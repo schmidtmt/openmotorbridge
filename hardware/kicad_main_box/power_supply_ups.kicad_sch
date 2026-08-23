@@ -1,0 +1,61 @@
+(kicad_sch (version 20230121) (generator eeschema)
+
+  (uuid "a0000000-0000-0000-0000-000000000002")
+
+  (paper "A4")
+
+  (title_block
+    (title "OpenMotorBridge v8.0 - Stromversorgung & USV")
+    (date "2026-08-23")
+    (rev "v8.0")
+    (comment 1 "TI LM5164-Q1 (65V Buck) + TI BQ24075 (Power-Path & USV)")
+    (comment 2 "SMBJ33CA TVS + Bourns PPTC + Murata 10k NTC JEITA Kaelte-/Hitzeschutz")
+  )
+
+  (hierarchical_label "KL30_IN" (shape input) (at 25.4 38.1 180)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "b0000000-0000-0000-0000-000000000001")
+  )
+
+  (hierarchical_label "KL15_IN" (shape input) (at 25.4 50.8 180)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "b0000000-0000-0000-0000-000000000002")
+  )
+
+  (hierarchical_label "GND_PWR" (shape input) (at 25.4 63.5 180)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "b0000000-0000-0000-0000-000000000003")
+  )
+
+  (hierarchical_label "VCC_5V" (shape output) (at 180.34 38.1 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "b0000000-0000-0000-0000-000000000004")
+  )
+
+  (hierarchical_label "VCC_3V3" (shape output) (at 180.34 50.8 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "b0000000-0000-0000-0000-000000000005")
+  )
+
+  (hierarchical_label "VBAT_SENSE" (shape output) (at 180.34 63.5 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "b0000000-0000-0000-0000-000000000006")
+  )
+
+  (hierarchical_label "VIGN_SENSE" (shape output) (at 180.34 76.2 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "b0000000-0000-0000-0000-000000000007")
+  )
+
+  (text "BLOCK 1: KFZ-TRANSISENTENSCHUTZ & SICHERUNG\n- F1: Bourns PPTC MF-MSMF050-2 (500mA / 1.0A)\n- D1: Littelfuse SMBJ33CA (33V Standoff, 53.3V Clamp)\n- D2: Diodes Inc DMP6023L P-FET Verpolschutz" (at 25.4 90.0 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+  )
+
+  (text "BLOCK 2: 65V BUCK CONVERTER\n- U2: TI LM5164-Q1 (65V Synchronous Buck -> 5.0V / 1.0A)" (at 25.4 115.0 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+  )
+
+  (text "BLOCK 3: POWER-PATH MANAGEMENT & USV\n- U3: TI BQ24075 LiPo Ladecontroller mit TS-Pin\n- TH1: Murata 10k NTC (JEITA Kaeltestopp < 0 C / Hitzestopp > 45 C)\n- U7: TI TPS7A0533 Ultra-Low-Noise LDO (3.3V / 200mA)" (at 25.4 140.0 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+  )
+)

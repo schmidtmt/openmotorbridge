@@ -1,23 +1,24 @@
-# 12 - GNSS-Engine, Track-Lifecycle & Actioncam-Sync
+# 12 - GNSS Multi-Constellation, IMU Traegheitsnavigation & Video-Sync
 
-## 1. Hardware & Performance
-* u-blox MAX-M10S Multi-GNSS Receiver im Heck-Pod 3 mit 25 x 25 mm Keramik-Patchantenne.
-* Gleichzeitiger Empfang von GPS, GLONASS, Galileo und BeiDou bei 10 Hz Aktualisierungsrate.
-* Empfindlichkeit: -167 dBm Navigation Tracking; Kaltstart < 26 s.
+Das OMB-TourLog-Subsystem kombiniert hochpraezise Satellitennavigation mit inertialsensorischer Koppelnavigation (Dead Reckoning), um auch in Tunnels, engen Schluchten und bei Abschattungen lueckenlose Tracks mit vollstaendiger Fahrzeugdynamik aufzuzeichnen.
 
-## 2. Track-Lifecycle State Machine
-* **Tour Start:** Automatische Aufzeichnung startet, sobald KL15 aktiv ist und Geschwindigkeit > 5 km/h über 10 Sekunden überschreitet.
-* **Kurzer Stopp (< 15 min):** Erzeugt ein neues `<trkseg>` innerhalb der aktuellen GPX-Datei (Tankstopps, Ampelphasen).
-* **Langer Stillstand (> 15 min oder Zündung AUS):** Schließt die aktuelle Tour ab und finalisiert die XML-Struktur auf der MicroSD-Karte.
+## 1. 15-State Extended Kalman Filter (EKF) & Traegheitsnavigation
+Faellt das Satellitensignal aus, schaltet das System nahtlos auf Traegheitskopplung um. Der EKF schaetzt kontinuierlich folgende Zustaende:
+- Position im Navigationskoordinatensystem (Nord, Ost, Hoehe)
+- Geschwindigkeitsvektor ueber Grund
+- Orientierungsquaternion (Schraeglage / Lean Angle, Nickwinkel, Gierwinkel)
+- Dynamischer Sensor-Bias von Beschleunigungsmesser und Gyroskop (Bosch BMI270)
 
-## 3. Actioncam Synchronisation (GPX 2.0 Erweiterung)
-Hardware-getaktete Events (z. B. Shutter-Trigger über BLE-Lenkertaster) werden mit 1-PPS-Genauigkeit (< 1 µs) direkt in das GPX-Schema eingebettet:
+### Schraeglagen- und Zentrifugalkraft-Berechnung
+Lean_Angle = arctan((v * yaw_rate) / g)  
+Das Filter unterscheidet anhand der Querbeschleunigung und Gierrate zuverlaessig zwischen echter Kurvenschraeglage und statischer Fahrbahnneigung.
 
-```xml
-<trkpt lat="47.3769" lon="8.5417">
-  <ele>408.2</ele>
-  <time>2026-08-23T08:34:26Z</time>
-  <extensions>
-    <omb:action_event type="video_marker" camera="gopro_hero12" clip_offset_ms="12450"/>
-  </extensions>
-</trkpt>
+## 2. Track-Lifecycle & Intelligente Segmentierung
+- **Auto-Start:** Startet eine neue Tour-Datei (`YYYY-MM-DD_HH-MM-SS.gpx`), sobald die Zuendung an ist und das Bike sich laenger als 10 s mit > 5 km/h bewegt.
+- **Segment-Split (`<trkseg>`):** Bei Ampel- oder Tankstopps unter 15 Minuten wird die GPX-Datei nicht geschlossen, sondern ein neues Track-Segment geoeffnet.
+- **Auto-Finalisierung:** Nach 15 Minuten Dauerstillstand oder 60 Sekunden nach Zuendung AUS wird die GPX-Struktur sauber abgeschlossen und fuer den WebDAV-Upload markiert.
+
+## 3. GPX 2.0 Telemetrie & 1-PPS Video-Sync
+- **Telemetrie-Tags:** Geschwindigkeit, Schraeglage, Beschleunigungswerte und Satelliten-Metadaten pro Trackpunkt.
+- **1-PPS Hardware-Sync:** Das u-blox MAX-M10S Modul liefert an `PIN_GNSS_PPS` einen hochpraezisen 1-Hz-Takt mit Zeitjitter < 1 us.
+- **Video-Marker:** Shutter-Events vom BLE-Lenkertaster werden mit Mikrozeitstempel eingebettet, um Actioncam-Footage (GoPro/Insta360) framegenau mit Schraeglagendaten zu ueberblenden.

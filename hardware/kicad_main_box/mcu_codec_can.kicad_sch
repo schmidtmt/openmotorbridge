@@ -1,0 +1,96 @@
+(kicad_sch (version 20230121) (generator eeschema)
+
+  (uuid "a0000000-0000-0000-0000-000000000003")
+
+  (paper "A3")
+
+  (title_block
+    (title "OpenMotorBridge v8.0 - MCU, Audio Codec & CAN-Bus")
+    (date "2026-08-23")
+    (rev "v8.0")
+    (comment 1 "ESP32-S3-WROOM-1-N16R8 Dual-Core MCU (240 MHz)")
+    (comment 2 "Everest ES8388 24-Bit I2S Codec + TI TCAN334G CAN-FD + Bosch BMI270 IMU")
+  )
+
+  (hierarchical_label "VCC_3V3" (shape input) (at 25.4 38.1 180)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "c0000000-0000-0000-0000-000000000001")
+  )
+
+  (hierarchical_label "VIGN_SENSE" (shape input) (at 25.4 48.26 180)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "c0000000-0000-0000-0000-000000000002")
+  )
+
+  (hierarchical_label "VBAT_SENSE" (shape input) (at 25.4 58.42 180)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "c0000000-0000-0000-0000-000000000003")
+  )
+
+  (hierarchical_label "CAN_H" (shape bidirectional) (at 280.0 38.1 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "c0000000-0000-0000-0000-000000000004")
+  )
+
+  (hierarchical_label "CAN_L" (shape bidirectional) (at 280.0 48.26 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "c0000000-0000-0000-0000-000000000005")
+  )
+
+  (hierarchical_label "UART_POD3_TX" (shape output) (at 280.0 58.42 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "c0000000-0000-0000-0000-000000000006")
+  )
+
+  (hierarchical_label "UART_POD3_RX" (shape input) (at 280.0 68.58 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "c0000000-0000-0000-0000-000000000007")
+  )
+
+  (hierarchical_label "GNSS_PPS" (shape input) (at 280.0 78.74 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "c0000000-0000-0000-0000-000000000008")
+  )
+
+  (hierarchical_label "POD1_1WIRE" (shape bidirectional) (at 280.0 88.9 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "c0000000-0000-0000-0000-000000000009")
+  )
+
+  (hierarchical_label "POD2_1WIRE" (shape bidirectional) (at 280.0 99.06 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "c0000000-0000-0000-0000-000000000010")
+  )
+
+  (hierarchical_label "AUDIO_OUT_P1" (shape output) (at 25.4 78.74 180)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "c0000000-0000-0000-0000-000000000011")
+  )
+
+  (hierarchical_label "AUDIO_IN_P1" (shape input) (at 25.4 88.9 180)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "c0000000-0000-0000-0000-000000000012")
+  )
+
+  (hierarchical_label "AUDIO_OUT_P2" (shape output) (at 25.4 99.06 180)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "c0000000-0000-0000-0000-000000000013")
+  )
+
+  (hierarchical_label "AUDIO_IN_P2" (shape input) (at 25.4 109.22 180)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "c0000000-0000-0000-0000-000000000014")
+  )
+
+  (text "BLOCK 1: ESP32-S3 HAUPT-CONTROLLER\n- U1: ESP32-S3-WROOM-1-N16R8 (16MB Flash, 8MB Octal PSRAM)\n- GPIO 1: ADC_BAT (USV LiPo)\n- GPIO 2: POD1_1WIRE_ID (DS2401 Port 1)\n- GPIO 3: ADC_LINE_LVL (Peak Sense)\n- GPIO 4: ADC_VIGN (KL15 1:11 Teiler)\n- GPIO 9..13: I2S Master Audio Bus (MCLK, BCLK, WS, DOUT, DIN)\n- GPIO 14/15: I2C Bus (BMI270 IMU & ES8388 Control)\n- GPIO 17/18: High-Speed UART (460.800 Baud zum Heck-Pod 3)\n- GPIO 19/20: TWAI CAN TX/RX\n- GPIO 21: GNSS_PPS (1-PPS Interrupt)\n- GPIO 22: POD2_1WIRE_ID (DS2401 Port 2)\n- GPIO 38/39: RESERVE_GPIO_A / B\n- GPIO 48: WS2812B RGB Status-LED" (at 25.4 130.0 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+  )
+
+  (text "BLOCK 2: STEREO AUDIO-CODEC\n- U5: Everest ES8388 (24-Bit I2S DAC/ADC Master)\n- Line-In L/R <- Bourns Audio-Uebertrager T1/T2\n- Line-Out L/R -> Bourns Audio-Uebertrager T1/T2" (at 170.0 130.0 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+  )
+
+  (text "BLOCK 3: CAN-BUS TRANSCEIVER & IMU\n- U6: TI TCAN334GDCNR (3.3V CAN-FD Transceiver, +-58V Fault Tolerance)\n- U4: Bosch Sensortec BMI270 (6-Achsen Gyro/Acc fuer 15-State EKF Schraeglagenfilterung)" (at 170.0 160.0 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+  )
+)

@@ -3,74 +3,518 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OpenMotorBridge Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#ff9f0a">
+    <meta name="description" content="OpenMotorBridge v8.0 - Universelles Intercom Gateway & BGH-konformer Tour Logger">
+    <title>OpenMotorBridge v8.0 Dashboard</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏍️</text></svg>">
 </head>
 
 <body>
-    <header>
-        <h1>OMB TourLog v8.0</h1>
-        <button id="btn-connect" class="btn">BLE Verbinden</button>
-    </header>
+    <div class="app-container">
+        <!-- Top App Header -->
+        <header class="app-header">
+            <div class="brand-section">
+                <div class="brand-logo">🏍️</div>
+                <div>
+                    <div class="brand-title">OpenMotorBridge</div>
+                    <div class="brand-subtitle">v8.0 Satelliten-Gateway</div>
+                </div>
+            </div>
 
-    <main class="grid">
-        <!-- Telemetrie Card -->
-        <section class="card">
-            <h2>Telemetrie & Power</h2>
-            <div class="stat-row">
-                <span>Bordnetz (KL15):</span>
-                <span id="val-vign" class="stat-val">-- V</span>
+            <div class="header-actions">
+                <div class="status-pill" id="pill-ble-status">
+                    <span class="status-dot" id="dot-ble"></span>
+                    <span id="label-ble-status">BLE Offline</span>
+                </div>
+                <button id="btn-demo-mode" class="btn-secondary" title="Live-Simulation für Demo & Tests aktivieren">
+                    🎮 Demo-Modus
+                </button>
+                <button id="btn-connect" class="btn-primary">
+                    ⚡ BLE Verbinden
+                </button>
             </div>
-            <div class="stat-row">
-                <span>USV-Puffer (LiPo):</span>
-                <span id="val-vbat" class="stat-val">-- V</span>
-            </div>
-            <div class="stat-row">
-                <span>Lenkertaster (CR2032):</span>
-                <span id="val-btn-bat" class="stat-val">-- %</span>
-            </div>
-            <div class="stat-row">
-                <span>GNSS Satelliten:</span>
-                <span id="val-sats" class="stat-val">--</span>
-            </div>
-        </section>
+        </header>
 
-        <!-- Betriebsmodus Card -->
-        <section class="card">
-            <h2>Audio Betriebsmodus</h2>
-            <button class="mode-btn active" data-mode="0">Standard Mode (Sena + Cardo)</button>
-            <button class="mode-btn" data-mode="1">Single Rider Mode (Port 2 Mute)</button>
-            <button class="mode-btn" data-mode="2">Cruise Mode (Speaker Out)</button>
-        </section>
+        <!-- Navigation Tabs -->
+        <nav class="nav-tabs" role="tablist">
+            <button class="tab-btn active" data-tab="tab-cockpit">
+                📊 Cockpit & Power
+            </button>
+            <button class="tab-btn" data-tab="tab-audio">
+                🎧 Audio & Ducking
+            </button>
+            <button class="tab-btn" data-tab="tab-cartridges">
+                🧩 Kassetten & DLE
+            </button>
+            <button class="tab-btn" data-tab="tab-tours">
+                🗺️ Touren & WebDAV
+            </button>
+            <button class="tab-btn" data-tab="tab-hardware">
+                ⚙️ Hardware & Reserve
+            </button>
+        </nav>
 
-        <!-- Kassetten-Status Card -->
-        <section class="card">
-            <h2>Gesteckte Kassetten (1-Wire)</h2>
-            <div class="stat-row">
-                <span>Pod 1 (Links):</span>
-                <span id="val-pod1" class="stat-val">Sena Apex (Mesh 3.0)</span>
-            </div>
-            <div class="stat-row">
-                <span>Pod 2 (Rechts):</span>
-                <span id="val-pod2" class="stat-val">Cardo DMC Gen2</span>
-            </div>
-            <div class="stat-row">
-                <span>Pod 3 (Heck):</span>
-                <span id="val-pod3" class="stat-val">OMM LoRa + MAX-M10S</span>
-            </div>
-        </section>
+        <!-- TAB 1: COCKPIT & POWER -->
+        <main id="tab-cockpit" class="tab-content active">
+            <div class="grid-2">
+                <!-- Live Schräglagen & Dynamik-Card -->
+                <section class="card">
+                    <div class="card-header">
+                        <span class="card-title">📐 Fahrdynamik & Schräglage</span>
+                        <span class="card-badge badge-orange" id="badge-gnss-fix">3D FIX (10 Hz)</span>
+                    </div>
 
-        <!-- Schnellaktionen Card -->
-        <section class="card">
-            <h2>Steuerung & Trigger</h2>
-            <button id="btn-sync-mesh" class="btn" style="width: 100%; margin-bottom: 8px;">Mesh Ground-Truth
-                Re-Sync</button>
-            <button id="btn-trigger-cam" class="btn"
-                style="width: 100%; background-color: #2196f3; color: white;">Actioncam Markierung</button>
-        </section>
-    </main>
+                    <div class="lean-gauge-container">
+                        <div class="bike-horizon">
+                            <div class="horizon-arc"></div>
+                            <div class="bike-indicator" id="bike-lean-visual">🏍️</div>
+                        </div>
+                        <div class="lean-angle-text" id="val-lean-angle">0.0°</div>
+                        <div class="stat-sub">Kurvenschräglage (Bosch BMI270 15-State EKF)</div>
+                    </div>
+
+                    <div class="grid-3" style="margin-top: 16px;">
+                        <div class="stat-tile">
+                            <span class="stat-label">Geschwindigkeit</span>
+                            <div class="stat-value" id="val-speed">0.0</div>
+                            <span class="stat-sub">km/h (GPS)</span>
+                        </div>
+                        <div class="stat-tile">
+                            <span class="stat-label">Satelliten</span>
+                            <div class="stat-value" id="val-sats">18</div>
+                            <span class="stat-sub">PDOP 1.1</span>
+                        </div>
+                        <div class="stat-tile">
+                            <span class="stat-label">1-PPS Zeit-Sync</span>
+                            <div class="stat-value" style="color: var(--accent-green);">LOCK</div>
+                            <span class="stat-sub">&lt; 1 µs Jitter</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Bordnetz & USV Power Monitor -->
+                <section class="card">
+                    <div class="card-header">
+                        <span class="card-title">🔋 Spannungs- & Thermomanagement</span>
+                        <span class="card-badge badge-green" id="badge-thermal-status">JEITA: Normal (22°C)</span>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="stat-tile">
+                            <span class="stat-label">Bordnetz KL15 (Zündung)</span>
+                            <div class="stat-value" id="val-vign" style="color: var(--accent-green);">12.6 V</div>
+                            <span class="stat-sub" id="sub-vign-status">Status: AKTIV</span>
+                        </div>
+                        <div class="stat-tile">
+                            <span class="stat-label">USV-LiPo (Unter Sitzbank)</span>
+                            <div class="stat-value" id="val-vbat">4.12 V</div>
+                            <span class="stat-sub">1000 mAh Puffer</span>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 18px;">
+                        <div class="control-label">
+                            <span>Starterbatterie-Typ & Schutzschwelle</span>
+                            <span id="label-battery-chem" style="color: var(--accent-orange); font-weight: 700;">AGM (11.8 V Cut-Off)</span>
+                        </div>
+                        <select id="select-battery-type" class="select-custom">
+                            <option value="agm" selected>AGM / Gel (Abschaltschwelle 11.8 V)</option>
+                            <option value="wet">Standard Blei-Säure Nass (Abschaltschwelle 11.6 V)</option>
+                            <option value="lifepo4">LiFePO4 Lithium-Eisenphosphat (Abschaltschwelle 12.8 V)</option>
+                            <option value="nmc">Li-Ion NMC Starterbatterie (Abschaltschwelle 10.5 V)</option>
+                        </select>
+                    </div>
+
+                    <div class="stat-tile" style="margin-top: 14px;">
+                        <div class="stat-label">
+                            <span>Lenkertaster (CR2032 Batterie)</span>
+                            <span id="val-btn-bat" style="color: var(--accent-green); font-weight: 800;">95 %</span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" id="bar-btn-bat" style="width: 95%;"></div>
+                        </div>
+                        <span class="stat-sub">Bluetooth SIG Service 0x180F Überwachung</span>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- TAB 2: AUDIO & DUCKING MATRIX -->
+        <main id="tab-audio" class="tab-content">
+            <div class="grid-2">
+                <!-- Betriebsmodus-Wahl -->
+                <section class="card">
+                    <div class="card-header">
+                        <span class="card-title">🎛️ Audio-Routing & Betriebsmodi</span>
+                        <span class="card-badge badge-blue">DSP Core 1 Realtime</span>
+                    </div>
+
+                    <div class="mode-card active" data-mode="0">
+                        <div class="mode-card-header">
+                            <span class="mode-name">Standard Mode (Mesh Bridge)</span>
+                            <span class="card-badge badge-green">Aktiv</span>
+                        </div>
+                        <div class="mode-desc">Port 1 (Sena) & Port 2 (Cardo) sind simultan aktiv und werden symmetrisch zum Fahrerhelm gemischt.</div>
+                    </div>
+
+                    <div class="mode-card" data-mode="1">
+                        <div class="mode-card-header">
+                            <span class="mode-name">Single Rider Mode</span>
+                        </div>
+                        <div class="mode-desc">Port 2 stummgeschaltet. Voller Fokus auf Primär-Intercom, Navigation & A2DP-Musik.</div>
+                    </div>
+
+                    <div class="mode-card" data-mode="2">
+                        <div class="mode-card-header">
+                            <span class="mode-name">Cruise Mode (Boom! Box Lautsprecher)</span>
+                        </div>
+                        <div class="mode-desc">Intercom -6 dB gedämpft. Optimierte Ausgabe über Harley-Davidson Bordlautsprecher.</div>
+                    </div>
+                </section>
+
+                <!-- Pegel- & Ducking-Regler -->
+                <section class="card">
+                    <div class="card-header">
+                        <span class="card-title">🎚️ Raised-Cosine Ducking & Gain</span>
+                        <span class="card-badge badge-orange">&lt; 8 ms Latenz</span>
+                    </div>
+
+                    <div class="control-group">
+                        <div class="control-label">
+                            <span>Port 1 Eingangspegel (Sena Apex)</span>
+                            <span id="label-gain-p1">+2.0 dB</span>
+                        </div>
+                        <input type="range" id="slider-gain-p1" class="control-slider" min="-12" max="12" step="0.5" value="2">
+                    </div>
+
+                    <div class="control-group">
+                        <div class="control-label">
+                            <span>Port 2 Eingangspegel (Cardo DMC Gen2)</span>
+                            <span id="label-gain-p2">+1.5 dB</span>
+                        </div>
+                        <input type="range" id="slider-gain-p2" class="control-slider" min="-12" max="12" step="0.5" value="1.5">
+                    </div>
+
+                    <div class="control-group">
+                        <div class="control-label">
+                            <span>Navi Ducking Dämpfung (Prio 1)</span>
+                            <span id="label-ducking-depth">-12.0 dB</span>
+                        </div>
+                        <input type="range" id="slider-ducking-depth" class="control-slider" min="-24" max="-3" step="1" value="-12">
+                    </div>
+
+                    <div class="grid-2" style="margin-top: 20px;">
+                        <button id="btn-trigger-p1-toggle" class="btn-secondary">
+                            🔘 Port 1 Mesh Toggle (200ms)
+                        </button>
+                        <button id="btn-trigger-p1-next" class="btn-secondary">
+                            ⏭️ Port 1 Channel Next (1s)
+                        </button>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- TAB 3: KASSETTEN & PROFILMANAGER -->
+        <main id="tab-cartridges" class="tab-content">
+            <div class="grid-3">
+                <!-- Pod 1 Card -->
+                <section class="card">
+                    <div class="card-header">
+                        <span class="card-title">1️⃣ Pod 1 (Rahmen links)</span>
+                        <span class="card-badge badge-green">Online</span>
+                    </div>
+                    <div class="stat-tile" style="margin-bottom: 12px;">
+                        <span class="stat-label">Gesteckte Kassette</span>
+                        <div style="font-size: 1.1rem; font-weight: 700; margin: 6px 0;" id="pod1-name">Sena Apex / Apex Plus</div>
+                        <span class="stat-sub" id="pod1-vendor">Sena Technologies • Mesh 3.0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-sub">1-Wire DS2401 ID:</span>
+                        <span style="font-family: monospace; font-size: 0.85rem;" id="pod1-uid">01:4F:2A:90:12:00:8C</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-sub">RF-Hardening:</span>
+                        <span style="color: var(--accent-green); font-size: 0.85rem;">BT Classic AUS</span>
+                    </div>
+                    <button class="btn-secondary" id="btn-p1-resync" style="width: 100%; margin-top: 14px;">
+                        🔄 Ground-Truth Re-Sync
+                    </button>
+                </section>
+
+                <!-- Pod 2 Card -->
+                <section class="card">
+                    <div class="card-header">
+                        <span class="card-title">2️⃣ Pod 2 (Rahmen rechts)</span>
+                        <span class="card-badge badge-green">Online</span>
+                    </div>
+                    <div class="stat-tile" style="margin-bottom: 12px;">
+                        <span class="stat-label">Gesteckte Kassette</span>
+                        <div style="font-size: 1.1rem; font-weight: 700; margin: 6px 0;" id="pod2-name">Cardo Packtalk Pro / Edge</div>
+                        <span class="stat-sub" id="pod2-vendor">Cardo Systems • DMC Gen2</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-sub">1-Wire DS2401 ID:</span>
+                        <span style="font-family: monospace; font-size: 0.85rem;" id="pod2-uid">01:B3:78:11:44:90:3A</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-sub">RF-Hardening:</span>
+                        <span style="color: var(--accent-green); font-size: 0.85rem;">Mesh-Only Aktiv</span>
+                    </div>
+                    <button class="btn-secondary" id="btn-p2-next" style="width: 100%; margin-top: 14px;">
+                        ⏭️ Kanal Weiterschalten (800ms)
+                    </button>
+                </section>
+
+                <!-- Pod 3 Card & DLE Score -->
+                <section class="card">
+                    <div class="card-header">
+                        <span class="card-title">3️⃣ Pod 3 (Heckbürzel)</span>
+                        <span class="card-badge badge-purple">DLE Leader</span>
+                    </div>
+                    <div class="stat-tile" style="margin-bottom: 12px;">
+                        <span class="stat-label">OpenMotorMesh & GNSS</span>
+                        <div style="font-size: 1.1rem; font-weight: 700; margin: 6px 0;">SX1262 LoRa + MAX-M10S</div>
+                        <span class="stat-sub">ESP32-C3 Co-Prozessor @ 460.8k</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-sub">DLE Gateway Score:</span>
+                        <span style="font-weight: 800; color: var(--accent-orange);" id="val-dle-score">100 / 100 Pkt.</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-sub">LoRa Sendeleistung:</span>
+                        <span>+22 dBm (868 MHz)</span>
+                    </div>
+                    <button class="btn-secondary" id="btn-open-wizard" style="width: 100%; margin-top: 14px;">
+                        ✨ Onboarding-Wizard
+                    </button>
+                </section>
+            </div>
+        </main>
+
+        <!-- TAB 4: TOUREN & WEBDAV -->
+        <main id="tab-tours" class="tab-content">
+            <div class="grid-2">
+                <!-- MicroSD Speicher & BGH Status -->
+                <section class="card">
+                    <div class="card-header">
+                        <span class="card-title">💾 MicroSD & BGH-Ringspeicher</span>
+                        <span class="card-badge badge-green">BGH VI ZR 233/17 OK</span>
+                    </div>
+
+                    <div class="stat-tile">
+                        <div class="stat-label">
+                            <span>Speicherbelegung (4-Bit SDIO FAT32)</span>
+                            <span id="label-storage-used">1.5 GB / 16.0 GB</span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" id="bar-storage" style="width: 12%;"></div>
+                        </div>
+                        <span class="stat-sub">14.5 GB frei • Auto-Purge Schwellwert: 200 MB</span>
+                    </div>
+
+                    <div class="grid-2" style="margin-top: 16px;">
+                        <button id="btn-trigger-video-marker" class="btn-primary" style="background: linear-gradient(135deg, var(--accent-blue), #005bb5); color: #fff;">
+                            📸 Actioncam Marker setzen
+                        </button>
+                        <button id="btn-trigger-webdav-now" class="btn-secondary">
+                            ☁️ WebDAV Sofort-Sync
+                        </button>
+                    </div>
+                </section>
+
+                <!-- WebDAV Cloud Sync Config -->
+                <section class="card">
+                    <div class="card-header">
+                        <span class="card-title">☁️ Heim-WLAN & WebDAV Sync</span>
+                        <span class="card-badge badge-blue">TLS 1.3</span>
+                    </div>
+
+                    <div class="control-group">
+                        <div class="control-label"><span>WebDAV Server URL</span></div>
+                        <input type="text" id="input-webdav-url" class="select-custom" value="https://cloud.local/remote.php/dav/files/user/omb_tracks/">
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="control-group">
+                            <div class="control-label"><span>Benutzername</span></div>
+                            <input type="text" id="input-webdav-user" class="select-custom" value="omb_rider">
+                        </div>
+                        <div class="control-group">
+                            <div class="control-label"><span>Passwort / App-Token</span></div>
+                            <input type="password" id="input-webdav-pass" class="select-custom" value="••••••••••••">
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px;">
+                        <button id="btn-save-webdav" class="btn-primary" style="padding: 8px 16px; font-size: 0.85rem;">
+                            Speichern & Testen
+                        </button>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Tour-Dateiliste -->
+            <section class="card" style="margin-top: 20px;">
+                <div class="card-header">
+                    <span class="card-title">📂 Gespeicherte Touren (/tracks/)</span>
+                    <button id="btn-refresh-tours" class="btn-secondary">🔄 Aktualisieren</button>
+                </div>
+
+                <div style="overflow-x: auto;">
+                    <table class="tour-table">
+                        <thead>
+                            <tr>
+                                <th>Datum & Uhrzeit</th>
+                                <th>Dauer</th>
+                                <th>Distanz</th>
+                                <th>Max. Schräglage</th>
+                                <th>Status</th>
+                                <th>Aktionen</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tour-list-body">
+                            <tr>
+                                <td><strong>2026-08-23 09:15</strong></td>
+                                <td>1h 42m</td>
+                                <td>84.6 km</td>
+                                <td style="color: var(--accent-orange); font-weight: 700;">44.2°</td>
+                                <td><span class="card-badge badge-green">Hochgeladen</span></td>
+                                <td>
+                                    <button class="btn-secondary" style="padding: 4px 8px; font-size: 0.75rem;" onclick="downloadMockGpx('tour_20260823.gpx')">⬇️ GPX</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>2026-08-22 14:30</strong></td>
+                                <td>3h 15m</td>
+                                <td>192.3 km</td>
+                                <td style="color: var(--accent-orange); font-weight: 700;">47.8°</td>
+                                <td><span class="card-badge badge-orange">★ Favorit</span></td>
+                                <td>
+                                    <button class="btn-secondary" style="padding: 4px 8px; font-size: 0.75rem;" onclick="downloadMockGpx('tour_20260822.fav.gpx')">⬇️ GPX</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+
+        <!-- TAB 5: HARDWARE & RESERVE I/O -->
+        <main id="tab-hardware" class="tab-content">
+            <div class="grid-2">
+                <!-- Reserve I/O Steuerung -->
+                <section class="card">
+                    <div class="card-header">
+                        <span class="card-title">🔌 Reserve-Schnittstellen (HD26 Pins 25 & 26)</span>
+                        <span class="card-badge badge-orange">Hardware v8.0</span>
+                    </div>
+
+                    <div class="stat-tile" style="margin-bottom: 14px;">
+                        <div class="stat-label">
+                            <span>RESERVE_GPIO_A (Pin 25 - Multifunktions-Eingang)</span>
+                            <span class="card-badge badge-blue">Input</span>
+                        </div>
+                        <div style="font-size: 1.1rem; font-weight: 700; margin: 6px 0;" id="val-reserve-a">Pegel: HIGH (3.3V)</div>
+                        <span class="stat-sub">Verwendung: Externer Lenker-PTT / Alarmanlagen-Sensor</span>
+                    </div>
+
+                    <div class="stat-tile">
+                        <div class="stat-label">
+                            <span>RESERVE_GPIO_B (Pin 26 - Schaltausgang)</span>
+                            <span class="card-badge badge-green">Schaltausgang</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin: 10px 0;">
+                            <div>
+                                <div style="font-size: 1.1rem; font-weight: 700;" id="val-reserve-b-state">Ausgang: AKTIV (5V ON)</div>
+                                <span class="stat-sub">Zweck: Actioncam Power-Gate / Relais</span>
+                            </div>
+                            <button id="btn-toggle-reserve-b" class="btn-primary" style="padding: 8px 16px;">
+                                Toggle Output
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CAN-Bus & System-Status -->
+                <section class="card">
+                    <div class="card-header">
+                        <span class="card-title">🚗 Fahrzeug-CAN & Diagnostik</span>
+                        <span class="card-badge badge-green">TCAN334G Link OK</span>
+                    </div>
+
+                    <div class="stat-row">
+                        <span class="stat-sub">CAN-Bus Geschwindigkeit:</span>
+                        <span style="font-weight: 700;">500 kbps (Harley-Davidson J1939)</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-sub">Audio-Codec:</span>
+                        <span style="font-weight: 700;">Everest ES8388 (24-Bit I2S Master)</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-sub">Transientenschutz:</span>
+                        <span style="color: var(--accent-green); font-weight: 700;">SMBJ33CA + PPTC 500mA</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-sub">CPU Core 0 / Core 1 Takt:</span>
+                        <span style="font-weight: 700;">240 MHz Dual-Core (ESP32-S3)</span>
+                    </div>
+
+                    <button id="btn-system-reboot" class="btn-secondary" style="width: 100%; margin-top: 18px; border-color: rgba(255, 69, 58, 0.4); color: var(--accent-red);">
+                        ⚠️ Zentralbox Warmstart (Soft Reboot)
+                    </button>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal: Kassetten Onboarding Wizard -->
+    <div class="modal-overlay" id="wizard-modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <div class="modal-title">✨ Kassetten-Onboarding-Wizard</div>
+                <button class="modal-close" id="btn-close-wizard">&times;</button>
+            </div>
+
+            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 16px;">
+                Um maximale HF-Entkopplung und Latenzfreiheit zu gewährleisten, führe vor dem Einstecken neuer Intercoms folgende Schritte durch:
+            </p>
+
+            <div class="wizard-step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                    <h4>Bluetooth Classic deaktivieren</h4>
+                    <p>Entkoppele alle gekoppelten Smartphones und GPS-Navis vom Intercom, um 2,4-GHz-Kanalblockaden zu verhindern.</p>
+                </div>
+            </div>
+
+            <div class="wizard-step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                    <h4>Reinen Mesh-Modus erzwingen</h4>
+                    <p>Aktiviere "Open Mesh Channel 1" (Sena) bzw. "Open DMC Group" (Cardo) und deaktiviere Audio-Multitasking im Endgerät.</p>
+                </div>
+            </div>
+
+            <div class="wizard-step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                    <h4>Kassette einschieben & verriegeln</h4>
+                    <p>Schiebe die Kassette ein, bis die POM-C Snap-Lock Klinken einrasten, und schließe den 90°-Cam-Lock Drehriegel.</p>
+                </div>
+            </div>
+
+            <button id="btn-wizard-finish" class="btn-primary" style="width: 100%; margin-top: 10px;">
+                Verstanden & Profil aktivieren
+            </button>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
 
     <script src="js/app.js"></script>
 </body>

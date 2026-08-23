@@ -5,6 +5,7 @@
 #include "driver/uart.h"
 #include "driver/gpio.h"
 #include "driver/spi_master.h"
+#include "esp_timer.h"
 #include "esp_log.h"
 
 static const char *TAG = "POD3_COPROC";
@@ -26,8 +27,65 @@ static const char *TAG = "POD3_COPROC";
 #define PIN_LORA_BUSY       GPIO_NUM_2
 #define PIN_LORA_DIO1       GPIO_NUM_1
 
+static spi_device_handle_t s_lora_spi = NULL;
+static volatile uint64_t s_last_pps_timestamp_us = 0;
+
+static void IRAM_ATTR pps_isr_handler(void *arg) {
+    s_last_pps_timestamp_us = esp_timer_get_time();
+}
+
+static void init_pps_interrupt(void) {
+    gpio_config_t pps_conf = {
+        .pin_bit_mask = (1ULL << PIN_GNSS_PPS),
+        .mode = GPIO_MODE_INPUT,
+        .pull_up_en = GPIO_PULLUP_DISABLE,
+        .pull_down_en = GPIO_PULLDOWN_ENABLE,
+        .intr_type = GPIO_INTR_POSEDGE,
+    };
+    gpio_config(&pps_conf);
+    gpio_install_isr_service(0);
+    gpio_isr_handler_add(PIN_GNSS_PPS, pps_isr_handler, NULL);
+    ESP_LOGI(TAG, "1-PPS Interrupt handler configured on GPIO %d.", PIN_GNSS_PPS);
+}
+
+static void init_lora_sx1262(void) {
+    ESP_LOGI(TAG, "Initializing Semtech SX1262 LoRa SPI Driver (+22 dBm PA @ 868 MHz)...");
+
+    spi_bus_config_t buscfg = {
+        .mosi_io_num = PIN_LORA_MOSI,
+        .miso_io_num = PIN_LORA_MISO,
+        .sclk_io_num = PIN_LORA_SCK,
+        .quadwp_io_num = -1,
+        .quadhd_io_num = -1,
+        .max_transfer_sz = 256,
+    };
+    spi_bus_initialize(SPI2_HOST, &buscfg, SPI_DMA_CH_AUTO);
+
+    spi_device_interface_config_t devcfg = {
+        .command_bits = 0,
+        .address_bits = 0,
+        .dummy_bits = 0,
+        .mode = 0,
+        .clock_speed_hz = 8000000, // 8 MHz SPI
+        .spics_io_num = PIN_LORA_NSS,
+        .queue_size = 7,
+    };
+    spi_bus_add_device(SPI2_HOST, &devcfg, &s_lora_spi);
+
+    // Reset & Standby Puls
+    gpio_set_direction(PIN_LORA_RST, GPIO_MODE_OUTPUT);
+    gpio_set_level(PIN_LORA_RST, 0);
+    vTaskDelay(pdMS_TO_TICKS(10));
+    gpio_set_level(PIN_LORA_RST, 1);
+    vTaskDelay(pdMS_TO_TICKS(20));
+
+    ESP_LOGI(TAG, "SX1262 LoRa Hardware ready for OpenMotorMesh Superframe.");
+}
+
 extern "C" void app_main(void) {
-    ESP_LOGI(TAG, "Heck-Pod 3 Co-Processor booting (ESP32-C3)...");
+    ESP_LOGI(TAG, "==================================================");
+    ESP_LOGI(TAG, "   Heck-Pod 3 Co-Processor (ESP32-C3 RISC-V)      ");
+    ESP_LOGI(TAG, "==================================================");
 
     // 1. UART zur Zentralbox initialisieren (460.800 Baud High-Speed)
     uart_config_t bridge_uart_config = {
@@ -42,7 +100,7 @@ extern "C" void app_main(void) {
     uart_set_pin(UART_NUM_BRIDGE, PIN_BRIDGE_TX, PIN_BRIDGE_RX, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE);
     uart_driver_install(UART_NUM_BRIDGE, 1024, 0, 0, NULL, 0);
 
-    // 2. UART zum u-blox MAX-M10S GNSS Modul (9600 initial / 115200 NMEA+UBX)
+    // 2. UART zum u-blox MAX-M10S GNSS Modul (115.200 Baud / 10 Hz)
     uart_config_t gnss_uart_config = {
         .baud_rate = 115200,
         .data_bits = UART_DATA_8_BITS,
@@ -55,7 +113,11 @@ extern "C" void app_main(void) {
     uart_set_pin(UART_NUM_GNSS, PIN_GNSS_TX, PIN_GNSS_RX, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE);
     uart_driver_install(UART_NUM_GNSS, 2048, 0, 0, NULL, 0);
 
-    ESP_LOGI(TAG, "Pod 3 communication interfaces ready. Starting forwarding loop...");
+    // 3. 1-PPS & SX1262 LoRa SPI initialisieren
+    init_pps_interrupt();
+    init_lora_sx1262();
+
+    ESP_LOGI(TAG, "Pod 3 communication interfaces fully operational. Starting loop...");
 
     uint8_t rx_buf[256];
     while (true) {

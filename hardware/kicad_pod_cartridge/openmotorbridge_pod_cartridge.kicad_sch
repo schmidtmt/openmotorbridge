@@ -1,0 +1,27 @@
+(kicad_sch (version 20230121) (generator eeschema)
+
+  (uuid "e0000000-0000-0000-0000-000000000001")
+
+  (paper "A4")
+
+  (title_block
+    (title "OpenMotorBridge v8.0 - Universelle Kassetten-Platine (Pod 1 & Pod 2)")
+    (date "2026-08-23")
+    (rev "v8.0")
+    (company "OpenMotorBridge Open Source Hardware")
+    (comment 1 "Mill-Max 6-Pin Pogo-Array (Serie 824-22-006-00-001101)")
+    (comment 2 "Maxim DS2401 1-Wire Silicon Serial Number + Opto-Trigger + Audio Interface")
+  )
+
+  (text "BLOCK 1: 6-POLIGES MILL-MAX POGO-PIN ARRAY (2.54 mm RASTER):\n- Pin 1: VCC (5.0V geschaltete Speisespannung fuer Intercom-Ladeelektronik)\n- Pin 2: GND (Dedizierte Power- & Signalmasse)\n- Pin 3: NF_P (Symmetrisches Audio Signal + zum Intercom Lautsprecher/Line-In)\n- Pin 4: NF_N (Symmetrisches Audio Signal -)\n- Pin 5: OPTO (Trigger-Signal von Toshiba TLP222A Halbleiterrelais)\n- Pin 6: 1-WIRE_ID (Dallas DS2401 Silicon Serial Number zur automatischen Profilerkennung)" (at 25.4 45.0 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+  )
+
+  (text "BLOCK 2: KASSETTEN-IDENTIFIKATION (DALLAS / ANALOG DEVICES DS2401):\n- U1: DS2401Z+ (SOT-223 / TSOC-6 64-Bit Lasered Serial Number)\n- Pin 1: GND, Pin 2: Data (1-Wire mit 4.7k Pullup auf VCC_3V3 in Zentralbox)\n- Liefert eindeutige 48-Bit Seriennummer zur automatischen Identifikation der Kassettenart\n  (z. B. Sena Apex -> Profil 'sena_apex.json', Cardo Edge -> 'cardo_dmc_gen2.json')" (at 25.4 90.0 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+  )
+
+  (text "BLOCK 3: TASTENSIMULATION & AUDIO-ABGRIFF (INTERCOM INTERFACE):\n- Optokoppler-Ausgang (TLP222A) wird direkt parallel zum Taster des Intercoms verdrahtet\n  (z. B. Sena Mesh-Button oder Cardo Intercom-Button)\n- NF_P / NF_N werden niederohmig an die Lautsprecher-Pins des Headset-Pads angeschlossen\n- ESD-Schutz: 4-Kanal ESD-Array (Nexperia IP4220CZ6) auf allen Pogo-Leitungen" (at 25.4 135.0 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+  )
+)

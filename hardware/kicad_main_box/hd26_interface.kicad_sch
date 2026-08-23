@@ -1,0 +1,48 @@
+(kicad_sch (version 20230121) (generator eeschema)
+
+  (uuid "a0000000-0000-0000-0000-000000000005")
+
+  (paper "A3")
+
+  (title_block
+    (title "OpenMotorBridge v8.0 - HD26 Flansch, 2x13 Header & SDIO Slot")
+    (date "2026-08-23")
+    (rev "v8.0")
+    (comment 1 "CN1: HD26 Flanschbuchse IP67 <-> J1: 2x13 Pfostenverbinder")
+    (comment 2 "26 Pins, 0 NC - Symmetrisches 6-Ader Interface fuer Pod 1, Pod 2, Pod 3")
+  )
+
+  (hierarchical_label "POD1_VCC" (shape input) (at 25.4 38.1 180)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "e0000000-0000-0000-0000-000000000001")
+  )
+
+  (hierarchical_label "POD1_GND" (shape input) (at 25.4 45.72 180)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "e0000000-0000-0000-0000-000000000002")
+  )
+
+  (hierarchical_label "POD1_NF_P" (shape input) (at 25.4 53.34 180)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "e0000000-0000-0000-0000-000000000003")
+  )
+
+  (hierarchical_label "POD1_NF_N" (shape input) (at 25.4 60.96 180)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "e0000000-0000-0000-0000-000000000004")
+  )
+
+  (hierarchical_label "POD1_OPTO" (shape input) (at 25.4 68.58 180)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "e0000000-0000-0000-0000-000000000005")
+  )
+
+  (hierarchical_label "POD1_1WIRE" (shape input) (at 25.4 76.2 180)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "e0000000-0000-0000-0000-000000000006")
+  )
+
+  (text "HD26 PIN-BELEGUNGSTABELLE (26 PINS, 0 NC):\n\nPOD 1 (Links am Rahmen):\n- Pin 1: POD1_VCC (5V geschaltet via High-Side P-FET)\n- Pin 2: POD1_GND (Dedizierte Power- & Signalmasse)\n- Pin 3: POD1_NF_P (Audio +)\n- Pin 4: POD1_NF_N (Audio -)\n- Pin 5: POD1_OPTO (TLP222A Trigger)\n- Pin 6: POD1_1WIRE_ID (DS2401 ID Sense GPIO 2)\n\nPOD 2 (Rechts am Rahmen):\n- Pin 7: POD2_VCC (5V geschaltet via High-Side P-FET)\n- Pin 8: POD2_GND (Dedizierte Power- & Signalmasse)\n- Pin 9: POD2_NF_P (Audio +)\n- Pin 10: POD2_NF_N (Audio -)\n- Pin 11: POD2_OPTO (TLP222A Trigger)\n- Pin 12: POD2_1WIRE_ID (DS2401 ID Sense GPIO 22)\n\nPOD 3 (Heckbuerzel):\n- Pin 13: POD3_VCC (5V Dauer-Versorgung)\n- Pin 14: POD3_GND (Dedizierte Masse)\n- Pin 15: POD3_UART_TX (Heck -> Box @ 460.8k)\n- Pin 16: POD3_UART_RX (Box -> Heck)\n- Pin 17: POD3_GNSS_PPS (1-PPS Hardware Sync)\n- Pin 18: POD3_1WIRE_ID (DS2401 ID Sense)\n\nBORDNETZ, CAN & RESERVE:\n- Pin 19: KL30 (12V Dauerplus abgesichert)\n- Pin 20: KL15 (12V Zuendungsplus)\n- Pin 21: GND_PWR (Hauptmasse)\n- Pin 22: GND_SHIELD (Kabelgesamtschirmung)\n- Pin 23: CAN_H (TI TCAN334G)\n- Pin 24: CAN_L (TI TCAN334G)\n- Pin 25: RESERVE_GPIO_A (Input / PTT)\n- Pin 26: RESERVE_GPIO_B (Schaltausgang / Actioncam Power)\n\nSDIO MICROSD KARTENLESER:\n- 4-Bit High-Speed SDIO Interface am ESP32-S3 (CLK, CMD, DAT0..DAT3)\n- CD_N (Card Detect Pin mit Pullup)" (at 25.4 100.0 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+  )
+)

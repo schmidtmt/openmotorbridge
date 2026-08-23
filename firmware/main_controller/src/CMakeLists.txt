@@ -17,7 +17,8 @@ idf_component_register(
         esp_wifi 
         esp_http_client 
         driver 
-        spiffs 
+        esp_adc
         fatfs 
         json
+        nimble
 )

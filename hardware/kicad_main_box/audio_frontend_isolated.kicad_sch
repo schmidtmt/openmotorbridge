@@ -1,0 +1,72 @@
+(kicad_sch (version 20230121) (generator eeschema)
+
+  (uuid "a0000000-0000-0000-0000-000000000004")
+
+  (paper "A4")
+
+  (title_block
+    (title "OpenMotorBridge v8.0 - Isoliertes Audio-Frontend & Optokoppler")
+    (date "2026-08-23")
+    (rev "v8.0")
+    (comment 1 "Galvanisch getrennt ueber Bourns LM-NP-1001-B1L (1500 V RMS)")
+    (comment 2 "Prellfreie Tastensimulation via Toshiba TLP222A PhotoMOS Relais")
+  )
+
+  (hierarchical_label "AUDIO_OUT_P1" (shape input) (at 180.34 38.1 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "d0000000-0000-0000-0000-000000000001")
+  )
+
+  (hierarchical_label "AUDIO_IN_P1" (shape output) (at 180.34 48.26 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "d0000000-0000-0000-0000-000000000002")
+  )
+
+  (hierarchical_label "AUDIO_OUT_P2" (shape input) (at 180.34 58.42 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "d0000000-0000-0000-0000-000000000003")
+  )
+
+  (hierarchical_label "AUDIO_IN_P2" (shape output) (at 180.34 68.58 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "d0000000-0000-0000-0000-000000000004")
+  )
+
+  (hierarchical_label "POD1_NF_P" (shape output) (at 25.4 38.1 180)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "d0000000-0000-0000-0000-000000000005")
+  )
+
+  (hierarchical_label "POD1_NF_N" (shape output) (at 25.4 48.26 180)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "d0000000-0000-0000-0000-000000000006")
+  )
+
+  (hierarchical_label "POD2_NF_P" (shape output) (at 25.4 58.42 180)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "d0000000-0000-0000-0000-000000000007")
+  )
+
+  (hierarchical_label "POD2_NF_N" (shape output) (at 25.4 68.58 180)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "d0000000-0000-0000-0000-000000000008")
+  )
+
+  (hierarchical_label "POD1_OPTO" (shape output) (at 25.4 78.74 180)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "d0000000-0000-0000-0000-000000000009")
+  )
+
+  (hierarchical_label "POD2_OPTO" (shape output) (at 25.4 88.9 180)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "d0000000-0000-0000-0000-000000000010")
+  )
+
+  (text "BLOCK 1: GALVANISCH GETRENNTER AUDIO-PFAD PORT 1 & 2\n- T1: Bourns LM-NP-1001-B1L (1:1 Audio-Uebertrager Port 1 Sena)\n- T2: Bourns LM-NP-1001-B1L (1:1 Audio-Uebertrager Port 2 Cardo)\n- 1500 V RMS galvanische Trennung eliminiert Brummschleifen vollstaendig" (at 25.4 110.0 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+  )
+
+  (text "BLOCK 2: TASTENSIMULATION & QUITTUNGSTON-RUECKMELDER\n- OC1: Toshiba TLP222A PhotoMOS Relais fuer Port 1 (Sena Mesh Toggle / Kanal)\n- OC2: Toshiba TLP222A PhotoMOS Relais fuer Port 2 (Cardo Group Toggle / Next)\n- R_on < 2 Ohm, prellfrei, Schaltzeit < 1 ms\n- Dioden-Spitzengleichrichter an GPIO 3 (ADC_LINE_LVL) zur Erkennung von Bestaetigungstoenen" (at 25.4 140.0 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+  )
+)
