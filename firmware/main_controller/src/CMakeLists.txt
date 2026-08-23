@@ -1,0 +1,23 @@
+idf_component_register(
+    SRCS 
+        "main.cpp"
+        "audio_dsp_pipeline.cpp"
+        "ble_service_server.cpp"
+        "ble_handlebar_client.cpp"
+        "cartridge_onewire.cpp"
+        "opto_pulse_sequencer.cpp"
+        "sdio_ring_buffer.cpp"
+        "webdav_uploader.cpp"
+        "gnss_omm_bridge.cpp"
+    INCLUDE_DIRS 
+        "."
+    REQUIRES 
+        nvs_flash 
+        esp_event 
+        esp_wifi 
+        esp_http_client 
+        driver 
+        spiffs 
+        fatfs 
+        json
+)

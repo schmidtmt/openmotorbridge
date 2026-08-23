@@ -1,0 +1,30 @@
+{
+    "id": "pmr446_midland_v1",
+    "name": "Midland G9 Pro / PMR446 Gateway",
+    "vendor": "Midland Europe",
+    "hardware_tier": 3,
+    "vcc_enabled": true,
+    "soft_start_ms": 50,
+    "input_gain_db": 6.0,
+    "output_gain_db": 2.0,
+    "noise_gate_threshold_db": -35,
+    "control_mode": "level_hold",
+    "toggle_mesh_ms": 0,
+    "channel_next_ms": 0,
+    "ptt_hold": true,
+    "mesh_capabilities": {
+        "protocol": "Analog_FM_PMR446",
+        "generation": 0,
+        "max_nodes": 99,
+        "open_mesh": true,
+        "preconfig_channels": 16,
+        "dle_bonus_score": 10
+    },
+    "rf_hardening": {
+        "disable_bluetooth_classic": false,
+        "clear_phone_gps_pairings": false,
+        "enforce_mesh_only_mode": false,
+        "disable_audio_multitasking": false,
+        "expected_idle_current_ma": 80
+    }
+}

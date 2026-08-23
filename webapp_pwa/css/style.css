@@ -1,0 +1,92 @@
+:root {
+    --bg-color: #121418;
+    --card-bg: #1e222b;
+    --accent: #ff9800;
+    --text-main: #f0f2f5;
+    --text-muted: #8c9ba5;
+    --success: #00e676;
+}
+
+body {
+    margin: 0;
+    padding: 16px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #2a313d;
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+}
+
+h1 {
+    font-size: 1.25rem;
+    margin: 0;
+}
+
+.btn {
+    background-color: var(--accent);
+    color: #000;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+@media (min-width: 600px) {
+    .grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.card {
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.card h2 {
+    font-size: 1rem;
+    margin-top: 0;
+    color: var(--accent);
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    margin: 8px 0;
+}
+
+.stat-val {
+    font-weight: bold;
+}
+
+.mode-btn {
+    width: 100%;
+    margin: 6px 0;
+    padding: 10px;
+    border: 1px solid #3a4454;
+    background: transparent;
+    color: var(--text-main);
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.mode-btn.active {
+    background-color: #2a3b2e;
+    border-color: var(--success);
+    color: var(--success);
+}

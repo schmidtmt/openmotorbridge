@@ -1,0 +1,20 @@
+# Build Artifacts & PlatformIO / ESP-IDF
+.pio/
+build/
+sdkconfig
+*.bin
+*.elf
+*.map
+
+# KiCad Backups & Lock-Dateien
+*.kicad_prl
+*-save.kicad_pcb
+*-save.kicad_sch
+_autosave-*
+*.bak
+
+# OS & Editor
+.DS_Store
+.vscode/
+.idea/
+node_modules/

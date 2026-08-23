@@ -1,0 +1,30 @@
+{
+    "id": "cardo_dmc_legacy_v1",
+    "name": "Cardo Packtalk Bold / Black (DMC Gen1)",
+    "vendor": "Cardo Systems",
+    "hardware_tier": 2,
+    "vcc_enabled": true,
+    "soft_start_ms": 150,
+    "input_gain_db": 0.0,
+    "output_gain_db": 0.0,
+    "noise_gate_threshold_db": -40,
+    "control_mode": "pulse_multilevel",
+    "toggle_mesh_ms": 300,
+    "channel_next_ms": 1000,
+    "ptt_hold": false,
+    "mesh_capabilities": {
+        "protocol": "Cardo_DMC_1.0",
+        "generation": 1,
+        "max_nodes": 15,
+        "open_mesh": false,
+        "preconfig_channels": 1,
+        "dle_bonus_score": 30
+    },
+    "rf_hardening": {
+        "disable_bluetooth_classic": true,
+        "clear_phone_gps_pairings": true,
+        "enforce_mesh_only_mode": true,
+        "disable_audio_multitasking": true,
+        "expected_idle_current_ma": 60
+    }
+}

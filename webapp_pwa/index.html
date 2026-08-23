@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenMotorBridge Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+
+<body>
+    <header>
+        <h1>OMB TourLog v8.0</h1>
+        <button id="btn-connect" class="btn">BLE Verbinden</button>
+    </header>
+
+    <main class="grid">
+        <!-- Telemetrie Card -->
+        <section class="card">
+            <h2>Telemetrie & Power</h2>
+            <div class="stat-row">
+                <span>Bordnetz (KL15):</span>
+                <span id="val-vign" class="stat-val">-- V</span>
+            </div>
+            <div class="stat-row">
+                <span>USV-Puffer (LiPo):</span>
+                <span id="val-vbat" class="stat-val">-- V</span>
+            </div>
+            <div class="stat-row">
+                <span>Lenkertaster (CR2032):</span>
+                <span id="val-btn-bat" class="stat-val">-- %</span>
+            </div>
+            <div class="stat-row">
+                <span>GNSS Satelliten:</span>
+                <span id="val-sats" class="stat-val">--</span>
+            </div>
+        </section>
+
+        <!-- Betriebsmodus Card -->
+        <section class="card">
+            <h2>Audio Betriebsmodus</h2>
+            <button class="mode-btn active" data-mode="0">Standard Mode (Sena + Cardo)</button>
+            <button class="mode-btn" data-mode="1">Single Rider Mode (Port 2 Mute)</button>
+            <button class="mode-btn" data-mode="2">Cruise Mode (Speaker Out)</button>
+        </section>
+
+        <!-- Kassetten-Status Card -->
+        <section class="card">
+            <h2>Gesteckte Kassetten (1-Wire)</h2>
+            <div class="stat-row">
+                <span>Pod 1 (Links):</span>
+                <span id="val-pod1" class="stat-val">Sena Apex (Mesh 3.0)</span>
+            </div>
+            <div class="stat-row">
+                <span>Pod 2 (Rechts):</span>
+                <span id="val-pod2" class="stat-val">Cardo DMC Gen2</span>
+            </div>
+            <div class="stat-row">
+                <span>Pod 3 (Heck):</span>
+                <span id="val-pod3" class="stat-val">OMM LoRa + MAX-M10S</span>
+            </div>
+        </section>
+
+        <!-- Schnellaktionen Card -->
+        <section class="card">
+            <h2>Steuerung & Trigger</h2>
+            <button id="btn-sync-mesh" class="btn" style="width: 100%; margin-bottom: 8px;">Mesh Ground-Truth
+                Re-Sync</button>
+            <button id="btn-trigger-cam" class="btn"
+                style="width: 100%; background-color: #2196f3; color: white;">Actioncam Markierung</button>
+        </section>
+    </main>
+
+    <script src="js/app.js"></script>
+</body>
+
+</html>
