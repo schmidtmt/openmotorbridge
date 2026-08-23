@@ -40,6 +40,14 @@ void audio_set_port_gains(float port1_gain_db, float port2_gain_db);
 void audio_set_nav_ducking(bool active);
 
 /**
+ * @brief Konfiguriert den geschwindigkeitsabhängigen Transparenzmodus & AGC-Limiter
+ * @param enabled Transparenzmodus aktiv/inaktiv
+ * @param speed_kmh Aktuelle Fahrzeuggeschwindigkeit via GPS/CAN
+ * @param sensitivity_gain_db Eingangsempfindlichkeit (-12.0 bis +6.0 dB)
+ */
+void audio_set_ambient_transparency(bool enabled, float speed_kmh, float sensitivity_gain_db);
+
+/**
  * @brief FreeRTOS Task für Echtzeit-Audioverarbeitung (Core 1)
  */
 void task_audio_dsp(void *pvParameters);

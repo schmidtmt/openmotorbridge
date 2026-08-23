@@ -33,7 +33,7 @@ Pins 19 to 26: Vehicle Power, Automotive Buses, Shield & Dedicated Reserve
 | **Pin 22** | `GND_SHIELD` | Overall cable shield and chassis ground |
 | **Pin 23** | `CAN_H` | CAN-Bus High (TI TCAN334G Transceiver) |
 | **Pin 24** | `CAN_L` | CAN-Bus Low (TI TCAN334G Transceiver) |
-| **Pin 25** | `RESERVE_GPIO_A`| Multifunction input (e.g. external PTT / analog input) |
+| **Pin 25** | `MIC_AMBIENT_IN`| External front ambient microphone input (M8 inline branch to ES8388 LIN2) |
 | **Pin 26** | `RESERVE_GPIO_B`| Multifunction output (e.g. relay / action cam power) |
 
 ## 2. ESP32-S3 GPIO Mapping

@@ -33,7 +33,7 @@ Pins 19 bis 26: Bordnetz, Fahrzeugbusse, Schirmung & Reserve
 | **Pin 22** | `GND_SHIELD` | Gesamtschirmung fuer Kabelbaum und Gehaeusemasse |
 | **Pin 23** | `CAN_H` | CAN-Bus High (TI TCAN334G Transceiver) |
 | **Pin 24** | `CAN_L` | CAN-Bus Low (TI TCAN334G Transceiver) |
-| **Pin 25** | `RESERVE_GPIO_A`| Multifunktions-Eingang (z. B. externer PTT / Analog-In) |
+| **Pin 25** | `MIC_AMBIENT_IN`| Externer Front-Mikrofoneingang fuer Umgebungsaudio (M8-Kabelbaumabzweig an ES8388 LIN2) |
 | **Pin 26** | `RESERVE_GPIO_B`| Multifunktions-Ausgang (z. B. Relais / Actioncam Power) |
 
 ## 2. GPIO-Mapping ESP32-S3

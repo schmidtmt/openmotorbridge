@@ -117,7 +117,7 @@ void onRawPacketReceived(uint8_t* rawData, size_t len) {
 ## 4. Dynamic Leader Election (DLE) Algorithm
 Within each 2.4 GHz mesh cell, an autonomous scoring algorithm elects exactly one central group gateway master (Cluster Head):
 
-$$\text{Score}_{\text{DLE}} = S_{\text{HW}} + S_{\text{PWR}} + S_{\text{GNSS}} + S_{\text{LORA}} + S_{\text{UPTIME}}$$
+$$\text{Score}_{\text{DLE}} = S_{\text{HW}} + S_{\text{PWR}} + S_{\text{GNSS}} + S_{\text{LORA}} + S_{\text{UPTIME}} + S_{\text{MIC}}$$
 
 | Parameter | Condition | Points |
 | :--- | :--- | :---: |
@@ -127,7 +127,28 @@ $$\text{Score}_{\text{DLE}} = S_{\text{HW}} + S_{\text{PWR}} + S_{\text{GNSS}} +
 | | Battery operation (UPS LiPo > 3.8 V) | +5 pts |
 | **S_GNSS (Position Stability)** | 3D-Fix with PDOP < 1.5 & 1-PPS lock | **+10 pts** |
 | **S_LORA (Link Quality)** | Average neighbor RSSI > -85 dBm | **+10 pts** |
+| **S_MIC (Acoustic Sensor)** | IP67 Front Ambient Microphone active (`FEAT_ENV_MIC`) | **+5 pts** |
 | **S_UPTIME (Hysteresis Guard)**| Currently active leader (prevents flapping) | **+15 pts** |
+
+### 4.1 Node Capability Vector & Smart Group Features
+Nodes announce their hardware feature set in periodic DLE beacon frames:
+
+```cpp
+enum OmmFeatureBits : uint8_t {
+    FEAT_DUAL_MESH_BRIDGE  = (1 << 0), // Sena + Cardo active (+60 pts)
+    FEAT_LORA_HIGH_POWER   = (1 << 1), // SX1262 +22 dBm PA
+    FEAT_GNSS_1PPS_LOCK    = (1 << 2), // Precision Time Master
+    FEAT_CAN_TELEMETRY     = (1 << 3), // OBD2 / CAN telemetry active
+    FEAT_ENV_MIC_ACTIVE    = (1 << 4), // Front ambient mic active (+5 pts)
+    FEAT_USV_BAT_BUFFER    = (1 << 5)  // UPS battery buffer capable
+};
+```
+
+1. **🚨 Group Siren Early Warning:**
+   * When the lead bike's front microphone detects an emergency siren (350–1000 Hz sweeping tones of police/ambulance/fire engines), it broadcasts an `ALERT_SIREN_APPROACHING` packet across the mesh.
+   * Trailing riders receive an audible warning beep in their helmet before the emergency vehicle is audible to them directly.
+2. **🎙️ Guide Pass-Through (Toll / Border Control Channel):**
+   * While stationary at toll gates or borders, the leader can push-to-broadcast their front microphone feed to the group for 10 seconds to share toll instructions or route directions.
 
 ---
 

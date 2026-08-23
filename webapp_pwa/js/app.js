@@ -56,6 +56,7 @@ const i18n = {
         gain_p1_label: 'Port 1 Eingangspegel (Sena Apex)',
         gain_p2_label: 'Port 2 Eingangspegel (Cardo DMC Gen2)',
         ducking_depth_label: 'Navi Ducking Dämpfung (Prio 1)',
+        ambient_mic_label: 'Front Ambient-Mic Pegel & AGC (v ≤ 30 km/h)',
         btn_p1_toggle: 'Port 1 Mesh Toggle (200ms)',
         btn_p1_next: 'Port 1 Channel Next (1s)',
         pod1_title: 'Pod 1 (Rahmen links)',
@@ -158,6 +159,7 @@ const i18n = {
         gain_p1_label: 'Port 1 Input Gain (Sena Apex)',
         gain_p2_label: 'Port 2 Input Gain (Cardo DMC Gen2)',
         ducking_depth_label: 'Navi Ducking Depth (Priority 1)',
+        ambient_mic_label: 'Front Ambient Mic Level & AGC (v ≤ 30 km/h)',
         btn_p1_toggle: 'Port 1 Mesh Toggle (200ms)',
         btn_p1_next: 'Port 1 Channel Next (1s)',
         pod1_title: 'Pod 1 (Left Frame)',
@@ -263,6 +265,8 @@ const sliderGainP2 = document.getElementById('slider-gain-p2');
 const labelGainP2 = document.getElementById('label-gain-p2');
 const sliderDuckingDepth = document.getElementById('slider-ducking-depth');
 const labelDuckingDepth = document.getElementById('label-ducking-depth');
+const sliderGainAmbient = document.getElementById('slider-gain-ambient');
+const labelGainAmbient = document.getElementById('label-gain-ambient');
 
 const wizardModal = document.getElementById('wizard-modal');
 const btnOpenWizard = document.getElementById('btn-open-wizard');
@@ -585,6 +589,11 @@ sliderGainP2.addEventListener('input', (e) => {
 sliderDuckingDepth.addEventListener('input', (e) => {
     const val = parseFloat(e.target.value);
     labelDuckingDepth.textContent = `${val.toFixed(1)} dB`;
+});
+
+sliderGainAmbient?.addEventListener('input', (e) => {
+    const val = parseFloat(e.target.value);
+    labelGainAmbient.textContent = `${val >= 0 ? '+' : ''}${val.toFixed(1)} dB (AGC aktiv)`;
 });
 
 // Hardware Trigger Buttons

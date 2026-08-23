@@ -52,6 +52,19 @@ esp_err_t gnss_bridge_send_omm_packet(const uint8_t *payload, size_t length) {
     return (written == (int)length) ? ESP_OK : ESP_FAIL;
 }
 
+uint8_t omm_get_capabilities_vector(void) {
+    uint8_t caps = FEAT_LORA_HIGH_POWER | FEAT_GNSS_1PPS_LOCK | FEAT_USV_BAT_BUFFER;
+    caps |= FEAT_DUAL_MESH_BRIDGE; // Sena + Cardo
+    caps |= FEAT_ENV_MIC_ACTIVE;   // Front Ambient-Mic an M8-Abzweig aktiv (+5 Pkt)
+    return caps;
+}
+
+esp_err_t omm_broadcast_siren_alert(void) {
+    ESP_LOGW(TAG, "🚨 SIREN DETECTED! Broadcasting ALERT_SIREN_APPROACHING to OMM group...");
+    uint8_t siren_pkt[8] = { 0xFF, 0x53, 0x49, 0x52, 0x45, 0x4E, 0x01, 0xAA }; // [ALERT, S, I, R, E, N, ID, CHK]
+    return gnss_bridge_send_omm_packet(siren_pkt, sizeof(siren_pkt));
+}
+
 void task_rear_pod_bridge(void *pvParameters) {
     ESP_LOGI(TAG, "Rear Pod Bridge Task running on Core 0.");
 

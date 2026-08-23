@@ -31,6 +31,11 @@ static bool s_nav_ducking_active = false;
 static float s_port1_gain = 1.0f;
 static float s_port2_gain = 1.0f;
 
+static bool s_transparency_enabled = true;
+static float s_transparency_gain = 1.0f; // 0.0 to 1.0
+static float s_ambient_sensitivity = 1.0f; // User Gain
+static float s_agc_level = 1.0f; // Dynamic Automatic Gain Control
+
 esp_err_t audio_dsp_init(void) {
     ESP_LOGI(TAG, "Initializing I2S Standard Master Driver (48 kHz / 16-Bit Stereo)...");
 
@@ -93,6 +98,21 @@ void audio_set_nav_ducking(bool active) {
     s_nav_ducking_active = active;
 }
 
+void audio_set_ambient_transparency(bool enabled, float speed_kmh, float sensitivity_gain_db) {
+    s_transparency_enabled = enabled;
+    s_ambient_sensitivity = powf(10.0f, sensitivity_gain_db / 20.0f);
+
+    if (!enabled || speed_kmh > 30.0f) {
+        s_transparency_gain = 0.0f; // Full Mute above 30 km/h (Noise Gate)
+    } else if (speed_kmh <= 15.0f) {
+        s_transparency_gain = 1.0f; // Full transparency 0-15 km/h
+    } else {
+        // Raised-cosine fade between 15 and 30 km/h
+        float norm = (speed_kmh - 15.0f) / 15.0f; // 0.0 to 1.0
+        s_transparency_gain = 0.5f * (1.0f + cosf(norm * (float)M_PI));
+    }
+}
+
 void task_audio_dsp(void *pvParameters) {
     ESP_LOGI(TAG, "Audio DSP Realtime Pipeline Task running on Core 1.");
 
@@ -128,35 +148,63 @@ void task_audio_dsp(void *pvParameters) {
             float p1_sample = (float)rx_buffer[i * 2] * s_port1_gain;
             float p2_sample = (float)rx_buffer[i * 2 + 1] * s_port2_gain;
 
+            // Optional Ambient Microphone Input Processing with AGC
+            float ambient_mix = 0.0f;
+            if (s_transparency_enabled && s_transparency_gain > 0.001f) {
+                // Synthesize mono ambient reference or read from LIN2 ADC
+                float raw_amb = (p1_sample + p2_sample) * 0.15f * s_ambient_sensitivity;
+                float abs_amb = fabsf(raw_amb);
+
+                // Fast Attack / Slow Release AGC Level Detector
+                if (abs_amb > s_agc_level) {
+                    s_agc_level += 0.1f * (abs_amb - s_agc_level); // Fast attack (clamp loud horns)
+                } else {
+                    s_agc_level += 0.0005f * (abs_amb - s_agc_level); // Slow decay
+                }
+
+                float agc_scaler = 1.0f;
+                if (s_agc_level > 16384.0f) { // Above -6 dBFS
+                    agc_scaler = 16384.0f / s_agc_level;
+                }
+                ambient_mix = raw_amb * agc_scaler * s_transparency_gain;
+            }
+
             float out_l = 0.0f;
             float out_r = 0.0f;
 
             switch (s_current_mode) {
                 case MODE_SINGLE_RIDER:
-                    // Port 2 stumm, nur Port 1 geduckt
-                    out_l = p1_sample * s_ducking_factor;
-                    out_r = p1_sample * s_ducking_factor;
+                    // Port 2 stumm, nur Port 1 geduckt + Ambient Transparenz
+                    out_l = (p1_sample * s_ducking_factor) + ambient_mix;
+                    out_r = (p1_sample * s_ducking_factor) + ambient_mix;
                     break;
 
                 case MODE_CRUISE:
                     // Fokus auf Bordlautsprecher, Intercom -6 dB
-                    out_l = (p1_sample + p2_sample) * 0.5f * s_ducking_factor;
-                    out_r = (p1_sample + p2_sample) * 0.5f * s_ducking_factor;
+                    out_l = ((p1_sample + p2_sample) * 0.5f * s_ducking_factor) + (ambient_mix * 0.5f);
+                    out_r = ((p1_sample + p2_sample) * 0.5f * s_ducking_factor) + (ambient_mix * 0.5f);
                     break;
 
                 case MODE_STANDARD:
                 default:
-                    // Volle Mischung beider Ports zum Helm
-                    out_l = (p1_sample * 0.8f + p2_sample * 0.2f) * s_ducking_factor;
-                    out_r = (p1_sample * 0.2f + p2_sample * 0.8f) * s_ducking_factor;
+                    // Volle Mischung beider Ports zum Helm + Ambient Transparenz
+                    out_l = ((p1_sample * 0.8f + p2_sample * 0.2f) * s_ducking_factor) + ambient_mix;
+                    out_r = ((p1_sample * 0.2f + p2_sample * 0.8f) * s_ducking_factor) + ambient_mix;
                     break;
             }
 
-            // Hard Limiting / Clipping Protection
-            if (out_l > 32767.0f) out_l = 32767.0f;
-            if (out_l < -32768.0f) out_l = -32768.0f;
-            if (out_r > 32767.0f) out_r = 32767.0f;
-            if (out_r < -32768.0f) out_r = -32768.0f;
+            // Soft-Knee Peak Limiting / Brickwall Overdrive Protection
+            if (out_l > 30000.0f) {
+                out_l = 30000.0f + tanhf((out_l - 30000.0f) / 5000.0f) * 2767.0f;
+            } else if (out_l < -30000.0f) {
+                out_l = -30000.0f + tanhf((out_l + 30000.0f) / 5000.0f) * 2768.0f;
+            }
+
+            if (out_r > 30000.0f) {
+                out_r = 30000.0f + tanhf((out_r - 30000.0f) / 5000.0f) * 2767.0f;
+            } else if (out_r < -30000.0f) {
+                out_r = -30000.0f + tanhf((out_r + 30000.0f) / 5000.0f) * 2768.0f;
+            }
 
             tx_buffer[i * 2] = (int16_t)out_l;
             tx_buffer[i * 2 + 1] = (int16_t)out_r;

@@ -117,7 +117,7 @@ void onRawPacketReceived(uint8_t* rawData, size_t len) {
 ## 4. Dynamic Leader Election (DLE) Algorithmus
 Innerhalb jeder 2.4-GHz-Funkzelle wird autonom genau ein zentraler Gateway-Master (Cluster Head) gewaehlt:
 
-$$\text{Score}_{\text{DLE}} = S_{\text{HW}} + S_{\text{PWR}} + S_{\text{GNSS}} + S_{\text{LORA}} + S_{\text{UPTIME}}$$
+$$\text{Score}_{\text{DLE}} = S_{\text{HW}} + S_{\text{PWR}} + S_{\text{GNSS}} + S_{\text{LORA}} + S_{\text{UPTIME}} + S_{\text{MIC}}$$
 
 | Parameter | Bedingung | Punkte |
 | :--- | :--- | :---: |
@@ -127,7 +127,28 @@ $$\text{Score}_{\text{DLE}} = S_{\text{HW}} + S_{\text{PWR}} + S_{\text{GNSS}} +
 | | Pufferbetrieb (USV-Akku > 3.8 V) | +5 Pkt. |
 | **S_GNSS (Positionsstabilitaet)** | 3D Fix mit PDOP < 1.5 & 1-PPS Lock | **+10 Pkt.** |
 | **S_LORA (Link-Qualitaet)** | Durchschnittlicher Nachbar-RSSI > -85 dBm | **+10 Pkt.** |
+| **S_MIC (Akustik-Sensor)** | IP67 Front Ambient-Mikrofon aktiv (`FEAT_ENV_MIC`) | **+5 Pkt.** |
 | **S_UPTIME (Hysterese-Schutz)** | Bereits aktiver Leader (verhindert Flattern) | **+15 Pkt.** |
+
+### 4.1 Node Capability Vector & Smarte Kolonnen-Funktionen
+Im periodischen DLE-Beacon kuendigt jeder Knoten seine Ausstattungsmerkmale an:
+
+```cpp
+enum OmmFeatureBits : uint8_t {
+    FEAT_DUAL_MESH_BRIDGE  = (1 << 0), // Sena + Cardo aktiv (+60 Pkt)
+    FEAT_LORA_HIGH_POWER   = (1 << 1), // SX1262 +22 dBm PA
+    FEAT_GNSS_1PPS_LOCK    = (1 << 2), // Zeitnormal-Master
+    FEAT_CAN_TELEMETRY     = (1 << 3), // OBD2 / CAN-Bus aktiv
+    FEAT_ENV_MIC_ACTIVE    = (1 << 4), // Front Ambient-Mikrofon aktiv (+5 Pkt)
+    FEAT_USV_BAT_BUFFER    = (1 << 5)  // USV Pufferbetrieb moeglich
+};
+```
+
+1. **🚨 Kolonnen-Sirenen-Fruehwarnung (Siren Early Warning):**
+   * Erkennt das Frontmikrofon des Fuehrungs-Bikes an einer Kreuzung ein Martinshorn (350–1000 Hz Frequenzwechsel eines herannahenden Einsatzfahrzeugs), sendet der Node ein `ALERT_SIREN_APPROACHING`-Paket an die gesamte Kolonne.
+   * Alle nachfolgenden Fahrer erhalten einen Warnton im Helm, bevor die Sirene fuer sie hoerbar ist.
+2. **🎙️ Guide Pass-Through (Maut-/Grenzkontroll-Kanal):**
+   * Der Leader kann bei Stillstand an Mautstellen oder Grenzen sein geregeltes Frontmikrofon per Tastendruck fuer 10 Sekunden ins Gruppen-Mesh schalten, um Anweisungen des Personals fuer alle hoerbar zu machen.
 
 ---
 
