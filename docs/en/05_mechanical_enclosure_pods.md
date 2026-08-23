@@ -1,6 +1,6 @@
-# 05 - Mechanical Construction: Central Box, Sealing Concept & Universal Pods
+# 05 - Mechanical Construction: Central Box, Sealing Concept, HD26 Flange & Status Light Pipe
 
-This document specifies the IP67 enclosure design for the central main box (Type A) and the fully universal, vehicle-agnostic satellite pod system (Type B) with modular quick-swap cartridge bays and standard 6-pin Pogo interface.
+This document specifies the IP67 enclosure design for the central main box (Type A) featuring the **HD26 wall flange in the upper tray**, **mid-tray pass-through apertures**, and **waterproof RGB light pipe**, alongside the universal satellite pod system (Type B) with modular cartridge bays.
 
 ---
 
@@ -12,43 +12,136 @@ This document specifies the IP67 enclosure design for the central main box (Type
 
 ```
 ┌────────────────────────────────────────────────────────────┐  ▲
-│ 1. LID (3.0 mm wall thickness + M8 ePTFE Vent + Ridge)     │  │
+│ 1. LID (3.0 mm wall thickness + M8 ePTFE Vent + LED Pipe)  │  │
 ├────────────────────────────────────────────────────────────┤  │ 43.5 mm
-│ 2. UPPER TRAY / MID BAFFLE (15.0 mm internal clearance)    │  │ Total
-├────────────────────────────────────────────────────────────┤  │ Height
-│ 3. LOWER CASE (20.0 mm internal clearance + PCB standoffs) │  │
+│ 2. UPPER TRAY: HD26 Wall Flange (Front) + Mid Baffle Floor │  │ Total
+│    • Ribbon Cable Slot (38 x 6 mm chamfered)               │  │ Height
+│    • LED Light Shaft (Ø 5.0 mm) & 4x Pressure Equal. Slots │  │
+├────────────────────────────────────────────────────────────┤  │
+│ 3. LOWER CASE: Closed Immersion Tray (20 mm int. height)   │  │
+│    • 4x M2.5 PCB Standoffs + Recessed LiPo Battery Pocket  │  │
 └────────────────────────────────────────────────────────────┘  ▼
 ```
 
-### 1.1 Sandwich Construction & PCB Mounting
-1. **Lower Case:** Recessed battery pocket (52.0 x 36.0 x 6.5 mm) for LiPo buffer pack (vibration-damped with 3M VHB 4910 foam tape) and NTC thermistor. Four Ruthex M3 x 5.7 mm brass heat-set inserts.
-2. **Electronics Tray:** 4-layer PCB (85.0 x 55.0 mm) mounted on four 4.0 mm cylinder standoffs with M2.5 x 5 mm screws (3.6 mm pilot holes with Ruthex M2.5 heat-set inserts) and NBR O-rings for vibration isolation.
-3. **Mid Baffle / Upper Tray:** Shields power electronics and battery; 6x ventilation slots (18.0 x 2.5 mm) equalize internal air pressure.
-4. **Enclosure Lid:** Bolted through with four M3 x 40/45 mm stainless steel socket head screws (DIN 912 / ISO 4762) into bottom Ruthex M3 brass inserts ($0.8\,\text{Nm}$ torque, secured with *Loctite 243*).
-
-### 1.2 Gasket Concept & Pressure Equalization
-- **Perimeter Tongue-and-Groove Gasket:** 2x NBR or silicone cord gaskets (2.0 mm diameter, 50–60 Shore A) in 2.5 x 1.5 mm grooves (25% defined pre-compression).
-- **Pressure Equalization Vent:** M8 x 1.25 threaded vent with waterproof ePTFE membrane (Gore Automotive Vent AVS 41 / Schreiner). Airflow $> 120\,\text{ml/min}$ @ 70 mbar, water intrusion point $> 1.5\,\text{bar}$.
-- **HD26 Wall Flange:** IP67 D-Sub HD26 flange socket with silicone seal in enclosure wall, internally strain-relieved via 26-conductor ribbon cable to 2x13 box header (J1).
+### 1.1 Sandwich Construction & Layer Breakdown
+1. **Lower Case (20.0 mm Internal Height - Closed Immersion Tray):**
+   * Fully sealed, solid-wall enclosure (no penetrations below PCB level).
+   * Recessed battery pocket (52.0 x 36.0 x 6.5 mm) for LiPo buffer pack (vibration-damped with *3M VHB 4910* foam tape) and NTC thermistor.
+   * Four Ruthex M3 x 5.7 mm brass heat-set inserts in the lower floor for through-bolts.
+   * 4-layer PCB (85.0 x 55.0 mm) mounted on four 4.0 mm cylinder standoffs with M2.5 x 5 mm screws and NBR O-rings for vibration isolation.
+2. **Upper Tray / Mid Frame (15.0 mm Internal Height):**
+   * Houses the bolted **HD26 D-Sub wall flange** on the front panel.
+   * Provides $12\,\text{mm}$ clearance for connector depth and a smooth loop for the ribbon cable.
+3. **Enclosure Lid (3.0 mm Wall Thickness):**
+   * Integrates the M8 x 1.25 ePTFE pressure equalization vent and the $\varnothing\,3.0\,\text{mm}$ PMMA light pipe for the WS2812B RGB LED.
+   * Bolted through with four M3 x 40/45 mm stainless steel socket head screws (DIN 912 / ISO 4762) into bottom Ruthex M3 brass inserts ($0.8\,\text{Nm}$ torque, secured with *Loctite 243*).
 
 ---
 
-## 2. Enclosure Type B: Universal Satellite Pod (Identical for Pods 1, 2, and 3)
-- **100% Universal Design:** All 3 pod locations on the motorcycle use the identical, fully universal enclosure body.
+## 2. Mid Baffle Pass-Throughs & Cable Routing
+
+The mid baffle separates the PCB/battery compartment mechanically from the connector chamber while providing precise pass-through cutouts:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                 UPPER TRAY MID BAFFLE (Top View)            │
+│                                                             │
+│   ┌─────────────────────────────┐     ┌─────────────────┐   │
+│   │ 1. Ribbon Cable Slot        │     │ 2. LED Shaft    │   │
+│   │    (38.0 x 6.0 mm)          │     │    (Ø 5.0 mm)   │   │
+│   │    Chamfered Edge R1.5 mm   │     │    Clearance    │   │
+│   └─────────────────────────────┘     └─────────────────┘   │
+│                                                             │
+│   [Slot 1]                 [Slot 2]                 [Slot 3]│
+│   (15 x 2 mm)              (15 x 2 mm)              (15 x 2)│
+│   ◄──────── 4x Internal Pressure Equalization Slots ───────►│
+└─────────────────────────────────────────────────────────────┘
+```
+
+### 2.1 Pass-Through Specifications
+1. **Ribbon Cable Slot:**
+   * **Dimensions:** $38.0 \times 6.0\,\text{mm}$ with $R=1.5\,\text{mm}$ full perimeter chamfer on top and bottom faces (prevents insulation abrasion on the 26-conductor AWG28 ribbon cable).
+   * **Position:** Aligned directly above the 2x13 box header `J1` on the main PCB.
+2. **Optical LED Light Shaft:**
+   * **Geometry:** $\varnothing\,5.0\,\text{mm}$ clearance hole, coaxially positioned above SMD LED `LED1` (WS2812B, GPIO 48).
+   * **Function:** Allows the lid-mounted PMMA light pipe to extend down to within $0.8\,\text{mm}$ of the LED emitter surface.
+3. **Pressure Equalization & Venting Slots:**
+   * 4x Labyrinth ventilation slots ($15.0 \times 2.0\,\text{mm}$) allow unimpeded airflow between lower tray and the M8 ePTFE vent in the lid while keeping cables organized.
+
+---
+
+## 3. HD26 D-Sub Enclosure Wall Flange (Upper Tray)
+
+```
+    OUTSIDE (IP67 Environment)                 UPPER TRAY (Main Box)
+┌─────────────────────────┐               ┌─────────────────────────────────┐
+│ IP67 HD26 Plug          │  Flange       │ 26-cond. Ribbon Cable (45 mm)   │
+│ (Main Harness)          ├── Gasket ─────┤ with 2x13 Box Header (J1)       │
+│ 2x M3 Jackscrews O-Ring │  (EPDM 1.5mm) │ ──► Through Mid-Baffle Slot     │
+└─────────────────────────┘               │ ──► Plugs onto Main PCB Header  │
+                                          └─────────────────────────────────┘
+```
+
+### 3.1 Mechanical Flange Specification
+* **Cutout Geometry:** D-Sub High-Density 26-pin cutout ($31.0 \times 13.0\,\text{mm}$) with $2.0\,\text{mm}$ corner radii in the **upper tray** front wall.
+* **Flange Gasket:** Precision-molded EPDM flat gasket ($1.5\,\text{mm}$ thickness, 60 Shore A) between metal collar of the Amphenol LTW / NorComp SEAL-D socket and enclosure wall.
+* **Fastening:** 2x stainless steel jackscrews (UNC 4-40 or M3 with O-ring sealing washers) torqued to $0.6\,\text{Nm}$ for a watertight seal.
+* **Strain-Relieved Interconnect:** A $45\,\text{mm}$ ultra-flexible 26-conductor ribbon cable (AWG28, 1.27 mm pitch) connects through the baffle slot to the 2x13 box header (J1) on the PCB.
+
+---
+
+## 4. Waterproof Light Pipe for WS2812B RGB Status LED
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ ENCLOSURE LID (3.0 mm Wall Thickness)                       │
+│                  ┌──────────────────┐                       │
+│                  │  PMMA Light Pipe │ ◄── O-Ring Gasket     │
+│                  │  (Ø 3.0 mm Matt) │     (IP67 Sealed)     │
+│                  └────────┬─────────┘                       │
+├───────────────────────────┼─────────────────────────────────┤
+│ MID BAFFLE                │ Passes through Ø 5.0 mm shaft
+├───────────────────────────┼─────────────────────────────────┤
+│                           │ Optical Air Gap 0.8 mm          │
+│                           ▼                                 │
+│                  ┌──────────────────┐                       │
+│                  │ WS2812B RGB LED  │                       │
+│  MAIN PCB        │ (ESP32 GPIO 48)  │                       │
+│  (LOWER TRAY)    └──────────────────┘                       │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### 4.1 Optical & Mechanical Specification
+* **Light Pipe Component:** PMMA optical light pipe with diffuse matte lens (*Bivar PLPC3-3MM* or *Mentor 1292.1101*), $\varnothing\,3.0\,\text{mm}$.
+* **Sealing:** NBR O-ring ($\varnothing\,3.0\,\text{mm}$ ID, $1.0\,\text{mm}$ cord thickness) inside stepped lid aperture, flush-mounted and sealed with optical-grade polyurethane.
+* **Visibility:** 120° viewing angle, clearly discernible under direct sunlight beneath seat / inside side cover.
+
+### 4.2 Status LED Color Code (State Machine)
+
+| LED Color & Pattern | Operational State | Meaning |
+| :--- | :--- | :--- |
+| 🟢 **Green Pulsing (1 Hz)** | **Normal Operation (Online)** | Main power active, all plugged pods operational, DLE OK |
+| 🔵 **Blue Blinking (2 Hz)** | **BLE Dashboard / Pairing** | WebApp PWA actively connected / data transfer |
+| 🟡 **Yellow Pulsing (0.5 Hz)**| **UPS Battery Mode (KL15 OFF)**| Shutdown rundown: GPX Tour-Close & WebDAV upload |
+| 🔴 **Red Fast Blinking** | **Warning / Error** | Starter battery under-voltage ($< 11.8\,\text{V}$) / Cartridge short |
+| 🟣 **Solid Purple** | **OMM DLE Leader** | Current motorcycle is coordinating the group mesh |
+| ⚪ **White Double Flash** | **Actioncam Marker** | Handlebar button pressed: GPS highlight marker saved |
+
+---
+
+## 5. Enclosure Type B: Universal Satellite Pod (Identical for Pods 1, 2, and 3)
+- **100% Universal Design:** All 3 pod locations on the motorcycle use the identical enclosure body.
 - **Bay Dimensions:** 64.0 x 46.0 x 23.5 mm.
 - **Cartridge Module:** 54.0 x 37.5 x 17.0 mm (PA12 MJF).
 - **Contact Array:** Mill-Max 6-pin pogo pin array (Series 824-22-006-00-001101, 2.54 mm pitch, 1.4 mm working stroke) with silicone boot gasket mating against ENIG pads.
-- **3-Stage Locking Mechanism:**
-  1. *Snap-Lock:* POM-C spring latches with tactile acoustic click.
-  2. *Cam-Lock:* Front 90-degree stainless steel rotating cam lock positively prevents accidental release under $> 20\,\text{g}$ shock loads.
-  3. *Push-to-Eject:* Rubberized rocker lever ejects cartridge by 8.0 mm upon unlocking.
-- **Universal Mounting:** Integrated M5 backplate for flat mounting, 3M Dual-Lock, or CNC aluminum tube clamps (compatible with all standard tube diameters: 22.0 mm, 28.6 mm, 1.0 inch, and 25–32 mm crash bars).
+- **3-Stage Locking:** Snap-lock POM-C latches, 90-degree rotating cam-lock, push-to-eject lever.
+- **Universal Mounting:** Integrated M5 backplate for flat mounting or CNC aluminum tube clamps (22.0 mm, 28.6 mm, 1.0 inch, 25–32 mm crash bars).
 
 ---
 
-## 3. Universal 6-Pin Pogo Contact Pinout
+## 6. Universal 6-Pin Pogo Contact Pinout
 
-| Pogo Pin | Pods 1 & 2 (Left / Right: Audio & Intercom Cartridges) | Pod 3 (Rear: GNSS & OpenMotorMesh LoRa) |
+| Pogo Pin | Pods 1 & 2 (Left / Right: Audio & Intercom Cartridges) | Pod 3 (Rear: GNSS & Dual-PHY OpenMotorMesh) |
 | :---: | :--- | :--- |
 | **Pin 1** | **`VCC`** (5V switched supply via P-FET) | **`VCC`** (5V continuous supply) |
 | **Pin 2** | **`GND`** (Dedicated power & signal ground) | **`GND`** (Dedicated power & signal ground) |
@@ -56,11 +149,3 @@ This document specifies the IP67 enclosure design for the central main box (Type
 | **Pin 4** | **`NF_N`** (Balanced audio signal - via Bourns) | **`UART_RX`** (Central Box $\rightarrow$ Rear Co-Processor) |
 | **Pin 5** | **`OPTO`** (TLP222A button simulation trigger) | **`GNSS_PPS`** (1-PPS hardware time sync) |
 | **Pin 6** | **`1-WIRE_ID`** (DS2401 Silicon Serial Number) | **`1-WIRE_ID`** (DS2401 rear cartridge identification) |
-
----
-
-## 4. Universal Cable Harness (Central Box to Pods)
-- **Cable Type:** High-flexibility, oil- and UV-resistant PUR cable with tinned copper braided shield.
-- **Conductors:** $2 \times 0.25\,\text{mm}^2$ (VCC / GND for up to 1 A charging current) + $4 \times 0.14\,\text{mm}^2$ twisted pairs (Audio/UART, Opto/PPS, 1-Wire ID).
-- **Shield Termination:** Braided shield terminated low-inductance to `GND_SHIELD` (Pin 22) on central box only.
-- **Vehicle Flexibility:** Because the pods share an identical form factor, Pods 1, 2, and 3 can be mounted flexibly on any motorcycle type (Harley-Davidson, BMW GS, KTM, Yamaha, Honda, Ducati, Triumph) on frame rails, crash bars, fairing stays, or luggage racks.

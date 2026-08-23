@@ -18,7 +18,9 @@ Complete component list and manufacturing specifications for SMT pick-and-place 
 | **OC1, OC2**| TLP222A(F) | Toshiba | SOP-4 | C112444 | Solid-State PhotoMOS Relay for PTT Button Simulation |
 | **D1** | SMBJ33CA | Littelfuse | DO-214AA (SMB) | C87848 | TVS Diode (33 V Standoff, 53.3 V max Clamping) |
 | **F1** | MF-MSMF050-2 | Bourns | 1812 SMD | C22668 | Resettable PPTC Fuse (500 mA Hold / 1.0 A Trip) |
-| **TH1** | NCP18XH103F03RB | Murata | 0603 SMD | C25804 | 10k NTC Thermistor for BQ24075 JEITA Thermal Cutoff |
+| **LED1** | WS2812B-B | Worldsemi | 5050 SMD | C114586 | RGB Status LED for Visual Mode & State Indication |
+| **LP1** | PLPC3-3MM / 1292.1101 | Bivar / Mentor | Ø 3.0 mm PMMA | Mechanical | IP67 Light Pipe with O-Ring in Top Enclosure Lid |
+| **VENT1** | AVS 41 | Gore Automotive | M8 x 1.25 Thread | Mechanical | ePTFE Pressure Equalization Vent (IP67 / 120 ml/min) |
 | **J1** | 2x13 Box Header | Standard 2.54 mm | THT Box Header | C2934175 | Internal Ribbon Header to HD26 Flange Connector |
 | **J2** | MicroSD Slot Push-Push | Molex / Korean Hro | SMD Push-Push | C266624 | 4-Bit SDIO Memory Card Slot for Tour Logging |
 | **CN1** | HD26 Socket IP67 | Amphenol LTW | Flange D-Sub | Custom Part | Waterproof 26-pin Outer Enclosure Interface |

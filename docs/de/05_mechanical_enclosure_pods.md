@@ -1,6 +1,6 @@
-# 05 - Mechanische Konstruktion: Zentralbox, Dichtungskonzept & Universal-Kassetten-Pods
+# 05 - Mechanische Konstruktion: Zentralbox, Dichtungskonzept, HD26-Wandflansch & Status-LED
 
-Dieses Dokument spezifiziert das IP67-Gehaeusedesign der zentralen Steuerbox (Typ A) sowie das hersteller- und fahrzeugunabhaengige, universelle Satelliten-Pod-System (Typ B) mit modularen Kassetten-Einschueben und Pogo-Pin-Schnittstelle.
+Dieses Dokument spezifiziert das IP67-Gehaeusedesign der zentralen Steuerbox (Typ A) mit integriertem **HD26-Wandflansch in der Oberwanne**, **Zwischenboden-Kabeldurchfuehrung** und **wasserdichtem RGB-Lichtleiter**, sowie das universelle Satelliten-Pod-System (Typ B) mit Kassetten-Einschueben.
 
 ---
 
@@ -12,43 +12,136 @@ Dieses Dokument spezifiziert das IP67-Gehaeusedesign der zentralen Steuerbox (Ty
 
 ```
 ┌────────────────────────────────────────────────────────────┐  ▲
-│ 1. DECKEL (3,0 mm Wandstärke + M8 ePTFE Vent + Zentriersteg│  │
+│ 1. DECKEL (3,0 mm Wandstärke + M8 ePTFE Vent + LED-Optik)  │  │
 ├────────────────────────────────────────────────────────────┤  │ 43,5 mm
-│ 2. OBERWANNE / ZWISCHENBODEN (15,0 mm lichte Innenhöhe)    │  │ Gesamt-
-├────────────────────────────────────────────────────────────┤  │ höhe
-│ 3. UNTERWANNE (20,0 mm lichte Innenhöhe + PCB-Dome)        │  │
+│ 2. OBERWANNE: HD26-Wandflansch (Stirnseite) + Baffle-Boden │  │ Gesamt-
+│    • Flachbandkabel-Durchführung (38 x 6 mm verrundet)     │  │ höhe
+│    • LED-Lichtschacht (Ø 5,0 mm) & 4x Druckausgleich-Slots │  │
+├────────────────────────────────────────────────────────────┤  │
+│ 3. UNTERWANNE: Geschlossene Tauchwanne (20 mm Innenhöhe)   │  │
+│    • 4x M2,5 PCB-Dome + vertiefte LiPo-Akkutasche im Boden │  │
 └────────────────────────────────────────────────────────────┘  ▼
 ```
 
-### 1.1 Sandwich-Aufbau & Platinenbefestigung
-1. **Unterwanne:** Vertiefte Akkutasche (52.0 x 36.0 x 6.5 mm) fuer den LiPo-Pufferakku (mit 3M VHB 4910 Schaumklebeband vibrationsgedaempft) und NTC-Temperatursensor. Vier Ruthex M3 x 5.7 mm Messing-Schmelzeinsaetze.
-2. **Elektronik-Ebene:** 4-Lagen-Platine (85.0 x 55.0 mm) auf vier 4.0-mm-Zylinderdomen mit M2.5 x 5 mm Schrauben (Bohrung 3.6 mm fuer Ruthex M2.5 Schmelzeinsaetze) und NBR-O-Ringen schwingungsentkoppelt gelagert.
-3. **Zwischenboden / Oberwanne:** Schirmt Leistungselektronik und Akku ab; 6x Lueftungsschlitze (18.0 x 2.5 mm) ermoeglichen inneren Druckausgleich.
-4. **Gehaeusedeckel:** Durchgehend ueber vier M3 x 40/45 mm Edelstahl-Zylinderschrauben (DIN 912 / ISO 4762) in die Ruthex M3 Messingbuchsen des Bodens verschraubt ($0{,}8\,\text{Nm}$ Anzugsmoment, gesichert mit *Loctite 243*).
-
-### 1.2 Dichtungskonzept & Druckausgleich
-- **Umlaufende Nut-Feder-Dichtung:** 2x NBR- bzw. Silikon-Rundschnuere (Durchmesser 2.0 mm, Shore-Haerte 50–60 A) in 2.5 x 1.5 mm Nuten (25 % definierte Vorkompression).
-- **Druckausgleichselement:** M8 x 1.25 Schraubventil mit wasserdichter ePTFE-Membran (Gore Automotive Vent AVS 41 / Schreiner). Luftdurchsatz $> 120\,\text{ml/min}$ bei 70 mbar, Wassereintrittspunkt $> 1{,}5\,\text{bar}$.
-- **HD26-Wandflansch:** Wasserdichte IP67 D-Sub HD26 Flanschbuchse mit Silikondichtung in der Gehaeusewand, intern ueber 26-poliges Flachbandkabel auf 2x13 Wannenstecker (J1) spannungsfrei entkoppelt.
+### 1.1 Sandwich-Aufbau & Schichtaufteilung
+1. **Unterwanne (20,0 mm Innenhöhe - Geschlossene Tauchwanne):**
+   * Vollstaendig geschlossene, durchbruchsfreie Wanne (kein Wassereintritt bei stehender Feuchtigkeit).
+   * Vertiefte Akkutasche (52.0 x 36.0 x 6.5 mm) fuer den LiPo-Pufferakku (mit *3M VHB 4910* Schaumklebeband vibrationsgedaempft) und NTC-Temperatursensor.
+   * Vier Ruthex M3 x 5.7 mm Messing-Schmelzeinsaetze im Wannenboden fuer die Gehaeusedurchgangsschrauben.
+   * 4-Lagen-Platine (85.0 x 55.0 mm) auf vier 4.0-mm-Zylinderdomen mit M2.5 x 5 mm Schrauben und NBR-O-Ringen schwingungsentkoppelt gelagert.
+2. **Oberwanne / Zwischenrahmen (15,0 mm Innenhöhe):**
+   * Beherbergt den verschraubten **HD26-D-Sub-Wandflansch** an der vorderen Stirnseite.
+   * Bietet $12\,\text{mm}$ freie Einbautiefe fuer die Steckerbuchse und eine sanfte Biegeschlaufe fuer das Flachbandkabel.
+3. **Gehaeusedeckel (3,0 mm Wandstärke):**
+   * Integriert das M8 x 1.25 ePTFE Druckausgleichsventil und den $\varnothing\,3{,}0\,\text{mm}$ PMMA-Lichtleiter fuer die WS2812B RGB-LED.
+   * Verschraubt ueber vier durchgehende M3 x 40/45 mm Edelstahl-Zylinderschrauben (DIN 912 / ISO 4762) mit $0{,}8\,\text{Nm}$ Anzugsmoment (gesichert mit *Loctite 243*).
 
 ---
 
-## 2. Gehaeuse Typ B: Universeller Satelliten-Pod (Identisch fuer Pod 1, 2 und 3)
-- **Vollstaendige Modularitaet:** Alle 3 Pod-Positionen am Motorrad nutzen das identische, vollstaendig universelle Gehaeuse.
+## 2. Zwischenboden-Durchfuehrung & Kabelmanagement
+
+Der Zwischenboden der Oberwanne trennt die empfindliche Leiterplatten- und Akkuebene mechanisch vom Steckeranschlussraum, besitzt jedoch praezise Durchbrueche:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│              ZWISCHENBODEN DER OBERWANNE (Draufsicht)       │
+│                                                             │
+│   ┌─────────────────────────────┐     ┌─────────────────┐   │
+│   │ 1. Flachbandkabel-Schlitz   │     │ 2. LED-Schacht  │   │
+│   │    (38,0 x 6,0 mm)          │     │    (Ø 5,0 mm)   │   │
+│   │    Rundum-Fase R1.5 mm      │     │    Freistellung │   │
+│   └─────────────────────────────┘     └─────────────────┘   │
+│                                                             │
+│   [Slot 1]                 [Slot 2]                 [Slot 3]│
+│   (15 x 2 mm)              (15 x 2 mm)              (15 x 2)│
+│   ◄────────── 4x Innere Druckausgleichs-Schlitze ──────────►│
+└─────────────────────────────────────────────────────────────┘
+```
+
+### 2.1 Spezifikation der Durchbrueche
+1. **Flachbandkabel-Durchfuehrung:**
+   * **Abmessungen:** $38{,}0 \times 6{,}0\,\text{mm}$ mit $R=1{,}5\,\text{mm}$ Rundum-Fase an Ober- und Unterkante (verhindert Scheuern oder Kantenabrieb des 26-poligen AWG28 Flachbandkabels bei Fahrzeugvibrationen).
+   * **Position:** Direkt vertikal ueber dem 2x13 Wannenstecker `J1` der Hauptplatine angeordnet.
+2. **Optischer LED-Lichtschacht:**
+   * **Geometrie:** Durchgangsbohrung $\varnothing\,5{,}0\,\text{mm}$, koaxial ueber der SMD-LED `LED1` (WS2812B, GPIO 48) platziert.
+   * **Funktion:** Ermoeglicht das ungehinderte Heranfuehren des im Deckel sitzenden PMMA-Lichtleiters bis auf $0{,}8\,\text{mm}$ an die LED-Oberflaeche.
+3. **Druckausgleichs- & Belueftungsschlitze:**
+   * 4x Labyrinth-Lueftungsschlitze ($15{,}0 \times 2{,}0\,\text{mm}$) ermoeglichen den freien Luftaustausch zwischen Unterwanne und dem M8 ePTFE-Ventil im Deckel, ohne dass lose Kabel nach unten rutschen koennen.
+
+---
+
+## 3. HD26 D-Sub Gehaeusewand-Flansch (In der Oberwanne)
+
+```
+    AUSSENSEITE (IP67)                        OBERWANNE (Zentralbox)
+┌─────────────────────────┐               ┌─────────────────────────────────┐
+│ IP67 HD26 Stecker       │  Flansch-     │ 26-pol. Flachbandkabel (45 mm)  │
+│ (Haupt-Kabelbaum)       ├── Dichtung ───┤ mit 2x13 Buchsenleiste (J1)     │
+│ 2x M3 Jackscrews O-Ring │  (EPDM 1.5mm) │ ──► Durch Zwischenboden-Schlitz │
+└─────────────────────────┘               │ ──► Steckt auf Hauptplatine     │
+                                          └─────────────────────────────────┘
+```
+
+### 3.1 Mechanische Spezifikation des Flanschausschnitts
+* **Ausschnitt-Geometrie:** D-Sub High-Density 26-Pin Ausschnitt ($31{,}0 \times 13{,}0\,\text{mm}$) mit $2{,}0\,\text{mm}$ Radien in der Stirnwand der **Oberwanne**.
+* **Flanschdichtung:** Formgenaue EPDM-Flachdichtung ($1{,}5\,\text{mm}$ Staerke, Shore 60 A) zwischen Metallkragen der Amphenol LTW / NorComp SEAL-D Buchse und Gehaeusewand.
+* **Verschraubung:** 2x Edelstahl-Sechskantbolzen (UNC 4-40 oder M3 mit O-Ring-Dichtscheiben) klemmen den Flansch mit $0{,}6\,\text{Nm}$ wasserdicht gegen die Wand.
+* **Spannungsfreie Entkopplung:** Ein $45\,\text{mm}$ langes, hochflexibles 26-poliges Flachbandkabel (AWG28, Raster 1.27 mm) fuehrt durch den Zwischenboden-Schlitz zur 2x13 Wannenbuchse (J1) auf dem PCB.
+
+---
+
+## 4. Wasserdichter Lichtleiter fuer die WS2812B RGB Status-LED
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ GEHAEUSEDECKEL (Wandstaerke 3,0 mm)                         │
+│                  ┌──────────────────┐                       │
+│                  │  PMMA Lichtleiter│ ◄── O-Ring Dichtung   │
+│                  │  (Ø 3,0 mm Matt) │     (IP67 Versiegelung│
+│                  └────────┬─────────┘                       │
+├───────────────────────────┼─────────────────────────────────┤
+│ ZWISCHENBODEN             │ Durchtritt durch Ø 5,0 mm Schacht
+├───────────────────────────┼─────────────────────────────────┤
+│                           │ Optischer Luftspalt 0,8 mm      │
+│                           ▼                                 │
+│                  ┌──────────────────┐                       │
+│                  │ WS2812B RGB-LED  │                       │
+│  HAUPTPLATINE    │ (ESP32 GPIO 48)  │                       │
+│  (UNTERWANNE)    └──────────────────┘                       │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### 4.1 Optische & Mechanische Spezifikation
+* **Lichtleiter-Typ:** PMMA-Praezisions-Lichtleiter mit diffuser, matter Linse (*Bivar PLPC3-3MM* oder *Mentor 1292.1101*), Durchmesser $\varnothing\,3{,}0\,\text{mm}$.
+* **Dichtung:** Umlaufender NBR-O-Ring ($\varnothing\,3{,}0\,\text{mm}$ ID, $1{,}0\,\text{mm}$ Schnurstaerke) in Stufenbohrung des Deckels, frontbuendig eingepresst und mit transparentem Polyurethan versiegelt.
+* **Sichtbarkeit:** 120°-Abstrahlwinkel, auch bei direkter Sonneneinstrahlung unter der Sitzbank / im Rahmendeckel deutlich sichtbar.
+
+### 4.2 Status-Farbcodierung (LED State Machine)
+
+| LED-Farbe & Muster | Betriebszustand | Bedeutung |
+| :--- | :--- | :--- |
+| 🟢 **Gruen pulsierend (1 Hz)** | **Normalbetrieb (Online)** | Bordnetz aktiv, alle gesteckten Pods aktiv, DLE OK |
+| 🔵 **Blau blinkend (2 Hz)** | **BLE Dashboard / Pairing** | WebApp PWA aktiv verbunden / Datenaustausch |
+| 🟡 **Gelb pulsierend (0.5 Hz)**| **USV-Akkubetrieb (KL15 AUS)**| Nachlauf-Modus: GPX Tour-Close & WebDAV Sync |
+| 🔴 **Rot schnell blinkend** | **Warnung / Fehler** | Unterspannung Starterbatterie ($< 11{,}8\,\text{V}$) / Kassetten-Kurzschluss |
+| 🟣 **Lila leuchtend** | **OMM DLE Leader** | Dieses Motorrad fuehrt die Mesh-Koordination der Gruppe |
+| ⚪ **Weiss Doppelblitz** | **Actioncam Marker** | Lenkertaster gedrueckt: GPS Highlight-Marker gesetzt |
+
+---
+
+## 5. Gehaeuse Typ B: Universeller Satelliten-Pod (Identisch fuer Pod 1, 2 und 3)
+- **Vollstaendige Modularitaet:** Alle 3 Pod-Positionen am Motorrad nutzen das identische, universelle Gehaeuse.
 - **Abmessungen Schacht:** 64.0 x 46.0 x 23.5 mm.
 - **Elektronik-Kassette:** 54.0 x 37.5 x 17.0 mm (PA12 MJF).
 - **Kontaktblock:** 6-poliges Mill-Max Pogo-Pin-Array (Serie 824-22-006-00-001101, Raster 2.54 mm, 1.4 mm Arbeitshub) mit Silikon-Formschuhdichtung gegen vergoldete ENIG-Pads.
-- **3-Stufen-Sicherheitsarretierung:**
-  1. *Snap-Lock:* POM-C Federklinken mit akustischem Klick beim Einschieben.
-  2. *Cam-Lock:* Stirnseitiger 90-Grad-Edelstahl-Drehriegel blockiert Klinken formschluessig gegen Stoesse $> 20\,\text{g}$.
-  3. *Push-to-Eject:* Gummierte Hebelwippe wirft Kassette nach Entriegelung um 8.0 mm aus.
-- **Universelle Montage:** Integrierte M5-Rueckenplatte fuer universelle Flachmontage, 3M Dual-Lock oder CNC-Aluminium-Rohrschellen (kompatibel mit allen Standard-Rohrdurchmessern: 22.0 mm, 28.6 mm, 1.0 Zoll sowie Sturzbuegeln von 25 bis 32 mm).
+- **3-Stufen-Sicherheitsarretierung:** Snap-Lock POM-C Klinken, 90°-Cam-Lock Drehriegel, Push-to-Eject Wippe.
+- **Universelle Montage:** Integrierte M5-Rueckenplatte fuer Flachmontage oder CNC-Aluminium-Rohrschellen (22.0 mm, 28.6 mm, 1.0 Zoll, 25–32 mm Sturzbuegel).
 
 ---
 
-## 3. Belegung der universellen 6-Pin Pogo-Kontaktleiste
+## 6. Belegung der universellen 6-Pin Pogo-Kontaktleiste
 
-| Pogo-Pin | Pod 1 & 2 (Links / Rechts: Audio & Intercom-Kassetten) | Pod 3 (Heck: GNSS & OpenMotorMesh LoRa) |
+| Pogo-Pin | Pod 1 & 2 (Links / Rechts: Audio & Intercom-Kassetten) | Pod 3 (Heck: GNSS & Dual-PHY OpenMotorMesh) |
 | :---: | :--- | :--- |
 | **Pin 1** | **`VCC`** (5V geschaltete Speisespannung via MOSFET) | **`VCC`** (5V Dauer-Versorgung) |
 | **Pin 2** | **`GND`** (Dedizierte Power- & Signalmasse) | **`GND`** (Dedizierte Power- & Signalmasse) |
@@ -56,11 +149,3 @@ Dieses Dokument spezifiziert das IP67-Gehaeusedesign der zentralen Steuerbox (Ty
 | **Pin 4** | **`NF_N`** (Symmetrisches Audiosignal - via Bourns) | **`UART_RX`** (Zentralbox $\rightarrow$ Heck-Co-Prozessor) |
 | **Pin 5** | **`OPTO`** (TLP222A Tastensimulations-Trigger) | **`GNSS_PPS`** (1-PPS Hardware-Zeitnormal Sync) |
 | **Pin 6** | **`1-WIRE_ID`** (DS2401 Silicon Serial Number) | **`1-WIRE_ID`** (DS2401 Heck-Kassetten-Erkennung) |
-
----
-
-## 4. Universeller Kabelbaum (Zentralbox zu Pods)
-- **Kabeltyp:** Hochflexibles, oel- und UV-bestaendiges PUR-Kabel mit Geflechtschirm aus verzinntem Kupfer.
-- **Adernaufbau:** $2 \times 0.25\,\text{mm}^2$ (VCC / GND fuer bis zu 1 A Ladestrom) + $4 \times 0.14\,\text{mm}^2$ verdrillte Paare (Audio/UART, Opto/PPS, 1-Wire ID).
-- **Schirmanschluss:** Der Gesamtschirm ist einseitig an der Zentralbox auf `GND_SHIELD` (Pin 22) niederinduktiv aufgelegt.
-- **Fahrzeug-Freiheit:** Dank der identischen Pod-Bauform koennen Pod 1, Pod 2 und Pod 3 an jedem beliebigen Motorradtyp (Harley-Davidson, BMW GS, KTM, Yamaha, Honda, Ducati, Triumph) frei an Rahmenrohren, Sturzbuegeln, Cockpithaltern oder Gepaecktraegern montiert werden.
