@@ -24,3 +24,8 @@
 * **Datum:** 2026-08
 * **Entscheidung:** Aufnahme des Everest ES8388 24-Bit I2S Audio-Codecs, TI TCAN334G CAN-FD Transceivers, Littelfuse SMBJ33CA TVS + Bourns PPTC Sicherung sowie 10k NTC am BQ24075 TS-Pin.
 * **Grund:** Bereitstellung von HiFi-Audio-Wandlung für den ESP32-S3, standardkonforme Fahrzeug-CAN-Anbindung, $> 12\,\text{V}$ Headroom für den LM5164 Buck Regler bei Load-Dumps und Schutz des LiPo-Akkus vor Frost (< 0 °C) und Sitzbank-Hitze (> 45 °C).
+
+### ADR-006: Adaptive Tiered QoS & LTE-Sidelink Cluster Partitioning Gateway Relay
+* **Datum:** 2026-08
+* **Entscheidung:** Einführung eines 3-Stufen-QoS-Kaskadenmodells (2.4 GHz Full-Duplex -> Randbereich ohne Music Sharing -> LoRa Codec2 PTT & Radar) und Adaption von 3GPP C-V2X / ProSe Sidelink Cluster Head Discovery bei getrennten Teilgruppen (Ampel- / Pass-Abriss).
+* **Grund:** Verhindert den Totalabriss der Gruppenkommunikation bei Verbindungsverlust; ermöglicht Weitbereichs-Sprachtunnel zwischen autonom gewählten Gruppen-Koordinatoren bei minimalem LoRa-Duty-Cycle-Verbrauch.
