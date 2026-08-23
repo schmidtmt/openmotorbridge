@@ -682,6 +682,17 @@ const CARTRIDGE_PROFILES = {
         idle_ma: 40,
         dle_bonus: 40
     },
+    sena_vortex: {
+        vendor: 'Sena Technologies • Bluetooth 5.1 (Vortex)',
+        vendor_en: 'Sena Technologies • Bluetooth 5.1 (Vortex)',
+        badge: 'badge_online',
+        badge_class: 'badge-green',
+        status: 'Power ON • DLE +20 Pkt.',
+        status_en: 'Power ON • DLE +20 Pts.',
+        status_color: 'var(--accent-orange)',
+        idle_ma: 32,
+        dle_bonus: 20
+    },
     sena_legacy_bt: {
         vendor: 'Sena Technologies • Bluetooth Intercom',
         vendor_en: 'Sena Technologies • Bluetooth Intercom',

@@ -149,6 +149,14 @@ static void load_profile_class(CartridgeInfo_t *cart, const char *profile_id) {
         cart->output_gain_db = 0.0f;
         cart->toggle_mesh_ms = 200;
         cart->channel_next_ms = 800;
+    } else if (strcmp(profile_id, "sena_vortex") == 0) {
+        strncpy(cart->name, "Sena Vortex (Bluetooth 5.1 Intercom)", sizeof(cart->name) - 1);
+        strncpy(cart->vendor, "Sena Technologies", sizeof(cart->vendor) - 1);
+        cart->hardware_tier = 3;
+        cart->input_gain_db = 0.5f;
+        cart->output_gain_db = 0.0f;
+        cart->toggle_mesh_ms = 300;
+        cart->channel_next_ms = 0;
     } else if (strcmp(profile_id, "sena_legacy_bt") == 0) {
         strncpy(cart->name, "Sena 20S / 10S / SF Series (Bluetooth)", sizeof(cart->name) - 1);
         strncpy(cart->vendor, "Sena Technologies", sizeof(cart->vendor) - 1);

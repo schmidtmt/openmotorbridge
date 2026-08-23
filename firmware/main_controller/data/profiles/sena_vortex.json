@@ -1,0 +1,30 @@
+{
+    "id": "sena_vortex",
+    "name": "Sena Vortex (Bluetooth 5.1 2-Way Intercom)",
+    "vendor": "Sena Technologies",
+    "hardware_tier": 3,
+    "vcc_enabled": true,
+    "soft_start_ms": 100,
+    "input_gain_db": 0.5,
+    "output_gain_db": 0.0,
+    "noise_gate_threshold_db": -45,
+    "control_mode": "quick_pair_button",
+    "toggle_mesh_ms": 300,
+    "channel_next_ms": 0,
+    "ptt_hold": false,
+    "mesh_capabilities": {
+        "protocol": "Bluetooth_Intercom_5.1",
+        "generation": 1,
+        "max_nodes": 2,
+        "open_mesh": false,
+        "preconfig_channels": 1,
+        "dle_bonus_score": 20
+    },
+    "rf_hardening": {
+        "disable_bluetooth_classic": false,
+        "clear_phone_gps_pairings": true,
+        "enforce_mesh_only_mode": false,
+        "disable_audio_multitasking": true,
+        "expected_idle_current_ma": 32
+    }
+}

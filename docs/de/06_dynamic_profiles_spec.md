@@ -16,7 +16,7 @@ Alle unterstuetzten Intercom- und Funkkassetten sind in 6 standardisierte Hardwa
 ├─────────┼───────────────────────────────┼─────────────────┼─────────────────┤
 │ **K1**  │ Sena 60S, Apex, 50S/R/C, SRL3 │ Sena Mesh 3.0/2 │ **+60 Punkte**  │
 │ **K2**  │ Sena Spider RT1/ST1           │ Mesh 2.0 Basic  │ **+40 Punkte**  │
-│ **K3**  │ Sena 20S EVO, 10S, SF, SMH10  │ Bluetooth 4.1/2 │ **+20 Punkte**  │
+│ **K3**  │ Sena Vortex, 20S, 10S, SF, 5S │ Bluetooth 5.1/4 │ **+20 Punkte**  │
 │ **K4**  │ Cardo Edge, Pro, Custom, Neo  │ Cardo DMC Gen2  │ **+60 Punkte**  │
 │ **K5**  │ Cardo Freecom 4x/2x, Spirit HD│ Live Intercom   │ **+40 Punkte**  │
 │ **K6**  │ Cardo Bold, Black, Slim       │ Cardo DMC Gen1  │ **+30 Punkte**  │
@@ -37,8 +37,9 @@ Alle unterstuetzten Intercom- und Funkkassetten sind in 6 standardisierte Hardwa
 ### Klasse 2: Sena Spider & Mesh-Only (`sena_spider.json`)
 * **Sena Spider RT1 / ST1:** Reine Mesh-Geraete ohne Bluetooth-Intercom-Overhead, DLE +40 Pkt.
 
-### Klasse 3: Sena Legacy & Bluetooth Intercom (`sena_legacy_bt.json`)
-* **Sena 20S EVO, 30K, 10S, 10R, SF4/SF2, SMH10:** Jog-Dial Pulsmuster fuer BT-Multi-Hop, DLE +20 Pkt.
+### Klasse 3: Sena Bluetooth & 2-Way Intercom (`sena_vortex.json`, `sena_legacy_bt.json`)
+* **Sena Vortex (`sena_vortex.json`):** Bluetooth 5.1 2-Wege-Intercom (1:1 bis 1,2 km), Quick-Pair Button-Trigger, DLE +20 Pkt.
+* **Sena 20S EVO, 30K, 10S, 10R, SF4/SF2, 5S, SMH10 (`sena_legacy_bt.json`):** Jog-Dial Pulsmuster fuer BT-Multi-Hop, DLE +20 Pkt.
 
 ### Klasse 4: Cardo Dynamic Mesh Communications Gen2 (`cardo_dmc_gen2.json`)
 * **Cardo Packtalk Pro, Edge, Custom, Neo:** DMC Gen2 mit Open DMC, schnellem Auto-Reconnect und DLE +60 Pkt.
