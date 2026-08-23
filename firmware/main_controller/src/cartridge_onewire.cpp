@@ -63,39 +63,40 @@ static void onewire_write_bit(gpio_num_t pin, uint8_t bit) {
 static uint8_t onewire_read_bit(gpio_num_t pin) {
     gpio_set_direction(pin, GPIO_MODE_OUTPUT_OD);
     gpio_set_level(pin, 0);
-    esp_rom_delay_us(3);
+    esp_rom_delay_us(6);
     gpio_set_direction(pin, GPIO_MODE_INPUT);
-    esp_rom_delay_us(10);
-    uint8_t bit = gpio_get_level(pin) ? 1 : 0;
+    esp_rom_delay_us(9);
+    int bit = gpio_get_level(pin);
     esp_rom_delay_us(55);
-    return bit;
+    return (uint8_t)bit;
 }
 
 static void onewire_write_byte(gpio_num_t pin, uint8_t byte) {
     for (int i = 0; i < 8; i++) {
-        onewire_write_bit(pin, byte & (1 << i));
+        onewire_write_bit(pin, (byte >> i) & 0x01);
     }
 }
 
 static uint8_t onewire_read_byte(gpio_num_t pin) {
-    uint8_t val = 0;
+    uint8_t byte = 0;
     for (int i = 0; i < 8; i++) {
-        if (onewire_read_bit(pin)) {
-            val |= (1 << i);
-        }
+        byte |= (onewire_read_bit(pin) << i);
     }
-    return val;
+    return byte;
 }
 
 esp_err_t cartridge_onewire_init(void) {
-    ESP_LOGI(TAG, "Initializing Dedicated 1-Wire Channels (Port 1: GPIO %d, Port 2: GPIO %d)...",
+    ESP_LOGI(TAG, "Initializing Independent Dual 1-Wire Channels (Port 1: GPIO %d, Port 2: GPIO %d)...",
              PIN_POD1_1WIRE_ID, PIN_POD2_1WIRE_ID);
-    
-    gpio_set_direction(PIN_POD1_1WIRE_ID, GPIO_MODE_INPUT_OUTPUT_OD);
-    gpio_set_pull_mode(PIN_POD1_1WIRE_ID, GPIO_PULLUP_ONLY);
 
-    gpio_set_direction(PIN_POD2_1WIRE_ID, GPIO_MODE_INPUT_OUTPUT_OD);
-    gpio_set_pull_mode(PIN_POD2_1WIRE_ID, GPIO_PULLUP_ONLY);
+    gpio_config_t io_conf = {
+        .pin_bit_mask = (1ULL << PIN_POD1_1WIRE_ID) | (1ULL << PIN_POD2_1WIRE_ID),
+        .mode = GPIO_MODE_INPUT,
+        .pull_up_en = GPIO_PULLUP_ENABLE,
+        .pull_down_en = GPIO_PULLDOWN_DISABLE,
+        .intr_type = GPIO_INTR_DISABLE,
+    };
+    gpio_config(&io_conf);
 
     return ESP_OK;
 }
@@ -105,9 +106,26 @@ CartridgeInfo_t cartridge_get_info(uint8_t port_num) {
     return s_cartridge_port2;
 }
 
-static void load_profile_mock(CartridgeInfo_t *cart, const char *profile_id) {
+static void load_profile_class(CartridgeInfo_t *cart, const char *profile_id) {
     strncpy(cart->profile_id, profile_id, sizeof(cart->profile_id) - 1);
-    if (strcmp(profile_id, "sena_apex") == 0) {
+
+    if (strcmp(profile_id, "disabled") == 0) {
+        strncpy(cart->name, "Slot Deaktiviert (Mute)", sizeof(cart->name) - 1);
+        strncpy(cart->vendor, "OpenMotorBridge System", sizeof(cart->vendor) - 1);
+        cart->hardware_tier = 0;
+        cart->input_gain_db = -96.0f;
+        cart->output_gain_db = -96.0f;
+        cart->toggle_mesh_ms = 0;
+        cart->channel_next_ms = 0;
+    } else if (strcmp(profile_id, "sena_60s") == 0) {
+        strncpy(cart->name, "Sena 60S (Mesh 3.0 Wave)", sizeof(cart->name) - 1);
+        strncpy(cart->vendor, "Sena Technologies", sizeof(cart->vendor) - 1);
+        cart->hardware_tier = 1;
+        cart->input_gain_db = 2.5f;
+        cart->output_gain_db = 0.0f;
+        cart->toggle_mesh_ms = 250;
+        cart->channel_next_ms = 1000;
+    } else if (strcmp(profile_id, "sena_apex") == 0) {
         strncpy(cart->name, "Sena Apex / Apex Plus (Mesh 3.0)", sizeof(cart->name) - 1);
         strncpy(cart->vendor, "Sena Technologies", sizeof(cart->vendor) - 1);
         cart->hardware_tier = 1;
@@ -115,14 +133,54 @@ static void load_profile_mock(CartridgeInfo_t *cart, const char *profile_id) {
         cart->output_gain_db = 0.0f;
         cart->toggle_mesh_ms = 200;
         cart->channel_next_ms = 1000;
+    } else if (strcmp(profile_id, "sena_50_series") == 0) {
+        strncpy(cart->name, "Sena 50S/R/C / MeshPort (Mesh 2.0/3.0)", sizeof(cart->name) - 1);
+        strncpy(cart->vendor, "Sena Technologies", sizeof(cart->vendor) - 1);
+        cart->hardware_tier = 1;
+        cart->input_gain_db = 2.0f;
+        cart->output_gain_db = 0.0f;
+        cart->toggle_mesh_ms = 200;
+        cart->channel_next_ms = 1000;
+    } else if (strcmp(profile_id, "sena_spider") == 0) {
+        strncpy(cart->name, "Sena Spider RT1 / ST1 (Mesh-Only)", sizeof(cart->name) - 1);
+        strncpy(cart->vendor, "Sena Technologies", sizeof(cart->vendor) - 1);
+        cart->hardware_tier = 2;
+        cart->input_gain_db = 1.5f;
+        cart->output_gain_db = 0.0f;
+        cart->toggle_mesh_ms = 200;
+        cart->channel_next_ms = 800;
+    } else if (strcmp(profile_id, "sena_legacy_bt") == 0) {
+        strncpy(cart->name, "Sena 20S / 10S / SF Series (Bluetooth)", sizeof(cart->name) - 1);
+        strncpy(cart->vendor, "Sena Technologies", sizeof(cart->vendor) - 1);
+        cart->hardware_tier = 3;
+        cart->input_gain_db = 0.0f;
+        cart->output_gain_db = 0.0f;
+        cart->toggle_mesh_ms = 350;
+        cart->channel_next_ms = 0;
     } else if (strcmp(profile_id, "cardo_dmc_gen2") == 0) {
         strncpy(cart->name, "Cardo Packtalk Pro / Edge (DMC Gen2)", sizeof(cart->name) - 1);
         strncpy(cart->vendor, "Cardo Systems", sizeof(cart->vendor) - 1);
         cart->hardware_tier = 1;
         cart->input_gain_db = 1.5f;
-        cart->output_gain_db = -1.0f;
+        cart->output_gain_db = -0.5f;
         cart->toggle_mesh_ms = 200;
         cart->channel_next_ms = 800;
+    } else if (strcmp(profile_id, "cardo_freecom_live") == 0) {
+        strncpy(cart->name, "Cardo Freecom 4x/2x / Spirit (Live)", sizeof(cart->name) - 1);
+        strncpy(cart->vendor, "Cardo Systems", sizeof(cart->vendor) - 1);
+        cart->hardware_tier = 2;
+        cart->input_gain_db = 1.0f;
+        cart->output_gain_db = -0.5f;
+        cart->toggle_mesh_ms = 250;
+        cart->channel_next_ms = 0;
+    } else if (strcmp(profile_id, "cardo_dmc_legacy") == 0) {
+        strncpy(cart->name, "Cardo Packtalk Bold / Black (DMC Gen1)", sizeof(cart->name) - 1);
+        strncpy(cart->vendor, "Cardo Systems", sizeof(cart->vendor) - 1);
+        cart->hardware_tier = 3;
+        cart->input_gain_db = 0.5f;
+        cart->output_gain_db = 0.0f;
+        cart->toggle_mesh_ms = 300;
+        cart->channel_next_ms = 600;
     } else {
         strncpy(cart->name, "Midland G9 Pro PMR446 Gateway", sizeof(cart->name) - 1);
         strncpy(cart->vendor, "Alan Electronics", sizeof(cart->vendor) - 1);
@@ -153,7 +211,7 @@ static void scan_port(gpio_num_t pin, CartridgeInfo_t *cart, uint8_t port_idx, c
             if (!cart->is_connected) {
                 cart->is_connected = true;
                 memcpy(cart->rom_id, rom, 8);
-                load_profile_mock(cart, default_profile);
+                load_profile_class(cart, default_profile);
                 ESP_LOGI(TAG, "Port %d: New Cartridge detected via 1-Wire: %s (%s)",
                          port_idx, cart->name, cart->vendor);
                 audio_set_port_gains(s_cartridge_port1.input_gain_db, s_cartridge_port2.input_gain_db);
@@ -162,7 +220,9 @@ static void scan_port(gpio_num_t pin, CartridgeInfo_t *cart, uint8_t port_idx, c
     } else {
         if (cart->is_connected) {
             cart->is_connected = false;
-            ESP_LOGW(TAG, "Port %d: Cartridge removed from 1-Wire bus.", port_idx);
+            load_profile_class(cart, "disabled");
+            ESP_LOGW(TAG, "Port %d: Cartridge removed / empty. Applied disabled.json (Mute).", port_idx);
+            audio_set_port_gains(s_cartridge_port1.input_gain_db, s_cartridge_port2.input_gain_db);
         }
     }
 }
