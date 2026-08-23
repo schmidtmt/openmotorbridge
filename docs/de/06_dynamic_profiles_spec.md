@@ -109,3 +109,57 @@ Um Kurzschluesse und Fehlkonfigurationen (z. B. versehentliches Stecken einer Au
    * **Audio-Kassette (Sena/Cardo) erkannt:** Pins werden an den Bourns NF-Pfad und ES8388 I2S-DSP geschaltet; das zugehoerige JSON-Profil wird geladen.
    * **Dummy-Kassette oder Open-Pin erkannt:** Slot bleibt dauerhaft stromlos geschaltet (`disabled.json`).
 3. **Soft-Start:** Nach erfolgreicher Validierung schaltet der P-FET die Speisespannung ueber eine definierte Soft-Start-Rampe ($100-150\,\text{ms}$) ein.
+
+---
+
+## 5. Kaufberatung & Adapter-Empfehlungen nach Preisspanne und Gruppen-Mesh
+
+Je nach Budget, Fahrprofil und der in der Motorradgruppe vorherrschenden Intercom-Marken (Sena vs. Cardo vs. Mischbetrieb) empfehlen sich folgende Kassetten-Kombinationen:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                 EMPFOHLENE POD-BESTUECKUNGS-SZENARIEN                       │
+├───────────────────────┬─────────────────────────┬───────────────────────────┤
+│ Setup-Kategorie       │ Pod 1 (Links)           │ Pod 2 (Rechts)            │
+├───────────────────────┼─────────────────────────┼───────────────────────────┤
+│ 💎 **High-End Leader**│ **Sena 60S / Apex**     │ **Cardo Packtalk Edge**   │
+│    (350 – 550 €)      │ (Mesh 3.0 Wave, K1)     │ (DMC Gen2 Air-Mount, K4)  │
+├───────────────────────┼─────────────────────────┼───────────────────────────┤
+│ ⚖️ **Preis-Leistung** │ **Sena Spider RT1/ST1** │ **Cardo Freecom 4x / Bold**│
+│    (180 – 280 €)      │ (Mesh 2.0 Pure, K2)     │ (Live Intercom/DMC, K5/K6)│
+├───────────────────────┼─────────────────────────┼───────────────────────────┤
+│ 💰 **Budget Einstieg**│ **Sena MeshPort Blue**  │ **IP67 Dummy-Kassette**   │
+│    (80 – 140 €)       │ (oder Sena 20S/SF, K3)  │ (Slot stromlos / disabled)│
+├───────────────────────┼─────────────────────────┼───────────────────────────┤
+│ 🏔️ **Adventure/Offroad**│ **Sena Apex / 50S**   │ **Midland G9 Pro PMR446** │
+│    (220 – 320 €)      │ (Mesh 3.0, K1)          │ (Analogfunk Gateway, K7)  │
+└───────────────────────┴─────────────────────────┴───────────────────────────┘
+```
+
+### 5.1 💎 High-End & DLE Leader Setup (Maximum Mesh & Zukunftssicherheit)
+* **Zielgruppe:** Tourenguides, Vielfahrer, große gemischte Reisegruppen mit modernster Ausstattung.
+* **Empfohlene Bestückung:**
+  * **Pod 1:** *Sena 60S* oder *Sena Apex* (Wave Mesh 3.0, 64 Nodes, DLE +60 Pkt.)
+  * **Pod 2:** *Cardo Packtalk Pro* oder *Packtalk Edge* (DMC Gen2, Air Mount, DLE +60 Pkt.)
+* **Vorteile:** Volle $120\,\text{Punkte}$ Gateway-Bonus (dieses Motorrad wird automatisch zum DLE Leader der gesamten Gruppe), HiFi-Audioqualität mit minimaler Latenz ($< 8\,\text{ms}$).
+
+### 5.2 ⚖️ Preis-Leistungs-Sieger / "Sweet Spot" (Der universelle Allrounder)
+* **Zielgruppe:** Motorrad-Freundeskreise, in denen sowohl Sena- als auch Cardo-Fahrer unterwegs sind.
+* **Empfohlene Bestückung:**
+  * **Pod 1:** *Sena Spider RT1 / ST1* (Reines Mesh-Only ohne Bluetooth-Intercom-Overhead, ca. $120-140\,\text{€}$ neu / $85\,\text{€}$ gebraucht, DLE +40 Pkt.)
+  * **Pod 2:** *Cardo Freecom 4x* oder gebrauchtes *Cardo Packtalk Bold (DMC Gen1)* (ca. $100-140\,\text{€}$, DLE +40/+30 Pkt.)
+* **Vorteile:** Vollwertige Zwei-Wege-Mesh-Brücke zwischen Sena Mesh und Cardo DMC für unter $250\,\text{€}$ Gesamtbudget.
+
+### 5.3 💰 Budget- & Stufen-Einstieg (Günstig starten, später aufrüsten)
+* **Zielgruppe:** Einsteiger, Solofahrer mit gelegentlichem Soziusbetrieb oder Fahrer, deren Gruppe ausschließlich eine Marke nutzt.
+* **Empfohlene Bestückung:**
+  * **Pod 1:** *Sena MeshPort Blue* oder gebrauchtes *Sena 20S / 10S / SF4* (ca. $45-65\,\text{€}$ gebraucht, DLE +20/+40 Pkt.)
+  * **Pod 2:** **IP67 Blind- / Leerkassette (`Pod_Dummy_Cartridge_IP67.stl`)** $\rightarrow$ Schacht ist doppelt O-Ring-versiegelt, firmwareseitig über `disabled.json` isoliert ($0{,}0\,\text{mA}$).
+* **Vorteile:** Minimaler Anschaffungspreis ($< 100\,\text{€}$). Zweiter Schacht kann bei Bedarf jederzeit per Plug-and-Play mit einer Cardo- oder Funkkassette nachgerüstet werden.
+
+### 5.4 🏔️ Adventure, Fernreise & Offroad (Unabhängig von Mobilfunk & Bluetooth-Reichweite)
+* **Zielgruppe:** Trans-Euro-Trail (TET), Wüsten- und Hochgebirgsreisen, Enduro-Touren ohne Handynetz.
+* **Empfohlene Bestückung:**
+  * **Pod 1:** *Sena Apex* oder *Sena 50S* (Nahbereichs-Mesh für die Gruppe)
+  * **Pod 2:** *Midland G9 Pro / Baofeng PMR446 Funkkassette* (Analoger Weitstreckenfunk über 446 MHz für kilometerweite Kommunikation)
+  * **Pod 3 (Heck):** *Dual-PHY OpenMotorMesh (868 MHz LoRa Fallback)* für bis zu $15\,\text{km}$ Notfall-PTT und Gruppenradar.

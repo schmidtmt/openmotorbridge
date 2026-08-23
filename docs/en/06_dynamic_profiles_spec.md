@@ -109,3 +109,57 @@ To prevent wiring shorts or misconfigurations (e.g. plugging an audio cartridge 
    * **Audio Cartridge (Sena/Cardo) detected:** Pins connect to Bourns audio paths and ES8388 DSP; matching JSON profile is loaded.
    * **Dummy Cartridge or Open-Pin detected:** Slot is maintained in zero-power isolation (`disabled.json`).
 3. **Soft-Start Activation:** Once validated, the P-FET applies 5V power over a controlled soft-start ramp ($100-150\,\text{ms}$).
+
+---
+
+## 5. Buyer's Guide & Best-Practice Configurations by Budget and Group Setup
+
+Depending on project budget, riding discipline, and whether the rider group relies primarily on Sena, Cardo, or a mixed ecosystem, the following cartridge setups are recommended:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                 RECOMMENDED POD CARTRIDGE CONFIGURATIONS                    │
+├───────────────────────┬─────────────────────────┬───────────────────────────┤
+│ Setup Category        │ Pod 1 (Left Frame)      │ Pod 2 (Right Frame)       │
+├───────────────────────┼─────────────────────────┼───────────────────────────┤
+│ 💎 **High-End Leader**│ **Sena 60S / Apex**     │ **Cardo Packtalk Edge**   │
+│    (350 – 550 €)      │ (Mesh 3.0 Wave, C1)     │ (DMC Gen2 Air-Mount, C4)  │
+├───────────────────────┼─────────────────────────┼───────────────────────────┤
+│ ⚖️ **Best Value**     │ **Sena Spider RT1/ST1** │ **Cardo Freecom 4x / Bold**│
+│    (180 – 280 €)      │ (Mesh 2.0 Pure, C2)     │ (Live Intercom/DMC, C5/C6)│
+├───────────────────────┼─────────────────────────┼───────────────────────────┤
+│ 💰 **Budget Starter** │ **Sena MeshPort Blue**  │ **IP67 Dummy Cartridge**  │
+│    (80 – 140 €)       │ (or Sena 20S/SF, C3)    │ (Slot powered-off/disabled│
+├───────────────────────┼─────────────────────────┼───────────────────────────┤
+│ 🏔️ **Adventure/Offroad**│ **Sena Apex / 50S**   │ **Midland G9 Pro PMR446** │
+│    (220 – 320 €)      │ (Mesh 3.0, C1)          │ (Analogue Radio, C7)      │
+└───────────────────────┴─────────────────────────┴───────────────────────────┘
+```
+
+### 5.1 💎 High-End & DLE Leader Setup (Maximum Mesh & Future-Proofing)
+* **Target Audience:** Tour guides, group road-captains, large mixed riding packs with state-of-the-art intercoms.
+* **Recommended Hardware:**
+  * **Pod 1:** *Sena 60S* or *Sena Apex* (Wave Mesh 3.0, 64 nodes, DLE +60 pts)
+  * **Pod 2:** *Cardo Packtalk Pro* or *Packtalk Edge* (DMC Gen2, Air Mount, DLE +60 pts)
+* **Key Benefit:** Full $120\,\text{points}$ gateway bonus (auto-elected DLE Group Leader), studio-grade audio quality, $< 8\,\text{ms}$ bridge latency.
+
+### 5.2 ⚖️ Best Value / "Sweet Spot" (The Universal Everyday All-Rounder)
+* **Target Audience:** Motorcycle friend groups with a split mix of Sena and Cardo riders.
+* **Recommended Hardware:**
+  * **Pod 1:** *Sena Spider RT1 / ST1* (Pure mesh without Bluetooth intercom overhead, approx. $120-140\,\text{€}$ new / $85\,\text{€}$ used, DLE +40 pts)
+  * **Pod 2:** *Cardo Freecom 4x* or used *Cardo Packtalk Bold (DMC Gen1)* (approx. $100-140\,\text{€}$, DLE +40/+30 pts)
+* **Key Benefit:** Complete, full-duplex cross-mesh bridge bridging Sena Mesh and Cardo DMC for under $250\,\text{€}$ total investment.
+
+### 5.3 💰 Budget & Phased Entry (Affordable Start, Upgrade Anytime)
+* **Target Audience:** Budget-conscious riders, solo riders with occasional pillion use, or single-brand groups.
+* **Recommended Hardware:**
+  * **Pod 1:** *Sena MeshPort Blue* or used *Sena 20S / 10S / SF4* (approx. $45-65\,\text{€}$ used, DLE +20/+40 pts)
+  * **Pod 2:** **IP67 Dummy Cartridge (`Pod_Dummy_Cartridge_IP67.stl`)** $\rightarrow$ Dual O-ring sealed and electrically isolated via `disabled.json` ($0.0\,\text{mA}$).
+* **Key Benefit:** Minimal upfront cost ($< 100\,\text{€}$). Slot 2 remains ready for instant tool-free plug-and-play expansion later.
+
+### 5.4 🏔️ Adventure, Offroad & Desert Expeditions (Cellular & Bluetooth Range Independent)
+* **Target Audience:** Trans-Euro-Trail (TET), remote alpine passes, and wilderness expeditions with zero cellular reception.
+* **Recommended Hardware:**
+  * **Pod 1:** *Sena Apex* or *Sena 50S* (Local group mesh)
+  * **Pod 2:** *Midland G9 Pro / Baofeng PMR446 Cartridge* (Analogue 446 MHz long-range radio gateway)
+  * **Pod 3 (Rear):** *Dual-PHY OpenMotorMesh (868 MHz LoRa Fallback)* for up to $15\,\text{km}$ emergency PTT and group radar.
