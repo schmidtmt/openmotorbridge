@@ -41,6 +41,7 @@ const i18n = {
         bat_chem_label: 'Starterbatterie-Typ & Schutzschwelle',
         handlebar_label: 'Lenkertaster (CR2032 Batterie)',
         handlebar_sub: 'Bluetooth SIG Service 0x180F Überwachung',
+        status_led_title: 'WS2812B RGB Status-LED (Gehäusedeckel)',
         audio_modes_title: 'Audio-Routing & Betriebsmodi',
         mode_0_name: 'Standard Mode (Mesh Bridge)',
         mode_0_desc: 'Port 1 (Sena) & Port 2 (Cardo) sind simultan aktiv und werden symmetrisch zum Fahrerhelm gemischt.',
@@ -141,6 +142,7 @@ const i18n = {
         bat_chem_label: 'Starter Battery Chemistry & Threshold',
         handlebar_label: 'Handlebar Remote (CR2032 Battery)',
         handlebar_sub: 'Bluetooth SIG Service 0x180F Monitoring',
+        status_led_title: 'WS2812B RGB Status LED (Enclosure Lid)',
         audio_modes_title: 'Audio Routing & Operating Modes',
         mode_0_name: 'Standard Mode (Mesh Bridge)',
         mode_0_desc: 'Port 1 (Sena) & Port 2 (Cardo) are simultaneously active and mixed symmetrically to the rider headset.',
@@ -825,36 +827,108 @@ document.getElementById('btn-trigger-webdav-now').addEventListener('click', () =
     }, 1200);
 });
 
-document.getElementById('btn-save-webdav').addEventListener('click', () => {
-    const url = document.getElementById('input-webdav-url').value;
-    const user = document.getElementById('input-webdav-user').value;
-    localStorage.setItem('omb_webdav_cfg', JSON.stringify({ url, user }));
-    showToast(state.lang === 'de' ? 'WebDAV Zugangsdaten gespeichert' : 'WebDAV credentials saved', 'success');
+// ==========================================
+// 11b. Interactive LED & Battery Simulators & USB MSC
+// ==========================================
+const btnToggleLowbat = document.getElementById('btn-toggle-lowbat');
+let s_isLowBatSim = false;
+
+if (btnToggleLowbat) {
+    btnToggleLowbat.addEventListener('click', () => {
+        s_isLowBatSim = !s_isLowBatSim;
+        if (s_isLowBatSim) {
+            valBtnBat.textContent = '15 %';
+            valBtnBat.style.color = 'var(--accent-red)';
+            barBtnBat.style.width = '15%';
+            barBtnBat.style.background = 'var(--accent-red)';
+            btnToggleLowbat.textContent = '⚡ Normal (95%) Reset';
+            showToast(state.lang === 'de' ? '⚠️ CR2032 Batterie schwach (15%)! Warnung an CAN-Bus & LED ausgelöst.' : '⚠️ CR2032 Battery Low (15%)! CAN-Bus & LED Alert triggered.', 'error');
+            updateLedVisual('red');
+        } else {
+            valBtnBat.textContent = '95 %';
+            valBtnBat.style.color = 'var(--accent-green)';
+            barBtnBat.style.width = '95%';
+            barBtnBat.style.background = 'var(--accent-green)';
+            btnToggleLowbat.textContent = '⚡ Low-Bat (15%) Test';
+            showToast(state.lang === 'de' ? 'CR2032 Batterie auf 95% zurückgesetzt (Normal)' : 'CR2032 Battery restored to 95% (Normal)', 'success');
+            updateLedVisual('green');
+        }
+    });
+}
+
+function updateLedVisual(colorKey) {
+    const ledVisual = document.getElementById('rgb-led-visual');
+    const ledBadge = document.getElementById('badge-led-status');
+    const ledLabel = document.getElementById('rgb-led-label');
+    const ledDesc = document.getElementById('rgb-led-desc');
+    const isDe = (state.lang === 'de');
+
+    const ledMap = {
+        green: {
+            color: '#30d158',
+            badge: isDe ? 'Online (Grün)' : 'Online (Green)',
+            badgeClass: 'badge-green',
+            label: isDe ? 'Normalbetrieb (Pulsierend Grün)' : 'Normal Operation (Pulsing Green)',
+            desc: isDe ? 'Bordnetz aktiv, alle Kassetten online, DLE synchronisiert' : 'Vehicle power active, all pods online, DLE synced'
+        },
+        blue: {
+            color: '#0a84ff',
+            badge: isDe ? 'BLE / USB (Blau)' : 'BLE / USB (Blue)',
+            badgeClass: 'badge-blue',
+            label: isDe ? 'BLE Pairing / USB-C MSC Modus' : 'BLE Pairing / USB-C MSC Mode',
+            desc: isDe ? 'WebApp verbunden oder MicroSD als USB-Laufwerk am PC' : 'WebApp connected or MicroSD exposed as USB drive'
+        },
+        yellow: {
+            color: '#ffd60a',
+            badge: isDe ? 'USV-Nachlauf (Gelb)' : 'UPS Rundown (Yellow)',
+            badgeClass: 'badge-orange',
+            label: isDe ? 'USV-Akkubetrieb (Zündung AUS)' : 'UPS Battery Mode (Ignition OFF)',
+            desc: isDe ? '15 Min. Nachlauf: GPX-Flush & WebDAV-Upload aktiv' : '15 min rundown: GPX flush & WebDAV upload active'
+        },
+        red: {
+            color: '#ff453a',
+            badge: isDe ? 'Warnung (Rot)' : 'Alert (Red)',
+            badgeClass: 'badge-purple',
+            label: isDe ? 'Fehler / Unterspannung Starterbatterie' : 'Error / Starter Battery Under-Voltage',
+            desc: isDe ? 'Spannung < 11.8 V oder CR2032 Lenkertaster leer' : 'Voltage < 11.8 V or handlebar CR2032 depleted'
+        },
+        purple: {
+            color: '#bf5af2',
+            badge: isDe ? 'DLE Leader (Lila)' : 'DLE Leader (Purple)',
+            badgeClass: 'badge-purple',
+            label: isDe ? 'OMM DLE Leader-Knoten' : 'OMM DLE Group Leader',
+            desc: isDe ? 'Dieses Motorrad koordiniert das Gruppen-Mesh' : 'This motorcycle coordinates the group mesh'
+        },
+        white: {
+            color: '#ffffff',
+            badge: isDe ? 'Marker (Weiß)' : 'Marker (White)',
+            badgeClass: 'badge-green',
+            label: isDe ? 'Actioncam Marker Bestätigung' : 'Action Cam Marker Confirmation',
+            desc: isDe ? '1-PPS GPS Highlight-Marker im GPX gespeichert' : '1-PPS GPS highlight marker recorded in GPX'
+        }
+    };
+
+    const cfg = ledMap[colorKey] || ledMap.green;
+    if (ledVisual) {
+        ledVisual.style.background = cfg.color;
+        ledVisual.style.boxShadow = `0 0 24px ${cfg.color}`;
+    }
+    if (ledBadge) {
+        ledBadge.className = `card-badge ${cfg.badgeClass}`;
+        ledBadge.textContent = cfg.badge;
+    }
+    if (ledLabel) ledLabel.textContent = cfg.label;
+    if (ledDesc) ledDesc.textContent = cfg.desc;
+}
+
+document.getElementById('select-led-sim')?.addEventListener('change', (e) => {
+    updateLedVisual(e.target.value);
 });
 
-// Mock GPX Download Generator
-window.downloadMockGpx = function (filename) {
-    const gpxContent = `<?xml version="1.0" encoding="UTF-8"?>
-<gpx version="1.1" creator="OpenMotorBridge v8.0" xmlns="http://www.topografix.com/GPX/1/1">
-  <trk>
-    <name>OMB Motorcycle Ride</name>
-    <trkseg>
-      <trkpt lat="47.3769" lon="8.5417"><ele>408.2</ele><time>2026-08-23T09:15:00Z</time></trkpt>
-      <trkpt lat="47.3820" lon="8.5520"><ele>420.5</ele><time>2026-08-23T09:20:00Z</time></trkpt>
-    </trkseg>
-  </trk>
-</gpx>`;
-    const blob = new Blob([gpxContent], { type: 'application/gpx+xml' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    showToast(state.lang === 'de' ? `Download gestartet: ${filename}` : `Download started: ${filename}`, 'success');
-};
+document.getElementById('btn-trigger-usb-msc')?.addEventListener('click', () => {
+    updateLedVisual('blue');
+    showToast(state.lang === 'de' ? '💾 USB Mass Storage Modus aktiviert: MicroSD als Laufwerk "OPENMOTOR" am Rechner gemountet.' : '💾 USB Mass Storage mode active: MicroSD mounted as "OPENMOTOR" volume on PC.', 'success');
+});
 
 // Initialize Language on Boot
 setLanguage(state.lang);

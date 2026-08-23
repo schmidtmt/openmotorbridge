@@ -132,14 +132,72 @@
                     </div>
 
                     <div class="stat-tile" style="margin-top: 14px;">
-                        <div class="stat-label">
+                        <div class="stat-label" style="display: flex; justify-content: space-between; align-items: center;">
                             <span data-i18n="handlebar_label">Lenkertaster (CR2032 Batterie)</span>
                             <span id="val-btn-bat" style="color: var(--accent-green); font-weight: 800;">95 %</span>
                         </div>
-                        <div class="progress-bar-container">
+                        <div class="progress-bar-container" style="margin: 8px 0;">
                             <div class="progress-bar-fill" id="bar-btn-bat" style="width: 95%;"></div>
                         </div>
-                        <span class="stat-sub" data-i18n="handlebar_sub">Bluetooth SIG Service 0x180F Überwachung</span>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="stat-sub" data-i18n="handlebar_sub">Bluetooth SIG Service 0x180F Überwachung</span>
+                            <button id="btn-toggle-lowbat" class="btn-secondary" style="padding: 3px 8px; font-size: 0.72rem;">
+                                ⚡ Low-Bat (15%) Test
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 3-Tier Sleep Cascade Monitor -->
+                    <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border-subtle);">
+                        <div class="control-label">
+                            <span>🔋 3-Stufen Power-Down Kaskade</span>
+                            <span class="card-badge badge-green" id="badge-sleep-tier">Stufe 0: Aktiv (KL15 ON)</span>
+                        </div>
+                        <div class="grid-3" style="margin-top: 8px; font-size: 0.75rem;">
+                            <div class="stat-tile" style="padding: 8px;">
+                                <strong style="color: var(--accent-yellow);">1. Nachlauf</strong><br>
+                                <span>15 Min • 45 mA</span><br>
+                                <span class="stat-sub">WebDAV & Flush</span>
+                            </div>
+                            <div class="stat-tile" style="padding: 8px;">
+                                <strong style="color: var(--accent-blue);">2. Deep Sleep</strong><br>
+                                <span>15m–72h • &lt;100µA</span><br>
+                                <span class="stat-sub">Sofort-Aufwachen</span>
+                            </div>
+                            <div class="stat-tile" style="padding: 8px;">
+                                <strong style="color: var(--accent-purple);">3. Hibernate</strong><br>
+                                <span>&gt;72h • &lt;20µA</span><br>
+                                <span class="stat-sub">Winterschutz 12M</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- WS2812B RGB Status-LED Card -->
+                <section class="card">
+                    <div class="card-header">
+                        <span class="card-title">🚦 <span data-i18n="status_led_title">WS2812B RGB Status-LED (Gehäusedeckel)</span></span>
+                        <span class="card-badge badge-green" id="badge-led-status">Online (Grün)</span>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 16px; padding: 12px 0;">
+                        <div id="rgb-led-visual" style="width: 36px; height: 36px; border-radius: 50%; background: #30d158; box-shadow: 0 0 20px #30d158; border: 2px solid rgba(255,255,255,0.8); flex-shrink: 0;"></div>
+                        <div>
+                            <div id="rgb-led-label" style="font-weight: 700; font-size: 1.05rem;">Normalbetrieb (Pulsierend Grün)</div>
+                            <div class="stat-sub" id="rgb-led-desc">Bordnetz aktiv, alle Kassetten online, DLE synchronisiert</div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 12px;">
+                        <div class="control-label"><span>LED-Status Simulator</span></div>
+                        <select id="select-led-sim" class="select-custom">
+                            <option value="green" selected>🟢 Normalbetrieb (Pulsierend Grün 1 Hz)</option>
+                            <option value="blue">🔵 BLE Dashboard / Pairing (Blinkend Blau 2 Hz)</option>
+                            <option value="yellow">🟡 USV-Akkubetrieb (Pulsierend Gelb 0.5 Hz)</option>
+                            <option value="red">🔴 Fehler / Unterspannung Starterbatterie (Rot schnell)</option>
+                            <option value="purple">🟣 OMM DLE Leader-Knoten (Lila leuchtend)</option>
+                            <option value="white">⚪ Actioncam Highlight Marker (Doppelblitz Weiß)</option>
+                        </select>
                     </div>
                 </section>
             </div>
@@ -344,6 +402,17 @@
                         </button>
                         <button id="btn-trigger-webdav-now" class="btn-secondary">
                             ☁️ <span data-i18n="btn_webdav_sync">WebDAV Sofort-Sync</span>
+                        </button>
+                    </div>
+
+                    <!-- USB Mass Storage Mode Trigger -->
+                    <div style="margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong style="font-size: 0.85rem;">🗂️ USB Mass Storage Class (MSC)</strong>
+                            <div class="stat-sub">PC-Direktzugriff als Laufwerk 'OPENMOTOR'</div>
+                        </div>
+                        <button id="btn-trigger-usb-msc" class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem;">
+                            💾 USB-Laufwerk Freigeben
                         </button>
                     </div>
                 </section>
