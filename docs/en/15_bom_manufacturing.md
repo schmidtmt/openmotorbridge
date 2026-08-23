@@ -1,6 +1,6 @@
 # 15 - Bill of Materials (BOM) & Manufacturing Guide
 
-Complete component list and manufacturing specifications for SMT pick-and-place assembly (PCBA) via JLCPCB / Eurocircuits.
+Complete component list and manufacturing specifications for SMT pick-and-place assembly (PCBA) via JLCPCB / Eurocircuits, including a step-by-step hardware bring-up and commissioning checklist.
 
 ---
 
@@ -54,3 +54,30 @@ Complete component list and manufacturing specifications for SMT pick-and-place 
 - **CPL Rotation Verification:** Pay close attention to pin 1 orientation for the Bourns transformers (T1, T2), optocouplers (OC1, OC2), and QFN packages (ES8388, SX1262) in the CPL file.
 - **Enclosure Manufacturing:** HP Multi Jet Fusion (MJF) in PA12 Black, glass-bead blasted, and vapor-sealed against fuel and oil exposure.
 - **Seals:** Custom molded silicone O-rings (Shore 50 A) for IP67 enclosure lid and cartridge bays.
+
+---
+
+## 5. Step-by-Step Hardware Bring-Up & Test Checklist
+
+### Step 1: Visual Inspection (Prior to First Power-On)
+* [ ] Check under U2 (LM5164), U3 (BQ24075), and U5 (ES8388) with microscope/loupe for solder bridges.
+* [ ] Verify polarity of TVS diode D1 (SMBJ33CA) and P-FET reverse polarity protection.
+* [ ] Ensure 2.0 mm galvanic isolation barrier around T1/T2 and OC1/OC2 is free from solder or flux residue.
+
+### Step 2: Voltage & Current Limit Testing
+* [ ] Set benchtop power supply to $12.0\,\text{V DC}$, current limit to $150\,\text{mA}$.
+* [ ] Measure quiescent current: Target $= 45\,\text{mA}$ to $75\,\text{mA}$ (without battery charging).
+* [ ] Test point `TP_5V`: Target $= 5.15\,\text{V} \pm 0.05\,\text{V}$.
+* [ ] Test point `TP_3V3`: Target $= 3.30\,\text{V} \pm 0.02\,\text{V}$.
+
+### Step 3: Firmware Flashing & Self-Test
+* [ ] Flash ESP-IDF firmware via native USB-C port (`firmware/main_controller/`).
+* [ ] Format LittleFS partition and upload profile files from `firmware/main_controller/data/profiles/`.
+* [ ] Verify serial console output @ 115,200 Baud: "LittleFS Mount OK", "1-Wire Manager Task OK", "I2S ES8388 Codec Init OK", "TCAN334G CAN-FD OK".
+
+### Step 4: Audio & Ducking Oscilloscope Test
+* [ ] Feed $1\,\text{kHz}$ sine wave ($1.0\,\text{V}_{\text{RMS}}$) into audio input.
+* [ ] Probe `PORT1_AUDIO_OUT`: Verify smooth $-12\,\text{dB}$ ducking ramp within $15\,\text{ms}$, $600\,\text{ms}$ hold time, and $250\,\text{ms}$ raised-cosine recovery.
+
+### Step 5: IP67 Enclosure Vacuum Leak Test
+* [ ] Place assembled unit inside vacuum chamber at $-20\,\text{kPa}$ for 60 seconds (max pressure loss $< 0.5\,\text{kPa}$).

@@ -1,6 +1,6 @@
 # 15 - BOM (Stueckliste) & Fertigungsleitfaden
 
-Vollstaendige Bauteilliste (Bill of Materials) und Fertigungsspezifikation fuer die SMT-Bestueckung (PCBA) bei JLCPCB / Eurocircuits.
+Vollstaendige Bauteilliste (Bill of Materials) und Fertigungsspezifikation fuer die SMT-Bestueckung (PCBA) bei JLCPCB / Eurocircuits sowie Schritt-fuer-Schritt Inbetriebnahmeprotokoll.
 
 ---
 
@@ -54,3 +54,31 @@ Vollstaendige Bauteilliste (Bill of Materials) und Fertigungsspezifikation fuer 
 - **CPL-Rotationsabgleich:** Bei der automatisierten Bestueckung ist auf die Pin-1-Ausrichtung der Bourns-Uebertrager (T1, T2), Optokoppler (OC1, OC2) und der QFN-ICs (ES8388, SX1262) zu achten.
 - **Gehaeusefertigung:** HP Multi Jet Fusion (MJF) in PA12 Schwarz, kugelgestrahlt und mit Heissbad-Dampfversiegelung gegen Benzin/Oel.
 - **Dichtungen:** Massgefertigte Silikon-Formdichtungen (Shore-Haerte 50 A) fuer IP67-Deckel und Kassetten-Einschuebe.
+
+---
+
+## 5. Inbetriebnahme-, Mess- & Testprotokoll (Schritt-fuer-Schritt)
+
+### Schritt 1: Visuelle Inspektion (Vor dem ersten Einschalten)
+* [ ] Loetbruecken unter U2 (LM5164), U3 (BQ24075) und U5 (ES8388) mit Mikroskop/Lupe ausschliessen.
+* [ ] Polaritaet der TVS-Diode D1 (SMBJ33CA) und des P-FET Verpolschutzes kontrollieren.
+* [ ] Pruefen, ob die 2,0 mm Isolationsbarriere um T1/T2 und OC1/OC2 frei von Zinnresten oder Flussmittel ist.
+
+### Schritt 2: Spannungspruefung & Strombegrenzung
+* [ ] Labornetzteil auf $12{,}0\,\text{V DC}$ einstellen, Strombegrenzung auf $150\,\text{mA}$.
+* [ ] Ruhestrom messen: Sollwert $= 45\,\text{mA}$ bis $75\,\text{mA}$ (ohne Akkuladung).
+* [ ] Pruefpunkt `TP_5V`: Sollwert $= 5{,}15\,\text{V} \pm 0{,}05\,\text{V}$.
+* [ ] Pruefpunkt `TP_3V3`: Sollwert $= 3{,}30\,\text{V} \pm 0{,}02\,\text{V}$.
+
+### Schritt 3: Flashen & System-Selbsttest
+* [ ] ESP-IDF / PlatformIO Flash via nativem USB-C Port ausfuehren (`firmware/main_controller/`).
+* [ ] LittleFS-Partition formatieren und Profile aus `firmware/main_controller/data/profiles/` hochladen.
+* [ ] Serielle Konsole ($115.200\,\text{Baud}$): Meldungen "LittleFS Mount OK", "1-Wire Manager Task OK", "I2S ES8388 Codec Init OK", "TCAN334G CAN-FD OK" verifizieren.
+
+### Schritt 4: Audio- & Ducking-Funktionstest
+* [ ] $1\,\text{kHz}$ Sinuston ($1{,}0\,\text{V}_{\text{RMS}}$) an Audio-Input anlegen.
+* [ ] Oszilloskop an `PORT1_AUDIO_OUT`: Ueberpruefen, ob das Signal innerhalb von $15\,\text{ms}$ weich gedaempft wird.
+* [ ] Signal abschalten: Pruefen, ob nach $600\,\text{ms}$ Hold-Zeit die weiche $250\,\text{ms}$-Raised-Cosine-Rueckkehr erfolgt.
+
+### Schritt 5: IP67-Dichtheitspruefung
+* [ ] Montiertes Gehaeuse in Vakuumkammer bei $-20\,\text{kPa}$ Unterdruck fuer 60 Sekunden halten (Druckverlust $< 0{,}5\,\text{kPa}$).
