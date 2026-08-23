@@ -1,10 +1,87 @@
-# 06 - Dynamische Hardwareprofile (LittleFS JSON)
+# 06 - Klassenorientierte Hardwareprofile & Kassetten-Erkennung
 
-Die Profile in `/profiles/` steuern Gain, Rauschunterdrueckung, Pegel, DLE-Boni und RF-Hardening dynamisch beim Einstecken einer Kassette.
+OpenMotorBridge nutzt ein klassenorientiertes, erweiterbares Profil-System auf Basis von **LittleFS JSON-Dateien** (`/profiles/*.json`), um verschiedenste Sena-, Cardo- und Funk-Geraete beim Einstecken ueber den 1-Wire-Bus (`DS2401`) automatisch zu erkennen und zu konfigurieren.
 
-## 1. Referenz-Profile
-- `sena_apex.json`: Sena Apex / Apex Plus (Mesh 3.0, 32 Nodes, DLE +60 Pkt., Bluetooth Classic deaktiviert).
-- `sena_legacy.json`: Sena Spider / 50S / 30K (Mesh 2.0, 24 Nodes, DLE +30 Pkt.).
-- `cardo_dmc_gen2.json`: Cardo Edge / Pro (DMC 2.0, 32 Nodes, Open DMC, DLE +60 Pkt., Bluetooth Classic deaktiviert).
-- `cardo_dmc_legacy.json`: Cardo Bold / Black (DMC 1.0, 15 Nodes, DLE +30 Pkt.).
-- `pmr446_gateway.json`: Midland G9 Pro / Analogfunk VOX / PTT-Relay Profil.
+---
+
+## 1. Klassenorientierte Geraete-Hierarchie
+
+Alle unterstuetzten Intercom- und Funkkassetten sind in 6 standardisierte Hardware-Klassen eingeteilt:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                 KLASSENORIENTIERTE HARDWARE-PROFIL-MATRIX                   │
+├─────────┬───────────────────────────────┬─────────────────┬─────────────────┤
+│ Klasse  │ Geraetefamilien               │ Mesh-Protokoll  │ DLE-Score Bonus │
+├─────────┼───────────────────────────────┼─────────────────┼─────────────────┤
+│ **K1**  │ Sena 60S, Apex, 50S/R/C, SRL3 │ Sena Mesh 3.0/2 │ **+60 Punkte**  │
+│ **K2**  │ Sena Spider RT1/ST1           │ Mesh 2.0 Basic  │ **+40 Punkte**  │
+│ **K3**  │ Sena 20S EVO, 10S, SF, SMH10  │ Bluetooth 4.1/2 │ **+20 Punkte**  │
+│ **K4**  │ Cardo Edge, Pro, Custom, Neo  │ Cardo DMC Gen2  │ **+60 Punkte**  │
+│ **K5**  │ Cardo Freecom 4x/2x, Spirit HD│ Live Intercom   │ **+40 Punkte**  │
+│ **K6**  │ Cardo Bold, Black, Slim       │ Cardo DMC Gen1  │ **+30 Punkte**  │
+│ **K7**  │ Midland G9 Pro, Baofeng/UHF   │ PMR446 Analog   │ **+10 Punkte**  │
+│ **K0**  │ Deaktiviert / Leerer Slot     │ Keines          │ **0 Punkte**    │
+└─────────┴───────────────────────────────┴─────────────────┴─────────────────┘
+```
+
+---
+
+## 2. Profil-Uebersicht im Dateisystem (`/data/profiles/`)
+
+### Klasse 1: Sena Next-Gen & High-Tier Mesh (`sena_60s.json`, `sena_apex.json`, `sena_50_series.json`)
+* **Sena 60S (`sena_60s.json`):** Wave-Mesh-Intercom, bis zu 64 Teilnehmer, Dual-Chip RF-Hardening.
+* **Sena Apex / Apex Plus (`sena_apex.json`):** Mesh 3.0 Referenzkassette, 32 Nodes, DLE +60 Pkt.
+* **Sena 50er Serie & MeshPort (`sena_50_series.json`):** 50S, 50R, 50C, SRL3, MeshPort Blue/Red (Mesh 2.0/3.0, 24–32 Nodes).
+
+### Klasse 2: Sena Spider & Mesh-Only (`sena_spider.json`)
+* **Sena Spider RT1 / ST1:** Reine Mesh-Geraete ohne Bluetooth-Intercom-Overhead, DLE +40 Pkt.
+
+### Klasse 3: Sena Legacy & Bluetooth Intercom (`sena_legacy_bt.json`)
+* **Sena 20S EVO, 30K, 10S, 10R, SF4/SF2, SMH10:** Jog-Dial Pulsmuster fuer BT-Multi-Hop, DLE +20 Pkt.
+
+### Klasse 4: Cardo Dynamic Mesh Communications Gen2 (`cardo_dmc_gen2.json`)
+* **Cardo Packtalk Pro, Edge, Custom, Neo:** DMC Gen2 mit Open DMC, schnellem Auto-Reconnect und DLE +60 Pkt.
+
+### Klasse 5: Cardo Live Intercom & Freecom Serie (`cardo_freecom_live.json`)
+* **Cardo Freecom 4x, Freecom 2x, Spirit HD:** Bluetooth 5.2 Live Intercom mit automatischem Reconnect, DLE +40 Pkt.
+
+### Klasse 6: Cardo Legacy DMC Gen1 (`cardo_dmc_legacy.json`)
+* **Cardo Packtalk Bold, Black, Slim, Smartpack:** DMC 1.0 mit bis zu 15 Teilnehmern, DLE +30 Pkt.
+
+### Klasse 7: Universelle Analog- & PMR446-Funkkassetten (`pmr446_gateway.json`)
+* **Midland G9 Pro, Baofeng/Kenwood 2-Pin K-Type, Motorola T82:** Hardware-PTT ueber PhotoMOS-Relais oder VOX-Schwellwertsteuerung.
+
+---
+
+## 3. Sicherheits-Fallback: `disabled.json` (Slot-Abschaltung)
+
+Wird ein Steckplatz nicht belegt, eine Kassette entfernt oder ein Pod in der WebApp manuell stillgelegt, laedt der ESP32-S3 sofort das Profil `disabled.json`:
+
+```json
+{
+    "id": "disabled",
+    "name": "Deaktiviert / Unbelegt (Disabled Slot)",
+    "vendor": "OpenMotorBridge System",
+    "hardware_tier": 0,
+    "vcc_enabled": false,
+    "soft_start_ms": 0,
+    "input_gain_db": -96.0,
+    "output_gain_db": -96.0,
+    "noise_gate_threshold_db": -96,
+    "control_mode": "disabled",
+    "mesh_capabilities": {
+        "protocol": "None",
+        "dle_bonus_score": 0
+    },
+    "rf_hardening": {
+        "expected_idle_current_ma": 0
+    }
+}
+```
+
+### Schutzwirkungen des `disabled.json` Profils:
+1. **Stromlos-Schaltung (`vcc_enabled: false`):** Der zugehoerige P-Kanal MOSFET Power-Gate oeffnet sofort $\rightarrow$ 0.0 mA Stromverbrauch.
+2. **Vollstaendige Audio-Stummschaltung:** Die Ein- und Ausgangs-Gains des ES8388 Codecs werden auf $-96\,\text{dB}$ gesetzt, um jegliches Rauschen oder Einstreuungen von offenen Leitungen zu eliminieren.
+3. **Deaktivierung von Schaltsignalen:** Die Toshiba TLP222A Optokoppler bleiben dauerhaft hochohmig.
+4. **DLE-Bereinigung:** Der DLE-Score-Beitrag faellt sofort auf 0 Punkte zurueck.

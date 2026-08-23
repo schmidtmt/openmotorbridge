@@ -1,0 +1,30 @@
+{
+    "id": "disabled",
+    "name": "Deaktiviert / Unbelegt (Disabled Slot)",
+    "vendor": "OpenMotorBridge System",
+    "hardware_tier": 0,
+    "vcc_enabled": false,
+    "soft_start_ms": 0,
+    "input_gain_db": -96.0,
+    "output_gain_db": -96.0,
+    "noise_gate_threshold_db": -96,
+    "control_mode": "disabled",
+    "toggle_mesh_ms": 0,
+    "channel_next_ms": 0,
+    "ptt_hold": false,
+    "mesh_capabilities": {
+        "protocol": "None",
+        "generation": 0,
+        "max_nodes": 0,
+        "open_mesh": false,
+        "preconfig_channels": 0,
+        "dle_bonus_score": 0
+    },
+    "rf_hardening": {
+        "disable_bluetooth_classic": true,
+        "clear_phone_gps_pairings": false,
+        "enforce_mesh_only_mode": false,
+        "disable_audio_multitasking": true,
+        "expected_idle_current_ma": 0
+    }
+}

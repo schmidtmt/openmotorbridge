@@ -228,11 +228,21 @@
                 <section class="card">
                     <div class="card-header">
                         <span class="card-title">1️⃣ <span data-i18n="pod1_title">Pod 1 (Rahmen links)</span></span>
-                        <span class="card-badge badge-green" data-i18n="badge_online">Online</span>
+                        <span class="card-badge badge-green" id="pod1-badge" data-i18n="badge_online">Online</span>
                     </div>
                     <div class="stat-tile" style="margin-bottom: 12px;">
-                        <span class="stat-label" data-i18n="inserted_cartridge">Gesteckte Kassette</span>
-                        <div style="font-size: 1.1rem; font-weight: 700; margin: 6px 0;" id="pod1-name">Sena Apex / Apex Plus</div>
+                        <span class="stat-label" data-i18n="inserted_cartridge">Gesteckte Kassette / Profil</span>
+                        <div style="margin: 8px 0;">
+                            <select id="select-pod1-profile" style="width: 100%; padding: 8px; border-radius: 8px; background: rgba(0,0,0,0.5); color: var(--text-primary); border: 1px solid var(--border-color); font-weight: 600;">
+                                <option value="disabled">🚫 Deaktiviert / Slot AUS (disabled.json)</option>
+                                <option value="sena_60s">⚡ Sena 60S (Mesh 3.0 Wave)</option>
+                                <option value="sena_apex" selected>🟢 Sena Apex / Apex Plus (Mesh 3.0)</option>
+                                <option value="sena_50_series">🔵 Sena 50S / 50R / 50C / MeshPort</option>
+                                <option value="sena_spider">🟣 Sena Spider RT1 / ST1 (Mesh-Only)</option>
+                                <option value="sena_legacy_bt">📻 Sena 20S / 10S / SF Series (BT)</option>
+                                <option value="pmr446_gateway">📡 Midland G9 Pro / PMR446 Funk</option>
+                            </select>
+                        </div>
                         <span class="stat-sub" id="pod1-vendor">Sena Technologies • Mesh 3.0</span>
                     </div>
                     <div class="stat-row">
@@ -240,8 +250,8 @@
                         <span style="font-family: monospace; font-size: 0.85rem;" id="pod1-uid">01:4F:2A:90:12:00:8C</span>
                     </div>
                     <div class="stat-row">
-                        <span class="stat-sub">RF-Hardening:</span>
-                        <span style="color: var(--accent-green); font-size: 0.85rem;" data-i18n="bt_classic_off">BT Classic AUS</span>
+                        <span class="stat-sub">Status:</span>
+                        <span style="color: var(--accent-green); font-size: 0.85rem;" id="pod1-status">Power ON • DLE +60 Pkt.</span>
                     </div>
                     <button class="btn-secondary" id="btn-p1-resync" style="width: 100%; margin-top: 14px;">
                         🔄 <span data-i18n="btn_ground_truth">Ground-Truth Re-Sync</span>
@@ -252,11 +262,20 @@
                 <section class="card">
                     <div class="card-header">
                         <span class="card-title">2️⃣ <span data-i18n="pod2_title">Pod 2 (Rahmen rechts)</span></span>
-                        <span class="card-badge badge-green" data-i18n="badge_online">Online</span>
+                        <span class="card-badge badge-green" id="pod2-badge" data-i18n="badge_online">Online</span>
                     </div>
                     <div class="stat-tile" style="margin-bottom: 12px;">
-                        <span class="stat-label" data-i18n="inserted_cartridge">Gesteckte Kassette</span>
-                        <div style="font-size: 1.1rem; font-weight: 700; margin: 6px 0;" id="pod2-name">Cardo Packtalk Pro / Edge</div>
+                        <span class="stat-label" data-i18n="inserted_cartridge">Gesteckte Kassette / Profil</span>
+                        <div style="margin: 8px 0;">
+                            <select id="select-pod2-profile" style="width: 100%; padding: 8px; border-radius: 8px; background: rgba(0,0,0,0.5); color: var(--text-primary); border: 1px solid var(--border-color); font-weight: 600;">
+                                <option value="disabled">🚫 Deaktiviert / Slot AUS (disabled.json)</option>
+                                <option value="cardo_dmc_gen2" selected>🟢 Cardo Packtalk Pro / Edge (DMC Gen2)</option>
+                                <option value="cardo_freecom_live">🔵 Cardo Freecom 4x / 2x / Spirit (Live)</option>
+                                <option value="cardo_dmc_legacy">🟣 Cardo Packtalk Bold / Black (DMC Gen1)</option>
+                                <option value="sena_apex">⚡ Sena Apex / Apex Plus (Mesh 3.0)</option>
+                                <option value="pmr446_gateway">📡 Midland G9 Pro / PMR446 Funk</option>
+                            </select>
+                        </div>
                         <span class="stat-sub" id="pod2-vendor">Cardo Systems • DMC Gen2</span>
                     </div>
                     <div class="stat-row">
@@ -264,8 +283,8 @@
                         <span style="font-family: monospace; font-size: 0.85rem;" id="pod2-uid">01:B3:78:11:44:90:3A</span>
                     </div>
                     <div class="stat-row">
-                        <span class="stat-sub">RF-Hardening:</span>
-                        <span style="color: var(--accent-green); font-size: 0.85rem;" data-i18n="mesh_only_on">Mesh-Only Aktiv</span>
+                        <span class="stat-sub">Status:</span>
+                        <span style="color: var(--accent-green); font-size: 0.85rem;" id="pod2-status">Power ON • DLE +60 Pkt.</span>
                     </div>
                     <button class="btn-secondary" id="btn-p2-next" style="width: 100%; margin-top: 14px;">
                         ⏭️ <span data-i18n="btn_channel_advance">Kanal Weiterschalten (800ms)</span>

@@ -1,0 +1,30 @@
+{
+    "id": "sena_spider",
+    "name": "Sena Spider RT1 / ST1 (Mesh-Only)",
+    "vendor": "Sena Technologies",
+    "hardware_tier": 2,
+    "vcc_enabled": true,
+    "soft_start_ms": 100,
+    "input_gain_db": 1.5,
+    "output_gain_db": 0.0,
+    "noise_gate_threshold_db": -44,
+    "control_mode": "pulse_mesh_only",
+    "toggle_mesh_ms": 200,
+    "channel_next_ms": 800,
+    "ptt_hold": false,
+    "mesh_capabilities": {
+        "protocol": "Sena_Mesh_2.0_Basic",
+        "generation": 2,
+        "max_nodes": 24,
+        "open_mesh": true,
+        "preconfig_channels": 9,
+        "dle_bonus_score": 40
+    },
+    "rf_hardening": {
+        "disable_bluetooth_classic": true,
+        "clear_phone_gps_pairings": true,
+        "enforce_mesh_only_mode": true,
+        "disable_audio_multitasking": true,
+        "expected_idle_current_ma": 40
+    }
+}

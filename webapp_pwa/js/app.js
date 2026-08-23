@@ -620,6 +620,165 @@ selectBatteryType.addEventListener('change', (e) => {
 });
 
 // ==========================================
+// 8b. Class-Oriented Cartridge Profile Engine
+// ==========================================
+const CARTRIDGE_PROFILES = {
+    disabled: {
+        vendor: 'Slot Deaktiviert (0.0 mA • Mute)',
+        vendor_en: 'Slot Disabled (0.0 mA • Mute)',
+        badge: 'badge_offline',
+        badge_class: 'badge-purple',
+        status: 'Power OFF • Mute (-96 dB)',
+        status_en: 'Power OFF • Mute (-96 dB)',
+        status_color: 'var(--text-muted)',
+        idle_ma: 0,
+        dle_bonus: 0
+    },
+    sena_60s: {
+        vendor: 'Sena Technologies • Mesh 3.0 Wave',
+        vendor_en: 'Sena Technologies • Mesh 3.0 Wave',
+        badge: 'badge_online',
+        badge_class: 'badge-green',
+        status: 'Power ON • DLE +60 Pkt.',
+        status_en: 'Power ON • DLE +60 Pts.',
+        status_color: 'var(--accent-green)',
+        idle_ma: 50,
+        dle_bonus: 60
+    },
+    sena_apex: {
+        vendor: 'Sena Technologies • Mesh 3.0',
+        vendor_en: 'Sena Technologies • Mesh 3.0',
+        badge: 'badge_online',
+        badge_class: 'badge-green',
+        status: 'Power ON • DLE +60 Pkt.',
+        status_en: 'Power ON • DLE +60 Pts.',
+        status_color: 'var(--accent-green)',
+        idle_ma: 45,
+        dle_bonus: 60
+    },
+    sena_50_series: {
+        vendor: 'Sena Technologies • Mesh 2.0/3.0',
+        vendor_en: 'Sena Technologies • Mesh 2.0/3.0',
+        badge: 'badge_online',
+        badge_class: 'badge-green',
+        status: 'Power ON • DLE +60 Pkt.',
+        status_en: 'Power ON • DLE +60 Pts.',
+        status_color: 'var(--accent-green)',
+        idle_ma: 45,
+        dle_bonus: 60
+    },
+    sena_spider: {
+        vendor: 'Sena Technologies • Mesh-Only',
+        vendor_en: 'Sena Technologies • Mesh-Only',
+        badge: 'badge_online',
+        badge_class: 'badge-green',
+        status: 'Power ON • DLE +40 Pkt.',
+        status_en: 'Power ON • DLE +40 Pts.',
+        status_color: 'var(--accent-blue)',
+        idle_ma: 40,
+        dle_bonus: 40
+    },
+    sena_legacy_bt: {
+        vendor: 'Sena Technologies • Bluetooth Intercom',
+        vendor_en: 'Sena Technologies • Bluetooth Intercom',
+        badge: 'badge_online',
+        badge_class: 'badge-green',
+        status: 'Power ON • DLE +20 Pkt.',
+        status_en: 'Power ON • DLE +20 Pts.',
+        status_color: 'var(--accent-orange)',
+        idle_ma: 35,
+        dle_bonus: 20
+    },
+    cardo_dmc_gen2: {
+        vendor: 'Cardo Systems • DMC Gen2',
+        vendor_en: 'Cardo Systems • DMC Gen2',
+        badge: 'badge_online',
+        badge_class: 'badge-green',
+        status: 'Power ON • DLE +60 Pkt.',
+        status_en: 'Power ON • DLE +60 Pts.',
+        status_color: 'var(--accent-green)',
+        idle_ma: 45,
+        dle_bonus: 60
+    },
+    cardo_freecom_live: {
+        vendor: 'Cardo Systems • Live Intercom BT5.2',
+        vendor_en: 'Cardo Systems • Live Intercom BT5.2',
+        badge: 'badge_online',
+        badge_class: 'badge-green',
+        status: 'Power ON • DLE +40 Pkt.',
+        status_en: 'Power ON • DLE +40 Pts.',
+        status_color: 'var(--accent-blue)',
+        idle_ma: 38,
+        dle_bonus: 40
+    },
+    cardo_dmc_legacy: {
+        vendor: 'Cardo Systems • DMC Gen1',
+        vendor_en: 'Cardo Systems • DMC Gen1',
+        badge: 'badge_online',
+        badge_class: 'badge-green',
+        status: 'Power ON • DLE +30 Pkt.',
+        status_en: 'Power ON • DLE +30 Pts.',
+        status_color: 'var(--accent-orange)',
+        idle_ma: 42,
+        dle_bonus: 30
+    },
+    pmr446_gateway: {
+        vendor: 'Alan Electronics • PMR446 Funk',
+        vendor_en: 'Alan Electronics • PMR446 Radio',
+        badge: 'badge_online',
+        badge_class: 'badge-green',
+        status: 'Power ON • DLE +10 Pkt.',
+        status_en: 'Power ON • DLE +10 Pts.',
+        status_color: 'var(--accent-orange)',
+        idle_ma: 60,
+        dle_bonus: 10
+    }
+};
+
+function updatePodDisplay(podNum, profileKey) {
+    const prof = CARTRIDGE_PROFILES[profileKey] || CARTRIDGE_PROFILES.disabled;
+    const isDe = (state.lang === 'de');
+    const badgeEl = document.getElementById(`pod${podNum}-badge`);
+    const vendorEl = document.getElementById(`pod${podNum}-vendor`);
+    const statusEl = document.getElementById(`pod${podNum}-status`);
+    
+    if (vendorEl) vendorEl.textContent = isDe ? prof.vendor : prof.vendor_en;
+    if (statusEl) {
+        statusEl.textContent = isDe ? prof.status : prof.status_en;
+        statusEl.style.color = prof.status_color;
+    }
+    if (badgeEl) {
+        if (profileKey === 'disabled') {
+            badgeEl.className = 'card-badge badge-purple';
+            badgeEl.textContent = isDe ? 'Aus' : 'Off';
+        } else {
+            badgeEl.className = 'card-badge badge-green';
+            badgeEl.textContent = isDe ? 'Online' : 'Online';
+        }
+    }
+    
+    // Recalculate DLE Score
+    const p1Key = document.getElementById('select-pod1-profile')?.value || 'sena_apex';
+    const p2Key = document.getElementById('select-pod2-profile')?.value || 'cardo_dmc_gen2';
+    const p1Bonus = CARTRIDGE_PROFILES[p1Key]?.dle_bonus || 0;
+    const p2Bonus = CARTRIDGE_PROFILES[p2Key]?.dle_bonus || 0;
+    const maxBonus = Math.max(p1Bonus, p2Bonus);
+    const dleTotal = maxBonus + 20 + 10 + 10; // HW + Power + GNSS + LoRa
+    const dleEl = document.getElementById('val-dle-score');
+    if (dleEl) dleEl.textContent = `${dleTotal} / 100 Pkt.`;
+}
+
+document.getElementById('select-pod1-profile')?.addEventListener('change', (e) => {
+    updatePodDisplay(1, e.target.value);
+    showToast(state.lang === 'de' ? `Pod 1 Profil geladen: ${e.target.options[e.target.selectedIndex].text}` : `Pod 1 profile applied: ${e.target.options[e.target.selectedIndex].text}`, 'success');
+});
+
+document.getElementById('select-pod2-profile')?.addEventListener('change', (e) => {
+    updatePodDisplay(2, e.target.value);
+    showToast(state.lang === 'de' ? `Pod 2 Profil geladen: ${e.target.options[e.target.selectedIndex].text}` : `Pod 2 profile applied: ${e.target.options[e.target.selectedIndex].text}`, 'success');
+});
+
+// ==========================================
 // 9. Onboarding Wizard Modal
 // ==========================================
 btnOpenWizard.addEventListener('click', () => {
