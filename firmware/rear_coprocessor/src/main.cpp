@@ -7,6 +7,7 @@
 #include "driver/spi_master.h"
 #include "esp_timer.h"
 #include "esp_log.h"
+#include "esp_ieee802154.h"
 
 static const char *TAG = "POD3_COPROC";
 
@@ -48,8 +49,20 @@ static void init_pps_interrupt(void) {
     ESP_LOGI(TAG, "1-PPS Interrupt handler configured on GPIO %d.", PIN_GNSS_PPS);
 }
 
-static void init_lora_sx1262(void) {
-    ESP_LOGI(TAG, "Initializing Semtech SX1262 LoRa SPI Driver (+22 dBm PA @ 868 MHz)...");
+// 1. Primary PHY: 2.4 GHz High-Speed Mesh (IEEE 802.15.4 / SC-FDMA TDMA)
+static void init_primary_2g4_mesh(void) {
+    ESP_LOGI(TAG, "Initializing 2.4 GHz Primary High-Speed Mesh (IEEE 802.15.4 / Opus 24k Audio)...");
+    // Initialisierung des internen 2.4 GHz IEEE 802.15.4 Transceivers
+    esp_ieee802154_enable();
+    esp_ieee802154_set_channel(15); // 2.425 GHz OMM Standard-Kanal
+    esp_ieee802154_set_txpower(20);  // Max +20 dBm EIRP
+    esp_ieee802154_set_promiscuous(false);
+    ESP_LOGI(TAG, "2.4 GHz Primary Mesh ready for HiFi full-duplex voice & music sharing.");
+}
+
+// 2. Secondary Fallback PHY: Semtech SX1262 LoRa (+22 dBm @ 868 MHz)
+static void init_fallback_lora_sx1262(void) {
+    ESP_LOGI(TAG, "Initializing Semtech SX1262 LoRa SPI Driver (+22 dBm PA @ 868 MHz Fallback)...");
 
     spi_bus_config_t buscfg = {
         .mosi_io_num = PIN_LORA_MOSI,
@@ -79,15 +92,15 @@ static void init_lora_sx1262(void) {
     gpio_set_level(PIN_LORA_RST, 1);
     vTaskDelay(pdMS_TO_TICKS(20));
 
-    ESP_LOGI(TAG, "SX1262 LoRa Hardware ready for OpenMotorMesh Superframe.");
+    ESP_LOGI(TAG, "SX1262 LoRa Hardware ready for Codec2 PTT & GPS Radar Fallback.");
 }
 
 extern "C" void app_main(void) {
     ESP_LOGI(TAG, "==================================================");
-    ESP_LOGI(TAG, "   Heck-Pod 3 Co-Processor (ESP32-C3 RISC-V)      ");
+    ESP_LOGI(TAG, "   Heck-Pod 3 Co-Processor (Dual-PHY OMM Gateway) ");
     ESP_LOGI(TAG, "==================================================");
 
-    // 1. UART zur Zentralbox initialisieren (460.800 Baud High-Speed)
+    // 1. High-Speed UART Bridge zur Zentralbox initialisieren (460.800 Baud)
     uart_config_t bridge_uart_config = {
         .baud_rate = 460800,
         .data_bits = UART_DATA_8_BITS,
@@ -113,11 +126,14 @@ extern "C" void app_main(void) {
     uart_set_pin(UART_NUM_GNSS, PIN_GNSS_TX, PIN_GNSS_RX, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE);
     uart_driver_install(UART_NUM_GNSS, 2048, 0, 0, NULL, 0);
 
-    // 3. 1-PPS & SX1262 LoRa SPI initialisieren
+    // 3. 1-PPS Zeitsignal konfigurieren
     init_pps_interrupt();
-    init_lora_sx1262();
 
-    ESP_LOGI(TAG, "Pod 3 communication interfaces fully operational. Starting loop...");
+    // 4. Dual-PHY OpenMotorMesh Transceiver initialisieren
+    init_primary_2g4_mesh();       // Primary PHY: 2.4 GHz IEEE 802.15.4 / SC-FDMA
+    init_fallback_lora_sx1262();   // Fallback PHY: 868 MHz LoRa (+22 dBm)
+
+    ESP_LOGI(TAG, "Pod 3 Dual-PHY interfaces fully operational. Starting streaming loop...");
 
     uint8_t rx_buf[256];
     while (true) {

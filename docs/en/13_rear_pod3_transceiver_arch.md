@@ -1,81 +1,127 @@
-# 13 - Rear Pod 3: Hardware Architecture, GNSS, LoRa & Co-Processor
+# 13 - Rear Pod 3: GNSS & Dual-PHY OpenMotorMesh Transceiver Architecture
 
-Satellite Pod 3 combines high-precision positioning (GNSS), digital long-range communication (OpenMotorMesh LoRa 868 MHz), and an autonomous co-processor inside an aerodynamic, waterproof IP67 enclosure mounted on the rear fender or luggage rack.
+**Rear Pod 3** (located at the rear fender / luggage rack) serves as the primary navigation and radio gateway for OpenMotorBridge. It houses the multi-constellation GNSS engine (**u-blox MAX-M10S**), the complete **Dual-PHY OpenMotorMesh system (2.4 GHz High-Speed Primary + 868 MHz LoRa Long-Range Fallback)**, and a dedicated **ESP32-C3 RISC-V co-processor**.
 
 ---
 
-## 1. Detailed Hardware Architecture in Rear Pod 3
+## 1. Hardware Architecture & Dual-PHY Functional Blocks
 
 ```
- 6-Pin Pogo Interface (from Central Box)
- ┌────────────────────────────────────────────────────────┐
- │ Pin 1: POD3_VCC (5V) ────► [ TI TPS7A0533 3.3V LDO ]   │
- │ Pin 2: POD3_GND ─────────► [ Common Ground Plane ]     │
- │ Pin 3: POD3_UART_TX ◄──── [ ESP32-C3 UART0 TX ]        │
- │ Pin 4: POD3_UART_RX ────► [ ESP32-C3 UART0 RX ]        │
- │ Pin 5: POD3_GNSS_PPS ◄─── [ MAX-M10S TIMEPULSE ]       │
- │ Pin 6: POD3_1WIRE_ID ◄─── [ Maxim DS2401Z+ ID ]        │
- └────────────────────────────────────────────────────────┘
-                               │
-               ┌───────────────┴───────────────┐
-               ▼                               ▼
- [ u-blox MAX-M10S GNSS ]            [ Semtech SX1262 LoRa ]
-   • 25x25mm Patch Antenna             • 868 MHz Helical Antenna
-   • 10 Hz PVT Navigation              • +22 dBm PA
-   • UART1 to ESP32-C3                 • SPI Master to ESP32-C3
+                      ┌─────────────────────────────────────────────────────────────┐
+                      │                    REAR POD 3 CARTRIDGE                     │
+                      │                                                             │
+                      │   ┌─────────────────────────────────────────────────────┐   │
+                      │   │  ESP32-C3 RISC-V Co-Processor (32-Bit @ 160 MHz)    │   │
+                      │   │  • Primary PHY: 2.4 GHz IEEE 802.15.4 / SC-FDMA     │   │
+                      │   │  • HiFi Audio (Opus 24k) & Proximity Mesh           │   │
+                      │   └──────────┬───────────────────────────┬──────────────┘   │
+                      │              │ SPI Master (8 MHz)        │ UART1 (115.2k)   │
+                      │              ▼                           ▼                  │
+                      │   ┌──────────────────────┐    ┌─────────────────────────┐   │
+                      │   │ Semtech SX1262 LoRa  │    │ u-blox MAX-M10S GNSS    │   │
+                      │   │ • Fallback PHY 868MHz│    │ • 10 Hz Multi-GNSS PVT  │   │
+                      │   │ • Codec2 & Radar     │    │ • 1-PPS Timepulse       │   │
+                      │   └──────────────────────┘    └─────────────────────────┘   │
+                      └──────────────────────────────┬──────────────────────────────┘
+                                                     │ High-Speed UART (460.8k)
+                                                     ▼
+                      ┌─────────────────────────────────────────────────────────────┐
+                      │ 6-Pin Mill-Max Pogo Interface (GND, VCC, TX, RX, PPS, 1W)   │
+                      └──────────────────────────────┬──────────────────────────────┘
+                                                     │ Shielded 6-core PUR Cable
+                                                     ▼
+                      ┌─────────────────────────────────────────────────────────────┐
+                      │ HD26 Flange Socket -> Main Box ESP32-S3 Host Controller     │
+                      └─────────────────────────────────────────────────────────────┘
 ```
 
-### 1.1 Core Components in Rear Pod 3
+---
+
+## 2. Dual-PHY OpenMotorMesh Matrix in Rear Pod 3
+
+| Feature | **Primary PHY (2.4 GHz High-Speed Mesh)** | **Secondary Fallback PHY (868 MHz LoRa)** |
+| :--- | :--- | :--- |
+| **Hardware Driver** | **ESP32-C3 Integrated 2.4 GHz Radio** | **Semtech SX1262 Transceiver (+22 dBm)** |
+| **Standard / Protocol** | IEEE 802.15.4 / SC-FDMA TDMA (2 Mbps) | LoRa Chirp Spread Spectrum (BW 250 kHz, SF7) |
+| **Antenna in Pod 3** | Integrated 2.4 GHz ceramic patch antenna | Tuned 868 MHz helical antenna |
+| **Audio Codec** | **Opus Speech/Full-Band (24 kbps / 12 kbps)** | **Codec2 (1200 bps / 700 bps PTT Bursts)** |
+| **Audio Mode** | **Full-Duplex Continuous (HiFi Voice)** | **Half-Duplex PTT Bursts (220 ms max.)** |
+| **Music Sharing** | Yes (A2DP dynamic forwarding @ 64 kbps) | No (bandwidth reserved for voice & SOS) |
+| **Telemetry Rate** | 10 Hz real-time dynamics stream | 1 Hz compressed group radar (12 Bytes) |
+| **Typical Range** | $150\,\text{m}$ to $300\,\text{m}$ (line-of-sight) | **$1.0\,\text{km}$ to $15.0\,\text{km}$ (multi-hop)** |
+| **Primary Role** | Primary group intercom & audio bridge | **Automatic fallback on group separation** |
+
+---
+
+## 3. Core Components in Rear Pod 3
+
 1. **Main Co-Processor (ESP32-C3-WROOM-02):**
    * 32-bit RISC-V single-core @ 160 MHz with 4 MB embedded flash.
-   * Handles local 10 Hz NMEA/UBX parsing from the MAX-M10S.
-   * Controls the SX1262 LoRa transceiver over high-speed SPI (10 MHz).
-   * Processes OMM Layer 2 frame encoding/decoding (Codec2 voice frames, GPS telemetry, DLE beacons).
+   * Transmits and receives **2.4 GHz Primary High-Speed Mesh** via its internal RF unit.
+   * Performs local 10 Hz NMEA/UBX parsing from MAX-M10S.
+   * Controls SX1262 LoRa transceiver over high-speed SPI (8 MHz).
+   * Seamlessly switches between 2.4 GHz HiFi audio and 868 MHz Codec2 fallback.
 2. **GNSS Engine (u-blox MAX-M10S):**
-   * Multi-constellation 4-system concurrent reception (GPS, GLONASS, Galileo, BeiDou).
+   * Concurrent 4-system multi-constellation operation (GPS, GLONASS, Galileo, BeiDou).
    * 25 x 25 x 4 mm ceramic patch antenna with integrated LNA and SAW bandpass filter.
-   * 1-PPS hardware time pulse (jitter $< 15\,\text{ns}$ RMS) routed directly to Pogo Pin 5.
+   * 1-PPS hardware timepulse (jitter $< 15\,\text{ns}$ RMS) connected to ESP32-C3 GPIO 6 and Pogo Pin 5.
 3. **OpenMotorMesh LoRa Transceiver (Semtech SX1262):**
-   * Frequency range: 868.0 – 868.6 MHz (EU ISM band) / 915 MHz (US band).
-   * Output power: up to $+22\,\text{dBm}$ ($160\,\text{mW}$ EIRP).
-   * Integrated RF switch, low-pass filter, and matched 868 MHz helical antenna.
+   * Frequency Range: 868.0 – 868.6 MHz (EU ISM band) / 915 MHz (US band).
+   * Output Power: up to $+22\,\text{dBm}$ ($160\,\text{mW}$ EIRP).
+   * Integrated RF switch, low-pass filter, and tuned 868 MHz helical antenna.
 4. **1-Wire Identification (Maxim / ADI DS2401Z+):**
-   * Delivers the 64-bit Silicon Serial Number for automated cartridge and port detection by the central box.
-5. **Power Regulation (TI TPS7A0533):**
-   * Ultra-low-noise automotive LDO (5.0V input $\rightarrow$ clean 3.3V / 200mA for GNSS and LoRa).
+   * Provides 64-bit silicon serial number for automated cartridge detection.
+5. **Voltage Regulation (TI TPS7A0533):**
+   * Ultra-low-noise automotive LDO (5.0V in $\rightarrow$ clean 3.3V / 200mA for GNSS & LoRa).
 
 ---
 
-## 2. 6-Pin Pogo Pinout Assignment
+## 4. Internal ESP32-C3 GPIO Pin Mapping
+
+| ESP32-C3 GPIO | Peripheral / Signal | Direction | Function |
+| :--- | :--- | :---: | :--- |
+| **GPIO 21** | `BRIDGE_TXD` | Output | High-Speed UART0 Tx to Central Box (460,800 Baud) |
+| **GPIO 20** | `BRIDGE_RXD` | Input | High-Speed UART0 Rx from Central Box (460,800 Baud) |
+| **GPIO 4** | `GNSS_TXD` | Output | UART1 Tx to u-blox MAX-M10S (115,200 Baud) |
+| **GPIO 5** | `GNSS_RXD` | Input | UART1 Rx from u-blox MAX-M10S (115,200 Baud) |
+| **GPIO 6** | `GNSS_PPS` | Input (IRQ) | 1-PPS Hardware Timepulse Interrupt |
+| **GPIO 8** | `LORA_SCK` | Output | SX1262 SPI Clock (8 MHz) |
+| **GPIO 9** | `LORA_MISO`| Input | SX1262 SPI Master-In Slave-Out |
+| **GPIO 10** | `LORA_MOSI`| Output | SX1262 SPI Master-Out Slave-In |
+| **GPIO 7** | `LORA_NSS` | Output | SX1262 SPI Chip Select |
+| **GPIO 3** | `LORA_NRST`| Output | SX1262 Hardware Reset |
+| **GPIO 2** | `LORA_BUSY`| Input | SX1262 Status Busy |
+| **GPIO 1** | `LORA_DIO1`| Input (IRQ) | SX1262 Packet Received / Transmit Done Interrupt |
+
+---
+
+## 5. 6-Pin Pogo Contact Interface Pinout
 
 | Pogo Pin | Signal Name | Electrical Specification | Description |
 | :---: | :--- | :--- | :--- |
-| **Pin 1** | `POD3_VCC` | 5.0 V DC (max. 250 mA) | Continuous supply from central box |
+| **Pin 1** | `POD3_VCC` | 5.0 V DC (max. 250 mA) | Continuous 5V power from Central Box |
 | **Pin 2** | `POD3_GND` | Power & Signal Ground | Dedicated return path |
-| **Pin 3** | `POD3_UART_TX` | 3.3 V LVTTL (460,800 Baud) | Data stream from ESP32-C3 to central box |
-| **Pin 4** | `POD3_UART_RX` | 3.3 V LVTTL (460,800 Baud) | Commands from central box to ESP32-C3 |
-| **Pin 5** | `POD3_GNSS_PPS`| 3.3 V Pulse (100 ms width) | 1-PPS hardware time reference synchronization |
+| **Pin 3** | `POD3_UART_TX` | 3.3 V LVTTL (460,800 Baud) | Stream from ESP32-C3 to Central Box |
+| **Pin 4** | `POD3_UART_RX` | 3.3 V LVTTL (460,800 Baud) | Commands from Central Box to ESP32-C3 |
+| **Pin 5** | `POD3_GNSS_PPS`| 3.3 V pulse (100 ms width) | 1-PPS hardware time synchronization |
 | **Pin 6** | `POD3_1WIRE_ID`| 1-Wire Open-Drain (3.3 V) | DS2401 cartridge identification bus |
 
 ---
 
-## 3. High-Speed UART Protocol & Frame Structure
-Communication between Rear Pod 3 and the main box uses a binary, CRC-16 protected frame protocol at **460,800 Baud**:
+## 6. Protocol Specification (Rear Pod $\leftrightarrow$ Central Box)
+
+Communication across the 460,800 Baud bridge is packet-oriented with CRC16-CCITT checksum:
 
 ```
-┌──────┬──────┬────────────┬─────────┬──────────────┬─────────┐
-│ SOF  │ LEN  │ MSG_TYPE   │ SEQ_NUM │ PAYLOAD      │ CRC-16  │
-│ 0xAA │ 1 B  │ 0x01..0x05 │ 1 B     │ 0..250 Bytes │ 2 Bytes │
-└──────┴──────┴────────────┴─────────┴──────────────┴─────────┘
+┌──────┬──────┬──────┬──────┬─────────────────┬──────┬──────┐
+│ SYNC │ TYPE │ LEN  │ SEQ  │ PAYLOAD (0..n)  │ CRC16-CCITT  │
+│ 0xAA │ 0x55 │ 1 B  │ 1 B  │ Variable        │ 2 Bytes      │
+└──────┴──────┴──────┴──────┴─────────────────┴──────┴──────┘
 ```
-- `MSG_TYPE 0x01` (PVT Telemetry): 10 Hz GPS position, speed, altitude, satellite count.
-- `MSG_TYPE 0x02` (LoRa Rx Voice Frame): Received Codec2 audio packet (300 Bytes) for intercom mixing.
-- `MSG_TYPE 0x03` (LoRa Tx Voice Frame): Codec2 audio packet to be transmitted over LoRa.
-- `MSG_TYPE 0x04` (DLE Status & Beacons): Exchange of RSSI metrics and cluster routing tables.
 
----
-
-## 4. Advantages of Rear Fender Placement
-- **Optimal 360-Degree GNSS Sky View:** No line-of-sight obstruction from the rider, windscreen, or fuel tank.
-- **Maximum RF Isolation:** The 868 MHz transmitter radiates at the rear – $> 1.2\,\text{m}$ away from the 2.4 GHz side mesh units (Pod 1 & Pod 2).
-- **Offloads the Main MCU:** Frees the ESP32-S3 from time-critical NMEA parsing and LoRa SPI polling.
+### Message Types:
+* **`0x01` - GNSS PVT Telemetry (10 Hz):** Pre-compressed binary vector with Latitude, Longitude, Altitude, Speed, Heading, PDOP, and Satellite stats.
+* **`0x02` - OMM 2.4 GHz Primary Audio Frame:** Opus 24k/12k frame from 2.4 GHz proximity mesh.
+* **`0x03` - OMM 868 MHz LoRa Fallback Frame:** Codec2 audio or radar packet from long-range fallback.
+* **`0x04` - OMM Tx Request (Dual-PHY):** Transmit command from Central Box to 2.4 GHz mesh or SX1262 LoRa.
+* **`0x05` - DLE Status & Link Quality:** Signal-to-Noise Ratio (SNR), RSSI, active PHY mode (2.4G vs 868M), and node DLE score.

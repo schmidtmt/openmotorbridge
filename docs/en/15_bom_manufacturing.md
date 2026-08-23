@@ -29,13 +29,14 @@ Complete component list and manufacturing specifications for SMT pick-and-place 
 
 | Designator | Component / MPN | Manufacturer | Package | LCSC / JLCPCB Part # | Function |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **U10** | ESP32-C3-WROOM-02-N4 | Espressif Systems | SMD Module | C2868705 | 32-Bit RISC-V Co-Processor (NMEA & LoRa Parser) |
+| **U10** | ESP32-C3-WROOM-02-N4 | Espressif Systems | SMD Module | C2868705 | 32-Bit RISC-V Co-Processor & 2.4 GHz Primary Mesh (Opus 24k) |
 | **U11** | MAX-M10S-00B | u-blox | LGA-18 | C3006240 | Multi-Constellation GNSS Engine (10 Hz, 1-PPS) |
-| **U12** | SX1262IMLTRT | Semtech | QFN-24 | C190184 | OpenMotorMesh 868 MHz LoRa Transceiver (+22 dBm) |
+| **U12** | SX1262IMLTRT | Semtech | QFN-24 | C190184 | Secondary Fallback 868 MHz LoRa Transceiver (+22 dBm) |
 | **U13** | DS2401Z+ | Maxim / ADI | SOT-223 / TO-92 | C14440 | 64-Bit 1-Wire Silicon Serial Number ID |
-| **U14** | TPS7A0533PDBVR | Texas Instruments | SOT-23-5 | C505293 | Ultra-Low-Noise 3.3V LDO (200 mA) for GNSS/LoRa |
+| **U14** | TPS7A0533PDBVR | Texas Instruments | SOT-23-5 | C505293 | Ultra-Low-Noise 3.3V LDO (200 mA) for GNSS & LoRa |
 | **ANT1** | GP.1575.25.4.A.02 | Taoglas | 25x25x4 mm Patch | C2689100 | Ceramic Patch Antenna for GPS/Galileo |
 | **ANT2** | ANT-868-CW-HWR-SMA | Linx / Taoglas | Helical Antenna | C290111 | 868 MHz Helical Antenna for Rear Fender |
+| **ANT3** | WLS.01.A.02 | Taoglas | 3.2x1.6 mm Chip | C2838381 | 2.4 GHz Ceramic Antenna for Primary HiFi Mesh |
 | **CN3** | 824-22-006-00-001101 | Mill-Max | SMD Pad Header | C189201 | 6-Pin Gold-Plated Pogo Target Contact Array |
 
 ---
