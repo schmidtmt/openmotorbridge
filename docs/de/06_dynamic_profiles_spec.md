@@ -56,7 +56,7 @@ Alle unterstuetzten Intercom- und Funkkassetten sind in 6 standardisierte Hardwa
 
 ## 3. Sicherheits-Fallback: `disabled.json` (Slot-Abschaltung)
 
-Wird ein Steckplatz nicht belegt, eine Kassette entfernt oder ein Pod in der WebApp manuell stillgelegt, laedt der ESP32-S3 sofort das Profil `disabled.json`:
+Wird ein Steckplatz nicht belegt, eine Dummy-Leerkassette eingesetzt oder ein Pod in der WebApp manuell stillgelegt, laedt der ESP32-S3 sofort das Profil `disabled.json`:
 
 ```json
 {
@@ -85,3 +85,26 @@ Wird ein Steckplatz nicht belegt, eine Kassette entfernt oder ein Pod in der Web
 2. **Vollstaendige Audio-Stummschaltung:** Die Ein- und Ausgangs-Gains des ES8388 Codecs werden auf $-96\,\text{dB}$ gesetzt, um jegliches Rauschen oder Einstreuungen von offenen Leitungen zu eliminieren.
 3. **Deaktivierung von Schaltsignalen:** Die Toshiba TLP222A Optokoppler bleiben dauerhaft hochohmig.
 4. **DLE-Bereinigung:** Der DLE-Score-Beitrag faellt sofort auf 0 Punkte zurueck.
+
+---
+
+## 4. Plug-and-Play Hardware-Port-Schutz & Auto-Routing
+
+Um Kurzschluesse und Fehlkonfigurationen (z. B. versehentliches Stecken einer Audio-Kassette an Pod 3 oder des Heck-Transceivers an Pod 1) zu verhindern, arbeitet die Kassetten-Initialisierung in 3 Phasen:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│          3-PHASEN PLUG-AND-PLAY ERKENNUNGSSEQUENZ           │
+├─────────────────────────────────────────────────────────────┤
+│ 1. ERKENNUNGSPHASE: 1-Wire ID Abfrage (Strombegrenzt < 20mA)│
+│ 2. VALIDIERUNG: Family-Code & UID Check gegen Profiltabelle │
+│ 3. FREIGABE: Erst bei Match -> 5V MOSFET EIN & Audio/UART On│
+└─────────────────────────────────────────────────────────────┘
+```
+
+1. **Strombegrenzte Erkennungsphase:** Beim Einstecken bleibt die Haupt-Speisung (5V MOSFET) gesperrt. Der 1-Wire-Treiber liest die 64-Bit Silicon Serial Number des DS2401 aus.
+2. **Automatische Routing-Zuweisung:**
+   * **Heck-Pod 3 UID erkannt:** Zentralbox schaltet Pins 15/16 auf High-Speed UART (@ 460.800 Baud) und initialisiert den NMEA/LoRa-Parser.
+   * **Audio-Kassette (Sena/Cardo) erkannt:** Pins werden an den Bourns NF-Pfad und ES8388 I2S-DSP geschaltet; das zugehoerige JSON-Profil wird geladen.
+   * **Dummy-Kassette oder Open-Pin erkannt:** Slot bleibt dauerhaft stromlos geschaltet (`disabled.json`).
+3. **Soft-Start:** Nach erfolgreicher Validierung schaltet der P-FET die Speisespannung ueber eine definierte Soft-Start-Rampe ($100-150\,\text{ms}$) ein.

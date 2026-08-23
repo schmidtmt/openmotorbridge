@@ -130,12 +130,28 @@ The mid baffle separates the PCB/battery compartment mechanically from the conne
 ---
 
 ## 5. Enclosure Type B: Universal Satellite Pod (Identical for Pods 1, 2, and 3)
+
 - **100% Universal Design:** All 3 pod locations on the motorcycle use the identical enclosure body.
 - **Bay Dimensions:** 64.0 x 46.0 x 23.5 mm.
 - **Cartridge Module:** 54.0 x 37.5 x 17.0 mm (PA12 MJF).
 - **Contact Array:** Mill-Max 6-pin pogo pin array (Series 824-22-006-00-001101, 2.54 mm pitch, 1.4 mm working stroke) with silicone boot gasket mating against ENIG pads.
-- **3-Stage Locking:** Snap-lock POM-C latches, 90-degree rotating cam-lock, push-to-eject lever.
+- **3-Stage Locking:** Snap-lock POM-C latches with acoustic click, 90-degree rotating cam-lock against $> 20\,\text{g}$ shock loads, push-to-eject lever.
 - **Universal Mounting:** Integrated M5 backplate for flat mounting or CNC aluminum tube clamps (22.0 mm, 28.6 mm, 1.0 inch, 25–32 mm crash bars).
+
+### 5.1 Pod Pressure Equalization Membrane (ePTFE)
+* **Problem:** Internal thermal dissipation (SX1262 LoRa $+22\,\text{dBm}$ PA, charging circuits) and direct solar radiation create pressure differentials in small pod volumes.
+* **Specification:** The rear of the pod body (recessed beneath the M5 mounting bracket) integrates an **adhesive $\varnothing\,7.0\,\text{mm}$ ePTFE venting membrane** (*Schreiner Air Vent* / *Gore Automotive Adhesive Vent*).
+* **Function:** Airflow $> 25\,\text{ml/min}$ @ 70 mbar, water intrusion pressure $> 1.5\,\text{bar}$ (IP67). Eliminates vacuum-induced moisture ingress during sudden rain cooling.
+
+### 5.2 Harness Strain Relief & Anti-Kink Protection
+* **Interface:** Bottom cable entry uses an **M12 x 1.5 IP67 cable gland with integrated spiral anti-kink boot** molded from UV/oil-resistant polyamide (PA6) with NBR seal.
+* **Protection:** Guarantees bend radius $> 30\,\text{mm}$ and robust tensile strain relief ($> 100\,\text{N}$) during full steering lock and road shocks.
+
+### 5.3 IP67 Dummy Cartridge (Slot Blank)
+* **Partial Population:** When a pod bay is temporarily unpopulated (e.g. single-intercom setups or disabled slots), the identical-footprint **IP67 Dummy Cartridge (`Pod_Dummy_Cartridge_IP67.stl`)** seals the bay completely.
+* **Sealing Concept:** Dual perimeter silicone gaskets isolate the internal Mill-Max pogo pins from road grime, water spray, and salt.
+* **Locking Mechanism:** Employs the identical POM-C snap-lock and 90° cam-lock as active cartridges.
+* **Hardware State:** Host MCU detects empty/open pins and maintains slot in zero-power, zero-noise isolation via `disabled.json`.
 
 ---
 

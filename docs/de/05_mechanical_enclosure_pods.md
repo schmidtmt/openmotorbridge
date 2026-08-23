@@ -130,12 +130,28 @@ Der Zwischenboden der Oberwanne trennt die empfindliche Leiterplatten- und Akkue
 ---
 
 ## 5. Gehaeuse Typ B: Universeller Satelliten-Pod (Identisch fuer Pod 1, 2 und 3)
+
 - **Vollstaendige Modularitaet:** Alle 3 Pod-Positionen am Motorrad nutzen das identische, universelle Gehaeuse.
 - **Abmessungen Schacht:** 64.0 x 46.0 x 23.5 mm.
 - **Elektronik-Kassette:** 54.0 x 37.5 x 17.0 mm (PA12 MJF).
 - **Kontaktblock:** 6-poliges Mill-Max Pogo-Pin-Array (Serie 824-22-006-00-001101, Raster 2.54 mm, 1.4 mm Arbeitshub) mit Silikon-Formschuhdichtung gegen vergoldete ENIG-Pads.
-- **3-Stufen-Sicherheitsarretierung:** Snap-Lock POM-C Klinken, 90°-Cam-Lock Drehriegel, Push-to-Eject Wippe.
+- **3-Stufen-Sicherheitsarretierung:** Snap-Lock POM-C Klinken mit akustischem Klick, 90°-Cam-Lock Drehriegel gegen Stoesse $> 20\,\text{g}$, Push-to-Eject Wippe.
 - **Universelle Montage:** Integrierte M5-Rueckenplatte fuer Flachmontage oder CNC-Aluminium-Rohrschellen (22.0 mm, 28.6 mm, 1.0 Zoll, 25–32 mm Sturzbuegel).
+
+### 5.1 Pod-Druckausgleichsmembran (ePTFE)
+* **Problemstellung:** Interne Abwaerme (SX1262 LoRa $+22\,\text{dBm}$ PA, Ladeschaltung) und Sonneneinstrahlung erzeugen Druckdifferenzen im kleinen Pod-Volumen.
+* **Spezifikation:** Auf der Rueckseite des Pod-Gehaeuses (geschuetzt in einer Senkung unter der M5-Rueckenplatte) sitzt eine **selbstklebende $\varnothing\,7{,}0\,\text{mm}$ ePTFE-Druckausgleichsmembran** (*Schreiner Air Vent* / *Gore Automotive Adhesive Vent*).
+* **Funktion:** Belueftungsrate $> 25\,\text{ml/min}$ bei 70 mbar, Wassereintrittspunkt $> 1{,}5\,\text{bar}$ (IP67). Verhindert Vakuum-Wassersaugen bei Abkuehlung durch Regenguesse.
+
+### 5.2 Kabelbaum-Knickschutz & Zugentlastung
+* **Schnittstelle:** Kabeleinfuehrung an der Gehaeuseunterseite ueber **M12 x 1.5 IP67-Kabelverschraubung mit integrierter Spiral-Knickschutztuelle** aus UV- und oelbestaendigem Polyamid (PA6) mit NBR-Dichteinsatz.
+* **Schutzwirkung:** Garantiert Biegeradius $> 30\,\text{mm}$ und zuverlaessige Zugentlastung ($> 100\,\text{N}$) bei Lenkereinschlaegen und harten Fahrbahnstoessen.
+
+### 5.3 IP67 Blind- / Leerkassette (Dummy Cartridge)
+* **Verwendung bei Teilbestueckung:** Wird ein Pod-Schacht temporaer nicht bestueckt (z. B. wenn nur Sena genutzt wird oder ein Pod stillgelegt ist), verschliesst die formidentische **IP67-Leerkassette (`Pod_Dummy_Cartridge_IP67.stl`)** den Schacht vollstaendig.
+* **Dichtungskonzept:** Doppelte Silikon-Umlaufdichtung schuetzt die innenliegenden Mill-Max Pogo-Pins vor Schmutz, Spritzwasser und Streusalz.
+* **Verriegelung:** Nutzt denselben POM-C Snap-Lock und 90°-Cam-Lock Drehriegel wie aktive Kassetten.
+* **Hardware-Zustand:** Die Zentralbox erkennt offene/leere Kontakte und haelt den Slot ueber `disabled.json` strom- und rauschfrei isoliert.
 
 ---
 

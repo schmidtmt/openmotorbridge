@@ -56,7 +56,7 @@ All supported intercom and radio cartridges are structured into standardized har
 
 ## 3. Safety Fallback: `disabled.json` (Slot Shutdown)
 
-When a cartridge slot is empty, removed, or explicitly disabled in the WebApp dashboard, the ESP32-S3 instantly applies `disabled.json`:
+When a cartridge slot is empty, populated with a dummy blank, or disabled in the WebApp dashboard, the ESP32-S3 instantly applies `disabled.json`:
 
 ```json
 {
@@ -85,3 +85,26 @@ When a cartridge slot is empty, removed, or explicitly disabled in the WebApp da
 2. **Audio Line Isolation:** Sets ES8388 codec input and output gain stages to $-96\,\text{dB}$, silencing line crosstalk and open-pin pickup.
 3. **Trigger Deactivation:** Keeps Toshiba TLP222A PhotoMOS relays high-impedance.
 4. **DLE Reset:** Drops DLE score contribution to 0 points.
+
+---
+
+## 4. Plug-and-Play Hardware Protection & Auto-Routing
+
+To prevent wiring shorts or misconfigurations (e.g. plugging an audio cartridge into Pod 3 or the rear transceiver into Pod 1), cartridge onboarding operates in 3 distinct phases:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│             3-PHASE PLUG-AND-PLAY ONBOARDING SEQUENCE       │
+├─────────────────────────────────────────────────────────────┤
+│ 1. DETECTION PHASE: 1-Wire ID query (Current limited < 20mA)│
+│ 2. VALIDATION: Check family code & UID against profile table│
+│ 3. ENABLING: Match verified -> 5V MOSFET ON & Audio/UART En │
+└─────────────────────────────────────────────────────────────┘
+```
+
+1. **Current-Limited Detection Phase:** When inserted, the 5V main power MOSFET remains off. The 1-Wire driver queries the 64-bit DS2401 silicon serial number under minimal sensing current.
+2. **Automatic Route Assignment:**
+   * **Rear Pod 3 UID detected:** Host MCU switches pins 15/16 to High-Speed UART (@ 460,800 Baud) and initializes the NMEA/LoRa parser.
+   * **Audio Cartridge (Sena/Cardo) detected:** Pins connect to Bourns audio paths and ES8388 DSP; matching JSON profile is loaded.
+   * **Dummy Cartridge or Open-Pin detected:** Slot is maintained in zero-power isolation (`disabled.json`).
+3. **Soft-Start Activation:** Once validated, the P-FET applies 5V power over a controlled soft-start ramp ($100-150\,\text{ms}$).

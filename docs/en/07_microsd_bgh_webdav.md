@@ -1,19 +1,50 @@
-# 07 - MicroSD Storage, BGH Compliant Ring Buffer & WebDAV Auto-Sync
+# 07 - MicroSD Storage, BGH Ring Buffer, WebDAV Sync & USB MSC
 
-## 1. High-Speed 4-Bit SDIO Interface
-Track logs are recorded directly to an automotive grade MicroSD card (FAT32) using the native 4-bit SDIO hardware bus of the ESP32-S3:
-- **Bus Speed:** 40 MHz clock with 4 data lines (DAT0..DAT3).
-- **Format:** GPX 2.0 with custom OpenMotorBridge XML telemetry extensions (`<omb:telemetry>` for lean angle, speed, voltage, satellite lock).
+This document specifies the high-speed 4-bit SDIO memory bus, the GDPR/BGH-compliant ring buffer, automated WebDAV synchronization, and the **minimal USB Mass Storage Class (MSC) mode** for direct PC/Mac file transfer.
 
-## 2. BGH VI ZR 233/17 & GDPR Ring Buffer Compliance
-To comply with legal data protection requirements and precedent German dashcam rulings:
-- Logs are stored in rolling 15-minute segments (`/tracks/tour_YYYYMMDD_HHMMSS.gpx`).
-- When free storage drops below **200 MB**, the oldest unprotected track files are automatically purged.
-- **Permanent Preservation:** Key moments can be flagged by pressing the handlebar remote button or via 1-PPS action cam trigger. Flagged tracks are renamed to `*.fav.gpx` and protected from automated deletion.
+---
 
-## 3. Post-Ride WebDAV Auto-Sync (TLS 1.3)
-When vehicle ignition is turned off (`KL15 = OFF`), the central box enters its graceful shutdown buffer:
-1. Flushes and finalizes the active GPX file.
-2. Scans for known home Wi-Fi SSIDs (e.g. garage network).
-3. Connects via **TLS 1.3** and uploads pending GPX tracks to a configured WebDAV server (Nextcloud, Synology NAS, QNAP).
-4. Powers down into ULP sleep mode upon successful sync.
+## 1. Storage Interface & High-Speed SDIO
+
+* **Interface:** Native 4-bit SDIO bus @ 40 MHz attached to ESP32-S3 (GPIOs 40–45).
+* **Throughput:** Sustained sequential write throughput $> 12\,\text{MB/s}$ (guarantees drop-free 10 Hz GPX, IMU, and telemetry logging).
+* **Filesystem:** FAT32 with dynamic sector buffering (32 kB cluster size).
+
+---
+
+## 2. Ring Buffer & BGH Compliance (BGH VI ZR 233/17 / GDPR)
+
+* **Rolling Buffer:** Tour tracks are saved as a circular buffer inside the `/tracks/` directory.
+* **Auto-Purge Threshold:** When free storage falls below $200\,\text{MB}$, the firmware automatically purges the oldest unprotected GPX logs in 50 MB chunks.
+* **Highlight Write-Protection:** Manually flagged video highlights or tours marked as favorites in the WebApp (`*.fav.gpx`) are permanently write-protected against automatic purging.
+
+---
+
+## 3. WebDAV Sync in Home Wi-Fi
+
+* **Automatic Network Scan:** Upon ignition shutoff (KL15 $< 11.8\,\text{V}$), the system scans for known home Wi-Fi SSIDs during the 15-minute UPS rundown.
+* **TLS 1.3 Upload:** If a configured network is found, the integrated WebDAV client uploads newly recorded GPX tracks encrypted via TLS 1.3 to Nextcloud, ownCloud, or Synology NAS (transfer speed $\approx 1.8\,\text{MB/s}$).
+* **Clean Rundown:** Once synchronization concludes, the filesystem is cleanly unmounted and the unit transitions to deep sleep.
+
+---
+
+## 4. USB Mass Storage Class (MSC) & Minimal Boot Mode
+
+When the main box is connected to a PC, Mac, or tablet via its native USB-C port while motorcycle ignition (KL15) is off, the ESP32-S3 launches into **Minimal USB MSC Mode**:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│             MINIMAL USB MASS STORAGE CLASS MODE             │
+├─────────────────────────────────────────────────────────────┤
+│ • VBUS Detection (5V active on native USB-C port)           │
+│ • Main Power Gates & Audio DSP (ES8388) remain ISOLATED     │
+│ • Radio transceivers (LoRa, Mesh, BLE) remain SHUT DOWN     │
+│ • Current Draw from USB Port: < 80 mA (Zero battery drain)  │
+│ • MicroSD card is mounted and presented as USB Flash Drive  │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Key Advantages in Practice:
+1. **No Tools / No Card Removal:** The MicroSD card stays safely sealed inside the IP67 housing. The host PC immediately mounts the volume as `OPENMOTOR`.
+2. **Direct Access:** Track logs in `/tracks/` can be opened directly in Google Earth, BaseCamp, or Kurviger, and profile JSON files in `/profiles/` can be configured on the desktop.
+3. **Vehicle Battery Protection:** Only the USB stack and SDIO controller are powered; all vehicle electronics and high-power stages remain completely powered off.
