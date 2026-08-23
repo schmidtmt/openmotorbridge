@@ -475,7 +475,7 @@
                                 <td style="color: var(--accent-orange); font-weight: 700;">44.2°</td>
                                 <td><span class="card-badge badge-green" data-i18n="status_uploaded">Hochgeladen</span></td>
                                 <td>
-                                    <button class="btn-secondary" style="padding: 4px 8px; font-size: 0.75rem;" onclick="downloadMockGpx('tour_20260823.gpx')">⬇️ GPX</button>
+                                    <button class="btn-secondary" style="padding: 4px 8px; font-size: 0.75rem;" onclick="openGpxExportModal('tour_20260823.gpx', '2026-08-23 09:15', '1h 42m', '84.6 km', '44.2°')">⚡ Export-Assistent</button>
                                 </td>
                             </tr>
                             <tr>
@@ -485,7 +485,7 @@
                                 <td style="color: var(--accent-orange); font-weight: 700;">47.8°</td>
                                 <td><span class="card-badge badge-orange" data-i18n="status_favorite">★ Favorit</span></td>
                                 <td>
-                                    <button class="btn-secondary" style="padding: 4px 8px; font-size: 0.75rem;" onclick="downloadMockGpx('tour_20260822.fav.gpx')">⬇️ GPX</button>
+                                    <button class="btn-secondary" style="padding: 4px 8px; font-size: 0.75rem;" onclick="openGpxExportModal('tour_20260822.fav.gpx', '2026-08-22 14:30', '3h 15m', '192.3 km', '47.8°')">⚡ Export-Assistent</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -601,6 +601,87 @@
             <button id="btn-wizard-finish" class="btn-primary" style="width: 100%; margin-top: 10px;">
                 <span data-i18n="btn_wizard_finish">Verstanden & Profil aktivieren</span>
             </button>
+        </div>
+    </div>
+
+    <!-- Modal: Extended GPX Export & Navigation Formatting -->
+    <div class="modal-overlay" id="gpx-export-modal">
+        <div class="modal-card" style="max-width: 600px;">
+            <div class="modal-header">
+                <div class="modal-title">🗺️ <span data-i18n="gpx_modal_title">Erweiterter GPX-Export & Navi-Formatierung</span></div>
+                <button class="modal-close" id="btn-close-gpx-modal">&times;</button>
+            </div>
+
+            <!-- Tour Meta Bar -->
+            <div style="background: var(--bg-surface-elevated); padding: 10px 14px; border-radius: var(--radius-sm); margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem;">
+                <div>
+                    <strong id="modal-gpx-filename">tour_20260823.gpx</strong>
+                    <div class="stat-sub" id="modal-gpx-meta">2026-08-23 09:15 • 1h 42m • 84.6 km • Max. 44.2°</div>
+                </div>
+                <span class="card-badge badge-green" id="modal-gpx-badge">10 Hz 1-PPS Sync</span>
+            </div>
+
+            <!-- Target Profile Selection -->
+            <div class="control-label"><span>Ziel-Exportprofil wählen:</span></div>
+            <div class="grid-2" style="gap: 10px; margin-bottom: 16px;">
+                <label class="stat-tile" style="cursor: pointer; border: 1px solid var(--accent-orange); background: rgba(255, 159, 10, 0.08); padding: 10px; border-radius: var(--radius-sm); display: flex; align-items: flex-start; gap: 8px;">
+                    <input type="radio" name="gpx-profile" value="moto_navi" checked style="margin-top: 4px;">
+                    <div>
+                        <strong style="color: var(--accent-orange); font-size: 0.9rem;">🏍️ Moto-Navi Route</strong>
+                        <div class="stat-sub" style="font-size: 0.75rem;">Shaping Points für Garmin Zūmo/Tread, BMW CRN, Kurviger & Calimoto. Verhindert Neuberechnung.</div>
+                    </div>
+                </label>
+
+                <label class="stat-tile" style="cursor: pointer; border: 1px solid var(--border-subtle); padding: 10px; border-radius: var(--radius-sm); display: flex; align-items: flex-start; gap: 8px;">
+                    <input type="radio" name="gpx-profile" value="video_sync" style="margin-top: 4px;">
+                    <div>
+                        <strong style="color: var(--accent-blue); font-size: 0.9rem;">🎬 Video-Sync Telemetrie</strong>
+                        <div class="stat-sub" style="font-size: 0.75rem;">10 Hz 1-PPS mit Schräglage (°), G-Force & Actioncam Schnittmarken (Telemetry Overlay / VIRB).</div>
+                    </div>
+                </label>
+
+                <label class="stat-tile" style="cursor: pointer; border: 1px solid var(--border-subtle); padding: 10px; border-radius: var(--radius-sm); display: flex; align-items: flex-start; gap: 8px;">
+                    <input type="radio" name="gpx-profile" value="clean_visual" style="margin-top: 4px;">
+                    <div>
+                        <strong style="color: var(--accent-green); font-size: 0.9rem;">🗺️ Visual Clean Track</strong>
+                        <div class="stat-sub" style="font-size: 0.75rem;">Ramer-Douglas-Peucker geglätteter Track für Google Earth, Relive, Komoot & Strava.</div>
+                    </div>
+                </label>
+
+                <label class="stat-tile" style="cursor: pointer; border: 1px solid var(--border-subtle); padding: 10px; border-radius: var(--radius-sm); display: flex; align-items: flex-start; gap: 8px;">
+                    <input type="radio" name="gpx-profile" value="raw_ekf" style="margin-top: 4px;">
+                    <div>
+                        <strong style="color: var(--accent-purple); font-size: 0.9rem;">📊 Raw EKF Sensor-Fusion</strong>
+                        <div class="stat-sub" style="font-size: 0.75rem;">Vollständiger Datensatz (IMU, CAN, Spannungen, DOP) für MATLAB / Analyse.</div>
+                    </div>
+                </label>
+            </div>
+
+            <!-- Options Checkboxes -->
+            <div style="background: var(--bg-surface-elevated); padding: 12px; border-radius: var(--radius-sm); margin-bottom: 16px; font-size: 0.82rem;">
+                <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px; cursor: pointer;">
+                    <input type="checkbox" id="chk-road-snapping" checked>
+                    <span><strong>OSM Road-Snapping:</strong> Mathematische Ausrichtung auf Straßennetz aktivieren</span>
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px; cursor: pointer;">
+                    <input type="checkbox" id="chk-garmin-ext" checked>
+                    <span><strong>Garmin &lt;gpxx:&gt; Extensions:</strong> Shaping Points & TransportMode einbetten</span>
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                    <input type="checkbox" id="chk-action-tags" checked>
+                    <span><strong>Actioncam Timecode-Marker:</strong> Highlight-Schnittmarken einschließen</span>
+                </label>
+            </div>
+
+            <!-- Action Buttons -->
+            <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                <button id="btn-save-indexeddb" class="btn-secondary" style="font-size: 0.85rem;">
+                    💾 In IndexedDB Speichern
+                </button>
+                <button id="btn-download-gpx-custom" class="btn-primary" style="font-size: 0.85rem;">
+                    ⬇️ GPX Herunterladen
+                </button>
+            </div>
         </div>
     </div>
 

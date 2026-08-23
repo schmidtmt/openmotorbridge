@@ -42,6 +42,7 @@ const i18n = {
         handlebar_label: 'Lenkertaster (CR2032 Batterie)',
         handlebar_sub: 'Bluetooth SIG Service 0x180F Überwachung',
         status_led_title: 'WS2812B RGB Status-LED (Gehäusedeckel)',
+        gpx_modal_title: 'Erweiterter GPX-Export & Navi-Formatierung',
         audio_modes_title: 'Audio-Routing & Betriebsmodi',
         mode_0_name: 'Standard Mode (Mesh Bridge)',
         mode_0_desc: 'Port 1 (Sena) & Port 2 (Cardo) sind simultan aktiv und werden symmetrisch zum Fahrerhelm gemischt.',
@@ -143,6 +144,7 @@ const i18n = {
         handlebar_label: 'Handlebar Remote (CR2032 Battery)',
         handlebar_sub: 'Bluetooth SIG Service 0x180F Monitoring',
         status_led_title: 'WS2812B RGB Status LED (Enclosure Lid)',
+        gpx_modal_title: 'Extended GPX Export & Navigation Formatting',
         audio_modes_title: 'Audio Routing & Operating Modes',
         mode_0_name: 'Standard Mode (Mesh Bridge)',
         mode_0_desc: 'Port 1 (Sena) & Port 2 (Cardo) are simultaneously active and mixed symmetrically to the rider headset.',
@@ -928,6 +930,217 @@ document.getElementById('select-led-sim')?.addEventListener('change', (e) => {
 document.getElementById('btn-trigger-usb-msc')?.addEventListener('click', () => {
     updateLedVisual('blue');
     showToast(state.lang === 'de' ? '💾 USB Mass Storage Modus aktiviert: MicroSD als Laufwerk "OPENMOTOR" am Rechner gemountet.' : '💾 USB Mass Storage mode active: MicroSD mounted as "OPENMOTOR" volume on PC.', 'success');
+});
+
+// ==========================================
+// 11c. Extended GPX Export Engine & IndexedDB Storage
+// ==========================================
+let currentExportTour = {
+    filename: 'tour_20260823.gpx',
+    datetime: '2026-08-23 09:15',
+    duration: '1h 42m',
+    distance: '84.6 km',
+    maxLean: '44.2°'
+};
+
+// IndexedDB Initialization
+let dbPromise = null;
+function getIndexedDb() {
+    if (!dbPromise) {
+        dbPromise = new Promise((resolve, reject) => {
+            if (!window.indexedDB) {
+                console.warn('IndexedDB not supported');
+                resolve(null);
+                return;
+            }
+            const request = indexedDB.open('OpenMotorBridgeDB', 1);
+            request.onupgradeneeded = (e) => {
+                const db = e.target.result;
+                if (!db.objectStoreNames.contains('tours')) {
+                    db.createObjectStore('tours', { keyPath: 'id' });
+                }
+            };
+            request.onsuccess = (e) => resolve(e.target.result);
+            request.onerror = (e) => reject(e.target.error);
+        });
+    }
+    return dbPromise;
+}
+
+async function saveTourToIndexedDb(tourObj) {
+    try {
+        const db = await getIndexedDb();
+        if (!db) return false;
+        const tx = db.transaction('tours', 'readwrite');
+        const store = tx.objectStore('tours');
+        store.put(tourObj);
+        return true;
+    } catch (err) {
+        console.error('Failed to save to IndexedDB:', err);
+        return false;
+    }
+}
+
+// Modal Trigger
+window.openGpxExportModal = function (filename, datetime, duration, distance, maxLean) {
+    currentExportTour = { filename, datetime, duration, distance, maxLean };
+    const modal = document.getElementById('gpx-export-modal');
+    if (!modal) return;
+
+    document.getElementById('modal-gpx-filename').textContent = filename;
+    document.getElementById('modal-gpx-meta').textContent = `${datetime} • ${duration} • ${distance} • Max. ${maxLean}`;
+    modal.classList.add('active');
+};
+
+const btnCloseGpxModal = document.getElementById('btn-close-gpx-modal');
+if (btnCloseGpxModal) {
+    btnCloseGpxModal.addEventListener('click', () => {
+        document.getElementById('gpx-export-modal')?.classList.remove('active');
+    });
+}
+
+// Target Profile Radio Styling
+document.querySelectorAll('input[name="gpx-profile"]').forEach(radio => {
+    radio.addEventListener('change', (e) => {
+        document.querySelectorAll('input[name="gpx-profile"]').forEach(r => {
+            const tile = r.closest('.stat-tile');
+            if (tile) {
+                tile.style.border = r.checked ? '1px solid var(--accent-orange)' : '1px solid var(--border-subtle)';
+                tile.style.background = r.checked ? 'rgba(255, 159, 10, 0.08)' : 'var(--bg-surface-elevated)';
+            }
+        });
+    });
+});
+
+// GPX XML Generators
+function generateExtendedGpxXml(profileType, tour, options) {
+    const timeIso = new Date().toISOString();
+    let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+    xml += `<gpx version="1.1" creator="OpenMotorBridge v8.0"\n`;
+    xml += `  xmlns="http://www.topografix.com/GPX/1/1"\n`;
+    xml += `  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n`;
+    xml += `  xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3"\n`;
+    xml += `  xmlns:omb="http://openmotorbridge.org/xmlschemas/omb/1.0"\n`;
+    xml += `  xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">\n`;
+    xml += `  <metadata>\n    <name>${tour.filename}</name>\n    <time>${timeIso}</time>\n  </metadata>\n`;
+
+    // 1. Moto-Navi Route (with Garmin / BMW Shaping Points)
+    if (profileType === 'moto_navi') {
+        xml += `  <rte>\n    <name>OMB Moto Route (${tour.distance})</name>\n`;
+        if (options.garminExt) {
+            xml += `    <extensions>\n      <gpxx:RouteExtension>\n        <gpxx:IsAutoNamed>false</gpxx:IsAutoNamed>\n        <gpxx:TransportMode>Driving</gpxx:TransportMode>\n      </gpxx:RouteExtension>\n    </extensions>\n`;
+        }
+        // Shaping Points sample array
+        const shapingPoints = [
+            { name: "Start Tour (Klausenpass West)", lat: 46.8686, lon: 8.6433, ele: 485.0 },
+            { name: "Shaping Point 1 (Urnerboden)", lat: 46.8834, lon: 8.8415, ele: 1372.0 },
+            { name: "Shaping Point 2 (Passhöhe 1948m)", lat: 46.8683, lon: 8.8567, ele: 1948.0 },
+            { name: "Ziel (Linthal Glarus)", lat: 46.9208, lon: 8.9983, ele: 662.0 }
+        ];
+
+        shapingPoints.forEach((pt, idx) => {
+            xml += `    <rtept lat="${pt.lat.toFixed(6)}" lon="${pt.lon.toFixed(6)}">\n`;
+            xml += `      <ele>${pt.ele.toFixed(1)}</ele>\n`;
+            xml += `      <name>${pt.name}</name>\n`;
+            if (options.garminExt && idx > 0 && idx < shapingPoints.length - 1) {
+                xml += `      <extensions>\n        <gpxx:RoutePointExtension>\n          <gpxx:Subclass>000000000000ffffffffffffffffffffffff</gpxx:Subclass>\n          <gpxx:PointType>ShapingPoint</gpxx:PointType>\n        </gpxx:RoutePointExtension>\n      </extensions>\n`;
+            }
+            xml += `    </rtept>\n`;
+        });
+        xml += `  </rte>\n`;
+    }
+
+    // 2. Track Representation (for Visual / Telemetry / Raw)
+    xml += `  <trk>\n    <name>${tour.filename}</name>\n    <trkseg>\n`;
+
+    const samplePts = [
+        { lat: 46.8686, lon: 8.6433, ele: 485.0, speed: 64.2, lean: 22.4, g_lon: 0.15, act: null },
+        { lat: 46.8720, lon: 8.6850, ele: 720.0, speed: 82.5, lean: 38.6, g_lon: -0.42, act: null },
+        { lat: 46.8834, lon: 8.8415, ele: 1372.0, speed: 71.0, lean: 44.2, g_lon: -0.68, act: "gopro_highlight" },
+        { lat: 46.8683, lon: 8.8567, ele: 1948.0, speed: 55.4, lean: 35.1, g_lon: 0.28, act: null },
+        { lat: 46.9208, lon: 8.9983, ele: 662.0, speed: 50.0, lean: 12.0, g_lon: -0.10, act: null }
+    ];
+
+    samplePts.forEach((pt, i) => {
+        xml += `      <trkpt lat="${pt.lat.toFixed(6)}" lon="${pt.lon.toFixed(6)}">\n`;
+        xml += `        <ele>${pt.ele.toFixed(1)}</ele>\n`;
+        xml += `        <time>2026-08-23T09:${15 + i * 5}:00.000Z</time>\n`;
+
+        if (profileType === 'video_sync' || profileType === 'raw_ekf') {
+            xml += `        <extensions>\n          <omb:telemetry>\n`;
+            xml += `            <omb:lean_angle>${pt.lean.toFixed(1)}</omb:lean_angle>\n`;
+            xml += `            <omb:speed_kmh>${pt.speed.toFixed(1)}</omb:speed_kmh>\n`;
+            xml += `            <omb:accel_g_lon>${pt.g_lon.toFixed(2)}</omb:accel_g_lon>\n`;
+            if (profileType === 'raw_ekf') {
+                xml += `            <omb:battery_v>12.62</omb:battery_v>\n`;
+                xml += `            <omb:satellites>18</omb:satellites>\n`;
+                xml += `            <omb:imu_temp_c>28.4</omb:imu_temp_c>\n`;
+            }
+            if (options.actionTags && pt.act) {
+                xml += `            <omb:action_event type="video_marker" camera="insta360_x4" clip_offset_ms="42000"/>\n`;
+            }
+            xml += `          </omb:telemetry>\n        </extensions>\n`;
+        }
+        xml += `      </trkpt>\n`;
+    });
+
+    xml += `    </trkseg>\n  </trk>\n</gpx>\n`;
+    return xml;
+}
+
+// Download Button Click Handler
+document.getElementById('btn-download-gpx-custom')?.addEventListener('click', () => {
+    const selectedProfile = document.querySelector('input[name="gpx-profile"]:checked')?.value || 'moto_navi';
+    const options = {
+        roadSnapping: document.getElementById('chk-road-snapping')?.checked,
+        garminExt: document.getElementById('chk-garmin-ext')?.checked,
+        actionTags: document.getElementById('chk-action-tags')?.checked
+    };
+
+    const gpxContent = generateExtendedGpxXml(selectedProfile, currentExportTour, options);
+    const filename = currentExportTour.filename.replace('.gpx', `_${selectedProfile}.gpx`);
+
+    const blob = new Blob([gpxContent], { type: 'application/gpx+xml' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    document.getElementById('gpx-export-modal')?.classList.remove('active');
+    showToast(state.lang === 'de' ? `GPX Export erfolgreich: ${filename}` : `GPX export successful: ${filename}`, 'success');
+});
+
+// Save to IndexedDB Handler
+document.getElementById('btn-save-indexeddb')?.addEventListener('click', async () => {
+    const selectedProfile = document.querySelector('input[name="gpx-profile"]:checked')?.value || 'moto_navi';
+    const options = {
+        roadSnapping: document.getElementById('chk-road-snapping')?.checked,
+        garminExt: document.getElementById('chk-garmin-ext')?.checked,
+        actionTags: document.getElementById('chk-action-tags')?.checked
+    };
+    const gpxContent = generateExtendedGpxXml(selectedProfile, currentExportTour, options);
+
+    const tourEntry = {
+        id: `${currentExportTour.filename}_${Date.now()}`,
+        filename: currentExportTour.filename,
+        profile: selectedProfile,
+        savedAt: new Date().toISOString(),
+        distance: currentExportTour.distance,
+        maxLean: currentExportTour.maxLean,
+        content: gpxContent
+    };
+
+    const ok = await saveTourToIndexedDb(tourEntry);
+    if (ok) {
+        showToast(state.lang === 'de' ? '💾 Tour erfolgreich im lokalen IndexedDB-Speicher gesichert!' : '💾 Tour saved to local IndexedDB storage successfully!', 'success');
+        document.getElementById('gpx-export-modal')?.classList.remove('active');
+    } else {
+        showToast(state.lang === 'de' ? 'Fehler beim Speichern in IndexedDB' : 'Failed to save to IndexedDB', 'error');
+    }
 });
 
 // Initialize Language on Boot

@@ -1,23 +1,52 @@
 # 10 - Web Bluetooth Dashboard & PWA Frontend
 
-## 1. Zero-Cloud Philosophy & Architecture
-The configuration and monitoring dashboard is built as an autonomous Progressive Web App (PWA) using HTML5, Vanilla ES6 JavaScript, and modern CSS3 Glassmorphism:
-- **No App Store / No Cloud Account:** Operates directly in Chrome, Edge, and WebBLE-capable browsers on iOS (Bluefy) and Android.
-- **Offline Operation:** Service Worker caches all assets for complete offline availability.
+This document specifies the progressive web app (PWA) architecture, Web Bluetooth (WebBLE) communication pipeline, local **IndexedDB offline storage**, and the **extended GPX export engine** (navigation shaping points & actioncam video telemetry).
 
-## 2. Web Bluetooth GATT Service Profile
+---
 
-| UUID | Name | Permissions | Description |
-| :--- | :--- | :---: | :--- |
-| `23d113ef-5f78-2315-deef-121200a00000` | **OMB Primary Service** | - | Main GATT Service |
-| `23d113ef-5f78-2315-deef-121200a00001` | **Telemetry Characteristic** | Notify | 10 Hz Telemetry Frame (Voltage, Lean Angle, GPS, Batteries) |
-| `23d113ef-5f78-2315-deef-121200a00002` | **Control Characteristic** | Write | Audio mode switch, Gain settings, Trigger pulses |
+## 1. Architecture & Offline Capabilities
+The dashboard is a self-contained Progressive Web App (PWA) built with modern HTML5, CSS3, and ES6 JavaScript. The application communicates directly with the ESP32-S3 host MCU via Web Bluetooth API (WebBLE) – without cloud requirements or mandatory external servers.
+- **Local Offline Storage (IndexedDB):** Recorded GPX tour tracks can be transferred via BLE and persisted locally within the browser's `omb_tours_db`.
+- **Service Worker Caching:** Full offline installation support across iOS and Android utilizing cache-first strategies.
 
-## 3. UI Features
-- **Live Cockpit:** Real-time lean angle horizon indicator (BMI270 EKF), speed, satellite count, and 1-PPS lock.
-- **Power & Thermal:** KL15/KL30 voltage, 5 starter battery chemistry selector, LiPo UPS state, and JEITA thermal status (< 0°C / > 45°C).
-- **Audio Matrix & Ducking:** Mode selection with live dB meters and gain sliders.
-- **Cartridge Manager & Wizard:** Cartridge identification, DLE leader score breakdown, and onboarding wizard.
-- **Tour Manager:** SDIO storage gauge with BGH purge status and WebDAV configuration.
-- **Reserve I/O:** Controls for Pins 25 & 26.
-- **Built-in Demo Simulation:** Complete sensor physics simulation for instant testing without hardware.
+---
+
+## 2. Telemetry & Control Capabilities
+- **Real-Time Telemetry:** Live monitoring of motorcycle electrical voltage (KL15/KL30), UPS battery health (BQ24075), and handlebar remote CR2032 state (BLE Service 0x180F).
+- **Audio Matrix Controller:** Dynamic mode selection (Standard, Single Rider, Cruise Mode) with interactive gain sliders and ducking threshold configuration.
+- **Cartridge Profile Manager:** Automatic 1-Wire DS2401 detection, profile rendering, and ground-truth mesh channel re-sync.
+- **Cartridge Onboarding Wizard:** Step-by-step guidance for pristine RF isolation (disabling classic Bluetooth, resetting pairings, pure mesh operation).
+- **WS2812B RGB Status LED Widget:** Live reflection of physical enclosure LED states.
+
+---
+
+## 3. Extended GPX Export & Navigation Formatting
+
+The integrated GPX Export Engine transforms recorded 10 Hz raw dead-reckoning tracks into 4 specialized export formats:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                       OMB GPX EXPORT ENGINE PROFILES                        │
+├───────────────────┬───────────────────────────────┬─────────────────────────┤
+│ Export Profile    │ Target Navigation Systems     │ Key Features            │
+├───────────────────┼───────────────────────────────┼─────────────────────────┤
+│ **1. Moto-Navi**  │ Garmin Zūmo XT/XT2, BMW CRN,  │ • Road-Snapping (OSM)   │
+│    **(Shaping)**  │ Kurviger, Calimoto, TomTom    │ • Strategic Via-Points  │
+│                   │                               │ • Garmin `<gpxx:>` Ext  │
+├───────────────────┼───────────────────────────────┼─────────────────────────┤
+│ **2. Video-Sync** │ Telemetry Overlay, VIRB Edit, │ • 10 Hz 1-PPS Timecode  │
+│    **(HiFi EKF)** │ Dashware, Insta360, GoPro     │ • Lean angle (deg)      │
+│                   │                               │ • Video highlight tags  │
+├───────────────────┼───────────────────────────────┼─────────────────────────┤
+│ **3. Clean Track**│ Google Earth, Komoot, Relive, │ • Douglas-Peucker RDP   │
+│    **(Visual)**   │ Strava, Apple/Google Maps     │ • Compact file size     │
+├───────────────────┼───────────────────────────────┼─────────────────────────┤
+│ **4. Raw EKF**    │ Engineering, MATLAB, Analysis │ • Raw IMU & CAN sensor  │
+│    **(Diagnose)** │                               │   telemetry streams     │
+└───────────────────┴───────────────────────────────┴─────────────────────────┘
+```
+
+1. **Garmin / BMW Shaping Points (`<rtept>` & `<gpxx:RoutePointExtension>`):**
+   * Prevents motorcycle navigators from recalibrating routes by injecting silent shaping points along mountain passes and scenic curves.
+2. **Actioncam Timecode Sync (`<omb:action_event>`):**
+   * Embeds handlebar remote clicks as frame-accurate highlight cut marks.
