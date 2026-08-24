@@ -170,42 +170,58 @@ The cartridge carrier PCB (`openmotorbridge_pod_cartridge`) adapts internal Sena
 * **Locking Mechanism:** Employs the identical POM-C snap-lock and 90° cam-lock as active cartridges.
 * **Hardware State:** Host MCU detects empty/open pins and maintains slot in zero-power, zero-noise isolation via `disabled.json`.
 
-### 5.5 Pod Base PCB & 3D Board Render
+### 5.5 Pod End-Cap Adapter PCB (`openmotorbridge_pod_base` / `ADPT`) & 3D Board Render
 
-The physical interface transition from the inserted cartridge to the modular motorcycle harness is implemented on the sealed **Pod Base PCB (`openmotorbridge_pod_base`)** inside the satellite pod's mounting base:
+The physical and electrical interface transition from the horizontally inserted cartridge to the modular motorcycle harness is implemented on the sealed **Pod End-Cap Adapter PCB (`openmotorbridge_pod_base` / `ADPT`)** mounted on the left end-wall:
+
+```
+ +-+---------------------+
+ |A+--------------------+|
+ |D|                    ||  <-- Full internal volume for Removable Cartridge / OMM Board
+M8AP                    ||      (Sena Apex / Cardo DMC / u-blox GNSS + LoRa)
+ |P|                    ||
+ |T+--------------------+|
+ +-+---------------------+
+  ▲ ▲
+  │ └── 6 gold-plated Mill-Max Pogo Pins (P) on inner end-cap wall
+  └──── M8 End-Cap Adapter PCB (ADPT) on left enclosure end-face
+```
 
 #### Top View (Cartridge Pogo Pins, Clear TVS Stage & Centered M8 Receptacle):
-![OpenMotorBridge Pod Base PCB Top 3D Render](../../hardware/kicad_pod_base/pod_base_3d_render_top.png)
+![OpenMotorBridge Pod End-Cap PCB Top 3D Render](../../hardware/kicad_pod_base/pod_base_3d_render_top.png)
 
 #### Bottom View (100% Solid Board Support for all THT & SMD Solder Joints):
-![OpenMotorBridge Pod Base PCB Bottom 3D Render](../../hardware/kicad_pod_base/pod_base_3d_render_bottom.png)
+![OpenMotorBridge Pod End-Cap PCB Bottom 3D Render](../../hardware/kicad_pod_base/pod_base_3d_render_bottom.png)
 
-* **Dimensions:** $28.0 \times 28.0\,\text{mm}$ (Compact 2-layer FR4 board with generous clearance between pogo array and M8 connector body).
-* **Mill-Max Pogo-Pin Array (`J1`):** 6-pin spring-loaded contact block (Series 824-22-006-00-001101, $2.54\,\text{mm}$ pitch, $1.4\,\text{mm}$ working stroke, 60g preload) protruding upward through the housing floor into the cartridge bay.
+* **Dimensions:** $36.0 \times 20.0\,\text{mm}$ (Compact 2-layer FR4 end-cap board with generous clearance between pogo array and M8 connector body).
+* **Mill-Max Pogo-Pin Array (`J1`):** 6-pin spring-loaded contact block (Series 824-22-006-00-001101, $2.54\,\text{mm}$ pitch, $1.4\,\text{mm}$ working stroke, 60g preload) pointing horizontally into the cartridge bay.
 * **Integrated ESD Protection Array (`U1`):** **Littelfuse SP3012-06UTG** (6-channel TVS array with $< 0.5\,\text{pF}$ parasitic capacitance) instantly clamps electrostatic discharges when pogo pins are touched during cartridge swaps.
-* **Directly Integrated M8 PCB Receptacle (`J2`):** Right-angle metal-shielded **M8 6-Pin A-Coded IP67 panel receptacle** (IEC 61076-2-104) soldered directly onto the PCB. The threaded M8 collar extends through the bottom housing wall, eliminating all manual wire soldering in the pod base cavity.
+* **Directly Integrated M8 PCB Receptacle (`J2`):** Right-angle metal-shielded **M8 6-Pin A-Coded IP67 panel receptacle** (IEC 61076-2-104) soldered directly onto the PCB. The threaded M8 collar extends horizontally through the left end-wall.
 * **Decoupling & Mounting (`H1`, `H2`):** 2x M2 mounting fasteners with Shore 40A silicone dampening against road vibrations.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│             MODULAR M8 INTERFACE TRANSITION IN POD BASE CHAMBER         │
+│            MODULAR M8 INTERFACE TRANSITION AT POD END-CAP WALL          │
 ├─────────────────────────────────────────────────────────────────────────┤
-│ 1. CARTRIDGE (Top / Removable Inlay):                                   │
-│    • 6 gold-plated ENIG contact pads (2.54 mm pitch)                    │
-│    • Perimeter Shore 40A silicone boot gasket                           │
-│                               ▲                                         │
-│                               ▼ (1.4 mm working stroke, 60g preload)    │
-│ 2. POD BASE PCB (openmotorbridge_pod_base, 28x28mm):                    │
+│ 1. CARTRIDGE (End-Face / Horizontally Insertable):                      │
+│    • 6 gold-plated ENIG end-contact pads (2.54 mm pitch)                │
+│    • Perimeter Shore 40A silicone flange gasket                         │
+│                               ◄► (1.4 mm horizontal stroke, 60g preload)│
+│ 2. POD END-CAP ADAPTER PCB (openmotorbridge_pod_base, 36x20mm):         │
 │    • Mill-Max 6-Pin Pogo-Pin Array (824-22-006-00-001101)               │
 │    • Integrated ESD protection array (Littelfuse SP3012, 6x TVS < 0.5pF)│
 │    • Directly soldered M8 6-Pin A-Coded IP67 PCB receptacle             │
-│                               ▼ (Threaded M8 collar extends through wall)│
-│ 3. MODULAR M8-TO-M8 PUR CONNECTING CABLE (0.5m .. 2.0m):                │
+│                               ▼ (Threaded M8 collar extends left wall)  │
+│ 3. MODULAR M8 RECEPTACLE (Left End-Cap Face):                           │
+│    • M8 6-Pin A-Coded IP67 receptacle with keyway (Poka-Yoke)           │
+│    • All-metal shielding collar for 360° EMC protection                 │
+│                               ▼                                         │
+│ 4. MODULAR M8-TO-M8 PUR CONNECTING CABLE (0.5m .. 2.0m):                │
 │    • Shielded 6-conductor PUR cable (Halogen-free, oil & UV resistant)  │
 │    • 2x Power (0.34 mm²) + 2x Audio/UART twisted (0.14 mm²) + 2x Signal │
 │    • Dual M8 6-Pin IP67 male plugs with vibration ratchet               │
 │                               ▼                                         │
-│ 4. CENTRAL BOX HD26 BREAKOUT PIGTAIL (Under Seat):                      │
+│ 5. CENTRAL BOX HD26 BREAKOUT PIGTAIL (Under Seat):                      │
 │    • 3x M8 6-Pin sockets (Pod 1 Left, Pod 2 Right, Pod 3 Rear)          │
 │    • 1x M8 4-Pin / Superseal (Vehicle power KL30/KL15/GND/Shield)       │
 │    • 1x M8 4-Pin (CAN-Bus telemetry & front ambient microphone)         │
@@ -216,19 +232,19 @@ The physical interface transition from the inserted cartridge to the modular mot
 
 To holistically verify mechanical clearances, sealing boundaries, and electrical transitions, the complete assembly of the **Universal Satellite Pod** and **Removable Cartridge** was modeled in a translucent X-ray aesthetic (*Ghosted X-Ray*) and an exploded layer hierarchy:
 
-#### Translucent 3D X-Ray CAD Architecture (5-Layer Precision Stack):
+#### Translucent 3D X-Ray CAD Architecture (End-Cap Adapter & Sena Apex Inlay):
 ![OpenMotorBridge 3D X-Ray CAD Architecture](../../hardware/cad/openmotorbridge_pod_assembly_render_xray.png)
 
-#### Exploded Assembly Hierarchy:
+#### Exploded Assembly Hierarchy (Along Horizontal Insertion Axis):
 ![OpenMotorBridge 3D Exploded View](../../hardware/cad/openmotorbridge_pod_exploded_view.png)
 
 #### Mechanical Specifications & Tolerances:
-* **Outer Pod Enclosure:** Makrolon 2805 Polycarbonate / PA12 MJF ($68.0 \times 48.0 \times 34.0\,\text{mm}$, internal bay $64.0 \times 46.0 \times 23.5\,\text{mm}$).
-* **Removable Cartridge:** $54.0 \times 37.5 \times 17.0\,\text{mm}$ housing shell with POM-C snap-lock latch ($> 85\,\text{N}$ retention force), glove grip knurling, and PMMA status lightpipe.
+* **Outer Pod Enclosure:** Makrolon 2805 Polycarbonate / PA12 MJF ($68.0 \times 44.0 \times 24.0\,\text{mm}$, internal bay $54.0 \times 38.0 \times 18.0\,\text{mm}$, ultra-flat $24\,\text{mm}$ profile).
+* **End-Cap Adapter (`ADPT`):** $36.0 \times 20.0 \times 1.6\,\text{mm}$ PCB with integrated M8 6-Pin IP67 all-metal receptacle and horizontal Mill-Max 6-Pin Pogo-Pin array.
+* **Removable Cartridge:** $52.0 \times 36.0 \times 16.5\,\text{mm}$ housing shell with POM-C snap-lock latch ($> 85\,\text{N}$ retention force), glove grip knurling, and PMMA status lightpipe.
 * **Integrated Sena Apex / Cardo OEM Inlay:** $45.0 \times 32.0 \times 6.5\,\text{mm}$ OEM bare PCB with Mesh 3.0 / Bluetooth dual chipsets, metal RF shielding cans, and U.FL coaxial antenna port.
-* **Cartridge Carrier PCB (`openmotorbridge_pod_cartridge`):** $35.0 \times 25.0 \times 1.2\,\text{mm}$ FR4 carrier with DS2401 1-Wire ID, right-angle low-profile JST-SH 1.0mm 6P flex connector, and 6 gold-plated ENIG pogo target pads.
-* **IP67 Sealing Plane:** Perimeter $55.0 \times 38.5\,\text{mm}$ Shore 40A silicone gasket boot pre-compressed by $0.6\,\text{mm}$ upon latching, hermetically sealing the internal chamber against high-pressure water jets and road dust.
-* **Pod Base PCB (`openmotorbridge_pod_base`):** $28.0 \times 28.0 \times 1.6\,\text{mm}$ PCB in pod mounting foot with 6 Mill-Max Pogo pins ($1.4\,\text{mm}$ stroke, 60g preload), Littelfuse SP3012 TVS array, and directly soldered M8 6-Pin IP67 PCB receptacle.
+* **Cartridge Carrier PCB (`openmotorbridge_pod_cartridge`):** $35.0 \times 25.0 \times 1.2\,\text{mm}$ FR4 carrier with DS2401 1-Wire ID, right-angle low-profile JST-SH 1.0mm 6P flex connector, and 6 gold-plated ENIG end-contact pads.
+* **IP67 Sealing Plane:** Perimeter $37.0 \times 17.0\,\text{mm}$ Shore 40A silicone flange gasket pre-compressed by $0.6\,\text{mm}$ upon latching, hermetically sealing the internal chamber against high-pressure water jets and road dust.
 
 ---
 

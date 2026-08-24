@@ -170,37 +170,49 @@ Die Kassetten-Trägerplatine (`openmotorbridge_pod_cartridge`) adaptiert die int
 * **Verriegelung:** Nutzt denselben POM-C Snap-Lock und 90°-Cam-Lock Drehriegel wie aktive Kassetten.
 * **Hardware-Zustand:** Die Zentralbox erkennt offene/leere Kontakte und haelt den Slot ueber `disabled.json` strom- und rauschfrei isoliert.
 
-### 5.5 Pod-Bodenplatine (`openmotorbridge_pod_base`) & 3D-Board-Render
+### 5.5 Pod-Stirnwand-Adapter (`openmotorbridge_pod_base` / `ADPT`) & 3D-Board-Render
 
-Der mechanische und elektrische Schnittstellenübergang von der eingelegten Wechselkassette auf die M8-Kabelverbindung zum Motorradkabelbaum erfolgt über die fest im Gehäusefuß montierte **Pod-Bodenplatine (`openmotorbridge_pod_base`)**:
+Der mechanische und elektrische Schnittstellenübergang von der stirnseitig eingeschobenen Wechselkassette auf die M8-Kabelverbindung zum Motorradkabelbaum erfolgt über die an der linken Stirnwand montierte **Pod-Adapterplatine (`openmotorbridge_pod_base` / `ADPT`)**:
+
+```
+ +-+---------------------+
+ |A+--------------------+|
+ |D|                    ||  <-- Voller Bauraum für Wechselkassette / OMM-Platine
+M8AP                    ||      (Sena Apex / Cardo DMC / u-blox GNSS + LoRa)
+ |P|                    ||
+ |T+--------------------+|
+ +-+---------------------+
+  ▲ ▲
+  │ └── 6 vergoldete Mill-Max Pogo-Pins (P) an der inneren Stirnwand
+  └──── M8-Stirnwand-Adapterplatine (ADPT) an der linken Gehäusestirnseite
+```
 
 #### Oberansicht (Kassetten-Pogo-Pins, frei positionierte ESD-Schutzstufe & zentrierte M8-Buchse):
-![OpenMotorBridge Pod-Bodenplatine Oberansicht 3D-Render](../../hardware/kicad_pod_base/pod_base_3d_render_top.png)
+![OpenMotorBridge Pod-Stirnwandplatine Oberansicht 3D-Render](../../hardware/kicad_pod_base/pod_base_3d_render_top.png)
 
 #### Unteransicht (100 % vollflächige Platinenauflage aller THT- und SMD-Kontakte):
-![OpenMotorBridge Pod-Bodenplatine Unteransicht 3D-Render](../../hardware/kicad_pod_base/pod_base_3d_render_bottom.png)
+![OpenMotorBridge Pod-Stirnwandplatine Unteransicht 3D-Render](../../hardware/kicad_pod_base/pod_base_3d_render_bottom.png)
 
-* **Abmessungen:** $28{,}0 \times 28{,}0\,\text{mm}$ (Kompakte 2-Layer FR4-Platine mit großzügigem Sicherheitsabstand zwischen Pogo-Array und M8-Gehäusekörper).
-* **Mill-Max Pogo-Pin-Array (`J1`):** 6-poliger Federkontakt-Block (Serie 824-22-006-00-001101, $2{,}54\,\text{mm}$ Raster, $1{,}4\,\text{mm}$ Arbeitshub, 60g Federkraft pro Kontakt), der durch den Gehäuseboden nach oben in den Kassettenraum ragt.
+* **Abmessungen:** $36{,}0 \times 20{,}0\,\text{mm}$ (Kompakte 2-Layer FR4-Stirnwandplatine mit großzügigem Sicherheitsabstand zwischen Pogo-Array und M8-Gehäusekörper).
+* **Mill-Max Pogo-Pin-Array (`J1`):** 6-poliger Federkontakt-Block (Serie 824-22-006-00-001101, $2{,}54\,\text{mm}$ Raster, $1{,}4\,\text{mm}$ Arbeitshub, 60g Federkraft pro Kontakt), der horizontal in den Kassettenraum ragt.
 * **Integrierte ESD-Schutzmatrix (`U1`):** **Littelfuse SP3012-06UTG** (6-Kanal TVS-Array mit $< 0{,}5\,\text{pF}$ parasitärer Kapazität) leitet elektrostatische Entladungen beim Berühren der Pogo-Pins im offenen Schacht blitzschnell gegen die Masse ab.
-* **Direkt integrierte M8-Leiterplattenbuchse (`J2`):** Abgewinkelte, metallgekapselte **M8 6-Pin A-Coded IP67 Einbaubuchse** (IEC 61076-2-104) mit M8-Außengewinde direkt auf der Platine verlötet. Das M8-Gewinde ragt durch die Gehäusewand nach außen – dadurch entfallen sämtliche manuell zu verlötenden Litzen oder lose Einzeladern im Gehäusefuß!
+* **Direkt integrierte M8-Leiterplattenbuchse (`J2`):** Abgewinkelte, metallgekapselte **M8 6-Pin A-Coded IP67 Einbaubuchse** (IEC 61076-2-104) mit M8-Außengewinde direkt auf der Platine verlötet. Das M8-Gewinde ragt stirnseitig durch die linke Gehäusewand nach außen.
 * **Mechanische Entkopplung & Montage (`H1`, `H2`):** 2x M2 Montagebohrungen mit Shore 40A Silikondämpfung gegen Fahrbahnvibrationen.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│        MODULARER SCHNITTSTELLEN-ÜBERGANG IM SATELLITEN-GEHÄUSEFUSS      │
+│        MODULARER SCHNITTSTELLEN-ÜBERGANG AN DER POD-STIRNWAND           │
 ├─────────────────────────────────────────────────────────────────────────┤
-│ 1. WECHSELKASSETTE (Oben / Entnehmbar):                                 │
-│    • 6 vergoldete ENIG-Kontaktflächen (2.54 mm Raster)                  │
+│ 1. WECHSELKASSETTE (Stirnseite / Horizontal Einschiebbar):              │
+│    • 6 vergoldete ENIG-Stirnkontaktflächen (2.54 mm Raster)             │
 │    • Umlaufende Shore 40A Silikondichtung                               │
-│                               ▲                                         │
-│                               ▼ (1.4 mm Arbeitshub, 60g Federkraft)     │
-│ 2. POD-BODENPLATINE (openmotorbridge_pod_base, 28x28mm):                │
+│                               ◄► (1.4 mm horizontaler Arbeitshub, 60g)   │
+│ 2. POD-STIRNWAND-ADAPTER (openmotorbridge_pod_base, 36x20mm):           │
 │    • Mill-Max 6-Pin Pogo-Pin-Array (824-22-006-00-001101)               │
 │    • Integrierte ESD-Schutzmatrix (Littelfuse SP3012, 6x TVS < 0.5pF)   │
 │    • Direkt aufgelötete M8 6-Pin A-Coded IP67 Einbaubuchse              │
-│                               ▼ (M8-Außengewinde ragt aus Gehäuse)      │
-│ 3. MODULARE M8-EINBAUBUCHSE (Gehäuseunterseite):                        │
+│                               ▼ (M8-Außengewinde ragt links aus Stirn)  │
+│ 3. MODULARE M8-EINBAUBUCHSE (Linke Stirnseite):                         │
 │    • M8 6-Pin A-Coded IP67-Buchse mit Führungsnut (Poka-Yoke)           │
 │    • Vollmetall-Schirmkragen für 360° EMV-Schirmung                     │
 │                               ▼                                         │
@@ -220,19 +232,19 @@ Der mechanische und elektrische Schnittstellenübergang von der eingelegten Wech
 
 Zur ganzheitlichen Verifikation der Passungen, Dichtebenen und elektrischen Übergänge wurde die mechanische Gesamtanordnung des **Satelliten-Pods** und der **Wechselkassette** in einer transluzenten Röntgen-Darstellung (*Ghosted X-Ray*) sowie einer Explosionsansicht modelliert:
 
-#### Transluzente 3D-Röntgenansicht (5-Layer-Schichtaufbau):
+#### Transluzente 3D-Röntgenansicht (Stirnwand-Adapter & Sena Apex Inlay):
 ![OpenMotorBridge 3D X-Ray CAD Architektur](../../hardware/cad/openmotorbridge_pod_assembly_render_xray.png)
 
-#### Baugruppen-Explosionsdarstellung (Hierarchie aller Komponenten):
+#### Baugruppen-Explosionsdarstellung (Hierarchie entlang der Einschubachse):
 ![OpenMotorBridge 3D Explosionsansicht](../../hardware/cad/openmotorbridge_pod_exploded_view.png)
 
 #### Mechanische Spezifikationen & Passungen:
-* **Pod-Außengehäuse:** Makrolon 2805 Polycarbonat / PA12 MJF ($68{,}0 \times 48{,}0 \times 34{,}0\,\text{mm}$, Schacht-Innenmaß $64{,}0 \times 46{,}0 \times 23{,}5\,\text{mm}$).
-* **Wechselkassette:** $54{,}0 \times 37{,}5 \times 17{,}0\,\text{mm}$ Gehäuseschale mit POM-C Schnappriegel ($> 85\,\text{N}$ Haltekraft), Grifffläche für Motorradhandschuhe und PMMA-Statuslichtleiter.
+* **Pod-Außengehäuse:** Makrolon 2805 Polycarbonat / PA12 MJF ($68{,}0 \times 44{,}0 \times 24{,}0\,\text{mm}$, Schacht-Innenmaß $54{,}0 \times 38{,}0 \times 18{,}0\,\text{mm}$, ultraflache Bauhöhe von nur $24\,\text{mm}$).
+* **Stirnwand-Adapter (`ADPT`):** $36{,}0 \times 20{,}0 \times 1{,}6\,\text{mm}$ Adapterplatine mit integrierter M8 6-Pin IP67 Vollmetallbuchse und horizontalem Mill-Max 6-Pin Pogo-Array.
+* **Wechselkassette:** $52{,}0 \times 36{,}0 \times 16{,}5\,\text{mm}$ Gehäuseschale mit POM-C Schnappriegel ($> 85\,\text{N}$ Haltekraft), Grifffläche für Motorradhandschuhe und PMMA-Statuslichtleiter.
 * **Integriertes Sena Apex / Cardo OEM-Inlay:** $45{,}0 \times 32{,}0 \times 6{,}5\,\text{mm}$ OEM-Hauptplatine mit Mesh 3.0 / Bluetooth Dual-Chipsets, HF-Schirmhauben und U.FL Koaxial-Antennenbuchse.
-* **Kassetten-Trägerplatine (`openmotorbridge_pod_cartridge`):** $35{,}0 \times 25{,}0 \times 1{,}2\,\text{mm}$ FR4-Adapter mit DS2401 1-Wire ID, abgewinkeltem JST-SH 1.0mm 6P Flex-Verbinder und 6 vergoldeten ENIG-Pogo-Zielkontaktpads.
-* **IP67-Dichtebene:** Der umlaufende $55{,}0 \times 38{,}5\,\text{mm}$ Shore 40A Silikon-Formschuh wird beim Einschieben um $0{,}6\,\text{mm}$ vorkomprimiert und dichtet die Kassettenkammer hermetisch gegen Strahlwasser und Staub ab.
-* **Pod-Bodenplatine (`openmotorbridge_pod_base`):** $28{,}0 \times 28{,}0 \times 1{,}6\,\text{mm}$ PCB im Gehäusefuß mit 6 Mill-Max Pogo-Pins ($1{,}4\,\text{mm}$ Hub, 60g Vorspannung), Littelfuse SP3012 TVS-Array und direkt aufgelöteter M8 6-Pin IP67 Einbaubuchse.
+* **Kassetten-Trägerplatine (`openmotorbridge_pod_cartridge`):** $35{,}0 \times 25{,}0 \times 1{,}2\,\text{mm}$ FR4-Adapter mit DS2401 1-Wire ID, abgewinkeltem JST-SH 1.0mm 6P Flex-Verbinder und 6 vergoldeten ENIG-Stirnkontaktpads.
+* **IP67-Dichtebene:** Der umlaufende $37{,}0 \times 17{,}0\,\text{mm}$ Shore 40A Silikon-Stirnflansch wird beim Einschieben um $0{,}6\,\text{mm}$ vorkomprimiert und dichtet die Kassettenkammer hermetisch gegen Strahlwasser und Staub ab.
 
 ---
 

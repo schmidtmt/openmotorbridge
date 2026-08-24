@@ -89,61 +89,12 @@
 	)
 	(footprint ""
 		(layer "F.Cu")
-		(uuid "01c00357-278e-442b-82e0-bc616703cee3")
-		(at 103 84)
-		(property "Reference" "H1"
-			(at 0 0 0)
-			(layer "F.SilkS")
-			(uuid "cb307c18-428b-43ef-80b9-d1669aae8c01")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(uuid "d80e4943-6f73-4bf3-a1b3-01ca8e9b9e40")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "5cc6bf01-af3a-4a62-9e13-ee180361eebd")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "bfd15142-dc5f-42b7-9517-700954757f31")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(duplicate_pad_numbers_are_jumpers no)
-		(embedded_fonts no)
-	)
-	(footprint ""
-		(layer "F.Cu")
-		(uuid "171f8e5f-0f59-465f-8719-ff02e961f90c")
-		(at 106 79.5)
+		(uuid "0b0b195e-c0f0-4ef4-b457-15a42c70c61b")
+		(at 108 76)
 		(property "Reference" "U1"
 			(at 0 0 0)
 			(layer "F.SilkS")
-			(uuid "d750e063-9fa1-4c32-a6dd-2ffb2ed60f9d")
+			(uuid "d528eee0-f908-43fe-ab84-e33bf2d1a830")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -153,7 +104,7 @@
 		(property "Value" ""
 			(at 0 0 0)
 			(layer "F.Fab")
-			(uuid "6469227f-1ae3-412f-a59c-691bd2418d8c")
+			(uuid "5414d08a-a0c7-4edd-ac11-bcb07c789492")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -164,7 +115,7 @@
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "cbdd118a-add0-4a88-8e4e-f41ea412b693")
+			(uuid "ca842d0d-a887-4921-acbe-0403dbc6518b")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -175,7 +126,7 @@
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "3a028367-68dc-4fc0-9715-e814f26ff8bc")
+			(uuid "caca66ff-38cf-49bc-bcab-86965f1d2426")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -198,12 +149,12 @@
 	)
 	(footprint ""
 		(layer "F.Cu")
-		(uuid "2dce9b0a-0110-4eb6-abbe-43d6a70c0d8c")
-		(at 114 90)
-		(property "Reference" "J2"
+		(uuid "1c1c18a4-2da3-42ed-91da-fa4ddcef22b7")
+		(at 103 80)
+		(property "Reference" "H1"
 			(at 0 0 0)
 			(layer "F.SilkS")
-			(uuid "d8b51b20-6866-4881-96b1-1d5d15c17eb0")
+			(uuid "1445aa92-a4f4-4232-b433-275faddd9f67")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -213,7 +164,7 @@
 		(property "Value" ""
 			(at 0 0 0)
 			(layer "F.Fab")
-			(uuid "74d03072-63ce-4880-a3c2-d550c148a93d")
+			(uuid "c5c63da1-24a5-462f-9f18-744ba2f7d273")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -224,7 +175,7 @@
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "a62a43a5-9ce7-4c7f-8005-acfddb722337")
+			(uuid "f2e7e6a3-08fa-4d82-b28d-94fab290239a")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -235,7 +186,7 @@
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "af28a934-74d2-4772-a856-c8850cb95a75")
+			(uuid "e8b4098c-4225-40fa-9b9b-7d66d4466d42")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -244,86 +195,15 @@
 		)
 		(duplicate_pad_numbers_are_jumpers no)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Connector_Audio.3dshapes/Jack_3.5mm_Ledino_KB3SPRS_Horizontal.step"
-			(offset
-				(xyz 4 -1 0)
-			)
-			(scale
-				(xyz 1 1 1)
-			)
-			(rotate
-				(xyz 0 0 -90)
-			)
-		)
 	)
 	(footprint ""
 		(layer "F.Cu")
-		(uuid "9036872e-6369-46fd-87e7-047adcf26d59")
-		(at 114 73.5 90)
-		(property "Reference" "J1"
-			(at 0 0 90)
-			(layer "F.SilkS")
-			(uuid "33f156a7-b91b-4381-b60f-8eadd3c3ad79")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(uuid "4a5ef136-1211-44fd-a9cb-f806f4251804")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "1c6900a8-fa0e-433d-be3a-033da10940df")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "d58f837f-9179-4137-97f4-5e3d800fb975")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(duplicate_pad_numbers_are_jumpers no)
-		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x06_P2.54mm_Vertical.step"
-			(offset
-				(xyz 0 6.35 0)
-			)
-			(scale
-				(xyz 1 1 1)
-			)
-			(rotate
-				(xyz 0 0 0)
-			)
-		)
-	)
-	(footprint ""
-		(layer "F.Cu")
-		(uuid "a001fa80-4919-494d-9f93-ebd7a3bb3a98")
-		(at 106 84.5)
+		(uuid "45c48383-d785-4ccf-9f49-5a2ef55f9fa9")
+		(at 108 84)
 		(property "Reference" "C1"
 			(at 0 0 0)
 			(layer "F.SilkS")
-			(uuid "78213c74-c25d-45b0-bedc-ac1ceb396438")
+			(uuid "eaba7196-aae3-4dcd-aebb-0d41e14bead8")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -333,7 +213,7 @@
 		(property "Value" ""
 			(at 0 0 0)
 			(layer "F.Fab")
-			(uuid "4b3d5de5-1234-4f7e-9d70-dab2c4ee7f3f")
+			(uuid "96227221-bf32-4292-a501-324b125de86a")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -344,7 +224,7 @@
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "3a0f00c2-ffd5-461c-b844-180dff64c7c2")
+			(uuid "d0cc6ada-aae4-4162-a078-56626a4eeee1")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -355,7 +235,7 @@
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "893a3b64-dfb1-4024-95f4-3a68410110d0")
+			(uuid "784f1ac2-c080-48a6-b6f1-9469228ca2cf")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -378,12 +258,12 @@
 	)
 	(footprint ""
 		(layer "F.Cu")
-		(uuid "c748969a-b47c-4fab-8aca-9efa0d28f91c")
-		(at 125 84)
-		(property "Reference" "H2"
+		(uuid "61954f0b-297e-48cb-8133-ae79bea41b5b")
+		(at 118 80)
+		(property "Reference" "J2"
 			(at 0 0 0)
 			(layer "F.SilkS")
-			(uuid "c607eb47-4344-402e-bfc4-00996ca8d197")
+			(uuid "db2c7892-b08d-4107-b094-eba63a62ec70")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -393,7 +273,7 @@
 		(property "Value" ""
 			(at 0 0 0)
 			(layer "F.Fab")
-			(uuid "91426025-bdd9-4bc9-a3f7-fca5fcf07206")
+			(uuid "f996f6c8-2535-4e7f-b515-cdd5351d6cd5")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -404,7 +284,7 @@
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "424c3af5-7259-45b2-8849-15fc6f441924")
+			(uuid "c1bd47d5-ed32-447a-867d-febed61e0a2d")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -415,7 +295,127 @@
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "4b78e262-1896-48e2-bae9-368fd0bb5fb7")
+			(uuid "251a6b10-9a5d-43a6-afc6-c54767a3fb36")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(duplicate_pad_numbers_are_jumpers no)
+		(embedded_fonts no)
+		(model "${KICAD10_3DMODEL_DIR}/Connector_Audio.3dshapes/Jack_3.5mm_Ledino_KB3SPRS_Horizontal.step"
+			(offset
+				(xyz 4 -1 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 -90)
+			)
+		)
+	)
+	(footprint ""
+		(layer "F.Cu")
+		(uuid "81555698-e2c5-49e6-96e5-c96fea34eb10")
+		(at 118 80)
+		(property "Reference" "J1"
+			(at 0 0 0)
+			(layer "F.SilkS")
+			(uuid "5c61e452-fe43-4ac3-a03f-40e7bd181cc9")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(uuid "7c8da4d2-cf44-408a-8de0-35934146a31e")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "be33bea3-83cb-4d60-a719-9d524b3a4e0f")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "727aa98b-9ccf-44f0-9910-54aa0926a159")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(duplicate_pad_numbers_are_jumpers no)
+		(embedded_fonts no)
+		(model "${KICAD10_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x06_P2.54mm_Vertical.step"
+			(offset
+				(xyz 0 6.35 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
+	)
+	(footprint ""
+		(layer "F.Cu")
+		(uuid "cceb04ce-a910-4253-a304-8c0a65148981")
+		(at 133 80)
+		(property "Reference" "H2"
+			(at 0 0 0)
+			(layer "F.SilkS")
+			(uuid "6290a433-de9c-4a3e-bcbf-4b670c1b565d")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(uuid "ed2fdeab-ea10-40ec-9f00-e46df6ed1acf")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "d609151c-f3d7-428d-9e3c-3db81f58fd97")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "68565ad7-c8c3-4429-8376-af8847382829")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -433,82 +433,82 @@
 			(type default)
 		)
 		(layer "Edge.Cuts")
-		(uuid "11c8c45a-c9a2-4624-b440-bee3a0ed413b")
+		(uuid "f36f7df1-1383-431b-9b5c-9684f9d7e407")
 	)
 	(gr_line
-		(start 100 96)
+		(start 100 88)
 		(end 100 72)
 		(stroke
 			(width 0.15)
 			(type default)
 		)
 		(layer "Edge.Cuts")
-		(uuid "357f078b-d798-4103-be1e-ee94177ddc2e")
+		(uuid "590a1dd1-758c-43a9-a455-8d1c813c2a04")
 	)
 	(gr_line
 		(start 102 70)
-		(end 126 70)
+		(end 134 70)
 		(stroke
 			(width 0.15)
 			(type default)
 		)
 		(layer "Edge.Cuts")
-		(uuid "5029c67d-2e6b-4e8a-a865-795981e8d324")
+		(uuid "f5e1a7bd-5aa6-4ebb-9258-19e8dfba8172")
 	)
 	(gr_line
-		(start 102 98)
-		(end 100 96)
+		(start 102 90)
+		(end 100 88)
 		(stroke
 			(width 0.15)
 			(type default)
 		)
 		(layer "Edge.Cuts")
-		(uuid "946b0950-00aa-4261-b060-f4a1e64f7ef1")
+		(uuid "ba761a30-7281-4cb6-b10c-060fbd27da80")
 	)
 	(gr_line
-		(start 126 70)
-		(end 128 72)
+		(start 134 70)
+		(end 136 72)
 		(stroke
 			(width 0.15)
 			(type default)
 		)
 		(layer "Edge.Cuts")
-		(uuid "9650bb8e-0f2a-4b13-be18-eade8aafe69c")
+		(uuid "fd984d7a-fb44-4f8b-828e-ec8d2a779fbd")
 	)
 	(gr_line
-		(start 126 98)
-		(end 102 98)
+		(start 134 90)
+		(end 102 90)
 		(stroke
 			(width 0.15)
 			(type default)
 		)
 		(layer "Edge.Cuts")
-		(uuid "37445e5c-97fa-45e4-9184-cb5c71abeb0b")
+		(uuid "e13a2690-e6a0-449d-bb81-ac421ee9d27f")
 	)
 	(gr_line
-		(start 128 72)
-		(end 128 96)
+		(start 136 72)
+		(end 136 88)
 		(stroke
 			(width 0.15)
 			(type default)
 		)
 		(layer "Edge.Cuts")
-		(uuid "e2d7ac81-ba45-4013-b849-6bd2bc8cfe07")
+		(uuid "d45f8fdb-8a62-44cc-86a4-8ba1f14b5598")
 	)
 	(gr_line
-		(start 128 96)
-		(end 126 98)
+		(start 136 88)
+		(end 134 90)
 		(stroke
 			(width 0.15)
 			(type default)
 		)
 		(layer "Edge.Cuts")
-		(uuid "867f74dd-29ef-4450-8e24-13abdbcbcb2c")
+		(uuid "a802b0ed-8c3d-4565-a478-a41bc82d974f")
 	)
-	(gr_text "SP3012"
-		(at 106.5 80 0)
+	(gr_text "SP3012 TVS"
+		(at 108 72.5 0)
 		(layer "F.SilkS")
-		(uuid "efc16fb9-daf3-4022-be11-55fc99f5b05b")
+		(uuid "ab979a9d-f7e6-4583-b6ad-9cc0df1459c2")
 		(effects
 			(font
 				(size 0.4 0.4)
@@ -516,10 +516,10 @@
 			)
 		)
 	)
-	(gr_text "M8 6-PIN DIRECT PCB (IP67)"
-		(at 114 97 0)
+	(gr_text "MILL-MAX POGO 6P"
+		(at 118 88 0)
 		(layer "F.SilkS")
-		(uuid "a474cab6-c0c1-44ab-884b-2cfa38dd6005")
+		(uuid "711280c7-2709-416a-bfe5-9b15ff29b21f")
 		(effects
 			(font
 				(size 0.5 0.5)
@@ -527,10 +527,10 @@
 			)
 		)
 	)
-	(gr_text "MILL-MAX POGO 6P"
-		(at 114 71.5 0)
+	(gr_text "M8-ADAPTER (ADPT)"
+		(at 118 72.5 0)
 		(layer "F.SilkS")
-		(uuid "135e7fe5-feea-464a-bfc1-da085f831c1e")
+		(uuid "f387e657-fabf-4318-b54d-090d55e45d60")
 		(effects
 			(font
 				(size 0.55 0.55)
