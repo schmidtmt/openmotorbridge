@@ -55,7 +55,7 @@ def generate_pod_base_pcb(pcb_path):
     # 2. Footprint definitions & 3D model mapping
     model_mapping = {
         'J1': (
-            '${KICAD10_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x06_P2.54mm_Horizontal.step',
+            '${KICAD10_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x06_P2.54mm_Vertical.step',
             (0.0, 0.0, 0.0),
             (0.0, 0.0, 0.0),
             (1.0, 1.0, 1.0)
@@ -136,9 +136,9 @@ def generate_pod_base_pcb(pcb_path):
 
     # 3. Add Silkscreen Labels on Top (F.SilkS) and Bottom (B.SilkS)
     top_labels = [
-        ("OPENMOTORBRIDGE // POD BASE", 118.0, Y0 + 1.8, 0.50, 0.50, 0.10),
-        ("SP3012 TVS", 108.0, Y0 + 4.5, 0.40, 0.40, 0.08),
-        ("6-PIN STIFTLEISTE (J1 -> KASSETTE)", 118.0, Y0 + H - 1.8, 0.40, 0.40, 0.08),
+        ("OPENMOTORBRIDGE // POD BASE", 118.0, Y0 + 1.5, 0.45, 0.45, 0.09),
+        ("SP3012 TVS", 108.0, Y0 + 3.5, 0.35, 0.35, 0.08),
+        ("6-PIN VERTICAL PIN HEADER (J1)", 118.0, Y0 + H - 1.5, 0.38, 0.38, 0.08),
     ]
 
     for text_str, x_mm, y_mm, sx, sy, th in top_labels:
@@ -152,8 +152,8 @@ def generate_pod_base_pcb(pcb_path):
         board.Add(txt)
 
     bottom_labels = [
-        ("OPENMOTORBRIDGE // POD BASE (REAR)", X_center, Y0 + 1.8, 0.50, 0.50, 0.10),
-        ("M8 6-PIN IP67 PANEL RECEPTACLE (J2)", X_center, Y0 + H - 1.8, 0.40, 0.40, 0.08),
+        ("OPENMOTORBRIDGE // POD BASE (REAR)", X_center, Y0 + 1.5, 0.45, 0.45, 0.09),
+        ("M8 6-PIN IP67 PANEL RECEPTACLE (J2)", X_center, Y0 + H - 1.5, 0.38, 0.38, 0.08),
     ]
 
     for text_str, x_mm, y_mm, sx, sy, th in bottom_labels:
