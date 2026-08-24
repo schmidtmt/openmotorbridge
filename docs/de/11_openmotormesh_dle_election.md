@@ -190,3 +190,66 @@ sequenceDiagram
 2. **Lokale HD-Sprache bleibt aktiv:** Innerhalb der Vordergruppe (Bikes 1-3) und innerhalb der Hintergruppe (Bikes 4-6) laeuft das 2.4-GHz-Mesh ununterbrochen weiter.
 3. **LoRa Cross-Gateway Voice Tunnel:** Sprudelt in einer Teilgruppe Sprache auf, encodiert der lokale Leader diese in Codec2 (1200 bps) und sendet sie ueber 868 MHz LoRa an den entfernten Leader, welcher sie lokal wieder in das 2.4-GHz-Mesh einspeist.
 4. **Cluster-Fusion (Re-Merge):** Sobald die Hintergruppe aufschliesst (< 400 m), erkennt Leader 2 den primaeren Leader 1, tritt in den Normalmodus zurueck und schliesst den LoRa-Tunnel.
+
+---
+
+## 7. OpenMotorMesh Paketformate & Binärspezifikation
+
+Alle OMM-Pakete nutzen ein kompaktes, byteweise gepacktes Binärformat zur Maximierung des Durchsatzes:
+
+### 7.1 Kompaktes 16-Byte Gruppenradar-Telemetriepaket (`TYPE_RADAR = 0x03`)
+Uebertragt 10-mal pro Sekunde (10 Hz) die exakte Position und Fahrdynamik jedes Bikes fuer das Cockpit-Radar:
+
+```
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+| Type (0x03)   |  Node ID LSB  |    Latitude (int32_t, 1e-7°)  |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|       Latitude (Forts.)       |   Longitude (int32_t, 1e-7°)  |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|       Longitude (Forts.)      | Altitude (int16_t, Meter WGS) |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+| Speed (km/h)  | Head (0..180) | Lean (-60..60)| Bat/Flags (8) |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+```
+
+```cpp
+struct __attribute__((packed)) OmmRadarPacket_t {
+    uint8_t  packet_type;       // 0x03 = TYPE_RADAR
+    uint8_t  node_id_short;     // Untere 8-Bit der DS2401 ID
+    int32_t  latitude_1e7;      // Breitengrad * 10.000.000
+    int32_t  longitude_1e7;     // Laengengrad * 10.000.000
+    int16_t  altitude_m;        // Hoehe ueber Meer (-500 .. +8000 m)
+    uint8_t  speed_kmh;         // 0 .. 255 km/h
+    uint8_t  heading_div2;      // Kurs / 2 (0..179 entspricht 0..358 Grad)
+    int8_t   lean_angle_deg;    // Schraeglage (-60..+60 Grad)
+    uint8_t  status_flags;      // Bit 0: 1-PPS Lock, Bit 1: KL15, Bit 2..7: Batt%
+};
+```
+
+### 7.2 Notfall- & Sirenen-Frühwarnpaket (`TYPE_EMERGENCY = 0xFF`)
+```cpp
+struct __attribute__((packed)) OmmEmergencyAlert_t {
+    uint8_t  packet_type;       // 0xFF = TYPE_EMERGENCY
+    uint8_t  alert_subtype;     // 0x01: Martinshorn/Sirene, 0x02: Sturzerkennung (eCall)
+    uint64_t sender_uid;        // 64-Bit Chip UID des erzeugenden Bikes
+    int32_t  event_lat_1e7;     // GPS-Koordinaten des Notfall-Events
+    int32_t  event_lon_1e7;
+    uint16_t alert_duration_ms; // Gueltigkeitsdauer des Alarms (z. B. 10.000 ms)
+    uint8_t  crc8_checksum;     // CRC-8/AUTOSAR Pruefsumme
+};
+```
+
+---
+
+## 8. OpenMotorMesh Entwickler-Tools & Wireshark-Dissector
+
+Zur herstellerunabhaengigen Analyse und Verifikation enthaelt das Repository ein vollwertiges Toolset:
+
+1. **Wireshark Lua Dissector (`tools/omm/omm_dissector.lua`):**
+   * Dekodiert 2.4 GHz IEEE 802.15.4 und LoRa-Pakete in Echtzeit.
+   * Visualisiert DLE-Scoring, Feature-Vektoren, Radar-Koordinaten, Lean Angles und Sirenen-Alerts im Wireshark-GUI.
+2. **Mesh-Netzwerk-Simulator (`tools/omm/omm_network_sim.py`):**
+   * Simuliert bis zu 20 virtuelle Motorraeder mit realistischer Fahrphysik, Kurvenschraeglagen und Topologieaenderungen.
+   * Validiert DLE-Wahlen, Partitioning an Pässen und automatischen Re-Merge bei Wiederannäherung.

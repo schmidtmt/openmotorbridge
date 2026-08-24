@@ -190,3 +190,66 @@ sequenceDiagram
 2. **Local HD Voice Maintained:** Within the front pack (Bikes 1-3) and within the rear pack (Bikes 4-6), 2.4 GHz full-duplex mesh remains fully active.
 3. **LoRa Cross-Gateway Voice Tunnel:** When a rider in either pack speaks, the local gateway leader compresses the voice via Codec2 (1200 bps) and transmits it over 868 MHz LoRa to the remote leader, which injects the audio directly into the other pack's 2.4 GHz mesh.
 4. **Cluster Fusion (Auto-Merge):** Once the rear pack catches up (< 400 m), Leader 2 detects Leader 1's primary beacon, gracefully yields the coordinator role, and closes the LoRa voice tunnel.
+
+---
+
+## 7. OpenMotorMesh Packet Formats & Binary Specification
+
+All OMM frames utilize a compact, byte-aligned packed format to maximize airtime efficiency:
+
+### 7.1 Compact 16-Byte Group Radar Telemetry Packet (`TYPE_RADAR = 0x03`)
+Transmitted 10 times per second (10 Hz) for cockpit live radar rendering:
+
+```
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+| Type (0x03)   |  Node ID LSB  |    Latitude (int32_t, 1e-7°)  |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|       Latitude (Cont.)        |   Longitude (int32_t, 1e-7°)  |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|       Longitude (Cont.)       | Altitude (int16_t, Meters WGS)|
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+| Speed (km/h)  | Head (0..180) | Lean (-60..60)| Bat/Flags (8) |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+```
+
+```cpp
+struct __attribute__((packed)) OmmRadarPacket_t {
+    uint8_t  packet_type;       // 0x03 = TYPE_RADAR
+    uint8_t  node_id_short;     // Lower 8-bit of DS2401 ID
+    int32_t  latitude_1e7;      // Latitude * 10,000,000
+    int32_t  longitude_1e7;     // Longitude * 10,000,000
+    int16_t  altitude_m;        // Altitude AMSL (-500 .. +8000 m)
+    uint8_t  speed_kmh;         // 0 .. 255 km/h
+    uint8_t  heading_div2;      // Heading / 2 (0..179 maps to 0..358 degrees)
+    int8_t   lean_angle_deg;    // Lean angle (-60..+60 deg)
+    uint8_t  status_flags;      // Bit 0: 1-PPS Lock, Bit 1: KL15, Bit 2..7: Batt%
+};
+```
+
+### 7.2 Emergency & Siren Alert Packet (`TYPE_EMERGENCY = 0xFF`)
+```cpp
+struct __attribute__((packed)) OmmEmergencyAlert_t {
+    uint8_t  packet_type;       // 0xFF = TYPE_EMERGENCY
+    uint8_t  alert_subtype;     // 0x01: Siren Early Warning, 0x02: Crash eCall
+    uint64_t sender_uid;        // 64-Bit Chip UID of triggering motorcycle
+    int32_t  event_lat_1e7;     // GPS coordinates of incident
+    int32_t  event_lon_1e7;
+    uint16_t alert_duration_ms; // Expiration lifetime (e.g., 10,000 ms)
+    uint8_t  crc8_checksum;     // CRC-8/AUTOSAR checksum
+};
+```
+
+---
+
+## 8. OpenMotorMesh Developer Tooling & Wireshark Dissector
+
+For protocol verification and cross-vendor analysis, the repository provides:
+
+1. **Wireshark Lua Dissector (`tools/omm/omm_dissector.lua`):**
+   * Decodes 2.4 GHz IEEE 802.15.4 and LoRa frames in real time.
+   * Visualizes DLE scoring, capability bitmasks, radar positions, and siren alerts in the Wireshark UI.
+2. **Mesh Network Simulator (`tools/omm/omm_network_sim.py`):**
+   * Simulates up to 20 virtual motorcycles with realistic riding dynamics, cornering lean angles, and topology shifts.
+   * Validates DLE elections, mountain pass partitioning, and auto-merge scenarios.

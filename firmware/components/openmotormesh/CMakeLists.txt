@@ -1,0 +1,9 @@
+idf_component_register(
+    SRCS 
+        "src/omm_dle_engine.cpp"
+    INCLUDE_DIRS 
+        "include"
+    REQUIRES 
+        esp_timer 
+        driver
+)
