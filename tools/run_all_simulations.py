@@ -32,6 +32,7 @@ from simulators.audio_dsp_sim import run_audio_dsp_simulation
 from simulators.power_ups_sim import run_power_ups_simulation
 from simulators.adr_ekf_sim import run_adr_ekf_simulation
 from simulators.cartridge_optopulse_sim import run_cartridge_optopulse_simulation
+from simulators.circuit_emulation_sim import run_circuit_emulation
 from omm.omm_network_sim import OmmNetworkSimulator
 
 def main():
@@ -65,6 +66,9 @@ def main():
         sim.trigger_siren_early_warning()
         sim.verify_radar_frames()
         results["OpenMotorMesh Protocol & Radar"] = True
+
+        # 6. Analog & Mixed-Signal Circuit Emulation (SPICE)
+        results["Analog & Power Circuit SPICE"] = run_circuit_emulation()
 
     except Exception as e:
         print(f"\n❌ SIMULATION FAILED WITH ERROR: {e}")
