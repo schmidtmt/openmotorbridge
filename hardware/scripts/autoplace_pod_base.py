@@ -54,16 +54,9 @@ def generate_pod_base_pcb(pcb_path):
 
     # 2. Footprint definitions & 3D model mapping
     model_mapping = {
-        # J1: 6-Pin Horizontal Pin Header (Centered at Y=80.0mm, X=118.0mm)
+        # J1: 6-Pin Horizontal Pin Header (Centered at Y=80.0mm, X=120.0mm)
         'J1': (
             '${KICAD10_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x06_P2.54mm_Horizontal.step',
-            (0.0, 0.0, 0.0),
-            (0.0, 0.0, 0.0),
-            (1.0, 1.0, 1.0)
-        ),
-        # J2: 6-Pad Wire Solder Terminal Array for M8 Pigtail Leads (Left Wing)
-        'J2': (
-            '${KICAD10_3DMODEL_DIR}/Connector_PinHeader_2.00mm.3dshapes/PinHeader_1x06_P2.00mm_Vertical.step',
             (0.0, 0.0, 0.0),
             (0.0, 0.0, 0.0),
             (1.0, 1.0, 1.0)
@@ -92,7 +85,7 @@ def generate_pod_base_pcb(pcb_path):
         # 6-Pin Horizontal Pin Header (OBERSEITE / INNEN: Horizontal in den Kassetteneinschub ragend)
         'J1': (X_center + 2.0, 73.65, 0.0, 'F.Cu'),          # (120.0, 73.65) Horizontal Pin Header (Y 73.65..86.35mm)
 
-        # 6-Pad Wire Terminal for M8 Panel-Mount Pigtail Leads (Left Wing)
+        # 6-Pad Wire Terminal for M8 Panel-Mount Pigtail Leads (Left Wing: Pure Flat Solder Pads)
         'J2': (X0 + 8.5, 75.0, 0.0, 'F.Cu'),                 # (108.5, 75.0) M8 Wire Connection Pads
 
         # Center Stage: SP3012 TVS Array & 100nF Cap
@@ -111,6 +104,29 @@ def generate_pod_base_pcb(pcb_path):
         pos = pcbnew.VECTOR2I(int(x_mm * 1e6), int(y_mm * 1e6))
         fp.SetPosition(pos)
         fp.SetOrientationDegrees(rot_deg)
+
+        # Add physical pads for J2 (6 Solder Pads) and H1/H2 (M2 screw holes)
+        if ref == 'J2':
+            for p_idx in range(6):
+                pad = pcbnew.PAD(fp)
+                pad.SetNumber(str(p_idx + 1))
+                pad.SetShape(pcbnew.PAD_SHAPE_ROUNDRECT)
+                pad.SetSize(pcbnew.VECTOR2I(int(1.8 * 1e6), int(1.2 * 1e6)))
+                pad.SetDrillSize(pcbnew.VECTOR2I(int(0.85 * 1e6), int(0.85 * 1e6)))
+                pad.SetAttribute(pcbnew.PAD_ATTRIB_PTH)
+                pad.SetLayerSet(pcbnew.LSET.AllCuMask())
+                pad.SetPosition(pcbnew.VECTOR2I(int(x_mm * 1e6), int((y_mm + p_idx * 2.0) * 1e6)))
+                fp.Add(pad)
+        elif ref in ('H1', 'H2'):
+            pad = pcbnew.PAD(fp)
+            pad.SetNumber("1")
+            pad.SetShape(pcbnew.PAD_SHAPE_CIRCLE)
+            pad.SetSize(pcbnew.VECTOR2I(int(3.5 * 1e6), int(3.5 * 1e6)))
+            pad.SetDrillSize(pcbnew.VECTOR2I(int(2.2 * 1e6), int(2.2 * 1e6)))
+            pad.SetAttribute(pcbnew.PAD_ATTRIB_NPTH)
+            pad.SetLayerSet(pcbnew.LSET.AllCuMask())
+            pad.SetPosition(pos)
+            fp.Add(pad)
 
         if ref in model_mapping:
             model_file, (rx, ry, rz), (ox, oy, oz), (sx, sy, sz) = model_mapping[ref]
