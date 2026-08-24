@@ -18,6 +18,7 @@
 #include "sdio_ring_buffer.h"
 #include "webdav_uploader.h"
 #include "gnss_omm_bridge.h"
+#include "adr_ekf_filter.h"
 
 static const char *TAG = "OMB_MAIN";
 
@@ -253,6 +254,7 @@ extern "C" void app_main(void) {
     opto_sequencer_init();
     audio_dsp_init();
     cartridge_onewire_init();
+    adr_ekf_init();
     sdio_storage_init();
     webdav_uploader_init();
     gnss_omm_bridge_init();
@@ -266,7 +268,8 @@ extern "C" void app_main(void) {
     // CORE 1: Echtzeit-Audio DSP Pipeline (Höchste Priorität)
     xTaskCreatePinnedToCore(task_audio_dsp, "AudioDSP", 8192, NULL, configMAX_PRIORITIES - 1, NULL, 1);
 
-    // CORE 0: Kommunikation, Busse & Systemüberwachung
+    // CORE 0: Kommunikation, Busse, Sensor-Fusion & Systemüberwachung
+    xTaskCreatePinnedToCore(task_adr_ekf_fusion, "ADR_EKF", 4096, NULL, 5, NULL, 0);
     xTaskCreatePinnedToCore(task_ble_services, "BLE_Server", 6144, NULL, 5, NULL, 0);
     xTaskCreatePinnedToCore(task_cartridge_manager, "Cartridge1W", 4096, NULL, 4, NULL, 0);
     xTaskCreatePinnedToCore(task_rear_pod_bridge, "RearPodBridge", 4096, NULL, 4, NULL, 0);

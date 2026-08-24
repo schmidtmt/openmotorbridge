@@ -9,6 +9,7 @@ idf_component_register(
         "sdio_ring_buffer.cpp"
         "webdav_uploader.cpp"
         "gnss_omm_bridge.cpp"
+        "adr_ekf_filter.cpp"
     INCLUDE_DIRS 
         "."
     REQUIRES 

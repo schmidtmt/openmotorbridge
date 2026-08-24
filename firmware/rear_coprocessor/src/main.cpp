@@ -95,6 +95,49 @@ static void init_fallback_lora_sx1262(void) {
     ESP_LOGI(TAG, "SX1262 LoRa Hardware ready for Codec2 PTT & GPS Radar Fallback.");
 }
 
+// 3. OpenMotorMesh Layer 2 Dynamic Leader Election (DLE) Struct
+typedef struct __attribute__((packed)) {
+    uint8_t protocol_version;   // 0x01
+    uint8_t frame_type;         // 0x01 = DLE_BEACON, 0xFF = ALERT_SIREN
+    uint64_t node_uid;          // 64-Bit DS2401 ID
+    uint8_t dle_score;          // 0..100 Points
+    uint8_t capabilities_mask;  // OmmFeatureBits (FEAT_ENV_MIC = 0x10)
+    int8_t tx_power_dbm;        // +20 dBm (2.4G) / +22 dBm (LoRa)
+    uint32_t cluster_id;        // Active Group ID
+    uint16_t sequence_num;      // Monotonic packet counter
+} OmmDleBeaconFrame_t;
+
+static uint8_t s_local_capabilities = 0x1D; // Dual-Mesh + LoRa + GNSS + USV + ENV_MIC
+static uint8_t s_current_dle_score = 95;
+static uint16_t s_beacon_seq = 0;
+
+static void send_omm_dle_beacon(void) {
+    OmmDleBeaconFrame_t beacon = {
+        .protocol_version = 0x01,
+        .frame_type = 0x01,
+        .node_uid = 0x014F2A9012008CULL,
+        .dle_score = s_current_dle_score,
+        .capabilities_mask = s_local_capabilities,
+        .tx_power_dbm = 20,
+        .cluster_id = 0xABCD0001,
+        .sequence_num = s_beacon_seq++
+    };
+
+    // Sende Frame über 2.4 GHz IEEE 802.15.4 Transceiver
+    esp_ieee802154_transmit((const uint8_t *)&beacon, false);
+}
+
+static void broadcast_siren_warning_mesh(void) {
+    ESP_LOGW(TAG, "🚨 OMM SIREN ALERT: Transmitting emergency beacon on 2.4 GHz and 868 MHz LoRa!");
+    uint8_t alert_pkt[12] = { 0xFF, 0x53, 0x49, 0x52, 0x45, 0x4E, 0x01, 0x00, 0x00, 0x00, 0x00, 0xAA };
+    // 2.4 GHz Broadcast
+    esp_ieee802154_transmit(alert_pkt, false);
+    // 868 MHz LoRa Fallback Broadcast
+    if (s_lora_spi) {
+        // SX1262 LoRa Packet TX Trigger
+    }
+}
+
 extern "C" void app_main(void) {
     ESP_LOGI(TAG, "==================================================");
     ESP_LOGI(TAG, "   Heck-Pod 3 Co-Processor (Dual-PHY OMM Gateway) ");
@@ -111,7 +154,7 @@ extern "C" void app_main(void) {
     };
     uart_param_config(UART_NUM_BRIDGE, &bridge_uart_config);
     uart_set_pin(UART_NUM_BRIDGE, PIN_BRIDGE_TX, PIN_BRIDGE_RX, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE);
-    uart_driver_install(UART_NUM_BRIDGE, 1024, 0, 0, NULL, 0);
+    uart_driver_install(UART_NUM_BRIDGE, 1024, 1024, 0, NULL, 0);
 
     // 2. UART zum u-blox MAX-M10S GNSS Modul (115.200 Baud / 10 Hz)
     uart_config_t gnss_uart_config = {
@@ -136,12 +179,29 @@ extern "C" void app_main(void) {
     ESP_LOGI(TAG, "Pod 3 Dual-PHY interfaces fully operational. Starting streaming loop...");
 
     uint8_t rx_buf[256];
+    uint32_t loop_count = 0;
+
     while (true) {
-        // GNSS-Daten lesen und vorkomprimiert an die Zentralbox streamen
+        // 1. GNSS-Daten lesen und an die Zentralbox weiterleiten
         int len = uart_read_bytes(UART_NUM_GNSS, rx_buf, sizeof(rx_buf), pdMS_TO_TICKS(10));
         if (len > 0) {
             uart_write_bytes(UART_NUM_BRIDGE, (const char *)rx_buf, len);
         }
-        vTaskDelay(pdMS_TO_TICKS(5));
+
+        // 2. Steuerbefehle von der Zentralbox lesen
+        int bridge_len = uart_read_bytes(UART_NUM_BRIDGE, rx_buf, sizeof(rx_buf), pdMS_TO_TICKS(5));
+        if (bridge_len >= 8) {
+            // Sirenen-Alarm Befehl (0xFF 'S' 'I' 'R' 'E' 'N')
+            if (rx_buf[0] == 0xFF && rx_buf[1] == 0x53 && rx_buf[2] == 0x49) {
+                broadcast_siren_warning_mesh();
+            }
+        }
+
+        // 3. Periodischer OMM DLE Beacon (alle 100 ms)
+        if (++loop_count % 10 == 0) {
+            send_omm_dle_beacon();
+        }
+
+        vTaskDelay(pdMS_TO_TICKS(10));
     }
 }
