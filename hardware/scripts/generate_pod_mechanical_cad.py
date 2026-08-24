@@ -154,11 +154,15 @@ def render_xray_assembly(output_png):
     draw_box(ax, 31.0, -8.0, -4.0, 3.5, 16.0, 8.0, color='#e2e8f0', alpha=0.95, edgecolor='#94a3b8', linewidth=0.8)
     draw_box(ax, 33.0, -5.0, -2.5, 2.0, 10.0, 5.0, color='#f59e0b', alpha=1.0, edgecolor='#d97706', linewidth=0.6)
 
-    # View angle setup (slanted isometric for maximum clarity)
-    ax.view_init(elev=24, azim=-52)
+    # View angle setup with TRUE PHYSICAL ASPECT RATIO (prevents square distortion)
+    ax.view_init(elev=22, azim=-50)
+    span_x = 42 - (-46) # 88 mm
+    span_y = 28 - (-28) # 56 mm
+    span_z = 18 - (-18) # 36 mm
     ax.set_xlim([-46, 42])
     ax.set_ylim([-28, 28])
     ax.set_zlim([-18, 18])
+    ax.set_box_aspect((span_x, span_y, span_z))
     ax.set_axis_off()
 
     # Title header
@@ -260,9 +264,13 @@ def render_exploded_view(output_png):
         ax.plot([-60, 56], [corner[0], corner[0]], [corner[1], corner[1]], color='#475569', linestyle='--', linewidth=0.7, alpha=0.6)
 
     ax.view_init(elev=20, azim=-50)
+    span_x = 58 - (-70) # 128 mm
+    span_y = 26 - (-26) # 52 mm
+    span_z = 18 - (-18) # 36 mm
     ax.set_xlim([-70, 58])
     ax.set_ylim([-26, 26])
     ax.set_zlim([-18, 18])
+    ax.set_box_aspect((span_x, span_y, span_z))
     ax.set_axis_off()
 
     fig.text(0.5, 0.95, "OPENMOTORBRIDGE // EXPLODED CENTRIC POD & CARTRIDGE ASSEMBLY", 
