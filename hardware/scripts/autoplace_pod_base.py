@@ -73,10 +73,10 @@ def generate_pod_base_pcb(pcb_path):
             (1.0, 1.0, 1.0)
         ),
         'J2': (
-            os.path.abspath(os.path.join(os.path.dirname(__file__), '../cad/M8_6Pin_A_Coded_Receptacle.wrl')),
+            '${KICAD10_3DMODEL_DIR}/Connector_Coaxial.3dshapes/SMA_Amphenol_132134-10_Vertical.step',
             (0.0, 0.0, 0.0),
             (0.0, 0.0, 0.0),
-            (393.700787, 393.700787, 393.700787)
+            (1.25, 1.25, 1.25)
         ),
     }
 
