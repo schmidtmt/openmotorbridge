@@ -1,10 +1,14 @@
-const CACHE_NAME = 'omb-pwa-v8.0';
+const CACHE_NAME = 'omb-pwa-v8.2';
 const ASSETS = [
     './',
     './index.html',
     './css/style.css',
     './js/app.js',
-    './manifest.json'
+    './manifest.json',
+    './assets/openmotorbridge_logo.svg',
+    './assets/openmotormesh_logo.svg',
+    './assets/openmotorbridge_logo.jpg',
+    './assets/openmotormesh_logo.jpg'
 ];
 
 self.addEventListener('install', (e) => {

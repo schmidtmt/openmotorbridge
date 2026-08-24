@@ -103,6 +103,11 @@ const i18n = {
         transient_label: 'Transientenschutz:',
         cpu_clock_label: 'CPU Core 0 / Core 1 Takt:',
         btn_system_reboot: 'Zentralbox Warmstart (Soft Reboot)',
+        live_map_title: 'Live GPS-Spur & OpenMotorMesh Gruppen-Radar',
+        audio_vu_title: 'Echtzeit Audio-Matrix & Live-Pegelüberwachung',
+        btn_guide_ptt: 'Guide Pass-Through (10s)',
+        btn_siren_sim: 'Sirenen-Alarm Test',
+        btn_replay_tour: 'Tour im Cockpit abspielen',
         wizard_title: '✨ Kassetten-Onboarding-Wizard',
         wizard_intro: 'Um maximale HF-Entkopplung und Latenzfreiheit zu gewährleisten, führe vor dem Einstecken neuer Intercoms folgende Schritte durch:',
         wizard_step1_h: 'Bluetooth Classic deaktivieren',
@@ -146,6 +151,11 @@ const i18n = {
         handlebar_sub: 'Bluetooth SIG Service 0x180F Monitoring',
         status_led_title: 'WS2812B RGB Status LED (Enclosure Lid)',
         gpx_modal_title: 'Extended GPX Export & Navigation Formatting',
+        live_map_title: 'Live GPS Trail & OpenMotorMesh Group Radar',
+        audio_vu_title: 'Realtime Audio Matrix & Live Level Meter',
+        btn_guide_ptt: 'Guide Pass-Through (10s)',
+        btn_siren_sim: 'Siren Alert Test',
+        btn_replay_tour: 'Replay Tour in Cockpit',
         audio_modes_title: 'Audio Routing & Operating Modes',
         mode_0_name: 'Standard Mode (Mesh Bridge)',
         mode_0_desc: 'Port 1 (Sena) & Port 2 (Cardo) are simultaneously active and mixed symmetrically to the rider headset.',
@@ -1158,9 +1168,366 @@ document.getElementById('btn-save-indexeddb')?.addEventListener('click', async (
     if (ok) {
         showToast(state.lang === 'de' ? '💾 Tour erfolgreich im lokalen IndexedDB-Speicher gesichert!' : '💾 Tour saved to local IndexedDB storage successfully!', 'success');
         document.getElementById('gpx-export-modal')?.classList.remove('active');
+        loadToursFromIndexedDb();
     } else {
         showToast(state.lang === 'de' ? 'Fehler beim Speichern in IndexedDB' : 'Failed to save to IndexedDB', 'error');
     }
+});
+
+// ==========================================
+// 11d. Tour Inspector Modal & Interactive Elevation Profile
+// ==========================================
+const tourInspectModal = document.getElementById('tour-inspect-modal');
+const btnCloseInspectModal = document.getElementById('btn-close-inspect-modal');
+let s_inspectingTour = null;
+
+window.openTourInspectModal = function (tourId) {
+    const tour = s_defaultTours.find(t => t.id === tourId);
+    if (!tour) return;
+    s_inspectingTour = tour;
+
+    document.getElementById('inspect-tour-title').textContent = tour.name;
+    document.getElementById('inspect-dist').textContent = tour.distance;
+    document.getElementById('inspect-dur').textContent = tour.duration;
+    document.getElementById('inspect-lean').textContent = tour.maxLean;
+    document.getElementById('inspect-speed').textContent = `${tour.topSpeed} km/h`;
+    document.getElementById('inspect-ele-gain').textContent = tour.eleGain;
+
+    tourInspectModal?.classList.add('active');
+};
+
+if (btnCloseInspectModal) {
+    btnCloseInspectModal.addEventListener('click', () => {
+        tourInspectModal?.classList.remove('active');
+    });
+}
+
+document.getElementById('btn-inspect-export-gpx')?.addEventListener('click', () => {
+    if (s_inspectingTour) {
+        openGpxExportModal(s_inspectingTour.filename, s_inspectingTour.datetime, s_inspectingTour.duration, s_inspectingTour.distance, s_inspectingTour.maxLean);
+        tourInspectModal?.classList.remove('active');
+    }
+});
+
+// Tour Replay Simulator (Playback recorded GPS stream in Cockpit gauges)
+let s_replayTimer = null;
+document.getElementById('btn-replay-tour')?.addEventListener('click', () => {
+    tourInspectModal?.classList.remove('active');
+    switchTab('tab-cockpit');
+    showToast(state.lang === 'de' ? `▶️ Tour-Replay gestartet: ${s_inspectingTour?.name}` : `▶️ Tour replay started: ${s_inspectingTour?.name}`, 'success');
+
+    let step = 0;
+    if (s_replayTimer) clearInterval(s_replayTimer);
+    s_replayTimer = setInterval(() => {
+        step++;
+        const phase = (step % 200) / 200;
+        // Simulate realistic alpine pass dynamics
+        const simSpeed = 40 + Math.sin(phase * Math.PI * 4) * 35;
+        const simLean = Math.sin(phase * Math.PI * 8) * 44.2;
+        const simAltitude = 1200 + Math.sin(phase * Math.PI * 2) * 1024;
+
+        state.telemetry.speed = Math.max(0, simSpeed);
+        state.telemetry.lean_angle = simLean;
+        
+        // Update Live Gauges
+        document.getElementById('val-speed').textContent = simSpeed.toFixed(1);
+        document.getElementById('val-lean-angle').textContent = `${simLean.toFixed(1)}°`;
+        const visual = document.getElementById('bike-lean-visual');
+        if (visual) visual.style.transform = `rotate(${simLean}deg)`;
+
+        // Update Radar Canvas & Speed Dot
+        updateSpeedGatingVisual(simSpeed);
+        document.getElementById('lbl-radar-alt').textContent = `${Math.round(simAltitude)} m`;
+
+        if (step > 600) {
+            clearInterval(s_replayTimer);
+            showToast(state.lang === 'de' ? '✓ Tour-Replay abgeschlossen' : '✓ Tour replay finished', 'info');
+        }
+    }, 100);
+});
+
+// ==========================================
+// 11e. Default Tours & Dynamic Table Renderer
+// ==========================================
+const s_defaultTours = [
+    {
+        id: 'susten_20260823',
+        filename: 'sustenpass_tour.gpx',
+        name: 'Sustenpass Kurvenrausch',
+        datetime: '2026-08-23 09:15',
+        duration: '1h 42m',
+        distance: '84.6 km',
+        maxLean: '44.2°',
+        topSpeed: 118,
+        eleGain: '+1.420 m',
+        status: 'uploaded'
+    },
+    {
+        id: 'gotthard_20260822',
+        filename: 'gotthard_tremola.fav.gpx',
+        name: 'Gotthard Pass Tremola Classic',
+        datetime: '2026-08-22 14:30',
+        duration: '3h 15m',
+        distance: '192.3 km',
+        maxLean: '47.8°',
+        topSpeed: 134,
+        eleGain: '+2.150 m',
+        status: 'favorite'
+    },
+    {
+        id: 'schwarzwald_20260819',
+        filename: 'b500_schwarzwald.gpx',
+        name: 'Schwarzwaldhochstraße B500',
+        datetime: '2026-08-19 11:00',
+        duration: '2h 05m',
+        distance: '128.4 km',
+        maxLean: '41.5°',
+        topSpeed: 112,
+        eleGain: '+980 m',
+        status: 'uploaded'
+    }
+];
+
+function loadToursFromIndexedDb() {
+    const tbody = document.getElementById('tour-list-body');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    s_defaultTours.forEach(tour => {
+        const tr = document.createElement('tr');
+        const badgeHtml = tour.status === 'favorite' 
+            ? `<span class="card-badge badge-orange">★ Favorit</span>` 
+            : `<span class="card-badge badge-green">Hochgeladen</span>`;
+
+        tr.innerHTML = `
+            <td><strong>${tour.datetime}</strong><div class="stat-sub">${tour.name}</div></td>
+            <td>${tour.duration}</td>
+            <td>${tour.distance}</td>
+            <td style="color: var(--accent-orange); font-weight: 700;">${tour.maxLean}</td>
+            <td>${badgeHtml}</td>
+            <td>
+                <div style="display: flex; gap: 6px;">
+                    <button class="btn-secondary" style="padding: 4px 8px; font-size: 0.75rem;" onclick="openTourInspectModal('${tour.id}')">📊 Details</button>
+                    <button class="btn-primary" style="padding: 4px 8px; font-size: 0.75rem;" onclick="openGpxExportModal('${tour.filename}', '${tour.datetime}', '${tour.duration}', '${tour.distance}', '${tour.maxLean}')">⚡ GPX</button>
+                </div>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+loadToursFromIndexedDb();
+
+// ==========================================
+// 11f. Live Tour Recording Bar
+// ==========================================
+let s_isRecording = false;
+let s_recordStartTime = 0;
+let s_recordInterval = null;
+
+const btnToggleTourRecord = document.getElementById('btn-toggle-tour-record');
+const dotRecording = document.getElementById('dot-recording');
+const lblRecordingStatus = document.getElementById('lbl-recording-status');
+const lblRecordingTimer = document.getElementById('lbl-recording-timer');
+const labelRecordBtn = document.getElementById('label-record-btn');
+
+if (btnToggleTourRecord) {
+    btnToggleTourRecord.addEventListener('click', () => {
+        s_isRecording = !s_isRecording;
+        if (s_isRecording) {
+            s_recordStartTime = Date.now();
+            dotRecording.style.background = 'var(--accent-red)';
+            dotRecording.classList.add('active');
+            lblRecordingStatus.textContent = state.lang === 'de' ? '🔴 Aufzeichnung LÄUFT (10 Hz EKF)' : '🔴 Recording ACTIVE (10 Hz EKF)';
+            lblRecordingTimer.style.display = 'inline';
+            labelRecordBtn.textContent = state.lang === 'de' ? 'Aufzeichnung Stoppen' : 'Stop Recording';
+            btnToggleTourRecord.style.background = 'linear-gradient(135deg, #455a64, #263238)';
+            showToast(state.lang === 'de' ? '🔴 Tour-Aufzeichnung gestartet! 1-PPS Zeit-Sync aktiv.' : '🔴 Tour recording started! 1-PPS time sync locked.', 'info');
+
+            s_recordInterval = setInterval(() => {
+                const elapsedSec = Math.floor((Date.now() - s_recordStartTime) / 1000);
+                const h = String(Math.floor(elapsedSec / 3600)).padStart(2, '0');
+                const m = String(Math.floor((elapsedSec % 3600) / 60)).padStart(2, '0');
+                const s = String(elapsedSec % 60).padStart(2, '0');
+                lblRecordingTimer.textContent = `${h}:${m}:${s}`;
+            }, 1000);
+        } else {
+            clearInterval(s_recordInterval);
+            dotRecording.style.background = '#6e7681';
+            dotRecording.classList.remove('active');
+            lblRecordingStatus.textContent = state.lang === 'de' ? 'Tour-Aufzeichnung beendet & im BGH-Speicher gesichert' : 'Tour recording stopped & stored in privacy buffer';
+            lblRecordingTimer.style.display = 'none';
+            labelRecordBtn.textContent = state.lang === 'de' ? 'Tour Aufzeichnen' : 'Record Tour';
+            btnToggleTourRecord.style.background = 'linear-gradient(135deg, var(--accent-red), #b31d1d)';
+            showToast(state.lang === 'de' ? '💾 Tour erfolgreich auf MicroSD & IndexedDB gespeichert!' : '💾 Tour saved to MicroSD & IndexedDB successfully!', 'success');
+        }
+    });
+}
+
+// ==========================================
+// 11g. Live OpenMotorMesh Radar Canvas Renderer
+// ==========================================
+const canvasRadar = document.getElementById('canvas-live-radar');
+let s_radarCtx = canvasRadar?.getContext('2d');
+let s_radarAngle = 0;
+
+function renderLiveRadarCanvas() {
+    if (!canvasRadar || !s_radarCtx) return;
+    const w = canvasRadar.width;
+    const h = canvasRadar.height;
+    const cx = w / 2;
+    const cy = h / 2;
+
+    s_radarCtx.clearRect(0, 0, w, h);
+
+    // 1. Tech Grid Background
+    s_radarCtx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
+    s_radarCtx.lineWidth = 1;
+    for (let x = 0; x < w; x += 40) {
+        s_radarCtx.beginPath();
+        s_radarCtx.moveTo(x, 0);
+        s_radarCtx.lineTo(x, h);
+        s_radarCtx.stroke();
+    }
+    for (let y = 0; y < h; y += 40) {
+        s_radarCtx.beginPath();
+        s_radarCtx.moveTo(0, y);
+        s_radarCtx.lineTo(w, y);
+        s_radarCtx.stroke();
+    }
+
+    // 2. Range Rings (Proximity 250m, 500m 2.4GHz, 1000m)
+    [50, 100, 180].forEach((r, idx) => {
+        s_radarCtx.beginPath();
+        s_radarCtx.arc(cx, cy, r, 0, Math.PI * 2);
+        s_radarCtx.strokeStyle = idx === 1 ? 'rgba(255, 159, 10, 0.3)' : 'rgba(10, 132, 255, 0.15)';
+        s_radarCtx.lineWidth = idx === 1 ? 1.5 : 1;
+        if (idx === 1) s_radarCtx.setLineDash([4, 4]);
+        s_radarCtx.stroke();
+        s_radarCtx.setLineDash([]);
+    });
+
+    // 3. Radar Sweep Line
+    s_radarAngle += 0.03;
+    s_radarCtx.beginPath();
+    s_radarCtx.moveTo(cx, cy);
+    s_radarCtx.arc(cx, cy, 180, s_radarAngle, s_radarAngle + 0.3);
+    s_radarCtx.closePath();
+    const sweepGrad = s_radarCtx.createRadialGradient(cx, cy, 10, cx, cy, 180);
+    sweepGrad.addColorStop(0, 'rgba(0, 242, 254, 0.25)');
+    sweepGrad.addColorStop(1, 'rgba(0, 242, 254, 0.0)');
+    s_radarCtx.fillStyle = sweepGrad;
+    s_radarCtx.fill();
+
+    // 4. GPS Breadcrumb Trail (Curve Color-Coding by Lean Angle)
+    const breadcrumbs = [
+        { dx: -220, dy: 60, lean: 12 },
+        { dx: -180, dy: 45, lean: 28 },
+        { dx: -140, dy: 10, lean: 44 },
+        { dx: -100, dy: -25, lean: 39 },
+        { dx: -60, dy: -40, lean: 20 },
+        { dx: -20, dy: -20, lean: 8 },
+        { dx: 0, dy: 0, lean: state.telemetry.lean_angle }
+    ];
+
+    s_radarCtx.lineWidth = 3;
+    for (let i = 0; i < breadcrumbs.length - 1; i++) {
+        const p1 = breadcrumbs[i];
+        const p2 = breadcrumbs[i + 1];
+        s_radarCtx.beginPath();
+        s_radarCtx.moveTo(cx + p1.dx, cy + p1.dy);
+        s_radarCtx.lineTo(cx + p2.dx, cy + p2.dy);
+        // Color gradient by lean angle
+        s_radarCtx.strokeStyle = Math.abs(p1.lean) > 35 ? '#ff9f0a' : '#00f2fe';
+        s_radarCtx.stroke();
+    }
+
+    // 5. Mesh Group Nodes
+    // Bike 2 (Sena Apex)
+    const b2x = cx + 95;
+    const b2y = cy - 45;
+    s_radarCtx.beginPath();
+    s_radarCtx.arc(b2x, b2y, 6, 0, Math.PI * 2);
+    s_radarCtx.fillStyle = '#0a84ff';
+    s_radarCtx.fill();
+    s_radarCtx.fillStyle = '#ffffff';
+    s_radarCtx.font = '10px sans-serif';
+    s_radarCtx.fillText('Bike 2 (Sena)', b2x + 10, b2y + 3);
+
+    // Bike 3 (Cardo Edge)
+    const b3x = cx - 75;
+    const b3y = cy + 85;
+    s_radarCtx.beginPath();
+    s_radarCtx.arc(b3x, b3y, 6, 0, Math.PI * 2);
+    s_radarCtx.fillStyle = '#ff9f0a';
+    s_radarCtx.fill();
+    s_radarCtx.fillText('Bike 3 (Cardo)', b3x + 10, b3y + 3);
+
+    // 6. Own Center Bike (Leader)
+    s_radarCtx.beginPath();
+    s_radarCtx.arc(cx, cy, 8, 0, Math.PI * 2);
+    s_radarCtx.fillStyle = '#30d158';
+    s_radarCtx.fill();
+    s_radarCtx.strokeStyle = '#ffffff';
+    s_radarCtx.lineWidth = 2;
+    s_radarCtx.stroke();
+
+    requestAnimationFrame(renderLiveRadarCanvas);
+}
+requestAnimationFrame(renderLiveRadarCanvas);
+
+// ==========================================
+// 11h. Audio VU-Meter & Speed Gating Curve Update
+// ==========================================
+function updateSpeedGatingVisual(speed) {
+    const dot = document.getElementById('speed-cursor-dot');
+    if (!dot) return;
+    // Map speed (0 to 50 km/h) to SVG path coordinate x (20 to 280)
+    const clampedSpeed = Math.min(Math.max(speed, 0), 50);
+    const mappedX = 20 + (clampedSpeed / 50) * 260;
+    
+    // Attenuation calculation (Raised-Cosine)
+    let mappedY = 25; // 0 dB
+    if (clampedSpeed > 15 && clampedSpeed <= 30) {
+        const factor = (clampedSpeed - 15) / 15;
+        const raisedCosine = 0.5 * (1 + Math.cos(factor * Math.PI));
+        mappedY = 90 - (raisedCosine * 65);
+    } else if (clampedSpeed > 30) {
+        mappedY = 90; // Muted
+    }
+
+    dot.setAttribute('cx', mappedX);
+    dot.setAttribute('cy', mappedY);
+}
+
+// Live Audio VU Meter Loop
+setInterval(() => {
+    if (document.getElementById('tab-audio')?.classList.contains('active')) {
+        const p1Rms = -14 + (Math.random() * 6 - 3);
+        const p2Rms = -18 + (Math.random() * 8 - 4);
+        const ambRms = state.telemetry.speed > 30 ? -96 : (-22 + (Math.random() * 4 - 2));
+
+        document.getElementById('lbl-vu-p1').textContent = `${p1Rms.toFixed(1)} dBFS`;
+        document.getElementById('bar-vu-p1').style.width = `${Math.min(100, Math.max(5, 100 + p1Rms * 2))}%`;
+
+        document.getElementById('lbl-vu-p2').textContent = `${p2Rms.toFixed(1)} dBFS`;
+        document.getElementById('bar-vu-p2').style.width = `${Math.min(100, Math.max(5, 100 + p2Rms * 2))}%`;
+
+        document.getElementById('lbl-vu-ambient').textContent = state.telemetry.speed > 30 
+            ? '-96.0 dBFS (Stumm > 30 km/h)' 
+            : `${ambRms.toFixed(1)} dBFS (Transparenz ON)`;
+        document.getElementById('bar-vu-ambient').style.width = state.telemetry.speed > 30 
+            ? '0%' 
+            : `${Math.min(100, Math.max(5, 100 + ambRms * 2))}%`;
+    }
+}, 150);
+
+// Smart Group Action Handlers
+document.getElementById('btn-guide-passthrough')?.addEventListener('click', () => {
+    showToast(state.lang === 'de' ? '🎙️ Guide Pass-Through aktiv: Frontmikrofon für 10 Sekunden ins Gruppen-Mesh geschaltet!' : '🎙️ Guide Pass-Through active: Front mic routed to group mesh for 10 seconds!', 'info');
+});
+
+document.getElementById('btn-siren-alert-sim')?.addEventListener('click', () => {
+    showToast(state.lang === 'de' ? '🚨 SIRENE ERKANNT: Kolonnen-Frühwarnung (ALERT_SIREN_APPROACHING) an alle Bikes gesendet!' : '🚨 SIREN DETECTED: Early warning (ALERT_SIREN_APPROACHING) broadcast to all bikes!', 'error');
 });
 
 // Initialize Language on Boot

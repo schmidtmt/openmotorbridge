@@ -200,6 +200,35 @@
                         </select>
                     </div>
                 </section>
+
+                <!-- Live GPS Track & OpenMotorMesh Group Radar Card -->
+                <section class="card" style="grid-column: 1 / -1;">
+                    <div class="card-header">
+                        <span class="card-title">🗺️ <span data-i18n="live_map_title">Live GPS-Spur & OpenMotorMesh Gruppen-Radar</span></span>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <span class="card-badge badge-purple" id="badge-mesh-nodes">3 Nodes in Reichweite</span>
+                            <button id="btn-center-map" class="btn-secondary" style="padding: 4px 8px; font-size: 0.75rem;">🎯 Zentrieren</button>
+                        </div>
+                    </div>
+
+                    <div style="position: relative; width: 100%; height: 260px; background: #07090d; border-radius: var(--radius-md); border: 1px solid var(--border-subtle); overflow: hidden;">
+                        <canvas id="canvas-live-radar" width="1100" height="260" style="width: 100%; height: 100%; display: block;"></canvas>
+                        
+                        <!-- Radar Overlay Info -->
+                        <div style="position: absolute; bottom: 10px; left: 14px; font-size: 0.75rem; background: rgba(13, 17, 23, 0.85); backdrop-filter: blur(10px); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); display: flex; gap: 14px;">
+                            <span>🛰️ <strong>10 Hz Dead-Reckoning:</strong> <span style="color: var(--accent-green);">AKTIV</span></span>
+                            <span>📍 <strong>Position:</strong> <span id="lbl-radar-coords">47.3769° N, 8.5417° E</span></span>
+                            <span>🏔️ <strong>Höhe:</strong> <span id="lbl-radar-alt">408 m</span></span>
+                            <span>📶 <strong>LoRa RSSI:</strong> <span style="color: var(--accent-orange);">-78 dBm</span></span>
+                        </div>
+
+                        <div style="position: absolute; top: 10px; right: 14px; display: flex; gap: 6px;">
+                            <span class="card-badge badge-green" style="font-size: 0.7rem;">● Eigener Node (Leader)</span>
+                            <span class="card-badge badge-blue" style="font-size: 0.7rem;">● Bike 2 (Sena Apex)</span>
+                            <span class="card-badge badge-orange" style="font-size: 0.7rem;">● Bike 3 (Cardo Edge)</span>
+                        </div>
+                    </div>
+                </section>
             </div>
         </main>
 
@@ -282,6 +311,117 @@
                         <button id="btn-trigger-p1-next" class="btn-secondary">
                             ⏭️ <span data-i18n="btn_p1_next">Port 1 Channel Next (1s)</span>
                         </button>
+                    </div>
+
+                    <!-- Smart Group Audio Actions -->
+                    <div style="margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border-subtle);">
+                        <div class="control-label"><span>🚨 Smarte Kolonnen- & Audio-Funktionen</span></div>
+                        <div class="grid-2" style="gap: 10px;">
+                            <button id="btn-guide-passthrough" class="btn-secondary" style="border-color: rgba(10, 132, 255, 0.4); color: var(--accent-blue);">
+                                🎙️ <span data-i18n="btn_guide_ptt">Guide Pass-Through (10s)</span>
+                            </button>
+                            <button id="btn-siren-alert-sim" class="btn-secondary" style="border-color: rgba(255, 69, 58, 0.4); color: var(--accent-red);">
+                                🚨 <span data-i18n="btn_siren_sim">Sirenen-Alarm Test</span>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Realtime 4-Channel Audio VU-Meter & Mixer Card -->
+                <section class="card" style="grid-column: 1 / -1;">
+                    <div class="card-header">
+                        <span class="card-title">📊 <span data-i18n="audio_vu_title">Echtzeit Audio-Matrix & Live-Pegelüberwachung</span></span>
+                        <span class="card-badge badge-green" id="badge-codec-state">ES8388 24-Bit I2S (48 kHz)</span>
+                    </div>
+
+                    <div class="grid-2" style="gap: 20px;">
+                        <!-- VU Bars -->
+                        <div>
+                            <div class="stat-label" style="margin-bottom: 8px;">4-Kanal Live VU-Meter (RMS / Peak)</div>
+                            
+                            <!-- Channel 1: Sena Port 1 -->
+                            <div style="margin-bottom: 10px;">
+                                <div style="display: flex; justify-content: space-between; font-size: 0.78rem; margin-bottom: 3px;">
+                                    <span>🔵 Port 1: Sena Apex (LIN1)</span>
+                                    <span id="lbl-vu-p1">-14.2 dBFS</span>
+                                </div>
+                                <div class="progress-bar-container" style="height: 10px;">
+                                    <div class="progress-bar-fill" id="bar-vu-p1" style="width: 65%; background: linear-gradient(90deg, #30d158 70%, #ffd60a 85%, #ff453a 100%);"></div>
+                                </div>
+                            </div>
+
+                            <!-- Channel 2: Cardo Port 2 -->
+                            <div style="margin-bottom: 10px;">
+                                <div style="display: flex; justify-content: space-between; font-size: 0.78rem; margin-bottom: 3px;">
+                                    <span>🟢 Port 2: Cardo DMC (RIN1)</span>
+                                    <span id="lbl-vu-p2">-18.5 dBFS</span>
+                                </div>
+                                <div class="progress-bar-container" style="height: 10px;">
+                                    <div class="progress-bar-fill" id="bar-vu-p2" style="width: 52%; background: linear-gradient(90deg, #30d158 70%, #ffd60a 85%, #ff453a 100%);"></div>
+                                </div>
+                            </div>
+
+                            <!-- Channel 3: Navi Garmin Line-In -->
+                            <div style="margin-bottom: 10px;">
+                                <div style="display: flex; justify-content: space-between; font-size: 0.78rem; margin-bottom: 3px;">
+                                    <span>🟡 Navi / Line-In (Ducking Master)</span>
+                                    <span id="lbl-vu-navi" style="color: var(--text-muted);">-96.0 dBFS (Silent)</span>
+                                </div>
+                                <div class="progress-bar-container" style="height: 10px;">
+                                    <div class="progress-bar-fill" id="bar-vu-navi" style="width: 4%; background: linear-gradient(90deg, #30d158 70%, #ffd60a 85%, #ff453a 100%);"></div>
+                                </div>
+                            </div>
+
+                            <!-- Channel 4: Front Ambient Mic -->
+                            <div>
+                                <div style="display: flex; justify-content: space-between; font-size: 0.78rem; margin-bottom: 3px;">
+                                    <span>🎙️ Front Ambient-Mic (LIN2 / AGC)</span>
+                                    <span id="lbl-vu-ambient">-22.0 dBFS (Transparenz ON)</span>
+                                </div>
+                                <div class="progress-bar-container" style="height: 10px;">
+                                    <div class="progress-bar-fill" id="bar-vu-ambient" style="width: 40%; background: linear-gradient(90deg, #0a84ff 70%, #bf5af2 100%);"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Speed-Gating Curve Visualizer -->
+                        <div>
+                            <div class="stat-label" style="margin-bottom: 8px;">Geschwindigkeits-Gating & Filterkurve</div>
+                            <div style="position: relative; height: 130px; background: #07090d; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); padding: 8px;">
+                                <svg viewBox="0 0 300 110" width="100%" height="100%">
+                                    <!-- Background Grid -->
+                                    <line x1="20" y1="90" x2="280" y2="90" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                                    <line x1="20" y1="20" x2="280" y2="20" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                                    <line x1="100" y1="10" x2="100" y2="95" stroke="rgba(255,255,255,0.1)" stroke-dasharray="2 2"/>
+                                    <line x1="180" y1="10" x2="180" y2="95" stroke="rgba(255,255,255,0.1)" stroke-dasharray="2 2"/>
+
+                                    <!-- Speed Scale Labels -->
+                                    <text x="20" y="105" fill="#6e7681" font-size="9">0 km/h</text>
+                                    <text x="90" y="105" fill="#ff9f0a" font-size="9">15 km/h</text>
+                                    <text x="170" y="105" fill="#ff453a" font-size="9">30 km/h</text>
+                                    <text x="250" y="105" fill="#6e7681" font-size="9">50+ km/h</text>
+
+                                    <!-- Attenuation Curve (Raised Cosine Fade) -->
+                                    <path d="M 20 25 L 100 25 C 140 25, 140 90, 180 90 L 280 90" fill="none" stroke="url(#cyan-curve-grad)" stroke-width="3"/>
+                                    <defs>
+                                        <linearGradient id="cyan-curve-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                            <stop offset="0%" stop-color="#30d158"/>
+                                            <stop offset="40%" stop-color="#30d158"/>
+                                            <stop offset="70%" stop-color="#ff9f0a"/>
+                                            <stop offset="100%" stop-color="#ff453a"/>
+                                        </linearGradient>
+                                    </defs>
+
+                                    <!-- Live Speed Cursor Dot -->
+                                    <circle id="speed-cursor-dot" cx="20" cy="25" r="5" fill="#00f2fe" stroke="#ffffff" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <div style="font-size: 0.72rem; color: var(--text-secondary); margin-top: 6px; display: flex; justify-content: space-between;">
+                                <span>0–15 km/h: 0 dB Transparenz</span>
+                                <span>15–30 km/h: Raised-Cosine Fade</span>
+                                <span>&gt; 30 km/h: Mute (-96 dB)</span>
+                            </div>
+                        </div>
                     </div>
                 </section>
             </div>
@@ -458,11 +598,32 @@
                 </section>
             </div>
 
+            <!-- Live Tour Recorder Bar -->
+            <section class="card" style="grid-column: 1 / -1; margin-top: 14px; background: linear-gradient(135deg, rgba(30, 38, 48, 0.9), rgba(15, 20, 26, 0.95)); border: 1px solid var(--border-accent);">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span class="status-dot" id="dot-recording" style="background: #6e7681;"></span>
+                            <strong style="font-size: 1.05rem;" id="lbl-recording-status">Live Tour-Aufzeichnung (10 Hz EKF)</strong>
+                        </div>
+                        <div class="stat-sub" id="lbl-recording-meta">Bereit zur Aufzeichnung • Automatischer BGH-Ringspeicher aktiv</div>
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <span id="lbl-recording-timer" style="font-family: monospace; font-size: 1.1rem; font-weight: 800; color: var(--accent-orange); display: none;">00:00:00</span>
+                        <button id="btn-toggle-tour-record" class="btn-primary" style="background: linear-gradient(135deg, var(--accent-red), #b31d1d);">
+                            🔴 <span id="label-record-btn">Tour Aufzeichnen</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
             <!-- Tour List Table -->
-            <section class="card" style="margin-top: 20px;">
+            <section class="card" style="margin-top: 16px; grid-column: 1 / -1;">
                 <div class="card-header">
                     <span class="card-title">📂 <span data-i18n="saved_tours_title">Gespeicherte Touren (/tracks/)</span></span>
-                    <button id="btn-refresh-tours" class="btn-secondary">🔄 <span data-i18n="btn_refresh">Aktualisieren</span></button>
+                    <div style="display: flex; gap: 8px;">
+                        <button id="btn-refresh-tours" class="btn-secondary">🔄 <span data-i18n="btn_refresh">Aktualisieren</span></button>
+                    </div>
                 </div>
 
                 <div style="overflow-x: auto;">
@@ -478,26 +639,7 @@
                             </tr>
                         </thead>
                         <tbody id="tour-list-body">
-                            <tr>
-                                <td><strong>2026-08-23 09:15</strong></td>
-                                <td>1h 42m</td>
-                                <td>84.6 km</td>
-                                <td style="color: var(--accent-orange); font-weight: 700;">44.2°</td>
-                                <td><span class="card-badge badge-green" data-i18n="status_uploaded">Hochgeladen</span></td>
-                                <td>
-                                    <button class="btn-secondary" style="padding: 4px 8px; font-size: 0.75rem;" onclick="openGpxExportModal('tour_20260823.gpx', '2026-08-23 09:15', '1h 42m', '84.6 km', '44.2°')">⚡ Export-Assistent</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><strong>2026-08-22 14:30</strong></td>
-                                <td>3h 15m</td>
-                                <td>192.3 km</td>
-                                <td style="color: var(--accent-orange); font-weight: 700;">47.8°</td>
-                                <td><span class="card-badge badge-orange" data-i18n="status_favorite">★ Favorit</span></td>
-                                <td>
-                                    <button class="btn-secondary" style="padding: 4px 8px; font-size: 0.75rem;" onclick="openGpxExportModal('tour_20260822.fav.gpx', '2026-08-22 14:30', '3h 15m', '192.3 km', '47.8°')">⚡ Export-Assistent</button>
-                                </td>
-                            </tr>
+                            <!-- Populated dynamically via app.js / IndexedDB -->
                         </tbody>
                     </table>
                 </div>
@@ -691,6 +833,84 @@
                 <button id="btn-download-gpx-custom" class="btn-primary" style="font-size: 0.85rem;">
                     ⬇️ GPX Herunterladen
                 </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Tour Details & Elevation Inspector -->
+    <div class="modal-overlay" id="tour-inspect-modal">
+        <div class="modal-card" style="max-width: 650px;">
+            <div class="modal-header">
+                <div class="modal-title">📊 <span id="inspect-tour-title">Touren-Details & Höhenprofil</span></div>
+                <button class="modal-close" id="btn-close-inspect-modal">&times;</button>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="grid-4" style="gap: 8px; margin-bottom: 16px;">
+                <div class="stat-tile" style="padding: 10px;">
+                    <span class="stat-label">Distanz</span>
+                    <div class="stat-value" id="inspect-dist" style="font-size: 1.1rem; color: var(--accent-orange);">84.6 km</div>
+                    <span class="stat-sub" id="inspect-dur">1h 42m</span>
+                </div>
+                <div class="stat-tile" style="padding: 10px;">
+                    <span class="stat-label">Max. Schräglage</span>
+                    <div class="stat-value" id="inspect-lean" style="font-size: 1.1rem; color: var(--accent-purple);">44.2°</div>
+                    <span class="stat-sub">Links 44° / Rechts 42°</span>
+                </div>
+                <div class="stat-tile" style="padding: 10px;">
+                    <span class="stat-label">Top Speed</span>
+                    <div class="stat-value" id="inspect-speed" style="font-size: 1.1rem; color: var(--accent-blue);">118 km/h</div>
+                    <span class="stat-sub">Ø 64 km/h</span>
+                </div>
+                <div class="stat-tile" style="padding: 10px;">
+                    <span class="stat-label">Höhenmeter</span>
+                    <div class="stat-value" id="inspect-ele-gain" style="font-size: 1.1rem; color: var(--accent-green);">+1.420 m</div>
+                    <span class="stat-sub">Passhöhe 2.224 m</span>
+                </div>
+            </div>
+
+            <!-- Interactive Elevation Chart SVG -->
+            <div class="control-label"><span>🏔️ Höhenprofil & Kurvenintensität:</span></div>
+            <div style="width: 100%; height: 160px; background: #07090d; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); padding: 8px; margin-bottom: 16px; position: relative;">
+                <svg id="svg-inspect-elevation" viewBox="0 0 500 140" width="100%" height="100%">
+                    <defs>
+                        <linearGradient id="ele-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="rgba(48, 209, 88, 0.4)"/>
+                            <stop offset="100%" stop-color="rgba(48, 209, 88, 0.0)"/>
+                        </linearGradient>
+                    </defs>
+                    <!-- Grid Lines -->
+                    <line x1="40" y1="20" x2="480" y2="20" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+                    <line x1="40" y1="60" x2="480" y2="60" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+                    <line x1="40" y1="100" x2="480" y2="100" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+                    
+                    <text x="8" y="24" fill="#6e7681" font-size="9">2200m</text>
+                    <text x="8" y="64" fill="#6e7681" font-size="9">1400m</text>
+                    <text x="8" y="104" fill="#6e7681" font-size="9">600m</text>
+
+                    <!-- Elevation Path -->
+                    <path id="path-inspect-ele" d="M 40 100 Q 150 15 260 40 T 480 90 L 480 115 L 40 115 Z" fill="url(#ele-grad)"/>
+                    <path id="path-inspect-ele-line" d="M 40 100 Q 150 15 260 40 T 480 90" fill="none" stroke="#30d158" stroke-width="2.5"/>
+
+                    <!-- ActionCam Markers -->
+                    <circle cx="150" cy="18" r="4" fill="#ff453a" stroke="#fff" stroke-width="1.5"/>
+                    <text x="155" y="15" fill="#ff453a" font-size="8" font-weight="700">📸 Passhöhe</text>
+
+                    <circle cx="360" cy="55" r="4" fill="#0a84ff" stroke="#fff" stroke-width="1.5"/>
+                    <text x="365" y="52" fill="#0a84ff" font-size="8" font-weight="700">📸 Kehren-Highlight</text>
+                </svg>
+            </div>
+
+            <!-- Actioncam Timeline & Action Buttons -->
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                <button id="btn-replay-tour" class="btn-secondary" style="border-color: rgba(48, 209, 88, 0.4); color: var(--accent-green);">
+                    ▶️ <span data-i18n="btn_replay_tour">Tour im Cockpit abspielen</span>
+                </button>
+                <div style="display: flex; gap: 8px;">
+                    <button id="btn-inspect-export-gpx" class="btn-primary">
+                        🗺️ <span>GPX Exportieren</span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
