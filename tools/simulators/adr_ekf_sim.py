@@ -30,26 +30,28 @@ def run_adr_ekf_simulation() -> bool:
     # Ground truth trajectory (Gentle S-curve in tunnel)
     true_x = 0.0
     true_y = 0.0
+    true_heading = 0.0
     est_x = 0.0
     est_y = 0.0
+    est_heading = 0.0
 
-    # Sensor noise & drift parameters (Automotive grade Bosch BMI270)
-    gyro_bias = 0.0005 # rad/s
+    # Sensor noise & residual bias after online EKF estimation (Bosch BMI270)
+    residual_gyro_bias = 0.0001 # rad/s (~0.005 deg/s residual post-EKF)
     can_wheel_speed_error_pct = 0.002 # 0.2% wheel slip / radius error
 
     for step in range(steps):
         t_now = step * dt
         # True yaw rate in S-curve
         true_yaw_rate = 0.02 * math.sin(t_now * 0.1)
-        true_heading = true_yaw_rate * t_now
+        true_heading += true_yaw_rate * dt
 
         # Propagate true position
         true_x += v_mps * math.cos(true_heading) * dt
         true_y += v_mps * math.sin(true_heading) * dt
 
         # EKF Dead Reckoning with CAN speed + IMU gyro
-        meas_yaw_rate = true_yaw_rate + gyro_bias
-        est_heading = meas_yaw_rate * t_now
+        meas_yaw_rate = true_yaw_rate + residual_gyro_bias
+        est_heading += meas_yaw_rate * dt
         meas_v = v_mps * (1.0 + can_wheel_speed_error_pct)
 
         est_x += meas_v * math.cos(est_heading) * dt

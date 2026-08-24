@@ -1,0 +1,4 @@
+# OpenMotorBridge - Python Digital Testbench & Simulation Requirements
+numpy>=1.22.0
+scipy>=1.8.0
+matplotlib>=3.5.0

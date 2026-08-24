@@ -13,8 +13,20 @@ import sys
 import os
 import time
 
+# Auto-re-exec with virtual environment if current python lacks dependencies
+tools_dir = os.path.abspath(os.path.dirname(__file__))
+root_dir = os.path.abspath(os.path.join(tools_dir, ".."))
+venv_python = os.path.join(root_dir, ".venv", "bin", "python")
+
+if os.path.exists(venv_python) and sys.executable != venv_python:
+    try:
+        import numpy
+    except ImportError:
+        # Seamlessly hand over execution to .venv Python
+        os.execv(venv_python, [venv_python] + sys.argv)
+
 # Add tools directory to Python path
-sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
+sys.path.insert(0, tools_dir)
 
 from simulators.audio_dsp_sim import run_audio_dsp_simulation
 from simulators.power_ups_sim import run_power_ups_simulation

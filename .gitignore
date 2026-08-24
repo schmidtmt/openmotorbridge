@@ -22,3 +22,12 @@ _autosave-*
 .vscode/
 .idea/
 .history/
+
+# Python Virtual Environments & PyCache
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+
