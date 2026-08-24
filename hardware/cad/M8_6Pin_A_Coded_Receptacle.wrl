@@ -11,7 +11,7 @@ Group {
         Shape {
           appearance Appearance {
             material Material {
-              diffuseColor 0.78 0.78 0.82
+              diffuseColor 0.75 0.75 0.78
               specularColor 0.95 0.95 0.95
               shininess 0.92
             }
@@ -24,6 +24,7 @@ Group {
     # 2. Hexagonal Wrench Nut / Lock Collar (Diameter 9.2mm, Height 2.0mm)
     Transform {
       translation 0.0 0.0 0.0035
+      rotation 1 0 0 1.570796
       children [
         Shape {
           appearance Appearance {
@@ -44,12 +45,13 @@ Group {
     # 3. EPDM Rubber Sealing O-Ring (Black, OD 8.6mm, Height 1.2mm)
     Transform {
       translation 0.0 0.0 0.0051
+      rotation 1 0 0 1.570796
       children [
         Shape {
           appearance Appearance {
             material Material {
               diffuseColor 0.10 0.10 0.12
-              specularColor 0.15 0.15 0.15
+              specularColor 0.20 0.20 0.20
               shininess 0.15
             }
           }
@@ -64,11 +66,12 @@ Group {
     # 4. M8 Threaded Outer Metal Barrel (OD 8.0mm, ID 6.0mm, Height 8.5mm, Nickel-Plated Brass)
     Transform {
       translation 0.0 0.0 0.0095
+      rotation 1 0 0 1.570796
       children [
         Shape {
           appearance Appearance {
             material Material {
-              diffuseColor 0.85 0.85 0.88
+              diffuseColor 0.82 0.82 0.85
               specularColor 0.98 0.98 0.98
               shininess 0.95
             }
@@ -84,6 +87,7 @@ Group {
     # 5. Black Insulating Insert / Core (PA66 Plastic, OD 5.8mm, Height 7.5mm)
     Transform {
       translation 0.0 0.0 0.0100
+      rotation 1 0 0 1.570796
       children [
         Shape {
           appearance Appearance {
@@ -121,6 +125,7 @@ Group {
     # Contact 1 (Gold, Angle = 0 deg)
     Transform {
       translation 0.001650 0.000000 0.0102
+      rotation 1 0 0 1.570796
       children [
         Shape {
           appearance Appearance {
@@ -141,6 +146,7 @@ Group {
     # Contact 2 (Gold, Angle = 60 deg)
     Transform {
       translation 0.000825 0.001429 0.0102
+      rotation 1 0 0 1.570796
       children [
         Shape {
           appearance Appearance {
@@ -161,6 +167,7 @@ Group {
     # Contact 3 (Gold, Angle = 120 deg)
     Transform {
       translation -0.000825 0.001429 0.0102
+      rotation 1 0 0 1.570796
       children [
         Shape {
           appearance Appearance {
@@ -181,6 +188,7 @@ Group {
     # Contact 4 (Gold, Angle = 180 deg)
     Transform {
       translation -0.001650 0.000000 0.0102
+      rotation 1 0 0 1.570796
       children [
         Shape {
           appearance Appearance {
@@ -201,6 +209,7 @@ Group {
     # Contact 5 (Gold, Angle = 240 deg)
     Transform {
       translation -0.000825 -0.001429 0.0102
+      rotation 1 0 0 1.570796
       children [
         Shape {
           appearance Appearance {
@@ -221,6 +230,7 @@ Group {
     # Contact 6 (Gold, Angle = 300 deg)
     Transform {
       translation 0.000825 -0.001429 0.0102
+      rotation 1 0 0 1.570796
       children [
         Shape {
           appearance Appearance {

@@ -55,9 +55,9 @@ def generate_pod_base_pcb(pcb_path):
     # 2. Footprint definitions & 3D model mapping
     model_mapping = {
         'J1': (
-            '${KICAD10_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x06_P2.54mm_Vertical.step',
+            '${KICAD10_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x06_P2.54mm_Horizontal.step',
             (0.0, 0.0, 0.0),
-            (0.0, 6.35, 0.0),
+            (0.0, 0.0, 0.0),
             (1.0, 1.0, 1.0)
         ),
         'U1': (
@@ -76,7 +76,7 @@ def generate_pod_base_pcb(pcb_path):
             os.path.abspath(os.path.join(os.path.dirname(__file__), '../cad/M8_6Pin_A_Coded_Receptacle.wrl')),
             (0.0, 0.0, 0.0),
             (0.0, 0.0, 0.0),
-            (1.0, 1.0, 1.0)
+            (393.700787, 393.700787, 393.700787)
         ),
     }
 
@@ -87,8 +87,8 @@ def generate_pod_base_pcb(pcb_path):
         'H1': (X0 + 3.0, Y_center, 0.0, 'F.Cu'),             # (103.0, 80.0) Left Mounting Hole
         'H2': (X0 + W - 3.0, Y_center, 0.0, 'F.Cu'),         # (133.0, 80.0) Right Mounting Hole
 
-        # Mill-Max 6-Pin Pogo Pin Header (OBERSEITE / INNEN: Senkrecht in den Kassettenraum ragend)
-        'J1': (X_center, Y_center, 0.0, 'F.Cu'),             # (118.0, 80.0) Oberseite / Innen
+        # 6-Pin Horizontal Pin Header (OBERSEITE / INNEN: Horizontal in den Kassetteneinschub ragend)
+        'J1': (X_center, 73.65, 0.0, 'F.Cu'),                # (118.0, 73.65) Horizontal Pin Header (Y 73.65..86.35mm)
 
         # Left Wing: ESD Protection Stage (OBERSEITE / INNEN: Geschützte Innenlage)
         'U1': (X0 + 8.0, Y_center - 4.0, 0.0, 'F.Cu'),       # (108.0, 76.0) TVS Array (Top)
@@ -101,6 +101,7 @@ def generate_pod_base_pcb(pcb_path):
     for ref, (x_mm, y_mm, rot_deg, layer_name) in layout_rules.items():
         fp = pcbnew.FOOTPRINT(board)
         fp.SetReference(ref)
+        fp.Reference().SetVisible(False) # Clean professional look
         target_layer = pcbnew.B_Cu if layer_name == 'B.Cu' else pcbnew.F_Cu
         fp.SetLayer(target_layer)
         board.Add(fp)
@@ -124,9 +125,9 @@ def generate_pod_base_pcb(pcb_path):
 
     # 3. Add Silkscreen Labels on Top (F.SilkS) and Bottom (B.SilkS)
     top_labels = [
-        ("OPENMOTORBRIDGE", X_center, Y0 + 2.2, 0.60, 0.60, 0.12),
-        ("SP3012 TVS", X0 + 8.0, Y0 + 2.2, 0.45, 0.45, 0.10),
-        ("MILL-MAX POGO 6P (INSIDE)", X_center, Y0 + H - 2.2, 0.50, 0.50, 0.10),
+        ("OPENMOTORBRIDGE // POD BASE", 120.0, Y0 + 2.2, 0.55, 0.55, 0.11),
+        ("SP3012 TVS", 108.0, Y0 + 2.2, 0.40, 0.40, 0.09),
+        ("MATES TO CARTRIDGE", 108.0, Y0 + H - 2.2, 0.38, 0.38, 0.08),
     ]
 
     for text_str, x_mm, y_mm, sx, sy, th in top_labels:

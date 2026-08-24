@@ -53,11 +53,11 @@ def auto_place_cartridge(pcb_path):
 
     # 3D Model Mapping
     model_mapping = {
-        # J1: 6-Pin 2.54mm Socket on Bottom (B.Cu) - Female socket pointing downward
+        # J1: 6-Pin 2.54mm Horizontal Socket on FRONT SHORT EDGE (X=102.5mm)
         'J1': (
-            '${KICAD10_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x06_P2.54mm_Vertical.step',
+            '${KICAD10_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x06_P2.54mm_Horizontal.step',
             (0.0, 0.0, 0.0),
-            (0.0, 6.35, 0.0),
+            (0.0, 0.0, 0.0),
             (1.0, 1.0, 1.0)
         ),
         # J2: JST-SH 1.0mm 6-Pin Horizontal Connector on Top (F.Cu) - Inlay connection
@@ -101,26 +101,26 @@ def auto_place_cartridge(pcb_path):
 
     # Verified Layout Matrix (ref: (x_mm, y_mm, rot_deg, layer_name))
     layout_rules = {
-        # Symmetrical M2 Mounting Holes with Silicone Damping Bushings
-        'H1': (X0 + 3.5, Y_center, 0.0, 'F.Cu'),             # (103.5, 80.0) Left Flank
-        'H2': (X0 + W - 3.5, Y_center, 0.0, 'F.Cu'),         # (131.5, 80.0) Right Flank
+        # Symmetrical M2 Mounting Holes in corners with silicone damping
+        'H1': (X0 + 3.0, Y0 + 3.0, 0.0, 'F.Cu'),             # (103.0, 70.5) Top-Left
+        'H2': (X0 + 3.0, Y0 + H - 3.0, 0.0, 'F.Cu'),         # (103.0, 89.5) Bottom-Left
 
-        # J1: 6-Pin PinSocket on UNTERSEITE (B.Cu) - Zentriert bei (117.5, 80.0), ragt nach unten auf Pod-Base Pins!
-        'J1': (X_center, Y_center, 0.0, 'B.Cu'),             # (117.5, 80.0) Unterseite / Nach unten öffnend
+        # J1: 6-Pin Horizontal PinSocket on FRONT SHORT EDGE (X=102.5, Pin 1 at Y=73.65mm, perfectly centered at Y=80.0)
+        'J1': (102.5, 73.65, 0.0, 'F.Cu'),                   # (102.5, 73.65) Horizontal Front Socket (Y 73.65..86.35mm)
 
-        # J2: JST-SH 6-Pin auf OBERSEITE (F.Cu) - Rechter Flügel für Inlay-Flexkabel
-        'J2': (X_center + 8.5, Y_center, 90.0, 'F.Cu'),       # (126.0, 80.0) Oberseite / Sena/Cardo Anschluss
+        # F1: 500mA PTC Fuse adjacent to Pin 1
+        'F1': (108.0, 75.0, 0.0, 'F.Cu'),                    # (108.0, 75.0) 500mA PTC Fuse
 
-        # U1, C1: DS2401 ID & 100nF Cap auf OBERSEITE (F.Cu) - Linker Flügel oben
-        'U1': (X_center - 8.5, Y_center - 4.5, 0.0, 'F.Cu'), # (109.0, 75.5) DS2401 Silicon ROM
-        'C1': (X_center - 8.5, Y_center + 4.5, 0.0, 'F.Cu'), # (109.0, 84.5) 100nF Decoupling Cap
+        # D1, R1: Green Power LED & 1.5k Resistor adjacent to Pin 6
+        'D1': (108.0, 85.0, 0.0, 'F.Cu'),                    # (108.0, 85.0) Green Power LED
+        'R1': (108.0, 82.5, 0.0, 'F.Cu'),                    # (108.0, 82.5) LED Resistor 1.5k
 
-        # F1: 500mA PTC Sicherung auf 5V Schiene (Oberseite)
-        'F1': (X_center - 3.5, Y0 + 6.0, 0.0, 'F.Cu'),       # (114.0, 73.5) 500mA PTC Fuse
+        # U1, C1: DS2401 Silicon ROM ID & 100nF Cap (Center Stage)
+        'U1': (115.0, Y_center, 0.0, 'F.Cu'),                # (115.0, 80.0) DS2401 SOT-23 ID Chip
+        'C1': (115.0, Y_center + 4.5, 0.0, 'F.Cu'),          # (115.0, 84.5) 100nF Decoupling Cap
 
-        # D1, R1: Grüne 5V Status-LED & 1.5k Vorwiderstand (Oberseite)
-        'D1': (X_center + 3.5, Y0 + 6.0, 0.0, 'F.Cu'),       # (121.0, 73.5) 5V Power LED
-        'R1': (X_center + 3.5, Y0 + 8.5, 0.0, 'F.Cu'),       # (121.0, 76.0) LED Resistor 1.5k
+        # J2: JST-SH 6-Pin Horizontal/90° Connector on OBERSEITE (F.Cu) - Facing Inlay Flex Cable
+        'J2': (126.5, Y_center, 90.0, 'F.Cu'),               # (126.5, 80.0) Docking Connection
     }
 
     for ref, (x_mm, y_mm, rot_deg, layer_name) in layout_rules.items():
@@ -150,11 +150,12 @@ def auto_place_cartridge(pcb_path):
 
     # Add clear silkscreen labels
     top_labels = [
-        ("OPENMOTORBRIDGE // CARRIER", X_center, Y0 + 2.5, 0.60, 0.60, 0.12),
-        ("DS2401 ID", X_center - 8.5, Y0 + 4.5, 0.40, 0.40, 0.09),
-        ("PTC 500mA", X_center - 3.5, Y0 + 8.5, 0.35, 0.35, 0.08),
-        ("PWR LED", X_center + 3.5, Y0 + 10.8, 0.35, 0.35, 0.08),
-        ("TO SENA / CARDO INLAY (90° JST-SH)", X_center, Y0 + H - 2.5, 0.45, 0.45, 0.10),
+        ("OPENMOTORBRIDGE // CARRIER", 120.0, Y0 + 2.5, 0.55, 0.55, 0.11),
+        ("FRONT MATING", 106.0, Y0 + 2.5, 0.40, 0.40, 0.08),
+        ("DS2401 ID", 115.0, Y_center - 4.5, 0.35, 0.35, 0.08),
+        ("PTC 500mA", 108.0, 72.5, 0.30, 0.30, 0.07),
+        ("PWR LED", 108.0, 87.5, 0.30, 0.30, 0.07),
+        ("TO HEADSET INLAY (90° JST-SH)", 126.5, Y0 + H - 2.5, 0.40, 0.40, 0.09),
     ]
 
     for text_str, x_mm, y_mm, sx, sy, th in top_labels:
@@ -168,8 +169,8 @@ def auto_place_cartridge(pcb_path):
         board.Add(txt)
 
     bottom_labels = [
-        ("6-PIN SOCKET (MATES TO POD-BASE)", X_center, Y0 + H - 2.5, 0.45, 0.45, 0.10),
-        ("GND SHIELD PLANE", X_center, Y0 + 2.5, 0.45, 0.45, 0.10),
+        ("OPENMOTORBRIDGE CARRIER (B.Cu)", X_center, Y_center, 0.45, 0.45, 0.10),
+        ("GND SHIELD PLANE", X_center, Y0 + H - 2.5, 0.40, 0.40, 0.09),
     ]
 
     for text_str, x_mm, y_mm, sx, sy, th in bottom_labels:
