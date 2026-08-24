@@ -174,7 +174,11 @@ Die Kassetten-Trägerplatine (`openmotorbridge_pod_cartridge`) adaptiert die int
 
 Der mechanische und elektrische Schnittstellenübergang von der eingelegten Wechselkassette auf die M8-Kabelverbindung zum Motorradkabelbaum erfolgt über die fest im Gehäusefuß montierte **Pod-Bodenplatine (`openmotorbridge_pod_base`)**:
 
-![OpenMotorBridge Pod-Bodenplatine 3D-Render](../../hardware/kicad_pod_base/kicad_3d_render.png)
+#### Oberansicht (Kassetten-Pogo-Pins, frei positionierte ESD-Schutzstufe & zentrierte M8-Buchse):
+![OpenMotorBridge Pod-Bodenplatine Oberansicht 3D-Render](../../hardware/kicad_pod_base/pod_base_3d_render_top.png)
+
+#### Unteransicht (100 % vollflächige Platinenauflage aller THT- und SMD-Kontakte):
+![OpenMotorBridge Pod-Bodenplatine Unteransicht 3D-Render](../../hardware/kicad_pod_base/pod_base_3d_render_bottom.png)
 
 * **Abmessungen:** $28{,}0 \times 28{,}0\,\text{mm}$ (Kompakte 2-Layer FR4-Platine mit großzügigem Sicherheitsabstand zwischen Pogo-Array und M8-Gehäusekörper).
 * **Mill-Max Pogo-Pin-Array (`J1`):** 6-poliger Federkontakt-Block (Serie 824-22-006-00-001101, $2{,}54\,\text{mm}$ Raster, $1{,}4\,\text{mm}$ Arbeitshub, 60g Federkraft pro Kontakt), der durch den Gehäuseboden nach oben in den Kassettenraum ragt.

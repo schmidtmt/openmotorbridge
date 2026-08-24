@@ -174,7 +174,11 @@ The cartridge carrier PCB (`openmotorbridge_pod_cartridge`) adapts internal Sena
 
 The physical interface transition from the inserted cartridge to the modular motorcycle harness is implemented on the sealed **Pod Base PCB (`openmotorbridge_pod_base`)** inside the satellite pod's mounting base:
 
-![OpenMotorBridge Pod Base PCB 3D Render](../../hardware/kicad_pod_base/kicad_3d_render.png)
+#### Top View (Cartridge Pogo Pins, Clear TVS Stage & Centered M8 Receptacle):
+![OpenMotorBridge Pod Base PCB Top 3D Render](../../hardware/kicad_pod_base/pod_base_3d_render_top.png)
+
+#### Bottom View (100% Solid Board Support for all THT & SMD Solder Joints):
+![OpenMotorBridge Pod Base PCB Bottom 3D Render](../../hardware/kicad_pod_base/pod_base_3d_render_bottom.png)
 
 * **Dimensions:** $28.0 \times 28.0\,\text{mm}$ (Compact 2-layer FR4 board with generous clearance between pogo array and M8 connector body).
 * **Mill-Max Pogo-Pin Array (`J1`):** 6-pin spring-loaded contact block (Series 824-22-006-00-001101, $2.54\,\text{mm}$ pitch, $1.4\,\text{mm}$ working stroke, 60g preload) protruding upward through the housing floor into the cartridge bay.
