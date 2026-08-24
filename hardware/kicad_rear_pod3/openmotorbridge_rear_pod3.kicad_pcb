@@ -1,89 +1,619 @@
-(kicad_pcb (version 20240108) (generator "pcbnew") (generator_version "8.0")
-
-  (general
-    (thickness 1.6)
-    (legacy_teardrops no)
-  )
-
-  (paper "A4")
-  (title_block
-    (title "OpenMotorBridge v8.0 - Rear Pod 3 Transceiver (50x35mm 4-Layer)")
-    (date "2026-08-24")
-    (rev "v8.0")
-    (company "OpenMotorBridge Open Source Hardware")
-    (comment 1 "u-blox MAX-M10S GNSS, Semtech SX1262 LoRa (+22dBm), ESP32-C3")
-    (comment 2 "Heckbürzel-Montage für 360° Rundum-HF-Abstrahlung")
-  )
-
-  (layers
-    (0 "F.Cu" signal)
-    (1 "In1.Cu" power "GND_PLANE")
-    (2 "In2.Cu" power "PWR_3V3")
-    (31 "B.Cu" signal)
-    (36 "B.SilkS" user "B.Silkscreen")
-    (37 "F.SilkS" user "F.Silkscreen")
-    (38 "B.Mask" user)
-    (39 "F.Mask" user)
-    (44 "Edge.Cuts" user)
-  )
-
-  (net 0 "")
-  (net 1 "GND")
-  (net 2 "+3V3")
-  (net 3 "UART_BRIDGE_TX")
-  (net 4 "UART_BRIDGE_RX")
-  (net 5 "GNSS_1PPS")
-  (net 6 "LORA_DIO1")
-
-  (gr_line (start 2.5 0.0) (end 47.5 0.0) (stroke (width 0.15) (type solid)) (layer "Edge.Cuts"))
-  (gr_arc (start 47.5 0.0) (mid 49.27 0.73) (end 50.0 2.5) (stroke (width 0.15) (type solid)) (layer "Edge.Cuts"))
-  (gr_line (start 50.0 2.5) (end 50.0 32.5) (stroke (width 0.15) (type solid)) (layer "Edge.Cuts"))
-  (gr_arc (start 50.0 32.5) (mid 49.27 34.27) (end 47.5 35.0) (stroke (width 0.15) (type solid)) (layer "Edge.Cuts"))
-  (gr_line (start 47.5 35.0) (end 2.5 35.0) (stroke (width 0.15) (type solid)) (layer "Edge.Cuts"))
-  (gr_arc (start 2.5 35.0) (mid 0.73 34.27) (end 0.0 32.5) (stroke (width 0.15) (type solid)) (layer "Edge.Cuts"))
-  (gr_line (start 0.0 32.5) (end 0.0 2.5) (stroke (width 0.15) (type solid)) (layer "Edge.Cuts"))
-  (gr_arc (start 0.0 2.5) (mid 0.73 0.73) (end 2.5 0.0) (stroke (width 0.15) (type solid)) (layer "Edge.Cuts"))
-
-  (footprint "MountingHole:MountingHole_3.2mm_M3_Pad_Via" (layer "F.Cu")
-    (at 3.0 3.0)
-    (pad "1" thru_hole circle (at 0 0) (size 5.5 5.5) (drill 3.2) (layers "*.Cu" "*.Mask") (net 1 "GND"))
-  )
-  (footprint "MountingHole:MountingHole_3.2mm_M3_Pad_Via" (layer "F.Cu")
-    (at 47.0 3.0)
-    (pad "1" thru_hole circle (at 0 0) (size 5.5 5.5) (drill 3.2) (layers "*.Cu" "*.Mask") (net 1 "GND"))
-  )
-  (footprint "MountingHole:MountingHole_3.2mm_M3_Pad_Via" (layer "F.Cu")
-    (at 3.0 32.0)
-    (pad "1" thru_hole circle (at 0 0) (size 5.5 5.5) (drill 3.2) (layers "*.Cu" "*.Mask") (net 1 "GND"))
-  )
-  (footprint "MountingHole:MountingHole_3.2mm_M3_Pad_Via" (layer "F.Cu")
-    (at 47.0 32.0)
-    (pad "1" thru_hole circle (at 0 0) (size 5.5 5.5) (drill 3.2) (layers "*.Cu" "*.Mask") (net 1 "GND"))
-  )
-
-  (footprint "RF_Module:ESP32-C3-WROOM-02" (layer "F.Cu")
-    (at 25.0 12.0)
-    (fp_text reference "U1" (at 0 -8.0) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
-    (fp_text value "ESP32-C3-WROOM-02" (at 0 8.0) (layer "F.Fab") (effects (font (size 1 1) (thickness 0.15))))
-  )
-
-  (footprint "RF_GPS:u-blox_MAX-M10S" (layer "F.Cu")
-    (at 12.0 25.0)
-    (fp_text reference "U2" (at 0 -6.0) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
-    (fp_text value "MAX-M10S" (at 0 6.0) (layer "F.Fab") (effects (font (size 1 1) (thickness 0.15))))
-  )
-
-  (footprint "Package_DFN_QFN:QFN-24-1EP_4x4mm_P0.5mm_EP2.6x2.6mm" (layer "F.Cu")
-    (at 38.0 25.0)
-    (fp_text reference "U3" (at 0 -3.2) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
-    (fp_text value "SX1262" (at 0 3.2) (layer "F.Fab") (effects (font (size 1 1) (thickness 0.15))))
-  )
-
-  (footprint "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" (layer "F.Cu")
-    (at 25.0 32.0)
-    (fp_text reference "J1" (at 0 -2.5) (layer "F.SilkS") (effects (font (size 0.8 0.8) (thickness 0.12))))
-    (fp_text value "M8_3PIN_SOCKET" (at 0 2.5) (layer "F.Fab") (effects (font (size 0.8 0.8) (thickness 0.12))))
-  )
-
-  (gr_text "OMB Pod 3 Transceiver" (at 25.0 4.0) (layer "F.SilkS") (effects (font (size 1.2 1.2) (thickness 0.18) bold)))
+(kicad_pcb
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(general
+		(thickness 1.6)
+		(legacy_teardrops no)
+	)
+	(paper "A4")
+	(title_block
+		(title "OpenMotorBridge v8.0 - Rear Pod 3 Transceiver (50x35mm 4-Layer)")
+		(date "2026-08-24")
+		(rev "v8.0")
+		(company "OpenMotorBridge Open Source Hardware")
+		(comment 1 "u-blox MAX-M10S GNSS, Semtech SX1262 LoRa (+22dBm), ESP32-C3")
+		(comment 2 "Heckbürzel-Montage für 360° Rundum-HF-Abstrahlung")
+	)
+	(layers
+		(0 "F.Cu" signal)
+		(4 "In1.Cu" power "GND_PLANE")
+		(6 "In2.Cu" power "PWR_3V3")
+		(2 "B.Cu" signal)
+		(5 "F.SilkS" user "F.Silkscreen")
+		(7 "B.SilkS" user "B.Silkscreen")
+		(1 "F.Mask" user)
+		(3 "B.Mask" user)
+		(25 "Edge.Cuts" user)
+		(27 "Margin" user)
+		(31 "F.CrtYd" user "F.Courtyard")
+		(29 "B.CrtYd" user "B.Courtyard")
+	)
+	(setup
+		(pad_to_mask_clearance 0)
+		(allow_soldermask_bridges_in_footprints no)
+		(tenting
+			(front yes)
+			(back yes)
+		)
+		(covering
+			(front no)
+			(back no)
+		)
+		(plugging
+			(front no)
+			(back no)
+		)
+		(capping no)
+		(filling no)
+		(pcbplotparams
+			(layerselection 0x00000000_00000000_55555555_5755f5ff)
+			(plot_on_all_layers_selection 0x00000000_00000000_00000000_00000000)
+			(disableapertmacros no)
+			(usegerberextensions no)
+			(usegerberattributes yes)
+			(usegerberadvancedattributes yes)
+			(creategerberjobfile yes)
+			(dashed_line_dash_ratio 12)
+			(dashed_line_gap_ratio 3)
+			(svgprecision 4)
+			(plotframeref no)
+			(mode 1)
+			(useauxorigin no)
+			(pdf_front_fp_property_popups yes)
+			(pdf_back_fp_property_popups yes)
+			(pdf_metadata yes)
+			(pdf_single_document no)
+			(dxfpolygonmode yes)
+			(dxfimperialunits yes)
+			(dxfusepcbnewfont yes)
+			(psnegative no)
+			(psa4output no)
+			(plot_black_and_white yes)
+			(sketchpadsonfab no)
+			(plotpadnumbers no)
+			(hidednponfab no)
+			(sketchdnponfab yes)
+			(crossoutdnponfab yes)
+			(subtractmaskfromsilk no)
+			(outputformat 1)
+			(mirror no)
+			(drillshape 1)
+			(scaleselection 1)
+			(outputdirectory "")
+		)
+	)
+	(footprint "RF_Module:ESP32-C3-WROOM-02"
+		(layer "F.Cu")
+		(uuid "02eee91b-6389-4a61-845b-f5eb7035c7ac")
+		(at 25 12)
+		(property "Reference" "U1"
+			(at 0 -8 0)
+			(layer "F.SilkS")
+			(uuid "1821489a-279c-4eb5-83fd-ff828497f4f7")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Value" "ESP32-C3-WROOM-02"
+			(at 0 8 0)
+			(layer "F.Fab")
+			(uuid "44ef29ff-4b75-49a3-8dd5-0fc9858c12a5")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "0a0f83dd-46d5-423f-b5ed-42bfaa8cf780")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "11da2a53-e3ca-45c8-9c92-2d34514006af")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(duplicate_pad_numbers_are_jumpers no)
+		(embedded_fonts no)
+	)
+	(footprint "MountingHole:MountingHole_3.2mm_M3_Pad_Via"
+		(layer "F.Cu")
+		(uuid "56f20256-2a27-42f6-b66f-d3de573441f6")
+		(at 47 32)
+		(property "Reference" ""
+			(at 0 0 0)
+			(layer "F.SilkS")
+			(uuid "0ae5634f-3156-4785-8088-42f9686aa572")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(uuid "d5f30682-eacc-400e-bd43-04dfc95cf38e")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "f3afc1c0-cbe3-44c1-b2d6-e0877eecef48")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "29e52212-741f-488b-b316-b22c942f18dd")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(duplicate_pad_numbers_are_jumpers no)
+		(pad "1" thru_hole circle
+			(at 0 0)
+			(size 5.5 5.5)
+			(drill 3.2)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+			(net "GND")
+			(uuid "986a6ac4-0017-4c51-bab4-809b43959359")
+		)
+		(embedded_fonts no)
+	)
+	(footprint "RF_GPS:u-blox_MAX-M10S"
+		(layer "F.Cu")
+		(uuid "65d9d661-ffb0-4c42-b555-45e397c9f22a")
+		(at 12 25)
+		(property "Reference" "U2"
+			(at 0 -6 0)
+			(layer "F.SilkS")
+			(uuid "0eece33b-cab4-49ba-870d-fa6e7e03b93e")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Value" "MAX-M10S"
+			(at 0 6 0)
+			(layer "F.Fab")
+			(uuid "89e058f5-8c45-4e94-aae1-bccea0d173c8")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "916da44f-4654-40e5-b9ee-2b88c81f8d21")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "b46c09ad-259f-4119-9b14-83027e16da60")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(duplicate_pad_numbers_are_jumpers no)
+		(embedded_fonts no)
+	)
+	(footprint "MountingHole:MountingHole_3.2mm_M3_Pad_Via"
+		(layer "F.Cu")
+		(uuid "6e2ab641-1aad-4b81-b6f4-bfb2402588f9")
+		(at 47 3)
+		(property "Reference" ""
+			(at 0 0 0)
+			(layer "F.SilkS")
+			(uuid "e352e959-602b-4f5e-b423-8af5c46af852")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(uuid "1ae50ace-4977-4490-b33f-380ced0ca9e8")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "96fa8bcc-b3c8-4d71-bf09-b6348b577382")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "2c98febf-e7a4-486b-bf43-300a11a86eca")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(duplicate_pad_numbers_are_jumpers no)
+		(pad "1" thru_hole circle
+			(at 0 0)
+			(size 5.5 5.5)
+			(drill 3.2)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+			(net "GND")
+			(uuid "5ef97eb5-2d9e-4785-98d0-9c9c01470c38")
+		)
+		(embedded_fonts no)
+	)
+	(footprint "MountingHole:MountingHole_3.2mm_M3_Pad_Via"
+		(layer "F.Cu")
+		(uuid "a03b4cce-a173-4741-b07f-e4ac0da017ed")
+		(at 3 32)
+		(property "Reference" ""
+			(at 0 0 0)
+			(layer "F.SilkS")
+			(uuid "8436b18c-2f15-44f0-9f41-8d06db7d9049")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(uuid "808e7caf-7f78-4146-93ad-88317dc69ade")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "55547858-8e84-4fae-8cca-90d704dbb7b6")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "1c832df8-2e84-42f6-a0ff-eda93acc4edd")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(duplicate_pad_numbers_are_jumpers no)
+		(pad "1" thru_hole circle
+			(at 0 0)
+			(size 5.5 5.5)
+			(drill 3.2)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+			(net "GND")
+			(uuid "16ae2447-18ab-4930-aa6d-756f3a048c61")
+		)
+		(embedded_fonts no)
+	)
+	(footprint "Package_DFN_QFN:QFN-24-1EP_4x4mm_P0.5mm_EP2.6x2.6mm"
+		(layer "F.Cu")
+		(uuid "ba8e2b5f-ed02-4aad-aa38-2318ac0724f9")
+		(at 38 25)
+		(property "Reference" "U3"
+			(at 0 -3.2 0)
+			(layer "F.SilkS")
+			(uuid "10356425-b8f1-43d3-b3d4-914db30ad141")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Value" "SX1262"
+			(at 0 3.2 0)
+			(layer "F.Fab")
+			(uuid "95616a7b-e255-4250-b5df-fb4aea2193dc")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "ea0ccdd3-2658-4ed3-8bf0-2d9ce205bf34")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "0ca1e127-b91f-41ac-b910-f26f18fc5eef")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(duplicate_pad_numbers_are_jumpers no)
+		(embedded_fonts no)
+	)
+	(footprint "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical"
+		(layer "F.Cu")
+		(uuid "ef36c8ad-d2b9-4567-9dbd-40ed7d6de2ee")
+		(at 25 32)
+		(property "Reference" "J1"
+			(at 0 -2.5 0)
+			(layer "F.SilkS")
+			(uuid "9be05d9b-e5e2-4c81-b863-957c8dbd3c4f")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.12)
+				)
+			)
+		)
+		(property "Value" "M8_3PIN_SOCKET"
+			(at 0 2.5 0)
+			(layer "F.Fab")
+			(uuid "23a232c8-b812-4d6f-8e53-eb4815ac14a7")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.12)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "9fd99631-88af-47ad-9575-b96b214a714d")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "944a037c-7ad6-4ae7-8f00-fb3a6a3be95c")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(duplicate_pad_numbers_are_jumpers no)
+		(embedded_fonts no)
+	)
+	(footprint "MountingHole:MountingHole_3.2mm_M3_Pad_Via"
+		(layer "F.Cu")
+		(uuid "f8011266-024a-435e-8b52-cdc224612ff3")
+		(at 3 3)
+		(property "Reference" ""
+			(at 0 0 0)
+			(layer "F.SilkS")
+			(uuid "3618be68-ca24-4e00-9ac2-19ce42f0c8d9")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(uuid "d02ddb9e-fb7b-43db-a854-ff0f6f228c87")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "3f4a6719-4146-4e32-ae72-5c80b120a453")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "8a85d38b-efb5-4e16-8b91-57a45df0d685")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(duplicate_pad_numbers_are_jumpers no)
+		(pad "1" thru_hole circle
+			(at 0 0)
+			(size 5.5 5.5)
+			(drill 3.2)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+			(net "GND")
+			(uuid "3c1b66bb-7e47-48dc-aa88-e4b2bd985801")
+		)
+		(embedded_fonts no)
+	)
+	(gr_arc
+		(start 0 2.5)
+		(mid 0.73 0.73)
+		(end 2.5 0)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "Edge.Cuts")
+		(uuid "33f312ca-4793-42e3-abb8-1bcfa659dad9")
+	)
+	(gr_line
+		(start 0 32.5)
+		(end 0 2.5)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "Edge.Cuts")
+		(uuid "3702f6ab-1178-40fc-b0a3-fe3500a86ffe")
+	)
+	(gr_line
+		(start 2.5 0)
+		(end 47.5 0)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "Edge.Cuts")
+		(uuid "75f74b44-6bf2-48a8-b795-a9047ca232d6")
+	)
+	(gr_arc
+		(start 2.5 35)
+		(mid 0.73 34.27)
+		(end 0 32.5)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "Edge.Cuts")
+		(uuid "2d8e114b-b6cc-4b65-a5fd-12ef127cc3c1")
+	)
+	(gr_arc
+		(start 47.5 0)
+		(mid 49.27 0.73)
+		(end 50 2.5)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "Edge.Cuts")
+		(uuid "d114298e-5c28-4e28-bbad-3f4a0a64fdd9")
+	)
+	(gr_line
+		(start 47.5 35)
+		(end 2.5 35)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "Edge.Cuts")
+		(uuid "57264e8b-fed9-4765-9cfc-734319680bbb")
+	)
+	(gr_line
+		(start 50 2.5)
+		(end 50 32.5)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "Edge.Cuts")
+		(uuid "01655d51-4d9e-4bd8-8c97-a3e71fd75630")
+	)
+	(gr_arc
+		(start 50 32.5)
+		(mid 49.27 34.27)
+		(end 47.5 35)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "Edge.Cuts")
+		(uuid "d1a93066-0ccf-420a-a766-90a064e94a7e")
+	)
+	(gr_text "OMB Pod 3 Transceiver"
+		(at 25 4 0)
+		(layer "F.SilkS")
+		(uuid "4bb1989d-a9bb-4f11-b4d6-20ee278812d8")
+		(effects
+			(font
+				(size 1.2 1.2)
+				(thickness 0.18)
+				(bold yes)
+			)
+		)
+	)
+	(embedded_fonts no)
 )
