@@ -196,17 +196,21 @@ The physical interface transition from the inserted cartridge to the modular mot
 │    • Integrated ESD protection array (Littelfuse SP3012, 6x TVS < 0.5pF)│
 │    • Directly soldered M8 6-Pin A-Coded IP67 PCB receptacle             │
 │                               ▼ (Threaded M8 collar extends through wall)│
-│ 3. MODULAR M8-TO-M8 PUR CONNECTING CABLE (0.5m .. 2.0m):                │
-│    • Shielded 6-conductor PUR cable (Halogen-free, oil & UV resistant)  │
-│    • 2x Power (0.34 mm²) + 2x Audio/UART twisted (0.14 mm²) + 2x Signal │
-│    • Dual M8 6-Pin IP67 male plugs with vibration ratchet               │
-│                               ▼                                         │
-│ 4. CENTRAL BOX HD26 BREAKOUT PIGTAIL (Under Seat):                      │
-│    • 3x M8 6-Pin sockets (Pod 1 Left, Pod 2 Right, Pod 3 Rear)          │
-│    • 1x M8 4-Pin / Superseal (Vehicle power KL30/KL15/GND/Shield)       │
-│    • 1x M8 4-Pin (CAN-Bus telemetry & front ambient microphone)         │
-└─────────────────────────────────────────────────────────────────────────┘
-```
+### 5.6 3D X-Ray CAD Architecture & Exploded Assembly View
+
+To holistically verify mechanical clearances, sealing boundaries, and electrical transitions, the complete assembly of the **Universal Satellite Pod** and **Removable Cartridge** was modeled in a translucent X-ray aesthetic (*Ghosted X-Ray*) and an exploded layer hierarchy:
+
+#### Translucent 3D X-Ray CAD Architecture (5-Layer Precision Stack):
+![OpenMotorBridge 3D X-Ray CAD Architecture](../../hardware/cad/openmotorbridge_pod_assembly_render_xray.png)
+
+#### Exploded Assembly Hierarchy:
+![OpenMotorBridge 3D Exploded View](../../hardware/cad/openmotorbridge_pod_exploded_view.png)
+
+#### Mechanical Specifications & Tolerances:
+* **Outer Enclosure:** Makrolon 2805 Polycarbonate ($36 \times 36 \times 44\,\text{mm}$, wall thickness $2.5\,\text{mm}$ with $2.0\,\text{mm}$ corner chamfers).
+* **Guiding & Latching:** Asymmetrical dovetail guide rails (Poka-Yoke) prevent reversed cartridge insertion. A spring-loaded POM-C snap-lock latch securely locks the cartridge with $> 85\,\text{N}$ retention force.
+* **IP67 Sealing Plane:** The perimeter Shore 40A silicone gasket boot is pre-compressed by $0.6\,\text{mm}$ upon latching, hermetically sealing the internal chamber against high-pressure water jets and road dust.
+* **Electrical Contacting:** 6 gold-plated Mill-Max Pogo pins ($1.4\,\text{mm}$ working stroke, 60g preload) dynamically absorb road shock and engine vibrations up to $20\,\text{g}$.
 
 ---
 

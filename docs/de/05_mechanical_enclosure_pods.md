@@ -196,21 +196,21 @@ Der mechanische und elektrische Schnittstellenübergang von der eingelegten Wech
 │    • Integrierte ESD-Schutzmatrix (Littelfuse SP3012, 6x TVS < 0.5pF)   │
 │    • Direkt aufgelötete M8 6-Pin A-Coded IP67 Einbaubuchse              │
 │                               ▼ (M8-Außengewinde ragt aus Gehäuse)      │
-│ 3. MODULARE M8-EINBAUBUCHSE (Gehäuseunterseite):                        │
-│    • M8 6-Pin A-Coded IP67-Buchse mit Führungsnut (Poka-Yoke)           │
-│    • Vollmetall-Schirmkragen für 360° EMV-Schirmung                     │
-│                               ▼                                         │
-│ 4. MODULARES M8-ZU-M8 PUR-VERBINDUNGSKABEL (0.5m .. 2.0m):              │
-│    • Geschirmtes 6-adriges PUR-Kabel (Halogenfrei, Öl- & UV-beständig)  │
-│    • 2x Power (0.34 mm²) + 2x Audio/UART verdrillt (0.14 mm²) + 2x Sign.│
-│    • Beidseitig M8 6-Pin IP67 Stecker mit Rüttelsicherung               │
-│                               ▼                                         │
-│ 5. ZENTRALBOX HD26-KABELBAUMPEITSCHE (Unter der Sitzbank):              │
-│    • 3x M8 6-Pin Buchsen (Pod 1 Links, Pod 2 Rechts, Pod 3 Heck)        │
-│    • 1x M8 4-Pin / Superseal (Bordnetz KL30/KL15/GND/Schirm)            │
-│    • 1x M8 4-Pin (CAN-Bus Telemetrie & Front-Umgebungsmikrofon)         │
-└─────────────────────────────────────────────────────────────────────────┘
-```
+### 5.6 3D-Röntgen-Architektur (X-Ray CAD) & Baugruppen-Explosionsansicht
+
+Zur ganzheitlichen Verifikation der Passungen, Dichtebenen und elektrischen Übergänge wurde die mechanische Gesamtanordnung des **Satelliten-Pods** und der **Wechselkassette** in einer transluzenten Röntgen-Darstellung (*Ghosted X-Ray*) sowie einer Explosionsansicht modelliert:
+
+#### Transluzente 3D-Röntgenansicht (5-Layer-Schichtaufbau):
+![OpenMotorBridge 3D X-Ray CAD Architektur](../../hardware/cad/openmotorbridge_pod_assembly_render_xray.png)
+
+#### Baugruppen-Explosionsdarstellung (Hierarchie aller Komponenten):
+![OpenMotorBridge 3D Explosionsansicht](../../hardware/cad/openmotorbridge_pod_exploded_view.png)
+
+#### Mechanische Spezifikationen & Passungen:
+* **Außenhülle:** Makrolon 2805 Polycarbonat ($36 \times 36 \times 44\,\text{mm}$, Wandstärke $2{,}5\,\text{mm}$ mit beidseitigen $2{,}0\,\text{mm}$ Eck-Fasen).
+* **Führung & Verriegelung:** Asymmetrische Schwalbenschwanz-Führungsnuten (Poka-Yoke) verhindern ein verkehrtes Einschieben der Kassette. Ein federbelasteter POM-C Schnappriegel arretiert die Kassette mit $> 85\,\text{N}$ Haltekraft.
+* **IP67-Dichtebene:** Der umlaufende Shore 40A Silikon-Formschuh wird beim Verriegeln um $0{,}6\,\text{mm}$ vorkomprimiert und dichtet die Kassettenkammer hermetisch gegen Strahlwasser und Staub ab.
+* **Elektrischer Übergang:** 6 vergoldete Mill-Max Pogo-Pins (Arbeitshub $1{,}4\,\text{mm}$, 60g Vorspannung) gleichen Fahrbahnvibrationen bis $20\,\text{g}$ dynamisch aus.
 
 ---
 
