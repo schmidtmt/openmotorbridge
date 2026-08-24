@@ -21,6 +21,8 @@ Vollstaendige Bauteilliste (Bill of Materials) und Fertigungsspezifikation fuer 
 | **LED1** | WS2812B-B | Worldsemi | 5050 SMD | C114586 | RGB Status-LED fuer optische Betriebsmodusanzeige |
 | **LP1** | PLPC3-3MM / 1292.1101 | Bivar / Mentor | Ø 3.0 mm PMMA | Mechanik | IP67 Lichtleiter mit O-Ring im Gehaeusedeckel |
 | **VENT1** | AVS 41 | Gore Automotive | M8 x 1.25 Schraub | Mechanik | ePTFE Druckausgleichselement (IP67 / 120 ml/min) |
+| **MIC1** | SPH0645LM4H / SiSonic | Knowles | 3.5x2.65 mm SMD | C119850 | IP67 Front Ambient-Mikrofon mit ePTFE Membran (Pin 25) |
+| **CN_M8** | M8 3-Pin Buchse IP67 | Binder / Phoenix | M8 Rundsteckverbinder | C289100 | Wasserdichter Kabelbaum-Steckabzweig fuer Front-Mikrofon |
 | **J1** | 2x13 Wannenstecker | Standard 2.54 mm | THT Box Header | C2934175 | Interner Pfostenverbinder zur HD26-Flanschbuchse |
 | **J2** | MicroSD Slot Push-Push | Molex / Korean Hro | SMD Push-Push | C266624 | 4-Bit SDIO Speicherkarte fuer Tour-Logging |
 | **CN1** | HD26 Buchse IP67 | Amphenol LTW | Flansch D-Sub | Kundenteil | Wasserdichte 26-polige Gehaeuseschnittstelle |
@@ -43,17 +45,31 @@ Vollstaendige Bauteilliste (Bill of Materials) und Fertigungsspezifikation fuer 
 
 ---
 
-## 3. Universelle Pod-Kassette (Pod 1 & Pod 2 Cartridge PCBA)
+## 3. Universelle Pod-Kassette & Blindkassette (Pod 1 & Pod 2 Cartridge PCBA)
 
 | Designator | Bauteil / MPN | Hersteller | Gehaeuse | LCSC / JLCPCB Part # | Funktion |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **U20** | DS2401Z+ | Maxim / ADI | SOT-223 | C14440 | 64-Bit 1-Wire Silicon Serial Number (Kassetten-ID) |
 | **D20** | IP4220CZ6 | Nexperia | SOT-457 | C119330 | 4-Kanal ESD-Schutzarray fuer Audio- und Opto-Leitungen |
 | **CN2** | 824-22-006-00-001101 | Mill-Max | SMD Pad Header | C189201 | 6-poliges vergoldetes Pogo-Zielkontakt-Array |
+| **DUMMY1** | Pod_Dummy_Cartridge_IP67.stl | OpenMotorBridge | PA12 MJF 3D-Druck | Mechanik | IP67 Blind-Kassette fuer unbestueckte Schacht-Plaetze |
 
 ---
 
-## 4. Fertigungshinweise & CPL-Ausrichtung
+## 4. Fertigungshinweise, Schutzlackierung & Vibrationshaertung
+
+### 4.1 Schutzlackierung nach IPC-CC-830B (Conformal Coating)
+* **Lackmaterial:** Modifizierter Polyurethan-Schutzlack (*Peters Elpeguard SL 1307 FLZ* oder *Electrolube UR5041*).
+* **Schichtdicke:** $40\,\mu\text{m}$ bis $60\,\mu\text{m}$ (Durchschlagfestigkeit $> 60\,\text{kV/mm}$ gegen Betauung und Salznebel).
+* **Maskierungszonen:** MicroSD-Kartenkontakte, SMD-Testpunkte (TP1–TP8), ePTFE-Ventil-Oeffnung.
+
+### 4.2 Vibrationsdaempfung nach ISO 16750-3 (Motorrad-Schwingungspruefung)
+* **PCB-Entkopplung:** 4x NBR-O-Ringe (3.0 mm Innendurchmesser, 1.0 mm Schnurstaerke) zwischen Gehaeusedomen und PCB-Unterseite.
+* **Schraubensicherung:** M2.5 Platinschrauben mit Anzugsmoment $0{,}35\,\text{Nm}$ und mittelfestem Sicherungslack (*Loctite 243* blau).
+* **Bauteil-Underfill:** Bourns LM-NP-1001 Uebertrager-Ecken mit elastischem Silikonkleber (*Dow Corning 732* / *Dowsil 3145*) am PCB gesichert.
+* **Pufferakku-Fixierung:** Vollflaechiges Acrylat-Schaum-Klebeband (*3M VHB 4910*, 1.0 mm Dicke) in der Oberwanne.
+
+### 4.3 CPL-Ausrichtung & Gehaeuse
 - **CPL-Rotationsabgleich:** Bei der automatisierten Bestueckung ist auf die Pin-1-Ausrichtung der Bourns-Uebertrager (T1, T2), Optokoppler (OC1, OC2) und der QFN-ICs (ES8388, SX1262) zu achten.
 - **Gehaeusefertigung:** HP Multi Jet Fusion (MJF) in PA12 Schwarz, kugelgestrahlt und mit Heissbad-Dampfversiegelung gegen Benzin/Oel.
 - **Dichtungen:** Massgefertigte Silikon-Formdichtungen (Shore-Haerte 50 A) fuer IP67-Deckel und Kassetten-Einschuebe.

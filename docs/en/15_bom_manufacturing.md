@@ -21,6 +21,8 @@ Complete component list and manufacturing specifications for SMT pick-and-place 
 | **LED1** | WS2812B-B | Worldsemi | 5050 SMD | C114586 | RGB Status LED for Visual Mode & State Indication |
 | **LP1** | PLPC3-3MM / 1292.1101 | Bivar / Mentor | Ø 3.0 mm PMMA | Mechanical | IP67 Light Pipe with O-Ring in Top Enclosure Lid |
 | **VENT1** | AVS 41 | Gore Automotive | M8 x 1.25 Thread | Mechanical | ePTFE Pressure Equalization Vent (IP67 / 120 ml/min) |
+| **MIC1** | SPH0645LM4H / SiSonic | Knowles | 3.5x2.65 mm SMD | C119850 | IP67 Front Ambient Microphone with ePTFE Vent (Pin 25) |
+| **CN_M8** | M8 3-Pin Socket IP67 | Binder / Phoenix | M8 Circular | C289100 | Waterproof Inline Branch Connector for Front Mic |
 | **J1** | 2x13 Box Header | Standard 2.54 mm | THT Box Header | C2934175 | Internal Ribbon Header to HD26 Flange Connector |
 | **J2** | MicroSD Slot Push-Push | Molex / Korean Hro | SMD Push-Push | C266624 | 4-Bit SDIO Memory Card Slot for Tour Logging |
 | **CN1** | HD26 Socket IP67 | Amphenol LTW | Flange D-Sub | Custom Part | Waterproof 26-pin Outer Enclosure Interface |
@@ -43,17 +45,31 @@ Complete component list and manufacturing specifications for SMT pick-and-place 
 
 ---
 
-## 3. Universal Pod Cartridge (Pod 1 & Pod 2 Cartridge PCBA)
+## 3. Universal Pod Cartridge & Blank Cartridge (Pod 1 & Pod 2 Cartridge PCBA)
 
 | Designator | Component / MPN | Manufacturer | Package | LCSC / JLCPCB Part # | Function |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **U20** | DS2401Z+ | Maxim / ADI | SOT-223 | C14440 | 64-Bit 1-Wire Silicon Serial Number (Cartridge ID) |
 | **D20** | IP4220CZ6 | Nexperia | SOT-457 | C119330 | 4-Channel ESD Protection Array for Audio & Opto Lines |
 | **CN2** | 824-22-006-00-001101 | Mill-Max | SMD Pad Header | C189201 | 6-Pin Gold-Plated Pogo Target Contact Array |
+| **DUMMY1** | Pod_Dummy_Cartridge_IP67.stl | OpenMotorBridge | PA12 MJF 3D Print | Mechanical | IP67 Blank Cartridge for Unpopulated Pod Slots |
 
 ---
 
-## 4. Assembly & Manufacturing Instructions
+## 4. Assembly, Conformal Coating & Vibration Hardening
+
+### 4.1 Conformal Coating per IPC-CC-830B
+* **Coating Material:** Modified polyurethane conformal coating (*Peters Elpeguard SL 1307 FLZ* or *Electrolube UR5041*).
+* **Layer Thickness:** $40\,\mu\text{m}$ to $60\,\mu\text{m}$ (dielectric breakdown strength $> 60\,\text{kV/mm}$ against humidity and salt spray).
+* **Masking Zones:** MicroSD card socket contacts, SMD test points (TP1–TP8), ePTFE vent aperture.
+
+### 4.2 Vibration Damping per ISO 16750-3 (Motorcycle Vibration Profile)
+* **PCB Decoupling:** 4x NBR O-rings (3.0 mm ID, 1.0 mm cross section) between enclosure bosses and PCB bottom.
+* **Screw Locking:** M2.5 board screws torqued to $0.35\,\text{Nm}$ with medium-strength threadlocker (*Loctite 243* blue).
+* **Component Underfill:** Bourns LM-NP-1001 transformer corners bonded to PCB with flexible silicone adhesive (*Dow Corning 732* / *Dowsil 3145*).
+* **Battery Bonding:** Full-surface acrylate foam adhesive tape (*3M VHB 4910*, 1.0 mm thickness) in top tray.
+
+### 4.3 CPL Alignment & Enclosure
 - **CPL Rotation Verification:** Pay close attention to pin 1 orientation for the Bourns transformers (T1, T2), optocouplers (OC1, OC2), and QFN packages (ES8388, SX1262) in the CPL file.
 - **Enclosure Manufacturing:** HP Multi Jet Fusion (MJF) in PA12 Black, glass-bead blasted, and vapor-sealed against fuel and oil exposure.
 - **Seals:** Custom molded silicone O-rings (Shore 50 A) for IP67 enclosure lid and cartridge bays.
