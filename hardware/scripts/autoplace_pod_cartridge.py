@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-OpenMotorBridge Universal Pod Cartridge Auto-Placement & Low-Profile Model Binder
----------------------------------------------------------------------------------
+OpenMotorBridge Universal Pod Cartridge Auto-Placement & Model Binder
+---------------------------------------------------------------------
 Harmonizes and populates the 35x25mm Pod Cartridge Carrier PCB for Sena/Cardo Inlays:
-- J1: 6-Pin Mill-Max ENIG Gold Target Pad Array (Left Stirnwand edge, matching Pod Base Pogo Pins)
-- J2: JST-SH 1.0mm 6-Pin Right-Angle Low-Profile Flex Header (Facing +X towards Sena OEM Inlay)
-- U1: Maxim DS2401 Silicon Serial ROM ID in SOT-23 (Center)
-- C1: 100nF Decoupling Capacitor 0603 (Center)
-- H1, H2: 2x M2 Mounting Insets with Silicone Vibration Damping Bushings
+- J1: 6-Pin 2.54mm Vertical PinSocket on B.Cu (Bottom-facing socket mating directly onto Pod-Base vertical pins)
+- J2: JST-SH 1.0mm 6-Pin Horizontal/90° Header on F.Cu (Top-facing connection to Sena/Cardo OEM Inlay)
+- U1: Maxim DS2401 Silicon Serial ROM ID in SOT-23 on F.Cu (Top)
+- C1: 100nF Decoupling Capacitor 0603 on F.Cu (Top)
+- H1, H2: 2x M2 Mounting Holes with Silicone Vibration Damping Bushings
 """
 
 import sys
@@ -51,35 +51,59 @@ def auto_place_cartridge(pcb_path):
         seg.SetEnd(p2)
         board.Add(seg)
 
-    # 3D Model Mapping (Ultra-Low-Profile & Right-Angle Components)
+    # 3D Model Mapping
     model_mapping = {
-        'J1': ('${KICAD10_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x06_P2.54mm_Horizontal.step', (0.0, 0.0, 90.0)),
-        'J2': ('${KICAD10_3DMODEL_DIR}/Connector_JST.3dshapes/JST_SH_SM06B-SRSS-TB_1x06-1MP_P1.00mm_Horizontal.step', (0.0, 0.0, 0.0)),
-        'U1': ('${KICAD10_3DMODEL_DIR}/Package_TO_SOT_SMD.3dshapes/SOT-23.step', (0.0, 0.0, 0.0)),
-        'C1': ('${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0603_1608Metric.step', (0.0, 0.0, 0.0)),
+        # J1: 6-Pin 2.54mm Socket on Bottom (B.Cu) - Female socket pointing downward
+        'J1': (
+            '${KICAD10_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x06_P2.54mm_Vertical.step',
+            (0.0, 0.0, 0.0),
+            (0.0, 6.35, 0.0),
+            (1.0, 1.0, 1.0)
+        ),
+        # J2: JST-SH 1.0mm 6-Pin Horizontal Connector on Top (F.Cu) - Inlay connection
+        'J2': (
+            '${KICAD10_3DMODEL_DIR}/Connector_JST.3dshapes/JST_SH_SM06B-SRSS-TB_1x06-1MP_P1.00mm_Horizontal.step',
+            (0.0, 0.0, 90.0),
+            (0.0, 0.0, 0.0),
+            (1.0, 1.0, 1.0)
+        ),
+        'U1': (
+            '${KICAD10_3DMODEL_DIR}/Package_TO_SOT_SMD.3dshapes/SOT-23.step',
+            (0.0, 0.0, 0.0),
+            (0.0, 0.0, 0.0),
+            (1.0, 1.0, 1.0)
+        ),
+        'C1': (
+            '${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0603_1608Metric.step',
+            (0.0, 0.0, 0.0),
+            (0.0, 0.0, 0.0),
+            (1.0, 1.0, 1.0)
+        ),
     }
 
-    # Verified Layout Matrix (in mm)
+    # Verified Layout Matrix (ref: (x_mm, y_mm, rot_deg, layer_name))
     layout_rules = {
-        # 2 M2 Side Mounting Holes with Silicone Damping Bushings (Shore 40A)
-        'H1': (X0 + 4.0, Y0 + 4.0, 0.0),             # (104.0, 71.5) Top-Left Mounting Hole
-        'H2': (X0 + 4.0, Y0 + H - 4.0, 0.0),         # (104.0, 88.5) Bottom-Left Mounting Hole
+        # Symmetrical M2 Mounting Holes with Silicone Damping Bushings
+        'H1': (X0 + 3.5, Y_center, 0.0, 'F.Cu'),             # (103.5, 80.0) Left Flank
+        'H2': (X0 + W - 3.5, Y_center, 0.0, 'F.Cu'),         # (131.5, 80.0) Right Flank
 
-        # 6-Pin Mill-Max Target Pad Array (Linke Stirnkante, zentriert auf Y = 80.0 mm)
-        'J1': (X0 + 2.5, Y_center, 90.0),            # (102.5, 80.0) - Trifft 1:1 auf Pod-Base Pogo-Pins!
+        # J1: 6-Pin PinSocket on UNTERSEITE (B.Cu) - Zentriert bei (117.5, 80.0), ragt nach unten auf Pod-Base Pins!
+        'J1': (X_center, Y_center, 0.0, 'B.Cu'),             # (117.5, 80.0) Unterseite / Nach unten öffnend
 
-        # JST-SH 1.0mm 6-Pin Header (Rechte Seite, Öffnung zeigt nach rechts zum Sena Inlay)
-        'J2': (X0 + 24.0, Y_center, 0.0),            # (124.0, 80.0) - Flexkabel zum Sena Apex Modul
+        # J2: JST-SH 6-Pin auf OBERSEITE (F.Cu) - Um 90° gedreht auf rechter Seite für Sena/Cardo Inlay-Flexkabel
+        'J2': (X_center + 8.0, Y_center, 90.0, 'F.Cu'),       # (125.5, 80.0) Oberseite / Sena/Cardo Anschluss
 
-        # Active ID Chip & Passives (Center-Mitte)
-        'U1': (X_center, Y_center - 4.5, 0.0),       # (117.5, 75.5) DS2401 Silicon ROM
-        'C1': (X_center, Y_center + 4.5, 0.0),       # (117.5, 84.5) 100nF Decoupling Cap
+        # U1, C1: DS2401 ID & 100nF Cap auf OBERSEITE (F.Cu) - Linke Seite
+        'U1': (X_center - 8.0, Y_center - 3.5, 0.0, 'F.Cu'), # (109.5, 76.5) DS2401 Silicon ROM
+        'C1': (X_center - 8.0, Y_center + 3.5, 0.0, 'F.Cu'), # (109.5, 83.5) 100nF Decoupling Cap
     }
 
-    for ref, (x_mm, y_mm, rot_deg) in layout_rules.items():
+    for ref, (x_mm, y_mm, rot_deg, layer_name) in layout_rules.items():
         fp = pcbnew.FOOTPRINT(board)
         fp.SetReference(ref)
-        fp.SetLayer(pcbnew.F_Cu)
+        fp.Reference().SetVisible(False) # Clean professional PCB without large ref clutter
+        target_layer = pcbnew.B_Cu if layer_name == 'B.Cu' else pcbnew.F_Cu
+        fp.SetLayer(target_layer)
         board.Add(fp)
 
         pos = pcbnew.VECTOR2I(int(x_mm * 1e6), int(y_mm * 1e6))
@@ -87,29 +111,44 @@ def auto_place_cartridge(pcb_path):
         fp.SetOrientationDegrees(rot_deg)
 
         if ref in model_mapping:
-            model_file, (rx, ry, rz) = model_mapping[ref]
+            model_file, (rx, ry, rz), (ox, oy, oz), (sx, sy, sz) = model_mapping[ref]
             fp.Models().clear()
             m = pcbnew.FP_3DMODEL()
             m.m_Filename = model_file
-            m.m_Scale = pcbnew.VECTOR3D(1.0, 1.0, 1.0)
-            m.m_Offset = pcbnew.VECTOR3D(0.0, 0.0, 0.0)
+            m.m_Scale = pcbnew.VECTOR3D(sx, sy, sz)
+            m.m_Offset = pcbnew.VECTOR3D(ox, oy, oz)
             m.m_Rotation = pcbnew.VECTOR3D(rx, ry, rz)
             m.m_Show = True
             fp.Add3DModel(m)
 
-        print(f"  ✓ Placed {ref:4s} at ({x_mm:6.2f}, {y_mm:6.2f}) mm, rot={rot_deg:5.1f}°")
+        print(f"  ✓ Placed {ref:4s} on {layer_name:4s} at ({x_mm:6.2f}, {y_mm:6.2f}) mm, rot={rot_deg:5.1f}°")
 
     # Add clear silkscreen labels
-    labels = [
-        ("SENA / CARDO CARRIER", X_center, Y0 + 2.5, 0.60, 0.60, 0.12),
-        ("DS2401 ID", X_center, Y_center - 5.5, 0.45, 0.45, 0.10),
-        ("JST-SH 6P (TO OEM INLAY)", X_center + 2.0, Y0 + H - 2.5, 0.45, 0.45, 0.10),
+    top_labels = [
+        ("OPENMOTORBRIDGE // CARRIER", X_center, Y0 + 2.5, 0.60, 0.60, 0.12),
+        ("DS2401 ID", X_center - 8.0, Y0 + 6.0, 0.45, 0.45, 0.10),
+        ("TO SENA / CARDO INLAY (90° JST-SH)", X_center, Y0 + H - 2.5, 0.45, 0.45, 0.10),
     ]
 
-    for text_str, x_mm, y_mm, sx, sy, th in labels:
+    for text_str, x_mm, y_mm, sx, sy, th in top_labels:
         txt = pcbnew.PCB_TEXT(board)
         txt.SetText(text_str)
         txt.SetLayer(pcbnew.F_SilkS)
+        txt.SetPosition(pcbnew.VECTOR2I(int(x_mm * 1e6), int(y_mm * 1e6)))
+        txt.SetTextSize(pcbnew.VECTOR2I(int(sx * 1e6), int(sy * 1e6)))
+        txt.SetTextThickness(int(th * 1e6))
+        txt.SetHorizJustify(pcbnew.GR_TEXT_H_ALIGN_CENTER)
+        board.Add(txt)
+
+    bottom_labels = [
+        ("6-PIN SOCKET (MATES TO POD-BASE)", X_center, Y0 + H - 2.5, 0.45, 0.45, 0.10),
+        ("GND SHIELD PLANE", X_center, Y0 + 2.5, 0.45, 0.45, 0.10),
+    ]
+
+    for text_str, x_mm, y_mm, sx, sy, th in bottom_labels:
+        txt = pcbnew.PCB_TEXT(board)
+        txt.SetText(text_str)
+        txt.SetLayer(pcbnew.B_SilkS)
         txt.SetPosition(pcbnew.VECTOR2I(int(x_mm * 1e6), int(y_mm * 1e6)))
         txt.SetTextSize(pcbnew.VECTOR2I(int(sx * 1e6), int(sy * 1e6)))
         txt.SetTextThickness(int(th * 1e6))
@@ -124,4 +163,5 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         pcb_file = sys.argv[1]
     auto_place_cartridge(pcb_file)
+
 
