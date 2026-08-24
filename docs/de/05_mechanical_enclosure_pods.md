@@ -135,93 +135,132 @@ Der Zwischenboden der Oberwanne trennt die empfindliche Leiterplatten- und Akkue
 - **Abmessungen Schacht:** 64.0 x 46.0 x 23.5 mm.
 - **Elektronik-Kassette:** 54.0 x 37.5 x 17.0 mm (PA12 MJF).
 
-### 5.1 Kassetten-Trägerplatine & 3D-Board-Render
+### 5.1 Kassetten-Trägerplatine (`openmotorbridge_pod_cartridge`) & 3D-Board-Renders
 
-Die Kassetten-Trägerplatine (`openmotorbridge_pod_cartridge`) adaptiert die internen Sena- oder Cardo-OEM-Inlays über einen abgewinkelten Low-Profile JST-SH Stecker auf die 6 vergoldeten Pogo-Kontaktpads:
+Die universelle Kassetten-Trägerplatine bildet das Herzstück jeder Wechselkassette. Sie dient als mechanische und elektrische Brücke zwischen der fahrzeugseitigen Pod-Basis und den internen Docking-Kontakten der jeweiligen Headset-Schale:
 
-![OpenMotorBridge Universal Pod Cartridge 3D PCB Render](../../hardware/kicad_pod_cartridge/kicad_3d_render.png)
+#### Oberansicht (Inlay-Header, 1-Wire ID & Entkopplung):
+![OpenMotorBridge Kassetten-Trägerplatine Oberansicht 3D-Render](../../hardware/kicad_pod_cartridge/cartridge_3d_render_top.png)
 
-*Abbildung 5.1: Photorealistisches 3D-Raytracing-Render der Kassetten-Trägerplatine (KiCad 8.0, 35.0 x 25.0 mm, ENIG Gold mit abgewinkeltem JST-SH 1.0 mm Stecker, 6 Pogo-Zielkontaktpads und Maxim DS2401 ID-Chip).*
+#### Unteransicht (6-Pin Buchsenleiste zum direkten Aufstecken auf die Pod-Basis):
+![OpenMotorBridge Kassetten-Trägerplatine Unteransicht 3D-Render](../../hardware/kicad_pod_cartridge/cartridge_3d_render_bottom.png)
 
-- **Kontaktblock:** 6-poliges Mill-Max Pogo-Pin-Array (Serie 824-22-006-00-001101, Raster 2.54 mm, 1.4 mm Arbeitshub) mit Silikon-Formschuhdichtung gegen vergoldete ENIG-Pads auf der Kassettenunterseite.
-- **Flache Bauhöhe (Low-Profile):** 
-  * Interner OEM-Inlay-Anschluss ueber **abgewinkelten Low-Profile SMD-Steckverbinder (JST-SH 1.0 mm, Bauhoehe 1.8 mm)** – verhindert vertikales Auftragen und ermoeglicht ultraflache Kassettengehaeuse ($17.0\,\text{mm}$ Gesamtdicke inkl. OEM-Inlay).
-- **Schwingungsdaempfung & Vibrationsentkopplung (Vibration Damping):**
-  * **Schwimmende Kassettenlagerung:** Die Kassettenplatine ist im PA12-Gehaeuse ueber eine umlaufende **Shore 40A Silikon-Formschuhdichtung** und zwei **M2-Silikon-Daempfungshuelsen** mechanisch schwingungsentkoppelt gelagert.
-  * **Vibrationsfestigkeit:** Daempft hochfrequente Motorvibrationen (Einzylinder, V2, Dreizylinder) bis $20\,\text{g}$ bei $50\dots 500\,\text{Hz}$.
-  * **Kontaktstabilitaet:** Der 1.4 mm Pogo-Pin-Arbeitshub mit $60\,\text{g}$ Federkraft pro Pin garantiert unterbrechungsfreien Kontakt ($\Delta R < 5\,\text{m}\Omega$) ohne Audio-Knacken bei harten Schlagloechern.
-- **3-Stufen-Sicherheitsarretierung:** Snap-Lock POM-C Klinken mit akustischem Klick, 90°-Cam-Lock Drehriegel gegen Stoesse $> 20\,\text{g}$, Push-to-Eject Wippe.
-- **Universelle Montage:** Integrierte M5-Rueckenplatte fuer Flachmontage oder CNC-Aluminium-Rohrschellen (22.0 mm, 28.6 mm, 1.0 Zoll, 25–32 mm Sturzbuegel).
+*Abbildung 5.1: Photorealistisches 3D-Raytracing-Render der Kassetten-Trägerplatine (KiCad 8.0, 35.0 x 25.0 mm, ENIG Gold mit nach unten öffnender 6-Pin Buchsenleiste auf B.Cu, Low-Profile JST-SH 1.0 mm Header auf F.Cu und Maxim DS2401 ID-Chip).*
 
-### 5.2 Pod-Druckausgleichsmembran (ePTFE)
+#### Platinenaufbau im Detail:
+* **Unterseite (`B.Cu` – Gegenstelle zur Pod-Basis):**
+  * **6-Pin Buchsenleiste (`J1` / PinSocket 2.54 mm):** Sitzt zentriert auf der Unterseite und öffnet senkrecht nach unten. Beim Einschieben der Kassette gleiten die nach oben ragenden Pins der Pod-Basis direkt und formschlüssig in diese Buchse.
+  * **Massefläche (`GND Shield Plane`):** Großflächige Kupferanbindung zur Abschirmung und Stabilisierung.
+* **Oberseite (`F.Cu` – Docking-Schnittstelle & ID):**
+  * **Low-Profile Inlay-Header (`J2`):** Um 90° gekippter **JST-SH 1.0 mm 6-Pin SMD-Steckverbinder** (Bauhöhe nur $1{,}8\,\text{mm}$). Ein kurzes internes Kabel verbindet diesen Header werkzeuglos mit dem im Kassetten-Deckel integrierten Docking-Schacht des Nutzers.
+  * **Digitaler Kassetten-ID-Chip (`U1`):** **Maxim DS2401Z+** Silicon Serial ROM (SOT-23) speichert eine weltweit eindeutige 64-Bit ROM-ID. Die Zentralbox erkennt beim Einstecken in Millisekunden, welches Headset-Profil geladen werden muss (z. B. `sena_50_series.json`, `cardo_dmc_gen2.json`).
+  * **Entkopplungskondensator (`C1`):** 100nF 0603 Keramikkondensator zur Filterung der 1-Wire-Busleitung.
+* **Mechanische Schwingungsdämpfung (`H1`, `H2`):**
+  * 2x M2-Befestigungsbohrungen mit Shore 40A Silikonhülsen lagern die Platine schwimmend im PA12-Kassettengehäuse gegen Fahrbahnstöße bis zu $20\,\text{g}$.
+
+---
+
+### 5.2 Benutzerzentrierte Plug & Play Docking-Architektur (0 Lötaufwand)
+
+Ein zentrales Entwicklungsziel von OpenMotorBridge ist die **100 % zerstörungsfreie und löt-freie Nutzung** durch jeden Motorradfahrer:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ WECHSELKASSETTE (z. B. "Sena 50S" oder "Cardo Edge Edition")│
+│                                                             │
+│  ┌───────────────────────────────────────────────────────┐  │
+│  │ DOCKING-SCHACHT IM KASSETTENDECKEL                    │  │
+│  │ (Fahrer klickt sein Original-Headset hier ein)        │  │
+│  │                                                       │  │
+│  │  [ Originale Gegen-Federkontakte / Pogo-Pins ]        │  │
+│  └──────────────────────────┬────────────────────────────┘  │
+│                             │ Kurzes internes JST-SH Kabel  │
+│                             ▼                               │
+│  ┌───────────────────────────────────────────────────────┐  │
+│  │ KASSETTEN-TRÄGERPLATINE (Carrier PCB, 35x25mm)        │  │
+│  │  - J2: JST-SH 6P Header (Oberseite)                   │  │
+│  │  - U1: DS2401 ID-Chip (Meldet Gerätetyp an ESP32)     │  │
+│  │  - J1: 6-Pin Buchse (Unterseite)                      │  │
+│  └──────────────────────────┬────────────────────────────┘  │
+└─────────────────────────────┼───────────────────────────────┘
+                              ▼ (Steckt beim Kassetteneinschub)
+┌─────────────────────────────┼───────────────────────────────┐
+│ POD-BASISPLATINE            │                               │
+│  - J1: 6-Pin PinHeader ◄────┘ (Oberseite)                   │
+│  - U1: SP3012 TVS-Schutzmatrix                              │
+│  - J2: Zentrierte M8 6-Pin IP67 Buchse (Unterseite)         │
+└─────────────────────────────┬───────────────────────────────┘
+                              ▼
+        M8-Kabelbaum zum Motorrad / Zentralbox
+```
+
+#### Modulare Kassetten-Varianten (Community- & 3D-Druck-Vorlagen):
+1. **Sena 50S / 30K / 20S EVO Edition:** Nutzt die originale Federkontakt-Leiste des Helm-Klemmsatzes. Das Gerät wird einfach von oben eingerastet.
+2. **Cardo Packtalk Edge / Pro Edition:** Integriert das magnetische *Air Mount*-Kontaktfeld für werkzeugloses Andocken.
+3. **Cardo Packtalk Bold / Black Edition:** Nutzt die Schiebe-Gegenkontakte der Cardo-Audiokit-Basis.
+4. **Sena Spider / Apex / OEM-Inlay Edition:** Für Bastler, die eine ausgebaute Bare-Board-Platine fest im Kassettenkörper montieren wollen.
+5. **PMR446 Funkgeräte-Edition:** Integriert einen Midland G9 / Kenwood-Doppelklinken-Anschluss für analoge PMR-Handfunkgeräte.
+
+---
+
+### 5.3 Pod-Druckausgleichsmembran (ePTFE)
 * **Problemstellung:** Interne Abwaerme (SX1262 LoRa $+22\,\text{dBm}$ PA, Ladeschaltung) und Sonneneinstrahlung erzeugen Druckdifferenzen im kleinen Pod-Volumen.
 * **Spezifikation:** Auf der Rueckseite des Pod-Gehaeuses (geschuetzt in einer Senkung unter der M5-Rueckenplatte) sitzt eine **selbstklebende $\varnothing\,7{,}0\,\text{mm}$ ePTFE-Druckausgleichsmembran** (*Schreiner Air Vent* / *Gore Automotive Adhesive Vent*).
 * **Funktion:** Belueftungsrate $> 25\,\text{ml/min}$ bei 70 mbar, Wassereintrittspunkt $> 1{,}5\,\text{bar}$ (IP67). Verhindert Vakuum-Wassersaugen bei Abkuehlung durch Regenguesse.
 
-### 5.3 Modularer M8-Rundsteckverbinder & Pod-Fuß-Schnittstelle
-* **Schnittstelle:** Kabeleinführung an der Gehäuseunterseite über eine **M8 6-Pin A-Coded IP67-Einbaubuchse** (nach IEC 61076-2-104) mit O-Ring-Flanschdichtung.
-* **100 % Verdrehsicher (Poka-Yoke):** Asymmetrisches Pinbild mit mechanischer Führungsnut und Führungsnase schließt ein falsches oder verdrehtes Einstecken physikalisch aus.
-* **Vibrationsfeste Überwurfmutter:** Freilaufende Rändelmutter mit integrierter Federzahnsperre (Anti-Vibration Ratchet) verhindert selbstständiges Losrütteln bei Motorvibrationen ($50\dots 500\,\text{Hz}$, bis zu $20\,\text{g}$).
-* **Modulare Austauschbarkeit:** Das Verbindungskabel zwischen Pod und Zentralbox kann ohne Öffnen des Gehäuses in Sekunden gelöst, getauscht oder in der Länge angepasst werden.
+---
 
 ### 5.4 IP67 Blind- / Leerkassette (Dummy Cartridge)
 * **Verwendung bei Teilbestueckung:** Wird ein Pod-Schacht temporaer nicht bestueckt (z. B. wenn nur Sena genutzt wird oder ein Pod stillgelegt ist), verschliesst die formidentische **IP67-Leerkassette (`Pod_Dummy_Cartridge_IP67.stl`)** den Schacht vollstaendig.
-* **Dichtungskonzept:** Doppelte Silikon-Umlaufdichtung schuetzt die innenliegenden Mill-Max Pogo-Pins vor Schmutz, Spritzwasser und Streusalz.
+* **Dichtungskonzept:** Doppelte Silikon-Umlaufdichtung schuetzt die innenliegenden Kontakte vor Schmutz, Spritzwasser und Streusalz.
 * **Verriegelung:** Nutzt denselben POM-C Snap-Lock und 90°-Cam-Lock Drehriegel wie aktive Kassetten.
 * **Hardware-Zustand:** Die Zentralbox erkennt offene/leere Kontakte und haelt den Slot ueber `disabled.json` strom- und rauschfrei isoliert.
 
-### 5.5 Pod-Stirnwand-Adapter (`openmotorbridge_pod_base` / `ADPT`) & 3D-Board-Render
+---
 
-Der mechanische und elektrische Schnittstellenübergang von der stirnseitig eingeschobenen Wechselkassette auf die M8-Kabelverbindung zum Motorradkabelbaum erfolgt über die an der linken Stirnwand montierte **Pod-Adapterplatine (`openmotorbridge_pod_base` / `ADPT`)**:
+### 5.5 Pod-Basisplatine (`openmotorbridge_pod_base`) & 3D-Board-Renders
 
-```
- +-+---------------------+
- |A+--------------------+|
- |D|                    ||  <-- Voller Bauraum für Wechselkassette / OMM-Platine
-M8AP                    ||      (Sena Apex / Cardo DMC / u-blox GNSS + LoRa)
- |P|                    ||
- |T+--------------------+|
- +-+---------------------+
-  ▲ ▲
-  │ └── 6 vergoldete Mill-Max Pogo-Pins (P) an der inneren Stirnwand
-  └──── M8-Stirnwand-Adapterplatine (ADPT) an der linken Gehäusestirnseite
-```
+Der mechanische und elektrische Übergang von der aufgesteckten Wechselkassette auf die M8-Kabelverbindung zum Motorradkabelbaum erfolgt über die im Pod-Boden montierte **Pod-Basisplatine (`openmotorbridge_pod_base`)**:
 
-#### Oberansicht (Kassetten-Pogo-Pins, frei positionierte ESD-Schutzstufe & zentrierte M8-Buchse):
-![OpenMotorBridge Pod-Stirnwandplatine Oberansicht 3D-Render](../../hardware/kicad_pod_base/pod_base_3d_render_top.png)
+#### Oberansicht (Senkrechte 6-Pin Stiftleiste & SP3012 TVS-Schutzstufe):
+![OpenMotorBridge Pod-Basisplatine Oberansicht 3D-Render](../../hardware/kicad_pod_base/pod_base_3d_render_top.png)
 
-#### Unteransicht (100 % vollflächige Platinenauflage aller THT- und SMD-Kontakte):
-![OpenMotorBridge Pod-Stirnwandplatine Unteransicht 3D-Render](../../hardware/kicad_pod_base/pod_base_3d_render_bottom.png)
+#### Unteransicht (Zentrierte M8 6-Pin IP67-Buchse & GND-Schirmfläche):
+![OpenMotorBridge Pod-Basisplatine Unteransicht 3D-Render](../../hardware/kicad_pod_base/pod_base_3d_render_bottom.png)
 
-* **Abmessungen:** $36{,}0 \times 20{,}0\,\text{mm}$ (Kompakte 2-Layer FR4-Stirnwandplatine mit großzügigem Sicherheitsabstand zwischen Pogo-Array und M8-Gehäusekörper).
-* **Mill-Max Pogo-Pin-Array (`J1`):** 6-poliger Federkontakt-Block (Serie 824-22-006-00-001101, $2{,}54\,\text{mm}$ Raster, $1{,}4\,\text{mm}$ Arbeitshub, 60g Federkraft pro Kontakt), der horizontal in den Kassettenraum ragt.
-* **Integrierte ESD-Schutzmatrix (`U1`):** **Littelfuse SP3012-06UTG** (6-Kanal TVS-Array mit $< 0{,}5\,\text{pF}$ parasitärer Kapazität) leitet elektrostatische Entladungen beim Berühren der Pogo-Pins im offenen Schacht blitzschnell gegen die Masse ab.
-* **Direkt integrierte M8-Leiterplattenbuchse (`J2`):** Abgewinkelte, metallgekapselte **M8 6-Pin A-Coded IP67 Einbaubuchse** (IEC 61076-2-104) mit M8-Außengewinde direkt auf der Platine verlötet. Das M8-Gewinde ragt stirnseitig durch die linke Gehäusewand nach außen.
+* **Abmessungen:** $36{,}0 \times 20{,}0\,\text{mm}$ (Kompakte 2-Layer FR4-Basisplatine mit großzügigen Leiterbahn- und Schutzabständen).
+* **Senkrechte 6-Pin Stiftleiste (`J1`):** 6-poliges Präzisions-Pin-Array ($2{,}54\,\text{mm}$ Raster, vergoldet) auf der Oberseite (`F.Cu`), das senkrecht nach oben in den Kassetten-Einschub ragt.
+* **Integrierte ESD-Schutzmatrix (`U1`):** **Littelfuse SP3012-06UTG** (6-Kanal TVS-Array mit $< 0{,}5\,\text{pF}$ parasitärer Kapazität) auf der Oberseite leitet elektrostatische Entladungen beim Berühren der Pins im offenen Schacht blitzschnell gegen die Masse ab.
+* **Zentrierte M8-Rundsteckverbinder-Buchse (`J2`):** Metallgekapselte **M8 6-Pin A-Coded IP67 Einbaubuchse** (IEC 61076-2-104) exakt im geometrischen Zentrum der Platinenunterseite (`B.Cu`) verlötet. Das M8-Gewinde ragt senkrecht nach unten durch die Gehäusewand nach außen.
 * **Mechanische Entkopplung & Montage (`H1`, `H2`):** 2x M2 Montagebohrungen mit Shore 40A Silikondämpfung gegen Fahrbahnvibrationen.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│        MODULARER SCHNITTSTELLEN-ÜBERGANG AN DER POD-STIRNWAND           │
+│              SCHNITTSTELLEN-ÜBERGANG POD-BASIS & KASSETTE               │
 ├─────────────────────────────────────────────────────────────────────────┤
-│ 1. WECHSELKASSETTE (Stirnseite / Horizontal Einschiebbar):              │
-│    • 6 vergoldete ENIG-Stirnkontaktflächen (2.54 mm Raster)             │
-│    • Umlaufende Shore 40A Silikondichtung                               │
-│                               ◄► (1.4 mm horizontaler Arbeitshub, 60g)   │
-│ 2. POD-STIRNWAND-ADAPTER (openmotorbridge_pod_base, 36x20mm):           │
-│    • Mill-Max 6-Pin Pogo-Pin-Array (824-22-006-00-001101)               │
+│ 1. DOCKING-SCHACHT KASSETTENDECKEL:                                     │
+│    • Original-Headset (Sena 50S / Cardo Edge) werkzeuglos eingeklinkt   │
+│    • Internes JST-SH 6P Flachbandkabel zur Kassetten-Trägerplatine       │
+│                               ▼                                         │
+│ 2. KASSETTEN-TRÄGERPLATINE (openmotorbridge_pod_cartridge, 35x25mm):     │
+│    • DS2401 1-Wire ID ROM (Meldet Headset-Typ an ESP32)                 │
+│    • 6-Pin Buchsenleiste auf Unterseite (B.Cu)                          │
+│                               ▼ (Steckverbindung im Pod-Schacht)        │
+│ 3. POD-BASISPLATINE (openmotorbridge_pod_base, 36x20mm):                │
+│    • 6-Pin Stiftleiste auf Oberseite (F.Cu)                             │
 │    • Integrierte ESD-Schutzmatrix (Littelfuse SP3012, 6x TVS < 0.5pF)   │
-│    • Direkt aufgelötete M8 6-Pin A-Coded IP67 Einbaubuchse              │
-│                               ▼ (M8-Außengewinde ragt links aus Stirn)  │
-│ 3. MODULARE M8-EINBAUBUCHSE (Linke Stirnseite):                         │
+│    • Zentrierte M8 6-Pin A-Coded IP67 Einbaubuchse auf Unterseite (B.Cu)│
+│                               ▼ (M8-Außengewinde ragt nach unten)       │
+│ 4. MODULARE M8-EINBAUBUCHSE (Gehäuseunterseite):                        │
 │    • M8 6-Pin A-Coded IP67-Buchse mit Führungsnut (Poka-Yoke)           │
 │    • Vollmetall-Schirmkragen für 360° EMV-Schirmung                     │
 │                               ▼                                         │
-│ 4. MODULARES M8-ZU-M8 PUR-VERBINDUNGSKABEL (0.5m .. 2.0m):              │
+│ 5. MODULARES M8-ZU-M8 PUR-VERBINDUNGSKABEL (0.5m .. 2.0m):              │
 │    • Geschirmtes 6-adriges PUR-Kabel (Halogenfrei, Öl- & UV-beständig)  │
 │    • 2x Power (0.34 mm²) + 2x Audio/UART verdrillt (0.14 mm²) + 2x Sign.│
 │    • Beidseitig M8 6-Pin IP67 Stecker mit Rüttelsicherung               │
 │                               ▼                                         │
-│ 5. ZENTRALBOX HD26-KABELBAUMPEITSCHE (Unter der Sitzbank):              │
+│ 6. ZENTRALBOX HD26-KABELBAUMPEITSCHE (Unter der Sitzbank):              │
 │    • 3x M8 6-Pin Buchsen (Pod 1 Links, Pod 2 Rechts, Pod 3 Heck)        │
 │    • 1x M8 4-Pin / Superseal (Bordnetz KL30/KL15/GND/Schirm)            │
 │    • 1x M8 4-Pin (CAN-Bus Telemetrie & Front-Umgebungsmikrofon)         │
@@ -240,10 +279,9 @@ Zur ganzheitlichen Verifikation der Passungen, Dichtebenen und elektrischen Übe
 
 #### Mechanische Spezifikationen & Passungen:
 * **Pod-Außengehäuse:** Makrolon 2805 Polycarbonat / PA12 MJF ($68{,}0 \times 44{,}0 \times 24{,}0\,\text{mm}$, Schacht-Innenmaß $54{,}0 \times 38{,}0 \times 18{,}0\,\text{mm}$, ultraflache Bauhöhe von nur $24\,\text{mm}$).
-* **Stirnwand-Adapter (`ADPT`):** $36{,}0 \times 20{,}0 \times 1{,}6\,\text{mm}$ Adapterplatine mit integrierter M8 6-Pin IP67 Vollmetallbuchse und horizontalem Mill-Max 6-Pin Pogo-Array.
+* **Pod-Basisplatine (`openmotorbridge_pod_base`):** $36{,}0 \times 20{,}0 \times 1{,}6\,\text{mm}$ Adapterplatine mit zentrierter M8 6-Pin IP67 Vollmetallbuchse (B.Cu) und senkrechter 6-Pin Stiftleiste (F.Cu).
 * **Wechselkassette:** $52{,}0 \times 36{,}0 \times 16{,}5\,\text{mm}$ Gehäuseschale mit POM-C Schnappriegel ($> 85\,\text{N}$ Haltekraft), Grifffläche für Motorradhandschuhe und PMMA-Statuslichtleiter.
-* **Integriertes Sena Apex / Cardo OEM-Inlay:** $45{,}0 \times 32{,}0 \times 6{,}5\,\text{mm}$ OEM-Hauptplatine mit Mesh 3.0 / Bluetooth Dual-Chipsets, HF-Schirmhauben und U.FL Koaxial-Antennenbuchse.
-* **Kassetten-Trägerplatine (`openmotorbridge_pod_cartridge`):** $35{,}0 \times 25{,}0 \times 1{,}2\,\text{mm}$ FR4-Adapter mit DS2401 1-Wire ID, abgewinkeltem JST-SH 1.0mm 6P Flex-Verbinder und 6 vergoldeten ENIG-Stirnkontaktpads.
+* **Kassetten-Trägerplatine (`openmotorbridge_pod_cartridge`):** $35{,}0 \times 25{,}0 \times 1{,}2\,\text{mm}$ FR4-Adapter mit DS2401 1-Wire ID, abgewinkeltem JST-SH 1.0mm 6P Flex-Verbinder (F.Cu) und 6-Pin Buchsenleiste (B.Cu).
 * **IP67-Dichtebene:** Der umlaufende $37{,}0 \times 17{,}0\,\text{mm}$ Shore 40A Silikon-Stirnflansch wird beim Einschieben um $0{,}6\,\text{mm}$ vorkomprimiert und dichtet die Kassettenkammer hermetisch gegen Strahlwasser und Staub ab.
 
 ---
