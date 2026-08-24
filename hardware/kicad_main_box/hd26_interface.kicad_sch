@@ -34,7 +34,7 @@
 			(pin passive line (at 15.24 2.54 180) (length 2.54) (name "18_POD3_1W" (effects (font (size 1.27 1.27)))) (number "18" (effects (font (size 1.27 1.27)))))
 			(property "Reference" "J1" (at -12.7 30.48 0) (effects (font (size 1.27 1.27)) (justify left)))
 			(property "Value" "HD26_FEMALE" (at -12.7 -30.48 0) (effects (font (size 1.27 1.27)) (justify left)))
-			(property "Footprint" "Connector_Dsub:DSUB-26-HD_Female_Horizontal" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+			(property "Footprint" "Connector_IDC:IDC-Header_2x13_P2.54mm_Vertical" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
 			(property "LCSC" "C2932311" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
 			(symbol "HD26_Female_0_1"
 				(rectangle (start -12.7 27.94) (end 12.7 -27.94) (stroke (width 0.254) (type solid)) (fill (type background)))
