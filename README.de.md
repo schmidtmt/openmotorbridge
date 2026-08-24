@@ -67,10 +67,13 @@ Die vollständige technische Spezifikation ist in 17 modulare Kapitel unterteilt
 15. [**15 - BOM (Stückliste) & Fertigungsleitfaden**](docs/de/15_bom_manufacturing.md)  
     *Stückliste für JLCPCB SMT-Bestückung (Main Box, Pod 3, Kassetten) und Fertigungsparameter.*
 
-16. [**16 - Rechtliche Compliance, Lizenzen, Regularien & DSGVO**](docs/de/16_legal_compliance_dsgvo.md)  
+16. [**16 - Simulation & Digitale Testbench**](docs/de/16_simulation_testbench.md)  
+    *Automotive-Simulations-Suite: Audio DSP, Raised-Cosine Ducking, Powermanagement, 15-State ADR-EKF & 1-Wire.*
+
+17. [**17 - Rechtliche Compliance, Lizenzen, Regularien & DSGVO**](docs/de/17_legal_compliance_dsgvo.md)  
     *ECE R10, RED 2014/53/EU Konformität, Funk-Regularien, Lizenzen und Haftungsausschluss.*
 
-17. [**17 - Quellen- & Normenverzeichnis**](docs/de/17_standards_references.md)  
+18. [**18 - Quellen- & Normenverzeichnis**](docs/de/18_standards_references.md)  
     *Fundstellen für ISO 7637-2, Bluetooth SIG Battery Service (0x180F), UBX-M10 und Intercom-Protokolle.*
 
 ---

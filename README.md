@@ -67,10 +67,13 @@ The comprehensive technical specification is split into 17 modular chapters:
 15. [**15 - Bill of Materials (BOM) & Manufacturing**](docs/en/15_bom_manufacturing.md)  
     *Complete 3-tier BOM for JLCPCB SMT assembly (Main Box, Rear Pod 3, Cartridges) & CPL parameters.*
 
-16. [**16 - Legal Compliance, Licensing, Regulations & GDPR**](docs/en/16_legal_compliance_dsgvo.md)  
+16. [**16 - Simulation & Digital Testbench**](docs/en/16_simulation_testbench.md)  
+    *Automotive Simulation Suite: Audio DSP, Raised-Cosine Ducking, Power Management, 15-State ADR-EKF & 1-Wire.*
+
+17. [**17 - Legal Compliance, Licensing, Regulations & GDPR**](docs/en/17_legal_compliance_dsgvo.md)  
     *ECE R10, RED 2014/53/EU compliance, RF spectrum regulations, open-source licenses & disclaimer.*
 
-17. [**17 - Standards & Normative References**](docs/en/17_standards_references.md)  
+18. [**18 - Standards & Normative References**](docs/en/18_standards_references.md)  
     *Reference index for ISO 7637-2, Bluetooth SIG Battery Service (0x180F), and intercom protocols.*
 
 ---

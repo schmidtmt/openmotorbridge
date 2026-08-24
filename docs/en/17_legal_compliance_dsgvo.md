@@ -1,4 +1,4 @@
-# 16 - Legal Compliance, Licensing, RF Regulations & GDPR
+# 17 - Legal Compliance, Licensing, Regulations & GDPR
 
 This document defines the open-source licensing model, regulatory RF and automotive compliance frameworks, data privacy architecture, and the legal liability disclaimer for the OpenMotorBridge project.
 
