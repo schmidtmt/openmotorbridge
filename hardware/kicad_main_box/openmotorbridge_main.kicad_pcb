@@ -96,7 +96,7 @@
 	(footprint "MountingHole:MountingHole_3.2mm_M3_Pad_Via"
 		(layer "F.Cu")
 		(uuid "2f935b36-c40e-44ba-9ed3-a43e0682fe3d")
-		(at 118.220238 74.84825)
+		(at 104 74)
 		(property "Reference" "H1"
 			(at 0 -2.5 0)
 			(layer "F.SilkS")
@@ -155,7 +155,7 @@
 	(footprint "MountingHole:MountingHole_3.2mm_M3_Pad_Via"
 		(layer "F.Cu")
 		(uuid "35a1e2d0-ade4-4bc3-b1ef-de77240d981e")
-		(at 118.220238 123.84825)
+		(at 104 121)
 		(property "Reference" "H3"
 			(at 0 2.5 0)
 			(layer "F.SilkS")
@@ -214,7 +214,7 @@
 	(footprint "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
 		(layer "F.Cu")
 		(uuid "537acce9-1c41-45da-9e3e-2091f760a65a")
-		(at 139.220238 113.84825)
+		(at 165 108)
 		(property "Reference" "U6"
 			(at 0 -3 0)
 			(layer "F.SilkS")
@@ -276,7 +276,7 @@
 	(footprint "MountingHole:MountingHole_3.2mm_M3_Pad_Via"
 		(layer "F.Cu")
 		(uuid "569001e5-4a35-49db-91d9-96206dc9d0d5")
-		(at 197.220238 123.84825)
+		(at 181 121)
 		(property "Reference" "H4"
 			(at 0 2.5 0)
 			(layer "F.SilkS")
@@ -335,9 +335,9 @@
 	(footprint "RF_Module:ESP32-S3-WROOM-1"
 		(layer "F.Cu")
 		(uuid "5b6d8aa7-15f5-487e-bffc-f215bfad0cc9")
-		(at 160.220238 99.34825 90)
+		(at 120 92)
 		(property "Reference" "U2"
-			(at 0 -10.5 0)
+			(at 0 -10.5 270)
 			(layer "F.SilkS")
 			(uuid "ce7994ad-9ccc-4a74-adf6-b06b804456b1")
 			(effects
@@ -348,7 +348,7 @@
 			)
 		)
 		(property "Value" "ESP32-S3-WROOM-1"
-			(at 0 10.5 0)
+			(at 0 10.5 270)
 			(layer "F.Fab")
 			(uuid "6d2a3a71-0589-4bca-94f0-e7a1f4845cac")
 			(effects
@@ -359,7 +359,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 90)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "9cba917e-abef-4cac-9337-6bc788547052")
@@ -370,7 +370,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 90)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "9ff29de1-3777-4f8c-b0b5-36ba0b84bba7")
@@ -397,7 +397,7 @@
 	(footprint "Connector_USB:USB_C_Receptacle_GCT_USB4085"
 		(layer "F.Cu")
 		(uuid "74a7523d-fdc4-4b57-8d9d-f609fecaf602")
-		(at 160.220238 74.34825)
+		(at 125 76)
 		(property "Reference" "J3"
 			(at 0 -3.5 0)
 			(layer "F.SilkS")
@@ -459,7 +459,7 @@
 	(footprint "Package_LGA:LGA-14_2.5x3mm_P0.5mm"
 		(layer "F.Cu")
 		(uuid "837a7f06-8ade-43f9-935c-39f4c2917ccf")
-		(at 160.220238 114.84825)
+		(at 142.5 98)
 		(property "Reference" "U5"
 			(at 0 -2.2 0)
 			(layer "F.SilkS")
@@ -521,9 +521,9 @@
 	(footprint "Connector_Card:microSD_HC_Molex_47571-0001"
 		(layer "F.Cu")
 		(uuid "8af113b9-effd-4de0-b948-d3d79233f565")
-		(at 167.220238 123.84825 180)
+		(at 155 92 90)
 		(property "Reference" "J2"
-			(at 0 -8.5 0)
+			(at 0 -8.5 270)
 			(layer "F.SilkS")
 			(uuid "c675fffd-5fd9-4d25-83e7-bcbc1f07e5be")
 			(effects
@@ -534,7 +534,7 @@
 			)
 		)
 		(property "Value" "MicroSD_4Bit_SDIO"
-			(at 0 8.5 0)
+			(at 0 8.5 270)
 			(layer "F.Fab")
 			(uuid "7bc6506c-7ada-4b1b-aaaf-fac18be33727")
 			(effects
@@ -545,7 +545,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 180)
+			(at 0 0 90)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "4e649e1b-3449-4a23-9add-fd7f1b1267cc")
@@ -556,7 +556,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 180)
+			(at 0 0 90)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "47c40fcc-ef9b-4543-99d6-4bd70b58813f")
@@ -583,7 +583,7 @@
 	(footprint "LED_SMD:LED_WS2812B-2020"
 		(layer "F.Cu")
 		(uuid "aa97b3c1-5a59-4562-83f7-9a1de86eb49e")
-		(at 160.220238 87.84825)
+		(at 142.5 76)
 		(property "Reference" "D1"
 			(at 0 -1.8 0)
 			(layer "F.SilkS")
@@ -634,9 +634,9 @@
 	(footprint "Connector_Dsub:DSUB-26-HD_Female_Horizontal_P2.29x1.98mm_EdgePinOffset7.70mm_Housings_POS01"
 		(layer "F.Cu")
 		(uuid "bfbc13cf-daae-4069-92e4-d551667c8723")
-		(at 117.220238 99.34825 -90)
+		(at 142.5 121.5 180)
 		(property "Reference" "J1"
-			(at 0 -12 0)
+			(at 0 -12 270)
 			(layer "F.SilkS")
 			(uuid "6f96ebb8-38c5-457c-9f75-adcc42ffff56")
 			(effects
@@ -647,7 +647,7 @@
 			)
 		)
 		(property "Value" "HD26_FEMALE"
-			(at 0 12 0)
+			(at 0 12 270)
 			(layer "F.Fab")
 			(uuid "24819a86-07f5-4176-8d73-769eae53f85f")
 			(effects
@@ -658,7 +658,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 270)
+			(at 0 0 180)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "1fdf8933-badb-4667-99d5-477dc352e170")
@@ -669,7 +669,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 270)
+			(at 0 0 180)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "4f782368-9c64-4803-a459-08539783902f")
@@ -696,7 +696,7 @@
 	(footprint "Package_SO:SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.41x3.3mm"
 		(layer "F.Cu")
 		(uuid "c6b97a28-cd24-4fd7-a039-1b5f070edeeb")
-		(at 133.220238 87.84825)
+		(at 136 102)
 		(property "Reference" "U1"
 			(at 0 -3.2 0)
 			(layer "F.SilkS")
@@ -758,7 +758,7 @@
 	(footprint "Converter_DCDC:Converter_DCDC_Mornsun_B_S-1WR3_THT"
 		(layer "F.Cu")
 		(uuid "cc9f4b17-340a-4611-8bf5-c8bedcd321e4")
-		(at 183.220238 86.84825)
+		(at 175 78)
 		(property "Reference" "U4"
 			(at 0 -4.5 0)
 			(layer "F.SilkS")
@@ -809,7 +809,7 @@
 	(footprint "MountingHole:MountingHole_3.2mm_M3_Pad_Via"
 		(layer "F.Cu")
 		(uuid "f92c003e-d252-4bb1-a005-b4588f5aa46a")
-		(at 197.220238 74.84825)
+		(at 181 74)
 		(property "Reference" "H2"
 			(at 0 -2.5 0)
 			(layer "F.SilkS")
@@ -868,7 +868,7 @@
 	(footprint "Package_DFN_QFN:QFN-28-1EP_4x4mm_P0.4mm_EP2.6x2.6mm"
 		(layer "F.Cu")
 		(uuid "fa7b6eef-4701-488e-9eee-7aa81e0affdc")
-		(at 183.220238 107.84825)
+		(at 168 92)
 		(property "Reference" "U3"
 			(at 0 -3 0)
 			(layer "F.SilkS")
