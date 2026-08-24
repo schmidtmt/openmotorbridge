@@ -110,6 +110,17 @@ def generate_pod_base_pcb(pcb_path):
         fp.SetPosition(pos)
         fp.SetOrientationDegrees(rot_deg)
 
+        if ref in ['H1', 'H2']:
+            # Add physical M2 drill hole so it renders clearly in 3D
+            pad = pcbnew.PAD(fp)
+            pad.SetNumber("1")
+            pad.SetShape(pcbnew.PAD_SHAPE_CIRCLE)
+            pad.SetAttribute(pcbnew.PAD_ATTRIB_PTH)
+            pad.SetSize(pcbnew.VECTOR2I(int(3.2 * 1e6), int(3.2 * 1e6)))
+            pad.SetDrillSize(pcbnew.VECTOR2I(int(2.2 * 1e6), int(2.2 * 1e6)))
+            pad.SetLayerSet(pcbnew.LSET.AllCuMask())
+            fp.Add(pad)
+
         if ref in model_mapping:
             model_file, (rx, ry, rz), (ox, oy, oz), (sx, sy, sz) = model_mapping[ref]
             fp.Models().clear()
@@ -125,9 +136,9 @@ def generate_pod_base_pcb(pcb_path):
 
     # 3. Add Silkscreen Labels on Top (F.SilkS) and Bottom (B.SilkS)
     top_labels = [
-        ("OPENMOTORBRIDGE // POD BASE", 120.0, Y0 + 2.2, 0.55, 0.55, 0.11),
-        ("SP3012 TVS", 108.0, Y0 + 2.2, 0.40, 0.40, 0.09),
-        ("MATES TO CARTRIDGE", 108.0, Y0 + H - 2.2, 0.38, 0.38, 0.08),
+        ("OPENMOTORBRIDGE // POD BASE", 118.0, Y0 + 1.8, 0.50, 0.50, 0.10),
+        ("SP3012 TVS", 108.0, Y0 + 4.5, 0.40, 0.40, 0.08),
+        ("6-PIN STIFTLEISTE (J1 -> KASSETTE)", 118.0, Y0 + H - 1.8, 0.40, 0.40, 0.08),
     ]
 
     for text_str, x_mm, y_mm, sx, sy, th in top_labels:
@@ -141,8 +152,8 @@ def generate_pod_base_pcb(pcb_path):
         board.Add(txt)
 
     bottom_labels = [
-        ("M8 6-PIN IP67 (OUTSIDE)", X_center, Y0 + 2.5, 0.55, 0.55, 0.12),
-        ("GND SHIELD PLANE", X_center, Y0 + H - 2.5, 0.45, 0.45, 0.10),
+        ("OPENMOTORBRIDGE // POD BASE (REAR)", X_center, Y0 + 1.8, 0.50, 0.50, 0.10),
+        ("M8 6-PIN IP67 PANEL RECEPTACLE (J2)", X_center, Y0 + H - 1.8, 0.40, 0.40, 0.08),
     ]
 
     for text_str, x_mm, y_mm, sx, sy, th in bottom_labels:
