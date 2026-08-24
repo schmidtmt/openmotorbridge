@@ -6,28 +6,33 @@
 
 ### 1. 3D Board Visualization & Photorealistic Renders
 
-The Rear Pod PCB integrates multi-constellation GNSS, dual-PHY mesh modems, and the RISC-V co-processor onto an ultra-compact **$50.0 \times 35.0\,\text{mm}$** footprint with zero overhang:
+The Rear Pod PCB unites multi-constellation GNSS, dual-PHY mesh networking, a 500mA PTC protection stage, and the RISC-V co-processor on an ultra-compact **$50.0 \times 35.0\,\text{mm}$** flat carrier with horizontal leading-edge mating:
 
-#### Top View (ESP32-C3 Mesh, u-blox MAX-M10S, SX1262 LoRa & U.FL Ports):
+#### Top View (Horizontal 6-Pin Front Socket, PTC Fuse, ESP32-C3 & GNSS/LoRa):
 ![OpenMotorBridge Rear Pod 3 Top 3D PCB Render](../../hardware/kicad_rear_pod3/rear_pod3_3d_render_top.png)
 
-#### Bottom View (6-Pin Socket Header Mating to Pod Base & Factory Testpoints):
+#### Bottom View (Clean 4-Layer Ground Plane & Production Testpoints):
 ![OpenMotorBridge Rear Pod 3 Bottom 3D PCB Render](../../hardware/kicad_rear_pod3/rear_pod3_3d_render_bottom.png)
 
-*Figure 13.1: Photorealistic 3D raytracing render of the OpenMotorBridge Rear Pod 3 PCB (KiCad 8.0, 4-layer FR4 TG150 ENIG with U.FL RF ports, ESP32-C3 antenna keepout, downward-facing 6-pin socket on B.Cu, and rear production testpoints).*
+*Figure 13.1: Photorealistic 3D raytraced render of the OpenMotorBridge Rear Pod 3 PCB (KiCad 8.0, 4-layer FR4 TG150 ENIG with horizontal forward-opening 6-pin precision socket, 500mA PTC fuse, 5V power LED, u-blox GNSS, SX1262 LoRa, and ESP32-C3 Mesh Transceiver).*
 
 ---
 
-## 2. Hardware Architecture & Dual-PHY Functional Blocks
+## 2. Hardware Architecture & End-Wall Mating Interface
 
 ```
                       ┌─────────────────────────────────────────────────────────────┐
-                      │                     REAR POD 3 MODULE                       │
+                      │              REAR POD 3 TRANSCEIVER MODULE                  │
+                      │             (Lies flat on the cartridge floor)              │
+                      │                                                             │
+                      │   • J1: 6-Pin Right-Angle Socket on Leading Edge (Front)    │
+                      │   • F1: 500mA PTC Fuse & D1: 5V Power Status LED            │
+                      │   • U4: DS2401 1-Wire ID ROM (openmotormesh_pod3.json)      │
                       │                                                             │
                       │   ┌─────────────────────────────────────────────────────┐   │
                       │   │  ESP32-C3 RISC-V Co-Processor (32-Bit @ 160 MHz)    │   │
                       │   │  • Primary PHY: 2.4 GHz IEEE 802.15.4 / SC-FDMA     │   │
-                      │   │  • HiFi Audio (Opus 24k) & Near-Range Mesh          │   │
+                      │   │  • HiFi Audio (Opus 24k) & Near-Field Mesh          │   │
                       │   └──────────┬───────────────────────────┬──────────────┘   │
                       │              │ SPI Master (8 MHz)        │ UART1 (115.2k)   │
                       │              ▼                           ▼                  │
@@ -36,22 +41,19 @@ The Rear Pod PCB integrates multi-constellation GNSS, dual-PHY mesh modems, and 
                       │   │ • Fallback PHY 868MHz│    │ • 10 Hz Multi-GNSS PVT  │   │
                       │   │ • Codec2 & Radar     │    │ • 1-PPS Time Standard   │   │
                       │   └──────────────────────┘    └─────────────────────────┘   │
-                      │                                                             │
-                      │   • U4: DS2401 1-Wire ID ROM (openmotormesh_pod3.json)      │
-                      │   • J1: 6-Pin Socket Header on Bottom Side (B.Cu)           │
                       └──────────────────────────────┬──────────────────────────────┘
-                                                     │ Engages on Insertion
+                                                     │ Horizontal Cartridge Slide-in
                                                      ▼
                       ┌─────────────────────────────────────────────────────────────┐
-                      │ POD BASE PCB (openmotorbridge_pod_base, 36x20mm)            │
-                      │  • J1: 6-Pin Pin Header on Top Side (F.Cu)                  │
+                      │ POD BASE PCB (openmotorbridge_pod_base)                     │
+                      │  • J1: 6-Pin Header at Inner End-Wall Face                  │
                       │  • U1: SP3012 TVS Protection Matrix                         │
-                      │  • J2: Centered M8 6-Pin IP67 Receptacle on Bottom (B.Cu)   │
+                      │  • J2: Centered M8 6-Pin IP67 Receptacle on Outside (B.Cu)  │
                       └──────────────────────────────┬──────────────────────────────┘
-                                                     │ Shielded 6-Conductor PUR Cable
+                                                     │ Shielded 6-Core PUR Harness
                                                      ▼
                       ┌─────────────────────────────────────────────────────────────┐
-                      │ HD26 Flange Receptacle -> Central Box ESP32-S3 Host MCU     │
+                      │ HD26 Flange Receptacle -> Main Box ESP32-S3 Host Processor  │
                       └─────────────────────────────────────────────────────────────┘
 ```
 

@@ -6,23 +6,28 @@ Der **Heck-Pod 3** (Position: Heckbuerzel / Gepaeckbruecke) ist das zentrale Fun
 
 ## 1. 3D-Board-Visualisierung & Photorealistische Renders
 
-Die Heck-Pod-Platine vereint auf extrem kompakten **$50{,}0 \times 35{,}0\,\text{mm}$** das Multi-Konstellations-GNSS, das Dual-PHY Mesh-Modem sowie den RISC-V Co-Prozessor mit vollkommen bündigen Kanten (Null Überhang):
+Die Heck-Pod-Platine vereint auf extrem kompakten **$50{,}0 \times 35{,}0\,\text{mm}$** das Multi-Konstellations-GNSS, das Dual-PHY Mesh-Modem, die 500mA PTC-Schutzstufe sowie den RISC-V Co-Prozessor mit horizontaler Stirnseiten-Steckung:
 
-#### Oberansicht (ESP32-C3 Mesh, u-blox MAX-M10S, SX1262 LoRa & U.FL Ports):
+#### Oberansicht (Horizontale 6-Pin Front-Buchsenleiste, PTC-Sicherung, ESP32-C3 & GNSS/LoRa):
 ![OpenMotorBridge Heck-Pod 3 Oberansicht 3D PCB Render](../../hardware/kicad_rear_pod3/rear_pod3_3d_render_top.png)
 
-#### Unteransicht (6-Pin Buchsenleiste zum Aufstecken auf Pod-Base & Factory Testpoints):
+#### Unteransicht (Kompakte 4-Lagen Massefläche & rückseitige Produktions-Testpunkte):
 ![OpenMotorBridge Heck-Pod 3 Unteransicht 3D PCB Render](../../hardware/kicad_rear_pod3/rear_pod3_3d_render_bottom.png)
 
-*Abbildung 13.1: Photorealistisches 3D-Raytracing-Render der OpenMotorBridge Heck-Pod 3 Platine (KiCad 8.0, 4-Lagen FR4 TG150 ENIG mit U.FL HF-Ports, ESP32-C3 Antennen-Keepout, nach unten öffnender 6-Pin Buchsenleiste auf B.Cu und rückseitigen Produktions-Testpunkten).*
+*Abbildung 13.1: Photorealistisches 3D-Raytracing-Render der OpenMotorBridge Heck-Pod 3 Platine (KiCad 8.0, 4-Lagen FR4 TG150 ENIG mit stirnseitig nach vorne öffnender 6-Pin Präzisionsbuchsenleiste, 500mA PTC-Schutzstufe, 5V Power-LED, u-blox GNSS, SX1262 LoRa und ESP32-C3 Mesh Transceiver).*
 
 ---
 
-## 2. Hardware-Architektur & Dual-PHY Funktionsblöcke
+## 2. Hardware-Architektur & Stirnwand-Steckschnittstelle
 
 ```
                       ┌─────────────────────────────────────────────────────────────┐
-                      │                    HECK-POD 3 KASSETTE                      │
+                      │                 HECK-POD 3 TRANSCEIVER-MODUL                │
+                      │               (Liegt flach am Kassettenboden)               │
+                      │                                                             │
+                      │   • J1: 6-Pin Winkelbuchsenleiste auf Stirnseite (links)    │
+                      │   • F1: 500mA PTC-Sicherung & D1: 5V Power-Status-LED       │
+                      │   • U4: DS2401 1-Wire ID ROM (openmotormesh_pod3.json)      │
                       │                                                             │
                       │   ┌─────────────────────────────────────────────────────┐   │
                       │   │  ESP32-C3 RISC-V Co-Prozessor (32-Bit @ 160 MHz)    │   │
@@ -36,17 +41,14 @@ Die Heck-Pod-Platine vereint auf extrem kompakten **$50{,}0 \times 35{,}0\,\text
                       │   │ • Fallback PHY 868MHz│    │ • 10 Hz Multi-GNSS PVT  │   │
                       │   │ • Codec2 & Radar     │    │ • 1-PPS Zeitnormal      │   │
                       │   └──────────────────────┘    └─────────────────────────┘   │
-                      │                                                             │
-                      │   • U4: DS2401 1-Wire ID ROM (openmotormesh_pod3.json)      │
-                      │   • J1: 6-Pin Buchsenleiste auf Unterseite (B.Cu)           │
                       └──────────────────────────────┬──────────────────────────────┘
-                                                     │ Steckt beim Einschieben
+                                                     │ Horizontaler Kassetteneinschub
                                                      ▼
                       ┌─────────────────────────────────────────────────────────────┐
-                      │ POD-BASISPLATINE (openmotorbridge_pod_base, 36x20mm)        │
-                      │  • J1: 6-Pin Stiftleiste auf Oberseite (F.Cu)               │
+                      │ POD-BASISPLATINE (openmotorbridge_pod_base)                 │
+                      │  • J1: 6-Pin Stiftleiste an der inneren Stirnwand           │
                       │  • U1: SP3012 TVS-Schutzmatrix                              │
-                      │  • J2: Zentrierte M8 6-Pin IP67 Buchse auf Unterseite (B.Cu)│
+                      │  • J2: Zentrierte M8 6-Pin IP67 Buchse nach aussen (B.Cu)   │
                       └──────────────────────────────┬──────────────────────────────┘
                                                      │ Geschirmtes 6-adriges PUR-Kabel
                                                      ▼
