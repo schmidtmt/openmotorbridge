@@ -97,39 +97,43 @@ To eliminate cross-talk between the $2.1\,\text{MHz}$ switching converter, $2.4\
 
 ---
 
-## 5. HD26 / 2x13 Pin Header Assignment (Enclosure Wall Interface)
+### 5.1 Central HD26 Harness & Modular M8 Breakout Pigtail
 
-Pins 1 to 18: 100% Satellite Pod Connections ($3 \times 6$-Conductor Shielded PUR)  
-Pins 19 to 26: Vehicle Power, Automotive Buses, Shield & Dedicated Reserve
+The central 26-pin interface of the control box branches out via a flame-retardant automotive breakout harness into **5 standardized, waterproof M8 circular sockets**:
 
-| Pin | Signal | Electrical Specification | Description |
-| :--- | :--- | :--- | :--- |
-| **Pin 1** | `POD1_VCC` | 5.0 V DC (max. 1.0 A) | Switched supply Pod 1 (via High-Side P-MOSFET) |
-| **Pin 2** | `POD1_GND` | Power & Signal GND | Dedicated ground Pod 1 |
-| **Pin 3** | `POD1_NF_P` | $1.0\,\text{V}_{\text{RMS}}$ Audio Diff+ | Balanced audio signal + (Bourns LM-NP-1001-B1L) |
-| **Pin 4** | `POD1_NF_N` | $1.0\,\text{V}_{\text{RMS}}$ Audio Diff- | Balanced audio signal - (Bourns LM-NP-1001-B1L) |
-| **Pin 5** | `POD1_OPTO` | $30\,\text{V} / 500\,\text{mA}$ Switch | Optocoupler key trigger (Toshiba TLP222A) |
-| **Pin 6** | `POD1_1WIRE_ID`| 1-Wire Open-Drain 3.3V | Dedicated 1-Wire ID bus for Pod 1 (DS2401) |
-| **Pin 7** | `POD2_VCC` | 5.0 V DC (max. 1.0 A) | Switched supply Pod 2 (via High-Side P-MOSFET) |
-| **Pin 8** | `POD2_GND` | Power & Signal GND | Dedicated ground Pod 2 |
-| **Pin 9** | `POD2_NF_P` | $1.0\,\text{V}_{\text{RMS}}$ Audio Diff+ | Balanced audio signal + (Bourns LM-NP-1001-B1L) |
-| **Pin 10** | `POD2_NF_N` | $1.0\,\text{V}_{\text{RMS}}$ Audio Diff- | Balanced audio signal - (Bourns LM-NP-1001-B1L) |
-| **Pin 11** | `POD2_OPTO` | $30\,\text{V} / 500\,\text{mA}$ Switch | Optocoupler key trigger (Toshiba TLP222A) |
-| **Pin 12** | `POD2_1WIRE_ID`| 1-Wire Open-Drain 3.3V | Dedicated 1-Wire ID bus for Pod 2 (DS2401) |
-| **Pin 13** | `POD3_VCC` | 5.0 V DC (max. 500 mA) | Continuous supply Rear Pod 3 (MAX-M10S + ESP32-C3) |
-| **Pin 14** | `POD3_GND` | Power & Signal GND | Dedicated ground Pod 3 |
-| **Pin 15** | `POD3_UART_TX` | 3.3 V LVTTL (460.8 kBd) | Data stream from Rear Co-Processor to Central Box |
-| **Pin 16** | `POD3_UART_RX` | 3.3 V LVTTL (460.8 kBd) | Command stream from Central Box to Rear Co-Processor |
-| **Pin 17** | `POD3_GNSS_PPS`| 3.3 V CMOS Pulse (100 ms) | 1-PPS time reference sync (jitter < 1 µs) |
-| **Pin 18** | `POD3_1WIRE_ID`| 1-Wire Open-Drain 3.3V | Dedicated 1-Wire ID bus for Rear Pod 3 (DS2401) |
-| **Pin 19** | `KL30` | 12.0 V – 14.8 V DC | Vehicle permanent battery +12V (Bourns PPTC 500mA protected) |
-| **Pin 20** | `KL15` | 12.0 V – 14.8 V DC | Vehicle switched ignition +12V (sense & wake-up) |
-| **Pin 21** | `GND_PWR` | 0 V Power Return | Main vehicle power ground |
-| **Pin 22** | `GND_SHIELD` | Enclosure / Cable Shield | Overall cable shield and chassis ground |
-| **Pin 23** | `CAN_H` | ISO 11898-2 CAN-High | Vehicle telemetry (TI TCAN334G Transceiver) |
-| **Pin 24** | `CAN_L` | ISO 11898-2 CAN-Low | Vehicle telemetry (TI TCAN334G Transceiver) |
-| **Pin 25** | `MIC_AMBIENT_IN`| $1.0\,\text{V}_{\text{pp}}$ Audio In | External front ambient microphone input (M8 inline branch to ES8388 LIN2) |
-| **Pin 26** | `RESERVE_GPIO_B`| 3.3V / 5.0V Switched Out | Multifunction output (e.g. action cam power / relay) |
+```
+                                  ┌───────────────────────────────┐
+                                  │ CENTRAL BOX HD26 / IDC26 PORT │
+                                  └───────────────┬───────────────┘
+                                                  │ (26 Conductors Bundled)
+                                                  ▼
+                         ┌─────────────────────────────────────────────────┐
+                         │ AUTOMOTIVE BREAKOUT PIGTAIL (Overmolded IP67)   │
+                         └──────┬──────────┬──────────┬──────────┬─────────┘
+                                │          │          │          │
+           ┌────────────────────┘          │          │          └────────────────────┐
+           ▼                               ▼          ▼                               ▼
+    ┌──────────────┐                ┌──────────────┐ ┌──────────────┐          ┌──────────────┐
+    │ RECEPTACLE 1:│                │ RECEPTACLE 2:│ │ RECEPTACLE 3:│          │ RECEPTACLE 4:│
+    │ POD 1 LEFT   │                │ POD 2 RIGHT  │ │ POD 3 REAR   │          │ POWER SUPPLY │
+    │ (M8 6-Pin)   │                │ (M8 6-Pin)   │ │ (M8 6-Pin)   │          │ (M8 4-Pin)   │
+    │ • Pins 1..6  │                │ • Pins 7..12 │ │ • Pins 13..18│          │ • KL30, KL15 │
+    │ • Audio Sena │                │ • Audio Cardo│ │ • GNSS / OMM │          │ • GND, Shield│
+    └──────────────┘                └──────────────┘ └──────────────┘          └──────────────┘
+                                                                                      │
+                                                                                      ▼
+                                                                               ┌──────────────┐
+                                                                               │ RECEPTACLE 5:│
+                                                                               │ TELEMETRY    │
+                                                                               │ (M8 4-Pin)   │
+                                                                               │ • CAN_H/L    │
+                                                                               │ • Mic-In     │
+                                                                               │ • Reserve    │
+                                                                               └──────────────┘
+```
+
+* **Modular Installation Concept:** Standardized **M8 6-Pin male-to-male PUR cables** are routed individually through the motorcycle frame. No rigid or bulky wiring harness needs to be pulled through tight cavities.
+* **Serviceability:** If a cable suffers mechanical or thermal damage, it can be replaced in minutes without tools.
 
 ---
 

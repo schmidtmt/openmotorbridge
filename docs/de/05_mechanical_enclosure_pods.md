@@ -158,9 +158,11 @@ Die Kassetten-Trägerplatine (`openmotorbridge_pod_cartridge`) adaptiert die int
 * **Spezifikation:** Auf der Rueckseite des Pod-Gehaeuses (geschuetzt in einer Senkung unter der M5-Rueckenplatte) sitzt eine **selbstklebende $\varnothing\,7{,}0\,\text{mm}$ ePTFE-Druckausgleichsmembran** (*Schreiner Air Vent* / *Gore Automotive Adhesive Vent*).
 * **Funktion:** Belueftungsrate $> 25\,\text{ml/min}$ bei 70 mbar, Wassereintrittspunkt $> 1{,}5\,\text{bar}$ (IP67). Verhindert Vakuum-Wassersaugen bei Abkuehlung durch Regenguesse.
 
-### 5.3 Kabelbaum-Knickschutz & Zugentlastung
-* **Schnittstelle:** Kabeleinfuehrung an der Gehaeuseunterseite ueber **M12 x 1.5 IP67-Kabelverschraubung mit integrierter Spiral-Knickschutztuelle** aus UV- und oelbestaendigem Polyamid (PA6) mit NBR-Dichteinsatz.
-* **Schutzwirkung:** Garantiert Biegeradius $> 30\,\text{mm}$ und zuverlaessige Zugentlastung ($> 100\,\text{N}$) bei Lenkereinschlaegen und harten Fahrbahnstoessen.
+### 5.3 Modularer M8-Rundsteckverbinder & Pod-Fuß-Schnittstelle
+* **Schnittstelle:** Kabeleinführung an der Gehäuseunterseite über eine **M8 6-Pin A-Coded IP67-Einbaubuchse** (nach IEC 61076-2-104) mit O-Ring-Flanschdichtung.
+* **100 % Verdrehsicher (Poka-Yoke):** Asymmetrisches Pinbild mit mechanischer Führungsnut und Führungsnase schließt ein falsches oder verdrehtes Einstecken physikalisch aus.
+* **Vibrationsfeste Überwurfmutter:** Freilaufende Rändelmutter mit integrierter Federzahnsperre (Anti-Vibration Ratchet) verhindert selbstständiges Losrütteln bei Motorvibrationen ($50\dots 500\,\text{Hz}$, bis zu $20\,\text{g}$).
+* **Modulare Austauschbarkeit:** Das Verbindungskabel zwischen Pod und Zentralbox kann ohne Öffnen des Gehäuses in Sekunden gelöst, getauscht oder in der Länge angepasst werden.
 
 ### 5.4 IP67 Blind- / Leerkassette (Dummy Cartridge)
 * **Verwendung bei Teilbestueckung:** Wird ein Pod-Schacht temporaer nicht bestueckt (z. B. wenn nur Sena genutzt wird oder ein Pod stillgelegt ist), verschliesst die formidentische **IP67-Leerkassette (`Pod_Dummy_Cartridge_IP67.stl`)** den Schacht vollstaendig.
@@ -168,15 +170,15 @@ Die Kassetten-Trägerplatine (`openmotorbridge_pod_cartridge`) adaptiert die int
 * **Verriegelung:** Nutzt denselben POM-C Snap-Lock und 90°-Cam-Lock Drehriegel wie aktive Kassetten.
 * **Hardware-Zustand:** Die Zentralbox erkennt offene/leere Kontakte und haelt den Slot ueber `disabled.json` strom- und rauschfrei isoliert.
 
-### 5.5 Pod-Boden Pogo-Kontaktblock, ESD-Schutz & Kabelübergang
+### 5.5 Pod-Boden Pogo-Kontaktblock, ESD-Schutz & Modularer M8-Übergang
 
-Der physische Übergang von der gesteckten Kassette zum flexiblen Fahrzeugkabelbaum erfolgt im versiegelten Gehäuseboden des Satelliten-Pods:
+Der physische Übergang von der gesteckten Kassette zum modularen Fahrzeugkabelbaum erfolgt im versiegelten Gehäuseboden des Satelliten-Pods:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                 VOLLSTÄNDIGER SCHNITTSTELLEN-ÜBERGANG                   │
+│              MODULARER M8-SCHNITTSTELLEN-ÜBERGANG IM POD-FUSS           │
 ├─────────────────────────────────────────────────────────────────────────┤
-│ 1. KASSETTE (Oberseite):                                                │
+│ 1. KASSETTE (Oberseite / Wechselteil):                                  │
 │    • 6 vergoldete ENIG-Kontaktpads (Raster 2.54 mm)                     │
 │    • Umlaufende Shore 40A Silikon-Formschuhdichtung                     │
 │                               ▲                                         │
@@ -186,22 +188,27 @@ Der physische Übergang von der gesteckten Kassette zum flexiblen Fahrzeugkabelb
 │    • Gehäusebündig eingepresst & mit O-Ring abgedichtet                 │
 │    • Integrierte ESD-Schutzmatrix (Littelfuse SP3012, 6x TVS < 0.5 pF)  │
 │                               ▼                                         │
-│ 3. KABELEINFÜHRUNG & ZUGENTLASTUNG (Gehäuseunterseite):                 │
-│    • M12 x 1.5 IP67-Kabelverschraubung mit Spiral-Knickschutz           │
-│    • Zugentlastung > 100 N, NBR-Dichtring gegen Gehäusewand             │
+│ 3. MODULARE M8-EINBAUBUCHSE (Gehäuseunterseite):                        │
+│    • M8 6-Pin A-Coded IP67-Buchse mit Führungsnut (Poka-Yoke)           │
+│    • Vollmetall-Schirmkragen für 360° EMV-Schirmung                     │
 │                               ▼                                         │
-│ 4. PUR-KABELBAUM (Zur Zentralbox):                                      │
+│ 4. MODULARES M8-ZU-M8 PUR-VERBINDUNGSKABEL (0.5m .. 2.0m):              │
 │    • Geschirmtes 6-adriges PUR-Kabel (Halogenfrei, Öl- & UV-beständig)  │
 │    • 2x Power (0.34 mm²) + 2x Audio/UART verdrillt (0.14 mm²) + 2x Sign.│
-│    • Schirmgeflecht (> 85 % Bedeckung) an GND_SHIELD                    │
+│    • Beidseitig M8 6-Pin IP67 Stecker mit Rüttelsicherung               │
+│                               ▼                                         │
+│ 5. ZENTRALBOX HD26-KABELBAUMPEITSCHE (Unter der Sitzbank):              │
+│    • 3x M8 6-Pin Buchsen (Pod 1 Links, Pod 2 Rechts, Pod 3 Heck)        │
+│    • 1x M8 4-Pin / Superseal (Bordnetz KL30/KL15/GND/Schirm)            │
+│    • 1x M8 4-Pin (CAN-Bus Telemetrie & Front-Umgebungsmikrofon)         │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 6. Belegung der 6-Pin Pogo-Leiste & PUR-Kabelbaum-Farbcodierung
+## 6. Belegung der 6-Pin M8 / Pogo-Schnittstelle & PUR-Kabelbaum-Farbcodierung
 
-| Pin | Leitungsfarbe (PUR-Kabel) | Querschnitt | Signal Pod 1 & 2 (Audio & Intercom) | Signal Pod 3 (Heck-Transceiver) | Schirmung & Verdrillung |
+| M8 / Pogo-Pin | Leitungsfarbe (PUR-Kabel) | Querschnitt | Signal Pod 1 & 2 (Audio & Intercom) | Signal Pod 3 (Heck-Transceiver) | Schirmung & Verdrillung |
 | :---: | :--- | :---: | :--- | :--- | :--- |
 | **Pin 1** | **Rot (RD)** | $0{,}34\,\text{mm}^2$ (AWG22) | **`VCC`** (5V geschaltete Speisespannung via MOSFET) | **`VCC`** (5V Dauer-Versorgung) | Einzelader (Power) |
 | **Pin 2** | **Schwarz (BK)** | $0{,}34\,\text{mm}^2$ (AWG22) | **`GND`** (Dedizierte Power- & Signalmasse) | **`GND`** (Dedizierte Power- & Signalmasse) | Einzelader (Power Ground) |
@@ -209,5 +216,6 @@ Der physische Übergang von der gesteckten Kassette zum flexiblen Fahrzeugkabelb
 | **Pin 4** | **Blau (BU)** | $0{,}14\,\text{mm}^2$ (AWG26) | **`NF_N`** (Symmetrisches Audiosignal - via Bourns) | **`UART_RX`** (Box $\rightarrow$ Heck-Co-Prozessor) | **Paar 1 verdrillt** (mit Pin 3) |
 | **Pin 5** | **Gelb (YE)** | $0{,}14\,\text{mm}^2$ (AWG26) | **`OPTO`** (TLP222A Tastensimulations-Trigger) | **`GNSS_PPS`** (1-PPS Hardware-Zeitnormal) | Einzelader (Steuersignal) |
 | **Pin 6** | **Grün (GN)** | $0{,}14\,\text{mm}^2$ (AWG26) | **`1-WIRE_ID`** (DS2401 Silicon Serial Number) | **`1-WIRE_ID`** (DS2401 Heck-Kassetten-Erkennung)| Einzelader (1-Wire Bus) |
-| **Shield**| **Kupfergeflecht (BL)**| $> 85\,\%$ Geflecht | **`GND_SHIELD`** (Gehäuse- & Gesamtschirmung) | **`GND_SHIELD`** (Gehäuse- & Gesamtschirmung) | Gesamtschirm über alle 6 Adern |
+| **M8-Gehäuse**| **Kupfergeflecht (BL)**| $> 85\,\%$ Geflecht | **`GND_SHIELD`** (360° Gehäuseschirmung) | **`GND_SHIELD`** (360° Gehäuseschirmung) | Gesamtschirm über M8-Metallkragen |
+
 

@@ -97,39 +97,43 @@ Um gegenseitige Störungen zwischen der Schaltnetzteil-HF ($2{,}1\,\text{MHz}$),
 
 ---
 
-## 5. HD26 / 2x13 Wannenstecker-Pinbelegung (Gehäusewand-Interface)
+### 5.1 Zentraler HD26-Kabelbaum & M8-Breakout-Pigtail
 
-Pins 1 bis 18: 100 % Satelliten-Pods ($3 \times 6$-Ader geschirmt)  
-Pins 19 bis 26: Bordnetz, Fahrzeugbusse, Schirmung & Reserve
+Die zentrale 26-Pin-Schnittstelle der Steuerbox teilt sich über eine hochflexible, flammhemmende Kfz-Kabelbaumpeitsche (Pigtail Breakout) in **5 standardisierte, wasserdichte M8-Buchsen** auf:
 
-| Pin | Signal | Elektrische Spezifikation | Beschreibung |
-| :--- | :--- | :--- | :--- |
-| **Pin 1** | `POD1_VCC` | 5.0 V DC (max. 1.0 A) | Geschaltete Speisespannung Pod 1 (via High-Side P-MOSFET) |
-| **Pin 2** | `POD1_GND` | Power & Signal GND | Dedizierte Masse Pod 1 |
-| **Pin 3** | `POD1_NF_P` | $1.0\,\text{V}_{\text{RMS}}$ Audio Diff+ | Symmetrisches Audiosignal + (Bourns LM-NP-1001-B1L) |
-| **Pin 4** | `POD1_NF_N` | $1.0\,\text{V}_{\text{RMS}}$ Audio Diff- | Symmetrisches Audiosignal - (Bourns LM-NP-1001-B1L) |
-| **Pin 5** | `POD1_OPTO` | $30\,\text{V} / 500\,\text{mA}$ Switch | Optokoppler Tasten-Trigger (Toshiba TLP222A) |
-| **Pin 6** | `POD1_1WIRE_ID`| 1-Wire Open-Drain 3.3V | Dedizierte 1-Wire ID-Leitung für Pod 1 (DS2401) |
-| **Pin 7** | `POD2_VCC` | 5.0 V DC (max. 1.0 A) | Geschaltete Speisespannung Pod 2 (via High-Side P-MOSFET) |
-| **Pin 8** | `POD2_GND` | Power & Signal GND | Dedizierte Masse Pod 2 |
-| **Pin 9** | `POD2_NF_P` | $1.0\,\text{V}_{\text{RMS}}$ Audio Diff+ | Symmetrisches Audiosignal + (Bourns LM-NP-1001-B1L) |
-| **Pin 10** | `POD2_NF_N` | $1.0\,\text{V}_{\text{RMS}}$ Audio Diff- | Symmetrisches Audiosignal - (Bourns LM-NP-1001-B1L) |
-| **Pin 11** | `POD2_OPTO` | $30\,\text{V} / 500\,\text{mA}$ Switch | Optokoppler Tasten-Trigger (Toshiba TLP222A) |
-| **Pin 12** | `POD2_1WIRE_ID`| 1-Wire Open-Drain 3.3V | Dedizierte 1-Wire ID-Leitung für Pod 2 (DS2401) |
-| **Pin 13** | `POD3_VCC` | 5.0 V DC (max. 500 mA) | Dauer-Versorgung Heck-Pod 3 (MAX-M10S + ESP32-C3) |
-| **Pin 14** | `POD3_GND` | Power & Signal GND | Dedizierte Masse Pod 3 |
-| **Pin 15** | `POD3_UART_TX` | 3.3 V LVTTL (460.8 kBd) | Datenstrom vom Heck-Co-Prozessor zur Zentralbox |
-| **Pin 16** | `POD3_UART_RX` | 3.3 V LVTTL (460.8 kBd) | Steuerdaten von Zentralbox zum Heck-Co-Prozessor |
-| **Pin 17** | `POD3_GNSS_PPS`| 3.3 V CMOS Puls (100 ms) | 1-PPS Zeitnormal-Synchronisation (Jitter < 1 µs) |
-| **Pin 18** | `POD3_1WIRE_ID`| 1-Wire Open-Drain 3.3V | Dedizierte 1-Wire ID-Leitung für Heck-Pod 3 (DS2401) |
-| **Pin 19** | `KL30` | 12.0 V – 14.8 V DC | Bordnetz Dauerplus (abgesichert via Bourns PPTC 500mA) |
-| **Pin 20** | `KL15` | 12.0 V – 14.8 V DC | Bordnetz Zündungsplus (Messabgriff & Aufwach-Trigger) |
-| **Pin 21** | `GND_PWR` | 0 V Power Return | Bordnetz Power-Hauptmasse |
-| **Pin 22** | `GND_SHIELD` | Gehäuse / Kabelschirm | Gesamtschirmung für Kabelbaum und Gehäusemasse |
-| **Pin 23** | `CAN_H` | ISO 11898-2 CAN-High | Fahrzeug-Telemetrie (TI TCAN334G Transceiver) |
-| **Pin 24** | `CAN_L` | ISO 11898-2 CAN-Low | Fahrzeug-Telemetrie (TI TCAN334G Transceiver) |
-| **Pin 25** | `MIC_AMBIENT_IN`| $1.0\,\text{V}_{\text{pp}}$ Audio In | Front-Umgebungsmikrofon (M8-Kabelbaumabzweig an ES8388 LIN2) |
-| **Pin 26** | `RESERVE_GPIO_B`| 3.3V / 5.0V Schaltausgang | Multifunktions-Ausgang (z. B. Actioncam Power-Gate / Relais) |
+```
+                                  ┌───────────────────────────────┐
+                                  │ ZENTRALBOX HD26 / IDC26 PORT  │
+                                  └───────────────┬───────────────┘
+                                                  │ (26-polig gebündelt)
+                                                  ▼
+                         ┌─────────────────────────────────────────────────┐
+                         │ AUTOMOTIVE BREAKOUT-PIGTAIL (Formverpresst IP67)│
+                         └──────┬──────────┬──────────┬──────────┬─────────┘
+                                │          │          │          │
+           ┌────────────────────┘          │          │          └────────────────────┐
+           ▼                               ▼          ▼                               ▼
+    ┌──────────────┐                ┌──────────────┐ ┌──────────────┐          ┌──────────────┐
+    │ BUCHSE 1:    │                │ BUCHSE 2:    │ │ BUCHSE 3:    │          │ BUCHSE 4:    │
+    │ POD 1 LINKS  │                │ POD 2 RECHTS │ │ POD 3 HECK   │          │ BORDNETZ     │
+    │ (M8 6-Pin)   │                │ (M8 6-Pin)   │ │ (M8 6-Pin)   │          │ (M8 4-Pin)   │
+    │ • Pins 1..6  │                │ • Pins 7..12 │ │ • Pins 13..18│          │ • KL30, KL15 │
+    │ • Audio Sena │                │ • Audio Cardo│ │ • GNSS / OMM │          │ • GND, Schirm│
+    └──────────────┘                └──────────────┘ └──────────────┘          └──────────────┘
+                                                                                      │
+                                                                                      ▼
+                                                                               ┌──────────────┐
+                                                                               │ BUCHSE 5:    │
+                                                                               │ TELEMETRIE   │
+                                                                               │ (M8 4-Pin)   │
+                                                                               │ • CAN_H/L    │
+                                                                               │ • Mic-In     │
+                                                                               │ • Reserve    │
+                                                                               └──────────────┘
+```
+
+* **Modulares Verlegekonzept:** Für die 3 Pods werden handelsübliche **M8 6-Pin Stecker-zu-Stecker PUR-Kabel** verwendet. Am Motorrad muss kein starrer Gesamtbaum mehr verlegt werden, sondern einzelne, schlanke Kabel.
+* **Servicefreundlichkeit:** Tritt an einem Kabel oder Stecker ein mechanischer Defekt auf, wird lediglich das betroffene M8-Kabel in Minuten werkzeuglos getauscht.
 
 ---
 

@@ -158,9 +158,11 @@ The cartridge carrier PCB (`openmotorbridge_pod_cartridge`) adapts internal Sena
 * **Specification:** The rear of the pod body (recessed beneath the M5 mounting bracket) integrates an **adhesive $\varnothing\,7.0\,\text{mm}$ ePTFE venting membrane** (*Schreiner Air Vent* / *Gore Automotive Adhesive Vent*).
 * **Function:** Airflow $> 25\,\text{ml/min}$ @ 70 mbar, water intrusion pressure $> 1.5\,\text{bar}$ (IP67). Eliminates vacuum-induced moisture ingress during sudden rain cooling.
 
-### 5.3 Harness Strain Relief & Anti-Kink Protection
-* **Interface:** Bottom cable entry uses an **M12 x 1.5 IP67 cable gland with integrated spiral anti-kink boot** molded from UV/oil-resistant polyamide (PA6) with NBR seal.
-* **Protection:** Guarantees bend radius $> 30\,\text{mm}$ and robust tensile strain relief ($> 100\,\text{N}$) during full steering lock and road shocks.
+### 5.3 Modular M8 Circular Connector & Pod Base Interface
+* **Interface:** Bottom chassis entry uses an **M8 6-Pin A-Coded IP67 panel mount receptacle** (conforming to IEC 61076-2-104) with O-ring flange seal.
+* **100% Anti-Rotation (Poka-Yoke):** Asymmetric pin layout with mechanical keyway ridge and alignment groove physically prevents incorrect or inverted insertion.
+* **Vibration-Proof Coupling Nut:** Freely spinning knurled metal sleeve with integrated ratchet spring detent (anti-vibration lock) prevents loosening under harsh engine vibrations ($50\dots 500\,\text{Hz}$, up to $20\,\text{g}$).
+* **Modular Field Replaceability:** The connecting cable between pod and central box can be detached, swapped, or customized in length in seconds without opening any enclosure.
 
 ### 5.4 IP67 Dummy Cartridge (Slot Blank)
 * **Partial Population:** When a pod bay is temporarily unpopulated (e.g. single-intercom setups or disabled slots), the identical-footprint **IP67 Dummy Cartridge (`Pod_Dummy_Cartridge_IP67.stl`)** seals the bay completely.
@@ -168,15 +170,15 @@ The cartridge carrier PCB (`openmotorbridge_pod_cartridge`) adapts internal Sena
 * **Locking Mechanism:** Employs the identical POM-C snap-lock and 90° cam-lock as active cartridges.
 * **Hardware State:** Host MCU detects empty/open pins and maintains slot in zero-power, zero-noise isolation via `disabled.json`.
 
-### 5.5 Pod Base Pogo Interface, ESD Protection & Cable Transition
+### 5.5 Pod Base Pogo Interface, ESD Protection & Modular M8 Transition
 
-The physical interface transition from the inserted cartridge to the flexible motorcycle harness occurs within the sealed bottom chamber of the satellite pod:
+The physical interface transition from the inserted cartridge to the modular motorcycle harness occurs within the sealed bottom chamber of the satellite pod:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                    COMPLETE INTERFACE TRANSITION CHAIN                  │
+│             MODULAR M8 INTERFACE TRANSITION IN POD BASE CHAMBER         │
 ├─────────────────────────────────────────────────────────────────────────┤
-│ 1. CARTRIDGE (Top):                                                     │
+│ 1. CARTRIDGE (Top / Removable Inlay):                                   │
 │    • 6 gold-plated ENIG contact pads (2.54 mm pitch)                    │
 │    • Perimeter Shore 40A silicone boot gasket                           │
 │                               ▲                                         │
@@ -186,22 +188,27 @@ The physical interface transition from the inserted cartridge to the flexible mo
 │    • Press-fitted flush into housing floor & O-ring sealed              │
 │    • Integrated ESD protection array (Littelfuse SP3012, 6x TVS < 0.5pF)│
 │                               ▼                                         │
-│ 3. CABLE ENTRY & STRAIN RELIEF (Housing Bottom):                        │
-│    • M12 x 1.5 IP67 cable gland with spiral bend relief boot            │
-│    • Tensile strain relief > 100 N, NBR seal against chassis wall       │
+│ 3. MODULAR M8 PANEL RECEPTACLE (Chassis Bottom):                        │
+│    • M8 6-Pin A-Coded IP67 female socket with keyway (Poka-Yoke)        │
+│    • Full metal shield collar for 360° EMC bonding                      │
 │                               ▼                                         │
-│ 4. PUR HARNESS (To Central Box):                                        │
+│ 4. MODULAR M8-TO-M8 PUR CONNECTING CABLE (0.5m .. 2.0m):                │
 │    • Shielded 6-conductor PUR cable (Halogen-free, oil & UV resistant)  │
 │    • 2x Power (0.34 mm²) + 2x Audio/UART twisted (0.14 mm²) + 2x Signal │
-│    • Copper braided overall shield (> 85 % coverage) on GND_SHIELD      │
+│    • Dual M8 6-Pin IP67 male plugs with vibration ratchet               │
+│                               ▼                                         │
+│ 5. CENTRAL BOX HD26 BREAKOUT PIGTAIL (Under Seat):                      │
+│    • 3x M8 6-Pin sockets (Pod 1 Left, Pod 2 Right, Pod 3 Rear)          │
+│    • 1x M8 4-Pin / Superseal (Vehicle power KL30/KL15/GND/Shield)       │
+│    • 1x M8 4-Pin (CAN-Bus telemetry & front ambient microphone)         │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 6. 6-Pin Pogo Pinout & PUR Harness Color Coding
+## 6. 6-Pin M8 / Pogo Interface & PUR Harness Color Coding
 
-| Pin | Wire Color (PUR Cable) | Wire Gauge | Signal Pods 1 & 2 (Audio & Intercom) | Signal Pod 3 (Rear Transceiver) | Shielding & Twisting |
+| M8 / Pogo Pin | Wire Color (PUR Cable) | Wire Gauge | Signal Pods 1 & 2 (Audio & Intercom) | Signal Pod 3 (Rear Transceiver) | Shielding & Twisting |
 | :---: | :--- | :---: | :--- | :--- | :--- |
 | **Pin 1** | **Red (RD)** | $0.34\,\text{mm}^2$ (AWG22) | **`VCC`** (5V switched supply via P-FET) | **`VCC`** (5V continuous supply) | Single Conductor (Power) |
 | **Pin 2** | **Black (BK)** | $0.34\,\text{mm}^2$ (AWG22) | **`GND`** (Dedicated power & signal ground) | **`GND`** (Dedicated power & signal ground) | Single Conductor (Power GND) |
@@ -209,5 +216,6 @@ The physical interface transition from the inserted cartridge to the flexible mo
 | **Pin 4** | **Blue (BU)** | $0.14\,\text{mm}^2$ (AWG26) | **`NF_N`** (Balanced audio signal - via Bourns) | **`UART_RX`** (Central Box $\rightarrow$ Rear MCU) | **Pair 1 Twisted** (with Pin 3) |
 | **Pin 5** | **Yellow (YE)** | $0.14\,\text{mm}^2$ (AWG26) | **`OPTO`** (TLP222A button simulation trigger) | **`GNSS_PPS`** (1-PPS hardware time sync) | Single Conductor (Control) |
 | **Pin 6** | **Green (GN)** | $0.14\,\text{mm}^2$ (AWG26) | **`1-WIRE_ID`** (DS2401 Silicon Serial Number) | **`1-WIRE_ID`** (DS2401 rear cartridge ID) | Single Conductor (1-Wire Bus) |
-| **Shield**| **Braided Copper (BL)**| $> 85\,\%$ Braid | **`GND_SHIELD`** (Chassis & overall shield) | **`GND_SHIELD`** (Chassis & overall shield) | Overall shield over all 6 wires |
+| **M8 Shell** | **Braided Copper (BL)**| $> 85\,\%$ Braid | **`GND_SHIELD`** (360° Chassis & overall shield) | **`GND_SHIELD`** (360° Chassis & overall shield) | Overall shield via M8 metal collar |
+
 
