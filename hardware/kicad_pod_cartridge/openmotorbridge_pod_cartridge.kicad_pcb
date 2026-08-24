@@ -1,4 +1,4 @@
-(kicad_pcb (version 20240108) (generator pcbnew)
+(kicad_pcb (version 20240108) (generator "pcbnew") (generator_version "8.0")
 
   (general
     (thickness 1.2)
@@ -33,7 +33,6 @@
   (net 5 "PTT_OPTO_KEY")
   (net 6 "VCC_POD")
 
-  ;; Board Outline (35.0 mm x 25.0 mm with 2.0 mm Corner Radii)
   (gr_line (start 2.0 0.0) (end 33.0 0.0) (stroke (width 0.15) (type solid)) (layer "Edge.Cuts"))
   (gr_arc (start 33.0 0.0) (mid 34.41 0.59) (end 35.0 2.0) (stroke (width 0.15) (type solid)) (layer "Edge.Cuts"))
   (gr_line (start 35.0 2.0) (end 35.0 23.0) (stroke (width 0.15) (type solid)) (layer "Edge.Cuts"))
@@ -43,7 +42,6 @@
   (gr_line (start 0.0 23.0) (end 0.0 2.0) (stroke (width 0.15) (type solid)) (layer "Edge.Cuts"))
   (gr_arc (start 0.0 2.0) (mid 0.59 0.59) (end 2.0 0.0) (stroke (width 0.15) (type solid)) (layer "Edge.Cuts"))
 
-  ;; 2x M2 Mounting Holes
   (footprint "MountingHole:MountingHole_2.2mm_M2" (layer "F.Cu")
     (at 2.5 12.5)
     (pad "1" thru_hole circle (at 0 0) (size 4.0 4.0) (drill 2.2) (layers "*.Cu" "*.Mask") (net 1 "GND"))
@@ -53,20 +51,17 @@
     (pad "1" thru_hole circle (at 0 0) (size 4.0 4.0) (drill 2.2) (layers "*.Cu" "*.Mask") (net 1 "GND"))
   )
 
-  ;; U1: DS2401 Silicon Serial ROM (SOT-23-3)
   (footprint "Package_TO_SOT_SMD:SOT-23" (layer "F.Cu")
     (at 17.5 7.0)
     (fp_text reference "U1" (at 0 -2.5) (layer "F.SilkS") (effects (font (size 0.8 0.8) (thickness 0.12))))
     (fp_text value "DS2401" (at 0 2.5) (layer "F.Fab") (effects (font (size 0.8 0.8) (thickness 0.12))))
   )
 
-  ;; J1: 6-Pin Spring Contact Pogo Pad Array
   (footprint "Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical" (layer "F.Cu")
     (at 17.5 19.0)
     (fp_text reference "J1" (at 0 -2.5) (layer "F.SilkS") (effects (font (size 0.8 0.8) (thickness 0.12))))
     (fp_text value "POGO_6PIN" (at 0 2.5) (layer "F.Fab") (effects (font (size 0.8 0.8) (thickness 0.12))))
   )
 
-  ;; Silkscreen
   (gr_text "OMB Cartridge v8.0" (at 17.5 2.5) (layer "F.SilkS") (effects (font (size 1.0 1.0) (thickness 0.15) bold)))
 )

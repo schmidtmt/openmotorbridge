@@ -1,4 +1,4 @@
-(kicad_pcb (version 20240108) (generator pcbnew)
+(kicad_pcb (version 20240108) (generator "pcbnew") (generator_version "8.0")
 
   (general
     (thickness 1.6)
@@ -97,9 +97,6 @@
   (net 17 "POD3_UART_RX")
   (net 18 "GNSS_1PPS")
 
-  ;; =========================================================================
-  ;; Board Outline (85.0 mm x 55.0 mm with 3.0 mm Corner Radii)
-  ;; =========================================================================
   (gr_line (start 3.0 0.0) (end 82.0 0.0) (stroke (width 0.15) (type solid)) (layer "Edge.Cuts"))
   (gr_arc (start 82.0 0.0) (mid 84.12 0.88) (end 85.0 3.0) (stroke (width 0.15) (type solid)) (layer "Edge.Cuts"))
   (gr_line (start 85.0 3.0) (end 85.0 52.0) (stroke (width 0.15) (type solid)) (layer "Edge.Cuts"))
@@ -109,9 +106,6 @@
   (gr_line (start 0.0 52.0) (end 0.0 3.0) (stroke (width 0.15) (type solid)) (layer "Edge.Cuts"))
   (gr_arc (start 0.0 3.0) (mid 0.88 0.88) (end 3.0 0.0) (stroke (width 0.15) (type solid)) (layer "Edge.Cuts"))
 
-  ;; =========================================================================
-  ;; 4x M3 Mounting Holes (Grid: 79.0 mm x 49.0 mm)
-  ;; =========================================================================
   (footprint "MountingHole:MountingHole_3.2mm_M3_Pad_Via" (layer "F.Cu")
     (at 3.0 3.0)
     (fp_text reference "H1" (at 0 -2.5) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
@@ -133,81 +127,67 @@
     (pad "1" thru_hole circle (at 0 0) (size 6.0 6.0) (drill 3.2) (layers "*.Cu" "*.Mask") (net 1 "GND"))
   )
 
-  ;; =========================================================================
-  ;; Core Components Placement
-  ;; =========================================================================
   
-  ;; U1: LM5164-Q1 100V Automotive Step-Down Converter
   (footprint "Package_SO:SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.41x3.3mm" (layer "F.Cu")
     (at 18.0 16.0)
     (fp_text reference "U1" (at 0 -3.2) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
     (fp_text value "LM5164-Q1" (at 0 3.2) (layer "F.Fab") (effects (font (size 1 1) (thickness 0.15))))
   )
 
-  ;; U2: ESP32-S3-WROOM-1-N16R8 Dual-Core Module
   (footprint "RF_Module:ESP32-S3-WROOM-1" (layer "F.Cu")
     (at 45.0 27.5 90)
     (fp_text reference "U2" (at 0 -10.5) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
     (fp_text value "ESP32-S3-WROOM-1" (at 0 10.5) (layer "F.Fab") (effects (font (size 1 1) (thickness 0.15))))
   )
 
-  ;; U3: Everest ES8388 Low Power Audio Codec (QFN-28)
   (footprint "Package_DFN_QFN:QFN-28-1EP_4x4mm_P0.4mm_EP2.6x2.6mm" (layer "F.Cu")
     (at 68.0 36.0)
     (fp_text reference "U3" (at 0 -3.0) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
     (fp_text value "ES8388" (at 0 3.0) (layer "F.Fab") (effects (font (size 1 1) (thickness 0.15))))
   )
 
-  ;; U4: Mornsun B0505S-1WR3 Galvanic DC/DC Converter (1.5kV Isolation)
   (footprint "Converter_DCDC:Converter_DCDC_Mornsun_B_S-1WR3_THT" (layer "F.Cu")
     (at 68.0 15.0)
     (fp_text reference "U4" (at 0 -4.5) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
     (fp_text value "B0505S-1WR3" (at 0 4.5) (layer "F.Fab") (effects (font (size 1 1) (thickness 0.15))))
   )
 
-  ;; U5: Bosch BMI270 6-Axis Automotive IMU
   (footprint "Package_LGA:LGA-14_2.5x3mm_P0.5mm" (layer "F.Cu")
     (at 45.0 43.0)
     (fp_text reference "U5" (at 0 -2.2) (layer "F.SilkS") (effects (font (size 0.8 0.8) (thickness 0.12))))
     (fp_text value "BMI270" (at 0 2.2) (layer "F.Fab") (effects (font (size 0.8 0.8) (thickness 0.12))))
   )
 
-  ;; U6: TI TCAN334G 3.3V CAN-FD Transceiver
   (footprint "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm" (layer "F.Cu")
     (at 24.0 42.0)
     (fp_text reference "U6" (at 0 -3.0) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
     (fp_text value "TCAN334G" (at 0 3.0) (layer "F.Fab") (effects (font (size 1 1) (thickness 0.15))))
   )
 
-  ;; J1: HD26 High-Density 26-Pin D-Sub Connector (Left Edge)
   (footprint "Connector_Dsub:DSUB-26-HD_Female_Horizontal_P2.29x1.98mm_EdgePinOffset7.70mm_Housings_POS01" (layer "F.Cu")
     (at 2.0 27.5 270)
     (fp_text reference "J1" (at 0 -12.0) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
     (fp_text value "HD26_FEMALE" (at 0 12.0) (layer "F.Fab") (effects (font (size 1 1) (thickness 0.15))))
   )
 
-  ;; J2: MicroSD Push-Push Card Slot (Bottom Edge)
   (footprint "Connector_Card:microSD_HC_Molex_47571-0001" (layer "F.Cu")
     (at 52.0 52.0 180)
     (fp_text reference "J2" (at 0 -8.5) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
     (fp_text value "MicroSD_4Bit_SDIO" (at 0 8.5) (layer "F.Fab") (effects (font (size 1 1) (thickness 0.15))))
   )
 
-  ;; J3: USB Type-C Receptacle (Top Edge)
   (footprint "Connector_USB:USB_C_Receptacle_GCT_USB4085" (layer "F.Cu")
     (at 45.0 2.5)
     (fp_text reference "J3" (at 0 -3.5) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
     (fp_text value "USB_C_IP67" (at 0 3.5) (layer "F.Fab") (effects (font (size 1 1) (thickness 0.15))))
   )
 
-  ;; D1: WS2812B-2020 RGB Status LED (under light pipe)
   (footprint "LED_SMD:LED_WS2812B-2020" (layer "F.Cu")
     (at 45.0 16.0)
     (fp_text reference "D1" (at 0 -1.8) (layer "F.SilkS") (effects (font (size 0.8 0.8) (thickness 0.12))))
     (fp_text value "WS2812B" (at 0 1.8) (layer "F.Fab") (effects (font (size 0.8 0.8) (thickness 0.12))))
   )
 
-  ;; Silkscreen Branding
   (gr_text "OpenMotorBridge v8.0" (at 45.0 8.0) (layer "F.SilkS") (effects (font (size 1.5 1.5) (thickness 0.2) bold)))
   (gr_text "CERN-OHL-S v2 | 4-Layer SMT" (at 45.0 10.5) (layer "F.SilkS") (effects (font (size 1.0 1.0) (thickness 0.15))))
   (gr_text "GALVANIC BARRIER (4mm)" (at 68.0 26.0 90) (layer "F.SilkS") (effects (font (size 0.9 0.9) (thickness 0.15))))
