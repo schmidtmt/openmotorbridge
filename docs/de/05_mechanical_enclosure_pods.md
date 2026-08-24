@@ -218,20 +218,22 @@ Ein zentrales Entwicklungsziel von OpenMotorBridge ist die **100 % zerstörungsf
 
 ---
 
-### 5.5 Pod-Basisplatine (`openmotorbridge_pod_base`) & Zentrische Kassetten-Führung
+### 5.5 Pod-Basisplatine (`openmotorbridge_pod_base`) & M8-Gehäuseentkopplung (Variante A)
 
-Der mechanische und elektrische Übergang von der Wechselkassette auf die M8-Kabelverbindung zum Motorradkabelbaum erfolgt über die zentrierte **Pod-Basisplatine (`openmotorbridge_pod_base`)**:
+Der mechanische und elektrische Übergang von der Wechselkassette auf die M8-Kabelverbindung zum Motorradkabelbaum erfolgt über die zentrierte **Pod-Basisplatine (`openmotorbridge_pod_base`)** in Kombination mit einer gehäuseverschraubten M8-Einbaubuchse (**Variante A: Vollständige mechanische Entkopplung**):
 
-#### Oberansicht (Senkrechte/Horizontale 6-Pin Stiftleiste & SP3012 TVS-Schutzstufe):
+#### Oberansicht (Horizontale 6-Pin Stiftleiste, SP3012 TVS & M8-Lötpad-Array):
 ![OpenMotorBridge Pod-Basisplatine Oberansicht 3D-Render](../../hardware/kicad_pod_base/pod_base_3d_render_top.png)
 
-#### Unteransicht (Zentrierte M8 6-Pin IP67-Buchse & GND-Schirmfläche):
+#### Unteransicht (Massive GND-Schirmfläche, 0 Bohrungen im Steckbereich):
 ![OpenMotorBridge Pod-Basisplatine Unteransicht 3D-Render](../../hardware/kicad_pod_base/pod_base_3d_render_bottom.png)
 
-* **Abmessungen:** $36{,}0 \times 20{,}0\,\text{mm}$ (Kompakte 2-Layer FR4-Basisplatine mit großzügigen Leiterbahn- und Schutzabständen).
+* **Abmessungen:** $36{,}0 \times 20{,}0\,\text{mm}$ (Kompakte 2-Layer FR4-Basisplatine mit getrennten Zonen für Stiftleiste und M8-Anschluss).
 * **Zentrierte 6-Pin Stiftleiste (`J1`):** 6-poliges Präzisions-Pin-Array ($2{,}54\,\text{mm}$ Raster, vergoldet) exakt auf der horizontalen Mittelachse ($Y=0, Z=0$).
+* **M8-Lötpad-Terminal (`J2`):** 6-Pad Wire-Solder-Feld auf der linken Schwinge für die flexiblen M8-Silikonlitzen (Pins 1..6).
 * **Integrierte ESD-Schutzmatrix (`U1`):** **Littelfuse SP3012-06UTG** (6-Kanal TVS-Array mit $< 0{,}5\,\text{pF}$ parasitärer Kapazität) leitet elektrostatische Entladungen beim Berühren der Kontakte blitzschnell gegen Masse ab.
-* **Zentrierte M8-Rundsteckverbinder-Buchse (`J2`):** Metallgekapselte **M8 6-Pin A-Coded IP67 Einbaubuchse** (IEC 61076-2-104) exakt im geometrischen Zentrum der Platinenunterseite (`B.Cu`) verlötet.
+* **M8 Gehäuse-Einbaubuchse (IP67 Panel Mount):** Die metallgekapselte **M8 6-Pin A-Coded Einbaubuchse** (IEC 61076-2-104) wird mit O-Ring und Messing-Kontermutter **direkt in die $3{,}0\,\text{mm}$ dicke PA12-Gehäusestirnwand** verschraubt ($1{,}5\,\text{Nm}$ mit Loctite 243). 
+* **100% Mechanische Entkopplung:** Beim Festschrauben des M8-Kabels und bei Fahrbahnvibrationen wirken alle mechanischen Zug- und Drehmomente ausschließlich auf das massive Kunststoffgehäuse. Die Lötstellen der Platine bleiben völlig kräftefrei!
 * **Mechanische Entkopplung & Montage (`H1`, `H2`):** 2x M2 Montagebohrungen mit Shore 40A Silikondämpfung gegen Fahrbahnvibrationen.
 
 ---

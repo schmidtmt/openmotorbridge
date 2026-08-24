@@ -219,20 +219,22 @@ A central design goal of OpenMotorBridge is **100% non-destructive and solder-fr
 
 ---
 
-### 5.5 Pod Base PCB (`openmotorbridge_pod_base`) & Centric Cartridge Guide
+### 5.5 Pod Base PCB (`openmotorbridge_pod_base`) & M8 Housing Decoupling (Variant A)
 
-The mechanical and electrical interface from the interchangeable cartridge to the M8 wiring harness is governed by the centered **Pod Base PCB (`openmotorbridge_pod_base`)**:
+The mechanical and electrical interface from the interchangeable cartridge to the M8 wiring harness is governed by the centric **Pod Base PCB (`openmotorbridge_pod_base`)** paired with a panel-mounted M8 receptacle (**Variant A: 100% Mechanical Decoupling**):
 
-#### Top View (Vertical/Horizontal 6-Pin Header & SP3012 TVS Protection Stage):
+#### Top View (Horizontal 6-Pin Header, SP3012 TVS & M8 Wire Terminal Pads):
 ![OpenMotorBridge Pod Base PCB Top 3D Render](../../hardware/kicad_pod_base/pod_base_3d_render_top.png)
 
-#### Bottom View (Centered M8 6-Pin IP67 Receptacle & GND Shield Plane):
+#### Bottom View (Massive Solid GND Shield Plane, Zero Holes in Mating Zone):
 ![OpenMotorBridge Pod Base PCB Bottom 3D Render](../../hardware/kicad_pod_base/pod_base_3d_render_bottom.png)
 
-* **Dimensions:** $36.0 \times 20.0\,\text{mm}$ (Compact 2-layer FR4 base board with generous clearance margins).
-* **Centered 6-Pin Header (`J1`):** 6-pin precision pin array ($2.54\,\text{mm}$ pitch, gold-plated) positioned at the exact geometric center line ($Y=0, Z=0$).
+* **Dimensions:** $36.0 \times 20.0\,\text{mm}$ (Compact 2-layer FR4 base board with separated zones for pin header and M8 wiring).
+* **Centric 6-Pin Header (`J1`):** 6-pin precision pin array ($2.54\,\text{mm}$ pitch, gold-plated) positioned at the exact geometric center line ($Y=0, Z=0$).
+* **M8 Wire Solder Terminal (`J2`):** 6-pad wire-solder block on the left wing for flexible silicone wire leads (Pins 1..6).
 * **Integrated ESD Protection Array (`U1`):** **Littelfuse SP3012-06UTG** (6-channel TVS diode array with $< 0.5\,\text{pF}$ parasitic capacitance) shunts ESD strikes upon pin contact directly to chassis ground.
-* **Centered M8 Receptacle (`J2`):** Metal-shielded **M8 6-Pin A-Coded IP67 Receptacle** (IEC 61076-2-104) soldered at the exact geometric center of the bottom layer (`B.Cu`).
+* **M8 Panel-Mount Receptacle (IP67):** The metal-shielded **M8 6-pin A-coded receptacle** (IEC 61076-2-104) is bolted with an O-ring and brass locknut **directly into the $3.0\,\text{mm}$ thick PA12 housing end-wall** ($1.5\,\text{Nm}$ with Loctite 243).
+* **100% Mechanical Decoupling:** Cable pulling, twisting, and road vibration forces act exclusively on the robust plastic housing, completely isolating PCB solder joints from mechanical stress!
 * **Mechanical Damping & Mounting (`H1`, `H2`):** 2x M2 mounting holes with Shore 40A silicone dampening bushings against road vibrations.
 
 ---

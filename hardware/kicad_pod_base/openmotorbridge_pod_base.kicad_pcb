@@ -89,135 +89,13 @@
 	)
 	(footprint ""
 		(layer "F.Cu")
-		(uuid "08551d14-b6a5-496c-899e-4ea02bb99e9e")
-		(at 108 84)
-		(property "Reference" "C1"
-			(at 0 0 0)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "2421088a-3b8a-47cf-aebe-527dafd25470")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(uuid "ceb72260-742a-4119-ae85-b800d7be1549")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "196be8b2-1c20-4a6c-9d04-05652ce66149")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "66fa52a0-055c-41e8-bcb1-f41b2f1b13af")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(duplicate_pad_numbers_are_jumpers no)
-		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0603_1608Metric.step"
-			(offset
-				(xyz 0 0 0)
-			)
-			(scale
-				(xyz 1 1 1)
-			)
-			(rotate
-				(xyz 0 0 0)
-			)
-		)
-	)
-	(footprint ""
-		(layer "F.Cu")
-		(uuid "2a6a7d26-81cf-495d-85a5-71d2e68fb560")
-		(at 118 73.65)
-		(property "Reference" "J1"
-			(at 0 0 0)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "2183545c-dfc6-400a-9f02-da6805e5907c")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(uuid "24a9870a-d557-4b61-9038-b549d245ea13")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "4e7dd72b-d1c4-43f2-9596-f3e83198794a")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "4d185910-1ecc-4e79-a7ac-4459e5e28957")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(duplicate_pad_numbers_are_jumpers no)
-		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x06_P2.54mm_Horizontal.step"
-			(offset
-				(xyz 0 0 0)
-			)
-			(scale
-				(xyz 1 1 1)
-			)
-			(rotate
-				(xyz 0 0 0)
-			)
-		)
-	)
-	(footprint ""
-		(layer "F.Cu")
-		(uuid "55c205ce-00f6-47af-a485-8cb25ae77d63")
-		(at 108 76)
+		(uuid "2852408e-0102-4434-bf4e-da99fec49782")
+		(at 113.5 76.5)
 		(property "Reference" "U1"
 			(at 0 0 0)
 			(layer "F.SilkS")
 			(hide yes)
-			(uuid "eae052e5-5889-41cb-81fa-5d8a32f032a8")
+			(uuid "cd841e91-9427-465e-af81-633b8bc3eadf")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -227,7 +105,7 @@
 		(property "Value" ""
 			(at 0 0 0)
 			(layer "F.Fab")
-			(uuid "e88d3c42-6f8e-4494-ac20-15f57c0b26f2")
+			(uuid "a36278e0-7c4e-444e-ac05-53ffe0714730")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -238,7 +116,7 @@
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "8ece007c-7eed-4ebf-88b3-fb958013395f")
+			(uuid "e433fdc8-7e02-4626-a423-b100e5b7839f")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -249,7 +127,7 @@
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "38823811-caf0-4035-b139-5d1a0923cb18")
+			(uuid "88a1e91e-0f24-4d5c-8bfb-b1b5b77f321a")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -272,13 +150,13 @@
 	)
 	(footprint ""
 		(layer "F.Cu")
-		(uuid "a8fc89ff-6c0f-44ac-88f7-dbb6e3b6a095")
-		(at 103 80)
-		(property "Reference" "H1"
+		(uuid "3fbb610f-a6eb-4a8f-aabd-501644d16841")
+		(at 120 73.65)
+		(property "Reference" "J1"
 			(at 0 0 0)
 			(layer "F.SilkS")
 			(hide yes)
-			(uuid "0ac9d47a-bdc0-4c45-9839-9f8f248ca562")
+			(uuid "c78e5249-807d-4aed-823f-87266a205673")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -288,7 +166,7 @@
 		(property "Value" ""
 			(at 0 0 0)
 			(layer "F.Fab")
-			(uuid "ccfbf42e-5255-4174-bf44-971b56285757")
+			(uuid "39cb7baf-b3b1-4a57-a220-237fcee3a094")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -299,7 +177,7 @@
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "f59a7f78-baad-4606-a9fb-3fea8d1b7b7f")
+			(uuid "593aa9a4-2627-4df0-9bc2-3b7f63e50f44")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -310,7 +188,68 @@
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "8652d04a-26a1-4feb-be05-f1db1eebcd45")
+			(uuid "95cd3905-0759-4e7c-a776-bc3808a17641")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(duplicate_pad_numbers_are_jumpers no)
+		(embedded_fonts no)
+		(model "${KICAD10_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x06_P2.54mm_Horizontal.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
+	)
+	(footprint ""
+		(layer "F.Cu")
+		(uuid "538f116d-63dd-4cc0-96b9-d8d80283b40d")
+		(at 103 80)
+		(property "Reference" "H1"
+			(at 0 0 0)
+			(layer "F.SilkS")
+			(hide yes)
+			(uuid "42f4f7de-2a25-4491-bfc0-309c590dece4")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(uuid "462fb007-8bae-430f-9fe8-04e96ecbecff")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "3858f6d3-5bf9-4dd6-8fb6-7cfac6be039c")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "d272e440-5fa0-44c1-b9a7-8774e2019ea8")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -322,13 +261,13 @@
 	)
 	(footprint ""
 		(layer "F.Cu")
-		(uuid "f3abb159-69f0-4173-aa40-93e5a13a36da")
+		(uuid "5bdd0c88-6002-43d0-958d-64360466fe39")
 		(at 133 80)
 		(property "Reference" "H2"
 			(at 0 0 0)
 			(layer "F.SilkS")
 			(hide yes)
-			(uuid "b1bfe989-38c0-41b1-aba2-b2abb6a38d05")
+			(uuid "401b6d64-78d4-4fa8-ad56-ef78cce3bab3")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -338,7 +277,7 @@
 		(property "Value" ""
 			(at 0 0 0)
 			(layer "F.Fab")
-			(uuid "5edaf9a9-6a38-46fe-b275-a0dace67b1e6")
+			(uuid "63d00342-964a-44b8-a8da-260420420da1")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -349,7 +288,7 @@
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "27b6956a-823c-4ca1-be2c-a9d710bf59be")
+			(uuid "794f4ba7-10f8-4989-9bba-54fd1adcfcfe")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -360,7 +299,7 @@
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "f27c165e-9535-4dea-853e-eda0396497f4")
+			(uuid "5e57efdc-15e2-4c93-acd0-2194f60724a9")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -371,14 +310,14 @@
 		(embedded_fonts no)
 	)
 	(footprint ""
-		(layer "B.Cu")
-		(uuid "4abd93f8-da2a-4583-80a2-b053ef5968f7")
-		(at 118 80)
-		(property "Reference" "J2"
+		(layer "F.Cu")
+		(uuid "936b610c-9d5d-496a-a7ce-915ae8d4912a")
+		(at 113.5 83.5)
+		(property "Reference" "C1"
 			(at 0 0 0)
 			(layer "F.SilkS")
 			(hide yes)
-			(uuid "01ec2917-ae77-4448-8b69-2447b0ff2fda")
+			(uuid "ffdd3505-4f72-4051-b37a-5e939d829cd2")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -388,7 +327,7 @@
 		(property "Value" ""
 			(at 0 0 0)
 			(layer "F.Fab")
-			(uuid "228c31d1-4d40-4af3-ad74-05417e89f813")
+			(uuid "475929cc-acb0-4362-a0d7-d1f4044ce9dd")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -399,7 +338,7 @@
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "d9bde19c-c678-4d32-823b-754c452357f6")
+			(uuid "f7d6b11c-d820-42ef-82c9-16f5ab970087")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -410,7 +349,7 @@
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "14d5778d-09de-4c4c-97f9-6c1b371941d6")
+			(uuid "20cc4fcd-3965-46ec-85a5-64aa54873ac3")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -419,12 +358,73 @@
 		)
 		(duplicate_pad_numbers_are_jumpers no)
 		(embedded_fonts no)
-		(model "/Users/schmidtm/openMotorBridge/hardware/cad/M8_6Pin_A_Coded_Receptacle.wrl"
+		(model "${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0603_1608Metric.step"
 			(offset
 				(xyz 0 0 0)
 			)
 			(scale
-				(xyz 393.700787 393.700787 393.700787)
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
+	)
+	(footprint ""
+		(layer "F.Cu")
+		(uuid "a27ae97b-c26a-4b80-8f60-bfb91fdb9569")
+		(at 108.5 75)
+		(property "Reference" "J2"
+			(at 0 0 0)
+			(layer "F.SilkS")
+			(hide yes)
+			(uuid "341cd122-198b-47af-bc18-f0ac6c86485d")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(uuid "520b59eb-6994-4a17-af58-71c86efe3481")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "90c46346-d3d5-4dfa-80ea-56b28336e185")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "15466034-9ed4-47fa-bafb-a46a0b65fe27")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(duplicate_pad_numbers_are_jumpers no)
+		(embedded_fonts no)
+		(model "${KICAD10_3DMODEL_DIR}/Connector_PinHeader_2.00mm.3dshapes/PinHeader_1x06_P2.00mm_Vertical.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
 			)
 			(rotate
 				(xyz 0 0 0)
@@ -439,7 +439,7 @@
 			(type default)
 		)
 		(layer "Edge.Cuts")
-		(uuid "e9455822-348d-49b7-b662-30982441c2e8")
+		(uuid "e12b162b-7816-4ab4-bab5-d99f91b825b9")
 	)
 	(gr_line
 		(start 100 88)
@@ -449,7 +449,7 @@
 			(type default)
 		)
 		(layer "Edge.Cuts")
-		(uuid "0d49306a-9df6-4023-8ced-5394f75a8077")
+		(uuid "3dc3ec51-b426-4134-b428-3a84ab46489a")
 	)
 	(gr_line
 		(start 102 70)
@@ -459,7 +459,7 @@
 			(type default)
 		)
 		(layer "Edge.Cuts")
-		(uuid "3548696a-2468-468d-bd49-1980a954e7f3")
+		(uuid "73b40294-ab30-474e-b5d2-f34ada88f40a")
 	)
 	(gr_line
 		(start 102 90)
@@ -469,7 +469,7 @@
 			(type default)
 		)
 		(layer "Edge.Cuts")
-		(uuid "ab5abfe9-e070-4fa4-87a5-e8fdd8ff0252")
+		(uuid "85a9e733-40d2-48e7-8bff-9763c727beb9")
 	)
 	(gr_line
 		(start 134 70)
@@ -479,7 +479,7 @@
 			(type default)
 		)
 		(layer "Edge.Cuts")
-		(uuid "be139ad9-f8a0-4f22-b034-f7e1e95e7a5d")
+		(uuid "1f87d5e7-83e2-4d6c-b467-41702fe4f804")
 	)
 	(gr_line
 		(start 134 90)
@@ -489,7 +489,7 @@
 			(type default)
 		)
 		(layer "Edge.Cuts")
-		(uuid "068d4482-b301-46e0-9b6c-6904befeb933")
+		(uuid "6ad7c7c0-431c-492d-abc9-5c4a52869945")
 	)
 	(gr_line
 		(start 136 72)
@@ -499,7 +499,7 @@
 			(type default)
 		)
 		(layer "Edge.Cuts")
-		(uuid "fd378453-fd58-4fe0-bdb3-2029d8358e5c")
+		(uuid "7474b9a8-88e9-4793-8af9-edf154fffcb4")
 	)
 	(gr_line
 		(start 136 88)
@@ -509,23 +509,56 @@
 			(type default)
 		)
 		(layer "Edge.Cuts")
-		(uuid "02f5d707-33d2-4e24-9ca6-baafb47a20be")
+		(uuid "24a81f30-4fcb-4156-bbbd-8a4a27bae047")
 	)
-	(gr_text "MATES TO CARTRIDGE"
-		(at 108 87.8 0)
+	(gr_text "SP3012 TVS"
+		(at 114 73 0)
 		(layer "F.SilkS")
-		(uuid "d3ca25ff-f085-4cc8-b37e-5d381295e384")
+		(uuid "473521d4-0ba1-40c1-80ea-b87e72869ffc")
 		(effects
 			(font
-				(size 0.38 0.38)
+				(size 0.3 0.3)
+				(thickness 0.07)
+			)
+		)
+	)
+	(gr_text "M8 WIRE IN (1..6)"
+		(at 108.5 72 0)
+		(layer "F.SilkS")
+		(uuid "8535c164-b26a-412e-aad7-ba2aae470b01")
+		(effects
+			(font
+				(size 0.36 0.36)
 				(thickness 0.08)
 			)
 		)
 	)
-	(gr_text "SP3012 TVS"
-		(at 108 72.2 0)
+	(gr_text "MATES TO CARTRIDGE"
+		(at 123 88 0)
 		(layer "F.SilkS")
-		(uuid "9dcd225a-aec4-445d-8612-9b68741ecd2d")
+		(uuid "90caadb8-e7a4-4150-a1c5-bb8218a72833")
+		(effects
+			(font
+				(size 0.36 0.36)
+				(thickness 0.08)
+			)
+		)
+	)
+	(gr_text "OPENMOTORBRIDGE // POD BASE"
+		(at 123 72 0)
+		(layer "F.SilkS")
+		(uuid "fa5febcd-b8f8-4414-9175-7d95a8bdbdba")
+		(effects
+			(font
+				(size 0.48 0.48)
+				(thickness 0.1)
+			)
+		)
+	)
+	(gr_text "GND SHIELD PLANE // 0 HOLES IN MATING ZONE"
+		(at 118 87.5 0)
+		(layer "B.SilkS")
+		(uuid "ef946032-9ee9-4372-9009-0e94aa3666d5")
 		(effects
 			(font
 				(size 0.4 0.4)
@@ -533,36 +566,14 @@
 			)
 		)
 	)
-	(gr_text "OPENMOTORBRIDGE // POD BASE"
-		(at 120 72.2 0)
-		(layer "F.SilkS")
-		(uuid "e1f86395-7335-4680-91a6-d9e7302a9b3d")
+	(gr_text "OPENMOTORBRIDGE POD BASE (B.Cu)"
+		(at 118 80 0)
+		(layer "B.SilkS")
+		(uuid "08e5f2c9-2476-4dfb-8534-fc0bc8486b28")
 		(effects
 			(font
-				(size 0.55 0.55)
+				(size 0.5 0.5)
 				(thickness 0.11)
-			)
-		)
-	)
-	(gr_text "GND SHIELD PLANE"
-		(at 118 87.5 0)
-		(layer "B.SilkS")
-		(uuid "aad5a92e-bf94-48ee-97ca-259ef3639f0f")
-		(effects
-			(font
-				(size 0.45 0.45)
-				(thickness 0.1)
-			)
-		)
-	)
-	(gr_text "M8 6-PIN IP67 (OUTSIDE)"
-		(at 118 72.5 0)
-		(layer "B.SilkS")
-		(uuid "65f42e28-48f2-469c-a7f0-9a3978a46490")
-		(effects
-			(font
-				(size 0.55 0.55)
-				(thickness 0.12)
 			)
 		)
 	)

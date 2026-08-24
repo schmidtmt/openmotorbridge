@@ -54,8 +54,16 @@ def generate_pod_base_pcb(pcb_path):
 
     # 2. Footprint definitions & 3D model mapping
     model_mapping = {
+        # J1: 6-Pin Horizontal Pin Header (Centered at Y=80.0mm, X=118.0mm)
         'J1': (
             '${KICAD10_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x06_P2.54mm_Horizontal.step',
+            (0.0, 0.0, 0.0),
+            (0.0, 0.0, 0.0),
+            (1.0, 1.0, 1.0)
+        ),
+        # J2: 6-Pad Wire Solder Terminal Array for M8 Pigtail Leads (Left Wing)
+        'J2': (
+            '${KICAD10_3DMODEL_DIR}/Connector_PinHeader_2.00mm.3dshapes/PinHeader_1x06_P2.00mm_Vertical.step',
             (0.0, 0.0, 0.0),
             (0.0, 0.0, 0.0),
             (1.0, 1.0, 1.0)
@@ -72,15 +80,9 @@ def generate_pod_base_pcb(pcb_path):
             (0.0, 0.0, 0.0),
             (1.0, 1.0, 1.0)
         ),
-        'J2': (
-            os.path.abspath(os.path.join(os.path.dirname(__file__), '../cad/M8_6Pin_A_Coded_Receptacle.wrl')),
-            (0.0, 0.0, 0.0),
-            (0.0, 0.0, 0.0),
-            (393.700787, 393.700787, 393.700787)
-        ),
     }
 
-    # Symmetrical, spacious, non-overlapping layout
+    # Symmetrical, spacious, non-overlapping layout (Variante A)
     # ref: (x_mm, y_mm, rot_deg, layer_name)
     layout_rules = {
         # Symmetrical M2 Mounting Holes on Left & Right Flanks (Through-Hole)
@@ -88,14 +90,14 @@ def generate_pod_base_pcb(pcb_path):
         'H2': (X0 + W - 3.0, Y_center, 0.0, 'F.Cu'),         # (133.0, 80.0) Right Mounting Hole
 
         # 6-Pin Horizontal Pin Header (OBERSEITE / INNEN: Horizontal in den Kassetteneinschub ragend)
-        'J1': (X_center, 73.65, 0.0, 'F.Cu'),                # (118.0, 73.65) Horizontal Pin Header (Y 73.65..86.35mm)
+        'J1': (X_center + 2.0, 73.65, 0.0, 'F.Cu'),          # (120.0, 73.65) Horizontal Pin Header (Y 73.65..86.35mm)
 
-        # Left Wing: ESD Protection Stage (OBERSEITE / INNEN: Geschützte Innenlage)
-        'U1': (X0 + 8.0, Y_center - 4.0, 0.0, 'F.Cu'),       # (108.0, 76.0) TVS Array (Top)
-        'C1': (X0 + 8.0, Y_center + 4.0, 0.0, 'F.Cu'),       # (108.0, 84.0) 100nF Cap (Top)
+        # 6-Pad Wire Terminal for M8 Panel-Mount Pigtail Leads (Left Wing)
+        'J2': (X0 + 8.5, 75.0, 0.0, 'F.Cu'),                 # (108.5, 75.0) M8 Wire Connection Pads
 
-        # Integrated M8 6-Pin Panel Receptacle (UNTERSEITE / AUSSEN: Senkrecht nach außen zeigend)
-        'J2': (X_center, Y_center, 0.0, 'B.Cu'),             # (118.0, 80.0) Unterseite / Außen
+        # Center Stage: SP3012 TVS Array & 100nF Cap
+        'U1': (X_center - 4.5, Y_center - 3.5, 0.0, 'F.Cu'), # (113.5, 76.5) TVS Array (Top)
+        'C1': (X_center - 4.5, Y_center + 3.5, 0.0, 'F.Cu'), # (113.5, 83.5) 100nF Cap (Top)
     }
 
     for ref, (x_mm, y_mm, rot_deg, layer_name) in layout_rules.items():
@@ -125,9 +127,10 @@ def generate_pod_base_pcb(pcb_path):
 
     # 3. Add Silkscreen Labels on Top (F.SilkS) and Bottom (B.SilkS)
     top_labels = [
-        ("OPENMOTORBRIDGE // POD BASE", 120.0, Y0 + 2.2, 0.55, 0.55, 0.11),
-        ("SP3012 TVS", 108.0, Y0 + 2.2, 0.40, 0.40, 0.09),
-        ("MATES TO CARTRIDGE", 108.0, Y0 + H - 2.2, 0.38, 0.38, 0.08),
+        ("OPENMOTORBRIDGE // POD BASE", 123.0, Y0 + 2.0, 0.48, 0.48, 0.10),
+        ("M8 WIRE IN (1..6)", 108.5, Y0 + 2.0, 0.36, 0.36, 0.08),
+        ("SP3012 TVS", 114.0, 73.0, 0.30, 0.30, 0.07),
+        ("MATES TO CARTRIDGE", 123.0, Y0 + H - 2.0, 0.36, 0.36, 0.08),
     ]
 
     for text_str, x_mm, y_mm, sx, sy, th in top_labels:
@@ -141,8 +144,8 @@ def generate_pod_base_pcb(pcb_path):
         board.Add(txt)
 
     bottom_labels = [
-        ("M8 6-PIN IP67 (OUTSIDE)", X_center, Y0 + 2.5, 0.55, 0.55, 0.12),
-        ("GND SHIELD PLANE", X_center, Y0 + H - 2.5, 0.45, 0.45, 0.10),
+        ("OPENMOTORBRIDGE POD BASE (B.Cu)", X_center, Y_center, 0.50, 0.50, 0.11),
+        ("GND SHIELD PLANE // 0 HOLES IN MATING ZONE", X_center, Y0 + H - 2.5, 0.40, 0.40, 0.09),
     ]
 
     for text_str, x_mm, y_mm, sx, sy, th in bottom_labels:
