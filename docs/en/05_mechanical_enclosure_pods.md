@@ -170,9 +170,17 @@ The cartridge carrier PCB (`openmotorbridge_pod_cartridge`) adapts internal Sena
 * **Locking Mechanism:** Employs the identical POM-C snap-lock and 90° cam-lock as active cartridges.
 * **Hardware State:** Host MCU detects empty/open pins and maintains slot in zero-power, zero-noise isolation via `disabled.json`.
 
-### 5.5 Pod Base Pogo Interface, ESD Protection & Modular M8 Transition
+### 5.5 Pod Base PCB & 3D Board Render
 
-The physical interface transition from the inserted cartridge to the modular motorcycle harness occurs within the sealed bottom chamber of the satellite pod:
+The physical interface transition from the inserted cartridge to the modular motorcycle harness is implemented on the sealed **Pod Base PCB (`openmotorbridge_pod_base`)** inside the satellite pod's mounting base:
+
+![OpenMotorBridge Pod Base PCB 3D Render](../../hardware/kicad_pod_base/kicad_3d_render.png)
+
+* **Dimensions:** $24.0 \times 14.0\,\text{mm}$ (Ultra-compact 2-layer FR4 board).
+* **Mill-Max Pogo-Pin Array (`J1`):** 6-pin spring-loaded contact block (Series 824-22-006-00-001101, $2.54\,\text{mm}$ pitch, $1.4\,\text{mm}$ working stroke, 60g preload) protruding upward through the housing floor into the cartridge bay.
+* **Integrated ESD Protection Array (`U1`):** **Littelfuse SP3012-06UTG** (6-channel TVS array with $< 0.5\,\text{pF}$ parasitic capacitance) instantly clamps electrostatic discharges when pogo pins are touched during cartridge swaps.
+* **M8 Interface Block (`J2`):** 6 signal lines + 1 shield connection pad to directly solder the rear of the M8 6-Pin IP67 panel receptacle.
+* **Decoupling & Mounting (`H1`, `H2`):** 2x M2 mounting fasteners with Shore 40A silicone dampening and 2-component potting for 100% waterproof (IP67) and vibration-proof longevity.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
@@ -183,7 +191,7 @@ The physical interface transition from the inserted cartridge to the modular mot
 │    • Perimeter Shore 40A silicone boot gasket                           │
 │                               ▲                                         │
 │                               ▼ (1.4 mm working stroke, 60g preload)    │
-│ 2. POD HOUSING FLOOR (Interface):                                       │
+│ 2. POD BASE PCB (openmotorbridge_pod_base, 24x14mm):                    │
 │    • Mill-Max 6-Pin Pogo-Pin Array (824-22-006-00-001101)               │
 │    • Press-fitted flush into housing floor & O-ring sealed              │
 │    • Integrated ESD protection array (Littelfuse SP3012, 6x TVS < 0.5pF)│

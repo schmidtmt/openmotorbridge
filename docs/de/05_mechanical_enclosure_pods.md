@@ -170,9 +170,17 @@ Die Kassetten-Trägerplatine (`openmotorbridge_pod_cartridge`) adaptiert die int
 * **Verriegelung:** Nutzt denselben POM-C Snap-Lock und 90°-Cam-Lock Drehriegel wie aktive Kassetten.
 * **Hardware-Zustand:** Die Zentralbox erkennt offene/leere Kontakte und haelt den Slot ueber `disabled.json` strom- und rauschfrei isoliert.
 
-### 5.5 Pod-Boden Pogo-Kontaktblock, ESD-Schutz & Modularer M8-Übergang
+### 5.5 Pod-Bodenplatine (Pod-Base PCB) & 3D-Board-Render
 
-Der physische Übergang von der gesteckten Kassette zum modularen Fahrzeugkabelbaum erfolgt im versiegelten Gehäuseboden des Satelliten-Pods:
+Der physische Übergang von der gesteckten Kassette zum modularen Fahrzeugkabelbaum erfolgt über die versiegelte **Pod-Bodenplatine (`openmotorbridge_pod_base`)** im Gehäusefuß des Satelliten-Pods:
+
+![OpenMotorBridge Pod-Bodenplatine 3D-Render](../../hardware/kicad_pod_base/kicad_3d_render.png)
+
+* **Abmessungen:** $24{,}0 \times 14{,}0\,\text{mm}$ (Ultra-kompaktes 2-Layer FR4-Board).
+* **Mill-Max Pogo-Pin-Array (`J1`):** 6-poliger Federkontaktblock (Serie 824-22-006-00-001101, Raster $2{,}54\,\text{mm}$, $1{,}4\,\text{mm}$ Arbeitshub, 60g Vorspannung) ragt durch die Gehäusetrennwand nach oben in den Kassetten-Aufnahmeschacht.
+* **Integrierte ESD-Schutzmatrix (`U1`):** **Littelfuse SP3012-06UTG** (6-Kanal TVS-Array mit $< 0{,}5\,\text{pF}$ parasitärer Kapazität) leitet elektrostatische Spitzen bei Berührung der Pogo-Pins sofort gegen das Metallgehäuse der M8-Buchse ab.
+* **M8-Schnittstellenblock (`J2`):** 6 Signalleitungen + 1 Schirmanschluss zur rückseitigen Kontaktierung der M8 6-Pin IP67-Einbaubuchse.
+* **Entkopplung & Montage (`H1`, `H2`):** 2x M2-Verschraubungen mit Shore 40A Silikon-Entkopplung und 2-Komponenten-Silikonverguss für 100 % Wasserdichtigkeit (IP67) und Rüttelsicherheit.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
@@ -183,7 +191,7 @@ Der physische Übergang von der gesteckten Kassette zum modularen Fahrzeugkabelb
 │    • Umlaufende Shore 40A Silikon-Formschuhdichtung                     │
 │                               ▲                                         │
 │                               ▼ (1.4 mm Feder-Arbeitshub, 60g/Pin)      │
-│ 2. POD-GEHÄUSEBODEN (Interface):                                        │
+│ 2. POD-BODENPLATINE (openmotorbridge_pod_base, 24x14mm):                │
 │    • Mill-Max 6-Pin Pogo-Pin-Array (824-22-006-00-001101)               │
 │    • Gehäusebündig eingepresst & mit O-Ring abgedichtet                 │
 │    • Integrierte ESD-Schutzmatrix (Littelfuse SP3012, 6x TVS < 0.5 pF)  │
