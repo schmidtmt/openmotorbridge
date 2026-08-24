@@ -19,6 +19,7 @@
 #include "webdav_uploader.h"
 #include "gnss_omm_bridge.h"
 #include "adr_ekf_filter.h"
+#include "omm_flasher.h"
 
 static const char *TAG = "OMB_MAIN";
 
@@ -258,6 +259,7 @@ extern "C" void app_main(void) {
     sdio_storage_init();
     webdav_uploader_init();
     gnss_omm_bridge_init();
+    omm_flasher_init();
     ble_server_init();
     ble_handlebar_client_init(on_handlebar_button_event, on_handlebar_battery_event);
 

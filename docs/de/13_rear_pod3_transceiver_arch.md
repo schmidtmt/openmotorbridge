@@ -125,3 +125,21 @@ Die Kommunikation ueber die 460.800-Baud-Schnittstelle erfolgt paketorientiert m
 * **`0x03` - OMM 868 MHz LoRa Fallback Frame:** Codec2 Audio- oder Radar-Paket aus dem Long-Range Fallback.
 * **`0x04` - OMM Tx Request (Dual-PHY):** Sendeauftrag der Zentralbox an das 2.4 GHz Mesh oder den SX1262 LoRa Transceiver.
 * **`0x05` - DLE Status & Link Quality:** Signal-to-Noise Ratio (SNR), RSSI, PHY-Modus (2.4G vs 868M) und DLE Gateway-Score des Knotens.
+* **`0xFE` - Firmware Update Bootloader Command:** `0xAA 0x55 0xFE 0x01 "BOOT"` leitet den ESP32-C3 ROM-Bootloader für das High-Speed UART Push-Flashen ein.
+
+---
+
+## 7. Firmware-Update & Fertigungs-Prüfschnittstelle
+
+### 7.1 In-System UART-Push-Flashen (Fahrbetrieb)
+* **Kein Gehäuseöffnen:** Updates werden transparent über die bestehende 6-Pin Kontaktleiste (`UART_TX` / `UART_RX`) eingespielt.
+* **Synchroner Bootloader-Sprung:** Die Zentralbox steuert über `0xFE` und einen 100-ms Power-Cycle auf `POD3_VCC` den Download-Modus.
+* **Übertragungsrate:** 460.800 Baud SLIP-Protokoll mit automatischer MD5-Prüfung ($< 6\,\text{s}$).
+
+### 7.2 Fertigungs- & Entwicklungs-Testpunkte (Bottom Layer `B.Cu`)
+Für die Erstprogrammierung und EOL-Prüfung in der Fertigung befinden sich auf der Unterseite standardisierte 1,0 mm SMD-Prüfpads:
+* **`TP1` (TP_BOOT):** ESP32-C3 GPIO9 (Low-Aktiv für Bootloader)
+* **`TP2` (TP_RST):** CHIP_PU (Hardware Reset)
+* **`TP3` (TP_TX):** ESP32-C3 UART0 TX (GPIO21)
+* **`TP4` (TP_RX):** ESP32-C3 UART0 RX (GPIO20)
+

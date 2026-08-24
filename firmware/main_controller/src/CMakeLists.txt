@@ -10,6 +10,7 @@ idf_component_register(
         "webdav_uploader.cpp"
         "gnss_omm_bridge.cpp"
         "adr_ekf_filter.cpp"
+        "omm_flasher.cpp"
     INCLUDE_DIRS 
         "."
     REQUIRES 

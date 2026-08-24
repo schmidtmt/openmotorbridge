@@ -195,6 +195,12 @@ extern "C" void app_main(void) {
             if (rx_buf[0] == 0xFF && rx_buf[1] == 0x53 && rx_buf[2] == 0x49) {
                 broadcast_siren_warning_mesh();
             }
+            // Firmware Push Bootloader Trigger (0xAA 0x55 0xFE 0x01 'B' 'O' 'O' 'T')
+            else if (rx_buf[0] == 0xAA && rx_buf[1] == 0x55 && rx_buf[2] == 0xFE && rx_buf[3] == 0x01) {
+                ESP_LOGW(TAG, "⚡ FIRMWARE UPDATE TRIGGER: Received bootloader entry command from Main Box! Preparing for UART flash...");
+                vTaskDelay(pdMS_TO_TICKS(20));
+                esp_restart();
+            }
         }
 
         // 3. Periodischer OMM DLE Beacon (alle 100 ms)

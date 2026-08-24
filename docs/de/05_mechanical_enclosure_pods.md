@@ -134,7 +134,13 @@ Der Zwischenboden der Oberwanne trennt die empfindliche Leiterplatten- und Akkue
 - **Vollstaendige Modularitaet:** Alle 3 Pod-Positionen am Motorrad nutzen das identische, universelle Gehaeuse.
 - **Abmessungen Schacht:** 64.0 x 46.0 x 23.5 mm.
 - **Elektronik-Kassette:** 54.0 x 37.5 x 17.0 mm (PA12 MJF).
-- **Kontaktblock:** 6-poliges Mill-Max Pogo-Pin-Array (Serie 824-22-006-00-001101, Raster 2.54 mm, 1.4 mm Arbeitshub) mit Silikon-Formschuhdichtung gegen vergoldete ENIG-Pads.
+- **Kontaktblock:** 6-poliges Mill-Max Pogo-Pin-Array (Serie 824-22-006-00-001101, Raster 2.54 mm, 1.4 mm Arbeitshub) mit Silikon-Formschuhdichtung gegen vergoldete ENIG-Pads auf der Kassettenunterseite.
+- **Flache Bauhöhe (Low-Profile):** 
+  * Interner OEM-Inlay-Anschluss ueber **abgewinkelten Low-Profile SMD-Steckverbinder (JST-SH 1.0 mm, Bauhoehe 1.8 mm)** – verhindert vertikales Auftragen und ermoeglicht ultraflache Kassettengehaeuse ($17.0\,\text{mm}$ Gesamtdicke inkl. OEM-Inlay).
+- **Schwingungsdaempfung & Vibrationsentkopplung (Vibration Damping):**
+  * **Schwimmende Kassettenlagerung:** Die Kassettenplatine ist im PA12-Gehaeuse ueber eine umlaufende **Shore 40A Silikon-Formschuhdichtung** und zwei **M2-Silikon-Daempfungshuelsen** mechanisch schwingungsentkoppelt gelagert.
+  * **Vibrationsfestigkeit:** Daempft hochfrequente Motorvibrationen (Einzylinder, V2, Dreizylinder) bis $20\,\text{g}$ bei $50\dots 500\,\text{Hz}$.
+  * **Kontaktstabilitaet:** Der 1.4 mm Pogo-Pin-Arbeitshub mit $60\,\text{g}$ Federkraft pro Pin garantiert unterbrechungsfreien Kontakt ($\Delta R < 5\,\text{m}\Omega$) ohne Audio-Knacken bei harten Schlagloechern.
 - **3-Stufen-Sicherheitsarretierung:** Snap-Lock POM-C Klinken mit akustischem Klick, 90°-Cam-Lock Drehriegel gegen Stoesse $> 20\,\text{g}$, Push-to-Eject Wippe.
 - **Universelle Montage:** Integrierte M5-Rueckenplatte fuer Flachmontage oder CNC-Aluminium-Rohrschellen (22.0 mm, 28.6 mm, 1.0 Zoll, 25–32 mm Sturzbuegel).
 
