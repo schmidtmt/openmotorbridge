@@ -153,30 +153,61 @@ Die Kassetten-Trägerplatine (`openmotorbridge_pod_cartridge`) adaptiert die int
 - **3-Stufen-Sicherheitsarretierung:** Snap-Lock POM-C Klinken mit akustischem Klick, 90°-Cam-Lock Drehriegel gegen Stoesse $> 20\,\text{g}$, Push-to-Eject Wippe.
 - **Universelle Montage:** Integrierte M5-Rueckenplatte fuer Flachmontage oder CNC-Aluminium-Rohrschellen (22.0 mm, 28.6 mm, 1.0 Zoll, 25–32 mm Sturzbuegel).
 
-### 5.1 Pod-Druckausgleichsmembran (ePTFE)
+### 5.2 Pod-Druckausgleichsmembran (ePTFE)
 * **Problemstellung:** Interne Abwaerme (SX1262 LoRa $+22\,\text{dBm}$ PA, Ladeschaltung) und Sonneneinstrahlung erzeugen Druckdifferenzen im kleinen Pod-Volumen.
 * **Spezifikation:** Auf der Rueckseite des Pod-Gehaeuses (geschuetzt in einer Senkung unter der M5-Rueckenplatte) sitzt eine **selbstklebende $\varnothing\,7{,}0\,\text{mm}$ ePTFE-Druckausgleichsmembran** (*Schreiner Air Vent* / *Gore Automotive Adhesive Vent*).
 * **Funktion:** Belueftungsrate $> 25\,\text{ml/min}$ bei 70 mbar, Wassereintrittspunkt $> 1{,}5\,\text{bar}$ (IP67). Verhindert Vakuum-Wassersaugen bei Abkuehlung durch Regenguesse.
 
-### 5.2 Kabelbaum-Knickschutz & Zugentlastung
+### 5.3 Kabelbaum-Knickschutz & Zugentlastung
 * **Schnittstelle:** Kabeleinfuehrung an der Gehaeuseunterseite ueber **M12 x 1.5 IP67-Kabelverschraubung mit integrierter Spiral-Knickschutztuelle** aus UV- und oelbestaendigem Polyamid (PA6) mit NBR-Dichteinsatz.
 * **Schutzwirkung:** Garantiert Biegeradius $> 30\,\text{mm}$ und zuverlaessige Zugentlastung ($> 100\,\text{N}$) bei Lenkereinschlaegen und harten Fahrbahnstoessen.
 
-### 5.3 IP67 Blind- / Leerkassette (Dummy Cartridge)
+### 5.4 IP67 Blind- / Leerkassette (Dummy Cartridge)
 * **Verwendung bei Teilbestueckung:** Wird ein Pod-Schacht temporaer nicht bestueckt (z. B. wenn nur Sena genutzt wird oder ein Pod stillgelegt ist), verschliesst die formidentische **IP67-Leerkassette (`Pod_Dummy_Cartridge_IP67.stl`)** den Schacht vollstaendig.
 * **Dichtungskonzept:** Doppelte Silikon-Umlaufdichtung schuetzt die innenliegenden Mill-Max Pogo-Pins vor Schmutz, Spritzwasser und Streusalz.
 * **Verriegelung:** Nutzt denselben POM-C Snap-Lock und 90°-Cam-Lock Drehriegel wie aktive Kassetten.
 * **Hardware-Zustand:** Die Zentralbox erkennt offene/leere Kontakte und haelt den Slot ueber `disabled.json` strom- und rauschfrei isoliert.
 
+### 5.5 Pod-Boden Pogo-Kontaktblock, ESD-Schutz & Kabelübergang
+
+Der physische Übergang von der gesteckten Kassette zum flexiblen Fahrzeugkabelbaum erfolgt im versiegelten Gehäuseboden des Satelliten-Pods:
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                 VOLLSTÄNDIGER SCHNITTSTELLEN-ÜBERGANG                   │
+├─────────────────────────────────────────────────────────────────────────┤
+│ 1. KASSETTE (Oberseite):                                                │
+│    • 6 vergoldete ENIG-Kontaktpads (Raster 2.54 mm)                     │
+│    • Umlaufende Shore 40A Silikon-Formschuhdichtung                     │
+│                               ▲                                         │
+│                               ▼ (1.4 mm Feder-Arbeitshub, 60g/Pin)      │
+│ 2. POD-GEHÄUSEBODEN (Interface):                                        │
+│    • Mill-Max 6-Pin Pogo-Pin-Array (824-22-006-00-001101)               │
+│    • Gehäusebündig eingepresst & mit O-Ring abgedichtet                 │
+│    • Integrierte ESD-Schutzmatrix (Littelfuse SP3012, 6x TVS < 0.5 pF)  │
+│                               ▼                                         │
+│ 3. KABELEINFÜHRUNG & ZUGENTLASTUNG (Gehäuseunterseite):                 │
+│    • M12 x 1.5 IP67-Kabelverschraubung mit Spiral-Knickschutz           │
+│    • Zugentlastung > 100 N, NBR-Dichtring gegen Gehäusewand             │
+│                               ▼                                         │
+│ 4. PUR-KABELBAUM (Zur Zentralbox):                                      │
+│    • Geschirmtes 6-adriges PUR-Kabel (Halogenfrei, Öl- & UV-beständig)  │
+│    • 2x Power (0.34 mm²) + 2x Audio/UART verdrillt (0.14 mm²) + 2x Sign.│
+│    • Schirmgeflecht (> 85 % Bedeckung) an GND_SHIELD                    │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
 ---
 
-## 6. Belegung der universellen 6-Pin Pogo-Kontaktleiste
+## 6. Belegung der 6-Pin Pogo-Leiste & PUR-Kabelbaum-Farbcodierung
 
-| Pogo-Pin | Pod 1 & 2 (Links / Rechts: Audio & Intercom-Kassetten) | Pod 3 (Heck: GNSS & Dual-PHY OpenMotorMesh) |
-| :---: | :--- | :--- |
-| **Pin 1** | **`VCC`** (5V geschaltete Speisespannung via MOSFET) | **`VCC`** (5V Dauer-Versorgung) |
-| **Pin 2** | **`GND`** (Dedizierte Power- & Signalmasse) | **`GND`** (Dedizierte Power- & Signalmasse) |
-| **Pin 3** | **`NF_P`** (Symmetrisches Audiosignal + via Bourns) | **`UART_TX`** (Heck-Co-Prozessor $\rightarrow$ Zentralbox) |
-| **Pin 4** | **`NF_N`** (Symmetrisches Audiosignal - via Bourns) | **`UART_RX`** (Zentralbox $\rightarrow$ Heck-Co-Prozessor) |
-| **Pin 5** | **`OPTO`** (TLP222A Tastensimulations-Trigger) | **`GNSS_PPS`** (1-PPS Hardware-Zeitnormal Sync) |
-| **Pin 6** | **`1-WIRE_ID`** (DS2401 Silicon Serial Number) | **`1-WIRE_ID`** (DS2401 Heck-Kassetten-Erkennung) |
+| Pin | Leitungsfarbe (PUR-Kabel) | Querschnitt | Signal Pod 1 & 2 (Audio & Intercom) | Signal Pod 3 (Heck-Transceiver) | Schirmung & Verdrillung |
+| :---: | :--- | :---: | :--- | :--- | :--- |
+| **Pin 1** | **Rot (RD)** | $0{,}34\,\text{mm}^2$ (AWG22) | **`VCC`** (5V geschaltete Speisespannung via MOSFET) | **`VCC`** (5V Dauer-Versorgung) | Einzelader (Power) |
+| **Pin 2** | **Schwarz (BK)** | $0{,}34\,\text{mm}^2$ (AWG22) | **`GND`** (Dedizierte Power- & Signalmasse) | **`GND`** (Dedizierte Power- & Signalmasse) | Einzelader (Power Ground) |
+| **Pin 3** | **Weiß (WH)** | $0{,}14\,\text{mm}^2$ (AWG26) | **`NF_P`** (Symmetrisches Audiosignal + via Bourns) | **`UART_TX`** (Heck-Co-Prozessor $\rightarrow$ Box) | **Paar 1 verdrillt** (mit Pin 4) |
+| **Pin 4** | **Blau (BU)** | $0{,}14\,\text{mm}^2$ (AWG26) | **`NF_N`** (Symmetrisches Audiosignal - via Bourns) | **`UART_RX`** (Box $\rightarrow$ Heck-Co-Prozessor) | **Paar 1 verdrillt** (mit Pin 3) |
+| **Pin 5** | **Gelb (YE)** | $0{,}14\,\text{mm}^2$ (AWG26) | **`OPTO`** (TLP222A Tastensimulations-Trigger) | **`GNSS_PPS`** (1-PPS Hardware-Zeitnormal) | Einzelader (Steuersignal) |
+| **Pin 6** | **Grün (GN)** | $0{,}14\,\text{mm}^2$ (AWG26) | **`1-WIRE_ID`** (DS2401 Silicon Serial Number) | **`1-WIRE_ID`** (DS2401 Heck-Kassetten-Erkennung)| Einzelader (1-Wire Bus) |
+| **Shield**| **Kupfergeflecht (BL)**| $> 85\,\%$ Geflecht | **`GND_SHIELD`** (Gehäuse- & Gesamtschirmung) | **`GND_SHIELD`** (Gehäuse- & Gesamtschirmung) | Gesamtschirm über alle 6 Adern |
+

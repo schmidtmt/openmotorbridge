@@ -153,30 +153,61 @@ The cartridge carrier PCB (`openmotorbridge_pod_cartridge`) adapts internal Sena
 - **3-Stage Locking:** Snap-lock POM-C latches with acoustic click, 90-degree rotating cam-lock against $> 20\,\text{g}$ shock loads, push-to-eject lever.
 - **Universal Mounting:** Integrated M5 backplate for flat mounting or CNC aluminum tube clamps (22.0 mm, 28.6 mm, 1.0 inch, 25–32 mm crash bars).
 
-### 5.1 Pod Pressure Equalization Membrane (ePTFE)
+### 5.2 Pod Pressure Equalization Membrane (ePTFE)
 * **Problem:** Internal thermal dissipation (SX1262 LoRa $+22\,\text{dBm}$ PA, charging circuits) and direct solar radiation create pressure differentials in small pod volumes.
 * **Specification:** The rear of the pod body (recessed beneath the M5 mounting bracket) integrates an **adhesive $\varnothing\,7.0\,\text{mm}$ ePTFE venting membrane** (*Schreiner Air Vent* / *Gore Automotive Adhesive Vent*).
 * **Function:** Airflow $> 25\,\text{ml/min}$ @ 70 mbar, water intrusion pressure $> 1.5\,\text{bar}$ (IP67). Eliminates vacuum-induced moisture ingress during sudden rain cooling.
 
-### 5.2 Harness Strain Relief & Anti-Kink Protection
+### 5.3 Harness Strain Relief & Anti-Kink Protection
 * **Interface:** Bottom cable entry uses an **M12 x 1.5 IP67 cable gland with integrated spiral anti-kink boot** molded from UV/oil-resistant polyamide (PA6) with NBR seal.
 * **Protection:** Guarantees bend radius $> 30\,\text{mm}$ and robust tensile strain relief ($> 100\,\text{N}$) during full steering lock and road shocks.
 
-### 5.3 IP67 Dummy Cartridge (Slot Blank)
+### 5.4 IP67 Dummy Cartridge (Slot Blank)
 * **Partial Population:** When a pod bay is temporarily unpopulated (e.g. single-intercom setups or disabled slots), the identical-footprint **IP67 Dummy Cartridge (`Pod_Dummy_Cartridge_IP67.stl`)** seals the bay completely.
 * **Sealing Concept:** Dual perimeter silicone gaskets isolate the internal Mill-Max pogo pins from road grime, water spray, and salt.
 * **Locking Mechanism:** Employs the identical POM-C snap-lock and 90° cam-lock as active cartridges.
 * **Hardware State:** Host MCU detects empty/open pins and maintains slot in zero-power, zero-noise isolation via `disabled.json`.
 
+### 5.5 Pod Base Pogo Interface, ESD Protection & Cable Transition
+
+The physical interface transition from the inserted cartridge to the flexible motorcycle harness occurs within the sealed bottom chamber of the satellite pod:
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    COMPLETE INTERFACE TRANSITION CHAIN                  │
+├─────────────────────────────────────────────────────────────────────────┤
+│ 1. CARTRIDGE (Top):                                                     │
+│    • 6 gold-plated ENIG contact pads (2.54 mm pitch)                    │
+│    • Perimeter Shore 40A silicone boot gasket                           │
+│                               ▲                                         │
+│                               ▼ (1.4 mm working stroke, 60g preload)    │
+│ 2. POD HOUSING FLOOR (Interface):                                       │
+│    • Mill-Max 6-Pin Pogo-Pin Array (824-22-006-00-001101)               │
+│    • Press-fitted flush into housing floor & O-ring sealed              │
+│    • Integrated ESD protection array (Littelfuse SP3012, 6x TVS < 0.5pF)│
+│                               ▼                                         │
+│ 3. CABLE ENTRY & STRAIN RELIEF (Housing Bottom):                        │
+│    • M12 x 1.5 IP67 cable gland with spiral bend relief boot            │
+│    • Tensile strain relief > 100 N, NBR seal against chassis wall       │
+│                               ▼                                         │
+│ 4. PUR HARNESS (To Central Box):                                        │
+│    • Shielded 6-conductor PUR cable (Halogen-free, oil & UV resistant)  │
+│    • 2x Power (0.34 mm²) + 2x Audio/UART twisted (0.14 mm²) + 2x Signal │
+│    • Copper braided overall shield (> 85 % coverage) on GND_SHIELD      │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
 ---
 
-## 6. Universal 6-Pin Pogo Contact Pinout
+## 6. 6-Pin Pogo Pinout & PUR Harness Color Coding
 
-| Pogo Pin | Pods 1 & 2 (Left / Right: Audio & Intercom Cartridges) | Pod 3 (Rear: GNSS & Dual-PHY OpenMotorMesh) |
-| :---: | :--- | :--- |
-| **Pin 1** | **`VCC`** (5V switched supply via P-FET) | **`VCC`** (5V continuous supply) |
-| **Pin 2** | **`GND`** (Dedicated power & signal ground) | **`GND`** (Dedicated power & signal ground) |
-| **Pin 3** | **`NF_P`** (Balanced audio signal + via Bourns) | **`UART_TX`** (Rear Co-Processor $\rightarrow$ Central Box) |
-| **Pin 4** | **`NF_N`** (Balanced audio signal - via Bourns) | **`UART_RX`** (Central Box $\rightarrow$ Rear Co-Processor) |
-| **Pin 5** | **`OPTO`** (TLP222A button simulation trigger) | **`GNSS_PPS`** (1-PPS hardware time sync) |
-| **Pin 6** | **`1-WIRE_ID`** (DS2401 Silicon Serial Number) | **`1-WIRE_ID`** (DS2401 rear cartridge identification) |
+| Pin | Wire Color (PUR Cable) | Wire Gauge | Signal Pods 1 & 2 (Audio & Intercom) | Signal Pod 3 (Rear Transceiver) | Shielding & Twisting |
+| :---: | :--- | :---: | :--- | :--- | :--- |
+| **Pin 1** | **Red (RD)** | $0.34\,\text{mm}^2$ (AWG22) | **`VCC`** (5V switched supply via P-FET) | **`VCC`** (5V continuous supply) | Single Conductor (Power) |
+| **Pin 2** | **Black (BK)** | $0.34\,\text{mm}^2$ (AWG22) | **`GND`** (Dedicated power & signal ground) | **`GND`** (Dedicated power & signal ground) | Single Conductor (Power GND) |
+| **Pin 3** | **White (WH)** | $0.14\,\text{mm}^2$ (AWG26) | **`NF_P`** (Balanced audio signal + via Bourns) | **`UART_TX`** (Rear MCU $\rightarrow$ Central Box) | **Pair 1 Twisted** (with Pin 4) |
+| **Pin 4** | **Blue (BU)** | $0.14\,\text{mm}^2$ (AWG26) | **`NF_N`** (Balanced audio signal - via Bourns) | **`UART_RX`** (Central Box $\rightarrow$ Rear MCU) | **Pair 1 Twisted** (with Pin 3) |
+| **Pin 5** | **Yellow (YE)** | $0.14\,\text{mm}^2$ (AWG26) | **`OPTO`** (TLP222A button simulation trigger) | **`GNSS_PPS`** (1-PPS hardware time sync) | Single Conductor (Control) |
+| **Pin 6** | **Green (GN)** | $0.14\,\text{mm}^2$ (AWG26) | **`1-WIRE_ID`** (DS2401 Silicon Serial Number) | **`1-WIRE_ID`** (DS2401 rear cartridge ID) | Single Conductor (1-Wire Bus) |
+| **Shield**| **Braided Copper (BL)**| $> 85\,\%$ Braid | **`GND_SHIELD`** (Chassis & overall shield) | **`GND_SHIELD`** (Chassis & overall shield) | Overall shield over all 6 wires |
+
