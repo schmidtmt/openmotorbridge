@@ -32,49 +32,50 @@ def auto_place_rear_pod(pcb_path):
 
     # 3D Model Mapping
     model_mapping = {
-        'U1': ('${KICAD10_3DMODEL_DIR}/RF_Module.3dshapes/ESP32-C3-WROOM-02.step', (0.0, 0.0, 0.0)),
-        'U2': ('${KICAD10_3DMODEL_DIR}/Package_DFN_QFN.3dshapes/ArtInChip_QFN-88-1EP_10x10mm_P0.4mm_EP6.74x6.74mm.step', (0.0, 0.0, 0.0)),
-        'U3': ('${KICAD10_3DMODEL_DIR}/Package_DFN_QFN.3dshapes/QFN-24-1EP_4x4mm_P0.5mm_EP2.6x2.6mm.step', (0.0, 0.0, 0.0)),
-        'U4': ('${KICAD10_3DMODEL_DIR}/Package_TO_SOT_SMD.3dshapes/SOT-23.step', (0.0, 0.0, 0.0)),
-        'J1': ('${KICAD10_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x06_P2.54mm_Horizontal.step', (0.0, 0.0, 90.0)),
-        'ANT1': ('${KICAD10_3DMODEL_DIR}/Connector_Coaxial.3dshapes/U.FL_Hirose_U.FL-R-SMT-1_Vertical.step', (0.0, 0.0, 0.0)),
-        'ANT2': ('${KICAD10_3DMODEL_DIR}/Connector_Coaxial.3dshapes/U.FL_Hirose_U.FL-R-SMT-1_Vertical.step', (0.0, 0.0, 0.0)),
-        'L1': ('${KICAD10_3DMODEL_DIR}/Inductor_SMD.3dshapes/L_0603_1608Metric.step', (0.0, 0.0, 0.0)),
-        'D1': ('${KICAD10_3DMODEL_DIR}/Diode_SMD.3dshapes/D_SOD-323.step', (0.0, 0.0, 0.0)),
-        'C1': ('${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0805_2012Metric.step', (0.0, 0.0, 0.0)),
-        'C2': ('${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0603_1608Metric.step', (0.0, 0.0, 0.0)),
-        'C3': ('${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0603_1608Metric.step', (0.0, 0.0, 0.0)),
-        'C4': ('${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0603_1608Metric.step', (0.0, 0.0, 0.0)),
+        'U1': ('${KICAD10_3DMODEL_DIR}/RF_Module.3dshapes/ESP32-C3-WROOM-02.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
+        'U2': ('${KICAD10_3DMODEL_DIR}/Package_DFN_QFN.3dshapes/QFN-24-1EP_4x4mm_P0.5mm_EP2.6x2.6mm.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
+        'U3': ('${KICAD10_3DMODEL_DIR}/Package_DFN_QFN.3dshapes/QFN-24-1EP_4x4mm_P0.5mm_EP2.6x2.6mm.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
+        'U4': ('${KICAD10_3DMODEL_DIR}/Package_TO_SOT_SMD.3dshapes/SOT-23.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
+        # J1: 6-Pin 2.54mm Socket on Bottom (B.Cu) - Female socket pointing downward to mate with Pod-Base
+        'J1': ('${KICAD10_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x06_P2.54mm_Vertical.step', (0.0, 0.0, 0.0), (0.0, 6.35, 0.0)),
+        'ANT1': ('${KICAD10_3DMODEL_DIR}/Connector_Coaxial.3dshapes/U.FL_Hirose_U.FL-R-SMT-1_Vertical.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
+        'ANT2': ('${KICAD10_3DMODEL_DIR}/Connector_Coaxial.3dshapes/U.FL_Hirose_U.FL-R-SMT-1_Vertical.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
+        'L1': ('${KICAD10_3DMODEL_DIR}/Inductor_SMD.3dshapes/L_0603_1608Metric.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
+        'D1': ('${KICAD10_3DMODEL_DIR}/LED_SMD.3dshapes/LED_0603_1608Metric.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
+        'C1': ('${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0805_2012Metric.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
+        'C2': ('${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0603_1608Metric.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
+        'C3': ('${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0603_1608Metric.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
+        'C4': ('${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0603_1608Metric.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
     }
 
     # Verified Layout Matrix (in mm)
     layout_rules = {
         # 4 Corner M3 Mounting Holes (3.5 mm inset)
-        'H1': (X0 + 3.5, Y0 + 3.5, 0.0, pcbnew.F_Cu),    # (103.5, 73.5)
-        'H2': (X_max - 3.5, Y0 + 3.5, 0.0, pcbnew.F_Cu), # (146.5, 73.5)
-        'H3': (X0 + 3.5, Y_max - 3.5, 0.0, pcbnew.F_Cu), # (103.5, 101.5)
-        'H4': (X_max - 3.5, Y_max - 3.5, 0.0, pcbnew.F_Cu),# (146.5, 101.5)
+        'H1': (X0 + 3.5, Y0 + 3.5, 0.0, pcbnew.F_Cu),    # (103.5, 73.5) Top-Left
+        'H2': (X_max - 3.5, Y0 + 3.5, 0.0, pcbnew.F_Cu), # (146.5, 73.5) Top-Right
+        'H3': (X0 + 3.5, Y_max - 3.5, 0.0, pcbnew.F_Cu), # (103.5, 101.5) Bottom-Left
+        'H4': (X_max - 3.5, Y_max - 3.5, 0.0, pcbnew.F_Cu),# (146.5, 101.5) Bottom-Right
 
         # Primary Active Components (Top Layer - Generous Wide-Clearance Topology)
-        'U1': (125.0, 86.0, 0.0, pcbnew.F_Cu),           # ESP32-C3-WROOM-02 (4mm top margin inside board, Y: 74..94mm)
-        'U2': (108.5, 93.0, 0.0, pcbnew.F_Cu),           # u-blox MAX-M10S GNSS (Left Wing, Y: 88..98mm)
-        'U3': (141.5, 93.0, 0.0, pcbnew.F_Cu),           # Semtech SX1262 LoRa (Right Wing, Y: 91..95mm)
-        'U4': (125.0, 97.0, 0.0, pcbnew.F_Cu),           # DS2401 Silicon ROM ID (Center, Y: 95.5..98.5mm)
+        'U1': (125.0, 78.0, 0.0, pcbnew.F_Cu),           # ESP32-C3-WROOM-02 (Antenna at top edge, Y: 72..86mm)
+        'U2': (109.0, 88.0, 0.0, pcbnew.F_Cu),           # u-blox MAX-M10S GNSS (Left Wing)
+        'U3': (141.0, 88.0, 0.0, pcbnew.F_Cu),           # Semtech SX1262 LoRa (Right Wing)
+        'U4': (116.0, 98.0, 0.0, pcbnew.F_Cu),           # DS2401 Silicon ROM ID (Bottom Left)
 
-        # RF Antennas / U.FL Ports (Symmetrical Top-Left & Top-Right)
-        'ANT2': (106.0, 80.0, 0.0, pcbnew.F_Cu),         # GNSS 1.575 GHz RF Port (Direct short trace to U2)
-        'ANT1': (144.0, 80.0, 0.0, pcbnew.F_Cu),         # 868 MHz LoRa RF Port (Direct short trace to U3)
+        # RF Antennas / U.FL Ports (Symmetrical Left & Right)
+        'ANT2': (108.0, 78.0, 0.0, pcbnew.F_Cu),         # GNSS 1.575 GHz RF Port (Direct short trace to U2)
+        'ANT1': (142.0, 78.0, 0.0, pcbnew.F_Cu),         # 868 MHz LoRa RF Port (Direct short trace to U3)
 
-        # Standardized 6-Pin Pogo Matrix Interface (Horizontal along bottom edge)
-        'J1': (125.0, 102.0, 0.0, pcbnew.F_Cu),          # 6-Pin Interface (Horizontal, Y: 100.7..103.3mm)
+        # J1: 6-Pin Socket on UNTERSEITE (B.Cu) - Female socket pointing down, mates with Pod-Base!
+        'J1': (125.0, 98.0, 0.0, pcbnew.B_Cu),           # 6-Pin Interface (Bottom layer B.Cu)
 
-        # Passives & RF Protection
-        'L1': (141.5, 97.5, 0.0, pcbnew.F_Cu),           # 47nH RF Choke for SX1262
-        'D1': (118.5, 97.5, 0.0, pcbnew.F_Cu),           # TVS Diode for 1-Wire Line
-        'C1': (122.0, 91.5, 0.0, pcbnew.F_Cu),           # 10uF 3V3 Decoupling
-        'C2': (128.0, 91.5, 0.0, pcbnew.F_Cu),           # 100nF ESP32
-        'C3': (108.5, 99.0, 0.0, pcbnew.F_Cu),           # 100nF GNSS Decoupling
-        'C4': (141.5, 87.5, 0.0, pcbnew.F_Cu),           # 100nF LoRa Decoupling
+        # Passives & Status LEDs
+        'L1': (141.0, 93.5, 0.0, pcbnew.F_Cu),           # 47nH RF Choke for SX1262
+        'D1': (134.0, 98.0, 0.0, pcbnew.F_Cu),           # Green Status / Mesh Activity LED
+        'C1': (121.0, 89.0, 0.0, pcbnew.F_Cu),           # 10uF 3V3 Decoupling
+        'C2': (129.0, 89.0, 0.0, pcbnew.F_Cu),           # 100nF ESP32
+        'C3': (109.0, 94.0, 0.0, pcbnew.F_Cu),           # 100nF GNSS Decoupling
+        'C4': (141.0, 96.5, 0.0, pcbnew.F_Cu),           # 100nF LoRa Decoupling
 
         # Factory Testpoints (Placed cleanly on Bottom Layer B_Cu)
         'TP1': (115.0, 80.0, 0.0, pcbnew.B_Cu),          # TP_BOOT (GPIO9)
@@ -98,42 +99,59 @@ def auto_place_rear_pod(pcb_path):
         pos = pcbnew.VECTOR2I(int(x_mm * 1e6), int(y_mm * 1e6))
         fp.SetPosition(pos)
         fp.SetOrientationDegrees(rot_deg)
-
-        # Hide testpoint reference text on silk
-        if ref.startswith('TP'):
-            fp.Reference().SetVisible(False)
+        fp.Reference().SetVisible(False) # Clean, high-end production look without reference clutter
 
         if ref in model_mapping:
-            model_file, (rx, ry, rz) = model_mapping[ref]
+            model_file, (rx, ry, rz), (ox, oy, oz) = model_mapping[ref]
             fp.Models().clear()
             m = pcbnew.FP_3DMODEL()
             m.m_Filename = model_file
             m.m_Scale = pcbnew.VECTOR3D(1.0, 1.0, 1.0)
-            m.m_Offset = pcbnew.VECTOR3D(0.0, 0.0, 0.0)
+            m.m_Offset = pcbnew.VECTOR3D(ox, oy, oz)
             m.m_Rotation = pcbnew.VECTOR3D(rx, ry, rz)
             m.m_Show = True
             fp.Add3DModel(m)
 
-        print(f"  ✓ Placed {ref:4s} at ({x_mm:6.2f}, {y_mm:6.2f}) mm, rot={rot_deg:5.1f}°")
+        print(f"  ✓ Placed {ref:4s} on layer at ({x_mm:6.2f}, {y_mm:6.2f}) mm, rot={rot_deg:5.1f}°")
 
     # Add clean silkscreen labels
     drawings_to_remove = []
     for d in board.GetDrawings():
-        if isinstance(d, pcbnew.PCB_TEXT) and d.GetLayer() == pcbnew.F_SilkS:
+        if isinstance(d, pcbnew.PCB_TEXT) and (d.GetLayer() == pcbnew.F_SilkS or d.GetLayer() == pcbnew.B_SilkS):
             drawings_to_remove.append(d)
     for d in drawings_to_remove:
         board.Remove(d)
 
-    labels = [
-        ("GNSS 1.575G", 108.5, 74.0, 0.80, 0.80, 0.15),
-        ("868M LoRa", 141.5, 74.0, 0.80, 0.80, 0.15),
-        ("POGO: VCC GND TX RX PPS 1W", 125.0, 103.8, 0.70, 0.70, 0.13),
+    top_labels = [
+        ("OPENMOTORBRIDGE", 110.0, 72.5, 0.55, 0.55, 0.12),
+        ("OMM TRANSCEIVER", 140.0, 72.5, 0.55, 0.55, 0.12),
+        ("GNSS 1.575G", 110.0, 75.5, 0.45, 0.45, 0.10),
+        ("868M LoRa", 140.0, 75.5, 0.45, 0.45, 0.10),
+        ("MAX-M10S", 109.0, 83.0, 0.50, 0.50, 0.10),
+        ("SX1262", 141.0, 83.0, 0.50, 0.50, 0.10),
+        ("DS2401 ID", 116.0, 94.0, 0.45, 0.45, 0.10),
+        ("STATUS LED", 134.0, 94.0, 0.45, 0.45, 0.10),
     ]
 
-    for text_str, x_mm, y_mm, sx, sy, th in labels:
+    for text_str, x_mm, y_mm, sx, sy, th in top_labels:
         txt = pcbnew.PCB_TEXT(board)
         txt.SetText(text_str)
         txt.SetLayer(pcbnew.F_SilkS)
+        txt.SetPosition(pcbnew.VECTOR2I(int(x_mm * 1e6), int(y_mm * 1e6)))
+        txt.SetTextSize(pcbnew.VECTOR2I(int(sx * 1e6), int(sy * 1e6)))
+        txt.SetTextThickness(int(th * 1e6))
+        txt.SetHorizJustify(pcbnew.GR_TEXT_H_ALIGN_CENTER)
+        board.Add(txt)
+
+    bottom_labels = [
+        ("6-PIN SOCKET (MATES TO POD-BASE)", 125.0, 102.5, 0.55, 0.55, 0.12),
+        ("FACTORY TESTPOINTS (PROD FLASH)", 125.0, 75.0, 0.50, 0.50, 0.10),
+    ]
+
+    for text_str, x_mm, y_mm, sx, sy, th in bottom_labels:
+        txt = pcbnew.PCB_TEXT(board)
+        txt.SetText(text_str)
+        txt.SetLayer(pcbnew.B_SilkS)
         txt.SetPosition(pcbnew.VECTOR2I(int(x_mm * 1e6), int(y_mm * 1e6)))
         txt.SetTextSize(pcbnew.VECTOR2I(int(sx * 1e6), int(sy * 1e6)))
         txt.SetTextThickness(int(th * 1e6))

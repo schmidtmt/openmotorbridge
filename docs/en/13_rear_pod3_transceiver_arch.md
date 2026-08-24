@@ -4,13 +4,17 @@
 
 ---
 
-## 1. 3D Board Visualization & Photorealistic Raytracing Render
+### 1. 3D Board Visualization & Photorealistic Renders
 
-The Rear Pod PCB integrates multi-constellation GNSS, the Dual-PHY mesh modem, and the RISC-V coprocessor onto an ultra-compact **$50.0 \times 35.0\,\text{mm}$** footprint with zero edge overhang:
+The Rear Pod PCB integrates multi-constellation GNSS, dual-PHY mesh modems, and the RISC-V co-processor onto an ultra-compact **$50.0 \times 35.0\,\text{mm}$** footprint with zero overhang:
 
-![OpenMotorBridge Heck-Pod 3 3D PCB Render](../../hardware/kicad_rear_pod3/kicad_3d_render.png)
+#### Top View (ESP32-C3 Mesh, u-blox MAX-M10S, SX1262 LoRa & U.FL Ports):
+![OpenMotorBridge Rear Pod 3 Top 3D PCB Render](../../hardware/kicad_rear_pod3/rear_pod3_3d_render_top.png)
 
-*Figure 13.1: Photorealistic 3D raytracing render of the OpenMotorBridge Rear Pod 3 PCB (KiCad 8.0, 4-layer FR4 TG150 ENIG with U.FL RF ports, ESP32-C3 antenna keep-out, and 6-pin Mill-Max interface).*
+#### Bottom View (6-Pin Socket Header Mating to Pod Base & Factory Testpoints):
+![OpenMotorBridge Rear Pod 3 Bottom 3D PCB Render](../../hardware/kicad_rear_pod3/rear_pod3_3d_render_bottom.png)
+
+*Figure 13.1: Photorealistic 3D raytracing render of the OpenMotorBridge Rear Pod 3 PCB (KiCad 8.0, 4-layer FR4 TG150 ENIG with U.FL RF ports, ESP32-C3 antenna keepout, downward-facing 6-pin socket on B.Cu, and rear production testpoints).*
 
 ---
 
@@ -18,27 +22,33 @@ The Rear Pod PCB integrates multi-constellation GNSS, the Dual-PHY mesh modem, a
 
 ```
                       ┌─────────────────────────────────────────────────────────────┐
-                      │                    REAR POD 3 CARTRIDGE                     │
+                      │                     REAR POD 3 MODULE                       │
                       │                                                             │
                       │   ┌─────────────────────────────────────────────────────┐   │
                       │   │  ESP32-C3 RISC-V Co-Processor (32-Bit @ 160 MHz)    │   │
                       │   │  • Primary PHY: 2.4 GHz IEEE 802.15.4 / SC-FDMA     │   │
-                      │   │  • HiFi Audio (Opus 24k) & Local Group Mesh         │   │
+                      │   │  • HiFi Audio (Opus 24k) & Near-Range Mesh          │   │
                       │   └──────────┬───────────────────────────┬──────────────┘   │
                       │              │ SPI Master (8 MHz)        │ UART1 (115.2k)   │
                       │              ▼                           ▼                  │
                       │   ┌──────────────────────┐    ┌─────────────────────────┐   │
                       │   │ Semtech SX1262 LoRa  │    │ u-blox MAX-M10S GNSS    │   │
                       │   │ • Fallback PHY 868MHz│    │ • 10 Hz Multi-GNSS PVT  │   │
-                      │   │ • Codec2 & Radar     │    │ • 1-PPS Time Reference  │   │
+                      │   │ • Codec2 & Radar     │    │ • 1-PPS Time Standard   │   │
                       │   └──────────────────────┘    └─────────────────────────┘   │
+                      │                                                             │
+                      │   • U4: DS2401 1-Wire ID ROM (openmotormesh_pod3.json)      │
+                      │   • J1: 6-Pin Socket Header on Bottom Side (B.Cu)           │
                       └──────────────────────────────┬──────────────────────────────┘
-                                                     │ High-Speed UART (460.8k)
+                                                     │ Engages on Insertion
                                                      ▼
                       ┌─────────────────────────────────────────────────────────────┐
-                      │ 6-Pin Mill-Max Pogo Interface (GND, VCC, TX, RX, PPS, 1W)   │
+                      │ POD BASE PCB (openmotorbridge_pod_base, 36x20mm)            │
+                      │  • J1: 6-Pin Pin Header on Top Side (F.Cu)                  │
+                      │  • U1: SP3012 TVS Protection Matrix                         │
+                      │  • J2: Centered M8 6-Pin IP67 Receptacle on Bottom (B.Cu)   │
                       └──────────────────────────────┬──────────────────────────────┘
-                                                     │ Shielded 6-Conductor PUR Harness
+                                                     │ Shielded 6-Conductor PUR Cable
                                                      ▼
                       ┌─────────────────────────────────────────────────────────────┐
                       │ HD26 Flange Receptacle -> Central Box ESP32-S3 Host MCU     │

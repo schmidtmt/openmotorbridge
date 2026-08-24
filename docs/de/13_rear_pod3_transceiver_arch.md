@@ -4,17 +4,21 @@ Der **Heck-Pod 3** (Position: Heckbuerzel / Gepaeckbruecke) ist das zentrale Fun
 
 ---
 
-## 1. 3D-Board-Visualisierung & Photorealistisches Render
+## 1. 3D-Board-Visualisierung & Photorealistische Renders
 
 Die Heck-Pod-Platine vereint auf extrem kompakten **$50{,}0 \times 35{,}0\,\text{mm}$** das Multi-Konstellations-GNSS, das Dual-PHY Mesh-Modem sowie den RISC-V Co-Prozessor mit vollkommen bündigen Kanten (Null Überhang):
 
-![OpenMotorBridge Heck-Pod 3 3D PCB Render](../../hardware/kicad_rear_pod3/kicad_3d_render.png)
+#### Oberansicht (ESP32-C3 Mesh, u-blox MAX-M10S, SX1262 LoRa & U.FL Ports):
+![OpenMotorBridge Heck-Pod 3 Oberansicht 3D PCB Render](../../hardware/kicad_rear_pod3/rear_pod3_3d_render_top.png)
 
-*Abbildung 13.1: Photorealistisches 3D-Raytracing-Render der OpenMotorBridge Heck-Pod 3 Platine (KiCad 8.0, 4-Lagen FR4 TG150 ENIG mit U.FL HF-Ports, ESP32-C3 Antennen-Keepout und 6-Pin Mill-Max Schnittstelle).*
+#### Unteransicht (6-Pin Buchsenleiste zum Aufstecken auf Pod-Base & Factory Testpoints):
+![OpenMotorBridge Heck-Pod 3 Unteransicht 3D PCB Render](../../hardware/kicad_rear_pod3/rear_pod3_3d_render_bottom.png)
+
+*Abbildung 13.1: Photorealistisches 3D-Raytracing-Render der OpenMotorBridge Heck-Pod 3 Platine (KiCad 8.0, 4-Lagen FR4 TG150 ENIG mit U.FL HF-Ports, ESP32-C3 Antennen-Keepout, nach unten öffnender 6-Pin Buchsenleiste auf B.Cu und rückseitigen Produktions-Testpunkten).*
 
 ---
 
-## 2. Hardware-Architektur & Dual-PHY Funktionsbloecke
+## 2. Hardware-Architektur & Dual-PHY Funktionsblöcke
 
 ```
                       ┌─────────────────────────────────────────────────────────────┐
@@ -32,11 +36,17 @@ Die Heck-Pod-Platine vereint auf extrem kompakten **$50{,}0 \times 35{,}0\,\text
                       │   │ • Fallback PHY 868MHz│    │ • 10 Hz Multi-GNSS PVT  │   │
                       │   │ • Codec2 & Radar     │    │ • 1-PPS Zeitnormal      │   │
                       │   └──────────────────────┘    └─────────────────────────┘   │
+                      │                                                             │
+                      │   • U4: DS2401 1-Wire ID ROM (openmotormesh_pod3.json)      │
+                      │   • J1: 6-Pin Buchsenleiste auf Unterseite (B.Cu)           │
                       └──────────────────────────────┬──────────────────────────────┘
-                                                     │ High-Speed UART (460.8k)
+                                                     │ Steckt beim Einschieben
                                                      ▼
                       ┌─────────────────────────────────────────────────────────────┐
-                      │ 6-Pin Mill-Max Pogo-Interface (GND, VCC, TX, RX, PPS, 1W)   │
+                      │ POD-BASISPLATINE (openmotorbridge_pod_base, 36x20mm)        │
+                      │  • J1: 6-Pin Stiftleiste auf Oberseite (F.Cu)               │
+                      │  • U1: SP3012 TVS-Schutzmatrix                              │
+                      │  • J2: Zentrierte M8 6-Pin IP67 Buchse auf Unterseite (B.Cu)│
                       └──────────────────────────────┬──────────────────────────────┘
                                                      │ Geschirmtes 6-adriges PUR-Kabel
                                                      ▼
