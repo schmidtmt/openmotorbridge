@@ -73,34 +73,36 @@ def generate_pod_base_pcb(pcb_path):
             (1.0, 1.0, 1.0)
         ),
         'J2': (
-            '${KICAD10_3DMODEL_DIR}/Connector_Audio.3dshapes/Jack_3.5mm_Ledino_KB3SPRS_Horizontal.step',
-            (0.0, 0.0, -90.0),
-            (4.0, -1.0, 0.0),
-            (1.0, 1.0, 1.0)
+            '${KICAD10_3DMODEL_DIR}/Connector_Coaxial.3dshapes/SMA_Amphenol_132291_Vertical.step',
+            (0.0, 0.0, 0.0),
+            (0.0, 0.0, 0.0),
+            (1.3, 1.3, 1.3) # Scaled to exact M8 8.0mm diameter
         ),
     }
 
     # Symmetrical, spacious, non-overlapping layout
+    # ref: (x_mm, y_mm, rot_deg, layer_name)
     layout_rules = {
-        # Symmetrical M2 Mounting Holes on Left & Right Flanks
-        'H1': (X0 + 3.0, Y_center, 0.0),             # (103.0, 80.0) Left Mounting Hole
-        'H2': (X0 + W - 3.0, Y_center, 0.0),         # (133.0, 80.0) Right Mounting Hole
+        # Symmetrical M2 Mounting Holes on Left & Right Flanks (Through-Hole)
+        'H1': (X0 + 3.0, Y_center, 0.0, 'F.Cu'),             # (103.0, 80.0) Left Mounting Hole
+        'H2': (X0 + W - 3.0, Y_center, 0.0, 'F.Cu'),         # (133.0, 80.0) Right Mounting Hole
 
-        # Mill-Max 6-Pin Pogo Pin Header (Centered horizontally on inner face)
-        'J1': (X_center, Y_center, 0.0),             # (118.0, 80.0) Center Inner
+        # Mill-Max 6-Pin Pogo Pin Header (OBERSEITE / INNEN: Senkrecht in den Kassettenraum ragend)
+        'J1': (X_center, Y_center, 0.0, 'F.Cu'),             # (118.0, 80.0) Oberseite / Innen
 
-        # Left Wing: ESD Protection Stage (TVS Array & 100nF Filter Cap)
-        'U1': (X0 + 8.0, Y_center - 4.0, 0.0),       # (108.0, 76.0) TVS Array
-        'C1': (X0 + 8.0, Y_center + 4.0, 0.0),       # (108.0, 84.0) 100nF Cap
+        # Left Wing: ESD Protection Stage (OBERSEITE / INNEN: Geschützte Innenlage)
+        'U1': (X0 + 8.0, Y_center - 4.0, 0.0, 'F.Cu'),       # (108.0, 76.0) TVS Array (Top)
+        'C1': (X0 + 8.0, Y_center + 4.0, 0.0, 'F.Cu'),       # (108.0, 84.0) 100nF Cap (Top)
 
-        # Integrated M8 6-Pin Panel Receptacle (Direct PCB Mount on Outer Face)
-        'J2': (X_center, Y_center, 0.0),             # (118.0, 80.0) Center Outer
+        # Integrated M8 6-Pin Panel Receptacle (UNTERSEITE / AUSSEN: Senkrecht nach außen zeigend)
+        'J2': (X_center, Y_center, 0.0, 'B.Cu'),             # (118.0, 80.0) Unterseite / Außen
     }
 
-    for ref, (x_mm, y_mm, rot_deg) in layout_rules.items():
+    for ref, (x_mm, y_mm, rot_deg, layer_name) in layout_rules.items():
         fp = pcbnew.FOOTPRINT(board)
         fp.SetReference(ref)
-        fp.SetLayer(pcbnew.F_Cu)
+        target_layer = pcbnew.B_Cu if layer_name == 'B.Cu' else pcbnew.F_Cu
+        fp.SetLayer(target_layer)
         board.Add(fp)
 
         pos = pcbnew.VECTOR2I(int(x_mm * 1e6), int(y_mm * 1e6))
@@ -118,19 +120,34 @@ def generate_pod_base_pcb(pcb_path):
             m.m_Show = True
             fp.Add3DModel(m)
 
-        print(f"  ✓ Placed {ref:4s} at ({x_mm:6.2f}, {y_mm:6.2f}) mm, rot={rot_deg:5.1f}°")
+        print(f"  ✓ Placed {ref:4s} on {layer_name:4s} at ({x_mm:6.2f}, {y_mm:6.2f}) mm, rot={rot_deg:5.1f}°")
 
-    # 3. Add Silkscreen Labels
-    labels = [
-        ("M8-ADAPTER (ADPT)", X_center, Y0 + 2.5, 0.55, 0.55, 0.12),
-        ("SP3012 TVS", X0 + 8.0, Y0 + 2.5, 0.40, 0.40, 0.10),
-        ("MILL-MAX POGO 6P", X_center, Y0 + H - 2.0, 0.50, 0.50, 0.10),
+    # 3. Add Silkscreen Labels on Top (F.SilkS) and Bottom (B.SilkS)
+    top_labels = [
+        ("OPENMOTORBRIDGE", X_center, Y0 + 2.2, 0.60, 0.60, 0.12),
+        ("SP3012 TVS", X0 + 8.0, Y0 + 2.2, 0.45, 0.45, 0.10),
+        ("MILL-MAX POGO 6P (INSIDE)", X_center, Y0 + H - 2.2, 0.50, 0.50, 0.10),
     ]
 
-    for text_str, x_mm, y_mm, sx, sy, th in labels:
+    for text_str, x_mm, y_mm, sx, sy, th in top_labels:
         txt = pcbnew.PCB_TEXT(board)
         txt.SetText(text_str)
         txt.SetLayer(pcbnew.F_SilkS)
+        txt.SetPosition(pcbnew.VECTOR2I(int(x_mm * 1e6), int(y_mm * 1e6)))
+        txt.SetTextSize(pcbnew.VECTOR2I(int(sx * 1e6), int(sy * 1e6)))
+        txt.SetTextThickness(int(th * 1e6))
+        txt.SetHorizJustify(pcbnew.GR_TEXT_H_ALIGN_CENTER)
+        board.Add(txt)
+
+    bottom_labels = [
+        ("M8 6-PIN IP67 (OUTSIDE)", X_center, Y0 + 2.5, 0.55, 0.55, 0.12),
+        ("GND SHIELD PLANE", X_center, Y0 + H - 2.5, 0.45, 0.45, 0.10),
+    ]
+
+    for text_str, x_mm, y_mm, sx, sy, th in bottom_labels:
+        txt = pcbnew.PCB_TEXT(board)
+        txt.SetText(text_str)
+        txt.SetLayer(pcbnew.B_SilkS)
         txt.SetPosition(pcbnew.VECTOR2I(int(x_mm * 1e6), int(y_mm * 1e6)))
         txt.SetTextSize(pcbnew.VECTOR2I(int(sx * 1e6), int(sy * 1e6)))
         txt.SetTextThickness(int(th * 1e6))
