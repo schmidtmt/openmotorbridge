@@ -38,17 +38,19 @@
 	)
 
 	;; =========================================================================
-	;; Hierarchical Labels
+	;; Hierarchical Labels (Matching Parent Sheet Pins exactly)
 	;; =========================================================================
 	(hierarchical_label "AUDIO_OUT_P1" (shape input) (at 30.0 50.0 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "d0000000-0000-0000-0000-000000000001"))
 	(hierarchical_label "AUDIO_IN_P1" (shape output) (at 30.0 70.0 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "d0000000-0000-0000-0000-000000000002"))
 	(hierarchical_label "AUDIO_OUT_P2" (shape input) (at 30.0 90.0 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "d0000000-0000-0000-0000-000000000003"))
 	(hierarchical_label "AUDIO_IN_P2" (shape output) (at 30.0 110.0 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "d0000000-0000-0000-0000-000000000004"))
 
-	(hierarchical_label "HD26_AUDIO_P1_OUT" (shape output) (at 220.0 50.0 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "d0000000-0000-0000-0000-000000000005"))
-	(hierarchical_label "HD26_AUDIO_P1_IN" (shape input) (at 220.0 70.0 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "d0000000-0000-0000-0000-000000000006"))
-	(hierarchical_label "HD26_AUDIO_P2_OUT" (shape output) (at 220.0 90.0 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "d0000000-0000-0000-0000-000000000007"))
-	(hierarchical_label "HD26_AUDIO_P2_IN" (shape input) (at 220.0 110.0 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "d0000000-0000-0000-0000-000000000008"))
+	(hierarchical_label "POD1_NF_P" (shape output) (at 220.0 50.0 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "d0000000-0000-0000-0000-000000000005"))
+	(hierarchical_label "POD1_NF_N" (shape output) (at 220.0 65.0 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "d0000000-0000-0000-0000-000000000006"))
+	(hierarchical_label "POD2_NF_P" (shape output) (at 220.0 80.0 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "d0000000-0000-0000-0000-000000000007"))
+	(hierarchical_label "POD2_NF_N" (shape output) (at 220.0 95.0 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "d0000000-0000-0000-0000-000000000008"))
+	(hierarchical_label "POD1_OPTO" (shape output) (at 220.0 110.0 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "d0000000-0000-0000-0000-000000000009"))
+	(hierarchical_label "POD2_OPTO" (shape output) (at 220.0 125.0 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "d0000000-0000-0000-0000-000000000010"))
 
 	;; =========================================================================
 	;; Symbols Placement
@@ -56,37 +58,37 @@
 	;; T1: Audio Transformer Port 1 Output
 	(symbol (lib_id "Device:Transformer_1P_1S") (at 120.0 50.0 0) (unit 1)
 		(in_bom yes) (on_board yes) (dnp no)
-		(uuid "d0000000-0000-0000-0000-000000000010")
+		(uuid "d0000000-0000-0000-0000-000000000011")
 		(property "Reference" "T1" (at 120.0 42.0 0) (effects (font (size 1.27 1.27))))
 		(property "Value" "LM-NP-1001" (at 120.0 45.0 0) (effects (font (size 1.27 1.27))))
-		(pin "1" (uuid "d0000000-0000-0000-0000-000000000011"))
-		(pin "2" (uuid "d0000000-0000-0000-0000-000000000012"))
-		(pin "3" (uuid "d0000000-0000-0000-0000-000000000013"))
-		(pin "4" (uuid "d0000000-0000-0000-0000-000000000014"))
+		(pin "1" (uuid "d0000000-0000-0000-0000-000000000012"))
+		(pin "2" (uuid "d0000000-0000-0000-0000-000000000013"))
+		(pin "3" (uuid "d0000000-0000-0000-0000-000000000014"))
+		(pin "4" (uuid "d0000000-0000-0000-0000-000000000015"))
 	)
 
 	;; T2: Audio Transformer Port 1 Input
 	(symbol (lib_id "Device:Transformer_1P_1S") (at 120.0 70.0 0) (unit 1)
 		(in_bom yes) (on_board yes) (dnp no)
-		(uuid "d0000000-0000-0000-0000-000000000020")
+		(uuid "d0000000-0000-0000-0000-000000000021")
 		(property "Reference" "T2" (at 120.0 62.0 0) (effects (font (size 1.27 1.27))))
 		(property "Value" "LM-NP-1001" (at 120.0 65.0 0) (effects (font (size 1.27 1.27))))
-		(pin "1" (uuid "d0000000-0000-0000-0000-000000000021"))
-		(pin "2" (uuid "d0000000-0000-0000-0000-000000000022"))
-		(pin "3" (uuid "d0000000-0000-0000-0000-000000000023"))
-		(pin "4" (uuid "d0000000-0000-0000-0000-000000000024"))
+		(pin "1" (uuid "d0000000-0000-0000-0000-000000000022"))
+		(pin "2" (uuid "d0000000-0000-0000-0000-000000000023"))
+		(pin "3" (uuid "d0000000-0000-0000-0000-000000000024"))
+		(pin "4" (uuid "d0000000-0000-0000-0000-000000000025"))
 	)
 
 	;; Q1: TLP222A PhotoMOS Opto Relay Port 1
-	(symbol (lib_id "Relay:TLP222A") (at 120.0 140.0 0) (unit 1)
+	(symbol (lib_id "Relay:TLP222A") (at 120.0 110.0 0) (unit 1)
 		(in_bom yes) (on_board yes) (dnp no)
-		(uuid "d0000000-0000-0000-0000-000000000030")
-		(property "Reference" "Q1" (at 120.0 132.0 0) (effects (font (size 1.27 1.27))))
-		(property "Value" "TLP222A" (at 120.0 135.0 0) (effects (font (size 1.27 1.27))))
-		(pin "1" (uuid "d0000000-0000-0000-0000-000000000031"))
-		(pin "2" (uuid "d0000000-0000-0000-0000-000000000032"))
-		(pin "3" (uuid "d0000000-0000-0000-0000-000000000033"))
-		(pin "4" (uuid "d0000000-0000-0000-0000-000000000034"))
+		(uuid "d0000000-0000-0000-0000-000000000031")
+		(property "Reference" "Q1" (at 120.0 102.0 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "TLP222A" (at 120.0 105.0 0) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "d0000000-0000-0000-0000-000000000032"))
+		(pin "2" (uuid "d0000000-0000-0000-0000-000000000033"))
+		(pin "3" (uuid "d0000000-0000-0000-0000-000000000034"))
+		(pin "4" (uuid "d0000000-0000-0000-0000-000000000035"))
 	)
 
 	;; =========================================================================
@@ -95,5 +97,6 @@
 	(wire (pts (xy 30.0 50.0) (xy 112.38 52.54)) (stroke (width 0) (type solid)))
 	(wire (pts (xy 127.62 52.54) (xy 220.0 50.0)) (stroke (width 0) (type solid)))
 	(wire (pts (xy 30.0 70.0) (xy 112.38 72.54)) (stroke (width 0) (type solid)))
-	(wire (pts (xy 127.62 72.54) (xy 220.0 70.0)) (stroke (width 0) (type solid)))
+	(wire (pts (xy 127.62 72.54) (xy 220.0 65.0)) (stroke (width 0) (type solid)))
+	(wire (pts (xy 130.16 112.54) (xy 220.0 110.0)) (stroke (width 0) (type solid)))
 )
