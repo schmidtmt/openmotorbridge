@@ -1169,7 +1169,7 @@
 		)
 		(duplicate_pad_numbers_are_jumpers no)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x06_P2.54mm_Vertical.step"
+		(model "${KICAD10_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x06_P2.54mm_Horizontal.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -1177,7 +1177,7 @@
 				(xyz 1 1 1)
 			)
 			(rotate
-				(xyz 0 0 0)
+				(xyz 0 0 90)
 			)
 		)
 	)
@@ -1630,7 +1630,7 @@
 	(gr_text "POGO: VCC GND TX RX PPS 1W"
 		(at 125 103.5 0)
 		(layer "F.SilkS")
-		(uuid "5edfed3d-1e0e-4f8f-907c-ab9ed1e27222")
+		(uuid "daf2f3e6-cd51-4de8-8536-064efae61e48")
 		(effects
 			(font
 				(size 0.75 0.75)
@@ -1641,7 +1641,7 @@
 	(gr_text "GNSS (1.575 GHz)"
 		(at 108 85 0)
 		(layer "F.SilkS")
-		(uuid "12e64613-6b81-4997-a639-74ca179f40d4")
+		(uuid "4bde3abf-35c8-488e-b4b6-6e531e3885d3")
 		(effects
 			(font
 				(size 0.85 0.85)
@@ -1652,7 +1652,7 @@
 	(gr_text "868MHz LoRa"
 		(at 143 85 0)
 		(layer "F.SilkS")
-		(uuid "63265998-6f95-46a2-9b4d-925f58e4954f")
+		(uuid "2f99a721-60bf-49b2-87be-de87ba940ed1")
 		(effects
 			(font
 				(size 0.85 0.85)
