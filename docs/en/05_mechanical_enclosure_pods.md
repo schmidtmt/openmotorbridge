@@ -180,13 +180,14 @@ A central design goal of OpenMotorBridge is **100% non-destructive and solder-fr
 │  │ CARTRIDGE CARRIER PCB (35x25mm)                       │  │
 │  │  - J2: JST-SH 6P Header (Top side)                    │  │
 │  │  - U1: DS2401 ID Chip (Reports device type to ESP32)  │  │
-│  │  - J1: 6-Pin Socket (Bottom side)                     │  │
+│  │  - F1: 500mA PTC Fuse & D1: Green Power LED           │  │
+│  │  - J1: 6-Pin Socket (Centered Front Edge)             │  │
 │  └──────────────────────────┬────────────────────────────┘  │
 └─────────────────────────────┼───────────────────────────────┘
-                              ▼ (Engages upon insertion)
+                              ▼ (Horizontal slide-in)
 ┌─────────────────────────────┼───────────────────────────────┐
 │ POD BASE PCB                │                               │
-│  - J1: 6-Pin Pin Header ◄───┘ (Top side)                    │
+│  - J1: 6-Pin Pin Header ◄───┘ (Inner End-Wall, Centered)    │
 │  - U1: SP3012 TVS Protection Matrix                         │
 │  - J2: Centered M8 6-Pin IP67 Receptacle (Bottom side)      │
 └─────────────────────────────┬───────────────────────────────┘
@@ -218,45 +219,84 @@ A central design goal of OpenMotorBridge is **100% non-destructive and solder-fr
 
 ---
 
-### 5.5 Pod Base PCB (`openmotorbridge_pod_base`) & 3D Board Renders
+### 5.5 Pod Base PCB (`openmotorbridge_pod_base`) & Centric Cartridge Guide
 
-The mechanical and electrical transition from the docked cartridge to the motorcycle harness is implemented on the bottom-mounted **Pod Base PCB (`openmotorbridge_pod_base`)**:
+The mechanical and electrical interface from the interchangeable cartridge to the M8 wiring harness is governed by the centered **Pod Base PCB (`openmotorbridge_pod_base`)**:
 
-#### Top View (Vertical 6-Pin Pin Header & SP3012 TVS Stage):
+#### Top View (Vertical/Horizontal 6-Pin Header & SP3012 TVS Protection Stage):
 ![OpenMotorBridge Pod Base PCB Top 3D Render](../../hardware/kicad_pod_base/pod_base_3d_render_top.png)
 
 #### Bottom View (Centered M8 6-Pin IP67 Receptacle & GND Shield Plane):
 ![OpenMotorBridge Pod Base PCB Bottom 3D Render](../../hardware/kicad_pod_base/pod_base_3d_render_bottom.png)
 
-* **Dimensions:** $36.0 \times 20.0\,\text{mm}$ (Compact 2-layer FR4 base PCB with generous clearance and isolation gaps).
-* **Vertical 6-Pin Header (`J1`):** 6-pin precision pin array ($2.54\,\text{mm}$ pitch, gold-plated) on the top side (`F.Cu`), protruding vertically into the cartridge bay.
-* **Integrated ESD Protection Array (`U1`):** **Littelfuse SP3012-06UTG** (6-channel TVS array with $< 0.5\,\text{pF}$ parasitic capacitance) on the top side clamps electrostatic discharges during cartridge insertion.
-* **Centered M8 PCB Receptacle (`J2`):** Metal-shielded **M8 6-Pin A-Coded IP67 panel receptacle** (IEC 61076-2-104) soldered directly at the geometric center of the bottom layer (`B.Cu`), extending vertically downwards through the chassis floor.
-* **Decoupling & Mounting (`H1`, `H2`):** 2x M2 mounting fasteners with Shore 40A silicone dampening against road vibrations.
+* **Dimensions:** $36.0 \times 20.0\,\text{mm}$ (Compact 2-layer FR4 base board with generous clearance margins).
+* **Centered 6-Pin Header (`J1`):** 6-pin precision pin array ($2.54\,\text{mm}$ pitch, gold-plated) positioned at the exact geometric center line ($Y=0, Z=0$).
+* **Integrated ESD Protection Array (`U1`):** **Littelfuse SP3012-06UTG** (6-channel TVS diode array with $< 0.5\,\text{pF}$ parasitic capacitance) shunts ESD strikes upon pin contact directly to chassis ground.
+* **Centered M8 Receptacle (`J2`):** Metal-shielded **M8 6-Pin A-Coded IP67 Receptacle** (IEC 61076-2-104) soldered at the exact geometric center of the bottom layer (`B.Cu`).
+* **Mechanical Damping & Mounting (`H1`, `H2`):** 2x M2 mounting holes with Shore 40A silicone dampening bushings against road vibrations.
+
+---
+
+### 5.6 Centric Slide-in Bay & Poka-Yoke Alignment Architecture
+
+To eliminate tilting, asymmetric lever forces, and reverse insertion, the cartridge chamber is **100% centric across all spatial axes**:
+
+```
+                  ◄──────────── 44.0 mm Pod Width ─────────────►
+ ┌─────────────────────────────────────────────────────────────┐ ▲
+ │                     3.0 mm Housing Top                      │ │
+ │ ┌───┬─────────────────────────────────────────────────┬───┐ │ │ 24.0 mm
+ │ │   │                                                 │   │ │ │ Pod
+ │ │3.0│          CENTRIC CARTRIDGE SLIDE-IN BAY         │3.0│ │ │ Height
+ │ │mm │                   (38 x 18 mm)                  │mm │ │ │
+ │ │   │                                                 │   │ │ │
+ │ │Key├───────────► ┌─────────────────────┐ ◄───────────┤Key│ │ │
+ │ │1.5│             │  6-PIN CONNECTOR    │             │2.0│ │ │
+ │ │mm │             │  (Exact Center)     │             │mm │ │ │
+ │ │   │             └─────────────────────┘             │   │ │ │
+ │ └───┴─────────────────────────────────────────────────┴───┘ │ │
+ │                    3.0 mm Housing Floor                     │ │
+ └─────────────────────────────────────────────────────────────┘ ▼
+```
+
+#### 4-Stage Safety Architecture for Perfect Alignment:
+1. **Fully Centric Geometry:**
+   * **Width ($Y$):** $44.0\,\text{mm}$ pod width and $38.0\,\text{mm}$ bay width yield symmetric **$3.0\,\text{mm}$ side walls**.
+   * **Height ($Z$):** $24.0\,\text{mm}$ pod height and $18.0\,\text{mm}$ bay height yield symmetric **$3.0\,\text{mm}$ top/bottom walls**.
+   * Connector sits at the intersection of symmetry axes $\rightarrow$ **Zero torque or lever strain**.
+2. **Poka-Yoke Asymmetric Keying Grooves:**
+   * Left guide rail: $1.5\,\text{mm}$ width.
+   * Right guide rail: $2.0\,\text{mm}$ width.
+   * Inverted (upside-down) insertion is physically impossible.
+3. **$45^\circ$ Self-Centering Funnel:**
+   * The cartridge nose features a $45^\circ$ lead-in bevel with a $\pm 1.2\,\text{mm}$ capture zone. Pins align smoothly before electrical contact.
+4. **Positive Mechanical Stop:**
+   * Insertion force is arrested after $4.5\,\text{mm}$ contact engagement by the solid PA12 housing body – zero stress is transmitted to PCB solder joints.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                 INTERFACE TRANSITION: POD BASE & CARTRIDGE              │
+│               POD BASE & CARTRIDGE INTERFACE PROGRESSION                │
 ├─────────────────────────────────────────────────────────────────────────┤
-│ 1. DOCKING CRADLE IN CARTRIDGE LID:                                     │
-│    • OEM headset (Sena 50S / Cardo Edge) clicked in tool-free           │
-│    • Internal JST-SH 6P flex cable to Cartridge Carrier PCB             │
+│ 1. CARTRIDGE LID DOCKING BAY:                                           │
+│    • Original headset (Sena 50S / Cardo Edge) clicked in tool-free      │
+│    • Internal JST-SH 6P ribbon cable to Cartridge Carrier PCB           │
 │                               ▼                                         │
-│ 2. CARTRIDGE CARRIER PCB (openmotorbridge_pod_cartridge, 35x25mm):       │
-│    • DS2401 1-Wire ID ROM (reports headset profile to ESP32)            │
-│    • 6-Pin Socket Header on Bottom (B.Cu)                               │
-│                               ▼ (Engages upon bay insertion)            │
+│ 2. CARTRIDGE CARRIER PCB (openmotorbridge_pod_cartridge, 35x25mm):      │
+│    • DS2401 1-Wire ID ROM (identifies headset model to ESP32 host)      │
+│    • 500mA PTC resettable fuse + green 5V power status LED              │
+│    • Centered 6-pin precision socket                                    │
+│                               ▼ (Horizontal cartridge slide-in)         │
 │ 3. POD BASE PCB (openmotorbridge_pod_base, 36x20mm):                    │
-│    • 6-Pin Pin Header on Top (F.Cu)                                     │
-│    • Integrated ESD protection array (Littelfuse SP3012, 6x TVS < 0.5pF)│
-│    • Centered M8 6-Pin A-Coded IP67 PCB receptacle on Bottom (B.Cu)     │
-│                               ▼ (Threaded M8 collar points down)        │
-│ 4. MODULAR M8 RECEPTACLE (Bottom Chassis Entry):                        │
-│    • M8 6-Pin A-Coded IP67 receptacle with keyway (Poka-Yoke)           │
-│    • All-metal shielding collar for 360° EMC protection                 │
+│    • Centered 6-pin pin header on inner end-wall                        │
+│    • Integrated ESD TVS array (Littelfuse SP3012, 6x TVS < 0.5pF)       │
+│    • Centered M8 6-pin A-coded IP67 receptacle on outside (B.Cu)        │
+│                               ▼ (M8 external thread facing outward)     │
+│ 4. MODULAR M8 PANEL RECEPTACLE (Housing underside):                     │
+│    • M8 6-pin A-coded IP67 receptacle with Poka-Yoke keyway             │
+│    • Solid metal shield collar for 360° EMI shielding                   │
 │                               ▼                                         │
-│ 5. MODULAR M8-TO-M8 PUR CONNECTING CABLE (0.5m .. 2.0m):                │
-│    • Shielded 6-conductor PUR cable (Halogen-free, oil & UV resistant)  │
+│ 5. MODULAR M8-TO-M8 PUR HARNESS (0.5m .. 2.0m):                         │
+│    • Shielded 6-conductor PUR cable (Halogen-free, oil- & UV-resistant) │
 │    • 2x Power (0.34 mm²) + 2x Audio/UART twisted (0.14 mm²) + 2x Signal │
 │    • Dual M8 6-Pin IP67 male plugs with vibration ratchet               │
 │                               ▼                                         │

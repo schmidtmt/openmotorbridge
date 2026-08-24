@@ -218,21 +218,59 @@ Ein zentrales Entwicklungsziel von OpenMotorBridge ist die **100 % zerstörungsf
 
 ---
 
-### 5.5 Pod-Basisplatine (`openmotorbridge_pod_base`) & 3D-Board-Renders
+### 5.5 Pod-Basisplatine (`openmotorbridge_pod_base`) & Zentrische Kassetten-Führung
 
-Der mechanische und elektrische Übergang von der aufgesteckten Wechselkassette auf die M8-Kabelverbindung zum Motorradkabelbaum erfolgt über die im Pod-Boden montierte **Pod-Basisplatine (`openmotorbridge_pod_base`)**:
+Der mechanische und elektrische Übergang von der Wechselkassette auf die M8-Kabelverbindung zum Motorradkabelbaum erfolgt über die zentrierte **Pod-Basisplatine (`openmotorbridge_pod_base`)**:
 
-#### Oberansicht (Senkrechte 6-Pin Stiftleiste & SP3012 TVS-Schutzstufe):
+#### Oberansicht (Senkrechte/Horizontale 6-Pin Stiftleiste & SP3012 TVS-Schutzstufe):
 ![OpenMotorBridge Pod-Basisplatine Oberansicht 3D-Render](../../hardware/kicad_pod_base/pod_base_3d_render_top.png)
 
 #### Unteransicht (Zentrierte M8 6-Pin IP67-Buchse & GND-Schirmfläche):
 ![OpenMotorBridge Pod-Basisplatine Unteransicht 3D-Render](../../hardware/kicad_pod_base/pod_base_3d_render_bottom.png)
 
 * **Abmessungen:** $36{,}0 \times 20{,}0\,\text{mm}$ (Kompakte 2-Layer FR4-Basisplatine mit großzügigen Leiterbahn- und Schutzabständen).
-* **Senkrechte 6-Pin Stiftleiste (`J1`):** 6-poliges Präzisions-Pin-Array ($2{,}54\,\text{mm}$ Raster, vergoldet) auf der Oberseite (`F.Cu`), das senkrecht nach oben in den Kassetten-Einschub ragt.
-* **Integrierte ESD-Schutzmatrix (`U1`):** **Littelfuse SP3012-06UTG** (6-Kanal TVS-Array mit $< 0{,}5\,\text{pF}$ parasitärer Kapazität) auf der Oberseite leitet elektrostatische Entladungen beim Berühren der Pins im offenen Schacht blitzschnell gegen die Masse ab.
-* **Zentrierte M8-Rundsteckverbinder-Buchse (`J2`):** Metallgekapselte **M8 6-Pin A-Coded IP67 Einbaubuchse** (IEC 61076-2-104) exakt im geometrischen Zentrum der Platinenunterseite (`B.Cu`) verlötet. Das M8-Gewinde ragt senkrecht nach unten durch die Gehäusewand nach außen.
+* **Zentrierte 6-Pin Stiftleiste (`J1`):** 6-poliges Präzisions-Pin-Array ($2{,}54\,\text{mm}$ Raster, vergoldet) exakt auf der horizontalen Mittelachse ($Y=0, Z=0$).
+* **Integrierte ESD-Schutzmatrix (`U1`):** **Littelfuse SP3012-06UTG** (6-Kanal TVS-Array mit $< 0{,}5\,\text{pF}$ parasitärer Kapazität) leitet elektrostatische Entladungen beim Berühren der Kontakte blitzschnell gegen Masse ab.
+* **Zentrierte M8-Rundsteckverbinder-Buchse (`J2`):** Metallgekapselte **M8 6-Pin A-Coded IP67 Einbaubuchse** (IEC 61076-2-104) exakt im geometrischen Zentrum der Platinenunterseite (`B.Cu`) verlötet.
 * **Mechanische Entkopplung & Montage (`H1`, `H2`):** 2x M2 Montagebohrungen mit Shore 40A Silikondämpfung gegen Fahrbahnvibrationen.
+
+---
+
+### 5.6 Zentrischer Kassetteneinschub & Poka-Yoke Führungskonzept
+
+Um Verkanten, schiefe Krafteinleitung und fehlerhaftes Einstecken physikalisch auszuschließen, ist der Kassetteneinschub **in allen Raumachsen exakt zentriert**:
+
+```
+                  ◄──────────── 44.0 mm Pod-Breite ────────────►
+ ┌─────────────────────────────────────────────────────────────┐ ▲
+ │                    3.0 mm Gehäuse-Deckel                    │ │
+ │ ┌───┬─────────────────────────────────────────────────┬───┐ │ │ 24.0 mm
+ │ │   │                                                 │   │ │ │ Pod-
+ │ │3.0│         ZENTRISCHER KASSETTEN-EINSCHUB          │3.0│ │ │ Höhe
+ │ │mm │                 (38 x 18 mm)                    │mm │ │ │
+ │ │   │                                                 │   │ │ │
+ │ │Nut├───────────► ┌─────────────────────┐ ◄───────────┤Nut│ │ │
+ │ │1.5│             │  6-PIN STECKER      │             │2.0│ │ │
+ │ │mm │             │  (Exakt zentriert)  │             │mm │ │ │
+ │ │   │             └─────────────────────┘             │   │ │ │
+ │ └───┴─────────────────────────────────────────────────┴───┘ │ │
+ │                    3.0 mm Gehäuse-Boden                     │ │
+ └─────────────────────────────────────────────────────────────┘ ▼
+```
+
+#### 4-Stufen-Sicherheit für perfekten Kassetten-Sitz:
+1. **Vollkommen zentrische Geometrie:**
+   * **Breite ($Y$):** Bei $44{,}0\,\text{mm}$ Pod-Außenbreite und $38{,}0\,\text{mm}$ Schachtbreite ergeben sich beidseitig symmetrische **$3{,}0\,\text{mm}$ Wandstärken**.
+   * **Höhe ($Z$):** Bei $24{,}0\,\text{mm}$ Pod-Außenhöhe und $18{,}0\,\text{mm}$ Schachthöhe ergeben sich symmetrische **$3{,}0\,\text{mm}$ Decken- und Bodenstärken**.
+   * Die Steckverbindung liegt exakt im Schnittpunkt der Symmetrieachsen $\rightarrow$ **Null Hebelwirkung oder Kippmomente**.
+2. **Poka-Yoke Verpolschutz (Asymmetrische Führungsnuten):**
+   * Linke Führungsnut: $1{,}5\,\text{mm}$ Breite.
+   * Rechte Führungsnut: $2{,}0\,\text{mm}$ Breite.
+   * Ein verkehrtes (über Kopf) Einschieben der Kassette ist mechanisch unmöglich.
+3. **$45^\circ$-Zentriertrichter am Kassettenkopf:**
+   * Die Kassettennase besitzt um den Steckerausschnitt eine umlaufende $45^\circ$-Einführschräge mit $\pm 1{,}2\,\text{mm}$ Fangbereich. Die Kontakte werden vor dem elektrischen Schluss perfekt zentriert.
+4. **Formschlüssiger Endanschlag:**
+   * Die Einschubkraft wird nach $4{,}5\,\text{mm}$ Kontakttiefe direkt vom massiven Gehäusekörper (PA12) abgefangen – die Platinen-Lötstellen bleiben zu 100 % kräftefrei.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
@@ -244,10 +282,11 @@ Der mechanische und elektrische Übergang von der aufgesteckten Wechselkassette 
 │                               ▼                                         │
 │ 2. KASSETTEN-TRÄGERPLATINE (openmotorbridge_pod_cartridge, 35x25mm):     │
 │    • DS2401 1-Wire ID ROM (Meldet Headset-Typ an ESP32)                 │
-│    • 6-Pin Buchsenleiste auf Unterseite (B.Cu)                          │
-│                               ▼ (Steckverbindung im Pod-Schacht)        │
+│    • 500mA PTC-Sicherung + grüne 5V Power-Status-LED                    │
+│    • 6-Pin Präzisionsbuchsenleiste (zentriert)                          │
+│                               ▼ (Horizontaler Kassetteneinschub)        │
 │ 3. POD-BASISPLATINE (openmotorbridge_pod_base, 36x20mm):                │
-│    • 6-Pin Stiftleiste auf Oberseite (F.Cu)                             │
+│    • 6-Pin Stiftleiste an der inneren Stirnwand (zentriert)             │
 │    • Integrierte ESD-Schutzmatrix (Littelfuse SP3012, 6x TVS < 0.5pF)   │
 │    • Zentrierte M8 6-Pin A-Coded IP67 Einbaubuchse auf Unterseite (B.Cu)│
 │                               ▼ (M8-Außengewinde ragt nach unten)       │
