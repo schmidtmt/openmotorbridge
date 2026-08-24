@@ -6,30 +6,56 @@
 
   (title_block
     (title "OpenMotorBridge v8.0 - Heck-Pod 3 (GNSS & Dual-PHY OpenMotorMesh)")
-    (date "2026-08-23")
+    (date "2026-08-24")
     (rev "v8.0")
     (company "OpenMotorBridge Open Source Hardware")
     (comment 1 "u-blox MAX-M10S 10Hz GNSS + ESP32-C3 2.4GHz Mesh + Semtech SX1262 LoRa (+22 dBm @ 868 MHz)")
     (comment 2 "Dual-PHY OMM Transceiver: 2.4 GHz HiFi Primary + 868 MHz Long-Range Fallback")
   )
 
-  (text "BLOCK 1: 6-POLIGES MILL-MAX POGO-INTERFACE (ZUR ZENTRALBOX):\n- Pin 1: POD3_VCC (5.0V DC Dauer-Versorgung ueber LM5164 / BQ24075)\n- Pin 2: POD3_GND (Dedizierte Power- & Signalmasse)\n- Pin 3: POD3_UART_TX (Heck ESP32-C3 -> Zentralbox ESP32-S3 @ 460.800 Baud)\n- Pin 4: POD3_UART_RX (Zentralbox ESP32-S3 -> Heck ESP32-C3 @ 460.800 Baud)\n- Pin 5: POD3_GNSS_PPS (1-PPS Hardware-Zeitnormal Sync an ESP32-S3 GPIO 21)\n- Pin 6: POD3_1WIRE_ID (DS2401 Silicon Serial Number zur Kassetten-Erkennung)" (at 25.4 45.0 0)
+  (hierarchical_label "POD3_VCC_5V" (shape input) (at 25.4 38.1 180)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "f0000000-0000-0000-0000-000000000002")
+  )
+
+  (hierarchical_label "GND" (shape passive) (at 25.4 48.26 180)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "f0000000-0000-0000-0000-000000000003")
+  )
+
+  (hierarchical_label "POD3_UART_TX" (shape output) (at 280.0 38.1 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "f0000000-0000-0000-0000-000000000004")
+  )
+
+  (hierarchical_label "POD3_UART_RX" (shape input) (at 280.0 48.26 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "f0000000-0000-0000-0000-000000000005")
+  )
+
+  (hierarchical_label "GNSS_1PPS" (shape output) (at 280.0 58.42 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "f0000000-0000-0000-0000-000000000006")
+  )
+
+  (hierarchical_label "POD3_1WIRE_ID" (shape bidirectional) (at 280.0 68.58 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "f0000000-0000-0000-0000-000000000007")
+  )
+
+  (text "BLOCK 1: 6-POLIGES MILL-MAX POGO-INTERFACE / M8 RUNDSTECKER:\n- Pin 1: POD3_VCC (5.0V DC Versorgung ueber Zentralbox)\n- Pin 2: POD3_GND (Dedizierte Power- & Signalmasse)\n- Pin 3: POD3_UART_TX (Heck ESP32-C3 -> Zentralbox ESP32-S3 @ 460.800 Baud)\n- Pin 4: POD3_UART_RX (Zentralbox ESP32-S3 -> Heck ESP32-C3 @ 460.800 Baud)\n- Pin 5: POD3_GNSS_PPS (1-PPS Hardware-Zeitnormal Sync an ESP32-S3 GPIO 21)\n- Pin 6: POD3_1WIRE_ID (DS2401 Silicon Serial Number)" (at 25.4 90.0 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
   )
 
-  (text "BLOCK 2: ESP32-C3 CO-PROZESSOR (32-BIT RISC-V @ 160 MHz - PRIMARY 2.4 GHz PHY):\n- Sendet & empfaengt 2.4 GHz Primary High-Speed Mesh (IEEE 802.15.4 / SC-FDMA TDMA, Opus 24k Audio)\n- Entlastet die Haupt-MCU vollstaendig von NMEA/UBX-Parsing & LoRa Frame En-/Decodierung\n- UART0: High-Speed Bridge zur Zentralbox (TX GPIO 21, RX GPIO 20 @ 460.800 Baud)\n- UART1: Interface zum MAX-M10S (TX GPIO 4, RX GPIO 5 @ 115.200 Baud / UBX-PVT)\n- SPI Master: Interface zum SX1262 LoRa (SCK GPIO 8, MISO GPIO 9, MOSI GPIO 10, NSS GPIO 7)\n- GPIO 2: SX1262 BUSY, GPIO 1: SX1262 DIO1 (Packet Rx Interrupt), GPIO 3: SX1262 NRST\n- GPIO 6: GNSS 1-PPS Input Interrupt (MAX-M10S TIMEPULSE)" (at 25.4 90.0 0)
+  (text "BLOCK 2: ESP32-C3 CO-PROZESSOR (PRIMARY 2.4 GHz MESH PHY):\n- Sendet & empfaengt 2.4 GHz Primary High-Speed Mesh (IEEE 802.15.4 / SC-FDMA, Opus 24k)\n- UART0: High-Speed Bridge zur Zentralbox (TX GPIO 21, RX GPIO 20 @ 460.800 Baud)\n- UART1: Interface zum MAX-M10S (TX GPIO 4, RX GPIO 5 @ 115.200 Baud / UBX-PVT)\n- SPI Master: Interface zum SX1262 LoRa (SCK GPIO 8, MISO GPIO 9, MOSI GPIO 10, NSS GPIO 7)\n- GPIO 2: SX1262 BUSY, GPIO 1: SX1262 DIO1, GPIO 3: SX1262 NRST\n- GPIO 6: GNSS 1-PPS Input Interrupt (MAX-M10S TIMEPULSE)" (at 25.4 130.0 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
   )
 
-  (text "BLOCK 3: GNSS ENGINE (U-BLOX MAX-M10S):\n- Multi-Konstellation 4-System Parallelbetrieb (GPS, GLONASS, Galileo, BeiDou)\n- 25 x 25 x 4 mm Keramik-Patchantenne mit integriertem LNA & SAW-Filter\n- 10 Hz PVT Navigation Rate\n- Zeitstempelgenauigkeit < 15 ns RMS fuer 1-PPS Video-Sync & EKF Dead Reckoning" (at 25.4 140.0 0)
+  (text "BLOCK 3: MULTI-GNSS ENGINE (U-BLOX MAX-M10S):\n- Multi-Konstellation (GPS, GLONASS, Galileo, BeiDou)\n- 25 x 25 x 4 mm Keramik-Patchantenne mit integriertem LNA & SAW-Filter\n- 10 Hz PVT Navigation Rate\n- Zeitstempelgenauigkeit < 15 ns RMS fuer 1-PPS Video-Sync & EKF Dead Reckoning" (at 25.4 175.0 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
   )
 
-  (text "BLOCK 4: SECONDARY FALLBACK PHY - LORA TRANSCEIVER (SEMTECH SX1262):\n- Frequenz: 868.0 - 868.6 MHz (EU ISM Band, Bandbreite 250 kHz, SF7..SF11)\n- Ausgangsleistung: +22 dBm PA mit abgestimmter 868 MHz Wendelantenne im Heckbuerzel\n- Dynamic Leader Election (DLE) Routing Engine & Inter-Cluster Voice Tunnel (Codec2 @ 1200 bps)\n- 100% lueckenloses GPS-Gruppenradar ueber 1 - 15 km bei Abreissen des 2.4-GHz-Netzes" (at 25.4 175.0 0)
-    (effects (font (size 1.27 1.27)) (justify left bottom))
-  )
-
-  (text "BLOCK 5: SPANNUNGSVERSORGUNG & 1-WIRE IDENTIFIKATION:\n- U14: TI TPS7A0533 Ultra-Low-Noise 3.3V LDO (5V In -> saubere 3.3V fuer GNSS & LoRa)\n- U13: Maxim DS2401Z+ 64-Bit 1-Wire Silicon Serial Number ID\n- CPL-Schutz: ESD-Schutzdioden auf allen UART- und PPS-Leitungen" (at 25.4 205.0 0)
+  (text "BLOCK 4: SECONDARY FALLBACK PHY - LORA TRANSCEIVER (SEMTECH SX1262):\n- Frequenz: 868.0 - 868.6 MHz (EU ISM Band, +22 dBm PA)\n- DLE Routing Engine & Inter-Cluster Voice Tunnel (Codec2 @ 1200 bps)\n- 100% lueckenloses GPS-Gruppenradar ueber 1 - 15 km" (at 25.4 210.0 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
   )
 )

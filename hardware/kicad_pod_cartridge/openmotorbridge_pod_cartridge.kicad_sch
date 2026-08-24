@@ -1,27 +1,57 @@
 (kicad_sch (version 20260206) (generator "eeschema") (generator_version "10.0")
 
-  (uuid "e0000000-0000-0000-0000-000000000001")
+  (uuid "c0000000-0000-0000-0000-000000000001")
 
   (paper "A4")
 
   (title_block
-    (title "OpenMotorBridge v8.0 - Universelle Kassetten-Platine (Pod 1 & Pod 2)")
-    (date "2026-08-23")
+    (title "OpenMotorBridge v8.0 - Universal Pod Cartridge")
+    (date "2026-08-24")
     (rev "v8.0")
     (company "OpenMotorBridge Open Source Hardware")
-    (comment 1 "Mill-Max 6-Pin Pogo-Array (Serie 824-22-006-00-001101)")
-    (comment 2 "Maxim DS2401 1-Wire Silicon Serial Number + Opto-Trigger + Audio Interface")
+    (comment 1 "DS2401 Silicon Serial ROM ID + 6-Pin Pogo-Pin Matrix Interface")
+    (comment 2 "Kassettenträgerplatine für Sena, Cardo, PMR446 & Custom Inlays")
   )
 
-  (text "BLOCK 1: 6-POLIGES MILL-MAX POGO-PIN ARRAY (2.54 mm RASTER):\n- Pin 1: VCC (5.0V geschaltete Speisespannung fuer Intercom-Ladeelektronik)\n- Pin 2: GND (Dedizierte Power- & Signalmasse)\n- Pin 3: NF_P (Symmetrisches Audio Signal + zum Intercom Lautsprecher/Line-In)\n- Pin 4: NF_N (Symmetrisches Audio Signal -)\n- Pin 5: OPTO (Trigger-Signal von Toshiba TLP222A Halbleiterrelais)\n- Pin 6: 1-WIRE_ID (Dallas DS2401 Silicon Serial Number zur automatischen Profilerkennung)" (at 25.4 45.0 0)
+  (hierarchical_label "POD_VCC" (shape input) (at 25.4 38.1 180)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "c0000000-0000-0000-0000-000000000002")
+  )
+
+  (hierarchical_label "GND" (shape passive) (at 25.4 48.26 180)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "c0000000-0000-0000-0000-000000000003")
+  )
+
+  (hierarchical_label "POD_1WIRE_ID" (shape bidirectional) (at 25.4 58.42 180)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "c0000000-0000-0000-0000-000000000004")
+  )
+
+  (hierarchical_label "AUDIO_MIC_IN" (shape output) (at 180.0 38.1 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "c0000000-0000-0000-0000-000000000005")
+  )
+
+  (hierarchical_label "AUDIO_SPEAKER_OUT" (shape input) (at 180.0 48.26 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "c0000000-0000-0000-0000-000000000006")
+  )
+
+  (hierarchical_label "PTT_OPTO_KEY" (shape bidirectional) (at 180.0 58.42 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "c0000000-0000-0000-0000-000000000007")
+  )
+
+  (text "BLOCK 1: 1-WIRE IDENTIFIKATION (MAXIM DS2401Z+):\n- U1: DS2401 64-Bit Lasered Silicon Serial Number im SOT-23-3 Gehaeuse\n- C1: 100nF 50V 0603 X7R Entkoppelkondensator\n- Ermoeglicht autonomes Hot-Plug Laden der LittleFS JSON-Profile an Port 1 & 2" (at 25.4 85.0 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
   )
 
-  (text "BLOCK 2: KASSETTEN-IDENTIFIKATION (DALLAS / ANALOG DEVICES DS2401):\n- U1: DS2401Z+ (SOT-223 / TSOC-6 64-Bit Lasered Serial Number)\n- Pin 1: GND, Pin 2: Data (1-Wire mit 4.7k Pullup auf VCC_3V3 in Zentralbox)\n- Liefert eindeutige 48-Bit Seriennummer zur automatischen Identifikation der Kassettenart\n  (z. B. Sena Apex -> Profil 'sena_apex.json', Cardo Edge -> 'cardo_dmc_gen2.json')" (at 25.4 90.0 0)
+  (text "BLOCK 2: 6-PIN POGO-PIN FEDERKONTAKT-INTERFACE (ZUM RAHMEN-POD):\n- Pin 1: POD_VCC (5V DC Versorgung)\n- Pin 2: GND (Masse)\n- Pin 3: POD_1WIRE_ID (DS2401 Datenleitung)\n- Pin 4: AUDIO_MIC_IN (Mikrofonsignal vom Intercom zum Codec)\n- Pin 5: AUDIO_SPEAKER_OUT (Lautsprechersignal vom Codec zum Intercom)\n- Pin 6: PTT_OPTO_KEY (PhotoMOS Optokoppler Taktleitung fuer Mesh/PTT/Pair)" (at 25.4 125.0 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
   )
 
-  (text "BLOCK 3: TASTENSIMULATION & AUDIO-ABGRIFF (INTERCOM INTERFACE):\n- Optokoppler-Ausgang (TLP222A) wird direkt parallel zum Taster des Intercoms verdrahtet\n  (z. B. Sena Mesh-Button oder Cardo Intercom-Button)\n- NF_P / NF_N werden niederohmig an die Lautsprecher-Pins des Headset-Pads angeschlossen\n- ESD-Schutz: 4-Kanal ESD-Array (Nexperia IP4220CZ6) auf allen Pogo-Leitungen" (at 25.4 135.0 0)
+  (text "BLOCK 3: OEM INTERCOM ADAPTER HEADER (JST / MOLEX ZU INTERCOM-PLATTE):\n- Passgenaue Loetpads / Steckverbinder fuer Sena 60S/Apex/50 und Cardo Edge/Bold" (at 25.4 165.0 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
   )
 )
