@@ -50,3 +50,30 @@ Die integrierte GPX-Export-Engine transformiert die aufgezeichneten 10-Hz-Rohdat
    * Verhindert eigenmaechtiges Neuberechnen der Navis durch Einbetten von nicht-ansagenden Zwischenzielen entlang der Passstrassen und Kurven.
 2. **Actioncam Timecode-Sync (`<omb:action_event>`):**
    * Betten Lenkertaster-Klicks als framegenaue Schnittmarken ein.
+
+---
+
+## 4. Smart Firmware & OEM Adapter Update-Hub
+
+Das Dashboard integriert eine zentrale Steuerungszentrale für alle Firmware- und Kassetten-Aktualisierungen:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                 SMART FIRMWARE & OEM ADAPTER UPDATE-HUB                     │
+├──────────────────────────────────────┬──────────────────────────────────────┤
+│ 📡 OMM Heck-Pod 3 In-System Flasher  │ 🎴 Sena / Cardo Mesh 3.0 Assistent   │
+├──────────────────────────────────────┼──────────────────────────────────────┤
+│ • 1-Klick High-Speed UART Push       │ • 1. Auto-Pairing Puls (TLP222A 5s)  │
+│ • 460.800 Baud SLIP Loader           │ • 2. Deep-Link zu offizieller App    │
+│ • Automatische MD5 Checksummen-Prüf. │ • 3. JSON Profil-Merge & Gain-Sync   │
+│ • Kein Zerlegen des Motorrads        │ • Kein manuelles Tastengefummel      │
+└──────────────────────────────────────┴──────────────────────────────────────┘
+```
+
+1. **OMM In-System Firmware Push:**
+   * Streamt `omm_rear.bin` über das 6-Pin UART-Interface direkt auf den ESP32-C3 Co-Prozessor des Heck-Pods mit animierter Fortschrittsanzeige ($< 6\,\text{s}$).
+2. **Sena & Cardo Smart Adapter Assistant:**
+   * **Schritt 1:** Triggert über den TLP222A Optokoppler der Kassette den 5-Sekunden-Puls für den Bluetooth-Pairing-Modus.
+   * **Schritt 2:** Öffnet per Deep-Link die offizielle Sena- oder Cardo-Smartphone-App zum drahtlosen Einspielen des Hersteller-Updates.
+   * **Schritt 3:** Führt nach Abschluss das aktualisierte LittleFS JSON-Profil (z.B. `sena_apex_v3.json`) mit den individuellen DSP- und Ducking-Einstellungen zusammen.
+

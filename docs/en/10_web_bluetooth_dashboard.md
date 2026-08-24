@@ -50,3 +50,30 @@ The integrated GPX Export Engine transforms recorded 10 Hz raw dead-reckoning tr
    * Prevents motorcycle navigators from recalibrating routes by injecting silent shaping points along mountain passes and scenic curves.
 2. **Actioncam Timecode Sync (`<omb:action_event>`):**
    * Embeds handlebar remote clicks as frame-accurate highlight cut marks.
+
+---
+
+## 4. Smart Firmware & OEM Adapter Update-Hub
+
+The dashboard integrates a unified update hub for all system firmware and OEM intercom modules:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                 SMART FIRMWARE & OEM ADAPTER UPDATE-HUB                     │
+├──────────────────────────────────────┬──────────────────────────────────────┤
+│ 📡 OMM Rear Pod 3 In-System Flasher  │ 🎴 Sena / Cardo Mesh 3.0 Assistant   │
+├──────────────────────────────────────┼──────────────────────────────────────┤
+│ • 1-Click High-Speed UART Push       │ • 1. Auto-Pairing Pulse (TLP222A 5s) │
+│ • 460,800 Baud SLIP Loader           │ • 2. Deep-Link to OEM Mobile App     │
+│ • Automated MD5 Hash Verification    │ • 3. JSON Profile-Merge & Gain-Sync  │
+│ • Zero Motorcycle Disassembly        │ • No Manual Button Acrobatics        │
+└──────────────────────────────────────┴──────────────────────────────────────┘
+```
+
+1. **OMM In-System Firmware Push:**
+   * Streams `omm_rear.bin` directly over the 6-pin UART interface to the ESP32-C3 coprocessor with animated real-time progress ($< 6\,\text{s}$).
+2. **Sena & Cardo Smart Adapter Assistant:**
+   * **Step 1:** Automatically triggers the cartridge's TLP222A optocoupler with a 5-second pulse to enter Bluetooth pairing mode.
+   * **Step 2:** Deep-links directly to the official Sena or Cardo mobile app for wireless vendor firmware updates.
+   * **Step 3:** Merges updated vendor JSON profiles (e.g. `sena_apex_v3.json`) with customized audio ducking and gain presets.
+

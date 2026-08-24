@@ -1,4 +1,5 @@
 Comment,Designator,Footprint,LCSC Part Number
-DS2401 Silicon Serial ROM,U1,SOT-23,C2834570
-100nF 50V 0603 X7R Ceramic Cap,C1,C_0603_1608Metric,C14663
-6-Pin Pogo Pin Pad Array,J1,PinHeader_1x06_P2.54mm_Vertical,C224379
+DS2401 Silicon Serial ROM,U1,Package_TO_SOT_SMD:SOT-23,C2834570
+100nF 50V 0603 X7R Ceramic Cap,C1,Capacitor_SMD:C_0603_1608Metric,C14663
+6-Pin Pogo Target Pad Array,J1,Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Horizontal,C224379
+6-Pin JST-SH Right-Angle Inlay Header,J2,Connector_JST:JST_SH_SM06B-SRSS-TB_1x06-1MP_P1.00mm_Horizontal,C145956

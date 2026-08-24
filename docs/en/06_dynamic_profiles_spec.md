@@ -163,3 +163,28 @@ Depending on project budget, riding discipline, and whether the rider group reli
   * **Pod 1:** *Sena Apex* or *Sena 50S* (Local group mesh)
   * **Pod 2:** *Midland G9 Pro / Baofeng PMR446 Cartridge* (Analogue 446 MHz long-range radio gateway)
   * **Pod 3 (Rear):** *Dual-PHY OpenMotorMesh (868 MHz LoRa Fallback)* for up to $15\,\text{km}$ emergency PTT and group radar.
+
+---
+
+## 6. Dynamic Profile Update & Merge Engine (WebApp / Mesh 3.0 Sync)
+
+When an intercom manufacturer (e.g. Sena upgrading from Mesh 2.0 to Mesh 3.0, or Cardo introducing DMC Gen 2) releases updated firmware, OpenMotorBridge dynamically adapts using an intelligent **JSON Merge Engine**:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                 JSON PROFILE MERGE ENGINE                   │
+├──────────────────────────────┬──────────────────────────────┤
+│ 1. Upstream Base Profile     │ 2. Custom User-Configured    │
+│    (e.g. sena_apex_v3.json)  │    Offsets (Ducking & Gains) │
+├──────────────────────────────┴──────────────────────────────┤
+│                             ▼                               │
+│ 3. Merged Live Runtime Profile in LittleFS Flash Storage    │
+│    (Updated Opto Timings + Preserved Personal Audio Gains)  │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### The 3 Phases of Profile Merging:
+1. **Base Parameters:** New optocoupler pulse durations (e.g. `ptt_pulse_ms: 180`), updated channel switching sequences (`[1000, 300, 200]`), and DLE score bonuses are imported from the new vendor JSON.
+2. **User-Settings Preservation:** Custom rider adjustments (e.g. $+2.0\,\text{dB}$ microphone gain, $-12\,\text{dB}$ navi ducking attenuation) are preserved and merged cleanly over base defaults.
+3. **Hot-Reload:** Central Box immediately applies merged parameters at runtime to the ES8388 codec and TLP222A opto-sequencer without requiring a system reboot.
+

@@ -1530,6 +1530,54 @@ document.getElementById('btn-siren-alert-sim')?.addEventListener('click', () => 
     showToast(state.lang === 'de' ? '🚨 SIRENE ERKANNT: Kolonnen-Frühwarnung (ALERT_SIREN_APPROACHING) an alle Bikes gesendet!' : '🚨 SIREN DETECTED: Early warning (ALERT_SIREN_APPROACHING) broadcast to all bikes!', 'error');
 });
 
+// ==========================================
+// Smart Update Hub Handlers (OMM UART Push & OEM Adapter Assistant)
+// ==========================================
+const btnTriggerOmmPush = document.getElementById('btn-trigger-omm-push');
+const containerOmmProgress = document.getElementById('container-omm-push-progress');
+const barOmmPush = document.getElementById('bar-omm-push');
+const lblOmmPushStatus = document.getElementById('lbl-omm-push-status');
+const lblOmmPushPct = document.getElementById('lbl-omm-push-pct');
+const badgeOmmFwState = document.getElementById('badge-omm-fw-state');
+
+btnTriggerOmmPush?.addEventListener('click', () => {
+    btnTriggerOmmPush.disabled = true;
+    containerOmmProgress.style.display = 'block';
+    lblOmmPushStatus.textContent = state.lang === 'de' ? 'Synchronisiere ROM-Bootloader (0x08 SLIP)...' : 'Syncing ROM Bootloader (0x08 SLIP)...';
+    barOmmPush.style.width = '5%';
+    lblOmmPushPct.textContent = '5 %';
+    showToast(state.lang === 'de' ? '⚡ High-Speed UART Push (460.800 Baud) gestartet...' : '⚡ High-Speed UART Push (460,800 Baud) started...', 'info');
+
+    let pct = 5;
+    const flashInterval = setInterval(() => {
+        pct += 15;
+        if (pct > 100) pct = 100;
+        barOmmPush.style.width = `${pct}%`;
+        lblOmmPushPct.textContent = `${pct} %`;
+        
+        if (pct < 40) {
+            lblOmmPushStatus.textContent = state.lang === 'de' ? 'Flash-Sektoren löschen & SLIP Chunks streamen...' : 'Erasing flash & streaming SLIP chunks...';
+        } else if (pct < 90) {
+            lblOmmPushStatus.textContent = state.lang === 'de' ? `Übertrage 'omm_rear.bin' (${pct}%)...` : `Transferring 'omm_rear.bin' (${pct}%)...`;
+        } else if (pct === 100) {
+            clearInterval(flashInterval);
+            lblOmmPushStatus.textContent = state.lang === 'de' ? '✓ MD5 Hash verifiziert • Coprozessor neugestartet' : '✓ MD5 Hash verified • Coprocessor rebooted';
+            badgeOmmFwState.textContent = 'Synchron (v8.0.4)';
+            badgeOmmFwState.className = 'card-badge badge-green';
+            btnTriggerOmmPush.disabled = false;
+            showToast(state.lang === 'de' ? '✓ OMM Heck-Pod Firmware erfolgreich via UART aktualisiert!' : '✓ OMM Rear Pod firmware successfully updated via UART!', 'success');
+        }
+    }, 250);
+});
+
+document.getElementById('btn-trigger-oem-pairing')?.addEventListener('click', () => {
+    showToast(state.lang === 'de' ? '⚡ TLP222A Optokoppler triggert 5s Phone-Pairing-Puls... Adapter bereit für Smartphone-App!' : '⚡ TLP222A optocoupler triggered 5s phone pairing pulse... Adapter ready for OEM app!', 'info');
+});
+
+document.getElementById('btn-trigger-profile-merge')?.addEventListener('click', () => {
+    showToast(state.lang === 'de' ? '✓ Profil \'sena_apex.json\' erfolgreich mit Mesh 3.0 Parametern zusammengeführt & aktiviert!' : '✓ Profile \'sena_apex.json\' merged with Mesh 3.0 parameters & activated!', 'success');
+});
+
 // Initialize Language on Boot
 setLanguage(state.lang);
 

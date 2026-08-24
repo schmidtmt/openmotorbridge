@@ -34,6 +34,12 @@ void opto_port1_channel_next(void);
 void opto_port2_channel_next(void);
 
 /**
+ * @brief Triggert 5-Sekunden Haltepuls für Bluetooth-Pairing Modus (Hersteller-App Update)
+ * @param port 1 für Port 1 (Links), 2 für Port 2 (Rechts)
+ */
+void opto_port_pairing_mode(uint8_t port);
+
+/**
  * @brief Prüft innerhalb von 500 ms nach Puls auf Quittungston am ADC
  */
 bool opto_verify_ack_tone(void);

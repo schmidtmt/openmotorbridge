@@ -11,6 +11,8 @@
 #include "services/gatt/ble_svc_gatt.h"
 #include "audio_dsp_pipeline.h"
 #include "opto_pulse_sequencer.h"
+#include "cartridge_onewire.h"
+#include "omm_flasher.h"
 
 static const char *TAG = "BLE_SERVER";
 
@@ -47,6 +49,12 @@ static int gatt_svr_chr_access_omb(uint16_t conn_handle, uint16_t attr_handle,
             opto_port1_channel_next();
         } else if (cmd[0] == 0x04) { // Trigger Port 2 Channel Next
             opto_port2_channel_next();
+        } else if (cmd[0] == 0x05) { // Trigger OEM Auto-Pairing (5s Opto Hold)
+            opto_port_pairing_mode(cmd[1]);
+        } else if (cmd[0] == 0x06) { // Trigger OMM High-Speed UART Push
+            omm_flasher_push_from_storage("/spiffs/omm_rear.bin");
+        } else if (cmd[0] == 0x07) { // Trigger Profile Merge & Hot-Reload
+            cartridge_apply_profile_merge(cmd[1], "sena_apex", 0.0f);
         }
         return 0;
     }

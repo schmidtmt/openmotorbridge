@@ -125,3 +125,23 @@ Communication across the 460,800 Baud bridge is packet-oriented with CRC16-CCITT
 * **`0x03` - OMM 868 MHz LoRa Fallback Frame:** Codec2 audio or radar packet from long-range fallback.
 * **`0x04` - OMM Tx Request (Dual-PHY):** Transmit command from Central Box to 2.4 GHz mesh or SX1262 LoRa.
 * **`0x05` - DLE Status & Link Quality:** Signal-to-Noise Ratio (SNR), RSSI, active PHY mode (2.4G vs 868M), and node DLE score.
+* **`0xFE` - Bootloader Jump / Flasher Trigger:** Forces ESP32-C3 into ROM download mode for UART push-flashing.
+
+---
+
+## 7. In-System Firmware Flashing & Production Test Interface
+
+To ensure straightforward initial flashing in the factory and seamless in-system updates at the motorcycle:
+
+### 7.1 In-System UART Push-Flashing (Operational)
+* During active motorcycle operation, firmware updates are pushed directly by the Central Box (`firmware/main_controller/src/omm_flasher.cpp`) over `UART_TX` and `UART_RX` at 460,800 baud.
+* The Central Box resets the ESP32-C3 via the switched `POD3_PWR_EN` power line and synchronizes using standard ESP-ROM SLIP frames.
+* **Flash duration:** $< 6\,\text{seconds}$ for $850\,\text{kB}$ firmware binary with verified MD5 checksum.
+
+### 7.2 Bottom-Layer Production Test Points (`B.Cu`)
+For End-of-Line (EOL) testing on the manufacturing bed of nails without soldering cables:
+* **`TP1` (`TP_BOOT`):** ESP32-C3 GPIO9 (Pull to GND for manual ROM bootloader entry).
+* **`TP2` (`TP_RST`):** ESP32-C3 CHIP_EN / Hardware Reset.
+* **`TP3` (`TP_TX`):** Direct ESP32-C3 U0TXD test pad.
+* **`TP4` (`TP_RX`):** Direct ESP32-C3 U0RXD test pad.
+

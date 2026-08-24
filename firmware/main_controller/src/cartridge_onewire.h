@@ -32,6 +32,11 @@ esp_err_t cartridge_onewire_init(void);
 CartridgeInfo_t cartridge_get_info(uint8_t port_num);
 
 /**
+ * @brief Führt ein Profil-Merge zur Laufzeit durch und aktualisiert DSP-Gains
+ */
+void cartridge_apply_profile_merge(uint8_t port, const char *profile_id, float gain_offset);
+
+/**
  * @brief Task zur zyklischen Kassetten-Erkennung & Profil-Aktualisierung (Core 0)
  */
 void task_cartridge_manager(void *pvParameters);

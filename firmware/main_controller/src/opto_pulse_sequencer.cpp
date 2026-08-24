@@ -50,6 +50,12 @@ void opto_port2_channel_next(void) {
     opto_trigger_single_click(PIN_PORT2_KEY, 800);
 }
 
+void opto_port_pairing_mode(uint8_t port) {
+    gpio_num_t pin = (port == 1) ? PIN_PORT1_KEY : PIN_PORT2_KEY;
+    ESP_LOGI(TAG, "Port %d: Triggering 5000 ms Pairing Hold Pulse for OEM App Update...", port);
+    opto_trigger_single_click(pin, 5000);
+}
+
 bool opto_verify_ack_tone(void) {
     // Prüft innerhalb von 500 ms nach Puls auf Quittungston am ADC
     ESP_LOGI(TAG, "Checking ADC line level for audio confirmation tone...");

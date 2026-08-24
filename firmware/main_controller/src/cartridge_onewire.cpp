@@ -235,6 +235,17 @@ static void scan_port(gpio_num_t pin, CartridgeInfo_t *cart, uint8_t port_idx, c
     }
 }
 
+void cartridge_apply_profile_merge(uint8_t port, const char *profile_id, float gain_offset) {
+    CartridgeInfo_t *cart = (port == 1) ? &s_cartridge_port1 : &s_cartridge_port2;
+    if (cart->is_connected) {
+        load_profile_class(cart, profile_id);
+        cart->input_gain_db += gain_offset;
+        ESP_LOGI(TAG, "Port %d: Merged dynamic profile '%s' with gain offset %.1f dB (Effective Gain: %.1f dB)",
+                 port, profile_id, gain_offset, cart->input_gain_db);
+        audio_set_port_gains(s_cartridge_port1.input_gain_db, s_cartridge_port2.input_gain_db);
+    }
+}
+
 void task_cartridge_manager(void *pvParameters) {
     ESP_LOGI(TAG, "Dedicated Dual-Channel 1-Wire Manager Task running on Core 0.");
 

@@ -163,3 +163,28 @@ Je nach Budget, Fahrprofil und der in der Motorradgruppe vorherrschenden Interco
   * **Pod 1:** *Sena Apex* oder *Sena 50S* (Nahbereichs-Mesh für die Gruppe)
   * **Pod 2:** *Midland G9 Pro / Baofeng PMR446 Funkkassette* (Analoger Weitstreckenfunk über 446 MHz für kilometerweite Kommunikation)
   * **Pod 3 (Heck):** *Dual-PHY OpenMotorMesh (868 MHz LoRa Fallback)* für bis zu $15\,\text{km}$ Notfall-PTT und Gruppenradar.
+
+---
+
+## 6. Dynamisches Profil-Update & Merge-Verfahren (WebApp / Mesh 3.0 Sync)
+
+Wenn ein Hersteller (z. B. Sena beim Sprung von Mesh 2.0 auf Mesh 3.0 oder Cardo bei DMC Gen 2) seine Firmware aktualisiert, passt sich OpenMotorBridge über ein intelligentes **JSON-Merge-Verfahren** an:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                 JSON PROFIL-MERGE-VERFAHREN                 │
+├──────────────────────────────┬──────────────────────────────┤
+│ 1. Basis-Herstellerprofil    │ 2. Individuelle User-Offsets │
+│    (z.B. sena_apex_v3.json)  │    (Ducking & Audio-Gains)   │
+├──────────────────────────────┴──────────────────────────────┤
+│                             ▼                               │
+│ 3. Gemergtes Live-Profil im LittleFS Flash-Speicher          │
+│    (Aktualisierte Opto-Timings + persönliche Lautstärken)   │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Die 3 Phasen des Profil-Merges:
+1. **Basis-Parameter:** Neue Optokoppler-Pulsdauern (z. B. `ptt_pulse_ms: 180`), geänderte Kanalwechselmuster (`[1000, 300, 200]`) und DLE-Bonuswerte werden aus dem neuen Hersteller-JSON geladen.
+2. **User-Settings Preservation:** Individuelle Anpassungen des Fahrers (z. B. $+2{,}0\,\text{dB}$ Mikrofonpegel, $-12\,\text{dB}$ Navi-Ducking) bleiben beim Update erhalten und werden über die Basiswerte gemerged.
+3. **Hot-Reload:** Die Zentralbox wendet die gemergten Parameter im laufenden Betrieb ohne Neustart sofort auf den ES8388 Codec und die TLP222A Opto-Puls-Engine an.
+

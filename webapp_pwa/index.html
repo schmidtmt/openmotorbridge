@@ -523,6 +523,82 @@
                     </button>
                 </section>
             </div>
+
+            <!-- Smart Firmware & OEM Adapter Update Hub -->
+            <section class="card" style="margin-top: 18px; border: 1px solid var(--border-accent); background: linear-gradient(135deg, rgba(22, 27, 34, 0.95), rgba(13, 17, 23, 0.98));">
+                <div class="card-header">
+                    <span class="card-title">🚀 <span data-i18n="update_hub_title">Smart Firmware & OEM Adapter Update-Hub</span></span>
+                    <span class="card-badge badge-blue">SLIP 460.8k • In-System OTA</span>
+                </div>
+
+                <div class="grid-2" style="gap: 20px;">
+                    <!-- Sub-Card 1: OpenMotorBridge & OMM Unified Flash Push -->
+                    <div style="background: var(--bg-surface-elevated); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <strong style="font-size: 0.95rem; color: var(--accent-orange);">📡 OMM Heck-Pod 3 In-System Flasher</strong>
+                            <span class="card-badge badge-green" id="badge-omm-fw-state">Synchron (v8.0.4)</span>
+                        </div>
+                        <p class="stat-sub" style="font-size: 0.78rem; margin-bottom: 12px;">
+                            Pusht neue OMM-Firmware ('omm_rear.bin') transparent über den 460.800 Baud High-Speed UART der 6-Pin Kontaktleiste ohne Zerlegen des Motorrads.
+                        </p>
+
+                        <!-- Progress Bar -->
+                        <div id="container-omm-push-progress" style="display: none; margin-bottom: 12px;">
+                            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 4px;">
+                                <span id="lbl-omm-push-status">SLIP Chunks übertragen...</span>
+                                <span id="lbl-omm-push-pct">0 %</span>
+                            </div>
+                            <div class="progress-bar-container" style="height: 8px;">
+                                <div class="progress-bar-fill" id="bar-omm-push" style="width: 0%; background: linear-gradient(90deg, var(--accent-blue), var(--accent-green));"></div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 8px;">
+                            <button id="btn-trigger-omm-push" class="btn-primary" style="flex: 1; font-size: 0.82rem; padding: 8px 12px;">
+                                ⚡ <span data-i18n="btn_push_omm_fw">OMM Firmware-Push starten</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Sub-Card 2: Sena / Cardo OEM Smart Update Assistant -->
+                    <div style="background: var(--bg-surface-elevated); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <strong style="font-size: 0.95rem; color: var(--accent-blue);">🎴 Sena / Cardo Mesh 3.0 Assistent</strong>
+                            <span class="card-badge badge-purple" id="badge-oem-adapter">Sena Apex erkannt</span>
+                        </div>
+                        <p class="stat-sub" style="font-size: 0.78rem; margin-bottom: 12px;">
+                            Geführter 3-Schritte-Assistent für drahtlose OEM-Mesh-Updates inklusive automatischem Tasten-Pairing und Profil-Merge.
+                        </p>
+
+                        <!-- 3-Step Action Row -->
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(0,0,0,0.3); padding: 6px 10px; border-radius: var(--radius-sm); font-size: 0.78rem;">
+                                <span>1. Auto-Pairing Puls (TLP222A):</span>
+                                <button id="btn-trigger-oem-pairing" class="btn-secondary" style="padding: 3px 8px; font-size: 0.72rem;">
+                                    ⚡ Pairing Starten (5s)
+                                </button>
+                            </div>
+                            <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(0,0,0,0.3); padding: 6px 10px; border-radius: var(--radius-sm); font-size: 0.78rem;">
+                                <span>2. Offizielle Hersteller-App:</span>
+                                <div style="display: flex; gap: 4px;">
+                                    <a href="https://www.sena.com/software" target="_blank" class="btn-secondary" style="padding: 3px 8px; font-size: 0.72rem; text-decoration: none; display: inline-block;">
+                                        📲 Sena App
+                                    </a>
+                                    <a href="https://www.cardosystems.com/update" target="_blank" class="btn-secondary" style="padding: 3px 8px; font-size: 0.72rem; text-decoration: none; display: inline-block;">
+                                        📲 Cardo App
+                                    </a>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(0,0,0,0.3); padding: 6px 10px; border-radius: var(--radius-sm); font-size: 0.78rem;">
+                                <span>3. Profil-Merge & Gain-Sync:</span>
+                                <button id="btn-trigger-profile-merge" class="btn-primary" style="padding: 3px 8px; font-size: 0.72rem; background: linear-gradient(135deg, var(--accent-green), #007a33);">
+                                    🔄 Profil Zusammenführen
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </main>
 
         <!-- TAB 4: TOUREN & WEBDAV -->

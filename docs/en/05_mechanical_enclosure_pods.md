@@ -132,9 +132,13 @@ The mid baffle separates the PCB/battery compartment mechanically from the conne
 ## 5. Enclosure Type B: Universal Satellite Pod (Identical for Pods 1, 2, and 3)
 
 - **100% Universal Design:** All 3 pod locations on the motorcycle use the identical enclosure body.
-- **Bay Dimensions:** 64.0 x 46.0 x 23.5 mm.
-- **Cartridge Module:** 54.0 x 37.5 x 17.0 mm (PA12 MJF).
-- **Contact Array:** Mill-Max 6-pin pogo pin array (Series 824-22-006-00-001101, 2.54 mm pitch, 1.4 mm working stroke) with silicone boot gasket mating against ENIG pads.
+- **Contact Array:** Mill-Max 6-pin pogo pin array (Series 824-22-006-00-001101, 2.54 mm pitch, 1.4 mm working stroke) with silicone boot gasket mating against ENIG pads on the cartridge bottom.
+- **Ultra-Low-Profile Design:** 
+  * Internal OEM inlay interface utilizes a **right-angle low-profile SMD connector (JST-SH 1.0 mm, 1.8 mm total height)** – prevents vertical stacking and enables ultra-slim cartridge enclosures ($17.0\,\text{mm}$ total thickness including OEM inlay).
+- **Vibration Damping & Mechanical Decoupling:**
+  * **Floating Cartridge Suspension:** The cartridge PCB is suspended inside the PA12 shell via a perimeter **Shore 40A silicone molded gasket** and two **M2 silicone decoupling bushings**.
+  * **Vibration Resistance:** Damps high-frequency single-cylinder and V-twin engine harmonics up to $20\,\text{g}$ across $50\dots 500\,\text{Hz}$.
+  * **Contact Stability:** The 1.4 mm pogo pin compression stroke with $60\,\text{g}$ preload per pin guarantees uninterrupted contact ($\Delta R < 5\,\text{m}\Omega$) without audio pops during severe potholes.
 - **3-Stage Locking:** Snap-lock POM-C latches with acoustic click, 90-degree rotating cam-lock against $> 20\,\text{g}$ shock loads, push-to-eject lever.
 - **Universal Mounting:** Integrated M5 backplate for flat mounting or CNC aluminum tube clamps (22.0 mm, 28.6 mm, 1.0 inch, 25–32 mm crash bars).
 
