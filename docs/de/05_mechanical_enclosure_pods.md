@@ -134,6 +134,15 @@ Der Zwischenboden der Oberwanne trennt die empfindliche Leiterplatten- und Akkue
 - **Vollstaendige Modularitaet:** Alle 3 Pod-Positionen am Motorrad nutzen das identische, universelle Gehaeuse.
 - **Abmessungen Schacht:** 64.0 x 46.0 x 23.5 mm.
 - **Elektronik-Kassette:** 54.0 x 37.5 x 17.0 mm (PA12 MJF).
+
+### 5.1 Kassetten-Trägerplatine & 3D-Board-Render
+
+Die Kassetten-Trägerplatine (`openmotorbridge_pod_cartridge`) adaptiert die internen Sena- oder Cardo-OEM-Inlays über einen abgewinkelten Low-Profile JST-SH Stecker auf die 6 vergoldeten Pogo-Kontaktpads:
+
+![OpenMotorBridge Universal Pod Cartridge 3D PCB Render](../../hardware/kicad_pod_cartridge/kicad_3d_render.png)
+
+*Abbildung 5.1: Photorealistisches 3D-Raytracing-Render der Kassetten-Trägerplatine (KiCad 8.0, 35.0 x 25.0 mm, ENIG Gold mit abgewinkeltem JST-SH 1.0 mm Stecker, 6 Pogo-Zielkontaktpads und Maxim DS2401 ID-Chip).*
+
 - **Kontaktblock:** 6-poliges Mill-Max Pogo-Pin-Array (Serie 824-22-006-00-001101, Raster 2.54 mm, 1.4 mm Arbeitshub) mit Silikon-Formschuhdichtung gegen vergoldete ENIG-Pads auf der Kassettenunterseite.
 - **Flache Bauhöhe (Low-Profile):** 
   * Interner OEM-Inlay-Anschluss ueber **abgewinkelten Low-Profile SMD-Steckverbinder (JST-SH 1.0 mm, Bauhoehe 1.8 mm)** – verhindert vertikales Auftragen und ermoeglicht ultraflache Kassettengehaeuse ($17.0\,\text{mm}$ Gesamtdicke inkl. OEM-Inlay).

@@ -4,7 +4,17 @@
 
 ---
 
-## 1. Hardware Architecture & Dual-PHY Functional Blocks
+## 1. 3D Board Visualization & Photorealistic Raytracing Render
+
+The Rear Pod PCB integrates multi-constellation GNSS, the Dual-PHY mesh modem, and the RISC-V coprocessor onto an ultra-compact **$50.0 \times 35.0\,\text{mm}$** footprint with zero edge overhang:
+
+![OpenMotorBridge Heck-Pod 3 3D PCB Render](../../hardware/kicad_rear_pod3/kicad_3d_render.png)
+
+*Figure 13.1: Photorealistic 3D raytracing render of the OpenMotorBridge Rear Pod 3 PCB (KiCad 8.0, 4-layer FR4 TG150 ENIG with U.FL RF ports, ESP32-C3 antenna keep-out, and 6-pin Mill-Max interface).*
+
+---
+
+## 2. Hardware Architecture & Dual-PHY Functional Blocks
 
 ```
                       ┌─────────────────────────────────────────────────────────────┐
@@ -13,14 +23,14 @@
                       │   ┌─────────────────────────────────────────────────────┐   │
                       │   │  ESP32-C3 RISC-V Co-Processor (32-Bit @ 160 MHz)    │   │
                       │   │  • Primary PHY: 2.4 GHz IEEE 802.15.4 / SC-FDMA     │   │
-                      │   │  • HiFi Audio (Opus 24k) & Proximity Mesh           │   │
+                      │   │  • HiFi Audio (Opus 24k) & Local Group Mesh         │   │
                       │   └──────────┬───────────────────────────┬──────────────┘   │
                       │              │ SPI Master (8 MHz)        │ UART1 (115.2k)   │
                       │              ▼                           ▼                  │
                       │   ┌──────────────────────┐    ┌─────────────────────────┐   │
                       │   │ Semtech SX1262 LoRa  │    │ u-blox MAX-M10S GNSS    │   │
                       │   │ • Fallback PHY 868MHz│    │ • 10 Hz Multi-GNSS PVT  │   │
-                      │   │ • Codec2 & Radar     │    │ • 1-PPS Timepulse       │   │
+                      │   │ • Codec2 & Radar     │    │ • 1-PPS Time Reference  │   │
                       │   └──────────────────────┘    └─────────────────────────┘   │
                       └──────────────────────────────┬──────────────────────────────┘
                                                      │ High-Speed UART (460.8k)
@@ -28,10 +38,10 @@
                       ┌─────────────────────────────────────────────────────────────┐
                       │ 6-Pin Mill-Max Pogo Interface (GND, VCC, TX, RX, PPS, 1W)   │
                       └──────────────────────────────┬──────────────────────────────┘
-                                                     │ Shielded 6-core PUR Cable
+                                                     │ Shielded 6-Conductor PUR Harness
                                                      ▼
                       ┌─────────────────────────────────────────────────────────────┐
-                      │ HD26 Flange Socket -> Main Box ESP32-S3 Host Controller     │
+                      │ HD26 Flange Receptacle -> Central Box ESP32-S3 Host MCU     │
                       └─────────────────────────────────────────────────────────────┘
 ```
 

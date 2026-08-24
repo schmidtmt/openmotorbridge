@@ -4,7 +4,17 @@ Der **Heck-Pod 3** (Position: Heckbuerzel / Gepaeckbruecke) ist das zentrale Fun
 
 ---
 
-## 1. Hardware-Architektur & Dual-PHY Funktionsbloecke
+## 1. 3D-Board-Visualisierung & Photorealistisches Render
+
+Die Heck-Pod-Platine vereint auf extrem kompakten **$50{,}0 \times 35{,}0\,\text{mm}$** das Multi-Konstellations-GNSS, das Dual-PHY Mesh-Modem sowie den RISC-V Co-Prozessor mit vollkommen bündigen Kanten (Null Überhang):
+
+![OpenMotorBridge Heck-Pod 3 3D PCB Render](../../hardware/kicad_rear_pod3/kicad_3d_render.png)
+
+*Abbildung 13.1: Photorealistisches 3D-Raytracing-Render der OpenMotorBridge Heck-Pod 3 Platine (KiCad 8.0, 4-Lagen FR4 TG150 ENIG mit U.FL HF-Ports, ESP32-C3 Antennen-Keepout und 6-Pin Mill-Max Schnittstelle).*
+
+---
+
+## 2. Hardware-Architektur & Dual-PHY Funktionsbloecke
 
 ```
                       ┌─────────────────────────────────────────────────────────────┐

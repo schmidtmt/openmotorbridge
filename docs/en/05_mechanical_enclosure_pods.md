@@ -132,6 +132,17 @@ The mid baffle separates the PCB/battery compartment mechanically from the conne
 ## 5. Enclosure Type B: Universal Satellite Pod (Identical for Pods 1, 2, and 3)
 
 - **100% Universal Design:** All 3 pod locations on the motorcycle use the identical enclosure body.
+- **Bay Dimensions:** 64.0 x 46.0 x 23.5 mm.
+- **Cartridge Module:** 54.0 x 37.5 x 17.0 mm (PA12 MJF).
+
+### 5.1 Cartridge Carrier PCB & 3D Board Render
+
+The cartridge carrier PCB (`openmotorbridge_pod_cartridge`) adapts internal Sena or Cardo OEM inlays via a low-profile right-angle JST-SH connector to the 6 gold-plated pogo contact target pads:
+
+![OpenMotorBridge Universal Pod Cartridge 3D PCB Render](../../hardware/kicad_pod_cartridge/kicad_3d_render.png)
+
+*Figure 5.1: Photorealistic 3D raytracing render of the Universal Pod Cartridge Carrier PCB (KiCad 8.0, 35.0 x 25.0 mm, ENIG Gold with right-angle JST-SH 1.0 mm connector, 6 pogo contact target pads, and Maxim DS2401 ID chip).*
+
 - **Contact Array:** Mill-Max 6-pin pogo pin array (Series 824-22-006-00-001101, 2.54 mm pitch, 1.4 mm working stroke) with silicone boot gasket mating against ENIG pads on the cartridge bottom.
 - **Ultra-Low-Profile Design:** 
   * Internal OEM inlay interface utilizes a **right-angle low-profile SMD connector (JST-SH 1.0 mm, 1.8 mm total height)** – prevents vertical stacking and enables ultra-slim cartridge enclosures ($17.0\,\text{mm}$ total thickness including OEM inlay).
