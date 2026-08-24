@@ -1,57 +1,110 @@
-(kicad_sch (version 20260206) (generator "eeschema") (generator_version "10.0")
+(kicad_sch
+	(version 20260206)
+	(generator "eeschema")
+	(generator_version "10.0")
+	(uuid "c0000000-0000-0000-0000-000000000001")
+	(paper "A4")
+	(title_block
+		(title "OpenMotorBridge v8.0 - Universal Pod Cartridge")
+		(date "2026-08-24")
+		(rev "v8.0")
+		(company "OpenMotorBridge Open Source Hardware")
+		(comment 1 "DS2401 Silicon Serial ROM ID + 6-Pin Pogo-Pin Matrix Interface")
+		(comment 2 "Kassettenträgerplatine für Sena, Cardo, PMR446 & Custom Inlays")
+	)
+	(lib_symbols
+		(symbol "Device:C_Small"
+			(pin passive line (at 0 2.54 270) (length 1.27) (name "~" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
+			(pin passive line (at 0 -2.54 90) (length 1.27) (name "~" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
+			(property "Reference" "C" (at 1.905 0 0) (effects (font (size 1.27 1.27)) (justify left)))
+			(property "Value" "C_Small" (at 1.905 -1.905 0) (effects (font (size 1.27 1.27)) (justify left)))
+			(symbol "C_Small_0_1"
+				(polyline (pts (xy -1.524 -0.635) (xy 1.524 -0.635)) (stroke (width 0.254) (type solid)) (fill (type none)))
+				(polyline (pts (xy -1.524 0.635) (xy 1.524 0.635)) (stroke (width 0.254) (type solid)) (fill (type none)))
+			)
+		)
+		(symbol "Memory_EEPROM:DS2401P"
+			(pin passive line (at -10.16 0 0) (length 2.54) (name "DATA_1WIRE" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
+			(pin power_in line (at 0 -10.16 90) (length 2.54) (name "GND" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
+			(pin passive line (at 10.16 0 180) (length 2.54) (name "NC" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
+			(property "Reference" "U1" (at -7.62 8.89 0) (effects (font (size 1.27 1.27)) (justify left)))
+			(property "Value" "DS2401" (at -7.62 -8.89 0) (effects (font (size 1.27 1.27)) (justify left)))
+			(property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+			(property "LCSC" "C2834570" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+			(symbol "DS2401_0_1"
+				(rectangle (start -7.62 7.62) (end 7.62 -7.62) (stroke (width 0.254) (type solid)) (fill (type background)))
+			)
+		)
+		(symbol "Connector:Conn_01x06"
+			(pin passive line (at -7.62 6.35 0) (length 2.54) (name "1_VCC" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
+			(pin passive line (at -7.62 3.81 0) (length 2.54) (name "2_GND" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
+			(pin passive line (at -7.62 1.27 0) (length 2.54) (name "3_1WIRE" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
+			(pin passive line (at -7.62 -1.27 0) (length 2.54) (name "4_MIC" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27)))))
+			(pin passive line (at -7.62 -3.81 0) (length 2.54) (name "5_SPK" (effects (font (size 1.27 1.27)))) (number "5" (effects (font (size 1.27 1.27)))))
+			(pin passive line (at -7.62 -6.35 0) (length 2.54) (name "6_PTT" (effects (font (size 1.27 1.27)))) (number "6" (effects (font (size 1.27 1.27)))))
+			(property "Reference" "J" (at -5.08 10.16 0) (effects (font (size 1.27 1.27)) (justify left)))
+			(property "Value" "Conn_01x06" (at -5.08 -10.16 0) (effects (font (size 1.27 1.27)) (justify left)))
+			(symbol "Conn_01x06_0_1"
+				(rectangle (start -5.08 8.89) (end 5.08 -8.89) (stroke (width 0.254) (type solid)) (fill (type background)))
+			)
+		)
+	)
 
-  (uuid "c0000000-0000-0000-0000-000000000001")
+	;; =========================================================================
+	;; Hierarchical Labels
+	;; =========================================================================
+	(hierarchical_label "POD_VCC" (shape input) (at 25.4 38.1 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "c0000000-0000-0000-0000-000000000002"))
+	(hierarchical_label "GND" (shape passive) (at 25.4 48.26 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "c0000000-0000-0000-0000-000000000003"))
+	(hierarchical_label "POD_1WIRE_ID" (shape bidirectional) (at 25.4 58.42 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "c0000000-0000-0000-0000-000000000004"))
+	(hierarchical_label "AUDIO_MIC_IN" (shape output) (at 180.0 38.1 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "c0000000-0000-0000-0000-000000000005"))
+	(hierarchical_label "AUDIO_SPEAKER_OUT" (shape input) (at 180.0 48.26 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "c0000000-0000-0000-0000-000000000006"))
+	(hierarchical_label "PTT_OPTO_KEY" (shape bidirectional) (at 180.0 58.42 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "c0000000-0000-0000-0000-000000000007"))
 
-  (paper "A4")
+	;; =========================================================================
+	;; Symbols Placement
+	;; =========================================================================
+	;; J1: 6-Pin Pogo Contact Interface
+	(symbol (lib_id "Connector:Conn_01x06") (at 50.0 70.0 0) (unit 1)
+		(in_bom yes) (on_board yes) (dnp no)
+		(uuid "c0000000-0000-0000-0000-000000000010")
+		(property "Reference" "J1" (at 50.0 55.0 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "POGO_6PIN_MATRIX" (at 50.0 58.0 0) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "c0000000-0000-0000-0000-000000000011"))
+		(pin "2" (uuid "c0000000-0000-0000-0000-000000000012"))
+		(pin "3" (uuid "c0000000-0000-0000-0000-000000000013"))
+		(pin "4" (uuid "c0000000-0000-0000-0000-000000000014"))
+		(pin "5" (uuid "c0000000-0000-0000-0000-000000000015"))
+		(pin "6" (uuid "c0000000-0000-0000-0000-000000000016"))
+	)
 
-  (title_block
-    (title "OpenMotorBridge v8.0 - Universal Pod Cartridge")
-    (date "2026-08-24")
-    (rev "v8.0")
-    (company "OpenMotorBridge Open Source Hardware")
-    (comment 1 "DS2401 Silicon Serial ROM ID + 6-Pin Pogo-Pin Matrix Interface")
-    (comment 2 "Kassettenträgerplatine für Sena, Cardo, PMR446 & Custom Inlays")
-  )
+	;; U1: DS2401 Silicon Serial ROM
+	(symbol (lib_id "Memory_EEPROM:DS2401P") (at 100.0 70.0 0) (unit 1)
+		(in_bom yes) (on_board yes) (dnp no)
+		(uuid "c0000000-0000-0000-0000-000000000020")
+		(property "Reference" "U1" (at 100.0 58.0 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "DS2401" (at 100.0 61.0 0) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "c0000000-0000-0000-0000-000000000021"))
+		(pin "2" (uuid "c0000000-0000-0000-0000-000000000022"))
+		(pin "3" (uuid "c0000000-0000-0000-0000-000000000023"))
+	)
 
-  (hierarchical_label "POD_VCC" (shape input) (at 25.4 38.1 180)
-    (effects (font (size 1.27 1.27)) (justify right))
-    (uuid "c0000000-0000-0000-0000-000000000002")
-  )
+	;; J2: Intercom Adapter Header
+	(symbol (lib_id "Connector:Conn_01x06") (at 150.0 70.0 0) (unit 1)
+		(in_bom yes) (on_board yes) (dnp no)
+		(uuid "c0000000-0000-0000-0000-000000000030")
+		(property "Reference" "J2" (at 150.0 55.0 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "INTERCOM_HEADER" (at 150.0 58.0 0) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "c0000000-0000-0000-0000-000000000031"))
+		(pin "2" (uuid "c0000000-0000-0000-0000-000000000032"))
+		(pin "3" (uuid "c0000000-0000-0000-0000-000000000033"))
+		(pin "4" (uuid "c0000000-0000-0000-0000-000000000034"))
+		(pin "5" (uuid "c0000000-0000-0000-0000-000000000035"))
+		(pin "6" (uuid "c0000000-0000-0000-0000-000000000036"))
+	)
 
-  (hierarchical_label "GND" (shape passive) (at 25.4 48.26 180)
-    (effects (font (size 1.27 1.27)) (justify right))
-    (uuid "c0000000-0000-0000-0000-000000000003")
-  )
-
-  (hierarchical_label "POD_1WIRE_ID" (shape bidirectional) (at 25.4 58.42 180)
-    (effects (font (size 1.27 1.27)) (justify right))
-    (uuid "c0000000-0000-0000-0000-000000000004")
-  )
-
-  (hierarchical_label "AUDIO_MIC_IN" (shape output) (at 180.0 38.1 0)
-    (effects (font (size 1.27 1.27)) (justify left))
-    (uuid "c0000000-0000-0000-0000-000000000005")
-  )
-
-  (hierarchical_label "AUDIO_SPEAKER_OUT" (shape input) (at 180.0 48.26 0)
-    (effects (font (size 1.27 1.27)) (justify left))
-    (uuid "c0000000-0000-0000-0000-000000000006")
-  )
-
-  (hierarchical_label "PTT_OPTO_KEY" (shape bidirectional) (at 180.0 58.42 0)
-    (effects (font (size 1.27 1.27)) (justify left))
-    (uuid "c0000000-0000-0000-0000-000000000007")
-  )
-
-  (text "BLOCK 1: 1-WIRE IDENTIFIKATION (MAXIM DS2401Z+):\n- U1: DS2401 64-Bit Lasered Silicon Serial Number im SOT-23-3 Gehaeuse\n- C1: 100nF 50V 0603 X7R Entkoppelkondensator\n- Ermoeglicht autonomes Hot-Plug Laden der LittleFS JSON-Profile an Port 1 & 2" (at 25.4 85.0 0)
-    (effects (font (size 1.27 1.27)) (justify left bottom))
-  )
-
-  (text "BLOCK 2: 6-PIN POGO-PIN FEDERKONTAKT-INTERFACE (ZUM RAHMEN-POD):\n- Pin 1: POD_VCC (5V DC Versorgung)\n- Pin 2: GND (Masse)\n- Pin 3: POD_1WIRE_ID (DS2401 Datenleitung)\n- Pin 4: AUDIO_MIC_IN (Mikrofonsignal vom Intercom zum Codec)\n- Pin 5: AUDIO_SPEAKER_OUT (Lautsprechersignal vom Codec zum Intercom)\n- Pin 6: PTT_OPTO_KEY (PhotoMOS Optokoppler Taktleitung fuer Mesh/PTT/Pair)" (at 25.4 125.0 0)
-    (effects (font (size 1.27 1.27)) (justify left bottom))
-  )
-
-  (text "BLOCK 3: OEM INTERCOM ADAPTER HEADER (JST / MOLEX ZU INTERCOM-PLATTE):\n- Passgenaue Loetpads / Steckverbinder fuer Sena 60S/Apex/50 und Cardo Edge/Bold" (at 25.4 165.0 0)
-    (effects (font (size 1.27 1.27)) (justify left bottom))
-  )
+	;; Wires
+	(wire (pts (xy 42.38 71.27) (xy 89.84 70.0)) (stroke (width 0) (type solid)))
+	(wire (pts (xy 42.38 68.73) (xy 142.38 68.73)) (stroke (width 0) (type solid)))
+	(wire (pts (xy 42.38 66.19) (xy 142.38 66.19)) (stroke (width 0) (type solid)))
+	(wire (pts (xy 42.38 63.65) (xy 142.38 63.65)) (stroke (width 0) (type solid)))
 )

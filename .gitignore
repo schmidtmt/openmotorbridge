@@ -17,4 +17,5 @@ _autosave-*
 .DS_Store
 .vscode/
 .idea/
-node_modules/
+node_modules/*.lck
+.history/

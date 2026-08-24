@@ -1,72 +1,99 @@
-(kicad_sch (version 20260206) (generator "eeschema") (generator_version "10.0")
+(kicad_sch
+	(version 20260206)
+	(generator "eeschema")
+	(generator_version "10.0")
+	(uuid "a0000000-0000-0000-0000-000000000004")
+	(paper "A3")
+	(title_block
+		(title "OpenMotorBridge v8.0 - Galvanisch Getrenntes Audio-Frontend")
+		(date "2026-08-24")
+		(rev "v8.0")
+		(company "OpenMotorBridge Open Source Hardware")
+		(comment 1 "Bourns LM-NP-1001 1:1 600 Ohm Audio-Uebertrager + Toshiba TLP222A PhotoMOS Relais")
+		(comment 2 "1.5 kV Galvanische Trennung (GND_ISO_AUDIO) zur totalen Brummschleifen-Befreiung")
+	)
+	(lib_symbols
+		(symbol "Device:Transformer_1P_1S"
+			(pin passive line (at -7.62 2.54 0) (length 2.54) (name "PRI1" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
+			(pin passive line (at -7.62 -2.54 0) (length 2.54) (name "PRI2" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
+			(pin passive line (at 7.62 2.54 180) (length 2.54) (name "SEC1" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
+			(pin passive line (at 7.62 -2.54 180) (length 2.54) (name "SEC2" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27)))))
+			(property "Reference" "T" (at -5.08 5.08 0) (effects (font (size 1.27 1.27)) (justify left)))
+			(property "Value" "Bourns_LM_NP_1001" (at -5.08 -5.08 0) (effects (font (size 1.27 1.27)) (justify left)))
+			(symbol "Transformer_0_1"
+				(rectangle (start -5.08 3.81) (end 5.08 -3.81) (stroke (width 0.254) (type solid)) (fill (type background)))
+			)
+		)
+		(symbol "Relay:TLP222A"
+			(pin passive line (at -10.16 2.54 0) (length 2.54) (name "ANODE" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
+			(pin passive line (at -10.16 -2.54 0) (length 2.54) (name "CATHODE" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
+			(pin passive line (at 10.16 2.54 180) (length 2.54) (name "DRAIN1" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
+			(pin passive line (at 10.16 -2.54 180) (length 2.54) (name "DRAIN2" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27)))))
+			(property "Reference" "Q" (at -7.62 5.08 0) (effects (font (size 1.27 1.27)) (justify left)))
+			(property "Value" "TLP222A" (at -7.62 -5.08 0) (effects (font (size 1.27 1.27)) (justify left)))
+			(symbol "TLP222A_0_1"
+				(rectangle (start -7.62 3.81) (end 7.62 -3.81) (stroke (width 0.254) (type solid)) (fill (type background)))
+			)
+		)
+	)
 
-  (uuid "a0000000-0000-0000-0000-000000000004")
+	;; =========================================================================
+	;; Hierarchical Labels
+	;; =========================================================================
+	(hierarchical_label "AUDIO_OUT_P1" (shape input) (at 30.0 50.0 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "d0000000-0000-0000-0000-000000000001"))
+	(hierarchical_label "AUDIO_IN_P1" (shape output) (at 30.0 70.0 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "d0000000-0000-0000-0000-000000000002"))
+	(hierarchical_label "AUDIO_OUT_P2" (shape input) (at 30.0 90.0 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "d0000000-0000-0000-0000-000000000003"))
+	(hierarchical_label "AUDIO_IN_P2" (shape output) (at 30.0 110.0 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "d0000000-0000-0000-0000-000000000004"))
 
-  (paper "A4")
+	(hierarchical_label "HD26_AUDIO_P1_OUT" (shape output) (at 220.0 50.0 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "d0000000-0000-0000-0000-000000000005"))
+	(hierarchical_label "HD26_AUDIO_P1_IN" (shape input) (at 220.0 70.0 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "d0000000-0000-0000-0000-000000000006"))
+	(hierarchical_label "HD26_AUDIO_P2_OUT" (shape output) (at 220.0 90.0 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "d0000000-0000-0000-0000-000000000007"))
+	(hierarchical_label "HD26_AUDIO_P2_IN" (shape input) (at 220.0 110.0 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "d0000000-0000-0000-0000-000000000008"))
 
-  (title_block
-    (title "OpenMotorBridge v8.0 - Isoliertes Audio-Frontend & Optokoppler")
-    (date "2026-08-23")
-    (rev "v8.0")
-    (comment 1 "Galvanisch getrennt ueber Bourns LM-NP-1001-B1L (1500 V RMS)")
-    (comment 2 "Prellfreie Tastensimulation via Toshiba TLP222A PhotoMOS Relais")
-  )
+	;; =========================================================================
+	;; Symbols Placement
+	;; =========================================================================
+	;; T1: Audio Transformer Port 1 Output
+	(symbol (lib_id "Device:Transformer_1P_1S") (at 120.0 50.0 0) (unit 1)
+		(in_bom yes) (on_board yes) (dnp no)
+		(uuid "d0000000-0000-0000-0000-000000000010")
+		(property "Reference" "T1" (at 120.0 42.0 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "LM-NP-1001" (at 120.0 45.0 0) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "d0000000-0000-0000-0000-000000000011"))
+		(pin "2" (uuid "d0000000-0000-0000-0000-000000000012"))
+		(pin "3" (uuid "d0000000-0000-0000-0000-000000000013"))
+		(pin "4" (uuid "d0000000-0000-0000-0000-000000000014"))
+	)
 
-  (hierarchical_label "AUDIO_OUT_P1" (shape input) (at 180.34 38.1 0)
-    (effects (font (size 1.27 1.27)) (justify left))
-    (uuid "d0000000-0000-0000-0000-000000000001")
-  )
+	;; T2: Audio Transformer Port 1 Input
+	(symbol (lib_id "Device:Transformer_1P_1S") (at 120.0 70.0 0) (unit 1)
+		(in_bom yes) (on_board yes) (dnp no)
+		(uuid "d0000000-0000-0000-0000-000000000020")
+		(property "Reference" "T2" (at 120.0 62.0 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "LM-NP-1001" (at 120.0 65.0 0) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "d0000000-0000-0000-0000-000000000021"))
+		(pin "2" (uuid "d0000000-0000-0000-0000-000000000022"))
+		(pin "3" (uuid "d0000000-0000-0000-0000-000000000023"))
+		(pin "4" (uuid "d0000000-0000-0000-0000-000000000024"))
+	)
 
-  (hierarchical_label "AUDIO_IN_P1" (shape output) (at 180.34 48.26 0)
-    (effects (font (size 1.27 1.27)) (justify left))
-    (uuid "d0000000-0000-0000-0000-000000000002")
-  )
+	;; Q1: TLP222A PhotoMOS Opto Relay Port 1
+	(symbol (lib_id "Relay:TLP222A") (at 120.0 140.0 0) (unit 1)
+		(in_bom yes) (on_board yes) (dnp no)
+		(uuid "d0000000-0000-0000-0000-000000000030")
+		(property "Reference" "Q1" (at 120.0 132.0 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "TLP222A" (at 120.0 135.0 0) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "d0000000-0000-0000-0000-000000000031"))
+		(pin "2" (uuid "d0000000-0000-0000-0000-000000000032"))
+		(pin "3" (uuid "d0000000-0000-0000-0000-000000000033"))
+		(pin "4" (uuid "d0000000-0000-0000-0000-000000000034"))
+	)
 
-  (hierarchical_label "AUDIO_OUT_P2" (shape input) (at 180.34 58.42 0)
-    (effects (font (size 1.27 1.27)) (justify left))
-    (uuid "d0000000-0000-0000-0000-000000000003")
-  )
-
-  (hierarchical_label "AUDIO_IN_P2" (shape output) (at 180.34 68.58 0)
-    (effects (font (size 1.27 1.27)) (justify left))
-    (uuid "d0000000-0000-0000-0000-000000000004")
-  )
-
-  (hierarchical_label "POD1_NF_P" (shape output) (at 25.4 38.1 180)
-    (effects (font (size 1.27 1.27)) (justify right))
-    (uuid "d0000000-0000-0000-0000-000000000005")
-  )
-
-  (hierarchical_label "POD1_NF_N" (shape output) (at 25.4 48.26 180)
-    (effects (font (size 1.27 1.27)) (justify right))
-    (uuid "d0000000-0000-0000-0000-000000000006")
-  )
-
-  (hierarchical_label "POD2_NF_P" (shape output) (at 25.4 58.42 180)
-    (effects (font (size 1.27 1.27)) (justify right))
-    (uuid "d0000000-0000-0000-0000-000000000007")
-  )
-
-  (hierarchical_label "POD2_NF_N" (shape output) (at 25.4 68.58 180)
-    (effects (font (size 1.27 1.27)) (justify right))
-    (uuid "d0000000-0000-0000-0000-000000000008")
-  )
-
-  (hierarchical_label "POD1_OPTO" (shape output) (at 25.4 78.74 180)
-    (effects (font (size 1.27 1.27)) (justify right))
-    (uuid "d0000000-0000-0000-0000-000000000009")
-  )
-
-  (hierarchical_label "POD2_OPTO" (shape output) (at 25.4 88.9 180)
-    (effects (font (size 1.27 1.27)) (justify right))
-    (uuid "d0000000-0000-0000-0000-000000000010")
-  )
-
-  (text "BLOCK 1: GALVANISCH GETRENNTER AUDIO-PFAD PORT 1 & 2\n- T1: Bourns LM-NP-1001-B1L (1:1 Audio-Uebertrager Port 1 Sena)\n- T2: Bourns LM-NP-1001-B1L (1:1 Audio-Uebertrager Port 2 Cardo)\n- 1500 V RMS galvanische Trennung eliminiert Brummschleifen vollstaendig" (at 25.4 110.0 0)
-    (effects (font (size 1.27 1.27)) (justify left bottom))
-  )
-
-  (text "BLOCK 2: TASTENSIMULATION & QUITTUNGSTON-RUECKMELDER\n- OC1: Toshiba TLP222A PhotoMOS Relais fuer Port 1 (Sena Mesh Toggle / Kanal)\n- OC2: Toshiba TLP222A PhotoMOS Relais fuer Port 2 (Cardo Group Toggle / Next)\n- R_on < 2 Ohm, prellfrei, Schaltzeit < 1 ms\n- Dioden-Spitzengleichrichter an GPIO 3 (ADC_LINE_LVL) zur Erkennung von Bestaetigungstoenen" (at 25.4 140.0 0)
-    (effects (font (size 1.27 1.27)) (justify left bottom))
-  )
+	;; =========================================================================
+	;; Interconnecting Wires
+	;; =========================================================================
+	(wire (pts (xy 30.0 50.0) (xy 112.38 52.54)) (stroke (width 0) (type solid)))
+	(wire (pts (xy 127.62 52.54) (xy 220.0 50.0)) (stroke (width 0) (type solid)))
+	(wire (pts (xy 30.0 70.0) (xy 112.38 72.54)) (stroke (width 0) (type solid)))
+	(wire (pts (xy 127.62 72.54) (xy 220.0 70.0)) (stroke (width 0) (type solid)))
 )

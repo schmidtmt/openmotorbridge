@@ -1,48 +1,78 @@
-(kicad_sch (version 20260206) (generator "eeschema") (generator_version "10.0")
+(kicad_sch
+	(version 20260206)
+	(generator "eeschema")
+	(generator_version "10.0")
+	(uuid "a0000000-0000-0000-0000-000000000005")
+	(paper "A3")
+	(title_block
+		(title "OpenMotorBridge v8.0 - HD26 Matrix-Schnittstelle & Bordnetz")
+		(date "2026-08-24")
+		(rev "v8.0")
+		(company "OpenMotorBridge Open Source Hardware")
+		(comment 1 "HD26 High-Density 26-Pin Industriesteckverbinder fuer alle externen Leitungen")
+		(comment 2 "Port 1 (Fahrer), Port 2 (Sozius), Port 3 (M8 Heck), KL30/KL15, CAN-Bus, Garmin Line-In")
+	)
+	(lib_symbols
+		(symbol "Connector:HD26_Female"
+			(pin passive line (at -15.24 25.4 0) (length 2.54) (name "1_KL30" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
+			(pin passive line (at -15.24 22.86 0) (length 2.54) (name "2_KL15" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
+			(pin passive line (at -15.24 20.32 0) (length 2.54) (name "3_GND_PWR" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
+			(pin passive line (at -15.24 15.24 0) (length 2.54) (name "4_CAN_H" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27)))))
+			(pin passive line (at -15.24 12.7 0) (length 2.54) (name "5_CAN_L" (effects (font (size 1.27 1.27)))) (number "5" (effects (font (size 1.27 1.27)))))
+			(pin passive line (at -15.24 7.62 0) (length 2.54) (name "6_P1_MIC" (effects (font (size 1.27 1.27)))) (number "6" (effects (font (size 1.27 1.27)))))
+			(pin passive line (at -15.24 5.08 0) (length 2.54) (name "7_P1_SPK" (effects (font (size 1.27 1.27)))) (number "7" (effects (font (size 1.27 1.27)))))
+			(pin passive line (at -15.24 2.54 0) (length 2.54) (name "8_P1_PTT" (effects (font (size 1.27 1.27)))) (number "8" (effects (font (size 1.27 1.27)))))
+			(pin passive line (at -15.24 0 0) (length 2.54) (name "9_P1_1W" (effects (font (size 1.27 1.27)))) (number "9" (effects (font (size 1.27 1.27)))))
+			(pin passive line (at 15.24 7.62 180) (length 2.54) (name "10_P2_MIC" (effects (font (size 1.27 1.27)))) (number "10" (effects (font (size 1.27 1.27)))))
+			(pin passive line (at 15.24 5.08 180) (length 2.54) (name "11_P2_SPK" (effects (font (size 1.27 1.27)))) (number "11" (effects (font (size 1.27 1.27)))))
+			(pin passive line (at 15.24 2.54 180) (length 2.54) (name "12_P2_PTT" (effects (font (size 1.27 1.27)))) (number "12" (effects (font (size 1.27 1.27)))))
+			(pin passive line (at 15.24 0 180) (length 2.54) (name "13_P2_1W" (effects (font (size 1.27 1.27)))) (number "13" (effects (font (size 1.27 1.27)))))
+			(property "Reference" "J1" (at -12.7 30.48 0) (effects (font (size 1.27 1.27)) (justify left)))
+			(property "Value" "HD26_FEMALE" (at -12.7 -30.48 0) (effects (font (size 1.27 1.27)) (justify left)))
+			(property "Footprint" "Connector_Dsub:DSUB-26-HD_Female_Horizontal" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+			(property "LCSC" "C2932311" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+			(symbol "HD26_0_1"
+				(rectangle (start -12.7 27.94) (end 12.7 -27.94) (stroke (width 0.254) (type solid)) (fill (type background)))
+			)
+		)
+	)
 
-  (uuid "a0000000-0000-0000-0000-000000000005")
+	;; =========================================================================
+	;; Hierarchical Labels
+	;; =========================================================================
+	(hierarchical_label "KL30_RAW" (shape output) (at 30.0 50.0 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "e0000000-0000-0000-0000-000000000001"))
+	(hierarchical_label "KL15_RAW" (shape output) (at 30.0 60.0 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "e0000000-0000-0000-0000-000000000002"))
+	(hierarchical_label "GND_PWR" (shape output) (at 30.0 70.0 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "e0000000-0000-0000-0000-000000000003"))
 
-  (paper "A3")
+	(hierarchical_label "HD26_CAN_H" (shape output) (at 220.0 50.0 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "e0000000-0000-0000-0000-000000000004"))
+	(hierarchical_label "HD26_CAN_L" (shape output) (at 220.0 60.0 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "e0000000-0000-0000-0000-000000000005"))
 
-  (title_block
-    (title "OpenMotorBridge v8.0 - HD26 Flansch, 2x13 Header & SDIO Slot")
-    (date "2026-08-23")
-    (rev "v8.0")
-    (comment 1 "CN1: HD26 Flanschbuchse IP67 <-> J1: 2x13 Pfostenverbinder")
-    (comment 2 "26 Pins, 0 NC - Symmetrisches 6-Ader Interface fuer Pod 1, Pod 2, Pod 3")
-  )
+	;; =========================================================================
+	;; Symbols Placement
+	;; =========================================================================
+	;; J1: HD26 High Density Female D-Sub
+	(symbol (lib_id "Connector:HD26_Female") (at 120.0 90.0 0) (unit 1)
+		(in_bom yes) (on_board yes) (dnp no)
+		(uuid "e0000000-0000-0000-0000-000000000010")
+		(property "Reference" "J1" (at 120.0 55.0 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "HD26_FEMALE" (at 120.0 58.0 0) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "e0000000-0000-0000-0000-000000000011"))
+		(pin "2" (uuid "e0000000-0000-0000-0000-000000000012"))
+		(pin "3" (uuid "e0000000-0000-0000-0000-000000000013"))
+		(pin "4" (uuid "e0000000-0000-0000-0000-000000000014"))
+		(pin "5" (uuid "e0000000-0000-0000-0000-000000000015"))
+		(pin "6" (uuid "e0000000-0000-0000-0000-000000000016"))
+		(pin "7" (uuid "e0000000-0000-0000-0000-000000000017"))
+		(pin "8" (uuid "e0000000-0000-0000-0000-000000000018"))
+		(pin "9" (uuid "e0000000-0000-0000-0000-000000000019"))
+		(pin "10" (uuid "e0000000-0000-0000-0000-000000000020"))
+		(pin "11" (uuid "e0000000-0000-0000-0000-000000000021"))
+		(pin "12" (uuid "e0000000-0000-0000-0000-000000000022"))
+		(pin "13" (uuid "e0000000-0000-0000-0000-000000000023"))
+	)
 
-  (hierarchical_label "POD1_VCC" (shape input) (at 25.4 38.1 180)
-    (effects (font (size 1.27 1.27)) (justify right))
-    (uuid "e0000000-0000-0000-0000-000000000001")
-  )
-
-  (hierarchical_label "POD1_GND" (shape input) (at 25.4 45.72 180)
-    (effects (font (size 1.27 1.27)) (justify right))
-    (uuid "e0000000-0000-0000-0000-000000000002")
-  )
-
-  (hierarchical_label "POD1_NF_P" (shape input) (at 25.4 53.34 180)
-    (effects (font (size 1.27 1.27)) (justify right))
-    (uuid "e0000000-0000-0000-0000-000000000003")
-  )
-
-  (hierarchical_label "POD1_NF_N" (shape input) (at 25.4 60.96 180)
-    (effects (font (size 1.27 1.27)) (justify right))
-    (uuid "e0000000-0000-0000-0000-000000000004")
-  )
-
-  (hierarchical_label "POD1_OPTO" (shape input) (at 25.4 68.58 180)
-    (effects (font (size 1.27 1.27)) (justify right))
-    (uuid "e0000000-0000-0000-0000-000000000005")
-  )
-
-  (hierarchical_label "POD1_1WIRE" (shape input) (at 25.4 76.2 180)
-    (effects (font (size 1.27 1.27)) (justify right))
-    (uuid "e0000000-0000-0000-0000-000000000006")
-  )
-
-  (text "HD26 PIN-BELEGUNGSTABELLE (26 PINS, 0 NC):\n\nPOD 1 (Links am Rahmen):\n- Pin 1: POD1_VCC (5V geschaltet via High-Side P-FET)\n- Pin 2: POD1_GND (Dedizierte Power- & Signalmasse)\n- Pin 3: POD1_NF_P (Audio +)\n- Pin 4: POD1_NF_N (Audio -)\n- Pin 5: POD1_OPTO (TLP222A Trigger)\n- Pin 6: POD1_1WIRE_ID (DS2401 ID Sense GPIO 2)\n\nPOD 2 (Rechts am Rahmen):\n- Pin 7: POD2_VCC (5V geschaltet via High-Side P-FET)\n- Pin 8: POD2_GND (Dedizierte Power- & Signalmasse)\n- Pin 9: POD2_NF_P (Audio +)\n- Pin 10: POD2_NF_N (Audio -)\n- Pin 11: POD2_OPTO (TLP222A Trigger)\n- Pin 12: POD2_1WIRE_ID (DS2401 ID Sense GPIO 22)\n\nPOD 3 (Heckbuerzel):\n- Pin 13: POD3_VCC (5V Dauer-Versorgung)\n- Pin 14: POD3_GND (Dedizierte Masse)\n- Pin 15: POD3_UART_TX (Heck -> Box @ 460.8k)\n- Pin 16: POD3_UART_RX (Box -> Heck)\n- Pin 17: POD3_GNSS_PPS (1-PPS Hardware Sync)\n- Pin 18: POD3_1WIRE_ID (DS2401 ID Sense)\n\nBORDNETZ, CAN & RESERVE:\n- Pin 19: KL30 (12V Dauerplus abgesichert)\n- Pin 20: KL15 (12V Zuendungsplus)\n- Pin 21: GND_PWR (Hauptmasse)\n- Pin 22: GND_SHIELD (Kabelgesamtschirmung)\n- Pin 23: CAN_H (TI TCAN334G)\n- Pin 24: CAN_L (TI TCAN334G)\n- Pin 25: RESERVE_GPIO_A (Input / PTT)\n- Pin 26: RESERVE_GPIO_B (Schaltausgang / Actioncam Power)\n\nSDIO MICROSD KARTENLESER:\n- 4-Bit High-Speed SDIO Interface am ESP32-S3 (CLK, CMD, DAT0..DAT3)\n- CD_N (Card Detect Pin mit Pullup)" (at 25.4 100.0 0)
-    (effects (font (size 1.27 1.27)) (justify left bottom))
-  )
+	;; Wires
+	(wire (pts (xy 30.0 50.0) (xy 104.76 115.4)) (stroke (width 0) (type solid)))
+	(wire (pts (xy 30.0 60.0) (xy 104.76 112.86)) (stroke (width 0) (type solid)))
+	(wire (pts (xy 30.0 70.0) (xy 104.76 110.32)) (stroke (width 0) (type solid)))
 )
