@@ -73,10 +73,10 @@ def generate_pod_base_pcb(pcb_path):
             (1.0, 1.0, 1.0)
         ),
         'J2': (
-            '${KICAD10_3DMODEL_DIR}/Connector_Coaxial.3dshapes/SMA_Amphenol_132291_Vertical.step',
+            os.path.abspath(os.path.join(os.path.dirname(__file__), '../cad/M8_6Pin_A_Coded_Receptacle.wrl')),
             (0.0, 0.0, 0.0),
             (0.0, 0.0, 0.0),
-            (1.3, 1.3, 1.3) # Scaled to exact M8 8.0mm diameter
+            (1.0, 1.0, 1.0)
         ),
     }
 

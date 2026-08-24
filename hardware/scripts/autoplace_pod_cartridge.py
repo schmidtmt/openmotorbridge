@@ -2,11 +2,11 @@
 """
 OpenMotorBridge Universal Pod Cartridge Auto-Placement & Low-Profile Model Binder
 ---------------------------------------------------------------------------------
-Harmonizes and populates the 35x25mm Pod Cartridge PCB for ultra-slim cassette integration:
-- J1: 6-Pin Mill-Max SMD Target Pad Array (Low-Profile, 1.0mm height, Bottom-facing)
-- J2: 6-Pin Right-Angle Low-Profile Intercom Header (Horizontal side-entry, <2.0mm height)
+Harmonizes and populates the 35x25mm Pod Cartridge Carrier PCB for Sena/Cardo Inlays:
+- J1: 6-Pin Mill-Max ENIG Gold Target Pad Array (Left Stirnwand edge, matching Pod Base Pogo Pins)
+- J2: JST-SH 1.0mm 6-Pin Right-Angle Low-Profile Flex Header (Facing +X towards Sena OEM Inlay)
 - U1: Maxim DS2401 Silicon Serial ROM ID in SOT-23 (Center)
-- C1: Decoupling Capacitor 0603
+- C1: 100nF Decoupling Capacitor 0603 (Center)
 - H1, H2: 2x M2 Mounting Insets with Silicone Vibration Damping Bushings
 """
 
@@ -15,16 +15,41 @@ import os
 import pcbnew
 
 def auto_place_cartridge(pcb_path):
-    print(f"Loading Cartridge PCB: {pcb_path}")
-    board = pcbnew.LoadBoard(pcb_path)
+    print(f"Loading/Creating Cartridge Carrier PCB: {pcb_path}")
+    os.makedirs(os.path.dirname(os.path.abspath(pcb_path)), exist_ok=True)
+    board = pcbnew.BOARD()
 
-    # Board Dimensions: 35.0 x 25.0 mm (X: 100.0 .. 135.0, Y: 70.0 .. 95.0)
+    # Board Dimensions: 35.0 x 25.0 mm (X: 100.0 .. 135.0, Y: 67.5 .. 92.5, Center: 117.5, 80.0)
     X0 = 100.0
-    Y0 = 70.0
+    Y0 = 67.5
     W = 35.0
     H = 25.0
     X_center = X0 + W / 2.0  # 117.5 mm
-    Y_center = Y0 + H / 2.0  # 82.5 mm
+    Y_center = Y0 + H / 2.0  # 80.0 mm (matches Pod Base Y_center exactly)
+
+    # 1. Create Board Outline (Edge.Cuts) with 2.0mm rounded chamfers
+    pts = [
+        (X0 + 2.0, Y0),
+        (X0 + W - 2.0, Y0),
+        (X0 + W, Y0 + 2.0),
+        (X0 + W, Y0 + H - 2.0),
+        (X0 + W - 2.0, Y0 + H),
+        (X0 + 2.0, Y0 + H),
+        (X0, Y0 + H - 2.0),
+        (X0, Y0 + 2.0),
+        (X0 + 2.0, Y0)
+    ]
+
+    for i in range(len(pts) - 1):
+        seg = pcbnew.PCB_SHAPE(board)
+        seg.SetShape(pcbnew.SHAPE_T_SEGMENT)
+        seg.SetLayer(pcbnew.Edge_Cuts)
+        seg.SetWidth(int(0.15 * 1e6))
+        p1 = pcbnew.VECTOR2I(int(pts[i][0] * 1e6), int(pts[i][1] * 1e6))
+        p2 = pcbnew.VECTOR2I(int(pts[i+1][0] * 1e6), int(pts[i+1][1] * 1e6))
+        seg.SetStart(p1)
+        seg.SetEnd(p2)
+        board.Add(seg)
 
     # 3D Model Mapping (Ultra-Low-Profile & Right-Angle Components)
     model_mapping = {
@@ -37,31 +62,25 @@ def auto_place_cartridge(pcb_path):
     # Verified Layout Matrix (in mm)
     layout_rules = {
         # 2 M2 Side Mounting Holes with Silicone Damping Bushings (Shore 40A)
-        'H1': (X0 + 3.5, Y_center, 0.0),    # (103.5, 82.5) Left
-        'H2': (X0 + W - 3.5, Y_center, 0.0),# (131.5, 82.5) Right
+        'H1': (X0 + 4.0, Y0 + 4.0, 0.0),             # (104.0, 71.5) Top-Left Mounting Hole
+        'H2': (X0 + 4.0, Y0 + H - 4.0, 0.0),         # (104.0, 88.5) Bottom-Left Mounting Hole
 
-        # 6-Pin Mill-Max Target Pad Array (Bottom edge, low-profile)
-        'J1': (X_center, Y0 + H - 3.5, 0.0),# (117.5, 91.5)
+        # 6-Pin Mill-Max Target Pad Array (Linke Stirnkante, zentriert auf Y = 80.0 mm)
+        'J1': (X0 + 2.5, Y_center, 90.0),            # (102.5, 80.0) - Trifft 1:1 auf Pod-Base Pogo-Pins!
 
-        # 6-Pin Right-Angle Low-Profile Intercom Inlay Connector (Top edge, opening facing outward/upward)
-        'J2': (X_center, Y0 + 4.5, 180.0),   # (117.5, 74.5) - Cable plugs in straight from top
+        # JST-SH 1.0mm 6-Pin Header (Rechte Seite, Öffnung zeigt nach rechts zum Sena Inlay)
+        'J2': (X0 + 24.0, Y_center, 0.0),            # (124.0, 80.0) - Flexkabel zum Sena Apex Modul
 
-        # Active ID Chip & Passives (Center)
-        'U1': (X_center, Y_center, 0.0),     # (117.5, 82.5) DS2401 Silicon ROM
-        'C1': (X_center + 4.5, Y_center, 0.0), # (122.0, 82.5) 100nF Decoupling
+        # Active ID Chip & Passives (Center-Mitte)
+        'U1': (X_center, Y_center - 4.5, 0.0),       # (117.5, 75.5) DS2401 Silicon ROM
+        'C1': (X_center, Y_center + 4.5, 0.0),       # (117.5, 84.5) 100nF Decoupling Cap
     }
 
-    existing_refs = {fp.GetReference(): fp for fp in board.Footprints()}
-
     for ref, (x_mm, y_mm, rot_deg) in layout_rules.items():
-        if ref in existing_refs:
-            fp = existing_refs[ref]
-        else:
-            fp = pcbnew.FOOTPRINT(board)
-            fp.SetReference(ref)
-            fp.SetLayer(pcbnew.F_Cu)
-            board.Add(fp)
-            existing_refs[ref] = fp
+        fp = pcbnew.FOOTPRINT(board)
+        fp.SetReference(ref)
+        fp.SetLayer(pcbnew.F_Cu)
+        board.Add(fp)
 
         pos = pcbnew.VECTOR2I(int(x_mm * 1e6), int(y_mm * 1e6))
         fp.SetPosition(pos)
@@ -81,17 +100,10 @@ def auto_place_cartridge(pcb_path):
         print(f"  ✓ Placed {ref:4s} at ({x_mm:6.2f}, {y_mm:6.2f}) mm, rot={rot_deg:5.1f}°")
 
     # Add clear silkscreen labels
-    drawings_to_remove = []
-    for d in board.GetDrawings():
-        if isinstance(d, pcbnew.PCB_TEXT) and d.GetLayer() == pcbnew.F_SilkS:
-            drawings_to_remove.append(d)
-    for d in drawings_to_remove:
-        board.Remove(d)
-
     labels = [
-        ("OEM INLAY (JST-SH 6P)", 117.5, 78.5, 0.75, 0.75, 0.14),
-        ("DS2401 ID", 117.5, 85.5, 0.75, 0.75, 0.14),
-        ("POGO TARGET 6P (BOTTOM)", 117.5, 89.0, 0.70, 0.70, 0.13),
+        ("SENA / CARDO CARRIER", X_center, Y0 + 2.5, 0.60, 0.60, 0.12),
+        ("DS2401 ID", X_center, Y_center - 5.5, 0.45, 0.45, 0.10),
+        ("JST-SH 6P (TO OEM INLAY)", X_center + 2.0, Y0 + H - 2.5, 0.45, 0.45, 0.10),
     ]
 
     for text_str, x_mm, y_mm, sx, sy, th in labels:
@@ -105,10 +117,11 @@ def auto_place_cartridge(pcb_path):
         board.Add(txt)
 
     board.Save(pcb_path)
-    print(f"\nSuccessfully auto-placed Cartridge PCB on {pcb_path} with low-profile models!\n")
+    print(f"\n✓ Successfully saved Cartridge Carrier PCB on {pcb_path}!\n")
 
 if __name__ == '__main__':
-    pcb_file = 'hardware/kicad_pod_cartridge/openmotorbridge_pod_cartridge.kicad_pcb'
+    pcb_file = os.path.abspath(os.path.join(os.path.dirname(__file__), '../kicad_pod_cartridge/openmotorbridge_pod_cartridge.kicad_pcb'))
     if len(sys.argv) > 1:
         pcb_file = sys.argv[1]
     auto_place_cartridge(pcb_file)
+
