@@ -55,26 +55,26 @@ def auto_place_rear_pod(pcb_path):
         'H3': (X0 + 3.5, Y_max - 3.5, 0.0, pcbnew.F_Cu), # (103.5, 101.5)
         'H4': (X_max - 3.5, Y_max - 3.5, 0.0, pcbnew.F_Cu),# (146.5, 101.5)
 
-        # Primary Active Components (Top Layer)
-        'U1': (125.0, 84.5, 0.0, pcbnew.F_Cu),           # ESP32-C3-WROOM-02 (Antenna top)
-        'U2': (114.0, 96.5, 0.0, pcbnew.F_Cu),           # u-blox MAX-M10S GNSS
-        'U3': (137.0, 96.0, 0.0, pcbnew.F_Cu),           # Semtech SX1262 LoRa
-        'U4': (125.0, 92.5, 0.0, pcbnew.F_Cu),           # DS2401 Silicon ROM ID
+        # Primary Active Components (Top Layer - Generous Wide-Clearance Topology)
+        'U1': (125.0, 86.0, 0.0, pcbnew.F_Cu),           # ESP32-C3-WROOM-02 (4mm top margin inside board, Y: 74..94mm)
+        'U2': (108.5, 93.0, 0.0, pcbnew.F_Cu),           # u-blox MAX-M10S GNSS (Left Wing, Y: 88..98mm)
+        'U3': (141.5, 93.0, 0.0, pcbnew.F_Cu),           # Semtech SX1262 LoRa (Right Wing, Y: 91..95mm)
+        'U4': (125.0, 97.0, 0.0, pcbnew.F_Cu),           # DS2401 Silicon ROM ID (Center, Y: 95.5..98.5mm)
 
-        # RF Antennas / U.FL Ports
-        'ANT1': (144.0, 90.0, 0.0, pcbnew.F_Cu),         # 868 MHz LoRa RF Port
-        'ANT2': (108.0, 90.0, 0.0, pcbnew.F_Cu),         # GNSS RF Port
+        # RF Antennas / U.FL Ports (Symmetrical Top-Left & Top-Right)
+        'ANT2': (106.0, 80.0, 0.0, pcbnew.F_Cu),         # GNSS 1.575 GHz RF Port (Direct short trace to U2)
+        'ANT1': (144.0, 80.0, 0.0, pcbnew.F_Cu),         # 868 MHz LoRa RF Port (Direct short trace to U3)
 
-        # Standardized 6-Pin Pogo Matrix Interface (UART Push Flashing Capable)
-        'J1': (125.0, 99.0, 90.0, pcbnew.F_Cu),          # 6-Pin Interface (Horizontal)
+        # Standardized 6-Pin Pogo Matrix Interface (Horizontal along bottom edge)
+        'J1': (125.0, 102.0, 0.0, pcbnew.F_Cu),          # 6-Pin Interface (Horizontal, Y: 100.7..103.3mm)
 
         # Passives & RF Protection
-        'L1': (142.5, 96.0, 0.0, pcbnew.F_Cu),           # 47nH RF Choke for SX1262
-        'D1': (119.0, 99.0, 0.0, pcbnew.F_Cu),           # TVS Diode for 1-Wire Line
-        'C1': (119.0, 84.5, 0.0, pcbnew.F_Cu),           # 10uF 3V3 Decoupling
-        'C2': (131.0, 84.5, 0.0, pcbnew.F_Cu),           # 100nF ESP32
-        'C3': (114.0, 90.5, 0.0, pcbnew.F_Cu),           # 100nF GNSS
-        'C4': (137.0, 90.5, 0.0, pcbnew.F_Cu),           # 100nF LoRa
+        'L1': (141.5, 97.5, 0.0, pcbnew.F_Cu),           # 47nH RF Choke for SX1262
+        'D1': (118.5, 97.5, 0.0, pcbnew.F_Cu),           # TVS Diode for 1-Wire Line
+        'C1': (122.0, 91.5, 0.0, pcbnew.F_Cu),           # 10uF 3V3 Decoupling
+        'C2': (128.0, 91.5, 0.0, pcbnew.F_Cu),           # 100nF ESP32
+        'C3': (108.5, 99.0, 0.0, pcbnew.F_Cu),           # 100nF GNSS Decoupling
+        'C4': (141.5, 87.5, 0.0, pcbnew.F_Cu),           # 100nF LoRa Decoupling
 
         # Factory Testpoints (Placed cleanly on Bottom Layer B_Cu)
         'TP1': (115.0, 80.0, 0.0, pcbnew.B_Cu),          # TP_BOOT (GPIO9)
@@ -125,9 +125,9 @@ def auto_place_rear_pod(pcb_path):
         board.Remove(d)
 
     labels = [
-        ("GNSS (1.575 GHz)", 108.0, 85.0, 0.85, 0.85, 0.15),
-        ("868MHz LoRa", 143.0, 85.0, 0.85, 0.85, 0.15),
-        ("POGO: VCC GND TX RX PPS 1W", 125.0, 103.5, 0.75, 0.75, 0.14),
+        ("GNSS 1.575G", 108.5, 74.0, 0.80, 0.80, 0.15),
+        ("868M LoRa", 141.5, 74.0, 0.80, 0.80, 0.15),
+        ("POGO: VCC GND TX RX PPS 1W", 125.0, 103.8, 0.70, 0.70, 0.13),
     ]
 
     for text_str, x_mm, y_mm, sx, sy, th in labels:
