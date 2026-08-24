@@ -79,6 +79,24 @@ def auto_place_cartridge(pcb_path):
             (0.0, 0.0, 0.0),
             (1.0, 1.0, 1.0)
         ),
+        'F1': (
+            '${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step',
+            (0.0, 0.0, 0.0),
+            (0.0, 0.0, 0.0),
+            (1.0, 1.0, 1.0)
+        ),
+        'D1': (
+            '${KICAD10_3DMODEL_DIR}/LED_SMD.3dshapes/LED_0603_1608Metric.step',
+            (0.0, 0.0, 0.0),
+            (0.0, 0.0, 0.0),
+            (1.0, 1.0, 1.0)
+        ),
+        'R1': (
+            '${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step',
+            (0.0, 0.0, 0.0),
+            (0.0, 0.0, 0.0),
+            (1.0, 1.0, 1.0)
+        ),
     }
 
     # Verified Layout Matrix (ref: (x_mm, y_mm, rot_deg, layer_name))
@@ -90,12 +108,19 @@ def auto_place_cartridge(pcb_path):
         # J1: 6-Pin PinSocket on UNTERSEITE (B.Cu) - Zentriert bei (117.5, 80.0), ragt nach unten auf Pod-Base Pins!
         'J1': (X_center, Y_center, 0.0, 'B.Cu'),             # (117.5, 80.0) Unterseite / Nach unten öffnend
 
-        # J2: JST-SH 6-Pin auf OBERSEITE (F.Cu) - Um 90° gedreht auf rechter Seite für Sena/Cardo Inlay-Flexkabel
-        'J2': (X_center + 8.0, Y_center, 90.0, 'F.Cu'),       # (125.5, 80.0) Oberseite / Sena/Cardo Anschluss
+        # J2: JST-SH 6-Pin auf OBERSEITE (F.Cu) - Rechter Flügel für Inlay-Flexkabel
+        'J2': (X_center + 8.5, Y_center, 90.0, 'F.Cu'),       # (126.0, 80.0) Oberseite / Sena/Cardo Anschluss
 
-        # U1, C1: DS2401 ID & 100nF Cap auf OBERSEITE (F.Cu) - Linke Seite
-        'U1': (X_center - 8.0, Y_center - 3.5, 0.0, 'F.Cu'), # (109.5, 76.5) DS2401 Silicon ROM
-        'C1': (X_center - 8.0, Y_center + 3.5, 0.0, 'F.Cu'), # (109.5, 83.5) 100nF Decoupling Cap
+        # U1, C1: DS2401 ID & 100nF Cap auf OBERSEITE (F.Cu) - Linker Flügel oben
+        'U1': (X_center - 8.5, Y_center - 4.5, 0.0, 'F.Cu'), # (109.0, 75.5) DS2401 Silicon ROM
+        'C1': (X_center - 8.5, Y_center + 4.5, 0.0, 'F.Cu'), # (109.0, 84.5) 100nF Decoupling Cap
+
+        # F1: 500mA PTC Sicherung auf 5V Schiene (Oberseite)
+        'F1': (X_center - 3.5, Y0 + 6.0, 0.0, 'F.Cu'),       # (114.0, 73.5) 500mA PTC Fuse
+
+        # D1, R1: Grüne 5V Status-LED & 1.5k Vorwiderstand (Oberseite)
+        'D1': (X_center + 3.5, Y0 + 6.0, 0.0, 'F.Cu'),       # (121.0, 73.5) 5V Power LED
+        'R1': (X_center + 3.5, Y0 + 8.5, 0.0, 'F.Cu'),       # (121.0, 76.0) LED Resistor 1.5k
     }
 
     for ref, (x_mm, y_mm, rot_deg, layer_name) in layout_rules.items():
@@ -126,7 +151,9 @@ def auto_place_cartridge(pcb_path):
     # Add clear silkscreen labels
     top_labels = [
         ("OPENMOTORBRIDGE // CARRIER", X_center, Y0 + 2.5, 0.60, 0.60, 0.12),
-        ("DS2401 ID", X_center - 8.0, Y0 + 6.0, 0.45, 0.45, 0.10),
+        ("DS2401 ID", X_center - 8.5, Y0 + 4.5, 0.40, 0.40, 0.09),
+        ("PTC 500mA", X_center - 3.5, Y0 + 8.5, 0.35, 0.35, 0.08),
+        ("PWR LED", X_center + 3.5, Y0 + 10.8, 0.35, 0.35, 0.08),
         ("TO SENA / CARDO INLAY (90° JST-SH)", X_center, Y0 + H - 2.5, 0.45, 0.45, 0.10),
     ]
 
