@@ -1,112 +1,692 @@
-(kicad_sch (version 20260206) (generator "eeschema") (generator_version "10.0")
-
-  (uuid "a0000000-0000-0000-0000-000000000001")
-
-  (paper "A3")
-
-  (title_block
-    (title "OpenMotorBridge v8.0 - Zentralbox Top-Level Blockschaltbild")
-    (date "2026-08-23")
-    (rev "v8.0")
-    (company "OpenMotorBridge Open Source Hardware")
-    (comment 1 "Universelles 4-Punkte-Satelliten-Gateway (CERN-OHL-S v2)")
-    (comment 2 "HD26 26-Pin Matrix, ES8388 24-Bit Codec, TCAN334G CAN-FD")
-  )
-
-  (sheet (at 38.1 44.45) (size 76.2 50.8)
-    (stroke (width 0.254) (type solid))
-    (fill (color 22 27 34 0.8))
-    (uuid "a0000000-0000-0000-0000-000000000002")
-    (property "Sheetname" "Power & USV" (at 38.1 43.18 0)
-      (effects (font (size 1.524 1.524)) (justify left bottom))
-    )
-    (property "Sheetfile" "power_supply_ups.kicad_sch" (at 38.1 96.52 0)
-      (effects (font (size 1.27 1.27)) (justify left top))
-    )
-    (pin "KL30_IN" input (at 38.1 53.34 180))
-    (pin "KL15_IN" input (at 38.1 60.96 180))
-    (pin "GND_PWR" input (at 38.1 68.58 180))
-    (pin "VCC_5V" output (at 114.3 53.34 0))
-    (pin "VCC_3V3" output (at 114.3 60.96 0))
-    (pin "VBAT_SENSE" output (at 114.3 68.58 0))
-    (pin "VIGN_SENSE" output (at 114.3 76.2 0))
-  )
-
-  (sheet (at 152.4 44.45) (size 95.25 76.2)
-    (stroke (width 0.254) (type solid))
-    (fill (color 22 27 34 0.8))
-    (uuid "a0000000-0000-0000-0000-000000000003")
-    (property "Sheetname" "MCU, Audio Codec & CAN" (at 152.4 43.18 0)
-      (effects (font (size 1.524 1.524)) (justify left bottom))
-    )
-    (property "Sheetfile" "mcu_codec_can.kicad_sch" (at 152.4 121.92 0)
-      (effects (font (size 1.27 1.27)) (justify left top))
-    )
-    (pin "VCC_3V3" input (at 152.4 53.34 180))
-    (pin "VIGN_SENSE" input (at 152.4 60.96 180))
-    (pin "VBAT_SENSE" input (at 152.4 68.58 180))
-    (pin "CAN_H" bidirectional (at 247.65 53.34 0))
-    (pin "CAN_L" bidirectional (at 247.65 60.96 0))
-    (pin "UART_POD3_TX" output (at 247.65 68.58 0))
-    (pin "UART_POD3_RX" input (at 247.65 76.2 0))
-    (pin "GNSS_PPS" input (at 247.65 83.82 0))
-    (pin "POD1_1WIRE" bidirectional (at 247.65 91.44 0))
-    (pin "POD2_1WIRE" bidirectional (at 247.65 99.06 0))
-    (pin "AUDIO_OUT_P1" output (at 152.4 83.82 180))
-    (pin "AUDIO_IN_P1" input (at 152.4 91.44 180))
-    (pin "AUDIO_OUT_P2" output (at 152.4 99.06 180))
-    (pin "AUDIO_IN_P2" input (at 152.4 106.68 180))
-  )
-
-  (sheet (at 38.1 133.35) (size 76.2 63.5)
-    (stroke (width 0.254) (type solid))
-    (fill (color 22 27 34 0.8))
-    (uuid "a0000000-0000-0000-0000-000000000004")
-    (property "Sheetname" "Audio-Frontend & Opto" (at 38.1 132.08 0)
-      (effects (font (size 1.524 1.524)) (justify left bottom))
-    )
-    (property "Sheetfile" "audio_frontend_isolated.kicad_sch" (at 38.1 198.12 0)
-      (effects (font (size 1.27 1.27)) (justify left top))
-    )
-    (pin "AUDIO_OUT_P1" input (at 114.3 142.24 0))
-    (pin "AUDIO_IN_P1" output (at 114.3 149.86 0))
-    (pin "AUDIO_OUT_P2" input (at 114.3 157.48 0))
-    (pin "AUDIO_IN_P2" output (at 114.3 165.1 0))
-    (pin "POD1_NF_P" output (at 38.1 142.24 180))
-    (pin "POD1_NF_N" output (at 38.1 149.86 180))
-    (pin "POD2_NF_P" output (at 38.1 157.48 180))
-    (pin "POD2_NF_N" output (at 38.1 165.1 180))
-    (pin "POD1_OPTO" output (at 38.1 172.72 180))
-    (pin "POD2_OPTO" output (at 38.1 180.34 180))
-  )
-
-  (sheet (at 285.75 44.45) (size 95.25 152.4)
-    (stroke (width 0.254) (type solid))
-    (fill (color 22 27 34 0.8))
-    (uuid "a0000000-0000-0000-0000-000000000005")
-    (property "Sheetname" "HD26 Flansch & 2x13 Header" (at 285.75 43.18 0)
-      (effects (font (size 1.524 1.524)) (justify left bottom))
-    )
-    (property "Sheetfile" "hd26_interface.kicad_sch" (at 285.75 198.12 0)
-      (effects (font (size 1.27 1.27)) (justify left top))
-    )
-    (pin "POD1_VCC" input (at 285.75 53.34 180))
-    (pin "POD1_GND" input (at 285.75 60.96 180))
-    (pin "POD1_NF_P" input (at 285.75 68.58 180))
-    (pin "POD1_NF_N" input (at 285.75 76.2 180))
-    (pin "POD1_OPTO" input (at 285.75 83.82 180))
-    (pin "POD1_1WIRE" input (at 285.75 91.44 180))
-    (pin "POD2_VCC" input (at 285.75 99.06 180))
-    (pin "POD2_GND" input (at 285.75 106.68 180))
-    (pin "POD2_NF_P" input (at 285.75 114.3 180))
-    (pin "POD2_NF_N" input (at 285.75 121.92 180))
-    (pin "POD2_OPTO" input (at 285.75 129.54 180))
-    (pin "POD2_1WIRE" input (at 285.75 137.16 180))
-    (pin "POD3_VCC" input (at 285.75 144.78 180))
-    (pin "POD3_GND" input (at 285.75 152.4 180))
-    (pin "POD3_TX" input (at 285.75 160.02 180))
-    (pin "POD3_RX" input (at 285.75 167.64 180))
-    (pin "POD3_PPS" input (at 285.75 175.26 180))
-    (pin "POD3_1WIRE" input (at 285.75 182.88 180))
-  )
+(kicad_sch
+	(version 20260306)
+	(generator "eeschema")
+	(generator_version "10.0")
+	(uuid "a0000000-0000-0000-0000-000000000001")
+	(paper "A3")
+	(title_block
+		(title "OpenMotorBridge v8.0 - Zentralbox Top-Level Blockschaltbild")
+		(date "2026-08-23")
+		(rev "v8.0")
+		(company "OpenMotorBridge Open Source Hardware")
+		(comment 1 "Universelles 4-Punkte-Satelliten-Gateway (CERN-OHL-S v2)")
+		(comment 2 "HD26 26-Pin Matrix, ES8388 24-Bit Codec, TCAN334G CAN-FD")
+	)
+	(lib_symbols)
+	(sheet
+		(at 38.1 44.45)
+		(size 76.2 50.8)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(fill
+			(color 22 27 34 0.8)
+		)
+		(uuid "a0000000-0000-0000-0000-000000000002")
+		(property "Sheetname" "Power & USV"
+			(at 38.1 43.18 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "power_supply_ups.kicad_sch"
+			(at 38.1 96.52 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "KL30_IN" input
+			(at 38.1 53.34 180)
+			(uuid "c70f59aa-ccc1-43ac-a618-881488133051")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "KL15_IN" input
+			(at 38.1 60.96 180)
+			(uuid "c005eaf1-3570-4edc-99aa-c9240fd6957b")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "GND_PWR" input
+			(at 38.1 68.58 180)
+			(uuid "830885ea-1d2c-4e75-b11f-39181d55e9f4")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "VCC_5V" output
+			(at 114.3 53.34 0)
+			(uuid "db6793cd-347c-4005-b912-70b2dee97e92")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "VCC_3V3" output
+			(at 114.3 60.96 0)
+			(uuid "5a1fcbea-f92c-4fa7-97d9-72b30c093457")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "VBAT_SENSE" output
+			(at 114.3 68.58 0)
+			(uuid "48d1823c-d303-4380-8d26-7a61315fbced")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "VIGN_SENSE" output
+			(at 114.3 76.2 0)
+			(uuid "da667a33-ca11-44cf-998f-49463a47f67b")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(instances
+			(project "openmotorbridge_main"
+				(path "/a0000000-0000-0000-0000-000000000001"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 152.4 44.45)
+		(size 95.25 76.2)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(fill
+			(color 22 27 34 0.8)
+		)
+		(uuid "a0000000-0000-0000-0000-000000000003")
+		(property "Sheetname" "MCU, Audio Codec & CAN"
+			(at 152.4 43.18 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "mcu_codec_can.kicad_sch"
+			(at 152.4 121.92 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "VCC_3V3" input
+			(at 152.4 53.34 180)
+			(uuid "d02fe67a-a02c-455e-a53d-c03f2c44320b")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "VIGN_SENSE" input
+			(at 152.4 60.96 180)
+			(uuid "0c5f830b-5ee3-49ac-b62b-697026f40afc")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "VBAT_SENSE" input
+			(at 152.4 68.58 180)
+			(uuid "e1638ae0-7080-4a02-a50f-96013bc8ae46")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "CAN_H" bidirectional
+			(at 247.65 53.34 0)
+			(uuid "b77b59a8-830c-4676-a9be-8beec7e21ccf")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "CAN_L" bidirectional
+			(at 247.65 60.96 0)
+			(uuid "a4987f7e-0f38-4ce5-88c0-b9771b5f44b7")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "UART_POD3_TX" output
+			(at 247.65 68.58 0)
+			(uuid "64ba4c87-4bca-4934-8c69-876c21d42c69")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "UART_POD3_RX" input
+			(at 247.65 76.2 0)
+			(uuid "e57ec65c-000e-426b-b611-df34dee94ee4")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "GNSS_PPS" input
+			(at 247.65 83.82 0)
+			(uuid "e705699d-13c8-4f4d-aa5d-5f53b7347887")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "POD1_1WIRE" bidirectional
+			(at 247.65 91.44 0)
+			(uuid "ac07fe5c-975c-461c-a0d8-fe3b5021d763")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "POD2_1WIRE" bidirectional
+			(at 247.65 99.06 0)
+			(uuid "9cd727d3-4b77-454b-be51-c6cbb8d7567b")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "AUDIO_OUT_P1" output
+			(at 152.4 83.82 180)
+			(uuid "5de4ca6e-2996-457d-9ce7-8bf142509454")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "AUDIO_IN_P1" input
+			(at 152.4 91.44 180)
+			(uuid "c1f565b6-f094-499c-8ffb-b1238d58856c")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "AUDIO_OUT_P2" output
+			(at 152.4 99.06 180)
+			(uuid "3edf13a7-90ec-4c05-ada7-06b23f82cca8")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "AUDIO_IN_P2" input
+			(at 152.4 106.68 180)
+			(uuid "84255d5f-cb45-46fb-8e7f-3f994782da13")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(instances
+			(project "openmotorbridge_main"
+				(path "/a0000000-0000-0000-0000-000000000001"
+					(page "4")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 38.1 133.35)
+		(size 76.2 63.5)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(fill
+			(color 22 27 34 0.8)
+		)
+		(uuid "a0000000-0000-0000-0000-000000000004")
+		(property "Sheetname" "Audio-Frontend & Opto"
+			(at 38.1 132.08 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "audio_frontend_isolated.kicad_sch"
+			(at 38.1 198.12 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "AUDIO_OUT_P1" input
+			(at 114.3 142.24 0)
+			(uuid "97cbc396-360a-417b-85ff-11b995642b81")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "AUDIO_IN_P1" output
+			(at 114.3 149.86 0)
+			(uuid "f81d614d-8210-4ce4-9dfb-a192f5a4c80c")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "AUDIO_OUT_P2" input
+			(at 114.3 157.48 0)
+			(uuid "ef5ac97e-23c0-4233-9a7a-01819273bc62")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "AUDIO_IN_P2" output
+			(at 114.3 165.1 0)
+			(uuid "9bae7801-f536-4271-a36b-7b36c35bb6bb")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "POD1_NF_P" output
+			(at 38.1 142.24 180)
+			(uuid "be13d507-e5e5-4e76-a4f2-f05aaab550cd")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "POD1_NF_N" output
+			(at 38.1 149.86 180)
+			(uuid "de6204b1-9de8-4e73-ab68-2b7b839ce5e1")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "POD2_NF_P" output
+			(at 38.1 157.48 180)
+			(uuid "1781bfab-40d3-48a1-a2df-340f2bc45a5e")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "POD2_NF_N" output
+			(at 38.1 165.1 180)
+			(uuid "bddaa3a9-9d0b-455d-b0ba-09cc2d40b522")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "POD1_OPTO" output
+			(at 38.1 172.72 180)
+			(uuid "cf0bbef0-1948-48a9-aed2-06984719cfd4")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "POD2_OPTO" output
+			(at 38.1 180.34 180)
+			(uuid "b50e74ad-a62b-4747-8674-4fc1c3f041cf")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(instances
+			(project "openmotorbridge_main"
+				(path "/a0000000-0000-0000-0000-000000000001"
+					(page "3")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 285.75 44.45)
+		(size 95.25 152.4)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(fill
+			(color 22 27 34 0.8)
+		)
+		(uuid "a0000000-0000-0000-0000-000000000005")
+		(property "Sheetname" "HD26 Flansch & 2x13 Header"
+			(at 285.75 43.18 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "hd26_interface.kicad_sch"
+			(at 285.75 198.12 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "POD1_VCC" input
+			(at 285.75 53.34 180)
+			(uuid "dbbc57d7-6feb-4b02-a404-6c654191d933")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "POD1_GND" input
+			(at 285.75 60.96 180)
+			(uuid "c52b1e51-13ce-42f0-b943-c8fc52f38b59")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "POD1_NF_P" input
+			(at 285.75 68.58 180)
+			(uuid "3ae4cdcd-e8e3-4332-8168-2840fd6d984a")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "POD1_NF_N" input
+			(at 285.75 76.2 180)
+			(uuid "bc2405cd-c8b6-4b0d-8f8f-84835439b249")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "POD1_OPTO" input
+			(at 285.75 83.82 180)
+			(uuid "1afc0ade-a891-4ae3-9af7-528d339f00e0")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "POD1_1WIRE" input
+			(at 285.75 91.44 180)
+			(uuid "e1537fef-b507-4bb9-8af4-8109abe9fefc")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "POD2_VCC" input
+			(at 285.75 99.06 180)
+			(uuid "e0b036cf-118d-44d6-8d30-bcc144f4954d")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "POD2_GND" input
+			(at 285.75 106.68 180)
+			(uuid "30350f2f-0b79-4fa1-bddf-291bb0343ee7")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "POD2_NF_P" input
+			(at 285.75 114.3 180)
+			(uuid "410ec0b0-a0b1-4812-9128-221c5dafbf8b")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "POD2_NF_N" input
+			(at 285.75 121.92 180)
+			(uuid "c648257c-e533-42ae-bbb3-e2e97e1d43c9")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "POD2_OPTO" input
+			(at 285.75 129.54 180)
+			(uuid "a548e350-99a2-48eb-90d5-f60305976691")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "POD2_1WIRE" input
+			(at 285.75 137.16 180)
+			(uuid "f8afc4a8-8237-44f2-a5a1-af5853ce4504")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "POD3_VCC" input
+			(at 285.75 144.78 180)
+			(uuid "22c0732d-8dfb-42cf-95be-580001832342")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "POD3_GND" input
+			(at 285.75 152.4 180)
+			(uuid "cdbbea14-0038-4cda-a6ce-7ffddd3eb4a9")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "POD3_TX" input
+			(at 285.75 160.02 180)
+			(uuid "a1d4d0e8-0d6f-406e-aecf-a0a6c082ef5b")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "POD3_RX" input
+			(at 285.75 167.64 180)
+			(uuid "71519ebc-415e-44f8-ab00-07bb21b01aa8")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "POD3_PPS" input
+			(at 285.75 175.26 180)
+			(uuid "ffe2c991-29be-4858-981f-863a6d73f312")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "POD3_1WIRE" input
+			(at 285.75 182.88 180)
+			(uuid "9616a066-81e5-4e9e-aee6-1f02480af250")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(instances
+			(project "openmotorbridge_main"
+				(path "/a0000000-0000-0000-0000-000000000001"
+					(page "5")
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
 )

@@ -1,5 +1,5 @@
 (kicad_sch
-	(version 20260206)
+	(version 20260306)
 	(generator "eeschema")
 	(generator_version "10.0")
 	(uuid "f0000000-0000-0000-0000-000000000001")
@@ -90,14 +90,14 @@
 	)
 
 	;; =========================================================================
-	;; Hierarchical Labels
+	;; Global Labels
 	;; =========================================================================
-	(hierarchical_label "POD3_VCC_5V" (shape input) (at 30.0 40.0 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "f0000000-0000-0000-0000-000000000002"))
-	(hierarchical_label "GND" (shape passive) (at 30.0 55.0 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "f0000000-0000-0000-0000-000000000003"))
-	(hierarchical_label "POD3_UART_TX" (shape output) (at 250.0 40.0 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "f0000000-0000-0000-0000-000000000004"))
-	(hierarchical_label "POD3_UART_RX" (shape input) (at 250.0 50.0 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "f0000000-0000-0000-0000-000000000005"))
-	(hierarchical_label "GNSS_1PPS" (shape output) (at 250.0 60.0 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "f0000000-0000-0000-0000-000000000006"))
-	(hierarchical_label "POD3_1WIRE_ID" (shape bidirectional) (at 250.0 70.0 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "f0000000-0000-0000-0000-000000000007"))
+	(global_label "POD3_VCC_5V" (shape input) (at 30.0 40.0 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "f0000000-0000-0000-0000-000000000002"))
+	(global_label "GND" (shape passive) (at 30.0 55.0 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "f0000000-0000-0000-0000-000000000003"))
+	(global_label "POD3_UART_TX" (shape output) (at 250.0 40.0 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "f0000000-0000-0000-0000-000000000004"))
+	(global_label "POD3_UART_RX" (shape input) (at 250.0 50.0 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "f0000000-0000-0000-0000-000000000005"))
+	(global_label "GNSS_1PPS" (shape output) (at 250.0 60.0 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "f0000000-0000-0000-0000-000000000006"))
+	(global_label "POD3_1WIRE_ID" (shape bidirectional) (at 250.0 70.0 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "f0000000-0000-0000-0000-000000000007"))
 
 	;; =========================================================================
 	;; Symbols Placement

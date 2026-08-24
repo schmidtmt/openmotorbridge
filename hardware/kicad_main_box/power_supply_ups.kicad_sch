@@ -1,8 +1,8 @@
 (kicad_sch
-	(version 20260206)
+	(version 20260306)
 	(generator "eeschema")
 	(generator_version "10.0")
-	(uuid "a0000000-0000-0000-0000-000000000002")
+	(uuid "b0000000-0000-0000-0000-000000000001")
 	(paper "A3")
 	(title_block
 		(title "OpenMotorBridge v8.0 - Stromversorgung & USV")

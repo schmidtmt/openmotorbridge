@@ -1,5 +1,5 @@
 (kicad_sch
-	(version 20260206)
+	(version 20260306)
 	(generator "eeschema")
 	(generator_version "10.0")
 	(uuid "c0000000-0000-0000-0000-000000000001")
@@ -51,14 +51,14 @@
 	)
 
 	;; =========================================================================
-	;; Hierarchical Labels
+	;; Global Labels
 	;; =========================================================================
-	(hierarchical_label "POD_VCC" (shape input) (at 25.4 38.1 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "c0000000-0000-0000-0000-000000000002"))
-	(hierarchical_label "GND" (shape passive) (at 25.4 48.26 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "c0000000-0000-0000-0000-000000000003"))
-	(hierarchical_label "POD_1WIRE_ID" (shape bidirectional) (at 25.4 58.42 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "c0000000-0000-0000-0000-000000000004"))
-	(hierarchical_label "AUDIO_MIC_IN" (shape output) (at 180.0 38.1 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "c0000000-0000-0000-0000-000000000005"))
-	(hierarchical_label "AUDIO_SPEAKER_OUT" (shape input) (at 180.0 48.26 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "c0000000-0000-0000-0000-000000000006"))
-	(hierarchical_label "PTT_OPTO_KEY" (shape bidirectional) (at 180.0 58.42 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "c0000000-0000-0000-0000-000000000007"))
+	(global_label "POD_VCC" (shape input) (at 25.4 38.1 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "c0000000-0000-0000-0000-000000000002"))
+	(global_label "GND" (shape passive) (at 25.4 48.26 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "c0000000-0000-0000-0000-000000000003"))
+	(global_label "POD_1WIRE_ID" (shape bidirectional) (at 25.4 58.42 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "c0000000-0000-0000-0000-000000000004"))
+	(global_label "AUDIO_MIC_IN" (shape output) (at 180.0 38.1 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "c0000000-0000-0000-0000-000000000005"))
+	(global_label "AUDIO_SPEAKER_OUT" (shape input) (at 180.0 48.26 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "c0000000-0000-0000-0000-000000000006"))
+	(global_label "PTT_OPTO_KEY" (shape bidirectional) (at 180.0 58.42 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "c0000000-0000-0000-0000-000000000007"))
 
 	;; =========================================================================
 	;; Symbols Placement
