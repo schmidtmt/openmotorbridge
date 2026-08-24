@@ -170,32 +170,32 @@ Die Kassetten-Trägerplatine (`openmotorbridge_pod_cartridge`) adaptiert die int
 * **Verriegelung:** Nutzt denselben POM-C Snap-Lock und 90°-Cam-Lock Drehriegel wie aktive Kassetten.
 * **Hardware-Zustand:** Die Zentralbox erkennt offene/leere Kontakte und haelt den Slot ueber `disabled.json` strom- und rauschfrei isoliert.
 
-### 5.5 Pod-Bodenplatine (Pod-Base PCB) & 3D-Board-Render
+### 5.5 Pod-Bodenplatine (`openmotorbridge_pod_base`) & 3D-Board-Render
 
-Der physische Übergang von der gesteckten Kassette zum modularen Fahrzeugkabelbaum erfolgt über die versiegelte **Pod-Bodenplatine (`openmotorbridge_pod_base`)** im Gehäusefuß des Satelliten-Pods:
+Der mechanische und elektrische Schnittstellenübergang von der eingelegten Wechselkassette auf die M8-Kabelverbindung zum Motorradkabelbaum erfolgt über die fest im Gehäusefuß montierte **Pod-Bodenplatine (`openmotorbridge_pod_base`)**:
 
 ![OpenMotorBridge Pod-Bodenplatine 3D-Render](../../hardware/kicad_pod_base/kicad_3d_render.png)
 
-* **Abmessungen:** $24{,}0 \times 14{,}0\,\text{mm}$ (Ultra-kompaktes 2-Layer FR4-Board).
-* **Mill-Max Pogo-Pin-Array (`J1`):** 6-poliger Federkontaktblock (Serie 824-22-006-00-001101, Raster $2{,}54\,\text{mm}$, $1{,}4\,\text{mm}$ Arbeitshub, 60g Vorspannung) ragt durch die Gehäusetrennwand nach oben in den Kassetten-Aufnahmeschacht.
-* **Integrierte ESD-Schutzmatrix (`U1`):** **Littelfuse SP3012-06UTG** (6-Kanal TVS-Array mit $< 0{,}5\,\text{pF}$ parasitärer Kapazität) leitet elektrostatische Spitzen bei Berührung der Pogo-Pins sofort gegen das Metallgehäuse der M8-Buchse ab.
-* **M8-Schnittstellenblock (`J2`):** 6 Signalleitungen + 1 Schirmanschluss zur rückseitigen Kontaktierung der M8 6-Pin IP67-Einbaubuchse.
-* **Entkopplung & Montage (`H1`, `H2`):** 2x M2-Verschraubungen mit Shore 40A Silikon-Entkopplung und 2-Komponenten-Silikonverguss für 100 % Wasserdichtigkeit (IP67) und Rüttelsicherheit.
+* **Abmessungen:** $28{,}0 \times 28{,}0\,\text{mm}$ (Kompakte 2-Layer FR4-Platine mit großzügigem Sicherheitsabstand zwischen Pogo-Array und M8-Gehäusekörper).
+* **Mill-Max Pogo-Pin-Array (`J1`):** 6-poliger Federkontakt-Block (Serie 824-22-006-00-001101, $2{,}54\,\text{mm}$ Raster, $1{,}4\,\text{mm}$ Arbeitshub, 60g Federkraft pro Kontakt), der durch den Gehäuseboden nach oben in den Kassettenraum ragt.
+* **Integrierte ESD-Schutzmatrix (`U1`):** **Littelfuse SP3012-06UTG** (6-Kanal TVS-Array mit $< 0{,}5\,\text{pF}$ parasitärer Kapazität) leitet elektrostatische Entladungen beim Berühren der Pogo-Pins im offenen Schacht blitzschnell gegen die Masse ab.
+* **Direkt integrierte M8-Leiterplattenbuchse (`J2`):** Abgewinkelte, metallgekapselte **M8 6-Pin A-Coded IP67 Einbaubuchse** (IEC 61076-2-104) mit M8-Außengewinde direkt auf der Platine verlötet. Das M8-Gewinde ragt durch die Gehäusewand nach außen – dadurch entfallen sämtliche manuell zu verlötenden Litzen oder lose Einzeladern im Gehäusefuß!
+* **Mechanische Entkopplung & Montage (`H1`, `H2`):** 2x M2 Montagebohrungen mit Shore 40A Silikondämpfung gegen Fahrbahnvibrationen.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│              MODULARER M8-SCHNITTSTELLEN-ÜBERGANG IM POD-FUSS           │
+│        MODULARER SCHNITTSTELLEN-ÜBERGANG IM SATELLITEN-GEHÄUSEFUSS      │
 ├─────────────────────────────────────────────────────────────────────────┤
-│ 1. KASSETTE (Oberseite / Wechselteil):                                  │
-│    • 6 vergoldete ENIG-Kontaktpads (Raster 2.54 mm)                     │
-│    • Umlaufende Shore 40A Silikon-Formschuhdichtung                     │
+│ 1. WECHSELKASSETTE (Oben / Entnehmbar):                                 │
+│    • 6 vergoldete ENIG-Kontaktflächen (2.54 mm Raster)                  │
+│    • Umlaufende Shore 40A Silikondichtung                               │
 │                               ▲                                         │
-│                               ▼ (1.4 mm Feder-Arbeitshub, 60g/Pin)      │
-│ 2. POD-BODENPLATINE (openmotorbridge_pod_base, 24x14mm):                │
+│                               ▼ (1.4 mm Arbeitshub, 60g Federkraft)     │
+│ 2. POD-BODENPLATINE (openmotorbridge_pod_base, 28x28mm):                │
 │    • Mill-Max 6-Pin Pogo-Pin-Array (824-22-006-00-001101)               │
-│    • Gehäusebündig eingepresst & mit O-Ring abgedichtet                 │
-│    • Integrierte ESD-Schutzmatrix (Littelfuse SP3012, 6x TVS < 0.5 pF)  │
-│                               ▼                                         │
+│    • Integrierte ESD-Schutzmatrix (Littelfuse SP3012, 6x TVS < 0.5pF)   │
+│    • Direkt aufgelötete M8 6-Pin A-Coded IP67 Einbaubuchse              │
+│                               ▼ (M8-Außengewinde ragt aus Gehäuse)      │
 │ 3. MODULARE M8-EINBAUBUCHSE (Gehäuseunterseite):                        │
 │    • M8 6-Pin A-Coded IP67-Buchse mit Führungsnut (Poka-Yoke)           │
 │    • Vollmetall-Schirmkragen für 360° EMV-Schirmung                     │

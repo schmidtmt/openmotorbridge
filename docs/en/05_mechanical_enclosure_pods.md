@@ -176,11 +176,11 @@ The physical interface transition from the inserted cartridge to the modular mot
 
 ![OpenMotorBridge Pod Base PCB 3D Render](../../hardware/kicad_pod_base/kicad_3d_render.png)
 
-* **Dimensions:** $24.0 \times 14.0\,\text{mm}$ (Ultra-compact 2-layer FR4 board).
+* **Dimensions:** $28.0 \times 28.0\,\text{mm}$ (Compact 2-layer FR4 board with generous clearance between pogo array and M8 connector body).
 * **Mill-Max Pogo-Pin Array (`J1`):** 6-pin spring-loaded contact block (Series 824-22-006-00-001101, $2.54\,\text{mm}$ pitch, $1.4\,\text{mm}$ working stroke, 60g preload) protruding upward through the housing floor into the cartridge bay.
 * **Integrated ESD Protection Array (`U1`):** **Littelfuse SP3012-06UTG** (6-channel TVS array with $< 0.5\,\text{pF}$ parasitic capacitance) instantly clamps electrostatic discharges when pogo pins are touched during cartridge swaps.
-* **M8 Interface Block (`J2`):** 6 signal lines + 1 shield connection pad to directly solder the rear of the M8 6-Pin IP67 panel receptacle.
-* **Decoupling & Mounting (`H1`, `H2`):** 2x M2 mounting fasteners with Shore 40A silicone dampening and 2-component potting for 100% waterproof (IP67) and vibration-proof longevity.
+* **Directly Integrated M8 PCB Receptacle (`J2`):** Right-angle metal-shielded **M8 6-Pin A-Coded IP67 panel receptacle** (IEC 61076-2-104) soldered directly onto the PCB. The threaded M8 collar extends through the bottom housing wall, eliminating all manual wire soldering in the pod base cavity.
+* **Decoupling & Mounting (`H1`, `H2`):** 2x M2 mounting fasteners with Shore 40A silicone dampening against road vibrations.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
@@ -191,21 +191,17 @@ The physical interface transition from the inserted cartridge to the modular mot
 │    • Perimeter Shore 40A silicone boot gasket                           │
 │                               ▲                                         │
 │                               ▼ (1.4 mm working stroke, 60g preload)    │
-│ 2. POD BASE PCB (openmotorbridge_pod_base, 24x14mm):                    │
+│ 2. POD BASE PCB (openmotorbridge_pod_base, 28x28mm):                    │
 │    • Mill-Max 6-Pin Pogo-Pin Array (824-22-006-00-001101)               │
-│    • Press-fitted flush into housing floor & O-ring sealed              │
 │    • Integrated ESD protection array (Littelfuse SP3012, 6x TVS < 0.5pF)│
-│                               ▼                                         │
-│ 3. MODULAR M8 PANEL RECEPTACLE (Chassis Bottom):                        │
-│    • M8 6-Pin A-Coded IP67 female socket with keyway (Poka-Yoke)        │
-│    • Full metal shield collar for 360° EMC bonding                      │
-│                               ▼                                         │
-│ 4. MODULAR M8-TO-M8 PUR CONNECTING CABLE (0.5m .. 2.0m):                │
+│    • Directly soldered M8 6-Pin A-Coded IP67 PCB receptacle             │
+│                               ▼ (Threaded M8 collar extends through wall)│
+│ 3. MODULAR M8-TO-M8 PUR CONNECTING CABLE (0.5m .. 2.0m):                │
 │    • Shielded 6-conductor PUR cable (Halogen-free, oil & UV resistant)  │
 │    • 2x Power (0.34 mm²) + 2x Audio/UART twisted (0.14 mm²) + 2x Signal │
 │    • Dual M8 6-Pin IP67 male plugs with vibration ratchet               │
 │                               ▼                                         │
-│ 5. CENTRAL BOX HD26 BREAKOUT PIGTAIL (Under Seat):                      │
+│ 4. CENTRAL BOX HD26 BREAKOUT PIGTAIL (Under Seat):                      │
 │    • 3x M8 6-Pin sockets (Pod 1 Left, Pod 2 Right, Pod 3 Rear)          │
 │    • 1x M8 4-Pin / Superseal (Vehicle power KL30/KL15/GND/Shield)       │
 │    • 1x M8 4-Pin (CAN-Bus telemetry & front ambient microphone)         │

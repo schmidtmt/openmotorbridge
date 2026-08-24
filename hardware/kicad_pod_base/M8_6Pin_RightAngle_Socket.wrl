@@ -1,0 +1,229 @@
+#VRML V2.0 utf8
+# M8 6-Pin A-Coded Industrial Sensor Receptacle (Right-Angle PCB Mount)
+# OpenMotorBridge - IEC 61076-2-104 compliant 3D Model
+
+Group {
+  children [
+    # 1. Main Plastic Body Block (Seated at back on PCB)
+    Transform {
+      translation 0.0 2.0 4.0
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 0.15 0.15 0.17
+              specularColor 0.3 0.3 0.3
+              shininess 0.3
+            }
+          }
+          geometry Box {
+            size 8.5 6.0 7.5
+          }
+        }
+      ]
+    }
+
+    # 2. Outer Threaded Metal Barrel (M8x0.5 Nickel-Plated Brass) extending horizontally towards bottom edge (-Y)
+    Transform {
+      translation 0.0 -4.0 4.0
+      rotation 1.0 0.0 0.0 1.5708
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 0.82 0.84 0.86
+              specularColor 0.98 0.98 0.98
+              shininess 0.92
+              ambientIntensity 0.35
+            }
+          }
+          geometry Cylinder {
+            radius 4.2
+            height 8.0
+          }
+        }
+      ]
+    }
+
+    # 3. Thread / Knurled Flange Ring
+    Transform {
+      translation 0.0 -2.0 4.0
+      rotation 1.0 0.0 0.0 1.5708
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 0.88 0.88 0.90
+              specularColor 1.0 1.0 1.0
+              shininess 0.95
+            }
+          }
+          geometry Cylinder {
+            radius 4.6
+            height 2.0
+          }
+        }
+      ]
+    }
+
+    # 4. Black Insulator Core (Front face of M8 socket at Y = -7.5)
+    Transform {
+      translation 0.0 -7.5 4.0
+      rotation 1.0 0.0 0.0 1.5708
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 0.05 0.05 0.05
+              specularColor 0.2 0.2 0.2
+              shininess 0.2
+            }
+          }
+          geometry Cylinder {
+            radius 3.4
+            height 1.5
+          }
+        }
+      ]
+    }
+
+    # 5. Mechanical Poka-Yoke Keyway Ridge (Top of insert at Z=6.5)
+    Transform {
+      translation 0.0 -7.5 6.5
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 0.1 0.1 0.1
+            }
+          }
+          geometry Box {
+            size 0.8 1.5 0.8
+          }
+        }
+      ]
+    }
+
+    # 6. Six Gold-Plated Sockets on PCD R=1.8mm (Front Face at Y = -8.0)
+    # Socket 1 (Top Left)
+    Transform {
+      translation -0.9 -8.0 5.3
+      rotation 1.0 0.0 0.0 1.5708
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 0.95 0.80 0.20
+              specularColor 1.0 0.9 0.4
+              shininess 0.9
+            }
+          }
+          geometry Cylinder {
+            radius 0.35
+            height 0.8
+          }
+        }
+      ]
+    }
+    # Socket 2 (Mid Left)
+    Transform {
+      translation -1.6 -8.0 4.0
+      rotation 1.0 0.0 0.0 1.5708
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 0.95 0.80 0.20
+              specularColor 1.0 0.9 0.4
+              shininess 0.9
+            }
+          }
+          geometry Cylinder {
+            radius 0.35
+            height 0.8
+          }
+        }
+      ]
+    }
+    # Socket 3 (Bottom Left)
+    Transform {
+      translation -0.9 -8.0 2.7
+      rotation 1.0 0.0 0.0 1.5708
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 0.95 0.80 0.20
+              specularColor 1.0 0.9 0.4
+              shininess 0.9
+            }
+          }
+          geometry Cylinder {
+            radius 0.35
+            height 0.8
+          }
+        }
+      ]
+    }
+    # Socket 4 (Bottom Right)
+    Transform {
+      translation 0.9 -8.0 2.7
+      rotation 1.0 0.0 0.0 1.5708
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 0.95 0.80 0.20
+              specularColor 1.0 0.9 0.4
+              shininess 0.9
+            }
+          }
+          geometry Cylinder {
+            radius 0.35
+            height 0.8
+          }
+        }
+      ]
+    }
+    # Socket 5 (Mid Right)
+    Transform {
+      translation 1.6 -8.0 4.0
+      rotation 1.0 0.0 0.0 1.5708
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 0.95 0.80 0.20
+              specularColor 1.0 0.9 0.4
+              shininess 0.9
+            }
+          }
+          geometry Cylinder {
+            radius 0.35
+            height 0.8
+          }
+        }
+      ]
+    }
+    # Socket 6 (Top Right)
+    Transform {
+      translation 0.9 -8.0 5.3
+      rotation 1.0 0.0 0.0 1.5708
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 0.95 0.80 0.20
+              specularColor 1.0 0.9 0.4
+              shininess 0.9
+            }
+          }
+          geometry Cylinder {
+            radius 0.35
+            height 0.8
+          }
+        }
+      ]
+    }
+  ]
+}
