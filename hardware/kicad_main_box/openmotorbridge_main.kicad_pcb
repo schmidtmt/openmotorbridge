@@ -634,9 +634,9 @@
 	(footprint "Connector_Dsub:DSUB-26-HD_Female_Horizontal_P2.29x1.98mm_EdgePinOffset7.70mm_Housings_POS01"
 		(layer "F.Cu")
 		(uuid "bfbc13cf-daae-4069-92e4-d551667c8723")
-		(at 142.5 121.5 180)
+		(at 142.5 114)
 		(property "Reference" "J1"
-			(at 0 -12 270)
+			(at 0 -12 90)
 			(layer "F.SilkS")
 			(uuid "6f96ebb8-38c5-457c-9f75-adcc42ffff56")
 			(effects
@@ -646,8 +646,8 @@
 				)
 			)
 		)
-		(property "Value" "HD26_FEMALE"
-			(at 0 12 270)
+		(property "Value" "IDC_2X13_HEADER"
+			(at 0 12 90)
 			(layer "F.Fab")
 			(uuid "24819a86-07f5-4176-8d73-769eae53f85f")
 			(effects
@@ -658,7 +658,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 180)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "1fdf8933-badb-4667-99d5-477dc352e170")
@@ -669,7 +669,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 180)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "4f782368-9c64-4803-a459-08539783902f")
@@ -681,7 +681,7 @@
 		)
 		(duplicate_pad_numbers_are_jumpers no)
 		(embedded_fonts no)
-		(model "/Connector_Dsub.3dshapes/DSUB-25_Socket_Horizontal_P2.77x2.84mm_EdgePinOffset7.70mm_Housed_MountingHolesOffset9.12mm.step"
+		(model "/Connector_IDC.3dshapes/IDC-Header_2x13_P2.54mm_Vertical.step"
 			(offset
 				(xyz 0 0 0)
 			)
