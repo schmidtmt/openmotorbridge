@@ -56,26 +56,26 @@ def auto_place_rear_pod(pcb_path):
         'H3': (X0 + 3.5, Y_max - 3.5, 0.0, pcbnew.F_Cu), # (103.5, 101.5) Bottom-Left
         'H4': (X_max - 3.5, Y_max - 3.5, 0.0, pcbnew.F_Cu),# (146.5, 101.5) Bottom-Right
 
-        # Primary Active Components (ESP32 fully inside board boundary: Y 70.0 .. 105.0mm)
-        'U1': (125.0, 86.0, 0.0, pcbnew.F_Cu),           # ESP32-C3 (Antenna moved safely down inside PCB outline)
-        'U2': (109.0, 86.0, 0.0, pcbnew.F_Cu),           # u-blox MAX-M10S GNSS (Left Wing)
-        'U3': (141.0, 86.0, 0.0, pcbnew.F_Cu),           # Semtech SX1262 LoRa (Right Wing)
-        'U4': (110.0, 98.0, 0.0, pcbnew.F_Cu),           # DS2401 Silicon ROM ID (Bottom Left)
+        # Primary Active Components (ESP32 antenna at Y: 72.5 mm -> 2.5mm safely INSIDE board)
+        'U1': (125.0, 90.0, 0.0, pcbnew.F_Cu),           # ESP32-C3 (Antenna: Y 72.5..79.0 mm, fully inside PCB)
+        'U2': (109.0, 83.0, 0.0, pcbnew.F_Cu),           # u-blox MAX-M10S GNSS (Left Wing)
+        'U3': (141.0, 83.0, 0.0, pcbnew.F_Cu),           # Semtech SX1262 LoRa (Right Wing)
+        'U4': (109.0, 97.0, 0.0, pcbnew.F_Cu),           # DS2401 Silicon ROM ID (Bottom Left)
 
         # RF Antennas / U.FL Ports (Symmetrical Left & Right)
-        'ANT2': (108.0, 76.0, 0.0, pcbnew.F_Cu),         # GNSS 1.575 GHz RF Port (Direct short trace to U2)
-        'ANT1': (142.0, 76.0, 0.0, pcbnew.F_Cu),         # 868 MHz LoRa RF Port (Direct short trace to U3)
+        'ANT2': (108.0, 75.0, 0.0, pcbnew.F_Cu),         # GNSS 1.575 GHz RF Port (Direct short trace to U2)
+        'ANT1': (142.0, 75.0, 0.0, pcbnew.F_Cu),         # 868 MHz LoRa RF Port (Direct short trace to U3)
 
-        # J1: 6-Pin Socket on UNTERSEITE (B.Cu) - Horizontal, centered below ESP32 with generous clearance!
-        'J1': (125.0, 100.5, 90.0, pcbnew.B_Cu),         # 6-Pin Interface (Bottom layer B.Cu, Horizontal)
+        # J1: 6-Pin Socket on UNTERSEITE (B.Cu) - Horizontal along bottom edge
+        'J1': (125.0, 102.0, 90.0, pcbnew.B_Cu),         # 6-Pin Interface (Bottom layer B.Cu, Horizontal)
 
-        # Passives & Status LEDs placed on flanks (leaving center channel completely free)
-        'C1': (113.5, 92.5, 0.0, pcbnew.F_Cu),           # 10uF 3V3 Decoupling (Left flank)
-        'C2': (136.5, 92.5, 0.0, pcbnew.F_Cu),           # 100nF ESP32 Decoupling (Right flank)
-        'L1': (141.0, 91.5, 0.0, pcbnew.F_Cu),           # 47nH RF Choke for SX1262
-        'D1': (140.0, 98.0, 0.0, pcbnew.F_Cu),           # Green Status / Mesh Activity LED (Bottom Right)
-        'C3': (109.0, 91.5, 0.0, pcbnew.F_Cu),           # 100nF GNSS Decoupling
-        'C4': (145.5, 91.5, 0.0, pcbnew.F_Cu),           # 100nF LoRa Decoupling
+        # Passives & Status LEDs placed on flanks
+        'C1': (113.5, 93.0, 0.0, pcbnew.F_Cu),           # 10uF 3V3 Decoupling (Left flank)
+        'C2': (136.5, 93.0, 0.0, pcbnew.F_Cu),           # 100nF ESP32 Decoupling (Right flank)
+        'L1': (141.0, 90.0, 0.0, pcbnew.F_Cu),           # 47nH RF Choke for SX1262
+        'D1': (141.0, 97.0, 0.0, pcbnew.F_Cu),           # Green Status / Mesh Activity LED (Bottom Right)
+        'C3': (109.0, 90.0, 0.0, pcbnew.F_Cu),           # 100nF GNSS Decoupling
+        'C4': (145.5, 90.0, 0.0, pcbnew.F_Cu),           # 100nF LoRa Decoupling
 
         # Factory Testpoints (Placed cleanly on Bottom Layer B_Cu)
         'TP1': (115.0, 78.0, 0.0, pcbnew.B_Cu),          # TP_BOOT (GPIO9)
@@ -123,14 +123,14 @@ def auto_place_rear_pod(pcb_path):
         board.Remove(d)
 
     top_labels = [
-        ("OPENMOTORBRIDGE", 110.0, 71.8, 0.50, 0.50, 0.11),
-        ("OMM TRANSCEIVER", 140.0, 71.8, 0.50, 0.50, 0.11),
-        ("GNSS 1.575G", 110.0, 74.5, 0.40, 0.40, 0.09),
-        ("868M LoRa", 140.0, 74.5, 0.40, 0.40, 0.09),
-        ("MAX-M10S", 109.0, 81.0, 0.45, 0.45, 0.10),
-        ("SX1262", 141.0, 81.0, 0.45, 0.45, 0.10),
-        ("DS2401 ID", 110.0, 94.8, 0.40, 0.40, 0.09),
-        ("STATUS LED", 140.0, 94.8, 0.40, 0.40, 0.09),
+        ("OPENMOTORBRIDGE", 110.0, 71.5, 0.50, 0.50, 0.11),
+        ("OMM TRANSCEIVER", 140.0, 71.5, 0.50, 0.50, 0.11),
+        ("GNSS 1.575G", 117.5, 75.5, 0.40, 0.40, 0.09),
+        ("868M LoRa", 132.5, 75.5, 0.40, 0.40, 0.09),
+        ("MAX-M10S", 109.0, 78.5, 0.45, 0.45, 0.10),
+        ("SX1262", 141.0, 78.5, 0.45, 0.45, 0.10),
+        ("DS2401 ID", 109.0, 93.5, 0.40, 0.40, 0.09),
+        ("STATUS LED", 141.0, 93.5, 0.40, 0.40, 0.09),
     ]
 
     for text_str, x_mm, y_mm, sx, sy, th in top_labels:
