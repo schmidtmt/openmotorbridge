@@ -210,7 +210,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "07796ceb-3137-483f-aa3b-459f172bb7b5")
-		(at 108 89.5)
+		(at 108 88.5)
 		(property "Reference" "R1"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -963,7 +963,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "add7ed1d-d375-4833-acab-6017b8bd49c6")
-		(at 108 83)
+		(at 108 83.5)
 		(property "Reference" "F1"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -1024,7 +1024,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "aec68e7a-23c7-4b13-b9cf-ed132cb834bc")
-		(at 108 92)
+		(at 108 91.5)
 		(property "Reference" "D1"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -1259,7 +1259,7 @@
 	(footprint "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "ef36c8ad-d2b9-4567-9dbd-40ed7d6de2ee")
-		(at 102.5 87.5)
+		(at 102.5 81.15)
 		(property "Reference" "J1"
 			(at 0 -2.5 0)
 			(layer "F.SilkS")
@@ -1769,7 +1769,7 @@
 	(gr_text "PTC 500mA"
 		(at 108 85 0)
 		(layer "F.SilkS")
-		(uuid "5a7d4638-9025-4e34-b1c1-bddd2159dd61")
+		(uuid "0e30eed8-237e-4dec-a428-44783ed94e26")
 		(effects
 			(font
 				(size 0.3 0.3)
@@ -1780,7 +1780,7 @@
 	(gr_text "PWR LED"
 		(at 108 94 0)
 		(layer "F.SilkS")
-		(uuid "7565665d-82ad-4a6e-9ca4-4ac738feae17")
+		(uuid "210c65bb-f452-456e-82a0-aca4ec7ce750")
 		(effects
 			(font
 				(size 0.3 0.3)
@@ -1791,7 +1791,7 @@
 	(gr_text "GNSS 1.575G"
 		(at 109 75 0)
 		(layer "F.SilkS")
-		(uuid "fe3cd5b9-2543-439a-a0ad-189bf9d9d5ca")
+		(uuid "55b8492e-8033-4f08-b3de-9dd18ed3a1ae")
 		(effects
 			(font
 				(size 0.35 0.35)
@@ -1802,7 +1802,7 @@
 	(gr_text "868M LoRa"
 		(at 109 100 0)
 		(layer "F.SilkS")
-		(uuid "89371726-2fc8-4818-b899-01e938098c28")
+		(uuid "f1eaf561-87c7-477a-8e9a-ff0e0225e24b")
 		(effects
 			(font
 				(size 0.35 0.35)
@@ -1813,7 +1813,7 @@
 	(gr_text "DS2401 ID"
 		(at 113.5 84.5 0)
 		(layer "F.SilkS")
-		(uuid "2d49fe62-d860-42f4-b85f-09b751c891de")
+		(uuid "22f4715d-d992-42ff-9df5-0ec717ce97e9")
 		(effects
 			(font
 				(size 0.35 0.35)
@@ -1824,7 +1824,7 @@
 	(gr_text "MAX-M10S"
 		(at 121 73.5 0)
 		(layer "F.SilkS")
-		(uuid "294630d0-21cc-4638-a265-c2a1d529e8bb")
+		(uuid "be7a8b03-18ee-4e6e-b532-27c2751be458")
 		(effects
 			(font
 				(size 0.42 0.42)
@@ -1835,7 +1835,7 @@
 	(gr_text "SX1262"
 		(at 121 101.5 0)
 		(layer "F.SilkS")
-		(uuid "26921ed5-3b06-4c02-bb38-92ca2337e4e5")
+		(uuid "ba9cadd0-eb85-41b9-a391-f1979210ae81")
 		(effects
 			(font
 				(size 0.42 0.42)
@@ -1846,7 +1846,7 @@
 	(gr_text "FRONT MATING (TO POD-BASE)"
 		(at 125 71.5 0)
 		(layer "F.SilkS")
-		(uuid "776541f2-c49c-458e-a224-b769e9fad7b3")
+		(uuid "31862bf9-5b2e-4227-9094-372d8dc98640")
 		(effects
 			(font
 				(size 0.42 0.42)
@@ -1857,7 +1857,7 @@
 	(gr_text "OPENMOTORBRIDGE // OMM TRANSCEIVER"
 		(at 125 103.5 0)
 		(layer "F.SilkS")
-		(uuid "4a3e7bf2-718b-4b49-a926-fabd1868ede0")
+		(uuid "4e81bbb1-00d4-44c0-8fc8-eb3c99672411")
 		(effects
 			(font
 				(size 0.55 0.55)
@@ -1868,7 +1868,7 @@
 	(gr_text "FACTORY TESTPOINTS (PROD FLASH)"
 		(at 130 74 0)
 		(layer "B.SilkS")
-		(uuid "179fa519-2023-45a9-a7b6-710d4ffcd6fd")
+		(uuid "db5306ad-797b-4ecd-855e-2fb8c668705b")
 		(effects
 			(font
 				(size 0.45 0.45)
@@ -1879,7 +1879,7 @@
 	(gr_text "OPENMOTORBRIDGE // OMM TRANSCEIVER (B.Cu)"
 		(at 125 102.5 0)
 		(layer "B.SilkS")
-		(uuid "8c3e9d87-1da3-48b7-bf90-0bc75020146b")
+		(uuid "4bbe0567-6963-4767-830a-38c908d54546")
 		(effects
 			(font
 				(size 0.5 0.5)

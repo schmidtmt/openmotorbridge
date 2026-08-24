@@ -58,16 +58,16 @@ def auto_place_rear_pod(pcb_path):
         'H3': (X0 + 3.5, Y_max - 3.5, 0.0, pcbnew.F_Cu), # (103.5, 101.5) Bottom-Left
         'H4': (X_max - 3.5, Y_max - 3.5, 0.0, pcbnew.F_Cu),# (146.5, 101.5) Bottom-Right
 
-        # J1: 6-Pin Horizontal Socket on FRONT SHORT EDGE (X=102.5, opening left toward Pod Base)
-        'J1': (102.5, Y_center, 0.0, pcbnew.F_Cu),       # (102.5, 87.5) Front leading-edge socket
+        # J1: 6-Pin Horizontal Socket on FRONT SHORT EDGE (X=102.5mm, Pin 1 at Y=81.15mm so 6 pins span Y 81.15..93.85mm, perfectly centered between H1 and H3!)
+        'J1': (102.5, 81.15, 0.0, pcbnew.F_Cu),          # Symmetrically centered (Clearance to H1: 7.65mm, Clearance to H3: 7.65mm)
 
         # Power Protection & Status LED (Adjacent to J1)
-        'F1': (108.0, Y_center - 4.5, 0.0, pcbnew.F_Cu), # (108.0, 83.0) 500mA PTC Fuse
-        'D1': (108.0, Y_center + 4.5, 0.0, pcbnew.F_Cu), # (108.0, 92.0) Green Power LED
-        'R1': (108.0, Y_center + 2.0, 0.0, pcbnew.F_Cu), # (108.0, 89.5) LED Resistor 1.5k
+        'F1': (108.0, 83.5, 0.0, pcbnew.F_Cu),           # 500mA PTC Fuse
+        'D1': (108.0, 91.5, 0.0, pcbnew.F_Cu),           # Green Power LED
+        'R1': (108.0, 88.5, 0.0, pcbnew.F_Cu),           # LED Resistor 1.5k
 
         # U4: DS2401 Silicon ROM ID (1-Wire)
-        'U4': (113.5, Y_center, 0.0, pcbnew.F_Cu),       # (113.5, 87.5) SOT-23 ID Chip
+        'U4': (113.5, 87.5, 0.0, pcbnew.F_Cu),           # SOT-23 ID Chip
 
         # Active RF & Processor Architecture (Spaced out across board length)
         'U1': (135.0, 90.0, 0.0, pcbnew.F_Cu),           # ESP32-C3 Mesh Transceiver (100% inside board)
