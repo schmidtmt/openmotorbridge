@@ -164,15 +164,15 @@ def render_xray_assembly(output_png):
     fig.text(0.5, 0.915, "3D X-Ray CAD Architecture — 100% Centric Slide-In Bay with Poka-Yoke Rails & Horizontal 6-Pin Mating", 
              color='#94a3b8', fontsize=11.5, ha='center', fontfamily='sans-serif')
 
-    # Annotation cards with cyberpunk dark-mode styling
+    # Technical Details Overlay
     left_card_text = (
-        "POD-BASIS: M8-PANEL & POD-BASE PLATINE\n"
+        "POD-BASIS: M8-ADAPTER & 6-PIN HEADER\n"
         "─────────────────────────────────────────\n"
-        "• M8 6-Pin IP67 Gehäuse-Einbaubuchse (O-Ring)\n"
-        "• AWG26 Silikon-Litzen (100% Entkopplung)\n"
+        "• M8 6-Pin IP67 Vollmetall-Einbaubuchse\n"
         "• Pod-Base Platine (36 x 20 mm PCB)\n"
         "• Integrierte Littelfuse SP3012 TVS-Matrix\n"
-        "• 6-Pin Präzisions-Stiftleiste (Zentrisch Y=0, Z=0)\n"
+        "• 6-Pin Präzisions-Stiftleiste (Zentrisch)\n"
+        "  (Exakt auf Symmetrieachse Y=0, Z=0)\n"
         "• Asymmetrische Poka-Yoke Führungsstege\n"
         "  (Links: 1.5 mm / Rechts: 2.0 mm Nut)"
     )
@@ -207,47 +207,48 @@ def render_exploded_view(output_png):
     ax = fig.add_subplot(111, projection='3d', facecolor='#080c14')
 
     # Exploded offsets along horizontal X-axis (from left to right):
-    # 1. M8 Panel Receptacle & Knurled Nut (Floating Left at X = -70 mm)
-    draw_cylinder(ax, x0=-72, y0=0, z0=0, radius=4.0, length=12.0, color='#64748b', alpha=0.95, axis='x')
-    draw_cylinder(ax, x0=-60, y0=0, z0=0, radius=4.8, length=3.0, color='#eab308', alpha=1.0, axis='x') # Brass Hex Locknut
-    
-    # 2. Flexible Silicone Wire Harness (AWG26 Pigtail bridging X = -57 to -34 mm)
-    wire_colors = ['#ef4444', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899']
-    for idx, col in enumerate(wire_colors):
-        wy = -5.0 + idx * 2.0
-        ax.plot([-57.0, -45.0, -34.0], [wy*0.4, wy*0.8, -8.0 + idx*1.5], [0.0, 2.0, 4.0], color=col, lw=2.2, alpha=0.95)
+    # 1. M8 Threaded Collar & Nut: X = -72..-56
+    # 2. Pod Base PCB (ADPT: 36x20mm): X = -34..-32
+    # 3. Horizontal 6-Pin Pin Header: X = -22..-14
+    # 4. Silicone Perimeter Gasket: X = -8..-6
+    # 5. Removable Cartridge Shell with Poka-Yoke: X = +10..+56
+    # 6. Horizontal 6-Pin Socket: X = +10..+16
+    # 7. Flat Cartridge Carrier PCB (35x25mm): X = +16..+46 (Z=-6)
+    # 8. Sena Apex OEM Inlay Module: X = +18..+54 (Z=+2)
 
-    # 3. Pod Base PCB (openmotorbridge_pod_base: 36x20x1.6mm at X = -34 mm)
+    # 1. M8 Receptacle & Knurled Nut (Floating Left)
+    draw_cylinder(ax, x0=-56, y0=0, z0=0, radius=4.0, length=-16.0, color='#64748b', alpha=0.95, axis='x')
+    draw_cylinder(ax, x0=-64, y0=0, z0=0, radius=4.6, length=-4.0, color='#eab308', alpha=1.0, axis='x')
+
+    # 2. Pod Base PCB (openmotorbridge_pod_base: 36x20x1.6mm at X = -34 mm)
     draw_box(ax, -34.0, -18.0, -10.0, 1.6, 36.0, 20.0, color='#059669', alpha=0.95, edgecolor='#10b981', linewidth=0.9)
-    # M8 Wire Solder Pad Terminal (Left Wing)
-    draw_box(ax, -32.4, -10.0, -6.0, 2.0, 5.0, 12.0, color='#0f172a', alpha=1.0, edgecolor='#475569', linewidth=0.6)
-    # SP3012 TVS Array & 100nF Cap
-    draw_box(ax, -32.4, -2.5, 2.0, 0.9, 3.2, 3.2, color='#0f172a', alpha=1.0, edgecolor='#64748b', linewidth=0.6)
+    draw_box(ax, -32.4, 8.0, 2.0, 0.9, 3.2, 3.2, color='#0f172a', alpha=1.0, edgecolor='#64748b', linewidth=0.6) # SP3012
 
-    # 4. Horizontal 6-Pin Pin Header (Floating at X = -20 mm, Centered at Y=0, Z=0)
+    # 3. Horizontal 6-Pin Pin Header (Floating at X = -20 mm, Centered at Y=0, Z=0)
     draw_box(ax, -20.0, -7.5, -1.25, 2.5, 15.0, 2.5, color='#0f172a', alpha=1.0, edgecolor='#334155', linewidth=0.6)
     pin_y_positions = np.linspace(-6.35, 6.35, 6)
     for py in pin_y_positions:
         draw_cylinder(ax, x0=-17.5, y0=py, z0=0, radius=0.32, length=6.0, color='#fbbf24', alpha=1.0, axis='x')
 
-    # 5. Silicone Perimeter Gasket (Shore 40A at X = -8 mm)
+    # 4. Silicone Perimeter Gasket (Shore 40A at X = -8 mm)
     draw_box(ax, -8.0, -18.5, -8.5, 1.5, 37.0, 17.0, color='#06b6d4', alpha=0.75, edgecolor='#0891b2', linewidth=0.9)
 
-    # 6. Removable Cartridge Shell (Wechselkassette with Poka-Yoke at X = +10 mm)
+    # 5. Removable Cartridge Shell (Wechselkassette with Poka-Yoke at X = +10 mm)
     draw_box(ax, 10.0, -18.0, -8.25, 46.0, 36.0, 16.5, color='#a855f7', alpha=0.25, edgecolor='#c084fc', linewidth=0.9)
     # Horizontal 6-Pin Socket on Cartridge Leading Edge
     draw_box(ax, 10.0, -7.8, -1.5, 6.0, 15.6, 3.0, color='#1e293b', alpha=0.98, edgecolor='#475569', linewidth=0.7)
 
-    # 7. Flat Cartridge Carrier PCB (35x25x1.2mm, Lower Floor Layer Z = -5.5 mm)
+    # 6. Flat Cartridge Carrier PCB (35x25x1.2mm, Lower Floor Layer Z = -5.5 mm)
     draw_box(ax, 14.0, -12.5, -5.5, 35.0, 25.0, 1.2, color='#047857', alpha=0.95, edgecolor='#10b981', linewidth=0.9)
     # 500mA PTC Fuse (F1), Power LED (D1), and DS2401 ID Chip
     draw_box(ax, 18.0, -5.0, -4.3, 1.6, 0.8, 0.6, color='#d97706', alpha=1.0, edgecolor='#b45309', linewidth=0.5)
     draw_box(ax, 18.0, 5.0, -4.3, 1.6, 0.8, 0.6, color='#22c55e', alpha=1.0, edgecolor='#16a34a', linewidth=0.5)
     draw_box(ax, 23.0, -1.5, -4.3, 3.0, 3.0, 1.0, color='#0f172a', alpha=1.0, edgecolor='#475569', linewidth=0.6)
 
-    # 8. Sena Apex / Cardo OEM Inlay Module (45x32x6.5mm, Upper Layer Z = +1.0 mm)
+    # 7. Sena Apex / Cardo OEM Inlay Module (45x32x6.5mm, Upper Layer Z = +1.0 mm)
     draw_box(ax, 13.0, -16.0, 1.0, 41.0, 32.0, 1.4, color='#065f46', alpha=0.95, edgecolor='#059669', linewidth=0.9)
     draw_box(ax, 16.0, -14.0, 2.4, 20.0, 18.0, 4.0, color='#cbd5e1', alpha=0.98, edgecolor='#94a3b8', linewidth=0.8)
+    draw_box(ax, 38.0, -14.0, 2.4, 14.0, 14.0, 3.8, color='#cbd5e1', alpha=0.98, edgecolor='#94a3b8', linewidth=0.8)
 
     # Horizontal guide dashed alignment lines
     for corner in [(-18.0, -8.0), (18.0, -8.0), (18.0, 8.0), (-18.0, 8.0)]:
@@ -264,31 +265,27 @@ def render_exploded_view(output_png):
     fig.text(0.5, 0.915, "Horizontale Explosionsdarstellung entlang der Kassetten-Einschubachse (X-Achse)", 
              color='#94a3b8', fontsize=11.5, ha='center', fontfamily='sans-serif')
 
-    left_card_text = (
+    exploded_legend = (
         "SCHICHT-HIERARCHIE ENTLANG DER EINSCHUBACHSE (X-ACHSE)\n"
         "─────────────────────────────────────────────────────\n"
-        "[1] M8-EINBAUBUCHSE MIT KONTERMUTTER & O-RING (VARIANTE A)\n"
-        "    • M8 6-Pin IP67 A-Coded mit Gehäuse-Verschraubung\n"
-        "    • 100% mechanische Entkopplung von der Platine\n\n"
-        "[2] HOCHFLEXIBLE SILIKON-LITZEN (AWG26 / 15mm)\n"
-        "    • Verbindet M8-Lötkelche mit Pod-Base Lötpad-Leiste\n\n"
-        "[3] POD-BASE PLATINE (36 x 20 mm PCB)\n"
-        "    • Integrierte Littelfuse SP3012 TVS-Matrix & 100nF Cap\n"
-        "    • 0 THT-Bohrlöcher in der M8-Zone (Kein Pin-Konflikt)\n\n"
-        "[4] 6-PIN PRÄZISIONS-STIFTLEISTE (ZENTRISCH Y=0, Z=0)\n"
-        "    • Horizontale Goldkontakte ragen in den Kassetten-Schacht\n\n"
-        "[5] SHORE 40A SILIKON-STIRNFLANSCHDICHTUNG\n"
+        "[1] M8-EINBAUBUCHSE MIT ÜBERWURFMUTTER (Links)\n"
+        "    • M8 6-Pin IP67 A-Coded mit Rüttelsicherung\n\n"
+        "[2] POD-BASE PLATINE (36 x 20 mm PCB)\n"
+        "    • Direkt aufgelötete M8-Buchse & Littelfuse TVS\n\n"
+        "[3] 6-PIN PRÄZISIONS-STIFTLEISTE (ZENTRISCH)\n"
+        "    • Horizontale Goldkontakte (Y=0, Z=0)\n\n"
+        "[4] SHORE 40A SILIKON-STIRNFLANSCHDICHTUNG\n"
         "    • Hermetische Barriere gegen Feuchtigkeit & Staub\n\n"
-        "[6] WECHSELKASSETTE MIT POKA-YOKE (52x36mm)\n"
+        "[5] WECHSELKASSETTE MIT POKA-YOKE (52x36mm)\n"
         "    • Asymmetrische Führungsnuten (1.5mm / 2.0mm)\n\n"
-        "[7] 6-PIN FRONT-BUCHSENLEISTE (ZENTRISCH)\n"
+        "[6] 6-PIN FRONT-BUCHSENLEISTE (ZENTRISCH)\n"
         "    • 45° Fangtrichter zur exakten Selbstzentrierung\n\n"
-        "[8] KASSETTEN-TRÄGERPLATINE (35 x 25 mm PCB)\n"
+        "[7] KASSETTEN-TRÄGERPLATINE (35 x 25 mm PCB)\n"
         "    • Liegt flach am Boden: PTC, LED, DS2401, JST-SH\n\n"
-        "[9] SENA / CARDO / OMM MODUL-BAURAUM (45 x 32 mm)\n"
+        "[8] SENA / CARDO / OMM MODUL-BAURAUM (45 x 32 mm)\n"
         "    • Voller Bauraum ohne störenden Doppelboden"
     )
-    fig.text(0.04, 0.44, left_card_text, color='#e2e8f0', fontsize=9.2, fontfamily='monospace',
+    fig.text(0.04, 0.46, exploded_legend, color='#e2e8f0', fontsize=9.2, fontfamily='monospace',
              bbox=dict(boxstyle='round,pad=0.8', facecolor='#111827', edgecolor='#38bdf8', alpha=0.92, lw=1.4))
 
     os.makedirs(os.path.dirname(os.path.abspath(output_png)), exist_ok=True)
