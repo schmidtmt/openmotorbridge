@@ -1,0 +1,96 @@
+(kicad_pcb (version 20240108) (generator pcbnew)
+
+  (general
+    (thickness 1.6)
+    (legacy_teardrops no)
+  )
+
+  (paper "A4")
+  (title_block
+    (title "OpenMotorBridge v8.0 - Rear Pod 3 Transceiver (50x35mm 4-Layer)")
+    (date "2026-08-24")
+    (rev "v8.0")
+    (company "OpenMotorBridge Open Source Hardware")
+    (comment 1 "u-blox MAX-M10S GNSS, Semtech SX1262 LoRa (+22dBm), ESP32-C3")
+    (comment 2 "Heckbürzel-Montage für 360° Rundum-HF-Abstrahlung")
+  )
+
+  (layers
+    (0 "F.Cu" signal)
+    (1 "In1.Cu" power "GND_PLANE")
+    (2 "In2.Cu" power "PWR_3V3")
+    (31 "B.Cu" signal)
+    (36 "B.SilkS" user "B.Silkscreen")
+    (37 "F.SilkS" user "F.Silkscreen")
+    (38 "B.Mask" user)
+    (39 "F.Mask" user)
+    (44 "Edge.Cuts" user)
+  )
+
+  (net 0 "")
+  (net 1 "GND")
+  (net 2 "+3V3")
+  (net 3 "UART_BRIDGE_TX")
+  (net 4 "UART_BRIDGE_RX")
+  (net 5 "GNSS_1PPS")
+  (net 6 "LORA_DIO1")
+
+  ;; Board Outline (50.0 mm x 35.0 mm with 2.5 mm Corner Radii)
+  (gr_line (start 2.5 0.0) (end 47.5 0.0) (stroke (width 0.15) (type solid)) (layer "Edge.Cuts"))
+  (gr_arc (start 47.5 0.0) (mid 49.27 0.73) (end 50.0 2.5) (stroke (width 0.15) (type solid)) (layer "Edge.Cuts"))
+  (gr_line (start 50.0 2.5) (end 50.0 32.5) (stroke (width 0.15) (type solid)) (layer "Edge.Cuts"))
+  (gr_arc (start 50.0 32.5) (mid 49.27 34.27) (end 47.5 35.0) (stroke (width 0.15) (type solid)) (layer "Edge.Cuts"))
+  (gr_line (start 47.5 35.0) (end 2.5 35.0) (stroke (width 0.15) (type solid)) (layer "Edge.Cuts"))
+  (gr_arc (start 2.5 35.0) (mid 0.73 34.27) (end 0.0 32.5) (stroke (width 0.15) (type solid)) (layer "Edge.Cuts"))
+  (gr_line (start 0.0 32.5) (end 0.0 2.5) (stroke (width 0.15) (type solid)) (layer "Edge.Cuts"))
+  (gr_arc (start 0.0 2.5) (mid 0.73 0.73) (end 2.5 0.0) (stroke (width 0.15) (type solid)) (layer "Edge.Cuts"))
+
+  ;; 4x M3 Mounting Holes
+  (footprint "MountingHole:MountingHole_3.2mm_M3_Pad_Via" (layer "F.Cu")
+    (at 3.0 3.0)
+    (pad "1" thru_hole circle (at 0 0) (size 5.5 5.5) (drill 3.2) (layers "*.Cu" "*.Mask") (net 1 "GND"))
+  )
+  (footprint "MountingHole:MountingHole_3.2mm_M3_Pad_Via" (layer "F.Cu")
+    (at 47.0 3.0)
+    (pad "1" thru_hole circle (at 0 0) (size 5.5 5.5) (drill 3.2) (layers "*.Cu" "*.Mask") (net 1 "GND"))
+  )
+  (footprint "MountingHole:MountingHole_3.2mm_M3_Pad_Via" (layer "F.Cu")
+    (at 3.0 32.0)
+    (pad "1" thru_hole circle (at 0 0) (size 5.5 5.5) (drill 3.2) (layers "*.Cu" "*.Mask") (net 1 "GND"))
+  )
+  (footprint "MountingHole:MountingHole_3.2mm_M3_Pad_Via" (layer "F.Cu")
+    (at 47.0 32.0)
+    (pad "1" thru_hole circle (at 0 0) (size 5.5 5.5) (drill 3.2) (layers "*.Cu" "*.Mask") (net 1 "GND"))
+  )
+
+  ;; U1: ESP32-C3-WROOM-02
+  (footprint "RF_Module:ESP32-C3-WROOM-02" (layer "F.Cu")
+    (at 25.0 12.0)
+    (fp_text reference "U1" (at 0 -8.0) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
+    (fp_text value "ESP32-C3-WROOM-02" (at 0 8.0) (layer "F.Fab") (effects (font (size 1 1) (thickness 0.15))))
+  )
+
+  ;; U2: u-blox MAX-M10S Multi-GNSS Modul
+  (footprint "RF_GPS:u-blox_MAX-M10S" (layer "F.Cu")
+    (at 12.0 25.0)
+    (fp_text reference "U2" (at 0 -6.0) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
+    (fp_text value "MAX-M10S" (at 0 6.0) (layer "F.Fab") (effects (font (size 1 1) (thickness 0.15))))
+  )
+
+  ;; U3: Semtech SX1262 LoRa Transceiver (+22 dBm)
+  (footprint "Package_DFN_QFN:QFN-24-1EP_4x4mm_P0.5mm_EP2.6x2.6mm" (layer "F.Cu")
+    (at 38.0 25.0)
+    (fp_text reference "U3" (at 0 -3.2) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
+    (fp_text value "SX1262" (at 0 3.2) (layer "F.Fab") (effects (font (size 1 1) (thickness 0.15))))
+  )
+
+  ;; J1: M8 3-Pin Automotive Connector
+  (footprint "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" (layer "F.Cu")
+    (at 25.0 32.0)
+    (fp_text reference "J1" (at 0 -2.5) (layer "F.SilkS") (effects (font (size 0.8 0.8) (thickness 0.12))))
+    (fp_text value "M8_3PIN_SOCKET" (at 0 2.5) (layer "F.Fab") (effects (font (size 0.8 0.8) (thickness 0.12))))
+  )
+
+  ;; Silkscreen
+  (gr_text "OMB Pod 3 Transceiver" (at 25.0 4.0) (layer "F.SilkS") (effects (font (size 1.2 1.2) (thickness 0.18) bold)))
+)

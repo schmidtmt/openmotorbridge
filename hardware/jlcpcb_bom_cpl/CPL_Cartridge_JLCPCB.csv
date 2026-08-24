@@ -1,0 +1,4 @@
+Designator,Val,Package,Mid X,Mid Y,Rotation,Layer
+U1,DS2401,SOT-23,17.50,7.00,0.0,Top
+C1,100nF,0603,17.50,12.00,0.0,Top
+J1,POGO_6PIN,HDR-6,17.50,19.00,0.0,Top
