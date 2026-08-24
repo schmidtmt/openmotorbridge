@@ -96,7 +96,7 @@
 	(footprint "MountingHole:MountingHole_3.2mm_M3_Pad_Via"
 		(layer "F.Cu")
 		(uuid "2f935b36-c40e-44ba-9ed3-a43e0682fe3d")
-		(at 3 3)
+		(at 118.220238 74.84825)
 		(property "Reference" "H1"
 			(at 0 -2.5 0)
 			(layer "F.SilkS")
@@ -155,7 +155,7 @@
 	(footprint "MountingHole:MountingHole_3.2mm_M3_Pad_Via"
 		(layer "F.Cu")
 		(uuid "35a1e2d0-ade4-4bc3-b1ef-de77240d981e")
-		(at 3 52)
+		(at 118.220238 123.84825)
 		(property "Reference" "H3"
 			(at 0 2.5 0)
 			(layer "F.SilkS")
@@ -214,7 +214,7 @@
 	(footprint "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
 		(layer "F.Cu")
 		(uuid "537acce9-1c41-45da-9e3e-2091f760a65a")
-		(at 24 42)
+		(at 139.220238 113.84825)
 		(property "Reference" "U6"
 			(at 0 -3 0)
 			(layer "F.SilkS")
@@ -265,7 +265,7 @@
 	(footprint "MountingHole:MountingHole_3.2mm_M3_Pad_Via"
 		(layer "F.Cu")
 		(uuid "569001e5-4a35-49db-91d9-96206dc9d0d5")
-		(at 82 52)
+		(at 197.220238 123.84825)
 		(property "Reference" "H4"
 			(at 0 2.5 0)
 			(layer "F.SilkS")
@@ -324,7 +324,7 @@
 	(footprint "RF_Module:ESP32-S3-WROOM-1"
 		(layer "F.Cu")
 		(uuid "5b6d8aa7-15f5-487e-bffc-f215bfad0cc9")
-		(at 45 27.5 90)
+		(at 160.220238 99.34825 90)
 		(property "Reference" "U2"
 			(at 0 -10.5 0)
 			(layer "F.SilkS")
@@ -375,7 +375,7 @@
 	(footprint "Connector_USB:USB_C_Receptacle_GCT_USB4085"
 		(layer "F.Cu")
 		(uuid "74a7523d-fdc4-4b57-8d9d-f609fecaf602")
-		(at 45 2.5)
+		(at 160.220238 74.34825)
 		(property "Reference" "J3"
 			(at 0 -3.5 0)
 			(layer "F.SilkS")
@@ -426,7 +426,7 @@
 	(footprint "Package_LGA:LGA-14_2.5x3mm_P0.5mm"
 		(layer "F.Cu")
 		(uuid "837a7f06-8ade-43f9-935c-39f4c2917ccf")
-		(at 45 43)
+		(at 160.220238 114.84825)
 		(property "Reference" "U5"
 			(at 0 -2.2 0)
 			(layer "F.SilkS")
@@ -477,7 +477,7 @@
 	(footprint "Connector_Card:microSD_HC_Molex_47571-0001"
 		(layer "F.Cu")
 		(uuid "8af113b9-effd-4de0-b948-d3d79233f565")
-		(at 52 52 180)
+		(at 167.220238 123.84825 180)
 		(property "Reference" "J2"
 			(at 0 -8.5 0)
 			(layer "F.SilkS")
@@ -528,7 +528,7 @@
 	(footprint "LED_SMD:LED_WS2812B-2020"
 		(layer "F.Cu")
 		(uuid "aa97b3c1-5a59-4562-83f7-9a1de86eb49e")
-		(at 45 16)
+		(at 160.220238 87.84825)
 		(property "Reference" "D1"
 			(at 0 -1.8 0)
 			(layer "F.SilkS")
@@ -579,7 +579,7 @@
 	(footprint "Connector_Dsub:DSUB-26-HD_Female_Horizontal_P2.29x1.98mm_EdgePinOffset7.70mm_Housings_POS01"
 		(layer "F.Cu")
 		(uuid "bfbc13cf-daae-4069-92e4-d551667c8723")
-		(at 2 27.5 -90)
+		(at 117.220238 99.34825 -90)
 		(property "Reference" "J1"
 			(at 0 -12 0)
 			(layer "F.SilkS")
@@ -630,7 +630,7 @@
 	(footprint "Package_SO:SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.41x3.3mm"
 		(layer "F.Cu")
 		(uuid "c6b97a28-cd24-4fd7-a039-1b5f070edeeb")
-		(at 18 16)
+		(at 133.220238 87.84825)
 		(property "Reference" "U1"
 			(at 0 -3.2 0)
 			(layer "F.SilkS")
@@ -681,7 +681,7 @@
 	(footprint "Converter_DCDC:Converter_DCDC_Mornsun_B_S-1WR3_THT"
 		(layer "F.Cu")
 		(uuid "cc9f4b17-340a-4611-8bf5-c8bedcd321e4")
-		(at 68 15)
+		(at 183.220238 86.84825)
 		(property "Reference" "U4"
 			(at 0 -4.5 0)
 			(layer "F.SilkS")
@@ -732,7 +732,7 @@
 	(footprint "MountingHole:MountingHole_3.2mm_M3_Pad_Via"
 		(layer "F.Cu")
 		(uuid "f92c003e-d252-4bb1-a005-b4588f5aa46a")
-		(at 82 3)
+		(at 197.220238 74.84825)
 		(property "Reference" "H2"
 			(at 0 -2.5 0)
 			(layer "F.SilkS")
@@ -791,7 +791,7 @@
 	(footprint "Package_DFN_QFN:QFN-28-1EP_4x4mm_P0.4mm_EP2.6x2.6mm"
 		(layer "F.Cu")
 		(uuid "fa7b6eef-4701-488e-9eee-7aa81e0affdc")
-		(at 68 36)
+		(at 183.220238 107.84825)
 		(property "Reference" "U3"
 			(at 0 -3 0)
 			(layer "F.SilkS")
@@ -840,9 +840,9 @@
 		(embedded_fonts no)
 	)
 	(gr_arc
-		(start 0 3)
-		(mid 0.88 0.88)
-		(end 3 0)
+		(start 115.220238 74.84825)
+		(mid 116.100238 72.72825)
+		(end 118.220238 71.84825)
 		(stroke
 			(width 0.15)
 			(type solid)
@@ -851,8 +851,8 @@
 		(uuid "d1142352-6bf7-451f-9145-b93e6fdd2f88")
 	)
 	(gr_line
-		(start 0 52)
-		(end 0 3)
+		(start 115.220238 123.84825)
+		(end 115.220238 74.84825)
 		(stroke
 			(width 0.15)
 			(type solid)
@@ -861,8 +861,8 @@
 		(uuid "36c82514-577c-4b16-ae1c-ece613ab99f6")
 	)
 	(gr_line
-		(start 3 0)
-		(end 82 0)
+		(start 118.220238 71.84825)
+		(end 197.220238 71.84825)
 		(stroke
 			(width 0.15)
 			(type solid)
@@ -871,9 +871,9 @@
 		(uuid "08df730b-3b80-4373-a2db-1391b58d776f")
 	)
 	(gr_arc
-		(start 3 55)
-		(mid 0.88 54.12)
-		(end 0 52)
+		(start 118.220238 126.84825)
+		(mid 116.100238 125.96825)
+		(end 115.220238 123.84825)
 		(stroke
 			(width 0.15)
 			(type solid)
@@ -882,9 +882,9 @@
 		(uuid "f5f8e0a6-4de1-4c4b-bbba-818c3c4e0838")
 	)
 	(gr_arc
-		(start 82 0)
-		(mid 84.12 0.88)
-		(end 85 3)
+		(start 197.220238 71.84825)
+		(mid 199.340238 72.72825)
+		(end 200.220238 74.84825)
 		(stroke
 			(width 0.15)
 			(type solid)
@@ -893,8 +893,8 @@
 		(uuid "2fdeafc0-f5da-4955-85e0-43af91eaa751")
 	)
 	(gr_line
-		(start 82 55)
-		(end 3 55)
+		(start 197.220238 126.84825)
+		(end 118.220238 126.84825)
 		(stroke
 			(width 0.15)
 			(type solid)
@@ -903,8 +903,8 @@
 		(uuid "4246fdf3-f82e-47f4-983c-be1bfcd305cb")
 	)
 	(gr_line
-		(start 85 3)
-		(end 85 52)
+		(start 200.220238 74.84825)
+		(end 200.220238 123.84825)
 		(stroke
 			(width 0.15)
 			(type solid)
@@ -913,9 +913,9 @@
 		(uuid "a00b87cb-9266-437d-8e81-703b79215437")
 	)
 	(gr_arc
-		(start 85 52)
-		(mid 84.12 54.12)
-		(end 82 55)
+		(start 200.220238 123.84825)
+		(mid 199.340238 125.96825)
+		(end 197.220238 126.84825)
 		(stroke
 			(width 0.15)
 			(type solid)
@@ -924,7 +924,7 @@
 		(uuid "37ba2298-c5f9-4af0-aa7b-f3a2f710eff4")
 	)
 	(gr_text "GALVANIC BARRIER (4mm)"
-		(at 68 26 90)
+		(at 183.220238 97.84825 90)
 		(layer "F.SilkS")
 		(uuid "bc524c8b-1b0c-47b1-ae1e-f26495a991a0")
 		(effects
@@ -935,7 +935,7 @@
 		)
 	)
 	(gr_text "CERN-OHL-S v2 | 4-Layer SMT"
-		(at 45 10.5 0)
+		(at 160.220238 82.34825 0)
 		(layer "F.SilkS")
 		(uuid "36c18fa7-d4e6-4972-a6f4-dbe7cd0a7c68")
 		(effects
@@ -946,7 +946,7 @@
 		)
 	)
 	(gr_text "OpenMotorBridge v8.0"
-		(at 45 8 0)
+		(at 160.220238 79.84825 0)
 		(layer "F.SilkS")
 		(uuid "2fbc931c-d840-4317-bd4d-858686d6184c")
 		(effects

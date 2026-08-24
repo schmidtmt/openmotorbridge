@@ -86,7 +86,7 @@
 	(footprint "RF_Module:ESP32-C3-WROOM-02"
 		(layer "F.Cu")
 		(uuid "02eee91b-6389-4a61-845b-f5eb7035c7ac")
-		(at 25 12)
+		(at 125.075012 82.075012)
 		(property "Reference" "U1"
 			(at 0 -8 0)
 			(layer "F.SilkS")
@@ -137,7 +137,7 @@
 	(footprint "MountingHole:MountingHole_3.2mm_M3_Pad_Via"
 		(layer "F.Cu")
 		(uuid "56f20256-2a27-42f6-b66f-d3de573441f6")
-		(at 47 32)
+		(at 147.075012 102.075012)
 		(property "Reference" ""
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -195,7 +195,7 @@
 	(footprint "RF_GPS:u-blox_MAX-M10S"
 		(layer "F.Cu")
 		(uuid "65d9d661-ffb0-4c42-b555-45e397c9f22a")
-		(at 12 25)
+		(at 112.075012 95.075012)
 		(property "Reference" "U2"
 			(at 0 -6 0)
 			(layer "F.SilkS")
@@ -246,7 +246,7 @@
 	(footprint "MountingHole:MountingHole_3.2mm_M3_Pad_Via"
 		(layer "F.Cu")
 		(uuid "6e2ab641-1aad-4b81-b6f4-bfb2402588f9")
-		(at 47 3)
+		(at 147.075012 73.075012)
 		(property "Reference" ""
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -304,7 +304,7 @@
 	(footprint "MountingHole:MountingHole_3.2mm_M3_Pad_Via"
 		(layer "F.Cu")
 		(uuid "a03b4cce-a173-4741-b07f-e4ac0da017ed")
-		(at 3 32)
+		(at 103.075012 102.075012)
 		(property "Reference" ""
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -362,7 +362,7 @@
 	(footprint "Package_DFN_QFN:QFN-24-1EP_4x4mm_P0.5mm_EP2.6x2.6mm"
 		(layer "F.Cu")
 		(uuid "ba8e2b5f-ed02-4aad-aa38-2318ac0724f9")
-		(at 38 25)
+		(at 138.075012 95.075012)
 		(property "Reference" "U3"
 			(at 0 -3.2 0)
 			(layer "F.SilkS")
@@ -413,7 +413,7 @@
 	(footprint "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "ef36c8ad-d2b9-4567-9dbd-40ed7d6de2ee")
-		(at 25 32)
+		(at 125.075012 102.075012)
 		(property "Reference" "J1"
 			(at 0 -2.5 0)
 			(layer "F.SilkS")
@@ -464,7 +464,7 @@
 	(footprint "MountingHole:MountingHole_3.2mm_M3_Pad_Via"
 		(layer "F.Cu")
 		(uuid "f8011266-024a-435e-8b52-cdc224612ff3")
-		(at 3 3)
+		(at 103.075012 73.075012)
 		(property "Reference" ""
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -520,9 +520,9 @@
 		(embedded_fonts no)
 	)
 	(gr_arc
-		(start 0 2.5)
-		(mid 0.73 0.73)
-		(end 2.5 0)
+		(start 100.075012 72.575012)
+		(mid 100.805012 70.805012)
+		(end 102.575012 70.075012)
 		(stroke
 			(width 0.15)
 			(type solid)
@@ -531,8 +531,8 @@
 		(uuid "33f312ca-4793-42e3-abb8-1bcfa659dad9")
 	)
 	(gr_line
-		(start 0 32.5)
-		(end 0 2.5)
+		(start 100.075012 102.575012)
+		(end 100.075012 72.575012)
 		(stroke
 			(width 0.15)
 			(type solid)
@@ -541,8 +541,8 @@
 		(uuid "3702f6ab-1178-40fc-b0a3-fe3500a86ffe")
 	)
 	(gr_line
-		(start 2.5 0)
-		(end 47.5 0)
+		(start 102.575012 70.075012)
+		(end 147.575012 70.075012)
 		(stroke
 			(width 0.15)
 			(type solid)
@@ -551,9 +551,9 @@
 		(uuid "75f74b44-6bf2-48a8-b795-a9047ca232d6")
 	)
 	(gr_arc
-		(start 2.5 35)
-		(mid 0.73 34.27)
-		(end 0 32.5)
+		(start 102.575012 105.075012)
+		(mid 100.805012 104.345012)
+		(end 100.075012 102.575012)
 		(stroke
 			(width 0.15)
 			(type solid)
@@ -562,9 +562,9 @@
 		(uuid "2d8e114b-b6cc-4b65-a5fd-12ef127cc3c1")
 	)
 	(gr_arc
-		(start 47.5 0)
-		(mid 49.27 0.73)
-		(end 50 2.5)
+		(start 147.575012 70.075012)
+		(mid 149.345012 70.805012)
+		(end 150.075012 72.575012)
 		(stroke
 			(width 0.15)
 			(type solid)
@@ -573,8 +573,8 @@
 		(uuid "d114298e-5c28-4e28-bbad-3f4a0a64fdd9")
 	)
 	(gr_line
-		(start 47.5 35)
-		(end 2.5 35)
+		(start 147.575012 105.075012)
+		(end 102.575012 105.075012)
 		(stroke
 			(width 0.15)
 			(type solid)
@@ -583,8 +583,8 @@
 		(uuid "57264e8b-fed9-4765-9cfc-734319680bbb")
 	)
 	(gr_line
-		(start 50 2.5)
-		(end 50 32.5)
+		(start 150.075012 72.575012)
+		(end 150.075012 102.575012)
 		(stroke
 			(width 0.15)
 			(type solid)
@@ -593,9 +593,9 @@
 		(uuid "01655d51-4d9e-4bd8-8c97-a3e71fd75630")
 	)
 	(gr_arc
-		(start 50 32.5)
-		(mid 49.27 34.27)
-		(end 47.5 35)
+		(start 150.075012 102.575012)
+		(mid 149.345012 104.345012)
+		(end 147.575012 105.075012)
 		(stroke
 			(width 0.15)
 			(type solid)
@@ -604,7 +604,7 @@
 		(uuid "d1a93066-0ccf-420a-a766-90a064e94a7e")
 	)
 	(gr_text "OMB Pod 3 Transceiver"
-		(at 25 4 0)
+		(at 125.075012 74.075012 0)
 		(layer "F.SilkS")
 		(uuid "4bb1989d-a9bb-4f11-b4d6-20ee278812d8")
 		(effects
