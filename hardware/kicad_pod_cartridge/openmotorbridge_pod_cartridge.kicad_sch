@@ -38,10 +38,10 @@
 		(symbol "Connector:Conn_01x06"
 			(pin passive line (at -7.62 6.35 0) (length 2.54) (name "1_VCC" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
 			(pin passive line (at -7.62 3.81 0) (length 2.54) (name "2_GND" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
-			(pin passive line (at -7.62 1.27 0) (length 2.54) (name "3_1WIRE" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
-			(pin passive line (at -7.62 -1.27 0) (length 2.54) (name "4_MIC" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27)))))
-			(pin passive line (at -7.62 -3.81 0) (length 2.54) (name "5_SPK" (effects (font (size 1.27 1.27)))) (number "5" (effects (font (size 1.27 1.27)))))
-			(pin passive line (at -7.62 -6.35 0) (length 2.54) (name "6_PTT" (effects (font (size 1.27 1.27)))) (number "6" (effects (font (size 1.27 1.27)))))
+			(pin passive line (at -7.62 1.27 0) (length 2.54) (name "3_NF_P" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
+			(pin passive line (at -7.62 -1.27 0) (length 2.54) (name "4_NF_N" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27)))))
+			(pin passive line (at -7.62 -3.81 0) (length 2.54) (name "5_OPTO" (effects (font (size 1.27 1.27)))) (number "5" (effects (font (size 1.27 1.27)))))
+			(pin passive line (at -7.62 -6.35 0) (length 2.54) (name "6_1WIRE" (effects (font (size 1.27 1.27)))) (number "6" (effects (font (size 1.27 1.27)))))
 			(property "Reference" "J" (at -5.08 10.16 0) (effects (font (size 1.27 1.27)) (justify left)))
 			(property "Value" "Conn_01x06" (at -5.08 -10.16 0) (effects (font (size 1.27 1.27)) (justify left)))
 			(symbol "Conn_01x06_0_1"
@@ -52,10 +52,10 @@
 
 	(global_label "POD_VCC" (shape input) (at 25.4 38.1 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "c0000000-0000-0000-0000-000000000002"))
 	(global_label "GND" (shape passive) (at 25.4 48.26 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "c0000000-0000-0000-0000-000000000003"))
-	(global_label "POD_1WIRE_ID" (shape bidirectional) (at 25.4 58.42 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "c0000000-0000-0000-0000-000000000004"))
-	(global_label "AUDIO_MIC_IN" (shape output) (at 180.0 38.1 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "c0000000-0000-0000-0000-000000000005"))
-	(global_label "AUDIO_SPEAKER_OUT" (shape input) (at 180.0 48.26 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "c0000000-0000-0000-0000-000000000006"))
-	(global_label "PTT_OPTO_KEY" (shape bidirectional) (at 180.0 58.42 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "c0000000-0000-0000-0000-000000000007"))
+	(global_label "POD_NF_P" (shape bidirectional) (at 25.4 58.42 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "c0000000-0000-0000-0000-000000000005"))
+	(global_label "POD_NF_N" (shape bidirectional) (at 25.4 68.58 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "c0000000-0000-0000-0000-000000000006"))
+	(global_label "POD_OPTO_KEY" (shape bidirectional) (at 180.0 38.1 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "c0000000-0000-0000-0000-000000000007"))
+	(global_label "POD_1WIRE_ID" (shape bidirectional) (at 180.0 48.26 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "c0000000-0000-0000-0000-000000000004"))
 
 	(symbol (lib_id "Connector:Conn_01x06") (at 50.0 70.0 0) (unit 1)
 		(in_bom yes) (on_board yes) (dnp no)
