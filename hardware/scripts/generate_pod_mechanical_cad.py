@@ -119,18 +119,21 @@ def render_xray_assembly(output_png):
     draw_box(ax, -28.4, 8.0, 2.0, 0.9, 3.2, 3.2, color='#0f172a', alpha=1.0, edgecolor='#64748b', linewidth=0.6)
     draw_box(ax, -28.4, 8.5, -4.0, 0.8, 1.6, 0.9, color='#d97706', alpha=1.0, edgecolor='#b45309', linewidth=0.5)
 
-    # 6. HORIZONTAL 6-PIN PIN HEADER (Mating interface at X = -28.4 to -20.0 mm, Centered at Y=0, Z=0)
+    # 6. HORIZONTAL 6-PIN PIN HEADER & INTEGRATED PA12 PROTECTIVE SHROUD (X = -28.4 to -20.0 mm, Centered at Y=0, Z=0)
+    # PA12 SLS Protective Collar (1.2mm wall with 45° self-centering funnel)
+    draw_box(ax, -28.4, -9.0, -2.5, 6.0, 18.0, 5.0, color='#0284c7', alpha=0.35, edgecolor='#38bdf8', linewidth=0.8)
     draw_box(ax, -28.4, -7.5, -1.25, 2.5, 15.0, 2.5, color='#0f172a', alpha=1.0, edgecolor='#334155', linewidth=0.6)
     pin_y_positions = np.linspace(-6.35, 6.35, 6)
     for py in pin_y_positions:
-        # Gold Pins extending horizontally into chamber
-        draw_cylinder(ax, x0=-25.9, y0=py, z0=0, radius=0.32, length=6.5, color='#fbbf24', alpha=1.0, axis='x')
+        # Gold Pins extending into PA12 protective funnel
+        draw_cylinder(ax, x0=-25.9, y0=py, z0=0, radius=0.32, length=5.5, color='#fbbf24', alpha=1.0, axis='x')
 
     # 7. REMOVABLE WECHSELKASSETTE SLED (52.0 x 36.0 x 16.5 mm, X = -19.5 to +32.5 mm)
     # Translucent smoky purple casing with 45° lead-in chamfer
     draw_box(ax, -19.5, -18.0, -8.25, 52.0, 36.0, 16.5, color='#a855f7', alpha=0.18, edgecolor='#c084fc', linewidth=0.9)
 
     # 8. HORIZONTAL 6-PIN SOCKET ON CARTRIDGE LEADING EDGE (at X = -19.5 to -13.5 mm, Centered at Y=0, Z=0)
+    # Socket slides directly into PA12 protective collar (piston-like seal)
     draw_box(ax, -19.5, -7.8, -1.5, 6.0, 15.6, 3.0, color='#1e293b', alpha=0.98, edgecolor='#475569', linewidth=0.7)
 
     # 9. FLAT HORIZONTAL CARTRIDGE PCB (Lying on cassette floor at Z = -6.5 mm, X = -19.0 to +16.0 mm)
@@ -161,18 +164,19 @@ def render_xray_assembly(output_png):
     # Title header
     fig.text(0.5, 0.95, "OPENMOTORBRIDGE // CENTRIC POD & FLAT CARTRIDGE ASSEMBLY", 
              color='#38bdf8', fontsize=17, fontweight='bold', ha='center', fontfamily='sans-serif')
-    fig.text(0.5, 0.915, "3D X-Ray CAD Architecture — 100% Centric Slide-In Bay with Poka-Yoke Rails & Horizontal 6-Pin Mating", 
+    fig.text(0.5, 0.915, "3D X-Ray CAD Architecture — 100% Centric Slide-In Bay with PA12 Shrouded Header & Horizontal 6-Pin Mating", 
              color='#94a3b8', fontsize=11.5, ha='center', fontfamily='sans-serif')
 
     # Technical Details Overlay
     left_card_text = (
-        "POD-BASIS: M8-ADAPTER & 6-PIN HEADER\n"
+        "POD-BASIS: M8-ADAPTER & SHROUDED HEADER\n"
         "─────────────────────────────────────────\n"
         "• M8 6-Pin IP67 Vollmetall-Einbaubuchse\n"
         "• Pod-Base Platine (36 x 20 mm PCB)\n"
         "• Integrierte Littelfuse SP3012 TVS-Matrix\n"
         "• 6-Pin Präzisions-Stiftleiste (Zentrisch)\n"
-        "  (Exakt auf Symmetrieachse Y=0, Z=0)\n"
+        "• PA12-Schutzkragen & Fangtrichter (1.2mm)\n"
+        "  (Vollständige Kapselung gegen Verbiegen)\n"
         "• Asymmetrische Poka-Yoke Führungsstege\n"
         "  (Links: 1.5 mm / Rechts: 2.0 mm Nut)"
     )
@@ -183,8 +187,8 @@ def render_xray_assembly(output_png):
         "WECHSELKASSETTE MIT FLACH-PLATINE (52x36mm)\n"
         "─────────────────────────────────────────\n"
         "• Horizontale 6-Pin Front-Buchsenleiste\n"
-        "• 45° Fangtrichter mit ±1.2mm Zentrierung\n"
-        "• Formschlüssiger Endanschlag (PA12)\n\n"
+        "• Gleitet formschlüssig in PA12-Schutzkragen\n"
+        "• 45° Fangtrichter mit ±1.2mm Selbstzentrierung\n\n"
         "KASSETTEN-TRÄGERPLATINE (35 x 25 mm PCB):\n"
         "• Liegt flach auf dem Kassettenboden\n"
         "• 500mA PTC-Sicherung & Grüne 5V Power-LED\n"
@@ -209,7 +213,7 @@ def render_exploded_view(output_png):
     # Exploded offsets along horizontal X-axis (from left to right):
     # 1. M8 Threaded Collar & Nut: X = -72..-56
     # 2. Pod Base PCB (ADPT: 36x20mm): X = -34..-32
-    # 3. Horizontal 6-Pin Pin Header: X = -22..-14
+    # 3. PA12 Integrated Shrouded Collar & 6-Pin Header: X = -22..-14
     # 4. Silicone Perimeter Gasket: X = -8..-6
     # 5. Removable Cartridge Shell with Poka-Yoke: X = +10..+56
     # 6. Horizontal 6-Pin Socket: X = +10..+16
@@ -224,11 +228,12 @@ def render_exploded_view(output_png):
     draw_box(ax, -34.0, -18.0, -10.0, 1.6, 36.0, 20.0, color='#059669', alpha=0.95, edgecolor='#10b981', linewidth=0.9)
     draw_box(ax, -32.4, 8.0, 2.0, 0.9, 3.2, 3.2, color='#0f172a', alpha=1.0, edgecolor='#64748b', linewidth=0.6) # SP3012
 
-    # 3. Horizontal 6-Pin Pin Header (Floating at X = -20 mm, Centered at Y=0, Z=0)
+    # 3. PA12 Shroud & 6-Pin Pin Header (Floating at X = -20 mm, Centered at Y=0, Z=0)
+    draw_box(ax, -20.0, -9.0, -2.5, 6.0, 18.0, 5.0, color='#0284c7', alpha=0.35, edgecolor='#38bdf8', linewidth=0.8)
     draw_box(ax, -20.0, -7.5, -1.25, 2.5, 15.0, 2.5, color='#0f172a', alpha=1.0, edgecolor='#334155', linewidth=0.6)
     pin_y_positions = np.linspace(-6.35, 6.35, 6)
     for py in pin_y_positions:
-        draw_cylinder(ax, x0=-17.5, y0=py, z0=0, radius=0.32, length=6.0, color='#fbbf24', alpha=1.0, axis='x')
+        draw_cylinder(ax, x0=-17.5, y0=py, z0=0, radius=0.32, length=5.0, color='#fbbf24', alpha=1.0, axis='x')
 
     # 4. Silicone Perimeter Gasket (Shore 40A at X = -8 mm)
     draw_box(ax, -8.0, -18.5, -8.5, 1.5, 37.0, 17.0, color='#06b6d4', alpha=0.75, edgecolor='#0891b2', linewidth=0.9)
@@ -272,14 +277,14 @@ def render_exploded_view(output_png):
         "    • M8 6-Pin IP67 A-Coded mit Rüttelsicherung\n\n"
         "[2] POD-BASE PLATINE (36 x 20 mm PCB)\n"
         "    • Direkt aufgelötete M8-Buchse & Littelfuse TVS\n\n"
-        "[3] 6-PIN PRÄZISIONS-STIFTLEISTE (ZENTRISCH)\n"
-        "    • Horizontale Goldkontakte (Y=0, Z=0)\n\n"
+        "[3] 6-PIN STIFTLEISTE MIT PA12-SCHUTZKRAGEN\n"
+        "    • 1.2mm PA12-Wandung & 45° Einlauftrichter\n\n"
         "[4] SHORE 40A SILIKON-STIRNFLANSCHDICHTUNG\n"
         "    • Hermetische Barriere gegen Feuchtigkeit & Staub\n\n"
         "[5] WECHSELKASSETTE MIT POKA-YOKE (52x36mm)\n"
         "    • Asymmetrische Führungsnuten (1.5mm / 2.0mm)\n\n"
         "[6] 6-PIN FRONT-BUCHSENLEISTE (ZENTRISCH)\n"
-        "    • 45° Fangtrichter zur exakten Selbstzentrierung\n\n"
+        "    • Gleitet saugend in PA12-Schutzkragen ein\n\n"
         "[7] KASSETTEN-TRÄGERPLATINE (35 x 25 mm PCB)\n"
         "    • Liegt flach am Boden: PTC, LED, DS2401, JST-SH\n\n"
         "[8] SENA / CARDO / OMM MODUL-BAURAUM (45 x 32 mm)\n"
