@@ -41,7 +41,7 @@
 			(property "Value" "ESP32-C3-WROOM-02" (at -15.24 -20.32 0) (effects (font (size 1.27 1.27)) (justify left)))
 			(property "Footprint" "RF_Module:ESP32-C3-WROOM-02" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
 			(property "LCSC" "C2934560" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
-			(symbol "ESP32_C3_0_1"
+			(symbol "ESP32-C3-WROOM-02_0_1"
 				(rectangle (start -15.24 17.78) (end 15.24 -20.32) (stroke (width 0.254) (type solid)) (fill (type background)))
 			)
 		)
@@ -55,7 +55,7 @@
 			(property "Value" "MAX-M10S" (at -10.16 -12.7 0) (effects (font (size 1.27 1.27)) (justify left)))
 			(property "Footprint" "RF_GPS:u-blox_MAX-M10S" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
 			(property "LCSC" "C2911220" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
-			(symbol "MAX_M10S_0_1"
+			(symbol "u-blox_MAX-M10S_0_1"
 				(rectangle (start -10.16 10.16) (end 10.16 -12.7) (stroke (width 0.254) (type solid)) (fill (type background)))
 			)
 		)
@@ -83,15 +83,12 @@
 			(property "Value" "M8_3PIN_SOCKET" (at -5.08 -8.89 0) (effects (font (size 1.27 1.27)) (justify left)))
 			(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
 			(property "LCSC" "C224376" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
-			(symbol "M8_0_1"
+			(symbol "M8_3Pin_0_1"
 				(rectangle (start -5.08 7.62) (end 5.08 -7.62) (stroke (width 0.254) (type solid)) (fill (type background)))
 			)
 		)
 	)
 
-	;; =========================================================================
-	;; Global Labels
-	;; =========================================================================
 	(global_label "POD3_VCC_5V" (shape input) (at 30.0 40.0 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "f0000000-0000-0000-0000-000000000002"))
 	(global_label "GND" (shape passive) (at 30.0 55.0 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "f0000000-0000-0000-0000-000000000003"))
 	(global_label "POD3_UART_TX" (shape output) (at 250.0 40.0 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "f0000000-0000-0000-0000-000000000004"))
@@ -99,10 +96,6 @@
 	(global_label "GNSS_1PPS" (shape output) (at 250.0 60.0 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "f0000000-0000-0000-0000-000000000006"))
 	(global_label "POD3_1WIRE_ID" (shape bidirectional) (at 250.0 70.0 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "f0000000-0000-0000-0000-000000000007"))
 
-	;; =========================================================================
-	;; Symbols Placement
-	;; =========================================================================
-	;; J1: M8 Connector
 	(symbol (lib_id "Connector:M8_3Pin") (at 45.0 70.0 0) (unit 1)
 		(in_bom yes) (on_board yes) (dnp no)
 		(uuid "f0000000-0000-0000-0000-000000000010")
@@ -113,7 +106,6 @@
 		(pin "3" (uuid "f0000000-0000-0000-0000-000000000013"))
 	)
 
-	;; U2: MAX-M10S GNSS Engine
 	(symbol (lib_id "RF_GPS:u-blox_MAX-M10S") (at 85.0 120.0 0) (unit 1)
 		(in_bom yes) (on_board yes) (dnp no)
 		(uuid "f0000000-0000-0000-0000-000000000020")
@@ -126,7 +118,6 @@
 		(pin "5" (uuid "f0000000-0000-0000-0000-000000000025"))
 	)
 
-	;; U1: ESP32-C3 Co-Processor
 	(symbol (lib_id "RF_Module:ESP32-C3-WROOM-02") (at 145.0 70.0 0) (unit 1)
 		(in_bom yes) (on_board yes) (dnp no)
 		(uuid "f0000000-0000-0000-0000-000000000030")
@@ -147,7 +138,6 @@
 		(pin "13" (uuid "f0000000-0000-0000-0000-000000000043"))
 	)
 
-	;; U3: SX1262 LoRa Transceiver
 	(symbol (lib_id "RF_Transceiver:SX1262") (at 210.0 120.0 0) (unit 1)
 		(in_bom yes) (on_board yes) (dnp no)
 		(uuid "f0000000-0000-0000-0000-000000000050")
@@ -162,17 +152,13 @@
 		(pin "7" (uuid "f0000000-0000-0000-0000-000000000057"))
 	)
 
-	;; Wires
-	;; UART bridge to Central Box
 	(wire (pts (xy 162.78 85.24) (xy 250.0 40.0)) (stroke (width 0) (type solid)))
 	(wire (pts (xy 162.78 80.16) (xy 250.0 50.0)) (stroke (width 0) (type solid)))
 
-	;; SPI to LoRa
 	(wire (pts (xy 162.78 64.92) (xy 197.3 122.54)) (stroke (width 0) (type solid)))
 	(wire (pts (xy 162.78 59.84) (xy 197.3 117.46)) (stroke (width 0) (type solid)))
 	(wire (pts (xy 162.78 54.76) (xy 197.3 112.38)) (stroke (width 0) (type solid)))
 
-	;; GNSS to ESP32-C3
 	(wire (pts (xy 97.7 122.54) (xy 127.22 75.08)) (stroke (width 0) (type solid)))
 	(wire (pts (xy 72.3 117.46) (xy 127.22 70.0)) (stroke (width 0) (type solid)))
 )

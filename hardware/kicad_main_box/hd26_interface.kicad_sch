@@ -36,15 +36,12 @@
 			(property "Value" "HD26_FEMALE" (at -12.7 -30.48 0) (effects (font (size 1.27 1.27)) (justify left)))
 			(property "Footprint" "Connector_Dsub:DSUB-26-HD_Female_Horizontal" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
 			(property "LCSC" "C2932311" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
-			(symbol "HD26_0_1"
+			(symbol "HD26_Female_0_1"
 				(rectangle (start -12.7 27.94) (end 12.7 -27.94) (stroke (width 0.254) (type solid)) (fill (type background)))
 			)
 		)
 	)
 
-	;; =========================================================================
-	;; Hierarchical Labels (Matching Parent Sheet Pins exactly)
-	;; =========================================================================
 	(hierarchical_label "POD1_VCC" (shape input) (at 30.0 40.0 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "e0000000-0000-0000-0000-000000000001"))
 	(hierarchical_label "POD1_GND" (shape input) (at 30.0 50.0 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "e0000000-0000-0000-0000-000000000002"))
 	(hierarchical_label "POD1_NF_P" (shape input) (at 30.0 60.0 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "e0000000-0000-0000-0000-000000000003"))
@@ -66,10 +63,6 @@
 	(hierarchical_label "POD3_PPS" (shape input) (at 30.0 210.0 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "e0000000-0000-0000-0000-000000000017"))
 	(hierarchical_label "POD3_1WIRE" (shape input) (at 30.0 220.0 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "e0000000-0000-0000-0000-000000000018"))
 
-	;; =========================================================================
-	;; Symbols Placement
-	;; =========================================================================
-	;; J1: HD26 High Density Female D-Sub
 	(symbol (lib_id "Connector:HD26_Female") (at 120.0 130.0 0) (unit 1)
 		(in_bom yes) (on_board yes) (dnp no)
 		(uuid "e0000000-0000-0000-0000-000000000020")
@@ -95,7 +88,6 @@
 		(pin "18" (uuid "e0000000-0000-0000-0000-000000000038"))
 	)
 
-	;; Wires
 	(wire (pts (xy 30.0 40.0) (xy 104.76 155.4)) (stroke (width 0) (type solid)))
 	(wire (pts (xy 30.0 50.0) (xy 104.76 152.86)) (stroke (width 0) (type solid)))
 	(wire (pts (xy 30.0 60.0) (xy 104.76 150.32)) (stroke (width 0) (type solid)))

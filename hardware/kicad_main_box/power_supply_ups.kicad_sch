@@ -65,7 +65,7 @@
 			(property "Value" "LM5164-Q1" (at -10.16 -8.89 0) (effects (font (size 1.27 1.27)) (justify left)))
 			(property "Footprint" "Package_SO:SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.41x3.3mm" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
 			(property "LCSC" "C2836263" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
-			(symbol "LM5164_0_1"
+			(symbol "LM5164-Q1_0_1"
 				(rectangle (start -10.16 7.62) (end 10.16 -10.16) (stroke (width 0.254) (type solid)) (fill (type background)))
 			)
 		)
@@ -85,9 +85,6 @@
 		)
 	)
 
-	;; =========================================================================
-	;; Hierarchical Labels
-	;; =========================================================================
 	(hierarchical_label "KL30_IN" (shape input) (at 30.0 50.0 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "b0000000-0000-0000-0000-000000000001"))
 	(hierarchical_label "KL15_IN" (shape input) (at 30.0 70.0 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "b0000000-0000-0000-0000-000000000002"))
 	(hierarchical_label "GND_PWR" (shape input) (at 30.0 90.0 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "b0000000-0000-0000-0000-000000000003"))
@@ -97,10 +94,6 @@
 	(hierarchical_label "VBAT_SENSE" (shape output) (at 220.0 90.0 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "b0000000-0000-0000-0000-000000000006"))
 	(hierarchical_label "VIGN_SENSE" (shape output) (at 220.0 110.0 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "b0000000-0000-0000-0000-000000000007"))
 
-	;; =========================================================================
-	;; Schematic Symbols Placement
-	;; =========================================================================
-	;; D1: Input TVS Diode
 	(symbol (lib_id "Device:D_TVS") (at 45.0 60.0 0) (unit 1)
 		(in_bom yes) (on_board yes) (dnp no)
 		(uuid "b0000000-0000-0000-0000-000000000010")
@@ -110,7 +103,6 @@
 		(pin "2" (uuid "b0000000-0000-0000-0000-000000000012"))
 	)
 
-	;; C1: Input Electrolytic Cap (100uF 50V)
 	(symbol (lib_id "Device:C_Small") (at 60.0 60.0 0) (unit 1)
 		(in_bom yes) (on_board yes) (dnp no)
 		(uuid "b0000000-0000-0000-0000-000000000020")
@@ -120,7 +112,6 @@
 		(pin "2" (uuid "b0000000-0000-0000-0000-000000000022"))
 	)
 
-	;; U1: LM5164-Q1 Step-Down Converter
 	(symbol (lib_id "Regulator_Switching:LM5164-Q1") (at 100.0 60.0 0) (unit 1)
 		(in_bom yes) (on_board yes) (dnp no)
 		(uuid "b0000000-0000-0000-0000-000000000030")
@@ -136,7 +127,6 @@
 		(pin "8" (uuid "b0000000-0000-0000-0000-000000000038"))
 	)
 
-	;; L1: Buck Inductor 47uH
 	(symbol (lib_id "Device:L_Small") (at 130.0 55.0 90) (unit 1)
 		(in_bom yes) (on_board yes) (dnp no)
 		(uuid "b0000000-0000-0000-0000-000000000040")
@@ -146,7 +136,6 @@
 		(pin "2" (uuid "b0000000-0000-0000-0000-000000000042"))
 	)
 
-	;; C2: Output Filter Cap (10uF 16V)
 	(symbol (lib_id "Device:C_Small") (at 150.0 60.0 0) (unit 1)
 		(in_bom yes) (on_board yes) (dnp no)
 		(uuid "b0000000-0000-0000-0000-000000000050")
@@ -156,7 +145,6 @@
 		(pin "2" (uuid "b0000000-0000-0000-0000-000000000052"))
 	)
 
-	;; U7: TPS7A0533 3.3V LDO
 	(symbol (lib_id "Regulator_Linear:TPS7A0533") (at 185.0 70.0 0) (unit 1)
 		(in_bom yes) (on_board yes) (dnp no)
 		(uuid "b0000000-0000-0000-0000-000000000060")
@@ -169,9 +157,6 @@
 		(pin "5" (uuid "b0000000-0000-0000-0000-000000000065"))
 	)
 
-	;; =========================================================================
-	;; Circuit Interconnecting Wires
-	;; =========================================================================
 	(wire (pts (xy 30.0 50.0) (xy 45.0 50.0)) (stroke (width 0) (type solid)))
 	(wire (pts (xy 45.0 50.0) (xy 45.0 57.46)) (stroke (width 0) (type solid)))
 	(wire (pts (xy 45.0 50.0) (xy 60.0 50.0)) (stroke (width 0) (type solid)))
@@ -179,19 +164,15 @@
 	(wire (pts (xy 60.0 50.0) (xy 87.3 50.0)) (stroke (width 0) (type solid)))
 	(wire (pts (xy 87.3 50.0) (xy 87.3 54.92)) (stroke (width 0) (type solid)))
 
-	;; Inductor to SW pin
 	(wire (pts (xy 112.7 55.0) (xy 127.46 55.0)) (stroke (width 0) (type solid)))
-	;; Inductor to 5V Output
 	(wire (pts (xy 132.54 55.0) (xy 150.0 55.0)) (stroke (width 0) (type solid)))
 	(wire (pts (xy 150.0 55.0) (xy 150.0 57.46)) (stroke (width 0) (type solid)))
 	(wire (pts (xy 150.0 55.0) (xy 174.84 55.0)) (stroke (width 0) (type solid)))
 	(wire (pts (xy 174.84 55.0) (xy 174.84 67.46)) (stroke (width 0) (type solid)))
 	(wire (pts (xy 150.0 50.0) (xy 220.0 50.0)) (stroke (width 0) (type solid)))
 
-	;; LDO 3.3V Output
 	(wire (pts (xy 195.16 67.46) (xy 220.0 70.0)) (stroke (width 0) (type solid)))
 
-	;; Ground wire
 	(wire (pts (xy 30.0 90.0) (xy 45.0 90.0)) (stroke (width 0) (type solid)))
 	(wire (pts (xy 45.0 62.54) (xy 45.0 90.0)) (stroke (width 0) (type solid)))
 	(wire (pts (xy 60.0 62.54) (xy 60.0 90.0)) (stroke (width 0) (type solid)))
@@ -199,7 +180,6 @@
 	(wire (pts (xy 150.0 62.54) (xy 150.0 90.0)) (stroke (width 0) (type solid)))
 	(wire (pts (xy 185.0 77.62) (xy 185.0 90.0)) (stroke (width 0) (type solid)))
 
-	;; Junctions
 	(junction (at 45.0 50.0) (diameter 0.9144) (color 0 0 0 0))
 	(junction (at 60.0 50.0) (diameter 0.9144) (color 0 0 0 0))
 	(junction (at 150.0 55.0) (diameter 0.9144) (color 0 0 0 0))

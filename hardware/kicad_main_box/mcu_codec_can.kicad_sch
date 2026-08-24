@@ -55,7 +55,7 @@
 			(property "Value" "ESP32-S3-WROOM-1-N16R8" (at -20.32 -25.4 0) (effects (font (size 1.27 1.27)) (justify left)))
 			(property "Footprint" "RF_Module:ESP32-S3-WROOM-1" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
 			(property "LCSC" "C2913200" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
-			(symbol "ESP32_S3_0_1"
+			(symbol "ESP32-S3-WROOM-1_0_1"
 				(rectangle (start -20.32 22.86) (end 20.32 -25.4) (stroke (width 0.254) (type solid)) (fill (type background)))
 			)
 		)
@@ -98,9 +98,6 @@
 		)
 	)
 
-	;; =========================================================================
-	;; Hierarchical Labels
-	;; =========================================================================
 	(hierarchical_label "VCC_3V3" (shape input) (at 30.0 40.0 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "c0000000-0000-0000-0000-000000000001"))
 	(hierarchical_label "VIGN_SENSE" (shape input) (at 30.0 55.0 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "c0000000-0000-0000-0000-000000000002"))
 	(hierarchical_label "VBAT_SENSE" (shape input) (at 30.0 70.0 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "c0000000-0000-0000-0000-000000000003"))
@@ -118,10 +115,6 @@
 	(hierarchical_label "AUDIO_OUT_P2" (shape output) (at 30.0 150.0 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "c0000000-0000-0000-0000-000000000013"))
 	(hierarchical_label "AUDIO_IN_P2" (shape input) (at 30.0 160.0 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "c0000000-0000-0000-0000-000000000014"))
 
-	;; =========================================================================
-	;; Symbols Placement
-	;; =========================================================================
-	;; U2: ESP32-S3 Main MCU
 	(symbol (lib_id "RF_Module:ESP32-S3-WROOM-1") (at 80.0 70.0 0) (unit 1)
 		(in_bom yes) (on_board yes) (dnp no)
 		(uuid "c0000000-0000-0000-0000-000000000020")
@@ -147,7 +140,6 @@
 		(pin "18" (uuid "c0000000-0000-0000-0000-000000000038"))
 	)
 
-	;; U3: ES8388 Audio Codec
 	(symbol (lib_id "Audio:ES8388") (at 170.0 70.0 0) (unit 1)
 		(in_bom yes) (on_board yes) (dnp no)
 		(uuid "c0000000-0000-0000-0000-000000000040")
@@ -168,7 +160,6 @@
 		(pin "13" (uuid "c0000000-0000-0000-0000-000000000053"))
 	)
 
-	;; U6: TCAN334G CAN Transceiver
 	(symbol (lib_id "Interface_CAN_LIN:TCAN334G") (at 210.0 140.0 0) (unit 1)
 		(in_bom yes) (on_board yes) (dnp no)
 		(uuid "c0000000-0000-0000-0000-000000000060")
@@ -182,21 +173,15 @@
 		(pin "6" (uuid "c0000000-0000-0000-0000-000000000066"))
 	)
 
-	;; =========================================================================
-	;; Interconnecting Wires
-	;; =========================================================================
-	;; I2S Bus between ESP32-S3 and ES8388
 	(wire (pts (xy 102.86 90.32) (xy 154.76 85.24)) (stroke (width 0) (type solid)))
 	(wire (pts (xy 102.86 85.24) (xy 154.76 80.16)) (stroke (width 0) (type solid)))
 	(wire (pts (xy 102.86 80.16) (xy 154.76 75.08)) (stroke (width 0) (type solid)))
 	(wire (pts (xy 102.86 75.08) (xy 154.76 70.0)) (stroke (width 0) (type solid)))
 	(wire (pts (xy 102.86 70.0) (xy 154.76 64.92)) (stroke (width 0) (type solid)))
 
-	;; CAN Bus lines
 	(wire (pts (xy 220.16 142.54) (xy 250.0 40.0)) (stroke (width 0) (type solid)))
 	(wire (pts (xy 220.16 145.08) (xy 250.0 50.0)) (stroke (width 0) (type solid)))
 
-	;; Audio I/O to Codec
 	(wire (pts (xy 185.24 85.24) (xy 210.0 85.24)) (stroke (width 0) (type solid)))
 	(wire (pts (xy 185.24 80.16) (xy 210.0 80.16)) (stroke (width 0) (type solid)))
 )

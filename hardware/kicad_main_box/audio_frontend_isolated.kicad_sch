@@ -20,7 +20,7 @@
 			(pin passive line (at 7.62 -2.54 180) (length 2.54) (name "SEC2" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27)))))
 			(property "Reference" "T" (at -5.08 5.08 0) (effects (font (size 1.27 1.27)) (justify left)))
 			(property "Value" "Bourns_LM_NP_1001" (at -5.08 -5.08 0) (effects (font (size 1.27 1.27)) (justify left)))
-			(symbol "Transformer_0_1"
+			(symbol "Transformer_1P_1S_0_1"
 				(rectangle (start -5.08 3.81) (end 5.08 -3.81) (stroke (width 0.254) (type solid)) (fill (type background)))
 			)
 		)
@@ -37,9 +37,6 @@
 		)
 	)
 
-	;; =========================================================================
-	;; Hierarchical Labels (Matching Parent Sheet Pins exactly)
-	;; =========================================================================
 	(hierarchical_label "AUDIO_OUT_P1" (shape input) (at 30.0 50.0 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "d0000000-0000-0000-0000-000000000001"))
 	(hierarchical_label "AUDIO_IN_P1" (shape output) (at 30.0 70.0 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "d0000000-0000-0000-0000-000000000002"))
 	(hierarchical_label "AUDIO_OUT_P2" (shape input) (at 30.0 90.0 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "d0000000-0000-0000-0000-000000000003"))
@@ -52,10 +49,6 @@
 	(hierarchical_label "POD1_OPTO" (shape output) (at 220.0 110.0 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "d0000000-0000-0000-0000-000000000009"))
 	(hierarchical_label "POD2_OPTO" (shape output) (at 220.0 125.0 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "d0000000-0000-0000-0000-000000000010"))
 
-	;; =========================================================================
-	;; Symbols Placement
-	;; =========================================================================
-	;; T1: Audio Transformer Port 1 Output
 	(symbol (lib_id "Device:Transformer_1P_1S") (at 120.0 50.0 0) (unit 1)
 		(in_bom yes) (on_board yes) (dnp no)
 		(uuid "d0000000-0000-0000-0000-000000000011")
@@ -67,7 +60,6 @@
 		(pin "4" (uuid "d0000000-0000-0000-0000-000000000015"))
 	)
 
-	;; T2: Audio Transformer Port 1 Input
 	(symbol (lib_id "Device:Transformer_1P_1S") (at 120.0 70.0 0) (unit 1)
 		(in_bom yes) (on_board yes) (dnp no)
 		(uuid "d0000000-0000-0000-0000-000000000021")
@@ -79,7 +71,6 @@
 		(pin "4" (uuid "d0000000-0000-0000-0000-000000000025"))
 	)
 
-	;; Q1: TLP222A PhotoMOS Opto Relay Port 1
 	(symbol (lib_id "Relay:TLP222A") (at 120.0 110.0 0) (unit 1)
 		(in_bom yes) (on_board yes) (dnp no)
 		(uuid "d0000000-0000-0000-0000-000000000031")
@@ -91,9 +82,6 @@
 		(pin "4" (uuid "d0000000-0000-0000-0000-000000000035"))
 	)
 
-	;; =========================================================================
-	;; Interconnecting Wires
-	;; =========================================================================
 	(wire (pts (xy 30.0 50.0) (xy 112.38 52.54)) (stroke (width 0) (type solid)))
 	(wire (pts (xy 127.62 52.54) (xy 220.0 50.0)) (stroke (width 0) (type solid)))
 	(wire (pts (xy 30.0 70.0) (xy 112.38 72.54)) (stroke (width 0) (type solid)))

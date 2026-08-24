@@ -31,7 +31,7 @@
 			(property "Value" "DS2401" (at -7.62 -8.89 0) (effects (font (size 1.27 1.27)) (justify left)))
 			(property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
 			(property "LCSC" "C2834570" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
-			(symbol "DS2401_0_1"
+			(symbol "DS2401P_0_1"
 				(rectangle (start -7.62 7.62) (end 7.62 -7.62) (stroke (width 0.254) (type solid)) (fill (type background)))
 			)
 		)
@@ -50,9 +50,6 @@
 		)
 	)
 
-	;; =========================================================================
-	;; Global Labels
-	;; =========================================================================
 	(global_label "POD_VCC" (shape input) (at 25.4 38.1 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "c0000000-0000-0000-0000-000000000002"))
 	(global_label "GND" (shape passive) (at 25.4 48.26 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "c0000000-0000-0000-0000-000000000003"))
 	(global_label "POD_1WIRE_ID" (shape bidirectional) (at 25.4 58.42 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "c0000000-0000-0000-0000-000000000004"))
@@ -60,10 +57,6 @@
 	(global_label "AUDIO_SPEAKER_OUT" (shape input) (at 180.0 48.26 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "c0000000-0000-0000-0000-000000000006"))
 	(global_label "PTT_OPTO_KEY" (shape bidirectional) (at 180.0 58.42 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "c0000000-0000-0000-0000-000000000007"))
 
-	;; =========================================================================
-	;; Symbols Placement
-	;; =========================================================================
-	;; J1: 6-Pin Pogo Contact Interface
 	(symbol (lib_id "Connector:Conn_01x06") (at 50.0 70.0 0) (unit 1)
 		(in_bom yes) (on_board yes) (dnp no)
 		(uuid "c0000000-0000-0000-0000-000000000010")
@@ -77,7 +70,6 @@
 		(pin "6" (uuid "c0000000-0000-0000-0000-000000000016"))
 	)
 
-	;; U1: DS2401 Silicon Serial ROM
 	(symbol (lib_id "Memory_EEPROM:DS2401P") (at 100.0 70.0 0) (unit 1)
 		(in_bom yes) (on_board yes) (dnp no)
 		(uuid "c0000000-0000-0000-0000-000000000020")
@@ -88,7 +80,6 @@
 		(pin "3" (uuid "c0000000-0000-0000-0000-000000000023"))
 	)
 
-	;; J2: Intercom Adapter Header
 	(symbol (lib_id "Connector:Conn_01x06") (at 150.0 70.0 0) (unit 1)
 		(in_bom yes) (on_board yes) (dnp no)
 		(uuid "c0000000-0000-0000-0000-000000000030")
@@ -102,7 +93,6 @@
 		(pin "6" (uuid "c0000000-0000-0000-0000-000000000036"))
 	)
 
-	;; Wires
 	(wire (pts (xy 42.38 71.27) (xy 89.84 70.0)) (stroke (width 0) (type solid)))
 	(wire (pts (xy 42.38 68.73) (xy 142.38 68.73)) (stroke (width 0) (type solid)))
 	(wire (pts (xy 42.38 66.19) (xy 142.38 66.19)) (stroke (width 0) (type solid)))
