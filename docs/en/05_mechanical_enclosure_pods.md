@@ -223,10 +223,12 @@ To holistically verify mechanical clearances, sealing boundaries, and electrical
 ![OpenMotorBridge 3D Exploded View](../../hardware/cad/openmotorbridge_pod_exploded_view.png)
 
 #### Mechanical Specifications & Tolerances:
-* **Outer Enclosure:** Makrolon 2805 Polycarbonate ($36 \times 36 \times 44\,\text{mm}$, wall thickness $2.5\,\text{mm}$ with $2.0\,\text{mm}$ corner chamfers).
-* **Guiding & Latching:** Asymmetrical dovetail guide rails (Poka-Yoke) prevent reversed cartridge insertion. A spring-loaded POM-C snap-lock latch securely locks the cartridge with $> 85\,\text{N}$ retention force.
-* **IP67 Sealing Plane:** The perimeter Shore 40A silicone gasket boot is pre-compressed by $0.6\,\text{mm}$ upon latching, hermetically sealing the internal chamber against high-pressure water jets and road dust.
-* **Electrical Contacting:** 6 gold-plated Mill-Max Pogo pins ($1.4\,\text{mm}$ working stroke, 60g preload) dynamically absorb road shock and engine vibrations up to $20\,\text{g}$.
+* **Outer Pod Enclosure:** Makrolon 2805 Polycarbonate / PA12 MJF ($68.0 \times 48.0 \times 34.0\,\text{mm}$, internal bay $64.0 \times 46.0 \times 23.5\,\text{mm}$).
+* **Removable Cartridge:** $54.0 \times 37.5 \times 17.0\,\text{mm}$ housing shell with POM-C snap-lock latch ($> 85\,\text{N}$ retention force), glove grip knurling, and PMMA status lightpipe.
+* **Integrated Sena Apex / Cardo OEM Inlay:** $45.0 \times 32.0 \times 6.5\,\text{mm}$ OEM bare PCB with Mesh 3.0 / Bluetooth dual chipsets, metal RF shielding cans, and U.FL coaxial antenna port.
+* **Cartridge Carrier PCB (`openmotorbridge_pod_cartridge`):** $35.0 \times 25.0 \times 1.2\,\text{mm}$ FR4 carrier with DS2401 1-Wire ID, right-angle low-profile JST-SH 1.0mm 6P flex connector, and 6 gold-plated ENIG pogo target pads.
+* **IP67 Sealing Plane:** Perimeter $55.0 \times 38.5\,\text{mm}$ Shore 40A silicone gasket boot pre-compressed by $0.6\,\text{mm}$ upon latching, hermetically sealing the internal chamber against high-pressure water jets and road dust.
+* **Pod Base PCB (`openmotorbridge_pod_base`):** $28.0 \times 28.0 \times 1.6\,\text{mm}$ PCB in pod mounting foot with 6 Mill-Max Pogo pins ($1.4\,\text{mm}$ stroke, 60g preload), Littelfuse SP3012 TVS array, and directly soldered M8 6-Pin IP67 PCB receptacle.
 
 ---
 

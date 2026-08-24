@@ -227,10 +227,12 @@ Zur ganzheitlichen Verifikation der Passungen, Dichtebenen und elektrischen Übe
 ![OpenMotorBridge 3D Explosionsansicht](../../hardware/cad/openmotorbridge_pod_exploded_view.png)
 
 #### Mechanische Spezifikationen & Passungen:
-* **Außenhülle:** Makrolon 2805 Polycarbonat ($36 \times 36 \times 44\,\text{mm}$, Wandstärke $2{,}5\,\text{mm}$ mit beidseitigen $2{,}0\,\text{mm}$ Eck-Fasen).
-* **Führung & Verriegelung:** Asymmetrische Schwalbenschwanz-Führungsnuten (Poka-Yoke) verhindern ein verkehrtes Einschieben der Kassette. Ein federbelasteter POM-C Schnappriegel arretiert die Kassette mit $> 85\,\text{N}$ Haltekraft.
-* **IP67-Dichtebene:** Der umlaufende Shore 40A Silikon-Formschuh wird beim Verriegeln um $0{,}6\,\text{mm}$ vorkomprimiert und dichtet die Kassettenkammer hermetisch gegen Strahlwasser und Staub ab.
-* **Elektrischer Übergang:** 6 vergoldete Mill-Max Pogo-Pins (Arbeitshub $1{,}4\,\text{mm}$, 60g Vorspannung) gleichen Fahrbahnvibrationen bis $20\,\text{g}$ dynamisch aus.
+* **Pod-Außengehäuse:** Makrolon 2805 Polycarbonat / PA12 MJF ($68{,}0 \times 48{,}0 \times 34{,}0\,\text{mm}$, Schacht-Innenmaß $64{,}0 \times 46{,}0 \times 23{,}5\,\text{mm}$).
+* **Wechselkassette:** $54{,}0 \times 37{,}5 \times 17{,}0\,\text{mm}$ Gehäuseschale mit POM-C Schnappriegel ($> 85\,\text{N}$ Haltekraft), Grifffläche für Motorradhandschuhe und PMMA-Statuslichtleiter.
+* **Integriertes Sena Apex / Cardo OEM-Inlay:** $45{,}0 \times 32{,}0 \times 6{,}5\,\text{mm}$ OEM-Hauptplatine mit Mesh 3.0 / Bluetooth Dual-Chipsets, HF-Schirmhauben und U.FL Koaxial-Antennenbuchse.
+* **Kassetten-Trägerplatine (`openmotorbridge_pod_cartridge`):** $35{,}0 \times 25{,}0 \times 1{,}2\,\text{mm}$ FR4-Adapter mit DS2401 1-Wire ID, abgewinkeltem JST-SH 1.0mm 6P Flex-Verbinder und 6 vergoldeten ENIG-Pogo-Zielkontaktpads.
+* **IP67-Dichtebene:** Der umlaufende $55{,}0 \times 38{,}5\,\text{mm}$ Shore 40A Silikon-Formschuh wird beim Einschieben um $0{,}6\,\text{mm}$ vorkomprimiert und dichtet die Kassettenkammer hermetisch gegen Strahlwasser und Staub ab.
+* **Pod-Bodenplatine (`openmotorbridge_pod_base`):** $28{,}0 \times 28{,}0 \times 1{,}6\,\text{mm}$ PCB im Gehäusefuß mit 6 Mill-Max Pogo-Pins ($1{,}4\,\text{mm}$ Hub, 60g Vorspannung), Littelfuse SP3012 TVS-Array und direkt aufgelöteter M8 6-Pin IP67 Einbaubuchse.
 
 ---
 
