@@ -313,9 +313,9 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "9a9cf9fb-a2b5-4efc-87db-8bab6b6a245c")
-		(at 117.5 74.5)
+		(at 117.5 74.5 180)
 		(property "Reference" "J2"
-			(at 0 0 0)
+			(at 0 0 180)
 			(layer "F.SilkS")
 			(uuid "c6fb4961-9825-48f9-956e-4cb9e5516ee1")
 			(effects
@@ -325,7 +325,7 @@
 			)
 		)
 		(property "Value" ""
-			(at 0 0 0)
+			(at 0 0 180)
 			(layer "F.Fab")
 			(uuid "9ed53052-2b1e-47dc-87bd-ec0305dcef36")
 			(effects
@@ -335,7 +335,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 0)
+			(at 0 0 180)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "806499f4-b028-4ce1-a66d-7bdabe9c397c")
@@ -346,7 +346,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 0)
+			(at 0 0 180)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "f2f89eb3-5464-4376-802a-8d0cff0be0a9")
@@ -626,7 +626,7 @@
 	(gr_text "POGO TARGET 6P (BOTTOM)"
 		(at 117.5 89 0)
 		(layer "F.SilkS")
-		(uuid "2e59d532-fef5-467c-b3d4-17d5ef1365fa")
+		(uuid "794214a9-bce6-469f-8e15-0612d01c0ba1")
 		(effects
 			(font
 				(size 0.7 0.7)
@@ -637,7 +637,7 @@
 	(gr_text "OEM INLAY (JST-SH 6P)"
 		(at 117.5 78.5 0)
 		(layer "F.SilkS")
-		(uuid "b59acb00-8c65-4896-b6e9-4978e02a4558")
+		(uuid "885d8c48-ca50-4e60-a228-ded125ffd227")
 		(effects
 			(font
 				(size 0.75 0.75)
@@ -648,7 +648,7 @@
 	(gr_text "DS2401 ID"
 		(at 117.5 85.5 0)
 		(layer "F.SilkS")
-		(uuid "558c57a6-5b96-4d4f-871c-ab63bb265213")
+		(uuid "869f135e-428d-4d18-8b92-f9501583c550")
 		(effects
 			(font
 				(size 0.75 0.75)

@@ -43,8 +43,8 @@ def auto_place_cartridge(pcb_path):
         # 6-Pin Mill-Max Target Pad Array (Bottom edge, low-profile)
         'J1': (X_center, Y0 + H - 3.5, 0.0),# (117.5, 91.5)
 
-        # 6-Pin Right-Angle Low-Profile Intercom Inlay Connector (Top edge, horizontal entry)
-        'J2': (X_center, Y0 + 4.5, 0.0),    # (117.5, 74.5)
+        # 6-Pin Right-Angle Low-Profile Intercom Inlay Connector (Top edge, opening facing outward/upward)
+        'J2': (X_center, Y0 + 4.5, 180.0),   # (117.5, 74.5) - Cable plugs in straight from top
 
         # Active ID Chip & Passives (Center)
         'U1': (X_center, Y_center, 0.0),     # (117.5, 82.5) DS2401 Silicon ROM
