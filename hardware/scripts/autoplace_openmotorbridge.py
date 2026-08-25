@@ -114,15 +114,15 @@ def auto_place_main_board(pcb_path):
         'U7': (166.0, 105.0, 0.0),            # Toshiba TLP222A PhotoMOS Optocoupler 1 (4.5 x 4.0 mm)
         'U8': (180.0, 105.0, 0.0),            # Toshiba TLP222A PhotoMOS Optocoupler 2 (4.5 x 4.0 mm)
 
-        # Zone 1A: Unified 4-Pin JST-PH Battery & NTC Connector on Left Short Edge
-        'J5': (120.0, 112.5, 90.0),           # JST-PH 4-Pin Shrouded (Rotated 90°: 4.5 x 10.0 mm on left edge)
+        # Zone 1A: Unified 4-Pin JST-PH Battery & NTC Connector on Front Rail (X=122.5..132.5)
+        'J5': (127.5, 118.5, 0.0),            # JST-PH 4-Pin Shrouded (Horizontal: 10.0 x 4.5 mm, 12mm below ESP32)
 
-        # Zone 1B: Front Connector Rail (Spaced comfortably along front edge)
-        'J3': (135.0, 118.5, 90.0),           # USB-C Service Port (Rotated 90°: 6.0 x 9.0 mm)
-        'J4': (143.5, 116.0, 0.0),            # 3-Pin RGB LED Header (Vertical in Y: 2.5 x 7.6 mm)
+        # Zone 1B: Front Service & Status Connectors
+        'J3': (136.5, 118.5, 90.0),           # USB-C Service Port (Rotated 90°: 6.0 x 9.0 mm)
+        'J4': (144.0, 116.0, 0.0),            # 3-Pin RGB LED Header (Vertical in Y: 2.5 x 7.6 mm)
 
-        # Zone 1C: Right Front Connector (Horizontal J1 - Pin 1 at X=152.0, body X=152..185 mm)
-        'J1': (152.0, 118.5, 90.0),           # 26-Port IDC Box Header 2x13 (Pin 1 at X=152, body spans X=152..185 mm)
+        # Zone 1C: Right Front Connector (Horizontal J1 - Pin 1 at X=152.0, body X=150..185 mm)
+        'J1': (152.0, 118.5, 90.0),           # 26-Port IDC Box Header 2x13 (Pin 1 at X=152, body spans X=150..185 mm)
     }
 
     existing_refs = {fp.GetReference(): fp for fp in board.Footprints()}

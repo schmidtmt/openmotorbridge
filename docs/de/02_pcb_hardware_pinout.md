@@ -66,24 +66,23 @@ Um gegenseitige Störungen zwischen der Schaltnetzteil-HF ($2{,}1\,\text{MHz}$),
 │ • TI LM5164 Buck  │ ZONE 3: DIGITAL CORE     │ ZONE 4B: GALV. ISOLATION│
 │ • TI BQ24075 USV  │ • ESP32-S3 Dual-Core     │ • 2x Bourns Übertrager  │
 │ • LC-PI-Filter    │ • 2.4 GHz PCB-Antenne    │ • 2x TLP222A PhotoMOS   │
-├───────────────────┼──────────────────────────┼─────────────────────────┤
-│ ZONE 1A: 4P AKKU  │ ZONE 1B: SERVICE & LED   │ ZONE 1C: SYSTEM I/O     │
-│ [J5: 4P JST-PH]   │ [J3: USB-C]   [J4: 3PLED]│ [J1: 26-POL IDC26]      │
-└───────────────────┴──────────────────────────┴─────────────────────────┘
+├───────────────────┴──────────────────────────┼─────────────────────────┤
+│ ZONE 1A: POWER, SERVICE & STATUS (LINKS)     │ ZONE 1B: SYSTEM I/O     │
+│ [J5: 4P AKKU+NTC]  [J3: USB-C]  [J4: 3P-LED] │ [J1: 26-POL IDC26]      │
+└──────────────────────────────────────────────┴─────────────────────────┘
 ```
 
-1. **Zone 1 (Vorderkante & Linke Flanke – 3 funktionale Stecker-Cluster):**
-   * **Zone 1A (Kurze linke Flanke – 4-Poliger JST-PH Akku- & Sensor-Hauptstecker):**
-     * `J5`: 4-Pin JST-PH Wannenstecker mit Rastnase ($4{,}5 \times 10{,}0\,\text{mm}$, $90^\circ$ gedreht) bei $(X = 120{,}0, Y = 112{,}5\,\text{mm})$:
+1. **Zone 1 (Vorderkante – 2 funktionale Stecker-Cluster):**
+   * **Zone 1A (Links/Mitte – Power, Service & Signalisierung mit großzügigen Abständen):**
+     * `J5`: 4-Pin JST-PH Wannenstecker mit Rastnase ($10{,}0 \times 4{,}5\,\text{mm}$, horizontal in X) bei $X = 127{,}5\,\text{mm}$:
        * Pin 1: `BAT+` (+3.7V / +4.2V 1S LiPo)
        * Pin 2: `BAT-` (`GND_PWR`)
-       * Pin 3: `NTC_JEITA` (10k NTC Temperaturüberwachung zu BQ24075 TS-Pin)
+       * Pin 3: `NTC_JEITA` (10k NTC Temperaturüberwachung)
        * Pin 4: `NTC_GND` (Sensor-Masse)
-       * **Vorteil:** Nur ein einziges, verpolsicheres 4-Draht-Kabel vom Akku-Zwischenboden nach unten!
-   * **Zone 1B (Vorderkante Links/Mitte – Service & Signalisierung mit maximalem Freiraum):**
-     * `J3`: Vertikale USB-C Service-Buchse ($6{,}0 \times 9{,}0\,\text{mm}$, $90^\circ$ gedreht) bei $X = 135{,}0\,\text{mm}$
-     * `J4`: 3-Pin RGB-LED-Anschluss ($2{,}5 \times 7{,}6\,\text{mm}$, vertikal in Y) bei $X = 143{,}5\,\text{mm}$ ($4{,}25\,\text{mm}$ zu `J3` und **$5{,}25\,\text{mm}$ reiner Freiraum zu `J1`**)
-   * **Zone 1C (Vorderkante Rechts – Galvanischer System-Hauptanschluss):**
+       * **Vorteil:** Liegt mit $> 12\,\text{mm}$ Abstand sicher unterhalb des ESP32-S3 und verhindert jede Kollision!
+     * `J3`: Vertikale USB-C Service-Buchse ($6{,}0 \times 9{,}0\,\text{mm}$, $90^\circ$ gedreht) bei $X = 136{,}5\,\text{mm}$ ($2{,}0\,\text{mm}$ Freiraum zu `J5`)
+     * `J4`: 3-Pin RGB-LED-Anschluss ($2{,}5 \times 7{,}6\,\text{mm}$, vertikal in Y) bei $X = 144{,}0\,\text{mm}$ ($3{,}25\,\text{mm}$ zu `J3` und **$4{,}25\,\text{mm}$ reiner Freiraum zu `J1`**)
+   * **Zone 1B (Rechts – Galvanischer System-Hauptanschluss):**
      * `J1`: 2x13 Pin IDC26 Wannenstecker ($33{,}0 \times 6{,}0\,\text{mm}$, horizontal in X) – Pin 1 bei $X = 152{,}0\,\text{mm}$, Gehäuse $X \in [150{,}0, 185{,}0\,\text{mm}]$ direkt unter `T1`/`T2` und `U7`/`U8`.
    * **10-mm-Einführkorridor:** Barrierefreier Steckzugang für alle Stecker ohne jegliche gegenseitige Behinderung.
 2. **Zone 2 (Linke Flanke oben – Automotive Power & USV):**

@@ -118,7 +118,7 @@ The upper tray forms the central functional module of the sandwich design: it co
     * Pin 2: `BAT-` (`GND_PWR`)
     * Pin 3: `NTC_JEITA` (10k NTC temperature monitoring)
     * Pin 4: `NTC_GND` (Sensor ground)
-  * The cable routes through a rounded $\varnothing\,5\,\text{mm}$ grommet in the left mid-baffle floor straight down to header `J5` on the left flank of the main PCB.
+  * The cable routes through a rounded $\varnothing\,5\,\text{mm}$ grommet in the left mid-baffle floor straight down to header `J5` on the front left edge of the main PCB (with $> 12\,\text{mm}$ clear safety margin to the ESP32-S3).
 
 ### 3.2 Pass-Through Specifications in Mid-Baffle
 1. **Ribbon Cable Pass-Through for Main Harness:**

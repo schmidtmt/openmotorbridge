@@ -121,7 +121,7 @@ Die Oberwanne bildet das mittlere Funktionsmodul des Sandwich-Aufbaus: Sie bünd
     * Pin 2: `BAT-` (`GND_PWR`)
     * Pin 3: `NTC_JEITA` (10k NTC Temperaturüberwachung)
     * Pin 4: `NTC_GND` (Sensor-Masse)
-  * Das Kabel führt durch eine abgerundete $\varnothing\,5\,\text{mm}$ Tülle im linken Zwischenboden direkt nach unten zur Buchse `J5` an der linken Flanke der Hauptplatine.
+  * Das Kabel führt durch eine abgerundete $\varnothing\,5\,\text{mm}$ Tülle im linken Zwischenboden direkt nach unten zur Buchse `J5` an der linken Vorderkante der Hauptplatine (mit $> 12\,\text{mm}$ Sicherheitsabstand zum ESP32-S3).
 
 ### 3.2 Spezifikation der Zwischenboden-Durchführungen
 1. **Flachbandkabel-Durchführung für Haupt-Kabelbaum:**
