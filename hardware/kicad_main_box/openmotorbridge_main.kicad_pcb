@@ -273,82 +273,6 @@
 			)
 		)
 	)
-	(footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical"
-		(layer "F.Cu")
-		(uuid "2ce32ee0-4226-4a7c-9200-2829431b98e5")
-		(at 127.50 118.50)
-		(property "Reference" "J6"
-			(at 0 0 0)
-			(layer "F.SilkS")
-			(uuid "f42f8431-2ca9-4ec3-b42b-85d5c6b66d87")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "NTC_10K_JEITA"
-			(at 0 0 0)
-			(layer "F.Fab")
-			(uuid "1560e067-96bb-4b6a-9978-fb315ef88c57")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "1c8aa26b-dca4-450b-9151-059b60698359")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "b5cb9894-aef1-409d-9cdd-53b02dab5271")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(duplicate_pad_numbers_are_jumpers no)
-		(pad "1" thru_hole circle
-			(at 0 0)
-			(size 1.7 1.7)
-			(drill 1)
-			(layers "*.Cu")
-			(remove_unused_layers no)
-			(uuid "89a06074-5780-4b91-bcc4-049bb24771d5")
-		)
-		(pad "2" thru_hole circle
-			(at 2.54 0)
-			(size 1.7 1.7)
-			(drill 1)
-			(layers "*.Cu")
-			(remove_unused_layers no)
-			(uuid "5047303a-76fc-4bae-959a-2fda734f845c")
-		)
-		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x02_P2.54mm_Vertical.step"
-			(offset
-				(xyz 0 0 0)
-			)
-			(scale
-				(xyz 1 1 1)
-			)
-			(rotate
-				(xyz 0 0 0)
-			)
-		)
-	)
 	(footprint "MountingHole:MountingHole_3.2mm_M3_Pad_Via"
 		(layer "F.Cu")
 		(uuid "2f935b36-c40e-44ba-9ed3-a43e0682fe3d")
@@ -1912,7 +1836,7 @@
 	(footprint "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "c0c5be66-b62e-4345-af69-7c967c2cb1d6")
-		(at 144.00 116.00)
+		(at 143.50 116.00)
 		(property "Reference" "J4"
 			(at 0 0 0)
 			(layer "F.SilkS")

@@ -102,42 +102,49 @@ Die Oberwanne bildet das mittlere Funktionsmodul des Sandwich-Aufbaus: Sie bünd
 │  │ 1. AKKU-AUFNAHMEWANNE   │  │ 2. Flachbandkabel-Schlitz│  │
 │  │    (52 x 36 x 6.5 mm)   │  │    (38,0 x 6,0 mm, R1,5) │  │
 │  │    mit EPDM-Spannband   │  │    führt zu J1 auf PCB   │  │
-│  └─────────────────────────┘  └──────────────────────────┘  │
+│  │    [4P JST-PH Tülle]    │  └──────────────────────────┘  │
+│  └─────────────────────────┘                                │
 │                                                             │
 │  [Slot 1]              [Slot 2]              [Slot 3]       │
 │  ◄──────── 4x Interne Druckausgleichsschlitze ─────────────►│
 ├─────────────────────────────────────────────────────────────┤
-│  STIRNWAND: [ HD26 Flansch ]   [ USB-C Port ]   [ RGB-LED ] │
+│  STIRNWAND: [ USB-C Port ]   [ RGB-LED ]   [ HD26 Flansch ] │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### 3.1 1S LiPo-Akkuaufnahme & EPDM-Spannband-Fixierung (Auf Zwischenboden)
+### 3.1 1S LiPo-Akkuaufnahme & 4-Poliger JST-PH Anschluss (Auf Zwischenboden)
 * **Passgenaue Aufnahmewanne ($52{,}0 \times 36{,}0 \times 6{,}5\,\text{mm}$):** Auf der Oberseite des Zwischenbodens angeformte Wanne, ausgekleidet mit $1{,}0\,\text{mm}$ EPDM-Moosgummi zur Stoßdämpfung.
 * **Elastisches EPDM-Gummispannband (Shore 50A, $10\,\text{mm}$ breit):** Spannt die Akkuzelle quer über die Wanne. Die Endösen klinken werkzeuglos in zwei Hinterschnitt-Rasthaken der Oberwannen-Seitenwände ein. Der Akku bleibt damit vibrationsfest und spielfrei fixiert, kann aber bei Wartungsarbeiten werkzeuglos getauscht werden.
-* **Integrierter NTC-Temperatursensor:** Im Zwischenboden unter der Zelle eingebettet für die BQ24075 JEITA-Ladeüberwachung.
+* **Kombiniertes 4-Draht-Kabel (JST-PH 2.0 mm Wannenstecker):** 
+  * Der Akku und der integrierte NTC-Sensor sind über einen einzigen, verpolsicheren **4-Pin JST-PH Stecker mit Verriegelungsnase** (`J5`) angeschlossen:
+    * Pin 1: `BAT+` (+3.7V / +4.2V 1S LiPo)
+    * Pin 2: `BAT-` (`GND_PWR`)
+    * Pin 3: `NTC_JEITA` (10k NTC Temperaturüberwachung)
+    * Pin 4: `NTC_GND` (Sensor-Masse)
+  * Das Kabel führt durch eine abgerundete $\varnothing\,5\,\text{mm}$ Tülle im linken Zwischenboden direkt nach unten zur Buchse `J5` an der linken Flanke der Hauptplatine.
 
 ### 3.2 Spezifikation der Zwischenboden-Durchführungen
 1. **Flachbandkabel-Durchführung für Haupt-Kabelbaum:**
    * **Abmessungen:** $38{,}0 \times 6{,}0\,\text{mm}$ mit beidseitig $R=1{,}5\,\text{mm}$ Kantenverrundung.
-   * **Position:** Liegt fluchtend direkt über der 2x13 Wannenbuchse `J1` auf der Hauptplatine.
+   * **Position:** Liegt auf der rechten Seite fluchtend direkt über der 2x13 Wannenbuchse `J1` auf der Hauptplatine.
    * **Kabelführung:** Das $45\,\text{mm}$ lange 26-polige Flachbandkabel führt vom stirnseitigen HD26-Flansch in der Oberwanne durch diesen Schlitz nach unten zur Hauptplatine.
 2. **Labyrinth-Druckausgleichsschlitze:**
    * 4x Belüftungsschlitze ($15{,}0 \times 2{,}0\,\text{mm}$) verbinden den unteren Elektronikraum mit dem oberen Raum und der ePTFE-Membran im Deckel.
 
 ---
 
-## 4. Stirnseitige Anschlüsse & Anzeige in der Oberwanne (HD26, USB-C & RGB-LED)
+## 4. Stirnseitige Anschlüsse & Anzeige in der Oberwanne (USB-C, RGB-LED & HD26)
 
 Alle drei Interaktions- und Anschlusselemente befinden sich kompakt und geschützt nebeneinander an der **vorderen Stirnwand der Oberwanne**:
 
 ```
                   VORDERE STIRNWAND DER OBERWANNE
 ┌─────────────────────────────────────────────────────────────┐
-│ ┌──────────────────────┐      ┌────────────┐     ┌────────┐ │
-│ │ 1. HD26 D-Sub Flansch│      │ 2. USB-C   │     │ 3. RGB │ │
-│ │    (Kabelbaum-Buchse)│      │    Service │     │    LED │ │
-│ │    2x M3 Jackscrews  │      │    Alukappe│     │    Ø3mm│ │
-│ └──────────────────────┘      └────────────┘     └────────┘ │
+│ ┌────────────┐     ┌────────┐      ┌──────────────────────┐ │
+│ │ 1. USB-C   │     │ 2. RGB │      │ 3. HD26 D-Sub Flansch│ │
+│ │    Service │     │    LED │      │    (Kabelbaum-Buchse)│ │
+│ │    Alukappe│     │    Ø3mm│      │    2x M3 Jackscrews  │ │
+│ └────────────┘     └────────┘      └──────────────────────┘ │
 └─────────────────────────────────────────────────────────────┘
 ```
 

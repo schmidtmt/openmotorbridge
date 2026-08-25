@@ -67,18 +67,22 @@ To completely eliminate coupling between switching power supply harmonics ($2.1\
 │ • TI BQ24075 UPS  │ • ESP32-S3 Dual-Core     │ • 2x Bourns Transformers│
 │ • LC-PI-Filter    │ • 2.4 GHz PCB Antenna    │ • 2x TLP222A PhotoMOS   │
 ├───────────────────┼──────────────────────────┼─────────────────────────┤
-│ ZONE 1A: BATTERY  │ ZONE 1B: SERVICE & LED   │ ZONE 1C: SYSTEM I/O     │
-│ [J5: BAT 2P LEFT] │ [J6: NTC]  [J3]  [J4:LED]│ [J1: 26-PIN IDC26]      │
+│ ZONE 1A: 4P BAT   │ ZONE 1B: SERVICE & LED   │ ZONE 1C: SYSTEM I/O     │
+│ [J5: 4P JST-PH]   │ [J3: USB-C]   [J4: 3PLED]│ [J1: 26-PIN IDC26]      │
 └───────────────────┴──────────────────────────┴─────────────────────────┘
 ```
 
-1. **Zone 1 (Front & Left Edge – 3 Dedicated Functional Connector Clusters):**
-   * **Zone 1A (Short Left Flank – LiPo Battery Power Input):**
-     * `J5`: 2-Pin JST-PH battery socket ($4.5 \times 6.0\,\text{mm}$, rotated $90^\circ$) on the left PCB flank at $(X = 120.0, Y = 112.0\,\text{mm})$ – ideal, direct vertical lead from battery on mid-baffle.
+1. **Zone 1 (Front & Left Flank – 3 Dedicated Functional Connector Clusters):**
+   * **Zone 1A (Short Left Flank – Unified 4-Pin JST-PH Battery & Sensor Shrouded Header):**
+     * `J5`: 4-Pin JST-PH shrouded header with locking ramp ($4.5 \times 10.0\,\text{mm}$, rotated $90^\circ$) at $(X = 120.0, Y = 112.5\,\text{mm})$:
+       * Pin 1: `BAT+` (+3.7V / +4.2V 1S LiPo)
+       * Pin 2: `BAT-` (`GND_PWR`)
+       * Pin 3: `NTC_JEITA` (10k NTC temperature monitoring to BQ24075 TS pin)
+       * Pin 4: `NTC_GND` (Sensor ground)
+       * **Advantage:** A single, polarized 4-wire pigtail from the upper battery compartment down to the board!
    * **Zone 1B (Front Edge Left/Center – Service & Signaling with generous air gaps):**
-     * `J6`: 2-Pin micro header for battery NTC sensor ($2.5 \times 5.0\,\text{mm}$, vertical in Y) at $X = 127.5\,\text{mm}$
-     * `J3`: Vertical USB-C service socket ($6.0 \times 9.0\,\text{mm}$, rotated $90^\circ$) at $X = 136.5\,\text{mm}$ ($4.75\,\text{mm}$ clearance to `J6`)
-     * `J4`: 3-Pin RGB LED header ($2.5 \times 7.6\,\text{mm}$, vertical in Y) at $X = 144.0\,\text{mm}$ ($3.25\,\text{mm}$ to `J3` and **$4.75\,\text{mm}$ clean clearance to `J1`**)
+     * `J3`: Vertical USB-C service socket ($6.0 \times 9.0\,\text{mm}$, rotated $90^\circ$) at $X = 135.0\,\text{mm}$
+     * `J4`: 3-Pin RGB LED header ($2.5 \times 7.6\,\text{mm}$, vertical in Y) at $X = 143.5\,\text{mm}$ ($4.25\,\text{mm}$ to `J3` and **$5.25\,\text{mm}$ clean clearance to `J1`**)
    * **Zone 1C (Front Edge Right – Galvanic Main System Header):**
      * `J1`: 2x13 Pin IDC26 box header ($33.0 \times 6.0\,\text{mm}$, horizontal in X) – Pin 1 at $X = 152.0\,\text{mm}$, body $X \in [150.0, 185.0\,\text{mm}]$ directly beneath `T1`/`T2` and `U7`/`U8`.
    * **10-mm Insertion Keep-Out:** Dedicated mating space preventing mechanical collisions.

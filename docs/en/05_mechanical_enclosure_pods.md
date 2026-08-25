@@ -96,48 +96,52 @@ The upper tray forms the central functional module of the sandwich design: it co
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                 UPPER TRAY (Top View onto Mid-Baffle)       │
+│                 UPPER TRAY (Top-Down on Mid-Baffle)         │
 │                                                             │
 │  ┌─────────────────────────┐  ┌──────────────────────────┐  │
 │  │ 1. BATTERY CRADLE       │  │ 2. Ribbon Cable Slot     │  │
 │  │    (52 x 36 x 6.5 mm)   │  │    (38.0 x 6.0 mm, R1.5) │  │
 │  │    with EPDM Strap      │  │    leads to J1 on PCB    │  │
-│  └─────────────────────────┘  └──────────────────────────┘  │
+│  │    [4P JST-PH Grommet]  │  └──────────────────────────┘  │
+│  └─────────────────────────┘                                │
 │                                                             │
-│  [Slot 1]              [Slot 2]              [Slot 3]       │
-│  ◄──────── 4x Internal Pressure Equalization Slots ────────►│
-├─────────────────────────────────────────────────────────────┤
-│  FRONT FACE: [ HD26 Flange ]   [ USB-C Port ]   [ RGB-LED ] │
+│  FRONT WALL: [ USB-C Port ]   [ RGB-LED ]   [ HD26 Flange ] │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### 3.1 1S LiPo Battery Cradle & EPDM Strap Retention (On Mid-Baffle)
+### 3.1 1S LiPo Battery Cradle & 4-Pin JST-PH Cable (On Mid-Baffle)
 * **Form-Fit Battery Cradle ($52.0 \times 36.0 \times 6.5\,\text{mm}$):** Molded directly on top of the mid-baffle, lined with a $1.0\,\text{mm}$ EPDM closed-cell foam pad for shock absorption.
 * **Elastic EPDM Rubber Retention Strap (Shore 50A, $10\,\text{mm}$ wide):** Spans across the battery pack. End eyelets snap tool-lessly into two undercut anchor hooks in the upper tray side walls. The battery remains securely locked in place and vibration-free.
-* **Integrated NTC Temperature Sensor:** Embedded in the mid-baffle floor beneath the battery for BQ24075 JEITA charge monitoring.
+* **Combined 4-Wire Cable (JST-PH 2.0 mm Shrouded Connector):**
+  * Battery and integrated NTC thermistor connect via a single polarized **4-Pin JST-PH shrouded header with locking ramp** (`J5`):
+    * Pin 1: `BAT+` (+3.7V / +4.2V 1S LiPo)
+    * Pin 2: `BAT-` (`GND_PWR`)
+    * Pin 3: `NTC_JEITA` (10k NTC temperature monitoring)
+    * Pin 4: `NTC_GND` (Sensor ground)
+  * The cable routes through a rounded $\varnothing\,5\,\text{mm}$ grommet in the left mid-baffle floor straight down to header `J5` on the left flank of the main PCB.
 
 ### 3.2 Pass-Through Specifications in Mid-Baffle
 1. **Ribbon Cable Pass-Through for Main Harness:**
    * **Dimensions:** $38.0 \times 6.0\,\text{mm}$ with $R=1.5\,\text{mm}$ edge chamfer on top and bottom faces.
-   * **Position:** Aligned directly above the 2x13 box header `J1` on the main PCB.
+   * **Position:** Located on the right side directly above the 2x13 box header `J1` on the main PCB.
    * **Routing:** The $45\,\text{mm}$ flexible 26-conductor ribbon cable runs from the HD26 wall flange in the upper tray through this slot down to header `J1`.
 2. **Labyrinth Pressure Equalization & Venting Slots:**
    * 4x Ventilation slots ($15.0 \times 2.0\,\text{mm}$) allow unimpeded airflow between the lower PCB chamber and the upper chamber / ePTFE vent in the lid.
 
 ---
 
-## 4. Front Panel Interfaces in Upper Tray (HD26, USB-C & RGB-LED)
+## 4. Front Panel Interfaces in Upper Tray (USB-C, RGB-LED & HD26)
 
 All three physical interface and display elements are co-located in the **front face of the upper tray**:
 
 ```
-                     FRONT FACE OF UPPER TRAY
+                  FRONT WALL OF UPPER TRAY
 ┌─────────────────────────────────────────────────────────────┐
-│ ┌──────────────────────┐      ┌────────────┐     ┌────────┐ │
-│ │ 1. HD26 D-Sub Flange │      │ 2. USB-C   │     │ 3. RGB │ │
-│ │    (Harness Socket)  │      │    Service │     │    LED │ │
-│ │    2x M3 Jackscrews  │      │    Alu Cap │     │    Ø3mm│ │
-│ └──────────────────────┘      └────────────┘     └────────┘ │
+│ ┌────────────┐     ┌────────┐      ┌──────────────────────┐ │
+│ │ 1. USB-C   │     │ 2. RGB │      │ 3. HD26 D-Sub Flange │ │
+│ │    Service │     │    LED │      │    (Main Harness)    │ │
+│ │    Alu Cap │     │    Ø3mm│      │    2x M3 Jackscrews  │ │
+│ └────────────┘     └────────┘      └──────────────────────┘ │
 └─────────────────────────────────────────────────────────────┘
 ```
 
