@@ -2150,73 +2150,104 @@
 		(duplicate_pad_numbers_are_jumpers no)
 		(embedded_fonts no)
 	)
-	(footprint ""
+	(footprint "Connector_JST:JST_PH_B4B-PH-K_1x04_P2.00mm_Vertical"
 		(layer "F.Cu")
-		(uuid "d27843f2-3746-43ad-825d-fc2781c72fe2")
-		(at 126.50 118.50)
+		(uuid "5ad200d7-21a4-4a25-b461-9da781c81cf5")
+		(at 120.00 112.50 90.0)
 		(property "Reference" "J5"
-			(at 0 0 0)
+			(at 0 -2.5 90)
 			(layer "F.SilkS")
 			(uuid "455b8455-fb33-4665-962a-123957ba39d3")
 			(effects
 				(font
-					(size 1.27 1.27)
+					(size 1 1)
+					(thickness 0.15)
 				)
 			)
 		)
-		(property "Value" "BAT_LIPO_3V7"
-			(at 0 0 0)
+		(property "Value" "JST_PH_4P_BAT_NTC"
+			(at 3 4.5 90)
 			(layer "F.Fab")
 			(uuid "4d90c08b-0ebe-4bb9-9000-2e83cf3889ea")
 			(effects
 				(font
-					(size 1.27 1.27)
+					(size 1 1)
+					(thickness 0.15)
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.jst-mfg.com/product/pdf/eng/ePH.pdf"
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "632590dd-f682-4b11-8bc1-a7b8b4df27c9")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
 		)
-		(property "Description" ""
+		(property "Description" "JST PH series connector, 4-pin vertical shrouded header (BAT+, BAT-, NTC, GND)"
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "9c616212-f198-468e-9535-a419aa424146")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
 		)
-		(duplicate_pad_numbers_are_jumpers no)
-		(pad "1" thru_hole circle
-			(at 0 0)
+		(fp_line
+			(start -2.0 -2.25)
+			(end 8.0 -2.25)
+			(stroke (width 0.15) (type solid))
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 8.0 -2.25)
+			(end 8.0 2.25)
+			(stroke (width 0.15) (type solid))
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 8.0 2.25)
+			(end -2.0 2.25)
+			(stroke (width 0.15) (type solid))
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start -2.0 2.25)
+			(end -2.0 -2.25)
+			(stroke (width 0.15) (type solid))
+			(layer "F.SilkS")
+		)
+		(pad "1" thru_hole rect
+			(at 0 0 90)
 			(size 1.7 1.7)
-			(drill 1)
-			(layers "*.Cu")
+			(drill 0.8)
+			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
 			(uuid "7dc9c955-a537-477d-8bbe-5b07a1b57715")
 		)
 		(pad "2" thru_hole circle
-			(at 2.54 0)
+			(at 2.0 0 90)
 			(size 1.7 1.7)
-			(drill 1)
-			(layers "*.Cu")
+			(drill 0.8)
+			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
 			(uuid "05603b09-be61-4e79-b73d-643a5795a41e")
 		)
+		(pad "3" thru_hole circle
+			(at 4.0 0 90)
+			(size 1.7 1.7)
+			(drill 0.8)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+			(uuid "2ce32ee0-4226-4a7c-9200-2829431b98e5")
+		)
+		(pad "4" thru_hole circle
+			(at 6.0 0 90)
+			(size 1.7 1.7)
+			(drill 0.8)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+			(uuid "a1b2c3d4-e5f6-47a8-b901-c2d3e4f5a6b7")
+		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Connector_JST.3dshapes/JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical.step"
+		(model "${KICAD10_3DMODEL_DIR}/Connector_JST.3dshapes/JST_PH_B4B-PH-K_1x04_P2.00mm_Vertical.step"
 			(offset
-				(xyz 0 0 0)
+				(xyz 3 0 0)
 			)
 			(scale
 				(xyz 1 1 1)
