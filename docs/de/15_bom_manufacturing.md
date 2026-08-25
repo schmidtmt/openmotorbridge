@@ -67,7 +67,7 @@ Vollstaendige Bauteilliste (Bill of Materials) und Fertigungsspezifikation fuer 
 * **PCB-Entkopplung:** 4x NBR-O-Ringe (3.0 mm Innendurchmesser, 1.0 mm Schnurstaerke) zwischen Gehaeusedomen und PCB-Unterseite.
 * **Schraubensicherung:** M2.5 Platinschrauben mit Anzugsmoment $0{,}35\,\text{Nm}$ und mittelfestem Sicherungslack (*Loctite 243* blau).
 * **Bauteil-Underfill:** Bourns LM-NP-1001 Uebertrager-Ecken mit elastischem Silikonkleber (*Dow Corning 732* / *Dowsil 3145*) am PCB gesichert.
-* **Pufferakku-Fixierung:** Vollflaechiges Acrylat-Schaum-Klebeband (*3M VHB 4910*, 1.0 mm Dicke) in der Oberwanne.
+* **Pufferakku-Fixierung:** $1{,}0\,\text{mm}$ Dämpfungspolster (*3M VHB 4910* / EPDM) und elastisches EPDM-Gummispannband (Shore 50A) in der Oberwanne auf dem Zwischenboden.
 
 ### 4.3 CPL-Ausrichtung & Gehaeuse
 - **CPL-Rotationsabgleich:** Bei der automatisierten Bestueckung ist auf die Pin-1-Ausrichtung der Bourns-Uebertrager (T1, T2), Optokoppler (OC1, OC2) und der QFN-ICs (ES8388, SX1262) zu achten.

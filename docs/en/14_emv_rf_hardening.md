@@ -50,4 +50,4 @@ The following components and contact surfaces must **not** be coated:
 * **Threadlocking:** All M2.5 PCB mounting screws are tightened to $0.35\,\text{Nm}$ and secured with medium-strength threadlocker (*Loctite 243* blue).
 * **Component Bonding (Underfill / RTV Silicone):**
   * **Bourns LM-NP-1001 Transformers:** Corners are stabilized with flexible RTV silicone (*Dow Corning 732* / *Dowsil 3145*) to prevent solder joint fatigue.
-  * **Buffer Battery:** Full-surface bonding inside upper case with $1.0\,\text{mm}$ vibration-absorbing acrylic foam tape (*3M VHB 4910*).
+  * **Buffer Battery:** Retention in upper tray on top of mid-baffle with $1.0\,\text{mm}$ vibration-absorbing foam cushion (*3M VHB 4910* / EPDM) and elastic EPDM rubber strap (Shore 50A).

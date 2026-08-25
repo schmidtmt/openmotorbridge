@@ -50,4 +50,4 @@ Folgende Bauteile und Kontaktflaechen duerfen **nicht** beschichtet werden:
 * **Schraubensicherung:** Alle PCB-Befestigungsschrauben (M2,5) werden mit einem Drehmoment von $0{,}35\,\text{Nm}$ angezogen und mit mittelfestem Sicherungslack (blau, *Loctite 243*) gesichert.
 * **Bauteilfixierung (Underfill / RTV-Silikon):**
   * **Bourns LM-NP-1001 Uebertrager:** Ecken werden mit elastischem Silikonkleber (*Dow Corning 732* / *Dowsil 3145*) gegen Rissbildung an SMD-Loetstellen gesichert.
-  * **Pufferakku:** Vollflaechige Fixierung in der Oberwanne mit vibrationsdaempfendem $1{,}0\,\text{mm}$ Acrylat-Schaumklebeband (*3M VHB 4910*).
+  * **Pufferakku:** Fixierung in der Oberwanne auf dem Zwischenboden mit vibrationsdämpfendem $1{,}0\,\text{mm}$ Schaumpolster (*3M VHB 4910* / EPDM) und elastischem EPDM-Gummispannband (Shore 50A).

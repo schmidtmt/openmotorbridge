@@ -67,7 +67,7 @@ Complete component list and manufacturing specifications for SMT pick-and-place 
 * **PCB Decoupling:** 4x NBR O-rings (3.0 mm ID, 1.0 mm cross section) between enclosure bosses and PCB bottom.
 * **Screw Locking:** M2.5 board screws torqued to $0.35\,\text{Nm}$ with medium-strength threadlocker (*Loctite 243* blue).
 * **Component Underfill:** Bourns LM-NP-1001 transformer corners bonded to PCB with flexible silicone adhesive (*Dow Corning 732* / *Dowsil 3145*).
-* **Battery Bonding:** Full-surface acrylate foam adhesive tape (*3M VHB 4910*, 1.0 mm thickness) in top tray.
+* **Battery Retention:** $1.0\,\text{mm}$ foam cushion (*3M VHB 4910* / EPDM) and elastic EPDM retention strap (Shore 50A) in upper tray on top of mid-baffle.
 
 ### 4.3 CPL Alignment & Enclosure
 - **CPL Rotation Verification:** Pay close attention to pin 1 orientation for the Bourns transformers (T1, T2), optocouplers (OC1, OC2), and QFN packages (ES8388, SX1262) in the CPL file.
