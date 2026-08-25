@@ -387,13 +387,26 @@ Um die Wärmeübertragungsfläche drastisch zu vergrößern und gleichzeitig den
 5. **100 % Funk-Neutralität:**
    * Da die Schienen rein seitlich und unterhalb des oberen $180^\circ$-Halbraums liegen, bleibt das Antennenfeld für GNSS, LoRa und Wi-Fi nach oben und horizontal völlig frei. Gleichzeitig schirmen die Seitenbleche die Audio- und Digital-Signale gegen seitliche Zünd- und Generator-Störfelder ab.
 
----
+### 5.7 IP67 Blind- / Leerkassette (`Pod_Dummy_Cartridge_IP67.stl`)
 
-### 5.7 IP67 Blind- / Leerkassette (Dummy Cartridge)
-* **Verwendung bei Teilbestückung:** Wird ein Pod-Schacht temporär nicht bestückt (z. B. wenn nur Sena genutzt wird oder ein Pod stillgelegt ist), verschließt die formidentische **IP67-Leerkassette (`Pod_Dummy_Cartridge_IP67.stl`)** den Schacht vollständig.
-* **Dichtungskonzept:** Stirnseitige Silikon-Umlaufdichtung schützt die innenliegenden Kontakte vor Schmutz, Spritzwasser und Streusalz.
-* **Verriegelung:** Nutzt denselben dualen Snap-Fit Klick-Verschluss wie aktive Einschubschlitten.
-* **Hardware-Zustand:** Die Zentralbox erkennt offene/leere Kontakte und hält den Slot über `disabled.json` strom- und rauschfrei isoliert.
+Wird ein Pod-Schacht temporär nicht für ein Headset genutzt (z. B. bei Einzelfahrer-Konfiguration mit nur 1 Intercom, bei Wartungsarbeiten oder während der Winterpause), verschließt die formidentische **IP67-Blindkassette** den Wechselschacht hermetisch:
+
+![OpenMotorBridge IP67 Blindkassette 3D CAD Render](../../hardware/cad/dummy_cartridge_cad.png)
+
+#### Mechanische Spezifikation & Dichtungskonzept:
+* **100 % Formidentischer Schlittenkörper ($92{,}0 \times 54{,}0 \times 23{,}5\,\text{mm}$):**
+  * Gleitet spielfrei auf denselben seitlichen Führungsbahnen wie aktive Kassetten.
+  * Vollständig geschlossene, ergonomische Frontblende ($58{,}0 \times 28{,}0 \times 5{,}0\,\text{mm}$) mit griffiger Rändelstruktur und zentrierter Griffmulde.
+* **Hermetische IP67/IP69K-Umlaufdichtung:**
+  * In eine $2{,}5\,\text{mm}$ tiefe Nut hinter dem Frontkragen ist eine hochelastische Silikon-/EPDM-Profildichtung eingelegt.
+  * Beim Einrasten der Kassette wird die Dichtung um 30 % komprimiert und schützt die innenliegenden Kontakte und Steckstifte dauerhaft vor Schmutz, Hochdruckreiniger-Wasser und Streusalz.
+* **Duale Snap-Fit Rastnasen & Auto-Eject:**
+  * Nutzt dieselben seitlichen PA12/POM-Schnappriegel. Beim Drücken der beiden seitlichen Riegeltasten werfen die internen Federn der Schottwand die Blindkassette automatisch $10\,\text{mm}$ aus.
+* **Integriertes Notfall-Staufach (*Utility Dry Storage*):**
+  * Da die Blindkassette keine Elektronik aufnehmen muss, bietet der hohle Innenraum ein **absolut wasserdichtes $80 \times 46 \times 16\,\text{mm}$ Mini-Staufach** (mit abnehmbarem Klick-Deckel) für Notfall-Bargeld, Kopie des Fahrzeugscheins, Inbusschlüssel oder Ersatz-O-Ringe.
+* **Elektrisches Systemverhalten:**
+  * Rein mechanischer Verschluss ohne Platinenbestückung. Die Buchse an der Schottwand bleibt berührsicher im Schutzkragen.
+  * Der ESP32-S3 erkennt den offenen 1-Wire-Bus (Timeout) und lädt automatisch das Profil `disabled.json` (Audio-Relais hochohmig getrennt, 5V-Ladeschiene stromlos).
 
 ---
 

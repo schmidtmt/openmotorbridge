@@ -398,13 +398,26 @@ To dramatically maximize the thermal conduction surface while simultaneously eli
 5. **100% RF-Neutral:**
    * Because the rails reside strictly on the lower side flanks, the upper $180^\circ$ hemispherical horizon for GNSS, LoRa, and Wi-Fi remains completely unobstructed, while providing beneficial side EMI shielding.
 
----
+### 5.7 IP67 Dummy Cartridge (`Pod_Dummy_Cartridge_IP67.stl`)
 
-### 5.7 IP67 Dummy Cartridge (Slot Blank)
-* **Partial Population:** When a pod bay is temporarily unpopulated (e.g. single-intercom setups or disabled slots), the identical-footprint **IP67 Dummy Cartridge (`Pod_Dummy_Cartridge_IP67.stl`)** seals the bay completely.
-* **Sealing Concept:** Dual perimeter silicone gaskets isolate the internal contacts from road grime, water spray, and salt.
-* **Locking Mechanism:** Employs the identical POM-C snap-lock and 90° cam-lock as active cartridges.
-* **Hardware State:** Host MCU detects empty/open pins and maintains slot in zero-power, zero-noise isolation via `disabled.json`.
+When a pod bay is temporarily unpopulated (e.g. single-intercom configurations, seasonal winter storage of headsets, or maintenance), the form-identical **IP67 Dummy Cartridge** hermetically seals the bay:
+
+![OpenMotorBridge IP67 Dummy Cartridge 3D CAD Render](../../hardware/cad/dummy_cartridge_cad.png)
+
+#### Mechanical Specification & Sealing Architecture:
+* **100% Form-Identical Sled Body ($92.0 \times 54.0 \times 23.5\,\text{mm}$):**
+  * Glides with zero play on the same lateral slide tracks as active cartridges.
+  * Completely closed, ergonomic faceplate ($58.0 \times 28.0 \times 5.0\,\text{mm}$) featuring textured finger-grip knurling and a centered pull recess.
+* **Hermetic IP67 / IP69K Perimeter Gasket:**
+  * A high-compliance silicone / EPDM profile gasket is nested within a $2.5\,\text{mm}$ deep groove behind the front collar.
+  * When clicked into lock, the gasket compresses by 30%, sealing internal contacts permanently against road grime, pressure washers, and salt spray.
+* **Dual Side Snap-Fit Latches & Auto-Eject:**
+  * Uses the identical PA12/POM side latches. Depressing the dual side buttons triggers the internal bulkhead ejection springs to automatically pop the cartridge out $10\,\text{mm}$.
+* **Integrated Waterproof Utility Dry-Storage Compartment:**
+  * Since no electronics or battery are required, the hollow cavity serves as an **IP67 waterproof $80 \times 46 \times 16\,\text{mm}$ dry storage box** (with snap-lock lid) for emergency cash, vehicle registration copy, Allen key, or spare O-rings.
+* **Electrical System State:**
+  * Pure mechanical seal without PCB assembly. The bulkhead pin header remains safely isolated inside its protective collar.
+  * The ESP32-S3 host detects the open 1-Wire bus (timeout) and automatically invokes `disabled.json` (audio relays high-Z isolated, 5V charge rail unpowered).
 
 ---
 
