@@ -9135,72 +9135,6 @@
 		(layer "Edge.Cuts")
 		(uuid "a0000000-0000-0000-0000-000000000010")
 	)
-	(gr_text "J3: USB SERVICE"
-		(at 124 125.5 0)
-		(layer "F.SilkS")
-		(uuid "c0000000-0000-0000-0000-000000000045")
-		(effects
-			(font
-				(size 0.75 0.75)
-				(thickness 0.12)
-			)
-		)
-	)
-	(gr_text "ANTENNA KEEPOUT ZONE"
-		(at 149.5 73 0)
-		(layer "F.SilkS")
-		(uuid "c0000000-0000-0000-0000-000000000040")
-		(effects
-			(font
-				(size 0.75 0.75)
-				(thickness 0.12)
-			)
-		)
-	)
-	(gr_text "J1: SYSTEM BUS (IDC-26)"
-		(at 157 125.5 0)
-		(layer "F.SilkS")
-		(uuid "c0000000-0000-0000-0000-000000000046")
-		(effects
-			(font
-				(size 0.75 0.75)
-				(thickness 0.12)
-			)
-		)
-	)
-	(gr_text "J5: PWR / BAT"
-		(at 186 89 0)
-		(layer "F.SilkS")
-		(uuid "c0000000-0000-0000-0000-000000000043")
-		(effects
-			(font
-				(size 0.75 0.75)
-				(thickness 0.12)
-			)
-		)
-	)
-	(gr_text "J4: RGB LED"
-		(at 186 104 0)
-		(layer "F.SilkS")
-		(uuid "c0000000-0000-0000-0000-000000000044")
-		(effects
-			(font
-				(size 0.75 0.75)
-				(thickness 0.12)
-			)
-		)
-	)
-	(gr_text "OpenMotorBridge Main Box v8.0"
-		(at 178 73 0)
-		(layer "F.SilkS")
-		(uuid "c0000000-0000-0000-0000-000000000041")
-		(effects
-			(font
-				(size 0.8 0.8)
-				(thickness 0.12)
-			)
-		)
-	)
 	(segment
 		(start 157.6 81.3)
 		(end 157.6 81.19)
@@ -19606,4 +19540,224 @@
 		)
 	)
 	(embedded_fonts no)
+
+	(gr_text "OpenMotorBridge Main Box v8.0"
+		(at 175.00 74.00 0)
+		(layer "F.SilkS")
+		(uuid "c0000000-0000-0000-0000-9d3c202db821")
+		(effects
+			(font
+				(size 1.00 1.00)
+				(thickness 0.18)
+			)
+		)
+	)
+	(gr_text "ZONE 1: ESP32-S3 CORE"
+		(at 149.50 74.00 0)
+		(layer "F.SilkS")
+		(uuid "c0000000-0000-0000-0000-3d538d665949")
+		(effects
+			(font
+				(size 0.80 0.80)
+				(thickness 0.14)
+			)
+		)
+	)
+	(gr_text "ZONE 2: 72V BUCK"
+		(at 124.00 77.00 0)
+		(layer "F.SilkS")
+		(uuid "c0000000-0000-0000-0000-dfe702f0f5f8")
+		(effects
+			(font
+				(size 0.80 0.80)
+				(thickness 0.14)
+			)
+		)
+	)
+	(gr_text "ZONE 3: ISOLATED AUDIO"
+		(at 175.00 80.00 0)
+		(layer "F.SilkS")
+		(uuid "c0000000-0000-0000-0000-8742e2936779")
+		(effects
+			(font
+				(size 0.80 0.80)
+				(thickness 0.14)
+			)
+		)
+	)
+	(gr_text "U1: LM5164"
+		(at 124.00 93.00 0)
+		(layer "F.SilkS")
+		(uuid "c0000000-0000-0000-0000-55a322559ea9")
+		(effects
+			(font
+				(size 0.70 0.70)
+				(thickness 0.12)
+			)
+		)
+	)
+	(gr_text "L1: 47uH"
+		(at 124.00 110.00 0)
+		(layer "F.SilkS")
+		(uuid "c0000000-0000-0000-0000-56c666f7fbbe")
+		(effects
+			(font
+				(size 0.70 0.70)
+				(thickness 0.12)
+			)
+		)
+	)
+	(gr_text "U2: ESP32-S3"
+		(at 149.50 101.00 0)
+		(layer "F.SilkS")
+		(uuid "c0000000-0000-0000-0000-94c3d9a1b275")
+		(effects
+			(font
+				(size 0.80 0.80)
+				(thickness 0.14)
+			)
+		)
+	)
+	(gr_text "T1: AUDIO OUT"
+		(at 174.00 98.00 0)
+		(layer "F.SilkS")
+		(uuid "c0000000-0000-0000-0000-6a64ab9bf70d")
+		(effects
+			(font
+				(size 0.70 0.70)
+				(thickness 0.12)
+			)
+		)
+	)
+	(gr_text "T2: AUDIO IN"
+		(at 174.00 115.00 0)
+		(layer "F.SilkS")
+		(uuid "c0000000-0000-0000-0000-deeff56642e3")
+		(effects
+			(font
+				(size 0.70 0.70)
+				(thickness 0.12)
+			)
+		)
+	)
+	(gr_text "U7: OPTO1"
+		(at 186.00 95.00 0)
+		(layer "F.SilkS")
+		(uuid "c0000000-0000-0000-0000-7e9536e7fc30")
+		(effects
+			(font
+				(size 0.60 0.60)
+				(thickness 0.11)
+			)
+		)
+	)
+	(gr_text "U8: OPTO2"
+		(at 186.00 112.00 0)
+		(layer "F.SilkS")
+		(uuid "c0000000-0000-0000-0000-7a048eaa87be")
+		(effects
+			(font
+				(size 0.60 0.60)
+				(thickness 0.11)
+			)
+		)
+	)
+	(gr_text "U6: CAN"
+		(at 185.00 83.00 0)
+		(layer "F.SilkS")
+		(uuid "c0000000-0000-0000-0000-c26915956bb4")
+		(effects
+			(font
+				(size 0.60 0.60)
+				(thickness 0.11)
+			)
+		)
+	)
+	(gr_text "J3: USB/UART"
+		(at 128.00 113.00 0)
+		(layer "F.SilkS")
+		(uuid "c0000000-0000-0000-0000-9559597be182")
+		(effects
+			(font
+				(size 0.75 0.75)
+				(thickness 0.13)
+			)
+		)
+	)
+	(gr_text "J1: SYSTEM IDC-26"
+		(at 157.00 113.00 0)
+		(layer "F.SilkS")
+		(uuid "c0000000-0000-0000-0000-5a81774da505")
+		(effects
+			(font
+				(size 0.75 0.75)
+				(thickness 0.13)
+			)
+		)
+	)
+	(gr_text "J5: BATT+NTC"
+		(at 195.00 87.00 0)
+		(layer "F.SilkS")
+		(uuid "c0000000-0000-0000-0000-0bf5e66106d5")
+		(effects
+			(font
+				(size 0.60 0.60)
+				(thickness 0.11)
+			)
+		)
+	)
+	(gr_text "J4: RGB"
+		(at 195.00 103.00 0)
+		(layer "F.SilkS")
+		(uuid "c0000000-0000-0000-0000-8b2fefa39044")
+		(effects
+			(font
+				(size 0.60 0.60)
+				(thickness 0.11)
+			)
+		)
+	)
+	(gr_text "▲ Pin 1"
+		(at 121.00 118.00 0)
+		(layer "F.SilkS")
+		(uuid "c0000000-0000-0000-0000-dfb78aefc5f1")
+		(effects
+			(font
+				(size 0.60 0.60)
+				(thickness 0.11)
+			)
+		)
+	)
+	(gr_text "▲ Pin 1"
+		(at 141.00 118.00 0)
+		(layer "F.SilkS")
+		(uuid "c0000000-0000-0000-0000-015a6daf1e54")
+		(effects
+			(font
+				(size 0.60 0.60)
+				(thickness 0.11)
+			)
+		)
+	)
+	(gr_line
+		(start 162.00 80.00)
+		(end 162.00 120.00)
+		(stroke
+			(width 0.20)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "c1000000-0000-0000-0000-34041ca17ccb")
+	)
+	(gr_text "4mm ISOLATION BARRIER"
+		(at 161.00 100.00 90)
+		(layer "F.SilkS")
+		(uuid "c0000000-0000-0000-0000-a612cdb8b5be")
+		(effects
+			(font
+				(size 0.60 0.60)
+				(thickness 0.11)
+			)
+		)
+	)
 )
