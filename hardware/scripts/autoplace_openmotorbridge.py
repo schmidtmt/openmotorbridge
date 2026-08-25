@@ -115,10 +115,10 @@ def auto_place_main_board(pcb_path):
         'U8': (180.0, 105.0, 0.0),            # Toshiba TLP222A PhotoMOS Optocoupler 2 (4.5 x 4.0 mm)
 
         # Zone 1A: Left Front Connector Cluster (Power, Battery, USB-C & Status LED)
-        'J5': (125.5, 118.5, 90.0),           # LiPo Akku JST-PH 2-Pin (Rotated 90°: 4.5 x 6.0 mm)
-        'J6': (131.0, 118.5, 90.0),           # NTC JEITA Sensor 2-Pin (Rotated 90°: 2.5 x 5.0 mm)
-        'J3': (138.5, 118.5, 0.0),            # USB-C Service Port (9.0 x 6.0 mm, direct to ESP32/USV)
-        'J4': (146.5, 118.5, 90.0),           # 3-Pin RGB LED Header (Rotated 90°: 2.5 x 7.5 mm)
+        'J5': (126.5, 118.5, 0.0),            # LiPo Akku JST-PH 2-Pin (6.0 x 4.5 mm)
+        'J6': (132.5, 117.0, 0.0),            # NTC JEITA Sensor 2-Pin (Vertical in Y: 2.5 x 5.0 mm)
+        'J3': (139.0, 118.5, 90.0),           # USB-C Service Port (Rotated 90°: 6.0 x 9.0 mm)
+        'J4': (145.5, 116.0, 0.0),            # 3-Pin RGB LED Header (Vertical in Y: 2.5 x 7.6 mm)
 
         # Zone 1B: Right Front Connector (Horizontal J1 - Pin 1 at X=152.0, body X=152..185 mm)
         'J1': (152.0, 118.5, 90.0),           # 26-Port IDC Box Header 2x13 (KiCad Pin 1 Origin at X=152, body spans X=152..185 mm)

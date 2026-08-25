@@ -59,8 +59,8 @@ def check_and_render_pcb(layout, output_path):
         'J2': (14.0, 14.5, '#475569', 'MicroSD Slot'),
         'J1': (6.0, 33.0, '#e2e8f0', 'IDC26 2x13 Header'),
         'J5': (6.0, 4.5, '#ef4444', 'JST-PH 2P Akku'),
-        'J6': (5.0, 2.5, '#3b82f6', 'NTC 2P'),
-        'J4': (7.5, 2.5, '#10b981', 'RGB 3P'),
+        'J6': (2.5, 5.0, '#3b82f6', 'NTC 2P'),
+        'J4': (2.5, 7.6, '#10b981', 'RGB 3P'),
         'J3': (9.0, 6.0, '#38bdf8', 'USB-C Vertical'),
 
         # Mounting Holes (Ø 6.0 mm keepout)

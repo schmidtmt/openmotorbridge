@@ -229,18 +229,18 @@ def render_main_box_cad(output_path):
 
     # - Bottom Connector Rail (Y = -22 to -17):
     # Left Group:
-    # J5 (LiPo Akku 2P at X_CAD = -32.2)
-    draw_box(ax2, -34.5, -22, -8.9, 4.5, 6, 5.0, color='#ef4444', alpha=0.95, edgecolor='#dc2626', linewidth=0.6)
-    # J6 (NTC 2P at X_CAD = -26.7)
-    draw_box(ax2, -28.0, -22, -8.9, 2.5, 5, 5.0, color='#3b82f6', alpha=0.95, edgecolor='#2563eb', linewidth=0.6)
-    # J3 (USB-C Service Port at X_CAD = -19.2) - Directly under front USB-C!
-    draw_box(ax2, -23.7, -22, -8.9, 9, 6, 5.0, color='#38bdf8', alpha=0.95, edgecolor='#0284c7', linewidth=0.6)
-    # J4 (3-Port RGB LED Header at X_CAD = -11.2) - Directly behind front RGB LED!
-    draw_box(ax2, -12.5, -22, -8.9, 2.5, 7.5, 5.0, color='#10b981', alpha=0.95, edgecolor='#059669', linewidth=0.6)
+    # J5 (LiPo Akku 2P at X_CAD = -31.2)
+    draw_box(ax2, -34.2, -22, -8.9, 6.0, 4.5, 5.0, color='#ef4444', alpha=0.95, edgecolor='#dc2626', linewidth=0.6)
+    # J6 (NTC 2P at X_CAD = -25.2)
+    draw_box(ax2, -26.5, -22, -8.9, 2.5, 5.0, 5.0, color='#3b82f6', alpha=0.95, edgecolor='#2563eb', linewidth=0.6)
+    # J3 (USB-C Service Port at X_CAD = -18.7, Rotated 90°: 6x9 mm)
+    draw_box(ax2, -21.7, -22, -8.9, 6.0, 9.0, 5.0, color='#38bdf8', alpha=0.95, edgecolor='#0284c7', linewidth=0.6)
+    # J4 (3-Port RGB LED Header at X_CAD = -12.2, Vertical: 2.5x7.6 mm)
+    draw_box(ax2, -13.5, -22, -8.9, 2.5, 7.6, 5.0, color='#10b981', alpha=0.95, edgecolor='#059669', linewidth=0.6)
     
     # Right Group:
-    # J1 (26-Port IDC Header 2x13 at X_CAD = +10.3, spans X = -6.2 to +26.8, Y = -22 to -16)
-    draw_box(ax2, -6.2, -22, -8.9, 33, 6, 5.4, color='#0f172a', alpha=0.95, edgecolor='#fbbf24', linewidth=0.8)
+    # J1 (26-Port IDC Header 2x13 at X_CAD = -5.7 to +27.3, Y = -22 to -16)
+    draw_box(ax2, -5.7, -22, -8.9, 33.0, 6.0, 5.4, color='#0f172a', alpha=0.95, edgecolor='#fbbf24', linewidth=0.8)
 
     # 4x Vibration PCB Mounts
     for px, py in [(-38, -23), (-38, 23), (38, -23), (38, 23)]:

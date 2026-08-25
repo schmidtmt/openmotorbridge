@@ -74,12 +74,12 @@ To completely eliminate coupling between switching power supply harmonics ($2.1\
 
 1. **Zone 1 (Front Edge – 2 Dedicated Functional Connector Clusters):**
    * **Zone 1A (Left – Power, Service & Status):**
-     * `J5`: 2-Pin JST-PH LiPo battery socket (Rotated $90^\circ$: $4.5 \times 6.0\,\text{mm}$)
-     * `J6`: 2-Pin micro header for battery NTC sensor (Rotated $90^\circ$: $2.5 \times 5.0\,\text{mm}$)
-     * `J3`: Vertical USB-C service socket ($9.0 \times 6.0\,\text{mm}$) – Directly adjacent to ESP32 & BQ24075 (ultra-short D+/D- routing)
-     * `J4`: 3-Pin RGB LED header (Rotated $90^\circ$: $2.5 \times 7.5\,\text{mm}$) – Direct GPIO drive from ESP32
+     * `J5`: 2-Pin JST-PH LiPo battery socket ($6.0 \times 4.5\,\text{mm}$) at $X = 126.5\,\text{mm}$
+     * `J6`: 2-Pin micro header for battery NTC sensor ($2.5 \times 5.0\,\text{mm}$, vertical in Y) at $X = 132.5\,\text{mm}$
+     * `J3`: Vertical USB-C service socket ($6.0 \times 9.0\,\text{mm}$, rotated $90^\circ$) at $X = 139.0\,\text{mm}$
+     * `J4`: 3-Pin RGB LED header ($2.5 \times 7.6\,\text{mm}$, vertical in Y) at $X = 145.5\,\text{mm}$ ($4.5\,\text{mm}$ clearance to `J1`)
    * **Zone 1B (Right – Galvanic Main System Header):**
-     * `J1`: 2x13 Pin IDC26 box header ($33.0 \times 6.0\,\text{mm}$) – Situated directly beneath `T1`/`T2` audio transformers and `U7`/`U8` optocouplers for straight-drop isolated routing.
+     * `J1`: 2x13 Pin IDC26 box header ($33.0 \times 6.0\,\text{mm}$, horizontal in X) – Pin 1 at $X = 152.0\,\text{mm}$, body spans $X = 152.0$ to $X = 185.0\,\text{mm}$ directly beneath `T1`/`T2` and `U7`/`U8`.
    * **10-mm Insertion Keep-Out:** Dedicated mating space preventing mechanical collisions.
 2. **Zone 2 (Left Flank Top – Automotive Power & UPS):**
    * Accepts raw motorcycle electrical voltages (KL30/KL15). Contains the Bourns PPTC fuse, SMBJ33CA TVS diode, reverse-polarity MOSFET, $10\,\mu\text{H}$ PI filter, TI LM5164-Q1 synchronous buck converter, and TI BQ24075 UPS battery management.
