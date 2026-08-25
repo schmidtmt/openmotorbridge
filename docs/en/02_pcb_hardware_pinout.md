@@ -99,6 +99,10 @@ To eliminate cross-talk between the $2.1\,\text{MHz}$ switching converter, $2.4\
 
 ### 5.1 Central HD26 Harness & Modular M8 Breakout Pigtail
 
+![OpenMotorBridge Central Automotive Wiring Harness](../../hardware/cad/wiring_harness_cad.png)
+
+*Figure 2.2: Technical schematic of the central automotive wiring harness (Harness v8.0). Left: Central control box with HD26 SEAL-D flange; Center: 26-conductor main trunk with overmolded IP67 junction hub; Right: 5 module branches to Pod 1 (Sena), Pod 2 (Cardo), Pod 3 (Rear GNSS/LoRa), Vehicle Power (12V KL30/KL15), and CAN/Aux Telemetry.*
+
 The central 26-pin interface of the control box branches out via a flame-retardant automotive breakout harness into **5 standardized, waterproof M8 circular sockets**:
 
 ```

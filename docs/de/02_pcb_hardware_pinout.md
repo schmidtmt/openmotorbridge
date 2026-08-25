@@ -99,6 +99,10 @@ Um gegenseitige Störungen zwischen der Schaltnetzteil-HF ($2{,}1\,\text{MHz}$),
 
 ### 5.1 Zentraler HD26-Kabelbaum & M8-Breakout-Pigtail
 
+![OpenMotorBridge Zentraler Automotive-Kabelbaum](../../hardware/cad/wiring_harness_cad.png)
+
+*Abbildung 2.2: Technische Skizze des zentralen Automotive-Kabelbaums (Harness v8.0). Links: Zentralbox mit HD26 SEAL-D Flansch; Mitte: 26-poliger Hauptstamm mit IP67-Formmuffe; Rechts: 5 Modulabgänge zu Pod 1 (Sena), Pod 2 (Cardo), Pod 3 (Heck GNSS/LoRa), Bordnetz (12V KL30/KL15) und CAN/Aux-Telemetrie.*
+
 Die zentrale 26-Pin-Schnittstelle der Steuerbox teilt sich über eine hochflexible, flammhemmende Kfz-Kabelbaumpeitsche (Pigtail Breakout) in **5 standardisierte, wasserdichte M8-Buchsen** auf:
 
 ```
