@@ -1,51 +1,55 @@
-# 05 - Mechanical Construction: Central Main Box, Mid-Baffle, Thermal Concept & Modular Pods
+# 05 - Mechanical Construction: 3-Piece Sandwich Enclosure, Mid-Baffle & Modular Pods
 
-This document specifies the mechanical construction, thermal management, and IP67 enclosure design of the central main control box (Type A) featuring an integrated **mid-baffle (ribbon cable pass-through slot, LED shaft & pressure venting)**, **HD26 wall flange**, **waterproof USB-C service port**, **solid copper thermal stud cooling system**, and **waterproof RGB status light pipe**, as well as the universal satellite pod system (Type B) with modular slide-in cartridges.
+This document specifies the mechanical construction, thermal management, and IP67/IP69K enclosure design of the central main control box (Type A) in a **3-piece sandwich construction (Lower Hull, Upper Tray with Mid-Baffle, Enclosure Lid)** with **integrated battery retention on top of the mid-baffle**, **HD26 wall flange**, **waterproof USB-C service port**, **solid copper thermal stud cooling system**, and **waterproof RGB status light guide window**, as well as the universal satellite pod system (Type B) with modular slide-in cartridges.
 
 ---
 
-## 1. Enclosure Type A: Central Main Box (Under Seat)
+## 1. Enclosure Type A: Central Main Box (3-Piece Sandwich Design)
 
-The base housing of the central main box is engineered as an ultra-rugged IP67/IP69K enclosure made of **PA12 (MJF process)** or **die-cast aluminum**, designed specifically for harsh motorcycle operating conditions (vibrations up to $20\,\text{g}$, high-pressure washdowns, heat buildup under the seat, and extreme road grime).
+The base housing of the central main box is engineered as a modular, 3-piece IP67/IP69K sandwich enclosure made of **PA12 (MJF process)** or **die-cast aluminum**, designed specifically for harsh motorcycle operating conditions (vibrations up to $20\,\text{g}$, high-pressure washdowns, heat buildup under the seat, and extreme road grime):
 
-- **External Dimensions:** $110.0 \times 74.0 \times 38.0\,\text{mm}$ (L x W x H; Lower Hull $26.0\,\text{mm}$, Top Lid $12.0\,\text{mm}$).
-- **Mounting:** 4x integrated corner ears with **hole spacing of $128.0 \times 56.0\,\text{mm}$** for vibration-damping **M4 silentblocks (Shore 50A EPDM)** to decouple high-frequency engine harmonics.
+- **External Dimensions:** $110.0 \times 74.0 \times 38.0\,\text{mm}$ (L x W x H; Lower Hull $17.0\,\text{mm}$, Upper Tray $15.0\,\text{mm}$, Top Lid $6.0\,\text{mm}$).
+- **Mounting:** 4x integrated corner ears on the lower hull with **hole spacing of $128.0 \times 56.0\,\text{mm}$** for vibration-damping **M4 silentblocks (Shore 50A EPDM)** to decouple high-frequency engine harmonics.
 - **Internal Clearance:** $102.0 \times 66.0 \times 32.0\,\text{mm}$ (optimized for the $85.0 \times 55.0\,\text{mm}$ 4-layer main PCB).
 - **Material & Manufacturing:** PA12 via HP Multi Jet Fusion (MJF) 3D printing (min. $3.0\,\text{mm}$ wall thickness), glass-bead blasted, chemically smoothed in hot vapor bath, and hydrophobic sealed.
 - **Protection Class:** IP67 / IP69K (dust-tight, submersible to $1\,\text{m}$ depth, and resistant to high-pressure steam cleaning).
 
-### 1.1 3D CAD Model & Assembly Layers
+### 1.1 3D CAD Model & 3-Tier Sandwich Hierarchy
 
-![OpenMotorBridge Central Main Box Base Enclosure IP67](../../hardware/cad/main_box_enclosure_cad.png)
+![OpenMotorBridge Central Main Box 3-Piece Sandwich Enclosure IP67](../../hardware/cad/main_box_enclosure_cad.png)
 
-*Figure 5.1: 3D CAD render of the central control box. Left: Closed IP67 housing with HD26 harness flange, blue anodized USB-C service screw cap, and 4x M4 silentblock mounting ears. Right: Sectional X-ray view revealing 4x solid copper thermal studs ($\varnothing\,8\,\text{mm}$), $2.0\,\text{mm}$ silicone thermal gap pad, 4-layer FR4 PCB, integrated PA12 mid-baffle with $38 \times 6\,\text{mm}$ ribbon cable pass-through slot, and LiPo UPS battery pocket.*
+*Figure 5.1: 3D CAD render of the central control box. Left: Closed IP67 housing with HD26 harness flange in the upper tray, blue anodized USB-C service screw cap, and 4x M4 silentblock mounting ears on the lower hull. Right: Sectional X-ray view revealing the 3 sandwich tiers: 1. Lower Hull (4x copper thermal studs, silicone pad, 4-layer PCB), 2. Upper Tray with Mid-Baffle (LiPo battery with EPDM strap on top, 38x6 mm ribbon slot & LED shaft in floor), 3. Top Lid with Gore-Vent and PMMA light pipe window.*
 
 ```
 ┌────────────────────────────────────────────────────────────┐  ▲
-│ 1. ENCLOSURE LID (12.0 mm Height)                          │  │
-│    • PMMA RGB Status Light Guide (Ø 3.0 mm, IP67 O-Ring)   │  │ 38.0 mm
+│ 1. ENCLOSURE LID (6.0 mm Height / 3.0 mm Wall Thickness)   │  │
+│    • PMMA RGB Status Light Guide Window (Ø 3.0 mm, IP67)   │  │ 38.0 mm
 │    • Gore ePTFE Pressure Equalization Vent (Ø 7.0 mm)      │  │ Total
 │    • Perimeter Groove with Shore 40A Silicone Profile Seal │  │ Height
 ├────────────────────────────────────────────────────────────┤  │
-│ 2. MID-BAFFLE (PA12, 2.5 mm Thickness)                     │  │
-│    • 38.0 x 6.0 mm Ribbon Cable Pass-Through Slot (R1.5mm) │  │
-│    • Ø 5.0 mm Optical Light Pipe Shaft Clearance           │  │
-│    • 4x Labyrinth Pressure Equalization Slots (15 x 2 mm)  │  │
-├────────────────────────────────────────────────────────────┤  │
-│ 3. LOWER HULL (26.0 mm Height - Solid Submersion Tray)     │  │
+│ 2. UPPER TRAY WITH MID-BAFFLE (15.0 mm Height)             │  │
 │    • Front Panel: HD26 D-Sub Flange + USB-C Service Cap    │  │
+│    • Upper Compartment (on top of Mid-Baffle):             │  │
+│      - 1S LiPo UPS Buffer Battery (52x36x6.5mm) in Cradle  │  │
+│      - EPDM Rubber Retention Strap for Battery Fixation    │  │
+│    • Mid-Baffle Floor (Partition to Lower Hull):           │  │
+│      - 38.0 x 6.0 mm Ribbon Cable Pass-Through Slot (R1.5) │  │
+│      - Ø 5.0 mm Optical Light Pipe Shaft Clearance         │  │
+│      - 4x Labyrinth Pressure Equalization Slots (15 x 2 mm)│  │
+├────────────────────────────────────────────────────────────┤  │
+│ 3. LOWER HULL (17.0 mm Height - Solid Submersion Tray)     │  │
 │    • 4-Layer Main PCB (85 x 55 mm) on M2.5 Damping Mounts  │  │
 │    • 2.0 mm Silicone Thermal Gap-Pad (Shore 00 35, λ=3W/mK)│  │
 │    • 4x Solid Copper Thermal Studs (Ø 8 mm in Bottom Hull) │  │
-│    • Recessed LiPo UPS Battery Pocket (52 x 36 x 6.5 mm)   │  │
+│    • 100% Solid Enclosure without Wall Penetrations        │  │
 └────────────────────────────────────────────────────────────┘  ▼
 ```
 
 ---
 
-## 2. Comprehensive Thermal Management & Cooling Concept
+## 2. Thermal Management & Cooling Concept (In Lower Hull)
 
-Due to the sealed IP67 enclosure under the seat and power dissipation from the $100\,\text{V}$ switching regulator (LM5164-Q1, up to $1.8\,\text{W}$ under full pod load), LiPo charge controller (BQ24075, up to $1.2\,\text{W}$), and ESP32-S3 DSP core ($0.8\,\text{W}$), the lower hull incorporates a high-efficiency **solid copper thermal stud system**:
+The solid lower immersion tray houses the heat-dissipating components: $100\,\text{V}$ switching regulator (LM5164-Q1, up to $1.8\,\text{W}$), LiPo charge controller (BQ24075, up to $1.2\,\text{W}$), and ESP32-S3 DSP core ($0.8\,\text{W}$). For efficient heat dissipation, the lower hull incorporates a **solid copper thermal stud system**:
 
 ```
       PRINTED CIRCUIT BOARD (TOP & INNER LAYERS)
@@ -84,99 +88,70 @@ Due to the sealed IP67 enclosure under the seat and power dissipation from the $
 
 ---
 
-## 3. Mid-Baffle Pass-Throughs, Cable Routing & Pressure Equalization
+## 3. Upper Tray: Battery Retention on Mid-Baffle & Cable Routing
 
-The integrated mid-baffle plate (PA12, $2.5\,\text{mm}$ thickness) mechanically separates the sensitive PCB and battery layer from the upper connector and lid volume while providing precision pass-through cutouts:
+The upper tray forms the central functional module of the sandwich design: its integrated mid-baffle (PA12, $2.5\,\text{mm}$ thickness) acts as the mounting base for the UPS buffer battery and isolates it from the PCB electronics below.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                 MID-BAFFLE PLATE (Top View)                 │
+│                 UPPER TRAY (Top View onto Mid-Baffle)       │
 │                                                             │
-│   ┌─────────────────────────────┐     ┌─────────────────┐   │
-│   │ 1. Ribbon Cable Slot        │     │ 2. LED Shaft    │   │
-│   │    (38.0 x 6.0 mm)          │     │    (Ø 5.0 mm)   │   │
-│   │    Chamfered Edge R1.5 mm   │     │    Clearance    │   │
-│   └─────────────────────────────┘     └─────────────────┘   │
+│  ┌─────────────────────────┐  ┌──────────────────────────┐  │
+│  │ 1. BATTERY CRADLE       │  │ 2. Ribbon Cable Slot     │  │
+│  │    (52 x 36 x 6.5 mm)   │  │    (38.0 x 6.0 mm, R1.5) │  │
+│  │    with EPDM Strap      │  │    leads to J1 on PCB    │  │
+│  └─────────────────────────┘  └──────────────────────────┘  │
 │                                                             │
-│   [Slot 1]                 [Slot 2]                 [Slot 3]│
-│   (15 x 2 mm)              (15 x 2 mm)              (15 x 2)│
-│   ◄──────── 4x Internal Pressure Equalization Slots ───────►│
+│  ┌─────────────────────────┐                                │
+│  │ 3. LED Light Shaft      │  [Slot 1] [Slot 2] [Slot 3]    │
+│  │    (Ø 5.0 mm)           │  (4x Pressure Equal. Slots)    │
+│  └─────────────────────────┘                                │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### 3.1 Pass-Through Specifications
+### 3.1 1S LiPo Battery Cradle & EPDM Strap Retention (On Mid-Baffle)
+* **Form-Fit Battery Cradle ($52.0 \times 36.0 \times 6.5\,\text{mm}$):** Molded directly on top of the mid-baffle, lined with a $1.0\,\text{mm}$ EPDM closed-cell foam pad for shock absorption.
+* **Elastic EPDM Rubber Retention Strap (Shore 50A, $10\,\text{mm}$ wide):** Spans across the battery pack. End eyelets snap tool-lessly into two undercut anchor hooks in the upper tray side walls. The battery remains securely locked in place and vibration-free.
+* **Integrated NTC Temperature Sensor:** Embedded in the mid-baffle floor beneath the battery for BQ24075 JEITA charge monitoring.
+
+### 3.2 Pass-Through Specifications in Mid-Baffle
 1. **Ribbon Cable Pass-Through for Main Harness:**
-   * **Dimensions:** $38.0 \times 6.0\,\text{mm}$ with $R=1.5\,\text{mm}$ full perimeter edge chamfer on top and bottom faces (prevents insulation wear or chafing on the 26-conductor AWG28 ribbon cable).
+   * **Dimensions:** $38.0 \times 6.0\,\text{mm}$ with $R=1.5\,\text{mm}$ edge chamfer on top and bottom faces.
    * **Position:** Aligned directly above the 2x13 box header `J1` on the main PCB.
-   * **Routing:** The $45\,\text{mm}$ flexible 26-conductor ribbon cable runs from the HD26 wall flange in a vibration-damping $S$-loop through this slot down to header `J1`.
+   * **Routing:** The $45\,\text{mm}$ flexible 26-conductor ribbon cable runs from the HD26 wall flange in the upper tray through this slot down to header `J1`.
 2. **Optical LED Light Shaft:**
    * **Geometry:** $\varnothing\,5.0\,\text{mm}$ cylindrical aperture, coaxially positioned above SMD LED `LED1` (WS2812B, GPIO 48).
-   * **Function:** Allows the lid-mounted PMMA light pipe to extend down to within $0.8\,\text{mm}$ of the LED emitter surface.
+   * **Function:** Allows the RGB status light to shine directly through the mid-baffle to the lid light pipe window.
 3. **Labyrinth Pressure Equalization & Venting Slots:**
-   * 4x Ventilation slots ($15.0 \times 2.0\,\text{mm}$) allow unimpeded airflow between the lower PCB chamber and the M8 ePTFE vent in the lid while maintaining structured cable management.
-
-
-### 3.2 3-Stage Battery Retention & Vibration Isolation (UPS Buffer Battery)
-
-To lock the 1S LiPo buffer cell (800–1200 mAh, $52.0 \times 36.0 \times 6.5\,\text{mm}$) completely rattle-free, shock-damped, and immovably in place under harsh motorcycle riding dynamics (vibrations up to $20\,\text{g}$), the main box incorporates a **3-stage retention system**:
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│ MID-BAFFLE (Underside)                                      │
-│   │ 4x Molded PA12 Downforce Retention Ribs (2.0 mm wall)   │
-│   ▼ (Apply gentle 0.5 mm pre-compression onto cell edges)   │
-│ ┌───┐                                                 ┌───┐ │
-│ │   │                                                 │   │ │
-│ ├───┴─────────────────────────────────────────────────┴───┤ │
-│ │ EPDM RUBBER RETENTION STRAP (Shore 50A, 10 mm wide)     │ │ ◄── Tool-less
-│ │ (Latched into side retention hooks in bottom hull)      │ │     assembly security
-│ ├─────────────────────────────────────────────────────────┤ │
-│ │ 1S LiPo BUFFER PACK (52 x 36 x 6.5 mm / UPS Cell)       │ │
-│ ├─────────────────────────────────────────────────────────┤ │
-│ │ 1.0 mm EPDM Cellular Rubber Cushion & NTC Temp Sensor   │ │ ◄── Shock absorption
-│ └─────────────────────────────────────────────────────────┘ │
-│ LOWER HULL (Recessed battery pocket 52 x 36 x 6.5 mm)       │
-└─────────────────────────────────────────────────────────────┘
-```
-
-1. **Integrated PA12 Downforce Retention Ribs on Mid-Baffle Underside:**
-   * Four vertical guide and compression ribs ($2.0\,\text{mm}$ thickness, $R=1.0\,\text{mm}$ edge radius) with soft-touch foam tips extend downward from the mid-baffle underside.
-   * Upon screwing down the mid-baffle, these ribs exert gentle, defined downward pre-load ($0.5\,\text{mm}$) onto the battery frame, eliminating any vertical ($Z$-axis) rattling under hard chassis jolts.
-2. **Elastic EPDM Rubber Retention Strap:**
-   * A $10\,\text{mm}$ wide, fuel- and UV-resistant **EPDM/silicone strap (Shore 50A)** spans transversely across the cell.
-   * Two undercut retention hooks molded directly into the lower hull floor secure the strap eyelets under tension.
-   * The battery remains securely locked in place even when the mid-baffle is removed during assembly or bench testing.
-3. **Shock-Absorbing Rubber Bedding & NTC Temperature Probe:**
-   * The pocket floor is lined with a **$1.0\,\text{mm}$ thick EPDM closed-cell rubber cushion**.
-   * A dedicated cutout integrates the $10\,\text{k}\Omega$ NTC thermistor in direct thermal contact with the pouch cell for high-precision BQ24075 JEITA charge control.
+   * 4x Ventilation slots ($15.0 \times 2.0\,\text{mm}$) allow unimpeded airflow between the lower PCB chamber and the upper chamber / ePTFE vent in the lid.
 
 ---
 
-## 4. Front Panel Interfaces & Serviceability
+## 4. Front Panel Interfaces in Upper Tray (HD26 & USB-C)
 
 ### 4.1 HD26 D-Sub Wall Flange (Main Vehicle Harness Interface)
-* **Cutout Geometry:** D-Sub High-Density 26-pin cutout ($39.2 \times 15.4\,\text{mm}$) in the front face of the **lower hull**.
+* **Cutout Geometry:** D-Sub High-Density 26-pin cutout ($39.2 \times 15.4\,\text{mm}$) in the front face of the **upper tray**.
 * **Flange Gasket:** Precision-molded EPDM flat gasket ($1.5\,\text{mm}$ thickness, Shore 60A) between the metal collar of the Amphenol LTW / NorComp SEAL-D socket and the enclosure wall.
 * **Fastening:** 2x M3 stainless steel hex jackscrews with O-ring sealing washers clamp the flange with $0.6\,\text{Nm}$ torque for a watertight seal.
 * **Internal Decoupling:** Connected to the main PCB via the 26-conductor ribbon cable looping through the mid-baffle slot to the 2x13 box header (`J1`).
 
 ### 4.2 Waterproof USB-C Programming & Service Port
-* **Access without Opening Housing:** Located on the front face adjacent to the HD26 flange is a waterproof USB-C service port with a **blue anodized aluminum screw cap** and red NBR/silicone O-ring.
+* **Access without Opening Housing:** Located on the front face of the upper tray adjacent to the HD26 flange is a waterproof USB-C service port with a **blue anodized aluminum screw cap** and red NBR/silicone O-ring.
 * **Function:** Facilitates on-vehicle firmware updates, ESP-IDF JTAG debugging, and diagnostics without disassembling the IP67 enclosure under the seat.
 
 ---
 
-## 5. Waterproof Light Pipe for WS2812B RGB Status LED & Pressure Vent
+## 5. Enclosure Lid: Waterproof PMMA Light Pipe Window & Pressure Vent
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│ ENCLOSURE LID (3.0 mm Wall Thickness / 12.0 mm Height)      │
+│ ENCLOSURE LID (3.0 mm Wall Thickness / 6.0 mm Height)       │
 │                  ┌──────────────────┐                       │
 │                  │  PMMA Light Pipe │ ◄── NBR O-Ring        │
-│                  │  (Ø 3.0 mm Matt) │     (IP67 Sealed)     │
+│                  │  (Ø 3.0 mm Matt) │     (IP67 Window)     │
 │                  └────────┬─────────┘                       │
 ├───────────────────────────┼─────────────────────────────────┤
-│ MID-BAFFLE                │ Passes through Ø 5.0 mm shaft   │
+│ UPPER TRAY / MID-BAFFLE   │ Passes through Ø 5.0 mm shaft   │
 ├───────────────────────────┼─────────────────────────────────┤
 │                           │ Optical Air Gap 0.8 mm          │
 │                           ▼                                 │

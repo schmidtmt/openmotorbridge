@@ -2,21 +2,24 @@
 """
 OpenMotorBridge Central Main Box Mechanical Enclosure CAD Generator
 -------------------------------------------------------------------
-Generates photorealistic 3D CAD visualizations for the Central Main Box Enclosure
+Generates photorealistic 3D CAD visualizations for the 3-Piece Sandwich Enclosure
 (openmotorbridge_main_box):
-  - IP67 PA12/Aluminum housing (110 x 74 x 38 mm)
-  - 4x M4 Silent-block mounting ears (128 x 56 mm hole spacing)
-  - Front panel: HD26 harness flange, USB-C service cap with O-ring
-  - Top lid: PMMA RGB Status LED light guide (Ø 3 mm), Gore ePTFE vent (Ø 7 mm)
-  - Mid-Baffle (Zwischenboden): Integrated 38x6 mm chamfered cable pass-through slot,
-    Ø 5 mm LED shaft, 4x pressure equalization slots, and integrated downward
-    retention ribs (Akku-Niederhalter-Stege) for the 1S LiPo buffer battery
-  - LiPo UPS Retention: Recessed pocket (52x36x6.5mm), EPDM rubber retention strap,
-    and soft-touch clamping ribs on the underside of the mid-baffle
-  - Thermal management: 4x Solid Copper Thermal Studs (Ø 8 mm) in bottom hull
-    coupled to 2.0 mm flexible silicone gap-pad (Shore 00 35) under LM5164/ESP32
-  - 4-layer FR4 Main PCB (85 x 55 mm) on vibration-isolated M2.5 standoffs
-  - 26-conductor flexible ribbon cable routed through the mid-baffle slot to J1 header
+  1. Lower Tray (Unterwanne, 17.0 mm):
+     - Closed immersion base with 4x M4 silentblock ears (128 x 56 mm)
+     - 4x Solid Copper Thermal Studs (Ø 8 mm) in bottom floor
+     - 2.0 mm Silicone Thermal Gap-Pad (Shore 00 35) under LM5164 / ESP32
+     - 4-layer Main PCB (85 x 55 x 1.6 mm) on M2.5 vibration isolators
+  2. Upper Tray with Mid-Baffle (Oberwanne mit Zwischenboden, 15.0 mm):
+     - Front panel: HD26 harness wall flange & USB-C service cap with O-ring
+     - Upper compartment on mid-baffle: 1S LiPo UPS buffer battery (52 x 36 x 6.5 mm)
+       secured in molded battery cradle by elastic EPDM rubber retention strap
+     - Mid-baffle partition floor: 38x6 mm chamfered ribbon cable slot,
+       Ø 5 mm optical LED light shaft, and 4x pressure equalization slots
+     - 26-conductor flexible ribbon cable routing from HD26 through mid-baffle to J1
+  3. Enclosure Lid (Gehäusedeckel, 6.0 mm):
+     - PMMA RGB Status LED window / light guide (Ø 3 mm, IP67 O-Ring)
+     - Gore ePTFE pressure equalization vent (Ø 7 mm)
+     - Perimeter Shore 40A silicone profile seal
 """
 
 import os
@@ -79,77 +82,85 @@ def render_main_box_cad(output_path):
     
     # -------------------------------------------------------------
     # Aspect Ratio Setup (True 1:1:1 Scale based on 110 x 74 x 38 mm)
+    # Total Z = -19 to +19 mm (38 mm)
+    # Unterwanne: Z = -19 to -2 mm (17 mm)
+    # Oberwanne:   Z = -2 to +13 mm (15 mm)
+    # Deckel:      Z = +13 to +19 mm (6 mm)
     # -------------------------------------------------------------
     span_x = 150.0 # -75 to +75 mm (incl. mounting ears)
     span_y = 90.0  # -45 to +45 mm
     span_z = 50.0  # -25 to +25 mm
     
     # -------------------------------------------------------------
-    # 1. EXTERNAL 3D VIEW: IP67 ENCLOSURE WITH FLANGE, SERVICE CAP & EARS
+    # 1. EXTERNAL 3D VIEW: 3-TIER SANDWICH ENCLOSURE
     # -------------------------------------------------------------
     ax1 = fig.add_subplot(121, projection='3d', facecolor='#080c14')
-    ax1.set_title("1. ZENTRALBOX BASISGEHÄUSE IP67 / IP69K (AUSSENANSICHT)\n(HD26-Kabelbaumflansch, USB-C Service-Kappe, PMMA-Lichtleiter & 4x M4 Silentblöcke)", 
+    ax1.set_title("1. ZENTRALBOX 3-TEILIGES SANDWICH-GEHÄUSE (IP67 / IP69K)\n(Unterwanne: PCB & Kühlung | Oberwanne: HD26, USB-C & Akku | Deckel: Gore-Vent & LED)", 
                   color='#38bdf8', fontsize=13, fontweight='bold', pad=15)
     
-    # Main Lower Hull (PA12 Black: 110 x 74 x 26 mm from Z = -18 to +8)
-    draw_box(ax1, -55, -37, -18, 110, 74, 26, color='#1e293b', alpha=0.95, edgecolor='#38bdf8', linewidth=1.0)
+    # Tier 1: Unterwanne (PA12 Black: 110 x 74 x 17 mm, Z = -19 to -2)
+    draw_box(ax1, -55, -37, -19, 110, 74, 17, color='#1e293b', alpha=0.95, edgecolor='#38bdf8', linewidth=1.0)
+    # Perimeter Gasket Line 1 (Red at Z = -2)
+    draw_box(ax1, -54.5, -36.5, -2.5, 109, 73, 0.8, color='#ef4444', alpha=0.95, edgecolor='#dc2626', linewidth=0.6)
     
-    # Top Lid (PA12: 110 x 74 x 12 mm from Z = +8 to +20)
-    draw_box(ax1, -55, -37, 8, 110, 74, 12, color='#0284c7', alpha=0.20, edgecolor='#38bdf8', linewidth=1.0)
+    # Tier 2: Oberwanne (PA12 Mid-Frame: 110 x 74 x 15 mm, Z = -2 to +13)
+    draw_box(ax1, -55, -37, -2, 110, 74, 15, color='#334155', alpha=0.75, edgecolor='#38bdf8', linewidth=1.0)
+    # Perimeter Gasket Line 2 (Red at Z = +13)
+    draw_box(ax1, -54.5, -36.5, 12.5, 109, 73, 0.8, color='#ef4444', alpha=0.95, edgecolor='#dc2626', linewidth=0.6)
     
-    # Perimeter Silicone Sealing Gasket (Red line at Z=8)
-    draw_box(ax1, -54, -36, 7.5, 108, 72, 1.0, color='#ef4444', alpha=0.95, edgecolor='#dc2626', linewidth=0.8)
+    # Tier 3: Gehäusedeckel (PA12 Top Lid: 110 x 74 x 6 mm, Z = +13 to +19)
+    draw_box(ax1, -55, -37, 13, 110, 74, 6, color='#0284c7', alpha=0.25, edgecolor='#38bdf8', linewidth=1.0)
     
-    # 4-Layer Main PCB (Visible inside: 85 x 55 x 1.6 mm)
-    draw_box(ax1, -42.5, -27.5, -6.0, 85, 55, 1.6, color='#059669', alpha=0.85, edgecolor='#10b981', linewidth=0.8)
-    
-    # 4x M4 Silent-Block Mounting Ears (Flanges at 4 corners, hole spacing 128 x 56 mm)
+    # 4x M4 Silent-Block Mounting Ears (at Unterwanne Z = -19 to -13)
     for ear_x in [-64, 55]:
         for ear_y in [-37, 23]:
-            draw_box(ax1, ear_x, ear_y, -18, 9, 14, 6, color='#334155', alpha=0.95, edgecolor='#64748b', linewidth=0.8)
+            draw_box(ax1, ear_x, ear_y, -19, 9, 14, 6, color='#334155', alpha=0.95, edgecolor='#64748b', linewidth=0.8)
             center_x = ear_x + 4.5
             center_y = ear_y + 7.0
-            draw_cylinder(ax1, center_x, center_y, -18.5, 4.0, 7.0, color='#0f172a', alpha=0.95, axis='z')
-            draw_cylinder(ax1, center_x, center_y, -19.0, 2.2, 8.0, color='#cbd5e1', alpha=0.95, axis='z')
+            draw_cylinder(ax1, center_x, center_y, -19.5, 4.0, 7.0, color='#0f172a', alpha=0.95, axis='z')
+            draw_cylinder(ax1, center_x, center_y, -20.0, 2.2, 8.0, color='#cbd5e1', alpha=0.95, axis='z')
 
-    # Front Panel Features (placed at Y = -37)
-    # HD26 D-Sub Wall Flange (39.2 x 15.4 mm at X = -10, Y = -37, Z = -5)
-    draw_box(ax1, -25, -40, -11, 40, 3, 16, color='#0284c7', alpha=0.95, edgecolor='#38bdf8', linewidth=1.0)
-    draw_box(ax1, -23, -42, -9, 36, 2, 12, color='#0f172a', alpha=0.95, edgecolor='#94a3b8', linewidth=0.8)
+    # Front Panel Features on Oberwanne (placed at Y = -37, Z = 0 to 11)
+    # HD26 D-Sub Wall Flange (39.2 x 15.4 mm at X = -10, Y = -37, Z = 5)
+    draw_box(ax1, -25, -40, -1, 40, 3, 15, color='#0284c7', alpha=0.95, edgecolor='#38bdf8', linewidth=1.0)
+    draw_box(ax1, -23, -42, 1, 36, 2, 11, color='#0f172a', alpha=0.95, edgecolor='#94a3b8', linewidth=0.8)
     for px in np.linspace(-20, 10, 9):
-        for pz in np.linspace(-7, 1, 3):
+        for pz in np.linspace(3, 10, 3):
             draw_cylinder(ax1, px, -42.5, pz, 0.4, 1.5, color='#fbbf24', alpha=0.95, axis='y')
-    draw_cylinder(ax1, -24.5, -41, -3, 1.5, 3.0, color='#cbd5e1', alpha=0.95, axis='y')
-    draw_cylinder(ax1, 14.5, -41, -3, 1.5, 3.0, color='#cbd5e1', alpha=0.95, axis='y')
+    draw_cylinder(ax1, -24.5, -41, 6.5, 1.5, 3.0, color='#cbd5e1', alpha=0.95, axis='y')
+    draw_cylinder(ax1, 14.5, -41, 6.5, 1.5, 3.0, color='#cbd5e1', alpha=0.95, axis='y')
     
-    # USB-C Waterproof Service Port & Screw-Cap (at X = 32, Y = -37, Z = -3)
-    draw_cylinder(ax1, 32, -37, -3, 6.0, 4.0, color='#475569', alpha=0.95, axis='y')
-    draw_cylinder(ax1, 32, -41, -3, 5.5, 3.0, color='#0284c7', alpha=0.95, axis='y')
-    draw_cylinder(ax1, 32, -39, -3, 5.8, 0.8, color='#ef4444', alpha=0.95, axis='y')
+    # USB-C Waterproof Service Port & Screw-Cap on Oberwanne (at X = 32, Y = -37, Z = 6.5)
+    draw_cylinder(ax1, 32, -37, 6.5, 6.0, 4.0, color='#475569', alpha=0.95, axis='y')
+    draw_cylinder(ax1, 32, -41, 6.5, 5.5, 3.0, color='#0284c7', alpha=0.95, axis='y')
+    draw_cylinder(ax1, 32, -39, 6.5, 5.8, 0.8, color='#ef4444', alpha=0.95, axis='y')
     
     # Top Lid Features:
-    # 1. PMMA RGB Status LED Light Guide (Ø 3.0 mm at X = 25, Y = 0, Z = 19)
-    draw_cylinder(ax1, 25, 0, 18, 2.0, 4.0, color='#34d399', alpha=0.95, axis='z')
-    # 2. Gore ePTFE Pressure Equalization Vent (Ø 7.0 mm at X = -10, Y = 0, Z = 19.5)
-    draw_cylinder(ax1, -10, 0, 19.5, 4.0, 1.0, color='#ffffff', alpha=0.95, axis='z')
-    draw_cylinder(ax1, -10, 0, 19.0, 5.0, 0.6, color='#64748b', alpha=0.95, axis='z')
+    # 1. PMMA RGB Status LED Light Guide Window (Ø 3.0 mm at X = 25, Y = 0, Z = 18.5)
+    draw_cylinder(ax1, 25, 0, 17.5, 2.0, 2.0, color='#34d399', alpha=0.95, axis='z')
+    # 2. Gore ePTFE Pressure Equalization Vent (Ø 7.0 mm at X = -10, Y = 0, Z = 18.5)
+    draw_cylinder(ax1, -10, 0, 18.5, 4.0, 1.0, color='#ffffff', alpha=0.95, axis='z')
+    draw_cylinder(ax1, -10, 0, 18.0, 5.0, 0.6, color='#64748b', alpha=0.95, axis='z')
     
-    # 4x M3 Stainless Lid Screws
+    # 4x M3 Stainless Through-Screws
     for sx in [-48, 48]:
         for sy in [-30, 30]:
-            draw_cylinder(ax1, sx, sy, 19.0, 2.5, 1.5, color='#cbd5e1', alpha=0.95, axis='z')
+            draw_cylinder(ax1, sx, sy, 18.5, 2.5, 1.5, color='#cbd5e1', alpha=0.95, axis='z')
             
     # Bottom Thermal Stud Heads
     for bx in [-25, 15]:
         for by in [-12, 12]:
-            draw_cylinder(ax1, bx, by, -19.0, 4.0, 1.5, color='#d97706', alpha=0.95, axis='z')
+            draw_cylinder(ax1, bx, by, -20.0, 4.0, 1.5, color='#d97706', alpha=0.95, axis='z')
     
     # Annotations Ax1
-    ax1.text(-5, -45, 12, "HD26 Flansch (Kabelbaum)", color='#38bdf8', fontsize=10, fontweight='bold')
-    ax1.text(32, -45, 10, "USB-C Service-Port (IP67)", color='#38bdf8', fontsize=10, fontweight='bold')
-    ax1.text(-68, -42, -22, "4x M4 Silentblöcke", color='#94a3b8', fontsize=10, fontweight='bold')
-    ax1.text(-12, 0, 24, "Gore ePTFE Membran", color='#ffffff', fontsize=10, fontweight='bold')
-    ax1.text(25, 0, 24, "PMMA RGB-Lichtleiter", color='#34d399', fontsize=10, fontweight='bold')
+    ax1.text(-5, -45, 16, "HD26 Flansch (Oberwanne)", color='#38bdf8', fontsize=9, fontweight='bold')
+    ax1.text(32, -45, 14, "USB-C Service (IP67)", color='#38bdf8', fontsize=9, fontweight='bold')
+    ax1.text(-68, -42, -23, "4x M4 Silentblöcke", color='#94a3b8', fontsize=9, fontweight='bold')
+    ax1.text(-12, 0, 22, "Gore ePTFE Membran", color='#ffffff', fontsize=9, fontweight='bold')
+    ax1.text(25, 0, 22, "PMMA RGB-Fenster", color='#34d399', fontsize=9, fontweight='bold')
+    ax1.text(-54, 38, -10, "1. Unterwanne (PCB)", color='#64748b', fontsize=8)
+    ax1.text(-54, 38, 5, "2. Oberwanne (Akku/HD26)", color='#64748b', fontsize=8)
+    ax1.text(-54, 38, 16, "3. Deckel (IP67)", color='#64748b', fontsize=8)
     
     ax1.set_xlim([-75, 75])
     ax1.set_ylim([-45, 45])
@@ -159,110 +170,108 @@ def render_main_box_cad(output_path):
     ax1.axis('off')
 
     # -------------------------------------------------------------
-    # 2. SECTION / X-RAY VIEW: ZWISCHENBODEN, AKKU-FIXIERUNG, KABEL & KÜHLUNG
+    # 2. SECTION / X-RAY VIEW: SANDWICH LAYERS & CABLE ROUTING
     # -------------------------------------------------------------
     ax2 = fig.add_subplot(122, projection='3d', facecolor='#080c14')
-    ax2.set_title("2. SCHNITTANSICHT: ZWISCHENBODEN, AKKU-FIXIERUNG & KÜHLUNG\n(Niederhalter-Stege, EPDM-Spannband, 38x6mm Kabel-Schlitz, 4x Kupfer-Pins & LiPo-USV)", 
+    ax2.set_title("2. SCHNITTANSICHT: SANDWICH-AUFBAU & KABELFÜHRUNG\n(Unten: PCB & Kühlbolzen | Zwischenboden: Kabel-Schlitz & LED-Schacht | Oben: 1S LiPo & EPDM-Gurt)", 
                   color='#10b981', fontsize=13, fontweight='bold', pad=15)
     
-    # Lower Hull Floor Outline (Translucent outline: 110 x 74 x 26 mm)
-    draw_box(ax2, -55, -37, -18, 110, 74, 26, color='#059669', alpha=0.05, edgecolor='#059669', linewidth=0.8)
+    # ---------------------------------------------------------
+    # LAYER 1: UNTERWANNE (Z = -19 to -2 mm) - PCB & KÜHLUNG
+    # ---------------------------------------------------------
+    draw_box(ax2, -55, -37, -19, 110, 74, 17, color='#059669', alpha=0.04, edgecolor='#059669', linewidth=0.6)
     
-    # 1. 4x Solid Copper Thermal Studs (Ø 8 mm x 6 mm, embedded in bottom floor Z=-18 to -12)
+    # 4x Solid Copper Thermal Studs (Ø 8 mm in bottom hull Z=-19 to -12.5)
     copper_coords = [(-25, -12), (-25, 12), (15, -12), (15, 12)]
     for cx, cy in copper_coords:
-        draw_cylinder(ax2, cx, cy, -18.5, 4.0, 6.5, color='#d97706', alpha=0.95, axis='z')
-        draw_cylinder(ax2, cx, cy, -12.0, 5.0, 0.5, color='#f59e0b', alpha=0.95, axis='z')
+        draw_cylinder(ax2, cx, cy, -19.5, 4.0, 7.0, color='#d97706', alpha=0.95, axis='z')
+        draw_cylinder(ax2, cx, cy, -12.5, 5.0, 0.5, color='#f59e0b', alpha=0.95, axis='z')
     
-    # 2. Flexible Silicone Thermal Gap-Pad (Shore 00 35, 60 x 40 x 2.0 mm, Z=-12 to -10)
-    draw_box(ax2, -35, -20, -12, 60, 40, 2.0, color='#38bdf8', alpha=0.85, edgecolor='#0284c7', linewidth=0.8)
+    # Flexible Silicone Thermal Gap-Pad (60 x 40 x 2.0 mm, Z=-12.5 to -10.5)
+    draw_box(ax2, -35, -20, -12.5, 60, 40, 2.0, color='#38bdf8', alpha=0.85, edgecolor='#0284c7', linewidth=0.8)
     
-    # 3. 1S LiPo UPS Buffer Battery (52 x 36 x 6.5 mm in recessed floor cavity Z=-18 to -11.5)
-    # Recessed pocket base & battery body
-    draw_box(ax2, -50, -18, -17.5, 12, 36, 6.0, color='#3b82f6', alpha=0.85, edgecolor='#1d4ed8', linewidth=0.8)
+    # 4-Layer Main PCB (85 x 55 x 1.6 mm at Z = -10.5 to -8.9)
+    draw_box(ax2, -42.5, -27.5, -10.5, 85, 55, 1.6, color='#065f46', alpha=0.95, edgecolor='#10b981', linewidth=1.0)
     
-    # 3.1 EPDM Rubber Retention Strap (Shore 50A, 10 mm wide elastomeric band spanning battery at X = -44)
-    draw_box(ax2, -46, -20, -11.5, 4.0, 40.0, 0.8, color='#0f172a', alpha=0.95, edgecolor='#38bdf8', linewidth=0.8)
-    # Lateral molded strap eyelets / anchor hooks in lower hull
-    draw_box(ax2, -47, -21, -14.0, 6.0, 2.0, 3.5, color='#334155', alpha=0.95, edgecolor='#64748b', linewidth=0.6)
-    draw_box(ax2, -47, 19, -14.0, 6.0, 2.0, 3.5, color='#334155', alpha=0.95, edgecolor='#64748b', linewidth=0.6)
-    
-    # 4. 4-Layer Main PCB (FR4 TG150: 85 x 55 x 1.6 mm at Z = -10 to -8.4)
-    draw_box(ax2, -42.5, -27.5, -10.0, 85, 55, 1.6, color='#065f46', alpha=0.95, edgecolor='#10b981', linewidth=1.0)
-    
-    # Key Components on PCB:
-    # - LM5164-Q1 Buck Converter & Shielded Inductor (Hotspot 1 at X = -25, Y = -12, Z = -8.4)
-    draw_box(ax2, -30, -16, -8.4, 10, 8, 4.5, color='#1e293b', alpha=0.95, edgecolor='#f59e0b', linewidth=0.8)
-    draw_box(ax2, -28, -6, -8.4, 6, 5, 2.0, color='#0f172a', alpha=0.95, edgecolor='#e2e8f0', linewidth=0.5)
-    
-    # - TI BQ24075 UPS Power-Path IC (Hotspot 2 at X = -25, Y = 10, Z = -8.4)
-    draw_box(ax2, -28, 8, -8.4, 6, 6, 1.8, color='#0f172a', alpha=0.95, edgecolor='#e2e8f0', linewidth=0.5)
-    
-    # - ESP32-S3 Dual-Core DSP Module (Hotspot 3 at X = 10, Y = -5, Z = -8.4)
-    draw_box(ax2, 0, -14, -8.4, 25, 18, 3.2, color='#cbd5e1', alpha=0.95, edgecolor='#94a3b8', linewidth=0.8)
-    draw_box(ax2, 25, -14, -8.4, 10, 18, 1.6, color='#047857', alpha=0.95, edgecolor='#10b981', linewidth=0.8)
-    
-    # - Bourns Audio Isolation Transformers (Zone 4 at X = -10, Y = 12, Z = -8.4)
-    draw_box(ax2, -12, 8, -8.4, 12, 10, 6.0, color='#1e293b', alpha=0.95, edgecolor='#fbbf24', linewidth=0.8)
-    draw_box(ax2, 3, 8, -8.4, 12, 10, 6.0, color='#1e293b', alpha=0.95, edgecolor='#fbbf24', linewidth=0.8)
-    
-    # - J1 2x13 Box Header on PCB (X = -22 to +12, Y = -23 to -17, Z = -8.4 to -3.0)
-    draw_box(ax2, -20, -22, -8.4, 34, 5, 5.4, color='#0f172a', alpha=0.95, edgecolor='#fbbf24', linewidth=0.8)
+    # PCB Components:
+    # - LM5164-Q1 Buck & Inductor (Hotspot 1 at X = -25, Y = -12)
+    draw_box(ax2, -30, -16, -8.9, 10, 8, 4.5, color='#1e293b', alpha=0.95, edgecolor='#f59e0b', linewidth=0.8)
+    # - TI BQ24075 UPS IC (Hotspot 2 at X = -25, Y = 10)
+    draw_box(ax2, -28, 8, -8.9, 6, 6, 1.8, color='#0f172a', alpha=0.95, edgecolor='#e2e8f0', linewidth=0.5)
+    # - ESP32-S3 DSP Module (Hotspot 3 at X = 10, Y = -5)
+    draw_box(ax2, 0, -14, -8.9, 25, 18, 3.2, color='#cbd5e1', alpha=0.95, edgecolor='#94a3b8', linewidth=0.8)
+    draw_box(ax2, 25, -14, -8.9, 10, 18, 1.6, color='#047857', alpha=0.95, edgecolor='#10b981', linewidth=0.8)
+    # - Bourns Transformers (X = -10, Y = 12)
+    draw_box(ax2, -12, 8, -8.9, 12, 10, 5.0, color='#1e293b', alpha=0.95, edgecolor='#fbbf24', linewidth=0.8)
+    draw_box(ax2, 3, 8, -8.9, 12, 10, 5.0, color='#1e293b', alpha=0.95, edgecolor='#fbbf24', linewidth=0.8)
+    # - WS2812B RGB LED on PCB (at X = 25, Y = 0)
+    draw_box(ax2, 23.5, -1.5, -8.9, 3.0, 3.0, 1.6, color='#10b981', alpha=0.95, edgecolor='#ffffff', linewidth=0.5)
+    # - J1 2x13 Box Header on PCB (at X = -10, Y = -22)
+    draw_box(ax2, -20, -22, -8.9, 34, 5, 5.4, color='#0f172a', alpha=0.95, edgecolor='#fbbf24', linewidth=0.8)
 
-    # -------------------------------------------------------------
-    # 5. ZWISCHENBODEN (MID-BAFFLE PLATE) AT Z = 2.0 TO 4.5 MM
-    # -------------------------------------------------------------
-    # Main Baffle Plate Left Section (X = -51 to -20)
-    draw_box(ax2, -51, -33, 2.0, 31, 66, 2.5, color='#334155', alpha=0.75, edgecolor='#64748b', linewidth=0.8)
-    # Main Baffle Plate Right Section (X = 18 to 51)
-    draw_box(ax2, 18, -33, 2.0, 33, 66, 2.5, color='#334155', alpha=0.75, edgecolor='#64748b', linewidth=0.8)
-    # Main Baffle Plate Center-Back Section (X = -20 to 18, Y = -14 to 33)
-    draw_box(ax2, -20, -14, 2.0, 38, 47, 2.5, color='#334155', alpha=0.75, edgecolor='#64748b', linewidth=0.8)
-    
-    # 5.1 Integrated Battery Downforce Ribs (Niederhalter-Stege extending downwards from Zwischenboden)
-    # Extending from Z = 2.0 down to Z = -10.5 onto the LiPo battery surface
-    draw_box(ax2, -49, -14, -10.5, 3.0, 5.0, 12.5, color='#475569', alpha=0.85, edgecolor='#94a3b8', linewidth=0.8)
-    draw_box(ax2, -49, 9, -10.5, 3.0, 5.0, 12.5, color='#475569', alpha=0.85, edgecolor='#94a3b8', linewidth=0.8)
-    # Soft-touch EPDM buffer tips on the rib ends (Z = -11.5 to -10.5)
-    draw_box(ax2, -49, -14, -11.5, 3.0, 5.0, 1.0, color='#38bdf8', alpha=0.95, edgecolor='#0284c7', linewidth=0.5)
-    draw_box(ax2, -49, 9, -11.5, 3.0, 5.0, 1.0, color='#38bdf8', alpha=0.95, edgecolor='#0284c7', linewidth=0.5)
-
-    # Highlight: 38.0 x 6.0 mm Cable Pass-Through Slot (at X = -20 to 18, Y = -22 to -14)
-    draw_box(ax2, -20.5, -22.5, 1.8, 39, 8.5, 2.9, color='#0284c7', alpha=0.25, edgecolor='#38bdf8', linewidth=1.2)
-    
-    # 26-Conductor Ultra-Flexible Ribbon Cable (pink/violet AWG28) looping through the slot
-    draw_box(ax2, -18, -36, -6, 30, 14, 1.2, color='#f43f5e', alpha=0.90, edgecolor='#fda4af', linewidth=0.6)
-    draw_box(ax2, -18, -22, -6, 30, 2, 9.0, color='#f43f5e', alpha=0.90, edgecolor='#fda4af', linewidth=0.6)
-    draw_box(ax2, -18, -21, 2.5, 30, 3, 1.2, color='#f43f5e', alpha=0.90, edgecolor='#fda4af', linewidth=0.6)
-    
-    # Ø 5.0 mm Optical LED Shaft Aperture in Zwischenboden (at X = 25, Y = 0)
-    draw_cylinder(ax2, 25, 0, 1.5, 2.8, 3.5, color='#0284c7', alpha=0.4, axis='z')
-    
-    # 4x Pressure Equalization & Venting Slots in Zwischenboden (15 x 2 mm)
-    for vx in [-35, -15, 5, 35]:
-        draw_box(ax2, vx, 15, 1.8, 12, 2.5, 2.9, color='#0284c7', alpha=0.3, edgecolor='#38bdf8', linewidth=0.6)
-    
-    # Top Lid PMMA Light Guide descending through the LED shaft down to PCB LED
-    draw_cylinder(ax2, 25, 0, -6.8, 1.5, 26.0, color='#34d399', alpha=0.85, axis='z')
-    draw_box(ax2, 23.5, -1.5, -8.4, 3.0, 3.0, 1.6, color='#10b981', alpha=0.95, edgecolor='#ffffff', linewidth=0.5)
-    
-    # 4x Vibration-Isolated PCB Standoffs
+    # 4x Vibration PCB Mounts
     for px, py in [(-38, -23), (-38, 23), (38, -23), (38, 23)]:
-        draw_cylinder(ax2, px, py, -15, 2.5, 5.0, color='#475569', alpha=0.95, axis='z')
-        draw_cylinder(ax2, px, py, -10.5, 3.0, 1.0, color='#ef4444', alpha=0.95, axis='z')
-        draw_cylinder(ax2, px, py, -8.4, 1.2, 3.0, color='#cbd5e1', alpha=0.95, axis='z')
+        draw_cylinder(ax2, px, py, -16, 2.5, 5.5, color='#475569', alpha=0.95, axis='z')
+        draw_cylinder(ax2, px, py, -10.5, 1.2, 3.0, color='#cbd5e1', alpha=0.95, axis='z')
+
+    # ---------------------------------------------------------
+    # LAYER 2: ZWISCHENBODEN & OBERWANNE (Z = -2 to +13 mm)
+    # ---------------------------------------------------------
+    # Solid Zwischenboden Partition Floor (PA12: 102 x 66 x 2.5 mm at Z = -2.0 to +0.5)
+    # Left Section
+    draw_box(ax2, -51, -33, -2.0, 31, 66, 2.5, color='#334155', alpha=0.75, edgecolor='#64748b', linewidth=0.8)
+    # Right Section
+    draw_box(ax2, 18, -33, -2.0, 33, 66, 2.5, color='#334155', alpha=0.75, edgecolor='#64748b', linewidth=0.8)
+    # Center-Back Section
+    draw_box(ax2, -20, -14, -2.0, 38, 47, 2.5, color='#334155', alpha=0.75, edgecolor='#64748b', linewidth=0.8)
+
+    # 1. 38.0 x 6.0 mm Ribbon Cable Pass-Through Slot in Zwischenboden
+    draw_box(ax2, -20.5, -22.5, -2.2, 39, 8.5, 2.9, color='#0284c7', alpha=0.25, edgecolor='#38bdf8', linewidth=1.2)
+    
+    # 26-Conductor Ultra-Flexible Ribbon Cable (pink/violet AWG28) looping from HD26 in Oberwanne down to J1 on PCB
+    draw_box(ax2, -18, -36, 4, 30, 14, 1.2, color='#f43f5e', alpha=0.90, edgecolor='#fda4af', linewidth=0.6)
+    draw_box(ax2, -18, -22, -8.0, 30, 2, 13.0, color='#f43f5e', alpha=0.90, edgecolor='#fda4af', linewidth=0.6)
+
+    # 2. Ø 5.0 mm Optical LED Shaft through Zwischenboden (X = 25, Y = 0)
+    draw_cylinder(ax2, 25, 0, -2.5, 2.8, 3.5, color='#0284c7', alpha=0.4, axis='z')
+    
+    # 3. 4x Labyrinth Pressure Equalization Slots in Zwischenboden (15 x 2 mm)
+    for vx in [-35, -15, 5, 35]:
+        draw_box(ax2, vx, 15, -2.2, 12, 2.5, 2.9, color='#0284c7', alpha=0.3, edgecolor='#38bdf8', linewidth=0.6)
+
+    # ---------------------------------------------------------
+    # UPPER COMPARTMENT: 1S LiPo BATTERY SITTING ON ZWISCHENBODEN
+    # ---------------------------------------------------------
+    # Battery Nesting Cradle / Bed on top of Zwischenboden (Z = 0.5 to 7.0 mm)
+    draw_box(ax2, -28, -2, 0.5, 54, 34, 1.0, color='#1e293b', alpha=0.95, edgecolor='#64748b', linewidth=0.8)
+    
+    # 1S LiPo UPS Buffer Battery (52 x 32 x 6.5 mm, resting on Zwischenboden cradle Z = 1.5 to 8.0 mm)
+    draw_box(ax2, -26, 0, 1.5, 50, 30, 6.5, color='#3b82f6', alpha=0.90, edgecolor='#1d4ed8', linewidth=1.0)
+    
+    # EPDM Rubber Retention Strap across battery (10 mm wide band spanning battery at X = -1)
+    draw_box(ax2, -3, -2, 8.0, 4.0, 34.0, 0.8, color='#0f172a', alpha=0.95, edgecolor='#38bdf8', linewidth=0.8)
+    # Side Anchor Lugs on Oberwanne walls for strap
+    draw_box(ax2, -4, -3, 3.0, 6.0, 2.0, 5.5, color='#475569', alpha=0.95, edgecolor='#94a3b8', linewidth=0.6)
+    draw_box(ax2, -4, 31, 3.0, 6.0, 2.0, 5.5, color='#475569', alpha=0.95, edgecolor='#94a3b8', linewidth=0.6)
+
+    # ---------------------------------------------------------
+    # LAYER 3: DECKEL (Z = +13 to +19 mm)
+    # ---------------------------------------------------------
+    draw_box(ax2, -55, -37, 13, 110, 74, 6, color='#0284c7', alpha=0.15, edgecolor='#38bdf8', linewidth=0.8)
+    
+    # PMMA Light Guide descending from Lid through LED shaft to PCB LED
+    draw_cylinder(ax2, 25, 0, -7.3, 1.5, 26.0, color='#34d399', alpha=0.85, axis='z')
 
     # Annotations Ax2
-    ax2.text(-22, -28, 7, "38x6 mm Kabel-Durchführung (Zwischenboden)", color='#38bdf8', fontsize=10, fontweight='bold')
-    ax2.text(-18, -38, -2, "26-Pin Flachbandkabel", color='#f43f5e', fontsize=9, fontweight='bold')
-    ax2.text(26, 0, 8, "Ø 5 mm LED-Schacht", color='#34d399', fontsize=9, fontweight='bold')
-    ax2.text(-35, 18, 7, "4x Druckausgleichsschlitze", color='#94a3b8', fontsize=9, fontweight='bold')
-    ax2.text(-68, -24, -4, "Akku-Niederhalter-Stege\n& EPDM-Spannband", color='#60a5fa', fontsize=8, fontweight='bold')
-    ax2.text(-25, -25, -20, "4x Kupfer-Bolzen (Ø 8 mm)", color='#f59e0b', fontsize=10, fontweight='bold')
-    ax2.text(-35, -28, -11, "2 mm Silikon-Wärmeleitpad", color='#38bdf8', fontsize=10, fontweight='bold')
-    ax2.text(-52, -25, -16, "1S LiPo Akku (USV)", color='#60a5fa', fontsize=10, fontweight='bold')
-    ax2.text(-30, -18, -3, "LM5164 Buck", color='#f59e0b', fontsize=8, fontweight='bold')
-    ax2.text(5, -18, -3, "ESP32-S3", color='#e2e8f0', fontsize=8, fontweight='bold')
+    ax2.text(-26, 0, 10, "1S LiPo-Akku (auf Zwischenboden)", color='#60a5fa', fontsize=9, fontweight='bold')
+    ax2.text(-3, -8, 11, "EPDM-Spannband", color='#38bdf8', fontsize=8, fontweight='bold')
+    ax2.text(-22, -28, 2, "38x6 mm Flachband-Schlitz", color='#38bdf8', fontsize=9, fontweight='bold')
+    ax2.text(-22, -38, -3, "26-Pin Flachbandkabel", color='#f43f5e', fontsize=8, fontweight='bold')
+    ax2.text(26, 0, 2, "Ø 5 mm LED-Schacht", color='#34d399', fontsize=8, fontweight='bold')
+    ax2.text(-35, 18, 2, "Druckausgleichsschlitze", color='#94a3b8', fontsize=8, fontweight='bold')
+    ax2.text(-25, -25, -20, "4x Kupfer-Pins (Ø 8 mm)", color='#f59e0b', fontsize=9, fontweight='bold')
+    ax2.text(-35, -28, -12, "2 mm Silikon-Pad", color='#38bdf8', fontsize=8, fontweight='bold')
+    ax2.text(5, -18, -6, "Hauptplatine (85x55 mm)", color='#10b981', fontsize=9, fontweight='bold')
 
     ax2.set_xlim([-75, 75])
     ax2.set_ylim([-45, 45])
@@ -274,7 +283,7 @@ def render_main_box_cad(output_path):
     plt.tight_layout()
     plt.savefig(output_path, dpi=220, facecolor='#080c14', bbox_inches='tight')
     plt.close()
-    print(f"✓ Main Box Mechanical Enclosure CAD generated: {output_path}")
+    print(f"✓ 3-Piece Sandwich Main Box CAD generated: {output_path}")
 
 if __name__ == "__main__":
     out1 = "/Users/schmidtm/.gemini/antigravity-ide/brain/71a5d344-5a46-4a0e-bb50-16bb2304a17f/main_box_enclosure_cad.png"

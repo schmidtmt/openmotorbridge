@@ -1,51 +1,55 @@
-# 05 - Mechanische Konstruktion: Zentralbox, Zwischenboden, Kühlkonzept & Kassetten-Pods
+# 05 - Mechanische Konstruktion: 3-Teiliges Sandwich-Gehäuse, Zwischenboden & Kassetten-Pods
 
-Dieses Dokument spezifiziert die mechanische Konstruktion, das Thermomanagement und das IP67-Gehäusedesign der zentralen Steuerbox (Typ A) mit integriertem **Zwischenboden (Flachbandkabel-Durchführung, LED-Schacht & Druckausgleich)**, **HD26-Wandflansch**, **wassergeschütztem USB-C Service-Port**, **Kupfer-Kühlbolzen-System** und **wasserdichtem RGB-Lichtleiter**, sowie das universelle Satelliten-Pod-System (Typ B) mit Kassetten-Einschüben.
+Dieses Dokument spezifiziert die mechanische Konstruktion, das Thermomanagement und das IP67/IP69K-Gehäusedesign der zentralen Steuerbox (Typ A) im **3-teiligen Sandwich-Aufbau (Unterwanne, Oberwanne mit Zwischenboden, Gehäusedeckel)** mit **integrierter Akku-Fixierung auf dem Zwischenboden**, **HD26-Kabelbaumflansch**, **wassergeschütztem USB-C Service-Port**, **Kupfer-Kühlbolzen-System** und **wasserdichtem RGB-Lichtleiterfenster**, sowie das universelle Satelliten-Pod-System (Typ B) mit Kassetten-Einschüben.
 
 ---
 
-## 1. Gehäuse Typ A: Zentrale Steuerbox (Unter der Sitzbank)
+## 1. Gehäuse Typ A: Zentrale Steuerbox (3-Teiliges Sandwich-Design)
 
-Das Basisgehäuse der Zentralbox ist als extrem robustes IP67/IP69K-Gehäuse aus **PA12 (MJF-Verfahren)** oder **Aluminium-Druckguss** konzipiert, das speziell für raue Motorrad-Bedingungen (Vibrationen bis $20\,\text{g}$, Spritzwasser, Hitzestau unter der Sitzbank) ausgelegt ist.
+Das Basisgehäuse der Zentralbox ist als modulares, 3-teiliges IP67/IP69K-Sandwichgehäuse aus **PA12 (MJF-Verfahren)** oder **Aluminium-Druckguss** konzipiert, das speziell für raue Motorrad-Bedingungen (Vibrationen bis $20\,\text{g}$, Spritzwasser, Hitzestau unter der Sitzbank) ausgelegt ist:
 
-- **Außenabmessungen:** $110{,}0 \times 74{,}0 \times 38{,}0\,\text{mm}$ (L x B x H, Unterwanne $26{,}0\,\text{mm}$, Deckel $12{,}0\,\text{mm}$).
-- **Befestigung:** 4x integrierte Ecklaschen mit **Lochabstand $128{,}0 \times 56{,}0\,\text{mm}$** für schwingungsdämpfende **M4 Silentblöcke (Shore 50A EPDM)** zur Entkopplung hochfrequenter Motorvibrationen.
+- **Außenabmessungen:** $110{,}0 \times 74{,}0 \times 38{,}0\,\text{mm}$ (L x B x H; Unterwanne $17{,}0\,\text{mm}$, Oberwanne $15{,}0\,\text{mm}$, Deckel $6{,}0\,\text{mm}$).
+- **Befestigung:** 4x integrierte Ecklaschen an der Unterwanne mit **Lochabstand $128{,}0 \times 56{,}0\,\text{mm}$** für schwingungsdämpfende **M4 Silentblöcke (Shore 50A EPDM)** zur Entkopplung hochfrequenter Motorvibrationen.
 - **Lichte Innenmaße:** $102{,}0 \times 66{,}0 \times 32{,}0\,\text{mm}$ (optimiert für die $85{,}0 \times 55{,}0\,\text{mm}$ 4-Layer Hauptplatine).
 - **Material & Fertigung:** PA12 im HP Multi Jet Fusion (MJF) 3D-Druck (min. $3{,}0\,\text{mm}$ Wandstärke), kugelgestrahlt, im Heißbad chemisch geglättet und hydrophob versiegelt.
 - **Schutzart:** IP67 / IP69K (strahlwasser- und tauchdicht bis $1\,\text{m}$ Wassertiefe sowie dampfstrahlbeständig).
 
-### 1.1 3D-CAD-Modell & Baugruppen-Schichten
+### 1.1 3D-CAD-Modell & 3-Schichten-Sandwichaufbau
 
-![OpenMotorBridge Zentralbox Basisgehäuse IP67](../../hardware/cad/main_box_enclosure_cad.png)
+![OpenMotorBridge Zentralbox 3-Teiliges Sandwich-Gehäuse IP67](../../hardware/cad/main_box_enclosure_cad.png)
 
-*Abbildung 5.1: 3D-CAD-Darstellung der zentralen Steuerbox. Links: Geschlossenes IP67-Gehäuse mit HD26-Kabelbaumflansch, blau eloxierter USB-C Servicekappe und 4x M4 Silentblöcken. Rechts: Schnittansicht mit 4x massiven Kupfer-Thermal-Pins ($\varnothing\,8\,\text{mm}$), $2{,}0\,\text{mm}$ Silikon-Wärmeleitpad, 4-Layer FR4-Platine, integriertem PA12-Zwischenboden mit $38 \times 6\,\text{mm}$ Flachbandkabel-Durchführung und LiPo-USV-Akkutasche.*
+*Abbildung 5.1: 3D-CAD-Darstellung der zentralen Steuerbox. Links: Geschlossenes IP67-Gehäuse mit HD26-Kabelbaumflansch in der Oberwanne, blau eloxierter USB-C Servicekappe und 4x M4 Silentblöcken an der Unterwanne. Rechts: Schnittansicht mit den 3 Sandwich-Ebenen: 1. Unterwanne (4x Kupfer-Kühlbolzen, Silikonpad, 4-Layer PCB), 2. Oberwanne mit Zwischenboden (Akku mit EPDM-Spannband oben, 38x6 mm Flachband-Schlitz & LED-Schacht im Boden), 3. Deckel mit Gore-Vent und PMMA-Lichtleiterfenster.*
 
 ```
 ┌────────────────────────────────────────────────────────────┐  ▲
-│ 1. GEHÄUSEDECKEL (12,0 mm Höhe)                            │  │
-│    • PMMA RGB-Status-Lichtleiter (Ø 3,0 mm, IP67 O-Ring)   │  │ 38,0 mm
-│    • Gore ePTFE Druckausgleichsventil (Ø 7,0 mm)           │  │ Gesamt-
+│ 1. GEHÄUSEDECKEL (6,0 mm Höhe / 3,0 mm Wandstärke)         │  │
+│    • PMMA RGB-Status-Lichtleiter-Fenster (Ø 3,0 mm, IP67)  │  │ 38,0 mm
+│    • Gore ePTFE Druckausgleichsmembran (Ø 7,0 mm)          │  │ Gesamt-
 │    • Umlaufende Nut mit Shore 40A Silikon-Profildichtung   │  │ höhe
 ├────────────────────────────────────────────────────────────┤  │
-│ 2. ZWISCHENBODEN (PA12, 2,5 mm Stärke)                     │  │
-│    • 38,0 x 6,0 mm Flachbandkabel-Durchführung (R 1,5 mm)  │  │
-│    • Ø 5,0 mm optischer Lichtleiter-Durchtrittsschacht     │  │
-│    • 4x Labyrinth-Druckausgleichsschlitze (15 x 2 mm)      │  │
+│ 2. OBERWANNE MIT ZWISCHENBODEN (15,0 mm Höhe)              │  │
+│    • Stirnseite: HD26 D-Sub Flansch + USB-C Service-Kappe  │  │
+│    • Oberes Fach (auf dem Zwischenboden):                  │  │
+│      - 1S LiPo-USV-Pufferakku (52x36x6.5mm) in Akkuwanne   │  │
+│      - EPDM-Gummispannband zur Akku-Fixierung              │  │
+│    • Zwischenboden (Trennebene zur Unterwanne):            │  │
+│      - 38,0 x 6,0 mm Flachbandkabel-Schlitz (R 1,5 mm)     │  │
+│      - Ø 5,0 mm optischer LED-Schacht über WS2812B         │  │
+│      - 4x Labyrinth-Druckausgleichsschlitze (15 x 2 mm)    │  │
 ├────────────────────────────────────────────────────────────┤  │
-│ 3. UNTERWANNE (26,0 mm Höhe - Geschlossene Tauchwanne)     │  │
-│    • Stirnwand: HD26 D-Sub Flansch + USB-C Service-Kappe   │  │
+│ 3. UNTERWANNE (17,0 mm Höhe - Geschlossene Tauchwanne)     │  │
 │    • 4-Layer Hauptplatine (85 x 55 mm) auf M2.5 Dämpfern   │  │
-│    • 2,0 mm Silikon-Wärmeleitpad (Shore 00 35, λ = 3 W/mK) │  │
+│    • 2,0 mm Silikon-Thermal-Gap-Pad (Shore 00 35, λ=3 W/mK)│  │
 │    • 4x Massive Kupfer-Thermal-Pins (Ø 8 mm im Wannenboden)│  │
-│    • Vertiefte 1S LiPo-USV-Akkutasche (52 x 36 x 6,5 mm)   │  │
+│    • 100% geschlossene Wanne ohne Gehäusedurchbrüche       │  │
 └────────────────────────────────────────────────────────────┘  ▼
 ```
 
 ---
 
-## 2. Durchgängiges Thermomanagement & Kühlkonzept der Zentralbox
+## 2. Thermomanagement & Kühlkonzept (In der Unterwanne)
 
-Aufgrund des geschlossenen IP67-Gehäuses unter der Sitzbank und den thermischen Verlustleistungen des $100\,\text{V}$-Schaltreglers (LM5164-Q1, bis zu $1{,}8\,\text{W}$ bei voller Pod-Versorgung), des LiPo-Ladecontrollers (BQ24075, bis zu $1{,}2\,\text{W}$) und des ESP32-S3 DSP-Kerns ($0{,}8\,\text{W}$) verfügt die Unterwanne über ein hocheffizientes **Solid-Copper-Thermal-Stud-System**:
+Die untere Tauchwanne beherbergt die wärmeerzeugenden Komponenten: $100\,\text{V}$-Schaltregler (LM5164-Q1, bis zu $1{,}8\,\text{W}$), LiPo-Ladecontroller (BQ24075, bis zu $1{,}2\,\text{W}$) und ESP32-S3 DSP-Kern ($0{,}8\,\text{W}$). Zur Entwärmung verfügt die Unterwanne über ein **Solid-Copper-Thermal-Stud-System**:
 
 ```
       LEITERPLATTE (TOP & INNER LAYERS)
@@ -84,99 +88,70 @@ Aufgrund des geschlossenen IP67-Gehäuses unter der Sitzbank und den thermischen
 
 ---
 
-## 3. Zwischenboden-Durchbrüche, Kabelführung & Druckausgleich
+## 3. Oberwanne: Akku-Fixierung auf Zwischenboden & Kabelführung
 
-Der integrierte Zwischenboden (PA12, $2{,}5\,\text{mm}$ Wandstärke) trennt die empfindliche Leiterplatten- und Akkuebene mechanisch von der oberen Stecker- und Deckelkammer und stellt präzise dimensionierte Durchführungen bereit:
+Die Oberwanne bildet das mittlere Funktionsmodul des Sandwich-Aufbaus: Ihr integrierter Zwischenboden (PA12, $2{,}5\,\text{mm}$ Wandstärke) dient als Montagebasis für den USV-Akku und trennt diesen von der darunterliegenden Elektronik.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                 ZWISCHENBODEN (Draufsicht)                  │
+│                 OBERWANNE (Draufsicht auf Zwischenboden)    │
 │                                                             │
-│   ┌─────────────────────────────┐     ┌─────────────────┐   │
-│   │ 1. Flachbandkabel-Schlitz   │     │ 2. LED-Schacht  │   │
-│   │    (38,0 x 6,0 mm)          │     │    (Ø 5,0 mm)   │   │
-│   │    Abgerundete Kante R1,5 mm│     │    Freischnitt  │   │
-│   └─────────────────────────────┘     └─────────────────┘   │
+│  ┌─────────────────────────┐  ┌──────────────────────────┐  │
+│  │ 1. AKKU-AUFNAHMEWANNE   │  │ 2. Flachbandkabel-Schlitz│  │
+│  │    (52 x 36 x 6.5 mm)   │  │    (38,0 x 6,0 mm, R1,5) │  │
+│  │    mit EPDM-Spannband   │  │    führt zu J1 auf PCB   │  │
+│  └─────────────────────────┘  └──────────────────────────┘  │
 │                                                             │
-│   [Schlitz 1]              [Schlitz 2]              [Schlitz 3]
-│   (15 x 2 mm)              (15 x 2 mm)              (15 x 2 mm)
-│   ◄──────── 4x Interne Druckausgleichsschlitze ────────────►│
+│  ┌─────────────────────────┐                                │
+│  │ 3. LED-Lichtschacht     │  [Slot 1] [Slot 2] [Slot 3]    │
+│  │    (Ø 5,0 mm)           │  (4x Druckausgleichsschlitze)  │
+│  └─────────────────────────┘                                │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### 3.1 Spezifikation der Zwischenboden-Durchführungen
+### 3.1 1S LiPo-Akkuaufnahme & EPDM-Spannband-Fixierung (Auf Zwischenboden)
+* **Passgenaue Aufnahmewanne ($52{,}0 \times 36{,}0 \times 6{,}5\,\text{mm}$):** Auf der Oberseite des Zwischenbodens angeformte Wanne, ausgekleidet mit $1{,}0\,\text{mm}$ EPDM-Moosgummi zur Stoßdämpfung.
+* **Elastisches EPDM-Gummispannband (Shore 50A, $10\,\text{mm}$ breit):** Spannt die Akkuzelle quer über die Wanne. Die Endösen klinken werkzeuglos in zwei Hinterschnitt-Rasthaken der Oberwannen-Seitenwände ein. Der Akku bleibt damit vibrationsfest und spielfrei fixiert, kann aber bei Wartungsarbeiten werkzeuglos getauscht werden.
+* **Integrierter NTC-Temperatursensor:** Im Zwischenboden unter der Zelle eingebettet für die BQ24075 JEITA-Ladeüberwachung.
+
+### 3.2 Spezifikation der Zwischenboden-Durchführungen
 1. **Flachbandkabel-Durchführung für Haupt-Kabelbaum:**
-   * **Abmessungen:** $38{,}0 \times 6{,}0\,\text{mm}$ mit beidseitig $R=1{,}5\,\text{mm}$ Kantenverrundung (verhindert Scheuern oder Durchscheuern der Isolation des 26-poligen AWG28 Flachbandkabels).
+   * **Abmessungen:** $38{,}0 \times 6{,}0\,\text{mm}$ mit beidseitig $R=1{,}5\,\text{mm}$ Kantenverrundung.
    * **Position:** Liegt fluchtend direkt über der 2x13 Wannenbuchse `J1` auf der Hauptplatine.
-   * **Kabelführung:** Das $45\,\text{mm}$ lange, hochflexible 26-polige Flachbandkabel führt vom HD26-Gehäusewandflansch in einer vibrationsfesten $S$-Schleife durch diesen Schlitz auf die Hauptplatine.
+   * **Kabelführung:** Das $45\,\text{mm}$ lange 26-polige Flachbandkabel führt vom stirnseitigen HD26-Flansch in der Oberwanne durch diesen Schlitz nach unten zur Hauptplatine.
 2. **Optischer LED-Durchtrittsschacht:**
    * **Geometrie:** $\varnothing\,5{,}0\,\text{mm}$ zylindrische Bohrung, koaxial positioniert über der SMD-LED `LED1` (WS2812B, GPIO 48).
-   * **Funktion:** Ermöglicht dem im Deckel eingepressten PMMA-Lichtleiter den ungehinderten Durchtritt bis auf $0{,}8\,\text{mm}$ an die LED-Emissionsfläche.
+   * **Funktion:** Lässt das Licht der Platine durch den Zwischenboden ungehindert zum Sichtfenster im Deckel durchtreten.
 3. **Labyrinth-Druckausgleichsschlitze:**
-   * 4x Belüftungsschlitze ($15{,}0 \times 2{,}0\,\text{mm}$) ermöglichen einen ungehinderten Luftaustausch zwischen der unteren Elektronikkammer und dem im Deckel sitzenden Gore ePTFE-Ventil, ohne Kabel zu quetschen.
-
-
-### 3.2 3-Stufen Akku-Fixierung & Vibrationsschutz (USV-Pufferbatterie)
-
-Um die 1S LiPo-Pufferzelle (800–1200 mAh, $52{,}0 \times 36{,}0 \times 6{,}5\,\text{mm}$) unter harten Motorrad-Bedingungen (Vibrationen bis $20\,\text{g}$, harte Fahrbahnschläge) absolut spielfrei, klapperfrei und schockgedämpft zu arretieren, verfügt die Zentralbox über ein **dreistufiges Haltekonzept**:
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│ ZWISCHENBODEN (Unterseite)                                  │
-│   │ 4x Angeformte PA12-Niederhalter-Stege (2.0 mm Wand)     │
-│   ▼ (Drücken mit 0.5 mm Vorspannung sanft auf Akku-Ränder)  │
-│ ┌───┐                                                 ┌───┐ │
-│ │   │                                                 │   │ │
-│ ├───┴─────────────────────────────────────────────────┴───┤ │
-│ │ EPDM-GUMMISPANNBAND (Shore 50A, 10 mm breit)            │ │ ◄── Werkzeuglose
-│ │ (In seitliche Rasthaken der Unterwanne eingeklinkt)     │ │     Montagesicherung
-│ ├─────────────────────────────────────────────────────────┤ │
-│ │ 1S LiPo-PUFFERAKKU (52 x 36 x 6.5 mm / USV-Zelle)       │ │
-│ ├─────────────────────────────────────────────────────────┤ │
-│ │ 1.0 mm EPDM-Moosgummipolster & NTC-Temperatursensor     │ │ ◄── Schockabsorption
-│ └─────────────────────────────────────────────────────────┘ │
-│ UNTERWANNE (Akkutasche 52 x 36 x 6.5 mm im Wannenboden)     │
-└─────────────────────────────────────────────────────────────┘
-```
-
-1. **Integrierte PA12-Niederhalter-Stege am Zwischenboden (*Downforce Ribs*):**
-   * An der Unterseite des Zwischenbodens sind **4 vertikale Führungs- und Druckstege ($2{,}0\,\text{mm}$ Wandstärke, $R=1{,}0\,\text{mm}$ Kantenradius)** mit weichen Moosgummi-Dämpfungsspitzen angeformt.
-   * Beim Verschrauben des Zwischenbodens drücken diese Stege mit definierter elastischer Vorspannung ($0{,}5\,\text{mm}$) von oben auf den Akku. Ein vertikales Abheben oder Verrutschen in $Z$-Richtung bei Schlägen ist mechanisch unmöglich.
-2. **Elastische EPDM-Spannlasche (*Rubber Retention Strap*):**
-   * Ein $10\,\text{mm}$ breites, hochelastisches **EPDM-/Silikon-Halteband (Shore 50A)** spannt die Zelle quer über die Akkutasche.
-   * Zwei im Wannenboden integrierte Hinterschnitt-Rasthaken nehmen die Endösen des Bands auf.
-   * Der Akku bleibt somit auch bei geöffnetem Zwischenboden (z. B. bei Firmware-Flashing oder Wartung) sicher fixiert.
-3. **Schockabsorbierende Moosgummibettung & NTC-Temperatursensor:**
-   * Der Boden der Akkutasche ist mit einem **$1{,}0\,\text{mm}$ dicken EPDM-Zellkautschuk-Polster** ausgelegt.
-   * Eine zentrierte Aussparung bettet den $10\,\text{k}\Omega$ NTC-Sensor formschlüssig direkt an die Akkuzelle ein, um die BQ24075 Ladeüberwachung (JEITA-Sicherheitsabschaltung bei $< 0\,^\circ\text{C}$ oder $> 45\,^\circ\text{C}$) thermisch optimal anzukoppeln.
+   * 4x Belüftungsschlitze ($15{,}0 \times 2{,}0\,\text{mm}$) verbinden den unteren Elektronikraum mit dem oberen Raum und der ePTFE-Membran im Deckel.
 
 ---
 
-## 4. Stirnseitige Anschlüsse & Wartungsfreundlichkeit
+## 4. Stirnseitige Anschlüsse in der Oberwanne (HD26 & USB-C)
 
 ### 4.1 HD26 D-Sub Gehäusewand-Flansch (Kabelbaum-Hauptanschluss)
-* **Ausschnitt-Geometrie:** D-Sub High-Density 26-Pin Ausschnitt ($39{,}2 \times 15{,}4\,\text{mm}$) in der vorderen Stirnwand der **Unterwanne**.
+* **Ausschnitt-Geometrie:** D-Sub High-Density 26-Pin Ausschnitt ($39{,}2 \times 15{,}4\,\text{mm}$) in der vorderen Stirnwand der **Oberwanne**.
 * **Flanschdichtung:** Formgenaue EPDM-Flachdichtung ($1{,}5\,\text{mm}$ Stärke, Shore 60 A) zwischen Metallkragen der Amphenol LTW / NorComp SEAL-D Buchse und der Gehäusewand.
 * **Verschraubung:** 2x M3 Edelstahl-Sechskantbolzen mit O-Ring-Dichtscheiben klemmen den Flansch mit $0{,}6\,\text{Nm}$ wasserdicht gegen die Wand.
 * **Interne Entkopplung:** Verbindung zur Hauptplatine über das 26-polige Flachbandkabel durch den Zwischenboden-Schlitz zur 2x13 Wannenbuchse (`J1`).
 
 ### 4.2 Wasserdichter USB-C Programmier- & Service-Port
-* **Zugang ohne Gehäuseöffnung:** An der Stirnwand neben dem HD26-Flansch befindet sich ein wasserdichter USB-C Service-Port mit **blau eloxierter Aluminium-Schraubkappe** und rotem NBR/Silikon-O-Ring.
+* **Zugang ohne Gehäuseöffnung:** An der Stirnwand der Oberwanne neben dem HD26-Flansch befindet sich ein wasserdichter USB-C Service-Port mit **blau eloxierter Aluminium-Schraubkappe** und rotem NBR/Silikon-O-Ring.
 * **Funktion:** Ermöglicht Firmware-Updates, ESP-IDF JTAG-Debugging und Diagnose im eingebauten Zustand unter der Sitzbank, ohne dass das IP67-Gehäuse aufgeschraubt werden muss.
 
 ---
 
-## 5. Wasserdichter Lichtleiter für die WS2812B RGB Status-LED & Druckausgleich
+## 5. Gehäusedeckel: Wasserdichtes LED-Sichtfenster & Druckausgleich
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│ GEHÄUSEDECKEL (Wandstärke 3,0 mm / Bauhöhe 12,0 mm)         │
+│ GEHÄUSEDECKEL (Wandstärke 3,0 mm / Bauhöhe 6,0 mm)          │
 │                  ┌──────────────────┐                       │
 │                  │  PMMA Lichtleiter│ ◄── NBR O-Ring        │
-│                  │  (Ø 3,0 mm Matt) │     (IP67 Versiegelung│
+│                  │  (Ø 3,0 mm Matt) │     (IP67 Sichtfenster│
 │                  └────────┬─────────┘                       │
 ├───────────────────────────┼─────────────────────────────────┤
-│ ZWISCHENBODEN             │ Durchtritt durch Ø 5,0 mm Schacht
+│ OBERWANNE / ZWISCHENBODEN │ Durchtritt durch Ø 5,0 mm Schacht
 ├───────────────────────────┼─────────────────────────────────┤
 │                           │ Optischer Luftspalt 0,8 mm      │
 │                           ▼                                 │
