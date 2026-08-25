@@ -2181,7 +2181,7 @@
 	(footprint "Connector_JST:JST_PH_B4B-PH-K_1x04_P2.00mm_Vertical"
 		(layer "F.Cu")
 		(uuid "5ad200d7-21a4-4a25-b461-9da781c81cf5")
-		(at 123.50 118.50)
+		(at 124.50 118.50)
 		(property "Reference" "J5"
 			(at 3 -3.5 0)
 			(layer "F.SilkS")
@@ -2217,26 +2217,26 @@
 			(uuid "9c616212-f198-468e-9535-a419aa424146")
 		)
 		(fp_line
-			(start -2.0 -2.25)
-			(end 8.0 -2.25)
+			(start -1.95 -2.25)
+			(end 7.95 -2.25)
 			(stroke (width 0.15) (type solid))
 			(layer "F.SilkS")
 		)
 		(fp_line
-			(start 8.0 -2.25)
-			(end 8.0 2.25)
+			(start 7.95 -2.25)
+			(end 7.95 2.25)
 			(stroke (width 0.15) (type solid))
 			(layer "F.SilkS")
 		)
 		(fp_line
-			(start 8.0 2.25)
-			(end -2.0 2.25)
+			(start 7.95 2.25)
+			(end -1.95 2.25)
 			(stroke (width 0.15) (type solid))
 			(layer "F.SilkS")
 		)
 		(fp_line
-			(start -2.0 2.25)
-			(end -2.0 -2.25)
+			(start -1.95 2.25)
+			(end -1.95 -2.25)
 			(stroke (width 0.15) (type solid))
 			(layer "F.SilkS")
 		)
@@ -2275,7 +2275,7 @@
 		(embedded_fonts no)
 		(model "${KICAD10_3DMODEL_DIR}/Connector_JST.3dshapes/JST_PH_B4B-PH-K_1x04_P2.00mm_Vertical.step"
 			(offset
-				(xyz 3 0 0)
+				(xyz 0 0 0)
 			)
 			(scale
 				(xyz 1 1 1)
