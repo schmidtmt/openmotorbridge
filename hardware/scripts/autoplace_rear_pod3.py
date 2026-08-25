@@ -30,7 +30,7 @@ def auto_place_rear_pod(pcb_path):
     Y_max = Y0 + H  # 105.0 mm
     Y_center = Y0 + H / 2.0  # 87.5 mm
 
-    # 3D Model Mapping
+    # 3D Model Mapping for 100% Integrated Onboard Antennas
     model_mapping = {
         'U1': ('${KICAD10_3DMODEL_DIR}/RF_Module.3dshapes/ESP32-C3-WROOM-02.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
         'U2': ('${KICAD10_3DMODEL_DIR}/Package_DFN_QFN.3dshapes/QFN-24-1EP_4x4mm_P0.5mm_EP2.6x2.6mm.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
@@ -38,8 +38,10 @@ def auto_place_rear_pod(pcb_path):
         'U4': ('${KICAD10_3DMODEL_DIR}/Package_TO_SOT_SMD.3dshapes/SOT-23.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
         # J1: 6-Pin 2.54mm Horizontal Socket on leading front edge (X=102.5mm)
         'J1': ('${KICAD10_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x06_P2.54mm_Horizontal.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
-        'ANT1': ('${KICAD10_3DMODEL_DIR}/Connector_Coaxial.3dshapes/U.FL_Hirose_U.FL-R-SMT-1_Vertical.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
-        'ANT2': ('${KICAD10_3DMODEL_DIR}/Connector_Coaxial.3dshapes/U.FL_Hirose_U.FL-R-SMT-1_Vertical.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
+        # ANT2: Integrated 18x18mm GNSS Ceramic Patch Antenna (Sky-Facing Zenith)
+        'ANT2': ('${KICAD10_3DMODEL_DIR}/RF_Antenna.3dshapes/Pulse_W3000.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
+        # ANT1: Integrated 868MHz High-Q Helical Spring / Coil Antenna
+        'ANT1': ('${KICAD10_3DMODEL_DIR}/Inductor_THT.3dshapes/L_Axial_L11.0mm_D4.5mm_P15.24mm_Horizontal_Fastron_MECC.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
         'L1': ('${KICAD10_3DMODEL_DIR}/Inductor_SMD.3dshapes/L_0603_1608Metric.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
         'F1': ('${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
         'D1': ('${KICAD10_3DMODEL_DIR}/LED_SMD.3dshapes/LED_0603_1608Metric.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
@@ -58,8 +60,8 @@ def auto_place_rear_pod(pcb_path):
         'H3': (X0 + 3.5, Y_max - 3.5, 0.0, pcbnew.F_Cu), # (103.5, 101.5) Bottom-Left
         'H4': (X_max - 3.5, Y_max - 3.5, 0.0, pcbnew.F_Cu),# (146.5, 101.5) Bottom-Right
 
-        # J1: 6-Pin Horizontal Socket on FRONT SHORT EDGE (X=102.5mm, Pin 1 at Y=81.15mm so 6 pins span Y 81.15..93.85mm, perfectly centered between H1 and H3!)
-        'J1': (102.5, 81.15, 0.0, pcbnew.F_Cu),          # Symmetrically centered (Clearance to H1: 7.65mm, Clearance to H3: 7.65mm)
+        # J1: 6-Pin Horizontal Socket on FRONT SHORT EDGE (X=102.5mm, Pin 1 at Y=81.15mm so 6 pins span Y 81.15..93.85mm, centered)
+        'J1': (102.5, 81.15, 0.0, pcbnew.F_Cu),
 
         # Power Protection & Status LED (Adjacent to J1)
         'F1': (108.0, 83.5, 0.0, pcbnew.F_Cu),           # 500mA PTC Fuse
@@ -69,14 +71,14 @@ def auto_place_rear_pod(pcb_path):
         # U4: DS2401 Silicon ROM ID (1-Wire)
         'U4': (113.5, 87.5, 0.0, pcbnew.F_Cu),           # SOT-23 ID Chip
 
-        # Active RF & Processor Architecture (Spaced out across board length)
-        'U1': (135.0, 90.0, 0.0, pcbnew.F_Cu),           # ESP32-C3 Mesh Transceiver (100% inside board)
-        'U2': (121.0, 77.0, 0.0, pcbnew.F_Cu),           # u-blox MAX-M10S GNSS (Top Center)
+        # Active RF & Processor Architecture
+        'U1': (136.0, 87.5, 0.0, pcbnew.F_Cu),           # ESP32-C3 Mesh Transceiver with PCB Antenna at Right Edge
+        'U2': (121.0, 75.0, 0.0, pcbnew.F_Cu),           # u-blox MAX-M10S GNSS (Top Center)
         'U3': (121.0, 98.0, 0.0, pcbnew.F_Cu),           # Semtech SX1262 LoRa (Bottom Center)
 
-        # RF Antennas / U.FL Ports (Safe clearance from mounting holes)
-        'ANT2': (109.0, 78.0, 0.0, pcbnew.F_Cu),         # GNSS 1.575 GHz RF Port (Direct to MAX-M10S)
-        'ANT1': (109.0, 97.0, 0.0, pcbnew.F_Cu),         # 868 MHz LoRa RF Port (Direct to SX1262)
+        # 100% Integrated Onboard Antennas
+        'ANT2': (121.0, 80.0, 0.0, pcbnew.F_Cu),         # Integrated GNSS Ceramic Patch (Skyward)
+        'ANT1': (109.0, 98.0, 0.0, pcbnew.F_Cu),         # Integrated 868 MHz Helical Coil Antenna
 
         # Passives & Decoupling
         'C1': (129.0, 80.0, 0.0, pcbnew.F_Cu),           # 10uF 3V3 Decoupling
@@ -114,7 +116,12 @@ def auto_place_rear_pod(pcb_path):
             fp.Models().clear()
             m = pcbnew.FP_3DMODEL()
             m.m_Filename = model_file
-            m.m_Scale = pcbnew.VECTOR3D(1.0, 1.0, 1.0)
+            if ref == 'ANT2':
+                m.m_Scale = pcbnew.VECTOR3D(1.8, 1.8, 1.5)
+            elif ref == 'ANT1':
+                m.m_Scale = pcbnew.VECTOR3D(0.9, 0.9, 0.9)
+            else:
+                m.m_Scale = pcbnew.VECTOR3D(1.0, 1.0, 1.0)
             m.m_Offset = pcbnew.VECTOR3D(ox, oy, oz)
             m.m_Rotation = pcbnew.VECTOR3D(rx, ry, rz)
             m.m_Show = True
