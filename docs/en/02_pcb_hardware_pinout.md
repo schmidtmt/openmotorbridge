@@ -80,8 +80,8 @@ To completely eliminate coupling between switching power supply harmonics ($2.1\
        * Pin 3: `NTC_JEITA` (10k NTC temperature monitoring)
        * Pin 4: `NTC_GND` (Sensor ground)
        * **Advantage:** Located $> 12\,\text{mm}$ below the ESP32-S3 module, preventing any overlap or clipping!
-     * `J3`: Vertical USB-C service socket ($8.9 \times 4.8\,\text{mm}$, non-rotated) at $X = 138.5\,\text{mm}$ ($1.55\,\text{mm}$ clean clearance to `J5`)
-     * `J4`: 3-Pin RGB LED header ($2.5 \times 7.6\,\text{mm}$, vertical in Y) at $X = 146.5\,\text{mm}$ ($2.28\,\text{mm}$ to `J3` and **$4.23\,\text{mm}$ clean clearance to `J1`**)
+     * `J3`: Vertical USB-C service socket ($6.0 \times 9.0\,\text{mm}$, standing vertically straight UP) at $X = 139.0\,\text{mm}$ ($2.00\,\text{mm}$ clean clearance to `J5`)
+     * `J4`: 3-Pin RGB LED header ($2.5 \times 7.6\,\text{mm}$, vertical in Y) at $X = 146.5\,\text{mm}$ ($1.70\,\text{mm}$ to `J3` and **$4.23\,\text{mm}$ clean clearance to `J1`**)
    * **Zone 1B (Front Edge Right – Galvanic Main System Header):**
      * `J1`: 2x13 Pin IDC26 box header ($33.0 \times 6.0\,\text{mm}$, horizontal in X) – Pin 1 at $X = 154.0\,\text{mm}$, body $X \in [152.0, 187.0\,\text{mm}]$ directly beneath `T1`/`T2` and `U7`/`U8`.
    * **10-mm Insertion Keep-Out:** Dedicated mating space preventing mechanical collisions.

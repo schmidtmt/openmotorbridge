@@ -118,7 +118,7 @@ def auto_place_main_board(pcb_path):
         'J5': (127.5, 118.5, 0.0),            # JST-PH 4-Pin Shrouded (Horizontal: 10.0 x 4.5 mm, Pin 1 at X=124.5)
 
         # Zone 1B: Front Service & Status Connectors
-        'J3': (138.5, 118.5, 0.0),             # USB-C Service Port (Vertical Receptacle: 8.9 x 4.8 mm)
+        'J3': (139.0, 118.5, 0.0),             # USB-C Service Port (Vertical Receptacle: 8.9 x 4.8 mm)
         'J4': (146.5, 116.0, 0.0),            # 3-Pin RGB LED Header (Vertical in Y: 2.5 x 7.6 mm)
 
         # Zone 1C: Right Front Connector (Horizontal J1 - Pin 1 at X=154.0, body X=152..187 mm)

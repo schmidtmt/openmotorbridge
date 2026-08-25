@@ -80,8 +80,8 @@ Um gegenseitige Störungen zwischen der Schaltnetzteil-HF ($2{,}1\,\text{MHz}$),
        * Pin 3: `NTC_JEITA` (10k NTC Temperaturüberwachung)
        * Pin 4: `NTC_GND` (Sensor-Masse)
        * **Vorteil:** Liegt mit $> 12\,\text{mm}$ Abstand sicher unterhalb des ESP32-S3 und verhindert jede Kollision!
-     * `J3`: Vertikale USB-C Service-Buchse ($8{,}9 \times 4{,}8\,\text{mm}$, unverdreht) bei $X = 138{,}5\,\text{mm}$ ($1{,}55\,\text{mm}$ reiner Freiraum zu `J5`)
-     * `J4`: 3-Pin RGB-LED-Anschluss ($2{,}5 \times 7{,}6\,\text{mm}$, vertikal in Y) bei $X = 146{,}5\,\text{mm}$ ($2{,}28\,\text{mm}$ zu `J3` und **$4{,}23\,\text{mm}$ reiner Freiraum zu `J1`**)
+     * `J3`: Vertikale USB-C Service-Buchse ($6{,}0 \times 9{,}0\,\text{mm}$, senkrecht nach oben stehend) bei $X = 139{,}0\,\text{mm}$ ($2{,}00\,\text{mm}$ reiner Freiraum zu `J5`)
+     * `J4`: 3-Pin RGB-LED-Anschluss ($2{,}5 \times 7{,}6\,\text{mm}$, vertikal in Y) bei $X = 146{,}5\,\text{mm}$ ($1{,}70\,\text{mm}$ zu `J3` und **$4{,}23\,\text{mm}$ reiner Freiraum zu `J1`**)
    * **Zone 1B (Rechts – Galvanischer System-Hauptanschluss):**
      * `J1`: 2x13 Pin IDC26 Wannenstecker ($33{,}0 \times 6{,}0\,\text{mm}$, horizontal in X) – Pin 1 bei $X = 154{,}0\,\text{mm}$, Gehäuse $X \in [152{,}0, 187{,}0\,\text{mm}]$ direkt unter `T1`/`T2` und `U7`/`U8`.
    * **10-mm-Einführkorridor:** Barrierefreier Steckzugang für alle Stecker ohne jegliche gegenseitige Behinderung.
