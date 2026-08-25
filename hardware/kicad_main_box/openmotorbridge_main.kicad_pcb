@@ -98,7 +98,7 @@
 		(uuid "0314a55d-129e-4211-ba7b-5b6ed4e3117e")
 		(at 158.00 94.00)
 		(property "Reference" "C6"
-			(at 0 0 0)
+			(at 0.00 -1.50 0)
 			(layer "F.SilkS")
 			(uuid "6fe47e90-547b-4106-b781-9a7e489ce059")
 			(effects
@@ -158,7 +158,7 @@
 		(uuid "11099d76-00e1-403e-b2d9-e18dcb646d7d")
 		(at 144.00 83.50)
 		(property "Reference" "C4"
-			(at 0 0 0)
+			(at 0.00 -1.50 0)
 			(layer "F.SilkS")
 			(uuid "c0e4386e-e58d-490d-9de8-e4c3ba3c51e9")
 			(effects
@@ -218,7 +218,7 @@
 		(uuid "1afe107b-9414-4f86-8a94-bdf90573c6e4")
 		(at 131.50 75.50)
 		(property "Reference" "R1"
-			(at 0 0 0)
+			(at 0.00 -1.50 0)
 			(layer "F.SilkS")
 			(uuid "d1e3d749-ab47-4d0d-9b80-f73b09882894")
 			(effects
@@ -278,8 +278,9 @@
 		(uuid "2f935b36-c40e-44ba-9ed3-a43e0682fe3d")
 		(at 119.22 75.85)
 		(property "Reference" "H1"
-			(at 0 -2.5 0)
+			(at 0.00 -3.00 0)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "0251313f-1e63-492b-baf1-0a7d1d95b2ea")
 			(effects
 				(font
@@ -337,7 +338,7 @@
 		(uuid "335f27bb-f810-46dd-895e-f6a487011d69")
 		(at 138.50 93.00)
 		(property "Reference" "C10"
-			(at 0 0 0)
+			(at 0.00 -1.50 0)
 			(layer "F.SilkS")
 			(uuid "8927ac6f-b7ed-48c8-b818-d09d45de88ee")
 			(effects
@@ -397,8 +398,9 @@
 		(uuid "35a1e2d0-ade4-4bc3-b1ef-de77240d981e")
 		(at 119.22 122.85)
 		(property "Reference" "H3"
-			(at 0 2.5 0)
+			(at 0.00 3.00 0)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "795fa829-27aa-40f8-b14b-87c1f7e4c4e6")
 			(effects
 				(font
@@ -456,7 +458,7 @@
 		(uuid "371d5c2a-1fed-478b-a084-1ecf1d617c86")
 		(at 139.00 83.50)
 		(property "Reference" "C3"
-			(at 0 0 0)
+			(at 0.00 -1.50 0)
 			(layer "F.SilkS")
 			(uuid "f63f2540-779c-4ee6-8030-5e3c9b724226")
 			(effects
@@ -516,7 +518,7 @@
 		(uuid "3afa5af1-e805-4a6b-aa5a-f9192cc0907b")
 		(at 127.00 76.50)
 		(property "Reference" "D2"
-			(at 0 0 0)
+			(at 0.00 -2.50 0)
 			(layer "F.SilkS")
 			(uuid "dc9d7042-ce5e-4f1b-9959-310e46484feb")
 			(effects
@@ -576,7 +578,7 @@
 		(uuid "537acce9-1c41-45da-9e3e-2091f760a65a")
 		(at 182.00 80.00)
 		(property "Reference" "U6"
-			(at 0 -3 0)
+			(at 0.00 -2.80 0)
 			(layer "F.SilkS")
 			(uuid "0de03be5-d822-4d94-b62f-ca70cdc8dbc8")
 			(effects
@@ -638,8 +640,9 @@
 		(uuid "569001e5-4a35-49db-91d9-96206dc9d0d5")
 		(at 196.22 122.85)
 		(property "Reference" "H4"
-			(at 0 2.5 0)
+			(at 0.00 3.00 0)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "5b77be91-6dd2-4dbc-9f75-ba422f34ab8d")
 			(effects
 				(font
@@ -697,7 +700,7 @@
 		(uuid "59bfb410-e938-41dc-8507-cbf6b790f26e")
 		(at 188.00 80.00)
 		(property "Reference" "R9"
-			(at 0 0 0)
+			(at 0.00 -1.50 0)
 			(layer "F.SilkS")
 			(uuid "24dc6df7-5b4b-4c30-a1cf-9860bb7a4136")
 			(effects
@@ -757,7 +760,7 @@
 		(uuid "5b6d8aa7-15f5-487e-bffc-f215bfad0cc9")
 		(at 126.50 93.00)
 		(property "Reference" "U2"
-			(at 0 -10.5 270)
+			(at 0.00 -11.00 270)
 			(layer "F.SilkS")
 			(uuid "ce7994ad-9ccc-4a74-adf6-b06b804456b1")
 			(effects
@@ -819,7 +822,7 @@
 		(uuid "60db94d7-6c23-4f46-98f7-c245a9e13148")
 		(at 135.00 76.50)
 		(property "Reference" "C1"
-			(at 0 0 0)
+			(at 0.00 -1.50 0)
 			(layer "F.SilkS")
 			(uuid "0ca25dae-d8b2-430e-832a-33198f638da9")
 			(effects
@@ -879,7 +882,7 @@
 		(uuid "62bae06b-545c-4bb4-a2bc-122c8e287444")
 		(at 150.00 77.50)
 		(property "Reference" "L1"
-			(at 0 0 0)
+			(at 0.00 -3.80 0)
 			(layer "F.SilkS")
 			(uuid "8b69c6b1-9a2d-4925-b854-bac1c181cf23")
 			(effects
@@ -939,7 +942,7 @@
 		(uuid "66bf7269-3fd4-40a6-8001-8eed8e75ac25")
 		(at 189.00 94.00)
 		(property "Reference" "C7"
-			(at 0 0 0)
+			(at 0.00 -1.50 0)
 			(layer "F.SilkS")
 			(uuid "d1985084-bb38-4067-93a8-0484da6529c4")
 			(effects
@@ -999,7 +1002,7 @@
 		(uuid "6c852f25-c003-4a57-ab81-2280f5a51b5c")
 		(at 131.50 77.50)
 		(property "Reference" "R2"
-			(at 0 0 0)
+			(at 0.00 1.50 0)
 			(layer "F.SilkS")
 			(uuid "c9169361-ed15-452b-9494-8bbdaddf8c5e")
 			(effects
@@ -1054,12 +1057,12 @@
 			)
 		)
 	)
-	(footprint "Connector_USB:USB_C_Receptacle_GCT_USB4085"
+	(footprint "Connector_USB:USB_C_Receptacle_GCT_USB4105-xx_Vertical"
 		(layer "F.Cu")
 		(uuid "74a7523d-fdc4-4b57-8d9d-f609fecaf602")
-		(at 139.00 118.50 90.0)
+		(at 139.50 118.50)
 		(property "Reference" "J3"
-			(at 0 3.5 0)
+			(at 0.00 -3.50 0)
 			(layer "F.SilkS")
 			(uuid "5d42929b-b534-495b-90a6-9ad7d7c7587f")
 			(effects
@@ -1070,7 +1073,7 @@
 			)
 		)
 		(property "Value" "USB_C_IP67"
-			(at 0 -3.5 0)
+			(at 0 4.5 0)
 			(layer "F.Fab")
 			(uuid "f9437c30-5998-42e1-8d6e-e1b11a8e6efb")
 			(effects
@@ -1080,7 +1083,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://gct.co/files/drawings/usb4085.pdf"
+		(property "Datasheet" "https://gct.co/files/drawings/usb4105.pdf"
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
@@ -1092,40 +1095,63 @@
 			(hide yes)
 			(uuid "d143445c-11a8-4f55-af29-4b285c106d06")
 		)
-		(duplicate_pad_numbers_are_jumpers no)
+		(fp_line
+			(start -4.47 -2.4)
+			(end 4.47 -2.4)
+			(stroke (width 0.15) (type solid))
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 4.47 -2.4)
+			(end 4.47 2.4)
+			(stroke (width 0.15) (type solid))
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 4.47 2.4)
+			(end -4.47 2.4)
+			(stroke (width 0.15) (type solid))
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start -4.47 2.4)
+			(end -4.47 -2.4)
+			(stroke (width 0.15) (type solid))
+			(layer "F.SilkS")
+		)
 		(pad "A5" smd rect
-			(at -0.5 -1.2 90)
+			(at -0.5 -1.2)
 			(size 0.3 1.2)
 			(layers "F.Cu" "F.Paste" "F.Mask")
 			(uuid "1a2b3c4d-0001-4000-8000-000000000001")
 		)
 		(pad "B5" smd rect
-			(at 0.5 -1.2 90)
+			(at 0.5 -1.2)
 			(size 0.3 1.2)
 			(layers "F.Cu" "F.Paste" "F.Mask")
 			(uuid "1a2b3c4d-0002-4000-8000-000000000002")
 		)
 		(pad "A6" smd rect
-			(at -0.25 1.2 90)
+			(at -0.25 1.2)
 			(size 0.3 1.2)
 			(layers "F.Cu" "F.Paste" "F.Mask")
 			(uuid "1a2b3c4d-0003-4000-8000-000000000003")
 		)
 		(pad "A7" smd rect
-			(at 0.25 1.2 90)
+			(at 0.25 1.2)
 			(size 0.3 1.2)
 			(layers "F.Cu" "F.Paste" "F.Mask")
 			(uuid "1a2b3c4d-0004-4000-8000-000000000004")
 		)
 		(pad "SH" thru_hole oval
-			(at -4.32 0 90)
+			(at -4.32 0)
 			(size 1.2 2.2)
 			(drill oval 0.8 1.8)
 			(layers "*.Cu" "*.Mask")
 			(uuid "1a2b3c4d-0005-4000-8000-000000000005")
 		)
 		(pad "SH" thru_hole oval
-			(at 4.32 0 90)
+			(at 4.32 0)
 			(size 1.2 2.2)
 			(drill oval 0.8 1.8)
 			(layers "*.Cu" "*.Mask")
@@ -1134,13 +1160,13 @@
 		(embedded_fonts no)
 		(model "${KICAD10_3DMODEL_DIR}/Connector_USB.3dshapes/USB_C_Receptacle_GCT_USB4085.step"
 			(offset
-				(xyz 0 0 0)
+				(xyz -2.975 -0.67 0.855)
 			)
 			(scale
 				(xyz 1 1 1)
 			)
 			(rotate
-				(xyz 90 0 90)
+				(xyz -90 0 0)
 			)
 		)
 	)
@@ -1149,7 +1175,7 @@
 		(uuid "7d8576e5-095f-4c37-adf3-67778b987119")
 		(at 180.00 94.00)
 		(property "Reference" "T2"
-			(at 0 0 0)
+			(at 0.00 -7.50 0)
 			(layer "F.SilkS")
 			(uuid "83d2b384-0e62-451f-bac1-8d14308c9c07")
 			(effects
@@ -1209,7 +1235,7 @@
 		(uuid "81e6d93d-04c9-4f61-b5d6-28c163f49b30")
 		(at 166.00 105.00)
 		(property "Reference" "U7"
-			(at 0 0 0)
+			(at 0.00 -2.80 0)
 			(layer "F.SilkS")
 			(uuid "ac73ab8e-beb1-4d7c-94a3-2003228c9ed3")
 			(effects
@@ -1269,7 +1295,7 @@
 		(uuid "837a7f06-8ade-43f9-935c-39f4c2917ccf")
 		(at 150.00 89.00)
 		(property "Reference" "U5"
-			(at 0 -2.2 0)
+			(at 0.00 -2.20 0)
 			(layer "F.SilkS")
 			(uuid "2f25dbb6-1ce3-427e-adf5-807bf30219d1")
 			(effects
@@ -1331,7 +1357,7 @@
 		(uuid "8add9745-a620-41da-b564-4cdaeb769c20")
 		(at 145.00 89.00)
 		(property "Reference" "C12"
-			(at 0 0 0)
+			(at 0.00 -1.50 0)
 			(layer "F.SilkS")
 			(uuid "d774e6ef-0b6f-4dbe-96c8-64f3aa900eb8")
 			(effects
@@ -1391,7 +1417,7 @@
 		(uuid "8af113b9-effd-4de0-b948-d3d79233f565")
 		(at 148.00 102.00)
 		(property "Reference" "J2"
-			(at 0 -8.5 180)
+			(at 0.00 -8.50 180)
 			(layer "F.SilkS")
 			(uuid "c675fffd-5fd9-4d25-83e7-bcbc1f07e5be")
 			(effects
@@ -1453,7 +1479,7 @@
 		(uuid "9d722d3e-5f5b-4dee-9b40-eb16ff0b4e92")
 		(at 166.00 94.00)
 		(property "Reference" "T1"
-			(at 0 0 0)
+			(at 0.00 -7.50 0)
 			(layer "F.SilkS")
 			(uuid "243845f2-150f-4487-9bbf-d42b74f23d2e")
 			(effects
@@ -1513,7 +1539,7 @@
 		(uuid "a7e5e864-7fd7-432a-8ada-d95541e947b8")
 		(at 145.00 91.00)
 		(property "Reference" "R10"
-			(at 0 0 0)
+			(at -1.80 0.00)
 			(layer "F.SilkS")
 			(uuid "bdcfbc2d-b010-4a72-84a9-6517fb343614")
 			(effects
@@ -1573,7 +1599,7 @@
 		(uuid "aa97b3c1-5a59-4562-83f7-9a1de86eb49e")
 		(at 154.00 85.00)
 		(property "Reference" "D1"
-			(at 0 -1.8 0)
+			(at 0.00 -1.80 0)
 			(layer "F.SilkS")
 			(uuid "be4b5d31-9dd3-4191-acc1-31b3656a08cd")
 			(effects
@@ -1624,7 +1650,7 @@
 		(uuid "b6541aa6-aa03-41ee-b1fc-2bfcf2f6d8e4")
 		(at 189.00 97.00)
 		(property "Reference" "R6"
-			(at 0 0 0)
+			(at 0.00 1.50 0)
 			(layer "F.SilkS")
 			(uuid "4a2ed845-5b10-4146-a47b-3633d38a64af")
 			(effects
@@ -1684,7 +1710,7 @@
 		(uuid "b8862443-7a83-40f1-9c26-ac0abfeecf05")
 		(at 180.00 105.00)
 		(property "Reference" "U8"
-			(at 0 0 0)
+			(at 0.00 -2.80 0)
 			(layer "F.SilkS")
 			(uuid "9ca7e850-4d8d-4999-a0f8-ea67a2e00a2d")
 			(effects
@@ -1744,7 +1770,7 @@
 		(uuid "bc507843-29b1-4b21-8520-df9f871c2d3a")
 		(at 145.00 93.00)
 		(property "Reference" "R11"
-			(at 0 0 0)
+			(at 0.00 1.50 0)
 			(layer "F.SilkS")
 			(uuid "fb7dbda2-a5fb-4dd1-93e5-1daa2069240a")
 			(effects
@@ -1804,7 +1830,7 @@
 		(uuid "bfbc13cf-daae-4069-92e4-d551667c8723")
 		(at 154.00 118.50 90.0)
 		(property "Reference" "J1"
-			(at 0 -12 180)
+			(at 0.00 -4.50 180)
 			(layer "F.SilkS")
 			(uuid "6f96ebb8-38c5-457c-9f75-adcc42ffff56")
 			(effects
@@ -1864,24 +1890,26 @@
 	(footprint "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "c0c5be66-b62e-4345-af69-7c967c2cb1d6")
-		(at 146.50 116.00)
+		(at 195.00 108.00)
 		(property "Reference" "J4"
-			(at 0 0 0)
+			(at -2.50 0.00 90)
 			(layer "F.SilkS")
 			(uuid "83184a32-9949-4c44-95c0-630acd6c3aa0")
 			(effects
 				(font
-					(size 1.27 1.27)
+					(size 1 1)
+					(thickness 0.15)
 				)
 			)
 		)
 		(property "Value" "LED_EXT"
-			(at 0 0 0)
+			(at 2.5 0 90)
 			(layer "F.Fab")
 			(uuid "b0c9e8aa-a7aa-47e9-a813-a0f4f3f700cc")
 			(effects
 				(font
-					(size 1.27 1.27)
+					(size 1 1)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -1890,52 +1918,63 @@
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "404ed4d3-d29e-416e-a330-65fcc78441d8")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
 		)
-		(property "Description" ""
+		(property "Description" "3-Pin Right Flank RGB LED Header (Vertical along Y)"
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "809b439a-af12-433e-8d0c-cd4d276ae8d6")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+		)
+		(fp_line
+			(start -1.27 -3.81)
+			(end 1.27 -3.81)
+			(stroke (width 0.15) (type solid))
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 1.27 -3.81)
+			(end 1.27 3.81)
+			(stroke (width 0.15) (type solid))
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 1.27 3.81)
+			(end -1.27 3.81)
+			(stroke (width 0.15) (type solid))
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start -1.27 3.81)
+			(end -1.27 -3.81)
+			(stroke (width 0.15) (type solid))
+			(layer "F.SilkS")
 		)
 		(duplicate_pad_numbers_are_jumpers no)
-		(pad "1" thru_hole circle
-			(at 0 0)
+		(pad "1" thru_hole rect
+			(at 0 -2.54)
 			(size 1.7 1.7)
 			(drill 1)
-			(layers "*.Cu")
-			(remove_unused_layers no)
+			(layers "*.Cu" "*.Mask")
 			(uuid "468af79b-9684-43da-99c1-a0080748599c")
 		)
 		(pad "2" thru_hole circle
-			(at 2.54 0)
+			(at 0 0)
 			(size 1.7 1.7)
 			(drill 1)
-			(layers "*.Cu")
-			(remove_unused_layers no)
-			(uuid "20fd873e-03a0-4050-8f27-c508f9faa00d")
+			(layers "*.Cu" "*.Mask")
+			(uuid "42f7ee84-fa86-4554-aa61-0428d0113f8c")
 		)
 		(pad "3" thru_hole circle
-			(at 5.08 0)
+			(at 0 2.54)
 			(size 1.7 1.7)
 			(drill 1)
-			(layers "*.Cu")
-			(remove_unused_layers no)
-			(uuid "c7f8ddf2-5093-4f2a-93e7-9692869216fd")
+			(layers "*.Cu" "*.Mask")
+			(uuid "ee3eb76c-fbef-47fe-bbba-411a76c8c4da")
 		)
 		(embedded_fonts no)
 		(model "${KICAD10_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x03_P2.54mm_Vertical.step"
 			(offset
-				(xyz 0 0 0)
+				(xyz 0 2.54 0)
 			)
 			(scale
 				(xyz 1 1 1)
@@ -1950,7 +1989,7 @@
 		(uuid "c6b97a28-cd24-4fd7-a039-1b5f070edeeb")
 		(at 142.00 78.00)
 		(property "Reference" "U1"
-			(at 0 -3.2 0)
+			(at 0.00 -3.20 0)
 			(layer "F.SilkS")
 			(uuid "28f742ec-9244-43de-81b5-10f443abbf9e")
 			(effects
@@ -2012,7 +2051,7 @@
 		(uuid "cbfc0531-d121-410a-adb8-082c7db51394")
 		(at 138.50 96.00)
 		(property "Reference" "C11"
-			(at 0 0 0)
+			(at 0.00 1.50 0)
 			(layer "F.SilkS")
 			(uuid "976089a0-ed1a-4faa-a882-c8be4f865985")
 			(effects
@@ -2072,7 +2111,7 @@
 		(uuid "cc678832-2a14-49ca-b0ea-3552ca944cf1")
 		(at 156.00 77.50)
 		(property "Reference" "C2"
-			(at 0 0 0)
+			(at 0.00 -1.50 0)
 			(layer "F.SilkS")
 			(uuid "c896d4c6-f33c-4aaf-8597-8de56075482f")
 			(effects
@@ -2127,63 +2166,12 @@
 			)
 		)
 	)
-	(footprint "Converter_DCDC:Converter_DCDC_Mornsun_B_S-1WR3_THT"
-		(layer "F.Cu")
-		(uuid "cc9f4b17-340a-4611-8bf5-c8bedcd321e4")
-		(at 184 80)
-		(property "Reference" "U4"
-			(at 0 -4.5 0)
-			(layer "F.SilkS")
-			(uuid "eefbdb29-abb7-4ca8-9e79-fbaf53cebd0d")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Value" "B0505S-1WR3"
-			(at 0 4.5 0)
-			(layer "F.Fab")
-			(uuid "f836abab-49bb-44bd-8aa1-001c10eba5bb")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "840e932f-7fb8-4473-bb60-dbac5c63da39")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "31403275-9e97-4314-ada2-e15d532e35af")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(duplicate_pad_numbers_are_jumpers no)
-		(embedded_fonts no)
-	)
 	(footprint "Connector_JST:JST_PH_B4B-PH-K_1x04_P2.00mm_Vertical"
 		(layer "F.Cu")
 		(uuid "5ad200d7-21a4-4a25-b461-9da781c81cf5")
-		(at 124.50 118.50)
+		(at 124.25 118.50)
 		(property "Reference" "J5"
-			(at 3 -3.5 0)
+			(at 3.00 -3.20 0)
 			(layer "F.SilkS")
 			(uuid "455b8455-fb33-4665-962a-123957ba39d3")
 			(effects
@@ -2245,7 +2233,6 @@
 			(size 1.7 1.7)
 			(drill 0.8)
 			(layers "*.Cu" "*.Mask")
-			(remove_unused_layers no)
 			(uuid "7dc9c955-a537-477d-8bbe-5b07a1b57715")
 		)
 		(pad "2" thru_hole circle
@@ -2253,7 +2240,6 @@
 			(size 1.7 1.7)
 			(drill 0.8)
 			(layers "*.Cu" "*.Mask")
-			(remove_unused_layers no)
 			(uuid "05603b09-be61-4e79-b73d-643a5795a41e")
 		)
 		(pad "3" thru_hole circle
@@ -2261,7 +2247,6 @@
 			(size 1.7 1.7)
 			(drill 0.8)
 			(layers "*.Cu" "*.Mask")
-			(remove_unused_layers no)
 			(uuid "2ce32ee0-4226-4a7c-9200-2829431b98e5")
 		)
 		(pad "4" thru_hole circle
@@ -2269,7 +2254,6 @@
 			(size 1.7 1.7)
 			(drill 0.8)
 			(layers "*.Cu" "*.Mask")
-			(remove_unused_layers no)
 			(uuid "a1b2c3d4-e5f6-47a8-b901-c2d3e4f5a6b7")
 		)
 		(embedded_fonts no)
@@ -2290,7 +2274,7 @@
 		(uuid "dee2d1f8-9b0a-4cef-aeb4-e4a62074ddfe")
 		(at 138.50 87.00)
 		(property "Reference" "U9"
-			(at 0 0 0)
+			(at 0.00 -2.20 0)
 			(layer "F.SilkS")
 			(uuid "80915952-df5f-415c-a1d4-8d413e42a8f7")
 			(effects
@@ -2350,7 +2334,7 @@
 		(uuid "e8eb09ae-6b2f-48dc-8336-41c377efb0eb")
 		(at 158.00 97.00)
 		(property "Reference" "R5"
-			(at 0 0 0)
+			(at 0.00 1.50 0)
 			(layer "F.SilkS")
 			(uuid "347aa186-7705-4605-aac6-12598b4cb991")
 			(effects
@@ -2410,8 +2394,9 @@
 		(uuid "f92c003e-d252-4bb1-a005-b4588f5aa46a")
 		(at 196.22 75.85)
 		(property "Reference" "H2"
-			(at 0 -2.5 0)
+			(at 0.00 -3.00 0)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "0126e3a2-1920-4937-b70f-b5b629b87ab2")
 			(effects
 				(font
@@ -2469,7 +2454,7 @@
 		(uuid "fa7b6eef-4701-488e-9eee-7aa81e0affdc")
 		(at 168.00 80.00)
 		(property "Reference" "U3"
-			(at 0 -3 0)
+			(at 0.00 -2.80 0)
 			(layer "F.SilkS")
 			(uuid "24c86e19-3487-4240-bb22-f0bd386a24d0")
 			(effects
@@ -2610,9 +2595,7 @@
 		(layer "Edge.Cuts")
 		(uuid "37ba2298-c5f9-4af0-aa7b-f3a2f710eff4")
 	)
-	(gr_text "GALVANIC BARRIER (4mm)"
-		(at 183.220238 97.84825 90)
-		(layer "F.SilkS")
+	(gr_text "GALVANIC BARRIER (4mm)" (at 173.00 74.00) (layer "F.SilkS")
 		(uuid "bc524c8b-1b0c-47b1-ae1e-f26495a991a0")
 		(effects
 			(font
@@ -2621,9 +2604,7 @@
 			)
 		)
 	)
-	(gr_text "CERN-OHL-S v2 | 4-Layer SMT"
-		(at 160.220238 82.34825 0)
-		(layer "F.SilkS")
+	(gr_text "CERN-OHL-S v2 | 4-Layer SMT" (at 147.00 114.50) (layer "F.SilkS")
 		(uuid "36c18fa7-d4e6-4972-a6f4-dbe7cd0a7c68")
 		(effects
 			(font
@@ -2632,9 +2613,7 @@
 			)
 		)
 	)
-	(gr_text "OpenMotorBridge v8.0"
-		(at 160.220238 79.84825 0)
-		(layer "F.SilkS")
+	(gr_text "OpenMotorBridge v8.0" (at 147.00 112.00) (layer "F.SilkS")
 		(uuid "2fbc931c-d840-4317-bd4d-858686d6184c")
 		(effects
 			(font

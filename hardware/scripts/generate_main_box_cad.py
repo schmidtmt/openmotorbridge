@@ -125,14 +125,14 @@ def render_main_box_cad(output_path):
             draw_cylinder(ax1, center_x, center_y, -20.0, 2.2, 8.0, color='#cbd5e1', alpha=0.95, axis='z')
 
     # Front Panel Features on Oberwanne (placed at Y = -37, Z = 0 to 11)
-    # 1. USB-C Waterproof Service Port & Screw-Cap on Left (at X = -18.7, Y = -37, Z = 6.5)
-    draw_cylinder(ax1, -18.7, -37, 6.5, 5.5, 4.0, color='#475569', alpha=0.95, axis='y')
-    draw_cylinder(ax1, -18.7, -41, 6.5, 5.0, 3.0, color='#0284c7', alpha=0.95, axis='y')
-    draw_cylinder(ax1, -18.7, -39, 6.5, 5.3, 0.8, color='#ef4444', alpha=0.95, axis='y')
+    # 1. USB-C Waterproof Service Port & Screw-Cap on Left (at X = -18.22, Y = -37, Z = 6.5)
+    draw_cylinder(ax1, -18.22, -37, 6.5, 5.5, 4.0, color='#475569', alpha=0.95, axis='y')
+    draw_cylinder(ax1, -18.22, -41, 6.5, 5.0, 3.0, color='#0284c7', alpha=0.95, axis='y')
+    draw_cylinder(ax1, -18.22, -39, 6.5, 5.3, 0.8, color='#ef4444', alpha=0.95, axis='y')
     
-    # 2. PMMA RGB Status LED Window on Left (at X = -11.2, Y = -37, Z = 6.5)
-    draw_cylinder(ax1, -11.2, -37.5, 6.5, 2.5, 1.5, color='#10b981', alpha=0.95, axis='y')
-    draw_cylinder(ax1, -11.2, -38.5, 6.5, 1.8, 1.0, color='#34d399', alpha=0.95, axis='y')
+    # 2. PMMA RGB Status LED Window on Right Flank (at X = 47, Y = 8.65, Z = 6.5)
+    draw_cylinder(ax1, 47.0, 8.65, 6.5, 2.5, 1.5, color='#10b981', alpha=0.95, axis='x')
+    draw_cylinder(ax1, 48.0, 8.65, 6.5, 1.8, 1.0, color='#34d399', alpha=0.95, axis='x')
 
     # 3. HD26 D-Sub Wall Flange on Right/Center (39.2 x 15.4 mm at X = 10, Y = -37, Z = 5)
     draw_box(ax1, -9, -40, -1, 38, 3, 15, color='#0284c7', alpha=0.95, edgecolor='#38bdf8', linewidth=1.0)
@@ -229,16 +229,18 @@ def render_main_box_cad(output_path):
 
     # - Bottom Front Connector Rail (Y = -22 to -17):
     # Left Group:
-    # J5 (4-Pin JST-PH Akku + NTC at X_CAD = -30.2, Horizontal: 10.0x4.5 mm)
-    draw_box(ax2, -35.2, -22, -8.9, 10.0, 4.5, 5.0, color='#ef4444', alpha=0.95, edgecolor='#dc2626', linewidth=0.6)
-    # J3 (USB-C Service Port at X_CAD = -18.7, Vertical Receptacle: 6.0x9.0 mm standing UP)
-    draw_box(ax2, -21.7, -22, -8.9, 6.0, 9.0, 5.0, color='#38bdf8', alpha=0.95, edgecolor='#0284c7', linewidth=0.6)
-    # J4 (3-Port RGB LED Header at X_CAD = -11.2, Vertical: 2.5x7.6 mm)
-    draw_box(ax2, -12.5, -22, -8.9, 2.5, 7.6, 5.0, color='#10b981', alpha=0.95, edgecolor='#059669', linewidth=0.6)
+    # J5 (4-Pin JST-PH Akku + NTC at X_CAD = -30.47, Horizontal: 10.0x4.5 mm)
+    draw_box(ax2, -35.47, -22, -8.9, 10.0, 4.5, 5.0, color='#ef4444', alpha=0.95, edgecolor='#dc2626', linewidth=0.6)
+    # J3 (USB-C Service Port at X_CAD = -18.22, Vertical Receptacle: 8.9x4.8 mm standing UP)
+    draw_box(ax2, -22.67, -22, -8.9, 8.9, 4.8, 5.0, color='#38bdf8', alpha=0.95, edgecolor='#0284c7', linewidth=0.6)
     
     # Right Group:
     # J1 (26-Port IDC Header 2x13 at X_CAD = -3.7 to +29.3, Y = -22 to -16)
     draw_box(ax2, -5.7, -22, -8.9, 35.0, 6.0, 5.4, color='#0f172a', alpha=0.95, edgecolor='#fbbf24', linewidth=0.8)
+
+    # Right Flank Connector:
+    # J4 (3-Port RGB LED Header on Right Flank at X_CAD = +37.28, Y_CAD = +8.65, Vertical in Y: 2.5x7.6 mm)
+    draw_box(ax2, 36.0, 5.0, -8.9, 2.5, 7.6, 5.0, color='#10b981', alpha=0.95, edgecolor='#059669', linewidth=0.6)
 
     # 4x Vibration PCB Mounts
     for px, py in [(-38, -23), (-38, 23), (38, -23), (38, 23)]:

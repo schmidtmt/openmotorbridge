@@ -72,18 +72,20 @@ To completely eliminate coupling between switching power supply harmonics ($2.1\
 └──────────────────────────────────────────────┴─────────────────────────┘
 ```
 
-1. **Zone 1 (Front Edge – 2 Dedicated Functional Connector Clusters):**
-   * **Zone 1A (Front Edge Left/Center – Power, Service & Status with generous clearance):**
-     * `J5`: 4-Pin JST-PH shrouded header with locking ramp ($10.0 \times 4.5\,\text{mm}$, horizontal in X) at $X = 127.5\,\text{mm}$ (Pin 1 at $X = 124.5\,\text{mm}$):
+1. **Zone 1 (Connector Architecture – Front Rail & Right Flank):**
+   * **Zone 1A (Front Edge Left – Battery & UPS Power Input):**
+     * `J5`: 4-Pin JST-PH shrouded header with locking ramp ($10.0 \times 4.5\,\text{mm}$, horizontal in X) at $X = 127.25\,\text{mm}$ (Pin 1 at $X = 124.25\,\text{mm}$):
        * Pin 1: `BAT+` (+3.7V / +4.2V 1S LiPo)
        * Pin 2: `BAT-` (`GND_PWR`)
        * Pin 3: `NTC_JEITA` (10k NTC temperature monitoring)
        * Pin 4: `NTC_GND` (Sensor ground)
-       * **Advantage:** Located $> 12\,\text{mm}$ below the ESP32-S3 module, preventing any overlap or clipping!
-     * `J3`: Vertical USB-C service socket ($6.0 \times 9.0\,\text{mm}$, standing vertically straight UP) at $X = 139.0\,\text{mm}$ ($2.00\,\text{mm}$ clean clearance to `J5`)
-     * `J4`: 3-Pin RGB LED header ($2.5 \times 7.6\,\text{mm}$, vertical in Y) at $X = 146.5\,\text{mm}$ ($1.70\,\text{mm}$ to `J3` and **$4.23\,\text{mm}$ clean clearance to `J1`**)
-   * **Zone 1B (Front Edge Right – Galvanic Main System Header):**
+       * **Advantage:** Located $> 12\,\text{mm}$ below the ESP32-S3 module and fits $100\%$ flush within silkscreen markings!
+   * **Zone 1B (Front Edge Center – Waterproof Service Port):**
+     * `J3`: Vertical USB-C service socket ($8.9 \times 4.8\,\text{mm}$, non-rotated, standing vertically UP) at $X = 139.50\,\text{mm}$ ($2.83\,\text{mm}$ clean clearance to `J5` and **$8.03\,\text{mm}$ expansive air gap to `J1`**)
+   * **Zone 1C (Front Edge Right – Galvanic Main System Header):**
      * `J1`: 2x13 Pin IDC26 box header ($33.0 \times 6.0\,\text{mm}$, horizontal in X) – Pin 1 at $X = 154.0\,\text{mm}$, body $X \in [152.0, 187.0\,\text{mm}]$ directly beneath `T1`/`T2` and `U7`/`U8`.
+   * **Zone 1D (Right Short Flank – Status & Diagnostics):**
+     * `J4`: 3-Pin RGB LED header ($2.5 \times 7.6\,\text{mm}$, vertical in Y) at $X = 195.00\,\text{mm}, Y = 108.00\,\text{mm}$ ($> 7\,\text{mm}$ clearance to `J1` and `U8`, $> 8\,\text{mm}$ to mounting hole `H4`).
    * **10-mm Insertion Keep-Out:** Dedicated mating space preventing mechanical collisions.
 2. **Zone 2 (Left Flank Top – Automotive Power & UPS):**
    * Accepts raw motorcycle electrical voltages (KL30/KL15). Contains the Bourns PPTC fuse, SMBJ33CA TVS diode, reverse-polarity MOSFET, $10\,\mu\text{H}$ PI filter, TI LM5164-Q1 synchronous buck converter, and TI BQ24075 UPS battery management.

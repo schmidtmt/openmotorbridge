@@ -72,18 +72,20 @@ Um gegenseitige Störungen zwischen der Schaltnetzteil-HF ($2{,}1\,\text{MHz}$),
 └──────────────────────────────────────────────┴─────────────────────────┘
 ```
 
-1. **Zone 1 (Vorderkante – 2 funktionale Stecker-Cluster):**
-   * **Zone 1A (Links/Mitte – Power, Service & Signalisierung mit großzügigen Abständen):**
-     * `J5`: 4-Pin JST-PH Wannenstecker mit Rastnase ($10{,}0 \times 4{,}5\,\text{mm}$, horizontal in X) bei $X = 127{,}5\,\text{mm}$ (Pin 1 bei $X = 124{,}5\,\text{mm}$):
+1. **Zone 1 (Stecker-Architektur – Front & rechte Flanke):**
+   * **Zone 1A (Vorderkante Links – Akku- & USV-Leistungseingang):**
+     * `J5`: 4-Pin JST-PH Wannenstecker mit Rastnase ($10{,}0 \times 4{,}5\,\text{mm}$, horizontal in X) bei $X = 127{,}25\,\text{mm}$ (Pin 1 bei $X = 124{,}25\,\text{mm}$):
        * Pin 1: `BAT+` (+3.7V / +4.2V 1S LiPo)
        * Pin 2: `BAT-` (`GND_PWR`)
        * Pin 3: `NTC_JEITA` (10k NTC Temperaturüberwachung)
        * Pin 4: `NTC_GND` (Sensor-Masse)
-       * **Vorteil:** Liegt mit $> 12\,\text{mm}$ Abstand sicher unterhalb des ESP32-S3 und verhindert jede Kollision!
-     * `J3`: Vertikale USB-C Service-Buchse ($6{,}0 \times 9{,}0\,\text{mm}$, senkrecht nach oben stehend) bei $X = 139{,}0\,\text{mm}$ ($2{,}00\,\text{mm}$ reiner Freiraum zu `J5`)
-     * `J4`: 3-Pin RGB-LED-Anschluss ($2{,}5 \times 7{,}6\,\text{mm}$, vertikal in Y) bei $X = 146{,}5\,\text{mm}$ ($1{,}70\,\text{mm}$ zu `J3` und **$4{,}23\,\text{mm}$ reiner Freiraum zu `J1`**)
-   * **Zone 1B (Rechts – Galvanischer System-Hauptanschluss):**
+       * **Vorteil:** Liegt mit $> 12\,\text{mm}$ Abstand sicher unterhalb des ESP32-S3 und sitzt $100\%$ deckungsgleich in der Bestückungsmarkierung!
+   * **Zone 1B (Vorderkante Mitte – Wasserdichter Service-Port):**
+     * `J3`: Vertikale USB-C Service-Buchse ($8{,}9 \times 4{,}8\,\text{mm}$, unverdreht, senkrecht nach oben) bei $X = 139{,}50\,\text{mm}$ ($2{,}83\,\text{mm}$ reiner Freiraum zu `J5` und **$8{,}03\,\text{mm}$ gigantischer Freiraum zu `J1`**)
+   * **Zone 1C (Vorderkante Rechts – Galvanischer System-Hauptanschluss):**
      * `J1`: 2x13 Pin IDC26 Wannenstecker ($33{,}0 \times 6{,}0\,\text{mm}$, horizontal in X) – Pin 1 bei $X = 154{,}0\,\text{mm}$, Gehäuse $X \in [152{,}0, 187{,}0\,\text{mm}]$ direkt unter `T1`/`T2` und `U7`/`U8`.
+   * **Zone 1D (Rechte kurze Flanke – Signalisierung & Diagnose):**
+     * `J4`: 3-Pin RGB-LED-Anschluss ($2{,}5 \times 7{,}6\,\text{mm}$, vertikal in Y) bei $X = 195{,}00\,\text{mm}, Y = 108{,}00\,\text{mm}$ ($> 7\,\text{mm}$ zu `J1` und `U8`, $> 8\,\text{mm}$ zur M3-Bohrung `H4`).
    * **10-mm-Einführkorridor:** Barrierefreier Steckzugang für alle Stecker ohne jegliche gegenseitige Behinderung.
 2. **Zone 2 (Linke Flanke oben – Automotive Power & USV):**
    * Nimmt die raue Bordnetzspannung von KL30/KL15 auf. Enthält die Bourns PPTC-Sicherung, die SMBJ33CA TVS-Diode, den Verpolschutz-MOSFET, das $10\,\mu\text{H}$ PI-Filter sowie den TI LM5164-Q1 Step-Down-Regler und das BQ24075 USV-Lademanagement.
