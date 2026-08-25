@@ -1,184 +1,157 @@
 # 02 - PCB Hardware, Layout & Pinout Specification
 
-This document specifies the 4-layer PCB layout of the central control box (`openmotorbridge_main_box`), EMC zoning, the 10 mm barrier-free insertion corridor, silicone vibration isolation, and complete connector and ESP32-S3 GPIO mappings.
+This document specifies the 4-layer PCB layout of the central main box (`openmotorbridge_main_box`), EMC zoning, barrier-free connector corridor, vibration decoupling, and complete pin/GPIO assignments.
 
 ---
 
-## 1. 3D Board Visualization & Photorealistic Raytracing Render
+## 1. 3D Board Visualization & Photorealistic Render
 
-The central box mainboard integrates the full automotive power supply, uninterruptible LiPo UPS, digital DSP host core, and galvanically isolated audio frontend onto a compact **$85.0 \times 55.0\,\text{mm}$** footprint:
+The main board integrates on a compact **$85.0 \times 55.0\,\text{mm}$** footprint the entire automotive power supply, uninterruptible LiPo UPS, digital DSP host core, and galvanic isolated audio frontend:
 
 ![OpenMotorBridge Main Box 3D PCB Render](../../hardware/kicad_main_box/kicad_3d_render.png)
 
-*Figure 2.1: Photorealistic 3D raytracing render of the OpenMotorBridge Central Box PCB (KiCad 8.0, 4-layer FR4 TG150 ENIG).*
+*Figure 2.1: Photorealistic 3D Raytracing Render of the OpenMotorBridge Central Main Box PCB (KiCad 9.0, 4-layer FR4 TG150 ENIG, 874 tracks, 114 vias, 0 DRC errors).*
 
 ---
 
-## 2. Board Dimensions, Layer Stackup & Manufacturing Specifications
+## 2. PCB Dimensions, Stackup & Manufacturing Specification
 
-| Parameter | Specification | Standard / Norm |
+| Parameter | Specification | Standard / Manufacturing Level |
 | :--- | :--- | :--- |
 | **Dimensions** | $85.0\,\text{mm} \times 55.0\,\text{mm} \times 1.6\,\text{mm}$ | DIN ISO 2768-m (Tolerance $\pm 0.1\,\text{mm}$) |
-| **Layer Count** | **4 Copper Layers** | Symmetrical stackup |
-| **Base Substrate** | FR4 High-TG ($T_g \ge 150\,^\circ\text{C}$) | Automotive-grade thermal stability |
-| **Surface Finish** | **ENIG (Electroless Nickel Immersion Gold)** | Corrosion-resistant, planar SMD pads |
-| **Copper Thickness** | $35\,\mu\text{m}$ (1.0 oz) Outer / $35\,\mu\text{m}$ Inner | High current capacity for buck & power-path |
-| **Solder Mask** | Matte Black | Low-reflection, UV-stabilized |
-| **Silkscreen** | Crisp White High-Res | Crisp component and connector designations |
-| **Min. Trace / Space** | $0.127\,\text{mm}$ (5 mil) / $0.127\,\text{mm}$ (5 mil) | JLCPCB Standard / Prototype compatible |
-| **Min. Via Size** | $0.30\,\text{mm}$ Hole / $0.50\,\text{mm}$ Pad | Tented on all vias |
+| **Layer Count** | **4 Copper Layers** | Symmetrical Stackup |
+| **Base Material** | FR4 High-TG ($T_g \ge 150\,^\circ\text{C}$) | Automotive-grade thermal endurance |
+| **Surface Finish** | **ENIG (Electroless Nickel Immersion Gold)** | Corrosion resistant, planar SMD pads |
+| **Copper Weight** | $35\,\mu\text{m}$ (1.0 oz) Outer / $35\,\mu\text{m}$ Inner | High current capability for Buck & Power-Path |
+| **Solder Mask** | Matte Black | Low reflection, UV resistant |
+| **Silkscreen** | Crisp White High-Res | Crisp component & connector labeling |
+| **Min. Trace / Spacing** | $0.127\,\text{mm}$ (5 mil) / $0.127\,\text{mm}$ (5 mil) | JLCPCB Standard / Prototype compatible |
+| **Min. Drill (Via)** | $0.30\,\text{mm}$ Drill / $0.60\,\text{mm}$ Pad | Tented vias on all layers |
 
 ### 2.1 4-Layer Stackup Architecture
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│ Layer 1 (F.Cu - Top): High-Speed Signals, I2S, Components   │  (35 µm Cu)
+│ Layer 1 (F.Cu - Top): High-Speed Signals, I2S, Components  │  (35 µm Cu)
 ├─────────────────────────────────────────────────────────────┤
-│ ── Prepreg 7628 (Dielectric, Er = 4.4, Thick 0.2 mm) ────── │
+│ ── Prepreg 7628 (Dielectric, Er = 4.4, Thickness 0.2 mm) ── │
 ├─────────────────────────────────────────────────────────────┤
-│ Layer 2 (In1.Cu): Continuous Ground Plane (GND_PWR / AGND)  │  (35 µm Cu)
+│ Layer 2 (In1.Cu): Continuous Ground Plane (GND_PWR / AGND) │  (35 µm Cu)
 ├─────────────────────────────────────────────────────────────┤
-│ ── FR4 Core (Isolation Core, Thick 1.0 mm) ──────────────── │
+│ ── FR4 Core (Isolation Core, Thickness 1.0 mm) ──────────── │
 ├─────────────────────────────────────────────────────────────┤
-│ Layer 3 (In2.Cu): Power Planes (5.0V, 3.3V, VBAT Polygons)  │  (35 µm Cu)
+│ Layer 3 (In2.Cu): Power Planes (VCC_3V3, VCC_5V Polygons)   │  (35 µm Cu)
 ├─────────────────────────────────────────────────────────────┤
-│ ── Prepreg 7628 (Dielectric, Er = 4.4, Thick 0.2 mm) ────── │
+│ ── Prepreg 7628 (Dielectric, Er = 4.4, Thickness 0.2 mm) ── │
 ├─────────────────────────────────────────────────────────────┤
-│ Layer 4 (B.Cu - Bottom): Secondary Routing & Ground Copper  │  (35 µm Cu)
+│ Layer 4 (B.Cu - Bottom): Secondary Routing & SMD Sensors   │  (35 µm Cu)
 └─────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 3. Zoning Architecture (Zero-Crosstalk & Zero-Collision Topology)
+## 3. Zoning Architecture (Zero-Cross-Talk & Zero-Collision Topology)
 
 ![OpenMotorBridge Mainboard Top-Down Layout Diagram](../../hardware/cad/main_board_pcb_top_down.png)
 
-*Figure 2.1: Collision-free 2D top-down layout diagram of the central mainboard ($85 \times 55\,\text{mm}$). Color-coded functional zones with $100\%$ overlap-free geometric bounding boxes.*
+*Figure 2.2: Collision-free 2D top-down component placement diagram of the central main board ($85 \times 55\,\text{mm}$). Color-coded zones with $100\,\%$ certified overlap-free bounding boxes.*
 
-To completely eliminate coupling between switching power supply harmonics ($2.1\,\text{MHz}$), 2.4 GHz Bluetooth RF, and sensitive analog audio lines, the board is segmented into **5 strictly isolated functional zones**:
+To eliminate cross-talk between the switching regulator RF ($2.1\,\text{MHz}$), 2.4 GHz Bluetooth/Wi-Fi wireless core, and ultra-sensitive analog audio paths, the PCB is segmented into **5 strictly isolated functional zones**:
 
 ```
-┌───────────────────┬──────────────────────────┬─────────────────────────┐
-│ ZONE 2: POWER &   │ ZONE 5: SENSORS & IMU    │ ZONE 4A: AUDIO CODEC    │
-│ AUTOMOTIVE UPS    │ • Bosch BMI270 6-Axis    │ • Everest ES8388 Codec  │
-│ • PPTC 500mA      │ • MicroSD Ring Storage   │ • TI TCAN334G CAN-FD    │
-│ • SMBJ33CA TVS    ├──────────────────────────┼─────────────────────────┤
-│ • TI LM5164 Buck  │ ZONE 3: DIGITAL CORE     │ ZONE 4B: GALV. ISOLATION│
-│ • TI BQ24075 UPS  │ • ESP32-S3 Dual-Core     │ • 2x Bourns Transformers│
-│ • LC-PI-Filter    │ • 2.4 GHz PCB Antenna    │ • 2x TLP222A PhotoMOS   │
-├───────────────────┴──────────────────────────┼─────────────────────────┤
-│ ZONE 1A: POWER, SERVICE & STATUS (LEFT)      │ ZONE 1B: SYSTEM I/O     │
-│ [J5: 4P BAT+NTC]   [J3: USB-C]   [J4: 3PLED] │ [J1: 26-PIN IDC26]      │
-└──────────────────────────────────────────────┴─────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────┐
+│                        ZONE 1: RF & ESP32-S3 CORE                      │
+│                • ESP32-S3-WROOM-1 (Top Center, Y in [73, 86])          │
+│                • Clear 2.4 GHz PCB Antenna Zone (>21mm to H1/H2)       │
+├─────────────────────────┬──────────────────┬───────────────────────────┤
+│ ZONE 2: 72V BUCK POWER  │ ZONE 5: SENSORS  │ ZONE 3: GALV. AUDIO & CAN │
+│ • LM5164 Buck (U1)      │ • MicroSD (J2)   │ • Bourns Trafo 1 (T1)     │
+│ • 47µH Inductor (L1)    │ • ES8388 (U3)    │ • Bourns Trafo 2 (T2)     │
+│ • SMBJ33CA TVS (D2 B.Cu)│ • BMI270 (U5)    │ • 2x TLP222A Opto (U7/U8) │
+│ • TPS7A0533 LDO (U9)    │ (Bottom B.Cu)    │ • TCAN334G CAN (U6)       │
+├─────────────────────────┴──────────────────┴───────────────────────────┤
+│ ZONE 4: LOWER FLANGE CONNECTORS (Between Mounting Holes H3 & H4)       │
+│ [J3: 10-Pin USB/UART IDC-10]            [J1: 26-Pin System-Bus IDC-26] │
+└────────────────────────────────────────────────────────────────────────┘
 ```
 
-1. **Zone 1 (Connector Architecture – Front Rail & Right Flank):**
-   * **Zone 1A (Front Edge Left – Battery & UPS Power Input):**
-     * `J5`: 4-Pin JST-PH shrouded header with locking ramp ($10.0 \times 4.5\,\text{mm}$, horizontal in X) at $X = 127.25\,\text{mm}$ (Pin 1 at $X = 124.25\,\text{mm}$):
-       * Pin 1: `BAT+` (+3.7V / +4.2V 1S LiPo)
-       * Pin 2: `BAT-` (`GND_PWR`)
-       * Pin 3: `NTC_JEITA` (10k NTC temperature monitoring)
-       * Pin 4: `NTC_GND` (Sensor ground)
-       * **Advantage:** Located $> 12\,\text{mm}$ below the ESP32-S3 module and fits $100\%$ flush within silkscreen markings!
-   * **Zone 1B (Front Edge Center – Waterproof Service Port):**
-     * `J3`: Vertical USB-C service socket ($8.9 \times 4.8\,\text{mm}$, non-rotated, standing vertically UP) at $X = 139.50\,\text{mm}$ ($2.83\,\text{mm}$ clean clearance to `J5` and **$8.03\,\text{mm}$ expansive air gap to `J1`**)
-   * **Zone 1C (Front Edge Right – Galvanic Main System Header):**
-     * `J1`: 2x13 Pin IDC26 box header ($33.0 \times 6.0\,\text{mm}$, horizontal in X) – Pin 1 at $X = 154.0\,\text{mm}$, body $X \in [152.0, 187.0\,\text{mm}]$ directly beneath `T1`/`T2` and `U7`/`U8`.
-   * **Zone 1D (Right Short Flank – Status & Diagnostics):**
-     * `J4`: 3-Pin RGB LED header ($2.5 \times 7.6\,\text{mm}$, vertical in Y) at $X = 195.00\,\text{mm}, Y = 108.00\,\text{mm}$ ($> 7\,\text{mm}$ clearance to `J1` and `U8`, $> 8\,\text{mm}$ to mounting hole `H4`).
-   * **10-mm Insertion Keep-Out:** Dedicated mating space preventing mechanical collisions.
-2. **Zone 2 (Left Flank Top – Automotive Power & UPS):**
-   * Accepts raw motorcycle electrical voltages (KL30/KL15). Contains the Bourns PPTC fuse, SMBJ33CA TVS diode, reverse-polarity MOSFET, $10\,\mu\text{H}$ PI filter, TI LM5164-Q1 synchronous buck converter, and TI BQ24075 UPS battery management.
-3. **Zone 3 (Left Flank Bottom – Digital Host Core):**
-   * Houses the ESP32-S3-WROOM-1 module (240 MHz dual-core), **shifted downward** for ample clearance from the top power section. The meandering 2.4 GHz PCB antenna overhangs the lower left board edge with copper keep-out on all 4 layers.
-4. **Zone 4 (Right Flank – Audio Frontend, Codec & Galvanic Isolation):**
-   * **Optimized Staging (Shifted Down & Right):**
-     * **Zone 4A (Top-Right):** The Everest ES8388 Audio Codec (`U3`) and TI TCAN334G CAN Transceiver (`U6`) sit in the upper right quadrant. This guarantees ultra-short $I^2S$ clock and data traces ($< 15\,\text{mm}$) with minimal jitter and zero RF emissions.
-     * **Zone 4B (Right Flank Bottom):** The two Bourns LM-NP-1001-B1L transformers (`T1`, `T2`) and two Toshiba TLP222A PhotoMOS optocouplers (`U7`, `U8`) are **shifted down and right**, positioned directly above the 2x13 box header `J1`.
-   * **Signal Integrity:** The isolated differential audio paths (`NF1_P/N`, `NF2_P/N`, $1500\,\text{V}_{\text{RMS}}$ isolation) and button synthesis triggers route directly and crossing-free to `J1`. The analog ground `AGND` is isolated from power ground `GND_PWR` via a $100\,\mu\text{m}$ split moat.
-5. **Zone 5 (Center – IMU Motion Fusion & MicroSD):**
-   * The Bosch BMI270 6-axis IMU sits exactly at the physical center of gravity to eliminate lever-arm centripetal offsets during lean angle estimation.
+1. **Zone 1 (Top Center Edge – RF & Digital Core):**
+   * Hosts the **ESP32-S3-WROOM-1** module (240 MHz Dual-Core) at $X = 149.50\,\text{mm}, Y = 86.00\,\text{mm}$.
+   * The PCB antenna points **vertically upwards** ($Y \in [73.25, 79.75\,\text{mm}]$) with generous clearance:
+     * $> 21.2\,\text{mm}$ clearance to mounting hole `H1` (top-left)
+     * $> 37.0\,\text{mm}$ clearance to mounting hole `H2` (top-right)
+   * The entire top strip ($Y \le 84.0\,\text{mm}$) is 100% free of copper fills, tracks, and tall components.
+
+2. **Zone 2 (Left Flank – Automotive Power & UPS):**
+   * Contains TI LM5164-Q1 Step-Down switching regulator `U1` ($X = 124.00, Y = 88.00$), Sunlord $47\,\mu\text{H}$ inductor `L1` ($X = 124.00, Y = 103.00$), and ultra-low-noise 3.3V LDO `U9` ($X = 134.00, Y = 84.00$).
+   * SMBJ33CA TVS diode `D2` ($X = 123.00, Y = 84.00$) and $10\,\mu\text{F}$ 100V cap `C1` ($X = 130.00, Y = 84.00$) sit on the bottom layer (`B.Cu`) directly beneath `VIN` pins for minimal loop inductance.
+
+3. **Zone 3 (Right Flank – Galvanic Isolation, Audio & CAN):**
+   * **Galvanic Isolation Barrier ($4.0\,\text{mm}$ Creepage Distance):** Vertical isolation gap at $X = 162\,\text{mm}$ separates primary from secondary domain.
+   * **Audio Isolation Transformers:** 2x Bourns LM-NP-1001 `T1` ($X = 174.00, Y = 90.00$) and `T2` ($X = 174.00, Y = 107.00$) with $17\,\text{mm}$ pitch for separated assembly courtyards.
+   * **Optocouplers:** 2x Toshiba TLP222A PhotoMOS `U7` ($X = 186.00, Y = 90.00$) and `U8` ($X = 186.00, Y = 107.00$).
+   * **CAN-FD:** TI TCAN334G Transceiver `U6` ($X = 185.00, Y = 78.00$) with $120\,\Omega$ termination resistor `R9`.
+   * **Auxiliary Connectors:** `J5` (4-Pin JST-PH Battery+NTC, $X = 195.00, Y = 92.00$) and `J4` (3-Pin JST-PH RGB LED, $X = 195.00, Y = 108.00$).
+
+4. **Zone 4 (Lower Flange Edge – Main Connectors):**
+   * **`J3` (10-Pin USB & UART Service IDC-10):** Located at $X = 128.00\,\text{mm}, Y = 121.50\,\text{mm}$ (flush with mounting holes $H3/H4$).
+   * **`J1` (26-Pin Automotive System Bus IDC-26):** Located at $X = 157.00\,\text{mm}, Y = 121.50\,\text{mm}$.
+   * **Ergonomics:** Both connectors sit side-by-side with a snug $1.0\,\text{mm}$ gap at the lower edge and route via ribbon cable straight to the waterproof HD26 enclosure flange.
+
+5. **Zone 5 (Bottom Layer `B.Cu` / Center – Sensors & Audio DSP):**
+   * **MicroSD Slot `J2`:** Centrally at $X = 158.00\,\text{mm}, Y = 98.00\,\text{mm}$.
+   * **Everest ES8388 Audio Codec `U3`:** At $X = 158.00\,\text{mm}, Y = 84.00\,\text{mm}$ on `B.Cu` for ultra-short trace routes to ESP32 and transformers.
+   * **Bosch BMI270 6-Axis IMU `U5`:** At $X = 149.50\,\text{mm}, Y = 108.00\,\text{mm}$ at the PCB center of mass.
 
 ---
 
-## 4. Mechanical Mounting & Vibration Decoupling
-
-* **4× Corner Mounting Holes ($\varnothing\,3.2\,\text{mm}$ for M3 Hardware):**
-  * Positioned at $(4.0\,\text{mm}, 4.0\,\text{mm})$, $(81.0\,\text{mm}, 4.0\,\text{mm})$, $(4.0\,\text{mm}, 51.0\,\text{mm})$, and $(81.0\,\text{mm}, 51.0\,\text{mm})$.
-  * **$6.0\,\text{mm}$ Circular Keep-Out Zones:** Accommodate **Shore 50A silicone vibration damping rings**, isolating the board against motorcycle engine harmonics ($50\dots 500\,\text{Hz}$, up to $20\,\text{g}$).
-
----
-
-### 5.1 Central HD26 Harness & Modular M8 Breakout Pigtail
+## 4. Central HD26/IDC-26 Connector Pinout (`J1`)
 
 ![OpenMotorBridge Central Automotive Wiring Harness](../../hardware/cad/wiring_harness_cad.png)
 
-*Figure 2.2: Technical schematic of the central automotive wiring harness (Harness v8.0). Left: Central control box with HD26 SEAL-D flange; Center: 26-conductor main trunk with overmolded IP67 junction hub; Right: 5 module branches to Pod 1 (Sena), Pod 2 (Cardo), Pod 3 (Rear GNSS/LoRa), Vehicle Power (12V KL30/KL15), and CAN/Aux Telemetry.*
+*Figure 2.3: Automotive Wiring Harness of the 26-Pin Flange Interface.*
 
-The central 26-pin interface of the control box branches out via a flame-retardant automotive breakout harness into **5 standardized, waterproof M8 circular sockets**:
-
-```
-                                  ┌───────────────────────────────┐
-                                  │ CENTRAL BOX HD26 / IDC26 PORT │
-                                  └───────────────┬───────────────┘
-                                                  │ (26 Conductors Bundled)
-                                                  ▼
-                         ┌─────────────────────────────────────────────────┐
-                         │ AUTOMOTIVE BREAKOUT PIGTAIL (Overmolded IP67)   │
-                         └──────┬──────────┬──────────┬──────────┬─────────┘
-                                │          │          │          │
-           ┌────────────────────┘          │          │          └────────────────────┐
-           ▼                               ▼          ▼                               ▼
-    ┌──────────────┐                ┌──────────────┐ ┌──────────────┐          ┌──────────────┐
-    │ RECEPTACLE 1:│                │ RECEPTACLE 2:│ │ RECEPTACLE 3:│          │ RECEPTACLE 4:│
-    │ POD 1 LEFT   │                │ POD 2 RIGHT  │ │ POD 3 REAR   │          │ POWER SUPPLY │
-    │ (M8 6-Pin)   │                │ (M8 6-Pin)   │ │ (M8 6-Pin)   │          │ (M8 4-Pin)   │
-    │ • Pins 1..6  │                │ • Pins 7..12 │ │ • Pins 13..18│          │ • KL30, KL15 │
-    │ • Audio Sena │                │ • Audio Cardo│ │ • GNSS / OMM │          │ • GND, Shield│
-    └──────────────┘                └──────────────┘ └──────────────┘          └──────────────┘
-                                                                                      │
-                                                                                      ▼
-                                                                               ┌──────────────┐
-                                                                               │ RECEPTACLE 5:│
-                                                                               │ TELEMETRY    │
-                                                                               │ (M8 4-Pin)   │
-                                                                               │ • CAN_H/L    │
-                                                                               │ • Mic-In     │
-                                                                               │ • Reserve    │
-                                                                               └──────────────┘
-```
-
-* **Modular Installation Concept:** Standardized **M8 6-Pin male-to-male PUR cables** are routed individually through the motorcycle frame. No rigid or bulky wiring harness needs to be pulled through tight cavities.
-* **Serviceability:** If a cable suffers mechanical or thermal damage, it can be replaced in minutes without tools.
+| Pin (HD26/J1) | Signal Name | Type / Voltage Range | Function & Protection |
+| :--- | :--- | :--- | :--- |
+| **Pin 1** | `POD1_VCC` | $+5.0\,\text{V}$ switched (max. 300 mA) | Handlebar Pod 1 Power Supply (High-Side Switch) |
+| **Pin 2** | `POD1_NF_P` | Audio Line-Out ($1.0\,\text{V}_{\text{RMS}}$ diff.) | Galvanically isolated via Trafo `T1` (Positive) |
+| **Pin 3** | `POD1_NF_N` | Audio Line-Out ($1.0\,\text{V}_{\text{RMS}}$ diff.) | Galvanically isolated via Trafo `T1` (Negative) |
+| **Pin 4** | `POD1_OPTO_KEY` | Optocoupler PTT Keying | PhotoMOS `U7` Open-Collector / Normally Open |
+| **Pin 5** | `POD2_VCC` | $+5.0\,\text{V}$ switched (max. 300 mA) | Helmet Pod 2 Power Supply (High-Side Switch) |
+| **Pin 6** | `POD2_NF_P` | Audio Line-In ($1.0\,\text{V}_{\text{RMS}}$ diff.) | Galvanically isolated via Trafo `T2` (Positive) |
+| **Pin 7** | `POD2_NF_N` | Audio Line-In ($1.0\,\text{V}_{\text{RMS}}$ diff.) | Galvanically isolated via Trafo `T2` (Negative) |
+| **Pin 8** | `POD2_OPTO_KEY` | Optocoupler Mute/Keying | PhotoMOS `U8` Open-Collector / Normally Open |
+| **Pin 9** | `POD3_VCC` | $+5.0\,\text{V}$ switched (max. 500 mA) | Rear Transceiver Pod 3 Power Supply |
+| **Pin 10** | `POD3_UART_TX` | UART TX ($3.3\,\text{V}$, 115200 Baud) | Data line to Pod 3 (GNSS/Telemetry) |
+| **Pin 11** | `POD3_UART_RX` | UART RX ($3.3\,\text{V}$, 115200 Baud) | Data line from Pod 3 (GNSS/Telemetry) |
+| **Pin 12** | `GND_PWR` | Power Ground ($0\,\text{V}$) | Main return path for Pod power supplies |
+| **Pin 13** | `GND_PWR` | Power Ground ($0\,\text{V}$) | Parallel ground path for low resistance |
+| **Pin 14** | `KL30_IN` | $+9\,\text{V} \dots +72\,\text{V}$ DC (Permanent Battery) | Battery Main Input (LM5164 Buck, TVS Protected) |
+| **Pin 15** | `KL15_IGN` | $+9\,\text{V} \dots +72\,\text{V}$ DC (Switched Ignition) | Ignition sense with voltage divider & Schmitt trigger |
+| **Pin 16** | `GND_PWR` | Power Ground ($0\,\text{V}$) | Vehicle ground reference |
+| **Pin 17** | `CAN_H` | CAN High (ISO 11898-2) | CAN-FD Bus line High ($120\,\Omega$ termination) |
+| **Pin 18** | `CAN_L` | CAN Low (ISO 11898-2) | CAN-FD Bus line Low ($120\,\Omega$ termination) |
+| **Pin 19** | `ONEWIRE_ID` | 1-Wire Data Bus ($3.3\,\text{V}$) | Automatic Pod & Accessory Detection (DS2431) |
+| **Pin 20** | `GND_SHIELD` | Enclosure & Cable Shield | Direct 360° chassis ground coupling |
+| **Pin 21** | `AGND` | Analog Audio Ground | Quiet ground plane for Codec reference |
+| **Pin 22** | `RESERVE_GPIO_A`| GPIO Digital I/O ($3.3\,\text{V}$) | Programmable GPIO / PWM Output |
+| **Pin 23** | `RESERVE_GPIO_B`| GPIO Digital I/O ($3.3\,\text{V}$) | Programmable GPIO / ADC Input |
+| **Pin 24** | `I2S_DOUT` | I2S Data Out ($3.3\,\text{V}$) | Digital Audio Stream to external DSP/Amp |
+| **Pin 25** | `I2S_BCLK` | I2S Bit Clock ($3.3\,\text{V}$) | Digital I2S Clock |
+| **Pin 26** | `GND_SHIELD` | Enclosure & Cable Shield | Second shield contact for full 360° enclosure bonding |
 
 ---
 
-## 6. ESP32-S3 GPIO Mapping
+## 5. Service IDC-10 Connector Pinout (`J3`)
 
-| GPIO | Signal Name | Direction | Function & Connected Peripheral |
-| :--- | :--- | :---: | :--- |
-| **GPIO 1** | `ADC_BAT` | Input (ADC) | UPS battery voltage sense via 1:2 divider (TI BQ24075) |
-| **GPIO 2** | `POD1_1WIRE_ID`| Bidir (OD) | 1-Wire bus for Port 1 cartridge detection (DS2401) |
-| **GPIO 3** | `ADC_LINE_LVL` | Input (ADC) | Audio peak level sense & acknowledgement tone detect |
-| **GPIO 4** | `ADC_VIGN` | Input (ADC) | Ignition KL15 monitoring via precision 1:11 divider |
-| **GPIO 5** | `PORT1_KEY` | Output | TLP222A trigger Port 1 (Sena Intercom toggle) |
-| **GPIO 6** | `PORT1_VCC_EN` | Output | High-Side MOSFET Port 1 power gate |
-| **GPIO 7** | `PORT2_KEY` | Output | TLP222A trigger Port 2 (Cardo channel advance) |
-| **GPIO 8** | `PORT2_VCC_EN` | Output | High-Side MOSFET Port 2 power gate |
-| **GPIO 9** | `I2S_MCLK` | Output | Master clock for Everest ES8388 audio codec (12.288 MHz) |
-| **GPIO 10** | `I2S_BCLK` | Output | Bit clock audio (3.072 MHz) |
-| **GPIO 11** | `I2S_WS` | Output | Word select / LRCLK (48 kHz) |
-| **GPIO 12** | `I2S_DOUT` | Output | Audio data out (DSP to ES8388 DAC) |
-| **GPIO 13** | `I2S_DIN` | Input | Audio data in (From ES8388 ADC to DSP) |
-| **GPIO 14** | `I2C_SDA` | Bidir (OD) | I2C data bus (Bosch BMI270 IMU & ES8388 control) |
-| **GPIO 15** | `I2C_SCL` | Output | I2C clock (400 kHz Fast-Mode) |
-| **GPIO 16** | `CHG_STAT_N` | Input | BQ24075 charging status monitor (Low = charging) |
-| **GPIO 17** | `GNSS_RX` | Input (UART) | u-blox MAX-M10S UART RX (from Rear Pod 3 coprocessor) |
-| **GPIO 18** | `GNSS_TX` | Output (UART)| u-blox MAX-M10S UART TX (to Rear Pod 3 coprocessor) |
-| **GPIO 19** | `CAN_TX` | Output (TWAI)| TWAI / CAN-Bus TX to TI TCAN334G |
-| **GPIO 20** | `CAN_RX` | Input (TWAI) | TWAI / CAN-Bus RX from TI TCAN334G |
-| **GPIO 21** | `GNSS_PPS` | Input (IRQ) | 1-PPS hardware time sync interrupt (< 1 µs jitter) |
-| **GPIO 22** | `POD2_1WIRE_ID`| Bidir (OD) | 1-Wire bus for Port 2 cartridge detection (DS2401) |
-| **GPIO 38** | `RESERVE_A` | Input/Output| Multifunction I/O Pin A (HD26 Pin 25) |
-| **GPIO 39** | `RESERVE_B` | Output | Multifunction I/O Pin B (HD26 Pin 26) |
-| **GPIO 48** | `STATUS_LED` | Output | WS2812B RGB status indicator (enclosure lid) |
+| Pin (`J3`) | Signal Name | Description |
+| :--- | :--- | :--- |
+| **Pin 1** | `VCC_5V_USB` | +5V USB-VBUS Power / Charging Input |
+| **Pin 2** | `USB_D_N` | USB 2.0 Full-Speed Data Line Negative (ESP32-S3 USB-OTG) |
+| **Pin 3** | `USB_D_P` | USB 2.0 Full-Speed Data Line Positive (ESP32-S3 USB-OTG) |
+| **Pin 4** | `GND_PWR` | USB Ground |
+| **Pin 5** | `UART_TXD0` | ESP32 Hardware UART0 TX (Debug & Flash Console) |
+| **Pin 6** | `UART_RXD0` | ESP32 Hardware UART0 RX (Debug & Flash Console) |
+| **Pin 7** | `ESP_EN` | Reset / Enable Control Signal |
+| **Pin 8** | `ESP_BOOT` | Boot Mode Select (GPIO0) |
+| **Pin 9** | `GND_PWR` | Debug Ground |
+| **Pin 10** | `GND_SHIELD` | USB Cable Shield |
