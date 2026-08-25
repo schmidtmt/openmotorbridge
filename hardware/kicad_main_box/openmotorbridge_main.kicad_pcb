@@ -1057,14 +1057,15 @@
 			)
 		)
 	)
-	(footprint "Connector_USB:USB_C_Receptacle_GCT_USB4105-xx_Vertical"
+	(footprint "Connector_IDC:IDC-Header_2x05_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "74a7523d-fdc4-4b57-8d9d-f609fecaf602")
-		(at 139.50 118.50)
+		(at 131.50 118.50 90.0)
+		(descr "Through hole IDC box header, 2x05, 2.54mm pitch, DIN 41651 / IEC 60603-13, double rows, https://docs.google.com/spreadsheets/d/16SsEcesNF15N3Lb4niX7dcUr-NY5_MFPQhobNuNppn4/edit#gid=0")
+		(tags "Through hole vertical IDC box header THT 2x05 2.54mm double row")
 		(property "Reference" "J3"
-			(at 0.00 -3.50 0)
+			(at 1.27 -6.1 0)
 			(layer "F.SilkS")
-			(uuid "5d42929b-b534-495b-90a6-9ad7d7c7587f")
 			(effects
 				(font
 					(size 1 1)
@@ -1072,10 +1073,9 @@
 				)
 			)
 		)
-		(property "Value" "USB_C_IP67"
-			(at 0 4.5 0)
+		(property "Value" "USB2_IDC_HEADER_9PIN"
+			(at 1.27 16.26 0)
 			(layer "F.Fab")
-			(uuid "f9437c30-5998-42e1-8d6e-e1b11a8e6efb")
 			(effects
 				(font
 					(size 1 1)
@@ -1083,90 +1083,354 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://gct.co/files/drawings/usb4105.pdf"
+		(property "KiLib_Generator" "connector/pin_header_socket"
 			(at 0 0 0)
-			(layer "F.Fab")
+			(layer "F.SilkS")
 			(hide yes)
-			(uuid "96fe873c-4f4e-4431-9b1f-c493a15fef8a")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
 		)
-		(property "Description" "USB Type-C Vertical Receptacle connector (Service Port)"
-			(at 0 0 0)
+		(attr through_hole)
+		(duplicate_pad_numbers_are_jumpers no)
+		(fp_line
+			(start -4.68 -0.5)
+			(end -4.68 0.5)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start -4.68 0.5)
+			(end -3.68 0)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start -3.68 0)
+			(end -4.68 -0.5)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start -3.29 -5.21)
+			(end 5.83 -5.21)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start -3.29 3.03)
+			(end -1.98 3.03)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start -3.29 15.37)
+			(end -3.29 -5.21)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start -1.98 -3.91)
+			(end 4.52 -3.91)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start -1.98 3.03)
+			(end -1.98 -3.91)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start -1.98 7.13)
+			(end -3.29 7.13)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start -1.98 14.07)
+			(end -1.98 7.13)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 4.52 -3.91)
+			(end 4.52 14.07)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 4.52 14.07)
+			(end -1.98 14.07)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 5.83 -5.21)
+			(end 5.83 15.37)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 5.83 15.37)
+			(end -3.29 15.37)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_rect
+			(start -3.68 -5.6)
+			(end 6.22 15.76)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(fill no)
+			(layer "F.CrtYd")
+		)
+		(fp_line
+			(start -3.18 -4.1)
+			(end -2.18 -5.1)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
 			(layer "F.Fab")
-			(hide yes)
-			(uuid "d143445c-11a8-4f55-af29-4b285c106d06")
 		)
 		(fp_line
-			(start -4.47 -2.4)
-			(end 4.47 -2.4)
-			(stroke (width 0.15) (type solid))
-			(layer "F.SilkS")
+			(start -3.18 3.03)
+			(end -1.98 3.03)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "F.Fab")
 		)
 		(fp_line
-			(start 4.47 -2.4)
-			(end 4.47 2.4)
-			(stroke (width 0.15) (type solid))
-			(layer "F.SilkS")
+			(start -3.18 15.26)
+			(end -3.18 -4.1)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "F.Fab")
 		)
 		(fp_line
-			(start 4.47 2.4)
-			(end -4.47 2.4)
-			(stroke (width 0.15) (type solid))
-			(layer "F.SilkS")
+			(start -2.18 -5.1)
+			(end 5.72 -5.1)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "F.Fab")
 		)
 		(fp_line
-			(start -4.47 2.4)
-			(end -4.47 -2.4)
-			(stroke (width 0.15) (type solid))
-			(layer "F.SilkS")
+			(start -1.98 -3.91)
+			(end 4.52 -3.91)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "F.Fab")
 		)
-		(pad "A5" smd rect
-			(at -0.5 -1.2)
-			(size 0.3 1.2)
-			(layers "F.Cu" "F.Paste" "F.Mask")
-			(uuid "1a2b3c4d-0001-4000-8000-000000000001")
+		(fp_line
+			(start -1.98 3.03)
+			(end -1.98 -3.91)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "F.Fab")
 		)
-		(pad "B5" smd rect
-			(at 0.5 -1.2)
-			(size 0.3 1.2)
-			(layers "F.Cu" "F.Paste" "F.Mask")
-			(uuid "1a2b3c4d-0002-4000-8000-000000000002")
+		(fp_line
+			(start -1.98 7.13)
+			(end -3.18 7.13)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "F.Fab")
 		)
-		(pad "A6" smd rect
-			(at -0.25 1.2)
-			(size 0.3 1.2)
-			(layers "F.Cu" "F.Paste" "F.Mask")
-			(uuid "1a2b3c4d-0003-4000-8000-000000000003")
+		(fp_line
+			(start -1.98 14.07)
+			(end -1.98 7.13)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "F.Fab")
 		)
-		(pad "A7" smd rect
-			(at 0.25 1.2)
-			(size 0.3 1.2)
-			(layers "F.Cu" "F.Paste" "F.Mask")
-			(uuid "1a2b3c4d-0004-4000-8000-000000000004")
+		(fp_line
+			(start 4.52 -3.91)
+			(end 4.52 14.07)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "F.Fab")
 		)
-		(pad "SH" thru_hole oval
-			(at -4.32 0)
-			(size 1.2 2.2)
-			(drill oval 0.8 1.8)
+		(fp_line
+			(start 4.52 14.07)
+			(end -1.98 14.07)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "F.Fab")
+		)
+		(fp_line
+			(start 5.72 -5.1)
+			(end 5.72 15.26)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "F.Fab")
+		)
+		(fp_line
+			(start 5.72 15.26)
+			(end -3.18 15.26)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "F.Fab")
+		)
+		(fp_text user "${REFERENCE}"
+			(at 1.27 5.08 90)
+			(layer "F.Fab")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(pad "1" thru_hole roundrect
+			(at 0 0)
+			(size 1.7 1.7)
+			(drill 1)
 			(layers "*.Cu" "*.Mask")
-			(uuid "1a2b3c4d-0005-4000-8000-000000000005")
+			(remove_unused_layers no)
+			(roundrect_rratio 0.147059)
 		)
-		(pad "SH" thru_hole oval
-			(at 4.32 0)
-			(size 1.2 2.2)
-			(drill oval 0.8 1.8)
+		(pad "2" thru_hole circle
+			(at 2.54 0)
+			(size 1.7 1.7)
+			(drill 1)
 			(layers "*.Cu" "*.Mask")
-			(uuid "1a2b3c4d-0006-4000-8000-000000000006")
+			(remove_unused_layers no)
+		)
+		(pad "3" thru_hole circle
+			(at 0 2.54)
+			(size 1.7 1.7)
+			(drill 1)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+		)
+		(pad "4" thru_hole circle
+			(at 2.54 2.54)
+			(size 1.7 1.7)
+			(drill 1)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+		)
+		(pad "5" thru_hole circle
+			(at 0 5.08)
+			(size 1.7 1.7)
+			(drill 1)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+		)
+		(pad "6" thru_hole circle
+			(at 2.54 5.08)
+			(size 1.7 1.7)
+			(drill 1)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+		)
+		(pad "7" thru_hole circle
+			(at 0 7.62)
+			(size 1.7 1.7)
+			(drill 1)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+		)
+		(pad "8" thru_hole circle
+			(at 2.54 7.62)
+			(size 1.7 1.7)
+			(drill 1)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+		)
+		(pad "9" thru_hole circle
+			(at 0 10.16)
+			(size 1.7 1.7)
+			(drill 1)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+		)
+		(pad "10" thru_hole circle
+			(at 2.54 10.16)
+			(size 1.7 1.7)
+			(drill 1)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Connector_USB.3dshapes/USB_C_Receptacle_GCT_USB4085.step"
+		(model "${KICAD10_3DMODEL_DIR}/Connector_IDC.3dshapes/IDC-Header_2x05_P2.54mm_Vertical.step"
 			(offset
-				(xyz -2.975 -0.67 0.855)
+				(xyz 0 0 0)
 			)
 			(scale
 				(xyz 1 1 1)
 			)
 			(rotate
-				(xyz -90 0 0)
+				(xyz 0 0 0)
 			)
 		)
 	)
@@ -1644,6 +1908,17 @@
 		)
 		(duplicate_pad_numbers_are_jumpers no)
 		(embedded_fonts no)
+		(model "${KICAD10_3DMODEL_DIR}/LED_SMD.3dshapes/LED_WS2812B_PLCC4_5.0x5.0mm_P3.2mm.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 0.4 0.4 0.4)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint ""
 		(layer "F.Cu")
@@ -1827,12 +2102,13 @@
 	)
 	(footprint "Connector_IDC:IDC-Header_2x13_P2.54mm_Vertical"
 		(layer "F.Cu")
-		(uuid "bfbc13cf-daae-4069-92e4-d551667c8723")
+		(uuid "ec30da57-61f2-45e0-827b-967b6bfbdf87")
 		(at 154.00 118.50 90.0)
+		(descr "Through hole IDC box header, 2x13, 2.54mm pitch, DIN 41651 / IEC 60603-13, double rows, https://docs.google.com/spreadsheets/d/16SsEcesNF15N3Lb4niX7dcUr-NY5_MFPQhobNuNppn4/edit#gid=0")
+		(tags "Through hole vertical IDC box header THT 2x13 2.54mm double row")
 		(property "Reference" "J1"
-			(at 0.00 -4.50 180)
+			(at 1.27 -6.1 0)
 			(layer "F.SilkS")
-			(uuid "6f96ebb8-38c5-457c-9f75-adcc42ffff56")
 			(effects
 				(font
 					(size 1 1)
@@ -1841,9 +2117,8 @@
 			)
 		)
 		(property "Value" "IDC_2X13_HEADER"
-			(at 0 12 180)
+			(at 1.27 36.58 0)
 			(layer "F.Fab")
-			(uuid "24819a86-07f5-4176-8d73-769eae53f85f")
 			(effects
 				(font
 					(size 1 1)
@@ -1851,29 +2126,456 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
-			(at 0 0 90)
-			(layer "F.Fab")
+		(property "KiLib_Generator" "connector/pin_header_socket"
+			(at 0 0 0)
+			(layer "F.SilkS")
 			(hide yes)
-			(uuid "1fdf8933-badb-4667-99d5-477dc352e170")
 			(effects
 				(font
-					(size 1.27 1.27)
+					(size 1 1)
+					(thickness 0.15)
 				)
 			)
 		)
-		(property "Description" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "4f782368-9c64-4803-a459-08539783902f")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
+		(attr through_hole)
 		(duplicate_pad_numbers_are_jumpers no)
+		(fp_line
+			(start -4.68 -0.5)
+			(end -4.68 0.5)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start -4.68 0.5)
+			(end -3.68 0)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start -3.68 0)
+			(end -4.68 -0.5)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start -3.29 -5.21)
+			(end 5.83 -5.21)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start -3.29 13.19)
+			(end -1.98 13.19)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start -3.29 35.69)
+			(end -3.29 -5.21)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start -1.98 -3.91)
+			(end 4.52 -3.91)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start -1.98 13.19)
+			(end -1.98 -3.91)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start -1.98 17.29)
+			(end -3.29 17.29)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start -1.98 34.39)
+			(end -1.98 17.29)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 4.52 -3.91)
+			(end 4.52 34.39)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 4.52 34.39)
+			(end -1.98 34.39)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 5.83 -5.21)
+			(end 5.83 35.69)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 5.83 35.69)
+			(end -3.29 35.69)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_rect
+			(start -3.68 -5.6)
+			(end 6.22 36.08)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(fill no)
+			(layer "F.CrtYd")
+		)
+		(fp_line
+			(start -3.18 -4.1)
+			(end -2.18 -5.1)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "F.Fab")
+		)
+		(fp_line
+			(start -3.18 13.19)
+			(end -1.98 13.19)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "F.Fab")
+		)
+		(fp_line
+			(start -3.18 35.58)
+			(end -3.18 -4.1)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "F.Fab")
+		)
+		(fp_line
+			(start -2.18 -5.1)
+			(end 5.72 -5.1)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "F.Fab")
+		)
+		(fp_line
+			(start -1.98 -3.91)
+			(end 4.52 -3.91)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "F.Fab")
+		)
+		(fp_line
+			(start -1.98 13.19)
+			(end -1.98 -3.91)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "F.Fab")
+		)
+		(fp_line
+			(start -1.98 17.29)
+			(end -3.18 17.29)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "F.Fab")
+		)
+		(fp_line
+			(start -1.98 34.39)
+			(end -1.98 17.29)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "F.Fab")
+		)
+		(fp_line
+			(start 4.52 -3.91)
+			(end 4.52 34.39)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "F.Fab")
+		)
+		(fp_line
+			(start 4.52 34.39)
+			(end -1.98 34.39)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "F.Fab")
+		)
+		(fp_line
+			(start 5.72 -5.1)
+			(end 5.72 35.58)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "F.Fab")
+		)
+		(fp_line
+			(start 5.72 35.58)
+			(end -3.18 35.58)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "F.Fab")
+		)
+		(fp_text user "${REFERENCE}"
+			(at 1.27 15.24 90)
+			(layer "F.Fab")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(pad "1" thru_hole roundrect
+			(at 0 0)
+			(size 1.7 1.7)
+			(drill 1)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+			(roundrect_rratio 0.147059)
+		)
+		(pad "2" thru_hole circle
+			(at 2.54 0)
+			(size 1.7 1.7)
+			(drill 1)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+		)
+		(pad "3" thru_hole circle
+			(at 0 2.54)
+			(size 1.7 1.7)
+			(drill 1)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+		)
+		(pad "4" thru_hole circle
+			(at 2.54 2.54)
+			(size 1.7 1.7)
+			(drill 1)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+		)
+		(pad "5" thru_hole circle
+			(at 0 5.08)
+			(size 1.7 1.7)
+			(drill 1)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+		)
+		(pad "6" thru_hole circle
+			(at 2.54 5.08)
+			(size 1.7 1.7)
+			(drill 1)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+		)
+		(pad "7" thru_hole circle
+			(at 0 7.62)
+			(size 1.7 1.7)
+			(drill 1)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+		)
+		(pad "8" thru_hole circle
+			(at 2.54 7.62)
+			(size 1.7 1.7)
+			(drill 1)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+		)
+		(pad "9" thru_hole circle
+			(at 0 10.16)
+			(size 1.7 1.7)
+			(drill 1)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+		)
+		(pad "10" thru_hole circle
+			(at 2.54 10.16)
+			(size 1.7 1.7)
+			(drill 1)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+		)
+		(pad "11" thru_hole circle
+			(at 0 12.7)
+			(size 1.7 1.7)
+			(drill 1)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+		)
+		(pad "12" thru_hole circle
+			(at 2.54 12.7)
+			(size 1.7 1.7)
+			(drill 1)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+		)
+		(pad "13" thru_hole circle
+			(at 0 15.24)
+			(size 1.7 1.7)
+			(drill 1)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+		)
+		(pad "14" thru_hole circle
+			(at 2.54 15.24)
+			(size 1.7 1.7)
+			(drill 1)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+		)
+		(pad "15" thru_hole circle
+			(at 0 17.78)
+			(size 1.7 1.7)
+			(drill 1)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+		)
+		(pad "16" thru_hole circle
+			(at 2.54 17.78)
+			(size 1.7 1.7)
+			(drill 1)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+		)
+		(pad "17" thru_hole circle
+			(at 0 20.32)
+			(size 1.7 1.7)
+			(drill 1)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+		)
+		(pad "18" thru_hole circle
+			(at 2.54 20.32)
+			(size 1.7 1.7)
+			(drill 1)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+		)
+		(pad "19" thru_hole circle
+			(at 0 22.86)
+			(size 1.7 1.7)
+			(drill 1)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+		)
+		(pad "20" thru_hole circle
+			(at 2.54 22.86)
+			(size 1.7 1.7)
+			(drill 1)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+		)
+		(pad "21" thru_hole circle
+			(at 0 25.4)
+			(size 1.7 1.7)
+			(drill 1)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+		)
+		(pad "22" thru_hole circle
+			(at 2.54 25.4)
+			(size 1.7 1.7)
+			(drill 1)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+		)
+		(pad "23" thru_hole circle
+			(at 0 27.94)
+			(size 1.7 1.7)
+			(drill 1)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+		)
+		(pad "24" thru_hole circle
+			(at 2.54 27.94)
+			(size 1.7 1.7)
+			(drill 1)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+		)
+		(pad "25" thru_hole circle
+			(at 0 30.48)
+			(size 1.7 1.7)
+			(drill 1)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+		)
+		(pad "26" thru_hole circle
+			(at 2.54 30.48)
+			(size 1.7 1.7)
+			(drill 1)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+		)
 		(embedded_fonts no)
 		(model "${KICAD10_3DMODEL_DIR}/Connector_IDC.3dshapes/IDC-Header_2x13_P2.54mm_Vertical.step"
 			(offset
@@ -1887,14 +2589,15 @@
 			)
 		)
 	)
-	(footprint "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical"
+	(footprint "Connector_JST:JST_PH_B3B-PH-K_1x03_P2.00mm_Vertical"
 		(layer "F.Cu")
-		(uuid "c0c5be66-b62e-4345-af69-7c967c2cb1d6")
-		(at 195.00 108.00)
+		(uuid "14f08e45-f09b-43d9-a78b-d51624c96561")
+		(at 195.00 108.00 90.0)
+		(descr "JST PH series connector, B3B-PH-K (http://www.jst-mfg.com/product/pdf/eng/ePH.pdf)")
+		(tags "connector JST PH vertical")
 		(property "Reference" "J4"
-			(at -2.50 0.00 90)
+			(at 2 -2.9 0)
 			(layer "F.SilkS")
-			(uuid "83184a32-9949-4c44-95c0-630acd6c3aa0")
 			(effects
 				(font
 					(size 1 1)
@@ -1902,10 +2605,9 @@
 				)
 			)
 		)
-		(property "Value" "LED_EXT"
-			(at 2.5 0 90)
+		(property "Value" "JST_PH_3P_LED_RGB"
+			(at 2 4 0)
 			(layer "F.Fab")
-			(uuid "b0c9e8aa-a7aa-47e9-a813-a0f4f3f700cc")
 			(effects
 				(font
 					(size 1 1)
@@ -1913,68 +2615,328 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "KiLib_Generator" "connector/JST"
 			(at 0 0 0)
-			(layer "F.Fab")
+			(layer "F.SilkS")
 			(hide yes)
-			(uuid "404ed4d3-d29e-416e-a330-65fcc78441d8")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
 		)
-		(property "Description" "3-Pin Right Flank RGB LED Header (Vertical along Y)"
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "809b439a-af12-433e-8d0c-cd4d276ae8d6")
-		)
-		(fp_line
-			(start -1.27 -3.81)
-			(end 1.27 -3.81)
-			(stroke (width 0.15) (type solid))
-			(layer "F.SilkS")
-		)
-		(fp_line
-			(start 1.27 -3.81)
-			(end 1.27 3.81)
-			(stroke (width 0.15) (type solid))
-			(layer "F.SilkS")
-		)
-		(fp_line
-			(start 1.27 3.81)
-			(end -1.27 3.81)
-			(stroke (width 0.15) (type solid))
-			(layer "F.SilkS")
-		)
-		(fp_line
-			(start -1.27 3.81)
-			(end -1.27 -3.81)
-			(stroke (width 0.15) (type solid))
-			(layer "F.SilkS")
-		)
+		(attr through_hole)
 		(duplicate_pad_numbers_are_jumpers no)
-		(pad "1" thru_hole rect
-			(at 0 -2.54)
-			(size 1.7 1.7)
-			(drill 1)
-			(layers "*.Cu" "*.Mask")
-			(uuid "468af79b-9684-43da-99c1-a0080748599c")
+		(fp_line
+			(start -2.36 -2.11)
+			(end -2.36 -0.86)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
 		)
-		(pad "2" thru_hole circle
+		(fp_line
+			(start -2.06 -0.5)
+			(end -1.45 -0.5)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start -2.06 0.8)
+			(end -1.45 0.8)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start -1.45 -1.2)
+			(end -1.45 2.3)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start -1.45 2.3)
+			(end 5.45 2.3)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start -1.11 -2.11)
+			(end -2.36 -2.11)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start -0.6 -2.01)
+			(end -0.6 -1.81)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start -0.3 -2.01)
+			(end -0.6 -2.01)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start -0.3 -1.91)
+			(end -0.6 -1.91)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start -0.3 -1.81)
+			(end -0.3 -2.01)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 0.5 -1.81)
+			(end 0.5 -1.2)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 0.5 -1.2)
+			(end -1.45 -1.2)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 0.9 1.8)
+			(end 1.1 1.8)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 0.9 2.3)
+			(end 0.9 1.8)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 1 2.3)
+			(end 1 1.8)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 1.1 1.8)
+			(end 1.1 2.3)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 2.9 1.8)
+			(end 3.1 1.8)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 2.9 2.3)
+			(end 2.9 1.8)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 3 2.3)
+			(end 3 1.8)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 3.1 1.8)
+			(end 3.1 2.3)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 3.5 -1.2)
+			(end 3.5 -1.81)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 5.45 -1.2)
+			(end 3.5 -1.2)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 5.45 2.3)
+			(end 5.45 -1.2)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 6.06 -0.5)
+			(end 5.45 -0.5)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 6.06 0.8)
+			(end 5.45 0.8)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_rect
+			(start -2.06 -1.81)
+			(end 6.06 2.91)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(fill no)
+			(layer "F.SilkS")
+		)
+		(fp_rect
+			(start -2.45 -2.2)
+			(end 6.45 3.3)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(fill no)
+			(layer "F.CrtYd")
+		)
+		(fp_line
+			(start -2.36 -2.11)
+			(end -2.36 -0.86)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "F.Fab")
+		)
+		(fp_line
+			(start -1.11 -2.11)
+			(end -2.36 -2.11)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "F.Fab")
+		)
+		(fp_rect
+			(start -1.95 -1.7)
+			(end 5.95 2.8)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(fill no)
+			(layer "F.Fab")
+		)
+		(fp_text user "${REFERENCE}"
+			(at 2 1.5 0)
+			(layer "F.Fab")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(pad "1" thru_hole roundrect
 			(at 0 0)
-			(size 1.7 1.7)
-			(drill 1)
+			(size 1.2 1.75)
+			(drill 0.75)
 			(layers "*.Cu" "*.Mask")
-			(uuid "42f7ee84-fa86-4554-aa61-0428d0113f8c")
+			(remove_unused_layers no)
+			(roundrect_rratio 0.208333)
 		)
-		(pad "3" thru_hole circle
-			(at 0 2.54)
-			(size 1.7 1.7)
-			(drill 1)
+		(pad "2" thru_hole oval
+			(at 2 0)
+			(size 1.2 1.75)
+			(drill 0.75)
 			(layers "*.Cu" "*.Mask")
-			(uuid "ee3eb76c-fbef-47fe-bbba-411a76c8c4da")
+			(remove_unused_layers no)
+		)
+		(pad "3" thru_hole oval
+			(at 4 0)
+			(size 1.2 1.75)
+			(drill 0.75)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x03_P2.54mm_Vertical.step"
+		(model "${KICAD10_3DMODEL_DIR}/Connector_JST.3dshapes/JST_PH_B3B-PH-K_1x03_P2.00mm_Vertical.step"
 			(offset
-				(xyz 0 2.54 0)
+				(xyz 0 0 0)
 			)
 			(scale
 				(xyz 1 1 1)
@@ -2169,11 +3131,12 @@
 	(footprint "Connector_JST:JST_PH_B4B-PH-K_1x04_P2.00mm_Vertical"
 		(layer "F.Cu")
 		(uuid "5ad200d7-21a4-4a25-b461-9da781c81cf5")
-		(at 124.25 118.50)
+		(at 195.00 92.00 90.0)
+		(descr "JST PH series connector, B4B-PH-K (http://www.jst-mfg.com/product/pdf/eng/ePH.pdf)")
+		(tags "connector JST PH vertical")
 		(property "Reference" "J5"
-			(at 3.00 -3.20 0)
+			(at 3 -2.9 0)
 			(layer "F.SilkS")
-			(uuid "455b8455-fb33-4665-962a-123957ba39d3")
 			(effects
 				(font
 					(size 1 1)
@@ -2182,9 +3145,8 @@
 			)
 		)
 		(property "Value" "JST_PH_4P_BAT_NTC"
-			(at 3 4.5 0)
+			(at 3 4 0)
 			(layer "F.Fab")
-			(uuid "4d90c08b-0ebe-4bb9-9000-2e83cf3889ea")
 			(effects
 				(font
 					(size 1 1)
@@ -2192,69 +3154,366 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://www.jst-mfg.com/product/pdf/eng/ePH.pdf"
+		(property "KiLib_Generator" "connector/JST"
 			(at 0 0 0)
-			(layer "F.Fab")
+			(layer "F.SilkS")
 			(hide yes)
-			(uuid "632590dd-f682-4b11-8bc1-a7b8b4df27c9")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
 		)
-		(property "Description" "JST PH series connector, 4-pin vertical shrouded header (BAT+, BAT-, NTC, GND)"
-			(at 0 0 0)
+		(attr through_hole)
+		(duplicate_pad_numbers_are_jumpers no)
+		(fp_line
+			(start -2.36 -2.11)
+			(end -2.36 -0.86)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start -2.06 -0.5)
+			(end -1.45 -0.5)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start -2.06 0.8)
+			(end -1.45 0.8)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start -1.45 -1.2)
+			(end -1.45 2.3)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start -1.45 2.3)
+			(end 7.45 2.3)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start -1.11 -2.11)
+			(end -2.36 -2.11)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start -0.6 -2.01)
+			(end -0.6 -1.81)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start -0.3 -2.01)
+			(end -0.6 -2.01)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start -0.3 -1.91)
+			(end -0.6 -1.91)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start -0.3 -1.81)
+			(end -0.3 -2.01)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 0.5 -1.81)
+			(end 0.5 -1.2)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 0.5 -1.2)
+			(end -1.45 -1.2)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 0.9 1.8)
+			(end 1.1 1.8)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 0.9 2.3)
+			(end 0.9 1.8)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 1 2.3)
+			(end 1 1.8)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 1.1 1.8)
+			(end 1.1 2.3)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 2.9 1.8)
+			(end 3.1 1.8)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 2.9 2.3)
+			(end 2.9 1.8)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 3 2.3)
+			(end 3 1.8)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 3.1 1.8)
+			(end 3.1 2.3)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 4.9 1.8)
+			(end 5.1 1.8)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 4.9 2.3)
+			(end 4.9 1.8)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 5 2.3)
+			(end 5 1.8)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 5.1 1.8)
+			(end 5.1 2.3)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 5.5 -1.2)
+			(end 5.5 -1.81)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 7.45 -1.2)
+			(end 5.5 -1.2)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 7.45 2.3)
+			(end 7.45 -1.2)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 8.06 -0.5)
+			(end 7.45 -0.5)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 8.06 0.8)
+			(end 7.45 0.8)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+		)
+		(fp_rect
+			(start -2.06 -1.81)
+			(end 8.06 2.91)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(fill no)
+			(layer "F.SilkS")
+		)
+		(fp_rect
+			(start -2.45 -2.2)
+			(end 8.45 3.3)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(fill no)
+			(layer "F.CrtYd")
+		)
+		(fp_line
+			(start -2.36 -2.11)
+			(end -2.36 -0.86)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
 			(layer "F.Fab")
-			(hide yes)
-			(uuid "9c616212-f198-468e-9535-a419aa424146")
 		)
 		(fp_line
-			(start -1.95 -2.25)
-			(end 7.95 -2.25)
-			(stroke (width 0.15) (type solid))
-			(layer "F.SilkS")
+			(start -1.11 -2.11)
+			(end -2.36 -2.11)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "F.Fab")
 		)
-		(fp_line
-			(start 7.95 -2.25)
-			(end 7.95 2.25)
-			(stroke (width 0.15) (type solid))
-			(layer "F.SilkS")
+		(fp_rect
+			(start -1.95 -1.7)
+			(end 7.95 2.8)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(fill no)
+			(layer "F.Fab")
 		)
-		(fp_line
-			(start 7.95 2.25)
-			(end -1.95 2.25)
-			(stroke (width 0.15) (type solid))
-			(layer "F.SilkS")
+		(fp_text user "${REFERENCE}"
+			(at 3 1.5 0)
+			(layer "F.Fab")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
 		)
-		(fp_line
-			(start -1.95 2.25)
-			(end -1.95 -2.25)
-			(stroke (width 0.15) (type solid))
-			(layer "F.SilkS")
-		)
-		(pad "1" thru_hole rect
+		(pad "1" thru_hole roundrect
 			(at 0 0)
-			(size 1.7 1.7)
-			(drill 0.8)
+			(size 1.2 1.75)
+			(drill 0.75)
 			(layers "*.Cu" "*.Mask")
-			(uuid "7dc9c955-a537-477d-8bbe-5b07a1b57715")
+			(remove_unused_layers no)
+			(roundrect_rratio 0.208333)
 		)
-		(pad "2" thru_hole circle
-			(at 2.0 0)
-			(size 1.7 1.7)
-			(drill 0.8)
+		(pad "2" thru_hole oval
+			(at 2 0)
+			(size 1.2 1.75)
+			(drill 0.75)
 			(layers "*.Cu" "*.Mask")
-			(uuid "05603b09-be61-4e79-b73d-643a5795a41e")
+			(remove_unused_layers no)
 		)
-		(pad "3" thru_hole circle
-			(at 4.0 0)
-			(size 1.7 1.7)
-			(drill 0.8)
+		(pad "3" thru_hole oval
+			(at 4 0)
+			(size 1.2 1.75)
+			(drill 0.75)
 			(layers "*.Cu" "*.Mask")
-			(uuid "2ce32ee0-4226-4a7c-9200-2829431b98e5")
+			(remove_unused_layers no)
 		)
-		(pad "4" thru_hole circle
-			(at 6.0 0)
-			(size 1.7 1.7)
-			(drill 0.8)
+		(pad "4" thru_hole oval
+			(at 6 0)
+			(size 1.2 1.75)
+			(drill 0.75)
 			(layers "*.Cu" "*.Mask")
-			(uuid "a1b2c3d4-e5f6-47a8-b901-c2d3e4f5a6b7")
+			(remove_unused_layers no)
 		)
 		(embedded_fonts no)
 		(model "${KICAD10_3DMODEL_DIR}/Connector_JST.3dshapes/JST_PH_B4B-PH-K_1x04_P2.00mm_Vertical.step"
@@ -2595,33 +3854,128 @@
 		(layer "Edge.Cuts")
 		(uuid "37ba2298-c5f9-4af0-aa7b-f3a2f710eff4")
 	)
-	(gr_text "GALVANIC BARRIER (4mm)" (at 173.00 74.00) (layer "F.SilkS")
-		(uuid "bc524c8b-1b0c-47b1-ae1e-f26495a991a0")
-		(effects
-			(font
-				(size 0.9 0.9)
-				(thickness 0.15)
-			)
-		)
-	)
-	(gr_text "CERN-OHL-S v2 | 4-Layer SMT" (at 147.00 114.50) (layer "F.SilkS")
-		(uuid "36c18fa7-d4e6-4972-a6f4-dbe7cd0a7c68")
-		(effects
-			(font
-				(size 1 1)
-				(thickness 0.15)
-			)
-		)
-	)
-	(gr_text "OpenMotorBridge v8.0" (at 147.00 112.00) (layer "F.SilkS")
-		(uuid "2fbc931c-d840-4317-bd4d-858686d6184c")
-		(effects
-			(font
-				(size 1.5 1.5)
-				(thickness 0.2)
-				(bold yes)
-			)
-		)
-	)
 	(embedded_fonts no)
+
+
+	(gr_text "OpenMotorBridge Main Box v8.0"
+		(at 150.00 72.40)
+		(layer "F.SilkS")
+		(uuid "d444a28d-f43e-4169-a1d2-c850d4396804")
+		(effects
+			(font
+				(size 1.00 1.00)
+				(thickness 0.15)
+			)
+		)
+	)
+	(gr_text "Dual-Channel Isolated Intercom"
+		(at 150.00 74.00)
+		(layer "F.SilkS")
+		(uuid "3a3b9242-60b9-42c8-9e0d-407d168001d3")
+		(effects
+			(font
+				(size 0.75 0.75)
+				(thickness 0.12)
+			)
+		)
+	)
+	(gr_text "GALVANIC BARRIER (4mm)"
+		(at 173.00 74.00)
+		(layer "F.SilkS")
+		(uuid "d620934a-8790-44a0-a375-a5268a5040a7")
+		(effects
+			(font
+				(size 0.75 0.75)
+				(thickness 0.12)
+			)
+		)
+	)
+	(gr_text "PWR (BAT/NTC)"
+		(at 195.00 84.00)
+		(layer "F.SilkS")
+		(uuid "1ab8e602-02b9-4857-aa1f-eee00b17a893")
+		(effects
+			(font
+				(size 0.85 0.85)
+				(thickness 0.13)
+			)
+		)
+	)
+	(gr_text "1:+ 2:- 3:NTC 4:G"
+		(at 195.00 85.70)
+		(layer "F.SilkS")
+		(uuid "42f2ca7d-6dc0-4fa4-88ee-d65ba5c37933")
+		(effects
+			(font
+				(size 0.70 0.70)
+				(thickness 0.11)
+			)
+		)
+	)
+	(gr_text "RGB LED"
+		(at 195.00 100.50)
+		(layer "F.SilkS")
+		(uuid "3c20c00e-a65f-44d1-bc4d-f607a0fbfefc")
+		(effects
+			(font
+				(size 0.85 0.85)
+				(thickness 0.13)
+			)
+		)
+	)
+	(gr_text "1:5V 2:DIN 3:G"
+		(at 195.00 102.20)
+		(layer "F.SilkS")
+		(uuid "edae5607-eba8-4e22-bcad-cff0cd08a731")
+		(effects
+			(font
+				(size 0.70 0.70)
+				(thickness 0.11)
+			)
+		)
+	)
+	(gr_text "USB SERVICE (9-PIN)"
+		(at 131.50 111.50)
+		(layer "F.SilkS")
+		(uuid "6b69b2cd-dfdd-45d5-8e5f-993d2de37238")
+		(effects
+			(font
+				(size 0.85 0.85)
+				(thickness 0.13)
+			)
+		)
+	)
+	(gr_text "1:5V 3:D- 5:D+ 7:G 9:KEY"
+		(at 131.50 113.10)
+		(layer "F.SilkS")
+		(uuid "ea965327-d01b-4b2e-a5a0-10a8f225b658")
+		(effects
+			(font
+				(size 0.70 0.70)
+				(thickness 0.11)
+			)
+		)
+	)
+	(gr_text "SYSTEM BUS (IDC-26)"
+		(at 160.00 111.50)
+		(layer "F.SilkS")
+		(uuid "2dc9dc11-1fb0-483d-8957-c6fe3bf25d06")
+		(effects
+			(font
+				(size 0.85 0.85)
+				(thickness 0.13)
+			)
+		)
+	)
+	(gr_text "MAIN SYSTEM HARNESS"
+		(at 160.00 113.10)
+		(layer "F.SilkS")
+		(uuid "273f6e08-73ad-48e5-b935-8ccc57946551")
+		(effects
+			(font
+				(size 0.70 0.70)
+				(thickness 0.11)
+			)
+		)
+	)
 )
