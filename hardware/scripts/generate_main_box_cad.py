@@ -134,14 +134,14 @@ def render_main_box_cad(output_path):
     draw_cylinder(ax1, -10, -37.5, 6.5, 2.5, 1.5, color='#10b981', alpha=0.95, axis='y')
     draw_cylinder(ax1, -10, -38.5, 6.5, 1.8, 1.0, color='#34d399', alpha=0.95, axis='y')
 
-    # 3. HD26 D-Sub Wall Flange on Right/Center (39.2 x 15.4 mm at X = 15, Y = -37, Z = 5)
-    draw_box(ax1, -4, -40, -1, 38, 3, 15, color='#0284c7', alpha=0.95, edgecolor='#38bdf8', linewidth=1.0)
-    draw_box(ax1, -2, -42, 1, 34, 2, 11, color='#0f172a', alpha=0.95, edgecolor='#94a3b8', linewidth=0.8)
-    for px in np.linspace(1, 29, 8):
+    # 3. HD26 D-Sub Wall Flange on Right/Center (39.2 x 15.4 mm at X = 10, Y = -37, Z = 5)
+    draw_box(ax1, -9, -40, -1, 38, 3, 15, color='#0284c7', alpha=0.95, edgecolor='#38bdf8', linewidth=1.0)
+    draw_box(ax1, -7, -42, 1, 34, 2, 11, color='#0f172a', alpha=0.95, edgecolor='#94a3b8', linewidth=0.8)
+    for px in np.linspace(-4, 24, 8):
         for pz in np.linspace(3, 10, 3):
             draw_cylinder(ax1, px, -42.5, pz, 0.4, 1.5, color='#fbbf24', alpha=0.95, axis='y')
-    draw_cylinder(ax1, -3.5, -41, 6.5, 1.5, 3.0, color='#cbd5e1', alpha=0.95, axis='y')
-    draw_cylinder(ax1, 33.5, -41, 6.5, 1.5, 3.0, color='#cbd5e1', alpha=0.95, axis='y')
+    draw_cylinder(ax1, -8.5, -41, 6.5, 1.5, 3.0, color='#cbd5e1', alpha=0.95, axis='y')
+    draw_cylinder(ax1, 28.5, -41, 6.5, 1.5, 3.0, color='#cbd5e1', alpha=0.95, axis='y')
     
     # Top Lid Features:
     # 1. Gore ePTFE Pressure Equalization Vent (Ø 7.0 mm at center X = 0, Y = 0, Z = 18.5)
@@ -239,8 +239,8 @@ def render_main_box_cad(output_path):
     draw_box(ax2, -12.5, -22, -8.9, 2.5, 7.5, 5.0, color='#10b981', alpha=0.95, edgecolor='#059669', linewidth=0.6)
     
     # Right Group:
-    # J1 (26-Port IDC Header 2x13 at X_CAD = +15.3, spans X = -1.2 to +31.8)
-    draw_box(ax2, -1.2, -22, -8.9, 33, 6, 5.4, color='#0f172a', alpha=0.95, edgecolor='#fbbf24', linewidth=0.8)
+    # J1 (26-Port IDC Header 2x13 at X_CAD = +10.3, spans X = -6.2 to +26.8, Y = -22 to -16)
+    draw_box(ax2, -6.2, -22, -8.9, 33, 6, 5.4, color='#0f172a', alpha=0.95, edgecolor='#fbbf24', linewidth=0.8)
 
     # 4x Vibration PCB Mounts
     for px, py in [(-38, -23), (-38, 23), (38, -23), (38, 23)]:
@@ -257,11 +257,11 @@ def render_main_box_cad(output_path):
     draw_box(ax2, -3, -14, -2.0, 54, 47, 2.5, color='#334155', alpha=0.75, edgecolor='#64748b', linewidth=0.8)
 
     # 1. 38.0 x 6.0 mm Ribbon Cable Pass-Through Slot in Zwischenboden (on Right Side above J1)
-    draw_box(ax2, -3.5, -22.5, -2.2, 39, 8.5, 2.9, color='#0284c7', alpha=0.25, edgecolor='#38bdf8', linewidth=1.2)
+    draw_box(ax2, -8.5, -22.5, -2.2, 39, 8.5, 2.9, color='#0284c7', alpha=0.25, edgecolor='#38bdf8', linewidth=1.2)
     
     # 26-Conductor Ultra-Flexible Ribbon Cable (pink/violet AWG28) looping from HD26 in Oberwanne down to J1 on PCB
-    draw_box(ax2, 0, -36, 4, 30, 14, 1.2, color='#f43f5e', alpha=0.90, edgecolor='#fda4af', linewidth=0.6)
-    draw_box(ax2, 0, -22, -8.0, 30, 2, 13.0, color='#f43f5e', alpha=0.90, edgecolor='#fda4af', linewidth=0.6)
+    draw_box(ax2, -5, -36, 4, 30, 14, 1.2, color='#f43f5e', alpha=0.90, edgecolor='#fda4af', linewidth=0.6)
+    draw_box(ax2, -5, -22, -8.0, 30, 2, 13.0, color='#f43f5e', alpha=0.90, edgecolor='#fda4af', linewidth=0.6)
 
     # 2. 4x Labyrinth Pressure Equalization Slots in Zwischenboden (15 x 2 mm)
     for vx in [-35, -15, 10, 30]:
