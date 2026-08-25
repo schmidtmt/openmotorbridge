@@ -140,9 +140,9 @@ def render_main_box_cad(output_path):
     draw_cylinder(ax1, 20, -41, 6.5, 5.0, 3.0, color='#0284c7', alpha=0.95, axis='y')
     draw_cylinder(ax1, 20, -39, 6.5, 5.3, 0.8, color='#ef4444', alpha=0.95, axis='y')
     
-    # 3. PMMA RGB Status LED Window on Oberwanne (at X = 38, Y = -37, Z = 6.5)
-    draw_cylinder(ax1, 38, -37.5, 6.5, 2.5, 1.5, color='#10b981', alpha=0.95, axis='y')
-    draw_cylinder(ax1, 38, -38.5, 6.5, 1.8, 1.0, color='#34d399', alpha=0.95, axis='y')
+    # 3. PMMA RGB Status LED Window on Oberwanne (at X = 29.5, Y = -37, Z = 6.5) - Aligned with J4!
+    draw_cylinder(ax1, 29.5, -37.5, 6.5, 2.5, 1.5, color='#10b981', alpha=0.95, axis='y')
+    draw_cylinder(ax1, 29.5, -38.5, 6.5, 1.8, 1.0, color='#34d399', alpha=0.95, axis='y')
     
     # Top Lid Features:
     # 1. Gore ePTFE Pressure Equalization Vent (Ø 7.0 mm at center X = 0, Y = 0, Z = 18.5)
@@ -229,16 +229,16 @@ def render_main_box_cad(output_path):
     draw_box(ax2, 26, -7, -8.9, 6, 4, 2.0, color='#0f172a', alpha=0.95, edgecolor='#38bdf8', linewidth=0.5)
 
     # - Bottom Connector Rail (Y = -22 to -17):
-    # J5 (LiPo Akku 2P)
-    draw_box(ax2, -34, -22, -8.9, 6, 4, 5.0, color='#ef4444', alpha=0.95, edgecolor='#dc2626', linewidth=0.6)
-    # J6 (NTC 2P)
-    draw_box(ax2, -26, -22, -8.9, 5, 3, 5.0, color='#3b82f6', alpha=0.95, edgecolor='#2563eb', linewidth=0.6)
-    # J1 (IDC26 2x13 Box Header, X = -19 to +14)
-    draw_box(ax2, -19, -22, -8.9, 33, 6, 5.4, color='#0f172a', alpha=0.95, edgecolor='#fbbf24', linewidth=0.8)
-    # J4 (RGB LED 3P)
-    draw_box(ax2, 16, -22, -8.9, 7, 3, 5.0, color='#10b981', alpha=0.95, edgecolor='#059669', linewidth=0.6)
-    # J3 (USB-C Vertical)
-    draw_box(ax2, 26, -22, -8.9, 9, 6, 5.0, color='#38bdf8', alpha=0.95, edgecolor='#0284c7', linewidth=0.6)
+    # J5 (LiPo Akku 2P at X_CAD = -31.2)
+    draw_box(ax2, -34.2, -22, -8.9, 6, 4, 5.0, color='#ef4444', alpha=0.95, edgecolor='#dc2626', linewidth=0.6)
+    # J6 (NTC 2P at X_CAD = -24.7)
+    draw_box(ax2, -27.2, -22, -8.9, 5, 3, 5.0, color='#3b82f6', alpha=0.95, edgecolor='#2563eb', linewidth=0.6)
+    # J1 (26-Port IDC Header 2x13 at X_CAD = -4.2)
+    draw_box(ax2, -20.7, -22, -8.9, 33, 6, 5.4, color='#0f172a', alpha=0.95, edgecolor='#fbbf24', linewidth=0.8)
+    # J3 (USB-C Service Port at X_CAD = +19.3) - Directly under front USB-C!
+    draw_box(ax2, 14.8, -22, -8.9, 9, 6, 5.0, color='#38bdf8', alpha=0.95, edgecolor='#0284c7', linewidth=0.6)
+    # J4 (3-Port RGB LED Header at X_CAD = +29.3) - Directly behind front RGB LED!
+    draw_box(ax2, 25.5, -22, -8.9, 7.5, 3, 5.0, color='#10b981', alpha=0.95, edgecolor='#059669', linewidth=0.6)
 
     # 4x Vibration PCB Mounts
     for px, py in [(-38, -23), (-38, 23), (38, -23), (38, 23)]:
@@ -282,8 +282,8 @@ def render_main_box_cad(output_path):
     draw_box(ax2, -4, -3, 3.0, 6.0, 2.0, 5.5, color='#475569', alpha=0.95, edgecolor='#94a3b8', linewidth=0.6)
     draw_box(ax2, -4, 31, 3.0, 6.0, 2.0, 5.5, color='#475569', alpha=0.95, edgecolor='#94a3b8', linewidth=0.6)
 
-    # Front Panel LED in Oberwanne (at X = 38, Y = -37, Z = 6.5)
-    draw_cylinder(ax2, 38, -37.5, 6.5, 2.5, 1.5, color='#10b981', alpha=0.95, axis='y')
+    # Front Panel LED in Oberwanne (at X = 29.5, Y = -37, Z = 6.5)
+    draw_cylinder(ax2, 29.5, -37.5, 6.5, 2.5, 1.5, color='#10b981', alpha=0.95, axis='y')
 
     # ---------------------------------------------------------
     # LAYER 3: DECKEL (Z = +13 to +19 mm)
@@ -295,7 +295,7 @@ def render_main_box_cad(output_path):
     ax2.text(-3, -8, 11, "EPDM-Spannband", color='#38bdf8', fontsize=8, fontweight='bold')
     ax2.text(-26, -28, 2, "38x6 mm Flachband-Schlitz", color='#38bdf8', fontsize=9, fontweight='bold')
     ax2.text(-26, -38, -3, "26-Pin Flachbandkabel", color='#f43f5e', fontsize=8, fontweight='bold')
-    ax2.text(32, -38, 10, "RGB-LED (Front)", color='#34d399', fontsize=8, fontweight='bold')
+    ax2.text(26, -38, 10, "RGB-LED (Front)", color='#34d399', fontsize=8, fontweight='bold')
     ax2.text(-35, 18, 2, "Druckausgleichsschlitze", color='#94a3b8', fontsize=8, fontweight='bold')
     ax2.text(-38, -15, -4, "ESP32-S3 (nach unten)", color='#cbd5e1', fontsize=8, fontweight='bold')
     ax2.text(8, 0, -4, "Bourns & Optos (rechts/unten)", color='#fbbf24', fontsize=8, fontweight='bold')

@@ -75,9 +75,9 @@ def auto_place_main_board(pcb_path):
         'H4': (X_max - 4.0, Y_max - 4.0, 0.0), # (196.22, 122.85) Bottom-Right
 
         # Zone 1: MCU & RF (Left Flank - Shifted down for generous power clearance)
-        'U2': (127.0, 99.0, 0.0),             # ESP32-S3-WROOM-1 MCU (18.0 x 25.5 mm)
-        'C10': (138.0, 102.0, 0.0),           # VDD Cap (0603)
-        'C11': (138.0, 105.0, 0.0),           # Bulk Cap (0805)
+        'U2': (126.5, 99.0, 0.0),             # ESP32-S3-WROOM-1 MCU (18.0 x 25.5 mm)
+        'C10': (137.5, 102.0, 0.0),           # VDD Cap (0603)
+        'C11': (137.5, 105.0, 0.0),           # Bulk Cap (0805)
 
         # Zone 2: Power & UPS (Top-Left Flank)
         'D2': (127.0, 77.0, 0.0),             # SMBJ33CA TVS Diode (5.4 x 3.6 mm)
@@ -97,7 +97,7 @@ def auto_place_main_board(pcb_path):
         'C12': (160.0, 87.0, 0.0),
         'R10': (160.0, 89.0, 0.0),
         'R11': (160.0, 91.0, 0.0),
-        'J2': (152.0, 102.0, 0.0),            # MicroSD Card Slot (14.0 x 14.5 mm)
+        'J2': (150.0, 102.0, 0.0),            # MicroSD Card Slot (14.0 x 14.5 mm)
 
         # Zone 4A: Audio Codec & CAN (Top-Right Flank)
         'U3': (170.0, 80.0, 0.0),             # Everest ES8388 Audio Codec (4.0 x 4.0 mm)
@@ -114,12 +114,12 @@ def auto_place_main_board(pcb_path):
         'U7': (172.0, 104.0, 0.0),            # Toshiba TLP222A PhotoMOS Optocoupler 1 (4.5 x 4.0 mm)
         'U8': (187.0, 104.0, 0.0),            # Toshiba TLP222A PhotoMOS Optocoupler 2 (4.5 x 4.0 mm)
 
-        # Zone 1: Bottom Connector Rail (All Vertical Top-Entry, 10mm plugging clearance)
+        # Zone 1: Front Connector Rail (Aligned with Oberwanne Front Panel: J5 -> J6 -> J1 -> J3 USB -> J4 LED)
         'J5': (126.5, 119.0, 0.0),            # LiPo Akku JST-PH 2-Pin (6.0 x 4.5 mm)
-        'J6': (133.5, 119.0, 0.0),            # NTC JEITA Sensor 2-Pin (5.0 x 2.5 mm)
-        'J1': (155.0, 119.0, 90.0),           # 2x13 IDC Box Header (33.0 x 6.0 mm)
-        'J4': (177.5, 119.0, 0.0),            # 3-Pin RGB LED Header (7.5 x 2.5 mm)
-        'J3': (188.0, 119.0, 0.0),            # Vertical USB-C Port (9.0 x 6.0 mm)
+        'J6': (133.0, 119.0, 0.0),            # NTC JEITA Sensor 2-Pin (5.0 x 2.5 mm)
+        'J1': (153.5, 119.0, 90.0),           # 26-Port IDC Header 2x13 (33.0 x 6.0 mm) - HD26 Ribbon
+        'J3': (177.0, 119.0, 0.0),            # USB-C Service Port (9.0 x 6.0 mm) - Aligned with Front USB
+        'J4': (187.0, 119.0, 0.0),            # 3-Port RGB LED Header (7.5 x 2.5 mm) - Aligned with Front LED
     }
 
     existing_refs = {fp.GetReference(): fp for fp in board.Footprints()}

@@ -276,7 +276,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "2ce32ee0-4226-4a7c-9200-2829431b98e5")
-		(at 133.50 119.00)
+		(at 133.00 119.00)
 		(property "Reference" "J6"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -411,7 +411,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "335f27bb-f810-46dd-895e-f6a487011d69")
-		(at 138.00 102.00)
+		(at 137.50 102.00)
 		(property "Reference" "C10"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -831,7 +831,7 @@
 	(footprint "RF_Module:ESP32-S3-WROOM-1"
 		(layer "F.Cu")
 		(uuid "5b6d8aa7-15f5-487e-bffc-f215bfad0cc9")
-		(at 127.00 99.00)
+		(at 126.50 99.00)
 		(property "Reference" "U2"
 			(at 0 -10.5 270)
 			(layer "F.SilkS")
@@ -1133,7 +1133,7 @@
 	(footprint "Connector_USB:USB_C_Receptacle_GCT_USB4085"
 		(layer "F.Cu")
 		(uuid "74a7523d-fdc4-4b57-8d9d-f609fecaf602")
-		(at 188.00 119.00)
+		(at 177.00 119.00)
 		(property "Reference" "J3"
 			(at 0 -3.5 0)
 			(layer "F.SilkS")
@@ -1437,7 +1437,7 @@
 	(footprint "Connector_Card:microSD_HC_Molex_47571-0001"
 		(layer "F.Cu")
 		(uuid "8af113b9-effd-4de0-b948-d3d79233f565")
-		(at 152.00 102.00)
+		(at 150.00 102.00)
 		(property "Reference" "J2"
 			(at 0 -8.5 180)
 			(layer "F.SilkS")
@@ -1850,7 +1850,7 @@
 	(footprint "Connector_Dsub:DSUB-26-HD_Female_Horizontal_P2.29x1.98mm_EdgePinOffset7.70mm_Housings_POS01"
 		(layer "F.Cu")
 		(uuid "bfbc13cf-daae-4069-92e4-d551667c8723")
-		(at 155.00 119.00 90)
+		(at 153.50 119.00 90)
 		(property "Reference" "J1"
 			(at 0 -12 180)
 			(layer "F.SilkS")
@@ -1912,7 +1912,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "c0c5be66-b62e-4345-af69-7c967c2cb1d6")
-		(at 177.50 119.00)
+		(at 187.00 119.00)
 		(property "Reference" "J4"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -2058,7 +2058,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "cbfc0531-d121-410a-adb8-082c7db51394")
-		(at 138.00 105.00)
+		(at 137.50 105.00)
 		(property "Reference" "C11"
 			(at 0 0 0)
 			(layer "F.SilkS")

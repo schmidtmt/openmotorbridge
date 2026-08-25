@@ -58,10 +58,7 @@ Die Hauptplatine vereint auf kompakten **$85{,}0 \times 55{,}0\,\text{mm}$** die
 Um gegenseitige Störungen zwischen der Schaltnetzteil-HF ($2{,}1\,\text{MHz}$), dem 2,4-GHz-Bluetooth-Funk und den hochempfindlichen analogen Audioleitungen vollständig zu eliminieren, ist die Platine in **5 strikt voneinander getrennte Funktionszonen** unterteilt:
 
 ```
-┌────────────────────────────────────────────────────────────────────────┐
-│ ZONE 1: STECKERLEISTE & BARRIEREFREIER 10-MM-STECKKORRIDOR (OBEN)      │
-│ [ J4: BAT ]   [ J1: 2x13 IDC26 WANNENSTECKER ]   [ J2: SD ]  [ J3: LED]│
-├───────────────────┬──────────────────────────┬─────────────────────────┤
+┌───────────────────┬──────────────────────────┬─────────────────────────┐
 │ ZONE 2: POWER &   │ ZONE 5: SENSORIK & IMU   │ ZONE 4A: AUDIO CODEC    │
 │ AUTOMOTIVE USV    │ • Bosch BMI270 6-Achsen  │ • Everest ES8388 Codec  │
 │ • PPTC 500mA      │ • MicroSD Ringspeicher   │ • TI TCAN334G CAN-FD    │
@@ -69,16 +66,20 @@ Um gegenseitige Störungen zwischen der Schaltnetzteil-HF ($2{,}1\,\text{MHz}$),
 │ • TI LM5164 Buck  │ ZONE 3: DIGITAL CORE     │ ZONE 4B: GALV. ISOLATION│
 │ • TI BQ24075 USV  │ • ESP32-S3 Dual-Core     │ • 2x Bourns Übertrager  │
 │ • LC-PI-Filter    │   (Nach unten versetzt)  │ • 2x TLP222A PhotoMOS   │
-│                   │ • 2.4 GHz PCB-Antenne    │   (Rechtsflanke über J1)│
-└───────────────────┴──────────────────────────┴─────────────────────────┘
+│                   │ • 2.4 GHz PCB-Antenne    │   (Rechtsflanke)        │
+├───────────────────┴──────────────────────────┴─────────────────────────┤
+│ ZONE 1: STECKERLEISTE & BARRIEREFREIER 10-MM-STECKKORRIDOR (FRONT/UNTEN│
+│ [J5: BAT]  [J6: NTC]   [J1: 26-POL IDC26]   [J3: USB-C]   [J4: 3P LED] │
+└────────────────────────────────────────────────────────────────────────┘
 ```
 
-1. **Zone 1 (Obere Kante – Steckverbinder-Reihe & 10-mm-Korridor):**
-   * Alle Gehäuseschnittstellen sind in einer **einheitlichen horizontalen Reihe** angeordnet:
-     * `J4`: 2-Pin JST-PH LiPo-Akkubuchse (Raster $2{,}0\,\text{mm}$)
-     * `J1`: 2x13 Pin IDC26 Wannenstecker mit Verriegelungsnasen (Raster $2{,}54\,\text{mm}$)
-     * `J2`: MicroSD-Kartenhalter (Push-Push SMD)
-     * `J3`: 3-Pin JST-XH RGB-LED-Anschluss (Raster $2{,}54\,\text{mm}$)
+1. **Zone 1 (Vorderkante – Steckverbinder-Reihe & 10-mm-Korridor):**
+   * Exakt auf die Gehäusefront der Oberwanne ausgerichtete Stecker-Reihenfolge:
+     * `J5`: 2-Pin JST-PH LiPo-Akkubuchse (Raster $2{,}0\,\text{mm}$)
+     * `J6`: 2-Pin Micro-Header für NTC-Temperatursensor
+     * `J1`: 2x13 Pin IDC26 Wannenstecker ($33\,\text{mm}$) – Direkt unter dem HD26-Flansch / Flachbandkabel-Schlitz
+     * `J3`: Vertikale USB-C Service-Buchse – Direkt hinter der frontseitigen USB-C Dichtkappe
+     * `J4`: 3-Pin RGB-LED-Anschluss (Raster $2{,}54\,\text{mm}$) – Direkt hinter dem PMMA-Status-Sichtfenster
    * **10-mm-Einführkorridor:** Unterhalb und um die Stecker herum gilt ein absolutes Bauteil-Sperrgebiet (Keep-Out) für Elkos und hohe Komponenten. Flachbandkabel und Finger können ohne Kollisionsgefahr bequem ein- und ausgesteckt werden.
 2. **Zone 2 (Linke Flanke oben – Automotive Power & USV):**
    * Nimmt die raue Bordnetzspannung von KL30/KL15 auf. Enthält die Bourns PPTC-Sicherung, die SMBJ33CA TVS-Diode, den Verpolschutz-MOSFET, das $10\,\mu\text{H}$ PI-Filter sowie den TI LM5164-Q1 Step-Down-Regler und das BQ24075 USV-Lademanagement.

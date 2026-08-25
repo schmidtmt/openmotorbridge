@@ -58,10 +58,7 @@ The central box mainboard integrates the full automotive power supply, uninterru
 To completely eliminate coupling between switching power supply harmonics ($2.1\,\text{MHz}$), 2.4 GHz Bluetooth RF, and sensitive analog audio lines, the board is segmented into **5 strictly isolated functional zones**:
 
 ```
-┌────────────────────────────────────────────────────────────────────────┐
-│ ZONE 1: CONNECTOR RAIL & 10-MM PLUGGING CORRIDOR (TOP)                 │
-│ [ J4: BAT ]   [ J1: 2x13 IDC26 BOX HEADER ]       [ J2: SD ]  [ J3: LED]│
-├───────────────────┬──────────────────────────┬─────────────────────────┤
+┌───────────────────┬──────────────────────────┬─────────────────────────┐
 │ ZONE 2: POWER &   │ ZONE 5: SENSORS & IMU    │ ZONE 4A: AUDIO CODEC    │
 │ AUTOMOTIVE UPS    │ • Bosch BMI270 6-Axis    │ • Everest ES8388 Codec  │
 │ • PPTC 500mA      │ • MicroSD Ring Storage   │ • TI TCAN334G CAN-FD    │
@@ -69,16 +66,20 @@ To completely eliminate coupling between switching power supply harmonics ($2.1\
 │ • TI LM5164 Buck  │ ZONE 3: DIGITAL CORE     │ ZONE 4B: GALV. ISOLATION│
 │ • TI BQ24075 UPS  │ • ESP32-S3 Dual-Core     │ • 2x Bourns Transformers│
 │ • LC-PI-Filter    │   (Shifted Downward)     │ • 2x TLP222A PhotoMOS   │
-│                   │ • 2.4 GHz PCB Antenna    │   (Right Flank over J1) │
-└───────────────────┴──────────────────────────┴─────────────────────────┘
+│                   │ • 2.4 GHz PCB Antenna    │   (Right Flank)         │
+├───────────────────┴──────────────────────────┴─────────────────────────┤
+│ ZONE 1: CONNECTOR RAIL & 10-MM PLUGGING CORRIDOR (FRONT/BOTTOM)        │
+│ [J5: BAT]  [J6: NTC]   [J1: 26-PIN IDC26]   [J3: USB-C]   [J4: 3P LED] │
+└────────────────────────────────────────────────────────────────────────┘
 ```
 
-1. **Zone 1 (Top Edge – Connector Row & 10-mm Corridor):**
-   * Uniform horizontal connector placement:
-     * `J4`: 2-Pin JST-PH LiPo battery socket ($2.0\,\text{mm}$ pitch)
-     * `J1`: 2x13 Pin IDC26 box header with locking ramps ($2.54\,\text{mm}$ pitch)
-     * `J2`: MicroSD push-push SMD socket
-     * `J3`: 3-Pin JST-XH RGB LED header ($2.54\,\text{mm}$ pitch)
+1. **Zone 1 (Front Edge – Connector Row & 10-mm Corridor):**
+   * Geometrically aligned with the Oberwanne front panel ports:
+     * `J5`: 2-Pin JST-PH LiPo battery socket ($2.0\,\text{mm}$ pitch)
+     * `J6`: 2-Pin micro header for battery NTC temperature sensor
+     * `J1`: 2x13 Pin IDC26 box header ($33\,\text{mm}$) – Directly beneath the HD26 flange & ribbon slot
+     * `J3`: Vertical USB-C service socket – Directly behind front panel waterproof USB-C cap
+     * `J4`: 3-Pin RGB LED header ($2.54\,\text{mm}$ pitch) – Directly behind front PMMA status window
    * **10-mm Insertion Keep-Out:** Clean clearance zone ensuring ribbon cables and fingers can mate without component interference.
 2. **Zone 2 (Left Flank Top – Automotive Power & UPS):**
    * Accepts raw motorcycle electrical voltages (KL30/KL15). Contains the Bourns PPTC fuse, SMBJ33CA TVS diode, reverse-polarity MOSFET, $10\,\mu\text{H}$ PI filter, TI LM5164-Q1 synchronous buck converter, and TI BQ24075 UPS battery management.
