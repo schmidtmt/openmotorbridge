@@ -96,7 +96,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "0314a55d-129e-4211-ba7b-5b6ed4e3117e")
-		(at 163.50 92.50)
+		(at 163.00 93.00)
 		(property "Reference" "C6"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -156,7 +156,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "11099d76-00e1-403e-b2d9-e18dcb646d7d")
-		(at 150.5 88)
+		(at 144.00 84.00)
 		(property "Reference" "C4"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -216,7 +216,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "1afe107b-9414-4f86-8a94-bdf90573c6e4")
-		(at 137 76.5)
+		(at 131.50 76.00)
 		(property "Reference" "R1"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -276,7 +276,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "2ce32ee0-4226-4a7c-9200-2829431b98e5")
-		(at 129.5 118)
+		(at 133.50 119.00)
 		(property "Reference" "J6"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -411,7 +411,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "335f27bb-f810-46dd-895e-f6a487011d69")
-		(at 123 76.5)
+		(at 138.00 102.00)
 		(property "Reference" "C10"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -530,7 +530,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "371d5c2a-1fed-478b-a084-1ecf1d617c86")
-		(at 143.5 88)
+		(at 139.00 84.00)
 		(property "Reference" "C3"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -590,7 +590,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "3afa5af1-e805-4a6b-aa5a-f9192cc0907b")
-		(at 140 76.5)
+		(at 127.00 77.00)
 		(property "Reference" "D2"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -650,7 +650,7 @@
 	(footprint "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
 		(layer "F.Cu")
 		(uuid "537acce9-1c41-45da-9e3e-2091f760a65a")
-		(at 188.00 80.00)
+		(at 183.00 80.00)
 		(property "Reference" "U6"
 			(at 0 -3 0)
 			(layer "F.SilkS")
@@ -771,7 +771,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "59bfb410-e938-41dc-8507-cbf6b790f26e")
-		(at 188.00 86.00)
+		(at 189.00 80.00)
 		(property "Reference" "R9"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -831,7 +831,7 @@
 	(footprint "RF_Module:ESP32-S3-WROOM-1"
 		(layer "F.Cu")
 		(uuid "5b6d8aa7-15f5-487e-bffc-f215bfad0cc9")
-		(at 132 89)
+		(at 127.00 99.00)
 		(property "Reference" "U2"
 			(at 0 -10.5 270)
 			(layer "F.SilkS")
@@ -893,7 +893,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "60db94d7-6c23-4f46-98f7-c245a9e13148")
-		(at 143.5 76.5)
+		(at 135.00 77.00)
 		(property "Reference" "C1"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -953,7 +953,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "62bae06b-545c-4bb4-a2bc-122c8e287444")
-		(at 150 77.5)
+		(at 150.00 78.00)
 		(property "Reference" "L1"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -1013,7 +1013,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "66bf7269-3fd4-40a6-8001-8eed8e75ac25")
-		(at 190.50 92.50)
+		(at 196.00 93.00)
 		(property "Reference" "C7"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -1073,7 +1073,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "6c852f25-c003-4a57-ab81-2280f5a51b5c")
-		(at 137 79.5)
+		(at 131.50 78.00)
 		(property "Reference" "R2"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -1133,7 +1133,7 @@
 	(footprint "Connector_USB:USB_C_Receptacle_GCT_USB4085"
 		(layer "F.Cu")
 		(uuid "74a7523d-fdc4-4b57-8d9d-f609fecaf602")
-		(at 191 118)
+		(at 188.00 119.00)
 		(property "Reference" "J3"
 			(at 0 -3.5 0)
 			(layer "F.SilkS")
@@ -1195,7 +1195,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "7d8576e5-095f-4c37-adf3-67778b987119")
-		(at 184.00 93.00)
+		(at 187.00 93.00)
 		(property "Reference" "T2"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -1255,7 +1255,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "81e6d93d-04c9-4f61-b5d6-28c163f49b30")
-		(at 169.00 104.00)
+		(at 172.00 104.00)
 		(property "Reference" "U7"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -1315,7 +1315,7 @@
 	(footprint "Package_LGA:LGA-14_2.5x3mm_P0.5mm"
 		(layer "F.Cu")
 		(uuid "837a7f06-8ade-43f9-935c-39f4c2917ccf")
-		(at 162 92)
+		(at 156.00 89.00)
 		(property "Reference" "U5"
 			(at 0 -2.2 0)
 			(layer "F.SilkS")
@@ -1377,7 +1377,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "8add9745-a620-41da-b564-4cdaeb769c20")
-		(at 162 86.5)
+		(at 160.00 87.00)
 		(property "Reference" "C12"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -1437,7 +1437,7 @@
 	(footprint "Connector_Card:microSD_HC_Molex_47571-0001"
 		(layer "F.Cu")
 		(uuid "8af113b9-effd-4de0-b948-d3d79233f565")
-		(at 154 96)
+		(at 152.00 102.00)
 		(property "Reference" "J2"
 			(at 0 -8.5 180)
 			(layer "F.SilkS")
@@ -1499,7 +1499,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "9d722d3e-5f5b-4dee-9b40-eb16ff0b4e92")
-		(at 170.00 93.00)
+		(at 172.00 93.00)
 		(property "Reference" "T1"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -1559,7 +1559,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "a7e5e864-7fd7-432a-8ada-d95541e947b8")
-		(at 162 97)
+		(at 160.00 89.00)
 		(property "Reference" "R10"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -1619,7 +1619,7 @@
 	(footprint "LED_SMD:LED_WS2812B-2020"
 		(layer "F.Cu")
 		(uuid "aa97b3c1-5a59-4562-83f7-9a1de86eb49e")
-		(at 154 84)
+		(at 148.00 88.00)
 		(property "Reference" "D1"
 			(at 0 -1.8 0)
 			(layer "F.SilkS")
@@ -1670,7 +1670,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "b6541aa6-aa03-41ee-b1fc-2bfcf2f6d8e4")
-		(at 190.50 95.50)
+		(at 196.00 96.00)
 		(property "Reference" "R6"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -1730,7 +1730,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "b8862443-7a83-40f1-9c26-ac0abfeecf05")
-		(at 183.00 104.00)
+		(at 187.00 104.00)
 		(property "Reference" "U8"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -1790,7 +1790,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "bc507843-29b1-4b21-8520-df9f871c2d3a")
-		(at 162 99.5)
+		(at 160.00 91.00)
 		(property "Reference" "R11"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -1850,7 +1850,7 @@
 	(footprint "Connector_Dsub:DSUB-26-HD_Female_Horizontal_P2.29x1.98mm_EdgePinOffset7.70mm_Housings_POS01"
 		(layer "F.Cu")
 		(uuid "bfbc13cf-daae-4069-92e4-d551667c8723")
-		(at 138.5 118 90)
+		(at 155.00 119.00 90)
 		(property "Reference" "J1"
 			(at 0 -12 180)
 			(layer "F.SilkS")
@@ -1912,7 +1912,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "c0c5be66-b62e-4345-af69-7c967c2cb1d6")
-		(at 184 118)
+		(at 177.50 119.00)
 		(property "Reference" "J4"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -1996,7 +1996,7 @@
 	(footprint "Package_SO:SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.41x3.3mm"
 		(layer "F.Cu")
 		(uuid "c6b97a28-cd24-4fd7-a039-1b5f070edeeb")
-		(at 147 86)
+		(at 142.00 78.50)
 		(property "Reference" "U1"
 			(at 0 -3.2 0)
 			(layer "F.SilkS")
@@ -2058,7 +2058,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "cbfc0531-d121-410a-adb8-082c7db51394")
-		(at 126 76.5)
+		(at 138.00 105.00)
 		(property "Reference" "C11"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -2118,7 +2118,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "cc678832-2a14-49ca-b0ea-3552ca944cf1")
-		(at 156.5 76.5)
+		(at 156.00 78.00)
 		(property "Reference" "C2"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -2229,7 +2229,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "d27843f2-3746-43ad-825d-fc2781c72fe2")
-		(at 123.5 118)
+		(at 126.50 119.00)
 		(property "Reference" "J5"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -2305,7 +2305,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "dee2d1f8-9b0a-4cef-aeb4-e4a62074ddfe")
-		(at 139.5 83.5)
+		(at 132.00 83.00)
 		(property "Reference" "U9"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -2365,7 +2365,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "e8eb09ae-6b2f-48dc-8336-41c377efb0eb")
-		(at 163.50 95.50)
+		(at 163.00 96.00)
 		(property "Reference" "R5"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -2484,7 +2484,7 @@
 	(footprint "Package_DFN_QFN:QFN-28-1EP_4x4mm_P0.4mm_EP2.6x2.6mm"
 		(layer "F.Cu")
 		(uuid "fa7b6eef-4701-488e-9eee-7aa81e0affdc")
-		(at 176.00 80.00)
+		(at 170.00 80.00)
 		(property "Reference" "U3"
 			(at 0 -3 0)
 			(layer "F.SilkS")

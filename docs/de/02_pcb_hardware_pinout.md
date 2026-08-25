@@ -49,7 +49,11 @@ Die Hauptplatine vereint auf kompakten **$85{,}0 \times 55{,}0\,\text{mm}$** die
 
 ---
 
-## 3. Zonierungs-Architektur (Zero-Cross-Talk Topologie)
+## 3. Zonierungs-Architektur (Zero-Cross-Talk & Zero-Collision Topologie)
+
+![OpenMotorBridge Zentralplatine Top-Down Bestückungsplan](../../hardware/cad/main_board_pcb_top_down.png)
+
+*Abbildung 2.1: Kollisionsfreier 2D-Top-Down-Bestückungsplan der Zentralplatine ($85 \times 55\,\text{mm}$). Farbcodierte Zonen mit $100\,\%$ Überschneidungsfreiheit (geprüfte Bounding-Boxes).*
 
 Um gegenseitige Störungen zwischen der Schaltnetzteil-HF ($2{,}1\,\text{MHz}$), dem 2,4-GHz-Bluetooth-Funk und den hochempfindlichen analogen Audioleitungen vollständig zu eliminieren, ist die Platine in **5 strikt voneinander getrennte Funktionszonen** unterteilt:
 
@@ -58,16 +62,14 @@ Um gegenseitige Störungen zwischen der Schaltnetzteil-HF ($2{,}1\,\text{MHz}$),
 │ ZONE 1: STECKERLEISTE & BARRIEREFREIER 10-MM-STECKKORRIDOR (OBEN)      │
 │ [ J4: BAT ]   [ J1: 2x13 IDC26 WANNENSTECKER ]   [ J2: SD ]  [ J3: LED]│
 ├───────────────────┬──────────────────────────┬─────────────────────────┤
-│ ZONE 2: POWER &   │ ZONE 3: DIGITAL CORE     │ ZONE 4: AUDIO ISOLATION │
-│ AUTOMOTIVE USV    │                          │ & CODEC FRONTEND        │
-│                   │ • ESP32-S3 Dual-Core     │                         │
-│ • PPTC 500mA      │ • Freitragende 2.4 GHz   │ • 2x Bourns Übertrager  │
-│ • SMBJ33CA TVS    │   PCB-Antenne (Overhang) │   (1500V RMS Isolation) │
-│ • P-FET Verpolung │ • 16MB Flash / 8MB PSRAM │ • Everest ES8388 Codec  │
-│ • TI LM5164 Buck  ├──────────────────────────┤ • 2x TLP222A PhotoMOS   │
-│ • TI BQ24075 USV  │ ZONE 5: SENSORIK & IMU   │ • Analoger Massestern   │
-│ • LC-PI-Filter    │ • Bosch BMI270 6-Achsen  │   (Isolationsgraben)    │
-│                   │   (Platinen-Schwerpunkt) │                         │
+│ ZONE 2: POWER &   │ ZONE 5: SENSORIK & IMU   │ ZONE 4A: AUDIO CODEC    │
+│ AUTOMOTIVE USV    │ • Bosch BMI270 6-Achsen  │ • Everest ES8388 Codec  │
+│ • PPTC 500mA      │ • MicroSD Ringspeicher   │ • TI TCAN334G CAN-FD    │
+│ • SMBJ33CA TVS    ├──────────────────────────┼─────────────────────────┤
+│ • TI LM5164 Buck  │ ZONE 3: DIGITAL CORE     │ ZONE 4B: GALV. ISOLATION│
+│ • TI BQ24075 USV  │ • ESP32-S3 Dual-Core     │ • 2x Bourns Übertrager  │
+│ • LC-PI-Filter    │   (Nach unten versetzt)  │ • 2x TLP222A PhotoMOS   │
+│                   │ • 2.4 GHz PCB-Antenne    │   (Rechtsflanke über J1)│
 └───────────────────┴──────────────────────────┴─────────────────────────┘
 ```
 
@@ -78,17 +80,17 @@ Um gegenseitige Störungen zwischen der Schaltnetzteil-HF ($2{,}1\,\text{MHz}$),
      * `J2`: MicroSD-Kartenhalter (Push-Push SMD)
      * `J3`: 3-Pin JST-XH RGB-LED-Anschluss (Raster $2{,}54\,\text{mm}$)
    * **10-mm-Einführkorridor:** Unterhalb und um die Stecker herum gilt ein absolutes Bauteil-Sperrgebiet (Keep-Out) für Elkos und hohe Komponenten. Flachbandkabel und Finger können ohne Kollisionsgefahr bequem ein- und ausgesteckt werden.
-2. **Zone 2 (Linke Flanke – Automotive Power & USV):**
+2. **Zone 2 (Linke Flanke oben – Automotive Power & USV):**
    * Nimmt die raue Bordnetzspannung von KL30/KL15 auf. Enthält die Bourns PPTC-Sicherung, die SMBJ33CA TVS-Diode, den Verpolschutz-MOSFET, das $10\,\mu\text{H}$ PI-Filter sowie den TI LM5164-Q1 Step-Down-Regler und das BQ24075 USV-Lademanagement.
-3. **Zone 3 (Zentral – Digitaler Host-Core):**
-   * Beherbergt das ESP32-S3-WROOM-1 Modul (240 MHz Dual-Core). Die PCB-Mäanderantenne ragt über die Platinenkante hinaus; darunterliegende Kupferflächen sind auf allen 4 Lagen vollständig ausgespart.
-4. **Zone 4 (Rechte Flanke – Galvanisch isoliertes Audio-Frontend & Pegeltrennung):**
-   * **Optimierte Vertikal-Staffelung:**
-     * **Oben (MCU-Nah):** Der Everest ES8388 Audio-Codec (`U3`) und der TI TCAN334G CAN-Transceiver (`U6`) sitzen im oberen Bereich direkt neben dem ESP32-S3. Dies garantiert ultrakurze $I^2S$-Takt- und Datenleitungen ($< 15\,\text{mm}$) mit minimalem Jitter und ohne HF-Abstrahlung.
-     * **Unten (Stecker-Nah):** Die beiden schweren Bourns LM-NP-1001-B1L Übertrager (`T1`, `T2`) sowie die beiden Toshiba TLP222A PhotoMOS-Optokoppler (`U7`, `U8`) sind **nach unten versetzt** und liegen direkt oberhalb der 2x13 Wannenbuchse `J1`.
+3. **Zone 3 (Linke Flanke unten – Digitaler Host-Core):**
+   * Beherbergt das ESP32-S3-WROOM-1 Modul (240 MHz Dual-Core), **nach unten versetzt** für großzügigen Freiraum zur oberen Spannungsversorgung. Die PCB-Mäanderantenne ragt über die linke untere Kante hinaus; darunterliegende Kupferflächen sind auf allen 4 Lagen vollständig ausgespart.
+4. **Zone 4 (Rechte Flanke – Audio-Frontend, Codec & Galvanische Trennung):**
+   * **Optimierte Vertikal- & Quer-Staffelung (Nach rechts und unten versetzt):**
+     * **Zone 4A (Oben rechts):** Der Everest ES8388 Audio-Codec (`U3`) und der TI TCAN334G CAN-Transceiver (`U6`) sitzen im oberen rechten Quadranten. Dies garantiert ultrakurze $I^2S$-Takt- und Datenleitungen ($< 15\,\text{mm}$) mit minimalem Jitter und ohne HF-Abstrahlung.
+     * **Zone 4B (Rechtsflanke unten):** Die beiden schweren Bourns LM-NP-1001-B1L Übertrager (`T1`, `T2`) sowie die beiden Toshiba TLP222A PhotoMOS-Optokoppler (`U7`, `U8`) sind **nach rechts an die Außenkante und nach unten** direkt über den 2x13 Wannenstecker `J1` versetzt.
    * **Signalintegrität:** Die galvanisch getrennten, symmetrischen Audiosignale (`NF1_P/N`, `NF2_P/N`, $1500\,\text{V}_{\text{RMS}}$ Isolation) und Tasten-Triggersignale führen kreuzungsfrei auf kürzestem Weg direkt auf `J1`. Die analoge Masse `AGND` ist über einen $100\,\mu\text{m}$ Isolationsgraben von der Powermasse `GND_PWR` getrennt.
-5. **Zone 5 (Zentrum – IMU Fahrdynamiksensorik):**
-   * Der Bosch BMI270 6-Achsen-Sensor (Gyroskop & Beschleunigungsmesser) sitzt exakt im geometrischen Schwerpunkt der Platine, um translatorische Hebelarmfehler bei Schräglagenberechnungen zu minimieren.
+5. **Zone 5 (Zentrum – IMU Fahrdynamiksensorik & MicroSD):**
+   * Der Bosch BMI270 6-Achsen-Sensor sitzt im Schwerpunkt der Platine zur minimierten Hebelarmdrift.
 
 ---
 

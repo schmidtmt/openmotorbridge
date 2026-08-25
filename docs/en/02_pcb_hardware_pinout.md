@@ -33,61 +33,63 @@ The central box mainboard integrates the full automotive power supply, uninterru
 ┌─────────────────────────────────────────────────────────────┐
 │ Layer 1 (F.Cu - Top): High-Speed Signals, I2S, Components   │  (35 µm Cu)
 ├─────────────────────────────────────────────────────────────┤
-│ ── Prepreg 7628 (Dielectric, Er = 4.4, Thickness 0.2 mm) ── │
+│ ── Prepreg 7628 (Dielectric, Er = 4.4, Thick 0.2 mm) ────── │
 ├─────────────────────────────────────────────────────────────┤
-│ Layer 2 (In1.Cu): Solid Ground Plane (GND_PWR / AGND)       │  (35 µm Cu)
+│ Layer 2 (In1.Cu): Continuous Ground Plane (GND_PWR / AGND)  │  (35 µm Cu)
 ├─────────────────────────────────────────────────────────────┤
-│ ── FR4 Core (Isolation Core, Thickness 1.0 mm) ──────────── │
+│ ── FR4 Core (Isolation Core, Thick 1.0 mm) ──────────────── │
 ├─────────────────────────────────────────────────────────────┤
 │ Layer 3 (In2.Cu): Power Planes (5.0V, 3.3V, VBAT Polygons)  │  (35 µm Cu)
 ├─────────────────────────────────────────────────────────────┤
-│ ── Prepreg 7628 (Dielectric, Er = 4.4, Thickness 0.2 mm) ── │
+│ ── Prepreg 7628 (Dielectric, Er = 4.4, Thick 0.2 mm) ────── │
 ├─────────────────────────────────────────────────────────────┤
-│ Layer 4 (B.Cu - Bottom): Secondary Routing & Ground Pour    │  (35 µm Cu)
+│ Layer 4 (B.Cu - Bottom): Secondary Routing & Ground Copper  │  (35 µm Cu)
 └─────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 3. PCB Zoning Architecture (Zero-Cross-Talk Topology)
+## 3. Zoning Architecture (Zero-Crosstalk & Zero-Collision Topology)
 
-To eliminate cross-talk between the $2.1\,\text{MHz}$ switching converter, $2.4\,\text{GHz}$ Bluetooth RF frontend, and sensitive analog audio lines, the PCB is partitioned into **5 physically isolated functional zones**:
+![OpenMotorBridge Mainboard Top-Down Layout Diagram](../../hardware/cad/main_board_pcb_top_down.png)
+
+*Figure 2.1: Collision-free 2D top-down layout diagram of the central mainboard ($85 \times 55\,\text{mm}$). Color-coded functional zones with $100\%$ overlap-free geometric bounding boxes.*
+
+To completely eliminate coupling between switching power supply harmonics ($2.1\,\text{MHz}$), 2.4 GHz Bluetooth RF, and sensitive analog audio lines, the board is segmented into **5 strictly isolated functional zones**:
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
-│ ZONE 1: CONNECTOR ROW & 10-MM BARRIER-FREE INSERTION CORRIDOR (TOP)    │
-│ [ J4: BAT ]   [ J1: 2x13 IDC26 SHROUDED HEADER ]   [ J2: SD ]  [J3:LED]│
+│ ZONE 1: CONNECTOR RAIL & 10-MM PLUGGING CORRIDOR (TOP)                 │
+│ [ J4: BAT ]   [ J1: 2x13 IDC26 BOX HEADER ]       [ J2: SD ]  [ J3: LED]│
 ├───────────────────┬──────────────────────────┬─────────────────────────┤
-│ ZONE 2: POWER &   │ ZONE 3: DIGITAL CORE     │ ZONE 4: AUDIO ISOLATION │
-│ AUTOMOTIVE UPS    │                          │ & CODEC FRONTEND        │
-│                   │ • ESP32-S3 Dual-Core     │                         │
-│ • PPTC 500mA      │ • Cantilevered 2.4 GHz   │ • 2x Bourns Transformer │
-│ • SMBJ33CA TVS    │   PCB Antenna (Overhang) │   (1500V RMS Isolation) │
-│ • P-FET Reverse   │ • 16MB Flash / 8MB PSRAM │ • Everest ES8388 Codec  │
-│ • TI LM5164 Buck  ├──────────────────────────┤ • 2x TLP222A PhotoMOS   │
-│ • TI BQ24075 UPS  │ ZONE 5: MOTION SENSORS   │ • Analog Star Ground    │
-│ • LC-PI Filter    │ • Bosch BMI270 6-Axis    │   (Isolation Moat)      │
-│                   │   (Center of Gravity)    │                         │
+│ ZONE 2: POWER &   │ ZONE 5: SENSORS & IMU    │ ZONE 4A: AUDIO CODEC    │
+│ AUTOMOTIVE UPS    │ • Bosch BMI270 6-Axis    │ • Everest ES8388 Codec  │
+│ • PPTC 500mA      │ • MicroSD Ring Storage   │ • TI TCAN334G CAN-FD    │
+│ • SMBJ33CA TVS    ├──────────────────────────┼─────────────────────────┤
+│ • TI LM5164 Buck  │ ZONE 3: DIGITAL CORE     │ ZONE 4B: GALV. ISOLATION│
+│ • TI BQ24075 UPS  │ • ESP32-S3 Dual-Core     │ • 2x Bourns Transformers│
+│ • LC-PI-Filter    │   (Shifted Downward)     │ • 2x TLP222A PhotoMOS   │
+│                   │ • 2.4 GHz PCB Antenna    │   (Right Flank over J1) │
 └───────────────────┴──────────────────────────┴─────────────────────────┘
 ```
 
-1. **Zone 1 (Top Edge – Connector Alignment & 10 mm Corridor):**
-   * All chassis interfaces are aligned in a **unified horizontal row**:
+1. **Zone 1 (Top Edge – Connector Row & 10-mm Corridor):**
+   * Uniform horizontal connector placement:
      * `J4`: 2-Pin JST-PH LiPo battery socket ($2.0\,\text{mm}$ pitch)
-     * `J1`: 2x13 Pin IDC26 shrouded header with locking latches ($2.54\,\text{mm}$ pitch)
-     * `J2`: MicroSD card socket (Push-Push SMD)
-     * `J3`: 3-Pin JST-XH RGB LED connector ($2.54\,\text{mm}$ pitch)
-   * **10 mm Insertion Corridor:** The area surrounding and below the connectors is a strict keep-out zone for tall components or electrolytic capacitors, ensuring comfortable tool-free ribbon cable insertion.
-2. **Zone 2 (Left Flank – Automotive Power & UPS):**
+     * `J1`: 2x13 Pin IDC26 box header with locking ramps ($2.54\,\text{mm}$ pitch)
+     * `J2`: MicroSD push-push SMD socket
+     * `J3`: 3-Pin JST-XH RGB LED header ($2.54\,\text{mm}$ pitch)
+   * **10-mm Insertion Keep-Out:** Clean clearance zone ensuring ribbon cables and fingers can mate without component interference.
+2. **Zone 2 (Left Flank Top – Automotive Power & UPS):**
    * Accepts raw motorcycle electrical voltages (KL30/KL15). Contains the Bourns PPTC fuse, SMBJ33CA TVS diode, reverse-polarity MOSFET, $10\,\mu\text{H}$ PI filter, TI LM5164-Q1 synchronous buck converter, and TI BQ24075 UPS battery management.
-3. **Zone 3 (Center – Digital Host Core):**
-   * Houses the ESP32-S3-WROOM-1 module (240 MHz dual-core). The meandering 2.4 GHz PCB antenna overhangs the board edge with copper keep-out on all 4 layers.
-4. **Zone 4 (Right Flank – Galvanically Isolated Audio Frontend & Signal Decoupling):**
-   * **Optimized Vertical Staging:**
-     * **Top (Close to MCU):** The Everest ES8388 Audio Codec (`U3`) and TI TCAN334G CAN Transceiver (`U6`) are situated in the upper area directly adjacent to the ESP32-S3. This guarantees ultra-short $I^2S$ clock and data traces ($< 15\,\text{mm}$) with minimal jitter and zero RF emissions.
-     * **Bottom (Close to Connector):** The two Bourns LM-NP-1001-B1L transformers (`T1`, `T2`) and the two Toshiba TLP222A PhotoMOS optocouplers (`U7`, `U8`) are **shifted downward**, directly above the 2x13 box header `J1`.
+3. **Zone 3 (Left Flank Bottom – Digital Host Core):**
+   * Houses the ESP32-S3-WROOM-1 module (240 MHz dual-core), **shifted downward** for ample clearance from the top power section. The meandering 2.4 GHz PCB antenna overhangs the lower left board edge with copper keep-out on all 4 layers.
+4. **Zone 4 (Right Flank – Audio Frontend, Codec & Galvanic Isolation):**
+   * **Optimized Staging (Shifted Down & Right):**
+     * **Zone 4A (Top-Right):** The Everest ES8388 Audio Codec (`U3`) and TI TCAN334G CAN Transceiver (`U6`) sit in the upper right quadrant. This guarantees ultra-short $I^2S$ clock and data traces ($< 15\,\text{mm}$) with minimal jitter and zero RF emissions.
+     * **Zone 4B (Right Flank Bottom):** The two Bourns LM-NP-1001-B1L transformers (`T1`, `T2`) and two Toshiba TLP222A PhotoMOS optocouplers (`U7`, `U8`) are **shifted down and right**, positioned directly above the 2x13 box header `J1`.
    * **Signal Integrity:** The isolated differential audio paths (`NF1_P/N`, `NF2_P/N`, $1500\,\text{V}_{\text{RMS}}$ isolation) and button synthesis triggers route directly and crossing-free to `J1`. The analog ground `AGND` is isolated from power ground `GND_PWR` via a $100\,\mu\text{m}$ split moat.
-5. **Zone 5 (Center – IMU Motion Fusion):**
+5. **Zone 5 (Center – IMU Motion Fusion & MicroSD):**
    * The Bosch BMI270 6-axis IMU sits exactly at the physical center of gravity to eliminate lever-arm centripetal offsets during lean angle estimation.
 
 ---
