@@ -1054,12 +1054,12 @@
 			)
 		)
 	)
-	(footprint "Connector_USB:USB_C_Receptacle_GCT_USB4085"
+	(footprint "Connector_USB:USB_C_Receptacle_GCT_USB4105-xx_Vertical"
 		(layer "F.Cu")
 		(uuid "74a7523d-fdc4-4b57-8d9d-f609fecaf602")
-		(at 139.00 118.50 90.0)
+		(at 138.50 118.50)
 		(property "Reference" "J3"
-			(at 0 -3.5 0)
+			(at 0 -4.5 0)
 			(layer "F.SilkS")
 			(uuid "5d42929b-b534-495b-90a6-9ad7d7c7587f")
 			(effects
@@ -1070,7 +1070,7 @@
 			)
 		)
 		(property "Value" "USB_C_IP67"
-			(at 0 3.5 0)
+			(at 0 4.5 0)
 			(layer "F.Fab")
 			(uuid "f9437c30-5998-42e1-8d6e-e1b11a8e6efb")
 			(effects
@@ -1080,29 +1080,80 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://gct.co/files/drawings/usb4105.pdf"
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "96fe873c-4f4e-4431-9b1f-c493a15fef8a")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
 		)
-		(property "Description" ""
+		(property "Description" "USB Type-C Vertical Receptacle connector (Service Port)"
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "d143445c-11a8-4f55-af29-4b285c106d06")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
 		)
-		(duplicate_pad_numbers_are_jumpers no)
+		(fp_line
+			(start -4.47 -2.4)
+			(end 4.47 -2.4)
+			(stroke (width 0.15) (type solid))
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 4.47 -2.4)
+			(end 4.47 2.4)
+			(stroke (width 0.15) (type solid))
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start 4.47 2.4)
+			(end -4.47 2.4)
+			(stroke (width 0.15) (type solid))
+			(layer "F.SilkS")
+		)
+		(fp_line
+			(start -4.47 2.4)
+			(end -4.47 -2.4)
+			(stroke (width 0.15) (type solid))
+			(layer "F.SilkS")
+		)
+		(pad "A5" smd rect
+			(at -0.5 -1.2)
+			(size 0.3 1.2)
+			(layers "F.Cu" "F.Paste" "F.Mask")
+			(uuid "1a2b3c4d-0001-4000-8000-000000000001")
+		)
+		(pad "B5" smd rect
+			(at 0.5 -1.2)
+			(size 0.3 1.2)
+			(layers "F.Cu" "F.Paste" "F.Mask")
+			(uuid "1a2b3c4d-0002-4000-8000-000000000002")
+		)
+		(pad "A6" smd rect
+			(at -0.25 1.2)
+			(size 0.3 1.2)
+			(layers "F.Cu" "F.Paste" "F.Mask")
+			(uuid "1a2b3c4d-0003-4000-8000-000000000003")
+		)
+		(pad "A7" smd rect
+			(at 0.25 1.2)
+			(size 0.3 1.2)
+			(layers "F.Cu" "F.Paste" "F.Mask")
+			(uuid "1a2b3c4d-0004-4000-8000-000000000004")
+		)
+		(pad "SH" thru_hole oval
+			(at -4.32 0)
+			(size 1.2 2.2)
+			(drill oval 0.8 1.8)
+			(layers "*.Cu" "*.Mask")
+			(uuid "1a2b3c4d-0005-4000-8000-000000000005")
+		)
+		(pad "SH" thru_hole oval
+			(at 4.32 0)
+			(size 1.2 2.2)
+			(drill oval 0.8 1.8)
+			(layers "*.Cu" "*.Mask")
+			(uuid "1a2b3c4d-0006-4000-8000-000000000006")
+		)
 		(embedded_fonts no)
 		(model "${KICAD10_3DMODEL_DIR}/Connector_USB.3dshapes/USB_C_Receptacle_GCT_USB4085.step"
 			(offset
@@ -1112,7 +1163,7 @@
 				(xyz 1 1 1)
 			)
 			(rotate
-				(xyz 90 0 -90)
+				(xyz 0 0 0)
 			)
 		)
 	)
@@ -1774,7 +1825,7 @@
 	(footprint "Connector_IDC:IDC-Header_2x13_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "bfbc13cf-daae-4069-92e4-d551667c8723")
-		(at 152.00 118.50 90.0)
+		(at 154.00 118.50 90.0)
 		(property "Reference" "J1"
 			(at 0 -12 180)
 			(layer "F.SilkS")
@@ -1836,7 +1887,7 @@
 	(footprint "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "c0c5be66-b62e-4345-af69-7c967c2cb1d6")
-		(at 144.00 116.00)
+		(at 146.50 116.00)
 		(property "Reference" "J4"
 			(at 0 0 0)
 			(layer "F.SilkS")
