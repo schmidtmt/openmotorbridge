@@ -86,9 +86,9 @@
 	(footprint "RF_Module:ESP32-C3-WROOM-02"
 		(layer "F.Cu")
 		(uuid "02eee91b-6389-4a61-845b-f5eb7035c7ac")
-		(at 142 87.5)
+		(at 132 87.5 -90)
 		(property "Reference" "U1"
-			(at 0 -8 0)
+			(at 0 -8 270)
 			(layer "F.SilkS")
 			(hide yes)
 			(uuid "1821489a-279c-4eb5-83fd-ff828497f4f7")
@@ -100,7 +100,7 @@
 			)
 		)
 		(property "Value" "ESP32-C3-WROOM-02"
-			(at 0 8 0)
+			(at 0 8 270)
 			(layer "F.Fab")
 			(uuid "44ef29ff-4b75-49a3-8dd5-0fc9858c12a5")
 			(effects
@@ -111,7 +111,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 0)
+			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "0a0f83dd-46d5-423f-b5ed-42bfaa8cf780")
@@ -122,7 +122,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 0)
+			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "11da2a53-e3ca-45c8-9c92-2d34514006af")
@@ -149,7 +149,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "05671b60-5da7-4ded-a7fe-ce19a7a8b589")
-		(at 112 100)
+		(at 112 101)
 		(property "Reference" "L1"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -271,7 +271,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "31267c38-9b17-4fb6-b429-74da97a60d39")
-		(at 126.5 100)
+		(at 126 101)
 		(property "Reference" "ANT1"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -332,7 +332,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "3fc878db-8029-4e3f-89f2-b057ab634483")
-		(at 112 75)
+		(at 112 74)
 		(property "Reference" "C3"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -551,7 +551,7 @@
 	(footprint "RF_GPS:u-blox_MAX-M10S"
 		(layer "F.Cu")
 		(uuid "65d9d661-ffb0-4c42-b555-45e397c9f22a")
-		(at 116.5 75)
+		(at 116.5 74)
 		(property "Reference" "U2"
 			(at 0 -6 0)
 			(layer "F.SilkS")
@@ -672,7 +672,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "7b8b9719-b796-4e7d-b48f-881f0beab1e8")
-		(at 134.5 90.5)
+		(at 122 90)
 		(property "Reference" "C2"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -794,7 +794,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "96732579-efb9-462a-a6ea-5edd7f443bbf")
-		(at 126.5 75)
+		(at 126 74)
 		(property "Reference" "ANT2"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -963,7 +963,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "add7ed1d-d375-4833-acab-6017b8bd49c6")
-		(at 108.5 74.5)
+		(at 108.5 74)
 		(property "Reference" "F1"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -1024,7 +1024,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "aec68e7a-23c7-4b13-b9cf-ed132cb834bc")
-		(at 108.5 100.5)
+		(at 108.5 101)
 		(property "Reference" "D1"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -1085,7 +1085,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "b9af0645-3bb7-47eb-a9c6-3d87bfbdab27")
-		(at 134.5 84.5)
+		(at 122 85)
 		(property "Reference" "C1"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -1146,7 +1146,7 @@
 	(footprint "Package_DFN_QFN:QFN-24-1EP_4x4mm_P0.5mm_EP2.6x2.6mm"
 		(layer "F.Cu")
 		(uuid "ba8e2b5f-ed02-4aad-aa38-2318ac0724f9")
-		(at 116.5 100)
+		(at 116.5 101)
 		(property "Reference" "U3"
 			(at 0 -3.2 0)
 			(layer "F.SilkS")
@@ -1322,7 +1322,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "f2d86638-6dab-41d9-87a9-8bf7c3ab9c1e")
-		(at 112 103)
+		(at 112 98)
 		(property "Reference" "C4"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -1769,7 +1769,7 @@
 	(gr_text "PTC"
 		(at 108.5 71.5 0)
 		(layer "F.SilkS")
-		(uuid "4c290a17-e3a2-4133-ba33-a0586b9edf55")
+		(uuid "db3870b1-0e88-4dd2-aca1-4bb46cf62a3f")
 		(effects
 			(font
 				(size 0.28 0.28)
@@ -1780,7 +1780,7 @@
 	(gr_text "LED"
 		(at 108.5 103.5 0)
 		(layer "F.SilkS")
-		(uuid "6ef4475b-7c3f-4f59-a847-9c5c1c3a7864")
+		(uuid "4238024a-02f1-46cb-83b6-4ec3ba3081a3")
 		(effects
 			(font
 				(size 0.28 0.28)
@@ -1791,7 +1791,7 @@
 	(gr_text "DS2401 ID"
 		(at 113 84.5 0)
 		(layer "F.SilkS")
-		(uuid "b556ba8b-0893-4448-99aa-8074e7b8e9cd")
+		(uuid "6da180cc-5921-48c7-b5df-3ef9a92d03c5")
 		(effects
 			(font
 				(size 0.32 0.32)
@@ -1802,7 +1802,7 @@
 	(gr_text "MAX-M10S"
 		(at 116.5 71.5 0)
 		(layer "F.SilkS")
-		(uuid "d3f1d0bc-44c9-458d-8467-9f1db2816405")
+		(uuid "2ac19b97-24db-4d1f-ada8-63d51165cd38")
 		(effects
 			(font
 				(size 0.32 0.32)
@@ -1813,7 +1813,7 @@
 	(gr_text "SX1262"
 		(at 116.5 94.5 0)
 		(layer "F.SilkS")
-		(uuid "128662fc-6079-4a56-8295-513df6acf088")
+		(uuid "92d5c6cb-4282-447e-9ebc-d754efe43c82")
 		(effects
 			(font
 				(size 0.32 0.32)
@@ -1824,7 +1824,7 @@
 	(gr_text "GNSS PATCH"
 		(at 126.5 80.5 0)
 		(layer "F.SilkS")
-		(uuid "250a4ae0-8397-476c-98a4-c4cc254a07da")
+		(uuid "88d3dc19-7f48-4f05-8686-5da881d8d4cd")
 		(effects
 			(font
 				(size 0.32 0.32)
@@ -1835,7 +1835,7 @@
 	(gr_text "868M LORA"
 		(at 126.5 94.5 0)
 		(layer "F.SilkS")
-		(uuid "5d581c90-f625-4f6f-8cee-8e3ce469c6a9")
+		(uuid "8ac42b24-0833-433a-b6bf-ec5733ba4e2e")
 		(effects
 			(font
 				(size 0.32 0.32)
@@ -1846,7 +1846,7 @@
 	(gr_text "FRONT MATING"
 		(at 102.5 74 0)
 		(layer "F.SilkS")
-		(uuid "75644b4d-6a87-4143-abe7-7aa351094c69")
+		(uuid "a4c6df35-c031-4d60-bab0-2356a7422bf1")
 		(effects
 			(font
 				(size 0.35 0.35)
@@ -1857,7 +1857,7 @@
 	(gr_text "OPENMOTORBRIDGE // OMM TRANSCEIVER"
 		(at 125 103.5 0)
 		(layer "F.SilkS")
-		(uuid "9b29a23f-5f9f-487e-a4dd-3b5a9ec087c9")
+		(uuid "11288a40-9dee-4b67-8094-c3d701468f62")
 		(effects
 			(font
 				(size 0.45 0.45)
@@ -1868,7 +1868,7 @@
 	(gr_text "FACTORY TESTPOINTS (PROD FLASH)"
 		(at 130 74 0)
 		(layer "B.SilkS")
-		(uuid "32feab5a-66af-476b-a9a1-90ced612600d")
+		(uuid "4c2fe632-9280-4423-8a13-7eb9b1fd566b")
 		(effects
 			(font
 				(size 0.45 0.45)
@@ -1879,7 +1879,7 @@
 	(gr_text "OPENMOTORBRIDGE // OMM TRANSCEIVER (B.Cu)"
 		(at 125 102.5 0)
 		(layer "B.SilkS")
-		(uuid "3914e888-b054-4249-92ef-3990c86e2d28")
+		(uuid "2f579d43-f725-482e-93f9-f1b8995cb8db")
 		(effects
 			(font
 				(size 0.5 0.5)

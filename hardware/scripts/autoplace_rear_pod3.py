@@ -62,26 +62,26 @@ def auto_place_rear_pod(pcb_path):
 
         # ZONE 1: FRONT CONNECTOR & POWER PROTECTION (Left side, X = 102.5 .. 112.0 mm)
         'J1': (102.5, 81.15, 0.0, pcbnew.F_Cu),          # 6-Pin Socket (Centered at Y=87.5mm)
-        'F1': (108.5, 74.5, 0.0, pcbnew.F_Cu),           # 500mA PTC Fuse (Top-Left)
-        'D1': (108.5, 100.5, 0.0, pcbnew.F_Cu),          # Green Power LED (Bottom-Left)
+        'F1': (108.5, 74.0, 0.0, pcbnew.F_Cu),           # 500mA PTC Fuse (Top-Left)
+        'D1': (108.5, 101.0, 0.0, pcbnew.F_Cu),          # Green Power LED (Bottom-Left)
         'R1': (108.5, 97.5, 0.0, pcbnew.F_Cu),           # LED Resistor 1.5k
         'U4': (113.0, 87.5, 0.0, pcbnew.F_Cu),           # SOT-23 ID Chip (Behind J1 Center)
 
-        # ZONE 2: TOP ROW — GNSS SUBSYSTEM (Y = 75.0 mm)
-        'U2': (116.5, 75.0, 0.0, pcbnew.F_Cu),           # u-blox MAX-M10S GNSS QFN
-        'C3': (112.0, 75.0, 0.0, pcbnew.F_Cu),           # 100nF GNSS Decoupling
-        'ANT2': (126.5, 75.0, 0.0, pcbnew.F_Cu),         # GNSS Ceramic Patch (Clean 8mm gap to ESP32)
+        # ZONE 2: TOP ROW — GNSS SUBSYSTEM (Y = 74.0 mm)
+        'U2': (116.5, 74.0, 0.0, pcbnew.F_Cu),           # u-blox MAX-M10S GNSS QFN
+        'C3': (112.0, 74.0, 0.0, pcbnew.F_Cu),           # 100nF GNSS Decoupling
+        'ANT2': (126.0, 74.0, 0.0, pcbnew.F_Cu),         # GNSS Ceramic Patch (Clean 9mm gap to ESP32, 20mm gap to H2)
 
-        # ZONE 3: CENTER-RIGHT — 2.4 GHz MESH MCU (Y = 87.5 mm)
-        'U1': (142.0, 87.5, 0.0, pcbnew.F_Cu),           # ESP32-C3 with PCB Antenna at Right Edge
-        'C1': (134.5, 84.5, 0.0, pcbnew.F_Cu),           # 10uF 3V3 Decoupling
-        'C2': (134.5, 90.5, 0.0, pcbnew.F_Cu),           # 100nF ESP32 Decoupling
+        # ZONE 3: CENTER-RIGHT — 2.4 GHz MESH MCU (Horizontal, 100% inside board margins)
+        'U1': (132.0, 87.5, -90.0, pcbnew.F_Cu),          # ESP32-C3 (Stays 3mm inside right edge, perfectly centered between H2 and H4)
+        'C1': (122.0, 85.0, 0.0, pcbnew.F_Cu),           # 10uF 3V3 Decoupling
+        'C2': (122.0, 90.0, 0.0, pcbnew.F_Cu),           # 100nF ESP32 Decoupling
 
-        # ZONE 4: BOTTOM ROW — 868 MHz LoRa SUBSYSTEM (Y = 100.0 mm)
-        'U3': (116.5, 100.0, 0.0, pcbnew.F_Cu),          # Semtech SX1262 LoRa QFN
-        'L1': (112.0, 100.0, 0.0, pcbnew.F_Cu),          # 47nH RF Choke
-        'C4': (112.0, 103.0, 0.0, pcbnew.F_Cu),          # 100nF LoRa Decoupling
-        'ANT1': (126.5, 100.0, 0.0, pcbnew.F_Cu),        # 868 MHz Helical Coil (Clean 8mm gap to ESP32)
+        # ZONE 4: BOTTOM ROW — 868 MHz LoRa SUBSYSTEM (Y = 101.0 mm)
+        'U3': (116.5, 101.0, 0.0, pcbnew.F_Cu),          # Semtech SX1262 LoRa QFN
+        'L1': (112.0, 101.0, 0.0, pcbnew.F_Cu),          # 47nH RF Choke
+        'C4': (112.0, 98.0, 0.0, pcbnew.F_Cu),           # 100nF LoRa Decoupling
+        'ANT1': (126.0, 101.0, 0.0, pcbnew.F_Cu),        # 868 MHz Helical Coil (Clean 9mm gap to ESP32, 20mm gap to H4)
 
         # Factory Testpoints (Placed cleanly on Bottom Layer B_Cu)
         'TP1': (120.0, 87.5, 0.0, pcbnew.B_Cu),          # TP_BOOT (GPIO9)
