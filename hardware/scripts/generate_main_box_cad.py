@@ -125,14 +125,14 @@ def render_main_box_cad(output_path):
             draw_cylinder(ax1, center_x, center_y, -20.0, 2.2, 8.0, color='#cbd5e1', alpha=0.95, axis='z')
 
     # Front Panel Features on Oberwanne (placed at Y = -37, Z = 0 to 11)
-    # 1. USB-C Waterproof Service Port & Screw-Cap on Left (at X = -20, Y = -37, Z = 6.5)
-    draw_cylinder(ax1, -20, -37, 6.5, 5.5, 4.0, color='#475569', alpha=0.95, axis='y')
-    draw_cylinder(ax1, -20, -41, 6.5, 5.0, 3.0, color='#0284c7', alpha=0.95, axis='y')
-    draw_cylinder(ax1, -20, -39, 6.5, 5.3, 0.8, color='#ef4444', alpha=0.95, axis='y')
+    # 1. USB-C Waterproof Service Port & Screw-Cap on Left (at X = -21.2, Y = -37, Z = 6.5)
+    draw_cylinder(ax1, -21.2, -37, 6.5, 5.5, 4.0, color='#475569', alpha=0.95, axis='y')
+    draw_cylinder(ax1, -21.2, -41, 6.5, 5.0, 3.0, color='#0284c7', alpha=0.95, axis='y')
+    draw_cylinder(ax1, -21.2, -39, 6.5, 5.3, 0.8, color='#ef4444', alpha=0.95, axis='y')
     
-    # 2. PMMA RGB Status LED Window on Left (at X = -10, Y = -37, Z = 6.5)
-    draw_cylinder(ax1, -10, -37.5, 6.5, 2.5, 1.5, color='#10b981', alpha=0.95, axis='y')
-    draw_cylinder(ax1, -10, -38.5, 6.5, 1.8, 1.0, color='#34d399', alpha=0.95, axis='y')
+    # 2. PMMA RGB Status LED Window on Left (at X = -13.7, Y = -37, Z = 6.5)
+    draw_cylinder(ax1, -13.7, -37.5, 6.5, 2.5, 1.5, color='#10b981', alpha=0.95, axis='y')
+    draw_cylinder(ax1, -13.7, -38.5, 6.5, 1.8, 1.0, color='#34d399', alpha=0.95, axis='y')
 
     # 3. HD26 D-Sub Wall Flange on Right/Center (39.2 x 15.4 mm at X = 10, Y = -37, Z = 5)
     draw_box(ax1, -9, -40, -1, 38, 3, 15, color='#0284c7', alpha=0.95, edgecolor='#38bdf8', linewidth=1.0)
@@ -227,16 +227,18 @@ def render_main_box_cad(output_path):
     draw_box(ax2, 5, -7, -8.9, 6, 4, 2.0, color='#0f172a', alpha=0.95, edgecolor='#38bdf8', linewidth=0.5)
     draw_box(ax2, 19, -7, -8.9, 6, 4, 2.0, color='#0f172a', alpha=0.95, edgecolor='#38bdf8', linewidth=0.5)
 
-    # - Bottom Connector Rail (Y = -22 to -17):
+    # - Left Edge Connector:
+    # J5 (LiPo Akku 2P JST-PH at Left Edge: X_CAD = -37.7, Y_CAD = -15.5)
+    draw_box(ax2, -40.5, -18.5, -8.9, 4.5, 6.0, 5.0, color='#ef4444', alpha=0.95, edgecolor='#dc2626', linewidth=0.6)
+
+    # - Bottom Front Connector Rail (Y = -22 to -17):
     # Left Group:
-    # J5 (LiPo Akku 2P at X_CAD = -31.2)
-    draw_box(ax2, -34.2, -22, -8.9, 6.0, 4.5, 5.0, color='#ef4444', alpha=0.95, edgecolor='#dc2626', linewidth=0.6)
-    # J6 (NTC 2P at X_CAD = -25.2)
-    draw_box(ax2, -26.5, -22, -8.9, 2.5, 5.0, 5.0, color='#3b82f6', alpha=0.95, edgecolor='#2563eb', linewidth=0.6)
-    # J3 (USB-C Service Port at X_CAD = -18.7, Rotated 90°: 6x9 mm)
-    draw_box(ax2, -21.7, -22, -8.9, 6.0, 9.0, 5.0, color='#38bdf8', alpha=0.95, edgecolor='#0284c7', linewidth=0.6)
-    # J4 (3-Port RGB LED Header at X_CAD = -12.2, Vertical: 2.5x7.6 mm)
-    draw_box(ax2, -13.5, -22, -8.9, 2.5, 7.6, 5.0, color='#10b981', alpha=0.95, edgecolor='#059669', linewidth=0.6)
+    # J6 (NTC 2P at X_CAD = -30.2)
+    draw_box(ax2, -31.5, -22, -8.9, 2.5, 5.0, 5.0, color='#3b82f6', alpha=0.95, edgecolor='#2563eb', linewidth=0.6)
+    # J3 (USB-C Service Port at X_CAD = -21.2, Rotated 90°: 6x9 mm)
+    draw_box(ax2, -24.2, -22, -8.9, 6.0, 9.0, 5.0, color='#38bdf8', alpha=0.95, edgecolor='#0284c7', linewidth=0.6)
+    # J4 (3-Port RGB LED Header at X_CAD = -13.7, Vertical: 2.5x7.6 mm)
+    draw_box(ax2, -15.0, -22, -8.9, 2.5, 7.6, 5.0, color='#10b981', alpha=0.95, edgecolor='#059669', linewidth=0.6)
     
     # Right Group:
     # J1 (26-Port IDC Header 2x13 at X_CAD = -5.7 to +27.3, Y = -22 to -16)

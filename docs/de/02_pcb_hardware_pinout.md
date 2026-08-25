@@ -66,21 +66,22 @@ Um gegenseitige Störungen zwischen der Schaltnetzteil-HF ($2{,}1\,\text{MHz}$),
 │ • TI LM5164 Buck  │ ZONE 3: DIGITAL CORE     │ ZONE 4B: GALV. ISOLATION│
 │ • TI BQ24075 USV  │ • ESP32-S3 Dual-Core     │ • 2x Bourns Übertrager  │
 │ • LC-PI-Filter    │ • 2.4 GHz PCB-Antenne    │ • 2x TLP222A PhotoMOS   │
-├───────────────────┴──────────────────────────┼─────────────────────────┤
-│ ZONE 1A: POWER, USB-C & STATUS-LED (LINKS)   │ ZONE 1B: SYSTEM I/O     │
-│ [J5: BAT] [J6: NTC] [J3: USB-C] [J4: 3P LED] │ [J1: 26-POL IDC26]      │
-└──────────────────────────────────────────────┴─────────────────────────┘
+├───────────────────┼──────────────────────────┼─────────────────────────┤
+│ ZONE 1A: AKKU     │ ZONE 1B: SERVICE & LED   │ ZONE 1C: SYSTEM I/O     │
+│ [J5: BAT 2P LINKS]│ [J6: NTC]  [J3]  [J4:LED]│ [J1: 26-POL IDC26]      │
+└───────────────────┴──────────────────────────┴─────────────────────────┘
 ```
 
-1. **Zone 1 (Vorderkante – 2 funktionale Stecker-Cluster):**
-   * **Zone 1A (Links – Power, Service & Signalisierung):**
-     * `J5`: 2-Pin JST-PH LiPo-Akkubuchse ($6{,}0 \times 4{,}5\,\text{mm}$) bei $X = 126{,}5\,\text{mm}$
-     * `J6`: 2-Pin Micro-Header für NTC-Sensor ($2{,}5 \times 5{,}0\,\text{mm}$, vertikal in Y) bei $X = 132{,}5\,\text{mm}$
-     * `J3`: Vertikale USB-C Service-Buchse ($6{,}0 \times 9{,}0\,\text{mm}$, $90^\circ$ gedreht) bei $X = 139{,}0\,\text{mm}$
-     * `J4`: 3-Pin RGB-LED-Anschluss ($2{,}5 \times 7{,}6\,\text{mm}$, vertikal in Y) bei $X = 145{,}5\,\text{mm}$ ($4{,}5\,\text{mm}$ Luft zur 26-Pin-Leiste `J1`)
-   * **Zone 1B (Rechts – Galvanischer System-Hauptanschluss):**
-     * `J1`: 2x13 Pin IDC26 Wannenstecker ($33{,}0 \times 6{,}0\,\text{mm}$, horizontal in X) – Pin 1 bei $X = 152{,}0\,\text{mm}$, Gehäuse erstreckt sich von $X = 152{,}0$ bis $X = 185{,}0\,\text{mm}$ direkt unter `T1`/`T2` und `U7`/`U8`.
-   * **10-mm-Einführkorridor:** Barrierefreier Steckzugang für alle Stecker ohne gegenseitige Behinderung.
+1. **Zone 1 (Vorderkante & Linke Kante – 3 funktionale Stecker-Cluster):**
+   * **Zone 1A (Kurze linke Flanke – LiPo-Akku Poweranschluss):**
+     * `J5`: 2-Pin JST-PH Akkubuchse ($4{,}5 \times 6{,}0\,\text{mm}$, $90^\circ$ gedreht) an der linken Platinenseite bei $(X = 120{,}0, Y = 112{,}0\,\text{mm})$ – idealer, direkter Kabelabgang vom Akku im Zwischenboden.
+   * **Zone 1B (Vorderkante Links/Mitte – Service & Signalisierung mit maximalem Freiraum):**
+     * `J6`: 2-Pin Micro-Header für NTC-Sensor ($2{,}5 \times 5{,}0\,\text{mm}$, vertikal in Y) bei $X = 127{,}5\,\text{mm}$
+     * `J3`: Vertikale USB-C Service-Buchse ($6{,}0 \times 9{,}0\,\text{mm}$, $90^\circ$ gedreht) bei $X = 136{,}5\,\text{mm}$ ($4{,}75\,\text{mm}$ Abstand zu `J6`)
+     * `J4`: 3-Pin RGB-LED-Anschluss ($2{,}5 \times 7{,}6\,\text{mm}$, vertikal in Y) bei $X = 144{,}0\,\text{mm}$ ($3{,}25\,\text{mm}$ zu `J3` und **$4{,}75\,\text{mm}$ reiner Freiraum zu `J1`**)
+   * **Zone 1C (Vorderkante Rechts – Galvanischer System-Hauptanschluss):**
+     * `J1`: 2x13 Pin IDC26 Wannenstecker ($33{,}0 \times 6{,}0\,\text{mm}$, horizontal in X) – Pin 1 bei $X = 152{,}0\,\text{mm}$, Gehäuse $X \in [150{,}0, 185{,}0\,\text{mm}]$ direkt unter `T1`/`T2` und `U7`/`U8`.
+   * **10-mm-Einführkorridor:** Barrierefreier Steckzugang für alle Stecker ohne jegliche gegenseitige Behinderung.
 2. **Zone 2 (Linke Flanke oben – Automotive Power & USV):**
    * Nimmt die raue Bordnetzspannung von KL30/KL15 auf. Enthält die Bourns PPTC-Sicherung, die SMBJ33CA TVS-Diode, den Verpolschutz-MOSFET, das $10\,\mu\text{H}$ PI-Filter sowie den TI LM5164-Q1 Step-Down-Regler und das BQ24075 USV-Lademanagement.
 3. **Zone 3 (Linke Flanke unten – Digitaler Host-Core):**

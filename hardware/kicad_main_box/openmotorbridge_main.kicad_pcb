@@ -276,7 +276,7 @@
 	(footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "2ce32ee0-4226-4a7c-9200-2829431b98e5")
-		(at 132.50 117.00)
+		(at 127.50 118.50)
 		(property "Reference" "J6"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -1912,7 +1912,7 @@
 	(footprint "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "c0c5be66-b62e-4345-af69-7c967c2cb1d6")
-		(at 145.50 116.00)
+		(at 144.00 116.00)
 		(property "Reference" "J4"
 			(at 0 0 0)
 			(layer "F.SilkS")

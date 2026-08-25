@@ -66,20 +66,21 @@ To completely eliminate coupling between switching power supply harmonics ($2.1\
 │ • TI LM5164 Buck  │ ZONE 3: DIGITAL CORE     │ ZONE 4B: GALV. ISOLATION│
 │ • TI BQ24075 UPS  │ • ESP32-S3 Dual-Core     │ • 2x Bourns Transformers│
 │ • LC-PI-Filter    │ • 2.4 GHz PCB Antenna    │ • 2x TLP222A PhotoMOS   │
-├───────────────────┴──────────────────────────┼─────────────────────────┤
-│ ZONE 1A: POWER, USB-C & LED (LEFT)           │ ZONE 1B: SYSTEM I/O     │
-│ [J5: BAT] [J6: NTC] [J3: USB-C] [J4: 3P LED] │ [J1: 26-PIN IDC26]      │
-└──────────────────────────────────────────────┴─────────────────────────┘
+├───────────────────┼──────────────────────────┼─────────────────────────┤
+│ ZONE 1A: BATTERY  │ ZONE 1B: SERVICE & LED   │ ZONE 1C: SYSTEM I/O     │
+│ [J5: BAT 2P LEFT] │ [J6: NTC]  [J3]  [J4:LED]│ [J1: 26-PIN IDC26]      │
+└───────────────────┴──────────────────────────┴─────────────────────────┘
 ```
 
-1. **Zone 1 (Front Edge – 2 Dedicated Functional Connector Clusters):**
-   * **Zone 1A (Left – Power, Service & Status):**
-     * `J5`: 2-Pin JST-PH LiPo battery socket ($6.0 \times 4.5\,\text{mm}$) at $X = 126.5\,\text{mm}$
-     * `J6`: 2-Pin micro header for battery NTC sensor ($2.5 \times 5.0\,\text{mm}$, vertical in Y) at $X = 132.5\,\text{mm}$
-     * `J3`: Vertical USB-C service socket ($6.0 \times 9.0\,\text{mm}$, rotated $90^\circ$) at $X = 139.0\,\text{mm}$
-     * `J4`: 3-Pin RGB LED header ($2.5 \times 7.6\,\text{mm}$, vertical in Y) at $X = 145.5\,\text{mm}$ ($4.5\,\text{mm}$ clearance to `J1`)
-   * **Zone 1B (Right – Galvanic Main System Header):**
-     * `J1`: 2x13 Pin IDC26 box header ($33.0 \times 6.0\,\text{mm}$, horizontal in X) – Pin 1 at $X = 152.0\,\text{mm}$, body spans $X = 152.0$ to $X = 185.0\,\text{mm}$ directly beneath `T1`/`T2` and `U7`/`U8`.
+1. **Zone 1 (Front & Left Edge – 3 Dedicated Functional Connector Clusters):**
+   * **Zone 1A (Short Left Flank – LiPo Battery Power Input):**
+     * `J5`: 2-Pin JST-PH battery socket ($4.5 \times 6.0\,\text{mm}$, rotated $90^\circ$) on the left PCB flank at $(X = 120.0, Y = 112.0\,\text{mm})$ – ideal, direct vertical lead from battery on mid-baffle.
+   * **Zone 1B (Front Edge Left/Center – Service & Signaling with generous air gaps):**
+     * `J6`: 2-Pin micro header for battery NTC sensor ($2.5 \times 5.0\,\text{mm}$, vertical in Y) at $X = 127.5\,\text{mm}$
+     * `J3`: Vertical USB-C service socket ($6.0 \times 9.0\,\text{mm}$, rotated $90^\circ$) at $X = 136.5\,\text{mm}$ ($4.75\,\text{mm}$ clearance to `J6`)
+     * `J4`: 3-Pin RGB LED header ($2.5 \times 7.6\,\text{mm}$, vertical in Y) at $X = 144.0\,\text{mm}$ ($3.25\,\text{mm}$ to `J3` and **$4.75\,\text{mm}$ clean clearance to `J1`**)
+   * **Zone 1C (Front Edge Right – Galvanic Main System Header):**
+     * `J1`: 2x13 Pin IDC26 box header ($33.0 \times 6.0\,\text{mm}$, horizontal in X) – Pin 1 at $X = 152.0\,\text{mm}$, body $X \in [150.0, 185.0\,\text{mm}]$ directly beneath `T1`/`T2` and `U7`/`U8`.
    * **10-mm Insertion Keep-Out:** Dedicated mating space preventing mechanical collisions.
 2. **Zone 2 (Left Flank Top – Automotive Power & UPS):**
    * Accepts raw motorcycle electrical voltages (KL30/KL15). Contains the Bourns PPTC fuse, SMBJ33CA TVS diode, reverse-polarity MOSFET, $10\,\mu\text{H}$ PI filter, TI LM5164-Q1 synchronous buck converter, and TI BQ24075 UPS battery management.
