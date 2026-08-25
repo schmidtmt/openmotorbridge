@@ -17,8 +17,12 @@ This document specifies circuit protections against automotive power transients 
 ## 2. RF Isolation & Spatial Diversity
 
 * **2.4 GHz Coexistence (Sena vs. Cardo):** Spatial separation of Pod 1 (left chassis rail) and Pod 2 (right chassis rail) across the metal vehicle frame provides $> 35\,\text{dB}$ free-space attenuation, effectively preventing de-sensing and intermodulation.
-* **868 MHz Isolation:** SX1262 LoRa radiates from the rear pod (Pod 3) – $> 1.2\,\text{m}$ away from the side 2.4 GHz mesh units.
-* **Shielded Cabling:** Symmetrical 6-conductor PUR shielded cables; shields connect to low-inductance chassis ground at the HD26 flange.
+* **Rear Pod 3 Tri-RF Antenna Architecture:**
+  * **2.4 GHz ESP32-C3 PCB Antenna:** Located along the front PCB leading edge with a $15 \times 8\,\text{mm}$ copper and component keepout zone across all 4 layers.
+  * **868 MHz LoRa Helical Coil Antenna:** Side/rear mounted with dedicated $50\,\Omega$ microstrip feed and symmetric $60 \times 36\,\text{mm}$ ground plane for optimal radiation efficiency ($> -1.5\,\text{dBi}$).
+  * **u-blox Multi-GNSS Ceramic Patch ($25 \times 25 \times 4\,\text{mm}$):** Centered with an unobstructed $180^\circ$ hemispherical sky view through the RF-transparent PA12 enclosure roof ($3.0\,\text{mm}$ wall thickness, $\varepsilon_r \approx 3.2$).
+* **Centered ePTFE Venting Membrane:** $\varnothing\,7.0\,\text{mm}$ Gore/Schreiner Air Vent centered on the top pod roof equalizes thermal pressure swings symmetrically without distorting the RF radiation pattern.
+* **Shielded Cabling:** Symmetrical 6-conductor PUR shielded cables; shields connect to low-inductance chassis ground at the M8 metal shell and HD26 flange.
 
 ---
 

@@ -51,7 +51,13 @@ Alle unterstuetzten Intercom- und Funkkassetten sind in 6 standardisierte Hardwa
 * **Cardo Packtalk Bold, Black, Slim, Smartpack:** DMC 1.0 mit bis zu 15 Teilnehmern, DLE +30 Pkt.
 
 ### Klasse 7: Universelle Analog- & PMR446-Funkkassetten (`pmr446_gateway.json`)
-* **Midland G9 Pro, Baofeng/Kenwood 2-Pin K-Type, Motorola T82:** Hardware-PTT ueber PhotoMOS-Relais oder VOX-Schwellwertsteuerung.
+* **Midland XT-Serie (XT10/XT30/XT50 Bare-Board) & Integrierte SA818S Transceiver:** Kompakte PMR446-Kassettenmodule (500 mW ERP, 446.0–446.2 MHz, 16 Kanäle, CTCSS/DCS) für analoge Gruppen-Kommunikation.
+* **Midland G9 Pro / Baofeng / Kenwood 2-Pin K-Type:** Externe Handfunkgeräte über wassergeschützte Doppelklinken-Blende.
+* **Hardware-PTT:** Unterbrechungsfreie Tastung über PhotoMOS-Relais (Toshiba TLP222A auf Pin 5 `OPTO`) synchronisiert mit der Lenker-PTT-Taste oder automatischer DSP-Schwellwert-VOX.
+* **Audio-Entkopplung:** Galvanische Trennung über Studio-Übertrager (Bourns LM-NP-1001) verhindert Masseschleifen und Bordnetz-Pfeifen vollständig.
+
+### Klasse 8: Midland Intercom & Wave Serie (`midland_wave.json` / `midland_bt.json`)
+* **Midland BTR1 Advanced, Rush RCF, BTX2 PRO S, Midland Wave, BT Mini:** Bluetooth 5.0/5.2 Intercom & Wave Mesh mit digitalem Audio-Pass-Through und DLE +30 Pkt.
 
 ---
 

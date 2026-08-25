@@ -131,11 +131,62 @@ The mid baffle separates the PCB/battery compartment mechanically from the conne
 
 ## 5. Enclosure Type B: Universal Satellite Pod (Identical for Pods 1, 2, and 3)
 
-- **100% Universal Design:** All 3 pod locations on the motorcycle use the identical enclosure body.
-- **Bay Dimensions:** 64.0 x 46.0 x 23.5 mm.
-- **Cartridge Module:** 54.0 x 37.5 x 17.0 mm (PA12 MJF).
+- **100% Universal Design:** All 3 pod locations on the motorcycle share the identical enclosure body scaled to the **Generic Maximum Envelope ($120.0 \times 64.0 \times 32.0\,\text{mm}$)**.
+- **Chamber Dimensions:** $96.0 \times 56.0 \times 24.0\,\text{mm}$ (PA12 MJF, $3.0\,\text{mm}$ wall thickness).
+- **Electronics Cartridge / Sled:** $92.0 \times 54.0 \times 23.5\,\text{mm}$ (Usable interior volume: $88.0 \times 50.0 \times 23.5\,\text{mm}$).
 
-### 5.1 Cartridge Carrier PCB (`openmotorbridge_pod_cartridge`) & 3D Board Renders
+### 5.1 Open Cartridge Carrier Sled (Open Sled Architecture) & Carrier PCB
+The removable cartridge is designed as an **open U-shaped carrier sled (Open Carrier Sled)**:
+
+```
+                  ◄──────────── 64.0 mm Pod Width ────────────►
+ ┌─────────────────────────────────────────────────────────────┐ ▲
+ │                    3.0 mm Enclosure Lid                     │ │
+ │ ┌───┬─────────────────────────────────────────────────┬───┐ │ │ 32.0 mm
+ │ │   │                                                 │   │ │ │ Pod
+ │ │3.0│      OPEN SLED CHAMBER (NO CARTRIDGE LID!)      │3.0│ │ │ Height
+ │ │mm │      Full 23.5 mm internal height for antennas  │mm │ │ │
+ │ │   │      Headset inlays & OMM transceiver modules   │   │ │ │
+ │ │Key├───────────► ┌─────────────────────┐ ◄───────────┤Key│ │ │
+ │ │1.5│             │  6-PIN SOCKET       │             │2.0│ │ │
+ │ │mm │             │  (Piston Slide-In)  │             │mm │ │ │
+ │ │   │             └─────────────────────┘             │   │ │ │
+ │ └───┴─────────────────────────────────────────────────┴───┘ │ │
+ │                    3.0 mm Enclosure Floor                   │ │
+ └─────────────────────────────────────────────────────────────┘ ▼
+```
+
+#### Advantages of the Large-Format Open Sled:
+1. **100% Generic Compatibility:** Fits all mainstream headset form factors (Sena 50S/60S, Cardo Packtalk Edge/Pro/Bold, Midland) as well as the standalone OpenMotorMesh transceiver module with GNSS and LoRa.
+2. **No Double Wall Thickness:** No separate cartridge lid is needed. This saves plastic thickness and eliminates an insulating air gap.
+3. **Full Usable Internal Height ($23.5\,\text{mm}$):** Massive headroom for $25 \times 25 \times 4\,\text{mm}$ GNSS ceramic patch antennas, helical LoRa coils, and tall headset components.
+4. **Protection Provided by Pod Shell:** Once slid in, the solid, weatherproof PA12 top wall of the Pod enclosure ($3.0\,\text{mm}$) provides the outer protective envelope.
+
+---
+
+### 5.2 IP67 Perimeter Faceplate Gasket & Snap-Fit Click-Lock
+
+```
+    OUTSIDE (IP67)                            POD INSERTION BAY
+┌─────────────────────────┐               ┌─────────────────────────────────┐
+│ PA12 Faceplate          │  Perimeter    │ Open U-Carrier Sled             │
+│ with Grip Ridge         ├── Flange ─────┤ with Carrier PCB & Module       │
+│ Dual Snap-Fit Latches   │  Gasket       │ ──► Slides along Poka-Yoke keys │
+│ (Tactile "Click")       │  (Shore 40A)  │ ──► Socket mates into Shroud    │
+└─────────────────────────┘               └─────────────────────────────────┘
+```
+
+1. **Perimeter Faceplate Gasket (IP67 Seal):**
+   * The outer faceplate of the sled features an integrated sealing groove with a **Shore 40A silicone profile gasket** ($1.5\,\text{mm}$ cord diameter).
+   * When fully seated, the faceplate compresses the gasket against the Pod opening flange, sealing the entire bay **100% watertight and dustproof to IP67**.
+2. **Dual Snap-Fit Quick-Release Latching (Click-Lock):**
+   * Integrated POM/PA12 snap-fit clips on the sled side flanks engage with positive detents in the Pod enclosure upon reaching the mechanical end-stop.
+   * Elastic compression of the silicone gasket maintains positive tension—**100% vibration-proof (> 20 g) and rattle-free**.
+   * **Toolless Quick-Release:** Squeezing the two lateral buttons with thumb and index finger releases the latch for effortless removal.
+
+---
+
+### 5.3 Cartridge Carrier PCB (`openmotorbridge_pod_cartridge`) & 3D Board Renders
 
 The universal cartridge carrier PCB forms the core of every removable cartridge. It acts as the mechanical and electrical bridge between the pod base and the internal headset cradle contacts:
 
@@ -160,58 +211,196 @@ The universal cartridge carrier PCB forms the core of every removable cartridge.
 
 ---
 
-### 5.2 User-Centric Plug & Play Docking Architecture (0 Soldering Required)
+### 5.4 Screwed-In Protective Bulkhead Cover with Integrated Auto-Eject Springs
+* **Mechanical Touch Protection:** After seating the Pod Base PCB and torquing the M8 knurled lock nut, a **$2.0\,\text{mm}$ thick PA12 protective bulkhead plate** is fastened to internal housing bosses with two M2 countersunk screws.
+* **Hermetic Isolation:** The bulkhead isolates the Pod Base PCB cavity (M8 solder joints, Littelfuse SP3012 TVS array, SMD filter capacitors) completely from the cartridge bay. Repeated sliding in/out of the cartridge cannot touch, scratch, or stress any components or solder pads.
+* **Integrated Shroud Collar:** The bulkhead integrates the central PA12 protective shroud with $45^\circ$ self-centering funnel, ensuring zero pin bending risk.
+* **Spring-Loaded Auto-Eject Mechanism:**
+  * To the left and right of the protective shroud, **dual stainless steel (V4A 1.4310) compression springs** with guide pushers are housed in the bulkhead.
+  * **On Insertion:** Sliding the cartridge sled in compresses the dual springs by $5\dots 6\,\text{mm}$ until the 6-pin socket mates fully into the shrouded header and the snap-fit latches engage with a positive click. The compressed springs maintain continuous pre-tension against the silicone gasket—**100% vibration-proof and rattle-free**.
+  * **On Release (Auto-Eject):** When the rider squeezes the two quick-release buttons on the faceplate, the snap-fit latches disengage, and **the dual springs pop the cartridge out by $8\dots 10\,\text{mm}$**.
+  * Electrical contact is cleanly broken, and the rider can effortlessly pull the cartridge out even while wearing heavy winter motorcycle gloves without any jamming.
 
-A central design goal of OpenMotorBridge is **100% non-destructive and solder-free operation** for real-world riders:
+---
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│ CARTRIDGE (e.g. "Sena 50S" or "Cardo Edge Edition")        │
-│                                                             │
-│  ┌───────────────────────────────────────────────────────┐  │
-│  │ DOCKING CRADLE IN CARTRIDGE LID                       │  │
-│  │ (Rider snaps their OEM headset into this cradle)      │  │
-│  │                                                       │  │
-│  │  [ OEM Spring Contacts / Pogo Pins ]                  │  │
-│  └──────────────────────────┬────────────────────────────┘  │
-│                             │ Short internal JST-SH cable   │
-│                             ▼                               │
-│  ┌───────────────────────────────────────────────────────┐  │
-│  │ CARTRIDGE CARRIER PCB (35x25mm)                       │  │
-│  │  - J2: JST-SH 6P Header (Top side)                    │  │
-│  │  - U1: DS2401 ID Chip (Reports device type to ESP32)  │  │
-│  │  - F1: 500mA PTC Fuse & D1: Green Power LED           │  │
-│  │  - J1: 6-Pin Socket (Centered Front Edge)             │  │
-│  └──────────────────────────┬────────────────────────────┘  │
-└─────────────────────────────┼───────────────────────────────┘
+### 5.5 Central Pod Pressure Equalization Membrane (ePTFE on Long Top Roof)
+* **Thermal & Pressure Cycling:** Internal heat dissipation (SX1262 LoRa $+22\,\text{dBm}$ PA, charging circuits) and solar exposure cause air expansion/contraction inside the Pod.
+* **Central Top Placement:** Located centrally on the **long top enclosure roof** ($X = 0.0\,\text{mm}, Y = 0.0\,\text{mm}$) inside a recessed pocket is a **$\varnothing\,7.0\,\text{mm}$ ePTFE vent membrane** (*Schreiner Air Vent* / *Gore Automotive Adhesive Vent*).
+* **Function:** Airflow $> 25\,\text{ml/min}$ at $70\,\text{mbar}$, water intrusion pressure $> 1.5\,\text{bar}$ (IP67). Prevents internal vacuum and water ingestion during sudden rainstorms and provides symmetric breathing across the internal chamber.
+
+---
+
+### 5.6 IP67 Dummy Cartridge (Blank Sled)
+* **Partial Fitment:** If a pod bay is temporarily unused, the identical **IP67 Dummy Cartridge (`Pod_Dummy_Cartridge_IP67.stl`)** seals the opening.
+* **Sealing:** Integrated perimeter silicone faceplate gasket protects internal contacts from road salt and water spray.
+* **Latching:** Employs the same dual snap-fit quick-release latching mechanism.
+* **Firmware State:** Main box detects the open slot and isolates it via `disabled.json`.
+
+---
+
+### 5.7 Pod Base PCB (`openmotorbridge_pod_base`) & Centric Cartridge Guide
+┌─────────────────────────────────────────────────────────────────────────┐
+│ CARTRIDGE (e.g. "Sena 50S" or "Cardo Edge Edition")                     │
+│                                                                         │
+│  ┌───────────────────────────────────────────────────────────────────┐  │
+│  │ DOCKING CRADLE & 3D CONTOUR NEGATIVE NEST                         │  │
+│  │ (Rider snaps their OEM headset into this cradle)                  │  │
+│  │                                                                   │  │
+│  │  [ OEM Spring Contacts / Pogo Pins ]                              │  │
+│  └──────────────────────────┬────────────────────────────────────────┘  │
+│                             │ Protected JST-SH Cable Channel            │
+│                             │ (1.5mm under-bed recess)                  │
+│                             ▼                                           │
+│  ┌───────────────────────────────────────────────────────────────────┐  │
+│  │ CARTRIDGE CARRIER PCB (60x36mm)                                   │  │
+│  │  - J2: JST-SH 6P Header (Top side F.Cu)                           │  │
+│  │  - U1: DS2401 ID Chip (Reports device type to ESP32)              │  │
+│  │  - F1: 500mA PTC Fuse & D1: Green Power LED                       │  │
+│  │  - J1: 6-Pin Socket (Centered Front Edge B.Cu)                    │  │
+│  └──────────────────────────┬────────────────────────────────────────┘  │
+└─────────────────────────────┼───────────────────────────────────────────┘
                               ▼ (Horizontal slide-in)
-┌─────────────────────────────┼───────────────────────────────┐
-│ POD BASE PCB                │                               │
-│  - J1: 6-Pin Pin Header ◄───┘ (Inner End-Wall, Centered)    │
-│  - U1: SP3012 TVS Protection Matrix                         │
-│  - J2: Centered M8 6-Pin IP67 Receptacle (Bottom side)      │
-└─────────────────────────────┬───────────────────────────────┘
+┌─────────────────────────────┼───────────────────────────────────────────┐
+│ POD BASE PCB                │                                           │
+│  - J1: 6-Pin Pin Header ◄───┘ (Inner End-Wall, Centered)                │
+│  - U1: SP3012 TVS Protection Matrix                                     │
+│  - J2: Centered M8 6-Pin IP67 Receptacle (Bottom side)                  │
+└─────────────────────────────┬───────────────────────────────────────────┘
                               ▼
      M8 PUR Harness to Motorcycle / Central Box
 ```
 
+#### 5.2.1 Protected Internal JST-SH Cable Routing & Pin-Mapping
+
+To route all analog audio, microphone, power, and PTT signals from the right-angle **JST-SH 1.0 mm 6-Pin SMD header (`J2`)** on the carrier PCB to the cradle contact array without pinching or soldering hassles:
+
+1. **Protected Under-Bed Routing Channel:**
+   * A **$1.5\,\text{mm}$ deep and $8.0\,\text{mm}$ wide recessed conduit** is molded/machined into the floor of the PA12 sled directly beneath the 3D contour negative nest.
+   * The ultra-flexible, silicone-insulated 6-conductor JST-SH ribbon cable rests fully recessed beneath the TPU damping liner, protected against wear and accidental pinching.
+2. **Standardized JST-SH 6P Header (`J2`) Pinout:**
+
+| Pin | Signal Name | Headset Adapter Function | Sena 50S/60S Pad | Cardo Edge Pad | Midland XT / PMR |
+| :---: | :--- | :--- | :--- | :--- | :--- |
+| **1** | `GND` | Common Ground Reference | Pin 1 (GND) | Pin 1 (GND) | Ground / Shield |
+| **2** | `5V_VBUS` | Filtered 5V Charge Rail (500mA PTC) | Pin 2 (USB-5V) | Pin 2 (5V Charge)| 5V DC In |
+| **3** | `AUDIO_R+` | Audio Diff-Out + (to Headset Speaker In) | Pin 4 (Spk R+) | Pin 3 (Spk +) | Speaker In + |
+| **4** | `AUDIO_R-` | Audio Diff-Out - (Speaker Return) | Pin 5 (Spk R-) | Pin 4 (Spk -) | Speaker In - |
+| **5** | `MIC_IN+` | Audio Diff-In + (from Headset Mic Out) | Pin 6 (Mic +) | Pin 5 (Mic +) | Mic Out + |
+| **6** | `OPTO_PTT` | Optocoupler PTT / Button Synthesis | Pin 7 (Mesh-Btn)| N/C (Aux) | PTT Switch |
+
+3. **Termination on the 3 Target Adapters:**
+   * **Sena 50S / 60S:** The JST-SH ribbon solders/crimps to the base of the gold-plated 7-pin pogo pin strip inside the contour nest.
+   * **Cardo Packtalk Edge / Pro:** The JST-SH ribbon terminates at the underside of the 5 Air Mount spring contact pads.
+   * **Midland XT / PMR446:** Plugs via a 4-pin micro header directly into bare PMR transceiver boards or solders to the waterproof 2-pin ($2.5\,\text{mm} + 3.5\,\text{mm}$) audio jack.
+
 #### Modular Cartridge Variants (Community & 3D Print Designs):
-1. **Sena 50S / 30K / 20S EVO Edition:** Integrates the OEM clamp-kit spring contact array. The unit simply clicks into place from above.
+1. **Sena 50S / 60S / 30K / 20S EVO Edition:** Integrates the OEM clamp-kit spring contact array. The unit simply clicks into place from above.
 2. **Cardo Packtalk Edge / Pro Edition:** Integrates the magnetic *Air Mount* contact pads for tool-free docking.
 3. **Cardo Packtalk Bold / Black Edition:** Uses the slide-in contacts of the Cardo audio-kit cradle.
-4. **Sena Spider / Apex / OEM-Inlay Edition:** For DIY enthusiasts wishing to embed a stripped bare-board PCB inside the cartridge shell.
-5. **PMR446 Walkie-Talkie Edition:** Houses a dual-jack Kenwood/Midland connector for analog PMR446 radios.
+4. **Midland Intercom Edition (BT Mini / BTR1 Advanced / Rush / Wave):** Docking cradle for Midland Bluetooth and Wave-Mesh intercoms ($70\dots 85\,\text{mm}$ chassis width).
+5. **Midland XT / Compact PMR446 Bare-Board Edition:** Houses the stripped bare PCB of a compact Midland PMR walkie-talkie (e.g. XT10/XT30/G5, $\approx 68 \times 42 \times 10\,\text{mm}$ without battery bay) directly inside the sled. Powered via 5V bus, PTT triggered via PhotoMOS optocoupler.
+6. **Embedded PMR446 Transceiver Edition (SA818S / RDA1846):** Fully integrated 500mW PMR446 transceiver module ($38 \times 20\,\text{mm}$) directly on the carrier PCB – with internal 446 MHz helical coil or rugged SMA front jack.
+7. **PMR446 Dual-Jack Adapter Edition:** Weatherproof Midland/Kenwood 2-Pin socket ($2.5\,\text{mm} + 3.5\,\text{mm}$) on the cartridge faceplate for connecting external handheld radios (Midland G9 Pro / G13).
 
 ---
 
-### 5.3 Pod Pressure Equalization Membrane (ePTFE)
+### 5.3 Detailed Fixing Mechanisms: 3D Contour Negative Nesting & EPDM Retention Strap
+
+To ensure 100% vibration-proof, play-free, and tool-free retention ($> 20\,\text{g}$ motorcycle rating), each cartridge sled integrates a **3-tier locking architecture**:
+
+```
+ ┌─────────────────────────────────────────────────────────────┐
+ │       ELASTIC EPDM RETENTION STRAP WITH QUICK-PULL TAB      │ ◄─── Continuous downward clamping
+ └──────────────────────────────┬──────────────────────────────┘
+                                ▼
+ ┌─────────────────────────────────────────────────────────────┐
+ │        ORIGINAL HEADSET (SENA 50S / CARDO EDGE / MIDLAND)   │
+ └──────────────────────────────┬──────────────────────────────┘
+                                ▼ (Form- & Force-Fit)
+ ┌─────────────────────────────────────────────────────────────┐
+ │ 3D CONTOUR NEGATIVE NEST (Exact negative of device rear)    │ ◄─── 100% play-free X/Y centering
+ │  • Vibration-damped TPU/NBR liner (Shore 40A, 0.8 mm)       │
+ │  • Integrated OEM snap latch / Neodymium disc magnets       │
+ └─────────────────────────────────────────────────────────────┘
+```
+
+![OpenMotorBridge Modular Cartridge Variants CAD Trio](../../hardware/cad/cartridge_variants_trio.png)
+
+*Figure 5.2: 3D CAD visualization of the three reference swappable cartridge cradles with form-fit 3D contour negative bedding and elastic EPDM retention straps in the open carrier sled ($92 \times 54 \times 23.5\,\text{mm}$): Sena Quick-Snap Cradle (left), Cardo Magnetic Air Mount (center), and Midland Dovetail Slide / Bare-PCB Inlay (right).*
+
+#### 1. Sena 50S / 60S Contour Nest & Snap-Cradle
+* **3D Contour Negative Nest:** The sled floor is precision-contoured as the exact 3D negative matching the curved underside of the Sena 50S/60S. The device recesses $4.0\,\text{mm}$ into the pocket, physically locking out any $X/Y$ shifting.
+* **OEM Snap-Fit Docking Latch:** Lower $4.0\,\text{mm}$ retention hook (*Bottom Hook*) and upper spring-loaded POM release latch (*Top Release Latch*) lock the device with an audible click.
+* **Elastic EPDM Retention Strap:** A $12\,\text{mm}$ wide, UV- and ozone-resistant EPDM rubber strap stretches across the device center, locking into side T-anchor pins. It exerts constant downward pre-tension – **zero vibration or rattling even on harsh off-road washboard tracks**.
+* **Electrical Interface:** Gold-plated 7-pin spring pogo pin array directly engages the OEM Sena contact pads; short JST-SH 6P ribbon connects to the cartridge carrier board (`openmotorbridge_pod_cartridge`).
+
+#### 2. Cardo Packtalk Edge / Pro Magnetic Air Mount & Contour Nest
+* **3D Contour Negative Nest:** Seamlessly mirrors the sleek aerodynamic curvature of the Packtalk Edge with an integrated $0.8\,\text{mm}$ Shore 40A silicone damping liner.
+* **Dual N52 Magnetic Attraction & Side Jaws:** Two embedded N52 neodymium disc magnets ($2\times \varnothing\,8 \times 2\,\text{mm}$) snap the unit into the contour pocket. Dual lateral PA12/POM jaws latch into the Cardo side recesses ($> 120\,\text{N}$ retention force).
+* **Elastic EPDM Retention Strap:** Provides supplemental downward retention for extreme enduro/gravel vibration profiles.
+* **Electrical Interface:** 5-pin spring contact pads mate with the Cardo audio/power pads with zero friction.
+
+#### 3. Midland BTR1 Advanced & XT30 Dovetail Slide / Contour Clamp
+* **For Midland Intercoms (BTR1 Advanced / Rush / Wave):**
+  * **Dovetail Slide Rail:** Intercom unit slides smoothly from above into the $72\,\text{mm}$ dovetail channel.
+  * **Spring-Locking Tooth & Strap:** A spring-loaded tooth clicks into the base recess; the EPDM strap secures the unit downward.
+* **For Midland XT Series & Bare-Board PMR446 (XT10 / XT30 / G5 stripped):**
+  * **4-Point Silicone Damped Contour Bed:** The stripped board ($\approx 68 \times 42 \times 10\,\text{mm}$) rests inside a dedicated milled/printed contour pocket on 4 silicone standoffs, secured by 2x M2 clamp screws and the EPDM rubber strap.
+  * **Antenna Options:** Internal $32\,\text{mm}$ 446 MHz helical coil inside the sled or an external SMA jack on the cartridge faceplate. Direct solder or JST header to carrier PCB.
+
+---
+
+### 5.5 Pod Pressure Equalization Membrane (ePTFE)
 * **Problem:** Internal thermal dissipation (SX1262 LoRa $+22\,\text{dBm}$ PA, charging circuits) and direct solar radiation create pressure differentials in small pod volumes.
-* **Specification:** The rear of the pod body (recessed beneath the M5 mounting bracket) integrates an **adhesive $\varnothing\,7.0\,\text{mm}$ ePTFE venting membrane** (*Schreiner Air Vent* / *Gore Automotive Adhesive Vent*).
+* **Specification:** The center of the top housing wall ($X=0, Y=0$) integrates an **adhesive $\varnothing\,7.0\,\text{mm}$ ePTFE venting membrane** (*Schreiner Air Vent* / *Gore Automotive Adhesive Vent*).
 * **Function:** Airflow $> 25\,\text{ml/min}$ @ 70 mbar, water intrusion pressure $> 1.5\,\text{bar}$ (IP67). Eliminates vacuum-induced moisture ingress during sudden rain cooling.
 
 ---
 
-### 5.4 IP67 Dummy Cartridge (Slot Blank)
+### 5.6 Monolithic Thermal Management: Lateral Thermal Slide Rails & Metallic Contact Plates
+
+To dramatically maximize the thermal conduction surface while simultaneously eliminating sliding wear on the 3D-printed guide tracks, the system integrates a **lateral metallic cooling and guide rail architecture (*Lateral Thermal Slide Rails*)**:
+
+```
+                    REMOVABLE CARTRIDGE SLED (PA12)
+ ┌───────────────────────────────────────────────────────────────────────────┐
+ │   PCB / HEADSET BATTERY (5V charge loss, SX1262 LoRa PA, ESP32-C3)        │
+ ├───────────────────────────────────────────────────────────────────────────┤
+ │   FLEXIBLE SILICONE GAP-PAD (Shore 00 35, 1.5 mm, λ = 3.0 W/m·K)          │ ◄── Vibration Damping & Heat-Flow
+ ├─────────────────────────┬───────────────────────┬─────────────────────────┤
+ │ CARTRIDGE FLANK PLATE   │                       │ CARTRIDGE FLANK PLATE   │ ◄── 0.8 mm Copper/Alu Spring Plate
+ └────────────┬────────────┴───────────────────────┴────────────┬────────────┘     (75 x 14 mm = 1050 mm² Area)
+              │                                                 │
+              ▼ (Large-Area Metallic Sliding Contact)           ▼
+ ┌────────────┴────────────┬───────────────────────┬────────────┴────────────┐
+ │ POD THERMAL SLIDE RAIL  │                       │ POD THERMAL SLIDE RAIL  │ ◄── Molded into Pod Side-Wall
+ ├─────────────────────────┴───────────────────────┴─────────────────────────┤
+ │                  MONOCOQUE POD OUTER HOUSING (PA12)                       │
+ └─────────────────────────┬───────────────────────┬─────────────────────────┘
+                           │                       │
+                           ▼                       ▼
+              ═══════════════════════════════════════════════════
+                 DIRECT MOTORCYCLE AIRFLOW ACROSS OUTER FLANKS
+              ═══════════════════════════════════════════════════
+```
+
+#### Engineering Advantages of Lateral Thermal Slide Rails:
+
+1. **Massive Thermal Contact Surface ($> 1,050\,\text{mm}^2$ per flank):**
+   * Instead of tiny isolated pins, the $75 \times 14\,\text{mm}$ **copper/aluminum flank plate** on the sled engages across its full length into the corresponding metal slide rail in the pod side-wall.
+   * Thermal resistance drops by $> 5\times$ compared to localized pin contacts.
+2. **Zero-Wear Metal-on-Metal Guidance:**
+   * Repeated cartridge swapping (Sena $\leftrightarrow$ Cardo $\leftrightarrow$ OMM) eliminates plastic-on-plastic friction. The precision metal rails provide silky-smooth, durable insertion across thousands of cycles.
+3. **Elastic Pre-load for Continuous Contact:**
+   * The cartridge flank plate features a subtle convex spring bow ($0.3\,\text{mm}$ travel) backed by the flexible silicone pad, maintaining steady mechanical contact pressure against the outer rail.
+4. **Airflow Dissipation on Outer Pod Flank:**
+   * The pod slide rail extends slightly onto the exterior flank (or couples to the M5 mounting bracket), transferring heat directly into motorcycle airflow.
+5. **100% RF-Neutral:**
+   * Because the rails reside strictly on the lower side flanks, the upper $180^\circ$ hemispherical horizon for GNSS, LoRa, and Wi-Fi remains completely unobstructed, while providing beneficial side EMI shielding.
+
+---
+
+### 5.7 IP67 Dummy Cartridge (Slot Blank)
 * **Partial Population:** When a pod bay is temporarily unpopulated (e.g. single-intercom setups or disabled slots), the identical-footprint **IP67 Dummy Cartridge (`Pod_Dummy_Cartridge_IP67.stl`)** seals the bay completely.
 * **Sealing Concept:** Dual perimeter silicone gaskets isolate the internal contacts from road grime, water spray, and salt.
 * **Locking Mechanism:** Employs the identical POM-C snap-lock and 90° cam-lock as active cartridges.
@@ -219,7 +408,7 @@ A central design goal of OpenMotorBridge is **100% non-destructive and solder-fr
 
 ---
 
-### 5.5 Pod Base PCB (`openmotorbridge_pod_base`) & Centric Cartridge Guide
+### 5.8 Pod Base PCB (`openmotorbridge_pod_base`) & Centric Cartridge Guide
 
 The mechanical and electrical interface from the interchangeable cartridge to the M8 wiring harness is governed by the centered **Pod Base PCB (`openmotorbridge_pod_base`)**:
 
@@ -229,27 +418,27 @@ The mechanical and electrical interface from the interchangeable cartridge to th
 #### Bottom View (Centered M8 6-Pin IP67 Receptacle & GND Shield Plane):
 ![OpenMotorBridge Pod Base PCB Bottom 3D Render](../../hardware/kicad_pod_base/pod_base_3d_render_bottom.png)
 
-* **Dimensions:** $36.0 \times 20.0\,\text{mm}$ (Compact 2-layer FR4 base board with generous clearance margins).
+* **Dimensions:** $48.0 \times 24.0\,\text{mm}$ (Compact 2-layer FR4 base board with generous clearance margins).
 * **Centered 6-Pin Header (`J1`) with PA12 Protective Shroud:** 6-pin precision pin array ($2.54\,\text{mm}$ pitch, gold-plated) positioned at the exact geometric center line ($Y=0, Z=0$).
-* **Integrated PA12 Protective Shroud & Lead-in Funnel:** The PA12 SLS housing forms a **4-sided, $1.2\,\text{mm}$ thick protective collar with $45^\circ$ self-centering lead-in chamfers** surrounding `J1`. The female socket header on the cartridge slides snugly into this shroud like a piston, fully encapsulating the pins against manual touching or mechanical bending.
+* **Integrated PA12 Protective Shroud & Lead-in Funnel:** The protective bulkhead forms a **4-sided, $1.2\,\text{mm}$ thick protective collar with $45^\circ$ self-centering lead-in chamfers** surrounding `J1`. The female socket header on the cartridge slides snugly into this shroud like a piston, fully encapsulating the pins against manual touching or mechanical bending.
 * **Integrated ESD Protection Array (`U1`):** **Littelfuse SP3012-06UTG** (6-channel TVS diode array with $< 0.5\,\text{pF}$ parasitic capacitance) shunts ESD strikes upon pin contact directly to chassis ground.
 * **Centered M8 Receptacle (`J2`):** Metal-shielded **M8 6-Pin A-Coded IP67 Receptacle** (IEC 61076-2-104) with solid mounting base and threaded barrel soldered at the exact geometric center of the bottom layer (`B.Cu`).
 * **Mechanical Damping & Mounting (`H1`, `H2`):** 2x M2 mounting holes with Shore 40A silicone dampening bushings against road vibrations. Insertion forces are absorbed 100% by the PA12 housing end-stop.
 
 ---
 
-### 5.6 Centric Slide-in Bay & Poka-Yoke Alignment Architecture
+### 5.8 Centric Slide-in Bay & Poka-Yoke Alignment Architecture
 
 To eliminate tilting, asymmetric lever forces, and reverse insertion, the cartridge chamber is **100% centric across all spatial axes**:
 
 ```
-                  ◄──────────── 44.0 mm Pod Width ─────────────►
+                  ◄──────────── 64.0 mm Pod Width ─────────────►
  ┌─────────────────────────────────────────────────────────────┐ ▲
  │                     3.0 mm Housing Top                      │ │
- │ ┌───┬─────────────────────────────────────────────────┬───┐ │ │ 24.0 mm
+ │ ┌───┬─────────────────────────────────────────────────┬───┐ │ │ 32.0 mm
  │ │   │                                                 │   │ │ │ Pod
  │ │3.0│          CENTRIC CARTRIDGE SLIDE-IN BAY         │3.0│ │ │ Height
- │ │mm │                   (38 x 18 mm)                  │mm │ │ │
+ │ │mm │                   (56 x 24 mm)                  │mm │ │ │
  │ │   │                                                 │   │ │ │
  │ │Key├───────────► ┌─────────────────────┐ ◄───────────┤Key│ │ │
  │ │1.5│             │  6-PIN CONNECTOR    │             │2.0│ │ │
@@ -262,32 +451,32 @@ To eliminate tilting, asymmetric lever forces, and reverse insertion, the cartri
 
 #### 4-Stage Safety Architecture for Perfect Alignment:
 1. **Fully Centric Geometry:**
-   * **Width ($Y$):** $44.0\,\text{mm}$ pod width and $38.0\,\text{mm}$ bay width yield symmetric **$3.0\,\text{mm}$ side walls**.
-   * **Height ($Z$):** $24.0\,\text{mm}$ pod height and $18.0\,\text{mm}$ bay height yield symmetric **$3.0\,\text{mm}$ top/bottom walls**.
+   * **Width ($Y$):** $64.0\,\text{mm}$ pod width and $56.0\,\text{mm}$ bay width yield symmetric **$3.0\,\text{mm}$ side walls**.
+   * **Height ($Z$):** $32.0\,\text{mm}$ pod height and $24.0\,\text{mm}$ bay height yield symmetric **$3.0\,\text{mm}$ top/bottom walls**.
    * Connector sits at the intersection of symmetry axes $\rightarrow$ **Zero torque or lever strain**.
 2. **Poka-Yoke Asymmetric Keying Grooves:**
    * Left guide rail: $1.5\,\text{mm}$ width.
    * Right guide rail: $2.0\,\text{mm}$ width.
    * Inverted (upside-down) insertion is physically impossible.
 3. **$45^\circ$ Self-Centering Funnel:**
-   * The cartridge nose features a $45^\circ$ lead-in bevel with a $\pm 1.2\,\text{mm}$ capture zone. Pins align smoothly before electrical contact.
-4. **Positive Mechanical Stop:**
-   * Insertion force is arrested after $4.5\,\text{mm}$ contact engagement by the solid PA12 housing body – zero stress is transmitted to PCB solder joints.
+   * The cartridge nose features a $45^\circ$ lead-in bevel with a $\pm 1.5\,\text{mm}$ capture zone. Pins align smoothly before electrical contact.
+4. **Positive Mechanical Stop & Auto-Eject:**
+   * Insertion force is arrested by the solid PA12 bulkhead – zero stress is transmitted to PCB solder joints. The dual V4A springs maintain continuous pre-tension and pop the sled out by $10\,\text{mm}$ upon release.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
 │               POD BASE & CARTRIDGE INTERFACE PROGRESSION                │
 ├─────────────────────────────────────────────────────────────────────────┤
-│ 1. CARTRIDGE LID DOCKING BAY:                                           │
-│    • Original headset (Sena 50S / Cardo Edge) clicked in tool-free      │
+│ 1. CARTRIDGE SLED DOCKING CRADLE:                                       │
+│    • Original headset (Sena 50S/60S / Cardo Edge) clicked in tool-free  │
 │    • Internal JST-SH 6P ribbon cable to Cartridge Carrier PCB           │
 │                               ▼                                         │
-│ 2. CARTRIDGE CARRIER PCB (openmotorbridge_pod_cartridge, 35x25mm):      │
+│ 2. CARTRIDGE CARRIER PCB (openmotorbridge_pod_cartridge, 60x36mm):      │
 │    • DS2401 1-Wire ID ROM (identifies headset model to ESP32 host)      │
 │    • 500mA PTC resettable fuse + green 5V power status LED              │
-│    • Centered 6-pin precision socket                                    │
+│    • Centered 6-pin precision socket at leading edge                    │
 │                               ▼ (Horizontal cartridge slide-in)         │
-│ 3. POD BASE PCB (openmotorbridge_pod_base, 36x20mm):                    │
+│ 3. POD BASE PCB (openmotorbridge_pod_base, 48x24mm):                    │
 │    • Centered 6-pin pin header on inner end-wall                        │
 │    • Integrated ESD TVS array (Littelfuse SP3012, 6x TVS < 0.5pF)       │
 │    • Centered M8 6-pin A-coded IP67 receptacle on outside (B.Cu)        │
@@ -308,22 +497,23 @@ To eliminate tilting, asymmetric lever forces, and reverse insertion, the cartri
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 5.6 3D X-Ray CAD Architecture & Exploded Assembly View
+### 5.9 3D X-Ray CAD Architecture & Exploded Assembly View
 
 To holistically verify mechanical clearances, sealing boundaries, and electrical transitions, the complete assembly of the **Universal Satellite Pod** and **Removable Cartridge** was modeled in a translucent X-ray aesthetic (*Ghosted X-Ray*) and an exploded layer hierarchy:
 
-#### Translucent 3D X-Ray CAD Architecture (End-Cap Adapter & Sena Apex Inlay):
+#### Translucent 3D X-Ray CAD Architecture (120 x 64 x 32 mm, Generic Max Envelope):
 ![OpenMotorBridge 3D X-Ray CAD Architecture](../../hardware/cad/openmotorbridge_pod_assembly_render_xray.png)
 
 #### Exploded Assembly Hierarchy (Along Horizontal Insertion Axis):
 ![OpenMotorBridge 3D Exploded View](../../hardware/cad/openmotorbridge_pod_exploded_view.png)
 
 #### Mechanical Specifications & Tolerances:
-* **Outer Pod Enclosure:** Makrolon 2805 Polycarbonate / PA12 MJF ($68.0 \times 44.0 \times 24.0\,\text{mm}$, internal bay $54.0 \times 38.0 \times 18.0\,\text{mm}$, ultra-flat $24\,\text{mm}$ profile).
-* **Pod Base PCB (`openmotorbridge_pod_base`):** $36.0 \times 20.0 \times 1.6\,\text{mm}$ PCB with centered M8 6-Pin IP67 all-metal receptacle (B.Cu) and vertical 6-pin pin header (F.Cu).
-* **Removable Cartridge:** $52.0 \times 36.0 \times 16.5\,\text{mm}$ housing shell with POM-C snap-lock latch ($> 85\,\text{N}$ retention force), glove grip knurling, and PMMA status lightpipe.
-* **Cartridge Carrier PCB (`openmotorbridge_pod_cartridge`):** $35.0 \times 25.0 \times 1.2\,\text{mm}$ FR4 carrier with DS2401 1-Wire ID, right-angle low-profile JST-SH 1.0mm 6P flex connector (F.Cu), and downward-facing 6-pin socket header (B.Cu).
-* **IP67 Sealing Plane:** Perimeter $37.0 \times 17.0\,\text{mm}$ Shore 40A silicone flange gasket pre-compressed by $0.6\,\text{mm}$ upon latching, hermetically sealing the internal chamber against high-pressure water jets and road dust.
+* **Outer Pod Enclosure:** Makrolon 2805 Polycarbonate / PA12 MJF ($120.0 \times 64.0 \times 32.0\,\text{mm}$, internal bay $96.0 \times 56.0 \times 24.0\,\text{mm}$).
+* **Pod Base PCB (`openmotorbridge_pod_base`):** $48.0 \times 24.0 \times 1.6\,\text{mm}$ PCB with centered M8 6-Pin IP67 all-metal receptacle (B.Cu) and vertical 6-pin pin header (F.Cu).
+* **Screwed-in Bulkhead Plate:** $56.0 \times 24.0 \times 2.0\,\text{mm}$ PA12 with 2x M2 countersunk screws, protective shroud, and dual stainless steel ejector springs ($10\,\text{mm}$ stroke).
+* **Open Cartridge Carrier Sled:** $92.0 \times 54.0 \times 23.5\,\text{mm}$ U-sled without top lid ($88.0 \times 50.0 \times 23.5\,\text{mm}$ usable inner volume).
+* **Cartridge Carrier PCB (`openmotorbridge_pod_cartridge`):** $60.0 \times 36.0 \times 1.2\,\text{mm}$ FR4 carrier with DS2401 1-Wire ID, right-angle low-profile JST-SH 1.0mm 6P flex connector (F.Cu), and horizontal 6-pin socket header (B.Cu).
+* **IP67 Sealing Plane:** Perimeter $58.0 \times 28.0\,\text{mm}$ Shore 40A silicone flange gasket pre-compressed by $0.8\,\text{mm}$ upon latching, hermetically sealing the internal chamber against high-pressure water jets and road dust.
 
 ---
 

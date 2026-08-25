@@ -17,8 +17,12 @@ Dieses Dokument spezifiziert die Schutzschaltungen gegen Kfz-Bordnetz-Transiente
 ## 2. HF-Entkopplung & Raumdiversitaet
 
 * **2,4-GHz-Koexistenz (Sena vs. Cardo):** Durch die raeumliche Trennung von Pod 1 (Rahmen links) und Pod 2 (Rahmen rechts) ueber das metallische Fahrzeugchassis wird eine minimale Freiraumdaempfung von $> 35\,\text{dB}$ sichergestellt. Dies verhindert De-Sensing und HF-Intermodulation effektiv.
-* **868-MHz-Isolation:** Der SX1262 LoRa-Transceiver strahlt am Heckbuerzel (Pod 3) ab – $> 1{,}2\,\text{m}$ entfernt von den 2,4-GHz-Kassetten.
-* **Geschirmte Zuleitungen:** Alle Zuleitungen (NF-Audio, High-Speed UART, 1-Wire) sind ueber 6-adrig geschirmte PUR-Kabel gefuehrt; die Gesamtschirme liegen ueber niederinduktive Masseflaechen am HD26-Flansch an.
+* **Heck-Pod 3 Antennen-Architektur (Tri-RF Layout):**
+  * **2.4 GHz ESP32-C3 PCB-Antenne:** Platziert am vorderen Platinenrand in einer $15 \times 8\,\text{mm}$ Kupfer- und Bauteil-Freihaltezone (Keepout Area) ohne Masseflächen auf allen 4 Lagen.
+  * **868 MHz LoRa-Wendelantenne:** Seitlich/hinten montiert mit dedizierter $50\,\Omega$ Microstrip-Speisung und symmetrischer $60 \times 36\,\text{mm}$ Groundplane für optimalen Wirkungsgrad ($> -1{,}5\,\text{dBi}$).
+  * **u-blox Multi-GNSS Keramik-Patchantenne ($25 \times 25 \times 4\,\text{mm}$):** Zentriert mit ungehindertem $180^\circ$-Halbkugel-Himmelsblick nach oben durch die funktransparente PA12-Gehäusedecke ($3{,}0\,\text{mm}$ Wandstärke, $\varepsilon_r \approx 3{,}2$).
+* **Zentrale ePTFE-Druckausgleichsmembran:** $\varnothing\,7{,}0\,\text{mm}$ Gore/Schreiner Air Vent mittig auf dem Pod-Dach gleicht thermische Druckstöße symmetrisch aus, ohne das HF-Fernfeld zu verzerren.
+* **Geschirmte Zuleitungen:** Alle Zuleitungen (NF-Audio, High-Speed UART, 1-Wire) sind ueber 6-adrig geschirmte PUR-Kabel gefuehrt; die Gesamtschirme liegen ueber niederinduktive Masseflaechen am M8-Metallflansch und HD26-Flansch an.
 
 ---
 

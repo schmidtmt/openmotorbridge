@@ -1,12 +1,12 @@
 # 13 - Rear Pod 3: GNSS & Dual-PHY OpenMotorMesh Transceiver Architecture
 
-**Rear Pod 3** (located at the rear fender / luggage rack) serves as the primary navigation and radio gateway for OpenMotorBridge. It houses the multi-constellation GNSS engine (**u-blox MAX-M10S**), the complete **Dual-PHY OpenMotorMesh system (2.4 GHz High-Speed Primary + 868 MHz LoRa Long-Range Fallback)**, and a dedicated **ESP32-C3 RISC-V co-processor**.
+**Rear Pod 3** (located at the rear fender / luggage rack) serves as the primary navigation and radio gateway for OpenMotorBridge. It utilizes the identical universal **Generic Maximum Envelope ($120.0 \times 64.0 \times 32.0\,\text{mm}$)** and houses the multi-constellation GNSS engine (**u-blox MAX-M10S**), the complete **Dual-PHY OpenMotorMesh system (2.4 GHz High-Speed Primary + 868 MHz LoRa Long-Range Fallback)**, and a dedicated **ESP32-C3 RISC-V co-processor** within its open carrier sled.
 
 ---
 
 ### 1. 3D Board Visualization & Photorealistic Renders
 
-The Rear Pod PCB unites multi-constellation GNSS, dual-PHY mesh networking, a 500mA PTC protection stage, and the RISC-V co-processor on an ultra-compact **$50.0 \times 35.0\,\text{mm}$** flat carrier with horizontal leading-edge mating:
+The Rear Pod PCB unites multi-constellation GNSS, dual-PHY mesh networking, a 500mA PTC protection stage, and the RISC-V co-processor on a generous **$60.0 \times 36.0\,\text{mm}$** flat carrier with horizontal leading-edge mating:
 
 #### Top View (Horizontal 6-Pin Front Socket, PTC Fuse, ESP32-C3 & GNSS/LoRa):
 ![OpenMotorBridge Rear Pod 3 Top 3D PCB Render](../../hardware/kicad_rear_pod3/rear_pod3_3d_render_top.png)
@@ -22,8 +22,8 @@ The Rear Pod PCB unites multi-constellation GNSS, dual-PHY mesh networking, a 50
 
 ```
                       ┌─────────────────────────────────────────────────────────────┐
-                      │              REAR POD 3 TRANSCEIVER MODULE                  │
-                      │             (Lies flat on the cartridge floor)              │
+                      │          REAR POD 3 OPENMOTORMESH TRANSCEIVER MODULE        │
+                      │    (Lies flat on the open 92x54x23.5mm carrier sled floor)  │
                       │                                                             │
                       │   • J1: 6-Pin Right-Angle Socket on Leading Edge (Front)    │
                       │   • F1: 500mA PTC Fuse & D1: 5V Power Status LED            │
@@ -42,11 +42,18 @@ The Rear Pod PCB unites multi-constellation GNSS, dual-PHY mesh networking, a 50
                       │   │ • Codec2 & Radar     │    │ • 1-PPS Time Standard   │   │
                       │   └──────────────────────┘    └─────────────────────────┘   │
                       └──────────────────────────────┬──────────────────────────────┘
-                                                     │ Horizontal Cartridge Slide-in
+                                                     │ Horizontal Cartridge Slide-in (Auto-Eject)
                                                      ▼
                       ┌─────────────────────────────────────────────────────────────┐
-                      │ POD BASE PCB (openmotorbridge_pod_base)                     │
-                      │  • J1: 6-Pin Header at Inner End-Wall Face                  │
+                      │ PROTECTIVE BULKHEAD WITH DUAL AUTO-EJECT SPRINGS (2x M2)    │
+                      │  • PA12 Partition (56 x 24 mm) seals Pod Base hermetically  │
+                      │  • 6-Pin Shrouded Header with 45° Self-Centering Funnel     │
+                      │  • Dual V4A Stainless Steel Springs pop sled out by 10mm    │
+                      └──────────────────────────────┬──────────────────────────────┘
+                                                     │
+                                                     ▼
+                      ┌─────────────────────────────────────────────────────────────┐
+                      │ POD BASE PCB (openmotorbridge_pod_base, 48 x 24 mm)         │
                       │  • U1: SP3012 TVS Protection Matrix                         │
                       │  • J2: Centered M8 6-Pin IP67 Receptacle on Outside (B.Cu)  │
                       └──────────────────────────────┬──────────────────────────────┘

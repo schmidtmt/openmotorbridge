@@ -51,7 +51,13 @@ All supported intercom and radio cartridges are structured into standardized har
 * **Cardo Packtalk Bold, Black, Slim, Smartpack:** DMC 1.0 with up to 15 nodes, DLE +30 pts.
 
 ### Class 7: Universal Analogue & PMR446 Radio Cartridges (`pmr446_gateway.json`)
-* **Midland G9 Pro, Baofeng/Kenwood 2-Pin K-Type, Motorola T82:** Hardware PTT via PhotoMOS relay or VOX gate.
+* **Midland XT Series (XT10/XT30/XT50 Bare-Board) & Embedded SA818S Transceivers:** Compact PMR446 cartridge modules (500 mW ERP, 446.0–446.2 MHz, 16 channels, CTCSS/DCS) for analogue group communications.
+* **Midland G9 Pro / Baofeng / Kenwood 2-Pin K-Type:** External handheld radios connected via weatherproof dual-jack faceplate.
+* **Hardware PTT:** Seamless transmit keying via PhotoMOS optocoupler (Toshiba TLP222A on Pin 5 `OPTO`) synchronized with handlebar PTT button or automatic DSP VOX.
+* **Audio Isolation:** Galvanic decoupling via studio-grade transformer (Bourns LM-NP-1001) completely eliminates ground loops and alternator whine.
+
+### Class 8: Midland Intercom & Wave Series (`midland_wave.json` / `midland_bt.json`)
+* **Midland BTR1 Advanced, Rush RCF, BTX2 PRO S, Midland Wave, BT Mini:** Bluetooth 5.0/5.2 Intercom & Wave Mesh with digital audio pass-through and DLE +30 pts.
 
 ---
 
