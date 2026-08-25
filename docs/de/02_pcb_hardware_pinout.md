@@ -82,8 +82,11 @@ Um gegenseitige Störungen zwischen der Schaltnetzteil-HF ($2{,}1\,\text{MHz}$),
    * Nimmt die raue Bordnetzspannung von KL30/KL15 auf. Enthält die Bourns PPTC-Sicherung, die SMBJ33CA TVS-Diode, den Verpolschutz-MOSFET, das $10\,\mu\text{H}$ PI-Filter sowie den TI LM5164-Q1 Step-Down-Regler und das BQ24075 USV-Lademanagement.
 3. **Zone 3 (Zentral – Digitaler Host-Core):**
    * Beherbergt das ESP32-S3-WROOM-1 Modul (240 MHz Dual-Core). Die PCB-Mäanderantenne ragt über die Platinenkante hinaus; darunterliegende Kupferflächen sind auf allen 4 Lagen vollständig ausgespart.
-4. **Zone 4 (Rechte Flanke – Galvanisch isoliertes Audio-Frontend):**
-   * Vollständig galvanisch getrennter Bereich. Die beiden Bourns LM-NP-1001-B1L Übertrager und die Toshiba TLP222A Optokoppler trennen das Audiosystem potentialfrei mit $1500\,\text{V}_{\text{RMS}}$ ab. Die analoge Masse `AGND` ist über einen $100\,\mu\text{m}$ Isolationsgraben von der Powermasse `GND_PWR` getrennt.
+4. **Zone 4 (Rechte Flanke – Galvanisch isoliertes Audio-Frontend & Pegeltrennung):**
+   * **Optimierte Vertikal-Staffelung:**
+     * **Oben (MCU-Nah):** Der Everest ES8388 Audio-Codec (`U3`) und der TI TCAN334G CAN-Transceiver (`U6`) sitzen im oberen Bereich direkt neben dem ESP32-S3. Dies garantiert ultrakurze $I^2S$-Takt- und Datenleitungen ($< 15\,\text{mm}$) mit minimalem Jitter und ohne HF-Abstrahlung.
+     * **Unten (Stecker-Nah):** Die beiden schweren Bourns LM-NP-1001-B1L Übertrager (`T1`, `T2`) sowie die beiden Toshiba TLP222A PhotoMOS-Optokoppler (`U7`, `U8`) sind **nach unten versetzt** und liegen direkt oberhalb der 2x13 Wannenbuchse `J1`.
+   * **Signalintegrität:** Die galvanisch getrennten, symmetrischen Audiosignale (`NF1_P/N`, `NF2_P/N`, $1500\,\text{V}_{\text{RMS}}$ Isolation) und Tasten-Triggersignale führen kreuzungsfrei auf kürzestem Weg direkt auf `J1`. Die analoge Masse `AGND` ist über einen $100\,\mu\text{m}$ Isolationsgraben von der Powermasse `GND_PWR` getrennt.
 5. **Zone 5 (Zentrum – IMU Fahrdynamiksensorik):**
    * Der Bosch BMI270 6-Achsen-Sensor (Gyroskop & Beschleunigungsmesser) sitzt exakt im geometrischen Schwerpunkt der Platine, um translatorische Hebelarmfehler bei Schräglagenberechnungen zu minimieren.
 

@@ -96,7 +96,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "0314a55d-129e-4211-ba7b-5b6ed4e3117e")
-		(at 163.5 76.5)
+		(at 163.50 92.50)
 		(property "Reference" "C6"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -650,7 +650,7 @@
 	(footprint "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
 		(layer "F.Cu")
 		(uuid "537acce9-1c41-45da-9e3e-2091f760a65a")
-		(at 188 95)
+		(at 188.00 80.00)
 		(property "Reference" "U6"
 			(at 0 -3 0)
 			(layer "F.SilkS")
@@ -771,7 +771,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "59bfb410-e938-41dc-8507-cbf6b790f26e")
-		(at 188 102)
+		(at 188.00 86.00)
 		(property "Reference" "R9"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -1013,7 +1013,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "66bf7269-3fd4-40a6-8001-8eed8e75ac25")
-		(at 189.5 76.5)
+		(at 190.50 92.50)
 		(property "Reference" "C7"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -1195,7 +1195,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "7d8576e5-095f-4c37-adf3-67778b987119")
-		(at 183 77)
+		(at 184.00 93.00)
 		(property "Reference" "T2"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -1255,7 +1255,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "81e6d93d-04c9-4f61-b5d6-28c163f49b30")
-		(at 169 86)
+		(at 169.00 104.00)
 		(property "Reference" "U7"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -1499,7 +1499,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "9d722d3e-5f5b-4dee-9b40-eb16ff0b4e92")
-		(at 170 77)
+		(at 170.00 93.00)
 		(property "Reference" "T1"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -1670,7 +1670,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "b6541aa6-aa03-41ee-b1fc-2bfcf2f6d8e4")
-		(at 189.5 79.5)
+		(at 190.50 95.50)
 		(property "Reference" "R6"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -1730,7 +1730,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "b8862443-7a83-40f1-9c26-ac0abfeecf05")
-		(at 182 86)
+		(at 183.00 104.00)
 		(property "Reference" "U8"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -2365,7 +2365,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "e8eb09ae-6b2f-48dc-8336-41c377efb0eb")
-		(at 163.5 79.5)
+		(at 163.50 95.50)
 		(property "Reference" "R5"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -2484,7 +2484,7 @@
 	(footprint "Package_DFN_QFN:QFN-28-1EP_4x4mm_P0.4mm_EP2.6x2.6mm"
 		(layer "F.Cu")
 		(uuid "fa7b6eef-4701-488e-9eee-7aa81e0affdc")
-		(at 176 94)
+		(at 176.00 80.00)
 		(property "Reference" "U3"
 			(at 0 -3 0)
 			(layer "F.SilkS")

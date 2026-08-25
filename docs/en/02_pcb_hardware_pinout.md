@@ -82,8 +82,11 @@ To eliminate cross-talk between the $2.1\,\text{MHz}$ switching converter, $2.4\
    * Accepts raw motorcycle electrical voltages (KL30/KL15). Contains the Bourns PPTC fuse, SMBJ33CA TVS diode, reverse-polarity MOSFET, $10\,\mu\text{H}$ PI filter, TI LM5164-Q1 synchronous buck converter, and TI BQ24075 UPS battery management.
 3. **Zone 3 (Center – Digital Host Core):**
    * Houses the ESP32-S3-WROOM-1 module (240 MHz dual-core). The meandering 2.4 GHz PCB antenna overhangs the board edge with copper keep-out on all 4 layers.
-4. **Zone 4 (Right Flank – Galvanically Isolated Audio Frontend):**
-   * Fully isolated audio domain. Dual Bourns LM-NP-1001-B1L transformers and Toshiba TLP222A optocouplers provide $1500\,\text{V}_{\text{RMS}}$ galvanic isolation. Analog ground `AGND` is separated from power ground `GND_PWR` via an isolation moat.
+4. **Zone 4 (Right Flank – Galvanically Isolated Audio Frontend & Signal Decoupling):**
+   * **Optimized Vertical Staging:**
+     * **Top (Close to MCU):** The Everest ES8388 Audio Codec (`U3`) and TI TCAN334G CAN Transceiver (`U6`) are situated in the upper area directly adjacent to the ESP32-S3. This guarantees ultra-short $I^2S$ clock and data traces ($< 15\,\text{mm}$) with minimal jitter and zero RF emissions.
+     * **Bottom (Close to Connector):** The two Bourns LM-NP-1001-B1L transformers (`T1`, `T2`) and the two Toshiba TLP222A PhotoMOS optocouplers (`U7`, `U8`) are **shifted downward**, directly above the 2x13 box header `J1`.
+   * **Signal Integrity:** The isolated differential audio paths (`NF1_P/N`, `NF2_P/N`, $1500\,\text{V}_{\text{RMS}}$ isolation) and button synthesis triggers route directly and crossing-free to `J1`. The analog ground `AGND` is isolated from power ground `GND_PWR` via a $100\,\mu\text{m}$ split moat.
 5. **Zone 5 (Center – IMU Motion Fusion):**
    * The Bosch BMI270 6-axis IMU sits exactly at the physical center of gravity to eliminate lever-arm centripetal offsets during lean angle estimation.
 

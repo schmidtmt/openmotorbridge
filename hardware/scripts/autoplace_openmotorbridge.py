@@ -91,18 +91,18 @@ def auto_place_main_board(pcb_path):
         'R1': (137.0, 76.5, 0.0),
         'R2': (137.0, 79.5, 0.0),
 
-        # Zone 3: Audio & CAN (Right)
-        'T1': (170.0, 77.0, 0.0),             # Bourns LM-NP-1001 Audio Transformer 1
-        'T2': (183.0, 77.0, 0.0),             # Bourns LM-NP-1001 Audio Transformer 2
-        'U7': (169.0, 86.0, 0.0),             # TLP222A Optocoupler 1
-        'U8': (182.0, 86.0, 0.0),             # TLP222A Optocoupler 2
-        'C6': (163.5, 76.5, 0.0),
-        'C7': (189.5, 76.5, 0.0),
-        'R5': (163.5, 79.5, 0.0),
-        'R6': (189.5, 79.5, 0.0),
-        'U3': (176.0, 94.0, 0.0),             # Everest ES8388 Audio Codec
-        'U6': (188.0, 95.0, 0.0),             # TI TCAN334G CAN-FD Transceiver
-        'R9': (188.0, 102.0, 0.0),
+        # Zone 3: Audio & CAN (Right - Audio Interfaces & Optocouplers shifted down towards J1)
+        'U3': (176.0, 80.0, 0.0),             # Everest ES8388 Audio Codec (Top - short I2S to MCU)
+        'U6': (188.0, 80.0, 0.0),             # TI TCAN334G CAN-FD Transceiver (Top)
+        'R9': (188.0, 86.0, 0.0),
+        'T1': (170.0, 93.0, 0.0),             # Bourns LM-NP-1001 Audio Transformer 1 (Lower Zone)
+        'T2': (184.0, 93.0, 0.0),             # Bourns LM-NP-1001 Audio Transformer 2 (Lower Zone)
+        'C6': (163.5, 92.5, 0.0),
+        'C7': (190.5, 92.5, 0.0),
+        'R5': (163.5, 95.5, 0.0),
+        'R6': (190.5, 95.5, 0.0),
+        'U7': (169.0, 104.0, 0.0),            # TLP222A Optocoupler 1 (Directly above connector rail)
+        'U8': (183.0, 104.0, 0.0),            # TLP222A Optocoupler 2 (Directly above connector rail)
 
         # Center Peripherals
         'J2': (154.0, 96.0, 0.0),             # Internal Flat MicroSD Slot
