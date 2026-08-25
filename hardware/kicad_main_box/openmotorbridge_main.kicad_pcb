@@ -273,10 +273,10 @@
 			)
 		)
 	)
-	(footprint ""
+	(footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "2ce32ee0-4226-4a7c-9200-2829431b98e5")
-		(at Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical131.00132.50 117.00)
+		(at 132.50 117.00)
 		(property "Reference" "J6"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -1133,7 +1133,7 @@
 	(footprint "Connector_USB:USB_C_Receptacle_GCT_USB4085"
 		(layer "F.Cu")
 		(uuid "74a7523d-fdc4-4b57-8d9d-f609fecaf602")
-		(at Connector_USB:USB_C_Receptacle_GCT_USB4105-xx_Vertical138.50139.00 118.50 90.0)
+		(at 139.00 118.50 90.0)
 		(property "Reference" "J3"
 			(at 0 -3.5 0)
 			(layer "F.SilkS")
@@ -1909,10 +1909,10 @@
 			)
 		)
 	)
-	(footprint ""
+	(footprint "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "c0c5be66-b62e-4345-af69-7c967c2cb1d6")
-		(at Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical146.50145.50 116.00)
+		(at 145.50 116.00)
 		(property "Reference" "J4"
 			(at 0 0 0)
 			(layer "F.SilkS")
@@ -2229,7 +2229,7 @@
 	(footprint ""
 		(layer "F.Cu")
 		(uuid "d27843f2-3746-43ad-825d-fc2781c72fe2")
-		(at Connector_JST:JST_PH_S2B-PH-K_1x02_P2.00mm_Horizontal125.50126.50 118.50)
+		(at 126.50 118.50)
 		(property "Reference" "J5"
 			(at 0 0 0)
 			(layer "F.SilkS")
