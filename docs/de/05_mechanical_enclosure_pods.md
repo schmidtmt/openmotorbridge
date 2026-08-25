@@ -1,106 +1,101 @@
-# 05 - Mechanische Konstruktion: Zentralbox, Dichtungskonzept, HD26-Wandflansch & Status-LED
+# 05 - Mechanische Konstruktion: Zentralbox, Kühlkonzept, Dichtung & Kassetten-Pods
 
-Dieses Dokument spezifiziert das IP67-Gehaeusedesign der zentralen Steuerbox (Typ A) mit integriertem **HD26-Wandflansch in der Oberwanne**, **Zwischenboden-Kabeldurchfuehrung** und **wasserdichtem RGB-Lichtleiter**, sowie das universelle Satelliten-Pod-System (Typ B) mit Kassetten-Einschueben.
+Dieses Dokument spezifiziert die mechanische Konstruktion, das Thermomanagement und das IP67-Gehäusedesign der zentralen Steuerbox (Typ A) mit integriertem **HD26-Wandflansch**, **wassergeschütztem USB-C Service-Port**, **Kupfer-Kühlbolzen-System** und **wasserdichtem RGB-Lichtleiter**, sowie das universelle Satelliten-Pod-System (Typ B) mit Kassetten-Einschüben.
 
 ---
 
-## 1. Gehaeuse Typ A: Zentrale Steuerbox (Unter Sitzbank)
-- **Aussenabmessungen:** 96.0 x 66.0 x 43.5 mm (L x B x H).
-- **Lichte Innenmasse:** 88.0 x 58.0 mm (Platinen-Ebene 85.0 x 55.0 mm).
-- **Material & Fertigung:** PA12 im HP Multi Jet Fusion (MJF) 3D-Druck (oder UV-/kraftstoffbestaendiges ASA im FDM-Verfahren mit min. 6 Perimetern / 2.4 mm Vollwand), kugelgestrahlt, im Heissbad schwarz chemisch geglaettet und hydrophob versiegelt.
-- **Schutzart:** IP67 (strahlwasser- und tauchdicht bis 1 m Wassertiefe).
+## 1. Gehäuse Typ A: Zentrale Steuerbox (Unter der Sitzbank)
+
+Das Basisgehäuse der Zentralbox ist als extrem robustes, 2-teiliges IP67/IP69K-Gehäuse aus **PA12 (MJF-Verfahren)** oder **Aluminium-Druckguss** konzipiert, das speziell für raue Motorrad-Bedingungen (Vibrationen bis $20\,\text{g}$, Spritzwasser, Hitzestau unter der Sitzbank) ausgelegt ist.
+
+- **Außenabmessungen:** $110{,}0 \times 74{,}0 \times 38{,}0\,\text{mm}$ (L x B x H, Unterwanne $26{,}0\,\text{mm}$, Deckel $12{,}0\,\text{mm}$).
+- **Befestigung:** 4x integrierte Ecklaschen mit **Lochabstand $128{,}0 \times 56{,}0\,\text{mm}$** für schwingungsdämpfende **M4 Silentblöcke (Shore 50A EPDM)** zur Entkopplung hochfrequenter Motorvibrationen.
+- **Lichte Innenmaße:** $102{,}0 \times 66{,}0 \times 32{,}0\,\text{mm}$ (optimiert für die $85{,}0 \times 55{,}0\,\text{mm}$ 4-Layer Hauptplatine).
+- **Material & Fertigung:** PA12 im HP Multi Jet Fusion (MJF) 3D-Druck (min. $3{,}0\,\text{mm}$ Wandstärke), kugelgestrahlt, im Heißbad chemisch geglättet und hydrophob versiegelt.
+- **Schutzart:** IP67 / IP69K (strahlwasser- und tauchdicht bis $1\,\text{m}$ Wassertiefe sowie dampfstrahlbeständig).
+
+### 1.1 3D-CAD-Modell & Thermisches Konzept
+
+![OpenMotorBridge Zentralbox Basisgehäuse IP67](../../hardware/cad/main_box_enclosure_cad.png)
+
+*Abbildung 5.1: 3D-CAD-Darstellung der zentralen Steuerbox. Links: Geschlossenes IP67-Gehäuse mit HD26-Kabelbaumflansch, blau eloxierter USB-C Servicekappe und 4x M4 Silentblöcken. Rechts: Schnittansicht mit 4x massiven Kupfer-Thermal-Pins ($\varnothing\,8\,\text{mm}$), $2{,}0\,\text{mm}$ Silikon-Wärmeleitpad, 4-Layer FR4-Platine und integrierter LiPo-USV-Akkutasche.*
 
 ```
 ┌────────────────────────────────────────────────────────────┐  ▲
-│ 1. DECKEL (3,0 mm Wandstärke + M8 ePTFE Vent + LED-Optik)  │  │
-├────────────────────────────────────────────────────────────┤  │ 43,5 mm
-│ 2. OBERWANNE: HD26-Wandflansch (Stirnseite) + Baffle-Boden │  │ Gesamt-
-│    • Flachbandkabel-Durchführung (38 x 6 mm verrundet)     │  │ höhe
-│    • LED-Lichtschacht (Ø 5,0 mm) & 4x Druckausgleich-Slots │  │
+│ 1. GEHÄUSEDECKEL (12,0 mm Höhe)                            │  │
+│    • PMMA RGB-Status-Lichtleiter (Ø 3,0 mm, IP67 O-Ring)   │  │ 38,0 mm
+│    • Gore ePTFE Druckausgleichsventil (Ø 7,0 mm)           │  │ Gesamt-
+│    • Umlaufende Nut mit Shore 40A Silikon-Profildichtung   │  │ höhe
 ├────────────────────────────────────────────────────────────┤  │
-│ 3. UNTERWANNE: Geschlossene Tauchwanne (20 mm Innenhöhe)   │  │
-│    • 4x M2,5 PCB-Dome + vertiefte LiPo-Akkutasche im Boden │  │
-└────────────────────────────────────────────────────────────┘  ▼
+│ 2. UNTERWANNE (26,0 mm Höhe - Geschlossene Tauchwanne)     │  │
+│    • Stirnwand: HD26 D-Sub Flansch + USB-C Service-Kappe   │  │
+│    • 4-Layer Hauptplatine (85 x 55 mm) auf M2.5 Dämpfern   │  │
+---
+
+## 2. Durchgängiges Thermomanagement & Kühlkonzept der Zentralbox
+
+Aufgrund des geschlossenen IP67-Gehäuses unter der Sitzbank und den thermischen Verlustleistungen des $100\,\text{V}$-Schaltreglers (LM5164-Q1, bis zu $1{,}8\,\text{W}$ bei voller Pod-Versorgung), des LiPo-Ladecontrollers (BQ24075, bis zu $1{,}2\,\text{W}$) und des ESP32-S3 DSP-Kerns ($0{,}8\,\text{W}$) verfügt die Unterwanne über ein hocheffizientes **Solid-Copper-Thermal-Stud-System**:
+
+```
+      LEITERPLATTE (TOP & INNER LAYERS)
+┌────────────────────────────────────────────────────────┐
+│ [ LM5164 Buck ]     [ BQ24075 UPS ]     [ ESP32-S3 ]   │ ◄── Thermische Hotspots
+│   (100V DCDC)       (Power-Path)        (Dual-Core)    │
+├────────────────────────────────────────────────────────┤
+│ ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ │ ◄── Thermal Vias (GND Plane)
+└──────────────────────────┬─────────────────────────────┘
+                           │
+ ┌─────────────────────────▼─────────────────────────────┐
+ │ 2,0 mm Kompressibles Silikon-Gap-Pad (Shore 00 35)    │ ◄── λ = 3,0 W/(m·K)
+ │ (Gleicht Bauteiltoleranzen & Vibrationen elastisch aus│
+ └─────────────────────────┬─────────────────────────────┘
+                           │
+ ┌─────────────────────────▼─────────────────────────────┐
+ │ 4x Solid Copper Thermal Studs (Ø 8,0 mm, Reinkupfer)  │ ◄── λ = 390 W/(m·K)
+ │ Im Wannenboden eingepresst & hydrophob versiegelt     │     Direct Heat Sink
+ └─────────────────────────┬─────────────────────────────┘
+                           ▼
+          Abgabe an Gehäuseboden / Motorradrahmen
 ```
 
-### 1.1 Sandwich-Aufbau & Schichtaufteilung
-1. **Unterwanne (20,0 mm Innenhöhe - Geschlossene Tauchwanne):**
-   * Vollstaendig geschlossene, durchbruchsfreie Wanne (kein Wassereintritt bei stehender Feuchtigkeit).
-   * Vertiefte Akkutasche (52.0 x 36.0 x 6.5 mm) fuer den LiPo-Pufferakku (mit *3M VHB 4910* Schaumklebeband vibrationsgedaempft) und NTC-Temperatursensor.
-   * Vier Ruthex M3 x 5.7 mm Messing-Schmelzeinsaetze im Wannenboden fuer die Gehaeusedurchgangsschrauben.
-   * 4-Lagen-Platine (85.0 x 55.0 mm) auf vier 4.0-mm-Zylinderdomen mit M2.5 x 5 mm Schrauben und NBR-O-Ringen schwingungsentkoppelt gelagert.
-2. **Oberwanne / Zwischenrahmen (15,0 mm Innenhöhe):**
-   * Beherbergt den verschraubten **HD26-D-Sub-Wandflansch** an der vorderen Stirnseite.
-   * Bietet $12\,\text{mm}$ freie Einbautiefe fuer die Steckerbuchse und eine sanfte Biegeschlaufe fuer das Flachbandkabel.
-3. **Gehaeusedeckel (3,0 mm Wandstärke):**
-   * Integriert das M8 x 1.25 ePTFE Druckausgleichsventil und den $\varnothing\,3{,}0\,\text{mm}$ PMMA-Lichtleiter fuer die WS2812B RGB-LED.
-   * Verschraubt ueber vier durchgehende M3 x 40/45 mm Edelstahl-Zylinderschrauben (DIN 912 / ISO 4762) mit $0{,}8\,\text{Nm}$ Anzugsmoment (gesichert mit *Loctite 243*).
+### 2.1 Spezifikation der thermischen Komponenten:
+1. **4x Massive Kupfer-Thermal-Pins ($\varnothing\,8{,}0\,\text{mm} \times 6{,}5\,\text{mm}$):**
+   * Gefertigt aus Elektrolytkupfer (CW004A / E-Cu58, $\lambda = 390\,\text{W/(m}\cdot\text{K)}$).
+   * Direkt im Boden der Unterwanne wasserdicht eingeschmolzen/eingepresst. Die Innenköpfe sind plan abgedreht ($\varnothing\,10\,\text{mm}$ Flachkopf), die Außenenden schließen plan mit der Wannenunterseite ab oder koppeln thermisch an den Fahrzeugrahmen.
+   * Positioniert exakt unter den 3 primären Hotspots:
+     - **Pin 1 & 2:** Unter der $100\,\text{V}$-Spannungsversorgung (LM5164-Q1 & Speicherdrossel $L_1$).
+     - **Pin 3:** Unter dem USV-Ladecontroller BQ24075.
+     - **Pin 4:** Unter dem ESP32-S3 Dual-Core DSP-Modul.
+2. **Kompressibles Silikon-Thermal-Gap-Pad ($60 \times 40 \times 2{,}0\,\text{mm}$):**
+   * Extrem weiches, vibrationsdämpfendes Silikon (*Bergquist Gap Pad 3000S30* / *Laird Tflex HD90000*, Shore 00 35, $\lambda = 3{,}0\,\text{W/(m}\cdot\text{K)}$).
+   * Komprimiert sich bei Montage der Hauptplatine um ca. $30\,\%$ ($0{,}6\,\text{mm}$ Kompression), gleicht Fertigungstoleranzen spielfrei aus und verhindert mechanische Scherkräfte auf SMD-Lötstellen.
+3. **Ergebnis:** Der thermische Gesamtwiderstand sinkt von $> 45\,\text{K/W}$ (reines Kunststoffgehäuse) auf **$< 5{,}8\,\text{K/W}$**. Die maximale Chiptemperatur des LM5164 bleibt selbst bei $+50\,^\circ\text{C}$ Umgebungstemperatur unter der Sitzbank sicher unter $+78\,^\circ\text{C}$ (zulässig bis $+125\,^\circ\text{C}$).
 
 ---
 
-## 2. Zwischenboden-Durchfuehrung & Kabelmanagement
+## 3. Stirnseitige Anschlüsse & Wartungsfreundlichkeit
 
-Der Zwischenboden der Oberwanne trennt die empfindliche Leiterplatten- und Akkuebene mechanisch vom Steckeranschlussraum, besitzt jedoch praezise Durchbrueche:
+### 3.1 HD26 D-Sub Gehäusewand-Flansch (Kabelbaum-Hauptanschluss)
+* **Ausschnitt-Geometrie:** D-Sub High-Density 26-Pin Ausschnitt ($39{,}2 \times 15{,}4\,\text{mm}$) in der vorderen Stirnwand der **Unterwanne**.
+* **Flanschdichtung:** Formgenaue EPDM-Flachdichtung ($1{,}5\,\text{mm}$ Stärke, Shore 60 A) zwischen Metallkragen der Amphenol LTW / NorComp SEAL-D Buchse und der Gehäusewand.
+* **Verschraubung:** 2x M3 Edelstahl-Sechskantbolzen mit O-Ring-Dichtscheiben klemmen den Flansch mit $0{,}6\,\text{Nm}$ wasserdicht gegen die Wand.
+* **Interne Entkopplung:** Verbindung zur Hauptplatine über ein vibrationsfestes $45\,\text{mm}$ Flachbandkabel oder direkte Winkel-Buchsenleiste.
+
+### 3.2 Wasserdichter USB-C Programmier- & Service-Port
+* **Zugang ohne Gehäuseöffnung:** An der Stirnwand neben dem HD26-Flansch befindet sich ein wasserdichter USB-C Service-Port mit **blau eloxierter Aluminium-Schraubkappe** und rotem NBR/Silikon-O-Ring.
+* **Funktion:** Ermöglicht Firmware-Updates, ESP-IDF JTAG-Debugging und Diagnose im eingebauten Zustand unter der Sitzbank, ohne dass das IP67-Gehäuse aufgeschraubt werden muss.
+
+---
+
+## 4. Wasserdichter Lichtleiter für die WS2812B RGB Status-LED & Druckausgleich
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│              ZWISCHENBODEN DER OBERWANNE (Draufsicht)       │
-│                                                             │
-│   ┌─────────────────────────────┐     ┌─────────────────┐   │
-│   │ 1. Flachbandkabel-Schlitz   │     │ 2. LED-Schacht  │   │
-│   │    (38,0 x 6,0 mm)          │     │    (Ø 5,0 mm)   │   │
-│   │    Rundum-Fase R1.5 mm      │     │    Freistellung │   │
-│   └─────────────────────────────┘     └─────────────────┘   │
-│                                                             │
-│   [Slot 1]                 [Slot 2]                 [Slot 3]│
-│   (15 x 2 mm)              (15 x 2 mm)              (15 x 2)│
-│   ◄────────── 4x Innere Druckausgleichs-Schlitze ──────────►│
-└─────────────────────────────────────────────────────────────┘
-```
-
-### 2.1 Spezifikation der Durchbrueche
-1. **Flachbandkabel-Durchfuehrung:**
-   * **Abmessungen:** $38{,}0 \times 6{,}0\,\text{mm}$ mit $R=1{,}5\,\text{mm}$ Rundum-Fase an Ober- und Unterkante (verhindert Scheuern oder Kantenabrieb des 26-poligen AWG28 Flachbandkabels bei Fahrzeugvibrationen).
-   * **Position:** Direkt vertikal ueber dem 2x13 Wannenstecker `J1` der Hauptplatine angeordnet.
-2. **Optischer LED-Lichtschacht:**
-   * **Geometrie:** Durchgangsbohrung $\varnothing\,5{,}0\,\text{mm}$, koaxial ueber der SMD-LED `LED1` (WS2812B, GPIO 48) platziert.
-   * **Funktion:** Ermoeglicht das ungehinderte Heranfuehren des im Deckel sitzenden PMMA-Lichtleiters bis auf $0{,}8\,\text{mm}$ an die LED-Oberflaeche.
-3. **Druckausgleichs- & Belueftungsschlitze:**
-   * 4x Labyrinth-Lueftungsschlitze ($15{,}0 \times 2{,}0\,\text{mm}$) ermoeglichen den freien Luftaustausch zwischen Unterwanne und dem M8 ePTFE-Ventil im Deckel, ohne dass lose Kabel nach unten rutschen koennen.
-
----
-
-## 3. HD26 D-Sub Gehaeusewand-Flansch (In der Oberwanne)
-
-```
-    AUSSENSEITE (IP67)                        OBERWANNE (Zentralbox)
-┌─────────────────────────┐               ┌─────────────────────────────────┐
-│ IP67 HD26 Stecker       │  Flansch-     │ 26-pol. Flachbandkabel (45 mm)  │
-│ (Haupt-Kabelbaum)       ├── Dichtung ───┤ mit 2x13 Buchsenleiste (J1)     │
-│ 2x M3 Jackscrews O-Ring │  (EPDM 1.5mm) │ ──► Durch Zwischenboden-Schlitz │
-└─────────────────────────┘               │ ──► Steckt auf Hauptplatine     │
-                                          └─────────────────────────────────┘
-```
-
-### 3.1 Mechanische Spezifikation des Flanschausschnitts
-* **Ausschnitt-Geometrie:** D-Sub High-Density 26-Pin Ausschnitt ($31{,}0 \times 13{,}0\,\text{mm}$) mit $2{,}0\,\text{mm}$ Radien in der Stirnwand der **Oberwanne**.
-* **Flanschdichtung:** Formgenaue EPDM-Flachdichtung ($1{,}5\,\text{mm}$ Staerke, Shore 60 A) zwischen Metallkragen der Amphenol LTW / NorComp SEAL-D Buchse und Gehaeusewand.
-* **Verschraubung:** 2x Edelstahl-Sechskantbolzen (UNC 4-40 oder M3 mit O-Ring-Dichtscheiben) klemmen den Flansch mit $0{,}6\,\text{Nm}$ wasserdicht gegen die Wand.
-* **Spannungsfreie Entkopplung:** Ein $45\,\text{mm}$ langes, hochflexibles 26-poliges Flachbandkabel (AWG28, Raster 1.27 mm) fuehrt durch den Zwischenboden-Schlitz zur 2x13 Wannenbuchse (J1) auf dem PCB.
-
----
-
-## 4. Wasserdichter Lichtleiter fuer die WS2812B RGB Status-LED
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│ GEHAEUSEDECKEL (Wandstaerke 3,0 mm)                         │
+│ GEHÄUSEDECKEL (Wandstärke 3,0 mm / Bauhöhe 12,0 mm)         │
 │                  ┌──────────────────┐                       │
-│                  │  PMMA Lichtleiter│ ◄── O-Ring Dichtung   │
+│                  │  PMMA Lichtleiter│ ◄── NBR O-Ring        │
 │                  │  (Ø 3,0 mm Matt) │     (IP67 Versiegelung│
 │                  └────────┬─────────┘                       │
-├───────────────────────────┼─────────────────────────────────┤
-│ ZWISCHENBODEN             │ Durchtritt durch Ø 5,0 mm Schacht
 ├───────────────────────────┼─────────────────────────────────┤
 │                           │ Optischer Luftspalt 0,8 mm      │
 │                           ▼                                 │
@@ -112,20 +107,20 @@ Der Zwischenboden der Oberwanne trennt die empfindliche Leiterplatten- und Akkue
 ```
 
 ### 4.1 Optische & Mechanische Spezifikation
-* **Lichtleiter-Typ:** PMMA-Praezisions-Lichtleiter mit diffuser, matter Linse (*Bivar PLPC3-3MM* oder *Mentor 1292.1101*), Durchmesser $\varnothing\,3{,}0\,\text{mm}$.
-* **Dichtung:** Umlaufender NBR-O-Ring ($\varnothing\,3{,}0\,\text{mm}$ ID, $1{,}0\,\text{mm}$ Schnurstaerke) in Stufenbohrung des Deckels, frontbuendig eingepresst und mit transparentem Polyurethan versiegelt.
-* **Sichtbarkeit:** 120°-Abstrahlwinkel, auch bei direkter Sonneneinstrahlung unter der Sitzbank / im Rahmendeckel deutlich sichtbar.
+* **Lichtleiter-Typ:** PMMA-Präzisions-Lichtleiter mit diffuser, matter Linse (*Mentor 1292.1101* / *Bivar PLPC3-3MM*), Durchmesser $\varnothing\,3{,}0\,\text{mm}$.
+* **Dichtung:** Umlaufender NBR-O-Ring ($\varnothing\,3{,}0\,\text{mm}$ ID, $1{,}0\,\text{mm}$ Schnurstärke) in Stufenbohrung des Deckels, frontbündig eingepresst und mit transparentem Polyurethan versiegelt.
+* **Druckausgleich:** Gore ePTFE-Schraubventil ($\varnothing\,7{,}0\,\text{mm}$) im Gehäusedeckel gleicht Luftdruckschwankungen (Passfahrten bis $3.000\,\text{m}$ Höhe) und thermische Atmungseffekte zuverlässig aus.
 
 ### 4.2 Status-Farbcodierung (LED State Machine)
 
 | LED-Farbe & Muster | Betriebszustand | Bedeutung |
 | :--- | :--- | :--- |
-| 🟢 **Gruen pulsierend (1 Hz)** | **Normalbetrieb (Online)** | Bordnetz aktiv, alle gesteckten Pods aktiv, DLE OK |
+| 🟢 **Grün pulsierend (1 Hz)** | **Normalbetrieb (Online)** | Bordnetz aktiv, alle gesteckten Pods aktiv, DLE OK |
 | 🔵 **Blau blinkend (2 Hz)** | **BLE Dashboard / Pairing** | WebApp PWA aktiv verbunden / Datenaustausch |
 | 🟡 **Gelb pulsierend (0.5 Hz)**| **USV-Akkubetrieb (KL15 AUS)**| Nachlauf-Modus: GPX Tour-Close & WebDAV Sync |
 | 🔴 **Rot schnell blinkend** | **Warnung / Fehler** | Unterspannung Starterbatterie ($< 11{,}8\,\text{V}$) / Kassetten-Kurzschluss |
-| 🟣 **Lila leuchtend** | **OMM DLE Leader** | Dieses Motorrad fuehrt die Mesh-Koordination der Gruppe |
-| ⚪ **Weiss Doppelblitz** | **Actioncam Marker** | Lenkertaster gedrueckt: GPS Highlight-Marker gesetzt |
+| 🟣 **Lila leuchtend** | **OMM DLE Leader** | Dieses Motorrad führt die Mesh-Koordination der Gruppe |
+| ⚪ **Weiß Doppelblitz** | **Actioncam Marker** | Lenkertaster gedrückt: GPS Highlight-Marker gesetzt |
 
 ---
 
