@@ -1,6 +1,6 @@
 # 05 - Mechanical Construction: 3-Piece Sandwich Enclosure, Mid-Baffle & Modular Pods
 
-This document specifies the mechanical construction, thermal management, and IP67/IP69K enclosure design of the central main control box (Type A) in a **3-piece sandwich construction (Lower Hull, Upper Tray with Mid-Baffle, Enclosure Lid)** with **integrated battery retention on top of the mid-baffle**, **HD26 wall flange**, **waterproof USB-C service port**, **solid copper thermal stud cooling system**, and **waterproof RGB status light guide window**, as well as the universal satellite pod system (Type B) with modular slide-in cartridges.
+This document specifies the mechanical construction, thermal management, and IP67/IP69K enclosure design of the central main control box (Type A) in a **3-piece sandwich construction (Lower Hull, Upper Tray with Mid-Baffle, Enclosure Lid)** with **integrated battery retention on top of the mid-baffle**, **front-panel interfaces (HD26, USB-C & RGB Status LED window)** in the upper tray, **solid copper thermal stud cooling system** in the lower hull, and a **homogeneous enclosure lid with Gore ePTFE pressure equalization vent**, as well as the universal satellite pod system (Type B) with modular slide-in cartridges.
 
 ---
 
@@ -18,23 +18,25 @@ The base housing of the central main box is engineered as a modular, 3-piece IP6
 
 ![OpenMotorBridge Central Main Box 3-Piece Sandwich Enclosure IP67](../../hardware/cad/main_box_enclosure_cad.png)
 
-*Figure 5.1: 3D CAD render of the central control box. Left: Closed IP67 housing with HD26 harness flange in the upper tray, blue anodized USB-C service screw cap, and 4x M4 silentblock mounting ears on the lower hull. Right: Sectional X-ray view revealing the 3 sandwich tiers: 1. Lower Hull (4x copper thermal studs, silicone pad, 4-layer PCB), 2. Upper Tray with Mid-Baffle (LiPo battery with EPDM strap on top, 38x6 mm ribbon slot & LED shaft in floor), 3. Top Lid with Gore-Vent and PMMA light pipe window.*
+*Figure 5.1: 3D CAD render of the central control box. Left: Closed IP67 housing with HD26 harness flange, USB-C service screw cap, and flush RGB status window on the front face of the upper tray, 4x M4 silentblock ears on the lower hull, and flat lid with Gore vent. Right: Sectional X-ray view revealing the 3 sandwich tiers: 1. Lower Hull (4x copper thermal studs, silicone pad, 4-layer PCB), 2. Upper Tray with Mid-Baffle (LiPo battery with EPDM strap on top, 38x6 mm ribbon slot in floor, ports on front face), 3. Solid protective lid with Gore vent (100% sealed).*
 
 ```
 ┌────────────────────────────────────────────────────────────┐  ▲
 │ 1. ENCLOSURE LID (6.0 mm Height / 3.0 mm Wall Thickness)   │  │
-│    • PMMA RGB Status Light Guide Window (Ø 3.0 mm, IP67)   │  │ 38.0 mm
-│    • Gore ePTFE Pressure Equalization Vent (Ø 7.0 mm)      │  │ Total
-│    • Perimeter Groove with Shore 40A Silicone Profile Seal │  │ Height
+│    • Gore ePTFE Pressure Equalization Vent (Ø 7.0 mm)      │  │ 38.0 mm
+│    • Perimeter Groove with Shore 40A Silicone Profile Seal │  │ Total
+│    • 100% Homogeneous Solid PA12 Protective Cover          │  │ Height
 ├────────────────────────────────────────────────────────────┤  │
 │ 2. UPPER TRAY WITH MID-BAFFLE (15.0 mm Height)             │  │
-│    • Front Panel: HD26 D-Sub Flange + USB-C Service Cap    │  │
+│    • Front Face (All Interfaces & Visual Indicators):      │  │
+│      - HD26 D-Sub Wall Flange (Main Vehicle Harness)       │  │
+│      - Waterproof USB-C Service Port (Aluminum Screw Cap)  │  │
+│      - Waterproof RGB Status LED Window (Ø 3 mm Flush)     │  │
 │    • Upper Compartment (on top of Mid-Baffle):             │  │
 │      - 1S LiPo UPS Buffer Battery (52x36x6.5mm) in Cradle  │  │
 │      - EPDM Rubber Retention Strap for Battery Fixation    │  │
 │    • Mid-Baffle Floor (Partition to Lower Hull):           │  │
 │      - 38.0 x 6.0 mm Ribbon Cable Pass-Through Slot (R1.5) │  │
-│      - Ø 5.0 mm Optical Light Pipe Shaft Clearance         │  │
 │      - 4x Labyrinth Pressure Equalization Slots (15 x 2 mm)│  │
 ├────────────────────────────────────────────────────────────┤  │
 │ 3. LOWER HULL (17.0 mm Height - Solid Submersion Tray)     │  │
@@ -88,9 +90,9 @@ The solid lower immersion tray houses the heat-dissipating components: $100\,\te
 
 ---
 
-## 3. Upper Tray: Battery Retention on Mid-Baffle & Cable Routing
+## 3. Upper Tray: Front Interfaces, Battery Retention & Mid-Baffle
 
-The upper tray forms the central functional module of the sandwich design: its integrated mid-baffle (PA12, $2.5\,\text{mm}$ thickness) acts as the mounting base for the UPS buffer battery and isolates it from the PCB electronics below.
+The upper tray forms the central functional module of the sandwich design: it consolidates all user-accessible interfaces and indicators on its front panel, and accommodates the UPS buffer battery on top of the integrated mid-baffle.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -102,10 +104,10 @@ The upper tray forms the central functional module of the sandwich design: its i
 │  │    with EPDM Strap      │  │    leads to J1 on PCB    │  │
 │  └─────────────────────────┘  └──────────────────────────┘  │
 │                                                             │
-│  ┌─────────────────────────┐                                │
-│  │ 3. LED Light Shaft      │  [Slot 1] [Slot 2] [Slot 3]    │
-│  │    (Ø 5.0 mm)           │  (4x Pressure Equal. Slots)    │
-│  └─────────────────────────┘                                │
+│  [Slot 1]              [Slot 2]              [Slot 3]       │
+│  ◄──────── 4x Internal Pressure Equalization Slots ────────►│
+├─────────────────────────────────────────────────────────────┤
+│  FRONT FACE: [ HD26 Flange ]   [ USB-C Port ]   [ RGB-LED ] │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -119,55 +121,41 @@ The upper tray forms the central functional module of the sandwich design: its i
    * **Dimensions:** $38.0 \times 6.0\,\text{mm}$ with $R=1.5\,\text{mm}$ edge chamfer on top and bottom faces.
    * **Position:** Aligned directly above the 2x13 box header `J1` on the main PCB.
    * **Routing:** The $45\,\text{mm}$ flexible 26-conductor ribbon cable runs from the HD26 wall flange in the upper tray through this slot down to header `J1`.
-2. **Optical LED Light Shaft:**
-   * **Geometry:** $\varnothing\,5.0\,\text{mm}$ cylindrical aperture, coaxially positioned above SMD LED `LED1` (WS2812B, GPIO 48).
-   * **Function:** Allows the RGB status light to shine directly through the mid-baffle to the lid light pipe window.
-3. **Labyrinth Pressure Equalization & Venting Slots:**
+2. **Labyrinth Pressure Equalization & Venting Slots:**
    * 4x Ventilation slots ($15.0 \times 2.0\,\text{mm}$) allow unimpeded airflow between the lower PCB chamber and the upper chamber / ePTFE vent in the lid.
 
 ---
 
-## 4. Front Panel Interfaces in Upper Tray (HD26 & USB-C)
+## 4. Front Panel Interfaces in Upper Tray (HD26, USB-C & RGB-LED)
+
+All three physical interface and display elements are co-located in the **front face of the upper tray**:
+
+```
+                     FRONT FACE OF UPPER TRAY
+┌─────────────────────────────────────────────────────────────┐
+│ ┌──────────────────────┐      ┌────────────┐     ┌────────┐ │
+│ │ 1. HD26 D-Sub Flange │      │ 2. USB-C   │     │ 3. RGB │ │
+│ │    (Harness Socket)  │      │    Service │     │    LED │ │
+│ │    2x M3 Jackscrews  │      │    Alu Cap │     │    Ø3mm│ │
+│ └──────────────────────┘      └────────────┘     └────────┘ │
+└─────────────────────────────────────────────────────────────┘
+```
 
 ### 4.1 HD26 D-Sub Wall Flange (Main Vehicle Harness Interface)
-* **Cutout Geometry:** D-Sub High-Density 26-pin cutout ($39.2 \times 15.4\,\text{mm}$) in the front face of the **upper tray**.
+* **Cutout Geometry:** D-Sub High-Density 26-pin cutout ($39.2 \times 15.4\,\text{mm}$) in the front face of the upper tray.
 * **Flange Gasket:** Precision-molded EPDM flat gasket ($1.5\,\text{mm}$ thickness, Shore 60A) between the metal collar of the Amphenol LTW / NorComp SEAL-D socket and the enclosure wall.
 * **Fastening:** 2x M3 stainless steel hex jackscrews with O-ring sealing washers clamp the flange with $0.6\,\text{Nm}$ torque for a watertight seal.
 * **Internal Decoupling:** Connected to the main PCB via the 26-conductor ribbon cable looping through the mid-baffle slot to the 2x13 box header (`J1`).
 
 ### 4.2 Waterproof USB-C Programming & Service Port
-* **Access without Opening Housing:** Located on the front face of the upper tray adjacent to the HD26 flange is a waterproof USB-C service port with a **blue anodized aluminum screw cap** and red NBR/silicone O-ring.
-* **Function:** Facilitates on-vehicle firmware updates, ESP-IDF JTAG debugging, and diagnostics without disassembling the IP67 enclosure under the seat.
+* **Access without Opening Housing:** Located adjacent to the HD26 flange is the waterproof USB-C service port with a **blue anodized aluminum screw cap** and red NBR/silicone O-ring.
+* **Function:** Facilitates on-vehicle firmware updates, ESP-IDF JTAG debugging, and diagnostics without opening the IP67 enclosure under the seat.
 
----
+### 4.3 Waterproof RGB Status LED Window
+* **Flush-Mounted PMMA Lens:** A diffuse PMMA lens body ($\varnothing\,3.0\,\text{mm}$, *Mentor 1292.1101*) is flush-pressed with a perimeter NBR O-ring into the front face of the upper tray and sealed with clear polyurethane.
+* **Direct Line of Sight:** Displays the system status directly on the front panel, providing instant visibility to rider or mechanic when inspecting the connectors under the seat.
 
-## 5. Enclosure Lid: Waterproof PMMA Light Pipe Window & Pressure Vent
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│ ENCLOSURE LID (3.0 mm Wall Thickness / 6.0 mm Height)       │
-│                  ┌──────────────────┐                       │
-│                  │  PMMA Light Pipe │ ◄── NBR O-Ring        │
-│                  │  (Ø 3.0 mm Matt) │     (IP67 Window)     │
-│                  └────────┬─────────┘                       │
-├───────────────────────────┼─────────────────────────────────┤
-│ UPPER TRAY / MID-BAFFLE   │ Passes through Ø 5.0 mm shaft   │
-├───────────────────────────┼─────────────────────────────────┤
-│                           │ Optical Air Gap 0.8 mm          │
-│                           ▼                                 │
-│                  ┌──────────────────┐                       │
-│                  │ WS2812B RGB LED  │                       │
-│  MAIN PCB        │ (ESP32 GPIO 48)  │                       │
-│  (LOWER HULL)    └──────────────────┘                       │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### 5.1 Optical & Mechanical Specification
-* **Light Pipe Component:** Precision PMMA light pipe with diffuse matte lens (*Mentor 1292.1101* / *Bivar PLPC3-3MM*), $\varnothing\,3.0\,\text{mm}$.
-* **Sealing:** Perimeter NBR O-ring ($\varnothing\,3.0\,\text{mm}$ ID, $1.0\,\text{mm}$ cord thickness) in stepped lid aperture, flush pressed and sealed with clear polyurethane.
-* **Pressure Equalization:** Gore ePTFE screw-in vent ($\varnothing\,7.0\,\text{mm}$) in the lid reliably balances atmospheric pressure variations (mountain pass rides up to $3,000\,\text{m}$) and thermal breathing effects.
-
-### 5.2 Status LED Color Code (State Machine)
+### 4.4 Status LED Color Code (State Machine)
 
 | LED Color & Pattern | Operational State | Meaning |
 | :--- | :--- | :--- |
@@ -177,6 +165,17 @@ The upper tray forms the central functional module of the sandwich design: its i
 | 🔴 **Red Fast Blinking** | **Warning / Error** | Starter battery under-voltage ($< 11.8\,\text{V}$) / Cartridge short |
 | 🟣 **Solid Purple** | **OMM DLE Leader** | Current motorcycle is coordinating the group mesh |
 | ⚪ **White Double Flash** | **Actioncam Marker** | Handlebar button pressed: GPS highlight marker saved |
+
+---
+
+## 5. Enclosure Lid: Rugged 100% Solid Protective Cover with Pressure Vent
+
+The enclosure lid hermetically seals the upper tray. Since all electrical interfaces and the status LED are integrated into the upper tray front panel, the lid is designed as a **rugged, homogeneous protective cover** without fragile optical penetrations:
+
+* **Dimensions & Wall Thickness:** $110.0 \times 74.0 \times 6.0\,\text{mm}$, $3.0\,\text{mm}$ continuous PA12 wall thickness.
+* **Pressure Equalization:** A central Gore ePTFE screw vent ($\varnothing\,7.0\,\text{mm}$, M8 thread) reliably balances atmospheric pressure variations (mountain pass rides up to $3,000\,\text{m}$) and thermal breathing effects.
+* **Hermetic Sealing:** Perimeter Shore 40A silicone profile seal in the lid groove, clamped with 4x M3 stainless steel screws into brass Ruthex threaded inserts in the lower hull.
+* **Maintenance Advantage:** The lid can be removed effortlessly for battery service or inspection without disconnecting any cables or optical light pipes.
 
 ---
 

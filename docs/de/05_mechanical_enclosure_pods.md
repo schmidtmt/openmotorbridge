@@ -1,6 +1,6 @@
 # 05 - Mechanische Konstruktion: 3-Teiliges Sandwich-Gehäuse, Zwischenboden & Kassetten-Pods
 
-Dieses Dokument spezifiziert die mechanische Konstruktion, das Thermomanagement und das IP67/IP69K-Gehäusedesign der zentralen Steuerbox (Typ A) im **3-teiligen Sandwich-Aufbau (Unterwanne, Oberwanne mit Zwischenboden, Gehäusedeckel)** mit **integrierter Akku-Fixierung auf dem Zwischenboden**, **HD26-Kabelbaumflansch**, **wassergeschütztem USB-C Service-Port**, **Kupfer-Kühlbolzen-System** und **wasserdichtem RGB-Lichtleiterfenster**, sowie das universelle Satelliten-Pod-System (Typ B) mit Kassetten-Einschüben.
+Dieses Dokument spezifiziert die mechanische Konstruktion, das Thermomanagement und das IP67/IP69K-Gehäusedesign der zentralen Steuerbox (Typ A) im **3-teiligen Sandwich-Aufbau (Unterwanne, Oberwanne mit Zwischenboden, Gehäusedeckel)** mit **integrierter Akku-Fixierung auf dem Zwischenboden**, **stirnseitiger Anschlussleiste (HD26, USB-C & RGB-LED-Statusfenster)** in der Oberwanne, **Kupfer-Kühlbolzen-System** in der Unterwanne und **homogenem Gehäusedeckel mit Gore ePTFE-Druckausgleichsmembran**, sowie das universelle Satelliten-Pod-System (Typ B) mit Kassetten-Einschüben.
 
 ---
 
@@ -18,23 +18,25 @@ Das Basisgehäuse der Zentralbox ist als modulares, 3-teiliges IP67/IP69K-Sandwi
 
 ![OpenMotorBridge Zentralbox 3-Teiliges Sandwich-Gehäuse IP67](../../hardware/cad/main_box_enclosure_cad.png)
 
-*Abbildung 5.1: 3D-CAD-Darstellung der zentralen Steuerbox. Links: Geschlossenes IP67-Gehäuse mit HD26-Kabelbaumflansch in der Oberwanne, blau eloxierter USB-C Servicekappe und 4x M4 Silentblöcken an der Unterwanne. Rechts: Schnittansicht mit den 3 Sandwich-Ebenen: 1. Unterwanne (4x Kupfer-Kühlbolzen, Silikonpad, 4-Layer PCB), 2. Oberwanne mit Zwischenboden (Akku mit EPDM-Spannband oben, 38x6 mm Flachband-Schlitz & LED-Schacht im Boden), 3. Deckel mit Gore-Vent und PMMA-Lichtleiterfenster.*
+*Abbildung 5.1: 3D-CAD-Darstellung der zentralen Steuerbox. Links: Geschlossenes IP67-Gehäuse mit HD26-Kabelbaumflansch, USB-C Servicekappe und bündigem RGB-Statusfenster an der Stirnseite der Oberwanne, 4x M4 Silentblöcken an der Unterwanne und flachem Deckel mit Gore-Membran. Rechts: Schnittansicht mit den 3 Sandwich-Ebenen: 1. Unterwanne (4x Kupfer-Kühlbolzen, Silikonpad, 4-Layer PCB), 2. Oberwanne mit Zwischenboden (Akku mit EPDM-Spannband oben, 38x6 mm Flachband-Schlitz im Boden, Ports an Stirnwand), 3. Robuster Deckel mit Gore-Vent (100% dicht).*
 
 ```
 ┌────────────────────────────────────────────────────────────┐  ▲
 │ 1. GEHÄUSEDECKEL (6,0 mm Höhe / 3,0 mm Wandstärke)         │  │
-│    • PMMA RGB-Status-Lichtleiter-Fenster (Ø 3,0 mm, IP67)  │  │ 38,0 mm
-│    • Gore ePTFE Druckausgleichsmembran (Ø 7,0 mm)          │  │ Gesamt-
-│    • Umlaufende Nut mit Shore 40A Silikon-Profildichtung   │  │ höhe
+│    • Gore ePTFE Druckausgleichsmembran (Ø 7,0 mm)          │  │ 38,0 mm
+│    • Umlaufende Nut mit Shore 40A Silikon-Profildichtung   │  │ Gesamt-
+│    • 100% homogener, geschlossener Vollkunststoff-Deckel   │  │ höhe
 ├────────────────────────────────────────────────────────────┤  │
 │ 2. OBERWANNE MIT ZWISCHENBODEN (15,0 mm Höhe)              │  │
-│    • Stirnseite: HD26 D-Sub Flansch + USB-C Service-Kappe  │  │
+│    • Stirnwand (Alle Anschlüsse & Anzeige):                │  │
+│      - HD26 D-Sub Flansch (Haupt-Kabelbaum)                │  │
+│      - Wasserdichter USB-C Service-Port (Alu-Schraubkappe) │  │
+│      - Wasserdichtes RGB-Status-LED-Sichtfenster (Ø 3 mm)  │  │
 │    • Oberes Fach (auf dem Zwischenboden):                  │  │
 │      - 1S LiPo-USV-Pufferakku (52x36x6.5mm) in Akkuwanne   │  │
-│      - EPDM-Gummispannband zur Akku-Fixierung              │  │
+│      - EPDM-Gummispannband zur vibrationsfesten Fixierung  │  │
 │    • Zwischenboden (Trennebene zur Unterwanne):            │  │
 │      - 38,0 x 6,0 mm Flachbandkabel-Schlitz (R 1,5 mm)     │  │
-│      - Ø 5,0 mm optischer LED-Schacht über WS2812B         │  │
 │      - 4x Labyrinth-Druckausgleichsschlitze (15 x 2 mm)    │  │
 ├────────────────────────────────────────────────────────────┤  │
 │ 3. UNTERWANNE (17,0 mm Höhe - Geschlossene Tauchwanne)     │  │
@@ -88,9 +90,9 @@ Die untere Tauchwanne beherbergt die wärmeerzeugenden Komponenten: $100\,\text{
 
 ---
 
-## 3. Oberwanne: Akku-Fixierung auf Zwischenboden & Kabelführung
+## 3. Oberwanne: Stirnseitige Schnittstellen, Akku & Zwischenboden
 
-Die Oberwanne bildet das mittlere Funktionsmodul des Sandwich-Aufbaus: Ihr integrierter Zwischenboden (PA12, $2{,}5\,\text{mm}$ Wandstärke) dient als Montagebasis für den USV-Akku und trennt diesen von der darunterliegenden Elektronik.
+Die Oberwanne bildet das mittlere Funktionsmodul des Sandwich-Aufbaus: Sie bündelt an ihrer Stirnseite alle von außen zugänglichen Schnittstellen und Anzeigen und nimmt auf der Oberseite des integrierten Zwischenbodens den USV-Pufferakku auf.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -102,10 +104,10 @@ Die Oberwanne bildet das mittlere Funktionsmodul des Sandwich-Aufbaus: Ihr integ
 │  │    mit EPDM-Spannband   │  │    führt zu J1 auf PCB   │  │
 │  └─────────────────────────┘  └──────────────────────────┘  │
 │                                                             │
-│  ┌─────────────────────────┐                                │
-│  │ 3. LED-Lichtschacht     │  [Slot 1] [Slot 2] [Slot 3]    │
-│  │    (Ø 5,0 mm)           │  (4x Druckausgleichsschlitze)  │
-│  └─────────────────────────┘                                │
+│  [Slot 1]              [Slot 2]              [Slot 3]       │
+│  ◄──────── 4x Interne Druckausgleichsschlitze ─────────────►│
+├─────────────────────────────────────────────────────────────┤
+│  STIRNWAND: [ HD26 Flansch ]   [ USB-C Port ]   [ RGB-LED ] │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -119,55 +121,41 @@ Die Oberwanne bildet das mittlere Funktionsmodul des Sandwich-Aufbaus: Ihr integ
    * **Abmessungen:** $38{,}0 \times 6{,}0\,\text{mm}$ mit beidseitig $R=1{,}5\,\text{mm}$ Kantenverrundung.
    * **Position:** Liegt fluchtend direkt über der 2x13 Wannenbuchse `J1` auf der Hauptplatine.
    * **Kabelführung:** Das $45\,\text{mm}$ lange 26-polige Flachbandkabel führt vom stirnseitigen HD26-Flansch in der Oberwanne durch diesen Schlitz nach unten zur Hauptplatine.
-2. **Optischer LED-Durchtrittsschacht:**
-   * **Geometrie:** $\varnothing\,5{,}0\,\text{mm}$ zylindrische Bohrung, koaxial positioniert über der SMD-LED `LED1` (WS2812B, GPIO 48).
-   * **Funktion:** Lässt das Licht der Platine durch den Zwischenboden ungehindert zum Sichtfenster im Deckel durchtreten.
-3. **Labyrinth-Druckausgleichsschlitze:**
+2. **Labyrinth-Druckausgleichsschlitze:**
    * 4x Belüftungsschlitze ($15{,}0 \times 2{,}0\,\text{mm}$) verbinden den unteren Elektronikraum mit dem oberen Raum und der ePTFE-Membran im Deckel.
 
 ---
 
-## 4. Stirnseitige Anschlüsse in der Oberwanne (HD26 & USB-C)
+## 4. Stirnseitige Anschlüsse & Anzeige in der Oberwanne (HD26, USB-C & RGB-LED)
+
+Alle drei Interaktions- und Anschlusselemente befinden sich kompakt und geschützt nebeneinander an der **vorderen Stirnwand der Oberwanne**:
+
+```
+                  VORDERE STIRNWAND DER OBERWANNE
+┌─────────────────────────────────────────────────────────────┐
+│ ┌──────────────────────┐      ┌────────────┐     ┌────────┐ │
+│ │ 1. HD26 D-Sub Flansch│      │ 2. USB-C   │     │ 3. RGB │ │
+│ │    (Kabelbaum-Buchse)│      │    Service │     │    LED │ │
+│ │    2x M3 Jackscrews  │      │    Alukappe│     │    Ø3mm│ │
+│ └──────────────────────┘      └────────────┘     └────────┘ │
+└─────────────────────────────────────────────────────────────┘
+```
 
 ### 4.1 HD26 D-Sub Gehäusewand-Flansch (Kabelbaum-Hauptanschluss)
-* **Ausschnitt-Geometrie:** D-Sub High-Density 26-Pin Ausschnitt ($39{,}2 \times 15{,}4\,\text{mm}$) in der vorderen Stirnwand der **Oberwanne**.
+* **Ausschnitt-Geometrie:** D-Sub High-Density 26-Pin Ausschnitt ($39{,}2 \times 15{,}4\,\text{mm}$) in der Stirnwand der Oberwanne.
 * **Flanschdichtung:** Formgenaue EPDM-Flachdichtung ($1{,}5\,\text{mm}$ Stärke, Shore 60 A) zwischen Metallkragen der Amphenol LTW / NorComp SEAL-D Buchse und der Gehäusewand.
 * **Verschraubung:** 2x M3 Edelstahl-Sechskantbolzen mit O-Ring-Dichtscheiben klemmen den Flansch mit $0{,}6\,\text{Nm}$ wasserdicht gegen die Wand.
 * **Interne Entkopplung:** Verbindung zur Hauptplatine über das 26-polige Flachbandkabel durch den Zwischenboden-Schlitz zur 2x13 Wannenbuchse (`J1`).
 
 ### 4.2 Wasserdichter USB-C Programmier- & Service-Port
-* **Zugang ohne Gehäuseöffnung:** An der Stirnwand der Oberwanne neben dem HD26-Flansch befindet sich ein wasserdichter USB-C Service-Port mit **blau eloxierter Aluminium-Schraubkappe** und rotem NBR/Silikon-O-Ring.
+* **Zugang ohne Gehäuseöffnung:** Direkt neben dem HD26-Flansch befindet sich der wasserdichte USB-C Service-Port mit **blau eloxierter Aluminium-Schraubkappe** und rotem NBR/Silikon-O-Ring.
 * **Funktion:** Ermöglicht Firmware-Updates, ESP-IDF JTAG-Debugging und Diagnose im eingebauten Zustand unter der Sitzbank, ohne dass das IP67-Gehäuse aufgeschraubt werden muss.
 
----
+### 4.3 Wasserdichtes RGB-Status-LED-Sichtfenster
+* **Frontbündige Linse:** Ein diffuser PMMA-Linsenkörper ($\varnothing\,3{,}0\,\text{mm}$, *Mentor 1292.1101*) ist mit umlaufendem NBR-O-Ring frontbündig in die Stirnwand der Oberwanne eingepresst und mit transparentem Polyurethan versiegelt.
+* **Blickwinkel:** Zeigt den Betriebszustand direkt an der Frontseite an, sodass der Fahrer / Mechaniker beim Blick unter die Sitzbank auf die Stecker sofort den Status sieht.
 
-## 5. Gehäusedeckel: Wasserdichtes LED-Sichtfenster & Druckausgleich
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│ GEHÄUSEDECKEL (Wandstärke 3,0 mm / Bauhöhe 6,0 mm)          │
-│                  ┌──────────────────┐                       │
-│                  │  PMMA Lichtleiter│ ◄── NBR O-Ring        │
-│                  │  (Ø 3,0 mm Matt) │     (IP67 Sichtfenster│
-│                  └────────┬─────────┘                       │
-├───────────────────────────┼─────────────────────────────────┤
-│ OBERWANNE / ZWISCHENBODEN │ Durchtritt durch Ø 5,0 mm Schacht
-├───────────────────────────┼─────────────────────────────────┤
-│                           │ Optischer Luftspalt 0,8 mm      │
-│                           ▼                                 │
-│                  ┌──────────────────┐                       │
-│                  │ WS2812B RGB-LED  │                       │
-│  HAUPTPLATINE    │ (ESP32 GPIO 48)  │                       │
-│  (UNTERWANNE)    └──────────────────┘                       │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### 5.1 Optische & Mechanische Spezifikation
-* **Lichtleiter-Typ:** PMMA-Präzisions-Lichtleiter mit diffuser, matter Linse (*Mentor 1292.1101* / *Bivar PLPC3-3MM*), Durchmesser $\varnothing\,3{,}0\,\text{mm}$.
-* **Dichtung:** Umlaufender NBR-O-Ring ($\varnothing\,3{,}0\,\text{mm}$ ID, $1{,}0\,\text{mm}$ Schnurstärke) in Stufenbohrung des Deckels, frontbündig eingepresst und mit transparentem Polyurethan versiegelt.
-* **Druckausgleich:** Gore ePTFE-Schraubventil ($\varnothing\,7{,}0\,\text{mm}$) im Gehäusedeckel gleicht Luftdruckschwankungen (Passfahrten bis $3.000\,\text{m}$ Höhe) und thermische Atmungseffekte zuverlässig aus.
-
-### 5.2 Status-Farbcodierung (LED State Machine)
+### 4.4 Status-Farbcodierung (LED State Machine)
 
 | LED-Farbe & Muster | Betriebszustand | Bedeutung |
 | :--- | :--- | :--- |
@@ -177,6 +165,17 @@ Die Oberwanne bildet das mittlere Funktionsmodul des Sandwich-Aufbaus: Ihr integ
 | 🔴 **Rot schnell blinkend** | **Warnung / Fehler** | Unterspannung Starterbatterie ($< 11{,}8\,\text{V}$) / Kassetten-Kurzschluss |
 | 🟣 **Lila leuchtend** | **OMM DLE Leader** | Dieses Motorrad führt die Mesh-Koordination der Gruppe |
 | ⚪ **Weiß Doppelblitz** | **Actioncam Marker** | Lenkertaster gedrückt: GPS Highlight-Marker gesetzt |
+
+---
+
+## 5. Gehäusedeckel: Robuste 100% dichte Schutzhaube mit Druckausgleich
+
+Der Gehäusedeckel schließt die Oberwanne nach oben hermetisch ab. Da sich alle Anschlüsse und die Status-LED in der Oberwanne befinden, ist der Deckel als **robuste, homogene Schutzhaube** ohne bruchanfällige Lichtleiterbohrungen ausgeführt:
+
+* **Geometrie & Wandstärke:** $110{,}0 \times 74{,}0 \times 6{,}0\,\text{mm}$, $3{,}0\,\text{mm}$ durchgehende PA12-Wandstärke.
+* **Druckausgleich:** Ein zentrales Gore ePTFE-Schraubventil ($\varnothing\,7{,}0\,\text{mm}$, M8-Gewinde) gleicht Luftdruckschwankungen (Passfahrten bis $3.000\,\text{m}$ Höhe) und thermische Atmungseffekte zuverlässig aus.
+* **Hermetische Abdichtung:** Umlaufende Shore 40A Silikon-Profildichtung in der Deckelnut, verschraubt über 4x M3 Edelstahlschrauben in Ruthex-Gewindeeinsätze der Unterwanne.
+* **Wartungsvorteil:** Zum Tausch des Pufferakkus oder zur Inspektion kann der Deckel werkzeuglos abgenommen werden, ohne dass Kabel oder optische Lichtleiter gelöst werden müssen.
 
 ---
 
