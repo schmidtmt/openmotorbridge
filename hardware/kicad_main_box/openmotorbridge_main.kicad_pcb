@@ -1059,7 +1059,7 @@
 		(uuid "74a7523d-fdc4-4b57-8d9d-f609fecaf602")
 		(at 139.00 118.50 90.0)
 		(property "Reference" "J3"
-			(at 0 -3.5 0)
+			(at 0 3.5 0)
 			(layer "F.SilkS")
 			(uuid "5d42929b-b534-495b-90a6-9ad7d7c7587f")
 			(effects
@@ -1070,7 +1070,7 @@
 			)
 		)
 		(property "Value" "USB_C_IP67"
-			(at 0 3.5 0)
+			(at 0 -3.5 0)
 			(layer "F.Fab")
 			(uuid "f9437c30-5998-42e1-8d6e-e1b11a8e6efb")
 			(effects
@@ -1140,7 +1140,7 @@
 				(xyz 1 1 1)
 			)
 			(rotate
-				(xyz 90 0 -90)
+				(xyz 90 0 90)
 			)
 		)
 	)
