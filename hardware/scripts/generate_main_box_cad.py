@@ -8,10 +8,13 @@ Generates photorealistic 3D CAD visualizations for the Central Main Box Enclosur
   - 4x M4 Silent-block mounting ears (128 x 56 mm hole spacing)
   - Front panel: HD26 harness flange, USB-C service cap with O-ring
   - Top lid: PMMA RGB Status LED light guide (Ø 3 mm), Gore ePTFE vent (Ø 7 mm)
+  - Mid-Baffle (Zwischenboden): Integrated 38x6 mm chamfered cable pass-through slot,
+    Ø 5 mm LED shaft, and 4x pressure equalization slots
   - Thermal management: 4x Solid Copper Thermal Studs (Ø 8 mm) in bottom hull
     coupled to 2.0 mm flexible silicone gap-pad (Shore 00 35) under LM5164/ESP32
   - Bottom internal LiPo UPS battery pocket (52 x 36 x 6.5 mm)
   - 4-layer FR4 Main PCB (85 x 55 mm) on vibration-isolated M2.5 standoffs
+  - 26-conductor flexible ribbon cable routed through the mid-baffle slot to J1 header
 """
 
 import os
@@ -72,21 +75,24 @@ def draw_cylinder(ax, x0, y0, z0, radius, length, color, alpha=1.0, resolution=3
 def render_main_box_cad(output_path):
     fig = plt.figure(figsize=(24, 12), dpi=220, facecolor='#080c14')
     
-    span_x = 150.0
-    span_y = 90.0
-    span_z = 50.0
+    # -------------------------------------------------------------
+    # Aspect Ratio Setup (True 1:1:1 Scale based on 110 x 74 x 38 mm)
+    # -------------------------------------------------------------
+    span_x = 150.0 # -75 to +75 mm (incl. mounting ears)
+    span_y = 90.0  # -45 to +45 mm
+    span_z = 50.0  # -25 to +25 mm
     
     # -------------------------------------------------------------
-    # 1. ISOMETRIC VIEW: CLOSED IP67 ENCLOSURE & FRONT CONNECTORS
+    # 1. EXTERNAL 3D VIEW: IP67 ENCLOSURE WITH FLANGE, SERVICE CAP & EARS
     # -------------------------------------------------------------
     ax1 = fig.add_subplot(121, projection='3d', facecolor='#080c14')
-    ax1.set_title("1. ZENTRALBOX BASISGEHÄUSE (IP67 - UNTER SITZBANK)\n(HD26-Kabelbaumflansch, USB-C Service-Kappe & 4x M4 Silentblöcke)", 
+    ax1.set_title("1. ZENTRALBOX BASISGEHÄUSE IP67 / IP69K (AUSSENANSICHT)\n(HD26-Kabelbaumflansch, USB-C Service-Kappe, PMMA-Lichtleiter & 4x M4 Silentblöcke)", 
                   color='#38bdf8', fontsize=13, fontweight='bold', pad=15)
     
-    # Translucent Main Enclosure Body (110 x 74 x 26 mm, Z=-18 to +8)
-    draw_box(ax1, -55, -37, -18, 110, 74, 26, color='#0284c7', alpha=0.15, edgecolor='#38bdf8', linewidth=0.8)
+    # Main Lower Hull (PA12 Black: 110 x 74 x 26 mm from Z = -18 to +8)
+    draw_box(ax1, -55, -37, -18, 110, 74, 26, color='#1e293b', alpha=0.95, edgecolor='#38bdf8', linewidth=1.0)
     
-    # Top Lid (110 x 74 x 12 mm, Z=8 to 20)
+    # Top Lid (PA12: 110 x 74 x 12 mm from Z = +8 to +20)
     draw_box(ax1, -55, -37, 8, 110, 74, 12, color='#0284c7', alpha=0.20, edgecolor='#38bdf8', linewidth=1.0)
     
     # Perimeter Silicone Sealing Gasket (Red line at Z=8)
@@ -151,10 +157,10 @@ def render_main_box_cad(output_path):
     ax1.axis('off')
 
     # -------------------------------------------------------------
-    # 2. SECTION / X-RAY VIEW: THERMAL PINS, GAP PAD, PCB & LIPO
+    # 2. SECTION / X-RAY VIEW: ZWISCHENBODEN, KABELKANAL, THERMAL & PCB
     # -------------------------------------------------------------
     ax2 = fig.add_subplot(122, projection='3d', facecolor='#080c14')
-    ax2.set_title("2. SCHNITTANSICHT & THERMISCHES KONZEPT\n(4x Kupfer-Bolzen, Silikon-Pad, 4-Layer PCB & 1S LiPo-Pufferakku)", 
+    ax2.set_title("2. SCHNITTANSICHT: ZWISCHENBODEN, KABELDURCHFÜHRUNG & KÜHLUNG\n(38x6mm Flachband-Schlitz, LED-Schacht, 4x Kupfer-Bolzen, Silikon-Pad & LiPo-USV)", 
                   color='#10b981', fontsize=13, fontweight='bold', pad=15)
     
     # Lower Hull Floor Outline (Translucent outline: 110 x 74 x 26 mm)
@@ -191,10 +197,37 @@ def render_main_box_cad(output_path):
     draw_box(ax2, -12, 8, -8.4, 12, 10, 6.0, color='#1e293b', alpha=0.95, edgecolor='#fbbf24', linewidth=0.8)
     draw_box(ax2, 3, 8, -8.4, 12, 10, 6.0, color='#1e293b', alpha=0.95, edgecolor='#fbbf24', linewidth=0.8)
     
-    # - Bosch BMI270 6-Axis IMU (Center X = 0, Y = -2, Z = -8.4)
-    draw_box(ax2, -2, -3, -8.4, 4, 3, 1.2, color='#0f172a', alpha=0.95, edgecolor='#38bdf8', linewidth=0.5)
+    # - J1 2x13 Box Header on PCB (X = -22 to +12, Y = -23 to -17, Z = -8.4 to -3.0)
+    draw_box(ax2, -20, -22, -8.4, 34, 5, 5.4, color='#0f172a', alpha=0.95, edgecolor='#fbbf24', linewidth=0.8)
+
+    # -------------------------------------------------------------
+    # 5. ZWISCHENBODEN (MID-BAFFLE PLATE) AT Z = 2.0 TO 4.5 MM
+    # -------------------------------------------------------------
+    # Main Baffle Plate Left Section (X = -51 to -20)
+    draw_box(ax2, -51, -33, 2.0, 31, 66, 2.5, color='#334155', alpha=0.75, edgecolor='#64748b', linewidth=0.8)
+    # Main Baffle Plate Right Section (X = 18 to 51)
+    draw_box(ax2, 18, -33, 2.0, 33, 66, 2.5, color='#334155', alpha=0.75, edgecolor='#64748b', linewidth=0.8)
+    # Main Baffle Plate Center-Back Section (X = -20 to 18, Y = -14 to 33)
+    draw_box(ax2, -20, -14, 2.0, 38, 47, 2.5, color='#334155', alpha=0.75, edgecolor='#64748b', linewidth=0.8)
     
-    # Top Lid PMMA Light Guide descending to PCB LED
+    # Highlight: 38.0 x 6.0 mm Cable Pass-Through Slot (at X = -20 to 18, Y = -22 to -14)
+    # Slot boundary frame (chamfered outline)
+    draw_box(ax2, -20.5, -22.5, 1.8, 39, 8.5, 2.9, color='#0284c7', alpha=0.25, edgecolor='#38bdf8', linewidth=1.2)
+    
+    # 26-Conductor Ultra-Flexible Ribbon Cable (pink/violet AWG28) looping through the slot
+    # From HD26 connector at front (Y=-37, Z=-5) looping up through slot (Z=3) down to J1 (Z=-3)
+    draw_box(ax2, -18, -36, -6, 30, 14, 1.2, color='#f43f5e', alpha=0.90, edgecolor='#fda4af', linewidth=0.6)
+    draw_box(ax2, -18, -22, -6, 30, 2, 9.0, color='#f43f5e', alpha=0.90, edgecolor='#fda4af', linewidth=0.6)
+    draw_box(ax2, -18, -21, 2.5, 30, 3, 1.2, color='#f43f5e', alpha=0.90, edgecolor='#fda4af', linewidth=0.6)
+    
+    # Ø 5.0 mm Optical LED Shaft Aperture in Zwischenboden (at X = 25, Y = 0)
+    draw_cylinder(ax2, 25, 0, 1.5, 2.8, 3.5, color='#0284c7', alpha=0.4, axis='z')
+    
+    # 4x Pressure Equalization & Venting Slots in Zwischenboden (15 x 2 mm)
+    for vx in [-35, -15, 5, 35]:
+        draw_box(ax2, vx, 15, 1.8, 12, 2.5, 2.9, color='#0284c7', alpha=0.3, edgecolor='#38bdf8', linewidth=0.6)
+    
+    # Top Lid PMMA Light Guide descending through the LED shaft down to PCB LED
     draw_cylinder(ax2, 25, 0, -6.8, 1.5, 26.0, color='#34d399', alpha=0.85, axis='z')
     draw_box(ax2, 23.5, -1.5, -8.4, 3.0, 3.0, 1.6, color='#10b981', alpha=0.95, edgecolor='#ffffff', linewidth=0.5)
     
@@ -205,18 +238,21 @@ def render_main_box_cad(output_path):
         draw_cylinder(ax2, px, py, -8.4, 1.2, 3.0, color='#cbd5e1', alpha=0.95, axis='z')
 
     # Annotations Ax2
+    ax2.text(-22, -28, 7, "38x6 mm Kabel-Durchführung (Zwischenboden)", color='#38bdf8', fontsize=10, fontweight='bold')
+    ax2.text(-18, -38, -2, "26-Pin Flachbandkabel", color='#f43f5e', fontsize=9, fontweight='bold')
+    ax2.text(26, 0, 8, "Ø 5 mm LED-Schacht", color='#34d399', fontsize=9, fontweight='bold')
+    ax2.text(-35, 18, 7, "4x Druckausgleichsschlitze", color='#94a3b8', fontsize=9, fontweight='bold')
     ax2.text(-25, -25, -20, "4x Kupfer-Bolzen (Ø 8 mm)", color='#f59e0b', fontsize=10, fontweight='bold')
     ax2.text(-35, -28, -11, "2 mm Silikon-Wärmeleitpad", color='#38bdf8', fontsize=10, fontweight='bold')
     ax2.text(-52, -25, -16, "1S LiPo Akku (USV)", color='#60a5fa', fontsize=10, fontweight='bold')
-    ax2.text(-30, -18, 5, "LM5164 Buck (100V)", color='#f59e0b', fontsize=9, fontweight='bold')
-    ax2.text(5, -18, 5, "ESP32-S3 DSP", color='#e2e8f0', fontsize=9, fontweight='bold')
-    ax2.text(-10, 16, 5, "Audio-Trafos", color='#fbbf24', fontsize=9, fontweight='bold')
+    ax2.text(-30, -18, -3, "LM5164 Buck", color='#f59e0b', fontsize=8, fontweight='bold')
+    ax2.text(5, -18, -3, "ESP32-S3", color='#e2e8f0', fontsize=8, fontweight='bold')
 
     ax2.set_xlim([-75, 75])
     ax2.set_ylim([-45, 45])
     ax2.set_zlim([-25, 25])
     ax2.set_box_aspect((span_x, span_y, span_z))
-    ax2.view_init(elev=24, azim=-55)
+    ax2.view_init(elev=26, azim=-52)
     ax2.axis('off')
 
     plt.tight_layout()
@@ -225,7 +261,7 @@ def render_main_box_cad(output_path):
     print(f"✓ Main Box Mechanical Enclosure CAD generated: {output_path}")
 
 if __name__ == "__main__":
-    out1 = "/Users/schmidtm/.gemini/antigravity-ide/brain/3c459d9f-b53d-4587-ae74-c2a74bcda330/main_box_enclosure_cad.png"
+    out1 = "/Users/schmidtm/.gemini/antigravity-ide/brain/71a5d344-5a46-4a0e-bb50-16bb2304a17f/main_box_enclosure_cad.png"
     out2 = "/Users/schmidtm/openMotorBridge/hardware/cad/main_box_enclosure_cad.png"
     os.makedirs(os.path.dirname(out2), exist_ok=True)
     render_main_box_cad(out1)

@@ -1,12 +1,12 @@
-# 05 - Mechanische Konstruktion: Zentralbox, Kühlkonzept, Dichtung & Kassetten-Pods
+# 05 - Mechanische Konstruktion: Zentralbox, Zwischenboden, Kühlkonzept & Kassetten-Pods
 
-Dieses Dokument spezifiziert die mechanische Konstruktion, das Thermomanagement und das IP67-Gehäusedesign der zentralen Steuerbox (Typ A) mit integriertem **HD26-Wandflansch**, **wassergeschütztem USB-C Service-Port**, **Kupfer-Kühlbolzen-System** und **wasserdichtem RGB-Lichtleiter**, sowie das universelle Satelliten-Pod-System (Typ B) mit Kassetten-Einschüben.
+Dieses Dokument spezifiziert die mechanische Konstruktion, das Thermomanagement und das IP67-Gehäusedesign der zentralen Steuerbox (Typ A) mit integriertem **Zwischenboden (Flachbandkabel-Durchführung, LED-Schacht & Druckausgleich)**, **HD26-Wandflansch**, **wassergeschütztem USB-C Service-Port**, **Kupfer-Kühlbolzen-System** und **wasserdichtem RGB-Lichtleiter**, sowie das universelle Satelliten-Pod-System (Typ B) mit Kassetten-Einschüben.
 
 ---
 
 ## 1. Gehäuse Typ A: Zentrale Steuerbox (Unter der Sitzbank)
 
-Das Basisgehäuse der Zentralbox ist als extrem robustes, 2-teiliges IP67/IP69K-Gehäuse aus **PA12 (MJF-Verfahren)** oder **Aluminium-Druckguss** konzipiert, das speziell für raue Motorrad-Bedingungen (Vibrationen bis $20\,\text{g}$, Spritzwasser, Hitzestau unter der Sitzbank) ausgelegt ist.
+Das Basisgehäuse der Zentralbox ist als extrem robustes IP67/IP69K-Gehäuse aus **PA12 (MJF-Verfahren)** oder **Aluminium-Druckguss** konzipiert, das speziell für raue Motorrad-Bedingungen (Vibrationen bis $20\,\text{g}$, Spritzwasser, Hitzestau unter der Sitzbank) ausgelegt ist.
 
 - **Außenabmessungen:** $110{,}0 \times 74{,}0 \times 38{,}0\,\text{mm}$ (L x B x H, Unterwanne $26{,}0\,\text{mm}$, Deckel $12{,}0\,\text{mm}$).
 - **Befestigung:** 4x integrierte Ecklaschen mit **Lochabstand $128{,}0 \times 56{,}0\,\text{mm}$** für schwingungsdämpfende **M4 Silentblöcke (Shore 50A EPDM)** zur Entkopplung hochfrequenter Motorvibrationen.
@@ -14,11 +14,11 @@ Das Basisgehäuse der Zentralbox ist als extrem robustes, 2-teiliges IP67/IP69K-
 - **Material & Fertigung:** PA12 im HP Multi Jet Fusion (MJF) 3D-Druck (min. $3{,}0\,\text{mm}$ Wandstärke), kugelgestrahlt, im Heißbad chemisch geglättet und hydrophob versiegelt.
 - **Schutzart:** IP67 / IP69K (strahlwasser- und tauchdicht bis $1\,\text{m}$ Wassertiefe sowie dampfstrahlbeständig).
 
-### 1.1 3D-CAD-Modell & Thermisches Konzept
+### 1.1 3D-CAD-Modell & Baugruppen-Schichten
 
 ![OpenMotorBridge Zentralbox Basisgehäuse IP67](../../hardware/cad/main_box_enclosure_cad.png)
 
-*Abbildung 5.1: 3D-CAD-Darstellung der zentralen Steuerbox. Links: Geschlossenes IP67-Gehäuse mit HD26-Kabelbaumflansch, blau eloxierter USB-C Servicekappe und 4x M4 Silentblöcken. Rechts: Schnittansicht mit 4x massiven Kupfer-Thermal-Pins ($\varnothing\,8\,\text{mm}$), $2{,}0\,\text{mm}$ Silikon-Wärmeleitpad, 4-Layer FR4-Platine und integrierter LiPo-USV-Akkutasche.*
+*Abbildung 5.1: 3D-CAD-Darstellung der zentralen Steuerbox. Links: Geschlossenes IP67-Gehäuse mit HD26-Kabelbaumflansch, blau eloxierter USB-C Servicekappe und 4x M4 Silentblöcken. Rechts: Schnittansicht mit 4x massiven Kupfer-Thermal-Pins ($\varnothing\,8\,\text{mm}$), $2{,}0\,\text{mm}$ Silikon-Wärmeleitpad, 4-Layer FR4-Platine, integriertem PA12-Zwischenboden mit $38 \times 6\,\text{mm}$ Flachbandkabel-Durchführung und LiPo-USV-Akkutasche.*
 
 ```
 ┌────────────────────────────────────────────────────────────┐  ▲
@@ -27,9 +27,20 @@ Das Basisgehäuse der Zentralbox ist als extrem robustes, 2-teiliges IP67/IP69K-
 │    • Gore ePTFE Druckausgleichsventil (Ø 7,0 mm)           │  │ Gesamt-
 │    • Umlaufende Nut mit Shore 40A Silikon-Profildichtung   │  │ höhe
 ├────────────────────────────────────────────────────────────┤  │
-│ 2. UNTERWANNE (26,0 mm Höhe - Geschlossene Tauchwanne)     │  │
+│ 2. ZWISCHENBODEN (PA12, 2,5 mm Stärke)                     │  │
+│    • 38,0 x 6,0 mm Flachbandkabel-Durchführung (R 1,5 mm)  │  │
+│    • Ø 5,0 mm optischer Lichtleiter-Durchtrittsschacht     │  │
+│    • 4x Labyrinth-Druckausgleichsschlitze (15 x 2 mm)      │  │
+├────────────────────────────────────────────────────────────┤  │
+│ 3. UNTERWANNE (26,0 mm Höhe - Geschlossene Tauchwanne)     │  │
 │    • Stirnwand: HD26 D-Sub Flansch + USB-C Service-Kappe   │  │
 │    • 4-Layer Hauptplatine (85 x 55 mm) auf M2.5 Dämpfern   │  │
+│    • 2,0 mm Silikon-Wärmeleitpad (Shore 00 35, λ = 3 W/mK) │  │
+│    • 4x Massive Kupfer-Thermal-Pins (Ø 8 mm im Wannenboden)│  │
+│    • Vertiefte 1S LiPo-USV-Akkutasche (52 x 36 x 6,5 mm)   │  │
+└────────────────────────────────────────────────────────────┘  ▼
+```
+
 ---
 
 ## 2. Durchgängiges Thermomanagement & Kühlkonzept der Zentralbox
@@ -73,21 +84,54 @@ Aufgrund des geschlossenen IP67-Gehäuses unter der Sitzbank und den thermischen
 
 ---
 
-## 3. Stirnseitige Anschlüsse & Wartungsfreundlichkeit
+## 3. Zwischenboden-Durchbrüche, Kabelführung & Druckausgleich
 
-### 3.1 HD26 D-Sub Gehäusewand-Flansch (Kabelbaum-Hauptanschluss)
+Der integrierte Zwischenboden (PA12, $2{,}5\,\text{mm}$ Wandstärke) trennt die empfindliche Leiterplatten- und Akkuebene mechanisch von der oberen Stecker- und Deckelkammer und stellt präzise dimensionierte Durchführungen bereit:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                 ZWISCHENBODEN (Draufsicht)                  │
+│                                                             │
+│   ┌─────────────────────────────┐     ┌─────────────────┐   │
+│   │ 1. Flachbandkabel-Schlitz   │     │ 2. LED-Schacht  │   │
+│   │    (38,0 x 6,0 mm)          │     │    (Ø 5,0 mm)   │   │
+│   │    Abgerundete Kante R1,5 mm│     │    Freischnitt  │   │
+│   └─────────────────────────────┘     └─────────────────┘   │
+│                                                             │
+│   [Schlitz 1]              [Schlitz 2]              [Schlitz 3]
+│   (15 x 2 mm)              (15 x 2 mm)              (15 x 2 mm)
+│   ◄──────── 4x Interne Druckausgleichsschlitze ────────────►│
+└─────────────────────────────────────────────────────────────┘
+```
+
+### 3.1 Spezifikation der Zwischenboden-Durchführungen
+1. **Flachbandkabel-Durchführung für Haupt-Kabelbaum:**
+   * **Abmessungen:** $38{,}0 \times 6{,}0\,\text{mm}$ mit beidseitig $R=1{,}5\,\text{mm}$ Kantenverrundung (verhindert Scheuern oder Durchscheuern der Isolation des 26-poligen AWG28 Flachbandkabels).
+   * **Position:** Liegt fluchtend direkt über der 2x13 Wannenbuchse `J1` auf der Hauptplatine.
+   * **Kabelführung:** Das $45\,\text{mm}$ lange, hochflexible 26-polige Flachbandkabel führt vom HD26-Gehäusewandflansch in einer vibrationsfesten $S$-Schleife durch diesen Schlitz auf die Hauptplatine.
+2. **Optischer LED-Durchtrittsschacht:**
+   * **Geometrie:** $\varnothing\,5{,}0\,\text{mm}$ zylindrische Bohrung, koaxial positioniert über der SMD-LED `LED1` (WS2812B, GPIO 48).
+   * **Funktion:** Ermöglicht dem im Deckel eingepressten PMMA-Lichtleiter den ungehinderten Durchtritt bis auf $0{,}8\,\text{mm}$ an die LED-Emissionsfläche.
+3. **Labyrinth-Druckausgleichsschlitze:**
+   * 4x Belüftungsschlitze ($15{,}0 \times 2{,}0\,\text{mm}$) ermöglichen einen ungehinderten Luftaustausch zwischen der unteren Elektronikkammer und dem im Deckel sitzenden Gore ePTFE-Ventil, ohne Kabel zu quetschen.
+
+---
+
+## 4. Stirnseitige Anschlüsse & Wartungsfreundlichkeit
+
+### 4.1 HD26 D-Sub Gehäusewand-Flansch (Kabelbaum-Hauptanschluss)
 * **Ausschnitt-Geometrie:** D-Sub High-Density 26-Pin Ausschnitt ($39{,}2 \times 15{,}4\,\text{mm}$) in der vorderen Stirnwand der **Unterwanne**.
 * **Flanschdichtung:** Formgenaue EPDM-Flachdichtung ($1{,}5\,\text{mm}$ Stärke, Shore 60 A) zwischen Metallkragen der Amphenol LTW / NorComp SEAL-D Buchse und der Gehäusewand.
 * **Verschraubung:** 2x M3 Edelstahl-Sechskantbolzen mit O-Ring-Dichtscheiben klemmen den Flansch mit $0{,}6\,\text{Nm}$ wasserdicht gegen die Wand.
-* **Interne Entkopplung:** Verbindung zur Hauptplatine über ein vibrationsfestes $45\,\text{mm}$ Flachbandkabel oder direkte Winkel-Buchsenleiste.
+* **Interne Entkopplung:** Verbindung zur Hauptplatine über das 26-polige Flachbandkabel durch den Zwischenboden-Schlitz zur 2x13 Wannenbuchse (`J1`).
 
-### 3.2 Wasserdichter USB-C Programmier- & Service-Port
+### 4.2 Wasserdichter USB-C Programmier- & Service-Port
 * **Zugang ohne Gehäuseöffnung:** An der Stirnwand neben dem HD26-Flansch befindet sich ein wasserdichter USB-C Service-Port mit **blau eloxierter Aluminium-Schraubkappe** und rotem NBR/Silikon-O-Ring.
 * **Funktion:** Ermöglicht Firmware-Updates, ESP-IDF JTAG-Debugging und Diagnose im eingebauten Zustand unter der Sitzbank, ohne dass das IP67-Gehäuse aufgeschraubt werden muss.
 
 ---
 
-## 4. Wasserdichter Lichtleiter für die WS2812B RGB Status-LED & Druckausgleich
+## 5. Wasserdichter Lichtleiter für die WS2812B RGB Status-LED & Druckausgleich
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -96,6 +140,8 @@ Aufgrund des geschlossenen IP67-Gehäuses unter der Sitzbank und den thermischen
 │                  │  PMMA Lichtleiter│ ◄── NBR O-Ring        │
 │                  │  (Ø 3,0 mm Matt) │     (IP67 Versiegelung│
 │                  └────────┬─────────┘                       │
+├───────────────────────────┼─────────────────────────────────┤
+│ ZWISCHENBODEN             │ Durchtritt durch Ø 5,0 mm Schacht
 ├───────────────────────────┼─────────────────────────────────┤
 │                           │ Optischer Luftspalt 0,8 mm      │
 │                           ▼                                 │
@@ -106,12 +152,12 @@ Aufgrund des geschlossenen IP67-Gehäuses unter der Sitzbank und den thermischen
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### 4.1 Optische & Mechanische Spezifikation
+### 5.1 Optische & Mechanische Spezifikation
 * **Lichtleiter-Typ:** PMMA-Präzisions-Lichtleiter mit diffuser, matter Linse (*Mentor 1292.1101* / *Bivar PLPC3-3MM*), Durchmesser $\varnothing\,3{,}0\,\text{mm}$.
 * **Dichtung:** Umlaufender NBR-O-Ring ($\varnothing\,3{,}0\,\text{mm}$ ID, $1{,}0\,\text{mm}$ Schnurstärke) in Stufenbohrung des Deckels, frontbündig eingepresst und mit transparentem Polyurethan versiegelt.
 * **Druckausgleich:** Gore ePTFE-Schraubventil ($\varnothing\,7{,}0\,\text{mm}$) im Gehäusedeckel gleicht Luftdruckschwankungen (Passfahrten bis $3.000\,\text{m}$ Höhe) und thermische Atmungseffekte zuverlässig aus.
 
-### 4.2 Status-Farbcodierung (LED State Machine)
+### 5.2 Status-Farbcodierung (LED State Machine)
 
 | LED-Farbe & Muster | Betriebszustand | Bedeutung |
 | :--- | :--- | :--- |
@@ -123,6 +169,7 @@ Aufgrund des geschlossenen IP67-Gehäuses unter der Sitzbank und den thermischen
 | ⚪ **Weiß Doppelblitz** | **Actioncam Marker** | Lenkertaster gedrückt: GPS Highlight-Marker gesetzt |
 
 ---
+
 
 ## 5. Gehaeuse Typ B: Universeller Satelliten-Pod (Identisch fuer Pod 1, 2 und 3)
 
@@ -246,8 +293,9 @@ Ein zentrales Entwicklungsziel von OpenMotorBridge ist die **100 % zerstörungsf
 
 Um die Signale vom 90°-abgewinkelten **JST-SH 1.0 mm 6-Pin SMD-Steckverbinder (`J2`)** auf der Kassetten-Trägerplatine absolut verwechslungs- und knickfrei zu den Kontaktpunkten des jeweiligen Adapters zu führen, besitzt der Kassetten-Schlitten folgende Struktur:
 
-1. **Geschützter Unterflur-Kabelkanal (*Under-Bed Routing Channel*):**
-   * Im Boden des PA12-Schlittens ist eine **$1{,}5\,\text{mm}$ tiefe und $8{,}0\,\text{mm}$ breite Kabelführung** direkt unterhalb des 3D-Kontur-Negativbetts eingefräst/eingedruckt.
+1. **Geschützter Unterflur-Kabelkanal & Zwischenboden-Durchführung (*Under-Bed Routing & Pass-Through Slot*):**
+   * **Kabeldurchführung im Kassetten-Zwischenboden:** Ein präziser **$10{,}0 \times 3{,}0\,\text{mm}$ Durchbruch mit beidseitig $R=1{,}0\,\text{mm}$ verrundeten Kanten** im Zwischenboden des PA12-Schlittens führt das Flachbandkabel von Header `J2` auf der unteren Trägerplatine nach oben in das 3D-Konturbett.
+   * **Unterflur-Kanal:** Im Boden des PA12-Schlittens ist eine **$1{,}5\,\text{mm}$ tiefe und $8{,}0\,\text{mm}$ breite Kabelführung** direkt unterhalb des 3D-Kontur-Negativbetts integriert.
    * Das hochflexible, silikonisolierte 6-adrige JST-SH Flachbandkabel liegt vollständig verdeckt unter dem Dämpfungsinlay. Beim Einsetzen oder Entnehmen des Intercoms besteht keinerlei Kontakt oder Quetschgefahr.
 2. **Standardisierte Pin-Belegung am JST-SH 6P Header (`J2`):**
 

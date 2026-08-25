@@ -1,12 +1,12 @@
-# 05 - Mechanical Construction: Central Main Box, Thermal Concept, Sealing & Modular Pods
+# 05 - Mechanical Construction: Central Main Box, Mid-Baffle, Thermal Concept & Modular Pods
 
-This document specifies the mechanical construction, thermal management, and IP67 enclosure design of the central main control box (Type A) featuring an integrated **HD26 wall flange**, **waterproof USB-C service port**, **solid copper thermal stud cooling system**, and **waterproof RGB status light pipe**, as well as the universal satellite pod system (Type B) with modular slide-in cartridges.
+This document specifies the mechanical construction, thermal management, and IP67 enclosure design of the central main control box (Type A) featuring an integrated **mid-baffle (ribbon cable pass-through slot, LED shaft & pressure venting)**, **HD26 wall flange**, **waterproof USB-C service port**, **solid copper thermal stud cooling system**, and **waterproof RGB status light pipe**, as well as the universal satellite pod system (Type B) with modular slide-in cartridges.
 
 ---
 
 ## 1. Enclosure Type A: Central Main Box (Under Seat)
 
-The base housing of the central main box is engineered as an ultra-rugged, 2-piece IP67/IP69K enclosure made of **PA12 (MJF process)** or **die-cast aluminum**, designed specifically for harsh motorcycle operating conditions (vibrations up to $20\,\text{g}$, high-pressure washdowns, heat buildup under the seat, and extreme road grime).
+The base housing of the central main box is engineered as an ultra-rugged IP67/IP69K enclosure made of **PA12 (MJF process)** or **die-cast aluminum**, designed specifically for harsh motorcycle operating conditions (vibrations up to $20\,\text{g}$, high-pressure washdowns, heat buildup under the seat, and extreme road grime).
 
 - **External Dimensions:** $110.0 \times 74.0 \times 38.0\,\text{mm}$ (L x W x H; Lower Hull $26.0\,\text{mm}$, Top Lid $12.0\,\text{mm}$).
 - **Mounting:** 4x integrated corner ears with **hole spacing of $128.0 \times 56.0\,\text{mm}$** for vibration-damping **M4 silentblocks (Shore 50A EPDM)** to decouple high-frequency engine harmonics.
@@ -14,11 +14,11 @@ The base housing of the central main box is engineered as an ultra-rugged, 2-pie
 - **Material & Manufacturing:** PA12 via HP Multi Jet Fusion (MJF) 3D printing (min. $3.0\,\text{mm}$ wall thickness), glass-bead blasted, chemically smoothed in hot vapor bath, and hydrophobic sealed.
 - **Protection Class:** IP67 / IP69K (dust-tight, submersible to $1\,\text{m}$ depth, and resistant to high-pressure steam cleaning).
 
-### 1.1 3D CAD Model & Thermal Concept
+### 1.1 3D CAD Model & Assembly Layers
 
 ![OpenMotorBridge Central Main Box Base Enclosure IP67](../../hardware/cad/main_box_enclosure_cad.png)
 
-*Figure 5.1: 3D CAD render of the central control box. Left: Closed IP67 housing with HD26 harness flange, blue anodized USB-C service screw cap, and 4x M4 silentblock mounting ears. Right: Sectional X-ray view revealing 4x solid copper thermal studs ($\varnothing\,8\,\text{mm}$), $2.0\,\text{mm}$ silicone thermal gap pad, 4-layer FR4 PCB, and integrated LiPo UPS battery pocket.*
+*Figure 5.1: 3D CAD render of the central control box. Left: Closed IP67 housing with HD26 harness flange, blue anodized USB-C service screw cap, and 4x M4 silentblock mounting ears. Right: Sectional X-ray view revealing 4x solid copper thermal studs ($\varnothing\,8\,\text{mm}$), $2.0\,\text{mm}$ silicone thermal gap pad, 4-layer FR4 PCB, integrated PA12 mid-baffle with $38 \times 6\,\text{mm}$ ribbon cable pass-through slot, and LiPo UPS battery pocket.*
 
 ```
 ┌────────────────────────────────────────────────────────────┐  ▲
@@ -27,11 +27,16 @@ The base housing of the central main box is engineered as an ultra-rugged, 2-pie
 │    • Gore ePTFE Pressure Equalization Vent (Ø 7.0 mm)      │  │ Total
 │    • Perimeter Groove with Shore 40A Silicone Profile Seal │  │ Height
 ├────────────────────────────────────────────────────────────┤  │
-│ 2. LOWER HULL (26.0 mm Height - Solid Submersion Tray)     │  │
+│ 2. MID-BAFFLE (PA12, 2.5 mm Thickness)                     │  │
+│    • 38.0 x 6.0 mm Ribbon Cable Pass-Through Slot (R1.5mm) │  │
+│    • Ø 5.0 mm Optical Light Pipe Shaft Clearance           │  │
+│    • 4x Labyrinth Pressure Equalization Slots (15 x 2 mm)  │  │
+├────────────────────────────────────────────────────────────┤  │
+│ 3. LOWER HULL (26.0 mm Height - Solid Submersion Tray)     │  │
 │    • Front Panel: HD26 D-Sub Flange + USB-C Service Cap    │  │
 │    • 4-Layer Main PCB (85 x 55 mm) on M2.5 Damping Mounts  │  │
-│    • 2.0 mm Silicone Thermal Gap-Pad (Shore 00 35)         │  │
-│    • 4x Solid Copper Thermal Studs (Ø 8.0 mm)              │  │
+│    • 2.0 mm Silicone Thermal Gap-Pad (Shore 00 35, λ=3W/mK)│  │
+│    • 4x Solid Copper Thermal Studs (Ø 8 mm in Bottom Hull) │  │
 │    • Recessed LiPo UPS Battery Pocket (52 x 36 x 6.5 mm)   │  │
 └────────────────────────────────────────────────────────────┘  ▼
 ```
@@ -79,21 +84,54 @@ Due to the sealed IP67 enclosure under the seat and power dissipation from the $
 
 ---
 
-## 3. Front Panel Interfaces & Serviceability
+## 3. Mid-Baffle Pass-Throughs, Cable Routing & Pressure Equalization
 
-### 3.1 HD26 D-Sub Wall Flange (Main Vehicle Harness Interface)
+The integrated mid-baffle plate (PA12, $2.5\,\text{mm}$ thickness) mechanically separates the sensitive PCB and battery layer from the upper connector and lid volume while providing precision pass-through cutouts:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                 MID-BAFFLE PLATE (Top View)                 │
+│                                                             │
+│   ┌─────────────────────────────┐     ┌─────────────────┐   │
+│   │ 1. Ribbon Cable Slot        │     │ 2. LED Shaft    │   │
+│   │    (38.0 x 6.0 mm)          │     │    (Ø 5.0 mm)   │   │
+│   │    Chamfered Edge R1.5 mm   │     │    Clearance    │   │
+│   └─────────────────────────────┘     └─────────────────┘   │
+│                                                             │
+│   [Slot 1]                 [Slot 2]                 [Slot 3]│
+│   (15 x 2 mm)              (15 x 2 mm)              (15 x 2)│
+│   ◄──────── 4x Internal Pressure Equalization Slots ───────►│
+└─────────────────────────────────────────────────────────────┘
+```
+
+### 3.1 Pass-Through Specifications
+1. **Ribbon Cable Pass-Through for Main Harness:**
+   * **Dimensions:** $38.0 \times 6.0\,\text{mm}$ with $R=1.5\,\text{mm}$ full perimeter edge chamfer on top and bottom faces (prevents insulation wear or chafing on the 26-conductor AWG28 ribbon cable).
+   * **Position:** Aligned directly above the 2x13 box header `J1` on the main PCB.
+   * **Routing:** The $45\,\text{mm}$ flexible 26-conductor ribbon cable runs from the HD26 wall flange in a vibration-damping $S$-loop through this slot down to header `J1`.
+2. **Optical LED Light Shaft:**
+   * **Geometry:** $\varnothing\,5.0\,\text{mm}$ cylindrical aperture, coaxially positioned above SMD LED `LED1` (WS2812B, GPIO 48).
+   * **Function:** Allows the lid-mounted PMMA light pipe to extend down to within $0.8\,\text{mm}$ of the LED emitter surface.
+3. **Labyrinth Pressure Equalization & Venting Slots:**
+   * 4x Ventilation slots ($15.0 \times 2.0\,\text{mm}$) allow unimpeded airflow between the lower PCB chamber and the M8 ePTFE vent in the lid while maintaining structured cable management.
+
+---
+
+## 4. Front Panel Interfaces & Serviceability
+
+### 4.1 HD26 D-Sub Wall Flange (Main Vehicle Harness Interface)
 * **Cutout Geometry:** D-Sub High-Density 26-pin cutout ($39.2 \times 15.4\,\text{mm}$) in the front face of the **lower hull**.
 * **Flange Gasket:** Precision-molded EPDM flat gasket ($1.5\,\text{mm}$ thickness, Shore 60A) between the metal collar of the Amphenol LTW / NorComp SEAL-D socket and the enclosure wall.
 * **Fastening:** 2x M3 stainless steel hex jackscrews with O-ring sealing washers clamp the flange with $0.6\,\text{Nm}$ torque for a watertight seal.
-* **Internal Decoupling:** Connected to the main PCB via a vibration-resistant $45\,\text{mm}$ ribbon cable or direct right-angle socket header.
+* **Internal Decoupling:** Connected to the main PCB via the 26-conductor ribbon cable looping through the mid-baffle slot to the 2x13 box header (`J1`).
 
-### 3.2 Waterproof USB-C Programming & Service Port
+### 4.2 Waterproof USB-C Programming & Service Port
 * **Access without Opening Housing:** Located on the front face adjacent to the HD26 flange is a waterproof USB-C service port with a **blue anodized aluminum screw cap** and red NBR/silicone O-ring.
 * **Function:** Facilitates on-vehicle firmware updates, ESP-IDF JTAG debugging, and diagnostics without disassembling the IP67 enclosure under the seat.
 
 ---
 
-## 4. Waterproof Light Pipe for WS2812B RGB Status LED & Pressure Vent
+## 5. Waterproof Light Pipe for WS2812B RGB Status LED & Pressure Vent
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -102,6 +140,8 @@ Due to the sealed IP67 enclosure under the seat and power dissipation from the $
 │                  │  PMMA Light Pipe │ ◄── NBR O-Ring        │
 │                  │  (Ø 3.0 mm Matt) │     (IP67 Sealed)     │
 │                  └────────┬─────────┘                       │
+├───────────────────────────┼─────────────────────────────────┤
+│ MID-BAFFLE                │ Passes through Ø 5.0 mm shaft   │
 ├───────────────────────────┼─────────────────────────────────┤
 │                           │ Optical Air Gap 0.8 mm          │
 │                           ▼                                 │
@@ -112,12 +152,12 @@ Due to the sealed IP67 enclosure under the seat and power dissipation from the $
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### 4.1 Optical & Mechanical Specification
+### 5.1 Optical & Mechanical Specification
 * **Light Pipe Component:** Precision PMMA light pipe with diffuse matte lens (*Mentor 1292.1101* / *Bivar PLPC3-3MM*), $\varnothing\,3.0\,\text{mm}$.
 * **Sealing:** Perimeter NBR O-ring ($\varnothing\,3.0\,\text{mm}$ ID, $1.0\,\text{mm}$ cord thickness) in stepped lid aperture, flush pressed and sealed with clear polyurethane.
 * **Pressure Equalization:** Gore ePTFE screw-in vent ($\varnothing\,7.0\,\text{mm}$) in the lid reliably balances atmospheric pressure variations (mountain pass rides up to $3,000\,\text{m}$) and thermal breathing effects.
 
-### 4.2 Status LED Color Code (State Machine)
+### 5.2 Status LED Color Code (State Machine)
 
 | LED Color & Pattern | Operational State | Meaning |
 | :--- | :--- | :--- |
