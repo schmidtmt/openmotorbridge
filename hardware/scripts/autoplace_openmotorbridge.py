@@ -120,8 +120,8 @@ def auto_place_main_board(pcb_path):
         'J3': (138.5, 118.5, 0.0),            # USB-C Service Port (9.0 x 6.0 mm, direct to ESP32/USV)
         'J4': (146.5, 118.5, 90.0),           # 3-Pin RGB LED Header (Rotated 90°: 2.5 x 7.5 mm)
 
-        # Zone 1B: Right Front Connector (Horizontal J1 - Straight Drop from Audio Domain)
-        'J1': (168.0, 118.5, 90.0),           # 26-Port IDC Box Header 2x13 (Rotated 90°: Horizontal 33.0 x 6.0 mm parallel to long edge)
+        # Zone 1B: Right Front Connector (Horizontal J1 - Pin 1 at X=152.0, body X=152..185 mm)
+        'J1': (152.0, 118.5, 90.0),           # 26-Port IDC Box Header 2x13 (KiCad Pin 1 Origin at X=152, body spans X=152..185 mm)
     }
 
     existing_refs = {fp.GetReference(): fp for fp in board.Footprints()}

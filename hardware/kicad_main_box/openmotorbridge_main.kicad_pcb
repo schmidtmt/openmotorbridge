@@ -1850,7 +1850,7 @@
 	(footprint "Connector_IDC:IDC-Header_2x13_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "bfbc13cf-daae-4069-92e4-d551667c8723")
-		(at 168.00 118.50 90.0)
+		(at 152.00 118.50 90.0)
 		(property "Reference" "J1"
 			(at 0 -12 180)
 			(layer "F.SilkS")

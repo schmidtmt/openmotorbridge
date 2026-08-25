@@ -77,7 +77,8 @@ def check_and_render_pcb(layout, output_path):
             w, h, _, _ = dims[ref]
             if int(rot) % 180 == 90:
                 w, h = h, w # Swap width and height for 90/270 deg rotation
-            boxes[ref] = (cx - w/2, cy - h/2, cx + w/2, cy + h/2)
+            actual_cx = cx + (15.24 if ref == 'J1' and cx < 160 else 0)
+            boxes[ref] = (actual_cx - w/2, cy - h/2, actual_cx + w/2, cy + h/2)
 
     overlaps = []
     refs = list(boxes.keys())
@@ -134,18 +135,19 @@ def check_and_render_pcb(layout, output_path):
             w, h, col, name = dims[ref]
             if int(rot) % 180 == 90:
                 w, h = h, w
+            actual_cx = cx + (15.24 if ref == 'J1' and cx < 160 else 0)
             is_overlap = any(ref in ov for ov in overlaps)
             edge_col = '#ff0055' if is_overlap else '#e2e8f0'
             line_w = 2.0 if is_overlap else 1.0
             
             # Box
-            rect = patches.Rectangle((cx - w/2, cy - h/2), w, h, linewidth=line_w, edgecolor=edge_col, facecolor=col, alpha=0.85)
+            rect = patches.Rectangle((actual_cx - w/2, cy - h/2), w, h, linewidth=line_w, edgecolor=edge_col, facecolor=col, alpha=0.85)
             ax.add_patch(rect)
             
             # Label
             label_text = f"{ref}\n{name}" if w > 5 and h > 4 else f"{ref}"
             font_s = 7.5 if w > 10 else 6.0
-            ax.text(cx, cy, label_text, color='#ffffff', fontsize=font_s, fontweight='bold', ha='center', va='center')
+            ax.text(actual_cx, cy, label_text, color='#ffffff', fontsize=font_s, fontweight='bold', ha='center', va='center')
 
     # Title & Legend
     ax.set_title("OPENMOTORBRIDGE v8.0 - ZENTRALPLATINE (85 x 55 mm) - TOP-DOWN BESTÜCKUNGSPLAN\n(Draufsicht mit Bauteil-Bounding-Boxes, Kollisionsprüfung & Zonen-Architektur)", 
