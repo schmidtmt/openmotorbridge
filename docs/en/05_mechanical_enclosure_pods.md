@@ -115,6 +115,41 @@ The integrated mid-baffle plate (PA12, $2.5\,\text{mm}$ thickness) mechanically 
 3. **Labyrinth Pressure Equalization & Venting Slots:**
    * 4x Ventilation slots ($15.0 \times 2.0\,\text{mm}$) allow unimpeded airflow between the lower PCB chamber and the M8 ePTFE vent in the lid while maintaining structured cable management.
 
+
+### 3.2 3-Stage Battery Retention & Vibration Isolation (UPS Buffer Battery)
+
+To lock the 1S LiPo buffer cell (800–1200 mAh, $52.0 \times 36.0 \times 6.5\,\text{mm}$) completely rattle-free, shock-damped, and immovably in place under harsh motorcycle riding dynamics (vibrations up to $20\,\text{g}$), the main box incorporates a **3-stage retention system**:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ MID-BAFFLE (Underside)                                      │
+│   │ 4x Molded PA12 Downforce Retention Ribs (2.0 mm wall)   │
+│   ▼ (Apply gentle 0.5 mm pre-compression onto cell edges)   │
+│ ┌───┐                                                 ┌───┐ │
+│ │   │                                                 │   │ │
+│ ├───┴─────────────────────────────────────────────────┴───┤ │
+│ │ EPDM RUBBER RETENTION STRAP (Shore 50A, 10 mm wide)     │ │ ◄── Tool-less
+│ │ (Latched into side retention hooks in bottom hull)      │ │     assembly security
+│ ├─────────────────────────────────────────────────────────┤ │
+│ │ 1S LiPo BUFFER PACK (52 x 36 x 6.5 mm / UPS Cell)       │ │
+│ ├─────────────────────────────────────────────────────────┤ │
+│ │ 1.0 mm EPDM Cellular Rubber Cushion & NTC Temp Sensor   │ │ ◄── Shock absorption
+│ └─────────────────────────────────────────────────────────┘ │
+│ LOWER HULL (Recessed battery pocket 52 x 36 x 6.5 mm)       │
+└─────────────────────────────────────────────────────────────┘
+```
+
+1. **Integrated PA12 Downforce Retention Ribs on Mid-Baffle Underside:**
+   * Four vertical guide and compression ribs ($2.0\,\text{mm}$ thickness, $R=1.0\,\text{mm}$ edge radius) with soft-touch foam tips extend downward from the mid-baffle underside.
+   * Upon screwing down the mid-baffle, these ribs exert gentle, defined downward pre-load ($0.5\,\text{mm}$) onto the battery frame, eliminating any vertical ($Z$-axis) rattling under hard chassis jolts.
+2. **Elastic EPDM Rubber Retention Strap:**
+   * A $10\,\text{mm}$ wide, fuel- and UV-resistant **EPDM/silicone strap (Shore 50A)** spans transversely across the cell.
+   * Two undercut retention hooks molded directly into the lower hull floor secure the strap eyelets under tension.
+   * The battery remains securely locked in place even when the mid-baffle is removed during assembly or bench testing.
+3. **Shock-Absorbing Rubber Bedding & NTC Temperature Probe:**
+   * The pocket floor is lined with a **$1.0\,\text{mm}$ thick EPDM closed-cell rubber cushion**.
+   * A dedicated cutout integrates the $10\,\text{k}\Omega$ NTC thermistor in direct thermal contact with the pouch cell for high-precision BQ24075 JEITA charge control.
+
 ---
 
 ## 4. Front Panel Interfaces & Serviceability

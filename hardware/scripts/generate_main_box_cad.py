@@ -9,10 +9,12 @@ Generates photorealistic 3D CAD visualizations for the Central Main Box Enclosur
   - Front panel: HD26 harness flange, USB-C service cap with O-ring
   - Top lid: PMMA RGB Status LED light guide (Ø 3 mm), Gore ePTFE vent (Ø 7 mm)
   - Mid-Baffle (Zwischenboden): Integrated 38x6 mm chamfered cable pass-through slot,
-    Ø 5 mm LED shaft, and 4x pressure equalization slots
+    Ø 5 mm LED shaft, 4x pressure equalization slots, and integrated downward
+    retention ribs (Akku-Niederhalter-Stege) for the 1S LiPo buffer battery
+  - LiPo UPS Retention: Recessed pocket (52x36x6.5mm), EPDM rubber retention strap,
+    and soft-touch clamping ribs on the underside of the mid-baffle
   - Thermal management: 4x Solid Copper Thermal Studs (Ø 8 mm) in bottom hull
     coupled to 2.0 mm flexible silicone gap-pad (Shore 00 35) under LM5164/ESP32
-  - Bottom internal LiPo UPS battery pocket (52 x 36 x 6.5 mm)
   - 4-layer FR4 Main PCB (85 x 55 mm) on vibration-isolated M2.5 standoffs
   - 26-conductor flexible ribbon cable routed through the mid-baffle slot to J1 header
 """
@@ -157,10 +159,10 @@ def render_main_box_cad(output_path):
     ax1.axis('off')
 
     # -------------------------------------------------------------
-    # 2. SECTION / X-RAY VIEW: ZWISCHENBODEN, KABELKANAL, THERMAL & PCB
+    # 2. SECTION / X-RAY VIEW: ZWISCHENBODEN, AKKU-FIXIERUNG, KABEL & KÜHLUNG
     # -------------------------------------------------------------
     ax2 = fig.add_subplot(122, projection='3d', facecolor='#080c14')
-    ax2.set_title("2. SCHNITTANSICHT: ZWISCHENBODEN, KABELDURCHFÜHRUNG & KÜHLUNG\n(38x6mm Flachband-Schlitz, LED-Schacht, 4x Kupfer-Bolzen, Silikon-Pad & LiPo-USV)", 
+    ax2.set_title("2. SCHNITTANSICHT: ZWISCHENBODEN, AKKU-FIXIERUNG & KÜHLUNG\n(Niederhalter-Stege, EPDM-Spannband, 38x6mm Kabel-Schlitz, 4x Kupfer-Pins & LiPo-USV)", 
                   color='#10b981', fontsize=13, fontweight='bold', pad=15)
     
     # Lower Hull Floor Outline (Translucent outline: 110 x 74 x 26 mm)
@@ -176,7 +178,14 @@ def render_main_box_cad(output_path):
     draw_box(ax2, -35, -20, -12, 60, 40, 2.0, color='#38bdf8', alpha=0.85, edgecolor='#0284c7', linewidth=0.8)
     
     # 3. 1S LiPo UPS Buffer Battery (52 x 36 x 6.5 mm in recessed floor cavity Z=-18 to -11.5)
+    # Recessed pocket base & battery body
     draw_box(ax2, -50, -18, -17.5, 12, 36, 6.0, color='#3b82f6', alpha=0.85, edgecolor='#1d4ed8', linewidth=0.8)
+    
+    # 3.1 EPDM Rubber Retention Strap (Shore 50A, 10 mm wide elastomeric band spanning battery at X = -44)
+    draw_box(ax2, -46, -20, -11.5, 4.0, 40.0, 0.8, color='#0f172a', alpha=0.95, edgecolor='#38bdf8', linewidth=0.8)
+    # Lateral molded strap eyelets / anchor hooks in lower hull
+    draw_box(ax2, -47, -21, -14.0, 6.0, 2.0, 3.5, color='#334155', alpha=0.95, edgecolor='#64748b', linewidth=0.6)
+    draw_box(ax2, -47, 19, -14.0, 6.0, 2.0, 3.5, color='#334155', alpha=0.95, edgecolor='#64748b', linewidth=0.6)
     
     # 4. 4-Layer Main PCB (FR4 TG150: 85 x 55 x 1.6 mm at Z = -10 to -8.4)
     draw_box(ax2, -42.5, -27.5, -10.0, 85, 55, 1.6, color='#065f46', alpha=0.95, edgecolor='#10b981', linewidth=1.0)
@@ -210,12 +219,18 @@ def render_main_box_cad(output_path):
     # Main Baffle Plate Center-Back Section (X = -20 to 18, Y = -14 to 33)
     draw_box(ax2, -20, -14, 2.0, 38, 47, 2.5, color='#334155', alpha=0.75, edgecolor='#64748b', linewidth=0.8)
     
+    # 5.1 Integrated Battery Downforce Ribs (Niederhalter-Stege extending downwards from Zwischenboden)
+    # Extending from Z = 2.0 down to Z = -10.5 onto the LiPo battery surface
+    draw_box(ax2, -49, -14, -10.5, 3.0, 5.0, 12.5, color='#475569', alpha=0.85, edgecolor='#94a3b8', linewidth=0.8)
+    draw_box(ax2, -49, 9, -10.5, 3.0, 5.0, 12.5, color='#475569', alpha=0.85, edgecolor='#94a3b8', linewidth=0.8)
+    # Soft-touch EPDM buffer tips on the rib ends (Z = -11.5 to -10.5)
+    draw_box(ax2, -49, -14, -11.5, 3.0, 5.0, 1.0, color='#38bdf8', alpha=0.95, edgecolor='#0284c7', linewidth=0.5)
+    draw_box(ax2, -49, 9, -11.5, 3.0, 5.0, 1.0, color='#38bdf8', alpha=0.95, edgecolor='#0284c7', linewidth=0.5)
+
     # Highlight: 38.0 x 6.0 mm Cable Pass-Through Slot (at X = -20 to 18, Y = -22 to -14)
-    # Slot boundary frame (chamfered outline)
     draw_box(ax2, -20.5, -22.5, 1.8, 39, 8.5, 2.9, color='#0284c7', alpha=0.25, edgecolor='#38bdf8', linewidth=1.2)
     
     # 26-Conductor Ultra-Flexible Ribbon Cable (pink/violet AWG28) looping through the slot
-    # From HD26 connector at front (Y=-37, Z=-5) looping up through slot (Z=3) down to J1 (Z=-3)
     draw_box(ax2, -18, -36, -6, 30, 14, 1.2, color='#f43f5e', alpha=0.90, edgecolor='#fda4af', linewidth=0.6)
     draw_box(ax2, -18, -22, -6, 30, 2, 9.0, color='#f43f5e', alpha=0.90, edgecolor='#fda4af', linewidth=0.6)
     draw_box(ax2, -18, -21, 2.5, 30, 3, 1.2, color='#f43f5e', alpha=0.90, edgecolor='#fda4af', linewidth=0.6)
@@ -242,6 +257,7 @@ def render_main_box_cad(output_path):
     ax2.text(-18, -38, -2, "26-Pin Flachbandkabel", color='#f43f5e', fontsize=9, fontweight='bold')
     ax2.text(26, 0, 8, "Ø 5 mm LED-Schacht", color='#34d399', fontsize=9, fontweight='bold')
     ax2.text(-35, 18, 7, "4x Druckausgleichsschlitze", color='#94a3b8', fontsize=9, fontweight='bold')
+    ax2.text(-68, -24, -4, "Akku-Niederhalter-Stege\n& EPDM-Spannband", color='#60a5fa', fontsize=8, fontweight='bold')
     ax2.text(-25, -25, -20, "4x Kupfer-Bolzen (Ø 8 mm)", color='#f59e0b', fontsize=10, fontweight='bold')
     ax2.text(-35, -28, -11, "2 mm Silikon-Wärmeleitpad", color='#38bdf8', fontsize=10, fontweight='bold')
     ax2.text(-52, -25, -16, "1S LiPo Akku (USV)", color='#60a5fa', fontsize=10, fontweight='bold')

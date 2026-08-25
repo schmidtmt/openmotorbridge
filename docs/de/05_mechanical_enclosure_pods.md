@@ -115,6 +115,41 @@ Der integrierte Zwischenboden (PA12, $2{,}5\,\text{mm}$ Wandstärke) trennt die 
 3. **Labyrinth-Druckausgleichsschlitze:**
    * 4x Belüftungsschlitze ($15{,}0 \times 2{,}0\,\text{mm}$) ermöglichen einen ungehinderten Luftaustausch zwischen der unteren Elektronikkammer und dem im Deckel sitzenden Gore ePTFE-Ventil, ohne Kabel zu quetschen.
 
+
+### 3.2 3-Stufen Akku-Fixierung & Vibrationsschutz (USV-Pufferbatterie)
+
+Um die 1S LiPo-Pufferzelle (800–1200 mAh, $52{,}0 \times 36{,}0 \times 6{,}5\,\text{mm}$) unter harten Motorrad-Bedingungen (Vibrationen bis $20\,\text{g}$, harte Fahrbahnschläge) absolut spielfrei, klapperfrei und schockgedämpft zu arretieren, verfügt die Zentralbox über ein **dreistufiges Haltekonzept**:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ ZWISCHENBODEN (Unterseite)                                  │
+│   │ 4x Angeformte PA12-Niederhalter-Stege (2.0 mm Wand)     │
+│   ▼ (Drücken mit 0.5 mm Vorspannung sanft auf Akku-Ränder)  │
+│ ┌───┐                                                 ┌───┐ │
+│ │   │                                                 │   │ │
+│ ├───┴─────────────────────────────────────────────────┴───┤ │
+│ │ EPDM-GUMMISPANNBAND (Shore 50A, 10 mm breit)            │ │ ◄── Werkzeuglose
+│ │ (In seitliche Rasthaken der Unterwanne eingeklinkt)     │ │     Montagesicherung
+│ ├─────────────────────────────────────────────────────────┤ │
+│ │ 1S LiPo-PUFFERAKKU (52 x 36 x 6.5 mm / USV-Zelle)       │ │
+│ ├─────────────────────────────────────────────────────────┤ │
+│ │ 1.0 mm EPDM-Moosgummipolster & NTC-Temperatursensor     │ │ ◄── Schockabsorption
+│ └─────────────────────────────────────────────────────────┘ │
+│ UNTERWANNE (Akkutasche 52 x 36 x 6.5 mm im Wannenboden)     │
+└─────────────────────────────────────────────────────────────┘
+```
+
+1. **Integrierte PA12-Niederhalter-Stege am Zwischenboden (*Downforce Ribs*):**
+   * An der Unterseite des Zwischenbodens sind **4 vertikale Führungs- und Druckstege ($2{,}0\,\text{mm}$ Wandstärke, $R=1{,}0\,\text{mm}$ Kantenradius)** mit weichen Moosgummi-Dämpfungsspitzen angeformt.
+   * Beim Verschrauben des Zwischenbodens drücken diese Stege mit definierter elastischer Vorspannung ($0{,}5\,\text{mm}$) von oben auf den Akku. Ein vertikales Abheben oder Verrutschen in $Z$-Richtung bei Schlägen ist mechanisch unmöglich.
+2. **Elastische EPDM-Spannlasche (*Rubber Retention Strap*):**
+   * Ein $10\,\text{mm}$ breites, hochelastisches **EPDM-/Silikon-Halteband (Shore 50A)** spannt die Zelle quer über die Akkutasche.
+   * Zwei im Wannenboden integrierte Hinterschnitt-Rasthaken nehmen die Endösen des Bands auf.
+   * Der Akku bleibt somit auch bei geöffnetem Zwischenboden (z. B. bei Firmware-Flashing oder Wartung) sicher fixiert.
+3. **Schockabsorbierende Moosgummibettung & NTC-Temperatursensor:**
+   * Der Boden der Akkutasche ist mit einem **$1{,}0\,\text{mm}$ dicken EPDM-Zellkautschuk-Polster** ausgelegt.
+   * Eine zentrierte Aussparung bettet den $10\,\text{k}\Omega$ NTC-Sensor formschlüssig direkt an die Akkuzelle ein, um die BQ24075 Ladeüberwachung (JEITA-Sicherheitsabschaltung bei $< 0\,^\circ\text{C}$ oder $> 45\,^\circ\text{C}$) thermisch optimal anzukoppeln.
+
 ---
 
 ## 4. Stirnseitige Anschlüsse & Wartungsfreundlichkeit
