@@ -65,22 +65,22 @@ To completely eliminate coupling between switching power supply harmonics ($2.1\
 │ • SMBJ33CA TVS    ├──────────────────────────┼─────────────────────────┤
 │ • TI LM5164 Buck  │ ZONE 3: DIGITAL CORE     │ ZONE 4B: GALV. ISOLATION│
 │ • TI BQ24075 UPS  │ • ESP32-S3 Dual-Core     │ • 2x Bourns Transformers│
-│ • LC-PI-Filter    │   (Shifted Downward)     │ • 2x TLP222A PhotoMOS   │
-│                   │ • 2.4 GHz PCB Antenna    │   (Right Flank)         │
-├───────────────────┴──────────────────────────┴─────────────────────────┤
-│ ZONE 1: CONNECTOR RAIL & 10-MM PLUGGING CORRIDOR (FRONT/BOTTOM)        │
-│ [J5: BAT]  [J6: NTC]   [J1: 26-PIN IDC26]   [J3: USB-C]   [J4: 3P LED] │
-└────────────────────────────────────────────────────────────────────────┘
+│ • LC-PI-Filter    │ • 2.4 GHz PCB Antenna    │ • 2x TLP222A PhotoMOS   │
+├───────────────────┴──────────────────────────┼─────────────────────────┤
+│ ZONE 1A: POWER, USB-C & LED (LEFT)           │ ZONE 1B: SYSTEM I/O     │
+│ [J5: BAT] [J6: NTC] [J3: USB-C] [J4: 3P LED] │ [J1: 26-PIN IDC26]      │
+└──────────────────────────────────────────────┴─────────────────────────┘
 ```
 
-1. **Zone 1 (Front Edge – Connector Row & 10-mm Corridor):**
-   * Geometrically aligned with the Oberwanne front panel ports:
-     * `J5`: 2-Pin JST-PH LiPo battery socket ($2.0\,\text{mm}$ pitch)
-     * `J6`: 2-Pin micro header for battery NTC temperature sensor
-     * `J1`: 2x13 Pin IDC26 box header ($33\,\text{mm}$) – Directly beneath the HD26 flange & ribbon slot
-     * `J3`: Vertical USB-C service socket – Directly behind front panel waterproof USB-C cap
-     * `J4`: 3-Pin RGB LED header ($2.54\,\text{mm}$ pitch) – Directly behind front PMMA status window
-   * **10-mm Insertion Keep-Out:** Clean clearance zone ensuring ribbon cables and fingers can mate without component interference.
+1. **Zone 1 (Front Edge – 2 Dedicated Functional Connector Clusters):**
+   * **Zone 1A (Left – Power, Service & Status):**
+     * `J5`: 2-Pin JST-PH LiPo battery socket (Rotated $90^\circ$: $4.5 \times 6.0\,\text{mm}$)
+     * `J6`: 2-Pin micro header for battery NTC sensor (Rotated $90^\circ$: $2.5 \times 5.0\,\text{mm}$)
+     * `J3`: Vertical USB-C service socket ($9.0 \times 6.0\,\text{mm}$) – Directly adjacent to ESP32 & BQ24075 (ultra-short D+/D- routing)
+     * `J4`: 3-Pin RGB LED header (Rotated $90^\circ$: $2.5 \times 7.5\,\text{mm}$) – Direct GPIO drive from ESP32
+   * **Zone 1B (Right – Galvanic Main System Header):**
+     * `J1`: 2x13 Pin IDC26 box header ($33.0 \times 6.0\,\text{mm}$) – Situated directly beneath `T1`/`T2` audio transformers and `U7`/`U8` optocouplers for straight-drop isolated routing.
+   * **10-mm Insertion Keep-Out:** Dedicated mating space preventing mechanical collisions.
 2. **Zone 2 (Left Flank Top – Automotive Power & UPS):**
    * Accepts raw motorcycle electrical voltages (KL30/KL15). Contains the Bourns PPTC fuse, SMBJ33CA TVS diode, reverse-polarity MOSFET, $10\,\mu\text{H}$ PI filter, TI LM5164-Q1 synchronous buck converter, and TI BQ24075 UPS battery management.
 3. **Zone 3 (Left Flank Bottom – Digital Host Core):**

@@ -65,22 +65,22 @@ Um gegenseitige Störungen zwischen der Schaltnetzteil-HF ($2{,}1\,\text{MHz}$),
 │ • SMBJ33CA TVS    ├──────────────────────────┼─────────────────────────┤
 │ • TI LM5164 Buck  │ ZONE 3: DIGITAL CORE     │ ZONE 4B: GALV. ISOLATION│
 │ • TI BQ24075 USV  │ • ESP32-S3 Dual-Core     │ • 2x Bourns Übertrager  │
-│ • LC-PI-Filter    │   (Nach unten versetzt)  │ • 2x TLP222A PhotoMOS   │
-│                   │ • 2.4 GHz PCB-Antenne    │   (Rechtsflanke)        │
-├───────────────────┴──────────────────────────┴─────────────────────────┤
-│ ZONE 1: STECKERLEISTE & BARRIEREFREIER 10-MM-STECKKORRIDOR (FRONT/UNTEN│
-│ [J5: BAT]  [J6: NTC]   [J1: 26-POL IDC26]   [J3: USB-C]   [J4: 3P LED] │
-└────────────────────────────────────────────────────────────────────────┘
+│ • LC-PI-Filter    │ • 2.4 GHz PCB-Antenne    │ • 2x TLP222A PhotoMOS   │
+├───────────────────┴──────────────────────────┼─────────────────────────┤
+│ ZONE 1A: POWER, USB-C & STATUS-LED (LINKS)   │ ZONE 1B: SYSTEM I/O     │
+│ [J5: BAT] [J6: NTC] [J3: USB-C] [J4: 3P LED] │ [J1: 26-POL IDC26]      │
+└──────────────────────────────────────────────┴─────────────────────────┘
 ```
 
-1. **Zone 1 (Vorderkante – Steckverbinder-Reihe & 10-mm-Korridor):**
-   * Exakt auf die Gehäusefront der Oberwanne ausgerichtete Stecker-Reihenfolge:
-     * `J5`: 2-Pin JST-PH LiPo-Akkubuchse (Raster $2{,}0\,\text{mm}$)
-     * `J6`: 2-Pin Micro-Header für NTC-Temperatursensor
-     * `J1`: 2x13 Pin IDC26 Wannenstecker ($33\,\text{mm}$) – Direkt unter dem HD26-Flansch / Flachbandkabel-Schlitz
-     * `J3`: Vertikale USB-C Service-Buchse – Direkt hinter der frontseitigen USB-C Dichtkappe
-     * `J4`: 3-Pin RGB-LED-Anschluss (Raster $2{,}54\,\text{mm}$) – Direkt hinter dem PMMA-Status-Sichtfenster
-   * **10-mm-Einführkorridor:** Unterhalb und um die Stecker herum gilt ein absolutes Bauteil-Sperrgebiet (Keep-Out) für Elkos und hohe Komponenten. Flachbandkabel und Finger können ohne Kollisionsgefahr bequem ein- und ausgesteckt werden.
+1. **Zone 1 (Vorderkante – 2 funktionale Stecker-Cluster):**
+   * **Zone 1A (Links – Power, Service & Signalisierung):**
+     * `J5`: 2-Pin JST-PH LiPo-Akkubuchse ($90^\circ$ gedreht: $4{,}5 \times 6{,}0\,\text{mm}$)
+     * `J6`: 2-Pin Micro-Header für NTC-Sensor ($90^\circ$ gedreht: $2{,}5 \times 5{,}0\,\text{mm}$)
+     * `J3`: Vertikale USB-C Service-Buchse ($9{,}0 \times 6{,}0\,\text{mm}$) – Direkt neben ESP32 & BQ24075 (ultrakurze D+/D- Leitungen)
+     * `J4`: 3-Pin RGB-LED-Anschluss ($90^\circ$ gedreht: $2{,}5 \times 7{,}5\,\text{mm}$) – Direkt am GPIO-Port des ESP32
+   * **Zone 1B (Rechts – Galvanischer System-Hauptanschluss):**
+     * `J1`: 2x13 Pin IDC26 Wannenstecker ($33{,}0 \times 6{,}0\,\text{mm}$) – Liegt exakt unter den Audio-Übertragern `T1`/`T2` und Optokopplern `U7`/`U8`, sodass alle galvanisch getrennten Signale ohne Platinenüberquerung direkt in `J1` einmünden.
+   * **10-mm-Einführkorridor:** Barrierefreier Steckzugang für alle Stecker ohne gegenseitige Behinderung.
 2. **Zone 2 (Linke Flanke oben – Automotive Power & USV):**
    * Nimmt die raue Bordnetzspannung von KL30/KL15 auf. Enthält die Bourns PPTC-Sicherung, die SMBJ33CA TVS-Diode, den Verpolschutz-MOSFET, das $10\,\mu\text{H}$ PI-Filter sowie den TI LM5164-Q1 Step-Down-Regler und das BQ24075 USV-Lademanagement.
 3. **Zone 3 (Linke Flanke unten – Digitaler Host-Core):**

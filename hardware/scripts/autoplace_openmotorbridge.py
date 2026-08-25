@@ -74,52 +74,54 @@ def auto_place_main_board(pcb_path):
         'H3': (X0 + 4.0, Y_max - 4.0, 0.0),  # (119.22, 122.85) Bottom-Left
         'H4': (X_max - 4.0, Y_max - 4.0, 0.0), # (196.22, 122.85) Bottom-Right
 
-        # Zone 1: MCU & RF (Left Flank - Shifted down for generous power clearance)
-        'U2': (126.5, 99.0, 0.0),             # ESP32-S3-WROOM-1 MCU (18.0 x 25.5 mm)
-        'C10': (137.5, 102.0, 0.0),           # VDD Cap (0603)
-        'C11': (137.5, 105.0, 0.0),           # Bulk Cap (0805)
+        # Zone 1: MCU & RF (Left Flank)
+        'U2': (126.5, 93.0, 0.0),             # ESP32-S3-WROOM-1 MCU (18.0 x 25.5 mm, Y=80.25..105.75)
+        'C10': (138.5, 93.0, 0.0),            # VDD Decoupling Cap
+        'C11': (138.5, 96.0, 0.0),            # Bulk Cap
+        'U9': (138.5, 87.0, 0.0),             # TI TPS7A0533 3.3V Ultra-Low-IQ LDO
 
         # Zone 2: Power & UPS (Top-Left Flank)
-        'D2': (127.0, 77.0, 0.0),             # SMBJ33CA TVS Diode (5.4 x 3.6 mm)
-        'R1': (131.5, 76.0, 0.0),
-        'R2': (131.5, 78.0, 0.0),
-        'C1': (135.0, 77.0, 0.0),             # 10uF 100V Input Cap (3.2 x 2.5 mm)
-        'U1': (142.0, 78.5, 0.0),             # TI LM5164-Q1 Synchronous Buck (5.0 x 6.0 mm)
-        'C3': (139.0, 84.0, 0.0),             # Bootstrap Cap
-        'C4': (144.0, 84.0, 0.0),             # VCC Cap
-        'L1': (150.0, 78.0, 0.0),             # 47uH Shielded Power Inductor (7.2 x 4.5 mm)
-        'C2': (156.0, 78.0, 0.0),             # 22uF 16V Output Cap
-        'U9': (132.0, 83.0, 0.0),             # TI TPS7A0533 3.3V Ultra-Low-IQ LDO
+        'D2': (127.0, 76.5, 0.0),             # SMBJ33CA TVS Diode (5.4 x 3.6 mm)
+        'R1': (131.5, 75.5, 0.0),
+        'R2': (131.5, 77.5, 0.0),
+        'C1': (135.0, 76.5, 0.0),             # 10uF 100V Input Cap (3.2 x 2.5 mm)
+        'U1': (142.0, 78.0, 0.0),             # TI LM5164-Q1 Synchronous Buck (5.0 x 6.0 mm)
+        'C3': (139.0, 83.5, 0.0),             # Bootstrap Cap
+        'C4': (144.0, 83.5, 0.0),             # VCC Cap
+        'L1': (150.0, 77.5, 0.0),             # 47uH Shielded Power Inductor (7.2 x 4.5 mm)
+        'C2': (156.0, 77.5, 0.0),             # 22uF 16V Output Cap
 
         # Zone 5: Center Peripherals (IMU, MicroSD, Status LED)
-        'D1': (148.0, 88.0, 0.0),             # WS2812B RGB Status LED (3.5 x 3.5 mm)
-        'U5': (156.0, 89.0, 0.0),             # Bosch BMI270 6-Axis IMU (3.0 x 2.5 mm)
-        'C12': (160.0, 87.0, 0.0),
-        'R10': (160.0, 89.0, 0.0),
-        'R11': (160.0, 91.0, 0.0),
-        'J2': (150.0, 102.0, 0.0),            # MicroSD Card Slot (14.0 x 14.5 mm)
+        'D1': (154.0, 85.0, 0.0),             # WS2812B RGB Status LED (3.5 x 3.5 mm)
+        'U5': (150.0, 89.0, 0.0),             # Bosch BMI270 6-Axis IMU (3.0 x 2.5 mm)
+        'C12': (145.0, 89.0, 0.0),
+        'R10': (145.0, 91.0, 0.0),
+        'R11': (145.0, 93.0, 0.0),
+        'J2': (148.0, 102.0, 0.0),            # MicroSD Card Slot (14.0 x 14.5 mm)
 
         # Zone 4A: Audio Codec & CAN (Top-Right Flank)
-        'U3': (170.0, 80.0, 0.0),             # Everest ES8388 Audio Codec (4.0 x 4.0 mm)
-        'U6': (183.0, 80.0, 0.0),             # TI TCAN334G CAN-FD Transceiver (5.0 x 6.0 mm)
-        'R9': (189.0, 80.0, 0.0),             # 120R CAN Termination Resistor
+        'U3': (168.0, 80.0, 0.0),             # Everest ES8388 Audio Codec (4.0 x 4.0 mm)
+        'U6': (182.0, 80.0, 0.0),             # TI TCAN334G CAN-FD Transceiver (5.0 x 6.0 mm)
+        'R9': (188.0, 80.0, 0.0),             # 120R CAN Termination Resistor
 
         # Zone 4B: Galvanic Audio Isolation & Triggers (Right Flank Lower)
-        'C6': (163.0, 93.0, 0.0),             # Audio Ch1 Coupling Cap
-        'R5': (163.0, 96.0, 0.0),
-        'T1': (172.0, 93.0, 0.0),             # Bourns LM-NP-1001 Audio Transformer 1 (12.5 x 9.5 mm)
-        'T2': (187.0, 93.0, 0.0),             # Bourns LM-NP-1001 Audio Transformer 2 (12.5 x 9.5 mm)
-        'C7': (196.0, 93.0, 0.0),             # Audio Ch2 Coupling Cap
-        'R6': (196.0, 96.0, 0.0),
-        'U7': (172.0, 104.0, 0.0),            # Toshiba TLP222A PhotoMOS Optocoupler 1 (4.5 x 4.0 mm)
-        'U8': (187.0, 104.0, 0.0),            # Toshiba TLP222A PhotoMOS Optocoupler 2 (4.5 x 4.0 mm)
+        'C6': (158.0, 94.0, 0.0),             # Audio Ch1 Coupling Cap
+        'R5': (158.0, 97.0, 0.0),
+        'T1': (166.0, 94.0, 0.0),             # Bourns LM-NP-1001 Audio Transformer 1 (12.5 x 9.5 mm)
+        'T2': (180.0, 94.0, 0.0),             # Bourns LM-NP-1001 Audio Transformer 2 (12.5 x 9.5 mm)
+        'C7': (189.0, 94.0, 0.0),             # Audio Ch2 Coupling Cap
+        'R6': (189.0, 97.0, 0.0),
+        'U7': (166.0, 105.0, 0.0),            # Toshiba TLP222A PhotoMOS Optocoupler 1 (4.5 x 4.0 mm)
+        'U8': (180.0, 105.0, 0.0),            # Toshiba TLP222A PhotoMOS Optocoupler 2 (4.5 x 4.0 mm)
 
-        # Zone 1: Front Connector Rail (Aligned with Oberwanne Front Panel: J5 -> J6 -> J1 -> J3 USB -> J4 LED)
-        'J5': (126.5, 119.0, 0.0),            # LiPo Akku JST-PH 2-Pin (6.0 x 4.5 mm)
-        'J6': (133.0, 119.0, 0.0),            # NTC JEITA Sensor 2-Pin (5.0 x 2.5 mm)
-        'J1': (153.5, 119.0, 90.0),           # 26-Port IDC Header 2x13 (33.0 x 6.0 mm) - HD26 Ribbon
-        'J3': (177.0, 119.0, 0.0),            # USB-C Service Port (9.0 x 6.0 mm) - Aligned with Front USB
-        'J4': (187.0, 119.0, 0.0),            # 3-Port RGB LED Header (7.5 x 2.5 mm) - Aligned with Front LED
+        # Zone 1A: Left Front Connector Cluster (Power, Battery, USB-C & Status LED)
+        'J5': (125.5, 118.5, 90.0),           # LiPo Akku JST-PH 2-Pin (Rotated 90°: 4.5 x 6.0 mm)
+        'J6': (131.0, 118.5, 90.0),           # NTC JEITA Sensor 2-Pin (Rotated 90°: 2.5 x 5.0 mm)
+        'J3': (138.5, 118.5, 0.0),            # USB-C Service Port (9.0 x 6.0 mm, direct to ESP32/USV)
+        'J4': (146.5, 118.5, 90.0),           # 3-Pin RGB LED Header (Rotated 90°: 2.5 x 7.5 mm)
+
+        # Zone 1B: Right Front Connector (26-Port Main System Header J1 - Direct Audio/Opto Drop)
+        'J1': (173.0, 118.5, 90.0),           # 26-Port IDC Box Header 2x13 (33.0 x 6.0 mm)
     }
 
     existing_refs = {fp.GetReference(): fp for fp in board.Footprints()}

@@ -72,9 +72,11 @@ def check_and_render_pcb(layout, output_path):
 
     # 1. Collision Detection
     boxes = {}
-    for ref, (cx, cy, _) in layout.items():
+    for ref, (cx, cy, rot) in layout.items():
         if ref in dims:
             w, h, _, _ = dims[ref]
+            if int(rot) % 180 == 90:
+                w, h = h, w # Swap width and height for 90/270 deg rotation
             boxes[ref] = (cx - w/2, cy - h/2, cx + w/2, cy + h/2)
 
     overlaps = []
@@ -127,9 +129,11 @@ def check_and_render_pcb(layout, output_path):
     ax.text(X0 + 58, Y0 + 4, "ZONE 4: GALV. AUDIO", color='#facc15', fontsize=9, fontweight='bold')
 
     # Draw Components
-    for ref, (cx, cy, _) in layout.items():
+    for ref, (cx, cy, rot) in layout.items():
         if ref in dims:
             w, h, col, name = dims[ref]
+            if int(rot) % 180 == 90:
+                w, h = h, w
             is_overlap = any(ref in ov for ov in overlaps)
             edge_col = '#ff0055' if is_overlap else '#e2e8f0'
             line_w = 2.0 if is_overlap else 1.0
