@@ -135,7 +135,7 @@
 		(uuid "b0000000-0000-0000-0000-000000000040")
 		(property "Reference" "L1" (at 130.0 50.0 0) (effects (font (size 1.27 1.27))))
 		(property "Value" "47uH" (at 130.0 53.0 0) (effects (font (size 1.27 1.27))))
-		(property "Footprint" "Inductor_SMD:L_2816_7142Metric" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Footprint" "Inductor_SMD:L_Sunlord_MWSA1206S-470" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
 		(pin "1" (uuid "b0000000-0000-0000-0000-000000000041"))
 		(pin "2" (uuid "b0000000-0000-0000-0000-000000000042"))
 	)

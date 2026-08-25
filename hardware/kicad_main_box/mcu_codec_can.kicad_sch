@@ -75,7 +75,7 @@
 			(pin power_in line (at 0 -25.4 90) (length 2.54) (name "GND" (effects (font (size 1.27 1.27)))) (number "13" (effects (font (size 1.27 1.27)))))
 			(property "Reference" "U3" (at -12.7 20.32 0) (effects (font (size 1.27 1.27)) (justify left)))
 			(property "Value" "ES8388" (at -12.7 -22.86 0) (effects (font (size 1.27 1.27)) (justify left)))
-			(property "Footprint" "Package_DFN_QFN:QFN-28-1EP_4x4mm_P0.4mm_EP2.6x2.6mm" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+			(property "Footprint" "Package_DFN_QFN:QFN-28-1EP_4x4mm_P0.4mm_EP2.4x2.4mm" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
 			(property "LCSC" "C111306" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
 			(symbol "ES8388_0_1"
 				(rectangle (start -12.7 17.78) (end 12.7 -22.86) (stroke (width 0.254) (type solid)) (fill (type background)))
@@ -146,7 +146,7 @@
 		(uuid "c0000000-0000-0000-0000-000000000040")
 		(property "Reference" "U3" (at 170.0 45.0 0) (effects (font (size 1.27 1.27))))
 		(property "Value" "ES8388" (at 170.0 48.0 0) (effects (font (size 1.27 1.27))))
-		(property "Footprint" "Package_DFN_QFN:QFN-28-1EP_4x4mm_P0.4mm_EP2.6x2.6mm" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Footprint" "Package_DFN_QFN:QFN-28-1EP_4x4mm_P0.4mm_EP2.4x2.4mm" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
 		(pin "1" (uuid "c0000000-0000-0000-0000-000000000041"))
 		(pin "2" (uuid "c0000000-0000-0000-0000-000000000042"))
 		(pin "3" (uuid "c0000000-0000-0000-0000-000000000043"))

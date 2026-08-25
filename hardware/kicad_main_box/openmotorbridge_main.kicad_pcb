@@ -877,9 +877,9 @@
 			)
 		)
 	)
-	(footprint ""
+	(footprint "Inductor_SMD:L_Sunlord_MWSA1206S-470"
 		(layer "F.Cu")
-		(uuid "62bae06b-545c-4bb4-a2bc-122c8e287444")
+		(uuid "8d7f6b9a-4c2e-4b1a-9f3c-5e8a7b6c5d4e")
 		(at 150.00 77.50)
 		(property "Reference" "L1"
 			(at 0.00 -3.80 0)
@@ -925,7 +925,7 @@
 		)
 		(duplicate_pad_numbers_are_jumpers no)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Inductor_SMD.3dshapes/L_2816_7142Metric.step"
+		(model "${KICAD10_3DMODEL_DIR}/Inductor_SMD.3dshapes/L_Sunlord_MWSA1206S-470.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -3708,7 +3708,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Package_DFN_QFN:QFN-28-1EP_4x4mm_P0.4mm_EP2.6x2.6mm"
+	(footprint "Package_DFN_QFN:QFN-28-1EP_4x4mm_P0.4mm_EP2.4x2.4mm"
 		(layer "F.Cu")
 		(uuid "fa7b6eef-4701-488e-9eee-7aa81e0affdc")
 		(at 168.00 80.00)
