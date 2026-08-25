@@ -68,6 +68,7 @@
 		(uuid "e0000000-0000-0000-0000-000000000020")
 		(property "Reference" "J1" (at 120.0 95.0 0) (effects (font (size 1.27 1.27))))
 		(property "Value" "HD26_FEMALE" (at 120.0 98.0 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "Connector_IDC:IDC-Header_2x13_P2.54mm_Vertical" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
 		(pin "1" (uuid "e0000000-0000-0000-0000-000000000021"))
 		(pin "2" (uuid "e0000000-0000-0000-0000-000000000022"))
 		(pin "3" (uuid "e0000000-0000-0000-0000-000000000023"))
