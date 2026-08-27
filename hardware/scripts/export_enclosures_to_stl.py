@@ -256,18 +256,91 @@ def generate_main_box_stl(output_dir: str):
     single_ear.add_box(0, 0, 0, 11.5, 14.0, 5.0)
     single_ear.write_stl(os.path.join(kit_dir, "4_single_m4_mounting_ear.stl"))
     
-    # 2. Mid Baffle Tray (Zwischenboden mit LiPo-Bett)
+    # 2. Mid Tray with Intermediate Floor & Front Panel (Oberwanne mit Zwischenboden & Anschlüssen)
+    # Outer dimensions: 105 x 75 x 15 mm, 2.5 mm wall thickness
     mb_mid = STLMeshBuilder("main_box_mid_baffle")
-    # Baffle Plate: 99.5 x 69.5 x 2.0 mm
-    mb_mid.add_box(2.75, 2.75, 0, 99.5, 69.5, 2.0)
-    # LiPo Battery Retention Cradle Walls: 56.0 x 38.0 x 8.0 mm (fits 1000mAh 1S LiPo)
-    mb_mid.add_box(5.0, 15.0, 2.0, 56.0, 2.0, 8.0)  # Front Wall
-    mb_mid.add_box(5.0, 53.0, 2.0, 56.0, 2.0, 8.0)  # Rear Wall
-    mb_mid.add_box(5.0, 15.0, 2.0, 2.0, 38.0, 8.0)  # Left Wall
-    # Ribbon Cable Pass-Through Flange (Right side)
-    mb_mid.add_box(68.0, 15.0, 2.0, 30.0, 3.0, 6.0)
-    mb_mid.add_box(68.0, 45.0, 2.0, 30.0, 3.0, 6.0)
+    
+    # A. Outer Perimeter Walls (Höhe: 15.0 mm)
+    # Left Wall (x = 0..2.5, y = 0..75)
+    mb_mid.add_box(0, 0, 0, 2.5, 75.0, 15.0)
+    # Right Wall (x = 102.5..105, y = 0..75)
+    mb_mid.add_box(102.5, 0, 0, 2.5, 75.0, 15.0)
+    # Back Wall (x = 0..105, y = 72.5..75)
+    mb_mid.add_box(0, 72.5, 0, 105.0, 2.5, 15.0)
+    
+    # Front Wall with Port Cutouts (y = 0..2.5, z = 0..15)
+    # 1. Left solid corner
+    mb_mid.add_box(0, 0, 0, 16.0, 2.5, 15.0)
+    # 2. USB-C Service Port (Opening: x = 16..28, z = 3.5..10.5)
+    mb_mid.add_box(16.0, 0, 0, 12.0, 2.5, 3.5)    # Wall below USB-C
+    mb_mid.add_box(16.0, 0, 10.5, 12.0, 2.5, 4.5) # Wall above USB-C
+    # 3. Wall between USB-C and RGB LED window
+    mb_mid.add_box(28.0, 0, 0, 7.0, 2.5, 15.0)
+    # 4. RGB Status LED Window (Opening: x = 35..41, z = 5.0..10.0)
+    mb_mid.add_box(35.0, 0, 0, 6.0, 2.5, 5.0)     # Wall below LED
+    mb_mid.add_box(35.0, 0, 10.0, 6.0, 2.5, 5.0)  # Wall above LED
+    # 5. Center dividing wall
+    mb_mid.add_box(41.0, 0, 0, 19.0, 2.5, 15.0)
+    # 6. HD26 / M16 Harness Flange Opening (Opening: x = 60..96, z = 2.5..12.5)
+    mb_mid.add_box(60.0, 0, 0, 36.0, 2.5, 2.5)    # Wall below harness
+    mb_mid.add_box(60.0, 0, 12.5, 36.0, 2.5, 2.5) # Wall above harness
+    # 7. Right solid corner
+    mb_mid.add_box(96.0, 0, 0, 9.0, 2.5, 15.0)
+    
+    # B. Intermediate Partition Floor with Cable Pass-Through Slot (z = 0..2.5 mm)
+    # Left solid floor under LiPo compartment (x = 2.5..60, y = 2.5..72.5)
+    mb_mid.add_box(2.5, 2.5, 0, 57.5, 70.0, 2.5)
+    # Right floor surrounding the cable pass-through slot:
+    # Front section (y = 2.5..15)
+    mb_mid.add_box(60.0, 2.5, 0, 42.5, 12.5, 2.5)
+    # Rear section (y = 27..72.5)
+    mb_mid.add_box(60.0, 27.0, 0, 42.5, 45.5, 2.5)
+    # Right border section (x = 94..102.5, y = 15..27)
+    mb_mid.add_box(94.0, 15.0, 0, 8.5, 12.0, 2.5)
+    # Left border section (x = 60..64, y = 15..27)
+    mb_mid.add_box(60.0, 15.0, 0, 4.0, 12.0, 2.5)
+    # (Notice: Open Cable Slot is x = 64..94, y = 15..27 -> 30x12 mm ribbon slot!)
+    
+    # C. LiPo Battery Retention Cradle Walls on top of floor (z = 2.5..10.5 mm)
+    mb_mid.add_box(5.0, 12.0, 2.5, 2.5, 50.0, 8.0)  # Left Cradle Wall
+    mb_mid.add_box(5.0, 12.0, 2.5, 50.0, 2.5, 8.0)  # Front Cradle Wall
+    mb_mid.add_box(5.0, 59.5, 2.5, 50.0, 2.5, 8.0)  # Rear Cradle Wall
+    mb_mid.add_box(52.5, 12.0, 2.5, 2.5, 50.0, 8.0) # Right Divider Wall
     mb_mid.write_stl(os.path.join(output_dir, "main_box_mid_baffle.stl"))
+    # Also save as main_box_mid_tray.stl for clear naming
+    mb_mid.write_stl(os.path.join(output_dir, "main_box_mid_tray.stl"))
+    
+    # Modular Tinkercad Kit: Add Mid Tray Primitives
+    mid_frame_only = STLMeshBuilder("5_mid_tray_frame_with_front_ports")
+    mid_frame_only.add_box(0, 0, 0, 2.5, 75.0, 15.0)
+    mid_frame_only.add_box(102.5, 0, 0, 2.5, 75.0, 15.0)
+    mid_frame_only.add_box(0, 72.5, 0, 105.0, 2.5, 15.0)
+    mid_frame_only.add_box(0, 0, 0, 16.0, 2.5, 15.0)
+    mid_frame_only.add_box(16.0, 0, 0, 12.0, 2.5, 3.5)
+    mid_frame_only.add_box(16.0, 0, 10.5, 12.0, 2.5, 4.5)
+    mid_frame_only.add_box(28.0, 0, 0, 7.0, 2.5, 15.0)
+    mid_frame_only.add_box(35.0, 0, 0, 6.0, 2.5, 5.0)
+    mid_frame_only.add_box(35.0, 0, 10.0, 6.0, 2.5, 5.0)
+    mid_frame_only.add_box(41.0, 0, 0, 19.0, 2.5, 15.0)
+    mid_frame_only.add_box(60.0, 0, 0, 36.0, 2.5, 2.5)
+    mid_frame_only.add_box(60.0, 0, 12.5, 36.0, 2.5, 2.5)
+    mid_frame_only.add_box(96.0, 0, 0, 9.0, 2.5, 15.0)
+    mid_frame_only.write_stl(os.path.join(kit_dir, "5_mid_tray_frame_with_front_ports.stl"))
+    
+    mid_floor_only = STLMeshBuilder("6_mid_baffle_floor_with_cable_slot")
+    mid_floor_only.add_box(2.5, 2.5, 0, 57.5, 70.0, 2.5)
+    mid_floor_only.add_box(60.0, 2.5, 0, 42.5, 12.5, 2.5)
+    mid_floor_only.add_box(60.0, 27.0, 0, 42.5, 45.5, 2.5)
+    mid_floor_only.add_box(94.0, 15.0, 0, 8.5, 12.0, 2.5)
+    mid_floor_only.add_box(60.0, 15.0, 0, 4.0, 12.0, 2.5)
+    mid_floor_only.write_stl(os.path.join(kit_dir, "6_mid_baffle_floor_with_cable_slot.stl"))
+    
+    cradle_only = STLMeshBuilder("7_lipo_battery_cradle_walls")
+    cradle_only.add_box(5.0, 12.0, 2.5, 2.5, 50.0, 8.0)
+    cradle_only.add_box(5.0, 12.0, 2.5, 50.0, 2.5, 8.0)
+    cradle_only.add_box(5.0, 59.5, 2.5, 50.0, 2.5, 8.0)
+    cradle_only.add_box(52.5, 12.0, 2.5, 2.5, 50.0, 8.0)
+    cradle_only.write_stl(os.path.join(kit_dir, "7_lipo_battery_cradle_walls.stl"))
     
     # 3. Enclosure Lid (Gehäusedeckel mit Dichtungsfalz)
     mb_lid = STLMeshBuilder("main_box_lid")
