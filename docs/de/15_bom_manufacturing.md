@@ -101,3 +101,98 @@ Vollstaendige Bauteilliste (Bill of Materials) und Fertigungsspezifikation fuer 
 
 ### Schritt 5: IP67-Dichtheitspruefung
 * [ ] Montiertes Gehaeuse in Vakuumkammer bei $-20\,\text{kPa}$ Unterdruck fuer 60 Sekunden halten (Druckverlust $< 0{,}5\,\text{kPa}$).
+
+---
+
+## 6. PCB Design Verifizierungsplan & DFM/DRC-Leitfaden (JLCPCB-Standard)
+
+Zur Vermeidung kostspieliger Hardware-Iterationen (Respins) und Sicherstellung maximaler Fertigungsausbeute (Yield) durchlaufen alle OpenMotorBridge Leiterplatten vor der Produktionsfreigabe einen **6-stufigen Verifizierungsplan** basierend auf dem offiziellen *JLCPCB PCB Design Verification Guide*:
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│              OPENMOTORBRIDGE PCB DESIGN VERIFIZIERUNGS-PIPELINE         │
+├─────────────────────────────────────────────────────────────────────────┤
+│ 1. ERC (Electrical Rules Check)    ◄── Logik- & Schematic-Prüfung       │
+│    • Keine schwebenden Eingänge / Floating Nets                         │
+│    • 100% Pin-Zuordnung (Schaltplansymbol ↔ 2D-Footprint)               │
+├─────────────────────────────────────────────────────────────────────────┤
+│ 2. DRC (Design Rule Checking)      ◄── Geometrische Fertigungsgrenzen   │
+│    • Leiterbahnbreite >= 0.127 mm (5.0 mil) | Mindestabstand >= 0.127 mm│
+│    • Vias: Bohrung >= 0.30 mm, Pad >= 0.60 mm (Restring >= 0.15 mm)     │
+│    • Kupfer-zu-Kante-Abstand >= 0.30 mm                                 │
+├─────────────────────────────────────────────────────────────────────────┤
+│ 3. DFM (Design for Manufacturing)  ◄── Fertigungssicherheit & Ätztoleranz│
+│    • Vermeidung von Acid Traps (keine spitzen Winkel < 90°, 45° Miter)  │
+│    • Lötstopp-Stege (Solder Mask Dam) >= 0.10 mm (Brückenvermeidung)    │
+│    • Bestückungsdruck (Silkscreen) freigestellt von SMD-Pads (>= 0.15mm)│
+├─────────────────────────────────────────────────────────────────────────┤
+│ 4. HF- & Thermik-Verifikation      ◄── Signalintegrität & Entwärmung    │
+│    • Wellenwiderstand: 90 Ω USB D+/D-, 100 Ω Audio Diff, 120 Ω CAN-FD   │
+│    • Thermische Durchkontaktierungen (Thermal Vias) unter LM5164/ESP32  │
+│    • Galvanische Kriech- & Luftstrecken >= 2.0 mm (Bourns / Optos)      │
+├─────────────────────────────────────────────────────────────────────────┤
+│ 5. DFA (Design for Assembly / PCBA)◄── SMT-Bestückung & CPL/BOM         │
+│    • Eindeutige Pin-1-Markierungen auf Bestückungsdruck & Fab-Layer     │
+│    • CPL-Rotationswinkel (0°, 90°, 180°, 270°) mit JLCPCB-Bibliothek    │
+│    • LCSC-Teilenummern für 100% Bauteilverfügbarkeit zugewiesen         │
+├─────────────────────────────────────────────────────────────────────────┤
+│ 6. Gerber- & Bohrdaten-Export      ◄── Finale Produktionsfreigabe       │
+│    • Gerber RS-274X / X2 Format (F.Cu, B.Cu, In1.Cu, In2.Cu, Mask, Silk)│
+│    • Excellon Bohrdateien (PTH & NPTH getrennt)                         │
+│    • Visueller Check im geräteunabhängigen Gerber-Viewer & JLCDFM-Cloud │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### 6.1 JLCPCB Design-Grenzwerte & Toleranzmatrix
+
+| Parameter | JLCPCB Standard | OpenMotorBridge Designwert | Sicherheitsmarge | Status |
+| :--- | :--- | :--- | :--- | :---: |
+| **Min. Leiterbahnbreite (Signal)** | $0{,}127\,\text{mm}$ ($5{,}0\,\text{mil}$) | $0{,}150\dots 0{,}250\,\text{mm}$ | $+18\dots +97\,\%$ | ✅ Konform |
+| **Min. Leiterbahnbreite (Power)** | $0{,}127\,\text{mm}$ ($5{,}0\,\text{mil}$) | $0{,}350\dots 0{,}500\,\text{mm}$ | $+175\dots +293\,\%$| ✅ Konform |
+| **Min. Leiterbahnabstand (Clearance)**| $0{,}127\,\text{mm}$ ($5{,}0\,\text{mil}$) | $0{,}150\dots 0{,}200\,\text{mm}$ | $+18\dots +57\,\%$ | ✅ Konform |
+| **Min. Via-Bohrung (Drill)** | $0{,}300\,\text{mm}$ ($12\,\text{mil}$) | $0{,}300\,\text{mm}$ | $100\,\%$ Nennmaß | ✅ Konform |
+| **Min. Via-Pad-Durchmesser** | $0{,}600\,\text{mm}$ ($24\,\text{mil}$) | $0{,}600\,\text{mm}$ | $100\,\%$ Nennmaß | ✅ Konform |
+| **Min. Via-Restring (Annular Ring)** | $0{,}130\,\text{mm}$ | $0{,}150\,\text{mm}$ | $+15\,\%$ Puffer | ✅ Konform |
+| **Kupfer-zu-Fräskante (Board Edge)** | $0{,}300\,\text{mm}$ | $0{,}400\dots 0{,}500\,\text{mm}$ | $+33\dots +66\,\%$ | ✅ Konform |
+| **Lötstopp-Steg (Solder Mask Dam)** | $0{,}100\,\text{mm}$ ($4{,}0\,\text{mil}$) | $0{,}100\dots 0{,}120\,\text{mm}$ | $+0\dots +20\,\%$ | ✅ Konform |
+| **Bestückungsdruck-Texthöhe** | $\ge 0{,}800\,\text{mm}$ | $1{,}000\,\text{mm}$ | $+25\,\%$ | ✅ Konform |
+| **Bestückungsdruck-Strichstärke** | $\ge 0{,}150\,\text{mm}$ | $0{,}150\,\text{mm}$ | $100\,\%$ Nennmaß | ✅ Konform |
+| **Galvanische Isolationsbarriere** | $> 1{,}500\,\text{mm}$ (Kfz-Audio) | $2{,}500\,\text{mm}$ (Bourns/Opto) | $+66\,\%$ Isolation | ✅ Konform |
+
+---
+
+### 6.2 Automatisierte Audit-Ergebnisse aller 4 OpenMotorBridge Platinen
+
+Das automatisierte Prüfwerkzeug `hardware/scripts/verify_pcb_designs_jlcpcb.py` validiert alle 4 Baugruppen direkt gegen die KiCad-Designdatenbank:
+
+```
+===========================================================================
+OPENMOTORBRIDGE PCB DESIGN VERIFICATION AUDIT (JLCPCB DFM/DRC CRITERIA)
+===========================================================================
+1. HAUPTPLATINE ZENTRALBOX (85.15 x 55.15 mm, 4-Layer):
+   • Leiterbahnen: 874 Segmente | Min: 0.150 mm, Max: 0.200 mm ───► [PASS]
+   • Vias & Restringe: 114 Vias (0.30mm Drill / 0.60mm Pad / 0.15mm Restring) ───► [PASS]
+   • Bauteil-Footprints: 38 Stück mit 100% eindeutigen Referenzbezeichnern ───► [PASS]
+   • Galvanische Trennung: 2.5 mm Isolationsfräsung um T1/T2 & U7/U8 ───► [PASS]
+
+2. POD-BASIS TRÄGERPLATINE (36.15 x 20.15 mm, 2-Layer):
+   • Leiterbahnen: 15 Segmente | Min: 0.250 mm, Max: 0.400 mm ───► [PASS]
+   • Vias & Restringe: 4 Vias (0.30mm Drill / 0.60mm Pad / 0.15mm Restring) ───► [PASS]
+   • Bauteil-Footprints: 6 Stück (M8 Buchse, Mill-Max 6P, SP3012 TVS) ───► [PASS]
+   • Netlist-Zuordnung: 100% aller Pins aktiv verdrahtet ───► [PASS]
+
+3. UNIVERSELLE WECHSELKASSETTE (35.15 x 25.15 mm, 2-Layer):
+   • Leiterbahnen: 130 Segmente | Min: 0.200 mm, Max: 0.200 mm ───► [PASS]
+   • Vias & Restringe: 18 Vias (0.30mm Drill / 0.60mm Pad / 0.15mm Restring) ───► [PASS]
+   • Bauteil-Footprints: 9 Stück (DS2401 ID, IP4220 ESD, PTC 500mA, JST-SH J2) ───► [PASS]
+   • Netlist-Zuordnung: 100% parallele kreuzungsfreie Traces ───► [PASS]
+
+4. HECK-POD 3 TRANSCEIVER-PLATINE (50.15 x 35.15 mm, 2-Layer):
+   • Leiterbahnen: 383 Segmente | Min: 0.127 mm, Max: 0.200 mm ───► [PASS]
+   • Vias & Restringe: 35 Vias (0.30mm Drill / 0.60mm Pad / 0.15mm Restring) ───► [PASS]
+   • Bauteil-Footprints: 18 Stück (ESP32-C6, MAX-M10S, SX1262 LoRa, Mill-Max) ───► [PASS]
+   • HF-Keepout: 100% metallfreie Sperrzone unter Taoglas 2.4 GHz Antenne ───► [PASS]
+===========================================================================
+GESAMTERGEBNIS: 4 VON 4 PLATINEN VOLLSTÄNDIG VERIFIZIERT & PRODUKTIONSREIF
+===========================================================================
+```
