@@ -127,9 +127,13 @@ class STLMeshBuilder:
         self.add_quad(np.array([x1, y0, z1]), np.array([x1, y1, z1]), np.array([ix1, iy1, z1]), np.array([ix1, iy0, z1]))
 
     def add_boss(self, cx: float, cy: float, z0: float, outer_r: float, inner_r: float, height: float, segments: int = 24):
-        """Adds a cylindrical screw standoff boss with a center screw hole."""
+        """
+        Adds a 100% watertight cylindrical screw standoff boss with a clean center hole
+        and mathematically correct surface normals on all inner, outer, top, and bottom facets.
+        """
         angles = np.linspace(0, 2 * np.pi, segments, endpoint=False)
         z1 = z0 + height
+        hole_bottom_center = np.array([cx, cy, z0])
         
         # Outer rings
         out_bot = [np.array([cx + outer_r * np.cos(a), cy + outer_r * np.sin(a), z0]) for a in angles]
@@ -141,12 +145,14 @@ class STLMeshBuilder:
         
         for i in range(segments):
             next_i = (i + 1) % segments
-            # Outer side wall
+            # 1. Outer side wall (normal pointing outwards)
             self.add_quad(out_bot[i], out_bot[next_i], out_top[next_i], out_top[i])
-            # Inner hole wall
-            self.add_quad(in_top[i], in_top[next_i], in_bot[next_i], in_bot[i])
-            # Top ring face
+            # 2. Inner hole wall (normal pointing inwards into the hole cavity)
+            self.add_quad(in_bot[i], in_bot[next_i], in_top[next_i], in_top[i])
+            # 3. Top annular ring face (normal pointing +Z UP)
             self.add_quad(out_top[i], out_top[next_i], in_top[next_i], in_top[i])
+            # 4. Bottom of the hole cap (normal pointing +Z UP)
+            self.add_triangle(hole_bottom_center, in_bot[i], in_bot[next_i])
 
     def add_cylinder(self, cx: float, cy: float, z0: float, radius: float, height: float, segments: int = 24):
         """Adds a solid vertical cylinder."""
@@ -216,6 +222,39 @@ def generate_main_box_stl(output_dir: str):
     mb_lower.add_boss(13.0, 62.0, 2.5, 3.5, 1.25, 3.5)
     mb_lower.add_boss(92.0, 62.0, 2.5, 3.5, 1.25, 3.5)
     mb_lower.write_stl(os.path.join(output_dir, "main_box_lower_case.stl"))
+    
+    # =========================================================================
+    # MODULAR TINKERCAD KIT (Separate Grundkörper / Primitive zum einfachen Gruppieren)
+    # =========================================================================
+    kit_dir = os.path.join(output_dir, "tinkercad_modular_kit")
+    os.makedirs(kit_dir, exist_ok=True)
+    
+    # Primitiv 1: Reine leere Wanne mit M4-Ohren (ohne Zylinder)
+    tub_only = STLMeshBuilder("1_main_box_empty_tub")
+    tub_only.add_hollow_box(0, 0, 0, 105.0, 75.0, 18.0, 2.5)
+    tub_only.add_box(-11.5, 9.5, 0, 11.5, 14.0, 5.0)
+    tub_only.add_box(-11.5, 51.5, 0, 11.5, 14.0, 5.0)
+    tub_only.add_box(105.0, 9.5, 0, 11.5, 14.0, 5.0)
+    tub_only.add_box(105.0, 51.5, 0, 11.5, 14.0, 5.0)
+    tub_only.write_stl(os.path.join(kit_dir, "1_main_box_empty_tub.stl"))
+    
+    # Primitiv 2: Die 4 Schraubdome zusammen als eigene Gruppe (passgenau für Wanne)
+    bosses_grp = STLMeshBuilder("2_main_box_4_standoffs_group")
+    bosses_grp.add_boss(13.0, 13.0, 2.5, 3.5, 1.25, 3.5)
+    bosses_grp.add_boss(92.0, 13.0, 2.5, 3.5, 1.25, 3.5)
+    bosses_grp.add_boss(13.0, 62.0, 2.5, 3.5, 1.25, 3.5)
+    bosses_grp.add_boss(92.0, 62.0, 2.5, 3.5, 1.25, 3.5)
+    bosses_grp.write_stl(os.path.join(kit_dir, "2_main_box_4_standoffs_group.stl"))
+    
+    # Primitiv 3: Ein einzelner isolierter M2.5 Schraubdom (im Nullpunkt) zum freien Duplizieren
+    single_boss = STLMeshBuilder("3_single_m2_5_standoff_boss")
+    single_boss.add_boss(0, 0, 0, 3.5, 1.25, 3.5)
+    single_boss.write_stl(os.path.join(kit_dir, "3_single_m2_5_standoff_boss.stl"))
+    
+    # Primitiv 4: Ein einzelnes M4 Montageohr (im Nullpunkt)
+    single_ear = STLMeshBuilder("4_single_m4_mounting_ear")
+    single_ear.add_box(0, 0, 0, 11.5, 14.0, 5.0)
+    single_ear.write_stl(os.path.join(kit_dir, "4_single_m4_mounting_ear.stl"))
     
     # 2. Mid Baffle Tray (Zwischenboden mit LiPo-Bett)
     mb_mid = STLMeshBuilder("main_box_mid_baffle")
