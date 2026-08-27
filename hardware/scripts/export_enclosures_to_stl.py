@@ -429,6 +429,22 @@ def export_main_box_package(base_dir: str):
     gasket_cord.add_box(1.0, 1.0, 0, 1.5, 73.0, 1.5)
     gasket_cord.add_box(102.5, 1.0, 0, 1.5, 73.0, 1.5)
     gasket_cord.write_stl(os.path.join(comp_dir, "22_silicone_o_ring_gasket_cord_1_5mm.stl"))
+    
+    # 23-24: Internal Pressure Equalization & Convective Breathing Slot Cutout Tools
+    vent_group = STLMeshBuilder("23_floor_vent_slots_cutout_tool_group")
+    # Left slots beside battery cradle
+    vent_group.add_box(8.0, 20.0, -1.0, 2.5, 15.0, 5.0)
+    vent_group.add_box(8.0, 40.0, -1.0, 2.5, 15.0, 5.0)
+    # Right slots between battery and cable pass-through
+    vent_group.add_box(55.0, 20.0, -1.0, 2.5, 15.0, 5.0)
+    vent_group.add_box(55.0, 40.0, -1.0, 2.5, 15.0, 5.0)
+    # Rear slot
+    vent_group.add_box(25.0, 64.0, -1.0, 15.0, 2.5, 5.0)
+    vent_group.write_stl(os.path.join(comp_dir, "23_floor_vent_slots_cutout_tool_group.stl"))
+    
+    single_vent = STLMeshBuilder("24_single_vent_slot_cutout_tool")
+    single_vent.add_box(0, 0, 0, 15.0, 2.5, 5.0)
+    single_vent.write_stl(os.path.join(comp_dir, "24_single_vent_slot_cutout_tool.stl"))
 
 
 # =============================================================================
