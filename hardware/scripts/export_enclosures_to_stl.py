@@ -167,7 +167,54 @@ class STLMeshBuilder:
             next_i = (i + 1) % segments
             self.add_triangle(bot_center, bot_ring[next_i], bot_ring[i])
             self.add_triangle(top_center, top_ring[i], top_ring[next_i])
-            self.add_quad(bot_ring[i], bot_ring[next_i], top_ring[next_i], top_ring[i])
+    def add_horizontal_cylinder_x(self, x0: float, cy: float, cz: float, radius: float, length: float, segments: int = 24):
+        """Adds a solid horizontal cylinder along the X axis."""
+        angles = np.linspace(0, 2 * np.pi, segments, endpoint=False)
+        left_center = np.array([x0, cy, cz])
+        right_center = np.array([x0 + length, cy, cz])
+        
+        left_ring = [np.array([x0, cy + radius * np.cos(a), cz + radius * np.sin(a)]) for a in angles]
+        right_ring = [np.array([x0 + length, cy + radius * np.cos(a), cz + radius * np.sin(a)]) for a in angles]
+        
+        for i in range(segments):
+            next_i = (i + 1) % segments
+            self.add_triangle(left_center, left_ring[i], left_ring[next_i])
+            self.add_triangle(right_center, right_ring[next_i], right_ring[i])
+            self.add_quad(left_ring[i], left_ring[next_i], right_ring[next_i], right_ring[i])
+
+    def add_horizontal_boss_x(self, x0: float, cy: float, cz: float, outer_r: float, inner_r: float, length: float, segments: int = 24):
+        """Adds a horizontal hollow cylindrical cable gland neck along the X axis with an open inner bore."""
+        angles = np.linspace(0, 2 * np.pi, segments, endpoint=False)
+        
+        out_l = [np.array([x0, cy + outer_r * np.cos(a), cz + outer_r * np.sin(a)]) for a in angles]
+        out_r = [np.array([x0 + length, cy + outer_r * np.cos(a), cz + outer_r * np.sin(a)]) for a in angles]
+        in_l = [np.array([x0, cy + inner_r * np.cos(a), cz + inner_r * np.sin(a)]) for a in angles]
+        in_r = [np.array([x0 + length, cy + inner_r * np.cos(a), cz + inner_r * np.sin(a)]) for a in angles]
+        
+        for i in range(segments):
+            next_i = (i + 1) % segments
+            # Outer tube
+            self.add_quad(out_l[i], out_l[next_i], out_r[next_i], out_r[i])
+            # Inner bore tube (normal facing inward)
+            self.add_quad(in_l[next_i], in_l[i], in_r[i], in_r[next_i])
+            # Left annular rim
+            self.add_quad(out_l[next_i], out_l[i], in_l[i], in_l[next_i])
+    def add_horizontal_tunnel_x(self, x0: float, y0: float, z0: float, length: float, width: float, height: float, wall: float):
+        """
+        Adds a 5-sided monocoque tunnel along the X axis.
+        Closed at: Bottom (-Z), Top (+Z), Left (-Y), Right (+Y), and Rear (-X at x0).
+        OPEN at: Front (+X at x0 + length) for slide-in cartridges.
+        """
+        # Bottom Wall
+        self.add_box(x0, y0, z0, length, width, wall)
+        # Top Wall
+        self.add_box(x0, y0, z0 + height - wall, length, width, wall)
+        # Left Side Wall (between bottom and top)
+        self.add_box(x0, y0, z0 + wall, length, wall, height - 2 * wall)
+        # Right Side Wall (between bottom and top)
+        self.add_box(x0, y0 + width - wall, z0 + wall, length, wall, height - 2 * wall)
+        # Rear End Wall (closing the tunnel at x0)
+        self.add_box(x0, y0 + wall, z0 + wall, wall, width - 2 * wall, height - 2 * wall)
 
     def write_stl(self, filepath: str, binary: bool = True):
         """Exports the collected triangles to binary or ASCII STL file."""
@@ -474,53 +521,72 @@ def export_pod_base_package(base_dir: str):
     os.makedirs(comp_dir, exist_ok=True)
     
     # Monolithic Models
+    # 1. Pod Base Housing (5-seitiger Monocoque-Schacht: 100 x 60 x 28 mm, nach vorne offen)
     pb = STLMeshBuilder("pod_base_housing")
-    pb.add_hollow_box(0, 0, 0, 62.0, 40.0, 18.0, 2.2)
-    pb.add_cylinder(12.0, 20.0, -10.0, 6.0, 10.0)
-    pb.add_cylinder(16.0, 20.0, 13.0, 4.2, 3.5)
-    pb.add_cylinder(46.0, 20.0, 13.0, 4.2, 3.5)
-    pb.add_box(20.0, 15.0, 2.2, 22.0, 10.0, 12.0)
-    pb.add_box(0, 2.0, 14.0, 2.5, 36.0, 4.0)
-    pb.add_box(59.5, 2.0, 14.0, 2.5, 36.0, 4.0)
+    # 5-seitiger Monocoque-Tunnel (offen bei x = 100 mm)
+    pb.add_horizontal_tunnel_x(0, 0, 0, 100.0, 60.0, 28.0, 2.5)
+    # Horizontaler M8 6-Pin IP67 Kabelstutzen an Rückwand (x = 0, y = 30, z = 14) mit Innenbohrung Ø 8mm
+    pb.add_horizontal_boss_x(-10.0, 30.0, 14.0, 6.0, 4.0, 12.5)
+    # Schutz-Schottwand / Zwischenboden bei x = 22 mm (trennt M8-Kammer vom Wechselschacht)
+    pb.add_box(22.0, 2.5, 2.5, 2.0, 55.0, 23.0)
+    # Zentrierter 6-Pin Schutzkragen mit 45°-Fangtrichter (x = 22..28, y = 24..36, z = 10..18)
+    pb.add_box(24.0, 24.0, 10.0, 4.0, 12.0, 8.0)
+    # 2x Auto-Eject Auswerferfedern-Sitze (flankierend bei y = 16 und y = 44)
+    pb.add_cylinder(22.0, 16.0, 14.0, 3.0, 5.0)
+    pb.add_cylinder(22.0, 44.0, 14.0, 3.0, 5.0)
+    # Decken Gore ePTFE-Membransitz (Ø 7mm) bei x = 50, y = 30, z = 28
+    pb.add_cylinder(50.0, 30.0, 28.0, 3.5, 1.5)
+    # 4x M2 Montage-Schraubdome für die Schutz-Schottwand
+    pb.add_boss(22.0, 5.0, 2.5, 2.5, 1.0, 4.0)
+    pb.add_boss(22.0, 55.0, 2.5, 2.5, 1.0, 4.0)
+    pb.add_boss(22.0, 5.0, 21.5, 2.5, 1.0, 4.0)
+    pb.add_boss(22.0, 55.0, 21.5, 2.5, 1.0, 4.0)
     pb.write_stl(os.path.join(pb_dir, "pod_base_housing.stl"))
+    pb.write_stl(os.path.join(base_dir, "pod_base_housing.stl"))
     
+    # 2. Helm-Klemmadapter
     pbc = STLMeshBuilder("pod_base_helmet_clamp")
-    pbc.add_box(0, 0, 0, 65.0, 42.0, 3.0)
-    pbc.add_box(0, 0, -15.0, 5.0, 42.0, 15.0)
-    pbc.add_box(0, 0, -18.0, 25.0, 42.0, 4.0)
+    pbc.add_box(0, 0, 0, 80.0, 50.0, 3.0)
+    pbc.add_box(0, 0, -15.0, 5.0, 50.0, 15.0)
+    pbc.add_box(0, 0, -18.0, 30.0, 50.0, 4.0)
     pbc.write_stl(os.path.join(pb_dir, "pod_base_helmet_clamp.stl"))
+    pbc.write_stl(os.path.join(base_dir, "pod_base_helmet_clamp.stl"))
     
-    # Modular Components
-    c1 = STLMeshBuilder("01_pod_base_empty_shell")
-    c1.add_hollow_box(0, 0, 0, 62.0, 40.0, 18.0, 2.2)
-    c1.write_stl(os.path.join(comp_dir, "01_pod_base_empty_shell.stl"))
+    # Modular Components for Tinkercad
+    c1 = STLMeshBuilder("01_pod_base_monocoque_empty_tunnel")
+    c1.add_horizontal_tunnel_x(0, 0, 0, 100.0, 60.0, 28.0, 2.5)
+    c1.write_stl(os.path.join(comp_dir, "01_pod_base_monocoque_empty_tunnel.stl"))
     
-    c2 = STLMeshBuilder("02_m8_connector_neck")
-    c2.add_cylinder(12.0, 20.0, -10.0, 6.0, 10.0)
-    c2.write_stl(os.path.join(comp_dir, "02_m8_connector_neck.stl"))
+    c2 = STLMeshBuilder("02_m8_horizontal_cable_gland_neck")
+    c2.add_horizontal_boss_x(-10.0, 30.0, 14.0, 6.0, 4.0, 12.5)
+    c2.write_stl(os.path.join(comp_dir, "02_m8_horizontal_cable_gland_neck.stl"))
     
-    c3 = STLMeshBuilder("03_pogo_pin_socket_bed")
-    c3.add_box(20.0, 15.0, 2.2, 22.0, 10.0, 12.0)
-    c3.write_stl(os.path.join(comp_dir, "03_pogo_pin_socket_bed.stl"))
+    c3 = STLMeshBuilder("03_pod_bulkhead_partition_plate")
+    c3.add_box(0, 0, 0, 2.0, 55.0, 23.0)
+    c3.write_stl(os.path.join(comp_dir, "03_pod_bulkhead_partition_plate.stl"))
     
-    c4 = STLMeshBuilder("04_magnet_pockets_pair")
-    c4.add_cylinder(16.0, 20.0, 13.0, 4.2, 3.5)
-    c4.add_cylinder(46.0, 20.0, 13.0, 4.2, 3.5)
-    c4.write_stl(os.path.join(comp_dir, "04_magnet_pockets_pair.stl"))
+    c4 = STLMeshBuilder("04_pin_guide_shroud_funnel")
+    c4.add_box(0, 0, 0, 4.0, 12.0, 8.0)
+    c4.write_stl(os.path.join(comp_dir, "04_pin_guide_shroud_funnel.stl"))
     
     c5 = STLMeshBuilder("05_pod_eptfe_membrane_boss")
-    c5.add_cylinder(31.0, 20.0, 18.0, 3.5, 1.5) # Ø 7mm Gore membrane boss on Pod ceiling
+    c5.add_cylinder(50.0, 30.0, 28.0, 3.5, 1.5)
     c5.write_stl(os.path.join(comp_dir, "05_pod_eptfe_membrane_boss.stl"))
     
     c6 = STLMeshBuilder("06_pod_bulkhead_convective_vent_slots_tool")
-    c6.add_box(8.0, 6.0, -1.0, 10.0, 2.0, 5.0)   # Left bulkhead slot
-    c6.add_box(8.0, 32.0, -1.0, 10.0, 2.0, 5.0)  # Right bulkhead slot
+    c6.add_box(21.0, 8.0, 12.0, 4.0, 6.0, 2.0)
+    c6.add_box(21.0, 46.0, 12.0, 4.0, 6.0, 2.0)
     c6.write_stl(os.path.join(comp_dir, "06_pod_bulkhead_convective_vent_slots_tool.stl"))
     
     c7 = STLMeshBuilder("07_pod_lateral_cooling_rails_pair")
-    c7.add_box(5.0, 0.5, 3.0, 50.0, 1.5, 12.0)   # Left embedded cooling rail
-    c7.add_box(5.0, 38.0, 3.0, 50.0, 1.5, 12.0)  # Right embedded cooling rail
+    c7.add_box(25.0, 1.0, 6.0, 65.0, 1.5, 16.0)
+    c7.add_box(25.0, 57.5, 6.0, 65.0, 1.5, 16.0)
     c7.write_stl(os.path.join(comp_dir, "07_pod_lateral_cooling_rails_pair.stl"))
+    
+    c8 = STLMeshBuilder("08_auto_eject_springs_pair")
+    c8.add_cylinder(22.0, 16.0, 14.0, 3.0, 8.0)
+    c8.add_cylinder(22.0, 44.0, 14.0, 3.0, 8.0)
+    c8.write_stl(os.path.join(comp_dir, "08_auto_eject_springs_pair.stl"))
 
 
 # =============================================================================
@@ -532,65 +598,88 @@ def export_cartridges_package(base_dir: str):
     comp_dir = os.path.join(pc_dir, "components")
     os.makedirs(comp_dir, exist_ok=True)
     
-    # Monolithic Sleds (mit ePTFE-Membransitz an der Frontblende)
+    # 1. Sena 50S/60S Cartridge Sled
     sc = STLMeshBuilder("cartridge_sena_sled")
-    sc.add_box(0, 0, 0, 58.0, 36.0, 14.0)
-    sc.add_cylinder(48.0, 10.0, 7.0, 4.0, 7.0)
-    sc.add_cylinder(48.0, 26.0, 7.0, 3.5, 7.0)
-    sc.add_cylinder(29.0, 18.0, 14.0, 5.5, 2.5)
-    # Frontblenden ePTFE-Druckausgleichsmembran (Ø 6.0 mm Membransitz)
-    sc.add_cylinder(5.0, 18.0, 14.0, 3.0, 1.5)
+    # Sled Base (75 x 54 x 22 mm, gleitet in den Pod-Schacht)
+    sc.add_box(0, 0, 0, 75.0, 54.0, 2.5)          # Sled Floor
+    sc.add_box(0, 0, 2.5, 75.0, 2.5, 18.0)        # Left Wall
+    sc.add_box(0, 51.5, 2.5, 75.0, 2.5, 18.0)     # Right Wall
+    # Front Faceplate (Abschlussblende bei x = 75 mm mit Griffmulde & Snap-Fit Rasten)
+    sc.add_box(75.0, -2.0, -1.5, 4.0, 58.0, 25.0)
+    # Sena 3D Cradle & Jog-Dial Nest auf der Oberseite
+    sc.add_cylinder(55.0, 18.0, 18.0, 6.0, 6.0)
+    sc.add_cylinder(55.0, 36.0, 18.0, 5.0, 6.0)
+    # Frontblenden ePTFE-Membran (Ø 6.0 mm)
+    sc.add_cylinder(77.0, 27.0, 18.0, 3.0, 2.0)
+    # 4x M2 PCB Schraubdome für Trägerplatine (openmotorbridge_pod_cartridge)
+    sc.add_boss(15.0, 10.0, 2.5, 2.5, 1.0, 2.5)
+    sc.add_boss(60.0, 10.0, 2.5, 2.5, 1.0, 2.5)
+    sc.add_boss(15.0, 44.0, 2.5, 2.5, 1.0, 2.5)
+    sc.add_boss(60.0, 44.0, 2.5, 2.5, 1.0, 2.5)
     sc.write_stl(os.path.join(pc_dir, "cartridge_sena_sled.stl"))
     sc.write_stl(os.path.join(base_dir, "cartridge_sena_sled.stl"))
     
+    # 2. Cardo Packtalk Edge Cartridge Sled
     cc = STLMeshBuilder("cartridge_cardo_sled")
-    cc.add_box(0, 0, 0, 58.0, 36.0, 15.0)
-    cc.add_cylinder(29.0, 18.0, 15.0, 6.0, 3.0)
-    cc.add_box(2.0, 14.0, 15.0, 6.0, 8.0, 4.0)
-    cc.add_box(46.0, 8.0, 8.0, 10.0, 20.0, 7.0)
-    # Frontblenden ePTFE-Membransitz
-    cc.add_cylinder(5.0, 18.0, 15.0, 3.0, 1.5)
+    cc.add_box(0, 0, 0, 75.0, 54.0, 2.5)          # Sled Floor
+    cc.add_box(0, 0, 2.5, 75.0, 2.5, 18.0)        # Left Wall
+    cc.add_box(0, 51.5, 2.5, 75.0, 2.5, 18.0)     # Right Wall
+    cc.add_box(75.0, -2.0, -1.5, 4.0, 58.0, 25.0) # Front Faceplate
+    # Cardo AirMount Magnet- & Pogo-Nest
+    cc.add_cylinder(40.0, 27.0, 18.0, 8.0, 4.0)
+    cc.add_box(5.0, 17.0, 18.0, 10.0, 20.0, 5.0)
+    cc.add_cylinder(77.0, 27.0, 18.0, 3.0, 2.0)   # Front ePTFE-Membran
+    cc.add_boss(15.0, 10.0, 2.5, 2.5, 1.0, 2.5)
+    cc.add_boss(60.0, 10.0, 2.5, 2.5, 1.0, 2.5)
+    cc.add_boss(15.0, 44.0, 2.5, 2.5, 1.0, 2.5)
+    cc.add_boss(60.0, 44.0, 2.5, 2.5, 1.0, 2.5)
     cc.write_stl(os.path.join(pc_dir, "cartridge_cardo_sled.stl"))
     cc.write_stl(os.path.join(base_dir, "cartridge_cardo_sled.stl"))
     
+    # 3. Blindkassette (Wasserdichte Dry Box Dummy)
     dc = STLMeshBuilder("cartridge_blindkassette_waterproof")
-    dc.add_box(0, 0, 0, 58.0, 36.0, 12.0)
-    for x_rib in [15.0, 22.0, 29.0, 36.0, 43.0]:
-        dc.add_box(x_rib, 4.0, 12.0, 2.5, 28.0, 2.0)
-    dc.add_box(2.5, 2.5, -3.5, 53.0, 31.0, 3.5)
-    # Front ePTFE-Membran
-    dc.add_cylinder(5.0, 18.0, 12.0, 3.0, 1.5)
+    dc.add_box(0, 0, 0, 75.0, 54.0, 2.5)
+    dc.add_box(0, 0, 2.5, 75.0, 2.5, 18.0)
+    dc.add_box(0, 51.5, 2.5, 75.0, 2.5, 18.0)
+    dc.add_box(75.0, -2.0, -1.5, 4.0, 58.0, 25.0)
+    # Wasserdichter Dry-Box Deckel mit Versteifungsrippen
+    dc.add_box(5.0, 5.0, 2.5, 65.0, 44.0, 18.0)
+    for x_rib in [18.0, 30.0, 42.0, 54.0]:
+        dc.add_box(x_rib, 5.0, 20.5, 2.5, 44.0, 2.0)
+    dc.add_cylinder(77.0, 27.0, 18.0, 3.0, 2.0)
     dc.write_stl(os.path.join(pc_dir, "cartridge_blindkassette_waterproof.stl"))
     dc.write_stl(os.path.join(base_dir, "cartridge_blindkassette_waterproof_dummy.stl"))
     
-    # Modular Components
+    # Modular Components for Tinkercad
     sled_base = STLMeshBuilder("01_universal_base_sled")
-    sled_base.add_box(0, 0, 0, 58.0, 36.0, 12.0)
+    sled_base.add_box(0, 0, 0, 75.0, 54.0, 2.5)
+    sled_base.add_box(0, 0, 2.5, 75.0, 2.5, 18.0)
+    sled_base.add_box(0, 51.5, 2.5, 75.0, 2.5, 18.0)
     sled_base.write_stl(os.path.join(comp_dir, "01_universal_base_sled.stl"))
     
-    pogo_pads = STLMeshBuilder("02_pogo_target_contact_pads")
-    pogo_pads.add_box(19.0, 14.0, -1.5, 20.0, 8.0, 1.5)
-    pogo_pads.write_stl(os.path.join(comp_dir, "02_pogo_target_contact_pads.stl"))
+    faceplate = STLMeshBuilder("02_cartridge_faceplate_with_gasket_lip")
+    faceplate.add_box(0, 0, 0, 4.0, 58.0, 25.0)
+    faceplate.add_box(-2.0, 2.0, 1.0, 2.0, 54.0, 23.0) # Sealing collar lip
+    faceplate.write_stl(os.path.join(comp_dir, "02_cartridge_faceplate_with_gasket_lip.stl"))
     
     mem_boss = STLMeshBuilder("03_cartridge_eptfe_membrane_boss")
-    mem_boss.add_cylinder(5.0, 18.0, 0, 3.0, 2.0)
+    mem_boss.add_cylinder(0, 0, 0, 3.0, 2.0)
     mem_boss.write_stl(os.path.join(comp_dir, "03_cartridge_eptfe_membrane_boss.stl"))
     
     mem_cut = STLMeshBuilder("04_cartridge_membrane_cutout_tool")
-    mem_cut.add_cylinder(5.0, 18.0, -2.0, 2.5, 6.0) # Ø 5mm hole tool
+    mem_cut.add_cylinder(0, 0, -2.0, 2.5, 6.0)
     mem_cut.write_stl(os.path.join(comp_dir, "04_cartridge_membrane_cutout_tool.stl"))
     
     cart_vents = STLMeshBuilder("05_cartridge_floor_convective_vent_slots_tool")
-    # 4x Convective heat circulation slots through the cartridge floor
-    cart_vents.add_box(12.0, 8.0, -1.0, 12.0, 2.0, 5.0)
-    cart_vents.add_box(12.0, 26.0, -1.0, 12.0, 2.0, 5.0)
-    cart_vents.add_box(34.0, 8.0, -1.0, 12.0, 2.0, 5.0)
-    cart_vents.add_box(34.0, 26.0, -1.0, 12.0, 2.0, 5.0)
+    cart_vents.add_box(18.0, 12.0, -1.0, 14.0, 2.5, 5.0)
+    cart_vents.add_box(18.0, 39.5, -1.0, 14.0, 2.5, 5.0)
+    cart_vents.add_box(44.0, 12.0, -1.0, 14.0, 2.5, 5.0)
+    cart_vents.add_box(44.0, 39.5, -1.0, 14.0, 2.5, 5.0)
     cart_vents.write_stl(os.path.join(comp_dir, "05_cartridge_floor_convective_vent_slots_tool.stl"))
     
     cu_plates = STLMeshBuilder("06_cartridge_copper_thermal_slide_plates_pair")
-    cu_plates.add_box(5.0, 0, 2.0, 48.0, 0.8, 10.0)      # Left copper flank plate
-    cu_plates.add_box(5.0, 35.2, 2.0, 48.0, 0.8, 10.0)   # Right copper flank plate
+    cu_plates.add_box(5.0, -0.8, 4.0, 65.0, 0.8, 14.0)
+    cu_plates.add_box(5.0, 54.0, 4.0, 65.0, 0.8, 14.0)
     cu_plates.write_stl(os.path.join(comp_dir, "06_cartridge_copper_thermal_slide_plates_pair.stl"))
 
 
@@ -606,7 +695,8 @@ def export_rear_pod3_package(base_dir: str):
     # Monolithic Models
     rp_low = STLMeshBuilder("rear_pod3_lower_housing")
     rp_low.add_hollow_box(0, 0, 0, 72.0, 48.0, 14.0, 2.2)
-    rp_low.add_cylinder(0, 24.0, 7.0, 6.0, 8.0)
+    # Horizontal M8 Cable Gland Neck with inner bore (protruding outward at x = 0, y = 24.0, z = 7.0)
+    rp_low.add_horizontal_boss_x(-10.0, 24.0, 7.0, 6.0, 4.0, 12.2)
     rp_low.add_box(24.0, 20.0, -8.0, 4.0, 8.0, 8.0)
     rp_low.add_box(34.0, 20.0, -8.0, 4.0, 8.0, 8.0)
     rp_low.add_box(44.0, 20.0, -8.0, 4.0, 8.0, 8.0)
@@ -615,12 +705,14 @@ def export_rear_pod3_package(base_dir: str):
     rp_low.add_boss(8.0, 40.0, 2.2, 3.0, 1.25, 3.0)
     rp_low.add_boss(64.0, 40.0, 2.2, 3.0, 1.25, 3.0)
     rp_low.write_stl(os.path.join(rp_dir, "rear_pod3_lower_housing.stl"))
+    rp_low.write_stl(os.path.join(base_dir, "rear_pod3_lower_housing.stl"))
     
     rp_lid = STLMeshBuilder("rear_pod3_radome_lid")
     rp_lid.add_box(0, 0, 0, 72.0, 48.0, 3.0)
     rp_lid.add_box(16.0, 9.0, 3.0, 40.0, 30.0, 10.0)
     rp_lid.add_box(2.4, 2.4, -2.5, 67.2, 43.2, 2.5)
     rp_lid.write_stl(os.path.join(rp_dir, "rear_pod3_radome_lid.stl"))
+    rp_lid.write_stl(os.path.join(base_dir, "rear_pod3_radome_lid.stl"))
     
     # Modular Components
     r1 = STLMeshBuilder("01_rear_pod3_empty_tub")
@@ -634,15 +726,16 @@ def export_rear_pod3_package(base_dir: str):
     r2.add_boss(64.0, 40.0, 2.2, 3.0, 1.25, 3.0)
     r2.write_stl(os.path.join(comp_dir, "02_rear_pod3_4_pcb_standoffs.stl"))
     
-    r3 = STLMeshBuilder("03_m8_cable_neck")
-    r3.add_cylinder(0, 24.0, 7.0, 6.0, 8.0)
-    r3.write_stl(os.path.join(comp_dir, "03_m8_cable_neck.stl"))
+    r3 = STLMeshBuilder("03_m8_horizontal_cable_gland_neck")
+    r3.add_horizontal_boss_x(-10.0, 24.0, 7.0, 6.0, 4.0, 12.2)
+    r3.write_stl(os.path.join(comp_dir, "03_m8_horizontal_cable_gland_neck.stl"))
     
     r4 = STLMeshBuilder("04_gopro_mounting_cleats")
     r4.add_box(24.0, 20.0, -8.0, 4.0, 8.0, 8.0)
     r4.add_box(34.0, 20.0, -8.0, 4.0, 8.0, 8.0)
-    r4.add_box(44.0, 20.0, -8.0, 4.0, 8.0, 8.0)
-    r4.write_stl(os.path.join(comp_dir, "04_gopro_mounting_cleats.stl"))
+    r5 = STLMeshBuilder("05_m8_horizontal_hole_cutout_tool")
+    r5.add_horizontal_cylinder_x(-12.0, 24.0, 7.0, 4.0, 16.0) # Ø 8mm hole tool
+    r5.write_stl(os.path.join(comp_dir, "05_m8_horizontal_hole_cutout_tool.stl"))
 
 
 def main():

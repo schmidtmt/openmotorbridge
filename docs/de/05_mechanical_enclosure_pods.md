@@ -711,21 +711,40 @@ hardware/cad/stl/
 │       ├── 23_floor_vent_slots_cutout_tool_group.stl# 5x Zwischenboden-Belüftungsschlitze
 │       └── 24_single_vent_slot_cutout_tool.stl      # Einzelner 15x2.5 mm Belüftungsschlitz
 │
-├── 02_pod_base/                                 # Satelliten-Pod Helmträger
-│   ├── pod_base_housing.stl                     # Helmträgergehäuse mit Pogo-Bett & M8-Stutzen
+├── 02_pod_base/                                 # Satelliten-Pod Helmträger (5-seitiger Monocoque-Schacht)
+│   ├── pod_base_housing.stl                     # Helmträgergehäuse mit Wechselschacht & M8-Rückanschluss
 │   ├── pod_base_helmet_clamp.stl                # Helm-Klemmadapter
-│   └── components/ (01_empty_shell, 02_m8_neck, 03_pogo_bed, 04_magnet_pockets)
+│   └── components/                              # Tinkercad-Primitiven zum freien Editieren
+│       ├── 01_pod_base_monocoque_empty_tunnel.stl # 5-seitiger Monocoque-Tunnel (100x60x28 mm, nach vorne offen)
+│       ├── 02_m8_horizontal_cable_gland_neck.stl # Horizontaler M8 6-Pin IP67 Kabelstutzen (Ø 8 mm Bohrung)
+│       ├── 03_pod_bulkhead_partition_plate.stl  # Schutz-Schottwand / Zwischenboden
+│       ├── 04_pin_guide_shroud_funnel.stl       # 6-Pin Schutzkragen mit 45°-Fangtrichter
+│       ├── 05_pod_eptfe_membrane_boss.stl       # Gore ePTFE-Membranaufnahme für Gehäusedecke
+│       ├── 06_pod_bulkhead_convective_vent_slots_tool.stl # Schneidkörper für Schottwand-Lüftungsschlitze
+│       ├── 07_pod_lateral_cooling_rails_pair.stl # Metallische Kühl- und Gleitschienen (in Seitenwand)
+│       └── 08_auto_eject_springs_pair.stl       # 2x V4A-Auswerferfedern
 │
 ├── 03_pod_cartridges/                           # Kassetten-Einschübe
-│   ├── cartridge_sena_sled.stl                  # Sena 50S/60S Kassetten-Schlitten
-│   ├── cartridge_cardo_sled.stl                 # Cardo Packtalk Edge Kassetten-Schlitten
-│   ├── cartridge_blindkassette_waterproof.stl   # Wasserdichte IP67 Blindkassette (Dry Box)
-│   └── components/ (01_base_sled, 02_pogo_pads)
+│   ├── cartridge_sena_sled.stl                  # Sena 50S/60S Kassetten-Schlitten (mit ePTFE-Membran)
+│   ├── cartridge_cardo_sled.stl                 # Cardo Packtalk Edge Kassetten-Schlitten (mit ePTFE-Membran)
+│   ├── cartridge_blindkassette_waterproof.stl   # Wasserdichte IP67 Blindkassette (Dry Box Dummy)
+│   └── components/                              # Tinkercad-Primitiven zum freien Editieren
+│       ├── 01_universal_base_sled.stl           # Universeller Grundschlitten (75x54x22 mm)
+│       ├── 02_cartridge_faceplate_with_gasket_lip.stl # PA12-Frontblende mit Dichtkragen & Snap-Fit
+│       ├── 03_cartridge_eptfe_membrane_boss.stl # Frontblenden ePTFE-Membransitz
+│       ├── 04_cartridge_membrane_cutout_tool.stl # Schneidkörper für Frontblenden-Membran
+│       ├── 05_cartridge_floor_convective_vent_slots_tool.stl # 4x Kassettenboden-Konvektionsschlitze
+│       └── 06_cartridge_copper_thermal_slide_plates_pair.stl # Seitliche Kupfer-Kühlflankenbleche (0.8 mm)
 │
 └── 04_rear_pod3/                                # Heck-Satelliten-Pod (Pod 3)
-    ├── rear_pod3_lower_housing.stl              # Heck-Untergehäuse mit M8-Stutzen & GoPro-Rasten
-    ├── rear_pod3_radome_lid.stl                 # Radomdeckel mit Antennenkuppel
-    └── components/ (01_tub, 02_standoffs, 03_m8_neck, 04_gopro_cleats)
+    ├── rear_pod3_lower_housing.stl              # Heck-Untergehäuse mit horizontalem M8-Stutzen & GoPro-Rasten
+    ├── rear_pod3_radome_lid.stl                 # Radomdeckel mit Antennenkuppel & Dichtlippe
+    └── components/                              # Tinkercad-Primitiven zum freien Editieren
+        ├── 01_rear_pod3_empty_tub.stl           # Leere Wanne (72x48x14 mm)
+        ├── 02_rear_pod3_4_pcb_standoffs.stl     # 4x M2.5 PCB-Schraubdome
+        ├── 03_m8_horizontal_cable_gland_neck.stl # Horizontaler M8-Kabelstutzen mit Ø 8 mm Bohrung
+        ├── 04_gopro_mounting_cleats.stl         # 3x GoPro- / Gepäckträger-Montagerasten
+        └── 05_m8_horizontal_hole_cutout_tool.stl# Schneidkörper für M8-Wanddurchbruch
 ```
 
 ---
