@@ -667,10 +667,61 @@ Zur ganzheitlichen geometrischen und elektrischen Validierung des Gesamtsystems 
 
 *Abbildung 5.5: Maßstabsgetreuer Längsschnitt (X-Z Ebene) durch den Satelliten-Pod. Erkennbar sind die zentrierte Lage der Steckverbindung auf der horizontalen Mittelachse, die Schachtführung und der spannungsfreie Übergang von der fahrzeugseitigen M8-Verschraubung zur internen Elektronik.*
 
-#### Zusammenfassung der mechanischen Passgenauigkeit (Tolerance Stack-Up):
-1. **Axiale Zentrierung:** Die 6-Pin Steckverbindung ($J_1 \leftrightarrow J_1$) liegt exakt auf der horizontalen Mittelachse ($Y=0{,}0\,\text{mm}, Z=0{,}0\,\text{mm}$).
-2. **Kräftefreier elektrischer Kontakt:** Einschubkräfte werden zu 100 % von der massiven $2{,}0\,\text{mm}$ PA12-Schottwand auf das Monocoque-Gehäuse abgeleitet. Die Lötstellen der Platinen bleiben vollständig kräfte- und biegemomentfrei.
-3. **Automatischer Auswurf (Auto-Eject):** Die beiden V4A-Edelstahlfedern erzeugen beim Entriegeln der seitlichen Snap-Fit Taster einen Auswurfhub von $8\dots 10\,\text{mm}$, sodass der Schlitten selbst mit dicken Handschuhen gegriffen werden kann.
+### 5.11 CAD-Dateistruktur & Tinkercad-Modulbaukasten (STL-Bibliothek)
+
+Alle 3D-Gehäusemodelle stehen im Verzeichnis [hardware/cad/stl/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/) und [hardware/3d_models_mjf/](file:///Users/schmidtm/openMotorBridge/hardware/3d_models_mjf/) als fertige, monolithische Druckkörper sowie als **vollständig zerlegte, modulare Tinkercad-Baukästen** bereit:
+
+```
+hardware/cad/stl/
+├── 01_main_box/                                 # Zentrale Steuerbox (3-Teiliges Sandwich)
+│   ├── main_box_complete_assembly.stl           # Vollständiges 3D-Montagemodell
+│   ├── main_box_lower_case.stl                  # Unterwanne mit Dichtnut & 4x M3 Eck-Spannsäulen
+│   ├── main_box_mid_tray.stl                    # Oberwanne mit Zwischenboden & 4x M3 Eck-Pfosten
+│   ├── main_box_lid.stl                         # Gehäusedeckel mit Dichtfeder & Gore-Vent Bohrung
+│   └── components/                              # Tinkercad-Primitiven zum freien Editieren & Stanzen
+│       ├── 01_lower_tub_empty.stl               # Leere Wanne (ohne Zylinder)
+│       ├── 02_pcb_4_standoffs_group.stl         # 4x PCB-Schraubdome als Gruppe
+│       ├── 03_single_m2_5_standoff.stl          # Einzelner M2.5 Schraubdom (im Nullpunkt)
+│       ├── 04_single_m4_mounting_ear.stl        # Einzelnes M4-Montageohr
+│       ├── 05_mid_tray_solid_frame.stl          # Mittelrahmen massiv geschlossen (105x75x15 mm)
+│       ├── 06_mid_partition_floor_solid.stl     # Zwischenboden massiv geschlossen
+│       ├── 07_lipo_battery_cradle_1000mah.stl   # LiPo-Akkuhalterung (1000 mAh Standard)
+│       ├── 08_lipo_battery_cradle_1500mah_large.stl # LiPo-Akkuhalterung (1500 mAh Large)
+│       ├── 09_cutout_tool_usb_c.stl             # Schneidkörper USB-C (in Tinkercad: "Bohrung")
+│       ├── 10_cutout_tool_led_window.stl        # Schneidkörper RGB-LED Statusfenster
+│       ├── 11_cutout_tool_hd26_dsub.stl         # Schneidkörper HD26 Kabelbaumflansch
+│       ├── 12_cutout_tool_m16_round_gland.stl   # Schneidkörper M16 Rundsteckverbinder
+│       ├── 13_cutout_tool_cable_slot.stl        # Schneidkörper Zwischenboden-Kabelschlitz
+│       ├── 14_lid_plate_only.stl                # Reine Deckelplatte
+│       ├── 15_lid_sealing_lip.stl               # Deckel-Einpress-Dichtlippe
+│       ├── 16_lid_gore_vent_boss.stl            # Gore-Vent Sockel
+│       ├── 17_corner_clamping_posts_mid_tray_4x.stl # 4x Eck-Pfostensäulen der Oberwanne
+│       ├── 18_corner_clamping_posts_lower_case_4x.stl # 4x Eck-Schraubsäulen der Unterwanne
+│       ├── 19_corner_screw_holes_cutout_tool_4x.stl # 4x M3 Bohrungszylinder
+│       ├── 20_perimeter_sealing_groove_collar.stl   # Umlaufender Dichtungskragen (Nut)
+│       ├── 21_perimeter_sealing_tongue_lip.stl      # Umlaufende Dichtungsfeder (Lippe)
+│       ├── 22_silicone_o_ring_gasket_cord_1_5mm.stl # Ø 1.5 mm Silikon-O-Ring Prüfkörper
+│       ├── 23_floor_vent_slots_cutout_tool_group.stl# 5x Zwischenboden-Belüftungsschlitze
+│       └── 24_single_vent_slot_cutout_tool.stl      # Einzelner 15x2.5 mm Belüftungsschlitz
+│
+├── 02_pod_base/                                 # Satelliten-Pod Helmträger
+│   ├── pod_base_housing.stl                     # Helmträgergehäuse mit Pogo-Bett & M8-Stutzen
+│   ├── pod_base_helmet_clamp.stl                # Helm-Klemmadapter
+│   └── components/ (01_empty_shell, 02_m8_neck, 03_pogo_bed, 04_magnet_pockets)
+│
+├── 03_pod_cartridges/                           # Kassetten-Einschübe
+│   ├── cartridge_sena_sled.stl                  # Sena 50S/60S Kassetten-Schlitten
+│   ├── cartridge_cardo_sled.stl                 # Cardo Packtalk Edge Kassetten-Schlitten
+│   ├── cartridge_blindkassette_waterproof.stl   # Wasserdichte IP67 Blindkassette (Dry Box)
+│   └── components/ (01_base_sled, 02_pogo_pads)
+│
+└── 04_rear_pod3/                                # Heck-Satelliten-Pod (Pod 3)
+    ├── rear_pod3_lower_housing.stl              # Heck-Untergehäuse mit M8-Stutzen & GoPro-Rasten
+    ├── rear_pod3_radome_lid.stl                 # Radomdeckel mit Antennenkuppel
+    └── components/ (01_tub, 02_standoffs, 03_m8_neck, 04_gopro_cleats)
+```
+
+---
 
 ## 6. Belegung der 6-Pin M8 / Pogo-Schnittstelle & PUR-Kabelbaum-Farbcodierung
 
@@ -683,5 +734,37 @@ Zur ganzheitlichen geometrischen und elektrischen Validierung des Gesamtsystems 
 | **Pin 5** | **Gelb (YE)** | $0{,}14\,\text{mm}^2$ (AWG26) | **`OPTO`** (TLP222A Tastensimulations-Trigger) | **`GNSS_PPS`** (1-PPS Hardware-Zeitnormal) | Einzelader (Steuersignal) |
 | **Pin 6** | **Grün (GN)** | $0{,}14\,\text{mm}^2$ (AWG26) | **`1-WIRE_ID`** (DS2401 Silicon Serial Number) | **`1-WIRE_ID`** (DS2401 Heck-Kassetten-Erkennung)| Einzelader (1-Wire Bus) |
 | **M8-Gehäuse**| **Kupfergeflecht (BL)**| $> 85\,\%$ Geflecht | **`GND_SHIELD`** (360° Gehäuseschirmung) | **`GND_SHIELD`** (360° Gehäuseschirmung) | Gesamtschirm über M8-Metallkragen |
+
+---
+
+## 7. Zusammenfassende Konstruktions- & Fertigungsrichtlinien
+
+```
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│             OPENMOTORBRIDGE MECHANISCHE SYSTEM-MATRIX (FERTIGUNGSÜBERSICHT)             │
+├───────────────────┬───────────────────────────────┬────────────────────────────────────┤
+│ BAUGRUPPE         │ HAUPTMERKMALE / MECHANIK       │ FERTIGUNG & MATERIAL               │
+├───────────────────┼───────────────────────────────┼────────────────────────────────────┤
+│ 1. ZENTRALBOX     │ • 3-Teiliges Sandwich-Design   │ • PA12 MJF oder Aluguss            │
+│    (Unterwanne,   │ • 4x M3 durchgehende Ecksäulen│ • 4x Cu-Thermal-Pins (Ø 8 mm)      │
+│     Oberwanne &   │ • Nut-und-Feder Dichtsystem   │ • Shore 00 35 Silikon-Gap-Pad      │
+│     Deckel)       │ • LiPo-Bett auf Zwischenboden │ • EPDM-Dichtschnur (Ø 1.5 mm)      │
+│                   │ • Kabelschlitz + 5x Lüftung   │ • Gore ePTFE-Ventil (Ø 7 mm)       │
+│                   │ • Stirnwand: HD26, USB-C, LED │ • M4 Silentblöcke (Shore 50A)      │
+├───────────────────┼───────────────────────────────┼────────────────────────────────────┤
+│ 2. SATELLITEN-PODS│ • Monocoque-Schacht (ohne Deckel)│ • PA12 MJF kugelgestrahlt        │
+│    (Pod 1, 2 & 3) │ • M8 6-Pin IP67 Rückanschluss │ • M8 Vollmetall-Einbaubuchse       │
+│                   │ • Schutz-Schottwand (2x M2)   │ • 2x V4A-Auswerferfedern (10 mm Hub│
+│                   │ • 45°-Fangtrichter für 6-Pin  │ • Seitliche metallische Gleitschiene│
+│                   │ • Obere Gore ePTFE-Membran    │ • Asymmetrische Poka-Yoke Nuten    │
+├───────────────────┼───────────────────────────────┼────────────────────────────────────┤
+│ 3. WECHSEL-       │ • Universeller Unterschlitten │ • PA12 MJF (2-Teilige Kassette)    │
+│    KASSETTEN      │ • Kassetten-PCB (DS2401 ID)   │ • Flanschdichtung Shore 40A        │
+│    (Sena, Cardo,  │ • Stirnflansch-IP67-Dichtung  │ • Duale POM Snap-Fit Riegel        │
+│     Midland, OMM) │ • Auto-Eject Schnellentrieglg.│ • Vergoldetes Pogo-Pin Array       │
+│                   │ • Unterflur-Kabelkanal 1.5 mm │ • N52 Neodym-Magnete (Cardo Edge)  │
+│                   │ • Modellspezifisches 3D-Nest  │ • EPDM-Sicherungslasche            │
+└───────────────────┴───────────────────────────────┴────────────────────────────────────┘
+```
 
 
