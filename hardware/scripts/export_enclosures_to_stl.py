@@ -126,6 +126,28 @@ class STLMeshBuilder:
         # Right Rim
         self.add_quad(np.array([x1, y0, z1]), np.array([x1, y1, z1]), np.array([ix1, iy1, z1]), np.array([ix1, iy0, z1]))
 
+    def add_boss(self, cx: float, cy: float, z0: float, outer_r: float, inner_r: float, height: float, segments: int = 24):
+        """Adds a cylindrical screw standoff boss with a center screw hole."""
+        angles = np.linspace(0, 2 * np.pi, segments, endpoint=False)
+        z1 = z0 + height
+        
+        # Outer rings
+        out_bot = [np.array([cx + outer_r * np.cos(a), cy + outer_r * np.sin(a), z0]) for a in angles]
+        out_top = [np.array([cx + outer_r * np.cos(a), cy + outer_r * np.sin(a), z1]) for a in angles]
+        
+        # Inner rings (screw hole)
+        in_bot = [np.array([cx + inner_r * np.cos(a), cy + inner_r * np.sin(a), z0]) for a in angles]
+        in_top = [np.array([cx + inner_r * np.cos(a), cy + inner_r * np.sin(a), z1]) for a in angles]
+        
+        for i in range(segments):
+            next_i = (i + 1) % segments
+            # Outer side wall
+            self.add_quad(out_bot[i], out_bot[next_i], out_top[next_i], out_top[i])
+            # Inner hole wall
+            self.add_quad(in_top[i], in_top[next_i], in_bot[next_i], in_bot[i])
+            # Top ring face
+            self.add_quad(out_top[i], out_top[next_i], in_top[next_i], in_top[i])
+
     def add_cylinder(self, cx: float, cy: float, z0: float, radius: float, height: float, segments: int = 24):
         """Adds a solid vertical cylinder."""
         angles = np.linspace(0, 2 * np.pi, segments, endpoint=False)
@@ -182,28 +204,17 @@ def generate_main_box_stl(output_dir: str):
     mb_lower = STLMeshBuilder("main_box_lower_case")
     # Outer tub: 105 x 75 x 18 mm, 2.5 mm wall thickness
     mb_lower.add_hollow_box(0, 0, 0, 105.0, 75.0, 18.0, 2.5)
-    # 4x M4 Silentblock Mounting Ears
+    # 4x M4 Silentblock Mounting Ears on outer corners
     mb_lower.add_box(-11.5, 9.5, 0, 11.5, 14.0, 5.0)   # Left Front
     mb_lower.add_box(-11.5, 51.5, 0, 11.5, 14.0, 5.0)  # Left Rear
     mb_lower.add_box(105.0, 9.5, 0, 11.5, 14.0, 5.0)   # Right Front
     mb_lower.add_box(105.0, 51.5, 0, 11.5, 14.0, 5.0)  # Right Rear
-    # 4x Heavy-Duty Solid Corner PCB Pedestals (merged into enclosure sidewalls & floor)
-    # PCB sits at z = 6.0 mm (3.5 mm pedestal height above the 2.5 mm floor)
-    # 1. Front-Left Corner Pedestal (x: 2.5..17.5, y: 2.5..17.5, z: 2.5..6.0)
-    mb_lower.add_box(2.5, 2.5, 2.5, 15.0, 15.0, 3.5)
-    mb_lower.add_cylinder(13.0, 13.0, 6.0, 3.5, 1.2) # Top M2.5 centering locator
     
-    # 2. Front-Right Corner Pedestal (x: 87.5..102.5, y: 2.5..17.5, z: 2.5..6.0)
-    mb_lower.add_box(87.5, 2.5, 2.5, 15.0, 15.0, 3.5)
-    mb_lower.add_cylinder(92.0, 13.0, 6.0, 3.5, 1.2)
-    
-    # 3. Rear-Left Corner Pedestal (x: 2.5..17.5, y: 57.5..72.5, z: 2.5..6.0)
-    mb_lower.add_box(2.5, 57.5, 2.5, 15.0, 15.0, 3.5)
-    mb_lower.add_cylinder(13.0, 62.0, 6.0, 3.5, 1.2)
-    
-    # 4. Rear-Right Corner Pedestal (x: 87.5..102.5, y: 57.5..72.5, z: 2.5..6.0)
-    mb_lower.add_box(87.5, 57.5, 2.5, 15.0, 15.0, 3.5)
-    mb_lower.add_cylinder(92.0, 62.0, 6.0, 3.5, 1.2)
+    # 4x Clean Cylindrical PCB Screw Bosses (M2.5 Schraubdome, Ø 7.0 mm outer, Ø 2.5 mm screw hole, height 3.5 mm)
+    mb_lower.add_boss(13.0, 13.0, 2.5, 3.5, 1.25, 3.5)
+    mb_lower.add_boss(92.0, 13.0, 2.5, 3.5, 1.25, 3.5)
+    mb_lower.add_boss(13.0, 62.0, 2.5, 3.5, 1.25, 3.5)
+    mb_lower.add_boss(92.0, 62.0, 2.5, 3.5, 1.25, 3.5)
     mb_lower.write_stl(os.path.join(output_dir, "main_box_lower_case.stl"))
     
     # 2. Mid Baffle Tray (Zwischenboden mit LiPo-Bett)
@@ -328,18 +339,11 @@ def generate_rear_pod3_stl(output_dir: str):
     rp_low.add_box(24.0, 20.0, -8.0, 4.0, 8.0, 8.0)
     rp_low.add_box(34.0, 20.0, -8.0, 4.0, 8.0, 8.0)
     rp_low.add_box(44.0, 20.0, -8.0, 4.0, 8.0, 8.0)
-    # 4x Heavy-Duty Solid Corner PCB Pedestals for 62x38 mm Rear PCB (merged into sidewalls)
-    rp_low.add_box(2.2, 2.2, 2.2, 10.0, 10.0, 3.0)
-    rp_low.add_cylinder(8.0, 8.0, 5.2, 3.0, 1.0)
-    
-    rp_low.add_box(59.8, 2.2, 2.2, 10.0, 10.0, 3.0)
-    rp_low.add_cylinder(64.0, 8.0, 5.2, 3.0, 1.0)
-    
-    rp_low.add_box(2.2, 35.8, 2.2, 10.0, 10.0, 3.0)
-    rp_low.add_cylinder(8.0, 40.0, 5.2, 3.0, 1.0)
-    
-    rp_low.add_box(59.8, 35.8, 2.2, 10.0, 10.0, 3.0)
-    rp_low.add_cylinder(64.0, 40.0, 5.2, 3.0, 1.0)
+    # 4x Clean Cylindrical PCB Screw Bosses for 62x38 mm Rear PCB (M2.5 Schraubdome, Ø 6.0 mm outer, Ø 2.5 mm hole)
+    rp_low.add_boss(8.0, 8.0, 2.2, 3.0, 1.25, 3.0)
+    rp_low.add_boss(64.0, 8.0, 2.2, 3.0, 1.25, 3.0)
+    rp_low.add_boss(8.0, 40.0, 2.2, 3.0, 1.25, 3.0)
+    rp_low.add_boss(64.0, 40.0, 2.2, 3.0, 1.25, 3.0)
     rp_low.write_stl(os.path.join(output_dir, "rear_pod3_lower_housing.stl"))
     
     # 2. Rear Pod 3 Radome Lid (HF-transparenter Kuppeldeckel)
