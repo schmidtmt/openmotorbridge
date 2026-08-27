@@ -744,8 +744,23 @@ hardware/cad/stl/
         ├── 02_rear_pod3_4_pcb_standoffs.stl     # 4x M2.5 PCB-Schraubdome
         ├── 03_m8_horizontal_cable_gland_neck.stl # Horizontaler M8-Kabelstutzen mit Ø 8 mm Bohrung
         ├── 04_gopro_mounting_cleats.stl         # 3x GoPro- / Gepäckträger-Montagerasten
-        └── 05_m8_horizontal_hole_cutout_tool.stl# Schneidkörper für M8-Wanddurchbruch
 ```
+
+#### Übersicht der druckfertigen STL-Masterdateien (Ready-to-Print)
+
+| Baugruppe | Funktion / Bauteil | Druckfertige STL-Datei | Modularer Baukasten (Tinkercad) |
+| :--- | :--- | :--- | :--- |
+| **Zentralbox (3-Teilig)** | Unterwanne mit Dichtnut & M3-Pfosten | [main_box_lower_case.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_lower_case.stl) | [01_main_box/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/components/) *(24 Primitiven)* |
+| **Zentralbox (3-Teilig)** | Oberwanne mit Zwischenboden & Akkubett | [main_box_mid_tray.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_mid_tray.stl) | [01_main_box/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/components/) |
+| **Zentralbox (3-Teilig)** | Gehäusedeckel mit Dichtfeder & Gore-Vent | [main_box_lid.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_lid.stl) | [01_main_box/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/components/) |
+| **Zentralbox (3-Teilig)** | Vollständiges 3D-Montagemodell (Prüfkörper) | [main_box_complete_assembly.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_complete_assembly.stl) | — |
+| **Satelliten-Pod** | 5-seitiges Monocoque-Schachtgehäuse | [pod_base_housing.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod_base_housing.stl) | [02_pod_base/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/components/) *(8 Primitiven)* |
+| **Satelliten-Pod** | Helm-Klemmadapter | [pod_base_helmet_clamp.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod_base_helmet_clamp.stl) | [02_pod_base/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/components/) |
+| **Wechselkassette** | Sena 50S/60S Kassetten-Schlitten | [cartridge_sena_sled.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_sena_sled.stl) | [03_pod_cartridges/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/components/) *(6 Primitiven)* |
+| **Wechselkassette** | Cardo Packtalk Edge Kassetten-Schlitten | [cartridge_cardo_sled.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_cardo_sled.stl) | [03_pod_cartridges/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/components/) |
+| **Wechselkassette** | Wasserdichte IP67 Blindkassette (Dry Box) | [cartridge_blindkassette_waterproof.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_blindkassette_waterproof.stl) | [03_pod_cartridges/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/components/) |
+| **Heck-Pod 3** | Untergehäuse mit horizontalem M8-Stutzen | [rear_pod3_lower_housing.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_rear_pod3/rear_pod3_lower_housing.stl) | [04_rear_pod3/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_rear_pod3/components/) *(5 Primitiven)* |
+| **Heck-Pod 3** | Radomdeckel mit Antennenkuppel & Dichtlippe | [rear_pod3_radome_lid.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_rear_pod3/rear_pod3_radome_lid.stl) | [04_rear_pod3/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_rear_pod3/components/) |
 
 ---
 
