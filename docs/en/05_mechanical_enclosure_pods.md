@@ -26,7 +26,6 @@ The base housing of the central main box is engineered as a modular, 3-piece IP6
 │    • Gore ePTFE Pressure Equalization Vent (Ø 7.0 mm)      │  │ 38.0 mm
 │    • Perimeter Groove with Shore 40A Silicone Profile Seal │  │ Total
 │    • 100% Homogeneous Solid PA12 Protective Cover          │  │ Height
-├────────────────────────────────────────────────────────────┤  │
 │ 2. UPPER TRAY WITH MID-BAFFLE (15.0 mm Height)             │  │
 │    • Front Face (All Interfaces & Visual Indicators):      │  │
 │      - HD26 D-Sub Wall Flange (Main Vehicle Harness)       │  │
@@ -46,6 +45,24 @@ The base housing of the central main box is engineered as a modular, 3-piece IP6
 │    • 100% Solid Enclosure without Wall Penetrations        │  │
 └────────────────────────────────────────────────────────────┘  ▼
 ```
+
+### 1.2 3D Exploded View & Sandwich Stratification (1:1:1 CAD Fitting)
+
+![OpenMotorBridge Central Main Box Exploded 3D CAD Fitting](../../hardware/cad/main_box_full_assembly_exploded_3d.png)
+
+*Figure 5.1.1: 1:1:1 Euclidean scale 3D CAD exploded assembly of the central main box. Displays all 6 assembly tiers along the vertical Z-axis: lower hull with 4x M4 silentblock mounts and 4x solid copper thermal studs (Ø8mm), silicone gap-pad, 4-layer main PCB (85x55mm) with J1 IDC box header, 26-conductor ribbon cable (AWG28), upper tray with mid-baffle and front interfaces (HD26, USB-C, LED), 1S LiPo buffer battery in cradle with EPDM retention strap, and protective lid with Gore ePTFE vent.*
+
+### 1.3 3D Mated X-Ray View & Mechanical Fitting
+
+![OpenMotorBridge Central Main Box Mated 3D X-Ray CAD Fitting](../../hardware/cad/main_box_assembly_mated_3d.png)
+
+*Figure 5.1.2: Translucent 3D X-ray view of the closed central control box. Confirms zero-collision component clearances, secure battery retention in the upper cradle, and smooth bend radius of the 26-pin ribbon cable passing through the 38x6 mm mid-baffle slot directly to the HD26 wall flange.*
+
+### 1.4 True-to-Scale Longitudinal & Transverse Cross-Sections (X-Z Thermal & Y-Z Cable Path)
+
+![OpenMotorBridge Central Main Box Cross Sections](../../hardware/cad/main_box_assembly_cross_section.png)
+
+*Figure 5.1.3: 2D cross-sections of the central main box. Top: Longitudinal (X-Z plane) showing the direct thermal dissipation path (copper studs $\rightarrow$ silicone gap-pad $\rightarrow$ LM5164/ESP32 hotspots) and battery bay. Bottom: Transverse (Y-Z plane) illustrating the 26-pin ribbon cable trajectory from J1 IDC header through the 38x6 mm mid-baffle slot directly to the sealed HD26 SEAL-D flange on the front wall.*
 
 ---
 

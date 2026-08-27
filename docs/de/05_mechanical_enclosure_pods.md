@@ -47,6 +47,24 @@ Das Basisgehäuse der Zentralbox ist als modulares, 3-teiliges IP67/IP69K-Sandwi
 └────────────────────────────────────────────────────────────┘  ▼
 ```
 
+### 1.2 3D-Explosionsdarstellung & Schichtaufbau (1:1:1 CAD Fitting)
+
+![OpenMotorBridge Zentralbox Exploded 3D CAD Fitting](../../hardware/cad/main_box_full_assembly_exploded_3d.png)
+
+*Abbildung 5.1.1: 1:1:1 euklidische CAD-Explosionsdarstellung der Zentralbox. Gezeigt werden alle 6 Montageebenen entlang der vertikalen Z-Achse: Unterwanne mit 4x M4 Silentblöcken und 4x Cu-Thermal-Pins (Ø8mm), elastisches Silikon-Gap-Pad, 4-Layer Hauptplatine (85x55mm) mit J1 Wannenstecker, 26-poliges Flachbandkabel (AWG28), Oberwanne mit Zwischenboden und stirnseitigen Schnittstellen (HD26, USB-C, LED), 1S LiPo-Pufferakku im Konturbett mit EPDM-Spannband sowie der Gehäusedeckel mit Gore ePTFE-Membran.*
+
+### 1.3 3D-Röntgenansicht & Zusammenbau-Fitting
+
+![OpenMotorBridge Zentralbox Mated 3D X-Ray CAD Fitting](../../hardware/cad/main_box_assembly_mated_3d.png)
+
+*Abbildung 5.1.2: Transparente 3D-Röntgenansicht der vollständig geschlossenen Zentralbox. Erkennbar sind die spielfreien Bauteilfreiräume, die geschützte Akku-Lagerung auf dem Zwischenboden und der scheuerfreie Bogen des 26-poligen Flachbandkabels durch den 38x6 mm Schlitz zum HD26-Flansch.*
+
+### 1.4 Maßstabsgetreuer Längs- & Querschnitt (X-Z Thermik & Y-Z Kabelführung)
+
+![OpenMotorBridge Zentralbox Cross Sections](../../hardware/cad/main_box_assembly_cross_section.png)
+
+*Abbildung 5.1.3: Exakte 2D-Schnittansichten der Zentralbox. Oben: Längsschnitt (X-Z Ebene) mit vollständigem thermischem Pfad (Kupfer-Thermal-Pins $\rightarrow$ Silikon-Gap-Pad $\rightarrow$ LM5164/ESP32 Hotspots) und Akku-Kammer. Unten: Querschnitt (Y-Z Ebene) mit detailliertem Verlauf des 26-poligen Flachbandkabels von der Wannenbuchse J1 auf der Hauptplatine durch den abgerundeten 38x6 mm Zwischenbodenschlitz direkt zum abgedichteten HD26 SEAL-D Flansch an der Gehäusestirnwand.*
+
 ---
 
 ## 2. Thermomanagement & Kühlkonzept (In der Unterwanne)
