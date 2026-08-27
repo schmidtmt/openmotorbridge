@@ -193,9 +193,42 @@ Der Gehäusedeckel schließt die Oberwanne nach oben hermetisch ab. Da sich alle
 - **Abmessungen Schacht:** $96{,}0 \times 56{,}0 \times 24{,}0\,\text{mm}$ (PA12 MJF, $3{,}0\,\text{mm}$ Wandstärke).
 - **Elektronik-Kassette / Schlitten:** $92{,}0 \times 54{,}0 \times 23{,}5\,\text{mm}$ (Lichter Innenbauraum: $88{,}0 \times 50{,}0 \times 23{,}5\,\text{mm}$).
 
-### 5.1 Offener Kassetten-Einschubschlitten (Open Sled Architecture) & Trägerplatine
+### 5.1 2-Teilige modulare Kassetten-Architektur (Universal-Unterschlitten & Modul-Oberteil)
 
-Die Wechselkassette ist als **offener U-förmiger Einschubschlitten (Open Carrier Sled)** konstruiert:
+Um maximale Flexibilität bei minimalen Fertigungskosten zu erzielen, ist jede Wechselkassette als **2-teiliges modulares Baugruppensystem** aufgebaut:
+
+```
+                      MODULARE 2-TEILIGE WECHSELKASSETTE
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 1. AUSTAUSCHBARES MODUL-OBERTEIL (3D-Konturbett & Haltenest):               │
+│    • Spezifisch für Sena 50S/60S, Cardo Air-Mount oder Midland XT30/PMR     │
+│    • Integriertes Pogo-Pin Kontaktfeld / N52-Magnete / EPDM-Spannlasche     │
+│    • 10.0 x 3.0 mm Kabeldurchbruchsschlitz (R=1.0 mm) in den Unterflurkanal │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ 2. AKUSTISCHE TPU-DÄMPFUNGSZWISCHENLAGE (Shore 40A, 0.5 mm - Klapperschutz) │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ 3. GENERISCHER UNIVERSAL-UNTERSCHLITTEN (Universal Base Sled):              │
+│    • 100% identisch für ALLE Headset- und Funk-Varianten                    │
+│    • Bodenfach für Trägerplatine (openmotorbridge_pod_cartridge, 35x25mm)   │
+│    • Stirnseitiger Sitz für 6-Pin Buchse J1 & axialer JST-SH Header J2      │
+│    • 1.5 mm tiefer Unterflur-Kabelkanal & 4x M2 Ruthex-Gewindeeinsätze      │
+│    • Poka-Yoke Führungsrippen (1.5 / 2.0 mm) & Snap-Fit Schnellverriegelung │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+#### Konstruktive Aufteilung & Dichtungskonzept:
+1. **Generischer Universal-Unterschlitten (Base Sled, $92{,}0 \times 54{,}0 \times 23{,}5\,\text{mm}$):**
+   * Bildet das robuste PA12-Grundchassis mit den seitlichen Poka-Yoke Führungsrippen und den Schnappriegel-Rastnasen.
+   * Beherbergt im vorderen Bodenfach die standardisierte $35{,}0 \times 25{,}0\,\text{mm}$ Kassetten-Trägerplatine (`openmotorbridge_pod_cartridge`) mit dem Maxim DS2401 ID-Chip und der stirnseitigen 6-Pin Buchsenleiste `J1`.
+   * Besitzt einen **$1{,}5\,\text{mm}$ tiefen und $8{,}0\,\text{mm}$ breiten Unterflur-Kabelkanal** im Boden sowie 4x eingelassene M2 Messing-Gewindeeinsätze (*Ruthex M2*).
+2. **Austauschbares Modul-Oberteil (3D-Konturbett Inlay):**
+   * Das Oberteil wird individuell an das jeweilige Headset-Modell angepasst (z. B. Sena 50S Klickbett mit Rastriegel, Cardo Packtalk Edge mit 2x N52 Magneten, Midland XT30 Klemmschiene).
+   * Enthält den **$10{,}0 \times 3{,}0\,\text{mm}$ Kabeldurchbruchsschlitz** mit beidseitig $R=1{,}0\,\text{mm}$ verrundeten Kanten, durch den das 6-adrige JST-SH Flachbandkabel vom Unterflurkanal direkt an die Lötseite des Kontaktfeldes (Pogo-Array / Air-Mount) geführt wird.
+   * Wird mit **4x M2 Senkkopfschrauben** (Edelstahl V4A) fest mit dem Unterschlitten verschraubt. Beim Wechsel des Headset-Herstellers muss der Fahrer lediglich das 3D-gedruckte Oberteil tauschen – die Elektronik-Trägerplatine bleibt erhalten.
+3. **Dichtungskonzept (Klarstellung zur Gehäuseabdichtung):**
+   * **Die IP67/IP69K-Wasserdichtigkeit wird vollständig am vorderen Stirnflansch des Pod-Gehäuses hergestellt:** Die umlaufende Shore 40A Silikondichtung der Kassettenblende dichtet den gesamten Wechselschacht beim Einrasten hermetisch gegen Strahlwasser und Staub ab.
+   * Da das Innere des Pod-Schachts im Betrieb **zu 100 % trocken und geschützt** ist, ist **zwischen Kassetten-Unterteil und Kassetten-Oberteil keine druckdichte IP67-Flachdichtung erforderlich**.
+   * Eine dünne $0{,}5\,\text{mm}$ Shore 40A TPU/Silikon-Zwischenlage zwischen Unter- und Oberteil dient rein der mechanischen Schwingungsentkopplung und dem Klapperschutz bei harten Fahrbahnstößen.
 
 ```
                   ◄──────────── 64.0 mm Pod-Breite ────────────►
@@ -577,6 +610,33 @@ Zur ganzheitlichen Verifikation der Passungen, Dichtebenen und elektrischen Übe
 * **IP67-Dichtebene:** Der umlaufende $58{,}0 \times 28{,}0\,\text{mm}$ Shore 40A Silikon-Stirnflansch wird beim Einschieben um $0{,}8\,\text{mm}$ vorkomprimiert und dichtet die Kassettenkammer hermetisch gegen Strahlwasser und Staub ab.
 
 ---
+
+
+---
+
+### 5.10 Pod 3 Baugruppen-Montage & 1:1:1 CAD-Fitting-Verifikation
+
+Zur ganzheitlichen geometrischen und elektrischen Validierung des Gesamtsystems wurde die vollständige Baugruppe des **Heck-Pods (Pod 3 mit OMM-Transceiver und Wechselkassette)** im maßstabsgetreuen 1:1:1 euklidischen CAD-Raum modelliert und verifiziert:
+
+#### 1. 3D-Baugruppen-Explosionsdarstellung (Hierarchie aller Komponenten):
+![OpenMotorBridge Pod 3 Baugruppen-Explosionsdarstellung 3D CAD](../../hardware/cad/pod3_full_assembly_exploded_3d.png)
+
+*Abbildung 5.3: Explosionsdarstellung des Satelliten-Pods 3 (120x64x32 mm Monocoque-Gehäuse, M8 6-Pin Einbaubuchse an der Gehäuseunterseite, vertikale Pod-Base-Platine an der inneren Stirnwand, einschraubbare PA12-Schutz-Schottwand mit 45°-Fangtrichter und dualen Auto-Eject Edelstahlfedern, sowie der einschiebbare Kassetten-Schlitten).*
+
+#### 2. Nahaufnahme der zusammengesteckten Kontakt- & Dichtebene:
+![OpenMotorBridge Pod 3 Nahaufnahme Steckverbindung](../../hardware/cad/pod3_assembly_mated_closeup.png)
+
+*Abbildung 5.4: Transparente Detailansicht des gesteckten Zustands. Die 6-Pin Präzisions-Stiftleiste der Pod-Base sitzt formschlüssig in der Buchsenleiste des Kassetten-Schlittens, umschlossen vom 4-seitigen Berührungsschutzkragen der Schottwand. Die Federn halten das System unter permanenter Vorspannung gegen die IP67-Flanschdichtung.*
+
+#### 3. Längsschnitt-Fitting (Mechanische & Elektrische Ausrichtung):
+![OpenMotorBridge Pod 3 Längsschnitt-Fitting](../../hardware/cad/pod3_assembly_cross_section.png)
+
+*Abbildung 5.5: Maßstabsgetreuer Längsschnitt (X-Z Ebene) durch den Satelliten-Pod. Erkennbar sind die zentrierte Lage der Steckverbindung auf der horizontalen Mittelachse, die Schachtführung und der spannungsfreie Übergang von der fahrzeugseitigen M8-Verschraubung zur internen Elektronik.*
+
+#### Zusammenfassung der mechanischen Passgenauigkeit (Tolerance Stack-Up):
+1. **Axiale Zentrierung:** Die 6-Pin Steckverbindung ($J_1 \leftrightarrow J_1$) liegt exakt auf der horizontalen Mittelachse ($Y=0{,}0\,\text{mm}, Z=0{,}0\,\text{mm}$).
+2. **Kräftefreier elektrischer Kontakt:** Einschubkräfte werden zu 100 % von der massiven $2{,}0\,\text{mm}$ PA12-Schottwand auf das Monocoque-Gehäuse abgeleitet. Die Lötstellen der Platinen bleiben vollständig kräfte- und biegemomentfrei.
+3. **Automatischer Auswurf (Auto-Eject):** Die beiden V4A-Edelstahlfedern erzeugen beim Entriegeln der seitlichen Snap-Fit Taster einen Auswurfhub von $8\dots 10\,\text{mm}$, sodass der Schlitten selbst mit dicken Handschuhen gegriffen werden kann.
 
 ## 6. Belegung der 6-Pin M8 / Pogo-Schnittstelle & PUR-Kabelbaum-Farbcodierung
 

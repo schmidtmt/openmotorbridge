@@ -190,8 +190,42 @@ The enclosure lid hermetically seals the upper tray. Since all electrical interf
 - **Chamber Dimensions:** $96.0 \times 56.0 \times 24.0\,\text{mm}$ (PA12 MJF, $3.0\,\text{mm}$ wall thickness).
 - **Electronics Cartridge / Sled:** $92.0 \times 54.0 \times 23.5\,\text{mm}$ (Usable interior volume: $88.0 \times 50.0 \times 23.5\,\text{mm}$).
 
-### 5.1 Open Cartridge Carrier Sled (Open Sled Architecture) & Carrier PCB
-The removable cartridge is designed as an **open U-shaped carrier sled (Open Carrier Sled)**:
+### 5.1 2-Piece Modular Cartridge Architecture (Universal Base Sled & Module Top Inlay)
+
+To achieve maximum modularity at minimal manufacturing cost, each swappable cartridge is engineered as a **2-piece modular assembly**:
+
+```
+                      MODULAR 2-PIECE SWAPPABLE CARTRIDGE
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 1. INTERCHANGEABLE MODULE TOP INLAY (3D Contour Bed & Cradle):              │
+│    • Specific for Sena 50S/60S, Cardo Air-Mount, or Midland XT30/PMR        │
+│    • Integrated Pogo-pin contact array / N52 magnets / EPDM retention strap │
+│    • 10.0 x 3.0 mm cable pass-through slot (R=1.0 mm) into under-bed channel│
+├─────────────────────────────────────────────────────────────────────────────┤
+│ 2. ACOUSTIC TPU DAMPING INTERFACE (Shore 40A, 0.5 mm - Anti-Rattle Layer)   │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ 3. UNIVERSAL BASE SLED (Generic Carrier Chassis):                           │
+│    • 100% identical across ALL headset and radio variants                   │
+│    • Floor compartment for carrier PCB (openmotorbridge_pod_cartridge, 35x25)│
+│    • Front seat for 6-pin socket J1 & axial JST-SH header J2 facing +X      │
+│    • 1.5 mm deep under-bed cable channel & 4x M2 threaded brass inserts     │
+│    • Poka-Yoke guide rails (1.5 / 2.0 mm) & dual snap-fit click latches     │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+#### Structural Division & Sealing Concept:
+1. **Universal Base Sled ($92.0 \times 54.0 \times 23.5\,\text{mm}$):**
+   * Standard PA12 base chassis with lateral Poka-Yoke guide rails and snap-fit locking latches.
+   * Houses the standardized $35.0 \times 25.0\,\text{mm}$ carrier PCB (`openmotorbridge_pod_cartridge`) with Maxim DS2401 ID chip and front 6-pin horizontal socket `J1`.
+   * Integrates an **$1.5\,\text{mm}$ deep and $8.0\,\text{mm}$ wide under-bed cable channel** as well as 4x heat-set brass threaded inserts (*Ruthex M2*).
+2. **Interchangeable Module Top Inlay (3D Contour Nest):**
+   * Tailored to the specific intercom geometry (e.g. Sena 50S snap nest with latch, Cardo Packtalk Edge with dual N52 magnets, Midland XT30 clamp nest).
+   * Features a **$10.0 \times 3.0\,\text{mm}$ pass-through slot** with $R=1.0\,\text{mm}$ filleted edges, routing the 6-conductor JST-SH ribbon cable directly from the under-bed channel to the solder pads of the contact field.
+   * Fastened securely to the base sled with **4x M2 countersunk screws** (V4A stainless steel). When switching headset brands, the rider only replaces the 3D-printed top inlay—the electronic carrier board is retained.
+3. **Enclosure Sealing Concept (Clarification on IP67 Sealing):**
+   * **IP67/IP69K ingress protection is established at the front perimeter flange of the Pod enclosure:** The Shore 40A silicone profile seal on the cartridge faceplate hermetically seals the entire slide-in chamber against high-pressure water and dust upon latching.
+   * Because the entire interior of the Pod chamber is **100% dry and protected during operation**, **no compression gasket is required between the cartridge base sled and top inlay**.
+   * A thin $0.5\,\text{mm}$ Shore 40A TPU/silicone intermediate layer provides vibration isolation and prevents acoustic rattling under severe motorcycle road shocks.
 
 ```
                   ◄──────────── 64.0 mm Pod Width ────────────►
@@ -584,6 +618,33 @@ To holistically verify mechanical clearances, sealing boundaries, and electrical
 * **IP67 Sealing Plane:** Perimeter $58.0 \times 28.0\,\text{mm}$ Shore 40A silicone flange gasket pre-compressed by $0.8\,\text{mm}$ upon latching, hermetically sealing the internal chamber against high-pressure water jets and road dust.
 
 ---
+
+
+---
+
+### 5.10 Pod 3 Assembly & 1:1:1 CAD Fitting Verification
+
+To validate the mechanical, thermal, and electrical integration of the entire system, the complete **Rear Pod 3 assembly (with OMM Transceiver and modular slide-in cartridge)** was modeled and verified in true 1:1:1 Euclidean scale CAD:
+
+#### 1. 3D Assembly Exploded View (Full Component Hierarchy):
+![OpenMotorBridge Pod 3 Assembly Exploded 3D CAD](../../hardware/cad/pod3_full_assembly_exploded_3d.png)
+
+*Figure 5.3: Exploded view of Satellite Pod 3 (120x64x32 mm monocoque enclosure, M8 6-pin panel receptacle on bottom face, vertical Pod Base PCB at inner bulkhead, screw-in PA12 protective partition with 45° alignment shroud and dual auto-eject stainless steel springs, and slide-in cartridge sled).*
+
+#### 2. Close-Up View of Mated Interface & Shroud:
+![OpenMotorBridge Pod 3 Mated Interface Close-Up](../../hardware/cad/pod3_assembly_mated_closeup.png)
+
+*Figure 5.4: Translucent close-up view of the mated state. The 6-pin precision pin header of the Pod Base engages the socket of the cartridge sled, fully enclosed by the 4-sided protective shroud. Compressed springs maintain constant preload against the IP67 flange gasket.*
+
+#### 3. Cross-Sectional Fitting (Mechanical & Electrical Alignment):
+![OpenMotorBridge Pod 3 Cross-Sectional Fitting](../../hardware/cad/pod3_assembly_cross_section.png)
+
+*Figure 5.5: True-to-scale cross section (X-Z plane) through Satellite Pod 3. Highlights the centered position of the 6-pin interface on the horizontal centerline, symmetrical sled guide rails, and stress-free transition from vehicle M8 connector to internal electronics.*
+
+#### Summary of Mechanical Tolerances (Tolerance Stack-Up):
+1. **Axial Centering:** The 6-pin interface ($J_1 \leftrightarrow J_1$) is located precisely on the horizontal centerline ($Y=0.0\,\text{mm}, Z=0.0\,\text{mm}$).
+2. **Stress-Free Electrical Contacts:** Insertion forces are 100% absorbed by the solid $2.0\,\text{mm}$ PA12 bulkhead against the monocoque enclosure. PCB solder joints remain entirely free of bending moments.
+3. **Auto-Eject Mechanism:** Dual V4A stainless steel springs produce an $8\dots 10\,\text{mm}$ automatic push-out stroke upon latch release, allowing easy removal even with heavy winter motorcycle gloves.
 
 ## 6. 6-Pin M8 / Pogo Interface & PUR Harness Color Coding
 
