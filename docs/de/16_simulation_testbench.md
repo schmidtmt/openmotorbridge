@@ -31,6 +31,10 @@ Um das Zusammenspiel von Hardware, Akustik, Fahrdynamik und Netzwerkprotokollen 
 │ 5. OpenMotorMesh      │ `omm_network_sim.py`  │ DLE Scoring-Wahl,           │
 │    Protokoll & Radar  │                       │ Pass-Partitioning, LoRa,    │
 │                       │                       │ Sirenen-Frühwarnung 10 Hz   │
+├───────────────────────┼───────────────────────┼─────────────────────────────┤
+│ 6. PCB Design DFM/DRC │ `verify_pcb_designs_  │ JLCPCB 6-Stufen-Audit,      │
+│    Verifikation       │  jlcpcb.py`           │ Leiterbahnen >= 0.127 mm,   │
+│                       │                       │ Vias 0.3/0.6 mm, 0 DRC-Fehl.│
 └───────────────────────┴───────────────────────┴─────────────────────────────┘
 ```
 
@@ -95,3 +99,18 @@ Mit einem einzigen Befehl können alle Simulatoren automatisiert ausgeführt und
 ```bash
 python3 tools/run_all_simulations.py
 ```
+
+---
+
+## 7. Automatisierte PCB Design- & DFM-Verifikation (`verify_pcb_designs_jlcpcb.py`)
+
+* **Geprüfte Baugruppen:** Zentralbox-Hauptplatine, Pod-Basis, Universelle Wechselkassette, Heck-Pod 3 Transceiver.
+* **Verifikations-Kriterien (JLCPCB-Standard):**
+  1. **Leiterbahnbreiten & Abstände:** Signalbahnen $\ge 0{,}150\,\text{mm}$, Powerbahnen $\ge 0{,}350\,\text{mm}$ (Toleranzgrenze $\ge 0{,}127\,\text{mm}$).
+  2. **Durchkontaktierungen (Vias):** $\varnothing\,0{,}30\,\text{mm}$ Bohrung, $\varnothing\,0{,}60\,\text{mm}$ Pad-Durchmesser, $0{,}15\,\text{mm}$ Restring.
+  3. **Acid-Trap-Prüfung:** Eliminierung spitzer Leiterbahnwinkel $< 90^\circ$ durch $45^\circ$-Fasen.
+  4. **Netlist & Pad-Zuordnung:** $100\,\%$ Zuweisung aller SMD- und THT-Pads ohne offene Ratsnest-Linien.
+* **Ausführung:**
+  ```bash
+  python3 hardware/scripts/verify_pcb_designs_jlcpcb.py
+  ```

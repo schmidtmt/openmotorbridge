@@ -95,3 +95,18 @@ Execute all verification simulators with a single command:
 ```bash
 python3 tools/run_all_simulations.py
 ```
+
+---
+
+## 7. Automated PCB Design & DFM Verification (`verify_pcb_designs_jlcpcb.py`)
+
+* **Audited Boards:** Central Main PCB, Pod Base Carrier, Universal Modular Cartridge, Rear Pod 3 Transceiver.
+* **Verification Criteria (JLCPCB Guide Compliant):**
+  1. **Trace Widths & Clearances:** Signal traces $\ge 0.150\,\text{mm}$, Power traces $\ge 0.350\,\text{mm}$ (Tolerance limit $\ge 0.127\,\text{mm}$).
+  2. **Vias & Annular Rings:** $\varnothing\,0.30\,\text{mm}$ drill, $\varnothing\,0.60\,\text{mm}$ pad diameter, $0.15\,\text{mm}$ annular ring.
+  3. **Acid Trap Detection:** Elimination of acute trace corners $< 90^\circ$ via $45^\circ$ mitered chamfers.
+  4. **Netlist & Pad Assignment:** $100\,\%$ electrical net parity without unrouted ratsnest lines.
+* **Execution:**
+  ```bash
+  python3 hardware/scripts/verify_pcb_designs_jlcpcb.py
+  ```
