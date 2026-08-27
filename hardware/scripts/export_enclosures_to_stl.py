@@ -220,35 +220,24 @@ def export_main_box_package(base_dir: str):
     mb_lower.add_boss(92.0, 62.0, 2.5, 3.5, 1.25, 3.5)
     mb_lower.write_stl(os.path.join(mb_dir, "main_box_lower_case.stl"))
     
-    # 2. Mid Tray (Oberwanne mit Zwischenboden & Front-Ports)
+    # 2. Mid Tray (Oberwanne mit durchgehenden, soliden Wänden & Zwischenboden)
     mb_mid = STLMeshBuilder("main_box_mid_tray")
-    # Outer frame
-    mb_mid.add_box(0, 0, 0, 2.5, 75.0, 15.0)
-    mb_mid.add_box(102.5, 0, 0, 2.5, 75.0, 15.0)
-    mb_mid.add_box(0, 72.5, 0, 105.0, 2.5, 15.0)
-    # Front wall with cutouts
-    mb_mid.add_box(0, 0, 0, 16.0, 2.5, 15.0)
-    mb_mid.add_box(16.0, 0, 0, 12.0, 2.5, 3.5)
-    mb_mid.add_box(16.0, 0, 10.5, 12.0, 2.5, 4.5)
-    mb_mid.add_box(28.0, 0, 0, 7.0, 2.5, 15.0)
-    mb_mid.add_box(35.0, 0, 0, 6.0, 2.5, 5.0)
-    mb_mid.add_box(35.0, 0, 10.0, 6.0, 2.5, 5.0)
-    mb_mid.add_box(41.0, 0, 0, 19.0, 2.5, 15.0)
-    mb_mid.add_box(60.0, 0, 0, 36.0, 2.5, 2.5)
-    mb_mid.add_box(60.0, 0, 12.5, 36.0, 2.5, 2.5)
-    mb_mid.add_box(96.0, 0, 0, 9.0, 2.5, 15.0)
-    # Floor with cable slot
-    mb_mid.add_box(2.5, 2.5, 0, 57.5, 70.0, 2.5)
-    mb_mid.add_box(60.0, 2.5, 0, 42.5, 12.5, 2.5)
-    mb_mid.add_box(60.0, 27.0, 0, 42.5, 45.5, 2.5)
-    mb_mid.add_box(94.0, 15.0, 0, 8.5, 12.0, 2.5)
-    mb_mid.add_box(60.0, 15.0, 0, 4.0, 12.0, 2.5)
-    # Battery cradle
+    # A. 100% Solid Continuous Perimeter Walls (105 x 75 x 15 mm, 2.5 mm wall thickness - NO seams, NO pre-cut holes)
+    mb_mid.add_box(0, 0, 0, 2.5, 75.0, 15.0)       # Left Wall
+    mb_mid.add_box(102.5, 0, 0, 2.5, 75.0, 15.0)   # Right Wall
+    mb_mid.add_box(0, 72.5, 0, 105.0, 2.5, 15.0)   # Back Wall
+    mb_mid.add_box(0, 0, 0, 105.0, 2.5, 15.0)      # 100% Solid Continuous Front Wall
+    # B. Solid Partition Floor (z = 0..2.5 mm)
+    mb_mid.add_box(2.5, 2.5, 0, 100.0, 70.0, 2.5)
+    # C. Battery Cradle (z = 2.5..10.5 mm)
     mb_mid.add_box(5.0, 12.0, 2.5, 2.5, 50.0, 8.0)
     mb_mid.add_box(5.0, 12.0, 2.5, 50.0, 2.5, 8.0)
     mb_mid.add_box(5.0, 59.5, 2.5, 50.0, 2.5, 8.0)
     mb_mid.add_box(52.5, 12.0, 2.5, 2.5, 50.0, 8.0)
     mb_mid.write_stl(os.path.join(mb_dir, "main_box_mid_tray.stl"))
+    # Also write to base cad/stl root for backward compatibility
+    mb_mid.write_stl(os.path.join(base_dir, "main_box_mid_tray.stl"))
+    mb_mid.write_stl(os.path.join(base_dir, "main_box_mid_baffle.stl"))
     
     # 3. Lid (Deckel)
     mb_lid = STLMeshBuilder("main_box_lid")
@@ -297,93 +286,71 @@ def export_main_box_package(base_dir: str):
     e_single.add_box(0, 0, 0, 11.5, 14.0, 5.0)
     e_single.write_stl(os.path.join(comp_dir, "04_single_m4_mounting_ear.stl"))
     
-    # 05. Mid tray solid frame (Solid 105x75x15 frame with solid front wall)
+    # 05. Mid tray solid frame (105x75x15 mm)
     mid_solid_frame = STLMeshBuilder("05_mid_tray_solid_frame")
     mid_solid_frame.add_box(0, 0, 0, 2.5, 75.0, 15.0)
     mid_solid_frame.add_box(102.5, 0, 0, 2.5, 75.0, 15.0)
     mid_solid_frame.add_box(0, 72.5, 0, 105.0, 2.5, 15.0)
-    mid_solid_frame.add_box(0, 0, 0, 105.0, 2.5, 15.0) # Solid front wall
+    mid_solid_frame.add_box(0, 0, 0, 105.0, 2.5, 15.0)
     mid_solid_frame.write_stl(os.path.join(comp_dir, "05_mid_tray_solid_frame.stl"))
     
-    # 06. Mid tray frame precut
-    mid_precut = STLMeshBuilder("06_mid_tray_frame_precut")
-    mid_precut.add_box(0, 0, 0, 2.5, 75.0, 15.0)
-    mid_precut.add_box(102.5, 0, 0, 2.5, 75.0, 15.0)
-    mid_precut.add_box(0, 72.5, 0, 105.0, 2.5, 15.0)
-    mid_precut.add_box(0, 0, 0, 16.0, 2.5, 15.0)
-    mid_precut.add_box(16.0, 0, 0, 12.0, 2.5, 3.5)
-    mid_precut.add_box(16.0, 0, 10.5, 12.0, 2.5, 4.5)
-    mid_precut.add_box(28.0, 0, 0, 7.0, 2.5, 15.0)
-    mid_precut.add_box(35.0, 0, 0, 6.0, 2.5, 5.0)
-    mid_precut.add_box(35.0, 0, 10.0, 6.0, 2.5, 5.0)
-    mid_precut.add_box(41.0, 0, 0, 19.0, 2.5, 15.0)
-    mid_precut.add_box(60.0, 0, 0, 36.0, 2.5, 2.5)
-    mid_precut.add_box(60.0, 0, 12.5, 36.0, 2.5, 2.5)
-    mid_precut.add_box(96.0, 0, 0, 9.0, 2.5, 15.0)
-    mid_precut.write_stl(os.path.join(comp_dir, "06_mid_tray_frame_precut.stl"))
-    
-    # 07. Mid partition floor with cable slot
-    floor_slot = STLMeshBuilder("07_mid_partition_floor_with_cable_slot")
-    floor_slot.add_box(2.5, 2.5, 0, 57.5, 70.0, 2.5)
-    floor_slot.add_box(60.0, 2.5, 0, 42.5, 12.5, 2.5)
-    floor_slot.add_box(60.0, 27.0, 0, 42.5, 45.5, 2.5)
-    floor_slot.add_box(94.0, 15.0, 0, 8.5, 12.0, 2.5)
-    floor_slot.add_box(60.0, 15.0, 0, 4.0, 12.0, 2.5)
-    floor_slot.write_stl(os.path.join(comp_dir, "07_mid_partition_floor_with_cable_slot.stl"))
-    
-    # 08. Mid partition floor solid (100x70 plate)
-    floor_solid = STLMeshBuilder("08_mid_partition_floor_solid")
+    # 06. Mid partition floor solid (100x70x2.5 mm)
+    floor_solid = STLMeshBuilder("06_mid_partition_floor_solid")
     floor_solid.add_box(2.5, 2.5, 0, 100.0, 70.0, 2.5)
-    floor_solid.write_stl(os.path.join(comp_dir, "08_mid_partition_floor_solid.stl"))
+    floor_solid.write_stl(os.path.join(comp_dir, "06_mid_partition_floor_solid.stl"))
     
-    # 09. LiPo Battery Cradle 1000mAh (Standard 52x36 mm LiPo)
-    cradle_1000 = STLMeshBuilder("09_lipo_battery_cradle_1000mah")
+    # 07. LiPo Battery Cradle 1000mAh
+    cradle_1000 = STLMeshBuilder("07_lipo_battery_cradle_1000mah")
     cradle_1000.add_box(5.0, 12.0, 2.5, 2.5, 50.0, 8.0)
     cradle_1000.add_box(5.0, 12.0, 2.5, 50.0, 2.5, 8.0)
     cradle_1000.add_box(5.0, 59.5, 2.5, 50.0, 2.5, 8.0)
     cradle_1000.add_box(52.5, 12.0, 2.5, 2.5, 50.0, 8.0)
-    cradle_1000.write_stl(os.path.join(comp_dir, "09_lipo_battery_cradle_1000mah.stl"))
+    cradle_1000.write_stl(os.path.join(comp_dir, "07_lipo_battery_cradle_1000mah.stl"))
     
-    # 10. LiPo Battery Cradle 1500mAh Large (Wide 60x42 mm LiPo)
-    cradle_1500 = STLMeshBuilder("10_lipo_battery_cradle_1500mah_large")
+    # 08. LiPo Battery Cradle 1500mAh Large
+    cradle_1500 = STLMeshBuilder("08_lipo_battery_cradle_1500mah_large")
     cradle_1500.add_box(4.0, 8.0, 2.5, 2.5, 58.0, 9.0)
     cradle_1500.add_box(4.0, 8.0, 2.5, 54.0, 2.5, 9.0)
     cradle_1500.add_box(4.0, 63.5, 2.5, 54.0, 2.5, 9.0)
     cradle_1500.add_box(55.5, 8.0, 2.5, 2.5, 58.0, 9.0)
-    cradle_1500.write_stl(os.path.join(comp_dir, "10_lipo_battery_cradle_1500mah_large.stl"))
+    cradle_1500.write_stl(os.path.join(comp_dir, "08_lipo_battery_cradle_1500mah_large.stl"))
     
-    # 11-14: Front Cutout Hole Tool Primitives (Set to 'Bohrung' / 'Hole' in Tinkercad)
-    tool_usbc = STLMeshBuilder("11_front_cutout_tool_usb_c")
-    tool_usbc.add_box(16.0, -1.0, 3.5, 12.0, 4.5, 7.0) # USB-C hole tool
-    tool_usbc.write_stl(os.path.join(comp_dir, "11_front_cutout_tool_usb_c.stl"))
+    # 09-13: Cutout Hole Tool Primitives (Set to 'Bohrung' / 'Hole' in Tinkercad and group!)
+    tool_usbc = STLMeshBuilder("09_cutout_tool_usb_c")
+    tool_usbc.add_box(18.0, -2.0, 4.0, 12.0, 6.0, 7.0) # USB-C hole tool
+    tool_usbc.write_stl(os.path.join(comp_dir, "09_cutout_tool_usb_c.stl"))
     
-    tool_led = STLMeshBuilder("12_front_cutout_tool_led")
-    tool_led.add_box(35.0, -1.0, 5.0, 6.0, 4.5, 5.0) # LED window hole tool
-    tool_led.write_stl(os.path.join(comp_dir, "12_front_cutout_tool_led.stl"))
+    tool_led = STLMeshBuilder("10_cutout_tool_led_window")
+    tool_led.add_box(36.0, -2.0, 5.0, 6.0, 6.0, 5.0) # LED window hole tool
+    tool_led.write_stl(os.path.join(comp_dir, "10_cutout_tool_led_window.stl"))
     
-    tool_hd26 = STLMeshBuilder("13_front_cutout_tool_hd26_flange")
-    tool_hd26.add_box(60.0, -1.0, 2.5, 36.0, 4.5, 10.0) # HD26 hole tool
-    tool_hd26.write_stl(os.path.join(comp_dir, "13_front_cutout_tool_hd26_flange.stl"))
+    tool_hd26 = STLMeshBuilder("11_cutout_tool_hd26_dsub")
+    tool_hd26.add_box(60.0, -2.0, 3.0, 36.0, 6.0, 9.5) # HD26 D-Sub hole tool
+    tool_hd26.write_stl(os.path.join(comp_dir, "11_cutout_tool_hd26_dsub.stl"))
     
-    tool_slot = STLMeshBuilder("14_cable_slot_cutout_tool")
-    tool_slot.add_box(64.0, 15.0, -1.0, 30.0, 12.0, 4.5) # Cable slot hole tool
-    tool_slot.write_stl(os.path.join(comp_dir, "14_cable_slot_cutout_tool.stl"))
+    tool_m16 = STLMeshBuilder("12_cutout_tool_m16_round_gland")
+    tool_m16.add_cylinder(78.0, 1.25, 7.5, 8.0, 6.0, segments=24) # M16 Ø16mm round hole tool (along Y axis approximation: cylinder)
+    tool_m16.write_stl(os.path.join(comp_dir, "12_cutout_tool_m16_round_gland.stl"))
     
-    # 15-17: Lid components
-    lid_plate = STLMeshBuilder("15_lid_plate_only")
+    tool_slot = STLMeshBuilder("13_cutout_tool_cable_slot")
+    tool_slot.add_box(64.0, 15.0, -1.0, 30.0, 12.0, 5.0) # Cable slot through floor
+    tool_slot.write_stl(os.path.join(comp_dir, "13_cutout_tool_cable_slot.stl"))
+    
+    # 14-16: Lid components
+    lid_plate = STLMeshBuilder("14_lid_plate_only")
     lid_plate.add_box(0, 0, 0, 105.0, 75.0, 4.0)
-    lid_plate.write_stl(os.path.join(comp_dir, "15_lid_plate_only.stl"))
+    lid_plate.write_stl(os.path.join(comp_dir, "14_lid_plate_only.stl"))
     
-    lid_lip = STLMeshBuilder("16_lid_sealing_lip")
+    lid_lip = STLMeshBuilder("15_lid_sealing_lip")
     lid_lip.add_box(2.8, 2.8, -3.0, 99.4, 3.0, 3.0)
     lid_lip.add_box(2.8, 69.2, -3.0, 99.4, 3.0, 3.0)
     lid_lip.add_box(2.8, 2.8, -3.0, 3.0, 69.4, 3.0)
     lid_lip.add_box(99.2, 2.8, -3.0, 3.0, 69.4, 3.0)
-    lid_lip.write_stl(os.path.join(comp_dir, "16_lid_sealing_lip.stl"))
+    lid_lip.write_stl(os.path.join(comp_dir, "15_lid_sealing_lip.stl"))
     
-    lid_vent = STLMeshBuilder("17_lid_gore_vent_boss")
+    lid_vent = STLMeshBuilder("16_lid_gore_vent_boss")
     lid_vent.add_cylinder(52.5, 37.5, 0, 4.0, 5.5)
-    lid_vent.write_stl(os.path.join(comp_dir, "17_lid_gore_vent_boss.stl"))
+    lid_vent.write_stl(os.path.join(comp_dir, "16_lid_gore_vent_boss.stl"))
 
 
 # =============================================================================
@@ -524,12 +491,18 @@ def export_rear_pod3_package(base_dir: str):
 
 
 def main():
+    import shutil
     base_dirs = [
         "/Users/schmidtm/openMotorBridge/hardware/cad/stl",
         "/Users/schmidtm/openMotorBridge/hardware/3d_models_mjf"
     ]
     
     for base in base_dirs:
+        for sub in ["01_main_box", "02_pod_base", "03_pod_cartridges", "04_rear_pod3", "tinkercad_modular_kit"]:
+            target = os.path.join(base, sub)
+            if os.path.exists(target):
+                shutil.rmtree(target)
+                
         export_main_box_package(base)
         export_pod_base_package(base)
         export_cartridges_package(base)
