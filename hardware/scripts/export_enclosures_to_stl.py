@@ -207,26 +207,34 @@ def export_main_box_package(base_dir: str):
     os.makedirs(comp_dir, exist_ok=True)
     
     # --- A. Monolithic Models ---
-    # 1. Lower Case (Unterwanne)
+    # 1. Lower Case (Unterwanne mit PCB-Schraubdomen & 4x M3 Eck-Spannsäulen)
     mb_lower = STLMeshBuilder("main_box_lower_case")
     mb_lower.add_hollow_box(0, 0, 0, 105.0, 75.0, 18.0, 2.5)
+    # 4x M4 Silentblock Mounting Ears on outer corners
     mb_lower.add_box(-11.5, 9.5, 0, 11.5, 14.0, 5.0)
     mb_lower.add_box(-11.5, 51.5, 0, 11.5, 14.0, 5.0)
     mb_lower.add_box(105.0, 9.5, 0, 11.5, 14.0, 5.0)
     mb_lower.add_box(105.0, 51.5, 0, 11.5, 14.0, 5.0)
+    # 4x PCB Standoffs (M2.5 Schraubdome, Höhe 3.5 mm über Boden)
     mb_lower.add_boss(13.0, 13.0, 2.5, 3.5, 1.25, 3.5)
     mb_lower.add_boss(92.0, 13.0, 2.5, 3.5, 1.25, 3.5)
     mb_lower.add_boss(13.0, 62.0, 2.5, 3.5, 1.25, 3.5)
     mb_lower.add_boss(92.0, 62.0, 2.5, 3.5, 1.25, 3.5)
+    # 4x M3 Corner Enclosure Clamping Pillars (Eck-Pfosten mit M3 Gewindeeinsatz-Bohrung)
+    mb_lower.add_boss(6.0, 6.0, 2.5, 4.0, 2.0, 15.5)
+    mb_lower.add_boss(99.0, 6.0, 2.5, 4.0, 2.0, 15.5)
+    mb_lower.add_boss(6.0, 69.0, 2.5, 4.0, 2.0, 15.5)
+    mb_lower.add_boss(99.0, 69.0, 2.5, 4.0, 2.0, 15.5)
     mb_lower.write_stl(os.path.join(mb_dir, "main_box_lower_case.stl"))
+    mb_lower.write_stl(os.path.join(base_dir, "main_box_lower_case.stl"))
     
-    # 2. Mid Tray (Oberwanne mit durchgehenden, soliden Wänden & Zwischenboden)
+    # 2. Mid Tray (Oberwanne mit 4x M3 Eck-Pfostensäulen & durchgehenden Wänden)
     mb_mid = STLMeshBuilder("main_box_mid_tray")
-    # A. 100% Solid Continuous Perimeter Walls (105 x 75 x 15 mm, 2.5 mm wall thickness - NO seams, NO pre-cut holes)
+    # A. 100% Solid Continuous Perimeter Walls (105 x 75 x 15 mm, 2.5 mm wall)
     mb_mid.add_box(0, 0, 0, 2.5, 75.0, 15.0)       # Left Wall
     mb_mid.add_box(102.5, 0, 0, 2.5, 75.0, 15.0)   # Right Wall
     mb_mid.add_box(0, 72.5, 0, 105.0, 2.5, 15.0)   # Back Wall
-    mb_mid.add_box(0, 0, 0, 105.0, 2.5, 15.0)      # 100% Solid Continuous Front Wall
+    mb_mid.add_box(0, 0, 0, 105.0, 2.5, 15.0)      # Front Wall
     # B. Solid Partition Floor (z = 0..2.5 mm)
     mb_mid.add_box(2.5, 2.5, 0, 100.0, 70.0, 2.5)
     # C. Battery Cradle (z = 2.5..10.5 mm)
@@ -234,20 +242,30 @@ def export_main_box_package(base_dir: str):
     mb_mid.add_box(5.0, 12.0, 2.5, 50.0, 2.5, 8.0)
     mb_mid.add_box(5.0, 59.5, 2.5, 50.0, 2.5, 8.0)
     mb_mid.add_box(52.5, 12.0, 2.5, 2.5, 50.0, 8.0)
+    # D. 4x Corner Through-Bolt Pillars (Eck-Pfosten mit M3 Durchgangsbohrung Ø 3.4 mm über 15 mm Höhe)
+    mb_mid.add_boss(6.0, 6.0, 0, 4.0, 1.7, 15.0)
+    mb_mid.add_boss(99.0, 6.0, 0, 4.0, 1.7, 15.0)
+    mb_mid.add_boss(6.0, 69.0, 0, 4.0, 1.7, 15.0)
+    mb_mid.add_boss(99.0, 69.0, 0, 4.0, 1.7, 15.0)
     mb_mid.write_stl(os.path.join(mb_dir, "main_box_mid_tray.stl"))
-    # Also write to base cad/stl root for backward compatibility
     mb_mid.write_stl(os.path.join(base_dir, "main_box_mid_tray.stl"))
     mb_mid.write_stl(os.path.join(base_dir, "main_box_mid_baffle.stl"))
     
-    # 3. Lid (Deckel)
+    # 3. Lid (Deckel mit 4x M3 Eck-Schraublöchern)
     mb_lid = STLMeshBuilder("main_box_lid")
     mb_lid.add_box(0, 0, 0, 105.0, 75.0, 4.0)
     mb_lid.add_box(2.8, 2.8, -3.0, 99.4, 3.0, 3.0)
     mb_lid.add_box(2.8, 69.2, -3.0, 99.4, 3.0, 3.0)
     mb_lid.add_box(2.8, 2.8, -3.0, 3.0, 69.4, 3.0)
     mb_lid.add_box(99.2, 2.8, -3.0, 3.0, 69.4, 3.0)
+    # 4x Corner M3 Screw Countersunk Bosses
+    mb_lid.add_boss(6.0, 6.0, 0, 4.0, 1.7, 4.0)
+    mb_lid.add_boss(99.0, 6.0, 0, 4.0, 1.7, 4.0)
+    mb_lid.add_boss(6.0, 69.0, 0, 4.0, 1.7, 4.0)
+    mb_lid.add_boss(99.0, 69.0, 0, 4.0, 1.7, 4.0)
     mb_lid.add_cylinder(52.5, 37.5, 4.0, 4.0, 1.5)
     mb_lid.write_stl(os.path.join(mb_dir, "main_box_lid.stl"))
+    mb_lid.write_stl(os.path.join(base_dir, "main_box_lid.stl"))
 
     # 4. Complete Assembly Mockup
     mb_asm = STLMeshBuilder("main_box_complete_assembly")
@@ -351,6 +369,28 @@ def export_main_box_package(base_dir: str):
     lid_vent = STLMeshBuilder("16_lid_gore_vent_boss")
     lid_vent.add_cylinder(52.5, 37.5, 0, 4.0, 5.5)
     lid_vent.write_stl(os.path.join(comp_dir, "16_lid_gore_vent_boss.stl"))
+    
+    # 17-19: Corner Clamping Post Primitives
+    posts_mid = STLMeshBuilder("17_corner_clamping_posts_mid_tray_4x")
+    posts_mid.add_boss(6.0, 6.0, 0, 4.0, 1.7, 15.0)
+    posts_mid.add_boss(99.0, 6.0, 0, 4.0, 1.7, 15.0)
+    posts_mid.add_boss(6.0, 69.0, 0, 4.0, 1.7, 15.0)
+    posts_mid.add_boss(99.0, 69.0, 0, 4.0, 1.7, 15.0)
+    posts_mid.write_stl(os.path.join(comp_dir, "17_corner_clamping_posts_mid_tray_4x.stl"))
+    
+    posts_low = STLMeshBuilder("18_corner_clamping_posts_lower_case_4x")
+    posts_low.add_boss(6.0, 6.0, 2.5, 4.0, 2.0, 15.5)
+    posts_low.add_boss(99.0, 6.0, 2.5, 4.0, 2.0, 15.5)
+    posts_low.add_boss(6.0, 69.0, 2.5, 4.0, 2.0, 15.5)
+    posts_low.add_boss(99.0, 69.0, 2.5, 4.0, 2.0, 15.5)
+    posts_low.write_stl(os.path.join(comp_dir, "18_corner_clamping_posts_lower_case_4x.stl"))
+    
+    tools_m3_holes = STLMeshBuilder("19_corner_screw_holes_cutout_tool_4x")
+    tools_m3_holes.add_cylinder(6.0, 6.0, -5.0, 1.7, 45.0)
+    tools_m3_holes.add_cylinder(99.0, 6.0, -5.0, 1.7, 45.0)
+    tools_m3_holes.add_cylinder(6.0, 69.0, -5.0, 1.7, 45.0)
+    tools_m3_holes.add_cylinder(99.0, 69.0, -5.0, 1.7, 45.0)
+    tools_m3_holes.write_stl(os.path.join(comp_dir, "19_corner_screw_holes_cutout_tool_4x.stl"))
 
 
 # =============================================================================
