@@ -207,7 +207,7 @@ def export_main_box_package(base_dir: str):
     os.makedirs(comp_dir, exist_ok=True)
     
     # --- A. Monolithic Models ---
-    # 1. Lower Case (Unterwanne mit PCB-Schraubdomen & 4x M3 Eck-Spannsäulen)
+    # 1. Lower Case (Unterwanne mit PCB-Schraubdomen, 4x M3 Eck-Spannsäulen & Dichtungsnut)
     mb_lower = STLMeshBuilder("main_box_lower_case")
     mb_lower.add_hollow_box(0, 0, 0, 105.0, 75.0, 18.0, 2.5)
     # 4x M4 Silentblock Mounting Ears on outer corners
@@ -225,10 +225,15 @@ def export_main_box_package(base_dir: str):
     mb_lower.add_boss(99.0, 6.0, 2.5, 4.0, 2.0, 15.5)
     mb_lower.add_boss(6.0, 69.0, 2.5, 4.0, 2.0, 15.5)
     mb_lower.add_boss(99.0, 69.0, 2.5, 4.0, 2.0, 15.5)
+    # Umlaufender äußerer Dichtungsfalz-Kragen (Sealing Groove Collar: z = 18..19.5 mm)
+    mb_lower.add_box(0, 0, 18.0, 105.0, 1.0, 1.5)      # Front collar
+    mb_lower.add_box(0, 74.0, 18.0, 105.0, 1.0, 1.5)   # Back collar
+    mb_lower.add_box(0, 0, 18.0, 1.0, 75.0, 1.5)       # Left collar
+    mb_lower.add_box(104.0, 0, 18.0, 1.0, 75.0, 1.5)   # Right collar
     mb_lower.write_stl(os.path.join(mb_dir, "main_box_lower_case.stl"))
     mb_lower.write_stl(os.path.join(base_dir, "main_box_lower_case.stl"))
     
-    # 2. Mid Tray (Oberwanne mit 4x M3 Eck-Pfostensäulen & durchgehenden Wänden)
+    # 2. Mid Tray (Oberwanne mit Nut & Feder Dichtungssteg, 4x M3 Eck-Pfostensäulen & soliden Wänden)
     mb_mid = STLMeshBuilder("main_box_mid_tray")
     # A. 100% Solid Continuous Perimeter Walls (105 x 75 x 15 mm, 2.5 mm wall)
     mb_mid.add_box(0, 0, 0, 2.5, 75.0, 15.0)       # Left Wall
@@ -247,17 +252,28 @@ def export_main_box_package(base_dir: str):
     mb_mid.add_boss(99.0, 6.0, 0, 4.0, 1.7, 15.0)
     mb_mid.add_boss(6.0, 69.0, 0, 4.0, 1.7, 15.0)
     mb_mid.add_boss(99.0, 69.0, 0, 4.0, 1.7, 15.0)
+    # E. Unterer Einpress-Dichtsteg (greift in die Nut der Unterwanne: z = -1.5..0 mm)
+    mb_mid.add_box(1.2, 1.2, -1.5, 102.6, 1.3, 1.5)
+    mb_mid.add_box(1.2, 72.5, -1.5, 102.6, 1.3, 1.5)
+    mb_mid.add_box(1.2, 1.2, -1.5, 1.3, 72.6, 1.5)
+    mb_mid.add_box(102.5, 1.2, -1.5, 1.3, 72.6, 1.5)
+    # F. Oberer Dichtungskragen für den Deckel (z = 15..16.5 mm)
+    mb_mid.add_box(0, 0, 15.0, 105.0, 1.0, 1.5)
+    mb_mid.add_box(0, 74.0, 15.0, 105.0, 1.0, 1.5)
+    mb_mid.add_box(0, 0, 15.0, 1.0, 75.0, 1.5)
+    mb_mid.add_box(104.0, 0, 15.0, 1.0, 75.0, 1.5)
     mb_mid.write_stl(os.path.join(mb_dir, "main_box_mid_tray.stl"))
     mb_mid.write_stl(os.path.join(base_dir, "main_box_mid_tray.stl"))
     mb_mid.write_stl(os.path.join(base_dir, "main_box_mid_baffle.stl"))
     
-    # 3. Lid (Deckel mit 4x M3 Eck-Schraublöchern)
+    # 3. Lid (Deckel mit 4x M3 Eck-Schraublöchern & Dichtungslippe)
     mb_lid = STLMeshBuilder("main_box_lid")
     mb_lid.add_box(0, 0, 0, 105.0, 75.0, 4.0)
-    mb_lid.add_box(2.8, 2.8, -3.0, 99.4, 3.0, 3.0)
-    mb_lid.add_box(2.8, 69.2, -3.0, 99.4, 3.0, 3.0)
-    mb_lid.add_box(2.8, 2.8, -3.0, 3.0, 69.4, 3.0)
-    mb_lid.add_box(99.2, 2.8, -3.0, 3.0, 69.4, 3.0)
+    # Untere Einpress-Dichtlippe (greift in die Dichtnut der Oberwanne: z = -2.5..0 mm)
+    mb_lid.add_box(1.2, 1.2, -2.5, 102.6, 1.3, 2.5)
+    mb_lid.add_box(1.2, 72.5, -2.5, 102.6, 1.3, 2.5)
+    mb_lid.add_box(1.2, 1.2, -2.5, 1.3, 72.6, 2.5)
+    mb_lid.add_box(102.5, 1.2, -2.5, 1.3, 72.6, 2.5)
     # 4x Corner M3 Screw Countersunk Bosses
     mb_lid.add_boss(6.0, 6.0, 0, 4.0, 1.7, 4.0)
     mb_lid.add_boss(99.0, 6.0, 0, 4.0, 1.7, 4.0)
@@ -391,6 +407,28 @@ def export_main_box_package(base_dir: str):
     tools_m3_holes.add_cylinder(6.0, 69.0, -5.0, 1.7, 45.0)
     tools_m3_holes.add_cylinder(99.0, 69.0, -5.0, 1.7, 45.0)
     tools_m3_holes.write_stl(os.path.join(comp_dir, "19_corner_screw_holes_cutout_tool_4x.stl"))
+    
+    # 20-22: Sealing System Modular Primitives
+    groove_collar = STLMeshBuilder("20_perimeter_sealing_groove_collar")
+    groove_collar.add_box(0, 0, 0, 105.0, 1.0, 1.5)
+    groove_collar.add_box(0, 74.0, 0, 105.0, 1.0, 1.5)
+    groove_collar.add_box(0, 0, 0, 1.0, 75.0, 1.5)
+    groove_collar.add_box(104.0, 0, 0, 1.0, 75.0, 1.5)
+    groove_collar.write_stl(os.path.join(comp_dir, "20_perimeter_sealing_groove_collar.stl"))
+    
+    tongue_lip = STLMeshBuilder("21_perimeter_sealing_tongue_lip")
+    tongue_lip.add_box(1.2, 1.2, 0, 102.6, 1.3, 2.0)
+    tongue_lip.add_box(1.2, 72.5, 0, 102.6, 1.3, 2.0)
+    tongue_lip.add_box(1.2, 1.2, 0, 1.3, 72.6, 2.0)
+    tongue_lip.add_box(102.5, 1.2, 0, 1.3, 72.6, 2.0)
+    tongue_lip.write_stl(os.path.join(comp_dir, "21_perimeter_sealing_tongue_lip.stl"))
+    
+    gasket_cord = STLMeshBuilder("22_silicone_o_ring_gasket_cord_1_5mm")
+    gasket_cord.add_box(1.0, 1.0, 0, 103.0, 1.5, 1.5)
+    gasket_cord.add_box(1.0, 72.5, 0, 103.0, 1.5, 1.5)
+    gasket_cord.add_box(1.0, 1.0, 0, 1.5, 73.0, 1.5)
+    gasket_cord.add_box(102.5, 1.0, 0, 1.5, 73.0, 1.5)
+    gasket_cord.write_stl(os.path.join(comp_dir, "22_silicone_o_ring_gasket_cord_1_5mm.stl"))
 
 
 # =============================================================================
