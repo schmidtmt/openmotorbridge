@@ -418,6 +418,35 @@ To ensure 100% vibration-proof, play-free, and tool-free retention ($> 20\,\text
 *Figure 5.2: 3D CAD visualization of the three reference swappable cartridge cradles with form-fit 3D contour negative bedding and elastic EPDM retention straps in the open carrier sled ($92 \times 54 \times 23.5\,\text{mm}$): Sena Quick-Snap Cradle (left), Cardo Magnetic Air Mount (center), and Midland Dovetail Slide / Bare-PCB Inlay (right).*
 
 #### 1. Sena 50S / 60S Contour Nest & Snap-Cradle
+![OpenMotorBridge Sena 50S Cartridge Assembly 3D CAD Fitting](../../hardware/cad/sena_cartridge_assembly_cad.png)
+
+*Figure 5.2: 1:1:1 Euclidean scale 3D CAD visualization of the Sena 50S/60S 2-piece modular cartridge inside the Satellite Pod. Highlights the universal base sled with carrier PCB (35x25 mm) and axial JST-SH header J2 facing +X, 1.5 mm under-bed routing channel, interchangeable 3D contour top nest with 7-pin gold Pogo array at X = +22 mm, and EPDM retention strap.*
+
+* **3D Contour Nest:** Sled floor forms an exact 3D negative of the Sena intercom bottom shell ($4.0\,\text{mm}$ deep recess, zero play along X and Y).
+* **OEM Snap Retention:** Positive lower retention lip ($4.0\,\text{mm}$ Bottom Hook) and upper spring-loaded POM latch (Top Release Latch).
+* **Elastic EPDM Retention Strap:** $12\,\text{mm}$ wide UV-resistant EPDM strap arches across center body, pulling the Sena firmly into the contour nest.
+* **Electrical Interface:** 7-pin gold-plated spring Pogo array at $X = +22.0\,\text{mm}$ contacts the Sena gold pads; JST-SH 6P flat ribbon cable routes via under-bed channel to carrier PCB (`openmotorbridge_pod_cartridge`).
+
+#### 2. Cardo Packtalk Edge / Pro Magnetic Air Mount & Contour Nest
+![OpenMotorBridge Cardo Packtalk Edge Cartridge Assembly 3D CAD Fitting](../../hardware/cad/cardo_cartridge_assembly_cad.png)
+
+*Figure 5.3: 1:1:1 Euclidean scale 3D CAD visualization of the Cardo Packtalk Edge 2-piece modular cartridge inside the Satellite Pod. Features dual N52 neodymium disc magnets (Ø8x2 mm), 5-pin spring contact pad array at X = +10 mm, and protected under-bed cable channel.*
+
+* **3D Contour Nest:** Replicates the curved underside of the Packtalk Edge with $0.8\,\text{mm}$ Shore 40A vibration isolation lining.
+* **Dual N52 Magnet Array & Locking Jaws:** Two N52 neodymium disc magnets ($2\times \varnothing\,8 \times 2\,\text{mm}$ at $X = -8\,\text{mm}$ and $X = +28\,\text{mm}$) provide $> 120\,\text{N}$ retention force in combination with lateral snap-lock flanks.
+* **Elastic EPDM Retention Strap:** Provides fail-safe mechanical retention under high offroad shocks.
+* **Electrical Interface:** 5-pin spring contact array at $X = +10.0\,\text{mm}$ contacts audio, mic, and 5V charge rails.
+
+---
+
+### 5.3.1 Mechanical & Electrical Longitudinal Cross-Section (Tolerance & Clearance Stack-Up)
+
+![OpenMotorBridge Sena & Cardo Cartridges Longitudinal Cross Section](../../hardware/cad/sena_cardo_cartridge_cross_section.png)
+
+*Figure 5.4: True-to-scale 2D longitudinal cross-section (X-Z plane) comparing Sena 50S (top) and Cardo Packtalk Edge (bottom) swappable cartridges inside the closed Pod enclosure. Shows the 2-piece sandwich stratification, axial JST-SH cable exit (+X), M2 fastening planes, and exact axial centering of the 6-pin interface on Y=0, Z=0.*
+
+<!-- replaced -->
+ & Snap-Cradle
 * **3D Contour Negative Nest:** The sled floor is precision-contoured as the exact 3D negative matching the curved underside of the Sena 50S/60S. The device recesses $4.0\,\text{mm}$ into the pocket, physically locking out any $X/Y$ shifting.
 * **OEM Snap-Fit Docking Latch:** Lower $4.0\,\text{mm}$ retention hook (*Bottom Hook*) and upper spring-loaded POM release latch (*Top Release Latch*) lock the device with an audible click.
 * **Elastic EPDM Retention Strap:** A $12\,\text{mm}$ wide, UV- and ozone-resistant EPDM rubber strap stretches across the device center, locking into side T-anchor pins. It exerts constant downward pre-tension – **zero vibration or rattling even on harsh off-road washboard tracks**.

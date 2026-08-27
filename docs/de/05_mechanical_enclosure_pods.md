@@ -398,16 +398,32 @@ Zur vibrationsfesten, spielfreien und werkzeuglosen Arretierung der Intercoms un
 *Abbildung 5.2: 3D-CAD-Visualisierung der drei Referenz-Kassettenaufnahmen mit formschlüssigem 3D-Kontur-Negativbett und elastischer EPDM-Spannlasche im offenen Großraum-Schlitten ($92 \times 54 \times 23{,}5\,\text{mm}$): Sena Quick-Snap Cradle (links), Cardo Magnetic Air Mount (Mitte) und Midland Dovetail Slide / Bare-PCB Inlay (rechts).*
 
 #### 1. Sena 50S / 60S Kontur-Nest & Snap-Cradle
+![OpenMotorBridge Sena 50S Cartridge Assembly 3D CAD Fitting](../../hardware/cad/sena_cartridge_assembly_cad.png)
+
+*Abbildung 5.2: 1:1:1 euklidische CAD-Visualisierung der Sena 50S/60S 2-teiligen Wechselkassette im Satelliten-Pod. Erkennbar sind der generische Unterschlitten mit Trägerplatine (35x25 mm) und axialem JST-SH Header J2, der 1.5 mm Unterflur-Kabelkanal, das austauschbare 3D-Konturbett mit 7-Pin Gold-Pogo-Array bei X = +22 mm und die EPDM-Spannlasche.*
+
 * **3D-Kontur-Negativbett:** Der Schlittenboden ist als exaktes 3D-Negativ der Sena-Gehäuseunterseite ausgeformt. Das Gerät sinkt $4{,}0\,\text{mm}$ tief in die Aussparung ein und kann sich in $X$- und $Y$-Richtung nicht um einen Zehntelmillimeter verschieben.
 * **OEM-Klick-Arretierung:** Formschlüssige untere Haltenase ($4{,}0\,\text{mm}$ *Bottom Hook*) und oberer federbelasteter POM-Rastriegel (*Top Release Latch*). Das Gerät klinkt mit einem satten Klick ein.
 * **Elastische EPDM-Sicherungslasche (Gummilasche):** Eine $12\,\text{mm}$ breite, UV- und ölbeständige EPDM-Spannlasche spannt sich quer über die Gehäusemitte und wird an seitlichen T-Ankern eingehängt. Sie zieht das Sena permanent nach unten in das Konturbett – **100 % rüttel- und klapperfrei auch bei harten Offroad-Schlägen**.
-* **Elektrischer Übergang:** 7-poliges vergoldetes Federkontaktfeld (Pogo-Array) greift direkt auf die originalen Gegenkontakte des Sena-Geräts; JST-SH 6P Flachbandkabel zur Kassetten-Trägerplatine (`openmotorbridge_pod_cartridge`).
+* **Elektrischer Übergang:** 7-poliges vergoldetes Federkontaktfeld (Pogo-Array bei $X = +22{,}0\,\text{mm}$) greift direkt auf die originalen Gegenkontakte des Sena-Geräts; JST-SH 6P Flachbandkabel durch den Unterflurkanal zur Kassetten-Trägerplatine (`openmotorbridge_pod_cartridge`).
 
 #### 2. Cardo Packtalk Edge / Pro Magnetic Air Mount & Kontur-Nest
+![OpenMotorBridge Cardo Packtalk Edge Cartridge Assembly 3D CAD Fitting](../../hardware/cad/cardo_cartridge_assembly_cad.png)
+
+*Abbildung 5.3: 1:1:1 euklidische CAD-Visualisierung der Cardo Packtalk Edge 2-teiligen Wechselkassette im Satelliten-Pod. Gezeigt werden die dualen N52-Neodym-Magnete (Ø8x2 mm), das 5-Pin Federkontaktfeld bei X = +10 mm und der scheuerfreie Kabelverlauf unter dem Dämpfungsinlay.*
+
 * **3D-Kontur-Negativbett:** Die Aufnahme bildet die geschwungene Unterseite des Packtalk Edge exakt nach. Eine $0{,}8\,\text{mm}$ Shore 40A Silikoneinlage dämpft Motor- und Fahrbahnstöße ab.
-* **Dual-N52-Magnetanzug & Klickflanken:** Zwei Neodym-Magnete ($2\times \varnothing\,8 \times 2\,\text{mm}$ N52) ziehen das Gerät passgenau in die Kontur. Zwei seitliche PA12/POM-Sicherungsflanken greifen formschlüssig in die Cardo-Haltenuten ($> 120\,\text{N}$ Abreißkraft).
+* **Dual-N52-Magnetanzug & Klickflanken:** Zwei Neodym-Magnete ($2\times \varnothing\,8 \times 2\,\text{mm}$ N52 bei $X = -8\,\text{mm}$ und $X = +28\,\text{mm}$) ziehen das Gerät passgenau in die Kontur. Zwei seitliche PA12/POM-Sicherungsflanken greifen formschlüssig in die Cardo-Haltenuten ($> 120\,\text{N}$ Abreißkraft).
 * **Elastische EPDM-Sicherungslasche:** Zusätzliche elastische Gummilasche für extreme Bedingungen (Enduro/Gravel), die ein vertikales Ausfedern mechanisch unmöglich macht.
-* **Elektrischer Übergang:** 5-Pin Federkontaktfeld stellt blitzschnell den Kontakt zu Audio, Mic und 5V-Speisung her.
+* **Elektrischer Übergang:** 5-Pin Federkontaktfeld bei $X = +10{,}0\,\text{mm}$ stellt blitzschnell den Kontakt zu Audio, Mic und 5V-Speisung her.
+
+---
+
+### 5.3.1 Mechanischer & Elektrischer Längsschnitt-Vergleich (Tolerance & Clearance Stack-Up)
+
+![OpenMotorBridge Sena & Cardo Cartridges Longitudinal Cross Section](../../hardware/cad/sena_cardo_cartridge_cross_section.png)
+
+*Abbildung 5.4: Maßstabsgetreuer 2D-Längsschnitt (X-Z Ebene) durch die Sena 50S (oben) und Cardo Packtalk Edge (unten) Wechselkassetten im geschlossenen Pod-Gehäuse. Dargestellt sind die 2-teilige Schichtung, der axiale JST-SH Kabelabgang nach rechts (+X), die M2-Verschraubungsebenen und die exakte axiale Zentrierung der 6-Pin Steckverbindung auf Y=0, Z=0.*
 
 #### 3. Midland BTR1 Advanced & XT30 Slide / Kontur-Klemme
 * **Für Midland Intercoms (BTR1 Advanced / Rush / Wave):**
