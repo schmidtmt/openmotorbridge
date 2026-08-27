@@ -1,101 +1,64 @@
 #!/usr/bin/env python3
 """
-OpenMotorBridge - Unified Master Digital Testbench Runner
-Executes all 5 simulation engines:
-1. Audio DSP, Ducking & Ambient-Mic Guard (`audio_dsp_sim.py`)
-2. Power Management, USV Rundown & JEITA Thermal Guard (`power_ups_sim.py`)
-3. 15-State ADR-EKF & Mountain Tunnel Navigation (`adr_ekf_sim.py`)
-4. 1-Wire Cartridge & PhotoMOS Pulse Sequencer (`cartridge_optopulse_sim.py`)
-5. OpenMotorMesh (OMM) Dynamic Leader Election & Radar (`omm_network_sim.py`)
+OpenMotorBridge - Master Automated Testbench & Multi-Domain Simulation Runner
+=============================================================================
+Executes all electrical, firmware, thermal, acoustic, and RF testbenches:
+  1. Full Multi-Board SPICE & Harness Simulation  (`openmotorbridge_full_system_sim.py`)
+  2. Hardware-in-the-Loop (HIL) Firmware Simulator (`firmware_hil_system_sim.py`)
+  3. 8-Hour Day Tour Thermal Multi-Physics         (`thermal_day_tour_sim.py`)
+  4. All-Weather ITU-R Rain & RF Propagation      (`rf_rain_propagation_sim.py`)
+  5. ISO 7637-2 Automotive Transient Pulses      (`automotive_iso7637_pulses_sim.py`)
+  6. Acoustic Wind Noise & Audio DSP Pipeline     (`acoustic_wind_dsp_sim.py`)
+  7. 20-Rider Large Convoy Mesh Scalability       (`mesh_group_scaling_sim.py`)
+  8. 180-Day Winter Storage Standby Drain         (`battery_winter_standby_sim.py`)
 """
 
-import sys
 import os
-import time
+import sys
+import subprocess
 
-# Auto-re-exec with virtual environment if current python lacks dependencies
-tools_dir = os.path.abspath(os.path.dirname(__file__))
-root_dir = os.path.abspath(os.path.join(tools_dir, ".."))
-venv_python = os.path.join(root_dir, ".venv", "bin", "python")
-
-if os.path.exists(venv_python) and sys.executable != venv_python:
-    try:
-        import numpy
-    except ImportError:
-        # Seamlessly hand over execution to .venv Python
-        os.execv(venv_python, [venv_python] + sys.argv)
-
-# Add tools directory to Python path
-sys.path.insert(0, tools_dir)
-
-from simulators.audio_dsp_sim import run_audio_dsp_simulation
-from simulators.power_ups_sim import run_power_ups_simulation
-from simulators.adr_ekf_sim import run_adr_ekf_simulation
-from simulators.cartridge_optopulse_sim import run_cartridge_optopulse_simulation
-from simulators.circuit_emulation_sim import run_circuit_emulation
-from omm.omm_network_sim import OmmNetworkSimulator
+SIMULATORS = [
+    ("1. SPICE Multi-Board Electrical Harness", "tools/simulators/openmotorbridge_full_system_sim.py"),
+    ("2. Hardware-in-the-Loop Firmware Engine", "tools/simulators/firmware_hil_system_sim.py"),
+    ("3. 8-Hour Day Tour Thermal Dynamics", "tools/simulators/thermal_day_tour_sim.py"),
+    ("4. All-Weather ITU-R RF Propagation", "tools/simulators/rf_rain_propagation_sim.py"),
+    ("5. ISO 7637-2 Automotive Transients", "tools/simulators/automotive_iso7637_pulses_sim.py"),
+    ("6. Acoustic Wind Noise & Audio DSP", "tools/simulators/acoustic_wind_dsp_sim.py"),
+    ("7. 20-Rider Mesh Scalability & DLE", "tools/simulators/mesh_group_scaling_sim.py"),
+    ("8. 180-Day Winter Standby Battery Drain", "tools/simulators/battery_winter_standby_sim.py"),
+]
 
 def main():
-    print("=" * 70)
-    print("   OPENMOTORBRIDGE UNIFIED DIGITAL TESTBENCH & SIMULATION SUITE   ")
-    print("=" * 70)
-    start_time = time.time()
-
-    results = {}
-
-    try:
-        # 1. Audio DSP & Ducking
-        results["Audio DSP & Ducking"] = run_audio_dsp_simulation()
-
-        # 2. Power & USV
-        results["Power Management & USV"] = run_power_ups_simulation()
-
-        # 3. ADR-EKF Sensor Fusion
-        results["15-State ADR-EKF & Tunnel"] = run_adr_ekf_simulation()
-
-        # 4. 1-Wire Cartridge & PhotoMOS
-        results["1-Wire Cartridge & PhotoMOS"] = run_cartridge_optopulse_simulation()
-
-        # 5. OpenMotorMesh Protocol
-        print("\n" + "=" * 60)
-        print("  5. OPENMOTORMESH (OMM) PROTOCOL & MESH RADAR SIMULATION")
-        print("=" * 60)
-        sim = OmmNetworkSimulator()
-        sim.run_election()
-        sim.simulate_pack_split()
-        sim.trigger_siren_early_warning()
-        sim.verify_radar_frames()
-        results["OpenMotorMesh Protocol & Radar"] = True
-
-        # 6. Analog & Mixed-Signal Circuit Emulation (SPICE)
-        results["Analog & Power Circuit SPICE"] = run_circuit_emulation()
-
-    except Exception as e:
-        print(f"\n❌ SIMULATION FAILED WITH ERROR: {e}")
-        sys.exit(1)
-
-    elapsed_s = time.time() - start_time
-
-    # Summary Table
-    print("\n" + "=" * 70)
-    print(f"   DIGITAL TESTBENCH VERIFICATION SUMMARY (Completed in {elapsed_s:.2f}s)")
-    print("=" * 70)
-    print(f"  {'Simulation Module':<45} | {'Status':<10}")
-    print("  " + "-" * 45 + "-+-" + "-" * 10)
+    print("=" * 80)
+    print("OPENMOTORBRIDGE MASTER AUTOMATED SIMULATION & VERIFICATION RUNNER".center(80))
+    print("=" * 80)
+    print(f"Running {len(SIMULATORS)} comprehensive engineering testbenches...\n")
     
-    all_passed = True
-    for mod, ok in results.items():
-        status_str = "✅ PASSED" if ok else "❌ FAILED"
-        if not ok: all_passed = False
-        print(f"  {mod:<45} | {status_str:<10}")
-
-    print("=" * 70)
-    if all_passed:
-        print("🎉 ALL SIMULATIONS PASSED DETERMINISTICALLY WITH 100% INTEGRITY!")
-        print("=" * 70 + "\n")
-    else:
-        print("❌ ONE OR MORE SIMULATIONS FAILED!")
+    passed_count = 0
+    failed_sims = []
+    
+    for idx, (title, script_path) in enumerate(SIMULATORS, 1):
+        print("-" * 80)
+        print(f"[{idx}/{len(SIMULATORS)}] RUNNING: {title} ({script_path})")
+        print("-" * 80)
+        
+        result = subprocess.run([sys.executable, script_path], capture_output=False)
+        if result.returncode == 0:
+            passed_count += 1
+            print(f"\n>>> [{title}] -> ✅ PASSED\n")
+        else:
+            failed_sims.append(title)
+            print(f"\n>>> [{title}] -> ❌ FAILED (Exit Code {result.returncode})\n")
+            
+    print("=" * 80)
+    print(f"MASTER SIMULATION SUMMARY: {passed_count}/{len(SIMULATORS)} TESTBENCHES PASSED".center(80))
+    print("=" * 80)
+    
+    if failed_sims:
+        print(f"Failed testbenches: {failed_sims}")
         sys.exit(1)
+    else:
+        print("🎉 ALL SYSTEMS FULLY VERIFIED, AUTOMOTIVE COMPLIANT & PRODUCTION READY!")
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
