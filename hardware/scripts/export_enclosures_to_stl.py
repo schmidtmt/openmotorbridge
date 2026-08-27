@@ -82,18 +82,49 @@ class STLMeshBuilder:
         self.add_quad(p[1], p[2], p[6], p[5])
 
     def add_hollow_box(self, x0: float, y0: float, z0: float, dx: float, dy: float, dz: float, wall: float):
-        """Adds a hollow box open at the top (enclosure tub)."""
-        # Outer walls
-        # Bottom
-        self.add_box(x0, y0, z0, dx, dy, wall)
-        # Left wall
-        self.add_box(x0, y0, z0 + wall, wall, dy, dz - wall)
-        # Right wall
-        self.add_box(x0 + dx - wall, y0, z0 + wall, wall, dy, dz - wall)
-        # Front wall
-        self.add_box(x0 + wall, y0, z0 + wall, dx - 2*wall, wall, dz - wall)
-        # Back wall
-        self.add_box(x0 + wall, y0 + dy - wall, z0 + wall, dx - 2*wall, wall, dz - wall)
+        """
+        Adds a 100% seamless, manifold hollow enclosure tub (open at top).
+        Generates clean outer shell, inner cavity, and top connecting rim with zero internal seams.
+        """
+        x1, y1, z1 = x0 + dx, y0 + dy, z0 + dz
+        ix0, iy0, iz0 = x0 + wall, y0 + wall, z0 + wall
+        ix1, iy1 = x1 - wall, y1 - wall
+        
+        # 1. Outer Bottom Face (z = z0, normal -Z)
+        self.add_quad(np.array([x0, y0, z0]), np.array([x0, y1, z0]), np.array([x1, y1, z0]), np.array([x1, y0, z0]))
+        
+        # 2. Inner Bottom Face (z = iz0, normal +Z)
+        self.add_quad(np.array([ix0, iy0, iz0]), np.array([ix1, iy0, iz0]), np.array([ix1, iy1, iz0]), np.array([ix0, iy1, iz0]))
+        
+        # 3. Outer Side Faces
+        # Front (y = y0, normal -Y)
+        self.add_quad(np.array([x0, y0, z0]), np.array([x1, y0, z0]), np.array([x1, y0, z1]), np.array([x0, y0, z1]))
+        # Back (y = y1, normal +Y)
+        self.add_quad(np.array([x1, y1, z0]), np.array([x0, y1, z0]), np.array([x0, y1, z1]), np.array([x1, y1, z1]))
+        # Left (x = x0, normal -X)
+        self.add_quad(np.array([x0, y1, z0]), np.array([x0, y0, z0]), np.array([x0, y0, z1]), np.array([x0, y1, z1]))
+        # Right (x = x1, normal +X)
+        self.add_quad(np.array([x1, y0, z0]), np.array([x1, y1, z0]), np.array([x1, y1, z1]), np.array([x1, y0, z1]))
+        
+        # 4. Inner Side Faces
+        # Inner Front (y = iy0, normal +Y)
+        self.add_quad(np.array([ix0, iy0, iz0]), np.array([ix0, iy0, z1]), np.array([ix1, iy0, z1]), np.array([ix1, iy0, iz0]))
+        # Inner Back (y = iy1, normal -Y)
+        self.add_quad(np.array([ix1, iy1, iz0]), np.array([ix1, iy1, z1]), np.array([ix0, iy1, z1]), np.array([ix0, iy1, iz0]))
+        # Inner Left (x = ix0, normal +X)
+        self.add_quad(np.array([ix0, iy1, iz0]), np.array([ix0, iy1, z1]), np.array([ix0, iy0, z1]), np.array([ix0, iy0, iz0]))
+        # Inner Right (x = ix1, normal -X)
+        self.add_quad(np.array([ix1, iy0, iz0]), np.array([ix1, iy0, z1]), np.array([ix1, iy1, z1]), np.array([ix1, iy1, iz0]))
+        
+        # 5. Top Rim Faces (Connecting outer top edge to inner top edge at z = z1)
+        # Front Rim
+        self.add_quad(np.array([x0, y0, z1]), np.array([x1, y0, z1]), np.array([ix1, iy0, z1]), np.array([ix0, iy0, z1]))
+        # Back Rim
+        self.add_quad(np.array([x1, y1, z1]), np.array([x0, y1, z1]), np.array([ix0, iy1, z1]), np.array([ix1, iy1, z1]))
+        # Left Rim
+        self.add_quad(np.array([x0, y1, z1]), np.array([x0, y0, z1]), np.array([ix0, iy0, z1]), np.array([ix0, iy1, z1]))
+        # Right Rim
+        self.add_quad(np.array([x1, y0, z1]), np.array([x1, y1, z1]), np.array([ix1, iy1, z1]), np.array([ix1, iy0, z1]))
 
     def add_cylinder(self, cx: float, cy: float, z0: float, radius: float, height: float, segments: int = 24):
         """Adds a solid vertical cylinder."""
@@ -157,13 +188,11 @@ def generate_main_box_stl(output_dir: str):
     mb_lower.add_box(105.0, 9.5, 0, 11.5, 14.0, 5.0)   # Right Front
     mb_lower.add_box(105.0, 51.5, 0, 11.5, 14.0, 5.0)  # Right Rear
     # 4x Internal PCB Mounting Standoffs (for 85x55 mm PCB at 79x49 mm spacing)
-    # PCB sits at z = 3.5 mm
+    # PCB sits at z = 3.5 mm above the 2.5 mm floor
     mb_lower.add_cylinder(13.0, 13.0, 2.5, 3.2, 3.5)
     mb_lower.add_cylinder(92.0, 13.0, 2.5, 3.2, 3.5)
     mb_lower.add_cylinder(13.0, 62.0, 2.5, 3.2, 3.5)
     mb_lower.add_cylinder(92.0, 62.0, 2.5, 3.2, 3.5)
-    # Front Cutout Reinforcement Flanges for M16 & USB-C
-    mb_lower.add_box(65.0, 0, 5.0, 28.0, 4.0, 12.0)
     mb_lower.write_stl(os.path.join(output_dir, "main_box_lower_case.stl"))
     
     # 2. Mid Baffle Tray (Zwischenboden mit LiPo-Bett)
