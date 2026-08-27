@@ -60,10 +60,10 @@ def auto_place_cartridge(pcb_path):
             (0.0, 0.0, 0.0),
             (1.0, 1.0, 1.0)
         ),
-        # J2: JST-SH 1.0mm 6-Pin Horizontal Connector on Top (F.Cu) - Inlay connection
+        # J2: JST-SH 1.0mm 6-Pin Horizontal Connector on Top (F.Cu) - Inlay connection (Axial facing +X)
         'J2': (
             '${KICAD10_3DMODEL_DIR}/Connector_JST.3dshapes/JST_SH_SM06B-SRSS-TB_1x06-1MP_P1.00mm_Horizontal.step',
-            (0.0, 0.0, 90.0),
+            (0.0, 0.0, 0.0),
             (0.0, 0.0, 0.0),
             (1.0, 1.0, 1.0)
         ),
