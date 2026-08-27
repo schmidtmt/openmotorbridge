@@ -541,6 +541,13 @@ def export_pod_base_package(base_dir: str):
     pb.add_boss(22.0, 55.0, 2.5, 2.5, 1.0, 4.0)
     pb.add_boss(22.0, 5.0, 21.5, 2.5, 1.0, 4.0)
     pb.add_boss(22.0, 55.0, 21.5, 2.5, 1.0, 4.0)
+    # Asymmetrische Poka-Yoke Führungsnuten (Nut-und-Feder Führungsschienen an Seitenwänden)
+    # Linke Schienenrippen (bilden 3.0mm Nut bei z = 6.7..9.7 mm)
+    pb.add_box(24.0, 2.5, 4.5, 74.0, 1.5, 2.2)
+    pb.add_box(24.0, 2.5, 9.7, 74.0, 1.5, 2.2)
+    # Rechte Schienenrippen (bilden 3.0mm Nut bei z = 12.7..15.7 mm -> Asymmetrischer Höhenversatz)
+    pb.add_box(24.0, 56.0, 10.5, 74.0, 1.5, 2.2)
+    pb.add_box(24.0, 56.0, 15.7, 74.0, 1.5, 2.2)
     pb.write_stl(os.path.join(pb_dir, "pod_base_housing.stl"))
     pb.write_stl(os.path.join(base_dir, "pod_base_housing.stl"))
     
@@ -597,6 +604,11 @@ def export_pod_base_package(base_dir: str):
     c8.add_cylinder(22.0, 16.0, 14.0, 3.0, 8.0)
     c8.add_cylinder(22.0, 44.0, 14.0, 3.0, 8.0)
     c8.write_stl(os.path.join(comp_dir, "08_auto_eject_springs_pair.stl"))
+    
+    c9 = STLMeshBuilder("09_pod_internal_guide_grooves_cutout_tool")
+    c9.add_box(22.0, 1.0, 6.7, 76.0, 3.0, 3.0)  # Left groove tool
+    c9.add_box(22.0, 56.0, 12.7, 76.0, 3.0, 3.0) # Right groove tool
+    c9.write_stl(os.path.join(comp_dir, "09_pod_internal_guide_grooves_cutout_tool.stl"))
 
 
 # =============================================================================
@@ -614,6 +626,11 @@ def export_cartridges_package(base_dir: str):
     sc.add_box(0, 0, 2.5, 75.0, 2.5, 18.0)        # Left Wall
     sc.add_box(0, 51.5, 2.5, 75.0, 2.5, 18.0)     # Right Wall
     sc.add_box(75.0, -2.0, -1.5, 4.0, 58.0, 25.0) # Front Faceplate
+    # Asymmetrische Poka-Yoke Führungsfedern (Tongue Rails) mit 30°-Einlaufnase
+    sc.add_box(4.0, -1.4, 6.9, 70.0, 1.4, 2.6)    # Linke Feder (z = 8.2 mm)
+    sc.add_box(0.0, -1.4, 7.2, 4.0, 1.4, 2.0)     # Einlaufschräge links
+    sc.add_box(4.0, 54.0, 12.9, 70.0, 1.4, 2.6)   # Rechte Feder (z = 14.2 mm)
+    sc.add_box(0.0, 54.0, 13.2, 4.0, 1.4, 2.0)    # Einlaufschräge rechts
     # Sena 3D Cradle & Jog-Dial Nest auf der Oberseite
     sc.add_cylinder(55.0, 18.0, 18.0, 6.0, 6.0)
     sc.add_cylinder(55.0, 36.0, 18.0, 5.0, 6.0)
@@ -631,6 +648,11 @@ def export_cartridges_package(base_dir: str):
     cc.add_box(0, 0, 2.5, 75.0, 2.5, 18.0)        # Left Wall
     cc.add_box(0, 51.5, 2.5, 75.0, 2.5, 18.0)     # Right Wall
     cc.add_box(75.0, -2.0, -1.5, 4.0, 58.0, 25.0) # Front Faceplate
+    # Asymmetrische Poka-Yoke Führungsfedern mit 30°-Einlaufnase
+    cc.add_box(4.0, -1.4, 6.9, 70.0, 1.4, 2.6)
+    cc.add_box(0.0, -1.4, 7.2, 4.0, 1.4, 2.0)
+    cc.add_box(4.0, 54.0, 12.9, 70.0, 1.4, 2.6)
+    cc.add_box(0.0, 54.0, 13.2, 4.0, 1.4, 2.0)
     # Cardo AirMount Magnet- & Pogo-Nest
     cc.add_cylinder(40.0, 27.0, 18.0, 8.0, 4.0)
     cc.add_box(5.0, 17.0, 18.0, 10.0, 20.0, 5.0)
@@ -648,6 +670,11 @@ def export_cartridges_package(base_dir: str):
     oc.add_box(0, 0, 2.5, 75.0, 2.5, 18.0)        # Left Wall
     oc.add_box(0, 51.5, 2.5, 75.0, 2.5, 18.0)     # Right Wall
     oc.add_box(75.0, -2.0, -1.5, 4.0, 58.0, 25.0) # Front Faceplate
+    # Asymmetrische Poka-Yoke Führungsfedern mit 30°-Einlaufnase
+    oc.add_box(4.0, -1.4, 6.9, 70.0, 1.4, 2.6)
+    oc.add_box(0.0, -1.4, 7.2, 4.0, 1.4, 2.0)
+    oc.add_box(4.0, 54.0, 12.9, 70.0, 1.4, 2.6)
+    oc.add_box(0.0, 54.0, 13.2, 4.0, 1.4, 2.0)
     # Voller offener Innenraum für openmotorbridge_rear_transceiver PCB (ESP32-S3, SX1262 LoRa, GNSS & Patch-Antenne)
     oc.add_boss(10.0, 8.0, 2.5, 2.5, 1.0, 3.0)
     oc.add_boss(65.0, 8.0, 2.5, 2.5, 1.0, 3.0)
@@ -663,6 +690,11 @@ def export_cartridges_package(base_dir: str):
     dc.add_box(0, 0, 2.5, 75.0, 2.5, 18.0)
     dc.add_box(0, 51.5, 2.5, 75.0, 2.5, 18.0)
     dc.add_box(75.0, -2.0, -1.5, 4.0, 58.0, 25.0)
+    # Asymmetrische Poka-Yoke Führungsfedern mit 30°-Einlaufnase
+    dc.add_box(4.0, -1.4, 6.9, 70.0, 1.4, 2.6)
+    dc.add_box(0.0, -1.4, 7.2, 4.0, 1.4, 2.0)
+    dc.add_box(4.0, 54.0, 12.9, 70.0, 1.4, 2.6)
+    dc.add_box(0.0, 54.0, 13.2, 4.0, 1.4, 2.0)
     # Wasserdichter Dry-Box Deckel mit Versteifungsrippen
     dc.add_box(5.0, 5.0, 2.5, 65.0, 44.0, 18.0)
     for x_rib in [18.0, 30.0, 42.0, 54.0]:
@@ -702,6 +734,13 @@ def export_cartridges_package(base_dir: str):
     cu_plates.add_box(5.0, -0.8, 4.0, 65.0, 0.8, 14.0)
     cu_plates.add_box(5.0, 54.0, 4.0, 65.0, 0.8, 14.0)
     cu_plates.write_stl(os.path.join(comp_dir, "06_cartridge_copper_thermal_slide_plates_pair.stl"))
+    
+    guide_ribs = STLMeshBuilder("07_cartridge_lateral_guide_ribs_pair")
+    guide_ribs.add_box(4.0, -1.4, 6.9, 70.0, 1.4, 2.6)
+    guide_ribs.add_box(0.0, -1.4, 7.2, 4.0, 1.4, 2.0)
+    guide_ribs.add_box(4.0, 54.0, 12.9, 70.0, 1.4, 2.6)
+    guide_ribs.add_box(0.0, 54.0, 13.2, 4.0, 1.4, 2.0)
+    guide_ribs.write_stl(os.path.join(comp_dir, "07_cartridge_lateral_guide_ribs_pair.stl"))
 
 
 def main():

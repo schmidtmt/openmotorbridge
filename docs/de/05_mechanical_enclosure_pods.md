@@ -562,39 +562,43 @@ Der mechanische und elektrische Übergang von der Wechselkassette auf die M8-Kab
 
 ---
 
-### 5.9 Zentrischer Kassetteneinschub & Poka-Yoke Führungskonzept
+### 5.9 Asymmetrisches Nut-und-Feder Führungsschienen- & Poka-Yoke Konzept
 
-Um Verkanten, schiefe Krafteinleitung und fehlerhaftes Einstecken physikalisch auszuschließen, ist der Kassetteneinschub **in allen Raumachsen exakt zentriert**:
+Um Verkanten, schiefe Krafteinleitung und fehlerhaftes Einstecken physikalisch auszuschließen, verfügt das Pod-Kassetten-System über eine **asymmetrische Nut-und-Feder-Linearführung**:
 
 ```
-                  ◄──────────── 64.0 mm Pod-Breite ────────────►
+                  ◄──────────── 60.0 mm Pod-Breite ────────────►
  ┌─────────────────────────────────────────────────────────────┐ ▲
- │                    3.0 mm Gehäuse-Deckel                    │ │
- │ ┌───┬─────────────────────────────────────────────────┬───┐ │ │ 32.0 mm
+ │                    2.5 mm Gehäuse-Decke                     │ │
+ │ ┌───┬─────────────────────────────────────────────────┬───┐ │ │ 28.0 mm
  │ │   │                                                 │   │ │ │ Pod-
- │ │3.0│         ZENTRISCHER KASSETTEN-EINSCHUB          │3.0│ │ │ Höhe
- │ │mm │                 (56 x 24 mm)                    │mm │ │ │
- │ │   │                                                 │   │ │ │
- │ │Nut├───────────► ┌─────────────────────┐ ◄───────────┤Nut│ │ │
- │ │1.5│             │  6-PIN STECKER      │             │2.0│ │ │
- │ │mm │             │  (Exakt zentriert)  │             │mm │ │ │
- │ │   │             └─────────────────────┘             │   │ │ │
+ │ │   │         ZENTRISCHER KASSETTEN-EINSCHUB          │   │ │ │ Höhe
+ │ │   │                 (54 x 22 mm)                    ├───┤ │ │
+ │ │   │                                                 │Nut│ │ │ (Rechte Nut
+ │ │   │                                                 │   │ │ │  bei z=14.2 mm)
+ │ ├───┤             ┌─────────────────────┐             ├───┤ │ │
+ │ │Nut│             │  6-PIN STECKER      │             │   │ │ │
+ │ │   │ ◄───────────┤  (Exakt zentriert)  ├───────────► │   │ │ │
+ │ ├───┤             └─────────────────────┘             │   │ │ │
+ │ │   │                                                 │   │ │ │ (Linke Nut
+ │ │   │                                                 │   │ │ │  bei z=8.2 mm)
  │ └───┴─────────────────────────────────────────────────┴───┘ │ │
- │                    3.0 mm Gehäuse-Boden                     │ │
+ │                    2.5 mm Gehäuse-Boden                     │ │
  └─────────────────────────────────────────────────────────────┘ ▼
 ```
 
 #### 4-Stufen-Sicherheit für perfekten Kassetten-Sitz:
-1. **Vollkommen zentrische Geometrie:**
-   * **Breite ($Y$):** Bei $64{,}0\,\text{mm}$ Pod-Außenbreite und $56{,}0\,\text{mm}$ Schachtbreite ergeben sich beidseitig symmetrische **$3{,}0\,\text{mm}$ Wandstärken**.
-   * **Höhe ($Z$):** Bei $32{,}0\,\text{mm}$ Pod-Außenhöhe und $24{,}0\,\text{mm}$ Schachthöhe ergeben sich symmetrische **$3{,}0\,\text{mm}$ Decken- und Bodenstärken**.
-   * Die Steckverbindung liegt exakt im Schnittpunkt der Symmetrieachsen $\rightarrow$ **Null Hebelwirkung oder Kippmomente**.
-2. **Poka-Yoke Verpolschutz (Asymmetrische Führungsnuten):**
-   * Linke Führungsnut: $1{,}5\,\text{mm}$ Breite.
-   * Rechte Führungsnut: $2{,}0\,\text{mm}$ Breite.
-   * Ein verkehrtes (über Kopf) Einschieben der Kassette ist mechanisch unmöglich.
-3. **$45^\circ$-Zentriertrichter am Kassettenkopf:**
-   * Die Kassettennase besitzt um den Steckerausschnitt eine umlaufende $45^\circ$-Einführschräge mit $\pm 1{,}5\,\text{mm}$ Fangbereich. Die Kontakte werden vor dem elektrischen Schluss perfekt zentriert.
+1. **Asymmetrische Nut-und-Feder Führungsschienen (Tongue & Groove Linear Rails):**
+   * **Nut im Pod-Innenraum:** Beidseitig durchgehende Führungsnuten ($3{,}0\,\text{mm}$ Nutbreite, $1{,}5\,\text{mm}$ Tiefe) in den Seitenwänden des Schachts.
+   * **Feder an den Kassettenflanken:** Umlaufende Führungsrippen ($2{,}6\,\text{mm}$ Höhe, $1{,}4\,\text{mm}$ Auskragung) an der Kassettenaußenwand.
+   * **Vorteil:** Die Kassettenwand bleibt massiv und stabil ($2{,}5\,\text{mm}$), während die Feder als Versteifungsrippe wirkt.
+2. **Poka-Yoke Verpolschutz durch Höhenversatz:**
+   * **Linke Führungsnut/Feder:** Positioniert auf Höhe $z = 8{,}2\,\text{mm}$.
+   * **Rechte Führungsnut/Feder:** Positioniert auf Höhe $z = 14{,}2\,\text{mm}$.
+   * Ein verkehrtes (über Kopf um $180^\circ$ gedrehtes) Einschieben der Kassette ist **mechanisch 100 % ausgeschlossen**, da die Federn sofort an der Gehäusestirn blockieren.
+3. **$30^\circ$-Einlaufschräge für blindes Stecken am Helm:**
+   * Die Kassetten-Führungsfedern besitzen an der Kassettennase auf den ersten $4{,}0\,\text{mm}$ eine **$30^\circ$-Einlauf-Anfasung**.
+   * Die Kassette zentriert sich beim Einstecken mit Motorradhandschuhen selbsttätig in der Nut, fängt Querkräfte ($Y$- und $Z$-Achse) ab und führt die 6-Pin Präzisionskontakte mit **$\pm 0{,}1\,\text{mm}$ Toleranz exakt zentrisch** in die Schottwand-Buchse.
 4. **Formschlüssiger Endanschlag & Auto-Eject:**
    * Die Einschubkraft wird direkt von der massiven Schottwand (PA12) abgefangen – die Platinen-Lötstellen bleiben zu 100 % kräftefrei. Die beiden V4A-Edelstahlfedern halten das System permanent unter Vorspannung und werfen den Schlitten beim Entriegeln um $10\,\text{mm}$ aus.
 
@@ -666,10 +670,11 @@ hardware/cad/stl/
 │       ├── 23_floor_vent_slots_cutout_tool_group.stl# 5x Zwischenboden-Belüftungsschlitze
 │       └── 24_single_vent_slot_cutout_tool.stl      # Einzelner 15x2.5 mm Belüftungsschlitz
 │
-├── 02_pod_base/                                 # Satelliten-Pod Helmträger (5-seitiger Monocoque-Schacht)
-│   ├── pod_base_housing.stl                     # Helmträgergehäuse mit Wechselschacht & M8-Rückanschluss
-│   ├── pod_base_helmet_clamp.stl                # Helm-Klemmadapter
-│   └── components/                              # Tinkercad-Primitiven zum freien Editieren
+├── 02_pod_base/                                 # Universeller Satelliten-Pod (für Pod 1, Pod 2 & Pod 3)
+│   ├── pod_base_housing.stl                     # Universelles 5-seitiges Monocoque-Schachtgehäuse mit Führungsnuten
+│   ├── pod_mount_helmet_clamp.stl               # Helm-Klemmadapter (für Pod 1 & 2 am Helm)
+│   ├── pod_mount_gopro_rack.stl                 # Heck- / GoPro- / Gepäckträger-Montageadapter (für Pod 3)
+│   └── components/                              # 9 Tinkercad-Primitiven (Schale, Schottwand, Nuten, Funnel, Federn)
 │       ├── 01_pod_base_monocoque_empty_tunnel.stl # 5-seitiger Monocoque-Tunnel (100x60x28 mm, nach vorne offen)
 │       ├── 02_m8_horizontal_cable_gland_neck.stl # Horizontaler M8 6-Pin IP67 Kabelstutzen (Ø 8 mm Bohrung)
 │       ├── 03_pod_bulkhead_partition_plate.stl  # Schutz-Schottwand / Zwischenboden
@@ -677,36 +682,38 @@ hardware/cad/stl/
 │       ├── 05_pod_eptfe_membrane_boss.stl       # Gore ePTFE-Membranaufnahme für Gehäusedecke
 │       ├── 06_pod_bulkhead_convective_vent_slots_tool.stl # Schneidkörper für Schottwand-Lüftungsschlitze
 │       ├── 07_pod_lateral_cooling_rails_pair.stl # Metallische Kühl- und Gleitschienen (in Seitenwand)
-│       └── 08_auto_eject_springs_pair.stl       # 2x V4A-Auswerferfedern
+│       ├── 08_auto_eject_springs_pair.stl       # 2x V4A-Auswerferfedern
+│       └── 09_pod_internal_guide_grooves_cutout_tool.stl # Schneidkörper für asymmetrische Poka-Yoke Führungsnuten
 │
 └── 03_pod_cartridges/                           # Kassetten-Einschübe
-    ├── cartridge_sena_sled.stl                  # Sena 50S/60S Kassetten-Schlitten (mit ePTFE-Membran)
-    ├── cartridge_cardo_sled.stl                 # Cardo Packtalk Edge Kassetten-Schlitten (mit ePTFE-Membran)
-    ├── cartridge_omm_transceiver_sled.stl       # OMM Transceiver Kassetten-Schlitten (für Pod 3 Heck)
+    ├── cartridge_sena_sled.stl                  # Sena 50S/60S Kassetten-Schlitten (mit Führungsfedern & ePTFE)
+    ├── cartridge_cardo_sled.stl                 # Cardo Packtalk Edge Schlitten (mit Führungsfedern & ePTFE)
+    ├── cartridge_omm_transceiver_sled.stl       # OMM Transceiver Schlitten (für Pod 3 Heck mit Führungsfedern)
     ├── cartridge_blindkassette_waterproof.stl   # Wasserdichte IP67 Blindkassette (Dry Box Dummy)
-    └── components/                              # Tinkercad-Primitiven zum freien Editieren
+    └── components/                              # 7 Tinkercad-Primitiven
         ├── 01_universal_base_sled.stl           # Universeller Grundschlitten (75x54x22 mm)
         ├── 02_cartridge_faceplate_with_gasket_lip.stl # PA12-Frontblende mit Dichtkragen & Snap-Fit
         ├── 03_cartridge_eptfe_membrane_boss.stl # Frontblenden ePTFE-Membransitz
         ├── 04_cartridge_membrane_cutout_tool.stl # Schneidkörper für Frontblenden-Membran
         ├── 05_cartridge_floor_convective_vent_slots_tool.stl # 4x Kassettenboden-Konvektionsschlitze
-        └── 06_cartridge_copper_thermal_slide_plates_pair.stl # Seitliche Kupfer-Kühlflankenbleche (0.8 mm)
+        ├── 06_cartridge_copper_thermal_slide_plates_pair.stl # Seitliche Kupfer-Kühlflankenbleche (0.8 mm)
+        └── 07_cartridge_lateral_guide_ribs_pair.stl # Asymmetrische Poka-Yoke Führungsfedern (Tongue Rails)
 ```
 
 #### Übersicht der druckfertigen STL-Masterdateien (Ready-to-Print)
 
 | Baugruppe | Funktion / Bauteil | Druckfertige STL-Datei | Modularer Baukasten (Tinkercad) |
 | :--- | :--- | :--- | :--- |
-| **Zentralbox (3-Teilig)** | Unterwanne mit Dichtnut & M3-Pfosten | [main_box_lower_case.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_lower_case.stl) | [01_main_box/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/components/) *(24 Primitiven)* |
+| **Zentralbox (3-Teilig)** | Unterwanne mit Dichtnut, Cu-Bolzen & M3-Pfosten | [main_box_lower_case.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_lower_case.stl) | [01_main_box/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/components/) *(24 Primitiven)* |
 | **Zentralbox (3-Teilig)** | Oberwanne mit Zwischenboden & Akkubett | [main_box_mid_tray.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_mid_tray.stl) | [01_main_box/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/components/) |
 | **Zentralbox (3-Teilig)** | Gehäusedeckel mit Dichtfeder & Gore-Vent | [main_box_lid.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_lid.stl) | [01_main_box/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/components/) |
 | **Zentralbox (3-Teilig)** | Vollständiges 3D-Montagemodell (Prüfkörper) | [main_box_complete_assembly.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_complete_assembly.stl) | — |
-| **Universeller Satelliten-Pod** | 5-seitiges Monocoque-Schachtgehäuse (für alle 3 Pods) | [pod_base_housing.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod_base_housing.stl) | [02_pod_base/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/components/) *(8 Primitiven)* |
+| **Universeller Satelliten-Pod** | 5-seitiges Monocoque-Schachtgehäuse (mit Führungsnuten) | [pod_base_housing.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod_base_housing.stl) | [02_pod_base/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/components/) *(9 Primitiven)* |
 | **Montageadapter (Helm)** | Helm-Klemmadapter (für Pod 1 & 2) | [pod_mount_helmet_clamp.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod_mount_helmet_clamp.stl) | [02_pod_base/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/components/) |
 | **Montageadapter (Heck)** | Heck- / GoPro- / Gepäckträger-Adapter (für Pod 3) | [pod_mount_gopro_rack.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod_mount_gopro_rack.stl) | [02_pod_base/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/components/) |
-| **Wechselkassette** | Sena 50S/60S Kassetten-Schlitten | [cartridge_sena_sled.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_sena_sled.stl) | [03_pod_cartridges/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/components/) *(6 Primitiven)* |
-| **Wechselkassette** | Cardo Packtalk Edge Kassetten-Schlitten | [cartridge_cardo_sled.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_cardo_sled.stl) | [03_pod_cartridges/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/components/) |
-| **Wechselkassette** | OMM Transceiver Kassetten-Schlitten (für Pod 3 Heck) | [cartridge_omm_transceiver_sled.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_omm_transceiver_sled.stl) | [03_pod_cartridges/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/components/) |
+| **Wechselkassette** | Sena 50S/60S Kassetten-Schlitten (mit Führungsfedern) | [cartridge_sena_sled.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_sena_sled.stl) | [03_pod_cartridges/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/components/) *(7 Primitiven)* |
+| **Wechselkassette** | Cardo Packtalk Edge Schlitten (mit Führungsfedern) | [cartridge_cardo_sled.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_cardo_sled.stl) | [03_pod_cartridges/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/components/) |
+| **Wechselkassette** | OMM Transceiver Schlitten (für Pod 3 Heck) | [cartridge_omm_transceiver_sled.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_omm_transceiver_sled.stl) | [03_pod_cartridges/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/components/) |
 | **Wechselkassette** | Wasserdichte IP67 Blindkassette (Dry Box Dummy) | [cartridge_blindkassette_waterproof.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_blindkassette_waterproof.stl) | [03_pod_cartridges/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/components/) |
 
 ---
@@ -751,7 +758,8 @@ hardware/cad/stl/
 │    (Sena, Cardo,  │ • Stirnflansch-IP67-Dichtung  │ • Duale POM Snap-Fit Riegel        │
 │     Midland, OMM) │ • Auto-Eject Schnellentrieglg.│ • Vergoldetes Pogo-Pin Array       │
 │                   │ • Unterflur-Kabelkanal 1.5 mm │ • N52 Neodym-Magnete (Cardo Edge)  │
-│                   │ • Modellspezifisches 3D-Nest  │ • EPDM-Sicherungslasche            │
+│                   │ • Poka-Yoke Führungsfedern    │ • EPDM-Sicherungslasche            │
+│                   │ • Modellspezifisches 3D-Nest  │ • Frontblenden ePTFE-Membran       │
 └───────────────────┴───────────────────────────────┴────────────────────────────────────┘
 ```
 
