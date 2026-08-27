@@ -12,11 +12,12 @@ def route_pod_base():
     pcb_path = "hardware/kicad_pod_base/openmotorbridge_pod_base.kicad_pcb"
     board = pcbnew.LoadBoard(pcb_path)
     
+    net_codes = {str(name): net.GetNetCode() for name, net in board.GetNetsByName().items()}
+    
     # Remove existing tracks
     for t in list(board.GetTracks()):
         board.Remove(t)
         
-    net_map = board.GetNetsByName()
     f_cu = board.GetLayerID("F.Cu")
     b_cu = board.GetLayerID("B.Cu")
     
@@ -26,8 +27,8 @@ def route_pod_base():
         track.SetEnd(pcbnew.VECTOR2I(pcbnew.FromMM(x2), pcbnew.FromMM(y2)))
         track.SetWidth(pcbnew.FromMM(width_mm))
         track.SetLayer(layer)
-        if net_name in net_map:
-            track.SetNet(net_map[net_name])
+        if net_name in net_codes:
+            track.SetNetCode(net_codes[net_name])
         board.Add(track)
         return track
 
@@ -36,8 +37,8 @@ def route_pod_base():
         via.SetPosition(pcbnew.VECTOR2I(pcbnew.FromMM(x), pcbnew.FromMM(y)))
         via.SetDrill(pcbnew.FromMM(drill_mm))
         via.SetWidth(pcbnew.FromMM(pad_mm))
-        if net_name in net_map:
-            via.SetNet(net_map[net_name])
+        if net_name in net_codes:
+            via.SetNetCode(net_codes[net_name])
         board.Add(via)
         return via
 

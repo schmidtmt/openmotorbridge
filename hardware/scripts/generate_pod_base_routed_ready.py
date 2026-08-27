@@ -213,8 +213,57 @@ def generate_pod_base_sexpr():
     out.append('\t(gr_text "SP3012 TVS" (at 108 73.5 0) (layer "F.SilkS") (effects (font (size 0.35 0.35) (thickness 0.08))))')
     out.append('\t(gr_text "6-PIN SMD PIN HEADER (J1)" (at 118 88.5 0) (layer "F.SilkS") (effects (font (size 0.38 0.38) (thickness 0.08))))')
 
-    out.append('\t(gr_text "OPENMOTORBRIDGE // POD BASE (REAR)" (at 118 71.5 0) (layer "B.SilkS") (effects (font (size 0.45 0.45) (thickness 0.09)) (justify mirror)))')
-    out.append('\t(gr_text "M8 6-PIN IP67 PANEL RECEPTACLE (J2)" (at 118 88.5 0) (layer "B.SilkS") (effects (font (size 0.38 0.38) (thickness 0.08)) (justify mirror)))')
+    # 7. Routing Tracks & Vias
+    tracks = [
+        # Net 2 (VCC)
+        (2, 116.60, 73.65, 108.625, 73.65, 0.40, "F.Cu"),
+        (2, 108.625, 73.65, 108.625, 74.50, 0.40, "F.Cu"),
+        (2, 108.625, 74.50, 108.00, 83.15, 0.40, "F.Cu"),
+        (2, 116.60, 73.65, 121.00, 75.00, 0.40, "F.Cu"),
+        (2, 121.00, 75.00, 121.00, 80.00, 0.40, "B.Cu"),
+
+        # Net 1 (GND)
+        (1, 119.40, 76.19, 108.00, 76.19, 0.40, "F.Cu"),
+        (1, 108.00, 76.19, 108.00, 84.85, 0.40, "F.Cu"),
+        (1, 123.00, 83.00, 119.50, 82.60, 0.40, "B.Cu"),
+
+        # Net 3 (SIG_P)
+        (3, 116.60, 78.73, 108.625, 75.50, 0.25, "F.Cu"),
+        (3, 116.60, 78.73, 116.50, 80.00, 0.25, "F.Cu"),
+        (3, 116.50, 80.00, 116.50, 82.60, 0.25, "B.Cu"),
+
+        # Net 4 (SIG_N)
+        (4, 119.40, 81.27, 108.625, 76.50, 0.25, "F.Cu"),
+        (4, 119.40, 81.27, 115.00, 78.00, 0.25, "F.Cu"),
+        (4, 115.00, 78.00, 115.00, 80.00, 0.25, "B.Cu"),
+
+        # Net 5 (TRIGGER_PPS)
+        (5, 116.60, 83.81, 108.625, 77.00, 0.25, "F.Cu"),
+        (5, 116.60, 83.81, 116.50, 76.00, 0.25, "F.Cu"),
+        (5, 116.50, 76.00, 116.50, 77.40, 0.25, "B.Cu"),
+
+        # Net 6 (1WIRE_ID)
+        (6, 119.40, 86.35, 108.625, 77.50, 0.25, "F.Cu"),
+        (6, 119.40, 86.35, 119.50, 75.00, 0.25, "F.Cu"),
+        (6, 119.50, 75.00, 119.50, 77.40, 0.25, "B.Cu"),
+    ]
+    for n_id, x1, y1, x2, y2, w, lay in tracks:
+        out.append(f'\t(segment (start {x1:.3f} {y1:.3f}) (end {x2:.3f} {y2:.3f}) (width {w:.2f}) (layer "{lay}") (net {n_id}))')
+        
+    vias = [
+        (2, 121.0, 75.0), # VCC
+        (1, 123.0, 83.0), # GND
+        (3, 116.5, 80.0), # SIG_P
+        (4, 115.0, 78.0), # SIG_N
+        (5, 116.5, 76.0), # TRIGGER_PPS
+        (6, 119.5, 75.0), # 1WIRE_ID
+        (1, 105.0, 75.0), # GND plane
+        (1, 105.0, 85.0),
+        (1, 131.0, 75.0),
+        (1, 131.0, 85.0),
+    ]
+    for n_id, vx, vy in vias:
+        out.append(f'\t(via (at {vx:.1f} {vy:.1f}) (size 0.6) (drill 0.3) (layers "F.Cu" "B.Cu") (net {n_id}))')
 
     out.append(')')
     
