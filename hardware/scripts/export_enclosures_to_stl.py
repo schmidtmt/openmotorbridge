@@ -544,13 +544,23 @@ def export_pod_base_package(base_dir: str):
     pb.write_stl(os.path.join(pb_dir, "pod_base_housing.stl"))
     pb.write_stl(os.path.join(base_dir, "pod_base_housing.stl"))
     
-    # 2. Helm-Klemmadapter
-    pbc = STLMeshBuilder("pod_base_helmet_clamp")
+    # 2. Helm-Klemmadapter (für Pod 1 & Pod 2 am Helm)
+    pbc = STLMeshBuilder("pod_mount_helmet_clamp")
     pbc.add_box(0, 0, 0, 80.0, 50.0, 3.0)
     pbc.add_box(0, 0, -15.0, 5.0, 50.0, 15.0)
     pbc.add_box(0, 0, -18.0, 30.0, 50.0, 4.0)
-    pbc.write_stl(os.path.join(pb_dir, "pod_base_helmet_clamp.stl"))
-    pbc.write_stl(os.path.join(base_dir, "pod_base_helmet_clamp.stl"))
+    pbc.write_stl(os.path.join(pb_dir, "pod_mount_helmet_clamp.stl"))
+    pbc.write_stl(os.path.join(base_dir, "pod_mount_helmet_clamp.stl"))
+    
+    # 3. Heck- / GoPro- / Gepäckträger-Montageadapter (für Pod 3 am Heck)
+    pbg = STLMeshBuilder("pod_mount_gopro_rack")
+    pbg.add_box(0, 0, 0, 80.0, 50.0, 4.0)
+    # 3x GoPro Cleats on bottom
+    pbg.add_box(28.0, 21.0, -8.0, 4.0, 8.0, 8.0)
+    pbg.add_box(38.0, 21.0, -8.0, 4.0, 8.0, 8.0)
+    pbg.add_box(48.0, 21.0, -8.0, 4.0, 8.0, 8.0)
+    pbg.write_stl(os.path.join(pb_dir, "pod_mount_gopro_rack.stl"))
+    pbg.write_stl(os.path.join(base_dir, "pod_mount_gopro_rack.stl"))
     
     # Modular Components for Tinkercad
     c1 = STLMeshBuilder("01_pod_base_monocoque_empty_tunnel")
@@ -600,18 +610,14 @@ def export_cartridges_package(base_dir: str):
     
     # 1. Sena 50S/60S Cartridge Sled
     sc = STLMeshBuilder("cartridge_sena_sled")
-    # Sled Base (75 x 54 x 22 mm, gleitet in den Pod-Schacht)
     sc.add_box(0, 0, 0, 75.0, 54.0, 2.5)          # Sled Floor
     sc.add_box(0, 0, 2.5, 75.0, 2.5, 18.0)        # Left Wall
     sc.add_box(0, 51.5, 2.5, 75.0, 2.5, 18.0)     # Right Wall
-    # Front Faceplate (Abschlussblende bei x = 75 mm mit Griffmulde & Snap-Fit Rasten)
-    sc.add_box(75.0, -2.0, -1.5, 4.0, 58.0, 25.0)
+    sc.add_box(75.0, -2.0, -1.5, 4.0, 58.0, 25.0) # Front Faceplate
     # Sena 3D Cradle & Jog-Dial Nest auf der Oberseite
     sc.add_cylinder(55.0, 18.0, 18.0, 6.0, 6.0)
     sc.add_cylinder(55.0, 36.0, 18.0, 5.0, 6.0)
-    # Frontblenden ePTFE-Membran (Ø 6.0 mm)
-    sc.add_cylinder(77.0, 27.0, 18.0, 3.0, 2.0)
-    # 4x M2 PCB Schraubdome für Trägerplatine (openmotorbridge_pod_cartridge)
+    sc.add_cylinder(77.0, 27.0, 18.0, 3.0, 2.0)   # Front ePTFE-Membran
     sc.add_boss(15.0, 10.0, 2.5, 2.5, 1.0, 2.5)
     sc.add_boss(60.0, 10.0, 2.5, 2.5, 1.0, 2.5)
     sc.add_boss(15.0, 44.0, 2.5, 2.5, 1.0, 2.5)
@@ -636,7 +642,22 @@ def export_cartridges_package(base_dir: str):
     cc.write_stl(os.path.join(pc_dir, "cartridge_cardo_sled.stl"))
     cc.write_stl(os.path.join(base_dir, "cartridge_cardo_sled.stl"))
     
-    # 3. Blindkassette (Wasserdichte Dry Box Dummy)
+    # 3. OMM Transceiver Cartridge Sled (Pod 3 Heck-Kassette: 1-teilig mit voller 23.5 mm Innenhöhe)
+    oc = STLMeshBuilder("cartridge_omm_transceiver_sled")
+    oc.add_box(0, 0, 0, 75.0, 54.0, 2.5)          # Sled Floor
+    oc.add_box(0, 0, 2.5, 75.0, 2.5, 18.0)        # Left Wall
+    oc.add_box(0, 51.5, 2.5, 75.0, 2.5, 18.0)     # Right Wall
+    oc.add_box(75.0, -2.0, -1.5, 4.0, 58.0, 25.0) # Front Faceplate
+    # Voller offener Innenraum für openmotorbridge_rear_transceiver PCB (ESP32-S3, SX1262 LoRa, GNSS & Patch-Antenne)
+    oc.add_boss(10.0, 8.0, 2.5, 2.5, 1.0, 3.0)
+    oc.add_boss(65.0, 8.0, 2.5, 2.5, 1.0, 3.0)
+    oc.add_boss(10.0, 46.0, 2.5, 2.5, 1.0, 3.0)
+    oc.add_boss(65.0, 46.0, 2.5, 2.5, 1.0, 3.0)
+    oc.add_cylinder(77.0, 27.0, 18.0, 3.0, 2.0)   # Front ePTFE-Membran
+    oc.write_stl(os.path.join(pc_dir, "cartridge_omm_transceiver_sled.stl"))
+    oc.write_stl(os.path.join(base_dir, "cartridge_omm_transceiver_sled.stl"))
+    
+    # 4. Blindkassette (Wasserdichte Dry Box Dummy)
     dc = STLMeshBuilder("cartridge_blindkassette_waterproof")
     dc.add_box(0, 0, 0, 75.0, 54.0, 2.5)
     dc.add_box(0, 0, 2.5, 75.0, 2.5, 18.0)
@@ -683,61 +704,6 @@ def export_cartridges_package(base_dir: str):
     cu_plates.write_stl(os.path.join(comp_dir, "06_cartridge_copper_thermal_slide_plates_pair.stl"))
 
 
-# =============================================================================
-# 4. REAR POD 3 EXPORTER
-# =============================================================================
-def export_rear_pod3_package(base_dir: str):
-    print("Exporting 04_rear_pod3 package & components...")
-    rp_dir = os.path.join(base_dir, "04_rear_pod3")
-    comp_dir = os.path.join(rp_dir, "components")
-    os.makedirs(comp_dir, exist_ok=True)
-    
-    # Monolithic Models
-    rp_low = STLMeshBuilder("rear_pod3_lower_housing")
-    rp_low.add_hollow_box(0, 0, 0, 72.0, 48.0, 14.0, 2.2)
-    # Horizontal M8 Cable Gland Neck with inner bore (protruding outward at x = 0, y = 24.0, z = 7.0)
-    rp_low.add_horizontal_boss_x(-10.0, 24.0, 7.0, 6.0, 4.0, 12.2)
-    rp_low.add_box(24.0, 20.0, -8.0, 4.0, 8.0, 8.0)
-    rp_low.add_box(34.0, 20.0, -8.0, 4.0, 8.0, 8.0)
-    rp_low.add_box(44.0, 20.0, -8.0, 4.0, 8.0, 8.0)
-    rp_low.add_boss(8.0, 8.0, 2.2, 3.0, 1.25, 3.0)
-    rp_low.add_boss(64.0, 8.0, 2.2, 3.0, 1.25, 3.0)
-    rp_low.add_boss(8.0, 40.0, 2.2, 3.0, 1.25, 3.0)
-    rp_low.add_boss(64.0, 40.0, 2.2, 3.0, 1.25, 3.0)
-    rp_low.write_stl(os.path.join(rp_dir, "rear_pod3_lower_housing.stl"))
-    rp_low.write_stl(os.path.join(base_dir, "rear_pod3_lower_housing.stl"))
-    
-    rp_lid = STLMeshBuilder("rear_pod3_radome_lid")
-    rp_lid.add_box(0, 0, 0, 72.0, 48.0, 3.0)
-    rp_lid.add_box(16.0, 9.0, 3.0, 40.0, 30.0, 10.0)
-    rp_lid.add_box(2.4, 2.4, -2.5, 67.2, 43.2, 2.5)
-    rp_lid.write_stl(os.path.join(rp_dir, "rear_pod3_radome_lid.stl"))
-    rp_lid.write_stl(os.path.join(base_dir, "rear_pod3_radome_lid.stl"))
-    
-    # Modular Components
-    r1 = STLMeshBuilder("01_rear_pod3_empty_tub")
-    r1.add_hollow_box(0, 0, 0, 72.0, 48.0, 14.0, 2.2)
-    r1.write_stl(os.path.join(comp_dir, "01_rear_pod3_empty_tub.stl"))
-    
-    r2 = STLMeshBuilder("02_rear_pod3_4_pcb_standoffs")
-    r2.add_boss(8.0, 8.0, 2.2, 3.0, 1.25, 3.0)
-    r2.add_boss(64.0, 8.0, 2.2, 3.0, 1.25, 3.0)
-    r2.add_boss(8.0, 40.0, 2.2, 3.0, 1.25, 3.0)
-    r2.add_boss(64.0, 40.0, 2.2, 3.0, 1.25, 3.0)
-    r2.write_stl(os.path.join(comp_dir, "02_rear_pod3_4_pcb_standoffs.stl"))
-    
-    r3 = STLMeshBuilder("03_m8_horizontal_cable_gland_neck")
-    r3.add_horizontal_boss_x(-10.0, 24.0, 7.0, 6.0, 4.0, 12.2)
-    r3.write_stl(os.path.join(comp_dir, "03_m8_horizontal_cable_gland_neck.stl"))
-    
-    r4 = STLMeshBuilder("04_gopro_mounting_cleats")
-    r4.add_box(24.0, 20.0, -8.0, 4.0, 8.0, 8.0)
-    r4.add_box(34.0, 20.0, -8.0, 4.0, 8.0, 8.0)
-    r5 = STLMeshBuilder("05_m8_horizontal_hole_cutout_tool")
-    r5.add_horizontal_cylinder_x(-12.0, 24.0, 7.0, 4.0, 16.0) # Ø 8mm hole tool
-    r5.write_stl(os.path.join(comp_dir, "05_m8_horizontal_hole_cutout_tool.stl"))
-
-
 def main():
     import shutil
     base_dirs = [
@@ -754,7 +720,6 @@ def main():
         export_main_box_package(base)
         export_pod_base_package(base)
         export_cartridges_package(base)
-        export_rear_pod3_package(base)
         
     print("\n" + "=" * 80)
     print("ALL ENCLOSURES & MODULAR COMPONENT LIBRARIES SUCCESSFULLY EXPORTED".center(80))

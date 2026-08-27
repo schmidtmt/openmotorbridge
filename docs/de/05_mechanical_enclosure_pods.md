@@ -562,7 +562,7 @@ Der mechanische und elektrische Übergang von der Wechselkassette auf die M8-Kab
 
 ---
 
-### 5.8 Zentrischer Kassetteneinschub & Poka-Yoke Führungskonzept
+### 5.9 Zentrischer Kassetteneinschub & Poka-Yoke Führungskonzept
 
 Um Verkanten, schiefe Krafteinleitung und fehlerhaftes Einstecken physikalisch auszuschließen, ist der Kassetteneinschub **in allen Raumachsen exakt zentriert**:
 
@@ -598,85 +598,40 @@ Um Verkanten, schiefe Krafteinleitung und fehlerhaftes Einstecken physikalisch a
 4. **Formschlüssiger Endanschlag & Auto-Eject:**
    * Die Einschubkraft wird direkt von der massiven Schottwand (PA12) abgefangen – die Platinen-Lötstellen bleiben zu 100 % kräftefrei. Die beiden V4A-Edelstahlfedern halten das System permanent unter Vorspannung und werfen den Schlitten beim Entriegeln um $10\,\text{mm}$ aus.
 
+#### 5.10 Universelle 1-Pod-Architektur (Pod 1, Pod 2 & Pod 3 sind 100 % baugleich)
+
+Das gesamte OpenMotorBridge-System basiert auf dem Prinzip der **vollständigen mechanischen Universalität**:
+
+1. **Ein einziges universelles Pod-Gehäuse (`pod_base_housing.stl`):**
+   * Alle drei Satelliten-Pods (Pod 1 Links, Pod 2 Rechts, Pod 3 Heck) verwenden **exakt denselben 5-seitigen Monocoque-Schacht** mit M8 6-Pin IP67 Rückanschluss, Schutz-Schottwand, 6-Pin Schutzkragen und Auto-Eject Federmechanismus.
+   * **Unterschiedliche Montage über modulare Adapterplatten:**
+     * **Am Helm (Pod 1 & 2):** Der universelle Helm-Klemmadapter ([pod_mount_helmet_clamp.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod_mount_helmet_clamp.stl)) wird an die Gehäuseunterseite gekoppelt.
+     * **Am Fahrzeugheck (Pod 3):** Die universelle GoPro- / Gepäckträger-Adapterplatte ([pod_mount_gopro_rack.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod_mount_gopro_rack.stl)) mit 3x GoPro-Rasten wird am Pod-Boden fixiert.
+2. **Funktionsanpassung ausschließlich über die Wechselkassetten:**
+   * **Audio- & Intercom-Kassetten (Pod 1 & 2):** 2-teilig mit `openmotorbridge_pod_cartridge` Trägerplatine (DS2401 ID), Unterflur-Kabelkanal, Zwischenboden und Modellspezifischem 3D-Konturbett (Sena / Cardo / Midland).
+   * **OMM-Transceiver-Kassette (Pod 3):** 1-teilig mit voller $23{,}5\,\text{mm}$ Innenhöhe. Die `openmotorbridge_rear_transceiver` Platine (ESP32-S3, SX1262 LoRa, GNSS und $25 \times 25\,\text{mm}$ Keramik-Patchantenne) sitzt direkt im Schlitten und steckt in derselben 6-Pin Präzisionsbuchse.
+   * **Blindkassette:** Hermetisch dichter IP67-Dummy mit integriertem Notfall-Trockenstaufach (*Dry Box*).
+
 ```
-┌─────────────────────────────────────────────────────────────────────────┐
-│              SCHNITTSTELLEN-ÜBERGANG POD-BASIS & KASSETTE               │
-├─────────────────────────────────────────────────────────────────────────┤
-│ 1. DOCKING-AUFNAHME KASSETTEN-SCHLITTEN:                                │
-│    • Original-Headset (Sena 50S/60S / Cardo Edge) werkzeuglos eingeklinkt│
-│    • Internes JST-SH 6P Flachbandkabel zur Kassetten-Trägerplatine       │
-│                               ▼                                         │
-│ 2. KASSETTEN-TRÄGERPLATINE (openmotorbridge_pod_cartridge, 60x36mm):    │
-│    • DS2401 1-Wire ID ROM (Meldet Headset-Typ an ESP32)                 │
-│    • 500mA PTC-Sicherung + grüne 5V Power-Status-LED                    │
-│    • 6-Pin Präzisionsbuchsenleiste (zentriert am Schlittenkopf)         │
-│                               ▼ (Horizontaler Kassetteneinschub)        │
-│ 3. POD-BASISPLATINE (openmotorbridge_pod_base, 48x24mm):                │
-│    • 6-Pin Stiftleiste an der inneren Stirnwand (zentriert)             │
-│    • Integrierte ESD-Schutzmatrix (Littelfuse SP3012, 6x TVS < 0.5pF)   │
-│    • Zentrierte M8 6-Pin A-Coded IP67 Einbaubuchse auf Unterseite (B.Cu)│
-│                               ▼ (M8-Außengewinde ragt nach unten)       │
-│ 4. MODULARE M8-EINBAUBUCHSE (Gehäuseunterseite):                        │
-│    • M8 6-Pin A-Coded IP67-Buchse mit Führungsnut (Poka-Yoke)           │
-│    • Vollmetall-Schirmkragen für 360° EMV-Schirmung                     │
-│                               ▼                                         │
-│ 5. MODULARES M8-ZU-M8 PUR-VERBINDUNGSKABEL (0.5m .. 2.0m):              │
-│    • Geschirmtes 6-adriges PUR-Kabel (Halogenfrei, Öl- & UV-beständig)  │
-│    • 2x Power (0.34 mm²) + 2x Audio/UART verdrillt (0.14 mm²) + 2x Sign.│
-│    • Beidseitig M8 6-Pin IP67 Stecker mit Rüttelsicherung               │
-│                               ▼                                         │
-│ 6. ZENTRALBOX HD26-KABELBAUMPEITSCHE (Unter der Sitzbank):              │
-│    • 3x M8 6-Pin Buchsen (Pod 1 Links, Pod 2 Rechts, Pod 3 Heck)        │
-│    • 1x M8 4-Pin / Superseal (Bordnetz KL30/KL15/GND/Schirm)            │
-│    • 1x M8 4-Pin (CAN-Bus Telemetrie & Front-Umgebungsmikrofon)         │
-└─────────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                 UNIVERSELLE OPENMOTORBRIDGE POD-ARCHITEKTUR                 │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                    1x UNIVERSELLES POD-BASIS-GEHÄUSE                        │
+│             (5-seitiger Monocoque-Schacht mit M8 6-Pin Rückwand)            │
+├──────────────────────────────────────┬──────────────────────────────────────┤
+│ MONTAGE-ADAPTER (Unterseite):        │ WECHSELKASSETTEN (Einschub vorne):   │
+│ • Helm-Klemmadapter (Pod 1 & 2)      │ • Sena 50S/60S Kassetten-Schlitten   │
+│ • Heck-/GoPro-Adapter (Pod 3)        │ • Cardo Packtalk Edge Schlitten      │
+│                                      │ • OMM Transceiver Schlitten (Pod 3)  │
+│                                      │ • Wasserdichte IP67 Blindkassette    │
+└──────────────────────────────────────┴──────────────────────────────────────┘
 ```
 
-### 5.9 3D-Röntgen-Architektur (X-Ray CAD) & Baugruppen-Explosionsansicht
-
-Zur ganzheitlichen Verifikation der Passungen, Dichtebenen und elektrischen Übergänge wurde die mechanische Gesamtanordnung des **Satelliten-Pods** und der **Wechselkassette** in einer transluzenten Röntgen-Darstellung (*Ghosted X-Ray*) sowie einer Explosionsansicht modelliert:
-
-#### Transluzente 3D-Röntgenansicht (120 x 64 x 32 mm, Generic Max Envelope):
-![OpenMotorBridge 3D X-Ray CAD Architektur](../../hardware/cad/openmotorbridge_pod_assembly_render_xray.png)
-
-#### Baugruppen-Explosionsdarstellung (Hierarchie entlang der Einschubachse):
-![OpenMotorBridge 3D Explosionsansicht](../../hardware/cad/openmotorbridge_pod_exploded_view.png)
-
-#### Mechanische Spezifikationen & Passungen:
-* **Pod-Außengehäuse:** Makrolon 2805 Polycarbonat / PA12 MJF ($120{,}0 \times 64{,}0 \times 32{,}0\,\text{mm}$, Schacht-Innenmaß $96{,}0 \times 56{,}0 \times 24{,}0\,\text{mm}$).
-* **Pod-Basisplatine (`openmotorbridge_pod_base`):** $48{,}0 \times 24{,}0 \times 1{,}6\,\text{mm}$ Adapterplatine mit zentrierter M8 6-Pin IP67 Vollmetallbuchse (B.Cu) und senkrechter 6-Pin Stiftleiste (F.Cu).
-* **Einschraubbare Schottwand:** $56{,}0 \times 24{,}0 \times 2{,}0\,\text{mm}$ PA12 mit 2x M2 Senkkopfschrauben, Schutzkragen und 2x Edelstahl-Auswerferfedern ($10\,\text{mm}$ Auswurfhub).
-* **Offener Kassetten-Schlitten:** $92{,}0 \times 54{,}0 \times 23{,}5\,\text{mm}$ U-Chassis ohne Deckel ($88{,}0 \times 50{,}0 \times 23{,}5\,\text{mm}$ nutzbarer Innenbauraum).
-* **Kassetten-Trägerplatine (`openmotorbridge_pod_cartridge`):** $60{,}0 \times 36{,}0 \times 1{,}2\,\text{mm}$ FR4-Adapter mit DS2401 1-Wire ID, abgewinkeltem JST-SH 1.0mm 6P Flex-Verbinder (F.Cu) und 6-Pin Buchsenleiste (B.Cu).
-* **IP67-Dichtebene:** Der umlaufende $58{,}0 \times 28{,}0\,\text{mm}$ Shore 40A Silikon-Stirnflansch wird beim Einschieben um $0{,}8\,\text{mm}$ vorkomprimiert und dichtet die Kassettenkammer hermetisch gegen Strahlwasser und Staub ab.
-
 ---
-
-
----
-
-### 5.10 Pod 3 Baugruppen-Montage & 1:1:1 CAD-Fitting-Verifikation
-
-Zur ganzheitlichen geometrischen und elektrischen Validierung des Gesamtsystems wurde die vollständige Baugruppe des **Heck-Pods (Pod 3 mit OMM-Transceiver und Wechselkassette)** im maßstabsgetreuen 1:1:1 euklidischen CAD-Raum modelliert und verifiziert:
-
-#### 1. 3D-Baugruppen-Explosionsdarstellung (Hierarchie aller Komponenten):
-![OpenMotorBridge Pod 3 Baugruppen-Explosionsdarstellung 3D CAD](../../hardware/cad/pod3_full_assembly_exploded_3d.png)
-
-*Abbildung 5.3: Explosionsdarstellung des Satelliten-Pods 3 (120x64x32 mm Monocoque-Gehäuse, M8 6-Pin Einbaubuchse an der Gehäuseunterseite, vertikale Pod-Base-Platine an der inneren Stirnwand, einschraubbare PA12-Schutz-Schottwand mit 45°-Fangtrichter und dualen Auto-Eject Edelstahlfedern, sowie der einschiebbare Kassetten-Schlitten).*
-
-#### 2. Nahaufnahme der zusammengesteckten Kontakt- & Dichtebene:
-![OpenMotorBridge Pod 3 Nahaufnahme Steckverbindung](../../hardware/cad/pod3_assembly_mated_closeup.png)
-
-*Abbildung 5.4: Transparente Detailansicht des gesteckten Zustands. Die 6-Pin Präzisions-Stiftleiste der Pod-Base sitzt formschlüssig in der Buchsenleiste des Kassetten-Schlittens, umschlossen vom 4-seitigen Berührungsschutzkragen der Schottwand. Die Federn halten das System unter permanenter Vorspannung gegen die IP67-Flanschdichtung.*
-
-#### 3. Längsschnitt-Fitting (Mechanische & Elektrische Ausrichtung):
-![OpenMotorBridge Pod 3 Längsschnitt-Fitting](../../hardware/cad/pod3_assembly_cross_section.png)
-
-*Abbildung 5.5: Maßstabsgetreuer Längsschnitt (X-Z Ebene) durch den Satelliten-Pod. Erkennbar sind die zentrierte Lage der Steckverbindung auf der horizontalen Mittelachse, die Schachtführung und der spannungsfreie Übergang von der fahrzeugseitigen M8-Verschraubung zur internen Elektronik.*
 
 ### 5.11 CAD-Dateistruktur & Tinkercad-Modulbaukasten (STL-Bibliothek)
 
-Alle 3D-Gehäusemodelle stehen im Verzeichnis [hardware/cad/stl/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/) und [hardware/3d_models_mjf/](file:///Users/schmidtm/openMotorBridge/hardware/3d_models_mjf/) als fertige, monolithische Druckkörper sowie als **vollständig zerlegte, modulare Tinkercad-Baukästen** bereit:
+Alle 3D-Gehäusemodelle stehen im Verzeichnis [hardware/cad/stl/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/) und [hardware/3d_models_mjf/](file:///Users/schmidtm/openMotorBridge/hardware/3d_models_mjf/) in 3 klar strukturierten Hauptpaketen bereit:
 
 ```
 hardware/cad/stl/
@@ -724,26 +679,18 @@ hardware/cad/stl/
 │       ├── 07_pod_lateral_cooling_rails_pair.stl # Metallische Kühl- und Gleitschienen (in Seitenwand)
 │       └── 08_auto_eject_springs_pair.stl       # 2x V4A-Auswerferfedern
 │
-├── 03_pod_cartridges/                           # Kassetten-Einschübe
-│   ├── cartridge_sena_sled.stl                  # Sena 50S/60S Kassetten-Schlitten (mit ePTFE-Membran)
-│   ├── cartridge_cardo_sled.stl                 # Cardo Packtalk Edge Kassetten-Schlitten (mit ePTFE-Membran)
-│   ├── cartridge_blindkassette_waterproof.stl   # Wasserdichte IP67 Blindkassette (Dry Box Dummy)
-│   └── components/                              # Tinkercad-Primitiven zum freien Editieren
-│       ├── 01_universal_base_sled.stl           # Universeller Grundschlitten (75x54x22 mm)
-│       ├── 02_cartridge_faceplate_with_gasket_lip.stl # PA12-Frontblende mit Dichtkragen & Snap-Fit
-│       ├── 03_cartridge_eptfe_membrane_boss.stl # Frontblenden ePTFE-Membransitz
-│       ├── 04_cartridge_membrane_cutout_tool.stl # Schneidkörper für Frontblenden-Membran
-│       ├── 05_cartridge_floor_convective_vent_slots_tool.stl # 4x Kassettenboden-Konvektionsschlitze
-│       └── 06_cartridge_copper_thermal_slide_plates_pair.stl # Seitliche Kupfer-Kühlflankenbleche (0.8 mm)
-│
-└── 04_rear_pod3/                                # Heck-Satelliten-Pod (Pod 3)
-    ├── rear_pod3_lower_housing.stl              # Heck-Untergehäuse mit horizontalem M8-Stutzen & GoPro-Rasten
-    ├── rear_pod3_radome_lid.stl                 # Radomdeckel mit Antennenkuppel & Dichtlippe
+└── 03_pod_cartridges/                           # Kassetten-Einschübe
+    ├── cartridge_sena_sled.stl                  # Sena 50S/60S Kassetten-Schlitten (mit ePTFE-Membran)
+    ├── cartridge_cardo_sled.stl                 # Cardo Packtalk Edge Kassetten-Schlitten (mit ePTFE-Membran)
+    ├── cartridge_omm_transceiver_sled.stl       # OMM Transceiver Kassetten-Schlitten (für Pod 3 Heck)
+    ├── cartridge_blindkassette_waterproof.stl   # Wasserdichte IP67 Blindkassette (Dry Box Dummy)
     └── components/                              # Tinkercad-Primitiven zum freien Editieren
-        ├── 01_rear_pod3_empty_tub.stl           # Leere Wanne (72x48x14 mm)
-        ├── 02_rear_pod3_4_pcb_standoffs.stl     # 4x M2.5 PCB-Schraubdome
-        ├── 03_m8_horizontal_cable_gland_neck.stl # Horizontaler M8-Kabelstutzen mit Ø 8 mm Bohrung
-        ├── 04_gopro_mounting_cleats.stl         # 3x GoPro- / Gepäckträger-Montagerasten
+        ├── 01_universal_base_sled.stl           # Universeller Grundschlitten (75x54x22 mm)
+        ├── 02_cartridge_faceplate_with_gasket_lip.stl # PA12-Frontblende mit Dichtkragen & Snap-Fit
+        ├── 03_cartridge_eptfe_membrane_boss.stl # Frontblenden ePTFE-Membransitz
+        ├── 04_cartridge_membrane_cutout_tool.stl # Schneidkörper für Frontblenden-Membran
+        ├── 05_cartridge_floor_convective_vent_slots_tool.stl # 4x Kassettenboden-Konvektionsschlitze
+        └── 06_cartridge_copper_thermal_slide_plates_pair.stl # Seitliche Kupfer-Kühlflankenbleche (0.8 mm)
 ```
 
 #### Übersicht der druckfertigen STL-Masterdateien (Ready-to-Print)
@@ -754,13 +701,13 @@ hardware/cad/stl/
 | **Zentralbox (3-Teilig)** | Oberwanne mit Zwischenboden & Akkubett | [main_box_mid_tray.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_mid_tray.stl) | [01_main_box/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/components/) |
 | **Zentralbox (3-Teilig)** | Gehäusedeckel mit Dichtfeder & Gore-Vent | [main_box_lid.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_lid.stl) | [01_main_box/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/components/) |
 | **Zentralbox (3-Teilig)** | Vollständiges 3D-Montagemodell (Prüfkörper) | [main_box_complete_assembly.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_complete_assembly.stl) | — |
-| **Satelliten-Pod** | 5-seitiges Monocoque-Schachtgehäuse | [pod_base_housing.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod_base_housing.stl) | [02_pod_base/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/components/) *(8 Primitiven)* |
-| **Satelliten-Pod** | Helm-Klemmadapter | [pod_base_helmet_clamp.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod_base_helmet_clamp.stl) | [02_pod_base/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/components/) |
+| **Universeller Satelliten-Pod** | 5-seitiges Monocoque-Schachtgehäuse (für alle 3 Pods) | [pod_base_housing.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod_base_housing.stl) | [02_pod_base/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/components/) *(8 Primitiven)* |
+| **Montageadapter (Helm)** | Helm-Klemmadapter (für Pod 1 & 2) | [pod_mount_helmet_clamp.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod_mount_helmet_clamp.stl) | [02_pod_base/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/components/) |
+| **Montageadapter (Heck)** | Heck- / GoPro- / Gepäckträger-Adapter (für Pod 3) | [pod_mount_gopro_rack.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod_mount_gopro_rack.stl) | [02_pod_base/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/components/) |
 | **Wechselkassette** | Sena 50S/60S Kassetten-Schlitten | [cartridge_sena_sled.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_sena_sled.stl) | [03_pod_cartridges/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/components/) *(6 Primitiven)* |
 | **Wechselkassette** | Cardo Packtalk Edge Kassetten-Schlitten | [cartridge_cardo_sled.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_cardo_sled.stl) | [03_pod_cartridges/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/components/) |
-| **Wechselkassette** | Wasserdichte IP67 Blindkassette (Dry Box) | [cartridge_blindkassette_waterproof.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_blindkassette_waterproof.stl) | [03_pod_cartridges/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/components/) |
-| **Heck-Pod 3** | Untergehäuse mit horizontalem M8-Stutzen | [rear_pod3_lower_housing.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_rear_pod3/rear_pod3_lower_housing.stl) | [04_rear_pod3/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_rear_pod3/components/) *(5 Primitiven)* |
-| **Heck-Pod 3** | Radomdeckel mit Antennenkuppel & Dichtlippe | [rear_pod3_radome_lid.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_rear_pod3/rear_pod3_radome_lid.stl) | [04_rear_pod3/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_rear_pod3/components/) |
+| **Wechselkassette** | OMM Transceiver Kassetten-Schlitten (für Pod 3 Heck) | [cartridge_omm_transceiver_sled.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_omm_transceiver_sled.stl) | [03_pod_cartridges/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/components/) |
+| **Wechselkassette** | Wasserdichte IP67 Blindkassette (Dry Box Dummy) | [cartridge_blindkassette_waterproof.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_blindkassette_waterproof.stl) | [03_pod_cartridges/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/components/) |
 
 ---
 
