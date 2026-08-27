@@ -199,22 +199,122 @@ class STLMeshBuilder:
             self.add_quad(in_l[next_i], in_l[i], in_r[i], in_r[next_i])
             # Left annular rim
             self.add_quad(out_l[next_i], out_l[i], in_l[i], in_l[next_i])
-    def add_horizontal_tunnel_x(self, x0: float, y0: float, z0: float, length: float, width: float, height: float, wall: float):
+    def add_plate_with_hole_yz(self, x0: float, y0: float, z0: float, W: float, H: float, yc: float, zc: float, R: float, normal_sign: int = 1, segments: int = 24):
+        """Adds a rectangular plate on the YZ plane with a circular through-hole."""
+        angles = np.linspace(0, 2 * np.pi, segments, endpoint=False)
+        circle_pts = [np.array([x0, yc + R * np.cos(a), zc + R * np.sin(a)]) for a in angles]
+        
+        c_bl = np.array([x0, y0, z0])
+        c_br = np.array([x0, y0 + W, z0])
+        c_tr = np.array([x0, y0 + W, z0 + H])
+        c_tl = np.array([x0, y0, z0 + H])
+        
+        def add_tri(v1, v2, v3):
+            if normal_sign < 0:
+                self.add_triangle(v1, v3, v2)
+            else:
+                self.add_triangle(v1, v2, v3)
+                
+        # Right edge quadrant (i = 21, 22, 23, 0, 1, 2, 3)
+        r_indices = [21, 22, 23, 0, 1, 2, 3]
+        for idx in range(len(r_indices) - 1):
+            i1, i2 = r_indices[idx], r_indices[idx + 1]
+            t1 = idx / (len(r_indices) - 1)
+            t2 = (idx + 1) / (len(r_indices) - 1)
+            e1 = c_br + (c_tr - c_br) * t1
+            e2 = c_br + (c_tr - c_br) * t2
+            add_tri(e1, e2, circle_pts[i2])
+            add_tri(e1, circle_pts[i2], circle_pts[i1])
+            
+        # Top edge quadrant (i = 3, 4, 5, 6, 7, 8, 9)
+        t_indices = [3, 4, 5, 6, 7, 8, 9]
+        for idx in range(len(t_indices) - 1):
+            i1, i2 = t_indices[idx], t_indices[idx + 1]
+            t1 = idx / (len(t_indices) - 1)
+            t2 = (idx + 1) / (len(t_indices) - 1)
+            e1 = c_tr + (c_tl - c_tr) * t1
+            e2 = c_tr + (c_tl - c_tr) * t2
+            add_tri(e1, e2, circle_pts[i2])
+            add_tri(e1, circle_pts[i2], circle_pts[i1])
+            
+        # Left edge quadrant (i = 9, 10, 11, 12, 13, 14, 15)
+        l_indices = [9, 10, 11, 12, 13, 14, 15]
+        for idx in range(len(l_indices) - 1):
+            i1, i2 = l_indices[idx], l_indices[idx + 1]
+            t1 = idx / (len(l_indices) - 1)
+            t2 = (idx + 1) / (len(l_indices) - 1)
+            e1 = c_tl + (c_bl - c_tl) * t1
+            e2 = c_tl + (c_bl - c_tl) * t2
+            add_tri(e1, e2, circle_pts[i2])
+            add_tri(e1, circle_pts[i2], circle_pts[i1])
+            
+        # Bottom edge quadrant (i = 15, 16, 17, 18, 19, 20, 21)
+        b_indices = [15, 16, 17, 18, 19, 20, 21]
+        for idx in range(len(b_indices) - 1):
+            i1, i2 = b_indices[idx], b_indices[idx + 1]
+            t1 = idx / (len(b_indices) - 1)
+            t2 = (idx + 1) / (len(b_indices) - 1)
+            e1 = c_bl + (c_br - c_bl) * t1
+            e2 = c_bl + (c_br - c_bl) * t2
+            add_tri(e1, e2, circle_pts[i2])
+            add_tri(e1, circle_pts[i2], circle_pts[i1])
+
+    def add_horizontal_tunnel_x(self, x0: float, y0: float, z0: float, length: float, width: float, height: float, wall: float, hole_y: float = None, hole_z: float = None, hole_r: float = 0.0):
         """
-        Adds a 5-sided monocoque tunnel along the X axis.
-        Closed at: Bottom (-Z), Top (+Z), Left (-Y), Right (+Y), and Rear (-X at x0).
-        OPEN at: Front (+X at x0 + length) for slide-in cartridges.
+        Adds a 100% seamless, watertight, manifold 5-sided monocoque tunnel along the X axis.
+        Open at front (+X at x0 + length).
+        Closed on 4 sides (bottom, top, left, right) and rear wall with ZERO internal intersecting seams.
+        If hole_r > 0, adds a smooth through-bore on the rear wall at (hole_y, hole_z).
         """
-        # Bottom Wall
-        self.add_box(x0, y0, z0, length, width, wall)
-        # Top Wall
-        self.add_box(x0, y0, z0 + height - wall, length, width, wall)
-        # Left Side Wall (between bottom and top)
-        self.add_box(x0, y0, z0 + wall, length, wall, height - 2 * wall)
-        # Right Side Wall (between bottom and top)
-        self.add_box(x0, y0 + width - wall, z0 + wall, length, wall, height - 2 * wall)
-        # Rear End Wall (closing the tunnel at x0)
-        self.add_box(x0, y0 + wall, z0 + wall, wall, width - 2 * wall, height - 2 * wall)
+        x1 = x0 + length
+        y1 = y0 + width
+        z1 = z0 + height
+        ix0 = x0 + wall
+        iy0 = y0 + wall
+        iz0 = z0 + wall
+        iy1 = y1 - wall
+        iz1 = z1 - wall
+        
+        # 1. Outer Faces (4 side/top/bottom faces)
+        # Outer Bottom (z = z0, normal -Z)
+        self.add_quad(np.array([x0, y0, z0]), np.array([x0, y1, z0]), np.array([x1, y1, z0]), np.array([x1, y0, z0]))
+        # Outer Top (z = z1, normal +Z)
+        self.add_quad(np.array([x0, y0, z1]), np.array([x1, y0, z1]), np.array([x1, y1, z1]), np.array([x0, y1, z1]))
+        # Outer Left (y = y0, normal -Y)
+        self.add_quad(np.array([x0, y0, z0]), np.array([x1, y0, z0]), np.array([x1, y0, z1]), np.array([x0, y0, z1]))
+        # Outer Right (y = y1, normal +Y)
+        self.add_quad(np.array([x0, y1, z0]), np.array([x0, y1, z1]), np.array([x1, y1, z1]), np.array([x1, y1, z0]))
+        
+        # 2. Inner Cavity Faces (4 side/top/bottom faces, normals facing inside)
+        # Inner Bottom (z = iz0, normal +Z)
+        self.add_quad(np.array([ix0, iy0, iz0]), np.array([x1, iy0, iz0]), np.array([x1, iy1, iz0]), np.array([ix0, iy1, iz0]))
+        # Inner Top (z = iz1, normal -Z)
+        self.add_quad(np.array([ix0, iy0, iz1]), np.array([ix0, iy1, iz1]), np.array([x1, iy1, iz1]), np.array([x1, iy0, iz1]))
+        # Inner Left (y = iy0, normal +Y)
+        self.add_quad(np.array([ix0, iy0, iz0]), np.array([ix0, iy0, iz1]), np.array([x1, iy0, iz1]), np.array([x1, iy0, iz0]))
+        # Inner Right (y = iy1, normal -Y)
+        self.add_quad(np.array([ix0, iy1, iz0]), np.array([x1, iy1, iz0]), np.array([x1, iy1, iz1]), np.array([ix0, iy1, iz1]))
+        
+        # 3. Front Open Mouth Annular Rim (at x = x1, normal +X)
+        self.add_quad(np.array([x1, y0, z0]), np.array([x1, y1, z0]), np.array([x1, y1, iz0]), np.array([x1, y0, iz0]))
+        self.add_quad(np.array([x1, y0, iz1]), np.array([x1, y1, iz1]), np.array([x1, y1, z1]), np.array([x1, y0, z1]))
+        self.add_quad(np.array([x1, y0, iz0]), np.array([x1, iy0, iz0]), np.array([x1, iy0, iz1]), np.array([x1, y0, iz1]))
+        self.add_quad(np.array([x1, iy1, iz0]), np.array([x1, y1, iz0]), np.array([x1, y1, iz1]), np.array([x1, iy1, iz1]))
+        
+        # 4. Rear Wall (at x0 outer, normal -X, and ix0 inner, normal +X)
+        if hole_r > 0 and hole_y is not None and hole_z is not None:
+            self.add_plate_with_hole_yz(x0, y0, z0, width, height, hole_y, hole_z, hole_r, normal_sign=-1)
+            self.add_plate_with_hole_yz(ix0, iy0, iz0, width - 2 * wall, height - 2 * wall, hole_y, hole_z, hole_r, normal_sign=1)
+            # Cylindrical sleeve connecting outer hole to inner hole (through-bore)
+            angles = np.linspace(0, 2 * np.pi, 24, endpoint=False)
+            out_c = [np.array([x0, hole_y + hole_r * np.cos(a), hole_z + hole_r * np.sin(a)]) for a in angles]
+            in_c = [np.array([ix0, hole_y + hole_r * np.cos(a), hole_z + hole_r * np.sin(a)]) for a in angles]
+            for i in range(24):
+                next_i = (i + 1) % 24
+                self.add_quad(out_c[next_i], out_c[i], in_c[i], in_c[next_i])
+        else:
+            self.add_quad(np.array([x0, y0, z0]), np.array([x0, y0, z1]), np.array([x0, y1, z1]), np.array([x0, y1, z0]))
+            self.add_quad(np.array([ix0, iy0, iz0]), np.array([ix0, iy1, iz0]), np.array([ix0, iy1, iz1]), np.array([ix0, iy0, iz1]))
 
     def write_stl(self, filepath: str, binary: bool = True):
         """Exports the collected triangles to binary or ASCII STL file."""
@@ -512,7 +612,7 @@ def export_main_box_package(base_dir: str):
 
 
 # =============================================================================
-# 2. POD BASE EXPORTER
+# 2. SATELLITE POD BASE EXPORTER
 # =============================================================================
 def export_pod_base_package(base_dir: str):
     print("Exporting 02_pod_base package & components...")
@@ -523,10 +623,10 @@ def export_pod_base_package(base_dir: str):
     # Monolithic Models
     # 1. Pod Base Housing (5-seitiger Monocoque-Schacht: 100 x 60 x 28 mm, nach vorne offen)
     pb = STLMeshBuilder("pod_base_housing")
-    # 5-seitiger Monocoque-Tunnel (offen bei x = 100 mm)
-    pb.add_horizontal_tunnel_x(0, 0, 0, 100.0, 60.0, 28.0, 2.5)
-    # Horizontaler M8 6-Pin IP67 Kabelstutzen an Rückwand (x = 0, y = 30, z = 14) mit Innenbohrung Ø 8mm
-    pb.add_horizontal_boss_x(-10.0, 30.0, 14.0, 6.0, 4.0, 12.5)
+    # 5-seitiger nahtloser Monocoque-Tunnel mit M8-Durchgangsbohrung (Ø 8mm) an der Rückwand
+    pb.add_horizontal_tunnel_x(0, 0, 0, 100.0, 60.0, 28.0, 2.5, hole_y=30.0, hole_z=14.0, hole_r=4.0)
+    # Horizontaler M8 6-Pin IP67 Kabelstutzen an Rückwand (x = -10..0, y = 30, z = 14) mit Innenbohrung Ø 8mm
+    pb.add_horizontal_boss_x(-10.0, 30.0, 14.0, 6.0, 4.0, 10.0)
     # Schutz-Schottwand / Zwischenboden bei x = 22 mm (trennt M8-Kammer vom Wechselschacht)
     pb.add_box(22.0, 2.5, 2.5, 2.0, 55.0, 23.0)
     # Zentrierter 6-Pin Schutzkragen mit 45°-Fangtrichter (x = 22..28, y = 24..36, z = 10..18)
@@ -542,12 +642,13 @@ def export_pod_base_package(base_dir: str):
     pb.add_boss(22.0, 5.0, 21.5, 2.5, 1.0, 4.0)
     pb.add_boss(22.0, 55.0, 21.5, 2.5, 1.0, 4.0)
     # Asymmetrische Poka-Yoke Führungsnuten (Nut-und-Feder Führungsschienen an Seitenwänden)
-    # Linke Schienenrippen (bilden 3.0mm Nut bei z = 6.7..9.7 mm)
     pb.add_box(24.0, 2.5, 4.5, 74.0, 1.5, 2.2)
     pb.add_box(24.0, 2.5, 9.7, 74.0, 1.5, 2.2)
-    # Rechte Schienenrippen (bilden 3.0mm Nut bei z = 12.7..15.7 mm -> Asymmetrischer Höhenversatz)
     pb.add_box(24.0, 56.0, 10.5, 74.0, 1.5, 2.2)
     pb.add_box(24.0, 56.0, 15.7, 74.0, 1.5, 2.2)
+    # 2x Kupfer-Wärmeleitpfosten (Ø 8.0 mm) im Pod-Gehäuseboden
+    pb.add_cylinder(42.0, 30.0, 0.0, 4.0, 2.5)
+    pb.add_cylinder(72.0, 30.0, 0.0, 4.0, 2.5)
     pb.write_stl(os.path.join(pb_dir, "pod_base_housing.stl"))
     pb.write_stl(os.path.join(base_dir, "pod_base_housing.stl"))
     
@@ -562,7 +663,6 @@ def export_pod_base_package(base_dir: str):
     # 3. Heck- / GoPro- / Gepäckträger-Montageadapter (für Pod 3 am Heck)
     pbg = STLMeshBuilder("pod_mount_gopro_rack")
     pbg.add_box(0, 0, 0, 80.0, 50.0, 4.0)
-    # 3x GoPro Cleats on bottom
     pbg.add_box(28.0, 21.0, -8.0, 4.0, 8.0, 8.0)
     pbg.add_box(38.0, 21.0, -8.0, 4.0, 8.0, 8.0)
     pbg.add_box(48.0, 21.0, -8.0, 4.0, 8.0, 8.0)
@@ -571,7 +671,7 @@ def export_pod_base_package(base_dir: str):
     
     # Modular Components for Tinkercad
     c1 = STLMeshBuilder("01_pod_base_monocoque_empty_tunnel")
-    c1.add_horizontal_tunnel_x(0, 0, 0, 100.0, 60.0, 28.0, 2.5)
+    c1.add_horizontal_tunnel_x(0, 0, 0, 100.0, 60.0, 28.0, 2.5, hole_y=30.0, hole_z=14.0, hole_r=4.0)
     c1.write_stl(os.path.join(comp_dir, "01_pod_base_monocoque_empty_tunnel.stl"))
     
     c2 = STLMeshBuilder("02_m8_horizontal_cable_gland_neck")
@@ -609,6 +709,11 @@ def export_pod_base_package(base_dir: str):
     c9.add_box(22.0, 1.0, 6.7, 76.0, 3.0, 3.0)  # Left groove tool
     c9.add_box(22.0, 56.0, 12.7, 76.0, 3.0, 3.0) # Right groove tool
     c9.write_stl(os.path.join(comp_dir, "09_pod_internal_guide_grooves_cutout_tool.stl"))
+    
+    c10 = STLMeshBuilder("10_pod_copper_thermal_studs_pair")
+    c10.add_cylinder(42.0, 30.0, 0.0, 4.0, 2.5)
+    c10.add_cylinder(72.0, 30.0, 0.0, 4.0, 2.5)
+    c10.write_stl(os.path.join(comp_dir, "10_pod_copper_thermal_studs_pair.stl"))
 
 
 # =============================================================================
@@ -631,6 +736,9 @@ def export_cartridges_package(base_dir: str):
     sc.add_box(0.0, -1.4, 7.2, 4.0, 1.4, 2.0)     # Einlaufschräge links
     sc.add_box(4.0, 54.0, 12.9, 70.0, 1.4, 2.6)   # Rechte Feder (z = 14.2 mm)
     sc.add_box(0.0, 54.0, 13.2, 4.0, 1.4, 2.0)    # Einlaufschräge rechts
+    # 2x Kupfer-Wärmeleitbolzen-Kontaktflächen im Kassettenboden
+    sc.add_cylinder(42.0, 30.0, 0.0, 4.0, 2.5)
+    sc.add_cylinder(72.0, 30.0, 0.0, 4.0, 2.5)
     # Sena 3D Cradle & Jog-Dial Nest auf der Oberseite
     sc.add_cylinder(55.0, 18.0, 18.0, 6.0, 6.0)
     sc.add_cylinder(55.0, 36.0, 18.0, 5.0, 6.0)
@@ -653,6 +761,9 @@ def export_cartridges_package(base_dir: str):
     cc.add_box(0.0, -1.4, 7.2, 4.0, 1.4, 2.0)
     cc.add_box(4.0, 54.0, 12.9, 70.0, 1.4, 2.6)
     cc.add_box(0.0, 54.0, 13.2, 4.0, 1.4, 2.0)
+    # 2x Kupfer-Wärmeleitbolzen-Kontaktflächen im Kassettenboden
+    cc.add_cylinder(42.0, 30.0, 0.0, 4.0, 2.5)
+    cc.add_cylinder(72.0, 30.0, 0.0, 4.0, 2.5)
     # Cardo AirMount Magnet- & Pogo-Nest
     cc.add_cylinder(40.0, 27.0, 18.0, 8.0, 4.0)
     cc.add_box(5.0, 17.0, 18.0, 10.0, 20.0, 5.0)
@@ -675,6 +786,9 @@ def export_cartridges_package(base_dir: str):
     oc.add_box(0.0, -1.4, 7.2, 4.0, 1.4, 2.0)
     oc.add_box(4.0, 54.0, 12.9, 70.0, 1.4, 2.6)
     oc.add_box(0.0, 54.0, 13.2, 4.0, 1.4, 2.0)
+    # 2x Kupfer-Wärmeleitbolzen-Kontaktflächen im Kassettenboden
+    oc.add_cylinder(42.0, 30.0, 0.0, 4.0, 2.5)
+    oc.add_cylinder(72.0, 30.0, 0.0, 4.0, 2.5)
     # Voller offener Innenraum für openmotorbridge_rear_transceiver PCB (ESP32-S3, SX1262 LoRa, GNSS & Patch-Antenne)
     oc.add_boss(10.0, 8.0, 2.5, 2.5, 1.0, 3.0)
     oc.add_boss(65.0, 8.0, 2.5, 2.5, 1.0, 3.0)
@@ -695,6 +809,9 @@ def export_cartridges_package(base_dir: str):
     dc.add_box(0.0, -1.4, 7.2, 4.0, 1.4, 2.0)
     dc.add_box(4.0, 54.0, 12.9, 70.0, 1.4, 2.6)
     dc.add_box(0.0, 54.0, 13.2, 4.0, 1.4, 2.0)
+    # 2x Kupfer-Wärmeleitbolzen-Kontaktflächen im Kassettenboden
+    dc.add_cylinder(42.0, 30.0, 0.0, 4.0, 2.5)
+    dc.add_cylinder(72.0, 30.0, 0.0, 4.0, 2.5)
     # Wasserdichter Dry-Box Deckel mit Versteifungsrippen
     dc.add_box(5.0, 5.0, 2.5, 65.0, 44.0, 18.0)
     for x_rib in [18.0, 30.0, 42.0, 54.0]:
@@ -741,6 +858,10 @@ def export_cartridges_package(base_dir: str):
     guide_ribs.add_box(4.0, 54.0, 12.9, 70.0, 1.4, 2.6)
     guide_ribs.add_box(0.0, 54.0, 13.2, 4.0, 1.4, 2.0)
     guide_ribs.write_stl(os.path.join(comp_dir, "07_cartridge_lateral_guide_ribs_pair.stl"))
+    cu_studs_cart = STLMeshBuilder("08_cartridge_copper_thermal_stud_pads_pair")
+    cu_studs_cart.add_cylinder(42.0, 30.0, 0.0, 4.0, 2.5)
+    cu_studs_cart.add_cylinder(72.0, 30.0, 0.0, 4.0, 2.5)
+    cu_studs_cart.write_stl(os.path.join(comp_dir, "08_cartridge_copper_thermal_stud_pads_pair.stl"))
 
 
 def main():

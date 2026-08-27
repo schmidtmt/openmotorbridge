@@ -674,7 +674,7 @@ hardware/cad/stl/
 │   ├── pod_base_housing.stl                     # Universelles 5-seitiges Monocoque-Schachtgehäuse mit Führungsnuten
 │   ├── pod_mount_helmet_clamp.stl               # Helm-Klemmadapter (für Pod 1 & 2 am Helm)
 │   ├── pod_mount_gopro_rack.stl                 # Heck- / GoPro- / Gepäckträger-Montageadapter (für Pod 3)
-│   └── components/                              # 9 Tinkercad-Primitiven (Schale, Schottwand, Nuten, Funnel, Federn)
+│   └── components/                              # 10 Tinkercad-Primitiven (Schale, Schottwand, Nuten, Funnel, Federn, Cu-Pins)
 │       ├── 01_pod_base_monocoque_empty_tunnel.stl # 5-seitiger Monocoque-Tunnel (100x60x28 mm, nach vorne offen)
 │       ├── 02_m8_horizontal_cable_gland_neck.stl # Horizontaler M8 6-Pin IP67 Kabelstutzen (Ø 8 mm Bohrung)
 │       ├── 03_pod_bulkhead_partition_plate.stl  # Schutz-Schottwand / Zwischenboden
@@ -683,21 +683,23 @@ hardware/cad/stl/
 │       ├── 06_pod_bulkhead_convective_vent_slots_tool.stl # Schneidkörper für Schottwand-Lüftungsschlitze
 │       ├── 07_pod_lateral_cooling_rails_pair.stl # Metallische Kühl- und Gleitschienen (in Seitenwand)
 │       ├── 08_auto_eject_springs_pair.stl       # 2x V4A-Auswerferfedern
-│       └── 09_pod_internal_guide_grooves_cutout_tool.stl # Schneidkörper für asymmetrische Poka-Yoke Führungsnuten
+│       ├── 09_pod_internal_guide_grooves_cutout_tool.stl # Schneidkörper für asymmetrische Poka-Yoke Führungsnuten
+│       └── 10_pod_copper_thermal_studs_pair.stl # 2x Kupfer-Wärmeleitpfosten (Ø 8.0 mm) für Pod-Boden
 │
 └── 03_pod_cartridges/                           # Kassetten-Einschübe
-    ├── cartridge_sena_sled.stl                  # Sena 50S/60S Kassetten-Schlitten (mit Führungsfedern & ePTFE)
-    ├── cartridge_cardo_sled.stl                 # Cardo Packtalk Edge Schlitten (mit Führungsfedern & ePTFE)
-    ├── cartridge_omm_transceiver_sled.stl       # OMM Transceiver Schlitten (für Pod 3 Heck mit Führungsfedern)
+    ├── cartridge_sena_sled.stl                  # Sena 50S/60S Kassetten-Schlitten (mit Führungsfedern, Cu-Pads & ePTFE)
+    ├── cartridge_cardo_sled.stl                 # Cardo Packtalk Edge Schlitten (mit Führungsfedern, Cu-Pads & ePTFE)
+    ├── cartridge_omm_transceiver_sled.stl       # OMM Transceiver Schlitten (für Pod 3 Heck mit Führungsfedern & Cu-Pads)
     ├── cartridge_blindkassette_waterproof.stl   # Wasserdichte IP67 Blindkassette (Dry Box Dummy)
-    └── components/                              # 7 Tinkercad-Primitiven
+    └── components/                              # 8 Tinkercad-Primitiven
         ├── 01_universal_base_sled.stl           # Universeller Grundschlitten (75x54x22 mm)
         ├── 02_cartridge_faceplate_with_gasket_lip.stl # PA12-Frontblende mit Dichtkragen & Snap-Fit
         ├── 03_cartridge_eptfe_membrane_boss.stl # Frontblenden ePTFE-Membransitz
         ├── 04_cartridge_membrane_cutout_tool.stl # Schneidkörper für Frontblenden-Membran
         ├── 05_cartridge_floor_convective_vent_slots_tool.stl # 4x Kassettenboden-Konvektionsschlitze
         ├── 06_cartridge_copper_thermal_slide_plates_pair.stl # Seitliche Kupfer-Kühlflankenbleche (0.8 mm)
-        └── 07_cartridge_lateral_guide_ribs_pair.stl # Asymmetrische Poka-Yoke Führungsfedern (Tongue Rails)
+        ├── 07_cartridge_lateral_guide_ribs_pair.stl # Asymmetrische Poka-Yoke Führungsfedern (Tongue Rails)
+        └── 08_cartridge_copper_thermal_stud_pads_pair.stl # 2x Kupfer-Wärmeleitbolzen-Kontaktflächen (Ø 8.0 mm)
 ```
 
 #### Übersicht der druckfertigen STL-Masterdateien (Ready-to-Print)
@@ -708,12 +710,12 @@ hardware/cad/stl/
 | **Zentralbox (3-Teilig)** | Oberwanne mit Zwischenboden & Akkubett | [main_box_mid_tray.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_mid_tray.stl) | [01_main_box/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/components/) |
 | **Zentralbox (3-Teilig)** | Gehäusedeckel mit Dichtfeder & Gore-Vent | [main_box_lid.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_lid.stl) | [01_main_box/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/components/) |
 | **Zentralbox (3-Teilig)** | Vollständiges 3D-Montagemodell (Prüfkörper) | [main_box_complete_assembly.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_complete_assembly.stl) | — |
-| **Universeller Satelliten-Pod** | 5-seitiges Monocoque-Schachtgehäuse (mit Führungsnuten) | [pod_base_housing.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod_base_housing.stl) | [02_pod_base/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/components/) *(9 Primitiven)* |
+| **Universeller Satelliten-Pod** | 5-seitiges Monocoque-Schachtgehäuse (mit Führungsnuten & Cu-Pins) | [pod_base_housing.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod_base_housing.stl) | [02_pod_base/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/components/) *(10 Primitiven)* |
 | **Montageadapter (Helm)** | Helm-Klemmadapter (für Pod 1 & 2) | [pod_mount_helmet_clamp.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod_mount_helmet_clamp.stl) | [02_pod_base/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/components/) |
 | **Montageadapter (Heck)** | Heck- / GoPro- / Gepäckträger-Adapter (für Pod 3) | [pod_mount_gopro_rack.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod_mount_gopro_rack.stl) | [02_pod_base/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/components/) |
-| **Wechselkassette** | Sena 50S/60S Kassetten-Schlitten (mit Führungsfedern) | [cartridge_sena_sled.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_sena_sled.stl) | [03_pod_cartridges/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/components/) *(7 Primitiven)* |
-| **Wechselkassette** | Cardo Packtalk Edge Schlitten (mit Führungsfedern) | [cartridge_cardo_sled.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_cardo_sled.stl) | [03_pod_cartridges/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/components/) |
-| **Wechselkassette** | OMM Transceiver Schlitten (für Pod 3 Heck) | [cartridge_omm_transceiver_sled.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_omm_transceiver_sled.stl) | [03_pod_cartridges/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/components/) |
+| **Wechselkassette** | Sena 50S/60S Kassetten-Schlitten (mit Führungsfedern & Cu-Pads) | [cartridge_sena_sled.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_sena_sled.stl) | [03_pod_cartridges/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/components/) *(8 Primitiven)* |
+| **Wechselkassette** | Cardo Packtalk Edge Schlitten (mit Führungsfedern & Cu-Pads) | [cartridge_cardo_sled.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_cardo_sled.stl) | [03_pod_cartridges/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/components/) |
+| **Wechselkassette** | OMM Transceiver Schlitten (für Pod 3 Heck mit Cu-Pads) | [cartridge_omm_transceiver_sled.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_omm_transceiver_sled.stl) | [03_pod_cartridges/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/components/) |
 | **Wechselkassette** | Wasserdichte IP67 Blindkassette (Dry Box Dummy) | [cartridge_blindkassette_waterproof.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_blindkassette_waterproof.stl) | [03_pod_cartridges/components/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/components/) |
 
 ---
