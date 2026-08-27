@@ -293,6 +293,9 @@ Um maximale Flexibilität bei minimalen Fertigungskosten zu erzielen, ist jede W
    * Integrierte POM/PA12-Rastnasen an den Seitenwänden des Schlittens rasten beim Erreichen des Endanschlags formschlüssig in die Rastkerben des Pod-Gehäuses ein.
    * Die elastische Kompression der Silikondichtung sorgt für ständige Zugspannung – **absolut vibrationsfest, rüttelsicher (> 20 g) und spielfrei**.
    * **Werkzeuglose Entriegelung:** Zwei seitliche ergonomische Entriegelungstaster an der Blende lösen die Rastung durch einfaches Zusammendrücken mit Daumen und Zeigefinger.
+3. **Integrierte ePTFE-Druckausgleichsmembran an der Kassetten-Frontblende:**
+   * Beim Einschieben des Schlittens dichtet die umlaufende Silikon-Flanschdichtung den Schacht bereits kurz vor Erreichen des Endanschlags ab. Ohne Druckausgleich würde die verdrängte Luft wie ein pneumatischer Kolben komprimieren und das Einrasten erschweren.
+   * Direkt in die Kassetten-Frontblende ist eine **$\varnothing\,6{,}0\,\text{mm}$ Gore ePTFE-Membran** integriert. Sie lässt Luft beim Einschieben widerstandslos entweichen, gleicht thermische Druckdifferenzen bei Regen oder Sonneneinstrahlung aus und hält Wasser sowie Staub zu $100\,\%$ nach IP67 ab.
 
 ---
 
@@ -462,6 +465,10 @@ Zur vibrationsfesten, spielfreien und werkzeuglosen Arretierung der Intercoms un
   * **Beim Einschieben:** Die Stirnseite des Kassetten-Schlittens drückt die Federn um $5\dots 6\,\text{mm}$ zusammen, bis die 6-Pin Buchse voll im Schutzkragen sitzt und die Snap-Fit Rastnasen mit einem satten Klick einrasten. Die komprimierten Federn halten das System unter permanenter Vorspannung gegen die Silikondichtung – **100 % spielfrei und vibrationsfest**.
   * **Beim Entriegeln (Auto-Eject):** Sobald der Fahrer die beiden seitlichen Schnellentriegelungstaster an der Blende zusammendrückt, lösen sich die Rastnasen und **die Federn werfen die Kassette automatisch um $8\dots 10\,\text{mm}$ nach außen aus**.
   * Der Steckkontakt ist damit sauber getrennt und die Kassette lässt sich selbst mit dicken Motorrad-Winterhandschuhen mühelos und ohne Verkanten greifen und herausziehen.
+* **Interne Konvektions- & Entwärmungsschlitze (Wärmebrücke im geschützten Innenraum):**
+  * In der Schutz-Schottwand der Pod-Basis (2x $10{,}0 \times 2{,}0\,\text{mm}$) sowie im Kassettenboden unter der Trägerplatine (4x $12{,}0 \times 2{,}0\,\text{mm}$) sind interne Konvektionsschlitze eingebracht.
+  * **Thermischer Vorteil:** Abwärme von Ladecontrollern, ESP32 und SX1262 LoRa-Endstufen staut sich nicht in isolierten Kunststofftaschen, sondern zirkuliert frei durch den gesamten Pod-Innenraum und koppelt an die seitlichen Aluminium-/Kupfer-Kühlschienen an.
+  * **Garantierte IP67-Dichtheit:** Da die äußere Kassetten-Frontblende mit der umlaufenden Silikondichtung den gesamten Schacht nach außen hermetisch versiegelt, bleibt der Innenraum trocken und geschützt, während die Wärme sich optimal im gesamten Schacht verteilt.
 
 ---
 

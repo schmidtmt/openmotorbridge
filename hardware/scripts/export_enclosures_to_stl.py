@@ -445,6 +445,23 @@ def export_main_box_package(base_dir: str):
     single_vent = STLMeshBuilder("24_single_vent_slot_cutout_tool")
     single_vent.add_box(0, 0, 0, 15.0, 2.5, 5.0)
     single_vent.write_stl(os.path.join(comp_dir, "24_single_vent_slot_cutout_tool.stl"))
+    
+    # 25-27: Solid Copper Thermal Stud System
+    cu_studs = STLMeshBuilder("25_copper_thermal_studs_4x")
+    # Positioned under LM5164 Buck (1&2), BQ24075 (3), ESP32-S3 (4)
+    for cx, cy in [(35.0, 25.0), (45.0, 25.0), (30.0, 48.0), (70.0, 40.0)]:
+        cu_studs.add_cylinder(cx, cy, 0, 4.0, 6.5)       # Ø 8mm shaft
+        cu_studs.add_cylinder(cx, cy, 2.5, 5.0, 1.5)     # Ø 10mm flat contact head
+    cu_studs.write_stl(os.path.join(comp_dir, "25_copper_thermal_studs_4x.stl"))
+    
+    cu_tool = STLMeshBuilder("26_copper_stud_floor_pockets_cutout_tool_4x")
+    for cx, cy in [(35.0, 25.0), (45.0, 25.0), (30.0, 48.0), (70.0, 40.0)]:
+        cu_tool.add_cylinder(cx, cy, -1.0, 4.0, 4.5)     # Ø 8mm through-hole tool
+    cu_tool.write_stl(os.path.join(comp_dir, "26_copper_stud_floor_pockets_cutout_tool_4x.stl"))
+    
+    gap_pad = STLMeshBuilder("27_thermal_gap_pad_preview")
+    gap_pad.add_box(22.5, 17.5, 2.5, 60.0, 40.0, 2.0)   # 60x40x2.0 mm Silicone Gap Pad
+    gap_pad.write_stl(os.path.join(comp_dir, "27_thermal_gap_pad_preview.stl"))
 
 
 # =============================================================================
@@ -490,6 +507,20 @@ def export_pod_base_package(base_dir: str):
     c4.add_cylinder(16.0, 20.0, 13.0, 4.2, 3.5)
     c4.add_cylinder(46.0, 20.0, 13.0, 4.2, 3.5)
     c4.write_stl(os.path.join(comp_dir, "04_magnet_pockets_pair.stl"))
+    
+    c5 = STLMeshBuilder("05_pod_eptfe_membrane_boss")
+    c5.add_cylinder(31.0, 20.0, 18.0, 3.5, 1.5) # Ø 7mm Gore membrane boss on Pod ceiling
+    c5.write_stl(os.path.join(comp_dir, "05_pod_eptfe_membrane_boss.stl"))
+    
+    c6 = STLMeshBuilder("06_pod_bulkhead_convective_vent_slots_tool")
+    c6.add_box(8.0, 6.0, -1.0, 10.0, 2.0, 5.0)   # Left bulkhead slot
+    c6.add_box(8.0, 32.0, -1.0, 10.0, 2.0, 5.0)  # Right bulkhead slot
+    c6.write_stl(os.path.join(comp_dir, "06_pod_bulkhead_convective_vent_slots_tool.stl"))
+    
+    c7 = STLMeshBuilder("07_pod_lateral_cooling_rails_pair")
+    c7.add_box(5.0, 0.5, 3.0, 50.0, 1.5, 12.0)   # Left embedded cooling rail
+    c7.add_box(5.0, 38.0, 3.0, 50.0, 1.5, 12.0)  # Right embedded cooling rail
+    c7.write_stl(os.path.join(comp_dir, "07_pod_lateral_cooling_rails_pair.stl"))
 
 
 # =============================================================================
@@ -501,27 +532,36 @@ def export_cartridges_package(base_dir: str):
     comp_dir = os.path.join(pc_dir, "components")
     os.makedirs(comp_dir, exist_ok=True)
     
-    # Monolithic Sleds
+    # Monolithic Sleds (mit ePTFE-Membransitz an der Frontblende)
     sc = STLMeshBuilder("cartridge_sena_sled")
     sc.add_box(0, 0, 0, 58.0, 36.0, 14.0)
     sc.add_cylinder(48.0, 10.0, 7.0, 4.0, 7.0)
     sc.add_cylinder(48.0, 26.0, 7.0, 3.5, 7.0)
     sc.add_cylinder(29.0, 18.0, 14.0, 5.5, 2.5)
+    # Frontblenden ePTFE-Druckausgleichsmembran (Ø 6.0 mm Membransitz)
+    sc.add_cylinder(5.0, 18.0, 14.0, 3.0, 1.5)
     sc.write_stl(os.path.join(pc_dir, "cartridge_sena_sled.stl"))
+    sc.write_stl(os.path.join(base_dir, "cartridge_sena_sled.stl"))
     
     cc = STLMeshBuilder("cartridge_cardo_sled")
     cc.add_box(0, 0, 0, 58.0, 36.0, 15.0)
     cc.add_cylinder(29.0, 18.0, 15.0, 6.0, 3.0)
     cc.add_box(2.0, 14.0, 15.0, 6.0, 8.0, 4.0)
     cc.add_box(46.0, 8.0, 8.0, 10.0, 20.0, 7.0)
+    # Frontblenden ePTFE-Membransitz
+    cc.add_cylinder(5.0, 18.0, 15.0, 3.0, 1.5)
     cc.write_stl(os.path.join(pc_dir, "cartridge_cardo_sled.stl"))
+    cc.write_stl(os.path.join(base_dir, "cartridge_cardo_sled.stl"))
     
     dc = STLMeshBuilder("cartridge_blindkassette_waterproof")
     dc.add_box(0, 0, 0, 58.0, 36.0, 12.0)
     for x_rib in [15.0, 22.0, 29.0, 36.0, 43.0]:
         dc.add_box(x_rib, 4.0, 12.0, 2.5, 28.0, 2.0)
     dc.add_box(2.5, 2.5, -3.5, 53.0, 31.0, 3.5)
+    # Front ePTFE-Membran
+    dc.add_cylinder(5.0, 18.0, 12.0, 3.0, 1.5)
     dc.write_stl(os.path.join(pc_dir, "cartridge_blindkassette_waterproof.stl"))
+    dc.write_stl(os.path.join(base_dir, "cartridge_blindkassette_waterproof_dummy.stl"))
     
     # Modular Components
     sled_base = STLMeshBuilder("01_universal_base_sled")
@@ -531,6 +571,27 @@ def export_cartridges_package(base_dir: str):
     pogo_pads = STLMeshBuilder("02_pogo_target_contact_pads")
     pogo_pads.add_box(19.0, 14.0, -1.5, 20.0, 8.0, 1.5)
     pogo_pads.write_stl(os.path.join(comp_dir, "02_pogo_target_contact_pads.stl"))
+    
+    mem_boss = STLMeshBuilder("03_cartridge_eptfe_membrane_boss")
+    mem_boss.add_cylinder(5.0, 18.0, 0, 3.0, 2.0)
+    mem_boss.write_stl(os.path.join(comp_dir, "03_cartridge_eptfe_membrane_boss.stl"))
+    
+    mem_cut = STLMeshBuilder("04_cartridge_membrane_cutout_tool")
+    mem_cut.add_cylinder(5.0, 18.0, -2.0, 2.5, 6.0) # Ø 5mm hole tool
+    mem_cut.write_stl(os.path.join(comp_dir, "04_cartridge_membrane_cutout_tool.stl"))
+    
+    cart_vents = STLMeshBuilder("05_cartridge_floor_convective_vent_slots_tool")
+    # 4x Convective heat circulation slots through the cartridge floor
+    cart_vents.add_box(12.0, 8.0, -1.0, 12.0, 2.0, 5.0)
+    cart_vents.add_box(12.0, 26.0, -1.0, 12.0, 2.0, 5.0)
+    cart_vents.add_box(34.0, 8.0, -1.0, 12.0, 2.0, 5.0)
+    cart_vents.add_box(34.0, 26.0, -1.0, 12.0, 2.0, 5.0)
+    cart_vents.write_stl(os.path.join(comp_dir, "05_cartridge_floor_convective_vent_slots_tool.stl"))
+    
+    cu_plates = STLMeshBuilder("06_cartridge_copper_thermal_slide_plates_pair")
+    cu_plates.add_box(5.0, 0, 2.0, 48.0, 0.8, 10.0)      # Left copper flank plate
+    cu_plates.add_box(5.0, 35.2, 2.0, 48.0, 0.8, 10.0)   # Right copper flank plate
+    cu_plates.write_stl(os.path.join(comp_dir, "06_cartridge_copper_thermal_slide_plates_pair.stl"))
 
 
 # =============================================================================
