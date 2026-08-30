@@ -211,6 +211,16 @@ Der Gehäusedeckel schließt die Oberwanne nach oben hermetisch ab. Da sich alle
 - **Abmessungen Schacht:** $96{,}0 \times 56{,}0 \times 24{,}0\,\text{mm}$ (PA12 MJF, $3{,}0\,\text{mm}$ Wandstärke).
 - **Elektronik-Kassette / Schlitten:** $92{,}0 \times 54{,}0 \times 23{,}5\,\text{mm}$ (Lichter Innenbauraum: $88{,}0 \times 50{,}0 \times 23{,}5\,\text{mm}$).
 
+#### 3D-CAD-Visualisierung des universellen Pod-Gehäuses & Kassetten-Einschubs:
+
+![OpenMotorBridge Satelliten-Pod CAD Explosionsdarstellung](../../hardware/cad/openmotorbridge_pod_exploded_view.png)
+
+*Abbildung 5.1.4: 3D-CAD-Explosionsdarstellung des universellen Satelliten-Pods. Gezeigt werden das 5-seitige Monocoque-Schachtgehäuse mit rückseitigem M8 6-Pin IP67 Kabelanschluss, Schutz-Schottwand mit 6-Pin Fangtrichter, V4A-Auswerferfedern, 2x Boden-Kupfer-Wärmeleitpfosten und der herausgezogene Universalschlitten mit asymmetrischen Führungsfedern.*
+
+![OpenMotorBridge Satelliten-Pod Röntgenansicht](../../hardware/cad/openmotorbridge_pod_assembly_render_xray.png)
+
+*Abbildung 5.1.5: 3D-Röntgen- und Transparenzdarstellung des geschlossenen Satelliten-Pods mit eingeschobener Wechselkassette. Gut erkennbar sind die spielfreien asymmetrischen Poka-Yoke Führungsnuten, der zentrierte 6-Pin Kolbeneinschub in den Schutzkragen und die bündige Flanschabdichtung.*
+
 ### 5.1 2-Teilige modulare Kassetten-Architektur (Universal-Unterschlitten & Modul-Oberteil)
 
 Um maximale Flexibilität bei minimalen Fertigungskosten zu erzielen, ist jede Wechselkassette als **2-teiliges modulares Baugruppensystem** aufgebaut:

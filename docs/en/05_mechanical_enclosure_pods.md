@@ -207,6 +207,16 @@ The enclosure lid hermetically seals the upper tray. Since all electrical interf
 - **Chamber Dimensions:** $96.0 \times 56.0 \times 24.0\,\text{mm}$ (PA12 MJF, $3.0\,\text{mm}$ wall thickness).
 - **Electronics Cartridge / Sled:** $92.0 \times 54.0 \times 23.5\,\text{mm}$ (Usable interior volume: $88.0 \times 50.0 \times 23.5\,\text{mm}$).
 
+#### 3D CAD Visualization of Universal Pod Housing & Swappable Sled:
+
+![OpenMotorBridge Satellite Pod CAD Exploded View](../../hardware/cad/openmotorbridge_pod_exploded_view.png)
+
+*Figure 5.1.4: 3D CAD exploded view of the universal Satellite Pod. Displays the 5-sided monocoque tunnel housing with rear M8 6-pin IP67 cable gland, protective bulkhead with 6-pin lead-in funnel, V4A auto-eject coil springs, 2x floor copper thermal studs, and the pulled-out universal sled with asymmetrical guide rails.*
+
+![OpenMotorBridge Satellite Pod X-Ray Assembly View](../../hardware/cad/openmotorbridge_pod_assembly_render_xray.png)
+
+*Figure 5.1.5: 3D translucent X-Ray render of the closed Satellite Pod with inserted swappable cartridge. Highlights the play-free asymmetrical Poka-Yoke guide grooves, centric 6-pin piston mating inside the shroud, and flush flange gasket seal.*
+
 ### 5.1 2-Piece Modular Cartridge Architecture (Universal Base Sled & Module Top Inlay)
 
 To achieve maximum modularity at minimal manufacturing cost, each swappable cartridge is engineered as a **2-piece modular assembly**:
