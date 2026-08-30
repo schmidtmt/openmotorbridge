@@ -211,16 +211,6 @@ Der Gehäusedeckel schließt die Oberwanne nach oben hermetisch ab. Da sich alle
 - **Abmessungen Schacht:** $96{,}0 \times 56{,}0 \times 24{,}0\,\text{mm}$ (PA12 MJF, $3{,}0\,\text{mm}$ Wandstärke).
 - **Elektronik-Kassette / Schlitten:** $92{,}0 \times 54{,}0 \times 23{,}5\,\text{mm}$ (Lichter Innenbauraum: $88{,}0 \times 50{,}0 \times 23{,}5\,\text{mm}$).
 
-#### 3D-CAD-Visualisierung des universellen Pod-Gehäuses & Kassetten-Einschubs:
-
-![OpenMotorBridge Satelliten-Pod CAD Explosionsdarstellung](../../hardware/cad/openmotorbridge_pod_exploded_view.png)
-
-*Abbildung 5.1.4: 3D-CAD-Explosionsdarstellung des universellen Satelliten-Pods. Gezeigt werden das 5-seitige Monocoque-Schachtgehäuse mit rückseitigem M8 6-Pin IP67 Kabelanschluss, Schutz-Schottwand mit 6-Pin Fangtrichter, V4A-Auswerferfedern, 2x Boden-Kupfer-Wärmeleitpfosten und der herausgezogene Universalschlitten mit asymmetrischen Führungsfedern.*
-
-![OpenMotorBridge Satelliten-Pod Röntgenansicht](../../hardware/cad/openmotorbridge_pod_assembly_render_xray.png)
-
-*Abbildung 5.1.5: 3D-Röntgen- und Transparenzdarstellung des geschlossenen Satelliten-Pods mit eingeschobener Wechselkassette. Gut erkennbar sind die spielfreien asymmetrischen Poka-Yoke Führungsnuten, der zentrierte 6-Pin Kolbeneinschub in den Schutzkragen und die bündige Flanschabdichtung.*
-
 ### 5.1 2-Teilige modulare Kassetten-Architektur (Universal-Unterschlitten & Modul-Oberteil)
 
 Um maximale Flexibilität bei minimalen Fertigungskosten zu erzielen, ist jede Wechselkassette als **2-teiliges modulares Baugruppensystem** aufgebaut:
@@ -618,9 +608,19 @@ Um Verkanten, schiefe Krafteinleitung und fehlerhaftes Einstecken physikalisch a
 4. **Formschlüssiger Endanschlag & Auto-Eject:**
    * Die Einschubkraft wird direkt von der massiven Schottwand (PA12) abgefangen – die Platinen-Lötstellen bleiben zu 100 % kräftefrei. Die beiden V4A-Edelstahlfedern halten das System permanent unter Vorspannung und werfen den Schlitten beim Entriegeln um $10\,\text{mm}$ aus.
 
-#### 5.10 Universelle 1-Pod-Architektur (Pod 1, Pod 2 & Pod 3 sind 100 % baugleich)
+### 5.10 Universelle 1-Pod-Architektur (Pod 1, Pod 2 & Pod 3 sind 100 % baugleich)
 
 Das gesamte OpenMotorBridge-System basiert auf dem Prinzip der **vollständigen mechanischen Universalität**:
+
+#### 3D-CAD-Explosionsdarstellung & Aufbau der universellen Pod-Baugruppe:
+
+![OpenMotorBridge Satelliten-Pod CAD Explosionsdarstellung](../../hardware/cad/openmotorbridge_pod_exploded_view.png)
+
+*Abbildung 5.7: 3D-CAD-Explosionsdarstellung des universellen Satelliten-Pods. Gezeigt werden das 5-seitige Monocoque-Schachtgehäuse mit rückseitigem M8 6-Pin IP67 Kabelanschluss, Schutz-Schottwand mit 6-Pin Fangtrichter, V4A-Auswerferfedern, 2x Boden-Kupfer-Wärmeleitpfosten und der herausgezogene Universalschlitten mit asymmetrischen Führungsfedern.*
+
+![OpenMotorBridge Satelliten-Pod Röntgenansicht](../../hardware/cad/openmotorbridge_pod_assembly_render_xray.png)
+
+*Abbildung 5.8: 3D-Röntgen- und Transparenzdarstellung des geschlossenen Satelliten-Pods mit eingeschobener Wechselkassette. Gut erkennbar sind die spielfreien asymmetrischen Poka-Yoke Führungsnuten, der zentrierte 6-Pin Kolbeneinschub in den Schutzkragen und die bündige Flanschabdichtung.*
 
 1. **Ein einziges universelles Pod-Gehäuse (`pod_base_housing.stl`):**
    * Alle drei Satelliten-Pods (Pod 1 Links, Pod 2 Rechts, Pod 3 Heck) verwenden **exakt denselben 5-seitigen Monocoque-Schacht** mit M8 6-Pin IP67 Rückanschluss, Schutz-Schottwand, 6-Pin Schutzkragen und Auto-Eject Federmechanismus.
