@@ -81,10 +81,10 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
         "Tomorrow"
     ),
     (
-        "01_main_box/00_lower_deck.scad",
+        "01_main_box/98_closed_box.scad",
         os.path.join(CAD_IMG_DIR, "main_box_enclosure_cad.png"),
-        "55,37,10,55,0,310,250",
-        "Solarized"
+        "55,37,18,55,0,310,250",
+        "Tomorrow"
     ),
     (
         "02_pod_base/99_pod_base_assembly.scad",
