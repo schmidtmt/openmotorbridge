@@ -122,6 +122,12 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
         "37.5,27,10,55,0,310,200",
         "Solarized"
     ),
+    (
+        "02_pod_base/pod_poka_yoke_cross_section.scad",
+        os.path.join(CAD_IMG_DIR, "pod_poka_yoke_cross_section_cad.png"),
+        "50,30,14,25,0,325,180",
+        "Tomorrow"
+    ),
 ]
 
 def clean_old_stls():

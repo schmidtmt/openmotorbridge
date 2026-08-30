@@ -607,6 +607,12 @@ To eliminate tilting, asymmetric lever forces, and reverse insertion, the cartri
  └─────────────────────────────────────────────────────────────┘ ▼
 ```
 
+#### 3D CAD Cross-Section View of Poka-Yoke Asymmetrical Guide Rails:
+
+![OpenMotorBridge Pod Poka-Yoke Asymmetrical Guide Rails 3D Cross Section](../../hardware/cad/pod_poka_yoke_cross_section_cad.png)
+
+*Figure 5.6: 3D CAD transverse cross-section (Y-Z plane) through the Satellite Pod housing and inserted swappable cartridge sled. Clearly highlights the $6.0\,\text{mm}$ vertical height offset of the guide tracks (Left: $Z=8.2\,\text{mm}$, Right: $Z=14.2\,\text{mm}$) with precision tongue-and-groove slide fit and centered 6-pin contact plane.*
+
 #### 4-Stage Safety Architecture for Perfect Alignment:
 1. **Fully Centric Geometry:**
    * **Width ($Y$):** $64.0\,\text{mm}$ pod width and $56.0\,\text{mm}$ bay width yield symmetric **$3.0\,\text{mm}$ side walls**.

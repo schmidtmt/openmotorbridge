@@ -597,6 +597,12 @@ Um Verkanten, schiefe Krafteinleitung und fehlerhaftes Einstecken physikalisch a
  └─────────────────────────────────────────────────────────────┘ ▼
 ```
 
+#### 3D-CAD-Schnittansicht der asymmetrischen Poka-Yoke Passung:
+
+![OpenMotorBridge Pod Poka-Yoke Asymmetrical Guide Rails 3D Cross Section](../../hardware/cad/pod_poka_yoke_cross_section_cad.png)
+
+*Abbildung 5.6: 3D-CAD-Querschnitt (Y-Z Ebene) durch das Satelliten-Pod-Gehäuse und den eingeschobenen Kassetten-Grundschlitten. Deutlich sichtbar ist der $6{,}0\,\text{mm}$ Höhenversatz der Führungsnuten (Links: $Z=8{,}2\,\text{mm}$, Rechts: $Z=14{,}2\,\text{mm}$) mit formschlüssig gleitenden Kassetten-Führungsfedern (blaue Schlittenflanken) und millimetergenauer Zentrierung der zentralen Kontaktebene.*
+
 #### 4-Stufen-Sicherheit für perfekten Kassetten-Sitz:
 1. **Asymmetrische Nut-und-Feder Führungsschienen (Tongue & Groove Linear Rails):**
    * **Nut im Pod-Innenraum:** Beidseitig durchgehende Führungsnuten ($3{,}0\,\text{mm}$ Nutbreite, $1{,}5\,\text{mm}$ Tiefe) in den Seitenwänden des Schachts.
