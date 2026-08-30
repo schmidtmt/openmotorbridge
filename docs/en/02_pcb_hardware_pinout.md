@@ -10,7 +10,7 @@ The main board integrates on a compact **$85.0 \times 55.0\,\text{mm}$** footpri
 
 ![OpenMotorBridge Main Box 3D PCB Render](../../hardware/kicad_main_box/kicad_3d_render.png)
 
-*Figure 2.1: Photorealistic 3D Raytracing Render of the OpenMotorBridge Central Main Box PCB (KiCad 9.0, 4-layer FR4 TG150 ENIG, 874 tracks, 114 vias, 0 DRC errors).*
+*Figure 2.1: Photorealistic 3D Raytracing Render of the OpenMotorBridge Central Main Box PCB (KiCad 10.0, 4-layer FR4 TG150 ENIG, 874 tracks, 114 vias, 0 DRC errors).*
 
 ---
 

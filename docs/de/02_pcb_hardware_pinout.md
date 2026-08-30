@@ -10,7 +10,7 @@ Die Hauptplatine vereint auf kompakten **$85{,}0 \times 55{,}0\,\text{mm}$** die
 
 ![OpenMotorBridge Main Box 3D PCB Render](../../hardware/kicad_main_box/kicad_3d_render.png)
 
-*Abbildung 2.1: Photorealistisches 3D-Raytracing-Render der OpenMotorBridge Zentralbox-Platine (KiCad 9.0, 4-Lagen FR4 TG150 ENIG, 874 Leiterbahnen, 114 Vias, 0 DRC-Fehler).*
+*Abbildung 2.1: Photorealistisches 3D-Raytracing-Render der OpenMotorBridge Zentralbox-Platine (KiCad 10.0, 4-Lagen FR4 TG150 ENIG, 874 Leiterbahnen, 114 Vias, 0 DRC-Fehler).*
 
 ---
 
