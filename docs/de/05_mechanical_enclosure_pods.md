@@ -720,6 +720,50 @@ hardware/cad/stl/
 
 ---
 
+### 5.12 OpenSCAD Parametrisches CAD-System & Modul-Architektur
+
+Neben den STL-Dateien steht das gesamte mechanische System als **vollständig parametrische OpenSCAD-Codebasis** unter [hardware/cad/scad/](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/) bereit. Der Aufbau folgt 1:1 dem intuitiven CSG-Workflow (Constructive Solid Geometry wie in Tinkercad: Addition mit `union()`, Subtraktion/Ausstanzen mit `difference()` und intuitive Ausrichtung über `center=false`).
+
+```
+hardware/cad/scad/
+├── 00_common/                                   # Globale Parameter, Hilfsmodule & Dummies
+│   ├── parameters.scad                          # $fn=60, globale Maße, Wandstärken, Nuthöhen
+│   ├── screw_bosses.scad                        # M2/M2.5/M3/M4 Schraubdome, Eck-Spannsäulen & Cu-Pfosten
+│   └── dummies/                                 # 3D-Prüfkörper für Passungs- & Bauraumprüfung
+│       ├── dummy_main_pcb.scad                  # Hauptplatine (95x65 mm) mit HD26, USB-C, LEDs, LM5164
+│       ├── dummy_lipo_battery.scad              # 1000 mAh LiPo-Zelle (50x35x6 mm) mit Schutzplatine
+│       ├── dummy_omm_transceiver_pcb.scad       # OMM Heck-Platine (70x48 mm) mit Patch-Antenne & LoRa
+│       ├── dummy_adapter_pcb.scad               # Kassetten-Adapterplatine (50x22 mm) mit DS2401 ID-Chip
+│       └── dummy_m8_connector.scad              # M8 6-Pin IP67 Stecker mit Rändelmutter & PUR-Kabel
+│
+├── 01_main_box/                                 # 3-Teilige Zentralbox
+│   ├── 00_lower_deck.scad                       # Unterwanne mit Cu-Pfosten, PCB-Domen & M3-Säulen
+│   ├── 01_upper_deck.scad                       # Oberwanne mit Zwischenboden, Akkubett & Schlitzen
+│   ├── 02_colsure.scad                          # Gehäusedeckel mit Dichtfeder & Gore-Vent-Sitz
+│   ├── 99_overall_box.scad                      # Gesamt-Zusammenbau inklusive eingelegter Dummies
+│   └── parts/                                   # Modulare CSG-Teilschritte (Basis, Säulen, Dome, Schlitze)
+│
+├── 02_pod_base/                                 # Universeller Satelliten-Pod
+│   ├── pod_base_housing.scad                    # 5-seitiges Schachtgehäuse mit M8-Bohrung, Nuten & Cu-Pfosten
+│   ├── pod_mount_helmet_clamp.scad              # Helm-Klemmadapter (für Pod 1 & 2)
+│   ├── pod_mount_gopro_rack.scad                # GoPro-/Heckträger-Adapter (für Pod 3)
+│   ├── 99_pod_base_assembly.scad                # Pod mit Schottwand, Federn & M8-Stecker
+│   └── parts/                                   # Modulare CSG-Teilschritte
+│
+└── 03_pod_cartridges/                           # Kassetten-Baukastensystem
+    ├── 00_base_sled.scad                        # Gemeinsamer Grundschlitten (Führungsfedern, Cu-Pads, Front)
+    ├── cartridge_omm_transceiver.scad           # Pod 3 Heck-Kassette (23.5 mm Innenhöhe, 4x PCB-Dome)
+    ├── cartridge_sena.scad                      # Sena 50S/60S Kassette (Sena 3D-Nest & Adapter-PCB)
+    ├── cartridge_cardo.scad                     # Cardo Packtalk Edge Kassette (AirMount Magnetsitz & Adapter-PCB)
+    ├── cartridge_blindkassette.scad             # Wasserdichte Dry Box Dummy mit Versteifungsrippen
+    └── 99_cartridge_assembly.scad               # Galerie-Vergleich aller 4 Kassetten mit Modulen
+```
+
+#### Hauptvorteile der OpenSCAD-Architektur:
+1. **Modulare Kassetten-Vererbung:** Alle Kassetten binden die gemeinsame Datei [00_base_sled.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/00_base_sled.scad) ein. Änderungen an den Führungsfedern, der Einlaufschräge oder den Kupferbolzen wirken sofort auf alle 4 Kassetten.
+2. **Kollisions- & Passungsprüfung mit Dummies:** Die Baugruppendateien (`99_overall_box.scad`, `99_pod_base_assembly.scad`, `99_cartridge_assembly.scad`) blenden echte 3D-Prüfkörper von Platinen, Akkus und Steckern farbig ein (`color()`), sodass Freiräume und Toleranzen vor dem Druck optisch geprüft werden können.
+3. **Mathematisch exaktes CSG:** OpenSCAD berechnet Schnitte und Bohrungen exakt volumetrisch, wodurch keine Dreiecks-Facettenartefakte mehr an Planarflächen auftreten.
+
 ## 6. Belegung der 6-Pin M8 / Pogo-Schnittstelle & PUR-Kabelbaum-Farbcodierung
 
 | M8 / Pogo-Pin | Leitungsfarbe (PUR-Kabel) | Querschnitt | Signal Pod 1 & 2 (Audio & Intercom) | Signal Pod 3 (Heck-Transceiver) | Schirmung & Verdrillung |

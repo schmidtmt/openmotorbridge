@@ -342,6 +342,12 @@ class STLMeshBuilder:
                     f.write("    endloop\n")
                     f.write("  endfacet\n")
                 f.write(f"endsolid {self.name}\n")
+        try:
+            os.chmod(filepath, 0o777)
+            import subprocess
+            subprocess.run(["xattr", "-c", filepath], capture_output=True)
+        except Exception:
+            pass
 
 
 # =============================================================================
@@ -880,6 +886,12 @@ def main():
         export_main_box_package(base)
         export_pod_base_package(base)
         export_cartridges_package(base)
+        try:
+            import subprocess
+            subprocess.run(["xattr", "-c", "-r", base], capture_output=True)
+            subprocess.run(["chmod", "-R", "777", base], capture_output=True)
+        except Exception:
+            pass
         
     print("\n" + "=" * 80)
     print("ALL ENCLOSURES & MODULAR COMPONENT LIBRARIES SUCCESSFULLY EXPORTED".center(80))
