@@ -1,0 +1,6 @@
+Designator,Comment,Footprint,LCSC Part #,Quantity
+C1,100nF_50V,Capacitor_SMD:C_0603_1608Metric,,1
+"H1, H2",M2_MountingHole,MountingHole:MountingHole_2.2mm_M2_Pad,,2
+J1,MILL_MAX_824_SMD_6P,Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical_SMD_Pin1Left,,1
+J2,M8_6PIN_RECEPTACLE,Connector_M8:M8_6Pin_IP67_Receptacle_Socketed,,1
+U1,SP3012-06UTG,Package_DFN_QFN:DFN-14_1.35x3.5mm_P0.5mm,,1

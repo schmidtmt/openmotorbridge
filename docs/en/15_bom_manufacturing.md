@@ -153,3 +153,113 @@ Complete Bill of Materials (BOM) and manufacturing specifications for all 4 PCBA
 
 ### Step 5: IP67 Pressure Leak Test
 * [ ] Assembled enclosure placed in vacuum chamber at $-20\,\text{kPa}$ for 60 seconds (pressure drop $< 0.5\,\text{kPa}$).
+
+---
+
+## 8. Step-by-Step Ordering Guide for JLCPCB (PCBA & SMT Assembly)
+
+All production-ready manufacturing packages can be generated automatically via `python3 hardware/scripts/export_manufacturing_packages.py` into the [hardware/production_packages/](file:///Users/schmidtm/openMotorBridge/hardware/production_packages/) directory.
+
+### 8.1 Checklist for JLCPCB Upload (All 4 Circuit Boards)
+
+| Subassembly / PCBA | Gerber ZIP File | BOM CSV File | CPL (Pick & Place) CSV | Layers & Stackup | Surface Finish & Thickness |
+| :--- | :--- | :--- | :--- | :---: | :--- |
+| **1. Central Main Box PCB** | `01_main_box_pcba_gerbers_jlcpcb.zip` | `01_main_box_pcba_bom_jlcpcb.csv` | `01_main_box_pcba_cpl_jlcpcb.csv` | **4 Layers** (JLC04161H-7628) | **ENIG (Gold)**, 1.6 mm, TG150 |
+| **2. Pod Base PCB** | `02_pod_base_pcba_gerbers_jlcpcb.zip` | `02_pod_base_pcba_bom_jlcpcb.csv` | `02_pod_base_pcba_cpl_jlcpcb.csv` | **2 Layers** (Standard) | **ENIG (Gold)**, 1.6 mm |
+| **3. Cartridge Carrier PCB**| `03_pod_cartridge_pcba_gerbers_jlcpcb.zip` | `03_pod_cartridge_pcba_bom_jlcpcb.csv` | `03_pod_cartridge_pcba_cpl_jlcpcb.csv` | **2 Layers** (Standard) | **ENIG (Gold)**, 1.2 mm |
+| **4. Rear Pod 3 Transceiver**| `04_rear_pod3_pcba_gerbers_jlcpcb.zip` | `04_rear_pod3_pcba_bom_jlcpcb.csv` | `04_rear_pod3_pcba_cpl_jlcpcb.csv` | **4 Layers** (JLC04161H-7628) | **ENIG (Gold)**, 1.6 mm, TG150 |
+
+### 8.2 Options to Select in JLCPCB Web Configurator:
+1. **PCB Order:**
+   * **Base Material:** FR-4 (TG150 for Main Box & Pod 3).
+   * **Surface Finish:** **ENIG (Electroless Nickel Immersion Gold)** – strictly required for corrosion-proof contact wiping and vibration-resistant QFN joints.
+   * **Solder Mask Color:** Matte Black or Green.
+   * **Via Covering:** *Tented* or *Filled & Capped* (under exposed thermal pads).
+2. **SMT Assembly:**
+   * Enable **"PCB Assembly"**.
+   * **Assembly Side:** *Top Side* (or *Both Sides* for Main Box).
+   * **Upload BOM & CPL:** Upload the generated `*_bom_jlcpcb.csv` and `*_cpl_jlcpcb.csv`.
+   * **Verify DFM Preview:** Visually verify Pin 1 orientation for Bourns transformers (T1/T2), optocouplers (OC1/OC2), and ESP32-S3.
+
+---
+
+## 9. Central Wiring Harness Manufacturing (HD26 Breakout Pigtail)
+
+The central wiring harness bridges the under-seat Central Box to the 3 satellite pods, 12V vehicle power, and CAN-bus / front microphone.
+
+### 9.1 Contract Manufacturing (JLCPCB Wire Harness / Cabelcon / Sinohand)
+Submit [central_breakout_harness_wirelist.csv](file:///Users/schmidtm/openMotorBridge/hardware/production_packages/05_wiring_harness/central_breakout_harness_wirelist.csv) directly to the cable assembly house.
+
+```
+                               CENTRAL HD26 BREAKOUT HARNESS
+┌─────────────────────────┐
+│ HD26 IP67 Male Plug     │ ──► Branch Pigtail Length: 250 mm each (sheathed in black PET braid)
+│ (Amphenol LTW / D-Sub)  │ ──► Y-Junction sealed with hotmelt adhesive / heatshrink cap
+└─┬───────────────────────┘
+  ├─► BRANCH 1 (250 mm): M8 6-Pin Receptacle (A-coded, IP67) ──► Pod 1 (Rider Helmet Left)
+  ├─► BRANCH 2 (250 mm): M8 6-Pin Receptacle (A-coded, IP67) ──► Pod 2 (Pillion Helmet Right)
+  ├─► BRANCH 3 (250 mm): M8 6-Pin Receptacle (A-coded, IP67) ──► Pod 3 (Rear OMM & GNSS)
+  ├─► BRANCH 4 (250 mm): AMP Superseal 1.5 4-Pin Receptacle  ──► 12V Vehicle Power (KL30, KL15, GND)
+  └─► BRANCH 5 (250 mm): M8 4-Pin Receptacle (A-coded, IP67) ──► CAN-Bus & IP67 Front Microphone
+```
+
+### 9.2 DIY Assembly Guide for Prototyping (Workbench Setup):
+1. **Prepare Materials:**
+   * 1x HD26 D-Sub solder-cup plug with IP67 metal backshell.
+   * 3x M8 6-Pin female pigtails (25 cm cut lead with color-coded conductors).
+   * 1x M8 4-Pin female pigtail (for CAN / microphone).
+   * 1x AMP Superseal 1.5 4-Pin connector housing with crimp pins.
+   * 3:1 dual-wall heatshrink tubing with hotmelt adhesive.
+2. **Solder to Pinout Schedule:**
+   * Solder wires to cups 1..26 according to [central_breakout_harness_wirelist.csv](file:///Users/schmidtm/openMotorBridge/hardware/production_packages/05_wiring_harness/central_breakout_harness_wirelist.csv).
+   * Twist audio wire pairs (3/4 and 9/10) and CAN pairs (23/24).
+3. **Strain Relief & Sealing:**
+   * Pot solder cups with neutral-cure RTV silicone / potting resin.
+   * Fasten thumbscrews and seal the cable exit with adhesive-lined heatshrink.
+
+---
+
+## 10. 3D Printing Production Order (HP Multi Jet Fusion PA12)
+
+All 3D printing STL bundles are organized in [hardware/production_packages/06_3d_print_mjf_stls/](file:///Users/schmidtm/openMotorBridge/hardware/production_packages/06_3d_print_mjf_stls/):
+
+### 10.1 Order Packages:
+1. **`01_main_box_3d_print_mjf.zip`:**
+   * `main_box_lower_case.stl` (1x)
+   * `main_box_upper_case.stl` (1x)
+   * `main_box_lid.stl` (1x)
+2. **`02_satellite_pods_3d_print_mjf.zip`:**
+   * `pod_base_housing.stl` (3x – for Pod 1, 2, and 3)
+   * `pod_bulkhead_plate.stl` (3x – for Pod 1, 2, and 3)
+   * `pod_mount_helmet_clamp.stl` (2x – for Pod 1 and 2 on helmet)
+   * `pod_mount_gopro_rack.stl` (1x – for Pod 3 on tail rack)
+3. **`03_cartridges_and_inlays_3d_print_mjf.zip`:**
+   * `cartridge_base_sled.stl` (3x)
+   * `cartridge_sena.stl` (1x)
+   * `cartridge_cardo.stl` (1x)
+   * `cartridge_omm_transceiver.stl` (1x)
+   * `cartridge_blindkassette.stl` (1x)
+
+### 10.2 Material Recommendations:
+* **Process:** **HP Multi Jet Fusion (MJF)** or **SLS (Selective Laser Sintering)**.
+* **Material:** **PA12 (Polyamide 12) Black**, bead blasted.
+* **Finish:** **Chemical Vapor Smoothing** – seals all microscopic surface pores against gasoline, brake fluid, chain lube, and high-pressure water jets (IP69K).
+
+---
+
+## 11. COTS Fasteners & Hardware Procurement List
+
+| Component | Specification / Type | Supplier / Manufacturer | Qty | Function |
+| :--- | :--- | :--- | :---: | :--- |
+| **M3 Case Screws** | M3 x 40 mm Socket Head V4A (DIN 912) | Standard Fastener | 4 pcs | 4-Corner Central Box clamping |
+| **M3 Threaded Inserts**| Ruthex M3 x 5.7 mm Brass | Ruthex / Amazon | 4 pcs | Heat-set inserts in lower base tub |
+| **M2 Bulkhead Screws** | M2 x 8 mm Flat Head V4A (DIN 7991) | Standard Fastener | 6 pcs | Secures 3x pod bulkhead plates |
+| **Ejection Springs** | Stainless V4A ($D=4.5\,\text{mm}, L_0=15\,\text{mm}, R=1.2\,\text{N/mm}$) | Gutekunst Federn / Sodemann | 6 pcs | Auto-Eject mechanism (2x per pod) |
+| **Copper Studs (Main Box)**| $\varnothing 8.0 \times 12.0\,\text{mm}$ Solid Copper | Lathe Turned / Cu-ETP Bar | 4 pcs | Direct heatsinking for LM5164/Charger |
+| **Copper Studs (Pods)** | $\varnothing 8.0 \times 6.0\,\text{mm}$ Solid Copper | Lathe Turned / Cu-ETP Bar | 6 pcs | Floor heatsinking (2x per pod) |
+| **Gore Vent Valve** | Gore Automotive AVS 41 (M8x1.25) | W. L. Gore & Associates | 1 pc | Central box lid pressure venting |
+| **Gore Vent Stickers** | Gore Adhesive Vent $\varnothing 6.0\,\text{mm}$ IP67 | W. L. Gore & Associates | 3 pcs | Cartridge bezel pneumatic venting |
+| **Light Pipe** | PMMA $\varnothing 3.0\,\text{mm}$ (Bivar PLPC3-3MM) | Bivar / Mouser / Digikey | 1 pc | LED status window in top lid |
+| **Buffer Battery** | 18650 LiFePO4 (3.2V 1500mAh) / LiPo 1S | EEMB / Enerpower | 1 pc | UPS battery backup |
+| **M8 Extension Cables** | M8 6-Pin A-Coded PUR shielded (1.0m / 1.5m) | Binder / Phoenix / Murr / LCSC | 3 pcs | Harness-to-pod extension lines |
+

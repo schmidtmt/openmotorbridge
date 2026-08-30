@@ -1,0 +1,7 @@
+Ref,Val,Package,PosX,PosY,Rot,Side
+"J2","M8_6PIN_RECEPTACLE","M8_6Pin_IP67_Receptacle_Socketed",118.000000,-80.000000,0.000000,bottom
+"C1","100nF_50V","C_0603_1608Metric",108.000000,-84.000000,90.000000,top
+"H1","M2_MountingHole","MountingHole_2.2mm_M2_Pad",103.000000,-80.000000,0.000000,top
+"H2","M2_MountingHole","MountingHole_2.2mm_M2_Pad",133.000000,-80.000000,0.000000,top
+"J1","MILL_MAX_824_SMD_6P","PinHeader_1x06_P2.54mm_Vertical_SMD_Pin1Left",118.000000,-73.650000,0.000000,top
+"U1","SP3012-06UTG","DFN-14_1.35x3.5mm_P0.5mm",108.000000,-76.000000,0.000000,top

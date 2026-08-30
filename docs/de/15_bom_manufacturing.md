@@ -153,3 +153,113 @@ Vollständige Bauteilliste (Bill of Materials) und Fertigungsspezifikation für 
 
 ### Schritt 5: IP67-Dichtheitsprüfung
 * [ ] Montiertes Gehäuse in Vakuumkammer bei $-20\,\text{kPa}$ Unterdruck für 60 Sekunden halten (Druckverlust $< 0{,}5\,\text{kPa}$).
+
+---
+
+## 8. Schritt-für-Schritt Bestellleitfaden für JLCPCB (PCBA & SMT-Bestückung)
+
+Alle fertigen Produktionspakete werden mit dem Master-Skript `python3 hardware/scripts/export_manufacturing_packages.py` vollautomatisch in das Verzeichnis [hardware/production_packages/](file:///Users/schmidtm/openMotorBridge/hardware/production_packages/) exportiert.
+
+### 8.1 Checkliste für den JLCPCB-Upload (Alle 4 Leiterplatten)
+
+| Baugruppe / PCBA | Gerber-ZIP Datei | BOM CSV Datei | CPL (Pick & Place) CSV | Lagen & Stackup | Oberfläche & Dicke |
+| :--- | :--- | :--- | :--- | :---: | :--- |
+| **1. Zentralbox Hauptplatine** | `01_main_box_pcba_gerbers_jlcpcb.zip` | `01_main_box_pcba_bom_jlcpcb.csv` | `01_main_box_pcba_cpl_jlcpcb.csv` | **4 Lagen** (JLC04161H-7628) | **ENIG (Gold)**, 1.6 mm, TG150 |
+| **2. Pod-Basisplatine** | `02_pod_base_pcba_gerbers_jlcpcb.zip` | `02_pod_base_pcba_bom_jlcpcb.csv` | `02_pod_base_pcba_cpl_jlcpcb.csv` | **2 Lagen** (Standard) | **ENIG (Gold)**, 1.6 mm |
+| **3. Kassetten-Trägerplatine** | `03_pod_cartridge_pcba_gerbers_jlcpcb.zip` | `03_pod_cartridge_pcba_bom_jlcpcb.csv` | `03_pod_cartridge_pcba_cpl_jlcpcb.csv` | **2 Lagen** (Standard) | **ENIG (Gold)**, 1.2 mm |
+| **4. Heck-Pod 3 Transceiver** | `04_rear_pod3_pcba_gerbers_jlcpcb.zip` | `04_rear_pod3_pcba_bom_jlcpcb.csv` | `04_rear_pod3_pcba_cpl_jlcpcb.csv` | **4 Lagen** (JLC04161H-7628) | **ENIG (Gold)**, 1.6 mm, TG150 |
+
+### 8.2 Auszufüllende Optionen im JLCPCB-Webkonfigurator:
+1. **PCB Order:**
+   * **Base Material:** FR-4 (TG150 für Zentralbox & Pod 3).
+   * **Surface Finish:** **ENIG (Electroless Nickel Immersion Gold)** – zwingend erforderlich für korrosionsbeständige Schleifkontakte und vibrationsfeste QFN-Lötstellen.
+   * **Solder Mask Color:** Beliebig (Standard: Matt-Schwarz oder Grün).
+   * **Via Covering:** *Tented* oder *Filled & Capped* (unter BGA/QFN EP-Pads).
+2. **SMT Assembly:**
+   * Häkchen bei **"PCB Assembly"** setzen.
+   * **Assembly Side:** *Top Side* (bzw. *Both Sides* für Zentralbox).
+   * **BOM & CPL hochladen:** Die generierten `*_bom_jlcpcb.csv` und `*_cpl_jlcpcb.csv` hochladen.
+   * **DFM-Vorschau prüfen:** Im visuellen CPL-Viewer die Ausrichtung von Pin 1 (Bourns-Übertrager T1/T2, Optokoppler OC1/OC2, ESP32-S3) kontrollieren und ggf. Rotation bestätigen.
+
+---
+
+## 9. Fertigung des zentralen Kabelbaums (HD26-Breakout-Pigtail)
+
+Der zentrale Kabelbaum verbindet die unter der Sitzbank montierte Zentralbox mit den 3 Pod-Anschlüssen, der Bordspannung und dem CAN-Bus / Front-Mikrofon.
+
+### 9.1 Auftragsfertigung (z. B. JLCPCB Wire Harness / Cabelcon / Sinohand)
+Für eine professionelle Fertigung wird die Datei [central_breakout_harness_wirelist.csv](file:///Users/schmidtm/openMotorBridge/hardware/production_packages/05_wiring_harness/central_breakout_harness_wirelist.csv) direkt an den Konfektionär übergeben.
+
+```
+                               ZENTRALER HD26 BREAKOUT-KABELBAUM
+┌─────────────────────────┐
+│ HD26 IP67 Stecker       │ ──► Gesamtlänge Peitschen: je 250 mm (mit schwarzem Geflechtschlauch)
+│ (Amphenol LTW / D-Sub)  │ ──► Y-Verteilerpunkt vergossen mit Schmelzkleber / Schrumpfkappe
+└─┬───────────────────────┘
+  ├─► PEITSCHE 1 (250 mm): M8 6-Pin Buchse (A-kodiert, IP67) ──► Pod 1 (Helm Fahrer Links)
+  ├─► PEITSCHE 2 (250 mm): M8 6-Pin Buchse (A-kodiert, IP67) ──► Pod 2 (Helm Sozius Rechts)
+  ├─► PEITSCHE 3 (250 mm): M8 6-Pin Buchse (A-kodiert, IP67) ──► Pod 3 (Heckbürzel OMM & GNSS)
+  ├─► PEITSCHE 4 (250 mm): AMP Superseal 1.5 4-Pin Buchse     ──► 12V Bordnetz (KL30, KL15, GND, Masse)
+  └─► PEITSCHE 5 (250 mm): M8 4-Pin Buchse (A-kodiert, IP67) ──► CAN-Bus & IP67 Front-Mikrofon
+```
+
+### 9.2 DIY-Bauanleitung für den Prototypen-Kabelbaum (Werkbank-Aufbau):
+1. **Materialien bereitstellen:**
+   * 1x HD26 D-Sub Stecker mit Lötkelchen und IP67-Metallhaube.
+   * 3x M8 6-Pin Buchsen-Pigtails (25 cm langes Kabel mit einseitig offener Litze).
+   * 1x M8 4-Pin Buchsen-Pigtail (für CAN/Mikrofon).
+   * 1x AMP Superseal 1.5 4-Pin Buchsengehäuse mit Crimpkontakten.
+   * Schrumpfschlauch mit Heißschmelzkleber (Innenkleber).
+2. **Löten nach Pinout-Tabelle:**
+   * Die Adern gemäß Tabelle aus [central_breakout_harness_wirelist.csv](file:///Users/schmidtm/openMotorBridge/hardware/production_packages/05_wiring_harness/central_breakout_harness_wirelist.csv) an die Lötkelche 1 bis 26 des HD26-Steckers anlöten.
+   * Audio-Adernpaare (Pins 3/4 und Pins 9/10) sowie CAN-Adern (Pins 23/24) jeweils paarig verdrillen.
+3. **Zugentlastung & Versiegelung:**
+   * Die Lötkelche im HD26-Gehäuse mit Silikonkautschuk / Heißkleber vergießen.
+   * Die Rändelschrauben der IP67-Haube festziehen und den Ausgang mit 3:1 Schrumpfschlauch abdichten.
+
+---
+
+## 10. 3D-Druck-Auftrag (HP Multi Jet Fusion PA12)
+
+Alle 3D-Druckdaten liegen gebündelt als ZIP-Pakete im Ordner [hardware/production_packages/06_3d_print_mjf_stls/](file:///Users/schmidtm/openMotorBridge/hardware/production_packages/06_3d_print_mjf_stls/):
+
+### 10.1 Bestellpakete:
+1. **`01_main_box_3d_print_mjf.zip`:**
+   * `main_box_lower_case.stl` (1x)
+   * `main_box_upper_case.stl` (1x)
+   * `main_box_lid.stl` (1x)
+2. **`02_satellite_pods_3d_print_mjf.zip`:**
+   * `pod_base_housing.stl` (3x – für Pod 1, 2 und 3)
+   * `pod_bulkhead_plate.stl` (3x – für Pod 1, 2 und 3)
+   * `pod_mount_helmet_clamp.stl` (2x – für Pod 1 und 2 am Helm)
+   * `pod_mount_gopro_rack.stl` (1x – für Pod 3 am Heck)
+3. **`03_cartridges_and_inlays_3d_print_mjf.zip`:**
+   * `cartridge_base_sled.stl` (3x)
+   * `cartridge_sena.stl` (1x)
+   * `cartridge_cardo.stl` (1x)
+   * `cartridge_omm_transceiver.stl` (1x)
+   * `cartridge_blindkassette.stl` (1x)
+
+### 10.2 Materialempfehlung:
+* **Verfahren:** **HP Multi Jet Fusion (MJF)** oder **SLS (Selective Laser Sintering)**.
+* **Material:** **PA12 (Polyamid 12) Schwarz**, kugelgestrahlt (*bead blasted*).
+* **Finish / Veredelung:** **Chemische Dampfglättung (*Vapor Smoothing / Chemical Polish*)** – versiegelt die Poren zu 100% gegen Benzin, Bremsflüssigkeit, Kettenöl und Hochdruckwasser (IP69K).
+
+---
+
+## 11. Zukaufteile & Normteile-Einkaufsliste (COTS-Komponenten)
+
+| Bauteil | Spezifikation / Typ | Bezugsquelle / Hersteller | Menge | Funktion |
+| :--- | :--- | :--- | :---: | :--- |
+| **M3 Gehäuseschrauben** | M3 x 40 mm Zylinderkopf V4A (DIN 912) | Normteil / Schrauben-Express | 4 Stk. | 4-Eck Zentralbox-Verschraubung |
+| **M3 Gewindeeinsätze** | Ruthex M3 x 5.7 mm Messing | Ruthex / Amazon | 4 Stk. | Einschmelzgewinde in Unterwanne |
+| **M2 Schottwandschrauben** | M2 x 8 mm Senkkopf V4A (DIN 7991) | Normteil | 6 Stk. | Fixierung der 3 Pod-Schottwände |
+| **Auswerfer-Druckfedern** | Edelstahl V4A ($D=4{,}5\,\text{mm}, L_0=15\,\text{mm}, R=1{,}2\,\text{N/mm}$) | Gutekunst Federn / Sodemann | 6 Stk. | Auto-Eject Mechanismus (2x pro Pod) |
+| **Kupfer-Kühlbolzen (Zentralbox)**| $\varnothing 8{,}0 \times 12{,}0\,\text{mm}$ Massivkupfer | Drehteil / Cu-ETP Rundstange | 4 Stk. | Direkte Entwärmung LM5164/Charger |
+| **Kupfer-Bolzen (Pods)** | $\varnothing 8{,}0 \times 6{,}0\,\text{mm}$ Massivkupfer | Drehteil / Cu-ETP Rundstange | 6 Stk. | Bodenentwärmung (2x pro Pod) |
+| **Gore Druckausgleichsventil** | Gore Automotive AVS 41 (M8x1.25) | W. L. Gore & Associates | 1 Stk. | Zentralbox-Deckelbelüftung |
+| **Gore Klebemembranen** | Gore Adhesive Vent $\varnothing 6{,}0\,\text{mm}$ IP67 | W. L. Gore & Associates | 3 Stk. | Kassettenfront-Druckausgleich |
+| **Lichtleiter** | PMMA $\varnothing 3{,}0\,\text{mm}$ (Bivar PLPC3-3MM) | Bivar / Mouser / Digikey | 1 Stk. | LED-Statusfenster im Deckel |
+| **Pufferakku** | 18650 LiFePO4 (3.2V 1500mAh) / LiPo 1S | EEMB / Enerpower | 1 Stk. | USV-Notstromversorgung |
+| **M8 Verlängerungskabel** | M8 6-Pin A-Coded PUR geschirmt (1.0m / 1.5m)| Binder / Phoenix / Murr / LCSC | 3 Stk. | Verbindung von Pigtail zu Pods |
+

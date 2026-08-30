@@ -1,0 +1,35 @@
+Designator,Comment,Footprint,LCSC Part #,Quantity
+C1,10uF_100V,Capacitor_SMD:C_0805_2012Metric,,1
+C10,100nF_MCU,Capacitor_SMD:C_0603_1608Metric,,1
+C11,10uF_MCU,Capacitor_SMD:C_0805_2012Metric,,1
+C12,100nF_IMU,Capacitor_SMD:C_0603_1608Metric,,1
+C2,22uF_16V,Capacitor_SMD:C_0805_2012Metric,,1
+C3,100nF_BST,Capacitor_SMD:C_0603_1608Metric,,1
+C4,100nF_VCC,Capacitor_SMD:C_0603_1608Metric,,1
+C6,1uF_POD1,Capacitor_SMD:C_0603_1608Metric,,1
+C7,1uF_POD2,Capacitor_SMD:C_0603_1608Metric,,1
+D1,WS2812B_RGB,LED_SMD:LED_WS2812B-2020,,1
+D2,SMBJ33CA_TVS,Diode_SMD:D_SMB,,1
+"H1, H2, H3, H4",,MountingHole:MountingHole_3.2mm_M3_Pad_Via,,4
+J1,SYSTEM_BUS_IDC26,Connector_IDC:IDC-Header_2x13_P2.54mm_Vertical,,1
+J2,MicroSD_Card,Connector_Card:microSD_HC_Molex_47571-0001,,1
+J3,USB2_IDC_HEADER_9PIN,Connector_IDC:IDC-Header_2x05_P2.54mm_Vertical,,1
+J4,RGB_LED_3PIN,Connector_JST:JST_PH_B3B-PH-K_1x03_P2.00mm_Vertical,,1
+J5,PWR_BAT_NTC_4PIN,Connector_JST:JST_PH_B4B-PH-K_1x04_P2.00mm_Vertical,,1
+L1,47uH_Inductor,Inductor_SMD:L_Sunlord_MWSA1206S-470,,1
+R1,100k_EN,Resistor_SMD:R_0603_1608Metric,,1
+R10,4k7_SDA,Resistor_SMD:R_0603_1608Metric,,1
+R11,4k7_SCL,Resistor_SMD:R_0603_1608Metric,,1
+R2,10k_EN,Resistor_SMD:R_0603_1608Metric,,1
+R5,600R_POD1,Resistor_SMD:R_0603_1608Metric,,1
+R6,600R_POD2,Resistor_SMD:R_0603_1608Metric,,1
+R9,120R_CAN,Resistor_SMD:R_0603_1608Metric,,1
+"T1, T2",LM-NP-1001,Transformer_SMD:Transformer_Ethernet_HALO_TG111-MSC13,,2
+U1,LM5164-Q1,Package_SO:SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.41x3.3mm,,1
+U2,ESP32-S3-WROOM-1,RF_Module:ESP32-S3-WROOM-1,,1
+U3,ES8388_Codec,Package_DFN_QFN:QFN-28-1EP_4x4mm_P0.4mm_EP2.4x2.4mm,,1
+U5,BMI270_IMU,Package_LGA:LGA-14_2.5x3mm_P0.5mm,,1
+U6,TCAN334G,Package_SO:SOIC-8_3.9x4.9mm_P1.27mm,,1
+U7,TLP222A_Opto1,Package_SO:Toshiba_SOIC-4-6_4.4x3.6mm_P1.27mm,,1
+U8,TLP222A_Opto2,Package_SO:Toshiba_SOIC-4-6_4.4x3.6mm_P1.27mm,,1
+U9,TPS7A0533_LDO,Package_TO_SOT_SMD:SOT-23-5,,1

@@ -1,0 +1,9 @@
+Designator,Comment,Footprint,LCSC Part #,Quantity
+C1,100nF,Capacitor_SMD:C_0603_1608Metric,,1
+D1,GREEN_LED,LED_SMD:LED_0603_1608Metric,,1
+F1,PTC_500mA,Resistor_SMD:R_0603_1608Metric,,1
+"H1, H2",M2_MountingHole,MountingHole:MountingHole_2.2mm_M2_Pad,,2
+J1,POD_BASE_SOCKET_6P,Connector_PinSocket_2.54mm:PinSocket_1x06_P2.54mm_Horizontal,,1
+J2,JST_SH_6P_AXIAL,Connector_JST:JST_SH_SM06B-SRSS-TB_1x06-1MP_P1.00mm_Horizontal,,1
+R1,1.5k,Resistor_SMD:R_0603_1608Metric,,1
+U1,DS2401,Package_TO_SOT_SMD:SOT-23,,1
