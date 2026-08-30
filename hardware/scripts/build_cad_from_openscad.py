@@ -77,7 +77,7 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
     (
         "01_main_box/99_overall_box.scad",
         os.path.join(CAD_IMG_DIR, "main_box_full_assembly_exploded_3d.png"),
-        "55,37,25,55,0,310,400",
+        "55,37,65,55,0,310,360",
         "Tomorrow"
     ),
     (
