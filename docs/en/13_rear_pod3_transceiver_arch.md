@@ -14,7 +14,21 @@ The Rear Pod PCB unites multi-constellation GNSS, dual-PHY mesh networking, a 50
 #### Bottom View (Clean 4-Layer Ground Plane & Production Testpoints):
 ![OpenMotorBridge Rear Pod 3 Bottom 3D PCB Render](../../hardware/kicad_rear_pod3/rear_pod3_3d_render_bottom.png)
 
-*Figure 13.1: Photorealistic 3D raytraced render of the OpenMotorBridge Rear Pod 3 PCB (KiCad 8.0, 4-layer FR4 TG150 ENIG with horizontal forward-opening 6-pin precision socket, 500mA PTC fuse, 5V power LED, u-blox GNSS, SX1262 LoRa, and ESP32-C3 Mesh Transceiver).*
+*Figure 13.1: Photorealistic 3D raytraced render of the OpenMotorBridge Rear Pod 3 PCB (KiCad 10, 4-layer FR4 TG150 ENIG with horizontal forward-opening 6-pin precision socket, 500mA PTC fuse, 5V power LED, u-blox GNSS, SX1262 LoRa, and ESP32-C3 Mesh Transceiver).*
+
+### 1.1 3D CAD Assembly & Direct 1-Tier Architecture (No Adapter PCB Required!)
+
+Unlike the Audio & Intercom cartridges (Pod 1 & Pod 2), which employ a 2-piece structure with a lower adapter carrier PCB (`openmotorbridge_pod_cartridge`) and an upper headset docking cradle, **Rear Pod 3 features a direct 1-tier monolithic architecture**:
+
+![OpenMotorBridge Rear Pod 3 CAD Assembly Exploded View](../../hardware/cad/pod3_full_assembly_exploded_3d.png)
+
+*Figure 13.2: 3D CAD exploded view of the complete Rear Pod 3 assembly featuring the universal pod base housing, rear M8 6-pin IP67 cable gland, GoPro / rack mount adapter plate ([pod_mount_gopro_rack.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/pod_mount_gopro_rack.scad)), and the 1-tier transceiver sled ([cartridge_omm_transceiver.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/cartridge_omm_transceiver.scad)) holding the transceiver PCB directly with zero intermediary adapters.*
+
+#### Why is No Adapter Board Required for Pod 3?
+1. **Fully Integrated Single-Board Architecture:** The `openmotorbridge_rear_transceiver` PCB is itself the complete transceiver, navigation, and co-processor unit. It carries the Maxim DS2401 ID chip, the 6-pin precision socket `J1`, the SX1262 LoRa modem, the u-blox MAX-M10S GNSS engine, and the $25 \times 25 \times 4\,\text{mm}$ ceramic patch antenna directly on its 4-layer FR4 substrate.
+2. **Direct Sled Mounting:** The board bolts directly to the 4x M2.5 mounting posts of the cartridge sled ([cartridge_omm_transceiver.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/cartridge_omm_transceiver.scad)).
+3. **Full $23.5\,\text{mm}$ Interior Height:** Without an intermediary partition floor or adapter board, the GNSS ceramic patch and LoRa helical antenna benefit from the complete unattenuated internal clearance directly beneath the weatherproof PA12 roof – maximizing RF gain and 360° sky coverage.
+4. **100% Mechanical Compatibility:** The cartridge utilizes the identical [00_base_sled.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/00_base_sled.scad) and slides seamlessly into the same universal pod housing ([pod_base_housing.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/pod_base_housing.scad)).
 
 ---
 

@@ -128,6 +128,12 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
         "50,30,14,25,0,325,180",
         "Tomorrow"
     ),
+    (
+        "02_pod_base/99_pod3_rear_assembly.scad",
+        os.path.join(CAD_IMG_DIR, "pod3_full_assembly_exploded_3d.png"),
+        "50,30,14,55,0,310,340",
+        "Tomorrow"
+    ),
 ]
 
 def clean_old_stls():

@@ -14,7 +14,21 @@ Die Heck-Pod-Platine vereint auf großzügigen **$60{,}0 \times 36{,}0\,\text{mm
 #### Unteransicht (Kompakte 4-Lagen Massefläche & rückseitige Produktions-Testpunkte):
 ![OpenMotorBridge Heck-Pod 3 Unteransicht 3D PCB Render](../../hardware/kicad_rear_pod3/rear_pod3_3d_render_bottom.png)
 
-*Abbildung 13.1: Photorealistisches 3D-Raytracing-Render der OpenMotorBridge Heck-Pod 3 Platine (KiCad 8.0, 4-Lagen FR4 TG150 ENIG mit stirnseitig nach vorne öffnender 6-Pin Präzisionsbuchsenleiste, 500mA PTC-Schutzstufe, 5V Power-LED, u-blox GNSS, SX1262 LoRa und ESP32-C3 Mesh Transceiver).*
+*Abbildung 13.1: Photorealistisches 3D-Raytracing-Render der OpenMotorBridge Heck-Pod 3 Platine (KiCad 10, 4-Lagen FR4 TG150 ENIG mit stirnseitig nach vorne öffnender 6-Pin Präzisionsbuchsenleiste, 500mA PTC-Schutzstufe, 5V Power-LED, u-blox GNSS, SX1262 LoRa und ESP32-C3 Mesh Transceiver).*
+
+### 1.1 3D-CAD-Gesamtbaugruppe & Direkter 1-Tier Einschub (Keine Adapterplatine erforderlich!)
+
+Im Gegensatz zu den Audio- & Intercom-Kassetten (Pod 1 & Pod 2), die einen 2-teiligen Aufbau mit unterer Adapter-Trägerplatine (`openmotorbridge_pod_cartridge`) und oberem Headset-Dockingschacht nutzen, besitzt der **Heck-Pod 3 eine direkte 1-Tier-Architektur**:
+
+![OpenMotorBridge Heck-Pod 3 CAD Baugruppen-Explosionsansicht](../../hardware/cad/pod3_full_assembly_exploded_3d.png)
+
+*Abbildung 13.2: 3D-CAD-Explosionsdarstellung der Heck-Pod 3 Gesamtkassette mit universellem Pod-Gehäuse, rückseitigem M8 6-Pin IP67 Kabelstutzen, GoPro-/Gepäckträger-Adapterplatte ([pod_mount_gopro_rack.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/pod_mount_gopro_rack.scad)) und dem 1-teiligen Transceiver-Schlitten ([cartridge_omm_transceiver.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/cartridge_omm_transceiver.scad)), in den die Transceiver-Platine direkt ohne Zwischen-Adapter verschraubt ist.*
+
+#### Warum wird für Pod 3 keine Adapterplatine benötigt?
+1. **Vollintegriertes Single-Board Design:** Die Platine `openmotorbridge_rear_transceiver` ist bereits das vollständige Funk-, Navigations- und Co-Prozessor-Modul. Sie trägt den Maxim DS2401 ID-Chip, die 6-Pin Präzisionsbuchse `J1`, das SX1262 LoRa-Modem, das u-blox MAX-M10S GNSS und die $25 \times 25 \times 4\,\text{mm}$ Keramik-Patchantenne direkt auf ihrem 4-Layer FR4-Board.
+2. **Direkte Verschraubung im Grundschlitten:** Die Platine wird mit 4x M2.5 Schrauben direkt auf die Schraubdome des Kassetten-Schlittens ([cartridge_omm_transceiver.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/cartridge_omm_transceiver.scad)) montiert.
+3. **Volle $23{,}5\,\text{mm}$ Innenhöhe:** Ohne Zwischenboden oder Adapterplatine steht dem GNSS-Patch und der LoRa-Wendelantenne die volle lichte Bauhöhe bis unter die wetterfeste PA12-Decke zur Verfügung – für maximalen Antennengewinn und freie Rundumabstrahlung nach oben zum Satelliten-Orbit.
+4. **100 % mechanische Kompatibilität:** Die Kassette nutzt exakt denselben [00_base_sled.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/00_base_sled.scad) wie alle anderen Kassetten und gleitet formschlüssig in dasselbe universelle Pod-Gehäuse ([pod_base_housing.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/pod_base_housing.scad)).
 
 ---
 
