@@ -87,16 +87,22 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
         "Tomorrow"
     ),
     (
+        "01_main_box/97_main_box_xray.scad",
+        os.path.join(CAD_IMG_DIR, "main_box_assembly_mated_3d.png"),
+        "55,37,18,55,0,310,250",
+        "Tomorrow"
+    ),
+    (
         "02_pod_base/99_pod_base_assembly.scad",
         os.path.join(CAD_IMG_DIR, "openmotorbridge_pod_exploded_view.png"),
         "50,30,14,55,0,310,300",
         "Tomorrow"
     ),
     (
-        "02_pod_base/pod_base_housing.scad",
+        "02_pod_base/97_pod_xray_assembly.scad",
         os.path.join(CAD_IMG_DIR, "openmotorbridge_pod_assembly_render_xray.png"),
         "50,30,14,55,0,310,250",
-        "Solarized"
+        "Tomorrow"
     ),
     (
         "03_pod_cartridges/99_cartridge_assembly.scad",
@@ -191,7 +197,7 @@ def render_images():
         
         cmd = [
             OPENSCAD_BIN,
-            "--render",
+            "--preview",
             "-o", img_path,
             f"--camera={camera_args}",
             f"--colorscheme={scheme}",
