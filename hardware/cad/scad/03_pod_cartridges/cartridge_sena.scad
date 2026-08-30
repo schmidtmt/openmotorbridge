@@ -32,10 +32,10 @@ module cartridge_sena_sled() {
 
         // 3. Upper Sena 3D Cradle & Jog-Dial Nest Bosses (Top Deck at z = 18.0 mm)
         translate([55.0, 18.0, 18.0])
-            cylinder(r=6.0, h=6.0, center=false); // Main jog-dial lock cylinder
+            cylinder(r=6.0, h=4.0, center=false); // Main jog-dial lock cylinder (z = 22.0 mm)
 
         translate([55.0, 36.0, 18.0])
-            cylinder(r=5.0, h=6.0, center=false); // Antenna pivot nest
+            cylinder(r=5.0, h=4.0, center=false); // Antenna pivot nest (z = 22.0 mm)
     }
 }
 

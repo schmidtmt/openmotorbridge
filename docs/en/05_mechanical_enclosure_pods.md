@@ -432,12 +432,12 @@ To ensure 100% vibration-proof, play-free, and tool-free retention ($> 20\,\text
 
 ![OpenMotorBridge Modular Cartridge Variants CAD Trio](../../hardware/cad/cartridge_variants_trio.png)
 
-*Figure 5.2: 3D CAD visualization of the three reference swappable cartridge cradles with form-fit 3D contour negative bedding and elastic EPDM retention straps in the open carrier sled ($92 \times 54 \times 23.5\,\text{mm}$): Sena Quick-Snap Cradle (left), Cardo Magnetic Air Mount (center), and Midland Dovetail Slide / Bare-PCB Inlay (right).*
+*Figure 5.2: 3D CAD visualization of the 4 modular swappable cartridge variants inside the universal base sled ($75 \times 54 \times 20.5\,\text{mm}$): OMM Rear Transceiver with GNSS & LoRa (front left), Sena 50S/60S Quick-Snap Cradle (front right), Cardo Magnetic Air Mount (rear left), and waterproof IP67 dummy cartridge / Dry Box (rear right).*
 
 #### 1. Sena 50S / 60S Contour Nest & Snap-Cradle
 ![OpenMotorBridge Sena 50S Cartridge Assembly 3D CAD Fitting](../../hardware/cad/sena_cartridge_assembly_cad.png)
 
-*Figure 5.2: 1:1:1 Euclidean scale 3D CAD visualization of the Sena 50S/60S 2-piece modular cartridge inside the Satellite Pod. Highlights the universal base sled with carrier PCB (35x25 mm) and axial JST-SH header J2 facing +X, 1.5 mm under-bed routing channel, interchangeable 3D contour top nest with 7-pin gold Pogo array at X = +22 mm, and EPDM retention strap.*
+*Figure 5.3: 1:1:1 Euclidean scale 3D CAD visualization of the Sena 50S/60S 2-piece modular cartridge inside the Satellite Pod. Highlights the universal base sled with adapter PCB (50x22 mm), 1.5 mm under-bed routing channel, interchangeable 3D contour top nest with Jog-Dial lock, and EPDM retention strap.*
 
 * **3D Contour Nest:** Sled floor forms an exact 3D negative of the Sena intercom bottom shell ($4.0\,\text{mm}$ deep recess, zero play along X and Y).
 * **OEM Snap Retention:** Positive lower retention lip ($4.0\,\text{mm}$ Bottom Hook) and upper spring-loaded POM latch (Top Release Latch).
@@ -447,7 +447,7 @@ To ensure 100% vibration-proof, play-free, and tool-free retention ($> 20\,\text
 #### 2. Cardo Packtalk Edge / Pro Magnetic Air Mount & Contour Nest
 ![OpenMotorBridge Cardo Packtalk Edge Cartridge Assembly 3D CAD Fitting](../../hardware/cad/cardo_cartridge_assembly_cad.png)
 
-*Figure 5.3: 1:1:1 Euclidean scale 3D CAD visualization of the Cardo Packtalk Edge 2-piece modular cartridge inside the Satellite Pod. Features dual N52 neodymium disc magnets (Ø8x2 mm), 5-pin spring contact pad array at X = +10 mm, and protected under-bed cable channel.*
+*Figure 5.4: 1:1:1 Euclidean scale 3D CAD visualization of the Cardo Packtalk Edge 2-piece modular cartridge inside the Satellite Pod. Features N52 neodymium disc magnet seat (Ø8x2 mm), 5-pin spring contact pad array at X = +10 mm, and protected under-bed cable channel.*
 
 * **3D Contour Nest:** Replicates the curved underside of the Packtalk Edge with $0.8\,\text{mm}$ Shore 40A vibration isolation lining.
 * **Dual N52 Magnet Array & Locking Jaws:** Two N52 neodymium disc magnets ($2\times \varnothing\,8 \times 2\,\text{mm}$ at $X = -8\,\text{mm}$ and $X = +28\,\text{mm}$) provide $> 120\,\text{N}$ retention force in combination with lateral snap-lock flanks.
