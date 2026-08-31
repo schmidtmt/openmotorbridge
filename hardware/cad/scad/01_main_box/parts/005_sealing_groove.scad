@@ -27,3 +27,6 @@ module main_box_sealing_tongue_lip(length=110.0, width=74.0, lip_w=1.6, lip_h=1.
             cube(size=[length - 2.8 - 2*lip_w, width - 2.8 - 2*lip_w, lip_h + 0.2], center=false);
     }
 }
+
+// Standalone preview
+main_box_sealing_tongue_lip();

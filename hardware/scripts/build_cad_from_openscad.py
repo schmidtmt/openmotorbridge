@@ -139,6 +139,12 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
     ),
 ]
 
+import threading
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+MAX_WORKERS = min(12, os.cpu_count() or 8)
+print_lock = threading.Lock()
+
 def clean_old_stls():
     print("🧹 Cleaning old STL directory...")
     if os.path.exists(STL_BASE):
@@ -147,64 +153,98 @@ def clean_old_stls():
     os.makedirs(os.path.join(STL_BASE, "01_main_box/components"), exist_ok=True)
     os.makedirs(os.path.join(STL_BASE, "02_pod_base/components"), exist_ok=True)
     os.makedirs(os.path.join(STL_BASE, "03_pod_cartridges/components"), exist_ok=True)
+    sys.stdout.flush()
+
+def compile_single_stl(scad_rel: str, stl_rel: str, idx: int, total: int) -> Tuple[bool, str, float]:
+    scad_path = os.path.join(SCAD_DIR, scad_rel)
+    stl_path = os.path.join(STL_BASE, stl_rel)
+    os.makedirs(os.path.dirname(stl_path), exist_ok=True)
+    
+    t0 = time.time()
+    cmd = [
+        OPENSCAD_BIN,
+        "-o", stl_path,
+        "--export-format", "binstl",
+        scad_path
+    ]
+    
+    res = subprocess.run(cmd, capture_output=True, text=True)
+    dt = time.time() - t0
+    
+    if res.returncode != 0:
+        return False, f"❌ Error compiling {scad_rel}:\n{res.stderr}", dt
+    else:
+        size_kb = os.path.getsize(stl_path) / 1024.0
+        return True, f"✅ Exported {stl_rel} ({size_kb:.1f} KB) in {dt:.1f}s", dt
 
 def compile_stls():
-    print("\n🔨 Compiling OpenSCAD models to Production STLs...")
+    total = len(STL_TARGETS)
+    print(f"\n🔨 Compiling {total} OpenSCAD models to Production STLs (Parallel across {MAX_WORKERS} workers)...")
+    sys.stdout.flush()
     start_total = time.time()
     
-    for idx, (scad_rel, stl_rel) in enumerate(STL_TARGETS, 1):
-        scad_path = os.path.join(SCAD_DIR, scad_rel)
-        stl_path = os.path.join(STL_BASE, stl_rel)
-        
-        os.makedirs(os.path.dirname(stl_path), exist_ok=True)
-        
-        print(f"[{idx}/{len(STL_TARGETS)}] Exporting {stl_rel}...")
-        t0 = time.time()
-        
-        cmd = [
-            OPENSCAD_BIN,
-            "-o", stl_path,
-            "--export-format", "binstl",
-            scad_path
-        ]
-        
-        res = subprocess.run(cmd, capture_output=True, text=True)
-        if res.returncode != 0:
-            print(f"  ❌ Error compiling {scad_rel}:\n{res.stderr}")
-        else:
-            size_kb = os.path.getsize(stl_path) / 1024.0
-            dt = time.time() - t0
-            print(f"  ✅ Done in {dt:.1f}s ({size_kb:.1f} KB)")
-            
-    print(f"All STLs compiled in {time.time() - start_total:.1f}s.")
+    completed_count = 0
+    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+        future_map = {
+            executor.submit(compile_single_stl, scad_rel, stl_rel, idx, total): (scad_rel, stl_rel)
+            for idx, (scad_rel, stl_rel) in enumerate(STL_TARGETS, 1)
+        }
+        for future in as_completed(future_map):
+            completed_count += 1
+            success, msg, dt = future.result()
+            with print_lock:
+                print(f"[{completed_count:2d}/{total:2d}] {msg}")
+                sys.stdout.flush()
+                
+    print(f"✨ All {total} STLs compiled in {time.time() - start_total:.1f}s.")
+    sys.stdout.flush()
+
+def render_single_image(scad_rel: str, img_path: str, camera_args: str, scheme: str, idx: int, total: int) -> Tuple[bool, str, float]:
+    scad_path = os.path.join(SCAD_DIR, scad_rel)
+    os.makedirs(os.path.dirname(img_path), exist_ok=True)
+    img_name = os.path.basename(img_path)
+    
+    t0 = time.time()
+    cmd = [
+        OPENSCAD_BIN,
+        "--preview",
+        "-o", img_path,
+        f"--camera={camera_args}",
+        f"--colorscheme={scheme}",
+        "--imgsize=1920,1080",
+        scad_path
+    ]
+    
+    res = subprocess.run(cmd, capture_output=True, text=True)
+    dt = time.time() - t0
+    
+    if res.returncode != 0:
+        return False, f"❌ Error rendering {img_name}:\n{res.stderr}", dt
+    else:
+        size_kb = os.path.getsize(img_path) / 1024.0
+        return True, f"✅ Rendered {img_name} ({size_kb:.1f} KB) in {dt:.1f}s", dt
 
 def render_images():
-    print("\n📸 Generating High-Resolution 3D PNG Renders...")
-    for idx, (scad_rel, img_path, camera_args, scheme) in enumerate(RENDER_TARGETS, 1):
-        scad_path = os.path.join(SCAD_DIR, scad_rel)
-        os.makedirs(os.path.dirname(img_path), exist_ok=True)
-        
-        img_name = os.path.basename(img_path)
-        print(f"[{idx}/{len(RENDER_TARGETS)}] Rendering {img_name}...")
-        t0 = time.time()
-        
-        cmd = [
-            OPENSCAD_BIN,
-            "--preview",
-            "-o", img_path,
-            f"--camera={camera_args}",
-            f"--colorscheme={scheme}",
-            "--imgsize=1920,1080",
-            scad_path
-        ]
-        
-        res = subprocess.run(cmd, capture_output=True, text=True)
-        if res.returncode != 0:
-            print(f"  ❌ Error rendering {img_name}:\n{res.stderr}")
-        else:
-            size_kb = os.path.getsize(img_path) / 1024.0
-            dt = time.time() - t0
-            print(f"  ✅ Rendered in {dt:.1f}s ({size_kb:.1f} KB)")
+    total = len(RENDER_TARGETS)
+    print(f"\n📸 Generating {total} High-Resolution 3D PNG Renders (Parallel across {MAX_WORKERS} workers)...")
+    sys.stdout.flush()
+    start_total = time.time()
+    
+    completed_count = 0
+    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+        future_map = {
+            executor.submit(render_single_image, scad_rel, img_path, camera_args, scheme, idx, total): img_path
+            for idx, (scad_rel, img_path, camera_args, scheme) in enumerate(RENDER_TARGETS, 1)
+        }
+        for future in as_completed(future_map):
+            completed_count += 1
+            success, msg, dt = future.result()
+            with print_lock:
+                print(f"[{completed_count:2d}/{total:2d}] {msg}")
+                sys.stdout.flush()
+                
+    print(f"✨ All {total} 3D Renders generated in {time.time() - start_total:.1f}s.")
+    sys.stdout.flush()
 
 def fix_permissions_and_attributes():
     print("\n🔓 Setting full permissions and stripping macOS attributes...")
@@ -215,11 +255,13 @@ def fix_permissions_and_attributes():
         except Exception as e:
             print(f"Warning: {e}")
     print("Permissions and attributes fixed.")
+    sys.stdout.flush()
 
 def main():
     print("=" * 80)
     print("OPENMOTORBRIDGE OPENSCAD MASTER BUILDER".center(80))
     print("=" * 80)
+    sys.stdout.flush()
     
     clean_old_stls()
     compile_stls()
@@ -229,6 +271,7 @@ def main():
     print("\n" + "=" * 80)
     print("🎉 ALL STLS & 3D RENDERS GENERATED DIRECTLY FROM OPENSCAD!".center(80))
     print("=" * 80)
+    sys.stdout.flush()
 
 if __name__ == '__main__':
     main()
