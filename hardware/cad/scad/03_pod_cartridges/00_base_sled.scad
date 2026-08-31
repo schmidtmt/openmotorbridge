@@ -61,7 +61,14 @@ module cartridge_base_sled(
             translate([sled_l - 9.0, sled_w - 6.0, wall])
                 screw_boss(outer_r=2.5, inner_r=M2_SCREW_HOLE_R, h=5.5);
 
-            // 7. Front Faceplate (4.0 x 58.0 x 25.0 mm at x = sled_l)
+            // 7. Lateral Support Ledges / Shoulders (Auflagestufen at z = 2.5 .. 8.0 mm)
+            // Provides continuous rigid shelf for the OEM insert and maintains 1.8 mm clearance over Carrier PCB
+            translate([10.0, wall, wall])
+                cube(size=[sled_l - 20.0, 1.2, 5.5], center=false);
+            translate([10.0, sled_w - wall - 1.2, wall])
+                cube(size=[sled_l - 20.0, 1.2, 5.5], center=false);
+
+            // 8. Front Faceplate (4.0 x 58.0 x 25.0 mm at x = sled_l)
             translate([sled_l, -2.0, -1.5])
                 cube(size=[CARTRIDGE_FACE_L, CARTRIDGE_FACE_W, CARTRIDGE_FACE_H], center=false);
 
