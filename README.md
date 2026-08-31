@@ -20,7 +20,7 @@
 
 ## 📚 Technical Documentation
 
-The comprehensive technical specification is split into 17 modular chapters:
+The comprehensive technical specification is split into 19 modular chapters:
 
 1. [**01 - System Architecture & Satellite Topology**](docs/en/01_system_architecture.md)  
    *Overview of the 4-point architecture, spatial RF diversity, and multi-domain concept.*
@@ -75,6 +75,9 @@ The comprehensive technical specification is split into 17 modular chapters:
 
 18. [**18 - Standards & Normative References**](docs/en/18_standards_references.md)  
     *Reference index for ISO 7637-2, Bluetooth SIG Battery Service (0x180F), and intercom protocols.*
+
+19. [**19 - Build Instructions & Hardware Kit BOM**](docs/en/19_build_instructions_kit.md)  
+    *Practical step-by-step assembly guide, 3D printing requirements, fasteners, seals, and commissioning.*
 
 ---
 

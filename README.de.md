@@ -20,52 +20,52 @@ Die **OpenMotorBridge (OMB)** ist eine offene, herstellerübergreifende Kommunik
 
 ## 📚 Inhaltsverzeichnis der Dokumentation
 
-Die vollständige technische Spezifikation ist in 17 modulare Kapitel unterteilt:
+Die umfassende technische Spezifikation gliedert sich in 19 modulare Kapitel:
 
 1. [**01 - Systemarchitektur & Satelliten-Topologie**](docs/de/01_system_architecture.md)  
-   *Überblick über die 4-Punkte-Architektur, Raumdiversität und das Multi-Domain-Konzept.*
+   *Überblick über die 4-Punkt-Topologie, räumliche HF-Diversität und das Multi-Domain-Konzept.*
 
 2. [**02 - PCB-Hardware & HD26-Pinout**](docs/de/02_pcb_hardware_pinout.md)  
-   *Hauptplatinen-Layout, ESP32-S3 Pin-Mapping und die 26-polige IP67-Gehäuseschnittstelle.*
+   *Zentralplatinen-Schaltplan, ESP32-S3 GPIO-Mapping und 26-polige IP67-Gehäuseschnittstelle.*
 
 3. [**03 - Isoliertes Audio-Frontend & Pegelanpassung**](docs/de/03_audio_frontend_isolated.md)  
-   *Galvanische Trennung via Bourns Audio-Übertrager und PhotoMOS-Tastensimulation (TLP222A).*
+   *Galvanische Trennung via Bourns-Übertrager und PhotoMOS-PTT-Tastensimulation (TLP222A).*
 
-4. [**04 - Automotive Power Management & USV**](docs/de/04_power_management_ups.md)  
-   *LM5164-Q1 Buck-Regler, BQ24075 USV-Schaltung mit JEITA-NTC-Überwachung und Starterbatterie-Profile.*
+4. [**04 - Automotive Powermanagement & USV**](docs/de/04_power_management_ups.md)  
+   *LM5164-Q1 Schaltregler, BQ24075 USV mit JEITA-NTC-Überwachung und 5 Akku-Ladeprofile.*
 
-5. [**05 - Mechanisches Gehäusekonzept & Kassetten-Einschübe**](docs/de/05_mechanical_enclosure_pods.md)  
-   *IP67-Gehäuse (Typ A Zentralbox, Typ B Pods) in PA12 MJF und Mill-Max Pogo-Pin-Kassetten.*
+5. [**05 - Mechanisches Gehäusedesign & Wechselkassetten**](docs/de/05_mechanical_enclosure_pods.md)  
+   *IP67-Gehäusekonzept (Typ A Zentralbox, Typ B Pods) in PA12 MJF mit Mill-Max Pogo-Bays.*
 
 6. [**06 - Dynamische Profile & 1-Wire DS2401 Erkennung**](docs/de/06_dynamic_profiles_spec.md)  
    *Automatische Hardware-Erkennung via DS2401 Silicon Serial Number und LittleFS JSON-Profile.*
 
-7. [**07 - MicroSD BGH-Ringspeicher & WebDAV-Synchronisation**](docs/de/07_microsd_bgh_webdav.md)  
-   *4-Bit SDIO FAT32-Dateisystem, DSGVO/BGH-konformer Ringspeicher und verschlüsselter TLS 1.3 Sync.*
+7. [**07 - MicroSD BGH-Ringspeicher & WebDAV-Sync**](docs/de/07_microsd_bgh_webdav.md)  
+   *4-Bit SDIO FAT32-Dateisystem, DSGVO-konformer Ringspeicher und verschlüsselter TLS 1.3 Sync.*
 
-8. [**08 - DSP Audio Engine & Raised-Cosine Ducking**](docs/de/08_dsp_audio_engine.md)  
-   *I2S DMA Audio-Pipeline, Raised-Cosine Crossfading, Windgeräusch-Kompensation und Codec2-Encoding.*
+8. [**08 - DSP-Audio-Engine & Raised-Cosine-Ducking**](docs/de/08_dsp_audio_engine.md)  
+   *I2S DMA Audio-Pipeline, Raised-Cosine-Überblendung, geschwindigkeitsabhängige Lautstärke.*
 
-9. [**09 - Firmware-Architektur & FreeRTOS Task-Design**](docs/de/09_firmware_architecture.md)  
-   *Dual-Core FreeRTOS Task-Struktur, Ringbuffer-Inter-Task-Kommunikation und Watchdogs.*
+9. [**09 - Firmware-Architektur & FreeRTOS-Design**](docs/de/09_firmware_architecture.md)  
+   *Dual-Core FreeRTOS Task-Architektur, sperrenfreie Ringpuffer und Task-Supervisoren.*
 
-10. [**10 - Web Bluetooth Dashboard & PWA Architektur**](docs/de/10_web_bluetooth_dashboard.md)  
-    *Zero-Cloud PWA Web-App, Web Bluetooth API (WebBLE), Fahrdynamik-Visualisierung und i18n.*
+10. [**10 - Web-Bluetooth-Dashboard & PWA-Architektur**](docs/de/10_web_bluetooth_dashboard.md)  
+    *Cloudfreie Offline-PWA, Web Bluetooth API (WebBLE), Fahrdynamik-HUD und i18n-Sprachumschaltung.*
 
-11. [**11 - OpenMotorMesh (OMM), DLE & Cluster-Relay**](docs/de/11_openmotormesh_dle_election.md)  
-    *Dual-PHY (2.4 GHz Sidelink + 868 MHz LoRa), Adaptive QoS, DLE-Scoring und LTE-Cluster-Relay.*
+11. [**11 - OpenMotorMesh (OMM), DLE & Cluster Relay**](docs/de/11_openmotormesh_dle_election.md)  
+    *Dual-PHY (2.4 GHz Sidelink + 868 MHz LoRa), Adaptives QoS, DLE-Scoring und Relaisknoten.*
 
-12. [**12 - GNSS Multi-Constellation, ADR & Video-Sync**](docs/de/12_gnss_track_lifecycle_video.md)  
-    *u-blox MAX-M10S, 15-State EKF Dead Reckoning, Map-Matching und Actioncam Smart Remote Steuerung.*
+12. [**12 - GNSS Multi-Konstellation, ADR & Video-Sync**](docs/de/12_gnss_track_lifecycle_video.md)  
+    *u-blox MAX-M10S, 15-Zustands-EKF Koppelnavigation, Map-Matching und Actioncam-Fernsteuerung.*
 
 13. [**13 - Heck-Pod 3 & Digitale Transceiver-Architektur**](docs/de/13_rear_pod3_transceiver_arch.md)  
-    *Auslagerung von GNSS, SX1262 LoRa 868 MHz und ESP32-C3 Co-Prozessor an den Heckbürzel.*
+    *Heck-Pod-Integration von GNSS, SX1262 LoRa 868 MHz und ESP32-C3 RISC-V Co-Prozessor.*
 
-14. [**14 - EMV-, HF- & Umwelthärtung**](docs/de/14_emv_rf_hardening.md)  
-    *Kfz-Transienten-Schutz, Schutzlackierung nach IPC-CC-830B und 35 dB Freiraumdämpfung am Chassis.*
+14. [**14 - EMV, HF- & Umwelthärtung**](docs/de/14_emv_rf_hardening.md)  
+    *Automotive-Transientenschutz, Schutzlackierung (IPC-CC-830B) und 35 dB Gehäuse-Schirmdämpfung.*
 
 15. [**15 - BOM (Stückliste) & Fertigungsleitfaden**](docs/de/15_bom_manufacturing.md)  
-    *Stückliste für JLCPCB SMT-Bestückung (Main Box, Pod 3, Kassetten) und Fertigungsparameter.*
+    *Vollständige 3-Ebenen-BOM für JLCPCB SMT-Bestückung (Main Box, Pod 3, Kassetten) & CPL-Daten.*
 
 16. [**16 - Simulation & Digitale Testbench**](docs/de/16_simulation_testbench.md)  
     *Automotive-Simulations-Suite: Audio DSP, Raised-Cosine Ducking, Powermanagement, 15-State ADR-EKF & 1-Wire.*
@@ -75,6 +75,9 @@ Die vollständige technische Spezifikation ist in 17 modulare Kapitel unterteilt
 
 18. [**18 - Quellen- & Normenverzeichnis**](docs/de/18_standards_references.md)  
     *Fundstellen für ISO 7637-2, Bluetooth SIG Battery Service (0x180F), UBX-M10 und Intercom-Protokolle.*
+
+19. [**19 - Bauanleitung & Kit-Stückliste**](docs/de/19_build_instructions_kit.md)  
+    *Praxisorientierte Schritt-für-Schritt-Bauanleitung, 3D-Druck-Bedarf, Normteile, Dichtungen & Inbetriebnahme.*
 
 ---
 
