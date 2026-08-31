@@ -258,7 +258,13 @@ def package_3d_print_stls():
     # 3. Cartridges Package
     cartridge_zip = os.path.join(stl_dir, "03_cartridges_and_inlays_3d_print_mjf.zip")
     with zipfile.ZipFile(cartridge_zip, 'w', zipfile.ZIP_DEFLATED) as z:
-        for f in ["cartridge_base_sled.stl", "cartridge_sena_sled.stl", "cartridge_cardo_sled.stl", "cartridge_omm_transceiver_sled.stl", "cartridge_blindkassette_waterproof.stl"]:
+        for f in [
+            "cartridge_base_sled.stl",
+            "cartridge_insert_sena.stl",
+            "cartridge_insert_cardo.stl",
+            "cartridge_insert_blindkassette.stl",
+            "cartridge_omm_transceiver_sled.stl"
+        ]:
             p = os.path.join(src_stl_base, "03_pod_cartridges", f)
             if os.path.exists(p):
                 z.write(p, arcname=f)

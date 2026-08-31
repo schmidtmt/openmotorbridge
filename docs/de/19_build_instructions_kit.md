@@ -74,9 +74,11 @@ Alle Gehäuse und Kassetten wurden so konstruiert, dass sie **sowohl auf handels
 | **Main Box Zwischenboden**| [`main_box_mid_tray.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_mid_tray.stl) | **1** | Akku-Wanne, 10x Konvektionsschlitze, HD26-/USB-C-/LED-Ausschnitte & Dichtlippe |
 | **Main Box Deckel** | [`main_box_lid.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_lid.stl) | **1** | Robuster Abschlussdeckel mit Gore ePTFE-Ventildom & 4x M3-Schraubenlöchern |
 | **Pod-Basisgehäuse** | [`pod_base_housing.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod_base_housing.stl) | **3** | Universelles Schachtgehäuse für Pod 1, 2 und 3 mit V-Rohrbett, 4x EPDM-Nasen & M8-Stutzen |
-| **OMM Heck-Kassette** | [`cartridge_omm_transceiver_sled.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_omm_transceiver_sled.stl) | **1** | Kassetten-Schlitten für Pod 3 (beherbergt die Rear Pod 3 PCBA mit Antennen) |
-| **Lenker-Kassette Links** | [`cartridge_sena_sled.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_sena_sled.stl) *(oder Cardo)* | **1** | Kassetten-Schlitten für Headset 1 (Sena 50S/60S oder Cardo Packtalk Edge) |
-| **Lenker-Kassette Rechts**| [`cartridge_blindkassette_waterproof.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_blindkassette_waterproof.stl) *(oder Cardo/Sena)* | **1** | Kassetten-Schlitten für Headset 2 oder hermetischer IP67-Schutzdummy |
+| **Universal-Kassettenschlitten**| [`cartridge_base_sled.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl) | **2** | Schlitten für Pod 1 & 2 mit $360^\circ$-Dichtsitz, Poka-Yoke-Schienen, Rastarmen & M2-Domen |
+| **Sena Adapter-Einsatz** | [`cartridge_insert_sena.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_sena.stl) | **1** | Modularer Deckeleinsatz mit Sena 50S/60S Konturbett, Pogo-Ausschnitt (wird mit 4x M2 verschraubt) |
+| **Cardo Adapter-Einsatz** | [`cartridge_insert_cardo.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_cardo.stl) | *(opt)* | Modularer Deckeleinsatz mit Cardo AirMount Konturbett & Magnet-Taschen (alternativ zu Sena) |
+| **Blindkassetten-Deckel** | [`cartridge_insert_blindkassette.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_blindkassette.stl) | **1** | Hermetischer IP67-Verschlussdeckel für ungenutzten Pod 2 (wird mit 4x M2 verschraubt) |
+| **OMM Heck-Kassette** | [`cartridge_omm_transceiver_sled.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_omm_transceiver_sled.stl) | **1** | Monocoque-Schlitten für Pod 3 (beherbergt direkt die $70 \times 48\,\text{mm}$ Rear Pod 3 PCBA) |
 | **Summe 3D-Druckteile** | | **9** | **Fertig gepackt in den 3D-Druck ZIPs in `hardware/production_packages/`** |
 
 ---
@@ -100,6 +102,8 @@ Alle Gehäuse und Kassetten wurden so konstruiert, dass sie **sowohl auf handels
 | **Gewindeeinsätze** | Messing M3 $\times 5{,}7\,\text{mm}$ (Ruthex RX-M3x5.7 / Tappex) | **4** | Werden mit dem Lötkolben in die Ecken der Unterwanne eingeschmolzen |
 | **Gehäuseschrauben** | Zylinderschraube DIN 912 Edelstahl V4A M3 $\times 40\,\text{mm}$ | **4** | Durchgehende 4-Eck-Verschraubung (Deckel $\rightarrow$ Zwischenboden $\rightarrow$ Unterwanne) |
 | **Platinenschrauben Main** | Zylinderschraube DIN 912 Edelstahl V4A M2.5 $\times 6\,\text{mm}$ | **4** | Fixierung der Hauptplatine auf den Unterwannen-Domen |
+| **Kassettendeckelschrauben**| Senkkopfschraube DIN 7991 Edelstahl V4A M2 $\times 6\,\text{mm}$ | **8** | Je 4x Schrauben zur Befestigung der Adaptereinsätze im Kassetten-Basisschlitten |
+| **Kassettenplatinenschrauben**| Zylinderschraube DIN 912 Edelstahl V4A M2 $\times 4\,\text{mm}$ | **8** | Je 4x Schrauben zur Befestigung der Kassetten-Carrier-PCBs im Schlittenboden |
 | **Schottwandschrauben Pod** | Senkkopfschraube DIN 7991 V4A M2 $\times 8\,\text{mm}$ | **6** | Je 2x Schrauben zur Schottwandfixierung pro Pod-Gehäuse |
 | **Auswerfer-Druckfedern** | Edelstahl V4A, $\varnothing_{\text{außen}} = 4{,}5\,\text{mm}$, $L_0 = 15\,\text{mm}$, $d = 0{,}4\,\text{mm}$ | **6** | Auto-Eject Mechanismus (je 2 Federn pro Pod-Schottwand) |
 | **Silentblöcke / Gummipuffer** | Gummipuffer Typ A (Außengewinde/Innengewinde M4, $\varnothing 15 \times 10\,\text{mm}$) | **4** | Schwingungsentkoppelte Montage der Zentralbox am Motorradrahmen |

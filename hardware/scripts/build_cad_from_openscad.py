@@ -36,12 +36,12 @@ STL_TARGETS: List[Tuple[str, str]] = [
     # 2. Satellite Pod Base
     ("02_pod_base/pod_base_housing.scad", "02_pod_base/pod_base_housing.stl"),
     
-    # 3. Pod Cartridges
+    # 3. Pod Cartridges & Modular Inserts
     ("03_pod_cartridges/00_base_sled.scad", "03_pod_cartridges/cartridge_base_sled.stl"),
+    ("03_pod_cartridges/parts/01_insert_sena.scad", "03_pod_cartridges/cartridge_insert_sena.stl"),
+    ("03_pod_cartridges/parts/02_insert_cardo.scad", "03_pod_cartridges/cartridge_insert_cardo.stl"),
+    ("03_pod_cartridges/parts/03_insert_blindkassette.scad", "03_pod_cartridges/cartridge_insert_blindkassette.stl"),
     ("03_pod_cartridges/cartridge_omm_transceiver.scad", "03_pod_cartridges/cartridge_omm_transceiver_sled.stl"),
-    ("03_pod_cartridges/cartridge_sena.scad", "03_pod_cartridges/cartridge_sena_sled.stl"),
-    ("03_pod_cartridges/cartridge_cardo.scad", "03_pod_cartridges/cartridge_cardo_sled.stl"),
-    ("03_pod_cartridges/cartridge_blindkassette.scad", "03_pod_cartridges/cartridge_blindkassette_waterproof.stl"),
     
     # 4. Modular Components (Main Box)
     ("01_main_box/parts/000_lower_base.scad", "01_main_box/components/01_lower_tub_empty.stl"),

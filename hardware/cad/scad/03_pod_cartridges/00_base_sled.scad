@@ -30,7 +30,28 @@ module cartridge_base_sled(
             translate([0, sled_w - wall, 0])
                 cube(size=[sled_l, wall, sled_h + wall], center=false);
 
-            // 4. Front Faceplate (4.0 x 58.0 x 25.0 mm at x = sled_l)
+            // 4. 4x M2 Lower Carrier PCB Mounting Standoffs (h = 2.5 mm, z = 2.5 .. 5.0 mm)
+            translate([18.0, 12.0, wall])
+                screw_boss(outer_r=2.2, inner_r=M2_SCREW_HOLE_R, h=2.5);
+            translate([54.0, 12.0, wall])
+                screw_boss(outer_r=2.2, inner_r=M2_SCREW_HOLE_R, h=2.5);
+            translate([18.0, sled_w - 12.0, wall])
+                screw_boss(outer_r=2.2, inner_r=M2_SCREW_HOLE_R, h=2.5);
+            translate([54.0, sled_w - 12.0, wall])
+                screw_boss(outer_r=2.2, inner_r=M2_SCREW_HOLE_R, h=2.5);
+
+            // 5. 4x M2 Insert Fastening Corner Posts (h = 5.5 mm, z = 2.5 .. 8.0 mm)
+            // Sturdy posts with brass heat-set / M2 screw cores for securing modular OEM inserts
+            translate([7.0, 6.0, wall])
+                screw_boss(outer_r=2.5, inner_r=M2_SCREW_HOLE_R, h=5.5);
+            translate([sled_l - 9.0, 6.0, wall])
+                screw_boss(outer_r=2.5, inner_r=M2_SCREW_HOLE_R, h=5.5);
+            translate([7.0, sled_w - 6.0, wall])
+                screw_boss(outer_r=2.5, inner_r=M2_SCREW_HOLE_R, h=5.5);
+            translate([sled_l - 9.0, sled_w - 6.0, wall])
+                screw_boss(outer_r=2.5, inner_r=M2_SCREW_HOLE_R, h=5.5);
+
+            // 6. Front Faceplate (4.0 x 58.0 x 25.0 mm at x = sled_l)
             translate([sled_l, -2.0, -1.5])
                 cube(size=[CARTRIDGE_FACE_L, CARTRIDGE_FACE_W, CARTRIDGE_FACE_H], center=false);
 

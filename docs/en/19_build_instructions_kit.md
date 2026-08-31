@@ -68,15 +68,19 @@ All enclosures and cartridges are designed to be manufactured **both on standard
 
 #### 3D Printed Parts Bill of Materials:
 
+#### Bill of Materials: 3D Printed Parts
+
 | Assembly | Filename / STL | Qty | Function & Description |
 | :--- | :--- | :---: | :--- |
 | **Main Box Lower Tub** | [`main_box_lower_case.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_lower_case.stl) | **1** | Monocoque base with 4x M4 silentblock ears, 4x PCB standoffs & O-ring groove |
 | **Main Box Mid Tray** | [`main_box_mid_tray.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_mid_tray.stl) | **1** | Battery cradle, 10x convective vent slots, HD26/USB-C/LED cutouts & sealing lip |
 | **Main Box Top Lid** | [`main_box_lid.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_lid.stl) | **1** | Top closure lid with Gore ePTFE vent boss & 4x M3 corner screw counterbores |
 | **Pod Base Housing** | [`pod_base_housing.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod_base_housing.stl) | **3** | Universal bay for Pod 1, 2, and 3 with V-tube saddle, 4x EPDM strap hooks & M8 neck |
-| **OMM Rear Cartridge** | [`cartridge_omm_transceiver_sled.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_omm_transceiver_sled.stl) | **1** | Sled for Pod 3 (houses Rear Pod 3 PCBA with GNSS/LoRa/2.4GHz antennas) |
-| **Handlebar Cartridge Left**| [`cartridge_sena_sled.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_sena_sled.stl) *(or Cardo)* | **1** | Sled for Headset 1 (Sena 50S/60S or Cardo Packtalk Edge) |
-| **Handlebar Cartridge Right**| [`cartridge_blindkassette_waterproof.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_blindkassette_waterproof.stl) *(or Cardo/Sena)* | **1** | Sled for Headset 2 or hermetic IP67 blank dummy with storage dry box |
+| **Universal Base Sled** | [`cartridge_base_sled.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl) | **2** | Base chassis for Pods 1 & 2 with $360^\circ$ seal seat, guide rails, latch arms & M2 bosses |
+| **Sena Adapter Insert** | [`cartridge_insert_sena.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_sena.stl) | **1** | Modular top cradle for Sena 50S/60S, pogo array pocket (fastened with 4x M2 screws) |
+| **Cardo Adapter Insert** | [`cartridge_insert_cardo.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_cardo.stl) | *(opt)* | Modular top cradle for Cardo AirMount with magnet pockets (alternative to Sena) |
+| **Waterproof Blank Cover** | [`cartridge_insert_blindkassette.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_blindkassette.stl) | **1** | Hermetic IP67 solid cover for unused Pod 2 slot (fastened with 4x M2 screws) |
+| **OMM Rear Cartridge** | [`cartridge_omm_transceiver_sled.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_omm_transceiver_sled.stl) | **1** | Monocoque sled for Pod 3 (directly houses $70 \times 48\,\text{mm}$ Rear Pod 3 PCBA) |
 | **Total 3D Printed Parts** | | **9** | **Pre-packaged in 3D Print ZIP archives in `hardware/production_packages/`** |
 
 ---
@@ -100,6 +104,8 @@ All enclosures and cartridges are designed to be manufactured **both on standard
 | **Threaded Inserts** | Brass M3 $\times 5.7\,\text{mm}$ (Ruthex RX-M3x5.7 / Tappex) | **4** | Heat-set into the 4 corners of the lower case tub |
 | **Enclosure Clamping Screws** | Socket Head Cap Screw DIN 912 Stainless V4A M3 $\times 40\,\text{mm}$ | **4** | 4-corner through-bolt clamping (Lid $\rightarrow$ Mid Tray $\rightarrow$ Lower Case) |
 | **Main Board PCB Screws** | Socket Head Cap Screw DIN 912 Stainless V4A M2.5 $\times 6\,\text{mm}$ | **4** | PCB fastening onto lower tub vibration standoffs |
+| **Cartridge Insert Screws** | Countersunk Screw DIN 7991 Stainless V4A M2 $\times 6\,\text{mm}$ | **8** | 4x screws per cartridge to secure modular OEM top insert |
+| **Cartridge PCB Screws** | Socket Head Cap Screw DIN 912 Stainless V4A M2 $\times 4\,\text{mm}$ | **8** | 4x screws per cartridge to mount Carrier PCB inside base sled |
 | **Pod Bulkhead Screws** | Countersunk Screw DIN 7991 V4A M2 $\times 8\,\text{mm}$ | **6** | 2x screws per pod to secure internal bulkhead partition |
 | **Auto-Eject Compression Springs**| Stainless V4A, $\text{OD} = 4.5\,\text{mm}$, $L_0 = 15\,\text{mm}$, wire $d = 0.4\,\text{mm}$ | **6** | Auto-Eject mechanism (2 springs per pod bulkhead) |
 | **Anti-Vibration Silentblocks** | Rubber Buffer Type A (Male/Female M4, $\varnothing 15 \times 10\,\text{mm}$) | **4** | Decoupled chassis mounting of central main box |

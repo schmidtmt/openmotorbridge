@@ -21,7 +21,7 @@ include <cartridge_blindkassette.scad>;
 module cartridge_gallery_preview() {
     // 1. OMM Transceiver Cartridge (Pod 3 Heck, Front Left)
     translate([0, 0, 0]) {
-        color("darkslategray", 0.8)
+        color("darkslategray", 0.9)
             cartridge_omm_transceiver_sled();
         // Inserted PCB Dummy
         translate([2.5, 3.0, 5.5])
@@ -30,26 +30,17 @@ module cartridge_gallery_preview() {
 
     // 2. Sena 50S/60S Cartridge (Front Right)
     translate([0, 80.0, 0]) {
-        color("slategray", 0.85)
-            cartridge_sena_sled();
-        // Inserted Adapter PCB Dummy
-        translate([12.0, 16.0, 5.0])
-            dummy_adapter_pcb();
+        cartridge_sena_assembly(exploded=false);
     }
 
     // 3. Cardo Packtalk Edge Cartridge (Rear Left)
     translate([100.0, 0, 0]) {
-        color("dimgray", 0.85)
-            cartridge_cardo_sled();
-        // Inserted Adapter PCB Dummy
-        translate([12.0, 16.0, 5.0])
-            dummy_adapter_pcb();
+        cartridge_cardo_assembly(exploded=false);
     }
 
     // 4. Waterproof Blindkassette (Rear Right)
     translate([100.0, 80.0, 0]) {
-        color("black", 0.9)
-            cartridge_blindkassette_waterproof();
+        cartridge_blindkassette_assembly(exploded=false);
     }
 }
 
