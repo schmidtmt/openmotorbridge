@@ -91,22 +91,20 @@ Complete Bill of Materials (BOM) and manufacturing specifications for all 4 PCBA
 | Component / Subassembly | Material / Specification | CAD / STL File | Qty | Function |
 | :--- | :--- | :--- | :---: | :--- |
 | **Pod Monocoque Tunnel** | PA12 MJF Black | `pod_base_housing.stl` | 3 | 5-sided tunnel housing with V-groove & 4x EPDM strap lugs |
-| **Protective Bulkhead** | PA12 MJF Black | `pod_bulkhead_plate.stl` | 3 | Bulkhead with 6-pin shroud funnel & spring seats |
-| **Auto-Eject Compression Springs**| Stainless V4A (D=4.5mm, L0=15mm)| Standard Part | 6 | Ejection mechanism (10 mm cartridge pop-out stroke) |
+| **Protective Bulkhead** | PA12 MJF Black | `03_pod_bulkhead_partition.stl` | 3 | Bulkhead with 6-pin shroud funnel & spring seats |
+| **Auto-Eject Compression Springs**| Stainless V4A (D=4.5mm, L0=15mm)| Standard Part | 6 | Ejection mechanism (9 mm cartridge pop-out stroke) |
 | **Bulkhead Screws** | Stainless V4A M2 x 8 mm Flat-Head| Standard Part | 6 | 2x screws per pod to secure bulkhead plate |
-| **Helmet Clamp Adapter** | PA12 MJF Black | `pod_mount_helmet_clamp.stl` | 2 | Universal helmet clamp mount for Pod 1 & Pod 2 |
-| **GoPro / Rack Mount Plate** | PA12 MJF Black | `pod_mount_gopro_rack.stl` | 1 | 3x GoPro tabs for rear fender / luggage rack mount |
 
 ### 5.3 Modular Swappable Cartridges & Inlays
 | Component / Subassembly | Material / Specification | CAD / STL File | Qty | Function |
 | :--- | :--- | :--- | :---: | :--- |
-| **Universal Carrier Sled** | PA12 MJF Black | `cartridge_base_sled.stl` | 3 | Universal carrier sled with Poka-Yoke guide rails |
-| **Sena 50S/60S 3D Cradle** | PA12 MJF Black | `cartridge_sena.stl` | 1 | Module top cradle with Jog-Dial lock & pogo nest |
-| **Cardo Edge Air-Mount Cradle** | PA12 MJF Black | `cartridge_cardo.stl` | 1 | Module top cradle with 2x N52 magnet pockets |
-| **OMM Transceiver Sled** | PA12 MJF Black | `cartridge_omm_transceiver.stl`| 1 | Monolithic 1-tier sled for direct Pod 3 PCB |
-| **IP67 Blind Cartridge (Dry Box)**| PA12 MJF Black | `cartridge_blindkassette.stl` | 1 | Hermetic dummy sled with emergency storage cavity |
+| **Universal Carrier Sled** | PA12 MJF Black | `cartridge_base_sled.stl` | 3 | Universal carrier sled with Poka-Yoke guide rails & snap-fit |
+| **Sena 50S/60S Cartridge Sled** | PA12 MJF Black | `cartridge_sena_sled.stl` | 1 | Sena cartridge sled with Jog-Dial lock |
+| **Cardo Edge Cartridge Sled** | PA12 MJF Black | `cartridge_cardo_sled.stl` | 1 | Cardo cartridge sled with 2x N52 magnet pockets |
+| **OMM Transceiver Sled** | PA12 MJF Black | `cartridge_omm_transceiver_sled.stl`| 1 | Monolithic 1-tier sled for direct Pod 3 PCB |
+| **IP67 Blind Cartridge (Dry Box)**| PA12 MJF Black | `cartridge_blindkassette_waterproof.stl` | 1 | Hermetic dummy sled with emergency storage cavity |
 | **Cartridge Flange Gaskets**| Shore 40A Silicone Molded | Commercial / Molded | 3 | Perimeter IP67 sealing at front bezel |
-| **ePTFE Venting Membrane** | Gore Adhesive Vent Ø 6.0 mm | Commercial Off-The-Shelf| 3 | Pneumatic venting during cartridge insertion |
+| **ePTFE Venting Membrane** | Gore Adhesive Vent Ø 7.0 mm | Commercial Off-The-Shelf| 3 | Pneumatic venting on top roof |
 
 ---
 
@@ -223,19 +221,16 @@ All 3D printing STL bundles are organized in [hardware/production_packages/06_3d
 ### 10.1 Order Packages:
 1. **`01_main_box_3d_print_mjf.zip`:**
    * `main_box_lower_case.stl` (1x)
-   * `main_box_upper_case.stl` (1x)
+   * `main_box_mid_tray.stl` (1x)
    * `main_box_lid.stl` (1x)
 2. **`02_satellite_pods_3d_print_mjf.zip`:**
    * `pod_base_housing.stl` (3x – for Pod 1, 2, and 3)
-   * `pod_bulkhead_plate.stl` (3x – for Pod 1, 2, and 3)
-   * `pod_mount_helmet_clamp.stl` (2x – for Pod 1 and 2 on helmet)
-   * `pod_mount_gopro_rack.stl` (1x – for Pod 3 on tail rack)
 3. **`03_cartridges_and_inlays_3d_print_mjf.zip`:**
    * `cartridge_base_sled.stl` (3x)
-   * `cartridge_sena.stl` (1x)
-   * `cartridge_cardo.stl` (1x)
-   * `cartridge_omm_transceiver.stl` (1x)
-   * `cartridge_blindkassette.stl` (1x)
+   * `cartridge_sena_sled.stl` (1x)
+   * `cartridge_cardo_sled.stl` (1x)
+   * `cartridge_omm_transceiver_sled.stl` (1x)
+   * `cartridge_blindkassette_waterproof.stl` (1x)
 
 ### 10.2 Material Recommendations:
 * **Process:** **HP Multi Jet Fusion (MJF)** or **SLS (Selective Laser Sintering)**.

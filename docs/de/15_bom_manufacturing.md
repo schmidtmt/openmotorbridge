@@ -91,22 +91,20 @@ Vollständige Bauteilliste (Bill of Materials) und Fertigungsspezifikation für 
 | Bauteil / Baugruppe | Material / Spezifikation | CAD / STL Datei | Menge | Funktion |
 | :--- | :--- | :--- | :---: | :--- |
 | **Pod-Monocoque-Schacht** | PA12 MJF Schwarz | `pod_base_housing.stl` | 3 | 5-seitiges Schachtgehäuse mit V-Rohrbett & 4x EPDM-Spannbandnasen |
-| **Schutz-Schottwand** | PA12 MJF Schwarz | `pod_bulkhead_plate.stl` | 3 | Schottwand mit 6-Pin Schutzkragen & Federsitzen |
-| **Auswerfer-Druckfedern** | Edelstahl V4A (D=4.5mm, L0=15mm)| Normteil | 6 | Auto-Eject Mechanismus (10 mm Kassettenauswurf) |
+| **Schutz-Schottwand** | PA12 MJF Schwarz | `03_pod_bulkhead_partition.stl` | 3 | Schottwand mit 6-Pin Schutzkragen & Federsitzen |
+| **Auswerfer-Druckfedern** | Edelstahl V4A (D=4.5mm, L0=15mm)| Normteil | 6 | Auto-Eject Mechanismus (9 mm Kassettenauswurf) |
 | **Schottwandschrauben** | Edelstahl V4A M2 x 8 mm Senkkopf | Normteil | 6 | 2x Schrauben zur Schottwandfixierung pro Pod |
-| **Helm-Klemmadapter** | PA12 MJF Schwarz | `pod_mount_helmet_clamp.stl` | 2 | Universelle Helm-Montage für Pod 1 & Pod 2 |
-| **GoPro-/Gepäckträger-Adapter**| PA12 MJF Schwarz | `pod_mount_gopro_rack.stl` | 1 | 3x GoPro-Rasten für Heckbürzel-Montage (Pod 3) |
 
 ### 5.3 Modulare Wechselkassetten & Inlays
 | Bauteil / Baugruppe | Material / Spezifikation | CAD / STL Datei | Menge | Funktion |
 | :--- | :--- | :--- | :---: | :--- |
-| **Universal-Grundschlitten** | PA12 MJF Schwarz | `cartridge_base_sled.stl` | 3 | Universeller Trägerschlitten mit Führungsfedern |
-| **Sena 50S/60S 3D-Konturbett** | PA12 MJF Schwarz | `cartridge_sena.stl` | 1 | Modul-Oberteil mit Jog-Dial Arretierung & Pogo-Nest |
-| **Cardo Edge Air-Mount Inlay**| PA12 MJF Schwarz | `cartridge_cardo.stl` | 1 | Modul-Oberteil mit 2x N52 Magnetsitzen |
-| **OMM Transceiver-Schlitten** | PA12 MJF Schwarz | `cartridge_omm_transceiver.stl`| 1 | 1-teiliger Schlitten für direkte Pod 3 Platine |
-| **IP67 Blindkassette (Dry Box)**| PA12 MJF Schwarz | `cartridge_blindkassette.stl` | 1 | Hermetischer Dummy mit Notfall-Staufach |
+| **Universal-Grundschlitten** | PA12 MJF Schwarz | `cartridge_base_sled.stl` | 3 | Universeller Trägerschlitten mit Führungsfedern & Snap-Fit |
+| **Sena 50S/60S Kassetten-Schlitten** | PA12 MJF Schwarz | `cartridge_sena_sled.stl` | 1 | Sena Kassetten-Schlitten mit Jog-Dial Arretierung |
+| **Cardo Edge Kassetten-Schlitten**| PA12 MJF Schwarz | `cartridge_cardo_sled.stl` | 1 | Cardo Kassetten-Schlitten mit 2x N52 Magnetsitzen |
+| **OMM Transceiver-Schlitten** | PA12 MJF Schwarz | `cartridge_omm_transceiver_sled.stl`| 1 | 1-teiliger Schlitten für direkte Pod 3 Platine |
+| **IP67 Blindkassette (Dry Box)**| PA12 MJF Schwarz | `cartridge_blindkassette_waterproof.stl` | 1 | Hermetischer Dummy mit Notfall-Staufach |
 | **Kassetten-Flanschdichtungen**| Shore 40A Silikon Formdichtung | Zukaufteil / Formteil| 3 | Umlaufende IP67-Abdichtung an Stirnblende |
-| **ePTFE Druckausgleichsmembran**| Gore Adhesive Vent Ø 6.0 mm | Zukaufteil | 3 | Pneumatischer Ausgleich beim Einschieben |
+| **ePTFE Druckausgleichsmembran**| Gore Adhesive Vent Ø 7.0 mm | Zukaufteil | 3 | Pneumatischer Ausgleich auf Gehäuse-Oberseite |
 
 ---
 
@@ -223,19 +221,16 @@ Alle 3D-Druckdaten liegen gebündelt als ZIP-Pakete im Ordner [hardware/producti
 ### 10.1 Bestellpakete:
 1. **`01_main_box_3d_print_mjf.zip`:**
    * `main_box_lower_case.stl` (1x)
-   * `main_box_upper_case.stl` (1x)
+   * `main_box_mid_tray.stl` (1x)
    * `main_box_lid.stl` (1x)
 2. **`02_satellite_pods_3d_print_mjf.zip`:**
    * `pod_base_housing.stl` (3x – für Pod 1, 2 und 3)
-   * `pod_bulkhead_plate.stl` (3x – für Pod 1, 2 und 3)
-   * `pod_mount_helmet_clamp.stl` (2x – für Pod 1 und 2 am Helm)
-   * `pod_mount_gopro_rack.stl` (1x – für Pod 3 am Heck)
 3. **`03_cartridges_and_inlays_3d_print_mjf.zip`:**
    * `cartridge_base_sled.stl` (3x)
-   * `cartridge_sena.stl` (1x)
-   * `cartridge_cardo.stl` (1x)
-   * `cartridge_omm_transceiver.stl` (1x)
-   * `cartridge_blindkassette.stl` (1x)
+   * `cartridge_sena_sled.stl` (1x)
+   * `cartridge_cardo_sled.stl` (1x)
+   * `cartridge_omm_transceiver_sled.stl` (1x)
+   * `cartridge_blindkassette_waterproof.stl` (1x)
 
 ### 10.2 Materialempfehlung:
 * **Verfahren:** **HP Multi Jet Fusion (MJF)** oder **SLS (Selective Laser Sintering)**.

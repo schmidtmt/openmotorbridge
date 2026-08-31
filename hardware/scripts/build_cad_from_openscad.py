@@ -19,7 +19,6 @@ OPENSCAD_BIN = "/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD"
 REPO_ROOT = "/Users/schmidtm/openMotorBridge"
 SCAD_DIR = os.path.join(REPO_ROOT, "hardware/cad/scad")
 STL_BASE = os.path.join(REPO_ROOT, "hardware/cad/stl")
-MJF_BASE = os.path.join(REPO_ROOT, "hardware/3d_models_mjf")
 CAD_IMG_DIR = os.path.join(REPO_ROOT, "hardware/cad")
 
 # Check OpenSCAD binary
@@ -36,8 +35,6 @@ STL_TARGETS: List[Tuple[str, str]] = [
     
     # 2. Satellite Pod Base
     ("02_pod_base/pod_base_housing.scad", "02_pod_base/pod_base_housing.stl"),
-    ("02_pod_base/pod_mount_helmet_clamp.scad", "02_pod_base/pod_mount_helmet_clamp.stl"),
-    ("02_pod_base/pod_mount_gopro_rack.scad", "02_pod_base/pod_mount_gopro_rack.stl"),
     
     # 3. Pod Cartridges
     ("03_pod_cartridges/00_base_sled.scad", "03_pod_cartridges/cartridge_base_sled.stl"),
@@ -50,8 +47,8 @@ STL_TARGETS: List[Tuple[str, str]] = [
     ("01_main_box/parts/000_lower_base.scad", "01_main_box/components/01_lower_tub_empty.stl"),
     ("01_main_box/parts/001_lower_screws_enclosure.scad", "01_main_box/components/02_corner_screws_enclosure.stl"),
     ("01_main_box/parts/002_pcb_standoffs.scad", "01_main_box/components/03_pcb_standoffs.stl"),
-    ("01_main_box/parts/003_copper_thermal_studs.scad", "01_main_box/components/04_copper_thermal_studs.stl"),
-    ("01_main_box/parts/004_mounting_ears.scad", "01_main_box/components/05_mounting_ears.stl"),
+    ("01_main_box/parts/004_mounting_ears.scad", "01_main_box/components/04_mounting_ears.stl"),
+    ("01_main_box/parts/005_sealing_groove.scad", "01_main_box/components/05_sealing_groove.stl"),
     ("01_main_box/parts/010_mid_tray_frame.scad", "01_main_box/components/06_mid_tray_frame.stl"),
     ("01_main_box/parts/011_mid_partition_floor.scad", "01_main_box/components/07_mid_partition_floor.stl"),
     ("01_main_box/parts/020_lid_plate.scad", "01_main_box/components/08_lid_plate.stl"),
@@ -61,7 +58,7 @@ STL_TARGETS: List[Tuple[str, str]] = [
     ("02_pod_base/parts/001_pod_rear_m8_gland.scad", "02_pod_base/components/02_pod_rear_m8_gland.stl"),
     ("02_pod_base/parts/002_pod_bulkhead_partition.scad", "02_pod_base/components/03_pod_bulkhead_partition.stl"),
     ("02_pod_base/parts/003_pod_guide_grooves.scad", "02_pod_base/components/04_pod_guide_grooves.stl"),
-    ("02_pod_base/parts/004_pod_copper_studs.scad", "02_pod_base/components/05_pod_copper_studs.stl"),
+    ("02_pod_base/parts/005_pod_strap_hooks.scad", "02_pod_base/components/05_pod_strap_hooks.stl"),
     
     # 6. Dummies
     ("00_common/dummies/dummy_main_pcb.scad", "01_main_box/components/dummy_main_pcb.stl"),
@@ -143,14 +140,13 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
 ]
 
 def clean_old_stls():
-    print("🧹 Cleaning old STL directories...")
-    for base in [STL_BASE, MJF_BASE]:
-        if os.path.exists(base):
-            shutil.rmtree(base)
-        os.makedirs(base, exist_ok=True)
-        os.makedirs(os.path.join(base, "01_main_box/components"), exist_ok=True)
-        os.makedirs(os.path.join(base, "02_pod_base/components"), exist_ok=True)
-        os.makedirs(os.path.join(base, "03_pod_cartridges/components"), exist_ok=True)
+    print("🧹 Cleaning old STL directory...")
+    if os.path.exists(STL_BASE):
+        shutil.rmtree(STL_BASE)
+    os.makedirs(STL_BASE, exist_ok=True)
+    os.makedirs(os.path.join(STL_BASE, "01_main_box/components"), exist_ok=True)
+    os.makedirs(os.path.join(STL_BASE, "02_pod_base/components"), exist_ok=True)
+    os.makedirs(os.path.join(STL_BASE, "03_pod_cartridges/components"), exist_ok=True)
 
 def compile_stls():
     print("\n🔨 Compiling OpenSCAD models to Production STLs...")
@@ -159,10 +155,8 @@ def compile_stls():
     for idx, (scad_rel, stl_rel) in enumerate(STL_TARGETS, 1):
         scad_path = os.path.join(SCAD_DIR, scad_rel)
         stl_path = os.path.join(STL_BASE, stl_rel)
-        mjf_path = os.path.join(MJF_BASE, stl_rel)
         
         os.makedirs(os.path.dirname(stl_path), exist_ok=True)
-        os.makedirs(os.path.dirname(mjf_path), exist_ok=True)
         
         print(f"[{idx}/{len(STL_TARGETS)}] Exporting {stl_rel}...")
         t0 = time.time()
@@ -180,8 +174,6 @@ def compile_stls():
             size_kb = os.path.getsize(stl_path) / 1024.0
             dt = time.time() - t0
             print(f"  ✅ Done in {dt:.1f}s ({size_kb:.1f} KB)")
-            # Copy to MJF folder as well
-            shutil.copy2(stl_path, mjf_path)
             
     print(f"All STLs compiled in {time.time() - start_total:.1f}s.")
 
@@ -215,7 +207,7 @@ def render_images():
 
 def fix_permissions_and_attributes():
     print("\n🔓 Setting full permissions and stripping macOS attributes...")
-    for path in [STL_BASE, MJF_BASE, CAD_IMG_DIR, SCAD_DIR]:
+    for path in [STL_BASE, CAD_IMG_DIR, SCAD_DIR]:
         try:
             subprocess.run(["xattr", "-c", "-r", path], capture_output=True)
             subprocess.run(["chmod", "-R", "777", path], capture_output=True)

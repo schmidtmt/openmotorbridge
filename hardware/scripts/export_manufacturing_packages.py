@@ -240,7 +240,7 @@ def package_3d_print_stls():
     # 1. Main Box Package
     main_box_zip = os.path.join(stl_dir, "01_main_box_3d_print_mjf.zip")
     with zipfile.ZipFile(main_box_zip, 'w', zipfile.ZIP_DEFLATED) as z:
-        for f in ["main_box_lower_case.stl", "main_box_upper_case.stl", "main_box_lid.stl"]:
+        for f in ["main_box_lower_case.stl", "main_box_mid_tray.stl", "main_box_lid.stl"]:
             p = os.path.join(src_stl_base, "01_main_box", f)
             if os.path.exists(p):
                 z.write(p, arcname=f)
@@ -249,7 +249,7 @@ def package_3d_print_stls():
     # 2. Satellite Pods Package
     pod_zip = os.path.join(stl_dir, "02_satellite_pods_3d_print_mjf.zip")
     with zipfile.ZipFile(pod_zip, 'w', zipfile.ZIP_DEFLATED) as z:
-        for f in ["pod_base_housing.stl", "pod_bulkhead_plate.stl", "pod_mount_helmet_clamp.stl", "pod_mount_gopro_rack.stl"]:
+        for f in ["pod_base_housing.stl"]:
             p = os.path.join(src_stl_base, "02_pod_base", f)
             if os.path.exists(p):
                 z.write(p, arcname=f)
@@ -258,7 +258,7 @@ def package_3d_print_stls():
     # 3. Cartridges Package
     cartridge_zip = os.path.join(stl_dir, "03_cartridges_and_inlays_3d_print_mjf.zip")
     with zipfile.ZipFile(cartridge_zip, 'w', zipfile.ZIP_DEFLATED) as z:
-        for f in ["cartridge_base_sled.stl", "cartridge_sena.stl", "cartridge_cardo.stl", "cartridge_omm_transceiver.stl", "cartridge_blindkassette.stl"]:
+        for f in ["cartridge_base_sled.stl", "cartridge_sena_sled.stl", "cartridge_cardo_sled.stl", "cartridge_omm_transceiver_sled.stl", "cartridge_blindkassette_waterproof.stl"]:
             p = os.path.join(src_stl_base, "03_pod_cartridges", f)
             if os.path.exists(p):
                 z.write(p, arcname=f)

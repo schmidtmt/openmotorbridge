@@ -22,7 +22,7 @@ Unlike the Audio & Intercom cartridges (Pod 1 & Pod 2), which employ a 2-piece s
 
 ![OpenMotorBridge Rear Pod 3 CAD Assembly Exploded View](../../hardware/cad/pod3_full_assembly_exploded_3d.png)
 
-*Figure 13.2: 3D CAD exploded view of the complete Rear Pod 3 assembly featuring the universal pod base housing, rear M8 6-pin IP67 cable gland, GoPro / rack mount adapter plate ([pod_mount_gopro_rack.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/pod_mount_gopro_rack.scad)), and the 1-tier transceiver sled ([cartridge_omm_transceiver.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/cartridge_omm_transceiver.scad)) holding the transceiver PCB directly with zero intermediary adapters.*
+*Figure 13.2: 3D CAD exploded view of the complete Rear Pod 3 assembly featuring the universal pod base housing (integrated V-groove frame tube saddle with EPDM strap lugs), rear M8 6-pin IP67 cable gland, and the 1-tier transceiver sled ([cartridge_omm_transceiver.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/cartridge_omm_transceiver.scad)) holding the transceiver PCB directly with zero intermediary adapters.*
 
 #### Why is No Adapter Board Required for Pod 3?
 1. **Fully Integrated Single-Board Architecture:** The `openmotorbridge_rear_transceiver` PCB is itself the complete transceiver, navigation, and co-processor unit. It carries the Maxim DS2401 ID chip, the 6-pin precision socket `J1`, the SX1262 LoRa modem, the u-blox MAX-M10S GNSS engine, and the $25 \times 25 \times 4\,\text{mm}$ ceramic patch antenna directly on its 4-layer FR4 substrate.

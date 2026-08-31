@@ -384,7 +384,6 @@ def export_main_box_package(base_dir: str):
     mb_lower.add_box(0, 0, 18.0, 1.0, 75.0, 1.5)       # Left collar
     mb_lower.add_box(104.0, 0, 18.0, 1.0, 75.0, 1.5)   # Right collar
     mb_lower.write_stl(os.path.join(mb_dir, "main_box_lower_case.stl"))
-    mb_lower.write_stl(os.path.join(base_dir, "main_box_lower_case.stl"))
     
     # 2. Mid Tray (Oberwanne mit Nut & Feder Dichtungssteg, 4x M3 Eck-Pfostensäulen & soliden Wänden)
     mb_mid = STLMeshBuilder("main_box_mid_tray")
@@ -416,8 +415,6 @@ def export_main_box_package(base_dir: str):
     mb_mid.add_box(0, 0, 15.0, 1.0, 75.0, 1.5)
     mb_mid.add_box(104.0, 0, 15.0, 1.0, 75.0, 1.5)
     mb_mid.write_stl(os.path.join(mb_dir, "main_box_mid_tray.stl"))
-    mb_mid.write_stl(os.path.join(base_dir, "main_box_mid_tray.stl"))
-    mb_mid.write_stl(os.path.join(base_dir, "main_box_mid_baffle.stl"))
     
     # 3. Lid (Deckel mit 4x M3 Eck-Schraublöchern & Dichtungslippe)
     mb_lid = STLMeshBuilder("main_box_lid")
@@ -434,7 +431,6 @@ def export_main_box_package(base_dir: str):
     mb_lid.add_boss(99.0, 69.0, 0, 4.0, 1.7, 4.0)
     mb_lid.add_cylinder(52.5, 37.5, 4.0, 4.0, 1.5)
     mb_lid.write_stl(os.path.join(mb_dir, "main_box_lid.stl"))
-    mb_lid.write_stl(os.path.join(base_dir, "main_box_lid.stl"))
 
     # 4. Complete Assembly Mockup
     mb_asm = STLMeshBuilder("main_box_complete_assembly")
@@ -653,24 +649,6 @@ def export_pod_base_package(base_dir: str):
     pb.add_box(24.0, 56.0, 10.5, 74.0, 1.5, 2.2)
     pb.add_box(24.0, 56.0, 15.7, 74.0, 1.5, 2.2)
     pb.write_stl(os.path.join(pb_dir, "pod_base_housing.stl"))
-    pb.write_stl(os.path.join(base_dir, "pod_base_housing.stl"))
-    
-    # 2. Helm-Klemmadapter (für Pod 1 & Pod 2 am Helm)
-    pbc = STLMeshBuilder("pod_mount_helmet_clamp")
-    pbc.add_box(0, 0, 0, 80.0, 50.0, 3.0)
-    pbc.add_box(0, 0, -15.0, 5.0, 50.0, 15.0)
-    pbc.add_box(0, 0, -18.0, 30.0, 50.0, 4.0)
-    pbc.write_stl(os.path.join(pb_dir, "pod_mount_helmet_clamp.stl"))
-    pbc.write_stl(os.path.join(base_dir, "pod_mount_helmet_clamp.stl"))
-    
-    # 3. Heck- / GoPro- / Gepäckträger-Montageadapter (für Pod 3 am Heck)
-    pbg = STLMeshBuilder("pod_mount_gopro_rack")
-    pbg.add_box(0, 0, 0, 80.0, 50.0, 4.0)
-    pbg.add_box(28.0, 21.0, -8.0, 4.0, 8.0, 8.0)
-    pbg.add_box(38.0, 21.0, -8.0, 4.0, 8.0, 8.0)
-    pbg.add_box(48.0, 21.0, -8.0, 4.0, 8.0, 8.0)
-    pbg.write_stl(os.path.join(pb_dir, "pod_mount_gopro_rack.stl"))
-    pbg.write_stl(os.path.join(base_dir, "pod_mount_gopro_rack.stl"))
     
     # Modular Components for Tinkercad
     c1 = STLMeshBuilder("01_pod_base_monocoque_empty_tunnel")
@@ -753,7 +731,6 @@ def export_pod_cartridges_package(base_dir: str):
     sc.add_boss(15.0, 44.0, 2.5, 2.5, 1.0, 2.5)
     sc.add_boss(60.0, 44.0, 2.5, 2.5, 1.0, 2.5)
     sc.write_stl(os.path.join(pc_dir, "cartridge_sena_sled.stl"))
-    sc.write_stl(os.path.join(base_dir, "cartridge_sena_sled.stl"))
     
     # 2. Cardo Packtalk Edge Cartridge Sled
     cc = STLMeshBuilder("cartridge_cardo_sled")
@@ -776,7 +753,6 @@ def export_pod_cartridges_package(base_dir: str):
     cc.add_boss(15.0, 44.0, 2.5, 2.5, 1.0, 2.5)
     cc.add_boss(60.0, 44.0, 2.5, 2.5, 1.0, 2.5)
     cc.write_stl(os.path.join(pc_dir, "cartridge_cardo_sled.stl"))
-    cc.write_stl(os.path.join(base_dir, "cartridge_cardo_sled.stl"))
     
     # 3. OMM Transceiver Cartridge Sled (Pod 3 Heck-Kassette: 1-teilig mit voller 23.5 mm Innenhöhe)
     oc = STLMeshBuilder("cartridge_omm_transceiver_sled")
@@ -797,7 +773,6 @@ def export_pod_cartridges_package(base_dir: str):
     oc.add_boss(65.0, 46.0, 2.5, 2.5, 1.0, 3.0)
     oc.add_cylinder(77.0, 27.0, 18.0, 3.0, 2.0)   # Front ePTFE-Membran
     oc.write_stl(os.path.join(pc_dir, "cartridge_omm_transceiver_sled.stl"))
-    oc.write_stl(os.path.join(base_dir, "cartridge_omm_transceiver_sled.stl"))
     
     # 4. Blindkassette (Wasserdichte Dry Box Dummy)
     dc = STLMeshBuilder("cartridge_blindkassette_waterproof")
@@ -817,7 +792,6 @@ def export_pod_cartridges_package(base_dir: str):
         dc.add_box(x_rib, 5.0, 20.5, 2.5, 44.0, 2.0)
     dc.add_cylinder(77.0, 27.0, 18.0, 3.0, 2.0)
     dc.write_stl(os.path.join(pc_dir, "cartridge_blindkassette_waterproof.stl"))
-    dc.write_stl(os.path.join(base_dir, "cartridge_blindkassette_waterproof_dummy.stl"))
     
     # Modular Components for Tinkercad
     sled_base = STLMeshBuilder("01_universal_base_sled")
@@ -867,8 +841,7 @@ def export_pod_cartridges_package(base_dir: str):
 def main():
     import shutil
     base_dirs = [
-        "/Users/schmidtm/openMotorBridge/hardware/cad/stl",
-        "/Users/schmidtm/openMotorBridge/hardware/3d_models_mjf"
+        "/Users/schmidtm/openMotorBridge/hardware/cad/stl"
     ]
     
     for base in base_dirs:
