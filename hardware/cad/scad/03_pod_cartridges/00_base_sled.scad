@@ -34,19 +34,20 @@ module cartridge_base_sled(
             translate([sled_l, -2.0, -1.5])
                 cube(size=[CARTRIDGE_FACE_L, CARTRIDGE_FACE_W, CARTRIDGE_FACE_H], center=false);
 
-            // 5. Front Sealing Collar Lip (Flansch-Dichtkragen: Shore 40A Silicone Seat)
-            translate([sled_l - 2.0, 0.0, -0.5]) {
+            // 5. Continuous 360° Perimeter Sealing Collar (Flansch-Dichtsitz für Silikondichtung)
+            // Sits at x = sled_l - 2.5 .. sled_l, completely unobstructed all around
+            translate([sled_l - 2.5, -1.0, -0.5]) {
                 difference() {
-                    cube(size=[2.0, sled_w, sled_h + 3.0], center=false);
-                    translate([-0.1, 1.5, 1.5])
-                        cube(size=[2.2, sled_w - 3.0, sled_h], center=false);
+                    cube(size=[2.5, sled_w + 2.0, sled_h + 3.0], center=false);
+                    translate([-0.1, 1.8, 1.8])
+                        cube(size=[2.7, sled_w - 1.6, sled_h - 0.6], center=false);
                 }
             }
 
             // 6. Asymmetrical Poka-Yoke Guide Ribs (Tongue Rails) with 30° Lead-in Nose
             // --- Left Guide Rib (z = 8.2 mm center, height 2.6 mm, protrusion 1.4 mm) ---
             translate([CARTRIDGE_CHAMFER_L, -CARTRIDGE_TONGUE_PROT, POD_GROOVE_LEFT_Z - CARTRIDGE_TONGUE_W/2.0])
-                cube(size=[sled_l - CARTRIDGE_CHAMFER_L - 1.0, CARTRIDGE_TONGUE_PROT, CARTRIDGE_TONGUE_W], center=false);
+                cube(size=[sled_l - CARTRIDGE_CHAMFER_L - 3.5, CARTRIDGE_TONGUE_PROT, CARTRIDGE_TONGUE_W], center=false);
 
             // Left 30° Lead-in Nose (x = 0 .. 4 mm)
             translate([0, -CARTRIDGE_TONGUE_PROT, POD_GROOVE_LEFT_Z - CARTRIDGE_TONGUE_W/2.0 + 0.3])
@@ -54,19 +55,19 @@ module cartridge_base_sled(
 
             // --- Right Guide Rib (z = 14.2 mm center, height 2.6 mm, protrusion 1.4 mm) ---
             translate([CARTRIDGE_CHAMFER_L, sled_w, POD_GROOVE_RIGHT_Z - CARTRIDGE_TONGUE_W/2.0])
-                cube(size=[sled_l - CARTRIDGE_CHAMFER_L - 1.0, CARTRIDGE_TONGUE_PROT, CARTRIDGE_TONGUE_W], center=false);
+                cube(size=[sled_l - CARTRIDGE_CHAMFER_L - 3.5, CARTRIDGE_TONGUE_PROT, CARTRIDGE_TONGUE_W], center=false);
 
             // Right 30° Lead-in Nose (x = 0 .. 4 mm)
             translate([0, sled_w, POD_GROOVE_RIGHT_Z - CARTRIDGE_TONGUE_W/2.0 + 0.3])
                 cube(size=[CARTRIDGE_CHAMFER_L, CARTRIDGE_TONGUE_PROT, CARTRIDGE_TONGUE_W - 0.6], center=false);
 
-            // 7. Dual Cantilever Snap-Fit Latch Arms & Quick-Release Squeeze Buttons
-            // --- Left Snap-Fit Cantilever Arm (x = 61.0 .. 75.0 mm, y = -1.8 .. 0.0 mm) ---
-            translate([61.0, -1.8, 6.0])
-                cube(size=[14.0, 1.8, 10.0], center=false);
+            // 7. Dual Recessed Snap-Fit Cantilever Arms & Ergonomic Quick-Release Buttons
+            // --- Left Arm (x = 54.0 .. 70.0 mm, in side wall, clears sealing collar at x = 72.5) ---
+            translate([54.0, -1.8, 6.0])
+                cube(size=[16.0, 1.8, 10.0], center=false);
 
-            // Left Triangular Latch Tooth (30° Lead-in ramp, 85° retention face, 1.8 mm undercut)
-            translate([61.0, -3.4, 6.5]) {
+            // Left Triangular Latch Tooth (at x = 58.0, 1.8 mm retention undercut)
+            translate([58.0, -3.4, 6.5]) {
                 polyhedron(
                     points=[
                         [0, 1.6, 0], [4.0, 1.6, 0], [4.0, 0, 0], [0, 1.6, 9.0], [4.0, 1.6, 9.0], [4.0, 0, 9.0]
@@ -78,21 +79,25 @@ module cartridge_base_sled(
             }
 
             // Left Textured Quick-Release Squeeze Button Pad (on Faceplate Flank)
-            translate([sled_l, -3.8, 5.0]) {
-                cube(size=[CARTRIDGE_FACE_L + 1.0, 1.8, 12.0], center=false);
+            translate([sled_l - 0.5, -4.0, 5.0]) {
+                cube(size=[CARTRIDGE_FACE_L + 1.5, 2.0, 12.0], center=false);
                 // 3x Tactile Grip Ribs
                 for (rz = [2.0, 6.0, 10.0]) {
-                    translate([0.5, -0.5, rz])
+                    translate([0.5, -0.6, rz])
                         cube(size=[CARTRIDGE_FACE_L, 0.6, 1.2], center=false);
                 }
             }
 
-            // --- Right Snap-Fit Cantilever Arm (x = 61.0 .. 75.0 mm, y = sled_w .. sled_w + 1.8 mm) ---
-            translate([61.0, sled_w, 6.0])
-                cube(size=[14.0, 1.8, 10.0], center=false);
+            // Left Flexure Link between arm and button (passes outside the sealed pod rim)
+            translate([70.0, -3.0, 8.0])
+                cube(size=[sled_l - 70.0, 1.4, 6.0], center=false);
+
+            // --- Right Arm (x = 54.0 .. 70.0 mm, in side wall) ---
+            translate([54.0, sled_w, 6.0])
+                cube(size=[16.0, 1.8, 10.0], center=false);
 
             // Right Triangular Latch Tooth
-            translate([61.0, sled_w + 1.8, 6.5]) {
+            translate([58.0, sled_w + 1.8, 6.5]) {
                 polyhedron(
                     points=[
                         [0, 0, 0], [4.0, 0, 0], [4.0, 1.6, 0], [0, 0, 9.0], [4.0, 0, 9.0], [4.0, 1.6, 9.0]
@@ -104,14 +109,18 @@ module cartridge_base_sled(
             }
 
             // Right Textured Quick-Release Squeeze Button Pad (on Faceplate Flank)
-            translate([sled_l, sled_w + 2.0, 5.0]) {
-                cube(size=[CARTRIDGE_FACE_L + 1.0, 1.8, 12.0], center=false);
+            translate([sled_l - 0.5, sled_w + 2.0, 5.0]) {
+                cube(size=[CARTRIDGE_FACE_L + 1.5, 2.0, 12.0], center=false);
                 // 3x Tactile Grip Ribs
                 for (rz = [2.0, 6.0, 10.0]) {
-                    translate([0.5, 1.7, rz])
+                    translate([0.5, 2.0, rz])
                         cube(size=[CARTRIDGE_FACE_L, 0.6, 1.2], center=false);
                 }
             }
+
+            // Right Flexure Link between arm and button
+            translate([70.0, sled_w + 1.6, 8.0])
+                cube(size=[sled_l - 70.0, 1.4, 6.0], center=false);
 
             // 8. Front ePTFE Gore Vent Boss on Faceplate
             translate([sled_l + 2.0, sled_w/2.0, 18.0])
@@ -119,12 +128,29 @@ module cartridge_base_sled(
                     cylinder(r=3.0, h=2.0, center=false);
         }
 
-        // 9. Front ePTFE Breather Through-Hole (Ø 2.0 mm)
-        translate([sled_l - 1.0, sled_w/2.0, 18.0])
-            rotate([0, 90, 0])
-                cylinder(r=1.0, h=CARTRIDGE_FACE_L + 4.0, center=false);
+        // 9. Side Wall Clearance Slots for Latch Arm Inward Flexure
+        // Left Arm Clearance Slots (1.0 mm slit above and below arm)
+        translate([52.0, -2.5, 4.8])
+            cube(size=[19.0, wall + 3.0, 1.0], center=false);
+        translate([52.0, -2.5, 16.2])
+            cube(size=[19.0, wall + 3.0, 1.0], center=false);
+        translate([52.0, -2.5, 4.8])
+            cube(size=[2.0, wall + 3.0, 12.4], center=false);
 
-        // 10. Floor Convective Breathing Slots (4x 14 x 2.5 mm)
+        // Right Arm Clearance Slots
+        translate([52.0, sled_w - wall - 0.5, 4.8])
+            cube(size=[19.0, wall + 3.0, 1.0], center=false);
+        translate([52.0, sled_w - wall - 0.5, 16.2])
+            cube(size=[19.0, wall + 3.0, 1.0], center=false);
+        translate([52.0, sled_w - wall - 0.5, 4.8])
+            cube(size=[2.0, wall + 3.0, 12.4], center=false);
+
+        // 10. Front ePTFE Breather Through-Hole (Ø 2.0 mm)
+        translate([sled_l - 3.0, sled_w/2.0, 18.0])
+            rotate([0, 90, 0])
+                cylinder(r=1.0, h=CARTRIDGE_FACE_L + 6.0, center=false);
+
+        // 11. Floor Convective Breathing Slots (4x 14 x 2.5 mm)
         translate([18.0, 10.0, -0.5]) cube(size=[14.0, 2.5, wall + 1.0], center=false);
         translate([18.0, sled_w - 12.5, -0.5]) cube(size=[14.0, 2.5, wall + 1.0], center=false);
         translate([44.0, 10.0, -0.5]) cube(size=[14.0, 2.5, wall + 1.0], center=false);
