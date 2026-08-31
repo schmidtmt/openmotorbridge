@@ -59,13 +59,7 @@ module cartridge_base_sled(
             translate([0, sled_w, POD_GROOVE_RIGHT_Z - CARTRIDGE_TONGUE_W/2.0 + 0.3])
                 cube(size=[CARTRIDGE_CHAMFER_L, CARTRIDGE_TONGUE_PROT, CARTRIDGE_TONGUE_W - 0.6], center=false);
 
-            // 7. 2x Copper Thermal Stud Pads in Sled Floor (Ø 8.0 x 2.5 mm)
-            translate([42.0, sled_w/2.0, 0.0])
-                copper_stud(r=COPPER_STUD_R, h=wall);
-            translate([60.0, sled_w/2.0, 0.0])
-                copper_stud(r=COPPER_STUD_R, h=wall);
-
-            // 8. Front ePTFE Gore Vent Boss on Faceplate
+            // 7. Front ePTFE Gore Vent Boss on Faceplate
             translate([sled_l + 2.0, sled_w/2.0, 18.0])
                 rotate([0, 90, 0])
                     cylinder(r=3.0, h=2.0, center=false);
