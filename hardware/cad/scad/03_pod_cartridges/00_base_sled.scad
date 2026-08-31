@@ -184,6 +184,14 @@ module cartridge_base_sled(
         translate([18.0, sled_w - 12.5, -0.5]) cube(size=[14.0, 2.5, wall + 1.0], center=false);
         translate([44.0, 10.0, -0.5]) cube(size=[14.0, 2.5, wall + 1.0], center=false);
         translate([44.0, sled_w - 12.5, -0.5]) cube(size=[14.0, 2.5, wall + 1.0], center=false);
+
+        // 12. 2x Side Wall U-Notches / Freistellungen for Rubber Strap (at x = 28 .. 42 mm, z = 11.5 .. 19 mm)
+        // Left Side Wall U-Notch
+        translate([28.0, -1.5, 11.5])
+            cube(size=[14.0, wall + 3.0, sled_h + 8.0], center=false);
+        // Right Side Wall U-Notch
+        translate([28.0, sled_w - wall - 1.5, 11.5])
+            cube(size=[14.0, wall + 3.0, sled_h + 8.0], center=false);
     }
 }
 
