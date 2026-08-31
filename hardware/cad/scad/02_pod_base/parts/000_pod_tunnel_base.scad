@@ -2,6 +2,9 @@
 // OpenMotorBridge - Satellite Pod: Monocoque Tunnel Base with Tube Saddle
 // =============================================================================
 // File: hardware/cad/scad/02_pod_base/parts/000_pod_tunnel_base.scad
+// Description: 5-sided monocoque tunnel with integrated V-groove tube saddle,
+//              zip-tie slots, and internal dual snap-fit catch pockets (Rasttaschen)
+//              for the cartridge quick-release auto-eject mechanism.
 // =============================================================================
 
 include <../../00_common/parameters.scad>;
@@ -45,6 +48,15 @@ module pod_tunnel_base(length=100.0, width=60.0, height=28.0, wall=2.5, r_edge=3
             cube([5.0, width + 2.0, 2.5], center=false);
         translate([80.0 - 2.5, -1.0, wall - 1.2])
             cube([5.0, width + 2.0, 2.5], center=false);
+
+        // 5. Dual Internal Snap-Fit Catch Pockets (Rasttaschen in Seitenwänden)
+        // Left Internal Catch Pocket (x = 83.5 .. 88.5 mm, y = wall - 1.6 .. wall mm, z = 6.0 .. 17.0 mm)
+        translate([83.5, wall - 1.6, 6.0])
+            cube(size=[5.0, 1.8, 11.0], center=false);
+
+        // Right Internal Catch Pocket (x = 83.5 .. 88.5 mm, y = width - wall .. width - wall + 1.6 mm)
+        translate([83.5, width - wall - 0.2, 6.0])
+            cube(size=[5.0, 1.8, 11.0], center=false);
     }
 }
 

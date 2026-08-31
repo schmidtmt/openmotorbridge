@@ -638,8 +638,8 @@ def export_pod_base_package(base_dir: str):
     # Zentrierter 6-Pin Schutzkragen mit 45°-Fangtrichter (x = 22..28, y = 24..36, z = 10..18)
     pb.add_box(24.0, 24.0, 10.0, 4.0, 12.0, 8.0)
     # 2x Auto-Eject Auswerferfedern-Sitze (flankierend bei y = 16 und y = 44)
-    pb.add_cylinder(22.0, 16.0, 14.0, 3.0, 5.0)
-    pb.add_cylinder(22.0, 44.0, 14.0, 3.0, 5.0)
+    pb.add_cylinder(22.0, 16.0, 14.0, 2.0, 5.0)
+    pb.add_cylinder(22.0, 44.0, 14.0, 2.0, 5.0)
     # Decken Gore ePTFE-Membransitz (Ø 7mm) bei x = 50, y = 30, z = 28
     pb.add_cylinder(50.0, 30.0, 28.0, 3.5, 1.5)
     # 4x M2 Montage-Schraubdome für die Schutz-Schottwand
@@ -652,9 +652,6 @@ def export_pod_base_package(base_dir: str):
     pb.add_box(24.0, 2.5, 9.7, 74.0, 1.5, 2.2)
     pb.add_box(24.0, 56.0, 10.5, 74.0, 1.5, 2.2)
     pb.add_box(24.0, 56.0, 15.7, 74.0, 1.5, 2.2)
-    # 2x Kupfer-Wärmeleitpfosten (Ø 8.0 mm) im Pod-Gehäuseboden
-    pb.add_cylinder(42.0, 30.0, 0.0, 4.0, 2.5)
-    pb.add_cylinder(72.0, 30.0, 0.0, 4.0, 2.5)
     pb.write_stl(os.path.join(pb_dir, "pod_base_housing.stl"))
     pb.write_stl(os.path.join(base_dir, "pod_base_housing.stl"))
     
@@ -701,35 +698,39 @@ def export_pod_base_package(base_dir: str):
     c6.add_box(21.0, 46.0, 12.0, 4.0, 6.0, 2.0)
     c6.write_stl(os.path.join(comp_dir, "06_pod_bulkhead_convective_vent_slots_tool.stl"))
     
-    c7 = STLMeshBuilder("07_pod_lateral_cooling_rails_pair")
-    c7.add_box(25.0, 1.0, 6.0, 65.0, 1.5, 16.0)
-    c7.add_box(25.0, 57.5, 6.0, 65.0, 1.5, 16.0)
-    c7.write_stl(os.path.join(comp_dir, "07_pod_lateral_cooling_rails_pair.stl"))
+    c7 = STLMeshBuilder("07_pod_snap_fit_catch_pockets_pair")
+    c7.add_box(83.5, 1.0, 6.0, 5.0, 1.8, 11.0)
+    c7.add_box(83.5, 57.2, 6.0, 5.0, 1.8, 11.0)
+    c7.write_stl(os.path.join(comp_dir, "07_pod_snap_fit_catch_pockets_pair.stl"))
     
     c8 = STLMeshBuilder("08_auto_eject_springs_pair")
-    c8.add_cylinder(22.0, 16.0, 14.0, 3.0, 8.0)
-    c8.add_cylinder(22.0, 44.0, 14.0, 3.0, 8.0)
+    c8.add_cylinder(22.0, 16.0, 14.0, 2.25, 8.0)
+    c8.add_cylinder(22.0, 44.0, 14.0, 2.25, 8.0)
     c8.write_stl(os.path.join(comp_dir, "08_auto_eject_springs_pair.stl"))
     
     c9 = STLMeshBuilder("09_pod_internal_guide_grooves_cutout_tool")
     c9.add_box(22.0, 1.0, 6.7, 76.0, 3.0, 3.0)  # Left groove tool
     c9.add_box(22.0, 56.0, 12.7, 76.0, 3.0, 3.0) # Right groove tool
     c9.write_stl(os.path.join(comp_dir, "09_pod_internal_guide_grooves_cutout_tool.stl"))
-    
-    c10 = STLMeshBuilder("10_pod_copper_thermal_studs_pair")
-    c10.add_cylinder(42.0, 30.0, 0.0, 4.0, 2.5)
-    c10.add_cylinder(72.0, 30.0, 0.0, 4.0, 2.5)
-    c10.write_stl(os.path.join(comp_dir, "10_pod_copper_thermal_studs_pair.stl"))
 
 
 # =============================================================================
-# 3. POD CARTRIDGES EXPORTER
+# 3. SATELLITE POD CARTRIDGES EXPORTER
 # =============================================================================
-def export_cartridges_package(base_dir: str):
+def export_pod_cartridges_package(base_dir: str):
     print("Exporting 03_pod_cartridges package & components...")
     pc_dir = os.path.join(base_dir, "03_pod_cartridges")
     comp_dir = os.path.join(pc_dir, "components")
     os.makedirs(comp_dir, exist_ok=True)
+    
+    def add_snap_fit_features(builder: STLMeshBuilder):
+        # Dual Cantilever Snap-Fit Arms & Latch Teeth
+        builder.add_box(61.0, -1.8, 6.0, 14.0, 1.8, 10.0)      # Left arm
+        builder.add_box(61.0, -3.4, 6.5, 4.0, 1.6, 9.0)        # Left latch tooth
+        builder.add_box(75.0, -3.8, 5.0, 5.0, 1.8, 12.0)       # Left button pad
+        builder.add_box(61.0, 54.0, 6.0, 14.0, 1.8, 10.0)      # Right arm
+        builder.add_box(61.0, 55.8, 6.5, 4.0, 1.6, 9.0)        # Right latch tooth
+        builder.add_box(75.0, 56.0, 5.0, 5.0, 1.8, 12.0)       # Right button pad
     
     # 1. Sena 50S/60S Cartridge Sled
     sc = STLMeshBuilder("cartridge_sena_sled")
@@ -742,9 +743,7 @@ def export_cartridges_package(base_dir: str):
     sc.add_box(0.0, -1.4, 7.2, 4.0, 1.4, 2.0)     # Einlaufschräge links
     sc.add_box(4.0, 54.0, 12.9, 70.0, 1.4, 2.6)   # Rechte Feder (z = 14.2 mm)
     sc.add_box(0.0, 54.0, 13.2, 4.0, 1.4, 2.0)    # Einlaufschräge rechts
-    # 2x Kupfer-Wärmeleitbolzen-Kontaktflächen im Kassettenboden
-    sc.add_cylinder(42.0, 30.0, 0.0, 4.0, 2.5)
-    sc.add_cylinder(72.0, 30.0, 0.0, 4.0, 2.5)
+    add_snap_fit_features(sc)
     # Sena 3D Cradle & Jog-Dial Nest auf der Oberseite
     sc.add_cylinder(55.0, 18.0, 18.0, 6.0, 6.0)
     sc.add_cylinder(55.0, 36.0, 18.0, 5.0, 6.0)
@@ -767,9 +766,7 @@ def export_cartridges_package(base_dir: str):
     cc.add_box(0.0, -1.4, 7.2, 4.0, 1.4, 2.0)
     cc.add_box(4.0, 54.0, 12.9, 70.0, 1.4, 2.6)
     cc.add_box(0.0, 54.0, 13.2, 4.0, 1.4, 2.0)
-    # 2x Kupfer-Wärmeleitbolzen-Kontaktflächen im Kassettenboden
-    cc.add_cylinder(42.0, 30.0, 0.0, 4.0, 2.5)
-    cc.add_cylinder(72.0, 30.0, 0.0, 4.0, 2.5)
+    add_snap_fit_features(cc)
     # Cardo AirMount Magnet- & Pogo-Nest
     cc.add_cylinder(40.0, 27.0, 18.0, 8.0, 4.0)
     cc.add_box(5.0, 17.0, 18.0, 10.0, 20.0, 5.0)
@@ -792,9 +789,7 @@ def export_cartridges_package(base_dir: str):
     oc.add_box(0.0, -1.4, 7.2, 4.0, 1.4, 2.0)
     oc.add_box(4.0, 54.0, 12.9, 70.0, 1.4, 2.6)
     oc.add_box(0.0, 54.0, 13.2, 4.0, 1.4, 2.0)
-    # 2x Kupfer-Wärmeleitbolzen-Kontaktflächen im Kassettenboden
-    oc.add_cylinder(42.0, 30.0, 0.0, 4.0, 2.5)
-    oc.add_cylinder(72.0, 30.0, 0.0, 4.0, 2.5)
+    add_snap_fit_features(oc)
     # Voller offener Innenraum für openmotorbridge_rear_transceiver PCB (ESP32-S3, SX1262 LoRa, GNSS & Patch-Antenne)
     oc.add_boss(10.0, 8.0, 2.5, 2.5, 1.0, 3.0)
     oc.add_boss(65.0, 8.0, 2.5, 2.5, 1.0, 3.0)
@@ -815,9 +810,7 @@ def export_cartridges_package(base_dir: str):
     dc.add_box(0.0, -1.4, 7.2, 4.0, 1.4, 2.0)
     dc.add_box(4.0, 54.0, 12.9, 70.0, 1.4, 2.6)
     dc.add_box(0.0, 54.0, 13.2, 4.0, 1.4, 2.0)
-    # 2x Kupfer-Wärmeleitbolzen-Kontaktflächen im Kassettenboden
-    dc.add_cylinder(42.0, 30.0, 0.0, 4.0, 2.5)
-    dc.add_cylinder(72.0, 30.0, 0.0, 4.0, 2.5)
+    add_snap_fit_features(dc)
     # Wasserdichter Dry-Box Deckel mit Versteifungsrippen
     dc.add_box(5.0, 5.0, 2.5, 65.0, 44.0, 18.0)
     for x_rib in [18.0, 30.0, 42.0, 54.0]:
@@ -853,21 +846,22 @@ def export_cartridges_package(base_dir: str):
     cart_vents.add_box(44.0, 39.5, -1.0, 14.0, 2.5, 5.0)
     cart_vents.write_stl(os.path.join(comp_dir, "05_cartridge_floor_convective_vent_slots_tool.stl"))
     
-    cu_plates = STLMeshBuilder("06_cartridge_copper_thermal_slide_plates_pair")
-    cu_plates.add_box(5.0, -0.8, 4.0, 65.0, 0.8, 14.0)
-    cu_plates.add_box(5.0, 54.0, 4.0, 65.0, 0.8, 14.0)
-    cu_plates.write_stl(os.path.join(comp_dir, "06_cartridge_copper_thermal_slide_plates_pair.stl"))
+    snap_arms = STLMeshBuilder("06_cartridge_snap_fit_cantilever_arms_pair")
+    snap_arms.add_box(61.0, -1.8, 6.0, 14.0, 1.8, 10.0)
+    snap_arms.add_box(61.0, 54.0, 6.0, 14.0, 1.8, 10.0)
+    snap_arms.write_stl(os.path.join(comp_dir, "06_cartridge_snap_fit_cantilever_arms_pair.stl"))
     
-    guide_ribs = STLMeshBuilder("07_cartridge_lateral_guide_ribs_pair")
+    snap_buttons = STLMeshBuilder("07_cartridge_quick_release_squeeze_buttons_pair")
+    snap_buttons.add_box(75.0, -3.8, 5.0, 5.0, 1.8, 12.0)
+    snap_buttons.add_box(75.0, 56.0, 5.0, 5.0, 1.8, 12.0)
+    snap_buttons.write_stl(os.path.join(comp_dir, "07_cartridge_quick_release_squeeze_buttons_pair.stl"))
+    
+    guide_ribs = STLMeshBuilder("08_cartridge_lateral_guide_ribs_pair")
     guide_ribs.add_box(4.0, -1.4, 6.9, 70.0, 1.4, 2.6)
     guide_ribs.add_box(0.0, -1.4, 7.2, 4.0, 1.4, 2.0)
     guide_ribs.add_box(4.0, 54.0, 12.9, 70.0, 1.4, 2.6)
     guide_ribs.add_box(0.0, 54.0, 13.2, 4.0, 1.4, 2.0)
-    guide_ribs.write_stl(os.path.join(comp_dir, "07_cartridge_lateral_guide_ribs_pair.stl"))
-    cu_studs_cart = STLMeshBuilder("08_cartridge_copper_thermal_stud_pads_pair")
-    cu_studs_cart.add_cylinder(42.0, 30.0, 0.0, 4.0, 2.5)
-    cu_studs_cart.add_cylinder(72.0, 30.0, 0.0, 4.0, 2.5)
-    cu_studs_cart.write_stl(os.path.join(comp_dir, "08_cartridge_copper_thermal_stud_pads_pair.stl"))
+    guide_ribs.write_stl(os.path.join(comp_dir, "08_cartridge_lateral_guide_ribs_pair.stl"))
 
 
 def main():
@@ -885,7 +879,7 @@ def main():
                 
         export_main_box_package(base)
         export_pod_base_package(base)
-        export_cartridges_package(base)
+        export_pod_cartridges_package(base)
         try:
             import subprocess
             subprocess.run(["xattr", "-c", "-r", base], capture_output=True)

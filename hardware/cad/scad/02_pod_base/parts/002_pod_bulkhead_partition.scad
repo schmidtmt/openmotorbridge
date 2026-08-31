@@ -2,6 +2,8 @@
 // OpenMotorBridge - Satellite Pod: Bulkhead Partition & 6-Pin Shroud Funnel
 // =============================================================================
 // File: hardware/cad/scad/02_pod_base/parts/002_pod_bulkhead_partition.scad
+// Description: Partition bulkhead with 6-pin shroud funnel, 2x M2 screw bosses,
+//              convective ventilation slots, and dual Auto-Eject spring guide posts.
 // =============================================================================
 
 include <../../00_common/parameters.scad>;
@@ -34,14 +36,14 @@ module pod_bulkhead_assembly(bulkhead_x=22.0, wall=2.5) {
         }
     }
 
-    // 3. 2x Auto-Eject Spring Retainer Posts (V4A Springs at y = 16 and y = 44)
+    // 3. 2x Auto-Eject Spring Retainer Posts (for Ø 4.5 mm V4A Springs at y = 16 and y = 44)
     translate([bulkhead_x + 2.0, 16.0, POD_OUTER_H/2.0])
         rotate([0, 90, 0])
-            cylinder(r=2.5, h=5.0);
+            cylinder(r=1.8, h=6.0, $fn=16);
 
     translate([bulkhead_x + 2.0, 44.0, POD_OUTER_H/2.0])
         rotate([0, 90, 0])
-            cylinder(r=2.5, h=5.0);
+            cylinder(r=1.8, h=6.0, $fn=16);
 
     // 4. 4x M2 Screw Standoff Bosses (for Bulkhead Mounting to Tunnel)
     translate([bulkhead_x, 5.0, wall])

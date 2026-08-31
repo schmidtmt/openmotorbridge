@@ -4,8 +4,9 @@
 // File: hardware/cad/scad/03_pod_cartridges/00_base_sled.scad
 // Description: Shared parametric base sled for all interchangeable cartridges.
 //              Includes sled floor, side walls, asymmetrical Poka-Yoke guide ribs
-//              with 30° lead-in chamfer, 2x floor copper stud pads, front faceplate
-//              with sealing collar & POM snap-fit latch seat, and ePTFE membrane boss.
+//              with 30° lead-in chamfer, dual spring-loaded snap-fit cantilever
+//              arms with squeeze release buttons and 85° latch teeth, front
+//              faceplate with sealing collar, and ePTFE membrane boss.
 // =============================================================================
 
 include <../00_common/parameters.scad>;
@@ -59,7 +60,60 @@ module cartridge_base_sled(
             translate([0, sled_w, POD_GROOVE_RIGHT_Z - CARTRIDGE_TONGUE_W/2.0 + 0.3])
                 cube(size=[CARTRIDGE_CHAMFER_L, CARTRIDGE_TONGUE_PROT, CARTRIDGE_TONGUE_W - 0.6], center=false);
 
-            // 7. Front ePTFE Gore Vent Boss on Faceplate
+            // 7. Dual Cantilever Snap-Fit Latch Arms & Quick-Release Squeeze Buttons
+            // --- Left Snap-Fit Cantilever Arm (x = 61.0 .. 75.0 mm, y = -1.8 .. 0.0 mm) ---
+            translate([61.0, -1.8, 6.0])
+                cube(size=[14.0, 1.8, 10.0], center=false);
+
+            // Left Triangular Latch Tooth (30° Lead-in ramp, 85° retention face, 1.8 mm undercut)
+            translate([61.0, -3.4, 6.5]) {
+                polyhedron(
+                    points=[
+                        [0, 1.6, 0], [4.0, 1.6, 0], [4.0, 0, 0], [0, 1.6, 9.0], [4.0, 1.6, 9.0], [4.0, 0, 9.0]
+                    ],
+                    faces=[
+                        [0,1,2], [3,5,4], [0,2,5,3], [1,4,5,2], [0,3,4,1]
+                    ]
+                );
+            }
+
+            // Left Textured Quick-Release Squeeze Button Pad (on Faceplate Flank)
+            translate([sled_l, -3.8, 5.0]) {
+                cube(size=[CARTRIDGE_FACE_L + 1.0, 1.8, 12.0], center=false);
+                // 3x Tactile Grip Ribs
+                for (rz = [2.0, 6.0, 10.0]) {
+                    translate([0.5, -0.5, rz])
+                        cube(size=[CARTRIDGE_FACE_L, 0.6, 1.2], center=false);
+                }
+            }
+
+            // --- Right Snap-Fit Cantilever Arm (x = 61.0 .. 75.0 mm, y = sled_w .. sled_w + 1.8 mm) ---
+            translate([61.0, sled_w, 6.0])
+                cube(size=[14.0, 1.8, 10.0], center=false);
+
+            // Right Triangular Latch Tooth
+            translate([61.0, sled_w + 1.8, 6.5]) {
+                polyhedron(
+                    points=[
+                        [0, 0, 0], [4.0, 0, 0], [4.0, 1.6, 0], [0, 0, 9.0], [4.0, 0, 9.0], [4.0, 1.6, 9.0]
+                    ],
+                    faces=[
+                        [0,2,1], [3,4,5], [0,3,5,2], [1,2,5,4], [0,1,4,3]
+                    ]
+                );
+            }
+
+            // Right Textured Quick-Release Squeeze Button Pad (on Faceplate Flank)
+            translate([sled_l, sled_w + 2.0, 5.0]) {
+                cube(size=[CARTRIDGE_FACE_L + 1.0, 1.8, 12.0], center=false);
+                // 3x Tactile Grip Ribs
+                for (rz = [2.0, 6.0, 10.0]) {
+                    translate([0.5, 1.7, rz])
+                        cube(size=[CARTRIDGE_FACE_L, 0.6, 1.2], center=false);
+                }
+            }
+
+            // 8. Front ePTFE Gore Vent Boss on Faceplate
             translate([sled_l + 2.0, sled_w/2.0, 18.0])
                 rotate([0, 90, 0])
                     cylinder(r=3.0, h=2.0, center=false);
