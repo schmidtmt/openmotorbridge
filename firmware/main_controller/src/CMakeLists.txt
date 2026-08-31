@@ -11,6 +11,7 @@ idf_component_register(
         "gnss_omm_bridge.cpp"
         "adr_ekf_filter.cpp"
         "omm_flasher.cpp"
+        "can_bus_manager.cpp"
     INCLUDE_DIRS 
         "."
     REQUIRES 

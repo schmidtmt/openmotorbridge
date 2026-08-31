@@ -189,6 +189,30 @@ static void load_profile_class(CartridgeInfo_t *cart, const char *profile_id) {
         cart->output_gain_db = 0.0f;
         cart->toggle_mesh_ms = 300;
         cart->channel_next_ms = 600;
+    } else if (strcmp(profile_id, "midland_wave") == 0) {
+        strncpy(cart->name, "Midland Wave (Mesh / Digital Intercom)", sizeof(cart->name) - 1);
+        strncpy(cart->vendor, "Midland Europe", sizeof(cart->vendor) - 1);
+        cart->hardware_tier = 2;
+        cart->input_gain_db = 2.0f;
+        cart->output_gain_db = 0.0f;
+        cart->toggle_mesh_ms = 250;
+        cart->channel_next_ms = 800;
+    } else if (strcmp(profile_id, "midland_bt") == 0) {
+        strncpy(cart->name, "Midland BTR1 / Rush / BTX Series", sizeof(cart->name) - 1);
+        strncpy(cart->vendor, "Midland Europe", sizeof(cart->vendor) - 1);
+        cart->hardware_tier = 3;
+        cart->input_gain_db = 1.5f;
+        cart->output_gain_db = 0.0f;
+        cart->toggle_mesh_ms = 300;
+        cart->channel_next_ms = 0;
+    } else if (strcmp(profile_id, "openmotormesh_pod3") == 0) {
+        strncpy(cart->name, "OpenMotorMesh Rear Pod 3 Gateway", sizeof(cart->name) - 1);
+        strncpy(cart->vendor, "OpenMotorBridge OSHW", sizeof(cart->vendor) - 1);
+        cart->hardware_tier = 1;
+        cart->input_gain_db = 0.0f;
+        cart->output_gain_db = 0.0f;
+        cart->toggle_mesh_ms = 0;
+        cart->channel_next_ms = 0;
     } else {
         strncpy(cart->name, "Midland G9 Pro PMR446 Gateway", sizeof(cart->name) - 1);
         strncpy(cart->vendor, "Alan Electronics", sizeof(cart->vendor) - 1);

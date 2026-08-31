@@ -1,0 +1,30 @@
+{
+    "id": "openmotormesh_pod3",
+    "name": "OpenMotorMesh Rear Pod 3 Gateway",
+    "vendor": "OpenMotorBridge Open Source Hardware",
+    "hardware_tier": 1,
+    "vcc_enabled": true,
+    "soft_start_ms": 100,
+    "input_gain_db": 0.0,
+    "output_gain_db": 0.0,
+    "noise_gate_threshold_db": -50,
+    "control_mode": "uart_packet_bridge",
+    "toggle_mesh_ms": 0,
+    "channel_next_ms": 0,
+    "ptt_hold": false,
+    "mesh_capabilities": {
+        "protocol": "OpenMotorMesh_DualPHY",
+        "generation": 2,
+        "max_nodes": 64,
+        "open_mesh": true,
+        "preconfig_channels": 16,
+        "dle_bonus_score": 80
+    },
+    "rf_hardening": {
+        "disable_bluetooth_classic": true,
+        "clear_phone_gps_pairings": true,
+        "enforce_mesh_only_mode": true,
+        "disable_audio_multitasking": true,
+        "expected_idle_current_ma": 65
+    }
+}
