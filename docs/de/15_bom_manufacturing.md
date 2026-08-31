@@ -256,9 +256,10 @@ Alle 3D-Druckdaten liegen gebündelt als ZIP-Pakete im Ordner [hardware/producti
 | **M2 Schottwandschrauben** | M2 x 8 mm Senkkopf V4A (DIN 7991) | Normteil | 6 Stk. | Fixierung der 3 Pod-Schottwände |
 | **Auswerfer-Druckfedern** | Edelstahl V4A ($D=4{,}5\,\text{mm}, L_0=15\,\text{mm}, R=1{,}2\,\text{N/mm}$) | Gutekunst Federn / Sodemann | 6 Stk. | Auto-Eject Mechanismus (2x pro Pod) |
 | **Kupfer-Kühlbolzen (Zentralbox)**| $\varnothing 8{,}0 \times 12{,}0\,\text{mm}$ Massivkupfer | Drehteil / Cu-ETP Rundstange | 4 Stk. | Direkte Entwärmung LM5164/Charger |
-| **Kupfer-Bolzen (Pods)** | $\varnothing 8{,}0 \times 6{,}0\,\text{mm}$ Massivkupfer | Drehteil / Cu-ETP Rundstange | 6 Stk. | Bodenentwärmung (2x pro Pod) |
+| **EPDM-Spannringe / Leiterbänder**| UV- & Ozonbeständiges EPDM ($\varnothing 45\dots 75\,\text{mm}$) | QuadLock / O-Ring-Shop / Amazon | 6 Stk. | Universal-Rohrbett-Schnellmontage (2x pro Pod) |
+| **UV-Kabelbinder (Diebstahlschutz)**| $4{,}8 \times 200\,\text{mm}$ Polyamid 6.6 Schwarz | HellermannTyton / Würth | 6 Stk. | Permanente Festmontage an Rahmenrohren |
 | **Gore Druckausgleichsventil** | Gore Automotive AVS 41 (M8x1.25) | W. L. Gore & Associates | 1 Stk. | Zentralbox-Deckelbelüftung |
-| **Gore Klebemembranen** | Gore Adhesive Vent $\varnothing 6{,}0\,\text{mm}$ IP67 | W. L. Gore & Associates | 3 Stk. | Kassettenfront-Druckausgleich |
+| **Gore Klebemembranen** | Gore Adhesive Vent $\varnothing 6{,}0\,\text{mm}$ IP67 | W. L. Gore & Associates | 3 Stk. | Pod-Druckausgleich (1x pro Pod) |
 | **Lichtleiter** | PMMA $\varnothing 3{,}0\,\text{mm}$ (Bivar PLPC3-3MM) | Bivar / Mouser / Digikey | 1 Stk. | LED-Statusfenster im Deckel |
 | **Pufferakku** | 18650 LiFePO4 (3.2V 1500mAh) / LiPo 1S | EEMB / Enerpower | 1 Stk. | USV-Notstromversorgung |
 | **M8 Verlängerungskabel** | M8 6-Pin A-Coded PUR geschirmt (1.0m / 1.5m)| Binder / Phoenix / Murr / LCSC | 3 Stk. | Verbindung von Pigtail zu Pods |

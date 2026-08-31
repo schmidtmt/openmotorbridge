@@ -616,20 +616,21 @@ Das gesamte OpenMotorBridge-System basiert auf dem Prinzip der **vollständigen 
 
 ![OpenMotorBridge Satelliten-Pod CAD Explosionsdarstellung](../../hardware/cad/openmotorbridge_pod_exploded_view.png)
 
-*Abbildung 5.7: 3D-CAD-Explosionsdarstellung des universellen Satelliten-Pods. Gezeigt werden das 5-seitige Monocoque-Schachtgehäuse mit rückseitigem M8 6-Pin IP67 Kabelanschluss, Schutz-Schottwand mit 6-Pin Fangtrichter, V4A-Auswerferfedern, 2x Boden-Kupfer-Wärmeleitpfosten und der herausgezogene Universalschlitten mit asymmetrischen Führungsfedern.*
+*Abbildung 5.7: 3D-CAD-Explosionsdarstellung des universellen Satelliten-Pods. Gezeigt werden das 5-seitige Monocoque-Schachtgehäuse mit dezent verrundeten Außenkanten (R=3 mm), integriertem V-Nut-Rohrbett (Ø18-35 mm) und 4x seitlichen EPDM-Einhängenasen, rückseitigem M8 6-Pin IP67 Kabelanschluss, Schutz-Schottwand mit 6-Pin Fangtrichter, V4A-Auswerferfedern und der herausgezogene Universalschlitten mit asymmetrischen Poka-Yoke Führungsfedern.*
 
 ![OpenMotorBridge Satelliten-Pod Röntgenansicht](../../hardware/cad/openmotorbridge_pod_assembly_render_xray.png)
 
-*Abbildung 5.8: 3D-Röntgen- und Transparenzdarstellung des geschlossenen Satelliten-Pods mit eingeschobener Wechselkassette. Gut erkennbar sind die spielfreien asymmetrischen Poka-Yoke Führungsnuten, der zentrierte 6-Pin Kolbeneinschub in den Schutzkragen und die bündige Flanschabdichtung.*
+*Abbildung 5.8: 3D-Röntgen- und Transparenzdarstellung des geschlossenen Satelliten-Pods mit eingeschobener Wechselkassette. Gut erkennbar sind das integrierte Universal-Rohrbett an der Unterseite, die spielfreien asymmetrischen Poka-Yoke Führungsnuten, der zentrierte 6-Pin Kolbeneinschub in den Schutzkragen und die bündige Flanschabdichtung.*
 
 1. **Ein einziges universelles Pod-Gehäuse (`pod_base_housing.stl`):**
-   * Alle drei Satelliten-Pods (Pod 1 Links, Pod 2 Rechts, Pod 3 Heck) verwenden **exakt denselben 5-seitigen Monocoque-Schacht** mit M8 6-Pin IP67 Rückanschluss, Schutz-Schottwand, 6-Pin Schutzkragen und Auto-Eject Federmechanismus.
-   * **Unterschiedliche Montage über modulare Adapterplatten:**
-     * **Am Helm (Pod 1 & 2):** Der universelle Helm-Klemmadapter ([pod_mount_helmet_clamp.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod_mount_helmet_clamp.stl)) wird an die Gehäuseunterseite gekoppelt.
-     * **Am Fahrzeugheck (Pod 3):** Die universelle GoPro- / Gepäckträger-Adapterplatte ([pod_mount_gopro_rack.stl](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod_mount_gopro_rack.stl)) mit 3x GoPro-Rasten wird am Pod-Boden fixiert.
+   * Alle drei Satelliten-Pods (Pod 1 Links, Pod 2 Rechts, Pod 3 Heck) verwenden **exakt denselben 5-seitigen Monocoque-Schacht** ($100 \times 60 \times 28\,\text{mm}$) mit M8 6-Pin IP67 Rückanschluss, Schutz-Schottwand, 6-Pin Schutzkragen und Auto-Eject Federmechanismus.
+   * **Integrierte Universal-Rohrbett- & EPDM-Spannbefestigung:**
+     * **An der Unterseite:** Eine angeformte $120^\circ$-V-Nut ($R = 15\,\text{mm}$) schmiegt sich formschlüssig an alle typischen Motorrad-Rohre ($\varnothing 18\dots 35\,\text{mm}$: $1"$ Sturzbügel, $7/8"$ Heckrahmen, $1\,1/8"$ Fatbars) oder liegt kippstabil auf planen Flächen auf.
+     * **4x Seitliche Einhängenasen:** Ermöglichen die blitzschnelle, werkzeuglose Montage mit 2 UV-beständigen EPDM-Gummiringen oder Silikon-Leiterbändern unter gleichzeitiger Vibrationsentkopplung.
+     * **Dauerhafte Sicherung:** Zusätzliche $5{,}0 \times 2{,}5\,\text{mm}$ Durchgangsschlitze erlauben die diebstahlgeschützte Festmontage per Standard-Kabelbinder ($4{,}8\,\text{mm}$) oder Edelstahl-Schlauchschellen.
 2. **Funktionsanpassung ausschließlich über die Wechselkassetten:**
    * **Audio- & Intercom-Kassetten (Pod 1 & 2):** 2-teilig mit `openmotorbridge_pod_cartridge` Trägerplatine (DS2401 ID), Unterflur-Kabelkanal, Zwischenboden und Modellspezifischem 3D-Konturbett (Sena / Cardo / Midland).
-   * **OMM-Transceiver-Kassette (Pod 3):** 1-teilig mit voller $23{,}5\,\text{mm}$ Innenhöhe. Die `openmotorbridge_rear_transceiver` Platine (ESP32-S3, SX1262 LoRa, GNSS und $25 \times 25\,\text{mm}$ Keramik-Patchantenne) sitzt direkt im Schlitten und steckt in derselben 6-Pin Präzisionsbuchse.
+   * **OMM-Transceiver-Kassette (Pod 3):** 1-teilig mit voller $23{,}5\,\text{mm}$ Innenhöhe und freiem $> 85\,\text{cm}^3$ Luftraum für optimale Antennenabstrahlung. Die `openmotorbridge_rear_transceiver` Platine sitzt direkt im Schlitten und steckt in derselben 6-Pin Präzisionsbuchse.
    * **Blindkassette:** Hermetisch dichter IP67-Dummy mit integriertem Notfall-Trockenstaufach (*Dry Box*).
 
 ```
@@ -637,13 +638,13 @@ Das gesamte OpenMotorBridge-System basiert auf dem Prinzip der **vollständigen 
 │                 UNIVERSELLE OPENMOTORBRIDGE POD-ARCHITEKTUR                 │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                    1x UNIVERSELLES POD-BASIS-GEHÄUSE                        │
-│             (5-seitiger Monocoque-Schacht mit M8 6-Pin Rückwand)            │
+│   (5-seitiger Monocoque-Schacht mit V-Rohrbett & 4x EPDM-Spannbandnasen)    │
 ├──────────────────────────────────────┬──────────────────────────────────────┤
-│ MONTAGE-ADAPTER (Unterseite):        │ WECHSELKASSETTEN (Einschub vorne):   │
-│ • Helm-Klemmadapter (Pod 1 & 2)      │ • Sena 50S/60S Kassetten-Schlitten   │
-│ • Heck-/GoPro-Adapter (Pod 3)        │ • Cardo Packtalk Edge Schlitten      │
-│                                      │ • OMM Transceiver Schlitten (Pod 3)  │
-│                                      │ • Wasserdichte IP67 Blindkassette    │
+│ MONTAGE-POSITIONEN AM BIKE:          │ WECHSELKASSETTEN (Einschub vorne):   │
+│ • Sturzbügel / Rahmenrohr links      │ • Sena 50S/60S Kassetten-Schlitten   │
+│ • Sturzbügel / Rahmenrohr rechts     │ • Cardo Packtalk Edge Schlitten      │
+│ • Heckgepäckträger / Kennzeichentr.  │ • OMM Transceiver Schlitten (Pod 3)  │
+│ • Flach unter Sitz / Seitendeckel    │ • Wasserdichte IP67 Blindkassette    │
 └──────────────────────────────────────┴──────────────────────────────────────┘
 ```
 

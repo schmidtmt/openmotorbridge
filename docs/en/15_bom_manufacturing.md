@@ -256,9 +256,10 @@ All 3D printing STL bundles are organized in [hardware/production_packages/06_3d
 | **M2 Bulkhead Screws** | M2 x 8 mm Flat Head V4A (DIN 7991) | Standard Fastener | 6 pcs | Secures 3x pod bulkhead plates |
 | **Ejection Springs** | Stainless V4A ($D=4.5\,\text{mm}, L_0=15\,\text{mm}, R=1.2\,\text{N/mm}$) | Gutekunst Federn / Sodemann | 6 pcs | Auto-Eject mechanism (2x per pod) |
 | **Copper Studs (Main Box)**| $\varnothing 8.0 \times 12.0\,\text{mm}$ Solid Copper | Lathe Turned / Cu-ETP Bar | 4 pcs | Direct heatsinking for LM5164/Charger |
-| **Copper Studs (Pods)** | $\varnothing 8.0 \times 6.0\,\text{mm}$ Solid Copper | Lathe Turned / Cu-ETP Bar | 6 pcs | Floor heatsinking (2x per pod) |
+| **EPDM Tension Rings / Straps**| UV- & Ozone-Resistant EPDM ($\varnothing 45\dots 75\,\text{mm}$) | QuadLock / O-Ring-Shop / Amazon | 6 pcs | Universal tube saddle quick mount (2x per pod) |
+| **UV Cable Ties (Theft Protection)**| $4.8 \times 200\,\text{mm}$ Polyamide 6.6 Black | HellermannTyton / Würth | 6 pcs | Permanent fixed frame mounting |
 | **Gore Vent Valve** | Gore Automotive AVS 41 (M8x1.25) | W. L. Gore & Associates | 1 pc | Central box lid pressure venting |
-| **Gore Vent Stickers** | Gore Adhesive Vent $\varnothing 6.0\,\text{mm}$ IP67 | W. L. Gore & Associates | 3 pcs | Cartridge bezel pneumatic venting |
+| **Gore Vent Stickers** | Gore Adhesive Vent $\varnothing 6.0\,\text{mm}$ IP67 | W. L. Gore & Associates | 3 pcs | Pod pressure venting (1x per pod) |
 | **Light Pipe** | PMMA $\varnothing 3.0\,\text{mm}$ (Bivar PLPC3-3MM) | Bivar / Mouser / Digikey | 1 pc | LED status window in top lid |
 | **Buffer Battery** | 18650 LiFePO4 (3.2V 1500mAh) / LiPo 1S | EEMB / Enerpower | 1 pc | UPS battery backup |
 | **M8 Extension Cables** | M8 6-Pin A-Coded PUR shielded (1.0m / 1.5m) | Binder / Phoenix / Murr / LCSC | 3 pcs | Harness-to-pod extension lines |

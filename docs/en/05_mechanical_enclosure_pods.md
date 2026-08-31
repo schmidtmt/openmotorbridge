@@ -655,19 +655,22 @@ To eliminate tilting, asymmetric lever forces, and reverse insertion, the cartri
 
 To holistically verify mechanical clearances, sealing boundaries, and electrical transitions, the complete assembly of the **Universal Satellite Pod** and **Removable Cartridge** was modeled in a translucent X-ray aesthetic (*Ghosted X-Ray*) and an exploded layer hierarchy:
 
-#### Translucent 3D X-Ray CAD Architecture (120 x 64 x 32 mm, Generic Max Envelope):
+#### Translucent 3D X-Ray CAD Architecture (100 x 60 x 28 mm, Universal Monocoque):
 ![OpenMotorBridge 3D X-Ray CAD Architecture](../../hardware/cad/openmotorbridge_pod_assembly_render_xray.png)
 
 #### Exploded Assembly Hierarchy (Along Horizontal Insertion Axis):
 ![OpenMotorBridge 3D Exploded View](../../hardware/cad/openmotorbridge_pod_exploded_view.png)
 
 #### Mechanical Specifications & Tolerances:
-* **Outer Pod Enclosure:** Makrolon 2805 Polycarbonate / PA12 MJF ($120.0 \times 64.0 \times 32.0\,\text{mm}$, internal bay $96.0 \times 56.0 \times 24.0\,\text{mm}$).
+* **Outer Pod Enclosure:** PA12 MJF ($100.0 \times 60.0 \times 28.0\,\text{mm}$, internal bay $76.0 \times 55.0 \times 23.0\,\text{mm}$) with $R=3.0\,\text{mm}$ rounded corners.
+* **Integrated Universal Tube Saddle (V-Groove):** Molded $120^\circ$ concave prism ($R=15\,\text{mm}$) on the bottom face that cradles frame tubes from $\varnothing 18\,\text{mm}$ to $\varnothing 35\,\text{mm}$ ($1"$ crash bars, $7/8"$ subframes, $1\,1/8"$ handlebars). Sits rock-solid on flat panels.
+* **4x Side Hook Lugs & Zip-Tie Slots:** 4 integrated lateral retaining lugs for toolless attachment using 2 UV-resistant EPDM rubber rings, plus $5.0 \times 2.5\,\text{mm}$ passthrough slots for heavy-duty zip-ties or stainless hose clamps.
+* **Solid PA12 Bottom Floor:** Continuous, sealed, leak-free, and crash-safe polymer bottom without external copper stud penetrations (100% compliant with ECE 22.06).
 * **Pod Base PCB (`openmotorbridge_pod_base`):** $48.0 \times 24.0 \times 1.6\,\text{mm}$ PCB with centered M8 6-Pin IP67 all-metal receptacle (B.Cu) and vertical 6-pin pin header (F.Cu).
-* **Screwed-in Bulkhead Plate:** $56.0 \times 24.0 \times 2.0\,\text{mm}$ PA12 with 2x M2 countersunk screws, protective shroud, and dual stainless steel ejector springs ($10\,\text{mm}$ stroke).
-* **Open Cartridge Carrier Sled:** $92.0 \times 54.0 \times 23.5\,\text{mm}$ U-sled without top lid ($88.0 \times 50.0 \times 23.5\,\text{mm}$ usable inner volume).
-* **Cartridge Carrier PCB (`openmotorbridge_pod_cartridge`):** $60.0 \times 36.0 \times 1.2\,\text{mm}$ FR4 carrier with DS2401 1-Wire ID, right-angle low-profile JST-SH 1.0mm 6P flex connector (F.Cu), and horizontal 6-pin socket header (B.Cu).
-* **IP67 Sealing Plane:** Perimeter $58.0 \times 28.0\,\text{mm}$ Shore 40A silicone flange gasket pre-compressed by $0.8\,\text{mm}$ upon latching, hermetically sealing the internal chamber against high-pressure water jets and road dust.
+* **Screwed-in Bulkhead Plate:** $55.0 \times 23.0 \times 2.0\,\text{mm}$ PA12 with 2x M2 countersunk screws, protective shroud, and dual stainless steel ejector springs ($10\,\text{mm}$ stroke).
+* **Open Cartridge Carrier Sled:** $75.0 \times 54.0 \times 20.5\,\text{mm}$ U-sled without top lid ($72.0 \times 50.0 \times 20.5\,\text{mm}$ usable inner volume).
+* **Cartridge Carrier PCB (`openmotorbridge_pod_cartridge`):** $50.0 \times 22.0 \times 1.2\,\text{mm}$ FR4 carrier with DS2401 1-Wire ID, right-angle low-profile JST-SH 1.0mm 6P flex connector (F.Cu), and horizontal 6-pin socket header (B.Cu).
+* **IP67 Sealing Plane:** Perimeter Shore 40A silicone flange gasket pre-compressed upon latching, hermetically sealing the internal chamber against high-pressure water jets and road dust (IP67 / IP69K).
 
 ---
 

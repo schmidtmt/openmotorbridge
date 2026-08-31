@@ -43,27 +43,45 @@ Klassische Motorrad-Kommunikationssysteme sind historisch stark fragmentiert:
 
 ## 2. Die universellen Montagekonzepte (Helm- vs. Rahmen-Docking)
 
-Die Satelliten-Pods 1 und 2 sind mechanisch zu **100 % baugleich** und unterstützen zwei gleichberechtigte Montagephilosophien:
+## 2. Universelles Montagekonzept (Fahrzeugrahmen-, Sturzbügel- & Rohrbett-Montage)
+
+Die Satelliten-Pods 1, 2 und 3 sind mechanisch zu **100 % baugleich** und für die werkzeuglose Schnellmontage an allen gängigen Motorrad-Rohrdurchmessern und Flachstellen ausgelegt:
 
 ```
-              OPTION A: HELM-DIREKTMONTAGE               OPTION B: FAHRZEUGRAHMEN-MONTAGE
-         ┌─────────────────────────────────────┐      ┌─────────────────────────────────────┐
-         │ • Pod 1 direkt am Fahrerhelm        │      │ • Pod 1 links an Tank/Rahmen        │
-         │ • Pod 2 direkt am Soziushelm        │      │ • Pod 2 rechts an Heck/Sturzbügel   │
-         │ • Pogo-Array dockt Headset am Helm  │      │ • Headsets verbleiben am Motorrad   │
-         │ • 1 dünnes M8 Spiralkabel zum Bike  │      │ • Helm-Audio via BT oder Klinke     │
-         └─────────────────────────────────────┘      └─────────────────────────────────────┘
+          UNIVERSELLE RAHMEN- & ROHRBETT-MONTAGE (100% KABELFREIER HELM)
+          ┌─────────────────────────────────────────────────────────────┐
+          │ • Integrierte V-Nut / Hohlkehle an der Pod-Unterseite       │
+          │ • Passend für Rohre von Ø 18 mm bis Ø 35 mm (1" / 1 1/8")   │
+          │ • 4x Einhängenasen für 2x wetterfeste EPDM-Spannringe       │
+          │ • 100% werkzeuglose Montage in 5 Sekunden ohne Lackschäden  │
+          │ • Pod 1 links am Rahmen / Sturzbügel (Fahrer-Mesh)          │
+          │ • Pod 2 rechts am Rahmen / Sturzbügel (Sozius-Mesh)         │
+          │ • Pod 3 am Heckrahmen / Gepäckträger (OMM Dual-PHY & GNSS)  │
+          └──────────────────────────────┬──────────────────────────────┘
+                                         │
+                                         ▼ Bluetooth A2DP / HFP / LE Audio
+          ┌─────────────────────────────────────────────────────────────┐
+          │ FAHRER- & SOZIUS-HELME (100% Kabellos & Leicht):            │
+          │ • Kein schweres Zusatzgehäuse am Helm (0g Zusatzgewicht)    │
+          │ • Keine störenden Spiralkabel oder flatternden Leitungen    │
+          │ • Fahrer nutzt normales OEM-Headset / integrierte Lautspr.  │
+          │ • Zentralbox streamt gemischtes Audio kabellos an die Helme │
+          └─────────────────────────────────────────────────────────────┘
 ```
 
-### Option A: Helm-Direktmontage (Empfohlen für maximale Ergonomie)
-* **Montage:** Der Pod wird mit der 3D-Druck-Helmklammer ([pod_mount_helmet_clamp.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/pod_mount_helmet_clamp.scad)) direkt an der Helmschale befestigt (Klemmschuh oder 3M VHB Klebepad).
-* **Vorteil:** Das Original-Headset (z. B. Sena 50S oder Cardo Packtalk Edge) sitzt in gewohnter Position am Helm. Seine vergoldeten OEM-Außenkontakte werden direkt vom Pogo-Pin-Array der Wechselkassette kontaktiert.
-* **Verbindung:** Ein einziges, flexibles, geschirmtes M8 6-Pin Spiralkabel verbindet den Helm mit dem Motorrad-Kabelbaum.
+### 2.1 Montage am Fahrzeug (Sturzbügel, Rahmenunterzug, Heckbrücke)
+* **Universal-Prisma (V-Nut):** An der Unterseite jedes Pod-Gehäuses ist eine $120^\circ$-Prismenkehle ($R = 15\,\text{mm}$) angeformt. Sie schmiegt sich formschlüssig an alle typischen Motorrad-Rohre an:
+  * $\varnothing 22\,\text{mm}$ ($7/8"$ Standard-Lenker und Rahmenstreben)
+  * $\varnothing 25{,}4\,\text{mm}$ ($1"$ Sturzbügel und Harley-Rahmenrohre)
+  * $\varnothing 28{,}6\,\text{mm}$ ($1\,1/8"$ Fatbar- & Enduro-Rahmen)
+  * $\varnothing 32\,\text{mm}$ ($1\,1/4"$ Custom-Sturzbügel)
+  * **Flache Montage:** Liegt auf ebenen Flächen (unter der Sitzbank / am Seitendeckel) kippstabil auf den Außenstegen auf.
+* **EPDM-Spannring-Befestigung:** Zwei UV-beständige EPDM-Gummispannringe (oder Silikon-Leiterbänder) werden um das Rahmenrohr gezogen und in die 4 seitlichen Einhängenasen eingehängt. Das dämpft gleichzeitig hochfrequente Motorvibrationen ab.
+* **Dauerhafte Diebstahlsicherung:** Durch die integrierten $5{,}0 \times 2{,}5\,\text{mm}$ Durchgangsschlitze können alternativ Standard-Kabelbinder ($4{,}8\,\text{mm}$) oder Edelstahl-Schlauchschellen gezogen werden.
 
-### Option B: Fahrzeugrahmen-Montage (Komplett kabelfreier Helm)
-* **Montage:** Pod 1 wird links am Fahrzeugrahmen/Seitendeckel und Pod 2 rechts am Rahmen montiert.
-* **Vorteil:** Die Intercom-Geräte verbleiben dauerhaft und diebstahlgeschützt am Motorrad.
-* **Helm-Kopplung:** Der Fahrerhelm verbindet sich drahtlos über Standard-Bluetooth mit dem System; die Intercom-Funkverbindung (Sena Mesh / Cardo DMC) wird über die fahrzeugfesten Pods abgewickelt.
+### 2.2 Kabelloser Helm-Komfort
+* Die schweren Intercom-Geräte (Sena 50S / Cardo Edge) verbleiben wetter- und diebstahlgeschützt an den Motorrad-Pods.
+* Die Helme von Fahrer und Sozius bleiben zu $100\,\%$ leicht, aerodynamisch original und frei von Kabeln. Die Audio-Ein- und Ausgabe erfolgt vollkommen drahtlos über die integrierte Bluetooth-Schnittstelle der Zentralbox.
 
 ---
 

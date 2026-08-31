@@ -43,27 +43,45 @@ Classic motorcycle communication systems are historically fragmented:
 
 ## 2. Universal Mounting Concepts (Helmet- vs. Frame-Docking)
 
-Satellite Pods 1 and 2 are mechanically **100% identical** and support two equally robust deployment strategies:
+## 2. Universal Mounting Concept (Vehicle Frame, Crash Bar & Tube Saddle Mount)
+
+Satellite Pods 1, 2, and 3 are mechanically **100% identical** and designed for toolless quick-mounting to all standard motorcycle tube diameters and flat surfaces:
 
 ```
-              OPTION A: HELMET DIRECT MOUNT               OPTION B: VEHICLE FRAME MOUNT
-         ┌─────────────────────────────────────┐      ┌─────────────────────────────────────┐
-         │ • Pod 1 directly on Rider Helmet    │      │ • Pod 1 left on tank/frame          │
-         │ • Pod 2 directly on Pillion Helmet  │      │ • Pod 2 right on rear/crash bar     │
-         │ • Pogo array docks headset on helmet│      │ • Headsets stay mounted on bike     │
-         │ • 1 slim M8 spiral cord to bike     │      │ • Helmet audio via BT or aux cable  │
-         └─────────────────────────────────────┘      └─────────────────────────────────────┘
+          UNIVERSAL FRAME & TUBE SADDLE MOUNT (100% WIRELESS HELMET COMFORT)
+          ┌─────────────────────────────────────────────────────────────┐
+          │ • Integrated V-groove / tube saddle on pod bottom           │
+          │ • Fits tube diameters from Ø 18 mm to Ø 35 mm (1" / 1 1/8") │
+          │ • 4x hook lugs for 2x weatherproof EPDM rubber tension rings│
+          │ • 100% toolless mounting in 5 seconds without paint damage  │
+          │ • Pod 1 left on frame / crash bar (Rider Mesh)              │
+          │ • Pod 2 right on frame / crash bar (Pillion Mesh)           │
+          │ • Pod 3 on rear frame / luggage rack (OMM Dual-PHY & GNSS)  │
+          └──────────────────────────────┬──────────────────────────────┘
+                                         │
+                                         ▼ Bluetooth A2DP / HFP / LE Audio
+          ┌─────────────────────────────────────────────────────────────┐
+          │ RIDER & PILLION HELMETS (100% Wireless & Lightweight):      │
+          │ • Zero bulky extra housing on helmet (0g extra weight)      │
+          │ • No flapping cables or dangling coiled wires               │
+          │ • Rider wears regular OEM headset / integrated speakers     │
+          │ • Central Box streams mixed audio wirelessly to both helmets│
+          └─────────────────────────────────────────────────────────────┘
 ```
 
-### Option A: Direct Helmet Docking (Recommended for Maximum Ergonomics)
-* **Mounting:** The Pod mounts directly to the helmet shell using the 3D printed clamp bracket ([pod_mount_helmet_clamp.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/pod_mount_helmet_clamp.scad)) or 3M VHB adhesive pad.
-* **Advantage:** The OEM headset (e.g., Sena 50S or Cardo Packtalk Edge) stays in its natural helmet position. Its gold-plated docking contacts are engaged directly by the cartridge's Pogo-pin array.
-* **Connection:** A single flexible, shielded M8 6-pin spiral cable connects the helmet to the motorcycle harness.
+### 2.1 Vehicle Mounting (Crash Bars, Frame Tubes, Luggage Racks)
+* **Universal Prism (V-Groove):** The bottom of each pod housing features a $120^\circ$ prism contour ($R = 15\,\text{mm}$) that cradles all standard motorcycle frame tubes:
+  * $\varnothing 22\,\text{mm}$ ($7/8"$ handlebars and rear subframe tubes)
+  * $\varnothing 25.4\,\text{mm}$ ($1"$ crash bars and cruiser frame tubes)
+  * $\varnothing 28.6\,\text{mm}$ ($1\,1/8"$ tapered handlebars and enduro frames)
+  * $\varnothing 32\,\text{mm}$ ($1\,1/4"$ heavy-duty crash bars)
+  * **Flat Surfaces:** Sits rock-solid on flat panels (under-seat battery tray / side covers).
+* **EPDM Tension Ring Retention:** Two UV-resistant EPDM rubber rings (or silicone ladder straps) wrap around the tube and hook into the 4 lateral side lugs. This simultaneously isolates high-frequency engine vibrations.
+* **Theft-Resistant Fixed Mounting:** Integrated $5.0 \times 2.5\,\text{mm}$ passthrough slots allow threading standard $4.8\,\text{mm}$ zip-ties or stainless hose clamps.
 
-### Option B: Vehicle Frame Docking (Zero-Cable Helmet Setup)
-* **Mounting:** Pod 1 mounts on the left bike frame / side panel, and Pod 2 mounts on the right frame.
-* **Advantage:** Intercom units stay permanently locked on the motorcycle.
-* **Helmet Link:** The rider's helmet connects wirelessly via standard Bluetooth to the bridge, while high-power mesh communication is handled by the bike-mounted pods.
+### 2.2 Wireless Helmet Audio
+* Heavy intercom hardware (Sena 50S / Cardo Edge) stays safely locked and weather-protected on the motorcycle.
+* Helmets remain $100\%$ lightweight, aerodynamically stock, and completely cable-free. Audio I/O connects wirelessly via the Central Box's integrated Bluetooth interface.
 
 ---
 
