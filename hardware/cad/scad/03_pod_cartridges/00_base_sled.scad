@@ -30,25 +30,26 @@ module cartridge_base_sled(
             translate([0, sled_w - wall, 0])
                 cube(size=[sled_l, wall, sled_h + wall], center=false);
 
-            // 4. 4x M2 Lower Carrier PCB Mounting Standoffs (for Pod 1 & 2 Audio Headsets)
-            translate([18.0, 12.0, wall])
+            // 4. 4x M2 Lower Carrier PCB Mounting Standoffs (for 35x25mm openmotorbridge_pod_cartridge PCB)
+            // Exact KiCad match: PCB at X=1.5..36.5, Y=14.5..39.5 -> Holes at (4.5, 17.5), (4.5, 36.5), (33.5, 17.5), (33.5, 36.5)
+            translate([4.5, 17.5, wall])
                 screw_boss(outer_r=2.2, inner_r=M2_SCREW_HOLE_R, h=2.5);
-            translate([54.0, 12.0, wall])
+            translate([33.5, 17.5, wall])
                 screw_boss(outer_r=2.2, inner_r=M2_SCREW_HOLE_R, h=2.5);
-            translate([18.0, sled_w - 12.0, wall])
+            translate([4.5, 36.5, wall])
                 screw_boss(outer_r=2.2, inner_r=M2_SCREW_HOLE_R, h=2.5);
-            translate([54.0, sled_w - 12.0, wall])
+            translate([33.5, 36.5, wall])
                 screw_boss(outer_r=2.2, inner_r=M2_SCREW_HOLE_R, h=2.5);
 
             // 5. 4x M2 Insert Fastening Corner Posts (h = 5.5 mm, z = 2.5 .. 8.0 mm)
-            // Secures interchangeable modular OEM inserts (Sena, Cardo, Blindkassette) & OMM Rear PCBA
-            translate([7.0, 6.0, wall])
+            // Secures interchangeable modular OEM inserts (Sena, Cardo, Blindkassette) at outer perimeter
+            translate([6.0, 6.0, wall])
                 screw_boss(outer_r=2.8, inner_r=M2_SCREW_HOLE_R, h=5.5);
-            translate([sled_l - 9.0, 6.0, wall])
+            translate([sled_l - 7.0, 6.0, wall])
                 screw_boss(outer_r=2.8, inner_r=M2_SCREW_HOLE_R, h=5.5);
-            translate([7.0, sled_w - 6.0, wall])
+            translate([6.0, sled_w - 6.0, wall])
                 screw_boss(outer_r=2.8, inner_r=M2_SCREW_HOLE_R, h=5.5);
-            translate([sled_l - 9.0, sled_w - 6.0, wall])
+            translate([sled_l - 7.0, sled_w - 6.0, wall])
                 screw_boss(outer_r=2.8, inner_r=M2_SCREW_HOLE_R, h=5.5);
 
             // 7. Lateral Support Ledges / Shoulders (Auflagestufen at z = 2.5 .. 8.0 mm)

@@ -11,8 +11,8 @@ include <../../00_common/parameters.scad>;
 include <../../00_common/screw_bosses.scad>;
 
 module cartridge_insert_blindkassette(
-    insert_l = 68.0,
-    insert_w = 47.0,
+    insert_l = 70.0,
+    insert_w = 49.0,
     deck_th  = 3.0
 ) {
     difference() {
@@ -28,25 +28,25 @@ module cartridge_insert_blindkassette(
         }
 
         // 3. 4x M2 Countersunk Mounting Screw Holes
-        translate([3.5, 2.5, -3.0])
+        translate([3.5, 3.5, -3.0])
             cylinder(r=M2_SCREW_HOLE_R, h=deck_th + 4.0, center=false);
-        translate([3.5, 2.5, deck_th - 1.0])
-            cylinder(r1=M2_SCREW_HOLE_R, r2=2.2, h=1.2, center=false);
+        translate([3.5, 3.5, deck_th - 1.0])
+            cylinder(r1=M2_SCREW_HOLE_R, r2=2.3, h=1.2, center=false);
 
-        translate([insert_l - 5.5, 2.5, -3.0])
+        translate([insert_l - 4.5, 3.5, -3.0])
             cylinder(r=M2_SCREW_HOLE_R, h=deck_th + 4.0, center=false);
-        translate([insert_l - 5.5, 2.5, deck_th - 1.0])
-            cylinder(r1=M2_SCREW_HOLE_R, r2=2.2, h=1.2, center=false);
+        translate([insert_l - 4.5, 3.5, deck_th - 1.0])
+            cylinder(r1=M2_SCREW_HOLE_R, r2=2.3, h=1.2, center=false);
 
-        translate([3.5, insert_w - 2.5, -3.0])
+        translate([3.5, insert_w - 3.5, -3.0])
             cylinder(r=M2_SCREW_HOLE_R, h=deck_th + 4.0, center=false);
-        translate([3.5, insert_w - 2.5, deck_th - 1.0])
-            cylinder(r1=M2_SCREW_HOLE_R, r2=2.2, h=1.2, center=false);
+        translate([3.5, insert_w - 3.5, deck_th - 1.0])
+            cylinder(r1=M2_SCREW_HOLE_R, r2=2.3, h=1.2, center=false);
 
-        translate([insert_l - 5.5, insert_w - 2.5, -3.0])
+        translate([insert_l - 4.5, insert_w - 3.5, -3.0])
             cylinder(r=M2_SCREW_HOLE_R, h=deck_th + 4.0, center=false);
-        translate([insert_l - 5.5, insert_w - 2.5, deck_th - 1.0])
-            cylinder(r1=M2_SCREW_HOLE_R, r2=2.2, h=1.2, center=false);
+        translate([insert_l - 4.5, insert_w - 3.5, deck_th - 1.0])
+            cylinder(r1=M2_SCREW_HOLE_R, r2=2.3, h=1.2, center=false);
     }
 }
 

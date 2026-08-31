@@ -28,18 +28,18 @@ module cartridge_blindkassette_assembly(exploded = false) {
 
     // 2. Interchangeable Solid Top Lid (Graphite Grey PA12)
     color("dimgray", 0.95)
-        translate([3.5, 3.5, z_insert])
+        translate([2.5, 2.5, z_insert])
             cartridge_insert_blindkassette();
 
     // 3. 4x M2 Stainless Steel Fastening Screws
     color("silver") {
-        translate([7.0, 6.0, z_screws])
+        translate([6.0, 6.0, z_screws])
             cylinder(r=1.8, h=2.0, center=false);
-        translate([CARTRIDGE_BASE_L - 9.0, 6.0, z_screws])
+        translate([CARTRIDGE_BASE_L - 7.0, 6.0, z_screws])
             cylinder(r=1.8, h=2.0, center=false);
-        translate([7.0, CARTRIDGE_BASE_W - 6.0, z_screws])
+        translate([6.0, CARTRIDGE_BASE_W - 6.0, z_screws])
             cylinder(r=1.8, h=2.0, center=false);
-        translate([CARTRIDGE_BASE_L - 9.0, CARTRIDGE_BASE_W - 6.0, z_screws])
+        translate([CARTRIDGE_BASE_L - 7.0, CARTRIDGE_BASE_W - 6.0, z_screws])
             cylinder(r=1.8, h=2.0, center=false);
     }
 }

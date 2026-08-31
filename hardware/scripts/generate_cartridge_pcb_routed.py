@@ -233,11 +233,17 @@ def generate_cartridge_pcb():
     out.append('\t\t)')
     out.append('\t)')
 
-    # 8. Mounting Holes H1 & H2 (M2 Pad with 2.2mm drill)
-    for ref, hy in [("H1", 70.5), ("H2", 89.5)]:
+    # 8. 4x Mounting Holes H1..H4 (M2 Pad with 2.2mm drill in 4 corners)
+    holes = [
+        ("H1", 103.0, 70.5),
+        ("H2", 103.0, 89.5),
+        ("H3", 132.0, 70.5),
+        ("H4", 132.0, 89.5),
+    ]
+    for ref, hx, hy in holes:
         out.append('\t(footprint "MountingHole:MountingHole_2.2mm_M2_Pad"')
         out.append('\t\t(layer "F.Cu")')
-        out.append(f'\t\t(at 103.0 {hy:.2f})')
+        out.append(f'\t\t(at {hx:.2f} {hy:.2f})')
         out.append(f'\t\t(property "Reference" "{ref}" (at 0 -2.8 0) (layer "F.SilkS") (effects (font (size 0.8 0.8) (thickness 0.12))))')
         out.append('\t\t(property "Value" "M2_MountingHole" (at 0 2.8 0) (layer "F.Fab") (effects (font (size 0.8 0.8) (thickness 0.12))))')
         out.append('\t\t(pad "1" thru_hole circle (at 0 0) (size 3.4 3.4) (drill 2.2) (layers "*.Cu" "*.Mask") (net 1 "GND"))')

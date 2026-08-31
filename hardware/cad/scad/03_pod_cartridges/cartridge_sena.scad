@@ -29,24 +29,24 @@ module cartridge_sena_assembly(exploded = false) {
             wall   = 2.5
         );
 
-    // 2. Carrier PCB (Green FR4 + Gold Pads + Components)
-    translate([12.5, 9.5, z_pcb])
+    // 2. Carrier PCB (Green FR4 + Gold Pads + Components aligned to front leading edge)
+    translate([1.5, (CARTRIDGE_BASE_W - 22.0)/2.0, z_pcb])
         dummy_adapter_pcb();
 
     // 3. Interchangeable Sena Insert (Slate Grey PA12)
     color("slategray", 0.95)
-        translate([3.5, 3.5, z_insert])
+        translate([2.5, 2.5, z_insert])
             cartridge_insert_sena();
 
     // 4. 4x M2 Stainless Steel Fastening Screws
     color("silver") {
-        translate([7.0, 6.0, z_screws])
+        translate([6.0, 6.0, z_screws])
             cylinder(r=1.8, h=2.0, center=false);
-        translate([CARTRIDGE_BASE_L - 9.0, 6.0, z_screws])
+        translate([CARTRIDGE_BASE_L - 7.0, 6.0, z_screws])
             cylinder(r=1.8, h=2.0, center=false);
-        translate([7.0, CARTRIDGE_BASE_W - 6.0, z_screws])
+        translate([6.0, CARTRIDGE_BASE_W - 6.0, z_screws])
             cylinder(r=1.8, h=2.0, center=false);
-        translate([CARTRIDGE_BASE_L - 9.0, CARTRIDGE_BASE_W - 6.0, z_screws])
+        translate([CARTRIDGE_BASE_L - 7.0, CARTRIDGE_BASE_W - 6.0, z_screws])
             cylinder(r=1.8, h=2.0, center=false);
     }
 }

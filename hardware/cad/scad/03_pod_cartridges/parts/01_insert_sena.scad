@@ -11,8 +11,8 @@ include <../../00_common/parameters.scad>;
 include <../../00_common/screw_bosses.scad>;
 
 module cartridge_insert_sena(
-    insert_l = 68.0,
-    insert_w = 47.0,
+    insert_l = 70.0,
+    insert_w = 49.0,
     deck_th  = 2.0,
     cradle_h = 8.0
 ) {
@@ -31,15 +31,15 @@ module cartridge_insert_sena(
                         cube(size=[insert_l - 8.0, insert_w - 8.0, cradle_h + 0.1], center=false);
 
                     // B. Sena Jog-Dial Wheel Pocket (Circular cutout at left flank)
-                    translate([34.0, 2.0, 1.0])
+                    translate([35.0, 2.0, 1.0])
                         cylinder(r=9.5, h=cradle_h + 1.0, center=false);
 
                     // C. 7-Pin Pogo Contact Array Pocket (Through-hole to lower PCB chamber)
-                    translate([16.0, 15.0, -3.0])
+                    translate([16.0, 16.0, -3.0])
                         cube(size=[24.0, 12.0, cradle_h + 4.0], center=false);
 
                     // D. Wiring Pass-Through / Routing Channel
-                    translate([42.0, (insert_w - 4.0)/2.0 - 4.0, -3.0])
+                    translate([44.0, (insert_w - 4.0)/2.0 - 4.0, -3.0])
                         cube(size=[12.0, 8.0, cradle_h + 4.0], center=false);
                 }
             }
@@ -53,34 +53,34 @@ module cartridge_insert_sena(
 
         // 4. 4x Screwdriver Vertical Access Clearances (Eckfreistellungen)
         // Completely clears the space above each screw head so screwdrivers have vertical line-of-sight
-        translate([3.5, 2.5, deck_th - 0.1])
+        translate([3.5, 3.5, deck_th - 0.1])
             cylinder(r=3.5, h=cradle_h + 1.0, center=false);
-        translate([insert_l - 5.5, 2.5, deck_th - 0.1])
+        translate([insert_l - 4.5, 3.5, deck_th - 0.1])
             cylinder(r=3.5, h=cradle_h + 1.0, center=false);
-        translate([3.5, insert_w - 2.5, deck_th - 0.1])
+        translate([3.5, insert_w - 3.5, deck_th - 0.1])
             cylinder(r=3.5, h=cradle_h + 1.0, center=false);
-        translate([insert_l - 5.5, insert_w - 2.5, deck_th - 0.1])
+        translate([insert_l - 4.5, insert_w - 3.5, deck_th - 0.1])
             cylinder(r=3.5, h=cradle_h + 1.0, center=false);
 
         // 5. 4x M2 Countersunk Mounting Screw Holes (DIN 7991 M2)
-        translate([3.5, 2.5, -0.5])
+        translate([3.5, 3.5, -0.5])
             cylinder(r=M2_SCREW_HOLE_R, h=deck_th + 1.0, center=false);
-        translate([3.5, 2.5, deck_th - 1.0])
+        translate([3.5, 3.5, deck_th - 1.0])
             cylinder(r1=M2_SCREW_HOLE_R, r2=2.3, h=1.1, center=false);
 
-        translate([insert_l - 5.5, 2.5, -0.5])
+        translate([insert_l - 4.5, 3.5, -0.5])
             cylinder(r=M2_SCREW_HOLE_R, h=deck_th + 1.0, center=false);
-        translate([insert_l - 5.5, 2.5, deck_th - 1.0])
+        translate([insert_l - 4.5, 3.5, deck_th - 1.0])
             cylinder(r1=M2_SCREW_HOLE_R, r2=2.3, h=1.1, center=false);
 
-        translate([3.5, insert_w - 2.5, -0.5])
+        translate([3.5, insert_w - 3.5, -0.5])
             cylinder(r=M2_SCREW_HOLE_R, h=deck_th + 1.0, center=false);
-        translate([3.5, insert_w - 2.5, deck_th - 1.0])
+        translate([3.5, insert_w - 3.5, deck_th - 1.0])
             cylinder(r1=M2_SCREW_HOLE_R, r2=2.3, h=1.1, center=false);
 
-        translate([insert_l - 5.5, insert_w - 2.5, -0.5])
+        translate([insert_l - 4.5, insert_w - 3.5, -0.5])
             cylinder(r=M2_SCREW_HOLE_R, h=deck_th + 1.0, center=false);
-        translate([insert_l - 5.5, insert_w - 2.5, deck_th - 1.0])
+        translate([insert_l - 4.5, insert_w - 3.5, deck_th - 1.0])
             cylinder(r1=M2_SCREW_HOLE_R, r2=2.3, h=1.1, center=false);
     }
 }
