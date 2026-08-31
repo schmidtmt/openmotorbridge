@@ -37,8 +37,36 @@ Ein vollständiges OpenMotorBridge-Fahrzeugkit besteht aus folgenden Baugruppen:
 
 ## 2. Vollständige Teile- und Einkaufsliste (BOM für 1 Fahrzeug-Kit)
 
-### 2.1 Kategorie A: 3D-Druckteile (HP MJF PA12 schwarz)
-*Empfohlenes Fertigungsverfahren: Multi Jet Fusion (MJF) oder SLS in PA12 (glasperlengestrahlt, schwarz gefärbt). Die fertigen Druckdateien liegen in [`hardware/production_packages/06_3d_print_mjf_stls/`](file:///Users/schmidtm/openMotorBridge/hardware/production_packages/06_3d_print_mjf_stls).*
+### 2.1 Kategorie A: 3D-Druckteile & Fertigungsoptionen (FDM vs. MJF)
+
+Alle Gehäuse und Kassetten wurden so konstruiert, dass sie **sowohl auf handelsüblichen Desktop-FDM-Druckern (Bambu Lab, Prusa, Voron, Creality) als auch bei industriellen Pulverbett-Dienstleistern (HP MJF / SLS)** gefertigt werden können.
+
+#### Option 1: Heimischer Desktop-FDM-Druck (Bambu Lab X1/P1/A1, Prusa MK3/MK4/XL etc.)
+* **Empfohlene Filamente für Motorrad & Outdoor:**
+  * **PETG:** *Ideal für alle Drucker ohne Einhausung.* UV-stabil, benzin-/ölbeständig, schlagzäh bis $80\,^\circ\text{C}$ Dauertemperatur.
+  * **ASA (oder ABS):** *Beste Wahl für Drucker mit geschlossenem Bauraum (z. B. Bambu X1/P1, Prusa Enclosure).* $100\,\%$ UV- und witterungsbeständig, hitzebeständig bis $100\,^\circ\text{C}$.
+  * **PA-CF / PET-CF (z. B. Bambu PAHT-CF, Prusament PA11-CF):** Exzellente Steifigkeit, seriennahe matte Carbon-Haptik.
+  * ❌ *Wichtig:* **Kein Standard-PLA verwenden**, da PLA am Motorrad in der prallen Sonne (über $55\,^\circ\text{C}$) erweicht und verzieht!
+* **Optimale Slicer-Einstellungen für IP67-Wasserdichtigkeit & Elastizität:**
+  * **Wandlinien (Perimeter):** **4 bis 5 Wände** einstellen (Wandstärke $\approx 1{,}6 \dots 2{,}0\,\text{mm}$ $\rightarrow$ Wände werden $100\,\%$ massiv ohne Hohlräume gedruckt).
+  * **Obere/untere Schichten:** **5 bis 6 Schichten**.
+  * **Infill:** $25 \dots 40\,\%$ (Gyroid oder Honeycomb).
+  * **Schichthöhe:** $0{,}16\,\text{mm}$ (empfohlen für saubere O-Ring-Nuten) oder $0{,}20\,\text{mm}$.
+  * **Flussrate (Flow):** $102 \dots 104\,\%$ (leichte Überextrusion dichtet eventuelle Schicht-Mikroporen hermetisch ab).
+  * **Druckausrichtung & Support-Hinweise:**
+    * `main_box_lower_case.stl`: Flach auf Gehäuseboden ausrichten $\rightarrow$ **$0\,\%$ Support benötigt**.
+    * `main_box_mid_tray.stl`: Flach auf Zwischenboden ausrichten $\rightarrow$ Baum-Stützen (Tree Support) an der Dichtlippe aktivieren.
+    * `main_box_lid.stl`: Flach mit der Oberseite auf das Druckbett legen $\rightarrow$ **$0\,\%$ Support benötigt**.
+    * `pod_base_housing.stl`: Auf die hintere M8-Stirnfläche stehend drucken $\rightarrow$ minimaler Tree-Support unter dem V-Rohrsattel.
+    * `cartridge_*_sled.stl`: Flach auf den Schlittenboden legen $\rightarrow$ die Snap-Fit-Rastarme liegen flach in der $XY$-Ebene (optimaler Faserverlauf für maximale Biegewechselfestigkeit!).
+
+#### Option 2: Industrieller 3D-Druck (JLCPCB 3D Print, Weerg, Craftcloud, Shapeways)
+* **Verfahren:** **HP Multi Jet Fusion (MJF)** oder **SLS** (Selektives Lasersintern).
+* **Material:** **PA12 (Polyamid 12)**, schwarz eingefärbt und glasperlengestrahlt.
+* **Vorteil:** Isotrope Festigkeit in allen 3 Raumachsen, absolut porenfrei, keine Stützstrukturen.
+* **Fertige ZIP-Pakete für Dienstleister:** [`hardware/production_packages/06_3d_print_mjf_stls/`](file:///Users/schmidtm/openMotorBridge/hardware/production_packages/06_3d_print_mjf_stls).
+
+#### Stückliste der 3D-Druckteile:
 
 | Baugruppe | Dateiname / STL | Stück | Funktion & Beschreibung |
 | :--- | :--- | :---: | :--- |

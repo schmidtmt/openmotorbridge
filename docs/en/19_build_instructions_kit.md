@@ -37,8 +37,36 @@ A complete OpenMotorBridge vehicle installation consists of the following assemb
 
 ## 2. Complete Parts List (BOM for 1 Motorcycle Kit)
 
-### 2.1 Category A: 3D Printed Parts (HP MJF PA12 Black)
-*Recommended manufacturing process: Multi Jet Fusion (MJF) or SLS in PA12 (glass-bead blasted, black dyed). Production packages are located in [`hardware/production_packages/06_3d_print_mjf_stls/`](file:///Users/schmidtm/openMotorBridge/hardware/production_packages/06_3d_print_mjf_stls).*
+### 2.1 Category A: 3D Printed Parts & Manufacturing Options (FDM vs. MJF)
+
+All enclosures and cartridges are designed to be manufactured **both on standard desktop FDM printers (Bambu Lab, Prusa, Voron, Creality) and via industrial powder-bed service providers (HP MJF / SLS)**.
+
+#### Option 1: Desktop FDM Printing (Bambu Lab X1/P1/A1, Prusa MK3/MK4/XL, etc.)
+* **Recommended Filaments for Motorcycle & Outdoor Use:**
+  * **PETG:** *Ideal for open-frame printers without enclosure.* UV-resistant, fuel/oil resistant, impact tough up to $80\,^\circ\text{C}$ continuous temperature.
+  * **ASA (or ABS):** *Best choice for enclosed printers (e.g., Bambu X1/P1, Prusa Enclosure).* $100\,\%$ UV & weather resistant, heat resistant up to $100\,^\circ\text{C}$.
+  * **PA-CF / PET-CF (e.g., Bambu PAHT-CF, Prusament PA11-CF):** Outstanding rigidity, production-grade matte carbon finish.
+  * ❌ *Important:* **Do not use standard PLA**, as PLA softens and warps in direct sunlight on a motorcycle above $55\,^\circ\text{C}$!
+* **Optimal Slicer Settings for IP67 Water Resistance & Durability:**
+  * **Wall Perimeters:** Set to **4 to 5 perimeters** (wall thickness $\approx 1.6 \dots 2.0\,\text{mm}$ $\rightarrow$ walls print $100\,\%$ solid with zero voids).
+  * **Top/Bottom Solid Layers:** **5 to 6 layers**.
+  * **Infill:** $25 \dots 40\,\%$ (Gyroid or Honeycomb).
+  * **Layer Height:** $0.16\,\text{mm}$ (recommended for clean O-ring grooves) or $0.20\,\text{mm}$.
+  * **Flow Rate:** $102 \dots 104\,\%$ (slight extrusion overlap permanently seals micro-voids between layer lines).
+  * **Print Orientation & Support Strategy:**
+    * `main_box_lower_case.stl`: Flat on bottom base $\rightarrow$ **$0\,\%$ support required**.
+    * `main_box_mid_tray.stl`: Flat on partition floor $\rightarrow$ enable Tree Support under perimeter sealing lip.
+    * `main_box_lid.stl`: Flat on top face on print bed $\rightarrow$ **$0\,\%$ support required**.
+    * `pod_base_housing.stl`: Standing upright on rear M8 gland face $\rightarrow$ minimal Tree Support under V-saddle.
+    * `cartridge_*_sled.stl`: Flat on sled floor $\rightarrow$ snap-fit cantilever arms lay in the $XY$ plane (optimal continuous filament grain direction for maximum flex endurance!).
+
+#### Option 2: Industrial 3D Printing (JLCPCB 3D Print, Weerg, Craftcloud, Shapeways)
+* **Process:** **HP Multi Jet Fusion (MJF)** or **SLS** (Selective Laser Sintering).
+* **Material:** **PA12 (Polyamide 12)**, black dyed and glass-bead blasted.
+* **Advantage:** Isotropic mechanical strength across all 3 axes, 100% leak-proof, zero support artifacts.
+* **Pre-packaged ZIP files for service providers:** [`hardware/production_packages/06_3d_print_mjf_stls/`](file:///Users/schmidtm/openMotorBridge/hardware/production_packages/06_3d_print_mjf_stls).
+
+#### 3D Printed Parts Bill of Materials:
 
 | Assembly | Filename / STL | Qty | Function & Description |
 | :--- | :--- | :---: | :--- |

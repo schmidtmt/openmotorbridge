@@ -784,4 +784,35 @@ To validate the mechanical, thermal, and electrical integration of the entire sy
 | **Pin 6** | **Green (GN)** | $0.14\,\text{mm}^2$ (AWG26) | **`1-WIRE_ID`** (DS2401 Silicon Serial Number) | **`1-WIRE_ID`** (DS2401 rear cartridge ID) | Single Conductor (1-Wire Bus) |
 | **M8 Shell** | **Braided Copper (BL)**| $> 85\,\%$ Braid | **`GND_SHIELD`** (360° Chassis & overall shield) | **`GND_SHIELD`** (360° Chassis & overall shield) | Overall shield via M8 metal collar |
 
+---
+
+## 7. Manufacturing & Material Selection: Desktop FDM vs. Industrial MJF
+
+The entire OpenMotorBridge enclosure system is specifically engineered to be produced **both on standard desktop FDM 3D printers (Prusa, Bambu Lab, Voron, Creality) and via professional powder-bed 3D printing services (HP MJF / SLS)**:
+
+### 7.1 Desktop FDM 3D Printing (Prusa MK3/MK4/XL, Bambu Lab X1/P1/A1, etc.)
+* **Recommended Filaments for Motorcycle & Automotive Environments:**
+  * **PETG:** *Ideal for all open-frame printers.* UV-resistant, impact tough, fuel and oil resistant, heat stable up to $80\,^\circ\text{C}$.
+  * **ASA (or ABS):** *Recommended for enclosed printers (e.g., Bambu X1/P1, Prusa Enclosure).* $100\,\%$ UV and weather stable, heat resistant up to $100\,^\circ\text{C}$, beautiful matte finish.
+  * **PA-CF / PET-CF (e.g., Bambu PAHT-CF, Prusament PA11-CF):** Maximum stiffness and OEM-like carbon finish.
+  * ❌ *Note:* **Do not use standard PLA**, as PLA softens and deforms in direct sunlight on a motorcycle above $55\,^\circ\text{C}$!
+* **Slicer Settings for IP67 Water Resistance (PrusaSlicer, Bambu Studio, OrcaSlicer):**
+  * **Wall Perimeters:** Set to **4 to 5 perimeters** (wall thickness $\approx 1.6 \dots 2.0\,\text{mm}$ $\rightarrow$ walls print $100\,\%$ solid with no internal voids).
+  * **Top/Bottom Solid Layers:** **5 to 6 layers**.
+  * **Infill:** $25 \dots 40\,\%$ (Gyroid or Honeycomb).
+  * **Layer Height:** $0.16\,\text{mm}$ (recommended for clean O-ring grooves) or $0.20\,\text{mm}$.
+  * **Flow Rate:** $102 \dots 104\,\%$ (slight extrusion overlap permanently seals micro-pores between layer lines).
+  * **Print Orientation:**
+    * `main_box_lower_case.stl`: Flat on bottom base $\rightarrow$ **$0\,\%$ support required**.
+    * `main_box_mid_tray.stl`: Flat on partition floor $\rightarrow$ Tree Support under perimeter sealing lip.
+    * `main_box_lid.stl`: Flat on top face on print bed $\rightarrow$ **$0\,\%$ support required**.
+    * `pod_base_housing.stl`: Standing upright on rear M8 gland face $\rightarrow$ minimal Tree Support under V-saddle.
+    * `cartridge_*_sled.stl`: Flat on sled floor $\rightarrow$ snap-fit cantilever arms lay in the $XY$ plane (optimal continuous filament grain direction for maximum flex endurance!).
+
+### 7.2 Industrial 3D Printing (HP MJF / SLS from JLCPCB, Weerg, Craftcloud)
+* **Process:** **HP Multi Jet Fusion (MJF)** or **SLS** (Selective Laser Sintering).
+* **Material:** **PA12 (Polyamide 12)**, black dyed and glass-bead blasted.
+* **Advantages:** Isotropic mechanical strength across all 3 axes, 100% leak-proof, zero support artifacts.
+* **Pre-packaged ZIP files for service providers:** [`hardware/production_packages/06_3d_print_mjf_stls/`](file:///Users/schmidtm/openMotorBridge/hardware/production_packages/06_3d_print_mjf_stls).
+
 

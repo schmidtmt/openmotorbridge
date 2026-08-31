@@ -849,35 +849,33 @@ hardware/cad/scad/
 
 ---
 
-## 7. Zusammenfassende Konstruktions- & Fertigungsrichtlinien
+## 8. Fertigungsverfahren & Materialauswahl: Desktop-FDM vs. Industrie-MJF
 
-```
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│             OPENMOTORBRIDGE MECHANISCHE SYSTEM-MATRIX (FERTIGUNGSÜBERSICHT)             │
-├───────────────────┬───────────────────────────────┬────────────────────────────────────┤
-│ BAUGRUPPE         │ HAUPTMERKMALE / MECHANIK       │ FERTIGUNG & MATERIAL               │
-├───────────────────┼───────────────────────────────┼────────────────────────────────────┤
-│ 1. ZENTRALBOX     │ • 3-Teiliges Sandwich-Design   │ • PA12 MJF oder Aluguss            │
-│    (Unterwanne,   │ • 4x M3 durchgehende Ecksäulen│ • 4x Cu-Thermal-Pins (Ø 8 mm)      │
-│     Oberwanne &   │ • Nut-und-Feder Dichtsystem   │ • Shore 00 35 Silikon-Gap-Pad      │
-│     Deckel)       │ • LiPo-Bett auf Zwischenboden │ • EPDM-Dichtschnur (Ø 1.5 mm)      │
-│                   │ • Kabelschlitz + 5x Lüftung   │ • Gore ePTFE-Ventil (Ø 7 mm)       │
-│                   │ • Stirnwand: HD26, USB-C, LED │ • M4 Silentblöcke (Shore 50A)      │
-├───────────────────┼───────────────────────────────┼────────────────────────────────────┤
-│ 2. SATELLITEN-PODS│ • Monocoque-Schacht (ohne Deckel)│ • PA12 MJF kugelgestrahlt        │
-│    (Pod 1, 2 & 3) │ • M8 6-Pin IP67 Rückanschluss │ • M8 Vollmetall-Einbaubuchse       │
-│                   │ • Schutz-Schottwand (2x M2)   │ • 2x V4A-Auswerferfedern (10 mm Hub│
-│                   │ • 45°-Fangtrichter für 6-Pin  │ • Seitliche metallische Gleitschiene│
-│                   │ • Obere Gore ePTFE-Membran    │ • Asymmetrische Poka-Yoke Nuten    │
-├───────────────────┼───────────────────────────────┼────────────────────────────────────┤
-│ 3. WECHSEL-       │ • Universeller Unterschlitten │ • PA12 MJF (2-Teilige Kassette)    │
-│    KASSETTEN      │ • Kassetten-PCB (DS2401 ID)   │ • Flanschdichtung Shore 40A        │
-│    (Sena, Cardo,  │ • Stirnflansch-IP67-Dichtung  │ • Duale POM Snap-Fit Riegel        │
-│     Midland, OMM) │ • Auto-Eject Schnellentrieglg.│ • Vergoldetes Pogo-Pin Array       │
-│                   │ • Unterflur-Kabelkanal 1.5 mm │ • N52 Neodym-Magnete (Cardo Edge)  │
-│                   │ • Poka-Yoke Führungsfedern    │ • EPDM-Sicherungslasche            │
-│                   │ • Modellspezifisches 3D-Nest  │ • Frontblenden ePTFE-Membran       │
-└───────────────────┴───────────────────────────────┴────────────────────────────────────┘
-```
+Das gesamte OpenMotorBridge Gehäusesystem ist so konstruiert, dass es **sowohl auf heimischen Desktop-FDM-Druckern (Prusa, Bambu Lab, Voron etc.) als auch bei professionellen 3D-Druck-Dienstleistern (HP MJF / SLS)** fehlerfrei und IP67-dicht gefertigt werden kann:
+
+### 8.1 Heimischer Desktop-FDM-Druck (Prusa MK3/MK4/XL, Bambu Lab X1/P1/A1 etc.)
+* **Materialempfehlungen für Motorrad & Automotive:**
+  * **PETG:** *Ideal für alle offenen Drucker ohne Gehäuse.* UV-beständig, schlagzäh, benzin- und säurefest, formstabil bis $80\,^\circ\text{C}$.
+  * **ASA (oder ABS):** *Empfehlung für Drucker mit Einhausung (z. B. Bambu X1/P1, Prusa mit Enclosure).* $100\,\%$ UV- und witterungsstabil, temperaturbeständig bis $100\,^\circ\text{C}$, edle matte Oberfläche.
+  * **PA-CF / PET-CF (z. B. Bambu PAHT-CF, Prusament PA11-CF):** Maximale Steifigkeit und seriennahe Carbon-Optik.
+  * ❌ *Hinweis:* **Kein Standard-PLA verwenden**, da PLA bei Sonneneinstrahlung im Sommer am Motorrad (über $55\,^\circ\text{C}$) weich wird und sich verzieht!
+* **Slicer-Empfehlungen für IP67-Dichtigkeit (PrusaSlicer, Bambu Studio, OrcaSlicer):**
+  * **Wandlinien (Perimeter):** **4 bis 5 Wände** einstellen (Wandstärke $\approx 1{,}6 \dots 2{,}0\,\text{mm}$ $\rightarrow$ alle Gehäusewände werden $100\,\%$ massiv ohne Hohlräume gedruckt).
+  * **Obere/untere Schichten:** **5 bis 6 Schichten**.
+  * **Infill:** $25 \dots 40\,\%$ (Gyroid oder Honeycomb).
+  * **Schichthöhe:** $0{,}16\,\text{mm}$ (empfohlen für saubere O-Ring-Nuten) oder $0{,}20\,\text{mm}$.
+  * **Flussrate (Flow):** $102 \dots 104\,\%$ (leichte Überextrusion dichtet Mikroporen zwischen den Schichten hermetisch ab).
+  * **Druckausrichtung:**
+    * `main_box_lower_case.stl`: Flach auf Gehäuseboden $\rightarrow$ **$0\,\%$ Support benötigt**.
+    * `main_box_mid_tray.stl`: Flach auf Zwischenboden $\rightarrow$ Baum-Stützen (Tree Support) an der Dichtlippe.
+    * `main_box_lid.stl`: Flach mit der Oberseite auf das Bett $\rightarrow$ **$0\,\%$ Support benötigt**.
+    * `pod_base_housing.stl`: Auf die hintere M8-Stirnfläche stehend $\rightarrow$ minimaler Tree-Support unter dem V-Sattel.
+    * `cartridge_*_sled.stl`: Flach auf den Schlittenboden $\rightarrow$ die Snap-Fit-Rastarme liegen flach in der $XY$-Ebene (optimaler Faserverlauf für maximale Biegewechselfestigkeit!).
+
+### 8.2 Industrieller 3D-Druck (HP MJF / SLS bei JLCPCB, Weerg, Craftcloud)
+* **Verfahren:** **HP Multi Jet Fusion (MJF)** oder **SLS** (Selektives Lasersintern).
+* **Material:** **PA12 (Polyamid 12)**, schwarz eingefärbt und glasperlengestrahlt.
+* **Vorteile:** Isotrope Festigkeit in allen 3 Raumachsen, absolut porenfrei, keine Stützstrukturen.
+* **Fertige ZIP-Pakete für Dienstleister:** [`hardware/production_packages/06_3d_print_mjf_stls/`](file:///Users/schmidtm/openMotorBridge/hardware/production_packages/06_3d_print_mjf_stls).
 
 
