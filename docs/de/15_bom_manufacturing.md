@@ -26,7 +26,6 @@ Vollständige Bauteilliste (Bill of Materials) und Fertigungsspezifikation für 
 | **J2** | MicroSD Slot Push-Push | Molex / Korean Hro | SMD Push-Push | C266624 | 4-Bit SDIO Speicherkarte für Tour-Logging |
 | **J_BAT** | Molex Micro-Fit 3.0 2P | Molex | SMD Header | C289110 | Steckverbindung zum 18650 LiFePO4 Pufferakku |
 | **CN1** | HD26 Buchse IP67 | Amphenol LTW | Flansch D-Sub | Kundenteil | Wasserdichte 26-polige Gehäuseschnittstelle |
-| **CU_STUDS**| 4x Kupfer-Kühlbolzen Ø8x12mm| DIN 1787 Cu-ETP | Massivkupfer | Drehteil | Entwärmung LM5164/Charger/MCU in Unterwanne |
 
 ---
 
@@ -79,12 +78,11 @@ Vollständige Bauteilliste (Bill of Materials) und Fertigungsspezifikation für 
 ### 5.1 Zentralbox (3-teiliges Sandwich-Gehäuse Typ A)
 | Bauteil / Baugruppe | Material / Spezifikation | CAD / STL Datei | Menge | Funktion |
 | :--- | :--- | :--- | :---: | :--- |
-| **Unterwanne** | PA12 MJF Schwarz | `main_box_lower_case.stl` | 1 | Grundgehäuse mit Dichtnut & 4x Kühlbolzensitzen |
-| **Oberwanne mit Zwischenboden**| PA12 MJF Schwarz | `main_box_upper_case.stl` | 1 | Akku-Halterung, HD26-Flansch, USB-C & LED-Fenster |
+| **Unterwanne** | PA12 MJF Schwarz | `main_box_lower_case.stl` | 1 | Monocoque-Grundgehäuse mit Dichtnut & 4x M4 Silentblock-Ohren |
+| **Oberwanne mit Zwischenboden**| PA12 MJF Schwarz | `main_box_upper_case.stl` | 1 | Akku-Halterung, 11x Konvektionsschlitze, HD26-Flansch, USB-C & LED |
 | **Gehäusedeckel** | PA12 MJF Schwarz | `main_box_lid.stl` | 1 | Homogener Verschlussdeckel mit ePTFE-Ventilsitz |
 | **Gehäuseschrauben** | Edelstahl V4A M3 x 40 mm DIN 912 | Normteil | 4 | Durchgehende 4-Eck-Verschraubung |
 | **Gewindeeinsätze** | Messing M3 Ruthex / Tappex | Normteil | 4 | Eingeschmolzen in Unterwanne |
-| **Kupfer-Kühlbolzen** | Massivkupfer Ø 8.0 x 12.0 mm | Drehteil | 4 | Direkte Entwärmung der Hotspots nach außen |
 | **Druckausgleichselement** | Gore Automotive AVS 41 (M8) | Zukaufteil | 1 | IP67 Druckausgleich & Kondensatvermeidung |
 | **Gehäusedichtung** | Silikon Shore 50A (1.5 mm Schnur) | Formdichtung | 1 | Hermetische IP67/IP69K Sandwich-Abdichtung |
 | **Lichtleiter** | PMMA Ø 3.0 mm (Bivar PLPC3) | Zukaufteil | 1 | Statusanzeige WS2812B im Gehäusedeckel |
@@ -92,10 +90,9 @@ Vollständige Bauteilliste (Bill of Materials) und Fertigungsspezifikation für 
 ### 5.2 Universelle Satelliten-Pods (3x identisch für Pod 1, 2 und 3)
 | Bauteil / Baugruppe | Material / Spezifikation | CAD / STL Datei | Menge | Funktion |
 | :--- | :--- | :--- | :---: | :--- |
-| **Pod-Monocoque-Schacht** | PA12 MJF Schwarz | `pod_base_housing.stl` | 3 | 5-seitiges Schachtgehäuse mit asymmetrischen Nuten |
+| **Pod-Monocoque-Schacht** | PA12 MJF Schwarz | `pod_base_housing.stl` | 3 | 5-seitiges Schachtgehäuse mit V-Rohrbett & 4x EPDM-Spannbandnasen |
 | **Schutz-Schottwand** | PA12 MJF Schwarz | `pod_bulkhead_plate.stl` | 3 | Schottwand mit 6-Pin Schutzkragen & Federsitzen |
 | **Auswerfer-Druckfedern** | Edelstahl V4A (D=4.5mm, L0=15mm)| Normteil | 6 | Auto-Eject Mechanismus (10 mm Kassettenauswurf) |
-| **Boden-Wärmeleitpfosten** | Massivkupfer Ø 8.0 x 6.0 mm | Drehteil | 6 | 2x Bolzen pro Pod zur Kassettenentwärmung |
 | **Schottwandschrauben** | Edelstahl V4A M2 x 8 mm Senkkopf | Normteil | 6 | 2x Schrauben zur Schottwandfixierung pro Pod |
 | **Helm-Klemmadapter** | PA12 MJF Schwarz | `pod_mount_helmet_clamp.stl` | 2 | Universelle Helm-Montage für Pod 1 & Pod 2 |
 | **GoPro-/Gepäckträger-Adapter**| PA12 MJF Schwarz | `pod_mount_gopro_rack.stl` | 1 | 3x GoPro-Rasten für Heckbürzel-Montage (Pod 3) |
@@ -255,7 +252,6 @@ Alle 3D-Druckdaten liegen gebündelt als ZIP-Pakete im Ordner [hardware/producti
 | **M3 Gewindeeinsätze** | Ruthex M3 x 5.7 mm Messing | Ruthex / Amazon | 4 Stk. | Einschmelzgewinde in Unterwanne |
 | **M2 Schottwandschrauben** | M2 x 8 mm Senkkopf V4A (DIN 7991) | Normteil | 6 Stk. | Fixierung der 3 Pod-Schottwände |
 | **Auswerfer-Druckfedern** | Edelstahl V4A ($D=4{,}5\,\text{mm}, L_0=15\,\text{mm}, R=1{,}2\,\text{N/mm}$) | Gutekunst Federn / Sodemann | 6 Stk. | Auto-Eject Mechanismus (2x pro Pod) |
-| **Kupfer-Kühlbolzen (Zentralbox)**| $\varnothing 8{,}0 \times 12{,}0\,\text{mm}$ Massivkupfer | Drehteil / Cu-ETP Rundstange | 4 Stk. | Direkte Entwärmung LM5164/Charger |
 | **EPDM-Spannringe / Leiterbänder**| UV- & Ozonbeständiges EPDM ($\varnothing 45\dots 75\,\text{mm}$) | QuadLock / O-Ring-Shop / Amazon | 6 Stk. | Universal-Rohrbett-Schnellmontage (2x pro Pod) |
 | **UV-Kabelbinder (Diebstahlschutz)**| $4{,}8 \times 200\,\text{mm}$ Polyamid 6.6 Schwarz | HellermannTyton / Würth | 6 Stk. | Permanente Festmontage an Rahmenrohren |
 | **Gore Druckausgleichsventil** | Gore Automotive AVS 41 (M8x1.25) | W. L. Gore & Associates | 1 Stk. | Zentralbox-Deckelbelüftung |

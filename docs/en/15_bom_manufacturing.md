@@ -26,7 +26,6 @@ Complete Bill of Materials (BOM) and manufacturing specifications for all 4 PCBA
 | **J2** | MicroSD Slot Push-Push | Molex / Korean Hro | SMD Push-Push | C266624 | 4-Bit SDIO Storage Card for Tour Logging |
 | **J_BAT** | Molex Micro-Fit 3.0 2P | Molex | SMD Header | C289110 | Header for 18650 LiFePO4 Buffer Battery |
 | **CN1** | HD26 Receptacle IP67 | Amphenol LTW | Flange D-Sub | Custom | Waterproof 26-pin Central Chassis Interface |
-| **CU_STUDS**| 4x Copper Studs Ø8x12mm | DIN 1787 Cu-ETP | Solid Copper | Lathe Turned | Direct Heatsinking for LM5164/Charger/MCU in Lower Case |
 
 ---
 
@@ -79,12 +78,11 @@ Complete Bill of Materials (BOM) and manufacturing specifications for all 4 PCBA
 ### 5.1 Main Central Box (3-Piece Sandwich Enclosure Type A)
 | Component / Subassembly | Material / Specification | CAD / STL File | Qty | Function |
 | :--- | :--- | :--- | :---: | :--- |
-| **Lower Base Tub** | PA12 MJF Black | `main_box_lower_case.stl` | 1 | Base case with gasket groove & 4x copper stud seats |
-| **Upper Deck with Divider** | PA12 MJF Black | `main_box_upper_case.stl` | 1 | Battery bay, HD26 flange, USB-C & LED optical window |
+| **Lower Base Tub** | PA12 MJF Black | `main_box_lower_case.stl` | 1 | Monocoque base case with gasket groove & 4x M4 silentblock ears |
+| **Upper Deck with Divider** | PA12 MJF Black | `main_box_upper_case.stl` | 1 | Battery bay, 11x convection slots, HD26 flange, USB-C & LED |
 | **Enclosure Top Lid** | PA12 MJF Black | `main_box_lid.stl` | 1 | Homogeneous cover lid with ePTFE vent seat |
 | **Case Fastening Screws** | Stainless V4A M3 x 40 mm DIN 912 | Standard Part | 4 | Continuous 4-corner clamp fastening |
 | **Threaded Inserts** | Brass M3 Ruthex / Tappex | Standard Part | 4 | Heat-set into lower base tub corner pillars |
-| **Copper Thermal Studs** | Solid Copper Ø 8.0 x 12.0 mm | Lathe Turned | 4 | Direct heat transfer from PCB hotspots to exterior |
 | **Venting Element** | Gore Automotive AVS 41 (M8) | Commercial Off-The-Shelf| 1 | IP67 pressure balance & condensation prevention |
 | **Chassis Gasket** | Silicone Shore 50A (1.5 mm Cord) | Custom Molded | 1 | Hermetic IP67/IP69K sandwich seal |
 | **Light Pipe** | PMMA Ø 3.0 mm (Bivar PLPC3) | Commercial Off-The-Shelf| 1 | Optical light guide for WS2812B in enclosure lid |
@@ -92,10 +90,9 @@ Complete Bill of Materials (BOM) and manufacturing specifications for all 4 PCBA
 ### 5.2 Universal Satellite Pods (3x Identical for Pod 1, 2, and 3)
 | Component / Subassembly | Material / Specification | CAD / STL File | Qty | Function |
 | :--- | :--- | :--- | :---: | :--- |
-| **Pod Monocoque Tunnel** | PA12 MJF Black | `pod_base_housing.stl` | 3 | 5-sided tunnel housing with asymmetric guide tracks |
+| **Pod Monocoque Tunnel** | PA12 MJF Black | `pod_base_housing.stl` | 3 | 5-sided tunnel housing with V-groove & 4x EPDM strap lugs |
 | **Protective Bulkhead** | PA12 MJF Black | `pod_bulkhead_plate.stl` | 3 | Bulkhead with 6-pin shroud funnel & spring seats |
 | **Auto-Eject Compression Springs**| Stainless V4A (D=4.5mm, L0=15mm)| Standard Part | 6 | Ejection mechanism (10 mm cartridge pop-out stroke) |
-| **Floor Thermal Studs** | Solid Copper Ø 8.0 x 6.0 mm | Lathe Turned | 6 | 2x studs per pod for cartridge heat conduction |
 | **Bulkhead Screws** | Stainless V4A M2 x 8 mm Flat-Head| Standard Part | 6 | 2x screws per pod to secure bulkhead plate |
 | **Helmet Clamp Adapter** | PA12 MJF Black | `pod_mount_helmet_clamp.stl` | 2 | Universal helmet clamp mount for Pod 1 & Pod 2 |
 | **GoPro / Rack Mount Plate** | PA12 MJF Black | `pod_mount_gopro_rack.stl` | 1 | 3x GoPro tabs for rear fender / luggage rack mount |
@@ -255,7 +252,6 @@ All 3D printing STL bundles are organized in [hardware/production_packages/06_3d
 | **M3 Threaded Inserts**| Ruthex M3 x 5.7 mm Brass | Ruthex / Amazon | 4 pcs | Heat-set inserts in lower base tub |
 | **M2 Bulkhead Screws** | M2 x 8 mm Flat Head V4A (DIN 7991) | Standard Fastener | 6 pcs | Secures 3x pod bulkhead plates |
 | **Ejection Springs** | Stainless V4A ($D=4.5\,\text{mm}, L_0=15\,\text{mm}, R=1.2\,\text{N/mm}$) | Gutekunst Federn / Sodemann | 6 pcs | Auto-Eject mechanism (2x per pod) |
-| **Copper Studs (Main Box)**| $\varnothing 8.0 \times 12.0\,\text{mm}$ Solid Copper | Lathe Turned / Cu-ETP Bar | 4 pcs | Direct heatsinking for LM5164/Charger |
 | **EPDM Tension Rings / Straps**| UV- & Ozone-Resistant EPDM ($\varnothing 45\dots 75\,\text{mm}$) | QuadLock / O-Ring-Shop / Amazon | 6 pcs | Universal tube saddle quick mount (2x per pod) |
 | **UV Cable Ties (Theft Protection)**| $4.8 \times 200\,\text{mm}$ Polyamide 6.6 Black | HellermannTyton / Würth | 6 pcs | Permanent fixed frame mounting |
 | **Gore Vent Valve** | Gore Automotive AVS 41 (M8x1.25) | W. L. Gore & Associates | 1 pc | Central box lid pressure venting |

@@ -30,7 +30,7 @@ import math
 import numpy as np
 from typing import Dict, List, Tuple
 
-def simulate_thermal_day_tour(mode: str = "ARCTIC_WINTER") -> Dict[str, Any]:
+def simulate_thermal_day_tour(mode: str = "STANDARD_SUMMER") -> Dict[str, Any]:
     """
     Simulates complete 480-minute thermal dynamics.
     Modes:

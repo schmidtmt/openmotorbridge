@@ -2,9 +2,9 @@
 // OpenMotorBridge - Main Box: Complete Lower Case (Unterwanne)
 // =============================================================================
 // File: hardware/cad/scad/01_main_box/00_lower_deck.scad
-// Description: Ready-to-print lower case tub with 4x M3 corner clamping posts,
-//              4x M2.5 PCB standoffs, 4x thermal copper stud floor through-holes,
-//              perimeter sealing groove, and 4x M4 silentblock mounting ears.
+// Description: Ready-to-print solid monocoque lower case tub with 4x M3 corner
+//              clamping posts, 4x M2.5 PCB standoffs, 4x M4 silentblock mounting
+//              ears, and perimeter sealing groove (100% solid leak-free PA12 floor).
 // =============================================================================
 
 include <../00_common/parameters.scad>;
@@ -12,14 +12,13 @@ include <../00_common/screw_bosses.scad>;
 include <parts/000_lower_base.scad>;
 include <parts/001_lower_screws_enclosure.scad>;
 include <parts/002_pcb_standoffs.scad>;
-include <parts/003_copper_thermal_studs.scad>;
 include <parts/004_mounting_ears.scad>;
 include <parts/005_sealing_groove.scad>;
 
 module main_box_lower_case() {
     difference() {
         union() {
-            // 1. Base Enclosure Tub
+            // 1. Base Enclosure Tub (100% Solid, Homogeneous PA12 Floor)
             main_box_lower_base(
                 length=MAIN_BOX_OUTER_L,
                 width=MAIN_BOX_OUTER_W,
@@ -50,10 +49,7 @@ module main_box_lower_case() {
             );
         }
 
-        // 5. 4x Thermal Copper Stud Floor Pockets (Ø 8.0 mm through-holes)
-        main_box_copper_stud_cutouts(h=6.0);
-
-        // 6. Perimeter Sealing Groove (Nut for Ø 1.5 mm O-Ring Gasket)
+        // 5. Perimeter Sealing Groove (Nut for Shore 40A Ø 1.5 mm O-Ring Gasket)
         main_box_sealing_groove_tool(
             length=MAIN_BOX_OUTER_L,
             width=MAIN_BOX_OUTER_W,

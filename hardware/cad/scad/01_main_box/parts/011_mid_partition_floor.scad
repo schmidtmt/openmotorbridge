@@ -26,11 +26,24 @@ module main_box_mid_partition_floor(floor_l=105.0, floor_w=69.0, floor_t=2.0) {
         translate([40.0, 4.0, -0.5])
             cube(size=[25.0, 4.0, floor_t + 1.0], center=false);
 
-        // 4. 5x Convective Ventilation Slots (15 x 2.5 mm each)
+        // 4. Enhanced Convective Ventilation & Air Circulation Slots (10x slots):
+        // Rear Row (5x slots along y = 58.0 mm)
         for (i = [0:4]) {
             translate([15.0 + i * 16.0, 58.0, -0.5])
                 cube(size=[12.0, 2.5, floor_t + 1.0], center=false);
         }
+
+        // Left Side Flank (2x slots along x = 10.0 mm)
+        translate([10.0, 20.0, -0.5]) cube(size=[2.5, 14.0, floor_t + 1.0], center=false);
+        translate([10.0, 38.0, -0.5]) cube(size=[2.5, 14.0, floor_t + 1.0], center=false);
+
+        // Right Side Flank (2x slots along x = 92.0 mm)
+        translate([92.0, 20.0, -0.5]) cube(size=[2.5, 14.0, floor_t + 1.0], center=false);
+        translate([92.0, 38.0, -0.5]) cube(size=[2.5, 14.0, floor_t + 1.0], center=false);
+
+        // Front Row Flanks (2x slots along y = 8.0 mm)
+        translate([15.0, 8.0, -0.5]) cube(size=[14.0, 2.5, floor_t + 1.0], center=false);
+        translate([76.0, 8.0, -0.5]) cube(size=[14.0, 2.5, floor_t + 1.0], center=false);
     }
 }
 

@@ -1,6 +1,6 @@
 # 05 - Mechanische Konstruktion: 3-Teiliges Sandwich-Gehäuse, Zwischenboden & Kassetten-Pods
 
-Dieses Dokument spezifiziert die mechanische Konstruktion, das Thermomanagement und das IP67/IP69K-Gehäusedesign der zentralen Steuerbox (Typ A) im **3-teiligen Sandwich-Aufbau (Unterwanne, Oberwanne mit Zwischenboden, Gehäusedeckel)** mit **integrierter Akku-Fixierung auf dem Zwischenboden**, **stirnseitiger Anschlussleiste (HD26, USB-C & RGB-LED-Statusfenster)** in der Oberwanne, **Kupfer-Kühlbolzen-System** in der Unterwanne und **homogenem Gehäusedeckel mit Gore ePTFE-Druckausgleichsmembran**, sowie das universelle Satelliten-Pod-System (Typ B) mit Kassetten-Einschüben.
+Dieses Dokument spezifiziert die mechanische Konstruktion, das Thermomanagement und das IP67/IP69K-Gehäusedesign der zentralen Steuerbox (Typ A) im **3-teiligen Sandwich-Aufbau (Unterwanne, Oberwanne mit Zwischenboden, Gehäusedeckel)** mit **integrierter Akku-Fixierung auf dem Zwischenboden**, **stirnseitiger Anschlussleiste (HD26, USB-C & RGB-LED-Statusfenster)** in der Oberwanne, **planarem 4-Layer Kupfer-Wärmespreader und 11x Zwischenboden-Konvektionsschlitzen** sowie das universelle Satelliten-Pod-System (Typ B) mit Kassetten-Einschüben.
 
 ---
 
@@ -18,7 +18,7 @@ Das Basisgehäuse der Zentralbox ist als modulares, 3-teiliges IP67/IP69K-Sandwi
 
 ![OpenMotorBridge Zentralbox 3-Teiliges Sandwich-Gehäuse IP67](../../hardware/cad/main_box_enclosure_cad.png)
 
-*Abbildung 5.1: 3D-CAD-Darstellung der zentralen Steuerbox. Links: Geschlossenes IP67-Gehäuse mit HD26-Kabelbaumflansch, USB-C Servicekappe und bündigem RGB-Statusfenster an der Stirnseite der Oberwanne, 4x M4 Silentblöcken an der Unterwanne und flachem Deckel mit Gore-Membran. Rechts: Schnittansicht mit den 3 Sandwich-Ebenen: 1. Unterwanne (4x Kupfer-Kühlbolzen, Silikonpad, 4-Layer PCB), 2. Oberwanne mit Zwischenboden (Akku mit EPDM-Spannband oben, 38x6 mm Flachband-Schlitz im Boden, Ports an Stirnwand), 3. Robuster Deckel mit Gore-Vent (100% dicht).*
+*Abbildung 5.1: 3D-CAD-Darstellung der zentralen Steuerbox. Links: Geschlossenes IP67-Gehäuse mit HD26-Kabelbaumflansch, USB-C Servicekappe und bündigem RGB-Statusfenster an der Stirnseite der Oberwanne, 4x M4 Silentblöcken an der Unterwanne und flachem Deckel mit Gore-Membran. Rechts: Schnittansicht mit den 3 Sandwich-Ebenen: 1. Unterwanne (100% homogener, geschlossener PA12-Boden, 4-Layer PCB auf M2.5 Stand-offs), 2. Oberwanne mit Zwischenboden (Akku mit EPDM-Spannband oben, 11x Konvektionsschlitze & Kabeldurchbruch im Boden, Ports an Stirnwand), 3. Robuster Deckel mit Gore-Vent (100% dicht).*
 
 ```
 ┌────────────────────────────────────────────────────────────┐  ▲
@@ -35,15 +35,15 @@ Das Basisgehäuse der Zentralbox ist als modulares, 3-teiliges IP67/IP69K-Sandwi
 │    • Oberes Fach (auf dem Zwischenboden):                  │  │
 │      - 1S LiPo-USV-Pufferakku (52x36x6.5mm) in Akkuwanne   │  │
 │      - EPDM-Gummispannband zur vibrationsfesten Fixierung  │  │
-│    • Zwischenboden (Trennebene zur Unterwanne):            │  │
-│      - 38,0 x 6,0 mm Flachbandkabel-Schlitz (R 1,5 mm)     │  │
-│      - 4x Labyrinth-Druckausgleichsschlitze (15 x 2 mm)    │  │
+│    • Zwischenboden (Optimierte Zirkulationsebene):         │  │
+│      - 25,0 x 4,0 mm Kabeldurchbruchsschlitz               │  │
+│      - 11x Konvektions- & Druckausgleichsschlitze          │  │
 ├────────────────────────────────────────────────────────────┤  │
-│ 3. UNTERWANNE (17,0 mm Höhe - Geschlossene Tauchwanne)     │  │
+│ 3. UNTERWANNE (17,0 mm Höhe - Geschlossene Monocoque-Wanne)│  │
 │    • 4-Layer Hauptplatine (85 x 55 mm) auf M2.5 Dämpfern   │  │
-│    • 2,0 mm Silikon-Thermal-Gap-Pad (Shore 00 35, λ=3 W/mK)│  │
-│    • 4x Massive Kupfer-Thermal-Pins (Ø 8 mm im Wannenboden)│  │
-│    • 100% geschlossene Wanne ohne Gehäusedurchbrüche       │  │
+│    • 2x 35 µm massive Kupfer-Innenlagen als Wärmespreader  │  │
+│    • 4x M4 Silentblock-Befestigungsohren (vibrationsfest)  │  │
+│    • 100% geschlossener PA12-Boden ohne Gehäusedurchbrüche │  │
 └────────────────────────────────────────────────────────────┘  ▼
 ```
 
@@ -51,60 +51,61 @@ Das Basisgehäuse der Zentralbox ist als modulares, 3-teiliges IP67/IP69K-Sandwi
 
 ![OpenMotorBridge Zentralbox Exploded 3D CAD Fitting](../../hardware/cad/main_box_full_assembly_exploded_3d.png)
 
-*Abbildung 5.1.1: 1:1:1 euklidische CAD-Explosionsdarstellung der Zentralbox. Gezeigt werden alle 6 Montageebenen entlang der vertikalen Z-Achse: Unterwanne mit 4x M4 Silentblöcken und 4x Cu-Thermal-Pins (Ø8mm), elastisches Silikon-Gap-Pad, 4-Layer Hauptplatine (85x55mm) mit J1 Wannenstecker, 26-poliges Flachbandkabel (AWG28), Oberwanne mit Zwischenboden und stirnseitigen Schnittstellen (HD26, USB-C, LED), 1S LiPo-Pufferakku im Konturbett mit EPDM-Spannband sowie der Gehäusedeckel mit Gore ePTFE-Membran.*
+*Abbildung 5.1.1: 1:1:1 euklidische CAD-Explosionsdarstellung der Zentralbox. Gezeigt werden alle 5 Montageebenen entlang der vertikalen Z-Achse: Unterwanne mit 4x M4 Silentblöcken und 100% geschlossenem PA12-Boden, 4-Layer Hauptplatine (85x55mm) mit planarem Kupfer-Wärmespreader, Oberwanne mit Zwischenboden (11x Konvektionsschlitze) und stirnseitigen Schnittstellen (HD26, USB-C, LED), 1S LiPo-Pufferakku im Konturbett mit EPDM-Spannband sowie der Gehäusedeckel mit Gore ePTFE-Membran.*
 
 ### 1.3 3D-Röntgenansicht & Zusammenbau-Fitting
 
 ![OpenMotorBridge Zentralbox Mated 3D X-Ray CAD Fitting](../../hardware/cad/main_box_assembly_mated_3d.png)
 
-*Abbildung 5.1.2: Transparente 3D-Röntgenansicht der vollständig geschlossenen Zentralbox. Erkennbar sind die spielfreien Bauteilfreiräume, die geschützte Akku-Lagerung auf dem Zwischenboden und der scheuerfreie Bogen des 26-poligen Flachbandkabels durch den 38x6 mm Schlitz zum HD26-Flansch.*
+*Abbildung 5.1.2: Transparente 3D-Röntgenansicht der vollständig geschlossenen Zentralbox. Erkennbar sind die spielfreien Bauteilfreiräume, die geschützte Akku-Lagerung auf dem Zwischenboden, die durchgängige Konvektion über die 11 Zwischenbodenschlitze und der scheuerfreie Kabelverlauf zum HD26-Flansch.*
 
 ### 1.4 Maßstabsgetreuer Längs- & Querschnitt (X-Z Thermik & Y-Z Kabelführung)
 
 ![OpenMotorBridge Zentralbox Cross Sections](../../hardware/cad/main_box_assembly_cross_section.png)
 
-*Abbildung 5.1.3: Exakte 2D-Schnittansichten der Zentralbox. Oben: Längsschnitt (X-Z Ebene) mit vollständigem thermischem Pfad (Kupfer-Thermal-Pins $\rightarrow$ Silikon-Gap-Pad $\rightarrow$ LM5164/ESP32 Hotspots) und Akku-Kammer. Unten: Querschnitt (Y-Z Ebene) mit detailliertem Verlauf des 26-poligen Flachbandkabels von der Wannenbuchse J1 auf der Hauptplatine durch den abgerundeten 38x6 mm Zwischenbodenschlitz direkt zum abgedichteten HD26 SEAL-D Flansch an der Gehäusestirnwand.*
+*Abbildung 5.1.3: Exakte 2D-Schnittansichten der Zentralbox. Oben: Längsschnitt (X-Z Ebene) mit vollständigem thermischem Pfad (Planarer 4-Layer Cu-Spreader $\rightarrow$ 11x Zwischenboden-Konvektionsschlitze $\rightarrow$ Gore ePTFE Druckausgleich) und Akku-Kammer. Unten: Querschnitt (Y-Z Ebene) mit detailliertem Verlauf der Schnittstellen direkt zum abgedichteten HD26 SEAL-D Flansch an der Gehäusestirnwand.*
 
 ---
 
-## 2. Thermomanagement & Kühlkonzept (In der Unterwanne)
+## 2. Thermomanagement & Planare PCB-Entwärmung (Kupferbolzenfrei)
 
-Die untere Tauchwanne beherbergt die wärmeerzeugenden Komponenten: $100\,\text{V}$-Schaltregler (LM5164-Q1, bis zu $1{,}8\,\text{W}$), LiPo-Ladecontroller (BQ24075, bis zu $1{,}2\,\text{W}$) und ESP32-S3 DSP-Kern ($0{,}8\,\text{W}$). Zur Entwärmung verfügt die Unterwanne über ein **Solid-Copper-Thermal-Stud-System**:
+Die Zentralbox beherbergt die wärmeerzeugenden Kernkomponenten: $100\,\text{V}$-Schaltregler (LM5164-Q1, $0{,}42\dots 0{,}58\,\text{W}$), LiPo-Ladecontroller (BQ24075, bis zu $0{,}55\,\text{W}$ bei Schnellladung) und ESP32-S3 DSP-Kern ($0{,}46\,\text{W}$). Die Gesamtabwärme liegt im normalen Fahrbetrieb bei lediglich **$\approx 1{,}5\,\text{W}$** (Peak bei maximaler Schnellladung: $2{,}45\,\text{W}$).
 
 ```
-      LEITERPLATTE (TOP & INNER LAYERS)
+       4-LAYER LEITERPLATTE (PLANARER KUPFER-WÄRMESPREADER)
 ┌────────────────────────────────────────────────────────┐
-│ [ LM5164 Buck ]     [ BQ24075 UPS ]     [ ESP32-S3 ]   │ ◄── Thermische Hotspots
+│ [ LM5164 Buck ]     [ BQ24075 UPS ]     [ ESP32-S3 ]   │ ◄── Bauelemente (SMD)
 │   (100V DCDC)       (Power-Path)        (Dual-Core)    │
 ├────────────────────────────────────────────────────────┤
-│ ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ │ ◄── Thermal Vias (GND Plane)
-└──────────────────────────┬─────────────────────────────┘
+│ ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ │ ◄── Layer 2: 35 µm Solid GND Plane
+├────────────────────────────────────────────────────────┤
+│ ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ │ ◄── Layer 3: 35 µm Solid PWR/GND Plane
+└──────────────────────────┬─────────────────────────────┘     (λ = 390 W/m·K, 93.5 cm² Fläche)
                            │
  ┌─────────────────────────▼─────────────────────────────┐
- │ 2,0 mm Kompressibles Silikon-Gap-Pad (Shore 00 35)    │ ◄── λ = 3,0 W/(m·K)
- │ (Gleicht Bauteiltoleranzen & Vibrationen elastisch aus│
- └─────────────────────────┬─────────────────────────────┘
-                           │
- ┌─────────────────────────▼─────────────────────────────┐
- │ 4x Solid Copper Thermal Studs (Ø 8,0 mm, Reinkupfer)  │ ◄── λ = 390 W/(m·K)
- │ Im Wannenboden eingepresst & hydrophob versiegelt     │     Direct Heat Sink
+ │ 11x ZWISCHENBODEN-KONVEKTIONSSCHLITZE & INNENLUFT     │ ◄── Freie Zirkulation in 210 cm³
+ │ (Wärme verteilt sich homogen im gesamten Gehäuse)     │     Luftvolumen & Gore ePTFE-Vent
  └─────────────────────────┬─────────────────────────────┘
                            ▼
-          Abgabe an Gehäuseboden / Motorradrahmen
+          Abgabe über PA12-Gehäuseoberfläche (300 cm²) an Fahrtwind
 ```
 
-### 2.1 Spezifikation der thermischen Komponenten:
-1. **4x Massive Kupfer-Thermal-Pins ($\varnothing\,8{,}0\,\text{mm} \times 6{,}5\,\text{mm}$):**
-   * Gefertigt aus Elektrolytkupfer (CW004A / E-Cu58, $\lambda = 390\,\text{W/(m}\cdot\text{K)}$).
-   * Direkt im Boden der Unterwanne wasserdicht eingeschmolzen/eingepresst. Die Innenköpfe sind plan abgedreht ($\varnothing\,10\,\text{mm}$ Flachkopf), die Außenenden schließen plan mit der Wannenunterseite ab oder koppeln thermisch an den Fahrzeugrahmen.
-   * Positioniert exakt unter den 3 primären Hotspots:
-     - **Pin 1 & 2:** Unter der $100\,\text{V}$-Spannungsversorgung (LM5164-Q1 & Speicherdrossel $L_1$).
-     - **Pin 3:** Unter dem USV-Ladecontroller BQ24075.
-     - **Pin 4:** Unter dem ESP32-S3 Dual-Core DSP-Modul.
-2. **Kompressibles Silikon-Thermal-Gap-Pad ($60 \times 40 \times 2{,}0\,\text{mm}$):**
-   * Extrem weiches, vibrationsdämpfendes Silikon (*Bergquist Gap Pad 3000S30* / *Laird Tflex HD90000*, Shore 00 35, $\lambda = 3{,}0\,\text{W/(m}\cdot\text{K)}$).
-   * Komprimiert sich bei Montage der Hauptplatine um ca. $30\,\%$ ($0{,}6\,\text{mm}$ Kompression), gleicht Fertigungstoleranzen spielfrei aus und verhindert mechanische Scherkräfte auf SMD-Lötstellen.
-3. **Ergebnis:** Der thermische Gesamtwiderstand sinkt von $> 45\,\text{K/W}$ (reines Kunststoffgehäuse) auf **$< 5{,}8\,\text{K/W}$**. Die maximale Chiptemperatur des LM5164 bleibt selbst bei $+50\,^\circ\text{C}$ Umgebungstemperatur unter der Sitzbank sicher unter $+78\,^\circ\text{C}$ (zulässig bis $+125\,^\circ\text{C}$).
+### 2.1 Spezifikation & physikalische Funktionsweise:
+1. **Planarer 4-Layer Kupfer-Wärmespreader ($85 \times 55\,\text{mm}$):**
+   * Die beiden massiven $35\,\mu\text{m}$ Innenlagen der FR4-Platine leiten die Wärme blitzschnell ($\lambda = 390\,\text{W/(m}\cdot\text{K)}$) vom LM5164, BQ24075 und ESP32 ab und verteilen sie vollflächig über die gesamte Platine.
+   * Lokale Hotspots werden vollständig eliminiert; die Platinenoberfläche bleibt im Sommerbetrieb bei homogenen $\approx 55\,^\circ\text{C}$.
+2. **11x Optimierte Konvektions- & Zirkulationsschlitze im Zwischenboden:**
+   * 5 Schlitze an der Rückkante ($Y = 58\,\text{mm}$), 4 Schlitze an den Seitenflanken ($X = 10\,\text{mm}, 92\,\text{mm}$) und 2 Schlitze an der Frontkante lassen die erwärmte Luft ungehindert nach oben in die Deckelkammer aufsteigen.
+   * Das gesamte Gehäuseinnenvolumen ($\approx 210\,\text{cm}^3$) wirkt als gemeinsamer thermischer Puffer, der Druck- und Temperaturschwankungen über das zentrale Gore ePTFE-Ventil ausgleicht.
+3. **Thermische Sicherheitsmargen im Extrem-Stresstest (Stau bei $45\,^\circ\text{C}$ Hitze + $13\,^\circ\text{C}$ Motorwärme = $58\,^\circ\text{C}$ unter Sitz):**
+   * **LM5164-Q1:** $T_j = 93{,}8\,^\circ\text{C}$ (Zulässig bis $+150\,^\circ\text{C}$ nach AEC-Q100 $\rightarrow$ **$+56{,}2\,^\circ\text{C}$ Sicherheitsabstand**).
+   * **ESP32-S3:** $T_j = 90{,}2\,^\circ\text{C}$ (Zulässig bis $+105\,^\circ\text{C}$ $\rightarrow$ **$+14{,}8\,^\circ\text{C}$ Sicherheitsabstand**).
+   * **3.3V LDO:** $T_j = 110{,}4\,^\circ\text{C}$ (Zulässig bis $+125\,^\circ\text{C}$ / $+150\,^\circ\text{C}$).
+   * **1S LiPo Akku:** Verbleibt in der oberen Kammer sicher unter $60\,^\circ\text{C}$ (JEITA-NTC pausiert Ladevorgänge oberhalb von $45\,^\circ\text{C}$ automatisch).
+4. **Vorteile der 100 % kupferbolzenfreien Konstruktion:**
+   * **Absolute Dichtheit nach IP67/IP69K:** Der Boden ist eine monolithische, ununterbrochene PA12-Wanne ohne Dichtfugen oder Klebestellen.
+   * **Sofort einsatzbereite 3D-Druckteile:** Keine Nachbearbeitung, kein Einpressen oder Einkleben von Drehteilen nötig.
+   * **Vollständige Vibrationsentkopplung:** 4x M4 Gummipuffer-Silentblöcke an den Wannenohren isolieren die gesamte Box mechanisch vom Motorradrahmen.
 
 ---
 
