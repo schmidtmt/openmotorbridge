@@ -29,22 +29,25 @@ module main_box_closed_assembly() {
             main_box_lid();
 
     // 4. Front Interface Fittings (HD26 Metal Flange & USB-C Aluminum Cap)
-    // HD26 Metal Flange Body
+    // HD26 Metal Flange Body (centered at x=30.0, z=MAIN_BOX_LOWER_H + 10.0)
     color("silver")
-        translate([MAIN_BOX_WALL + 6.0 + 19.5, -2.0, MAIN_BOX_LOWER_H + 2.0 + 6.5])
-            cube([39.0, 3.0, 13.0], center=true);
+        translate([30.0, -1.0, MAIN_BOX_LOWER_H + 10.0])
+            cube([39.0, 3.5, 9.5], center=true);
 
-    // USB-C Metal Threaded Cap
+    // USB-C Metal Threaded Cap (centered at x=62.5, z=MAIN_BOX_LOWER_H + 9.75)
     color("silver")
-        translate([MAIN_BOX_WALL + 6.0 + 39.0 + 6.0 + 5.5, -3.0, MAIN_BOX_LOWER_H + 2.0 + 6.5])
+        translate([62.5, -2.5, MAIN_BOX_LOWER_H + 9.75])
             rotate([90, 0, 0])
-                cylinder(r=5.5, h=4.0, center=true);
+                cylinder(r=4.5, h=5.0, center=true, $fn=24);
 
-    // RGB LED PMMA Light Window
-    color("cyan", 0.7)
-        translate([MAIN_BOX_WALL + 6.0 + 39.0 + 6.0 + 11.0 + 6.0 + 2.0, -1.0, MAIN_BOX_LOWER_H + 2.0 + 6.5])
-            rotate([90, 0, 0])
-                cylinder(r=2.0, h=3.0, center=true);
+    // RGB LED PMMA Light Windows (3x Ø 2.5 mm at x=77.5, 82.5, 87.5)
+    color("cyan", 0.75) {
+        for (i = [0:2]) {
+            translate([77.5 + i * 5.0, -0.5, MAIN_BOX_LOWER_H + 9.5])
+                rotate([90, 0, 0])
+                    cylinder(r=1.25, h=3.0, center=true, $fn=16);
+        }
+    }
 
     // 5. 4x M3 Stainless Steel Corner Screws
     color("silver") {
