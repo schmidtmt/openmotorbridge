@@ -22,7 +22,7 @@ module cartridge_gallery_preview() {
     // 1. OMM Transceiver Cartridge (Pod 3 Heck, Front Left)
     translate([0, 0, 0]) {
         color("darkslategray", 0.9)
-            cartridge_omm_transceiver_sled();
+            cartridge_base_sled();
         // Inserted PCB Dummy
         translate([2.5, 3.0, 5.5])
             dummy_omm_transceiver_pcb();

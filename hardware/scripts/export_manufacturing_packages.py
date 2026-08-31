@@ -262,8 +262,7 @@ def package_3d_print_stls():
             "cartridge_base_sled.stl",
             "cartridge_insert_sena.stl",
             "cartridge_insert_cardo.stl",
-            "cartridge_insert_blindkassette.stl",
-            "cartridge_omm_transceiver_sled.stl"
+            "cartridge_insert_blindkassette.stl"
         ]:
             p = os.path.join(src_stl_base, "03_pod_cartridges", f)
             if os.path.exists(p):

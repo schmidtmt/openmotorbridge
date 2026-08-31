@@ -3,8 +3,8 @@
 // =============================================================================
 // File: hardware/cad/scad/03_pod_cartridges/parts/02_insert_cardo.scad
 // Description: Standalone 3D printable top cradle insert for Cardo Packtalk Edge.
-//              Features AirMount wedge contour, dual N52 magnet pockets, 5-pin
-//              pogo contact array pocket, and 4x M2 countersunk mounting holes.
+//              Features open corner cutouts giving 100% vertical screwdriver access
+//              to all 4x M2 countersunk fastening screws from directly above.
 // =============================================================================
 
 include <../../00_common/parameters.scad>;
@@ -53,26 +53,36 @@ module cartridge_insert_cardo(
                 cube(size=[10.0, 1.2, 4.0], center=false);
         }
 
-        // 4. 4x M2 Countersunk Mounting Screw Holes
+        // 4. 4x Screwdriver Vertical Access Clearances (Eckfreistellungen)
+        translate([3.5, 2.5, deck_th - 0.1])
+            cylinder(r=3.5, h=cradle_h + 1.0, center=false);
+        translate([insert_l - 5.5, 2.5, deck_th - 0.1])
+            cylinder(r=3.5, h=cradle_h + 1.0, center=false);
+        translate([3.5, insert_w - 2.5, deck_th - 0.1])
+            cylinder(r=3.5, h=cradle_h + 1.0, center=false);
+        translate([insert_l - 5.5, insert_w - 2.5, deck_th - 0.1])
+            cylinder(r=3.5, h=cradle_h + 1.0, center=false);
+
+        // 5. 4x M2 Countersunk Mounting Screw Holes (DIN 7991 M2)
         translate([3.5, 2.5, -0.5])
             cylinder(r=M2_SCREW_HOLE_R, h=deck_th + 1.0, center=false);
-        translate([3.5, 2.5, deck_th - 0.8])
-            cylinder(r1=M2_SCREW_HOLE_R, r2=2.2, h=1.0, center=false);
+        translate([3.5, 2.5, deck_th - 1.0])
+            cylinder(r1=M2_SCREW_HOLE_R, r2=2.3, h=1.1, center=false);
 
         translate([insert_l - 5.5, 2.5, -0.5])
             cylinder(r=M2_SCREW_HOLE_R, h=deck_th + 1.0, center=false);
-        translate([insert_l - 5.5, 2.5, deck_th - 0.8])
-            cylinder(r1=M2_SCREW_HOLE_R, r2=2.2, h=1.0, center=false);
+        translate([insert_l - 5.5, 2.5, deck_th - 1.0])
+            cylinder(r1=M2_SCREW_HOLE_R, r2=2.3, h=1.1, center=false);
 
         translate([3.5, insert_w - 2.5, -0.5])
             cylinder(r=M2_SCREW_HOLE_R, h=deck_th + 1.0, center=false);
-        translate([3.5, insert_w - 2.5, deck_th - 0.8])
-            cylinder(r1=M2_SCREW_HOLE_R, r2=2.2, h=1.0, center=false);
+        translate([3.5, insert_w - 2.5, deck_th - 1.0])
+            cylinder(r1=M2_SCREW_HOLE_R, r2=2.3, h=1.1, center=false);
 
         translate([insert_l - 5.5, insert_w - 2.5, -0.5])
             cylinder(r=M2_SCREW_HOLE_R, h=deck_th + 1.0, center=false);
-        translate([insert_l - 5.5, insert_w - 2.5, deck_th - 0.8])
-            cylinder(r1=M2_SCREW_HOLE_R, r2=2.2, h=1.0, center=false);
+        translate([insert_l - 5.5, insert_w - 2.5, deck_th - 1.0])
+            cylinder(r1=M2_SCREW_HOLE_R, r2=2.3, h=1.1, center=false);
     }
 }
 

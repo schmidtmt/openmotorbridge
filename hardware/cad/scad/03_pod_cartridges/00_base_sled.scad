@@ -15,7 +15,7 @@ include <../00_common/screw_bosses.scad>;
 module cartridge_base_sled(
     sled_l   = CARTRIDGE_BASE_L,
     sled_w   = CARTRIDGE_BASE_W,
-    sled_h   = 18.0,
+    sled_h   = CARTRIDGE_BASE_H,
     wall     = 2.5
 ) {
     difference() {
@@ -30,7 +30,7 @@ module cartridge_base_sled(
             translate([0, sled_w - wall, 0])
                 cube(size=[sled_l, wall, sled_h + wall], center=false);
 
-            // 4. 4x M2 Lower Carrier PCB Mounting Standoffs (h = 2.5 mm, z = 2.5 .. 5.0 mm)
+            // 4. 4x M2 Lower Carrier PCB Mounting Standoffs (for Pod 1 & 2 Audio Headsets)
             translate([18.0, 12.0, wall])
                 screw_boss(outer_r=2.2, inner_r=M2_SCREW_HOLE_R, h=2.5);
             translate([54.0, 12.0, wall])
@@ -40,8 +40,18 @@ module cartridge_base_sled(
             translate([54.0, sled_w - 12.0, wall])
                 screw_boss(outer_r=2.2, inner_r=M2_SCREW_HOLE_R, h=2.5);
 
-            // 5. 4x M2 Insert Fastening Corner Posts (h = 5.5 mm, z = 2.5 .. 8.0 mm)
-            // Sturdy posts with brass heat-set / M2 screw cores for securing modular OEM inserts
+            // 5. 4x M2.5 Direct Mounting Standoffs (for Pod 3 OMM Rear Transceiver PCBA 70x48mm)
+            translate([6.5, 7.0, wall])
+                screw_boss(outer_r=2.5, inner_r=M2_5_SCREW_HOLE_R, h=3.0);
+            translate([sled_l - 6.5, 7.0, wall])
+                screw_boss(outer_r=2.5, inner_r=M2_5_SCREW_HOLE_R, h=3.0);
+            translate([6.5, sled_w - 7.0, wall])
+                screw_boss(outer_r=2.5, inner_r=M2_5_SCREW_HOLE_R, h=3.0);
+            translate([sled_l - 6.5, sled_w - 7.0, wall])
+                screw_boss(outer_r=2.5, inner_r=M2_5_SCREW_HOLE_R, h=3.0);
+
+            // 6. 4x M2 Insert Fastening Corner Posts (h = 5.5 mm, z = 2.5 .. 8.0 mm)
+            // Secures interchangeable modular OEM inserts (Sena, Cardo, Blindkassette)
             translate([7.0, 6.0, wall])
                 screw_boss(outer_r=2.5, inner_r=M2_SCREW_HOLE_R, h=5.5);
             translate([sled_l - 9.0, 6.0, wall])
@@ -51,7 +61,7 @@ module cartridge_base_sled(
             translate([sled_l - 9.0, sled_w - 6.0, wall])
                 screw_boss(outer_r=2.5, inner_r=M2_SCREW_HOLE_R, h=5.5);
 
-            // 6. Front Faceplate (4.0 x 58.0 x 25.0 mm at x = sled_l)
+            // 7. Front Faceplate (4.0 x 58.0 x 25.0 mm at x = sled_l)
             translate([sled_l, -2.0, -1.5])
                 cube(size=[CARTRIDGE_FACE_L, CARTRIDGE_FACE_W, CARTRIDGE_FACE_H], center=false);
 
