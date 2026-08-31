@@ -20,7 +20,7 @@ Die Heck-Pod-Platine vereint auf großzügigen **$60{,}0 \times 36{,}0\,\text{mm
 
 Im Gegensatz zu den Audio- & Intercom-Kassetten (Pod 1 & Pod 2), die einen 2-teiligen Aufbau mit unterer Adapter-Trägerplatine (`openmotorbridge_pod_cartridge`) und oberem Headset-Dockingschacht nutzen, besitzt der **Heck-Pod 3 eine direkte 1-Tier-Architektur**:
 
-![OpenMotorBridge Heck-Pod 3 CAD Baugruppen-Explosionsansicht](../../hardware/cad/pod3_full_assembly_exploded_3d.png)
+![OpenMotorBridge Heck-Pod 3 CAD Baugruppen-Explosionsansicht](../images/cad/pod3_full_assembly_exploded_3d.png)
 
 *Abbildung 13.2: 3D-CAD-Explosionsdarstellung der Heck-Pod 3 Gesamtkassette mit universellem Pod-Gehäuse (integriertes V-Rohrbett mit EPDM-Spannbandnasen), rückseitigem M8 6-Pin IP67 Kabelstutzen und dem 1-teiligen Transceiver-Schlitten ([cartridge_omm_transceiver.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/cartridge_omm_transceiver.scad)), in den die Transceiver-Platine direkt ohne Zwischen-Adapter verschraubt ist.*
 

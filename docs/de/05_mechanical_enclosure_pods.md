@@ -16,7 +16,7 @@ Das Basisgehäuse der Zentralbox ist als modulares, 3-teiliges IP67/IP69K-Sandwi
 
 ### 1.1 3D-CAD-Modell & 3-Schichten-Sandwichaufbau
 
-![OpenMotorBridge Zentralbox 3-Teiliges Sandwich-Gehäuse IP67](../../hardware/cad/main_box_enclosure_cad.png)
+![OpenMotorBridge Zentralbox 3-Teiliges Sandwich-Gehäuse IP67](../images/cad/main_box_enclosure_cad.png)
 
 *Abbildung 5.1: 3D-CAD-Darstellung der zentralen Steuerbox. Links: Geschlossenes IP67-Gehäuse mit HD26-Kabelbaumflansch, USB-C Servicekappe und bündigem RGB-Statusfenster an der Stirnseite der Oberwanne, 4x M4 Silentblöcken an der Unterwanne und flachem Deckel mit Gore-Membran. Rechts: Schnittansicht mit den 3 Sandwich-Ebenen: 1. Unterwanne (100% homogener, geschlossener PA12-Boden, 4-Layer PCB auf M2.5 Stand-offs), 2. Oberwanne mit Zwischenboden (Akku mit EPDM-Spannband oben, 11x Konvektionsschlitze & Kabeldurchbruch im Boden, Ports an Stirnwand), 3. Robuster Deckel mit Gore-Vent (100% dicht).*
 
@@ -49,19 +49,19 @@ Das Basisgehäuse der Zentralbox ist als modulares, 3-teiliges IP67/IP69K-Sandwi
 
 ### 1.2 3D-Explosionsdarstellung & Schichtaufbau (1:1:1 CAD Fitting)
 
-![OpenMotorBridge Zentralbox Exploded 3D CAD Fitting](../../hardware/cad/main_box_full_assembly_exploded_3d.png)
+![OpenMotorBridge Zentralbox Exploded 3D CAD Fitting](../images/cad/main_box_full_assembly_exploded_3d.png)
 
 *Abbildung 5.1.1: 1:1:1 euklidische CAD-Explosionsdarstellung der Zentralbox. Gezeigt werden alle 5 Montageebenen entlang der vertikalen Z-Achse: Unterwanne mit 4x M4 Silentblöcken und 100% geschlossenem PA12-Boden, 4-Layer Hauptplatine (85x55mm) mit planarem Kupfer-Wärmespreader, Oberwanne mit Zwischenboden (11x Konvektionsschlitze) und stirnseitigen Schnittstellen (HD26, USB-C, LED), 1S LiPo-Pufferakku im Konturbett mit EPDM-Spannband sowie der Gehäusedeckel mit Gore ePTFE-Membran.*
 
 ### 1.3 3D-Röntgenansicht & Zusammenbau-Fitting
 
-![OpenMotorBridge Zentralbox Mated 3D X-Ray CAD Fitting](../../hardware/cad/main_box_assembly_mated_3d.png)
+![OpenMotorBridge Zentralbox Mated 3D X-Ray CAD Fitting](../images/cad/main_box_assembly_mated_3d.png)
 
 *Abbildung 5.1.2: Transparente 3D-Röntgenansicht der vollständig geschlossenen Zentralbox. Erkennbar sind die spielfreien Bauteilfreiräume, die geschützte Akku-Lagerung auf dem Zwischenboden, die durchgängige Konvektion über die 11 Zwischenbodenschlitze und der scheuerfreie Kabelverlauf zum HD26-Flansch.*
 
 ### 1.4 Maßstabsgetreuer Längs- & Querschnitt (X-Z Thermik & Y-Z Kabelführung)
 
-![OpenMotorBridge Zentralbox Cross Sections](../../hardware/cad/main_box_assembly_cross_section.png)
+![OpenMotorBridge Zentralbox Cross Sections](../images/cad/main_box_assembly_cross_section.png)
 
 *Abbildung 5.1.3: Exakte 2D-Schnittansichten der Zentralbox. Oben: Längsschnitt (X-Z Ebene) mit vollständigem thermischem Pfad (Planarer 4-Layer Cu-Spreader $\rightarrow$ 11x Zwischenboden-Konvektionsschlitze $\rightarrow$ Gore ePTFE Druckausgleich) und Akku-Kammer. Unten: Querschnitt (Y-Z Ebene) mit detailliertem Verlauf der Schnittstellen direkt zum abgedichteten HD26 SEAL-D Flansch an der Gehäusestirnwand.*
 
@@ -415,12 +415,12 @@ Zur vibrationsfesten, spielfreien und werkzeuglosen Arretierung der Intercoms un
  └─────────────────────────────────────────────────────────────┘
 ```
 
-![OpenMotorBridge Modular Cartridge Variants CAD Trio](../../hardware/cad/cartridge_variants_trio.png)
+![OpenMotorBridge Modular Cartridge Variants CAD Trio](../images/cad/cartridge_variants_trio.png)
 
 *Abbildung 5.2: 3D-CAD-Visualisierung der 4 modularen Wechselkassetten-Varianten im universellen Grundschlitten ($75 \times 54 \times 20{,}5\,\text{mm}$): OMM Heck-Transceiver mit GPS & LoRa (vorne links), Sena 50S/60S Quick-Snap Cradle (vorne rechts), Cardo Magnetic Air Mount (hinten links) und wasserdichte IP67 Blindkassette / Dry Box (hinten rechts).*
 
 #### 1. Sena 50S / 60S Kontur-Nest & Snap-Cradle
-![OpenMotorBridge Sena 50S Cartridge Assembly 3D CAD Fitting](../../hardware/cad/sena_cartridge_assembly_cad.png)
+![OpenMotorBridge Sena 50S Cartridge Assembly 3D CAD Fitting](../images/cad/sena_cartridge_assembly_cad.png)
 
 *Abbildung 5.3: 1:1:1 euklidische CAD-Visualisierung der Sena 50S/60S 2-teiligen Wechselkassette im Satelliten-Pod. Erkennbar sind der generische Unterschlitten mit Adapterplatine (50x22 mm), der 1.5 mm Unterflur-Kabelkanal, das austauschbare 3D-Konturbett mit Jog-Dial-Arretierung und die EPDM-Spannlasche.*
 
@@ -430,7 +430,7 @@ Zur vibrationsfesten, spielfreien und werkzeuglosen Arretierung der Intercoms un
 * **Elektrischer Übergang:** 7-poliges vergoldetes Federkontaktfeld (Pogo-Array bei $X = +22{,}0\,\text{mm}$) greift direkt auf die originalen Gegenkontakte des Sena-Geräts; JST-SH 6P Flachbandkabel durch den Unterflurkanal zur Kassetten-Trägerplatine (`openmotorbridge_pod_cartridge`).
 
 #### 2. Cardo Packtalk Edge / Pro Magnetic Air Mount & Kontur-Nest
-![OpenMotorBridge Cardo Packtalk Edge Cartridge Assembly 3D CAD Fitting](../../hardware/cad/cardo_cartridge_assembly_cad.png)
+![OpenMotorBridge Cardo Packtalk Edge Cartridge Assembly 3D CAD Fitting](../images/cad/cardo_cartridge_assembly_cad.png)
 
 *Abbildung 5.4: 1:1:1 euklidische CAD-Visualisierung der Cardo Packtalk Edge 2-teiligen Wechselkassette im Satelliten-Pod. Gezeigt werden der N52-Neodym-Magnetsitz (Ø8x2 mm), das 5-Pin Federkontaktfeld bei X = +10 mm und der scheuerfreie Kabelverlauf unter dem Dämpfungsinlay.*
 
@@ -443,7 +443,7 @@ Zur vibrationsfesten, spielfreien und werkzeuglosen Arretierung der Intercoms un
 
 ### 5.3.1 Mechanischer & Elektrischer Längsschnitt-Vergleich (Tolerance & Clearance Stack-Up)
 
-![OpenMotorBridge Sena & Cardo Cartridges Longitudinal Cross Section](../../hardware/cad/sena_cardo_cartridge_cross_section.png)
+![OpenMotorBridge Sena & Cardo Cartridges Longitudinal Cross Section](../images/cad/sena_cardo_cartridge_cross_section.png)
 
 *Abbildung 5.5: Maßstabsgetreuer 2D-Längsschnitt (X-Z Ebene) durch die Sena 50S (oben) und Cardo Packtalk Edge (unten) Wechselkassetten im geschlossenen Pod-Gehäuse. Dargestellt sind die 2-teilige Schichtung, der axiale JST-SH Kabelabgang nach rechts (+X), die M2-Verschraubungsebenen und die exakte axiale Zentrierung der 6-Pin Steckverbindung auf Y=0, Z=0.*
 
@@ -595,7 +595,7 @@ Da die Satelliten-Pods durch ihre optimierte Schaltungsarchitektur extrem verlus
 
 Wird ein Pod-Schacht temporär nicht für ein Headset genutzt (z. B. bei Einzelfahrer-Konfiguration mit nur 1 Intercom, bei Wartungsarbeiten oder während der Winterpause), verschließt die formidentische **IP67-Blindkassette** den Wechselschacht hermetisch:
 
-![OpenMotorBridge IP67 Blindkassette 3D CAD Render](../../hardware/cad/dummy_cartridge_cad.png)
+![OpenMotorBridge IP67 Blindkassette 3D CAD Render](../images/cad/dummy_cartridge_cad.png)
 
 #### Mechanische Spezifikation & Dichtungskonzept:
 * **100 % Formidentischer Schlittenkörper ($92{,}0 \times 54{,}0 \times 23{,}5\,\text{mm}$):**
@@ -660,7 +660,7 @@ Um Verkanten, schiefe Krafteinleitung und fehlerhaftes Einstecken physikalisch a
 
 #### 3D-CAD-Schnittansicht der asymmetrischen Poka-Yoke Passung:
 
-![OpenMotorBridge Pod Poka-Yoke Asymmetrical Guide Rails 3D Cross Section](../../hardware/cad/pod_poka_yoke_cross_section_cad.png)
+![OpenMotorBridge Pod Poka-Yoke Asymmetrical Guide Rails 3D Cross Section](../images/cad/pod_poka_yoke_cross_section_cad.png)
 
 *Abbildung 5.6: 3D-CAD-Querschnitt (Y-Z Ebene) durch das Satelliten-Pod-Gehäuse und den eingeschobenen Kassetten-Grundschlitten. Deutlich sichtbar ist der $6{,}0\,\text{mm}$ Höhenversatz der Führungsnuten (Links: $Z=8{,}2\,\text{mm}$, Rechts: $Z=14{,}2\,\text{mm}$) mit formschlüssig gleitenden Kassetten-Führungsfedern (blaue Schlittenflanken) und millimetergenauer Zentrierung der zentralen Kontaktebene.*
 
@@ -685,11 +685,11 @@ Das gesamte OpenMotorBridge-System basiert auf dem Prinzip der **vollständigen 
 
 #### 3D-CAD-Explosionsdarstellung & Aufbau der universellen Pod-Baugruppe:
 
-![OpenMotorBridge Satelliten-Pod CAD Explosionsdarstellung](../../hardware/cad/openmotorbridge_pod_exploded_view.png)
+![OpenMotorBridge Satelliten-Pod CAD Explosionsdarstellung](../images/cad/openmotorbridge_pod_exploded_view.png)
 
 *Abbildung 5.7: 3D-CAD-Explosionsdarstellung des universellen Satelliten-Pods. Gezeigt werden das 5-seitige Monocoque-Schachtgehäuse mit dezent verrundeten Außenkanten (R=3 mm), integriertem V-Nut-Rohrbett (Ø18-35 mm) und 4x seitlichen EPDM-Einhängenasen, rückseitigem M8 6-Pin IP67 Kabelanschluss, Schutz-Schottwand mit 6-Pin Fangtrichter, V4A-Auswerferfedern und der herausgezogene Universalschlitten mit asymmetrischen Poka-Yoke Führungsfedern.*
 
-![OpenMotorBridge Satelliten-Pod Röntgenansicht](../../hardware/cad/openmotorbridge_pod_assembly_render_xray.png)
+![OpenMotorBridge Satelliten-Pod Röntgenansicht](../images/cad/openmotorbridge_pod_assembly_render_xray.png)
 
 *Abbildung 5.8: 3D-Röntgen- und Transparenzdarstellung des geschlossenen Satelliten-Pods mit eingeschobener Wechselkassette. Gut erkennbar sind das integrierte Universal-Rohrbett an der Unterseite, die spielfreien asymmetrischen Poka-Yoke Führungsnuten, der zentrierte 6-Pin Kolbeneinschub in den Schutzkragen und die bündige Flanschabdichtung.*
 

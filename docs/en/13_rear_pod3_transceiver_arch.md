@@ -20,7 +20,7 @@ The Rear Pod PCB unites multi-constellation GNSS, dual-PHY mesh networking, a 50
 
 Unlike the Audio & Intercom cartridges (Pod 1 & Pod 2), which employ a 2-piece structure with a lower adapter carrier PCB (`openmotorbridge_pod_cartridge`) and an upper headset docking cradle, **Rear Pod 3 features a direct 1-tier monolithic architecture**:
 
-![OpenMotorBridge Rear Pod 3 CAD Assembly Exploded View](../../hardware/cad/pod3_full_assembly_exploded_3d.png)
+![OpenMotorBridge Rear Pod 3 CAD Assembly Exploded View](../images/cad/pod3_full_assembly_exploded_3d.png)
 
 *Figure 13.2: 3D CAD exploded view of the complete Rear Pod 3 assembly featuring the universal pod base housing (integrated V-groove frame tube saddle with EPDM strap lugs), rear M8 6-pin IP67 cable gland, and the 1-tier transceiver sled ([cartridge_omm_transceiver.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/cartridge_omm_transceiver.scad)) holding the transceiver PCB directly with zero intermediary adapters.*
 

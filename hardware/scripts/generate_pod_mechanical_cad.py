@@ -516,9 +516,9 @@ Group {
     print(f"✓ Exported Stirnwand-Adapter 3D VRML Assembly Model: {output_wrl}")
 
 if __name__ == '__main__':
-    xray_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../cad/openmotorbridge_pod_assembly_render_xray.png'))
-    exploded_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../cad/openmotorbridge_pod_exploded_view.png'))
-    vrml_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../cad/openmotorbridge_pod_assembly.wrl'))
+    xray_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../docs/images/cad/openmotorbridge_pod_assembly_render_xray.png'))
+    exploded_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../docs/images/cad/openmotorbridge_pod_exploded_view.png'))
+    vrml_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../cad/vrml/openmotorbridge_pod_assembly.wrl'))
     render_xray_assembly(xray_path)
     render_exploded_view(exploded_path)
     export_vrml_assembly(vrml_path)

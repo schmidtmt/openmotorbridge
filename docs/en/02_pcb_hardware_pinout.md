@@ -51,7 +51,7 @@ The main board integrates on a compact **$85.0 \times 55.0\,\text{mm}$** footpri
 
 ## 3. Zoning Architecture (Zero-Cross-Talk & Zero-Collision Topology)
 
-![OpenMotorBridge Mainboard Top-Down Layout Diagram](../../hardware/cad/main_board_pcb_top_down.png)
+![OpenMotorBridge Mainboard Top-Down Layout Diagram](../images/cad/main_board_pcb_top_down.png)
 
 *Figure 2.2: Collision-free 2D top-down component placement diagram of the central main board ($85 \times 55\,\text{mm}$). Color-coded zones with $100\,\%$ certified overlap-free bounding boxes.*
 
@@ -106,7 +106,7 @@ To eliminate cross-talk between the switching regulator RF ($2.1\,\text{MHz}$), 
 
 ## 4. Central HD26/IDC-26 Connector Pinout (`J1`)
 
-![OpenMotorBridge Central Automotive Wiring Harness](../../hardware/cad/wiring_harness_cad.png)
+![OpenMotorBridge Central Automotive Wiring Harness](../images/cad/wiring_harness_cad.png)
 
 *Figure 2.3: Automotive Wiring Harness of the 26-Pin Flange Interface.*
 

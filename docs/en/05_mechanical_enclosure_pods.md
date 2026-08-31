@@ -16,7 +16,7 @@ The base housing of the central main box is engineered as a modular, 3-piece IP6
 
 ### 1.1 3D CAD Model & 3-Tier Sandwich Hierarchy
 
-![OpenMotorBridge Central Main Box 3-Piece Sandwich Enclosure IP67](../../hardware/cad/main_box_enclosure_cad.png)
+![OpenMotorBridge Central Main Box 3-Piece Sandwich Enclosure IP67](../images/cad/main_box_enclosure_cad.png)
 
 *Figure 5.1: 3D CAD render of the central control box. Left: Closed IP67 housing with HD26 harness flange, USB-C service screw cap, and flush RGB status window on the front face of the upper tray, 4x M4 silentblock ears on the lower hull, and flat lid with Gore vent. Right: Sectional X-ray view revealing the 3 sandwich tiers: 1. Lower Hull (100% solid homogeneous PA12 floor, 4-layer PCB on M2.5 standoffs), 2. Upper Tray with Mid-Baffle (LiPo battery with EPDM strap on top, 11x convection slots & wire slot in floor, ports on front face), 3. Solid protective lid with Gore vent (100% sealed).*
 
@@ -49,19 +49,19 @@ The base housing of the central main box is engineered as a modular, 3-piece IP6
 
 ### 1.2 3D Exploded View & Sandwich Stratification (1:1:1 CAD Fitting)
 
-![OpenMotorBridge Central Main Box Exploded 3D CAD Fitting](../../hardware/cad/main_box_full_assembly_exploded_3d.png)
+![OpenMotorBridge Central Main Box Exploded 3D CAD Fitting](../images/cad/main_box_full_assembly_exploded_3d.png)
 
 *Figure 5.1.1: 1:1:1 Euclidean scale 3D CAD exploded assembly of the central main box. Displays all 5 assembly tiers along the vertical Z-axis: lower hull with 4x M4 silentblock mounts and 100% solid PA12 floor, 4-layer main PCB (85x55mm) with planar copper heat spreader, upper tray with mid-baffle (11x convection slots) and front interfaces (HD26, USB-C, LED), 1S LiPo buffer battery in cradle with EPDM retention strap, and protective lid with Gore ePTFE vent.*
 
 ### 1.3 3D Mated X-Ray View & Mechanical Fitting
 
-![OpenMotorBridge Central Main Box Mated 3D X-Ray CAD Fitting](../../hardware/cad/main_box_assembly_mated_3d.png)
+![OpenMotorBridge Central Main Box Mated 3D X-Ray CAD Fitting](../images/cad/main_box_assembly_mated_3d.png)
 
 *Figure 5.1.2: Translucent 3D X-ray view of the closed central control box. Confirms zero-collision component clearances, secure battery retention in the upper cradle, continuous convection through the 11 mid-baffle slots, and smooth wiring trajectory directly to the HD26 wall flange.*
 
 ### 1.4 True-to-Scale Longitudinal & Transverse Cross-Sections (X-Z Thermal & Y-Z Cable Path)
 
-![OpenMotorBridge Central Main Box Cross Sections](../../hardware/cad/main_box_assembly_cross_section.png)
+![OpenMotorBridge Central Main Box Cross Sections](../images/cad/main_box_assembly_cross_section.png)
 
 *Figure 5.1.3: 2D cross-sections of the central main box. Top: Longitudinal (X-Z plane) showing the direct planar thermal dissipation path (4-layer Cu spreader $\rightarrow$ 11x mid-baffle convection slots $\rightarrow$ Gore ePTFE pressure vent) and battery bay. Bottom: Transverse (Y-Z plane) illustrating front interface integration directly to the sealed HD26 SEAL-D flange on the front wall.*
 
@@ -502,12 +502,12 @@ To ensure 100% vibration-proof, play-free, and tool-free retention ($> 20\,\text
  └─────────────────────────────────────────────────────────────┘
 ```
 
-![OpenMotorBridge Modular Cartridge Variants CAD Trio](../../hardware/cad/cartridge_variants_trio.png)
+![OpenMotorBridge Modular Cartridge Variants CAD Trio](../images/cad/cartridge_variants_trio.png)
 
 *Figure 5.2: 3D CAD visualization of the 4 modular swappable cartridge variants inside the universal base sled ($75 \times 54 \times 20.5\,\text{mm}$): OMM Rear Transceiver with GNSS & LoRa (front left), Sena 50S/60S Quick-Snap Cradle (front right), Cardo Magnetic Air Mount (rear left), and waterproof IP67 dummy cartridge / Dry Box (rear right).*
 
 #### 1. Sena 50S / 60S Contour Nest & Snap-Cradle
-![OpenMotorBridge Sena 50S Cartridge Assembly 3D CAD Fitting](../../hardware/cad/sena_cartridge_assembly_cad.png)
+![OpenMotorBridge Sena 50S Cartridge Assembly 3D CAD Fitting](../images/cad/sena_cartridge_assembly_cad.png)
 
 *Figure 5.3: 1:1:1 Euclidean scale 3D CAD visualization of the Sena 50S/60S 2-piece modular cartridge inside the Satellite Pod. Highlights the universal base sled with adapter PCB (50x22 mm), 1.5 mm under-bed routing channel, interchangeable 3D contour top nest with Jog-Dial lock, and EPDM retention strap.*
 
@@ -517,7 +517,7 @@ To ensure 100% vibration-proof, play-free, and tool-free retention ($> 20\,\text
 * **Electrical Interface:** 7-pin gold-plated spring Pogo array at $X = +22.0\,\text{mm}$ contacts the Sena gold pads; JST-SH 6P flat ribbon cable routes via under-bed channel to carrier PCB (`openmotorbridge_pod_cartridge`).
 
 #### 2. Cardo Packtalk Edge / Pro Magnetic Air Mount & Contour Nest
-![OpenMotorBridge Cardo Packtalk Edge Cartridge Assembly 3D CAD Fitting](../../hardware/cad/cardo_cartridge_assembly_cad.png)
+![OpenMotorBridge Cardo Packtalk Edge Cartridge Assembly 3D CAD Fitting](../images/cad/cardo_cartridge_assembly_cad.png)
 
 *Figure 5.4: 1:1:1 Euclidean scale 3D CAD visualization of the Cardo Packtalk Edge 2-piece modular cartridge inside the Satellite Pod. Features N52 neodymium disc magnet seat (Ø8x2 mm), 5-pin spring contact pad array at X = +10 mm, and protected under-bed cable channel.*
 
@@ -530,7 +530,7 @@ To ensure 100% vibration-proof, play-free, and tool-free retention ($> 20\,\text
 
 ### 5.3.1 Mechanical & Electrical Longitudinal Cross-Section (Tolerance & Clearance Stack-Up)
 
-![OpenMotorBridge Sena & Cardo Cartridges Longitudinal Cross Section](../../hardware/cad/sena_cardo_cartridge_cross_section.png)
+![OpenMotorBridge Sena & Cardo Cartridges Longitudinal Cross Section](../images/cad/sena_cardo_cartridge_cross_section.png)
 
 *Figure 5.4: True-to-scale 2D longitudinal cross-section (X-Z plane) comparing Sena 50S (top) and Cardo Packtalk Edge (bottom) swappable cartridges inside the closed Pod enclosure. Shows the 2-piece sandwich stratification, axial JST-SH cable exit (+X), M2 fastening planes, and exact axial centering of the 6-pin interface on Y=0, Z=0.*
 
@@ -608,7 +608,7 @@ Because the Satellite Pods operate with ultra-low thermal dissipation (Pods 1 & 
 
 When a pod bay is temporarily unpopulated (e.g. single-intercom configurations, seasonal winter storage of headsets, or maintenance), the form-identical **IP67 Dummy Cartridge** hermetically seals the bay:
 
-![OpenMotorBridge IP67 Dummy Cartridge 3D CAD Render](../../hardware/cad/dummy_cartridge_cad.png)
+![OpenMotorBridge IP67 Dummy Cartridge 3D CAD Render](../images/cad/dummy_cartridge_cad.png)
 
 #### Mechanical Specification & Sealing Architecture:
 * **100% Form-Identical Sled Body ($92.0 \times 54.0 \times 23.5\,\text{mm}$):**
@@ -670,7 +670,7 @@ To eliminate tilting, asymmetric lever forces, and reverse insertion, the cartri
 
 #### 3D CAD Cross-Section View of Poka-Yoke Asymmetrical Guide Rails:
 
-![OpenMotorBridge Pod Poka-Yoke Asymmetrical Guide Rails 3D Cross Section](../../hardware/cad/pod_poka_yoke_cross_section_cad.png)
+![OpenMotorBridge Pod Poka-Yoke Asymmetrical Guide Rails 3D Cross Section](../images/cad/pod_poka_yoke_cross_section_cad.png)
 
 *Figure 5.6: 3D CAD transverse cross-section (Y-Z plane) through the Satellite Pod housing and inserted swappable cartridge sled. Clearly highlights the $6.0\,\text{mm}$ vertical height offset of the guide tracks (Left: $Z=8.2\,\text{mm}$, Right: $Z=14.2\,\text{mm}$) with precision tongue-and-groove slide fit and centered 6-pin contact plane.*
 
@@ -727,10 +727,10 @@ To eliminate tilting, asymmetric lever forces, and reverse insertion, the cartri
 To holistically verify mechanical clearances, sealing boundaries, and electrical transitions, the complete assembly of the **Universal Satellite Pod** and **Removable Cartridge** was modeled in a translucent X-ray aesthetic (*Ghosted X-Ray*) and an exploded layer hierarchy:
 
 #### Translucent 3D X-Ray CAD Architecture (100 x 60 x 28 mm, Universal Monocoque):
-![OpenMotorBridge 3D X-Ray CAD Architecture](../../hardware/cad/openmotorbridge_pod_assembly_render_xray.png)
+![OpenMotorBridge 3D X-Ray CAD Architecture](../images/cad/openmotorbridge_pod_assembly_render_xray.png)
 
 #### Exploded Assembly Hierarchy (Along Horizontal Insertion Axis):
-![OpenMotorBridge 3D Exploded View](../../hardware/cad/openmotorbridge_pod_exploded_view.png)
+![OpenMotorBridge 3D Exploded View](../images/cad/openmotorbridge_pod_exploded_view.png)
 
 #### Mechanical Specifications & Tolerances:
 * **Outer Pod Enclosure:** PA12 MJF ($100.0 \times 60.0 \times 28.0\,\text{mm}$, internal bay $76.0 \times 55.0 \times 23.0\,\text{mm}$) with $R=3.0\,\text{mm}$ rounded corners.
@@ -753,17 +753,17 @@ To holistically verify mechanical clearances, sealing boundaries, and electrical
 To validate the mechanical, thermal, and electrical integration of the entire system, the complete **Rear Pod 3 assembly (with OMM Transceiver and modular slide-in cartridge)** was modeled and verified in true 1:1:1 Euclidean scale CAD:
 
 #### 1. 3D Assembly Exploded View (Full Component Hierarchy):
-![OpenMotorBridge Pod 3 Assembly Exploded 3D CAD](../../hardware/cad/pod3_full_assembly_exploded_3d.png)
+![OpenMotorBridge Pod 3 Assembly Exploded 3D CAD](../images/cad/pod3_full_assembly_exploded_3d.png)
 
 *Figure 5.3: Exploded view of Satellite Pod 3 (120x64x32 mm monocoque enclosure, M8 6-pin panel receptacle on bottom face, vertical Pod Base PCB at inner bulkhead, screw-in PA12 protective partition with 45° alignment shroud and dual auto-eject stainless steel springs, and slide-in cartridge sled).*
 
 #### 2. Close-Up View of Mated Interface & Shroud:
-![OpenMotorBridge Pod 3 Mated Interface Close-Up](../../hardware/cad/pod3_assembly_mated_closeup.png)
+![OpenMotorBridge Pod 3 Mated Interface Close-Up](../images/cad/pod3_assembly_mated_closeup.png)
 
 *Figure 5.4: Translucent close-up view of the mated state. The 6-pin precision pin header of the Pod Base engages the socket of the cartridge sled, fully enclosed by the 4-sided protective shroud. Compressed springs maintain constant preload against the IP67 flange gasket.*
 
 #### 3. Cross-Sectional Fitting (Mechanical & Electrical Alignment):
-![OpenMotorBridge Pod 3 Cross-Sectional Fitting](../../hardware/cad/pod3_assembly_cross_section.png)
+![OpenMotorBridge Pod 3 Cross-Sectional Fitting](../images/cad/pod3_assembly_cross_section.png)
 
 *Figure 5.5: True-to-scale cross section (X-Z plane) through Satellite Pod 3. Highlights the centered position of the 6-pin interface on the horizontal centerline, symmetrical sled guide rails, and stress-free transition from vehicle M8 connector to internal electronics.*
 

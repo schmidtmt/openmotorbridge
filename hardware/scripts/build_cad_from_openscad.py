@@ -19,7 +19,7 @@ OPENSCAD_BIN = "/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD"
 REPO_ROOT = "/Users/schmidtm/openMotorBridge"
 SCAD_DIR = os.path.join(REPO_ROOT, "hardware/cad/scad")
 STL_BASE = os.path.join(REPO_ROOT, "hardware/cad/stl")
-CAD_IMG_DIR = os.path.join(REPO_ROOT, "hardware/cad")
+CAD_IMG_DIR = os.path.join(REPO_ROOT, "docs/images/cad")
 
 # Check OpenSCAD binary
 if not os.path.exists(OPENSCAD_BIN):

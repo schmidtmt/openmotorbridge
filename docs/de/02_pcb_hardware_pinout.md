@@ -51,7 +51,7 @@ Die Hauptplatine vereint auf kompakten **$85{,}0 \times 55{,}0\,\text{mm}$** die
 
 ## 3. Zonierungs-Architektur (Zero-Cross-Talk & Zero-Collision Topologie)
 
-![OpenMotorBridge Zentralplatine Top-Down Bestückungsplan](../../hardware/cad/main_board_pcb_top_down.png)
+![OpenMotorBridge Zentralplatine Top-Down Bestückungsplan](../images/cad/main_board_pcb_top_down.png)
 
 *Abbildung 2.2: Kollisionsfreier 2D-Top-Down-Bestückungsplan der Zentralplatine ($85 \times 55\,\text{mm}$). Farbcodierte Zonen mit $100\,\%$ Überschneidungsfreiheit (geprüfte Bounding-Boxes).*
 
@@ -106,7 +106,7 @@ Um gegenseitige Störungen zwischen der Schaltnetzteil-HF ($2{,}1\,\text{MHz}$),
 
 ## 4. Pinbelegung des zentralen HD26/IDC-26 Steckverbinders (`J1`)
 
-![OpenMotorBridge Zentraler Automotive-Kabelbaum](../../hardware/cad/wiring_harness_cad.png)
+![OpenMotorBridge Zentraler Automotive-Kabelbaum](../images/cad/wiring_harness_cad.png)
 
 *Abbildung 2.3: Automotive-Kabelbaum der 26-poligen Flansch-Schnittstelle.*
 

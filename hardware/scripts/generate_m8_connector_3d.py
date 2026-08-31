@@ -178,5 +178,5 @@ Group {
     print(f"✓ Generated M8 6-Pin A-Coded IP67 VRML 3D Model: {output_wrl}")
 
 if __name__ == '__main__':
-    target = os.path.abspath(os.path.join(os.path.dirname(__file__), '../cad/M8_6Pin_A_Coded_Receptacle.wrl'))
+    target = os.path.abspath(os.path.join(os.path.dirname(__file__), '../cad/vrml/M8_6Pin_A_Coded_Receptacle.wrl'))
     generate_m8_vrml(target)
