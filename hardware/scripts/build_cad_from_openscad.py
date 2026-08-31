@@ -164,6 +164,7 @@ def compile_stls():
         cmd = [
             OPENSCAD_BIN,
             "-o", stl_path,
+            "--export-format", "binstl",
             scad_path
         ]
         
