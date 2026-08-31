@@ -40,26 +40,16 @@ module cartridge_base_sled(
             translate([54.0, sled_w - 12.0, wall])
                 screw_boss(outer_r=2.2, inner_r=M2_SCREW_HOLE_R, h=2.5);
 
-            // 5. 4x M2.5 Direct Mounting Standoffs (for Pod 3 OMM Rear Transceiver PCBA 70x48mm)
-            translate([6.5, 7.0, wall])
-                screw_boss(outer_r=2.5, inner_r=M2_5_SCREW_HOLE_R, h=3.0);
-            translate([sled_l - 6.5, 7.0, wall])
-                screw_boss(outer_r=2.5, inner_r=M2_5_SCREW_HOLE_R, h=3.0);
-            translate([6.5, sled_w - 7.0, wall])
-                screw_boss(outer_r=2.5, inner_r=M2_5_SCREW_HOLE_R, h=3.0);
-            translate([sled_l - 6.5, sled_w - 7.0, wall])
-                screw_boss(outer_r=2.5, inner_r=M2_5_SCREW_HOLE_R, h=3.0);
-
-            // 6. 4x M2 Insert Fastening Corner Posts (h = 5.5 mm, z = 2.5 .. 8.0 mm)
-            // Secures interchangeable modular OEM inserts (Sena, Cardo, Blindkassette)
+            // 5. 4x M2 Insert Fastening Corner Posts (h = 5.5 mm, z = 2.5 .. 8.0 mm)
+            // Secures interchangeable modular OEM inserts (Sena, Cardo, Blindkassette) & OMM Rear PCBA
             translate([7.0, 6.0, wall])
-                screw_boss(outer_r=2.5, inner_r=M2_SCREW_HOLE_R, h=5.5);
+                screw_boss(outer_r=2.8, inner_r=M2_SCREW_HOLE_R, h=5.5);
             translate([sled_l - 9.0, 6.0, wall])
-                screw_boss(outer_r=2.5, inner_r=M2_SCREW_HOLE_R, h=5.5);
+                screw_boss(outer_r=2.8, inner_r=M2_SCREW_HOLE_R, h=5.5);
             translate([7.0, sled_w - 6.0, wall])
-                screw_boss(outer_r=2.5, inner_r=M2_SCREW_HOLE_R, h=5.5);
+                screw_boss(outer_r=2.8, inner_r=M2_SCREW_HOLE_R, h=5.5);
             translate([sled_l - 9.0, sled_w - 6.0, wall])
-                screw_boss(outer_r=2.5, inner_r=M2_SCREW_HOLE_R, h=5.5);
+                screw_boss(outer_r=2.8, inner_r=M2_SCREW_HOLE_R, h=5.5);
 
             // 7. Lateral Support Ledges / Shoulders (Auflagestufen at z = 2.5 .. 8.0 mm)
             // Provides continuous rigid shelf for the OEM insert and maintains 1.8 mm clearance over Carrier PCB
