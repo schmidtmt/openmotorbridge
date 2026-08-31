@@ -26,15 +26,16 @@ module corner_screw_post(size_x=5.0, size_y=5.0, h=12.0, hole_r=1.65, hole_h=10.
     }
 }
 
-// 3. M4 Silentblock Outer Mounting Ear (with rubber buffer hole)
-module mounting_ear_m4(ear_len=12.0, ear_w=10.0, ear_h=6.0, hole_r=2.2) {
+// 3. M4 Silentblock Outer Mounting Ear (Centered in Y around y=0, extends along +X)
+module mounting_ear_m4(ear_len=14.0, ear_w=12.0, ear_h=5.0, hole_r=2.2) {
     difference() {
         union() {
-            cube(size=[ear_len - ear_w/2.0, ear_w, ear_h], center=false);
-            translate([ear_len - ear_w/2.0, ear_w/2.0, 0])
+            translate([0, -ear_w/2.0, 0])
+                cube(size=[ear_len - ear_w/2.0, ear_w, ear_h], center=false);
+            translate([ear_len - ear_w/2.0, 0, 0])
                 cylinder(r=ear_w/2.0, h=ear_h, center=false);
         }
-        translate([ear_len - ear_w/2.0, ear_w/2.0, -0.1])
+        translate([ear_len - ear_w/2.0, 0, -0.1])
             cylinder(r=hole_r, h=ear_h + 0.2, center=false);
     }
 }
