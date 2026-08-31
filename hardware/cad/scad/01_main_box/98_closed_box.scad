@@ -8,9 +8,9 @@
 // =============================================================================
 
 include <../00_common/parameters.scad>;
-include <00_lower_deck.scad>;
-include <01_upper_deck.scad>;
-include <02_colsure.scad>;
+use <00_lower_deck.scad>;
+use <01_upper_deck.scad>;
+use <02_colsure.scad>;
 
 module main_box_closed_assembly() {
     // 1. Lower Case Tub (Unterwanne, Dark Slate Grey PA12)

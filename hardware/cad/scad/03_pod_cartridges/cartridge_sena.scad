@@ -11,9 +11,9 @@
 
 include <../00_common/parameters.scad>;
 include <../00_common/screw_bosses.scad>;
-include <00_base_sled.scad>;
-include <parts/01_insert_sena.scad>;
-include <../00_common/dummies/dummy_adapter_pcb.scad>;
+use <00_base_sled.scad>;
+use <parts/01_insert_sena.scad>;
+use <../00_common/dummies/dummy_adapter_pcb.scad>;
 
 module cartridge_sena_assembly(exploded = false) {
     z_pcb    = exploded ? 16.0 : 5.0;

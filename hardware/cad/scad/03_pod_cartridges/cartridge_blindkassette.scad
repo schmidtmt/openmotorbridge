@@ -10,8 +10,8 @@
 
 include <../00_common/parameters.scad>;
 include <../00_common/screw_bosses.scad>;
-include <00_base_sled.scad>;
-include <parts/03_insert_blindkassette.scad>;
+use <00_base_sled.scad>;
+use <parts/03_insert_blindkassette.scad>;
 
 module cartridge_blindkassette_assembly(exploded = false) {
     z_insert = exploded ? 24.0 : 8.0;

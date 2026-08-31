@@ -9,11 +9,11 @@
 
 include <../00_common/parameters.scad>;
 include <../00_common/screw_bosses.scad>;
-include <parts/000_lower_base.scad>;
-include <parts/001_lower_screws_enclosure.scad>;
-include <parts/002_pcb_standoffs.scad>;
-include <parts/004_mounting_ears.scad>;
-include <parts/005_sealing_groove.scad>;
+use <parts/000_lower_base.scad>;
+use <parts/001_lower_screws_enclosure.scad>;
+use <parts/002_pcb_standoffs.scad>;
+use <parts/004_mounting_ears.scad>;
+use <parts/005_sealing_groove.scad>;
 
 module main_box_lower_case() {
     difference() {

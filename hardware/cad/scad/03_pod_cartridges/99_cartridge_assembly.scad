@@ -10,12 +10,12 @@
 // =============================================================================
 
 include <../00_common/parameters.scad>;
-include <../00_common/dummies/dummy_omm_transceiver_pcb.scad>;
-include <../00_common/dummies/dummy_adapter_pcb.scad>;
-include <cartridge_omm_transceiver.scad>;
-include <cartridge_sena.scad>;
-include <cartridge_cardo.scad>;
-include <cartridge_blindkassette.scad>;
+use <../00_common/dummies/dummy_omm_transceiver_pcb.scad>;
+use <../00_common/dummies/dummy_adapter_pcb.scad>;
+use <cartridge_omm_transceiver.scad>;
+use <cartridge_sena.scad>;
+use <cartridge_cardo.scad>;
+use <cartridge_blindkassette.scad>;
 
 // Render all 4 cartridge variants side by side for visual design check
 module cartridge_gallery_preview() {

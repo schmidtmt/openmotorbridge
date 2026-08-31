@@ -9,8 +9,8 @@
 
 include <../00_common/parameters.scad>;
 include <../00_common/screw_bosses.scad>;
-include <00_base_sled.scad>;
-include <../00_common/dummies/dummy_omm_transceiver_pcb.scad>;
+use <00_base_sled.scad>;
+use <../00_common/dummies/dummy_omm_transceiver_pcb.scad>;
 
 module cartridge_omm_transceiver_assembly(exploded = false) {
     z_pcb = exploded ? 20.0 : 5.5;

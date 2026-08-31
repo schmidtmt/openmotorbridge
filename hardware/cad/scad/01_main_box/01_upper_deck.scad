@@ -9,11 +9,11 @@
 
 include <../00_common/parameters.scad>;
 include <../00_common/screw_bosses.scad>;
-include <parts/001_lower_screws_enclosure.scad>;
-include <parts/005_sealing_groove.scad>;
-include <parts/010_mid_tray_frame.scad>;
-include <parts/011_mid_partition_floor.scad>;
-include <parts/012_front_cutouts.scad>;
+use <parts/001_lower_screws_enclosure.scad>;
+use <parts/005_sealing_groove.scad>;
+use <parts/010_mid_tray_frame.scad>;
+use <parts/011_mid_partition_floor.scad>;
+use <parts/012_front_cutouts.scad>;
 
 module main_box_mid_tray() {
     difference() {

@@ -7,8 +7,8 @@
 // =============================================================================
 
 include <../00_common/parameters.scad>;
-include <../00_common/dummies/dummy_m8_connector.scad>;
-include <pod_base_housing.scad>;
+use <../00_common/dummies/dummy_m8_connector.scad>;
+use <pod_base_housing.scad>;
 
 // View Mode: Set to true for slide-out exploded cartridge view
 CARTRIDGE_PULLED_OUT = true;

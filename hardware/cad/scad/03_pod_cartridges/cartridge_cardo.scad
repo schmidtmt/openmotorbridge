@@ -11,9 +11,9 @@
 
 include <../00_common/parameters.scad>;
 include <../00_common/screw_bosses.scad>;
-include <00_base_sled.scad>;
-include <parts/02_insert_cardo.scad>;
-include <../00_common/dummies/dummy_adapter_pcb.scad>;
+use <00_base_sled.scad>;
+use <parts/02_insert_cardo.scad>;
+use <../00_common/dummies/dummy_adapter_pcb.scad>;
 
 module cartridge_cardo_assembly(exploded = false) {
     z_pcb    = exploded ? 16.0 : 5.0;
