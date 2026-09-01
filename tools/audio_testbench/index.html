@@ -20,6 +20,10 @@
 
     <div class="system-status-pills">
       <div class="pill">
+        <span id="pillAmbDot" class="dot active"></span>
+        <span id="pillAmbText">TRANSPARENZ: 100%</span>
+      </div>
+      <div class="pill">
         <span id="pillDuckingDot" class="dot"></span>
         <span id="pillDuckingText">DUCKING: 0 dB</span>
       </div>
@@ -169,6 +173,16 @@
 
           <div class="meter-strip">
             <div class="meter-label">
+              <span>AMBIENT</span>
+              <span id="lblAmbDb">-∞ dB</span>
+            </div>
+            <div class="meter-track">
+              <div id="meterAmbFill" class="meter-fill" style="background: linear-gradient(90deg, #8b5cf6, #06b6d4);"></div>
+            </div>
+          </div>
+
+          <div class="meter-strip">
+            <div class="meter-label">
               <span>MUSIK</span>
               <span id="lblMusicDb">-∞ dB</span>
             </div>
@@ -218,6 +232,49 @@
         <button class="pill" onclick="setSpeedPreset(25)" style="cursor: pointer; justify-content: center;">25 km/h (Stadt)</button>
         <button class="pill" onclick="setSpeedPreset(80)" style="cursor: pointer; justify-content: center;">80 km/h (Land)</button>
         <button class="pill" onclick="setSpeedPreset(130)" style="cursor: pointer; justify-content: center;">130 km/h (BAB)</button>
+      </div>
+
+      <!-- Ambient Transparency Section -->
+      <div class="panel-header" style="margin-top: 0.5rem;">
+        <span class="panel-title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M2 12h20M12 2v20M4.93 4.93l14.14 14.14M4.93 19.07l14.14-14.14"/>
+          </svg>
+          Transparenzmodus (Front-Mikrofon)
+        </span>
+      </div>
+
+      <div class="control-group">
+        <div class="control-label">
+          <span>Speed-Gating & Status</span>
+          <span id="lblTranspGain" class="control-val">100 % (0.0 dB)</span>
+        </div>
+        <select id="selectTranspMode">
+          <option value="AUTO_SPEED" selected>Auto-Gating (0-15 km/h An, >30 km/h Mute)</option>
+          <option value="ALWAYS_ON">Immer Aktiv (Test-Modus)</option>
+          <option value="ALWAYS_OFF">Deaktiviert (Mute)</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">Außengeräusch-Simulation:</label>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem;">
+          <button id="btnAmbTraffic" class="pill" style="cursor: pointer; justify-content: center;">Verkehr & Ampel</button>
+          <button id="btnAmbSiren" class="pill" style="cursor: pointer; justify-content: center;">Martinshorn-Test</button>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <div class="control-label">
+          <span>Hardware-AGC Boost</span>
+          <span id="valTranspSens" class="control-val">+0 dB</span>
+        </div>
+        <input type="range" id="sliderTranspSens" min="0" max="18" step="1" value="0">
+      </div>
+
+      <div class="control-group" style="display: flex; flex-direction: row; align-items: center; justify-content: space-between; background: var(--bg-surface-elevated); padding: 0.45rem 0.6rem; border-radius: 6px; border: 1px solid var(--border-subtle);">
+        <span style="font-size: 0.72rem; color: var(--text-muted);">Stimmfilter (350 Hz - 3.2 kHz)</span>
+        <input type="checkbox" id="chkTranspBandpass" checked style="cursor: pointer;">
       </div>
 
       <div class="control-group" style="margin-top: 0.5rem;">
@@ -464,6 +521,58 @@
       window.ombAudio.duckingDepthDb = val;
     });
 
+    // Transparenzmodus Event Listeners
+    const selectTranspMode = document.getElementById('selectTranspMode');
+    const lblTranspGain = document.getElementById('lblTranspGain');
+    const btnAmbTraffic = document.getElementById('btnAmbTraffic');
+    const btnAmbSiren = document.getElementById('btnAmbSiren');
+    const sliderTranspSens = document.getElementById('sliderTranspSens');
+    const valTranspSens = document.getElementById('valTranspSens');
+    const chkTranspBandpass = document.getElementById('chkTranspBandpass');
+
+    const meterAmbFill = document.getElementById('meterAmbFill');
+    const lblAmbDb = document.getElementById('lblAmbDb');
+    const pillAmbDot = document.getElementById('pillAmbDot');
+    const pillAmbText = document.getElementById('pillAmbText');
+
+    selectTranspMode.addEventListener('change', (e) => {
+      window.ombAudio.setTransparencyMode(e.target.value);
+    });
+
+    sliderTranspSens.addEventListener('input', (e) => {
+      const val = parseFloat(e.target.value);
+      valTranspSens.textContent = "+" + val + " dB";
+      window.ombAudio.setTransparencySensitivity(val);
+    });
+
+    chkTranspBandpass.addEventListener('change', (e) => {
+      window.ombAudio.setTransparencyBandpass(e.target.checked);
+    });
+
+    btnAmbTraffic.addEventListener('click', async () => {
+      if (!isMasterStarted) await btnMasterPower.click();
+      if (window.ombAudio.ambientSoundType === 'TRAFFIC') {
+        window.ombAudio.stopAmbientSound();
+        btnAmbTraffic.style.background = 'var(--bg-surface-elevated)';
+      } else {
+        window.ombAudio.startAmbientSound('TRAFFIC');
+        btnAmbTraffic.style.background = 'linear-gradient(135deg, #8b5cf6, #06b6d4)';
+        btnAmbSiren.style.background = 'var(--bg-surface-elevated)';
+      }
+    });
+
+    btnAmbSiren.addEventListener('click', async () => {
+      if (!isMasterStarted) await btnMasterPower.click();
+      if (window.ombAudio.ambientSoundType === 'SIREN') {
+        window.ombAudio.stopAmbientSound();
+        btnAmbSiren.style.background = 'var(--bg-surface-elevated)';
+      } else {
+        window.ombAudio.startAmbientSound('SIREN');
+        btnAmbSiren.style.background = 'linear-gradient(135deg, #f43f5e, #f59e0b)';
+        btnAmbTraffic.style.background = 'var(--bg-surface-elevated)';
+      }
+    });
+
     // Cartridge Profile Switching
     function selectProfile(profileId) {
       document.querySelectorAll('.profile-card').forEach(c => {
@@ -493,11 +602,15 @@
 
       // 1. Update Meters
       const micLvl = getAnalyserLevel(window.ombAudio.micAnalyser);
+      const ambLvl = getAnalyserLevel(window.ombAudio.ambientAnalyser);
       const musicLvl = getAnalyserLevel(window.ombAudio.musicAnalyser);
       const masterLvl = getAnalyserLevel(window.ombAudio.masterAnalyser);
 
       meterMicFill.style.width = Math.min(100, Math.max(0, (micLvl.db + 60) * 1.66)) + "%";
       lblMicDb.textContent = micLvl.db > -60 ? micLvl.db.toFixed(1) + " dB" : "-∞ dB";
+
+      meterAmbFill.style.width = Math.min(100, Math.max(0, (ambLvl.db + 60) * 1.66)) + "%";
+      lblAmbDb.textContent = ambLvl.db > -60 ? ambLvl.db.toFixed(1) + " dB" : "-∞ dB";
 
       meterMusicFill.style.width = Math.min(100, Math.max(0, (musicLvl.db + 60) * 1.66)) + "%";
       lblMusicDb.textContent = musicLvl.db > -60 ? musicLvl.db.toFixed(1) + " dB" : "-∞ dB";
@@ -527,6 +640,22 @@
       } else {
         pillVadDot.className = "dot";
         pillVadText.textContent = "VAD: IDLE";
+      }
+
+      // 3. Transparency Status Pill & Indicator
+      const transGain = window.ombAudio.currentTransparencyGain || 0.0;
+      const transDb = transGain > 0.001 ? (20 * Math.log10(transGain)).toFixed(1) : "-∞";
+      lblTranspGain.textContent = Math.round(transGain * 100) + " % (" + transDb + " dB)";
+
+      if (transGain > 0.8) {
+        pillAmbDot.className = "dot active";
+        pillAmbText.textContent = "TRANSPARENZ: " + Math.round(transGain * 100) + "%";
+      } else if (transGain > 0.05) {
+        pillAmbDot.className = "dot ducking";
+        pillAmbText.textContent = "TRANSPARENZ: " + Math.round(transGain * 100) + "%";
+      } else {
+        pillAmbDot.className = "dot";
+        pillAmbText.textContent = "TRANSPARENZ: GATE ZU";
       }
 
       // 3. Render FFT Spectrum
