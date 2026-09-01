@@ -123,17 +123,21 @@ Alle Gehäuse und Kassetten wurden so konstruiert, dass sie **sowohl auf handels
 
 ---
 
-### 2.5 Kategorie E: Kabelbaum, Steckverbinder & Pufferakku
+### 2.5 Kategorie E: Kabelbaum, Steckverbinder, Taster & Sensoren
 
 | Bauteil | Spezifikation / MPN | Stück | Zweck |
 | :--- | :--- | :---: | :--- |
 | **HD26 Flanschbuchse** | Amphenol LTW HD26 Buchse IP67 (Frontmontage mit Dichtung) | **1** | Zentrale Gehäuseschnittstelle an der Main Box |
 | **HD26 Kabelstecker** | HD26 Steckergehäuse IP67 mit Zugentlastung & Rändelschrauben | **1** | Gegenstecker am fahrzeugseitigen Kabelbaum |
-| **M8 6-Pin Kabelstecker** | M8 Rundsteckverbinder 6-Pin A-kodiert IP67 (männlich, Schraubanschluss) | **3** | Steckverbindung vom Kabelbaum zu den 3 Pods |
+| **M8 6-Pin Kabelstecker** | M8 Rundsteckverbinder 6-Pin A-kodiert IP67 (männlich, Schraubanschluss) | **3** | Steckverbindung vom Kabelbaum zu den 3 Pods (Peitsche 1, 2 und 3) |
+| **M8 4-Pin Kabelstecker** | M8 Rundsteckverbinder 4-Pin A-kodiert IP67 (männlich, Schraubanschluss) | **1** | Steckverbindung zum Front-Cockpit-Zweig (Peitsche 5: CAN-Bus & Ambient-Mic) |
+| **Superseal 4-Pin Stecker**| AMP Superseal 1.5 4-Pin Gehäuse mit Dichtungen & Kontakten | **1** | Steckverbindung zur 12V Stromversorgung (Peitsche 4: Kl. 30, Kl. 15, GND) |
+| **Front Ambient-Mikrofon** | Knowles SiSonic / SPH0645 MEMS mit IP67 ePTFE-Schallmembran | **1** | *Optional:* Erfassung von Umweltgeräuschen für Transparenzmodus (Peitsche 5) |
+| **Funk-Lenkertaster** | BLE 5.0 Funkfernbedienung mit CR2032 Batterie (z. B. Sena RC4 / generic) | **1** | Drahtlose PTT-Sprachsteuerung & Actioncam-Marker am Lenker ($\varnothing 22 \dots 28\,\text{mm}$) |
 | **Pufferakku** | 3.7V LiPo $1000\,\text{mAh}$ (Abmessungen max. $52 \times 36 \times 6\,\text{mm}$) mit 10k NTC | **1** | USV-Notstromversorgung bei Zündung-Aus / Anlasser-Spannungseinbruch |
 | **Akkustecker** | Molex Micro-Fit 3.0 2-Pin Buchsengehäuse mit Crimpkontakten | **1** | Anschluss des Akkus an die Hauptplatine (`J_BAT`) |
 | **KFZ-Sicherungshalter** | Wasserdichter Mini-Flachsicherungshalter IP67 mit **2A Sicherung** | **1** | Absicherung der Kl. 30/15 Zuleitung direkt an der Motorradbatterie |
-| **Automotive-Leitungen** | FLRY-B $0{,}35\,\text{mm}^2$ (Signal/Audio) und $0{,}5\,\text{mm}^2$ (12V Power/Masse) | *nach Bedarf* | Fahrzeugkabelbaum nach Spezifikation in [`central_breakout_harness_wirelist.csv`](file:///Users/schmidtm/openMotorBridge/hardware/production_packages/05_wiring_harness_spec/central_breakout_harness_wirelist.csv) |
+| **Automotive-Leitungen** | FLRY-B $0{,}35\,\text{mm}^2$ (Signal/Audio) und $0{,}5\,\text{mm}^2$ (12V Power/Masse) | *nach Bedarf* | Fahrzeugkabelbaum nach Spezifikation in [`central_breakout_harness_wirelist.csv`](file:///Users/schmidtm/openMotorBridge/hardware/production_packages/05_wiring_harness/central_breakout_harness_wirelist.csv) |
 | **EPDM-Spannbänder** | UV- und ozonbeständige EPDM-Leiterbänder oder robuste O-Ringe | **6** | Werkzeuglose Montage der 3 Pods an Lenkerrohren ($\varnothing 22 \dots 28\,\text{mm}$) |
 
 ---
@@ -211,16 +215,23 @@ Alle Gehäuse und Kassetten wurden so konstruiert, dass sie **sowohl auf handels
 ---
 
 ### Schritt 6: Konfektionierung des Fahrzeugkabelbaums
-1. **Kabelquerschnitte:** Für die 12V-Versorgung (`PIN 1: KL_30`, `PIN 2: KL_15`, `PIN 3: GND`) FLRY-B $0{,}5\,\text{mm}^2$ verwenden; für alle Audio- und Signalleitungen FLRY-B $0{,}35\,\text{mm}^2$.
-2. **Fahrzeugspezifische Längenanpassung:** Die 3 M8-Abzweige passend zu deinem Motorrad und den gewählten Pod-Montageorten zuschneiden (vor dem Schneiden probeweise mit Schnur oder Kabelbinder am Rahmen verlegen!):
-   * **Lenker / Cockpit (Standard):** ca. $150 \dots 190\,\text{cm}$ (entlang Rahmenrohr / Lenkkopf).
-   * **Sturzbügel (Reise-Enduro wie BMW GS, T7, Africa Twin):** ca. $110 \dots 140\,\text{cm}$ (direkt am vorderen/mittleren Sturzbügelrohr).
-   * **Batterie- / Seitendeckel (Harley-Davidson Tourer, Cruiser, Softail):** ca. $25 \dots 50\,\text{cm}$ (sehr kurzer Weg von der Zentralbox unter der Sitzbank).
-   * **Kofferträger / Gepäckaufnahme:** ca. $60 \dots 100\,\text{cm}$.
-   * **Heckbürzel / Kennzeichenträger (Pod 3):** ca. $40 \dots 80\,\text{cm}$.
-3. **Pinbelegung:** Exakt nach der Fertigungstabelle in [`central_breakout_harness_wirelist.csv`](file:///Users/schmidtm/openMotorBridge/hardware/production_packages/05_wiring_harness_spec/central_breakout_harness_wirelist.csv) löten/crimpen.
-4. **Schutz:** Den gesamten Kabelbaum mit elastischem Schirmgeflechtschlauch und wasserdichtem Schrumpfschlauch (mit Innenkleber) überziehen.
-5. **Sicherung:** Den Mini-Flachsicherungshalter mit **2A Sicherung** in die rote 12V-Dauerplus-Leitung (Kl. 30) direkt am Batteriepol einbinden.
+Der zentrale HD26-Kabelbaum fächert sich von der Zentralbox unter der Sitzbank in **5 definierte Peitschen** auf:
+1. **Peitsche 1 & 2 (M8 6-Pin):** Zu Satelliten-Pod 1 (Fahrer) & Pod 2 (Sozius) für Audio In/Out, isolierten Opto-PTT und 1-Wire ID.
+2. **Peitsche 3 (M8 6-Pin):** Zu Heck-Pod 3 (Heckbürzel/Kennzeichenträger) für High-Speed UART (460.8k Baud), 1-PPS GNSS Time-Sync und 1-Wire ID.
+3. **Peitsche 4 (Superseal 1.5 4-Pin):** 12V Bordnetz-Stromversorgung direkt zur Motorradbatterie (`Kl. 30` Dauerplus abgesichert, `Kl. 15` Zündungsplus geschaltet, `GND` Fahrzeugmasse).
+4. **Peitsche 5 (M8 4-Pin A-kodiert):** Kombinierter Front-Cockpit-Zweig hinter die Lampenmaske:
+   * **Pin 1 & 2:** `CAN_H` & `CAN_L` für Fahrzeug-CAN-Bus Telemetrie (120 Ω differentiell).
+   * **Pin 3 & 4:** `FRONT_MIC_SIG` & `FRONT_MIC_GND` für das optionale wetterfeste Knowles SiSonic MEMS Ambient-Mikrofon.
+
+#### Fahrzeugspezifische Längenanpassung:
+Die Peitschen vor dem Schneiden probeweise mit einer Schnur am Motorradrahmen verlegen:
+* **Lenker / Cockpit / Front-Zweig (Peitsche 1, 2, 5):** ca. $150 \dots 190\,\text{cm}$ (entlang Rahmenrohr durch den Lenkkopfbereich).
+* **Sturzbügel (Reise-Enduro wie BMW GS, T7, Africa Twin):** ca. $110 \dots 140\,\text{cm}$.
+* **Batterie- / Seitendeckel (Harley-Davidson Tourer, Cruiser, Softail):** ca. $25 \dots 50\,\text{cm}$.
+* **Heckbürzel / Kennzeichenträger (Peitsche 3 / Pod 3):** ca. $40 \dots 80\,\text{cm}$.
+* **Pinbelegung & Verdrahtung:** Exakt nach der Fertigungstabelle in [`central_breakout_harness_wirelist.csv`](file:///Users/schmidtm/openMotorBridge/hardware/production_packages/05_wiring_harness/central_breakout_harness_wirelist.csv) löten/crimpen.
+* **Schutz:** Den gesamten Kabelbaum mit elastischem Schirmgeflechtschlauch und wasserdichtem Schrumpfschlauch (mit Innenkleber) überziehen.
+* **Sicherung:** Den Mini-Flachsicherungshalter mit **2A Sicherung** in die rote 12V-Dauerplus-Leitung (Kl. 30) direkt am Batteriepol einbinden.
 
 ---
 
@@ -246,7 +257,10 @@ pio run --target upload
 2. [ ] **Status-LED:** Blinkt nach dem Start grün (System bereit, Pufferakku lädt).
 3. [ ] **Web-Dashboard:** Im Browser (Chrome/Edge auf Smartphone oder PC) [`https://schmidtmt.github.io/openmotorbridge/`](https://schmidtmt.github.io/openmotorbridge/) oder direkt lokal [`webapp_pwa/index.html`](file:///Users/schmidtm/openMotorBridge/webapp_pwa/index.html) öffnen, auf "⚡ BLE Verbinden" klicken und mit `OpenMotorBridge_v8` koppeln.
 4. [ ] **Kassettenerkennung:** Kassetten in Pod 1, 2 und 3 einstecken. Im Dashboard muss sofort das entsprechende Profil (z. B. "Sena 50S Mesh", "Cardo Packtalk", "OMM Transceiver") mit Seriennummer angezeigt werden.
-5. [ ] **Audio-Check:** Headset koppeln, Musik abspielen $\rightarrow$ sauberes, glasklares Signal ohne Lichtmaschinen-Pfeifen oder Masseschleifen (dank 1500V Bourns Übertrager-Trennung).
+5. [ ] **Funk-Lenkertaster koppeln:** Im Dashboard unter *Cockpit & Power* bei der Kachel *Lenkertaster* auf **"🔗 Taster Koppeln"** klicken, Taste am BLE-Lenkertaster 5 s gedrückt halten. Koppelung und CR2032-Batteriestatus (z. B. 95%) verifizieren.
+6. [ ] **Heim-WLAN & WebDAV konfigurieren:** Im Dashboard unter *Touren & WebDAV* die heimische WLAN-SSID, das WLAN-Passwort und die WebDAV-Server-URL (Nextcloud/Synology) eintragen und auf **"WLAN & WebDAV Speichern"** klicken.
+7. [ ] **Front-Ambient-Mikrofon & Transparenzmodus:** Optionales Mikrofon an M8 4-Pin Peitsche 5 anstecken. Im Stand (< 30 km/h) ins Mikrofon sprechen $\rightarrow$ Umgebungsgeräusche werden transparent in den Helm eingeblendet (schaltet bei Fahrt automatisch ab).
+8. [ ] **Audio-Check:** Headset koppeln, Musik abspielen $\rightarrow$ sauberes, glasklares Signal ohne Lichtmaschinen-Pfeifen oder Masseschleifen (dank 1500V Bourns Übertrager-Trennung).
 
 ---
 

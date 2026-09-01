@@ -125,17 +125,21 @@ All enclosures and cartridges are designed to be manufactured **both on standard
 
 ---
 
-### 2.5 Category E: Wiring Harness, Connectors & Battery
+### 2.5 Category E: Wiring Harness, Connectors, Remote & Sensors
 
 | Item | Specification / MPN | Qty | Purpose |
 | :--- | :--- | :---: | :--- |
 | **HD26 Receptacle (Chassis)** | Amphenol LTW HD26 IP67 Panel Mount Receptacle | **1** | Main enclosure connector on central box |
 | **HD26 Cable Plug** | HD26 Plug IP67 with metal/plastic hood & thumbscrews | **1** | Mating plug on motorcycle wiring harness |
-| **M8 6-Pin Cable Plugs** | M8 Circular Connector 6-Pin A-Coded IP67 (Male, screw termination)| **3** | Harness connections to the 3 pods |
+| **M8 6-Pin Cable Plugs** | M8 Circular Connector 6-Pin A-Coded IP67 (Male, screw termination)| **3** | Harness connections to the 3 pods (Pigtails 1, 2, and 3) |
+| **M8 4-Pin Cable Plug** | M8 Circular Connector 4-Pin A-Coded IP67 (Male, screw termination)| **1** | Front cockpit branch (Pigtail 5: CAN-Bus & Ambient Mic) |
+| **Superseal 4-Pin Plug** | AMP Superseal 1.5 4-Pin Housing with seals & terminals | **1** | 12V vehicle power supply branch (Pigtail 4: Kl. 30, Kl. 15, GND) |
+| **Front Ambient Mic** | Knowles SiSonic / SPH0645 MEMS with IP67 ePTFE Acoustic Vent | **1** | *Optional:* Ambient noise sensing for DSP transparency mode (Pigtail 5) |
+| **Wireless Handlebar Remote**| BLE 5.0 Wireless Remote with CR2032 Battery (e.g. Sena RC4 / generic)| **1** | Wireless PTT voice control & Action Cam video highlight marker ($\varnothing 22 \dots 28\,\text{mm}$) |
 | **Backup Battery** | 3.7V LiPo $1000\,\text{mAh}$ (max $52 \times 36 \times 6\,\text{mm}$) with 10k NTC | **1** | UPS power during engine crank & ignition-off logging |
 | **Battery Connector** | Molex Micro-Fit 3.0 2-Pin Receptacle Housing with crimps | **1** | Battery connection to main board (`J_BAT`) |
 | **Inline Fuse Holder** | Waterproof Mini Blade Fuse Holder IP67 with **2A fuse** | **1** | Primary battery lead protection (Kl. 30 directly at battery) |
-| **Automotive Wire** | FLRY-B $0.35\,\text{mm}^2$ (Signals/Audio) and $0.5\,\text{mm}^2$ (12V Power/GND) | *as needed*| Harness assembly according to [`central_breakout_harness_wirelist.csv`](file:///Users/schmidtm/openMotorBridge/hardware/production_packages/05_wiring_harness_spec/central_breakout_harness_wirelist.csv) |
+| **Automotive Wire** | FLRY-B $0.35\,\text{mm}^2$ (Signals/Audio) and $0.5\,\text{mm}^2$ (12V Power/GND) | *as needed*| Harness assembly according to [`central_breakout_harness_wirelist.csv`](file:///Users/schmidtm/openMotorBridge/hardware/production_packages/05_wiring_harness/central_breakout_harness_wirelist.csv) |
 | **EPDM Straps** | Ozone & UV-resistant EPDM rubber ladder straps or heavy-duty O-rings | **6** | Toolless mounting of the 3 pods to handlebar/frame tubes ($\varnothing 22 \dots 28\,\text{mm}$) |
 
 ---
@@ -209,16 +213,23 @@ All enclosures and cartridges are designed to be manufactured **both on standard
 ---
 
 ### Step 6: Vehicle Wiring Harness Assembly
-1. **Wire Gauges:** Use FLRY-B $0.5\,\text{mm}^2$ for 12V power (`PIN 1: KL_30`, `PIN 2: KL_15`, `PIN 3: GND`); use FLRY-B $0.35\,\text{mm}^2$ for all audio and signal lines.
-2. **Vehicle-Specific Length Adjustment:** Cut the 3 M8 branch lengths to match your motorcycle layout and chosen pod locations (mock-route on frame with cord or zip-ties before cutting!):
-   * **Handlebar / Cockpit (Standard):** approx. $150 \dots 190\,\text{cm}$ (along frame backbone / steering head).
-   * **Crash Bars (Travel Enduros e.g. BMW GS, T7, Africa Twin):** approx. $110 \dots 140\,\text{cm}$ (direct path to front/mid engine guards).
-   * **Side Covers / Battery Trays (Harley-Davidson Tourers, Cruisers, Softail):** approx. $25 \dots 50\,\text{cm}$ (ultra-short run from main box under the seat).
-   * **Pannier Racks / Luggage Mounts:** approx. $60 \dots 100\,\text{cm}$.
-   * **Rear Tail / License Plate Carrier (Pod 3):** approx. $40 \dots 80\,\text{cm}$.
-3. **Pin Assignment:** Solder and crimp strictly following [`central_breakout_harness_wirelist.csv`](file:///Users/schmidtm/openMotorBridge/hardware/production_packages/05_wiring_harness_spec/central_breakout_harness_wirelist.csv).
-4. **Harness Protection:** Encase all branches in braided expandable sleeving and adhesive-lined heat shrink tubing.
-5. **Inline Fuse:** Solder the waterproof inline fuse holder with **2A fuse** into the red Kl. 30 lead directly at the battery terminal.
+The central HD26 breakout harness fans out from the main box under the seat into **5 dedicated pigtails**:
+1. **Pigtails 1 & 2 (M8 6-Pin):** To Satellite Pod 1 (Rider) & Pod 2 (Pillion) for audio in/out, isolated opto-PTT, and 1-Wire ID.
+2. **Pigtail 3 (M8 6-Pin):** To Rear Pod 3 (tail / license plate bracket) for high-speed UART (460.8k baud), 1-PPS GNSS time sync, and 1-Wire ID.
+3. **Pigtail 4 (Superseal 1.5 4-Pin):** 12V vehicle power directly to motorcycle battery (`Kl. 30` fused permanent 12V, `Kl. 15` switched ignition, `GND` vehicle ground).
+4. **Pigtail 5 (M8 4-Pin A-Coded):** Combined front cockpit branch behind headlight mask:
+   * **Pins 1 & 2:** `CAN_H` & `CAN_L` for vehicle CAN-bus telemetry (120 Ω differential).
+   * **Pins 3 & 4:** `FRONT_MIC_SIG` & `FRONT_MIC_GND` for the optional weatherproof Knowles SiSonic MEMS ambient microphone.
+
+#### Vehicle-Specific Length Adjustment:
+Mock-route on the motorcycle frame with cord before cutting:
+* **Handlebar / Cockpit / Front Branch (Pigtails 1, 2, 5):** approx. $150 \dots 190\,\text{cm}$ (along frame backbone through steering head area).
+* **Crash Bars (Travel Enduros e.g. BMW GS, T7, Africa Twin):** approx. $110 \dots 140\,\text{cm}$.
+* **Side Covers / Battery Trays (Harley-Davidson Tourers, Cruisers, Softail):** approx. $25 \dots 50\,\text{cm}$.
+* **Rear Tail / License Plate Carrier (Pigtail 3 / Pod 3):** approx. $40 \dots 80\,\text{cm}$.
+* **Pin Assignment & Wiring:** Solder and crimp strictly following [`central_breakout_harness_wirelist.csv`](file:///Users/schmidtm/openMotorBridge/hardware/production_packages/05_wiring_harness/central_breakout_harness_wirelist.csv).
+* **Harness Protection:** Encase all branches in braided expandable sleeving and adhesive-lined heat shrink tubing.
+* **Inline Fuse:** Solder the waterproof inline fuse holder with **2A fuse** into the red Kl. 30 lead directly at the battery terminal.
 
 ---
 
@@ -244,7 +255,10 @@ pio run --target upload
 2. [ ] **Status LED:** Flashes green on boot (system initialized, backup battery charging).
 3. [ ] **Web Dashboard:** Open [`https://schmidtmt.github.io/openmotorbridge/`](https://schmidtmt.github.io/openmotorbridge/) in Chrome/Edge (or locally [`webapp_pwa/index.html`](file:///Users/schmidtm/openMotorBridge/webapp_pwa/index.html)), click "⚡ Connect BLE", and pair with `OpenMotorBridge_v8`.
 4. [ ] **Cartridge Detection:** Insert cartridges into Pods 1, 2, and 3. The dashboard must immediately display the detected profile (e.g., "Sena 50S Mesh", "Cardo Packtalk", "OMM Transceiver") and 1-Wire serial number.
-5. [ ] **Audio Test:** Connect headset, play music $\rightarrow$ pristine audio without alternator whine or ground loop noise (isolated by 1500V Bourns transformers).
+5. [ ] **Pair Wireless Handlebar Remote:** In dashboard under *Cockpit & Power*, click **"🔗 Pair Remote"** on the Handlebar Remote tile and hold the button on the BLE remote for 5 s. Confirm pairing and check CR2032 battery readout (e.g., 95%).
+6. [ ] **Configure Home Wi-Fi & WebDAV:** In dashboard under *Tours & WebDAV*, enter your garage Wi-Fi SSID, password, and WebDAV server URL (Nextcloud/Synology), then click **"Save Wi-Fi & WebDAV"**.
+7. [ ] **Front Ambient Mic & Transparency Mode:** Plug optional microphone into M8 4-pin pigtail 5. Speak into microphone while stationary (< 30 km/h) $\rightarrow$ ambient audio is injected into helmet headset (automatically mutes while riding).
+8. [ ] **Audio Test:** Connect headset, play music $\rightarrow$ pristine audio without alternator whine or ground loop noise (isolated by 1500V Bourns transformers).
 
 ---
 
