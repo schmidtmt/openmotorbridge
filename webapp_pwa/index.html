@@ -82,18 +82,18 @@
                     <div class="grid-3" style="margin-top: 16px;">
                         <div class="stat-tile">
                             <span class="stat-label" data-i18n="speed_label">Geschwindigkeit</span>
-                            <div class="stat-value" id="val-speed">0.0</div>
+                            <div class="stat-value" id="val-speed">--</div>
                             <span class="stat-sub">km/h (GPS)</span>
                         </div>
                         <div class="stat-tile">
                             <span class="stat-label" data-i18n="sats_label">Satelliten</span>
-                            <div class="stat-value" id="val-sats">18</div>
-                            <span class="stat-sub">PDOP 1.1</span>
+                            <div class="stat-value" id="val-sats">--</div>
+                            <span class="stat-sub" id="sub-sats">Kein GPS</span>
                         </div>
                         <div class="stat-tile">
                             <span class="stat-label" data-i18n="sync_label">1-PPS Zeit-Sync</span>
-                            <div class="stat-value" style="color: var(--accent-green);">LOCK</div>
-                            <span class="stat-sub">&lt; 1 µs Jitter</span>
+                            <div class="stat-value" id="val-sync" style="color: var(--text-muted);">--</div>
+                            <span class="stat-sub" id="sub-sync">Getrennt</span>
                         </div>
                     </div>
                 </section>
@@ -102,19 +102,19 @@
                 <section class="card">
                     <div class="card-header">
                         <span class="card-title">🔋 <span data-i18n="power_title">Spannungs- & Thermomanagement</span></span>
-                        <span class="card-badge badge-green" id="badge-thermal-status" data-i18n="thermal_normal">JEITA: Normal (22°C)</span>
+                        <span class="card-badge" id="badge-thermal-status" style="background: rgba(255,255,255,0.08); color: var(--text-muted);">JEITA: --</span>
                     </div>
 
                     <div class="grid-2">
                         <div class="stat-tile">
                             <span class="stat-label" data-i18n="vign_label">Bordnetz KL15 (Zündung)</span>
-                            <div class="stat-value" id="val-vign" style="color: var(--accent-green);">12.6 V</div>
-                            <span class="stat-sub" id="sub-vign-status" data-i18n="vign_active">Status: AKTIV</span>
+                            <div class="stat-value" id="val-vign" style="color: var(--text-muted);">-- V</div>
+                            <span class="stat-sub" id="sub-vign-status">Status: Getrennt</span>
                         </div>
                         <div class="stat-tile">
                             <span class="stat-label" data-i18n="vbat_label">USV-LiPo (Unter Sitzbank)</span>
-                            <div class="stat-value" id="val-vbat">4.12 V</div>
-                            <span class="stat-sub" data-i18n="vbat_sub">1000 mAh Puffer</span>
+                            <div class="stat-value" id="val-vbat" style="color: var(--text-muted);">-- V</div>
+                            <span class="stat-sub" data-i18n="vbat_sub">USV Puffer</span>
                         </div>
                     </div>
 
@@ -134,10 +134,10 @@
                     <div class="stat-tile" style="margin-top: 14px;">
                         <div class="stat-label" style="display: flex; justify-content: space-between; align-items: center;">
                             <span data-i18n="handlebar_label">Lenkertaster (CR2032 Batterie)</span>
-                            <span id="val-btn-bat" style="color: var(--accent-green); font-weight: 800;">95 %</span>
+                            <span id="val-btn-bat" style="color: var(--text-muted); font-weight: 800;">-- %</span>
                         </div>
                         <div class="progress-bar-container" style="margin: 8px 0;">
-                            <div class="progress-bar-fill" id="bar-btn-bat" style="width: 95%;"></div>
+                            <div class="progress-bar-fill" id="bar-btn-bat" style="width: 0%;"></div>
                         </div>
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             <span class="stat-sub" data-i18n="handlebar_sub">Bluetooth SIG Service 0x180F Überwachung</span>
@@ -151,7 +151,7 @@
                     <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border-subtle);">
                         <div class="control-label">
                             <span>🔋 3-Stufen Power-Down Kaskade</span>
-                            <span class="card-badge badge-green" id="badge-sleep-tier">Stufe 0: Aktiv (KL15 ON)</span>
+                            <span class="card-badge" id="badge-sleep-tier" style="background: rgba(255,255,255,0.08); color: var(--text-muted);">Offline</span>
                         </div>
                         <div class="grid-3" style="margin-top: 8px; font-size: 0.75rem;">
                             <div class="stat-tile" style="padding: 8px;">
@@ -177,14 +177,14 @@
                 <section class="card">
                     <div class="card-header">
                         <span class="card-title">🚦 <span data-i18n="status_led_title">WS2812B RGB Status-LED (Gehäusedeckel)</span></span>
-                        <span class="card-badge badge-green" id="badge-led-status">Online (Grün)</span>
+                        <span class="card-badge" id="badge-led-status" style="background: rgba(255,255,255,0.08); color: var(--text-muted);">Offline</span>
                     </div>
 
                     <div style="display: flex; align-items: center; gap: 16px; padding: 12px 0;">
-                        <div id="rgb-led-visual" style="width: 36px; height: 36px; border-radius: 50%; background: #30d158; box-shadow: 0 0 20px #30d158; border: 2px solid rgba(255,255,255,0.8); flex-shrink: 0;"></div>
+                        <div id="rgb-led-visual" style="width: 36px; height: 36px; border-radius: 50%; background: #475569; box-shadow: none; border: 2px solid rgba(255,255,255,0.2); flex-shrink: 0;"></div>
                         <div>
-                            <div id="rgb-led-label" style="font-weight: 700; font-size: 1.05rem;">Normalbetrieb (Pulsierend Grün)</div>
-                            <div class="stat-sub" id="rgb-led-desc">Bordnetz aktiv, alle Kassetten online, DLE synchronisiert</div>
+                            <div id="rgb-led-label" style="font-weight: 700; font-size: 1.05rem;">Offline (Nicht verbunden)</div>
+                            <div class="stat-sub" id="rgb-led-desc">Warte auf BLE Verbindung oder Demo-Modus</div>
                         </div>
                     </div>
 
@@ -206,7 +206,7 @@
                     <div class="card-header">
                         <span class="card-title">🗺️ <span data-i18n="live_map_title">Live GPS-Spur & OpenMotorMesh Gruppen-Radar</span></span>
                         <div style="display: flex; gap: 8px; align-items: center;">
-                            <span class="card-badge badge-purple" id="badge-mesh-nodes">3 Nodes in Reichweite</span>
+                            <span class="card-badge" id="badge-mesh-nodes" style="background: rgba(255,255,255,0.08); color: var(--text-muted);">Offline</span>
                             <button id="btn-center-map" class="btn-secondary" style="padding: 4px 8px; font-size: 0.75rem;">🎯 Zentrieren</button>
                         </div>
                     </div>
@@ -216,10 +216,10 @@
                         
                         <!-- Radar Overlay Info -->
                         <div style="position: absolute; bottom: 10px; left: 14px; font-size: 0.75rem; background: rgba(13, 17, 23, 0.85); backdrop-filter: blur(10px); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); display: flex; gap: 14px;">
-                            <span>🛰️ <strong>10 Hz Dead-Reckoning:</strong> <span style="color: var(--accent-green);">AKTIV</span></span>
-                            <span>📍 <strong>Position:</strong> <span id="lbl-radar-coords">47.3769° N, 8.5417° E</span></span>
-                            <span>🏔️ <strong>Höhe:</strong> <span id="lbl-radar-alt">408 m</span></span>
-                            <span>📶 <strong>LoRa RSSI:</strong> <span style="color: var(--accent-orange);">-78 dBm</span></span>
+                            <span>🛰️ <strong>10 Hz Dead-Reckoning:</strong> <span id="lbl-radar-dr" style="color: var(--text-muted);">OFFLINE</span></span>
+                            <span>📍 <strong>Position:</strong> <span id="lbl-radar-coords">--</span></span>
+                            <span>🏔️ <strong>Höhe:</strong> <span id="lbl-radar-alt">--</span></span>
+                            <span>📶 <strong>LoRa RSSI:</strong> <span id="lbl-radar-rssi" style="color: var(--text-muted);">-- dBm</span></span>
                         </div>
 
                         <div style="position: absolute; top: 10px; right: 14px; display: flex; gap: 6px;">

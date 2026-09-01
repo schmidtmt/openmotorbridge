@@ -255,14 +255,14 @@ const state = {
     batteryChemistry: localStorage.getItem('omb_bat_chem') || 'agm',
     webdavConfig: JSON.parse(localStorage.getItem('omb_webdav_cfg') || '{}'),
     telemetry: {
-        v_ign: 12.6,
-        v_bat: 4.12,
-        btn_bat: 95,
-        speed: 0.0,
+        v_ign: null,
+        v_bat: null,
+        btn_bat: null,
+        speed: null,
         lean_angle: 0.0,
-        sats: 18,
+        sats: null,
         mode: 0,
-        reserve_b: true
+        reserve_b: false
     }
 };
 
@@ -453,6 +453,104 @@ function updateBleUiState(connected) {
         btnConnect.classList.remove('connected');
         dotBle.classList.remove('active');
         labelBleStatus.textContent = dict.ble_offline;
+        if (!state.isDemoMode) {
+            resetDisconnectedTelemetryUi();
+        }
+    }
+}
+
+function resetDisconnectedTelemetryUi() {
+    const isDe = state.lang === 'de';
+
+    // Speed & GPS
+    if (valSpeed) valSpeed.textContent = '--';
+    if (valSats) valSats.textContent = '--';
+    const subSats = document.getElementById('sub-sats');
+    if (subSats) subSats.textContent = isDe ? 'Kein GPS' : 'No GPS';
+    const valSync = document.getElementById('val-sync');
+    if (valSync) {
+        valSync.textContent = '--';
+        valSync.style.color = 'var(--text-muted)';
+    }
+    const subSync = document.getElementById('sub-sync');
+    if (subSync) subSync.textContent = isDe ? 'Getrennt' : 'Disconnected';
+
+    // Voltages & Battery
+    if (valVign) {
+        valVign.textContent = '-- V';
+        valVign.style.color = 'var(--text-muted)';
+    }
+    const subVign = document.getElementById('sub-vign-status');
+    if (subVign) subVign.textContent = isDe ? 'Status: Getrennt' : 'Status: Offline';
+    if (valVbat) {
+        valVbat.textContent = '-- V';
+        valVbat.style.color = 'var(--text-muted)';
+    }
+    if (valBtnBat) {
+        valBtnBat.textContent = '-- %';
+        valBtnBat.style.color = 'var(--text-muted)';
+    }
+    if (barBtnBat) barBtnBat.style.width = '0%';
+
+    // Lean Angle
+    if (valLeanAngle) valLeanAngle.textContent = '0.0°';
+    if (bikeLeanVisual) bikeLeanVisual.style.transform = 'rotate(0deg)';
+
+    // Badges & Status
+    const badgeThermal = document.getElementById('badge-thermal-status');
+    if (badgeThermal) {
+        badgeThermal.className = 'card-badge';
+        badgeThermal.style.background = 'rgba(255,255,255,0.08)';
+        badgeThermal.style.color = 'var(--text-muted)';
+        badgeThermal.textContent = 'JEITA: --';
+    }
+    const badgeSleep = document.getElementById('badge-sleep-tier');
+    if (badgeSleep) {
+        badgeSleep.className = 'card-badge';
+        badgeSleep.style.background = 'rgba(255,255,255,0.08)';
+        badgeSleep.style.color = 'var(--text-muted)';
+        badgeSleep.textContent = 'Offline';
+    }
+    const badgeLed = document.getElementById('badge-led-status');
+    if (badgeLed) {
+        badgeLed.className = 'card-badge';
+        badgeLed.style.background = 'rgba(255,255,255,0.08)';
+        badgeLed.style.color = 'var(--text-muted)';
+        badgeLed.textContent = 'Offline';
+    }
+
+    // RGB LED Visual
+    const rgbVisual = document.getElementById('rgb-led-visual');
+    if (rgbVisual) {
+        rgbVisual.style.background = '#475569';
+        rgbVisual.style.boxShadow = 'none';
+    }
+    const rgbLabel = document.getElementById('rgb-led-label');
+    if (rgbLabel) rgbLabel.textContent = isDe ? 'Offline (Nicht verbunden)' : 'Offline (Disconnected)';
+    const rgbDesc = document.getElementById('rgb-led-desc');
+    if (rgbDesc) rgbDesc.textContent = isDe ? 'Warte auf BLE Verbindung oder Demo-Modus' : 'Waiting for BLE connection or demo mode';
+
+    // Radar / Mesh
+    const badgeMesh = document.getElementById('badge-mesh-nodes');
+    if (badgeMesh) {
+        badgeMesh.className = 'card-badge';
+        badgeMesh.style.background = 'rgba(255,255,255,0.08)';
+        badgeMesh.style.color = 'var(--text-muted)';
+        badgeMesh.textContent = 'Offline';
+    }
+    const lblCoords = document.getElementById('lbl-radar-coords');
+    if (lblCoords) lblCoords.textContent = '--';
+    const lblAlt = document.getElementById('lbl-radar-alt');
+    if (lblAlt) lblAlt.textContent = '--';
+    const lblRssi = document.getElementById('lbl-radar-rssi');
+    if (lblRssi) {
+        lblRssi.textContent = '-- dBm';
+        lblRssi.style.color = 'var(--text-muted)';
+    }
+    const lblDr = document.getElementById('lbl-radar-dr');
+    if (lblDr) {
+        lblDr.textContent = 'OFFLINE';
+        lblDr.style.color = 'var(--text-muted)';
     }
 }
 
@@ -480,7 +578,7 @@ function handleBleTelemetry(event) {
 // ==========================================
 function updateTelemetryUi(data) {
     const dict = i18n[state.lang];
-    if (data.v_ign !== undefined) {
+    if (data.v_ign !== undefined && data.v_ign !== null) {
         valVign.textContent = `${data.v_ign.toFixed(1)} V`;
         const cutOffMap = { agm: 11.8, wet: 11.6, lifepo4: 12.8, nmc: 10.5 };
         const threshold = cutOffMap[state.batteryChemistry] || 11.8;
@@ -493,29 +591,31 @@ function updateTelemetryUi(data) {
         }
     }
 
-    if (data.v_bat !== undefined) {
+    if (data.v_bat !== undefined && data.v_bat !== null) {
         valVbat.textContent = `${data.v_bat.toFixed(2)} V`;
+        valVbat.style.color = 'var(--text)';
     }
 
-    if (data.btn_bat !== undefined) {
+    if (data.btn_bat !== undefined && data.btn_bat !== null) {
         valBtnBat.textContent = `${data.btn_bat} %`;
+        valBtnBat.style.color = data.btn_bat < 20 ? 'var(--accent-red)' : 'var(--accent-green)';
         barBtnBat.style.width = `${data.btn_bat}%`;
     }
 
-    if (data.speed !== undefined) {
+    if (data.speed !== undefined && data.speed !== null) {
         valSpeed.textContent = data.speed.toFixed(1);
     }
 
-    if (data.sats !== undefined) {
+    if (data.sats !== undefined && data.sats !== null) {
         valSats.textContent = data.sats;
     }
 
-    if (data.lean_angle !== undefined) {
+    if (data.lean_angle !== undefined && data.lean_angle !== null) {
         valLeanAngle.textContent = `${data.lean_angle.toFixed(1)}°`;
         bikeLeanVisual.style.transform = `rotate(${data.lean_angle}deg)`;
     }
 
-    if (data.mode !== undefined) {
+    if (data.mode !== undefined && data.mode !== null) {
         document.querySelectorAll('.mode-card').forEach(card => {
             const m = parseInt(card.getAttribute('data-mode'), 10);
             if (m === data.mode) {
@@ -544,11 +644,78 @@ btnDemo.addEventListener('click', () => {
 
 function toggleDemoMode(enable) {
     const dict = i18n[state.lang];
+    const isDe = state.lang === 'de';
     state.isDemoMode = enable;
     if (enable) {
         btnDemo.classList.add('active');
         btnDemo.querySelector('span').textContent = dict.demo_active;
-        showToast(state.lang === 'de' ? 'Live-Simulation gestartet' : 'Live simulation started', 'success');
+        showToast(isDe ? 'Live-Simulation gestartet' : 'Live simulation started', 'success');
+
+        // Activate indicators
+        const valSync = document.getElementById('val-sync');
+        if (valSync) {
+            valSync.textContent = 'LOCK';
+            valSync.style.color = 'var(--accent-green)';
+        }
+        const subSync = document.getElementById('sub-sync');
+        if (subSync) subSync.textContent = '< 1 µs Jitter';
+        const subSats = document.getElementById('sub-sats');
+        if (subSats) subSats.textContent = 'PDOP 1.1';
+        const subVign = document.getElementById('sub-vign-status');
+        if (subVign) subVign.textContent = isDe ? 'Status: AKTIV' : 'Status: ACTIVE';
+
+        const badgeThermal = document.getElementById('badge-thermal-status');
+        if (badgeThermal) {
+            badgeThermal.className = 'card-badge badge-green';
+            badgeThermal.style.background = '';
+            badgeThermal.style.color = '';
+            badgeThermal.textContent = isDe ? 'JEITA: Normal (22°C)' : 'JEITA: Normal (22°C)';
+        }
+        const badgeSleep = document.getElementById('badge-sleep-tier');
+        if (badgeSleep) {
+            badgeSleep.className = 'card-badge badge-green';
+            badgeSleep.style.background = '';
+            badgeSleep.style.color = '';
+            badgeSleep.textContent = isDe ? 'Stufe 0: Aktiv (KL15 ON)' : 'Tier 0: Active (KL15 ON)';
+        }
+        const badgeLed = document.getElementById('badge-led-status');
+        if (badgeLed) {
+            badgeLed.className = 'card-badge badge-green';
+            badgeLed.style.background = '';
+            badgeLed.style.color = '';
+            badgeLed.textContent = isDe ? 'Online (Grün)' : 'Online (Green)';
+        }
+        const rgbVisual = document.getElementById('rgb-led-visual');
+        if (rgbVisual) {
+            rgbVisual.style.background = '#30d158';
+            rgbVisual.style.boxShadow = '0 0 20px #30d158';
+        }
+        const rgbLabel = document.getElementById('rgb-led-label');
+        if (rgbLabel) rgbLabel.textContent = isDe ? 'Normalbetrieb (Pulsierend Grün)' : 'Normal Mode (Pulsing Green)';
+        const rgbDesc = document.getElementById('rgb-led-desc');
+        if (rgbDesc) rgbDesc.textContent = isDe ? 'Bordnetz aktiv, alle Kassetten online, DLE synchronisiert' : 'Board power active, cartridges online, DLE synced';
+
+        const badgeMesh = document.getElementById('badge-mesh-nodes');
+        if (badgeMesh) {
+            badgeMesh.className = 'card-badge badge-purple';
+            badgeMesh.style.background = '';
+            badgeMesh.style.color = '';
+            badgeMesh.textContent = isDe ? '3 Nodes in Reichweite' : '3 Nodes in range';
+        }
+        const lblDr = document.getElementById('lbl-radar-dr');
+        if (lblDr) {
+            lblDr.textContent = 'AKTIV';
+            lblDr.style.color = 'var(--accent-green)';
+        }
+        const lblCoords = document.getElementById('lbl-radar-coords');
+        if (lblCoords) lblCoords.textContent = '47.3769° N, 8.5417° E';
+        const lblAlt = document.getElementById('lbl-radar-alt');
+        if (lblAlt) lblAlt.textContent = '408 m';
+        const lblRssi = document.getElementById('lbl-radar-rssi');
+        if (lblRssi) {
+            lblRssi.textContent = '-78 dBm';
+            lblRssi.style.color = 'var(--accent-orange)';
+        }
 
         let angleTime = 0;
         state.demoInterval = setInterval(() => {
@@ -573,15 +740,10 @@ function toggleDemoMode(enable) {
             clearInterval(state.demoInterval);
             state.demoInterval = null;
         }
-        updateTelemetryUi({
-            v_ign: 12.6,
-            v_bat: 4.12,
-            btn_bat: 95,
-            speed: 0.0,
-            sats: 18,
-            lean_angle: 0.0
-        });
-        showToast(state.lang === 'de' ? 'Demo-Simulation beendet' : 'Demo simulation stopped');
+        if (!state.isBleConnected) {
+            resetDisconnectedTelemetryUi();
+        }
+        showToast(isDe ? 'Demo-Simulation beendet' : 'Demo simulation stopped');
     }
 }
 
@@ -1687,8 +1849,9 @@ document.getElementById('btn-trigger-profile-merge')?.addEventListener('click', 
     showToast(state.lang === 'de' ? '✓ Profil \'sena_apex.json\' erfolgreich mit Mesh 3.0 Parametern zusammengeführt & aktiviert!' : '✓ Profile \'sena_apex.json\' merged with Mesh 3.0 parameters & activated!', 'success');
 });
 
-// Initialize Language on Boot
+// Initialize Language & Disconnected State on Boot
 setLanguage(state.lang);
+resetDisconnectedTelemetryUi();
 
 // ==========================================
 // 12. Service Worker Registration (PWA Offline)
