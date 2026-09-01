@@ -117,8 +117,8 @@ Alle Gehäuse und Kassetten wurden so konstruiert, dass sie **sowohl auf handels
 | :--- | :--- | :---: | :--- |
 | **Gehäusedichtung Main Box** | Silikon-Rundschnur $\varnothing 1{,}5\,\text{mm}$ Shore 40A / 50A ($40\,\text{cm}$ Länge) | **1** | Hermetische Nut-Feder-Abdichtung zwischen Unterwanne und Zwischenboden |
 | **Kassetten-Flanschdichtungen**| Silikon Formdichtung Shore 40A ($54 \times 18\,\text{mm}$, $1{,}5\,\text{mm}$ Stärke) | **3** | Stirnseitige IP67-Abdichtung der Kassettenblende am Pod-Mundloch |
-| **Druckausgleichselement** | Gore Automotive AVS 41 (M8 Schraubventil) oder AVS 4 | **1** | Druckausgleich & Kondensatvermeidung im Main Box Deckel |
-| **ePTFE-Klebemembranen** | Gore / Porex IP67 Membranpad $\varnothing 7{,}0\,\text{mm}$ (selbstklebend) | **4** | Aufkleben auf die Entlüftungsdome der 3 Pods und Kassetten |
+| **Druckausgleichselement** | Gore Automotive AVS 41 (M8 Schraubventil) oder AVS 4 | **1** | Druckausgleich & Kondensatvermeidung im Main Box Deckel (optional) |
+| **ePTFE-Klebemembranen** | Gore / Porex IP67 Membranpad $\varnothing 7{,}0\,\text{mm}$ (selbstklebend) | **4** | 3x für die oberen Entlüftungsdome der 3 Pod-Gehäuse + 1x für Main Box Deckel (oder 1x Reserve) |
 | **Lichtleiter (LED)** | Bivar PLPC3-3MM oder Mentor 1292.1101 (PMMA $\varnothing 3{,}0\,\text{mm}$) | **1** | Wasserdichte Einkopplung der WS2812B RGB-LED durch den Deckel |
 
 ---
@@ -199,8 +199,12 @@ Alle Gehäuse und Kassetten wurden so konstruiert, dass sie **sowohl auf handels
 ---
 
 ### Schritt 5: Bestückung der Wechselkassetten
-1. **Heck-Kassette (Pod 3):** Die `04_rear_pod3_pcba` Platine mit der stirnseitigen 6-Pin Präzisionsbuchse in den Schlitten [`cartridge_omm_transceiver_sled.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_omm_transceiver_sled.stl) einrasten und mit 2x M2 Schrauben fixieren.
-2. **Lenker-Kassetten (Pod 1 & 2):** Die `03_pod_cartridge_pcba` Adapterplatine in den jeweiligen Kassetten-Schlitten einsetzen und das Headset-Anschlusskabel (JST-SH) einstecken.
+1. **Heck-Kassette (Pod 3):** Die `04_rear_pod3_pcba` Platine mit der stirnseitigen 6-Pin Präzisionsbuchse in den Schlitten [`cartridge_omm_transceiver_sled.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_omm_transceiver_sled.stl) einsetzen und mit **4x M2/M2.5 Schrauben** in den 4 Eckdomen vibrationsfest verschrauben.
+2. **Audio- & Intercom-Kassetten (Pod 1 & 2):**
+   * Die `03_pod_cartridge_pcba` Trägerplatine ($35 \times 25\,\text{mm}$) in den vorderen Bereich des Basisschlittens einsetzen und mit **4x M2 Schrauben** (mind. 2 Schrauben diagonal) auf den 4 Boden-Dömchen fixieren.
+   * Headset-Anschlusskabel (JST-SH 1.0 mm) anstecken und durch die Bodendurchführung nach oben leiten.
+   * Den gewünschten Zwischenboden ([`cartridge_insert_sena.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_sena.stl) oder [`cartridge_insert_cardo.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_cardo.stl)) aufsetzen und mit **4x M2 Senkkopfschrauben** in die 4 hohen Eckpfosten verschrauben.
+   * OEM-Helmaufnahme (Sena Klemmsatz / Cardo Air-Mount) einsetzen und mit einem elastischen EPDM-Spannband an den seitlichen Haken sichern.
 3. **Flanschdichtung anbringen:** Die Silikon-Flanschdichtung über den Dichtkragen der Kassettenblende ziehen.
 4. **Funktionstest Verriegelung:** Kassette in das Pod-Gehäuse einschieben $\rightarrow$ muss mit einem hörbaren "Klick" satt einrasten. Beim Zusammendrücken der beiden seitlichen Taster muss die Kassette ca. $8 \dots 10\,\text{mm}$ selbstständig herausschnappen.
 
@@ -208,10 +212,12 @@ Alle Gehäuse und Kassetten wurden so konstruiert, dass sie **sowohl auf handels
 
 ### Schritt 6: Konfektionierung des Fahrzeugkabelbaums
 1. **Kabelquerschnitte:** Für die 12V-Versorgung (`PIN 1: KL_30`, `PIN 2: KL_15`, `PIN 3: GND`) FLRY-B $0{,}5\,\text{mm}^2$ verwenden; für alle Audio- und Signalleitungen FLRY-B $0{,}35\,\text{mm}^2$.
-2. **Längenanpassung:** Die 3 M8-Abzweige passend zu deinem Fahrzeug zuschneiden:
-   * **Abzweig Pod 1 (Lenker Links):** ca. $150 \dots 180\,\text{cm}$ (je nach Verlegung am Rahmenrohr).
-   * **Abzweig Pod 2 (Lenker Rechts):** ca. $150 \dots 180\,\text{cm}$.
-   * **Abzweig Pod 3 (Heckbürzel):** ca. $40 \dots 80\,\text{cm}$.
+2. **Fahrzeugspezifische Längenanpassung:** Die 3 M8-Abzweige passend zu deinem Motorrad und den gewählten Pod-Montageorten zuschneiden (vor dem Schneiden probeweise mit Schnur oder Kabelbinder am Rahmen verlegen!):
+   * **Lenker / Cockpit (Standard):** ca. $150 \dots 190\,\text{cm}$ (entlang Rahmenrohr / Lenkkopf).
+   * **Sturzbügel (Reise-Enduro wie BMW GS, T7, Africa Twin):** ca. $110 \dots 140\,\text{cm}$ (direkt am vorderen/mittleren Sturzbügelrohr).
+   * **Batterie- / Seitendeckel (Harley-Davidson Tourer, Cruiser, Softail):** ca. $25 \dots 50\,\text{cm}$ (sehr kurzer Weg von der Zentralbox unter der Sitzbank).
+   * **Kofferträger / Gepäckaufnahme:** ca. $60 \dots 100\,\text{cm}$.
+   * **Heckbürzel / Kennzeichenträger (Pod 3):** ca. $40 \dots 80\,\text{cm}$.
 3. **Pinbelegung:** Exakt nach der Fertigungstabelle in [`central_breakout_harness_wirelist.csv`](file:///Users/schmidtm/openMotorBridge/hardware/production_packages/05_wiring_harness_spec/central_breakout_harness_wirelist.csv) löten/crimpen.
 4. **Schutz:** Den gesamten Kabelbaum mit elastischem Schirmgeflechtschlauch und wasserdichtem Schrumpfschlauch (mit Innenkleber) überziehen.
 5. **Sicherung:** Den Mini-Flachsicherungshalter mit **2A Sicherung** in die rote 12V-Dauerplus-Leitung (Kl. 30) direkt am Batteriepol einbinden.

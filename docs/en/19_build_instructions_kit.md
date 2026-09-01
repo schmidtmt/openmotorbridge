@@ -119,8 +119,8 @@ All enclosures and cartridges are designed to be manufactured **both on standard
 | :--- | :--- | :---: | :--- |
 | **Main Box Perimeter Gasket** | Silicone cord $\varnothing 1.5\,\text{mm}$ Shore 40A / 50A ($40\,\text{cm}$ length) | **1** | Hermetic tongue-and-groove seal between lower case and mid tray |
 | **Cartridge Faceplate Gaskets** | Molded silicone gasket Shore 40A ($54 \times 18\,\text{mm}$, $1.5\,\text{mm}$ thk) | **3** | IP67 front faceplate seal against pod mouth rim |
-| **Pressure Equalization Vent** | Gore Automotive AVS 41 (M8 screw-in vent) or AVS 4 | **1** | Pressure equalization & condensate prevention in main box lid |
-| **ePTFE Adhesive Breathers** | Gore / Porex IP67 adhesive membrane disc $\varnothing 7.0\,\text{mm}$ | **4** | Applied to top breather bosses of the 3 pods and cartridges |
+| **Pressure Equalization Vent** | Gore Automotive AVS 41 (M8 screw-in vent) or AVS 4 | **1** | Pressure equalization & condensate prevention in main box lid (optional) |
+| **ePTFE Adhesive Breathers** | Gore / Porex IP67 adhesive membrane disc $\varnothing 7.0\,\text{mm}$ | **4** | 3x for the top breather bosses of the 3 pod roofs + 1x for main box lid (or 1x spare) |
 | **Light Pipe (RGB LED)** | Bivar PLPC3-3MM or Mentor 1292.1101 (PMMA $\varnothing 3.0\,\text{mm}$) | **1** | IP67 optical coupling of WS2812B RGB LED through top lid |
 
 ---
@@ -196,20 +196,26 @@ All enclosures and cartridges are designed to be manufactured **both on standard
 
 ---
 
-### Step 5: Cartridge Assembly & Test
-1. **Rear Cartridge (Pod 3):** Snap the `04_rear_pod3_pcba` into [`cartridge_omm_transceiver_sled.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_omm_transceiver_sled.stl) and secure with 2x M2 screws.
-2. **Handlebar Cartridges (Pod 1 & 2):** Mount the `03_pod_cartridge_pcba` adapter board into the respective sled and plug in the headset harness (JST-SH).
-3. **Attach Flange Gasket:** Fit the silicone faceplate seal over the cartridge rim.
-4. **Latch & Eject Test:** Insert cartridge into pod bay $\rightarrow$ must lock with an audible click. Squeezing both release buttons must automatically eject the cartridge by $8 \dots 10\,\text{mm}$.
+### Step 5: Assembling the Modular Cartridges
+1. **Rear Cartridge (Pod 3):** Insert the `04_rear_pod3_pcba` transceiver board with front-facing 6-pin precision socket into the sled [`cartridge_omm_transceiver_sled.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_omm_transceiver_sled.stl) and secure with **4x M2/M2.5 screws** into the 4 corner standoff posts.
+2. **Audio & Intercom Cartridges (Pod 1 & 2):**
+   * Insert the `03_pod_cartridge_pcba` carrier board ($35 \times 25\,\text{mm}$) into the front bay of the base sled and secure with **4x M2 screws** (minimum 2 diagonally) onto the 4 floor bosses.
+   * Plug in the headset wiring harness (JST-SH 1.0 mm) and route upward through the floor opening.
+   * Seat the desired intermediate deck ([`cartridge_insert_sena.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_sena.stl) or [`cartridge_insert_cardo.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_cardo.stl)) and fasten with **4x M2 countersunk screws** into the 4 tall corner posts.
+   * Place OEM clamp cradle (Sena clamp kit / Cardo Air-Mount) and secure with an elastic EPDM retention strap on the outer hooks.
+3. **Attach Flange Gasket:** Slide the molded silicone flange seal over the sealing collar behind the front faceplate.
+4. **Functional Latch Test:** Slide cartridge into pod tunnel $\rightarrow$ must latch with a crisp, audible click. Squeezing both side buttons must cause the cartridge to auto-eject outward by $\approx 8 \dots 10\,\text{mm}$.
 
 ---
 
-### Step 6: Motorcycle Wiring Harness Assembly
-1. **Wire Gauge:** Use FLRY-B $0.5\,\text{mm}^2$ for 12V power/ground and $0.35\,\text{mm}^2$ for audio and signals.
-2. **Cable Lengths:** Measure and cut the 3 pod branches to fit your vehicle:
-   * **Pod 1 (Handlebar Left):** $\approx 150 \dots 180\,\text{cm}$.
-   * **Pod 2 (Handlebar Right):** $\approx 150 \dots 180\,\text{cm}$.
-   * **Pod 3 (Tail/License Plate):** $\approx 40 \dots 80\,\text{cm}$.
+### Step 6: Vehicle Wiring Harness Assembly
+1. **Wire Gauges:** Use FLRY-B $0.5\,\text{mm}^2$ for 12V power (`PIN 1: KL_30`, `PIN 2: KL_15`, `PIN 3: GND`); use FLRY-B $0.35\,\text{mm}^2$ for all audio and signal lines.
+2. **Vehicle-Specific Length Adjustment:** Cut the 3 M8 branch lengths to match your motorcycle layout and chosen pod locations (mock-route on frame with cord or zip-ties before cutting!):
+   * **Handlebar / Cockpit (Standard):** approx. $150 \dots 190\,\text{cm}$ (along frame backbone / steering head).
+   * **Crash Bars (Travel Enduros e.g. BMW GS, T7, Africa Twin):** approx. $110 \dots 140\,\text{cm}$ (direct path to front/mid engine guards).
+   * **Side Covers / Battery Trays (Harley-Davidson Tourers, Cruisers, Softail):** approx. $25 \dots 50\,\text{cm}$ (ultra-short run from main box under the seat).
+   * **Pannier Racks / Luggage Mounts:** approx. $60 \dots 100\,\text{cm}$.
+   * **Rear Tail / License Plate Carrier (Pod 3):** approx. $40 \dots 80\,\text{cm}$.
 3. **Pin Assignment:** Solder and crimp strictly following [`central_breakout_harness_wirelist.csv`](file:///Users/schmidtm/openMotorBridge/hardware/production_packages/05_wiring_harness_spec/central_breakout_harness_wirelist.csv).
 4. **Harness Protection:** Encase all branches in braided expandable sleeving and adhesive-lined heat shrink tubing.
 5. **Inline Fuse:** Solder the waterproof inline fuse holder with **2A fuse** into the red Kl. 30 lead directly at the battery terminal.
