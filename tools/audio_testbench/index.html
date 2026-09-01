@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenMotorBridge - Live Audio DSP Studio & Testbench</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Top Header & System Bar -->
+  <header>
+    <div class="logo-group">
+      <span class="badge-brand">OMB-DSP</span>
+      <h1>Live Audio DSP Studio & Real-Time Testbench</h1>
+    </div>
+
+    <div class="system-status-pills">
+      <div class="pill">
+        <span id="pillDuckingDot" class="dot"></span>
+        <span id="pillDuckingText">DUCKING: 0 dB</span>
+      </div>
+      <div class="pill">
+        <span id="pillVadDot" class="dot"></span>
+        <span id="pillVadText">VAD: IDLE</span>
+      </div>
+      <div class="pill">
+        <span id="pillPttDot" class="dot"></span>
+        <span id="pillPttText">PTT: OFF</span>
+      </div>
+      <button id="btnMasterPower" class="btn-master-power">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
+          <line x1="12" y1="2" x2="12" y2="12"></line>
+        </svg>
+        <span id="btnPowerLabel">STUDIO STARTEN</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Grid Dashboard -->
+  <main class="dashboard-grid">
+
+    <!-- Column 1: Audio Inputs & Motorcycle Controls -->
+    <aside class="panel">
+      <div class="panel-header">
+        <span class="panel-title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+            <line x1="12" y1="19" x2="12" y2="23"></line>
+            <line x1="8" y1="23" x2="16" y2="23"></line>
+          </svg>
+          1. Headset & Mikrofon
+        </span>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="micDeviceSelect">Audio-Eingabegerät</label>
+        <select id="micDeviceSelect">
+          <option value="">Standard-Mikrofon</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <div class="control-label">
+          <span>Mikrofon-Gain</span>
+          <span id="valMicGain" class="control-val">1.00x</span>
+        </div>
+        <input type="range" id="sliderMicGain" min="0" max="3" step="0.05" value="1.0">
+      </div>
+
+      <div class="control-group">
+        <div class="control-label">
+          <span>VAD-Schwellwert (Spracherkennung)</span>
+          <span id="valVadThresh" class="control-val">0.04</span>
+        </div>
+        <input type="range" id="sliderVadThresh" min="0.01" max="0.25" step="0.005" value="0.04">
+      </div>
+
+      <!-- Large PTT Button -->
+      <button id="btnPtt" class="ptt-button">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+        </svg>
+        <span>PTT DRÜCKEN</span>
+      </button>
+      <div class="ptt-hint">[LEERTASTE] gedrückt halten = Lenkertaste</div>
+
+      <!-- Music Source -->
+      <div class="panel-header" style="margin-top: 0.5rem;">
+        <span class="panel-title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 18V5l12-2v13"></path>
+            <circle cx="6" cy="18" r="3"></circle>
+            <circle cx="18" cy="16" r="3"></circle>
+          </svg>
+          2. Musik-Zuspielung
+        </span>
+      </div>
+
+      <div class="control-group">
+        <button id="btnToggleSynth" class="btn-master-power" style="width: 100%; justify-content: center;">
+          <span>Riding-Synthwave (Demo)</span>
+        </button>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">Oder eigene MP3 / Audio-Datei:</label>
+        <input type="file" id="fileAudioInput" accept="audio/*" style="font-size: 0.75rem; color: var(--text-dim);">
+      </div>
+
+      <div class="control-group">
+        <div class="control-label">
+          <span>Musik-Lautstärke</span>
+          <span id="valMusicVol" class="control-val">80 %</span>
+        </div>
+        <input type="range" id="sliderMusicVol" min="0" max="1" step="0.05" value="0.8">
+      </div>
+    </aside>
+
+    <!-- Column 2: Visualizers & Dynamic Oscilloscopes -->
+    <section class="panel">
+      <div class="panel-header">
+        <span class="panel-title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+          </svg>
+          Echtzeit-Audioanalysator & Ducking-Oszilloskop
+        </span>
+        <span id="valDspLatency" class="control-val" style="font-size: 0.75rem;">Latenz: 5.3 ms</span>
+      </div>
+
+      <!-- Canvas Visualizers -->
+      <div class="visualizer-container">
+        <canvas id="spectrumCanvas"></canvas>
+
+        <div class="control-label" style="margin-top: -0.5rem;">
+          <span>Ducking-Gain-Verlauf (15 ms Attack / 800 ms Raised-Cosine Release)</span>
+          <span id="valCurDuckingFactor" class="control-val">100 % (0.0 dB)</span>
+        </div>
+        <canvas id="duckingScope"></canvas>
+
+        <!-- Ducking Gain Reduction Meter -->
+        <div class="control-group">
+          <div class="control-label">
+            <span>Ducking Gain Reduction (Absenkung)</span>
+            <span id="valGrDb" class="control-val">0.0 dB</span>
+          </div>
+          <div class="gr-bar">
+            <div id="grBarFill" class="gr-fill"></div>
+          </div>
+        </div>
+
+        <!-- Triple VU-Meter Rack -->
+        <div class="meters-rack">
+          <div class="meter-strip">
+            <div class="meter-label">
+              <span>MIC IN</span>
+              <span id="lblMicDb">-∞ dB</span>
+            </div>
+            <div class="meter-track">
+              <div id="meterMicFill" class="meter-fill"></div>
+            </div>
+          </div>
+
+          <div class="meter-strip">
+            <div class="meter-label">
+              <span>MUSIK</span>
+              <span id="lblMusicDb">-∞ dB</span>
+            </div>
+            <div class="meter-track">
+              <div id="meterMusicFill" class="meter-fill"></div>
+            </div>
+          </div>
+
+          <div class="meter-strip">
+            <div class="meter-label">
+              <span>HELM MASTER</span>
+              <span id="lblMasterDb">-∞ dB</span>
+            </div>
+            <div class="meter-track">
+              <div id="meterMasterFill" class="meter-fill"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Column 3: Vehicle Dynamics & Cartridge Profiles -->
+    <aside class="panel">
+      <div class="panel-header">
+        <span class="panel-title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          3. Fahrzustand & Akustik
+        </span>
+      </div>
+
+      <!-- Speedometer Display -->
+      <div class="speedometer-display">
+        <span id="speedDisplay" class="speed-number">0</span>
+        <span class="speed-unit">KM/H</span>
+      </div>
+
+      <div class="control-group">
+        <input type="range" id="sliderSpeed" min="0" max="160" step="1" value="0">
+      </div>
+
+      <!-- Preset Buttons -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem;">
+        <button class="pill" onclick="setSpeedPreset(0)" style="cursor: pointer; justify-content: center;">0 km/h (Ampel)</button>
+        <button class="pill" onclick="setSpeedPreset(25)" style="cursor: pointer; justify-content: center;">25 km/h (Stadt)</button>
+        <button class="pill" onclick="setSpeedPreset(80)" style="cursor: pointer; justify-content: center;">80 km/h (Land)</button>
+        <button class="pill" onclick="setSpeedPreset(130)" style="cursor: pointer; justify-content: center;">130 km/h (BAB)</button>
+      </div>
+
+      <div class="control-group" style="margin-top: 0.5rem;">
+        <div class="control-label">
+          <span>Ducking-Tiefe (Absenkung)</span>
+          <span id="valDuckingDepth" class="control-val">-12 dB</span>
+        </div>
+        <select id="selectDuckingDepth">
+          <option value="-6">-6 dB (Dezente Absenkung)</option>
+          <option value="-12" selected>-12 dB (Standard Touring)</option>
+          <option value="-18">-18 dB (Starke Absenkung)</option>
+          <option value="-24">-24 dB (Sehr leise)</option>
+          <option value="-96">-96 dB (Vollständige Stummschaltung)</option>
+        </select>
+      </div>
+
+      <!-- Cartridge Profiles (1-Wire Simulation) -->
+      <div class="panel-header" style="margin-top: 0.5rem;">
+        <span class="panel-title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+            <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+            <line x1="6" y1="6" x2="6.01" y2="6"></line>
+            <line x1="6" y1="18" x2="6.01" y2="18"></line>
+          </svg>
+          4. Kassetten-Hot-Swap
+        </span>
+      </div>
+
+      <div class="profile-cards">
+        <div class="profile-card selected" data-profile="SENA_60S" onclick="selectProfile('SENA_60S')">
+          <div class="profile-name">Sena 60S</div>
+          <div class="profile-desc">+2.5 dB / Wave EQ</div>
+        </div>
+
+        <div class="profile-card" data-profile="CARDO_PACKTALK" onclick="selectProfile('CARDO_PACKTALK')">
+          <div class="profile-name">Cardo Pro</div>
+          <div class="profile-desc">Natural Voice Comp</div>
+        </div>
+
+        <div class="profile-card" data-profile="OMM_LORA_RADIO" onclick="selectProfile('OMM_LORA_RADIO')">
+          <div class="profile-name">OMM LoRa</div>
+          <div class="profile-desc">24k Opus / 868MHz</div>
+        </div>
+
+        <div class="profile-card" data-profile="BLINDKASSETTE" onclick="selectProfile('BLINDKASSETTE')">
+          <div class="profile-name">Blindkassette</div>
+          <div class="profile-desc">Slot Mute (-96 dB)</div>
+        </div>
+      </div>
+
+    </aside>
+
+  </main>
+
+  <!-- Bottom Info Footer -->
+  <footer>
+    <span>OpenMotorBridge Acoustic DSP Emulator v8.1</span>
+    <span>48.000 Hz / 16-Bit Stereo DMA Emulation</span>
+    <span>Firmware-Ref: firmware/main_controller/src/audio_dsp_pipeline.cpp</span>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="dsp_engine.js"></script>
+  <script>
+    // UI Glue Code
+    let isMasterStarted = false;
+    const btnMasterPower = document.getElementById('btnMasterPower');
+    const btnPowerLabel = document.getElementById('btnPowerLabel');
+    const micDeviceSelect = document.getElementById('micDeviceSelect');
+    const sliderMicGain = document.getElementById('sliderMicGain');
+    const valMicGain = document.getElementById('valMicGain');
+    const sliderVadThresh = document.getElementById('sliderVadThresh');
+    const valVadThresh = document.getElementById('valVadThresh');
+    const btnPtt = document.getElementById('btnPtt');
+    const btnToggleSynth = document.getElementById('btnToggleSynth');
+    const fileAudioInput = document.getElementById('fileAudioInput');
+    const sliderMusicVol = document.getElementById('sliderMusicVol');
+    const valMusicVol = document.getElementById('valMusicVol');
+    const sliderSpeed = document.getElementById('sliderSpeed');
+    const speedDisplay = document.getElementById('speedDisplay');
+    const selectDuckingDepth = document.getElementById('selectDuckingDepth');
+    const valDuckingDepth = document.getElementById('valDuckingDepth');
+
+    // Visualizer Elements
+    const spectrumCanvas = document.getElementById('spectrumCanvas');
+    const duckingScope = document.getElementById('duckingScope');
+    const specCtx = spectrumCanvas.getContext('2d');
+    const scopeCtx = duckingScope.getContext('2d');
+
+    const meterMicFill = document.getElementById('meterMicFill');
+    const meterMusicFill = document.getElementById('meterMusicFill');
+    const meterMasterFill = document.getElementById('meterMasterFill');
+    const grBarFill = document.getElementById('grBarFill');
+
+    const lblMicDb = document.getElementById('lblMicDb');
+    const lblMusicDb = document.getElementById('lblMusicDb');
+    const lblMasterDb = document.getElementById('lblMasterDb');
+    const valGrDb = document.getElementById('valGrDb');
+    const valCurDuckingFactor = document.getElementById('valCurDuckingFactor');
+
+    const pillDuckingDot = document.getElementById('pillDuckingDot');
+    const pillDuckingText = document.getElementById('pillDuckingText');
+    const pillVadDot = document.getElementById('pillVadDot');
+    const pillVadText = document.getElementById('pillVadText');
+    const pillPttDot = document.getElementById('pillPttDot');
+    const pillPttText = document.getElementById('pillPttText');
+
+    // Master Start/Stop
+    btnMasterPower.addEventListener('click', async () => {
+      if (!isMasterStarted) {
+        await window.ombAudio.init();
+        await window.ombAudio.startMicrophone(micDeviceSelect.value || null);
+        await populateMicDevices();
+        isMasterStarted = true;
+        btnMasterPower.classList.add('running');
+        btnPowerLabel.textContent = "STUDIO AKTIV";
+        requestAnimationFrame(renderLoop);
+      } else {
+        if (window.ombAudio.ctx.state === 'running') {
+          await window.ombAudio.ctx.suspend();
+          btnMasterPower.classList.remove('running');
+          btnPowerLabel.textContent = "STUDIO PAUSIERT";
+        } else {
+          await window.ombAudio.ctx.resume();
+          btnMasterPower.classList.add('running');
+          btnPowerLabel.textContent = "STUDIO AKTIV";
+        }
+      }
+    });
+
+    // Populate Mic Devices
+    async function populateMicDevices() {
+      try {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        micDeviceSelect.innerHTML = '<option value="">Standard-Mikrofon</option>';
+        devices.filter(d => d.kind === 'audioinput').forEach(d => {
+          const opt = document.createElement('option');
+          opt.value = d.deviceId;
+          opt.textContent = d.label || `Mikrofon ${d.deviceId.slice(0, 6)}...`;
+          micDeviceSelect.appendChild(opt);
+        });
+      } catch(e) {}
+    }
+
+    micDeviceSelect.addEventListener('change', () => {
+      if (isMasterStarted) {
+        window.ombAudio.startMicrophone(micDeviceSelect.value || null);
+      }
+    });
+
+    // Mic Gain Slider
+    sliderMicGain.addEventListener('input', (e) => {
+      const val = parseFloat(e.target.value);
+      valMicGain.textContent = val.toFixed(2) + "x";
+      if (window.ombAudio.micGain) {
+        window.ombAudio.micGain.gain.value = val;
+      }
+    });
+
+    // VAD Threshold
+    sliderVadThresh.addEventListener('input', (e) => {
+      const val = parseFloat(e.target.value);
+      valVadThresh.textContent = val.toFixed(3);
+      window.ombAudio.vadThreshold = val;
+    });
+
+    // PTT Button & Spacebar Key
+    function activatePtt(active) {
+      window.ombAudio.setPtt(active);
+      if (active) {
+        btnPtt.classList.add('active');
+        pillPttDot.classList.add('active');
+        pillPttText.textContent = "PTT: AKTIV";
+      } else {
+        btnPtt.classList.remove('active');
+        pillPttDot.classList.remove('active');
+        pillPttText.textContent = "PTT: OFF";
+      }
+    }
+
+    btnPtt.addEventListener('mousedown', () => activatePtt(true));
+    btnPtt.addEventListener('mouseup', () => activatePtt(false));
+    btnPtt.addEventListener('mouseleave', () => activatePtt(false));
+    btnPtt.addEventListener('touchstart', (e) => { e.preventDefault(); activatePtt(true); });
+    btnPtt.addEventListener('touchend', (e) => { e.preventDefault(); activatePtt(false); });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.code === 'Space' && e.target.tagName !== 'INPUT' && !e.repeat) {
+        activatePtt(true);
+      }
+    });
+    window.addEventListener('keyup', (e) => {
+      if (e.code === 'Space') {
+        activatePtt(false);
+      }
+    });
+
+    // Music Source Controls
+    btnToggleSynth.addEventListener('click', async () => {
+      if (!isMasterStarted) btnMasterPower.click();
+      if (!window.ombAudio.isSynthPlaying) {
+        window.ombAudio.startSynthMusic();
+        btnToggleSynth.style.background = 'linear-gradient(135deg, #059669, #10b981)';
+      } else {
+        window.ombAudio.stopSynthMusic();
+        btnToggleSynth.style.background = 'linear-gradient(135deg, #2563eb, #0284c7)';
+      }
+    });
+
+    fileAudioInput.addEventListener('change', async (e) => {
+      if (e.target.files.length > 0) {
+        if (!isMasterStarted) await btnMasterPower.click();
+        await window.ombAudio.loadAudioFile(e.target.files[0]);
+        btnToggleSynth.style.background = 'linear-gradient(135deg, #2563eb, #0284c7)';
+      }
+    });
+
+    sliderMusicVol.addEventListener('input', (e) => {
+      const val = parseFloat(e.target.value);
+      valMusicVol.textContent = Math.round(val * 100) + " %";
+      if (window.ombAudio.musicGain) {
+        window.ombAudio.musicGain.gain.value = val;
+      }
+    });
+
+    // Speed Controls
+    sliderSpeed.addEventListener('input', (e) => {
+      const spd = parseInt(e.target.value, 10);
+      speedDisplay.textContent = spd;
+      window.ombAudio.setSpeed(spd);
+    });
+
+    function setSpeedPreset(kmh) {
+      sliderSpeed.value = kmh;
+      speedDisplay.textContent = kmh;
+      window.ombAudio.setSpeed(kmh);
+    }
+
+    // Ducking Depth
+    selectDuckingDepth.addEventListener('change', (e) => {
+      const val = parseFloat(e.target.value);
+      valDuckingDepth.textContent = val + " dB";
+      window.ombAudio.duckingDepthDb = val;
+    });
+
+    // Cartridge Profile Switching
+    function selectProfile(profileId) {
+      document.querySelectorAll('.profile-card').forEach(c => {
+        c.classList.toggle('selected', c.dataset.profile === profileId);
+      });
+      window.ombAudio.setProfile(profileId);
+    }
+
+    // Helper: Compute RMS and dBFS
+    function getAnalyserLevel(analyser) {
+      if (!analyser) return { rms: 0, db: -100 };
+      const data = new Uint8Array(analyser.frequencyBinCount);
+      analyser.getByteTimeDomainData(data);
+      let sum = 0;
+      for (let i = 0; i < data.length; i++) {
+        const norm = (data[i] - 128) / 128;
+        sum += norm * norm;
+      }
+      const rms = Math.sqrt(sum / data.length);
+      const db = rms > 0.00001 ? 20 * Math.log10(rms) : -100;
+      return { rms, db };
+    }
+
+    // Main 60 FPS Render Loop
+    function renderLoop() {
+      if (!isMasterStarted) return;
+
+      // 1. Update Meters
+      const micLvl = getAnalyserLevel(window.ombAudio.micAnalyser);
+      const musicLvl = getAnalyserLevel(window.ombAudio.musicAnalyser);
+      const masterLvl = getAnalyserLevel(window.ombAudio.masterAnalyser);
+
+      meterMicFill.style.width = Math.min(100, Math.max(0, (micLvl.db + 60) * 1.66)) + "%";
+      lblMicDb.textContent = micLvl.db > -60 ? micLvl.db.toFixed(1) + " dB" : "-∞ dB";
+
+      meterMusicFill.style.width = Math.min(100, Math.max(0, (musicLvl.db + 60) * 1.66)) + "%";
+      lblMusicDb.textContent = musicLvl.db > -60 ? musicLvl.db.toFixed(1) + " dB" : "-∞ dB";
+
+      meterMasterFill.style.width = Math.min(100, Math.max(0, (masterLvl.db + 60) * 1.66)) + "%";
+      lblMasterDb.textContent = masterLvl.db > -60 ? masterLvl.db.toFixed(1) + " dB" : "-∞ dB";
+
+      // 2. Ducking Status & Gain Reduction
+      const curFactor = window.ombAudio.duckingFactor;
+      const grDb = 20 * Math.log10(curFactor);
+      const grPercent = Math.min(100, Math.max(0, (-grDb / 24.0) * 100));
+      grBarFill.style.width = grPercent + "%";
+      valGrDb.textContent = grDb.toFixed(1) + " dB";
+      valCurDuckingFactor.textContent = Math.round(curFactor * 100) + " % (" + grDb.toFixed(1) + " dB)";
+
+      if (curFactor < 0.95) {
+        pillDuckingDot.className = "dot ducking";
+        pillDuckingText.textContent = "DUCKING: " + grDb.toFixed(0) + " dB";
+      } else {
+        pillDuckingDot.className = "dot";
+        pillDuckingText.textContent = "DUCKING: 0 dB";
+      }
+
+      if (window.ombAudio.vadActive) {
+        pillVadDot.className = "dot active";
+        pillVadText.textContent = "VAD: VOICE";
+      } else {
+        pillVadDot.className = "dot";
+        pillVadText.textContent = "VAD: IDLE";
+      }
+
+      // 3. Render FFT Spectrum
+      renderSpectrum();
+
+      // 4. Render Ducking Envelope Scope
+      renderDuckingScope();
+
+      requestAnimationFrame(renderLoop);
+    }
+
+    // Spectrum Analyzer Canvas Drawing
+    function renderSpectrum() {
+      const w = spectrumCanvas.width = spectrumCanvas.clientWidth;
+      const h = spectrumCanvas.height = spectrumCanvas.clientHeight;
+      specCtx.clearRect(0, 0, w, h);
+
+      if (!window.ombAudio.masterAnalyser) return;
+      const freqData = new Uint8Array(window.ombAudio.masterAnalyser.frequencyBinCount);
+      window.ombAudio.masterAnalyser.getByteFrequencyData(freqData);
+
+      const barCount = 64;
+      const barWidth = (w / barCount) - 2;
+
+      for (let i = 0; i < barCount; i++) {
+        const binIdx = Math.floor(Math.pow(i / barCount, 1.8) * freqData.length);
+        const val = freqData[binIdx] / 255.0;
+        const barHeight = val * h * 0.9;
+
+        const x = i * (barWidth + 2);
+        const y = h - barHeight;
+
+        const grad = specCtx.createLinearGradient(0, h, 0, 0);
+        grad.addColorStop(0, '#06b6d4');
+        grad.addColorStop(0.6, '#3b82f6');
+        grad.addColorStop(1.0, '#f43f5e');
+
+        specCtx.fillStyle = grad;
+        specCtx.fillRect(x, y, barWidth, barHeight);
+      }
+    }
+
+    // Ducking Oscilloscope Drawing
+    function renderDuckingScope() {
+      const w = duckingScope.width = duckingScope.clientWidth;
+      const h = duckingScope.height = duckingScope.clientHeight;
+      scopeCtx.clearRect(0, 0, w, h);
+
+      const hist = window.ombAudio.duckingHistory;
+      scopeCtx.strokeStyle = '#f59e0b';
+      scopeCtx.lineWidth = 2.5;
+      scopeCtx.beginPath();
+
+      for (let i = 0; i < hist.length; i++) {
+        const x = (i / (hist.length - 1)) * w;
+        // Factor 1.0 is near the top (20px margin), 0.0 near bottom
+        const y = 20 + (1.0 - hist[i]) * (h - 40);
+        if (i === 0) scopeCtx.moveTo(x, y);
+        else scopeCtx.lineTo(x, y);
+      }
+      scopeCtx.stroke();
+
+      // Zero-line reference
+      scopeCtx.strokeStyle = '#223049';
+      scopeCtx.lineWidth = 1;
+      scopeCtx.setLineDash([4, 4]);
+      scopeCtx.beginPath();
+      scopeCtx.moveTo(0, 20);
+      scopeCtx.lineTo(w, 20);
+      scopeCtx.stroke();
+      scopeCtx.setLineDash([]);
+    }
+  </script>
+</body>
+</html>
