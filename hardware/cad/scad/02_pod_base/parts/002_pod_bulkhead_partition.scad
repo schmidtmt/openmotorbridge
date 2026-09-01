@@ -58,6 +58,12 @@ module pod_bulkhead_assembly(bulkhead_x=22.0, wall=2.5) {
     translate([bulkhead_x, POD_OUTER_W - 5.0, POD_OUTER_H - wall])
         rotate([0, 90, 0])
             screw_boss(outer_r=2.0, inner_r=M2_SCREW_HOLE_R, h=3.0);
+
+    // 5. Poka-Yoke Anti-Rotation Keying Lug (Codiernase for Stirnwand-Platine)
+    //    Matches 4.0 x 2.5 mm notch at bottom edge of openmotorbridge_pod_base PCB (y = 37.5..40.5 mm).
+    //    Mechanically blocks 180° upside-down installation of the Stirnwand-Adapter PCB!
+    translate([bulkhead_x - 1.8, 37.5, wall])
+        cube(size=[1.8, 3.0, 3.0], center=false);
 }
 
 // Standalone preview

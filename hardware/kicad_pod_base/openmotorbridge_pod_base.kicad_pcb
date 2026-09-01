@@ -737,13 +737,75 @@
 	)
 	(gr_line
 		(start 134 90)
-		(end 102 90)
+		(end 129 90)
 		(stroke
 			(width 0.15)
 			(type solid)
 		)
 		(layer "Edge.Cuts")
 		(uuid "47bafa74-f210-498d-9b8f-1cded3a1cb97")
+	)
+	(gr_line
+		(start 129 90)
+		(end 129 87.5)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "Edge.Cuts")
+		(uuid "47bafa74-f210-498d-9b8f-1cded3a1cb98")
+	)
+	(gr_line
+		(start 129 87.5)
+		(end 125 87.5)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "Edge.Cuts")
+		(uuid "47bafa74-f210-498d-9b8f-1cded3a1cb99")
+	)
+	(gr_line
+		(start 125 87.5)
+		(end 125 90)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "Edge.Cuts")
+		(uuid "47bafa74-f210-498d-9b8f-1cded3a1cba0")
+	)
+	(gr_line
+		(start 125 90)
+		(end 102 90)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "Edge.Cuts")
+		(uuid "47bafa74-f210-498d-9b8f-1cded3a1cba1")
+	)
+	(gr_text "▲ TOP / OBEN"
+		(at 127 72 0)
+		(layer "F.SilkS")
+		(uuid "d3addef2-3059-4016-afc0-8931276ce3a6")
+		(effects
+			(font
+				(size 0.45 0.45)
+				(thickness 0.09)
+			)
+		)
+	)
+	(gr_text "▼ POKA-YOKE KEY"
+		(at 127 86.2 0)
+		(layer "F.SilkS")
+		(uuid "d3addef2-3059-4016-afc0-8931276ce3a7")
+		(effects
+			(font
+				(size 0.4 0.4)
+				(thickness 0.08)
+			)
+		)
 	)
 	(gr_line
 		(start 136 72)
