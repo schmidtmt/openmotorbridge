@@ -407,13 +407,24 @@ btnConnect.addEventListener('click', async () => {
 
     const isDe = state.lang === 'de';
 
+    // Detect iOS / iPadOS (iPadOS reports MacIntel with touch points)
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
     // 1. Browser compatibility check for Web Bluetooth API
     if (!navigator.bluetooth || typeof navigator.bluetooth.requestDevice !== 'function') {
-        const msg = isDe
-            ? 'Web Bluetooth wird von diesem Browser (z. B. Safari / Firefox) nicht unterstützt. Bitte nutze Google Chrome, MS Edge, Opera oder unter iOS "Bluefy" (HTTPS/localhost erforderlich).'
-            : 'Web Bluetooth is not supported by this browser (e.g. Safari / Firefox). Please use Google Chrome, MS Edge, Opera, or Bluefy on iOS (HTTPS/localhost required).';
-        console.warn('Web Bluetooth API (navigator.bluetooth) not available in this browser or context.');
-        showToast(msg, 'warning', 6000);
+        let msg = '';
+        if (isIOS) {
+            msg = isDe
+                ? 'Auf iPad & iPhone erzwingt Apple die WebKit-Engine (auch in Chrome & Edge). Daher funktioniert Web Bluetooth nur in speziellen BLE-Browsern wie "Bluefy – Web BLE Browser" (kostenlos im App Store).'
+                : 'On iPad & iPhone, Apple enforces the WebKit engine (even in Chrome & Edge). Therefore Web Bluetooth only works in dedicated BLE browsers like "Bluefy – Web BLE Browser" (free on App Store).';
+        } else {
+            msg = isDe
+                ? 'Web Bluetooth wird von diesem Browser (Safari / Firefox) nicht unterstützt. Bitte nutze auf dem Mac/PC Google Chrome, MS Edge oder Opera (über HTTPS oder localhost).'
+                : 'Web Bluetooth is not supported by this browser (Safari / Firefox). Please use Google Chrome, MS Edge, or Opera on Mac/PC (via HTTPS or localhost).';
+        }
+        console.warn('Web Bluetooth API (navigator.bluetooth) not available. isIOS:', isIOS);
+        showToast(msg, 'warning', 7000);
         return;
     }
 
