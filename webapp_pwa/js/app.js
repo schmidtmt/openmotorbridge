@@ -39,7 +39,7 @@ const i18n = {
         vbat_label: 'USV-LiPo (Unter Sitzbank)',
         vbat_sub: '1000 mAh Puffer',
         bat_chem_label: 'Starterbatterie-Typ & Schutzschwelle',
-        handlebar_label: 'Lenkertaster (CR2032 Batterie)',
+        handlebar_label: 'Lenkertaster & Funk-PTT (CR2032 Batterie)',
         handlebar_sub: 'Bluetooth SIG Service 0x180F Überwachung',
         status_led_title: 'WS2812B RGB Status-LED (Gehäusedeckel)',
         gpx_modal_title: 'Erweiterter GPX-Export & Navi-Formatierung',
@@ -93,7 +93,7 @@ const i18n = {
         webdav_user_label: 'Benutzername',
         webdav_pass_label: 'Passwort / App-Token',
         btn_save_webdav: 'WLAN & WebDAV Speichern',
-        btn_pair_remote: 'Taster Koppeln',
+        btn_pair_remote: 'PTT-Taster Koppeln',
         saved_tours_title: 'Gespeicherte Touren (/tracks/)',
         btn_refresh: 'Aktualisieren',
         th_date: 'Datum & Uhrzeit',
@@ -161,7 +161,7 @@ const i18n = {
         vbat_label: 'UPS LiPo (Under Seat)',
         vbat_sub: '1000 mAh Buffer',
         bat_chem_label: 'Starter Battery Chemistry & Threshold',
-        handlebar_label: 'Handlebar Remote (CR2032 Battery)',
+        handlebar_label: 'Handlebar Remote & Wireless PTT (CR2032 Battery)',
         handlebar_sub: 'Bluetooth SIG Service 0x180F Monitoring',
         status_led_title: 'WS2812B RGB Status LED (Enclosure Lid)',
         gpx_modal_title: 'Extended GPX Export & Navigation Formatting',
@@ -220,7 +220,7 @@ const i18n = {
         webdav_user_label: 'Username',
         webdav_pass_label: 'Password / App Token',
         btn_save_webdav: 'Save WiFi & WebDAV',
-        btn_pair_remote: 'Pair Remote',
+        btn_pair_remote: 'Pair PTT Remote',
         saved_tours_title: 'Recorded Rides (/tracks/)',
         btn_refresh: 'Refresh',
         th_date: 'Date & Time',
@@ -362,8 +362,9 @@ btnLangToggle.addEventListener('click', () => {
 // ==========================================
 // 2. Toast Notification Helper
 // ==========================================
-function showToast(message, type = 'info') {
+function showToast(message, type = 'info', durationMs = 3500) {
     const container = document.getElementById('toast-container');
+    if (!container) return;
     const toast = document.createElement('div');
     toast.className = 'toast';
     const icon = type === 'success' ? '✅' : type === 'warning' ? '⚠️' : '⚡';
@@ -375,7 +376,7 @@ function showToast(message, type = 'info') {
         toast.style.transform = 'translateY(10px)';
         toast.style.transition = 'all 0.3s ease';
         setTimeout(() => toast.remove(), 300);
-    }, 3000);
+    }, durationMs);
 }
 
 // ==========================================
@@ -404,9 +405,20 @@ btnConnect.addEventListener('click', async () => {
         return;
     }
 
+    const isDe = state.lang === 'de';
+
+    // 1. Browser compatibility check for Web Bluetooth API
+    if (!navigator.bluetooth || typeof navigator.bluetooth.requestDevice !== 'function') {
+        const msg = isDe
+            ? 'Web Bluetooth wird von diesem Browser (z. B. Safari / Firefox) nicht unterstützt. Bitte nutze Google Chrome, MS Edge, Opera oder unter iOS "Bluefy" (HTTPS/localhost erforderlich).'
+            : 'Web Bluetooth is not supported by this browser (e.g. Safari / Firefox). Please use Google Chrome, MS Edge, Opera, or Bluefy on iOS (HTTPS/localhost required).';
+        console.warn('Web Bluetooth API (navigator.bluetooth) not available in this browser or context.');
+        showToast(msg, 'warning', 6000);
+        return;
+    }
+
     try {
-        const dict = i18n[state.lang];
-        showToast(state.lang === 'de' ? 'Suche nach OpenMotorBridge v8.0...' : 'Scanning for OpenMotorBridge v8.0...');
+        showToast(isDe ? 'Suche nach OpenMotorBridge v8.0...' : 'Scanning for OpenMotorBridge v8.0...', 'info', 2500);
         bleDevice = await navigator.bluetooth.requestDevice({
             filters: [{ namePrefix: 'OpenMotorBridge' }],
             optionalServices: [OMB_SERVICE_UUID]
@@ -414,7 +426,7 @@ btnConnect.addEventListener('click', async () => {
 
         bleDevice.addEventListener('gattserverdisconnected', onBleDisconnected);
 
-        showToast(state.lang === 'de' ? 'Verbinde mit GATT Server...' : 'Connecting to GATT Server...');
+        showToast(isDe ? 'Verbinde mit GATT Server...' : 'Connecting to GATT Server...', 'info', 2500);
         const server = await bleDevice.gatt.connect();
         const service = await server.getPrimaryService(OMB_SERVICE_UUID);
 
@@ -427,13 +439,27 @@ btnConnect.addEventListener('click', async () => {
 
         state.isBleConnected = true;
         updateBleUiState(true);
-        showToast(state.lang === 'de' ? 'Erfolgreich mit OpenMotorBridge verbunden!' : 'Connected to OpenMotorBridge!', 'success');
+        showToast(isDe ? 'Erfolgreich mit OpenMotorBridge verbunden!' : 'Connected to OpenMotorBridge!', 'success', 3500);
 
         if (state.isDemoMode) toggleDemoMode(false);
 
     } catch (err) {
-        console.error('BLE connection failed:', err);
-        showToast((state.lang === 'de' ? 'Verbindung abgebrochen: ' : 'Connection failed: ') + err.message, 'warning');
+        console.warn('BLE connection result:', err);
+        if (err.name === 'NotFoundError') {
+            // User cancelled chooser dialog OR no matching OpenMotorBridge was found in BLE range
+            const msg = isDe
+                ? 'Keine OpenMotorBridge gefunden (oder Suche abgebrochen). Tipp: Nutze oben rechts den Demo-Modus, um alle Funktionen ohne Hardware zu testen!'
+                : 'No OpenMotorBridge found (or scan cancelled). Tip: Use Demo Mode in the top right to test without hardware!';
+            showToast(msg, 'warning', 5000);
+        } else if (err.name === 'SecurityError') {
+            const msg = isDe
+                ? 'Bluetooth-Zugriff verweigert (Sicherheitsrichtlinie oder kein HTTPS/localhost).'
+                : 'Bluetooth access denied (security policy or insecure HTTP context).';
+            showToast(msg, 'warning', 5000);
+        } else {
+            const prefix = isDe ? 'Verbindung fehlgeschlagen: ' : 'Connection failed: ';
+            showToast(prefix + (err.message || err.name), 'warning', 4000);
+        }
     }
 });
 
@@ -1182,42 +1208,50 @@ btnSaveWebdav?.addEventListener('click', () => {
 // ==========================================
 // 11b. Interactive Handlebar Remote & LED Simulators & USB MSC
 // ==========================================
-const btnPairRemote = document.getElementById('btn-pair-remote');
-if (btnPairRemote) {
-    btnPairRemote.addEventListener('click', () => {
-        const isDe = state.lang === 'de';
-        showToast(isDe 
-            ? '🔍 BLE-Suchmodus aktiv: Halte jetzt die Taste am Lenkertaster 5 Sekunden lang gedrückt...' 
-            : '🔍 BLE Discovery active: Hold handlebar remote button for 5 seconds...', 
-            'info'
-        );
+const pairRemoteButtons = document.querySelectorAll('.btn-pair-remote-action');
 
-        if (controlChar) {
-            try {
-                controlChar.writeValue(new Uint8Array([0x05, 0x01]));
-            } catch(e) {
-                console.warn('GATT Pair Remote command failed:', e);
-            }
+function handlePairRemoteClick() {
+    const isDe = state.lang === 'de';
+    showToast(isDe 
+        ? '🔍 BLE-Suchmodus aktiv: Halte jetzt die Taste am Lenkertaster / Funk-PTT 5 Sekunden lang gedrückt...' 
+        : '🔍 BLE Discovery active: Hold handlebar remote / wireless PTT button for 5 seconds...', 
+        'info',
+        4000
+    );
+
+    if (controlChar) {
+        try {
+            controlChar.writeValue(new Uint8Array([0x05, 0x01]));
+        } catch(e) {
+            console.warn('GATT Pair Remote command failed:', e);
         }
+    }
 
-        btnPairRemote.disabled = true;
-        btnPairRemote.textContent = isDe ? '⏳ Suche...' : '⏳ Searching...';
-
-        setTimeout(() => {
-            btnPairRemote.disabled = false;
-            btnPairRemote.textContent = isDe ? '✓ Verbunden' : '✓ Paired';
-            if (valBtnBat) {
-                valBtnBat.textContent = '95 %';
-                valBtnBat.style.color = 'var(--accent-green)';
-            }
-            if (barBtnBat) {
-                barBtnBat.style.width = '95%';
-                barBtnBat.style.background = 'var(--accent-green)';
-            }
-            showToast(isDe ? '✓ Funk-Lenkertaster erfolgreich gekoppelt (CR2032: 95%)' : '✓ Handlebar remote paired successfully (CR2032: 95%)', 'success');
-        }, 2500);
+    pairRemoteButtons.forEach(btn => {
+        btn.disabled = true;
+        btn.textContent = isDe ? '⏳ Suche...' : '⏳ Searching...';
     });
+
+    setTimeout(() => {
+        pairRemoteButtons.forEach(btn => {
+            btn.disabled = false;
+            btn.textContent = isDe ? '✓ Verbunden' : '✓ Paired';
+        });
+        if (valBtnBat) {
+            valBtnBat.textContent = '95 %';
+            valBtnBat.style.color = 'var(--accent-green)';
+        }
+        if (barBtnBat) {
+            barBtnBat.style.width = '95%';
+            barBtnBat.style.background = 'var(--accent-green)';
+        }
+        showToast(isDe ? '✓ Funk-Lenkertaster (PTT) erfolgreich gekoppelt (CR2032: 95%)' : '✓ Handlebar remote (PTT) paired successfully (CR2032: 95%)', 'success', 3500);
+    }, 2500);
 }
+
+pairRemoteButtons.forEach(btn => {
+    btn.addEventListener('click', handlePairRemoteClick);
+});
 const btnToggleLowbat = document.getElementById('btn-toggle-lowbat');
 let s_isLowBatSim = false;
 

@@ -133,7 +133,7 @@
 
                     <div class="stat-tile" style="margin-top: 14px;">
                         <div class="stat-label" style="display: flex; justify-content: space-between; align-items: center;">
-                            <span data-i18n="handlebar_label">Lenkertaster (CR2032 Batterie)</span>
+                            <span data-i18n="handlebar_label">Lenkertaster & Funk-PTT (CR2032 Batterie)</span>
                             <span id="val-btn-bat" style="color: var(--text-muted); font-weight: 800;">-- %</span>
                         </div>
                         <div class="progress-bar-container" style="margin: 8px 0;">
@@ -142,8 +142,8 @@
                         <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap;">
                             <span class="stat-sub" data-i18n="handlebar_sub">Bluetooth SIG Service 0x180F Überwachung</span>
                             <div style="display: flex; gap: 6px;">
-                                <button id="btn-pair-remote" class="btn-primary" style="padding: 4px 10px; font-size: 0.72rem;">
-                                    🔗 <span data-i18n="btn_pair_remote">Taster Koppeln</span>
+                                <button id="btn-pair-remote" class="btn-primary btn-pair-remote-action" style="padding: 5px 12px; font-size: 0.75rem;">
+                                    🔗 <span data-i18n="btn_pair_remote">PTT-Taster Koppeln</span>
                                 </button>
                                 <button id="btn-toggle-lowbat" class="btn-secondary" style="padding: 4px 8px; font-size: 0.72rem;">
                                     ⚡ Low-Bat Test
@@ -327,6 +327,16 @@
                             </button>
                             <button id="btn-siren-alert-sim" class="btn-secondary" style="border-color: rgba(255, 69, 58, 0.4); color: var(--accent-red);">
                                 🚨 <span data-i18n="btn_siren_sim">Sirenen-Alarm Test</span>
+                            </button>
+                        </div>
+                        <!-- Wireless PTT Handlebar Remote in Audio Tab -->
+                        <div style="margin-top: 12px; padding: 10px 14px; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                            <div>
+                                <div style="font-size: 0.88rem; font-weight: 700;">🔘 Funk-Lenkertaster & PTT (BLE Remote)</div>
+                                <span class="stat-sub">Drahtlose PTT-Sprechtaste & Audio-Steuerung (Bluetooth SIG 0x180F)</span>
+                            </div>
+                            <button id="btn-pair-remote-audio" class="btn-primary btn-pair-remote-action" style="padding: 6px 14px; font-size: 0.8rem;">
+                                🔗 <span data-i18n="btn_pair_remote">PTT-Taster Koppeln</span>
                             </button>
                         </div>
                     </div>
@@ -1080,7 +1090,7 @@
     <!-- Toast Container -->
     <div class="toast-container" id="toast-container"></div>
 
-    <script src="js/app.js?v=8.5"></script>
+    <script src="js/app.js?v=8.6"></script>
 </body>
 
 </html>
