@@ -25,9 +25,9 @@ Unlike the Audio & Intercom cartridges (Pod 1 & Pod 2), which employ a 2-piece s
 *Figure 13.2: 3D CAD exploded view of the complete Rear Pod 3 assembly featuring the universal pod base housing (integrated V-groove frame tube saddle with EPDM strap lugs), rear M8 6-pin IP67 cable gland, and the 1-tier transceiver sled ([cartridge_omm_transceiver.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/cartridge_omm_transceiver.scad)) holding the transceiver PCB directly with zero intermediary adapters.*
 
 #### Why is No Adapter Board Required for Pod 3?
-1. **Fully Integrated Single-Board Architecture:** The `openmotorbridge_rear_transceiver` PCB is itself the complete transceiver, navigation, and co-processor unit. It carries the Maxim DS2401 ID chip, the 6-pin precision socket `J1`, the SX1262 LoRa modem, the u-blox MAX-M10S GNSS engine, and the $25 \times 25 \times 4\,\text{mm}$ ceramic patch antenna directly on its 4-layer FR4 substrate.
-2. **Direct Sled Mounting:** The board bolts directly to the 4x M2.5 mounting posts of the cartridge sled ([cartridge_omm_transceiver.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/cartridge_omm_transceiver.scad)).
-3. **Full $23.5\,\text{mm}$ Interior Height:** Without an intermediary partition floor or adapter board, the GNSS ceramic patch and LoRa helical antenna benefit from the complete unattenuated internal clearance directly beneath the weatherproof PA12 roof – maximizing RF gain and 360° sky coverage.
+1. **Fully Integrated Single-Board Architecture:** The `openmotorbridge_rear_transceiver` PCB is itself the complete transceiver, navigation, and co-processor unit. It carries the Maxim DS2401 ID chip, the 6-pin precision socket `J1`, the SX1262 LoRa modem, the u-blox MAX-M10S GNSS engine, and two Pulse W3000 ceramic chip antennas (GNSS top, LoRa bottom) with direct, lossless $50\,\Omega$ microstrip lines directly on its 4-layer FR4 substrate.
+2. **Direct Sled Mounting:** The board bolts directly to the 4x M2 mounting posts of the cartridge sled ([cartridge_omm_transceiver.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/cartridge_omm_transceiver.scad)) and seals under the weatherproof, RF-transparent solid PA12 lid ([cartridge_insert_blindkassette.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/parts/03_insert_blindkassette.scad)).
+3. **Full $23.5\,\text{mm}$ Interior Height:** Without an intermediary partition floor or adapter board, the antennas benefit from the complete unattenuated internal clearance directly beneath the weatherproof PA12 roof – maximizing RF gain and 360° sky coverage.
 4. **100% Mechanical Compatibility:** The cartridge utilizes the identical [00_base_sled.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/00_base_sled.scad) and slides seamlessly into the same universal pod housing ([pod_base_housing.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/pod_base_housing.scad)).
 
 ---
@@ -86,7 +86,7 @@ Unlike the Audio & Intercom cartridges (Pod 1 & Pod 2), which employ a 2-piece s
 | :--- | :--- | :--- |
 | **Hardware Driver** | **ESP32-C3 Integrated 2.4 GHz Radio** | **Semtech SX1262 Transceiver (+22 dBm)** |
 | **Standard / Protocol** | IEEE 802.15.4 / SC-FDMA TDMA (2 Mbps) | LoRa Chirp Spread Spectrum (BW 250 kHz, SF7) |
-| **Antenna in Pod 3** | Integrated 2.4 GHz ceramic patch antenna | Tuned 868 MHz helical antenna |
+| **Antenna in Pod 3** | Integrated ESP32-C3 PCB antenna | Pulse W3000 868 MHz ceramic chip antenna (direct $50\,\Omega$) |
 | **Audio Codec** | **Opus Speech/Full-Band (24 kbps / 12 kbps)** | **Codec2 (1200 bps / 700 bps PTT Bursts)** |
 | **Audio Mode** | **Full-Duplex Continuous (HiFi Voice)** | **Half-Duplex PTT Bursts (220 ms max.)** |
 | **Music Sharing** | Yes (A2DP dynamic forwarding @ 64 kbps) | No (bandwidth reserved for voice & SOS) |
@@ -106,12 +106,12 @@ Unlike the Audio & Intercom cartridges (Pod 1 & Pod 2), which employ a 2-piece s
    * Seamlessly switches between 2.4 GHz HiFi audio and 868 MHz Codec2 fallback.
 2. **GNSS Engine (u-blox MAX-M10S):**
    * Concurrent 4-system multi-constellation operation (GPS, GLONASS, Galileo, BeiDou).
-   * 25 x 25 x 4 mm ceramic patch antenna with integrated LNA and SAW bandpass filter.
-   * 1-PPS hardware timepulse (jitter $< 15\,\text{ns}$ RMS) connected to ESP32-C3 GPIO 6 and Pogo Pin 5.
+   * Pulse W3000 multi-band ceramic chip antenna with optimized direct $50\,\Omega$ microstrip line (zero parasitic stubs or external connectors).
+   * 1-PPS hardware timepulse (jitter $< 15\,\text{ns}$ RMS) connected to ESP32-C3 GPIO 6 and female socket contact 5.
 3. **OpenMotorMesh LoRa Transceiver (Semtech SX1262):**
    * Frequency Range: 868.0 – 868.6 MHz (EU ISM band) / 915 MHz (US band).
    * Output Power: up to $+22\,\text{dBm}$ ($160\,\text{mW}$ EIRP).
-   * Integrated RF switch, low-pass filter, and tuned 868 MHz helical antenna.
+   * Integrated RF switch, low-pass filter, and Pulse W3000 868 MHz ceramic chip antenna (direct $50\,\Omega$).
 4. **1-Wire Identification (Maxim / ADI DS2401Z+):**
    * Provides 64-bit silicon serial number for automated cartridge detection.
 5. **Voltage Regulation (TI TPS7A0533):**

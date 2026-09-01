@@ -2,8 +2,11 @@
 // OpenMotorBridge - Dummy 3D Model: OMM Rear Transceiver PCB (Pod 3)
 // =============================================================================
 // File: hardware/cad/scad/00_common/dummies/dummy_omm_transceiver_pcb.scad
-// Description: 3D model of the OMM Rear Transceiver PCB (ESP32-S3, SX1262 LoRa,
-//              GNSS Multi-Constellation Engine, Ceramic Patch Antenna).
+// Description: Accurate 3D CAD model of the Rear Pod 3 PCBA (70 x 48 mm):
+//              - 70 x 48 x 1.6 mm FR4 Substrate with 4x M2 Mounting Holes
+//              - 6-Pin Horizontal Female Socket (PinSocket) mating into Pod Base
+//              - 2x Pulse W3000 Ceramic Chip Antennas (GNSS top, LoRa bottom)
+//              - Semtech SX1262 LoRa, u-blox MAX-M10S GNSS, ESP32-C3 MCU
 // =============================================================================
 
 include <../parameters.scad>;
@@ -13,48 +16,44 @@ module dummy_omm_transceiver_pcb() {
     color("forestgreen") {
         difference() {
             cube(size=[70.0, 48.0, 1.6], center=false);
-            // 4x M2.5 Mounting Holes
-            translate([4.0, 4.0, -0.1])   cylinder(r=1.35, h=2.0);
-            translate([66.0, 4.0, -0.1])  cylinder(r=1.35, h=2.0);
-            translate([4.0, 44.0, -0.1])  cylinder(r=1.35, h=2.0);
-            translate([66.0, 44.0, -0.1]) cylinder(r=1.35, h=2.0);
+            // 4x M2 Mounting Holes (H1: 4,3 | H2: 66,3 | H3: 4,45 | H4: 66,45)
+            translate([4.0, 3.0, -0.1])   cylinder(r=1.1, h=2.0, $fn=24);
+            translate([66.0, 3.0, -0.1])  cylinder(r=1.1, h=2.0, $fn=24);
+            translate([4.0, 45.0, -0.1])  cylinder(r=1.1, h=2.0, $fn=24);
+            translate([66.0, 45.0, -0.1]) cylinder(r=1.1, h=2.0, $fn=24);
         }
     }
 
-    // 2. 25x25x4mm Ceramic GNSS Patch Antenna
-    color("burlywood")
-        translate([40.0, 11.5, 1.6])
-            cube(size=[25.0, 25.0, 4.0], center=false);
-
-    // Silver Metallized Patch Center Dot
-    color("silver")
-        translate([52.5, 24.0, 5.6])
-            cylinder(r=2.0, h=0.2);
-
-    // 3. SX1262 868 MHz LoRa RF Shield Can
-    color("silver")
-        translate([10.0, 6.0, 1.6])
-            cube(size=[15.0, 15.0, 2.5], center=false);
-
-    // 4. ESP32-S3 Wireless MCU Module
+    // 2. 6-Pin Horizontal Female Socket (Black plastic housing projecting towards -X)
+    // Sits on board edge at Y=17.65..30.35, projecting 6.0 mm over edge
     color("darkslategray")
-        translate([10.0, 26.0, 1.6])
+        translate([-6.0, 16.5, 0.0])
+            cube(size=[8.5, 15.2, 5.0], center=false);
+
+    // 3. Pulse W3000 GNSS Ceramic Antenna (Top edge: 10.0 x 3.2 x 2.0 mm)
+    color("white")
+        translate([31.0, 0.5, 1.6])
+            cube(size=[10.0, 3.2, 2.0], center=false);
+
+    // 4. Pulse W3000 LoRa Ceramic Antenna (Bottom edge: 10.0 x 3.2 x 2.0 mm)
+    color("white")
+        translate([31.0, 44.3, 1.6])
+            cube(size=[10.0, 3.2, 2.0], center=false);
+
+    // 5. Semtech SX1262 LoRa Transceiver (QFN-24 4x4mm)
+    color("black")
+        translate([22.0, 33.0, 1.6])
+            cube(size=[4.0, 4.0, 0.9], center=false);
+
+    // 6. u-blox MAX-M10S GNSS Receiver (QFN-24 4x4mm)
+    color("black")
+        translate([22.0, 11.0, 1.6])
+            cube(size=[4.0, 4.0, 0.9], center=false);
+
+    // 7. ESP32-C3-WROOM-02 Wireless MCU Module
+    color("silver")
+        translate([50.0, 15.0, 1.6])
             cube(size=[18.0, 18.0, 3.2], center=false);
-
-    // 5. 6-Pin Gold-Plated Pogo-Pin Array (Rear Interface)
-    color("gold") {
-        for (i = [0:5]) {
-            translate([-1.0, 16.5 + i * 3.0, 0.5])
-                rotate([0, 90, 0])
-                    cylinder(r=0.6, h=3.0);
-        }
-    }
-
-    // 6. 2x Thermal Copper Stud Pads (under the PCB)
-    color("darkorange") {
-        translate([42.0, 24.0, -2.5]) cylinder(r=COPPER_STUD_R, h=2.5);
-        translate([60.0, 24.0, -2.5]) cylinder(r=COPPER_STUD_R, h=2.5);
-    }
 }
 
 // Preview standalone

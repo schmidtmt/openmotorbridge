@@ -25,9 +25,9 @@ Im Gegensatz zu den Audio- & Intercom-Kassetten (Pod 1 & Pod 2), die einen 2-tei
 *Abbildung 13.2: 3D-CAD-Explosionsdarstellung der Heck-Pod 3 Gesamtkassette mit universellem Pod-Gehäuse (integriertes V-Rohrbett mit EPDM-Spannbandnasen), rückseitigem M8 6-Pin IP67 Kabelstutzen und dem 1-teiligen Transceiver-Schlitten ([cartridge_omm_transceiver.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/cartridge_omm_transceiver.scad)), in den die Transceiver-Platine direkt ohne Zwischen-Adapter verschraubt ist.*
 
 #### Warum wird für Pod 3 keine Adapterplatine benötigt?
-1. **Vollintegriertes Single-Board Design:** Die Platine `openmotorbridge_rear_transceiver` ist bereits das vollständige Funk-, Navigations- und Co-Prozessor-Modul. Sie trägt den Maxim DS2401 ID-Chip, die 6-Pin Präzisionsbuchse `J1`, das SX1262 LoRa-Modem, das u-blox MAX-M10S GNSS und die $25 \times 25 \times 4\,\text{mm}$ Keramik-Patchantenne direkt auf ihrem 4-Layer FR4-Board.
-2. **Direkte Verschraubung im Grundschlitten:** Die Platine wird mit 4x M2.5 Schrauben direkt auf die Schraubdome des Kassetten-Schlittens ([cartridge_omm_transceiver.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/cartridge_omm_transceiver.scad)) montiert.
-3. **Volle $23{,}5\,\text{mm}$ Innenhöhe:** Ohne Zwischenboden oder Adapterplatine steht dem GNSS-Patch und der LoRa-Wendelantenne die volle lichte Bauhöhe bis unter die wetterfeste PA12-Decke zur Verfügung – für maximalen Antennengewinn und freie Rundumabstrahlung nach oben zum Satelliten-Orbit.
+1. **Vollintegriertes Single-Board Design:** Die Platine `openmotorbridge_rear_transceiver` ist bereits das vollständige Funk-, Navigations- und Co-Prozessor-Modul. Sie trägt den Maxim DS2401 ID-Chip, die 6-Pin Präzisionsbuchse `J1`, das SX1262 LoRa-Modem, das u-blox MAX-M10S GNSS sowie zwei Pulse W3000 Keramik-Chipantennen (GNSS oben, LoRa unten) mit direkter, verlustfreier $50\,\Omega$-Microstrip-Anbindung direkt auf ihrem 4-Layer FR4-Board.
+2. **Direkte Verschraubung im Grundschlitten:** Die Platine wird mit 4x M2 Schrauben direkt auf die Schraubdome des Kassetten-Schlittens ([cartridge_omm_transceiver.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/cartridge_omm_transceiver.scad)) montiert und mit dem wetterfesten, HF-transparenten PA12-Deckel ([cartridge_insert_blindkassette.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/parts/03_insert_blindkassette.scad)) verschraubt.
+3. **Volle $23{,}5\,\text{mm}$ Innenhöhe:** Ohne Zwischenboden oder Adapterplatine steht den Antennen die volle lichte Bauhöhe unter der HF-transparenten PA12-Haube zur Verfügung – für maximalen Gewinn ohne störende Gehäusedämpfung.
 4. **100 % mechanische Kompatibilität:** Die Kassette nutzt exakt denselben [00_base_sled.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/00_base_sled.scad) wie alle anderen Kassetten und gleitet formschlüssig in dasselbe universelle Pod-Gehäuse ([pod_base_housing.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/pod_base_housing.scad)).
 
 ---
@@ -86,7 +86,7 @@ Im Gegensatz zu den Audio- & Intercom-Kassetten (Pod 1 & Pod 2), die einen 2-tei
 | :--- | :--- | :--- |
 | **Hardware-Treiber** | **ESP32-C3 Internes 2.4-GHz-Radio** | **Semtech SX1262 Transceiver (+22 dBm)** |
 | **Standard / Protokoll** | IEEE 802.15.4 / SC-FDMA TDMA (2 Mbps) | LoRa Chirp Spread Spectrum (BW 250 kHz, SF7) |
-| **Antenne im Pod 3** | Integrierte 2.4-GHz-Keramik-Patchantenne | Abgestimmte 868-MHz-Wendelantenne |
+| **Antenne im Pod 3** | Integrierte ESP32-C3 PCB-Antenne | Pulse W3000 868-MHz-Keramik-Chipantenne ($50\,\Omega$ direkt) |
 | **Audio-Codec** | **Opus Speech/Full-Band (24 kbps / 12 kbps)** | **Codec2 (1200 bps / 700 bps PTT Bursts)** |
 | **Audio-Modus** | **Vollduplex kontinuierlich (HiFi Sprache)** | **Halbduplex PTT-Bursts (220 ms max.)** |
 | **Musik-Sharing** | Ja (A2DP Dynamic Forwarding @ 64 kbps) | Nein (Bandbreite reserviert fuer Sprache) |
@@ -106,12 +106,12 @@ Im Gegensatz zu den Audio- & Intercom-Kassetten (Pod 1 & Pod 2), die einen 2-tei
    * Schaltet unterbrechungsfrei zwischen 2.4 GHz HiFi-Audio und 868 MHz Codec2 Fallback um.
 2. **GNSS Engine (u-blox MAX-M10S):**
    * Multi-Konstellation 4-System Parallelbetrieb (GPS, GLONASS, Galileo, BeiDou).
-   * 25 x 25 x 4 mm Keramik-Patchantenne mit integriertem LNA und SAW-Bandpassfilter.
-   * 1-PPS Hardware-Zeitsignal (Jitter $< 15\,\text{ns}$ RMS) an ESP32-C3 GPIO 6 und ueber Pogo-Pin 5 an Zentralbox.
+   * Pulse W3000 Multi-Band Keramik-Chipantenne mit optimierter $50\,\Omega$-Direktanbindung ohne parasitäre Stichleitungen oder externe Stecker.
+   * 1-PPS Hardware-Zeitsignal (Jitter $< 15\,\text{ns}$ RMS) an ESP32-C3 GPIO 6 und ueber Buchsenkontakt 5 an Zentralbox.
 3. **OpenMotorMesh LoRa Transceiver (Semtech SX1262):**
    * Frequenzbereich: 868.0 – 868.6 MHz (EU ISM Band) / 915 MHz (US Band).
    * Sendeleistung: bis zu $+22\,\text{dBm}$ ($160\,\text{mW}$ EIRP).
-   * Integrierter HF-Schalter, Tiefpassfilter und abgestimmte 868-MHz-Wendelantenne.
+   * Integrierter HF-Schalter, Tiefpassfilter und Pulse W3000 868-MHz-Keramik-Chipantenne ($50\,\Omega$ direkt).
 4. **1-Wire Identifikation (Maxim / ADI DS2401Z+):**
    * Liefert die 64-Bit Silicon Serial Number fuer die automatische Kassetten- und Steckplatzerkennung an der Zentralbox.
 5. **Spannungsregelung (TI TPS7A0533):**
