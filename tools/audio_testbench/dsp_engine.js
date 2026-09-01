@@ -56,6 +56,16 @@ class OpenMotorBridgeAudioEngine {
 
     // Ducking history buffer for scope
     this.duckingHistory = new Float32Array(256).fill(1.0);
+
+    // Motorcycle Engine Acoustic Simulator
+    this.isEngineRunning = false;
+    this.engineType = 'BOXER_TWIN'; // 'BOXER_TWIN', 'INLINE_4', 'V_TWIN'
+    this.engineRouting = 'HELMET';   // 'HELMET', 'AMBIENT', 'BOTH'
+    this.engineVolume = 0.4;
+    this.engineRpm = 1150;
+    this.engineGear = 'N';
+    this.throttleBlipping = false;
+    this.engineThrottleRpmBoost = 0;
   }
 
   async init() {
@@ -149,7 +159,23 @@ class OpenMotorBridgeAudioEngine {
     this.windFilter.frequency.value = 400;
     this.windGain.connect(this.windFilter);
 
-    // 5. Master Output
+    // 5. Motorcycle Engine Sound Chain
+    this.engineMasterGain = this.ctx.createGain();
+    this.engineMasterGain.gain.value = 0.0;
+
+    this.engineHelmetGain = this.ctx.createGain();
+    this.engineHelmetGain.gain.value = 0.35; // Default routed to Helmet
+
+    this.engineAmbientGain = this.ctx.createGain();
+    this.engineAmbientGain.gain.value = 0.0; // Routed to Ambient Mic
+
+    this.engineMasterGain.connect(this.engineHelmetGain);
+    this.engineHelmetGain.connect(this.masterGain);
+
+    this.engineMasterGain.connect(this.engineAmbientGain);
+    this.engineAmbientGain.connect(this.ambientSynthGain);
+
+    // 6. Master Output
     this.masterGain = this.ctx.createGain();
     this.masterGain.gain.value = 0.9;
     this.masterAnalyser = this.ctx.createAnalyser();
@@ -290,6 +316,14 @@ class OpenMotorBridgeAudioEngine {
     if (!this.ctx) return;
 
     this.updateTransparencyGain();
+
+    // Update Motorcycle Transmission & Engine RPM
+    const state = this.getEngineState(kmh);
+    this.engineGear = state.gear;
+    this.engineRpm = state.rpm;
+    if (this.isEngineRunning) {
+      this.updateEngineAcoustics();
+    }
 
     // Wind Noise Simulation (Turbulence scales with v^2)
     const windLevel = Math.min(1.0, Math.pow(kmh / 140.0, 2) * 0.35);
@@ -552,6 +586,167 @@ class OpenMotorBridgeAudioEngine {
     this.musicSource.connect(this.musicGain);
     this.musicSource.start(0);
     return true;
+  }
+
+  // Motorcycle 6-Speed Transmission & Dynamic RPM Model
+  getEngineState(kmh) {
+    if (kmh < 1) {
+      return { gear: 'N', rpm: 1150 };
+    }
+    const gears = [
+      { maxKmh: 35, gear: 1, baseRpm: 1200, slope: 140 },
+      { maxKmh: 62, gear: 2, baseRpm: 2100, slope: 95 },
+      { maxKmh: 92, gear: 3, baseRpm: 2500, slope: 72 },
+      { maxKmh: 120, gear: 4, baseRpm: 3000, slope: 55 },
+      { maxKmh: 145, gear: 5, baseRpm: 3400, slope: 44 },
+      { maxKmh: 200, gear: 6, baseRpm: 3800, slope: 36 }
+    ];
+    let cur = gears[gears.length - 1];
+    for (let g of gears) {
+      if (kmh <= g.maxKmh) {
+        cur = g;
+        break;
+      }
+    }
+    const minK = cur.gear === 1 ? 0 : gears[cur.gear - 2].maxKmh;
+    const rpm = Math.min(9200, Math.round(cur.baseRpm + (kmh - minK) * cur.slope));
+    return { gear: cur.gear, rpm: rpm };
+  }
+
+  // Start Motorcycle Engine Synthesis
+  startEngine() {
+    if (this.isEngineRunning || !this.ctx) return;
+    this.isEngineRunning = true;
+
+    // 1. Primary Firing Pulse Oscillator
+    this.enginePulseOsc = this.ctx.createOscillator();
+    this.enginePulseOsc.type = 'sawtooth';
+
+    // 2. Sub-Bass Crankshaft Oscillator (Deep Thump)
+    this.engineSubOsc = this.ctx.createOscillator();
+    this.engineSubOsc.type = 'triangle';
+
+    // 3. Exhaust Chamber Resonance Bandpass Filter
+    this.engineExhaustBp = this.ctx.createBiquadFilter();
+    this.engineExhaustBp.type = 'bandpass';
+    this.engineExhaustBp.Q.value = 2.8;
+
+    // 4. Low-pass Muffler Filter
+    this.engineMufflerLp = this.ctx.createBiquadFilter();
+    this.engineMufflerLp.type = 'lowpass';
+    this.engineMufflerLp.frequency.value = 1100;
+
+    // Connect Engine Chain
+    this.enginePulseOsc.connect(this.engineExhaustBp);
+    this.engineExhaustBp.connect(this.engineMufflerLp);
+    this.engineSubOsc.connect(this.engineMufflerLp);
+    this.engineMufflerLp.connect(this.engineMasterGain);
+
+    this.enginePulseOsc.start();
+    this.engineSubOsc.start();
+
+    this.updateEngineAcoustics();
+    this.engineMasterGain.gain.setValueAtTime(this.engineVolume, this.ctx.currentTime);
+  }
+
+  // Stop Engine
+  stopEngine() {
+    if (!this.isEngineRunning) return;
+    this.isEngineRunning = false;
+
+    if (this.enginePulseOsc) {
+      try { this.enginePulseOsc.stop(); } catch(e) {}
+      this.enginePulseOsc = null;
+    }
+    if (this.engineSubOsc) {
+      try { this.engineSubOsc.stop(); } catch(e) {}
+      this.engineSubOsc = null;
+    }
+    if (this.engineMasterGain) {
+      this.engineMasterGain.gain.setValueAtTime(0.0, this.ctx.currentTime);
+    }
+  }
+
+  // Update Firing Frequencies & Resonances in Real-Time
+  updateEngineAcoustics() {
+    if (!this.ctx || !this.isEngineRunning || !this.enginePulseOsc) return;
+
+    const effRpm = Math.min(9500, Math.max(900, this.engineRpm + this.engineThrottleRpmBoost));
+    let firingFreq = 20.0;
+    let resFreq = 200.0;
+
+    switch (this.engineType) {
+      case 'BOXER_TWIN':
+        // BMW R1250GS Boxer: 2 Cylinders, heavy 625cc pistons, 1 firing per rev
+        firingFreq = effRpm / 60.0; // 18.3 Hz at 1100 RPM, 75 Hz at 4500 RPM
+        resFreq = 150.0 + effRpm * 0.045;
+        this.engineExhaustBp.Q.value = 2.4;
+        break;
+
+      case 'INLINE_4':
+        // Screaming 4-Cylinder Superbike: 2 firings per rev (high-pitched wail)
+        firingFreq = effRpm / 30.0; // 36.6 Hz at 1100 RPM, 150 Hz at 4500 RPM, 266 Hz at 8000 RPM
+        resFreq = 280.0 + effRpm * 0.065;
+        this.engineExhaustBp.Q.value = 3.2;
+        break;
+
+      case 'V_TWIN':
+        // 90° V2 Cruiser / Enduro: Syncopated cadence, rich low-end growl
+        firingFreq = (effRpm / 60.0) * 1.12;
+        resFreq = 180.0 + effRpm * 0.05;
+        this.engineExhaustBp.Q.value = 2.6;
+        break;
+    }
+
+    const now = this.ctx.currentTime;
+    this.enginePulseOsc.frequency.setTargetAtTime(firingFreq, now, 0.04);
+    this.engineSubOsc.frequency.setTargetAtTime(firingFreq * 0.5, now, 0.04);
+    this.engineExhaustBp.frequency.setTargetAtTime(resFreq, now, 0.04);
+
+    // Dynamic Volume scaling with load / RPM
+    const throttleGainBoost = this.throttleBlipping ? 1.35 : 1.0;
+    const loadScaler = (0.75 + (effRpm / 8000.0) * 0.5) * throttleGainBoost;
+    this.engineMasterGain.gain.setTargetAtTime(this.engineVolume * loadScaler, now, 0.04);
+  }
+
+  setEngineType(type) {
+    this.engineType = type;
+    this.updateEngineAcoustics();
+  }
+
+  setEngineRouting(routing) {
+    this.engineRouting = routing;
+    if (!this.ctx) return;
+    const now = this.ctx.currentTime;
+
+    if (routing === 'HELMET') {
+      this.engineHelmetGain.gain.setTargetAtTime(0.35, now, 0.05);
+      this.engineAmbientGain.gain.setTargetAtTime(0.0, now, 0.05);
+    } else if (routing === 'AMBIENT') {
+      this.engineHelmetGain.gain.setTargetAtTime(0.0, now, 0.05);
+      this.engineAmbientGain.gain.setTargetAtTime(0.8, now, 0.05);
+    } else if (routing === 'BOTH') {
+      this.engineHelmetGain.gain.setTargetAtTime(0.35, now, 0.05);
+      this.engineAmbientGain.gain.setTargetAtTime(0.8, now, 0.05);
+    }
+  }
+
+  setEngineVolume(vol) {
+    this.engineVolume = vol;
+    if (this.isEngineRunning) {
+      this.updateEngineAcoustics();
+    }
+  }
+
+  // Interactive Throttle Blip (Gasgeben im Stand / beim Schalten)
+  setThrottleBlipping(active) {
+    this.throttleBlipping = active;
+    if (active) {
+      this.engineThrottleRpmBoost = 2600; // Rev up by +2600 RPM
+    } else {
+      this.engineThrottleRpmBoost = 0;
+    }
+    this.updateEngineAcoustics();
   }
 
   // Trigger PTT (Push-to-Talk)

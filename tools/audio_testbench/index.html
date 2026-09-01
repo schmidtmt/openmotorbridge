@@ -216,10 +216,20 @@
         </span>
       </div>
 
-      <!-- Speedometer Display -->
-      <div class="speedometer-display">
-        <span id="speedDisplay" class="speed-number">0</span>
-        <span class="speed-unit">KM/H</span>
+      <!-- Cockpit Instrument Cluster (Speed, Gear, RPM) -->
+      <div class="speedometer-display" style="display: grid; grid-template-columns: 1fr 0.6fr 1fr; align-items: center; text-align: center;">
+        <div>
+          <span id="speedDisplay" class="speed-number">0</span>
+          <div class="speed-unit">KM/H</div>
+        </div>
+        <div style="border-left: 1px solid var(--border-subtle); border-right: 1px solid var(--border-subtle);">
+          <span id="gearDisplay" class="speed-number" style="color: var(--accent-amber);">N</span>
+          <div class="speed-unit">GANG</div>
+        </div>
+        <div>
+          <span id="rpmDisplay" class="speed-number" style="font-size: 1.6rem; color: var(--accent-cyan);">1150</span>
+          <div class="speed-unit">U/MIN</div>
+        </div>
       </div>
 
       <div class="control-group">
@@ -232,6 +242,57 @@
         <button class="pill" onclick="setSpeedPreset(25)" style="cursor: pointer; justify-content: center;">25 km/h (Stadt)</button>
         <button class="pill" onclick="setSpeedPreset(80)" style="cursor: pointer; justify-content: center;">80 km/h (Land)</button>
         <button class="pill" onclick="setSpeedPreset(130)" style="cursor: pointer; justify-content: center;">130 km/h (BAB)</button>
+      </div>
+
+      <!-- Motorcycle Engine Sound Simulator -->
+      <div class="panel-header" style="margin-top: 0.5rem;">
+        <span class="panel-title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+          </svg>
+          Motor-Sound (Akkustik-Simulator)
+        </span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem;">
+        <button id="btnToggleEngine" class="btn-master-power" style="justify-content: center; padding: 0.5rem;">
+          <span id="lblBtnEngine">Motor Starten</span>
+        </button>
+        <button id="btnThrottleBlip" class="pill" style="cursor: pointer; justify-content: center; font-weight: 700; color: var(--accent-amber); border-color: var(--accent-amber);">
+          Gasgeben [W]
+        </button>
+      </div>
+
+      <div class="control-group">
+        <div class="control-label">
+          <span>Motortyp</span>
+          <span id="lblEngineType" class="control-val">BMW Boxer 1250</span>
+        </div>
+        <select id="selectEngineType">
+          <option value="BOXER_TWIN" selected>BMW Boxer Twin (1250 GS)</option>
+          <option value="INLINE_4">Inline-4 Superbike (1000cc)</option>
+          <option value="V_TWIN">V-Twin 90° (Cruiser / Adventure)</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <div class="control-label">
+          <span>Sound-Routing</span>
+          <span class="control-val">Ziel</span>
+        </div>
+        <select id="selectEngineRoute">
+          <option value="HELMET" selected>In Helm einspielen (Fahrgefühl)</option>
+          <option value="AMBIENT">In Front-Mic einspielen (Filter-Test)</option>
+          <option value="BOTH">Beide Kanäle (Helm + Ambient)</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <div class="control-label">
+          <span>Motor-Lautstärke</span>
+          <span id="valEngineVol" class="control-val">40 %</span>
+        </div>
+        <input type="range" id="sliderEngineVol" min="0" max="1" step="0.05" value="0.4">
       </div>
 
       <!-- Ambient Transparency Section -->
@@ -521,6 +582,74 @@
       window.ombAudio.duckingDepthDb = val;
     });
 
+    // Motorcycle Engine Simulator Controls
+    const gearDisplay = document.getElementById('gearDisplay');
+    const rpmDisplay = document.getElementById('rpmDisplay');
+    const btnToggleEngine = document.getElementById('btnToggleEngine');
+    const lblBtnEngine = document.getElementById('lblBtnEngine');
+    const btnThrottleBlip = document.getElementById('btnThrottleBlip');
+    const selectEngineType = document.getElementById('selectEngineType');
+    const lblEngineType = document.getElementById('lblEngineType');
+    const selectEngineRoute = document.getElementById('selectEngineRoute');
+    const sliderEngineVol = document.getElementById('sliderEngineVol');
+    const valEngineVol = document.getElementById('valEngineVol');
+
+    btnToggleEngine.addEventListener('click', async () => {
+      if (!isMasterStarted) await btnMasterPower.click();
+      if (!window.ombAudio.isEngineRunning) {
+        window.ombAudio.startEngine();
+        btnToggleEngine.style.background = 'linear-gradient(135deg, #059669, #10b981)';
+        lblBtnEngine.textContent = "Motor Stoppen";
+      } else {
+        window.ombAudio.stopEngine();
+        btnToggleEngine.style.background = 'linear-gradient(135deg, #2563eb, #0284c7)';
+        lblBtnEngine.textContent = "Motor Starten";
+      }
+    });
+
+    function triggerThrottle(active) {
+      window.ombAudio.setThrottleBlipping(active);
+      if (active) {
+        btnThrottleBlip.style.background = 'var(--accent-amber)';
+        btnThrottleBlip.style.color = '#000';
+      } else {
+        btnThrottleBlip.style.background = 'var(--bg-surface-elevated)';
+        btnThrottleBlip.style.color = 'var(--accent-amber)';
+      }
+    }
+
+    btnThrottleBlip.addEventListener('mousedown', () => triggerThrottle(true));
+    btnThrottleBlip.addEventListener('mouseup', () => triggerThrottle(false));
+    btnThrottleBlip.addEventListener('mouseleave', () => triggerThrottle(false));
+    btnThrottleBlip.addEventListener('touchstart', (e) => { e.preventDefault(); triggerThrottle(true); });
+    btnThrottleBlip.addEventListener('touchend', (e) => { e.preventDefault(); triggerThrottle(false); });
+
+    window.addEventListener('keydown', (e) => {
+      if ((e.code === 'KeyW' || e.key === 'w' || e.key === 'W') && e.target.tagName !== 'INPUT' && !e.repeat) {
+        triggerThrottle(true);
+      }
+    });
+    window.addEventListener('keyup', (e) => {
+      if (e.code === 'KeyW' || e.key === 'w' || e.key === 'W') {
+        triggerThrottle(false);
+      }
+    });
+
+    selectEngineType.addEventListener('change', (e) => {
+      window.ombAudio.setEngineType(e.target.value);
+      lblEngineType.textContent = e.target.options[e.target.selectedIndex].text.split('(')[0].trim();
+    });
+
+    selectEngineRoute.addEventListener('change', (e) => {
+      window.ombAudio.setEngineRouting(e.target.value);
+    });
+
+    sliderEngineVol.addEventListener('input', (e) => {
+      const val = parseFloat(e.target.value);
+      valEngineVol.textContent = Math.round(val * 100) + " %";
+      window.ombAudio.setEngineVolume(val);
+    });
+
     // Transparenzmodus Event Listeners
     const selectTranspMode = document.getElementById('selectTranspMode');
     const lblTranspGain = document.getElementById('lblTranspGain');
@@ -658,10 +787,15 @@
         pillAmbText.textContent = "TRANSPARENZ: GATE ZU";
       }
 
-      // 3. Render FFT Spectrum
+      // 4. Cockpit Instrument Cluster (Gear & RPM)
+      gearDisplay.textContent = window.ombAudio.engineGear || 'N';
+      const curRpm = Math.round(window.ombAudio.engineRpm + window.ombAudio.engineThrottleRpmBoost);
+      rpmDisplay.textContent = curRpm;
+
+      // 5. Render FFT Spectrum
       renderSpectrum();
 
-      // 4. Render Ducking Envelope Scope
+      // 6. Render Ducking Envelope Scope
       renderDuckingScope();
 
       requestAnimationFrame(renderLoop);
