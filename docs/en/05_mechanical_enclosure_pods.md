@@ -641,7 +641,8 @@ The mechanical and electrical interface from the interchangeable cartridge to th
 #### Bottom View (Centered M8 6-Pin IP67 Receptacle & GND Shield Plane):
 ![OpenMotorBridge Pod Base PCB Bottom 3D Render](../../hardware/kicad_pod_base/pod_base_3d_render_bottom.png)
 
-* **Dimensions:** $48.0 \times 24.0\,\text{mm}$ (Compact 2-layer FR4 base board with generous clearance margins).
+* **Dimensions:** $36.0 \times 20.0\,\text{mm}$ (Compact 2-layer FR4 base board with $4.0 \times 2.5\,\text{mm}$ Poka-Yoke keying notch at bottom edge).
+* **Poka-Yoke Alignment:** Asymmetric keying notch on bottom edge (`Edge.Cuts` at $X = 125 \dots 129\,\text{mm}$) mates with the corresponding alignment lug on the enclosure floor, physically blocking $180^\circ$ upside-down mounting.
 * **Centered 6-Pin Header (`J1`) with PA12 Protective Shroud:** 6-pin precision pin array ($2.54\,\text{mm}$ pitch, gold-plated) positioned at the exact geometric center line ($Y=0, Z=0$).
 * **Integrated PA12 Protective Shroud & Lead-in Funnel:** The protective bulkhead forms a **4-sided, $1.2\,\text{mm}$ thick protective collar with $45^\circ$ self-centering lead-in chamfers** surrounding `J1`. The female socket header on the cartridge slides snugly into this shroud like a piston, fully encapsulating the pins against manual touching or mechanical bending.
 * **Integrated ESD Protection Array (`U1`):** **Littelfuse SP3012-06UTG** (6-channel TVS diode array with $< 0.5\,\text{pF}$ parasitic capacitance) shunts ESD strikes upon pin contact directly to chassis ground.

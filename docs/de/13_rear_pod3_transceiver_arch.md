@@ -6,7 +6,7 @@ Der **Heck-Pod 3** (Position: Heckbürzel / Gepäckbrücke) ist das zentrale Fun
 
 ## 1. 3D-Board-Visualisierung & Photorealistische Renders
 
-Die Heck-Pod-Platine vereint auf großzügigen **$60{,}0 \times 36{,}0\,\text{mm}$** das Multi-Konstellations-GNSS, das Dual-PHY Mesh-Modem, die 500mA PTC-Schutzstufe sowie den RISC-V Co-Prozessor mit horizontaler Stirnseiten-Steckung:
+Die Heck-Pod-Platine vereint auf großzügigen **$70{,}0 \times 48{,}0\,\text{mm}$** das Multi-Konstellations-GNSS, das Dual-PHY Mesh-Modem, die 500mA PTC-Schutzstufe sowie den RISC-V Co-Prozessor mit horizontaler Stirnseiten-Steckung:
 
 #### Oberansicht (Horizontale 6-Pin Front-Buchsenleiste, PTC-Sicherung, ESP32-C3 & GNSS/LoRa):
 ![OpenMotorBridge Heck-Pod 3 Oberansicht 3D PCB Render](../../hardware/kicad_rear_pod3/rear_pod3_3d_render_top.png)

@@ -6,7 +6,7 @@
 
 ### 1. 3D Board Visualization & Photorealistic Renders
 
-The Rear Pod PCB unites multi-constellation GNSS, dual-PHY mesh networking, a 500mA PTC protection stage, and the RISC-V co-processor on a generous **$60.0 \times 36.0\,\text{mm}$** flat carrier with horizontal leading-edge mating:
+The Rear Pod PCB unites multi-constellation GNSS, dual-PHY mesh networking, a 500mA PTC protection stage, and the RISC-V co-processor on a generous **$70.0 \times 48.0\,\text{mm}$** flat carrier with horizontal leading-edge mating:
 
 #### Top View (Horizontal 6-Pin Front Socket, PTC Fuse, ESP32-C3 & GNSS/LoRa):
 ![OpenMotorBridge Rear Pod 3 Top 3D PCB Render](../../hardware/kicad_rear_pod3/rear_pod3_3d_render_top.png)

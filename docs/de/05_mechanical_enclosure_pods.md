@@ -628,7 +628,8 @@ Der mechanische und elektrische Übergang von der Wechselkassette auf die M8-Kab
 #### Unteransicht (Zentrierte M8 6-Pin IP67-Buchse & GND-Schirmfläche):
 ![OpenMotorBridge Pod-Basisplatine Unteransicht 3D-Render](../../hardware/kicad_pod_base/pod_base_3d_render_bottom.png)
 
-* **Abmessungen:** $48{,}0 \times 24{,}0\,\text{mm}$ (Kompakte 2-Layer FR4-Basisplatine mit großzügigen Leiterbahn- und Schutzabständen).
+* **Abmessungen:** $36{,}0 \times 20{,}0\,\text{mm}$ (Kompakte 2-Layer FR4-Basisplatine mit $4{,}0 \times 2{,}5\,\text{mm}$ Poka-Yoke Codierkerbe an der Unterkante).
+* **Poka-Yoke Ausrichtung:** Asymmetrische Codierkerbe an der Unterkante (`Edge.Cuts` bei $X = 125 \dots 129\,\text{mm}$) greift formschlüssig in die korrespondierende Führungsnase des Gehäusebodens ein und verhindert eine verkehrte $180^\circ$-Montage auf den Kopf.
 * **Zentrierte 6-Pin Stiftleiste (`J1`) mit PA12-Schutzkragen:** 6-poliges Präzisions-Pin-Array ($2{,}54\,\text{mm}$ Raster, vergoldet) exakt auf der horizontalen Mittelachse ($Y=0, Z=0$).
 * **Integrierte PA12-Schutzwandung & Fangtrichter:** Die Schottwand bildet um die Stiftleiste `J1` eine **4-seitige, $1{,}2\,\text{mm}$ starke Schutzwand mit $45^\circ$-Einlaufschrägen**. Die Buchsenleiste der Wechselkassette gleitet formschlüssig und saugend wie ein Kolben in diese Wanne ein – die Stifte sind fingersicher gekapselt und können niemals verbogen oder verkantet werden.
 * **Integrierte ESD-Schutzmatrix (`U1`):** **Littelfuse SP3012-06UTG** (6-Kanal TVS-Array mit $< 0{,}5\,\text{pF}$ parasitärer Kapazität) leitet elektrostatische Entladungen beim Berühren der Kontakte blitzschnell gegen Masse ab.
