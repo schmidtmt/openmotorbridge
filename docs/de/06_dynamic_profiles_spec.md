@@ -194,3 +194,33 @@ Wenn ein Hersteller (z. B. Sena beim Sprung von Mesh 2.0 auf Mesh 3.0 oder Cardo
 2. **User-Settings Preservation:** Individuelle Anpassungen des Fahrers (z. B. $+2{,}0\,\text{dB}$ Mikrofonpegel, $-12\,\text{dB}$ Navi-Ducking) bleiben beim Update erhalten und werden über die Basiswerte gemerged.
 3. **Hot-Reload:** Die Zentralbox wendet die gemergten Parameter im laufenden Betrieb ohne Neustart sofort auf den ES8388 Codec und die TLP222A Opto-Puls-Engine an.
 
+---
+
+## 7. WebApp-Workflow: Automatische Erkennung & Erstzuweisung neuer Kassetten-UIDs
+
+Wenn ein Nutzer eine neue Kassetten-Trägerplatine mit fabrikneuem DS2401 Chip baut oder einsteckt, führt die OpenMotorBridge WebApp/PWA einen benutzerfreundlichen Onboarding-Dialog durch:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ 🧩 NEUE KASSETTE ERKANNT!                                   │
+├─────────────────────────────────────────────────────────────┤
+│ Erkannter Steckplatz:   Pod 1 (Rahmen links)                │
+│ 1-Wire Chip-UID:        01:A2:3B:4C:5D:6E:7F:8A             │
+├─────────────────────────────────────────────────────────────┤
+│ Dieser Kassetten-Hardware wurde bisher noch kein Profil     │
+│ zugewiesen. Welches Intercom oder Funkgerät ist verbaut?    │
+│                                                             │
+│ Hardware-Profil:  [ 🔵 Sena 50S / 50R / SRL3 (K1)      ▼ ]  │
+├─────────────────────────────────────────────────────────────┤
+│ [ Später zuweisen ]         [ Profil zuweisen & speichern ] │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Der Schritt-für-Schritt-Ablauf:
+1. **Automatischer Scan:** Der ESP32-S3 pollt im 2-Sekunden-Takt (`task_cartridge_manager`) beide 1-Wire-Ports. Erkennt er einen Presence-Pulse mit gültiger CRC8 und Family-Code `0x01` (DS2401), sendet er die 64-Bit UID via BLE-Telemetrie an die WebApp.
+2. **Dialog-Pop-up:** Die WebApp vergleicht die UID mit der hinterlegten Zuordnungstabelle (`/profiles/mapping.json` / PWA `localStorage`). Ist die UID neu, öffnet sich automatisch das Zuweisungs-Modal (`#uuid-detect-modal`).
+3. **Profil-Auswahl & Speicherung:** Der Fahrer wählt sein Modell (z. B. *Sena 50S*, *Cardo Packtalk Edge*, *PMR446*) und klickt auf "Zuweisen".
+4. **Persistentes Mapping:** Das Mapping `{"<UID>": "<profile_id>"}` wird dauerhaft im ESP32 LittleFS und im Browser gespeichert.
+5. **Vollautomatische Wiedererkennung:** Zukünftig wird diese physische Kassette an jedem beliebigen Pod-Steckplatz (Pod 1 oder Pod 2) sofort ohne Rückfrage als das zugewiesene Modell erkannt, parametrisiert und im DLE-Gateway eingerechnet.
+
+

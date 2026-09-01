@@ -67,6 +67,13 @@ const i18n = {
         mesh_only_on: 'Mesh-Only Aktiv',
         btn_ground_truth: 'Ground-Truth Re-Sync',
         btn_channel_advance: 'Kanal Weiterschalten (800ms)',
+        btn_learn_uuid: 'UUID anlernen',
+        uuid_modal_title: 'Neue Kassette erkannt!',
+        detected_slot: 'Erkannter Steckplatz:',
+        uuid_assign_intro: 'Dieser Kassetten-Hardware wurde bisher noch kein Profil zugewiesen. Welches Intercom oder Funkgerät ist in dieser Kassette verbaut?',
+        lbl_select_profile: 'Hardware-Profil auswählen:',
+        btn_save_mapping: 'Profil zuweisen & speichern',
+        btn_cancel: 'Später zuweisen',
         dle_score_label: 'DLE Gateway Score:',
         lora_power_label: 'LoRa Sendeleistung:',
         btn_onboarding_wizard: 'Onboarding-Wizard',
@@ -180,6 +187,13 @@ const i18n = {
         mesh_only_on: 'Mesh-Only Active',
         btn_ground_truth: 'Ground-Truth Re-Sync',
         btn_channel_advance: 'Advance Channel (800ms)',
+        btn_learn_uuid: 'Learn UUID',
+        uuid_modal_title: 'New Cartridge Detected!',
+        detected_slot: 'Detected Slot:',
+        uuid_assign_intro: 'This cartridge hardware has not been mapped to a profile yet. Which intercom or radio is installed in this cartridge?',
+        lbl_select_profile: 'Select Hardware Profile:',
+        btn_save_mapping: 'Assign & Save Profile',
+        btn_cancel: 'Assign Later',
         dle_score_label: 'DLE Gateway Score:',
         lora_power_label: 'LoRa Output Power:',
         btn_onboarding_wizard: 'Onboarding Wizard',
@@ -826,6 +840,79 @@ btnCloseWizard.addEventListener('click', () => {
 btnWizardFinish.addEventListener('click', () => {
     wizardModal.classList.remove('active');
     showToast(state.lang === 'de' ? 'Kassetten-Profil erfolgreich eingerichtet & aktiviert!' : 'Cartridge profile configured & activated successfully!', 'success');
+});
+
+// ==========================================
+// 9b. 1-Wire New UUID Detection & Profile Assignment
+// ==========================================
+const uuidDetectModal = document.getElementById('uuid-detect-modal');
+const btnCloseUuidModal = document.getElementById('btn-close-uuid-modal');
+const btnCancelUuid = document.getElementById('btn-cancel-uuid');
+const btnSaveUuidMapping = document.getElementById('btn-save-uuid-mapping');
+const detectedSlotName = document.getElementById('detected-slot-name');
+const detectedUuidVal = document.getElementById('detected-uuid-val');
+const selectUuidProfile = document.getElementById('select-uuid-profile');
+
+let currentDetectedPort = 1;
+
+function openUuidDetectionModal(portNum, customUid = null) {
+    currentDetectedPort = portNum;
+    const isDe = (state.lang === 'de');
+    if (detectedSlotName) {
+        detectedSlotName.textContent = portNum === 1 
+            ? (isDe ? 'Pod 1 (Rahmen links)' : 'Pod 1 (Frame Left)') 
+            : (isDe ? 'Pod 2 (Rahmen rechts)' : 'Pod 2 (Frame Right)');
+    }
+    if (detectedUuidVal) {
+        detectedUuidVal.textContent = customUid || (portNum === 1 ? '01:A2:3B:4C:5D:6E:7F:8A' : '01:B3:78:11:44:90:3A');
+    }
+    if (uuidDetectModal) uuidDetectModal.classList.add('active');
+}
+
+function closeUuidDetectionModal() {
+    if (uuidDetectModal) uuidDetectModal.classList.remove('active');
+}
+
+btnCloseUuidModal?.addEventListener('click', closeUuidDetectionModal);
+btnCancelUuid?.addEventListener('click', closeUuidDetectionModal);
+
+btnSaveUuidMapping?.addEventListener('click', () => {
+    const selectedProfile = selectUuidProfile?.value || 'sena_50_series';
+    const profileText = selectUuidProfile?.options[selectUuidProfile.selectedIndex]?.text || selectedProfile;
+    const uid = detectedUuidVal?.textContent || '01:A2:3B:4C:5D:6E:7F:8A';
+    
+    // Save to localStorage mapping
+    try {
+        const mapping = JSON.parse(localStorage.getItem('omb_cartridge_mapping') || '{}');
+        mapping[uid] = selectedProfile;
+        localStorage.setItem('omb_cartridge_mapping', JSON.stringify(mapping));
+    } catch (e) {
+        console.error("Mapping save error:", e);
+    }
+    
+    // Apply to current pod selector and display
+    const selectEl = document.getElementById(`select-pod${currentDetectedPort}-profile`);
+    if (selectEl) {
+        selectEl.value = selectedProfile;
+        updatePodDisplay(currentDetectedPort, selectedProfile);
+    }
+    
+    const uidEl = document.getElementById(`pod${currentDetectedPort}-uid`);
+    if (uidEl) uidEl.textContent = uid;
+    
+    closeUuidDetectionModal();
+    const isDe = (state.lang === 'de');
+    showToast(isDe 
+        ? `Erfolgreich! UID ${uid} dauerhaft mit ${profileText} verknüpft.` 
+        : `Success! UID ${uid} permanently mapped to ${profileText}.`, 'success');
+});
+
+document.getElementById('btn-p1-learn')?.addEventListener('click', () => {
+    openUuidDetectionModal(1, '01:4F:2A:90:12:00:8C');
+});
+
+document.getElementById('btn-p2-learn')?.addEventListener('click', () => {
+    openUuidDetectionModal(2, '01:B3:78:11:44:90:3A');
 });
 
 // ==========================================

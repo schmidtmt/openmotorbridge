@@ -460,9 +460,14 @@
                         <span class="stat-sub">Status:</span>
                         <span style="color: var(--accent-green); font-size: 0.85rem;" id="pod1-status">Power ON • DLE +60 Pkt.</span>
                     </div>
-                    <button class="btn-secondary" id="btn-p1-resync" style="width: 100%; margin-top: 14px;">
-                        🔄 <span data-i18n="btn_ground_truth">Ground-Truth Re-Sync</span>
-                    </button>
+                    <div style="display: flex; gap: 8px; margin-top: 14px;">
+                        <button class="btn-secondary" id="btn-p1-resync" style="flex: 1;">
+                            🔄 <span data-i18n="btn_ground_truth">Sync</span>
+                        </button>
+                        <button class="btn-primary" id="btn-p1-learn" style="flex: 1.2; font-size: 0.82rem;">
+                            🧩 <span data-i18n="btn_learn_uuid">UUID anlernen</span>
+                        </button>
+                    </div>
                 </section>
 
                 <!-- Pod 2 Card -->
@@ -494,9 +499,14 @@
                         <span class="stat-sub">Status:</span>
                         <span style="color: var(--accent-green); font-size: 0.85rem;" id="pod2-status">Power ON • DLE +60 Pkt.</span>
                     </div>
-                    <button class="btn-secondary" id="btn-p2-next" style="width: 100%; margin-top: 14px;">
-                        ⏭️ <span data-i18n="btn_channel_advance">Kanal Weiterschalten (800ms)</span>
-                    </button>
+                    <div style="display: flex; gap: 8px; margin-top: 14px;">
+                        <button class="btn-secondary" id="btn-p2-next" style="flex: 1;">
+                            ⏭️ <span data-i18n="btn_channel_advance">Kanal</span>
+                        </button>
+                        <button class="btn-primary" id="btn-p2-learn" style="flex: 1.2; font-size: 0.82rem;">
+                            🧩 <span data-i18n="btn_learn_uuid">UUID anlernen</span>
+                        </button>
+                    </div>
                 </section>
 
                 <!-- Pod 3 Card & DLE Score -->
@@ -829,6 +839,52 @@
             <button id="btn-wizard-finish" class="btn-primary" style="width: 100%; margin-top: 10px;">
                 <span data-i18n="btn_wizard_finish">Verstanden & Profil aktivieren</span>
             </button>
+        </div>
+    </div>
+
+    <!-- Modal: New 1-Wire Cartridge Detected (UUID Registration) -->
+    <div class="modal-overlay" id="uuid-detect-modal">
+        <div class="modal-card" style="max-width: 520px;">
+            <div class="modal-header">
+                <div class="modal-title">🧩 <span data-i18n="uuid_modal_title">Neue Kassette erkannt!</span></div>
+                <button class="modal-close" id="btn-close-uuid-modal">&times;</button>
+            </div>
+
+            <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 12px; padding: 14px; margin-bottom: 16px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span style="font-size: 0.85rem; color: var(--text-secondary);" data-i18n="detected_slot">Erkannter Steckplatz:</span>
+                    <strong id="detected-slot-name" style="color: var(--accent-green);">Pod 1 (Rahmen links)</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 0.85rem; color: var(--text-secondary);">1-Wire Chip-UID (DS2401):</span>
+                    <code id="detected-uuid-val" style="background: rgba(0,0,0,0.3); padding: 3px 8px; border-radius: 6px; font-size: 0.85rem; color: var(--accent-cyan); font-family: monospace;">01:A2:3B:4C:5D:6E:7F:8A</code>
+                </div>
+            </div>
+
+            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 12px;" data-i18n="uuid_assign_intro">
+                Dieser Kassetten-Hardware wurde bisher noch kein Profil zugewiesen. Welches Intercom oder Funkgerät ist in dieser Kassette verbaut?
+            </p>
+
+            <div class="input-group" style="margin-bottom: 20px;">
+                <label for="select-uuid-profile" data-i18n="lbl_select_profile" style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; display: block;">Hardware-Profil auswählen:</label>
+                <select id="select-uuid-profile" class="form-control" style="width: 100%; padding: 10px 12px; border-radius: 8px; background: var(--bg-surface-secondary); color: var(--text-primary); border: 1px solid var(--border-color); font-size: 0.95rem;">
+                    <option value="sena_60s">⚡ Sena 60S (Mesh 3.0 Wave • K1)</option>
+                    <option value="sena_apex">🟢 Sena Apex / Apex Plus (Mesh 3.0 • K1)</option>
+                    <option value="sena_50_series" selected>🔵 Sena 50S / 50R / 50C / SRL3 (Mesh 2.0/3.0 • K1)</option>
+                    <option value="sena_spider">🟣 Sena Spider RT1 / ST1 (Mesh-Only • K2)</option>
+                    <option value="sena_vortex">🌀 Sena Vortex (Bluetooth 5.1 • K3)</option>
+                    <option value="sena_legacy_bt">📻 Sena 20S / 30K / 10S / SF (Bluetooth • K3)</option>
+                    <option value="cardo_dmc_gen2">🟢 Cardo Packtalk Edge / Pro / Custom (DMC Gen2 • K4)</option>
+                    <option value="cardo_freecom_live">🔵 Cardo Freecom 4x / 2x / Spirit HD (Live Intercom • K5)</option>
+                    <option value="cardo_dmc_legacy">🟣 Cardo Packtalk Bold / Black / Slim (DMC Gen1 • K6)</option>
+                    <option value="pmr446_gateway">📡 Midland G9 Pro / Baofeng PMR446 (Analog Gateway • K7)</option>
+                </select>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+                <button id="btn-cancel-uuid" class="btn-secondary" style="flex: 1; padding: 10px;" data-i18n="btn_cancel">Später zuweisen</button>
+                <button id="btn-save-uuid-mapping" class="btn-primary" style="flex: 2; padding: 10px;" data-i18n="btn_save_mapping">Profil zuweisen & speichern</button>
+            </div>
         </div>
     </div>
 
