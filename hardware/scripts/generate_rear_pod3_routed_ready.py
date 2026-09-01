@@ -47,14 +47,15 @@ net_map = {name: num for num, name in nets}
 component_pins = {
     # J1: 6-Pin Horizontal Connector
     # Physically at rot=180: local pad 6 sits at Y=87.65 (mating Pod Base Kontakt 1 VCC)
-    # local pad 1 sits at Y=100.35 (mating Pod Base Kontakt 6 1-Wire ID)
+    # J1: 6-Pin Female Socket Strip (PinSocket_1x06_P2.54mm_Horizontal)
+    # Origin at (102.5, 87.65, 0): Pad 1 is at Y=87.65, Pad 6 is at Y=100.35
     'J1': {
-        '6': 'POD3_VCC_5V',    # Y=87.65 (Mates with Pod Base Kontakt 1 VCC)
-        '5': 'GND',            # Y=90.19 (Mates with Pod Base Kontakt 2 GND)
-        '4': 'POD3_UART_TX',   # Y=92.73 (Mates with Pod Base Kontakt 3 UART_TX)
-        '3': 'POD3_UART_RX',   # Y=95.27 (Mates with Pod Base Kontakt 4 UART_RX)
-        '2': 'GNSS_1PPS',      # Y=97.81 (Mates with Pod Base Kontakt 5 GNSS_1PPS)
-        '1': 'POD3_1WIRE_ID',  # Y=100.35 (Mates with Pod Base Kontakt 6 1-Wire ID)
+        '1': 'POD3_VCC_5V',    # Y=87.65 (Mates with Pod Base Kontakt 1 VCC)
+        '2': 'GND',            # Y=90.19 (Mates with Pod Base Kontakt 2 GND)
+        '3': 'POD3_UART_TX',   # Y=92.73 (Mates with Pod Base Kontakt 3 UART_TX)
+        '4': 'POD3_UART_RX',   # Y=95.27 (Mates with Pod Base Kontakt 4 UART_RX)
+        '5': 'GNSS_1PPS',      # Y=97.81 (Mates with Pod Base Kontakt 5 GNSS_1PPS)
+        '6': 'POD3_1WIRE_ID',  # Y=100.35 (Mates with Pod Base Kontakt 6 1-Wire ID)
     },
     # F1: 500mA PTC Fuse
     'F1': {
@@ -173,11 +174,11 @@ component_pins = {
 
 # Footprint Specifications (library_path, ref, val, x, y, rot, layer, model_path)
 # Centerline Y = 94.0 mm, Outline X = 100.0..170.0, Y = 70.0..118.0 (70.0 x 48.0 mm)
-# J1 6-Pin Header rotated 180 deg: Pins point LEFT out of the board towards bulkhead socket!
-# At rot=180: Header origin at (102.50, 100.35) -> Pin 1 at Y=100.35, Pin 6 at Y=87.65, Pin Center = 94.00 mm!
+# J1 6-Pin Female Socket strip (rot=0): Socket body projects LEFT out of the board towards bulkhead pin header!
+# Socket origin at (102.50, 87.65) -> Pin 1 at Y=87.65, Pin 6 at Y=100.35, Center = 94.00 mm!
 components = [
-    # J1: 6-Pin Horizontal connector pointing LEFT towards mating bulkhead socket
-    ("Connector_PinHeader_2.54mm.pretty/PinHeader_1x06_P2.54mm_Horizontal.kicad_mod", "J1", "6-Pin_OMM_Socket", 102.50, 100.35, 180, "F.Cu", "Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x06_P2.54mm_Horizontal.step"),
+    # J1: 6-Pin Horizontal female socket strip opening LEFT towards mating bulkhead pins
+    ("PinSocket_1x06_P2.54mm_Horizontal", "J1", "6-Pin_OMM_Female_Socket", 102.50, 87.65, 0, "F.Cu", "${KICAD10_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x06_P2.54mm_Horizontal.step"),
     # Protection & Status (F1 near Pin 1 VCC at Y=87.65; D1/R1 5V power LED)
     ("Resistor_SMD.pretty/R_1206_3216Metric.kicad_mod", "F1", "PTC_500mA", 106.75, 83.71, 90, "F.Cu", "Resistor_SMD.3dshapes/R_1206_3216Metric.step"),
     ("LED_SMD.pretty/LED_0805_2012Metric.kicad_mod", "D1", "LED_Green_5V", 112.06, 72.50, 180, "F.Cu", "LED_SMD.3dshapes/LED_0805_2012Metric.step"),
