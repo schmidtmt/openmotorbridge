@@ -69,9 +69,23 @@ class OpenMotorBridgeAudioEngine {
   }
 
   async init() {
-    if (this.ctx) return;
+    if (this.ctx) {
+      if (this.ctx.state === 'suspended') {
+        try { await this.ctx.resume(); } catch(e) {}
+      }
+      return;
+    }
+
     const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-    this.ctx = new AudioContextClass({ sampleRate: 48000 });
+    try {
+      this.ctx = new AudioContextClass();
+    } catch(e) {
+      this.ctx = new AudioContextClass({ sampleRate: 48000 });
+    }
+
+    if (this.ctx.state === 'suspended') {
+      try { await this.ctx.resume(); } catch(e) {}
+    }
 
     // 1. Mic Chain
     this.micPreamp = this.ctx.createGain();
@@ -199,10 +213,61 @@ class OpenMotorBridgeAudioEngine {
     this.isRunning = true;
   }
 
+  // Ensure AudioContext is initialized and un-suspended
+  async ensureRunning() {
+    if (!this.ctx) {
+      await this.init();
+    }
+    if (this.ctx && this.ctx.state === 'suspended') {
+      try {
+        await this.ctx.resume();
+      } catch(e) {
+        console.warn("Could not resume AudioContext:", e);
+      }
+    }
+  }
+
+  // Acoustic Chime played on studio activation (Triad C5 - E5 - G5)
+  playStartupChime() {
+    if (!this.ctx) return;
+    const now = this.ctx.currentTime;
+    [523.25, 659.25, 783.99].forEach((freq, i) => {
+      const osc = this.ctx.createOscillator();
+      const g = this.ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, now + i * 0.08);
+      g.gain.setValueAtTime(0.001, now + i * 0.08);
+      g.gain.linearRampToValueAtTime(0.3, now + i * 0.08 + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.22);
+      osc.connect(g);
+      g.connect(this.masterGain);
+      osc.start(now + i * 0.08);
+      osc.stop(now + i * 0.08 + 0.25);
+    });
+  }
+
+  // Test Tone (440 Hz Sine Beep) for Output Verification
+  async playTestTone() {
+    await this.ensureRunning();
+    if (!this.ctx) return;
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const g = this.ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(440, now);
+    g.gain.setValueAtTime(0.001, now);
+    g.gain.linearRampToValueAtTime(0.45, now + 0.02);
+    g.gain.setValueAtTime(0.45, now + 0.35);
+    g.gain.linearRampToValueAtTime(0.001, now + 0.45);
+    osc.connect(g);
+    g.connect(this.masterGain);
+    osc.start(now);
+    osc.stop(now + 0.48);
+  }
+
   // Request & Connect Live Headset Microphone
   async startMicrophone(deviceId = null) {
-    if (!this.ctx) await this.init();
-    if (this.ctx.state === 'suspended') await this.ctx.resume();
+    await this.ensureRunning();
 
     if (this.micStream) {
       this.micStream.getTracks().forEach(t => t.stop());
@@ -521,43 +586,65 @@ class OpenMotorBridgeAudioEngine {
   }
 
   // Built-in Synthesizer for Demo Music / Beats (Zero-dependency audio player)
-  startSynthMusic() {
+  async startSynthMusic() {
+    await this.ensureRunning();
     if (this.isSynthPlaying) return;
     this.isSynthPlaying = true;
 
-    // Melodic Synth Chords & Bassline loop
+    // Rich Driving Synthwave Sequence: Am -> F -> C -> G
     const chords = [
-      [220.0, 261.63, 329.63], // Am
-      [174.61, 220.0, 261.63], // F
-      [130.81, 164.81, 196.0], // C
-      [196.0, 246.94, 293.66], // G
+      [220.0, 261.63, 329.63, 440.0],  // Am
+      [174.61, 220.0, 261.63, 349.23], // F
+      [130.81, 164.81, 196.0, 261.63], // C
+      [196.0, 246.94, 293.66, 392.0],  // G
     ];
 
-    let chordIdx = 0;
-    this.synthInterval = setInterval(() => {
+    let step = 0;
+    const playTick = () => {
       if (!this.ctx || !this.isSynthPlaying) return;
-      const curChord = chords[chordIdx % chords.length];
-      chordIdx++;
+      const now = this.ctx.currentTime;
+      const chordIdx = Math.floor(step / 4) % chords.length;
+      const curChord = chords[chordIdx];
 
-      curChord.forEach((freq, idx) => {
-        const osc = this.ctx.createOscillator();
-        const oscGain = this.ctx.createGain();
+      // 1. Synth Chord Pad on beat 0
+      if (step % 4 === 0) {
+        curChord.forEach((freq, idx) => {
+          const osc = this.ctx.createOscillator();
+          const oscGain = this.ctx.createGain();
+          osc.type = idx === 0 ? 'sawtooth' : 'triangle';
+          osc.frequency.value = freq * (idx === 0 ? 0.5 : 1.0);
 
-        osc.type = idx === 0 ? 'sawtooth' : 'triangle';
-        osc.frequency.value = freq * (idx === 0 ? 0.5 : 1.0); // Bass octaved down
+          oscGain.gain.setValueAtTime(0.001, now);
+          oscGain.gain.linearRampToValueAtTime(0.24, now + 0.04);
+          oscGain.gain.exponentialRampToValueAtTime(0.001, now + 1.6);
 
-        const now = this.ctx.currentTime;
-        oscGain.gain.setValueAtTime(0.001, now);
-        oscGain.gain.exponentialRampToValueAtTime(0.12, now + 0.08);
-        oscGain.gain.exponentialRampToValueAtTime(0.001, now + 1.8);
+          osc.connect(oscGain);
+          oscGain.connect(this.musicGain);
 
-        osc.connect(oscGain);
-        oscGain.connect(this.musicGain);
+          osc.start(now);
+          osc.stop(now + 1.7);
+        });
+      }
 
-        osc.start(now);
-        osc.stop(now + 1.9);
-      });
-    }, 1800);
+      // 2. Punchy Kick Drum on every beat (4-on-the-floor)
+      const kickOsc = this.ctx.createOscillator();
+      const kickGain = this.ctx.createGain();
+      kickOsc.frequency.setValueAtTime(140, now);
+      kickOsc.frequency.exponentialRampToValueAtTime(40, now + 0.09);
+      kickGain.gain.setValueAtTime(0.4, now);
+      kickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+
+      kickOsc.connect(kickGain);
+      kickGain.connect(this.musicGain);
+      kickOsc.start(now);
+      kickOsc.stop(now + 0.2);
+
+      step++;
+    };
+
+    // Play FIRST beat IMMEDIATELY (no 1.8s delay!)
+    playTick();
+    this.synthInterval = setInterval(playTick, 460); // 130 BPM
   }
 
   stopSynthMusic() {
@@ -614,7 +701,8 @@ class OpenMotorBridgeAudioEngine {
   }
 
   // Start Motorcycle Engine Synthesis
-  startEngine() {
+  async startEngine() {
+    await this.ensureRunning();
     if (this.isEngineRunning || !this.ctx) return;
     this.isEngineRunning = true;
 
@@ -629,12 +717,12 @@ class OpenMotorBridgeAudioEngine {
     // 3. Exhaust Chamber Resonance Bandpass Filter
     this.engineExhaustBp = this.ctx.createBiquadFilter();
     this.engineExhaustBp.type = 'bandpass';
-    this.engineExhaustBp.Q.value = 2.8;
+    this.engineExhaustBp.Q.value = 2.2;
 
     // 4. Low-pass Muffler Filter
     this.engineMufflerLp = this.ctx.createBiquadFilter();
     this.engineMufflerLp.type = 'lowpass';
-    this.engineMufflerLp.frequency.value = 1100;
+    this.engineMufflerLp.frequency.value = 1600;
 
     // Connect Engine Chain
     this.enginePulseOsc.connect(this.engineExhaustBp);
@@ -646,7 +734,7 @@ class OpenMotorBridgeAudioEngine {
     this.engineSubOsc.start();
 
     this.updateEngineAcoustics();
-    this.engineMasterGain.gain.setValueAtTime(this.engineVolume, this.ctx.currentTime);
+    this.engineMasterGain.gain.setValueAtTime(this.engineVolume * 0.9, this.ctx.currentTime);
   }
 
   // Stop Engine
@@ -672,29 +760,29 @@ class OpenMotorBridgeAudioEngine {
     if (!this.ctx || !this.isEngineRunning || !this.enginePulseOsc) return;
 
     const effRpm = Math.min(9500, Math.max(900, this.engineRpm + this.engineThrottleRpmBoost));
-    let firingFreq = 20.0;
-    let resFreq = 200.0;
+    let firingFreq = 55.0;
+    let resFreq = 220.0;
 
     switch (this.engineType) {
       case 'BOXER_TWIN':
-        // BMW R1250GS Boxer: 2 Cylinders, heavy 625cc pistons, 1 firing per rev
-        firingFreq = effRpm / 60.0; // 18.3 Hz at 1100 RPM, 75 Hz at 4500 RPM
-        resFreq = 150.0 + effRpm * 0.045;
-        this.engineExhaustBp.Q.value = 2.4;
+        // BMW R1250GS Boxer: Deep audible 55 Hz idle growl -> 220 Hz high-rev thrum
+        firingFreq = 35.0 + (effRpm / 9000.0) * 180.0;
+        resFreq = 160.0 + (effRpm / 9000.0) * 320.0;
+        this.engineExhaustBp.Q.value = 2.0;
         break;
 
       case 'INLINE_4':
-        // Screaming 4-Cylinder Superbike: 2 firings per rev (high-pitched wail)
-        firingFreq = effRpm / 30.0; // 36.6 Hz at 1100 RPM, 150 Hz at 4500 RPM, 266 Hz at 8000 RPM
-        resFreq = 280.0 + effRpm * 0.065;
-        this.engineExhaustBp.Q.value = 3.2;
+        // Screaming 4-Cylinder Superbike: Higher pitch (70 Hz idle -> 420 Hz sports bike wail)
+        firingFreq = 65.0 + (effRpm / 9000.0) * 340.0;
+        resFreq = 260.0 + (effRpm / 9000.0) * 480.0;
+        this.engineExhaustBp.Q.value = 3.0;
         break;
 
       case 'V_TWIN':
-        // 90° V2 Cruiser / Enduro: Syncopated cadence, rich low-end growl
-        firingFreq = (effRpm / 60.0) * 1.12;
-        resFreq = 180.0 + effRpm * 0.05;
-        this.engineExhaustBp.Q.value = 2.6;
+        // 90° V2 Cruiser / Enduro: Syncopated cadence, rich low-end rumble
+        firingFreq = 42.0 + (effRpm / 9000.0) * 200.0;
+        resFreq = 180.0 + (effRpm / 9000.0) * 300.0;
+        this.engineExhaustBp.Q.value = 2.4;
         break;
     }
 
@@ -704,8 +792,8 @@ class OpenMotorBridgeAudioEngine {
     this.engineExhaustBp.frequency.setTargetAtTime(resFreq, now, 0.04);
 
     // Dynamic Volume scaling with load / RPM
-    const throttleGainBoost = this.throttleBlipping ? 1.35 : 1.0;
-    const loadScaler = (0.75 + (effRpm / 8000.0) * 0.5) * throttleGainBoost;
+    const throttleGainBoost = this.throttleBlipping ? 1.4 : 1.0;
+    const loadScaler = (0.7 + (effRpm / 8000.0) * 0.55) * throttleGainBoost;
     this.engineMasterGain.gain.setTargetAtTime(this.engineVolume * loadScaler, now, 0.04);
   }
 

@@ -35,6 +35,10 @@
         <span id="pillPttDot" class="dot"></span>
         <span id="pillPttText">PTT: OFF</span>
       </div>
+      <button id="btnTestTone" class="pill" style="cursor: pointer; background: var(--bg-surface-elevated); color: var(--accent-cyan); border-color: var(--accent-cyan); font-weight: 700; gap: 0.3rem;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+        <span>Testton</span>
+      </button>
       <button id="btnMasterPower" class="btn-master-power">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
@@ -447,23 +451,40 @@
     // Master Start/Stop
     btnMasterPower.addEventListener('click', async () => {
       if (!isMasterStarted) {
-        await window.ombAudio.init();
-        await window.ombAudio.startMicrophone(micDeviceSelect.value || null);
-        await populateMicDevices();
+        await window.ombAudio.ensureRunning();
+        window.ombAudio.playStartupChime();
         isMasterStarted = true;
         btnMasterPower.classList.add('running');
         btnPowerLabel.textContent = "STUDIO AKTIV";
         requestAnimationFrame(renderLoop);
+
+        // Non-blocking microphone connection
+        window.ombAudio.startMicrophone(micDeviceSelect.value || null).then(() => {
+          populateMicDevices();
+        }).catch(err => console.warn("Mic not available:", err));
       } else {
-        if (window.ombAudio.ctx.state === 'running') {
+        if (window.ombAudio.ctx && window.ombAudio.ctx.state === 'running') {
           await window.ombAudio.ctx.suspend();
           btnMasterPower.classList.remove('running');
           btnPowerLabel.textContent = "STUDIO PAUSIERT";
-        } else {
+        } else if (window.ombAudio.ctx) {
           await window.ombAudio.ctx.resume();
           btnMasterPower.classList.add('running');
           btnPowerLabel.textContent = "STUDIO AKTIV";
         }
+      }
+    });
+
+    // Test Tone
+    const btnTestTone = document.getElementById('btnTestTone');
+    btnTestTone.addEventListener('click', async () => {
+      await window.ombAudio.ensureRunning();
+      window.ombAudio.playTestTone();
+      if (!isMasterStarted) {
+        isMasterStarted = true;
+        btnMasterPower.classList.add('running');
+        btnPowerLabel.textContent = "STUDIO AKTIV";
+        requestAnimationFrame(renderLoop);
       }
     });
 
@@ -536,9 +557,15 @@
 
     // Music Source Controls
     btnToggleSynth.addEventListener('click', async () => {
-      if (!isMasterStarted) btnMasterPower.click();
+      await window.ombAudio.ensureRunning();
+      if (!isMasterStarted) {
+        isMasterStarted = true;
+        btnMasterPower.classList.add('running');
+        btnPowerLabel.textContent = "STUDIO AKTIV";
+        requestAnimationFrame(renderLoop);
+      }
       if (!window.ombAudio.isSynthPlaying) {
-        window.ombAudio.startSynthMusic();
+        await window.ombAudio.startSynthMusic();
         btnToggleSynth.style.background = 'linear-gradient(135deg, #059669, #10b981)';
       } else {
         window.ombAudio.stopSynthMusic();
@@ -548,7 +575,13 @@
 
     fileAudioInput.addEventListener('change', async (e) => {
       if (e.target.files.length > 0) {
-        if (!isMasterStarted) await btnMasterPower.click();
+        await window.ombAudio.ensureRunning();
+        if (!isMasterStarted) {
+          isMasterStarted = true;
+          btnMasterPower.classList.add('running');
+          btnPowerLabel.textContent = "STUDIO AKTIV";
+          requestAnimationFrame(renderLoop);
+        }
         await window.ombAudio.loadAudioFile(e.target.files[0]);
         btnToggleSynth.style.background = 'linear-gradient(135deg, #2563eb, #0284c7)';
       }
@@ -595,9 +628,15 @@
     const valEngineVol = document.getElementById('valEngineVol');
 
     btnToggleEngine.addEventListener('click', async () => {
-      if (!isMasterStarted) await btnMasterPower.click();
+      await window.ombAudio.ensureRunning();
+      if (!isMasterStarted) {
+        isMasterStarted = true;
+        btnMasterPower.classList.add('running');
+        btnPowerLabel.textContent = "STUDIO AKTIV";
+        requestAnimationFrame(renderLoop);
+      }
       if (!window.ombAudio.isEngineRunning) {
-        window.ombAudio.startEngine();
+        await window.ombAudio.startEngine();
         btnToggleEngine.style.background = 'linear-gradient(135deg, #059669, #10b981)';
         lblBtnEngine.textContent = "Motor Stoppen";
       } else {
