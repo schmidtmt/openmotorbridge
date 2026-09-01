@@ -708,22 +708,22 @@ class OpenMotorBridgeAudioEngine {
       return { gear: cur.gear, rpm: rpm };
 
     } else if (this.engineType === 'BOXER_TWIN') {
-      // BMW R1250GS: Punchy Flat-Twin, ShiftCam Mid-Range (Linear & Tour-friendly)
+      // BMW R1250GS: ShiftCam Flat-Twin (Brawny Low-End & Relaxed Mid-Range Touring)
       if (kmh < 1) return { gear: 'N', rpm: 1050 };
       const gears = [
-        { maxKmh: 35, gear: 1, baseRpm: 1100, slope: 85 },   // 1st: 1100 -> 4075 RPM
-        { maxKmh: 62, gear: 2, baseRpm: 2400, slope: 65 },   // 2nd: 2400 -> 4155 RPM
-        { maxKmh: 92, gear: 3, baseRpm: 2800, slope: 50 },   // 3rd: 2800 -> 4300 RPM
-        { maxKmh: 120, gear: 4, baseRpm: 3200, slope: 40 },  // 4th: 3200 -> 4320 RPM
-        { maxKmh: 148, gear: 5, baseRpm: 3500, slope: 33 },  // 5th: 3500 -> 4424 RPM
-        { maxKmh: 220, gear: 6, baseRpm: 3700, slope: 28 }   // 6th: 130 km/h ~4036 RPM
+        { maxKmh: 24, gear: 1, baseRpm: 1050, slope: 60 },   // 1st: 1050 -> 2490 RPM (shifts at 24 km/h)
+        { maxKmh: 44, gear: 2, baseRpm: 1650, slope: 45 },   // 2nd: 1650 -> 2550 RPM (shifts at 44 km/h)
+        { maxKmh: 66, gear: 3, baseRpm: 1800, slope: 38 },   // 3rd: 50 km/h is 2028 RPM! (shifts at 66 km/h)
+        { maxKmh: 92, gear: 4, baseRpm: 2100, slope: 30 },   // 4th: 70 km/h is 2220 RPM (shifts at 92 km/h)
+        { maxKmh: 118, gear: 5, baseRpm: 2300, slope: 25 },  // 5th: 100 km/h is 2500 RPM (shifts at 118 km/h)
+        { maxKmh: 210, gear: 6, baseRpm: 2500, slope: 21 }   // 6th: 130 km/h is 2752 RPM, 160 km/h is 3382 RPM!
       ];
       let cur = gears[gears.length - 1];
       for (let g of gears) {
         if (kmh <= g.maxKmh) { cur = g; break; }
       }
       const minK = cur.gear === 1 ? 0 : gears[cur.gear - 2].maxKmh;
-      const rpm = Math.min(7800, Math.round(cur.baseRpm + (kmh - minK) * cur.slope));
+      const rpm = Math.min(6500, Math.round(cur.baseRpm + (kmh - minK) * cur.slope));
       return { gear: cur.gear, rpm: rpm };
 
     } else {
@@ -820,11 +820,11 @@ class OpenMotorBridgeAudioEngine {
         break;
 
       case 'BOXER_TWIN':
-        // BMW R1250GS Boxer: Sattes 36 Hz Standgas -> 180 Hz bei 7500 U/min
-        effRpm = Math.min(8000, Math.max(950, effRpm));
-        firingFreq = 35.0 + (effRpm / 7800.0) * 155.0;
-        resFreq = 150.0 + (effRpm / 7800.0) * 260.0;
-        this.engineExhaustBp.Q.value = 2.2;
+        // BMW R1250GS Boxer: Sattes 32 Hz Standgas -> 142 Hz bei 6500 U/min
+        effRpm = Math.min(6500, Math.max(950, effRpm));
+        firingFreq = 32.0 + (effRpm / 6500.0) * 110.0;
+        resFreq = 140.0 + (effRpm / 6500.0) * 200.0;
+        this.engineExhaustBp.Q.value = 2.4;
         break;
 
       case 'INLINE_4':
@@ -843,7 +843,7 @@ class OpenMotorBridgeAudioEngine {
 
     // Dynamic Volume scaling with load / RPM
     const throttleGainBoost = this.throttleBlipping ? 1.4 : 1.0;
-    const maxR = this.engineType === 'V_TWIN' ? 5000.0 : (this.engineType === 'BOXER_TWIN' ? 7800.0 : 12000.0);
+    const maxR = this.engineType === 'V_TWIN' ? 5000.0 : (this.engineType === 'BOXER_TWIN' ? 6500.0 : 12000.0);
     const loadScaler = (0.7 + (effRpm / maxR) * 0.55) * throttleGainBoost;
     this.engineMasterGain.gain.setTargetAtTime(this.engineVolume * loadScaler, now, 0.04);
   }
@@ -888,7 +888,7 @@ class OpenMotorBridgeAudioEngine {
       if (this.engineType === 'V_TWIN') {
         this.engineThrottleRpmBoost = 1300; // +1300 RPM blip for V2 (e.g. 850 -> 2150 RPM)
       } else if (this.engineType === 'BOXER_TWIN') {
-        this.engineThrottleRpmBoost = 2200; // +2200 RPM blip for Boxer (e.g. 1050 -> 3250 RPM)
+        this.engineThrottleRpmBoost = 1600; // +1600 RPM blip for Boxer (e.g. 1050 -> 2650 RPM)
       } else {
         this.engineThrottleRpmBoost = 3500; // +3500 RPM blip for Superbike (e.g. 1250 -> 4750 RPM)
       }
