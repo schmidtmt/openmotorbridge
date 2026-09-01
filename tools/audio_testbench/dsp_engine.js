@@ -686,29 +686,65 @@ class OpenMotorBridgeAudioEngine {
     return true;
   }
 
-  // Motorcycle 6-Speed Transmission & Dynamic RPM Model
+  // Motorcycle Transmission & Dynamic RPM Model (Engine-Specific Gearing)
   getEngineState(kmh) {
-    if (kmh < 1) {
-      return { gear: 'N', rpm: 1150 };
-    }
-    const gears = [
-      { maxKmh: 35, gear: 1, baseRpm: 1200, slope: 140 },
-      { maxKmh: 62, gear: 2, baseRpm: 2100, slope: 95 },
-      { maxKmh: 92, gear: 3, baseRpm: 2500, slope: 72 },
-      { maxKmh: 120, gear: 4, baseRpm: 3000, slope: 55 },
-      { maxKmh: 145, gear: 5, baseRpm: 3400, slope: 44 },
-      { maxKmh: 200, gear: 6, baseRpm: 3800, slope: 36 }
-    ];
-    let cur = gears[gears.length - 1];
-    for (let g of gears) {
-      if (kmh <= g.maxKmh) {
-        cur = g;
-        break;
+    if (this.engineType === 'V_TWIN') {
+      // V-Twin Cruiser / Big-Bore: Low-RPM Torque Monster (Early Shifting, Low Redline)
+      if (kmh < 1) return { gear: 'N', rpm: 850 };
+      const gears = [
+        { maxKmh: 22, gear: 1, baseRpm: 880, slope: 70 },    // 1st: 880 -> 2420 RPM
+        { maxKmh: 42, gear: 2, baseRpm: 1500, slope: 55 },   // 2nd: 1500 -> 2600 RPM
+        { maxKmh: 68, gear: 3, baseRpm: 1650, slope: 44 },   // 3rd: 1650 -> 2794 RPM
+        { maxKmh: 95, gear: 4, baseRpm: 1850, slope: 37 },   // 4th: 1850 -> 2849 RPM
+        { maxKmh: 122, gear: 5, baseRpm: 2000, slope: 31 },  // 5th: 2000 -> 2837 RPM
+        { maxKmh: 200, gear: 6, baseRpm: 2150, slope: 22 }   // 6th (Overdrive): 100 km/h ~2200 RPM, 130 km/h ~2550 RPM
+      ];
+      let cur = gears[gears.length - 1];
+      for (let g of gears) {
+        if (kmh <= g.maxKmh) { cur = g; break; }
       }
+      const minK = cur.gear === 1 ? 0 : gears[cur.gear - 2].maxKmh;
+      const rpm = Math.min(5000, Math.round(cur.baseRpm + (kmh - minK) * cur.slope));
+      return { gear: cur.gear, rpm: rpm };
+
+    } else if (this.engineType === 'BOXER_TWIN') {
+      // BMW R1250GS: Punchy Flat-Twin, ShiftCam Mid-Range (Linear & Tour-friendly)
+      if (kmh < 1) return { gear: 'N', rpm: 1050 };
+      const gears = [
+        { maxKmh: 35, gear: 1, baseRpm: 1100, slope: 85 },   // 1st: 1100 -> 4075 RPM
+        { maxKmh: 62, gear: 2, baseRpm: 2400, slope: 65 },   // 2nd: 2400 -> 4155 RPM
+        { maxKmh: 92, gear: 3, baseRpm: 2800, slope: 50 },   // 3rd: 2800 -> 4300 RPM
+        { maxKmh: 120, gear: 4, baseRpm: 3200, slope: 40 },  // 4th: 3200 -> 4320 RPM
+        { maxKmh: 148, gear: 5, baseRpm: 3500, slope: 33 },  // 5th: 3500 -> 4424 RPM
+        { maxKmh: 220, gear: 6, baseRpm: 3700, slope: 28 }   // 6th: 130 km/h ~4036 RPM
+      ];
+      let cur = gears[gears.length - 1];
+      for (let g of gears) {
+        if (kmh <= g.maxKmh) { cur = g; break; }
+      }
+      const minK = cur.gear === 1 ? 0 : gears[cur.gear - 2].maxKmh;
+      const rpm = Math.min(7800, Math.round(cur.baseRpm + (kmh - minK) * cur.slope));
+      return { gear: cur.gear, rpm: rpm };
+
+    } else {
+      // Inline-4 Superbike: Screaming 1000cc High-Rev Track Monster
+      if (kmh < 1) return { gear: 'N', rpm: 1250 };
+      const gears = [
+        { maxKmh: 50, gear: 1, baseRpm: 1300, slope: 140 },  // 1st: 1300 -> 8300 RPM
+        { maxKmh: 82, gear: 2, baseRpm: 4600, slope: 115 },  // 2nd: 4600 -> 8280 RPM
+        { maxKmh: 112, gear: 3, baseRpm: 5400, slope: 95 },  // 3rd: 5400 -> 8250 RPM
+        { maxKmh: 140, gear: 4, baseRpm: 6000, slope: 80 },  // 4th: 6000 -> 8240 RPM
+        { maxKmh: 168, gear: 5, baseRpm: 6500, slope: 68 },  // 5th: 6500 -> 8404 RPM
+        { maxKmh: 260, gear: 6, baseRpm: 7000, slope: 52 }   // 6th: Screams up to 11800 RPM
+      ];
+      let cur = gears[gears.length - 1];
+      for (let g of gears) {
+        if (kmh <= g.maxKmh) { cur = g; break; }
+      }
+      const minK = cur.gear === 1 ? 0 : gears[cur.gear - 2].maxKmh;
+      const rpm = Math.min(12000, Math.round(cur.baseRpm + (kmh - minK) * cur.slope));
+      return { gear: cur.gear, rpm: rpm };
     }
-    const minK = cur.gear === 1 ? 0 : gears[cur.gear - 2].maxKmh;
-    const rpm = Math.min(9200, Math.round(cur.baseRpm + (kmh - minK) * cur.slope));
-    return { gear: cur.gear, rpm: rpm };
   }
 
   // Start Motorcycle Engine Synthesis
@@ -728,12 +764,12 @@ class OpenMotorBridgeAudioEngine {
     // 3. Exhaust Chamber Resonance Bandpass Filter
     this.engineExhaustBp = this.ctx.createBiquadFilter();
     this.engineExhaustBp.type = 'bandpass';
-    this.engineExhaustBp.Q.value = 2.2;
+    this.engineExhaustBp.Q.value = 2.4;
 
     // 4. Low-pass Muffler Filter
     this.engineMufflerLp = this.ctx.createBiquadFilter();
     this.engineMufflerLp.type = 'lowpass';
-    this.engineMufflerLp.frequency.value = 1600;
+    this.engineMufflerLp.frequency.value = 1500;
 
     // Connect Engine Chain
     this.enginePulseOsc.connect(this.engineExhaustBp);
@@ -770,30 +806,33 @@ class OpenMotorBridgeAudioEngine {
   updateEngineAcoustics() {
     if (!this.ctx || !this.isEngineRunning || !this.enginePulseOsc) return;
 
-    const effRpm = Math.min(9500, Math.max(900, this.engineRpm + this.engineThrottleRpmBoost));
-    let firingFreq = 55.0;
-    let resFreq = 220.0;
+    let effRpm = this.engineRpm + this.engineThrottleRpmBoost;
+    let firingFreq = 50.0;
+    let resFreq = 200.0;
 
     switch (this.engineType) {
+      case 'V_TWIN':
+        // Big-Bore V2: Deep thumping low-RPM rhythm (850 - 5000 RPM)
+        effRpm = Math.min(5200, Math.max(750, effRpm));
+        firingFreq = 26.0 + (effRpm / 5000.0) * 85.0; // Deep 26 Hz idle -> 111 Hz high-rev rumble
+        resFreq = 120.0 + (effRpm / 5000.0) * 160.0;  // Resonant chamber 120 - 280 Hz
+        this.engineExhaustBp.Q.value = 3.2;           // Crisp, punchy "Potato" exhaust pulse
+        break;
+
       case 'BOXER_TWIN':
-        // BMW R1250GS Boxer: Deep audible 55 Hz idle growl -> 220 Hz high-rev thrum
-        firingFreq = 35.0 + (effRpm / 9000.0) * 180.0;
-        resFreq = 160.0 + (effRpm / 9000.0) * 320.0;
-        this.engineExhaustBp.Q.value = 2.0;
+        // BMW R1250GS Boxer: Sattes 36 Hz Standgas -> 180 Hz bei 7500 U/min
+        effRpm = Math.min(8000, Math.max(950, effRpm));
+        firingFreq = 35.0 + (effRpm / 7800.0) * 155.0;
+        resFreq = 150.0 + (effRpm / 7800.0) * 260.0;
+        this.engineExhaustBp.Q.value = 2.2;
         break;
 
       case 'INLINE_4':
-        // Screaming 4-Cylinder Superbike: Higher pitch (70 Hz idle -> 420 Hz sports bike wail)
-        firingFreq = 65.0 + (effRpm / 9000.0) * 340.0;
-        resFreq = 260.0 + (effRpm / 9000.0) * 480.0;
+        // Screaming 4-Cylinder Superbike: Hochdrehendes Sägen (1250 - 12000 RPM)
+        effRpm = Math.min(12500, Math.max(1100, effRpm));
+        firingFreq = 65.0 + (effRpm / 12000.0) * 360.0;
+        resFreq = 260.0 + (effRpm / 12000.0) * 460.0;
         this.engineExhaustBp.Q.value = 3.0;
-        break;
-
-      case 'V_TWIN':
-        // 90° V2 Cruiser / Enduro: Syncopated cadence, rich low-end rumble
-        firingFreq = 42.0 + (effRpm / 9000.0) * 200.0;
-        resFreq = 180.0 + (effRpm / 9000.0) * 300.0;
-        this.engineExhaustBp.Q.value = 2.4;
         break;
     }
 
@@ -804,12 +843,16 @@ class OpenMotorBridgeAudioEngine {
 
     // Dynamic Volume scaling with load / RPM
     const throttleGainBoost = this.throttleBlipping ? 1.4 : 1.0;
-    const loadScaler = (0.7 + (effRpm / 8000.0) * 0.55) * throttleGainBoost;
+    const maxR = this.engineType === 'V_TWIN' ? 5000.0 : (this.engineType === 'BOXER_TWIN' ? 7800.0 : 12000.0);
+    const loadScaler = (0.7 + (effRpm / maxR) * 0.55) * throttleGainBoost;
     this.engineMasterGain.gain.setTargetAtTime(this.engineVolume * loadScaler, now, 0.04);
   }
 
   setEngineType(type) {
     this.engineType = type;
+    const state = this.getEngineState(this.speedKmh);
+    this.engineGear = state.gear;
+    this.engineRpm = state.rpm;
     this.updateEngineAcoustics();
   }
 
@@ -841,7 +884,14 @@ class OpenMotorBridgeAudioEngine {
   setThrottleBlipping(active) {
     this.throttleBlipping = active;
     if (active) {
-      this.engineThrottleRpmBoost = 2600; // Rev up by +2600 RPM
+      // Scale blip revs to engine character
+      if (this.engineType === 'V_TWIN') {
+        this.engineThrottleRpmBoost = 1300; // +1300 RPM blip for V2 (e.g. 850 -> 2150 RPM)
+      } else if (this.engineType === 'BOXER_TWIN') {
+        this.engineThrottleRpmBoost = 2200; // +2200 RPM blip for Boxer (e.g. 1050 -> 3250 RPM)
+      } else {
+        this.engineThrottleRpmBoost = 3500; // +3500 RPM blip for Superbike (e.g. 1250 -> 4750 RPM)
+      }
     } else {
       this.engineThrottleRpmBoost = 0;
     }
