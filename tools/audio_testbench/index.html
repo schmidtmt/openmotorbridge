@@ -450,28 +450,36 @@
 
     // Master Start/Stop
     btnMasterPower.addEventListener('click', async () => {
-      if (!isMasterStarted) {
-        await window.ombAudio.ensureRunning();
-        window.ombAudio.playStartupChime();
-        isMasterStarted = true;
-        btnMasterPower.classList.add('running');
-        btnPowerLabel.textContent = "STUDIO AKTIV";
-        requestAnimationFrame(renderLoop);
+      try {
+        if (!isMasterStarted) {
+          await window.ombAudio.init();
+          if (window.ombAudio.ctx && window.ombAudio.ctx.state === 'suspended') {
+            await window.ombAudio.ctx.resume();
+          }
+          window.ombAudio.playStartupChime();
 
-        // Non-blocking microphone connection
-        window.ombAudio.startMicrophone(micDeviceSelect.value || null).then(() => {
-          populateMicDevices();
-        }).catch(err => console.warn("Mic not available:", err));
-      } else {
-        if (window.ombAudio.ctx && window.ombAudio.ctx.state === 'running') {
-          await window.ombAudio.ctx.suspend();
-          btnMasterPower.classList.remove('running');
-          btnPowerLabel.textContent = "STUDIO PAUSIERT";
-        } else if (window.ombAudio.ctx) {
-          await window.ombAudio.ctx.resume();
+          // Acquire microphone and populate device list
+          await window.ombAudio.startMicrophone(micDeviceSelect.value || null);
+          await populateMicDevices();
+
+          isMasterStarted = true;
           btnMasterPower.classList.add('running');
           btnPowerLabel.textContent = "STUDIO AKTIV";
+          requestAnimationFrame(renderLoop);
+        } else {
+          if (window.ombAudio.ctx && window.ombAudio.ctx.state === 'running') {
+            await window.ombAudio.ctx.suspend();
+            btnMasterPower.classList.remove('running');
+            btnPowerLabel.textContent = "STUDIO PAUSIERT";
+          } else if (window.ombAudio.ctx) {
+            await window.ombAudio.ctx.resume();
+            btnMasterPower.classList.add('running');
+            btnPowerLabel.textContent = "STUDIO AKTIV";
+          }
         }
+      } catch (err) {
+        console.error("Studio start error:", err);
+        alert("Studio Start: " + err.message);
       }
     });
 
@@ -491,15 +499,29 @@
     // Populate Mic Devices
     async function populateMicDevices() {
       try {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) return;
         const devices = await navigator.mediaDevices.enumerateDevices();
-        micDeviceSelect.innerHTML = '<option value="">Standard-Mikrofon</option>';
-        devices.filter(d => d.kind === 'audioinput').forEach(d => {
-          const opt = document.createElement('option');
-          opt.value = d.deviceId;
-          opt.textContent = d.label || `Mikrofon ${d.deviceId.slice(0, 6)}...`;
-          micDeviceSelect.appendChild(opt);
-        });
-      } catch(e) {}
+        const audioInputs = devices.filter(d => d.kind === 'audioinput');
+        if (audioInputs.length > 0) {
+          const currentVal = micDeviceSelect.value;
+          micDeviceSelect.innerHTML = '';
+          audioInputs.forEach((d, idx) => {
+            const opt = document.createElement('option');
+            opt.value = d.deviceId;
+            opt.textContent = d.label || `Mikrofon ${idx + 1} (${d.deviceId.slice(0, 6)}...)`;
+            if (d.deviceId === currentVal) opt.selected = true;
+            micDeviceSelect.appendChild(opt);
+          });
+        }
+      } catch(e) {
+        console.warn("populateMicDevices error:", e);
+      }
+    }
+
+    // Try initial enumeration if permission already cached
+    populateMicDevices();
+    if (navigator.mediaDevices && navigator.mediaDevices.addEventListener) {
+      navigator.mediaDevices.addEventListener('devicechange', populateMicDevices);
     }
 
     micDeviceSelect.addEventListener('change', () => {

@@ -227,42 +227,45 @@ class OpenMotorBridgeAudioEngine {
     }
   }
 
-  // Acoustic Chime played on studio activation (Triad C5 - E5 - G5)
+  // Acoustic Chime played on studio activation (Safe Web Audio trigger)
   playStartupChime() {
-    if (!this.ctx) return;
-    const now = this.ctx.currentTime;
-    [523.25, 659.25, 783.99].forEach((freq, i) => {
-      const osc = this.ctx.createOscillator();
-      const g = this.ctx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(freq, now + i * 0.08);
-      g.gain.setValueAtTime(0.001, now + i * 0.08);
-      g.gain.linearRampToValueAtTime(0.3, now + i * 0.08 + 0.02);
-      g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.22);
-      osc.connect(g);
-      g.connect(this.masterGain);
-      osc.start(now + i * 0.08);
-      osc.stop(now + i * 0.08 + 0.25);
-    });
+    if (!this.ctx || !this.masterGain) return;
+    try {
+      const now = this.ctx.currentTime;
+      [523.25, 659.25, 783.99].forEach((freq, i) => {
+        const osc = this.ctx.createOscillator();
+        const g = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        g.gain.value = 0.15;
+        osc.connect(g);
+        g.connect(this.masterGain);
+        osc.start(now + i * 0.09);
+        osc.stop(now + i * 0.09 + 0.16);
+      });
+    } catch(e) {
+      console.warn("Chime error:", e);
+    }
   }
 
   // Test Tone (440 Hz Sine Beep) for Output Verification
   async playTestTone() {
     await this.ensureRunning();
-    if (!this.ctx) return;
-    const now = this.ctx.currentTime;
-    const osc = this.ctx.createOscillator();
-    const g = this.ctx.createGain();
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(440, now);
-    g.gain.setValueAtTime(0.001, now);
-    g.gain.linearRampToValueAtTime(0.45, now + 0.02);
-    g.gain.setValueAtTime(0.45, now + 0.35);
-    g.gain.linearRampToValueAtTime(0.001, now + 0.45);
-    osc.connect(g);
-    g.connect(this.masterGain);
-    osc.start(now);
-    osc.stop(now + 0.48);
+    if (!this.ctx || !this.masterGain) return;
+    try {
+      const now = this.ctx.currentTime;
+      const osc = this.ctx.createOscillator();
+      const g = this.ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = 440;
+      g.gain.value = 0.25;
+      osc.connect(g);
+      g.connect(this.masterGain);
+      osc.start(now);
+      osc.stop(now + 0.45);
+    } catch(e) {
+      console.warn("Test tone error:", e);
+    }
   }
 
   // Request & Connect Live Headset Microphone
@@ -270,7 +273,9 @@ class OpenMotorBridgeAudioEngine {
     await this.ensureRunning();
 
     if (this.micStream) {
-      this.micStream.getTracks().forEach(t => t.stop());
+      try {
+        this.micStream.getTracks().forEach(t => t.stop());
+      } catch(e) {}
     }
 
     const constraints = {
@@ -286,13 +291,20 @@ class OpenMotorBridgeAudioEngine {
       this.micStream = await navigator.mediaDevices.getUserMedia(constraints);
       this.micSource = this.ctx.createMediaStreamSource(this.micStream);
       this.micSource.connect(this.micPreamp);
-      
-      // Ambient input also receives mic signal for real room transparency testing
       this.micSource.connect(this.ambientMicInputGain);
       return true;
     } catch (err) {
-      console.error("Failed to acquire microphone stream:", err);
-      return false;
+      console.warn("Could not acquire exact mic, falling back to default:", err);
+      try {
+        this.micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        this.micSource = this.ctx.createMediaStreamSource(this.micStream);
+        this.micSource.connect(this.micPreamp);
+        this.micSource.connect(this.ambientMicInputGain);
+        return true;
+      } catch (e2) {
+        console.error("Failed to acquire microphone stream:", e2);
+        return false;
+      }
     }
   }
 
