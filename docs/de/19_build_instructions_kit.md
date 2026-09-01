@@ -102,8 +102,8 @@ Alle Gehäuse und Kassetten wurden so konstruiert, dass sie **sowohl auf handels
 | **Gewindeeinsätze** | Messing M3 $\times 5{,}7\,\text{mm}$ (Ruthex RX-M3x5.7 / Tappex) | **4** | Werden mit dem Lötkolben in die Ecken der Unterwanne eingeschmolzen |
 | **Gehäuseschrauben** | Zylinderschraube DIN 912 Edelstahl V4A M3 $\times 40\,\text{mm}$ | **4** | Durchgehende 4-Eck-Verschraubung (Deckel $\rightarrow$ Zwischenboden $\rightarrow$ Unterwanne) |
 | **Platinenschrauben Main** | Zylinderschraube DIN 912 Edelstahl V4A M2.5 $\times 6\,\text{mm}$ | **4** | Fixierung der Hauptplatine auf den Unterwannen-Domen |
-| **Kassettendeckelschrauben**| Senkkopfschraube DIN 7991 Edelstahl V4A M2 $\times 6\,\text{mm}$ | **8** | Je 4x Schrauben zur Befestigung der Adaptereinsätze im Kassetten-Basisschlitten |
-| **Kassettenplatinenschrauben**| Zylinderschraube DIN 912 Edelstahl V4A M2 $\times 4\,\text{mm}$ | **8** | Je 4x Schrauben zur Befestigung der Kassetten-Carrier-PCBs im Schlittenboden |
+| **Kassettendeckelschrauben**| Senkkopfschraube DIN 7991 Edelstahl V4A M2 $\times 6\,\text{mm}$ | **12** | Je 4x Schrauben zur Befestigung der Adaptereinsätze/Deckel im Kassetten-Basisschlitten (3 Kassetten: 2x Intercom-Pods + 1x Heck-Transceiver) |
+| **Kassettenplatinenschrauben**| Zylinderschraube DIN 912 Edelstahl V4A M2 $\times 4\,\text{mm}$ | **12** | Je 4x Schrauben zur Befestigung der Kassetten-Carrier-PCBs / Transceiver-PCBs im Schlittenboden (3 Kassetten) |
 | **Schottwandschrauben Pod** | Senkkopfschraube DIN 7991 V4A M2 $\times 8\,\text{mm}$ | **6** | Je 2x Schrauben zur Schottwandfixierung pro Pod-Gehäuse |
 | **Auswerfer-Druckfedern** | Edelstahl V4A, $\varnothing_{\text{außen}} = 4{,}5\,\text{mm}$, $L_0 = 15\,\text{mm}$, $d = 0{,}4\,\text{mm}$ | **6** | Auto-Eject Mechanismus (je 2 Federn pro Pod-Schottwand) |
 | **Silentblöcke / Gummipuffer** | Gummipuffer Typ A (Außengewinde/Innengewinde M4, $\varnothing 15 \times 10\,\text{mm}$) | **4** | Schwingungsentkoppelte Montage der Zentralbox am Motorradrahmen |
@@ -244,7 +244,7 @@ pio run --target upload
 ### Selbsttest-Checkliste:
 1. [ ] **Labornetzteil:** $12{,}0\,\text{V}$ anlegen (Strombegrenzung $150\,\text{mA}$). Ruhestrom messen: Sollwert $= 45 \dots 75\,\text{mA}$.
 2. [ ] **Status-LED:** Blinkt nach dem Start grün (System bereit, Pufferakku lädt).
-3. [ ] **Web-Dashboard:** Im Browser (Chrome/Edge auf Smartphone oder PC) `https://schmidtmt.github.io/openmotorbridge/` öffnen, auf "Connect WebBLE" klicken und mit `OpenMotorBridge_v8` koppeln.
+3. [ ] **Web-Dashboard:** Im Browser (Chrome/Edge auf Smartphone oder PC) [`https://schmidtmt.github.io/openmotorbridge/`](https://schmidtmt.github.io/openmotorbridge/) oder direkt lokal [`webapp_pwa/index.html`](file:///Users/schmidtm/openMotorBridge/webapp_pwa/index.html) öffnen, auf "⚡ BLE Verbinden" klicken und mit `OpenMotorBridge_v8` koppeln.
 4. [ ] **Kassettenerkennung:** Kassetten in Pod 1, 2 und 3 einstecken. Im Dashboard muss sofort das entsprechende Profil (z. B. "Sena 50S Mesh", "Cardo Packtalk", "OMM Transceiver") mit Seriennummer angezeigt werden.
 5. [ ] **Audio-Check:** Headset koppeln, Musik abspielen $\rightarrow$ sauberes, glasklares Signal ohne Lichtmaschinen-Pfeifen oder Masseschleifen (dank 1500V Bourns Übertrager-Trennung).
 

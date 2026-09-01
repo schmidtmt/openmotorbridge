@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="0; url=webapp_pwa/">
+    <meta name="theme-color" content="#ff9f0a">
+    <title>OpenMotorBridge v8.0 - Web Gateway</title>
+    <style>
+        :root {
+            --bg: #0b0f19;
+            --surface: #131b2e;
+            --accent: #ff9f0a;
+            --accent-cyan: #06b6d4;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        body {
+            background: radial-gradient(circle at 50% 20%, #1e293b 0%, var(--bg) 80%);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+        .gateway-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            max-width: 520px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+        .logo-badge {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+        h1 { font-size: 1.6rem; font-weight: 800; margin-bottom: 0.5rem; }
+        p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.8rem; line-height: 1.5; }
+        .links-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+        }
+        .btn-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            padding: 0.9rem 1.2rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: transform 0.15s ease, opacity 0.15s ease;
+        }
+        .btn-link:hover { transform: translateY(-2px); opacity: 0.95; }
+        .btn-primary {
+            background: linear-gradient(135deg, #f59e0b, #ea580c);
+            color: #000;
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+        .footer-note {
+            margin-top: 1.5rem;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+    </style>
+    <script>
+        // Automatic immediate redirect to Companion PWA Dashboard
+        window.location.replace("webapp_pwa/");
+    </script>
+</head>
+<body>
+    <div class="gateway-card">
+        <div class="logo-badge">🏍️</div>
+        <h1>OpenMotorBridge v8.0</h1>
+        <p>Universelles Intercom Gateway, Live DSP Audio Engine & BGH-konformer Tour Logger.</p>
+        
+        <div class="links-grid">
+            <a href="webapp_pwa/" class="btn-link btn-primary">
+                ⚡ Companion PWA Dashboard öffnen
+            </a>
+            <a href="tools/audio_testbench/" class="btn-link btn-secondary">
+                🎧 Live Audio DSP Testbench öffnen
+            </a>
+        </div>
+        
+        <div class="footer-note">
+            Automatische Weiterleitung aktiv... Klicke oben, falls du nicht sofort weitergeleitet wirst.
+        </div>
+    </div>
+</body>
+</html>

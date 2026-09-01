@@ -104,8 +104,8 @@ All enclosures and cartridges are designed to be manufactured **both on standard
 | **Threaded Inserts** | Brass M3 $\times 5.7\,\text{mm}$ (Ruthex RX-M3x5.7 / Tappex) | **4** | Heat-set into the 4 corners of the lower case tub |
 | **Enclosure Clamping Screws** | Socket Head Cap Screw DIN 912 Stainless V4A M3 $\times 40\,\text{mm}$ | **4** | 4-corner through-bolt clamping (Lid $\rightarrow$ Mid Tray $\rightarrow$ Lower Case) |
 | **Main Board PCB Screws** | Socket Head Cap Screw DIN 912 Stainless V4A M2.5 $\times 6\,\text{mm}$ | **4** | PCB fastening onto lower tub vibration standoffs |
-| **Cartridge Insert Screws** | Countersunk Screw DIN 7991 Stainless V4A M2 $\times 6\,\text{mm}$ | **8** | 4x screws per cartridge to secure modular OEM top insert |
-| **Cartridge PCB Screws** | Socket Head Cap Screw DIN 912 Stainless V4A M2 $\times 4\,\text{mm}$ | **8** | 4x screws per cartridge to mount Carrier PCB inside base sled |
+| **Cartridge Insert Screws** | Countersunk Screw DIN 7991 Stainless V4A M2 $\times 6\,\text{mm}$ | **12** | 4x screws per cartridge to secure modular OEM top inserts (3 cartridges: 2x Intercom Pods + 1x Rear Transceiver) |
+| **Cartridge PCB Screws** | Socket Head Cap Screw DIN 912 Stainless V4A M2 $\times 4\,\text{mm}$ | **12** | 4x screws per cartridge to mount Carrier PCBs / Transceiver PCB inside base sled (3 cartridges) |
 | **Pod Bulkhead Screws** | Countersunk Screw DIN 7991 V4A M2 $\times 8\,\text{mm}$ | **6** | 2x screws per pod to secure internal bulkhead partition |
 | **Auto-Eject Compression Springs**| Stainless V4A, $\text{OD} = 4.5\,\text{mm}$, $L_0 = 15\,\text{mm}$, wire $d = 0.4\,\text{mm}$ | **6** | Auto-Eject mechanism (2 springs per pod bulkhead) |
 | **Anti-Vibration Silentblocks** | Rubber Buffer Type A (Male/Female M4, $\varnothing 15 \times 10\,\text{mm}$) | **4** | Decoupled chassis mounting of central main box |
@@ -242,7 +242,7 @@ pio run --target upload
 ### Commissioning Checklist:
 1. [ ] **Bench Power:** Apply $12.0\,\text{V}$ with $150\,\text{mA}$ current limit. Measure idle current: $45 \dots 75\,\text{mA}$.
 2. [ ] **Status LED:** Flashes green on boot (system initialized, backup battery charging).
-3. [ ] **Web Dashboard:** Open `https://schmidtmt.github.io/openmotorbridge/` in Chrome/Edge, click "Connect WebBLE", and pair with `OpenMotorBridge_v8`.
+3. [ ] **Web Dashboard:** Open [`https://schmidtmt.github.io/openmotorbridge/`](https://schmidtmt.github.io/openmotorbridge/) in Chrome/Edge (or locally [`webapp_pwa/index.html`](file:///Users/schmidtm/openMotorBridge/webapp_pwa/index.html)), click "⚡ Connect BLE", and pair with `OpenMotorBridge_v8`.
 4. [ ] **Cartridge Detection:** Insert cartridges into Pods 1, 2, and 3. The dashboard must immediately display the detected profile (e.g., "Sena 50S Mesh", "Cardo Packtalk", "OMM Transceiver") and 1-Wire serial number.
 5. [ ] **Audio Test:** Connect headset, play music $\rightarrow$ pristine audio without alternator whine or ground loop noise (isolated by 1500V Bourns transformers).
 
