@@ -37,6 +37,8 @@ nets = [
     (18, "NET_LED_R"),
     (19, "TP_BOOT"),
     (20, "TP_EN"),
+    (21, "LORA_RF_ANT"),
+    (22, "GNSS_RF_IN"),
 ]
 
 net_map = {name: num for num, name in nets}
@@ -44,13 +46,15 @@ net_map = {name: num for num, name in nets}
 # 2. Component Pin-to-Net Mapping
 component_pins = {
     # J1: 6-Pin Horizontal Connector
+    # Physically at rot=180: local pad 6 sits at Y=87.65 (mating Pod Base Kontakt 1 VCC)
+    # local pad 1 sits at Y=100.35 (mating Pod Base Kontakt 6 1-Wire ID)
     'J1': {
-        '1': 'POD3_VCC_5V',
-        '2': 'GND',
-        '3': 'POD3_UART_TX',
-        '4': 'POD3_UART_RX',
-        '5': 'GNSS_1PPS',
-        '6': 'POD3_1WIRE_ID',
+        '6': 'POD3_VCC_5V',    # Y=87.65 (Mates with Pod Base Kontakt 1 VCC)
+        '5': 'GND',            # Y=90.19 (Mates with Pod Base Kontakt 2 GND)
+        '4': 'POD3_UART_TX',   # Y=92.73 (Mates with Pod Base Kontakt 3 UART_TX)
+        '3': 'POD3_UART_RX',   # Y=95.27 (Mates with Pod Base Kontakt 4 UART_RX)
+        '2': 'GNSS_1PPS',      # Y=97.81 (Mates with Pod Base Kontakt 5 GNSS_1PPS)
+        '1': 'POD3_1WIRE_ID',  # Y=100.35 (Mates with Pod Base Kontakt 6 1-Wire ID)
     },
     # F1: 500mA PTC Fuse
     'F1': {
@@ -107,7 +111,7 @@ component_pins = {
         '8': 'VCC_3V3',
         '9': 'GND',
         '10': 'GND',
-        '11': 'GND',
+        '11': 'GNSS_RF_IN',
         '12': 'GND',
         '13': 'GND',
         '14': 'GND',
@@ -134,16 +138,24 @@ component_pins = {
         '14': 'LORA_SCK',
         '15': 'LORA_MOSI',
         '16': 'LORA_MISO',
-        '17': 'GND',
+        '17': 'LORA_RF_ANT',
         '18': 'VCC_3V3',
         '19': 'GND',
         '20': 'GND',
-        '21': 'GND',
+        '21': 'LORA_RF_ANT',
         '22': 'GND',
         '23': 'GND',
         '24': 'VCC_3V3',
         '25': 'GND', # EP
     },
+    # ANT1: Pulse_W3000 868MHz LoRa Ceramic Antenna
+    'ANT1': {'1': 'LORA_RF_ANT', '2': 'GND'},
+    # ANT2: Pulse_W3000 GNSS Ceramic Antenna
+    'ANT2': {'1': 'GNSS_RF_IN', '2': 'GND'},
+    # J2: LoRa 868 MHz U.FL Coaxial Connector
+    'J2': {'1': 'LORA_RF_ANT', '2': 'GND'},
+    # J3: GNSS U.FL Coaxial Connector
+    'J3': {'1': 'GNSS_RF_IN', '2': 'GND'},
     # C1: 10uF 3V3 Cap
     'C1': {'1': 'VCC_3V3', '2': 'GND'},
     # C2: 100nF ESP32 Cap
@@ -152,7 +164,7 @@ component_pins = {
     'C3': {'1': 'VCC_3V3', '2': 'GND'},
     # C4: 100nF LoRa Cap
     'C4': {'1': 'VCC_3V3', '2': 'GND'},
-    # H1..H4: M3 Mounting Holes
+    # H1..H4: M2 Mounting Holes
     'H1': {'1': 'GND'},
     'H2': {'1': 'GND'},
     'H3': {'1': 'GND'},
@@ -160,25 +172,32 @@ component_pins = {
 }
 
 # Footprint Specifications (library_path, ref, val, x, y, rot, layer, model_path)
+# Centerline Y = 94.0 mm, Outline X = 100.0..170.0, Y = 70.0..118.0 (70.0 x 48.0 mm)
+# J1 6-Pin Header rotated 180 deg: Pins point LEFT out of the board towards bulkhead socket!
+# At rot=180: Header origin at (102.50, 100.35) -> Pin 1 at Y=100.35, Pin 6 at Y=87.65, Pin Center = 94.00 mm!
 components = [
-    # J1: 6-Pin Horizontal leading connector
-    ("Connector_PinHeader_2.54mm.pretty/PinHeader_1x06_P2.54mm_Horizontal.kicad_mod", "J1", "6-Pin_OMM_Socket", 102.50, 87.50, 0, "F.Cu", "Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x06_P2.54mm_Horizontal.step"),
-    # Protection & Status
-    ("Resistor_SMD.pretty/R_1206_3216Metric.kicad_mod", "F1", "PTC_500mA", 109.00, 78.00, 90, "F.Cu", "Resistor_SMD.3dshapes/R_1206_3216Metric.step"),
-    ("LED_SMD.pretty/LED_0805_2012Metric.kicad_mod", "D1", "LED_Green_5V", 109.00, 97.00, 90, "F.Cu", "LED_SMD.3dshapes/LED_0805_2012Metric.step"),
-    ("Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod", "R1", "1.5k_LED_Resistor", 109.00, 93.00, 90, "F.Cu", "Resistor_SMD.3dshapes/R_0603_1608Metric.step"),
-    # Maxim DS2401 ID Chip
-    ("Package_TO_SOT_SMD.pretty/SOT-23.kicad_mod", "U4", "DS2401_1Wire_ID", 112.50, 87.50, 0, "F.Cu", "Package_TO_SOT_SMD.3dshapes/SOT-23.step"),
-    # u-blox MAX-M10S GNSS
-    ("RF_GPS.pretty/ublox_MAX.kicad_mod", "U2", "MAX-M10S_GNSS", 120.00, 77.00, 0, "F.Cu", "Package_DFN_QFN.3dshapes/QFN-24-1EP_4x4mm_P0.5mm_EP2.6x2.6mm.step"),
-    ("Capacitor_SMD.pretty/C_0603_1608Metric.kicad_mod", "C3", "100nF_GNSS", 113.50, 74.00, 0, "F.Cu", "Capacitor_SMD.3dshapes/C_0603_1608Metric.step"),
-    # Semtech SX1262 LoRa
-    ("Package_DFN_QFN.pretty/QFN-24-1EP_4x4mm_P0.5mm_EP2.6x2.6mm.kicad_mod", "U3", "SX1262_LoRa_+22dBm", 120.00, 98.00, 0, "F.Cu", "Package_DFN_QFN.3dshapes/QFN-24-1EP_4x4mm_P0.5mm_EP2.6x2.6mm.step"),
-    ("Capacitor_SMD.pretty/C_0603_1608Metric.kicad_mod", "C4", "100nF_LoRa", 113.50, 101.00, 0, "F.Cu", "Capacitor_SMD.3dshapes/C_0603_1608Metric.step"),
-    # ESP32-C3 RISC-V Mesh MCU
-    ("RF_Module.pretty/ESP32-C3-WROOM-02.kicad_mod", "U1", "ESP32-C3-WROOM-02", 135.00, 87.50, -90, "F.Cu", "RF_Module.3dshapes/ESP32-C3-WROOM-02.step"),
-    ("Capacitor_SMD.pretty/C_0805_2012Metric.kicad_mod", "C1", "10uF_3V3", 125.00, 85.00, 90, "F.Cu", "Capacitor_SMD.3dshapes/C_0805_2012Metric.step"),
-    ("Capacitor_SMD.pretty/C_0603_1608Metric.kicad_mod", "C2", "100nF_MCU", 125.00, 90.00, 90, "F.Cu", "Capacitor_SMD.3dshapes/C_0603_1608Metric.step"),
+    # J1: 6-Pin Horizontal connector pointing LEFT towards mating bulkhead socket
+    ("Connector_PinHeader_2.54mm.pretty/PinHeader_1x06_P2.54mm_Horizontal.kicad_mod", "J1", "6-Pin_OMM_Socket", 102.50, 100.35, 180, "F.Cu", "Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x06_P2.54mm_Horizontal.step"),
+    # Protection & Status (F1 near Pin 1 VCC at Y=87.65; D1/R1 5V power LED)
+    ("Resistor_SMD.pretty/R_1206_3216Metric.kicad_mod", "F1", "PTC_500mA", 106.75, 83.71, 90, "F.Cu", "Resistor_SMD.3dshapes/R_1206_3216Metric.step"),
+    ("LED_SMD.pretty/LED_0805_2012Metric.kicad_mod", "D1", "LED_Green_5V", 112.06, 72.50, 180, "F.Cu", "LED_SMD.3dshapes/LED_0805_2012Metric.step"),
+    ("Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod", "R1", "1.5k_LED_Resistor", 114.00, 77.83, 90, "F.Cu", "Resistor_SMD.3dshapes/R_0603_1608Metric.step"),
+    # Maxim DS2401 ID Chip (Directly adjacent to J1 Pin 6 1-Wire at Y=100.35)
+    ("Package_TO_SOT_SMD.pretty/SOT-23.kicad_mod", "U4", "DS2401_1Wire_ID", 112.50, 100.35, 0, "F.Cu", "Package_TO_SOT_SMD.3dshapes/SOT-23.step"),
+    # u-blox MAX-M10S GNSS Subsystem & Antennas (Top edge - U2 rotated 180 for direct RF/SPI alignment)
+    ("RF_GPS.pretty/ublox_MAX.kicad_mod", "U2", "MAX-M10S_GNSS", 124.00, 83.00, 180, "F.Cu", "Package_DFN_QFN.3dshapes/QFN-24-1EP_4x4mm_P0.5mm_EP2.6x2.6mm.step"),
+    ("Capacitor_SMD.pretty/C_0603_1608Metric.kicad_mod", "C3", "100nF_GNSS", 114.00, 83.53, 90, "F.Cu", "Capacitor_SMD.3dshapes/C_0603_1608Metric.step"),
+    ("Connector_Coaxial.pretty/U.FL_Hirose_U.FL-R-SMT-1_Vertical.kicad_mod", "J3", "GNSS_UFL", 124.00, 74.00, 0, "F.Cu", None),
+    ("RF_Antenna.pretty/Pulse_W3000.kicad_mod", "ANT2", "GNSS_Patch_Antenna", 136.00, 71.00, 180, "F.Cu", None),
+    # Semtech SX1262 LoRa Subsystem & Antennas (Bottom edge)
+    ("Package_DFN_QFN.pretty/QFN-24-1EP_4x4mm_P0.5mm_EP2.6x2.6mm.kicad_mod", "U3", "SX1262_LoRa_+22dBm", 124.00, 105.00, 0, "F.Cu", "Package_DFN_QFN.3dshapes/QFN-24-1EP_4x4mm_P0.5mm_EP2.6x2.6mm.step"),
+    ("Capacitor_SMD.pretty/C_0603_1608Metric.kicad_mod", "C4", "100nF_LoRa", 115.03, 104.75, 0, "F.Cu", "Capacitor_SMD.3dshapes/C_0603_1608Metric.step"),
+    ("Connector_Coaxial.pretty/U.FL_Hirose_U.FL-R-SMT-1_Vertical.kicad_mod", "J2", "LORA_UFL", 124.00, 114.50, 180, "F.Cu", None),
+    ("RF_Antenna.pretty/Pulse_W3000.kicad_mod", "ANT1", "868MHz_LoRa_Antenna", 136.00, 117.00, 0, "F.Cu", None),
+    # ESP32-C3 RISC-V Mesh MCU (Centered rear facing tail clearance)
+    ("RF_Module.pretty/ESP32-C3-WROOM-02.kicad_mod", "U1", "ESP32-C3-WROOM-02", 156.80, 94.39, -90, "F.Cu", "RF_Module.3dshapes/ESP32-C3-WROOM-02.step"),
+    ("Capacitor_SMD.pretty/C_0805_2012Metric.kicad_mod", "C1", "10uF_3V3", 109.50, 77.25, 90, "F.Cu", "Capacitor_SMD.3dshapes/C_0805_2012Metric.step"),
+    ("Capacitor_SMD.pretty/C_0603_1608Metric.kicad_mod", "C2", "100nF_MCU", 139.75, 76.47, 180, "F.Cu", "Capacitor_SMD.3dshapes/C_0603_1608Metric.step"),
     # 4 Corner M2 Mounting Holes (Matches 00_base_sled corner posts: Delta X = 62.0 mm, Delta Y = 42.0 mm)
     ("MountingHole.pretty/MountingHole_2.2mm_M2_Pad.kicad_mod", "H1", "M2_Mounting_Hole", 104.00, 73.00, 0, "F.Cu", None),
     ("MountingHole.pretty/MountingHole_2.2mm_M2_Pad.kicad_mod", "H2", "M2_Mounting_Hole", 166.00, 73.00, 0, "F.Cu", None),
@@ -186,19 +205,52 @@ components = [
     ("MountingHole.pretty/MountingHole_2.2mm_M2_Pad.kicad_mod", "H4", "M2_Mounting_Hole", 166.00, 115.00, 0, "F.Cu", None),
 ]
 
+def extract_sexpr(text, start_idx):
+    """Balanced S-expression extractor respecting nested parentheses and strings."""
+    depth = 0
+    in_quote = False
+    escape = False
+    for i in range(start_idx, len(text)):
+        c = text[i]
+        if escape:
+            escape = False
+            continue
+        if c == '\\':
+            escape = True
+            continue
+        if c == '"':
+            in_quote = not in_quote
+            continue
+        if not in_quote:
+            if c == '(':
+                depth += 1
+            elif c == ')':
+                depth -= 1
+                if depth == 0:
+                    return i + 1
+    return len(text)
+
 def load_and_transform_footprint(fp_rel_path, ref, val, x, y, rot, layer, model_path=None):
     full_path = os.path.join(kicad_fp_dir, fp_rel_path)
     with open(full_path, 'r') as f:
         mod_text = f.read()
 
-    # Replace (footprint "...") header
+    # 1. Strip (embedded_fonts ...) cleanly
+    mod_text = re.sub(r'\(embedded_fonts\s+[^\)]+\)', '', mod_text)
+
+    # 2. Replace (footprint "...") header
     fp_name = fp_rel_path.replace(".kicad_mod", "").replace("/", ":")
     mod_text = re.sub(r'\(footprint\s+"[^"]+"', f'(footprint "{fp_name}"\n\t\t(layer "{layer}")\n\t\t(uuid "f0000000-0000-0000-0000-{abs(hash(ref)) & 0xffffffffffff:012x}")\n\t\t(at {x:.2f} {y:.2f} {rot})', mod_text, count=1)
 
-    # Remove all existing properties cleanly
-    mod_text = re.sub(r'\(property\s+.*?\n\t\)', '', mod_text, flags=re.DOTALL)
-    
-    # Add clean hidden properties
+    # 3. Remove all existing properties at footprint level cleanly using balanced S-expressions
+    while True:
+        p_idx = mod_text.find('(property')
+        if p_idx == -1:
+            break
+        p_end = extract_sexpr(mod_text, p_idx)
+        mod_text = mod_text[:p_idx] + mod_text[p_end:]
+
+    # 4. Add clean Reference and Value properties
     new_props = f"""\t(property "Reference" "{ref}"
 \t\t(at 0 0 0)
 \t\t(layer "F.SilkS")
@@ -224,7 +276,6 @@ def load_and_transform_footprint(fp_rel_path, ref, val, x, y, rot, layer, model_
 \t\t)
 \t)"""
 
-    # Insert properties after the first line
     lines = mod_text.splitlines()
     header_idx = 1
     for idx, l in enumerate(lines):
@@ -234,43 +285,63 @@ def load_and_transform_footprint(fp_rel_path, ref, val, x, y, rot, layer, model_
     lines.insert(header_idx, new_props)
     mod_text = "\n".join(lines)
 
-    # Assign Net numbers to Pads
-    pin_assignments = component_pins.get(ref, {})
-    
-    def pad_sub(match):
-        pad_num = match.group(1)
-        pad_type = match.group(2)
-        pad_shape = match.group(3)
-        pad_rest = match.group(4)
-        
-        net_name = pin_assignments.get(pad_num, "")
-        net_idx = net_map.get(net_name, 0)
-        
-        # Remove any existing (net ...)
-        pad_rest_clean = re.sub(r'\(net\s+\d+\s+"[^"]*"\)', '', pad_rest).strip()
-        
-        if net_name:
-            net_clause = f' (net {net_idx} "{net_name}")'
-        else:
-            net_clause = ''
-            
-        return f'(pad "{pad_num}" {pad_type} {pad_shape}{net_clause} {pad_rest_clean})'
+    # 5. Remove existing models cleanly using balanced sexpr
+    while True:
+        m_idx = mod_text.find('(model')
+        if m_idx == -1:
+            break
+        m_end = extract_sexpr(mod_text, m_idx)
+        mod_text = mod_text[:m_idx] + mod_text[m_end:]
 
-    mod_text = re.sub(r'\(pad\s+"([^"]+)"\s+([^\s]+)\s+([^\s]+)(.*?)\)', pad_sub, mod_text, flags=re.DOTALL)
-    
-    # Attach 3D Model if specified
+    # 6. Assign Net numbers to Pads using balanced sexpr
+    pin_assignments = component_pins.get(ref, {})
+    new_parts = []
+    pos = 0
+    while True:
+        pad_idx = mod_text.find('(pad', pos)
+        if pad_idx == -1:
+            new_parts.append(mod_text[pos:])
+            break
+        new_parts.append(mod_text[pos:pad_idx])
+        pad_end = extract_sexpr(mod_text, pad_idx)
+        pad_sexpr = mod_text[pad_idx:pad_end]
+
+        m = re.match(r'\(pad\s+"([^"]+)"\s+([^\s]+)\s+([^\s\)]+)', pad_sexpr)
+        if m:
+            pad_num = m.group(1)
+            net_name = pin_assignments.get(pad_num, "")
+            net_idx = net_map.get(net_name, 0)
+
+            # Strip existing (net ...) inside pad
+            pad_clean = re.sub(r'\(net\s+\d+\s+"[^"]*"\)', '', pad_sexpr)
+            
+            # If footprint is rotated, ensure pad (at x y) includes rotation so pads rotate with footprint
+            if rot != 0:
+                pad_clean = re.sub(r'\(at\s+([^\s\)]+)\s+([^\s\)]+)\)', rf'(at \1 \2 {rot})', pad_clean)
+
+            # If net assigned, insert (net ...) right after shape
+            if net_name:
+                net_clause = f' (net {net_idx} "{net_name}")'
+                prefix_len = m.end()
+                pad_clean = pad_clean[:prefix_len] + net_clause + pad_clean[prefix_len:]
+            new_parts.append(pad_clean)
+        else:
+            new_parts.append(pad_sexpr)
+        pos = pad_end
+
+    mod_text = "".join(new_parts)
+
+    # 7. Attach 3D Model if specified right before last closing parenthesis
     if model_path:
-        # Remove existing models
-        mod_text = re.sub(r'\(model\s+.*?\n\t\)', '', mod_text, flags=re.DOTALL)
         full_model = f"{kicad_3d_dir}/{model_path}"
-        model_block = f"""\t\t(model "{full_model}"
+        model_block = f"""\n\t\t(model "{full_model}"
 \t\t\t(offset (xyz 0 0 0))
 \t\t\t(scale (xyz 1 1 1))
 \t\t\t(rotate (xyz 0 0 0))
-\t\t)"""
+\t\t)\n"""
         last_paren = mod_text.rfind(')')
-        mod_text = mod_text[:last_paren] + model_block + '\n\t)'
-        
+        mod_text = mod_text[:last_paren].rstrip() + model_block + '\t)'
+
     # Indent for inclusion in PCB
     indented = "\n".join(["\t" + line for line in mod_text.strip().splitlines()])
     return indented
@@ -295,16 +366,20 @@ def generate_edge_cuts():
 # Generate Silkscreen Labels
 def generate_silkscreen():
     labels = [
-        ("OpenMotorMesh Heck-Pod 3 v8.0", 125.0, 72.2, 0.85, 0.14, 0),
-        ("J1: 6-PIN OMM", 102.5, 96.5, 0.65, 0.11, 90),
-        ("F1: PTC", 109.0, 74.2, 0.60, 0.10, 0),
-        ("D1: 5V", 109.0, 100.8, 0.60, 0.10, 0),
-        ("U4: ID", 112.5, 90.8, 0.60, 0.10, 0),
-        ("U2: MAX-M10S GNSS", 120.0, 72.2, 0.65, 0.11, 0),
-        ("U3: SX1262 868MHz", 120.0, 102.8, 0.65, 0.11, 0),
-        ("U1: ESP32-C3 MESH", 135.0, 72.5, 0.70, 0.12, 0),
-        ("2.4GHz ANTENNA ZONE", 145.0, 87.5, 0.60, 0.10, 90),
-        ("▲ Pin 1", 101.0, 81.0, 0.60, 0.10, 0),
+        ("J3: GNSS U.FL", 124.0, 71.5, 0.55, 0.10, 0),
+        ("J2: LoRa U.FL", 124.0, 117.0, 0.55, 0.10, 0),
+        ("▲ Pin 1", 101.0, 87.65, 0.60, 0.10, 0),
+        ("F1: PTC", 109.0, 91.0, 0.60, 0.10, 0),
+        ("D1: 5V", 109.0, 77.0, 0.60, 0.10, 0),
+        ("U4: ID", 112.5, 97.0, 0.60, 0.10, 0),
+        ("2.4GHz ANTENNA ZONE", 158.0, 95.0, 0.60, 0.10, 90),
+        ("U2: MAX-M10S GNSS", 124.0, 89.0, 0.65, 0.11, 0),
+        ("U3: SX1262 LoRa", 124.0, 100.0, 0.65, 0.11, 0),
+        ("ANT1: LoRa Pulse W3000", 138.0, 114.5, 0.65, 0.11, 0),
+        ("ANT2: GNSS Pulse W3000", 138.2, 73.0, 0.65, 0.11, 0),
+        ("J1: 6-PIN OMM", 102.5, 94.0, 0.65, 0.11, 90),
+        ("U1: ESP32-C3 MESH", 148.2, 93.5, 0.70, 0.12, 270),
+        ("OpenMotorMesh Heck-Pod 3 v8.0 (70x48mm)", 146.5, 79.2, 0.85, 0.14, 0),
     ]
     lines = []
     for txt, x, y, sz, th, rot in labels:
@@ -333,8 +408,8 @@ pcb_header = f"""(kicad_pcb
 \t)
 \t(paper "A4")
 \t(title_block
-\t\t(title "OpenMotorBridge v8.0 - Rear Pod 3 OMM Transceiver (50x35mm 4-Layer)")
-\t\t(date "2026-08-25")
+\t\t(title "OpenMotorBridge v8.0 - Rear Pod 3 OMM Transceiver (70x48mm 4-Layer)")
+\t\t(date "2026-09-01")
 \t\t(rev "v8.0")
 \t\t(company "OpenMotorBridge Open Source Hardware")
 \t\t(comment 1 "u-blox MAX-M10S GNSS + Semtech SX1262 LoRa (+22dBm) + ESP32-C3 RISC-V")
