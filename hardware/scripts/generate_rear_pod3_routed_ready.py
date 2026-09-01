@@ -12,7 +12,7 @@ import re
 
 pcb_file = "hardware/kicad_rear_pod3/openmotorbridge_rear_pod3.kicad_pcb"
 kicad_fp_dir = "/Applications/KiCad/KiCad.app/Contents/SharedSupport/footprints"
-kicad_3d_dir = "${KICAD8_3DMODEL_DIR}"
+kicad_3d_dir = "${KICAD10_3DMODEL_DIR}"
 
 # 1. Netlist definition
 nets = [
@@ -188,13 +188,13 @@ components = [
     # u-blox MAX-M10S GNSS Subsystem & Antennas (Top edge - U2 rotated 180 for direct RF/SPI alignment)
     ("RF_GPS.pretty/ublox_MAX.kicad_mod", "U2", "MAX-M10S_GNSS", 124.00, 83.00, 180, "F.Cu", "Package_DFN_QFN.3dshapes/QFN-24-1EP_4x4mm_P0.5mm_EP2.6x2.6mm.step"),
     ("Capacitor_SMD.pretty/C_0603_1608Metric.kicad_mod", "C3", "100nF_GNSS", 114.00, 83.53, 90, "F.Cu", "Capacitor_SMD.3dshapes/C_0603_1608Metric.step"),
-    ("Connector_Coaxial.pretty/U.FL_Hirose_U.FL-R-SMT-1_Vertical.kicad_mod", "J3", "GNSS_UFL", 124.00, 74.00, 0, "F.Cu", None),
-    ("RF_Antenna.pretty/Pulse_W3000.kicad_mod", "ANT2", "GNSS_Patch_Antenna", 136.00, 71.00, 180, "F.Cu", None),
+    ("Connector_Coaxial.pretty/U.FL_Hirose_U.FL-R-SMT-1_Vertical.kicad_mod", "J3", "GNSS_UFL", 124.00, 74.00, 0, "F.Cu", "Connector_Coaxial.3dshapes/U.FL_Hirose_U.FL-R-SMT-1_Vertical.step"),
+    ("RF_Antenna.pretty/Pulse_W3000.kicad_mod", "ANT2", "GNSS_Patch_Antenna", 136.00, 71.00, 180, "F.Cu", "RF_Antenna.3dshapes/Pulse_W3000.step"),
     # Semtech SX1262 LoRa Subsystem & Antennas (Bottom edge)
     ("Package_DFN_QFN.pretty/QFN-24-1EP_4x4mm_P0.5mm_EP2.6x2.6mm.kicad_mod", "U3", "SX1262_LoRa_+22dBm", 124.00, 105.00, 0, "F.Cu", "Package_DFN_QFN.3dshapes/QFN-24-1EP_4x4mm_P0.5mm_EP2.6x2.6mm.step"),
     ("Capacitor_SMD.pretty/C_0603_1608Metric.kicad_mod", "C4", "100nF_LoRa", 115.03, 104.75, 0, "F.Cu", "Capacitor_SMD.3dshapes/C_0603_1608Metric.step"),
-    ("Connector_Coaxial.pretty/U.FL_Hirose_U.FL-R-SMT-1_Vertical.kicad_mod", "J2", "LORA_UFL", 124.00, 114.50, 180, "F.Cu", None),
-    ("RF_Antenna.pretty/Pulse_W3000.kicad_mod", "ANT1", "868MHz_LoRa_Antenna", 136.00, 117.00, 0, "F.Cu", None),
+    ("Connector_Coaxial.pretty/U.FL_Hirose_U.FL-R-SMT-1_Vertical.kicad_mod", "J2", "LORA_UFL", 124.00, 114.50, 180, "F.Cu", "Connector_Coaxial.3dshapes/U.FL_Hirose_U.FL-R-SMT-1_Vertical.step"),
+    ("RF_Antenna.pretty/Pulse_W3000.kicad_mod", "ANT1", "868MHz_LoRa_Antenna", 136.00, 117.00, 0, "F.Cu", "RF_Antenna.3dshapes/Pulse_W3000.step"),
     # ESP32-C3 RISC-V Mesh MCU (Centered rear facing tail clearance)
     ("RF_Module.pretty/ESP32-C3-WROOM-02.kicad_mod", "U1", "ESP32-C3-WROOM-02", 156.80, 94.39, -90, "F.Cu", "RF_Module.3dshapes/ESP32-C3-WROOM-02.step"),
     ("Capacitor_SMD.pretty/C_0805_2012Metric.kicad_mod", "C1", "10uF_3V3", 109.50, 77.25, 90, "F.Cu", "Capacitor_SMD.3dshapes/C_0805_2012Metric.step"),

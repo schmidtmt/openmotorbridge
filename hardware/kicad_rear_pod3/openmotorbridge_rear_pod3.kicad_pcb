@@ -459,7 +459,7 @@
 			(uuid "e0c3a4b8-7a6f-4496-9100-a22f06b586ea")
 		)
 		(embedded_fonts no)
-		(model "${KICAD8_3DMODEL_DIR}/Package_DFN_QFN.3dshapes/QFN-24-1EP_4x4mm_P0.5mm_EP2.6x2.6mm.step"
+		(model "${KICAD10_3DMODEL_DIR}/Package_DFN_QFN.3dshapes/QFN-24-1EP_4x4mm_P0.5mm_EP2.6x2.6mm.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -595,7 +595,7 @@
 			(uuid "8d39e0d6-1a77-488b-9b9d-6ffe8a1dbab3")
 		)
 		(embedded_fonts no)
-		(model "${KICAD8_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0603_1608Metric.step"
+		(model "${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0603_1608Metric.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -998,6 +998,18 @@
 			)
 		)
 		(embedded_fonts no)
+		(model "${KICAD10_3DMODEL_DIR}/RF_Antenna.3dshapes/Pulse_W3000.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
+
 	)
 	(footprint "Capacitor_SMD.pretty:C_0805_2012Metric"
 		(layer "F.Cu")
@@ -1123,7 +1135,7 @@
 			(uuid "e6109e12-84be-46ae-8a19-90adef53c671")
 		)
 		(embedded_fonts no)
-		(model "${KICAD8_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0805_2012Metric.step"
+		(model "${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0805_2012Metric.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -1733,7 +1745,7 @@
 			(uuid "e6e46d2a-6a75-41a4-ba22-74c38a143b3d")
 		)
 		(embedded_fonts no)
-		(model "${KICAD8_3DMODEL_DIR}/Package_DFN_QFN.3dshapes/QFN-24-1EP_4x4mm_P0.5mm_EP2.6x2.6mm.step"
+		(model "${KICAD10_3DMODEL_DIR}/Package_DFN_QFN.3dshapes/QFN-24-1EP_4x4mm_P0.5mm_EP2.6x2.6mm.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -2772,7 +2784,7 @@
 			(uuid "e8209252-f301-49d3-8ef4-060c900b8a25")
 		)
 		(embedded_fonts no)
-		(model "${KICAD8_3DMODEL_DIR}/LED_SMD.3dshapes/LED_0805_2012Metric.step"
+		(model "${KICAD10_3DMODEL_DIR}/LED_SMD.3dshapes/LED_0805_2012Metric.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -3140,6 +3152,18 @@
 			)
 		)
 		(embedded_fonts no)
+		(model "${KICAD10_3DMODEL_DIR}/Connector_Coaxial.3dshapes/U.FL_Hirose_U.FL-R-SMT-1_Vertical.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
+
 	)
 	(footprint "MountingHole.pretty:MountingHole_2.2mm_M2_Pad"
 		(layer "F.Cu")
@@ -3583,7 +3607,7 @@
 			(uuid "570b9701-1d84-4d67-857a-d5279940e2aa")
 		)
 		(embedded_fonts no)
-		(model "${KICAD8_3DMODEL_DIR}/Package_TO_SOT_SMD.3dshapes/SOT-23.step"
+		(model "${KICAD10_3DMODEL_DIR}/Package_TO_SOT_SMD.3dshapes/SOT-23.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -3951,6 +3975,18 @@
 			)
 		)
 		(embedded_fonts no)
+		(model "${KICAD10_3DMODEL_DIR}/Connector_Coaxial.3dshapes/U.FL_Hirose_U.FL-R-SMT-1_Vertical.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
+
 	)
 	(footprint "Capacitor_SMD.pretty:C_0603_1608Metric"
 		(layer "F.Cu")
@@ -4076,7 +4112,7 @@
 			(uuid "229683f6-8d41-472e-a4e6-61599657d9f9")
 		)
 		(embedded_fonts no)
-		(model "${KICAD8_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0603_1608Metric.step"
+		(model "${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0603_1608Metric.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -4212,7 +4248,7 @@
 			(uuid "df45e98c-e1b9-4d11-b615-15d816a95b69")
 		)
 		(embedded_fonts no)
-		(model "${KICAD8_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0603_1608Metric.step"
+		(model "${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0603_1608Metric.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -5143,7 +5179,7 @@
 			)
 		)
 		(embedded_fonts no)
-		(model "${KICAD8_3DMODEL_DIR}/RF_Module.3dshapes/ESP32-C3-WROOM-02.step"
+		(model "${KICAD10_3DMODEL_DIR}/RF_Module.3dshapes/ESP32-C3-WROOM-02.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -5279,7 +5315,7 @@
 			(uuid "5df3f16c-40ff-45d1-bb06-5360e032a28a")
 		)
 		(embedded_fonts no)
-		(model "${KICAD8_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_1206_3216Metric.step"
+		(model "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_1206_3216Metric.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -5682,6 +5718,18 @@
 			)
 		)
 		(embedded_fonts no)
+		(model "${KICAD10_3DMODEL_DIR}/RF_Antenna.3dshapes/Pulse_W3000.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
+
 	)
 	(footprint "MountingHole.pretty:MountingHole_2.2mm_M2_Pad"
 		(layer "F.Cu")
@@ -6005,7 +6053,7 @@
 			(uuid "b5c23866-5b97-4e8b-84aa-0ffebf5b9d54")
 		)
 		(embedded_fonts no)
-		(model "${KICAD8_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step"
+		(model "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step"
 			(offset
 				(xyz 0 0 0)
 			)
