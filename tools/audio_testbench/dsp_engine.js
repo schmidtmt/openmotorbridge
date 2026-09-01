@@ -184,8 +184,6 @@ class OpenMotorBridgeAudioEngine {
     this.engineAmbientGain.gain.value = 0.0; // Routed to Ambient Mic
 
     this.engineMasterGain.connect(this.engineHelmetGain);
-    this.engineHelmetGain.connect(this.masterGain);
-
     this.engineMasterGain.connect(this.engineAmbientGain);
     this.engineAmbientGain.connect(this.ambientSynthGain);
 
@@ -200,6 +198,7 @@ class OpenMotorBridgeAudioEngine {
     this.duckingGain.connect(this.masterGain);
     this.ambientGain.connect(this.masterGain);
     this.windFilter.connect(this.masterGain);
+    this.engineHelmetGain.connect(this.masterGain);
 
     this.masterGain.connect(this.masterAnalyser);
     this.masterAnalyser.connect(this.ctx.destination);
