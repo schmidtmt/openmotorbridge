@@ -223,4 +223,17 @@ Wenn ein Nutzer eine neue Kassetten-Trägerplatine mit fabrikneuem DS2401 Chip b
 4. **Persistentes Mapping:** Das Mapping `{"<UID>": "<profile_id>"}` wird dauerhaft im ESP32 LittleFS und im Browser gespeichert.
 5. **Vollautomatische Wiedererkennung:** Zukünftig wird diese physische Kassette an jedem beliebigen Pod-Steckplatz (Pod 1 oder Pod 2) sofort ohne Rückfrage als das zugewiesene Modell erkannt, parametrisiert und im DLE-Gateway eingerechnet.
 
+---
+
+### 7.1 Zero-Trust Hardware-Quarantäne (Fail-Safe Schutzabschaltung)
+
+> [!CAUTION]
+> **Elektronikschutz-Prinzip:** Solange eine neu gesteckte Kassetten-Hardware (DS2401 UID) keinem verifizierten Profil zugewiesen wurde, wird der entsprechende Pod-Steckplatz **strikt wie ein unvollständig oder fehlerhaft gesteckter Slot behandelt**:
+> 1. **5V VCC Power-Gate OFF (0,0 mA):** Der P-Kanal Lastschalter zum OEM-Cradle bleibt vollständig gesperrt. Das Intercom erhält keinerlei Betriebsspannung.
+> 2. **Audio DSP Mute (-96 dB):** Beide Audiokanäle (Eingang & Ausgang) des ES8388 Codecs sind software- und hardwareseitig stummgeschaltet, um Knacken, Rauschen oder Übersprechen zu verhindern.
+> 3. **Optokoppler hochohmig (OFF):** Die TLP222A Relais für PTT und Tasterauslösung bleiben geöffnet.
+> 4. **DLE Gateway-Bonus = 0:** Kein Einrechnen unbestätigter Hardware in den DLE-Score.
+> 
+> **Erst wenn der Nutzer in der WebApp das Profil bestätigt** (oder die UID bereits im Flash-Mapping hinterlegt ist), führt der Controller eine kontrollierte Soft-Start-Einschaltsequenz (50 ms Inrush-Limiting) durch und schaltet die Audiopegel frei.
+
 

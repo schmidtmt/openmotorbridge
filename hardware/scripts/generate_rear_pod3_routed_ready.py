@@ -179,11 +179,11 @@ components = [
     ("RF_Module.pretty/ESP32-C3-WROOM-02.kicad_mod", "U1", "ESP32-C3-WROOM-02", 135.00, 87.50, -90, "F.Cu", "RF_Module.3dshapes/ESP32-C3-WROOM-02.step"),
     ("Capacitor_SMD.pretty/C_0805_2012Metric.kicad_mod", "C1", "10uF_3V3", 125.00, 85.00, 90, "F.Cu", "Capacitor_SMD.3dshapes/C_0805_2012Metric.step"),
     ("Capacitor_SMD.pretty/C_0603_1608Metric.kicad_mod", "C2", "100nF_MCU", 125.00, 90.00, 90, "F.Cu", "Capacitor_SMD.3dshapes/C_0603_1608Metric.step"),
-    # 4 Corner M3 Mounting Holes
-    ("MountingHole.pretty/MountingHole_3.2mm_M3_Pad_Via.kicad_mod", "H1", "M3_Mounting_Hole", 103.50, 73.50, 0, "F.Cu", None),
-    ("MountingHole.pretty/MountingHole_3.2mm_M3_Pad_Via.kicad_mod", "H2", "M3_Mounting_Hole", 146.50, 73.50, 0, "F.Cu", None),
-    ("MountingHole.pretty/MountingHole_3.2mm_M3_Pad_Via.kicad_mod", "H3", "M3_Mounting_Hole", 103.50, 101.50, 0, "F.Cu", None),
-    ("MountingHole.pretty/MountingHole_3.2mm_M3_Pad_Via.kicad_mod", "H4", "M3_Mounting_Hole", 146.50, 101.50, 0, "F.Cu", None),
+    # 4 Corner M2 Mounting Holes (Matches 00_base_sled corner posts: Delta X = 62.0 mm, Delta Y = 42.0 mm)
+    ("MountingHole.pretty/MountingHole_2.2mm_M2_Pad.kicad_mod", "H1", "M2_Mounting_Hole", 104.00, 73.00, 0, "F.Cu", None),
+    ("MountingHole.pretty/MountingHole_2.2mm_M2_Pad.kicad_mod", "H2", "M2_Mounting_Hole", 166.00, 73.00, 0, "F.Cu", None),
+    ("MountingHole.pretty/MountingHole_2.2mm_M2_Pad.kicad_mod", "H3", "M2_Mounting_Hole", 104.00, 115.00, 0, "F.Cu", None),
+    ("MountingHole.pretty/MountingHole_2.2mm_M2_Pad.kicad_mod", "H4", "M2_Mounting_Hole", 166.00, 115.00, 0, "F.Cu", None),
 ]
 
 def load_and_transform_footprint(fp_rel_path, ref, val, x, y, rot, layer, model_path=None):
@@ -275,11 +275,11 @@ def load_and_transform_footprint(fp_rel_path, ref, val, x, y, rot, layer, model_
     indented = "\n".join(["\t" + line for line in mod_text.strip().splitlines()])
     return indented
 
-# Generate board outline (50.0 x 35.0 mm: 100.0..150.0, 70.0..105.0)
+# Generate board outline (70.0 x 48.0 mm: 100.0..170.0, 70.0..118.0)
 def generate_edge_cuts():
     r = 2.5
     x1, y1 = 100.0, 70.0
-    x2, y2 = 150.0, 105.0
+    x2, y2 = 170.0, 118.0
     lines = [
         f'\t(gr_line (start {x1+r:.2f} {y1:.2f}) (end {x2-r:.2f} {y1:.2f}) (stroke (width 0.15) (type solid)) (layer "Edge.Cuts") (uuid "e0000000-0000-0000-0000-000000000001"))',
         f'\t(gr_arc (start {x2-r:.2f} {y1:.2f}) (mid {x2-0.73:.2f} {y1+0.73:.2f}) (end {x2:.2f} {y1+r:.2f}) (stroke (width 0.15) (type solid)) (layer "Edge.Cuts") (uuid "e0000000-0000-0000-0000-000000000002"))',

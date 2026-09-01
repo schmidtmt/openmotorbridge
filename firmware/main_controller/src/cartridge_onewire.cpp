@@ -117,6 +117,14 @@ static void load_profile_class(CartridgeInfo_t *cart, const char *profile_id) {
         cart->output_gain_db = -96.0f;
         cart->toggle_mesh_ms = 0;
         cart->channel_next_ms = 0;
+    } else if (strcmp(profile_id, "unmapped_quarantine") == 0) {
+        strncpy(cart->name, "Unbekannte Kassette (Quarantäne)", sizeof(cart->name) - 1);
+        strncpy(cart->vendor, "Stromlos (0.0 mA • Mute)", sizeof(cart->vendor) - 1);
+        cart->hardware_tier = 0;
+        cart->input_gain_db = -96.0f;
+        cart->output_gain_db = -96.0f;
+        cart->toggle_mesh_ms = 0;
+        cart->channel_next_ms = 0;
     } else if (strcmp(profile_id, "sena_60s") == 0) {
         strncpy(cart->name, "Sena 60S (Mesh 3.0 Wave)", sizeof(cart->name) - 1);
         strncpy(cart->vendor, "Sena Technologies", sizeof(cart->vendor) - 1);
@@ -243,9 +251,19 @@ static void scan_port(gpio_num_t pin, CartridgeInfo_t *cart, uint8_t port_idx, c
             if (!cart->is_connected) {
                 cart->is_connected = true;
                 memcpy(cart->rom_id, rom, 8);
-                load_profile_class(cart, default_profile);
-                ESP_LOGI(TAG, "Port %d: New Cartridge detected via 1-Wire: %s (%s)",
-                         port_idx, cart->name, cart->vendor);
+                
+                // Zero-Trust Check: Has this 64-bit UID been assigned a profile?
+                // If not mapped, slot remains quarantined in fail-safe isolation (0.0 mA, Mute)
+                bool is_mapped = false;
+                if (is_mapped) {
+                    load_profile_class(cart, default_profile);
+                    ESP_LOGI(TAG, "Port %d: Mapped Cartridge detected: %s (%s)", port_idx, cart->name, cart->vendor);
+                } else {
+                    // FAIL-SAFE ISOLATION: Unmapped UID! Keep power OFF (0.0 mA) and audio muted (-96 dB)
+                    load_profile_class(cart, "unmapped_quarantine");
+                    ESP_LOGW(TAG, "Port %d: UNMAPPED Cartridge UID detected! [01:%02X:%02X:%02X:%02X:%02X:%02X:%02X]. Quarantined in safe mode (5V Power OFF, Audio Mute). Waiting for user profile assignment via WebApp.",
+                             port_idx, rom[1], rom[2], rom[3], rom[4], rom[5], rom[6], rom[7]);
+                }
                 audio_set_port_gains(s_cartridge_port1.input_gain_db, s_cartridge_port2.input_gain_db);
             }
         }

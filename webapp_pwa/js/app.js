@@ -70,6 +70,8 @@ const i18n = {
         btn_learn_uuid: 'UUID anlernen',
         uuid_modal_title: 'Neue Kassette erkannt!',
         detected_slot: 'Erkannter Steckplatz:',
+        uuid_quarantine_title: 'Hardware-Schutzabschaltung aktiv:',
+        uuid_quarantine_desc: 'Die 5V-Stromversorgung zum OEM-Adapter und alle Audio-Kanäle bleiben strikt stromlos (0,0 mA • Mute), bis du das Hardware-Profil zuweist.',
         uuid_assign_intro: 'Dieser Kassetten-Hardware wurde bisher noch kein Profil zugewiesen. Welches Intercom oder Funkgerät ist in dieser Kassette verbaut?',
         lbl_select_profile: 'Hardware-Profil auswählen:',
         btn_save_mapping: 'Profil zuweisen & speichern',
@@ -190,6 +192,8 @@ const i18n = {
         btn_learn_uuid: 'Learn UUID',
         uuid_modal_title: 'New Cartridge Detected!',
         detected_slot: 'Detected Slot:',
+        uuid_quarantine_title: 'Hardware Fail-Safe Isolation Active:',
+        uuid_quarantine_desc: '5V power supply to OEM cradle and all audio channels remain strictly disconnected (0.0 mA • Mute) until you assign the hardware profile.',
         uuid_assign_intro: 'This cartridge hardware has not been mapped to a profile yet. Which intercom or radio is installed in this cartridge?',
         lbl_select_profile: 'Select Hardware Profile:',
         btn_save_mapping: 'Assign & Save Profile',
@@ -671,6 +675,17 @@ const CARTRIDGE_PROFILES = {
         idle_ma: 0,
         dle_bonus: 0
     },
+    unmapped_quarantine: {
+        vendor: 'Nicht zugeordnet (0.0 mA • Quarantäne)',
+        vendor_en: 'Unassigned (0.0 mA • Quarantined)',
+        badge: 'badge_warning',
+        badge_class: 'badge-orange',
+        status: '⚠️ Schutzabschaltung: Stromlos (0.0 mA) • Mute',
+        status_en: '⚠️ Fail-Safe: Power OFF (0.0 mA) • Mute',
+        status_color: 'var(--accent-orange)',
+        idle_ma: 0,
+        dle_bonus: 0
+    },
     sena_60s: {
         vendor: 'Sena Technologies • Mesh 3.0 Wave',
         vendor_en: 'Sena Technologies • Mesh 3.0 Wave',
@@ -863,9 +878,16 @@ function openUuidDetectionModal(portNum, customUid = null) {
             ? (isDe ? 'Pod 1 (Rahmen links)' : 'Pod 1 (Frame Left)') 
             : (isDe ? 'Pod 2 (Rahmen rechts)' : 'Pod 2 (Frame Right)');
     }
+    const uid = customUid || (portNum === 1 ? '01:A2:3B:4C:5D:6E:7F:8A' : '01:B3:78:11:44:90:3A');
     if (detectedUuidVal) {
-        detectedUuidVal.textContent = customUid || (portNum === 1 ? '01:A2:3B:4C:5D:6E:7F:8A' : '01:B3:78:11:44:90:3A');
+        detectedUuidVal.textContent = uid;
     }
+    const uidEl = document.getElementById(`pod${portNum}-uid`);
+    if (uidEl) uidEl.textContent = uid;
+    
+    // Put slot immediately into quarantine safe state (0.0 mA, Mute) until user confirms profile!
+    updatePodDisplay(portNum, 'unmapped_quarantine');
+
     if (uuidDetectModal) uuidDetectModal.classList.add('active');
 }
 
