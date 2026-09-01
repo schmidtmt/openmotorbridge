@@ -233,6 +233,23 @@ Mock-route on the motorcycle frame with cord before cutting:
 
 ---
 
+### Step 7: Harley-Davidson Touring Special (Batwing / Sharknose USB Hub & Ottocast)
+For riders of Harley-Davidson Touring models (Street Glide, Road Glide, Ultra Limited, CVO with Boom! Box GTS or Skyline OS), the fairing is already opened to route pigtail 5 (CAN & Ambient Mic). This presents the perfect opportunity for the **stealth wireless CarPlay upgrade**:
+
+1. **2-Port USB 2.0 Data Hub in the Fairing:**
+   * Disconnect the original factory USB lead from the back of the Boom! Box GTS radio.
+   * Plug the input of a compact, vibration-resistant 2-port automotive USB hub into the radio's USB port.
+   * **Hub Port 1:** Connect to the factory extension cable leading to the right-side Jukebox glovebox (retaining wired phone charging, USB music sticks, and official dealer firmware updates).
+   * **Hub Port 2:** Connect to a wireless CarPlay/Android Auto adapter (e.g. *Ottocast U2-Air / Mini* or *CarlinKit 5.0*), secured firmly inside the fairing with 3M Dual-Lock heavy-duty fastener.
+2. **Glovebox $V_{\text{BUS}}$ Cutoff Switch:**
+   * Splice an IP65 miniature toggle or rocker switch into the red $+5\,\text{V}$ power wire ($V_{\text{BUS}}$) feeding Hub Port 2 (Ottocast).
+   * Mount the switch unobtrusively in the rear or side wall of the right glovebox (drill hole $\varnothing 6\,\text{mm}$ or $\varnothing 12\,\text{mm}$).
+   * **Practical Benefits:**
+     * **Switch ON:** Wireless Apple CarPlay connects automatically within seconds of turning on the ignition while your phone stays in your riding jacket.
+     * **Switch OFF:** Cuts power to the Ottocast when using the glovebox USB port for a wired connection (preventing USB host address conflicts) or when parked near a café/hotel to stop the motorcycle from capturing your phone's Wi-Fi.
+
+---
+
 ## 4. Software Flashing & Initial Test (Step-by-Step)
 
 ```bash

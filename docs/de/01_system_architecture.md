@@ -117,9 +117,24 @@ Die Verbindung aller Komponenten erfolgt über den zentralen HD26-Flansch an der
 ## 5. Integration in OEM-Infotainmentsysteme
 
 ### 5.1 Harley-Davidson Boom! Box GTS & Skyline OS
-* **WHIM-Emulation & Apple CarPlay / Android Auto:** 
-  OpenMotorBridge emuliert an den Audio-Schnittstellen die elektrische Impedanz eines aktiven OEM-Headsets. Dadurch schaltet das Harley-Davidson Boom! Box GTS Infotainment Apple CarPlay und Android Auto im Display frei, **ohne dass das proprietäre HD-WHIM-Modul ($> 350\,\text{€}$) installiert werden muss**.
+
+#### 5.1.1 WHIM-Emulation & Apple CarPlay / Android Auto Freischaltung
+* **Hintergrund:** Apple CarPlay setzt im Fahrzeug ein betriebsbereites Sprachmikrofon voraus. Harley-Davidson verriegelt CarPlay in der Boom! Box GTS Firmware standardmäßig und verlangt entweder das kabelgebundene 7-Pin DIN-Headset oder das proprietäre Bluetooth-Funkmodul **HD-WHIM** (*Wireless Headset Interface Module*, $> 350\,\text{€}$).
+* **Elektrische Impedanz-Emulation:** OpenMotorBridge emuliert an den Audio-Schnittstellen über ein präzises Widerstands- und Übertragernetzwerk die charakteristische elektrische Gleich- und Wechselstrom-Impedanz ($1{,}0 \dots 2{,}2\,\text{k}\Omega$) eines aktiven OEM-Mikrofons.
+* **Ergebnis:** Die Boom! Box GTS schaltet Apple CarPlay und Android Auto im 6,5"- bzw. 12,3"-Fahrzeugdisplay sofort frei – **ohne teures WHIM-Modul** und ohne unsichere Jumper-Stecker.
 * **Nahtloses Ducking:** Navigationsansagen der Boom! Box werden über den ES8388 Codec priorisiert und über die aktiven Intercom-Gespräche mit einstellbarem Ducking ($-12\,\text{dB}$) sanft eingeblendet.
+
+#### 5.1.2 Autarker 2-Port Fairing-USB-Hub & Ottocast Wireless-Adapter
+Um das Smartphone nicht bei jeder Fahrt im engen, sonnenerhitzten Handschuhfach an ein USB-Kabel anstecken zu müssen:
+* **Topologie in der Frontverkleidung (Batwing / Sharknose):** In die vom Radio kommende originale USB-Leitung wird hinter dem Tacho ein kompakter, vibrationsfester 2-Port USB 2.0 Datenhub eingeschleift:
+  * **Port 1 (Handschuhfach):** Führt wie gewohnt in das rechte Jukebox-Handschuhfach. Dient weiterhin für USB-Sticks mit Musik, kabelgebundenes Laden oder Werkstatt-Software-Updates der Boom! Box.
+  * **Port 2 (Verkleidung intern):** Verbleibt unsichtbar mit 3M Dual-Lock in der Verkleidung und speist einen drahtlosen CarPlay/Android Auto Adapter (z. B. *Ottocast U2-Air / Mini* oder *CarlinKit 5.0*).
+* **Der $V_{\text{BUS}}$-Trennschalter im Handschuhfach:**
+  * In die $+5\,\text{V}$ Versorgungsader ($V_{\text{BUS}}$) zu Port 2 (Ottocast) wird ein dezenter, spritzwassergeschützter Miniatur-Wippschalter im Handschuhfach gesetzt.
+  * **Drei unverzichtbare Funktionen des Schalters:**
+    1. **Kollisionsvermeidung:** Wird im Handschuhfach ein iPhone per Kabel oder ein USB-Stick für System-Updates eingesteckt, wird der Ottocast per Schalter stromlos geschaltet – so entstehen keine USB-Host-Adresskonflikte.
+    2. **WLAN-Freigabe bei Parken / Pause:** Steht das Motorrad im Carport, vor dem Café oder Hotel in Reichweite des Smartphones, verhindert das Ausschalten des Ottocast, dass das Handy dauerhaft seine WLAN- und Bluetooth-Verbindung an das parkende Motorrad verliert.
+    3. **Schneller Kaltstart:** Ermöglicht einen sofortigen Reset des Wireless-Adapters ohne Demontage der Verkleidung oder Abklemmen der Motorradbatterie.
 
 ### 5.2 BMW Motorrad ConnectedRide & CAN-Bus Integration
 * **Echtzeit-Telemetrie:** Über den integrierten TCAN334G CAN-Transceiver lauscht die Zentralbox im Listen-Only-Modus auf dem Fahrzeugbus und erfasst Raddrehzahlen, Schräglage und Blinkersignale.

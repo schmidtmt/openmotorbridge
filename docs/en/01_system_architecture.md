@@ -117,9 +117,24 @@ All system signals converge at the central HD26 flanged connector:
 ## 5. Integration into OEM Infotainment Systems
 
 ### 5.1 Harley-Davidson Boom! Box GTS & Skyline OS
-* **WHIM Emulation & Apple CarPlay / Android Auto:**
-  OpenMotorBridge emulates active OEM headset impedance networks. This unlocks Apple CarPlay and Android Auto on the Boom! Box display **without purchasing the proprietary HD WHIM module ($> \$350$)**.
+
+#### 5.1.1 WHIM Emulation & Apple CarPlay / Android Auto Unlocking
+* **Background:** Apple CarPlay strictly mandates an active speech microphone. Harley-Davidson locks CarPlay in factory Boom! Box GTS firmware unless either a wired 7-pin DIN headset or the proprietary **HD-WHIM** (*Wireless Headset Interface Module*, $> \$350$) is installed.
+* **Impedance Emulation:** OpenMotorBridge replicates the DC bias and AC impedance ($1.0 \dots 2.2\,\text{k}\Omega$) of an active OEM electret microphone via its isolated Bourns transformer frontend.
+* **Result:** The Boom! Box GTS unlocks Apple CarPlay and Android Auto on the 6.5" or 12.3" touchscreen immediately — **without requiring the \$350 WHIM module** or unreliable jumper bypass plugs.
 * **Seamless Audio Ducking:** Boom! Box navigation announcements are prioritized and smoothly blended over active intercom conversations with adjustable ducking ($-12\,\text{dB}$).
+
+#### 5.1.2 Discrete Fairing 2-Port USB Hub & Ottocast Wireless Adapter
+To eliminate the need to pull out and plug in a smartphone in the cramped, sun-heated glovebox every ride:
+* **Fairing Topology (Batwing / Sharknose):** Behind the speedometer cluster, a compact automotive-grade 2-port USB 2.0 data hub is looped into the factory head unit USB lead:
+  * **Port 1 (Glovebox):** Continues to the factory Jukebox glovebox for flash drives with music, wired charging, or official Boom! Box firmware updates.
+  * **Port 2 (Internal Fairing):** Secured invisibly with 3M Dual-Lock inside the fairing, powering a wireless CarPlay/Android Auto adapter (e.g. *Ottocast U2-Air / Mini* or *CarlinKit 5.0*).
+* **The Glovebox $V_{\text{BUS}}$ Cutoff Switch:**
+  * A discrete, IP65 rocker switch in the glovebox breaks the $+5\,\text{V}$ power wire ($V_{\text{BUS}}$) feeding Port 2 (Ottocast).
+  * **Three Essential Functions:**
+    1. **Collision Avoidance:** If a phone or USB flash drive is connected in the glovebox for system updates, flipping the switch disconnects the Ottocast, avoiding USB host address conflicts.
+    2. **Wi-Fi Release when Parked:** When the motorcycle is parked near a café, hotel room, or carport within Bluetooth range, switching off the Ottocast prevents the bike from continuously hijacking the phone's Wi-Fi and mobile data connection.
+    3. **Instant Hard Reboot:** Enables a rapid cold power cycle of the wireless adapter without taking off the fairing or disconnecting the main motorcycle battery.
 
 ### 5.2 BMW Motorrad ConnectedRide & CAN-Bus Integration
 * **Real-time Telemetry:** Via the TCAN334G transceiver in listen-only mode, the bridge captures wheel speeds, lean angles, and turn indicators.

@@ -91,3 +91,20 @@ To protect rider hearing during extreme acoustic events (sirens, horns in tunnel
 1. **Analog Diode Peak Clamping:** Fast Schottky clamp diodes at the ES8388 `LIN2` input limit voltage ($V_{\text{in,max}} \le 1.0\,\text{V}_{\text{RMS}}$).
 2. **ES8388 Hardware ALC (Automatic Level Control):** Dynamic compression with $5\,\text{ms}$ attack and $200\,\text{ms}$ decay to a safe $-6\,\text{dBFS}$ target.
 3. **DSP Lookahead Brickwall Limiter:** A $1\,\text{ms}$ soft-knee lookahead limiter on Core 1 guarantees zero clipping above $0\,\text{dBFS}$.
+
+---
+
+## 8. Harley-Davidson Boom! Box GTS WHIM Microphone Impedance Emulation
+
+To unlock Apple CarPlay on the Boom! Box GTS infotainment system without purchasing the proprietary HD-WHIM module ($> \$350$):
+
+### 8.1 OEM Microphone Detection Mechanism
+During boot, the Boom! Box GTS samples its 7-pin audio connector (or internal WHIM harness) for an active voice microphone:
+1. **DC Bias Check:** The head unit applies a DC bias voltage ($V_{\text{MIC\_BIAS}} \approx 8 \dots 10\,\text{V}$) via an internal pull-up resistor.
+2. **Impedance Measurement:** If open-circuit (no headset plugged in), CarPlay startup is blocked with *"No headset connected"*.
+3. **Detection Window:** An active headset is verified when load impedance falls within $1.0 \dots 2.2\,\text{k}\Omega$ and audio feedback is measurable.
+
+### 8.2 Circuit Implementation in OpenMotorBridge
+* **Isolated Impedance Matching:** The primary side of the Bourns LM-NP-1001 transformer is coupled to the Boom! Box microphone pin via an RC network ($R_{\text{BIAS}} = 1.5\,\text{k}\Omega$ metal film $1\%$, $C = 10\,\mu\text{F}$ tantalum).
+* **Signal Pass-Through:** Outgoing speech (rider headset via Sena/Cardo or front ambient mic) is cleanly modulated into the Boom! Box microphone input, enabling Siri voice navigation and voice commands at highway speeds.
+* **Advantage:** The Boom! Box continuously detects a legitimate OEM headset. Apple CarPlay starts immediately upon ignition without requiring manual jumper plugs or fragile DIY resistors.

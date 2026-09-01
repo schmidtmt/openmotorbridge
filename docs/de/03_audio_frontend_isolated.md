@@ -91,3 +91,20 @@ Um das Gehör des Fahrers bei extremen Schallereignissen (z. B. Martinshorn, Hup
 1. **Analoger Dioden-Spitzenwertbegrenzer:** Dem ES8388 ADC-Eingang `LIN2` ist ein schneller Schottky-Klemmdioden-Limiter vorgeschaltet ($V_{\text{in,max}} \le 1{,}0\,\text{V}_{\text{RMS}}$).
 2. **ES8388 Hardware-ALC (Automatic Level Control):** Der integrierte Hardware-Kompressor regelt den Eingangspegel dynamisch mit einer Attack-Zeit von $5\,\text{ms}$ und Decay von $200\,\text{ms}$ auf ein sicheres Target von $-6\,\text{dBFS}$.
 3. **DSP Lookahead Brickwall-Limiter:** Auf Core 1 verhindert ein $1\,\text{ms}$ Lookahead Peak Limiter mit Soft-Knee jegliches Übersteuern über $0\,\text{dBFS}$.
+
+---
+
+## 8. Harley-Davidson Boom! Box GTS WHIM-Mikrofon-Impedanz-Emulation
+
+Zur Freischaltung von Apple CarPlay in der Boom! Box GTS Infotainment-Headunit ohne das proprietäre HD-WHIM-Modul ($> 350\,\text{€}$):
+
+### 8.1 Funktionsweise der OEM-Mikrofonerkennung
+Die Boom! Box GTS tastet beim Hochfahren über ihren 7-Pin Audioanschluss (bzw. den internen WHIM-Kabelbaum) das Vorhandensein eines Sprachmikrofons ab:
+1. **DC-Prüfung:** Das Radio legt eine Gleichspannung ($V_{\text{MIC\_BIAS}} \approx 8\dots 10\,\text{V}$) über einen internen Vorwiderstand an.
+2. **Impedanzmessung:** Fließt kein Strom (Leerlauf bei fehlendem Headset), verweigert Apple CarPlay den Start mit der Meldung *"No headset connected"*.
+3. **Erkennungsfenster:** Ein aktives Headset-Mikrofon wird erkannt, wenn der Abschlusswiderstand im Bereich $1{,}0\dots 2{,}2\,\text{k}\Omega$ liegt und eine Signalrückmeldung messbar ist.
+
+### 8.2 Schaltungstechnische Lösung in OpenMotorBridge
+* **Galvanisch getrennte Impedanzanpassung:** Die Primärseite des Bourns LM-NP-1001 Übertragers ist über ein RC-Dämpfungsglied ($R_{\text{BIAS}} = 1{,}5\,\text{k}\Omega$ Metallfilm $1\,\%$, $C = 10\,\mu\text{F}$ Tantal) an den Headset-Mikrofon-Pin der Boom! Box gekoppelt.
+* **Signalrückführung:** Ausgehende Sprache (Fahrer-Headset via Sena/Cardo oder Front-Ambient-Mic) wird transparent in den Boom! Box Mikrofoneingang moduliert. Dadurch versteht Siri und die Harley-Sprachsteuerung Navigationsziele fehlerfrei bei voller Fahrt.
+* **Vorteil:** Die Boom! Box erkennt dauerhaft ein vollwertiges OEM-Headset. Apple CarPlay startet ab Zündung sofort ohne lästige Jumper oder fehleranfällige Bastelwiderstände.

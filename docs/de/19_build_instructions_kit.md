@@ -235,6 +235,23 @@ Die Peitschen vor dem Schneiden probeweise mit einer Schnur am Motorradrahmen ve
 
 ---
 
+### Schritt 7: Harley-Davidson Touring Spezial (Batwing / Sharknose USB-Hub & Ottocast)
+Für Fahrer von Harley-Davidson Touring Modellen (Street Glide, Road Glide, Ultra Limited, CVO mit Boom! Box GTS oder Skyline OS) wird die Verkleidung für die Verlegung des M8 4-Pin Front-Zweigs (CAN & Ambient-Mic) geöffnet. Dabei bietet sich die perfekte Gelegenheit für das **autarke Wireless-CarPlay-Upgrade**:
+
+1. **2-Port USB 2.0 Daten-Hub in der Verkleidung:**
+   * Die vom Radio (Boom! Box GTS Rückseite) kommende originale USB-Leitung abziehen.
+   * Den Eingang des kompakten 2-Port USB-Hubs an die Radio-USB-Buchse anstecken.
+   * **Hub-Port 1:** Mit dem originalen Verlängerungskabel verbinden, das ins rechte Jukebox-Handschuhfach führt (bleibt für USB-Sticks mit Musik, kabelgebundenes Laden oder Werkstatt-Updates erhalten).
+   * **Hub-Port 2:** An einen Wireless CarPlay/Android Auto Adapter (z. B. *Ottocast U2-Air / Mini* oder *CarlinKit 5.0*) anschließen und vibrationssicher mit 3M Dual-Lock Klettband an der Innenwand der Verkleidung befestigen.
+2. **$V_{\text{BUS}}$-Trennschalter im Handschuhfach montieren:**
+   * In die rote $+5\,\text{V}$ Versorgungsader ($V_{\text{BUS}}$) der Zuleitung zu Hub-Port 2 (Ottocast) einen kleinen, spritzwassergeschützten Miniatur-Kipp- oder Wippschalter einschleifen.
+   * Den Schalter unauffällig an der Rück- oder Seitenwand des rechten Handschuhfachs montieren (Bohrung $\varnothing 6\,\text{mm}$ oder $\varnothing 12\,\text{mm}$).
+   * **Nutzen in der Praxis:** 
+     * **Schalter EIN:** Drahtloses Apple CarPlay verbindet sich beim Einschalten der Zündung automatisch in Sekunden mit dem Smartphone in der Jackentasche.
+     * **Schalter AUS:** Trennt den Ottocast komplett vom Strom, falls man das Handschuhfach per Kabel nutzen möchte (verhindert USB-Konflikte) oder das Motorrad vor einem Café/Hotel steht und das Smartphone-WLAN nicht vom parkenden Motorrad gekapert werden soll.
+
+---
+
 ## 4. Erstinbetriebnahme & Software-Flash (Schritt-für-Schritt)
 
 ```bash
