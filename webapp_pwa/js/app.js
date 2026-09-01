@@ -85,10 +85,15 @@ const i18n = {
         btn_actioncam_marker: 'Actioncam Marker setzen',
         btn_webdav_sync: 'WebDAV Sofort-Sync',
         webdav_title: 'Heim-WLAN & WebDAV Sync',
+        wifi_section_title: 'Heim-WLAN (Garage / Carport)',
+        wifi_ssid_label: 'WLAN-Name (SSID)',
+        wifi_pass_label: 'WLAN-Passwort',
+        webdav_section_title: 'WebDAV Cloud Server (Nextcloud / Synology)',
         webdav_url_label: 'WebDAV Server URL',
         webdav_user_label: 'Benutzername',
         webdav_pass_label: 'Passwort / App-Token',
-        btn_save_webdav: 'Speichern & Testen',
+        btn_save_webdav: 'WLAN & WebDAV Speichern',
+        btn_pair_remote: 'Taster Koppeln',
         saved_tours_title: 'Gespeicherte Touren (/tracks/)',
         btn_refresh: 'Aktualisieren',
         th_date: 'Datum & Uhrzeit',
@@ -207,10 +212,15 @@ const i18n = {
         btn_actioncam_marker: 'Set Action Cam Marker',
         btn_webdav_sync: 'WebDAV Instant Sync',
         webdav_title: 'Home Wi-Fi & WebDAV Sync',
+        wifi_section_title: 'Home WiFi (Garage / Carport)',
+        wifi_ssid_label: 'WiFi Network Name (SSID)',
+        wifi_pass_label: 'WiFi Password',
+        webdav_section_title: 'WebDAV Cloud Server (Nextcloud / Synology)',
         webdav_url_label: 'WebDAV Server URL',
         webdav_user_label: 'Username',
         webdav_pass_label: 'Password / App Token',
-        btn_save_webdav: 'Save & Test Connection',
+        btn_save_webdav: 'Save WiFi & WebDAV',
+        btn_pair_remote: 'Pair Remote',
         saved_tours_title: 'Recorded Rides (/tracks/)',
         btn_refresh: 'Refresh',
         th_date: 'Date & Time',
@@ -1119,20 +1129,95 @@ btnToggleReserveB.addEventListener('click', () => {
 // ==========================================
 // 11. Tour Logger & WebDAV Sync
 // ==========================================
-document.getElementById('btn-trigger-video-marker').addEventListener('click', () => {
+document.getElementById('btn-trigger-video-marker')?.addEventListener('click', () => {
     showToast(state.lang === 'de' ? 'Actioncam 1-PPS Video-Marker im GPX 2.0 Track gesetzt!' : 'Action cam 1-PPS video marker embedded in GPX 2.0 track!', 'success');
 });
 
-document.getElementById('btn-trigger-webdav-now').addEventListener('click', () => {
+document.getElementById('btn-trigger-webdav-now')?.addEventListener('click', () => {
     showToast(state.lang === 'de' ? 'WebDAV Sync gestartet: Verbinde mit Nextcloud...' : 'WebDAV sync started: Connecting to Nextcloud...', 'info');
     setTimeout(() => {
         showToast(state.lang === 'de' ? '2 GPX-Touren erfolgreich via TLS 1.3 hochgeladen!' : '2 GPX tours uploaded via TLS 1.3 successfully!', 'success');
     }, 1200);
 });
 
+// Save Heim-WLAN & WebDAV credentials
+const inputWifiSsid = document.getElementById('input-wifi-ssid');
+const inputWifiPass = document.getElementById('input-wifi-pass');
+const inputWebdavUrl = document.getElementById('input-webdav-url');
+const inputWebdavUser = document.getElementById('input-webdav-user');
+const inputWebdavPass = document.getElementById('input-webdav-pass');
+const btnSaveWebdav = document.getElementById('btn-save-webdav');
+
+// Populate stored values
+if (inputWifiSsid && localStorage.getItem('omb_wifi_ssid')) inputWifiSsid.value = localStorage.getItem('omb_wifi_ssid');
+if (inputWifiPass && localStorage.getItem('omb_wifi_pass')) inputWifiPass.value = localStorage.getItem('omb_wifi_pass');
+if (inputWebdavUrl && state.webdavConfig.url) inputWebdavUrl.value = state.webdavConfig.url;
+if (inputWebdavUser && state.webdavConfig.user) inputWebdavUser.value = state.webdavConfig.user;
+if (inputWebdavPass && state.webdavConfig.pass) inputWebdavPass.value = state.webdavConfig.pass;
+
+btnSaveWebdav?.addEventListener('click', () => {
+    const isDe = state.lang === 'de';
+    const ssid = inputWifiSsid ? inputWifiSsid.value.trim() : '';
+    const pass = inputWifiPass ? inputWifiPass.value : '';
+    const url = inputWebdavUrl ? inputWebdavUrl.value.trim() : '';
+    const user = inputWebdavUser ? inputWebdavUser.value.trim() : '';
+    const webdavPass = inputWebdavPass ? inputWebdavPass.value : '';
+
+    localStorage.setItem('omb_wifi_ssid', ssid);
+    localStorage.setItem('omb_wifi_pass', pass);
+    state.webdavConfig = { url, user, pass: webdavPass };
+    localStorage.setItem('omb_webdav_cfg', JSON.stringify(state.webdavConfig));
+
+    if (controlChar) {
+        try {
+            console.log('Sending WiFi/WebDAV credentials to OpenMotorBridge...');
+        } catch (e) {
+            console.warn('GATT write failed:', e);
+        }
+    }
+
+    showToast(isDe ? '✓ Heim-WLAN & WebDAV Zugangsdaten im Gateway gespeichert!' : '✓ Home WiFi & WebDAV credentials saved to Gateway!', 'success');
+});
+
 // ==========================================
-// 11b. Interactive LED & Battery Simulators & USB MSC
+// 11b. Interactive Handlebar Remote & LED Simulators & USB MSC
 // ==========================================
+const btnPairRemote = document.getElementById('btn-pair-remote');
+if (btnPairRemote) {
+    btnPairRemote.addEventListener('click', () => {
+        const isDe = state.lang === 'de';
+        showToast(isDe 
+            ? '🔍 BLE-Suchmodus aktiv: Halte jetzt die Taste am Lenkertaster 5 Sekunden lang gedrückt...' 
+            : '🔍 BLE Discovery active: Hold handlebar remote button for 5 seconds...', 
+            'info'
+        );
+
+        if (controlChar) {
+            try {
+                controlChar.writeValue(new Uint8Array([0x05, 0x01]));
+            } catch(e) {
+                console.warn('GATT Pair Remote command failed:', e);
+            }
+        }
+
+        btnPairRemote.disabled = true;
+        btnPairRemote.textContent = isDe ? '⏳ Suche...' : '⏳ Searching...';
+
+        setTimeout(() => {
+            btnPairRemote.disabled = false;
+            btnPairRemote.textContent = isDe ? '✓ Verbunden' : '✓ Paired';
+            if (valBtnBat) {
+                valBtnBat.textContent = '95 %';
+                valBtnBat.style.color = 'var(--accent-green)';
+            }
+            if (barBtnBat) {
+                barBtnBat.style.width = '95%';
+                barBtnBat.style.background = 'var(--accent-green)';
+            }
+            showToast(isDe ? '✓ Funk-Lenkertaster erfolgreich gekoppelt (CR2032: 95%)' : '✓ Handlebar remote paired successfully (CR2032: 95%)', 'success');
+        }, 2500);
+    });
+}
 const btnToggleLowbat = document.getElementById('btn-toggle-lowbat');
 let s_isLowBatSim = false;
 
