@@ -689,22 +689,22 @@ class OpenMotorBridgeAudioEngine {
   // Motorcycle Transmission & Dynamic RPM Model (Engine-Specific Gearing)
   getEngineState(kmh) {
     if (this.engineType === 'V_TWIN') {
-      // V-Twin Cruiser / Big-Bore: Low-RPM Torque Monster (Early Shifting, Low Redline)
+      // V-Twin Cruiser / Big-Bore: Low-RPM Torque Monster (Early Cruising Gearing)
       if (kmh < 1) return { gear: 'N', rpm: 850 };
       const gears = [
-        { maxKmh: 22, gear: 1, baseRpm: 880, slope: 70 },    // 1st: 880 -> 2420 RPM
-        { maxKmh: 42, gear: 2, baseRpm: 1500, slope: 55 },   // 2nd: 1500 -> 2600 RPM
-        { maxKmh: 68, gear: 3, baseRpm: 1650, slope: 44 },   // 3rd: 1650 -> 2794 RPM
-        { maxKmh: 95, gear: 4, baseRpm: 1850, slope: 37 },   // 4th: 1850 -> 2849 RPM
-        { maxKmh: 122, gear: 5, baseRpm: 2000, slope: 31 },  // 5th: 2000 -> 2837 RPM
-        { maxKmh: 200, gear: 6, baseRpm: 2150, slope: 22 }   // 6th (Overdrive): 100 km/h ~2200 RPM, 130 km/h ~2550 RPM
+        { maxKmh: 18, gear: 1, baseRpm: 850, slope: 75 },    // 1st: 850 -> 2200 RPM (rolls off)
+        { maxKmh: 32, gear: 2, baseRpm: 1400, slope: 55 },   // 2nd: 1400 -> 2170 RPM (30-zone)
+        { maxKmh: 46, gear: 3, baseRpm: 1550, slope: 45 },   // 3rd: 1550 -> 2180 RPM
+        { maxKmh: 68, gear: 4, baseRpm: 1950, slope: 28 },   // 4th: 50 km/h is 2062 RPM! (City cruising in 4th)
+        { maxKmh: 92, gear: 5, baseRpm: 1950, slope: 24 },   // 5th: 70 km/h is 2000 RPM, 80 km/h is 2240 RPM
+        { maxKmh: 200, gear: 6, baseRpm: 2000, slope: 18 }   // 6th (Overdrive): 100 km/h ~2140 RPM, 130 km/h ~2680 RPM
       ];
       let cur = gears[gears.length - 1];
       for (let g of gears) {
         if (kmh <= g.maxKmh) { cur = g; break; }
       }
       const minK = cur.gear === 1 ? 0 : gears[cur.gear - 2].maxKmh;
-      const rpm = Math.min(5000, Math.round(cur.baseRpm + (kmh - minK) * cur.slope));
+      const rpm = Math.min(4800, Math.round(cur.baseRpm + (kmh - minK) * cur.slope));
       return { gear: cur.gear, rpm: rpm };
 
     } else if (this.engineType === 'BOXER_TWIN') {
