@@ -28,12 +28,12 @@ module poka_yoke_cross_section_demo() {
 
     // 2. Correctly Inserted Cartridge Sled (Vibrant Royal Blue / Orange)
     intersection() {
-        translate([23.0, 3.0, 2.5]) {
+        translate([POD_BULKHEAD_X + 1.0, (POD_OUTER_W - CARTRIDGE_BASE_W)/2.0, POD_WALL]) {
             color("dodgerblue", 0.95)
                 cartridge_base_sled(
                     sled_l = CARTRIDGE_BASE_L,
                     sled_w = CARTRIDGE_BASE_W,
-                    sled_h = 18.0,
+                    sled_h = CARTRIDGE_BASE_H,
                     wall   = 2.5
                 );
         }
@@ -42,13 +42,13 @@ module poka_yoke_cross_section_demo() {
     }
 
     // 3. Highlight Markers / Dimension Indicators for Asymmetrical Rail Heights
-    // Left Groove Indicator Pin (Z = 8.2 mm, Bright Crimson)
+    // Left Groove Indicator Pin (Bright Crimson)
     color("crimson")
         translate([CUT_X - 1.0, -1.5, POD_GROOVE_LEFT_Z])
             rotate([0, 90, 0])
                 cylinder(r=1.5, h=3.0, center=false, $fn=16);
 
-    // Right Groove Indicator Pin (Z = 14.2 mm, Bright Crimson)
+    // Right Groove Indicator Pin (Bright Crimson)
     color("crimson")
         translate([CUT_X - 1.0, POD_OUTER_W - 1.5, POD_GROOVE_RIGHT_Z])
             rotate([0, 90, 0])
@@ -59,7 +59,7 @@ module poka_yoke_cross_section_demo() {
         translate([POD_BULKHEAD_X + 2.0, 16.0, POD_OUTER_H/2.0])
             rotate([0, 90, 0])
                 cylinder(r=2.25, h=7.0, $fn=16);
-        translate([POD_BULKHEAD_X + 2.0, 44.0, POD_OUTER_H/2.0])
+        translate([POD_BULKHEAD_X + 2.0, POD_OUTER_W - 16.0, POD_OUTER_H/2.0])
             rotate([0, 90, 0])
                 cylinder(r=2.25, h=7.0, $fn=16);
     }

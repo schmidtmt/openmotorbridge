@@ -15,7 +15,7 @@ include <../00_common/dummies/dummy_m8_connector.scad>;
 
 // View Mode: Set to true for slide-out exploded view
 EXPLODED_VIEW = true;
-SLIDE_X      = EXPLODED_VIEW ? 45.0 : 24.0;
+SLIDE_X      = EXPLODED_VIEW ? 65.0 : POD_BULKHEAD_X + 1.0;
 
 module pod3_rear_assembly() {
     // 1. Pod Base Housing (Translucent Slate Grey)
@@ -28,7 +28,7 @@ module pod3_rear_assembly() {
             dummy_m8_connector();
 
     // 3. OMM Transceiver Cartridge Assembly (Slides into the Pod Base Tunnel)
-    translate([SLIDE_X, 3.0, 2.5])
+    translate([SLIDE_X, (POD_OUTER_W - CARTRIDGE_BASE_W)/2.0, POD_WALL])
         cartridge_omm_transceiver_assembly(exploded = EXPLODED_VIEW);
 }
 

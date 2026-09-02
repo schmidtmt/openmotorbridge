@@ -31,17 +31,18 @@ module cartridge_base_sled(
                 cube(size=[sled_l, wall, sled_h + wall], center=false);
 
             // 4. 4x M2 Lower Carrier PCB Mounting Standoffs (for 35x25mm openmotorbridge_pod_cartridge PCB)
-            // Exact KiCad match: PCB at X=1.5..36.5, Y=14.5..39.5 -> Holes at (4.5, 17.5), (4.5, 36.5), (33.5, 17.5), (33.5, 36.5)
-            translate([4.5, 17.5, wall])
+            // Exact KiCad match: PCB at X=1.5..36.5, Y=(sled_w-25)/2 .. (sled_w+25)/2
+            y_pcb_c = sled_w / 2.0;
+            translate([4.5, y_pcb_c - 9.5, wall])
                 screw_boss(outer_r=2.2, inner_r=M2_SCREW_HOLE_R, h=2.5);
-            translate([33.5, 17.5, wall])
+            translate([33.5, y_pcb_c - 9.5, wall])
                 screw_boss(outer_r=2.2, inner_r=M2_SCREW_HOLE_R, h=2.5);
-            translate([4.5, 36.5, wall])
+            translate([4.5, y_pcb_c + 9.5, wall])
                 screw_boss(outer_r=2.2, inner_r=M2_SCREW_HOLE_R, h=2.5);
-            translate([33.5, 36.5, wall])
+            translate([33.5, y_pcb_c + 9.5, wall])
                 screw_boss(outer_r=2.2, inner_r=M2_SCREW_HOLE_R, h=2.5);
 
-            // 5. 4x M2 Insert Fastening Corner Posts (h = 5.5 mm, z = 2.5 .. 8.0 mm)
+            // 5. 4x M2 Insert Fastening Corner Posts (h = 5.5 mm, z = wall .. wall + 5.5 mm)
             // Secures interchangeable modular OEM inserts (Sena, Cardo, Blindkassette) at outer perimeter
             translate([6.0, 6.0, wall])
                 screw_boss(outer_r=2.8, inner_r=M2_SCREW_HOLE_R, h=5.5);
@@ -52,15 +53,15 @@ module cartridge_base_sled(
             translate([sled_l - 7.0, sled_w - 6.0, wall])
                 screw_boss(outer_r=2.8, inner_r=M2_SCREW_HOLE_R, h=5.5);
 
-            // 7. Lateral Support Ledges / Shoulders (Auflagestufen at z = 2.5 .. 8.0 mm)
+            // 7. Lateral Support Ledges / Shoulders (Auflagestufen at z = wall .. wall + 5.5 mm)
             // Provides continuous rigid shelf for the OEM insert and maintains 1.8 mm clearance over Carrier PCB
             translate([10.0, wall, wall])
                 cube(size=[sled_l - 20.0, 1.2, 5.5], center=false);
             translate([10.0, sled_w - wall - 1.2, wall])
                 cube(size=[sled_l - 20.0, 1.2, 5.5], center=false);
 
-            // 8. Front Faceplate (4.0 x 58.0 x 25.0 mm at x = sled_l)
-            translate([sled_l, -2.0, -1.5])
+            // 8. Front Faceplate (4.0 x CARTRIDGE_FACE_W x CARTRIDGE_FACE_H at x = sled_l)
+            translate([sled_l, -(CARTRIDGE_FACE_W - sled_w)/2.0, -(CARTRIDGE_FACE_H - sled_h)/2.0])
                 cube(size=[CARTRIDGE_FACE_L, CARTRIDGE_FACE_W, CARTRIDGE_FACE_H], center=false);
 
             // 5. Continuous 360° Perimeter Sealing Collar (Flansch-Dichtsitz für Silikondichtung)
@@ -74,7 +75,7 @@ module cartridge_base_sled(
             }
 
             // 6. Asymmetrical Poka-Yoke Guide Ribs (Tongue Rails) with 30° Lead-in Nose
-            // --- Left Guide Rib (z = 8.2 mm center, height 2.6 mm, protrusion 1.4 mm) ---
+            // --- Left Guide Rib (z = POD_GROOVE_LEFT_Z center) ---
             translate([CARTRIDGE_CHAMFER_L, -CARTRIDGE_TONGUE_PROT, POD_GROOVE_LEFT_Z - CARTRIDGE_TONGUE_W/2.0])
                 cube(size=[sled_l - CARTRIDGE_CHAMFER_L - 3.5, CARTRIDGE_TONGUE_PROT, CARTRIDGE_TONGUE_W], center=false);
 
@@ -82,7 +83,7 @@ module cartridge_base_sled(
             translate([0, -CARTRIDGE_TONGUE_PROT, POD_GROOVE_LEFT_Z - CARTRIDGE_TONGUE_W/2.0 + 0.3])
                 cube(size=[CARTRIDGE_CHAMFER_L, CARTRIDGE_TONGUE_PROT, CARTRIDGE_TONGUE_W - 0.6], center=false);
 
-            // --- Right Guide Rib (z = 14.2 mm center, height 2.6 mm, protrusion 1.4 mm) ---
+            // --- Right Guide Rib (z = POD_GROOVE_RIGHT_Z center) ---
             translate([CARTRIDGE_CHAMFER_L, sled_w, POD_GROOVE_RIGHT_Z - CARTRIDGE_TONGUE_W/2.0])
                 cube(size=[sled_l - CARTRIDGE_CHAMFER_L - 3.5, CARTRIDGE_TONGUE_PROT, CARTRIDGE_TONGUE_W], center=false);
 
@@ -91,12 +92,13 @@ module cartridge_base_sled(
                 cube(size=[CARTRIDGE_CHAMFER_L, CARTRIDGE_TONGUE_PROT, CARTRIDGE_TONGUE_W - 0.6], center=false);
 
             // 7. Dual Recessed Snap-Fit Cantilever Arms & Ergonomic Quick-Release Buttons
-            // --- Left Arm (x = 54.0 .. 70.0 mm, in side wall, clears sealing collar at x = 72.5) ---
-            translate([54.0, -1.8, 6.0])
+            arm_x_start = sled_l - 24.0;
+            // --- Left Arm (in side wall, clears sealing collar) ---
+            translate([arm_x_start, -1.8, 6.0])
                 cube(size=[16.0, 1.8, 10.0], center=false);
 
-            // Left Triangular Latch Tooth (at x = 58.0, 1.8 mm retention undercut)
-            translate([58.0, -3.4, 6.5]) {
+            // Left Triangular Latch Tooth (retention undercut)
+            translate([arm_x_start + 4.0, -3.4, 6.5]) {
                 polyhedron(
                     points=[
                         [0, 1.6, 0], [4.0, 1.6, 0], [4.0, 0, 0], [0, 1.6, 9.0], [4.0, 1.6, 9.0], [4.0, 0, 9.0]
@@ -110,23 +112,22 @@ module cartridge_base_sled(
             // Left Textured Quick-Release Squeeze Button Pad (on Faceplate Flank)
             translate([sled_l - 0.5, -4.0, 5.0]) {
                 cube(size=[CARTRIDGE_FACE_L + 1.5, 2.0, 12.0], center=false);
-                // 3x Tactile Grip Ribs
                 for (rz = [2.0, 6.0, 10.0]) {
                     translate([0.5, -0.6, rz])
                         cube(size=[CARTRIDGE_FACE_L, 0.6, 1.2], center=false);
                 }
             }
 
-            // Left Flexure Link between arm and button (passes outside the sealed pod rim)
-            translate([70.0, -3.0, 8.0])
-                cube(size=[sled_l - 70.0, 1.4, 6.0], center=false);
+            // Left Flexure Link between arm and button
+            translate([arm_x_start + 16.0, -3.0, 8.0])
+                cube(size=[sled_l - (arm_x_start + 16.0), 1.4, 6.0], center=false);
 
-            // --- Right Arm (x = 54.0 .. 70.0 mm, in side wall) ---
-            translate([54.0, sled_w, 6.0])
+            // --- Right Arm (in side wall) ---
+            translate([arm_x_start, sled_w, 6.0])
                 cube(size=[16.0, 1.8, 10.0], center=false);
 
             // Right Triangular Latch Tooth
-            translate([58.0, sled_w + 1.8, 6.5]) {
+            translate([arm_x_start + 4.0, sled_w + 1.8, 6.5]) {
                 polyhedron(
                     points=[
                         [0, 0, 0], [4.0, 0, 0], [4.0, 1.6, 0], [0, 0, 9.0], [4.0, 0, 9.0], [4.0, 1.6, 9.0]
@@ -140,7 +141,6 @@ module cartridge_base_sled(
             // Right Textured Quick-Release Squeeze Button Pad (on Faceplate Flank)
             translate([sled_l - 0.5, sled_w + 2.0, 5.0]) {
                 cube(size=[CARTRIDGE_FACE_L + 1.5, 2.0, 12.0], center=false);
-                // 3x Tactile Grip Ribs
                 for (rz = [2.0, 6.0, 10.0]) {
                     translate([0.5, 2.0, rz])
                         cube(size=[CARTRIDGE_FACE_L, 0.6, 1.2], center=false);
@@ -148,50 +148,64 @@ module cartridge_base_sled(
             }
 
             // Right Flexure Link between arm and button
-            translate([70.0, sled_w + 1.6, 8.0])
-                cube(size=[sled_l - 70.0, 1.4, 6.0], center=false);
+            translate([arm_x_start + 16.0, sled_w + 1.6, 8.0])
+                cube(size=[sled_l - (arm_x_start + 16.0), 1.4, 6.0], center=false);
 
             // 8. Front ePTFE Gore Vent Boss on Faceplate
-            translate([sled_l + 2.0, sled_w/2.0, 18.0])
+            translate([sled_l + 2.0, sled_w/2.0 + 12.0, sled_h/2.0])
                 rotate([0, 90, 0])
                     cylinder(r=3.0, h=2.0, center=false);
+
+            // 9. Front SMA Bulkhead Flange Reinforcement Boss
+            translate([sled_l, sled_w/2.0 - 12.0, sled_h/2.0])
+                rotate([0, 90, 0])
+                    cylinder(r=5.5, h=2.0, center=false);
         }
 
-        // 9. Side Wall Clearance Slots for Latch Arm Inward Flexure
-        // Left Arm Clearance Slots (1.0 mm slit above and below arm)
-        translate([52.0, -2.5, 4.8])
+        // 10. Side Wall Clearance Slots for Latch Arm Inward Flexure
+        arm_x_start = sled_l - 24.0;
+        // Left Arm Clearance Slots
+        translate([arm_x_start - 2.0, -2.5, 4.8])
             cube(size=[19.0, wall + 3.0, 1.0], center=false);
-        translate([52.0, -2.5, 16.2])
+        translate([arm_x_start - 2.0, -2.5, 16.2])
             cube(size=[19.0, wall + 3.0, 1.0], center=false);
-        translate([52.0, -2.5, 4.8])
+        translate([arm_x_start - 2.0, -2.5, 4.8])
             cube(size=[2.0, wall + 3.0, 12.4], center=false);
 
         // Right Arm Clearance Slots
-        translate([52.0, sled_w - wall - 0.5, 4.8])
+        translate([arm_x_start - 2.0, sled_w - wall - 0.5, 4.8])
             cube(size=[19.0, wall + 3.0, 1.0], center=false);
-        translate([52.0, sled_w - wall - 0.5, 16.2])
+        translate([arm_x_start - 2.0, sled_w - wall - 0.5, 16.2])
             cube(size=[19.0, wall + 3.0, 1.0], center=false);
-        translate([52.0, sled_w - wall - 0.5, 4.8])
+        translate([arm_x_start - 2.0, sled_w - wall - 0.5, 4.8])
             cube(size=[2.0, wall + 3.0, 12.4], center=false);
 
-        // 10. Front ePTFE Breather Through-Hole (Ø 2.0 mm)
-        translate([sled_l - 3.0, sled_w/2.0, 18.0])
+        // 11. Front ePTFE Breather Through-Hole (Ø 2.0 mm)
+        translate([sled_l - 3.0, sled_w/2.0 + 12.0, sled_h/2.0])
             rotate([0, 90, 0])
                 cylinder(r=1.0, h=CARTRIDGE_FACE_L + 6.0, center=false);
 
-        // 11. Floor Convective Breathing Slots (4x 14 x 2.5 mm)
-        translate([18.0, 10.0, -0.5]) cube(size=[14.0, 2.5, wall + 1.0], center=false);
-        translate([18.0, sled_w - 12.5, -0.5]) cube(size=[14.0, 2.5, wall + 1.0], center=false);
-        translate([44.0, 10.0, -0.5]) cube(size=[14.0, 2.5, wall + 1.0], center=false);
-        translate([44.0, sled_w - 12.5, -0.5]) cube(size=[14.0, 2.5, wall + 1.0], center=false);
+        // 12. Front SMA Bulkhead Flange Bore (Ø 6.5 mm through-hole + O-Ring Recess)
+        translate([sled_l - 3.0, sled_w/2.0 - 12.0, sled_h/2.0])
+            rotate([0, 90, 0])
+                cylinder(r=SMA_BORE_R, h=CARTRIDGE_FACE_L + 6.0, center=false);
 
-        // 12. 2x Side Wall U-Notches / Freistellungen for Rubber Strap (at x = 28 .. 42 mm, z = 11.5 .. 19 mm)
-        // Left Side Wall U-Notch
-        translate([28.0, -1.5, 11.5])
-            cube(size=[14.0, wall + 3.0, sled_h + 8.0], center=false);
-        // Right Side Wall U-Notch
-        translate([28.0, sled_w - wall - 1.5, 11.5])
-            cube(size=[14.0, wall + 3.0, sled_h + 8.0], center=false);
+        // SMA Bulkhead O-Ring Recess (Ø 9.5 mm x 1.2 mm deep on outer face)
+        translate([sled_l + CARTRIDGE_FACE_L - SMA_ORECESS_DEPTH + 0.01, sled_w/2.0 - 12.0, sled_h/2.0])
+            rotate([0, 90, 0])
+                cylinder(r=SMA_ORECESS_R, h=SMA_ORECESS_DEPTH + 0.5, center=false);
+
+        // 13. Floor Convective Breathing Slots (4x 16 x 2.5 mm)
+        translate([20.0, 10.0, -0.5]) cube(size=[16.0, 2.5, wall + 1.0], center=false);
+        translate([20.0, sled_w - 12.5, -0.5]) cube(size=[16.0, 2.5, wall + 1.0], center=false);
+        translate([65.0, 10.0, -0.5]) cube(size=[16.0, 2.5, wall + 1.0], center=false);
+        translate([65.0, sled_w - 12.5, -0.5]) cube(size=[16.0, 2.5, wall + 1.0], center=false);
+
+        // 14. 2x Side Wall U-Notches / Freistellungen for Rubber Strap (at x = 45 .. 65 mm)
+        translate([45.0, -1.5, 11.5])
+            cube(size=[20.0, wall + 3.0, sled_h + 8.0], center=false);
+        translate([45.0, sled_w - wall - 1.5, 11.5])
+            cube(size=[20.0, wall + 3.0, sled_h + 8.0], center=false);
     }
 }
 

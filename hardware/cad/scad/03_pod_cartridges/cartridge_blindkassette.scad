@@ -22,7 +22,7 @@ module cartridge_blindkassette_assembly(exploded = false) {
         cartridge_base_sled(
             sled_l = CARTRIDGE_BASE_L,
             sled_w = CARTRIDGE_BASE_W,
-            sled_h = 16.0,
+            sled_h = CARTRIDGE_BASE_H,
             wall   = 2.5
         );
 

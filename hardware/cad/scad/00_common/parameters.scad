@@ -18,33 +18,38 @@ MAIN_BOX_LID_H        = 4.0;   // Lid plate thickness in Z (mm)
 MAIN_BOX_WALL         = 2.5;   // Nominal wall thickness (mm)
 MAIN_BOX_CORNER_POST  = 5.0;   // Corner clamping screw post size (mm)
 
-// --- 3. Satellite Pod Dimensions (Universal 1-Pod Housing) ---
-POD_OUTER_L           = 100.0; // Outer length in X (mm)
-POD_OUTER_W           = 60.0;  // Outer width in Y (mm)
-POD_OUTER_H           = 28.0;  // Outer height in Z (mm)
-POD_WALL              = 2.5;   // Nominal wall thickness (mm)
-POD_BULKHEAD_X        = 22.0;  // Partition bulkhead position in X (mm)
-POD_CHAMBER_L         = 78.0;  // Sliding chamber length in X (mm)
-POD_CHAMBER_W         = 55.0;  // Sliding chamber width in Y (mm)
-POD_CHAMBER_H         = 23.0;  // Sliding chamber height in Z (mm)
+// --- 3. Satellite Pod Dimensions (Universal Enlarged Envelope) ---
+POD_OUTER_L           = 135.0; // Outer length in X (mm)
+POD_OUTER_W           = 70.0;  // Outer width in Y (mm)
+POD_OUTER_H           = 38.0;  // Outer height in Z (mm)
+POD_WALL              = 3.5;   // Nominal wall thickness (mm)
+POD_BULKHEAD_X        = 18.0;  // Partition bulkhead position in X (mm)
+POD_CHAMBER_L         = 117.0; // Sliding chamber length in X (mm)
+POD_CHAMBER_W         = 63.0;  // Sliding chamber width in Y (mm)
+POD_CHAMBER_H         = 31.0;  // Sliding chamber height in Z (mm)
 
 // --- 4. Pod Linear Guide Rails (Poka-Yoke Tongue & Groove) ---
 POD_GROOVE_W          = 3.0;   // Internal guide groove width in Z (mm)
 POD_GROOVE_DEPTH      = 1.5;   // Internal guide groove depth in Y (mm)
-POD_GROOVE_LEFT_Z     = 8.2;   // Center height of left groove (mm)
-POD_GROOVE_RIGHT_Z    = 14.2;  // Center height of right groove (mm, asym offset)
+POD_GROOVE_LEFT_Z     = 10.0;  // Center height of left groove (mm)
+POD_GROOVE_RIGHT_Z    = 18.0;  // Center height of right groove (mm, asym offset)
 
 CARTRIDGE_TONGUE_W    = 2.6;   // Cartridge tongue rail height in Z (mm, 0.2mm clearance)
 CARTRIDGE_TONGUE_PROT = 1.4;   // Cartridge tongue protrusion in Y (mm, 0.1mm clearance)
 CARTRIDGE_CHAMFER_L   = 4.0;   // 30° lead-in chamfer nose length (mm)
 
-// --- 5. Cartridge Dimensions ---
-CARTRIDGE_BASE_L      = 75.0;  // Sled length in X (mm)
-CARTRIDGE_BASE_W      = 54.0;  // Sled width in Y (mm)
-CARTRIDGE_BASE_H      = 20.5;  // Sled height in Z (mm)
+// --- 5. Cartridge Dimensions (Enlarged Universal Sled) ---
+CARTRIDGE_BASE_L      = 116.0; // Sled length in X (mm)
+CARTRIDGE_BASE_W      = 58.0;  // Sled width in Y (mm)
+CARTRIDGE_BASE_H      = 28.0;  // Sled height in Z (mm)
 CARTRIDGE_FACE_L      = 4.0;   // Front faceplate thickness in X (mm)
-CARTRIDGE_FACE_W      = 58.0;  // Front faceplate width in Y (mm)
-CARTRIDGE_FACE_H      = 25.0;  // Front faceplate height in Z (mm)
+CARTRIDGE_FACE_W      = 64.0;  // Front faceplate width in Y (mm)
+CARTRIDGE_FACE_H      = 34.0;  // Front faceplate height in Z (mm)
+
+// --- 5a. RF Interface & Sealing Dimensions ---
+SMA_BORE_R            = 3.25;  // Ø 6.5 mm through-hole for standard SMA bulkhead
+SMA_ORECESS_R         = 4.75;  // Ø 9.5 mm recess for waterproof silicone O-ring
+SMA_ORECESS_DEPTH     = 1.2;   // 1.2 mm deep O-ring compression pocket
 
 // --- 6. Thermal Copper Studs (Kühlbolzen) ---
 COPPER_STUD_DIA       = 8.0;   // Diameter of thermal copper studs (mm)

@@ -11,8 +11,8 @@ include <../../00_common/parameters.scad>;
 include <../../00_common/screw_bosses.scad>;
 
 module cartridge_insert_blindkassette(
-    insert_l = 70.0,
-    insert_w = 49.0,
+    insert_l = 110.0,
+    insert_w = 53.0,
     deck_th  = 3.0
 ) {
     difference() {
@@ -21,32 +21,36 @@ module cartridge_insert_blindkassette(
             cube(size=[insert_l, insert_w, deck_th], center=false);
 
             // 2. Internal Stiffening Ribs (Kreuzverrippung)
-            translate([insert_l/2.0 - 1.0, 4.0, -2.0])
-                cube(size=[2.0, insert_w - 8.0, 2.0], center=false);
-            translate([4.0, insert_w/2.0 - 1.0, -2.0])
-                cube(size=[insert_l - 8.0, 2.0, 2.0], center=false);
+            translate([insert_l/2.0 - 1.0, 4.0, -2.5])
+                cube(size=[2.0, insert_w - 8.0, 2.5], center=false);
+            translate([4.0, insert_w/2.0 - 1.0, -2.5])
+                cube(size=[insert_l - 8.0, 2.0, 2.5], center=false);
+            translate([insert_l/4.0 - 1.0, 4.0, -2.5])
+                cube(size=[2.0, insert_w - 8.0, 2.5], center=false);
+            translate([3*insert_l/4.0 - 1.0, 4.0, -2.5])
+                cube(size=[2.0, insert_w - 8.0, 2.5], center=false);
         }
 
         // 3. 4x M2 Countersunk Mounting Screw Holes
         translate([3.5, 3.5, -3.0])
             cylinder(r=M2_SCREW_HOLE_R, h=deck_th + 4.0, center=false);
-        translate([3.5, 3.5, deck_th - 1.0])
-            cylinder(r1=M2_SCREW_HOLE_R, r2=2.3, h=1.2, center=false);
+        translate([3.5, 3.5, deck_th - 1.2])
+            cylinder(r1=M2_SCREW_HOLE_R, r2=2.3, h=1.3, center=false);
 
         translate([insert_l - 4.5, 3.5, -3.0])
             cylinder(r=M2_SCREW_HOLE_R, h=deck_th + 4.0, center=false);
-        translate([insert_l - 4.5, 3.5, deck_th - 1.0])
-            cylinder(r1=M2_SCREW_HOLE_R, r2=2.3, h=1.2, center=false);
+        translate([insert_l - 4.5, 3.5, deck_th - 1.2])
+            cylinder(r1=M2_SCREW_HOLE_R, r2=2.3, h=1.3, center=false);
 
         translate([3.5, insert_w - 3.5, -3.0])
             cylinder(r=M2_SCREW_HOLE_R, h=deck_th + 4.0, center=false);
-        translate([3.5, insert_w - 3.5, deck_th - 1.0])
-            cylinder(r1=M2_SCREW_HOLE_R, r2=2.3, h=1.2, center=false);
+        translate([3.5, insert_w - 3.5, deck_th - 1.2])
+            cylinder(r1=M2_SCREW_HOLE_R, r2=2.3, h=1.3, center=false);
 
         translate([insert_l - 4.5, insert_w - 3.5, -3.0])
             cylinder(r=M2_SCREW_HOLE_R, h=deck_th + 4.0, center=false);
-        translate([insert_l - 4.5, insert_w - 3.5, deck_th - 1.0])
-            cylinder(r1=M2_SCREW_HOLE_R, r2=2.3, h=1.2, center=false);
+        translate([insert_l - 4.5, insert_w - 3.5, deck_th - 1.2])
+            cylinder(r1=M2_SCREW_HOLE_R, r2=2.3, h=1.3, center=false);
     }
 }
 

@@ -91,49 +91,49 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
     (
         "02_pod_base/99_pod_base_assembly.scad",
         os.path.join(CAD_IMG_DIR, "openmotorbridge_pod_exploded_view.png"),
-        "50,30,14,55,0,310,300",
+        "67.5,35,19,55,0,310,380",
         "Tomorrow"
     ),
     (
         "02_pod_base/97_pod_xray_assembly.scad",
         os.path.join(CAD_IMG_DIR, "openmotorbridge_pod_assembly_render_xray.png"),
-        "50,30,14,55,0,310,250",
+        "67.5,35,19,55,0,310,320",
         "Tomorrow"
     ),
     (
         "03_pod_cartridges/99_cartridge_assembly.scad",
         os.path.join(CAD_IMG_DIR, "cartridge_variants_trio.png"),
-        "50,40,10,55,0,310,380",
+        "100,65,15,55,0,310,500",
         "Tomorrow"
     ),
     (
         "03_pod_cartridges/cartridge_sena.scad",
         os.path.join(CAD_IMG_DIR, "sena_cartridge_assembly_cad.png"),
-        "37.5,27,10,55,0,310,200",
+        "58,29,14,55,0,310,280",
         "Solarized"
     ),
     (
         "03_pod_cartridges/cartridge_cardo.scad",
         os.path.join(CAD_IMG_DIR, "cardo_cartridge_assembly_cad.png"),
-        "37.5,27,10,55,0,310,200",
+        "58,29,14,55,0,310,280",
         "Solarized"
     ),
     (
         "03_pod_cartridges/cartridge_blindkassette.scad",
         os.path.join(CAD_IMG_DIR, "dummy_cartridge_cad.png"),
-        "37.5,27,10,55,0,310,200",
+        "58,29,14,55,0,310,280",
         "Solarized"
     ),
     (
         "02_pod_base/pod_poka_yoke_cross_section.scad",
         os.path.join(CAD_IMG_DIR, "pod_poka_yoke_cross_section_cad.png"),
-        "55,30,14,18,0,80,125",
+        "65,35,19,18,0,80,180",
         "Tomorrow"
     ),
     (
         "02_pod_base/99_pod3_rear_assembly.scad",
         os.path.join(CAD_IMG_DIR, "pod3_full_assembly_exploded_3d.png"),
-        "50,30,14,55,0,310,340",
+        "67.5,35,19,55,0,310,420",
         "Tomorrow"
     ),
 ]

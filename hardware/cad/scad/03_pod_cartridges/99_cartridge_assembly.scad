@@ -24,18 +24,18 @@ module cartridge_gallery_preview() {
         cartridge_omm_transceiver_assembly(exploded=false);
     }
 
-    // 2. Sena 50S/60S Cartridge (Front Right)
-    translate([0, 80.0, 0]) {
+    // 2. Sena 50S/60S & +Mesh Slide-Mount Cartridge (Front Right)
+    translate([0, 90.0, 0]) {
         cartridge_sena_assembly(exploded=false);
     }
 
     // 3. Cardo Packtalk Edge Cartridge (Rear Left)
-    translate([100.0, 0, 0]) {
+    translate([140.0, 0, 0]) {
         cartridge_cardo_assembly(exploded=false);
     }
 
     // 4. Waterproof Blindkassette (Rear Right)
-    translate([100.0, 80.0, 0]) {
+    translate([140.0, 90.0, 0]) {
         cartridge_blindkassette_assembly(exploded=false);
     }
 }

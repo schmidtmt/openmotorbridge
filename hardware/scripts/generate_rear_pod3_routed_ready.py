@@ -38,24 +38,26 @@ nets = [
     (19, "TP_BOOT"),
     (20, "TP_EN"),
     (21, "LORA_RF_ANT"),
-    (22, "GNSS_RF_IN"),
+    (22, "LORA_ANT_INT"),
+    (23, "GNSS_RF_IN"),
+    (24, "GNSS_ANT_INT"),
+    (25, "ESP_RF_ANT"),
+    (26, "ESP_ANT_INT"),
 ]
 
 net_map = {name: num for num, name in nets}
 
 # 2. Component Pin-to-Net Mapping
 component_pins = {
-    # J1: 6-Pin Horizontal Connector
-    # Physically at rot=180: local pad 6 sits at Y=87.65 (mating Pod Base Kontakt 1 VCC)
     # J1: 6-Pin Female Socket Strip (PinSocket_1x06_P2.54mm_Horizontal)
-    # Origin at (102.5, 87.65, 0): Pad 1 is at Y=87.65, Pad 6 is at Y=100.35
+    # Origin at (102.5, 89.65, 0): Pad 1 is at Y=89.65, Pad 6 is at Y=102.35, Center = 96.00 mm!
     'J1': {
-        '1': 'POD3_VCC_5V',    # Y=87.65 (Mates with Pod Base Kontakt 1 VCC)
-        '2': 'GND',            # Y=90.19 (Mates with Pod Base Kontakt 2 GND)
-        '3': 'POD3_UART_TX',   # Y=92.73 (Mates with Pod Base Kontakt 3 UART_TX)
-        '4': 'POD3_UART_RX',   # Y=95.27 (Mates with Pod Base Kontakt 4 UART_RX)
-        '5': 'GNSS_1PPS',      # Y=97.81 (Mates with Pod Base Kontakt 5 GNSS_1PPS)
-        '6': 'POD3_1WIRE_ID',  # Y=100.35 (Mates with Pod Base Kontakt 6 1-Wire ID)
+        '1': 'POD3_VCC_5V',    # Y=89.65 (Mates with Pod Base Kontakt 1 VCC)
+        '2': 'GND',            # Y=92.19 (Mates with Pod Base Kontakt 2 GND)
+        '3': 'POD3_UART_TX',   # Y=94.73 (Mates with Pod Base Kontakt 3 UART_TX)
+        '4': 'POD3_UART_RX',   # Y=97.27 (Mates with Pod Base Kontakt 4 UART_RX)
+        '5': 'GNSS_1PPS',      # Y=99.81 (Mates with Pod Base Kontakt 5 GNSS_1PPS)
+        '6': 'POD3_1WIRE_ID',  # Y=102.35 (Mates with Pod Base Kontakt 6 1-Wire ID)
     },
     # F1: 500mA PTC Fuse
     'F1': {
@@ -98,6 +100,7 @@ component_pins = {
         '16': 'GND',
         '17': 'GND',
         '18': 'GND',
+        'ANT': 'ESP_RF_ANT',
         '19': 'GND', # Thermal pad
     },
     # U2: u-blox MAX-M10S GNSS
@@ -149,17 +152,18 @@ component_pins = {
         '24': 'VCC_3V3',
         '25': 'GND', # EP
     },
-    # ANT1: Pulse_W3000 868MHz LoRa Ceramic Antenna
-    'ANT1': {'1': 'LORA_RF_ANT', '2': 'GND'},
-    # ANT2: Pulse_W3000 GNSS Ceramic Antenna
-    'ANT2': {'1': 'GNSS_RF_IN', '2': 'GND'},
-    # C1: 10uF 3V3 Cap
+    # RF Switches (Murata MM8030 mechanical break switch)
+    'J3': {'1': 'ESP_RF_ANT', '2': 'ESP_ANT_INT', '3': 'GND'},
+    'J4': {'1': 'LORA_RF_ANT', '2': 'LORA_ANT_INT', '3': 'GND'},
+    'J5': {'1': 'GNSS_RF_IN', '2': 'GNSS_ANT_INT', '3': 'GND'},
+    # Ceramic Antennas (Pulse W3000)
+    'ANT1': {'1': 'LORA_ANT_INT', '2': 'GND'},
+    'ANT2': {'1': 'GNSS_ANT_INT', '2': 'GND'},
+    'ANT3': {'1': 'ESP_ANT_INT', '2': 'GND'},
+    # Capacitors
     'C1': {'1': 'VCC_3V3', '2': 'GND'},
-    # C2: 100nF ESP32 Cap
     'C2': {'1': 'VCC_3V3', '2': 'GND'},
-    # C3: 100nF GNSS Cap
     'C3': {'1': 'VCC_3V3', '2': 'GND'},
-    # C4: 100nF LoRa Cap
     'C4': {'1': 'VCC_3V3', '2': 'GND'},
     # H1..H4: M2 Mounting Holes
     'H1': {'1': 'GND'},
@@ -169,35 +173,38 @@ component_pins = {
 }
 
 # Footprint Specifications (library_path, ref, val, x, y, rot, layer, model_path)
-# Centerline Y = 94.0 mm, Outline X = 100.0..170.0, Y = 70.0..118.0 (70.0 x 48.0 mm)
-# J1 6-Pin Female Socket strip (rot=0): Socket body projects LEFT out of the board towards bulkhead pin header!
-# Socket origin at (102.50, 87.65) -> Pin 1 at Y=87.65, Pin 6 at Y=100.35, Center = 94.00 mm!
+# Centerline Y = 96.0 mm, Outline X = 100.0..210.0, Y = 70.0..122.0 (110.0 x 52.0 mm)
 components = [
     # J1: 6-Pin Horizontal female socket strip opening LEFT towards mating bulkhead pins
-    ("PinSocket_1x06_P2.54mm_Horizontal", "J1", "6-Pin_OMM_Female_Socket", 102.50, 87.65, 0, "F.Cu", "${KICAD10_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x06_P2.54mm_Horizontal.step"),
-    # Protection & Status (F1 near Pin 1 VCC at Y=87.65; D1/R1 5V power LED)
+    ("PinSocket_1x06_P2.54mm_Horizontal", "J1", "6-Pin_OMM_Female_Socket", 102.50, 89.65, 0, "F.Cu", "${KICAD10_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x06_P2.54mm_Horizontal.step"),
+    # Protection & Status (F1 near Pin 1 VCC; D1/R1 5V power LED)
     ("Resistor_SMD.pretty/R_1206_3216Metric.kicad_mod", "F1", "PTC_500mA", 106.75, 83.71, 90, "F.Cu", "Resistor_SMD.3dshapes/R_1206_3216Metric.step"),
     ("LED_SMD.pretty/LED_0805_2012Metric.kicad_mod", "D1", "LED_Green_5V", 112.06, 72.50, 180, "F.Cu", "LED_SMD.3dshapes/LED_0805_2012Metric.step"),
-    ("Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod", "R1", "1.5k_LED_Resistor", 114.00, 77.83, 90, "F.Cu", "Resistor_SMD.3dshapes/R_0603_1608Metric.step"),
-    # Maxim DS2401 ID Chip (Directly adjacent to J1 Pin 6 1-Wire at Y=100.35)
-    ("Package_TO_SOT_SMD.pretty/SOT-23.kicad_mod", "U4", "DS2401_1Wire_ID", 112.50, 100.35, 0, "F.Cu", "Package_TO_SOT_SMD.3dshapes/SOT-23.step"),
-    # u-blox MAX-M10S GNSS Subsystem & Antennas (Top edge - U2 rotated 180 for direct RF/SPI alignment)
+    ("Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod", "R1", "1.5k_LED_Resistor", 106.75, 77.83, 90, "F.Cu", "Resistor_SMD.3dshapes/R_0603_1608Metric.step"),
+    ("Capacitor_SMD.pretty/C_0805_2012Metric.kicad_mod", "C1", "10uF_3V3", 109.50, 78.95, 90, "F.Cu", "Capacitor_SMD.3dshapes/C_0805_2012Metric.step"),
+    # Maxim DS2401 ID Chip (Adjacent to J1 Pin 6 1-Wire)
+    ("Package_TO_SOT_SMD.pretty/SOT-23.kicad_mod", "U4", "DS2401_1Wire_ID", 114.50, 104.50, 0, "F.Cu", "Package_TO_SOT_SMD.3dshapes/SOT-23.step"),
+    # u-blox MAX-M10S GNSS Subsystem, MM8030 Switch & Ceramic Patch Antenna (Top edge)
     ("RF_GPS.pretty/ublox_MAX.kicad_mod", "U2", "MAX-M10S_GNSS", 124.00, 83.00, 180, "F.Cu", "Package_DFN_QFN.3dshapes/QFN-24-1EP_4x4mm_P0.5mm_EP2.6x2.6mm.step"),
-    ("Capacitor_SMD.pretty/C_0603_1608Metric.kicad_mod", "C3", "100nF_GNSS", 114.00, 83.53, 90, "F.Cu", "Capacitor_SMD.3dshapes/C_0603_1608Metric.step"),
-    ("RF_Antenna.pretty/Pulse_W3000.kicad_mod", "ANT2", "GNSS_Patch_Antenna", 136.00, 71.00, 180, "F.Cu", "RF_Antenna.3dshapes/Pulse_W3000.step"),
-    # Semtech SX1262 LoRa Subsystem & Antennas (Bottom edge)
+    ("Capacitor_SMD.pretty/C_0603_1608Metric.kicad_mod", "C3", "100nF_GNSS", 109.50, 88.28, 90, "F.Cu", "Capacitor_SMD.3dshapes/C_0603_1608Metric.step"),
+    ("Capacitor_SMD.pretty/C_0603_1608Metric.kicad_mod", "C2", "100nF_MCU", 140.53, 80.75, 180, "F.Cu", "Capacitor_SMD.3dshapes/C_0603_1608Metric.step"),
+    ("RF_Connector.pretty/Murata_MM8030-2610.kicad_mod", "J5", "MM8030_GNSS", 139.85, 77.75, 0, "F.Cu", None),
+    ("RF_Antenna.pretty/Pulse_W3000.kicad_mod", "ANT2", "GNSS_Patch_Antenna", 137.05, 71.00, 180, "F.Cu", "RF_Antenna.3dshapes/Pulse_W3000.step"),
+    # Semtech SX1262 LoRa Subsystem, MM8030 Switch & Ceramic Antenna (Bottom edge)
     ("Package_DFN_QFN.pretty/QFN-24-1EP_4x4mm_P0.5mm_EP2.6x2.6mm.kicad_mod", "U3", "SX1262_LoRa_+22dBm", 124.00, 105.00, 0, "F.Cu", "Package_DFN_QFN.3dshapes/QFN-24-1EP_4x4mm_P0.5mm_EP2.6x2.6mm.step"),
-    ("Capacitor_SMD.pretty/C_0603_1608Metric.kicad_mod", "C4", "100nF_LoRa", 115.03, 104.75, 0, "F.Cu", "Capacitor_SMD.3dshapes/C_0603_1608Metric.step"),
-    ("RF_Antenna.pretty/Pulse_W3000.kicad_mod", "ANT1", "868MHz_LoRa_Antenna", 136.00, 117.00, 0, "F.Cu", "RF_Antenna.3dshapes/Pulse_W3000.step"),
-    # ESP32-C3 RISC-V Mesh MCU (Centered rear facing tail clearance)
+    ("Capacitor_SMD.pretty/C_0603_1608Metric.kicad_mod", "C4", "100nF_LoRa", 115.78, 114.00, 0, "F.Cu", "Capacitor_SMD.3dshapes/C_0603_1608Metric.step"),
+    ("RF_Connector.pretty/Murata_MM8030-2610.kicad_mod", "J4", "MM8030_LORA", 134.25, 116.05, 180, "F.Cu", None),
+    ("RF_Antenna.pretty/Pulse_W3000.kicad_mod", "ANT1", "868MHz_LoRa_Antenna", 136.80, 120.75, 0, "F.Cu", "RF_Antenna.3dshapes/Pulse_W3000.step"),
+    # ESP32-C3 RISC-V Mesh MCU
     ("RF_Module.pretty/ESP32-C3-WROOM-02.kicad_mod", "U1", "ESP32-C3-WROOM-02", 156.80, 94.39, -90, "F.Cu", "RF_Module.3dshapes/ESP32-C3-WROOM-02.step"),
-    ("Capacitor_SMD.pretty/C_0805_2012Metric.kicad_mod", "C1", "10uF_3V3", 109.50, 77.25, 90, "F.Cu", "Capacitor_SMD.3dshapes/C_0805_2012Metric.step"),
-    ("Capacitor_SMD.pretty/C_0603_1608Metric.kicad_mod", "C2", "100nF_MCU", 139.75, 76.47, 180, "F.Cu", "Capacitor_SMD.3dshapes/C_0603_1608Metric.step"),
-    # 4 Corner M2 Mounting Holes (Matches 00_base_sled corner posts: Delta X = 62.0 mm, Delta Y = 42.0 mm)
-    ("MountingHole.pretty/MountingHole_2.2mm_M2_Pad.kicad_mod", "H1", "M2_Mounting_Hole", 104.00, 73.00, 0, "F.Cu", None),
-    ("MountingHole.pretty/MountingHole_2.2mm_M2_Pad.kicad_mod", "H2", "M2_Mounting_Hole", 166.00, 73.00, 0, "F.Cu", None),
-    ("MountingHole.pretty/MountingHole_2.2mm_M2_Pad.kicad_mod", "H3", "M2_Mounting_Hole", 104.00, 115.00, 0, "F.Cu", None),
-    ("MountingHole.pretty/MountingHole_2.2mm_M2_Pad.kicad_mod", "H4", "M2_Mounting_Hole", 166.00, 115.00, 0, "F.Cu", None),
+    # 2.4 GHz Primary Mesh MM8030 Switch & Onboard Antenna (Right edge towards SMA bulkhead)
+    ("RF_Antenna.pretty/Pulse_W3000.kicad_mod", "ANT3", "2.4GHz_Mesh_Antenna", 186.00, 92.00, 0, "F.Cu", "RF_Antenna.3dshapes/Pulse_W3000.step"),
+    ("RF_Connector.pretty/Murata_MM8030-2610.kicad_mod", "J3", "MM8030_2G4", 198.35, 92.00, 0, "F.Cu", None),
+    # 4 Corner M2 Mounting Holes (Concentric with cartridge sled posts)
+    ("MountingHole.pretty/MountingHole_2.2mm_M2_Pad.kicad_mod", "H1", "M2_Mounting_Hole", 103.50, 73.00, 0, "F.Cu", None),
+    ("MountingHole.pretty/MountingHole_2.2mm_M2_Pad.kicad_mod", "H2", "M2_Mounting_Hole", 206.50, 73.00, 0, "F.Cu", None),
+    ("MountingHole.pretty/MountingHole_2.2mm_M2_Pad.kicad_mod", "H3", "M2_Mounting_Hole", 103.50, 119.00, 0, "F.Cu", None),
+    ("MountingHole.pretty/MountingHole_2.2mm_M2_Pad.kicad_mod", "H4", "M2_Mounting_Hole", 206.50, 119.00, 0, "F.Cu", None),
 ]
 
 def extract_sexpr(text, start_idx):
@@ -341,11 +348,11 @@ def load_and_transform_footprint(fp_rel_path, ref, val, x, y, rot, layer, model_
     indented = "\n".join(["\t" + line for line in mod_text.strip().splitlines()])
     return indented
 
-# Generate board outline (70.0 x 48.0 mm: 100.0..170.0, 70.0..118.0)
+# Generate board outline (110.0 x 52.0 mm: 100.0..210.0, 70.0..122.0)
 def generate_edge_cuts():
     r = 2.5
     x1, y1 = 100.0, 70.0
-    x2, y2 = 170.0, 118.0
+    x2, y2 = 210.0, 122.0
     lines = [
         f'\t(gr_line (start {x1+r:.2f} {y1:.2f}) (end {x2-r:.2f} {y1:.2f}) (stroke (width 0.15) (type solid)) (layer "Edge.Cuts") (uuid "e0000000-0000-0000-0000-000000000001"))',
         f'\t(gr_arc (start {x2-r:.2f} {y1:.2f}) (mid {x2-0.73:.2f} {y1+0.73:.2f}) (end {x2:.2f} {y1+r:.2f}) (stroke (width 0.15) (type solid)) (layer "Edge.Cuts") (uuid "e0000000-0000-0000-0000-000000000002"))',
@@ -361,20 +368,21 @@ def generate_edge_cuts():
 # Generate Silkscreen Labels
 def generate_silkscreen():
     labels = [
-        ("J3: GNSS U.FL", 124.0, 71.5, 0.55, 0.10, 0),
-        ("J2: LoRa U.FL", 124.0, 117.0, 0.55, 0.10, 0),
-        ("▲ Pin 1", 101.0, 87.65, 0.60, 0.10, 0),
-        ("F1: PTC", 109.0, 91.0, 0.60, 0.10, 0),
-        ("D1: 5V", 109.0, 77.0, 0.60, 0.10, 0),
-        ("U4: ID", 112.5, 97.0, 0.60, 0.10, 0),
-        ("2.4GHz ANTENNA ZONE", 158.0, 95.0, 0.60, 0.10, 90),
+        ("▲ Pin 1", 101.0, 89.65, 0.60, 0.10, 0),
+        ("F1: PTC", 106.75, 87.0, 0.60, 0.10, 0),
+        ("D1: 5V", 112.06, 75.5, 0.60, 0.10, 0),
+        ("U4: ID", 114.5, 101.0, 0.60, 0.10, 0),
         ("U2: MAX-M10S GNSS", 124.0, 89.0, 0.65, 0.11, 0),
-        ("U3: SX1262 LoRa", 124.0, 100.0, 0.65, 0.11, 0),
-        ("ANT1: LoRa Pulse W3000", 138.0, 114.5, 0.65, 0.11, 0),
-        ("ANT2: GNSS Pulse W3000", 138.2, 73.0, 0.65, 0.11, 0),
-        ("J1: 6-PIN OMM", 102.5, 94.0, 0.65, 0.11, 90),
-        ("U1: ESP32-C3 MESH", 148.2, 93.5, 0.70, 0.12, 270),
-        ("OpenMotorMesh Heck-Pod 3 v8.0 (70x48mm)", 146.5, 79.2, 0.85, 0.14, 0),
+        ("J5: GNSS MM8030", 139.85, 81.0, 0.55, 0.10, 0),
+        ("ANT2: GNSS Pulse W3000", 137.05, 74.0, 0.65, 0.11, 0),
+        ("U3: SX1262 LoRa", 124.0, 99.0, 0.65, 0.11, 0),
+        ("J4: LoRa MM8030", 134.25, 113.0, 0.55, 0.10, 0),
+        ("ANT1: LoRa Pulse W3000", 136.8, 117.5, 0.65, 0.11, 0),
+        ("J1: 6-PIN OMM", 102.5, 96.0, 0.65, 0.11, 90),
+        ("U1: ESP32-C3 MESH", 156.8, 83.0, 0.70, 0.12, 0),
+        ("ANT3: 2.4GHz Mesh", 186.0, 88.5, 0.60, 0.10, 0),
+        ("J3: 2.4G MM8030", 198.35, 88.0, 0.55, 0.10, 0),
+        ("OpenMotorMesh Heck-Pod 3 v8.0 (110x52mm)", 150.0, 73.0, 0.85, 0.14, 0),
     ]
     lines = []
     for txt, x, y, sz, th, rot in labels:
@@ -403,7 +411,7 @@ pcb_header = f"""(kicad_pcb
 \t)
 \t(paper "A4")
 \t(title_block
-\t\t(title "OpenMotorBridge v8.0 - Rear Pod 3 OMM Transceiver (70x48mm 4-Layer)")
+\t\t(title "OpenMotorBridge v8.0 - Rear Pod 3 OMM Transceiver (110x52mm 4-Layer)")
 \t\t(date "2026-09-01")
 \t\t(rev "v8.0")
 \t\t(company "OpenMotorBridge Open Source Hardware")

@@ -55,13 +55,13 @@ module pod_base_housing() {
 
             // 5. Asymmetrical Poka-Yoke Internal Linear Guide Rails (Tongue & Groove)
             pod_internal_guide_ribs(
-                start_x=24.0,
-                length=76.0,
+                start_x=POD_BULKHEAD_X + 2.0,
+                length=POD_OUTER_L - POD_BULKHEAD_X - 4.0,
                 wall=POD_WALL
             );
 
-            // 6. Ceiling Gore ePTFE Breather Vent Boss (Top center: x = 50.0, y = 30.0, z = 28.0)
-            translate([50.0, POD_OUTER_W/2.0, POD_OUTER_H])
+            // 6. Ceiling Gore ePTFE Breather Vent Boss (Top center)
+            translate([POD_OUTER_L/2.0, POD_OUTER_W/2.0, POD_OUTER_H])
                 cylinder(r=3.5, h=1.5, center=false, $fn=16);
         }
 
@@ -74,7 +74,7 @@ module pod_base_housing() {
         );
 
         // 8. Ceiling Gore Vent Center Breather Hole (Ø 3.0 mm)
-        translate([50.0, POD_OUTER_W/2.0, POD_OUTER_H - POD_WALL - 0.5])
+        translate([POD_OUTER_L/2.0, POD_OUTER_W/2.0, POD_OUTER_H - POD_WALL - 0.5])
             cylinder(r=1.5, h=POD_WALL + 2.5, center=false, $fn=16);
     }
 }

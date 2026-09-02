@@ -21,14 +21,14 @@ def auto_place_rear_pod(pcb_path):
     print(f"Loading Rear POD 3 PCB: {pcb_path}")
     board = pcbnew.LoadBoard(pcb_path)
 
-    # Board Dimensions: 50.0 x 35.0 mm (X: 100.0 .. 150.0, Y: 70.0 .. 105.0)
+    # Board Dimensions: 110.0 x 52.0 mm (X: 100.0 .. 210.0, Y: 70.0 .. 122.0)
     X0 = 100.0
     Y0 = 70.0
-    W = 50.0
-    H = 35.0
-    X_max = X0 + W  # 150.0 mm
-    Y_max = Y0 + H  # 105.0 mm
-    Y_center = Y0 + H / 2.0  # 87.5 mm
+    W = 110.0
+    H = 52.0
+    X_max = X0 + W  # 210.0 mm
+    Y_max = Y0 + H  # 122.0 mm
+    Y_center = Y0 + H / 2.0  # 96.0 mm
 
     # 3D Model Mapping for 100% Integrated Onboard Antennas
     model_mapping = {
@@ -36,15 +36,14 @@ def auto_place_rear_pod(pcb_path):
         'U2': ('${KICAD10_3DMODEL_DIR}/Package_DFN_QFN.3dshapes/QFN-24-1EP_4x4mm_P0.5mm_EP2.6x2.6mm.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
         'U3': ('${KICAD10_3DMODEL_DIR}/Package_DFN_QFN.3dshapes/QFN-24-1EP_4x4mm_P0.5mm_EP2.6x2.6mm.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
         'U4': ('${KICAD10_3DMODEL_DIR}/Package_TO_SOT_SMD.3dshapes/SOT-23.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
-        # J1: 6-Pin 2.54mm Horizontal Socket on leading front edge (X=102.5mm)
+        # J1: 6-Pin 2.54mm Horizontal Socket on leading front edge (X=102.5mm, Centered Y=96.0mm)
         'J1': ('${KICAD10_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x06_P2.54mm_Horizontal.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
-        # ANT2: Integrated GNSS Ceramic Patch Antenna (Sky-Facing Zenith, 12x12mm SMT)
+        # Antennas: Pulse W3000 Tri-Band Ceramic Antennas
+        'ANT1': ('${KICAD10_3DMODEL_DIR}/RF_Antenna.3dshapes/Pulse_W3000.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
         'ANT2': ('${KICAD10_3DMODEL_DIR}/RF_Antenna.3dshapes/Pulse_W3000.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
-        # ANT1: Integrated 868MHz High-Q Helical Spring / Coil Antenna
-        'ANT1': ('${KICAD10_3DMODEL_DIR}/Inductor_THT.3dshapes/L_Axial_L11.0mm_D4.5mm_P15.24mm_Horizontal_Fastron_MECC.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
-        'L1': ('${KICAD10_3DMODEL_DIR}/Inductor_SMD.3dshapes/L_0603_1608Metric.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
-        'F1': ('${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
-        'D1': ('${KICAD10_3DMODEL_DIR}/LED_SMD.3dshapes/LED_0603_1608Metric.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
+        'ANT3': ('${KICAD10_3DMODEL_DIR}/RF_Antenna.3dshapes/Pulse_W3000.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
+        'F1': ('${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_1206_3216Metric.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
+        'D1': ('${KICAD10_3DMODEL_DIR}/LED_SMD.3dshapes/LED_0805_2012Metric.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
         'R1': ('${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
         'C1': ('${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0805_2012Metric.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
         'C2': ('${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0603_1608Metric.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
@@ -54,40 +53,37 @@ def auto_place_rear_pod(pcb_path):
 
     # Verified Layout Matrix with Strict Subsystem Zoning & 100% Collision-Free Spacing
     layout_rules = {
-        # 4 Corner M3 Mounting Holes (3.5 mm inset)
-        'H1': (X0 + 3.5, Y0 + 3.5, 0.0, pcbnew.F_Cu),    # (103.5, 73.5) Top-Left
-        'H2': (X_max - 3.5, Y0 + 3.5, 0.0, pcbnew.F_Cu), # (146.5, 73.5) Top-Right
-        'H3': (X0 + 3.5, Y_max - 3.5, 0.0, pcbnew.F_Cu), # (103.5, 101.5) Bottom-Left
-        'H4': (X_max - 3.5, Y_max - 3.5, 0.0, pcbnew.F_Cu),# (146.5, 101.5) Bottom-Right
+        # 4 Corner M2 Mounting Holes (Concentric with cartridge sled posts)
+        'H1': (103.5, 73.0, 0.0, pcbnew.F_Cu),
+        'H2': (206.5, 73.0, 0.0, pcbnew.F_Cu),
+        'H3': (103.5, 119.0, 0.0, pcbnew.F_Cu),
+        'H4': (206.5, 119.0, 0.0, pcbnew.F_Cu),
 
-        # ZONE 1: FRONT CONNECTOR & POWER PROTECTION (Left side, X = 102.5 .. 112.0 mm)
-        'J1': (102.5, 81.15, 0.0, pcbnew.F_Cu),          # 6-Pin Socket (Centered at Y=87.5mm)
-        'F1': (108.5, 74.0, 0.0, pcbnew.F_Cu),           # 500mA PTC Fuse (Top-Left)
-        'D1': (108.5, 101.0, 0.0, pcbnew.F_Cu),          # Green Power LED (Bottom-Left)
-        'R1': (108.5, 97.5, 0.0, pcbnew.F_Cu),           # LED Resistor 1.5k
-        'U4': (113.0, 87.5, 0.0, pcbnew.F_Cu),           # SOT-23 ID Chip (Behind J1 Center)
+        # ZONE 1: FRONT CONNECTOR & POWER PROTECTION (Left side, X = 102.5 .. 115.0 mm)
+        'J1': (102.5, 89.65, 0.0, pcbnew.F_Cu),          # 6-Pin Socket (Centered at Y=96.0mm)
+        'F1': (106.75, 83.71, 90.0, pcbnew.F_Cu),        # 500mA PTC Fuse
+        'D1': (112.06, 72.50, 180.0, pcbnew.F_Cu),       # Green Power LED
+        'R1': (106.75, 77.83, 90.0, pcbnew.F_Cu),        # LED Resistor 1.5k
+        'C1': (109.50, 78.95, 90.0, pcbnew.F_Cu),        # 10uF 3V3 Decoupling
+        'U4': (114.50, 104.50, 0.0, pcbnew.F_Cu),        # SOT-23 ID Chip
 
-        # ZONE 2: TOP ROW — GNSS SUBSYSTEM (Y = 74.0 mm)
-        'U2': (116.5, 74.0, 0.0, pcbnew.F_Cu),           # u-blox MAX-M10S GNSS QFN
-        'C3': (112.0, 74.0, 0.0, pcbnew.F_Cu),           # 100nF GNSS Decoupling
-        'ANT2': (126.0, 74.0, 0.0, pcbnew.F_Cu),         # GNSS Ceramic Patch (Clean 9mm gap to ESP32, 20mm gap to H2)
+        # ZONE 2: TOP ROW — GNSS SUBSYSTEM (Y = 71.0 .. 83.0 mm)
+        'U2': (124.0, 83.0, 180.0, pcbnew.F_Cu),         # u-blox MAX-M10S GNSS QFN
+        'C3': (109.50, 88.28, 90.0, pcbnew.F_Cu),        # 100nF GNSS Decoupling
+        'C2': (140.53, 80.75, 180.0, pcbnew.F_Cu),       # 100nF Decoupling
+        'J5': (139.85, 77.75, 0.0, pcbnew.F_Cu),         # Murata MM8030 GNSS RF Switch
+        'ANT2': (137.05, 71.0, 180.0, pcbnew.F_Cu),      # GNSS Ceramic Patch Antenna
 
-        # ZONE 3: CENTER-RIGHT — 2.4 GHz MESH MCU (Horizontal, 100% inside board margins)
-        'U1': (132.0, 87.5, -90.0, pcbnew.F_Cu),          # ESP32-C3 (Stays 3mm inside right edge, perfectly centered between H2 and H4)
-        'C1': (122.0, 85.0, 0.0, pcbnew.F_Cu),           # 10uF 3V3 Decoupling
-        'C2': (122.0, 90.0, 0.0, pcbnew.F_Cu),           # 100nF ESP32 Decoupling
+        # ZONE 3: BOTTOM ROW — 868 MHz LoRa SUBSYSTEM (Y = 105.0 .. 121.0 mm)
+        'U3': (124.0, 105.0, 0.0, pcbnew.F_Cu),          # Semtech SX1262 LoRa QFN
+        'C4': (115.78, 114.0, 0.0, pcbnew.F_Cu),         # 100nF LoRa Decoupling
+        'J4': (134.25, 116.05, 180.0, pcbnew.F_Cu),      # Murata MM8030 LoRa RF Switch
+        'ANT1': (136.80, 120.75, 0.0, pcbnew.F_Cu),      # 868 MHz LoRa Ceramic Antenna
 
-        # ZONE 4: BOTTOM ROW — 868 MHz LoRa SUBSYSTEM (Y = 101.0 mm)
-        'U3': (116.5, 101.0, 0.0, pcbnew.F_Cu),          # Semtech SX1262 LoRa QFN
-        'L1': (112.0, 101.0, 0.0, pcbnew.F_Cu),          # 47nH RF Choke
-        'C4': (112.0, 98.0, 0.0, pcbnew.F_Cu),           # 100nF LoRa Decoupling
-        'ANT1': (126.0, 101.0, 0.0, pcbnew.F_Cu),        # 868 MHz Helical Coil (Clean 9mm gap to ESP32, 20mm gap to H4)
-
-        # Factory Testpoints (Placed cleanly on Bottom Layer B_Cu)
-        'TP1': (120.0, 87.5, 0.0, pcbnew.B_Cu),          # TP_BOOT (GPIO9)
-        'TP2': (123.0, 87.5, 0.0, pcbnew.B_Cu),          # TP_RST (CHIP_PU)
-        'TP3': (126.0, 87.5, 0.0, pcbnew.B_Cu),          # TP_TX (GPIO21)
-        'TP4': (129.0, 87.5, 0.0, pcbnew.B_Cu),          # TP_RX (GPIO20)
+        # ZONE 4: RIGHT AREA — 2.4 GHz MESH MCU, SWITCH & ANTENNA
+        'U1': (156.8, 94.39, -90.0, pcbnew.F_Cu),        # ESP32-C3
+        'ANT3': (186.0, 92.0, 0.0, pcbnew.F_Cu),         # 2.4 GHz Mesh Ceramic Antenna
+        'J3': (198.35, 92.0, 0.0, pcbnew.F_Cu),          # Murata MM8030 2.4 GHz RF Switch
     }
 
     existing_refs = {fp.GetReference(): fp for fp in board.Footprints()}

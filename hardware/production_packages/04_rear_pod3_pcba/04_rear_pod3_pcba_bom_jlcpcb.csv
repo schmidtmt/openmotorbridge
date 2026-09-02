@@ -1,6 +1,7 @@
 Designator,Comment,Footprint,LCSC Part #,Quantity
 ANT1,868MHz_LoRa_Antenna,RF_Antenna.pretty:Pulse_W3000,,1
 ANT2,GNSS_Patch_Antenna,RF_Antenna.pretty:Pulse_W3000,,1
+ANT3,2.4GHz_Mesh_Antenna,RF_Antenna.pretty:Pulse_W3000,,1
 C1,10uF_3V3,Capacitor_SMD.pretty:C_0805_2012Metric,,1
 C2,100nF_MCU,Capacitor_SMD.pretty:C_0603_1608Metric,,1
 C3,100nF_GNSS,Capacitor_SMD.pretty:C_0603_1608Metric,,1
@@ -9,6 +10,9 @@ D1,LED_Green_5V,LED_SMD.pretty:LED_0805_2012Metric,,1
 F1,PTC_500mA,Resistor_SMD.pretty:R_1206_3216Metric,,1
 "H1, H2, H3, H4",M2_Mounting_Hole,MountingHole.pretty:MountingHole_2.2mm_M2_Pad,,4
 J1,6-Pin_OMM_Female_Socket,PinSocket_1x06_P2.54mm_Horizontal,,1
+J3,MM8030_2G4,RF_Connector.pretty:Murata_MM8030-2610,,1
+J4,MM8030_LORA,RF_Connector.pretty:Murata_MM8030-2610,,1
+J5,MM8030_GNSS,RF_Connector.pretty:Murata_MM8030-2610,,1
 R1,1.5k_LED_Resistor,Resistor_SMD.pretty:R_0603_1608Metric,,1
 U1,ESP32-C3-WROOM-02,RF_Module.pretty:ESP32-C3-WROOM-02,,1
 U2,MAX-M10S_GNSS,RF_GPS.pretty:ublox_MAX,,1

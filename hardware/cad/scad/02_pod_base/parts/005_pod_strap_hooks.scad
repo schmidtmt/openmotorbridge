@@ -8,7 +8,7 @@
 
 module pod_strap_hook_lugs(length=100.0, width=60.0, hook_w=8.0, hook_out=3.0, hook_h=4.5) {
     // 4 Hook locations: 2 on Left flank (y = 0), 2 on Right flank (y = width)
-    x_positions = [20.0, 80.0];
+    x_positions = [25.0, length - 25.0];
 
     for (x = x_positions) {
         // Left Flank Hooks (y = 0, pointing up +Z)

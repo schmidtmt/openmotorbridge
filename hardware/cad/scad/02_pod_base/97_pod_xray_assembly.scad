@@ -28,15 +28,15 @@ module pod_xray_inspection_assembly() {
         translate([POD_BULKHEAD_X + 2.0, 16.0, POD_OUTER_H/2.0])
             rotate([0, 90, 0])
                 cylinder(r=2.5, h=10.0, $fn=16);
-        translate([POD_BULKHEAD_X + 2.0, 44.0, POD_OUTER_H/2.0])
+        translate([POD_BULKHEAD_X + 2.0, POD_OUTER_W - 16.0, POD_OUTER_H/2.0])
             rotate([0, 90, 0])
                 cylinder(r=2.5, h=10.0, $fn=16);
     }
 
     // 4. Fully Inserted Cartridge Sled (Opaque Royal Blue / Gold)
-    translate([24.0, 3.0, 2.5]) {
+    translate([POD_BULKHEAD_X + 1.0, (POD_OUTER_W - CARTRIDGE_BASE_W)/2.0, POD_WALL]) {
         color("dodgerblue", 0.95)
-            cartridge_sena_sled();
+            cartridge_base_sled();
     }
 }
 
