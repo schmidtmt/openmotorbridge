@@ -1193,8 +1193,18 @@ document.getElementById('btn-trigger-p1-next').addEventListener('click', async (
     if (controlChar) await controlChar.writeValue(new Uint8Array([0x03, 0x00]));
 });
 
-document.getElementById('btn-p1-resync').addEventListener('click', () => {
-    showToast(state.lang === 'de' ? 'Ground-Truth Mesh Re-Sync gesendet' : 'Ground-Truth Mesh Re-Sync sent', 'success');
+document.getElementById('btn-p1-resync')?.addEventListener('click', () => {
+    const uid = document.getElementById('pod1-uid')?.textContent?.trim();
+    if (uid && uid !== '--:--:--:--:--:--:--') {
+        const mapping = JSON.parse(localStorage.getItem('omb_cartridge_mapping') || '{}');
+        const profile = mapping[uid] || 'sena_apex';
+        const select = document.getElementById('select-pod1-profile');
+        if (select) select.value = profile;
+        updatePodDisplay(1, profile);
+        showToast(state.lang === 'de' ? `Ground-Truth Re-Sync: Profil '${profile}' anhand UID geladen` : `Ground-Truth Re-Sync: Profile '${profile}' loaded from UID`, 'success');
+    } else {
+        showToast(state.lang === 'de' ? 'Ground-Truth Mesh Re-Sync gesendet' : 'Ground-Truth Mesh Re-Sync sent', 'success');
+    }
 });
 
 document.getElementById('btn-p2-next').addEventListener('click', async () => {
@@ -1390,13 +1400,39 @@ function updatePodDisplay(podNum, profileKey) {
 }
 
 document.getElementById('select-pod1-profile')?.addEventListener('change', (e) => {
-    updatePodDisplay(1, e.target.value);
-    showToast(state.lang === 'de' ? `Pod 1 Profil geladen: ${e.target.options[e.target.selectedIndex].text}` : `Pod 1 profile applied: ${e.target.options[e.target.selectedIndex].text}`, 'success');
+    const newProfile = e.target.value;
+    updatePodDisplay(1, newProfile);
+
+    // Auto-update persistent UID mapping so next plug-in retains the new profile!
+    const uid = document.getElementById('pod1-uid')?.textContent?.trim();
+    if (uid && uid !== '--:--:--:--:--:--:--') {
+        try {
+            const mapping = JSON.parse(localStorage.getItem('omb_cartridge_mapping') || '{}');
+            mapping[uid] = newProfile;
+            localStorage.setItem('omb_cartridge_mapping', JSON.stringify(mapping));
+        } catch (err) {
+            console.error('Mapping save error:', err);
+        }
+    }
+    showToast(state.lang === 'de' ? `Pod 1 Profil & UID-Zuordnung aktualisiert: ${e.target.options[e.target.selectedIndex].text}` : `Pod 1 profile & UID mapping updated: ${e.target.options[e.target.selectedIndex].text}`, 'success');
 });
 
 document.getElementById('select-pod2-profile')?.addEventListener('change', (e) => {
-    updatePodDisplay(2, e.target.value);
-    showToast(state.lang === 'de' ? `Pod 2 Profil geladen: ${e.target.options[e.target.selectedIndex].text}` : `Pod 2 profile applied: ${e.target.options[e.target.selectedIndex].text}`, 'success');
+    const newProfile = e.target.value;
+    updatePodDisplay(2, newProfile);
+
+    // Auto-update persistent UID mapping so next plug-in retains the new profile!
+    const uid = document.getElementById('pod2-uid')?.textContent?.trim();
+    if (uid && uid !== '--:--:--:--:--:--:--') {
+        try {
+            const mapping = JSON.parse(localStorage.getItem('omb_cartridge_mapping') || '{}');
+            mapping[uid] = newProfile;
+            localStorage.setItem('omb_cartridge_mapping', JSON.stringify(mapping));
+        } catch (err) {
+            console.error('Mapping save error:', err);
+        }
+    }
+    showToast(state.lang === 'de' ? `Pod 2 Profil & UID-Zuordnung aktualisiert: ${e.target.options[e.target.selectedIndex].text}` : `Pod 2 profile & UID mapping updated: ${e.target.options[e.target.selectedIndex].text}`, 'success');
 });
 
 // ==========================================
