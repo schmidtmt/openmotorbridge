@@ -98,29 +98,55 @@ Im Gegensatz zu den Audio- & Intercom-Kassetten (Pod 1 & Pod 2), die einen 2-tei
 
 ## 3. Kern-Bauelemente im Heck-Pod 3
 
-1. **Haupt-Co-Prozessor (ESP32-C3-WROOM-02U mit U.FL):**
+1. **Haupt-Co-Prozessor (ESP32-C3-WROOM-02U mit HF-Schaltbuchse):**
    * 32-Bit RISC-V Single-Core @ 160 MHz mit 4 MB Embedded Flash.
    * Sendet und empfaengt das **2.4 GHz Primary High-Speed Mesh** (Opus 24k HiFi-Audio & 10 Hz Telemetrie).
-   * **Der primäre Profiteur der externen SMA-Frontbuchse (HD-Kanal Reichweiten-Booster):**
-     * **Das Problem:** Der 2.4-GHz-Kanal ist das qualitative Herzstück (glasklares Vollduplex-Audio), hat aber physikalisch mit interner Antenne die kürzeste Reichweite ($150\dots 300\,\text{m}$). Der 868-MHz-LoRa-Kanal überbrückt dagegen selbst mit Chipantenne bereits $1\dots 2{,}5\,\text{km}$.
-     * **Die Lösung:** Das 2.4-GHz-Radio des `ESP32-C3-WROOM-02U` wird über ein internes U.FL-auf-SMA Koax-Pigtail direkt an die **wasserdichte SMA-Flansch-Doppelbuchse (Bulkhead)** der Kassettenblende geführt.
-     * **Reichweitensprung:** Mit einer ultrakompakten 2,4-GHz-Stummelantenne (nur $\approx 30\,\text{mm}$ kurz, $\lambda/4$) oder einer an der Heckspitze montierten Antenne springt die **HiFi-Opus-Voll-Duplex-Reichweite von $200\,\text{m}$ auf $600\dots 1.000\,\text{m}$**!
-     * **Fahrpraxis:** Die Gruppe bleibt selbst bei weit auseinandergezogener Kolonne im kristallklaren HD-Sprachchat, ohne dass auf den Notfall-LoRa-Halbduplex-Funk (Codec2 Walkie-Talkie) zurückgefallen werden muss.
    * Uebernimmt lokales 10 Hz NMEA/UBX-Parsing vom MAX-M10S und SPI-Steuerung des LoRa-Modems.
 2. **GNSS Engine (u-blox MAX-M10S):**
    * Multi-Konstellation 4-System Parallelbetrieb (GPS, GLONASS, Galileo, BeiDou).
-   * Standard: Pulse W3000 Multi-Band Keramik-Chipantenne mit optimierter $50\,\Omega$-Direktanbindung.
-   * **Optionaler externer Antennenanschluss (`J4` U.FL):** Über ein 0-Ohm Lötbrücken-Pad kann der HF-Eingang wahlweise auf eine U.FL-Buchse umgeschaltet werden, um bei starker Abschirmung (z. B. durch schwere Gepäckrollen oder Alukoffer über dem Heck-Pod) eine externe aktive GNSS-Antenne anzuschließen.
    * 1-PPS Hardware-Zeitsignal (Jitter $< 15\,\text{ns}$ RMS) an ESP32-C3 GPIO 6 und ueber Buchsenkontakt 5 an Zentralbox.
 3. **OpenMotorMesh LoRa Transceiver (Semtech SX1262):**
    * Frequenzbereich: 868.0 – 868.6 MHz (EU ISM Band) / 915 MHz (US Band).
    * Sendeleistung: bis zu $+22\,\text{dBm}$ ($160\,\text{mW}$ EIRP).
-   * Integrierter HF-Schalter, Tiefpassfilter und Pulse W3000 868-MHz-Keramik-Chipantenne ($50\,\Omega$ direkt auf der Platine).
-   * *Option:* Über eine Bestückungsoption (0-Ohm Lötbrücke) kann für Extrem-Expeditionen alternativ auch der 868-MHz-Pfad statt des 2,4-GHz-Pfads auf den SMA-Bulkhead gepatcht werden ($> 25\,\text{km}$ LoRa-Reichweite).
+   * Integrierter HF-Schalter, Tiefpassfilter und automatische Antennenumschaltung.
 4. **1-Wire Identifikation (Maxim / ADI DS2401Z+):**
    * Liefert die 64-Bit Silicon Serial Number fuer die automatische Kassetten- und Steckplatzerkennung an der Zentralbox.
 5. **Spannungsregelung (TI TPS7A0533):**
    * Ultra-Low-Noise Automotive LDO (5.0V Eingang $\rightarrow$ saubere 3.3V / 200mA fuer GNSS & LoRa).
+
+---
+
+### 3.1 Universelle HF-Schaltbuchsen-Architektur: Automatische Antennenumschaltung
+
+Um maximale Flexibilität zu gewährleisten, sind **alle 3 Funk- und Navigationspfade** der Transceiver-Platine mit miniaturisierten **mechanischen HF-Schaltbuchsen (z. B. Murata MM8030-2610 / SWG-Serie)** ausgestattet.
+
+```
+                  FUNKTIONSPRINZIP DER HF-SCHALTBUCHSEN
+  1. NORMALZUSTAND (Kein Kabel gesteckt)   2. GESTECKT (Pigtail zur SMA-Frontbuchse)
+┌──────────────────────────────────────┐ ┌──────────────────────────────────────┐
+│  HF-Chip ──► [Federkontakt] ──► Ant  │ │  HF-Chip ──► [Koax-Stecker] ──► SMA  │
+│              (Geschlossen)   (Intern)│ │              (Offen!)         (Aussen)│
+│                                      │ │              [Getrennt] ─X─► Ant     │
+└──────────────────────────────────────┘ └──────────────────────────────────────┘
+```
+
+#### Das mechanische Umschaltprinzip:
+* **Ohne Stecker (Normalbetrieb):** Eine federnde Beryllium-Kupfer-Zunge in der Buchse leitet das HF-Signal verlustfrei ($< 0{,}08\,\text{dB}$ Dämpfung) direkt auf die interne Onboard-Antenne (Pulse W3000 Keramik-Chip bzw. PCB-Antenne).
+* **Mit Stecker (Koax-Pigtail eingeklinkt):** Beim Einschieben des Pigtail-Steckers drückt der Mittelkontakt die interne Feder mechanisch zur Seite:
+  * Die Verbindung zur internen Onboard-Antenne wird **vollständig und automatisch unterbrochen** ($> 20\,\text{dB}$ Isolation).
+  * 100 % der HF-Leistung werden verlustfrei auf das Koaxialkabel zur externen SMA-Frontblendenbuchse geleitet.
+* **Beim Abziehen:** Die Federzunge schnappt sofort zurück – die interne Antenne ist ohne Löt- oder Konfigurationsaufwand augenblicklich wieder aktiv!
+
+#### Die 3 Schaltbuchsen auf der Platine & das Steck-Szenario:
+1. **Buchse `J3` (2.4 GHz Primary High-Speed Mesh – ESP32-C3) ──► [WERKSEITIGER DEFAULT]:**
+   * Das interne Pigtail zur SMA-Frontblendenbuchse ist **ab Werk auf `J3` gesteckt**.
+   * **Warum 2.4 GHz die Default-Wahl ist:** Der 2.4-GHz-Kanal überträgt das bandbreitenintensive **Opus-HiFi-Vollduplex-Audio** und hat mit interner Antenne physikalisch die kürzeste Reichweite ($150\dots 300\,\text{m}$). Durch Anschrauben einer winzigen 2,4-GHz-Stummelantenne ($\approx 30\,\text{mm}$ kurz) an der Kassettenblende springt die HiFi-Sprachreichweite auf **$600\dots 1.000\,\text{m}$**. Die Gruppe bleibt dauerhaft im glasklaren Stereo-Chat, ohne vorzeitig auf den schmalbandigen LoRa-Notfunk zurückzufallen!
+2. **Buchse `J4` (868 MHz LoRa Fallback – Semtech SX1262):**
+   * Läuft standardmäßig autark über die interne Pulse W3000 Keramik-Chipantenne ($1\dots 2{,}5\,\text{km}$ LoRa-Reichweite).
+   * **Expeditions-Option:** Für Extrem-Touren im Gebirge oder in der Wüste kann der Fahrer das Pigtail werkzeuglos von `J3` auf `J4` umstecken. `J3` reaktiviert sofort seine interne 2.4-GHz-Antenne, während LoRa auf die externe Antenne geschaltet wird (**$> 25\,\text{km}$ LoRa-Reichweite**).
+3. **Buchse `J5` (Multi-GNSS – u-blox MAX-M10S):**
+   * Läuft standardmäßig autark über die interne GNSS-Keramikantenne.
+   * **Alukoffer- / Gepäck-Option:** Falls schwere Alukoffer oder wasserdichte Zeltrollen direkt über dem Heck-Pod 3 montiert sind und die Satellitensicht abschirmen, kann das Pigtail auf `J5` gesteckt werden, um eine externe aktive GNSS-Patchantenne an der Heckspitze zu speisen.
 
 ---
 

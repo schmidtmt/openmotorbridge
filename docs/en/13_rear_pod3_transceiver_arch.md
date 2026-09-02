@@ -98,29 +98,55 @@ Unlike the Audio & Intercom cartridges (Pod 1 & Pod 2), which employ a 2-piece s
 
 ## 3. Core Components in Rear Pod 3
 
-1. **Main Co-Processor (ESP32-C3-WROOM-02U with U.FL):**
+1. **Main Co-Processor (ESP32-C3-WROOM-02U with RF Switch Receptacle):**
    * 32-bit RISC-V single-core @ 160 MHz with 4 MB embedded flash.
    * Transmits and receives **2.4 GHz Primary High-Speed Mesh** (Opus 24k HiFi audio & 10 Hz telemetry).
-   * **Primary Beneficiary of the External SMA Bulkhead (HD Audio Range Booster):**
-     * **The Physics Bottleneck:** The 2.4 GHz channel is the qualitative crown jewel (crystal-clear full-duplex speech), but physically suffers the shortest range ($150\dots 300\,\text{m}$ with internal antennas). The 868 MHz LoRa channel already easily reaches $1\dots 2.5\,\text{km}$ even with a tiny chip antenna.
-     * **The Solution:** The 2.4 GHz RF output of the `ESP32-C3-WROOM-02U` is routed via an internal U.FL-to-SMA coaxial pigtail directly to the **waterproof SMA flange bulkhead** on the Pod 3 cartridge faceplate.
-     * **Range Multiplier:** Adding an ultra-compact 2.4 GHz stub antenna (only $\approx 30\,\text{mm}$ tall, $\lambda/4$) or a tail-mounted antenna boosts **HiFi Opus full-duplex range from $200\,\text{m}$ to $600\dots 1,000\,\text{m}$**!
-     * **Riding Experience:** The group stays connected in pristine, uncompressed HD stereo voice chat over vastly longer convoy gaps before ever needing to drop into emergency LoRa half-duplex walkie-talkie mode.
    * Performs local 10 Hz NMEA/UBX parsing from MAX-M10S and SPI control of the LoRa modem.
 2. **GNSS Engine (u-blox MAX-M10S):**
    * Concurrent 4-system multi-constellation operation (GPS, GLONASS, Galileo, BeiDou).
-   * Standard: Pulse W3000 multi-band ceramic chip antenna with optimized direct $50\,\Omega$ microstrip line.
-   * **Optional External Antenna Port (`J4` U.FL):** A 0-ohm jumper pad allows switching the RF input to an on-board U.FL socket, enabling connection of an external active GNSS antenna when heavy luggage rolls or aluminum panniers block the rear pod's sky view.
    * 1-PPS hardware timepulse (jitter $< 15\,\text{ns}$ RMS) connected to ESP32-C3 GPIO 6 and female socket contact 5.
 3. **OpenMotorMesh LoRa Transceiver (Semtech SX1262):**
    * Frequency Range: 868.0 – 868.6 MHz (EU ISM band) / 915 MHz (US band).
    * Output Power: up to $+22\,\text{dBm}$ ($160\,\text{mW}$ EIRP).
-   * Integrated RF switch, low-pass filter, and Pulse W3000 868 MHz ceramic chip antenna ($50\,\Omega$ directly on board).
-   * *Option:* A 0-ohm PCB jumper can alternatively route the 868 MHz LoRa path to the external SMA bulkhead for extreme trans-continental expeditions requiring $> 25\,\text{km}$ LoRa range.
+   * Integrated RF switch, low-pass filter, and automatic antenna disconnect switching.
 4. **1-Wire Identification (Maxim / ADI DS2401Z+):**
    * Provides 64-bit silicon serial number for automated cartridge detection.
 5. **Voltage Regulation (TI TPS7A0533):**
    * Ultra-low-noise automotive LDO (5.0V in $\rightarrow$ clean 3.3V / 200mA for GNSS & LoRa).
+
+---
+
+### 3.1 Universal RF Switch Receptacle Architecture: Automated Antenna Cut-Off
+
+To provide ultimate deployment versatility, **all three RF and navigation paths** on the transceiver board feature miniature **mechanical RF switch receptacles (e.g. Murata MM8030-2610 / SWG Series)**.
+
+```
+            OPERATING PRINCIPLE OF MECHANICAL RF SWITCH RECEPTACLES
+  1. UNMATED (No cable plugged in)         2. MATED (Pigtail to external SMA bulkhead)
+┌──────────────────────────────────────┐ ┌──────────────────────────────────────┐
+│  RF-IC ──► [Spring Leaf] ──► Ant     │ │  RF-IC ──► [Center Pin] ──► Ext SMA  │
+│            (Closed/Normal) (Internal)│ │            (Lifted!)        (External)│
+│                                      │ │            [Isolated] ─X─► Ant       │
+└──────────────────────────────────────┘ └──────────────────────────────────────┘
+```
+
+#### The Mechanical Switching Principle:
+* **Unmated (Default Internal Operation):** An internal phosphor-bronze spring leaf connects the RF transceiver output with near-zero loss ($< 0.08\,\text{dB}$) directly to the onboard antenna (Pulse W3000 ceramic chip or PCB trace).
+* **Mated (Coaxial Pigtail Inserted):** Inserting the coaxial pigtail plug physically deflects the spring leaf:
+  * The connection to the onboard antenna is **mechanically broken and completely isolated** ($> 20\,\text{dB}$ isolation).
+  * 100% of RF transmission power flows directly into the coaxial cable toward the external waterproof SMA bulkhead on the faceplate.
+* **Extraction:** When unplugged, the spring leaf immediately snaps back—instantly restoring internal antenna operation with zero soldering or manual bridging!
+
+#### The Three On-Board Switch Receptacles & Mating Scenarios:
+1. **Receptacle `J3` (2.4 GHz Primary High-Speed Mesh – ESP32-C3) ──► [FACTORY DEFAULT]:**
+   * The internal pigtail to the SMA faceplate bulkhead is **plugged into `J3` by default**.
+   * **Why 2.4 GHz is the Primary Default:** 2.4 GHz carries high-bandwidth **Opus HiFi full-duplex audio** and naturally suffers the shortest physical range ($150\dots 300\,\text{m}$ with internal antennas). Adding an ultra-compact 2.4 GHz stub aerial ($\approx 30\,\text{mm}$ tall) boosts crystal-clear voice range to **$600\dots 1,000\,\text{m}$**. The riding group stays in pristine stereo voice chat across large convoy gaps without dropping into low-bandwidth LoRa emergency mode.
+2. **Receptacle `J4` (868 MHz LoRa Fallback – Semtech SX1262):**
+   * Operates autonomously via its onboard Pulse W3000 ceramic antenna ($1\dots 2.5\,\text{km}$ LoRa range).
+   * **Expedition Setup:** For trans-continental tours or desert expeditions, the rider can move the pigtail from `J3` to `J4`. `J3` automatically restores its internal 2.4 GHz antenna, while LoRa is routed to the external aerial for **$> 25\,\text{km}$ long-range multi-hop coverage**.
+3. **Receptacle `J5` (Multi-GNSS – u-blox MAX-M10S):**
+   * Operates autonomously via its onboard GNSS ceramic antenna.
+   * **Pannier / Luggage Shielding Setup:** If heavy aluminum cases or dry-bags completely cover the rear pod, the pigtail can be plugged into `J5` to feed an external active GNSS antenna on the tail tip.
 
 ---
 
