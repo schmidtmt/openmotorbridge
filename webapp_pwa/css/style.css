@@ -415,22 +415,49 @@ body {
 .horizon-arc {
     width: 200px;
     height: 100px;
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    border-bottom: none;
+    border: 2px solid rgba(255, 255, 255, 0.12);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.06);
     border-top-left-radius: 100px;
     border-top-right-radius: 100px;
     position: absolute;
     top: 10px;
 }
 
+.arc-mark {
+    position: absolute;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    user-select: none;
+}
+
+.mark-left {
+    left: -14px;
+    bottom: -6px;
+}
+
+.mark-center {
+    left: 50%;
+    top: -14px;
+    transform: translateX(-50%);
+    color: var(--accent-green);
+}
+
+.mark-right {
+    right: -14px;
+    bottom: -6px;
+}
+
 .bike-indicator {
-    width: 80px;
-    height: 80px;
+    width: 84px;
+    height: 84px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 40px;
+    transform-origin: 50% 88%;
     transition: transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    z-index: 2;
 }
 
 .lean-angle-text {
