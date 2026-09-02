@@ -205,9 +205,9 @@ The enclosure lid hermetically seals the upper tray. Since all electrical interf
 
 ## 5. Enclosure Type B: Universal Satellite Pod (Identical for Pods 1, 2, and 3)
 
-- **100% Universal Design:** All 3 pod locations on the motorcycle share the identical enclosure body scaled to the **Generic Maximum Envelope ($120.0 \times 64.0 \times 32.0\,\text{mm}$)**.
-- **Chamber Dimensions:** $96.0 \times 56.0 \times 24.0\,\text{mm}$ (PA12 MJF, $3.0\,\text{mm}$ wall thickness).
-- **Electronics Cartridge / Sled:** $92.0 \times 54.0 \times 23.5\,\text{mm}$ (Usable interior volume: $88.0 \times 50.0 \times 23.5\,\text{mm}$).
+- **100% Universal Design:** All 3 pod locations on the motorcycle share the identical enclosure body scaled to the **Enlarged Universal Envelope ($135.0 \times 70.0 \times 38.0\,\text{mm}$)**.
+- **Chamber Dimensions:** $120.0 \times 60.0 \times 30.5\,\text{mm}$ (PA12 MJF, $3.0\,\text{mm}$ wall thickness).
+- **Electronics Cartridge / Sled:** $116.0 \times 58.0 \times 30.0\,\text{mm}$ (Usable interior volume: $110.0 \times 54.0 \times 28.0\,\text{mm}$ – guaranteed to fit commercial off-the-shelf OEM adapters like Sena +Mesh intact with internal antenna pigtails).
 
 ### 5.1 2-Piece Modular Cartridge Architecture (Universal Base Sled & Module Top Inlay)
 
@@ -233,7 +233,7 @@ To achieve maximum modularity at minimal manufacturing cost, each swappable cart
 ```
 
 #### Structural Division & Sealing Concept:
-1. **Universal Base Sled ($92.0 \times 54.0 \times 23.5\,\text{mm}$):**
+1. **Universal Base Sled ($116.0 \times 58.0 \times 30.0\,\text{mm}$):**
    * Standard PA12 base chassis with lateral Poka-Yoke guide rails and snap-fit locking latches.
    * Houses the standardized $35.0 \times 25.0\,\text{mm}$ carrier PCB (`openmotorbridge_pod_cartridge`) with Maxim DS2401 ID chip and front 6-pin horizontal socket `J1`.
    * Integrates an **$1.5\,\text{mm}$ deep and $8.0\,\text{mm}$ wide under-bed cable channel** as well as 4x heat-set brass threaded inserts (*Ruthex M2*).
@@ -483,6 +483,20 @@ To route all analog audio, microphone, power, and PTT signals from the right-ang
 5. **Midland XT / Compact PMR446 Bare-Board Edition:** Houses the stripped bare PCB of a compact Midland PMR walkie-talkie (e.g. XT10/XT30/G5, $\approx 68 \times 42 \times 10\,\text{mm}$ without battery bay) directly inside the sled. Powered via 5V bus, PTT triggered via PhotoMOS optocoupler.
 6. **Embedded PMR446 Transceiver Edition (SA818S / RDA1846):** Fully integrated 500mW PMR446 transceiver module ($38 \times 20\,\text{mm}$) directly on the carrier PCB – with internal 446 MHz helical coil or rugged SMA front jack.
 7. **PMR446 Dual-Jack Adapter Edition:** Weatherproof Midland/Kenwood 2-Pin socket ($2.5\,\text{mm} + 3.5\,\text{mm}$) on the cartridge faceplate for connecting external handheld radios (Midland G9 Pro / G13).
+8. **Sena +Mesh & MeshPort Edition (Off-the-Shelf Slide Mount & SMA Bulkhead):**
+   * **100% Non-Destructive Use of Unmodified OEM Hardware:** The Sena +Mesh adapter remains in its factory original enclosure (zero warranty voiding, no opening or soldering required).
+   * **Sena-Compatible 3D Slide-Mount Inlay:** The cartridge top inlay replicates the exact geometry of the original Sena motorcycle frame mounting plate:
+     * **2x Longitudinal Slide Rails:** The +Mesh slides smoothly into place along its molded side channels.
+     * **Integrated Resilient Latch Trigger:** Snaps audibly behind the catch notch at end-stop; manually released via fingertip pressure.
+     * **2x End Hooks:** Accommodate the original Sena EPDM rubber tension strap for dual redundant anti-vibration locking against severe road shock.
+   * **RF Antenna Interface (SMA Bulkhead Double-Socket on Faceplate):**
+     * Waterproof **SMA flange bulkhead with O-ring** integrated into the cartridge front faceplate.
+     * **Internal:** Short, flexible RG178 coaxial pigtail with $90^\circ$ elbow connector ($R \ge 12\,\text{mm}$) routes cleanly to the antenna port of the Sena +Mesh.
+     * **External:** Standardized gold-plated SMA female thread. Connects either to an ultra-compact 2.4 GHz stub antenna ($25\dots 30\,\text{mm}$) or a low-loss extension cable leading to the cockpit windshield or rear fairing.
+     * **Protection When Unused:** Waterproof silicone/rubber sealing plug (or threaded brass O-ring cap) protects against moisture and road grime.
+   * **Electrical Power Supply (90° Micro-USB / USB-C Ribbon Pigtail):**
+     * Routed from Pin 1 (`GND`) and Pin 2 (`5V_VBUS`) of the JST-SH header `J2` in the under-bed channel directly into the side charging port of the +Mesh.
+     * Central controller manages power with inrush-limiting, automatic sleep-tier transitions, and starter battery protection. Audio is bridged wirelessly via Bluetooth to the helmet (audio pins 3–6 on `J2` remain N/C).
 
 ---
 

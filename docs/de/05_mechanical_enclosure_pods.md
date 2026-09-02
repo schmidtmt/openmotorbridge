@@ -208,9 +208,9 @@ Der Gehäusedeckel schließt die Oberwanne nach oben hermetisch ab. Da sich alle
 
 ## 5. Gehaeuse Typ B: Universeller Satelliten-Pod (Identisch fuer Pod 1, 2 und 3)
 
-- **Vollstaendige Modularitaet:** Alle 3 Pod-Positionen am Motorrad nutzen das identische, universelle Gehaeuse im **generischen Maximal-Envelope ($120{,}0 \times 64{,}0 \times 32{,}0\,\text{mm}$)**.
-- **Abmessungen Schacht:** $96{,}0 \times 56{,}0 \times 24{,}0\,\text{mm}$ (PA12 MJF, $3{,}0\,\text{mm}$ Wandstärke).
-- **Elektronik-Kassette / Schlitten:** $92{,}0 \times 54{,}0 \times 23{,}5\,\text{mm}$ (Lichter Innenbauraum: $88{,}0 \times 50{,}0 \times 23{,}5\,\text{mm}$).
+- **Vollstaendige Modularitaet:** Alle 3 Pod-Positionen am Motorrad nutzen das identische, universelle Gehaeuse im **erweiterten Universal-Envelope ($135{,}0 \times 70{,}0 \times 38{,}0\,\text{mm}$)**.
+- **Abmessungen Schacht:** $120{,}0 \times 60{,}0 \times 30{,}5\,\text{mm}$ (PA12 MJF, $3{,}0\,\text{mm}$ Wandstärke).
+- **Elektronik-Kassette / Schlitten:** $116{,}0 \times 58{,}0 \times 30{,}0\,\text{mm}$ (Lichter Innenbauraum: $110{,}0 \times 54{,}0 \times 28{,}0\,\text{mm}$ – garantiert passend für ungeöffnete OEM-Adapter wie Sena +Mesh inkl. Antennen-Pigtail).
 
 ### 5.1 2-Teilige modulare Kassetten-Architektur (Universal-Unterschlitten & Modul-Oberteil)
 
@@ -236,7 +236,7 @@ Um maximale Flexibilität bei minimalen Fertigungskosten zu erzielen, ist jede W
 ```
 
 #### Konstruktive Aufteilung & Dichtungskonzept:
-1. **Generischer Universal-Unterschlitten (Base Sled, $92{,}0 \times 54{,}0 \times 23{,}5\,\text{mm}$):**
+1. **Generischer Universal-Unterschlitten (Base Sled, $116{,}0 \times 58{,}0 \times 30{,}0\,\text{mm}$):**
    * Bildet das robuste PA12-Grundchassis mit den seitlichen Poka-Yoke Führungsrippen und den Schnappriegel-Rastnasen.
    * Beherbergt im vorderen Bodenfach die standardisierte $35{,}0 \times 25{,}0\,\text{mm}$ Kassetten-Trägerplatine (`openmotorbridge_pod_cartridge`) mit dem Maxim DS2401 ID-Chip und der stirnseitigen 6-Pin Buchsenleiste `J1`.
    * Besitzt einen **$1{,}5\,\text{mm}$ tiefen und $8{,}0\,\text{mm}$ breiten Unterflur-Kabelkanal** im Boden sowie 4x eingelassene M2 Messing-Gewindeeinsätze (*Ruthex M2*).
@@ -392,6 +392,20 @@ Um die Signale vom 90°-abgewinkelten **JST-SH 1.0 mm 6-Pin SMD-Steckverbinder (
 5. **Midland XT / Compact PMR446 Bare-Board Edition:** Nimmt die entkernte Platine eines kompakten Midland-Handfunkgeräts (z. B. XT10/XT30/G5, $\approx 68 \times 42 \times 10\,\text{mm}$ ohne Batteriefach) direkt im Schlitten auf. Stromversorgung direkt über 5V-Bordnetz, PTT-Steuerung über PhotoMOS-Relais.
 6. **Integrierte PMR446 Transceiver-Edition (SA818S / RDA1846):** Vollständig integriertes 500mW PMR446-Analogfunkmodul ($38 \times 20\,\text{mm}$) direkt auf der Kassetten-Trägerplatine – wahlweise mit interner 446-MHz-Helix oder robuster SMA-Frontbuchse.
 7. **PMR446 Doppelklinken-Adapter Edition:** Spritzwassergeschützter Midland/Kenwood 2-Pin Anschluss ($2{,}5\,\text{mm} + 3{,}5\,\text{mm}$) an der Kassettenblende zum Anstecken externer Großgeräte (Midland G9 Pro / G13).
+8. **Sena +Mesh & MeshPort Edition (Off-the-Shelf Slide-Mount & SMA-Bulkhead):**
+   * **100 % zerstörungsfreie Nutzung des ungeöffneten OEM-Geräts:** Der Sena +Mesh Adapter wird im Originalgehäuse belassen (kein Aufschrauben oder Löten nötig).
+   * **Sena-kompatibles 3D-Schlitten-Inlay:** Das Kassetten-Oberteil bildet exakt die Geometrie der originalen Sena-Rahmenbefestigungsplatte ab:
+     * **2x Längs-Führungsstege:** Der +Mesh gleitet formschlüssig über seine Gehäusenuten hinein.
+     * **Integrierte federnde Rastzunge:** Rastet am Endanschlag hinter der Gehäuseraste ein und sichert gegen Herausrutschen; werkzeuglos per Fingerdruck entriegelbar.
+     * **2x Haltehaken an der Schmalseite:** Nehmen das originale Sena-Gummispannband (EPDM) auf, um das Modul zusätzlich redundant gegen harte Fahrbahnstöße und Vibrationen zu sichern.
+   * **HF-Antennenschnittstelle (SMA-Doppelbuchse / Bulkhead an der Frontblende):**
+     * In die Kassetten-Frontblende ist eine wasserdichte **SMA-Flansch-Doppelbuchse mit O-Ring** integriert.
+     * **Innen:** Ein kurzes, flexibles RG178-Koax-Pigtail mit $90^\circ$-Winkelstecker führt mit kontrolliertem Mindestbiegeradius ($R \ge 12\,\text{mm}$) zur Antennenbuchse des Sena +Mesh.
+     * **Außen:** Standardisiertes SMA-Schraubgewinde. Hier kann wahlweise eine ultrakompakte 2,4-GHz-Stummelantenne ($25\dots 30\,\text{mm}$) direkt aufgeschraubt werden oder ein Koaxialkabel zu einer Antenne an der Cockpitscheibe/Heckverkleidung.
+     * **Schutz bei Nichtbenutzung:** Eine wasserdichte Silikon-Schutzkappe (oder verschraubte Messing-Endkappe mit O-Ring) schützt das Außengewinde vor Feuchtigkeit und Straßenschmutz.
+   * **Elektrische Speisung (90° Micro-USB / USB-C Flachbandkabel):**
+     * Von Pin 1 (`GND`) und Pin 2 (`5V_VBUS`) des JST-SH Headers `J2` der Kassetten-Trägerplatine führt ein extrem flaches 90°-Winkel-Pigtail im Unterflurkanal direkt in die Ladebuchse des +Mesh.
+     * Die Zentralbox steuert die Stromversorgung controllerüberwacht mit kontrollierter Inrush-Strombegrenzung, Sleep-Tiers und Unterspannungsabschaltung. Audio läuft rein drahtlos via Bluetooth zum Helm (Audio-Pins 3–6 am Header bleiben N/C).
 
 ---
 
