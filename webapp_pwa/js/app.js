@@ -495,6 +495,50 @@ function updateBleUiState(connected) {
         btnConnect.classList.add('connected');
         dotBle.classList.add('active');
         labelBleStatus.textContent = dict.ble_online;
+
+        // Activate connected hardware indicators across all tabs
+        const badgeCodec = document.getElementById('badge-codec-state');
+        if (badgeCodec) {
+            badgeCodec.className = 'card-badge badge-green';
+            badgeCodec.style.background = '';
+            badgeCodec.style.color = '';
+            badgeCodec.textContent = 'ES8388 24-Bit I2S (48 kHz)';
+        }
+        const pod1Badge = document.getElementById('pod1-badge');
+        if (pod1Badge) {
+            pod1Badge.className = 'card-badge badge-green';
+            pod1Badge.style.background = '';
+            pod1Badge.style.color = '';
+            pod1Badge.textContent = dict.badge_online || 'Online';
+        }
+        const pod2Badge = document.getElementById('pod2-badge');
+        if (pod2Badge) {
+            pod2Badge.className = 'card-badge badge-green';
+            pod2Badge.style.background = '';
+            pod2Badge.style.color = '';
+            pod2Badge.textContent = dict.badge_online || 'Online';
+        }
+        const pod3Badge = document.getElementById('pod3-badge');
+        if (pod3Badge) {
+            pod3Badge.className = 'card-badge badge-purple';
+            pod3Badge.style.background = '';
+            pod3Badge.style.color = '';
+            pod3Badge.textContent = 'DLE Leader';
+        }
+        const badgeCan = document.getElementById('badge-can-link');
+        if (badgeCan) {
+            badgeCan.className = 'card-badge badge-green';
+            badgeCan.style.background = '';
+            badgeCan.style.color = '';
+            badgeCan.textContent = 'TCAN334G Link OK';
+        }
+        const badgeOmm = document.getElementById('badge-omm-fw-state');
+        if (badgeOmm) {
+            badgeOmm.className = 'card-badge badge-green';
+            badgeOmm.style.background = '';
+            badgeOmm.style.color = '';
+            badgeOmm.textContent = 'Synchron (v8.0.4)';
+        }
     } else {
         labelConnectBtn.textContent = dict.ble_connect;
         btnConnect.classList.remove('connected');
@@ -599,6 +643,125 @@ function resetDisconnectedTelemetryUi() {
         lblDr.textContent = 'OFFLINE';
         lblDr.style.color = 'var(--text-muted)';
     }
+
+    // 2. Tab Audio: Codec & 4-Channel VU-Meters
+    const badgeCodec = document.getElementById('badge-codec-state');
+    if (badgeCodec) {
+        badgeCodec.className = 'card-badge';
+        badgeCodec.style.background = 'rgba(255,255,255,0.08)';
+        badgeCodec.style.color = 'var(--text-muted)';
+        badgeCodec.textContent = isDe ? 'Codec: Standby' : 'Codec: Standby';
+    }
+    const lblVuP1 = document.getElementById('lbl-vu-p1');
+    const barVuP1 = document.getElementById('bar-vu-p1');
+    if (lblVuP1) {
+        lblVuP1.textContent = isDe ? '-- dBFS (Standby)' : '-- dBFS (Standby)';
+        lblVuP1.style.color = 'var(--text-muted)';
+    }
+    if (barVuP1) barVuP1.style.width = '0%';
+
+    const lblVuP2 = document.getElementById('lbl-vu-p2');
+    const barVuP2 = document.getElementById('bar-vu-p2');
+    if (lblVuP2) {
+        lblVuP2.textContent = isDe ? '-- dBFS (Standby)' : '-- dBFS (Standby)';
+        lblVuP2.style.color = 'var(--text-muted)';
+    }
+    if (barVuP2) barVuP2.style.width = '0%';
+
+    const lblVuNavi = document.getElementById('lbl-vu-navi');
+    const barVuNavi = document.getElementById('bar-vu-navi');
+    if (lblVuNavi) {
+        lblVuNavi.textContent = isDe ? '-- dBFS (Standby)' : '-- dBFS (Standby)';
+        lblVuNavi.style.color = 'var(--text-muted)';
+    }
+    if (barVuNavi) barVuNavi.style.width = '0%';
+
+    const lblVuAmb = document.getElementById('lbl-vu-ambient');
+    const barVuAmb = document.getElementById('bar-vu-ambient');
+    if (lblVuAmb) {
+        lblVuAmb.textContent = isDe ? '-- dBFS (Standby)' : '-- dBFS (Standby)';
+        lblVuAmb.style.color = 'var(--text-muted)';
+    }
+    if (barVuAmb) barVuAmb.style.width = '0%';
+
+    updateSpeedGatingVisual(0);
+
+    // Audio Modes: Clear active badges in disconnected standby
+    document.querySelectorAll('.mode-card').forEach(card => {
+        card.classList.remove('active');
+        const badge = card.querySelector('.badge-green');
+        if (badge) badge.remove();
+    });
+
+    // 3. Tab Cartridges: Pod 1, 2, 3 & Update Hub
+    const pod1Badge = document.getElementById('pod1-badge');
+    if (pod1Badge) {
+        pod1Badge.className = 'card-badge';
+        pod1Badge.style.background = 'rgba(255,255,255,0.08)';
+        pod1Badge.style.color = 'var(--text-muted)';
+        pod1Badge.textContent = 'Offline';
+    }
+    const pod1Status = document.getElementById('pod1-status');
+    if (pod1Status) {
+        pod1Status.style.color = 'var(--text-muted)';
+        pod1Status.textContent = isDe ? 'Standby (Warte auf BLE)' : 'Standby (Waiting for BLE)';
+    }
+    const pod1Uid = document.getElementById('pod1-uid');
+    if (pod1Uid) pod1Uid.textContent = '--:--:--:--:--:--:--';
+
+    const pod2Badge = document.getElementById('pod2-badge');
+    if (pod2Badge) {
+        pod2Badge.className = 'card-badge';
+        pod2Badge.style.background = 'rgba(255,255,255,0.08)';
+        pod2Badge.style.color = 'var(--text-muted)';
+        pod2Badge.textContent = 'Offline';
+    }
+    const pod2Status = document.getElementById('pod2-status');
+    if (pod2Status) {
+        pod2Status.style.color = 'var(--text-muted)';
+        pod2Status.textContent = isDe ? 'Standby (Warte auf BLE)' : 'Standby (Waiting for BLE)';
+    }
+    const pod2Uid = document.getElementById('pod2-uid');
+    if (pod2Uid) pod2Uid.textContent = '--:--:--:--:--:--:--';
+
+    const pod3Badge = document.getElementById('pod3-badge');
+    if (pod3Badge) {
+        pod3Badge.className = 'card-badge';
+        pod3Badge.style.background = 'rgba(255,255,255,0.08)';
+        pod3Badge.style.color = 'var(--text-muted)';
+        pod3Badge.textContent = 'Offline';
+    }
+    const valDleScore = document.getElementById('val-dle-score');
+    if (valDleScore) {
+        valDleScore.textContent = isDe ? '-- / 100 Pkt.' : '-- / 100 Pts.';
+        valDleScore.style.color = 'var(--text-muted)';
+    }
+    const badgeOmm = document.getElementById('badge-omm-fw-state');
+    if (badgeOmm) {
+        badgeOmm.className = 'card-badge';
+        badgeOmm.style.background = 'rgba(255,255,255,0.08)';
+        badgeOmm.style.color = 'var(--text-muted)';
+        badgeOmm.textContent = 'Offline';
+    }
+
+    // 4. Tab Hardware & Reserve
+    const valReserveA = document.getElementById('val-reserve-a');
+    if (valReserveA) {
+        valReserveA.textContent = isDe ? 'Pegel: -- (Standby)' : 'Level: -- (Standby)';
+        valReserveA.style.color = 'var(--text-muted)';
+    }
+    const valReserveB = document.getElementById('val-reserve-b-state');
+    if (valReserveB) {
+        valReserveB.textContent = isDe ? 'Ausgang: Standby (0V OFF)' : 'Output: Standby (0V OFF)';
+        valReserveB.style.color = 'var(--text-muted)';
+    }
+    const badgeCan = document.getElementById('badge-can-link');
+    if (badgeCan) {
+        badgeCan.className = 'card-badge';
+        badgeCan.style.background = 'rgba(255,255,255,0.08)';
+        badgeCan.style.color = 'var(--text-muted)';
+        badgeCan.textContent = 'CAN: Standby';
+    }
 }
 
 function handleBleTelemetry(event) {
@@ -651,6 +814,8 @@ function updateTelemetryUi(data) {
 
     if (data.speed !== undefined && data.speed !== null) {
         valSpeed.textContent = data.speed.toFixed(1);
+        state.telemetry.speed = data.speed;
+        updateSpeedGatingVisual(data.speed);
     }
 
     if (data.sats !== undefined && data.sats !== null) {
@@ -658,6 +823,7 @@ function updateTelemetryUi(data) {
     }
 
     if (data.lean_angle !== undefined && data.lean_angle !== null) {
+        state.telemetry.lean_angle = data.lean_angle;
         valLeanAngle.textContent = `${data.lean_angle.toFixed(1)}°`;
         bikeLeanVisual.style.transform = `rotate(${data.lean_angle}deg)`;
     }
@@ -762,6 +928,94 @@ function toggleDemoMode(enable) {
         if (lblRssi) {
             lblRssi.textContent = '-78 dBm';
             lblRssi.style.color = 'var(--accent-orange)';
+        }
+
+        // Activate Audio Tab in Demo
+        const badgeCodec = document.getElementById('badge-codec-state');
+        if (badgeCodec) {
+            badgeCodec.className = 'card-badge badge-green';
+            badgeCodec.style.background = '';
+            badgeCodec.style.color = '';
+            badgeCodec.textContent = 'ES8388 24-Bit I2S (48 kHz)';
+        }
+        const lblVuP1 = document.getElementById('lbl-vu-p1');
+        if (lblVuP1) lblVuP1.style.color = '';
+        const lblVuP2 = document.getElementById('lbl-vu-p2');
+        if (lblVuP2) lblVuP2.style.color = '';
+        const lblVuNavi = document.getElementById('lbl-vu-navi');
+        if (lblVuNavi) lblVuNavi.style.color = '';
+        const lblVuAmb = document.getElementById('lbl-vu-ambient');
+        if (lblVuAmb) lblVuAmb.style.color = '';
+        updateTelemetryUi({ mode: 0 });
+
+        // Activate Cartridges Tab in Demo
+        const pod1Badge = document.getElementById('pod1-badge');
+        if (pod1Badge) {
+            pod1Badge.className = 'card-badge badge-green';
+            pod1Badge.style.background = '';
+            pod1Badge.style.color = '';
+            pod1Badge.textContent = dict.badge_online || 'Online';
+        }
+        const pod1Status = document.getElementById('pod1-status');
+        if (pod1Status) {
+            pod1Status.style.color = 'var(--accent-green)';
+            pod1Status.textContent = 'Power ON • DLE +60 Pkt.';
+        }
+        const pod1Uid = document.getElementById('pod1-uid');
+        if (pod1Uid) pod1Uid.textContent = '01:4F:2A:90:12:00:8C';
+
+        const pod2Badge = document.getElementById('pod2-badge');
+        if (pod2Badge) {
+            pod2Badge.className = 'card-badge badge-green';
+            pod2Badge.style.background = '';
+            pod2Badge.style.color = '';
+            pod2Badge.textContent = dict.badge_online || 'Online';
+        }
+        const pod2Status = document.getElementById('pod2-status');
+        if (pod2Status) {
+            pod2Status.style.color = 'var(--accent-green)';
+            pod2Status.textContent = 'Power ON • DLE +40 Pkt.';
+        }
+        const pod2Uid = document.getElementById('pod2-uid');
+        if (pod2Uid) pod2Uid.textContent = '01:B2:77:4A:99:00:1E';
+
+        const pod3Badge = document.getElementById('pod3-badge');
+        if (pod3Badge) {
+            pod3Badge.className = 'card-badge badge-purple';
+            pod3Badge.style.background = '';
+            pod3Badge.style.color = '';
+            pod3Badge.textContent = 'DLE Leader';
+        }
+        const valDleScore = document.getElementById('val-dle-score');
+        if (valDleScore) {
+            valDleScore.textContent = '100 / 100 Pkt.';
+            valDleScore.style.color = 'var(--accent-orange)';
+        }
+        const badgeOmm = document.getElementById('badge-omm-fw-state');
+        if (badgeOmm) {
+            badgeOmm.className = 'card-badge badge-green';
+            badgeOmm.style.background = '';
+            badgeOmm.style.color = '';
+            badgeOmm.textContent = 'Synchron (v8.0.4)';
+        }
+
+        // Activate Hardware Tab in Demo
+        const valReserveA = document.getElementById('val-reserve-a');
+        if (valReserveA) {
+            valReserveA.textContent = isDe ? 'Pegel: HIGH (3.3V)' : 'Level: HIGH (3.3V)';
+            valReserveA.style.color = 'var(--accent-green)';
+        }
+        const valReserveB = document.getElementById('val-reserve-b-state');
+        if (valReserveB) {
+            valReserveB.textContent = isDe ? 'Ausgang: AKTIV (5V ON)' : 'Output: ACTIVE (5V ON)';
+            valReserveB.style.color = 'var(--accent-green)';
+        }
+        const badgeCan = document.getElementById('badge-can-link');
+        if (badgeCan) {
+            badgeCan.className = 'card-badge badge-green';
+            badgeCan.style.background = '';
+            badgeCan.style.color = '';
+            badgeCan.textContent = 'TCAN334G Link OK';
         }
 
         let angleTime = 0;
@@ -1807,6 +2061,19 @@ function renderLiveRadarCanvas() {
         s_radarCtx.setLineDash([]);
     });
 
+    // Standby Check: If BLE is disconnected and Demo mode is inactive, render subtle standby grid only
+    if (!state.isBleConnected && !state.isDemoMode) {
+        s_radarCtx.fillStyle = 'rgba(255, 255, 255, 0.35)';
+        s_radarCtx.font = 'bold 12px sans-serif';
+        s_radarCtx.textAlign = 'center';
+        s_radarCtx.fillText(state.lang === 'de' ? 'STANDBY • RADAR INAKTIV' : 'STANDBY • RADAR INACTIVE', cx, cy - 6);
+        s_radarCtx.font = '10px sans-serif';
+        s_radarCtx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+        s_radarCtx.fillText(state.lang === 'de' ? 'Warte auf BLE oder Demo-Modus' : 'Waiting for BLE or Demo Mode', cx, cy + 12);
+        requestAnimationFrame(renderLiveRadarCanvas);
+        return;
+    }
+
     // 3. Radar Sweep Line
     s_radarAngle += 0.03;
     s_radarCtx.beginPath();
@@ -1902,23 +2169,45 @@ function updateSpeedGatingVisual(speed) {
 
 // Live Audio VU Meter Loop
 setInterval(() => {
+    // Only update live VU-meters when BLE is connected or Demo mode is active!
+    if (!state.isBleConnected && !state.isDemoMode) {
+        return;
+    }
+
     if (document.getElementById('tab-audio')?.classList.contains('active')) {
         const p1Rms = -14 + (Math.random() * 6 - 3);
         const p2Rms = -18 + (Math.random() * 8 - 4);
         const ambRms = state.telemetry.speed > 30 ? -96 : (-22 + (Math.random() * 4 - 2));
 
-        document.getElementById('lbl-vu-p1').textContent = `${p1Rms.toFixed(1)} dBFS`;
-        document.getElementById('bar-vu-p1').style.width = `${Math.min(100, Math.max(5, 100 + p1Rms * 2))}%`;
+        const elP1 = document.getElementById('lbl-vu-p1');
+        const barP1 = document.getElementById('bar-vu-p1');
+        if (elP1) {
+            elP1.textContent = `${p1Rms.toFixed(1)} dBFS`;
+            elP1.style.color = '';
+        }
+        if (barP1) barP1.style.width = `${Math.min(100, Math.max(5, 100 + p1Rms * 2))}%`;
 
-        document.getElementById('lbl-vu-p2').textContent = `${p2Rms.toFixed(1)} dBFS`;
-        document.getElementById('bar-vu-p2').style.width = `${Math.min(100, Math.max(5, 100 + p2Rms * 2))}%`;
+        const elP2 = document.getElementById('lbl-vu-p2');
+        const barP2 = document.getElementById('bar-vu-p2');
+        if (elP2) {
+            elP2.textContent = `${p2Rms.toFixed(1)} dBFS`;
+            elP2.style.color = '';
+        }
+        if (barP2) barP2.style.width = `${Math.min(100, Math.max(5, 100 + p2Rms * 2))}%`;
 
-        document.getElementById('lbl-vu-ambient').textContent = state.telemetry.speed > 30 
-            ? '-96.0 dBFS (Stumm > 30 km/h)' 
-            : `${ambRms.toFixed(1)} dBFS (Transparenz ON)`;
-        document.getElementById('bar-vu-ambient').style.width = state.telemetry.speed > 30 
-            ? '0%' 
-            : `${Math.min(100, Math.max(5, 100 + ambRms * 2))}%`;
+        const elAmb = document.getElementById('lbl-vu-ambient');
+        const barAmb = document.getElementById('bar-vu-ambient');
+        if (elAmb) {
+            elAmb.textContent = state.telemetry.speed > 30 
+                ? (state.lang === 'de' ? '-96.0 dBFS (Stumm > 30 km/h)' : '-96.0 dBFS (Muted > 30 km/h)')
+                : `${ambRms.toFixed(1)} dBFS (Transparenz ON)`;
+            elAmb.style.color = '';
+        }
+        if (barAmb) {
+            barAmb.style.width = state.telemetry.speed > 30 
+                ? '0%' 
+                : `${Math.min(100, Math.max(5, 100 + ambRms * 2))}%`;
+        }
     }
 }, 150);
 
