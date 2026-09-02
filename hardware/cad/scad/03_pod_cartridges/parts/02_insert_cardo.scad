@@ -60,15 +60,6 @@ module cartridge_insert_cardo(
         translate([20.0, insert_w/2.0 - 8.0, -1.0])
             cube(size=[18.0, 16.0, deck_th + cradle_h + 2.0], center=false);
 
-        // 5. 4x Convective Airflow & Breathing Slots (Lüftungsschlitze)
-        translate([18.0, 8.0, -1.0])
-            cube(size=[14.0, 2.5, deck_th + 2.0], center=false);
-        translate([18.0, insert_w - 10.5, -1.0])
-            cube(size=[14.0, 2.5, deck_th + 2.0], center=false);
-        translate([75.0, 8.0, -1.0])
-            cube(size=[14.0, 2.5, deck_th + 2.0], center=false);
-        translate([75.0, insert_w - 10.5, -1.0])
-            cube(size=[14.0, 2.5, deck_th + 2.0], center=false);
 
         // 6. 2x Outward-Facing EPDM Rubber Strap Undercut Hook Slots
         // Left Hook Undercut Slot
