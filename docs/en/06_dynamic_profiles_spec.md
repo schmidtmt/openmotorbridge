@@ -263,4 +263,72 @@ A common real-world scenario: over time, a rider upgrades their intercom hardwar
 5. **Ground-Truth Re-Sync (`🔄 Sync`):**
    The rider can click the Sync button at any time to verify which profile in flash storage corresponds to the physical UID currently seated in the slot, or use **`🧩 Learn UUID`** to interactively reconfigure the mapping.
 
+---
+
+## 8. Taxonomy of OEM Adapter Interfacing: Connection Classes & Wiring Matrix
+
+OpenMotorBridge accommodates a wide spectrum of commercial off-the-shelf OEM headsets, handheld radios, and wireless bridge dongles without requiring users to open, modify, or desolder devices. To maintain clean universal plug-and-play modularity, the system classifies all OEM hardware into **5 standardized connection classes**:
+
+```
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                   OVERVIEW OF THE 5 OEM ADAPTER CONNECTION CLASSES                     │
+├───────────────────┬─────────────────────────────┬──────────────────────────────────────┤
+│ Adapter Class     │ Typical Hardware Models     │ Interfacing & Connection Scheme      │
+├───────────────────┼─────────────────────────────┼──────────────────────────────────────┤
+│ **Class A:**      │ Sena +Mesh (B2M-01),        │ • Switched 5V power only (90° Micro- │
+│ Wireless Bridge   │ Sena MeshPort Blue / Red,   │   USB / USB-C) from J2 (Pins 1 & 2)  │
+│ (Power-Only / USB)│ Cardo Packtalk Outdoor USB  │ • Audio routed wirelessly via BT     │
+│                   │                             │ • External SMA bulkhead double-jack  │
+│                   │                             │ • Mechanics: OEM slide-mount & strap │
+├───────────────────┼─────────────────────────────┼──────────────────────────────────────┤
+│ **Class B:**      │ Sena 50S, 60S, 30K,         │ • Full analog stereo (Audio In & Out)│
+│ Pogo-Pin Clamps   │ Sena 20S EVO, SRL3          │ • 6-conductor ribbon from J2 to pogo │
+│ (Spring-Pin Array)│                             │   array on contour nest              │
+│                   │                             │ • TLP222A PTT synthesis (Pin 6)      │
+│                   │                             │ • Mechanics: Click-in cradle nest    │
+├───────────────────┼─────────────────────────────┼──────────────────────────────────────┤
+│ **Class C:**      │ Cardo Packtalk Edge,        │ • Full analog stereo (Audio In & Out)│
+│ Magnetic Air-Mount│ Cardo Packtalk Pro,         │ • 5-pad spring-contact array in nest │
+│                   │ Cardo Packtalk Neo          │ • Dual N52 Neodymium guidance magnets│
+│                   │                             │   for tool-free magnetic latching    │
+├───────────────────┼─────────────────────────────┼──────────────────────────────────────┤
+│ **Class D:**      │ Cardo Packtalk Bold / Black,│ • Full analog stereo (Audio In & Out)│
+│ Slide Cradle      │ Cardo Freecom 1 / 2 / 4+    │ • Lateral wiping contacts in cradle  │
+│                   │                             │ • Mechanics: Slide rail with latch   │
+├───────────────────┼─────────────────────────────┼──────────────────────────────────────┤
+│ **Class E:**      │ Midland G7 / G9 Pro, G13,   │ • 2-Pin dual audio jack (2.5mm+3.5mm)│
+│ Analogue Radio    │ Midland XT30, Baofeng,      │ • Opto-PTT keys transmitter to ground│
+│ (PMR446 / Kenwood)│ Kenwood TK Series           │ • 5V DC/DC regulator (battery dummy) │
+│                   │                             │ • Fixed 446MHz helix or SMA front jack│
+└───────────────────┴─────────────────────────────┴──────────────────────────────────────┘
+```
+
+### 8.1 Detailed Pinout of Cartridge Header (`J2`) Across Adapter Classes
+
+The 6-pin **JST-SH 1.0 mm header (`J2`)** on the universal cartridge carrier PCB (`openmotorbridge_pod_cartridge`) distributes all power, audio, and synthesis lines. The appropriate pre-crimped inlay harness plugs directly into `J2`:
+
+| Pin | Signal | Class A (e.g. +Mesh) | Class B (e.g. Sena 50S) | Class C (e.g. Cardo Edge)| Class E (PMR446 Radio) |
+| :---: | :--- | :--- | :--- | :--- | :--- |
+| **1** | `GND` | Micro-USB Pin 5 (GND) | Pogo-Pin 1 (GND) | Air-Mount Pad 1 (GND) | Jack shield / Ground |
+| **2** | `5V_VBUS` | Micro-USB Pin 1 (+5V) | Pogo-Pin 2 (5V Charge)| Air-Mount Pad 2 (5V Charge)| Battery dummy 5V In |
+| **3** | `AUDIO_R+` | *N/C (Pure BT Audio)* | Pogo-Pin 4 (Spk R+) | Air-Mount Pad 3 (Spk +)| Jack Speaker + |
+| **4** | `AUDIO_R-` | *N/C (Pure BT Audio)* | Pogo-Pin 5 (Spk R-) | Air-Mount Pad 4 (Spk -)| Jack Speaker - |
+| **5** | `MIC_IN+` | *N/C (Pure BT Audio)* | Pogo-Pin 6 (Mic +) | Air-Mount Pad 5 (Mic +)| Jack Microphone + |
+| **6** | `OPTO_PTT` | *N/C* | Pogo-Pin 7 (Mesh-Btn)| *N/C* (Aux) | PTT trigger to ground |
+
+---
+
+### 8.2 RF and Antenna Concepts Across Hardware Enclosures
+
+1. **Adapters with External Antenna Sockets (e.g. Sena +Mesh, PMR446 Radios):**
+   * **Front Bulkhead Double-Jack:** A waterproof SMA flange bulkhead (with silicone O-ring) is mounted on the cartridge faceplate.
+   * **Internal Pigtail:** A short, flexible RG178 coaxial pigtail connects the internal bulkhead to the antenna port of the OEM device (maintaining bend radius $R \ge 12\,\text{mm}$).
+   * **Optional External Aerial:** Riders can screw on an ultra-compact 2.4 GHz stub antenna ($25\dots 30\,\text{mm}$) directly, or connect a low-loss cable to a high-gain antenna on the windshield or tail.
+   * **Protective Cap:** When unused, a waterproof silicone cap or threaded brass O-ring plug seals the port to IP67.
+2. **Adapters with Integrated Folding Antennas (e.g. Sena 50S / 60S):**
+   * The open-top sled design provides the full $28.0\,\text{mm}$ clearance height, allowing factory folding antennas to be deployed inside the chamber without interfering with the pod ceiling.
+3. **Adapters with Internal Chip Antennas (e.g. Cardo Packtalk Edge DMC Gen2):**
+   * RF radiation passes through the high-grade PA12 plastic enclosure virtually unattenuated ($\le 0.4\,\text{dB}$ insertion loss at 2.4 GHz), requiring zero external perforations.
+
+
 

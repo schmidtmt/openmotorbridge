@@ -263,5 +263,73 @@ Ein häufiger Anwendungsfall in der Praxis: Der Fahrer rüstet nach einiger Zeit
 5. **Ground-Truth Re-Sync (`🔄 Sync`):**
    Mit dem Sync-Button kann der Fahrer jederzeit verifizieren, welches Profil der real im Slot steckenden Hardware-UID im Flash zugeordnet ist, oder über **`🧩 UUID anlernen`** die Zuordnung interaktiv neu konfigurieren.
 
+---
+
+## 8. Systematik der OEM-Adapter-Anbindung: Anschluss-Klassen & Verkabelungs-Matrix
+
+OpenMotorBridge unterstützt verschiedenste Klassen käuflicher OEM-Headsets, Funkgeräte und drahtloser Adapter, ohne dass der Nutzer Geräte modifizieren oder aufschrauben muss. Um die universelle Kompatibilität zu gewährleisten, unterteilt das System alle OEM-Geräte in **5 standardisierte Anschluss-Klassen**:
+
+```
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                   ÜBERSICHT DER 5 OEM-ADAPTER ANSCHLUSS-KLASSEN                       │
+├───────────────────┬─────────────────────────────┬──────────────────────────────────────┤
+│ Adapter-Klasse    │ Typische Geräte-Vertreter   │ Anschluss- & Schnittstellen-Typ      │
+├───────────────────┼─────────────────────────────┼──────────────────────────────────────┤
+│ **Klasse A:**     │ Sena +Mesh (B2M-01),        │ • Reine 5V-Speisung (90° Micro-USB / │
+│ Drahtlos-Bridge   │ Sena MeshPort Blue / Red,   │   USB-C) über Header J2 (Pin 1 & 2)  │
+│ (Nur-Strom / USB) │ Cardo Packtalk Outdoor Dongle│ • Audio drahtlos via Bluetooth      │
+│                   │                             │ • Externe SMA-Bulkhead Doppelbuchse  │
+│                   │                             │ • Mechanik: OEM-Schlitten & Gummiband│
+├───────────────────┼─────────────────────────────┼──────────────────────────────────────┤
+│ **Klasse B:**     │ Sena 50S, 60S, 30K,         │ • Vollwertig analog (Audio In & Out) │
+│ Pogo-Pin Klemmen  │ Sena 20S EVO, SRL3          │ • 6-adriges Flachband von J2 auf     │
+│ (Federkontakt-Bett│                             │   Pogo-Pin Kontaktleiste im Inlay    │
+│                   │                             │ • TLP222A PTT-Trigger (Pin 6)        │
+│                   │                             │ • Mechanik: Klick-Bett wie Helmclip  │
+├───────────────────┼─────────────────────────────┼──────────────────────────────────────┤
+│ **Klasse C:**     │ Cardo Packtalk Edge,        │ • Vollwertig analog (Audio In & Out) │
+│ Magnetischer      │ Cardo Packtalk Pro,         │ • 5-Pol Federkontaktfeld im Inlay    │
+│ Air-Mount         │ Cardo Packtalk Neo          │ • 2x N52 Neodym-Magnete mit Führungs-│
+│                   │                             │   keil für werkzeugloses Andocken    │
+├───────────────────┼─────────────────────────────┼──────────────────────────────────────┤
+│ **Klasse D:**     │ Cardo Packtalk Bold / Black,│ • Vollwertig analog (Audio In & Out) │
+│ Schiebe-Cradle    │ Cardo Freecom 1 / 2 / 4+    │ • Seitliche Schiebekontakte im Inlay │
+│                   │                             │ • Mechanik: Gleitschiene mit Arretier│
+├───────────────────┼─────────────────────────────┼──────────────────────────────────────┤
+│ **Klasse E:**     │ Midland G7 / G9 Pro, G13,   │ • 2-Pin Doppelklinke (2.5mm + 3.5mm) │
+│ Analoger Funk     │ Midland XT30, Baofeng,      │ • Opto-PTT tastet PTT gegen Masse    │
+│ (PMR446 / Kenwood)│ Kenwood TK-Serie            │ • 5V DC/DC Speisung (Batteriedummy)  │
+│                   │                             │ • Feste 446MHz Wendel oder SMA-Front │
+└───────────────────┴─────────────────────────────┴──────────────────────────────────────┘
+```
+
+### 8.1 Detaillierte Pin-Belegung der Kassetten-Schnittstelle (`J2`) nach Klassen
+
+Der 6-polige **JST-SH 1.0 mm Header (`J2`)** auf der Kassetten-Trägerplatine (`openmotorbridge_pod_cartridge`) führt alle Versorgungs- und Steuersignale. Je nach Adapter-Klasse wird das passende vorkonfektionierte Inlay-Kabel angesteckt:
+
+| Pin | Signal | Klasse A (z.B. +Mesh) | Klasse B (z.B. Sena 50S) | Klasse C (z.B. Cardo Edge)| Klasse E (PMR446 Funk) |
+| :---: | :--- | :--- | :--- | :--- | :--- |
+| **1** | `GND` | Micro-USB Pin 5 (GND) | Pogo-Pin 1 (GND) | Air-Mount Pad 1 (GND) | Klinke Schirm / Masse |
+| **2** | `5V_VBUS` | Micro-USB Pin 1 (+5V) | Pogo-Pin 2 (5V Charge)| Air-Mount Pad 2 (5V Charge)| Batteriedummy 5V In |
+| **3** | `AUDIO_R+` | *N/C (Reines BT-Audio)* | Pogo-Pin 4 (Spk R+) | Air-Mount Pad 3 (Spk +)| Klinke Lautsprecher + |
+| **4** | `AUDIO_R-` | *N/C (Reines BT-Audio)* | Pogo-Pin 5 (Spk R-) | Air-Mount Pad 4 (Spk -)| Klinke Lautsprecher - |
+| **5** | `MIC_IN+` | *N/C (Reines BT-Audio)* | Pogo-Pin 6 (Mic +) | Air-Mount Pad 5 (Mic +)| Klinke Mikrofon + |
+| **6** | `OPTO_PTT` | *N/C* | Pogo-Pin 7 (Mesh-Btn)| *N/C* (Aux) | PTT Taster gegen Masse |
+
+---
+
+### 8.2 HF- und Antennenkonzepte je nach Gerätebauform
+
+1. **Adapter mit externer Antennenbuchse (z.B. Sena +Mesh, PMR446 Handfunk):**
+   * **Frontblenden-Doppelbuchse:** Eine wasserdichte SMA-Flanschbuchse (Bulkhead mit O-Ring) wird in die Kassetten-Frontblende montiert.
+   * **Internes Pigtail:** Ein kurzes, flexibles RG178-Koax-Pigtail verbindet die Doppelbuchse mit dem Antennenanschluss des OEM-Geräts im Kassetteninneren (Biegeradius $R \ge 12\,\text{mm}$).
+   * **Optionale Außenantenne:** Der Fahrer kann eine ultrakompakte 2,4 GHz Stummelantenne ($25\dots 30\,\text{mm}$) direkt aufschrauben oder per Antennenkabel eine High-Gain-Antenne an der Cockpitscheibe / am Heck anschließen.
+   * **Verschlusskappe:** Bei Nichtgebrauch dichtet eine Silikon-Schutzkappe oder verschraubte Messing-Endkappe mit O-Ring den Anschluss nach IP67 ab.
+2. **Adapter mit integrierter Klappantenne (z.B. Sena 50S / 60S):**
+   * Der offene Kassetten-Schlitten bietet nach oben hin die volle lichte Bauhöhe ($28{,}0\,\text{mm}$), sodass werkseitige Klappantennen im Schacht aufgestellt werden können, ohne an die Pod-Decke zu stoßen.
+3. **Adapter mit festen internen Antennen (z.B. Cardo Packtalk Edge DMC Gen2):**
+   * Die HF-Wellen durchdringen das hochwertige PA12-Kunststoffgehäuse des Pods und der Kassette praktisch dämpfungsfrei ($\le 0{,}4\,\text{dB}$ Einfügedämpfung bei 2,4 GHz), sodass keine Gehäusedurchbrüche erforderlich sind.
+
+
 
 

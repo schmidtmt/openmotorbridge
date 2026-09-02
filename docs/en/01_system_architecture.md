@@ -83,6 +83,15 @@ Satellite Pods 1, 2, and 3 are mechanically **100% identical** and designed for 
 * Heavy intercom hardware (Sena 50S / Cardo Edge) stays safely locked and weather-protected on the motorcycle.
 * Helmets remain $100\%$ lightweight, aerodynamically stock, and completely cable-free. Audio I/O connects wirelessly via the Central Box's integrated Bluetooth interface.
 
+### 2.3 Universal Off-the-Shelf OEM Adapter Interfacing
+The enlarged pod cartridges ($110 \times 54 \times 28\,\text{mm}$ interior cavity) accommodate all commercial off-the-shelf OEM adapters in their factory-unopened state:
+* **Class A (Wireless Bridges & USB Power):** e.g. Sena +Mesh (B2M-01), Sena MeshPort Blue/Red – powered via low-profile 90° Micro-USB/USB-C, wireless BT audio bridge to helmet, external SMA bulkhead double-jack with silicone protection plug on faceplate.
+* **Class B (Pogo-Pin Spring-Contact Cradles):** e.g. Sena 50S/60S/30K/20S EVO – full analog audio (ES8388 codec) and TLP222A PTT synthesis.
+* **Class C (Magnetic Air-Mount):** e.g. Cardo Packtalk Edge/Pro/Neo – tool-free magnetic latching via dual N52 Neodymium magnets.
+* **Class D (Slide Cradles):** e.g. Cardo Packtalk Bold/Black, Freecom series – mechanical slide rail with catch spring.
+* **Class E (Analogue PMR446 Radios):** e.g. Midland G7/G9 Pro, XT30, Kenwood – 2-pin dual audio jack with PhotoMOS PTT keying.
+*(Detailed wiring matrix and pinouts available in [Specification 06, Section 8](file:///Users/schmidtm/openMotorBridge/docs/en/06_dynamic_profiles_spec.md#8-taxonomy-of-oem-adapter-interfacing-connection-classes--wiring-matrix)).*
+
 ---
 
 ## 3. RF Coexistence & Spatial Diversity ($> 35\,\text{dB}$ Isolation)
