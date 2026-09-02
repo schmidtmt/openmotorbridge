@@ -236,4 +236,32 @@ Wenn ein Nutzer eine neue Kassetten-Trägerplatine mit fabrikneuem DS2401 Chip b
 > 
 > **Erst wenn der Nutzer in der WebApp das Profil bestätigt** (oder die UID bereits im Flash-Mapping hinterlegt ist), führt der Controller eine kontrollierte Soft-Start-Einschaltsequenz (50 ms Inrush-Limiting) durch und schaltet die Audiopegel frei.
 
+---
+
+### 7.2 Hardware-Upgrade & OEM-Adapter-Update (Austausch des Headsets in bestehender Kassette)
+
+Ein häufiger Anwendungsfall in der Praxis: Der Fahrer rüstet nach einiger Zeit sein Intercom auf – beispielsweise wird ein gebrauchtes Sena 20S oder Cardo Freecom aus dem Kassettengehäuse entnommen und durch ein modernes Modell (z. B. Sena 60S Mesh 3.0 Wave oder Cardo Packtalk Pro / Edge DMC Gen2) ersetzt. Die universelle Kassetten-Trägerplatine (`openmotorbridge_pod_cartridge`) mit dem DS2401 ID-Chip wird dabei weiterverwendet.
+
+#### Das Prinzip der persistenten UID-Neuverknüpfung:
+1. **Unveränderte Chip-UID:**
+   Da der DS2401 Silizium-Seriennummern-Chip fest auf der Trägerplatine verlötet ist, behält die umgerüstete Kassette ihre 64-Bit-Hardware-UID (z. B. `01:4F:2A:90:12:00:8C`).
+2. **Sofortige Auswahl im Dashboard:**
+   Im Tab **„🧩 Kassetten & DLE“** der WebApp wählt der Fahrer im Dropdown des jeweiligen Slots einfach das neu eingebaute Modell (z. B. *„⚡ Sena 60S (Mesh 3.0 Wave)“*).
+3. **Automatisches Überschreiben der Zuordnungstabelle:**
+   Durch die Auswahl im Dropdown aktualisiert die WebApp **sofort und automatisch** das persistente Mapping:
+   ```json
+   {
+     "01:4F:2A:90:12:00:8C": "sena_60s"
+   }
+   ```
+   Dieser Eintrag wird dauerhaft im Browser-Speicher (`localStorage`) und synchron auf dem ESP32 LittleFS (`/profiles/mapping.json`) gespeichert.
+4. **Verhalten beim erneuten Einstecken:**
+   Wird die Kassette später entfernt, in einen anderen Steckplatz gesteckt oder das System neugestartet:
+   * Der 1-Wire-Bus liest die UID `01:4F:2A:90:12:00:8C` aus.
+   * Die Zuordnungstabelle liefert sofort **`sena_60s`** (das alte Profil ist überschrieben).
+   * **Es wird verlässlich das neue Profil geladen** – inklusive der neuen Optokoppler-Timings, Audio-Gains und des höheren DLE-Mesh-3.0-Scores (+60 Pkt.).
+5. **Ground-Truth Re-Sync (`🔄 Sync`):**
+   Mit dem Sync-Button kann der Fahrer jederzeit verifizieren, welches Profil der real im Slot steckenden Hardware-UID im Flash zugeordnet ist, oder über **`🧩 UUID anlernen`** die Zuordnung interaktiv neu konfigurieren.
+
+
 

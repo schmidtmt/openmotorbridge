@@ -24,7 +24,7 @@ Die W3C Web-Bluetooth-API wird je nach Betriebssystem unterschiedlich unterstüt
 ## 2. Telemetrie & Steuerungsfunktionen
 - **Echtzeit-Telemetrie:** Ueberwachung der Bordnetzspannung (KL15/KL30), USV-Akkuspannung (BQ24075) und CR2032-Batteriestatus des BLE-Lenkertasters (Service 0x180F).
 - **Audio-Matrix-Steuerung:** Interaktiver Umschalter fuer Betriebsmodi (Standard, Single Rider, Cruise Mode) sowie Schieberegler fuer Ducking-Schwellwerte und Gain.
-- **Kassetten- & Profilmanager:** Erkennung der via 1-Wire gesteckten Module, Anzeige der aktiven Hardwareprofile und Ground-Truth-Kanalwahl mit Re-Sync-Trigger.
+- **Kassetten- & Profilmanager:** Erkennung der via 1-Wire gesteckten Module, Anzeige der aktiven Hardwareprofile und Ground-Truth-Kanalwahl mit Re-Sync-Trigger (`🔄 Sync`). Bei Headset-Upgrades (z. B. Sena 60S statt 20S in bestehender Kassette) verknüpft die WebApp die neue Auswahl sofort persistent mit der 1-Wire DS2401 Chip-UID, sodass künftig nach jedem Aus- und Einstecken automatisch das neue Profil geladen wird.
 - **Kassetten-Onboarding-Wizard:** Schritt-fuer-Schritt-Anleitung bei Neu-Kopplung (Bluetooth Classic am Intercom deaktivieren, Pairings loeschen, reinen Mesh-Betrieb erzwingen).
 - **WS2812B RGB Status-LED Widget:** Live-Spiegelung des optischen Gehaeusestatus im Dashboard.
 

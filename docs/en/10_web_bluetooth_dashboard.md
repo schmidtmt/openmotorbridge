@@ -24,7 +24,7 @@ Support for the W3C Web Bluetooth API varies depending on the platform and brows
 ## 2. Telemetry & Control Capabilities
 - **Real-Time Telemetry:** Live monitoring of motorcycle electrical voltage (KL15/KL30), UPS battery health (BQ24075), and handlebar remote CR2032 state (BLE Service 0x180F).
 - **Audio Matrix Controller:** Dynamic mode selection (Standard, Single Rider, Cruise Mode) with interactive gain sliders and ducking threshold configuration.
-- **Cartridge Profile Manager:** Automatic 1-Wire DS2401 detection, profile rendering, and ground-truth mesh channel re-sync.
+- **Cartridge Profile Manager:** Automatic 1-Wire DS2401 detection, active hardware profile rendering, and ground-truth mesh channel re-sync (`🔄 Sync`). When upgrading headset modules (e.g. Sena 60S replacing 20S in an existing cartridge), the WebApp instantly re-maps the new profile to the physical 1-Wire DS2401 chip UID in persistent storage, ensuring future insertions always load the new profile.
 - **Cartridge Onboarding Wizard:** Step-by-step guidance for pristine RF isolation (disabling classic Bluetooth, resetting pairings, pure mesh operation).
 - **WS2812B RGB Status LED Widget:** Live reflection of physical enclosure LED states.
 
