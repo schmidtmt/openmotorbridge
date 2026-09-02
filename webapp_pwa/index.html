@@ -97,20 +97,30 @@
                                     <!-- LED Taillight Bar (Glowing Red) -->
                                     <path d="M 38 51 L 50 47 L 62 51" stroke="#ff3b30" stroke-width="3" stroke-linecap="round" fill="none" style="filter: drop-shadow(0 0 4px #ff3b30);"/>
 
-                                    <!-- Rider Torso / Leather Racing Suit Shoulders -->
-                                    <path d="M 25 39 Q 50 33 75 39 L 69 49 Q 50 46 31 49 Z" fill="#0f172a" stroke="#00f2fe" stroke-width="1.5"/>
-                                    <ellipse cx="29" cy="40" rx="4" ry="2.5" fill="#ff9f0a"/>
-                                    <ellipse cx="71" cy="40" rx="4" ry="2.5" fill="#ff9f0a"/>
+                                    <!-- Rider Torso / Leather Suit Back & Aerodynamic Speed Hump -->
+                                    <path d="M 25 41 Q 50 35 75 41 L 69 51 Q 50 47 31 51 Z" fill="#0f172a" stroke="#00f2fe" stroke-width="1.5"/>
+                                    <!-- Leather Racing Speed Hump (Rennhöcker auf dem Rücken) -->
+                                    <path d="M 46 36 Q 50 31 54 36 L 53 45 Q 50 47 47 45 Z" fill="#1e293b" stroke="#ff9f0a" stroke-width="1.2"/>
+                                    <ellipse cx="29" cy="42" rx="4" ry="2.5" fill="#ff9f0a"/>
+                                    <ellipse cx="71" cy="42" rx="4" ry="2.5" fill="#ff9f0a"/>
 
-                                    <!-- Handlebars & Bar-End Mirrors -->
-                                    <path d="M 16 33 L 34 37 M 66 37 L 84 33" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
-                                    <circle cx="14" cy="32" r="2.5" fill="#00f2fe"/>
-                                    <circle cx="86" cy="32" r="2.5" fill="#00f2fe"/>
+                                    <!-- Handlebars & Back of Mirror Housings (Viewed from Behind) -->
+                                    <path d="M 16 34 L 34 38 M 66 38 L 84 34" stroke="#64748b" stroke-width="2" stroke-linecap="round"/>
+                                    <!-- Dark Mirror Shells (Rear Facing) -->
+                                    <ellipse cx="14" cy="33" rx="3" ry="2.2" fill="#1e293b" stroke="#475569" stroke-width="1"/>
+                                    <ellipse cx="86" cy="33" rx="3" ry="2.2" fill="#1e293b" stroke="#475569" stroke-width="1"/>
 
-                                    <!-- Aerodynamic Full-Face Helmet -->
-                                    <ellipse cx="50" cy="25" rx="10" ry="12" fill="#f8fafc" stroke="#1e293b" stroke-width="1.5"/>
-                                    <!-- Tinted Racing Visor -->
-                                    <path d="M 43 24 Q 50 22 57 24 Q 57 28 50 29 Q 43 28 43 24 Z" fill="#0b0f19" stroke="#38bdf8" stroke-width="1"/>
+                                    <!-- Helmet Shell (Rear View / Hinterkopf) -->
+                                    <path d="M 41 33 C 37 27, 39 16, 50 15 C 61 16, 63 27, 59 33 C 56 35, 44 35, 41 33 Z" fill="#f8fafc" stroke="#1e293b" stroke-width="1.5"/>
+                                    <!-- Aerodynamic Rear Diffuser / Spoiler (Heck-Abrisskante) -->
+                                    <path d="M 44 20 Q 50 17 56 20 L 58 23 Q 50 21 42 23 Z" fill="#0f172a" stroke="#00f2fe" stroke-width="1"/>
+                                    <!-- Helmet Rear Air Extractors (Abluftschlitze) -->
+                                    <line x1="45" y1="25" x2="48" y2="27" stroke="#64748b" stroke-width="1.5" stroke-linecap="round"/>
+                                    <line x1="55" y1="25" x2="52" y2="27" stroke="#64748b" stroke-width="1.5" stroke-linecap="round"/>
+                                    <!-- ECE / Safety Reflector Badge (Nackenreflektor) -->
+                                    <rect x="47" y="29.5" width="6" height="2.5" rx="1" fill="#ff9f0a"/>
+                                    <!-- Helmet Neck Roll (Nackenpolster-Abschluss) -->
+                                    <path d="M 43 34 Q 50 36 57 34" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round"/>
                                 </svg>
                             </div>
                         </div>
@@ -1129,7 +1139,7 @@
     <!-- Toast Container -->
     <div class="toast-container" id="toast-container"></div>
 
-    <script src="js/app.js?v=8.9"></script>
+    <script src="js/app.js?v=8.10"></script>
 </body>
 
 </html>

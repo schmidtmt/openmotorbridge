@@ -1,4 +1,4 @@
-const CACHE_NAME = 'omb-pwa-v8.9';
+const CACHE_NAME = 'omb-pwa-v8.10';
 const ASSETS = [
     './',
     './index.html',
