@@ -486,9 +486,9 @@ To route all analog audio, microphone, power, and PTT signals from the right-ang
 8. **Sena +Mesh & MeshPort Edition (Off-the-Shelf Slide Mount & SMA Bulkhead):**
    * **100% Non-Destructive Use of Unmodified OEM Hardware:** The Sena +Mesh adapter remains in its factory original enclosure (zero warranty voiding, no opening or soldering required).
    * **Sena-Compatible 3D Slide-Mount Inlay:** The cartridge top inlay replicates the exact geometry of the original Sena motorcycle frame mounting plate:
-     * **2x Longitudinal Slide Rails:** The +Mesh slides smoothly into place along its molded side channels.
-     * **Integrated Resilient Latch Trigger:** Snaps audibly behind the catch notch at end-stop; manually released via fingertip pressure.
-     * **2x End Hooks:** Accommodate the original Sena EPDM rubber tension strap for dual redundant anti-vibration locking against severe road shock.
+     * **2x Transverse Slide Guide Rails (Short-Axis Slide Travel):** Mates with the dual sliding hooks on the rear of the +Mesh housing (hooks spaced ~30 mm apart along length, each ~20 mm long parallel to the short axis). The +Mesh slides crosswise into positive lock.
+     * **Integrated Resilient Latch Trigger (Auslöser):** Snaps audibly behind the catch notch at transverse end-stop; manually released via fingertip pressure on the release paddle.
+     * **2x End Retention Hooks:** Accommodate the original Sena EPDM rubber tension strap for dual redundant anti-vibration locking against severe road shock.
    * **RF Antenna Interface (SMA Bulkhead Double-Socket on Faceplate):**
      * Waterproof **SMA flange bulkhead with O-ring** integrated into the cartridge front faceplate.
      * **Internal:** Short, flexible RG178 coaxial pigtail with $90^\circ$ elbow connector ($R \ge 12\,\text{mm}$) routes cleanly to the antenna port of the Sena +Mesh.

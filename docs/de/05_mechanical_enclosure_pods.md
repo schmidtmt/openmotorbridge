@@ -395,9 +395,9 @@ Um die Signale vom 90°-abgewinkelten **JST-SH 1.0 mm 6-Pin SMD-Steckverbinder (
 8. **Sena +Mesh & MeshPort Edition (Off-the-Shelf Slide-Mount & SMA-Bulkhead):**
    * **100 % zerstörungsfreie Nutzung des ungeöffneten OEM-Geräts:** Der Sena +Mesh Adapter wird im Originalgehäuse belassen (kein Aufschrauben oder Löten nötig).
    * **Sena-kompatibles 3D-Schlitten-Inlay:** Das Kassetten-Oberteil bildet exakt die Geometrie der originalen Sena-Rahmenbefestigungsplatte ab:
-     * **2x Längs-Führungsstege:** Der +Mesh gleitet formschlüssig über seine Gehäusenuten hinein.
-     * **Integrierte federnde Rastzunge:** Rastet am Endanschlag hinter der Gehäuseraste ein und sichert gegen Herausrutschen; werkzeuglos per Fingerdruck entriegelbar.
-     * **2x Haltehaken an der Schmalseite:** Nehmen das originale Sena-Gummispannband (EPDM) auf, um das Modul zusätzlich redundant gegen harte Fahrbahnstöße und Vibrationen zu sichern.
+     * **2x Quer-Führungsstege (Quer-Schieberichtung):** Bilden die Gegenstücke zu den beiden auf der Rückseite des +Mesh integrierten Schiebehaken ab (Hakenabstand ca. $30\,\text{mm}$, Hakenlänge knapp $20\,\text{mm}$ parallel zur kurzen Gehäuseseite). Das +Mesh gleitet quer formschlüssig auf die Haltestege.
+     * **Integrierte federnde Rastzunge mit Auslöser:** Rastet am Quer-Endanschlag hinter der Gehäuseraste ein und sichert gegen Herausrutschen; werkzeuglos per Fingerdruck auf den Auslöser entriegelbar.
+     * **2x Haltehaken:** Nehmen das originale Sena-Gummispannband (EPDM) auf, um das Modul zusätzlich redundant gegen harte Fahrbahnstöße und Vibrationen zu sichern.
    * **HF-Antennenschnittstelle (SMA-Doppelbuchse / Bulkhead an der Frontblende):**
      * In die Kassetten-Frontblende ist eine wasserdichte **SMA-Flansch-Doppelbuchse mit O-Ring** integriert.
      * **Innen:** Ein kurzes, flexibles RG178-Koax-Pigtail mit $90^\circ$-Winkelstecker führt mit kontrolliertem Mindestbiegeradius ($R \ge 12\,\text{mm}$) zur Antennenbuchse des Sena +Mesh.
