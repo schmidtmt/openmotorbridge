@@ -18,6 +18,8 @@ const i18n = {
         demo_active: 'Demo Aktiv',
         ble_connect: 'BLE Verbinden',
         ble_connected: '✓ Verbunden',
+        fullscreen: 'Vollbild',
+        exit_fullscreen: 'Beenden',
         tab_cockpit: 'Cockpit & Power',
         tab_audio: 'Audio & Ducking',
         tab_cartridges: 'Kassetten & DLE',
@@ -140,6 +142,8 @@ const i18n = {
         demo_active: 'Demo Active',
         ble_connect: 'Connect BLE',
         ble_connected: '✓ Connected',
+        fullscreen: 'Fullscreen',
+        exit_fullscreen: 'Exit Full',
         tab_cockpit: 'Cockpit & Power',
         tab_audio: 'Audio & Ducking',
         tab_cartridges: 'Cartridges & DLE',
@@ -277,6 +281,8 @@ const state = {
 };
 
 // DOM Elements
+const btnFullscreen = document.getElementById('btn-fullscreen');
+const labelFullscreen = document.getElementById('label-fullscreen');
 const btnLangToggle = document.getElementById('btn-lang-toggle');
 const labelLang = document.getElementById('label-lang');
 const btnConnect = document.getElementById('btn-connect');
@@ -336,6 +342,7 @@ function setLanguage(lang) {
     // Update battery chemistry options text
     updateBatteryOptionsText(lang);
     updateBleUiState(state.isBleConnected);
+    updateFullscreenUi();
 
     showToast(lang === 'de' ? 'Sprache: Deutsch' : 'Language: English', 'info');
 }
@@ -357,6 +364,94 @@ function updateBatteryOptionsText(lang) {
 
 btnLangToggle.addEventListener('click', () => {
     setLanguage(state.lang === 'de' ? 'en' : 'de');
+});
+
+// ==========================================
+// 1b. Fullscreen & Screen Wake Lock Engine (Motorcycle Cockpit)
+// ==========================================
+let wakeLock = null;
+
+async function requestWakeLock() {
+    if ('wakeLock' in navigator) {
+        try {
+            wakeLock = await navigator.wakeLock.request('screen');
+            console.log('Screen Wake Lock active.');
+            wakeLock.addEventListener('release', () => {
+                console.log('Screen Wake Lock released.');
+            });
+        } catch (err) {
+            console.warn('Wake Lock request error:', err);
+        }
+    }
+}
+
+async function releaseWakeLock() {
+    if (wakeLock !== null) {
+        try {
+            await wakeLock.release();
+            wakeLock = null;
+        } catch (err) {
+            console.warn('Wake Lock release error:', err);
+        }
+    }
+}
+
+async function toggleFullscreen() {
+    const isDe = state.lang === 'de';
+    const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
+
+    if (!isFs) {
+        try {
+            if (document.documentElement.requestFullscreen) {
+                await document.documentElement.requestFullscreen();
+            } else if (document.documentElement.webkitRequestFullscreen) {
+                await document.documentElement.webkitRequestFullscreen();
+            } else {
+                showToast(isDe ? '💡 Tipp: Für Vollbild im Safari-Menü "Zum Home-Bildschirm" wählen!' : '💡 Tip: In Safari menu tap "Add to Home Screen" for fullscreen!', 'info', 6000);
+                return;
+            }
+            await requestWakeLock();
+            showToast(isDe ? '⛶ Vollbild aktiv • Display bleibt an (Wake-Lock)' : '⛶ Fullscreen active • Screen kept awake', 'success');
+        } catch (err) {
+            console.warn('Fullscreen request failed:', err);
+            showToast(isDe ? '💡 Tipp: "Zum Home-Bildschirm" hinzufügen für dauerhaftes Vollbild' : '💡 Tip: Add to Home Screen for fullscreen', 'info');
+        }
+    } else {
+        try {
+            if (document.exitFullscreen) {
+                await document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+                await document.webkitExitFullscreen();
+            }
+            await releaseWakeLock();
+        } catch (err) {
+            console.warn('Exit fullscreen failed:', err);
+        }
+    }
+}
+
+function updateFullscreenUi() {
+    const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
+    if (btnFullscreen) {
+        btnFullscreen.classList.toggle('active', isFs);
+        btnFullscreen.style.borderColor = isFs ? 'var(--accent-blue)' : '';
+        btnFullscreen.style.background = isFs ? 'rgba(0, 242, 254, 0.15)' : '';
+    }
+    if (labelFullscreen) {
+        const dict = i18n[state.lang] || i18n.de;
+        labelFullscreen.textContent = isFs ? dict.exit_fullscreen : dict.fullscreen;
+    }
+}
+
+document.addEventListener('fullscreenchange', updateFullscreenUi);
+document.addEventListener('webkitfullscreenchange', updateFullscreenUi);
+btnFullscreen?.addEventListener('click', toggleFullscreen);
+
+// Re-acquire Wake Lock when rider returns to the tab while in fullscreen
+document.addEventListener('visibilitychange', async () => {
+    if (document.visibilityState === 'visible' && (document.fullscreenElement || document.webkitFullscreenElement)) {
+        await requestWakeLock();
+    }
 });
 
 // ==========================================
