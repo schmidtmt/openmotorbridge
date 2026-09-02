@@ -6,15 +6,15 @@
 
 ### 1. 3D Board Visualization & Photorealistic Renders
 
-The Rear Pod PCB unites multi-constellation GNSS, dual-PHY mesh networking, a 500mA PTC protection stage, and the RISC-V co-processor on a generous **$70.0 \times 48.0\,\text{mm}$** flat carrier with horizontal leading-edge mating:
+The Rear Pod PCB unites multi-constellation GNSS, dual-PHY mesh networking, three mechanical RF switch receptacles (Murata MM8030), three Pulse W3000 ceramic antennas, a 500mA PTC protection stage, and the RISC-V co-processor on a generous **$110.0 \times 52.0\,\text{mm}$** flat carrier with horizontal leading-edge mating:
 
-#### Top View (Horizontal 6-Pin Front Socket, PTC Fuse, ESP32-C3 & GNSS/LoRa):
+#### Top View (Centered 6-Pin Front Socket, PTC Fuse, ESP32-C3, 3x MM8030 RF Switches & 3x Pulse W3000 Antennas):
 ![OpenMotorBridge Rear Pod 3 Top 3D PCB Render](../../hardware/kicad_rear_pod3/rear_pod3_3d_render_top.png)
 
-#### Bottom View (Clean 4-Layer Ground Plane & Production Testpoints):
+#### Bottom View (Clean 4-Layer Ground Plane & 4x M2 Mounting Holes):
 ![OpenMotorBridge Rear Pod 3 Bottom 3D PCB Render](../../hardware/kicad_rear_pod3/rear_pod3_3d_render_bottom.png)
 
-*Figure 13.1: Photorealistic 3D raytraced render of the OpenMotorBridge Rear Pod 3 PCB (KiCad 10, 4-layer FR4 TG150 ENIG with horizontal forward-opening 6-pin precision socket, 500mA PTC fuse, 5V power LED, u-blox GNSS, SX1262 LoRa, and ESP32-C3 Mesh Transceiver).*
+*Figure 13.1: Photorealistic 3D raytraced render of the OpenMotorBridge Rear Pod 3 PCB (KiCad 10, 4-layer FR4 TG150 ENIG, $110.0 \times 52.0\,\text{mm}$, with horizontal forward-opening centered 6-pin precision socket, 500mA PTC fuse, 5V power LED, u-blox GNSS, SX1262 LoRa, ESP32-C3 Mesh Transceiver, and 3x Murata MM8030 switches for external SMA antennas).*
 
 ### 1.1 3D CAD Assembly & Direct 1-Tier Architecture (No Adapter PCB Required!)
 
@@ -22,10 +22,10 @@ Unlike the Audio & Intercom cartridges (Pod 1 & Pod 2), which employ a 2-piece s
 
 ![OpenMotorBridge Rear Pod 3 CAD Assembly Exploded View](../images/cad/pod3_full_assembly_exploded_3d.png)
 
-*Figure 13.2: 3D CAD exploded view of the complete Rear Pod 3 assembly featuring the universal pod base housing (integrated V-groove frame tube saddle with EPDM strap lugs), rear M8 6-pin IP67 cable gland, and the 1-tier transceiver sled ([cartridge_omm_transceiver.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/cartridge_omm_transceiver.scad)) holding the transceiver PCB directly with zero intermediary adapters.*
+*Figure 13.2: 3D CAD exploded view of the complete Rear Pod 3 assembly featuring the universal pod base housing (integrated V-groove frame tube saddle with EPDM strap lugs), rear M8 6-pin IP67 cable gland, and the 1-tier transceiver sled ([cartridge_omm_transceiver.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/cartridge_omm_transceiver.scad)) holding the transceiver PCB ($110 \times 52\,\text{mm}$) directly with zero intermediary adapters.*
 
 #### Why is No Adapter Board Required for Pod 3?
-1. **Fully Integrated Single-Board Architecture:** The `openmotorbridge_rear_transceiver` PCB is itself the complete transceiver, navigation, and co-processor unit. It carries the Maxim DS2401 ID chip, the 6-pin precision socket `J1`, the SX1262 LoRa modem, the u-blox MAX-M10S GNSS engine, and two Pulse W3000 ceramic chip antennas (GNSS top, LoRa bottom) with direct, lossless $50\,\Omega$ microstrip lines directly on its 4-layer FR4 substrate.
+1. **Fully Integrated Single-Board Architecture:** The `openmotorbridge_rear_transceiver` PCB is itself the complete transceiver, navigation, and co-processor unit. It carries the Maxim DS2401 ID chip, the 6-pin precision socket `J1`, the SX1262 LoRa modem, the u-blox MAX-M10S GNSS engine, the ESP32-C3 MCU, three Pulse W3000 ceramic chip antennas (`ANT1` LoRa, `ANT2` GNSS, `ANT3` 2.4 GHz), and three Murata MM8030 mechanical RF switches (`J3`, `J4`, `J5`) with direct, lossless $50\,\Omega$ microstrip lines directly on its 4-layer FR4 substrate.
 2. **Direct Sled Mounting:** The board bolts directly to the 4x M2 mounting posts of the cartridge sled ([cartridge_omm_transceiver.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/cartridge_omm_transceiver.scad)) and seals under the weatherproof, RF-transparent solid PA12 lid ([cartridge_insert_blindkassette.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/parts/03_insert_blindkassette.scad)).
 3. **Full $23.5\,\text{mm}$ Interior Height:** Without an intermediary partition floor or adapter board, the antennas benefit from the complete unattenuated internal clearance directly beneath the weatherproof PA12 roof – maximizing RF gain and 360° sky coverage.
 4. **100% Mechanical Compatibility:** The cartridge utilizes the identical [00_base_sled.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/00_base_sled.scad) and slides seamlessly into the same universal pod housing ([pod_base_housing.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/pod_base_housing.scad)).
@@ -37,11 +37,12 @@ Unlike the Audio & Intercom cartridges (Pod 1 & Pod 2), which employ a 2-piece s
 ```
                       ┌─────────────────────────────────────────────────────────────┐
                       │          REAR POD 3 OPENMOTORMESH TRANSCEIVER MODULE        │
-                      │    (Lies flat on the open 92x54x23.5mm carrier sled floor)  │
+                      │       (110 x 52 mm on the open carrier sled floor)          │
                       │                                                             │
-                      │   • J1: 6-Pin Right-Angle Socket on Leading Edge (Front)    │
+                      │   • J1: Centered 6-Pin Right-Angle Socket on Leading Edge   │
                       │   • F1: 500mA PTC Fuse & D1: 5V Power Status LED            │
                       │   • U4: DS2401 1-Wire ID ROM (openmotormesh_pod3.json)      │
+                      │   • J3..J5: 3x Murata MM8030 Auto RF Break-Switches         │
                       │                                                             │
                       │   ┌─────────────────────────────────────────────────────┐   │
                       │   │  ESP32-C3 RISC-V Co-Processor (32-Bit @ 160 MHz)    │   │
@@ -86,7 +87,7 @@ Unlike the Audio & Intercom cartridges (Pod 1 & Pod 2), which employ a 2-piece s
 | :--- | :--- | :--- |
 | **Hardware Driver** | **ESP32-C3 Integrated 2.4 GHz Radio** | **Semtech SX1262 Transceiver (+22 dBm)** |
 | **Standard / Protocol** | IEEE 802.15.4 / SC-FDMA TDMA (2 Mbps) | LoRa Chirp Spread Spectrum (BW 250 kHz, SF7) |
-| **Antenna in Pod 3** | Integrated ESP32-C3 PCB antenna | Pulse W3000 868 MHz ceramic chip antenna (direct $50\,\Omega$) |
+| **Antenna in Pod 3** | Pulse W3000 2.4 GHz ceramic chip antenna (`ANT3`) + Murata MM8030 switch (`J3`) to SMA | Pulse W3000 868 MHz ceramic chip antenna (`ANT1`) + Murata MM8030 switch (`J4`) to SMA |
 | **Audio Codec** | **Opus Speech/Full-Band (24 kbps / 12 kbps)** | **Codec2 (1200 bps / 700 bps PTT Bursts)** |
 | **Audio Mode** | **Full-Duplex Continuous (HiFi Voice)** | **Half-Duplex PTT Bursts (220 ms max.)** |
 | **Music Sharing** | Yes (A2DP dynamic forwarding @ 64 kbps) | No (bandwidth reserved for voice & SOS) |

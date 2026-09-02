@@ -6,15 +6,15 @@ Der **Heck-Pod 3** (Position: Heckbürzel / Gepäckbrücke) ist das zentrale Fun
 
 ## 1. 3D-Board-Visualisierung & Photorealistische Renders
 
-Die Heck-Pod-Platine vereint auf großzügigen **$70{,}0 \times 48{,}0\,\text{mm}$** das Multi-Konstellations-GNSS, das Dual-PHY Mesh-Modem, die 500mA PTC-Schutzstufe sowie den RISC-V Co-Prozessor mit horizontaler Stirnseiten-Steckung:
+Die Heck-Pod-Platine vereint auf großzügigen **$110{,}0 \times 52{,}0\,\text{mm}$** das Multi-Konstellations-GNSS, das Dual-PHY Mesh-Modem, die drei mechanischen HF-Umschaltbuchsen (Murata MM8030), drei Pulse W3000 Keramik-Chipantennen, die 500mA PTC-Schutzstufe sowie den RISC-V Co-Prozessor mit horizontaler Stirnseiten-Steckung:
 
-#### Oberansicht (Horizontale 6-Pin Front-Buchsenleiste, PTC-Sicherung, ESP32-C3 & GNSS/LoRa):
+#### Oberansicht (Zentrierte 6-Pin Front-Buchsenleiste, PTC-Sicherung, ESP32-C3, 3x MM8030 RF-Switches & 3x Pulse W3000 Antennen):
 ![OpenMotorBridge Heck-Pod 3 Oberansicht 3D PCB Render](../../hardware/kicad_rear_pod3/rear_pod3_3d_render_top.png)
 
-#### Unteransicht (Kompakte 4-Lagen Massefläche & rückseitige Produktions-Testpunkte):
+#### Unteransicht (Kompakte 4-Lagen Massefläche & 4x M2 Montagebohrungen):
 ![OpenMotorBridge Heck-Pod 3 Unteransicht 3D PCB Render](../../hardware/kicad_rear_pod3/rear_pod3_3d_render_bottom.png)
 
-*Abbildung 13.1: Photorealistisches 3D-Raytracing-Render der OpenMotorBridge Heck-Pod 3 Platine (KiCad 10, 4-Lagen FR4 TG150 ENIG mit stirnseitig nach vorne öffnender 6-Pin Präzisionsbuchsenleiste, 500mA PTC-Schutzstufe, 5V Power-LED, u-blox GNSS, SX1262 LoRa und ESP32-C3 Mesh Transceiver).*
+*Abbildung 13.1: Photorealistisches 3D-Raytracing-Render der OpenMotorBridge Heck-Pod 3 Platine (KiCad 10, 4-Lagen FR4 TG150 ENIG, $110{,}0 \times 52{,}0\,\text{mm}$, mit stirnseitig nach vorne öffnender zentrierter 6-Pin Präzisionsbuchsenleiste, 500mA PTC-Schutzstufe, 5V Power-LED, u-blox GNSS, SX1262 LoRa, ESP32-C3 Mesh Transceiver sowie 3x Murata MM8030 Umschaltern für externe SMA-Antennen).*
 
 ### 1.1 3D-CAD-Gesamtbaugruppe & Direkter 1-Tier Einschub (Keine Adapterplatine erforderlich!)
 
@@ -22,10 +22,10 @@ Im Gegensatz zu den Audio- & Intercom-Kassetten (Pod 1 & Pod 2), die einen 2-tei
 
 ![OpenMotorBridge Heck-Pod 3 CAD Baugruppen-Explosionsansicht](../images/cad/pod3_full_assembly_exploded_3d.png)
 
-*Abbildung 13.2: 3D-CAD-Explosionsdarstellung der Heck-Pod 3 Gesamtkassette mit universellem Pod-Gehäuse (integriertes V-Rohrbett mit EPDM-Spannbandnasen), rückseitigem M8 6-Pin IP67 Kabelstutzen und dem 1-teiligen Transceiver-Schlitten ([cartridge_omm_transceiver.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/cartridge_omm_transceiver.scad)), in den die Transceiver-Platine direkt ohne Zwischen-Adapter verschraubt ist.*
+*Abbildung 13.2: 3D-CAD-Explosionsdarstellung der Heck-Pod 3 Gesamtkassette mit universellem Pod-Gehäuse (integriertes V-Rohrbett mit EPDM-Spannbandnasen), rückseitigem M8 6-Pin IP67 Kabelstutzen und dem 1-teiligen Transceiver-Schlitten ([cartridge_omm_transceiver.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/cartridge_omm_transceiver.scad)), in den die Transceiver-Platine ($110 \times 52\,\text{mm}$) direkt ohne Zwischen-Adapter verschraubt ist.*
 
 #### Warum wird für Pod 3 keine Adapterplatine benötigt?
-1. **Vollintegriertes Single-Board Design:** Die Platine `openmotorbridge_rear_transceiver` ist bereits das vollständige Funk-, Navigations- und Co-Prozessor-Modul. Sie trägt den Maxim DS2401 ID-Chip, die 6-Pin Präzisionsbuchse `J1`, das SX1262 LoRa-Modem, das u-blox MAX-M10S GNSS sowie zwei Pulse W3000 Keramik-Chipantennen (GNSS oben, LoRa unten) mit direkter, verlustfreier $50\,\Omega$-Microstrip-Anbindung direkt auf ihrem 4-Layer FR4-Board.
+1. **Vollintegriertes Single-Board Design:** Die Platine `openmotorbridge_rear_transceiver` ist bereits das vollständige Funk-, Navigations- und Co-Prozessor-Modul. Sie trägt den Maxim DS2401 ID-Chip, die 6-Pin Präzisionsbuchse `J1`, das SX1262 LoRa-Modem, das u-blox MAX-M10S GNSS, das ESP32-C3-Modul, drei Pulse W3000 Keramik-Chipantennen (`ANT1` LoRa, `ANT2` GNSS, `ANT3` 2.4 GHz) sowie drei Murata MM8030 mechanische Umschaltbuchsen (`J3`, `J4`, `J5`) mit direkter, verlustfreier $50\,\Omega$-Microstrip-Anbindung direkt auf ihrem 4-Layer FR4-Board.
 2. **Direkte Verschraubung im Grundschlitten:** Die Platine wird mit 4x M2 Schrauben direkt auf die Schraubdome des Kassetten-Schlittens ([cartridge_omm_transceiver.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/cartridge_omm_transceiver.scad)) montiert und mit dem wetterfesten, HF-transparenten PA12-Deckel ([cartridge_insert_blindkassette.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/parts/03_insert_blindkassette.scad)) verschraubt.
 3. **Volle $23{,}5\,\text{mm}$ Innenhöhe:** Ohne Zwischenboden oder Adapterplatine steht den Antennen die volle lichte Bauhöhe unter der HF-transparenten PA12-Haube zur Verfügung – für maximalen Gewinn ohne störende Gehäusedämpfung.
 4. **100 % mechanische Kompatibilität:** Die Kassette nutzt exakt denselben [00_base_sled.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/00_base_sled.scad) wie alle anderen Kassetten und gleitet formschlüssig in dasselbe universelle Pod-Gehäuse ([pod_base_housing.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/pod_base_housing.scad)).
@@ -37,11 +37,12 @@ Im Gegensatz zu den Audio- & Intercom-Kassetten (Pod 1 & Pod 2), die einen 2-tei
 ```
                       ┌─────────────────────────────────────────────────────────────┐
                       │          HECK-POD 3 OPENMOTORMESH TRANSCEIVER-MODUL         │
-                      │     (Liegt flach im offenen 92x54x23.5mm Einschubschlitten) │
+                      │         (110 x 52 mm im offenen Kassetten-Einschubschlitten)│
                       │                                                             │
-                      │   • J1: 6-Pin Winkelbuchsenleiste auf Stirnseite (links)    │
+                      │   • J1: Zentrierte 6-Pin Winkelbuchsenleiste (Stirnseite)   │
                       │   • F1: 500mA PTC-Sicherung & D1: 5V Power-Status-LED       │
                       │   • U4: DS2401 1-Wire ID ROM (openmotormesh_pod3.json)      │
+                      │   • J3..J5: 3x Murata MM8030 automatische HF-Umschalter     │
                       │                                                             │
                       │   ┌─────────────────────────────────────────────────────┐   │
                       │   │  ESP32-C3 RISC-V Co-Prozessor (32-Bit @ 160 MHz)    │   │
@@ -86,7 +87,7 @@ Im Gegensatz zu den Audio- & Intercom-Kassetten (Pod 1 & Pod 2), die einen 2-tei
 | :--- | :--- | :--- |
 | **Hardware-Treiber** | **ESP32-C3 Internes 2.4-GHz-Radio** | **Semtech SX1262 Transceiver (+22 dBm)** |
 | **Standard / Protokoll** | IEEE 802.15.4 / SC-FDMA TDMA (2 Mbps) | LoRa Chirp Spread Spectrum (BW 250 kHz, SF7) |
-| **Antenne im Pod 3** | Integrierte ESP32-C3 PCB-Antenne | Pulse W3000 868-MHz-Keramik-Chipantenne ($50\,\Omega$ direkt) |
+| **Antenne im Pod 3** | Pulse W3000 2.4 GHz Keramikantenne (`ANT3`) + Murata MM8030 Umschalter (`J3`) auf SMA | Pulse W3000 868-MHz-Keramik-Chipantenne (`ANT1`) + Murata MM8030 Umschalter (`J4`) auf SMA |
 | **Audio-Codec** | **Opus Speech/Full-Band (24 kbps / 12 kbps)** | **Codec2 (1200 bps / 700 bps PTT Bursts)** |
 | **Audio-Modus** | **Vollduplex kontinuierlich (HiFi Sprache)** | **Halbduplex PTT-Bursts (220 ms max.)** |
 | **Musik-Sharing** | Ja (A2DP Dynamic Forwarding @ 64 kbps) | Nein (Bandbreite reserviert fuer Sprache) |
