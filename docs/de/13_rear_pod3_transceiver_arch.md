@@ -218,3 +218,30 @@ Für die Erstprogrammierung und EOL-Prüfung in der Fertigung befinden sich auf 
 * **`TP3` (TP_TX):** ESP32-C3 UART0 TX (GPIO21)
 * **`TP4` (TP_RX):** ESP32-C3 UART0 RX (GPIO20)
 
+---
+
+## 8. Ausblick & Upgrade-Roadmap: Optionale LTE-M / 4G Cloud-Kassette & HF-Triplexer
+
+### 8.1 Status quo V1 (Fokus auf Robustheit & Autarkie)
+In der Version 1 konzentriert sich der Heck-Pod 3 auf das **robuste, kostenfreie Nah- und Weitverkehrs-Funknetzwerk**:
+* **3x Onboard-Keramik-Chipantennen (Pulse W3000):** Vollständig gekapselt im PA12-Gehäuse für $868\,\text{MHz}$ LoRa, $1575\,\text{MHz}$ GNSS und $2{,}4\,\text{GHz}$ Mesh/BLE.
+* **3x Murata MM8030 HF-Umschaltbuchsen:** Erlauben wahlweise das gezielte Herausführen eines Funkpfads auf eine externe SMA-Antenne.
+* **Smartphone als Cloud-Gateway:** Die Internetanbindung (Cloud-Sync, WebApp-Karten, Notruf) erfolgt kostenlos und ohne extra SIM-Karte über das Smartphone des Fahrers am Smart Fairing Hub.
+
+### 8.2 Upgrade-Pfad V2: Autarke LTE-M / NB-IoT Cloud-Kassette
+Dank der modularen Kassetten-Architektur kann das System in einer späteren Ausbaustufe ohne Änderungen am Gehäuse oder Kabelbaum zu einem vollautonomen IoT-Cloud-Tracker aufgerüstet werden:
+
+1. **Optionale Kassetten-Platine (`cartridge_omm_transceiver_lte`):**
+   * Ein ultrakompaktes LTE Cat-1 bis / LTE-M IoT-Modem (z. B. *Quectel EG915N* oder *SIMCom SIM7080G*) wird auf dem großzügigen $110 \times 52\,\text{mm}$ Board integriert.
+   * **Konnektivität:** Integrierte eSIM oder Nano-SIM (z. B. *1NCE IoT-Flat*: 10 € für 10 Jahre / 500 MB Datenvolumen ohne Monatsgebühr).
+2. **HF-Triplexer (Frequenzweiche für 1-Kabel-Breitbandantenne):**
+   * Statt drei separater Antennen oder manueller Umschalter kaskadiert die V2-Platine zwei keramische LTCC-Diplexer (0603 Bauform):
+     * *Diplexer 1:* Trennt $868\,\text{MHz}$ LoRa / LTE-Low-Band ab.
+     * *Diplexer 2:* Trennt $1575\,\text{MHz}$ GNSS und $2400\,\text{MHz}$ Mesh / LTE-High-Band ab.
+     * *GNSS-Schutz:* Ein SAW-Bandpassfilter mit $> 50\,\text{dB}$ Dämpfung schützt den u-blox LNA vor Übersteuerung durch LoRa- und LTE-Sendeimpulse.
+   * **Antenne:** Eine einzige externe Breitband-Kompaktantenne ($700 \dots 2700\,\text{MHz}$, z. B. Taoglas / Pulse LTE-Whip) speist alle Funkmodule gleichzeitig.
+3. **Zusatzfunktionen der V2-Cloud-Kassette:**
+   * **Autarkes eCall (Unfall-Notruf):** Setzt bei Sturzerkennung (IMU) automatisch Notruf-SMS und GPS-Koordinaten an Rettungsleitstellen ab – selbst wenn das Smartphone zerstört oder verloren ist.
+   * **Diebstahlüberwachung & Geofencing:** Sendet Live-Positionen und Batterie-Warnungen auf das Smartphone, wenn das geparkte Motorrad bewegt wird.
+   * **Unendliche Gruppen-Mesh-Brücke:** Bei Abreißen des LoRa-Sichtkontakts (z. B. in tiefen Tälern oder bei großer Gruppendistanz) wird die Sprach- und Positionsübertragung nahtlos über MQTT/Mobilfunk weitergeleitet.
+

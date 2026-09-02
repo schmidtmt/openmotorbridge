@@ -220,3 +220,31 @@ For End-of-Line (EOL) testing on the manufacturing bed of nails without solderin
 * **`TP3` (`TP_TX`):** Direct ESP32-C3 U0TXD test pad.
 * **`TP4` (`TP_RX`):** Direct ESP32-C3 U0RXD test pad.
 
+---
+
+## 8. Roadmap & Upgrade Path: Optional LTE-M / 4G Cloud Cartridge & RF Triplexer
+
+### 8.1 Status Quo V1 (Focused on Reliability & Zero Running Costs)
+In Version 1, Rear Pod 3 focuses strictly on **robust, zero-cost ad-hoc mesh networking**:
+* **3x Onboard Ceramic Chip Antennas (Pulse W3000):** Fully encapsulated inside the PA12 enclosure for $868\,\text{MHz}$ LoRa, $1575\,\text{MHz}$ GNSS, and $2.4\,\text{GHz}$ Mesh/BLE.
+* **3x Murata MM8030 RF Switch Jacks:** Allow selective routing of individual radio paths to an external SMA antenna connector.
+* **Smartphone as Cloud Gateway:** All cloud features (live telemetry, WebApp mapping, crash alerting) run cost-free through the rider's smartphone linked via the Smart Fairing Hub.
+
+### 8.2 Upgrade Path V2: Autonomous LTE-M / NB-IoT Cloud Cartridge
+Thanks to the modular 1-tier cartridge concept, the system can later be upgraded to a standalone IoT cloud tracker without modifying motorcycle wiring or base pod enclosures:
+
+1. **Optional Cartridge PCB (`cartridge_omm_transceiver_lte`):**
+   * Incorporates an ultra-compact LTE Cat-1 bis / LTE-M IoT modem (e.g. *Quectel EG915N* or *SIMCom SIM7080G*) onto the spacious $110 \times 52\,\text{mm}$ carrier.
+   * **Connectivity:** Integrated eSIM or Nano-SIM (e.g. *1NCE IoT Flat*: 10 € for 10 years / 500 MB data with no monthly fees).
+2. **RF Triplexer (Single-Feed Broadband Antenna):**
+   * Instead of three discrete antennas or manual selector switches, the V2 board cascades two miniature LTCC ceramic diplexers (0603 footprint):
+     * *Diplexer 1:* Splits $868\,\text{MHz}$ LoRa / LTE low band.
+     * *Diplexer 2:* Splits $1575\,\text{MHz}$ GNSS and $2400\,\text{MHz}$ mesh / LTE high band.
+     * *GNSS Protection:* A SAW bandpass filter with $> 50\,\text{dB}$ out-of-band attenuation shields the u-blox LNA from LoRa and LTE transmit desensitization.
+   * **Antenna:** A single external broadband antenna ($700 \dots 2700\,\text{MHz}$, e.g. Taoglas / Pulse LTE whip) feeds all three transceivers simultaneously.
+3. **Advanced V2 Capabilities:**
+   * **Autonomous eCall Crash Notification:** Sends emergency SMS and GPS coordinates to rescue dispatch upon IMU tip-over detection—even if the smartphone is destroyed or thrown from the bike.
+   * **Anti-Theft Geofencing & Motion Alert:** Transmits silent alarm notifications and battery status if the parked motorcycle is disturbed.
+   * **Infinite Group Mesh Relay:** Seamlessly routes voice and position data over MQTT / cellular whenever LoRa line-of-sight is lost across mountain ranges.
+
+
