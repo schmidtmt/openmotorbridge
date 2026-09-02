@@ -98,20 +98,25 @@ Unlike the Audio & Intercom cartridges (Pod 1 & Pod 2), which employ a 2-piece s
 
 ## 3. Core Components in Rear Pod 3
 
-1. **Main Co-Processor (ESP32-C3-WROOM-02):**
+1. **Main Co-Processor (ESP32-C3-WROOM-02U with U.FL):**
    * 32-bit RISC-V single-core @ 160 MHz with 4 MB embedded flash.
-   * Transmits and receives **2.4 GHz Primary High-Speed Mesh** via its internal RF unit.
-   * Performs local 10 Hz NMEA/UBX parsing from MAX-M10S.
-   * Controls SX1262 LoRa transceiver over high-speed SPI (8 MHz).
-   * Seamlessly switches between 2.4 GHz HiFi audio and 868 MHz Codec2 fallback.
+   * Transmits and receives **2.4 GHz Primary High-Speed Mesh** (Opus 24k HiFi audio & 10 Hz telemetry).
+   * **Primary Beneficiary of the External SMA Bulkhead (HD Audio Range Booster):**
+     * **The Physics Bottleneck:** The 2.4 GHz channel is the qualitative crown jewel (crystal-clear full-duplex speech), but physically suffers the shortest range ($150\dots 300\,\text{m}$ with internal antennas). The 868 MHz LoRa channel already easily reaches $1\dots 2.5\,\text{km}$ even with a tiny chip antenna.
+     * **The Solution:** The 2.4 GHz RF output of the `ESP32-C3-WROOM-02U` is routed via an internal U.FL-to-SMA coaxial pigtail directly to the **waterproof SMA flange bulkhead** on the Pod 3 cartridge faceplate.
+     * **Range Multiplier:** Adding an ultra-compact 2.4 GHz stub antenna (only $\approx 30\,\text{mm}$ tall, $\lambda/4$) or a tail-mounted antenna boosts **HiFi Opus full-duplex range from $200\,\text{m}$ to $600\dots 1,000\,\text{m}$**!
+     * **Riding Experience:** The group stays connected in pristine, uncompressed HD stereo voice chat over vastly longer convoy gaps before ever needing to drop into emergency LoRa half-duplex walkie-talkie mode.
+   * Performs local 10 Hz NMEA/UBX parsing from MAX-M10S and SPI control of the LoRa modem.
 2. **GNSS Engine (u-blox MAX-M10S):**
    * Concurrent 4-system multi-constellation operation (GPS, GLONASS, Galileo, BeiDou).
-   * Pulse W3000 multi-band ceramic chip antenna with optimized direct $50\,\Omega$ microstrip line (zero parasitic stubs or external connectors).
+   * Standard: Pulse W3000 multi-band ceramic chip antenna with optimized direct $50\,\Omega$ microstrip line.
+   * **Optional External Antenna Port (`J4` U.FL):** A 0-ohm jumper pad allows switching the RF input to an on-board U.FL socket, enabling connection of an external active GNSS antenna when heavy luggage rolls or aluminum panniers block the rear pod's sky view.
    * 1-PPS hardware timepulse (jitter $< 15\,\text{ns}$ RMS) connected to ESP32-C3 GPIO 6 and female socket contact 5.
 3. **OpenMotorMesh LoRa Transceiver (Semtech SX1262):**
    * Frequency Range: 868.0 – 868.6 MHz (EU ISM band) / 915 MHz (US band).
    * Output Power: up to $+22\,\text{dBm}$ ($160\,\text{mW}$ EIRP).
-   * Integrated RF switch, low-pass filter, and Pulse W3000 868 MHz ceramic chip antenna (direct $50\,\Omega$).
+   * Integrated RF switch, low-pass filter, and Pulse W3000 868 MHz ceramic chip antenna ($50\,\Omega$ directly on board).
+   * *Option:* A 0-ohm PCB jumper can alternatively route the 868 MHz LoRa path to the external SMA bulkhead for extreme trans-continental expeditions requiring $> 25\,\text{km}$ LoRa range.
 4. **1-Wire Identification (Maxim / ADI DS2401Z+):**
    * Provides 64-bit silicon serial number for automated cartridge detection.
 5. **Voltage Regulation (TI TPS7A0533):**
