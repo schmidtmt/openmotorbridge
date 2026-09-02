@@ -9,6 +9,16 @@ Das Dashboard ist eine vollstaendig autarke Progressive Web App (PWA) basierend 
 - **Lokaler Offline-Speicher (IndexedDB):** GPX-Touren koennen ueber BLE direkt von der MicroSD-Karte heruntergeladen und in der lokalen `omb_tours_db` des Browsers persistent gesichert werden.
 - **Service Worker Caching:** Die gesamte WebApp laeuft offlinefaehig im Browser (Cache-First Strategie fuer PWA Installation auf iOS und Android).
 
+### 1.1 Plattform- & Browser-Kompatibilität (Web Bluetooth)
+
+Die W3C Web-Bluetooth-API wird je nach Betriebssystem unterschiedlich unterstützt:
+
+| Plattform | Empfohlener Browser | Verbindungsmethode & Besonderheiten |
+| :--- | :--- | :--- |
+| **Android / PC / Mac / Linux** | **Google Chrome, MS Edge, Opera** | **Nativ:** Direkte Unterstützung der Web Bluetooth API. Voraussetzung: Sicherer Kontext (`https://` oder `http://localhost`). |
+| **Apple iOS / iPadOS** (iPhone, iPad) | **[Bluefy – Web BLE Browser](https://apps.apple.com/app/bluefy-web-ble-browser/id1492822055)** (kostenlos im App Store) | **Erforderlich:** Apple blockiert in WebKit/Safari (und damit auch in iOS-Chrome/Edge) den Zugriff auf Web Bluetooth. *Bluefy* stellt eine standardkonforme Brücke über Apples natives *CoreBluetooth* bereit. |
+| **Desktop Safari / Firefox** | Nicht unterstützt | Desktop-Safari und Mozilla Firefox unterstützen Web Bluetooth herstellerseitig nicht. |
+
 ---
 
 ## 2. Telemetrie & Steuerungsfunktionen

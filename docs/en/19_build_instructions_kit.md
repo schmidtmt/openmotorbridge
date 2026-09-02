@@ -270,7 +270,7 @@ pio run --target upload
 ### Commissioning Checklist:
 1. [ ] **Bench Power:** Apply $12.0\,\text{V}$ with $150\,\text{mA}$ current limit. Measure idle current: $45 \dots 75\,\text{mA}$.
 2. [ ] **Status LED:** Flashes green on boot (system initialized, backup battery charging).
-3. [ ] **Web Dashboard:** Open [`https://schmidtmt.github.io/openmotorbridge/`](https://schmidtmt.github.io/openmotorbridge/) in Chrome/Edge (or locally [`webapp_pwa/index.html`](file:///Users/schmidtm/openMotorBridge/webapp_pwa/index.html)), click "⚡ Connect BLE", and pair with `OpenMotorBridge_v8`.
+3. [ ] **Web Dashboard:** Open [`https://schmidtmt.github.io/openmotorbridge/`](https://schmidtmt.github.io/openmotorbridge/) (on **Android/PC/Mac:** Google Chrome or MS Edge; on **iPhone/iPad:** [Bluefy Web BLE Browser](https://apps.apple.com/app/bluefy-web-ble-browser/id1492822055) due to iOS WebKit policies) or locally [`webapp_pwa/index.html`](file:///Users/schmidtm/openMotorBridge/webapp_pwa/index.html), click "⚡ Connect BLE", and pair with `OpenMotorBridge_v8`.
 4. [ ] **Cartridge Detection:** Insert cartridges into Pods 1, 2, and 3. The dashboard must immediately display the detected profile (e.g., "Sena 50S Mesh", "Cardo Packtalk", "OMM Transceiver") and 1-Wire serial number.
 5. [ ] **Pair Wireless Handlebar Remote:** In dashboard under *Cockpit & Power*, click **"🔗 Pair Remote"** on the Handlebar Remote tile and hold the button on the BLE remote for 5 s. Confirm pairing and check CR2032 battery readout (e.g., 95%).
 6. [ ] **Configure Home Wi-Fi & WebDAV:** In dashboard under *Tours & WebDAV*, enter your garage Wi-Fi SSID, password, and WebDAV server URL (Nextcloud/Synology), then click **"Save Wi-Fi & WebDAV"**.

@@ -9,6 +9,16 @@ The dashboard is a self-contained Progressive Web App (PWA) built with modern HT
 - **Local Offline Storage (IndexedDB):** Recorded GPX tour tracks can be transferred via BLE and persisted locally within the browser's `omb_tours_db`.
 - **Service Worker Caching:** Full offline installation support across iOS and Android utilizing cache-first strategies.
 
+### 1.1 Platform & Browser Compatibility (Web Bluetooth)
+
+Support for the W3C Web Bluetooth API varies depending on the platform and browser engine:
+
+| Platform | Recommended Browser | Connection Mode & Notes |
+| :--- | :--- | :--- |
+| **Android / PC / Mac / Linux** | **Google Chrome, MS Edge, Opera** | **Native:** Direct native Web Bluetooth API support. Requires a secure context (`https://` or `http://localhost`). |
+| **Apple iOS / iPadOS** (iPhone, iPad) | **[Bluefy – Web BLE Browser](https://apps.apple.com/app/bluefy-web-ble-browser/id1492822055)** (free on App Store) | **Required:** Apple restricts Web Bluetooth in WebKit/Safari (and therefore in iOS-Chrome/Edge as well). *Bluefy* provides a standards-compliant bridge via native *CoreBluetooth*. |
+| **Desktop Safari / Firefox** | Not supported | Desktop Safari and Mozilla Firefox do not support Web Bluetooth. |
+
 ---
 
 ## 2. Telemetry & Control Capabilities
