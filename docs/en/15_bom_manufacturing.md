@@ -155,7 +155,7 @@ Complete Bill of Materials (BOM) and manufacturing specifications for all 4 PCBA
 
 All production-ready manufacturing packages can be generated automatically via `python3 hardware/scripts/export_manufacturing_packages.py` into the [hardware/production_packages/](file:///Users/schmidtm/openMotorBridge/hardware/production_packages/) directory.
 
-### 8.1 Checklist for JLCPCB Upload (All 4 Circuit Boards)
+### 8.1 Checklist for JLCPCB Upload (All 5 Circuit Boards)
 
 | Subassembly / PCBA | Gerber ZIP File | BOM CSV File | CPL (Pick & Place) CSV | Layers & Stackup | Surface Finish & Thickness |
 | :--- | :--- | :--- | :--- | :---: | :--- |
@@ -163,6 +163,7 @@ All production-ready manufacturing packages can be generated automatically via `
 | **2. Pod Base PCB** | `02_pod_base_pcba_gerbers_jlcpcb.zip` | `02_pod_base_pcba_bom_jlcpcb.csv` | `02_pod_base_pcba_cpl_jlcpcb.csv` | **2 Layers** (Standard) | **ENIG (Gold)**, 1.6 mm |
 | **3. Cartridge Carrier PCB**| `03_pod_cartridge_pcba_gerbers_jlcpcb.zip` | `03_pod_cartridge_pcba_bom_jlcpcb.csv` | `03_pod_cartridge_pcba_cpl_jlcpcb.csv` | **2 Layers** (Standard) | **ENIG (Gold)**, 1.2 mm |
 | **4. Rear Pod 3 Transceiver**| `04_rear_pod3_pcba_gerbers_jlcpcb.zip` | `04_rear_pod3_pcba_bom_jlcpcb.csv` | `04_rear_pod3_pcba_cpl_jlcpcb.csv` | **4 Layers** (JLC04161H-7628) | **ENIG (Gold)**, 1.6 mm, TG150 |
+| **5. Smart Fairing Hub** | `05_smart_fairing_pcba_gerbers_jlcpcb.zip` | `05_smart_fairing_pcba_bom_jlcpcb.csv` | `05_smart_fairing_pcba_cpl_jlcpcb.csv` | **4 Layers** (JLC04161H-7628) | **ENIG (Gold)**, 1.6 mm, TG150 |
 
 ### 8.2 Options to Select in JLCPCB Web Configurator:
 1. **PCB Order:**
