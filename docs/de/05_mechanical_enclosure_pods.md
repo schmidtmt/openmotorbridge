@@ -740,7 +740,52 @@ Das gesamte OpenMotorBridge-System basiert auf dem Prinzip der **vollständigen 
 
 ---
 
-### 5.11 CAD-Dateistruktur & Tinkercad-Modulbaukasten (STL-Bibliothek)
+### 5.11 Pod-3 Heck-Kombihalter mit winkelverstellbarem Radar-Ausleger (Dual-Mount Bracket)
+
+Um die vollständige Gleichheit des universellen Pod-Basis-Gehäuses (`pod_base_housing.stl`) über alle 3 Einbauorte zu bewahren, wird die Zubehör- und Sensorbefestigung nicht im Gehäuse selbst, sondern in der **fahrzeugseitigen Montagehalterung** gelöst:
+
+```
+                  ┌───────────────────────────────┐
+                  │    HECK-RADAR (GARMIN VARIA)   │
+                  └───────────────┬───────────────┘
+                                  │ (Winkelverstellung: GoPro-Scharnier M5)
+                     ┌────────────┴────────────┐
+                     │   Ausleger am Halter    │
+  ┌──────────────────┴─────────────────────────┴──────────────────┐
+  │                 HECK-KOMBIHALTER (ALU / PA12-CF)              │
+  │  ┌─────────────────────────────────────────────────────────┐  │
+  │  │           STANDARD POD 3 (UNIVERSAL-GEHÄUSE)            │  │
+  │  │           (mit OMM-Transceiver, LoRa, GNSS)             │  │
+  │  └─────────────────────────────────────────────────────────┘  │
+  └───────────────────────────────┬───────────────────────────────┘
+                                  │
+                     [ Montage am Kennzeichenhalter / Heckrahmen ]
+```
+
+1. **Formgeführte Pod-Aufnahme:** Der Heckhalter umschließt die Unterseite des universellen Pod-Gehäuses formschlüssig über das $120^\circ$-V-Nut-Prisma und spannt das Gehäuse vibrationsfest und spielfrei ein.
+2. **Winkelverstellbarer Radar-Ausleger:**
+   * Ein nach hinten/oben ragender Tragarm endet in einer **GoPro-kompatiblen 2-Laschen-Gabel** mit M5-Verschraubung.
+   * **Horizontale Justage:** Totwinkel-Radarsensoren (*Garmin Varia RTL515/eRTL615* oder Automotive 24-GHz-Radare) verlangen einen horizontalen Abstrahlwinkel ($\pm 5^\circ$ zur Fahrbahn). Über das Scharnier kann der Sensor unabhängig vom Montagewinkel des Kennzeichenträgers oder Heckfenders exakt einnivelliert werden.
+3. **Integrierte Kabelführung:** Die beiden rückwärtigen M8-Leitungen (M8 6-Pin für Pod 3 und M8 4-Pin für Radar-Speisung & Telemetrie) werden parallel und zugentlastet durch eine rückseitige Kabelrinne geführt.
+
+---
+
+### 5.12 Wireless Smart Fairing & 4-Port Power Hub (Cockpit-Gehäuse & Thermomanagement)
+
+Das vordere Cockpit-Subsystem verlagert die USB-Ladeelektronik, das Ambient-Mikrofon und die PTT-Auswertung direkt in die Frontverkleidung:
+
+1. **Gehäuseaufbau & Montage:**
+   * Kompaktes, wetterfestes IP65-Gehäuse ($85 \times 55 \times 24\,\text{mm}$) zur Montage hinter dem Windschild, Instrumententräger oder der Batwing/Sharknose-Verkleidung.
+   * **Silikon-Dichtkappe:** Die 4 frontseitigen USB-Buchsen sind mit federnden Einzel-Silikonklappen gegen Regen und Straßenschmutz geschützt.
+2. **Thermomanagement:**
+   * Der integrierte High-Power DCDC-Wandler (bis zu 45W Gesamtleistung) ist über ein thermisch leitendes Silikonpad (3 W/mK) an eine rückseitige Aluminium-Kühlplatte gekoppelt, die vom Fahrtwind hinter der Verkleidung umströmt wird.
+3. **Akustischer Schalleintritt (MEMS Ambient-Mikrofon):**
+   * An der Gehäuseunterseite befindet sich ein nach unten gerichteter Schalleintrittskanal ($\varnothing 2{,}5\,\text{mm}$), der durch eine wasserdichte, staubdichte ePTFE-Schallmembran geschützt ist.
+   * Dadurch werden Wind- und Fahrgeräusche präzise erfasst, ohne dass Wasser bei starkem Regen oder der Fahrzeugwäsche eindringen kann.
+
+---
+
+### 5.13 CAD-Dateistruktur & Tinkercad-Modulbaukasten (STL-Bibliothek)
 
 Alle 3D-Gehäusemodelle stehen im Verzeichnis [hardware/cad/stl/](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/) und [hardware/3d_models_mjf/](file:///Users/schmidtm/openMotorBridge/hardware/3d_models_mjf/) in 3 klar strukturierten Hauptpaketen bereit:
 

@@ -216,10 +216,10 @@ def export_wiring_harness_package():
         ["W20", "HD26_MALE", "20", "IGNITION_KL15", "Yellow-Red", "AWG22 (0.34mm²)", "SUPERSEAL_4P_POWER", "2", "Switched Ignition 12V"],
         ["W21", "HD26_MALE", "21", "VEHICLE_GND", "Black-White", "AWG20 (0.50mm²)", "SUPERSEAL_4P_POWER", "3", "Vehicle Ground (KL31)"],
         ["W22", "HD26_MALE", "22", "CHASSIS_EARTH", "Green-Yellow", "AWG20 (0.50mm²)", "SUPERSEAL_4P_POWER", "4", "Direct Motorcycle Frame Earth"],
-        ["W23", "HD26_MALE", "23", "CAN_H", "Yellow-Black", "AWG24 (0.22mm²)", "M8_4P_FEMALE_CAN_MIC", "1", "ISO 11898-2 CAN High (120Ω Diff)"],
-        ["W24", "HD26_MALE", "24", "CAN_L", "Green-White", "AWG24 (0.22mm²)", "M8_4P_FEMALE_CAN_MIC", "2", "ISO 11898-2 CAN Low (120Ω Diff)"],
-        ["W25", "HD26_MALE", "25", "FRONT_MIC_SIG", "Blue-Black", "AWG26 (0.14mm²)", "M8_4P_FEMALE_CAN_MIC", "3", "Ambient Mic Signal (SPH0645)"],
-        ["W26", "HD26_MALE", "26", "FRONT_MIC_GND", "Black-Grey", "AWG26 (0.14mm²)", "M8_4P_FEMALE_CAN_MIC", "4", "Ambient Mic Ground Reference"]
+        ["W23", "HD26_MALE", "23", "RADAR_PWR_12V", "Red-Blue", "AWG22 (0.34mm²)", "M8_4P_FEMALE_RADAR", "1", "Switched 12V Radar Power (KL15 protected)"],
+        ["W24", "HD26_MALE", "24", "RADAR_GND", "Black-Blue", "AWG22 (0.34mm²)", "M8_4P_FEMALE_RADAR", "2", "Power & Signal Ground"],
+        ["W25", "HD26_MALE", "25", "RADAR_RX_CAN_H", "Yellow-Black", "AWG24 (0.22mm²)", "M8_4P_FEMALE_RADAR", "3", "Radar Telemetry RX / CAN High (Garmin Varia / 24GHz mmWave / OBD2)"],
+        ["W26", "HD26_MALE", "26", "RADAR_TX_CAN_L", "Green-White", "AWG24 (0.22mm²)", "M8_4P_FEMALE_RADAR", "4", "Radar Telemetry TX / CAN Low (Garmin Varia / 24GHz mmWave / OBD2)"]
     ]
 
     with open(csv_path, 'w', newline='') as f:

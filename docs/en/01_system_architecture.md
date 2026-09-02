@@ -36,7 +36,17 @@ Classic motorcycle communication systems are historically fragmented:
 └──────────────────────────────┴──────────────────────────────┴─────────────────────────────┘
   │                                                                                         │
   ├─► 6. VEHICLE POWER: AMP Superseal 1.5 4-Pin (KL30 Batt+, KL15 Ign+, Chassis Ground)       │
-  └─► 7. FRONT BRANCH: M8 4-Pin Receptacle (Vehicle CAN-Bus & IP67 Front Ambient Mic)────────┘
+  ├─► 7. REAR SENSOR BRANCH: M8 4-Pin (Rear Radar / Blind-Spot Sensor / Local OBD2-CAN)─────┤
+  │                                                                                         │
+  ▼ 2.4 GHz Ultra-Low-Latency Wireless Link (ESP-NOW < 3ms & BLE 5.0 2M-PHY)                │
+┌───────────────────────────────────────────────────────────────────────────────────────────┤
+│ 8. COCKPIT SUBSYSTEM: Wireless Smart Fairing & 4-Port Power Hub (Front Fairing)           │
+│ • 4-Port High-Power DCDC USB Hub (2x USB-C PD, 2x USB-A for Phone, Cam, GPS, Internal)   │
+│ • Digital I2S MEMS Ambient Mic with ePTFE Acoustic Vent (Edge RMS Noise Level Tracking)   │
+│ • Hardwired Handlebar PTT Pushbutton Input (Direct GPIO Interrupt, 100% Battery-Free!)    │
+│ • Optional Front CAN-Bus Transceiver (for Bikes with Diagnostic/TFT CAN in Fairing)       │
+│ • Only Single Vehicle Wire Needed: Rugged 2-Core 12V Power Cable (Zero Signal Flexing!)   │
+└───────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -119,7 +129,7 @@ All system signals converge at the central HD26 flanged connector:
 | **Pigtail 2 (250 mm)** | M8 6-Pin A-Coded (Female) | **Satellite Pod 2** (Pillion) | NF_OUT+, NF_OUT-, OPTO_TRIGGER, 1-WIRE_ID, +5V_VBUS, GND |
 | **Pigtail 3 (250 mm)** | M8 6-Pin A-Coded (Female) | **Rear Pod 3** (OMM & GNSS) | UART_TX, UART_RX, 1-PPS_SYNC, 1-WIRE_ID, +5V_POD3, GND |
 | **Pigtail 4 (250 mm)** | AMP Superseal 1.5 4-Pin | **12V Vehicle Power** | KL30 (Batt+), KL15 (Ign+), GND (Power), GND (Sense) |
-| **Pigtail 5 (250 mm)** | M8 4-Pin A-Coded (Female) | **CAN-Bus & Front Mic** | CAN_H, CAN_L, MIC_AMBIENT_IN, +3V3_MIC_BIAS |
+| **Pigtail 5 (250 mm)** | M8 4-Pin A-Coded (Female) | **Rear Radar & Local OBD2** | RADAR_PWR_12V, RADAR_GND, RADAR_RX (UART/CAN_H), RADAR_TX (UART/CAN_L) |
 
 ---
 
@@ -133,18 +143,24 @@ All system signals converge at the central HD26 flanged connector:
 * **Result:** The Boom! Box GTS unlocks Apple CarPlay and Android Auto on the 6.5" or 12.3" touchscreen immediately — **without requiring the \$350 WHIM module** or unreliable jumper bypass plugs.
 * **Seamless Audio Ducking:** Boom! Box navigation announcements are prioritized and smoothly blended over active intercom conversations with adjustable ducking ($-12\,\text{dB}$).
 
-#### 5.1.2 Discrete Fairing 2-Port USB Hub & Ottocast Wireless Adapter
-To eliminate the need to pull out and plug in a smartphone in the cramped, sun-heated glovebox every ride:
-* **Fairing Topology (Batwing / Sharknose):** Behind the speedometer cluster, a compact automotive-grade 2-port USB 2.0 data hub is looped into the factory head unit USB lead:
-  * **Port 1 (Glovebox):** Continues to the factory Jukebox glovebox for flash drives with music, wired charging, or official Boom! Box firmware updates.
-  * **Port 2 (Internal Fairing):** Secured invisibly with 3M Dual-Lock inside the fairing, powering a wireless CarPlay/Android Auto adapter (e.g. *Ottocast U2-Air / Mini* or *CarlinKit 5.0*).
-* **The Glovebox $V_{\text{BUS}}$ Cutoff Switch:**
-  * A discrete, IP65 rocker switch in the glovebox breaks the $+5\,\text{V}$ power wire ($V_{\text{BUS}}$) feeding Port 2 (Ottocast).
-  * **Three Essential Functions:**
-    1. **Collision Avoidance:** If a phone or USB flash drive is connected in the glovebox for system updates, flipping the switch disconnects the Ottocast, avoiding USB host address conflicts.
-    2. **Wi-Fi Release when Parked:** When the motorcycle is parked near a café, hotel room, or carport within Bluetooth range, switching off the Ottocast prevents the bike from continuously hijacking the phone's Wi-Fi and mobile data connection.
-    3. **Instant Hard Reboot:** Enables a rapid cold power cycle of the wireless adapter without taking off the fairing or disconnecting the main motorcycle battery.
+#### 5.1.2 Wireless Smart Fairing & 4-Port Power Hub
+To eliminate fragile signal wiring harnesses through the flexed steering head and provide high-current cockpit charging:
+* **Wireless RF Bridge to Central Box:** An autonomous controller node (ESP32-C3 / nRF52840) inside the fairing communicates via **ESP-NOW ($< 3\,\text{ms}$ latency)** and **BLE 5.0 (2M-PHY)** directly to the Central Box.
+* **4-Port High-Power DCDC USB Hub:**
+  * **Port 1 (USB-C PD 30W):** Rapid charging for smartphone running GPS navigation or Wireless CarPlay.
+  * **Port 2 (USB-C 15W):** Continuous power for helmet or fairing action cams (GoPro / Insta360).
+  * **Port 3 (USB-A 10W):** Power supply for dedicated motorcycle GPS (Garmin Zumo / TomTom Rider).
+  * **Port 4 (USB-A internal):** Feeds the wireless CarPlay/Android Auto dongle (*Ottocast / CarlinKit*) on the Boom! Box USB branch with glovebox cutoff switch.
+* **Digital I2S MEMS Ambient Microphone (Knowles):** Surface-mounted on the fairing node PCB behind an IP67 ePTFE acoustic membrane. The local MCU calculates ambient road/engine noise levels (dB-A / RMS) via Edge-DSP and streams compact telemetry to the Central Box for dynamic helmet volume AGC.
+* **Direct Wired Handlebar PTT (100% Battery-Free):** The handlebar push-to-talk button wires directly into the front node's interrupt GPIO. Eliminates coin-cell battery failure in freezing winter weather!
+* **Minimal Bike Wiring:** The entire fairing system requires only **a single 2-core 12V automotive power lead** (tapped at the headlight or accessory circuit). Zero signal wires crossing the steering head.
 
 ### 5.2 BMW Motorrad ConnectedRide & CAN-Bus Integration
 * **Real-time Telemetry:** Via the TCAN334G transceiver in listen-only mode, the bridge captures wheel speeds, lean angles, and turn indicators.
-* **TFT Display Notifications:** If the wireless remote battery drops below $2.3\,\text{V}$, an alert is broadcast to the TFT display (*"Handlebar remote battery low - replace CR2032"*).
+* **TFT Display Notifications:** System alerts can be rendered directly on the motorcycle TFT dashboard.
+
+### 5.3 Rear Radar & Blind-Spot Assistant (Garmin Varia / 24 GHz mmWave) on Pod 3 Dual-Mount Bracket
+* **Pod 3 Dual-Mount Bracket:** The rear mounting bracket securely holds the universal Pod 3 housing while integrating an angle-adjustable GoPro-compatible arm to level the radar sensor horizontally.
+* **Direct Connection to Pigtail 5:** Provides switched 12V power and bidirectional telemetry (UART / CAN) through the M8 4-pin interface.
+* **Acoustic Helmet Warnings:** When a vehicle approaches rapidly from behind, the DSP audio engine smoothly ducks music/intercom and injects a crisp dual-tone acoustic chime directly into the rider's headset.
+* **Visual Dashboard Display:** The WebApp renders a real-time radar tracking display with distance indicators and vehicle hazard status (green/amber/red).

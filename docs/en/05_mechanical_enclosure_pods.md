@@ -737,7 +737,7 @@ To eliminate tilting, asymmetric lever forces, and reverse insertion, the cartri
 │ 6. CENTRAL BOX HD26 BREAKOUT PIGTAIL (Under Seat):                      │
 │    • 3x M8 6-Pin sockets (Pod 1 Left, Pod 2 Right, Pod 3 Rear)          │
 │    • 1x M8 4-Pin / Superseal (Vehicle power KL30/KL15/GND/Shield)       │
-│    • 1x M8 4-Pin (CAN-Bus telemetry & front ambient microphone)         │
+│    • 1x M8 4-Pin (Rear Radar power & telemetry / local under-seat OBD2) │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -790,6 +790,47 @@ To validate the mechanical, thermal, and electrical integration of the entire sy
 1. **Axial Centering:** The 6-pin interface ($J_1 \leftrightarrow J_1$) is located precisely on the horizontal centerline ($Y=0.0\,\text{mm}, Z=0.0\,\text{mm}$).
 2. **Stress-Free Electrical Contacts:** Insertion forces are 100% absorbed by the solid $2.0\,\text{mm}$ PA12 bulkhead against the monocoque enclosure. PCB solder joints remain entirely free of bending moments.
 3. **Auto-Eject Mechanism:** Dual V4A stainless steel springs produce an $8\dots 10\,\text{mm}$ automatic push-out stroke upon latch release, allowing easy removal even with heavy winter motorcycle gloves.
+
+---
+
+### 5.11 Pod 3 Rear Dual-Mount Bracket with Angle-Adjustable Radar Arm
+
+To preserve 100% universality and manufacturing commonality across all three Pod base housings (`pod_base_housing.stl`), accessory mounting is resolved exclusively via the **motorcycle mounting bracket**:
+
+```
+                  ┌───────────────────────────────┐
+                  │    REAR RADAR (GARMIN VARIA)  │
+                  └───────────────┬───────────────┘
+                                  │ (Tilt adjustment: M5 GoPro-style hinge)
+                     ┌────────────┴────────────┐
+                     │   Extended Bracket Arm  │
+  ┌──────────────────┴─────────────────────────┴──────────────────┐
+  │                 REAR DUAL BRACKET (CNC ALU / PA12-CF)         │
+  │  ┌─────────────────────────────────────────────────────────┐  │
+  │  │           STANDARD POD 3 (UNIVERSAL HOUSING)            │  │
+  │  │           (OMM Transceiver, LoRa 868, GNSS Multi-Band)  │  │
+  │  └─────────────────────────────────────────────────────────┘  │
+  └───────────────────────────────┬───────────────────────────────┘
+                                  │
+                     [ Mount to License Plate / Subframe Rack ]
+```
+
+1. **Precision Pod Clamping:** The dual bracket captures the standard Pod 3 bottom V-saddle securely, isolating vibration while maintaining rigid alignment.
+2. **Angle-Adjustable Radar Arm:**
+   * Rear-facing arm terminates in a **GoPro-compatible 2-prong fork** with an M5 stainless locking screw.
+   * **Horizontal Leveling:** Rear-facing radar units (*Garmin Varia RTL515/eRTL615* or automotive 24-GHz sensors) require alignment within $\pm 5^\circ$ of the road plane. The hinge allows instant leveling regardless of license plate holder or fender slope.
+3. **Harness Integration:** Both rear M8 cables (M8 6-pin for Pod 3 and M8 4-pin for radar power & telemetry) route side-by-side through a built-in cable management channel.
+
+---
+
+### 5.12 Wireless Smart Fairing & 4-Port Power Hub (Cockpit Enclosure)
+
+The front cockpit subsystem is housed inside an IP65 enclosure ($85 \times 55 \times 24\,\text{mm}$) positioned behind the motorcycle windscreen or front fairing:
+1. **Weatherproof 4-Port USB Hub:** Four ports (2x USB-C PD, 2x USB-A) protected by individual spring-loaded silicone sealing flaps.
+2. **Thermal Management:** The high-efficiency buck converter (up to 45W total load) is thermally bridged via a 3 W/mK silicone pad to an external aluminum baseplate, cooled by ambient cockpit airflow.
+3. **Downward Acoustic Vent:** The Knowles I2S MEMS ambient mic sits behind a downward-facing $\varnothing 2.5\,\text{mm}$ acoustic sound port covered with a hydrophobic ePTFE membrane, impervious to driving rain and pressure washers.
+
+---
 
 ## 6. 6-Pin M8 / Pogo Interface & PUR Harness Color Coding
 
