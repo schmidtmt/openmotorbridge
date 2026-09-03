@@ -21,9 +21,13 @@ Das Basisgehäuse der Zentralbox ist als modulares, 3-teiliges IP67/IP69K-Sandwi
 
 ### 1.1 3D-CAD-Modell & 3-Schichten-Sandwichaufbau
 
+![OpenMotorBridge Zentralbox 3D Anschnitt CAD](../images/cad/main_box_cutaway_3d.png)
+
+*Abbildung 8.1: Photorealistischer 3D-CAD-Schräganschnitt der zentralen Steuerbox. Sichtbar sind die 3 Schichten im geschlossenen Verbund: Unterwanne mit 4-Layer-Platine (ENIG) auf M2.5 Dämpfern, Zwischenboden mit 11 Konvektionsschlitzen, oberes Akku-Fach mit 1S LiPo-USV-Batterie und EPDM-Spannband, HD26-Flansch, USB-C Servicekappe sowie Deckel mit Gore-Membran.*
+
 ![OpenMotorBridge Zentralbox 3-Teiliges Sandwich-Gehäuse IP67](../images/cad/main_box_enclosure_cad.png)
 
-*Abbildung 8.1: 3D-CAD-Darstellung der zentralen Steuerbox. Links: Geschlossenes IP67-Gehäuse mit HD26-Kabelbaumflansch, USB-C Servicekappe und bündigem RGB-Statusfenster an der Stirnseite der Oberwanne, 4x M4 Silentblöcken an der Unterwanne und flachem Deckel mit Gore-Membran. Rechts: Schnittansicht mit den 3 Sandwich-Ebenen.*
+*Abbildung 8.2: 3D-CAD-Konstruktionsübersicht der zentralen Steuerbox (Typ A).*
 
 ```
 ┌────────────────────────────────────────────────────────────┐  ▲
@@ -128,13 +132,17 @@ Die Gesamtabwärme der Zentralbox liegt im normalen Fahrbetrieb bei lediglich **
 
 Alle 3 Pod-Positionen nutzen dasselbe 5-seitige Monocoque-Schachtgehäuse im erweiterten Envelope ($135{,}0 \times 70{,}0 \times 38{,}0\,\text{mm}$):
 
+![OpenMotorBridge Satelliten-Pod & Kassetten 3D Anschnitt CAD](../images/cad/pod_cartridge_cutaway_3d.png)
+
+*Abbildung 8.5: Photorealistischer 3D-CAD-Schräganschnitt des Satelliten-Pods mit eingeschobener Wechselkassette. Gut zu erkennen sind die 120°-V-Nut mit EPDM-Spannringen um das Motorrad-Rahmenrohr, die M8 6-Pin-Buchse, die innere Schottwand mit den beiden komprimierten V4A-Edelstahlfedern, die asymmetrischen Poka-Yoke Gleitschienen mit 6 mm Höhenversatz, der 6-polige Goldkontakt-Eingriff (4,8 mm Wipe-Weg) und die formbündige Dichtung an der Frontblende.*
+
 ![OpenMotorBridge Satelliten-Pod CAD Explosionsdarstellung](../images/cad/openmotorbridge_pod_exploded_view.png)
 
-*Abbildung 8.5: 3D-CAD-Explosionsdarstellung des universellen Satelliten-Pods.*
+*Abbildung 8.6: 3D-CAD-Explosionsdarstellung des universellen Satelliten-Pods.*
 
 ![OpenMotorBridge Satelliten-Pod Röntgenansicht](../images/cad/openmotorbridge_pod_assembly_render_xray.png)
 
-*Abbildung 8.6: 3D-Röntgen- und Transparenzdarstellung des geschlossenen Satelliten-Pods.*
+*Abbildung 8.7: 3D-Röntgen- und Transparenzdarstellung des geschlossenen Satelliten-Pods.*
 
 ### 4.1 Rohrbett-Prisma ($120^\circ$) & EPDM-Spannbefestigung
 * **An der Unterseite:** $120^\circ$-V-Nut ($R = 15\,\text{mm}$) schmiegt sich formschlüssig an alle Rohre von $\varnothing 18\dots 35\,\text{mm}$ an ($1"$ Sturzbügel, $7/8"$ Heckrahmen).
@@ -219,13 +227,17 @@ Alle 3 Pod-Positionen nutzen dasselbe 5-seitige Monocoque-Schachtgehäuse im erw
 
 Der Heck-Pod 3 vereint den OMM-Transceiver, 868 MHz LoRa und Multi-GNSS in aerodynamischer Heckposition:
 
+![Pod 3 Transceiver & Radar 3D Anschnitt CAD](../images/cad/pod3_radar_cutaway_3d.png)
+
+*Abbildung 8.13: Photorealistischer 3D-CAD-Schräganschnitt des Heck-Pods 3 mit montiertem Blind-Spot Radarsensor. Sichtbar sind das dielektrische Radom mit Gore-Membran, die 25x25 mm Keramik-Patchantenne, die 868 MHz LoRa-Wendelantenne, die 4-Layer-Platine mit RP2040 und SX1262, der M8 6-Pin-Anschluss sowie der M5-GoPro-Ausleger mit verstellbarem Garmin Varia Radarkopf.*
+
 ![Pod 3 Full Assembly Exploded 3D](../images/cad/pod3_full_assembly_exploded_3d.png)
 
-*Abbildung 8.13: CAD-Explosionsdarstellung des Heck-Pods 3 mit Antennen-Radom, Platine und M8-Bajonettsockel.*
+*Abbildung 8.14: CAD-Explosionsdarstellung des Heck-Pods 3 mit Antennen-Radom, Platine und M8-Bajonettsockel.*
 
 ![Pod 3 Assembly Cross Section](../images/cad/pod3_assembly_cross_section.png)
 
-*Abbildung 8.14: Längsschnitt durch den Heck-Pod 3 mit koaxial geschirmter Antennenkammer und $25 \times 25\,\text{mm}$ GNSS-Groundplane.*
+*Abbildung 8.15: Längsschnitt durch den Heck-Pod 3 mit koaxial geschirmter Antennenkammer und $25 \times 25\,\text{mm}$ GNSS-Groundplane.*
 
 * **Winkelverstellbarer Radar-Ausleger:** GoPro-kompatibles M5-Scharnier zur horizontalen Ausrichtung von Garmin Varia Radarsensoren ($\pm 5^\circ$).
 
