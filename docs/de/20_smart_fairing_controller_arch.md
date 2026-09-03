@@ -168,13 +168,75 @@ Das Cockpit-Subsystem erfasst Umwelt-, Motor- und Windgeräusche direkt an der F
 
 ---
 
-## 8. Leiterplatten-Spezifikation (`05_smart_fairing_pcba`)
+## 8. Leiterplatten-Spezifikation (`05_front_node_pcba`)
 
 | Parameter | Spezifikation | Begründung |
 | :--- | :--- | :--- |
-| **Abmessungen** | **$65{,}0 \times 42{,}0 \times 1{,}6\,\text{mm}$** | Kompakt zur unsichtbaren Montage hinter Verkleidung / Tacho |
-| **Lagenanzahl** | **4 Lagen (JLC04161H-7628)** | L1: Signale/RF, L2: Durchgehende Solid GND-Plane, L3: 5V/3V3 Power, L4: Signale |
-| **Basismaterial** | **FR-4 TG150** | Hochtemperaturfest gegen Sommerhitze in der geschlossenen Verkleidung |
-| **Oberflächenveredelung**| **ENIG (Electroless Nickel Immersion Gold)** | Korrosionsbeständig gegen Kondensfeuchte und Temperaturschwankungen |
-| **Kupferauflage** | **$35\,\mu\text{m}$ (1 oz)** alle Lagen | Robuste Stromtragfähigkeit für DCDC und USB-Ports |
+| **Abmessungen** | **$68{,}0 \times 44{,}0 \times 1{,}6\,\text{mm}$** ($R = 2{,}5\,\text{mm}$) | Kompakt zur universellen Montage (Fairing, Cockpit, Gabel) |
+| **Befestigung** | **4x M2.5 Schraubbohrungen** ($61{,}0 \times 37{,}0\,\text{mm}$) | 4x M2.5 Schraubdome mit Messing-Gewindeeinsätzen |
+| **Lagenanzahl** | **4 Lagen (JLC04161H-7628)** | L1: Signale/RF, L2: Solid GND-Plane, L3: 5V/3V3 Power, L4: Signale |
+| **Basismaterial** | **FR-4 TG150** | Hochtemperaturfest gegen Sommerhitze im geschlossenen Cockpit |
+| **Oberflächenveredelung**| **ENIG (Electroless Nickel Immersion Gold)** | Korrosionsbeständig gegen Feuchte und Temperaturschwankungen |
+| **Kupferauflage** | **$35\,\mu\text{m}$ (1 oz)** alle Lagen | Robuste Stromtragfähigkeit für DCDC-Schaltregler und USB-Ports |
 | **Bordspannungsschutz** | TVS-Diode **SMCJ36CA** (1500W Peak) | Blockt Automotive Load-Dump und Induktionsspitzen der Lichtmaschine |
+| **DRC-Status** | **100 % Geroutet / 0 Fehler** | 0 Unconnected, 0 Clearance Errors, 90 $\Omega$ USB-Differenzialpaare |
+
+---
+
+## 9. Fotorealistische 3D-Leiterplatten-Renderings
+
+### 9.1 Platinen-Oberseite (Top Layer Assembly)
+
+![Front Node Top 3D Render](../images/cad/front_node_3d_render_top.png)
+
+*Abbildung 20.1: Fotorealistisches 3D-Rendering der bestückten Front-Node-Leiterplatte (Oberseite). Zu sehen sind der Automotive USB 2.0 Hub IC (Microchip USB2512B), der ESP32-C3-WROOM-02U Controller mit goldenem U.FL-Koaxialanschluss, der TI TPS2051B USB-Leistungsschalter, der Automotive Buck-Converter (LMR36015) mit Ringkern-Speicherdrossel, die 3x JST-PH Steckverbinder an der Südkante (CarPlay, Glovebox, Host), die 3x Steckverbinder an der Westkante (12V, CAN, PTT) sowie der bündige USB-C Service-Port.*
+
+### 9.2 Platinen-Unterseite (Bottom Layer Assembly)
+
+![Front Node Bottom 3D Render](../images/cad/front_node_3d_render_bottom.png)
+
+*Abbildung 20.2: Fotorealistisches 3D-Rendering der Platinen-Unterseite mit durchgehender Solid-Ground-Plane, Entkopplungskondensatoren und der akustischen Eintrittsöffnung für das Knowles SPH0645 I2S MEMS Ambient-Mikrofon.*
+
+---
+
+## 10. Wasserdichtes IP67-Gehäuse & 4-in-1 Universal-Befestigungssystem
+
+Um den Front-Knoten sowohl hinter Verkleidungen (Harley Batwing/Sharknose) als auch universell an BMW GS/RT, Reiseenduros oder Naked-Bikes montieren zu können, wurde ein hochintegriertes HP MJF PA12 Gehäuse mit einem **4-in-1 Befestigungskonzept** entwickelt:
+
+### 10.1 Geschlossenes Gehäusemodell (IP67 Closed Assembly)
+
+![Front Node Closed Enclosure CAD](../images/cad/front_node_closed_cad.png)
+
+*Abbildung 20.3: Geschlossenes Gehäuse ($84{,}0 \times 60{,}0 \times 23{,}0\,\text{mm}$) aus UV-beständigem HP MJF PA12. Sichtbar sind die 4x M3 Eckverschraubungen, die EPDM-Kammleisten an Süd- und Westkante, der versenkte USB-C Service-Port mit Silikonschutzkappe, das Sichtfenster für die Status-LED sowie die seitlichen M4 Silentblock-Ohren.*
+
+### 10.2 Explosionszeichnung & Montageebenen (Exploded View)
+
+![Front Node Exploded Assembly 3D](../images/cad/front_node_exploded_3d.png)
+
+*Abbildung 20.4: Explosionsdarstellung aller mechanischen Komponenten: Unterteil mit M2.5 Schraubdomen, PCB-Baugruppe, 2x EPDM-Dichtkämme für Süd- und Westkabel, umlaufende Silikon-Dichtschnur (blau), USB-C Schutzkappe, Gehäusedeckel mit Dichtlippe und 4x M3 Edelstahlschrauben.*
+
+### 10.3 4-in-1 Universal-Befestigungssystem (Unterseite)
+
+![Front Node Multi-Mount Bottom CAD](../images/cad/front_node_bottom_cad.png)
+
+*Abbildung 20.5: Detailansicht des 4-in-1 Montagebodens: 1. Standard AMPS 4-Loch-Muster ($38{,}0 \times 30{,}0\,\text{mm}$) mit M4 Messingeinsätzen für BMW GS/RT Navibügel (12/16 mm Rohr) und RAM-Mounts; 2. 90° gekreuzte Kabelbinder- & Schellen-Tunnel ($5{,}5 \times 2{,}2\,\text{mm}$) zum scheuerfreien Verzurren an Gabel- und Rahmenrohren; 3. 2x M4/M5 Silentblock-Flanschohren; 4. Plane $50 \times 28\,\text{mm}$ Vertiefung für 3M Dual-Lock Klettband.*
+
+### 10.4 3D-Schnittansicht & Einbaukontrolle (Internal Seating Cutaway)
+
+![Front Node Cutaway Inspection](../images/cad/front_node_cutaway_3d.png)
+
+*Abbildung 20.6: 3D-Schnittansicht der Baugruppe zur Überprüfung der internen Freigänge, der gleichmäßigen Verpressung der Dichtelemente und der exakten Fluchtung der Steckverbinder.*
+
+---
+
+## 11. Fertigungspakete & Produktionsstatus
+
+Alle produktionsreifen Fertigungsdaten stehen im Verzeichnis `hardware/production_packages/` zur Verfügung:
+
+1. **PCBA Fertigungspaket (`05_front_node_pcba/`):**
+   * `05_front_node_pcba_gerbers_jlcpcb.zip`: RS-274X 4-Layer Gerberdaten inkl. Excellon Bohrdaten.
+   * `05_front_node_pcba_bom_jlcpcb.csv`: Vollständige Stückliste mit validierten LCSC-Bestellnummern.
+   * `05_front_node_pcba_cpl_jlcpcb.csv`: Pick & Place Bestückungskoordinaten für die SMT-Fertigung.
+2. **3D-Druck Fertigungspaket (`06_3d_print_mjf_stls/`):**
+   * `04_front_node_3d_print_mjf.zip`: Produktions-STLs für Unterteil (`front_node_lower_tub.stl`), Deckel (`front_node_upper_lid.stl`), Kabelkämme (`front_node_cable_glands_tpu.stl`) und USB-C Staubkappe (`front_node_usbc_cap_tpu.stl`).
+
