@@ -22,6 +22,21 @@ Um hohe Wirkungsgrade bei minimaler Eigenerwärmung im geschlossenen IP67-Gehäu
 └──────────────────────────────────────┴──────────────────────────────────────┘
 ```
 
+### 1.1 LM5164-Q1 Induktivitäts- & Filter-Dimensionierung
+Die Speicherinduktivität $L$ des synchronen Abwärtswandlers ist für lückenlosen Betrieb (CCM) und minimalen Ausgangs-Ripple berechnet:
+
+$$L = \frac{V_{\text{OUT}} \cdot (V_{\text{IN,max}} - V_{\text{OUT}})}{V_{\text{IN,max}} \cdot \Delta I_L \cdot f_{\text{sw}}}$$
+
+* **Berechnungsparameter:** $V_{\text{IN,max}} = 65\,\text{V}$, $V_{\text{OUT}} = 5{,}0\,\text{V}$, $f_{\text{sw}} = 400\,\text{kHz}$, Ripplestromverhältnis $\Delta I_L = 0{,}30 \times I_{\text{OUT}} = 300\,\text{mA}$.
+* **Ergebnis:** $L = \frac{5{,}0 \cdot (65 - 5)}{65 \cdot 0{,}30 \cdot 400 \times 10^3} \approx 38{,}4\,\mu\text{H} \rightarrow$ **Gewählt: $47\,\mu\text{H}$** (Würth WE-PD 744770147 / Coilcraft XAL5030-473, $I_{\text{sat}} = 2{,}1\,\text{A}$, $R_{\text{DC}} = 115\,\text{m}\Omega$).
+* **Eingangskapazität:** $2 \times 10\,\mu\text{F}$ 100V X7R Vielschichtkeramik (MLCC) dämpfen Leitungsinduktivitäten des Motorrad-Kabelbaums zuverlässig.
+
+### 1.2 Labor-Messwerte des Systemstroms (INA226 Präzisionsmessung @ 12.0 V Bordnetz)
+* **Normalbetrieb (Volllast):** $185\,\text{mA}$ ($2{,}22\,\text{W}$ bei aktiver Sena- & Cardo-Audiobrücke, LoRa 868MHz RX und 10 Hz Multi-GNSS).
+* **USV-Nachlauf (WLAN WebDAV Sync):** $45\,\text{mA}$ ($0{,}54\,\text{W}$ bei aktiver Übertragung mit Zündung AUS).
+* **Standby Deep Sleep (KL15 Ext-Interrupt):** **$92\,\mu\text{A}$** (System wacht in $< 5\,\text{ms}$ bei Zündung AN auf).
+* **ULP-Winter-Hibernate (> 72 h Stillstand):** **$14{,}8\,\mu\text{A}$** (Gemessen mit INA226; schützt Starterbatterie selbst nach 12 Monaten Standzeit vor Tiefentladung).
+
 ---
 
 ## 2. Dynamisches Power-Path Management & Integrierte USV

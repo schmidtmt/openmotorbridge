@@ -13,7 +13,64 @@ Dieses Dokument spezifiziert das Telemetrie- und Speicher-Subsystem der OpenMoto
 
 ---
 
-## 2. Ringspeicher & BGH-Konformität (BGH VI ZR 233/17 & DSGVO)
+## 2. Sensor-Fusion & Automotive Dead Reckoning (ADR Engine)
+
+Das Telemetrie-Subsystem führt Daten des Multi-GNSS-Empfängers (**u-blox MAX-M10S** im Heck-Pod 3), der 6-Achsen-IMU (**Bosch BMI270**) und optionaler Raddrehzahlen (über fahrzeugseitigen CAN-Bus oder ABS-Sensorpulse) in einem **15-State Error-State Extended Kalman Filter (ES-EKF)** zusammen:
+
+```
+[ u-blox Multi-GNSS (M10S 10 Hz) ] ──(UART 460.8k)──┐
+[ CAN-Bus Raddrehzahl / Speed ] ────(10-20 Hz)───────┼─► [ 15-State Extended Kalman Filter ] ──► [ MicroSD: tour.gpx ]
+[ Bosch BMI270 Gyro / Accel (I2C) ] ─(50-100 Hz)─────┘        (Dead Reckoning Engine)            (Mit Schräglage & G-Force)
+```
+
+### 2.1 Lückenlose Tunnel-Navigation (Inertial Navigation)
+Bricht der GNSS-Empfang in Tunneln, Unterführungen, dichten Waldgebieten oder engen Schluchten ab:
+* Die Raddrehzahl liefert die präzise Wegstrecke ($\Delta s = v \cdot \Delta t$).
+* Das Gyroskop der BMI270 IMU integriert Kurven, Richtungs- und Höhenänderungen kontinuierlich weiter.
+* Der Track läuft im Tunnel ohne Einfrieren, Sprünge oder Zick-Zack-Muster nahtlos auf der Fahrbahnlinie weiter.
+
+### 2.2 Kompensation von Multipath-Sprüngen (Felswand-Filterung bei Alpenpässen)
+GNSS-Messausreißer (z. B. $40\,\text{m}$-Positionssprünge durch Signalreflexionen an steilen Felswänden in Pässen) werden vom Kalman-Filter automatisch verworfen: Die IMU meldet dem EKF, dass physikalisch keine entsprechende Querbeschleunigung stattgefunden hat, wodurch der Track auf der realen Fahrbahnlinie gehalten wird.
+
+---
+
+## 3. MotoGP-Style Telemetrie & GPX 2.0 XML-Spezifikation
+
+Jeder Wegpunkt im GPX-Datensatz wird mit $10\,\text{Hz}$ um hochpräzise Fahrdynamik-Metadaten erweitert:
+* **Kurvenschräglage links/rechts (°):** $\text{Lean\_Angle} = \arctan\left(\frac{v \cdot \dot{\psi}}{g}\right)$
+* **Längs- und Querbeschleunigung (Brems- und Beschleunigungs-G-Kräfte):** Aus kalibrierten IMU-Werten.
+* **Bordnetz- und Batteriespannung:** Zur Diagnose von Lichtmaschine und Regler.
+* **1-PPS Hardware-Zeitsynchronisation:** Mit $< 15\,\text{ns}$ Jitter für framegenaue Actioncam-Videomarker.
+
+```xml
+<trkpt lat="47.3769" lon="8.5417">
+  <ele>408.2</ele>
+  <time>2026-08-23T09:15:00.100Z</time>
+  <extensions>
+    <omb:telemetry>
+      <omb:lean_angle>44.2</omb:lean_angle>
+      <omb:speed_kmh>84.6</omb:speed_kmh>
+      <omb:accel_g_lon>-0.72</omb:accel_g_lon>
+      <omb:accel_g_lat>0.98</omb:accel_g_lat>
+      <omb:battery_v>12.6</omb:battery_v>
+      <omb:satellites>18</omb:satellites>
+      <omb:hdop>0.8</omb:hdop>
+    </omb:telemetry>
+  </extensions>
+</trkpt>
+```
+
+---
+
+## 4. Track-Lifecycle & Intelligente Segmentierung
+
+* **Auto-Start:** Startet eine neue Tour-Datei (`YYYY-MM-DD_HH-MM-SS.gpx`), sobald die Zündung (KL15) aktiv ist und sich das Motorrad länger als 10 Sekunden mit $> 5\,\text{km/h}$ bewegt.
+* **Segment-Split (`<trkseg>`):** Bei Ampel- oder kurzen Tankstopps unter 15 Minuten wird die Datei nicht geschlossen, sondern ein neues Track-Segment geöffnet, um Routen-Artefakte im Stand zu eliminieren.
+* **Auto-Finalisierung:** Nach 15 Minuten Dauerstillstand oder 60 Sekunden nach Zündung AUS wird die GPX-XML-Struktur sauber mit `</gpx>` abgeschlossen und für den WebDAV-Upload markiert.
+
+---
+
+## 5. Ringspeicher & BGH-Konformität (BGH VI ZR 233/17 & DSGVO)
 
 Um den strengen Vorgaben des Bundesgerichtshofs (BGH-Urteil VI ZR 233/17) und der DSGVO bezüglich anlassloser Überwachung im Straßenverkehr zu entsprechen:
 
@@ -36,7 +93,30 @@ Um den strengen Vorgaben des Bundesgerichtshofs (BGH-Urteil VI ZR 233/17) und de
 
 ---
 
-## 3. Automatischer WebDAV / Nextcloud Upload im Heim-WLAN
+## 6. Map-Matching & Universeller GPX-Export (Web-App Pipeline)
+
+```
+[ MicroSD: tour_raw.gpx ] ──(BLE / WebDAV)──► [ Web Dashboard / Smartphone ]
+                                                      │
+                                                      ▼
+                                       [ Map-Matching Engine (OSRM / Valhalla) ]
+                                                      │
+                         ┌────────────────────────────┴────────────────────────────┐
+                         ▼                                                         ▼
+           [ Bereinigte Navi-Route (.gpx) ]                           [ Reiner Visual-Track (.gpx) ]
+           (20-50 gesetzte Shaping Points für                          (1:1 geglättete Linie für
+            Garmin, Kurviger, Calimoto, TomTom)                        Google Maps, Komoot, Relive)
+```
+
+1. **Automatisches Road-Snapping:**
+   * Die Web-App nutzt Routing-Engines (OSRM oder Valhalla), um die Rohkoordinaten mathematisch auf das reale Straßennetz von OpenStreetMap zu snappen. Wendemanöver auf Parkplätzen und minimale GPS-Drifts werden automatisch bereinigt.
+2. **Export für Motorrad-Navis (Shaping Points):**
+   * Die App erzeugt eine echte, routingfähige `.gpx`-Datei mit strategisch platzierten Wegepunkten (Shaping Points).
+   * Diese kann direkt an Mitfahrer geteilt und in **Garmin Tread/Zūmo, BMW ConnectedRide, Kurviger, Calimoto oder TomTom** importiert werden, ohne dass das jeweilige Navi die Route eigenmächtig umberechnet.
+
+---
+
+## 7. Automatischer WebDAV / Nextcloud Upload im Heim-WLAN
 
 ```
 MOTORRAD ROLLT IN DIE GARAGE (ZÜNDUNG AUS)
@@ -54,7 +134,7 @@ MOTORRAD ROLLT IN DIE GARAGE (ZÜNDUNG AUS)
 
 ---
 
-## 4. Minimaler USB Mass Storage Class (MSC) Modus
+## 8. Minimaler USB Mass Storage Class (MSC) Modus
 
 Wird die Zentralbox über den nativen USB-C-Port an einen PC, Mac oder ein Tablet angeschlossen, während die Fahrzeugzündung (KL15) ausgeschaltet ist, startet der ESP32-S3 im **Minimalen USB MSC Modus**:
 

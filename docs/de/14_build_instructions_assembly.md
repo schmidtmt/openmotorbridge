@@ -131,12 +131,15 @@ Um ein vollwertiges OpenMotorBridge (v8.0) Gesamtsystem für ein Motorrad aufzub
 | **EPDM-Spannbänder** | UV- und ozonbeständiges EPDM ($\varnothing 45 \dots 75\,\text{mm}$) | **6** | Werkzeuglose Schnellmontage der Pods an Rahmen- & Sturzbügeln |
 | **Murata MM8030 Pigtails** | Murata MM126036 auf SMA-Bulkhead IP67 (150 mm, RG-178)| **3** | Koaxial-Bypass für Pod 3: J3 (2.4G), J4 (868M), J5 (GNSS) |
 | **U.FL Koaxial-Pigtail** | IPEX MHF1 / U.FL auf RP-SMA Bulkhead IP67 (150 mm, RG-178)| **1** | Koaxial-Zuleitung für Front-Knoten ESP32-C3 externe Antenne |
-| **SMA IP67 Schutzkappen** | Messing vernickelt mit Dichtungs-O-Ring (Rändelkappe) | **4** | Schutz ungenutzter SMA-Buchsen (interne Antennen bleiben aktiv) |
+| **SMA-Flansch-Doppelbuchse** | SMA-Buchse auf SMA-Buchse Bulkhead IP67 mit O-Ring & Mutter | **1** | Wasserdichte HF-Durchführung in Kassetten-Frontblende (Klasse A) |
+| **Koax-Pigtail intern** | RG-178 Koaxialkabel ($6\dots 10\,\text{cm}$, SMA 90° auf SMA) | **1** | HF-Verbindung von Sena +Mesh / OEM-Adapter zur Frontblende |
+| **SMA IP67 Schutzkappen** | Messing vernickelt mit Dichtungs-O-Ring (Rändelkappe) | **5** | Schutz ungenutzter SMA-Buchsen (3x Heck, 1x Front, 1x Pod) |
 | **Externe Antennen (Opt.)** | 2.4G Collinear (+5 dBi), 868M LoRa (+3 dBi), aktive GNSS-Puck | *nach Wunsch*| High-Gain Antennen für maximale Reichweite und freie Himmelsicht |
 | **USB-A Flachbandkabel (Front)**| USB-A Stecker/Kupplung kurz ($10\dots 15\,\text{cm}$, 90°-Winkel)| **1** | Ottocast-Anbindung an J1 durch vorderen Dichtkamm |
 | **USB-C Ladekabel (Handschuhf.)**| USB-C Stecker/Stecker ($1{,}0\,\text{m}$, 90°-Winkel, PUR)| **1** | Smartphone-Ladekabel von J2 durch vorderen Dichtkamm |
 | **JST-GH Crimpstecker-Set** | JST-GH 1.25mm 2-Pin Gehäuse + Crimpkontakte | **2 Sätze**| Vorkonfektionierte Litzen für J3 (PTT) & J7 (12V) durch linken Kamm |
 | **90° USB Kassetten-Kabel** | Ultraflaches 90°-Winkelkabel Micro-USB/USB-C ($5\dots 8\,\text{cm}$) | **1** | 5V-Speisung für Sena +Mesh / MeshPort Adapter in Kassette |
+| **EPDM Kassetten-Spannband** | Elastisches EPDM-Gummiband ($\approx 35 \times 10\,\text{mm}$) | **1** | Vibrationssichere Arretierung des OEM-Adapters über Kassettennasen |
 
 ---
 
@@ -201,7 +204,7 @@ Für den sauberen, vibrationsfesten und IP67-dichten Zusammenbau aller Baugruppe
    * **Klasse A (Sena +Mesh B2M-01 / MeshPort Adapter):**
      * Adapter seitlich in die Quer-Führungsschienen des Inlays ([`01_insert_sena.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/parts/01_insert_sena.scad)) einschieben, bis die Rastklinke hörbar arretiert.
      * **USB-Speisung verbinden:** Das flache $90^\circ$-Winkelkabel (Micro-USB bzw. USB-C) vom 5V/GND-Header der Kassettenplatine durch die Deckaussparung führen und in den USB-Ladeport des +Mesh stecken (reine 5V-Dauerversorgung; Audio läuft drahtlos via Bluetooth zum Helm).
-     * **Antenne:** Das Antennen-Koaxialkabel durch das vordere Kassettenfenster zur stirnseitigen SMA-Buchse führen und anschrauben.
+     * **Antenne:** Die wasserdichte SMA-Flansch-Doppelbuchse mit O-Ring von außen in die $\varnothing 6{,}5\,\text{mm}$ Frontblenden-Bohrung einsetzen und von innen mit der Flanschmutter kontern. Das interne $90^\circ$-Koaxial-Pigtail an den Antennenanschluss des +Mesh schrauben, durch das vordere Kassettenfenster führen und an der Innenseite der Frontblenden-Buchse verschrauben. Bei Nichtgebrauch einer externen Antenne die stirnseitige SMA-Schutzkappe aufschrauben.
      * Mit dem elastischen EPDM-Spannband über die beiden seitlichen Haltenasen gegen Erschütterungen sichern.
    * **Klasse B & C (Sena 50S/60S oder Cardo Packtalk Edge Cradles):**
      * 6-poliges JST-SH Flachbandkabel von der Kassettenplatine direkt mit der OEM-Pogo-Pin-Leiste (Sena) bzw. dem magnetischen Cardo Air-Mount verbinden (galvanisch getrennte Analog-Audio-Kanäle, Mikrofon und Optokoppler-PTT).

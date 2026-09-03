@@ -183,7 +183,9 @@ Dieses Dokument enthält die vollständige Bauteilliste (Bill of Materials) und 
 | **Automotive-Leitungen** | FLRY-B $0{,}5\,\text{mm}^2$ & $0{,}35\,\text{mm}^2$ (diverse Farben) | Leoni / Helukabel | nach Bed. | Fahrzeugkabelbaum nach `central_breakout_harness_wirelist.csv` |
 | **Murata MM8030 Pigtails (Pod 3)**| Murata MM126036 auf SMA-Bulkhead IP67 (150 mm, RG-178)| Murata / Mouser | 3 Stk. | Koaxial-Bypass für J3 (2.4G), J4 (868M), J5 (GNSS) |
 | **U.FL Pigtail (Front-Node)** | IPEX MHF1 / U.FL auf RP-SMA Bulkhead IP67 (150 mm, RG-178) | Taoglas / Molex | 1 Stk. | Koaxial-Zuleitung für ESP32-C3 externe Antenne |
-| **SMA IP67 Schutzkappen** | Messing vernickelt mit Dichtungs-O-Ring (Rändelkappe) | Amphenol / Radiall | 4 Stk. | Wasserdichter Schutz ungenutzter externer SMA-Buchsen |
+| **SMA-Flansch-Doppelbuchse** | SMA-Buchse auf SMA-Buchse Bulkhead IP67 mit O-Ring & Mutter | Amphenol / Radiall | 1 Stk. | Wasserdichte HF-Durchführung in Kassetten-Frontblende (Klasse A) |
+| **Koax-Pigtail intern (Kassette)**| RG-178 Koaxialkabel ($6\dots 10\,\text{cm}$, SMA-Stecker 90° auf SMA-Stecker)| Delock / Taoglas | 1 Stk. | HF-Verbindung von Sena +Mesh / OEM-Adapter zur Frontblende |
+| **SMA IP67 Schutzkappen** | Messing vernickelt mit Dichtungs-O-Ring (Rändelkappe) | Amphenol / Radiall | 5 Stk. | Wasserdichter Schutz ungenutzter externer SMA-Buchsen (3x Heck, 1x Front, 1x Pod) |
 | **Externe 2.4 GHz Mesh-Antenne**| 2.4 GHz Collinear Dipol (+5 dBi / +7 dBi) mit SMA-Stecker | Taoglas / Linx | 1 Stk. | Optionale High-Gain Antenne am Heck/Topcase |
 | **Externe 868 MHz LoRa-Antenne**| 868 MHz Monopol / Dipol (+3 dBi / +5 dBi) mit SMA-Stecker | Linx ANT-868 / Taoglas | 1 Stk. | Optionale Long-Range Bergpass-Antenne |
 | **Externe aktive GNSS-Antenne** | Aktiver Flachpuck (+28 dB LNA, 3.3V Phantomspeisung, SMA) | Taoglas AA.162 / Garmin | 1 Stk. | Optionale Dach-/Koffermontage bei verdecktem Heck |
@@ -191,6 +193,7 @@ Dieses Dokument enthält die vollständige Bauteilliste (Bill of Materials) und 
 | **USB-C Ladekabel (Handschuhf.)**| USB-C Stecker/Stecker ($1{,}0\,\text{m}$, 90°-Winkel, PUR)| Anker / Baseus | 1 Stk. | Smartphone-Ladekabel von J2 durch vorderen Dichtkamm |
 | **JST-GH Crimpstecker-Set** | JST-GH 1.25mm 2-Pin Gehäuse + Crimpkontakte | JST / Mouser | 2 Sätze| Vorkonfektionierte Litzen für J3 (PTT) & J7 (12V) durch linken Kamm |
 | **90° USB Kassetten-Kabel** | Ultraflaches 90°-Winkelkabel Micro-USB/USB-C ($5\dots 8\,\text{cm}$) | Delock / Amazon | 1 Stk. | 5V-Speisung für Sena +Mesh / MeshPort Adapter in Kassette |
+| **EPDM Kassetten-Spannband** | Elastisches EPDM-Gummiband ($\approx 35 \times 10\,\text{mm}$) | Sonderfertigung / Sena | 1 Stk. | Vibrationssichere Arretierung des OEM-Adapters über Kassettennasen |
 
 ---
 

@@ -109,6 +109,65 @@ Alle unterstützten Intercom- und Funkkassetten sind in 8 standardisierte Hardwa
 └─────────┴───────────────────────────────┴─────────────────┴─────────────────┘
 ```
 
+### 3.1 Detaillierte Geräte-Klassifizierung & Profile im Dateisystem (`/data/profiles/`)
+* **Klasse 1: Sena Next-Gen & High-Tier Mesh (`sena_60s.json`, `sena_apex.json`, `sena_50_series.json`):**
+  * *Sena 60S:* Wave-Mesh-Intercom, bis zu 64 Teilnehmer, Dual-Chip RF-Hardening, DLE +60 Pkt.
+  * *Sena Apex / Apex Plus:* Mesh 3.0 Referenzkassette, 32 Nodes, DLE +60 Pkt.
+  * *Sena 50S, 50R, 50C, SRL3, MeshPort Blue/Red:* Mesh 2.0/3.0, 24–32 Nodes.
+* **Klasse 2: Sena Spider & Mesh-Only (`sena_spider.json`):**
+  * *Sena Spider RT1 / ST1:* Reine Mesh-Geräte ohne Bluetooth-Intercom-Overhead, DLE +40 Pkt.
+* **Klasse 3: Sena Bluetooth & 2-Way Intercom (`sena_vortex.json`, `sena_legacy_bt.json`):**
+  * *Sena Vortex:* Bluetooth 5.1 2-Wege-Intercom (1:1 bis 1,2 km), Quick-Pair Button-Trigger, DLE +20 Pkt.
+  * *Sena 20S EVO, 30K, 10S, 10R, SF4/SF2, 5S, SMH10:* Jog-Dial Pulsmuster für BT-Multi-Hop, DLE +20 Pkt.
+* **Klasse 4: Cardo Dynamic Mesh Communications Gen2 (`cardo_dmc_gen2.json`):**
+  * *Cardo Packtalk Pro, Edge, Custom, Neo:* DMC Gen2 mit Open DMC, schnellem Auto-Reconnect und DLE +60 Pkt.
+* **Klasse 5: Cardo Live Intercom & Freecom Serie (`cardo_freecom_live.json`):**
+  * *Cardo Freecom 4x, Freecom 2x, Spirit HD:* Bluetooth 5.2 Live Intercom mit automatischem Reconnect, DLE +40 Pkt.
+* **Klasse 6: Cardo Legacy DMC Gen1 (`cardo_dmc_legacy.json`):**
+  * *Cardo Packtalk Bold, Black, Slim, Smartpack:* DMC 1.0 mit bis zu 15 Teilnehmern, DLE +30 Pkt.
+* **Klasse 7: Universelle Analog- & PMR446-Funkkassetten (`pmr446_gateway.json`):**
+  * *Midland XT-Serie (XT10/XT30/XT50 Bare-Board) & Integrierte SA818S Transceiver:* Kompakte PMR446-Kassettenmodule (500 mW ERP, 446.0–446.2 MHz, 16 Kanäle, CTCSS/DCS) für analoge Gruppen-Kommunikation.
+  * *Midland G9 Pro / Baofeng / Kenwood 2-Pin K-Type:* Externe Handfunkgeräte über wassergeschützte Doppelklinken-Blende.
+  * *Hardware-PTT:* Unterbrechungsfreie Tastung über PhotoMOS-Relais (Toshiba TLP222A auf Pin 6 `OPTO_PTT`) synchronisiert mit der Lenker-PTT-Taste oder automatischer DSP-Schwellwert-VOX.
+  * *Audio-Entkopplung:* Galvanische Trennung über Studio-Übertrager (Bourns LM-NP-1001) verhindert Masseschleifen und Bordnetz-Pfeifen vollständig.
+* **Klasse 8: Midland Intercom & Wave Serie (`midland_wave.json` / `midland_bt.json`):**
+  * *Midland BTR1 Advanced, Rush RCF, BTX2 PRO S, Midland Wave, BT Mini:* Bluetooth 5.0/5.2 Intercom & Wave Mesh mit digitalem Audio-Pass-Through und DLE +30 Pkt.
+
+### 3.2 JSON Profil-Schema Spezifikation
+Jedes Hardwareprofil liegt als eigenständige JSON-Datei im internen Flash-Dateisystem (`/data/profiles/*.json`) des ESP32-S3 und definiert alle Pegel-, Routing- und Optokoppler-Timings:
+
+```json
+{
+  "id": "sena_60s",
+  "name": "Sena 60S Wave Mesh 3.0",
+  "vendor": "Sena Technologies",
+  "hardware_tier": 1,
+  "vcc_enabled": true,
+  "vcc_current_limit_ma": 850,
+  "soft_start_ms": 120,
+  "input_gain_db": 0.0,
+  "output_gain_db": -2.5,
+  "ducking_attenuation_db": -12.0,
+  "ducking_attack_ms": 35,
+  "ducking_release_ms": 650,
+  "noise_gate_threshold_db": -54,
+  "control_mode": "pogo_pulse",
+  "opto_trigger_duration_ms": 120,
+  "opto_trigger_hold_ms": 1500,
+  "mesh_capabilities": {
+    "protocol": "Sena Wave Mesh 3.0",
+    "max_group_nodes": 64,
+    "dle_bonus_score": 60
+  },
+  "audio_routing": {
+    "intercom_bridge": true,
+    "rider_headset": true,
+    "pillion_headset": true,
+    "boombox_lineout": false
+  }
+}
+```
+
 ---
 
 ## 4. 1-Wire DS2401 Kassetten-Erkennung & 3-Phasen Plug-and-Play
@@ -188,22 +247,108 @@ Der 6-polige **JST-SH 1.0 mm Header (`J2`)** auf der Kassettenplatine führt all
 
 ## 6. Sicherheits-Fallback: `disabled.json` & Zero-Trust Quarantäne
 
-Wird ein Steckplatz nicht belegt, eine Blindkassette eingesetzt oder eine unbekannte UID erkannt:
-1. **Stromlos-Schaltung (`vcc_enabled: false`):** Der P-Kanal MOSFET öffnet sofort $\rightarrow 0{,}0\,\text{mA}$ Ruhestrom.
-2. **Audio-Stummschaltung:** Ein- und Ausgangs-Gains des ES8388 werden auf $-96\,\text{dB}$ gesetzt.
-3. **Optokoppler hochohmig:** TLP222A Relais bleiben dauerhaft geöffnet.
-4. **DLE-Score = 0:** Kein Einrechnen unbestätigter Hardware in das Gruppen-Routing.
+Wird ein Steckplatz nicht belegt, eine Dummy-Leerkassette eingesetzt oder ein Pod in der WebApp manuell stillgelegt, lädt der ESP32-S3 sofort das Profil `disabled.json`:
+
+```json
+{
+  "id": "disabled",
+  "name": "Deaktiviert / Unbelegt (Disabled Slot)",
+  "vendor": "OpenMotorBridge System",
+  "hardware_tier": 0,
+  "vcc_enabled": false,
+  "soft_start_ms": 0,
+  "input_gain_db": -96.0,
+  "output_gain_db": -96.0,
+  "ducking_attenuation_db": 0.0,
+  "ducking_attack_ms": 0,
+  "ducking_release_ms": 0,
+  "noise_gate_threshold_db": -96,
+  "control_mode": "disabled",
+  "opto_trigger_duration_ms": 0,
+  "opto_trigger_hold_ms": 0,
+  "mesh_capabilities": {
+    "protocol": "None",
+    "max_group_nodes": 0,
+    "dle_bonus_score": 0
+  },
+  "audio_routing": {
+    "intercom_bridge": false,
+    "rider_headset": false,
+    "pillion_headset": false,
+    "boombox_lineout": false
+  }
+}
+```
+
+### 6.1 Schutzwirkungen des `disabled.json` Profils
+1. **Stromlos-Schaltung (`vcc_enabled: false`):** Der zugehörige P-Kanal MOSFET öffnet sofort $\rightarrow 0{,}0\,\text{mA}$ Ruhestrom.
+2. **Vollständige Audio-Stummschaltung:** Ein- und Ausgangs-Gains des ES8388 Codecs werden auf $-96\,\text{dB}$ gesetzt, um jegliches Rauschen oder kapazitives Übersprechen offener Leitungen zu eliminieren.
+3. **Deaktivierung von Schaltsignalen:** Die Toshiba TLP222A Optokoppler bleiben dauerhaft hochohmig geöffnet.
+4. **DLE-Bereinigung:** Der DLE-Score-Beitrag fällt sofort auf 0 Punkte zurück.
+
+### 6.2 Zero-Trust Hardware-Quarantäne (Fail-Safe Schutzabschaltung)
+Solange eine neu gesteckte Kassetten-Hardware (DS2401 UID) keinem verifizierten Profil zugewiesen wurde, wird der entsprechende Pod-Steckplatz **strikt wie ein unvollständig oder fehlerhaft gesteckter Slot behandelt**:
+* **5V VCC Power-Gate OFF (0,0 mA):** Der P-Kanal Lastschalter zum OEM-Cradle bleibt gesperrt.
+* **Audio DSP Mute (-96 dB):** Beide Audiokanäle sind stummgeschaltet, um Knacken, Rauschen oder Brummschleifen zu verhindern.
+* **Optokoppler hochohmig:** Keine unkontrollierten Tastimpulse an das Headset.
+* **DLE Gateway-Bonus = 0:** Keine Beeinflussung der Gruppen-Wahl.
+* **Freigabe erst nach Bestätigung:** Erst wenn der Nutzer in der WebApp das Profil bestätigt (oder die UID bereits im Flash-Mapping hinterlegt ist), führt der Controller eine kontrollierte Soft-Start-Einschaltsequenz (50 ms Inrush-Limiting) durch und schaltet die Audiopegel frei.
 
 ---
 
 ## 7. WebApp-Workflow: Automatische Erkennung & Profilzuweisung
 
 Beim Einstecken einer neuen Kassetten-Hardware führt die PWA einen automatischen Onboarding-Dialog aus:
-1. **Automatischer Scan:** ESP32-S3 pollt alle 2 Sekunden beide 1-Wire-Ports und sendet neue UIDs via BLE an die WebApp.
-2. **Dialog-Pop-up:** Die WebApp öffnet das Zuweisungs-Modal (`#uuid-detect-modal`).
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ 🧩 NEUE KASSETTE ERKANNT!                                   │
+├─────────────────────────────────────────────────────────────┤
+│ Erkannter Steckplatz:   Pod 1 (Rahmen links)                │
+│ 1-Wire Chip-UID:        01:A2:3B:4C:5D:6E:7F:8A             │
+├─────────────────────────────────────────────────────────────┤
+│ Dieser Kassetten-Hardware wurde bisher noch kein Profil     │
+│ zugewiesen. Welches Intercom oder Funkgerät ist verbaut?    │
+│                                                             │
+│ Hardware-Profil:  [ 🔵 Sena 50S / 50R / SRL3 (K1)      ▼ ]  │
+├─────────────────────────────────────────────────────────────┤
+│ [ Später zuweisen ]         [ Profil zuweisen & speichern ] │
+└─────────────────────────────────────────────────────────────┘
+```
+
+1. **Automatischer Scan:** Der ESP32-S3 pollt alle 2 Sekunden beide 1-Wire-Ports (`task_cartridge_manager`). Erkennt er einen Presence-Pulse mit gültiger CRC8 und Family-Code `0x01` (DS2401), sendet er die 64-Bit UID via BLE an die WebApp.
+2. **Dialog-Pop-up:** Die WebApp vergleicht die UID mit der Zuordnungstabelle (`/profiles/mapping.json` / PWA `localStorage`). Ist die UID neu, öffnet sich automatisch das Zuweisungs-Modal (`#uuid-detect-modal`).
 3. **Profil-Auswahl & Speicherung:** Der Fahrer wählt sein Modell aus dem Dropdown.
 4. **Persistentes Mapping:** Das Mapping `{"<UID>": "<profile_id>"}` wird dauerhaft im ESP32 LittleFS und im Browser gespeichert.
 5. **Wiedererkennung:** Zukünftig wird diese Kassette an jedem beliebigen Steckplatz sofort automatisch parametrisiert.
+
+### 7.1 Dynamisches Profil-Update & JSON-Merge-Verfahren
+Wenn ein Hersteller (z. B. Sena beim Sprung von Mesh 2.0 auf Mesh 3.0 oder Cardo bei DMC Gen 2) seine Firmware aktualisiert, passt sich OpenMotorBridge über ein intelligentes **JSON-Merge-Verfahren** an:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                 JSON PROFIL-MERGE-VERFAHREN                 │
+├──────────────────────────────┬──────────────────────────────┤
+│ 1. Basis-Herstellerprofil    │ 2. Individuelle User-Offsets │
+│    (z.B. sena_apex_v3.json)  │    (Ducking & Audio-Gains)   │
+├──────────────────────────────┴──────────────────────────────┤
+│                             ▼                               │
+│ 3. Gemergtes Live-Profil im LittleFS Flash-Speicher          │
+│    (Aktualisierte Opto-Timings + persönliche Lautstärken)   │
+└─────────────────────────────────────────────────────────────┘
+```
+
+* **Phase 1 (Basis-Parameter):** Neue Optokoppler-Pulsdauern (z. B. `ptt_pulse_ms: 180`), geänderte Kanalwechselmuster und DLE-Bonuswerte werden aus dem neuen Hersteller-JSON geladen.
+* **Phase 2 (User-Settings Preservation):** Individuelle Anpassungen des Fahrers (z. B. $+2{,}0\,\text{dB}$ Mikrofonpegel, $-12\,\text{dB}$ Navi-Ducking) bleiben beim Update erhalten und werden über die Basiswerte gemerged.
+* **Phase 3 (Hot-Reload):** Die Zentralbox wendet die gemergten Parameter im laufenden Betrieb ohne Neustart sofort auf den ES8388 Codec und die TLP222A Opto-Puls-Engine an.
+
+### 7.2 Hardware-Upgrade & OEM-Adapter-Update (Austausch des Headsets in bestehender Kassette)
+Rüstet der Fahrer nach einiger Zeit sein Intercom auf (z. B. von Sena 20S auf Sena 60S Mesh 3.0 Wave) und behält die Trägerplatine bei:
+1. **Unveränderte Chip-UID:** Die 64-Bit Hardware-UID des DS2401 bleibt identisch.
+2. **Auswahl im Dashboard:** Im Tab **„🧩 Kassetten & DLE“** der WebApp wählt der Fahrer im Dropdown des Slots einfach das neu eingebaute Modell (*„⚡ Sena 60S (Mesh 3.0 Wave)“*).
+3. **Automatisches Überschreiben:** Die WebApp aktualisiert sofort das Mapping synchron im Browser und im ESP32 LittleFS (`/profiles/mapping.json`).
+4. **Verlässlicher Reload:** Beim nächsten Einstecken oder Booten wird sofort das neue Profil mit den neuen Opto-Timings und dem höheren DLE-Score (+60 Pkt.) geladen.
+5. **Ground-Truth Re-Sync (`🔄 Sync`):** Mit dem Sync-Button kann der Fahrer jederzeit verifizieren, welches Profil der real gesteckten Hardware-UID im Flash zugeordnet ist.
 
 ---
 

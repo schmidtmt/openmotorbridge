@@ -65,35 +65,190 @@ OpenMotorMesh implementiert Routing- und Schleifenschutz-Mechanismen aus IEEE 80
 * **Hop Limit (TTL):** Wird bei jedem Relais-Hop dekrementiert ($T_{\text{max}} = 5$).
 * **Sequence-Cache:** Jeder Knoten speichert die letzten 64 Sequence-Numbers empfangener Pakete; Duplikate werden in Hardware sofort verworfen.
 
+### 2.1 Layer-2 Frame-Header C++ Struct & Duplicate Filter
+```cpp
+struct MeshHeader_t {
+    uint8_t  meshFlags;     // Priority & Type Flags (Bit 0..2: Prio, Bit 3..7: Type)
+    uint8_t  hopLimit;      // TTL Dekrement pro Hop (Loop-Schutz, Default = 5)
+    uint16_t meshSeqNum;    // Fortlaufende ID des Senders
+    uint8_t  originMac[6];  // Erzeuger-Node MAC (aus DS2401 UID abgeleitet)
+    uint8_t  targetMac[6];  // Multicast (ff:ff:...) oder Unicast Node MAC
+} __attribute__((packed));
+
+void onRawPacketReceived(uint8_t* rawData, size_t len) {
+    if (len < sizeof(MeshHeader_t)) return;
+    
+    MeshHeader_t* meshHdr = (MeshHeader_t*)rawData;
+    uint8_t* payload = rawData + sizeof(MeshHeader_t);
+    size_t payloadLen = len - sizeof(MeshHeader_t);
+
+    // 1. Layer-2 Loop & Duplicate Filter
+    if (meshHdr->hopLimit == 0) return;
+    if (checkAndRegisterL2Duplicate(meshHdr->originMac, meshHdr->meshSeqNum)) {
+        return; // Duplikat verworfen -> Spart CPU- und DMA-Last
+    }
+
+    // 2. Lokale Verarbeitung (Audio Playout oder Radar-Dekodierung)
+    processL3Payload(payload, payloadLen);
+
+    // 3. Managed Forwarding: Weiterleitung wenn wir Relay-Master sind
+    if (currentRideMode == MODE_RELAY_AR) {
+        meshHdr->hopLimit--;
+        broadcastForward(rawData, len);
+    }
+}
+```
+
 ---
 
-## 3. Dynamic Leader Election (DLE) Algorithmus
+## 3. Layer 3 & 4: 6LoWPAN, IPv6 Multicast & Audio-Streaming
 
-Das Mesh wählt vollautomatisch und autonom den optimalen Gateway-Knoten der Gruppe. Bricht die Gruppe an einer Ampel oder Passkehre auseinander, spaltet sich das Mesh sofort in zwei voll funktionsfähige Sub-Cluster und vereinigt sich beim Aufschließen nahtlos wieder:
-
-```
-                       DYNAMIC LEADER ELECTION (DLE)
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ ELECTION CRITERIA & SCORING FORMEL:                                         │
-│                                                                             │
-│   DLE_Score = S_Gateway + S_Battery + S_GNSS + S_Position + S_Stability     │
-│                                                                             │
-│ • S_Gateway:    Kassetten-Klassen (Sena K1 +60, Cardo K4 +60 -> Max 120 P.)│
-│ • S_Battery:    Bordnetz 12V (+30 Pkt.) vs. LiPo-Puffer (+10 Pkt.)          │
-│ • S_GNSS:       3D Fix mit > 15 Satelliten (+20 Pkt.)                       │
-│ • S_Position:   Zentral in der Kolonne (+15 Pkt.)                           │
-│ • S_Stability:  Laufzeit & Link-Stabilität (+10 Pkt.)                       │
-└─────────────────────────────────────────────────────────────────────────────┘
-```
-
-### 3.1 Kolonnen-Split & Re-Merge Sequenz
-1. **Split-Erkennung:** Bleiben die Sync-Beacons des Leaders für mehr als $1{,}5\,\text{Sekunden}$ aus, initiiert der ranghöchste verbliebene Slave eine Ad-hoc-Neuwahl im Sub-Cluster.
-2. **LoRa-Relay-Tunnel:** Das abgetrennte Sub-Cluster schaltet automatisch den 868-MHz-Tunnel ein; PTT-Funksprüche werden über LoRa zum Haupt-Cluster geroutet.
-3. **Nahtloser Re-Merge:** Nähert sich die Kolonne wieder auf $< 300\,\text{m}$, erkennt der Sub-Leader den primären Sync-Beacon, gibt seine Führungsrolle ab und synchronisiert seinen Zeitschlitz kollisionsfrei zurück.
+* **Multicast-Routing:** Sprachdaten werden via IPv6-Multicast an Gruppen-Adressen (z. B. `ff02::1`) gesendet. Ein einziges Paket erreicht alle Gruppen-Teilnehmer ohne ressourcenfressende Unicast-Duplikation.
+* **Header-Kompression (6LoWPAN nach RFC 6282):** Komprimiert den 40-Byte IPv6-Header auf 2 bis 4 Bytes für minimale Funk-Overheads.
+* **Autonome Adressierung (SLAAC):** Jeder Node generiert seine eigene Link-Local-Adresse (`fe80::/64`) autonom aus der 64-Bit DS2401 Chip-UID.
 
 ---
 
-## 4. Automotive Dead Reckoning (ADR) & Sensorfusion
+## 4. Dynamic Leader Election (DLE) Algorithmus
+
+Das Mesh wählt vollautomatisch und autonom den optimalen Gateway-Knoten der Gruppe. Innerhalb jeder Funkzelle wird autonom genau ein zentraler Gateway-Master (Cluster Head) gewählt:
+
+$$\text{Score}_{\text{DLE}} = S_{\text{HW}} + S_{\text{PWR}} + S_{\text{GNSS}} + S_{\text{LORA}} + S_{\text{UPTIME}} + S_{\text{MIC}}$$
+
+| Parameter | Bedingung | Punkte |
+| :--- | :--- | :---: |
+| **S_HW (Hardware Tier)** | Sena Apex (Mesh 3.0) ODER Cardo Edge (DMC Gen2) gesteckt | **+60 Pkt.** |
+| | Sena Legacy / Cardo DMC Gen1 gesteckt | +30 Pkt. |
+| **S_PWR (Stromversorgung)** | Zündung aktiv (KL15 > 12.5 V via LM5164) | **+20 Pkt.** |
+| | Pufferbetrieb (USV-Akku > 3.8 V) | +5 Pkt. |
+| **S_GNSS (Positionsstabilität)**| 3D Fix mit PDOP < 1.5 & 1-PPS Lock | **+10 Pkt.** |
+| **S_LORA (Link-Qualität)** | Durchschnittlicher Nachbar-RSSI > -85 dBm | **+10 Pkt.** |
+| **S_MIC (Akustik-Sensor)** | IP67 Front Ambient-Mikrofon aktiv (`FEAT_ENV_MIC`) | **+5 Pkt.** |
+| **S_UPTIME (Hysterese-Schutz)** | Bereits aktiver Leader (verhindert Flattern) | **+15 Pkt.** |
+
+### 4.1 Node Capability Vector & Smarte Kolonnen-Funktionen
+Im periodischen DLE-Beacon kündigt jeder Knoten seine Ausstattungsmerkmale an:
+
+```cpp
+enum OmmFeatureBits : uint8_t {
+    FEAT_DUAL_MESH_BRIDGE  = (1 << 0), // Sena + Cardo aktiv (+60 Pkt)
+    FEAT_LORA_HIGH_POWER   = (1 << 1), // SX1262 +22 dBm PA
+    FEAT_GNSS_1PPS_LOCK    = (1 << 2), // Zeitnormal-Master
+    FEAT_CAN_TELEMETRY     = (1 << 3), // OBD2 / CAN-Bus aktiv
+    FEAT_ENV_MIC_ACTIVE    = (1 << 4), // Front Ambient-Mikrofon aktiv (+5 Pkt)
+    FEAT_USV_BAT_BUFFER    = (1 << 5)  // USV Pufferbetrieb möglich
+};
+```
+
+1. **🚨 Kolonnen-Sirenen-Frühwarnung (Siren Early Warning):**
+   * Erkennt das Frontmikrofon des Führungs-Bikes an einer Kreuzung ein Martinshorn ($350\dots 1000\,\text{Hz}$ Frequenzwechsel eines herannahenden Einsatzfahrzeugs), sendet der Node ein `ALERT_SIREN_APPROACHING`-Paket an die gesamte Kolonne.
+   * Alle nachfolgenden Fahrer erhalten einen Warnton im Helm, bevor die Sirene für sie direkt hörbar ist.
+2. **🎙️ Guide Pass-Through (Maut-/Grenzkontroll-Kanal):**
+   * Der Leader kann bei Stillstand an Mautstellen oder Grenzen sein geregeltes Frontmikrofon per Tastendruck für 10 Sekunden ins Gruppen-Mesh schalten, um Anweisungen des Personals für alle hörbar zu machen.
+
+### 4.2 Adaptive Tiered QoS (Stufenweises Bandbreiten- & Reichweiten-Modell)
+Um Verbindungsabrisse im Keim zu ersticken, greift ein 3-stufiges Kaskaden-Modell:
+1. **Stufe 1 - Nahbereich (< 500 m, 2.4 GHz):** Full-Duplex HD-Voice, A2DP Music-Sharing und Navi-Ducking aktiv. LoRa sendet im Hintergrund Pings (Duty-Cycle $< 0{,}1\,\%$).
+2. **Stufe 2 - Randbereich (500 m - 1.2 km):** Bei sinkendem Link-Quality-Index wird Music-Sharing automatisch pausiert, um die volle Kanalbandbreite der Sprache zu widmen.
+3. **Stufe 3 - Weitbereich / Abgerissen (1 km - 15 km, 868 MHz LoRa):**
+   * Music-Sharing: AUS.
+   * GPS-Gruppenradar & Telemetrie: 100 % aktiv auf dem Dashboard.
+   * Sprache: Automatischer Fallback auf Codec2 (1200 bps PTT-Funk).
+
+### 4.3 Cluster Partitioning & Inter-Cluster Gateway Relay (LTE-Sidelink Adaption)
+Wird eine Gruppe durch äußere Einflüsse (rote Ampel, Bahnübergang, Passkuppe) getrennt, greift die automatische Cluster-Teilung:
+
+```mermaid
+sequenceDiagram
+    participant VG as Vordergruppe (Bikes 1-3)
+    participant L1 as Leader 1 (Bike 1)
+    participant L2 as Leader 2 (Bike 4)
+    participant HG as Hintergruppe (Bikes 4-6)
+
+    Note over VG,HG: Einheitliche Gruppe (Leader 1 aktiv auf 2.4 GHz)
+    Note over VG,HG: Gruppe wird getrennt (z. B. Ampel schaltet Rot)
+    HG->>HG: 2.4 GHz Beacon von Leader 1 verloren -> DLE Neu-Wahl
+    HG->>L2: Bike 4 wird autonom zu Leader 2 gewählt
+    Note over VG: Lokales 2.4 GHz Mesh aktiv (HD Audio)
+    Note over HG: Lokales 2.4 GHz Mesh aktiv (HD Audio)
+    HG->>L2: Bike 5 spricht im lokalen 2.4 GHz Mesh
+    L2->>L2: VAD Trigger: Sprache lokal erkannt, Cluster getrennt
+    L2->>L1: Sende Codec2 Audio-Paket (300 B) via 868 MHz LoRa
+    L1->>VG: Dekomprimiere & speise Audio in 2.4 GHz Mesh der Vordergruppe ein
+    Note over VG: Vordergruppe hört: "Stehen an der roten Ampel!"
+```
+
+1. **Autonome Sub-Leader Wahl:** Die Hintergruppe erkennt den Verlust des primären Leaders (Beacon-Timeout $> 500\,\text{ms}$) und wählt sofort Bike 4 zum lokalen Leader 2.
+2. **Lokale HD-Sprache bleibt aktiv:** Innerhalb beider Teilgruppen läuft das 2.4-GHz-Mesh ununterbrochen weiter.
+3. **LoRa Cross-Gateway Voice Tunnel:** Sprudelt in einer Teilgruppe Sprache auf, encodiert der lokale Leader diese in Codec2 (1200 bps) und sendet sie über 868 MHz LoRa an den entfernten Leader, welcher sie lokal wieder einspeist.
+4. **Cluster-Fusion (Re-Merge):** Sobald die Hintergruppe aufschließt ($< 400\,\text{m}$), erkennt Leader 2 den primären Leader 1, tritt in den Normalmodus zurück und schließt den LoRa-Tunnel.
+
+### 4.4 OpenMotorMesh Paketformate & Binärspezifikation
+Alle OMM-Pakete nutzen ein kompaktes, byteweise gepacktes Binärformat:
+
+#### Kompaktes 16-Byte Gruppenradar-Telemetriepaket (`TYPE_RADAR = 0x03`)
+```cpp
+struct __attribute__((packed)) OmmRadarPacket_t {
+    uint8_t  packet_type;       // 0x03 = TYPE_RADAR
+    uint8_t  node_id_short;     // Untere 8-Bit der DS2401 ID
+    int32_t  latitude_1e7;      // Breitengrad * 10.000.000
+    int32_t  longitude_1e7;     // Längengrad * 10.000.000
+    int16_t  altitude_m;        // Höhe über Meer (-500 .. +8000 m)
+    uint8_t  speed_kmh;         // 0 .. 255 km/h
+    uint8_t  heading_div2;      // Kurs / 2 (0..179 entspricht 0..358 Grad)
+    int8_t   lean_angle_deg;    // Schräglage (-60..+60 Grad)
+    uint8_t  status_flags;      // Bit 0: 1-PPS Lock, Bit 1: KL15, Bit 2..7: Batt%
+};
+```
+
+#### Notfall- & Sirenen-Frühwarnpaket (`TYPE_EMERGENCY = 0xFF`)
+```cpp
+struct __attribute__((packed)) OmmEmergencyAlert_t {
+    uint8_t  packet_type;       // 0xFF = TYPE_EMERGENCY
+    uint8_t  alert_subtype;     // 0x01: Martinshorn/Sirene, 0x02: Sturzerkennung (eCall)
+    uint64_t sender_uid;        // 64-Bit Chip UID des erzeugenden Bikes
+    int32_t  event_lat_1e7;     // GPS-Koordinaten des Notfall-Events
+    int32_t  event_lon_1e7;
+    uint16_t alert_duration_ms; // Gültigkeitsdauer des Alarms (z. B. 10.000 ms)
+    uint8_t  crc8_checksum;     // CRC-8/AUTOSAR Prüfsumme
+};
+```
+
+---
+
+## 5. Heck-Pod 3 Transceiver-Architektur & UART-Protokoll
+
+Der Heck-Pod 3 (`PCBA 04`) dient als zentraler RF-Gateway- und GNSS-Knoten und beherbergt einen **Raspberry Pi RP2040** Dual-Core Coprozessor:
+* **Core 0 (`rear_nmea_task`):** Parst UBX/NMEA Datenströme des u-blox MAX-M10S Multi-GNSS mit 10 Hz und berechnet Positionsprädiktionen.
+* **Core 1 (`rear_lora_task`):** Steuert den Semtech SX1262 LoRa Transceiver über SPI (@ 16 MHz), verwaltet CSMA/CA Kanalzugriffe und puffert ein- und ausgehende OMM-Frames.
+
+### 5.1 Protokoll-Spezifikation (Heck-Pod $\leftrightarrow$ Zentralbox)
+Die Kommunikation über die 460.800-Baud-Schnittstelle erfolgt paketorientiert mit CRC16-CCITT-Prüfsumme:
+
+```
+┌──────┬──────┬──────┬──────┬─────────────────┬──────┬──────┐
+│ SYNC │ TYPE │ LEN  │ SEQ  │ PAYLOAD (0..n)  │ CRC16-CCITT  │
+│ 0xAA │ 0x55 │ 1 B  │ 1 B  │ Variable        │ 2 Bytes      │
+└──────┴──────┴──────┴──────┴─────────────────┴──────┴──────┘
+```
+
+#### Nachrichtentypen (Message Types):
+* **`0x01` - GNSS PVT Telemetrie (10 Hz):** Vorkomprimierter Binärvektor mit Latitude, Longitude, Altitude, Speed, Heading, PDOP und Satellitenstatus.
+* **`0x02` - OMM 2.4 GHz Primary Audio Frame:** Opus 24k/12k Frame aus dem 2.4 GHz Proximity Mesh.
+* **`0x03` - OMM 868 MHz LoRa Fallback Frame:** Codec2 Audio- oder Radar-Paket aus dem Long-Range Fallback.
+* **`0x04` - OMM Tx Request (Dual-PHY):** Sendeauftrag der Zentralbox an das 2.4 GHz Mesh oder den SX1262 LoRa Transceiver.
+* **`0x05` - DLE Status & Link Quality:** Signal-to-Noise Ratio (SNR), RSSI, PHY-Modus (2.4G vs 868M) und DLE Gateway-Score des Knotens.
+* **`0xFE` - Firmware Update Bootloader Command:** `0xAA 0x55 0xFE 0x01 "BOOT"` schaltet den RP2040 in den USB-ROM-Bootloader-Modus für Push-Flashen.
+
+### 5.2 V2 Upgrade-Roadmap: Optionale LTE-M / NB-IoT Cloud-Kassette & HF-Triplexer
+Für Langstreckenfahrer und weltweite Gruppenvernetzung ist eine alternative Monolith-Kassette für Pod 3 vorbereitet:
+* **Quectel BG95-M3 Modem:** Unterstützt LTE Cat M1, NB-IoT, eGPRS und integriertes GNSS.
+* **HF-Triplexer:** Ermöglicht die gemeinsame Nutzung der Antennenports für 868 MHz LoRa, LTE-M (Bänder B1/B3/B8/B20) und GNSS L1.
+* **Cloud Telemetry Mirror:** Automatischer Live-Standort-Upload ins Web-Portal auch außerhalb von Mesh- und LoRa-Reichweiten.
+
+---
+
+## 6. Automotive Dead Reckoning (ADR) & Sensorfusion
 
 Das GNSS-Subsystem im Heck-Pod 3 (**u-blox NEO-M9N / MAX-M10S**) ist mit der 6-Achsen-IMU (**Bosch BMI270**) und den Fahrzeug-Raddrehzahlen über einen **15-State Error-State Kalman-Filter (ES-EKF)** gekoppelt:
 
@@ -131,7 +286,7 @@ Jeder Wegpunkt speichert die vollständige Fahrzeugdynamik:
 
 ---
 
-## 5. Actioncam-Steuerung & 1-PPS Framegenaue Zeitsynchronisation
+## 7. Actioncam-Steuerung & 1-PPS Framegenaue Zeitsynchronisation
 
 OpenMotorBridge steuert gekoppelte Actioncams drahtlos über den Lenkertaster und bettet Sensordaten direkt in die Videoaufnahmen ein:
 

@@ -32,7 +32,7 @@ Classic motorcycle communication systems are historically fragmented:
 │ • Universal Pod Enclosure    │ • Universal Pod Enclosure    │ • Universal Pod Enclosure   │
 │ • Cartridge Sled for Sena    │ • Cartridge Sled for Cardo   │ • 1-Tier Monolithic Sled    │
 │   50S/60S/MeshPort           │   Packtalk Edge / PMR446     │ • u-blox MAX-M10S Multi-GNSS│
-│ • Helmet or Frame Mounted    │ • Helmet or Frame Mounted    │ • SX1262 LoRa 868MHz + C3   │
+│ • Helmet or Frame Mounted    │ • Helmet or Frame Mounted    │ • SX1262 LoRa 868MHz + RP2040│
 └──────────────────────────────┴──────────────────────────────┴─────────────────────────────┘
   │                                                                                         │
   ├─► 6. VEHICLE POWER: AMP Superseal 1.5 4-Pin (KL30 Batt+, KL15 Ign+, Chassis Ground)       │
@@ -50,8 +50,6 @@ Classic motorcycle communication systems are historically fragmented:
 ```
 
 ---
-
-## 2. Universal Mounting Concepts (Helmet- vs. Frame-Docking)
 
 ## 2. Universal Mounting Concept (Vehicle Frame, Crash Bar & Tube Saddle Mount)
 

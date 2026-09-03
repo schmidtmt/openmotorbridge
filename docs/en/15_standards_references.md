@@ -25,6 +25,7 @@ This document lists all international automotive, industry, radio frequency, and
 * **ETSI EN 300 220-2 v3.2.1:** *Short Range Devices (SRD) operating in the frequency range 25 MHz to 1 000 MHz* (LoRa 868 MHz Sub-GHz band duty cycle limits: 1% / 10%).
 * **ETSI EN 301 489-1 / -3 / -17:** *ElectroMagnetic Compatibility (EMC) standard for radio equipment and services*.
 * **FCC Part 15 Subpart C / B:** *Title 47 CFR Part 15 — Radio Frequency Devices* (US regulatory rules for unlicensed intentional and unintentional radiators).
+* **3GPP TS 36.331 / TS 36.213 (Release 14/15 Sidelink C-V2X / ProSe):** *E-UTRA; Physical layer procedures / Radio Resource Control* (Reference for SC-FDMA TDMA slot structure in OpenMotorMesh).
 * **ITU-R P.838 / P.840:** *Specific attenuation model for rain / fog for use in prediction methods* (Atmospheric path loss modeling for 2.4 GHz and 868 MHz).
 
 ---

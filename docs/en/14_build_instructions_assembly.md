@@ -131,12 +131,15 @@ To build a fully featured OpenMotorBridge (v8.0) installation for one motorcycle
 | **EPDM Frame Straps** | UV/Ozone-resistant EPDM ladder straps ($\varnothing 45 \dots 75\,\text{mm}$) | **6** | Tool-free rapid mounting of pods to crash bars or frame tubes |
 | **Murata MM8030 Pigtails** | Murata MM126036 to SMA Bulkhead IP67 (150 mm, RG-178)| **3** | Coaxial bypass for Pod 3: J3 (2.4G), J4 (868M), J5 (GNSS) |
 | **U.FL Coaxial Pigtail** | IPEX MHF1 / U.FL to RP-SMA Bulkhead IP67 (150 mm, RG-178)| **1** | Coaxial feed for Front Node ESP32-C3 external antenna |
-| **SMA IP67 Protective Caps** | Nickel-plated brass with internal O-ring (knurled cap)| **4** | Waterproof seal for unpopulated SMA ports (internal antennas stay active) |
+| **SMA Flange Double Bulkhead**| SMA Female to SMA Female Bulkhead IP67 with O-ring & nut | **1** | Waterproof RF feedthrough in cartridge faceplate (Class A) |
+| **Internal Coax Pigtail** | RG-178 Coaxial Cable ($6\dots 10\,\text{cm}$, 90° SMA Male to SMA Male)| **1** | RF connection from Sena +Mesh / OEM adapter to faceplate |
+| **SMA IP67 Protective Caps** | Nickel-plated brass with internal O-ring (knurled cap)| **5** | Waterproof seal for unpopulated SMA ports (3x Pod 3, 1x Front, 1x Pod) |
 | **External Antennas (Opt.)**| 2.4G Collinear (+5 dBi), 868M LoRa (+3 dBi), Active GNSS Puck | *Optional* | High-gain external antennas for long range & unobstructed sky view |
 | **USB-A Flat Ribbon Cable (Front)**| Short 90° USB-A male-to-female adapter ($10\dots 15\,\text{cm}$)| **1** | Ottocast connection to J1 via front cable gland |
 | **USB-C Glovebox Cable (Front)**| Right-angle USB-C male-to-male ($1.0\,\text{m}$, PUR/Nylon) | **1** | Smartphone charging from J2 via front cable gland |
 | **JST-GH Connector Kit (Left)** | JST-GH 1.25mm 2-pin female housings + crimp terminals | **2 sets** | Pre-crimped harness leads for J3 (PTT) & J7 (12V) |
 | **90° USB Cartridge Cable** | Low-profile 90° right-angle Micro-USB/USB-C ($5\dots 8\,\text{cm}$) | **1** | 5V power feed for Sena +Mesh / MeshPort inside cartridge |
+| **EPDM Cartridge Retaining Band**| Elastic EPDM rubber strap ($\approx 35 \times 10\,\text{mm}$) | **1** | Vibration-proof retention of OEM adapter via cartridge hooks |
 
 ---
 
@@ -201,7 +204,7 @@ To assemble all subassemblies with vibration resistance and hermetic IP67 sealin
    * **Class A (Sena +Mesh B2M-01 / MeshPort Adapter):**
      * Slide the adapter laterally into the transverse slide rails of the cradle insert ([`01_insert_sena.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/parts/01_insert_sena.scad)) until the retaining snap latch clicks into place.
      * **Connect USB Power:** Route the low-profile $90^\circ$ right-angle cable (Micro-USB or USB-C) from the cartridge PCB 5V/GND header through the deck window into the +Mesh USB charging port (pure 5V continuous power supply; intercom audio routes wirelessly over Bluetooth to the helmet).
-     * **RF Antenna:** Route the antenna coaxial pigtail through the front window to the faceplate SMA bulkhead and fasten tightly.
+     * **RF Antenna:** Insert the waterproof SMA female-to-female flange bulkhead with O-ring from the outside into the $\varnothing 6.5\,\text{mm}$ faceplate bore and secure from the inside with the locknut. Connect the internal $90^\circ$ coaxial pigtail to the +Mesh antenna port, route through the front window, and fasten tightly to the inside of the faceplate SMA bulkhead. Fasten the external SMA IP67 protective cap whenever an external antenna is not connected.
      * Secure the +Mesh adapter against vibration shocks using the elastic EPDM retention strap across both lateral hooks.
    * **Class B & C (Sena 50S/60S or Cardo Packtalk Edge Cradles):**
      * Connect the 6-pin JST-SH ribbon cable from the cartridge PCB directly to the OEM pogo-pin dock (Sena) or magnetic Cardo Air-Mount (providing galvanically isolated analog audio channels, mic, and optocoupled PTT).

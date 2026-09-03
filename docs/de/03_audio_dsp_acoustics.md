@@ -105,6 +105,19 @@ GAIN
 └─────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
+### 3.1 ES8388 Low-Level Registerkonfiguration & I2S DMA-Architektur
+* **Taktraten & Master-Clock:**
+  * Abtastrate $F_s = 48{,}0\,\text{kHz}$ (24-Bit Stereo).
+  * Master Clock: $MCLK = 256 \times F_s = 12{,}288\,\text{MHz}$ (generiert über ESP32-S3 Audio-PLL auf GPIO 0).
+  * Bit Clock: $BCLK = 64 \times F_s = 3{,}072\,\text{MHz}$ (32-Bit Frame-Slot für präzise 24-Bit Wortbreite).
+  * Left/Right Word Clock: $LRCK = F_s = 48{,}0\,\text{kHz}$.
+* **DMA-Pufferstruktur:**
+  * 4 verkettete DMA-Deskriptoren mit je 128 Stereo-Samples ($2{,}67\,\text{ms}$ Blockzeit).
+  * Gesamte Audio-Latenz (ADC $\rightarrow$ FreeRTOS DSP $\rightarrow$ DAC): **$7{,}85\,\text{ms}$** (unterhalb der Wahrnehmungsschwelle von $15\,\text{ms}$).
+* **Hardware-ALC Register-Set (`Reg 0x12 - 0x17`):**
+  * Target Level: $-6\,\text{dBFS}$, Max Gain: $+24\,\text{dB}$, Min Gain: $-12\,\text{dB}$.
+  * Attack Time: $5\,\text{ms}$, Decay Time: $200\,\text{ms}$, Noise Gate Threshold: $-54\,\text{dBFS}$.
+
 ---
 
 ## 4. Digitaler Knowles MEMS Akustiksensor & AGC Fahrtwind-Kompensation
@@ -145,13 +158,25 @@ FAHRWIND-PEGEL          FAHRGESCHWINDIGKEIT    AGC LAUTSTÄRKE-BOOST    AKUSTIK-
 
 * **Transparenzmodus bei Stillstand ($0\dots 15\,\text{km/h}$):** An roten Ampeln und beim Rangieren wird der Schall über einen Sprach-Bandpass ($350\,\text{Hz} - 3{,}2\,\text{kHz}$) dezent in den Helm eingeblendet, sodass Verkehrsgeräusche und Durchsagen ohne Absetzen des Helms klar verständlich sind.
 
+### 4.3 Die 4 Betriebsmodi des Gesamtsystems
+1. **Modus 1 (Touring-Duo):** Fahrer und Sozius hören sich gegenseitig mit vollem Duplex. Navi blendet sich mit $-12\,\text{dB}$ Ducking ein. Musik wird bei Intercom-Aktivität auf $-15\,\text{dB}$ gesenkt.
+2. **Modus 2 (Highway-Solo):** Fahrer fährt allein. Pod 2 ist stromlos (`disabled.json`). Voller DSP-Fokus auf Telefonie, CarPlay/Android Auto und Radar-Akustik.
+3. **Modus 3 (Group-Mesh Bridge):** Pod 1 (Sena) und Pod 2 (Cardo) sind parallel aktiv. Cross-Mix verbindet beide Gruppen in Echtzeit.
+4. **Modus 4 (Emergency-Override):** LoRa-Notruffunk oder Radar-Kollisionsalarm (TTC < 3.5s) schalten alle anderen Audioquellen sofort auf $-24\,\text{dB}$ stumm und injizieren den Notruf bzw. Alarm-Doppelton mit maximalem Headroom.
+
 ---
 
-## 5. Mehrstufiger Übersteuerungsschutz & Analog-Limiter
+## 5. Mehrstufiger Übersteuerungsschutz, Analog-Limiter & Signalerfassung
 
 1. **Analoger Dioden-Spitzenwertbegrenzer:** Dem ES8388 ADC-Eingang ist ein schneller Schottky-Klemmdioden-Limiter vorgeschaltet ($V_{\text{in,max}} \le 1{,}0\,\text{V}_{\text{RMS}}$).
 2. **ES8388 Hardware-ALC:** Der integrierte Hardware-Kompressor regelt den Eingangspegel dynamisch mit einer Attack-Zeit von $5\,\text{ms}$ und Decay von $200\,\text{ms}$ auf ein sicheres Target von $-6\,\text{dBFS}$.
 3. **DSP Lookahead Brickwall-Limiter:** Verhindert im digitalen Bereich jegliches Übersteuern über $0\,\text{dBFS}$, um das Gehör des Fahrers vor Spitzenpegeln (Martinshorn, Auspuffknallen) zu schützen.
+
+### 5.1 Quittungston- & Voice-Prompt-Erkennung (Ground-Truth Verifikation)
+Um zu überprüfen, ob ein angebundenes OEM-Headset Schaltbefehle tatsächlich angenommen hat (z. B. "Mesh Intercom On", "Phone Connected" oder Bestätigungstöne):
+* Die DSP-Engine führt an den analogen Eingangskanälen eine latenzarme **Goertzel-Filter-Tonerkennung** und Fourier-Analyse (FFT) durch.
+* Charakteristische Dual-Tone-Frequenzen von Sena ($1000\,\text{Hz} / 2000\,\text{Hz}$) und Cardo Beeps werden in $< 80\,\text{ms}$ verifiziert.
+* Das Ergebnis wird via BLE an das WebApp-Dashboard gemeldet ("Erfolgreich gekoppelt"), ohne dass der Fahrer den Helm abnehmen muss.
 
 ---
 

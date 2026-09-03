@@ -21,6 +21,7 @@ This document specifies the protection circuitry against vehicle electrical tran
   * **2.4 GHz ESP32-C3 PCB Antenna:** Placed at the front edge in a $15 \times 8\,\text{mm}$ copper keepout area.
   * **868 MHz LoRa Helical Antenna:** Lateral mount with $50\,\Omega$ microstrip feed and dedicated $60 \times 36\,\text{mm}$ ground plane ($> -1{,}5\,\text{dBi}$ gain).
   * **u-blox Multi-GNSS Ceramic Patch ($25 \times 25 \times 4\,\text{mm}$):** Centered with an unobstructed $180^\circ$ hemispherical sky view through the RF-transparent PA12 ceiling ($\varepsilon_r \approx 3{,}2$).
+* **Central ePTFE Pressure Equalization Vent:** $\varnothing\,7{,}0\,\text{mm}$ Gore/Schreiner Air Vent centered on the pod roof symmetrically relieves thermal pressure pulses without distorting RF radiation patterns.
 * **Shielded Harnessing:** All pod interconnects use 6-conductor shielded PUR cables with continuous 360° shield bonding at M8 and HD26 metal flanges.
 
 ---
@@ -38,3 +39,4 @@ This document specifies the protection circuitry against vehicle electrical tran
 * **PCB Isolation:** 4x NBR O-rings (ID 3.0 mm, cross-section 1.0 mm) between enclosure bosses and PCB underside.
 * **Screw Locking:** M2.5 board screws torqued to $0{,}35\,\text{Nm}$ and secured with medium-strength threadlocker (*Loctite 243* blue).
 * **Component Underfill:** Bourns LM-NP-1001 transformer corners anchored with elastomeric silicone adhesive (*Dow Corning 732* / *Dowsil 3145*).
+* **Battery Cushioning:** LiPo UPS cell anchored in the upper enclosure tray with $1{,}0\,\text{mm}$ vibration damping foam (*3M VHB 4910* / EPDM) and an elastic EPDM retention strap (Shore 50A).

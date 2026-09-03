@@ -183,7 +183,9 @@ This document provides the complete Bill of Materials (BOM) and manufacturing sp
 | **Automotive Wire** | FLRY-B $0.5\,\text{mm}^2$ & $0.35\,\text{mm}^2$ (various colors) | Leoni / Helukabel | As req. | Bike harness per `central_breakout_harness_wirelist.csv` |
 | **Murata MM8030 Pigtails (Pod 3)**| Murata MM126036 to SMA Bulkhead IP67 (150 mm, RG-178)| Murata / Mouser | 3 pcs | Coaxial bypass for J3 (2.4G), J4 (868M), J5 (GNSS) |
 | **U.FL Pigtail (Front Node)**| IPEX MHF1 / U.FL to RP-SMA Bulkhead IP67 (150 mm, RG-178) | Taoglas / Molex | 1 pc | Coaxial lead for ESP32-C3 external fairing antenna |
-| **SMA IP67 Protective Caps** | Nickel-plated brass with internal O-ring (knurled cap)| Amphenol / Radiall | 4 pcs | Waterproof seal for unpopulated external SMA ports |
+| **SMA Flange Double Bulkhead**| SMA Female to SMA Female Bulkhead IP67 with O-ring & nut | Amphenol / Radiall | 1 pc | Waterproof RF feedthrough in cartridge faceplate (Class A) |
+| **Internal Coax Pigtail (Cartridge)**| RG-178 Coaxial Cable ($6\dots 10\,\text{cm}$, 90° SMA Male to SMA Male)| Delock / Taoglas | 1 pc | RF connection from Sena +Mesh / OEM adapter to faceplate |
+| **SMA IP67 Protective Caps** | Nickel-plated brass with internal O-ring (knurled cap)| Amphenol / Radiall | 5 pcs | Waterproof seal for unpopulated external SMA ports (3x Pod 3, 1x Front, 1x Pod) |
 | **External 2.4 GHz Mesh Antenna**| 2.4 GHz Collinear Dipole (+5 dBi / +7 dBi) with SMA Male | Taoglas / Linx | 1 pc | Optional high-gain antenna on tail / topcase |
 | **External 868 MHz LoRa Antenna**| 868 MHz Monopole / Dipole (+3 dBi / +5 dBi) with SMA Male | Linx ANT-868 / Taoglas | 1 pc | Optional long-range mountain pass antenna |
 | **External Active GNSS Antenna**| Active Flat Puck (+28 dB LNA, 3.3V phantom power, SMA) | Taoglas AA.162 / Garmin | 1 pc | Optional roof/luggage mount for clear sky view |
@@ -191,6 +193,7 @@ This document provides the complete Bill of Materials (BOM) and manufacturing sp
 | **USB-C Glovebox Cable (Front)**| Right-angle USB-C male-to-male ($1.0\,\text{m}$, PUR/Nylon) | Anker / Baseus | 1 pc | Smartphone charging from J2 via front cable gland |
 | **JST-GH Connector Kit (Left)** | JST-GH 1.25mm 2-Pin female housings + crimp terminals | JST / Mouser | 2 sets | Pre-crimped harness leads for J3 (PTT) & J7 (12V) |
 | **90° USB Cartridge Cable** | Low-profile 90° right-angle Micro-USB/USB-C ($5\dots 8\,\text{cm}$) | Delock / Amazon | 1 pc | 5V power feed for Sena +Mesh / MeshPort inside cartridge |
+| **EPDM Cartridge Retaining Band**| Elastic EPDM rubber strap ($\approx 35 \times 10\,\text{mm}$) | Custom / Sena | 1 pc | Vibration-proof retention of OEM adapter via cartridge hooks |
 
 ---
 

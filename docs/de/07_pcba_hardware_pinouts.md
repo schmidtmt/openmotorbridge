@@ -10,22 +10,22 @@ Dieses Dokument bildet die **zentrale, autoritative Hardware-Spezifikation aller
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
 │                   DIE 5 HARDWARE-BAUGRUPPEN (PCBAs) DER OPENMOTORBRIDGE                │
 ├───────┬───────────────────────────────┬───────────────┬─────────┬──────────────────────┤
-│ Baugruppe │ Name & Funktion           │ Abmessungen   │ Lagen   │ Kern-ICs / Controller│
+│ Baugruppe │ Name & Funktion           │ Platinenmaße  │ Lagen   │ Kern-ICs / Controller│
 ├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
 │ **PCBA 01**│ **Zentralbox Main Controller** │ 85 x 55 mm    │ 4 Lagen │ ESP32-S3, LM5164,    │
-│       │ (Unter der Sitzbank, Audio/USV)│               │ (ENIG)  │ BQ24075, ES8388, IMU │
+│       │ (Unter der Sitzbank, Audio/USV)│ (77x47 mm M3) │ (ENIG)  │ BQ24075, ES8388, IMU │
 ├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
-│ **PCBA 02**│ **Satelliten Pod Base Carrier**│ 52 x 32 mm    │ 2 Lagen │ SP3012 TVS, M8 6-Pin,│
-│       │ (Sockel für Pod 1 & 2)        │               │         │ Kassetten-Aufnahme   │
+│ **PCBA 02**│ **Satelliten Pod Base Carrier**│ 36 x 20 mm    │ 2 Lagen │ SP3012 TVS, M8 6-Pin,│
+│       │ (Sockel für Pod 1 & 2)        │ (30 mm M2)    │         │ Kassetten-Aufnahme   │
 ├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
-│ **PCBA 03**│ **Universalschlitten Cartridge**│ 105 x 48 mm   │ 2 Lagen │ DS2401 1-Wire ID,    │
-│       │ (Inlay für Sena, Cardo, Funk) │               │         │ TLP222A PhotoMOS Opto│
+│ **PCBA 03**│ **Universalschlitten Cartridge**│ 35 x 25 mm    │ 2 Lagen │ DS2401 1-Wire ID,    │
+│       │ (Trägerplatine im 116x58 Sled)│ (29x19 mm M2) │         │ TLP222A PhotoMOS Opto│
 ├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
-│ **PCBA 04**│ **Rear Pod 3 Transceiver Hub** │ 92 x 44 mm    │ 4 Lagen │ RP2040 Coprozessor,  │
-│       │ (Heckbürzel: LoRa & GNSS)     │               │ (ENIG)  │ SX1262 LoRa, NEO-M9N │
+│ **PCBA 04**│ **Rear Pod 3 Transceiver Hub** │ 55 x 48 mm    │ 4 Lagen │ RP2040 Coprozessor,  │
+│       │ (Heckbürzel: LoRa & GNSS)     │ (46x19 mm M2) │ (ENIG)  │ SX1262 LoRa, MAX-M10S│
 ├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
-│ **PCBA 05**│ **Universal Front-Knoten**    │ 72 x 48 mm    │ 4 Lagen │ ESP32-C3 RISC-V,     │
-│       │ (Smart Fairing Hub & Ottocast)│               │ (ENIG)  │ USB2512B, TPS2051B   │
+│ **PCBA 05**│ **Universal Front-Knoten**    │ 68 x 44 mm    │ 4 Lagen │ ESP32-C3 RISC-V,     │
+│       │ (Smart Fairing Hub & Ottocast)│ (62x38 mm M2.5│ (ENIG)  │ USB2512B, TPS2051B   │
 └───────┴───────────────────────────────┴───────────────┴─────────┴──────────────────────┘
 ```
 
@@ -124,10 +124,10 @@ Für alle 4-Lagen-Platinen (PCBA 01, PCBA 04 und PCBA 05) wird der identische, s
 
 ![PCBA 02 Satelliten Pod Base Carrier](../images/pcba/pcba02_pod_base_3d.png)
 
-*Abbildung 7.2: KiCad 3D-Render der Pod-Basisplatine (PCBA 02, 52 x 32 mm, 2 Lagen) mit 6-poliger Präzisions-Stiftleiste, M8 6-Pin IP67 Buchsenanschluss und SP3012 TVS-Schutzarray.*
+*Abbildung 7.2: KiCad 3D-Render der Pod-Basisplatine (PCBA 02, 36 x 20 mm, 2 Lagen) mit 6-poliger Präzisions-Stiftleiste, M8 6-Pin IP67 Buchsenanschluss und SP3012 TVS-Schutzarray.*
 
 ### 4.1 Technische Platinen-Kenndaten
-* **Abmessungen:** $52{,}0 \times 32{,}0\,\text{mm}$ (Rechteckkontur mit 2x M3 Befestigungsbohrungen im Abstand $44{,}0\,\text{mm}$).
+* **Abmessungen:** $36{,}0 \times 20{,}0\,\text{mm}$ (Rechteckkontur mit 2x M2 Befestigungsbohrungen im Abstand $30{,}0\,\text{mm}$, passgenau für die Schottkammer des Pod-Gehäuses).
 * **Lagenaufbau:** 2 Lagen FR-4 High-TG150 ($1{,}6\,\text{mm}$ Dicke, $35\,\mu\text{m}$ Kupfer beidseitig).
   * Layer 1 (Top): Präzisionskontaktleiste `J1`, TVS-Array `U1` und SMD-Entkoppelkondensatoren.
   * Layer 2 (Bottom): Vollflächige Masseebene (`GND`) zur HF- und Störunterdrückung.
@@ -168,10 +168,10 @@ Vertikale, hochpräzise SMD-Stiftleiste ($2{,}54\,\text{mm}$ Raster, vergoldet, 
 
 ![PCBA 03 Universalschlitten Cartridge](../images/pcba/pcba03_pod_cartridge_3d.png)
 
-*Abbildung 7.3: KiCad 3D-Render des Universalschlitten-Kassettenträgers (PCBA 03, 105 x 48 mm, 2 Lagen) mit DS2401 1-Wire ID-Chip, horizontaler Mating-Buchse und Headset-JST-SH Schnittstelle.*
+*Abbildung 7.3: KiCad 3D-Render des Universalschlitten-Kassettenträgers (PCBA 03, 35 x 25 mm, 2 Lagen) mit DS2401 1-Wire ID-Chip, horizontaler Mating-Buchse und Headset-JST-SH Schnittstelle.*
 
 ### 5.1 Technische Platinen-Kenndaten
-* **Abmessungen:** $105{,}0 \times 48{,}0\,\text{mm}$ (asymmetrische Poka-Yoke Gleitkontur mit $6\,\text{mm}$ Höhenversatz).
+* **Abmessungen:** $35{,}0 \times 25{,}0\,\text{mm}$ (kompakte Trägerplatine mit 4x M2 Befestigungsbohrungen im Raster $29{,}0 \times 19{,}0\,\text{mm}$, formschlüssig integriert in den $116 \times 58\,\text{mm}$ Wechselschlitten mit $105 \times 48\,\text{mm}$ Adapter-Konturbett).
 * **Lagenaufbau:** 2 Lagen FR-4 High-TG150 ($1{,}6\,\text{mm}$ Dicke, $35\,\mu\text{m}$ Kupfer).
 * **Ausstattung:** DS2401 1-Wire Chip (`U1`), Toshiba TLP222A PhotoMOS Relais (`U2`), PPTC 500mA Sicherung (`F1`), Grüne Status-LED (`D1`).
 
@@ -210,10 +210,10 @@ Der $1{,}0\,\text{mm}$ JST-SH Winkelstecker verbindet die Kassettenplatine mit d
 
 ![PCBA 04 Rear Pod 3 Transceiver Hub](../images/pcba/pcba04_rear_pod3_3d.png)
 
-*Abbildung 7.4: KiCad 3D-Render der Heck-Pod 3 Transceiverplatine (PCBA 04, 110 x 52 mm, 4 Lagen) mit RP2040 Coprozessor, Semtech SX1262 LoRa, u-blox Multi-GNSS und U.FL/Murata MM8030 HF-Umschaltports.*
+*Abbildung 7.4: KiCad 3D-Render der Heck-Pod 3 Transceiverplatine (PCBA 04, 55 x 48 mm, 4 Lagen) mit RP2040 Coprozessor, Semtech SX1262 LoRa, u-blox Multi-GNSS und U.FL/Murata MM8030 HF-Umschaltports.*
 
 ### 6.1 Technische Platinen-Kenndaten
-* **Abmessungen:** $110{,}0 \times 52{,}0\,\text{mm}$ (aerodynamische Heckbürzel-Kontur mit dielektrischem Antennen-Fenster).
+* **Abmessungen:** $55{,}0 \times 48{,}0\,\text{mm}$ (4 Lagen FR-4 High-TG150, 4x M2 Montagebohrungen im Raster $46{,}0 \times 19{,}0\,\text{mm}$, formbündig im aerodynamischen Heck-Pod 3 Gehäuse montiert).
 * **Lagenaufbau:** 4 Lagen FR-4 High-TG150 ($1{,}6\,\text{mm}$, $35\,\mu\text{m}$ Cu) mit kontrollierter $50\,\Omega$ Impedanz für alle HF-Pfade.
   * Layer 1 (Top): HF-Transceiver, GNSS-Modul, Murata MM8030 Buchsen, koplanare $50\,\Omega$ Wellenleiter.
   * Layer 2 (Inner 1): Durchgehende, unsegmentierte HF-Massebezugsebene.

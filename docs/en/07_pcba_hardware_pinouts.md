@@ -10,22 +10,22 @@ This document serves as the **authoritative hardware specification for all 5 pri
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
 │                   THE 5 HARDWARE ASSEMBLIES (PCBAs) OF OPENMOTORBRIDGE                 │
 ├───────┬───────────────────────────────┬───────────────┬─────────┬──────────────────────┤
-│ Assy  │ Name & Function               │ Dimensions    │ Layers  │ Key ICs / Controller │
+│ Assy  │ Name & Function               │ PCB Outline   │ Layers  │ Key ICs / Controller │
 ├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
 │ **PCBA 01**│ **Central Box Main Controller**│ 85 x 55 mm    │ 4 Layer │ ESP32-S3, LM5164,    │
-│       │ (Under-Seat, Audio / UPS / BT)│               │ (ENIG)  │ BQ24075, ES8388, IMU │
+│       │ (Under-Seat, Audio / UPS / BT)│ (77x47 mm M3) │ (ENIG)  │ BQ24075, ES8388, IMU │
 ├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
-│ **PCBA 02**│ **Satellite Pod Base Carrier** │ 52 x 32 mm    │ 2 Layer │ SP3012 TVS, M8 6-Pin,│
-│       │ (Docking Base for Pod 1 & 2)  │               │         │ Cartridge Receptacle │
+│ **PCBA 02**│ **Satellite Pod Base Carrier** │ 36 x 20 mm    │ 2 Layer │ SP3012 TVS, M8 6-Pin,│
+│       │ (Docking Base for Pod 1 & 2)  │ (30 mm M2)    │         │ Cartridge Receptacle │
 ├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
-│ **PCBA 03**│ **Universal Cartridge Carrier**│ 105 x 48 mm   │ 2 Layer │ DS2401 1-Wire ID,    │
-│       │ (Sena, Cardo, PMR Inlay Sled) │               │         │ TLP222A PhotoMOS Opto│
+│ **PCBA 03**│ **Universal Cartridge Carrier**│ 35 x 25 mm    │ 2 Layer │ DS2401 1-Wire ID,    │
+│       │ (Carrier PCB in 116x58 Sled)  │ (29x19 mm M2) │         │ TLP222A PhotoMOS Opto│
 ├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
-│ **PCBA 04**│ **Rear Pod 3 Transceiver Hub** │ 92 x 44 mm    │ 4 Layer │ RP2040 Coprocessor,  │
-│       │ (Tail Pod: LoRa 868M & GNSS)  │               │ (ENIG)  │ SX1262 LoRa, NEO-M9N │
+│ **PCBA 04**│ **Rear Pod 3 Transceiver Hub** │ 55 x 48 mm    │ 4 Layer │ RP2040 Coprocessor,  │
+│       │ (Tail Pod: LoRa 868M & GNSS)  │ (46x19 mm M2) │ (ENIG)  │ SX1262 LoRa, MAX-M10S│
 ├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
-│ **PCBA 05**│ **Universal Front Node**      │ 72 x 48 mm    │ 4 Layer │ ESP32-C3 RISC-V,     │
-│       │ (Smart Fairing Hub & Ottocast)│               │ (ENIG)  │ USB2512B, TPS2051B   │
+│ **PCBA 05**│ **Universal Front Node**      │ 68 x 44 mm    │ 4 Layer │ ESP32-C3 RISC-V,     │
+│       │ (Smart Fairing Hub & Ottocast)│ (62x38 mm M2.5│ (ENIG)  │ USB2512B, TPS2051B   │
 └───────┴───────────────────────────────┴───────────────┴─────────┴──────────────────────┘
 ```
 
@@ -124,10 +124,10 @@ All 4-layer boards (PCBA 01, PCBA 04, and PCBA 05) utilize an identical controll
 
 ![PCBA 02 Satellite Pod Base Carrier](../images/pcba/pcba02_pod_base_3d.png)
 
-*Figure 7.2: KiCad 3D render of the Pod Base carrier board (PCBA 02, 52 x 32 mm, 2 layers) with 6-pin precision pin header, M8 6-pin IP67 socket interface, and SP3012 TVS protection array.*
+*Figure 7.2: KiCad 3D render of the Pod Base carrier board (PCBA 02, 36 x 20 mm, 2 layers) with 6-pin precision pin header, M8 6-pin IP67 socket interface, and SP3012 TVS protection array.*
 
 ### 4.1 Board Specifications & Mechanical Fastening
-* **Dimensions:** $52{,}0 \times 32{,}0\,\text{mm}$ (Rectangular PCB with 2x M3 mounting holes at $44{,}0\,\text{mm}$ spacing).
+* **Dimensions:** $36{,}0 \times 20{,}0\,\text{mm}$ (Rectangular PCB with 2x M2 mounting holes at $30{,}0\,\text{mm}$ spacing, seated inside the pod bulkhead chamber).
 * **Layer Stackup:** 2 Layers FR-4 High-TG150 ($1{,}6\,\text{mm}$ thickness, $35\,\mu\text{m}$ copper).
   * Layer 1 (Top): Precision contact header `J1`, TVS array `U1`, decoupling capacitors.
   * Layer 2 (Bottom): Solid continuous GND plane for RF and transient suppression.
@@ -168,10 +168,10 @@ Vertical, gold-plated SMD pin header ($2{,}54\,\text{mm}$ pitch, $4{,}8\,\text{m
 
 ![PCBA 03 Universal Cartridge Carrier](../images/pcba/pcba03_pod_cartridge_3d.png)
 
-*Figure 7.3: KiCad 3D render of the Universal Cartridge carrier (PCBA 03, 105 x 48 mm, 2 layers) with DS2401 1-Wire ID chip, horizontal mating socket, and headset JST-SH connector.*
+*Figure 7.3: KiCad 3D render of the Universal Cartridge carrier (PCBA 03, 35 x 25 mm, 2 layers) with DS2401 1-Wire ID chip, horizontal mating socket, and headset JST-SH connector.*
 
 ### 5.1 Board Specifications & Features
-* **Dimensions:** $105{,}0 \times 48{,}0\,\text{mm}$ (asymmetrical Poka-Yoke rail contour with $6\,\text{mm}$ vertical offset).
+* **Dimensions:** $35{,}0 \times 25{,}0\,\text{mm}$ (compact carrier PCB with 4x M2 mounting holes in $29{,}0 \times 19{,}0\,\text{mm}$ grid, housed inside the $116 \times 58\,\text{mm}$ base sled with $105 \times 48\,\text{mm}$ contour bed).
 * **Layer Stackup:** 2 Layers FR-4 High-TG150 ($1{,}6\,\text{mm}$ thickness, $35\,\mu\text{m}$ copper).
 * **On-Board Components:** DS2401 1-Wire ID (`U1`), Toshiba TLP222A PhotoMOS relay (`U2`), PPTC 500mA fuse (`F1`), Green power LED (`D1`).
 
@@ -210,10 +210,10 @@ The $1{,}0\,\text{mm}$ right-angle JST-SH connector links the cartridge board to
 
 ![PCBA 04 Rear Pod 3 Transceiver Hub](../images/pcba/pcba04_rear_pod3_3d.png)
 
-*Figure 7.4: KiCad 3D render of the Rear Pod 3 Transceiver PCB (PCBA 04, 110 x 52 mm, 4 layers) with RP2040 coprocessor, Semtech SX1262 LoRa, u-blox Multi-GNSS, and U.FL/Murata MM8030 RF switch ports.*
+*Figure 7.4: KiCad 3D render of the Rear Pod 3 Transceiver PCB (PCBA 04, 55 x 48 mm, 4 layers) with RP2040 coprocessor, Semtech SX1262 LoRa, u-blox Multi-GNSS, and U.FL/Murata MM8030 RF switch ports.*
 
 ### 6.1 Board Specifications & RF Layout
-* **Dimensions:** $110{,}0 \times 52{,}0\,\text{mm}$ (Aerodynamic tail cowl profile with dielectric RF radome).
+* **Dimensions:** $55{,}0 \times 48{,}0\,\text{mm}$ (4 Layers FR-4 High-TG150, 4x M2 mounting holes in $46{,}0 \times 19{,}0\,\text{mm}$ grid, housed inside aerodynamic tail cowl with dielectric RF radome).
 * **Layer Stackup:** 4 Layers FR-4 High-TG150 ($1{,}6\,\text{mm}$, $35\,\mu\text{m}$ Cu) with controlled $50\,\Omega$ coplanar waveguides.
   * Layer 1 (Top): RF transceivers, GNSS module, Murata MM8030 switches, $50\,\Omega$ coplanar RF traces.
   * Layer 2 (Inner 1): Continuous, unslotted RF ground reference plane.
