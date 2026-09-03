@@ -37,12 +37,15 @@ The dashboard is a fully self-contained Progressive Web App (PWA) built with sta
   * **Link Status:** Live 2.4 GHz ESP-NOW wireless status badge.
   * **Subsystem Tiles:**
     1. **📱 Wireless CarPlay / AA (Ottocast):** Live voltage & current (`5.00 V · 380 mA`), operating status (`ACTIVE`, `REBOOT`, `STANDBY`).
-    2. **⚡ Handlebar PTT (Zero-Latency):** Status indicator (`< 1.8 ms Latency`) with glowing pulse animation when keying.
+    2. **⚡ Handlebar PTT (Zero-Latency):** Status indicator (`< 1.8 ms Latency`) with glowing pulse animation when keying (1x = radio, 2x = cam toggle, long = HiLight tag).
     3. **🎙️ Cockpit Noise (Knowles MEMS):** Real-time sound pressure level in $\text{dB(A)}$ and dynamic AGC helmet boost (`+0.0 dB` to `+6.0 dB Boost`).
+    4. **🎥 Action Cam BLE Bridge (GoPro / Insta360 / DJI):** Camera model (`GoPro Hero 12` / `Insta360 X4`), battery level (%), remaining SD time, pulsing red REC badge.
   * **Wind Noise VU Meter:** Color-coded level bar ($35\,\text{dB(A)}$ idle to $115\,\text{dB(A)}$ highway).
   * **Interactive Controls:**
     * **`⚡ CarPlay 1-Click Hard Reboot (2.5s)`:** Triggers a hardware power cycle on the TI TPS2051B switch (2.5s VBUS cutoff with countdown animation).
     * **`🔘 Test Handlebar PTT`:** Simulates mechanical button presses with tactile feedback.
+    * **`🎥 Cam Start/Stop & HiLight`:** Manual touch shutter toggle and highlight tag button for action cameras.
+    * **`Fuel-Stop Filter (KL15)` Toggle:** Automatically cuts recording upon ignition off to avoid empty parking/fuel stop footage.
     * **`Auto-Café Mode (60s)` Toggle:** Automatically cuts VBUS after ignition OFF to release smartphone Wi-Fi for café/hotel networks.
 * **Rear Radar & Blind-Spot Assistant (BSD HUD Card):**
   * **Status Badges:** Real-time threat classification (`CLEAR`, `⚠️ VEHICLE CLOSING IN`, `🚨 COLLISION RISK!`) and hardware link (`GARMIN VARIA / 24 GHz M8`).

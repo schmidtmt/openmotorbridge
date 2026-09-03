@@ -36,14 +36,17 @@ Das Dashboard ist eine vollständig autarke Progressive Web App (PWA) basierend 
 * **Spannungs- & Thermomanagement:** Live-Anzeige von Bordnetz (KL15), USV-LiPo und Starterbatterie-Entladeschutz.
 * **Universal Front-Knoten (Smart Fairing Hub Card):**
   * **Status-Badge:** Live 2.4 GHz ESP-NOW Funklink (`ESP-NOW LINK (2.4 GHz)` / `OFFLINE`).
-  * **3 Subsystem-Kacheln:**
+  * **4 Subsystem-Kacheln:**
     1. **📱 Wireless CarPlay / AA (Ottocast):** Live-Spannung & Strom (`5.00 V · 380 mA`), Betriebsstatus (`AKTIV`, `REBOOT`, `STANDBY`).
-    2. **⚡ Lenker-PTT (Zero-Latency):** Bereitschaftsstatus und Latenzanzeige (`< 1.8 ms Latenz`) mit leuchtender Pulse-Animation bei Tastendruck.
+    2. **⚡ Lenker-PTT (Zero-Latency):** Bereitschaftsstatus und Latenzanzeige (`< 1.8 ms Latenz`) mit leuchtender Pulse-Animation bei Tastendruck (1x = Funk, 2x = Cam Toggle, Lang = HiLight Tag).
     3. **🎙️ Cockpit-Lärm (Knowles MEMS):** Live-Schallpegel in $\text{dB(A)}$ und berechnete Lautstärkenachführung (`+0.0 dB` bis `+6.0 dB Boost`).
+    4. **🎥 Action-Cam BLE Bridge (GoPro / Insta360 / DJI):** Kamera-Typ (`GoPro Hero 12` / `Insta360 X4`), Akkustand (%), verbleibende SD-Zeit, pulsierender roter REC-Status.
   * **Fahrtwind-Lärm VU-Meter:** Farbkodierter Balken ($35\,\text{dB(A)}$ Standgas bis $115\,\text{dB(A)}$ Höchstgeschwindigkeit).
   * **Interaktive Steuerungen:**
     * **`⚡ CarPlay 1-Klick Kaltstart (2.5s)`:** Löst einen hardwareseitigen Power-Cycle am TI TPS2051B Lastschalter aus (2.5s Spannungsabschaltung mit Countdown-Animation auf dem Button).
     * **`🔘 Lenker-PTT Testen`:** Simuliert den Lenkertaster mit haptischer und optischer Bestätigung.
+    * **`🎥 Cam Start/Stopp & HiLight`:** Manuelle Touch-Auslösung und Lesezeichen-Setzung für Action-Cams.
+    * **`Tankpausen-Filter (KL15)` Toggle:** Automatischer Aufnahmestopp bei Zündungsaus zur Vermeidung von Leerlauf-Aufnahmen.
     * **`Auto-Café Mode (60s)` Toggle:** Schaltet die automatische VBUS-Abschaltung bei Zündung AUS zur Freigabe des Smartphone-WLANs um.
 * **Heck-Radar & Totwinkel-Assistent (BSD HUD Card):**
   * **Status-Badges:** Echtzeit-Gefahrenstufe (`FREI`, `⚠️ FAHRZEUG NÄHERT SICH`, `🚨 KOLLISIONSRISIKO!`) und Hardware-Link (`GARMIN VARIA / 24 GHz M8`).

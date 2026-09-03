@@ -223,7 +223,7 @@ The $1{,}0\,\text{mm}$ right-angle JST-SH connector links the cartridge board to
 ### 6.2 Pinout of 6-Pin Interface to Central Box (`J1`)
 
 | Pin (J1) | Signal Name | Signal Type / Level | Function & Description |
-| :---: | :--- | :--- | :--- |
+| :--- | :--- | :--- | :--- |
 | **Pin 1** | `1_VCC_5V` | $+5{,}0\,\text{V}$ DC switched (max. 500 mA) | Main power supply from Central Box |
 | **Pin 2** | `2_GND` | Power & RF Ground ($0\,\text{V}$) | Common reference ground for logic and RF |
 | **Pin 3** | `3_UART_TX` | UART TX ($3{,}3\,\text{V}$, 460,800 Baud) | High-speed telemetry and NMEA stream to Central Box |
@@ -236,7 +236,7 @@ The $1{,}0\,\text{mm}$ right-angle JST-SH connector links the cartridge board to
 The board features 3 automatic coaxial switch connectors (`Murata MM8030-2610`) that seamlessly switch to external antennas upon insertion ($< 0{,}15\,\text{dB}$ insertion loss, $> 25\,\text{dB}$ isolation up to 6 GHz):
 
 | RF Port | Frequency Band | Internal Default Antenna | External Bypass Path (MM8030) |
-| :---: | :--- | :--- | :--- |
+| :--- | :--- | :--- | :--- |
 | **`J3`** | $2{,}4\,\text{GHz}$ ISM | Internal Inverted-F PCB Antenna (IFA, $0\,\text{dBi}$) | External $+5\,\text{dBi}$ whip or sharkfin antenna |
 | **`J4`** | $868\,\text{MHz}$ LoRa | Internal helical coil antenna ($+1{,}5\,\text{dBi}$) | External $\lambda/4$ monopole antenna for maximum range |
 | **`J5`** | $1{,}575\,\text{GHz}$ GNSS | Internal $25 \times 25\,\text{mm}$ ceramic patch antenna | External active patch antenna with $+3{,}3\,\text{V}$ phantom power |
@@ -269,8 +269,9 @@ The board features 3 automatic coaxial switch connectors (`Murata MM8030-2610`) 
 * **Layer Stackup:** 4 Layers FR-4 High-TG150 ($1{,}6\,\text{mm}$, $35\,\mu\text{m}$ copper).
   * Layer 1 (Top): ESP32-C3 controller, USB2512B hub, Knowles MEMS, $90\,\Omega$ USB differential pairs.
   * Layer 2 (Inner 1): Continuous low-impedance ground plane (Solid GND).
-  * Layer 3 (Inner 2): Split Power planes ($+5{,}0\,\text{V}_{\text{MAIN}}$, $+5{,}0\,\text{V}_{\text{OTTOCAST}}$, $+3{,}3\,\text{V}$).
-  * Layer 4 (Bottom): LMR36015 buck converter, TPS2051B load switch, TVS diodes, and filters.
+  * Layer 3 (Inner 2): Split Power planes ($+5{,}0\,\text{V}_{\text{MAIN}}$, $+5{,}0\,\text{V}_{\text{OTTOCAST}}$, $+5{,}0\,\text{V}_{\text{CAM}}$, $+3{,}3\,\text{V}$).
+  * Layer 4 (Bottom): LMR36015 / TPS54302 buck converter, TPS2051B load switch, TVS diodes, and filters.
+* **KL15 Buffer Capacitor (`C_BUF`):** $470\dots 1000\,\mu\text{F}$ 10V low-ESR polymer SMD (7343 / D-case) in the upper-right corner keeps the ESP32-C3 alive for $1\dots 2\,\text{s}$ upon ignition shutoff, ensuring clean transmission of the BLE shutter-stop command to action cameras.
 
 ### 7.2 Vehicle & Sensor Interfaces (JST-PH Headers)
 
@@ -278,16 +279,17 @@ The board features 3 automatic coaxial switch connectors (`Murata MM8030-2610`) 
 | :--- | :--- | :---: | :--- |
 | **`J1`** | JST-PH / 2-Pin Terminal | 2-Pin | **12V Vehicle Input:** Pin 1: `KL15_12V_SW` ($+9\dots 36\,\text{V}$ DC Ignition+), Pin 2: `GND` (Vehicle chassis ground). Powered via LMR36015 buck converter. |
 | **`J2`** | JST-PH ($2{,}00\,\text{mm}$) | 3-Pin | **Cockpit CAN Bus:** Pin 1: `CAN_H`, Pin 2: `CAN_L`, Pin 3: `GND` (ISO 11898-2 with $120\,\Omega$ termination for cockpit gauge clusters). |
-| **`J3`** | JST-PH ($2{,}00\,\text{mm}$) | 2-Pin | **Handlebar PTT Interface:** Pin 1: `PTT_INPUT_N` (Active-Low interrupt on ESP32-C3 GPIO 0, internal pull-up, 100nF RC lowpass), Pin 2: `GND`. 100% battery-free. |
+| **`J3`** | JST-PH ($2{,}00\,\text{mm}$) | 2-Pin | **Handlebar PTT Interface:** Pin 1: `PTT_INPUT_N` (Active-Low interrupt on ESP32-C3 GPIO 0, internal pull-up, 100nF RC lowpass), Pin 2: `GND`. Supports single-press (PTT), double-click (action cam toggle), and long-press (HiLight tag). |
 
-### 7.3 Automotive USB 2.0 High-Speed Subsystem (`Microchip USB2512B`)
+### 7.3 Automotive USB 2.0 Subsystem & Action Cam Power (`Microchip USB2512B`)
 
 | Port | Connector Type | Function & Performance Specifications |
 | :--- | :--- | :--- |
 | **`J4`** | JST-PH (4-Pin) | **Upstream Host Port:** Carries `USB_UP_VBUS` ($+5{,}0\,\text{V}$), `USB_UP_DM`, `USB_UP_DP`, `GND` linking the hub to the central host. |
 | **`J5`** | JST-PH (4-Pin) | **Downstream Port 1 (Glovebox / Phone):** Constant $+5{,}0\,\text{V}$ VBUS (up to $2{,}0\,\text{A}$) for uninterrupted smartphone or navigation unit charging. |
 | **`J6`** | JST-PH (4-Pin) | **Downstream Port 2 (Ottocast CarPlay / Android Auto):** Switched $+5{,}0\,\text{V}$ VBUS via `TI TPS2051B` load switch with **1-Click Cold Restart** (2.5s power cut) and **Auto-Café 60s Timer**. |
-| **`J7`** | USB-C 16-Pin Receptacle | **Service & Flashing Port:** Native ESP32-C3 USB-JTAG / CDC-Serial interface for firmware upgrades, calibration, and live acoustic debugging. |
+| **`J7`** | USB-C 16-Pin Receptacle | **Service & Flashing Port (right edge adjacent to `D1`):** Native ESP32-C3 USB-JTAG / CDC-Serial interface for firmware upgrades and calibration. |
+| **`J8`** | JST-PH (2-Pin / 4-Pin) | **Action Cam Power Port (Charge-Only):** Dedicated $+5{,}0\,\text{V}$ DC power (up to $2{,}0\,\text{A}$) for GoPro / Insta360 / DJI — purposely without USB data to prevent mass-storage transfer lockout. |
 
 ### 7.4 ESP32-C3 RISC-V Controller Pin Mapping
 

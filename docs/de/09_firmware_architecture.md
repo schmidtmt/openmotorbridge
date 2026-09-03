@@ -126,8 +126,9 @@ Das Gesamtsystem orchestriert 14 spezialisierte Tasks über 3 physikalisch getre
 | **`webdav_sync_task`**| ESP32-S3 (Core 0) | **3** | 8 KB | Nachlauf (Graceful)| LwIP TLS 1.3 | Automatischer GPX-Upload im Heim-WLAN bei Zündung AUS. |
 | **`rear_nmea_task`** | RP2040 (Core 0) | **High**| 2 KB | 10 Hz DMA | UART0 (460.8k Baud) | High-Speed UBX/NMEA Parsing & 1-PPS Timecode Capture. |
 | **`rear_lora_task`** | RP2040 (Core 1) | **High**| 2 KB | SX1262 IRQ | SPI0 Bus | 868 MHz LoRa Mesh Paketierung & Notfall-Sprachtunnel. |
-| **`front_ptt_task`** | ESP32-C3 | **24** | 2 KB | GPIO 0 Edge ISR | ESP-NOW TX Queue | Überträgt Lenker-PTT Schließvorgänge in unter $0{,}9\,\text{ms}$. |
+| **`front_ptt_task`** | ESP32-C3 | **24** | 2 KB | GPIO 0 Edge ISR | ESP-NOW TX Queue | Überträgt Lenker-PTT: 1x kurz = Funk-PTT via ESP-NOW in $< 0{,}9\,\text{ms}$; 2x kurz = Action-Cam Toggle; 1x lang = HiLight Tag. |
 | **`front_mems_task`** | ESP32-C3 | **18** | 4 KB | 48 kHz DMA | Biquad Filter | Knowles SPH0645 Digitalmikrofon A-Weighting & RMS-Pegel. |
+| **`front_cam_ble_task`**| ESP32-C3 | **12** | 4 KB | Event / KL15 ISR | NimBLE Client | Steuert GoPro / Insta360 / DJI per BLE; führt bei Zündungsaus mit $C_{\text{BUF}}$-Pufferung sofortigen Auto-Stop (Tankpausen-Filter) aus. |
 | **`front_pwr_task`** | ESP32-C3 | **10** | 2 KB | 10 Hz Timer | GPIO Lastschalter | TPS2051B 1-Klick Kaltstart (2,5s) & Auto-Café 60s Countdown. |
 
 ---

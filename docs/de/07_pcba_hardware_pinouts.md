@@ -269,8 +269,9 @@ Die Platine verfügt über 3 automatische Koaxial-Umschaltbuchsen (`Murata MM803
 * **Lagenaufbau:** 4 Lagen FR-4 High-TG150 ($1{,}6\,\text{mm}$, $35\,\mu\text{m}$ Kupfer).
   * Layer 1 (Top): ESP32-C3 Controller, USB2512B Hub, Knowles MEMS, $90\,\Omega$ USB-Differenzpaare.
   * Layer 2 (Inner 1): Durchgehende, niederohmige GND-Masseebene.
-  * Layer 3 (Inner 2): Split Power ($+5{,}0\,\text{V}_{\text{MAIN}}$, $+5{,}0\,\text{V}_{\text{OTTOCAST}}$, $+3{,}3\,\text{V}$).
-  * Layer 4 (Bottom): LMR36015 Buck-Wandler, TPS2051B Lastschalter, TVS-Dioden und Filter.
+  * Layer 3 (Inner 2): Split Power ($+5{,}0\,\text{V}_{\text{MAIN}}$, $+5{,}0\,\text{V}_{\text{OTTOCAST}}$, $+5{,}0\,\text{V}_{\text{CAM}}$, $+3{,}3\,\text{V}$).
+  * Layer 4 (Bottom): LMR36015 / TPS54302 Buck-Wandler, TPS2051B Lastschalter, TVS-Dioden und Filter.
+* **KL15-Pufferkondensator (`C_BUF`):** $470\dots 1000\,\mu\text{F}$ 10V Low-ESR Polymer-SMD (Bauform 7343 / D-Case) in der oberen rechten Ecke puffert den ESP32-C3 bei Zündungsaus für $1\dots 2\,\text{s}$ zum sauberen Senden des BLE-Shutter-Stop-Befehls an Action-Cams.
 
 ### 7.2 Fahrzeug- & Peripherie-Schnittstellen (JST-PH Header)
 
@@ -278,16 +279,17 @@ Die Platine verfügt über 3 automatische Koaxial-Umschaltbuchsen (`Murata MM803
 | :--- | :--- | :---: | :--- |
 | **`J1`** | JST-PH / 2-Pin Schraubklemme | 2-Pin | **12V Bordnetz-Eingang:** Pin 1: `KL15_12V_SW` ($+9\dots 36\,\text{V}$ DC Zündungsplus), Pin 2: `GND` (Fahrzeugmasse). Gespeist über LMR36015 Buck-Regler. |
 | **`J2`** | JST-PH ($2{,}00\,\text{mm}$) | 3-Pin | **Cockpit CAN-Bus:** Pin 1: `CAN_H`, Pin 2: `CAN_L`, Pin 3: `GND` (ISO 11898-2 mit $120\,\Omega$ Abschlusswiderstand für Cockpit-Instrumente). |
-| **`J3`** | JST-PH ($2{,}00\,\text{mm}$) | 2-Pin | **Lenker-PTT Schnittstelle:** Pin 1: `PTT_INPUT_N` (Active-Low Interrupt auf ESP32-C3 GPIO 0, interner Pull-up, 100nF RC-Tiefpass), Pin 2: `GND`. 100% batteriefreier Anschluss. |
+| **`J3`** | JST-PH ($2{,}00\,\text{mm}$) | 2-Pin | **Lenker-PTT Schnittstelle:** Pin 1: `PTT_INPUT_N` (Active-Low Interrupt auf ESP32-C3 GPIO 0, interner Pull-up, 100nF RC-Tiefpass), Pin 2: `GND`. Unterstützt Einfachklick (PTT), Doppelklick (Action-Cam Toggle) und Langklick (HiLight Tag). |
 
-### 7.3 Automotive USB 2.0 High-Speed Subsystem (`Microchip USB2512B`)
+### 7.3 Automotive USB 2.0 Subsystem & Action-Cam Power (`Microchip USB2512B`)
 
 | Port | Steckertyp | Funktion & Leistungsdaten |
 | :--- | :--- | :--- |
 | **`J4`** | JST-PH (4-Pin) | **Upstream Host Port:** Führt `USB_UP_VBUS` ($+5{,}0\,\text{V}$), `USB_UP_DM`, `USB_UP_DP`, `GND` zur Verbindung mit dem Hauptsystem. |
 | **`J5`** | JST-PH (4-Pin) | **Downstream Port 1 (Handschuhfach / Phone):** Dauerhafter $+5{,}0\,\text{V}$ VBUS (bis $2{,}0\,\text{A}$) für unterbrechungsfreies Laden von Smartphones oder Navi-Geräten. |
 | **`J6`** | JST-PH (4-Pin) | **Downstream Port 2 (Ottocast CarPlay / Android Auto):** Geschalteter $+5{,}0\,\text{V}$ VBUS über `TI TPS2051B` Lastschalter mit **1-Klick Kaltstart-Funktion** (2,5s Reset) und **Auto-Café 60s Timer**. |
-| **`J7`** | USB-C 16-Pin Receptacle | **Service- & Flash-Port:** Nativer ESP32-C3 USB-JTAG / CDC-Serial Port für Firmware-Updates, Kalibrierung und Echtzeit-Akkustikanalyse. |
+| **`J7`** | USB-C 16-Pin Receptacle | **Service- & Flash-Port (rechte Außenflanke neben `D1`):** Nativer ESP32-C3 USB-JTAG / CDC-Serial Port für Firmware-Updates und Kalibrierung. |
+| **`J8`** | JST-PH (2-Pin / 4-Pin) | **Action-Cam Power-Port (Charge-Only):** Reine $+5{,}0\,\text{V}$ Speisung (bis $2{,}0\,\text{A}$) für GoPro / Insta360 / DJI – bewusst ohne USB-Daten, um Massenspeicher-Lockup an der Boom! Box zu verhindern. |
 
 ### 7.4 ESP32-C3 RISC-V Controller Pinbelegung & Funktions-Mapping
 

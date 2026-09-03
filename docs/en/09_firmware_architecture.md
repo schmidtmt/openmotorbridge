@@ -120,8 +120,9 @@ The overall system orchestrates 13 specialized tasks across 3 physically separat
 | **`webdav_sync_task`**| ESP32-S3 (Core 0) | **3** | 8 KB | Graceful Shutdown | LwIP TLS 1.3 | Automatic GPX tour upload via home Wi-Fi upon ignition OFF. |
 | **`rear_nmea_task`** | RP2040 (Core 0) | **High**| 2 KB | 10 Hz DMA | UART0 (460.8k Baud) | High-speed UBX/NMEA parsing & 1-PPS timecode capture. |
 | **`rear_lora_task`** | RP2040 (Core 1) | **High**| 2 KB | SX1262 IRQ | SPI0 Bus | 868 MHz LoRa mesh packet scheduling & emergency voice. |
-| **`front_ptt_task`** | ESP32-C3 | **24** | 2 KB | GPIO 0 Edge ISR | ESP-NOW TX Queue | Transmits handlebar PTT transitions in under $0{,}9\,\text{ms}$. |
+| **`front_ptt_task`** | ESP32-C3 | **24** | 2 KB | GPIO 0 Edge ISR | ESP-NOW TX Queue | Transmits handlebar PTT: 1x short = radio PTT via ESP-NOW in $< 0{,}9\,\text{ms}$; 2x short = Action Cam Toggle; 1x long = HiLight Tag. |
 | **`front_mems_task`** | ESP32-C3 | **18** | 4 KB | 48 kHz DMA | Biquad Filter | Knowles SPH0645 MEMS acoustic A-weighting & RMS tracking. |
+| **`front_cam_ble_task`**| ESP32-C3 | **12** | 4 KB | Event / KL15 ISR | NimBLE Client | Controls GoPro / Insta360 / DJI over BLE; triggers instant auto-stop (fuel-stop filter) upon ignition off with $C_{\text{BUF}}$ power reserve. |
 | **`front_pwr_task`** | ESP32-C3 | **10** | 2 KB | 10 Hz Timer | GPIO Load Switch | TPS2051B 1-click cold restart (2.5s) & Auto-Café 60s timer. |
 
 ---

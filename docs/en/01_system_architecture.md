@@ -40,12 +40,13 @@ Classic motorcycle communication systems are historically fragmented:
   │                                                                                         │
   ▼ 2.4 GHz Ultra-Low-Latency Wireless Link (ESP-NOW < 3ms & BLE 5.0 2M-PHY)                │
 ┌───────────────────────────────────────────────────────────────────────────────────────────┤
-│ 8. COCKPIT SUBSYSTEM: Wireless Smart Fairing & 4-Port Power Hub (Front Fairing)           │
-│ • 4-Port High-Power DCDC USB Hub (2x USB-C PD, 2x USB-A for Phone, Cam, GPS, Internal)   │
+│ 8. COCKPIT SUBSYSTEM: Wireless Universal Front Node (Smart Fairing Controller)             │
+│ • Automotive 2-Port USB 2.0 Hub (Microchip USB2512B) for Boom! Box & CarPlay Adapter       │
+│ • Switched CarPlay Port via TI TPS2051B (Controlled 2.5s Cold Reboot & 60s Auto-Café)      │
 │ • Digital I2S MEMS Ambient Mic with ePTFE Acoustic Vent (Edge RMS Noise Level Tracking)   │
 │ • Hardwired Handlebar PTT Pushbutton Input (Direct GPIO Interrupt, 100% Battery-Free!)    │
-│ • Optional Front CAN-Bus Transceiver (for Bikes with Diagnostic/TFT CAN in Fairing)       │
-│ • Only Single Vehicle Wire Needed: Rugged 2-Core 12V Power Cable (Zero Signal Flexing!)   │
+│ • Integrated Cockpit CAN-Bus Transceiver (TCAN334G with 120 Ohm) for Fairing TFT Displays │
+│ • Only Single Vehicle Wire Needed: Rugged 2-Core 12V Power Cable (KL15 / GND)              │
 └───────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -141,17 +142,29 @@ All system signals converge at the central HD26 flanged connector:
 * **Result:** The Boom! Box GTS unlocks Apple CarPlay and Android Auto on the 6.5" or 12.3" touchscreen immediately — **without requiring the \$350 WHIM module** or unreliable jumper bypass plugs.
 * **Seamless Audio Ducking:** Boom! Box navigation announcements are prioritized and smoothly blended over active intercom conversations with adjustable ducking ($-12\,\text{dB}$).
 
-#### 5.1.2 Wireless Smart Fairing & 4-Port Power Hub
-To eliminate fragile signal wiring harnesses through the flexed steering head and provide high-current cockpit charging:
-* **Wireless RF Bridge to Central Box:** An autonomous controller node (ESP32-C3 / nRF52840) inside the fairing communicates via **ESP-NOW ($< 3\,\text{ms}$ latency)** and **BLE 5.0 (2M-PHY)** directly to the Central Box.
-* **4-Port High-Power DCDC USB Hub:**
-  * **Port 1 (USB-C PD 30W):** Rapid charging for smartphone running GPS navigation or Wireless CarPlay.
-  * **Port 2 (USB-C 15W):** Continuous power for helmet or fairing action cams (GoPro / Insta360).
-  * **Port 3 (USB-A 10W):** Power supply for dedicated motorcycle GPS (Garmin Zumo / TomTom Rider).
-  * **Port 4 (USB-A internal):** Feeds the wireless CarPlay/Android Auto dongle (*Ottocast / CarlinKit*) on the Boom! Box USB branch with glovebox cutoff switch.
-* **Digital I2S MEMS Ambient Microphone (Knowles):** Surface-mounted on the fairing node PCB behind an IP67 ePTFE acoustic membrane. The local MCU calculates ambient road/engine noise levels (dB-A / RMS) via Edge-DSP and streams compact telemetry to the Central Box for dynamic helmet volume AGC.
-* **Direct Wired Handlebar PTT (100% Battery-Free):** The handlebar push-to-talk button wires directly into the front node's interrupt GPIO. Eliminates coin-cell battery failure in freezing winter weather!
-* **Minimal Bike Wiring:** The entire fairing system requires only **a single 2-core 12V automotive power lead** (tapped at the headlight or accessory circuit). Zero signal wires crossing the steering head.
+#### 5.1.2 Wireless Universal Front Node, Automotive USB Hub & Action Cam Subsystem (PCBA 05)
+To eliminate fragile signal wiring harnesses through the flexed steering head and provide uninterrupted infotainment, action cam, and PTT connectivity in the cockpit:
+* **Wireless RF Bridge to Central Box:** An autonomous controller node (ESP32-C3 RISC-V) inside the fairing communicates via **ESP-NOW ($< 0.9\,\text{ms}$ latency)** and **BLE 5.0 (2M-PHY)** directly to the Central Box.
+* **Automotive USB 2.0 High-Speed Subsystem (Microchip USB2512B & TI TPS2051B):**
+  * **Upstream Host Port (`J4`):** Connects directly to the USB input of the Harley-Davidson Boom! Box GTS / Skyline OS in the glovebox.
+  * **Downstream Port 1 (`J5` / Phone & Glovebox):** Uninterrupted $+5.0\,\text{V}$ VBUS (up to $2.0\,\text{A}$) for clean smartphone charging or navigation devices.
+  * **Downstream Port 2 (`J6` / Ottocast CarPlay):** Switched $+5.0\,\text{V}$ VBUS via `TI TPS2051B` power gate with software-controlled **2.5s cold restart** and **Auto-Café 60s timer** upon ignition off.
+  * **USB-C Service Port (`J7`):** Native diagnostic, calibration, and flashing receptacle (relocated to the right-side edge next to `D1`) for the ESP32-C3 controller.
+* **Dedicated 5V Action Cam Power Header (`J8` / Charge-Only):**
+  * Provides **clean $+5.0\,\text{V}$ DC charging power (up to $2.0\,\text{A}$)** for action cameras (GoPro, Insta360, DJI) – purposely **without data lines**, preventing the Boom! Box infotainment system from erroneously locking the camera into USB mass storage transfer mode.
+* **Integrated Action Cam BLE Shutter Bridge (GoPro, Insta360, DJI Action):**
+  * The ESP32-C3 controls cockpit action and 360° cameras directly via Bluetooth Low Energy (Open GoPro API, Insta360 Smart Remote GATT, DJI Remote profile) — completely eliminating the need for bulky separate handlebar remotes!
+  * **Handlebar Pushbutton Gesture Control (on `J3` / GPIO 0):**
+    * *Single short press ($< 400\,\text{ms}$):* Intercom / Radio PTT.
+    * *Double-click (2x short):* **Action Cam Start / Stop Recording Toggle** (with acoustic confirmation chime in helmet).
+    * *Long press ($> 1.5\,\text{s}$):* **HiLight Tag / Bookmark** in the active video track.
+  * **Insta360 Telemetry Injection:** Streams live GNSS telemetry (speed, lean angle, elevation) via BLE directly into the Insta360 video stream.
+* **Intelligent Standstill Filter & KL15 Buffer Capacitor (`C_BUF`):**
+  * A compact buffer capacitor ($470\dots 1000\,\mu\text{F}$ 10V polymer SMD) in the top-right PCB corner keeps the ESP32-C3 powered for $\approx 1\dots 2\,\text{seconds}$ when switched ignition (KL15) turns off.
+  * The controller instantly senses the falling edge on `KL15_SENSE` and fires the BLE *"Stop Recording"* packet to the camera within $30\,\text{ms}$.
+  * **Advantage:** Fuel stops, red lights, and pauses are automatically cut from video footage; the camera finalizes its MP4 container and enters sleep mode. Upon turning ignition back on, recording resumes seamlessly.
+* **Digital I2S MEMS Ambient Microphone (Knowles SPH0645LM4H-6):** Edge-DSP ambient road/engine noise computation for automatic helmet volume AGC.
+* **Minimal Bike Wiring:** Single **2-core 12V automotive power lead (`J1`)** tapped at switched KL15 ignition; on-board TI TPS54302 buck converter produces the $+5\,\text{V}$ rail.
 
 ### 5.2 BMW Motorrad ConnectedRide & CAN-Bus Integration
 * **Real-time Telemetry:** Via the TCAN334G transceiver in listen-only mode, the bridge captures wheel speeds, lean angles, and turn indicators.
