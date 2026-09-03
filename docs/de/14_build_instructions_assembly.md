@@ -139,15 +139,30 @@ Um ein vollwertiges OpenMotorBridge (v8.0) Gesamtsystem für ein Motorrad aufzub
 
 ---
 
-### 2.6 Kategorie F: Werkzeuge, Chemie & Hilfsmittel
+### 2.6 Kategorie F: Benötigte Werkzeuge, Messmittel & Montagechemie
 
-* **Lötkolben / Lötstation:** Mit feiner Spitze ($220 \dots 240\,^\circ\text{C}$) zum sauberen Einschmelzen der Ruthex-Gewindeeinsätze und Löten des Kabelbaums.
-* **Sechskantschlüssel (Inbus):** Größen $1{,}5\,\text{mm}$ (M2), $2{,}0\,\text{mm}$ (M2.5), $2{,}5\,\text{mm}$ (M3) und $3{,}0\,\text{mm}$ (M4/M5).
-* **Schraubensicherung:** *Loctite 243* (blau, mittelfest) für alle Schraubverbindungen am Motorrad gegen Vibrationslösen.
-* **Silikonfett / Dichtungsfett:** Für die O-Ring-Dichtschnüre und Kassettenlippen (verhindert Versprödung und Reibung).
-* **Elektronik-Schutzlack (Conformal Coating):** *Peters Elpeguard SL 1307* oder *Electrolube UR5041* Polyurethanlack (IPC-CC-830B).
-* **Crimpzange:** Für JST-SH/GH Kontakte und Kfz-Flachsteckhülsen.
-* **USB-C Datenkabel:** Zum Flashen der Firmware via PlatformIO / ESP-IDF.
+Für den sauberen, vibrationsfesten und IP67-dichten Zusammenbau aller Baugruppen wird folgendes Werkzeug- und Hilfsmittel-Set empfohlen:
+
+| Werkzeug / Hilfsmittel | Empfohlenes Modell / Spezifikation | Einsatzzweck im Projekt | Unverzichtbar? |
+| :--- | :--- | :--- | :---: |
+| **Inbusschlüssel-Satz (Kugelkopf)** | Größen 1,5 mm / 2,0 mm / 2,5 mm / 3,0 mm | M2 Schottwände, M2.5 PCBAs, M3 Gehäuse, M5 Radar | **Ja** |
+| **Gabelschlüssel / Nüsse** | SW 7 (M4 Muttern), SW 8 (SMA-Bulkheads), SW 10 (Batteriepol) | Konterung der Silentblöcke & SMA-HF-Buchsen | **Ja** |
+| **Feinmechanik-Drehmomentschlüssel**| $0{,}2 \dots 1{,}5\,\text{Nm}$ (z. B. Wera 7440) | Verzugsfreies Anziehen der M3 Deckel ($0{,}8\,\text{Nm}$) & PCBAs ($0{,}4\,\text{Nm}$) | *Empfohlen* |
+| **Regelbare Lötstation** | $200 \dots 450\,^\circ\text{C}$ (z. B. TS101, Pinecil, Weller) | Einschmelzen der Ruthex-Einsätze & Kabelbaum-Löten | **Ja** |
+| **Ruthex Einschmelzspitzen** | Adapter-Lötspitzen für M3 & M4 (Ruthex / CNC Kitchen) | Lotrechtes, wulstfreies Einsetzen der Messinggewinde ($220 \dots 240\,^\circ\text{C}$) | *Empfohlen* |
+| **Fein-Crimpzange (Miniatur)**| Engineer PA-09 oder IWISS IWS-2820M ($1{,}0 \dots 1{,}6\,\text{mm}$ Raster) | Crimpen von JST-SH (1.0 mm Kassetten) & JST-GH (1.25 mm Front-Knoten) | **Ja** |
+| **Automotive-Crimpzange** | Für unisolierte Kfz-Kabelschuhe ($0{,}5 \dots 1{,}5\,\text{mm}^2$) | Crimpen der 12V Flachstecker & M6 Ringösen an Batteriepolen | **Ja** |
+| **Präzisions-Abisolierzange** | $0{,}08 \dots 1{,}0\,\text{mm}^2$ (AWG 28–18, z. B. Knipex 12 62 180) | Sauberes Abisolieren der FLRY-B Leitungen ohne Aderkerbung | **Ja** |
+| **Elektronik-Seitenschneider** | Watenfrei (z. B. Knipex Super Knips 78 03 125) | Bündiges Kürzen von Drähten, Pins und Kabelbindern ohne scharfe Grate | **Ja** |
+| **Heißluftgebläse / Heißluftföhn** | Mit Reduzierdüse ($150 \dots 300\,^\circ\text{C}$) | Schrumpfen von Schmelzkleber-Schrumpfschläuchen am Kabelbaum | **Ja** |
+| **ESD-Präzisionspinzette** | Fein, abgewinkelt, kunststoffbeschichtet | Zerstörungsfreies, senkrechtes Aufdrücken von Murata MM8030 & U.FL Steckern | **Ja** |
+| **Digitalmultimeter (DMM)** | Mit Durchgangsprüfer (Piepser) & mV/mA-Messung | Durchgangsprüfung Kabelbaum, Prüfung Ruhestrom & 5V/3.3V Schienen | **Ja** |
+| **Labornetzteil mit Strombegrenzung** | $0 \dots 30\,\text{V DC}, 0 \dots 3\,\text{A}$ (einstellbare Strombegrenzung) | Erstinbetriebnahme bei 12.0V / 150mA zur sicheren Kurzschluss-Vermeidung | **Ja** |
+| **Silikon-Dichtungsfett** | OKS 1110 oder Liqui Moly Silikonfett (transparent, dielektrisch) | Schmierung der Silikonschnüre, EPDM-Kämme & Kassettenlippen | **Ja** |
+| **Schraubensicherung (Loctite 243)**| Mittelfest (blau) | Schwingungsschutz aller Schrauben gegen Motorrad-Vibrationen | **Ja** |
+| **Elektronik-Schutzlack (Conformal)** | Peters Elpeguard SL 1307 oder Electrolube UR5041 (IPC-CC-830B) | Vollflächige Feuchte- & Salzsprühnebel-Versiegelung aller PCBAs | *Empfohlen* |
+| **Skalpell / Cuttermesser** | Mit frischer Klinge | Gratfreies Ablängen der Silikon-Dichtschnur & EPDM-Zuschnitte | **Ja** |
+| **USB-C Datenkabel** | Hochwertiges USB 2.0/3.0 Datenkabel (kein reines Ladekabel!) | Flashen von ESP32-S3, RP2040 und ESP32-C3 via PlatformIO | **Ja** |
 
 ---
 

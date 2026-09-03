@@ -191,5 +191,21 @@ Dieses Dokument enthält die vollständige Bauteilliste (Bill of Materials) und 
 | **USB-C Ladekabel (Handschuhf.)**| USB-C Stecker/Stecker ($1{,}0\,\text{m}$, 90°-Winkel, PUR)| Anker / Baseus | 1 Stk. | Smartphone-Ladekabel von J2 durch vorderen Dichtkamm |
 | **JST-GH Crimpstecker-Set** | JST-GH 1.25mm 2-Pin Gehäuse + Crimpkontakte | JST / Mouser | 2 Sätze| Vorkonfektionierte Litzen für J3 (PTT) & J7 (12V) durch linken Kamm |
 
+---
+
+## 11. Benötigte Werkzeuge & Fertigungshilfsmittel (Werkstatt-Ausstattung)
+
+Für die Montage aller 5 Baugruppen, die Kabelkonfektionierung und die Erstinbetriebnahme wird folgende Mindestausstattung an Werkzeugen und Montagechemie benötigt (Details siehe [Kapitel 14, Abschnitt 2.6](file:///Users/schmidtm/openMotorBridge/docs/de/14_build_instructions_assembly.md#26-kategorie-f-ben%C3%B6tigte-werkzeuge-messmittel--montagechemie)):
+
+| Werkzeug-Kategorie | Enthaltene Werkzeuge & Spezifikation | Hauptzweck im OpenMotorBridge-Aufbau |
+| :--- | :--- | :--- |
+| **Mechanik & Schrauben** | Inbus 1,5 / 2,0 / 2,5 / 3,0 mm; Gabelschlüssel SW 7, 8, 10; Drehmomentschlüssel ($0{,}2 \dots 1{,}5\,\text{Nm}$) | Verzugsfreies Verschrauben aller Gehäuse, PCBAs und SMA-Buchsen |
+| **Thermisches Fügen** | Lötstation ($200 \dots 450\,^\circ\text{C}$) mit Ruthex M3/M4 Einschmelzspitzen & feiner Lötspitze | Lotrechtes Einschmelzen der 12x Messinggewinde; Kabelbaumlötung |
+| **Kabel- & Crimpmittel** | Fein-Crimpzange (Engineer PA-09 / IWISS IWS-2820M); Kfz-Crimpzange; Abisolierzange; Heißluftföhn | Konfektionierung von JST-SH (1.0 mm), JST-GH (1.25 mm) und Schrumpfschläuchen |
+| **HF- & Feinelektronik** | ESD-Präzisionspinzette (abgewinkelt, kunststoffbeschichtet) | Zerstörungsfreies Aufstecken der Murata MM8030 und U.FL Koax-Stecker |
+| **Montagechemie & Dichten**| OKS 1110 / Liqui Moly Silikonfett; Loctite 243 mittelfest; Peters Elpeguard Conformal Coating | IP67-Gleitdichtung, Vibrationssicherung und Feuchteschutz der Leiterplatten |
+| **Prüf- & Flash-Hardware**| Digitalmultimeter; Labornetzteil mit Strombegrenzung ($12\,\text{V} / 150\,\text{mA}$); USB-C Datenkabel | Kurzschluss-Schutz, Spannungs-Check und Firmware-Flash aller 3 Controller |
+
+
 
 

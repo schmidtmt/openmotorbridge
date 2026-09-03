@@ -191,5 +191,21 @@ This document provides the complete Bill of Materials (BOM) and manufacturing sp
 | **USB-C Glovebox Cable (Front)**| Right-angle USB-C male-to-male ($1.0\,\text{m}$, PUR/Nylon) | Anker / Baseus | 1 pc | Smartphone charging from J2 via front cable gland |
 | **JST-GH Connector Kit (Left)** | JST-GH 1.25mm 2-pin female housings + crimp terminals | JST / Mouser | 2 sets | Pre-crimped harness leads for J3 (PTT) & J7 (12V) |
 
+---
+
+## 11. Required Tools & Workshop Equipment
+
+To assemble all 5 subassemblies, crimp the harness, and perform commissioning, the following minimum equipment and assembly chemicals are required (for details, see [Chapter 14, Section 2.6](file:///Users/schmidtm/openMotorBridge/docs/en/14_build_instructions_assembly.md#26-category-f-required-tools-measurement-equipment--assembly-chemicals)):
+
+| Tool Category | Tools & Specification | Primary Project Purpose |
+| :--- | :--- | :--- |
+| **Mechanics & Screws** | Hex keys 1.5 / 2.0 / 2.5 / 3.0 mm; Wrenches 7, 8, 10 mm; Torque driver ($0.2 \dots 1.5\,\text{Nm}$) | Even tightening of enclosures, PCBAs, and SMA bulkheads |
+| **Thermal Assembly** | Soldering station ($200 \dots 450\,^\circ\text{C}$) with Ruthex M3/M4 tips & fine chisel tip | Perpendicular insertion of 12x brass inserts; harness soldering |
+| **Crimp & Harnessing** | Micro-crimper (Engineer PA-09 / IWISS IWS-2820M); Automotive crimper; Wire stripper; Heat gun | Crimping JST-SH (1.0 mm), JST-GH (1.25 mm), and dual-wall heatshrink |
+| **RF & Precision Electronics**| ESD precision tweezers (curved, plastic/ceramic coated) | Safe perpendicular mating of Murata MM8030 and U.FL coax plugs |
+| **Chemicals & Sealing** | OKS 1110 / Liqui Moly silicone grease; Loctite 243 threadlocker; Conformal coating | IP67 sliding seal lubrication, vibration locking, and PCB humidity protection |
+| **Testing & Flashing** | Digital multimeter; Benchtop power supply with current limit ($12\,\text{V} / 150\,\text{mA}$); USB-C cable | Short-circuit prevention, rail validation, and firmware flashing |
+
+
 
 

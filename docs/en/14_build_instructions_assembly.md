@@ -139,15 +139,30 @@ To build a fully featured OpenMotorBridge (v8.0) installation for one motorcycle
 
 ---
 
-### 2.6 Category F: Tools, Consumables & Assembly Aids
+### 2.6 Category F: Required Tools, Measurement Equipment & Assembly Chemicals
 
-* **Soldering Station:** With fine chisel/conical tip ($220 \dots 240\,^\circ\text{C}$) for heat-set insert installation and harness soldering.
-* **Hex Keys (Allen):** Sizes $1.5\,\text{mm}$ (M2), $2.0\,\text{mm}$ (M2.5), $2.5\,\text{mm}$ (M3), and $3.0\,\text{mm}$ (M4/M5).
-* **Threadlocker:** *Loctite 243* (Blue, medium strength) for all motorcycle mechanical screws against vibration.
-* **Silicone Grease:** Dielectric silicone paste for O-rings and cartridge gaskets (prevents aging and friction).
-* **Conformal Coating:** *Peters Elpeguard SL 1307* or *Electrolube UR5041* polyurethane coating (IPC-CC-830B).
-* **Crimping Tool:** For JST-SH/GH pins and automotive spade terminals.
-* **USB-C Data Cable:** For initial firmware flashing via PlatformIO / ESP-IDF.
+To assemble all subassemblies with vibration resistance and hermetic IP67 sealing, the following toolkit and consumables are recommended:
+
+| Tool / Equipment | Recommended Model / Specification | Purpose in the Project | Essential? |
+| :--- | :--- | :--- | :---: |
+| **Hex Key Set (Ball End)** | Sizes 1.5 mm / 2.0 mm / 2.5 mm / 3.0 mm | M2 bulkheads, M2.5 PCBAs, M3 cases, M5 radar hinge | **Yes** |
+| **Open Wrenches / Sockets** | 7 mm (M4 nuts), 8 mm (SMA bulkheads), 10 mm (Battery terminal) | Tightening silentblock nuts & SMA RF receptacles | **Yes** |
+| **Precision Torque Screwdriver**| $0.2 \dots 1.5\,\text{Nm}$ (e.g. Wera 7440) | Even torque on M3 lids ($0.8\,\text{Nm}$) & PCBAs ($0.4\,\text{Nm}$) | *Recommended* |
+| **Adjustable Soldering Station**| $200 \dots 450\,^\circ\text{C}$ (e.g. TS101, Pinecil, Weller) | Heat-set insert installation & harness soldering | **Yes** |
+| **Ruthex Heat-Set Tips** | Dedicated brass soldering tips for M3 & M4 (Ruthex / CNC Kitchen)| Perpendicular, ridge-free insert seating ($220 \dots 240\,^\circ\text{C}$) | *Recommended* |
+| **Micro-Crimp Pliers** | Engineer PA-09 or IWISS IWS-2820M ($1.0 \dots 1.6\,\text{mm}$ pitch) | Crimping JST-SH (1.0 mm Cartridges) & JST-GH (1.25 mm Front Node) | **Yes** |
+| **Automotive Crimper** | For uninsulated open-barrel automotive terminals ($0.5 \dots 1.5\,\text{mm}^2$)| 12V spade terminals & M6 battery terminal ring lugs | **Yes** |
+| **Precision Wire Stripper** | $0.08 \dots 1.0\,\text{mm}^2$ (AWG 28–18, e.g. Knipex 12 62 180) | Nick-free stripping of thin FLRY-B wires | **Yes** |
+| **Flush Wire Cutters** | Precision electronics diagonal cutter (e.g. Knipex Super Knips) | Flush cuts on wires, pins, and zip-ties without sharp burrs | **Yes** |
+| **Heat Gun / Hot Air Blower**| With reduction nozzle ($150 \dots 300\,^\circ\text{C}$) | Shrinking dual-wall adhesive-lined heatshrink tubing on harness | **Yes** |
+| **ESD Precision Tweezers** | Fine curved plastic/ceramic tipped tweezers | Damage-free perpendicular snapping of Murata MM8030 & U.FL plugs | **Yes** |
+| **Digital Multimeter (DMM)** | With continuity buzzer & mV/mA ranges | Harness continuity checking, quiescent current & 5V/3.3V rails | **Yes** |
+| **Benchtop Power Supply** | $0 \dots 30\,\text{V DC}, 0 \dots 3\,\text{A}$ (adjustable current limit) | Safe first power-up at 12.0V / 150mA to prevent short-circuit damage | **Yes** |
+| **Dielectric Silicone Grease**| OKS 1110 or Liqui Moly Silicone Paste (transparent, dielectric) | Lubrication of silicone O-rings, EPDM combs & cartridge lips | **Yes** |
+| **Threadlocker (Loctite 243)** | Medium strength (blue) | Prevents motorcycle screw loosening under heavy vibrations | **Yes** |
+| **Conformal Coating** | Peters Elpeguard SL 1307 or Electrolube UR5041 (IPC-CC-830B) | Full PCB encapsulation against condensation and road salt spray | *Recommended* |
+| **Scalpel / Precision Knife** | With fresh sharp blade | Burr-free trimming of silicone cord gaskets & EPDM blocks | **Yes** |
+| **USB-C Data Cable** | High-quality USB 2.0/3.0 data cable (not a power-only cable!) | Flashing ESP32-S3, RP2040, and ESP32-C3 via PlatformIO | **Yes** |
 
 ---
 
