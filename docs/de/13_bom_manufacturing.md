@@ -84,12 +84,13 @@ Dieses Dokument enthält die vollständige Bauteilliste (Bill of Materials) und 
 
 ## 6. Mechanik- & Gehäuse-BOM (3D-Druck MJF PA12 & Normteile)
 
-### 6.1 Druckdateien-Übersicht (15 Teile für 1 Fahrzeug)
-* **Zentralbox (3 Teile):** `main_box_lower_case.stl`, `main_box_mid_tray.stl`, `main_box_lid.stl`.
-* **Satelliten-Pods (6 Teile):** 3x `pod_base_housing.stl`, 3x `03_pod_bulkhead_partition.stl`.
-* **Kassetten (3 Teile):** `cartridge_sena_sled.stl` (oder Cardo), `cartridge_cardo_sled.stl` (oder Blindkassette), `cartridge_omm_transceiver_sled.stl`.
-* **Front-Knoten (2 Teile):** `front_node_lower_case.stl`, `front_node_upper_case.stl`.
-* **Heck-Radar Halter (1 Teil):** `pod3_radar_bracket.stl` (M5 GoPro-Schwenkarm für Pod 3).
+### 6.1 Druckdateien-Übersicht (17 Teile für 1 Fahrzeug)
+* **Zentralbox (3 Teile, PA12 / ASA):** `main_box_lower_case.stl`, `main_box_mid_tray.stl`, `main_box_lid.stl`.
+* **Satelliten-Pods (6 Teile, PA12 / ASA):** 3x `pod_base_housing.stl`, 3x `03_pod_bulkhead_partition.stl`.
+* **Kassetten (3 Teile, PA12 / ASA):** `cartridge_sena_sled.stl` (oder Cardo), `cartridge_cardo_sled.stl` (oder Blindkassette), `cartridge_omm_transceiver_sled.stl`.
+* **Front-Knoten Gehäuse (2 Teile, PA12 / ASA):** `front_node_lower_tub.stl`, `front_node_upper_lid.stl`.
+* **Front-Knoten Dichtungen & Kappe (2 Teile, TPU 95A / 85A):** `front_node_cable_glands_tpu.stl` (Paar Dichtkämme für Front-USB & Flanken-Signale), `front_node_usbc_cap_tpu.stl` (elastische USB-C Staubschutzkappe mit Haltekollier).
+* **Heck-Radar Halter (1 Teil, PA12 / ASA):** `pod3_radar_bracket.stl` (M5 GoPro-Schwenkarm für Pod 3).
 
 ---
 
@@ -186,5 +187,9 @@ Dieses Dokument enthält die vollständige Bauteilliste (Bill of Materials) und 
 | **Externe 2.4 GHz Mesh-Antenne**| 2.4 GHz Collinear Dipol (+5 dBi / +7 dBi) mit SMA-Stecker | Taoglas / Linx | 1 Stk. | Optionale High-Gain Antenne am Heck/Topcase |
 | **Externe 868 MHz LoRa-Antenne**| 868 MHz Monopol / Dipol (+3 dBi / +5 dBi) mit SMA-Stecker | Linx ANT-868 / Taoglas | 1 Stk. | Optionale Long-Range Bergpass-Antenne |
 | **Externe aktive GNSS-Antenne** | Aktiver Flachpuck (+28 dB LNA, 3.3V Phantomspeisung, SMA) | Taoglas AA.162 / Garmin | 1 Stk. | Optionale Dach-/Koffermontage bei verdecktem Heck |
+| **USB-A Flachbandkabel (Front)**| USB-A Stecker/Kupplung kurz ($10\dots 15\,\text{cm}$, 90°-Winkel)| Delock / Amazon | 1 Stk. | Ottocast-Anbindung an J1 durch vorderen Dichtkamm |
+| **USB-C Ladekabel (Handschuhf.)**| USB-C Stecker/Stecker ($1{,}0\,\text{m}$, 90°-Winkel, PUR)| Anker / Baseus | 1 Stk. | Smartphone-Ladekabel von J2 durch vorderen Dichtkamm |
+| **JST-GH Crimpstecker-Set** | JST-GH 1.25mm 2-Pin Gehäuse + Crimpkontakte | JST / Mouser | 2 Sätze| Vorkonfektionierte Litzen für J3 (PTT) & J7 (12V) durch linken Kamm |
+
 
 

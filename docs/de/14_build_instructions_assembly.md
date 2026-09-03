@@ -62,10 +62,12 @@ Um ein vollwertiges OpenMotorBridge (v8.0) Gesamtsystem für ein Motorrad aufzub
 | **Kassette 1 (Fahrer)** | [`cartridge_sena_sled.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_sena_sled.stl) *(oder Cardo)* | **1** | Kassetten-Schlitten für Fahrer-Headset (Sena 50S/60S oder Cardo Packtalk Edge) |
 | **Kassette 2 (Sozius)** | [`cartridge_cardo_sled.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_cardo_sled.stl) *(oder Blind)* | **1** | Kassetten-Schlitten für Zweit-Headset oder hermetische Blindkassette |
 | **Kassette 3 (Heckbürzel)**| [`cartridge_omm_transceiver_sled.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_omm_transceiver_sled.stl) | **1** | Heck-Kassette für RP2040 Coprozessor, GNSS-Patch und LoRa-Antenne |
-| **Front-Knoten Unterwanne** | [`front_node_lower_case.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_lower_case.stl) | **1** | Cockpit-Gehäusewanne mit AMPS-Lochbild, EPDM-Dichtkämmen & V-Rohrbett |
-| **Front-Knoten Deckel** | [`front_node_upper_case.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_upper_case.stl) | **1** | Gehäusedeckel mit Knowles MEMS Schalleintritt & O-Ring-Dichtnut |
+| **Front-Knoten Unterwanne** | [`front_node_lower_tub.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_lower_tub.stl) | **1** | Cockpit-Gehäusewanne mit AMPS-Lochbild, EPDM-Dichtkämmen & V-Rohrbett (PA12 / ASA) |
+| **Front-Knoten Deckel** | [`front_node_upper_lid.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_upper_lid.stl) | **1** | Gehäusedeckel mit Knowles MEMS Schalleintritt & O-Ring-Dichtnut (PA12 / ASA) |
+| **Front-Knoten Dichtkämme** | [`front_node_cable_glands_tpu.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_cable_glands_tpu.stl) | **1 Paar** | Elastische Dichtkämme für Front (3x USB) & Flanke (3x Signale) (TPU 95A / 85A) |
+| **Front-Knoten USB-C Kappe**| [`front_node_usbc_cap_tpu.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_usbc_cap_tpu.stl) | **1** | Elastische Staubschutzkappe mit Haltekollier für Service-Port (TPU 95A / 85A) |
 | **Heck-Radar Kombihalter** | [`pod3_radar_bracket.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod3_radar_bracket.stl) | **1** | M5 GoPro-Ausleger zur horizontalen Ausrichtung des Garmin Varia / mmWave Radars |
-| **Summe 3D-Druckteile** | | **15** | **Vollständiger Teilesatz für 1 Gesamtsystem** |
+| **Summe 3D-Druckteile** | | **17** | **Vollständiger Teilesatz für 1 Gesamtsystem (15x PA12/ASA + 2x TPU)** |
 
 ---
 
@@ -131,6 +133,9 @@ Um ein vollwertiges OpenMotorBridge (v8.0) Gesamtsystem für ein Motorrad aufzub
 | **U.FL Koaxial-Pigtail** | IPEX MHF1 / U.FL auf RP-SMA Bulkhead IP67 (150 mm, RG-178)| **1** | Koaxial-Zuleitung für Front-Knoten ESP32-C3 externe Antenne |
 | **SMA IP67 Schutzkappen** | Messing vernickelt mit Dichtungs-O-Ring (Rändelkappe) | **4** | Schutz ungenutzter SMA-Buchsen (interne Antennen bleiben aktiv) |
 | **Externe Antennen (Opt.)** | 2.4G Collinear (+5 dBi), 868M LoRa (+3 dBi), aktive GNSS-Puck | *nach Wunsch*| High-Gain Antennen für maximale Reichweite und freie Himmelsicht |
+| **USB-A Flachbandkabel (Front)**| USB-A Stecker/Kupplung kurz ($10\dots 15\,\text{cm}$, 90°-Winkel)| **1** | Ottocast-Anbindung an J1 durch vorderen Dichtkamm |
+| **USB-C Ladekabel (Handschuhf.)**| USB-C Stecker/Stecker ($1{,}0\,\text{m}$, 90°-Winkel, PUR)| **1** | Smartphone-Ladekabel von J2 durch vorderen Dichtkamm |
+| **JST-GH Crimpstecker-Set** | JST-GH 1.25mm 2-Pin Gehäuse + Crimpkontakte | **2 Sätze**| Vorkonfektionierte Litzen für J3 (PTT) & J7 (12V) durch linken Kamm |
 
 ---
 
@@ -209,8 +214,19 @@ Um ein vollwertiges OpenMotorBridge (v8.0) Gesamtsystem für ein Motorrad aufzub
 4. **HF-Antennenpigtail (Optional / Verkleidung):**
    * Bei Nutzung einer externen Antenne: U.FL / IPEX-MHF1 Stecker senkrecht auf die Antennenbuchse des ESP32-C3-WROOM-02U Moduls aufklicken.
    * Das Koaxialkabel führt entweder durch die EPDM-Dichtkämme zu einer flexiblen 2.4 GHz Klebeantenne (z. B. Molex 146153) an der Innenseite der Frontverkleidung oder auf eine RP-SMA Flanschbuchse.
-5. **Verkabelung & EPDM-Kämme:** Zuleitungskabel in die EPDM-Dichtkämme einlegen und Deckel mit Silikon-Rundschnur und 4x M3 x 20 mm Schrauben verschließen.
-6. **USB-C Kappe:** Silikon-Schutzkappe am Port `J2` befestigen.
+5. **Kabel in Front- & Flankenöffnungen einlegen:**
+   * **Vordere Öffnung (Südwand, 3 Kanäle $\varnothing 4{,}2\,\text{mm}$ für USB):**
+     * Kurzes USB-A Flachbandkabel in Kanal 1 einlegen und an Port `J1` (geschalteter VBUS für Ottocast Dongle) anstecken.
+     * $1{,}0\,\text{m}$ langes USB-C Ladekabel in Kanal 2 einlegen und an Port `J2` (Handschuhfach) anstecken.
+     * Kanal 3 dient als Reserve. Die elastische USB-C Staubschutzkappe (`front_node_usbc_cap_tpu.stl`) mit dem Haltekollier am Service-Port fixieren.
+   * **Linke Öffnung (Westwand, 3 Kanäle $\varnothing 3{,}2\,\text{mm}$ für Signale & Power):**
+     * 12V Bordnetzzuleitung (KL15 & GND) mit JST-GH 2-Pin Stecker in Kanal 1 einlegen und an `J7` einrasten.
+     * Lenker-PTT Steuerleitung mit JST-GH 2-Pin Stecker in Kanal 2 einlegen und an `J3` einrasten.
+     * Kanal 3 dient als Reserve (oder für CAN-Bus Leitung).
+6. **Dichtkämme einsetzen & Deckel verschließen:**
+   * Einen dünnen Hauch Silikonfett auf die Außenflanken der EPDM/TPU Dichtkämme auftragen.
+   * Kämme in die Gehäusetaschen einschieben (die Schlitze schließen sich um die Kabel).
+   * Umlaufende Silikon-Rundschnur ($\varnothing 1{,}5\,\text{mm}, 30\,\text{cm}$) in die Deckelnut einlegen und mit 4x M3 x 20 mm Schrauben über Kreuz festziehen (die Dichtkämme werden dabei um ca. $15\,\%$ komprimiert und dichten hermetisch IP67 ab).
 
 ### 5.2 Montage am Fahrzeug (4 Optionen)
 

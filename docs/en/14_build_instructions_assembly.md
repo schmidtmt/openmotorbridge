@@ -62,10 +62,12 @@ To build a fully featured OpenMotorBridge (v8.0) installation for one motorcycle
 | **Cartridge 1 (Rider)** | [`cartridge_sena_sled.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_sena_sled.stl) *(or Cardo)* | **1** | Hot-swap sled for primary rider headset (Sena 50S/60S or Cardo Packtalk Edge) |
 | **Cartridge 2 (Passenger)**| [`cartridge_cardo_sled.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_cardo_sled.stl) *(or Blank)* | **1** | Hot-swap sled for passenger headset or hermetic blank protector cartridge |
 | **Cartridge 3 (Tail)** | [`cartridge_omm_transceiver_sled.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_omm_transceiver_sled.stl) | **1** | Rear pod sled holding RP2040 coprocessor, active GNSS patch, and 868 MHz LoRa helical antenna |
-| **Front Node Lower Tub** | [`front_node_lower_case.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_lower_case.stl) | **1** | Cockpit fairing tub with AMPS hole pattern ($30 \times 38\,\text{mm}$), EPDM cable combs & V-bed |
-| **Front Node Upper Lid** | [`front_node_upper_case.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_upper_case.stl) | **1** | Front lid with acoustic sound entry port for Knowles MEMS & perimeter gasket groove |
+| **Front Node Lower Tub** | [`front_node_lower_tub.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_lower_tub.stl) | **1** | Cockpit fairing tub with AMPS hole pattern ($30 \times 38\,\text{mm}$), EPDM cable combs & V-bed (PA12 / ASA) |
+| **Front Node Upper Lid** | [`front_node_upper_lid.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_upper_lid.stl) | **1** | Front lid with acoustic sound entry port for Knowles MEMS & perimeter gasket groove (PA12 / ASA) |
+| **Front Node Cable Glands**| [`front_node_cable_glands_tpu.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_cable_glands_tpu.stl) | **1 Pair** | Elastomeric cable glands for Front (3x USB) & Left (3x Signals/Power) (TPU 95A / 85A) |
+| **Front Node USB-C Cap** | [`front_node_usbc_cap_tpu.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_usbc_cap_tpu.stl) | **1** | Elastomeric protective dust cap with retaining tether for service port (TPU 95A / 85A) |
 | **Rear Radar Dual Bracket**| [`pod3_radar_bracket.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod3_radar_bracket.stl) | **1** | M5 GoPro-style swivel hinge for horizontal leveling of Garmin Varia / mmWave radar |
-| **Total 3D Printed Parts** | | **15** | **Complete hardware set for 1 motorcycle installation** |
+| **Total 3D Printed Parts** | | **17** | **Complete hardware set for 1 motorcycle installation (15x PA12/ASA + 2x TPU)** |
 
 ---
 
@@ -131,6 +133,9 @@ To build a fully featured OpenMotorBridge (v8.0) installation for one motorcycle
 | **U.FL Coaxial Pigtail** | IPEX MHF1 / U.FL to RP-SMA Bulkhead IP67 (150 mm, RG-178)| **1** | Coaxial feed for Front Node ESP32-C3 external antenna |
 | **SMA IP67 Protective Caps** | Nickel-plated brass with internal O-ring (knurled cap)| **4** | Waterproof seal for unpopulated SMA ports (internal antennas stay active) |
 | **External Antennas (Opt.)**| 2.4G Collinear (+5 dBi), 868M LoRa (+3 dBi), Active GNSS Puck | *Optional* | High-gain external antennas for long range & unobstructed sky view |
+| **USB-A Flat Ribbon Cable (Front)**| Short 90° USB-A male-to-female adapter ($10\dots 15\,\text{cm}$)| **1** | Ottocast connection to J1 via front cable gland |
+| **USB-C Glovebox Cable (Front)**| Right-angle USB-C male-to-male ($1.0\,\text{m}$, PUR/Nylon) | **1** | Smartphone charging from J2 via front cable gland |
+| **JST-GH Connector Kit (Left)** | JST-GH 1.25mm 2-pin female housings + crimp terminals | **2 sets** | Pre-crimped harness leads for J3 (PTT) & J7 (12V) |
 
 ---
 
@@ -209,8 +214,19 @@ To build a fully featured OpenMotorBridge (v8.0) installation for one motorcycle
 4. **RF Antenna Pigtail (Optional / Fairing):**
    * When using an external fairing antenna: Snap the U.FL / IPEX-MHF1 plug onto the ESP32-C3-WROOM-02U module antenna port.
    * Route the thin coax lead through the EPDM rubber combs to an internal adhesive dipole (e.g. Molex 146153) or an RP-SMA bulkhead.
-5. **Wiring & Gaskets:** Route lead wires through the EPDM rubber combs, seat the silicone cord gasket, and screw down the lid using 4x M3 x 20 mm bolts.
-6. **Dust Cap:** Attach the silicone tethered dust cap over the USB-C port `J2`.
+5. **Insert Cables into Front & Left Enclosure Openings:**
+   * **Front Opening (South Wall, 3x $\varnothing 4.2\,\text{mm}$ slitted channels for USB):**
+     * Insert the short USB-A flat ribbon cable into Channel 1 and connect to Port `J1` (switched VBUS for Ottocast Dongle).
+     * Insert the $1.0\,\text{m}$ right-angle USB-C charging cable into Channel 2 and connect to Port `J2` (glovebox charging).
+     * Channel 3 serves as spare. Seat the elastomeric USB-C service dust cap (`front_node_usbc_cap_tpu.stl`) with its collar over the service port.
+   * **Left Opening (West Wall, 3x $\varnothing 3.2\,\text{mm}$ slitted channels for Signals & Power):**
+     * Route 12V vehicle power (KL15 & GND) with JST-GH 2-pin connector into Channel 1 and latch into `J7`.
+     * Route Handlebar PTT switch lead with JST-GH 2-pin connector into Channel 2 and latch into `J3`.
+     * Channel 3 serves as spare (or CAN-Bus twisted pair).
+6. **Seat Glands & Close Enclosure:**
+   * Lightly coat the outer flanks of the EPDM/TPU cable glands with silicone grease.
+   * Slide the combs into the enclosure cutouts (the slits close snugly around the wires).
+   * Lay the $\varnothing 1.5\,\text{mm}$ silicone O-ring cord ($30\,\text{cm}$) into the lid perimeter groove and tighten the 4x M3 x 20 mm bolts in a cross pattern (compressing the glands by approx. 15% for hermetic IP67 sealing).
 
 ### 5.2 Motorcycle Mounting (4 Options)
 

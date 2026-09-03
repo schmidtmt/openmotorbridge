@@ -84,12 +84,13 @@ This document provides the complete Bill of Materials (BOM) and manufacturing sp
 
 ## 6. Mechanical CAD & 3D Printing BOM (MJF PA12 / ASA)
 
-### 6.1 CAD / STL Asset Overview (15 Parts for 1 Motorcycle)
-* **Central Main Box (3 parts):** `main_box_lower_case.stl`, `main_box_mid_tray.stl`, `main_box_lid.stl`.
-* **Satellite Pods (6 parts):** 3x `pod_base_housing.stl`, 3x `03_pod_bulkhead_partition.stl`.
-* **Cartridges (3 parts):** `cartridge_sena_sled.stl` (or Cardo), `cartridge_cardo_sled.stl` (or Blank), `cartridge_omm_transceiver_sled.stl`.
-* **Universal Front Node (2 parts):** `front_node_lower_case.stl`, `front_node_upper_case.stl`.
-* **Rear Radar Bracket (1 part):** `pod3_radar_bracket.stl` (M5 GoPro swivel arm for Pod 3).
+### 6.1 CAD / STL Asset Overview (17 Parts for 1 Motorcycle)
+* **Central Main Box (3 parts, PA12 / ASA):** `main_box_lower_case.stl`, `main_box_mid_tray.stl`, `main_box_lid.stl`.
+* **Satellite Pods (6 parts, PA12 / ASA):** 3x `pod_base_housing.stl`, 3x `03_pod_bulkhead_partition.stl`.
+* **Cartridges (3 parts, PA12 / ASA):** `cartridge_sena_sled.stl` (or Cardo), `cartridge_cardo_sled.stl` (or Blank), `cartridge_omm_transceiver_sled.stl`.
+* **Universal Front Node Housing (2 parts, PA12 / ASA):** `front_node_lower_tub.stl`, `front_node_upper_lid.stl`.
+* **Front Node Glands & Dust Cap (2 parts, TPU 95A / 85A):** `front_node_cable_glands_tpu.stl` (Pair of South USB & West signal combs), `front_node_usbc_cap_tpu.stl` (Elastomeric USB-C dust cap with tether).
+* **Rear Radar Bracket (1 part, PA12 / ASA):** `pod3_radar_bracket.stl` (M5 GoPro swivel arm for Pod 3).
 
 ---
 
@@ -186,5 +187,9 @@ This document provides the complete Bill of Materials (BOM) and manufacturing sp
 | **External 2.4 GHz Mesh Antenna**| 2.4 GHz Collinear Dipole (+5 dBi / +7 dBi) with SMA Male | Taoglas / Linx | 1 pc | Optional high-gain antenna on tail / topcase |
 | **External 868 MHz LoRa Antenna**| 868 MHz Monopole / Dipole (+3 dBi / +5 dBi) with SMA Male | Linx ANT-868 / Taoglas | 1 pc | Optional long-range mountain pass antenna |
 | **External Active GNSS Antenna**| Active Flat Puck (+28 dB LNA, 3.3V phantom power, SMA) | Taoglas AA.162 / Garmin | 1 pc | Optional roof/luggage mount for clear sky view |
+| **USB-A Flat Ribbon Cable (Front)**| Short 90° USB-A male-to-female adapter ($10\dots 15\,\text{cm}$)| Delock / Amazon | 1 pc | Ottocast connection to J1 via front cable gland |
+| **USB-C Glovebox Cable (Front)**| Right-angle USB-C male-to-male ($1.0\,\text{m}$, PUR/Nylon) | Anker / Baseus | 1 pc | Smartphone charging from J2 via front cable gland |
+| **JST-GH Connector Kit (Left)** | JST-GH 1.25mm 2-pin female housings + crimp terminals | JST / Mouser | 2 sets | Pre-crimped harness leads for J3 (PTT) & J7 (12V) |
+
 
 
