@@ -180,4 +180,11 @@ This document provides the complete Bill of Materials (BOM) and manufacturing sp
 | **M8 Extension Cables (Pods)**| M8 6-Pin A-Coded PUR Shielded (1.0m / 1.5m) | Binder / Phoenix / Murr | 3 pcs | Pigtail to Pod 1, 2, and 3 Interconnect |
 | **M8 Extension Cable (Radar)**| M8 4-Pin A-Coded PUR Shielded (1.0m) | Binder / Phoenix / Murr | 1 pc | Connection to Garmin Varia / mmWave rear radar |
 | **Automotive Wire** | FLRY-B $0.5\,\text{mm}^2$ & $0.35\,\text{mm}^2$ (various colors) | Leoni / Helukabel | As req. | Bike harness per `central_breakout_harness_wirelist.csv` |
+| **Murata MM8030 Pigtails (Pod 3)**| Murata MM126036 to SMA Bulkhead IP67 (150 mm, RG-178)| Murata / Mouser | 3 pcs | Coaxial bypass for J3 (2.4G), J4 (868M), J5 (GNSS) |
+| **U.FL Pigtail (Front Node)**| IPEX MHF1 / U.FL to RP-SMA Bulkhead IP67 (150 mm, RG-178) | Taoglas / Molex | 1 pc | Coaxial lead for ESP32-C3 external fairing antenna |
+| **SMA IP67 Protective Caps** | Nickel-plated brass with internal O-ring (knurled cap)| Amphenol / Radiall | 4 pcs | Waterproof seal for unpopulated external SMA ports |
+| **External 2.4 GHz Mesh Antenna**| 2.4 GHz Collinear Dipole (+5 dBi / +7 dBi) with SMA Male | Taoglas / Linx | 1 pc | Optional high-gain antenna on tail / topcase |
+| **External 868 MHz LoRa Antenna**| 868 MHz Monopole / Dipole (+3 dBi / +5 dBi) with SMA Male | Linx ANT-868 / Taoglas | 1 pc | Optional long-range mountain pass antenna |
+| **External Active GNSS Antenna**| Active Flat Puck (+28 dB LNA, 3.3V phantom power, SMA) | Taoglas AA.162 / Garmin | 1 pc | Optional roof/luggage mount for clear sky view |
+
 

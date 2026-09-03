@@ -113,7 +113,7 @@ Um ein vollwertiges OpenMotorBridge (v8.0) Gesamtsystem für ein Motorrad aufzub
 
 ---
 
-### 2.5 Kategorie E: Kabelbaum, Steckverbinder & Pufferakku
+### 2.5 Kategorie E: Kabelbaum, Steckverbinder, Pufferakku & HF-Pigtails
 
 | Bauteil | Spezifikation / Typ | Stück | Zweck & Funktion |
 | :--- | :--- | :---: | :--- |
@@ -127,6 +127,10 @@ Um ein vollwertiges OpenMotorBridge (v8.0) Gesamtsystem für ein Motorrad aufzub
 | **KFZ-Sicherungshalter** | Wasserdichter Mini-Flachsicherungshalter IP67 + **2A Sicherung**| **1** | Absicherung der 12V Dauerplus-Leitung (KL30) direkt am Batteriepol |
 | **Automotive-Leitungen** | FLRY-B $0{,}5\,\text{mm}^2$ (Power/GND) und $0{,}35\,\text{mm}^2$ (Signale/Audio)| *nach Bedarf* | Fahrzeugkabelbaum nach [`central_breakout_harness_wirelist.csv`](file:///Users/schmidtm/openMotorBridge/hardware/production_packages/05_wiring_harness_spec/central_breakout_harness_wirelist.csv) |
 | **EPDM-Spannbänder** | UV- und ozonbeständiges EPDM ($\varnothing 45 \dots 75\,\text{mm}$) | **6** | Werkzeuglose Schnellmontage der Pods an Rahmen- & Sturzbügeln |
+| **Murata MM8030 Pigtails** | Murata MM126036 auf SMA-Bulkhead IP67 (150 mm, RG-178)| **3** | Koaxial-Bypass für Pod 3: J3 (2.4G), J4 (868M), J5 (GNSS) |
+| **U.FL Koaxial-Pigtail** | IPEX MHF1 / U.FL auf RP-SMA Bulkhead IP67 (150 mm, RG-178)| **1** | Koaxial-Zuleitung für Front-Knoten ESP32-C3 externe Antenne |
+| **SMA IP67 Schutzkappen** | Messing vernickelt mit Dichtungs-O-Ring (Rändelkappe) | **4** | Schutz ungenutzter SMA-Buchsen (interne Antennen bleiben aktiv) |
+| **Externe Antennen (Opt.)** | 2.4G Collinear (+5 dBi), 868M LoRa (+3 dBi), aktive GNSS-Puck | *nach Wunsch*| High-Gain Antennen für maximale Reichweite und freie Himmelsicht |
 
 ---
 
@@ -166,10 +170,31 @@ Um ein vollwertiges OpenMotorBridge (v8.0) Gesamtsystem für ein Motorrad aufzub
 3. **Zwischenboden & Akku:** Oberwanne aufsetzen, 1000 mAh LiPo in die Wanne legen und mit EPDM-Spannband sichern.
 4. **Dichtungen & Deckel:** Silikon-Rundschnur (Ø 1,5 mm) in die Deckelnut einlegen, Gore-Membran einkleben und mit 4x M3 x 40 mm Schrauben über Kreuz festziehen.
 
-### Schritt 2: Satelliten-Pods 1, 2 und Heck-Pod 3
+### Schritt 2: Satelliten-Pods 1, 2 und Heck-Pod 3 (Basisgehäuse & Schottwand)
 1. **Basisplatine einsetzen:** `openmotorbridge_pod_base` in das Pod-Gehäuse einschieben und M8-Buchse festziehen.
 2. **Schottwand fixieren:** Schottwand mit M2 Schrauben sichern.
-3. **Kassetten-Montage:** Kassettenplatine (`openmotorbridge_pod_cartridge`) in den Kassetten-Schlitten einklicken und OEM-Cradle (Sena Pogo-Leiste oder Cardo Air-Mount) anschließen.
+
+### Schritt 3: Headset-Kassetten 1 & 2 montieren (Fahrer & Sozius)
+1. **Platine einsetzen:** Kassettenplatine (`openmotorbridge_pod_cartridge`) in den Kassetten-Schlitten einklicken.
+2. **OEM-Cradle anschließen:** Flachbandkabel an Sena Pogo-Leiste oder Cardo Air-Mount verbinden.
+3. **Flanschdichtung:** Silikon-Formdichtung auf den Kassettenkragen aufziehen und mit Silikonfett benetzen.
+
+### Schritt 4: Heck-Kassette Pod 3 & HF-Pigtail-Montage (Dreifach-Koaxial-Bypass)
+1. **SMA-Bulkhead-Buchsen montieren:**
+   * Die 3x SMA-Flanschbuchsen der Murata MM126036 Pigtails von außen durch die vorbereiteten $\varnothing 6{,}5\,\text{mm}$ Bohrungen der Kassetten-Stirnwand führen.
+   * Der integrierte Silikon-O-Ring dichtet in der $\varnothing 9{,}5 \times 1{,}2\,\text{mm}$ Gehäusesenkung hermetisch ab.
+   * Von innen die Zahnscheibe auflegen und mit der Sechskantmutter (SW 8) handfest mit ca. $0{,}8\,\text{Nm}$ anziehen.
+2. **Koaxialkabel im Schlitten verlegen:**
+   * Die hochflexiblen RG-178 / 1.13mm Koaxialleitungen in den Längskanal am Schlittenboden einlegen.
+3. **Platine einschieben & Pigtails aufklicken:**
+   * Heck-Transceiver-Platine (`PCBA 04`) einsetzen und mit M2.5 Schrauben fixieren.
+   * Mit einer Kunststoff-Pinzette die rechtwinkligen Murata MM8030-Stecker senkrecht auf die SMD-Umschaltbuchsen aufdrücken, bis sie spürbar einrasten:
+     * `J3` $\rightarrow$ 2.4 GHz OpenMotorMesh Bypass
+     * `J4` $\rightarrow$ 868 MHz Semtech SX1262 LoRa Bypass
+     * `J5` $\rightarrow$ Multi-GNSS u-blox M9N Bypass (mit 3.3V Phantomspeisung)
+4. **Funktionsweise der automatischen Umschaltung (Plug & Play):**
+   * **Standardbetrieb (ohne externe Antennen):** Auf die SMA-Buchsen werden die IP67-Messing-Rändelkappen aufgeschraubt. Die internen Antennen (2.4 GHz IFA, 868 MHz Wendelantenne und 25x25 mm GNSS-Keramikpatch) arbeiten zu 100 % autark und wettergeschützt im Radom.
+   * **Externer Antennenbetrieb:** Wird eine externe Antenne (z. B. Taoglas Collinear am Heck oder aktive Dachantenne am Koffer) aufgeschraubt, hebt die interne Kontaktfeder in der Murata MM8030-Buchse mechanisch ab: Die interne Antenne wird mit $> 25\,\text{dB}$ Isolation entkoppelt und das HF-Signal mit minimalster Einfügedämpfung ($< 0{,}15\,\text{dB}$) auf die externe Antenne geleitet.
 
 ---
 
@@ -181,8 +206,11 @@ Um ein vollwertiges OpenMotorBridge (v8.0) Gesamtsystem für ein Motorrad aufzub
    * 4x M4 Messingeinsätze in das AMPS-Lochbild ($30 \times 38\,\text{mm}$) am Gehäuseboden einschmelzen.
 2. **Akustik-Membran einsetzen:** Hydrophobe Gore ePTFE-Membran über die Schallöffnung des Knowles MEMS Mikrofons kleben.
 3. **Platine montieren:** Front-Node Platine (`PCBA 05`) mit M2.5 Schrauben fixieren.
-4. **Verkabelung & EPDM-Kämme:** Zuleitungskabel in die EPDM-Dichtkämme einlegen und Deckel mit Silikon-Rundschnur und 4x M3 x 20 mm Schrauben verschließen.
-5. **USB-C Kappe:** Silikon-Schutzkappe am Port `J2` befestigen.
+4. **HF-Antennenpigtail (Optional / Verkleidung):**
+   * Bei Nutzung einer externen Antenne: U.FL / IPEX-MHF1 Stecker senkrecht auf die Antennenbuchse des ESP32-C3-WROOM-02U Moduls aufklicken.
+   * Das Koaxialkabel führt entweder durch die EPDM-Dichtkämme zu einer flexiblen 2.4 GHz Klebeantenne (z. B. Molex 146153) an der Innenseite der Frontverkleidung oder auf eine RP-SMA Flanschbuchse.
+5. **Verkabelung & EPDM-Kämme:** Zuleitungskabel in die EPDM-Dichtkämme einlegen und Deckel mit Silikon-Rundschnur und 4x M3 x 20 mm Schrauben verschließen.
+6. **USB-C Kappe:** Silikon-Schutzkappe am Port `J2` befestigen.
 
 ### 5.2 Montage am Fahrzeug (4 Optionen)
 

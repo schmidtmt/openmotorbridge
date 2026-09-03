@@ -113,7 +113,7 @@ To build a fully featured OpenMotorBridge (v8.0) installation for one motorcycle
 
 ---
 
-### 2.5 Category E: Wiring Harness, Connectors & Backup Battery
+### 2.5 Category E: Wiring Harness, Connectors, Backup Battery & RF Pigtails
 
 | Component | Specification / Type | Qty | Purpose & Function |
 | :--- | :--- | :---: | :--- |
@@ -127,6 +127,10 @@ To build a fully featured OpenMotorBridge (v8.0) installation for one motorcycle
 | **Automotive Fuse Holder** | Waterproof Mini-Blade Inline Fuse Holder IP67 + **2A Fuse** | **1** | Protects permanent 12V supply (KL30) directly at battery terminal |
 | **Automotive Wire** | FLRY-B $0.5\,\text{mm}^2$ (Power/GND) and $0.35\,\text{mm}^2$ (Signals/Audio) | *As req.* | Custom bike harness per [`central_breakout_harness_wirelist.csv`](file:///Users/schmidtm/openMotorBridge/hardware/production_packages/05_wiring_harness_spec/central_breakout_harness_wirelist.csv) |
 | **EPDM Frame Straps** | UV/Ozone-resistant EPDM ladder straps ($\varnothing 45 \dots 75\,\text{mm}$) | **6** | Tool-free rapid mounting of pods to crash bars or frame tubes |
+| **Murata MM8030 Pigtails** | Murata MM126036 to SMA Bulkhead IP67 (150 mm, RG-178)| **3** | Coaxial bypass for Pod 3: J3 (2.4G), J4 (868M), J5 (GNSS) |
+| **U.FL Coaxial Pigtail** | IPEX MHF1 / U.FL to RP-SMA Bulkhead IP67 (150 mm, RG-178)| **1** | Coaxial feed for Front Node ESP32-C3 external antenna |
+| **SMA IP67 Protective Caps** | Nickel-plated brass with internal O-ring (knurled cap)| **4** | Waterproof seal for unpopulated SMA ports (internal antennas stay active) |
+| **External Antennas (Opt.)**| 2.4G Collinear (+5 dBi), 868M LoRa (+3 dBi), Active GNSS Puck | *Optional* | High-gain external antennas for long range & unobstructed sky view |
 
 ---
 
@@ -166,25 +170,49 @@ To build a fully featured OpenMotorBridge (v8.0) installation for one motorcycle
 3. **Mid Tray & Battery:** Position the upper case with the intermediate tray, place the 1000 mAh LiPo into the battery pocket, and secure with the EPDM strap.
 4. **Gasket & Lid:** Seat the $\varnothing 1{,}5\,\text{mm}$ silicone O-ring cord into the perimeter groove, adhere the Gore ePTFE vent, and tighten the 4x M3 x 40 mm stainless screws in a cross pattern.
 
-### Step 2: Satellite Pods 1, 2, and Rear Pod 3
+### Step 2: Satellite Pods 1, 2, and Rear Pod 3 (Tub & Bulkhead)
 1. **Install Baseboard:** Slide `openmotorbridge_pod_base` into the pod tub and tighten the M8 hex nut.
 2. **Mount Bulkhead:** Secure the protective partition wall with 2x M2 countersunk screws.
-3. **Assemble Cartridge:** Snap the cartridge carrier (`PCBA 03`) into the sled and connect the OEM headset cradle (Sena pogo pins or Cardo Air-Mount).
+
+### Step 3: Headset Cartridges 1 & 2 (Rider & Passenger)
+1. **Assemble Cartridge:** Snap the cartridge carrier (`PCBA 03`) into the sled.
+2. **Connect Cradle:** Plug the OEM headset cradle ribbon cable (Sena pogo pins or Cardo Air-Mount).
+3. **Mouth Seal:** Fit the silicone molded flange gasket over the cartridge collar and lightly coat with silicone grease.
+
+### Step 4: Rear Pod 3 Cartridge & RF Pigtails (Triple Coaxial Bypass)
+1. **Install SMA Bulkheads:**
+   * Feed the 3x SMA female bulkhead connectors of the Murata MM126036 pigtails from the outside through the prepared $\varnothing 6.5\,\text{mm}$ bores in the cartridge front face.
+   * The integrated silicone O-ring seats hermetically in the $\varnothing 9.5 \times 1.2\,\text{mm}$ counterbore.
+   * From inside, place the lock washer and tighten the hex nut (8 mm wrench) to approx. $0.8\,\text{Nm}$.
+2. **Route Coaxial Cables:**
+   * Lay the flexible 1.13mm / RG-178 coaxial leads neatly into the floor channel of the sled.
+3. **Insert PCB & Connect Pigtails:**
+   * Mount the rear transceiver board (`PCBA 04`) with M2.5 screws.
+   * Using plastic tweezers, snap the right-angle Murata MM8030 plugs vertically onto the SMD switch receptacles until they click:
+     * `J3` $\rightarrow$ 2.4 GHz OpenMotorMesh Bypass
+     * `J4` $\rightarrow$ 868 MHz Semtech SX1262 LoRa Bypass
+     * `J5` $\rightarrow$ Multi-GNSS u-blox M9N Bypass (with 3.3V phantom power)
+4. **Automatic RF Switch Operation (Plug & Play):**
+   * **Standard Operation (No external antennas):** The IP67 knurled brass caps are screwed onto the SMA ports. The internal antennas (2.4G IFA, 868M helical, and 25x25mm GNSS patch) operate 100% autonomously protected inside the dielectric radome.
+   * **External High-Gain Operation:** When an external antenna is threaded on, the mechanical leaf switch inside the Murata MM8030 receptacle lifts: The internal antenna is electrically disconnected ($> 25\,\text{dB}$ isolation) and the RF energy flows to the external antenna with $< 0.15\,\text{dB}$ insertion loss.
 
 ---
 
 ## 5. Universal Front Node Assembly & Vehicle Installation
 
-### 4.1 Enclosure Assembly
+### 5.1 Enclosure Assembly
 1. **Heat-Set Inserts:**
    * Melt 4x M3 inserts into the enclosure corners.
    * Melt 4x M4 inserts into the AMPS pattern ($30 \times 38\,\text{mm}$) on the bottom.
 2. **Acoustic Membrane:** Adhere the hydrophobic Gore ePTFE acoustic membrane over the Knowles MEMS sound port.
 3. **Mount PCB:** Fasten `PCBA 05` using M2.5 screws.
-4. **Wiring & Gaskets:** Route lead wires through the EPDM rubber combs, seat the silicone cord gasket, and screw down the lid using 4x M3 x 20 mm bolts.
-5. **Dust Cap:** Attach the silicone tethered dust cap over the USB-C port `J2`.
+4. **RF Antenna Pigtail (Optional / Fairing):**
+   * When using an external fairing antenna: Snap the U.FL / IPEX-MHF1 plug onto the ESP32-C3-WROOM-02U module antenna port.
+   * Route the thin coax lead through the EPDM rubber combs to an internal adhesive dipole (e.g. Molex 146153) or an RP-SMA bulkhead.
+5. **Wiring & Gaskets:** Route lead wires through the EPDM rubber combs, seat the silicone cord gasket, and screw down the lid using 4x M3 x 20 mm bolts.
+6. **Dust Cap:** Attach the silicone tethered dust cap over the USB-C port `J2`.
 
-### 4.2 Motorcycle Mounting (4 Options)
+### 5.2 Motorcycle Mounting (4 Options)
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐

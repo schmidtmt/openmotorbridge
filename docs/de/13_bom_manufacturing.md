@@ -180,4 +180,11 @@ Dieses Dokument enthält die vollständige Bauteilliste (Bill of Materials) und 
 | **M8 Zuleitungskabel (Pods)** | M8 6-Pin A-Coded PUR geschirmt (1.0m / 1.5m) | Binder / Phoenix / Murr | 3 Stk. | Verbindung Kabelbaum-Pigtail zu Pod 1, 2 und 3 |
 | **M8 Zuleitungskabel (Radar)**| M8 4-Pin A-Coded PUR geschirmt (1.0m) | Binder / Phoenix / Murr | 1 Stk. | Zuleitung zu Garmin Varia / mmWave Heckradar |
 | **Automotive-Leitungen** | FLRY-B $0{,}5\,\text{mm}^2$ & $0{,}35\,\text{mm}^2$ (diverse Farben) | Leoni / Helukabel | nach Bed. | Fahrzeugkabelbaum nach `central_breakout_harness_wirelist.csv` |
+| **Murata MM8030 Pigtails (Pod 3)**| Murata MM126036 auf SMA-Bulkhead IP67 (150 mm, RG-178)| Murata / Mouser | 3 Stk. | Koaxial-Bypass für J3 (2.4G), J4 (868M), J5 (GNSS) |
+| **U.FL Pigtail (Front-Node)** | IPEX MHF1 / U.FL auf RP-SMA Bulkhead IP67 (150 mm, RG-178) | Taoglas / Molex | 1 Stk. | Koaxial-Zuleitung für ESP32-C3 externe Antenne |
+| **SMA IP67 Schutzkappen** | Messing vernickelt mit Dichtungs-O-Ring (Rändelkappe) | Amphenol / Radiall | 4 Stk. | Wasserdichter Schutz ungenutzter externer SMA-Buchsen |
+| **Externe 2.4 GHz Mesh-Antenne**| 2.4 GHz Collinear Dipol (+5 dBi / +7 dBi) mit SMA-Stecker | Taoglas / Linx | 1 Stk. | Optionale High-Gain Antenne am Heck/Topcase |
+| **Externe 868 MHz LoRa-Antenne**| 868 MHz Monopol / Dipol (+3 dBi / +5 dBi) mit SMA-Stecker | Linx ANT-868 / Taoglas | 1 Stk. | Optionale Long-Range Bergpass-Antenne |
+| **Externe aktive GNSS-Antenne** | Aktiver Flachpuck (+28 dB LNA, 3.3V Phantomspeisung, SMA) | Taoglas AA.162 / Garmin | 1 Stk. | Optionale Dach-/Koffermontage bei verdecktem Heck |
+
 
