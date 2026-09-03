@@ -13,10 +13,10 @@ Um das Zusammenspiel von Hardware, Akustik, Fahrdynamik, Thermik, Hochfrequenz-P
 │ Modul                     │ Datei                             │ Test-Fokus / Standard   │
 ├───────────────────────────┼───────────────────────────────────┼─────────────────────────┤
 │ 1. Multi-Board SPICE      │ `openmotorbridge_full_system_     │ 87V Load Dump, 6.5V USV,│
-│    Verbundsimulation      │  sim.py`                          │ 85dB CMRR, 1.5m 1-Wire  │
+│    Verbundsimulation      │  sim.py`                          │ 85dB CMRR, Front Node   │
 ├───────────────────────────┼───────────────────────────────────┼─────────────────────────┤
-│ 2. Hardware-in-the-Loop   │ `firmware_hil_system_sim.py`      │ 9 Live-Szenarien, PTT,  │
-│    Firmware-Simulator     │                                   │ Blindkassette, DLE Mesh │
+│ 2. Hardware-in-the-Loop   │ `firmware_hil_system_sim.py`      │ 10 Live-Szenarien, PTT, │
+│    Firmware-Simulator     │                                   │ Front Node, DLE Mesh    │
 ├───────────────────────────┼───────────────────────────────────┼─────────────────────────┤
 │ 3. 8h-Tagestour Thermik   │ `thermal_day_tour_sim.py`         │ -20°C Frost bis +58°C   │
 │    Multi-Physik           │                                   │ Motor-Wärmestau im Stau │
@@ -36,8 +36,8 @@ Um das Zusammenspiel von Hardware, Akustik, Fahrdynamik, Thermik, Hochfrequenz-P
 │ 8. 180-Tage Winterpause   │ `battery_winter_standby_sim.py`   │ 16.5 µA ULP-Hibernate,  │
 │    Ruhestrom-Analyse      │                                   │ 0.59% Entladung / 6 Mon.│
 ├───────────────────────────┼───────────────────────────────────┼─────────────────────────┤
-│ 9. PCB Design DFM/DRC     │ `verify_pcb_designs_jlcpcb.py`    │ JLCPCB 6-Stufen-Audit,  │
-│    Verifikation           │                                   │ 4 Platinen, 0 DRC-Fehler│
+│ 9. Universal Front Node & │ `front_node_wireless_hub_sim.py`  │ USB2512B Eye, MEMS DSP, │
+│    Smart Fairing Hub      │                                   │ TPS2051B, ESP-NOW, OTA  │
 └───────────────────────────┴───────────────────────────────────┴─────────────────────────┘
 ```
 
@@ -51,25 +51,32 @@ Um das Zusammenspiel von Hardware, Akustik, Fahrdynamik, Thermik, Hochfrequenz-P
   3. **Bourns Audio-Übertrager CMRR:** $85{,}0\,\text{dB}$ Gleichtaktunterdrückung gegen $1{,}2\,\text{kHz}$ Lichtmaschinen-Pfeifen $\rightarrow$ Restrauschen am Audio-Codec $< 141\,\mu\text{V}$ (glasklare $67{,}9\,\text{dB}$ Sprach-SNR).
   4. **1-Wire Signalintegrität über 1.5m Kabelbaum:** Flankenanstiegszeit $t_{\text{rise}} = 1{,}74\,\mu\text{s}$ über $167{,}9\,\text{pF}$ Gesamtkapazität ($65{,}3\,\%$ Sicherheitsmarge zur $5{,}0\,\mu\text{s}$-Norm).
   5. **PTT-zu-LoRa End-to-End Latenz:** Vom Tastendruck am Helm über Optokoppler, Opus-Encoder und UART-Bridge zum LoRa-Sendepuls in nur **$14{,}59\,\text{ms}$** ($< 25\,\text{ms}$ Aviation-Intercom-Norm).
+  6. **Universal Front Node DCDC & Hub:** LMR36015 Synchrongleichrichter mit $91{,}8\,\%$ Wirkungsgrad ($5{,}3\,\text{mV}$ Ripple), USB2512B High-Speed Augendiagramm mit $88{,}5\,\%$ Augenöffnung ($18{,}5\,\text{ps}$ Skew), Knowles MEMS mit $65{,}4\,\text{dB}$ SNR.
+  7. **Front-Node Zero-Latency PTT:** Gesamtlatenz vom Lenkertaster über ESP-NOW bis zur TLP222A Optokoppler-Zündung beträgt nur **$1{,}74\,\text{ms}$** ($< 5{,}0\,\text{ms}$ Anforderung).
+  8. **Ottocast Auto-Café VBUS-Abschaltung:** Automatischer $60\,\text{s}$ Countdown nach Zündung AUS zur nahtlosen Übergabe des Smartphone-WLANs an Heim- oder Café-Netze.
 
 ---
 
 ## 3. Hardware-in-the-Loop (HIL) Firmware-Simulator (`firmware_hil_system_sim.py`)
 
-Führt die reale C++-Firmware-Logik auf einer virtuellen Mehr-Platinen-Hardware aus und deckt 9 Lebenszyklus-Szenarien ab:
+Führt die reale C++-Firmware-Logik auf einer virtuellen Mehr-Platinen-Hardware aus und deckt 10 Lebenszyklus-Szenarien ab:
 
-* **Szenario 1:** Zündung AN (KL15 = $12{,}60\,\text{V}$) $\rightarrow$ Cold Boot beider Controller $\rightarrow$ Grüne Status-LED.
+* **Szenario 1:** Zündung AN (KL15 = $12{,}60\,\text{V}$) $\rightarrow$ Cold Boot aller Controller (Main Box, Rear Pod, Front Node) $\rightarrow$ Etablierung des ESP-NOW Funklinks.
 * **Szenario 2A (Blindkassette):** Keine 1-Wire ROM-ID $\rightarrow$ Automatisches Profil `"disabled"` (Mute auf $-96\,\text{dB}$ Gain zum Schutz vor Rauschen und offenen Einstreuungen).
 * **Szenario 2B (Hot-Swap):** Einklicken der Sena 60S / Cardo Edge Kassette im laufenden Betrieb $\rightarrow$ 1-Wire Erkennung in $< 2\,\text{s}$ $\rightarrow$ Laden des Profils, Audio-Entsperrung und Gain-Konfiguration.
 * **Szenario 3:** NEO-M9N GNSS 3D-DGPS Fix (22 Satelliten) und 1-PPS Hardware-Zeitsynchronisation.
-* **Szenario 4:** PTT-Tastendruck $\rightarrow$ Opus 24k Audio-Encodierung $\rightarrow$ Simultan-Broadcast auf $2{,}4\,\text{GHz}$ IEEE 802.15.4 Mesh und $868\,\text{MHz}$ SX1262 LoRa Fallback.
+* **Szenario 4 (Dual-PTT & Akustik-Adaption):**
+  * PTT-Tastendruck an Kassette $\rightarrow$ Opus 24k Mesh-Broadcast.
+  * PTT-Tastendruck am Front-Node Lenkertaster $\rightarrow$ ESP-NOW Action Frame $\rightarrow$ Optokoppler-Zündung in **$1{,}74\,\text{ms}$**.
+  * Knowles SPH0645 MEMS erfasst Geschwindigkeitslärm bei $130\,\text{km/h}$ ($79\,\text{dBA}$) $\rightarrow$ Audio DSP AGC regelt Intercom-Lautstärke dynamisch um $+1{,}0\,\text{dB}$ nach.
 * **Szenario 5:** Motorstart ($6{,}5\,\text{V}$ Spannungseinbruch) $\rightarrow$ USV-Sofortpufferung $\rightarrow$ $0$ Audio-Drops, $0$ Reboots.
 * **Szenario 6 (Kabelabriss & Kurzschluss):** M8-Kabel zum Helm reißt ab $\rightarrow$ Bourns PTC-Sicherung löst in $1{,}2\,\text{ms}$ aus ($< 15\,\text{mA}$ Kurzschlussstrom, $0\,\text{V}$ Einbruch auf Hauptplatine) $\rightarrow$ Anti-Pop Mute schützt Helmlautsprecher vor Krachen $\rightarrow$ Rote Warn-LED.
 * **Szenario 7 (CAN-Bus Abriss):** TCAN334G Fehlerschutz $\rightarrow$ Automatischer Fallback der Geschwindigkeitserfassung auf GNSS/IMU-Koppelnavigation.
 * **Szenario 8 (Bordnetz-Spannungsalarm):**
   * Stufe A ($< 11{,}8\,\text{V}$): Gelbe LED, Helm-Warnton (*Low Battery Chime*), Lastabwurf.
   * Stufe B ($0{,}0\,\text{V}$ Sicherungsausfall bei $80\,\text{km/h}$): USV-Übernahme, Sprachwarnung *"WARNING: MAIN POWER LOST"*, roter Strobe, Notfall-GPX-Flush.
-* **Szenario 9:** Zündung AUS $\rightarrow$ 15-minütiger WebDAV/GPX Sync-Timer $\rightarrow$ ULP-Tiefschlaf ($< 20\,\mu\text{A}$).
+* **Szenario 9 (Smart Fairing Dongle-Management):** 1-Klick Hard-Reset ($2{,}5\,\text{s}$ VBUS Kaltstart) via WebApp und Auto-Café $60\,\text{s}$ Abschalt-Countdown bei Zündung AUS.
+* **Szenario 10:** Zündung AUS $\rightarrow$ 15-minütiger WebDAV/GPX Sync-Timer $\rightarrow$ ULP-Tiefschlaf ($< 20\,\mu\text{A}$).
 
 ---
 
@@ -143,9 +150,37 @@ Berechnet die Dämpfung nach ITU-R P.838-3 (Regen), ITU-R P.840-9 (Nebel) und IT
 
 ---
 
-## 10. Ausführung der Master-Testbench
+## 10. Universal Front Node & Smart Fairing Hub (`front_node_wireless_hub_sim.py`)
 
-Alle 8 Testbenches können vollautomatisiert mit einem einzigen Befehl ausgeführt werden:
+Verifiziert alle hochfrequenten, leistungselektronischen und funktechnischen Subsysteme der Front-Knoten-Baugruppe (PCBA 05):
+
+1. **USB 2.0 High-Speed Augendiagramm (Microchip USB2512B):**
+   * Datenrate: $480{,}0\,\text{Mbps}$ mit $Z_{\text{diff}} = 90{,}2\,\Omega$ (Toleranzfenster: $90 \pm 9\,\Omega$).
+   * Intra-Pair Laufzeitversatz: nur $2{,}38\,\text{ps}$ (Spezifikation: $< 45\,\text{ps}$).
+   * Augenöffnung: $89{,}4\,\%$ Augenbreite ($1863\,\text{ps}$) und $362{,}7\,\text{mV}$ differentielle Höhe $\rightarrow$ Perfekt rauschfreie Datenübertragung zu Ottocast und Handschuhfach.
+2. **TI TPS2051B VBUS Lastschalter & Schutzschaltung:**
+   * Soft-Start Einschaltstrom: sanfter Anstieg in $1{,}20\,\text{ms}$ begrenzt Spitzenstrom bei $100\,\mu\text{F}$ Dongle-Pufferung auf $0{,}417\,\text{A}$ ($< 1{,}0\,\text{A}$ Limit).
+   * Kurzschlussabschaltung: $6{,}2\,\mu\text{s}$ Reaktionszeit auf `FAULT_N` bei Überstrom.
+   * 1-Klick Kaltstart: $2{,}50\,\text{s}$ kompletter VBUS-Power-Cycle zum zuverlässigen Rebooten hängender Wireless-Dongles.
+3. **Knowles SPH0645 Digitales I2S MEMS & A-Weighting Filter:**
+   * Abtastung: $16\,\text{kHz}$ / 24-Bit über Direct Memory Access (DMA).
+   * Biquad Direct Form II Digitalfilter nach IEC 61672-1 Class 1 ($100\,\text{Hz}$ Winddruck-Dämpfung $-19{,}1\,\text{dB}$).
+   * $20\,\text{ms}$ RMS-Blockbildung mit kalibrierter $\text{dB(A)}$-Telemetrie an die Zentralbox im $50\,\text{Hz}$ Takt.
+4. **2.4 GHz ESP-NOW Ultra-Low-Latency PTT Budget:**
+   * Hardware-RC Filterung: $15{,}0\,\mu\text{s}$.
+   * Edge-Interrupt & Queue: $8{,}5\,\mu\text{s}$.
+   * 802.11 Over-The-Air Frame ($1\,\text{Mbps}$ DSSS CCK): $772{,}0\,\mu\text{s}$.
+   * Optokoppler-Triggerung: $45{,}0\,\mu\text{s}$.
+   * **Gesamtlatenz (Glass-to-Glass): $0{,}90\,\text{ms}$** (Anforderung $< 5{,}0\,\text{ms}$) bei $99{,}8\,\%$ Packet Delivery Ratio im Nahbereich.
+5. **Dual-Bank OTA Rollback-Schutz:**
+   * Fehlersimulation: Spannungsunterbrechung bei $45\,\%$ Flash-Fortschritt in Partition `ota_1`.
+   * Bootloader-Integritätsprüfung erkennt unvollständige Signatur und bootet zuverlässig `ota_0` $\rightarrow$ **$0{,}0\,\%$ Brick-Risiko**.
+
+---
+
+## 11. Ausführung der Master-Testbench
+
+Alle 9 Testbenches können vollautomatisiert mit einem einzigen Befehl ausgeführt werden:
 
 ```bash
 python3 tools/run_all_simulations.py

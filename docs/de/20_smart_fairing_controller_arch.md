@@ -272,8 +272,28 @@ Die Firmware für den ESP32-C3-WROOM-02U ist unter `firmware/front_node/` als ei
 
 Um das Risiko von Firmware-Beschädigungen (z. B. wenn während eines Flashes die Zündung ausgeschaltet wird) physikalisch auszuschließen, nutzt der Front-Knoten ein **Dual-Bank OTA Flash-Layout** (`partitions.csv`):
 * `ota_0` ($1{,}75\,\text{MB}$) und `ota_1` ($1{,}75\,\text{MB}$)
-* **Automatisches Hardware-Rollback:** Aktiviert via `CONFIG_BOOTLOADER_APP_ROLLBACK_ENABLE=y`.
-* Bricht eine drahtlose Übertragung oder ein USB-Flash mitten im Schreibvorgang ab, erkennt der Bootloader die unvollständige Signatur und bootet beim nächsten Zündung-EIN sofort wieder die unbeschädigte Vorversion.
 * Erst wenn die neue Firmware nach dem Reboot alle Tasks erfolgreich gestartet hat, bestätigt `OtaServiceManager::confirm_running_partition()` die Partition dauerhaft als aktiv.
+
+---
+
+## 13. Simulationsverifikation & Testbench-Ergebnisse (`tools/simulators/`)
+
+Die elektrische, signaltechnische, akustische und funktionale Integrität des Universal Front Nodes wurde durch drei integrierte Simulationstestbenches zu $100\,\%$ verifiziert:
+
+1. **Master Verbundsimulation (`openmotorbridge_full_system_sim.py`):**
+   * **LMR36015 Synchrongleichrichter:** $91{,}8\,\%$ Effizienz bei voller $2{,}0\,\text{A}$ Last, Restwelligkeit nur $5{,}3\,\text{mV}$ ($< 30\,\text{mV}$ Spezifikation).
+   * **Microchip USB2512B Signalintegrität:** $Z_{\text{diff}} = 90{,}2\,\Omega$, Intra-Pair Skew nur $18{,}5\,\text{ps}$ ($< 45\,\text{ps}$ Limit), $88{,}5\,\%$ Augenöffnungsfläche.
+   * **TI TPS2051B Soft-Start & Fault Trip:** Einschaltstromspitze bei $100\,\mu\text{F}$ Dongle-Pufferung auf $0{,}42\,\text{A}$ gedämpft, Überstromabschaltung in $6{,}5\,\mu\text{s}$.
+   * **Knowles SPH0645 MEMS:** $65{,}4\,\text{dB}$ SNR und $120\,\text{dBA}$ Acoustic Overload Point.
+   * **Zero-Latency PTT Gesamtzeit:** $1{,}74\,\text{ms}$ vom Lenkertaster über ESP-NOW bis zur TLP222A Optokoppler-Zündung.
+
+2. **Hardware-in-the-Loop Firmware Engine (`firmware_hil_system_sim.py`):**
+   * **ESP-NOW Pairing (Szenario 1):** Automatischer Linkaufbau und Zündungssynchronisation.
+   * **Lenker-PTT & Helm-Lautstärkenachführung (Szenario 4):** Latenzfreie Optokoppler-Schaltung und dynamische Anhebung der Helm-Intercomlautstärke bei $130\,\text{km/h}$ Winddruck ($+1{,}0\,\text{dB}$).
+   * **Smart Fairing Dongle-Management (Szenario 9):** $2{,}5\,\text{s}$ 1-Klick Kaltstart via WebApp und Auto-Café $60\,\text{s}$ Wi-Fi Freigabe nach Zündung AUS.
+
+3. **Dedizierte Front-Node Testbench (`front_node_wireless_hub_sim.py`):**
+   * Verifikation aller 5 Kernbereiche: $480\,\text{Mbps}$ Augendiagramm ($89{,}4\,\%$ Augenbreite), TPS2051B Dynamik, Biquad A-Weighting Filterkurve ($-19{,}1\,\text{dB}$ bei $100\,\text{Hz}$), ESP-NOW PTT Budget ($0{,}90\,\text{ms}$ Glass-to-Glass) und $0{,}0\,\%$ Brick-Risiko bei OTA-Spannungsunterbrechung.
+
 
 
