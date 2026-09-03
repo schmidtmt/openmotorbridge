@@ -66,6 +66,12 @@ STL_TARGETS: List[Tuple[str, str]] = [
     ("00_common/dummies/dummy_omm_transceiver_pcb.scad", "03_pod_cartridges/components/dummy_omm_transceiver_pcb.stl"),
     ("00_common/dummies/dummy_adapter_pcb.scad", "03_pod_cartridges/components/dummy_adapter_pcb.stl"),
     ("00_common/dummies/dummy_m8_connector.scad", "02_pod_base/components/dummy_m8_connector.stl"),
+    
+    # 7. Universal Front Node
+    ("04_front_node/00_front_node_tub.scad", "04_front_node/front_node_lower_tub.stl"),
+    ("04_front_node/01_front_node_lid.scad", "04_front_node/front_node_upper_lid.stl"),
+    ("04_front_node/02_front_node_cable_glands.scad", "04_front_node/front_node_cable_glands_tpu.stl"),
+    ("04_front_node/03_front_node_usbc_plug.scad", "04_front_node/front_node_usbc_cap_tpu.stl"),
 ]
 
 # List of High-Resolution 3D Render Targets
@@ -137,6 +143,30 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
         "67.5,35,19,55,0,310,420",
         "Tomorrow"
     ),
+    (
+        "04_front_node/98_front_node_closed.scad",
+        os.path.join(CAD_IMG_DIR, "front_node_closed_cad.png"),
+        "42,30,12,55,0,310,220",
+        "Tomorrow"
+    ),
+    (
+        "04_front_node/98_front_node_closed.scad",
+        os.path.join(CAD_IMG_DIR, "front_node_bottom_cad.png"),
+        "42,30,0,135,0,310,230",
+        "Tomorrow"
+    ),
+    (
+        "04_front_node/99_front_node_assembly.scad",
+        os.path.join(CAD_IMG_DIR, "front_node_exploded_3d.png"),
+        "42,30,45,55,0,310,340",
+        "Tomorrow"
+    ),
+    (
+        "04_front_node/97_front_node_xray.scad",
+        os.path.join(CAD_IMG_DIR, "front_node_cutaway_3d.png"),
+        "42,30,12,55,0,310,220",
+        "Tomorrow"
+    ),
 ]
 
 import threading
@@ -153,6 +183,7 @@ def clean_old_stls():
     os.makedirs(os.path.join(STL_BASE, "01_main_box/components"), exist_ok=True)
     os.makedirs(os.path.join(STL_BASE, "02_pod_base/components"), exist_ok=True)
     os.makedirs(os.path.join(STL_BASE, "03_pod_cartridges/components"), exist_ok=True)
+    os.makedirs(os.path.join(STL_BASE, "04_front_node"), exist_ok=True)
     sys.stdout.flush()
 
 def compile_single_stl(scad_rel: str, stl_rel: str, idx: int, total: int) -> Tuple[bool, str, float]:

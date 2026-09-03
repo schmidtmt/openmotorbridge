@@ -60,6 +60,14 @@ BOARDS = [
         "pcb": os.path.join(BASE_DIR, "kicad_rear_pod3/openmotorbridge_rear_pod3.kicad_pcb"),
         "layers": "F.Cu,B.Cu,In1.Cu,In2.Cu,F.Paste,B.Paste,F.SilkS,B.SilkS,F.Mask,B.Mask,Edge.Cuts",
         "is_4layer": True
+    },
+    {
+        "name": "05_front_node_pcba",
+        "title": "OpenMotorBridge Universal Front Node PCB",
+        "sch": os.path.join(BASE_DIR, "kicad_front_node/openmotorbridge_front_node.kicad_sch"),
+        "pcb": os.path.join(BASE_DIR, "kicad_front_node/openmotorbridge_front_node.kicad_pcb"),
+        "layers": "F.Cu,B.Cu,In1.Cu,In2.Cu,F.Paste,B.Paste,F.SilkS,B.SilkS,F.Mask,B.Mask,Edge.Cuts",
+        "is_4layer": True
     }
 ]
 
@@ -268,6 +276,20 @@ def package_3d_print_stls():
             if os.path.exists(p):
                 z.write(p, arcname=f)
     print(f"  ✅ Created Cartridges STL Package: {os.path.basename(cartridge_zip)}")
+
+    # 4. Front Node Enclosure Package
+    front_node_zip = os.path.join(stl_dir, "04_front_node_3d_print_mjf.zip")
+    with zipfile.ZipFile(front_node_zip, 'w', zipfile.ZIP_DEFLATED) as z:
+        for f in [
+            "front_node_lower_tub.stl",
+            "front_node_upper_lid.stl",
+            "front_node_cable_glands_tpu.stl",
+            "front_node_usbc_cap_tpu.stl"
+        ]:
+            p = os.path.join(src_stl_base, "04_front_node", f)
+            if os.path.exists(p):
+                z.write(p, arcname=f)
+    print(f"  ✅ Created Front Node STL Package: {os.path.basename(front_node_zip)}")
 
 if __name__ == "__main__":
     os.makedirs(OUTPUT_BASE, exist_ok=True)

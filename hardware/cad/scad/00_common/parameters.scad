@@ -76,3 +76,36 @@ M3_SCREW_HOLE_R       = 1.65;  // M3 clearance hole (r = 1.65 mm -> Ø 3.3 mm)
 M4_SCREW_HOLE_R       = 2.2;   // M4 clearance hole (r = 2.2 mm -> Ø 4.4 mm)
 M8_BORE_R             = 4.0;   // M8 cable through-bore (r = 4.0 mm -> Ø 8.0 mm)
 M8_STUDS_OUTER_R      = 6.0;   // M8 neck outer radius (Ø 12.0 mm)
+
+// --- 8. Universal Front Node Enclosure Dimensions ---
+FRONT_NODE_PCB_L      = 68.0;  // PCB length in X (mm)
+FRONT_NODE_PCB_W      = 44.0;  // PCB width in Y (mm)
+FRONT_NODE_PCB_H      = 1.6;   // PCB thickness in Z (mm)
+FRONT_NODE_PCB_R      = 2.5;   // PCB corner radius (mm)
+
+FRONT_NODE_CHAMBER_L  = 72.0;  // Internal chamber length in X (mm, 2mm margin)
+FRONT_NODE_CHAMBER_W  = 48.0;  // Internal chamber width in Y (mm, 2mm margin)
+FRONT_NODE_TUB_H      = 16.0;  // Lower tub depth in Z (mm)
+FRONT_NODE_LID_H      = 7.0;   // Upper lid height in Z (mm)
+FRONT_NODE_WALL       = 2.5;   // Wall thickness in HP MJF PA12 (mm)
+FRONT_NODE_CORNER_R   = 4.0;   // Outer enclosure corner radius (mm)
+
+FRONT_NODE_OUTER_L    = FRONT_NODE_CHAMBER_L + 2 * FRONT_NODE_WALL + 7.0; // 84.0 mm
+FRONT_NODE_OUTER_W    = FRONT_NODE_CHAMBER_W + 2 * FRONT_NODE_WALL + 7.0; // 60.0 mm
+FRONT_NODE_OUTER_H    = FRONT_NODE_TUB_H + FRONT_NODE_LID_H;              // 23.0 mm
+
+// PCB Standoff Heights & Radii
+FRONT_NODE_STANDOFF_H = 3.0;   // Height of PCB standoffs from floor (mm)
+FRONT_NODE_STANDOFF_R = 3.0;   // Outer radius of M2.5 screw bosses (mm)
+FRONT_NODE_INSERT_R   = 1.7;   // Core hole for Ruthex M2.5 heat-set inserts (Ø 3.4 mm)
+
+// AMPS 4-Hole Mounting Pattern (38 x 30 mm, M4 threaded inserts)
+AMPS_SPACING_X        = 38.0;  // AMPS hole distance in X (mm)
+AMPS_SPACING_Y        = 30.0;  // AMPS hole distance in Y (mm)
+AMPS_INSERT_R         = 2.3;   // Core hole for Ruthex M4 heat-set inserts (Ø 4.6 mm)
+
+// Acoustic Vent for Knowles SPH0645 MEMS
+FRONT_NODE_MIC_HOLE_R = 1.25;  // Sound canal radius (Ø 2.5 mm)
+FRONT_NODE_MIC_MEMB_R = 3.0;   // Gore ePTFE membrane pocket radius (Ø 6.0 mm)
+FRONT_NODE_MIC_MEMB_D = 0.8;   // Membrane pocket depth (mm)
+
