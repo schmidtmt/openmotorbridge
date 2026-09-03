@@ -20,64 +20,55 @@ Die **OpenMotorBridge (OMB)** ist eine offene, herstellerübergreifende Kommunik
 
 ## 📚 Inhaltsverzeichnis der Dokumentation
 
-Die umfassende technische Spezifikation gliedert sich in 19 modulare Kapitel:
+Die modulare technische Gesamtspezifikation gliedert sich in 16 thematisch strukturierte Kapitel:
 
 1. [**01 - Systemarchitektur & Satelliten-Topologie**](docs/de/01_system_architecture.md)  
-   *Überblick über die 4-Punkt-Topologie, räumliche HF-Diversität und das Multi-Domain-Konzept.*
+   *Überblick über die 5-Punkt-Topologie, HF-Diversität, Cockpit-Integration und das Gesamtsystem.*
 
-2. [**02 - PCB-Hardware & HD26-Pinout**](docs/de/02_pcb_hardware_pinout.md)  
-   *Zentralplatinen-Schaltplan, ESP32-S3 GPIO-Mapping und 26-polige IP67-Gehäuseschnittstelle.*
+2. [**02 - Intercom-Matrix, Profile & Dynamisches Routing**](docs/de/02_intercom_matrix_profiles.md)  
+   *Die 5 OEM-Adapterklassen A–E, LittleFS-Profil-Engine, Zero-Latency PTT (< 1,8 ms) und Audio-Cross-Matrix.*
 
-3. [**03 - Isoliertes Audio-Frontend & Pegelanpassung**](docs/de/03_audio_frontend_isolated.md)  
-   *Galvanische Trennung via Bourns-Übertrager und PhotoMOS-PTT-Tastensimulation (TLP222A).*
+3. [**03 - Audio-DSP, Akustik & Knowles MEMS Wind-Tracking**](docs/de/03_audio_dsp_acoustics.md)  
+   *1500V Bourns Trennung, ES8388 Audio-Codec, Knowles MEMS Fahrtwind-Abtastung & Raised-Cosine Ducking.*
 
-4. [**04 - Automotive Powermanagement & USV**](docs/de/04_power_management_ups.md)  
-   *LM5164-Q1 Schaltregler, BQ24075 USV mit JEITA-NTC-Überwachung und 5 Akku-Ladeprofile.*
+4. [**04 - Mesh-Netzwerk, LoRa & GNSS-Navigation**](docs/de/04_mesh_lora_navigation.md)  
+   *OpenMotorMesh (OMM), Dynamic Leader Election (DLE), 868 MHz LoRa Fallback & 10 Hz Multi-GNSS.*
 
-5. [**05 - Mechanisches Gehäusedesign & Wechselkassetten**](docs/de/05_mechanical_enclosure_pods.md)  
-   *IP67-Gehäusekonzept (Typ A Zentralbox, Typ B Pods) in PA12 MJF mit Mill-Max Pogo-Bays.*
+5. [**05 - Stromversorgung, USV-Akkusystem & Power-Gate**](docs/de/05_power_management_ups.md)  
+   *LM5164-Q1 72V Buck, BQ24075 USV, Front-Node LMR36015 / TPS2051B Power-Gate & 1-Klick CarPlay Kaltstart.*
 
-6. [**06 - Dynamische Profile & 1-Wire DS2401 Erkennung**](docs/de/06_dynamic_profiles_spec.md)  
-   *Automatische Hardware-Erkennung via DS2401 Silicon Serial Number und LittleFS JSON-Profile.*
+6. [**06 - Telemetrie-Blackbox, SDIO-Ringpuffer & WebDAV-Sync**](docs/de/06_telemetry_blackbox_webdav.md)  
+   *4-Bit High-Speed SDIO, BGH- und DSGVO-konformer Ringspeicher, ECDSA SHA-256 & automatischer Cloud-Sync.*
 
-7. [**07 - MicroSD BGH-Ringspeicher & WebDAV-Sync**](docs/de/07_microsd_bgh_webdav.md)  
-   *4-Bit SDIO FAT32-Dateisystem, DSGVO-konformer Ringspeicher und verschlüsselter TLS 1.3 Sync.*
+7. [**07 - Hardware-Architektur & Platinen-Pinouts (PCBA 01 bis 05)**](docs/de/07_pcba_hardware_pinouts.md)  
+   *Alle 5 Leiterplatten im Detail: Lagenaufbau, Impedanzen, Net-Klassen, Funktionszonen und Pinout-Tabellen.*
 
-8. [**08 - DSP-Audio-Engine & Raised-Cosine-Ducking**](docs/de/08_dsp_audio_engine.md)  
-   *I2S DMA Audio-Pipeline, Raised-Cosine-Überblendung, geschwindigkeitsabhängige Lautstärke.*
+8. [**08 - Mechanische Gehäuse, CAD & Dichtungssystem**](docs/de/08_enclosures_mechanics_cad.md)  
+   *3-teilige Zentralbox, universelle Satelliten-Pods, Wechselkassetten, Heck-Pod 3 und 4-in-1 Front-Knoten.*
 
-9. [**09 - Firmware-Architektur & FreeRTOS-Design**](docs/de/09_firmware_architecture.md)  
-   *Dual-Core FreeRTOS Task-Architektur, sperrenfreie Ringpuffer und Task-Supervisoren.*
+9. [**09 - Firmware-Architektur, FreeRTOS & Rollback-OTA**](docs/de/09_firmware_architecture.md)  
+   *Multi-Core ESP32-S3, RP2040, ESP32-C3, ESP-NOW Low-Latency-Protokoll und ausfallsicheres Dual-Bank OTA.*
 
-10. [**10 - Web-Bluetooth-Dashboard & PWA-Architektur**](docs/de/10_web_bluetooth_dashboard.md)  
-    *Cloudfreie Offline-PWA, Web Bluetooth API (WebBLE), Fahrdynamik-HUD und i18n-Sprachumschaltung.*
+10. [**10 - WebApp PWA & Dashboard-Bedienung**](docs/de/10_webapp_pwa_dashboard.md)  
+    *Autarkes WebBLE Dashboard, Fahrdynamik-HUD, Front-Node Steuerung (1-Klick Reboot) & 4-stufiger GPX-Export.*
 
-11. [**11 - OpenMotorMesh (OMM), DLE & Cluster Relay**](docs/de/11_openmotormesh_dle_election.md)  
-    *Dual-PHY (2.4 GHz Sidelink + 868 MHz LoRa), Adaptives QoS, DLE-Scoring und Relaisknoten.*
+11. [**11 - Digitale Simulation & Multi-Physik Master-Testbench**](docs/de/11_simulation_testbench.md)  
+    *9 modulare Python-Testbenches und 10 HIL-Szenarien für SPICE, Thermik, Transienten, RF und Akustik.*
 
-12. [**12 - GNSS Multi-Konstellation, ADR & Video-Sync**](docs/de/12_gnss_track_lifecycle_video.md)  
-    *u-blox MAX-M10S, 15-Zustands-EKF Koppelnavigation, Map-Matching und Actioncam-Fernsteuerung.*
+12. [**12 - EMV-Härtung, Schirmung & ESD-Schutz**](docs/de/12_emv_rf_hardening.md)  
+    *Kfz-Transienten nach ISO 7637-2, 2.4 GHz vs 868 MHz Entkopplung, IPC-CC-830B Schutzlack & ISO 16750-3.*
 
-13. [**13 - Heck-Pod 3 & Digitale Transceiver-Architektur**](docs/de/13_rear_pod3_transceiver_arch.md)  
-    *Heck-Pod-Integration von GNSS, SX1262 LoRa 868 MHz und ESP32-C3 RISC-V Co-Prozessor.*
+13. [**13 - Stücklisten (BOM) & SMT-Fertigungsdaten**](docs/de/13_bom_manufacturing.md)  
+    *Komplette Bauteilliste für alle 5 PCBAs, JLCPCB SMT-Bestellcheckliste, Kabelbaum-Pigtail & Normteile.*
 
-14. [**14 - EMV, HF- & Umwelthärtung**](docs/de/14_emv_rf_hardening.md)  
-    *Automotive-Transientenschutz, Schutzlackierung (IPC-CC-830B) und 35 dB Gehäuse-Schirmdämpfung.*
+14. [**14 - Bauanleitung, Verkabelung & Fahrzeug-Installation**](docs/de/14_build_instructions_assembly.md)  
+    *Schritt-für-Schritt Aufbau, 3D-Druck (FDM vs. MJF), Front-Node Montage (BMW GS / Harley) & Inbetriebnahme.*
 
-15. [**15 - BOM (Stückliste) & Fertigungsleitfaden**](docs/de/15_bom_manufacturing.md)  
-    *Vollständige 3-Ebenen-BOM für JLCPCB SMT-Bestückung (Main Box, Pod 3, Kassetten) & CPL-Daten.*
+15. [**15 - Automotive-Standards & Normen-Referenzen**](docs/de/15_standards_references.md)  
+    *Industrienormen: ISO 7637-2, ISO 16750, ECE R10, RED 2014/53/EU, IEC 61672-1 Class 1 und Bluetooth SIG.*
 
-16. [**16 - Simulation & Digitale Testbench**](docs/de/16_simulation_testbench.md)  
-    *Automotive-Simulations-Suite: Audio DSP, Raised-Cosine Ducking, Powermanagement, 15-State ADR-EKF & 1-Wire.*
-
-17. [**17 - Rechtliche Compliance, Lizenzen, Regularien & DSGVO**](docs/de/17_legal_compliance_dsgvo.md)  
-    *ECE R10, RED 2014/53/EU Konformität, Funk-Regularien, Lizenzen und Haftungsausschluss.*
-
-18. [**18 - Quellen- & Normenverzeichnis**](docs/de/18_standards_references.md)  
-    *Fundstellen für ISO 7637-2, Bluetooth SIG Battery Service (0x180F), UBX-M10 und Intercom-Protokolle.*
-
-19. [**19 - Bauanleitung & Kit-Stückliste**](docs/de/19_build_instructions_kit.md)  
-    *Praxisorientierte Schritt-für-Schritt-Bauanleitung, 3D-Druck-Bedarf, Normteile, Dichtungen & Inbetriebnahme.*
+16. [**16 - Datenschutz (DSGVO), Recht & Konformität**](docs/de/16_legal_compliance_dsgvo.md)  
+    *Open-Source-Lizenzen (GPL-3.0, CERN-OHL-S v2, CC BY-SA 4.0), DSGVO/BGH-Konformität & Haftungsausschluss.*
 
 ---
 

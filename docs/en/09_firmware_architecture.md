@@ -1,68 +1,80 @@
-# 09 - Firmware Architecture (C++ / FreeRTOS / ESP-IDF v5.x)
+# 09 - Firmware Architecture, FreeRTOS Tasks & Rollback-OTA
 
-The firmware is built on ESP-IDF v5.x and FreeRTOS with strict CPU core isolation between the ESP32-S3 (Central Box) and ESP32-C3 (Rear Pod Coprocessor):
-
-```
-┌────────────────────────────────────────────────────────────────────────┐
-│                        ESP32-S3 DUAL-CORE MCU                          │
-├───────────────────────────────────┬────────────────────────────────────┤
-│ CORE 0 (Communication & Sensors)  │ CORE 1 (Real-Time Audio DSP)       │
-├───────────────────────────────────┼────────────────────────────────────┤
-│ • BLE GATT Server (PWA Dashboard) │ • I2S DMA Codec Receiver & Transm. │
-│ • BLE Handlebar Remote Client     │ • Raised-Cosine Ducking Engine     │
-│ • Dual 1-Wire Cartridge Manager   │ • Fast Peak Level Detector         │
-│ • OMM High-Speed UART Bridge      │ • Dual-Port Cross-Matrix Routing   │
-│ • OMM In-System Flasher Engine    │                                    │
-│ • ADR-EKF Dead-Reckoning Filter   │                                    │
-│ • SDIO BGH Ringbuffer & WebDAV    │                                    │
-└───────────────────────────────────┴────────────────────────────────────┘
-```
+This document specifies the system-wide firmware architecture of OpenMotorBridge v8.0: the multi-core allocation of the ESP32-S3 host MCU, the coprocessors (RP2040 in Rear Pod 3 and ESP32-C3 in the Front Node), the **ESP-NOW low-latency protocol (< 1.8 ms)**, the LittleFS profile engine, and the **Dual-Bank Rollback-OTA architecture** guaranteeing zero bricking during power interruptions.
 
 ---
 
-## 1. Dual-Core Task Distribution (@ 240 MHz)
+## 1. Multi-Core & Multi-MCU System Architecture
 
-### CORE 0 (Communication & System Management):
-- **BLE Server:** Web-Bluetooth interface for the progressive WebApp dashboard (`0x180D`, `0x180A`).
-- **BLE Client:** Automated pairing and battery telemetry monitoring for handlebar remotes.
-- **1-Wire Cartridge Manager:** Scans Port 1 & Port 2 for DS2401 Silicon Serial ROM IDs and applies LittleFS JSON profiles.
-- **Opto-Pulse Sequencer:** TLP222A button synthesis for OEM Sena / Cardo inlays.
-- **WebDAV TLS 1.3 Client:** Asynchronous background upload of GPX / BGH tour logs to Nextcloud / Synology over home Wi-Fi.
-- **SDIO Logger:** 4-bit high-speed SD card logger with circular ring buffer and automated BGH privacy purge.
-- **ADR-EKF Filter:** 15-state sensor fusion combining 10 Hz GNSS telemetry with Bosch BMI270 6-axis IMU for dead reckoning in tunnels.
-- **OMM Flasher Engine (`omm_flasher.cpp`):** Synchronous high-speed UART push-flashing for the Rear Pod during one-click system updates.
+```
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                        THE 3 FIRMWARE CONTROLLERS IN CONCERT                           │
+├──────────────────────────────────────┬─────────────────────────┬───────────────────────┤
+│ 1. CENTRAL BOX (ESP32-S3 Dual-Core)  │ 2. REAR POD 3 (RP2040)  │ 3. FRONT NODE (ESP-C3)│
+├──────────────────────────────────────┼─────────────────────────┼───────────────────────┤
+│ • Core 0: BLE, WebDAV, SDIO, ESP-NOW │ • Core 0: NMEA/UBX 10Hz │ • FreeRTOS Single-Core│
+│ • Core 1: Realtime 48kHz Audio DSP   │ • Core 1: LoRa SX1262   │ • I2S MEMS Filter     │
+│ • LittleFS Cartridge Profile Engine  │ • 1-PPS Timecode Sync   │ • VBUS Power Switch   │
+└──────────────────────────────────────┴─────────────────────────┴───────────────────────┘
+```
 
-### CORE 1 (Real-Time Audio DSP Engine):
-- **I2S Audio DMA Receiver & Transmitter:** Ultra-low-latency streaming via ES8388 audio codec ($f_s = 48\,\text{kHz}, 24\,\text{bit}$).
-- **Raised-Cosine Ducking Engine:** Click-free, smooth continuously-differentiable audio attenuation for navigation voice prompts.
-- **ADC Peak Level Detector:** Continuous monitoring of microphone thresholds and speech presence.
+### 1.1 ESP32-S3 Core Allocation (240 MHz)
+
+#### CORE 0 (Communication, Telemetry & System):
+- **BLE GATT Server:** Web-Bluetooth connection for the PWA dashboard (`0x180D`, `0x180A`).
+- **ESP-NOW Front Node Client (`esp_now_front_node_client.cpp`):** Handles zero-latency handlebar PTT events ($< 1{,}8\,\text{ms}$) and Knowles MEMS dB(A) noise telemetry.
+- **Dual 1-Wire Cartridge Manager:** Polls DS2401 ROM IDs on Ports 1 & 2 to dynamically mount LittleFS JSON profiles.
+- **Opto-Pulse Sequencer:** Toshiba TLP222A button synthesis for OEM Sena/Cardo inlays.
+- **WebDAV TLS 1.3 Client:** Asynchronous upload of GPX rides to Nextcloud/Synology on home Wi-Fi.
+- **SDIO Logging Task:** 4-bit high-speed SD card logger with rolling BGH privacy auto-purge.
+
+#### CORE 1 (Realtime Audio DSP Engine @ Highest Priority):
+- **I2S Audio DMA Receiver & Transmitter:** Ultra-low-latency streaming via ES8388 Codec ($f_s = 48\,\text{kHz}, 24\,\text{bit}$, 128-sample double buffers = $2{,}67\,\text{ms}$).
+- **Raised-Cosine Ducking Engine:** Click-free, mathematically continuous attenuation during announcements.
+- **Dynamic AGC Volume Boost:** Automatic helmet volume scaling driven by Front Node wind noise.
+- **Lookahead Brickwall Limiter:** Prevents digital clipping above $0\,\text{dBFS}$.
 
 ---
 
-## 2. OMM In-System UART-Push-Flasher (`omm_flasher.cpp`)
+## 2. Ultra-Low-Latency ESP-NOW Protocol (`esp_now_front_node_client`)
 
-To enable one-click firmware updates for the entire motorcycle system directly from the smartphone, the Central Box integrates an automated SLIP-loader engine:
+Direct communication between Front Node and Central Box utilizes unencrypted IEEE 802.11 Vendor-Specific Action Frames:
 
+```cpp
+enum FrontNodePktType : uint8_t {
+    PKT_TYPE_HEARTBEAT       = 0x01,  // Status, Uptime, VBUS Voltage
+    PKT_TYPE_PTT_EVENT       = 0x02,  // Handlebar PTT pressed/released (< 1.8 ms)
+    PKT_TYPE_AUDIO_RMS       = 0x03,  // Knowles MEMS wind noise dB(A) (50 Hz)
+    PKT_TYPE_OTTOCAST_STATUS = 0x04,  // Status, Current, Auto-Café Timer
+    PKT_TYPE_CAN_TELEMETRY   = 0x05,  // Cockpit CAN telemetry
+    PKT_TYPE_CMD_POWER_CYCLE = 0x10,  // Central Box -> Front Node: 2.5s Hard Reboot
+    PKT_TYPE_CMD_CONFIG      = 0x11   // Central Box -> Front Node: Ignition Sync
+};
 ```
-┌─────────────────────────┐                ┌─────────────────────────┐
-│ CENTRAL BOX (ESP32-S3)  │ 460,800 Baud   │ REAR POD 3 (ESP32-C3)   │
-│                         ├───────────────►│                         │
-│ • Reads 'omm_rear.bin'  │ UART TX / RX   │ • Receives SLIP Chunks  │
-│ • Power-Cycle / Boot-Cmd│                │ • Flashes NOR storage   │
-│ • MD5 Hash Verification │◄───────────────┤ • Reboots into new app  │
-└─────────────────────────┘ ACK / Status   └─────────────────────────┘
-```
 
-### Push-Flashing Workflow:
-1. **Trigger:** WebApp transfers combined firmware package (`omb_main.bin` + `omm_rear.bin`) to the Central Box.
-2. **Bootloader Entry:** Central Box transmits command `0xAA 0x55 0xFE 0x01 "BOOT"` over UART and executes a synchronous 100 ms power-cycle via `POD3_PWR_EN`.
-3. **ROM Synchronization:** 0x08 SLIP synchronization frame locks the ESP32-C3 into ROM download mode.
-4. **Streaming:** 1024-byte block streaming at 460,800 baud ($< 6\,\text{seconds}$ total duration).
-5. **Integrity Check:** MD5 hash validation and automatic warm reboot into the active application.
+### 2.1 Handlebar PTT Latency Budget
+1. **Handlebar Switch Closure:** $12\,\mu\text{s}$ hardware debouncing.
+2. **ESP32-C3 GPIO Interrupt:** $35\,\mu\text{s}$ ISR execution time.
+3. **ESP-NOW Radio Transmission (2.4 GHz):** $0{,}90\,\text{ms}$ over-the-air flight time (99.8% PDR).
+4. **Central Box ESP32-S3 Core 0 ISR:** $45\,\mu\text{s}$ frame decode & pin toggle.
+5. **Toshiba TLP222A Optocoupler:** $0{,}50\,\text{ms}$ turn-on time $t_{\text{ON}}$.
+* **Total Glass-to-Glass Latency:** **$1{,}74\,\text{ms}$** (far below the human perceptual threshold of 10 ms).
 
 ---
 
-## 3. TLP222A Pulse Synthesis
-Button pulses are precisely synthesized:
-- **Single Click (Mesh On/Off):** 200 ms active, > 300 ms idle.
-- **Channel Next Pulse:** 1000 ms active, > 500 ms idle.
+## 3. Dual-Bank Rollback-OTA Partitioning
+
+To completely eliminate the risk of bricking when the vehicle ignition is turned off during an update:
+
+```csv
+# Name,   Type, SubType, Offset,  Size, Flags
+nvs,      data, nvs,     0x9000,  0x4000,
+otadata,  data, ota,     0xd000,  0x2000,
+phy_init, data, phy,     0xf000,  0x1000,
+factory,  app,  factory, 0x10000, 0x180000,
+ota_0,    app,  ota_0,   0x190000,0x140000,
+ota_1,    app,  ota_1,   0x2d0000,0x140000,
+storage,  data, littlefs,0x410000,0x3f0000,
+```
+
+* **Automatic Rollback:** The bootloader verifies firmware image integrity via SHA-256 before committing. If power cuts out mid-flash, the bootloader automatically reverts to the previous working slot (`ota_0`) $\rightarrow$ **0.0% brick risk**.

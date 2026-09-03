@@ -20,64 +20,55 @@
 
 ## 📚 Technical Documentation
 
-The comprehensive technical specification is split into 19 modular chapters:
+The comprehensive technical specification is split into 16 logically organized chapters:
 
 1. [**01 - System Architecture & Satellite Topology**](docs/en/01_system_architecture.md)  
-   *Overview of the 4-point architecture, spatial RF diversity, and multi-domain concept.*
+   *Overview of the 5-point architecture, spatial RF diversity, cockpit integration, and overall system design.*
 
-2. [**02 - PCB Hardware & HD26 Pinout**](docs/en/02_pcb_hardware_pinout.md)  
-   *Main board schematic, ESP32-S3 GPIO mapping, and the 26-pin IP67 enclosure interface.*
+2. [**02 - Intercom Matrix, Hardware Profiles & Routing**](docs/en/02_intercom_matrix_profiles.md)  
+   *The 5 OEM adapter classes A–E, LittleFS profile engine, zero-latency PTT (< 1.8 ms), and audio cross-matrix.*
 
-3. [**03 - Isolated Audio Frontend & Level Matching**](docs/en/03_audio_frontend_isolated.md)  
-   *Galvanic isolation via Bourns audio transformers and PhotoMOS PTT simulation (TLP222A).*
+3. [**03 - Audio DSP, Acoustics & Knowles MEMS Wind Tracking**](docs/en/03_audio_dsp_acoustics.md)  
+   *1500V Bourns isolation, ES8388 Codec, Knowles MEMS acoustic wind sampling, and Raised-Cosine Ducking.*
 
-4. [**04 - Automotive Power Management & UPS**](docs/en/04_power_management_ups.md)  
-   *LM5164-Q1 buck regulator, BQ24075 UPS with JEITA NTC monitoring, and 5 battery profiles.*
+4. [**04 - Mesh Network, LoRa & GNSS Navigation**](docs/en/04_mesh_lora_navigation.md)  
+   *OpenMotorMesh (OMM), Dynamic Leader Election (DLE), 868 MHz LoRa fallback, and 10 Hz Multi-GNSS.*
 
-5. [**05 - Mechanical Enclosure & Modular Cartridges**](docs/en/05_mechanical_enclosure_pods.md)  
-   *IP67 enclosure concept (Type A central box, Type B pods) in PA12 MJF with Mill-Max pogo bays.*
+5. [**05 - Power Management, UPS Battery & Power Gate**](docs/en/05_power_management_ups.md)  
+   *LM5164-Q1 72V buck, BQ24075 UPS, Front Node LMR36015 / TPS2051B power gate & 1-click CarPlay hard reboot.*
 
-6. [**06 - Dynamic Profiles & 1-Wire DS2401 Detection**](docs/en/06_dynamic_profiles_spec.md)  
-   *Automatic cartridge hardware detection via DS2401 Silicon Serial Number and LittleFS JSON profiles.*
+6. [**06 - Telemetry Blackbox, SDIO Ringbuffer & WebDAV Sync**](docs/en/06_telemetry_blackbox_webdav.md)  
+   *4-bit high-speed SDIO, GDPR/court-compliant ringbuffer, ECDSA SHA-256, and automated private cloud sync.*
 
-7. [**07 - MicroSD BGH Ring Buffer & WebDAV Sync**](docs/en/07_microsd_bgh_webdav.md)  
-   *4-Bit SDIO FAT32 filesystem, GDPR-compliant ring buffer logging, and encrypted TLS 1.3 sync.*
+7. [**07 - Hardware Architecture & Board Pinouts (PCBA 01 to 05)**](docs/en/07_pcba_hardware_pinouts.md)  
+   *All 5 circuit boards: layer stackup, controlled impedance, net classes, functional zoning, and pinouts.*
 
-8. [**08 - DSP Audio Engine & Raised-Cosine Ducking**](docs/en/08_dsp_audio_engine.md)  
-   *I2S DMA audio pipeline, raised-cosine crossfading, speed-dependent gain, and Codec2 encoding.*
+8. [**08 - Mechanical Enclosures, CAD & Sealing System**](docs/en/08_enclosures_mechanics_cad.md)  
+   *3-piece Central Box, universal satellite pods, modular cartridges, Rear Pod 3, and 4-in-1 Front Node.*
 
-9. [**09 - Firmware Architecture & FreeRTOS Design**](docs/en/09_firmware_architecture.md)  
-   *Dual-core FreeRTOS task architecture, lockless ring buffers, and task supervisors.*
+9. [**09 - Firmware Architecture, FreeRTOS & Rollback-OTA**](docs/en/09_firmware_architecture.md)  
+   *Multi-core ESP32-S3, RP2040, ESP32-C3, ESP-NOW low-latency protocol (< 1.8 ms), and dual-bank rollback OTA.*
 
-10. [**10 - Web Bluetooth Dashboard & PWA Architecture**](docs/en/10_web_bluetooth_dashboard.md)  
-    *Zero-cloud PWA web app, Web Bluetooth API (WebBLE), vehicle dynamics HUD, and i18n switcher.*
+10. [**10 - WebApp PWA & Dashboard Operation**](docs/en/10_webapp_pwa_dashboard.md)  
+    *Zero-cloud PWA web app, Web Bluetooth API (WebBLE), vehicle dynamics HUD, and Front Node controls.*
 
-11. [**11 - OpenMotorMesh (OMM), DLE & Cluster Relay**](docs/en/11_openmotormesh_dle_election.md)  
-    *Dual-PHY (2.4 GHz Sidelink + 868 MHz LoRa), Adaptive QoS, DLE scoring, and cluster relay.*
+11. [**11 - Digital Simulation & Multi-Physics Master Testbench**](docs/en/11_simulation_testbench.md)  
+    *9 modular Python testbenches and 10 HIL scenarios verifying SPICE, thermal, transients, RF, and acoustics.*
 
-12. [**12 - GNSS Multi-Constellation, ADR & Video Sync**](docs/en/12_gnss_track_lifecycle_video.md)  
-    *u-blox MAX-M10S, 15-state EKF dead reckoning, map-matching, and Actioncam Smart Remote control.*
+12. [**12 - EMC Hardening, RF Shielding & Environmental Protection**](docs/en/12_emv_rf_hardening.md)  
+    *Automotive transient immunity (ISO 7637-2), 2.4 GHz vs 868 MHz isolation, IPC-CC-830B coating, and shock damping.*
 
-13. [**13 - Rear Pod 3 & Digital Transceiver Architecture**](docs/en/13_rear_pod3_transceiver_arch.md)  
-    *Rear pod integration of GNSS, SX1262 LoRa 868 MHz, and ESP32-C3 RISC-V co-processor.*
+13. [**13 - Bill of Materials (BOM) & SMT Manufacturing**](docs/en/13_bom_manufacturing.md)  
+    *Complete 5-board BOM for JLCPCB SMT production, ordering checklist, wiring harness pigtail, and COTS items.*
 
-14. [**14 - EMC, RF & Environmental Hardening**](docs/en/14_emv_rf_hardening.md)  
-    *Automotive transient protection, conformal coating (IPC-CC-830B), and 35 dB chassis isolation.*
+14. [**14 - Build Instructions, Wiring & Vehicle Installation**](docs/en/14_build_instructions_assembly.md)  
+    *Step-by-step assembly guide, 3D printing parameters (FDM vs. MJF), Front Node mounting, and commissioning.*
 
-15. [**15 - Bill of Materials (BOM) & Manufacturing**](docs/en/15_bom_manufacturing.md)  
-    *Complete 3-tier BOM for JLCPCB SMT assembly (Main Box, Rear Pod 3, Cartridges) & CPL parameters.*
+15. [**15 - Automotive Standards & Technical References**](docs/en/15_standards_references.md)  
+    *Index for ISO 7637-2, ISO 16750, ECE R10, RED 2014/53/EU, IEC 61672-1 Class 1, and Bluetooth SIG.*
 
-16. [**16 - Simulation & Digital Testbench**](docs/en/16_simulation_testbench.md)  
-    *Automotive Simulation Suite: Audio DSP, Raised-Cosine Ducking, Power Management, 15-State ADR-EKF & 1-Wire.*
-
-17. [**17 - Legal Compliance, Licensing, Regulations & GDPR**](docs/en/17_legal_compliance_dsgvo.md)  
-    *ECE R10, RED 2014/53/EU compliance, RF spectrum regulations, open-source licenses & disclaimer.*
-
-18. [**18 - Standards & Normative References**](docs/en/18_standards_references.md)  
-    *Reference index for ISO 7637-2, Bluetooth SIG Battery Service (0x180F), and intercom protocols.*
-
-19. [**19 - Build Instructions & Hardware Kit BOM**](docs/en/19_build_instructions_kit.md)  
-    *Practical step-by-step assembly guide, 3D printing requirements, fasteners, seals, and commissioning.*
+16. [**16 - Legal Compliance, Privacy (GDPR) & Licensing**](docs/en/16_legal_compliance_dsgvo.md)  
+    *Open-source licenses (GPL-3.0, CERN-OHL-S v2, CC BY-SA 4.0), GDPR compliance, and liability disclaimer.*
 
 ---
 
