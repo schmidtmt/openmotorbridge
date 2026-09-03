@@ -82,7 +82,45 @@ This document provides the complete Bill of Materials (BOM) and manufacturing sp
 
 ---
 
-## 6. JLCPCB SMT Ordering Checklist (All 5 Boards)
+## 6. Mechanical CAD & 3D Printing BOM (MJF PA12 / ASA)
+
+### 6.1 CAD / STL Asset Overview
+* **Central Box:** `main_box_lower_case.stl`, `main_box_mid_tray.stl`, `main_box_lid.stl`.
+* **Satellite Pods (3x):** `pod_base_housing.stl`, `03_pod_bulkhead_partition.stl`.
+* **Cartridges:** `cartridge_base_sled.stl`, `cartridge_sena_sled.stl`, `cartridge_cardo_sled.stl`, `cartridge_omm_transceiver_sled.stl`, `cartridge_blindkassette_waterproof.stl`.
+* **Front Node:** `front_node_lower_case.stl`, `front_node_upper_case.stl`.
+
+---
+
+## 7. Step-by-Step Commissioning, Measurement & Test Protocol
+
+### Step 1: Visual Inspection (Prior to Initial Power-Up)
+* [ ] Exclude solder bridges beneath LM5164, BQ24075, ES8388, and USB2512B under inspection microscope.
+* [ ] Verify polarity of TVS diode D1 (SMBJ33CA) and P-channel MOSFET reverse polarity circuit.
+* [ ] Confirm the 2.5 mm isolation barrier around Bourns transformers T1/T2 and PhotoMOS OC1/OC2 is free of tin whiskers.
+
+### Step 2: Bench Power-Up & Current Verification
+* [ ] Set laboratory DC power supply to $12{,}0\,\text{V DC}$ with $150\,\text{mA}$ current clamp.
+* [ ] Measure quiescent current: Expected $= 45\,\text{mA}$ to $75\,\text{mA}$ (without battery charging).
+* [ ] Test point `TP_5V`: Expected $= 5{,}15\,\text{V} \pm 0{,}05\,\text{V}$.
+* [ ] Test point `TP_3V3`: Expected $= 3{,}30\,\text{V} \pm 0{,}02\,\text{V}$.
+
+### Step 3: Firmware Flash & Hardware Self-Test
+* [ ] Execute PlatformIO / ESP-IDF flash over USB-C port (`firmware/main_controller/`).
+* [ ] Format LittleFS storage partition and flash OEM cartridge JSON profiles.
+* [ ] Open serial console (115,200 Baud): Verify "LittleFS Mount OK", "1-Wire Manager Task OK", "I2S ES8388 Codec Init OK", "TCAN334G CAN-FD OK".
+
+### Step 4: Audio & Ducking Verification
+* [ ] Feed $1\,\text{kHz}$ sine wave ($1{,}0\,\text{V}_{\text{RMS}}$) into audio input line.
+* [ ] Connect oscilloscope to `PORT1_AUDIO_OUT`: Verify audio attenuates smoothly within $15\,\text{ms}$ upon PTT trigger.
+* [ ] Release PTT trigger: Confirm $600\,\text{ms}$ hold period followed by smooth $250\,\text{ms}$ raised-cosine volume restoration.
+
+### Step 5: IP67 Pressure Decay Test
+* [ ] Place assembled enclosure into vacuum decay chamber at $-20\,\text{kPa}$ gauge pressure for 60 seconds (leakage rate $< 0{,}5\,\text{kPa}$).
+
+---
+
+## 8. JLCPCB SMT Ordering Checklist (All 5 Boards)
 
 | Assembly / PCBA | Gerber ZIP Archive | BOM CSV File | CPL (Pick & Place) CSV | Layers & Stackup | Surface Finish |
 | :--- | :--- | :--- | :--- | :---: | :--- |
@@ -94,7 +132,7 @@ This document provides the complete Bill of Materials (BOM) and manufacturing sp
 
 ---
 
-## 7. Central Wiring Harness (HD26 Breakout Pigtail)
+## 9. Central Wiring Harness (HD26 Breakout Pigtail)
 
 ```
                                CENTRAL HD26 BREAKOUT HARNESS
@@ -111,7 +149,7 @@ This document provides the complete Bill of Materials (BOM) and manufacturing sp
 
 ---
 
-## 8. COTS Procurement List
+## 10. COTS Procurement List
 
 | Component | Specification / Type | Supplier / Manufacturer | Quantity | Function |
 | :--- | :--- | :--- | :---: | :--- |

@@ -59,3 +59,33 @@ The dashboard is a fully self-contained Progressive Web App (PWA) built with sta
 
 ### 2.5 Tab 5: Hardware & Reserve (`#tab-hardware`)
 * **Front Node Diagnostics:** Hardware specifications (ESP32-C3, LMR36015, USB2512B, TPS2051B, Knowles MEMS) and OTA firmware check.
+* **Reserve I/O:** Status and toggle switches for HD26 Pin 25 (`RESERVE_GPIO_A`) and Pin 26 (`RESERVE_GPIO_B`).
+* **Central Box Soft-Reboot:** Controlled warm restart of the main system.
+
+---
+
+## 3. Advanced GPX Export & Navigation Formatting
+
+The integrated export engine transforms raw 10 Hz telemetry logs into 4 specialized destination formats:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                       OMB GPX EXPORT ENGINE FORMATS                         │
+├───────────────────┬───────────────────────────────┬─────────────────────────┤
+│ Format Profile    │ Target Applications           │ Key Features            │
+├───────────────────┼───────────────────────────────┼─────────────────────────┤
+│ **1. Moto-Navi**  │ Garmin Zūmo XT/XT2, BMW CRN,  │ • Road-Snapping (OSM)   │
+│    **(Shaping)**  │ Kurviger, Calimoto, TomTom    │ • Strategic shaping pts │
+│                   │                               │ • Garmin `<gpxx:>` Ext  │
+├───────────────────┼───────────────────────────────┼─────────────────────────┤
+│ **2. Video-Sync** │ Telemetry Overlay, VIRB Edit, │ • 10 Hz 1-PPS Timecode  │
+│    **(HiFi EKF)** │ Dashware, Insta360, GoPro     │ • Lean angle (degrees)  │
+│                   │                               │ • Video highlight tags  │
+├───────────────────┼───────────────────────────────┼─────────────────────────┤
+│ **3. Clean Track**│ Google Earth, Komoot, Relive, │ • Douglas-Peucker RDP   │
+│    **(Visual)**   │ Strava, Apple/Google Maps     │ • Compact file size     │
+├───────────────────┼───────────────────────────────┼─────────────────────────┤
+│ **4. Raw EKF**    │ Engineering Analysis, MATLAB, │ • Complete IMU & CAN    │
+│    **(Diagnose)** │ RaceChrono                    │   sensor logs unfiltered│
+└───────────────────┴───────────────────────────────┴─────────────────────────┘
+```

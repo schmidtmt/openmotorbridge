@@ -74,9 +74,90 @@ HANDLEBAR PTT PUSHBUTTON (COCKPIT)
 
 The DSP mixer core routes audio signals dynamically across all connected endpoints:
 
-| Priority | Audio Source | Ducking Behavior | Target Endpoints |
+| **Priority** | **Audio Source** | **Ducking Behavior** | **Target Endpoints** |
 | :---: | :--- | :--- | :--- |
 | **1 (Highest)** | **Emergency Intercom / Warning** | Ducks all other audio to $-24\,\text{dB}$ | Driver & Passenger Helmets |
 | **2** | **Navigation Prompts (GPS/CarPlay)** | Smooth Raised-Cosine Ducking ($-18\,\text{dB}$) | Driver Helmet |
 | **3** | **Mesh Intercom (Sena / Cardo / OMM)** | Low latency, Full-Duplex mixing | Group Broadcast |
 | **4 (Lowest)** | **Media Audio (Music / FM Radio)** | Background music stream | Helmets (Muted during voice) |
+
+---
+
+## 5. 3-Phase Plug-and-Play Detection Sequence
+
+To protect active headsets against electrical shorts and hot-plug transients, OpenMotorBridge executes a strict 3-phase hardware handshake:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│          3-PHASE PLUG-AND-PLAY DETECTION SEQUENCE           │
+├─────────────────────────────────────────────────────────────┤
+│ 1. DETECTION: 1-Wire ID query (current-limited < 20 mA)     │
+│ 2. VALIDATION: Family Code & 64-bit UID checked vs database │
+│ 3. RELEASE: Only on match -> 5V MOSFET ON & Audio/UART live │
+└─────────────────────────────────────────────────────────────┘
+```
+
+1. **Current-Limited Interrogation:** Upon cartridge insertion, the 5V high-side switch remains OFF. The 1-Wire driver polls with a current-limited sense voltage ($< 20\,\text{mA}$) to read the DS2401 UID.
+2. **Dynamic Routing Assignment:**
+   * **Rear Pod 3 UID detected:** Central Box switches pins 15/16 to high-speed UART (460,800 Baud) and initializes the NMEA/LoRa parser.
+   * **Audio Cartridge (Sena/Cardo) detected:** Pins are routed to the Bourns audio path and ES8388 I2S DSP; the matching JSON profile is loaded.
+   * **Blank Cartridge or Unassigned UID:** Bay remains unpowered (`disabled.json`).
+3. **Controlled Soft-Start:** Once validated, the P-channel MOSFET energizes the cartridge via a soft-start ramp ($100-150\,\text{ms}$) preventing inrush dips.
+
+### 5.1 Cartridge Pinout Specification (`J2` / JST-SH 1.0 mm)
+
+The 6-pin **JST-SH 1.0 mm header (`J2`)** on `PCBA 03` connects to the OEM headset cradle:
+
+| Pin | Signal | Class A (+Mesh) | Class B (Sena 50S) | Class C (Cardo Edge)| Class E (PMR446) |
+| :---: | :--- | :--- | :--- | :--- | :--- |
+| **1** | `GND` | Micro-USB Pin 5 (GND) | Pogo-Pin 1 (GND) | Air-Mount Pad 1 (GND) | Plug Shield / Chassis |
+| **2** | `5V_VBUS` | Micro-USB Pin 1 (+5V) | Pogo-Pin 2 (5V Charge)| Air-Mount Pad 2 (5V Charge)| Battery Dummy 5V In |
+| **3** | `AUDIO_R+` | *N/C (Pure BT Audio)* | Pogo-Pin 4 (Spk R+) | Air-Mount Pad 3 (Spk +)| Plug Speaker + |
+| **4** | `AUDIO_R-` | *N/C (Pure BT Audio)* | Pogo-Pin 5 (Spk R-) | Air-Mount Pad 4 (Spk -)| Plug Speaker - |
+| **5** | `MIC_IN+` | *N/C (Pure BT Audio)* | Pogo-Pin 6 (Mic +) | Air-Mount Pad 5 (Mic +)| Plug Microphone + |
+| **6** | `OPTO_PTT` | *N/C* | Pogo-Pin 7 (Mesh-Btn)| *N/C* (Aux) | PTT Switch to Ground |
+
+---
+
+## 6. Safety Fallback: `disabled.json` & Zero-Trust Quarantine
+
+If a bay is empty, a blank cartridge is inserted, or an unknown UID is read:
+1. **Power Cut (`vcc_enabled: false`):** The P-channel MOSFET stays open $\rightarrow 0{,}0\,\text{mA}$ quiescent draw.
+2. **Audio Mute:** Codec input and output gains are locked to $-96\,\text{dB}$.
+3. **High-Z Optocoupler:** TLP222A relays remain open.
+4. **DLE Score = 0:** Prevents unverified hardware from affecting mesh leader election.
+
+---
+
+## 7. WebApp Workflow: Automatic Recognition & Profile Assignment
+
+When unknown cartridge hardware is inserted, the PWA launches an automated onboarding dialog:
+1. **Automatic Scan:** ESP32-S3 polls both 1-Wire ports every 2 seconds and forwards new UIDs via BLE.
+2. **Assignment Modal:** The WebApp displays the `#uuid-detect-modal` prompt.
+3. **Model Selection:** The rider selects their headset model from the dropdown list.
+4. **Persistent Mapping:** The configuration `{"<UID>": "<profile_id>"}` is permanently saved to LittleFS and browser IndexedDB.
+5. **Zero-Touch Reconnection:** Subsequent insertions automatically re-apply all gains and pulse timings.
+
+---
+
+## 8. Recommended Pod Configuration Scenarios
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                   RECOMMENDED POD CONFIGURATION SCENARIOS                   │
+├───────────────────────┬─────────────────────────┬───────────────────────────┤
+│ Setup Category        │ Pod 1 (Left)            │ Pod 2 (Right)             │
+├───────────────────────┼─────────────────────────┼───────────────────────────┤
+│ 💎 **High-End Leader**│ **Sena 60S / Apex**     │ **Cardo Packtalk Edge**   │
+│    (350 – 550 €)      │ (Mesh 3.0 Wave, Class B)│ (DMC Gen2 Air-Mount, Cl. C│
+├───────────────────────┼─────────────────────────┼───────────────────────────┤
+│ ⚖️ **Price-Perf.**    │ **Sena Spider RT1/ST1** │ **Cardo Freecom 4x / Bold**│
+│    (180 – 280 €)      │ (Mesh 2.0 Pure, Class B)│ (Live Intercom/DMC, Cl. D)│
+├───────────────────────┼─────────────────────────┼───────────────────────────┤
+│ 💰 **Budget Entry**   │ **Sena MeshPort Blue**  │ **IP67 Blank Cartridge**  │
+│    (80 – 140 €)       │ (or Sena 20S/SF, Cl. A) │ (Slot unpowered/disabled) │
+├───────────────────────┼─────────────────────────┼───────────────────────────┤
+│ 🏔️ **Adventure/Offroad**│ **Sena Apex / 50S**   │ **Midland G9 Pro PMR446** │
+│    (220 – 320 €)      │ (Mesh 3.0, Class B)     │ (Analog Radio Gateway, E) │
+└───────────────────────┴─────────────────────────┴───────────────────────────┘
+```
