@@ -38,6 +38,9 @@ To exhaustively verify the interaction of hardware, acoustics, vehicle dynamics,
 ├───────────────────────────┼───────────────────────────────────┼─────────────────────────┤
 │ 9. Universal Front Node & │ `front_node_wireless_hub_sim.py`  │ USB2512B Eye, MEMS DSP, │
 │    Smart Fairing Hub      │                                   │ TPS2051B, ESP-NOW, OTA  │
+├───────────────────────────┼───────────────────────────────────┼─────────────────────────┤
+│ 10. Live Audio DSP Studio │ `tools/audio_testbench/server.py` │ Interactive Web Audio   │
+│     & Real-Time Simulator │                                   │ Suite, Mic/PTT/Speedo/EQ│
 └───────────────────────────┴───────────────────────────────────┴─────────────────────────┘
 ```
 
@@ -79,9 +82,29 @@ Executes production C++ firmware algorithms against a virtual multi-board testbe
 
 ---
 
-## 4. Running the Master Testbench
+## 4. Interactive Live Audio DSP Studio & Real-Time Testbench (`tools/audio_testbench/`)
 
-All 9 testbenches run automatically with a single command:
+While the 9 batch Python simulators numerically audit edge cases, the **Live Audio DSP Studio** provides interactive, audible verification in the browser:
+
+```bash
+python3 tools/audio_testbench/server.py
+```
+
+* **Live Headset Ingestion:** Works with any connected USB or Bluetooth headset / microphone with live preamp gain and VAD thresholding.
+* **Handlebar Remote Simulation:** Screen button or holding `[SPACEBAR]` executes bounce-free PTT keying with instantaneous raised-cosine ducking.
+* **Firmware-Identical Ducking:** Smooth $-12\,\text{dB}$ attenuation with $15\,\text{ms}$ attack and $800\,\text{ms}$ release curves (identical to `audio_dsp_pipeline.cpp`).
+* **Motorcycle Speedometer (0 to 160 km/h):**
+  * $0\dots 15\,\text{km/h}$ (Traffic stop / staging): Ambient transparency mode active ($350\,\text{Hz}\dots 3.2\,\text{kHz}$).
+  * $15\dots 30\,\text{km/h}$: Raised-cosine fade-out of ambient feed.
+  * $> 30\,\text{km/h}$: Noise gate engaged with dynamic aerodynamic noise generation proportional to $v^2$.
+* **1-Wire Cartridge Hot-Swap:** Toggle between Sena 60S (+2.5 dB EQ peak), Cardo Packtalk Pro (natural vocal compression), OMM LoRa emergency radio bandpass ($300\dots 3400\,\text{Hz}$), and mute (blind cartridge).
+* **Real-Time DSP Oscilloscope:** Stereo FFT spectrum analyzer, triple VU-meters, and gain reduction envelope tracker.
+
+---
+
+## 5. Running the Master Testbench
+
+All 9 numerical batch testbenches run automatically with a single command:
 
 ```bash
 python3 tools/run_all_simulations.py

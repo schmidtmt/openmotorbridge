@@ -160,3 +160,37 @@ FAHRWIND-PEGEL          FAHRGESCHWINDIGKEIT    AGC LAUTSTÄRKE-BOOST    AKUSTIK-
 Zur Freischaltung von Apple CarPlay in der Boom! Box GTS Infotainment-Headunit ohne das proprietäre HD-WHIM-Modul ($> 350\,\text{€}$):
 * **Elektrische Impedanz-Emulation:** OpenMotorBridge emuliert über ein präzises Widerstands- und Übertragernetzwerk an den Audio-Schnittstellen die Gleich- und Wechselstrom-Impedanz ($1{,}0 \dots 2{,}2\,\text{k}\Omega$) eines aktiven OEM-Mikrofons.
 * **Ergebnis:** Apple CarPlay und Android Auto werden im Fahrzeugdisplay sofort freigeschaltet.
+
+---
+
+## 7. Interaktives Live Audio DSP Studio & Echtzeit-Simulator (`tools/audio_testbench/`)
+
+Für die sofortige akustische Verifikation der gesamten DSP-Pipeline im Browser (ohne geflashte Hardware) steht das autarke Web Audio DSP Studio zur Verfügung:
+
+```bash
+# Startet den lokalen HTTP-Server und öffnet http://localhost:8088
+python3 tools/audio_testbench/server.py
+```
+
+```
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│               OPENMOTORBRIDGE LIVE AUDIO DSP STUDIO & ECHTZEIT-SIMULATOR               │
+├───────────────────────────────┬───────────────────────────────┬────────────────────────┤
+│ 1. EINGABEN & FAHRZEUG        │ 2. ECHTZEIT-OSZILLOSKOP & DSP │ 3. OUTPUT & SPEKTRUM   │
+├───────────────────────────────┼───────────────────────────────┼────────────────────────┤
+│ • Reales Mikrofon/Headset     │ • Raised-Cosine Ducking Kurve │ • Stereo FFT Spektrum  │
+│ • Lenker-PTT Taste ([SPACE])  │ • 15ms Attack / 800ms Release │ • Triple VU-Meter      │
+│ • Virtueller Tacho (0-160km/h)│ • AGC Windgeräusch-Gate       │ • Helm-Master-Pegel    │
+│ • Synthwave & MP3 Drag&Drop   │ • 1-Wire Kassetten-Hot-Swap   │ • Latenzzähler (<10ms) │
+└───────────────────────────────┴───────────────────────────────┴────────────────────────┘
+```
+
+### 7.1 Funktionsumfang des Simulators
+1. **Mikrofon- & Headset-Live-Einspeisung:** Wähle jedes angebundene USB- oder Bluetooth-Headset mit regelbarem Gain und VAD-Schwellwert.
+2. **Lenker-PTT Fernbedienung:** Taste im UI oder Halten der `[LEERTASTE]` schaltet das Mikrofon prellfrei frei und triggert das Ducking.
+3. **1:1 Firmware Raised-Cosine Ducking:** Implementiert exakt die mathematische Kennlinie aus [`audio_dsp_pipeline.cpp`](../../firmware/main_controller/src/audio_dsp_pipeline.cpp) mit kontinuierlichem Dämpfungsverlauf.
+4. **Motorrad-Tachometer & Fahrtwind:**
+   * $0\dots 15\,\text{km/h}$ (Ampel/Rangieren): $100\,\%$ Transparenzmodus aktiv.
+   * $15\dots 30\,\text{km/h}$: Stetiges Ausblenden über Raised-Cosine Flanke.
+   * $> 30\,\text{km/h}$: Windgeräusch-Gate aktiv mit dynamischer Pink-Noise-Beimischung proportional zu $v^2$.
+5. **1-Wire Kassetten-Hot-Swap:** Simuliert die hardware-spezifischen Klangprofile (Sena 60S Preamp/EQ, Cardo Packtalk Pro Kompression, OMM LoRa Telemetrie-Bandpass $300\dots 3400\,\text{Hz}$, Blindkassette $-96\,\text{dB}$).

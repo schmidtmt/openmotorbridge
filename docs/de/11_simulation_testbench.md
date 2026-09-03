@@ -38,6 +38,9 @@ Um das Zusammenspiel von Hardware, Akustik, Fahrdynamik, Thermik, Hochfrequenz-P
 ├───────────────────────────┼───────────────────────────────────┼─────────────────────────┤
 │ 9. Universal Front Node & │ `front_node_wireless_hub_sim.py`  │ USB2512B Eye, MEMS DSP, │
 │    Smart Fairing Hub      │                                   │ TPS2051B, ESP-NOW, OTA  │
+├───────────────────────────┼───────────────────────────────────┼─────────────────────────┤
+│ 10. Live Audio DSP Studio │ `tools/audio_testbench/server.py` │ Interaktive Web-Audio   │
+│     & Echtzeit-Simulator  │                                   │ Suite, Mic/PTT/Tacho/EQ │
 └───────────────────────────┴───────────────────────────────────┴─────────────────────────┘
 ```
 
@@ -178,9 +181,29 @@ Verifiziert alle hochfrequenten, leistungselektronischen und funktechnischen Sub
 
 ---
 
-## 11. Ausführung der Master-Testbench
+## 11. Interaktives Live Audio DSP Studio & Echtzeit-Simulator (`tools/audio_testbench/`)
 
-Alle 9 Testbenches können vollautomatisiert mit einem einzigen Befehl ausgeführt werden:
+Während die 9 numerischen Python-Module die Grenzparameter rechnerisch auditieren, dient das **Live Audio DSP Studio** der hörbaren Echtzeit-Erprobung im Webbrowser:
+
+```bash
+python3 tools/audio_testbench/server.py
+```
+
+* **Reale Mikrofon-Einspeisung:** Unterstützt jedes angeschlossene Headset / USB-Mikrofon mit einstellbarem Vorverstärker-Pegel und VAD-Schwellwert.
+* **Leertaste als Lenker-PTT:** Halten der Leertaste `[SPACE]` simuliert die prellfreie Auslösung des TLP222A Optokopplers.
+* **Firmware-identisches Raised-Cosine Ducking:** Stetige Lautstärkeabsenkung um $-12\,\text{dB}$ mit $15\,\text{ms}$ Attack und $800\,\text{ms}$ Release ohne jegliche Knackgeräusche.
+* **Virtueller Motorrad-Tacho (0 bis 160 km/h):**
+  * $0\dots 15\,\text{km/h}$ (Ampel / Stillstand): Transparenzmodus mit Umgebungs-Einblendung ($350\,\text{Hz}\dots 3{,}2\,\text{kHz}$).
+  * $15\dots 30\,\text{km/h}$: Raised-Cosine Ausblendung.
+  * $> 30\,\text{km/h}$: Windgeräusch-Gate aktiv mit dynamischem rosa Rauschen proportional zu $v^2$.
+* **1-Wire Kassetten-Hot-Swap:** Umschaltung zwischen Sena 60S (EQ-Boost), Cardo Packtalk Pro (Vocal-Kompression), OMM LoRa Notfall-Bandpass ($300\dots 3400\,\text{Hz}$) und Stummschaltung (Blindkassette).
+* **Visuelle DSP-Telemetrie:** Stereo FFT-Spektrumanalysator, Dreifach-VU-Meter und Oszilloskop für den Dämpfungsverlauf.
+
+---
+
+## 12. Ausführung der Master-Testbench
+
+Alle 9 numerischen Batch-Testbenches können vollautomatisiert mit einem einzigen Befehl ausgeführt werden:
 
 ```bash
 python3 tools/run_all_simulations.py

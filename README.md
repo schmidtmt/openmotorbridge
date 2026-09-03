@@ -80,6 +80,8 @@ The comprehensive technical specification is split into 16 logically organized c
 * **`firmware/rear_coprocessor/`**: ESP-IDF / C++ source code for the Rear Pod 3 co-processor (ESP32-C3).
 * **`webapp_pwa/`**: Zero-cloud offline WebBLE dashboard (HTML5, Vanilla JS, CSS3, Service Worker, i18n).
 * **`hardware/`**: KiCad schematics, Gerber files, and 3D enclosure CAD models.
+* **`tools/audio_testbench/`**: **Interactive Live Audio DSP Studio & Real-Time Testbench** (`python3 tools/audio_testbench/server.py` $\rightarrow$ Web Audio testbench with live mic, Spacebar PTT, speedometer & ducking).
+* **`tools/simulators/`**: 9 modular Python simulation testbenches (`python3 tools/run_all_simulations.py`).
 
 ---
 

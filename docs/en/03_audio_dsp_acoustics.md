@@ -72,3 +72,37 @@ $$g(t) = \begin{cases} 1{,}0 & \text{for } t < 0 \\ g_{\min} + \frac{1 - g_{\min
 * **Attack Time ($T_{\text{attack}}$):** $15\,\text{ms}$ smooth descent (inaudible transition).
 * **Hold Time ($T_{\text{hold}}$):** $600\,\text{ms}$ retention to prevent pumping between words.
 * **Release Time ($T_{\text{release}}$):** $250\,\text{ms}$ smooth raised-cosine return.
+
+---
+
+## 5. Interactive Live Audio DSP Studio & Real-Time Testbench (`tools/audio_testbench/`)
+
+For instant acoustic verification of the entire DSP pipeline directly in the browser (without flashing hardware), an interactive Web Audio DSP Studio is provided:
+
+```bash
+# Launches local test server and opens http://localhost:8088
+python3 tools/audio_testbench/server.py
+```
+
+```
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│              OPENMOTORBRIDGE LIVE AUDIO DSP STUDIO & REALTIME TESTBENCH                │
+├───────────────────────────────┬───────────────────────────────┬────────────────────────┤
+│ 1. INPUTS & MOTORCYCLE        │ 2. REALTIME OSCILLOSCOPE & DSP│ 3. OUTPUT & SPECTRUM   │
+├───────────────────────────────┼───────────────────────────────┼────────────────────────┤
+│ • Physical Mic/Headset In     │ • Raised-Cosine Ducking Curve │ • Stereo FFT Spectrum  │
+│ • Handlebar PTT ([SPACEBAR])  │ • 15ms Attack / 800ms Release │ • Triple VU-Meters     │
+│ • Virtual Speedo (0-160 km/h) │ • Dynamic Wind Noise Gate     │ • Helmet Master Gain   │
+│ • Synthwave & MP3 Drag & Drop │ • 1-Wire Hot-Swap Profiles    │ • Latency (< 10 ms)    │
+└───────────────────────────────┴───────────────────────────────┴────────────────────────┘
+```
+
+### 5.1 Testbench Capabilities
+1. **Live Microphone & Headset Ingestion:** Select any USB or Bluetooth headset with adjustable mic preamp gain and VAD trigger threshold.
+2. **Handlebar Remote Simulation:** Screen button or holding `[SPACEBAR]` provides bounce-free PTT trigger with instant ducking.
+3. **1:1 Firmware Raised-Cosine Ducking:** Evaluates the exact mathematical formulation from [`audio_dsp_pipeline.cpp`](../../firmware/main_controller/src/audio_dsp_pipeline.cpp) with zero audio artifacts.
+4. **Motorcycle Speedometer & Wind Noise:**
+   * $0\dots 15\,\text{km/h}$ (Traffic stop): $100\%$ ambient transparency mode.
+   * $15\dots 30\,\text{km/h}$: Raised-cosine fade-out of ambient microphone.
+   * $> 30\,\text{km/h}$: Noise gate engaged with dynamic aerodynamic noise generation proportional to $v^2$.
+5. **1-Wire Cartridge Hot-Swap:** Simulates OEM acoustic profiles (Sena 60S EQ presence, Cardo Packtalk Pro vocal compression, OMM LoRa $300\dots 3400\,\text{Hz}$ radio bandpass, Blind plug $-96\,\text{dB}$).

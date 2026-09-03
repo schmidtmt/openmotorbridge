@@ -80,6 +80,8 @@ Die modulare technische Gesamtspezifikation gliedert sich in 16 thematisch struk
 * **`firmware/rear_coprocessor/`**: ESP-IDF / C++ Quellcode für den Heck-Pod 3 Co-Prozessor (ESP32-C3).
 * **`webapp_pwa/`**: Offlinefähiges WebBLE Dashboard (HTML5, Vanilla JS, CSS3, Service Worker, i18n).
 * **`hardware/`**: KiCad Schaltpläne, Gerber-Dateien und 3D-Modelle für das Gehäuse.
+* **`tools/audio_testbench/`**: **Interaktives Live Audio DSP Studio & Echtzeit-Simulator** (`python3 tools/audio_testbench/server.py` $\rightarrow$ Web-Audio Testbench mit Live-Mic, Space-PTT, Tacho & Ducking).
+* **`tools/simulators/`**: 9 modulare Python-Simulations-Testbenches (`python3 tools/run_all_simulations.py`).
 
 ---
 
