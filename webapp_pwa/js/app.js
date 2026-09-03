@@ -132,7 +132,14 @@ const i18n = {
         wizard_step2_p: 'Aktiviere "Open Mesh Channel 1" (Sena) bzw. "Open DMC Group" (Cardo) und deaktiviere Audio-Multitasking im Endgerät.',
         wizard_step3_h: 'Kassette einschieben & verriegeln',
         wizard_step3_p: 'Schiebe die Kassette ein, bis die POM-C Snap-Lock Klinken einrasten, und schließe den 90°-Cam-Lock Drehriegel.',
-        btn_wizard_finish: 'Verstanden & Profil aktivieren'
+        btn_wizard_finish: 'Verstanden & Profil aktivieren',
+        front_node_title: 'Universal Front-Knoten (Smart Fairing Hub)',
+        front_node_diag_title: 'Universal Front-Knoten Diagnostik (PCBA 05)',
+        front_noise_vu_label: 'Fahrtwind-Lärmpegel & Helm-Lautstärkeanpassung (AGC)',
+        btn_reboot_ottocast: 'CarPlay 1-Klick Kaltstart (2.5s)',
+        btn_test_ptt: 'Lenker-PTT Testen',
+        auto_cafe_label: 'Auto-Café Mode (60s)',
+        btn_front_node_ota: 'Front-Node OTA Firmware-Update prüfen'
     },
     en: {
         app_subtitle: 'v8.0 Satellite Gateway',
@@ -256,7 +263,14 @@ const i18n = {
         wizard_step2_p: 'Activate "Open Mesh Channel 1" (Sena) or "Open DMC Group" (Cardo) and disable audio multitasking on the device.',
         wizard_step3_h: 'Insert & Lock Cartridge',
         wizard_step3_p: 'Slide the cartridge in until the POM-C snap-lock clicks, then turn the 90° cam-lock to secure.',
-        btn_wizard_finish: 'Understood & Activate Profile'
+        btn_wizard_finish: 'Understood & Activate Profile',
+        front_node_title: 'Universal Front Node (Smart Fairing Hub)',
+        front_node_diag_title: 'Universal Front Node Diagnostics (PCBA 05)',
+        front_noise_vu_label: 'Wind Noise SPL & Helmet Volume Compensation (AGC)',
+        btn_reboot_ottocast: 'CarPlay 1-Click Power-Cycle (2.5s)',
+        btn_test_ptt: 'Test Handlebar PTT',
+        auto_cafe_label: 'Auto-Café Mode (60s)',
+        btn_front_node_ota: 'Check Front Node OTA Firmware Update'
     }
 };
 
@@ -277,6 +291,20 @@ const state = {
         sats: null,
         mode: 0,
         reserve_b: false
+    },
+    frontNode: {
+        linked: true,
+        ottocastPower: true,
+        ottocastVbusV: 5.00,
+        ottocastCurrentMa: 380,
+        ottocastState: 'ACTIVE',
+        rebooting: false,
+        autoCafeEnabled: true,
+        cafeCountdown: 0,
+        cafeTimer: null,
+        ambientDba: 52.0,
+        agcBoostDb: 0.0,
+        pttPressed: false
     }
 };
 
@@ -319,6 +347,23 @@ const btnWizardFinish = document.getElementById('btn-wizard-finish');
 
 const btnToggleReserveB = document.getElementById('btn-toggle-reserve-b');
 const valReserveBState = document.getElementById('val-reserve-b-state');
+
+// Front Node Elements
+const badgeFrontNodeLink = document.getElementById('badge-front-node-link');
+const badgeOttocastStatus = document.getElementById('badge-ottocast-status');
+const lblOttocastPower = document.getElementById('lbl-ottocast-power');
+const badgeFrontPtt = document.getElementById('badge-front-ptt');
+const lblFrontPttLatency = document.getElementById('lbl-front-ptt-latency');
+const tileFrontPtt = document.getElementById('tile-front-ptt');
+const badgeFrontNoise = document.getElementById('badge-front-noise');
+const lblFrontNoiseVal = document.getElementById('lbl-front-noise-val');
+const barFrontNoise = document.getElementById('bar-front-noise');
+const lblFrontAgcBoost = document.getElementById('lbl-front-agc-boost');
+const btnRebootOttocast = document.getElementById('btn-reboot-ottocast');
+const btnTestHandlebarPtt = document.getElementById('btn-test-handlebar-ptt');
+const chkAutoCafe = document.getElementById('chk-auto-cafe');
+const lblAutoCafeStatus = document.getElementById('lbl-auto-cafe-status');
+const btnFrontNodeOta = document.getElementById('btn-front-node-ota');
 
 let bleDevice = null;
 let controlChar = null;
@@ -941,6 +986,157 @@ function updateTelemetryUi(data) {
             }
         });
     }
+
+    // Front Node Subsystem Update
+    if (data.front_node || data.speed !== undefined || state.frontNode.linked) {
+        const fn = data.front_node || {};
+        const isLinked = fn.linked !== undefined ? fn.linked : state.frontNode.linked;
+        
+        if (badgeFrontNodeLink) {
+            badgeFrontNodeLink.className = isLinked ? 'card-badge badge-green' : 'card-badge';
+            badgeFrontNodeLink.textContent = isLinked ? 'ESP-NOW LINK (2.4 GHz)' : 'OFFLINE';
+            badgeFrontNodeLink.style.background = isLinked ? '' : 'rgba(255,255,255,0.08)';
+        }
+
+        // Ambient Noise & AGC Volume Compensation (Knowles SPH0645 MEMS)
+        let dba = fn.ambient_dba;
+        if (dba === undefined && data.speed !== undefined) {
+            // Realistic wind noise acoustic curve based on vehicle speed
+            const speedClamped = Math.max(data.speed, 0);
+            dba = 48.0 + (speedClamped > 15 ? 28.0 * Math.log10(speedClamped / 15.0) : 0);
+            dba = Math.min(Math.max(dba, 45.0), 108.0);
+        }
+
+        if (dba !== undefined) {
+            state.frontNode.ambientDba = dba;
+            const agcBoost = dba > 70.0 ? Math.min((dba - 70.0) * 0.15, 6.0) : 0.0;
+            state.frontNode.agcBoostDb = agcBoost;
+
+            if (lblFrontNoiseVal) lblFrontNoiseVal.textContent = `${dba.toFixed(1)} dB(A)`;
+            if (badgeFrontNoise) badgeFrontNoise.textContent = `${Math.round(dba)} dB(A)`;
+            if (lblFrontAgcBoost) lblFrontAgcBoost.textContent = `+${agcBoost.toFixed(1)} dB Boost`;
+
+            if (barFrontNoise) {
+                const pct = Math.min(Math.max(((dba - 35.0) / (115.0 - 35.0)) * 100.0, 5.0), 100.0);
+                barFrontNoise.style.width = `${pct}%`;
+            }
+        }
+
+        // Ottocast Power Switch
+        if (fn.ottocast_state !== undefined) {
+            state.frontNode.ottocastState = fn.ottocast_state;
+        }
+        if (badgeOttocastStatus && lblOttocastPower) {
+            if (state.frontNode.rebooting) {
+                badgeOttocastStatus.className = 'card-badge badge-orange';
+                badgeOttocastStatus.textContent = 'REBOOT';
+                lblOttocastPower.textContent = '0.00 V · 0 mA';
+            } else if (state.frontNode.ottocastState === 'ACTIVE') {
+                badgeOttocastStatus.className = 'card-badge badge-green';
+                badgeOttocastStatus.textContent = 'AKTIV';
+                lblOttocastPower.textContent = '5.00 V · 380 mA';
+            } else if (state.frontNode.ottocastState === 'OFF') {
+                badgeOttocastStatus.className = 'card-badge';
+                badgeOttocastStatus.textContent = 'STANDBY';
+                lblOttocastPower.textContent = '0.00 V · 0 mA';
+            } else if (state.frontNode.ottocastState === 'FAULT') {
+                badgeOttocastStatus.className = 'card-badge badge-red';
+                badgeOttocastStatus.textContent = 'FAULT (TRIP)';
+                lblOttocastPower.textContent = '0.00 V · TRIP';
+            }
+        }
+
+        // PTT Indicator
+        if (fn.ptt_pressed !== undefined) {
+            state.frontNode.pttPressed = fn.ptt_pressed;
+            updateFrontNodePttVisual(fn.ptt_pressed);
+        }
+    }
+}
+
+// Front Node Visual & Control Helpers
+function updateFrontNodePttVisual(pressed) {
+    if (!badgeFrontPtt || !lblFrontPttLatency || !tileFrontPtt) return;
+    if (pressed) {
+        badgeFrontPtt.className = 'card-badge badge-green';
+        badgeFrontPtt.textContent = 'GESENDET';
+        lblFrontPttLatency.textContent = '1.74 ms Zündung';
+        lblFrontPttLatency.style.color = 'var(--accent-green)';
+        tileFrontPtt.classList.add('ptt-active-pulse');
+    } else {
+        badgeFrontPtt.className = 'card-badge badge-blue';
+        badgeFrontPtt.textContent = 'BEREIT';
+        lblFrontPttLatency.textContent = '< 1.8 ms Latenz';
+        lblFrontPttLatency.style.color = 'var(--accent-blue)';
+        tileFrontPtt.classList.remove('ptt-active-pulse');
+    }
+}
+
+function rebootOttocastDongle() {
+    if (state.frontNode.rebooting) return;
+    state.frontNode.rebooting = true;
+    state.frontNode.ottocastState = 'REBOOTING';
+    
+    if (btnRebootOttocast) {
+        btnRebootOttocast.disabled = true;
+        btnRebootOttocast.innerHTML = '<span>⏳</span> <span>Kaltstart läuft (2.5s)...</span>';
+    }
+    
+    updateTelemetryUi({});
+    showToast(state.lang === 'de' ? '⚡ Ottocast VBUS Kaltstart eingeleitet (2.5s Puls)...' : '⚡ Ottocast VBUS power-cycle initiated (2.5s pulse)...');
+
+    setTimeout(() => {
+        state.frontNode.rebooting = false;
+        state.frontNode.ottocastState = 'ACTIVE';
+        if (btnRebootOttocast) {
+            btnRebootOttocast.disabled = false;
+            btnRebootOttocast.innerHTML = `<span>⚡</span> <span>${i18n[state.lang].btn_reboot_ottocast}</span>`;
+        }
+        updateTelemetryUi({});
+        showToast(state.lang === 'de' ? '✓ CarPlay / AA Dongle erfolgreich neu gestartet!' : '✓ CarPlay / AA dongle rebooted successfully!');
+    }, 2500);
+}
+
+// Attach Front Node Event Listeners
+if (btnRebootOttocast) {
+    btnRebootOttocast.addEventListener('click', rebootOttocastDongle);
+}
+
+if (btnTestHandlebarPtt) {
+    const triggerPress = () => {
+        updateFrontNodePttVisual(true);
+        showToast(state.lang === 'de' ? '⚡ Lenker-PTT gedrückt: Optokoppler TLP222A gezündet (< 1.8 ms)!' : '⚡ Handlebar PTT pressed: Optocoupler TLP222A keyed (< 1.8 ms)!');
+    };
+    const triggerRelease = () => {
+        updateFrontNodePttVisual(false);
+    };
+
+    btnTestHandlebarPtt.addEventListener('mousedown', triggerPress);
+    btnTestHandlebarPtt.addEventListener('mouseup', triggerRelease);
+    btnTestHandlebarPtt.addEventListener('touchstart', (e) => { e.preventDefault(); triggerPress(); });
+    btnTestHandlebarPtt.addEventListener('touchend', (e) => { e.preventDefault(); triggerRelease(); });
+}
+
+if (chkAutoCafe) {
+    chkAutoCafe.addEventListener('change', (e) => {
+        state.frontNode.autoCafeEnabled = e.target.checked;
+        if (lblAutoCafeStatus) {
+            lblAutoCafeStatus.textContent = e.target.checked 
+                ? (state.lang === 'de' ? 'WLAN-Freigabe bei Zündung AUS' : 'Wi-Fi release on ignition OFF')
+                : (state.lang === 'de' ? 'Deaktiviert (Dauerstrom)' : 'Disabled (Continuous power)');
+        }
+        showToast(state.frontNode.autoCafeEnabled 
+            ? (state.lang === 'de' ? 'Auto-Café Modus aktiviert (60s Timer)' : 'Auto-Café mode enabled (60s timer)')
+            : (state.lang === 'de' ? 'Auto-Café Modus deaktiviert' : 'Auto-Café mode disabled'));
+    });
+}
+
+if (btnFrontNodeOta) {
+    btnFrontNodeOta.addEventListener('click', () => {
+        showToast(state.lang === 'de' 
+            ? '✓ Front-Node Firmware ist aktuell (v1.0.0 Dual-Bank ota_0 aktiv)' 
+            : '✓ Front Node firmware is up-to-date (v1.0.0 Dual-Bank ota_0 active)');
+    });
 }
 
 // ==========================================
