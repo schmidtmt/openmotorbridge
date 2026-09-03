@@ -1,0 +1,20 @@
+idf_component_register(
+    SRCS
+        "main.cpp"
+        "esp_now_bridge.cpp"
+        "ottocast_power_manager.cpp"
+        "knowles_mems_dsp.cpp"
+        "handlebar_ptt_handler.cpp"
+        "cockpit_can_manager.cpp"
+        "ota_service_manager.cpp"
+    INCLUDE_DIRS
+        "."
+    REQUIRES
+        esp_timer
+        esp_wifi
+        esp_now
+        driver
+        nvs_flash
+        app_update
+        mbedtls
+)

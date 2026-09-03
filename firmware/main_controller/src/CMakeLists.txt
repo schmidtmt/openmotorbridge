@@ -12,12 +12,14 @@ idf_component_register(
         "adr_ekf_filter.cpp"
         "omm_flasher.cpp"
         "can_bus_manager.cpp"
+        "esp_now_front_node_client.cpp"
     INCLUDE_DIRS 
         "."
     REQUIRES 
         nvs_flash 
         esp_event 
         esp_wifi 
+        esp_now
         esp_http_client 
         driver 
         esp_adc

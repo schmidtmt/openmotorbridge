@@ -1,0 +1,39 @@
+#pragma once
+
+#include <stdbool.h>
+#include <stdint.h>
+#include "esp_now.h"
+
+// Callback for remote command handling from Central Box
+typedef void (*FrontNodeCmdCallback)(uint8_t cmd_id, const uint8_t* payload, size_t len);
+
+class EspNowBridge {
+public:
+    static EspNowBridge& instance();
+
+    bool init(const uint8_t* central_box_mac = nullptr);
+    void set_command_callback(FrontNodeCmdCallback cb);
+
+    // Fast Transmit Methods
+    bool send_ptt_event(bool pressed, uint64_t timestamp_us);
+    bool send_audio_rms(uint8_t dba, uint32_t raw_rms);
+    bool send_ottocast_status(uint8_t state, bool power_on, bool fault, uint32_t cafe_sec);
+    bool send_heartbeat();
+
+    bool is_linked() const;
+    uint32_t get_tx_success_count() const;
+    uint32_t get_tx_fail_count() const;
+
+private:
+    EspNowBridge();
+
+    static void on_data_sent(const uint8_t* mac_addr, esp_now_send_status_t status);
+    static void on_data_recv(const esp_now_recv_info_t* recv_info, const uint8_t* data, int len);
+
+    uint8_t m_peer_mac[6];
+    bool m_peer_registered;
+    bool m_link_active;
+    uint32_t m_tx_success_count;
+    uint32_t m_tx_fail_count;
+    FrontNodeCmdCallback m_cmd_callback;
+};

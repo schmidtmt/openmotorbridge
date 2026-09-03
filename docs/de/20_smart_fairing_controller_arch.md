@@ -240,3 +240,40 @@ Alle produktionsreifen Fertigungsdaten stehen im Verzeichnis `hardware/productio
 2. **3D-Druck Fertigungspaket (`06_3d_print_mjf_stls/`):**
    * `04_front_node_3d_print_mjf.zip`: Produktions-STLs für Unterteil (`front_node_lower_tub.stl`), Deckel (`front_node_upper_lid.stl`), Kabelkämme (`front_node_cable_glands_tpu.stl`) und USB-C Staubkappe (`front_node_usbc_cap_tpu.stl`).
 
+---
+
+## 12. Firmware-Architektur & Echtzeit-Taskdesign (`firmware/front_node/`)
+
+Die Firmware für den ESP32-C3-WROOM-02U ist unter `firmware/front_node/` als eigenständiges ESP-IDF CMake-Projekt implementiert. Sie ist strikt deterministisch aufgeteilt:
+
+```
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                        FRONT NODE REAL-TIME TASKS (FREERTOS)                           │
+├────────────────────────────────────────────────────────────────────────────────────────┤
+│  1. Task: ptt_task (Priorität 10 - Höchste Prio)                                      │
+│     • Blockiert an ISR-Queue; wird bei Flanke an GPIO0 unverzüglich geweckt.           │
+│     • Sendet PTT-Event ohne Scheduler-Verzug via ESP-NOW direkt an die Zentralbox.    │
+│     • Gesamtlatenz bis zum Helm-Intercom-Trigger: < 3,5 ms!                            │
+├────────────────────────────────────────────────────────────────────────────────────────┤
+│  2. Task: audio_dsp (Priorität 6 - 50 Hz Takt)                                         │
+│     • Liest 320 Audiosamples via I2S DMA vom Knowles SPH0645 MEMS (16 kHz, 24-Bit).   │
+│     • Berechnet A-bewerteten Effektivwert (Biquad-Filter) und normiert auf dB(A) SPL.  │
+│     • Überträgt 1-Byte dB(A) Telemetrie an die Zentralbox für Helm-Lautstärkenachführung│
+├────────────────────────────────────────────────────────────────────────────────────────┤
+│  3. Task: supervisor (Priorität 3 - 10 Hz Takt)                                        │
+│     • Takten des Ottocast-Zustandsautomaten (Auto-Café 60s Countdown, Reboot-Puls).   │
+│     • Hardware-Überwachung des TI TPS2051B FAULT_N Pins (Kurzschluss-/Überstromschutz).│
+│     • Abfrage und Weiterleitung lokaler Cockpit-CAN-Telegramme (250/500 kbps).         │
+│     • Optische Status-Signalisierung über die grüne LED D1 (GPIO8).                   │
+└────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### 12.1 Ausfallsicheres Dual-Bank OTA mit Rollback-Schutz
+
+Um das Risiko von Firmware-Beschädigungen (z. B. wenn während eines Flashes die Zündung ausgeschaltet wird) physikalisch auszuschließen, nutzt der Front-Knoten ein **Dual-Bank OTA Flash-Layout** (`partitions.csv`):
+* `ota_0` ($1{,}75\,\text{MB}$) und `ota_1` ($1{,}75\,\text{MB}$)
+* **Automatisches Hardware-Rollback:** Aktiviert via `CONFIG_BOOTLOADER_APP_ROLLBACK_ENABLE=y`.
+* Bricht eine drahtlose Übertragung oder ein USB-Flash mitten im Schreibvorgang ab, erkennt der Bootloader die unvollständige Signatur und bootet beim nächsten Zündung-EIN sofort wieder die unbeschädigte Vorversion.
+* Erst wenn die neue Firmware nach dem Reboot alle Tasks erfolgreich gestartet hat, bestätigt `OtaServiceManager::confirm_running_partition()` die Partition dauerhaft als aktiv.
+
+
