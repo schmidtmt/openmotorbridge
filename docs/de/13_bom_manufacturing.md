@@ -190,6 +190,7 @@ Dieses Dokument enthält die vollständige Bauteilliste (Bill of Materials) und 
 | **USB-A Flachbandkabel (Front)**| USB-A Stecker/Kupplung kurz ($10\dots 15\,\text{cm}$, 90°-Winkel)| Delock / Amazon | 1 Stk. | Ottocast-Anbindung an J1 durch vorderen Dichtkamm |
 | **USB-C Ladekabel (Handschuhf.)**| USB-C Stecker/Stecker ($1{,}0\,\text{m}$, 90°-Winkel, PUR)| Anker / Baseus | 1 Stk. | Smartphone-Ladekabel von J2 durch vorderen Dichtkamm |
 | **JST-GH Crimpstecker-Set** | JST-GH 1.25mm 2-Pin Gehäuse + Crimpkontakte | JST / Mouser | 2 Sätze| Vorkonfektionierte Litzen für J3 (PTT) & J7 (12V) durch linken Kamm |
+| **90° USB Kassetten-Kabel** | Ultraflaches 90°-Winkelkabel Micro-USB/USB-C ($5\dots 8\,\text{cm}$) | Delock / Amazon | 1 Stk. | 5V-Speisung für Sena +Mesh / MeshPort Adapter in Kassette |
 
 ---
 

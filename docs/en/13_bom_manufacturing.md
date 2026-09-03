@@ -189,7 +189,8 @@ This document provides the complete Bill of Materials (BOM) and manufacturing sp
 | **External Active GNSS Antenna**| Active Flat Puck (+28 dB LNA, 3.3V phantom power, SMA) | Taoglas AA.162 / Garmin | 1 pc | Optional roof/luggage mount for clear sky view |
 | **USB-A Flat Ribbon Cable (Front)**| Short 90° USB-A male-to-female adapter ($10\dots 15\,\text{cm}$)| Delock / Amazon | 1 pc | Ottocast connection to J1 via front cable gland |
 | **USB-C Glovebox Cable (Front)**| Right-angle USB-C male-to-male ($1.0\,\text{m}$, PUR/Nylon) | Anker / Baseus | 1 pc | Smartphone charging from J2 via front cable gland |
-| **JST-GH Connector Kit (Left)** | JST-GH 1.25mm 2-pin female housings + crimp terminals | JST / Mouser | 2 sets | Pre-crimped harness leads for J3 (PTT) & J7 (12V) |
+| **JST-GH Connector Kit (Left)** | JST-GH 1.25mm 2-Pin female housings + crimp terminals | JST / Mouser | 2 sets | Pre-crimped harness leads for J3 (PTT) & J7 (12V) |
+| **90° USB Cartridge Cable** | Low-profile 90° right-angle Micro-USB/USB-C ($5\dots 8\,\text{cm}$) | Delock / Amazon | 1 pc | 5V power feed for Sena +Mesh / MeshPort inside cartridge |
 
 ---
 

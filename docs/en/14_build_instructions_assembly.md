@@ -136,6 +136,7 @@ To build a fully featured OpenMotorBridge (v8.0) installation for one motorcycle
 | **USB-A Flat Ribbon Cable (Front)**| Short 90° USB-A male-to-female adapter ($10\dots 15\,\text{cm}$)| **1** | Ottocast connection to J1 via front cable gland |
 | **USB-C Glovebox Cable (Front)**| Right-angle USB-C male-to-male ($1.0\,\text{m}$, PUR/Nylon) | **1** | Smartphone charging from J2 via front cable gland |
 | **JST-GH Connector Kit (Left)** | JST-GH 1.25mm 2-pin female housings + crimp terminals | **2 sets** | Pre-crimped harness leads for J3 (PTT) & J7 (12V) |
+| **90° USB Cartridge Cable** | Low-profile 90° right-angle Micro-USB/USB-C ($5\dots 8\,\text{cm}$) | **1** | 5V power feed for Sena +Mesh / MeshPort inside cartridge |
 
 ---
 
@@ -196,8 +197,17 @@ To assemble all subassemblies with vibration resistance and hermetic IP67 sealin
 
 ### Step 3: Headset Cartridges 1 & 2 (Rider & Passenger)
 1. **Assemble Cartridge:** Snap the cartridge carrier (`PCBA 03`) into the sled.
-2. **Connect Cradle:** Plug the OEM headset cradle ribbon cable (Sena pogo pins or Cardo Air-Mount).
-3. **Mouth Seal:** Fit the silicone molded flange gasket over the cartridge collar and lightly coat with silicone grease.
+2. **Connect OEM Adapter / Cradle (by device class):**
+   * **Class A (Sena +Mesh B2M-01 / MeshPort Adapter):**
+     * Slide the adapter laterally into the transverse slide rails of the cradle insert ([`01_insert_sena.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/parts/01_insert_sena.scad)) until the retaining snap latch clicks into place.
+     * **Connect USB Power:** Route the low-profile $90^\circ$ right-angle cable (Micro-USB or USB-C) from the cartridge PCB 5V/GND header through the deck window into the +Mesh USB charging port (pure 5V continuous power supply; intercom audio routes wirelessly over Bluetooth to the helmet).
+     * **RF Antenna:** Route the antenna coaxial pigtail through the front window to the faceplate SMA bulkhead and fasten tightly.
+     * Secure the +Mesh adapter against vibration shocks using the elastic EPDM retention strap across both lateral hooks.
+   * **Class B & C (Sena 50S/60S or Cardo Packtalk Edge Cradles):**
+     * Connect the 6-pin JST-SH ribbon cable from the cartridge PCB directly to the OEM pogo-pin dock (Sena) or magnetic Cardo Air-Mount (providing galvanically isolated analog audio channels, mic, and optocoupled PTT).
+   * **Class D (Hermetic Blank Cartridge):**
+     * Insert the blank sled with solid faceplate and O-ring seal when running solo without a passenger pod.
+3. **Mouth Seal:** Fit the silicone molded flange gasket over the cartridge collar and lightly coat with dielectric silicone grease.
 
 ### Step 4: Rear Pod 3 Cartridge & RF Pigtails (Triple Coaxial Bypass)
 1. **Install SMA Bulkheads:**

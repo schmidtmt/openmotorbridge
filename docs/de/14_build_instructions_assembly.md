@@ -136,6 +136,7 @@ Um ein vollwertiges OpenMotorBridge (v8.0) Gesamtsystem für ein Motorrad aufzub
 | **USB-A Flachbandkabel (Front)**| USB-A Stecker/Kupplung kurz ($10\dots 15\,\text{cm}$, 90°-Winkel)| **1** | Ottocast-Anbindung an J1 durch vorderen Dichtkamm |
 | **USB-C Ladekabel (Handschuhf.)**| USB-C Stecker/Stecker ($1{,}0\,\text{m}$, 90°-Winkel, PUR)| **1** | Smartphone-Ladekabel von J2 durch vorderen Dichtkamm |
 | **JST-GH Crimpstecker-Set** | JST-GH 1.25mm 2-Pin Gehäuse + Crimpkontakte | **2 Sätze**| Vorkonfektionierte Litzen für J3 (PTT) & J7 (12V) durch linken Kamm |
+| **90° USB Kassetten-Kabel** | Ultraflaches 90°-Winkelkabel Micro-USB/USB-C ($5\dots 8\,\text{cm}$) | **1** | 5V-Speisung für Sena +Mesh / MeshPort Adapter in Kassette |
 
 ---
 
@@ -196,8 +197,17 @@ Für den sauberen, vibrationsfesten und IP67-dichten Zusammenbau aller Baugruppe
 
 ### Schritt 3: Headset-Kassetten 1 & 2 montieren (Fahrer & Sozius)
 1. **Platine einsetzen:** Kassettenplatine (`openmotorbridge_pod_cartridge`) in den Kassetten-Schlitten einklicken.
-2. **OEM-Cradle anschließen:** Flachbandkabel an Sena Pogo-Leiste oder Cardo Air-Mount verbinden.
-3. **Flanschdichtung:** Silikon-Formdichtung auf den Kassettenkragen aufziehen und mit Silikonfett benetzen.
+2. **OEM-Adapter / Cradle anschließen (nach Gerätetyp):**
+   * **Klasse A (Sena +Mesh B2M-01 / MeshPort Adapter):**
+     * Adapter seitlich in die Quer-Führungsschienen des Inlays ([`01_insert_sena.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/parts/01_insert_sena.scad)) einschieben, bis die Rastklinke hörbar arretiert.
+     * **USB-Speisung verbinden:** Das flache $90^\circ$-Winkelkabel (Micro-USB bzw. USB-C) vom 5V/GND-Header der Kassettenplatine durch die Deckaussparung führen und in den USB-Ladeport des +Mesh stecken (reine 5V-Dauerversorgung; Audio läuft drahtlos via Bluetooth zum Helm).
+     * **Antenne:** Das Antennen-Koaxialkabel durch das vordere Kassettenfenster zur stirnseitigen SMA-Buchse führen und anschrauben.
+     * Mit dem elastischen EPDM-Spannband über die beiden seitlichen Haltenasen gegen Erschütterungen sichern.
+   * **Klasse B & C (Sena 50S/60S oder Cardo Packtalk Edge Cradles):**
+     * 6-poliges JST-SH Flachbandkabel von der Kassettenplatine direkt mit der OEM-Pogo-Pin-Leiste (Sena) bzw. dem magnetischen Cardo Air-Mount verbinden (galvanisch getrennte Analog-Audio-Kanäle, Mikrofon und Optokoppler-PTT).
+   * **Klasse D (Hermetische Blindkassette):**
+     * Schutzschlitten mit geschlossener Frontblende und O-Ring einsetzen, wenn der Beifahrer-Pod ungenutzt bleibt.
+3. **Flanschdichtung:** Silikon-Formdichtung auf den Kassettenkragen aufziehen und dünn mit dielektrischem Silikonfett benetzen.
 
 ### Schritt 4: Heck-Kassette Pod 3 & HF-Pigtail-Montage (Dreifach-Koaxial-Bypass)
 1. **SMA-Bulkhead-Buchsen montieren:**
