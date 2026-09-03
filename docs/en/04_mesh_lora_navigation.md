@@ -22,6 +22,12 @@ To balance wide audio bandwidth with long-range offroad resilience, OpenMotorBri
 └───────────────────────────────────┴────────────────────────────────────┘
 ```
 
+### 1.1 Triple Coaxial RF Bypass (Murata MM8030 RF Switch Sockets)
+Rear Pod 3 integrates all three RF subsystems (2.4 GHz Mesh, 868 MHz LoRa, Multi-GNSS) and features automated **Murata MM8030-2610** coaxial switch sockets:
+* **Internal Antenna Array (Standard):** Encased within the dielectric radome are an Inverted-F PCB antenna (IFA for 2.4 GHz), an 868 MHz helical spring coil, and a $25 \times 25\,\text{mm}$ ceramic GNSS patch.
+* **External Bypass (Plug & Play):** When an external coaxial plug is inserted (e.g. $+5\,\text{dBi}$ whip antenna or active roof-mounted GNSS patch), the internal mechanical switch disconnects the internal radiator with $< 0{,}15\,\text{dB}$ insertion loss and $> 25\,\text{dB}$ isolation.
+* **Zero Disassembly:** External high-gain antennas plug in directly without opening the hermetic IP67 casing.
+
 ---
 
 ## 2. Dynamic Leader Election (DLE) & Group Partitioning

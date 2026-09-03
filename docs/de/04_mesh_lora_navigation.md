@@ -34,6 +34,12 @@ OpenMotorMesh kombiniert zwei komplementäre Funkschnittstellen, um sowohl HiFi-
 * **Sprachübertragung:** Schmalband-Sprachtunnel via Codec2 (1200 bps) für Notfall-PTT über Distanzen von $1\dots 15\,\text{km}$.
 * **Gruppenradar:** Übermittelt GPS-Koordinaten aller Gruppenmitglieder für das Cockpit-Radar im 5-Sekunden-Intervall.
 
+### 1.3 Dreifach-Koaxial-Bypass (Murata MM8030 HF-Umschaltbuchsen)
+Der Heck-Pod 3 vereint alle drei HF-Subsysteme (2.4 GHz Mesh, 868 MHz LoRa, Multi-GNSS) und ermöglicht durch integrierte **Murata MM8030-2610** Umschaltbuchsen die unterbrechungsfreie Umschaltung zwischen internen Antennen und externen Fahrzeug-Antennen:
+* **Interne Antennen (Standard):** Im dielektrischen Radom geschützt arbeiten eine Inverted-F PCB-Antenne (IFA für 2.4 GHz), eine $868\,\text{MHz}$ Wendelspule und ein $25 \times 25\,\text{mm}$ Keramik-Patch (GNSS).
+* **Externer Bypass (Plug & Play):** Beim Einstecken eines externen Koaxial-Steckers (z. B. externe $+5\,\text{dBi}$ Stabantenne oder aktive GNSS-Dachantenne) öffnet der interne mechanische Schalter den Pfad zur internen Antenne automatisch mit $< 0{,}15\,\text{dB}$ Einfügedämpfung und $> 25\,\text{dB}$ Isolation.
+* **Keine Gehäuseöffnung erforderlich:** Externes Zubehör kann ohne Werkzeugeingriff direkt adaptiert werden.
+
 ---
 
 ## 2. Layer 2: 802.11s-Light Loop-Prevention & Managed Forwarding
