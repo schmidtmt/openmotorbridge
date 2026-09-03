@@ -720,7 +720,7 @@ Das gesamte OpenMotorBridge-System basiert auf dem Prinzip der **vollständigen 
      * **Dauerhafte Sicherung:** Zusätzliche $5{,}0 \times 2{,}5\,\text{mm}$ Durchgangsschlitze erlauben die diebstahlgeschützte Festmontage per Standard-Kabelbinder ($4{,}8\,\text{mm}$) oder Edelstahl-Schlauchschellen.
 2. **Funktionsanpassung ausschließlich über die Wechselkassetten:**
    * **Audio- & Intercom-Kassetten (Pod 1 & 2):** 2-teilig mit `openmotorbridge_pod_cartridge` Trägerplatine (DS2401 ID), Unterflur-Kabelkanal, Zwischenboden und Modellspezifischem 3D-Konturbett (Sena / Cardo / Midland).
-   * **OMM-Transceiver-Kassette (Pod 3):** 1-teilig mit voller $23{,}5\,\text{mm}$ Innenhöhe und freiem $> 85\,\text{cm}^3$ Luftraum für optimale Antennenabstrahlung. Die `openmotorbridge_rear_transceiver` Platine sitzt direkt im Schlitten und steckt in derselben 6-Pin Präzisionsbuchse.
+   * **OMM-Transceiver-Kassette (Pod 3):** Nutzt **exakt denselben universellen Grundschlitten** (`cartridge_base_sled.stl`) mit 6 integrierten M2-Bodendomen. Im vorderen Bereich sitzt die kompakte OMM-Transceiver-Platine ($55{,}0 \times 48{,}0\,\text{mm}$) mit U.FL-Pigtails, im hinteren Bereich der modulare Antennen-Halter ([04_antenna_bracket_omm.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/parts/04_antenna_bracket_omm.scad)) mit Decken-GPS-Patch ($0\,\text{dB}$ Polarisationsverlust), Seitenwand-LoRa-FPC und 2,4-GHz-SMA-Außenantennendurchführung.
    * **Blindkassette:** Hermetisch dichter IP67-Dummy mit integriertem Notfall-Trockenstaufach (*Dry Box*).
 
 ```

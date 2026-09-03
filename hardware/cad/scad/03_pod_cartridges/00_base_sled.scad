@@ -30,16 +30,21 @@ module cartridge_base_sled(
             translate([0, sled_w - wall, 0])
                 cube(size=[sled_l, wall, sled_h + wall], center=false);
 
-            // 4. 4x M2 Lower Carrier PCB Mounting Standoffs (for 35x25mm openmotorbridge_pod_cartridge PCB)
-            // Exact KiCad match: PCB at X=1.5..36.5, Y=(sled_w-25)/2 .. (sled_w+25)/2
+            // 4. 6x M2 Lower PCB Mounting Standoffs:
+            // - X = 4.5 & 33.5 mm for Carrier PCB (Pods 1 & 2)
+            // - X = 4.5 & 50.5 mm for Compact OMM Transceiver PCB (Pod 3, 55x48mm)
             y_pcb_c = sled_w / 2.0;
             translate([4.5, y_pcb_c - 9.5, wall])
                 screw_boss(outer_r=2.2, inner_r=M2_SCREW_HOLE_R, h=2.5);
             translate([33.5, y_pcb_c - 9.5, wall])
                 screw_boss(outer_r=2.2, inner_r=M2_SCREW_HOLE_R, h=2.5);
+            translate([50.5, y_pcb_c - 9.5, wall])
+                screw_boss(outer_r=2.2, inner_r=M2_SCREW_HOLE_R, h=2.5);
             translate([4.5, y_pcb_c + 9.5, wall])
                 screw_boss(outer_r=2.2, inner_r=M2_SCREW_HOLE_R, h=2.5);
             translate([33.5, y_pcb_c + 9.5, wall])
+                screw_boss(outer_r=2.2, inner_r=M2_SCREW_HOLE_R, h=2.5);
+            translate([50.5, y_pcb_c + 9.5, wall])
                 screw_boss(outer_r=2.2, inner_r=M2_SCREW_HOLE_R, h=2.5);
 
             // 5. 4x M2 Insert Fastening Corner Posts (h = 5.5 mm, z = wall .. wall + 5.5 mm)

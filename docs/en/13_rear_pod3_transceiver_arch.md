@@ -4,31 +4,26 @@
 
 ---
 
-### 1. 3D Board Visualization & Photorealistic Renders
+## 1. System Topology & 1-Tier Modular Architecture
 
-The Rear Pod PCB unites multi-constellation GNSS, dual-PHY mesh networking, three mechanical RF switch receptacles (Murata MM8030), three Pulse W3000 ceramic antennas, a 500mA PTC protection stage, and the RISC-V co-processor on a generous **$110.0 \times 52.0\,\text{mm}$** flat carrier with horizontal leading-edge mating:
+The rear cartridge utilizes the **100% universal base sled ([cartridge_base_sled.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/00_base_sled.scad))**, identical to the sleds deployed in Pod 1 (Sena) and Pod 2 (Cardo). The $116 \times 58\,\text{mm}$ interior sled volume is cleanly split into two specialized chambers:
 
-#### Top View (Centered 6-Pin Front Socket, PTC Fuse, ESP32-C3, 3x MM8030 RF Switches & 3x Pulse W3000 Antennas):
-![OpenMotorBridge Rear Pod 3 Top 3D PCB Render](../../hardware/kicad_rear_pod3/rear_pod3_3d_render_top.png)
+1. **Forward Chamber ($X = 0 \dots 56\,\text{mm}$): Compact OMM Transceiver PCBA ($55.0 \times 48.0\,\text{mm}$)**
+   - 4-layer FR4 TG150 ENIG board carrying the ESP32-C3-WROOM-02U (with native U.FL micro-coax port), Semtech SX1262 LoRa transceiver, u-blox MAX-M10S multi-GNSS engine, Maxim DS2401 ID silicon serial chip, 500mA PTC protection stage, and centered 6-pin precision socket header.
+   - Securely fastened via four M2 floor standoffs integrated into the universal base sled ($X = 4.5\,\text{mm}$ and $X = 50.5\,\text{mm}$).
+2. **Aft Chamber ($X = 57 \dots 110\,\text{mm}$): Modular Antenna Bracket ([04_antenna_bracket_omm.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/parts/04_antenna_bracket_omm.scad))**
+   - Independent PA12 bracket frame secured via the two rear corner posts of the universal base sled.
+   - **GNSS (GPS):** Elevated top cradle holding an $18 \times 18\,\text{mm}$ (or $25 \times 25\,\text{mm}$) RHCP ceramic patch antenna facing straight up through the RF-transparent PA12 roof ($0\,\text{dB}$ polarization mismatch loss).
+   - **LoRa (868 MHz):** Vertical sidewall bed securing a flexible 868 MHz FPC dipole antenna along the outer enclosure wall (unimpeded RF penetration through PA12).
+   - **2.4 GHz Audio Mesh:** Guides the U.FL micro-coax line from the ESP32-C3 directly to the waterproof front/rear SMA bulkhead connector for the high-gain external whip antenna.
+3. **Weatherproof Solid PA12 Cover ([03_insert_blindkassette.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/parts/03_insert_blindkassette.scad))**
+   - Hermetically seals the assembly against rain, dust, and high-pressure vehicle washing (IP67 / IP69K).
 
-#### Bottom View (Clean 4-Layer Ground Plane & 4x M2 Mounting Holes):
-![OpenMotorBridge Rear Pod 3 Bottom 3D PCB Render](../../hardware/kicad_rear_pod3/rear_pod3_3d_render_bottom.png)
-
-*Figure 13.1: Photorealistic 3D raytraced render of the OpenMotorBridge Rear Pod 3 PCB (KiCad 10, 4-layer FR4 TG150 ENIG, $110.0 \times 52.0\,\text{mm}$, with horizontal forward-opening centered 6-pin precision socket, 500mA PTC fuse, 5V power LED, u-blox GNSS, SX1262 LoRa, ESP32-C3 Mesh Transceiver, and 3x Murata MM8030 switches for external SMA antennas).*
-
-### 1.1 3D CAD Assembly & Direct 1-Tier Architecture (No Adapter PCB Required!)
-
-Unlike the Audio & Intercom cartridges (Pod 1 & Pod 2), which employ a 2-piece structure with a lower adapter carrier PCB (`openmotorbridge_pod_cartridge`) and an upper headset docking cradle, **Rear Pod 3 features a direct 1-tier monolithic architecture**:
+### 1.1 3D CAD Assembly & Exploded View
 
 ![OpenMotorBridge Rear Pod 3 CAD Assembly Exploded View](../images/cad/pod3_full_assembly_exploded_3d.png)
 
-*Figure 13.2: 3D CAD exploded view of the complete Rear Pod 3 assembly featuring the universal pod base housing (integrated V-groove frame tube saddle with EPDM strap lugs), rear M8 6-pin IP67 cable gland, and the 1-tier transceiver sled ([cartridge_omm_transceiver.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/cartridge_omm_transceiver.scad)) holding the transceiver PCB ($110 \times 52\,\text{mm}$) directly with zero intermediary adapters.*
-
-#### Why is No Adapter Board Required for Pod 3?
-1. **Fully Integrated Single-Board Architecture:** The `openmotorbridge_rear_transceiver` PCB is itself the complete transceiver, navigation, and co-processor unit. It carries the Maxim DS2401 ID chip, the 6-pin precision socket `J1`, the SX1262 LoRa modem, the u-blox MAX-M10S GNSS engine, the ESP32-C3 MCU, three Pulse W3000 ceramic chip antennas (`ANT1` LoRa, `ANT2` GNSS, `ANT3` 2.4 GHz), and three Murata MM8030 mechanical RF switches (`J3`, `J4`, `J5`) with direct, lossless $50\,\Omega$ microstrip lines directly on its 4-layer FR4 substrate.
-2. **Direct Sled Mounting:** The board bolts directly to the 4x M2 mounting posts of the cartridge sled ([cartridge_omm_transceiver.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/cartridge_omm_transceiver.scad)) and seals under the weatherproof, RF-transparent solid PA12 lid ([cartridge_insert_blindkassette.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/parts/03_insert_blindkassette.scad)).
-3. **Full $23.5\,\text{mm}$ Interior Height:** Without an intermediary partition floor or adapter board, the antennas benefit from the complete unattenuated internal clearance directly beneath the weatherproof PA12 roof – maximizing RF gain and 360° sky coverage.
-4. **100% Mechanical Compatibility:** The cartridge utilizes the identical [00_base_sled.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/00_base_sled.scad) and slides seamlessly into the same universal pod housing ([pod_base_housing.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/pod_base_housing.scad)).
+*Figure 13.2: 3D CAD exploded view of the complete Rear Pod 3 assembly: Universal base sled (with 6 floor standoffs ensuring 100% commonality across all pods), compact OMM PCBA forward, modular antenna bracket aft (holding the zenith GPS patch and sidewall LoRa FPC), and weatherproof solid PA12 top cover.*
 
 ---
 

@@ -4,31 +4,26 @@ Der **Heck-Pod 3** (Position: Heckbürzel / Gepäckbrücke) ist das zentrale Fun
 
 ---
 
-## 1. 3D-Board-Visualisierung & Photorealistische Renders
+## 1. Systemaufbau & 1-Tier Modular-Architektur
 
-Die Heck-Pod-Platine vereint auf großzügigen **$110{,}0 \times 52{,}0\,\text{mm}$** das Multi-Konstellations-GNSS, das Dual-PHY Mesh-Modem, die drei mechanischen HF-Umschaltbuchsen (Murata MM8030), drei Pulse W3000 Keramik-Chipantennen, die 500mA PTC-Schutzstufe sowie den RISC-V Co-Prozessor mit horizontaler Stirnseiten-Steckung:
+Die Heck-Kassette nutzt den **zu 100 % universellen Grundschlitten ([cartridge_base_sled.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/00_base_sled.scad))**, der auch für Pod 1 (Sena) und Pod 2 (Cardo) im Einsatz ist. Der $116 \times 58\,\text{mm}$ große Schlitten ist in zwei hochoptimierte Funktionskammern aufgeteilt:
 
-#### Oberansicht (Zentrierte 6-Pin Front-Buchsenleiste, PTC-Sicherung, ESP32-C3, 3x MM8030 RF-Switches & 3x Pulse W3000 Antennen):
-![OpenMotorBridge Heck-Pod 3 Oberansicht 3D PCB Render](../../hardware/kicad_rear_pod3/rear_pod3_3d_render_top.png)
+1. **Vordere Kammer ($X = 0 \dots 56\,\text{mm}$): Kompakte OMM-Transceiver-Platine ($55{,}0 \times 48{,}0\,\text{mm}$)**
+   - Vierzinkiges 4-Lagen FR4 TG150 ENIG Board mit ESP32-C3-WROOM-02U (U.FL-Anschluss), Semtech SX1262 LoRa, u-blox MAX-M10S Multi-GNSS, Maxim DS2401 ID-Chip, 500mA PTC-Schutzstufe und zentrierter 6-Pin Präzisions-Stirnseitenbuchse.
+   - Fest verschraubt in vier M2-Bodendomen des universellen Grundschlittens ($X = 4{,}5\,\text{mm}$ und $X = 50{,}5\,\text{mm}$).
+2. **Hintere Kammer ($X = 57 \dots 110\,\text{mm}$): Modularer Antennen-Halter ([04_antenna_bracket_omm.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/parts/04_antenna_bracket_omm.scad))**
+   - Eigenständiger PA12-Trägerkörper, verschraubt in den beiden hinteren Original-Eckdomen des Grundschlittens.
+   - **GNSS (GPS):** Erhöhter Decken-Halter für eine $18 \times 18\,\text{mm}$ (oder $25 \times 25\,\text{mm}$) RHCP-Keramik-Patchantenne, die plan nach oben durch den HF-transparenten PA12-Deckel in den Zenit blickt ($0\,\text{dB}$ Polarisationsverlust).
+   - **LoRa (868 MHz):** Vertikales Seitenwand-Bett für eine flexible 868-MHz-FPC-Dipolantenne an der Gehäuseaußenwand (vollkommen verlustfreie Durchdringung des PA12-Gehäuses).
+   - **2,4 GHz Audio-Mesh:** Führt das U.FL-Mikro-Koaxkabel des ESP32-C3 direkt zur wasserdichten SMA-Buchse an der Stirnseite für die externe High-Gain Stabantenne.
+3. **Wasserdichter PA12-Deckel ([03_insert_blindkassette.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/parts/03_insert_blindkassette.scad))**
+   - Verschließt die gesamte Oberseite hermetisch und dichtet gegen Straßenschmutz und Hochdruckreiniger (IP67 / IP69K) ab.
 
-#### Unteransicht (Kompakte 4-Lagen Massefläche & 4x M2 Montagebohrungen):
-![OpenMotorBridge Heck-Pod 3 Unteransicht 3D PCB Render](../../hardware/kicad_rear_pod3/rear_pod3_3d_render_bottom.png)
-
-*Abbildung 13.1: Photorealistisches 3D-Raytracing-Render der OpenMotorBridge Heck-Pod 3 Platine (KiCad 10, 4-Lagen FR4 TG150 ENIG, $110{,}0 \times 52{,}0\,\text{mm}$, mit stirnseitig nach vorne öffnender zentrierter 6-Pin Präzisionsbuchsenleiste, 500mA PTC-Schutzstufe, 5V Power-LED, u-blox GNSS, SX1262 LoRa, ESP32-C3 Mesh Transceiver sowie 3x Murata MM8030 Umschaltern für externe SMA-Antennen).*
-
-### 1.1 3D-CAD-Gesamtbaugruppe & Direkter 1-Tier Einschub (Keine Adapterplatine erforderlich!)
-
-Im Gegensatz zu den Audio- & Intercom-Kassetten (Pod 1 & Pod 2), die einen 2-teiligen Aufbau mit unterer Adapter-Trägerplatine (`openmotorbridge_pod_cartridge`) und oberem Headset-Dockingschacht nutzen, besitzt der **Heck-Pod 3 eine direkte 1-Tier-Architektur**:
+### 1.1 3D-CAD-Gesamtbaugruppe & Explosionsdarstellung
 
 ![OpenMotorBridge Heck-Pod 3 CAD Baugruppen-Explosionsansicht](../images/cad/pod3_full_assembly_exploded_3d.png)
 
-*Abbildung 13.2: 3D-CAD-Explosionsdarstellung der Heck-Pod 3 Gesamtkassette mit universellem Pod-Gehäuse (integriertes V-Rohrbett mit EPDM-Spannbandnasen), rückseitigem M8 6-Pin IP67 Kabelstutzen und dem 1-teiligen Transceiver-Schlitten ([cartridge_omm_transceiver.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/cartridge_omm_transceiver.scad)), in den die Transceiver-Platine ($110 \times 52\,\text{mm}$) direkt ohne Zwischen-Adapter verschraubt ist.*
-
-#### Warum wird für Pod 3 keine Adapterplatine benötigt?
-1. **Vollintegriertes Single-Board Design:** Die Platine `openmotorbridge_rear_transceiver` ist bereits das vollständige Funk-, Navigations- und Co-Prozessor-Modul. Sie trägt den Maxim DS2401 ID-Chip, die 6-Pin Präzisionsbuchse `J1`, das SX1262 LoRa-Modem, das u-blox MAX-M10S GNSS, das ESP32-C3-Modul, drei Pulse W3000 Keramik-Chipantennen (`ANT1` LoRa, `ANT2` GNSS, `ANT3` 2.4 GHz) sowie drei Murata MM8030 mechanische Umschaltbuchsen (`J3`, `J4`, `J5`) mit direkter, verlustfreier $50\,\Omega$-Microstrip-Anbindung direkt auf ihrem 4-Layer FR4-Board.
-2. **Direkte Verschraubung im Grundschlitten:** Die Platine wird mit 4x M2 Schrauben direkt auf die Schraubdome des Kassetten-Schlittens ([cartridge_omm_transceiver.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/cartridge_omm_transceiver.scad)) montiert und mit dem wetterfesten, HF-transparenten PA12-Deckel ([cartridge_insert_blindkassette.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/parts/03_insert_blindkassette.scad)) verschraubt.
-3. **Volle $23{,}5\,\text{mm}$ Innenhöhe:** Ohne Zwischenboden oder Adapterplatine steht den Antennen die volle lichte Bauhöhe unter der HF-transparenten PA12-Haube zur Verfügung – für maximalen Gewinn ohne störende Gehäusedämpfung.
-4. **100 % mechanische Kompatibilität:** Die Kassette nutzt exakt denselben [00_base_sled.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/00_base_sled.scad) wie alle anderen Kassetten und gleitet formschlüssig in dasselbe universelle Pod-Gehäuse ([pod_base_housing.scad](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/pod_base_housing.scad)).
+*Abbildung 13.2: 3D-CAD-Explosionsdarstellung der Heck-Pod 3 Gesamtkassette: Universeller Grundschlitten (mit 6 M2-Bodendomen für universelle Kompatibilität mit allen Pods), kompakte OMM-Platine vorne, modularer Antennen-Halter hinten (mit Decken-GPS-Patch und Seitenwand-LoRa-FPC) und wetterfestem PA12-Deckel.*
 
 ---
 

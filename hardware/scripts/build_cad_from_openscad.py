@@ -41,6 +41,7 @@ STL_TARGETS: List[Tuple[str, str]] = [
     ("03_pod_cartridges/parts/01_insert_sena.scad", "03_pod_cartridges/cartridge_insert_sena.stl"),
     ("03_pod_cartridges/parts/02_insert_cardo.scad", "03_pod_cartridges/cartridge_insert_cardo.stl"),
     ("03_pod_cartridges/parts/03_insert_blindkassette.scad", "03_pod_cartridges/cartridge_insert_blindkassette.stl"),
+    ("03_pod_cartridges/parts/04_antenna_bracket_omm.scad", "03_pod_cartridges/cartridge_antenna_bracket_omm.stl"),
     
     # 4. Modular Components (Main Box)
     ("01_main_box/parts/000_lower_base.scad", "01_main_box/components/01_lower_tub_empty.stl"),
