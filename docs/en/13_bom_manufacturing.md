@@ -84,11 +84,12 @@ This document provides the complete Bill of Materials (BOM) and manufacturing sp
 
 ## 6. Mechanical CAD & 3D Printing BOM (MJF PA12 / ASA)
 
-### 6.1 CAD / STL Asset Overview
-* **Central Box:** `main_box_lower_case.stl`, `main_box_mid_tray.stl`, `main_box_lid.stl`.
-* **Satellite Pods (3x):** `pod_base_housing.stl`, `03_pod_bulkhead_partition.stl`.
-* **Cartridges:** `cartridge_base_sled.stl`, `cartridge_sena_sled.stl`, `cartridge_cardo_sled.stl`, `cartridge_omm_transceiver_sled.stl`, `cartridge_blindkassette_waterproof.stl`.
-* **Front Node:** `front_node_lower_case.stl`, `front_node_upper_case.stl`.
+### 6.1 CAD / STL Asset Overview (15 Parts for 1 Motorcycle)
+* **Central Main Box (3 parts):** `main_box_lower_case.stl`, `main_box_mid_tray.stl`, `main_box_lid.stl`.
+* **Satellite Pods (6 parts):** 3x `pod_base_housing.stl`, 3x `03_pod_bulkhead_partition.stl`.
+* **Cartridges (3 parts):** `cartridge_sena_sled.stl` (or Cardo), `cartridge_cardo_sled.stl` (or Blank), `cartridge_omm_transceiver_sled.stl`.
+* **Universal Front Node (2 parts):** `front_node_lower_case.stl`, `front_node_upper_case.stl`.
+* **Rear Radar Bracket (1 part):** `pod3_radar_bracket.stl` (M5 GoPro swivel arm for Pod 3).
 
 ---
 
@@ -149,18 +150,34 @@ This document provides the complete Bill of Materials (BOM) and manufacturing sp
 
 ---
 
-## 10. COTS Procurement List
+## 10. COTS Procurement List (Complete Kit for 1 Vehicle)
 
-| Component | Specification / Type | Supplier / Manufacturer | Quantity | Function |
+| Component | Specification / Type | Supplier / Manufacturer | Quantity | Location & Function |
 | :--- | :--- | :--- | :---: | :--- |
 | **M3 Case Screws** | M3 x 40 mm Socket Head V4A (DIN 912) | Standard Hardware | 4 pcs | 4-Corner Central Box Assembly |
-| **M3 Front Case Screws**| M3 x 20 mm Socket Head V4A (DIN 912) | Standard Hardware | 4 pcs | Front Node Enclosure Screws |
-| **M3 Threaded Inserts** | Ruthex M3 x 5.7 mm Brass | Ruthex / Amazon | 8 pcs | Heat-Set Inserts (Box & Front Node) |
-| **M4 Threaded Inserts** | Ruthex M4 x 8.1 mm Brass | Ruthex / Amazon | 4 pcs | Heat-Set Inserts for AMPS Base |
-| **M2 Bulkhead Screws** | M2 x 8 mm Countersunk V4A (DIN 7991) | Standard Hardware | 6 pcs | Secures 3 Pod Bulkheads |
+| **M3 Front Case Screws**| M3 x 20 mm Socket Head V4A (DIN 912) | Standard Hardware | 4 pcs | 4-Corner Front Node Enclosure Screws |
+| **M2.5 PCB Mounting Screws**| M2.5 x 6 mm Socket Head V4A (DIN 912) | Standard Hardware | 8 pcs | 4x Central Box PCB, 4x Front Node PCB |
+| **M3 Threaded Inserts** | Ruthex M3 x 5.7 mm Brass (RX-M3x5.7) | Ruthex / Amazon | 8 pcs | 4x Central Box Tub, 4x Front Node Tub |
+| **M4 Threaded Inserts** | Ruthex M4 x 8.1 mm Brass (RX-M4x8.1) | Ruthex / Amazon | 4 pcs | Front Node Base (AMPS pattern 30 x 38 mm) |
+| **M2 Bulkhead Screws** | M2 x 8 mm Countersunk V4A (DIN 7991) | Standard Hardware | 6 pcs | Secures 3 Pod Bulkheads (2 per pod) |
+| **M5 Radar Clamp Screw** | M5 x 25 mm Socket Head V4A (DIN 912) + Acorn Nut | Standard Hardware | 1 pc | Secures Pod 3 GoPro radar swivel hinge |
 | **Ejector Springs** | Stainless V4A ($D=4{,}5\,\text{mm}, L_0=15\,\text{mm}, R=1{,}2\,\text{N/mm}$) | Gutekunst Federn | 6 pcs | Auto-Eject Mechanism (2 per Pod) |
-| **EPDM O-Rings** | UV- & Ozone-resistant EPDM ($\varnothing 45\dots 75\,\text{mm}$) | QuadLock / Standard | 6 pcs | Tube Saddle Mount (Pods & Front Node) |
-| **Gore Vent Screw** | Gore Automotive AVS 41 (M8x1.25) | W. L. Gore & Associates | 1 pc | Central Box Lid Equalization |
-| **Gore Adhesive Vents**| Gore Adhesive Vent $\varnothing 6{,}0\,\text{mm}$ IP67 | W. L. Gore & Associates | 4 pcs | Pod & Front Node Equalization |
-| **Backup Battery** | 1S LiPo (3.7V 1000mAh) with NTC | EEMB / Enerpower | 1 pc | UPS Emergency Power Supply |
-| **M8 Extension Cables**| M8 6-Pin A-Coded PUR Shielded (1.0m / 1.5m)| Binder / Phoenix / Murr | 3 pcs | Pigtail to Pod Interconnect |
+| **Rubber Silentblocks** | Type A M4 Male/Female ($\varnothing 15 \times 10\,\text{mm}$) + Nyloc Nuts | Standard Hardware | 4 pcs | Vibration-isolated frame mount for Main Box |
+| **EPDM Frame O-Rings** | UV- & Ozone-resistant EPDM ($\varnothing 45\dots 75\,\text{mm}$) | QuadLock / Standard | 6 pcs | Tool-free tube saddle mount (Pods & Front Node) |
+| **EPDM Cable Combs (Front)**| EPDM Closed-Cell Slotted Rubber ($15 \times 8 \times 4\,\text{mm}$) | Custom / EPDM Shop | 2 pcs | Waterproof ribbon cable feedthrough in Front Node |
+| **Silicone Gasket Cord** | Silicone Solid Cord $\varnothing 1.5\,\text{mm}$ Shore 40A (1.0 m) | Standard O-Ring Shop | 1 pc | $40\,\text{cm}$ Main Box groove, $30\,\text{cm}$ Front Node lid groove |
+| **Cartridge Face Seals** | Molded Silicone Flange Seal Shore 40A ($54 \times 18\,\text{mm}$) | Custom / Silicone | 3 pcs | Front face seal on Pods 1, 2, and 3 |
+| **Silicone USB-C Cap** | Waterproof tethered silicone dust cap | GCT / Amazon | 1 pc | IP67 protective cover for Front Node Port J2 |
+| **Handlebar PTT Button** | IP67 Button (Momentary NO) with Clamp ($\varnothing 22/28\,\text{mm}$) | Daytona / Oxford / APEM | 1 pc | Battery-free handlebar PTT wired to Front Node (J3) |
+| **Gore Vent Screw** | Gore Automotive AVS 41 (M8x1.25) | W. L. Gore & Associates | 1 pc | Central Box Lid Equalization & Condensation Inhibit |
+| **Gore Adhesive Vents**| Gore Adhesive Vent $\varnothing 6{,}0\,\text{mm}$ IP67 | W. L. Gore & Associates | 5 pcs | 3x Pods, 1x Front Node, 1x Knowles MEMS acoustic port |
+| **Optical Light Pipe** | Bivar PLPC3-3MM ($\varnothing 3{,}0\,\text{mm}, L=8\,\text{mm}$) | Bivar / Mentor | 1 pc | Optical transmission of WS2812B LED through lid |
+| **3M Dual-Lock Tape** | 3M Dual-Lock SJ3550 (Mushroom tape, 25 mm wide) | 3M / Amazon | 25 cm | Vibration-proof fairing mount for Ottocast & Front Node |
+| **Backup Battery** | 1S LiPo (3.7V 1000mAh) with 10k NTC & Molex Micro-Fit | EEMB / Enerpower | 1 pc | Seamless UPS power reserve in Central Box |
+| **Automotive Fuse Holder** | Waterproof Mini-Blade Inline Fuse Holder + **2A Fuse** | Hella / MTA | 1 pc | Protects permanent 12V feed (KL30) at battery terminal |
+| **HD26 Flange & Plug** | Amphenol LTW HD26 IP67 (Chassis socket + Cable plug) | Amphenol LTW | 1 set | 26-pin primary interface between box and harness |
+| **AMP Superseal 1.5 Plug**| TE Connectivity 4-Pin Housing with female contacts | TE Connectivity | 1 pc | 12V vehicle power connection on harness |
+| **M8 Extension Cables (Pods)**| M8 6-Pin A-Coded PUR Shielded (1.0m / 1.5m) | Binder / Phoenix / Murr | 3 pcs | Pigtail to Pod 1, 2, and 3 Interconnect |
+| **M8 Extension Cable (Radar)**| M8 4-Pin A-Coded PUR Shielded (1.0m) | Binder / Phoenix / Murr | 1 pc | Connection to Garmin Varia / mmWave rear radar |
+| **Automotive Wire** | FLRY-B $0.5\,\text{mm}^2$ & $0.35\,\text{mm}^2$ (various colors) | Leoni / Helukabel | As req. | Bike harness per `central_breakout_harness_wirelist.csv` |
+

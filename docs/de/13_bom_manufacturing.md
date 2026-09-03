@@ -84,11 +84,12 @@ Dieses Dokument enthält die vollständige Bauteilliste (Bill of Materials) und 
 
 ## 6. Mechanik- & Gehäuse-BOM (3D-Druck MJF PA12 & Normteile)
 
-### 6.1 Druckdateien-Übersicht
-* **Zentralbox:** `main_box_lower_case.stl`, `main_box_mid_tray.stl`, `main_box_lid.stl`.
-* **Satelliten-Pods (3x):** `pod_base_housing.stl`, `03_pod_bulkhead_partition.stl`.
-* **Kassetten:** `cartridge_base_sled.stl`, `cartridge_sena_sled.stl`, `cartridge_cardo_sled.stl`, `cartridge_omm_transceiver_sled.stl`, `cartridge_blindkassette_waterproof.stl`.
-* **Front-Knoten:** `front_node_lower_case.stl`, `front_node_upper_case.stl`.
+### 6.1 Druckdateien-Übersicht (15 Teile für 1 Fahrzeug)
+* **Zentralbox (3 Teile):** `main_box_lower_case.stl`, `main_box_mid_tray.stl`, `main_box_lid.stl`.
+* **Satelliten-Pods (6 Teile):** 3x `pod_base_housing.stl`, 3x `03_pod_bulkhead_partition.stl`.
+* **Kassetten (3 Teile):** `cartridge_sena_sled.stl` (oder Cardo), `cartridge_cardo_sled.stl` (oder Blindkassette), `cartridge_omm_transceiver_sled.stl`.
+* **Front-Knoten (2 Teile):** `front_node_lower_case.stl`, `front_node_upper_case.stl`.
+* **Heck-Radar Halter (1 Teil):** `pod3_radar_bracket.stl` (M5 GoPro-Schwenkarm für Pod 3).
 
 ---
 
@@ -149,18 +150,34 @@ Dieses Dokument enthält die vollständige Bauteilliste (Bill of Materials) und 
 
 ---
 
-## 10. Zukaufteile & Normteile-Einkaufsliste (COTS-Komponenten)
+## 10. Zukaufteile & Normteile-Einkaufsliste (COTS-Komponenten für 1 Komplettset)
 
-| Bauteil | Spezifikation / Typ | Bezugsquelle / Hersteller | Menge | Funktion |
+| Bauteil | Spezifikation / Typ | Bezugsquelle / Hersteller | Menge | Montageort & Funktion |
 | :--- | :--- | :--- | :---: | :--- |
 | **M3 Gehäuseschrauben** | M3 x 40 mm Zylinderkopf V4A (DIN 912) | Normteil / Schrauben-Express | 4 Stk. | 4-Eck Zentralbox-Verschraubung |
-| **M3 Gehäuseschrauben (Front)** | M3 x 20 mm Zylinderkopf V4A (DIN 912) | Normteil / Schrauben-Express | 4 Stk. | Front-Node Gehäuseverschraubung |
-| **M3 Gewindeeinsätze** | Ruthex M3 x 5.7 mm Messing | Ruthex / Amazon | 8 Stk. | Einschmelzgewinde (Box & Front-Node) |
-| **M4 Gewindeeinsätze** | Ruthex M4 x 8.1 mm Messing | Ruthex / Amazon | 4 Stk. | Einschmelzgewinde Front-Node AMPS-Boden |
-| **M2 Schottwandschrauben** | M2 x 8 mm Senkkopf V4A (DIN 7991) | Normteil | 6 Stk. | Fixierung der 3 Pod-Schottwände |
-| **Auswerfer-Druckfedern** | Edelstahl V4A ($D=4{,}5\,\text{mm}, L_0=15\,\text{mm}, R=1{,}2\,\text{N/mm}$) | Gutekunst Federn / Sodemann | 6 Stk. | Auto-Eject Mechanismus (2x pro Pod) |
+| **M3 Gehäuseschrauben (Front)** | M3 x 20 mm Zylinderkopf V4A (DIN 912) | Normteil / Schrauben-Express | 4 Stk. | 4-Eck Front-Node Gehäuseverschraubung |
+| **M2.5 Platinenschrauben** | M2.5 x 6 mm Zylinderkopf V4A (DIN 912) | Normteil / Schrauben-Express | 8 Stk. | 4x Zentralbox-Platine, 4x Front-Node-Platine |
+| **M3 Gewindeeinsätze** | Ruthex M3 x 5.7 mm Messing (RX-M3x5.7) | Ruthex / Amazon | 8 Stk. | 4x Zentralbox Unterwanne, 4x Front-Node Unterwanne |
+| **M4 Gewindeeinsätze** | Ruthex M4 x 8.1 mm Messing (RX-M4x8.1) | Ruthex / Amazon | 4 Stk. | Front-Node Gehäuseboden (AMPS-Lochbild 30 x 38 mm) |
+| **M2 Schottwandschrauben** | M2 x 8 mm Senkkopf V4A (DIN 7991) | Normteil | 6 Stk. | Fixierung der 3 Pod-Schottwände (2x pro Pod) |
+| **M5 Radar-Klemmschraube** | M5 x 25 mm V4A (DIN 912) + Hutmutter | Normteil | 1 Stk. | Klemmschraube für Pod 3 GoPro-Radar-Schwenkarm |
+| **Auswerfer-Druckfedern** | Edelstahl V4A ($D=4{,}5\,\text{mm}, L_0=15\,\text{mm}, R=1{,}2\,\text{N/mm}$) | Gutekunst Federn / Sodemann | 6 Stk. | Auto-Eject Schnappmechanismus (2x pro Pod) |
+| **Silentblöcke / Gummipuffer**| Typ A M4 Außen/Innen ($\varnothing 15 \times 10\,\text{mm}$) + Stoppmuttern | Ganter / Normteil | 4 Stk. | Schwingungsentkoppelte Rahmenmontage Zentralbox |
 | **EPDM-Spannringe** | UV- & Ozonbeständiges EPDM ($\varnothing 45\dots 75\,\text{mm}$) | QuadLock / O-Ring-Shop | 6 Stk. | Rohrbett-Schnellmontage (Pods & Front-Node) |
-| **Gore Druckausgleichsventil** | Gore Automotive AVS 41 (M8x1.25) | W. L. Gore & Associates | 1 Stk. | Zentralbox-Deckelbelüftung |
-| **Gore Klebemembranen** | Gore Adhesive Vent $\varnothing 6{,}0\,\text{mm}$ IP67 | W. L. Gore & Associates | 4 Stk. | Pod- & Front-Node Druckausgleich |
-| **Pufferakku** | 1S LiPo (3.7V 1000mAh) mit NTC | EEMB / Enerpower | 1 Stk. | USV-Notstromversorgung |
-| **M8 Zuleitungskabel** | M8 6-Pin A-Coded PUR geschirmt (1.0m / 1.5m)| Binder / Phoenix / Murr | 3 Stk. | Verbindung von Pigtail zu Pods |
+| **EPDM-Dichtkämme (Front)** | EPDM Zellkautschuk geschlitzt ($15 \times 8 \times 4\,\text{mm}$) | Sonderfertigung / EPDM-Shop | 2 Stk. | Wasserdichte Flachkabel-Einführung im Front-Knoten |
+| **Silikon-Dichtschnur** | Silikon-Rundschnur $\varnothing 1{,}5\,\text{mm}$ Shore 40A (1.0 m) | O-Ring-Shop | 1 Stk. | $40\,\text{cm}$ Zentralbox-Nut, $30\,\text{cm}$ Front-Node Deckelnut |
+| **Kassetten-Flanschdichtungen**| Silikon-Formdichtung Shore 40A ($54 \times 18\,\text{mm}$) | Sonderfertigung / Silikon | 3 Stk. | Stirnseitige Mundloch-Abdichtung an Pod 1, 2 und 3 |
+| **Silikon USB-C Schutzkappe** | Wasserdichte Schutzkappe mit Haltelasche | GCT / Amazon | 1 Stk. | IP67 Schutzabdeckung für Front-Node Port J2 |
+| **Lenker-PTT Taster** | IP67 Taster (Schließer) mit Schelle ($\varnothing 22/28\,\text{mm}$) | Daytona / Oxford / APEM | 1 Stk. | Batteriefreier Lenker-PTT am Front-Knoten (Port J3) |
+| **Gore Druckausgleichsventil** | Gore Automotive AVS 41 (M8x1.25 Schraubventil) | W. L. Gore & Associates | 1 Stk. | Zentralbox-Deckelbelüftung & Kondensatschutz |
+| **Gore Klebemembranen** | Gore Adhesive Vent $\varnothing 6{,}0\,\text{mm}$ IP67 | W. L. Gore & Associates | 5 Stk. | 3x Pods, 1x Front-Node, 1x Knowles MEMS Akustikport |
+| **PMMA Lichtleiter** | Bivar PLPC3-3MM ($\varnothing 3{,}0\,\text{mm}, L=8\,\text{mm}$) | Bivar / Mentor | 1 Stk. | Optische WS2812B Statusübertragung im Deckel |
+| **3M Dual-Lock Klettband** | 3M Dual-Lock SJ3550 (Pilzkopfband, 25 mm breit) | 3M / Amazon | 25 cm | Vibrationsfeste Verkleidungsmontage für Ottocast & Node |
+| **Pufferakku (LiPo USV)** | 1S LiPo (3.7V 1000mAh) mit 10k NTC & Molex Micro-Fit | EEMB / Enerpower | 1 Stk. | USV-Pufferung in der Zentralbox |
+| **KFZ-Sicherungshalter** | Wasserdichter Mini-Flachsicherungshalter + **2A Sicherung** | Hella / MTA | 1 Stk. | Absicherung Dauerplus (KL30) direkt am Batteriepol |
+| **HD26 Flanschbuchse & Stecker**| Amphenol LTW HD26 IP67 (Buchse + Stecker mit Tülle) | Amphenol LTW | 1 Satz | 26-Pin Hauptschnittstelle Box & Kabelbaum |
+| **AMP Superseal 1.5 Buchse**| TE Connectivity 4-Pin Buchsengehäuse mit Kontakten | TE Connectivity | 1 Stk. | 12V Bordnetz-Einspeisung am Kabelbaum |
+| **M8 Zuleitungskabel (Pods)** | M8 6-Pin A-Coded PUR geschirmt (1.0m / 1.5m) | Binder / Phoenix / Murr | 3 Stk. | Verbindung Kabelbaum-Pigtail zu Pod 1, 2 und 3 |
+| **M8 Zuleitungskabel (Radar)**| M8 4-Pin A-Coded PUR geschirmt (1.0m) | Binder / Phoenix / Murr | 1 Stk. | Zuleitung zu Garmin Varia / mmWave Heckradar |
+| **Automotive-Leitungen** | FLRY-B $0{,}5\,\text{mm}^2$ & $0{,}35\,\text{mm}^2$ (diverse Farben) | Leoni / Helukabel | nach Bed. | Fahrzeugkabelbaum nach `central_breakout_harness_wirelist.csv` |
+
