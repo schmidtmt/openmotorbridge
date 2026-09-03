@@ -41,10 +41,13 @@ module dummy_main_pcb() {
         translate([30.0, 20.0, 1.6])
             cube(size=[10.0, 10.0, 4.5], center=false);
 
-    // 6. ESP32-S3-WROOM-1 Wireless MCU Module
+    // 6. ESP32-S3-WROOM-1U Wireless MCU Module (18.0 x 19.2 mm with U.FL connector)
     color("silver")
         translate([20.0, 42.0, 1.6])
-            cube(size=[18.0, 25.5, 3.2], center=false);
+            cube(size=[18.0, 19.2, 3.2], center=false);
+    color("gold")
+        translate([20.0 + 14.5, 42.0 + 16.0, 1.6 + 3.2])
+            cylinder(r=1.2, h=1.0, $fn=16);
 
     // 7. BQ25798 LiPo Solar/Vehicle Charger IC & Choke
     color("dimgray")

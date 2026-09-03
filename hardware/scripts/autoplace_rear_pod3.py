@@ -21,27 +21,24 @@ def auto_place_rear_pod(pcb_path):
     print(f"Loading Rear POD 3 PCB: {pcb_path}")
     board = pcbnew.LoadBoard(pcb_path)
 
-    # Board Dimensions: 110.0 x 52.0 mm (X: 100.0 .. 210.0, Y: 70.0 .. 122.0)
+    # Board Dimensions: 55.0 x 48.0 mm (X: 100.0 .. 155.0, Y: 72.0 .. 120.0)
     X0 = 100.0
-    Y0 = 70.0
-    W = 110.0
-    H = 52.0
-    X_max = X0 + W  # 210.0 mm
-    Y_max = Y0 + H  # 122.0 mm
+    Y0 = 72.0
+    W = 55.0
+    H = 48.0
+    X_max = X0 + W  # 155.0 mm
+    Y_max = Y0 + H  # 120.0 mm
     Y_center = Y0 + H / 2.0  # 96.0 mm
 
-    # 3D Model Mapping for 100% Integrated Onboard Antennas
+    # 3D Model Mapping
     model_mapping = {
-        'U1': ('${KICAD10_3DMODEL_DIR}/RF_Module.3dshapes/ESP32-C3-WROOM-02.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
+        'U1': ('${KICAD10_3DMODEL_DIR}/RF_Module.3dshapes/ESP32-C3-WROOM-02U.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
         'U2': ('${KICAD10_3DMODEL_DIR}/Package_DFN_QFN.3dshapes/QFN-24-1EP_4x4mm_P0.5mm_EP2.6x2.6mm.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
         'U3': ('${KICAD10_3DMODEL_DIR}/Package_DFN_QFN.3dshapes/QFN-24-1EP_4x4mm_P0.5mm_EP2.6x2.6mm.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
         'U4': ('${KICAD10_3DMODEL_DIR}/Package_TO_SOT_SMD.3dshapes/SOT-23.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
-        # J1: 6-Pin 2.54mm Horizontal Socket on leading front edge (X=102.5mm, Centered Y=96.0mm)
         'J1': ('${KICAD10_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x06_P2.54mm_Horizontal.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
-        # Antennas: Pulse W3000 Tri-Band Ceramic Antennas
-        'ANT1': ('${KICAD10_3DMODEL_DIR}/RF_Antenna.3dshapes/Pulse_W3000.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
-        'ANT2': ('${KICAD10_3DMODEL_DIR}/RF_Antenna.3dshapes/Pulse_W3000.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
-        'ANT3': ('${KICAD10_3DMODEL_DIR}/RF_Antenna.3dshapes/Pulse_W3000.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
+        'J4': ('${KICAD10_3DMODEL_DIR}/Connector_Coaxial.3dshapes/U.FL_Hirose_U.FL-R-SMT-1_Vertical.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
+        'J5': ('${KICAD10_3DMODEL_DIR}/Connector_Coaxial.3dshapes/U.FL_Hirose_U.FL-R-SMT-1_Vertical.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
         'F1': ('${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_1206_3216Metric.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
         'D1': ('${KICAD10_3DMODEL_DIR}/LED_SMD.3dshapes/LED_0805_2012Metric.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
         'R1': ('${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
@@ -51,39 +48,35 @@ def auto_place_rear_pod(pcb_path):
         'C4': ('${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0603_1608Metric.step', (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
     }
 
-    # Verified Layout Matrix with Strict Subsystem Zoning & 100% Collision-Free Spacing
+    # Verified Layout Matrix matching openmotorbridge_rear_pod3.kicad_pcb exactly
     layout_rules = {
-        # 4 Corner M2 Mounting Holes (Concentric with cartridge sled posts)
-        'H1': (103.5, 73.0, 0.0, pcbnew.F_Cu),
-        'H2': (206.5, 73.0, 0.0, pcbnew.F_Cu),
-        'H3': (103.5, 119.0, 0.0, pcbnew.F_Cu),
-        'H4': (206.5, 119.0, 0.0, pcbnew.F_Cu),
+        # 4 Corner M2 Mounting Holes (Matching base sled standoffs)
+        'H1': (103.00,  86.50,   0.0, pcbnew.F_Cu),
+        'H2': (103.00, 105.50,   0.0, pcbnew.F_Cu),
+        'H3': (149.00,  86.50,   0.0, pcbnew.F_Cu),
+        'H4': (149.00, 105.50,   0.0, pcbnew.F_Cu),
 
-        # ZONE 1: FRONT CONNECTOR & POWER PROTECTION (Left side, X = 102.5 .. 115.0 mm)
-        'J1': (102.5, 89.65, 0.0, pcbnew.F_Cu),          # 6-Pin Socket (Centered at Y=96.0mm)
-        'F1': (106.75, 83.71, 90.0, pcbnew.F_Cu),        # 500mA PTC Fuse
-        'D1': (112.06, 72.50, 180.0, pcbnew.F_Cu),       # Green Power LED
-        'R1': (106.75, 77.83, 90.0, pcbnew.F_Cu),        # LED Resistor 1.5k
-        'C1': (109.50, 78.95, 90.0, pcbnew.F_Cu),        # 10uF 3V3 Decoupling
-        'U4': (114.50, 104.50, 0.0, pcbnew.F_Cu),        # SOT-23 ID Chip
+        # Front Connector, Protection & 1-Wire ID
+        'J1': (102.50,  89.65,   0.0, pcbnew.F_Cu),
+        'F1': (111.29,  89.75,   0.0, pcbnew.F_Cu),
+        'C1': (113.75,  84.20,  90.0, pcbnew.F_Cu),
+        'U4': (116.19, 103.05,   0.0, pcbnew.F_Cu),
+        'C2': (111.25, 104.72,  90.0, pcbnew.F_Cu),
+        'R1': (108.00, 109.08,  90.0, pcbnew.F_Cu),
+        'D1': (108.00, 113.44, -90.0, pcbnew.F_Cu),
 
-        # ZONE 2: TOP ROW — GNSS SUBSYSTEM (Y = 71.0 .. 83.0 mm)
-        'U2': (124.0, 83.0, 180.0, pcbnew.F_Cu),         # u-blox MAX-M10S GNSS QFN
-        'C3': (109.50, 88.28, 90.0, pcbnew.F_Cu),        # 100nF GNSS Decoupling
-        'C2': (140.53, 80.75, 180.0, pcbnew.F_Cu),       # 100nF Decoupling
-        'J5': (139.85, 77.75, 0.0, pcbnew.F_Cu),         # Murata MM8030 GNSS RF Switch
-        'ANT2': (137.05, 71.0, 180.0, pcbnew.F_Cu),      # GNSS Ceramic Patch Antenna
+        # GNSS Subsystem (Top)
+        'U2': (130.25,  78.15, 180.0, pcbnew.F_Cu),
+        'C3': (117.75,  84.22,  90.0, pcbnew.F_Cu),
+        'J5': (115.50,  76.03, 180.0, pcbnew.F_Cu),
 
-        # ZONE 3: BOTTOM ROW — 868 MHz LoRa SUBSYSTEM (Y = 105.0 .. 121.0 mm)
-        'U3': (124.0, 105.0, 0.0, pcbnew.F_Cu),          # Semtech SX1262 LoRa QFN
-        'C4': (115.78, 114.0, 0.0, pcbnew.F_Cu),         # 100nF LoRa Decoupling
-        'J4': (134.25, 116.05, 180.0, pcbnew.F_Cu),      # Murata MM8030 LoRa RF Switch
-        'ANT1': (136.80, 120.75, 0.0, pcbnew.F_Cu),      # 868 MHz LoRa Ceramic Antenna
+        # LoRa Subsystem (Bottom)
+        'U3': (122.00, 113.50,   0.0, pcbnew.F_Cu),
+        'C4': (115.25, 107.78,  90.0, pcbnew.F_Cu),
+        'J4': (142.25, 114.50,   0.0, pcbnew.F_Cu),
 
-        # ZONE 4: RIGHT AREA — 2.4 GHz MESH MCU, SWITCH & ANTENNA
-        'U1': (156.8, 94.39, -90.0, pcbnew.F_Cu),        # ESP32-C3
-        'ANT3': (186.0, 92.0, 0.0, pcbnew.F_Cu),         # 2.4 GHz Mesh Ceramic Antenna
-        'J3': (198.35, 92.0, 0.0, pcbnew.F_Cu),          # Murata MM8030 2.4 GHz RF Switch
+        # Central MCU Subsystem (ESP32-C3-WROOM-02U with U.FL)
+        'U1': (138.00,  96.00, -90.0, pcbnew.F_Cu),
     }
 
     existing_refs = {fp.GetReference(): fp for fp in board.Footprints()}

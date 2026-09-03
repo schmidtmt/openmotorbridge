@@ -26,7 +26,7 @@ def auto_place_main_board(pcb_path):
     # 3D Model Mapping for all components
     model_mapping = {
         # Active ICs
-        'U2': ('${KICAD10_3DMODEL_DIR}/RF_Module.3dshapes/ESP32-S3-WROOM-1.step', (0.0, 0.0, 0.0)),
+        'U2': ('${KICAD10_3DMODEL_DIR}/RF_Module.3dshapes/ESP32-WROOM-32U.step', (0.0, 0.0, 0.0)),
         'U1': ('${KICAD10_3DMODEL_DIR}/Package_SO.3dshapes/SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.41x3.81mm.step', (0.0, 0.0, 0.0)),
         'U3': ('${KICAD10_3DMODEL_DIR}/Package_DFN_QFN.3dshapes/QFN-28-1EP_4x4mm_P0.4mm_EP2.4x2.4mm.step', (0.0, 0.0, 0.0)),
         'U5': ('${KICAD10_3DMODEL_DIR}/Package_LGA.3dshapes/Bosch_LGA-14_3x2.5mm_P0.5mm.step', (0.0, 0.0, 0.0)),
@@ -37,6 +37,7 @@ def auto_place_main_board(pcb_path):
 
         # Discrete & Passives
         'L1': ('${KICAD10_3DMODEL_DIR}/Inductor_SMD.3dshapes/L_2816_7142Metric.step', (0.0, 0.0, 0.0)),
+        'D1': ('${KICAD10_3DMODEL_DIR}/LED_SMD.3dshapes/LED_WS2812B-PLCC4.step', (0.0, 0.0, 0.0)),
         'D2': ('${KICAD10_3DMODEL_DIR}/Diode_SMD.3dshapes/D_SMB.step', (0.0, 0.0, 0.0)),
         'T1': ('${KICAD10_3DMODEL_DIR}/Transformer_SMD.3dshapes/Transformer_Ethernet_HALO_TG111-MSC13.step', (0.0, 0.0, 0.0)),
         'T2': ('${KICAD10_3DMODEL_DIR}/Transformer_SMD.3dshapes/Transformer_Ethernet_HALO_TG111-MSC13.step', (0.0, 0.0, 0.0)),
@@ -58,73 +59,64 @@ def auto_place_main_board(pcb_path):
         'R11': ('${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step', (0.0, 0.0, 0.0)),
 
         # Connectors & Peripherals
-        'J2': ('${KICAD10_3DMODEL_DIR}/Connector_Card.3dshapes/microSD_HC_Hirose_DM3D-SF.step', (0.0, 0.0, 0.0)),
-        'J3': ('${KICAD10_3DMODEL_DIR}/Connector_USB.3dshapes/USB_C_Receptacle_GCT_USB4085.step', (90.0, 0.0, -90.0)),
         'J1': ('${KICAD10_3DMODEL_DIR}/Connector_IDC.3dshapes/IDC-Header_2x13_P2.54mm_Vertical.step', (0.0, 0.0, 0.0)),
-        'J5': ('${KICAD10_3DMODEL_DIR}/Connector_JST.3dshapes/JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical.step', (0.0, 0.0, 0.0)),
-        'J6': ('${KICAD10_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x02_P2.54mm_Vertical.step', (0.0, 0.0, 0.0)),
-        'J4': ('${KICAD10_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x03_P2.54mm_Vertical.step', (0.0, 0.0, 0.0)),
+        'J2': ('${KICAD10_3DMODEL_DIR}/Connector_Card.3dshapes/microSD_HC_Hirose_DM3D-SF.step', (0.0, 0.0, 0.0)),
+        'J3': ('${KICAD10_3DMODEL_DIR}/Connector_IDC.3dshapes/IDC-Header_2x05_P2.54mm_Vertical.step', (0.0, 0.0, 0.0)),
+        'J4': ('${KICAD10_3DMODEL_DIR}/Connector_JST.3dshapes/JST_PH_B3B-PH-K_1x03_P2.00mm_Vertical.step', (0.0, 0.0, 0.0)),
+        'J5': ('${KICAD10_3DMODEL_DIR}/Connector_JST.3dshapes/JST_PH_B4B-PH-K_1x04_P2.00mm_Vertical.step', (0.0, 0.0, 0.0)),
     }
 
-    # Complete 3-Zone Coordinate Layout Matrix (in mm) - 100% Zero-Collision Certified
+    # Complete Verified Placement Matrix (in mm) matching openmotorbridge_main.kicad_pcb exactly
     layout_rules = {
-        # 4 Corner M3 Mounting Holes (Ø 6.0 mm Keep-Outs)
-        'H1': (X0 + 4.0, Y0 + 4.0,   0.0),   # (119.22, 75.85) Top-Left
-        'H2': (X_max - 4.0, Y0 + 4.0, 0.0),  # (196.22, 75.85) Top-Right
-        'H3': (X0 + 4.0, Y_max - 4.0, 0.0),  # (119.22, 122.85) Bottom-Left
-        'H4': (X_max - 4.0, Y_max - 4.0, 0.0), # (196.22, 122.85) Bottom-Right
+        # 4 Corner M3 Mounting Holes
+        'H1': (119.22,  75.85,  0.0),
+        'H2': (196.22,  75.85,  0.0),
+        'H3': (119.22, 122.85,  0.0),
+        'H4': (196.22, 122.85,  0.0),
 
-        # Zone 1: MCU & RF (Left Flank)
-        'U2': (126.5, 93.0, 0.0),             # ESP32-S3-WROOM-1 MCU (18.0 x 25.5 mm, Y=80.25..105.75)
-        'C10': (138.5, 93.0, 0.0),            # VDD Decoupling Cap
-        'C11': (138.5, 96.0, 0.0),            # Bulk Cap
-        'U9': (138.5, 87.0, 0.0),             # TI TPS7A0533 3.3V Ultra-Low-IQ LDO
+        # Power & UPS (LM5164, LDO, Passives)
+        'D2':  (123.00,  84.00,  0.0),
+        'U1':  (124.00,  88.00,  0.0),
+        'C1':  (130.00,  84.00,  0.0),
+        'U9':  (134.00,  84.00,  0.0),
+        'C3':  (119.00,  88.00,  0.0),
+        'C4':  (119.00,  90.00,  0.0),
+        'R1':  (128.00,  92.00,  0.0),
+        'R2':  (123.00,  92.00,  0.0),
+        'C2':  (134.00,  96.00,  0.0),
+        'L1':  (124.00, 103.00,  0.0),
 
-        # Zone 2: Power & UPS (Top-Left Flank)
-        'D2': (127.0, 76.5, 0.0),             # SMBJ33CA TVS Diode (5.4 x 3.6 mm)
-        'R1': (131.5, 75.5, 0.0),
-        'R2': (131.5, 77.5, 0.0),
-        'C1': (135.0, 76.5, 0.0),             # 10uF 100V Input Cap (3.2 x 2.5 mm)
-        'U1': (142.0, 78.0, 0.0),             # TI LM5164-Q1 Synchronous Buck (5.0 x 6.0 mm)
-        'C3': (139.0, 83.5, 0.0),             # Bootstrap Cap
-        'C4': (144.0, 83.5, 0.0),             # VCC Cap
-        'L1': (150.0, 77.5, 0.0),             # 47uH Shielded Power Inductor (7.2 x 4.5 mm)
-        'C2': (156.0, 77.5, 0.0),             # 22uF 16V Output Cap
+        # MCU & Decoupling (ESP32-S3-WROOM-1U with U.FL connector)
+        'U2':  (149.50,  89.15,  0.0),
+        'C10': (138.00,  88.00,  0.0),
+        'C11': (138.00,  91.00,  0.0),
 
-        # Zone 5: Center Peripherals (IMU, MicroSD, Status LED)
-        'D1': (154.0, 85.0, 0.0),             # WS2812B RGB Status LED (3.5 x 3.5 mm)
-        'U5': (150.0, 89.0, 0.0),             # Bosch BMI270 6-Axis IMU (3.0 x 2.5 mm)
-        'C12': (145.0, 89.0, 0.0),
-        'R10': (145.0, 91.0, 0.0),
-        'R11': (145.0, 93.0, 0.0),
-        'J2': (148.0, 102.0, 0.0),            # MicroSD Card Slot (14.0 x 14.5 mm)
+        # Peripherals & Sensors (IMU, MicroSD, Status LED)
+        'D1':  (149.50, 104.00,  0.0),
+        'U5':  (149.50, 108.00,  0.0),
+        'C12': (149.50, 104.00,  0.0),
+        'R10': (152.50, 104.00,  0.0),
+        'R11': (152.50, 106.00,  0.0),
+        'J2':  (158.00,  98.00,  0.0),
 
-        # Zone 4A: Audio Codec & CAN (Top-Right Flank)
-        'U3': (168.0, 80.0, 0.0),             # Everest ES8388 Audio Codec (4.0 x 4.0 mm)
-        'U6': (182.0, 80.0, 0.0),             # TI TCAN334G CAN-FD Transceiver (5.0 x 6.0 mm)
-        'R9': (188.0, 80.0, 0.0),             # 120R CAN Termination Resistor
+        # Audio Codec, CAN & Optocouplers
+        'U3':  (158.00,  84.00,  0.0),
+        'C6':  (164.00,  91.00,  0.0),
+        'R5':  (164.00,  93.00,  0.0),
+        'T1':  (174.00,  90.00,  0.0),
+        'U7':  (186.00,  90.00,  0.0),
+        'C7':  (164.00, 105.00,  0.0),
+        'R6':  (164.00, 107.00,  0.0),
+        'T2':  (174.00, 107.00,  0.0),
+        'U8':  (186.00, 107.00,  0.0),
+        'U6':  (185.00,  78.00,  0.0),
+        'R9':  (191.00,  78.00,  0.0),
 
-        # Zone 4B: Galvanic Audio Isolation & Triggers (Right Flank Lower)
-        'C6': (158.0, 94.0, 0.0),             # Audio Ch1 Coupling Cap
-        'R5': (158.0, 97.0, 0.0),
-        'T1': (166.0, 94.0, 0.0),             # Bourns LM-NP-1001 Audio Transformer 1 (12.5 x 9.5 mm)
-        'T2': (180.0, 94.0, 0.0),             # Bourns LM-NP-1001 Audio Transformer 2 (12.5 x 9.5 mm)
-        'C7': (189.0, 94.0, 0.0),             # Audio Ch2 Coupling Cap
-        'R6': (189.0, 97.0, 0.0),
-        'U7': (166.0, 105.0, 0.0),            # Toshiba TLP222A PhotoMOS Optocoupler 1 (4.5 x 4.0 mm)
-        'U8': (180.0, 105.0, 0.0),            # Toshiba TLP222A PhotoMOS Optocoupler 2 (4.5 x 4.0 mm)
-
-        # Zone 1A: Unified 4-Pin JST-PH Battery & NTC Connector on Front Rail (X=122.3..132.2)
-        'J5': (127.25, 118.5, 0.0),           # JST-PH 4-Pin Shrouded (Horizontal: 10.0 x 4.5 mm, Pin 1 at X=124.25)
-
-        # Zone 1B: Front Service Port
-        'J3': (139.5, 118.5, 0.0),            # USB-C Service Port (Vertical Receptacle: 8.9 x 4.8 mm standing straight UP)
-
-        # Zone 1C: Right Front Connector (Horizontal J1 - Pin 1 at X=154.0, body X=152..187 mm)
-        'J1': (154.0, 118.5, 90.0),           # 26-Port IDC Box Header 2x13 (Pin 1 at X=154, body spans X=152..187 mm)
-
-        # Zone 1D: Right Short Edge Status Connector
-        'J4': (195.0, 108.0, 0.0),            # 3-Pin RGB LED Header on Right Flank (Vertical in Y: 2.5 x 7.6 mm)
+        # Headers & Front Connectors
+        'J3':  (128.00, 121.50, 90.0),
+        'J1':  (157.00, 121.50, 90.0),
+        'J5':  (195.00,  92.00, 90.0),
+        'J4':  (195.00, 108.00, 90.0),
     }
 
     existing_refs = {fp.GetReference(): fp for fp in board.Footprints()}
