@@ -7,9 +7,9 @@
 	(title_block
 		(title "OpenMotorBridge Universal Front Node (Cockpit & Smart Fairing)")
 		(date "2026-09-03")
-		(rev "v1.0")
+		(rev "v1.1")
 		(company "OpenMotorBridge Open Source Hardware")
-		(comment 1 "Automotive USB 2.0 Hub + CarPlay Power Switch + I2S Ambient Mic + CAN + Handlebar PTT + ESP-NOW")
+		(comment 1 "Dual Power: Pure USB Bus-Powered Standard + Optional Switched 12V (KL15 ACC)")
 	)
 
 	(lib_symbols
@@ -30,9 +30,9 @@
 		)
 	)
 
-	(global_label "KL30_12V" (shape input) (at 30.0 40.0 180) (effects (font (size 1.27 1.27)) (justify right)))
-	(global_label "KL15_IGN" (shape input) (at 30.0 45.0 180) (effects (font (size 1.27 1.27)) (justify right)))
+	(global_label "KL15_12V_SW" (shape input) (at 30.0 40.0 180) (effects (font (size 1.27 1.27)) (justify right)))
 	(global_label "GND" (shape passive) (at 30.0 50.0 180) (effects (font (size 1.27 1.27)) (justify right)))
+	(global_label "USB_UP_VBUS" (shape input) (at 30.0 60.0 180) (effects (font (size 1.27 1.27)) (justify right)))
 	(global_label "VCC_5V" (shape output) (at 80.0 40.0 0) (effects (font (size 1.27 1.27)) (justify left)))
 	(global_label "VCC_3V3" (shape output) (at 80.0 45.0 0) (effects (font (size 1.27 1.27)) (justify left)))
 	(global_label "VCC_5V_OTTOCAST" (shape output) (at 80.0 50.0 0) (effects (font (size 1.27 1.27)) (justify left)))

@@ -67,7 +67,7 @@ def create_project_file():
                     "track_width": 0.30,
                     "via_diameter": 0.6,
                     "via_drill": 0.3,
-                    "nets": ["KL30_12V", "KL15_IGN", "VCC_5V", "VCC_5V_OTTOCAST", "VCC_3V3", "GND", "SW_BUCK"]
+                    "nets": ["KL15_12V_SW", "VIN_BUCK", "VCC_5V", "VCC_5V_OTTOCAST", "VCC_3V3", "GND", "SW_BUCK", "VBUS_BUCK_OUT", "USB_UP_VBUS"]
                 },
                 {
                     "name": "USB_DIFF",
@@ -98,9 +98,9 @@ def create_schematic_file():
 	(title_block
 		(title "OpenMotorBridge Universal Front Node (Cockpit & Smart Fairing)")
 		(date "2026-09-03")
-		(rev "v1.0")
+		(rev "v1.1")
 		(company "OpenMotorBridge Open Source Hardware")
-		(comment 1 "Automotive USB 2.0 Hub + CarPlay Power Switch + I2S Ambient Mic + CAN + Handlebar PTT + ESP-NOW")
+		(comment 1 "Dual Power: Pure USB Bus-Powered Standard + Optional Switched 12V (KL15 ACC)")
 	)
 
 	(lib_symbols
@@ -121,9 +121,9 @@ def create_schematic_file():
 		)
 	)
 
-	(global_label "KL30_12V" (shape input) (at 30.0 40.0 180) (effects (font (size 1.27 1.27)) (justify right)))
-	(global_label "KL15_IGN" (shape input) (at 30.0 45.0 180) (effects (font (size 1.27 1.27)) (justify right)))
+	(global_label "KL15_12V_SW" (shape input) (at 30.0 40.0 180) (effects (font (size 1.27 1.27)) (justify right)))
 	(global_label "GND" (shape passive) (at 30.0 50.0 180) (effects (font (size 1.27 1.27)) (justify right)))
+	(global_label "USB_UP_VBUS" (shape input) (at 30.0 60.0 180) (effects (font (size 1.27 1.27)) (justify right)))
 	(global_label "VCC_5V" (shape output) (at 80.0 40.0 0) (effects (font (size 1.27 1.27)) (justify left)))
 	(global_label "VCC_3V3" (shape output) (at 80.0 45.0 0) (effects (font (size 1.27 1.27)) (justify left)))
 	(global_label "VCC_5V_OTTOCAST" (shape output) (at 80.0 50.0 0) (effects (font (size 1.27 1.27)) (justify left)))
@@ -161,9 +161,9 @@ def create_pcb_board():
     tb = board.GetTitleBlock()
     tb.SetTitle("OpenMotorBridge Universal Front Node (Cockpit & Smart Fairing)")
     tb.SetDate("2026-09-03")
-    tb.SetRevision("v1.0")
+    tb.SetRevision("v1.1")
     tb.SetCompany("OpenMotorBridge Open Source Hardware")
-    tb.SetComment(0, "PCBA 05: Automotive USB 2.0 Hub + CarPlay Power Switch + I2S MEMS + CAN + PTT")
+    tb.SetComment(0, "Dual Power: Pure USB Bus-Powered Standard + Optional Switched 12V (KL15 ACC)")
 
     # 4 Layers Stackup
     board.SetLayerName(pcbnew.In1_Cu, "GND_PLANE")
@@ -171,7 +171,7 @@ def create_pcb_board():
 
     # Netlist
     nets = [
-        "GND", "KL30_12V", "KL15_IGN", "KL15_SENSE",
+        "GND", "KL15_12V_SW", "VIN_BUCK", "KL15_SENSE",
         "VCC_5V", "VCC_5V_OTTOCAST", "VCC_3V3", "VDD12_HUB",
         "USB_UP_VBUS", "USB_UP_DP", "USB_UP_DM",
         "USB_DN1_DP", "USB_DN1_DM",
@@ -183,7 +183,7 @@ def create_pcb_board():
         "TWAI_TX", "TWAI_RX", "CAN_H", "CAN_L",
         "ESP_EN", "ESP_BOOT", "LED_STATUS",
         "XTAL_IN", "XTAL_OUT", "HUB_RESET_N", "HUB_RBIAS",
-        "SW_BUCK", "BST_BUCK", "FB_BUCK"
+        "SW_BUCK", "BST_BUCK", "FB_BUCK", "VBUS_BUCK_OUT"
     ]
     net_map = {}
     for name in nets:
@@ -194,9 +194,10 @@ def create_pcb_board():
     # Component Definitions
     components = [
         # 1. Connectors West Edge (Vehicle Interface)
-        ("Connector_JST.pretty", "JST_PH_B3B-PH-K_1x03_P2.00mm_Vertical", "J1", "12V_KL30_KL15_GND", 104.5, 80.0, 90,
-         {"1": "KL30_12V", "2": "KL15_IGN", "3": "GND"},
-         "Connector_JST.3dshapes/JST_PH_B3B-PH-K_1x03_P2.00mm_Vertical.step"),
+        # J1 is now 2-Pin for OPTIONAL 12V Switched (KL15) + GND
+        ("Connector_JST.pretty", "JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical", "J1", "OPT_12V_KL15_GND", 104.5, 80.0, 90,
+         {"1": "KL15_12V_SW", "2": "GND"},
+         "Connector_JST.3dshapes/JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical.step"),
         ("Connector_JST.pretty", "JST_PH_B3B-PH-K_1x03_P2.00mm_Vertical", "J2", "CAN_H_L_GND", 104.5, 92.0, 90,
          {"1": "CAN_H", "2": "CAN_L", "3": "GND"},
          "Connector_JST.3dshapes/JST_PH_B3B-PH-K_1x03_P2.00mm_Vertical.step"),
@@ -228,19 +229,28 @@ def create_pcb_board():
          {"1": "ESP_EN", "2": "GND"},
          "Button_Switch_SMD.3dshapes/SW_Push_SPST_NO_Alps_SKRK.step"),
 
-        # 4. Power Management Stage (Buck + LDO + Protection)
+        # 4. Power Management Stage (Dual-Path OR-ing: USB VBUS + Optional 12V Buck)
+        ("Diode_SMD.pretty", "D_SMA", "D7", "SS34_USB_OR", 158.0, 79.0, 180,
+         {"1": "VCC_5V", "2": "USB_UP_VBUS"},
+         "Diode_SMD.3dshapes/D_SMA.step"),
+        ("Diode_SMD.pretty", "D_SMA", "D8", "SS34_BUCK_OR", 127.0, 81.0, 0,
+         {"1": "VBUS_BUCK_OUT", "2": "VCC_5V"},
+         "Diode_SMD.3dshapes/D_SMA.step"),
+        ("Diode_SMD.pretty", "D_SMA", "D5", "SS34_REV_POL", 109.0, 80.0, 0,
+         {"1": "KL15_12V_SW", "2": "VIN_BUCK"},
+         "Diode_SMD.3dshapes/D_SMA.step"),
+        ("Diode_SMD.pretty", "D_SMB", "D4", "SMCJ36CA_TVS", 110.0, 74.0, 0,
+         {"1": "VIN_BUCK", "2": "GND"},
+         "Diode_SMD.3dshapes/D_SMB.step"),
         ("Package_TO_SOT_SMD.pretty", "SOT-23-6", "U4", "TPS54302_BUCK_5V2A", 114.0, 81.0, 0,
-         {"1": "GND", "2": "SW_BUCK", "3": "KL30_12V", "4": "FB_BUCK", "5": "KL30_12V", "6": "BST_BUCK"},
+         {"1": "GND", "2": "SW_BUCK", "3": "VIN_BUCK", "4": "FB_BUCK", "5": "VIN_BUCK", "6": "BST_BUCK"},
          "Package_TO_SOT_SMD.3dshapes/SOT-23-6.step"),
-        ("Inductor_SMD.pretty", "L_Sunlord_MWSA1206S-470", "L1", "4.7uH_Power_Choke", 122.0, 81.0, 0,
-         {"1": "SW_BUCK", "2": "VCC_5V"},
+        ("Inductor_SMD.pretty", "L_Sunlord_MWSA1206S-470", "L1", "4.7uH_Power_Choke", 121.5, 81.0, 0,
+         {"1": "SW_BUCK", "2": "VBUS_BUCK_OUT"},
          "Inductor_SMD.3dshapes/L_2816_7142Metric.step"),
         ("Package_TO_SOT_SMD.pretty", "SOT-23-5", "U6", "TLV75533P_3V3_500mA", 114.0, 92.0, 0,
          {"1": "VCC_5V", "2": "GND", "3": "VCC_5V", "4": "GND", "5": "VCC_3V3"},
          "Package_TO_SOT_SMD.3dshapes/SOT-23-5.step"),
-        ("Diode_SMD.pretty", "D_SMB", "D4", "SMCJ36CA_TVS", 110.0, 74.0, 0,
-         {"1": "KL30_12V", "2": "GND"},
-         "Diode_SMD.3dshapes/D_SMB.step"),
 
         # 5. USB Hub Controller (Microchip USB2512B 36-QFN)
         ("Package_DFN_QFN.pretty", "QFN-36-1EP_6x6mm_P0.5mm_EP4.1x4.1mm", "U2", "USB2512B_AEC_HUB", 146.0, 90.0, 0,
@@ -282,16 +292,15 @@ def create_pcb_board():
          "LED_SMD.3dshapes/LED_0805_2012Metric.step"),
 
         # 11. Key Discrete Passives (0603 / 0805)
-        ("Capacitor_SMD.pretty", "C_0805_2012Metric", "C19", "10uF_50V", 110.0, 85.0, 0, {"1": "KL30_12V", "2": "GND"}, "Capacitor_SMD.3dshapes/C_0805_2012Metric.step"),
-        ("Capacitor_SMD.pretty", "C_0805_2012Metric", "C22", "22uF_16V", 126.0, 85.0, 0, {"1": "VCC_5V", "2": "GND"}, "Capacitor_SMD.3dshapes/C_0805_2012Metric.step"),
+        ("Capacitor_SMD.pretty", "C_0805_2012Metric", "C19", "10uF_50V", 110.0, 86.0, 0, {"1": "VIN_BUCK", "2": "GND"}, "Capacitor_SMD.3dshapes/C_0805_2012Metric.step"),
+        ("Capacitor_SMD.pretty", "C_0805_2012Metric", "C22", "22uF_16V", 126.0, 86.0, 0, {"1": "VCC_5V", "2": "GND"}, "Capacitor_SMD.3dshapes/C_0805_2012Metric.step"),
         ("Capacitor_SMD.pretty", "C_0603_1608Metric", "C24", "2.2uF_3V3", 118.0, 92.0, 0, {"1": "VCC_3V3", "2": "GND"}, "Capacitor_SMD.3dshapes/C_0603_1608Metric.step"),
         ("Resistor_SMD.pretty", "R_0603_1608Metric", "R10", "120R_CAN", 118.0, 103.0, 0, {"1": "CAN_H", "2": "CAN_L"}, "Resistor_SMD.3dshapes/R_0603_1608Metric.step"),
         ("Resistor_SMD.pretty", "R_0603_1608Metric", "R5", "12k_RBIAS", 142.0, 85.0, 0, {"1": "HUB_RBIAS", "2": "GND"}, "Resistor_SMD.3dshapes/R_0603_1608Metric.step"),
         ("Resistor_SMD.pretty", "R_0603_1608Metric", "R15", "5.1k_CC1", 132.0, 77.0, 0, {"1": "USB_CC1", "2": "GND"}, "Resistor_SMD.3dshapes/R_0603_1608Metric.step"),
         ("Resistor_SMD.pretty", "R_0603_1608Metric", "R16", "5.1k_CC2", 136.0, 77.0, 0, {"1": "USB_CC2", "2": "GND"}, "Resistor_SMD.3dshapes/R_0603_1608Metric.step"),
         ("Resistor_SMD.pretty", "R_0603_1608Metric", "R8", "10k_FAULT", 154.0, 98.0, 0, {"1": "VCC_3V3", "2": "OTTOCAST_FAULT_N"}, "Resistor_SMD.3dshapes/R_0603_1608Metric.step"),
-
-        # 11. 4 Corner M2.5 Mounting Holes
+        # 12. 4 Corner M2.5 Mounting Holes
         ("MountingHole.pretty", "MountingHole_2.7mm_M2.5_Pad_Via", "H1", "M2.5_MOUNT", 103.5, 73.5, 0, {"1": "GND"}, None),
         ("MountingHole.pretty", "MountingHole_2.7mm_M2.5_Pad_Via", "H2", "M2.5_MOUNT", 164.5, 73.5, 0, {"1": "GND"}, None),
         ("MountingHole.pretty", "MountingHole_2.7mm_M2.5_Pad_Via", "H3", "M2.5_MOUNT", 103.5, 110.5, 0, {"1": "GND"}, None),
@@ -371,7 +380,7 @@ def create_pcb_board():
     # Add Silkscreen Labels
     labels = [
         ("OPENMOTORBRIDGE // UNIVERSAL FRONT NODE", 134.0, 71.2, 0.6, 0.6, 0.12),
-        ("J1: 12V IN", 104.5, 75.5, 0.45, 0.45, 0.09),
+        ("J1: OPT 12V ACC", 104.5, 75.5, 0.45, 0.45, 0.09),
         ("J2: CAN-BUS", 104.5, 87.5, 0.45, 0.45, 0.09),
         ("J3: PTT", 104.5, 98.5, 0.45, 0.45, 0.09),
         ("J4: USB HOST", 163.5, 74.5, 0.45, 0.45, 0.09),
