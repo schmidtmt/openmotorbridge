@@ -64,9 +64,9 @@ All 4-layer boards (PCBA 01, PCBA 04, and PCBA 05) utilize an identical controll
 
 ## 3. PCBA 01: Central Box Main Controller (`openmotorbridge_central_box`)
 
-![OpenMotorBridge Main Box 3D PCB Render](../../hardware/kicad_main_box/kicad_3d_render.png)
+![PCBA 01 Central Box Main Controller](../images/pcba/pcba01_central_box_3d.png)
 
-*Figure 7.1: Photorealistic 3D raytracing render of the Central Box PCB ($85 \times 55\,\text{mm}$).*
+*Figure 7.1: Precise KiCad 3D raytracing render of the Central Box main board (PCBA 01, 85 x 55 mm, 4 layers) with ESP32-S3 WROOM-1, LM5164-Q1 72V Buck, Bourns 1500V audio transformers, shrouded box headers, and gold ENIG pads.*
 
 ### 3.1 Pinout of Central 26-Pin Flange Connector (`J1` / HD26)
 
@@ -103,6 +103,10 @@ All 4-layer boards (PCBA 01, PCBA 04, and PCBA 05) utilize an identical controll
 
 ## 4. PCBA 02: Satellite Pod Base Carrier (`openmotorbridge_pod_base`)
 
+![PCBA 02 Satellite Pod Base Carrier](../images/pcba/pcba02_pod_base_3d.png)
+
+*Figure 7.2: KiCad 3D render of the Pod Base carrier board (PCBA 02, 52 x 32 mm, 2 layers) with 6-pin precision pin header, M8 6-pin IP67 socket interface, and SP3012 TVS protection array.*
+
 Mounted securely in the socket of Pods 1 and 2:
 * **Pin 1:** `+5V_VBUS` (Supplied from Main Controller, protected by 500mA PPTC)
 * **Pin 2:** `NF_AUDIO_P` (Positive differential audio line)
@@ -115,6 +119,10 @@ Mounted securely in the socket of Pods 1 and 2:
 
 ## 5. PCBA 03: Universal Cartridge Carrier (`openmotorbridge_pod_cartridge`)
 
+![PCBA 03 Universal Cartridge Carrier](../images/pcba/pcba03_pod_cartridge_3d.png)
+
+*Figure 7.3: KiCad 3D render of the Universal Cartridge carrier (PCBA 03, 105 x 48 mm, 2 layers) with DS2401 1-Wire ID chip, horizontal mating socket, and headset JST-SH connector.*
+
 The sled-mounted PCB providing headset adaptation:
 * **DS2401 ID Chip:** Located on `B.Cu`, broadcasts 64-bit UID upon insertion.
 * **Toshiba TLP222A:** Solid-state PhotoMOS relay for bounce-free PTT triggering.
@@ -124,6 +132,10 @@ The sled-mounted PCB providing headset adaptation:
 
 ## 6. PCBA 04: Rear Pod 3 Transceiver Hub (`openmotorbridge_rear_pod3`)
 
+![PCBA 04 Rear Pod 3 Transceiver Hub](../images/pcba/pcba04_rear_pod3_3d.png)
+
+*Figure 7.4: KiCad 3D render of the Rear Pod 3 Transceiver PCB (PCBA 04, 110 x 52 mm, 4 layers) with RP2040 coprocessor, Semtech SX1262 LoRa, u-blox Multi-GNSS, and U.FL/Murata MM8030 RF switch ports.*
+
 Integrated in the tail cowl:
 * **RP2040 Dual-Cortex-M0+ Coprocessor:** 133 MHz, handles high-speed NMEA parsing (460.8k Baud) and OMM packet scheduling.
 * **Semtech SX1262 LoRa Transceiver:** 868 MHz (+22 dBm PA) with $50\,\Omega$ coplanar waveguide.
@@ -132,6 +144,10 @@ Integrated in the tail cowl:
 ---
 
 ## 7. PCBA 05: Universal Front Node (`openmotorbridge_front_node`)
+
+![PCBA 05 Universal Front Node](../images/pcba/pcba05_front_node_3d.png)
+
+*Figure 7.5: KiCad 3D render of the Universal Front Node (PCBA 05, 68 x 44 mm, 4 layers) with ESP32-C3 RISC-V, Microchip USB2512B High-Speed hub, TI TPS2051B power gate, and Knowles I2S MEMS microphone.*
 
 The newly developed cockpit and fairing controller:
 * **ESP32-C3-WROOM-02U:** 160 MHz RISC-V, external U.FL antenna, executes the < 1.8 ms ESP-NOW wireless bridge.

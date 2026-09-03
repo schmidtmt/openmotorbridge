@@ -64,9 +64,9 @@ Für alle 4-Lagen-Platinen (PCBA 01, PCBA 04 und PCBA 05) wird der identische, s
 
 ## 3. PCBA 01: Zentralbox Main Controller (`openmotorbridge_central_box`)
 
-![OpenMotorBridge Main Box 3D PCB Render](../../hardware/kicad_main_box/kicad_3d_render.png)
+![PCBA 01 Zentralbox Main Controller](../images/pcba/pcba01_central_box_3d.png)
 
-*Abbildung 7.1: Photorealistisches 3D-Render der Zentralbox-Platine ($85 \times 55\,\text{mm}$).*
+*Abbildung 7.1: Präzises KiCad 3D-Raytracing-Render der Zentralbox-Hauptplatine (PCBA 01, 85 x 55 mm, 4 Lagen) mit ESP32-S3 WROOM-1, LM5164-Q1 72V Buck, Bourns 1500V Audio-Übertragern, Box-Headers und ENIG-Goldpads.*
 
 ### 3.1 Pinbelegung des zentralen 26-poligen Flansch-Steckverbinders (`J1` / HD26)
 
@@ -103,6 +103,10 @@ Für alle 4-Lagen-Platinen (PCBA 01, PCBA 04 und PCBA 05) wird der identische, s
 
 ## 4. PCBA 02: Satelliten Pod Base Carrier (`openmotorbridge_pod_base`)
 
+![PCBA 02 Satelliten Pod Base Carrier](../images/pcba/pcba02_pod_base_3d.png)
+
+*Abbildung 7.2: KiCad 3D-Render der Pod-Basisplatine (PCBA 02, 52 x 32 mm, 2 Lagen) mit 6-poliger Präzisions-Stiftleiste, M8 6-Pin IP67 Buchsenanschluss und SP3012 TVS-Schutzarray.*
+
 Die Pod-Base-Platine bildet die fest im Gehäusesockel verschraubte Übergabeschnittstelle zwischen dem M8-Zuleitungskabel und der auswechselbaren Kassette:
 
 ### 4.1 M8 6-Pin Steckerbelegung (Eingangsseite)
@@ -117,6 +121,10 @@ Die Pod-Base-Platine bildet die fest im Gehäusesockel verschraubte Übergabesch
 
 ## 5. PCBA 03: Universalschlitten Cartridge (`openmotorbridge_pod_cartridge`)
 
+![PCBA 03 Universalschlitten Cartridge](../images/pcba/pcba03_pod_cartridge_3d.png)
+
+*Abbildung 7.3: KiCad 3D-Render des Universalschlitten-Kassettenträgers (PCBA 03, 105 x 48 mm, 2 Lagen) mit DS2401 1-Wire ID-Chip, horizontaler Mating-Buchse und Headset-JST-SH Schnittstelle.*
+
 Nimmt die eigentliche Headset-Elektronik oder das Adapter-Cradle auf:
 * **DS2401 ID-Chip:** Auf `B.Cu` verlötet; sendet beim Einstecken die eindeutige Hardware-UID.
 * **Toshiba TLP222A:** PhotoMOS-Relais für PTT-Tastung (< 1 ms prellfrei).
@@ -126,6 +134,10 @@ Nimmt die eigentliche Headset-Elektronik oder das Adapter-Cradle auf:
 ---
 
 ## 6. PCBA 04: Rear Pod 3 Transceiver & Coprozessor (`openmotorbridge_rear_pod3`)
+
+![PCBA 04 Rear Pod 3 Transceiver Hub](../images/pcba/pcba04_rear_pod3_3d.png)
+
+*Abbildung 7.4: KiCad 3D-Render der Heck-Pod 3 Transceiverplatine (PCBA 04, 110 x 52 mm, 4 Lagen) mit RP2040 Coprozessor, Semtech SX1262 LoRa, u-blox Multi-GNSS und U.FL/Murata MM8030 HF-Umschaltports.*
 
 Sitzt im strömungsgünstigen Heckbürzel und vereint die Weitbereichs-Funkinfrastruktur:
 
@@ -147,6 +159,10 @@ Sitzt im strömungsgünstigen Heckbürzel und vereint die Weitbereichs-Funkinfra
 ---
 
 ## 7. PCBA 05: Universal Front-Knoten (`openmotorbridge_front_node`)
+
+![PCBA 05 Universal Front-Knoten](../images/pcba/pcba05_front_node_3d.png)
+
+*Abbildung 7.5: KiCad 3D-Render des Universal Front-Knotens (PCBA 05, 68 x 44 mm, 4 Lagen) mit ESP32-C3 RISC-V, Microchip USB2512B High-Speed Hub, TI TPS2051B Power-Gate und Knowles I2S MEMS Mikrofon.*
 
 Die neu entwickelte Verkleidungs- und Cockpit-Platine für Motorräder mit Frontverkleidung (Harley Touring, BMW GS/RT, etc.):
 
