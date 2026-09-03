@@ -112,6 +112,7 @@ The overall system orchestrates 13 specialized tasks across 3 physically separat
 | **`audio_dsp_task`** | ESP32-S3 (Core 1) | **24** | 8 KB | 48 kHz DMA ISR | FreeRTOS StreamBuffer | Zero-latency I2S audio mix, Raised-Cosine ducking & AGC. |
 | **`esp_now_rx_task`** | ESP32-S3 (Core 0) | **22** | 4 KB | Event-Queue | Direct-to-Task Notify | Handles Front Node PTT events ($< 1{,}8\,\text{ms}$) & noise RMS. |
 | **`opto_seq_task`** | ESP32-S3 (Core 0) | **18** | 2 KB | Event-Queue | FreeRTOS Queue | Synthesizes bounce-free pulses to TLP222A PhotoMOS relays. |
+| **`radar_proc_task`** | ESP32-S3 (Core 0) | **16** | 4 KB | 20 Hz UART2 ISR | FreeRTOS Queue / UART | Garmin Varia / mmWave parsing, TTC calculation & Prio-1 ducking. |
 | **`adr_ekf_task`** | ESP32-S3 (Core 0) | **15** | 4 KB | 50 Hz Timer | I2C / CAN Buffer | 15-State Kalman filter (GNSS + IMU + wheel speed). |
 | **`ble_server_task`** | ESP32-S3 (Core 0) | **10** | 4 KB | Event-Driven | NimBLE Stack | Web-Bluetooth PWA dashboard (GATT services `0x180D`/`0x180A`). |
 | **`sdio_log_task`** | ESP32-S3 (Core 0) | **8** | 8 KB | 10 Hz Ringbuffer | FreeRTOS RingBuffer | 4-Bit SDIO blackbox telemetry logging with ECDSA SHA-256. |

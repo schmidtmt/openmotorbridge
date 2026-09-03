@@ -340,6 +340,89 @@
                     </div>
                 </section>
 
+                <!-- Rear Radar & Blind-Spot Detection (BSD) Assistant Card -->
+                <section class="card" id="card-rear-radar">
+                    <div class="card-header">
+                        <span class="card-title">🛡️ <span data-i18n="rear_radar_title">Heck-Radar & Totwinkel-Assistent (BSD)</span></span>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <span class="card-badge badge-green" id="badge-radar-status">FREI (KEIN FAHRZEUG)</span>
+                            <span class="card-badge badge-blue" id="badge-radar-hw">GARMIN VARIA / M8</span>
+                        </div>
+                    </div>
+
+                    <!-- BSD Visual Cockpit: Mirror Warning LEDs & Radar Cone HUD -->
+                    <div style="display: grid; grid-template-columns: 80px 1fr 80px; gap: 12px; align-items: center; margin: 12px 0 16px 0;">
+                        <!-- Left Mirror BSD Warning LED -->
+                        <div id="bsd-mirror-left" class="bsd-mirror-indicator" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 160px; background: rgba(0,0,0,0.3); border: 2px solid rgba(255,255,255,0.08); border-radius: var(--radius-sm); transition: all 0.25s;">
+                            <div class="bsd-led-symbol" style="font-size: 1.6rem; opacity: 0.25; filter: grayscale(1);">⚠️</div>
+                            <div style="font-size: 0.65rem; font-weight: 700; color: var(--text-muted); margin-top: 4px;">SPIEGEL L</div>
+                            <div id="lbl-bsd-left-dist" style="font-size: 0.72rem; color: var(--text-muted); font-weight: 600;">--</div>
+                        </div>
+
+                        <!-- Central Rear Radar Sector Canvas -->
+                        <div style="position: relative; height: 160px; background: #06090e; border-radius: var(--radius-md); border: 1px solid var(--border-subtle); overflow: hidden;">
+                            <canvas id="canvas-rear-radar" width="500" height="160" style="width: 100%; height: 100%; display: block;"></canvas>
+                            <div style="position: absolute; top: 6px; left: 10px; font-size: 0.68rem; color: var(--text-muted); display: flex; gap: 10px;">
+                                <span>🎯 <strong>Erfassung:</strong> 140 m / 40° Sektor</span>
+                                <span>📡 <strong>Aktualisierung:</strong> 20 Hz</span>
+                            </div>
+                        </div>
+
+                        <!-- Right Mirror BSD Warning LED -->
+                        <div id="bsd-mirror-right" class="bsd-mirror-indicator" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 160px; background: rgba(0,0,0,0.3); border: 2px solid rgba(255,255,255,0.08); border-radius: var(--radius-sm); transition: all 0.25s;">
+                            <div class="bsd-led-symbol" style="font-size: 1.6rem; opacity: 0.25; filter: grayscale(1);">⚠️</div>
+                            <div style="font-size: 0.65rem; font-weight: 700; color: var(--text-muted); margin-top: 4px;">SPIEGEL R</div>
+                            <div id="lbl-bsd-right-dist" style="font-size: 0.72rem; color: var(--text-muted); font-weight: 600;">--</div>
+                        </div>
+                    </div>
+
+                    <!-- 4 Subsystem Metric Tiles -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 12px;">
+                        <div class="stat-tile" style="padding: 10px 12px; background: rgba(0,0,0,0.25); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                            <div style="font-size: 0.72rem; color: var(--text-secondary);">📏 Nächstes Objekt</div>
+                            <div style="font-size: 1.15rem; font-weight: 700; color: var(--accent-green); margin: 3px 0;" id="lbl-radar-closest-dist">-- m</div>
+                            <div style="font-size: 0.7rem; color: var(--text-muted);">Erfassungsbereich: 140m</div>
+                        </div>
+                        <div class="stat-tile" style="padding: 10px 12px; background: rgba(0,0,0,0.25); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                            <div style="font-size: 0.72rem; color: var(--text-secondary);">⚡ Relativ-Tempo</div>
+                            <div style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin: 3px 0;" id="lbl-radar-rel-speed">-- km/h</div>
+                            <div style="font-size: 0.7rem; color: var(--text-muted);" id="lbl-radar-speed-status">Keine Annäherung</div>
+                        </div>
+                        <div class="stat-tile" style="padding: 10px 12px; background: rgba(0,0,0,0.25); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                            <div style="font-size: 0.72rem; color: var(--text-secondary);">⏱️ Time-To-Collision</div>
+                            <div style="font-size: 1.15rem; font-weight: 700; color: var(--accent-blue); margin: 3px 0;" id="lbl-radar-ttc">-- s</div>
+                            <div style="font-size: 0.7rem; color: var(--text-muted);">Warnschwelle: &lt; 3.5s</div>
+                        </div>
+                        <div class="stat-tile" style="padding: 10px 12px; background: rgba(0,0,0,0.25); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                            <div style="font-size: 0.72rem; color: var(--text-secondary);">🔊 Helm-Ducking</div>
+                            <div style="font-size: 1.15rem; font-weight: 700; color: var(--accent-orange); margin: 3px 0;" id="lbl-radar-duck-status">-18 dB Bereit</div>
+                            <div style="font-size: 0.7rem; color: var(--text-muted);">Prio-1 Doppelton-Ping</div>
+                        </div>
+                    </div>
+
+                    <!-- Radar Controls & Simulation Triggers -->
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; padding-top: 10px; border-top: 1px solid var(--border-subtle);">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <button id="btn-radar-sim-approach" class="btn-secondary" style="font-size: 0.8rem; padding: 7px 12px; border-color: rgba(255, 159, 10, 0.4); color: var(--accent-orange);">
+                                <span>🚗</span> <span data-i18n="btn_radar_sim">Annäherung Simulieren</span>
+                            </button>
+                            <button id="btn-radar-test-chime" class="btn-secondary" style="font-size: 0.8rem; padding: 7px 12px;">
+                                <span>🔔</span> <span data-i18n="btn_radar_chime">Warnping Testen</span>
+                            </button>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <label class="switch-custom" style="position: relative; display: inline-block; width: 36px; height: 20px; margin: 0;">
+                                <input type="checkbox" id="chk-radar-sound" checked style="opacity: 0; width: 0; height: 0;">
+                                <span class="slider-round" style="position: absolute; cursor: pointer; inset: 0; background-color: var(--accent-green); border-radius: 20px; transition: .25s;"></span>
+                            </label>
+                            <div>
+                                <div style="font-weight: 600; font-size: 0.78rem;" data-i18n="radar_sound_label">Akustischer Helm-Warnping</div>
+                                <div class="stat-sub" style="font-size: 0.68rem;">Prio-1 Audio-Mischung ins Headset</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
                 <!-- Live GPS Track & OpenMotorMesh Group Radar Card -->
                 <section class="card" style="grid-column: 1 / -1;">
                     <div class="card-header">

@@ -12,6 +12,7 @@ Executes all electrical, firmware, thermal, acoustic, and RF testbenches:
   7. 20-Rider Large Convoy Mesh Scalability       (`mesh_group_scaling_sim.py`)
   8. 180-Day Winter Storage Standby Drain         (`battery_winter_standby_sim.py`)
   9. Universal Front Node & Smart Fairing Hub     (`front_node_wireless_hub_sim.py`)
+  10. Rear Radar & Blind-Spot Detection (BSD)     (`radar_blindspot_sim.py`)
 """
 
 import os
@@ -28,6 +29,7 @@ SIMULATORS = [
     ("7. 20-Rider Mesh Scalability & DLE", "tools/simulators/mesh_group_scaling_sim.py"),
     ("8. 180-Day Winter Standby Battery Drain", "tools/simulators/battery_winter_standby_sim.py"),
     ("9. Universal Front Node & Smart Fairing", "tools/simulators/front_node_wireless_hub_sim.py"),
+    ("10. Rear Radar & Blind-Spot Detection", "tools/simulators/radar_blindspot_sim.py"),
 ]
 
 def main():

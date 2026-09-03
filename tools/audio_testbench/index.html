@@ -322,10 +322,11 @@
       </div>
 
       <div class="control-group">
-        <label class="control-label">Außengeräusch-Simulation:</label>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem;">
-          <button id="btnAmbTraffic" class="pill" style="cursor: pointer; justify-content: center;">Verkehr & Ampel</button>
-          <button id="btnAmbSiren" class="pill" style="cursor: pointer; justify-content: center;">Martinshorn-Test</button>
+        <label class="control-label">Außengeräusch- & Alarm-Simulation:</label>
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1.1fr; gap: 0.4rem;">
+          <button id="btnAmbTraffic" class="pill" style="cursor: pointer; justify-content: center; font-size: 0.75rem;">Verkehr</button>
+          <button id="btnAmbSiren" class="pill" style="cursor: pointer; justify-content: center; font-size: 0.75rem;">Martinshorn</button>
+          <button id="btnAmbRadar" class="pill" style="cursor: pointer; justify-content: center; font-size: 0.75rem; color: var(--accent-amber); border-color: rgba(255,159,10,0.5);">🚨 Radar-Ping</button>
         </div>
       </div>
 
@@ -761,6 +762,12 @@
         btnAmbSiren.style.background = 'linear-gradient(135deg, #f43f5e, #f59e0b)';
         btnAmbTraffic.style.background = 'var(--bg-surface-elevated)';
       }
+    });
+
+    const btnAmbRadar = document.getElementById('btnAmbRadar');
+    btnAmbRadar.addEventListener('click', async () => {
+      if (!isMasterStarted) await btnMasterPower.click();
+      window.ombAudio.playRadarWarningPing(2);
     });
 
     // Cartridge Profile Switching

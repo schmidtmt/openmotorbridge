@@ -45,6 +45,15 @@ Das Dashboard ist eine vollständig autarke Progressive Web App (PWA) basierend 
     * **`⚡ CarPlay 1-Klick Kaltstart (2.5s)`:** Löst einen hardwareseitigen Power-Cycle am TI TPS2051B Lastschalter aus (2.5s Spannungsabschaltung mit Countdown-Animation auf dem Button).
     * **`🔘 Lenker-PTT Testen`:** Simuliert den Lenkertaster mit haptischer und optischer Bestätigung.
     * **`Auto-Café Mode (60s)` Toggle:** Schaltet die automatische VBUS-Abschaltung bei Zündung AUS zur Freigabe des Smartphone-WLANs um.
+* **Heck-Radar & Totwinkel-Assistent (BSD HUD Card):**
+  * **Status-Badges:** Echtzeit-Gefahrenstufe (`FREI`, `⚠️ FAHRZEUG NÄHERT SICH`, `🚨 KOLLISIONSRISIKO!`) und Hardware-Link (`GARMIN VARIA / 24 GHz M8`).
+  * **Virtuelle Spiegel-Warn-LEDs (BSD):** Linker (`#bsd-mirror-left`) und rechter (`#bsd-mirror-right`) Spiegelindikator mit Abstandsdisplay und pulsierender Leuchtanimation (Bernstein / Rot), wenn ein herannahendes Fahrzeug den Totwinkel-Nahbereich ($d < 15\,\text{m}$, Spurversatz) betritt.
+  * **Zentraler Heckradar-Sektor (HTML5 Canvas):** $40^\circ$-Fächersektor nach hinten mit Distanzringen ($25\,\text{m}$, $50\,\text{m}$, $100\,\text{m}$, $140\,\text{m}$), animiertem Sweep-Strahl und dynamisch getrackten Fahrzeugblips inklusive Abstands- und $\Delta v$-Tags.
+  * **4 Telemetrie-Kacheln:** Nächstes Objekt ($d$), Relativgeschwindigkeit ($\Delta v$), Time-To-Collision ($\text{TTC}$) und Helm-Ducking-Status ($-18\,\text{dB}$ Prio-1).
+  * **Interaktive Steuerungen:**
+    * **`🚗 Annäherung Simulieren`:** Startet eine 10-sekündige Überholsimulation eines herannahenden Fahrzeugs ($120\,\text{m} \rightarrow 8\,\text{m}$, $+42\,\text{km/h}$) mit automatischer Gefahreneskalation.
+    * **`🔔 Warnping Testen`:** Spielt den synthetisierten Prio-1 Doppelton ($880\,\text{Hz} / 1760\,\text{Hz}$) über die Web Audio API im Browser ab.
+    * **`Akustischer Helm-Warnping` Toggle:** Erlaubt das vorübergehende Stummschalten der Helmpings.
 
 ### 2.2 Tab 2: Audio & Ducking (`#tab-audio`)
 * **Betriebsmodus-Wahl:** Umschaltung zwischen Standard Mode (Mesh Bridge), Single Rider Mode und Cruise Mode.

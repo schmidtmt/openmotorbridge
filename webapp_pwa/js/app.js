@@ -139,7 +139,11 @@ const i18n = {
         btn_reboot_ottocast: 'CarPlay 1-Klick Kaltstart (2.5s)',
         btn_test_ptt: 'Lenker-PTT Testen',
         auto_cafe_label: 'Auto-Café Mode (60s)',
-        btn_front_node_ota: 'Front-Node OTA Firmware-Update prüfen'
+        btn_front_node_ota: 'Front-Node OTA Firmware-Update prüfen',
+        rear_radar_title: 'Heck-Radar & Totwinkel-Assistent (BSD)',
+        btn_radar_sim: 'Annäherung Simulieren',
+        btn_radar_chime: 'Warnping Testen',
+        radar_sound_label: 'Akustischer Helm-Warnping'
     },
     en: {
         app_subtitle: 'v8.0 Satellite Gateway',
@@ -270,7 +274,11 @@ const i18n = {
         btn_reboot_ottocast: 'CarPlay 1-Click Power-Cycle (2.5s)',
         btn_test_ptt: 'Test Handlebar PTT',
         auto_cafe_label: 'Auto-Café Mode (60s)',
-        btn_front_node_ota: 'Check Front Node OTA Firmware Update'
+        btn_front_node_ota: 'Check Front Node OTA Firmware Update',
+        rear_radar_title: 'Rear Radar & Blind-Spot Assistant (BSD)',
+        btn_radar_sim: 'Simulate Approach',
+        btn_radar_chime: 'Test Warning Chime',
+        radar_sound_label: 'Acoustic Helmet Alert'
     }
 };
 
@@ -305,6 +313,18 @@ const state = {
         ambientDba: 52.0,
         agcBoostDb: 0.0,
         pttPressed: false
+    },
+    radar: {
+        enabled: true,
+        soundEnabled: true,
+        threatLevel: 0,
+        closestDist: null,
+        relSpeedKmh: null,
+        ttcSec: null,
+        blindSpotLeft: false,
+        blindSpotRight: false,
+        targets: [],
+        simCycle: null
     }
 };
 
@@ -783,6 +803,14 @@ function resetDisconnectedTelemetryUi() {
         lblDr.textContent = 'OFFLINE';
         lblDr.style.color = 'var(--text-muted)';
     }
+
+    // Reset Rear Radar & Blind-Spot Assistant
+    if (state.radar && state.radar.simCycle) {
+        clearInterval(state.radar.simCycle);
+        state.radar.simCycle = null;
+    }
+    if (state.radar) state.radar.targets = [];
+    updateRadarUi({ targets: [] });
 
     // 2. Tab Audio: Codec & 4-Channel VU-Meters
     const badgeCodec = document.getElementById('badge-codec-state');
@@ -1309,6 +1337,11 @@ function toggleDemoMode(enable) {
             badgeCan.textContent = 'TCAN334G Link OK';
         }
 
+        // Trigger initial Radar Vehicle Approach in Demo
+        setTimeout(() => {
+            if (state.isDemoMode) triggerSimulatedRadarApproach();
+        }, 1500);
+
         let angleTime = 0;
         state.demoInterval = setInterval(() => {
             angleTime += 0.05;
@@ -1332,6 +1365,12 @@ function toggleDemoMode(enable) {
             clearInterval(state.demoInterval);
             state.demoInterval = null;
         }
+        if (state.radar && state.radar.simCycle) {
+            clearInterval(state.radar.simCycle);
+            state.radar.simCycle = null;
+        }
+        if (state.radar) state.radar.targets = [];
+        updateRadarUi({ targets: [] });
         if (!state.isBleConnected) {
             resetDisconnectedTelemetryUi();
         }
@@ -2471,7 +2510,322 @@ function renderLiveRadarCanvas() {
 requestAnimationFrame(renderLiveRadarCanvas);
 
 // ==========================================
-// 11h. Audio VU-Meter & Speed Gating Curve Update
+// 11h. Rear Radar & Blind-Spot Detection (BSD) Engine
+// ==========================================
+const canvasRearRadar = document.getElementById('canvas-rear-radar');
+let s_rearRadarCtx = canvasRearRadar?.getContext('2d');
+let s_rearSweepAngle = 0;
+let s_lastChimeTime = 0;
+
+function playRadarWarningChime(threatLevel) {
+    if (!state.radar.soundEnabled) return;
+    try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        const now = ctx.currentTime;
+        
+        const f1 = threatLevel >= 2 ? 988 : 880;   // B5 or A5
+        const f2 = threatLevel >= 2 ? 1976 : 1760; // B6 or A6
+        
+        // Beep 1
+        const osc1 = ctx.createOscillator();
+        const gain1 = ctx.createGain();
+        osc1.type = 'sine';
+        osc1.frequency.setValueAtTime(f1, now);
+        gain1.gain.setValueAtTime(0.18, now);
+        gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+        osc1.connect(gain1);
+        gain1.connect(ctx.destination);
+        osc1.start(now);
+        osc1.stop(now + 0.09);
+        
+        // Beep 2
+        const osc2 = ctx.createOscillator();
+        const gain2 = ctx.createGain();
+        osc2.type = 'sine';
+        osc2.frequency.setValueAtTime(f2, now + 0.12);
+        gain2.gain.setValueAtTime(0.22, now + 0.12);
+        gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.23);
+        osc2.connect(gain2);
+        gain2.connect(ctx.destination);
+        osc2.start(now + 0.12);
+        osc2.stop(now + 0.23);
+    } catch (e) {
+        console.warn('Radar AudioContext locked:', e);
+    }
+}
+
+function updateRadarUi(radarState) {
+    const isDe = state.lang === 'de';
+    const badgeStatus = document.getElementById('badge-radar-status');
+    const lblDist = document.getElementById('lbl-radar-closest-dist');
+    const lblSpeed = document.getElementById('lbl-radar-rel-speed');
+    const lblSpeedStatus = document.getElementById('lbl-radar-speed-status');
+    const lblTtc = document.getElementById('lbl-radar-ttc');
+    const mirrorLeft = document.getElementById('bsd-mirror-left');
+    const mirrorRight = document.getElementById('bsd-mirror-right');
+    const lblLeftDist = document.getElementById('lbl-bsd-left-dist');
+    const lblRightDist = document.getElementById('lbl-bsd-right-dist');
+
+    if (!radarState || !radarState.targets || radarState.targets.length === 0) {
+        if (badgeStatus) {
+            badgeStatus.textContent = isDe ? 'FREI (KEIN FAHRZEUG)' : 'CLEAR (NO VEHICLE)';
+            badgeStatus.className = 'card-badge badge-green';
+        }
+        if (lblDist) lblDist.textContent = '-- m';
+        if (lblSpeed) lblSpeed.textContent = '-- km/h';
+        if (lblSpeedStatus) lblSpeedStatus.textContent = isDe ? 'Keine Annäherung' : 'No approach';
+        if (lblTtc) lblTtc.textContent = '-- s';
+        if (mirrorLeft) {
+            mirrorLeft.className = 'bsd-mirror-indicator';
+            if (lblLeftDist) lblLeftDist.textContent = '--';
+        }
+        if (mirrorRight) {
+            mirrorRight.className = 'bsd-mirror-indicator';
+            if (lblRightDist) lblRightDist.textContent = '--';
+        }
+        return;
+    }
+
+    const t = radarState.targets[0];
+    if (lblDist) lblDist.textContent = `${t.dist.toFixed(1)} m`;
+    if (lblSpeed) lblSpeed.textContent = `+${t.speed.toFixed(0)} km/h`;
+    if (lblTtc) lblTtc.textContent = t.ttc ? `${t.ttc.toFixed(1)} s` : '--';
+
+    if (t.threat === 2) {
+        if (badgeStatus) {
+            badgeStatus.textContent = isDe ? '🚨 KOLLISIONSRISIKO!' : '🚨 COLLISION RISK!';
+            badgeStatus.className = 'card-badge badge-red';
+        }
+        if (lblSpeedStatus) lblSpeedStatus.textContent = isDe ? 'Kritisch schnelle Annäherung!' : 'Critical high-speed approach!';
+    } else if (t.threat === 1) {
+        if (badgeStatus) {
+            badgeStatus.textContent = isDe ? '⚠️ FAHRZEUG NÄHERT SICH' : '⚠️ VEHICLE APPROACHING';
+            badgeStatus.className = 'card-badge badge-orange';
+        }
+        if (lblSpeedStatus) lblSpeedStatus.textContent = isDe ? 'Fahrzeug nähert sich' : 'Vehicle closing in';
+    } else {
+        if (badgeStatus) {
+            badgeStatus.textContent = isDe ? 'FREI (NORMALABSTAND)' : 'CLEAR (NORMAL DISTANCE)';
+            badgeStatus.className = 'card-badge badge-green';
+        }
+        if (lblSpeedStatus) lblSpeedStatus.textContent = isDe ? 'Gleichbleibender Abstand' : 'Constant distance';
+    }
+
+    // Mirror Blind Spot LEDs (Active if < 15 m)
+    if (t.dist < 15.0 && t.azimuth < -2) {
+        if (mirrorLeft) mirrorLeft.className = t.threat === 2 ? 'bsd-mirror-indicator warning-red' : 'bsd-mirror-indicator warning-amber';
+        if (lblLeftDist) lblLeftDist.textContent = `${t.dist.toFixed(0)} m`;
+    } else {
+        if (mirrorLeft) mirrorLeft.className = 'bsd-mirror-indicator';
+        if (lblLeftDist) lblLeftDist.textContent = '--';
+    }
+
+    if (t.dist < 15.0 && t.azimuth > 2) {
+        if (mirrorRight) mirrorRight.className = t.threat === 2 ? 'bsd-mirror-indicator warning-red' : 'bsd-mirror-indicator warning-amber';
+        if (lblRightDist) lblRightDist.textContent = `${t.dist.toFixed(0)} m`;
+    } else {
+        if (mirrorRight) mirrorRight.className = 'bsd-mirror-indicator';
+        if (lblRightDist) lblRightDist.textContent = '--';
+    }
+
+    // Audio Ping trigger on threat escalation
+    if (t.threat > 0) {
+        const now = Date.now();
+        if (now - s_lastChimeTime > 2500) {
+            s_lastChimeTime = now;
+            playRadarWarningChime(t.threat);
+        }
+    }
+}
+
+function renderRearRadarCanvas() {
+    if (!canvasRearRadar || !s_rearRadarCtx) return;
+    const w = canvasRearRadar.width;
+    const h = canvasRearRadar.height;
+    const cx = w / 2;
+    const bikeY = 24;
+
+    s_rearRadarCtx.clearRect(0, 0, w, h);
+
+    // 1. Standby Check
+    if (!state.isBleConnected && !state.isDemoMode) {
+        s_rearRadarCtx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+        s_rearRadarCtx.lineWidth = 1;
+        for (let y = 0; y < h; y += 30) {
+            s_rearRadarCtx.beginPath();
+            s_rearRadarCtx.moveTo(0, y);
+            s_rearRadarCtx.lineTo(w, y);
+            s_rearRadarCtx.stroke();
+        }
+        s_rearRadarCtx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+        s_rearRadarCtx.font = 'bold 11px sans-serif';
+        s_rearRadarCtx.textAlign = 'center';
+        s_rearRadarCtx.fillText(state.lang === 'de' ? 'HECK-RADAR STANDBY' : 'REAR RADAR STANDBY', cx, h / 2 - 4);
+        s_rearRadarCtx.font = '9px sans-serif';
+        s_rearRadarCtx.fillStyle = 'rgba(255, 255, 255, 0.18)';
+        s_rearRadarCtx.fillText(state.lang === 'de' ? 'Warte auf BLE oder Demo-Modus' : 'Waiting for BLE or Demo Mode', cx, h / 2 + 12);
+        requestAnimationFrame(renderRearRadarCanvas);
+        return;
+    }
+
+    // 2. Fanning Radar Cone (40° Field of View pointing downward/backward)
+    const coneLen = h - bikeY - 10;
+    const halfAngle = 0.38; // ~22 degrees
+    
+    s_rearRadarCtx.save();
+    s_rearRadarCtx.beginPath();
+    s_rearRadarCtx.moveTo(cx, bikeY);
+    s_rearRadarCtx.lineTo(cx - Math.sin(halfAngle) * coneLen, bikeY + Math.cos(halfAngle) * coneLen);
+    s_rearRadarCtx.arc(cx, bikeY, coneLen, Math.PI / 2 - halfAngle, Math.PI / 2 + halfAngle);
+    s_rearRadarCtx.closePath();
+    
+    const coneGrad = s_rearRadarCtx.createRadialGradient(cx, bikeY, 10, cx, bikeY, coneLen);
+    coneGrad.addColorStop(0, 'rgba(10, 132, 255, 0.12)');
+    coneGrad.addColorStop(0.7, 'rgba(10, 132, 255, 0.04)');
+    coneGrad.addColorStop(1, 'rgba(10, 132, 255, 0.0)');
+    s_rearRadarCtx.fillStyle = coneGrad;
+    s_rearRadarCtx.fill();
+    s_rearRadarCtx.strokeStyle = 'rgba(10, 132, 255, 0.25)';
+    s_rearRadarCtx.lineWidth = 1;
+    s_rearRadarCtx.stroke();
+    s_rearRadarCtx.restore();
+
+    // 3. Range Arcs (25m, 50m, 100m, 140m)
+    const ranges = [
+        { d: 25, r: coneLen * 0.20, label: '25 m' },
+        { d: 50, r: coneLen * 0.40, label: '50 m' },
+        { d: 100, r: coneLen * 0.72, label: '100 m' },
+        { d: 140, r: coneLen * 1.00, label: '140 m' }
+    ];
+
+    ranges.forEach(rng => {
+        s_rearRadarCtx.beginPath();
+        s_rearRadarCtx.arc(cx, bikeY, rng.r, Math.PI / 2 - halfAngle, Math.PI / 2 + halfAngle);
+        s_rearRadarCtx.strokeStyle = rng.d === 50 ? 'rgba(255, 159, 10, 0.35)' : 'rgba(255, 255, 255, 0.12)';
+        s_rearRadarCtx.lineWidth = rng.d === 50 ? 1.5 : 1;
+        if (rng.d === 50) s_rearRadarCtx.setLineDash([4, 4]);
+        s_rearRadarCtx.stroke();
+        s_rearRadarCtx.setLineDash([]);
+
+        // Label
+        s_rearRadarCtx.fillStyle = 'rgba(255, 255, 255, 0.35)';
+        s_rearRadarCtx.font = '8px sans-serif';
+        s_rearRadarCtx.textAlign = 'right';
+        s_rearRadarCtx.fillText(rng.label, cx - Math.sin(halfAngle) * rng.r - 4, bikeY + Math.cos(halfAngle) * rng.r);
+    });
+
+    // 4. Downward Radar Sweep Beam
+    s_rearSweepAngle += 0.04;
+    const sweepRel = (Math.sin(s_rearSweepAngle) * halfAngle);
+    s_rearRadarCtx.beginPath();
+    s_rearRadarCtx.moveTo(cx, bikeY);
+    s_rearRadarCtx.lineTo(cx + Math.sin(sweepRel) * coneLen, bikeY + Math.cos(sweepRel) * coneLen);
+    s_rearRadarCtx.strokeStyle = 'rgba(0, 242, 254, 0.4)';
+    s_rearRadarCtx.lineWidth = 2;
+    s_rearRadarCtx.stroke();
+
+    // 5. Motorcycle Icon at origin
+    s_rearRadarCtx.beginPath();
+    s_rearRadarCtx.arc(cx, bikeY, 7, 0, Math.PI * 2);
+    s_rearRadarCtx.fillStyle = '#30d158';
+    s_rearRadarCtx.fill();
+    s_rearRadarCtx.strokeStyle = '#ffffff';
+    s_rearRadarCtx.lineWidth = 2;
+    s_rearRadarCtx.stroke();
+
+    // Small forward indicator
+    s_rearRadarCtx.beginPath();
+    s_rearRadarCtx.moveTo(cx, bikeY - 7);
+    s_rearRadarCtx.lineTo(cx - 3, bikeY - 14);
+    s_rearRadarCtx.lineTo(cx + 3, bikeY - 14);
+    s_rearRadarCtx.closePath();
+    s_rearRadarCtx.fillStyle = '#ffffff';
+    s_rearRadarCtx.fill();
+
+    // 6. Draw Tracked Radar Targets
+    if (state.radar && state.radar.targets) {
+        state.radar.targets.forEach(t => {
+            const frac = Math.min(Math.max(t.dist / 140.0, 0.05), 1.0);
+            const targetR = coneLen * frac;
+            const targetAzimRad = (t.azimuth * Math.PI) / 180.0;
+            const tx = cx + Math.sin(targetAzimRad) * targetR;
+            const ty = bikeY + Math.cos(targetAzimRad) * targetR;
+
+            const color = t.threat === 2 ? '#ff453a' : (t.threat === 1 ? '#ff9f0a' : '#30d158');
+
+            // Glowing Outer Pulse Ring
+            s_rearRadarCtx.beginPath();
+            s_rearRadarCtx.arc(tx, ty, 9 + Math.sin(Date.now() / 150) * 3, 0, Math.PI * 2);
+            s_rearRadarCtx.strokeStyle = color;
+            s_rearRadarCtx.lineWidth = 1.5;
+            s_rearRadarCtx.stroke();
+
+            // Vehicle Dot
+            s_rearRadarCtx.beginPath();
+            s_rearRadarCtx.arc(tx, ty, 6, 0, Math.PI * 2);
+            s_rearRadarCtx.fillStyle = color;
+            s_rearRadarCtx.fill();
+            s_rearRadarCtx.strokeStyle = '#ffffff';
+            s_rearRadarCtx.lineWidth = 1.5;
+            s_rearRadarCtx.stroke();
+
+            // Target Tag
+            s_rearRadarCtx.fillStyle = '#ffffff';
+            s_rearRadarCtx.font = 'bold 9px sans-serif';
+            s_rearRadarCtx.textAlign = tx > cx ? 'left' : 'right';
+            const offset = tx > cx ? 12 : -12;
+            s_rearRadarCtx.fillText(`${t.dist.toFixed(0)}m (${t.speed > 0 ? '+' : ''}${t.speed.toFixed(0)} km/h)`, tx + offset, ty + 3);
+        });
+    }
+
+    requestAnimationFrame(renderRearRadarCanvas);
+}
+requestAnimationFrame(renderRearRadarCanvas);
+
+function triggerSimulatedRadarApproach() {
+    if (state.radar.simCycle) {
+        clearInterval(state.radar.simCycle);
+        state.radar.simCycle = null;
+    }
+    showToast(state.lang === 'de' ? '🚗 Fahrzeug-Annäherung von hinten gestartet (120 m -> 8 m)...' : '🚗 Simulating approaching vehicle from rear (120 m -> 8 m)...', 'info');
+
+    let dist = 120.0;
+    const speed = 42.0; // +42 km/h approach speed
+    const azim = -7; // Left lane
+
+    state.radar.simCycle = setInterval(() => {
+        dist -= (speed * 1000 / 3600) * 0.15; // 150 ms steps
+        if (dist <= 6.0) {
+            clearInterval(state.radar.simCycle);
+            state.radar.simCycle = null;
+            state.radar.targets = [];
+            updateRadarUi({ targets: [] });
+            showToast(state.lang === 'de' ? '✓ Fahrzeug hat überholt • Radarbereich wieder frei' : '✓ Vehicle has overtaken • Radar sector clear', 'success');
+            return;
+        }
+
+        const ttc = (dist / (speed * 1000 / 3600));
+        let threat = 0;
+        if (ttc < 3.5 || dist < 35) threat = 2;
+        else if (dist < 80) threat = 1;
+
+        state.radar.targets = [{
+            id: 1,
+            dist: dist,
+            speed: speed,
+            azimuth: azim,
+            ttc: ttc,
+            threat: threat
+        }];
+
+        updateRadarUi({ targets: state.radar.targets });
+    }, 150);
+}
+
+// ==========================================
+// 11i. Audio VU-Meter & Speed Gating Curve Update
 // ==========================================
 function updateSpeedGatingVisual(speed) {
     const dot = document.getElementById('speed-cursor-dot');
@@ -2593,6 +2947,21 @@ document.getElementById('btn-trigger-oem-pairing')?.addEventListener('click', ()
 
 document.getElementById('btn-trigger-profile-merge')?.addEventListener('click', () => {
     showToast(state.lang === 'de' ? '✓ Profil \'sena_apex.json\' erfolgreich mit Mesh 3.0 Parametern zusammengeführt & aktiviert!' : '✓ Profile \'sena_apex.json\' merged with Mesh 3.0 parameters & activated!', 'success');
+});
+
+// Radar UI Handlers
+document.getElementById('btn-radar-sim-approach')?.addEventListener('click', () => {
+    triggerSimulatedRadarApproach();
+});
+
+document.getElementById('btn-radar-test-chime')?.addEventListener('click', () => {
+    playRadarWarningChime(2);
+    showToast(state.lang === 'de' ? '🔔 Prio-1 Radar-Doppelton (880/1760 Hz) abgespielt' : '🔔 Prio-1 radar dual-tone (880/1760 Hz) played', 'info');
+});
+
+document.getElementById('chk-radar-sound')?.addEventListener('change', (e) => {
+    state.radar.soundEnabled = e.target.checked;
+    showToast(state.lang === 'de' ? `Radar-Helmton: ${state.radar.soundEnabled ? 'Aktiviert' : 'Stumm'}` : `Radar helmet alert: ${state.radar.soundEnabled ? 'Enabled' : 'Muted'}`, 'info');
 });
 
 // Initialize Language & Disconnected State on Boot

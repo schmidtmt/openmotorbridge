@@ -21,6 +21,7 @@
 #include "adr_ekf_filter.h"
 #include "omm_flasher.h"
 #include "can_bus_manager.h"
+#include "radar_processor.h"
 
 static const char *TAG = "OMB_MAIN";
 
@@ -263,6 +264,7 @@ extern "C" void app_main(void) {
     gnss_omm_bridge_init();
     omm_flasher_init();
     can_bus_manager_init();
+    radar_processor_init();
     ble_server_init();
     ble_handlebar_client_init(on_handlebar_button_event, on_handlebar_battery_event);
 
@@ -276,6 +278,7 @@ extern "C" void app_main(void) {
     // CORE 0: Kommunikation, Busse, Sensor-Fusion & Systemüberwachung
     xTaskCreatePinnedToCore(task_adr_ekf_fusion, "ADR_EKF", 4096, NULL, 5, NULL, 0);
     xTaskCreatePinnedToCore(task_can_bus_manager, "CAN_Bus", 4096, NULL, 4, NULL, 0);
+    xTaskCreatePinnedToCore(task_radar_processor, "RadarProc", 4096, NULL, 6, NULL, 0);
     xTaskCreatePinnedToCore(task_ble_services, "BLE_Server", 6144, NULL, 5, NULL, 0);
     xTaskCreatePinnedToCore(task_cartridge_manager, "Cartridge1W", 4096, NULL, 4, NULL, 0);
     xTaskCreatePinnedToCore(task_rear_pod_bridge, "RearPodBridge", 4096, NULL, 4, NULL, 0);

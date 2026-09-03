@@ -160,7 +160,15 @@ To eliminate fragile signal wiring harnesses through the flexed steering head an
 * **TFT Display Notifications:** System alerts can be rendered directly on the motorcycle TFT dashboard.
 
 ### 5.3 Rear Radar & Blind-Spot Assistant (Garmin Varia / 24 GHz mmWave) on Pod 3 Dual-Mount Bracket
-* **Pod 3 Dual-Mount Bracket:** The rear mounting bracket securely holds the universal Pod 3 housing while integrating an angle-adjustable GoPro-compatible arm to level the radar sensor horizontally.
-* **Direct Connection to Pigtail 5:** Provides switched 12V power and bidirectional telemetry (UART / CAN) through the M8 4-pin interface.
-* **Acoustic Helmet Warnings:** When a vehicle approaches rapidly from behind, the DSP audio engine smoothly ducks music/intercom and injects a crisp dual-tone acoustic chime directly into the rider's headset.
-* **Visual Dashboard Display:** The WebApp renders a real-time radar tracking display with distance indicators and vehicle hazard status (green/amber/red).
+* **Pod 3 Dual-Mount Bracket & Alignment:** The rear mounting bracket securely holds the universal Pod 3 housing while integrating an angle-adjustable GoPro-compatible M5 arm for horizontal radar leveling ($\pm 5^\circ$).
+* **Direct Connection to Pigtail 5:** Provides switched 12V power and bidirectional telemetry (UART2 on `RESERVE_GPIO_A/B` or CAN-Bus) through the waterproof M8 4-pin interface.
+* **Supported Radar Hardware:**
+  * **Garmin Varia Radar:** RTL515 / eRTL615 serial streaming protocol (0xAA preamble, $140\,\text{m}$ range, $20\,\text{Hz}$ update rate).
+  * **24 GHz mmWave Doppler Radars:** Automotive compact modules (e.g. BGT24LTR11 / HLK-LD2410 / DFROBOT).
+* **Dynamic Threat Estimation & Time-To-Collision (TTC):**
+  * $\text{TTC} = \frac{d}{v_{\text{rel}}}$.
+  * **Clear (Green):** No vehicle in danger zone or $v_{\text{rel}} \le 10\,\text{km/h}$.
+  * **Amber (Approaching):** $d \le 80\,\text{m}$ and $v_{\text{rel}} > 15\,\text{km/h}$ (standard vehicle closing in).
+  * **Red (Collision Hazard):** $\text{TTC} < 3.5\,\text{s}$ or ($d \le 35\,\text{m}$ and $v_{\text{rel}} > 25\,\text{km/h}$).
+* **Acoustic Helmet Warnings (Priority-1 Ducking):** On amber/red hazard alerts, the audio DSP immediately ducks music/intercom to **$-18\,\text{dB}$** ($< 15\,\text{ms}$ attack) and injects a crisp **synthesized dual-tone chime** ($880\,\text{Hz} \rightarrow 1760\,\text{Hz}$ on Amber, $988\,\text{Hz} \rightarrow 1976\,\text{Hz}$ on Red) directly into the rider's helmet.
+* **Blind-Spot Detection (BSD) & Mirror LEDs:** When an approaching vehicle enters the close-range blind-spot zone ($d < 15\,\text{m}$, $|\text{azimuth}| > 3^\circ$), virtual left/right mirror indicator pills flash in amber or red on the WebApp HUD.

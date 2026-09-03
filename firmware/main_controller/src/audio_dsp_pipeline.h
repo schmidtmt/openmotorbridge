@@ -48,6 +48,12 @@ void audio_set_nav_ducking(bool active);
 void audio_set_ambient_transparency(bool enabled, float speed_kmh, float sensitivity_gain_db);
 
 /**
+ * @brief Triggert Priorität-1 Ducking (-18 dB) und spielt synthetisierten Radar-Doppelton
+ * @param threat_level 1 = Gelb (Annäherung), 2 = Rot (Kritische Annäherung / Notfall)
+ */
+void audio_trigger_radar_alert(uint8_t threat_level);
+
+/**
  * @brief FreeRTOS Task für Echtzeit-Audioverarbeitung (Core 1)
  */
 void task_audio_dsp(void *pvParameters);

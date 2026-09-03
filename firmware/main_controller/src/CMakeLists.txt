@@ -13,6 +13,7 @@ idf_component_register(
         "omm_flasher.cpp"
         "can_bus_manager.cpp"
         "esp_now_front_node_client.cpp"
+        "radar_processor.cpp"
     INCLUDE_DIRS 
         "."
     REQUIRES 

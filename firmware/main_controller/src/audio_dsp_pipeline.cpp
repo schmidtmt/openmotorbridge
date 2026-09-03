@@ -36,6 +36,26 @@ static float s_transparency_gain = 1.0f; // 0.0 to 1.0
 static float s_ambient_sensitivity = 1.0f; // User Gain
 static float s_agc_level = 1.0f; // Dynamic Automatic Gain Control
 
+static bool s_radar_alert_active = false;
+static uint32_t s_radar_sample_idx = 0;
+static uint32_t s_radar_sample_len = 0;
+static float s_radar_f1 = 880.0f;
+static float s_radar_f2 = 1760.0f;
+
+void audio_trigger_radar_alert(uint8_t threat_level) {
+    s_radar_alert_active = true;
+    s_radar_sample_idx = 0;
+    s_radar_sample_len = (SAMPLE_RATE * 230) / 1000; // 230 ms dual-tone
+    if (threat_level >= 2) {
+        s_radar_f1 = 987.77f;  // B5
+        s_radar_f2 = 1975.53f; // B6 (Critical fast-closing warning)
+    } else {
+        s_radar_f1 = 880.0f;   // A5
+        s_radar_f2 = 1760.0f;  // A6 (Amber approach warning)
+    }
+    ESP_LOGW(TAG, "🚨 Radar Warning Alert triggered in DSP Pipeline (Threat: %d)", threat_level);
+}
+
 esp_err_t audio_dsp_init(void) {
     ESP_LOGI(TAG, "Initializing I2S Standard Master Driver (48 kHz / 16-Bit Stereo)...");
 
@@ -130,7 +150,13 @@ void task_audio_dsp(void *pvParameters) {
         }
 
         // 2. Raised-Cosine Ducking Filterberechnung
-        if (s_nav_ducking_active) {
+        if (s_radar_alert_active) {
+            // Priorität 1: Sofortiges Absenken auf -18 dB (0.125f) bei Annäherungsgefahr
+            if (s_ducking_factor > 0.125f) {
+                s_ducking_factor -= (DUCKING_ATTACK * 2.5f);
+                if (s_ducking_factor < 0.125f) s_ducking_factor = 0.125f;
+            }
+        } else if (s_nav_ducking_active) {
             if (s_ducking_factor > 0.25f) { // -12 dB Ducking
                 s_ducking_factor -= DUCKING_ATTACK;
                 if (s_ducking_factor < 0.25f) s_ducking_factor = 0.25f;
@@ -169,27 +195,44 @@ void task_audio_dsp(void *pvParameters) {
                 ambient_mix = raw_amb * agc_scaler * s_transparency_gain;
             }
 
+            // Synthesize radar dual-tone warning ping
+            float radar_chime = 0.0f;
+            if (s_radar_alert_active) {
+                float t_sec = (float)s_radar_sample_idx / (float)SAMPLE_RATE;
+                if (t_sec < 0.10f) {
+                    // Beep 1
+                    radar_chime = sinf(2.0f * (float)M_PI * s_radar_f1 * t_sec) * 12000.0f;
+                } else if (t_sec >= 0.13f && t_sec < 0.23f) {
+                    // Beep 2
+                    radar_chime = sinf(2.0f * (float)M_PI * s_radar_f2 * (t_sec - 0.13f)) * 14000.0f;
+                }
+                s_radar_sample_idx++;
+                if (s_radar_sample_idx >= s_radar_sample_len) {
+                    s_radar_alert_active = false;
+                }
+            }
+
             float out_l = 0.0f;
             float out_r = 0.0f;
 
             switch (s_current_mode) {
                 case MODE_SINGLE_RIDER:
-                    // Port 2 stumm, nur Port 1 geduckt + Ambient Transparenz
-                    out_l = (p1_sample * s_ducking_factor) + ambient_mix;
-                    out_r = (p1_sample * s_ducking_factor) + ambient_mix;
+                    // Port 2 stumm, nur Port 1 geduckt + Ambient Transparenz + Radar Chime
+                    out_l = (p1_sample * s_ducking_factor) + ambient_mix + radar_chime;
+                    out_r = (p1_sample * s_ducking_factor) + ambient_mix + radar_chime;
                     break;
 
                 case MODE_CRUISE:
-                    // Fokus auf Bordlautsprecher, Intercom -6 dB
-                    out_l = ((p1_sample + p2_sample) * 0.5f * s_ducking_factor) + (ambient_mix * 0.5f);
-                    out_r = ((p1_sample + p2_sample) * 0.5f * s_ducking_factor) + (ambient_mix * 0.5f);
+                    // Fokus auf Bordlautsprecher, Intercom -6 dB + Radar Chime
+                    out_l = ((p1_sample + p2_sample) * 0.5f * s_ducking_factor) + (ambient_mix * 0.5f) + radar_chime;
+                    out_r = ((p1_sample + p2_sample) * 0.5f * s_ducking_factor) + (ambient_mix * 0.5f) + radar_chime;
                     break;
 
                 case MODE_STANDARD:
                 default:
-                    // Volle Mischung beider Ports zum Helm + Ambient Transparenz
-                    out_l = ((p1_sample * 0.8f + p2_sample * 0.2f) * s_ducking_factor) + ambient_mix;
-                    out_r = ((p1_sample * 0.2f + p2_sample * 0.8f) * s_ducking_factor) + ambient_mix;
+                    // Volle Mischung beider Ports zum Helm + Ambient Transparenz + Radar Chime
+                    out_l = ((p1_sample * 0.8f + p2_sample * 0.2f) * s_ducking_factor) + ambient_mix + radar_chime;
+                    out_r = ((p1_sample * 0.2f + p2_sample * 0.8f) * s_ducking_factor) + ambient_mix + radar_chime;
                     break;
             }
 

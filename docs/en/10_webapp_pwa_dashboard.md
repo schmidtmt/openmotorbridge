@@ -44,6 +44,15 @@ The dashboard is a fully self-contained Progressive Web App (PWA) built with sta
     * **`⚡ CarPlay 1-Click Hard Reboot (2.5s)`:** Triggers a hardware power cycle on the TI TPS2051B switch (2.5s VBUS cutoff with countdown animation).
     * **`🔘 Test Handlebar PTT`:** Simulates mechanical button presses with tactile feedback.
     * **`Auto-Café Mode (60s)` Toggle:** Automatically cuts VBUS after ignition OFF to release smartphone Wi-Fi for café/hotel networks.
+* **Rear Radar & Blind-Spot Assistant (BSD HUD Card):**
+  * **Status Badges:** Real-time threat classification (`CLEAR`, `⚠️ VEHICLE CLOSING IN`, `🚨 COLLISION RISK!`) and hardware link (`GARMIN VARIA / 24 GHz M8`).
+  * **Virtual Mirror Warning LEDs (BSD):** Left (`#bsd-mirror-left`) and right (`#bsd-mirror-right`) mirror indicators with live distance readout and pulsing animations (Amber / Red) when an approaching vehicle enters the close-range blind-spot zone ($d < 15\,\text{m}$).
+  * **Central Rear Radar Sector (HTML5 Canvas):** $40^\circ$ downward fanning radar beam with range rings ($25\,\text{m}$, $50\,\text{m}$, $100\,\text{m}$, $140\,\text{m}$), animated sweep ray, and dynamically tracked vehicle blips showing distance and $\Delta v$ tags.
+  * **4 Telemetry Metric Tiles:** Closest object distance ($d$), relative approach speed ($\Delta v$), Time-To-Collision ($\text{TTC}$), and helmet audio ducking status ($-18\,\text{dB}$ Prio-1).
+  * **Interactive Controls:**
+    * **`🚗 Simulate Approach`:** Triggers a 10-second overtaking simulation of an approaching car ($120\,\text{m} \rightarrow 8\,\text{m}$, $+42\,\text{km/h}$) with automated threat escalation and helmet chime.
+    * **`🔔 Test Warning Chime`:** Synthesizes the dual-tone alert ping ($880\,\text{Hz} / 1760\,\text{Hz}$) via the Web Audio API.
+    * **`Acoustic Helmet Alert` Toggle:** Mutes/unmutes the radar warning chimes.
 
 ### 2.2 Tab 2: Audio & Ducking (`#tab-audio`)
 * **Mode Selector:** Standard Mode (Mesh Bridge), Single Rider Mode, Cruise Mode.

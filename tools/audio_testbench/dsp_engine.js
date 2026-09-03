@@ -50,6 +50,7 @@ class OpenMotorBridgeAudioEngine {
     this.pttActive = false;
     this.vadThreshold = 0.04;
     this.vadActive = false;
+    this.radarDuckActive = false;
 
     this.currentProfile = 'SENA_60S';
     this.currentMode = 'MODE_STANDARD';
@@ -267,6 +268,49 @@ class OpenMotorBridgeAudioEngine {
     }
   }
 
+  // Radar Warning Ping (Priority 1 Ducking -18dB + 880/1760 Hz Dual-Tone)
+  async playRadarWarningPing(threatLevel = 2) {
+    await this.ensureRunning();
+    if (!this.ctx || !this.masterGain) return;
+    this.radarDuckActive = true;
+    try {
+      const now = this.ctx.currentTime;
+      const f1 = threatLevel >= 2 ? 988 : 880;
+      const f2 = threatLevel >= 2 ? 1976 : 1760;
+
+      // Tone 1
+      const osc1 = this.ctx.createOscillator();
+      const g1 = this.ctx.createGain();
+      osc1.type = 'sine';
+      osc1.frequency.value = f1;
+      g1.gain.setValueAtTime(0.3, now);
+      g1.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+      osc1.connect(g1);
+      g1.connect(this.masterGain);
+      osc1.start(now);
+      osc1.stop(now + 0.09);
+
+      // Tone 2
+      const osc2 = this.ctx.createOscillator();
+      const g2 = this.ctx.createGain();
+      osc2.type = 'sine';
+      osc2.frequency.value = f2;
+      g2.gain.setValueAtTime(0.35, now + 0.12);
+      g2.gain.exponentialRampToValueAtTime(0.001, now + 0.23);
+      osc2.connect(g2);
+      g2.connect(this.masterGain);
+      osc2.start(now + 0.12);
+      osc2.stop(now + 0.23);
+
+      setTimeout(() => {
+        this.radarDuckActive = false;
+      }, 650);
+    } catch (e) {
+      console.warn("Radar chime error:", e);
+      this.radarDuckActive = false;
+    }
+  }
+
   // Request & Connect Live Headset Microphone
   async startMicrophone(deviceId = null) {
     await this.ensureRunning();
@@ -330,13 +374,13 @@ class OpenMotorBridgeAudioEngine {
     }
 
     // 2. Ducking Logic (Raised-Cosine curve from audio_dsp_pipeline.cpp)
-    const isDuckTriggered = this.pttActive || this.vadActive;
-    const targetLinear = Math.pow(10.0, this.duckingDepthDb / 20.0);
+    const isDuckTriggered = this.pttActive || this.vadActive || this.radarDuckActive;
+    const targetLinear = this.radarDuckActive ? Math.pow(10.0, -18.0 / 20.0) : Math.pow(10.0, this.duckingDepthDb / 20.0);
 
     if (isDuckTriggered) {
-      // Attack phase (Fast ~15 ms)
+      const attackRate = this.radarDuckActive ? (this.duckingAttack * 2.0) : this.duckingAttack;
       if (this.duckingFactor > targetLinear) {
-        this.duckingFactor -= this.duckingAttack;
+        this.duckingFactor -= attackRate;
         if (this.duckingFactor < targetLinear) this.duckingFactor = targetLinear;
       }
     } else {
