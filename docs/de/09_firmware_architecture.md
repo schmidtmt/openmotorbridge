@@ -61,6 +61,48 @@ enum FrontNodePktType : uint8_t {
 5. **Toshiba TLP222A Optokoppler:** $0{,}50\,\text{ms}$ Durchschaltzeit $t_{\text{ON}}$.
 * **Gesamtlatenz:** **$1{,}74\,\text{ms}$** (Weit unterhalb des physiologischen Schwellwerts von $10\,\text{ms}$).
 
+### 2.2 Front-Node Binding, Proximity-Pairing & Zero-Touch Re-Pairing
+
+Um gegenseitige Funk-Interferenzen oder Geister-Trigger bei Gruppenfahrten und an Ampeln (mehrere OpenMotorBridge-Bikes auf engem Raum) zu 100 % auszuschließen, nutzt das System ein striktes **1:1 Hardware-Binding** mit NVS-Persistierung:
+
+```
+                  FRONT-NODE BINDING- & RE-PAIRING ZUSTANDSAUTOMAT
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 1. ZUSTAND [UNPAIRED] (Erstinbetriebnahme / Werkseinstellung):              │
+│    • NVS-Speicher ist leer (keine Zentralbox-MAC hinterlegt).               │
+│    • Front-Node geht beim Booten AUTOMATISCH in den Koppelmodus.            │
+│    • Erstkontakt erfolgt in der heimischen Garage (0 fremde Bikes).         │
+│    • Zentralbox scannt via WebApp -> Fester AES-128 LMK-Key- & MAC-Sync.    │
+│    • Status wechselt auf [LINKED] und wird permanent im NVS gesichert.      │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ 2. ZUSTAND [LINKED] (Normalbetrieb Straße & Rennstrecke):                   │
+│    • Exklusiver Unicast auf Wi-Fi Kanal 1 an die gespeicherte Zentralbox.   │
+│    • Fremde ESP-NOW Pakete werden bereits in der Hardware-MAC-Schicht       │
+│      verworfen -> 0 CPU-Last, 0 Fehltrigger, 0 Übersprechen.                │
+│    • Zentralbox sendet periodisch Heartbeats (500 ms Intervall).            │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ 3. ZUSTAND [ORPHAN / RE-PAIRING READY] (Zentralbox wurde getauscht):        │
+│    • Bleiben Heartbeats der hinterlegten Zentralbox für > 60 s aus          │
+│      (weil die alte Box defekt oder ausgebaut ist), wechselt der Knoten     │
+│      automatisch in den Bereitschaftszustand für Proximity-Rescue.          │
+│    • Schutz vor Hijacking: Solange die Originalbox lebt, ist der Knoten     │
+│      vollständig taub für fremde Übernahmeversuche!                         │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ 4. PROXIMITY-RESCUE ÜBERNAHME (Ohne Werkzeug & ohne Gehäusezugriff):        │
+│    • Fahrer tippt in der WebApp der NEUEN Zentralbox: [Front-Node koppeln]. │
+│    • Neue Zentralbox sendet ESP-NOW Rescue-Beacon.                          │
+│    • Front-Node akzeptiert die neue Zentralbox NUR wenn:                    │
+│      a) Heartbeat-Verlust der alten Box > 60 Sekunden anhält                │
+│      b) Empfangene Signalstärke der neuen Box RSSI > -42 dBm beträgt         │
+│         (physikalisch nur auf demselben Rahmen im 1-Meter-Nahfeld erreichbar)│
+│    • Altes NVS-Binding wird überschrieben -> Nahtloser Normalbetrieb.       │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ 5. SCHNELLER OVERRIDE VIA LENKER-PTT (Falls Taster verbaut):                │
+│    • 10 Sekunden Dauerdruck auf den PTT-Taster im Stillstand                │
+│    • Löscht das NVS-Binding sofort manuell und erzwingt Zustand [UNPAIRED]. │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
 ---
 
 ## 3. Dual-Bank Rollback-OTA Partitionierung

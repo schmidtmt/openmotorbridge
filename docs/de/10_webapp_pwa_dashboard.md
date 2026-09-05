@@ -79,7 +79,11 @@ Das Dashboard ist eine vollständig autarke Progressive Web App (PWA) basierend 
 * **WebDAV-Konfiguration:** Zugangsdaten für automatisches Hochladen zu Nextcloud/Synology.
 
 ### 2.5 Tab 5: Hardware & Reserve (`#tab-hardware`)
-* **Front-Knoten Diagnostik:** Übersicht der Spezifikationen (ESP32-C3, LMR36015, USB2512B, TPS2051B, Knowles MEMS) und Button zur Prüfung von OTA-Firmware-Updates.
+* **Front-Knoten Diagnostik & Pairing-Management:** 
+  * Anzeige der Hardware-Spezifikationen (ESP32-C3, LMR36015, USB2512B, TPS2051B, Knowles MEMS).
+  * **1:1 Binding-Status:** Gepaarte MAC-Adresse, ESP-NOW Link-Zustand (`LINKED`, `OFFLINE`) und Signalpegel (RSSI).
+  * **Interaktiver Koppel-Button:** `[Neuen Front-Knoten koppeln / Rescue-Übernahme]` – triggert den nahfeldbasierten Proximity-Rescue Beacon ($\text{RSSI} > -42\,\text{dBm}$) bei Tausch der Zentralbox.
+  * Button zur Prüfung und Durchführung von **OTA-Firmware-Updates**.
 * **Reserve I/O:** Status und Toggle-Schalter für HD26 Pin 25 (`RESERVE_GPIO_A`) und Pin 26 (`RESERVE_GPIO_B`).
 * **Zentralbox Soft-Reboot:** Gesteuerter Warmstart des Hauptsystems.
 

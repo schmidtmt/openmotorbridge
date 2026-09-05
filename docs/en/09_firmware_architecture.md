@@ -60,6 +60,47 @@ enum FrontNodePktType : uint8_t {
 5. **Toshiba TLP222A Optocoupler:** $0{,}50\,\text{ms}$ turn-on time $t_{\text{ON}}$.
 * **Total Glass-to-Glass Latency:** **$1{,}74\,\text{ms}$** (far below the human perceptual threshold of 10 ms).
 
+### 2.2 Front-Node Binding, Proximity-Pairing & Zero-Touch Re-Pairing
+
+To completely prevent cross-talk, accidental triggering, or packet interference during group rides and at red lights (where multiple OpenMotorBridge-equipped motorcycles are clustered together), the system implements a strict **1:1 hardware binding** stored in NVS flash:
+
+```
+                FRONT NODE BINDING & RE-PAIRING STATE MACHINE
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 1. STATE [UNPAIRED] (First-Time Commissioning / Factory Defaults):          │
+│    • NVS flash is blank (no Central Box MAC registered).                    │
+│    • Front Node automatically enters pairing mode on boot.                  │
+│    • Initial setup occurs in home garage (zero neighboring OMB bikes).      │
+│    • Central Box scans via WebApp -> Synchronizes 128-bit AES key & MAC.    │
+│    • Status transitions to [LINKED] and is permanently saved in NVS.        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ 2. STATE [LINKED] (Normal Daily Riding & Group Packs):                      │
+│    • Dedicated unicast on Wi-Fi Channel 1 to registered Central Box MAC.    │
+│    • Foreign ESP-NOW packets rejected at hardware MAC layer                 │
+│      -> 0 CPU overhead, 0 false triggers, 0 cross-talk.                     │
+│    • Central Box broadcasts periodic heartbeats (500 ms interval).          │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ 3. STATE [ORPHAN / RE-PAIRING READY] (Central Box Replaced / Dead):         │
+│    • If heartbeats from the registered Central Box cease for > 60 seconds   │
+│      (e.g., box replaced or damaged), Front Node enters rescue readiness.   │
+│    • Anti-Hijacking Protection: As long as the registered box is active,    │
+│      the Front Node remains completely deaf to foreign pairing attempts!    │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ 4. PROXIMITY RESCUE TAKEOVER (Zero-Drill & Zero Tool Access):               │
+│    • Rider taps [Pair Front Node] in WebApp of the NEW Central Box.         │
+│    • New Central Box transmits ESP-NOW Rescue Beacon.                       │
+│    • Front Node accepts the new Central Box ONLY IF:                        │
+│      a) Heartbeat loss from old box persists for > 60 seconds.              │
+│      b) Received signal strength of new box satisfies RSSI > -42 dBm        │
+│         (physically achievable only across the 1-meter span of same bike).  │
+│    • Previous NVS binding overwritten -> Seamless transition to [LINKED].   │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ 5. RAPID OVERRIDE VIA HANDLEBAR PTT (If Button Installed):                  │
+│    • Hold handlebar PTT continuously for 10 seconds while stationary.       │
+│    • Manually clears NVS binding and forces state back to [UNPAIRED].       │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
 ---
 
 ## 3. Dual-Bank Rollback-OTA Partitioning

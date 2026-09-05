@@ -70,7 +70,11 @@ The dashboard is a fully self-contained Progressive Web App (PWA) built with sta
 * **GPX Export Engine:** Download rides in 4 optimized formats (Moto-Navi Shaping, Video-Sync, Clean Track, Raw EKF).
 
 ### 2.5 Tab 5: Hardware & Reserve (`#tab-hardware`)
-* **Front Node Diagnostics:** Hardware specifications (ESP32-C3, LMR36015, USB2512B, TPS2051B, Knowles MEMS) and OTA firmware check.
+* **Front Node Diagnostics & Pairing Management:** 
+  * Real-time hardware specifications (ESP32-C3, LMR36015, USB2512B, TPS2051B, Knowles MEMS).
+  * **1:1 Binding Status:** Registered MAC address, ESP-NOW link state (`LINKED`, `OFFLINE`), and signal strength (RSSI).
+  * **Interactive Pairing Button:** `[Pair Front Node / Proximity Rescue]` – triggers the localized proximity rescue beacon ($\text{RSSI} > -42\,\text{dBm}$) if the Central Box was replaced.
+  * Check and execute **OTA firmware updates**.
 * **Reserve I/O:** Status and toggle switches for HD26 Pin 25 (`RESERVE_GPIO_A`) and Pin 26 (`RESERVE_GPIO_B`).
 * **Central Box Soft-Reboot:** Controlled warm restart of the main system.
 
