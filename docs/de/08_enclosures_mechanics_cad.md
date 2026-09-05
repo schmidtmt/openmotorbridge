@@ -5,7 +5,7 @@ Dieses Dokument spezifiziert die mechanische Konstruktion, das Thermomanagement,
 2. **Universelle Satelliten-Pods (Typ B):** Baugleiches 5-seitiges Monocoque-Schachtgehäuse für Pod 1, 2 und 3 mit $120^\circ$-V-Nut Rohrbett, M8 6-Pin IP67-Rückanschluss, Schutz-Schottwand und federbelastetem Auto-Eject.
 3. **Modulare Wechselkassetten (Typ C):** Generischer 2-teiliger Universal-Basisschlitten mit asymmetrischer Poka-Yoke Nut-und-Feder-Führung für Sena 50S/60S, Cardo Packtalk Edge/Bold, OMM-Transceiver und hermetische IP67 Blindkassette (Dry Box).
 4. **Heck-Pod 3 & Radar-Ausleger (Typ D):** Strömungsgünstiger Heckbürzel-Transceiver mit dielektrischem Antennenradom für 868 MHz LoRa und Multi-GNSS sowie winkelverstellbarem Halter für Totwinkel-Radar (Garmin Varia).
-5. **Universal Front-Knoten (Typ E):** Ultrakompakter Smart Fairing Hub ($84 \times 60 \times 23\,\text{mm}$) mit **4-in-1 Universal-Befestigungssystem** (AMPS, Rohrbügel-Prisma, Silentblöcke, 3M Dual-Lock), EPDM-Kabelkämmen und Knowles MEMS Akustikkanal.
+5. **Universal Front-Knoten (Typ E):** Ultrakompakter Cockpit- & Sensor-Hub ($84 \times 60 \times 23\,\text{mm}$) mit **4-in-1 Universal-Befestigungssystem** (AMPS, Rohrbügel-Prisma, Silentblöcke, 3M Dual-Lock), EPDM-Kabelkämmen und Knowles MEMS Akustikkanal.
 
 ---
 
@@ -302,13 +302,41 @@ Vollständig integriertes 500 mW PMR446-Analogfunkmodul ($38 \times 20\,\text{mm
 
 ---
 
-## 7. Gehäuse Typ D: Heck-Pod 3 Transceiver & Radar-Ausleger
+## 7. Gehäuse Typ D: Heck-Pod 3 Transceiver & 3-Säulen-Montagearchitektur
 
-Der Heck-Pod 3 vereint den OMM-Transceiver, 868 MHz LoRa und Multi-GNSS in aerodynamischer Heckposition:
+Der Heck-Pod 3 vereint den OMM-Transceiver, 868 MHz LoRa und Multi-GNSS (`PCBA 04`, RP2040) in aerodynamischer Heckposition. 
+
+> [!IMPORTANT]
+> **Architektonische Modularität (Typ-B-Unantastbarkeit):**
+> Das universelle Schachtgehäuse von Pod 3 (Typ B, $100 \times 60 \times 28\,\text{mm}$) bleibt über alle Motorradtypen hinweg **zu 100 % baugleich und unverändert**. Die Anpassung an unterschiedliche Fahrzeugkategorien erfolgt ausschließlich über fahrzeugspezifische Montage-Konsolen.
+
+```
+                               UNIVERSAL POD 3 (TYP B)
+                            [100 x 60 x 28 mm / PCBA 04]
+                                         │
+        ┌────────────────────────────────┼────────────────────────────────┐
+        ▼                                ▼                                ▼
+┌───────────────────────┐    ┌───────────────────────┐    ┌───────────────────────┐
+│     TYP D1: ADVENTURE │    │ TYP D2: CLASSIC BAGGER│    │ TYP D3: PERFORMANCE   │
+│   (Universal Rohrbett)│    │(Touring Stealth Shell)│    │ (ST Aero-Winglet)     │
+├───────────────────────┤    ├───────────────────────┤    ├───────────────────────┤
+│ • Reiseenduros (BMW GS│    │ • Road King, Street   │    │ • Road Glide ST, King │
+│   KTM Adv, Africa Tw.)│    │   Glide, Ultra Limited│    │   of the Baggers Style│
+│ • 120°-V-Nut am Boden │    │ • Organische Tropfen- │    │ • Carbon-Aero-Winglets│
+│ • Rohre Ø 18..35 mm   │    │   form, extrem flach  │    │ • Facettierte Flanken │
+│ • Radar am Pod-Halter │    │ • Radar unterm Schild │    │ • Radar unterm Schild │
+└───────────────────────┘    └───────────────────────┘    └───────────────────────┘
+```
+
+---
+
+### 7.1 Typ D1: Reiseenduro & Adventure (Universal-Rohrbett mit V-Nut)
+
+Für Reiseenduros und Naked Bikes mit Rohrheckrahmen oder Gepäckbrücke:
 
 ![Pod 3 Transceiver & Radar 3D Anschnitt CAD](../images/cad/pod3_radar_cutaway_3d.png)
 
-*Abbildung 8.13: Photorealistischer 3D-CAD-Schräganschnitt des Heck-Pods 3 mit montiertem Blind-Spot Radarsensor. Sichtbar sind das dielektrische Radom mit Gore-Membran, die 25x25 mm Keramik-Patchantenne, die 868 MHz LoRa-Wendelantenne, die 4-Layer-Platine mit RP2040 und SX1262, der M8 6-Pin-Anschluss sowie der M5-GoPro-Ausleger mit verstellbarem Garmin Varia Radarkopf.*
+*Abbildung 8.13: Photorealistischer 3D-CAD-Schräganschnitt des Heck-Pods 3 (Typ D1) mit montiertem Blind-Spot Radarsensor. Sichtbar sind das dielektrische Radom mit Gore-Membran, die 25x25 mm Keramik-Patchantenne, die 868 MHz LoRa-Wendelantenne, die 4-Layer-Platine mit RP2040 und SX1262, der M8 6-Pin-Anschluss sowie der M5-GoPro-Ausleger mit verstellbarem Garmin Varia Radarkopf.*
 
 ![Pod 3 Full Assembly Exploded 3D](../images/cad/pod3_full_assembly_exploded_3d.png)
 
@@ -318,11 +346,152 @@ Der Heck-Pod 3 vereint den OMM-Transceiver, 868 MHz LoRa und Multi-GNSS in aerod
 
 *Abbildung 8.15: Längsschnitt durch den Heck-Pod 3 mit koaxial geschirmter Antennenkammer und $25 \times 25\,\text{mm}$ GNSS-Groundplane.*
 
-* **Winkelverstellbarer Radar-Ausleger:** GoPro-kompatibles M5-Scharnier zur horizontalen Ausrichtung von Garmin Varia Radarsensoren ($\pm 5^\circ$).
+---
+
+### 7.2 Das offene Slide-In Dock & Der 3D-Schichtaufbau am Heck
+
+Um das universelle Pod-3-Gehäuse ($135 \times 70 \times 38\,\text{mm}$) zerstörungsfrei und ohne thermische oder funktionale Doppelgehäuse-Verluste auf dem Harley-Davidson Kotflügel zu integrieren, nutzt das System ein **oben offenes Aufnahmedock** ([`007_pod_slide_dock_core.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/parts/007_pod_slide_dock_core.scad)):
+- **Kein Doppelgehäuse:** Das Pod-Gehäuse bleibt zu 100 % identisch mit Pod 1 und 2. Seine Oberseite liegt frei – das ePTFE Gore-Vent atmet ungehindert in die Außenluft und die GNSS-Patchantenne hat freie Sicht in den Zenit.
+- **Kassettenwechsel & Antenne nach HINTEN:** Das Pod wird so orientiert, dass der geschlossene M8-Kabelstutzen nach vorne (zum Sitz) zeigt. Die Wechselschachtöffnung und die Antenne (LoRa 868 MHz / 2.4 GHz) zeigen nach **hinten**. Die Kassette lässt sich ohne Demontage der Sitzbank von hinten entnehmen.
+- **Kaschierte Stirnflächen:** Aerodynamische Keil- und Heckblenden brechen die $70 \times 38\,\text{mm}$ Frontfläche vollständig.
+
+```
+                  ┌────────────────────────────────────────────────────────┐
+                  │          OFFENES POD-AUFNAHMEDOCK (TYP D2 / D3)        │
+                  │  • Oben komplett offen: Gore-Vent & GNSS atmen frei!   │
+                  │  • Front verkleidet die 70x38 mm Stirnfläche           │
+                  │  • Heck verjüngt sich organisch als Diffusor/Teardrop  │
+                  └───────────────────────────┬────────────────────────────┘
+                                              │ Formschlüssiger Einschub
+                                              ▼
+                  ┌────────────────────────────────────────────────────────┐
+                  │            UNIVERSAL POD 3 GEHÄUSE (TYP B)             │
+                  │          135 x 70 x 38 mm (100 % einheitlich)          │
+                  │  • M8-Kabelstutzen zeigt nach VORNE (Richtung Sitz)    │
+                  │  • Kassettenöffnung & Antenne zeigen nach HINTEN       │
+                  └───────────────────────────┬────────────────────────────┘
+                                              │ Werkzeuglos entnehmbar
+                                              ▼
+                  ┌────────────────────────────────────────────────────────┐
+ ◄── Zug nach     │              MODULARE WECHSELKASSETTE                  │
+     HINTEN       │          (PCBA 04: GNSS / LoRa 868 / ESP-NOW)          │
+                  │  • Antenne zeigt nach hinten (verdeckt / eingeklipst)  │
+                  └────────────────────────────────────────────────────────┘
+```
+
+![Pod 3 Fender Mounting Exploded Stack 3D](../images/cad/pod3_fender_exploded_stack_3d.png)
+
+*Abbildung 8.16: Vertikaler Explosions-Schichtaufbau der Heckmontage: Unten der Kotflügel, gefolgt von der fahrzeugspezifischen Dock-Brücke (ohne Bohrungen im Blech!), dem Standard-Pod-3-Gehäuse ($135 \times 70 \times 38\,\text{mm}$) mit freiliegender Oberseite, der nach hinten ausziehbaren Wechselkassette und dem entkoppelten Radarhalter unter dem Kennzeichen.*
 
 ---
 
-## 8. Gehäuse Typ E: Universal Front-Knoten (Smart Fairing Controller)
+### 7.3 Referenz-Kit 1: Harley-Davidson CVO Road Glide ST (2024+) & New Touring Platform
+
+Für High-Performance Bagger mit werkseitiger Einzelsitzbank und Forged-Carbon-Hutze (FLTRXSTSE):
+Aufgrund der werkseitigen Showa Inverted-Remote-Reservoir-Stoßdämpfer mit dicken Hydraulikleitungen und des neuen 2024er Heckabschlusses scheiden externe Strut-Konsolen mechanisch aus. Das ST-Referenzkit integriert die 5 Knoten daher zu 100 % unsichtbar und zerstörungsfrei:
+
+```
+          CVO ROAD GLIDE ST (2024+) GESAMTSYSTEM-INTEGRATION
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 1. COCKPIT (Vorne, unsichtbar hinter Außenhaut):                            │
+│    • Front-Node (PCBA 05) + Ottocast am Alu-Geweihträger montiert           │
+│    • 12V Zündungsplus direkt vom internen Fairing-Zubehörstecker            │
+│    • Funkverbindung (ESP-NOW) zur Zentralbox -> 0 Kabel über den Lenkkopf   │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ 2. MITTE (Unter Sitzbank):                                                  │
+│    • Zentralbox mittig im Batteriefach                                      │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ 3. HECK (Unter Forged Carbon Hutze & Kennzeichen):                          │
+│    • Pod 3 aufrecht im Skeleton Dock (cvo_st_undercowl_skeleton_dock.scad)  │
+│      Gegen Fahrbahnschläge nach oben verspannt, 0 Bohrungen, 0 Lackkleber   │
+│    • Externe 2.4 GHz Telemetrie-Finne (cvo_st_telemetry_fin.scad) am Tab    │
+│    • Radar mittig unter dem Kennzeichen (radar_license_plate_bracket.scad)  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ 4. KOFFER (Gruppenfunk-Brücke Sena & Cardo):                                │
+│    • Pod 1 (Sena Mesh) im linken Kofferdeckel                               │
+│    • Pod 2 (Cardo DMC) im rechten Kofferdeckel                              │
+│    • Montage an originalen Scharnier-/Fangbandschrauben (Zero-Drill)        │
+│    • Kabelführung am Fangband, wetterfeste Schnellkupplung außen am Spalt   │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+#### A. Heck-Integration: Das Under-Cowl Skeleton Dock & Telemetrie-Finne
+* **Skeleton Dock (`cvo_st_undercowl_skeleton_dock.scad`):** Nimmt das Standard-Pod-3-Gehäuse ($135 \times 70 \times 38{,}5\,\text{mm}$) aufrecht auf. Zwei nach oben gewölbte Federbögen stützen sich an der Innendecke der Carbonhutze ab und verhindern jedes Aufbäumen oder Klappern über Schlaglöchern und Kopfsteinpflaster.
+* **Telemetrie-Finne (`cvo_st_telemetry_fin.scad`):** Sitzt auf der originalen hinteren Schraublasche der Hutze. Sie führt die 2,4-GHz-Mesh-Antenne des ESP32-C3 nach draußen an die frische Luft und leitet das Koaxialkabel unsichtbar unter der Lasche in die Hutze.
+
+#### B. Kofferdeckel-Integration: Pod 1 (Links) & Pod 2 (Rechts)
+* **Top-Lid Montage:** Beide Pods sitzen im vorderen Drittel der Kofferdeckel, verschraubt an den originalen Torx-Punkten der Scharnier- bzw. Fangbandhalterung.
+* **Gepäck- und Getränke-Sicherheit:** Liegen ca. $30\,\text{cm}$ über dem Kofferboden. Schwere Kaltgetränke, Werkzeug oder feuchte Kleidung am Boden liegen vollständig unterhalb der Funk-Fresnel-Zone.
+* **Maximale HF-Isolation ($> 40\,\text{dB}$):** Sena (links) und Cardo (rechts) sind über $60\,\text{cm}$ voneinander getrennt, mit Heckfender und Rahmen als HF-Schild.
+
+---
+
+### 7.4 Referenz-Kit 2: Harley-Davidson Road King Special (FLHRXS / Classic Naked Touring)
+
+Für klassische Touring-Modelle ohne Frontverkleidung und mit 2-Up-Komfortsitzbank oder klassischem Heckfender:
+
+```
+             ROAD KING SPECIAL (RKS) GESAMTSYSTEM-INTEGRATION
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 1. COCKPIT (Nacelle, unsichtbar hinter 7" LED-Scheinwerfer):                │
+│    • Front-Node (PCBA 05) im Hohlraum der Aluminium-Headlight-Nacelle       │
+│    • Speist Garmin Navi / Smartphone-Halterung & Action-Cam am Lenker       │
+│    • PTT-Lenkertaster & Knowles Windgeräusch-Mikrofon                       │
+│    • 100 % drahtlos via ESP-NOW zur Zentralbox -> 0 Kabel am Tank nach hinten│
+├─────────────────────────────────────────────────────────────────────────────┤
+│ 2. MITTE (Unter Sitzbank):                                                  │
+│    • Zentralbox mittig im Batteriefach                                      │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ 3. HECK (Kotflügel-Konsole & Kennzeichen):                                  │
+│    • Pod 3 in der Touring Fender Console (pod3_touring_fender_console.scad)  │
+│      Formvollendet auf Kotflügel geschraubt an 1/4"-20 Soziussitz-Mutter    │
+│    • Radar mittig unter dem Kennzeichen                                     │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ 4. KOFFER:                                                                  │
+│    • Pod 1 (Sena) & Pod 2 (Cardo) in den Kofferdeckeln (analog ST)          │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+* **Touring Fender Console (`pod3_touring_fender_console.scad`):** Organische Tropfenform ($R = 6\dots 7\,\text{mm}$), die das Pod 3 formschlüssig aufnimmt. Nutzt die originale $1/4"-20$ Rändelmutter im Kotflügel. M8-Kabel taucht unsichtbar nach vorne unter die Sitzbank ab.
+* **Headlight Nacelle Front-Knoten:** Nutzt den gigantischen Raum hinter dem 7"-LED-Scheinwerfer. Stromversorgung über den dort liegenden Harley-Zubehörstecker.
+
+---
+
+### 7.5 Referenz-Kit 3: Classic Bagger & Cruiser (Touring Stealth Console)
+
+Für Harley-Davidson Street Glide, Electra Glide und Ultra Limited mit 2-Up-Komfortsitzbank:
+
+![Pod 3 Touring Stealth Console CAD](../images/cad/pod3_touring_stealth_cad.png)
+
+*Abbildung 8.18: Isolierte 3D-CAD-Ansicht der Touring Stealth Console (`pod3_touring_stealth_console.scad`). Vollständig organisch verrundete Konturen ($R = 6\dots 7\,\text{mm}$) ohne harte Boxkanten. Vordere Montagelasche für die originale $1/4"-20$ Soziussitz-Schraube im Schutzblech, anschmiegende Sitzbankkontur mit M8-Kabelkanal nach vorne unter die Bank, Anbindung der Frontschräge auf halber Einschubhöhe ($Z = 22\,\text{mm}$), offenes zentrales Dock und sanft abfallender Teardrop-Heckbürzel mit integrierter Einklips-Nut für die Heckantenne.*
+
+![Pod 3 Fender Assembly Touring 3D](../images/cad/pod3_fender_assembly_touring_3d.png)
+
+*Abbildung 8.19: Fotorealistische Gesamtheck-Montage an der Classic Touring-Maschine: Nahtlose Anschmiegung an die Beifahrersitzbank, M8-Kabel unsichtbar nach vorne geführt, freiliegendes Pod-Dach für ungestörten GNSS-Empfang, Kassetteneinschub von hinten und entkoppeltes Garmin Varia Radar unter dem Kennzeichen.*
+
+---
+
+### 7.6 Entkoppeltes Kennzeichen-Radar-Bracket & Rechtliche Konformität
+
+Auf Cruisern und Baggern wird das Garmin Varia mmWave-Radar von Pod 3 **entkoppelt** und mittig unter dem Kennzeichen montiert:
+
+![Radar License Plate Bracket CAD](../images/cad/radar_license_plate_bracket_cad.png)
+
+*Abbildung 8.22: 3D-CAD-Modell des entkoppelten Kennzeichen-Radarhalters mit M6-Klemmung, M5-Schwenkscharnier und verdecktem rückseitigem M8-Kabelkanal.*
+
+* **Rechtliche Vorschrift (§ 10 Abs. 6 FZV / ECE R138):**
+  Das Kennzeichen muss von oben in einem vertikalen Winkel von **mindestens $+30^\circ$ vollständig und ohne Verdeckung** einsehbar sein.
+* **Vermeidung des Dachüberstand-Problems:**
+  Durch die Platzierung des Radars **unter** dem Kennzeichen muss die obere Pod-Konsole nicht weit nach hinten auskragen. Der $+30^\circ$-Sichtbereich auf die Zulassungs- und TÜV-Plaketten bleibt zu $100\,\%$ frei.
+* **Schwingungs- und Vibrationsfestigkeit:**
+  Das Radar sitzt direkt an der massiven Grundplatte ohne langen Hebelarm – vollkommen vibrationsfest gegen die Vibrationen des Milwaukee-Eight 117 cui Motors.
+* **Verdeckte Kabelführung:**
+  Das M8-Signalkabel des Radars verläuft unsichtbar in einem rückseitig eingeformten Schacht hinter dem Kennzeichen nach oben und vereinigt sich hinter der Blinkerbrücke mit dem Heckkabelbaum.
+
+
+---
+
+## 8. Gehäuse Typ E: Universal Front-Knoten (Cockpit- & Sensor-Hub)
 
 Das Gehäuse des Front-Knotens wurde speziell für die geschützte Montage in Motorrad-Frontverkleidungen (Batwing, Sharknose, BMW GS/RT Schnabel) oder an Sturzbügeln entwickelt:
 
@@ -332,21 +501,21 @@ Das Gehäuse des Front-Knotens wurde speziell für die geschützte Montage in Mo
 
 ![Universal Front Node Closed CAD](../images/cad/front_node_closed_cad.png)
 
-*Abbildung 8.15: Geschlossenes Front-Node IP67-Gehäuse.*
+*Abbildung 8.21: Geschlossenes Front-Node IP67-Gehäuse.*
 
 ![Universal Front Node Exploded 3D](../images/cad/front_node_exploded_3d.png)
 
-*Abbildung 8.16: 3D-Explosionsdarstellung des Front-Knotens entlang der Z-Achse.*
+*Abbildung 8.22: 3D-Explosionsdarstellung des Front-Knotens entlang der Z-Achse.*
 
 ![Universal Front Node Cutaway 3D](../images/cad/front_node_cutaway_3d.png)
 
-*Abbildung 8.17: Transparente 3D-Schnittansicht des Front-Knotens mit Knowles MEMS Schallkanal und VBUS-Lastschalter.*
+*Abbildung 8.23: Transparente 3D-Schnittansicht des Front-Knotens mit Knowles MEMS Schallkanal und VBUS-Lastschalter.*
 
 ### 8.1 Das 4-in-1 Universal-Befestigungssystem des Front-Knotens
 
 ![Universal Front Node Bottom CAD 4-in-1](../images/cad/front_node_bottom_cad.png)
 
-*Abbildung 8.18: Gehäuseunterseite des Front-Knotens mit AMPS-Bohrbild, $120^\circ$ V-Nut Rohrbett, EPDM-Spannnasen, Silentblock-Lochungen und 3M Dual-Lock Klettnuten.*
+*Abbildung 8.24: Gehäuseunterseite des Front-Knotens mit AMPS-Bohrbild, $120^\circ$ V-Nut Rohrbett, EPDM-Spannnasen, Silentblock-Lochungen und 3M Dual-Lock Klettnuten.*
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
@@ -375,22 +544,44 @@ Das Gehäuse des Front-Knotens wurde speziell für die geschützte Montage in Mo
 
 ## 9. CAD-Dateistruktur & OpenSCAD-Modulbaukasten (STL-Bibliothek)
 
-Alle 3D-Gehäusemodelle stehen unter `hardware/cad/stl/` und `hardware/cad/scad/` bereit:
+Die CAD-Dateistruktur von OpenMotorBridge folgt einer strengen hierarchischen CSG-Architektur (Constructive Solid Geometry):
+- **Hauptverzeichnisse (`01_main_box/`, `02_pod_base/`, `03_pod_cartridges/`, `04_front_node/`)**: Enthalten **ausschließlich monolithische, direkt 3D-druckbare Produktions-STLs** (100 % single-manifold, wasserdicht, 0 frei schwebende Körper).
+- **Unterordner (`components/`)**: Enthalten die parametrischen CSG-Einzelkomponenten (z. B. unbeschnittene Basiskörper, Flansche, Schraubdome, Dichtkämme und PCB-/Akku-Dummies) für Baugruppenmontagen und modulare Adaptionen.
+
+### 9.1 Druckfertige Produktions-STLs (Hauptverzeichnisse)
 
 | Baugruppe | Funktion / Bauteil | Druckfertige STL-Datei | Parametrischer OpenSCAD Code |
 | :--- | :--- | :--- | :--- |
-| **Zentralbox** | Unterwanne mit Dichtnut | `main_box_lower_case.stl` | `01_main_box/00_lower_deck.scad` |
-| **Zentralbox** | Oberwanne mit Zwischenboden | `main_box_mid_tray.stl` | `01_main_box/01_upper_deck.scad` |
-| **Zentralbox** | Gehäusedeckel mit Gore-Vent | `main_box_lid.stl` | `01_main_box/02_colsure.scad` |
-| **Satelliten-Pod**| 5-seitiges Monocoque-Gehäuse | `pod_base_housing.stl` | `02_pod_base/pod_base_housing.scad` |
-| **Schottwand** | Schutzwand mit Federsitzen | `03_pod_bulkhead_partition.stl` | `02_pod_base/parts/bulkhead.scad`|
-| **Kassette** | Universeller Basisschlitten | `cartridge_base_sled.stl` | `03_pod_cartridges/00_base_sled.scad`|
-| **Kassette** | Sena 50S/60S Schlitten | `cartridge_sena_sled.stl` | `03_pod_cartridges/cartridge_sena.scad`|
-| **Kassette** | Cardo Packtalk Edge Schlitten | `cartridge_cardo_sled.stl`| `03_pod_cartridges/cartridge_cardo.scad`|
-| **Kassette** | OMM Transceiver Schlitten | `cartridge_omm_transceiver_sled.stl`| `03_pod_cartridges/cartridge_omm.scad`|
-| **Kassette** | IP67 Blindkassette (Dry Box)| `cartridge_blindkassette_waterproof.stl`| `03_pod_cartridges/cartridge_blind.scad`|
-| **Front-Knoten** | Unterwanne mit 4-in-1 Boden | `front_node_lower_case.stl`| `04_front_node/front_node_lower.scad`|
-| **Front-Knoten** | Oberwanne mit Dichtkämmen | `front_node_upper_case.stl`| `04_front_node/front_node_upper.scad`|
+| **Zentralbox** | Unterwanne mit Dichtnut & Halteohren | `01_main_box/main_box_lower_case.stl` | `01_main_box/00_lower_deck.scad` |
+| **Zentralbox** | Oberwanne mit Zwischenboden | `01_main_box/main_box_mid_tray.stl` | `01_main_box/01_upper_deck.scad` |
+| **Zentralbox** | Gehäusedeckel mit Gore-Vent | `01_main_box/main_box_lid.stl` | `01_main_box/02_colsure.scad` |
+| **Satelliten-Pod**| 5-seitiges Monocoque-Gehäuse (Tunnel) | `02_pod_base/pod_base_housing.stl` | `02_pod_base/pod_base_housing.scad` |
+| **Satelliten-Pod**| CVO ST Under-Cowl Skeleton Dock | `02_pod_base/cvo_st_undercowl_skeleton_dock.stl` | `02_pod_base/cvo_st_undercowl_skeleton_dock.scad` |
+| **Satelliten-Pod**| CVO ST Telemetrie-Finne (2.4 GHz Mesh) | `02_pod_base/cvo_st_telemetry_fin.stl` | `02_pod_base/cvo_st_telemetry_fin.scad` |
+| **Satelliten-Pod**| Road King Special Touring Fender Console | `02_pod_base/pod3_touring_fender_console.stl` | `02_pod_base/pod3_touring_fender_console.scad` |
+| **Satelliten-Pod**| Touring Kofferdeckel-Halter (Pod 1 & 2) | `02_pod_base/saddlebag_lid_dock.stl` | `02_pod_base/saddlebag_lid_dock.scad` |
+| **Radarhalter** | Entkoppelte Kennzeichen-Radarhalterung | `02_pod_base/radar_license_plate_bracket.stl` | `02_pod_base/radar_license_plate_bracket.scad` |
+| **Kassette** | Universeller Basisschlitten mit Dichtung | `03_pod_cartridges/cartridge_base_sled.stl` | `03_pod_cartridges/00_base_sled.scad` |
+| **Kassette** | Sena 50S/60S Adapterkassette | `03_pod_cartridges/cartridge_insert_sena.stl` | `03_pod_cartridges/parts/01_insert_sena.scad` |
+| **Kassette** | Cardo Packtalk Edge Adapterkassette | `03_pod_cartridges/cartridge_insert_cardo.stl` | `03_pod_cartridges/parts/02_insert_cardo.scad` |
+| **Kassette** | IP67 Blindkassette (wasserdichte Dry Box)| `03_pod_cartridges/cartridge_insert_blindkassette.stl` | `03_pod_cartridges/parts/03_insert_blindkassette.scad` |
+| **Kassette** | OMM Dipol-Antennenhalterung | `03_pod_cartridges/cartridge_antenna_bracket_omm.stl` | `03_pod_cartridges/parts/04_antenna_bracket_omm.scad` |
+| **Front-Knoten** | Unterwanne mit 4-in-1 Boden & Ohren | `04_front_node/front_node_lower_tub.stl` | `04_front_node/00_front_node_tub.scad` |
+| **Front-Knoten** | Gehäusedeckel mit LED & FPC-Tasche | `04_front_node/front_node_upper_lid.stl` | `04_front_node/01_front_node_lid.scad` |
+| **Front-Knoten** | EPDM/TPU Dichtkamm-Paar mit Steg | `04_front_node/front_node_cable_glands_tpu.stl` | `04_front_node/02_front_node_cable_glands.scad` |
+| **Front-Knoten** | TPU USB-C Staubschutzstopfen | `04_front_node/front_node_usbc_cap_tpu.stl` | `04_front_node/03_front_node_usbc_plug.scad` |
+
+### 9.2 Baukasten-Komponenten & Dummies (`components/`-Verzeichnisse)
+
+In den `components/`-Verzeichnissen liegen die isolierten Basiskörper (vor Differenzoperationen) und Zubehörteile:
+- **`01_main_box/components/`**: `01_lower_tub_empty.stl`, `02_corner_screws_enclosure.stl`, `03_pcb_standoffs.stl`, `04_mounting_ears.stl`, `05_sealing_groove.stl`, `06_mid_tray_frame.stl`, `07_mid_partition_floor.stl`, `08_lid_plate.stl`, `dummy_main_pcb.stl`, `dummy_lipo_battery.stl`.
+- **`02_pod_base/components/`**: `01_pod_tunnel_base.stl`, `02_pod_rear_m8_gland.stl`, `03_pod_bulkhead_partition.stl`, `04_pod_guide_grooves.stl`, `05_pod_strap_hooks.stl`, `06_fender_curved_saddle.stl`, `07_pod_slide_dock_core.stl`, `dummy_m8_connector.stl`.
+- **`03_pod_cartridges/components/`**: `dummy_adapter_pcb.stl`, `dummy_omm_transceiver_pcb.stl`.
+- **`04_front_node/components/`**:
+  - `01_front_node_base_tub.stl`: Monolithischer, abgerundeter Basiskörper mit ausgehöhlter Innenkammer (Grundquader im CSG-Verfahren).
+  - `02_pcb_standoffs.stl`: 4x M2.5 Schraubdome für PCBA05.
+  - `03_mounting_ears.stl`: 2x M4/M5 Schwingungsdämpfer-Flanschohren.
+  - `dummy_front_node_pcb.stl`: 3D-Prüfdummy der PCBA05 mit Steckverbinder-Höhenprofilen.
 
 ---
 

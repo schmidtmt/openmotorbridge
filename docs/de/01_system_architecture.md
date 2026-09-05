@@ -40,7 +40,7 @@ Klassische Motorrad-Kommunikationssysteme sind historisch stark fragmentiert:
   │                                                                                         │
   ▼ 2.4 GHz Ultra-Low-Latency Funkverbindung (ESP-NOW < 3ms & BLE 5.0 2M-PHY)               │
 ┌───────────────────────────────────────────────────────────────────────────────────────────┤
-│ 8. COCKPIT-SUBSYSTEM: Wireless Universal Front-Knoten (Smart Fairing Controller)           │
+│ 8. COCKPIT-SUBSYSTEM: Wireless Universal Front-Knoten (PCBA 05 Cockpit & Cam Bridge)     │
 │ • Automotive 2-Port USB 2.0 Hub (Microchip USB2512B) für Boom! Box & CarPlay-Adapter       │
 │ • Geschalteter CarPlay-Port via TI TPS2051B (gesteuerter 2,5s Kaltstart & 60s Auto-Café)   │
 │ • Digitales I2S-MEMS Ambient-Mikrofon mit ePTFE-Membran (Edge-RMS-Schallpegelmessung)     │
@@ -52,44 +52,46 @@ Klassische Motorrad-Kommunikationssysteme sind historisch stark fragmentiert:
 
 ---
 
-## 2. Universelles Montagekonzept (Fahrzeugrahmen-, Sturzbügel- & Rohrbett-Montage)
+## 2. Modulare Systemphilosophie & Montagefreiheit (Die 5 Funktionsknoten)
 
-Die Satelliten-Pods 1, 2 und 3 sind mechanisch zu **100 % baugleich** und für die werkzeuglose Schnellmontage an allen gängigen Motorrad-Rohrdurchmessern und Flachstellen ausgelegt:
+OpenMotorBridge v8.0 definiert die Plattform über **5 standardisierte Funktionsknoten**:
+1. **Zentralbox (Main ECU):** Zentraler Rechenkern (ESP32-S3), 24-Bit Audio-DSP/Codec (ES8388), galvanische Trennübertrager, 72V Automotive Step-Down (LM5164-Q1) und LiPo-USV (BQ24075). *(Typischerweise mittig unter der Sitzbank im Batteriefach montiert).*
+2. **Heck-Pod 3 (Backbone & Telemetrie):** Multi-GNSS (u-blox MAX-M10S), 868 MHz LoRa (Semtech SX1262), 2.4 GHz OMM-Mesh-Co-Prozessor (ESP32-C3) und 6-Achs-IMU (BMI270). *(Typischerweise am Heck mit ungestörter Sicht in den Zenit).*
+3. **Satelliten-Pod 1 (Intercom-Brücke A):** Universal-Wechselschacht für Sena (Mesh 2.0/3.0 / Bluetooth). *(Typischerweise linke Fahrzeugseite).*
+4. **Satelliten-Pod 2 (Intercom-Brücke B):** Universal-Wechselschacht für Cardo (DMC Gen1/Gen2 / Bluetooth) oder analogen Funk (PMR446). *(Typischerweise rechte Fahrzeugseite zur HF-Raumdiversität).*
+5. **Front-Node (Cockpit & Camera Hub):** Autonomer ESP32-C3 Satellit, Automotive USB 2.0 Hub (USB2512B) für Apple CarPlay/Ottocast, geschalteter 5V-Action-Cam-Ladeport mit BLE-Shutter, digitaler PTT-Tastereingang und Knowles MEMS-Windgeräuschmikrofon. *(Typischerweise unsichtbar in der Cockpitverkleidung oder Scheinwerfermaske).*
 
 ```
-          UNIVERSELLE RAHMEN- & ROHRBETT-MONTAGE (100% KABELFREIER HELM)
-          ┌─────────────────────────────────────────────────────────────┐
-          │ • Integrierte V-Nut / Hohlkehle an der Pod-Unterseite       │
-          │ • Passend für Rohre von Ø 18 mm bis Ø 35 mm (1" / 1 1/8")   │
-          │ • 4x Einhängenasen für 2x wetterfeste EPDM-Spannringe       │
-          │ • 100% werkzeuglose Montage in 5 Sekunden ohne Lackschäden  │
-          │ • Pod 1 links am Rahmen / Sturzbügel (Fahrer-Mesh)          │
-          │ • Pod 2 rechts am Rahmen / Sturzbügel (Sozius-Mesh)         │
-          │ • Pod 3 am Heckrahmen / Gepäckträger (OMM Dual-PHY & GNSS)  │
-          └──────────────────────────────┬──────────────────────────────┘
-                                         │
-                                         ▼ Bluetooth A2DP / HFP / LE Audio
-          ┌─────────────────────────────────────────────────────────────┐
-          │ FAHRER- & SOZIUS-HELME (100% Kabellos & Leicht):            │
-          │ • Kein schweres Zusatzgehäuse am Helm (0g Zusatzgewicht)    │
-          │ • Keine störenden Spiralkabel oder flatternden Leitungen    │
-          │ • Fahrer nutzt normales OEM-Headset / integrierte Lautspr.  │
-          │ • Zentralbox streamt gemischtes Audio kabellos an die Helme │
-          └─────────────────────────────────────────────────────────────┘
+                     DIE 5 STANDARDISIERTEN FUNKTIONSKNOTEN
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 1. FRONT-NODE (Cockpit/Nacelle):  Drahtloser USB-, Cam-, PTT- & Audio-Hub   │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ 2. ZENTRALBOX (Unter Sitz/Akku):  DSP Audio-Matrix, Power Supply, USV, CAN  │
+├──────────────────────────────┬──────────────────────────────┬───────────────┤
+│ 3. POD 1 (Links/Koffer):     │ 4. POD 2 (Rechts/Koffer):    │ 5. HECK-POD 3:│
+│ • Intercom-Brücke A (Sena)   │ • Intercom-Brücke B (Cardo)  │ • GNSS / LoRa │
+│ • 100% Wechselschacht        │ • 100% Wechselschacht        │ • OMM 2.4 GHz │
+└──────────────────────────────┴──────────────────────────────┴───────────────┘
 ```
 
-### 2.1 Montage am Fahrzeug (Sturzbügel, Rahmenunterzug, Heckbrücke)
-* **Universal-Prisma (V-Nut):** An der Unterseite jedes Pod-Gehäuses ist eine $120^\circ$-Prismenkehle ($R = 15\,\text{mm}$) angeformt. Sie schmiegt sich formschlüssig an alle typischen Motorrad-Rohre an:
-  * $\varnothing 22\,\text{mm}$ ($7/8"$ Standard-Lenker und Rahmenstreben)
-  * $\varnothing 25{,}4\,\text{mm}$ ($1"$ Sturzbügel und Harley-Rahmenrohre)
-  * $\varnothing 28{,}6\,\text{mm}$ ($1\,1/8"$ Fatbar- & Enduro-Rahmen)
-  * $\varnothing 32\,\text{mm}$ ($1\,1/4"$ Custom-Sturzbügel)
-  * **Flache Montage:** Liegt auf ebenen Flächen (unter der Sitzbank / am Seitendeckel) kippstabil auf den Außenstegen auf.
-* **EPDM-Spannring-Befestigung:** Zwei UV-beständige EPDM-Gummispannringe (oder Silikon-Leiterbänder) werden um das Rahmenrohr gezogen und in die 4 seitlichen Einhängenasen eingehängt. Das dämpft gleichzeitig hochfrequente Motorvibrationen ab.
-* **Dauerhafte Diebstahlsicherung:** Durch die integrierten $5{,}0 \times 2{,}5\,\text{mm}$ Durchgangsschlitze können alternativ Standard-Kabelbinder ($4{,}8\,\text{mm}$) oder Edelstahl-Schlauchschellen gezogen werden.
+> [!NOTE]
+> **Montagefreiheit – *Your Bike, Your Choice*:**  
+> Wo und wie ihr diese 5 Boxen an eurem Motorrad platziert, ist bewusst **völlig euch überlassen**! OpenMotorBridge stellt die standardisierten Elektronik- und Gehäuse-Dimensionen sowie die Schnittstellen bereit.  
+> Für ausgewählte Plattformen liefern wir in **[Kapitel 08 (Mechanik & Gehäuse)](file:///Users/schmidtm/openMotorBridge/docs/de/08_enclosures_mechanics_cad.md)** komplett durchentwickelte, 100 % schraub- und klebefreie **Referenz-Montagekits** mit:
+> * **Referenz-Kit 1 (Harley-Davidson CVO Road Glide ST & New Touring):** Pod 3 im Under-Cowl Skeleton Dock unter der Forged-Carbon-Hutze, Pod 1 & 2 geschützt in den Kofferdeckeln (Zero-Drill an Scharnierschrauben, Schnellkupplung), Front-Node am Geweihträger hinter der Sharknose-Außenhaut.
+> * **Referenz-Kit 2 (Harley-Davidson Road King Special):** Pod 3 in der Touring Fender Console auf dem Kotflügel, Pod 1 & 2 in den Kofferdeckeln, Front-Node unsichtbar in der 7"-Scheinwerfer-Nacelle.
+> * **Referenz-Kit 3 (Universal Adventure & Naked Bike – BMW GS, KTM etc.):** Pod 3 am Rohrheckrahmen / Gepäckbrücke, Pod 1 & 2 an Sturzbügeln per Rohrbett mit V-Nut und EPDM-Spannringen.
+>
+> Ihr könnt diese Referenzen 1:1 nachbauen, für euer eigenes Modell adaptieren oder anhand der offenen CAD-/STEP-Maße völlig eigene Halterungen designen, die perfekt zu eurem Motorrad passen!
+
+### 2.1 Universelle Gehäuse-Grundformen & Rohrbett-Option (Universal-V-Nut)
+Für Naked Bikes, Enduros und klassische Rahmenrohre verfügen die Universal-Pod-Gehäuse (Typ B) an der Unterseite über eine integrierte $120^\circ$-Prismenkehle ($R = 15\,\text{mm}$):
+* Passend für alle typischen Rohre von $\varnothing 18\,\text{mm}$ bis $\varnothing 35\,\text{mm}$ ($7/8"$, $1"$, $1\,1/8"$, $1\,1/4"$).
+* 4 Einhängenasen für wetterfeste EPDM-Spannringe zur werkzeuglosen Schnellmontage ohne Lackkontakt.
+* Durchgangsschlitze ($5{,}0 \times 2{,}5\,\text{mm}$) für Kabelbinder oder Schellen bei dauerhafter Diebstahlsicherung.
 
 ### 2.2 Kabelloser Helm-Komfort
-* Die schweren Intercom-Geräte (Sena 50S / Cardo Edge) verbleiben wetter- und diebstahlgeschützt an den Motorrad-Pods.
+* Die schweren Intercom-Geräte (Sena 50S / Cardo Edge) verbleiben wetter- und diebstahlgeschützt an den Motorrad-Pods (z. B. im Kofferdeckel oder unter der Abdeckung).
 * Die Helme von Fahrer und Sozius bleiben zu $100\,\%$ leicht, aerodynamisch original und frei von Kabeln. Die Audio-Ein- und Ausgabe erfolgt vollkommen drahtlos über die integrierte Bluetooth-Schnittstelle der Zentralbox.
 
 ### 2.3 Universelle OEM-Adapter-Kompatibilität (Off-the-Shelf)

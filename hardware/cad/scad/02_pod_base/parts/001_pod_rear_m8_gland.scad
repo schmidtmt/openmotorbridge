@@ -11,10 +11,10 @@ module pod_rear_m8_neck(neck_len=10.0, outer_r=6.0, inner_r=4.0, yc=30.0, zc=14.
     translate([-neck_len, yc, zc]) {
         difference() {
             rotate([0, 90, 0])
-                cylinder(r=outer_r, h=neck_len, center=false);
+                cylinder(r=outer_r, h=neck_len + 2.0, center=false);
             translate([-0.1, 0, 0])
                 rotate([0, 90, 0])
-                    cylinder(r=inner_r, h=neck_len + 0.2, center=false);
+                    cylinder(r=inner_r, h=neck_len + 4.0, center=false);
         }
     }
 }

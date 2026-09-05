@@ -12,11 +12,11 @@ module pod_strap_hook_lugs(length=100.0, width=60.0, hook_w=8.0, hook_out=3.0, h
 
     for (x = x_positions) {
         // Left Flank Hooks (y = 0, pointing up +Z)
-        translate([x - hook_w/2.0, -hook_out, 0.5]) {
+        translate([x - hook_w/2.0, -hook_out, 1.5]) {
             difference() {
                 union() {
-                    // Base protrusion
-                    cube([hook_w, hook_out + 0.1, hook_h], center=false);
+                    // Base protrusion overlapping 2.5 mm into wall
+                    cube([hook_w, hook_out + 2.5, hook_h], center=false);
                     // Upward retaining lip
                     translate([0, 0, hook_h - 1.0])
                         cube([hook_w, 1.5, 2.5], center=false);
@@ -29,17 +29,17 @@ module pod_strap_hook_lugs(length=100.0, width=60.0, hook_w=8.0, hook_out=3.0, h
         }
 
         // Right Flank Hooks (y = width, pointing up +Z)
-        translate([x - hook_w/2.0, width - 0.1, 0.5]) {
+        translate([x - hook_w/2.0, width - 2.5, 1.5]) {
             difference() {
                 union() {
-                    // Base protrusion
-                    cube([hook_w, hook_out + 0.1, hook_h], center=false);
+                    // Base protrusion overlapping 2.5 mm into wall
+                    cube([hook_w, hook_out + 2.5, hook_h], center=false);
                     // Upward retaining lip
-                    translate([0, hook_out - 1.5, hook_h - 1.0])
+                    translate([0, hook_out + 1.0, hook_h - 1.0])
                         cube([hook_w, 1.5, 2.5], center=false);
                 }
                 // Chamfer bottom edge
-                translate([-0.1, hook_out, -0.1])
+                translate([-0.1, hook_out + 2.4, -0.1])
                     rotate([-45, 0, 0])
                         cube([hook_w + 0.2, 2.0, 2.0], center=false);
             }

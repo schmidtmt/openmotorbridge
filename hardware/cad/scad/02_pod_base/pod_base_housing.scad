@@ -11,11 +11,11 @@
 
 include <../00_common/parameters.scad>;
 include <../00_common/screw_bosses.scad>;
-include <parts/000_pod_tunnel_base.scad>;
-include <parts/001_pod_rear_m8_gland.scad>;
-include <parts/002_pod_bulkhead_partition.scad>;
-include <parts/003_pod_guide_grooves.scad>;
-include <parts/005_pod_strap_hooks.scad>;
+use <parts/000_pod_tunnel_base.scad>;
+use <parts/001_pod_rear_m8_gland.scad>;
+use <parts/002_pod_bulkhead_partition.scad>;
+use <parts/003_pod_guide_grooves.scad>;
+use <parts/005_pod_strap_hooks.scad>;
 
 module pod_base_housing() {
     difference() {
@@ -60,9 +60,9 @@ module pod_base_housing() {
                 wall=POD_WALL
             );
 
-            // 6. Ceiling Gore ePTFE Breather Vent Boss (Top center)
-            translate([POD_OUTER_L/2.0, POD_OUTER_W/2.0, POD_OUTER_H])
-                cylinder(r=3.5, h=1.5, center=false, $fn=16);
+            // 6. Ceiling Gore ePTFE Breather Vent Boss (Top center, fused into ceiling)
+            translate([POD_OUTER_L/2.0, POD_OUTER_W/2.0, POD_OUTER_H - 1.0])
+                cylinder(r=3.5, h=2.5, center=false, $fn=16);
         }
 
         // 7. Rear Wall M8 Continuous Cable Through-Bore (Ø 8.0 mm into chamber)
