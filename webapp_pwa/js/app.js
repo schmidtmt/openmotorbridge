@@ -137,6 +137,11 @@ const i18n = {
         front_node_diag_title: 'Universal Front-Knoten Diagnostik (PCBA 05)',
         front_noise_vu_label: 'Fahrtwind-Lärmpegel & Helm-Lautstärkeanpassung (AGC)',
         btn_reboot_ottocast: 'CarPlay 1-Klick Kaltstart (2.5s)',
+        btn_pair_front_node: 'Front-Node koppeln (Rescue)',
+        btn_unpair_front_node: 'Trennen',
+        front_node_state_linked: '1:1 GEKOPPELT',
+        front_node_state_unpaired: 'KOPPELBEREIT',
+        front_node_state_orphan: 'RE-PAIRING (RESCUE)',
         btn_test_ptt: 'Lenker-PTT Testen',
         auto_cafe_label: 'Auto-Café Mode (60s)',
         btn_front_node_ota: 'Front-Node OTA Firmware-Update prüfen',
@@ -284,6 +289,11 @@ const i18n = {
         front_node_diag_title: 'Universal Front Node Diagnostics (PCBA 05)',
         front_noise_vu_label: 'Wind Noise SPL & Helmet Volume Compensation (AGC)',
         btn_reboot_ottocast: 'CarPlay 1-Click Power-Cycle (2.5s)',
+        btn_pair_front_node: 'Pair Front Node (Rescue)',
+        btn_unpair_front_node: 'Unpair',
+        front_node_state_linked: '1:1 LINKED',
+        front_node_state_unpaired: 'READY TO PAIR',
+        front_node_state_orphan: 'RE-PAIRING (RESCUE)',
         btn_test_ptt: 'Test Handlebar PTT',
         auto_cafe_label: 'Auto-Café Mode (60s)',
         btn_front_node_ota: 'Check Front Node OTA Firmware Update',
@@ -326,6 +336,7 @@ const state = {
     },
     frontNode: {
         linked: true,
+        bindingState: 'LINKED', // 'LINKED', 'UNPAIRED', 'ORPHAN'
         ottocastPower: true,
         ottocastVbusV: 5.00,
         ottocastCurrentMa: 380,
@@ -410,6 +421,9 @@ const valReserveBState = document.getElementById('val-reserve-b-state');
 
 // Front Node Elements
 const badgeFrontNodeLink = document.getElementById('badge-front-node-link');
+const badgeFrontNodeBind = document.getElementById('badge-front-node-bind');
+const btnPairFrontNode = document.getElementById('btn-pair-front-node');
+const btnUnpairFrontNode = document.getElementById('btn-unpair-front-node');
 const badgeOttocastStatus = document.getElementById('badge-ottocast-status');
 const lblOttocastPower = document.getElementById('lbl-ottocast-power');
 const badgeFrontPtt = document.getElementById('badge-front-ptt');
@@ -1097,6 +1111,24 @@ function updateTelemetryUi(data) {
             badgeFrontNodeLink.style.background = isLinked ? '' : 'rgba(255,255,255,0.08)';
         }
 
+        if (fn.binding_state !== undefined) {
+            state.frontNode.bindingState = (fn.binding_state === 1) ? 'LINKED' : (fn.binding_state === 2 ? 'ORPHAN' : 'UNPAIRED');
+        }
+
+        if (badgeFrontNodeBind) {
+            const bState = state.frontNode.bindingState;
+            if (bState === 'LINKED') {
+                badgeFrontNodeBind.className = 'card-badge badge-blue';
+                badgeFrontNodeBind.textContent = i18n[state.lang].front_node_state_linked || '1:1 GEKOPPELT';
+            } else if (bState === 'ORPHAN') {
+                badgeFrontNodeBind.className = 'card-badge badge-red';
+                badgeFrontNodeBind.textContent = i18n[state.lang].front_node_state_orphan || 'RE-PAIRING (RESCUE)';
+            } else {
+                badgeFrontNodeBind.className = 'card-badge badge-orange';
+                badgeFrontNodeBind.textContent = i18n[state.lang].front_node_state_unpaired || 'KOPPELBEREIT';
+            }
+        }
+
         // Ambient Noise & AGC Volume Compensation (Knowles SPH0645 MEMS)
         let dba = fn.ambient_dba;
         if (dba === undefined && data.speed !== undefined) {
@@ -1453,6 +1485,34 @@ if (btnRebootOttocast) {
     btnRebootOttocast.addEventListener('click', rebootOttocastDongle);
 }
 
+if (btnPairFrontNode) {
+    btnPairFrontNode.addEventListener('click', () => {
+        showToast(state.lang === 'de' ? '📡 Sende Koppel- & Nahfeld-Rescue Beacon auf Kanal 1 (Nahfeld RSSI > -42 dBm)...' : '📡 Broadcasting pairing & proximity-rescue beacon on channel 1 (RSSI > -42 dBm)...');
+        if (typeof bleCharCommand !== 'undefined' && bleCharCommand) {
+            const cmd = new Uint8Array([0x18]);
+            bleCharCommand.writeValue(cmd).catch(console.error);
+        }
+        setTimeout(() => {
+            state.frontNode.bindingState = 'LINKED';
+            state.frontNode.linked = true;
+            updateTelemetryUi({});
+            showToast(state.lang === 'de' ? '✨ Front-Node erfolgreich 1:1 gekoppelt und im NVS gesichert!' : '✨ Front Node paired 1:1 and persisted in NVS!');
+        }, 1200);
+    });
+}
+
+if (btnUnpairFrontNode) {
+    btnUnpairFrontNode.addEventListener('click', () => {
+        showToast(state.lang === 'de' ? '⛓️‍💥 Front-Node getrennt. NVS-Binding gelöscht.' : '⛓️‍💥 Front Node uncoupled. NVS binding cleared.');
+        if (typeof bleCharCommand !== 'undefined' && bleCharCommand) {
+            const cmd = new Uint8Array([0x19]);
+            bleCharCommand.writeValue(cmd).catch(console.error);
+        }
+        state.frontNode.bindingState = 'UNPAIRED';
+        updateTelemetryUi({});
+    });
+}
+
 // Handlebar PTT Multi-Click Simulator
 if (btnTestHandlebarPtt) {
     let pttPressStart = 0;
@@ -1468,7 +1528,14 @@ if (btnTestHandlebarPtt) {
         const duration = Date.now() - pttPressStart;
         updateFrontNodePttVisual(false);
 
-        if (duration >= 800) {
+        if (duration >= 10000) {
+            // 10s Continuous Hold: Unpair / Factory Reset
+            pttClickCount = 0;
+            if (pttClickTimer) clearTimeout(pttClickTimer);
+            state.frontNode.bindingState = 'UNPAIRED';
+            updateTelemetryUi({});
+            showToast(state.lang === 'de' ? '⚡ Lenker-PTT 10s Dauerdruck: Front-Node NVS-Binding gelöscht -> Zustand [UNPAIRED]!' : '⚡ Handlebar PTT 10s Hold: Front Node NVS binding cleared -> State [UNPAIRED]!');
+        } else if (duration >= 800) {
             // Long Press (>800ms): HiLight Tag
             pttClickCount = 0;
             if (pttClickTimer) clearTimeout(pttClickTimer);

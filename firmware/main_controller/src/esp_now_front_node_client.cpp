@@ -3,6 +3,8 @@
 #include "esp_wifi.h"
 #include "esp_log.h"
 #include "esp_timer.h"
+#include "nvs_flash.h"
+#include "nvs.h"
 #include "opto_pulse_sequencer.h"
 #include "audio_dsp_pipeline.h"
 #include <string.h>
@@ -11,6 +13,9 @@ static const char* TAG = "FRONT_NODE_CLIENT";
 
 #define ESPNOW_WIFI_CHANNEL     1
 #define FRONT_NODE_PROTOCOL_VER 0x01
+
+#define NVS_NAMESPACE_FN        "fn_client"
+#define NVS_KEY_FN_MAC          "fn_mac"
 
 // Packet Types matching front_node_config.h
 enum FrontNodePacketType : uint8_t {
@@ -21,14 +26,21 @@ enum FrontNodePacketType : uint8_t {
     PKT_TYPE_CAN_TELEMETRY   = 0x05,
     PKT_TYPE_CAM_STATUS      = 0x06,
     PKT_TYPE_CAM_SCAN_RES    = 0x07,
+    PKT_TYPE_BINDING_BEACON  = 0x08,
+    PKT_TYPE_BINDING_ACK     = 0x09,
     PKT_TYPE_CMD_POWER_CYCLE = 0x10,
     PKT_TYPE_CMD_CONFIG      = 0x11,
-    PKT_TYPE_CAM_CMD         = 0x12
+    PKT_TYPE_CAM_CMD         = 0x12,
+    PKT_TYPE_CMD_UNBIND      = 0x13
 };
 
-static uint8_t s_front_node_mac[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}; // Broadcast or paired
+static const uint8_t s_broadcast_mac[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+static uint8_t s_front_node_mac[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+static bool s_is_paired = false;
+
 static FrontNodeStatus s_status = {
     .is_linked = false,
+    .binding_state = 0, // 0 = Unpaired
     .ottocast_state = 0,
     .ottocast_power_on = false,
     .ottocast_fault = false,
@@ -43,21 +55,97 @@ static FrontNodeStatus s_status = {
     .cam_fuel_filter_en = true
 };
 
+static bool load_stored_front_node_mac(uint8_t* mac_out) {
+    if (!mac_out) return false;
+    nvs_handle_t handle;
+    esp_err_t err = nvs_open(NVS_NAMESPACE_FN, NVS_READONLY, &handle);
+    if (err != ESP_OK) return false;
+
+    size_t size = 6;
+    err = nvs_get_blob(handle, NVS_KEY_FN_MAC, mac_out, &size);
+    nvs_close(handle);
+
+    if (err != ESP_OK || size != 6) return false;
+
+    bool all_zero = true, all_ff = true;
+    for (int i = 0; i < 6; i++) {
+        if (mac_out[i] != 0x00) all_zero = false;
+        if (mac_out[i] != 0xFF) all_ff = false;
+    }
+    return (!all_zero && !all_ff);
+}
+
+static bool save_stored_front_node_mac(const uint8_t* mac_in) {
+    if (!mac_in) return false;
+    nvs_handle_t handle;
+    esp_err_t err = nvs_open(NVS_NAMESPACE_FN, NVS_READWRITE, &handle);
+    if (err != ESP_OK) return false;
+
+    err = nvs_set_blob(handle, NVS_KEY_FN_MAC, mac_in, 6);
+    if (err == ESP_OK) {
+        err = nvs_commit(handle);
+    }
+    nvs_close(handle);
+    return (err == ESP_OK);
+}
+
+static void clear_stored_front_node_mac(void) {
+    nvs_handle_t handle;
+    if (nvs_open(NVS_NAMESPACE_FN, NVS_READWRITE, &handle) == ESP_OK) {
+        nvs_erase_key(handle, NVS_KEY_FN_MAC);
+        nvs_commit(handle);
+        nvs_close(handle);
+        ESP_LOGI(TAG, "Front Node MAC cleared from Central Box NVS.");
+    }
+}
+
+static void add_or_update_peer(const uint8_t* mac) {
+    if (!mac) return;
+    if (esp_now_is_peer_exist(mac)) {
+        return;
+    }
+    esp_now_peer_info_t peer = {};
+    memcpy(peer.peer_addr, mac, 6);
+    peer.channel = ESPNOW_WIFI_CHANNEL;
+    peer.ifidx = WIFI_IF_STA;
+    peer.encrypt = false;
+    esp_now_add_peer(&peer);
+}
+
 static void on_esp_now_recv(const esp_now_recv_info_t* recv_info, const uint8_t* data, int len) {
-    if (!data || len < 2) return;
+    if (!data || len < 2 || !recv_info) return;
 
     uint8_t ver = data[0];
     uint8_t pkt_type = data[1];
 
     if (ver != FRONT_NODE_PROTOCOL_VER) return;
 
-    s_status.is_linked = true;
-    s_status.last_seen_us = esp_timer_get_time();
+    const uint8_t* src_mac = recv_info->src_addr;
 
-    // Auto-learn Front Node MAC address
-    if (recv_info && recv_info->src_addr) {
-        memcpy(s_front_node_mac, recv_info->src_addr, 6);
+    // Handle BINDING_ACK
+    if (pkt_type == PKT_TYPE_BINDING_ACK) {
+        ESP_LOGI(TAG, "✨ Received BINDING_ACK from Front Node %02X:%02X:%02X:%02X:%02X:%02X",
+                 src_mac[0], src_mac[1], src_mac[2], src_mac[3], src_mac[4], src_mac[5]);
+
+        save_stored_front_node_mac(src_mac);
+        memcpy(s_front_node_mac, src_mac, 6);
+        add_or_update_peer(s_front_node_mac);
+
+        s_is_paired = true;
+        s_status.is_linked = true;
+        s_status.binding_state = (len >= 3) ? data[2] : 1;
+        s_status.last_seen_us = esp_timer_get_time();
+        return;
     }
+
+    // Drop non-matching packets if strictly paired
+    if (s_is_paired && memcmp(src_mac, s_front_node_mac, 6) != 0) {
+        return;
+    }
+
+    s_status.is_linked = true;
+    s_status.binding_state = 1; // Linked
+    s_status.last_seen_us = esp_timer_get_time();
 
     switch (pkt_type) {
         case PKT_TYPE_PTT_EVENT:
@@ -116,18 +204,26 @@ static void on_esp_now_recv(const esp_now_recv_info_t* recv_info, const uint8_t*
 esp_err_t esp_now_front_node_init(void) {
     esp_now_register_recv_cb(on_esp_now_recv);
 
-    // Register broadcast peer
-    esp_now_peer_info_t peer = {};
-    memcpy(peer.peer_addr, s_front_node_mac, 6);
-    peer.channel = ESPNOW_WIFI_CHANNEL;
-    peer.ifidx = WIFI_IF_STA;
-    peer.encrypt = false;
+    // Ensure broadcast peer is always available for pairing beacons
+    add_or_update_peer(s_broadcast_mac);
 
-    if (!esp_now_is_peer_exist(s_front_node_mac)) {
-        esp_now_add_peer(&peer);
+    // Load paired MAC from NVS if available
+    uint8_t stored_mac[6] = {0};
+    if (load_stored_front_node_mac(stored_mac)) {
+        memcpy(s_front_node_mac, stored_mac, 6);
+        add_or_update_peer(s_front_node_mac);
+        s_is_paired = true;
+        s_status.binding_state = 1;
+        ESP_LOGI(TAG, "Central Box restored Front Node binding from NVS: %02X:%02X:%02X:%02X:%02X:%02X",
+                 s_front_node_mac[0], s_front_node_mac[1], s_front_node_mac[2],
+                 s_front_node_mac[3], s_front_node_mac[4], s_front_node_mac[5]);
+    } else {
+        memcpy(s_front_node_mac, s_broadcast_mac, 6);
+        s_is_paired = false;
+        s_status.binding_state = 0;
+        ESP_LOGW(TAG, "Central Box has no Front Node paired in NVS. Ready for pairing discovery.");
     }
 
-    ESP_LOGI(TAG, "Central Box ESP-NOW client for Front Node initialized.");
     return ESP_OK;
 }
 
@@ -137,6 +233,54 @@ FrontNodeStatus esp_now_front_node_get_status(void) {
         s_status.is_linked = false;
     }
     return s_status;
+}
+
+esp_err_t esp_now_front_node_start_pairing(void) {
+    uint8_t buf[8] = {0};
+    buf[0] = FRONT_NODE_PROTOCOL_VER;
+    buf[1] = PKT_TYPE_BINDING_BEACON;
+
+    // Embed Central Box Wi-Fi Station MAC
+    esp_wifi_get_mac(WIFI_IF_STA, &buf[2]);
+
+    ESP_LOGI(TAG, "Broadcasting Front Node Pairing / Rescue Beacon on Channel 1 (Central Box STA: %02X:%02X:%02X:%02X:%02X:%02X)",
+             buf[2], buf[3], buf[4], buf[5], buf[6], buf[7]);
+
+    // Broadcast to open listening nodes
+    esp_err_t err = esp_now_send(s_broadcast_mac, buf, sizeof(buf));
+
+    // Also send unicast if previously paired
+    if (s_is_paired && memcmp(s_front_node_mac, s_broadcast_mac, 6) != 0) {
+        esp_now_send(s_front_node_mac, buf, sizeof(buf));
+    }
+
+    return err;
+}
+
+esp_err_t esp_now_front_node_unbind(void) {
+    uint8_t buf[2] = {FRONT_NODE_PROTOCOL_VER, PKT_TYPE_CMD_UNBIND};
+    ESP_LOGW(TAG, "Sending Unbind Command to Front Node and clearing Central Box NVS...");
+
+    if (s_is_paired && memcmp(s_front_node_mac, s_broadcast_mac, 6) != 0) {
+        esp_now_send(s_front_node_mac, buf, sizeof(buf));
+    }
+
+    clear_stored_front_node_mac();
+    memcpy(s_front_node_mac, s_broadcast_mac, 6);
+    s_is_paired = false;
+    s_status.is_linked = false;
+    s_status.binding_state = 0;
+
+    return ESP_OK;
+}
+
+esp_err_t esp_now_front_node_send_heartbeat(void) {
+    uint8_t buf[2] = {FRONT_NODE_PROTOCOL_VER, PKT_TYPE_HEARTBEAT};
+    return esp_now_send(s_front_node_mac, buf, sizeof(buf));
+}
+
+bool esp_now_front_node_is_paired(void) {
+    return s_is_paired;
 }
 
 esp_err_t esp_now_front_node_reboot_ottocast(void) {
@@ -196,4 +340,3 @@ esp_err_t esp_now_front_node_cam_set_fuel_filter(bool enable) {
     uint8_t buf[4] = {FRONT_NODE_PROTOCOL_VER, PKT_TYPE_CAM_CMD, 0x07, static_cast<uint8_t>(enable ? 1 : 0)};
     return esp_now_send(s_front_node_mac, buf, sizeof(buf));
 }
-

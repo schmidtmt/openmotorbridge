@@ -262,7 +262,10 @@
                 <section class="card" id="card-front-node">
                     <div class="card-header">
                         <span class="card-title">📡 <span data-i18n="front_node_title">Universal Front-Knoten</span></span>
-                        <span class="card-badge badge-green" id="badge-front-node-link">ESP-NOW LINK (2.4 GHz)</span>
+                        <div style="display: flex; gap: 6px; align-items: center;">
+                            <span class="card-badge badge-blue" id="badge-front-node-bind">1:1 GEKOPPELT</span>
+                            <span class="card-badge badge-green" id="badge-front-node-link">ESP-NOW LINK (2.4 GHz)</span>
+                        </div>
                     </div>
 
                     <!-- 4-Column Subsystem Metric Tiles -->
@@ -355,11 +358,17 @@
                         </div>
                     </div>
 
-                    <!-- Ottocast Controls & Auto-Café -->
+                    <!-- Front Node Hardware-Binding & Controls -->
                     <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; padding-top: 10px; border-top: 1px solid var(--border-subtle);">
-                        <div style="display: flex; align-items: center; gap: 8px;">
+                        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px;">
                             <button id="btn-reboot-ottocast" class="btn-secondary" style="display: flex; align-items: center; gap: 6px; font-size: 0.8rem; padding: 7px 12px; border-color: rgba(255, 159, 10, 0.4); color: var(--accent-orange);">
                                 <span>⚡</span> <span data-i18n="btn_reboot_ottocast">CarPlay 1-Klick Kaltstart (2.5s)</span>
+                            </button>
+                            <button id="btn-pair-front-node" class="btn-secondary" style="display: flex; align-items: center; gap: 6px; font-size: 0.8rem; padding: 7px 12px; border-color: rgba(50, 215, 75, 0.4); color: var(--accent-green);">
+                                <span>🔗</span> <span data-i18n="btn_pair_front_node">Front-Node koppeln (Rescue)</span>
+                            </button>
+                            <button id="btn-unpair-front-node" class="btn-secondary" style="display: flex; align-items: center; gap: 6px; font-size: 0.8rem; padding: 7px 12px; border-color: rgba(255, 69, 58, 0.3); color: var(--accent-red);">
+                                <span>⛓️‍💥</span> <span data-i18n="btn_unpair_front_node">Trennen</span>
                             </button>
                             <button id="btn-test-handlebar-ptt" class="btn-secondary" style="font-size: 0.8rem; padding: 7px 12px;">
                                 <span>🔘</span> <span data-i18n="btn_test_ptt">Lenker-PTT Testen</span>

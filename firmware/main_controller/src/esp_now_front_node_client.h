@@ -10,6 +10,7 @@ extern "C" {
 
 typedef struct {
     bool is_linked;
+    uint8_t binding_state;        // 0=Unpaired / Discovery, 1=Linked, 2=Orphan
     uint8_t ottocast_state;
     bool ottocast_power_on;
     bool ottocast_fault;
@@ -37,6 +38,26 @@ esp_err_t esp_now_front_node_init(void);
 FrontNodeStatus esp_now_front_node_get_status(void);
 
 /**
+ * @brief Broadcasts pairing / proximity-rescue beacon to discover or adopt Front Node
+ */
+esp_err_t esp_now_front_node_start_pairing(void);
+
+/**
+ * @brief Sends unbind command to Front Node and clears NVS binding on Central Box
+ */
+esp_err_t esp_now_front_node_unbind(void);
+
+/**
+ * @brief Sends periodic link supervision heartbeat to Front Node
+ */
+esp_err_t esp_now_front_node_send_heartbeat(void);
+
+/**
+ * @brief Checks if Central Box currently has a stored Front Node pairing in NVS
+ */
+bool esp_now_front_node_is_paired(void);
+
+/**
  * @brief Sends a 1-click reboot command to the Ottocast USB power switch
  */
 esp_err_t esp_now_front_node_reboot_ottocast(void);
@@ -60,4 +81,5 @@ esp_err_t esp_now_front_node_cam_set_fuel_filter(bool enable);
 #ifdef __cplusplus
 }
 #endif
+
 

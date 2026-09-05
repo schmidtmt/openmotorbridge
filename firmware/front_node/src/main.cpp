@@ -115,6 +115,9 @@ static void on_ptt_action(PttClickType click_type) {
     } else if (click_type == PTT_CLICK_LONG) {
         ESP_LOGI(TAG, "⚡ Multi-Click: 1x Long (>800ms) -> Action-Cam HiLight Bookmark Tag");
         cam.trigger_hilight();
+    } else if (click_type == PTT_CLICK_RESET_PAIRING) {
+        ESP_LOGW(TAG, "⚡ PTT 10s Override: Resetting Front Node NVS binding and entering UNPAIRED mode!");
+        EspNowBridge::instance().reset_binding();
     }
 }
 
@@ -205,6 +208,9 @@ static void supervisor_task(void* pvParameters) {
     uint32_t led_tick = 0;
 
     while (1) {
+        // 0. Advance ESP-NOW Bridge State Machine (Heartbeat timeout & Orphan supervision)
+        bridge.update();
+
         // 1. Advance Ottocast State Machine (Overcurrent & Auto-Café timers)
         ottocast.update();
 
@@ -249,11 +255,14 @@ static void supervisor_task(void* pvParameters) {
         } else if (cam.is_recording()) {
             // Distinct heartbeat blink while action cam is actively recording
             gpio_set_level(PIN_STATUS_LED, (led_tick % 10 == 0 || led_tick % 10 == 2) ? 1 : 0);
-        } else if (bridge.is_linked()) {
+        } else if (bridge.get_binding_state() == BINDING_STATE_LINKED) {
             // Solid ON or calm 1 Hz breathing blink when linked to Central Box
             gpio_set_level(PIN_STATUS_LED, (led_tick % 10 < 8) ? 1 : 0);
+        } else if (bridge.get_binding_state() == BINDING_STATE_ORPHAN) {
+            // Slow double-flash (re-pairing ready / orphan rescue mode)
+            gpio_set_level(PIN_STATUS_LED, (led_tick % 20 < 4 && (led_tick % 2) == 0) ? 1 : 0);
         } else {
-            // 2 Hz flashing when searching for Central Box
+            // 2 Hz flashing when searching for Central Box in open UNPAIRED mode
             gpio_set_level(PIN_STATUS_LED, (led_tick % 5 < 2) ? 1 : 0);
         }
 

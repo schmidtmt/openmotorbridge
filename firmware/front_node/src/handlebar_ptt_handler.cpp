@@ -20,6 +20,7 @@ HandlebarPttHandler::HandlebarPttHandler()
     , m_release_time_us(0)
     , m_click_count(0)
     , m_long_press_fired(false)
+    , m_reset_hold_fired(false)
 {
 }
 
@@ -103,8 +104,10 @@ bool HandlebarPttHandler::get_event(PttEvent* evt, TickType_t wait_ticks) {
             // Key Down
             m_press_start_us = now;
             m_long_press_fired = false;
+            m_reset_hold_fired = false;
         } else {
             // Key Up
+            m_reset_hold_fired = false;
             if (!m_long_press_fired) {
                 uint64_t press_duration_ms = (now - m_press_start_us) / 1000ULL;
                 if (press_duration_ms < 450) {
@@ -136,6 +139,18 @@ void HandlebarPttHandler::update() {
             ESP_LOGI(TAG, "⚡ PTT Long-Press (>%d ms) Detected -> Triggering Action-Cam HiLight Marker", PTT_LONG_PRESS_MS);
             if (m_action_cb) {
                 m_action_cb(PTT_CLICK_LONG);
+            }
+        }
+    }
+
+    // 1b. 10-Second Continuous Hold Detection for Binding Reset (10,000 ms)
+    if (m_is_pressed && !m_reset_hold_fired && m_press_start_us > 0) {
+        if ((now - m_press_start_us) >= (PTT_RESET_HOLD_MS * 1000ULL)) {
+            m_reset_hold_fired = true;
+            m_click_count = 0;
+            ESP_LOGW(TAG, "⚡ PTT 10s Continuous Hold Detected -> Triggering Front Node Unpair / Pairing Reset");
+            if (m_action_cb) {
+                m_action_cb(PTT_CLICK_RESET_PAIRING);
             }
         }
     }

@@ -34,12 +34,22 @@ enum FrontNodePacketType : uint8_t {
     PKT_TYPE_CAN_TELEMETRY   = 0x05,
     PKT_TYPE_CAM_STATUS      = 0x06,   // Action-Cam telemetry (brand, state, bat%, sd_min, flags)
     PKT_TYPE_CAM_SCAN_RES    = 0x07,   // Discovered BLE camera item (mac, rssi, brand, name)
+    PKT_TYPE_BINDING_BEACON  = 0x08,   // Rescue / pairing beacon from Central Box
+    PKT_TYPE_BINDING_ACK     = 0x09,   // Binding confirmation from Front Node to Central Box
     PKT_TYPE_CMD_POWER_CYCLE = 0x10,
     PKT_TYPE_CMD_CONFIG      = 0x11,
     PKT_TYPE_CAM_CMD         = 0x12,   // Action-Cam remote command from Central Box / WebApp
+    PKT_TYPE_CMD_UNBIND      = 0x13,   // Manual unpair / clear NVS binding command
     PKT_TYPE_OTA_BEGIN       = 0x20,
     PKT_TYPE_OTA_CHUNK       = 0x21,
     PKT_TYPE_OTA_FINISH      = 0x22
+};
+
+// Front Node Hardware-Binding States (1:1 Binding Machine)
+enum FrontNodeBindingState : uint8_t {
+    BINDING_STATE_UNPAIRED   = 0x00,   // Fresh / factory-reset: open pairing beacon listener
+    BINDING_STATE_LINKED     = 0x01,   // Exclusive 1:1 link with stored Central Box MAC
+    BINDING_STATE_ORPHAN     = 0x02    // Central Box lost (>60s timeout): ready for Proximity-Rescue
 };
 
 // Camera Profile Types
@@ -75,15 +85,19 @@ enum PttClickType : uint8_t {
     PTT_CLICK_NONE           = 0x00,
     PTT_CLICK_SINGLE         = 0x01,   // Short press <400ms: Intercom/Radio PTT (<0.9ms zero-latency)
     PTT_CLICK_DOUBLE         = 0x02,   // Double click: Action-Cam Record Toggle (Start/Stop)
-    PTT_CLICK_LONG           = 0x03    // Long press >800ms: Action-Cam HiLight Marker
+    PTT_CLICK_LONG           = 0x03,   // Long press >800ms: Action-Cam HiLight Marker
+    PTT_CLICK_RESET_PAIRING  = 0x04    // Continuous 10s hold: Manual unpair & NVS binding reset
 };
 
-// --- 3. Functional Timing Parameters ---
-#define PTT_DEBOUNCE_MS         15      // Hardware/Software RC debounce threshold
-#define PTT_DOUBLE_CLICK_MS     350     // Inter-click max duration for double click
-#define PTT_LONG_PRESS_MS       800     // Duration threshold for HiLight bookmark trigger
-#define OTTOCAST_RESET_PULSE_MS 2500    // VBUS power-off duration during 1-click reboot
-#define CAFE_DISCONNECT_SEC     60      // Delay before disabling VBUS after ignition off
-#define AUDIO_RMS_INTERVAL_MS   20      // 50 Hz telemetry rate for dBA edge audio
-#define HEARTBEAT_INTERVAL_MS   500     // Link supervision heartbeat
+// --- 3. Functional Timing & Threshold Parameters ---
+#define PTT_DEBOUNCE_MS              15      // Hardware/Software RC debounce threshold
+#define PTT_DOUBLE_CLICK_MS          350     // Inter-click max duration for double click
+#define PTT_LONG_PRESS_MS            800     // Duration threshold for HiLight bookmark trigger
+#define PTT_RESET_HOLD_MS            10000   // Continuous 10s hold to force unpair and NVS reset
+#define OTTOCAST_RESET_PULSE_MS      2500    // VBUS power-off duration during 1-click reboot
+#define CAFE_DISCONNECT_SEC          60      // Delay before disabling VBUS after ignition off
+#define AUDIO_RMS_INTERVAL_MS        20      // 50 Hz telemetry rate for dBA edge audio
+#define HEARTBEAT_INTERVAL_MS        500     // Link supervision heartbeat
+#define ORPHAN_HEARTBEAT_TIMEOUT_SEC 60      // Heartbeat timeout before entering ORPHAN state
+#define PROXIMITY_RSSI_THRESHOLD_DBM -42     // Minimum RSSI for Proximity-Rescue (< 1 m on bike)
 

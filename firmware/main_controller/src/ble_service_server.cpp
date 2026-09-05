@@ -74,6 +74,10 @@ static int gatt_svr_chr_access_omb(uint16_t conn_handle, uint16_t attr_handle,
             esp_now_front_node_cam_set_fuel_filter(cmd[1] != 0);
         } else if (cmd[0] == 0x17) { // Front Node: 1-Click Ottocast Cold Reboot
             esp_now_front_node_reboot_ottocast();
+        } else if (cmd[0] == 0x18) { // Front Node: Start Pairing / Proximity-Rescue Beacon
+            esp_now_front_node_start_pairing();
+        } else if (cmd[0] == 0x19) { // Front Node: Unbind & Clear NVS
+            esp_now_front_node_unbind();
         }
         return 0;
     }

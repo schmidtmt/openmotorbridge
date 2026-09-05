@@ -22,6 +22,7 @@
 #include "omm_flasher.h"
 #include "can_bus_manager.h"
 #include "radar_processor.h"
+#include "esp_now_front_node_client.h"
 
 static const char *TAG = "OMB_MAIN";
 
@@ -164,6 +165,8 @@ void task_power_supervisor(void *pvParameters) {
                 sdio_track_finalize();
                 webdav_trigger_sync_sequence();
             }
+            // Synchronize ignition state with Front Node
+            esp_now_front_node_set_ignition(s_ignition_active);
         }
 
         // Bei Zündung AUS: Nachlaufzeit zählen & 3-Stufen Schlaf-Kaskade steuern
@@ -182,6 +185,9 @@ void task_power_supervisor(void *pvParameters) {
                 esp_deep_sleep_start();
             }
         }
+
+        // Link supervision: send periodic heartbeat to Front Node
+        esp_now_front_node_send_heartbeat();
 
         // Telemetrie an PWA senden
         SystemTelemetry_t telem = {
@@ -265,6 +271,7 @@ extern "C" void app_main(void) {
     omm_flasher_init();
     can_bus_manager_init();
     radar_processor_init();
+    esp_now_front_node_init();
     ble_server_init();
     ble_handlebar_client_init(on_handlebar_button_event, on_handlebar_battery_event);
 

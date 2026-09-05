@@ -42,5 +42,6 @@ private:
     uint64_t m_release_time_us;
     uint8_t  m_click_count;
     bool     m_long_press_fired;
+    bool     m_reset_hold_fired;
 };
 
