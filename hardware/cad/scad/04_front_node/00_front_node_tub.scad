@@ -8,31 +8,21 @@
 
 include <../00_common/parameters.scad>;
 include <../00_common/screw_bosses.scad>;
-include <parts/001_pcb_standoffs.scad>;
-include <parts/002_acoustic_vent.scad>;
-include <parts/003_sealing_system.scad>;
-include <parts/004_mounting_system.scad>;
-include <parts/005_cable_combs.scad>;
+use <parts/000_front_node_base_tub.scad>;
+use <parts/001_pcb_standoffs.scad>;
+use <parts/002_acoustic_vent.scad>;
+use <parts/003_sealing_system.scad>;
+use <parts/004_mounting_system.scad>;
+use <parts/005_cable_combs.scad>;
 
 module front_node_lower_tub() {
     difference() {
         union() {
-            // 1. Solid outer tub body with rounded corners
-            linear_extrude(height = FRONT_NODE_TUB_H) {
-                offset(r = FRONT_NODE_CORNER_R) {
-                    offset(delta = -FRONT_NODE_CORNER_R) {
-                        square([FRONT_NODE_OUTER_L, FRONT_NODE_OUTER_W], center=false);
-                    }
-                }
-            }
+            // 1. Monolithic Base Tub Body (Hollowed outer block with rounded corners)
+            front_node_base_tub();
             
             // 2. Additive 2x M4/M5 Silentblock Flange Mounting Ears (East & West)
             front_node_flange_ears(ear_len = 14.0, ear_w = 14.0, ear_h = 5.0, hole_r = 2.5);
-        }
-        
-        // 3. Hollow internal chamber (leaves 2.5 mm wall and 2.5 mm floor)
-        translate([FRONT_NODE_WALL + 3.5, FRONT_NODE_WALL + 3.5, FRONT_NODE_WALL]) {
-            cube(size=[FRONT_NODE_CHAMBER_L, FRONT_NODE_CHAMBER_W, FRONT_NODE_TUB_H + 1.0], center=false);
         }
         
         // 4. Perimeter Sealing Groove (Nut for Ø 1.5 mm O-ring cord)
@@ -64,9 +54,8 @@ module front_node_lower_tub() {
         translate([0, FRONT_NODE_WALL + 3.5, 0])
             west_cable_comb_cutout(z_start = FRONT_NODE_TUB_H - 7.5, h = 7.6);
             
-        // 8. USB-C Service Port Opening
-        translate([FRONT_NODE_WALL + 3.5, 0, 0])
-            front_node_usbc_service_cutout();
+        // 8. USB-C Service Port Opening (East wall)
+        front_node_usbc_service_cutout();
             
         // 9. Acoustic Vent Port Cutout for Knowles MEMS (floor)
         translate([FRONT_NODE_WALL + 3.5, FRONT_NODE_WALL + 3.5, 0])

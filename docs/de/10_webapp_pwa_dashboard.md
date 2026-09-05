@@ -34,7 +34,12 @@ Das Dashboard ist eine vollständig autarke Progressive Web App (PWA) basierend 
 ### 2.1 Tab 1: Cockpit & Power (`#tab-cockpit`)
 * **Fahrdynamik & Schräglage:** Animierte Neigungsanzeige des Motorrads (15-State EKF mit Bosch BMI270), 10 Hz Dead-Reckoning Status.
 * **Spannungs- & Thermomanagement:** Live-Anzeige von Bordnetz (KL15), USV-LiPo und Starterbatterie-Entladeschutz.
-* **Universal Front-Knoten (Smart Fairing Hub Card):**
+* **Universal Front-Knoten Card:**
+  * Live CarPlay/AA Status (TPS2051B Spannung/Strom).
+  * 1-Klick Hard-Reset Button ($2{,}5\,\text{s}$ VBUS Kaltstart).
+  * Lenker-PTT Status (< 1.8 ms Latenzanzeige, Test-Button).
+  * 4. Metrik-Kachel: Action-Cam BLE Bridge (REC-Toggle, HiLight Marker, Tankpausen-Filter, Pairing-Modal).
+  * Live Fahrtwind-Lärmpegel VU-Meter (Knowles MEMS dB(A) & AGC-Boost).
   * **Status-Badge:** Live 2.4 GHz ESP-NOW Funklink (`ESP-NOW LINK (2.4 GHz)` / `OFFLINE`).
   * **4 Subsystem-Kacheln:**
     1. **📱 Wireless CarPlay / AA (Ottocast):** Live-Spannung & Strom (`5.00 V · 380 mA`), Betriebsstatus (`AKTIV`, `REBOOT`, `STANDBY`).

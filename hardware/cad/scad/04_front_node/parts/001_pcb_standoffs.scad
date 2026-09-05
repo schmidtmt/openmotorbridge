@@ -30,3 +30,6 @@ module front_node_pcb_standoffs(h = FRONT_NODE_STANDOFF_H) {
         }
     }
 }
+
+// Standalone render / STL export
+front_node_pcb_standoffs();

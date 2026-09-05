@@ -58,3 +58,6 @@ module front_node_flange_ears(ear_len = 14.0, ear_w = 14.0, ear_h = 5.0, hole_r 
     translate([FRONT_NODE_OUTER_L, CENTER_Y, 0])
         mounting_ear_m4(ear_len=ear_len, ear_w=ear_w, ear_h=ear_h, hole_r=hole_r);
 }
+
+// Standalone render / STL export
+front_node_flange_ears();

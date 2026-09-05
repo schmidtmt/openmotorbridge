@@ -26,15 +26,15 @@ module front_node_cross_section_cutaway() {
                     front_node_upper_lid();
                     
             // 3. Cable Combs (in place)
-            translate([FRONT_NODE_WALL + 3.5 + 12.2, 0.1, FRONT_NODE_TUB_H - 8.0])
+            translate([17.2, 0.1, FRONT_NODE_TUB_H - 8.0])
                 south_epdm_cable_comb();
                 
             translate([0.1, FRONT_NODE_WALL + 3.5 + 11.2, FRONT_NODE_TUB_H - 7.5])
                 west_epdm_cable_comb();
                 
-            // 4. USB-C Plug
-            translate([FRONT_NODE_WALL + 3.5 + 55.82, -2.5, FRONT_NODE_STANDOFF_H + FRONT_NODE_PCB_H + 1.8])
-                rotate([90, 0, 0])
+            // 4. USB-C Plug (East wall)
+            translate([FRONT_NODE_OUTER_L - 7.2, 38.82, FRONT_NODE_WALL + FRONT_NODE_STANDOFF_H + FRONT_NODE_PCB_H + 1.8])
+                rotate([0, 90, 90])
                     front_node_usbc_plug();
         }
         

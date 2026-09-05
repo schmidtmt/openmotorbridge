@@ -19,8 +19,11 @@ enum FrontNodePacketType : uint8_t {
     PKT_TYPE_AUDIO_RMS       = 0x03,
     PKT_TYPE_OTTOCAST_STATUS = 0x04,
     PKT_TYPE_CAN_TELEMETRY   = 0x05,
+    PKT_TYPE_CAM_STATUS      = 0x06,
+    PKT_TYPE_CAM_SCAN_RES    = 0x07,
     PKT_TYPE_CMD_POWER_CYCLE = 0x10,
-    PKT_TYPE_CMD_CONFIG      = 0x11
+    PKT_TYPE_CMD_CONFIG      = 0x11,
+    PKT_TYPE_CAM_CMD         = 0x12
 };
 
 static uint8_t s_front_node_mac[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}; // Broadcast or paired
@@ -31,7 +34,13 @@ static FrontNodeStatus s_status = {
     .ottocast_fault = false,
     .cafe_countdown_sec = 0,
     .ambient_dba = 45,
-    .last_seen_us = 0
+    .last_seen_us = 0,
+    .cam_profile = 0,
+    .cam_state = 0,
+    .cam_battery_pct = 0,
+    .cam_sd_min_rem = 0,
+    .cam_autoconnect_en = true,
+    .cam_fuel_filter_en = true
 };
 
 static void on_esp_now_recv(const esp_now_recv_info_t* recv_info, const uint8_t* data, int len) {
@@ -80,6 +89,25 @@ static void on_esp_now_recv(const esp_now_recv_info_t* recv_info, const uint8_t*
             }
             break;
 
+        case PKT_TYPE_CAM_STATUS:
+            if (len >= 9) {
+                s_status.cam_profile = data[2];
+                s_status.cam_state = data[3];
+                s_status.cam_battery_pct = data[4];
+                memcpy(&s_status.cam_sd_min_rem, &data[5], sizeof(uint16_t));
+                s_status.cam_autoconnect_en = (data[7] != 0);
+                s_status.cam_fuel_filter_en = (data[8] != 0);
+            }
+            break;
+
+        case PKT_TYPE_CAM_SCAN_RES:
+            if (len >= 10) {
+                ESP_LOGI(TAG, "Action-Cam BLE Scan Item: MAC=%02X:%02X:%02X:%02X:%02X:%02X RSSI=%d Profile=%d Name='%s'",
+                         data[2], data[3], data[4], data[5], data[6], data[7],
+                         (int8_t)data[8], data[9], (len > 10) ? reinterpret_cast<const char*>(&data[10]) : "");
+            }
+            break;
+
         default:
             break;
     }
@@ -121,3 +149,51 @@ esp_err_t esp_now_front_node_set_ignition(bool ignition_on) {
     uint8_t buf[3] = {FRONT_NODE_PROTOCOL_VER, PKT_TYPE_CMD_CONFIG, static_cast<uint8_t>(ignition_on ? 1 : 0)};
     return esp_now_send(s_front_node_mac, buf, sizeof(buf));
 }
+
+esp_err_t esp_now_front_node_cam_toggle_rec(void) {
+    uint8_t buf[3] = {FRONT_NODE_PROTOCOL_VER, PKT_TYPE_CAM_CMD, 0x01}; // 0x01 = CAM_CMD_TOGGLE_REC
+    ESP_LOGI(TAG, "Relaying Action-Cam REC Toggle to Front Node");
+    return esp_now_send(s_front_node_mac, buf, sizeof(buf));
+}
+
+esp_err_t esp_now_front_node_cam_hilight_tag(void) {
+    uint8_t buf[3] = {FRONT_NODE_PROTOCOL_VER, PKT_TYPE_CAM_CMD, 0x02}; // 0x02 = CAM_CMD_HILIGHT_TAG
+    ESP_LOGI(TAG, "Relaying Action-Cam HiLight Tag to Front Node");
+    return esp_now_send(s_front_node_mac, buf, sizeof(buf));
+}
+
+esp_err_t esp_now_front_node_cam_start_scan(void) {
+    uint8_t buf[3] = {FRONT_NODE_PROTOCOL_VER, PKT_TYPE_CAM_CMD, 0x03}; // 0x03 = CAM_CMD_START_SCAN
+    ESP_LOGI(TAG, "Triggering Action-Cam BLE Inquiry Scan on Front Node");
+    return esp_now_send(s_front_node_mac, buf, sizeof(buf));
+}
+
+esp_err_t esp_now_front_node_cam_pair(const uint8_t* mac, uint8_t profile, const char* name) {
+    uint8_t buf[40] = {0};
+    buf[0] = FRONT_NODE_PROTOCOL_VER;
+    buf[1] = PKT_TYPE_CAM_CMD;
+    buf[2] = 0x04; // CAM_CMD_PAIR
+    if (mac) memcpy(&buf[3], mac, 6);
+    buf[9] = profile;
+    if (name) strncpy(reinterpret_cast<char*>(&buf[10]), name, 28);
+
+    ESP_LOGI(TAG, "Sending Action-Cam Pair command to Front Node (Profile=%d)", profile);
+    return esp_now_send(s_front_node_mac, buf, sizeof(buf));
+}
+
+esp_err_t esp_now_front_node_cam_unpair(void) {
+    uint8_t buf[3] = {FRONT_NODE_PROTOCOL_VER, PKT_TYPE_CAM_CMD, 0x05}; // 0x05 = CAM_CMD_UNPAIR
+    ESP_LOGI(TAG, "Sending Action-Cam Unpair command to Front Node");
+    return esp_now_send(s_front_node_mac, buf, sizeof(buf));
+}
+
+esp_err_t esp_now_front_node_cam_set_autoconnect(bool enable) {
+    uint8_t buf[4] = {FRONT_NODE_PROTOCOL_VER, PKT_TYPE_CAM_CMD, 0x06, static_cast<uint8_t>(enable ? 1 : 0)};
+    return esp_now_send(s_front_node_mac, buf, sizeof(buf));
+}
+
+esp_err_t esp_now_front_node_cam_set_fuel_filter(bool enable) {
+    uint8_t buf[4] = {FRONT_NODE_PROTOCOL_VER, PKT_TYPE_CAM_CMD, 0x07, static_cast<uint8_t>(enable ? 1 : 0)};
+    return esp_now_send(s_front_node_mac, buf, sizeof(buf));
+}
+

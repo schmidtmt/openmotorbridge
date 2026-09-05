@@ -25,7 +25,7 @@ This document serves as the **authoritative hardware specification for all 5 pri
 │       │ (Tail Pod: LoRa 868M & GNSS)  │ (46x19 mm M2) │ (ENIG)  │ SX1262 LoRa, MAX-M10S│
 ├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
 │ **PCBA 05**│ **Universal Front Node**      │ 68 x 44 mm    │ 4 Layer │ ESP32-C3 RISC-V,     │
-│       │ (Smart Fairing Hub & Ottocast)│ (62x38 mm M2.5│ (ENIG)  │ USB2512B, TPS2051B   │
+│       │ (Front Hub & Ottocast CarPlay)│ (62x38 mm M2.5│ (ENIG)  │ USB2512B, TPS2051B   │
 └───────┴───────────────────────────────┴───────────────┴─────────┴──────────────────────┘
 ```
 

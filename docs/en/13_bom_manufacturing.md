@@ -84,13 +84,18 @@ This document provides the complete Bill of Materials (BOM) and manufacturing sp
 
 ## 6. Mechanical CAD & 3D Printing BOM (MJF PA12 / ASA)
 
-### 6.1 CAD / STL Asset Overview (17 Parts for 1 Motorcycle)
+### 6.1 CAD / STL Asset Overview (Modular STLs for 1 Motorcycle)
 * **Central Main Box (3 parts, PA12 / ASA):** `main_box_lower_case.stl`, `main_box_mid_tray.stl`, `main_box_lid.stl`.
-* **Satellite Pods (6 parts, PA12 / ASA):** 3x `pod_base_housing.stl`, 3x `03_pod_bulkhead_partition.stl`.
+* **Satellite Pods Base (6 parts, PA12 / ASA):** 3x `pod_base_housing.stl`, 3x `03_pod_bulkhead_partition.stl`.
 * **Cartridges (3 parts, PA12 / ASA):** `cartridge_sena_sled.stl` (or Cardo), `cartridge_cardo_sled.stl` (or Blank), `cartridge_omm_transceiver_sled.stl`.
 * **Universal Front Node Housing (2 parts, PA12 / ASA):** `front_node_lower_tub.stl`, `front_node_upper_lid.stl`.
 * **Front Node Glands & Dust Cap (2 parts, TPU 95A / 85A):** `front_node_cable_glands_tpu.stl` (Pair of South USB & West signal combs), `front_node_usbc_cap_tpu.stl` (Elastomeric USB-C dust cap with tether).
-* **Rear Radar Bracket (1 part, PA12 / ASA):** `pod3_radar_bracket.stl` (M5 GoPro swivel arm for Pod 3).
+* **Rear Mounting & Enclosure Options for Pod 3 & Saddlebags (Reference Kits):**
+  * **Type D1 (Adventure / Tubular Racks):** `pod3_radar_bracket.stl` (M5 GoPro swivel arm directly on Pod 3) & standard pipe saddle (`005_pod_strap_hooks.scad`).
+  * **Reference Kit 1 (CVO Road Glide ST & New Touring):** `cvo_st_undercowl_skeleton_dock.stl` (upright spring-preloaded dock under carbon cowl) + `cvo_st_telemetry_fin.stl` (2.4 GHz tail fin) + `saddlebag_lid_dock.stl` (saddlebag lid dock).
+  * **Reference Kit 2 (Road King Special):** `pod3_touring_fender_console.stl` (organic fender console for 1/4"-20 nut) + `saddlebag_lid_dock.stl`.
+  * **Reference Kit 3 (Classic Bagger & Cruiser):** `pod3_touring_stealth_console.stl` (low-profile touring console).
+  * **Decoupled Radar Bracket (Cruiser / Bagger):** `radar_license_plate_bracket.stl` (centrally symmetrical M6 clamping bracket below license plate frame with M5 GoPro hinge & concealed M8 wire routing).
 
 ---
 
@@ -130,7 +135,7 @@ This document provides the complete Bill of Materials (BOM) and manufacturing sp
 | **2. Pod Base Board** | `02_pod_base_pcba_gerbers_jlcpcb.zip` | `02_pod_base_pcba_bom_jlcpcb.csv` | `02_pod_base_pcba_cpl_jlcpcb.csv` | **2 Layers** (Standard) | **ENIG (Gold)**, 1.6 mm |
 | **3. Cartridge Carrier** | `03_pod_cartridge_pcba_gerbers_jlcpcb.zip` | `03_pod_cartridge_pcba_bom_jlcpcb.csv` | `03_pod_cartridge_pcba_cpl_jlcpcb.csv` | **2 Layers** (Standard) | **ENIG (Gold)**, 1.2 mm |
 | **4. Rear Pod 3 Transceiver** | `04_rear_pod3_pcba_gerbers_jlcpcb.zip` | `04_rear_pod3_pcba_bom_jlcpcb.csv` | `04_rear_pod3_pcba_cpl_jlcpcb.csv` | **4 Layers** (JLC04161H-7628) | **ENIG (Gold)**, 1.6 mm, TG150 |
-| **5. Universal Front Node** | `05_smart_fairing_pcba_gerbers_jlcpcb.zip` | `05_smart_fairing_pcba_bom_jlcpcb.csv` | `05_smart_fairing_pcba_cpl_jlcpcb.csv` | **4 Layers** (JLC04161H-7628) | **ENIG (Gold)**, 1.6 mm, TG150 |
+| **5. Universal Front Node** | `05_front_node_pcba_gerbers_jlcpcb.zip` | `05_front_node_pcba_bom_jlcpcb.csv` | `05_front_node_pcba_cpl_jlcpcb.csv` | **4 Layers** (JLC04161H-7628) | **ENIG (Gold)**, 1.6 mm, TG150 |
 
 ---
 

@@ -34,7 +34,7 @@ A complete OpenMotorBridge motorcycle installation comprises:
                                            ▼ 2.4 GHz Wireless Link (ESP-NOW < 1.8 ms)
                                  ┌──────────────────────────────────┐
                                  │ 1x UNIVERSAL FRONT NODE (IP67)   │
-                                 │ (Smart Fairing Hub & Cockpit)    │
+                                 │ (Cockpit & Sensor Hub)           │
                                  │ • 4-in-1 Universal Mounting      │
                                  │ • Ottocast USB-A Port (CarPlay)  │
                                  │ • Glovebox USB-C Charging Port   │
@@ -239,18 +239,21 @@ To assemble all subassemblies with vibration resistance and hermetic IP67 sealin
    * Melt 4x M4 inserts into the AMPS pattern ($30 \times 38\,\text{mm}$) on the bottom.
 2. **Acoustic Membrane:** Adhere the hydrophobic Gore ePTFE acoustic membrane over the Knowles MEMS sound port.
 3. **Mount PCB:** Fasten `PCBA 05` using M2.5 screws.
-4. **RF Antenna Pigtail (Optional / Fairing):**
-   * When using an external fairing antenna: Snap the U.FL / IPEX-MHF1 plug onto the ESP32-C3-WROOM-02U module antenna port.
-   * Route the thin coax lead through the EPDM rubber combs to an internal adhesive dipole (e.g. Molex 146153) or an RP-SMA bulkhead.
-5. **Insert Cables into Front & Left Enclosure Openings:**
-   * **Front Opening (South Wall, 3x $\varnothing 4.2\,\text{mm}$ slitted channels for USB):**
-     * Insert the short USB-A flat ribbon cable into Channel 1 and connect to Port `J1` (switched VBUS for Ottocast Dongle).
-     * Insert the $1.0\,\text{m}$ right-angle USB-C charging cable into Channel 2 and connect to Port `J2` (glovebox charging).
-     * Channel 3 serves as spare. Seat the elastomeric USB-C service dust cap (`front_node_usbc_cap_tpu.stl`) with its collar over the service port.
+4. **RF Antenna Installation (ESP32-C3 2.4 GHz):**
+   * Adhere the flexible 2.4 GHz FPC dipole antenna (e.g. Molex 146153) into the $48 \times 12\,\text{mm}$ recess pocket on the inside of the enclosure lid.
+   * Route the $1.13\,\text{mm}$ micro-coaxial lead into the ceiling guide canal and snap the U.FL / IPEX-MHF1 connector perpendicular onto the antenna port of the ESP32-C3-WROOM-02U module. (Optional: For extreme installations such as solid carbon fiber fairings, the lead can be routed outside through an EPDM gland slit).
+5. **Insert Cables into Front & Flank Openings:**
+   * **Front Opening (South Wall, 4x $\varnothing 4.2\,\text{mm}$ slitted channels for USB):**
+     * Insert the short USB-A flat ribbon cable into Channel 1 and connect to Port `J6` (switched VBUS for CarPlay / Dongle).
+     * Insert the $1.0\,\text{m}$ right-angle USB-C charging cable into Channel 2 and connect to Port `J5` (glovebox charging).
+     * Insert the USB cable into Channel 3 and connect to Port `J4` (USB host).
+     * Insert the 5V Action-Cam charging cable into Channel 4 and connect to Port `J8` (continuous 5V charging backed by buffer capacitor C_BUF).
+   * **Right Opening (East Wall, USB-C Service Port):**
+     * Seat the elastomeric USB-C service dust cap (`front_node_usbc_cap_tpu.stl`) with its sealing flange collar into the East wall pocket over service port `J7`.
    * **Left Opening (West Wall, 3x $\varnothing 3.2\,\text{mm}$ slitted channels for Signals & Power):**
-     * Route 12V vehicle power (KL15 & GND) with JST-GH 2-pin connector into Channel 1 and latch into `J7`.
-     * Route Handlebar PTT switch lead with JST-GH 2-pin connector into Channel 2 and latch into `J3`.
-     * Channel 3 serves as spare (or CAN-Bus twisted pair).
+     * Route 12V vehicle power (KL15 & GND) with JST-PH 2-pin connector into Channel 1 and latch into `J1`.
+     * Route CAN-Bus twisted pair with JST-PH 3-pin connector into Channel 2 and latch into `J2`.
+     * Route Handlebar PTT switch lead with JST-PH 2-pin connector into Channel 3 and latch into `J3`.
 6. **Seat Glands & Close Enclosure:**
    * Lightly coat the outer flanks of the EPDM/TPU cable glands with silicone grease.
    * Slide the combs into the enclosure cutouts (the slits close snugly around the wires).

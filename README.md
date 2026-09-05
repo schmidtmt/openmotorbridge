@@ -23,7 +23,7 @@
 The comprehensive technical specification is split into 16 logically organized chapters:
 
 1. [**01 - System Architecture & Satellite Topology**](docs/en/01_system_architecture.md)  
-   *Overview of the 5-point architecture, spatial RF diversity, cockpit integration, and overall system design.*
+   *The 5 standardized functional nodes, open mounting philosophy ("Your Bike, Your Choice"), RF diversity, and cockpit integration.*
 
 2. [**02 - Intercom Matrix, Hardware Profiles & Routing**](docs/en/02_intercom_matrix_profiles.md)  
    *The 5 OEM adapter classes A–E, LittleFS profile engine, zero-latency PTT (< 1.8 ms), and audio cross-matrix.*
@@ -43,8 +43,8 @@ The comprehensive technical specification is split into 16 logically organized c
 7. [**07 - Hardware Architecture & Board Pinouts (PCBA 01 to 05)**](docs/en/07_pcba_hardware_pinouts.md)  
    *All 5 circuit boards: layer stackup, controlled impedance, net classes, functional zoning, and pinouts.*
 
-8. [**08 - Mechanical Enclosures, CAD & Sealing System**](docs/en/08_enclosures_mechanics_cad.md)  
-   *3-piece Central Box, universal satellite pods, modular cartridges, Rear Pod 3, and 4-in-1 Front Node.*
+8. [**08 - Mechanical Enclosures, CAD & Reference Mounting Kits**](docs/en/08_enclosures_mechanics_cad.md)  
+   *Universal pods & cartridges, 4-in-1 Front Node, and turnkey zero-drill reference kits for CVO ST, Road King Special, and Adventure bikes.*
 
 9. [**09 - Firmware Architecture, FreeRTOS & Rollback-OTA**](docs/en/09_firmware_architecture.md)  
    *Multi-core ESP32-S3, RP2040, ESP32-C3, ESP-NOW low-latency protocol (< 1.8 ms), and dual-bank rollback OTA.*

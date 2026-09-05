@@ -34,7 +34,7 @@ Ein vollständiges OpenMotorBridge-Fahrzeugkit besteht aus folgenden Baugruppen:
                                            ▼ 2.4 GHz Funkbrücke (ESP-NOW < 1.8 ms)
                                  ┌──────────────────────────────────┐
                                  │ 1x UNIVERSAL FRONT-KNOTEN (IP67) │
-                                 │ (Smart Fairing Hub & Cockpit)    │
+                                 │ (Cockpit- & Sensor-Hub)          │
                                  │ • 4-in-1 Universal-Befestigung   │
                                  │ • Ottocast USB-A Port (CarPlay)  │
                                  │ • Handschuhfach USB-C Ladeport   │
@@ -239,18 +239,21 @@ Für den sauberen, vibrationsfesten und IP67-dichten Zusammenbau aller Baugruppe
    * 4x M4 Messingeinsätze in das AMPS-Lochbild ($30 \times 38\,\text{mm}$) am Gehäuseboden einschmelzen.
 2. **Akustik-Membran einsetzen:** Hydrophobe Gore ePTFE-Membran über die Schallöffnung des Knowles MEMS Mikrofons kleben.
 3. **Platine montieren:** Front-Node Platine (`PCBA 05`) mit M2.5 Schrauben fixieren.
-4. **HF-Antennenpigtail (Optional / Verkleidung):**
-   * Bei Nutzung einer externen Antenne: U.FL / IPEX-MHF1 Stecker senkrecht auf die Antennenbuchse des ESP32-C3-WROOM-02U Moduls aufklicken.
-   * Das Koaxialkabel führt entweder durch die EPDM-Dichtkämme zu einer flexiblen 2.4 GHz Klebeantenne (z. B. Molex 146153) an der Innenseite der Frontverkleidung oder auf eine RP-SMA Flanschbuchse.
+4. **HF-Antennenmontage (ESP32-C3 2,4 GHz):**
+   * Die flexible 2,4-GHz-FPC-Dipolantenne (z. B. Molex 146153) in die $48 \times 12\,\text{mm}$ Klebetasche an der Innenseite des Gehäusedeckels einkleben.
+   * Das $1{,}13\,\text{mm}$ Mikro-Koaxialkabel in den Führungskanal der Deckeldecke einlegen und den U.FL / IPEX-MHF1 Stecker senkrecht auf die Antennenbuchse des ESP32-C3-WROOM-02U Moduls aufklicken. (Optional: Für extreme Einbaulagen wie Vollcarbon-Verkleidungen kann das Kabel durch einen EPDM-Kammschlitz nach außen geführt werden).
 5. **Kabel in Front- & Flankenöffnungen einlegen:**
-   * **Vordere Öffnung (Südwand, 3 Kanäle $\varnothing 4{,}2\,\text{mm}$ für USB):**
-     * Kurzes USB-A Flachbandkabel in Kanal 1 einlegen und an Port `J1` (geschalteter VBUS für Ottocast Dongle) anstecken.
-     * $1{,}0\,\text{m}$ langes USB-C Ladekabel in Kanal 2 einlegen und an Port `J2` (Handschuhfach) anstecken.
-     * Kanal 3 dient als Reserve. Die elastische USB-C Staubschutzkappe (`front_node_usbc_cap_tpu.stl`) mit dem Haltekollier am Service-Port fixieren.
+   * **Vordere Öffnung (Südwand, 4 Kanäle $\varnothing 4{,}2\,\text{mm}$ für USB):**
+     * Kurzes USB-A Flachbandkabel in Kanal 1 einlegen und an Port `J6` (geschalteter VBUS für CarPlay / Dongle) anstecken.
+     * $1{,}0\,\text{m}$ langes USB-C Ladekabel in Kanal 2 einlegen und an Port `J5` (Handschuhfach) anstecken.
+     * USB-Kabel in Kanal 3 einlegen und an Port `J4` (USB-Host) anstecken.
+     * 5V Action-Cam Ladekabel in Kanal 4 einlegen und an Port `J8` (5V Dauerladung mit Pufferkondensator C_BUF) anstecken.
+   * **Rechte Öffnung (Ostwand, USB-C Service-Port):**
+     * Die elastische USB-C Staubschutzkappe (`front_node_usbc_cap_tpu.stl`) mit dem Dichtkragen in die Gehäusetasche des Service-Ports `J7` eindrücken.
    * **Linke Öffnung (Westwand, 3 Kanäle $\varnothing 3{,}2\,\text{mm}$ für Signale & Power):**
-     * 12V Bordnetzzuleitung (KL15 & GND) mit JST-GH 2-Pin Stecker in Kanal 1 einlegen und an `J7` einrasten.
-     * Lenker-PTT Steuerleitung mit JST-GH 2-Pin Stecker in Kanal 2 einlegen und an `J3` einrasten.
-     * Kanal 3 dient als Reserve (oder für CAN-Bus Leitung).
+     * 12V Bordnetzzuleitung (KL15 & GND) mit JST-PH 2-Pin Stecker in Kanal 1 einlegen und an `J1` einrasten.
+     * CAN-Bus Leitung mit JST-PH 3-Pin Stecker in Kanal 2 einlegen und an `J2` einrasten.
+     * Lenker-PTT Steuerleitung mit JST-PH 2-Pin Stecker in Kanal 3 einlegen und an `J3` einrasten.
 6. **Dichtkämme einsetzen & Deckel verschließen:**
    * Einen dünnen Hauch Silikonfett auf die Außenflanken der EPDM/TPU Dichtkämme auftragen.
    * Kämme in die Gehäusetaschen einschieben (die Schlitze schließen sich um die Kabel).

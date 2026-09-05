@@ -35,16 +35,16 @@ module front_node_exploded_assembly() {
         dummy_front_node_pcb();
         
     // 4. South USB Cable Comb (floating forwards)
-    translate([FRONT_NODE_WALL + 3.5 + 12.2, -18.0, FRONT_NODE_TUB_H - 8.0])
+    translate([17.2, -18.0, FRONT_NODE_TUB_H - 8.0])
         south_epdm_cable_comb();
         
     // 5. West Signal/Power Cable Comb (floating leftwards)
     translate([-18.0, FRONT_NODE_WALL + 3.5 + 11.2, FRONT_NODE_TUB_H - 7.5])
         west_epdm_cable_comb();
         
-    // 6. USB-C Protective Plug (floating forwards)
-    translate([FRONT_NODE_WALL + 3.5 + 55.82, -22.0, FRONT_NODE_STANDOFF_H + FRONT_NODE_PCB_H + 1.8])
-        rotate([90, 0, 0])
+    // 6. USB-C Protective Plug (floating rightwards / East)
+    translate([FRONT_NODE_OUTER_L + 18.0, 38.82, FRONT_NODE_WALL + FRONT_NODE_STANDOFF_H + FRONT_NODE_PCB_H + 1.8])
+        rotate([0, 90, 90])
             front_node_usbc_plug();
             
     // 7. Perimeter Silicone Gasket Ring

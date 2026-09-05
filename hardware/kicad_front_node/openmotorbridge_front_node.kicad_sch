@@ -5,7 +5,7 @@
 	(uuid "e0000000-0000-0000-0000-000000000001")
 	(paper "A3")
 	(title_block
-		(title "OpenMotorBridge Universal Front Node (Cockpit & Smart Fairing)")
+		(title "OpenMotorBridge Universal Front Node (Cockpit & Sensor Hub)")
 		(date "2026-09-03")
 		(rev "v1.1")
 		(company "OpenMotorBridge Open Source Hardware")

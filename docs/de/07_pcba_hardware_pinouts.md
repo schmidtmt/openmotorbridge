@@ -25,7 +25,7 @@ Dieses Dokument bildet die **zentrale, autoritative Hardware-Spezifikation aller
 │       │ (Heckbürzel: LoRa & GNSS)     │ (46x19 mm M2) │ (ENIG)  │ SX1262 LoRa, MAX-M10S│
 ├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
 │ **PCBA 05**│ **Universal Front-Knoten**    │ 68 x 44 mm    │ 4 Lagen │ ESP32-C3 RISC-V,     │
-│       │ (Smart Fairing Hub & Ottocast)│ (62x38 mm M2.5│ (ENIG)  │ USB2512B, TPS2051B   │
+│       │ (Front-Hub & Ottocast CarPlay)│ (62x38 mm M2.5│ (ENIG)  │ USB2512B, TPS2051B   │
 └───────┴───────────────────────────────┴───────────────┴─────────┴──────────────────────┘
 ```
 

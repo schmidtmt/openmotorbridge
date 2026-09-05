@@ -32,7 +32,7 @@ module dummy_front_node_pcb() {
         }
     }
 
-    // 2. South Connectors (J6: CarPlay, J5: Glovebox, J4: USB Host) - 4-Pin JST-PH
+    // 2. South Connectors (J6: CarPlay, J5: Glovebox, J4: USB Host, J8: Action-Cam) - 4-Pin JST-PH
     color("ghostwhite") {
         translate([15.75 - 5.0, 0.5, FRONT_NODE_PCB_H])
             cube(size=[10.0, 4.5, 7.5], center=false); // J6
@@ -40,12 +40,14 @@ module dummy_front_node_pcb() {
             cube(size=[10.0, 4.5, 7.5], center=false); // J5
         translate([43.25 - 5.0, 0.5, FRONT_NODE_PCB_H])
             cube(size=[10.0, 4.5, 7.5], center=false); // J4
+        translate([56.00 - 5.0, 0.5, FRONT_NODE_PCB_H])
+            cube(size=[10.0, 4.5, 7.5], center=false); // J8 (Action-Cam 5V Charge)
     }
 
-    // 3. South USB-C Service Port (J7)
+    // 3. East USB-C Service Port (J7, 90° rotated facing East)
     color("silver") {
-        translate([53.82 - 4.5, -1.0, FRONT_NODE_PCB_H])
-            cube(size=[9.0, 7.5, 3.2], center=false);
+        translate([FRONT_NODE_PCB_L - 6.5, 30.82 - 4.5, FRONT_NODE_PCB_H])
+            cube(size=[7.5, 9.0, 3.2], center=false);
     }
 
     // 4. West Connectors (J1: 12V ACC, J2: CAN, J3: PTT)
@@ -86,17 +88,26 @@ module dummy_front_node_pcb() {
             cube(size=[7.0, 7.0, 3.0], center=false);
     }
 
-    // 9. SMD Pushbuttons SW1 (Reset) & SW2 (Boot)
+    // 9. Buffer Capacitor C_BUF (7343 D-Case Polymer / Tantalum, Action-Cam hold-up)
+    color("gold") {
+        translate([55.62 - 3.65, 3.75 - 2.15, FRONT_NODE_PCB_H])
+            cube(size=[7.3, 4.3, 3.1], center=false);
+    }
+
+    // 10. SMD Pushbuttons SW1 (Reset) & SW2 (Boot)
     color("darkslategray") {
-        translate([64.4 - 2.0, 23.5 - 2.0, FRONT_NODE_PCB_H])
+        translate([65.15 - 2.0, 17.75 - 2.0, FRONT_NODE_PCB_H])
             cube(size=[4.0, 4.0, 2.5], center=false); // SW1
         translate([22.5 - 2.0, 22.0 - 2.0, FRONT_NODE_PCB_H])
             cube(size=[4.0, 4.0, 2.5], center=false); // SW2
     }
 
-    // 10. Status LED D1 (Green 0805)
+    // 11. Status LED D1 (Green 0805)
     color("limegreen") {
-        translate([66.25 - 1.0, 30.19 - 0.6, FRONT_NODE_PCB_H])
-            cube(size=[2.0, 1.2, 0.8], center=false);
+        translate([64.75 - 0.6, 22.25 - 1.0, FRONT_NODE_PCB_H])
+            cube(size=[1.2, 2.0, 0.8], center=false);
     }
 }
+
+// Standalone render / STL export
+dummy_front_node_pcb();

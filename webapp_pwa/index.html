@@ -258,14 +258,14 @@
                     </div>
                 </section>
 
-                <!-- Universal Front Node & Smart Fairing Hub Card -->
+                <!-- Universal Front Node (PCBA 05) Card -->
                 <section class="card" id="card-front-node">
                     <div class="card-header">
-                        <span class="card-title">📡 <span data-i18n="front_node_title">Universal Front-Knoten (Smart Fairing Hub)</span></span>
+                        <span class="card-title">📡 <span data-i18n="front_node_title">Universal Front-Knoten</span></span>
                         <span class="card-badge badge-green" id="badge-front-node-link">ESP-NOW LINK (2.4 GHz)</span>
                     </div>
 
-                    <!-- 3-Column Subsystem Metric Tiles -->
+                    <!-- 4-Column Subsystem Metric Tiles -->
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin: 10px 0 14px 0;">
                         <!-- Tile 1: Wireless CarPlay / Android Auto (Ottocast) -->
                         <div class="stat-tile" style="padding: 10px 12px; background: rgba(0,0,0,0.25); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
@@ -296,6 +296,19 @@
                             <div style="font-size: 1.1rem; font-weight: 700; color: var(--accent-green); margin: 3px 0;" id="lbl-front-agc-boost">+0.0 dB Boost</div>
                             <div style="font-size: 0.7rem; color: var(--text-muted);">Knowles SPH0645 MEMS</div>
                         </div>
+
+                        <!-- Tile 4: Action-Cam BLE Bridge -->
+                        <div class="stat-tile" id="tile-front-cam" style="padding: 10px 12px; background: rgba(0,0,0,0.25); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); transition: all 0.2s;">
+                            <div style="font-size: 0.72rem; color: var(--text-secondary); display: flex; justify-content: space-between; align-items: center;">
+                                <span>🎥 Action-Cam BLE</span>
+                                <span class="card-badge badge-blue" id="badge-cam-status" style="font-size: 0.62rem; padding: 2px 6px;">VERBUNDEN</span>
+                            </div>
+                            <div style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin: 3px 0;" id="lbl-cam-name">GoPro Hero 12</div>
+                            <div style="font-size: 0.7rem; color: var(--text-muted); display: flex; justify-content: space-between;" id="lbl-cam-telemetry">
+                                <span id="lbl-cam-bat">🔋 88%</span>
+                                <span id="lbl-cam-sd">⏱️ 2h 45m SD</span>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Live Ambient Noise VU Meter & Speed Compensation -->
@@ -312,6 +325,33 @@
                             <span>70 dB(A) AGC Schwelle</span>
                             <span>95 dB(A) Autobahn</span>
                             <span>115 dB(A) Max</span>
+                        </div>
+                    </div>
+
+                    <!-- Action-Cam Quick Control Bar -->
+                    <div style="margin-bottom: 14px; padding: 10px 12px; background: rgba(0,0,0,0.2); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between;">
+                        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                            <button id="btn-cam-rec-toggle" class="btn-primary" style="display: flex; align-items: center; gap: 6px; font-size: 0.8rem; padding: 7px 14px; background: #ff453a; border-color: #ff453a;">
+                                <span id="icon-cam-rec">⏺️</span> <span id="lbl-cam-rec-btn" data-i18n="btn_cam_rec_start">Aufnahme Starten</span>
+                            </button>
+                            <button id="btn-cam-hilight" class="btn-secondary" style="display: flex; align-items: center; gap: 6px; font-size: 0.8rem; padding: 7px 12px; color: var(--accent-yellow); border-color: rgba(255, 214, 10, 0.4);">
+                                <span>🔖</span> <span data-i18n="btn_cam_hilight">HiLight Marker</span>
+                            </button>
+                            <button id="btn-open-cam-pairing" class="btn-secondary" style="display: flex; align-items: center; gap: 6px; font-size: 0.8rem; padding: 7px 12px; color: var(--accent-blue); border-color: rgba(10, 132, 255, 0.4);">
+                                <span>🔗</span> <span data-i18n="btn_cam_pairing">Kamera Koppeln</span>
+                            </button>
+                        </div>
+
+                        <!-- Tankpausen-Filter Switch -->
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <label class="switch-custom" style="position: relative; display: inline-block; width: 36px; height: 20px; margin: 0;">
+                                <input type="checkbox" id="chk-tank-filter" checked style="opacity: 0; width: 0; height: 0;">
+                                <span class="slider-round" id="slider-tank-filter" style="position: absolute; cursor: pointer; inset: 0; background-color: var(--accent-green); border-radius: 20px; transition: .25s;"></span>
+                            </label>
+                            <div>
+                                <div style="font-weight: 600; font-size: 0.78rem;" data-i18n="tank_filter_label">Tankpausen-Filter</div>
+                                <div class="stat-sub" id="lbl-tank-filter-sub" style="font-size: 0.68rem;">Auto-Cut bei Zündung AUS ($C_{\text{BUF}}$)</div>
+                            </div>
                         </div>
                     </div>
 
@@ -1340,6 +1380,87 @@
                     <button id="btn-inspect-export-gpx" class="btn-primary">
                         🗺️ <span>GPX Exportieren</span>
                     </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Action-Cam BLE Pairing & Profiling -->
+    <div class="modal-overlay" id="modal-cam-pairing">
+        <div class="modal-card" style="max-width: 540px;">
+            <div class="modal-header">
+                <div class="modal-title">🎥 <span data-i18n="cam_pairing_modal_title">Action-Cam BLE Kopplung & Autoconnect</span></div>
+                <button class="modal-close" id="btn-close-cam-modal">&times;</button>
+            </div>
+
+            <!-- Scan Section -->
+            <div style="margin-bottom: 14px; padding: 12px; background: rgba(0,0,0,0.25); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <div>
+                        <div style="font-weight: 600; font-size: 0.85rem;" data-i18n="cam_scan_heading">Bluetooth LE Kamerasuche</div>
+                        <div class="stat-sub" id="lbl-scan-status">Universal Front Node sucht nach GoPro, Insta360 und DJI</div>
+                    </div>
+                    <button id="btn-start-cam-scan" class="btn-primary" style="font-size: 0.78rem; padding: 6px 12px; display: flex; align-items: center; gap: 6px;">
+                        <span id="icon-cam-scan-spin">🔍</span> <span id="lbl-scan-btn-txt" data-i18n="btn_start_scan">Kameras suchen</span>
+                    </button>
+                </div>
+
+                <!-- Discovered Devices List -->
+                <div id="list-discovered-cams" style="max-height: 140px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; margin-top: 8px;">
+                    <div style="font-size: 0.75rem; color: var(--text-muted); text-align: center; padding: 10px 0;">Klicke auf "Kameras suchen", um nach aktiven Action-Cams in Funkreichweite zu scannen.</div>
+                </div>
+            </div>
+
+            <!-- Auto-Detected Profile & Pairing Controls -->
+            <div id="box-cam-pair-controls" style="margin-bottom: 14px; padding: 12px; background: rgba(0,0,0,0.25); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                <div class="control-label" style="margin-bottom: 4px;"><span data-i18n="lbl_cam_profile">Erkanntes Kamera-Steuerprofil:</span></div>
+                <select id="sel-cam-profile" class="select-custom" style="width: 100%; margin-bottom: 10px; font-size: 0.82rem; padding: 6px 10px;">
+                    <option value="1">🔵 GoPro Hero 9 / 10 / 11 / 12 / 13 / Max (Open GoPro BLE)</option>
+                    <option value="2">🟡 Insta360 X3 / X4 / Ace Pro / GO 3 (Remote Shutter)</option>
+                    <option value="3">⚪ DJI Osmo Action 3 / 4 / 5 Pro & Osmo 360 (DJI BLE)</option>
+                </select>
+
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                    <label style="display: flex; align-items: center; gap: 8px; font-size: 0.78rem; cursor: pointer;">
+                        <input type="checkbox" id="chk-cam-autoconnect" checked>
+                        <span data-i18n="chk_autoconnect_label">Bei Zündung EIN automatisch verbinden (Autoconnect)</span>
+                    </label>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 8px;">
+                    <button id="btn-confirm-cam-pair" class="btn-primary" style="font-size: 0.82rem; padding: 7px 14px;">
+                        ✓ <span data-i18n="btn_confirm_pair">Kamera Koppeln & Profil speichern</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Current Paired Camera Status Card -->
+            <div id="box-current-paired-cam" style="margin-bottom: 14px; padding: 12px; background: rgba(48, 209, 88, 0.08); border-radius: var(--radius-sm); border: 1px solid rgba(48, 209, 88, 0.3);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="font-size: 1.1rem;">🎥</span>
+                        <div>
+                            <div style="font-weight: 700; font-size: 0.88rem;" id="lbl-modal-paired-name">GoPro Hero 12 Black</div>
+                            <div class="stat-sub" id="lbl-modal-paired-mac">MAC: C4:64:E3:42:19:B1 · Open GoPro Profil</div>
+                        </div>
+                    </div>
+                    <span class="card-badge badge-green" id="badge-modal-cam-state">VERBUNDEN</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.08);">
+                    <span style="font-size: 0.72rem; color: var(--text-muted);">Autoconnect aktiv · NVS Flash gesichert</span>
+                    <button id="btn-unpair-cam" class="btn-secondary" style="font-size: 0.72rem; padding: 4px 10px; color: var(--accent-red); border-color: rgba(255,69,58,0.4);">
+                        🗑️ <span data-i18n="btn_unpair_cam">Entkoppeln</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- PTT Multi-Click Mapping Guide -->
+            <div style="padding: 10px 12px; background: rgba(0,0,0,0.2); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); font-size: 0.74rem;">
+                <div style="font-weight: 700; margin-bottom: 4px; color: var(--accent-blue);">📌 Lenker-PTT Multi-Click Steuerung:</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; color: var(--text-secondary);">
+                    <div>• <strong>1x kurz (&lt;400ms):</strong> Funk/Intercom PTT (&lt;0.9ms)</div>
+                    <div>• <strong>2x kurz (Doppelklick):</strong> REC Start / Stopp</div>
+                    <div style="grid-column: span 2;">• <strong>1x lang (&gt;800ms):</strong> HiLight Bookmark Marker setzen</div>
                 </div>
             </div>
         </div>

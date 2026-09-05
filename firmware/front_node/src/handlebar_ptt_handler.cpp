@@ -15,6 +15,11 @@ HandlebarPttHandler::HandlebarPttHandler()
     : m_event_queue(nullptr)
     , m_is_pressed(false)
     , m_last_edge_us(0)
+    , m_action_cb(nullptr)
+    , m_press_start_us(0)
+    , m_release_time_us(0)
+    , m_click_count(0)
+    , m_long_press_fired(false)
 {
 }
 
@@ -85,11 +90,68 @@ bool HandlebarPttHandler::init() {
     return true;
 }
 
+void HandlebarPttHandler::set_action_callback(PttActionCallback cb) {
+    m_action_cb = cb;
+}
+
 bool HandlebarPttHandler::get_event(PttEvent* evt, TickType_t wait_ticks) {
     if (!m_event_queue || !evt) return false;
-    return (xQueueReceive(m_event_queue, evt, wait_ticks) == pdTRUE);
+    bool received = (xQueueReceive(m_event_queue, evt, wait_ticks) == pdTRUE);
+    if (received) {
+        uint64_t now = evt->timestamp_us;
+        if (evt->pressed) {
+            // Key Down
+            m_press_start_us = now;
+            m_long_press_fired = false;
+        } else {
+            // Key Up
+            if (!m_long_press_fired) {
+                uint64_t press_duration_ms = (now - m_press_start_us) / 1000ULL;
+                if (press_duration_ms < 450) {
+                    m_click_count++;
+                    m_release_time_us = now;
+
+                    if (m_click_count >= 2) {
+                        ESP_LOGI(TAG, "⚡ PTT Double-Click Detected -> Triggering Action-Cam REC Toggle");
+                        if (m_action_cb) {
+                            m_action_cb(PTT_CLICK_DOUBLE);
+                        }
+                        m_click_count = 0;
+                    }
+                }
+            }
+        }
+    }
+    return received;
+}
+
+void HandlebarPttHandler::update() {
+    uint64_t now = esp_timer_get_time();
+
+    // 1. Long Press Detection while pressed (>800ms)
+    if (m_is_pressed && !m_long_press_fired && m_press_start_us > 0) {
+        if ((now - m_press_start_us) >= (PTT_LONG_PRESS_MS * 1000ULL)) {
+            m_long_press_fired = true;
+            m_click_count = 0;
+            ESP_LOGI(TAG, "⚡ PTT Long-Press (>%d ms) Detected -> Triggering Action-Cam HiLight Marker", PTT_LONG_PRESS_MS);
+            if (m_action_cb) {
+                m_action_cb(PTT_CLICK_LONG);
+            }
+        }
+    }
+
+    // 2. Single-click expiration after release
+    if (!m_is_pressed && m_click_count == 1 && m_release_time_us > 0) {
+        if ((now - m_release_time_us) >= (PTT_DOUBLE_CLICK_MS * 1000ULL)) {
+            m_click_count = 0;
+            if (m_action_cb) {
+                m_action_cb(PTT_CLICK_SINGLE);
+            }
+        }
+    }
 }
 
 bool HandlebarPttHandler::is_pressed() const {
     return m_is_pressed;
 }
+

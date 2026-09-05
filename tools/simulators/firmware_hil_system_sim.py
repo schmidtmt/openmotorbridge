@@ -466,7 +466,7 @@ def run_hil_system_simulation():
     # SCENARIO 9: UNIVERSAL FRONT NODE OTTOCAST REBOOT & AUTO-CAFÉ DISCONNECT
     # -------------------------------------------------------------------------
     print("\n" + "=" * 80)
-    print("SCENARIO 9: SMART FAIRING OTTOCAST 1-CLICK RESET & AUTO-CAFÉ DISCONNECT")
+    print("SCENARIO 9: UNIVERSAL FRONT NODE OTTOCAST 1-CLICK RESET & AUTO-CAFÉ DISCONNECT")
     print("=" * 80)
     log_sys("Rider triggers 1-Click Dongle Reboot from PWA WebApp...")
     front_fw.trigger_1click_reboot()

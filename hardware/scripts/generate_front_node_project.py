@@ -96,7 +96,7 @@ def create_schematic_file():
 	(uuid "e0000000-0000-0000-0000-000000000001")
 	(paper "A3")
 	(title_block
-		(title "OpenMotorBridge Universal Front Node (Cockpit & Smart Fairing)")
+		(title "OpenMotorBridge Universal Front Node (Cockpit & Sensor Hub)")
 		(date "2026-09-03")
 		(rev "v1.1")
 		(company "OpenMotorBridge Open Source Hardware")
@@ -159,7 +159,7 @@ def create_pcb_board():
 
     # Title Block
     tb = board.GetTitleBlock()
-    tb.SetTitle("OpenMotorBridge Universal Front Node (Cockpit & Smart Fairing)")
+    tb.SetTitle("OpenMotorBridge Universal Front Node (Cockpit & Sensor Hub)")
     tb.SetDate("2026-09-03")
     tb.SetRevision("v1.1")
     tb.SetCompany("OpenMotorBridge Open Source Hardware")
@@ -215,22 +215,28 @@ def create_pcb_board():
         ("Connector_JST.pretty", "JST_PH_B4B-PH-K_1x04_P2.00mm_Vertical", "J6", "USB_DN2_CARPLAY", 115.75, 111.50, 180,
          {"1": "VCC_5V_OTTOCAST", "2": "USB_DN2_DM", "3": "USB_DN2_DP", "4": "GND"},
          "Connector_JST.3dshapes/JST_PH_B4B-PH-K_1x04_P2.00mm_Vertical.step"),
+        ("Connector_JST.pretty", "JST_PH_B4B-PH-K_1x04_P2.00mm_Vertical", "J8", "ACTION_CAM_5V_PWR", 156.00, 111.50, 180,
+         {"1": "VCC_5V", "2": "USB_CAM_DCP", "3": "USB_CAM_DCP", "4": "GND"},
+         "Connector_JST.3dshapes/JST_PH_B4B-PH-K_1x04_P2.00mm_Vertical.step"),
 
-        # 3. North Edge: USB-C Service Port & Tactical Buttons
-        ("Connector_USB.pretty", "USB_C_Receptacle_HRO_TYPE-C-31-M-12", "J7", "USB-C_SERVICE", 153.82, 109.70, 0,
+        # 3. East Edge: USB-C Service Port & Tactical Buttons
+        ("Connector_USB.pretty", "USB_C_Receptacle_HRO_TYPE-C-31-M-12", "J7", "USB-C_SERVICE", 163.95, 100.82, 90,
          {"A1": "GND", "B1": "GND", "A4": "VCC_5V", "B4": "VCC_5V", "A5": "USB_CC1", "B5": "USB_CC2",
           "A6": "USB_SERV_DP", "B6": "USB_SERV_DP", "A7": "USB_SERV_DM", "B7": "USB_SERV_DM",
           "A12": "GND", "B12": "GND", "SH1": "GND", "SH2": "GND", "SH3": "GND", "SH4": "GND"},
          "Connector_USB.3dshapes/USB_C_Receptacle_GCT_USB4105-xx-A_16P_TopMnt_Horizontal.step"),
-        ("Button_Switch_SMD.pretty", "SW_Push_SPST_NO_Alps_SKRK", "SW1", "BOOT", 164.40, 93.50, 0,
+        ("Button_Switch_SMD.pretty", "SW_Push_SPST_NO_Alps_SKRK", "SW1", "BOOT", 165.15, 87.75, 0,
          {"1": "ESP_BOOT", "2": "GND"},
          "Button_Switch_SMD.3dshapes/SW_Push_SPST_NO_Alps_SKRK.step"),
         ("Button_Switch_SMD.pretty", "SW_Push_SPST_NO_Alps_SKRK", "SW2", "RESET", 122.50, 92.00, 90,
          {"1": "ESP_EN", "2": "GND"},
          "Button_Switch_SMD.3dshapes/SW_Push_SPST_NO_Alps_SKRK.step"),
 
-        # 4. Power Management Stage (Dual-Path OR-ing: USB VBUS + Optional 12V Buck)
-        ("Diode_SMD.pretty", "D_SMA", "D7", "SS34_USB_OR", 151.25, 99.25, 90,
+        # 4. Power Management Stage (Dual-Path OR-ing: USB VBUS + Optional 12V Buck + C_BUF)
+        ("Capacitor_Tantalum_SMD.pretty", "CP_EIA-7343-31_Kemet-D", "C_BUF", "470uF_10V_POLYMER", 163.50, 80.50, 270,
+         {"1": "VCC_5V", "2": "GND"},
+         "Capacitor_Tantalum_SMD.3dshapes/CP_EIA-7343-31_Kemet-D.step"),
+        ("Diode_SMD.pretty", "D_SMA", "D7", "SS34_USB_OR", 149.00, 96.25, 90,
          {"1": "VCC_5V", "2": "USB_UP_VBUS"},
          "Diode_SMD.3dshapes/D_SMA.step"),
         ("Diode_SMD.pretty", "D_SMA", "D8", "SS34_BUCK_OR", 155.25, 73.50, 0,

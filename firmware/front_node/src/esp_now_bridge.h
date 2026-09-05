@@ -18,6 +18,8 @@ public:
     bool send_ptt_event(bool pressed, uint64_t timestamp_us);
     bool send_audio_rms(uint8_t dba, uint32_t raw_rms);
     bool send_ottocast_status(uint8_t state, bool power_on, bool fault, uint32_t cafe_sec);
+    bool send_cam_status(uint8_t brand, uint8_t state, uint8_t bat_pct, uint16_t sd_min, bool autoconn, bool fuelfilt);
+    bool send_cam_scan_result(const uint8_t* mac, int8_t rssi, uint8_t brand, const char* name);
     bool send_heartbeat();
 
     bool is_linked() const;

@@ -4,13 +4,16 @@
 // File: hardware/cad/scad/04_front_node/01_front_node_lid.scad
 // Description: HP MJF PA12 waterproof top lid with perimeter compression tongue,
 //              M3 corner clamping holes, LED light-pipe tunnel, and internal
-//              adhesive FPC antenna pocket.
+//              adhesive FPC antenna pocket with coaxial cable routing clips.
 // =============================================================================
 
 include <../00_common/parameters.scad>;
-include <parts/003_sealing_system.scad>;
+use <parts/003_sealing_system.scad>;
 
 module front_node_upper_lid() {
+    pcb_origin_x = FRONT_NODE_WALL + 3.5 + (FRONT_NODE_CHAMBER_L - FRONT_NODE_PCB_L) / 2.0; // 8.0 mm
+    pcb_origin_y = FRONT_NODE_WALL + 3.5 + (FRONT_NODE_CHAMBER_W - FRONT_NODE_PCB_W) / 2.0; // 8.0 mm
+
     difference() {
         union() {
             // 1. Solid lid body with rounded corners
@@ -31,13 +34,13 @@ module front_node_upper_lid() {
             );
             
             // 3. Clamping Pressure Ribs over South & West Cable Combs
-            // South compression bar (over 38 mm USB comb)
-            translate([FRONT_NODE_WALL + 3.5 + 12.0, 0, -1.5])
-                cube(size=[38.0, FRONT_NODE_WALL, 1.5], center=false);
+            // South compression bar (over 53.0 mm 4-Port USB comb, X in [17.0, 70.0])
+            translate([17.0, 0, -1.5])
+                cube(size=[53.0, FRONT_NODE_WALL + 3.2, 1.5], center=false);
                 
-            // West compression bar (over 30 mm Signal/Power comb)
+            // West compression bar (over 30.0 mm Signal/Power comb)
             translate([0, FRONT_NODE_WALL + 3.5 + 11.0, -1.5])
-                cube(size=[FRONT_NODE_WALL, 30.0, 1.5], center=false);
+                cube(size=[FRONT_NODE_WALL + 3.2, 30.0, 1.5], center=false);
         }
         
         // 4. Internal cavity recess (reduces weight & creates headroom over tall parts)
@@ -62,19 +65,24 @@ module front_node_upper_lid() {
                 cylinder(r=3.1, h=3.5, center=false);
         }
         
-        // 6. Status LED Light-Pipe Tunnel (Ø 2.0 mm through-hole over D1)
-        // PCB origin is [FRONT_NODE_WALL + 3.5, FRONT_NODE_WALL + 3.5]
-        // D1 is at [PCB_X + 66.25, PCB_Y + 30.19]
-        led_x = FRONT_NODE_WALL + 3.5 + 66.25;
-        led_y = FRONT_NODE_WALL + 3.5 + 30.19;
+        // 6. Status LED Light-Pipe Tunnel (Ø 2.0 mm through-hole directly over D1)
+        // D1 is at PCB rel [64.75, 22.25] -> Tub [72.75, 30.25]
+        led_x = pcb_origin_x + 64.75;
+        led_y = pcb_origin_y + 22.25;
         translate([led_x, led_y, -0.1])
             cylinder(r=1.0, h=FRONT_NODE_LID_H + 0.2, center=false);
             
-        // 7. Internal FPC Antenna Pocket (recess in ceiling for adhesive 2.4 GHz dipole)
-        translate([FRONT_NODE_WALL + 10.0, FRONT_NODE_OUTER_W / 2.0 - 6.0, FRONT_NODE_LID_H - FRONT_NODE_WALL - 0.5])
-            cube(size=[48.0, 12.0, 0.6], center=false);
+        // 7. Internal FPC Antenna Pocket & Coaxial Cable Retention System
+        // A. Recess pocket for adhesive 2.4 GHz FPC dipole (e.g. Molex 146153, 48 x 12 mm)
+        translate([FRONT_NODE_WALL + 10.0, FRONT_NODE_OUTER_W / 2.0 - 6.0, FRONT_NODE_LID_H - FRONT_NODE_WALL - 0.6])
+            cube(size=[48.0, 12.0, 0.7], center=false);
+            
+        // B. Recessed cable guide canal (Ø 1.5 mm) for U.FL coax lead to ESP32-C3
+        translate([FRONT_NODE_WALL + 54.0, FRONT_NODE_OUTER_W / 2.0 - 2.5, FRONT_NODE_LID_H - FRONT_NODE_WALL - 1.0])
+            cube(size=[10.0, 2.0, 1.1], center=false);
     }
 }
 
 // Standalone compilation
 front_node_upper_lid();
+

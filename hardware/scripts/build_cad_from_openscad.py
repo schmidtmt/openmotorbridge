@@ -67,11 +67,24 @@ STL_TARGETS: List[Tuple[str, str]] = [
     ("00_common/dummies/dummy_adapter_pcb.scad", "03_pod_cartridges/components/dummy_adapter_pcb.stl"),
     ("00_common/dummies/dummy_m8_connector.scad", "02_pod_base/components/dummy_m8_connector.stl"),
     
-    # 7. Universal Front Node
+    # 7. Universal Front Node (Production Parts)
     ("04_front_node/00_front_node_tub.scad", "04_front_node/front_node_lower_tub.stl"),
     ("04_front_node/01_front_node_lid.scad", "04_front_node/front_node_upper_lid.stl"),
     ("04_front_node/02_front_node_cable_glands.scad", "04_front_node/front_node_cable_glands_tpu.stl"),
     ("04_front_node/03_front_node_usbc_plug.scad", "04_front_node/front_node_usbc_cap_tpu.stl"),
+
+    # 7b. Modular Components (Front Node)
+    ("04_front_node/parts/000_front_node_base_tub.scad", "04_front_node/components/01_front_node_base_tub.stl"),
+    ("04_front_node/parts/001_pcb_standoffs.scad", "04_front_node/components/02_pcb_standoffs.stl"),
+    ("04_front_node/parts/004_mounting_system.scad", "04_front_node/components/03_mounting_ears.stl"),
+    ("04_front_node/parts/006_dummy_front_node_pcb.scad", "04_front_node/components/dummy_front_node_pcb.stl"),
+
+    # 8. Pod 3 Touring & ST Bagger Consoles & Radar Mount
+    ("02_pod_base/pod3_touring_stealth_console.scad", "02_pod_base/pod3_touring_stealth_console.stl"),
+    ("02_pod_base/pod3_st_aero_winglet_nacelle.scad", "02_pod_base/pod3_st_aero_winglet_nacelle.stl"),
+    ("02_pod_base/radar_license_plate_bracket.scad", "02_pod_base/radar_license_plate_bracket.stl"),
+    ("02_pod_base/parts/006_fender_curved_saddle.scad", "02_pod_base/components/06_fender_curved_saddle.stl"),
+    ("02_pod_base/parts/007_pod_slide_dock_core.scad", "02_pod_base/components/07_pod_slide_dock_core.stl"),
 ]
 
 # List of High-Resolution 3D Render Targets
@@ -104,7 +117,7 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
     (
         "02_pod_base/97_pod_xray_assembly.scad",
         os.path.join(CAD_IMG_DIR, "openmotorbridge_pod_assembly_render_xray.png"),
-        "67.5,35,19,55,0,310,320",
+        "67.5,35,19,55,0,310,380",
         "Tomorrow"
     ),
     (
@@ -146,7 +159,7 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
     (
         "04_front_node/98_front_node_closed.scad",
         os.path.join(CAD_IMG_DIR, "front_node_closed_cad.png"),
-        "42,30,12,55,0,310,220",
+        "42,30,12,55,0,50,220",
         "Tomorrow"
     ),
     (
@@ -158,13 +171,55 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
     (
         "04_front_node/99_front_node_assembly.scad",
         os.path.join(CAD_IMG_DIR, "front_node_exploded_3d.png"),
-        "42,30,45,55,0,310,340",
+        "42,30,45,55,0,50,340",
         "Tomorrow"
     ),
     (
         "04_front_node/97_front_node_xray.scad",
         os.path.join(CAD_IMG_DIR, "front_node_cutaway_3d.png"),
         "42,30,12,55,0,310,220",
+        "Tomorrow"
+    ),
+    (
+        "02_pod_base/parts/006_fender_curved_saddle.scad",
+        os.path.join(CAD_IMG_DIR, "fender_curved_saddle_cad.png"),
+        "0,0,8,55,0,310,280",
+        "Tomorrow"
+    ),
+    (
+        "02_pod_base/pod3_touring_stealth_console.scad",
+        os.path.join(CAD_IMG_DIR, "pod3_touring_stealth_cad.png"),
+        "10,0,20,55,0,310,340",
+        "Tomorrow"
+    ),
+    (
+        "02_pod_base/pod3_st_aero_winglet_nacelle.scad",
+        os.path.join(CAD_IMG_DIR, "pod3_st_aero_winglet_cad.png"),
+        "10,0,10,55,0,310,380",
+        "Tomorrow"
+    ),
+    (
+        "02_pod_base/radar_license_plate_bracket.scad",
+        os.path.join(CAD_IMG_DIR, "radar_license_plate_bracket_cad.png"),
+        "0,12,-22,55,0,310,280",
+        "Tomorrow"
+    ),
+    (
+        "02_pod_base/99_pod3_fender_assembly_touring.scad",
+        os.path.join(CAD_IMG_DIR, "pod3_fender_assembly_touring_3d.png"),
+        "0,0,-40,60,0,325,900",
+        "Tomorrow"
+    ),
+    (
+        "02_pod_base/99_pod3_fender_assembly_st.scad",
+        os.path.join(CAD_IMG_DIR, "pod3_fender_assembly_st_3d.png"),
+        "0,0,-40,60,0,325,900",
+        "Tomorrow"
+    ),
+    (
+        "02_pod_base/98_pod3_fender_exploded_stack.scad",
+        os.path.join(CAD_IMG_DIR, "pod3_fender_exploded_stack_3d.png"),
+        "0,0,50,55,0,320,850",
         "Tomorrow"
     ),
 ]

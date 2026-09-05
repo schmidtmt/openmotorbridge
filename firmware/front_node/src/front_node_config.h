@@ -32,16 +32,58 @@ enum FrontNodePacketType : uint8_t {
     PKT_TYPE_AUDIO_RMS       = 0x03,
     PKT_TYPE_OTTOCAST_STATUS = 0x04,
     PKT_TYPE_CAN_TELEMETRY   = 0x05,
+    PKT_TYPE_CAM_STATUS      = 0x06,   // Action-Cam telemetry (brand, state, bat%, sd_min, flags)
+    PKT_TYPE_CAM_SCAN_RES    = 0x07,   // Discovered BLE camera item (mac, rssi, brand, name)
     PKT_TYPE_CMD_POWER_CYCLE = 0x10,
     PKT_TYPE_CMD_CONFIG      = 0x11,
+    PKT_TYPE_CAM_CMD         = 0x12,   // Action-Cam remote command from Central Box / WebApp
     PKT_TYPE_OTA_BEGIN       = 0x20,
     PKT_TYPE_OTA_CHUNK       = 0x21,
     PKT_TYPE_OTA_FINISH      = 0x22
 };
 
+// Camera Profile Types
+enum CamProfileType : uint8_t {
+    CAM_PROFILE_NONE         = 0x00,
+    CAM_PROFILE_GOPRO        = 0x01,   // GoPro Hero 9/10/11/12/13, Max (Open GoPro BLE)
+    CAM_PROFILE_INSTA360     = 0x02,   // Insta360 X3/X4, Ace Pro, GO 3
+    CAM_PROFILE_DJI          = 0x03    // DJI Osmo Action 3/4/5 Pro, Osmo 360
+};
+
+// Camera Connection & Recording States
+enum CamState : uint8_t {
+    CAM_STATE_DISCONNECTED   = 0x00,
+    CAM_STATE_SCANNING       = 0x01,
+    CAM_STATE_CONNECTING     = 0x02,
+    CAM_STATE_CONNECTED      = 0x03,
+    CAM_STATE_RECORDING      = 0x04
+};
+
+// Action-Cam Command Subtypes for PKT_TYPE_CAM_CMD
+enum CamCmdSubtype : uint8_t {
+    CAM_CMD_TOGGLE_REC       = 0x01,   // Start/Stop recording toggle
+    CAM_CMD_HILIGHT_TAG      = 0x02,   // Insert bookmark / highlight marker
+    CAM_CMD_START_SCAN       = 0x03,   // Scan for nearby BLE cameras (10s)
+    CAM_CMD_PAIR             = 0x04,   // Pair specific MAC with profile
+    CAM_CMD_UNPAIR           = 0x05,   // Unpair and clear from NVS
+    CAM_CMD_SET_AUTOCONNECT  = 0x06,   // Toggle autonomous autoconnect on boot/wake
+    CAM_CMD_SET_FUEL_FILTER  = 0x07    // Toggle KL15 Tankpausen-Filter (Auto-Stop/Resume)
+};
+
+// PTT Multi-Click Action Types
+enum PttClickType : uint8_t {
+    PTT_CLICK_NONE           = 0x00,
+    PTT_CLICK_SINGLE         = 0x01,   // Short press <400ms: Intercom/Radio PTT (<0.9ms zero-latency)
+    PTT_CLICK_DOUBLE         = 0x02,   // Double click: Action-Cam Record Toggle (Start/Stop)
+    PTT_CLICK_LONG           = 0x03    // Long press >800ms: Action-Cam HiLight Marker
+};
+
 // --- 3. Functional Timing Parameters ---
 #define PTT_DEBOUNCE_MS         15      // Hardware/Software RC debounce threshold
+#define PTT_DOUBLE_CLICK_MS     350     // Inter-click max duration for double click
+#define PTT_LONG_PRESS_MS       800     // Duration threshold for HiLight bookmark trigger
 #define OTTOCAST_RESET_PULSE_MS 2500    // VBUS power-off duration during 1-click reboot
 #define CAFE_DISCONNECT_SEC     60      // Delay before disabling VBUS after ignition off
 #define AUDIO_RMS_INTERVAL_MS   20      // 50 Hz telemetry rate for dBA edge audio
 #define HEARTBEAT_INTERVAL_MS   500     // Link supervision heartbeat
+

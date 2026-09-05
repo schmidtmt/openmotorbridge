@@ -13,6 +13,7 @@
 #include "opto_pulse_sequencer.h"
 #include "cartridge_onewire.h"
 #include "omm_flasher.h"
+#include "esp_now_front_node_client.h"
 
 static const char *TAG = "BLE_SERVER";
 
@@ -35,7 +36,7 @@ static uint16_t conn_handle_pwa = BLE_HS_CONN_HANDLE_NONE;
 static int gatt_svr_chr_access_omb(uint16_t conn_handle, uint16_t attr_handle,
                                    struct ble_gatt_access_ctxt *ctxt, void *arg) {
     if (ctxt->op == BLE_GATT_ACCESS_OP_WRITE_CHR) {
-        uint8_t cmd[4] = {0};
+        uint8_t cmd[32] = {0};
         uint16_t len = OS_MBUF_PKTLEN(ctxt->om);
         if (len > sizeof(cmd)) len = sizeof(cmd);
         os_mbuf_copydata(ctxt->om, 0, len, cmd);
@@ -55,6 +56,24 @@ static int gatt_svr_chr_access_omb(uint16_t conn_handle, uint16_t attr_handle,
             omm_flasher_push_from_storage("/spiffs/omm_rear.bin");
         } else if (cmd[0] == 0x07) { // Trigger Profile Merge & Hot-Reload
             cartridge_apply_profile_merge(cmd[1], "sena_apex", 0.0f);
+        } else if (cmd[0] == 0x10) { // Action-Cam: REC Start/Stop Toggle
+            esp_now_front_node_cam_toggle_rec();
+        } else if (cmd[0] == 0x11) { // Action-Cam: HiLight Bookmark Tag
+            esp_now_front_node_cam_hilight_tag();
+        } else if (cmd[0] == 0x12) { // Action-Cam: Start BLE Camera Scan
+            esp_now_front_node_cam_start_scan();
+        } else if (cmd[0] == 0x13) { // Action-Cam: Pair Specific Camera
+            if (len >= 8) {
+                esp_now_front_node_cam_pair(&cmd[1], cmd[7], (len > 8) ? reinterpret_cast<const char*>(&cmd[8]) : nullptr);
+            }
+        } else if (cmd[0] == 0x14) { // Action-Cam: Unpair Camera
+            esp_now_front_node_cam_unpair();
+        } else if (cmd[0] == 0x15) { // Action-Cam: Set Autoconnect
+            esp_now_front_node_cam_set_autoconnect(cmd[1] != 0);
+        } else if (cmd[0] == 0x16) { // Action-Cam: Set KL15 Fuel-Stop Filter
+            esp_now_front_node_cam_set_fuel_filter(cmd[1] != 0);
+        } else if (cmd[0] == 0x17) { // Front Node: 1-Click Ottocast Cold Reboot
+            esp_now_front_node_reboot_ottocast();
         }
         return 0;
     }

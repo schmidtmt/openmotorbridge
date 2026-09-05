@@ -36,8 +36,8 @@ Um das Zusammenspiel von Hardware, Akustik, Fahrdynamik, Thermik, Hochfrequenz-P
 │ 8. 180-Tage Winterpause   │ `battery_winter_standby_sim.py`   │ 16.5 µA ULP-Hibernate,  │
 │    Ruhestrom-Analyse      │                                   │ 0.59% Entladung / 6 Mon.│
 ├───────────────────────────┼───────────────────────────────────┼─────────────────────────┤
-│ 9. Universal Front Node & │ `front_node_wireless_hub_sim.py`  │ USB2512B Eye, MEMS DSP, │
-│    Smart Fairing Hub      │                                   │ TPS2051B, ESP-NOW, OTA  │
+│ 9. Universal Front Node   │ `front_node_wireless_hub_sim.py`  │ USB2512B Eye, MEMS DSP, │
+│    (PCBA 05)              │                                   │ TPS2051B, ESP-NOW, BLE  │
 ├───────────────────────────┼───────────────────────────────────┼─────────────────────────┤
 │ 10. Live Audio DSP Studio │ `tools/audio_testbench/server.py` │ Interaktive Web-Audio   │
 │     & Echtzeit-Simulator  │                                   │ Suite, Mic/PTT/Tacho/EQ │
@@ -78,7 +78,7 @@ Führt die reale C++-Firmware-Logik auf einer virtuellen Mehr-Platinen-Hardware 
 * **Szenario 8 (Bordnetz-Spannungsalarm):**
   * Stufe A ($< 11{,}8\,\text{V}$): Gelbe LED, Helm-Warnton (*Low Battery Chime*), Lastabwurf.
   * Stufe B ($0{,}0\,\text{V}$ Sicherungsausfall bei $80\,\text{km/h}$): USV-Übernahme, Sprachwarnung *"WARNING: MAIN POWER LOST"*, roter Strobe, Notfall-GPX-Flush.
-* **Szenario 9 (Smart Fairing Dongle-Management):** 1-Klick Hard-Reset ($2{,}5\,\text{s}$ VBUS Kaltstart) via WebApp und Auto-Café $60\,\text{s}$ Abschalt-Countdown bei Zündung AUS.
+* **Szenario 9 (Universal Front Node Power & Dongle-Management):** 1-Klick Hard-Reset ($2{,}5\,\text{s}$ VBUS Kaltstart) via WebApp und Auto-Café $60\,\text{s}$ Abschalt-Countdown bei Zündung AUS.
 * **Szenario 10:** Zündung AUS $\rightarrow$ 15-minütiger WebDAV/GPX Sync-Timer $\rightarrow$ ULP-Tiefschlaf ($< 20\,\mu\text{A}$).
 
 ---
@@ -153,7 +153,7 @@ Berechnet die Dämpfung nach ITU-R P.838-3 (Regen), ITU-R P.840-9 (Nebel) und IT
 
 ---
 
-## 10. Universal Front Node & Smart Fairing Hub (`front_node_wireless_hub_sim.py`)
+## 10. Universal Front Node (PCBA 05) (`front_node_wireless_hub_sim.py`)
 
 Verifiziert alle hochfrequenten, leistungselektronischen und funktechnischen Subsysteme der Front-Knoten-Baugruppe (PCBA 05):
 

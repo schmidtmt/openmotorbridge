@@ -23,7 +23,7 @@ Die **OpenMotorBridge (OMB)** ist eine offene, herstellerübergreifende Kommunik
 Die modulare technische Gesamtspezifikation gliedert sich in 16 thematisch strukturierte Kapitel:
 
 1. [**01 - Systemarchitektur & Satelliten-Topologie**](docs/de/01_system_architecture.md)  
-   *Überblick über die 5-Punkt-Topologie, HF-Diversität, Cockpit-Integration und das Gesamtsystem.*
+   *Die 5 standardisierten Funktionsknoten, freie Montagephilosophie („Your Bike, Your Choice“), HF-Diversität und Cockpit-Integration.*
 
 2. [**02 - Intercom-Matrix, Profile & Dynamisches Routing**](docs/de/02_intercom_matrix_profiles.md)  
    *Die 5 OEM-Adapterklassen A–E, LittleFS-Profil-Engine, Zero-Latency PTT (< 1,8 ms) und Audio-Cross-Matrix.*
@@ -43,8 +43,8 @@ Die modulare technische Gesamtspezifikation gliedert sich in 16 thematisch struk
 7. [**07 - Hardware-Architektur & Platinen-Pinouts (PCBA 01 bis 05)**](docs/de/07_pcba_hardware_pinouts.md)  
    *Alle 5 Leiterplatten im Detail: Lagenaufbau, Impedanzen, Net-Klassen, Funktionszonen und Pinout-Tabellen.*
 
-8. [**08 - Mechanische Gehäuse, CAD & Dichtungssystem**](docs/de/08_enclosures_mechanics_cad.md)  
-   *3-teilige Zentralbox, universelle Satelliten-Pods, Wechselkassetten, Heck-Pod 3 und 4-in-1 Front-Knoten.*
+8. [**08 - Mechanische Gehäuse, CAD & Referenz-Montagekits**](docs/de/08_enclosures_mechanics_cad.md)  
+   *Universelle Pods & Kassetten, 4-in-1 Front-Knoten sowie schraub- und klebefreie Referenzkits für CVO ST, Road King Special und Enduros.*
 
 9. [**09 - Firmware-Architektur, FreeRTOS & Rollback-OTA**](docs/de/09_firmware_architecture.md)  
    *Multi-Core ESP32-S3, RP2040, ESP32-C3, ESP-NOW Low-Latency-Protokoll und ausfallsicheres Dual-Bank OTA.*

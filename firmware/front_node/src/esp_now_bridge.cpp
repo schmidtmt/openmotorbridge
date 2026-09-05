@@ -142,6 +142,36 @@ bool EspNowBridge::send_ottocast_status(uint8_t state, bool power_on, bool fault
     return (res == ESP_OK);
 }
 
+bool EspNowBridge::send_cam_status(uint8_t brand, uint8_t state, uint8_t bat_pct, uint16_t sd_min, bool autoconn, bool fuelfilt) {
+    uint8_t buf[9];
+    buf[0] = FRONT_NODE_PROTOCOL_VER;
+    buf[1] = PKT_TYPE_CAM_STATUS;
+    buf[2] = brand;
+    buf[3] = state;
+    buf[4] = bat_pct;
+    memcpy(&buf[5], &sd_min, sizeof(uint16_t));
+    buf[7] = autoconn ? 1 : 0;
+    buf[8] = fuelfilt ? 1 : 0;
+
+    esp_err_t res = esp_now_send(m_peer_mac, buf, sizeof(buf));
+    return (res == ESP_OK);
+}
+
+bool EspNowBridge::send_cam_scan_result(const uint8_t* mac, int8_t rssi, uint8_t brand, const char* name) {
+    uint8_t buf[40] = {0};
+    buf[0] = FRONT_NODE_PROTOCOL_VER;
+    buf[1] = PKT_TYPE_CAM_SCAN_RES;
+    if (mac) memcpy(&buf[2], mac, 6);
+    buf[8] = static_cast<uint8_t>(rssi);
+    buf[9] = brand;
+    if (name) {
+        strncpy(reinterpret_cast<char*>(&buf[10]), name, 29);
+    }
+
+    esp_err_t res = esp_now_send(m_peer_mac, buf, sizeof(buf));
+    return (res == ESP_OK);
+}
+
 bool EspNowBridge::send_heartbeat() {
     uint8_t buf[2];
     buf[0] = FRONT_NODE_PROTOCOL_VER;

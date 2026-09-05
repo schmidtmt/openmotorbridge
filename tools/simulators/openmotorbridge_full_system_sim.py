@@ -265,7 +265,7 @@ def sim_rear_pod3() -> Dict[str, Any]:
     return results
 
 def sim_front_node() -> Dict[str, Any]:
-    """1.5 Universal Front Node Simulation (Smart Fairing Controller)"""
+    """1.5 Universal Front Node Simulation (PCBA 05)"""
     results = {}
     
     # Test 1: LMR36015 36V Synchronous Buck Converter (12V -> 5.0V @ 2.0A full load)
@@ -547,7 +547,7 @@ def run_all_simulations():
     print(f"      -> Status: ✅ PASSED")
 
     # 1.5 Universal Front Node
-    print(format_banner("1.5 UNIVERSAL FRONT NODE (SMART FAIRING CONTROLLER)", "-"))
+    print(format_banner("1.5 UNIVERSAL FRONT NODE (PCBA 05)", "-"))
     fn = sim_front_node()
     print("  [1] LMR36015 36V Synchronous Buck Converter (12V -> 5.0V @ 2.0A):")
     print(f"      • Conversion Efficiency   : {fn['lmr36015_buck']['efficiency_percent']:.1f} %")

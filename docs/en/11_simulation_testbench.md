@@ -36,8 +36,8 @@ To exhaustively verify the interaction of hardware, acoustics, vehicle dynamics,
 │ 8. 180-Day Winter Storage │ `battery_winter_standby_sim.py`   │ 16.5 µA ULP-Hibernate,  │
 │    Quiescent Drain        │                                   │ 0.59% Drain / 6 Months  │
 ├───────────────────────────┼───────────────────────────────────┼─────────────────────────┤
-│ 9. Universal Front Node & │ `front_node_wireless_hub_sim.py`  │ USB2512B Eye, MEMS DSP, │
-│    Smart Fairing Hub      │                                   │ TPS2051B, ESP-NOW, OTA  │
+│ 9. Universal Front Node   │ `front_node_wireless_hub_sim.py`  │ USB2512B Eye, MEMS DSP, │
+│    (PCBA 05)              │                                   │ TPS2051B, ESP-NOW, BLE  │
 ├───────────────────────────┼───────────────────────────────────┼─────────────────────────┤
 │ 10. Live Audio DSP Studio │ `tools/audio_testbench/server.py` │ Interactive Web Audio   │
 │     & Real-Time Simulator │                                   │ Suite, Mic/PTT/Speedo/EQ│
@@ -77,7 +77,7 @@ Executes production C++ firmware algorithms against a virtual multi-board testbe
 * **Scenario 8 (Battery Voltage Alarm):**
   * Stage A ($< 11{,}8\,\text{V}$): Yellow LED, low battery chime, non-essential load shedding.
   * Stage B ($0{,}0\,\text{V}$ fuse blowout at 80 km/h): UPS takeover, voice warning *"WARNING: MAIN POWER LOST"*, emergency GPX sync.
-* **Scenario 9 (Smart Fairing Power Gate):** 1-click hard reboot (2.5s VBUS cutoff) and Auto-Café 60s countdown timer.
+* **Scenario 9 (Universal Front Node Power & Dongle Management):** 1-click hard reboot (2.5s VBUS cutoff) and Auto-Café 60s countdown timer.
 * **Scenario 10:** Ignition OFF $\rightarrow$ 15-minute WebDAV/GPX sync window $\rightarrow$ ULP deep sleep ($< 20\,\mu\text{A}$).
 
 ---
@@ -152,7 +152,7 @@ Calculates atmospheric and precipitation attenuation according to ITU-R P.838-3 
 
 ---
 
-## 10. Universal Front Node & Smart Fairing Hub (`front_node_wireless_hub_sim.py`)
+## 10. Universal Front Node (PCBA 05) (`front_node_wireless_hub_sim.py`)
 
 Simulates and verifies all high-speed, power, and wireless subsystems of the Front Node (PCBA 05):
 

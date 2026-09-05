@@ -133,13 +133,25 @@ const i18n = {
         wizard_step3_h: 'Kassette einschieben & verriegeln',
         wizard_step3_p: 'Schiebe die Kassette ein, bis die POM-C Snap-Lock Klinken einrasten, und schließe den 90°-Cam-Lock Drehriegel.',
         btn_wizard_finish: 'Verstanden & Profil aktivieren',
-        front_node_title: 'Universal Front-Knoten (Smart Fairing Hub)',
+        front_node_title: 'Universal Front-Knoten',
         front_node_diag_title: 'Universal Front-Knoten Diagnostik (PCBA 05)',
         front_noise_vu_label: 'Fahrtwind-Lärmpegel & Helm-Lautstärkeanpassung (AGC)',
         btn_reboot_ottocast: 'CarPlay 1-Klick Kaltstart (2.5s)',
         btn_test_ptt: 'Lenker-PTT Testen',
         auto_cafe_label: 'Auto-Café Mode (60s)',
         btn_front_node_ota: 'Front-Node OTA Firmware-Update prüfen',
+        btn_cam_rec_start: 'Aufnahme Starten',
+        btn_cam_rec_stop: 'Aufnahme Stoppen',
+        btn_cam_hilight: 'HiLight Marker',
+        btn_cam_pairing: 'Kamera Koppeln',
+        tank_filter_label: 'Tankpausen-Filter',
+        cam_pairing_modal_title: 'Action-Cam BLE Kopplung & Autoconnect',
+        cam_scan_heading: 'Bluetooth LE Kamerasuche',
+        btn_start_scan: 'Kameras suchen',
+        lbl_cam_profile: 'Erkanntes Kamera-Steuerprofil:',
+        chk_autoconnect_label: 'Bei Zündung EIN automatisch verbinden (Autoconnect)',
+        btn_confirm_pair: 'Kamera Koppeln & Profil speichern',
+        btn_unpair_cam: 'Entkoppeln',
         rear_radar_title: 'Heck-Radar & Totwinkel-Assistent (BSD)',
         btn_radar_sim: 'Annäherung Simulieren',
         btn_radar_chime: 'Warnping Testen',
@@ -268,13 +280,25 @@ const i18n = {
         wizard_step3_h: 'Insert & Lock Cartridge',
         wizard_step3_p: 'Slide the cartridge in until the POM-C snap-lock clicks, then turn the 90° cam-lock to secure.',
         btn_wizard_finish: 'Understood & Activate Profile',
-        front_node_title: 'Universal Front Node (Smart Fairing Hub)',
+        front_node_title: 'Universal Front Node',
         front_node_diag_title: 'Universal Front Node Diagnostics (PCBA 05)',
         front_noise_vu_label: 'Wind Noise SPL & Helmet Volume Compensation (AGC)',
         btn_reboot_ottocast: 'CarPlay 1-Click Power-Cycle (2.5s)',
         btn_test_ptt: 'Test Handlebar PTT',
         auto_cafe_label: 'Auto-Café Mode (60s)',
         btn_front_node_ota: 'Check Front Node OTA Firmware Update',
+        btn_cam_rec_start: 'Start Recording',
+        btn_cam_rec_stop: 'Stop Recording',
+        btn_cam_hilight: 'HiLight Marker',
+        btn_cam_pairing: 'Pair Camera',
+        tank_filter_label: 'Fuel-Stop Filter',
+        cam_pairing_modal_title: 'Action-Cam BLE Pairing & Autoconnect',
+        cam_scan_heading: 'Bluetooth LE Camera Inquiry',
+        btn_start_scan: 'Scan Cameras',
+        lbl_cam_profile: 'Detected Camera Control Profile:',
+        chk_autoconnect_label: 'Auto-connect on vehicle ignition ON (Autoconnect)',
+        btn_confirm_pair: 'Pair Camera & Save Profile',
+        btn_unpair_cam: 'Unpair',
         rear_radar_title: 'Rear Radar & Blind-Spot Assistant (BSD)',
         btn_radar_sim: 'Simulate Approach',
         btn_radar_chime: 'Test Warning Chime',
@@ -313,6 +337,22 @@ const state = {
         ambientDba: 52.0,
         agcBoostDb: 0.0,
         pttPressed: false
+    },
+    actionCam: {
+        paired: true,
+        connected: true,
+        recording: false,
+        brand: 'GoPro',
+        model: 'GoPro Hero 12 Black',
+        profile: 1,
+        batteryPct: 88,
+        sdRemMin: 165,
+        autoconnect: true,
+        fuelFilter: true,
+        wasRecordingAtFuelStop: false,
+        mac: 'C4:64:E3:42:19:B1',
+        scanning: false,
+        discovered: []
     },
     radar: {
         enabled: true,
@@ -384,6 +424,37 @@ const btnTestHandlebarPtt = document.getElementById('btn-test-handlebar-ptt');
 const chkAutoCafe = document.getElementById('chk-auto-cafe');
 const lblAutoCafeStatus = document.getElementById('lbl-auto-cafe-status');
 const btnFrontNodeOta = document.getElementById('btn-front-node-ota');
+
+// Action Cam BLE Bridge DOM Elements
+const tileFrontCam = document.getElementById('tile-front-cam');
+const badgeCamStatus = document.getElementById('badge-cam-status');
+const lblCamName = document.getElementById('lbl-cam-name');
+const lblCamBat = document.getElementById('lbl-cam-bat');
+const lblCamSd = document.getElementById('lbl-cam-sd');
+const btnCamRecToggle = document.getElementById('btn-cam-rec-toggle');
+const iconCamRec = document.getElementById('icon-cam-rec');
+const lblCamRecBtn = document.getElementById('lbl-cam-rec-btn');
+const btnCamHilight = document.getElementById('btn-cam-hilight');
+const btnOpenCamPairing = document.getElementById('btn-open-cam-pairing');
+const chkTankFilter = document.getElementById('chk-tank-filter');
+const lblTankFilterSub = document.getElementById('lbl-tank-filter-sub');
+
+// Action Cam Pairing Modal Elements
+const modalCamPairing = document.getElementById('modal-cam-pairing');
+const btnCloseCamModal = document.getElementById('btn-close-cam-modal');
+const btnStartCamScan = document.getElementById('btn-start-cam-scan');
+const iconCamScanSpin = document.getElementById('icon-cam-scan-spin');
+const lblScanBtnTxt = document.getElementById('lbl-scan-btn-txt');
+const lblScanStatus = document.getElementById('lbl-scan-status');
+const listDiscoveredCams = document.getElementById('list-discovered-cams');
+const selCamProfile = document.getElementById('sel-cam-profile');
+const chkCamAutoconnect = document.getElementById('chk-cam-autoconnect');
+const btnConfirmCamPair = document.getElementById('btn-confirm-cam-pair');
+const boxCurrentPairedCam = document.getElementById('box-current-paired-cam');
+const lblModalPairedName = document.getElementById('lbl-modal-paired-name');
+const lblModalPairedMac = document.getElementById('lbl-modal-paired-mac');
+const badgeModalCamState = document.getElementById('badge-modal-cam-state');
+const btnUnpairCam = document.getElementById('btn-unpair-cam');
 
 let bleDevice = null;
 let controlChar = null;
@@ -1079,6 +1150,21 @@ function updateTelemetryUi(data) {
             state.frontNode.pttPressed = fn.ptt_pressed;
             updateFrontNodePttVisual(fn.ptt_pressed);
         }
+
+        // Action-Cam BLE Subsystem
+        if (fn.cam || state.actionCam) {
+            if (fn.cam) {
+                if (fn.cam.state !== undefined) {
+                    state.actionCam.connected = (fn.cam.state >= 3);
+                    state.actionCam.recording = (fn.cam.state === 4);
+                }
+                if (fn.cam.battery_pct !== undefined) state.actionCam.batteryPct = fn.cam.battery_pct;
+                if (fn.cam.sd_min_rem !== undefined) state.actionCam.sdRemMin = fn.cam.sd_min_rem;
+                if (fn.cam.profile !== undefined) state.actionCam.profile = fn.cam.profile;
+                if (fn.cam.name) state.actionCam.model = fn.cam.name;
+            }
+            updateActionCamUi();
+        }
     }
 }
 
@@ -1098,6 +1184,243 @@ function updateFrontNodePttVisual(pressed) {
         lblFrontPttLatency.style.color = 'var(--accent-blue)';
         tileFrontPtt.classList.remove('ptt-active-pulse');
     }
+}
+
+// ==========================================
+// Action-Cam BLE Bridge Logic
+// ==========================================
+function updateActionCamUi() {
+    const cam = state.actionCam;
+    if (!cam) return;
+
+    const isDe = state.lang === 'de';
+
+    // 1. Update Subsystem Metric Tile 4
+    if (badgeCamStatus && lblCamName && lblCamBat && lblCamSd && tileFrontCam) {
+        if (cam.recording) {
+            badgeCamStatus.className = 'card-badge badge-red ptt-active-pulse';
+            badgeCamStatus.textContent = '● REC';
+            tileFrontCam.style.borderColor = 'rgba(255, 69, 58, 0.6)';
+        } else if (cam.connected) {
+            badgeCamStatus.className = 'card-badge badge-blue';
+            badgeCamStatus.textContent = isDe ? 'VERBUNDEN' : 'CONNECTED';
+            tileFrontCam.style.borderColor = 'var(--border-subtle)';
+        } else if (cam.scanning) {
+            badgeCamStatus.className = 'card-badge badge-orange';
+            badgeCamStatus.textContent = 'SCANNING...';
+            tileFrontCam.style.borderColor = 'rgba(255, 159, 10, 0.4)';
+        } else {
+            badgeCamStatus.className = 'card-badge';
+            badgeCamStatus.textContent = isDe ? 'GETRENNT' : 'OFFLINE';
+            tileFrontCam.style.borderColor = 'var(--border-subtle)';
+        }
+
+        lblCamName.textContent = cam.paired ? cam.model : (isDe ? 'Nicht gekoppelt' : 'Not paired');
+        lblCamBat.textContent = cam.connected ? `🔋 ${cam.batteryPct}%` : '🔋 --%';
+
+        const hours = Math.floor(cam.sdRemMin / 60);
+        const mins = cam.sdRemMin % 60;
+        lblCamSd.textContent = cam.connected ? `⏱️ ${hours}h ${mins}m SD` : '⏱️ -- SD';
+    }
+
+    // 2. Update Quick REC Toggle Button
+    if (btnCamRecToggle && lblCamRecBtn && iconCamRec) {
+        if (cam.recording) {
+            iconCamRec.textContent = '⏹️';
+            lblCamRecBtn.textContent = i18n[state.lang].btn_cam_rec_stop;
+            btnCamRecToggle.style.background = 'rgba(255, 69, 58, 0.2)';
+            btnCamRecToggle.style.borderColor = 'var(--accent-red)';
+            btnCamRecToggle.style.color = 'var(--accent-red)';
+        } else {
+            iconCamRec.textContent = '⏺️';
+            lblCamRecBtn.textContent = i18n[state.lang].btn_cam_rec_start;
+            btnCamRecToggle.style.background = '#ff453a';
+            btnCamRecToggle.style.borderColor = '#ff453a';
+            btnCamRecToggle.style.color = '#ffffff';
+        }
+    }
+
+    // 3. Update Modal Paired Status Card
+    if (boxCurrentPairedCam && lblModalPairedName && lblModalPairedMac && badgeModalCamState) {
+        if (cam.paired) {
+            boxCurrentPairedCam.style.display = 'block';
+            lblModalPairedName.textContent = cam.model;
+
+            let profName = 'GoPro BLE';
+            if (cam.profile === 2) profName = 'Insta360 Remote BLE';
+            if (cam.profile === 3) profName = 'DJI Osmo / Action BLE';
+
+            lblModalPairedMac.textContent = `MAC: ${cam.mac} · ${profName}`;
+            badgeModalCamState.className = cam.recording ? 'card-badge badge-red' : (cam.connected ? 'card-badge badge-green' : 'card-badge');
+            badgeModalCamState.textContent = cam.recording ? '● RECORDING' : (cam.connected ? (isDe ? 'VERBUNDEN' : 'CONNECTED') : (isDe ? 'GETRENNT' : 'OFFLINE'));
+        } else {
+            boxCurrentPairedCam.style.display = 'none';
+        }
+    }
+}
+
+function toggleActionCamRec() {
+    if (!state.actionCam.connected) {
+        showToast(state.lang === 'de' ? '⚠️ Keine Action-Cam verbunden. Bitte erst koppeln.' : '⚠️ No action camera connected. Please pair first.');
+        return;
+    }
+
+    state.actionCam.recording = !state.actionCam.recording;
+    const isRec = state.actionCam.recording;
+
+    // Send BLE GATT command opcode 0x10 to Main Controller / Front Node
+    if (controlChar && state.isBleConnected) {
+        const payload = new Uint8Array([0x10, isRec ? 0x01 : 0x00]);
+        controlChar.writeValue(payload).catch(err => console.warn('Cam REC GATT send failed:', err));
+    }
+
+    updateActionCamUi();
+
+    if (isRec) {
+        showToast(state.lang === 'de' ? '▶️ Action-Cam Aufnahme gestartet!' : '▶️ Action Cam recording started!');
+    } else {
+        showToast(state.lang === 'de' ? '⏹️ Action-Cam Aufnahme beendet & auf SD-Karte gesichert!' : '⏹️ Action Cam recording stopped & saved to SD card!');
+    }
+}
+
+function triggerActionCamHilight() {
+    if (!state.actionCam.connected) {
+        showToast(state.lang === 'de' ? '⚠️ Keine Action-Cam verbunden.' : '⚠️ No action camera connected.');
+        return;
+    }
+
+    // Send BLE GATT command opcode 0x11
+    if (controlChar && state.isBleConnected) {
+        const payload = new Uint8Array([0x11, 0x01]);
+        controlChar.writeValue(payload).catch(err => console.warn('Cam HiLight GATT send failed:', err));
+    }
+
+    showToast(state.lang === 'de' ? '🔖 HiLight Marker in Video-Timeline gesetzt!' : '🔖 HiLight bookmark tag placed in video timeline!');
+}
+
+function openActionCamModal() {
+    if (modalCamPairing) {
+        modalCamPairing.classList.add('active');
+        updateActionCamUi();
+    }
+}
+
+function closeActionCamModal() {
+    if (modalCamPairing) {
+        modalCamPairing.classList.remove('active');
+    }
+}
+
+function startActionCamScan() {
+    if (state.actionCam.scanning) return;
+    state.actionCam.scanning = true;
+
+    if (iconCamScanSpin && lblScanBtnTxt && lblScanStatus) {
+        iconCamScanSpin.style.display = 'inline-block';
+        iconCamScanSpin.style.animation = 'spin 1s linear infinite';
+        lblScanBtnTxt.textContent = state.lang === 'de' ? 'Scanne...' : 'Scanning...';
+        lblScanStatus.textContent = state.lang === 'de' ? 'Suche nach BLE Action-Cams in Funkreichweite...' : 'Scanning for nearby BLE action cameras...';
+    }
+
+    if (listDiscoveredCams) {
+        listDiscoveredCams.innerHTML = '<div style="font-size: 0.75rem; color: var(--accent-blue); text-align: center; padding: 12px 0;">📡 BLE Inquiry Scan aktiv (10s)...</div>';
+    }
+
+    // Trigger hardware BLE scan via GATT opcode 0x12
+    if (controlChar && state.isBleConnected) {
+        const payload = new Uint8Array([0x12, 0x0A]); // 10s scan
+        controlChar.writeValue(payload).catch(err => console.warn('Cam Scan GATT send failed:', err));
+    }
+
+    // Simulation / Discovery Populator
+    setTimeout(() => {
+        state.actionCam.scanning = false;
+        if (iconCamScanSpin && lblScanBtnTxt && lblScanStatus) {
+            iconCamScanSpin.style.animation = 'none';
+            lblScanBtnTxt.textContent = i18n[state.lang].btn_start_scan;
+            lblScanStatus.textContent = state.lang === 'de' ? 'Scan abgeschlossen: 3 Kameras erkannt!' : 'Scan completed: 3 cameras detected!';
+        }
+
+        const discovered = [
+            { name: 'GoPro Hero 12 Black', mac: 'C4:64:E3:42:19:B1', rssi: -52, profile: 1, brandBadge: 'GoPro (Open GoPro)' },
+            { name: 'Insta360 X4', mac: 'E2:15:98:71:04:A2', rssi: -66, profile: 2, brandBadge: 'Insta360 (Remote BLE)' },
+            { name: 'DJI Osmo 360 / Action 4', mac: 'F0:9C:23:4B:11:80', rssi: -73, profile: 3, brandBadge: 'DJI Action & Osmo 360' }
+        ];
+
+        state.actionCam.discovered = discovered;
+
+        if (listDiscoveredCams) {
+            listDiscoveredCams.innerHTML = '';
+            discovered.forEach(item => {
+                const row = document.createElement('div');
+                row.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; background: rgba(255,255,255,0.04); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); cursor: pointer; transition: background 0.15s;';
+                row.innerHTML = `
+                    <div>
+                        <div style="font-weight: 600; font-size: 0.82rem; color: var(--text-primary);">${item.name}</div>
+                        <div style="font-size: 0.68rem; color: var(--text-muted);">${item.mac} · ${item.rssi} dBm</div>
+                    </div>
+                    <span class="card-badge badge-blue" style="font-size: 0.62rem;">${item.brandBadge}</span>
+                `;
+
+                row.addEventListener('mouseenter', () => { row.style.background = 'rgba(255,255,255,0.09)'; });
+                row.addEventListener('mouseleave', () => { row.style.background = 'rgba(255,255,255,0.04)'; });
+                row.addEventListener('click', () => {
+                    if (selCamProfile) selCamProfile.value = item.profile.toString();
+                    showToast(state.lang === 'de' 
+                        ? `Ausgewählt: ${item.name} (Profil automatisch auf ${item.brandBadge} gesetzt)` 
+                        : `Selected: ${item.name} (Profile auto-set to ${item.brandBadge})`);
+                });
+
+                listDiscoveredCams.appendChild(row);
+            });
+        }
+    }, 1200);
+}
+
+function confirmCamPairing() {
+    const profVal = selCamProfile ? parseInt(selCamProfile.value, 10) : 1;
+    let selectedItem = state.actionCam.discovered.find(d => d.profile === profVal);
+    if (!selectedItem) {
+        if (profVal === 1) selectedItem = { name: 'GoPro Hero 12 Black', mac: 'C4:64:E3:42:19:B1', profile: 1 };
+        else if (profVal === 2) selectedItem = { name: 'Insta360 X4', mac: 'E2:15:98:71:04:A2', profile: 2 };
+        else selectedItem = { name: 'DJI Osmo 360 / Action 4', mac: 'F0:9C:23:4B:11:80', profile: 3 };
+    }
+
+    state.actionCam.paired = true;
+    state.actionCam.connected = true;
+    state.actionCam.recording = false;
+    state.actionCam.model = selectedItem.name;
+    state.actionCam.mac = selectedItem.mac;
+    state.actionCam.profile = profVal;
+    state.actionCam.autoconnect = chkCamAutoconnect ? chkCamAutoconnect.checked : true;
+
+    // Send GATT pair command opcode 0x13
+    if (controlChar && state.isBleConnected) {
+        const payload = new Uint8Array([0x13, profVal]);
+        controlChar.writeValue(payload).catch(err => console.warn('Cam Pair GATT send failed:', err));
+    }
+
+    updateActionCamUi();
+    showToast(state.lang === 'de'
+        ? `✓ ${selectedItem.name} erfolgreich gekoppelt! Autoconnect in NVS gesichert.`
+        : `✓ ${selectedItem.name} paired successfully! Autoconnect saved to NVS.`);
+}
+
+function unpairActionCam() {
+    state.actionCam.paired = false;
+    state.actionCam.connected = false;
+    state.actionCam.recording = false;
+    state.actionCam.model = state.lang === 'de' ? 'Nicht gekoppelt' : 'Not paired';
+    state.actionCam.mac = '--:--:--:--:--:--';
+
+    // Send GATT unpair command opcode 0x14
+    if (controlChar && state.isBleConnected) {
+        const payload = new Uint8Array([0x14, 0x01]);
+        controlChar.writeValue(payload).catch(err => console.warn('Cam Unpair GATT send failed:', err));
+    }
+
+    updateActionCamUi();
+    showToast(state.lang === 'de' ? '🗑️ Action-Cam entkoppelt und NVS-Profil gelöscht.' : '🗑️ Action camera unpaired and NVS profile cleared.');
 }
 
 function rebootOttocastDongle() {
@@ -1130,19 +1453,74 @@ if (btnRebootOttocast) {
     btnRebootOttocast.addEventListener('click', rebootOttocastDongle);
 }
 
+// Handlebar PTT Multi-Click Simulator
 if (btnTestHandlebarPtt) {
+    let pttPressStart = 0;
+    let pttClickCount = 0;
+    let pttClickTimer = null;
+
     const triggerPress = () => {
+        pttPressStart = Date.now();
         updateFrontNodePttVisual(true);
-        showToast(state.lang === 'de' ? '⚡ Lenker-PTT gedrückt: Optokoppler TLP222A gezündet (< 1.8 ms)!' : '⚡ Handlebar PTT pressed: Optocoupler TLP222A keyed (< 1.8 ms)!');
     };
+
     const triggerRelease = () => {
+        const duration = Date.now() - pttPressStart;
         updateFrontNodePttVisual(false);
+
+        if (duration >= 800) {
+            // Long Press (>800ms): HiLight Tag
+            pttClickCount = 0;
+            if (pttClickTimer) clearTimeout(pttClickTimer);
+            triggerActionCamHilight();
+            showToast(state.lang === 'de' ? '⚡ PTT Long-Press (>800ms) erkannt: Action-Cam HiLight Marker!' : '⚡ PTT Long-Press (>800ms): Action Cam HiLight marker!');
+        } else {
+            // Short click
+            pttClickCount++;
+            if (pttClickCount === 1) {
+                pttClickTimer = setTimeout(() => {
+                    // Single click expired: Intercom key
+                    pttClickCount = 0;
+                    showToast(state.lang === 'de' ? '⚡ Lenker-PTT 1x kurz: Optokoppler TLP222A gezündet (< 0.9 ms)!' : '⚡ Handlebar PTT 1x short: Optocoupler keyed (< 0.9 ms)!');
+                }, 350);
+            } else if (pttClickCount === 2) {
+                // Double click within 350ms: Action Cam REC Toggle
+                if (pttClickTimer) clearTimeout(pttClickTimer);
+                pttClickCount = 0;
+                toggleActionCamRec();
+                showToast(state.lang === 'de' ? '⚡ PTT Doppelklick erkannt: Action-Cam Aufnahme getoggelt!' : '⚡ PTT Double-Click: Action Cam REC toggled!');
+            }
+        }
     };
 
     btnTestHandlebarPtt.addEventListener('mousedown', triggerPress);
     btnTestHandlebarPtt.addEventListener('mouseup', triggerRelease);
     btnTestHandlebarPtt.addEventListener('touchstart', (e) => { e.preventDefault(); triggerPress(); });
     btnTestHandlebarPtt.addEventListener('touchend', (e) => { e.preventDefault(); triggerRelease(); });
+}
+
+// Action-Cam Buttons & Modal Listeners
+if (btnCamRecToggle) btnCamRecToggle.addEventListener('click', toggleActionCamRec);
+if (btnCamHilight) btnCamHilight.addEventListener('click', triggerActionCamHilight);
+if (btnOpenCamPairing) btnOpenCamPairing.addEventListener('click', openActionCamModal);
+if (btnCloseCamModal) btnCloseCamModal.addEventListener('click', closeActionCamModal);
+if (btnStartCamScan) btnStartCamScan.addEventListener('click', startActionCamScan);
+if (btnConfirmCamPair) btnConfirmCamPair.addEventListener('click', confirmCamPairing);
+if (btnUnpairCam) btnUnpairCam.addEventListener('click', unpairActionCam);
+
+if (chkTankFilter) {
+    chkTankFilter.addEventListener('change', (e) => {
+        state.actionCam.fuelFilter = e.target.checked;
+        showToast(e.target.checked 
+            ? (state.lang === 'de' ? '⛽ Tankpausen-Filter aktiviert (Auto-Cut via C_BUF Puffer)' : '⛽ Fuel-stop filter enabled')
+            : (state.lang === 'de' ? 'Tankpausen-Filter deaktiviert' : 'Fuel-stop filter disabled'));
+    });
+}
+
+if (chkCamAutoconnect) {
+    chkCamAutoconnect.addEventListener('change', (e) => {
+        state.actionCam.autoconnect = e.target.checked;
+    });
 }
 
 if (chkAutoCafe) {
@@ -1348,6 +1726,13 @@ function toggleDemoMode(enable) {
             const simulatedLean = Math.sin(angleTime) * 36.5 + (Math.random() * 2 - 1);
             const simulatedSpeed = Math.abs(Math.cos(angleTime * 0.7)) * 75 + 25;
             const simulatedVign = 12.6 + Math.sin(angleTime * 0.2) * 0.4;
+
+            // Action-Cam Recording Time Simulation
+            if (state.actionCam && state.actionCam.recording) {
+                if (Math.random() < 0.015 && state.actionCam.sdRemMin > 0) {
+                    state.actionCam.sdRemMin--;
+                }
+            }
 
             updateTelemetryUi({
                 v_ign: simulatedVign,

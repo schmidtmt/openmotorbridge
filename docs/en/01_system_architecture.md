@@ -30,9 +30,10 @@ Classic motorcycle communication systems are historically fragmented:
 ┌──────────────────────────────┬──────────────────────────────┬─────────────────────────────┤
 │ 3. SATELLITE POD 1 (M8 6P):  │ 4. SATELLITE POD 2 (M8 6P):  │ 5. REAR POD 3 (M8 6P):      │
 │ • Universal Pod Enclosure    │ • Universal Pod Enclosure    │ • Universal Pod Enclosure   │
-│ • Cartridge Sled for Sena    │ • Cartridge Sled for Cardo   │ • 1-Tier Monolithic Sled    │
-│   50S/60S/MeshPort           │   Packtalk Edge / PMR446     │ • u-blox MAX-M10S Multi-GNSS│
-│ • Helmet or Frame Mounted    │ • Helmet or Frame Mounted    │ • SX1262 LoRa 868MHz + RP2040│
+│ • Intercom Bridge A (Sena    │ • Intercom Bridge B (Cardo   │ • 1-Tier Monolithic Sled    │
+│   50S/60S/MeshPort Sled)     │   Packtalk Edge / PMR446)    │ • u-blox MAX-M10S Multi-GNSS│
+│ • Saddlebag, Frame, Rear or  │ • Saddlebag, Frame, Rear or  │ • SX1262 LoRa 868MHz + RP2040│
+│   Helmet Mounting            │   Helmet Mounting            │ • 2.4 GHz OMM-Mesh (ESP32-C3)│
 └──────────────────────────────┴──────────────────────────────┴─────────────────────────────┘
   │                                                                                         │
   ├─► 6. VEHICLE POWER: AMP Superseal 1.5 4-Pin (KL30 Batt+, KL15 Ign+, Chassis Ground)       │
@@ -40,7 +41,7 @@ Classic motorcycle communication systems are historically fragmented:
   │                                                                                         │
   ▼ 2.4 GHz Ultra-Low-Latency Wireless Link (ESP-NOW < 3ms & BLE 5.0 2M-PHY)                │
 ┌───────────────────────────────────────────────────────────────────────────────────────────┤
-│ 8. COCKPIT SUBSYSTEM: Wireless Universal Front Node (Smart Fairing Controller)             │
+│ 8. COCKPIT SUBSYSTEM: Wireless Universal Front Node (PCBA 05 Cockpit & Cam Bridge)       │
 │ • Automotive 2-Port USB 2.0 Hub (Microchip USB2512B) for Boom! Box & CarPlay Adapter       │
 │ • Switched CarPlay Port via TI TPS2051B (Controlled 2.5s Cold Reboot & 60s Auto-Café)      │
 │ • Digital I2S MEMS Ambient Mic with ePTFE Acoustic Vent (Edge RMS Noise Level Tracking)   │
@@ -52,31 +53,38 @@ Classic motorcycle communication systems are historically fragmented:
 
 ---
 
-## 2. Universal Mounting Concept (Vehicle Frame, Crash Bar & Tube Saddle Mount)
+## 2. Modular System Philosophy & Mounting Freedom (The 5 Functional Nodes)
 
-Satellite Pods 1, 2, and 3 are mechanically **100% identical** and designed for toolless quick-mounting to all standard motorcycle tube diameters and flat surfaces:
+OpenMotorBridge v8.0 defines the platform across **5 standardized functional nodes**:
+1. **Central Box (Main ECU):** Central computational core (ESP32-S3), 24-bit audio DSP/codec (ES8388), galvanic isolation transformers, 72V automotive step-down (LM5164-Q1), and LiPo UPS (BQ24075). *(Typically mounted centrally under the seat in the battery compartment).*
+2. **Rear Pod 3 (Backbone & Telemetry):** Multi-GNSS (u-blox MAX-M10S), 868 MHz LoRa (Semtech SX1262), 2.4 GHz OMM Mesh co-processor (ESP32-C3), and 6-axis IMU (BMI270). *(Typically mounted at the rear with an unobstructed view of the zenith).*
+3. **Satellite Pod 1 (Intercom Bridge A):** Universal cartridge bay for Sena (Mesh 2.0/3.0 / Bluetooth). *(Typically on the left vehicle side).*
+4. **Satellite Pod 2 (Intercom Bridge B):** Universal cartridge bay for Cardo (DMC Gen1/Gen2 / Bluetooth) or analog PMR446 radio. *(Typically on the right vehicle side for RF spatial diversity).*
+5. **Front Node (Cockpit & Camera Hub):** Autonomous ESP32-C3 satellite, automotive USB 2.0 hub (USB2512B) for Apple CarPlay/Ottocast, switched 5V action cam charge port with BLE shutter, digital PTT button input, and Knowles MEMS ambient noise microphone. *(Typically hidden behind fairings or inside the headlight nacelle).*
 
 ```
-          UNIVERSAL FRAME & TUBE SADDLE MOUNT (100% WIRELESS HELMET COMFORT)
-          ┌─────────────────────────────────────────────────────────────┐
-          │ • Integrated V-groove / tube saddle on pod bottom           │
-          │ • Fits tube diameters from Ø 18 mm to Ø 35 mm (1" / 1 1/8") │
-          │ • 4x hook lugs for 2x weatherproof EPDM rubber tension rings│
-          │ • 100% toolless mounting in 5 seconds without paint damage  │
-          │ • Pod 1 left on frame / crash bar (Rider Mesh)              │
-          │ • Pod 2 right on frame / crash bar (Pillion Mesh)           │
-          │ • Pod 3 on rear frame / luggage rack (OMM Dual-PHY & GNSS)  │
-          └──────────────────────────────┬──────────────────────────────┘
-                                         │
-                                         ▼ Bluetooth A2DP / HFP / LE Audio
-          ┌─────────────────────────────────────────────────────────────┐
-          │ RIDER & PILLION HELMETS (100% Wireless & Lightweight):      │
-          │ • Zero bulky extra housing on helmet (0g extra weight)      │
-          │ • No flapping cables or dangling coiled wires               │
-          │ • Rider wears regular OEM headset / integrated speakers     │
-          │ • Central Box streams mixed audio wirelessly to both helmets│
-          └─────────────────────────────────────────────────────────────┘
+                     THE 5 STANDARDIZED FUNCTIONAL NODES
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 1. FRONT NODE (Cockpit/Nacelle):  Wireless USB, Action Cam, PTT & Audio Hub │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ 2. CENTRAL BOX (Under Seat/Batt): DSP Audio Matrix, Power Supply, UPS, CAN  │
+├──────────────────────────────┬──────────────────────────────┬───────────────┤
+│ 3. POD 1 (Left/Saddlebag):   │ 4. POD 2 (Right/Saddlebag):  │ 5. REAR POD 3:│
+│ • Intercom Bridge A (Sena)   │ • Intercom Bridge B (Cardo)  │ • GNSS / LoRa │
+│ • 100% Quick-Swap Cartridge  │ • 100% Quick-Swap Cartridge  │ • OMM 2.4 GHz │
+└──────────────────────────────┴──────────────────────────────┴───────────────┘
 ```
+
+> [!NOTE]
+> **Mounting Freedom – *Your Bike, Your Choice*:**  
+> Where and how you place these 5 enclosures on your motorcycle is deliberately **entirely up to you**! OpenMotorBridge provides the standardized electronic layouts, enclosure dimensions, and interfaces.  
+> For popular motorcycle categories, we deliver turnkey, 100% zero-drill and adhesive-free **Reference Mounting Kits** in **[Chapter 08 (Mechanics & CAD)](file:///Users/schmidtm/openMotorBridge/docs/en/08_enclosures_mechanics_cad.md)**:
+> * **Reference Kit 1 (Harley-Davidson CVO Road Glide ST & New Touring):** Pod 3 inside the Under-Cowl Skeleton Dock under the forged carbon cowl, Pods 1 & 2 protected inside the saddlebag lids (zero-drill Torx hinge screws, quick disconnect), Front Node on fairing bracket behind outer sharknose skin.
+> * **Reference Kit 2 (Harley-Davidson Road King Special / FLHRXS):** Pod 3 in the Touring Fender Console on the rear fender, Pods 1 & 2 in the saddlebag lids, Front Node hidden inside the 7" headlight nacelle.
+> * **Reference Kit 3 (Classic Bagger & Cruiser – Street Glide / Electra Glide):** Pod 3 in the Touring Stealth Console seamless to passenger seat, decoupled radar below the license plate, Pods 1 & 2 in the saddlebag lids.
+> * **Reference Kit 4 (Adventure & Touring Enduros – BMW GS, KTM Adventure, Africa Twin):** Pod 3 directly on luggage rack / tubular subframe with integrated M5 GoPro radar arm, Pods 1 & 2 on crash bars via 120° V-grooves and EPDM tension straps, Front Node on nav crossbar or inside beak.
+>
+> Riders are encouraged to replicate these kits, adapt them for other motorcycle models, or design custom brackets based on our open CAD/STEP dimensional envelopes!
 
 ### 2.1 Vehicle Mounting (Crash Bars, Frame Tubes, Luggage Racks)
 * **Universal Prism (V-Groove):** The bottom of each pod housing features a $120^\circ$ prism contour ($R = 15\,\text{mm}$) that cradles all standard motorcycle frame tubes:
@@ -124,8 +132,8 @@ All system signals converge at the central HD26 flanged connector:
 
 | Branch / Cable | Connector Type | Target Device | Transferred Signals |
 | :--- | :--- | :--- | :--- |
-| **Pigtail 1 (250 mm)** | M8 6-Pin A-Coded (Female) | **Satellite Pod 1** (Rider) | NF_OUT+, NF_OUT-, OPTO_TRIGGER, 1-WIRE_ID, +5V_VBUS, GND |
-| **Pigtail 2 (250 mm)** | M8 6-Pin A-Coded (Female) | **Satellite Pod 2** (Pillion) | NF_OUT+, NF_OUT-, OPTO_TRIGGER, 1-WIRE_ID, +5V_VBUS, GND |
+| **Pigtail 1 (250 mm)** | M8 6-Pin A-Coded (Female) | **Satellite Pod 1** (Intercom Bridge A: Sena Mesh / Universal) | NF_OUT+, NF_OUT-, OPTO_TRIGGER, 1-WIRE_ID, +5V_VBUS, GND |
+| **Pigtail 2 (250 mm)** | M8 6-Pin A-Coded (Female) | **Satellite Pod 2** (Intercom Bridge B: Cardo DMC / PMR446) | NF_OUT+, NF_OUT-, OPTO_TRIGGER, 1-WIRE_ID, +5V_VBUS, GND |
 | **Pigtail 3 (250 mm)** | M8 6-Pin A-Coded (Female) | **Rear Pod 3** (OMM & GNSS) | UART_TX, UART_RX, 1-PPS_SYNC, 1-WIRE_ID, +5V_POD3, GND |
 | **Pigtail 4 (250 mm)** | AMP Superseal 1.5 4-Pin | **12V Vehicle Power** | KL30 (Batt+), KL15 (Ign+), GND (Power), GND (Sense) |
 | **Pigtail 5 (250 mm)** | M8 4-Pin A-Coded (Female) | **Rear Radar & Local OBD2** | RADAR_PWR_12V, RADAR_GND, RADAR_RX (UART/CAN_H), RADAR_TX (UART/CAN_L) |

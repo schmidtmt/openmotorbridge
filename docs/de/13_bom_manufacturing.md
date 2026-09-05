@@ -84,13 +84,18 @@ Dieses Dokument enthält die vollständige Bauteilliste (Bill of Materials) und 
 
 ## 6. Mechanik- & Gehäuse-BOM (3D-Druck MJF PA12 & Normteile)
 
-### 6.1 Druckdateien-Übersicht (17 Teile für 1 Fahrzeug)
+### 6.1 Druckdateien-Übersicht (Modulare STLs für 1 Fahrzeug)
 * **Zentralbox (3 Teile, PA12 / ASA):** `main_box_lower_case.stl`, `main_box_mid_tray.stl`, `main_box_lid.stl`.
-* **Satelliten-Pods (6 Teile, PA12 / ASA):** 3x `pod_base_housing.stl`, 3x `03_pod_bulkhead_partition.stl`.
+* **Satelliten-Pods Basis (6 Teile, PA12 / ASA):** 3x `pod_base_housing.stl`, 3x `03_pod_bulkhead_partition.stl`.
 * **Kassetten (3 Teile, PA12 / ASA):** `cartridge_sena_sled.stl` (oder Cardo), `cartridge_cardo_sled.stl` (oder Blindkassette), `cartridge_omm_transceiver_sled.stl`.
 * **Front-Knoten Gehäuse (2 Teile, PA12 / ASA):** `front_node_lower_tub.stl`, `front_node_upper_lid.stl`.
 * **Front-Knoten Dichtungen & Kappe (2 Teile, TPU 95A / 85A):** `front_node_cable_glands_tpu.stl` (Paar Dichtkämme für Front-USB & Flanken-Signale), `front_node_usbc_cap_tpu.stl` (elastische USB-C Staubschutzkappe mit Haltekollier).
-* **Heck-Radar Halter (1 Teil, PA12 / ASA):** `pod3_radar_bracket.stl` (M5 GoPro-Schwenkarm für Pod 3).
+* **Heck-Montage & Konsolen-Optionen für Pod 3 & Koffer (Referenz-Kits):**
+  * **Typ D1 (Adventure / Rohrträger):** `pod3_radar_bracket.stl` (M5 GoPro-Schwenkarm direkt an Pod 3) & Standard-Rohrsattel (`005_pod_strap_hooks.scad`).
+  * **Referenz-Kit 1 (CVO Road Glide ST & New Touring):** `cvo_st_undercowl_skeleton_dock.stl` (aufrechtes Federsitz-Dock unter Carbonhutze) + `cvo_st_telemetry_fin.stl` (2,4 GHz Heckfinne) + `saddlebag_lid_dock.stl` (Kofferdeckel-Dock).
+  * **Referenz-Kit 2 (Road King Special):** `pod3_touring_fender_console.stl` (organische Kotflügel-Konsole für 1/4"-20 Mutter) + `saddlebag_lid_dock.stl`.
+  * **Referenz-Kit 3 (Classic Bagger & Cruiser):** `pod3_touring_stealth_console.stl` (flache Touring-Konsole).
+  * **Entkoppelter Radar-Halter (Cruiser / Bagger):** `radar_license_plate_bracket.stl` (zentrisch symmetrische M6-Klemmung unterhalb Kennzeichenhalter mit M5 GoPro-Gelenk & verdeckter M8-Kabelführung).
 
 ---
 
@@ -130,7 +135,7 @@ Dieses Dokument enthält die vollständige Bauteilliste (Bill of Materials) und 
 | **2. Pod-Basisplatine** | `02_pod_base_pcba_gerbers_jlcpcb.zip` | `02_pod_base_pcba_bom_jlcpcb.csv` | `02_pod_base_pcba_cpl_jlcpcb.csv` | **2 Lagen** (Standard) | **ENIG (Gold)**, 1.6 mm |
 | **3. Kassetten-Trägerplatine** | `03_pod_cartridge_pcba_gerbers_jlcpcb.zip` | `03_pod_cartridge_pcba_bom_jlcpcb.csv` | `03_pod_cartridge_pcba_cpl_jlcpcb.csv` | **2 Lagen** (Standard) | **ENIG (Gold)**, 1.2 mm |
 | **4. Heck-Pod 3 Transceiver** | `04_rear_pod3_pcba_gerbers_jlcpcb.zip` | `04_rear_pod3_pcba_bom_jlcpcb.csv` | `04_rear_pod3_pcba_cpl_jlcpcb.csv` | **4 Lagen** (JLC04161H-7628) | **ENIG (Gold)**, 1.6 mm, TG150 |
-| **5. Universal Front-Knoten** | `05_smart_fairing_pcba_gerbers_jlcpcb.zip` | `05_smart_fairing_pcba_bom_jlcpcb.csv` | `05_smart_fairing_pcba_cpl_jlcpcb.csv` | **4 Lagen** (JLC04161H-7628) | **ENIG (Gold)**, 1.6 mm, TG150 |
+| **5. Universal Front-Knoten** | `05_front_node_pcba_gerbers_jlcpcb.zip` | `05_front_node_pcba_bom_jlcpcb.csv` | `05_front_node_pcba_cpl_jlcpcb.csv` | **4 Lagen** (JLC04161H-7628) | **ENIG (Gold)**, 1.6 mm, TG150 |
 
 ---
 
