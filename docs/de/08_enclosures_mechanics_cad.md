@@ -311,17 +311,13 @@ Der Heck-Pod 3 vereint den OMM-Transceiver, 868 MHz LoRa und Multi-GNSS (`PCBA 0
 > **Architektonische Modularität (Typ-B-Unantastbarkeit):**
 > Das universelle Schachtgehäuse von Pod 3 (Typ B, $135 	imes 70 	imes 38{,}5\,	ext{mm}$ Außenmaße, $100 	imes 60 	imes 28\,	ext{mm}$ Innenraum) bleibt über alle Motorradtypen hinweg **zu 100 % baugleich und unverändert**. Die Aufnahme der Telemetrie- und Funkhardware erfolgt über die standardisierte OMM-Transceiver-Wechselkassette (`cartridge_antenna_bracket_omm.stl` / `04_antenna_bracket_omm.scad`). Die fahrzeugspezifische Adaption an Kotflügel, Gepäckbrücken oder Heckrahmen erfolgt ausschließlich über externe Montagekonsolen oder Haltesysteme.
 
-![Pod 3 Transceiver & Radar 3D Anschnitt CAD](../images/cad/pod3_radar_cutaway_3d.png)
-
-*Abbildung 8.13: Photorealistischer 3D-CAD-Schräganschnitt des Heck-Pods 3 mit montiertem Blind-Spot Radarsensor. Sichtbar sind das dielektrische Radom mit Gore-Membran, die 25x25 mm Keramik-Patchantenne, die 868 MHz LoRa-Wendelantenne, die 4-Layer-Platine mit RP2040 und SX1262, der M8 6-Pin-Anschluss sowie der integrierte M5-GoPro-Ausleger mit verstellbarem Garmin Varia Radarkopf.*
-
 ![Pod 3 Full Assembly Exploded 3D](../images/cad/pod3_full_assembly_exploded_3d.png)
 
-*Abbildung 8.14: CAD-Explosionsdarstellung des Heck-Pods 3 mit Antennen-Radom, Platine und M8-Bajonettsockel.*
+*Abbildung 8.13: CAD-Explosionsdarstellung des Heck-Pods 3 mit Antennen-Radom, Platine und M8-Bajonettsockel.*
 
 ![Pod 3 Assembly Cross Section](../images/cad/pod3_assembly_cross_section.png)
 
-*Abbildung 8.15: Längsschnitt durch den Heck-Pod 3 mit koaxial geschirmter Antennenkammer und $25 	imes 25\,	ext{mm}$ GNSS-Groundplane.*
+*Abbildung 8.14: Längsschnitt durch den Heck-Pod 3 mit koaxial geschirmter Antennenkammer und $25 	imes 25\,	ext{mm}$ GNSS-Groundplane.*
 
 ---
 
@@ -335,21 +331,21 @@ Das Gehäuse des Front-Knotens wurde speziell für die geschützte Montage in Mo
 
 ![Universal Front Node Closed CAD](../images/cad/front_node_closed_cad.png)
 
-*Abbildung 8.16: Geschlossenes Front-Node IP67-Gehäuse.*
+*Abbildung 8.15: Geschlossenes Front-Node IP67-Gehäuse.*
 
 ![Universal Front Node Exploded 3D](../images/cad/front_node_exploded_3d.png)
 
-*Abbildung 8.17: 3D-Explosionsdarstellung des Front-Knotens entlang der Z-Achse.*
+*Abbildung 8.16: 3D-Explosionsdarstellung des Front-Knotens entlang der Z-Achse.*
 
 ![Universal Front Node Cutaway 3D](../images/cad/front_node_cutaway_3d.png)
 
-*Abbildung 8.18: Transparente 3D-Schnittansicht des Front-Knotens mit Knowles MEMS Schallkanal und VBUS-Lastschalter.*
+*Abbildung 8.17: Transparente 3D-Schnittansicht des Front-Knotens mit Knowles MEMS Schallkanal und VBUS-Lastschalter.*
 
 ### 8.1 Das 4-in-1 Universal-Befestigungssystem des Front-Knotens
 
 ![Universal Front Node Bottom CAD 4-in-1](../images/cad/front_node_bottom_cad.png)
 
-*Abbildung 8.19: Gehäuseunterseite des Front-Knotens mit AMPS-Bohrbild, $120^\circ$ V-Nut Rohrbett, EPDM-Spannnasen, Silentblock-Lochungen und 3M Dual-Lock Klettnuten.*
+*Abbildung 8.18: Gehäuseunterseite des Front-Knotens mit AMPS-Bohrbild, $120^\circ$ V-Nut Rohrbett, EPDM-Spannnasen, Silentblock-Lochungen und 3M Dual-Lock Klettnuten.*
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
@@ -460,11 +456,11 @@ Für Harley-Davidson Street Glide, Electra Glide und Ultra Limited mit 2-Up-Komf
 
 ![Pod 3 Touring Stealth Console CAD](../images/cad/pod3_touring_stealth_cad.png)
 
-*Abbildung 8.20: Isolierte 3D-CAD-Ansicht der Touring Stealth Console (`pod3_touring_stealth_console.scad`). Vollständig organisch verrundete Konturen ($R = 6\dots 7\,	ext{mm}$) ohne harte Boxkanten. Vordere Montagelasche für die originale $1/4"-20$ Soziussitz-Schraube im Schutzblech, anschmiegende Sitzbankkontur mit M8-Kabelkanal nach vorne unter die Bank, Anbindung der Frontschräge auf halber Einschubhöhe ($Z = 22\,	ext{mm}$), offenes zentrales Dock und sanft abfallender Teardrop-Heckbürzel mit integrierter Einklips-Nut für die Heckantenne.*
+*Abbildung 8.19: Isolierte 3D-CAD-Ansicht der Touring Stealth Console (`pod3_touring_stealth_console.scad`). Vollständig organisch verrundete Konturen ($R = 6\dots 7\,	ext{mm}$) ohne harte Boxkanten. Vordere Montagelasche für die originale $1/4"-20$ Soziussitz-Schraube im Schutzblech, anschmiegende Sitzbankkontur mit M8-Kabelkanal nach vorne unter die Bank, Anbindung der Frontschräge auf halber Einschubhöhe ($Z = 22\,	ext{mm}$), offenes zentrales Dock und sanft abfallender Teardrop-Heckbürzel mit integrierter Einklips-Nut für die Heckantenne.*
 
 ![Pod 3 Fender Assembly Touring 3D](../images/cad/pod3_fender_assembly_touring_3d.png)
 
-*Abbildung 8.21: Fotorealistische Gesamtheck-Montage an der Classic Touring-Maschine: Nahtlose Anschmiegung an die Beifahrersitzbank, M8-Kabel unsichtbar nach vorne geführt, freiliegendes Pod-Dach für ungestörten GNSS-Empfang, Kassetteneinschub von hinten und entkoppeltes Garmin Varia Radar unter dem Kennzeichen.*
+*Abbildung 8.20: Fotorealistische Gesamtheck-Montage an der Classic Touring-Maschine: Nahtlose Anschmiegung an die Beifahrersitzbank, M8-Kabel unsichtbar nach vorne geführt, freiliegendes Pod-Dach für ungestörten GNSS-Empfang, Kassetteneinschub von hinten und entkoppeltes Garmin Varia Radar unter dem Kennzeichen.*
 
 ---
 
@@ -501,6 +497,10 @@ Für großvolumige Reiseenduros und Naked Bikes mit offenem Gitterrohrrahmen, Ro
   Die Gehäuseunterseite von Pod 1, 2 und 3 besitzt eine integrierte Hohlkehle ($R=15\,	ext{mm}$), die sich spielfrei an alle gängigen Sturzbügel- und Gepäckträgerrohre ($arnothing 18\dots 35\,	ext{mm}$, z. B. $22\,	ext{mm}$ oder $25{,}4\,	ext{mm} / 1"$) anschmiegt.
 * **Integrierter M5-GoPro-Radarausleger an Pod 3:**
   Anders als bei tiefen Cruisern und Baggern erfordern Reiseenduros keine Entkopplung des Radars unter das Kennzeichen: Durch die hohe Sitzposition und die steile Heckgeometrie sitzt das Radar am schwenkbaren M5-GoPro-Arm direkt an der Pod-3-Basisplatte in optimaler Erfassungshöhe ($80\dots 100\,	ext{cm}$) mit freiem Radar-Öffnungswinkel über dem Hinterrad.
+
+![Pod 3 Transceiver & Radar 3D Anschnitt CAD](../images/cad/pod3_radar_cutaway_3d.png)
+
+*Abbildung 8.21: Photorealistischer 3D-CAD-Schräganschnitt des Heck-Pods 3 in der Adventure-Konfiguration (BMW GS / KTM Adventure). Auf Reiseenduros sitzt der Garmin Varia Blind-Spot Radarsensor direkt am integrierten M5-GoPro-Schwenkarm der Pod-3-Basisplatte in optimaler Erfassungshöhe über dem Hinterrad, während die Gehäuseunterseite mit 120°-V-Nut und EPDM-Spannringen formschlüssig auf der Gepäckbrücke oder dem Rohrheck aufliegt.*
 
 ---
 

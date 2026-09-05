@@ -271,17 +271,13 @@ Rear Pod 3 integrates the OMM transceiver, 868 MHz LoRa, and Multi-GNSS (`PCBA 0
 > **Architectural Modularity (Type B Invariance):**
 > The universal pod base enclosure of Pod 3 (Type B, $135 \times 70 \times 38.5\,\text{mm}$ outer dimensions, $100 \times 60 \times 28\,\text{mm}$ inner space) remains **100% identical and unchanged** across all motorcycle types. Integration of telemetry and wireless hardware is handled via the standardized OMM transceiver swap cartridge (`cartridge_antenna_bracket_omm.stl` / `04_antenna_bracket_omm.scad`). Vehicle-specific adaptation to fenders, luggage racks, or rear subframes occurs strictly via external mounting consoles or docking systems.
 
-![Pod 3 Transceiver & Radar 3D Cutaway CAD](../images/cad/pod3_radar_cutaway_3d.png)
-
-*Figure 8.13: Photorealistic 3D CAD isometric cutaway of rear Pod 3 with integrated blind-spot radar sensor. Depicted are the dielectric radome with Gore membrane, the 25x25 mm ceramic patch antenna, the 868 MHz LoRa helical antenna, the 4-layer PCB with RP2040 and SX1262, the M8 6-pin connector, and the integrated M5 GoPro swivel arm holding an adjustable Garmin Varia radar head.*
-
 ![Pod 3 Full Assembly Exploded 3D](../images/cad/pod3_full_assembly_exploded_3d.png)
 
-*Figure 8.14: 3D CAD exploded view of rear Pod 3 with antenna radome, internal PCB, and M8 bayonet socket.*
+*Figure 8.13: 3D CAD exploded view of rear Pod 3 with antenna radome, internal PCB, and M8 bayonet socket.*
 
 ![Pod 3 Assembly Cross Section](../images/cad/pod3_assembly_cross_section.png)
 
-*Figure 8.15: Longitudinal cross-section through rear Pod 3 showing coaxially shielded antenna chamber and $25 \times 25\,\text{mm}$ GNSS ground plane.*
+*Figure 8.14: Longitudinal cross-section through rear Pod 3 showing coaxially shielded antenna chamber and $25 \times 25\,\text{mm}$ GNSS ground plane.*
 
 ---
 
@@ -295,21 +291,21 @@ The Front Node enclosure was specially engineered for protected installation ins
 
 ![Universal Front Node Closed CAD](../images/cad/front_node_closed_cad.png)
 
-*Figure 8.16: Closed Front Node IP67 enclosure.*
+*Figure 8.15: Closed Front Node IP67 enclosure.*
 
 ![Universal Front Node Exploded 3D](../images/cad/front_node_exploded_3d.png)
 
-*Figure 8.17: 3D exploded view of the Front Node along the vertical Z-axis.*
+*Figure 8.16: 3D exploded view of the Front Node along the vertical Z-axis.*
 
 ![Universal Front Node Cutaway 3D](../images/cad/front_node_cutaway_3d.png)
 
-*Figure 8.18: Transparent 3D cutaway view of the Front Node showing Knowles MEMS acoustic duct and VBUS load switch.*
+*Figure 8.17: Transparent 3D cutaway view of the Front Node showing Knowles MEMS acoustic duct and VBUS load switch.*
 
 ### 8.1 The 4-in-1 Universal Mounting System of the Front Node
 
 ![Universal Front Node Bottom CAD 4-in-1](../images/cad/front_node_bottom_cad.png)
 
-*Figure 8.19: Enclosure bottom view of the Front Node showing AMPS hole pattern, $120^\circ$ V-groove tube saddle, EPDM strap anchor tabs, silentblock mounting holes, and 3M Dual-Lock hook-and-loop channels.*
+*Figure 8.18: Enclosure bottom view of the Front Node showing AMPS hole pattern, $120^\circ$ V-groove tube saddle, EPDM strap anchor tabs, silentblock mounting holes, and 3M Dual-Lock hook-and-loop channels.*
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
@@ -420,11 +416,11 @@ For Harley-Davidson Street Glide, Electra Glide, and Ultra Limited with 2-Up com
 
 ![Pod 3 Touring Stealth Console CAD](../images/cad/pod3_touring_stealth_cad.png)
 
-*Figure 8.20: Isolated 3D CAD view of the Touring Stealth Console (`pod3_touring_stealth_console.scad`). Completely organic smoothed contours ($R = 6\dots 7\,\text{mm}$) without hard box edges. Forward mounting tab for the OEM $1/4"-20$ pillion seat screw in the fender, form-fitting seat transition with M8 cable duct heading forward under the seat, front slope integration at mid-insertion height ($Z = 22\,\text{mm}$), open central dock, and gently sloping teardrop rear tail with integrated clip-in slot for the rear antenna.*
+*Figure 8.19: Isolated 3D CAD view of the Touring Stealth Console (`pod3_touring_stealth_console.scad`). Completely organic smoothed contours ($R = 6\dots 7\,\text{mm}$) without hard box edges. Forward mounting tab for the OEM $1/4"-20$ pillion seat screw in the fender, form-fitting seat transition with M8 cable duct heading forward under the seat, front slope integration at mid-insertion height ($Z = 22\,\text{mm}$), open central dock, and gently sloping teardrop rear tail with integrated clip-in slot for the rear antenna.*
 
 ![Pod 3 Fender Assembly Touring 3D](../images/cad/pod3_fender_assembly_touring_3d.png)
 
-*Figure 8.21: Photorealistic complete rear assembly on the Classic Touring bike: Seamless transition against passenger seat, M8 cable routed invisibly forward, unobstructed pod roof for uncompromised GNSS reception, rearward cartridge insertion, and decoupled Garmin Varia radar below the license plate.*
+*Figure 8.20: Photorealistic complete rear assembly on the Classic Touring bike: Seamless transition against passenger seat, M8 cable routed invisibly forward, unobstructed pod roof for uncompromised GNSS reception, rearward cartridge insertion, and decoupled Garmin Varia radar below the license plate.*
 
 ---
 
@@ -461,6 +457,10 @@ For adventure motorcycles and naked bikes with tubular trellis subframes, rear r
   The enclosure bottom of Pods 1, 2, and 3 features an integrated concave saddle ($R=15\,\text{mm}$) that clamps free of play onto all common crash bar and luggage rack tubes ($\varnothing 18\dots 35\,\text{mm}$, e.g. $22\,\text{mm}$ or $25.4\,\text{mm} / 1"$).
 * **Integrated M5 GoPro Radar Arm on Pod 3:**
   Unlike low-slung cruisers and baggers, adventure enduros do not require decoupling the radar below the license plate: Due to the tall ride height and steep tail geometry, the radar mounts via the swiveling M5 GoPro arm directly on the Pod 3 base plate at optimal detection height ($80\dots 100\,\text{cm}$) with unobstructed beam clearance above the rear tire.
+
+![Pod 3 Transceiver & Radar 3D Cutaway CAD](../images/cad/pod3_radar_cutaway_3d.png)
+
+*Figure 8.21: Photorealistic 3D CAD isometric cutaway of rear Pod 3 in the Adventure Configuration (BMW GS / KTM Adventure). On adventure bikes, the Garmin Varia blind-spot radar mounts directly on the integrated M5 GoPro swivel arm of the Pod 3 base plate at optimal detection height above the rear tire, while the 120° V-groove and EPDM tension straps cradle securely onto the luggage rack or tubular subframe.*
 
 ---
 
