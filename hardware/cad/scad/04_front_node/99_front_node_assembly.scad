@@ -30,8 +30,8 @@ module front_node_exploded_assembly() {
         translate([FRONT_NODE_WALL + 3.5 + 24.50, FRONT_NODE_WALL + 3.5 + 17.46, -10.0])
             cylinder(r=FRONT_NODE_MIC_MEMB_R, h=0.2, center=false);
             
-    // 3. Universal Front Node PCB Assembly
-    translate([FRONT_NODE_WALL + 3.5, FRONT_NODE_WALL + 3.5, FRONT_NODE_WALL + FRONT_NODE_STANDOFF_H + EXPLODE_PCB_Z])
+    // 3. Universal Front Node PCB Assembly (centered on standoffs)
+    translate([FRONT_NODE_WALL + 3.5 + (FRONT_NODE_CHAMBER_L - FRONT_NODE_PCB_L)/2.0, FRONT_NODE_WALL + 3.5 + (FRONT_NODE_CHAMBER_W - FRONT_NODE_PCB_W)/2.0, FRONT_NODE_WALL + FRONT_NODE_STANDOFF_H + EXPLODE_PCB_Z])
         dummy_front_node_pcb();
         
     // 4. South USB Cable Comb (floating forwards)
@@ -42,8 +42,8 @@ module front_node_exploded_assembly() {
     translate([-18.0, FRONT_NODE_WALL + 3.5 + 11.2, FRONT_NODE_TUB_H - 7.5])
         west_epdm_cable_comb();
         
-    // 6. USB-C Protective Plug (floating rightwards / East)
-    translate([FRONT_NODE_OUTER_L + 18.0, 38.82, FRONT_NODE_WALL + FRONT_NODE_STANDOFF_H + FRONT_NODE_PCB_H + 1.8])
+    // 6. USB-C Protective Plug (floating rightwards / East, forward right flank)
+    translate([FRONT_NODE_OUTER_L + 18.0, 21.18, FRONT_NODE_WALL + FRONT_NODE_STANDOFF_H + FRONT_NODE_PCB_H + 1.8])
         rotate([0, 90, 90])
             front_node_usbc_plug();
             

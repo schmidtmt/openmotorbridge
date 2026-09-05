@@ -24,10 +24,10 @@ module west_cable_comb_cutout(z_start = FRONT_NODE_TUB_H - 7.5, h = 7.6) {
         cube(size=[FRONT_NODE_WALL + 5.0, 30.0, h], center=false);
 }
 
-// 3. USB-C Service Port Cutout (East wall, X = 84.0 mm, Y = 38.82 mm)
+// 3. USB-C Service Port Cutout (East wall, X = 84.0 mm, Y = 21.18 mm, forward right flank)
 module front_node_usbc_service_cutout(
     z_center = FRONT_NODE_WALL + FRONT_NODE_STANDOFF_H + FRONT_NODE_PCB_H + 1.8,
-    y_center = (FRONT_NODE_CHAMBER_W - FRONT_NODE_PCB_W)/2.0 + FRONT_NODE_WALL + 3.5 + 30.82, // 38.82 mm
+    y_center = (FRONT_NODE_CHAMBER_W - FRONT_NODE_PCB_W)/2.0 + FRONT_NODE_WALL + 3.5 + 13.18, // 21.18 mm (KiCad J7: Y=100.82 on board spanning Y=70..114 mm -> 114 - 100.82 = 13.18 mm from front edge)
     w = 10.5,
     h = 4.8
 ) {

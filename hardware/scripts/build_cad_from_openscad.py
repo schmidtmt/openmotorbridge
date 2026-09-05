@@ -79,9 +79,11 @@ STL_TARGETS: List[Tuple[str, str]] = [
     ("04_front_node/parts/004_mounting_system.scad", "04_front_node/components/03_mounting_ears.stl"),
     ("04_front_node/parts/006_dummy_front_node_pcb.scad", "04_front_node/components/dummy_front_node_pcb.stl"),
 
-    # 8. Pod 3 Touring & ST Bagger Consoles & Radar Mount
-    ("02_pod_base/pod3_touring_stealth_console.scad", "02_pod_base/pod3_touring_stealth_console.stl"),
-    ("02_pod_base/pod3_st_aero_winglet_nacelle.scad", "02_pod_base/pod3_st_aero_winglet_nacelle.stl"),
+    # 8. Pod 3 Touring & ST Bagger Consoles, Docks & Radar Mount
+    ("02_pod_base/pod3_touring_fender_console.scad", "02_pod_base/pod3_touring_fender_console.stl"),
+    ("02_pod_base/cvo_st_undercowl_skeleton_dock.scad", "02_pod_base/cvo_st_undercowl_skeleton_dock.stl"),
+    ("02_pod_base/cvo_st_telemetry_fin.scad", "02_pod_base/cvo_st_telemetry_fin.stl"),
+    ("02_pod_base/saddlebag_lid_dock.scad", "02_pod_base/saddlebag_lid_dock.stl"),
     ("02_pod_base/radar_license_plate_bracket.scad", "02_pod_base/radar_license_plate_bracket.stl"),
     ("02_pod_base/parts/006_fender_curved_saddle.scad", "02_pod_base/components/06_fender_curved_saddle.stl"),
     ("02_pod_base/parts/007_pod_slide_dock_core.scad", "02_pod_base/components/07_pod_slide_dock_core.stl"),
@@ -187,15 +189,27 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
         "Tomorrow"
     ),
     (
-        "02_pod_base/pod3_touring_stealth_console.scad",
-        os.path.join(CAD_IMG_DIR, "pod3_touring_stealth_cad.png"),
-        "10,0,20,55,0,310,340",
+        "02_pod_base/pod3_touring_fender_console.scad",
+        os.path.join(CAD_IMG_DIR, "pod3_touring_fender_console_cad.png"),
+        "0,0,15,55,0,310,320",
         "Tomorrow"
     ),
     (
-        "02_pod_base/pod3_st_aero_winglet_nacelle.scad",
-        os.path.join(CAD_IMG_DIR, "pod3_st_aero_winglet_cad.png"),
-        "10,0,10,55,0,310,380",
+        "02_pod_base/cvo_st_undercowl_skeleton_dock.scad",
+        os.path.join(CAD_IMG_DIR, "cvo_st_undercowl_skeleton_dock_cad.png"),
+        "0,0,20,55,0,310,320",
+        "Tomorrow"
+    ),
+    (
+        "02_pod_base/cvo_st_telemetry_fin.scad",
+        os.path.join(CAD_IMG_DIR, "cvo_st_telemetry_fin_cad.png"),
+        "0,0,10,55,0,310,220",
+        "Tomorrow"
+    ),
+    (
+        "02_pod_base/saddlebag_lid_dock.scad",
+        os.path.join(CAD_IMG_DIR, "saddlebag_lid_dock_cad.png"),
+        "0,0,15,55,0,310,280",
         "Tomorrow"
     ),
     (

@@ -44,20 +44,22 @@ module dummy_front_node_pcb() {
             cube(size=[10.0, 4.5, 7.5], center=false); // J8 (Action-Cam 5V Charge)
     }
 
-    // 3. East USB-C Service Port (J7, 90° rotated facing East)
+    // 3. East USB-C Service Port (J7, 90° rotated facing East, forward right flank)
+    // Synchronized with KiCad J7 (Y=100.82 on board Y=70..114 mm -> 114 - 100.82 = 13.18 mm from front edge)
     color("silver") {
-        translate([FRONT_NODE_PCB_L - 6.5, 30.82 - 4.5, FRONT_NODE_PCB_H])
+        translate([FRONT_NODE_PCB_L - 6.5, 13.18 - 4.5, FRONT_NODE_PCB_H])
             cube(size=[7.5, 9.0, 3.2], center=false);
     }
 
-    // 4. West Connectors (J1: 12V ACC, J2: CAN, J3: PTT)
+    // 4. West Connectors (J3: PTT front, J2: CAN middle, J1: 12V ACC rear)
+    // Synchronized with KiCad (114 - Y_kicad: J3=9.75 mm, J2=17.75 mm, J1=30.0 mm from front edge)
     color("ghostwhite") {
-        translate([0.5, 14.0 - 3.0, FRONT_NODE_PCB_H])
-            cube(size=[4.5, 6.0, 7.5], center=false); // J1 (2-pin)
-        translate([0.5, 26.25 - 4.0, FRONT_NODE_PCB_H])
-            cube(size=[4.5, 8.0, 7.5], center=false); // J2 (3-pin)
-        translate([0.5, 34.25 - 3.0, FRONT_NODE_PCB_H])
-            cube(size=[4.5, 6.0, 7.5], center=false); // J3 (2-pin)
+        translate([0.5, 9.75 - 3.0, FRONT_NODE_PCB_H])
+            cube(size=[4.5, 6.0, 7.5], center=false); // J3 (PTT switch, 2-pin)
+        translate([0.5, 17.75 - 4.0, FRONT_NODE_PCB_H])
+            cube(size=[4.5, 8.0, 7.5], center=false); // J2 (CAN-Bus, 3-pin)
+        translate([0.5, 30.0 - 3.0, FRONT_NODE_PCB_H])
+            cube(size=[4.5, 6.0, 7.5], center=false); // J1 (12V ACC, 2-pin)
     }
 
     // 5. ESP32-C3-WROOM-02U Module with U.FL

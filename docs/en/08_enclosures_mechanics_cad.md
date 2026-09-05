@@ -330,6 +330,50 @@ The Front Node enclosure was specially engineered for protected installation ins
 └────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
+### 8.2 Front Node Connector & Flank Layout
+
+The physical arrangement of connectors and cable entries on the enclosure flanks aligns with the 4-layer PCBA 05 PCB design (`openmotorbridge_front_node.kicad_pcb`) and cockpit cable routing ergonomics:
+
+```
+                   FRONT NODE FLANK & CONNECTOR LAYOUT
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                                 REAR FACE                                   │
+│            (Fully enclosed HP MJF PA12 protective wall, Y = 60 mm)          │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ LEFT SHORT FLANK (X = 0 mm)    │ INTERNAL CHAMBER     │ RIGHT SHORT FLANK (X = 84)  │
+│                                │                      │                             │
+│ • J1: 12V ACC Power (Y=38 mm)  │ • ESP32-C3 Controller│ • Enclosed solid wall (rear)│
+│ • Mounting ear (M4, Y=30 mm)   │ • Knowles MEMS Mic   │ • Mounting ear (M4, Y=30 mm)│
+│ • J2: CAN-Bus (Y=25.75 mm)     │ • USB2512B Hub IC    │                             │
+│ • J3: PTT button (Y=17.75 mm)  │ • Status LED D1      │ • J7: USB-C Service (Y=21.2)│
+│   (3-slot EPDM cable comb)     │                      │   (IP67 TPU sealing plug)   │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                FRONT FACE                                   │
+│       (4-slot EPDM cable comb for cockpit & sensor cables, Y = 0 mm)        │
+│    J6: CarPlay      J5: Glovebox           J4: USB Host      J8: Action-Cam │
+│    (X = 23.75 mm)   (X = 37.50 mm)         (X = 51.25 mm)    (X = 64.00 mm) │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+1. **Front Face / South Flank ($Y = 0\,\text{mm}$):**
+   - **4-Slot EPDM Cable Comb (`south_epdm_cable_comb`):** Directs four cockpit USB connections strain-relieved and water-sealed forwards:
+     - `J6` ($X = 23.75\,\text{mm}$): Apple CarPlay / Android Auto smartphone connection.
+     - `J5` ($X = 37.50\,\text{mm}$): Glovebox / cockpit USB-C charging feed.
+     - `J4` ($X = 51.25\,\text{mm}$): USB host interface.
+     - `J8` ($X = 64.00\,\text{mm}$): Action-Cam 5V power and hardware shutter trigger line.
+2. **Right Short Flank / East Flank ($X = 84.0\,\text{mm}$):**
+   - **Forward Flank ($Y = 21.18\,\text{mm}$):** Waterproof USB-C Service Port (`J7`), located on the **forward right flank** (immediately adjacent to the front corner and status LED `D1`, exactly $13.18\,\text{mm}$ from the PCB front edge). Enables easy access for firmware flashing and diagnostic log extraction while installed on the bike. Sealed flush by an elastomeric TPU protective cap (`front_node_usbc_cap_tpu.stl`) with a captive collar loop.
+   - **Center ($Y = 30.0\,\text{mm}$):** M4/M5 silentblock flange mounting ear ($Z = 0\dots 5\,\text{mm}$).
+   - **Rear Flank ($Y = 37\dots 60\,\text{mm}$):** Enclosed solid PA12 wall.
+3. **Left Short Flank / West Flank ($X = 0\,\text{mm}$):**
+   - **3-Slot EPDM Cable Comb (`west_epdm_cable_comb`):** Routes vehicle harness and control signals:
+     - `J3` ($Y = 17.75\,\text{mm}$, forward): PTT handlebar switch input.
+     - `J2` ($Y = 25.75\,\text{mm}$, middle): 2-wire CAN-Bus interface to Central Box / vehicle.
+     - `J1` ($Y = 38.0\,\text{mm}$, rearward): 12V switched ignition power (KL15).
+   - **Center ($Y = 30.0\,\text{mm}$):** M4/M5 silentblock flange mounting ear ($Z = 0\dots 5\,\text{mm}$).
+4. **Bottom Face ($Z = 0\,\text{mm}$):**
+   - Acoustic through-hole canal ($\varnothing\,2.5\,\text{mm}$) with a protective Gore ePTFE waterproof membrane ($\varnothing\,6.0 \times 0.8\,\text{mm}$) directly beneath the Knowles SPH0645 MEMS sensor for ambient noise and speech analysis.
+
 ---
 
 ## 9. Vehicle-Specific Reference Mounting Kits (Zero-Drill / Bolt-On)

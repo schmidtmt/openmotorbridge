@@ -370,6 +370,50 @@ Das Gehäuse des Front-Knotens wurde speziell für die geschützte Montage in Mo
 └────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
+### 8.2 Schnittstellen- & Flankenlayout des Front-Knotens
+
+Die Anordnung der Steckverbinder und Durchführungen an den Gehäuseflanken ist exakt auf das 4-Layer-Platinenlayout der PCBA 05 (`openmotorbridge_front_node.kicad_pcb`) und die Cockpit-Kabelführung abgestimmt:
+
+```
+                  FRONT-KNOTEN FLANKEN- & SCHNITTSTELLENLAYOUT
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                                HINTERSEITE                                  │
+│             (Vollwandig geschlossenes HP MJF PA12 Gehäuse, Y = 60 mm)       │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ LINKE SCHMALSEITE (X = 0 mm)   │ INNENRAUM (PCBA 05)  │ RECHTE SCHMALSEITE (X = 84) │
+│                                │                      │                             │
+│ • J1: 12V ACC Speisung (Y=38)  │ • ESP32-C3 Controller│ • Geschlossene Wandung (hinten)│
+│ • Flansch-Ohr (M4, Y=30 mm)    │ • Knowles MEMS Mic   │ • Flansch-Ohr (M4, Y=30 mm) │
+│ • J2: CAN-Bus (Y=25.75 mm)     │ • USB2512B Hub IC    │                             │
+│ • J3: PTT-Taster (Y=17.75 mm)  │ • Status-LED D1 (rot)│ • J7: USB-C Service (Y=21.2)│
+│   (3-fach EPDM-Dichtkamm)      │                      │   (IP67 TPU-Schutzstopfen)  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                VORDERSEITE                                  │
+│        (4-fach EPDM-Dichtkamm für Cockpit- & Sensor-Kabel, Y = 0 mm)        │
+│    J6: CarPlay      J5: Handschuhfach      J4: USB-Host      J8: Action-Cam │
+│    (X = 23.75 mm)   (X = 37.50 mm)         (X = 51.25 mm)    (X = 64.00 mm) │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+1. **Vorderseite / Südflanke ($Y = 0\,\text{mm}$):**
+   - **4-fach EPDM-Dichtkamm (`south_epdm_cable_comb`):** Führt vier USB-Kabel verwechslungs- und vibrationsfest nach vorne heraus:
+     - `J6` ($X = 23{,}75\,\text{mm}$): Apple CarPlay / Android Auto Smartphone-Kabel.
+     - `J5` ($X = 37{,}50\,\text{mm}$): Handschuhfach-USB-Ladeport.
+     - `J4` ($X = 51{,}25\,\text{mm}$): USB-Host-Schnittstelle.
+     - `J8` ($X = 64{,}00\,\text{mm}$): Action-Cam 5V-Lade- und Triggerleitung.
+2. **Rechte Schmalseite / Ostflanke ($X = 84{,}0\,\text{mm}$):**
+   - **Vordere Flanke ($Y = 21{,}18\,\text{mm}$):** Wasserdichter USB-C Service-Port (`J7`), positioniert auf der rechten Schmalseite **vorne** (unmittelbar neben der Frontkante und der grünen Status-LED `D1`, exakt $13{,}18\,\text{mm}$ von der vorderen Platinenkante entfernt). Ermöglicht bequemes Anstecken eines USB-C Datenkabels für Firmware-Flashen und Diagnose im eingebauten Zustand. Geschützt durch den bündig sitzenden TPU-Dichtstopfen (`front_node_usbc_cap_tpu.stl`) mit integrierter Haltekollier-Lasche.
+   - **Mitte ($Y = 30{,}0\,\text{mm}$):** M4/M5 Silentblock-Flanschbefestigungslasche ($Z = 0\dots 5\,\text{mm}$).
+   - **Hintere Flanke ($Y = 37\dots 60\,\text{mm}$):** Vollwandig geschlossene Schutzwand.
+3. **Linke Schmalseite / Westflanke ($X = 0\,\text{mm}$):**
+   - **3-fach EPDM-Dichtkamm (`west_epdm_cable_comb`):** Führt Signal- und Bordnetzleitungen zur Fahrzeugfront:
+     - `J3` ($Y = 17{,}75\,\text{mm}$, vorne): PTT-Lenkertaster für Sprechfunk.
+     - `J2` ($Y = 25{,}75\,\text{mm}$, mitte): Zweidraht-CAN-Bus zur Zentralbox bzw. zum Fahrzeugnetz.
+     - `J1` ($Y = 38{,}0\,\text{mm}$, hinten): 12V Zündungsplus (KL15) Speisung.
+   - **Mitte ($Y = 30{,}0\,\text{mm}$):** M4/M5 Silentblock-Flanschbefestigungslasche ($Z = 0\dots 5\,\text{mm}$).
+4. **Gehäuseunterseite ($Z = 0\,\text{mm}$):**
+   - Schwingungsdämpfender Knowles SPH0645 MEMS Akustikkanal ($\varnothing\,2{,}5\,\text{mm}$) mit wasserdichter, ölabweisender Gore ePTFE-Schutzmembran ($\varnothing\,6{,}0 \times 0{,}8\,\text{mm}$) zur Windgeräusch- und Sprachpegelanalyse.
+
 ---
 
 ## 9. Fahrzeugspezifische Referenz-Montagekits (Zero-Drill / Bolt-On)

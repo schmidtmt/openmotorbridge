@@ -32,8 +32,8 @@ module front_node_cross_section_cutaway() {
             translate([0.1, FRONT_NODE_WALL + 3.5 + 11.2, FRONT_NODE_TUB_H - 7.5])
                 west_epdm_cable_comb();
                 
-            // 4. USB-C Plug (East wall)
-            translate([FRONT_NODE_OUTER_L - 7.2, 38.82, FRONT_NODE_WALL + FRONT_NODE_STANDOFF_H + FRONT_NODE_PCB_H + 1.8])
+            // 4. USB-C Plug (East wall, forward right flank)
+            translate([FRONT_NODE_OUTER_L - 7.2, 21.18, FRONT_NODE_WALL + FRONT_NODE_STANDOFF_H + FRONT_NODE_PCB_H + 1.8])
                 rotate([0, 90, 90])
                     front_node_usbc_plug();
         }
@@ -43,8 +43,8 @@ module front_node_cross_section_cutaway() {
             cube(size=[FRONT_NODE_OUTER_L, FRONT_NODE_OUTER_W / 2.0 + 10.0, FRONT_NODE_OUTER_H + 15.0], center=false);
     }
     
-    // 6. Intact Front Node PCB Assembly inside the cutaway
-    translate([FRONT_NODE_WALL + 3.5, FRONT_NODE_WALL + 3.5, FRONT_NODE_WALL + FRONT_NODE_STANDOFF_H])
+    // 6. Intact Front Node PCB Assembly inside the cutaway (centered on standoffs)
+    translate([FRONT_NODE_WALL + 3.5 + (FRONT_NODE_CHAMBER_L - FRONT_NODE_PCB_L)/2.0, FRONT_NODE_WALL + 3.5 + (FRONT_NODE_CHAMBER_W - FRONT_NODE_PCB_W)/2.0, FRONT_NODE_WALL + FRONT_NODE_STANDOFF_H])
         dummy_front_node_pcb();
 }
 

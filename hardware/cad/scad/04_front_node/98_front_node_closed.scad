@@ -30,8 +30,8 @@ module front_node_closed_assembly() {
     translate([0.1, FRONT_NODE_WALL + 3.5 + 11.2, FRONT_NODE_TUB_H - 7.5])
         west_epdm_cable_comb();
         
-    // 5. USB-C Protective Plug (in position at East wall)
-    translate([FRONT_NODE_OUTER_L - 7.2, 38.82, FRONT_NODE_WALL + FRONT_NODE_STANDOFF_H + FRONT_NODE_PCB_H + 1.8])
+    // 5. USB-C Protective Plug (in position at East wall, forward right flank)
+    translate([FRONT_NODE_OUTER_L - 7.2, 21.18, FRONT_NODE_WALL + FRONT_NODE_STANDOFF_H + FRONT_NODE_PCB_H + 1.8])
         rotate([0, 90, 90])
             front_node_usbc_plug();
             
