@@ -48,11 +48,17 @@ The Central Box enclosure is engineered in **PA12 (HP Multi Jet Fusion)** for ha
 
 ![OpenMotorBridge Central Box Exploded 3D CAD Fitting](../images/cad/main_box_full_assembly_exploded_3d.png)
 
-*Figure 8.2: 1:1:1 Euclidean CAD exploded view of the Central Box along the Z-axis.*
+*Figure 8.3: 1:1:1 Euclidean CAD exploded view of the Central Box along the Z-axis.*
 
 ![OpenMotorBridge Central Box Mated 3D X-Ray CAD Fitting](../images/cad/main_box_assembly_mated_3d.png)
 
-*Figure 8.3: Transparent 3D X-ray view of the closed Central Box showing clean internal clearances.*
+*Figure 8.4: Transparent 3D X-ray view of the closed Central Box showing clean internal clearances.*
+
+### 1.4 True-to-Scale Longitudinal & Cross Section (X-Z Thermal & Y-Z Cable Routing)
+
+![OpenMotorBridge Central Box Cross Sections](../images/cad/main_box_assembly_cross_section.png)
+
+*Figure 8.5: True-to-scale 2D cross sections of the Central Box (X-Z and Y-Z planes).*
 
 ---
 
@@ -107,15 +113,15 @@ All 3 pod locations use the identical 5-sided monocoque enclosure ($135{,}0 \tim
 
 ![OpenMotorBridge Satellite Pod & Cartridge 3D Cutaway CAD](../images/cad/pod_cartridge_cutaway_3d.png)
 
-*Figure 8.4: Photorealistic 3D CAD diagonal cutaway render of the Satellite Pod with docked Cartridge. Clearly visible: 120° V-groove pipe saddle with EPDM O-rings around frame tube, M8 6-pin connector, internal bulkhead with dual compressed V4A springs, asymmetrical Poka-Yoke rails with 8mm height offset, 6-pin gold contact mating (4.8mm wipe length), and front bezel gasket.*
+*Figure 8.6: Photorealistic 3D CAD diagonal cutaway render of the Satellite Pod with docked Cartridge. Clearly visible: 120° V-groove pipe saddle with EPDM O-rings around frame tube, M8 6-pin connector, internal bulkhead with dual compressed V4A springs, asymmetrical Poka-Yoke rails with 8mm height offset, 6-pin gold contact mating (4.8mm wipe length), and front bezel gasket.*
 
 ![OpenMotorBridge Satellite Pod Exploded View](../images/cad/openmotorbridge_pod_exploded_view.png)
 
-*Figure 8.5: Exploded view of the Satellite Pod with M8 socket, baseboard, bulkhead, and cartridge sled.*
+*Figure 8.7: Exploded view of the Satellite Pod with M8 socket, baseboard, bulkhead, and cartridge sled.*
 
 ![OpenMotorBridge Satellite Pod X-Ray Assembly](../images/cad/openmotorbridge_pod_assembly_render_xray.png)
 
-*Figure 8.6: X-ray cutaway view of the closed Satellite Pod.*
+*Figure 8.8: X-ray cutaway view of the closed Satellite Pod.*
 
 ### 4.1 V-Groove Pipe Saddle ($120^\circ$) & EPDM Strap Mounting
 * **Underside Profile:** $120^\circ$-V-saddle ($R = 15\,\text{mm}$) contours snugly to frame tubes from $\varnothing 18\dots 35\,\text{mm}$ ($1"$ crash bars, $7/8"$ subframes).
@@ -183,7 +189,7 @@ All 3 pod locations use the identical 5-sided monocoque enclosure ($135{,}0 \tim
 
 ![OpenMotorBridge Pod Poka-Yoke Cross Section](../images/cad/pod_poka_yoke_cross_section_cad.png)
 
-*Figure 8.7: Cross-section showing the $8{,}0\,\text{mm}$ vertical height offset of the guide rails ($Z=10{,}0\,\text{mm}$ left, $Z=18{,}0\,\text{mm}$ right), rendering inverted insertion physically impossible.*
+*Figure 8.9: Cross-section showing the $8{,}0\,\text{mm}$ vertical height offset of the guide rails ($Z=10{,}0\,\text{mm}$ left, $Z=18{,}0\,\text{mm}$ right), rendering inverted insertion physically impossible.*
 
 ---
 
@@ -191,7 +197,7 @@ All 3 pod locations use the identical 5-sided monocoque enclosure ($135{,}0 \tim
 
 ![OpenMotorBridge Modular Cartridge Variants CAD Trio](../images/cad/cartridge_variants_trio.png)
 
-*Figure 8.8: The modular cartridge variants (OMM Transceiver, Sena 50S/60S, Cardo Packtalk Edge, IP67 Dry Box).*
+*Figure 8.10: The modular cartridge variants (OMM Transceiver, Sena 50S/60S, Cardo Packtalk Edge, IP67 Dry Box).*
 
 ### 5.1 User-Centric Plug & Play Docking Architecture (Zero Solder)
 To route signals from the right-angled **JST-SH 1.0 mm 6-pin SMD header (`J2`)** on the cartridge carrier PCB to adapter contact points without crimp or bend fatigue:
@@ -211,7 +217,7 @@ To route signals from the right-angled **JST-SH 1.0 mm 6-pin SMD header (`J2`)**
 ### 5.2 Sena 50S / 60S Cradle
 ![OpenMotorBridge Sena 50S Cartridge Assembly 3D CAD Fitting](../images/cad/sena_cartridge_assembly_cad.png)
 
-*Figure 8.9: CAD visualization of the Sena 50S/60S quick-change cartridge with spring-loaded 7-pin pogo array.*
+*Figure 8.11: CAD visualization of the Sena 50S/60S quick-change cartridge with spring-loaded 7-pin pogo array.*
 
 ### 5.3 Sena +Mesh & Universal Slide-Inlay (Class A with External RF Bulkhead)
 For Sena +Mesh (or other OEM adapters requiring external antenna feeds):
@@ -225,7 +231,7 @@ For Sena +Mesh (or other OEM adapters requiring external antenna feeds):
 ### 5.4 Cardo Packtalk Edge / Pro Magnetic Air Mount
 ![OpenMotorBridge Cardo Packtalk Edge Cartridge Assembly 3D CAD Fitting](../images/cad/cardo_cartridge_assembly_cad.png)
 
-*Figure 8.10: CAD visualization of the Cardo Packtalk Edge cartridge with dual N52 neodymium magnets and 5 sprung contact pads.*
+*Figure 8.12: CAD visualization of the Cardo Packtalk Edge cartridge with dual N52 neodymium magnets and 5 sprung contact pads.*
 
 ### 5.5 Cardo Packtalk Bold / Black Edition
 Utilizes the slide-locking mechanical shoe of the original Cardo audio kit cradle. The unit slides in from the top and snaps into place against vibration.
@@ -240,12 +246,12 @@ Fully integrated 500 mW PMR446 analog radio module ($38 \times 20\,\text{mm}$) m
 ### 5.8 Longitudinal Cross-Section Comparison (Sena vs. Cardo)
 ![OpenMotorBridge Sena & Cardo Cartridges Longitudinal Cross Section](../images/cad/sena_cardo_cartridge_cross_section.png)
 
-*Figure 8.11: 2D longitudinal cutaway (X-Z plane) through Sena 50S (top) and Cardo Packtalk Edge (bottom) cartridges.*
+*Figure 8.13: 2D longitudinal cutaway (X-Z plane) through Sena 50S (top) and Cardo Packtalk Edge (bottom) cartridges.*
 
 ### 5.9 IP67 Blank Cartridge (Dry Box Dummy)
 ![OpenMotorBridge IP67 Blindkassette 3D CAD Render](../images/cad/dummy_cartridge_cad.png)
 
-*Figure 8.12: Hermetic IP67 blank cartridge providing an $80 \times 46 \times 16\,\text{mm}$ dry storage compartment.*
+*Figure 8.14: Hermetic IP67 blank cartridge providing an $80 \times 46 \times 16\,\text{mm}$ dry storage compartment.*
 
 ---
 
@@ -273,11 +279,11 @@ Rear Pod 3 integrates the OMM transceiver, 868 MHz LoRa, and Multi-GNSS (`PCBA 0
 
 ![Pod 3 Full Assembly Exploded 3D](../images/cad/pod3_full_assembly_exploded_3d.png)
 
-*Figure 8.13: 3D CAD exploded view of rear Pod 3 with antenna radome, internal PCB, and M8 bayonet socket.*
+*Figure 8.15: 3D CAD exploded view of rear Pod 3 with antenna radome, internal PCB, and M8 bayonet socket.*
 
 ![Pod 3 Assembly Cross Section](../images/cad/pod3_assembly_cross_section.png)
 
-*Figure 8.14: Longitudinal cross-section through rear Pod 3 showing coaxially shielded antenna chamber and $25 \times 25\,\text{mm}$ GNSS ground plane.*
+*Figure 8.16: Longitudinal cross-section through rear Pod 3 showing coaxially shielded antenna chamber and $25 \times 25\,\text{mm}$ GNSS ground plane.*
 
 ---
 
@@ -291,21 +297,21 @@ The Front Node enclosure was specially engineered for protected installation ins
 
 ![Universal Front Node Closed CAD](../images/cad/front_node_closed_cad.png)
 
-*Figure 8.15: Closed Front Node IP67 enclosure.*
+*Figure 8.17: Closed Front Node IP67 enclosure.*
 
 ![Universal Front Node Exploded 3D](../images/cad/front_node_exploded_3d.png)
 
-*Figure 8.16: 3D exploded view of the Front Node along the vertical Z-axis.*
+*Figure 8.18: 3D exploded view of the Front Node along the vertical Z-axis.*
 
 ![Universal Front Node Cutaway 3D](../images/cad/front_node_cutaway_3d.png)
 
-*Figure 8.17: Transparent 3D cutaway view of the Front Node showing Knowles MEMS acoustic duct and VBUS load switch.*
+*Figure 8.19: Transparent 3D cutaway view of the Front Node showing Knowles MEMS acoustic duct and VBUS load switch.*
 
 ### 8.1 The 4-in-1 Universal Mounting System of the Front Node
 
 ![Universal Front Node Bottom CAD 4-in-1](../images/cad/front_node_bottom_cad.png)
 
-*Figure 8.18: Enclosure bottom view of the Front Node showing AMPS hole pattern, $120^\circ$ V-groove tube saddle, EPDM strap anchor tabs, silentblock mounting holes, and 3M Dual-Lock hook-and-loop channels.*
+*Figure 8.20: Enclosure bottom view of the Front Node showing AMPS hole pattern, $120^\circ$ V-groove tube saddle, EPDM strap anchor tabs, silentblock mounting holes, and 3M Dual-Lock hook-and-loop channels.*
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
@@ -416,6 +422,18 @@ Due to factory inverted Showa remote reservoir rear shocks with thick braided hy
 * **Skeleton Dock (`cvo_st_undercowl_skeleton_dock.scad`):** Receives the standard Pod 3 housing ($135 \times 70 \times 38.5\,\text{mm}$) upright. Two upward-arching spring arms brace against the ceiling of the carbon cowl, preventing any play or rattling over potholes and cobblestones.
 * **Telemetry Fin (`cvo_st_telemetry_fin.scad`):** Mounts directly onto the OEM rear mounting tab of the cowl. It passes the ESP32-C3 2.4 GHz mesh antenna outside into clean air while routing the coaxial cable invisibly beneath the tab into the cowl.
 
+![CVO ST Under-Cowl Skeleton Dock CAD](../images/cad/cvo_st_undercowl_skeleton_dock_cad.png)
+
+*Figure 8.21: 3D CAD view of the Under-Cowl Skeleton Dock (`cvo_st_undercowl_skeleton_dock.scad`). Monolithic cradle with dual upward-curving spring arches that brace against the underside of the carbon cowl, lateral damping wings, and form-fitting insertion dock for Pod 3.*
+
+![CVO ST Telemetry Fin CAD](../images/cad/cvo_st_telemetry_fin_cad.png)
+
+*Figure 8.22: 3D CAD model of the external 2.4 GHz Telemetry Fin (`cvo_st_telemetry_fin.scad`). Aerodynamically profiled fin bolted to the OEM rear tab of the forged carbon cowl with protected coaxial cable pass-through and strain relief.*
+
+![Pod 3 Fender Assembly ST 3D](../images/cad/pod3_fender_assembly_st_3d.png)
+
+*Figure 8.23: Photorealistic complete rear assembly on the CVO Road Glide ST: Invisible, vibration-proof integration of Pod 3 inside the Skeleton Dock beneath the forged carbon cowl, sleek telemetry fin atop the rear tab, and complete clearance around the Showa inverted remote reservoirs.*
+
 #### B. Saddlebag Lid Integration: Pod 1 (Left) & Pod 2 (Right)
 * **Top-Lid Mounting:** Both pods mount in the forward third of the saddlebag lids, bolted to the OEM Torx fasteners of the hinge/check-strap bracket (see [Section 9.5](#95-universal-saddlebag-lid-dock-saddlebag_lid_dockscad)).
 * **Luggage & Beverage Safety:** Located approx. $30\,\text{cm}$ above the bag floor. Heavy cold drinks, tools, or damp rain gear on the bag floor remain completely outside the RF Fresnel zone.
@@ -452,6 +470,14 @@ For classic touring models without front fairing and with 2-Up comfort touring s
 * **Touring Fender Console (`pod3_touring_fender_console.scad`):** Organic teardrop shape ($R = 6\dots 7\,\text{mm}$) form-fitting Pod 3. Bolted to the OEM $1/4"-20$ knurled nut in the rear fender. The M8 cable dives invisibly forward under the seat.
 * **Headlight Nacelle Front Node:** Utilizes the generous cavity behind the 7" LED headlight. Power supplied via the OEM Harley accessory connector located there.
 
+![Pod 3 Touring Fender Console CAD](../images/cad/pod3_touring_fender_console.png)
+
+*Figure 8.24: Isolated 3D CAD view of the Touring Fender Console (`pod3_touring_fender_console.scad`) for Road King Special. Organic teardrop styling with rear slide opening for Pod 3 and rapid cartridge swap.*
+
+![Pod 3 Touring Fender Console CAD Underside](../images/cad/pod3_touring_fender_console_cad.png)
+
+*Figure 8.25: Underside of the Touring Fender Console CAD: Concave 195 mm curved fender saddle, forward $1/4"-20$ mounting tab for the pillion seat nut, and recessed cable duct for chafe-free M8 routing under the seat.*
+
 ---
 
 ### 9.3 Reference Kit 3: Classic Bagger & Cruiser (Touring Stealth Console)
@@ -460,11 +486,11 @@ For Harley-Davidson Street Glide, Electra Glide, and Ultra Limited with 2-Up com
 
 ![Pod 3 Touring Stealth Console CAD](../images/cad/pod3_touring_stealth_cad.png)
 
-*Figure 8.19: Isolated 3D CAD view of the Touring Stealth Console (`pod3_touring_stealth_console.scad`). Completely organic smoothed contours ($R = 6\dots 7\,\text{mm}$) without hard box edges. Forward mounting tab for the OEM $1/4"-20$ pillion seat screw in the fender, form-fitting seat transition with M8 cable duct heading forward under the seat, front slope integration at mid-insertion height ($Z = 22\,\text{mm}$), open central dock, and gently sloping teardrop rear tail with integrated clip-in slot for the rear antenna.*
+*Figure 8.26: Isolated 3D CAD view of the Touring Stealth Console (`pod3_touring_stealth_console.scad`). Completely organic smoothed contours ($R = 6\dots 7\,\text{mm}$) without hard box edges. Forward mounting tab for the OEM $1/4"-20$ pillion seat screw in the fender, form-fitting seat transition with M8 cable duct heading forward under the seat, front slope integration at mid-insertion height ($Z = 22\,\text{mm}$), open central dock, and gently sloping teardrop rear tail with integrated clip-in slot for the rear antenna.*
 
 ![Pod 3 Fender Assembly Touring 3D](../images/cad/pod3_fender_assembly_touring_3d.png)
 
-*Figure 8.20: Photorealistic complete rear assembly on the Classic Touring bike: Seamless transition against passenger seat, M8 cable routed invisibly forward, unobstructed pod roof for uncompromised GNSS reception, rearward cartridge insertion, and decoupled Garmin Varia radar below the license plate.*
+*Figure 8.27: Photorealistic complete rear assembly on the Classic Touring bike: Seamless transition against passenger seat, M8 cable routed invisibly forward, unobstructed pod roof for uncompromised GNSS reception, rearward cartridge insertion, and decoupled Garmin Varia radar below the license plate.*
 
 ---
 
@@ -504,7 +530,7 @@ For adventure motorcycles and naked bikes with tubular trellis subframes, rear r
 
 ![Pod 3 Transceiver & Radar 3D Cutaway CAD](../images/cad/pod3_radar_cutaway_3d.png)
 
-*Figure 8.21: Photorealistic 3D CAD isometric cutaway of rear Pod 3 in the Adventure Configuration (BMW GS / KTM Adventure). On adventure bikes, the Garmin Varia blind-spot radar mounts directly on the integrated M5 GoPro swivel arm of the Pod 3 base plate at optimal detection height above the rear tire, while the 120° V-groove and EPDM tension straps cradle securely onto the luggage rack or tubular subframe.*
+*Figure 8.28: Photorealistic 3D CAD isometric cutaway of rear Pod 3 in the Adventure Configuration (BMW GS / KTM Adventure). On adventure bikes, the Garmin Varia blind-spot radar mounts directly on the integrated M5 GoPro swivel arm of the Pod 3 base plate at optimal detection height above the rear tire, while the 120° V-groove and EPDM tension straps cradle securely onto the luggage rack or tubular subframe.*
 
 ---
 
@@ -514,7 +540,7 @@ The universal Saddlebag Lid Dock ([`saddlebag_lid_dock.scad`](file:///Users/schm
 
 ![Universal Saddlebag Lid Dock CAD](../images/cad/saddlebag_lid_dock_iso.png)
 
-*Figure 8.22: 3D CAD visualization of the Saddlebag Lid Dock (`saddlebag_lid_dock.scad`). Visible are the inboard-oriented Torx mounting flange for OEM hinge screws, forward M8 cable snout with strain relief, perimeter half-shell with EPDM strap slots, and upper drip lip shielding the cartridge entrance.*
+*Figure 8.29: 3D CAD visualization of the Saddlebag Lid Dock (`saddlebag_lid_dock.scad`). Visible are the inboard-oriented Torx mounting flange for OEM hinge screws, forward M8 cable snout with strain relief, perimeter half-shell with EPDM strap slots, and upper drip lip shielding the cartridge entrance.*
 
 #### 9.5.1 Zero-Drill Mounting & Mechanical Design
 1. **OEM Mounting Point Utilization (Zero-Drill):**
@@ -556,7 +582,7 @@ On cruisers and baggers, the Garmin Varia mmWave radar is **decoupled** from Pod
 
 ![Radar License Plate Bracket CAD](../images/cad/radar_license_plate_bracket_cad.png)
 
-*Figure 8.23: 3D CAD model of the decoupled license plate radar bracket with M6 clamping, M5 swivel hinge, and concealed rear M8 cable channel.*
+*Figure 8.30: 3D CAD model of the decoupled license plate radar bracket with M6 clamping, M5 swivel hinge, and concealed rear M8 cable channel.*
 
 * **Legal Requirement (§ 10 Para. 6 FZV / ECE R138):**
   The license plate must remain completely visible and unobstructed from above at a vertical angle of **at least $+30^\circ$**.
