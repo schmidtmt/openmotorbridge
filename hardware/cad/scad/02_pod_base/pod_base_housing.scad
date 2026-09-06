@@ -19,7 +19,7 @@ use <parts/003_pod_guide_grooves.scad>;
 use <parts/005_pod_strap_hooks.scad>;
 
 module pod_base_housing() {
-    port_offset_y = 9.0; // Symmetrical offset from centerline (yc = POD_OUTER_W / 2.0 = 35.0 mm)
+    port_offset_y = 8.0; // Symmetrical offset from centerline (yc = POD_OUTER_W / 2.0 = 35.0 mm; Port A = 27 mm, Port B = 43 mm)
 
     difference() {
         union() {
