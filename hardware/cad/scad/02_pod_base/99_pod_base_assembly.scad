@@ -9,6 +9,7 @@
 include <../00_common/parameters.scad>;
 use <../00_common/dummies/dummy_m8_connector.scad>;
 use <pod_base_housing.scad>;
+use <parts/008_pod_base_usbc_cap_tpu.scad>;
 use <../03_pod_cartridges/cartridge_sena.scad>;
 
 // View Mode: Set to true for slide-out exploded cartridge view
@@ -20,10 +21,15 @@ module pod_base_full_assembly() {
     color("slategray", 0.75)
         pod_base_housing();
 
-    // 2. M8 6-Pin IP67 Metal Connector (connected at rear)
-    translate([0, POD_OUTER_W/2.0, POD_OUTER_H/2.0])
+    // 2a. Port A: M8 6-Pin IP67 Metal Connector (connected at rear left, Y = 27 mm)
+    translate([0, POD_OUTER_W/2.0 - 8.0, POD_OUTER_H/2.0])
         rotate([0, 180, 0])
             dummy_m8_connector();
+
+    // 2b. Port B: USB-C Waterproof TPU Sealing Cap (plugged at rear right, Y = 43 mm)
+    translate([0.5, POD_OUTER_W/2.0 + 8.0, POD_OUTER_H/2.0])
+        rotate([0, 90, 90])
+            pod_base_usbc_cap_tpu();
 
     // 3. 2x V4A Auto-Eject Coil Springs
     color("gold") {

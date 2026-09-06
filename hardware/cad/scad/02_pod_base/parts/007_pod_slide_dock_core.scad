@@ -48,10 +48,10 @@ module pod_slide_dock_subtraction(
             cube([14.0, 5.0, 10.0], center=false);
     }
 
-    // 3. Front M8 Cable Gland Neck Pocket (facing -X towards seat)
-    // Neck is centered at Y = 0, Z = 19.0 mm, outer radius 6.0 mm
-    translate([-dock_l/2.0 - 15.0, -8.0, 19.0 - 8.0])
-        cube([16.0, 16.0, 20.0], center=false);
+    // 3. Front Dual-Port Connector Pocket (facing -X towards seat)
+    // Spans Port A (M8 at Y = -8.0 mm) and Port B (USB-C at Y = +8.0 mm)
+    translate([-dock_l/2.0 - 15.0, -19.0, 19.0 - 9.0])
+        cube([16.0, 38.0, 22.0], center=false);
 
     // 4. Rear Mouth Clearance (facing +X towards tail)
     // Allows the cartridge faceplate (width 74 mm, height 34 mm) to slide through cleanly

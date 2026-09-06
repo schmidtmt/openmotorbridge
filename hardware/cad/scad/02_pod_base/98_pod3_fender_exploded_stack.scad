@@ -16,8 +16,9 @@
 
 include <../00_common/parameters.scad>;
 use <parts/006_fender_curved_saddle.scad>;
-use <pod3_st_aero_winglet_nacelle.scad>;
+use <design_studies/pod3_st_aero_winglet_nacelle.scad>;
 use <radar_license_plate_bracket.scad>;
+use <99_pod3_fender_assembly_st.scad>;
 use <pod_base_housing.scad>;
 use <../03_pod_cartridges/cartridge_omm_transceiver.scad>;
 
@@ -65,7 +66,7 @@ module dummy_tail_and_radar() {
 
 module pod3_fender_exploded_stack() {
     // Layer 1: Harley Steel Fender Arch
-    dummy_fender();
+    dummy_st_fender();
 
     // Layer 2: ST Aero-Winglet Performance Bridge (bolting to side fender struts)
     translate([0, 0, Z_BRIDGE])

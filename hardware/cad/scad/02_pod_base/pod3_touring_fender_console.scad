@@ -98,9 +98,10 @@ module pod3_internal_slide_tunnel() {
     translate([POD_L/2.0 - 1.0, -(POD_W - 2.0)/2.0, 5.0])
         cube([65.0, POD_W - 2.0, POD_H - 2.0], center=false);
 
-    // 3. Front M8 Gland Straight Chamber (X = -68 to -95 mm)
-    translate([-POD_L/2.0 - 26.0, -11.0, 19.0 - 11.0])
-        cube([28.0, 22.0, 22.0], center=false);
+    // 3. Front Dual-Port Connector Chamber (X = -68 to -95 mm, Y = -19 to +19 mm)
+    // Generously clears Port A (M8 at Y=-8 mm) and Port B (USB-C at Y=+8 mm)
+    translate([-POD_L/2.0 - 26.0, -19.0, 19.0 - 11.0])
+        cube([28.0, 38.0, 22.0], center=false);
 
     // 4. Strap Hook Reliefs inside chamber
     hook_x = [-POD_L/2.0 + 25.0, -POD_L/2.0 + 110.0];

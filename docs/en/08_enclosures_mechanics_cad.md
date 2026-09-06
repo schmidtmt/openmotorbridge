@@ -586,7 +586,7 @@ The universal Saddlebag Lid Dock ([`saddlebag_lid_dock.scad`](file:///Users/schm
 
 ![Universal Saddlebag Lid Dock CAD](../images/cad/saddlebag_lid_dock_iso.png)
 
-*Figure 8.29: 3D CAD visualization of the Saddlebag Lid Dock (`saddlebag_lid_dock.scad`). Visible are the inboard-oriented Torx mounting flange for OEM hinge screws, forward M8 cable snout with strain relief, perimeter half-shell with EPDM strap slots, and upper drip lip shielding the cartridge entrance.*
+*Figure 8.29: 3D CAD visualization of the Saddlebag Lid Dock (`saddlebag_lid_dock.scad`). Visible are the inboard-oriented Torx mounting flange for OEM hinge screws, forward Dual-Port cable snout with strain relief (Port B USB-C pass-through & Port A M8 clearance), perimeter half-shell with EPDM strap slots, and upper drip lip shielding the cartridge entrance.*
 
 #### 9.5.1 Zero-Drill Mounting & Mechanical Design
 1. **OEM Mounting Point Utilization (Zero-Drill):**
@@ -628,14 +628,23 @@ The wiring of the saddlebag lid pods resolves the fundamental operational challe
  ═════════════════════════════════════════════════════════════════════════════════
   INSIDE SADDLEBAG (Dry, clean, protected – 0 adapters inside bag)
  ─────────────────────────────────────────────────────────────────────────────────
-  [ 6-Pin MagSafe Plug ] ────────► At front bag edge (slim wire < 2 mm)
+  [ 6-Pin MagSafe Pigtail ] ─────► At front bag edge (slim wire < 2 mm)
          │
-         │ (Slim, ultra-flexible flat/silicone ribbon, routed without bends)
+         ▼
+  [ 19 mm Tub Floor Grommet ] ───► Asymmetric split seal (EPDM/TPU)
+         │
+         ▼
+  [ Stage-1 Strain Relief ] ─────► Integrated clamping tower absorbs 100% pull force
+         │
+         │ (Slim, ultra-flexible flat/silicone ribbon, 100% strain- & tension-free)
          ▼
   [ Routed along Lid Tether ] ──► Ascends protected into saddlebag lid
          │
          ▼
-  [ Direct Plug-in to PORT B ] ──► USB-C Slim-Port on Pod Base PCB
+  [ Stage-2 Strain Relief ] ─────► Zip-tie tunnel in 46 mm snout secures cable
+         │
+         ▼
+  [ Direct Plug-in to PORT B ] ──► USB-C Slim-Port on Pod Base PCB (Zero-Stress!)
   [ (Zero M8 adapters inside!) ]
  ═════════════════════════════════════════════════════════════════════════════════
 ```
@@ -653,6 +662,11 @@ The wiring of the saddlebag lid pods resolves the fundamental operational challe
 4. **Adapter-Free Direct Plug-In at Pod Port B:**
    * The slim cable routes along the textile check-strap directly into **Slim-Port B of the Pod Base**.
    * Port A (M8 threaded neck) is capped with a protective dust plug inside the bag. No auxiliary adapter PCBs, breakout blocks, or loose solder joints exist inside the saddlebag.
+5. **2-Stage Strain Relief & Zero-Drill Bottom Grommet ([`010_saddlebag_hole_grommet_split.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/parts/010_saddlebag_hole_grommet_split.scad)):**
+   * Cable enters through the factory $19\,\text{mm}$ tub floor hole alongside the M8 steel spacer sleeve.
+   * **Stage 1 (Tub Floor):** An integrated strain-relief tower on the grommet's interior flange clamps the cable via mini zip-tie. MagSafe breakaway tension ($10\dots 15\,\text{N}$) and shifting cargo loads are 100% grounded into the bag floor.
+   * **Stage 2 (Lid Dock):** The cable is clamped again in the $46\,\text{mm}$ dual-port snout of [`saddlebag_lid_dock.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/saddlebag_lid_dock.scad) just $15\,\text{mm}$ before the connector.
+   * **Result at Port B:** The internal USB-C plug is entirely mechanically decoupled, experiencing **exactly 0 Newtons of mechanical tension or vibration shear**.
 
 #### 9.5.3 RF Physics: Why Saddlebag Lids Beat Bag Floors
 

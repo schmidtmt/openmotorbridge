@@ -10,6 +10,7 @@
 include <../00_common/parameters.scad>;
 include <../00_common/dummies/dummy_m8_connector.scad>;
 include <pod_base_housing.scad>;
+use <parts/008_pod_base_usbc_cap_tpu.scad>;
 include <../03_pod_cartridges/00_base_sled.scad>;
 include <../03_pod_cartridges/cartridge_sena.scad>;
 
@@ -18,10 +19,15 @@ module pod_xray_inspection_assembly() {
     color([0.2, 0.35, 0.55, 0.32])
         pod_base_housing();
 
-    // 2. M8 6-Pin IP67 Metal Connector (Rear)
-    translate([0, POD_OUTER_W/2.0, POD_OUTER_H/2.0])
+    // 2a. Port A: M8 6-Pin IP67 Metal Connector (Rear Left, Y = 27 mm)
+    translate([0, POD_OUTER_W/2.0 - 8.0, POD_OUTER_H/2.0])
         rotate([0, 180, 0])
             dummy_m8_connector();
+
+    // 2b. Port B: USB-C Waterproof TPU Sealing Cap (Rear Right, Y = 43 mm)
+    translate([0.5, POD_OUTER_W/2.0 + 8.0, POD_OUTER_H/2.0])
+        rotate([0, 90, 90])
+            pod_base_usbc_cap_tpu();
 
     // 3. 2x V4A Auto-Eject Coil Springs
     color("gold", 1.0) {

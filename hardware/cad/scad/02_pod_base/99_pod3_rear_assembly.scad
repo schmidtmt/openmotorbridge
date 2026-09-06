@@ -10,6 +10,7 @@
 
 include <../00_common/parameters.scad>;
 include <pod_base_housing.scad>;
+use <parts/008_pod_base_usbc_cap_tpu.scad>;
 include <../03_pod_cartridges/cartridge_omm_transceiver.scad>;
 include <../00_common/dummies/dummy_m8_connector.scad>;
 
@@ -22,10 +23,15 @@ module pod3_rear_assembly() {
     color("darkslategray", 0.75)
         pod_base_housing();
 
-    // 2. M8 6-Pin IP67 Metal Connector (Connected at rear)
-    translate([0, POD_OUTER_W/2.0, POD_OUTER_H/2.0])
+    // 2a. Port A: M8 6-Pin IP67 Metal Connector (Connected at rear left, Y = 27 mm)
+    translate([0, POD_OUTER_W/2.0 - 8.0, POD_OUTER_H/2.0])
         rotate([0, 180, 0])
             dummy_m8_connector();
+
+    // 2b. Port B: USB-C Waterproof TPU Sealing Cap (Connected at rear right, Y = 43 mm)
+    translate([0.5, POD_OUTER_W/2.0 + 8.0, POD_OUTER_H/2.0])
+        rotate([0, 90, 90])
+            pod_base_usbc_cap_tpu();
 
     // 3. OMM Transceiver Cartridge Assembly (Slides into the Pod Base Tunnel)
     translate([SLIDE_X, (POD_OUTER_W - CARTRIDGE_BASE_W)/2.0, POD_WALL])

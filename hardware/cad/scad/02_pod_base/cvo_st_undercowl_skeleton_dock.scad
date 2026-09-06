@@ -53,9 +53,9 @@ module core_dock_tray() {
             linear_extrude(height=TRAY_H + 2.0, center=false)
                 rounded_box_2d(POD_L, POD_W, r=3.5);
 
-        // Front M8 harness wire relief (X = -POD_L/2)
-        translate([-POD_L/2.0 - DOCK_WALL - 1.0, -14.0, 6.0])
-            cube([DOCK_WALL + 3.0, 28.0, TRAY_H], center=false);
+        // Front Dual-Port harness wire relief (X = -POD_L/2, spans Port A M8 at Y=-8 and Port B USB-C at Y=+8)
+        translate([-POD_L/2.0 - DOCK_WALL - 1.0, -18.0, 6.0])
+            cube([DOCK_WALL + 3.0, 36.0, TRAY_H], center=false);
 
         // Rear SMA antenna coax relief (X = +POD_L/2)
         translate([POD_L/2.0 - 1.0, -16.0, 6.0])

@@ -18,8 +18,9 @@
 // =============================================================================
 
 include <../00_common/parameters.scad>;
-use <pod3_st_aero_winglet_nacelle.scad>;
+use <design_studies/pod3_st_aero_winglet_nacelle.scad>;
 use <pod_base_housing.scad>;
+use <parts/008_pod_base_usbc_cap_tpu.scad>;
 use <../03_pod_cartridges/cartridge_omm_transceiver.scad>;
 use <radar_license_plate_bracket.scad>;
 
@@ -161,10 +162,15 @@ module st_fender_assembly() {
         }
     }
 
-    // 8. Concealed M8 Cable (runs under left wing, drops down inside of left wingtip)
+    // 8a. Port B: Waterproof USB-C TPU Cap (Sealed for outdoor fender mounting)
+    translate([-POD_OUTER_L/2.0 + 0.5, 8.0, 21.5])
+        rotate([0, 90, 90])
+            pod_base_usbc_cap_tpu();
+
+    // 8b. Concealed M8 Cable (runs from Port A at Y=-8 under left wing, drops down inside of left wingtip)
     color("#0284c7") {
         hull() {
-            translate([-POD_OUTER_L/2.0 - 2.0, 0, 16.0]) sphere(r=2.5, $fn=16);
+            translate([-POD_OUTER_L/2.0 - 2.0, -8.0, 21.5]) sphere(r=2.5, $fn=16);
             translate([-82.0, 20.0, 15.0]) sphere(r=2.5, $fn=16);
         }
         hull() {

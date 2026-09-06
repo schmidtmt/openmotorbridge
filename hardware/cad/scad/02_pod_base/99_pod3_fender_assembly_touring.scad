@@ -18,8 +18,9 @@
 // =============================================================================
 
 include <../00_common/parameters.scad>;
-use <pod3_touring_stealth_console.scad>;
+use <design_studies/pod3_touring_stealth_console.scad>;
 use <pod_base_housing.scad>;
+use <parts/008_pod_base_usbc_cap_tpu.scad>;
 use <../03_pod_cartridges/cartridge_omm_transceiver.scad>;
 use <radar_license_plate_bracket.scad>;
 
@@ -129,12 +130,17 @@ module touring_fender_assembly() {
         }
     }
 
-    // 6. Forward M8 Cable (runs out front of pod at X=-68, dives directly under seat)
+    // 5b. Port B: Waterproof USB-C TPU Cap (Sealed for outdoor fender mounting)
+    translate([-POD_OUTER_L/2.0 + 0.5, 8.0, 21.5])
+        rotate([0, 90, 90])
+            pod_base_usbc_cap_tpu();
+
+    // 6. Forward M8 Cable (runs out front of Port A at X=-68, Y=-8, dives directly under seat)
     color("#0284c7") {
-        translate([-POD_OUTER_L/2.0 - 5.0, 0, 21.5])
+        translate([-POD_OUTER_L/2.0 - 5.0, -8.0, 21.5])
             rotate([0, 90, 0])
                 cylinder(r=4.0, h=40.0, center=true, $fn=24);
-        translate([-POD_OUTER_L/2.0 - 35.0, 0, 12.0])
+        translate([-POD_OUTER_L/2.0 - 35.0, -8.0, 12.0])
             cylinder(r=4.0, h=18.0, center=true, $fn=24);
     }
 

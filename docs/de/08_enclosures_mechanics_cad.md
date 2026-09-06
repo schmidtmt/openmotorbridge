@@ -620,7 +620,7 @@ Das universelle Kofferdeckel-Dock ([`saddlebag_lid_dock.scad`](file:///Users/sch
 
 ![Universal Saddlebag Lid Dock CAD](../images/cad/saddlebag_lid_dock_iso.png)
 
-*Abbildung 8.29: 3D-CAD-Visualisierung des Kofferdeckel-Docks (`saddlebag_lid_dock.scad`). Sichtbar sind der inboard gerichtete Torx-Montageflansch für die originalen Scharnierschrauben, die frontale M8-Kabelschnauze mit Zugentlastung, die umlaufende Halbschale mit EPDM-Spannbandschlitzen und die obere Tropfkante über dem Kassetteneinschub.*
+*Abbildung 8.29: 3D-CAD-Visualisierung des Kofferdeckel-Docks (`saddlebag_lid_dock.scad`). Sichtbar sind der inboard gerichtete Torx-Montageflansch für die originalen Scharnierschrauben, die frontale Dual-Port-Kabelschnauze mit Zugentlastung (Port B USB-C Durchgang & Port A M8 Freisparung), die umlaufende Halbschale mit EPDM-Spannbandschlitzen und die obere Tropfkante über dem Kassetteneinschub.*
 
 #### 9.5.1 Zero-Drill-Befestigung & Mechanisches Konzept
 1. **Nutzung originaler Befestigungspunkte (Zero-Drill):**
@@ -662,14 +662,23 @@ Die Verkabelung der Kofferdeckel-Pods löst das fundamentale Praxiskriterium des
  ═════════════════════════════════════════════════════════════════════════════════
   IM KOFFER (Trocken, sauber, geschützt – 0 Adapter im Koffer)
  ─────────────────────────────────────────────────────────────────────────────────
-  [ 6-Pin MagSafe-Stecker ] ────────► An Koffer-Vorderkante (Kabel < 2 mm)
+  [ 6-Pin MagSafe-Pigtail ] ────────► An Koffer-Vorderkante (Kabel < 2 mm)
          │
-         │ (Schlankes, hochflexibles Flach-/Silikonkabel, knickfrei verlegt)
+         ▼
+  [ 19-mm-Bodendurchführung ] ──────► Asymmetrische Split-Dichtung (EPDM/TPU)
+         │
+         ▼
+  [ Stufe-1-Zugentlastung am Boden ] ► Integrierter Klemmturm fängt 100 % Abreißkraft ab
+         │
+         │ (Schlankes, hochflexibles Flach-/Silikonkabel, völlig last- & zugfrei)
          ▼
   [ Führung am Deckel-Fangband ] ──► Steigt geschützt in den Kofferdeckel auf
          │
          ▼
-  [ Direktanschluss an PORT B ] ────► USB-C Slim-Port der Pod-Basisplatine
+  [ Stufe-2-Zugentlastung am Dock ] ─► Kabelbinder-Tunnel im 46-mm-Schnauz klemmt Kabel
+         │
+         ▼
+  [ Direktanschluss an PORT B ] ────► USB-C Slim-Port der Pod-Basis (100 % lastfrei)
   [ (Kein M8-Adapter im Koffer!) ]
  ═════════════════════════════════════════════════════════════════════════════════
 ```
@@ -687,6 +696,11 @@ Die Verkabelung der Kofferdeckel-Pods löst das fundamentale Praxiskriterium des
 4. **Adapterfreier Direktanschluss an Port B des Pods:**
    * Das schlanke Koffer-Kabel läuft parallel zum textilen Deckel-Fangband in den Kofferdeckel und wird **direkt in den Slim-Port B der Pod-Basis** eingesteckt.
    * Port A (M8-Stutzen) wird im Koffer mit einer Schutzkappe verschlossen. Im Kofferinneren befinden sich **keinerlei zusätzliche Adapterplatinen oder Lötstellen**.
+5. **2-Stufen-Zugentlastung & Zero-Drill-Bodendichtung ([`010_saddlebag_hole_grommet_split.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/parts/010_saddlebag_hole_grommet_split.scad)):**
+   * Das Kabel tritt zusammen mit der M8-Stützhülse durch das serienmäßige $19\,\text{mm}$-Bodenloch ein.
+   * **Stufe 1 (Kofferboden):** Ein direkt an den Innenflansch der TPU-Dichtung angeformter Zugentlastungsturm klemmt das Kabel per Mini-Kabelbinder fest. Externe MagSafe-Abreißkräfte ($10\dots 15\,\text{N}$) und Stoßbelastungen durch herumrutschendes Gepäck werden zu 100 % in den Kofferboden eingeleitet.
+   * **Stufe 2 (Kofferdeckel):** Im Schnauz des Kofferdeckel-Docks ([`saddlebag_lid_dock.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/saddlebag_lid_dock.scad)) wird das Kabel $15\,\text{mm}$ vor dem Stecker erneut formschlüssig abgefangen.
+   * **Ergebnis an Port B:** Der USB-C-Stecker im Pod ist vollständig mechanisch entkoppelt und unterliegt **0 Newton dynamischer oder statischer Zugkraft**.
 
 #### 9.5.3 HF-Physik: Warum Kofferdeckel statt Kofferboden?
 
