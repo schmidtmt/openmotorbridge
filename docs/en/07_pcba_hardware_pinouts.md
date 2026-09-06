@@ -133,34 +133,46 @@ All 4-layer boards (PCBA 01, PCBA 04, and PCBA 05) utilize an identical controll
   * Layer 2 (Bottom): Solid continuous GND plane for RF and transient suppression.
 * **Surface Finish:** ENIG ($0{,}05\,\mu\text{m}$ gold plating for long-term corrosion resistance).
 
-### 4.2 Pinout of M8 6-Pin Circular Receptacle (`J2` / Cable Harness Input)
+### 4.2 Pinout of Dual-Port Inputs (`J2` / Port A M8 & `J3` / Port B USB-C)
 
-The M8 circular receptacle (A-coded, IP67) connects the pod base securely to the main harness:
+The pod base carrier board features two galvanically coupled input ports with automatic power multiplexing:
+* **Port A (`J2`):** Rugged M8 circular receptacle (A-coded, 6-pin, IP67) for exposed outdoor mounting (e.g. rear radar Pod 3 or crash-bar clamps).
+* **Port B (`J3`):** Ultra-flat 6-pin USB-C SMD receptacle for protected saddlebag interior mounting and tool-free chase/support vehicle deployment.
 
-| Pin (M8/J2) | Signal Name | Signal Type / Level | Function & ESD Protection |
-| :---: | :--- | :--- | :--- |
-| **Pin 1** | `1_VCC` | $+5{,}0\,\text{V}$ DC (max. 300 mA) | Supply voltage from Central Box (protected by 500mA PPTC, TVS Ch 1) |
-| **Pin 2** | `2_GND` | Power Ground ($0\,\text{V}$) | Central low-impedance ground return and RF reference |
-| **Pin 3** | `3_SIG_P` | Audio Line Positive ($1{,}0\,\text{V}_{\text{RMS}}$ diff.) | Differential audio signal Positive (TVS Ch 2, $< 0{,}5\,\text{pF}$) |
-| **Pin 4** | `4_SIG_N` | Audio Line Negative ($1{,}0\,\text{V}_{\text{RMS}}$ diff.) | Differential audio signal Negative (TVS Ch 3, $< 0{,}5\,\text{pF}$) |
-| **Pin 5** | `5_TRIGGER_PPS`| Trigger / Timecode ($3{,}3\,\text{V}$ Logic) | Optocoupler PTT trigger or 1-PPS Timepulse (TVS Ch 4) |
-| **Pin 6** | `6_1WIRE_ID` | 1-Wire Data Bus ($3{,}3\,\text{V}$) | Auto-ID line for DS2401 cartridge recognition (TVS Ch 5) |
-| **Collar** | `SHIELD` | Shield & Chassis Ground | $360^\circ$ circumferential contact to M8 metal thread & pipe saddle |
+| Pin | Port A (`J2`, M8 6P) | Port B (`J3`, USB-C 6P) | Signal Type / Level | Function & Protection |
+| :---: | :--- | :--- | :--- | :--- |
+| **1** | `1_VCC_M8` | `A1/B12: GND` | Power Ground ($0\,\text{V}$) | Central low-impedance ground return |
+| **2** | `2_GND` | `A4/B9: VCC_USBC` | $+5{,}0\,\text{V}$ DC (max. 500 mA) | Supply fed via LM66100 ideal-diode `U3` |
+| **3** | `3_SIG_P` | `A6: SIG_P (D+)` | Audio Line Positive ($1{,}0\,\text{V}_{\text{RMS}}$ diff.) | Differential audio signal Positive (TVS Ch 2) |
+| **4** | `4_SIG_N` | `A7: SIG_N (D-)` | Audio Line Negative ($1{,}0\,\text{V}_{\text{RMS}}$ diff.) | Differential audio signal Negative (TVS Ch 3) |
+| **5** | `5_TRIGGER_PPS`| `A5: TRIGGER (CC1)` | Trigger / Timecode ($3{,}3\,\text{V}$ Logic) | Optocoupler PTT trigger or 1-PPS Timepulse (TVS Ch 4) |
+| **6** | `6_1WIRE_ID` | `A8: 1WIRE_ID (SBU1)`| 1-Wire Data Bus ($3{,}3\,\text{V}$) | Auto-ID line for DS2401 cartridge recognition (TVS Ch 5) |
+| **Collar**| `SHIELD` | `SH1/SH2: SHIELD` | Shield & Chassis Ground | $360^\circ$ circumferential contact to metal thread / shell |
 
 ### 4.3 Pinout of 6-Pin Precision Pin Header (`J1` / Cartridge Interface)
 
-Vertical, gold-plated SMD pin header ($2{,}54\,\text{mm}$ pitch, $4{,}8\,\text{mm}$ wipe length):
+Vertical, gold-plated SMD pin header ($2{,}54\,\text{mm}$ pitch, $4{,}8\,\text{mm}$ wipe length, centered at $X=118\,\text{mm}$):
 
 | Pin (J1) | Signal Name | Direction | Description |
 | :---: | :--- | :---: | :--- |
-| **Pin 1** | `1_VCC` | Output $\rightarrow$ Cartridge | $+5{,}0\,\text{V}$ DC power for headset charging and active electronics |
+| **Pin 1** | `1_VCC` | Output $\rightarrow$ Cartridge | $+5{,}0\,\text{V}$ DC power routed from active port via LM66100 power-mux |
 | **Pin 2** | `2_GND` | Bidirectional | Ground reference for power and signals |
 | **Pin 3** | `3_SIG_P` | Bidirectional | Differential audio signal Positive |
 | **Pin 4** | `4_SIG_N` | Bidirectional | Differential audio signal Negative |
 | **Pin 5** | `5_TRIGGER_PPS`| Bidirectional | Bounce-free PTT trigger line to headset |
 | **Pin 6** | `6_1WIRE_ID` | Bidirectional | 1-Wire ROM-ID query line to DS2401 silicon chip |
 
-* **ESD Protection Array:** Littelfuse `SP3012-06UTG` clamps all 5 active lines against electrostatic discharges per IEC 61000-4-2 ($\pm 15\,\text{kV}$ air, $\pm 8\,\text{kV}$ contact) with $< 0{,}5\,\text{pF}$ parasitic capacitance.
+* **ESD Protection Array:** Littelfuse `SP3012-06UTG` clamps all active signal lines against electrostatic discharges per IEC 61000-4-2 ($\pm 15\,\text{kV}$ air, $\pm 8\,\text{kV}$ contact) with $< 0{,}5\,\text{pF}$ parasitic capacitance.
+
+### 4.4 Automatic Power-Mux & Modular Harness Architecture
+
+1. **Hardware Arbitration (`U2`, `U3` / TI LM66100):**
+   * Dual SC-70-6 ideal-diode ICs provide near-zero-latency automatic power selection with ultra-low on-resistance ($R_{\text{ON}} \approx 79\,\text{m}\Omega$, minimal millivolt drop).
+   * Cross-conduction and reverse-current feeding between Port A and Port B are physically prevented.
+2. **Modular Cable Harness Configurations:**
+   * **Type A (Outdoor Motorcycle):** HD26 $\rightarrow$ 3x rugged M8 A-coded lines to the pod base screw receptacles.
+   * **Type B (Saddlebag with MagSafe):** HD26 $\rightarrow$ M8 line to frame dock under the seat $\rightarrow$ 6-pin IP67 MagSafe breakaway coupling $\rightarrow$ slim cable entering saddlebag via 19 mm hole directly into Port B.
+   * **Type C (Support Vehicle / Cabin / Lab):** HD26 $\rightarrow$ USB-C slim harness for tool-free, clean dashboard installation powered via standard automotive USB chargers.
 
 ---
 

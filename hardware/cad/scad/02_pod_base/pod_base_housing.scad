@@ -5,8 +5,9 @@
 // Description: Ready-to-print universal pod base housing for all 3 positions
 //              (Pod 1 Left, Pod 2 Right, Pod 3 Rear). Includes 5-sided monocoque
 //              tunnel with rounded corners, universal frame tube saddle (V-groove),
-//              4x EPDM strap hook lugs, rear M8 cable gland neck, bulkhead partition,
-//              asymmetrical Poka-Yoke guide grooves, and ceiling Gore ePTFE breather.
+//              4x EPDM strap hook lugs, Dual-Port rear wall (Port A M8 on left,
+//              Port B USB-C pocket on right), bulkhead partition, asymmetrical
+//              Poka-Yoke guide grooves, and ceiling Gore ePTFE breather.
 // =============================================================================
 
 include <../00_common/parameters.scad>;
@@ -18,9 +19,11 @@ use <parts/003_pod_guide_grooves.scad>;
 use <parts/005_pod_strap_hooks.scad>;
 
 module pod_base_housing() {
+    port_offset_y = 9.0; // Symmetrical offset from centerline (yc = POD_OUTER_W / 2.0 = 35.0 mm)
+
     difference() {
         union() {
-            // 1. Monocoque 5-Sided Tunnel Body (100 x 60 x 28 mm with V-Groove & Zip-Tie Slots)
+            // 1. Monocoque 5-Sided Tunnel Body (135 x 70 x 38 mm with V-Groove & Zip-Tie Slots)
             pod_tunnel_base(
                 length=POD_OUTER_L,
                 width=POD_OUTER_W,
@@ -38,16 +41,16 @@ module pod_base_housing() {
                 hook_h=4.5
             );
 
-            // 3. Rear M8 6-Pin IP67 Cable Gland Stutzen (x = -10.0 .. 0.0 mm)
+            // 3. Rear Port A: M8 6-Pin IP67 Cable Gland Stutzen (Shifted Left: yc = 26.0 mm)
             pod_rear_m8_neck(
                 neck_len=10.0,
                 outer_r=M8_STUDS_OUTER_R,
                 inner_r=M8_BORE_R,
-                yc=POD_OUTER_W/2.0,
+                yc=POD_OUTER_W/2.0 - port_offset_y,
                 zc=POD_OUTER_H/2.0
             );
 
-            // 4. Protective Bulkhead Partition with 6-Pin Shroud & Spring Seats (x = 22 mm)
+            // 4. Protective Bulkhead Partition with 6-Pin Shroud & Spring Seats (x = 18 mm)
             pod_bulkhead_assembly(
                 bulkhead_x=POD_BULKHEAD_X,
                 wall=POD_WALL
@@ -65,15 +68,27 @@ module pod_base_housing() {
                 cylinder(r=3.5, h=2.5, center=false, $fn=16);
         }
 
-        // 7. Rear Wall M8 Continuous Cable Through-Bore (Ø 8.0 mm into chamber)
+        // 7. Rear Port A: M8 Continuous Cable Through-Bore (Shifted Left: yc = 26.0 mm)
         pod_rear_m8_through_hole_tool(
             wall_th=POD_WALL + 1.0,
             inner_r=M8_BORE_R,
-            yc=POD_OUTER_W/2.0,
+            yc=POD_OUTER_W/2.0 - port_offset_y,
             zc=POD_OUTER_H/2.0
         );
 
-        // 8. Ceiling Gore Vent Center Breather Hole (Ø 3.0 mm)
+        // 8. Rear Port B: Recessed USB-C Slim Outer Pocket & Through-Window (Shifted Right: yc = 44.0 mm)
+        pod_rear_usbc_pocket_tool(
+            wall_th=POD_WALL + 1.0,
+            pocket_depth=2.5,
+            pocket_w=12.0,
+            pocket_h=6.5,
+            port_w=9.2,
+            port_h=3.6,
+            yc=POD_OUTER_W/2.0 + port_offset_y,
+            zc=POD_OUTER_H/2.0
+        );
+
+        // 9. Ceiling Gore Vent Center Breather Hole (Ø 3.0 mm)
         translate([POD_OUTER_L/2.0, POD_OUTER_W/2.0, POD_OUTER_H - POD_WALL - 0.5])
             cylinder(r=1.5, h=POD_WALL + 2.5, center=false, $fn=16);
     }

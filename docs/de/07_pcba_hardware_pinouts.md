@@ -133,34 +133,46 @@ Für alle 4-Lagen-Platinen (PCBA 01, PCBA 04 und PCBA 05) wird der identische, s
   * Layer 2 (Bottom): Vollflächige Masseebene (`GND`) zur HF- und Störunterdrückung.
 * **Oberflächenveredelung:** ENIG (Goldauflage $0{,}05\,\mu\text{m}$ für langlebige Korrosionsbeständigkeit).
 
-### 4.2 Pinbelegung der M8 6-Pin Rundbuchse (`J2` / Kabelbaum-Eingang)
+### 4.2 Pinbelegung der Dual-Port Eingänge (`J2` / Port A M8 & `J3` / Port B USB-C)
 
-Die M8-Rundbuchse (A-kodiert, IP67) stellt die wasserdichte Verbindung zum Hauptkabelbaum her:
+Die Pod-Bodenplatine verfügt über zwei galvanisch gekoppelte Eingangsports mit automatischem Power-Mux:
+* **Port A (`J2`):** Robuste M8-Rundbuchse (A-kodiert, 6-polig, IP67) für exponierte Außenmontage (z. B. Heckradar Pod 3 oder Sturzbügel).
+* **Port B (`J3`):** Schlanke 6-Pin USB-C SMD-Buchse für geschützte Koffer-Innenmontage und werkzeuglosen Begleitfahrzeug-Einsatz.
 
-| Pin (M8/J2) | Signalname | Signalart / Spannungsbereich | Funktion & ESD-Schutz |
-| :---: | :--- | :--- | :--- |
-| **Pin 1** | `1_VCC` | $+5{,}0\,\text{V}$ DC (max. 300 mA) | Speisespannung von Zentralbox (abgesichert über 500mA PPTC, TVS Ch 1) |
-| **Pin 2** | `2_GND` | Power-Masse ($0\,\text{V}$) | Zentraler Massepfad für Rückströme und HF-Referenz |
-| **Pin 3** | `3_SIG_P` | Audio Line Positiv ($1{,}0\,\text{V}_{\text{RMS}}$ diff.) | Differenzieller NF-Audiopfad Positiv (TVS Ch 2, $< 0{,}5\,\text{pF}$) |
-| **Pin 4** | `4_SIG_N` | Audio Line Negativ ($1{,}0\,\text{V}_{\text{RMS}}$ diff.) | Differenzieller NF-Audiopfad Negativ (TVS Ch 3, $< 0{,}5\,\text{pF}$) |
-| **Pin 5** | `5_TRIGGER_PPS`| Trigger / Timecode ($3{,}3\,\text{V}$ Logic) | Optokoppler-PTT-Tastung oder 1-PPS Timepulse (TVS Ch 4) |
-| **Pin 6** | `6_1WIRE_ID` | 1-Wire Datenbus ($3{,}3\,\text{V}$) | Datenleitung zur automatischen Kassetten-Erkennung (TVS Ch 5) |
-| **Kragen** | `SHIELD` | Schirm- und Gehäusemasse | $360^\circ$-Rundumkontakt zum M8 Metallgewinde und Rohrbett |
+| Pin | Port A (`J2`, M8 6P) | Port B (`J3`, USB-C 6P) | Signalart / Spannungsbereich | Funktion & Schutz |
+| :---: | :--- | :--- | :--- | :--- |
+| **1** | `1_VCC_M8` | `A1/B12: GND` | Power-Masse ($0\,\text{V}$) | Zentraler Massepfad für Rückströme |
+| **2** | `2_GND` | `A4/B9: VCC_USBC` | $+5{,}0\,\text{V}$ DC (max. 500 mA) | Speisung über LM66100 Ideal-Diode `U3` |
+| **3** | `3_SIG_P` | `A6: SIG_P (D+)` | Audio Line Positiv ($1{,}0\,\text{V}_{\text{RMS}}$ diff.) | Differenzieller NF-Audiopfad Positiv (TVS Ch 2) |
+| **4** | `4_SIG_N` | `A7: SIG_N (D-)` | Audio Line Negativ ($1{,}0\,\text{V}_{\text{RMS}}$ diff.) | Differenzieller NF-Audiopfad Negativ (TVS Ch 3) |
+| **5** | `5_TRIGGER_PPS`| `A5: TRIGGER (CC1)` | Trigger / Timecode ($3{,}3\,\text{V}$ Logic) | Optokoppler-PTT-Tastung oder 1-PPS Timepulse (TVS Ch 4) |
+| **6** | `6_1WIRE_ID` | `A8: 1WIRE_ID (SBU1)`| 1-Wire Datenbus ($3{,}3\,\text{V}$) | Datenleitung zur Kassetten-Erkennung (TVS Ch 5) |
+| **Kragen**| `SHIELD` | `SH1/SH2: SHIELD` | Schirm- und Gehäusemasse | $360^\circ$-Rundumkontakt zum Metallgewinde / Gehäuse |
 
 ### 4.3 Pinbelegung der 6-poligen Präzisions-Stiftleiste (`J1` / Kassetten-Übergabe)
 
-Vertikale, hochpräzise SMD-Stiftleiste ($2{,}54\,\text{mm}$ Raster, vergoldet, mechanischer Wipe-Weg $4{,}8\,\text{mm}$):
+Vertikale, hochpräzise SMD-Stiftleiste ($2{,}54\,\text{mm}$ Raster, vergoldet, mechanischer Wipe-Weg $4{,}8\,\text{mm}$, mittig zentriert bei $X=118\,\text{mm}$):
 
 | Pin (J1) | Signalname | Richtung | Beschreibung |
 | :---: | :--- | :---: | :--- |
-| **Pin 1** | `1_VCC` | Ausgang $\rightarrow$ Kassette | $+5{,}0\,\text{V}$ DC Speisung für Headset-Ladeschaltung und Elektronik |
+| **Pin 1** | `1_VCC` | Ausgang $\rightarrow$ Kassette | $+5{,}0\,\text{V}$ DC geschaltet vom aktiven Port über LM66100 Power-Mux |
 | **Pin 2** | `2_GND` | Bidirektional | Massebezug für Signal und Versorgung |
 | **Pin 3** | `3_SIG_P` | Bidirektional | Differenzielles NF-Audiosignal Positiv |
 | **Pin 4** | `4_SIG_N` | Bidirektional | Differenzielles NF-Audiosignal Negativ |
 | **Pin 5** | `5_TRIGGER_PPS`| Bidirektional | Prellfreie PTT-Schaltleitung zum Headset-Taster |
 | **Pin 6** | `6_1WIRE_ID` | Bidirektional | 1-Wire ROM-ID Abfrageleitung zum DS2401-Chip der Kassette |
 
-* **ESD-Schutzarray:** Littelfuse `SP3012-06UTG` schützt alle 5 Signalleitungen gegen elektrostatische Entladungen nach IEC 61000-4-2 ($\pm 15\,\text{kV}$ Luftentladung, $\pm 8\,\text{kV}$ Kontaktentladung) bei vernachlässigbarer Kapazität von nur $0{,}5\,\text{pF}$.
+* **ESD-Schutzarray:** Littelfuse `SP3012-06UTG` schützt alle Signalleitungen gegen elektrostatische Entladungen nach IEC 61000-4-2 ($\pm 15\,\text{kV}$ Luftentladung, $\pm 8\,\text{kV}$ Kontaktentladung) bei vernachlässigbarer Kapazität von nur $0{,}5\,\text{pF}$.
+
+### 4.4 Automatischer Power-Mux & Modulare Kabelpeitschen-Architektur
+
+1. **Hardware-Arbitrierung (`U2`, `U3` / TI LM66100):**
+   * Zwei Ideal-Dioden-ICs (SC-70-6) schalten verzögerungsfrei die jeweils aktive 5V-Quelle auf die interne `VCC`-Schiene durch ($R_{\text{ON}} \approx 79\,\text{m}\Omega$, Spannungsabfall nur wenige Millivolt).
+   * Verhindert verlässlich Rückspeisungen von Port A auf Port B oder umgekehrt.
+2. **Modulare Kabelpeitschen-Konfigurationen:**
+   * **Typ A (Outdoor-Motorrad):** HD26 $\rightarrow$ 3x robuste M8 A-kodierte Leitungen zu den Pod-Schraubbuchsen.
+   * **Typ B (Koffer mit MagSafe):** HD26 $\rightarrow$ M8 Leitung zum Rahmen-Dock unter der Sitzbank $\rightarrow$ 6-Pin IP67 MagSafe-Kupplung $\rightarrow$ Slim-Kabel durch 19 mm Kofferöffnung direkt in Port B.
+   * **Typ C (Begleitfahrzeug / Auto-Cockpit / Labor):** HD26 $\rightarrow$ USB-C Slim-Kabelpeitsche für werkzeuglosen Direktanschluss der Pods am Armaturenbrett über Standard-Kfz-USB-Ports.
 
 ---
 
