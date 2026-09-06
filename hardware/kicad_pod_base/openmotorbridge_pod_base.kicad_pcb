@@ -728,10 +728,10 @@
 		(pad "SH" thru_hole circle (at -3.5 1.8 180) (size 1.2 1.2) (drill 0.8) (layers "*.Cu" "*.Mask" "B.Paste") (net 9 "GND_SHIELD"))
 		(pad "SH" thru_hole circle (at 3.5 1.8 180) (size 1.2 1.2) (drill 0.8) (layers "*.Cu" "*.Mask" "B.Paste") (net 9 "GND_SHIELD"))
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Connector_USB.3dshapes/USB_C_Receptacle_GCT_USB4125-xx-x_6P_TopMnt_Horizontal.step"
+		(model "${KICAD10_3DMODEL_DIR}/Connector_USB.3dshapes/USB_C_Plug_ShenzhenJingTuoJin_918-118A2021Y40002_Vertical.step"
 			(offset (xyz 0 0 0))
 			(scale (xyz 1 1 1))
-			(rotate (xyz 90 0 0))
+			(rotate (xyz 0 0 90))
 		)
 	)
 	(footprint "Package_TO_SOT_SMD:SOT-363_SC-70-6"
