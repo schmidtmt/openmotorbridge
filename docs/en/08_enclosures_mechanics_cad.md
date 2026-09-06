@@ -613,11 +613,14 @@ The wiring of the saddlebag lid pods resolves the fundamental operational challe
   ON MOTORCYCLE FRAME (Permanently routed, weather- & stone-chip protected)
  ─────────────────────────────────────────────────────────────────────────────────
   [Central Box under the seat]
-         │
-         │ (Rugged M8 automotive system harness)
+         │ • KL15 Ignition Sense (Wake-Up) & LM5164 DCDC 5.0V
+         │ • BQ24075 LiPo UPS (buffers 6.5V cold-crank voltage dips)
+         │ • TLP222A Optocouplers (automated OEM headset boot & PTT trigger)
          ▼
-  [ Stationary M8-to-MagSafe Adapter ]
-         │ (Fastened vibration-free & concealed along frame tube)
+  [ Rugged M8 automotive system harness ]
+         ▼
+  [ Stationary MagSafe Frame Dock (009_magsafe_frame_dock.scad) ]
+         │ (Fastened to subframe tube, with PCBA 06 TVS-ESD protection diodes)
          ▼
   [ 6-Pin MagSafe Receptacle (IP67) ] ──► Mounted to frame under seat overhang
  ═════════════════════════════════════════════════════════════════════════════════
@@ -649,9 +652,11 @@ The wiring of the saddlebag lid pods resolves the fundamental operational challe
  ═════════════════════════════════════════════════════════════════════════════════
 ```
 
-1. **Ignition-Switched Continuous Power (Terminal 15):**
-   * Saddlebag pods are powered directly by the bike's switched 12V bus (tapped from the Harley P&A accessory connector beneath the seat).
-   * **Zero Battery Babysitting:** Intercom pods power up and down synchronously with the ignition. The classic risk of forgetting to charge before a Sunday ride or getting low-battery beeps 10 minutes in is completely eliminated.
+1. **Intelligent Power Delivery & UPS Buffering via Central Box (Terminal 15 / BQ24075):**
+   * Saddlebag pods are **not directly or unregulatively fed** from the raw bike bus, but supplied with regulated, conditioned power from the **Central Box** beneath the seat.
+   * **Ignition-Switched Wake-Up & UPS Buffering:** The Central Box monitors ignition voltage (Terminal 15, e.g. via the Harley P&A connector). When ignition turns ON, the LM5164-Q1 step-down regulator provides clean $5.0\,\text{V}$, while the integrated **LiPo UPS buffer (BQ24075)** seamlessly bridges cranking dips (cold crank down to $6.5\,\text{V}$ in $8.5\,\mu\text{s}$)—the saddlebag pods and radio modules never reboot during engine start.
+   * **Automated OEM Headset Boot via Optocouplers:** Once power is stabilized, the Central Box triggers the power/wake sequence of the OEM intercom adapters (Sena Mesh / Cardo DMC) inside the cartridges using galvanically isolated **Toshiba TLP222A optocouplers**.
+   * **Zero Battery Maintenance & Seamless Shutdown:** The intercom modules power up and down automatically with the bike's ignition. The hassle of charging standalone headset batteries or suffering unexpected battery drain mid-ride is 100% eliminated.
 2. **Mechanic-Proof 6-Pin MagSafe Breakaway (IP67):**
    * At dealerships and independent shops, mechanics performing inspections, tire changes, or brake pad replacements loosen the two quarter-turn pins and yank the bags off in seconds without inspecting for aftermarket wiring. A rigid screwed or latched connector would inevitably shear.
    * The **6-pin IP67 magnetic coupling with N52 neodymium magnets and gold-plated pogo pins** releases cleanly at $\approx 10\dots 15\,\text{N}$ of axial pull **without any structural or electrical damage**.

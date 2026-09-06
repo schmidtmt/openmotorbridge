@@ -647,11 +647,14 @@ Die Verkabelung der Kofferdeckel-Pods löst das fundamentale Praxiskriterium des
   AM MOTORRADRAHMEN (Fest verlegt, wetter- & steinschlaggeschützt)
  ─────────────────────────────────────────────────────────────────────────────────
   [Central Box unter der Sitzbank]
-         │
-         │ (Robustes M8-Automotive-Systemkabel)
+         │ • KL15 Zündungsplus-Erkennung (Wake-Up) & LM5164 DCDC 5.0V
+         │ • BQ24075 LiPo-USV (puffert 6,5V Cold-Crank-Spannungseinbrüche)
+         │ • TLP222A Optokoppler (automatisierter OEM-Headset-Boot & PTT)
          ▼
-  [ Stationärer M8-zu-MagSafe-Adapter ]
-         │ (Liegt unsichtbar & vibrationsfest fixiert am Rahmenrohr)
+  [ M8-Automotive-Systemkabel ]
+         ▼
+  [ Stationäres MagSafe-Rahmen-Dock (009_magsafe_frame_dock.scad) ]
+         │ (Fixiert am Rahmenrohr, mit PCBA 06 TVS-ESD-Schutzdioden)
          ▼
   [ 6-Pin MagSafe-Buchse (IP67) ] ──► Unter Sitzbankkante am Rahmen befestigt
  ═════════════════════════════════════════════════════════════════════════════════
@@ -683,9 +686,11 @@ Die Verkabelung der Kofferdeckel-Pods löst das fundamentale Praxiskriterium des
  ═════════════════════════════════════════════════════════════════════════════════
 ```
 
-1. **Zündungsplus-Dauerversorgung (Klemme 15):**
-   * Die Stromversorgung der Koffer-Pods erfolgt direkt über das Zündungsplus des Bordnetzes (abgegriffen am Harley P&A Zubehörstecker unter der Sitzbank).
-   * **Null Akku-Wartung:** Die Intercom-Pods schalten mit der Zündung ein und aus. Das Risiko, vor der Fahrt das Laden zu vergessen oder nach 10 Minuten einen leeren Akku zu haben, ist zu 100 % eliminiert.
+1. **Intelligente Stromversorgung & USV-Pufferung über die Zentralbox (Klemme 15 / BQ24075):**
+   * Die Koffer-Pods werden **nicht direkt unreguliert** aus dem Bordnetz gespeist, sondern zentral und konditioniert von der **Zentralbox** unter der Sitzbank versorgt.
+   * **Zündungsgesteuerter Wake-Up & USV-Pufferung:** Die Zentralbox erfasst das Zündungsplus (Klemme 15, z. B. am Harley P&A-Zubehörstecker). Bei Zündung EIN regelt der LM5164-Q1 Step-Down auf saubere $5{,}0\,\text{V}$ herunter und der integrierte **LiPo-USV-Pufferakku (BQ24075)** fängt selbst härteste Startspannungseinbrüche (Cold Crank bis $6{,}5\,\text{V}$) unterbrechungsfrei in $8{,}5\,\mu\text{s}$ ab – die Koffer-Pods und Funkmodule rebooten niemals beim Anlassen des Motors.
+   * **Automatisierter OEM-Boot per Optokoppler:** Sobald die Versorgungsspannung steht, triggert die Zentralbox über galvanisch getrennte **Toshiba TLP222A Optokoppler** die Tasten-/Power-Einschaltsequenz der OEM-Headset-Adapter (Sena Mesh / Cardo DMC) in den Kassetten.
+   * **Null Akku-Wartung & automatischer Shutdown:** Die Intercom-Module schalten vollautomatisch mit der Fahrzeugzündung ein und aus. Das Risiko, vor der Fahrt das Laden zu vergessen oder mit leerem Headset-Akku dazustehen, ist zu 100 % eliminiert.
 2. **Werkstattsichere 6-Pin MagSafe-Abreißkupplung (IP67):**
    * In Vertragswerkstätten lösen Mechaniker bei Inspektionen, Reifen- oder Bremsenwechseln die Kofferbefestigungen und heben den Koffer in Sekunden ab, ohne nach nachgerüsteten Kabeln zu suchen. Eine feste Schraub- oder Klickverbindung würde hier unweigerlich abreißen.
    * Die **6-polige IP67-Magnetkupplung mit N52-Neodym-Magneten und vergoldeten Pogo-Pins** trennt sich bei ca. $10\dots 15\,\text{N}$ axialer Zugkraft **völlig verschleiß- und zerstörungsfrei**.
