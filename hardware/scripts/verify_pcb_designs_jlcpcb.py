@@ -25,7 +25,8 @@ BOARDS = {
     "Main Board (Central Control Box)": "hardware/kicad_main_box/openmotorbridge_main.kicad_pcb",
     "Pod Base (Satellite Submersion Carrier)": "hardware/kicad_pod_base/openmotorbridge_pod_base.kicad_pcb",
     "Pod Cartridge (Universal Intercom Sled)": "hardware/kicad_pod_cartridge/openmotorbridge_pod_cartridge.kicad_pcb",
-    "Rear Pod 3 (Transceiver & Mesh)": "hardware/kicad_rear_pod3/openmotorbridge_rear_pod3.kicad_pcb"
+    "Rear Pod 3 (Transceiver & Mesh)": "hardware/kicad_rear_pod3/openmotorbridge_rear_pod3.kicad_pcb",
+    "MagSafe Frame Dock (PCBA 06 Adapter)": "hardware/kicad_magsafe_dock/openmotorbridge_magsafe_dock.kicad_pcb"
 }
 
 def verify_board(board_name, pcb_path):

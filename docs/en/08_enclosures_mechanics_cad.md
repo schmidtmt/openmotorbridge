@@ -685,6 +685,28 @@ Placing intercom pods inside the saddlebag lid ($\approx 70\dots 75\,\text{cm}$ 
 | **Latching Mechanism** | Inside swing path of striker bar | $> 15\,\text{cm}$ clearance from striker bar | The metallic One-Touch striker bar causes only localized reflections and at $\lambda = 12.5\,\text{cm}$ produces zero forward/upward shadowing. |
 | **RF Decoupling** | $< 20\,\text{dB}$ with adjacent mounting | **$> 40\,\text{dB}$ spatial diversity** | Sena (left bag) and Cardo (right bag) are separated by $> 60\,\text{cm}$; steel rear fender and frame act as RF shield $\implies$ 0 receiver de-sensing. |
 
+#### 9.5.4 Stationary MagSafe Frame Dock (`009_magsafe_frame_dock.scad`) & Tube Clamp
+
+The stationary MagSafe Frame Dock ([`009_magsafe_frame_dock.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/parts/009_magsafe_frame_dock.scad)) mounts securely to the motorcycle frame tube beneath the seat overhang (sized for Harley Touring / Softail / CVO ST frame tube $\varnothing 25.4\dots 28.6\,\text{mm}$ / $1"\dots 1.125"$):
+
+![MagSafe Frame Dock CAD](../images/cad/magsafe_frame_dock_cad.png)
+
+*Figure 8.30: 3D CAD assembly of the MagSafe Frame Dock (`009_magsafe_frame_dock.scad`). Visible are the lower monocoque housing with internal guide rails for PCBA 06, the frontal MagSafe self-locating funnel, the rear M8 cable compression gland, the upper half-collar split clamp with M3 stainless steel hardware, and the bottom service and potting lid.*
+
+1. **Internal Guide Rails & Retention Catches for PCBA 06:**
+   * The compact $26.0 \times 11.5\,\text{mm}$ protection adapter board (PCBA 06) slides into lateral $11.9 \times 1.9\,\text{mm}$ guide channels.
+   * Resilient retention tabs engage the PCB edge notches at $X = 113\,\text{mm}$, locking the board against road vibration and axial cable pull.
+2. **Dual Frame Attachment Strategy (Split-Clamp & Heavy-Duty Zip-Tie):**
+   * **Primary (Two-Piece Split Clamp Collar):** The upper clamp strap (`009_magsafe_frame_clamp.stl`) encircles the $\varnothing 26\,\text{mm}$ frame tube and fastens via 2x M3 DIN 912 Allen socket screws into brass heat-set threaded inserts (`M3x4x5`) in the dock body for a rigid, slip-free lock.
+   * **Friction Grip Ribs:** The concave tube cradle features four axial $0.8\,\text{mm}$ ribs that bite securely into powder-coated frame tubes without marring paint.
+   * **Secondary (Universal Cable Ties):** Two transverse $5.2 \times 2.8\,\text{mm}$ slots enable quick tool-free mounting with UV-resistant high-tensile zip-ties to irregular tubes, gussets, or battery trays.
+3. **M8 Cable Strain Relief & Conical Compression Seal (Bike Side):**
+   * The $\varnothing 8.4\,\text{mm}$ cable entry transitions into a conical compression cavity ($\varnothing 10.4 \to 8.4\,\text{mm}$). Tightening the M8 gland compresses the cable jacket, guaranteeing that axial pull forces never reach the solder pads on `J1`.
+4. **MagSafe Self-Aligning Funnel (Saddlebag Side):**
+   * The forward coupling pocket includes a perimeter $30^\circ$ bevel ($19.5 \times 10.5\,\text{mm}$ opening tapering to $16.5 \times 7.5\,\text{mm}$). When mounting the saddlebag with riding gloves, the magnetic plug effortlessly locates and snaps into position.
+5. **Bottom Service & Potting Access Lid (`009_magsafe_frame_lid.stl`):**
+   * The removable bottom plate with tongue-and-groove sealing ledge provides unrestricted access during wire soldering and allows complete encapsulation with polyurethane potting compound for permanent IP67 submersible waterproofing.
+
 ---
 
 ### 9.6 Decoupled License Plate Radar Bracket & Legal Compliance
@@ -693,7 +715,7 @@ On cruisers and baggers, the Garmin Varia mmWave radar is **decoupled** from Pod
 
 ![Radar License Plate Bracket CAD](../images/cad/radar_license_plate_bracket_cad.png)
 
-*Figure 8.30: 3D CAD model of the decoupled license plate radar bracket with M6 clamping, M5 swivel hinge, and concealed rear M8 cable channel.*
+*Figure 8.31: 3D CAD model of the decoupled license plate radar bracket with M6 clamping, M5 swivel hinge, and concealed rear M8 cable channel.*
 
 * **Legal Requirement (§ 10 Para. 6 FZV / ECE R138):**
   The license plate must remain completely visible and unobstructed from above at a vertical angle of **at least $+30^\circ$**.
@@ -724,6 +746,9 @@ The OpenMotorBridge CAD repository follows a strict hierarchical Constructive So
 | **Satellite Pod**| CVO ST Telemetry Fin (2.4 GHz Mesh) | `02_pod_base/cvo_st_telemetry_fin.stl` | `02_pod_base/cvo_st_telemetry_fin.scad` |
 | **Satellite Pod**| Road King Special Touring Fender Console | `02_pod_base/pod3_touring_fender_console.stl` | `02_pod_base/pod3_touring_fender_console.scad` |
 | **Satellite Pod**| Touring Saddlebag Lid Dock (Pods 1 & 2) | `02_pod_base/saddlebag_lid_dock.stl` | `02_pod_base/saddlebag_lid_dock.scad` |
+| **Frame Dock** | MagSafe Frame Dock Lower Body | `02_pod_base/components/009_magsafe_frame_dock.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
+| **Frame Dock** | MagSafe Tube Clamp Collar (Ø 26 mm) | `02_pod_base/components/009_magsafe_frame_clamp.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
+| **Frame Dock** | MagSafe Service & Potting Lid | `02_pod_base/components/009_magsafe_frame_lid.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
 | **Radar Mount** | Decoupled License-Plate Radar Bracket | `02_pod_base/radar_license_plate_bracket.stl` | `02_pod_base/radar_license_plate_bracket.scad` |
 | **Cartridge** | Universal base sled with O-ring groove | `03_pod_cartridges/cartridge_base_sled.stl` | `03_pod_cartridges/00_base_sled.scad` |
 | **Cartridge** | Sena 50S/60S adapter sled | `03_pod_cartridges/cartridge_insert_sena.stl` | `03_pod_cartridges/parts/01_insert_sena.scad` |

@@ -1,16 +1,16 @@
-# 07 - Hardware Architecture & Board Pinouts (PCBA 01 to 05)
+# 07 - Hardware Architecture & Board Pinouts (PCBA 01 to 06)
 
-This document serves as the **authoritative hardware specification for all 5 printed circuit board assemblies (PCBA 01 through PCBA 05)** of the OpenMotorBridge v8.0 system, detailing layer stackups, controlled impedance classes, zoning concepts, and complete pinout tables.
+This document serves as the **authoritative hardware specification for all 6 printed circuit board assemblies (PCBA 01 through PCBA 06)** of the OpenMotorBridge v8.0 system, detailing layer stackups, controlled impedance classes, zoning concepts, and complete pinout tables.
 
 ---
 
-## 1. Overview of the 5 Hardware Assemblies (PCBAs)
+## 1. Overview of the 6 Hardware Assemblies (PCBAs)
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                   THE 5 HARDWARE ASSEMBLIES (PCBAs) OF OPENMOTORBRIDGE                 │
+│                   THE 6 HARDWARE ASSEMBLIES (PCBAs) OF OPENMOTORBRIDGE                 │
 ├───────┬───────────────────────────────┬───────────────┬─────────┬──────────────────────┤
-│ Assy  │ Name & Function               │ PCB Outline   │ Layers  │ Key ICs / Controller │
+│ Assy  │ Name & Function               │ PCB Outline   │ Layers  │ Key ICs / Components │
 ├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
 │ **PCBA 01**│ **Central Box Main Controller**│ 85 x 55 mm    │ 4 Layer │ ESP32-S3, LM5164,    │
 │       │ (Under-Seat, Audio / UPS / BT)│ (77x47 mm M3) │ (ENIG)  │ BQ24075, ES8388, IMU │
@@ -26,6 +26,9 @@ This document serves as the **authoritative hardware specification for all 5 pri
 ├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
 │ **PCBA 05**│ **Universal Front Node**      │ 68 x 44 mm    │ 4 Layer │ ESP32-C3 RISC-V,     │
 │       │ (Front Hub & Ottocast CarPlay)│ (62x38 mm M2.5│ (ENIG)  │ USB2512B, TPS2051B   │
+├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
+│ **PCBA 06**│ **MagSafe Frame Dock Adapter** │ 26 x 11.5 mm  │ 2 Layer │ 500mA PPTC Fuse, 5V  │
+│       │ (Frame Dock: M8 to MagSafe)   │ (Slide-Rails) │         │ TVS, USBLC6-4SC6 ESD │
 └───────┴───────────────────────────────┴───────────────┴─────────┴──────────────────────┘
 ```
 
@@ -316,3 +319,54 @@ The board features 3 automatic coaxial switch connectors (`Murata MM8030-2610`) 
 | **GPIO 8** | `MIC_I2S_DATA` | Input | I2S Serial Audio Data from Knowles MEMS microphone (wind noise tracking) |
 | **GPIO 20** | `TWAI_RX` | Input | CAN Bus receive line from TI SN65HVD230 transceiver |
 | **GPIO 21** | `TWAI_TX` | Output | CAN Bus transmit line to TI SN65HVD230 transceiver |
+
+---
+
+## 8. PCBA 06: MagSafe Frame Dock Adapter (`openmotorbridge_magsafe_dock`)
+
+![PCBA 06 MagSafe Frame Dock Adapter](../images/pcba/pcba06_magsafe_dock_3d.png)
+
+*Figure 7.6: KiCad 3D raytracing render of the MagSafe Frame Dock adapter board (PCBA 06, 26 x 11.5 mm, 2 layers) with 1206 PPTC self-resetting fuse (F1, 500 mA), SOD-323 TVS diode (D1), SOT-23-6 4-channel ESD protection array (U1, USBLC6-4SC6), and gold-plated SMD pogo contact pads.*
+
+### 8.1 Purpose & Protection Architecture for Saddlebag Detachment
+When the saddlebag is removed from the motorcycle (e.g. for cleaning, service, or hotel check-in), the bike-side MagSafe coupling sits exposed under the seat overhang. PCBA 06 isolates and protects the Central Box and vehicle electrical system against:
+1. **Short Circuits on Exposed Pogo Pins:** Rainwater, road spray, loose keys, or metal tools trip the self-resetting **1206 PPTC polyfuse `F1`** ($I_{\text{hold}} = 500\,\text{mA}$, $I_{\text{trip}} = 1000\,\text{mA}$, $V_{\text{max}} = 16\,\text{V}$). As soon as the conductive object is removed or the contacts dry, power is automatically restored with zero fuse replacements.
+2. **Inductive Switching Transients:** The **unidirectional 5V TVS diode `D1`** (SOD-323) clamps voltage spikes on the $+5\,\text{V}$ line to $< 7.0\,\text{V}$.
+3. **Electrostatic Discharge (ESD):** The **4-channel ultra-low-capacitance TVS array `U1`** (USBLC6-4SC6 in SOT-23-6, $C_{\text{io}} < 0.8\,\text{pF}$) protects the differential audio lines (`SIG_P`, `SIG_N`), the optocoupler boot trigger (`TRIGGER_PPS`), and the 1-Wire ID bus (`1WIRE_ID`) to **IEC 61000-4-2 Level 4** ($\pm 15\,\text{kV}$ air discharge, $\pm 8\,\text{kV}$ contact discharge).
+
+### 8.2 Technical PCB Specifications
+* **Dimensions:** $26.0 \times 11.5 \times 1.6\,\text{mm}$ (FR-4 2 layers, $35\,\mu\text{m}$ Cu, ENIG gold finish).
+* **Retention & Guide Geometry:** Lateral retention notches at $X = 112.5\dots 114.5\,\text{mm}$ ($2.0\,\text{mm}$ wide, $0.75\,\text{mm}$ deep) lock the board securely into the $11.9 \times 1.9\,\text{mm}$ internal slide-in guide rails of the frame dock enclosure.
+* **Layer Stackup:**
+  * **Top (F.Cu):** Signal routing with $\ge 0.25\,\text{mm}$ traces, $0.50\,\text{mm}$ power traces for VCC/GND, SMT protection devices.
+  * **Bottom (B.Cu):** Continuous low-impedance ground plane (GND) with 10 thermal relief stitching vias (drill $0.30\,\text{mm}$, pad $0.60\,\text{mm}$, annular ring $\ge 0.15\,\text{mm}$).
+* **DFM/DRC:** 100% compliant with JLCPCB standard 2-layer manufacturing rules (0 acid traps, trace width $\ge 0.25\,\text{mm}$).
+
+### 8.3 Pinout & Interface Mapping
+
+| Pin | Signal Name | Polarity / Type | Function & Protection Path |
+| :---: | :--- | :--- | :--- |
+| **`J1.1`** | `VCC_IN` | $+5.0\,\text{V}$ DC In | Raw power input from Central Box M8 harness (fed by LM5164 / BQ24075 UPS) |
+| **`J1.2`** | `GND` | Power / Signal GND | Central ground reference, tied to solid B.Cu ground plane via 10 vias |
+| **`J1.3`** | `SIG_P` | Audio Diff + / D+ | Differential Audio Positive (filtered via U1 Ch 1, protected up to $\pm 15\,\text{kV}$) |
+| **`J1.4`** | `SIG_N` | Audio Diff - / D- | Differential Audio Negative (filtered via U1 Ch 2, protected up to $\pm 15\,\text{kV}$) |
+| **`J1.5`** | `TRIGGER_PPS`| 3.3V Opto-Trigger | Boot/wake pulse from Central Box TLP222A PhotoMOS (filtered via U1 Ch 3) |
+| **`J1.6`** | `1WIRE_ID` | Digital 1-Wire Bus| Cartridge identification bus for DS2401 Silicon Serial ROM (filtered via U1 Ch 4) |
+| **`J1.7`** | `GND_SHIELD`| Cable Shield | M8 cable foil/braid shield, grounded directly to system ground on PCB |
+| **`J2.1`** | `VCC_PROT` | $+5.0\,\text{V}$ DC Out | Protected MagSafe output: Post-PPTC fuse `F1`, TVS `D1`, and 100nF cap `C1` |
+| **`J2.2`** | `GND` | Power / Signal GND | MagSafe ground contact (grounded via heavy B.Cu copper plane) |
+| **`J2.3`** | `SIG_P` | Audio Diff + | MagSafe Pogo Pin 3: Differential audio output to saddlebag pod |
+| **`J2.4`** | `SIG_N` | Audio Diff - | MagSafe Pogo Pin 4: Differential audio output to saddlebag pod |
+| **`J2.5`** | `TRIGGER_PPS`| 3.3V Opto-Trigger | MagSafe Pogo Pin 5: Power-on and boot trigger to saddlebag pod cartridge |
+| **`J2.6`** | `1WIRE_ID` | Digital 1-Wire Bus| MagSafe Pogo Pin 6: 1-Wire bus for detecting inserted OEM headset cartridge |
+
+### 8.4 Bill of Materials (BOM) PCBA 06
+| Ref | Component / Type | Package | Specification & Function | LCSC Part |
+| :--- | :--- | :--- | :--- | :--- |
+| **`F1`** | 0ZCG0050FF2C | SMD 1206 | 500 mA Hold / 1000 mA Trip, 16V PPTC Resettable Polyfuse | `C207936` |
+| **`D1`** | ESD5Z5.0T1G | SOD-323 | 5.0V Unidirectional TVS Diode (VCC Transient Clamp) | `C2834585` |
+| **`U1`** | USBLC6-4SC6 | SOT-23-6 | 4-Channel Low-Cap ($<0.8\,\text{pF}$, $\pm 15\,\text{kV}$) ESD Protection Array | `C7519` |
+| **`C1`** | 100nF 50V X7R | SMD 0603 | Ceramic decoupling capacitor on VCC_PROT | `C14663` |
+| **`J1`** | M8 Wire Pads | SMD/THT 1x07 | 7-pin wire-to-board solder pad array with 0.6mm through-holes for M8 leads | Custom |
+| **`J2`** | MagSafe 6P Pads | SMD 1x06 | 6-pin gold-plated contact pads for MagSafe magnetic pogo coupling | `C224376` |
+

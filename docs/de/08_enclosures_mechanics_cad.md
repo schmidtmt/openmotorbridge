@@ -746,6 +746,30 @@ Die CAD-Dateistruktur von OpenMotorBridge folgt einer strengen hierarchischen CS
 - **Hauptverzeichnisse (`01_main_box/`, `02_pod_base/`, `03_pod_cartridges/`, `04_front_node/`)**: Enthalten **ausschließlich monolithische, direkt 3D-druckbare Produktions-STLs** (100 % single-manifold, wasserdicht, 0 frei schwebende Körper).
 - **Unterordner (`components/`)**: Enthalten die parametrischen CSG-Einzelkomponenten (z. B. unbeschnittene Basiskörper, Flansche, Schraubdome, Dichtkämme und PCB-/Akku-Dummies) für Baugruppenmontagen und modulare Adaptionen.
 
+#### 9.5.4 Stationäres MagSafe-Rahmendock (`009_magsafe_frame_dock.scad`) & Rohrklemmung
+
+Das stationäre MagSafe-Rahmendock ([`009_magsafe_frame_dock.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/parts/009_magsafe_frame_dock.scad)) wird fahrzeugfest am Rahmenrohr unter dem Sitzüberhang montiert (passend für Harley Touring / Softail / CVO ST Rahmenrohre mit $\varnothing 25{,}4\dots 28{,}6\,\text{mm}$ bzw. $1"\dots 1{,}125"$):
+
+![MagSafe Frame Dock CAD](../images/cad/magsafe_frame_dock_cad.png)
+
+*Abbildung 8.30: 3D-CAD-Baugruppe des MagSafe-Rahmendocks (`009_magsafe_frame_dock.scad`). Sichtbar sind das Hauptgehäuse mit internen Führungsschienen für PCBA 06, der frontale MagSafe-Einfädeltrichter, die rückseitige M8-Kabelverschraubung, die obere Halbschellen-Rohrklemmung mit M3-Edelstahlschrauben sowie der untere Inspektions- und Vergussdeckel.*
+
+1. **Interne Führungsschienen & Rastelemente für PCBA 06:**
+   * Die $26{,}0 \times 11{,}5\,\text{mm}$ kleine Schutzplatine (PCBA 06) gleitet formschlüssig in zwei seitliche $11{,}9 \times 1{,}9\,\text{mm}$ Führungsnuten.
+   * Elastische Rastnasen greifen in die seitlichen Platinenaussparungen bei $X = 113\,\text{mm}$ ein und sichern die Leiterplatte vibrationsfest gegen axiale Verschiebungen.
+2. **Doppelte Rahmen-Befestigungsmöglichkeit (Split-Clamp & Zip-Tie):**
+   * **Primär (Zweiteilige Rohrschelle):** Der obere Halbschellen-Bügel (`009_magsafe_frame_clamp.stl`) umschließt das $\varnothing 26\,\text{mm}$ Rahmenrohr und wird über 2x M3 Zylinderkopfschrauben (DIN 912) in Messing-Gewindeeinsätze (`M3x4x5`) im Dock-Körper spielfrei und verdrehsicher festgezogen.
+   * **Reibungsrippen:** Auf der Rohrwiege des Gehäuses sind vier axiale $0{,}8\,\text{mm}$ Längsrippen angeformt, die sich rutschfest an pulverbeschichtete Rahmenrohre anschmiegen.
+   * **Sekundär (Universal-Kabelbinder):** Zwei querlaufende $5{,}2 \times 2{,}8\,\text{mm}$ Durchbrüche erlauben die werkzeuglose Befestigung mit Schwerlast-Kabelbindern an beliebigen Rohrdurchmessern oder Halteblechen.
+3. **M8-Zugentlastung & Konischer Dichtkonus (Bike-Seite):**
+   * Die Kabelbohrung ($\varnothing 8{,}4\,\text{mm}$) geht in einen konischen Kompressionsraum ($\varnothing 10{,}4 \to 8{,}4\,\text{mm}$) über. Beim Anziehen der M8-Verschraubung wird die Kabelisolierung quetschfest fixiert, sodass axiale Zugkräfte niemals die Lötstellen von `J1` erreichen.
+4. **MagSafe-Einfädeltrichter (Koffer-Seite):**
+   * Das vordere Kupplungsnest besitzt eine umlaufende $30^\circ$-Fase ($19{,}5 \times 10{,}5\,\text{mm}$ Öffnung verjüngend auf $16{,}5 \times 7{,}5\,\text{mm}$). Dadurch rastet das magnetische Gegenstück auch bei ungenauem Heranführen des Koffers mit Handschuhen selbstzentrierend und satt ein.
+5. **Unterer Service- & Vergussdeckel (`009_magsafe_frame_lid.stl`):**
+   * Der abnehmbare Bodendeckel mit Nut- und Feder-Labyrinthdichtung gewährt vollen Zugang beim Verlöten der M8-Adern und ermöglicht das nachträgliche Ausgießen mit Polyurethan-Elektronikverguss für 100 %ige IP67-Unterwassersicherheit.
+
+---
+
 ### 10.1 Druckfertige Produktions-STLs (Hauptverzeichnisse)
 
 | Baugruppe | Funktion / Bauteil | Druckfertige STL-Datei | Parametrischer OpenSCAD Code |
@@ -758,6 +782,9 @@ Die CAD-Dateistruktur von OpenMotorBridge folgt einer strengen hierarchischen CS
 | **Satelliten-Pod**| CVO ST Telemetrie-Finne (2.4 GHz Mesh) | `02_pod_base/cvo_st_telemetry_fin.stl` | `02_pod_base/cvo_st_telemetry_fin.scad` |
 | **Satelliten-Pod**| Road King Special Touring Fender Console | `02_pod_base/pod3_touring_fender_console.stl` | `02_pod_base/pod3_touring_fender_console.scad` |
 | **Satelliten-Pod**| Touring Kofferdeckel-Halter (Pod 1 & 2) | `02_pod_base/saddlebag_lid_dock.stl` | `02_pod_base/saddlebag_lid_dock.scad` |
+| **Rahmendock** | MagSafe Rahmen-Dock Gehäuseunterteil | `02_pod_base/components/009_magsafe_frame_dock.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
+| **Rahmendock** | MagSafe Rohrschellen-Bügel (Ø 26 mm) | `02_pod_base/components/009_magsafe_frame_clamp.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
+| **Rahmendock** | MagSafe Service- & Vergussdeckel | `02_pod_base/components/009_magsafe_frame_lid.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
 | **Radarhalter** | Entkoppelte Kennzeichen-Radarhalterung | `02_pod_base/radar_license_plate_bracket.stl` | `02_pod_base/radar_license_plate_bracket.scad` |
 | **Kassette** | Universeller Basisschlitten mit Dichtung | `03_pod_cartridges/cartridge_base_sled.stl` | `03_pod_cartridges/00_base_sled.scad` |
 | **Kassette** | Sena 50S/60S Adapterkassette | `03_pod_cartridges/cartridge_insert_sena.stl` | `03_pod_cartridges/parts/01_insert_sena.scad` |
