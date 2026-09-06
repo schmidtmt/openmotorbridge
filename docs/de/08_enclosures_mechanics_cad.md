@@ -261,6 +261,9 @@ Um sowohl exponierte Outdoor-Einsätze (z. B. Sturzbügel-Montage bei Adventure-
    * Wird Port A (M8) mit Bordnetz versorgt, wird Port B (Slim-Port) rückspeisefest gesperrt. Wird im Koffer Port B versorgt, ist Port A inaktiv. Ein versehentlicher Kurzschluss oder Parallelbetrieb ist physikalisch ausgeschlossen.
 4. **Schutz & Flexibilität:**
    * Port B ist durch einen bündigen, formangepassten TPU-Dichtstopfen mit Haltekollier (`pod_base_usbc_cap_tpu.stl`) versiegelt, wenn der Pod im Freien über Port A betrieben wird.
+5. **Universelle Multi-Plattform-Nutzung (Begleitfahrzeug / Pkw-Cockpit / Werkbank):**
+   * Derselbe Pod kann ohne Modifikation oder zusätzliche Adapterplatinen in einem Begleitfahrzeug (Support-Van, Tour-Guide-Pkw, Besenfahrzeug) eingesetzt werden: Statt starre, schwere Industrie-M8-Kabelbäume durch den Fahrzeuginnenraum zum Armaturenbrett zu verlegen, wird der Pod einfach über Port B mit einem handelsüblichen, extrem flexiblen Slim-USB-C-Kabel an einen 12V-USB-Adapter oder eine Bordbuchse angeschlossen.
+   * **100 % Universalität:** Ein einziges physikalisches Pod-Design deckt somit nahtlos **Outdoor-Motorrad** (Port A, M8 IP67), **Koffer-Innenraum** (Port B, MagSafe-Kupplung) und **Begleitfahrzeug / Testbench** (Port B, Standard-Slim-Kabel) ab.
 
 ---
 

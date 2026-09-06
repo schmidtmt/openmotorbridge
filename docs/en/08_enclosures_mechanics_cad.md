@@ -227,6 +227,9 @@ To support both exposed outdoor deployments (e.g. crash-bar clamps on adventure 
    * If Port A (M8) receives bike power, Port B is isolated. If Port B receives power in the saddlebag, Port A is isolated. Cross-conduction and short circuits are physically impossible.
 4. **Environmental Sealing:**
    * Port B is protected by a flush-fitting TPU sealing cap with retaining lanyard (`pod_base_usbc_cap_tpu.stl`) whenever the pod operates outdoors via Port A.
+5. **Universal Multi-Platform Deployment (Support Vehicles / Cabin / Lab Bench):**
+   * The exact same pod can be deployed without modifications or secondary adapter boards in a chase/support vehicle (tour guide van, rally support car, sag wagon): Instead of routing bulky, rigid industrial M8 harness cables across the vehicle cabin or dashboard, the pod is powered via Port B using an off-the-shelf, ultra-flexible slim USB-C cable plugged into a standard 12V USB charger or dashboard port.
+   * **100% Universal Hardware:** A single physical pod design seamlessly covers **outdoor motorcycle duty** (Port A, M8 IP67), **saddlebag interior mounting** (Port B via MagSafe coupling), and **support vehicle / testbench operation** (Port B, standard slim cable).
 
 ---
 
