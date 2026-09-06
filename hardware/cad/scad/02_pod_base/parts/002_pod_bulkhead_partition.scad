@@ -2,20 +2,21 @@
 // OpenMotorBridge - Satellite Pod: Bulkhead Partition & 6-Pin Shroud Funnel
 // =============================================================================
 // File: hardware/cad/scad/02_pod_base/parts/002_pod_bulkhead_partition.scad
-// Description: Partition bulkhead with 6-pin shroud funnel, 2x M2 screw bosses,
+// Description: Partition bulkhead with 6-pin shroud funnel, 2x M2 PCB mounting
+//              bosses (H1 at Y=20, H2 at Y=50), 4x perimeter corner screw bosses,
 //              convective ventilation slots, and dual Auto-Eject spring guide posts.
 // =============================================================================
 
 include <../../00_common/parameters.scad>;
 include <../../00_common/screw_bosses.scad>;
 
-module pod_bulkhead_assembly(bulkhead_x=22.0, wall=2.5) {
-    // 1. Vertical Partition Bulkhead Wall (x = 22.0 mm)
+module pod_bulkhead_assembly(bulkhead_x=18.0, wall=3.5) {
+    // 1. Vertical Partition Bulkhead Wall (x = 18.0 mm)
     translate([bulkhead_x, wall, wall]) {
         difference() {
             cube(size=[2.0, POD_OUTER_W - 2*wall, POD_OUTER_H - 2*wall], center=false);
 
-            // 6-Pin Interface Center Window
+            // 6-Pin Interface Center Window (Pass-through for J1 on PCBA 02)
             translate([-0.5, (POD_OUTER_W - 2*wall)/2.0 - 5.0, (POD_OUTER_H - 2*wall)/2.0 - 3.5])
                 cube(size=[3.0, 10.0, 7.0], center=false);
 
@@ -24,10 +25,18 @@ module pod_bulkhead_assembly(bulkhead_x=22.0, wall=2.5) {
                 cube(size=[3.0, 6.0, 2.0], center=false);
             translate([-0.5, POD_OUTER_W - 2*wall - 12.0, (POD_OUTER_H - 2*wall)/2.0 - 1.0])
                 cube(size=[3.0, 6.0, 2.0], center=false);
+
+            // 2x M2 Screw Through-Holes for PCBA 02 Mounting (H1 at Y=20, H2 at Y=50)
+            translate([-0.5, 20.0 - wall, 19.0 - wall])
+                rotate([0, 90, 0])
+                    cylinder(r=M2_SCREW_HOLE_R, h=3.0, center=false, $fn=24);
+            translate([-0.5, 50.0 - wall, 19.0 - wall])
+                rotate([0, 90, 0])
+                    cylinder(r=M2_SCREW_HOLE_R, h=3.0, center=false, $fn=24);
         }
     }
 
-    // 2. 6-Pin Protective Shroud with 45° Lead-in Funnel
+    // 2. 6-Pin Protective Shroud with 45° Lead-in Funnel (facing +X into cartridge chamber)
     translate([bulkhead_x + 2.0, POD_OUTER_W/2.0 - 6.0, POD_OUTER_H/2.0 - 4.0]) {
         difference() {
             cube(size=[4.0, 12.0, 8.0], center=false);
@@ -45,7 +54,16 @@ module pod_bulkhead_assembly(bulkhead_x=22.0, wall=2.5) {
         rotate([0, 90, 0])
             cylinder(r=1.8, h=6.0, $fn=16);
 
-    // 4. 4x M2 Screw Standoff Bosses (for Bulkhead Mounting to Tunnel)
+    // 4. 2x Planar M2 Mounting Bosses for PCBA 02 (on rear face facing -X towards PCB at X=16.4)
+    //    Guarantees rock-solid planar support preventing PCB wobble!
+    translate([bulkhead_x, 20.0, 19.0])
+        rotate([0, -90, 0])
+            screw_boss(outer_r=2.5, inner_r=M2_SCREW_HOLE_R, h=1.6);
+    translate([bulkhead_x, 50.0, 19.0])
+        rotate([0, -90, 0])
+            screw_boss(outer_r=2.5, inner_r=M2_SCREW_HOLE_R, h=1.6);
+
+    // 5. 4x M2 Screw Standoff Bosses (for Bulkhead Mounting to Tunnel Corners)
     translate([bulkhead_x, 5.0, wall])
         rotate([0, 90, 0])
             screw_boss(outer_r=2.0, inner_r=M2_SCREW_HOLE_R, h=3.0);
@@ -59,7 +77,7 @@ module pod_bulkhead_assembly(bulkhead_x=22.0, wall=2.5) {
         rotate([0, 90, 0])
             screw_boss(outer_r=2.0, inner_r=M2_SCREW_HOLE_R, h=3.0);
 
-    // 5. Poka-Yoke Anti-Rotation Keying Lug (Codiernase for Stirnwand-Platine)
+    // 6. Poka-Yoke Anti-Rotation Keying Lug (Codiernase for Stirnwand-Platine)
     //    Matches 4.0 x 2.5 mm notch at bottom edge of openmotorbridge_pod_base PCB (y = 37.5..40.5 mm).
     //    Mechanically blocks 180° upside-down installation of the Stirnwand-Adapter PCB!
     translate([bulkhead_x - 1.8, 37.5, wall])

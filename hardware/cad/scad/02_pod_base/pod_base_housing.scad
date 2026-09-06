@@ -41,11 +41,12 @@ module pod_base_housing() {
                 hook_h=4.5
             );
 
-            // 3. Rear Port A: M8 6-Pin IP67 Cable Gland Stutzen (Shifted Left: yc = 26.0 mm)
+            // 3. Rear Port A: M8 Protective Collar (Shifted Left: yc = 27.0 mm)
             pod_rear_m8_neck(
-                neck_len=10.0,
-                outer_r=M8_STUDS_OUTER_R,
-                inner_r=M8_BORE_R,
+                collar_len=2.0,
+                outer_size=16.0,
+                inner_size=11.5,
+                r_corner=1.5,
                 yc=POD_OUTER_W/2.0 - port_offset_y,
                 zc=POD_OUTER_H/2.0
             );
@@ -65,7 +66,7 @@ module pod_base_housing() {
 
             // 6. Rear Port B: Internal Sleeve Boss (Encloses USB-C pocket against inner chamber)
             pod_rear_usbc_internal_sleeve(
-                depth=10.0,
+                depth=14.0,
                 outer_w=17.0,
                 outer_h=11.5,
                 yc=POD_OUTER_W/2.0 + port_offset_y,
@@ -77,10 +78,11 @@ module pod_base_housing() {
                 cylinder(r=3.5, h=2.5, center=false, $fn=16);
         }
 
-        // 8. Rear Port A: M8 Continuous Cable Through-Bore (Shifted Left: yc = 27.0 mm)
+        // 8. Rear Port A: M8 Square Base Through-Cutout Tool (11.5 x 11.5 mm, yc = 27.0 mm)
         pod_rear_m8_through_hole_tool(
-            wall_th=POD_WALL + 1.0,
-            inner_r=M8_BORE_R,
+            wall_th=POD_WALL + 2.0,
+            base_size=11.5,
+            r_corner=1.5,
             yc=POD_OUTER_W/2.0 - port_offset_y,
             zc=POD_OUTER_H/2.0
         );
