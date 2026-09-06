@@ -191,6 +191,43 @@ All 3 pod locations use the identical 5-sided monocoque enclosure ($135{,}0 \tim
 
 *Figure 8.9: Cross-section showing the $8{,}0\,\text{mm}$ vertical height offset of the guide rails ($Z=10{,}0\,\text{mm}$ left, $Z=18{,}0\,\text{mm}$ right), rendering inverted insertion physically impossible.*
 
+### 4.4 Dual-Port Pod Base Architecture (Z-Axis Decoupling & Saddlebag Integration)
+
+To support both exposed outdoor deployments (e.g. crash-bar clamps on adventure bikes or rear radar Pod 3) and protected saddlebag internal installations without requiring DIY soldered adapter cables, the Pod Base PCB ([`openmotorbridge_pod_base.kicad_pcb`](file:///Users/schmidtm/openMotorBridge/hardware/kicad_pod_base/openmotorbridge_pod_base.kicad_pcb)) incorporates a **Dual-Port Architecture**:
+
+```
+                         POD BASE PCB (TOP VIEW / LAYOUT)
+ ┌────────────────────────────────────────────────────────────────────────┐
+ │                                                                        │
+ │   [ PORT A: M8 6-Pin ]                   [ PORT B: USB-C Slim ]        │
+ │   (Outdoor / Rear Radar)                 (Saddlebag / Interior Mount)  │
+ │   Rugged threaded jack                   Sealed behind TPU dust cap    │
+ │            │                                         │                 │
+ │            └───► [ AUTOMATIC POWER-MUX /     ] ◄─────┘                 │
+ │                  [ IDEAL DIODES (LM66100)    ]                         │
+ │                                │                                       │
+ │                                ▼                                       │
+ │                    [ SP3012 ESD Array ]                                │
+ │                                │                                       │
+ │                                ▼                                       │
+ │                    [ J1: Mill-Max 6-Pin Pogo ]                         │
+ │                    (Centered for cartridge engagement)                 │
+ │                                                                        │
+ └────────────────────────────────────────────────────────────────────────┘
+```
+
+1. **Mechanical Decoupling of `J1` and `J2`:**
+   * Previously, the M8 receptacle (`J2`) sat on the PCB underside directly axial behind the 6-pin Mill-Max pogo array (`J1`), creating tight Z-axis vertical stacking clearances.
+   * By placing **Port A (M8, left)** and **Port B (Slim-Port, right)** side-by-side, the central pogo-pin region remains completely unobstructed. Mechanical assembly clearances and stack heights relax significantly.
+2. **100% Preservation of Enclosure & PCB Envelopes:**
+   * The Pod Base PCB strictly maintains its ultra-compact dimensions of **$36.0 \times 20.0\,\text{mm}$**.
+   * The external 5-sided monocoque housing remains locked to its standardized envelope of **$135.0 \times 70.0 \times 38.0\,\text{mm}$**. These dimensions were historically dictated by the unopened OEM housing of the Sena +Mesh adapter (B2M-01) with its slide-in lugs, ensuring 100% warranty preservation.
+3. **Hardware Arbitration (Priority & Reverse-Current Protection):**
+   * An integrated ideal-diode power multiplexer (e.g. TI LM66100 / Dual P-FETs) automatically routes power from the active port while preventing reverse current feeding into the inactive port.
+   * If Port A (M8) receives bike power, Port B is isolated. If Port B receives power in the saddlebag, Port A is isolated. Cross-conduction and short circuits are physically impossible.
+4. **Environmental Sealing:**
+   * Port B is protected by a flush-fitting TPU sealing cap with retaining lanyard (`pod_base_usbc_cap_tpu.stl`) whenever the pod operates outdoors via Port A.
+
 ---
 
 ## 5. Type C: Modular Cartridges & Sleds
@@ -557,10 +594,56 @@ The universal Saddlebag Lid Dock ([`saddlebag_lid_dock.scad`](file:///Users/schm
 5. **Vibration-Proof EPDM Retention:**
    * Two lateral slots ($25 \times 3\,\text{mm}$) accept an elastic retention strap that locks the pod securely in the cradle during severe road impacts.
 
-#### 9.5.2 Cable Routing & Quick Saddlebag Removal
-* **Integrated M8 Strain Relief:** At the front, a funnel-shaped snout routes the M8 PUR cable forward without pinch risks. Two zip-tie channels anchor the cable jacket against pull forces.
-* **Routing along Check-Strap:** The cable runs parallel to the textile lid check-strap down into the saddlebag interior, experiencing no pinching or torsion during lid open/close cycles.
-* **Watertight M8 Quick Disconnect:** An M8 inline quick disconnect is positioned at the upper bag gap (beneath the seat edge). Saddlebags can thus be disconnected and removed for servicing or washing with a single turn.
+#### 9.5.2 Cable Routing, Switched Power & Mechanic-Proof MagSafe Breakaway
+
+The wiring of the saddlebag lid pods resolves the fundamental operational challenge of daily and dealership workshop service: **Ignition-switched continuous power without battery babysitting alongside 100% non-destructive saddlebag removal ("Mechanic-Proof Breakaway")**.
+
+```
+               SADDLEBAG CABLING & MAGSAFE BREAKAWAY INTERFACE
+ ═════════════════════════════════════════════════════════════════════════════════
+  ON MOTORCYCLE FRAME (Permanently routed, weather- & stone-chip protected)
+ ─────────────────────────────────────────────────────────────────────────────────
+  [Central Box under the seat]
+         │
+         │ (Rugged M8 automotive system harness)
+         ▼
+  [ Stationary M8-to-MagSafe Adapter ]
+         │ (Fastened vibration-free & concealed along frame tube)
+         ▼
+  [ 6-Pin MagSafe Receptacle (IP67) ] ──► Mounted to frame under seat overhang
+ ═════════════════════════════════════════════════════════════════════════════════
+         ▲
+    ═══ SNAP! ═══  (Self-aligning N52 neodymium magnetic coupling)
+    ═══ POP!  ═══  (Non-destructive breakaway during bag removal: ~10-15 N pull)
+         ▼
+ ═════════════════════════════════════════════════════════════════════════════════
+  INSIDE SADDLEBAG (Dry, clean, protected – 0 adapters inside bag)
+ ─────────────────────────────────────────────────────────────────────────────────
+  [ 6-Pin MagSafe Plug ] ────────► At front bag edge (slim wire < 2 mm)
+         │
+         │ (Slim, ultra-flexible flat/silicone ribbon, routed without bends)
+         ▼
+  [ Routed along Lid Tether ] ──► Ascends protected into saddlebag lid
+         │
+         ▼
+  [ Direct Plug-in to PORT B ] ──► USB-C Slim-Port on Pod Base PCB
+  [ (Zero M8 adapters inside!) ]
+ ═════════════════════════════════════════════════════════════════════════════════
+```
+
+1. **Ignition-Switched Continuous Power (Terminal 15):**
+   * Saddlebag pods are powered directly by the bike's switched 12V bus (tapped from the Harley P&A accessory connector beneath the seat).
+   * **Zero Battery Babysitting:** Intercom pods power up and down synchronously with the ignition. The classic risk of forgetting to charge before a Sunday ride or getting low-battery beeps 10 minutes in is completely eliminated.
+2. **Mechanic-Proof 6-Pin MagSafe Breakaway (IP67):**
+   * At dealerships and independent shops, mechanics performing inspections, tire changes, or brake pad replacements loosen the two quarter-turn pins and yank the bags off in seconds without inspecting for aftermarket wiring. A rigid screwed or latched connector would inevitably shear.
+   * The **6-pin IP67 magnetic coupling with N52 neodymium magnets and gold-plated pogo pins** releases cleanly at $\approx 10\dots 15\,\text{N}$ of axial pull **without any structural or electrical damage**.
+   * Upon re-attaching the bag, magnetic polarity ensures instant self-centering (*Snap!*)—power and signal lines resume immediately.
+3. **Dual-Zone Cabling Architecture:**
+   * **Zone 1 (External on Bike):** Fully ruggedized automotive standard (M8 PUR jacket) from Central Box to the frame-mounted MagSafe adapter.
+   * **Zone 2 (Inside Saddlebag):** Since the interior is dry, clean, and luggage-safe, a lightweight consumer-grade silicone or flat ribbon cable ($< 2\,\text{mm}$ OD) is utilized. It consumes zero usable packing volume and avoids distorting lid gaskets.
+4. **Adapter-Free Direct Plug-In at Pod Port B:**
+   * The slim cable routes along the textile check-strap directly into **Slim-Port B of the Pod Base**.
+   * Port A (M8 threaded neck) is capped with a protective dust plug inside the bag. No auxiliary adapter PCBs, breakout blocks, or loose solder joints exist inside the saddlebag.
 
 #### 9.5.3 RF Physics: Why Saddlebag Lids Beat Bag Floors
 

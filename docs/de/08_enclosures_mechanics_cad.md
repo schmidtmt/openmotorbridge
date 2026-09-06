@@ -225,6 +225,43 @@ Alle 3 Pod-Positionen nutzen dasselbe 5-seitige Monocoque-Schachtgehäuse im erw
 
 *Abbildung 8.9: 3D-CAD-Querschnitt (Y-Z Ebene) durch das Satelliten-Pod-Gehäuse und den Kassetten-Grundschlitten. Sichtbar ist der $8{,}0\,\text{mm}$ Höhenversatz der Führungsnuten (Links: $Z=10{,}0\,\text{mm}$, Rechts: $Z=18{,}0\,\text{mm}$). Ein $180^\circ$-Falscheinbau ist mechanisch ausgeschlossen.*
 
+### 4.4 Dual-Port Anschluss-Architektur der Pod-Basis (Entflechtung & Koffer-Integration)
+
+Um sowohl exponierte Outdoor-Einsätze (z. B. Sturzbügel-Montage bei Adventure-Bikes oder Heckradar Pod 3) als auch geschützte Koffer-Innenmontagen ohne selbstgelötete Adapterkabel abzudecken, verfügt die Pod-Bodenplatine ([`openmotorbridge_pod_base.kicad_pcb`](file:///Users/schmidtm/openMotorBridge/hardware/kicad_pod_base/openmotorbridge_pod_base.kicad_pcb)) über eine **Dual-Port-Architektur**:
+
+```
+                       POD-BASISPLATINE (DRAUFSICHT / LAYOUT)
+ ┌────────────────────────────────────────────────────────────────────────┐
+ │                                                                        │
+ │   [ PORT A: M8 6-Pin ]                   [ PORT B: USB-C Slim ]        │
+ │   (Outdoor / Heckradar)                  (Koffer / Innenmontage)       │
+ │   Robuste Schraubbuchse                  Hinter TPU-Schutzstopfen      │
+ │            │                                         │                 │
+ │            └───► [ AUTOMATISCHER POWER-MUX / ] ◄─────┘                 │
+ │                  [ IDEAL-DIODEN (LM66100)    ]                         │
+ │                                │                                       │
+ │                                ▼                                       │
+ │                    [ SP3012 ESD-Array ]                                │
+ │                                │                                       │
+ │                                ▼                                       │
+ │                    [ J1: Mill-Max 6-Pin Pogo ]                         │
+ │                    (Zentriert zum Kassetten-Eingriff)                  │
+ │                                                                        │
+ └────────────────────────────────────────────────────────────────────────┘
+```
+
+1. **Mechanische Entflechtung von `J1` und `J2`:**
+   * Bisher saß die M8-Buchse (`J2`) auf der Unterseite der Platine direkt axial hinter der 6-poligen Mill-Max Pogo-Pin-Leiste (`J1`), was zu einem engen vertikalen Bauraumkonflikt entlang der Z-Achse führte.
+   * Durch die Aufteilung in **Port A (M8, links)** und **Port B (Slim-Port, rechts)** liegt die Pogo-Pin-Leiste in der Mitte frei. Die mechanische Aufbauhöhe entspannt sich signifikant.
+2. **100 % Erhalt der Gehäuse- & Platinenabmessungen:**
+   * Die Pod-Basisplatine behält ihre kompakten Abmessungen von **$36{,}0 \times 20{,}0\,\text{mm}$** bei.
+   * Das äußere 5-seitige Monocoque-Gehäuse verbleibt exakt im standardisierten Envelope von **$135{,}0 \times 70{,}0 \times 38{,}0\,\text{mm}$**. Die Abmessungen wurden historisch exakt auf das ungeöffnete Originalgehäuse des Sena +Mesh Adapters (B2M-01) mit seinen Clip-Führungen kalibriert und bleiben für 100 % OEM-Garantieerhalt unverändert.
+3. **Hardware-Arbitrierung (Prioritäts- & Rückspeiseschutz):**
+   * Ein integrierter Ideal-Dioden-Power-Multiplexer (z. B. TI LM66100 / P-Kanal MOSFETs) schaltet automatisch die jeweils aktive Versorgungsspannung durch.
+   * Wird Port A (M8) mit Bordnetz versorgt, wird Port B (Slim-Port) rückspeisefest gesperrt. Wird im Koffer Port B versorgt, ist Port A inaktiv. Ein versehentlicher Kurzschluss oder Parallelbetrieb ist physikalisch ausgeschlossen.
+4. **Schutz & Flexibilität:**
+   * Port B ist durch einen bündigen, formangepassten TPU-Dichtstopfen mit Haltekollier (`pod_base_usbc_cap_tpu.stl`) versiegelt, wenn der Pod im Freien über Port A betrieben wird.
+
 ---
 
 ## 5. Gehäuse Typ C: Modulare Wechselkassetten
@@ -591,10 +628,56 @@ Das universelle Kofferdeckel-Dock ([`saddlebag_lid_dock.scad`](file:///Users/sch
 5. **Vibrationsfeste EPDM-Sicherung:**
    * Zwei seitliche Durchbrüche ($25 	imes 3\,	ext{mm}$) nehmen ein elastisches Spannband auf, das den Pod bei harten Fahrbahnschlägen spielfrei in der Wanne arretiert.
 
-#### 9.5.2 Kabelführung & Schnelle Kofferdemontage
-* **Integrierte M8-Zugentlastung:** An der Vorderseite führt eine trichterförmige Schnauze das M8-PUR-Kabel verwechslungssicher ab. Zwei Kabelbinderkanäle sichern den Kabelmantel gegen Zugbelastung.
-* **Führung am Fangband:** Das Kabel verläuft parallel zum textilen Deckel-Fangband nach unten in das Kofferinnere. Es wird beim Öffnen und Schließen des Deckels weder gequetscht noch auf Torsion beansprucht.
-* **Wasserdichte M8-Schnellkupplung:** Im oberen Kofferspalt (unterhalb der Sitzbankkante) ist eine M8-Trennstelle integriert. Die Koffer können somit bei Servicearbeiten oder zum Waschen mit einem einzigen Handgriff elektrisch getrennt und wie gewohnt abgenommen werden.
+#### 9.5.2 Kabelführung, Zündungsplus & Werkstattsichere MagSafe-Abreißkupplung
+
+Die Verkabelung der Kofferdeckel-Pods löst das fundamentale Praxiskriterium des Alltags- und Werkstattbetriebs: **Zündungsgesteuerter Dauerstrom ohne Akku-Sorgen bei gleichzeitiger 100 % zerstörungsfreier Kofferdemontage („Mechaniker-Sicherheit“)**.
+
+```
+                  KOFFER-VERKABELUNG & MAGSAFE-ABREISS-SCHNITTSTELLE
+ ═════════════════════════════════════════════════════════════════════════════════
+  AM MOTORRADRAHMEN (Fest verlegt, wetter- & steinschlaggeschützt)
+ ─────────────────────────────────────────────────────────────────────────────────
+  [Central Box unter der Sitzbank]
+         │
+         │ (Robustes M8-Automotive-Systemkabel)
+         ▼
+  [ Stationärer M8-zu-MagSafe-Adapter ]
+         │ (Liegt unsichtbar & vibrationsfest fixiert am Rahmenrohr)
+         ▼
+  [ 6-Pin MagSafe-Buchse (IP67) ] ──► Unter Sitzbankkante am Rahmen befestigt
+ ═════════════════════════════════════════════════════════════════════════════════
+         ▲
+    ═══ KLACK! ═══  (Selbstzentrierende N52-Neodym-Magnetkupplung)
+    ═══ PLOPP! ═══  (Zerstörungsfreie Abreißtrennung bei Kofferabnahme: ~10-15 N)
+         ▼
+ ═════════════════════════════════════════════════════════════════════════════════
+  IM KOFFER (Trocken, sauber, geschützt – 0 Adapter im Koffer)
+ ─────────────────────────────────────────────────────────────────────────────────
+  [ 6-Pin MagSafe-Stecker ] ────────► An Koffer-Vorderkante (Kabel < 2 mm)
+         │
+         │ (Schlankes, hochflexibles Flach-/Silikonkabel, knickfrei verlegt)
+         ▼
+  [ Führung am Deckel-Fangband ] ──► Steigt geschützt in den Kofferdeckel auf
+         │
+         ▼
+  [ Direktanschluss an PORT B ] ────► USB-C Slim-Port der Pod-Basisplatine
+  [ (Kein M8-Adapter im Koffer!) ]
+ ═════════════════════════════════════════════════════════════════════════════════
+```
+
+1. **Zündungsplus-Dauerversorgung (Klemme 15):**
+   * Die Stromversorgung der Koffer-Pods erfolgt direkt über das Zündungsplus des Bordnetzes (abgegriffen am Harley P&A Zubehörstecker unter der Sitzbank).
+   * **Null Akku-Wartung:** Die Intercom-Pods schalten mit der Zündung ein und aus. Das Risiko, vor der Fahrt das Laden zu vergessen oder nach 10 Minuten einen leeren Akku zu haben, ist zu 100 % eliminiert.
+2. **Werkstattsichere 6-Pin MagSafe-Abreißkupplung (IP67):**
+   * In Vertragswerkstätten lösen Mechaniker bei Inspektionen, Reifen- oder Bremsenwechseln die Kofferbefestigungen und heben den Koffer in Sekunden ab, ohne nach nachgerüsteten Kabeln zu suchen. Eine feste Schraub- oder Klickverbindung würde hier unweigerlich abreißen.
+   * Die **6-polige IP67-Magnetkupplung mit N52-Neodym-Magneten und vergoldeten Pogo-Pins** trennt sich bei ca. $10\dots 15\,\text{N}$ axialer Zugkraft **völlig verschleiß- und zerstörungsfrei**.
+   * Beim Wiedereinsetzen des Koffers zieht sich die Kupplung durch die magnetische Polung vollautomatisch zentrierend zusammen (*Klack*) – Zündungsplus und Signale stehen sofort wieder zur Verfügung.
+3. **Zwei-Zonen-Kabelarchitektur:**
+   * **Zone 1 (Außen am Bike):** Vollwertiger Automotive-Standard (M8-PUR-Kabel) von der Central Box zum Rahmenadapter.
+   * **Zone 2 (Im Koffer):** Da der Kofferinnenraum trocken, sauber und witterungsgeschützt ist, kommt ein schlankes, leichtes Consumer-Silikon- oder Flachbandkabel ($< 2\,\text{mm}$ Außendurchmesser) zum Einsatz. Es trägt nicht auf, nimmt kein Koffervolumen weg und beansprucht die Dichtkanten nicht.
+4. **Adapterfreier Direktanschluss an Port B des Pods:**
+   * Das schlanke Koffer-Kabel läuft parallel zum textilen Deckel-Fangband in den Kofferdeckel und wird **direkt in den Slim-Port B der Pod-Basis** eingesteckt.
+   * Port A (M8-Stutzen) wird im Koffer mit einer Schutzkappe verschlossen. Im Kofferinneren befinden sich **keinerlei zusätzliche Adapterplatinen oder Lötstellen**.
 
 #### 9.5.3 HF-Physik: Warum Kofferdeckel statt Kofferboden?
 
