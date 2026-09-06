@@ -12,36 +12,36 @@ $fn = 32;
 module pod_base_usbc_cap_tpu() {
     color([0.2, 0.2, 0.2, 0.95]) {
         union() {
-            // 1. Outer Flush Flange (Fits inside the 12.0 x 6.5 x 2.5 mm pocket)
+            // 1. Plug Well Body (Fits snugly into the 14.0 x 8.5 x 7.0 mm recessed pocket)
             hull() {
-                translate([-4.3, -1.8, 0])
-                    cylinder(r=1.2, h=2.0, center=false);
-                translate([4.3, -1.8, 0])
-                    cylinder(r=1.2, h=2.0, center=false);
-                translate([-4.3, 1.8, 0])
-                    cylinder(r=1.2, h=2.0, center=false);
-                translate([4.3, 1.8, 0])
-                    cylinder(r=1.2, h=2.0, center=false);
+                translate([-5.25, -2.5, 0])
+                    cylinder(r=1.5, h=6.0, center=false);
+                translate([5.25, -2.5, 0])
+                    cylinder(r=1.5, h=6.0, center=false);
+                translate([-5.25, 2.5, 0])
+                    cylinder(r=1.5, h=6.0, center=false);
+                translate([5.25, 2.5, 0])
+                    cylinder(r=1.5, h=6.0, center=false);
             }
 
-            // 2. Inner Sealing Plug (Presses into USB-C receptacle opening)
-            translate([0, 0, 2.0]) {
+            // Dual Perimeter Sealing Ribs (+0.2 mm interference fit against pocket walls)
+            translate([-6.5, -3.75, 2.0])
+                cube([13.0, 7.5, 0.8], center=false);
+            translate([-6.5, -3.75, 4.5])
+                cube([13.0, 7.5, 0.8], center=false);
+
+            // 2. Inner Receptacle Sealing Tongue (Plugs into vertical USB-C mouth)
+            translate([0, 0, 6.0]) {
                 hull() {
                     translate([-3.4, -0.9, 0])
-                        cylinder(r=0.8, h=4.5, center=false);
+                        cylinder(r=0.8, h=3.5, center=false);
                     translate([3.4, -0.9, 0])
-                        cylinder(r=0.8, h=4.5, center=false);
+                        cylinder(r=0.8, h=3.5, center=false);
                     translate([-3.4, 0.9, 0])
-                        cylinder(r=0.8, h=4.5, center=false);
+                        cylinder(r=0.8, h=3.5, center=false);
                     translate([3.4, 0.9, 0])
-                        cylinder(r=0.8, h=4.5, center=false);
+                        cylinder(r=0.8, h=3.5, center=false);
                 }
-
-                // Dual Sealing Ribs (Dichtlippen +0.2 mm interference fit)
-                translate([-4.0, -1.5, 1.5])
-                    cube([8.0, 3.0, 0.6], center=false);
-                translate([-4.0, -1.5, 3.2])
-                    cube([8.0, 3.0, 0.6], center=false);
             }
 
             // 3. Ergonomic Finger Pull Tab (Griffnase)

@@ -63,12 +63,21 @@ module pod_base_housing() {
                 wall=POD_WALL
             );
 
-            // 6. Ceiling Gore ePTFE Breather Vent Boss (Top center, fused into ceiling)
+            // 6. Rear Port B: Internal Sleeve Boss (Encloses USB-C pocket against inner chamber)
+            pod_rear_usbc_internal_sleeve(
+                depth=10.0,
+                outer_w=17.0,
+                outer_h=11.5,
+                yc=POD_OUTER_W/2.0 + port_offset_y,
+                zc=POD_OUTER_H/2.0
+            );
+
+            // 7. Ceiling Gore ePTFE Breather Vent Boss (Top center, fused into ceiling)
             translate([POD_OUTER_L/2.0, POD_OUTER_W/2.0, POD_OUTER_H - 1.0])
                 cylinder(r=3.5, h=2.5, center=false, $fn=16);
         }
 
-        // 7. Rear Port A: M8 Continuous Cable Through-Bore (Shifted Left: yc = 26.0 mm)
+        // 8. Rear Port A: M8 Continuous Cable Through-Bore (Shifted Left: yc = 27.0 mm)
         pod_rear_m8_through_hole_tool(
             wall_th=POD_WALL + 1.0,
             inner_r=M8_BORE_R,
@@ -76,14 +85,14 @@ module pod_base_housing() {
             zc=POD_OUTER_H/2.0
         );
 
-        // 8. Rear Port B: Recessed USB-C Slim Outer Pocket & Through-Window (Shifted Right: yc = 44.0 mm)
+        // 9. Rear Port B: Recessed USB-C Vertical Socket Plug-Well & Seat (Depth 7.0 mm)
         pod_rear_usbc_pocket_tool(
-            wall_th=POD_WALL + 1.0,
-            pocket_depth=2.5,
-            pocket_w=12.0,
-            pocket_h=6.5,
-            port_w=9.2,
-            port_h=3.6,
+            wall_th=18.0,
+            pocket_depth=7.0,
+            pocket_w=14.0,
+            pocket_h=8.5,
+            port_w=9.6,
+            port_h=4.0,
             yc=POD_OUTER_W/2.0 + port_offset_y,
             zc=POD_OUTER_H/2.0
         );

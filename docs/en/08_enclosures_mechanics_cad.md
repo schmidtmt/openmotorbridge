@@ -225,8 +225,11 @@ To support both exposed outdoor deployments (e.g. crash-bar clamps on adventure 
 3. **Hardware Arbitration (Priority & Reverse-Current Protection):**
    * An integrated ideal-diode power multiplexer (e.g. TI LM66100 / Dual P-FETs) automatically routes power from the active port while preventing reverse current feeding into the inactive port.
    * If Port A (M8) receives bike power, Port B is isolated. If Port B receives power in the saddlebag, Port A is isolated. Cross-conduction and short circuits are physically impossible.
-4. **Environmental Sealing:**
-   * Port B is protected by a flush-fitting TPU sealing cap with retaining lanyard (`pod_base_usbc_cap_tpu.stl`) whenever the pod operates outdoors via Port A.
+4. **Axial Alignment & Recessed Plug-Well (Depth Compensation):**
+   * **Vertical Connector Orientation:** The USB-C receptacle (`J3`) on `B.Cu` stands **vertical** (normal to the PCB plane), aligned with the axial mating direction matching the M8 connector.
+   * **Depth Compensation ($7.0\,\text{mm}$ Plug-Well):** Because the PCB is positioned against the bulkhead at $X = 18.0\,\text{mm}$ ($X = 16.4\,\text{mm}$ on `B.Cu`) to accommodate the $116\,\text{mm}$ long cartridge sled, a standard vertical USB-C connector ($H \approx 9.5\dots 10.0\,\text{mm}$) reaches to $X \approx 6.9\,\text{mm}$. The rear housing wall is therefore molded with a **$7.0\,\text{mm}$ deep recessed plug-well** ($14.0 \times 8.5\,\text{mm}$) with an internal isolating sleeve.
+   * **Plug Clearance:** The USB-C receptacle mouth sits perfectly flush at the base of this well, allowing standard USB-C cable overmolds to insert and latch securely without housing collision.
+   * **TPU Sealing:** When operating outdoors via Port A, the molded TPU dust cap ([`008_pod_base_usbc_cap_tpu.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/parts/008_pod_base_usbc_cap_tpu.scad)) seals the $7.0\,\text{mm}$ well with dual sealing ribs flush with the outer shell (IP67).
 5. **Universal Multi-Platform Deployment (Support Vehicles / Cabin / Lab Bench):**
    * The exact same pod can be deployed without modifications or secondary adapter boards in a chase/support vehicle (tour guide van, rally support car, sag wagon): Instead of routing bulky, rigid industrial M8 harness cables across the vehicle cabin or dashboard, the pod is powered via Port B using an off-the-shelf, ultra-flexible slim USB-C cable plugged into a standard 12V USB charger or dashboard port.
    * **100% Universal Hardware:** A single physical pod design seamlessly covers **outdoor motorcycle duty** (Port A, M8 IP67), **saddlebag interior mounting** (Port B via MagSafe coupling), and **support vehicle / testbench operation** (Port B, standard slim cable).

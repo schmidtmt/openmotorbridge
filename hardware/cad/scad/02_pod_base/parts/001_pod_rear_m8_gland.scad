@@ -30,18 +30,41 @@ module pod_rear_m8_through_hole_tool(wall_th=5.0, inner_r=4.0, yc=26.0, zc=19.0)
             cylinder(r=inner_r, h=wall_th + 2.0, center=false, $fn=32);
 }
 
-// 3. Port B: Recessed USB-C Slim Socket Outer Pocket & Pass-Through Tool
-module pod_rear_usbc_pocket_tool(
-    wall_th=5.0,
-    pocket_depth=2.5,
-    pocket_w=12.0,
-    pocket_h=6.5,
-    port_w=9.2,
-    port_h=3.6,
-    yc=44.0,
+// 3. Port B: Internal Enclosing Sleeve Boss (Seals rear chamber around USB-C tunnel)
+module pod_rear_usbc_internal_sleeve(
+    depth=10.0,
+    outer_w=17.0,
+    outer_h=11.5,
+    yc=43.0,
     zc=19.0
 ) {
-    // A. Flush Recessed Pocket on Rear Exterior (holds TPU plug flange flush)
+    translate([0, yc, zc]) {
+        rotate([0, 90, 0])
+            hull() {
+                translate([-(outer_h/2 - 2.0), -(outer_w/2 - 2.0), 0])
+                    cylinder(r=2.0, h=depth, center=false, $fn=24);
+                translate([(outer_h/2 - 2.0), -(outer_w/2 - 2.0), 0])
+                    cylinder(r=2.0, h=depth, center=false, $fn=24);
+                translate([-(outer_h/2 - 2.0), (outer_w/2 - 2.0), 0])
+                    cylinder(r=2.0, h=depth, center=false, $fn=24);
+                translate([(outer_h/2 - 2.0), (outer_w/2 - 2.0), 0])
+                    cylinder(r=2.0, h=depth, center=false, $fn=24);
+            }
+    }
+}
+
+// 4. Port B: Recessed USB-C Vertical Socket Plug-Well & Pass-Through Tool
+module pod_rear_usbc_pocket_tool(
+    wall_th=18.0,
+    pocket_depth=7.0,
+    pocket_w=14.0,
+    pocket_h=8.5,
+    port_w=9.6,
+    port_h=4.0,
+    yc=43.0,
+    zc=19.0
+) {
+    // A. Recessed Plug-Well on Rear Exterior (7.0 mm deep: accepts USB-C cable overmold)
     translate([-0.5, yc, zc]) {
         rotate([0, 90, 0])
             hull() {
@@ -56,18 +79,18 @@ module pod_rear_usbc_pocket_tool(
             }
     }
 
-    // B. Inner Through-Window into Chamber for USB-C Receptacle
-    translate([-1.0, yc, zc]) {
+    // B. Inner Receptacle Seat Tunnel (meets the 9.5 mm vertical USB-C socket on the PCB at x = 16.4)
+    translate([pocket_depth - 0.1, yc, zc]) {
         rotate([0, 90, 0])
             hull() {
                 translate([-(port_h/2 - 1.0), -(port_w/2 - 1.0), 0])
-                    cylinder(r=1.0, h=wall_th + 3.0, center=false, $fn=20);
+                    cylinder(r=1.0, h=wall_th, center=false, $fn=20);
                 translate([(port_h/2 - 1.0), -(port_w/2 - 1.0), 0])
-                    cylinder(r=1.0, h=wall_th + 3.0, center=false, $fn=20);
+                    cylinder(r=1.0, h=wall_th, center=false, $fn=20);
                 translate([-(port_h/2 - 1.0), (port_w/2 - 1.0), 0])
-                    cylinder(r=1.0, h=wall_th + 3.0, center=false, $fn=20);
+                    cylinder(r=1.0, h=wall_th, center=false, $fn=20);
                 translate([(port_h/2 - 1.0), (port_w/2 - 1.0), 0])
-                    cylinder(r=1.0, h=wall_th + 3.0, center=false, $fn=20);
+                    cylinder(r=1.0, h=wall_th, center=false, $fn=20);
             }
     }
 }
