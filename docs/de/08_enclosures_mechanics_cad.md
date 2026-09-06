@@ -754,9 +754,9 @@ Das stationäre MagSafe-Rahmendock ([`009_magsafe_frame_dock.scad`](file:///User
 
 *Abbildung 8.30: 3D-CAD-Baugruppe des MagSafe-Rahmendocks (`009_magsafe_frame_dock.scad`). Sichtbar sind das Hauptgehäuse mit internen Führungsschienen für PCBA 06, der frontale MagSafe-Einfädeltrichter, die rückseitige M8-Kabelverschraubung, die obere Halbschellen-Rohrklemmung mit M3-Edelstahlschrauben sowie der untere Inspektions- und Vergussdeckel.*
 
-1. **Interne Führungsschienen & Rastelemente für PCBA 06:**
+1. **Interne Führungsschienen & Asymmetrische Poka-Yoke-Codierung für PCBA 06:**
    * Die $26{,}0 \times 11{,}5\,\text{mm}$ kleine Schutzplatine (PCBA 06) gleitet formschlüssig in zwei seitliche $11{,}9 \times 1{,}9\,\text{mm}$ Führungsnuten.
-   * Elastische Rastnasen greifen in die seitlichen Platinenaussparungen bei $X = 113\,\text{mm}$ ein und sichern die Leiterplatte vibrationsfest gegen axiale Verschiebungen.
+   * **Poka-Yoke-Verpolschutz:** Die Platine besitzt eine einseitige $2{,}5 \times 1{,}0\,\text{mm}$ Aussparung an der Unterkante, während die Oberkante durchgehend glatt ist. Eine exakt passende Codierrippe in der unteren Führungsschiene des Gehäuses verhindert mechanisch ein seitenverkehrtes oder um 180° verdrehtes Einschieben zu 100 %. Die Längsfixierung erfolgt formschlüssig zwischen dem MagSafe-Kragennest und dem rückseitigen M8-Anschlag.
 2. **Doppelte Rahmen-Befestigungsmöglichkeit (Split-Clamp & Zip-Tie):**
    * **Primär (Zweiteilige Rohrschelle):** Der obere Halbschellen-Bügel (`009_magsafe_frame_clamp.stl`) umschließt das $\varnothing 26\,\text{mm}$ Rahmenrohr und wird über 2x M3 Zylinderkopfschrauben (DIN 912) in Messing-Gewindeeinsätze (`M3x4x5`) im Dock-Körper spielfrei und verdrehsicher festgezogen.
    * **Reibungsrippen:** Auf der Rohrwiege des Gehäuses sind vier axiale $0{,}8\,\text{mm}$ Längsrippen angeformt, die sich rutschfest an pulverbeschichtete Rahmenrohre anschmiegen.

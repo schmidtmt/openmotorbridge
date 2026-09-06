@@ -2,18 +2,21 @@
 """
 Generate Complete, Routing-Ready KiCad PCB for PCBA 06: MagSafe Frame Dock Adapter
 - Dimensions: 26.0 x 11.5 mm 2-Layer FR4
-- J1: M8 6-Pin + Shield wire-to-board solder pad strip (Bike Side, Left)
-- J2: 6-Pin MagSafe Gold SMD Contact Pads / Pogo receptacle (Saddlebag Side, Right)
+- J1: M8 6-Pin + Shield wire-to-board solder pad strip (Bike Side, Left) + 3D Horizontal Receptacle Model
+- J2: 6-Pin MagSafe Gold SMD Contact Pads (Saddlebag Side, Right) + 3D Magnetic Dock Model
 - F1: 1206 PPTC Resettable Polyfuse (500mA hold, 1A trip)
 - D1: SOD-323 Unidirectional 5V TVS Diode (VCC Transient Clamp)
 - C1: 0603 100nF 50V Ceramic Decoupling Capacitor
 - U1: SOT-23-6 USBLC6-4SC6 Ultra-Low-Capacitance 4-Ch ESD Array
-- 100% Routed Traces, JLCPCB Standard Compliant (Trace >= 0.25mm, Power = 0.50mm)
+- Asymmetrical Poka-Yoke Mechanical Keying Notch (Bottom Edge ONLY at X=112..114.5mm)
+- 100% Routed Traces, JLCPCB Standard Compliant (Clean non-crossing routing with B.Cu jump vias)
 - Solid B.Cu GND ground plane with thermal reliefs
 """
 
 import os
 import math
+import uuid
+import subprocess
 
 pcb_file = "hardware/kicad_magsafe_dock/openmotorbridge_magsafe_dock.kicad_pcb"
 kicad10_3d_dir = "${KICAD10_3DMODEL_DIR}"
@@ -31,8 +34,15 @@ nets = [
 ]
 
 def generate_magsafe_dock_pcb():
-    os.makedirs(os.path.dirname(os.path.abspath(pcb_file)), exist_ok=True)
+    target_dir = os.path.dirname(os.path.abspath(pcb_file))
+    os.makedirs(target_dir, exist_ok=True)
     
+    # Ensure 3D VRML models are generated
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    model_gen_script = os.path.join(script_dir, "generate_dock_3d_models.py")
+    if os.path.exists(model_gen_script):
+        subprocess.run(["python3", model_gen_script], check=True)
+
     out = []
     out.append('(kicad_pcb')
     out.append('\t(version 20240108)')
@@ -84,29 +94,25 @@ def generate_magsafe_dock_pcb():
         out.append(f'\t(net {n_id} "{n_name}")')
 
     # Edge.Cuts (26.0 x 11.5 mm: X=100.0 to 126.0, Y=70.0 to 81.5)
-    # Includes 1.0mm chamfers on corners and 0.75mm slide-lock side notches at X=112.5..114.5
+    # Strictly asymmetrical Poka-Yoke: Top edge is completely straight, bottom edge has single 2.5 x 1.0mm keying notch
     X0 = 100.0
     Y0 = 70.0
     W = 26.0
     H = 11.5
     pts = [
         (X0 + 1.0, Y0),
-        (112.5, Y0),
-        (112.5, Y0 + 0.75),
-        (114.5, Y0 + 0.75),
-        (114.5, Y0),
-        (X0 + W - 1.0, Y0),
-        (X0 + W, Y0 + 1.0),
-        (X0 + W, Y0 + H - 1.0),
-        (X0 + W - 1.0, Y0 + H),
-        (114.5, Y0 + H),
-        (114.5, Y0 + H - 0.75),
-        (112.5, Y0 + H - 0.75),
-        (112.5, Y0 + H),
-        (X0 + 1.0, Y0 + H),
-        (X0, Y0 + H - 1.0),
-        (X0, Y0 + 1.0),
-        (X0 + 1.0, Y0)
+        (X0 + W - 1.0, Y0),      # Top edge straight! No notch!
+        (X0 + W, Y0 + 1.0),      # Top-right 45 deg chamfer
+        (X0 + W, Y0 + H - 1.0),  # Right edge
+        (X0 + W - 1.0, Y0 + H),  # Bottom-right 45 deg chamfer
+        (114.5, Y0 + H),         # Bottom edge to notch
+        (114.5, Y0 + H - 1.0),   # Notch right wall (1.0mm deep)
+        (112.0, Y0 + H - 1.0),   # Notch ceiling (2.5mm wide)
+        (112.0, Y0 + H),         # Notch left wall
+        (X0 + 1.0, Y0 + H),      # Bottom edge to left corner
+        (X0, Y0 + H - 1.0),      # Bottom-left 45 deg chamfer
+        (X0, Y0 + 1.0),          # Left edge
+        (X0 + 1.0, Y0)           # Top-left 45 deg chamfer
     ]
     for i in range(len(pts) - 1):
         x1, y1 = pts[i]
@@ -132,8 +138,13 @@ def generate_magsafe_dock_pcb():
         (7, 0.0,  4.50, 8, "GND_SHIELD", "SHD"),
     ]
     for p_num, px, py, n_id, n_name, lbl in j1_pads:
-        # Through-hole + SMD combo pad for robust wire attachment (drill 0.6mm, pad 1.8 x 1.1mm)
         out.append(f'\t\t(pad "{p_num}" thru_hole oval (at {px:.3f} {py:.3f}) (size 1.8 1.1) (drill 0.6) (layers "*.Cu" "*.Mask") (net {n_id} "{n_name}"))')
+    
+    out.append('\t\t(model "m8_6pin_horizontal_receptacle.wrl"')
+    out.append('\t\t\t(offset (xyz 0 0 0))')
+    out.append('\t\t\t(scale (xyz 0.3937 0.3937 0.3937))')
+    out.append('\t\t\t(rotate (xyz 0 0 0))')
+    out.append('\t\t)')
     out.append('\t)')
 
     # -------------------------------------------------------------
@@ -227,6 +238,12 @@ def generate_magsafe_dock_pcb():
     ]
     for p_num, px, py, n_id, n_name, lbl in j2_pads:
         out.append(f'\t\t(pad "{p_num}" smd roundrect (at {px:.3f} {py:.3f}) (size 2.4 1.1) (layers "F.Cu" "F.Paste" "F.Mask") (roundrect_rratio 0.25) (net {n_id} "{n_name}"))')
+    
+    out.append('\t\t(model "magsafe_6pin_dock_connector.wrl"')
+    out.append('\t\t\t(offset (xyz 0 0 0))')
+    out.append('\t\t\t(scale (xyz 0.3937 0.3937 0.3937))')
+    out.append('\t\t\t(rotate (xyz 0 0 0))')
+    out.append('\t\t)')
     out.append('\t)')
 
     # -------------------------------------------------------------
@@ -237,110 +254,30 @@ def generate_magsafe_dock_pcb():
     out.append('\t(gr_text "MAGSAFE ►" (at 121.5 70.8 0) (layer "F.SilkS") (effects (font (size 0.45 0.45) (thickness 0.08))))')
     out.append('\t(gr_text "▲ +5V" (at 123.5 71.1 0) (layer "F.SilkS") (effects (font (size 0.35 0.35) (thickness 0.07))))')
 
-    
     # Silk labels on B.Cu
     out.append('\t(gr_text "OPENMOTORBRIDGE v8.1" (at 113.0 74.0 0) (layer "B.SilkS") (effects (font (size 0.7 0.7) (thickness 0.12)) (justify mirror)))')
     out.append('\t(gr_text "ESD / PPTC PROTECTED DOCK" (at 113.0 77.5 0) (layer "B.SilkS") (effects (font (size 0.55 0.55) (thickness 0.10)) (justify mirror)))')
 
-    # -------------------------------------------------------------
-    # 8. Complete 100% Routed Traces
-    # -------------------------------------------------------------
-    tracks = [
-        # Net 2 (VCC_IN): J1 Pad 1 (102.5, 71.5) -> F1 Pad 1 (106.1, 71.5)
-        (2, 102.5, 71.5, 106.1, 71.5, 0.50, "F.Cu"),
+    # Read current routed tracks and vias from openmotorbridge_magsafe_dock.kicad_pcb
+    # to preserve the user's non-crossing routing exactly
+    with open(pcb_file, 'r', encoding='utf-8') as pf:
+        cur_pcb = pf.read()
 
-        # Net 3 (VCC_PROT): F1 Pad 2 (108.9, 71.5) -> D1 Pad 1 (110.95, 71.5) -> C1 Pad 1 (115.725, 71.5) -> J2 Pad 1 (123.5, 71.75)
-        (3, 108.90, 71.50, 110.95, 71.50, 0.50, "F.Cu"),
-        (3, 110.95, 71.50, 115.725, 71.50, 0.50, "F.Cu"),
-        (3, 115.725, 71.50, 120.00, 71.50, 0.50, "F.Cu"),
-        (3, 120.00, 71.50, 120.25, 71.75, 0.50, "F.Cu"),
-        (3, 120.25, 71.75, 123.50, 71.75, 0.50, "F.Cu"),
+    import re
+    seg_blocks = re.findall(r'(\(segment\s+\(start [\d\.-]+ [\d\.-]+\)\s+\(end [\d\.-]+ [\d\.-]+\)\s+\(width [\d\.-]+\)\s+\(layer \"[^\"]+\"\)\s+\(net \"?[^\"]+\"?\)(?:\s+\(uuid \"[^\"]+\"\))?\s*\))', cur_pcb)
+    via_blocks = re.findall(r'(\(via\s+\(at [\d\.-]+ [\d\.-]+\)\s+\(size [\d\.-]+\)\s+\(drill [\d\.-]+\)\s+\(layers \"[^\"]+\" \"[^\"]+\"\)\s+\(net \"?[^\"]+\"?\)(?:\s+\(uuid \"[^\"]+\"\))?\s*\))', cur_pcb)
 
-        # Net 3 to U1 Pin 5 (VBUS reference): from (115.0, 71.5) to (115.0, 76.5) to U1 Pin 5 (113.637, 76.5)
-        (3, 115.00, 71.50, 115.00, 76.50, 0.30, "F.Cu"),
-        (3, 115.00, 76.50, 113.637, 76.50, 0.30, "F.Cu"),
-
-        # Net 4 (SIG_P): J1 Pad 3 (102.5, 74.5) -> U1 Pad 1 (111.363, 75.55) -> J2 Pad 3 (123.5, 74.95)
-        (4, 102.50, 74.50, 108.00, 74.50, 0.25, "F.Cu"),
-        (4, 108.00, 74.50, 109.05, 75.55, 0.25, "F.Cu"),
-        (4, 109.05, 75.55, 111.363, 75.55, 0.25, "F.Cu"),
-        (4, 111.363, 75.55, 111.363, 74.95, 0.25, "F.Cu"),
-        (4, 111.363, 74.95, 123.50, 74.95, 0.25, "F.Cu"),
-
-        # Net 5 (SIG_N): J1 Pad 4 (102.5, 76.0) -> U1 Pad 3 (111.363, 77.45) -> J2 Pad 4 (123.5, 76.55)
-        (5, 102.50, 76.00, 108.00, 76.00, 0.25, "F.Cu"),
-        (5, 108.00, 76.00, 109.45, 77.45, 0.25, "F.Cu"),
-        (5, 109.45, 77.45, 111.363, 77.45, 0.25, "F.Cu"),
-        (5, 111.363, 77.45, 117.00, 77.45, 0.25, "F.Cu"),
-        (5, 117.00, 77.45, 117.90, 76.55, 0.25, "F.Cu"),
-        (5, 117.90, 76.55, 123.50, 76.55, 0.25, "F.Cu"),
-
-        # Net 6 (TRIGGER_PPS): J1 Pad 5 (102.5, 77.5) -> U1 Pad 4 (113.637, 77.45) -> J2 Pad 5 (123.5, 78.15)
-        (6, 102.50, 77.50, 106.00, 77.50, 0.25, "F.Cu"),
-        (6, 106.00, 77.50, 107.50, 79.00, 0.25, "F.Cu"),
-        (6, 107.50, 79.00, 115.00, 79.00, 0.25, "F.Cu"),
-        (6, 115.00, 79.00, 115.00, 77.45, 0.25, "F.Cu"),
-        (6, 115.00, 77.45, 113.637, 77.45, 0.25, "F.Cu"),
-        (6, 115.00, 79.00, 119.00, 79.00, 0.25, "F.Cu"),
-        (6, 119.00, 79.00, 119.85, 78.15, 0.25, "F.Cu"),
-        (6, 119.85, 78.15, 123.50, 78.15, 0.25, "F.Cu"),
-
-        # Net 7 (1WIRE_ID): J1 Pad 6 (102.5, 79.0) -> U1 Pad 6 (113.637, 75.55) -> J2 Pad 6 (123.5, 79.75)
-        (7, 102.50, 79.00, 105.00, 79.00, 0.25, "F.Cu"),
-        (7, 105.00, 79.00, 106.50, 80.50, 0.25, "F.Cu"),
-        (7, 106.50, 80.50, 117.00, 80.50, 0.25, "F.Cu"),
-        (7, 117.00, 80.50, 117.00, 75.55, 0.25, "F.Cu"),
-        (7, 117.00, 75.55, 113.637, 75.55, 0.25, "F.Cu"),
-        (7, 117.00, 80.50, 120.00, 80.50, 0.25, "F.Cu"),
-        (7, 120.00, 80.50, 120.75, 79.75, 0.25, "F.Cu"),
-        (7, 120.75, 79.75, 123.50, 79.75, 0.25, "F.Cu"),
-
-        # Net 8 (GND_SHIELD) to GND via tie at (105.0, 79.5)
-        (8, 102.50, 80.50, 104.00, 80.50, 0.40, "F.Cu"),
-        (8, 104.00, 80.50, 105.00, 79.50, 0.40, "F.Cu"),
-        (1, 105.00, 79.50, 106.00, 78.50, 0.40, "F.Cu"),
-
-        # GND traces to Vias on F.Cu
-        (1, 102.50, 73.00, 104.50, 73.00, 0.40, "F.Cu"),
-        (1, 113.05, 71.50, 113.05, 72.80, 0.40, "F.Cu"),
-        (1, 117.275, 71.50, 117.275, 72.80, 0.40, "F.Cu"),
-        (1, 111.363, 76.50, 110.00, 76.50, 0.40, "F.Cu"),
-        (1, 123.50, 73.35, 121.50, 73.35, 0.40, "F.Cu"),
-
-        # B.Cu Ground plane interconnect spine (Orthogonal & 135 deg bends, zero acid traps)
-        (1, 104.50, 73.00, 121.50, 73.00, 0.50, "B.Cu"),
-        (1, 106.00, 78.50, 121.50, 78.50, 0.50, "B.Cu"),
-        (1, 104.50, 73.00, 104.50, 77.00, 0.50, "B.Cu"),
-        (1, 104.50, 77.00, 106.00, 78.50, 0.50, "B.Cu"),
-        (1, 121.50, 73.00, 121.50, 78.50, 0.50, "B.Cu"),
-    ]
-    for n_id, x1, y1, x2, y2, w, lay in tracks:
-        out.append(f'\t(segment (start {x1:.3f} {y1:.3f}) (end {x2:.3f} {y2:.3f}) (width {w:.2f}) (layer "{lay}") (net {n_id}))')
-
-    # -------------------------------------------------------------
-    # 9. Ground Vias (Drill 0.3mm, Pad 0.6mm - Annular Ring 0.15mm)
-    # -------------------------------------------------------------
-    gnd_vias = [
-        (104.50, 73.00), # Near J1 GND
-        (106.00, 78.50), # Near J1 Shield tie
-        (113.05, 72.80), # Near D1 TVS GND
-        (117.275, 72.80), # Near C1 Cap GND
-        (110.00, 76.50), # Near U1 ESD Array GND
-        (121.50, 73.35), # Near J2 MagSafe GND
-        (102.00, 70.80), # Corner stitch
-        (124.00, 70.80), # Corner stitch
-        (102.00, 80.70), # Corner stitch
-        (124.00, 80.70), # Corner stitch
-    ]
-    for vx, vy in gnd_vias:
-        out.append(f'\t(via (at {vx:.3f} {vy:.3f}) (size 0.6) (drill 0.3) (layers "F.Cu" "B.Cu") (net 1))')
+    for seg in seg_blocks:
+        out.append('\t' + seg)
+    for via in via_blocks:
+        out.append('\t' + via)
 
     out.append(')')
 
     with open(pcb_file, 'w', encoding='utf-8') as f:
         f.write('\n'.join(out))
 
-    print(f"✓ Successfully generated {pcb_file} with 100% routed signals, PPTC/TVS/ESD protection, and JLCPCB compliance!")
+    print(f"✓ Successfully generated {pcb_file} with non-crossing routing, asymmetrical Poka-Yoke key, and 3D connector models!")
 
 if __name__ == '__main__':
     generate_magsafe_dock_pcb()

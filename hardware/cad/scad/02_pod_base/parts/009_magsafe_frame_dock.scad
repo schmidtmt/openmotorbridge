@@ -51,9 +51,10 @@ module magsafe_frame_dock_body(
     magsafe_depth = magsafe_depth_default,
     m8_bore_dia   = m8_bore_dia_default
 ) {
-    difference() {
-        union() {
-            // 1.1 Main Ergonomic Aerodynamic Monocoque Block
+    union() {
+        difference() {
+            union() {
+                // 1.1 Main Ergonomic Aerodynamic Monocoque Block
             hull() {
                 translate([-dock_len/2 + 3, -dock_w/2 + 3, 3])
                     sphere(r=3);
@@ -139,11 +140,6 @@ module magsafe_frame_dock_body(
 
             // Precision Lateral Slide-In Guide Rails (Slot W=12.2mm, H=1.9mm)
             cube([pcb_len + 2.0, pcb_w + 0.8, pcb_t], center=true);
-
-            // Retention Snap Stops (engaging PCB side notches at X=0)
-            // Left & Right side reliefs
-            translate([0, 0, 0])
-                cube([3.0, pcb_w + 2.5, 3.0], center=true);
         }
 
         // -------------------------------------------------------------
@@ -215,6 +211,12 @@ module magsafe_frame_dock_body(
                 cylinder(r=2.5, h=2.5, center=false); // Counterbore
             }
         }
+    }
+
+    // 1.7 Single Asymmetrical Poka-Yoke Keying Rib (+Y Rail ONLY at X=0)
+    // Engages matching single notch on PCBA 06 bottom edge to prevent 180° inverted insertion
+    translate([0, (pcb_w + 0.8)/2 - 0.5, 8.5])
+        cube([2.0, 1.0, pcb_t - 0.1], center=true);
     }
 }
 

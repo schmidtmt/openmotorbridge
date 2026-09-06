@@ -693,9 +693,9 @@ The stationary MagSafe Frame Dock ([`009_magsafe_frame_dock.scad`](file:///Users
 
 *Figure 8.30: 3D CAD assembly of the MagSafe Frame Dock (`009_magsafe_frame_dock.scad`). Visible are the lower monocoque housing with internal guide rails for PCBA 06, the frontal MagSafe self-locating funnel, the rear M8 cable compression gland, the upper half-collar split clamp with M3 stainless steel hardware, and the bottom service and potting lid.*
 
-1. **Internal Guide Rails & Retention Catches for PCBA 06:**
+1. **Internal Guide Rails & Asymmetrical Poka-Yoke Mechanical Keying for PCBA 06:**
    * The compact $26.0 \times 11.5\,\text{mm}$ protection adapter board (PCBA 06) slides into lateral $11.9 \times 1.9\,\text{mm}$ guide channels.
-   * Resilient retention tabs engage the PCB edge notches at $X = 113\,\text{mm}$, locking the board against road vibration and axial cable pull.
+   * **Poka-Yoke Reverse Polarity Protection:** The PCB features a single $2.5 \times 1.0\,\text{mm}$ keying notch on its bottom edge while the top edge is continuous and straight. A matching keying rib in the enclosure's bottom guide rail mechanically prevents 180° inverted or upside-down board insertion with 100% certainty. Axial retention is secured form-fittingly between the MagSafe collar nest and the rear M8 cable stop.
 2. **Dual Frame Attachment Strategy (Split-Clamp & Heavy-Duty Zip-Tie):**
    * **Primary (Two-Piece Split Clamp Collar):** The upper clamp strap (`009_magsafe_frame_clamp.stl`) encircles the $\varnothing 26\,\text{mm}$ frame tube and fastens via 2x M3 DIN 912 Allen socket screws into brass heat-set threaded inserts (`M3x4x5`) in the dock body for a rigid, slip-free lock.
    * **Friction Grip Ribs:** The concave tube cradle features four axial $0.8\,\text{mm}$ ribs that bite securely into powder-coated frame tubes without marring paint.
