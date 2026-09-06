@@ -56,7 +56,7 @@
 			(property "Value" "USBLC6-4SC6" (at -7.62 -7.62 0) (effects (font (size 1.27 1.27)) (justify left)))
 			(property "Footprint" "Package_TO_SOT_SMD:SOT-23-6" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
 			(property "LCSC" "C7519" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
-			(symbol "USBLC6_0_1"
+			(symbol "USBLC6-4SC6_0_1"
 				(rectangle (start -7.62 6.35) (end 7.62 -6.35) (stroke (width 0.254) (type solid)) (fill (type background)))
 			)
 		)
@@ -70,7 +70,7 @@
 			(pin passive line (at -7.62 -7.62 0) (length 2.54) (name "SHIELD" (effects (font (size 1.27 1.27)))) (number "7" (effects (font (size 1.27 1.27)))))
 			(property "Reference" "J" (at -5.08 10.16 0) (effects (font (size 1.27 1.27)) (justify left)))
 			(property "Value" "Conn_01x07_Shield" (at -5.08 -10.16 0) (effects (font (size 1.27 1.27)) (justify left)))
-			(symbol "Conn_01x07_0_1"
+			(symbol "Conn_01x07_Shield_0_1"
 				(rectangle (start -5.08 10.16) (end 5.08 -10.16) (stroke (width 0.254) (type solid)) (fill (type background)))
 			)
 		)
@@ -195,12 +195,12 @@
 	(wire (pts (xy 37.38 57.46) (xy 74.84 76.19)) (stroke (width 0) (type solid)))
 	(wire (pts (xy 74.84 76.19) (xy 127.38 58.73)) (stroke (width 0) (type solid)))
 
-	(wire (pts (xy 37.38 60.0) (xy 74.84 83.81)) (stroke (width 0) (type solid)))
-	(wire (pts (xy 74.84 83.81) (xy 127.38 61.27)) (stroke (width 0) (type solid)))
+	(wire (pts (xy 37.38 60.0) (xy 95.16 76.19)) (stroke (width 0) (type solid)))
+	(wire (pts (xy 95.16 76.19) (xy 127.38 61.27)) (stroke (width 0) (type solid)))
 
-	(wire (pts (xy 37.38 62.54) (xy 95.16 83.81)) (stroke (width 0) (type solid)))
-	(wire (pts (xy 95.16 83.81) (xy 127.38 63.81)) (stroke (width 0) (type solid)))
+	(wire (pts (xy 37.38 62.54) (xy 74.84 83.81)) (stroke (width 0) (type solid)))
+	(wire (pts (xy 74.84 83.81) (xy 127.38 63.81)) (stroke (width 0) (type solid)))
 
-	(wire (pts (xy 37.38 65.08) (xy 95.16 76.19)) (stroke (width 0) (type solid)))
-	(wire (pts (xy 95.16 76.19) (xy 127.38 66.35)) (stroke (width 0) (type solid)))
+	(wire (pts (xy 37.38 65.08) (xy 95.16 83.81)) (stroke (width 0) (type solid)))
+	(wire (pts (xy 95.16 83.81) (xy 127.38 66.35)) (stroke (width 0) (type solid)))
 )

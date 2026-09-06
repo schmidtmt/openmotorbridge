@@ -685,27 +685,32 @@ Placing intercom pods inside the saddlebag lid ($\approx 70\dots 75\,\text{cm}$ 
 | **Latching Mechanism** | Inside swing path of striker bar | $> 15\,\text{cm}$ clearance from striker bar | The metallic One-Touch striker bar causes only localized reflections and at $\lambda = 12.5\,\text{cm}$ produces zero forward/upward shadowing. |
 | **RF Decoupling** | $< 20\,\text{dB}$ with adjacent mounting | **$> 40\,\text{dB}$ spatial diversity** | Sena (left bag) and Cardo (right bag) are separated by $> 60\,\text{cm}$; steel rear fender and frame act as RF shield $\implies$ 0 receiver de-sensing. |
 
-#### 9.5.4 Stationary MagSafe Frame Dock (`009_magsafe_frame_dock.scad`) & Tube Clamp
+#### 9.5.4 Stationary MagSafe Frame Dock (`009_magsafe_frame_dock.scad`) & Horizontal Clamshell Architecture
 
 The stationary MagSafe Frame Dock ([`009_magsafe_frame_dock.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/parts/009_magsafe_frame_dock.scad)) mounts securely to the motorcycle frame tube beneath the seat overhang (sized for Harley Touring / Softail / CVO ST frame tube $\varnothing 25.4\dots 28.6\,\text{mm}$ / $1"\dots 1.125"$):
 
 ![MagSafe Frame Dock CAD](../images/cad/magsafe_frame_dock_cad.png)
 
-*Figure 8.30: 3D CAD assembly of the MagSafe Frame Dock (`009_magsafe_frame_dock.scad`). Visible are the lower monocoque housing with internal guide rails for PCBA 06, the frontal MagSafe self-locating funnel, the rear M8 cable compression gland, the upper half-collar split clamp with M3 stainless steel hardware, and the bottom service and potting lid.*
+*Figure 8.30: 3D CAD exploded assembly of the MagSafe Frame Dock (`009_magsafe_frame_dock.scad`). Visible are the upper shell with integrated Ø 26 mm tube saddle and M3 threaded inserts, the central PCBA 06 protection board, the lower shell with half-cradles for M8 and MagSafe, the upper tube clamp strap (`009_magsafe_frame_clamp.stl`), and the single central DIN 912 M2.5 clamping screw.*
 
-1. **Internal Guide Rails & Asymmetrical Poka-Yoke Mechanical Keying for PCBA 06:**
-   * The compact $26.0 \times 11.5\,\text{mm}$ protection adapter board (PCBA 06) slides into lateral $11.9 \times 1.9\,\text{mm}$ guide channels.
-   * **Poka-Yoke Reverse Polarity Protection:** The PCB features a single $2.5 \times 1.0\,\text{mm}$ keying notch on its bottom edge while the top edge is continuous and straight. A matching keying rib in the enclosure's bottom guide rail mechanically prevents 180° inverted or upside-down board insertion with 100% certainty. Axial retention is secured form-fittingly between the MagSafe collar nest and the rear M8 cable stop.
-2. **Dual Frame Attachment Strategy (Split-Clamp & Heavy-Duty Zip-Tie):**
-   * **Primary (Two-Piece Split Clamp Collar):** The upper clamp strap (`009_magsafe_frame_clamp.stl`) encircles the $\varnothing 26\,\text{mm}$ frame tube and fastens via 2x M3 DIN 912 Allen socket screws into brass heat-set threaded inserts (`M3x4x5`) in the dock body for a rigid, slip-free lock.
-   * **Friction Grip Ribs:** The concave tube cradle features four axial $0.8\,\text{mm}$ ribs that bite securely into powder-coated frame tubes without marring paint.
-   * **Secondary (Universal Cable Ties):** Two transverse $5.2 \times 2.8\,\text{mm}$ slots enable quick tool-free mounting with UV-resistant high-tensile zip-ties to irregular tubes, gussets, or battery trays.
-3. **M8 Cable Strain Relief & Conical Compression Seal (Bike Side):**
-   * The $\varnothing 8.4\,\text{mm}$ cable entry transitions into a conical compression cavity ($\varnothing 10.4 \to 8.4\,\text{mm}$). Tightening the M8 gland compresses the cable jacket, guaranteeing that axial pull forces never reach the solder pads on `J1`.
-4. **MagSafe Self-Aligning Funnel (Saddlebag Side):**
-   * The forward coupling pocket includes a perimeter $30^\circ$ bevel ($19.5 \times 10.5\,\text{mm}$ opening tapering to $16.5 \times 7.5\,\text{mm}$). When mounting the saddlebag with riding gloves, the magnetic plug effortlessly locates and snaps into position.
-5. **Bottom Service & Potting Access Lid (`009_magsafe_frame_lid.stl`):**
-   * The removable bottom plate with tongue-and-groove sealing ledge provides unrestricted access during wire soldering and allows complete encapsulation with polyurethane potting compound for permanent IP67 submersible waterproofing.
+1. **Horizontal Clamshell Split & Zero-Stress Drop-In Assembly:**
+   * **Horizontal Split Plane ($Z = 8.5\,\text{mm}$):** The housing is split along the connector and board centerline into two form-fitting halves:
+     - **Upper Shell (`009_magsafe_frame_dock.stl`):** Houses the upper half-cradles for the M8 cable gland and MagSafe coupling nest, the concave $\varnothing 26\,\text{mm}$ frame tube saddle with M3 clamp wings, and an internal reinforced tapered screw boss with Ruthex M2.5 brass heat-set insert ($\varnothing 3.6 \times 4.5\,\text{mm}$).
+     - **Lower Shell (`009_magsafe_frame_lid.stl`):** Houses the lower half-cradles for M8 and MagSafe, a perimeter resting ledge for PCBA 06 ($Z = 7.7\,\text{mm}$), and an internal screw boss with M2.5 clearance through-hole ($\varnothing 2.8\,\text{mm}$) and DIN 912 Allen socket counterbore ($\varnothing 5.2 \times 2.8\,\text{mm}$).
+   * **Stress-Free Assembly:** The pre-soldered, rigid assembly (M8 harness + PCBA 06 + MagSafe connector) drops directly into the lower shell from above. No axial sliding, zero bending stress on wire leads or solder joints!
+2. **Sleek Monocoque Envelope WITHOUT External Side Screw Tabs ($W = 16.0\,\text{mm}$):**
+   * Eliminating bulky side screw ears preserves an ultra-compact width of exactly $16.0\,\text{mm}$, tucking discreetly beneath the seat tube without frame interference.
+   * Clamping is accomplished by **a single central DIN 912 M2.5 stainless steel screw (M2.5 x 12 mm)** passing through the center of the PCB.
+3. **Central M2.5 Clamping Boss Through PCB Hole:**
+   * The upper and lower internal cylindrical bosses ($\varnothing 4.4\,\text{mm}$) mate directly through the central $\varnothing 2.7\,\text{mm}$ mounting hole (`H1`) of PCBA 06.
+   * The upper boss is strongly anchored into the solid housing ceiling ($Z \le 16\,\text{mm}$) with a structural draft angle.
+   * Tightening the central screw draws both shells, the PCB, and the connectors into a rigid, vibration-proof sandwich.
+4. **Perimeter Labyrinth Tongue-and-Groove Seal & IP67 Potting:**
+   * An $0.8\,\text{mm}$ perimeter tongue on the upper shell engages with a matching groove on the lower shell at $Z = 8.5\,\text{mm}$.
+   * Applying silicone sealant or conformal potting compound during assembly ensures 100% IP67 submersible waterproof protection against road spray and high-pressure bike washing.
+5. **Frame Tube Clamping & Zip-Tie Provision:**
+   * **Split Clamp Strap:** The upper strap collar (`009_magsafe_frame_clamp.stl`) locks the assembly to the frame tube via 4x M3 screws. Four axial $0.6\,\text{mm}$ friction ribs prevent any slipping or twisting under vibration.
+   * **Zip-Tie Slots:** Two integrated transverse $5.2 \times 2.8\,\text{mm}$ slots provide universal tool-free mounting options.
 
 ---
 
@@ -746,9 +751,9 @@ The OpenMotorBridge CAD repository follows a strict hierarchical Constructive So
 | **Satellite Pod**| CVO ST Telemetry Fin (2.4 GHz Mesh) | `02_pod_base/cvo_st_telemetry_fin.stl` | `02_pod_base/cvo_st_telemetry_fin.scad` |
 | **Satellite Pod**| Road King Special Touring Fender Console | `02_pod_base/pod3_touring_fender_console.stl` | `02_pod_base/pod3_touring_fender_console.scad` |
 | **Satellite Pod**| Touring Saddlebag Lid Dock (Pods 1 & 2) | `02_pod_base/saddlebag_lid_dock.stl` | `02_pod_base/saddlebag_lid_dock.scad` |
-| **Frame Dock** | MagSafe Frame Dock Lower Body | `02_pod_base/components/009_magsafe_frame_dock.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
-| **Frame Dock** | MagSafe Tube Clamp Collar (Ø 26 mm) | `02_pod_base/components/009_magsafe_frame_clamp.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
-| **Frame Dock** | MagSafe Service & Potting Lid | `02_pod_base/components/009_magsafe_frame_lid.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
+| **Frame Dock** | MagSafe Frame Dock Upper Shell (Tube Saddle, Wings & M2.5 Insert) | `02_pod_base/components/009_magsafe_frame_dock.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
+| **Frame Dock** | MagSafe Tube Clamp Strap (Ø 26 mm) | `02_pod_base/components/009_magsafe_frame_clamp.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
+| **Frame Dock** | MagSafe Frame Dock Lower Shell (PCB Ledge & M2.5 Counterbore) | `02_pod_base/components/009_magsafe_frame_lid.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
 | **Radar Mount** | Decoupled License-Plate Radar Bracket | `02_pod_base/radar_license_plate_bracket.stl` | `02_pod_base/radar_license_plate_bracket.scad` |
 | **Cartridge** | Universal base sled with O-ring groove | `03_pod_cartridges/cartridge_base_sled.stl` | `03_pod_cartridges/00_base_sled.scad` |
 | **Cartridge** | Sena 50S/60S adapter sled | `03_pod_cartridges/cartridge_insert_sena.stl` | `03_pod_cartridges/parts/01_insert_sena.scad` |

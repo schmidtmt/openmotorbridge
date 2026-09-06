@@ -27,7 +27,7 @@ if not os.path.exists(OPENSCAD_BIN):
     sys.exit(1)
 
 # List of Master Production STL Targets (Source SCAD -> Target Relative STL)
-STL_TARGETS: List[Tuple[str, str]] = [
+STL_TARGETS: List[Tuple] = [
     # 1. Main Box
     ("01_main_box/00_lower_deck.scad", "01_main_box/main_box_lower_case.stl"),
     ("01_main_box/01_upper_deck.scad", "01_main_box/main_box_mid_tray.stl"),
@@ -87,6 +87,11 @@ STL_TARGETS: List[Tuple[str, str]] = [
     ("02_pod_base/radar_license_plate_bracket.scad", "02_pod_base/radar_license_plate_bracket.stl"),
     ("02_pod_base/parts/006_fender_curved_saddle.scad", "02_pod_base/components/06_fender_curved_saddle.stl"),
     ("02_pod_base/parts/007_pod_slide_dock_core.scad", "02_pod_base/components/07_pod_slide_dock_core.stl"),
+
+    # 9. Stationary MagSafe Frame Dock (Under-Seat Breakaway Mount)
+    ("02_pod_base/parts/009_magsafe_frame_dock.scad", "02_pod_base/components/009_magsafe_frame_dock.stl", ["-D", 'part="body"']),
+    ("02_pod_base/parts/009_magsafe_frame_dock.scad", "02_pod_base/components/009_magsafe_frame_lid.stl", ["-D", 'part="lid"']),
+    ("02_pod_base/parts/009_magsafe_frame_dock.scad", "02_pod_base/components/009_magsafe_frame_clamp.stl", ["-D", 'part="clamp"']),
 ]
 
 # List of High-Resolution 3D Render Targets
@@ -236,6 +241,12 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
         "0,0,50,55,0,320,850",
         "Tomorrow"
     ),
+    (
+        "02_pod_base/parts/009_magsafe_frame_dock.scad",
+        os.path.join(CAD_IMG_DIR, "magsafe_frame_dock_cad.png"),
+        "0,0,22,60,0,320,195",
+        "Tomorrow"
+    ),
 ]
 
 import threading
@@ -245,17 +256,18 @@ MAX_WORKERS = min(12, os.cpu_count() or 8)
 print_lock = threading.Lock()
 
 def clean_old_stls():
-    print("🧹 Cleaning old STL directory...")
-    if os.path.exists(STL_BASE):
-        shutil.rmtree(STL_BASE)
+    print("🧹 Preparing STL directories...")
     os.makedirs(STL_BASE, exist_ok=True)
     os.makedirs(os.path.join(STL_BASE, "01_main_box/components"), exist_ok=True)
     os.makedirs(os.path.join(STL_BASE, "02_pod_base/components"), exist_ok=True)
     os.makedirs(os.path.join(STL_BASE, "03_pod_cartridges/components"), exist_ok=True)
-    os.makedirs(os.path.join(STL_BASE, "04_front_node"), exist_ok=True)
+    os.makedirs(os.path.join(STL_BASE, "04_front_node/components"), exist_ok=True)
     sys.stdout.flush()
 
-def compile_single_stl(scad_rel: str, stl_rel: str, idx: int, total: int) -> Tuple[bool, str, float]:
+def compile_single_stl(target: Tuple, idx: int, total: int) -> Tuple[bool, str, float]:
+    scad_rel = target[0]
+    stl_rel = target[1]
+    extra_args = target[2] if len(target) > 2 else []
     scad_path = os.path.join(SCAD_DIR, scad_rel)
     stl_path = os.path.join(STL_BASE, stl_rel)
     os.makedirs(os.path.dirname(stl_path), exist_ok=True)
@@ -265,6 +277,7 @@ def compile_single_stl(scad_rel: str, stl_rel: str, idx: int, total: int) -> Tup
         OPENSCAD_BIN,
         "-o", stl_path,
         "--export-format", "binstl",
+        *extra_args,
         scad_path
     ]
     
@@ -286,8 +299,8 @@ def compile_stls():
     completed_count = 0
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
         future_map = {
-            executor.submit(compile_single_stl, scad_rel, stl_rel, idx, total): (scad_rel, stl_rel)
-            for idx, (scad_rel, stl_rel) in enumerate(STL_TARGETS, 1)
+            executor.submit(compile_single_stl, target, idx, total): target
+            for idx, target in enumerate(STL_TARGETS, 1)
         }
         for future in as_completed(future_map):
             completed_count += 1

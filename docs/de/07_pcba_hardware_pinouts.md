@@ -27,8 +27,8 @@ Dieses Dokument bildet die **zentrale, autoritative Hardware-Spezifikation aller
 │ **PCBA 05**│ **Universal Front-Knoten**    │ 68 x 44 mm    │ 4 Lagen │ ESP32-C3 RISC-V,     │
 │       │ (Front-Hub & Ottocast CarPlay)│ (62x38 mm M2.5│ (ENIG)  │ USB2512B, TPS2051B   │
 ├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
-│ **PCBA 06**│ **MagSafe Frame Dock Adapter** │ 26 x 11.5 mm  │ 2 Lagen │ 500mA PPTC Fuse, 5V  │
-│       │ (Rahmendock: M8 auf MagSafe)  │ (Slide-Rails) │         │ TVS, USBLC6-4SC6 ESD │
+│ **PCBA 06**│ **MagSafe Frame Dock Adapter** │ 28 x 11.5 mm  │ 2 Lagen │ 500mA PPTC Fuse, 5V  │
+│       │ (Rahmendock: M8 auf MagSafe)  │ (Zentral M2.5)│         │ TVS, USBLC6-4SC6 ESD │
 └───────┴───────────────────────────────┴───────────────┴─────────┴──────────────────────┘
 ```
 
@@ -326,7 +326,7 @@ Die Platine verfügt über 3 automatische Koaxial-Umschaltbuchsen (`Murata MM803
 
 ![PCBA 06 MagSafe Frame Dock Adapter](../images/pcba/pcba06_magsafe_dock_3d.png)
 
-*Abbildung 7.6: KiCad 3D-Raytracing-Render der MagSafe Rahmendock-Adapterplatine (PCBA 06, 26 x 11,5 mm, 2 Lagen) mit 1206 PPTC-Selbstrückstellender Sicherung (F1, 500 mA), SOD-323 TVS-Diode (D1), SOT-23-6 4-Kanal ESD-Schutzarray (U1, USBLC6-4SC6) und vergoldeten SMD-Pogo-Kontaktflächen.*
+*Abbildung 7.6: KiCad 3D-Raytracing-Render der MagSafe Rahmendock-Adapterplatine (PCBA 06, 28 x 11,5 mm, 2 Lagen) mit 1206 PPTC-Selbstrückstellender Sicherung (F1, 500 mA), SOD-323 TVS-Diode (D1), SOT-23-6 4-Kanal ESD-Schutzarray (U1, USBLC6-4SC6), 100nF Entkopplung (C1), horizontalem M8-Kabelanschluss (J1), 6-Pin MagSafe-Kontaktpad (J2) sowie zentraler M2.5 Montagebohrung (H1).*
 
 ### 8.1 Zweck & Schutzarchitektur bei Koffer-Demontage
 Wird der Koffer bei montiertem Koffer-Pod abgenommen (z. B. zum Waschen oder im Hotel), liegt die fahrzeugseitige MagSafe-Kupplung unter der Sitzbank frei. PCBA 06 schützt die Zentralbox und das Bordnetz vor:
@@ -335,19 +335,20 @@ Wird der Koffer bei montiertem Koffer-Pod abgenommen (z. B. zum Waschen oder im 
 3. **Elektrostatischer Entladung (ESD):** Das **4-Kanal Ultra-Low-Capacitance TVS-Array `U1`** (USBLC6-4SC6 in SOT-23-6, $C_{\text{io}} < 0{,}8\,\text{pF}$) schützt die Audio-Differenzleitungen (`SIG_P`, `SIG_N`), die Optokoppler-Triggerleitung (`TRIGGER_PPS`) und den 1-Wire ID-Bus (`1WIRE_ID`) zuverlässig nach **IEC 61000-4-2 Level 4** ($\pm 15\,\text{kV}$ Luft, $\pm 8\,\text{kV}$ Kontakt).
 
 ### 8.2 Technische Platinen-Kenndaten
-* **Abmessungen:** $26{,}0 \times 11{,}5 \times 1{,}6\,\text{mm}$ (FR-4 2 Lagen, $35\,\mu\text{m}$ Cu, ENIG Goldfinish).
-* **Führungs- & Rastgeometrie:** Seitliche Einrastkerben bei $X = 112{,}5\dots 114{,}5\,\text{mm}$ ($2{,}0\,\text{mm}$ breit, $0{,}75\,\text{mm}$ tief) arretieren die Platine vibrationsfest in den $11{,}9 \times 1{,}9\,\text{mm}$ Führungsschienen des Rahmendock-Gehäuses.
+* **Abmessungen:** $28{,}0 \times 11{,}5 \times 1{,}6\,\text{mm}$ (FR-4 2 Lagen, $35\,\mu\text{m}$ Cu, ENIG Goldfinish).
+* **Zentrale M2.5 Verschraubung:** Mittige Montagebohrung $\varnothing 2{,}7\,\text{mm}$ (Bohrungszentrum bei $X = 114{,}0\,\text{mm}, Y = 75{,}75\,\text{mm}$) mit beidseitigem $\varnothing 4{,}5\,\text{mm}$ GND-Ringpad und Sperrzone. Die Platine wird durch einen einzelnen zentralen M2.5 Zylinderkopf-Schraubdom vibrationsfest und verzugfrei zwischen den beiden Halbschalen des Rahmendocks verklemmt.
+* **Layout- & Routing-Status:** Alle Bauteil-Footprints, 3D-Körper (M8-Flansch, MagSafe-Kupplung, SMD-Bauteile), Netzverbindungen und Designregeln sind vollständig im KiCad-Projekt definiert und vorbereitet für das manuelle interaktive Routing im KiCad GUI.
 * **Lagenstruktur:**
-  * **Top (F.Cu):** Signalrouting mit $\ge 0{,}25\,\text{mm}$ Leiterbahnen, $0{,}50\,\text{mm}$ Power-Leiterbahnen für VCC/GND, SMD-Schutzbauteile.
-  * **Bottom (B.Cu):** Durchgehende Masseebene (GND) mit 10 thermischen Entlastungsvias (Bohrung $0{,}30\,\text{mm}$, Pad $0{,}60\,\text{mm}$, Restring $\ge 0{,}15\,\text{mm}$).
-* **DFM/DRC:** 100 % konform mit dem JLCPCB Standard-Fertigungsprozess (0 Acid-Traps, Leiterbahnbreiten $\ge 0{,}25\,\text{mm}$).
+  * **Top (F.Cu):** Bauteilplatzierung (F1, D1, U1, C1, J1, J2), Signal- und Power-Leiterbahnen.
+  * **Bottom (B.Cu):** Durchgehende Masseebene (GND) mit thermischer Entlastung und Massevias.
+* **DFM/DRC:** 100 % konform mit dem JLCPCB 2-Lagen Standard-Fertigungsprozess.
 
 ### 8.3 Pinbelegung & Schnittstellen-Mapping
 
 | Pin | Signalname | Polarität / Typ | Funktion & Schutzpfad |
 | :---: | :--- | :--- | :--- |
 | **`J1.1`** | `VCC_IN` | $+5{,}0\,\text{V}$ DC In | Rohspannung von M8-Kabelbaum der Zentralbox (gespeist über LM5164 / BQ24075 USV) |
-| **`J1.2`** | `GND` | Power / Signal GND | Zentraler Massebezugspunkt, über 10 Vias niederohmig an B.Cu-Massefläche angebunden |
+| **`J1.2`** | `GND` | Power / Signal GND | Zentraler Massebezugspunkt, über Vias niederohmig an B.Cu-Massefläche angebunden |
 | **`J1.3`** | `SIG_P` | Audio Diff + / D+ | Differentielles Audio Positiv (gefiltert über U1 Ch 1, geschützt bis $\pm 15\,\text{kV}$) |
 | **`J1.4`** | `SIG_N` | Audio Diff - / D- | Differentielles Audio Negativ (gefiltert über U1 Ch 2, geschützt bis $\pm 15\,\text{kV}$) |
 | **`J1.5`** | `TRIGGER_PPS`| 3.3V Opto-Trigger | Boot-/Wake-Triggerimpuls vom TLP222A PhotoMOS (gefiltert über U1 Ch 3) |
@@ -369,4 +370,5 @@ Wird der Koffer bei montiertem Koffer-Pod abgenommen (z. B. zum Waschen oder im 
 | **`C1`** | 100nF 50V X7R | SMD 0603 | Keramischer Entkoppelkondensator auf VCC_PROT | `C14663` |
 | **`J1`** | M8 Wire Pads | SMD/THT 1x07 | 7-poliges Lötpad-Array mit 0,6mm Durchkontaktierung für M8-Kabeladern | Custom |
 | **`J2`** | MagSafe 6P Pads | SMD 1x06 | 6-polige vergoldete Kontaktflächen für MagSafe Magnet-Pogo-Kupplung | `C224376` |
+| **`H1`** | MountingHole_Pad | M2.5 (Ø 2.7 mm) | Bohrung Ø 2.7 mm, Pad Ø 4.5 mm, geerdet an System-GND | Hardware |
 
