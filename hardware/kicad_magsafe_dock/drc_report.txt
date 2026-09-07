@@ -1,0 +1,85 @@
+** Drc report for openmotorbridge_magsafe_dock.kicad_pcb **
+** Created on 2026-09-07T10:59:58 **
+** Report includes: Errors, Warnings **
+
+** Found 21 DRC violations **
+[silk_edge_clearance]: Silkscreen clipped by board edge
+    Rule: board setup constraints silk; warning
+    @(101.0000 mm, 70.0000 mm): Segment on Edge.Cuts
+    @(113.7000 mm, 69.9500 mm): Reference field of D1
+[silk_edge_clearance]: Silkscreen clipped by board edge
+    Rule: board setup constraints silk; warning
+    @(101.0000 mm, 70.0000 mm): Segment on Edge.Cuts
+    @(118.4750 mm, 69.9500 mm): Reference field of C1
+[lib_footprint_mismatch]: Footprint 'MountingHole_2.7mm_M2.5_Pad' does not match copy in library 'MountingHole'
+    Local override; warning
+    @(114.0000 mm, 75.7500 mm): Footprint H1
+[lib_footprint_issues]: Footprint 'SolderWirePad_1x07_SMD_2.0mm' not found in library 'Connector_Wire'
+    Local override; warning
+    @(102.5000 mm, 75.7500 mm): Footprint J1
+[lib_footprint_mismatch]: Footprint 'SOT-23-6' does not match copy in library 'Package_TO_SOT_SMD'
+    Local override; warning
+    @(119.5000 mm, 75.7500 mm): Footprint U1
+[lib_footprint_mismatch]: Footprint 'D_SOD-323' does not match copy in library 'Diode_SMD'
+    Local override; warning
+    @(113.7000 mm, 71.2500 mm): Footprint D1
+[lib_footprint_mismatch]: Footprint 'C_0603_1608Metric' does not match copy in library 'Capacitor_SMD'
+    Local override; warning
+    @(118.4750 mm, 71.2500 mm): Footprint C1
+[lib_footprint_mismatch]: Footprint 'Fuse_1206_3216Metric' does not match copy in library 'Fuse'
+    Local override; warning
+    @(108.3500 mm, 71.2500 mm): Footprint F1
+[lib_footprint_mismatch]: Footprint 'PinHeader_1x06_P2.54mm_Vertical_SMD_Pin1Left' does not match copy in library 'Connector_PinHeader_2.54mm'
+    Local override; warning
+    @(125.5000 mm, 75.7500 mm): Footprint J2
+[text_height]: Text height out of range (board setup constraints silk text height min height 0.8000 mm; actual 0.4500 mm)
+    Rule: board setup constraints silk text height; warning
+    @(104.5000 mm, 70.8000 mm): PCB text 'M8 BIKE' on F.Silkscreen
+[text_height]: Text height out of range (board setup constraints silk text height min height 0.8000 mm; actual 0.4500 mm)
+    Rule: board setup constraints silk text height; warning
+    @(114.0000 mm, 72.8000 mm): PCB text 'PCBA 06 // MAGSAFE DOCK' on F.Silkscreen
+[text_height]: Text height out of range (board setup constraints silk text height min height 0.8000 mm; actual 0.4500 mm)
+    Rule: board setup constraints silk text height; warning
+    @(123.5000 mm, 70.8000 mm): PCB text 'MAGSAFE' on F.Silkscreen
+[text_height]: Text height out of range (board setup constraints silk text height min height 0.8000 mm; actual 0.5000 mm)
+    Rule: board setup constraints silk text height; warning
+    @(114.0000 mm, 78.5000 mm): PCB text 'CENTER MOUNT M2.5 // IP67 DOCK' on B.Silkscreen
+[text_height]: Text height out of range (board setup constraints silk text height min height 0.8000 mm; actual 0.6500 mm)
+    Rule: board setup constraints silk text height; warning
+    @(114.0000 mm, 73.5000 mm): PCB text 'OPENMOTORBRIDGE v8.2' on B.Silkscreen
+[text_height]: Text height out of range (board setup constraints silk text height min height 0.8000 mm; actual 0.5000 mm)
+    Rule: board setup constraints silk text height; warning
+    @(114.0000 mm, 72.8500 mm): Reference field of H1
+[text_height]: Text height out of range (board setup constraints silk text height min height 0.8000 mm; actual 0.5000 mm)
+    Rule: board setup constraints silk text height; warning
+    @(119.5000 mm, 77.9500 mm): Reference field of U1
+[text_height]: Text height out of range (board setup constraints silk text height min height 0.8000 mm; actual 0.5000 mm)
+    Rule: board setup constraints silk text height; warning
+    @(113.7000 mm, 69.9500 mm): Reference field of D1
+[text_height]: Text height out of range (board setup constraints silk text height min height 0.8000 mm; actual 0.5000 mm)
+    Rule: board setup constraints silk text height; warning
+    @(118.4750 mm, 69.9500 mm): Reference field of C1
+[text_height]: Text height out of range (board setup constraints silk text height min height 0.8000 mm; actual 0.5000 mm)
+    Rule: board setup constraints silk text height; warning
+    @(108.3500 mm, 72.5500 mm): Reference field of F1
+[silk_overlap]: Silkscreen clearance
+    Rule: board setup constraints silk; warning
+    @(114.0000 mm, 72.8500 mm): Reference field of H1
+    @(114.0000 mm, 72.8000 mm): PCB text 'PCBA 06 // MAGSAFE DOCK' on F.Silkscreen
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(114.0000 mm, 73.5000 mm): PCB text 'OPENMOTORBRIDGE v8.2' on B.Silkscreen
+    @(114.0000 mm, 75.7500 mm): PTH pad 1 [GND] of H1
+
+** Found 0 unconnected pads **
+
+** Found 0 Footprint errors **
+
+** Ignored checks **
+    - Footprint has no courtyard defined
+    - Track endpoint not centered on via
+    - Tuning profile track geometries
+    - Footprint doesn't match symbol's footprint filters
+    - Footprint component type doesn't match footprint pads
+
+** End of Report **
