@@ -124,13 +124,21 @@ def generate_full_track(sample_rate_hz: float = 10.0) -> List[TrackPoint]:
             curr_v_kmh = v1_kmh + frac * (v2_kmh - v1_kmh)
             curr_v_mps = curr_v_kmh / 3.6
 
-            # S-curve oscillation inside the tunnel for realistic steering
+            # S-curve oscillation and dynamic Swiss road curvature for realistic steering
             in_tunnel = tun1 or (frac > 0.5 and tun2)
-            eff_heading = bearing
+            is_ricken = ("Rickenpass" in lbl1) or ("Rickenpass" in lbl2) or (curr_alt > 650.0)
+
             if in_tunnel:
-                # Add sinusoidal lateral wobble simulating lane curves inside the 2.2km tube
+                # Sinusoidal lateral wobble simulating lane curves inside the 2.2km tube
                 wobble = 6.0 * math.sin(current_time * 0.4)
-                eff_heading = (bearing + wobble) % 360.0
+            elif is_ricken:
+                # Mountain serpentines: alternating hairpin bends with high lean (20° - 42°)
+                wobble = 24.0 * math.sin(current_time * 0.45) + 8.0 * math.cos(current_time * 0.90)
+            else:
+                # Swiss country road / Thur valley highway & Wil SG departure curves (8° - 24°)
+                wobble = 18.0 * math.sin(current_time * 0.42) + 6.0 * math.cos(current_time * 0.84)
+
+            eff_heading = (bearing + wobble) % 360.0
 
             # Compute yaw rate
             if prev_heading is None:
@@ -145,8 +153,8 @@ def generate_full_track(sample_rate_hz: float = 10.0) -> List[TrackPoint]:
             yaw_rate_rad_s = math.radians(yaw_rate_deg_s)
             centripetal_accel = curr_v_mps * yaw_rate_rad_s
             lean_angle_deg = math.degrees(math.atan(centripetal_accel / g))
-            # Clamp to realistic motorcycle lean limit (45 deg)
-            lean_angle_deg = max(-45.0, min(45.0, lean_angle_deg))
+            # Clamp to realistic motorcycle lean limit (42 deg)
+            lean_angle_deg = max(-42.0, min(42.0, lean_angle_deg))
 
             # GNSS Satellite visibility and dilution of precision
             if in_tunnel:

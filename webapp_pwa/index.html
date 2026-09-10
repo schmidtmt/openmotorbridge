@@ -151,6 +151,22 @@
                             <span class="stat-sub" id="sub-sync">Getrennt</span>
                         </div>
                     </div>
+
+                    <!-- Live GNSS Position & Route Banner -->
+                    <div style="margin-top: 14px; padding: 10px 14px; background: rgba(13, 17, 23, 0.75); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 0.8rem;">
+                        <div>
+                            <span style="color: var(--text-muted); font-size: 0.72rem; display: block;">📍 GPS-POSITION (WGS84)</span>
+                            <strong id="cockpit-gps-coords" style="font-family: monospace; color: var(--text-primary); font-size: 0.85rem;">--</strong>
+                        </div>
+                        <div>
+                            <span style="color: var(--text-muted); font-size: 0.72rem; display: block;">🏔️ HÖHE Ü. M.</span>
+                            <strong id="cockpit-gps-alt" style="color: var(--accent-blue); font-size: 0.85rem;">--</strong>
+                        </div>
+                        <div>
+                            <span style="color: var(--text-muted); font-size: 0.72rem; display: block;">🛣️ ETAPPE</span>
+                            <span id="cockpit-gps-route" style="color: var(--accent-orange); font-weight: 700; font-size: 0.85rem;">Wil SG → Wattwil</span>
+                        </div>
+                    </div>
                 </section>
 
                 <!-- Power & Thermal Management Card -->

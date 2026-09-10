@@ -30,7 +30,7 @@ SIMULATORS = [
     ("8. 180-Day Winter Standby Battery Drain", "tools/simulators/battery_winter_standby_sim.py"),
     ("9. Universal Front Node (PCBA 05)", "tools/simulators/front_node_wireless_hub_sim.py"),
     ("10. Rear Radar & Blind-Spot Detection", "tools/simulators/radar_blindspot_sim.py"),
-    ("11. Multi-Bike Digital Twin (10 PCBs)", "tools/simulators/openmotorbridge_digital_twin.py", ["--fast", "--duration", "1050", "--headless"]),
+    ("11. Multi-Bike Digital Twin (10 PCBs)", "tools/simulators/openmotorbridge_digital_twin.py", ["--port", "8766", "--fast", "--duration", "1050", "--headless"]),
 ]
 
 def main():

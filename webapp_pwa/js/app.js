@@ -738,6 +738,7 @@ function disconnectBle() {
 // ==========================================
 let simWs = null;
 let isSimConnected = false;
+let s_simTrackHistory = [];
 const btnSimWs = document.getElementById('btn-sim-ws');
 const labelSimWs = document.getElementById('label-sim-ws');
 
@@ -761,6 +762,7 @@ function connectSimWebSocket(url = 'ws://localhost:8765') {
         
         simWs.onopen = () => {
             isSimConnected = true;
+            s_simTrackHistory = [];
             if (btnSimWs) {
                 btnSimWs.classList.add('connected');
                 btnSimWs.style.background = 'var(--accent-green)';
@@ -786,6 +788,7 @@ function connectSimWebSocket(url = 'ws://localhost:8765') {
 
         simWs.onclose = () => {
             isSimConnected = false;
+            s_simTrackHistory = [];
             if (btnSimWs) {
                 btnSimWs.classList.remove('connected');
                 btnSimWs.style.background = '';
@@ -813,10 +816,41 @@ function disconnectSimWebSocket() {
         simWs = null;
     }
     isSimConnected = false;
+    s_simTrackHistory = [];
+}
+
+function renderMeshCards(members) {
+    if (!members) return;
+    const badgeMesh = document.getElementById('badge-mesh-nodes');
+    if (badgeMesh) {
+        badgeMesh.className = 'card-badge badge-green';
+        badgeMesh.textContent = `OMM Aktiv (${members.length} Bikes)`;
+        badgeMesh.style.background = '';
+        badgeMesh.style.color = '';
+    }
+    const legend = document.getElementById('mesh-nodes-legend');
+    if (legend) {
+        legend.innerHTML = members.map((m, idx) => {
+            const colorClass = idx === 0 ? 'badge-green' : (idx === 1 ? 'badge-blue' : 'badge-orange');
+            return `<span class="card-badge ${colorClass}" style="font-size: 0.7rem;">● ${m.id} (${m.rssi} dBm)</span>`;
+        }).join(' ');
+    }
+    const pod3Badge = document.getElementById('pod3-badge');
+    if (pod3Badge) {
+        pod3Badge.className = 'card-badge badge-green';
+        pod3Badge.textContent = 'Online (Dual-PHY)';
+        pod3Badge.style.background = '';
+        pod3Badge.style.color = '';
+    }
+    const valDleScore = document.getElementById('val-dle-score');
+    if (valDleScore) {
+        valDleScore.textContent = '96 / 100 Pkt.';
+        valDleScore.style.color = 'var(--accent-green)';
+    }
 }
 
 function handleSimTelemetry(data) {
-    // 1. Core Vehicle Telemetry
+    // 1. Core Vehicle Telemetry (Speed, Battery, Voltage, Lean Angle)
     updateTelemetryUi({
         v_ign: data.v_ign,
         v_bat: data.v_bat,
@@ -827,46 +861,96 @@ function handleSimTelemetry(data) {
         mode: data.mode
     });
 
-    // 2. GNSS & Tunnel Dead-Reckoning Badge
+    // 2. GNSS, Tunnel Dead-Reckoning & 1-PPS Sync
     const badgeGnss = document.getElementById('badge-gnss-fix');
     const subSats = document.getElementById('sub-sats');
+    const valSync = document.getElementById('val-sync');
+    const subSync = document.getElementById('sub-sync');
     if (badgeGnss) {
         if (data.in_tunnel) {
             badgeGnss.className = 'card-badge badge-red';
             badgeGnss.textContent = `TUNNEL EKF-DR (Drift: ${data.dr_drift_m}m)`;
             if (subSats) subSats.textContent = 'Tunnel-Blackout';
+            if (valSync) { valSync.textContent = 'EKF Hold'; valSync.style.color = 'var(--accent-orange)'; }
+            if (subSync) subSync.textContent = 'IMU Koppelnav.';
         } else {
             badgeGnss.className = 'card-badge badge-orange';
             badgeGnss.textContent = `3D FIX (HDOP: ${data.hdop})`;
-            if (subSats) subSats.textContent = `${data.sats} Sats 10Hz`;
+            if (subSats) subSats.textContent = `${data.sats} Sats (10 Hz)`;
+            if (valSync) { valSync.textContent = '±12 ns'; valSync.style.color = 'var(--accent-green)'; }
+            if (subSync) subSync.textContent = '1-PPS Sync Lock';
         }
     }
 
-    // 3. Radar & Threat Visualization
-    if (data.radar && data.radar.targets) {
-        updateRadarUi(data.radar);
+    // 3. Cockpit Header GPS Position & Route Etappe
+    const cpCoords = document.getElementById('cockpit-gps-coords');
+    const cpAlt = document.getElementById('cockpit-gps-alt');
+    const cpRoute = document.getElementById('cockpit-gps-route');
+    if (cpCoords && data.lat && data.lon) {
+        cpCoords.textContent = `${data.lat.toFixed(5)}° N, ${data.lon.toFixed(5)}° E`;
+    }
+    if (cpAlt && data.alt) {
+        cpAlt.textContent = `${Math.round(data.alt)} m ü. M.`;
+    }
+    if (cpRoute) {
+        if (data.in_tunnel) {
+            cpRoute.textContent = 'Umfahrungstunnel Wattwil (2.2 km)';
+            cpRoute.style.color = 'var(--accent-red)';
+        } else if (data.alt > 650) {
+            cpRoute.textContent = 'Rickenpass Serpentinen (795 m)';
+            cpRoute.style.color = 'var(--accent-blue)';
+        } else if (data.speed > 70) {
+            cpRoute.textContent = 'Schnellstrasse Bazenheid/Dietfurt';
+            cpRoute.style.color = 'var(--accent-green)';
+        } else {
+            cpRoute.textContent = 'Wil SG → Wattwil';
+            cpRoute.style.color = 'var(--accent-orange)';
+        }
     }
 
-    // 4. Coordinates, Altitude & Mesh Topology
+    // 4. Coordinates, Altitude & Mesh Topology in Live Radar card
     const lblCoords = document.getElementById('lbl-radar-coords');
     if (lblCoords && data.lat && data.lon) {
-        lblCoords.textContent = `${data.lat.toFixed(4)}° N, ${data.lon.toFixed(4)}° E`;
+        lblCoords.textContent = `${data.lat.toFixed(5)}° N, ${data.lon.toFixed(5)}° E`;
     }
     const lblAlt = document.getElementById('lbl-radar-alt');
     if (lblAlt && data.alt) {
-        lblAlt.textContent = `${Math.round(data.alt)} m`;
+        lblAlt.textContent = `${Math.round(data.alt)} m ü. M.`;
     }
     const lblRssi = document.getElementById('lbl-radar-rssi');
     if (lblRssi && data.rf_rssi !== undefined) {
         lblRssi.textContent = `${data.rf_link} (${data.rf_rssi} dBm)`;
+        lblRssi.style.color = data.rf_link.includes('LORA') ? 'var(--accent-orange)' : 'var(--accent-green)';
     }
     const lblDr = document.getElementById('lbl-radar-dr');
     if (lblDr) {
-        lblDr.textContent = data.in_tunnel ? `EKF-DR: ${data.dr_drift_m}m` : 'GNSS Fix OK';
+        lblDr.textContent = data.in_tunnel ? `EKF-DR: ${data.dr_drift_m}m` : 'GNSS 3D FIX (10 Hz)';
         lblDr.style.color = data.in_tunnel ? 'var(--accent-red)' : 'var(--accent-green)';
     }
 
-    // 5. Mesh Group Cards
+    // 5. Radar & Threat Visualization
+    if (data.radar) {
+        updateRadarUi(data.radar);
+    }
+
+    // 6. Record to rolling track history for Live Radar Canvas
+    if (data.lat && data.lon) {
+        s_simTrackHistory.push({
+            lat: data.lat,
+            lon: data.lon,
+            alt: data.alt,
+            lean: data.lean_angle || 0,
+            speed: data.speed || 0,
+            in_tunnel: Boolean(data.in_tunnel),
+            distance_chaser: data.distance_chaser_m || 65.0,
+            rf_link: data.rf_link || 'OMM_MESH_24GHZ'
+        });
+        if (s_simTrackHistory.length > 250) {
+            s_simTrackHistory.shift();
+        }
+    }
+
+    // 7. Mesh Group Cards
     if (data.mesh_members) {
         renderMeshCards(data.mesh_members);
     }
@@ -3018,15 +3102,15 @@ function renderLiveRadarCanvas() {
         s_radarCtx.setLineDash([]);
     });
 
-    // Standby Check: If BLE is disconnected and Demo mode is inactive, render subtle standby grid only
-    if (!state.isBleConnected && !state.isDemoMode) {
+    // Standby Check: If BLE is disconnected, Demo mode is inactive, and Digital Twin is offline, render standby grid only
+    if (!state.isBleConnected && !state.isDemoMode && !isSimConnected) {
         s_radarCtx.fillStyle = 'rgba(255, 255, 255, 0.35)';
         s_radarCtx.font = 'bold 12px sans-serif';
         s_radarCtx.textAlign = 'center';
         s_radarCtx.fillText(state.lang === 'de' ? 'STANDBY • RADAR INAKTIV' : 'STANDBY • RADAR INACTIVE', cx, cy - 6);
         s_radarCtx.font = '10px sans-serif';
         s_radarCtx.fillStyle = 'rgba(255, 255, 255, 0.2)';
-        s_radarCtx.fillText(state.lang === 'de' ? 'Warte auf BLE oder Demo-Modus' : 'Waiting for BLE or Demo Mode', cx, cy + 12);
+        s_radarCtx.fillText(state.lang === 'de' ? 'Warte auf BLE, Demo-Modus oder Digital Twin' : 'Waiting for BLE, Demo Mode or Digital Twin', cx, cy + 12);
         requestAnimationFrame(renderLiveRadarCanvas);
         return;
     }
@@ -3043,58 +3127,114 @@ function renderLiveRadarCanvas() {
     s_radarCtx.fillStyle = sweepGrad;
     s_radarCtx.fill();
 
-    // 4. GPS Breadcrumb Trail (Curve Color-Coding by Lean Angle)
-    const breadcrumbs = [
-        { dx: -220, dy: 60, lean: 12 },
-        { dx: -180, dy: 45, lean: 28 },
-        { dx: -140, dy: 10, lean: 44 },
-        { dx: -100, dy: -25, lean: 39 },
-        { dx: -60, dy: -40, lean: 20 },
-        { dx: -20, dy: -20, lean: 8 },
-        { dx: 0, dy: 0, lean: state.telemetry.lean_angle }
-    ];
+    // 4. GPS Breadcrumb Trail & Bikes (Digital Twin Live GPS or Demo Breadcrumbs)
+    if (isSimConnected && s_simTrackHistory.length > 1) {
+        const latest = s_simTrackHistory[s_simTrackHistory.length - 1];
+        const scaleLat = 22000;
+        const scaleLon = 16000;
 
-    s_radarCtx.lineWidth = 3;
-    for (let i = 0; i < breadcrumbs.length - 1; i++) {
-        const p1 = breadcrumbs[i];
-        const p2 = breadcrumbs[i + 1];
+        s_radarCtx.lineWidth = 3;
+        for (let i = 0; i < s_simTrackHistory.length - 1; i++) {
+            const p1 = s_simTrackHistory[i];
+            const p2 = s_simTrackHistory[i + 1];
+            const x1 = cx + (p1.lon - latest.lon) * scaleLon;
+            const y1 = cy - (p1.lat - latest.lat) * scaleLat;
+            const x2 = cx + (p2.lon - latest.lon) * scaleLon;
+            const y2 = cy - (p2.lat - latest.lat) * scaleLat;
+
+            s_radarCtx.beginPath();
+            s_radarCtx.moveTo(x1, y1);
+            s_radarCtx.lineTo(x2, y2);
+            if (p1.in_tunnel) {
+                s_radarCtx.strokeStyle = '#ff3b30'; // Red tunnel trail
+                s_radarCtx.setLineDash([4, 4]);
+            } else {
+                s_radarCtx.strokeStyle = Math.abs(p1.lean) > 15 ? '#ff9f0a' : '#00f2fe';
+                s_radarCtx.setLineDash([]);
+            }
+            s_radarCtx.stroke();
+            s_radarCtx.setLineDash([]);
+        }
+
+        // Bike B (Chaser) Position relative to Bike A (Leader)
+        const chaserDist = latest.distance_chaser || 65.0;
+        const chaserOffsetPx = Math.min(Math.max(chaserDist * 1.4, 35), 150);
+        const b2x = cx - chaserOffsetPx * 0.7;
+        const b2y = cy + chaserOffsetPx * 0.7;
+
         s_radarCtx.beginPath();
-        s_radarCtx.moveTo(cx + p1.dx, cy + p1.dy);
-        s_radarCtx.lineTo(cx + p2.dx, cy + p2.dy);
-        // Color gradient by lean angle
-        s_radarCtx.strokeStyle = Math.abs(p1.lean) > 35 ? '#ff9f0a' : '#00f2fe';
+        s_radarCtx.arc(b2x, b2y, 6, 0, Math.PI * 2);
+        s_radarCtx.fillStyle = '#0a84ff';
+        s_radarCtx.fill();
+        s_radarCtx.fillStyle = '#ffffff';
+        s_radarCtx.font = 'bold 10px sans-serif';
+        s_radarCtx.textAlign = 'left';
+        s_radarCtx.fillText(`Bike B (${Math.round(chaserDist)}m)`, b2x + 10, b2y + 3);
+
+        // Own Center Bike (Bike A Leader)
+        s_radarCtx.beginPath();
+        s_radarCtx.arc(cx, cy, 8, 0, Math.PI * 2);
+        s_radarCtx.fillStyle = '#30d158';
+        s_radarCtx.fill();
+        s_radarCtx.strokeStyle = '#ffffff';
+        s_radarCtx.lineWidth = 2;
+        s_radarCtx.stroke();
+        s_radarCtx.fillStyle = '#ffffff';
+        s_radarCtx.font = 'bold 10px sans-serif';
+        s_radarCtx.textAlign = 'left';
+        s_radarCtx.fillText('Bike A (Leader)', cx + 12, cy - 4);
+    } else {
+        // Fallback Demo Breadcrumb Trail
+        const breadcrumbs = [
+            { dx: -220, dy: 60, lean: 12 },
+            { dx: -180, dy: 45, lean: 28 },
+            { dx: -140, dy: 10, lean: 44 },
+            { dx: -100, dy: -25, lean: 39 },
+            { dx: -60, dy: -40, lean: 20 },
+            { dx: -20, dy: -20, lean: 8 },
+            { dx: 0, dy: 0, lean: state.telemetry.lean_angle }
+        ];
+
+        s_radarCtx.lineWidth = 3;
+        for (let i = 0; i < breadcrumbs.length - 1; i++) {
+            const p1 = breadcrumbs[i];
+            const p2 = breadcrumbs[i + 1];
+            s_radarCtx.beginPath();
+            s_radarCtx.moveTo(cx + p1.dx, cy + p1.dy);
+            s_radarCtx.lineTo(cx + p2.dx, cy + p2.dy);
+            s_radarCtx.strokeStyle = Math.abs(p1.lean) > 35 ? '#ff9f0a' : '#00f2fe';
+            s_radarCtx.stroke();
+        }
+
+        // Demo Bike 2 (Sena Apex)
+        const b2x = cx + 95;
+        const b2y = cy - 45;
+        s_radarCtx.beginPath();
+        s_radarCtx.arc(b2x, b2y, 6, 0, Math.PI * 2);
+        s_radarCtx.fillStyle = '#0a84ff';
+        s_radarCtx.fill();
+        s_radarCtx.fillStyle = '#ffffff';
+        s_radarCtx.font = '10px sans-serif';
+        s_radarCtx.fillText('Bike 2 (Sena)', b2x + 10, b2y + 3);
+
+        // Demo Bike 3 (Cardo Edge)
+        const b3x = cx - 75;
+        const b3y = cy + 85;
+        s_radarCtx.beginPath();
+        s_radarCtx.arc(b3x, b3y, 6, 0, Math.PI * 2);
+        s_radarCtx.fillStyle = '#ff9f0a';
+        s_radarCtx.fill();
+        s_radarCtx.fillText('Bike 3 (Cardo)', b3x + 10, b3y + 3);
+
+        // Own Center Bike (Leader)
+        s_radarCtx.beginPath();
+        s_radarCtx.arc(cx, cy, 8, 0, Math.PI * 2);
+        s_radarCtx.fillStyle = '#30d158';
+        s_radarCtx.fill();
+        s_radarCtx.strokeStyle = '#ffffff';
+        s_radarCtx.lineWidth = 2;
         s_radarCtx.stroke();
     }
-
-    // 5. Mesh Group Nodes
-    // Bike 2 (Sena Apex)
-    const b2x = cx + 95;
-    const b2y = cy - 45;
-    s_radarCtx.beginPath();
-    s_radarCtx.arc(b2x, b2y, 6, 0, Math.PI * 2);
-    s_radarCtx.fillStyle = '#0a84ff';
-    s_radarCtx.fill();
-    s_radarCtx.fillStyle = '#ffffff';
-    s_radarCtx.font = '10px sans-serif';
-    s_radarCtx.fillText('Bike 2 (Sena)', b2x + 10, b2y + 3);
-
-    // Bike 3 (Cardo Edge)
-    const b3x = cx - 75;
-    const b3y = cy + 85;
-    s_radarCtx.beginPath();
-    s_radarCtx.arc(b3x, b3y, 6, 0, Math.PI * 2);
-    s_radarCtx.fillStyle = '#ff9f0a';
-    s_radarCtx.fill();
-    s_radarCtx.fillText('Bike 3 (Cardo)', b3x + 10, b3y + 3);
-
-    // 6. Own Center Bike (Leader)
-    s_radarCtx.beginPath();
-    s_radarCtx.arc(cx, cy, 8, 0, Math.PI * 2);
-    s_radarCtx.fillStyle = '#30d158';
-    s_radarCtx.fill();
-    s_radarCtx.strokeStyle = '#ffffff';
-    s_radarCtx.lineWidth = 2;
-    s_radarCtx.stroke();
 
     requestAnimationFrame(renderLiveRadarCanvas);
 }
@@ -3148,6 +3288,7 @@ function playRadarWarningChime(threatLevel) {
 }
 
 function updateRadarUi(radarState) {
+    if (!radarState) return;
     const isDe = state.lang === 'de';
     const badgeStatus = document.getElementById('badge-radar-status');
     const lblDist = document.getElementById('lbl-radar-closest-dist');
@@ -3159,7 +3300,8 @@ function updateRadarUi(radarState) {
     const lblLeftDist = document.getElementById('lbl-bsd-left-dist');
     const lblRightDist = document.getElementById('lbl-bsd-right-dist');
 
-    if (!radarState || !radarState.targets || radarState.targets.length === 0) {
+    if (!radarState.targets || radarState.targets.length === 0) {
+        state.radar.targets = [];
         if (badgeStatus) {
             badgeStatus.textContent = isDe ? 'FREI (KEIN FAHRZEUG)' : 'CLEAR (NO VEHICLE)';
             badgeStatus.className = 'card-badge badge-green';
@@ -3179,18 +3321,42 @@ function updateRadarUi(radarState) {
         return;
     }
 
-    const t = radarState.targets[0];
-    if (lblDist) lblDist.textContent = `${t.dist.toFixed(1)} m`;
-    if (lblSpeed) lblSpeed.textContent = `+${t.speed.toFixed(0)} km/h`;
-    if (lblTtc) lblTtc.textContent = t.ttc ? `${t.ttc.toFixed(1)} s` : '--';
+    // Normalize target fields
+    const rawT = radarState.targets[0];
+    const dist = rawT.dist !== undefined ? rawT.dist : (rawT.distance_m !== undefined ? rawT.distance_m : null);
+    const speed = rawT.speed !== undefined ? rawT.speed : (rawT.speed_diff_kmh !== undefined ? rawT.speed_diff_kmh : 0);
+    const ttc = rawT.ttc !== undefined ? rawT.ttc : (dist !== null && speed > 0 ? (dist / (speed / 3.6)) : null);
+    const azimuth = rawT.azimuth !== undefined ? rawT.azimuth : (rawT.threat === 2 ? -3.0 : 0.0);
 
-    if (t.threat === 2) {
+    let threatLevel = 0;
+    if (typeof rawT.threat === 'number') {
+        threatLevel = rawT.threat;
+    } else if (rawT.threat === 'critical' || (dist !== null && dist < 25.0)) {
+        threatLevel = 2;
+    } else if (rawT.threat === 'warning' || (dist !== null && dist < 50.0)) {
+        threatLevel = 1;
+    }
+
+    const t = {
+        dist: dist !== null ? dist : 45.0,
+        speed: speed,
+        ttc: ttc,
+        threat: threatLevel,
+        azimuth: azimuth
+    };
+    state.radar.targets = [t];
+
+    if (lblDist) lblDist.textContent = dist !== null ? `${dist.toFixed(1)} m` : '-- m';
+    if (lblSpeed) lblSpeed.textContent = `+${Math.round(speed)} km/h`;
+    if (lblTtc) lblTtc.textContent = ttc ? `${ttc.toFixed(1)} s` : '--';
+
+    if (threatLevel === 2) {
         if (badgeStatus) {
             badgeStatus.textContent = isDe ? '🚨 KOLLISIONSRISIKO!' : '🚨 COLLISION RISK!';
             badgeStatus.className = 'card-badge badge-red';
         }
         if (lblSpeedStatus) lblSpeedStatus.textContent = isDe ? 'Kritisch schnelle Annäherung!' : 'Critical high-speed approach!';
-    } else if (t.threat === 1) {
+    } else if (threatLevel === 1) {
         if (badgeStatus) {
             badgeStatus.textContent = isDe ? '⚠️ FAHRZEUG NÄHERT SICH' : '⚠️ VEHICLE APPROACHING';
             badgeStatus.className = 'card-badge badge-orange';
@@ -3204,29 +3370,29 @@ function updateRadarUi(radarState) {
         if (lblSpeedStatus) lblSpeedStatus.textContent = isDe ? 'Gleichbleibender Abstand' : 'Constant distance';
     }
 
-    // Mirror Blind Spot LEDs (Active if < 15 m)
-    if (t.dist < 15.0 && t.azimuth < -2) {
-        if (mirrorLeft) mirrorLeft.className = t.threat === 2 ? 'bsd-mirror-indicator warning-red' : 'bsd-mirror-indicator warning-amber';
-        if (lblLeftDist) lblLeftDist.textContent = `${t.dist.toFixed(0)} m`;
+    // Mirror Blind Spot LEDs (Active if < 18 m)
+    if (dist !== null && dist < 18.0 && azimuth < -1.5) {
+        if (mirrorLeft) mirrorLeft.className = threatLevel === 2 ? 'bsd-mirror-indicator warning-red' : 'bsd-mirror-indicator warning-amber';
+        if (lblLeftDist) lblLeftDist.textContent = `${dist.toFixed(0)} m`;
     } else {
         if (mirrorLeft) mirrorLeft.className = 'bsd-mirror-indicator';
         if (lblLeftDist) lblLeftDist.textContent = '--';
     }
 
-    if (t.dist < 15.0 && t.azimuth > 2) {
-        if (mirrorRight) mirrorRight.className = t.threat === 2 ? 'bsd-mirror-indicator warning-red' : 'bsd-mirror-indicator warning-amber';
-        if (lblRightDist) lblRightDist.textContent = `${t.dist.toFixed(0)} m`;
+    if (dist !== null && dist < 18.0 && azimuth > 1.5) {
+        if (mirrorRight) mirrorRight.className = threatLevel === 2 ? 'bsd-mirror-indicator warning-red' : 'bsd-mirror-indicator warning-amber';
+        if (lblRightDist) lblRightDist.textContent = `${dist.toFixed(0)} m`;
     } else {
         if (mirrorRight) mirrorRight.className = 'bsd-mirror-indicator';
         if (lblRightDist) lblRightDist.textContent = '--';
     }
 
     // Audio Ping trigger on threat escalation
-    if (t.threat > 0) {
+    if (threatLevel > 0) {
         const now = Date.now();
         if (now - s_lastChimeTime > 2500) {
             s_lastChimeTime = now;
-            playRadarWarningChime(t.threat);
+            playRadarWarningChime(threatLevel);
         }
     }
 }
@@ -3241,7 +3407,7 @@ function renderRearRadarCanvas() {
     s_rearRadarCtx.clearRect(0, 0, w, h);
 
     // 1. Standby Check
-    if (!state.isBleConnected && !state.isDemoMode) {
+    if (!state.isBleConnected && !state.isDemoMode && !isSimConnected) {
         s_rearRadarCtx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
         s_rearRadarCtx.lineWidth = 1;
         for (let y = 0; y < h; y += 30) {
@@ -3256,7 +3422,7 @@ function renderRearRadarCanvas() {
         s_rearRadarCtx.fillText(state.lang === 'de' ? 'HECK-RADAR STANDBY' : 'REAR RADAR STANDBY', cx, h / 2 - 4);
         s_rearRadarCtx.font = '9px sans-serif';
         s_rearRadarCtx.fillStyle = 'rgba(255, 255, 255, 0.18)';
-        s_rearRadarCtx.fillText(state.lang === 'de' ? 'Warte auf BLE oder Demo-Modus' : 'Waiting for BLE or Demo Mode', cx, h / 2 + 12);
+        s_rearRadarCtx.fillText(state.lang === 'de' ? 'Warte auf BLE, Demo-Modus oder Digital Twin' : 'Waiting for BLE, Demo Mode or Digital Twin', cx, h / 2 + 12);
         requestAnimationFrame(renderRearRadarCanvas);
         return;
     }
@@ -3441,8 +3607,8 @@ function updateSpeedGatingVisual(speed) {
 
 // Live Audio VU Meter Loop
 setInterval(() => {
-    // Only update live VU-meters when BLE is connected or Demo mode is active!
-    if (!state.isBleConnected && !state.isDemoMode) {
+    // Only update live VU-meters when BLE is connected, Demo mode is active, or Digital Twin is connected!
+    if (!state.isBleConnected && !state.isDemoMode && !isSimConnected) {
         return;
     }
 

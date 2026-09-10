@@ -192,11 +192,20 @@ class MotorcycleNode:
             # Simulated vehicle approaching from behind
             dist = 45.0 + 15.0 * math.sin(now * 0.2)
             speed_delta = 20.0 + 5.0 * math.cos(now * 0.3)
+            threat_int = 2 if dist < 25.0 else (1 if dist < 50.0 else 0)
+            threat_str = "critical" if dist < 25.0 else ("warning" if dist < 50.0 else "info")
+            ttc = round(dist / max(1.0, speed_delta / 3.6), 1)
+            azimuth = -3.5 if (math.sin(now * 0.4) < 0) else 3.5
             self.pcb_rear.radar_targets = [{
                 "id": 101,
+                "dist": round(dist, 1),
                 "distance_m": round(dist, 1),
+                "speed": round(speed_delta, 1),
                 "speed_diff_kmh": round(speed_delta, 1),
-                "threat": "critical" if dist < 25.0 else ("warning" if dist < 50.0 else "info")
+                "ttc": ttc,
+                "threat": threat_int,
+                "threat_level": threat_str,
+                "azimuth": azimuth
             }]
         elif pt.in_tunnel:
             self.pcb_rear.radar_targets = []
