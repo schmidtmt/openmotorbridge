@@ -17,6 +17,7 @@ use <parts/001_pod_rear_m8_gland.scad>;
 use <parts/002_pod_bulkhead_partition.scad>;
 use <parts/003_pod_guide_grooves.scad>;
 use <parts/005_pod_strap_hooks.scad>;
+use <../03_pod_cartridges/parts/05_magnetic_lock_latch.scad>;
 
 module pod_base_housing() {
     port_offset_y = 8.0; // Symmetrical offset from centerline (yc = POD_OUTER_W / 2.0 = 35.0 mm; Port A = 27 mm, Port B = 43 mm)
@@ -102,6 +103,12 @@ module pod_base_housing() {
         // 9. Ceiling Gore Vent Center Breather Hole (Ø 3.0 mm)
         translate([POD_OUTER_L/2.0, POD_OUTER_W/2.0, POD_OUTER_H - POD_WALL - 0.5])
             cylinder(r=1.5, h=POD_WALL + 2.5, center=false, $fn=16);
+
+        // 10. Magnetic Anti-Theft Lock: Internal Guide Groove Detent Pocket (X = 88 mm)
+        magnetic_lock_housing_detent_tool(wall=POD_WALL, z_center=POD_GROOVE_LEFT_Z);
+
+        // 11. Magnetic Anti-Theft Lock: Exterior Neodymium Key Alignment Target (X = 64 mm)
+        magnetic_lock_housing_target_tool(wall=POD_WALL, z_center=POD_GROOVE_LEFT_Z);
     }
 }
 

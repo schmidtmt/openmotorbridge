@@ -574,12 +574,12 @@ Für Harley-Davidson Street Glide, Electra Glide und Ultra Limited mit 2-Up-Komf
 
 ---
 
-### 9.4 Referenz-Kit 4: Adventure & Touring Enduros (BMW GS, KTM Adventure, Africa Twin)
+### 9.4 Referenz-Kit 4: Adventure & Touring Enduros (BMW GS / GSA, KTM Adventure, Africa Twin)
 
-Für großvolumige Reiseenduros und Naked Bikes mit offenem Gitterrohrrahmen, Rohrheck oder Aluminium-Gepäckbrücke:
+Für großvolumige Reiseenduros und Offroad-Tourer mit offenem Gitterrohr-Heckrahmen, Rohrgepäckbrücke und optionalem Aluminium-3-Koffersystem (z. B. Touratech Zega Pro/Evo, BMW Adventure oder Wunderlich):
 
 ```
-           ADVENTURE BIKE (BMW GS / KTM / AFRICA TWIN) INTEGRATION
+            ADVENTURE BIKE (BMW GS / KTM / AFRICA TWIN) INTEGRATION
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │ 1. COCKPIT (Windschild / Navigationsstrebe / Schnabel):                     │
 │    • Front-Node (PCBA 05) via AMPS-Bohrbild (30 x 38 mm) an Navigationsstrebe│
@@ -588,29 +588,237 @@ Für großvolumige Reiseenduros und Naked Bikes mit offenem Gitterrohrrahmen, Ro
 │    • Knowles MEMS Mikrofon misst turbulenten Windpegel hinter der Scheibe    │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │ 2. MITTE (Unter Fahrersitz / Batteriefach):                                 │
-│    • Zentralbox spritzwassergeschützt im Batteriefach                       │
+│    • Zentralbox spritzwassergeschützt im Batteriefach / Werkzeugraum        │
+│    • Abgriff Bordnetz-Dauerplus (Kl. 30), Zündungsplus (Kl. 15) und CAN-Bus │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ 3. HECK (Gepäckbrücke / Rohrheck):                                          │
-│    • Pod 3 mit integrierter 120°-V-Nut direkt auf Heckträger / Rohrrahmen   │
-│    • Befestigung mit 2x wetterfesten EPDM-Spannringen oder Kabelbindern     │
-│    • Blind-Spot Radar direkt am integrierten M5-GoPro-Ausleger des Pod 3    │
-│      (optimale Bodenfreiheit, keine Hecküberstände)                         │
+│ 3. VORDERER HECKRAHMEN / SEITENBEREICH (Kassetten-Pods 1 & 2):             │
+│    • Variante A (GSA & Heavy Duty): An der Innenseite der Rundrohr-         │
+│      Kofferträger (Ø 18 mm) im geschützten Rahmendreieck ("Überrollkäfig")  │
+│    • Variante B (Standard-GS ohne Koffer): Im "Transition Dock" unter der   │
+│      Sitzbank in der optischen "Bügelfalte" am Fahrer-/Sozius-Übergang       │
+│    • Raumdiversität > 45 cm; 100 % frei von Koffer-Abschattung nach oben/vorn│
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ 4. STURZBÜGEL (Links & Rechts):                                             │
-│    • Pod 1 (Sena) links am Sturzbügel (120°-V-Nut für Ø 22..32 mm Rohre)    │
-│    • Pod 2 (Cardo) rechts am Sturzbügel (EPDM-Spannringe)                   │
-│    • Höchste HF-Isolation (> 40 dB) durch massiven Tank & Motorblock       │
+│ 4. HECK (Gepäckbrücken-Ausleger "Heck-Balkon" hinter Alu-Topcase):          │
+│    • Universeller "Rack-Tail Mount" an Gepäckbrücke hinter Topcase-Rückwand │
+│    • Pod 3 horizontal mit freiem 140°-Zenit-Blick (u-blox MAX-M10S GNSS)   │
+│    • Integrierter 2.4 GHz Antennen-Astabweiser (+5 dBi Stabantenne geschützt│
+│      in PA12-CF Gleitrippe mit 45°-Abweiser gegen Ast-Abriss im Unterholz)  │
+│    • Schwenkbarer M5-GoPro-Radarausleger unten für Garmin Varia mmWave      │
+│      (in 90..95 cm Höhe optimal vor Steinschlag/Roost und Wasser geschützt) │
+│    • Topcase bleibt in 5 Sekunden per Original-Schnellverschluss abnehmbar  │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-* **V-Nut Rohrbett ($120^\circ$-Prisma):**
-  Die Gehäuseunterseite von Pod 1, 2 und 3 besitzt eine integrierte Hohlkehle ($R=15\,\text{mm}$), die sich spielfrei an alle gängigen Sturzbügel- und Gepäckträgerrohre ($\varnothing 18\dots 35\,\text{mm}$, z. B. $22\,\text{mm}$ oder $25{,}4\,\text{mm} / 1"$) anschmiegt.
-* **Integrierter M5-GoPro-Radarausleger an Pod 3:**
-  Anders als bei tiefen Cruisern und Baggern erfordern Reiseenduros keine Entkopplung des Radars unter das Kennzeichen: Durch die hohe Sitzposition und die steile Heckgeometrie sitzt das Radar am schwenkbaren M5-GoPro-Arm direkt an der Pod-3-Basisplatte in optimaler Erfassungshöhe ($80\dots 100\,\text{cm}$) mit freiem Radar-Öffnungswinkel über dem Hinterrad.
+#### 9.4.1 Kassetten-Pods 1 & 2 (Seitenmodule) – Die zwei Montage-Varianten
 
-![Pod 3 Transceiver & Radar 3D Anschnitt CAD](../images/cad/pod3_radar_cutaway_3d.png)
+Auf Reiseenduros existieren je nach Einsatzzweck und Koffersystem zwei grundverschiedene Fahrzeughecks. OpenMotorBridge bietet dafür zwei perfekt abgestimmte Montagevarianten:
 
-*Abbildung 8.28: Photorealistischer 3D-CAD-Schräganschnitt des Heck-Pods 3 in der Adventure-Konfiguration (BMW GS / KTM Adventure). Auf Reiseenduros sitzt der Garmin Varia Blind-Spot Radarsensor direkt am integrierten M5-GoPro-Schwenkarm der Pod-3-Basisplatte in optimaler Erfassungshöhe über dem Hinterrad, während die Gehäuseunterseite mit 120°-V-Nut und EPDM-Spannringen formschlüssig auf der Gepäckbrücke oder dem Rohrheck aufliegt.*
+* **Variante A: BMW F850 GSA / R 1250 GSA / R 1300 GS Adventure & Heavy-Duty-Modelle mit Rohr-Kofferträgern**
+  * **Montage:** An den Innenseiten der robusten Stahl- bzw. Edelstahl-Kofferträger (z. B. Touratech, BMW OEM GSA) im geschützten Rahmendreieck unter Verwendung von formschlüssigen Halbschellen (`adventure_pannier_rack_clamp.scad`).
+  * **Vorteile:**
+    1. **Mechanischer Überrollkäfig:** Nutzt die ohnehin vorhandene, extrem verwindungssteife $\varnothing 18\,\text{mm}$ Rundrohr-Struktur. Bei Umfallern, Felskontakten oder Stürzen im Gelände absorbiert das Trägerrohr alle Stoßkräfte; der Pod bleibt unberührt.
+    2. **Thermische Entkopplung:** Natürlicher Abstand zum tieferliegenden Endschalldämpfer; keine Hitzestaus.
+    3. **Optimale HF-Diversität:** Pod 1 (Sena Mesh, links) und Pod 2 (Cardo DMC, rechts) besitzen einen lateralen Abstand von $> 45\,\text{cm}$ mit Heckrahmen und Sitzbank als HF-Trennwand ($> 40\,\text{dB}$ Entkopplung).
+    4. **Extrem kurze Kabelwege:** Lediglich $20\dots 25\,\text{cm}$ M8-PUR-Kabelweg direkt in die Zentralbox unter der Sitzbank.
+
+* **Variante B: Standard-BMW GS und nackte Reiseenduros (ohne Rohr-Kofferträger)**
+  * **Montage:** Über ein formschönes "Transition Dock" (`adventure_transition_dock.scad`), das als geschwungene Brücke direkt an den oberen Heckrahmenrohren unter der Sitzbank verschraubt oder mit EPDM-Spannbändern fixiert wird.
+  * **Positionierung:** Exakt in der optischen "Bügelfalte" am Übergang von der Fahrer- zur Soziussitzbank.
+  * **Vorteile:**
+    1. **100 % unabhängig von Koffersystemen:** Funktioniert auch dann perfekt, wenn das Motorrad komplett "nackt" ohne Träger, mit Vario-Koffern oder mit leichten Soft-Bags / Hufeisen-Taschen gefahren wird.
+    2. **Ergonomisch geschützt:** Vollständig außerhalb des dynamischen Bewegungsbereichs von Fahrerstiefeln und Sozius-Fersen platziert; kein Hängenbleiben beim Aufsteigen.
+    3. **Freie Abstrahlcharakteristik:** Ungestörte $180^\circ$-HF-Sichtachse zur Seite und schräg nach oben zum Fahrer- und Soziushelm.
+
+---
+
+#### 9.4.2 Heck-Pod 3 (Transceiver) – Das universelle "Rack-Tail Mount" & Heck-Balkon-Konzept
+
+Wird eine Reiseenduro mit einem Aluminium-Topcase (z. B. Touratech Zega Evo 38L oder BMW Adventure Topcase) bestückt, schirmt das massive $1{,}5\,\text{mm}$ Aluminiumblech Funkwellen nach oben ab (Faraday-Käfig). Das universelle "Rack-Tail Mount" (`adventure_rack_tail_mount.scad`) löst diesen Konflikt als stabiler Heck-Balkon, der fest an der Gepäckbrücke des Motorrads verschraubt wird und ca. $65\,\text{mm}$ hinter die senkrechte Rückwand des Topcases kragt:
+
+```
+        SEITENANSICHT (SCHNITT): GS-HECK MIT ALU-TOPCASE & HECK-BALKON
+═════════════════════════════════════════════════════════════════════════════════
+
+                 ┌──────────────────────────────────────┐
+                 │                                      │
+                 │         ALU-TOPCASE (STARR)          │
+                 │      (z. B. Touratech Zega Evo /     │
+                 │       BMW Adventure Alukoffer)       │
+                 │                                      │
+                 │   [Deckel öffnet nach vorn/oben!]    │
+                 │                                      │
+                 └──────────────────┬───────────────────┘
+                                    │ Koffer-Bodenfuge (starr)
+  ════╦═════════════════════════════╧═════════════════════╦════════════════════
+      │     BMW GS EDELSTAHL-GEPÄCKBRÜCKE (Ø 18 mm)       │
+  ════╩═══════════════════════════════════════════════════╩══════════╗
+                                                                      ║
+                                    "HECK-BALKON" (AUSLEGER)          ║
+                           ┌──────────────────────────────────────────╜
+                           │
+       Freier 140°-Zenit   │           ┌────────────────────────┐
+       nach oben & hinten  ▼           │ 45°-ASTABWEISER-KEIL   │
+               \       /               │ (Äste & Gurte gleiten  │
+                \  ▲  /                │  glatt nach oben ab!)  │
+                 \ │ /                 └───────────┬────────────┘
+        ┌──────────┴──────────┐                    │
+        │    POD 3 GEHÄUSE    │       ┌────────────┴───────────┐
+        │ (MAX-M10S GNSS oben,│       │ 2.4 GHz +5 dBi ANTENNE │  ◄── Voll versenkt
+        │  SX1262 LoRa intern,│──────►│ (Integrierte Klemmnut, │      im PA12-Kanal,
+        │  6-Achs IMU BMI270) │       │  RG178-Koax 100% intern│      kein Ast-Abriss!
+        └──────────┬──────────┘       └────────────────────────┘
+                   │                               │
+                   ▼                               ▼
+          ┌────────────────────────────────────────────────────┐
+          │  UNTERSEITE: M5 GOPRO-SCHWENKARM (2-AUGEN-GABEL)   │
+          └────────────────────────┬───────────────────────────┘
+                                   │
+                                   ▼
+                      ┌────────────────────────┐
+                      │   GARMIN VARIA RADAR   │  ◄── In 90..95 cm Höhe:
+                      │   24 GHz mmWave Sensor │      100 % freier Erfassungskegel,
+                      │ (±20° Neigungsjustage) │      geschützt vor Steinschlag/Roost,
+                      └────────────────────────┘      Schlamm & Wasserdurchfahrten!
+```
+
+```
+           DRAUFSICHT: HECK-BALKON MIT INTEGRIERTER 2.4 GHz ANTENNE
+═════════════════════════════════════════════════════════════════════════════════
+
+                     [SENKRECHTE RÜCKWAND ALU-TOPCASE]
+ ═══════════════════════════════════════════════════════════════════════════════
+        ▲                                                              ▲
+        │  2x M6 Trägerplatten-Verschraubung oder Ø 18 mm Halbschellen │
+ ───────┴──────────────────────────────────────────────────────────────┴───────
+ │  ┌───────────────────────────────────────────────────────────────────────┐  │
+ │  │                                                                       │  │
+ │  │                      POD 3 GEHÄUSEAUFNAHME                            │  │
+ │  │         (Formbündige Wanne für Pod 3: 135 x 70 x 38 mm)               │  │
+ │  │       • u-blox MAX-M10S Keramik-Patchantenne blickt frei nach oben    │  │
+ │  │       • M8-Zuleitung (Port A) läuft verdeckt von unten ein            │  │
+ │  │                                                                       │  │
+ │  └───────────────────────────────────┬───────────────────────────────────┘  │
+ │                                      │ Interner Koax-Kanal (RG178 pigtail)  │
+ │                                      ▼                                      │
+ │                     ┌─────────────────────────────────┐                     │
+ │                     │   ASTABWEISER-FINNE (PA12-CF)   │                     │
+ │                     │  ┌───────────────────────────┐  │                     │
+ │                     │  │  2.4 GHz +5 dBi ANTENNE   │  │                     │
+ │                     │  │  (Eingeclipster Dipol     │  │                     │
+ │                     │  │   in geschützter Nut)     │  │                     │
+ │                     │  └───────────────────────────┘  │                     │
+ │                     └────────────────┬────────────────┘                     │
+ ───────────────────────────────────────┼───────────────────────────────────────
+                                        ▼
+                           (GoPro M5-Zweiaugen-Gabel)
+                                        │
+                            [GARMIN VARIA RADAR UNTEN]
+```
+
+##### Die mechanischen & funktechnischen Kernvorteile:
+1. **100 % Erhalt des Topcase-Schnellverschlusses (5-Sekunden-Klick):**
+   * Der Ausleger stützt sich an den tragenden Edelstahlrohren ($\varnothing 18\,\text{mm}$) der Gepäckbrücke oder den hinteren M6-Verschraubungen der Adapterplatte ab – **nicht am Koffer selbst**.
+   * Das Topcase kann jederzeit sekundenschnell verriegelt und abgenommen werden. Pod 3, Antenne und Radar verbleiben einsatzbereit am Motorrad (Schutz und Tracking auch bei Solofahrten ohne Gepäck).
+2. **Kollisionsfreie Deckelöffnung:**
+   * Da der Ausleger direkt unterhalb der Koffer-Bodenfuge auskragt und die Rückwand des Koffers starr bleibt, lässt sich der Topcase-Deckel uneingeschränkt nach oben oder nach vorne schwenken sowie vollständig aushängen.
+3. **Plattformübergreifende Schnittstelle:**
+   * Identische Geometrie für Standard-GS, GS Adventure, Africa Twin und KTM 1290 Super Adventure.
+4. **Offroad-Schutz der Sensoren (90..95 cm Höhe über Grund) & Dualer Lock-Mechanismus:**
+   * Anders als bei Cruisern liegt das Garmin Varia mmWave-Radar weit außerhalb der Wurfparabel von Grobstollenreifen (Tire Roost).
+   * Bei tiefen Fluss- und Schlammdurchfahrten taucht das Heck nicht ins Wasser ein.
+   * Keine Gefahr des Aufsetzens oder Abreißens an Felskanten bei steilen Bergab-Stufen.
+   * **Dualer Lock-Mechanismus (Neigungssicherung + Diebstahlschutz):**
+     Standardmäßige GoPro-Reibgelenke und Garmin-Vierteldreh-Halterungen sind auf extremen Rüttelstrecken (Wellblech/Waschbrett auf TET-Tracks) oder bei Raststätten-Zwischenstopps unzureichend. OpenMotorBridge implementiert daher ein doppeltes Verriegelungssystem:
+
+```
+           DUALER RADAR-LOCK: HIRTH-VERZAHNUNG & DIEBSTAHLSICHERES DOCK
+═════════════════════════════════════════════════════════════════════════════════
+
+    A. HIRTH-FORMSCHLUSS (10°-RASTUNG)          B. GARMIN DIEBSTAHL-VERRIEGELUNG
+    ----------------------------------          --------------------------------
+      (Kein Absacken bei Wellblech!)              (Kein Abziehen bei Zwischenstopp!)
+
+              M5-Klemmschraube                            Garmin Varia Radar
+             (Torx-TR Security)                         (RTL515 / RCT715 / eRTL615)
+                     │                                            │
+                     ▼                                            ▼
+               ┌───────────┐                            ┌───────────────────┐
+     Gabel-    │ ▓▓▓▓▓▓▓▓▓ │                            │  [Varia Gehäuse]  │
+     wange     │ ▓▓ 10° ▓▓ │                            │   Drehung um 90°  │
+     links ───►│ ▓▓Hirth▓▓ │                            └─────────┬─────────┘
+               │ ▓▓Zähne▓▓ │                                      │
+               └───┬───┬───┘                       Bajonett-Flügel│(verriegelt)
+                   │   │                                          ▼
+     ┌─────────────┘   └─────────────┐              ┌───────────────────────────┐
+     │ 6 mm GoPro-Zunge mit beid-    │              │ █ 90°-Bajonett-Kammer   █ │
+     │ seitiger Hirth-Rosette        │◄────────────►│ █                       █ │
+     │ (100% formschlüssig arretiert)│              │ █   [M3 Madenschraube] ◄──┼── Torx-TR / Inbus
+     └─────────────┬───┬─────────────┘              │ █  (sperrt Rückdrehung) █ │   verhindert Drehen
+                   │   │                            └─────────────┬─────────────┘   im Parkzustand!
+               ┌───┴───┴───┐                                      │
+     Gabel-    │ ▓▓Zähne▓▓ │                                      ▼
+     wange ───►│ ▓▓Hirth▓▓ │                             M8 PUR Signalkabel
+     rechts    │ ▓▓ 10° ▓▓ │                            (verdeckte Zugentlastung)
+               │ ▓▓▓▓▓▓▓▓▓ │
+               └───────────┘
+```
+
+     - **Schwingungs- & Neigungsschutz (Radiale Hirth-Verzahnung):**
+       Anstelle reiner Reibung besitzen die Gabelwangen und die zentrale GoPro-Zunge eine formschlüssige 36-Zahn-Hirth-Rosette ([`011_gopro_hirth_lock.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/parts/011_gopro_hirth_lock.scad)). Durch Lösen der M5-Sicherheitsschraube um 1–2 Umdrehungen kann die Radar-Neigung in feinen $10^\circ$-Schritten präzise nivelliert werden (Ausgleich von Sozius- und Gepäckzuladung). Nach Festziehen der Schraube ist ein Absacken des Radars selbst bei härtestem Offroad-Pistenrütteln physikalisch unmöglich.
+     - **Garmin Varia Diebstahlschutz-Dock ([`radar_varia_gopro_lock_dock.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/radar_varia_gopro_lock_dock.scad)):**
+       Das Garmin Radar wird mit seinem originalen Quarter-Turn Bajonett um $90^\circ$ in das Dock eingedreht. Eine integrierte Sperrklinke rastet formschlüssig ein. Zusätzlich wird eine verdeckte M3-Sicherheits-Madenschraube (Inbus oder Torx-TR mit Innenstift) tangential hinter die Bajonettflanke gedreht. Das Radar kann ohne Spezialbit nicht mehr entriegelt oder entwendet werden. Die M5-Drehachse wird ebenfalls durch eine Torx-TR-Schraube oder M5-Sicherungsmutter geschützt.
+5. **Astabweiser-Schutz der externen 2.4 GHz Antenne:**
+   * Keine ungeschützte SMA-Stabantenne, die im dichten Unterholz von Zweigen abgeschert wird.
+   * Die Antenne liegt geschützt in einer formschlüssigen Klemmnut hinter einem $45^\circ$-Gleitkeil aus zähem PA12-CF. Äste und Packgurte gleiten rückstandsfrei ab.
+   * Die Koaxialzuleitung (RG178/U.FL) verläuft zu $100\,\%$ verdeckt im Bauteilinneren mit O-Ring-Dichtung.
+
+---
+
+#### 9.4.3 Unsichtbarer Magnet-Diebstahlschutz für Wechselkassetten
+
+Auf frei zugänglichen Reiseenduros und bei Zwischenstopps auf Fernreisen müssen die modularen Einschubkassetten (Sena, Cardo, Transceiver) zuverlässig gegen schnellen Gelegenheitsdiebstahl geschützt werden. Während die Pod-Gehäuse selbst durch feste M8-Verschraubungen und Halteklammern fahrzeugfest montiert sind, wurde für den Kassettenmechanismus ein innovatives, vollkommen unsichtbares Verriegelungskonzept entwickelt:
+
+```
+        MAGNETISCHER DIEBSTAHL-SCHUTZ: 2-ARM-WIPPE (KINEMATIK-SCHNITT)
+═════════════════════════════════════════════════════════════════════════════════
+
+                 POD-GEHÄUSEWAND (PA12-MJF, NICHT-MAGNETISCH)
+ ─────────────────────────┬───────────────────────┬──────────────────────────────
+  [EXTERNER NEODYM-KEY]   │                       │ [GEHÄUSE-FÜHRUNGSNUT]
+   (Zielkreis bei X=64)   │                       │  (Rastkerbe bei X=88 mm)
+            ▼             │                       │            ▲
+      ┌───────────┐       │                       │            │ 90° Sperrflanke:
+      │ NEODYM-   │       │                       │            │ blockiert Auszug!
+      │ MAGNET N52│       │                       │            │
+      └─────┬─────┘       │                       │            │
+ ═══════════╪═════════════╪═══════════════════════╪════════════╪═════════════════
+  KASSETTE  │             │                       │            │
+            ▼ Zieht nach  │   M2 SCHWENKACHSE     │            ▼
+      ┌───────────┐ außen!│    (DREHPUNKT)        │   ┌─────────────────┐
+      │STAHLANKER ├───────┴─────────⊙─────────────┴───┤ SÄGEZAHN-KRALLE │
+      │(Ø 6.2 mm) │   Hinterarm     │     Vorderarm   │ (30° Ein / 90°)|
+      └─────┬─────┘   (X = 46 mm)   │    (X = 70 mm)  └─────────────────┘
+            ▲                       │                          ▲
+     [V4A-FEDER] █ Drückt           │                          │ Schwenkt nach
+     (Normalst.)   nach innen       │                          │ innen frei!
+```
+
+##### Funktionsweise & Konstruktionsmerkmale:
+1. **Keine Gehäusevergrößerung & plane Kassettenfront:**
+   * Der Mechanismus nutzt die bestehenden seitlichen Wandstärken des Kassetten-Basisschlittens (`00_base_sled.scad`, Parameter `magnetic_lock = true`). Das Außenvolumen der Pods ($135 \times 70 \times 38{,}5\,\text{mm}$) bleibt unverändert.
+   * **Diebstahlsichere Front:** Die außenliegenden Squeeze-Buttons der Standardkassette entfallen im Anti-Theft-Modus; die Flanken der Frontplatte schließen glatt und bündig ab, sodass ein manuelles Aushebeln per Hand unmöglich ist.
+2. **Kinetische 2-Arm-Wippe (`parts/05_magnetic_lock_latch.scad`):**
+   * Die Verriegelung arbeitet als Hebel 1. Ordnung mit zentralem Drehpunkt (M2-Schwenkachse auf $X = 58\,\text{mm}$).
+   * **Vorderer Arm ($X = 70\,\text{mm}$):** Trägt die Sägezahn-Rastkralle, die durch einen Schlitz der linken Führungsfeder $2{,}5\,\text{mm}$ nach außen in die Gehäusenut ragt. Beim Einschieben gleitet die $30^\circ$-Anlaufschräge butterweich über die Schiene und schnappt am Endanschlag mit einem satten Klick in die Gehäuseraste bei $X = 88\,\text{mm}$ ein.
+   * **Hinterer Arm ($X = 46\,\text{mm}$):** Trägt den eingepressten, ferromagnetischen Stahlanker ($\varnothing 6{,}2 \times 8\,\text{mm}$). Eine V4A-Druckfeder stützt sich gegen die innere Schlittenwand ab und hält die vordere Kralle im Ruhezustand permanent unter formschlüssiger Sperrung.
+3. **Kontaktlose Neodym-Entriegelung & Taktiler Zielkreis:**
+   * Auf der linken Gehäuseaußenwand von `pod_base_housing.scad` ist bei $X = 64\,\text{mm}$ ein dezenter Zielkreis ($\varnothing 18\,\text{mm} \times 0{,}6\,\text{mm}$) eingelassen.
+   * Hält der Fahrer einen handlichen Neodym-Magnetschlüssel (N52 am Schlüsselbund) an diesen Zielkreis, zieht das Magnetfeld den Stahlanker um ca. $2\,\text{mm}$ nach außen an die Innenwand.
+   * Durch die Wippen-Kinematik schwenkt die vordere Rastkralle nach innen in den Schlitten und gibt die Gehäuseraste frei.
+   * Die im Gehäusegrund sitzende Auswerffeder stößt die Kassette sofort definiert um $15\dots 20\,\text{mm}$ nach vorne aus.
+4. **Hermetischer Offroad-Schutz (Sand-, Schlamm- & Eissicher):**
+   * Herkömmliche Zylinderschlösser oder Schieberiegel versagen im Geländeeinsatz schnell durch eindringenden Staub, Schlamm oder Frost.
+   * Der magnetische Kassettenverschluss besitzt keinerlei Öffnungen nach außen, ist vollständig gekapselt und arbeitet wartungsfrei unter härtesten Witterungsbedingungen.
 
 ---
 
@@ -733,8 +941,10 @@ Auf Cruisern und Baggern wird das Garmin Varia mmWave-Radar von Pod 3 **entkoppe
   Das Kennzeichen muss von oben in einem vertikalen Winkel von **mindestens $+30^\circ$ vollständig und ohne Verdeckung** einsehbar sein.
 * **Vermeidung des Dachüberstand-Problems:**
   Durch die Platzierung des Radars **unter** dem Kennzeichen muss die obere Pod-Konsole nicht weit nach hinten auskragen. Der $+30^\circ$-Sichtbereich auf die Zulassungs- und TÜV-Plaketten bleibt zu $100\,\%$ frei.
-* **Schwingungs- und Vibrationsfestigkeit:**
-  Das Radar sitzt direkt an der massiven Grundplatte ohne langen Hebelarm – vollkommen vibrationsfest gegen die Vibrationen des Milwaukee-Eight 117 cui Motors.
+* **Schwingungs- und Vibrationsfestigkeit (Formschluss-Hirth-Gelenk):**
+  Das Radar sitzt direkt an der massiven Grundplatte ohne langen Hebelarm. Die Gabelwangen besitzen eine integrierte formschlüssige 36-Zahn Hirth-Rosette ([`011_gopro_hirth_lock.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/parts/011_gopro_hirth_lock.scad)), die zusammen mit dem diebstahlhemmenden Garmin Varia Dock ([`radar_varia_gopro_lock_dock.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/radar_varia_gopro_lock_dock.scad)) ein unbeabsichtigtes Absacken durch die harten Vibrationen des Milwaukee-Eight 117 cui Motors zuverlässig verhindert.
+* **Diebstahlschutz:**
+  Die Bajonettaufnahme fixiert das Radar mit einer verdeckten M3-Sicherheitsmadenschraube und M5-Sicherheits-Torx-TR Schraube am Hirth-Gelenk gegen Entwendung im Straßenverkehr.
 * **Verdeckte Kabelführung:**
   Das M8-Signalkabel des Radars verläuft unsichtbar in einem rückseitig eingeformten Schacht hinter dem Kennzeichen nach oben und vereinigt sich hinter der Blinkerbrücke mit dem Heckkabelbaum.
 
@@ -787,11 +997,16 @@ Das stationäre MagSafe-Rahmendock ([`009_magsafe_frame_dock.scad`](file:///User
 | **Satelliten-Pod**| CVO ST Telemetrie-Finne (2.4 GHz Mesh) | `02_pod_base/cvo_st_telemetry_fin.stl` | `02_pod_base/cvo_st_telemetry_fin.scad` |
 | **Satelliten-Pod**| Road King Special Touring Fender Console | `02_pod_base/pod3_touring_fender_console.stl` | `02_pod_base/pod3_touring_fender_console.scad` |
 | **Satelliten-Pod**| Touring Kofferdeckel-Halter (Pod 1 & 2) | `02_pod_base/saddlebag_lid_dock.stl` | `02_pod_base/saddlebag_lid_dock.scad` |
+| **Adventure Pod 3**| Rack-Tail Mount (Heck-Balkon mit Astabweiser & Radar-Gabel) | `02_pod_base/adventure_rack_tail_mount.stl` | `02_pod_base/adventure_rack_tail_mount.scad` |
+| **Adventure Pods 1/2**| GS Transition Dock (Sitzbank-Bügelfalten-Brücke) | `02_pod_base/adventure_transition_dock.stl` | `02_pod_base/adventure_transition_dock.scad` |
+| **Adventure Pods 1/2**| GSA Rohrträger-Klemmschelle (Ø 18 mm Rahmendreieck) | `02_pod_base/adventure_pannier_rack_clamp.stl` | `02_pod_base/adventure_pannier_rack_clamp.scad` |
 | **Rahmendock** | MagSafe Rahmen-Dock Gehäuseoberteil (Rohrsattel, Flügel & M2.5 Insert) | `02_pod_base/components/009_magsafe_frame_dock.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
 | **Rahmendock** | MagSafe Rohrschellen-Bügel (Ø 26 mm) | `02_pod_base/components/009_magsafe_frame_clamp.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
 | **Rahmendock** | MagSafe Rahmen-Dock Gehäuseunterteil (PCB-Ledge & M2.5 Senkung) | `02_pod_base/components/009_magsafe_frame_lid.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
 | **Radarhalter** | Entkoppelte Kennzeichen-Radarhalterung | `02_pod_base/radar_license_plate_bracket.stl` | `02_pod_base/radar_license_plate_bracket.scad` |
+| **Radar-Zubehör** | Garmin Varia Quarter-Turn Anti-Theft Lock Dock | `02_pod_base/radar_varia_gopro_lock_dock.stl` | `02_pod_base/radar_varia_gopro_lock_dock.scad` |
 | **Kassette** | Universeller Basisschlitten mit Dichtung | `03_pod_cartridges/cartridge_base_sled.stl` | `03_pod_cartridges/00_base_sled.scad` |
+| **Kassette** | Magnetischer Diebstahlschutz-Rastbolzen (Sägezahn-Mechanik) | `03_pod_cartridges/cartridge_magnetic_lock_latch.stl` | `03_pod_cartridges/parts/05_magnetic_lock_latch.scad` |
 | **Kassette** | Sena 50S/60S Adapterkassette | `03_pod_cartridges/cartridge_insert_sena.stl` | `03_pod_cartridges/parts/01_insert_sena.scad` |
 | **Kassette** | Cardo Packtalk Edge Adapterkassette | `03_pod_cartridges/cartridge_insert_cardo.stl` | `03_pod_cartridges/parts/02_insert_cardo.scad` |
 | **Kassette** | IP67 Blindkassette (wasserdichte Dry Box)| `03_pod_cartridges/cartridge_insert_blindkassette.stl` | `03_pod_cartridges/parts/03_insert_blindkassette.scad` |
@@ -805,7 +1020,7 @@ Das stationäre MagSafe-Rahmendock ([`009_magsafe_frame_dock.scad`](file:///User
 
 In den `components/`-Verzeichnissen liegen die isolierten Basiskörper (vor Differenzoperationen) und Zubehörteile:
 - **`01_main_box/components/`**: `01_lower_tub_empty.stl`, `02_corner_screws_enclosure.stl`, `03_pcb_standoffs.stl`, `04_mounting_ears.stl`, `05_sealing_groove.stl`, `06_mid_tray_frame.stl`, `07_mid_partition_floor.stl`, `08_lid_plate.stl`, `dummy_main_pcb.stl`, `dummy_lipo_battery.stl`.
-- **`02_pod_base/components/`**: `01_pod_tunnel_base.stl`, `02_pod_rear_m8_gland.stl`, `03_pod_bulkhead_partition.stl`, `04_pod_guide_grooves.stl`, `05_pod_strap_hooks.stl`, `06_fender_curved_saddle.stl`, `07_pod_slide_dock_core.stl`, `dummy_m8_connector.stl`.
+- **`02_pod_base/components/`**: `01_pod_tunnel_base.stl`, `02_pod_rear_m8_gland.stl`, `03_pod_bulkhead_partition.stl`, `04_pod_guide_grooves.stl`, `05_pod_strap_hooks.stl`, `06_fender_curved_saddle.stl`, `07_pod_slide_dock_core.stl`, `011_gopro_hirth_lock.scad` (Radiale Formschluss-Verzahnung), `dummy_m8_connector.stl`.
 - **`03_pod_cartridges/components/`**: `dummy_adapter_pcb.stl`, `dummy_omm_transceiver_pcb.stl`.
 - **`04_front_node/components/`**:
   - `01_front_node_base_tub.stl`: Monolithischer, abgerundeter Basiskörper mit ausgehöhlter Innenkammer (Grundquader im CSG-Verfahren).

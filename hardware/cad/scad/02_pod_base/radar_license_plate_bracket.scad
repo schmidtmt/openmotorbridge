@@ -13,6 +13,7 @@
 // =============================================================================
 
 include <../00_common/parameters.scad>;
+use <parts/011_gopro_hirth_lock.scad>;
 
 PLATE_BOLT_SPACING = 120.0; // Distance between lower license plate screws (mm)
 RADAR_BRACKET_W    = 136.0; // Total bracket width in Y (mm)
@@ -88,7 +89,18 @@ module radar_license_plate_bracket() {
             rotate([0, 90, 0])
                 cylinder(r=4.6, h=5.0, center=false, $fn=6);
 
-        // E. Rear M8 Cable Channel on Spine Backside (Y=0, Z down to -RADAR_DROP_Z + 10)
+        // E. Form-Fit Radial Hirth Locking Rosettes (Formschluss 10°-Rastung against vibration)
+        // Left lug inner face (X = -3.5 mm)
+        translate([-3.5, 12.0, -RADAR_DROP_Z])
+            rotate([0, -90, 0])
+                gopro_hirth_subtraction_tool();
+
+        // Right lug inner face (X = 3.5 mm)
+        translate([3.5, 12.0, -RADAR_DROP_Z])
+            rotate([0, 90, 0])
+                gopro_hirth_subtraction_tool();
+
+        // F. Rear M8 Cable Channel on Spine Backside (Y=0, Z down to -RADAR_DROP_Z + 10)
         translate([-3.0, -0.5, -RADAR_DROP_Z + 10.0])
             cube([6.0, 3.5, RADAR_DROP_Z], center=false);
     }

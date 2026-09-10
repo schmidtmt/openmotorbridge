@@ -11,12 +11,14 @@
 
 include <../00_common/parameters.scad>;
 include <../00_common/screw_bosses.scad>;
+use <parts/05_magnetic_lock_latch.scad>;
 
 module cartridge_base_sled(
-    sled_l   = CARTRIDGE_BASE_L,
-    sled_w   = CARTRIDGE_BASE_W,
-    sled_h   = CARTRIDGE_BASE_H,
-    wall     = 2.5
+    sled_l        = CARTRIDGE_BASE_L,
+    sled_w        = CARTRIDGE_BASE_W,
+    sled_h        = CARTRIDGE_BASE_H,
+    wall          = 2.5,
+    magnetic_lock = true
 ) {
     difference() {
         union() {
@@ -96,65 +98,76 @@ module cartridge_base_sled(
             translate([0, sled_w, POD_GROOVE_RIGHT_Z - CARTRIDGE_TONGUE_W/2.0 + 0.3])
                 cube(size=[CARTRIDGE_CHAMFER_L, CARTRIDGE_TONGUE_PROT, CARTRIDGE_TONGUE_W - 0.6], center=false);
 
-            // 7. Dual Recessed Snap-Fit Cantilever Arms & Ergonomic Quick-Release Buttons
-            arm_x_start = sled_l - 24.0;
-            // --- Left Arm (in side wall, clears sealing collar) ---
-            translate([arm_x_start, -1.8, 6.0])
-                cube(size=[16.0, 1.8, 10.0], center=false);
+            // 7. Snap-Fit Retention & Lock Mechanism
+            if (magnetic_lock) {
+                // --- Magnetic Anti-Theft Lock: Internal Rocker Pivot Boss & Pocket Enclosure ---
+                translate([LATCH_PIVOT_X, wall + 1.5, wall])
+                    screw_boss(outer_r=3.2, inner_r=M2_SCREW_HOLE_R, h=7.5);
 
-            // Left Triangular Latch Tooth (retention undercut)
-            translate([arm_x_start + 4.0, -3.4, 6.5]) {
-                polyhedron(
-                    points=[
-                        [0, 1.6, 0], [4.0, 1.6, 0], [4.0, 0, 0], [0, 1.6, 9.0], [4.0, 1.6, 9.0], [4.0, 0, 9.0]
-                    ],
-                    faces=[
-                        [0,1,2], [3,5,4], [0,2,5,3], [1,4,5,2], [0,3,4,1]
-                    ]
-                );
-            }
+                // Protective Enclosure Wall along inner edge of the rocker pocket
+                translate([LATCH_MAGNET_X - 4.0, wall + 3.2, wall])
+                    cube([LATCH_TOOTH_X - LATCH_MAGNET_X + 8.0, 1.6, 10.0]);
+            } else {
+                // --- Legacy Manual Quick-Release Cantilever Arms & Squeeze Buttons ---
+                arm_x_start = sled_l - 24.0;
+                // --- Left Arm (in side wall, clears sealing collar) ---
+                translate([arm_x_start, -1.8, 6.0])
+                    cube(size=[16.0, 1.8, 10.0], center=false);
 
-            // Left Textured Quick-Release Squeeze Button Pad (on Faceplate Flank)
-            translate([sled_l - 0.5, -4.0, 5.0]) {
-                cube(size=[CARTRIDGE_FACE_L + 1.5, 2.0, 12.0], center=false);
-                for (rz = [2.0, 6.0, 10.0]) {
-                    translate([0.5, -0.6, rz])
-                        cube(size=[CARTRIDGE_FACE_L, 0.6, 1.2], center=false);
+                // Left Triangular Latch Tooth (retention undercut)
+                translate([arm_x_start + 4.0, -3.4, 6.5]) {
+                    polyhedron(
+                        points=[
+                            [0, 1.6, 0], [4.0, 1.6, 0], [4.0, 0, 0], [0, 1.6, 9.0], [4.0, 1.6, 9.0], [4.0, 0, 9.0]
+                        ],
+                        faces=[
+                            [0,1,2], [3,5,4], [0,2,5,3], [1,4,5,2], [0,3,4,1]
+                        ]
+                    );
                 }
-            }
 
-            // Left Flexure Link between arm and button
-            translate([arm_x_start + 16.0, -3.0, 8.0])
-                cube(size=[sled_l - (arm_x_start + 16.0), 1.4, 6.0], center=false);
-
-            // --- Right Arm (in side wall) ---
-            translate([arm_x_start, sled_w, 6.0])
-                cube(size=[16.0, 1.8, 10.0], center=false);
-
-            // Right Triangular Latch Tooth
-            translate([arm_x_start + 4.0, sled_w + 1.8, 6.5]) {
-                polyhedron(
-                    points=[
-                        [0, 0, 0], [4.0, 0, 0], [4.0, 1.6, 0], [0, 0, 9.0], [4.0, 0, 9.0], [4.0, 1.6, 9.0]
-                    ],
-                    faces=[
-                        [0,2,1], [3,4,5], [0,3,5,2], [1,2,5,4], [0,1,4,3]
-                    ]
-                );
-            }
-
-            // Right Textured Quick-Release Squeeze Button Pad (on Faceplate Flank)
-            translate([sled_l - 0.5, sled_w + 2.0, 5.0]) {
-                cube(size=[CARTRIDGE_FACE_L + 1.5, 2.0, 12.0], center=false);
-                for (rz = [2.0, 6.0, 10.0]) {
-                    translate([0.5, 2.0, rz])
-                        cube(size=[CARTRIDGE_FACE_L, 0.6, 1.2], center=false);
+                // Left Textured Quick-Release Squeeze Button Pad (on Faceplate Flank)
+                translate([sled_l - 0.5, -4.0, 5.0]) {
+                    cube(size=[CARTRIDGE_FACE_L + 1.5, 2.0, 12.0], center=false);
+                    for (rz = [2.0, 6.0, 10.0]) {
+                        translate([0.5, -0.6, rz])
+                            cube(size=[CARTRIDGE_FACE_L, 0.6, 1.2], center=false);
+                    }
                 }
-            }
 
-            // Right Flexure Link between arm and button
-            translate([arm_x_start + 16.0, sled_w + 1.6, 8.0])
-                cube(size=[sled_l - (arm_x_start + 16.0), 1.4, 6.0], center=false);
+                // Left Flexure Link between arm and button
+                translate([arm_x_start + 16.0, -3.0, 8.0])
+                    cube(size=[sled_l - (arm_x_start + 16.0), 1.4, 6.0], center=false);
+
+                // --- Right Arm (in side wall) ---
+                translate([arm_x_start, sled_w, 6.0])
+                    cube(size=[16.0, 1.8, 10.0], center=false);
+
+                // Right Triangular Latch Tooth
+                translate([arm_x_start + 4.0, sled_w + 1.8, 6.5]) {
+                    polyhedron(
+                        points=[
+                            [0, 0, 0], [4.0, 0, 0], [4.0, 1.6, 0], [0, 0, 9.0], [4.0, 0, 9.0], [4.0, 1.6, 9.0]
+                        ],
+                        faces=[
+                            [0,2,1], [3,4,5], [0,3,5,2], [1,2,5,4], [0,1,4,3]
+                        ]
+                    );
+                }
+
+                // Right Textured Quick-Release Squeeze Button Pad (on Faceplate Flank)
+                translate([sled_l - 0.5, sled_w + 2.0, 5.0]) {
+                    cube(size=[CARTRIDGE_FACE_L + 1.5, 2.0, 12.0], center=false);
+                    for (rz = [2.0, 6.0, 10.0]) {
+                        translate([0.5, 2.0, rz])
+                            cube(size=[CARTRIDGE_FACE_L, 0.6, 1.2], center=false);
+                    }
+                }
+
+                // Right Flexure Link between arm and button
+                translate([arm_x_start + 16.0, sled_w + 1.6, 8.0])
+                    cube(size=[sled_l - (arm_x_start + 16.0), 1.4, 6.0], center=false);
+            }
 
             // 8. Front ePTFE Gore Vent Boss on Faceplate
             translate([sled_l + 2.0, sled_w/2.0 + 12.0, sled_h/2.0])
@@ -167,23 +180,28 @@ module cartridge_base_sled(
                     cylinder(r=5.5, h=2.0, center=false);
         }
 
-        // 10. Side Wall Clearance Slots for Latch Arm Inward Flexure
-        arm_x_start = sled_l - 24.0;
-        // Left Arm Clearance Slots
-        translate([arm_x_start - 2.0, -2.5, 4.8])
-            cube(size=[19.0, wall + 3.0, 1.0], center=false);
-        translate([arm_x_start - 2.0, -2.5, 16.2])
-            cube(size=[19.0, wall + 3.0, 1.0], center=false);
-        translate([arm_x_start - 2.0, -2.5, 4.8])
-            cube(size=[2.0, wall + 3.0, 12.4], center=false);
+        // 10. Side Wall Clearance Slots / Magnetic Latch Pocket
+        if (magnetic_lock) {
+            // Magnetic Anti-Theft Lock: Rocker Lever Cavity & Tongue Exit Slot
+            magnetic_lock_sled_pocket_tool(wall=wall, z_center=POD_GROOVE_LEFT_Z);
+        } else {
+            arm_x_start = sled_l - 24.0;
+            // Left Arm Clearance Slots
+            translate([arm_x_start - 2.0, -2.5, 4.8])
+                cube(size=[19.0, wall + 3.0, 1.0], center=false);
+            translate([arm_x_start - 2.0, -2.5, 16.2])
+                cube(size=[19.0, wall + 3.0, 1.0], center=false);
+            translate([arm_x_start - 2.0, -2.5, 4.8])
+                cube(size=[2.0, wall + 3.0, 12.4], center=false);
 
-        // Right Arm Clearance Slots
-        translate([arm_x_start - 2.0, sled_w - wall - 0.5, 4.8])
-            cube(size=[19.0, wall + 3.0, 1.0], center=false);
-        translate([arm_x_start - 2.0, sled_w - wall - 0.5, 16.2])
-            cube(size=[19.0, wall + 3.0, 1.0], center=false);
-        translate([arm_x_start - 2.0, sled_w - wall - 0.5, 4.8])
-            cube(size=[2.0, wall + 3.0, 12.4], center=false);
+            // Right Arm Clearance Slots
+            translate([arm_x_start - 2.0, sled_w - wall - 0.5, 4.8])
+                cube(size=[19.0, wall + 3.0, 1.0], center=false);
+            translate([arm_x_start - 2.0, sled_w - wall - 0.5, 16.2])
+                cube(size=[19.0, wall + 3.0, 1.0], center=false);
+            translate([arm_x_start - 2.0, sled_w - wall - 0.5, 4.8])
+                cube(size=[2.0, wall + 3.0, 12.4], center=false);
+        }
 
         // 11. Front ePTFE Breather Through-Hole (Ø 2.0 mm)
         translate([sled_l - 3.0, sled_w/2.0 + 12.0, sled_h/2.0])

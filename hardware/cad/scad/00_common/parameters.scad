@@ -51,6 +51,15 @@ SMA_BORE_R            = 3.25;  // Ø 6.5 mm through-hole for standard SMA bulkhe
 SMA_ORECESS_R         = 4.75;  // Ø 9.5 mm recess for waterproof silicone O-ring
 SMA_ORECESS_DEPTH     = 1.2;   // 1.2 mm deep O-ring compression pocket
 
+// --- 5b. Magnetic Anti-Theft Lock System ---
+LATCH_PIVOT_X         = 58.0;  // Center pivot position along sled X (mm)
+LATCH_MAGNET_X        = 46.0;  // Ferromagnetic anchor position along sled X (mm)
+LATCH_TOOTH_X         = 70.0;  // Locking sawtooth pawl position along sled X (mm)
+LATCH_ARM_H           = 6.0;   // Rocker lever height in Z (mm)
+LATCH_ARM_THICK       = 2.6;   // Rocker beam thickness in Y (mm)
+LATCH_MAGNET_PIN_DIA  = 6.2;   // Bore for Ø 6.0 mm steel dowel pin (mm)
+LATCH_SPRING_DIA      = 3.8;   // Bore for Ø 3.5 mm return compression spring (mm)
+
 // --- 6. Thermal Copper Studs (Kühlbolzen) ---
 COPPER_STUD_DIA       = 8.0;   // Diameter of thermal copper studs (mm)
 COPPER_STUD_R         = COPPER_STUD_DIA / 2.0; // Radius = 4.0 mm
