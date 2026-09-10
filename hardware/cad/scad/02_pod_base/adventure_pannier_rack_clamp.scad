@@ -95,6 +95,8 @@ module adventure_pannier_rack_clamp_cap() {
     }
 }
 
+part = "base"; // "base", "cap", "assembly"
+
 // Master assembly view (both halves clamped)
 module adventure_pannier_rack_clamp() {
     adventure_pannier_rack_clamp_base();
@@ -103,5 +105,11 @@ module adventure_pannier_rack_clamp() {
             adventure_pannier_rack_clamp_cap();
 }
 
-// Standalone render of base clamp
-adventure_pannier_rack_clamp_base();
+// Standalone render dispatch
+if (part == "cap") {
+    adventure_pannier_rack_clamp_cap();
+} else if (part == "assembly") {
+    adventure_pannier_rack_clamp();
+} else {
+    adventure_pannier_rack_clamp_base();
+}

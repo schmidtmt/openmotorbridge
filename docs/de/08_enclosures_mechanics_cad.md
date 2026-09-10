@@ -578,6 +578,9 @@ Für Harley-Davidson Street Glide, Electra Glide und Ultra Limited mit 2-Up-Komf
 
 Für großvolumige Reiseenduros und Offroad-Tourer mit offenem Gitterrohr-Heckrahmen, Rohrgepäckbrücke und optionalem Aluminium-3-Koffersystem (z. B. Touratech Zega Pro/Evo, BMW Adventure oder Wunderlich):
 
+![OpenMotorBridge Adventure-Kit Master Assembly 3D Studio](../images/cad/adventure_kit_master_assembly_3d.png)
+*Abbildung 8.21: Photorealistisches 3D-CAD-Studio des modularen Adventure-Kits (`99_adventure_kit_assembly.scad`). Links: GSA Rohrträger-Klemmschelle im geschützten Rahmendreieck (Pod 1 & Sena). Mitte: Standard-GS Transition Dock in der Sitzbank-Bügelfalte (Pod 2 & Cardo). Rechts: Gepäckbrücken-Ausleger "Heck-Balkon" hinter Alutopcase mit 45°-Astabweiser-Finne für die 2.4 GHz Dipolantenne, Pod 3 Transceiver und Garmin Varia Radar mit 36-Zahn Hirth-Formschluss-Gelenk.*
+
 ```
             ADVENTURE BIKE (BMW GS / KTM / AFRICA TWIN) INTEGRATION
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -803,6 +806,9 @@ Auf frei zugänglichen Reiseenduros und bei Zwischenstopps auf Fernreisen müsse
      (Normalst.)   nach innen       │                          │ innen frei!
 ```
 
+![OpenMotorBridge Magnetischer Diebstahlschutz 3D CAD Kinematik](../images/cad/magnetic_anti_theft_lock_cad.png)
+*Abbildung 8.24: Kinematische 3D-Schnittansicht des magnetischen Kassetten-Diebstahlschutzes (`98_magnetic_anti_theft_inspection.scad`). Erkennbar sind das transparente Pod-Gehäuse, der Schlitten mit 1. Klasse Wipphebel (grün), die 90°-Sägezahnkralle im Gehäuserasteingriff, der Ø 6x8 mm Stahlanker mit V4A Rückstellfeder, die M2 Edelstahl-Drehachse sowie die stirnseitigen V4A Auswerffedern.*
+
 ##### Funktionsweise & Konstruktionsmerkmale:
 1. **Keine Gehäusevergrößerung & plane Kassettenfront:**
    * Der Mechanismus nutzt die bestehenden seitlichen Wandstärken des Kassetten-Basisschlittens (`00_base_sled.scad`, Parameter `magnetic_lock = true`). Das Außenvolumen der Pods ($135 \times 70 \times 38{,}5\,\text{mm}$) bleibt unverändert.
@@ -999,7 +1005,8 @@ Das stationäre MagSafe-Rahmendock ([`009_magsafe_frame_dock.scad`](file:///User
 | **Satelliten-Pod**| Touring Kofferdeckel-Halter (Pod 1 & 2) | `02_pod_base/saddlebag_lid_dock.stl` | `02_pod_base/saddlebag_lid_dock.scad` |
 | **Adventure Pod 3**| Rack-Tail Mount (Heck-Balkon mit Astabweiser & Radar-Gabel) | `02_pod_base/adventure_rack_tail_mount.stl` | `02_pod_base/adventure_rack_tail_mount.scad` |
 | **Adventure Pods 1/2**| GS Transition Dock (Sitzbank-Bügelfalten-Brücke) | `02_pod_base/adventure_transition_dock.stl` | `02_pod_base/adventure_transition_dock.scad` |
-| **Adventure Pods 1/2**| GSA Rohrträger-Klemmschelle (Ø 18 mm Rahmendreieck) | `02_pod_base/adventure_pannier_rack_clamp.stl` | `02_pod_base/adventure_pannier_rack_clamp.scad` |
+| **Adventure Pods 1/2**| GSA Rohrträger-Klemmschelle Basis (Ø 18 mm Rohr) | `02_pod_base/adventure_pannier_rack_clamp_base.stl` | `02_pod_base/adventure_pannier_rack_clamp.scad` |
+| **Adventure Pods 1/2**| GSA Rohrträger-Klemmschelle Kappe (Ø 18 mm Rohr) | `02_pod_base/adventure_pannier_rack_clamp_cap.stl` | `02_pod_base/adventure_pannier_rack_clamp.scad` |
 | **Rahmendock** | MagSafe Rahmen-Dock Gehäuseoberteil (Rohrsattel, Flügel & M2.5 Insert) | `02_pod_base/components/009_magsafe_frame_dock.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
 | **Rahmendock** | MagSafe Rohrschellen-Bügel (Ø 26 mm) | `02_pod_base/components/009_magsafe_frame_clamp.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
 | **Rahmendock** | MagSafe Rahmen-Dock Gehäuseunterteil (PCB-Ledge & M2.5 Senkung) | `02_pod_base/components/009_magsafe_frame_lid.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
@@ -1020,7 +1027,7 @@ Das stationäre MagSafe-Rahmendock ([`009_magsafe_frame_dock.scad`](file:///User
 
 In den `components/`-Verzeichnissen liegen die isolierten Basiskörper (vor Differenzoperationen) und Zubehörteile:
 - **`01_main_box/components/`**: `01_lower_tub_empty.stl`, `02_corner_screws_enclosure.stl`, `03_pcb_standoffs.stl`, `04_mounting_ears.stl`, `05_sealing_groove.stl`, `06_mid_tray_frame.stl`, `07_mid_partition_floor.stl`, `08_lid_plate.stl`, `dummy_main_pcb.stl`, `dummy_lipo_battery.stl`.
-- **`02_pod_base/components/`**: `01_pod_tunnel_base.stl`, `02_pod_rear_m8_gland.stl`, `03_pod_bulkhead_partition.stl`, `04_pod_guide_grooves.stl`, `05_pod_strap_hooks.stl`, `06_fender_curved_saddle.stl`, `07_pod_slide_dock_core.stl`, `011_gopro_hirth_lock.scad` (Radiale Formschluss-Verzahnung), `dummy_m8_connector.stl`.
+- **`02_pod_base/components/`**: `01_pod_tunnel_base.stl`, `02_pod_rear_m8_gland.stl`, `03_pod_bulkhead_partition.stl`, `04_pod_guide_grooves.stl`, `05_pod_strap_hooks.stl`, `06_fender_curved_saddle.stl`, `07_pod_slide_dock_core.stl`, `011_gopro_hirth_lock.stl` (Radiale Formschluss-Verzahnung), `dummy_m8_connector.stl`.
 - **`03_pod_cartridges/components/`**: `dummy_adapter_pcb.stl`, `dummy_omm_transceiver_pcb.stl`.
 - **`04_front_node/components/`**:
   - `01_front_node_base_tub.stl`: Monolithischer, abgerundeter Basiskörper mit ausgehöhlter Innenkammer (Grundquader im CSG-Verfahren).

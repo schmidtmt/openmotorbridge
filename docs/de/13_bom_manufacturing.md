@@ -91,7 +91,14 @@ Dieses Dokument enthält die vollständige Bauteilliste (Bill of Materials) und 
 * **Front-Knoten Gehäuse (2 Teile, PA12 / ASA):** `front_node_lower_tub.stl`, `front_node_upper_lid.stl`.
 * **Front-Knoten Dichtungen & Kappe (2 Teile, TPU 95A / 85A):** `front_node_cable_glands_tpu.stl` (Paar Dichtkämme für Front-USB & Flanken-Signale), `front_node_usbc_cap_tpu.stl` (elastische USB-C Staubschutzkappe mit Haltekollier).
 * **Heck-Montage & Konsolen-Optionen für Pod 3 & Koffer (Referenz-Kits):**
-  * **Typ D1 (Adventure / Rohrträger):** `pod3_radar_bracket.stl` (M5 GoPro-Schwenkarm direkt an Pod 3) & Standard-Rohrsattel (`005_pod_strap_hooks.scad`).
+  * **Adventure-Kit (BMW R1250/1300 GS & GSA, KTM Super Adventure, Africa Twin):**
+    * `adventure_pannier_rack_clamp_base.stl` & `adventure_pannier_rack_clamp_cap.stl`: Schwerlast-Rohrträger-Klemmschellen-Paar (Ø 18 mm Edelstahlrohr, schützt Pods 1 & 2 als Überrollkäfig im Kofferträger-Rahmendreieck).
+    * `adventure_transition_dock.stl`: Ergonomisches Sitzbank-Bügelfalten-Dock (100% kofferunabhängig, feste Klemmung an Ø 28 mm Rahmenrohr).
+    * `adventure_rack_tail_mount.stl`: Heck-Balkon Gepäckbrücken-Ausleger (65 mm Cantilever hinter Alutopcase, 45° Astabweiser-Finne für Dipolantenne, integrierte M5 GoPro-Gabel).
+    * `radar_varia_gopro_lock_dock.stl`: Garmin Varia Quarter-Turn Bajonett-Dock (akustische Formschluss-Rastung + verdeckte M3 Torx-TR Diebstahlsicherung + untere Hirth-Lasche).
+    * `011_gopro_hirth_lock.stl`: 36-Zahn Radial-Hirth-Formschluss-Rosette (10°-Schritte gegen Nick-Wandern bei Wellblechpiste).
+    * `cartridge_magnetic_lock_latch.stl`: Magnetischer Diebstahlschutz-Wipphebel mit 90°-Sägezahn-Sperrflanke und Aufnahme für Ø 6x8 mm Stahlanker.
+  * **Typ D1 (Adventure / Rohrträger klassisch):** `pod3_radar_bracket.stl` (M5 GoPro-Schwenkarm direkt an Pod 3) & Standard-Rohrsattel (`005_pod_strap_hooks.scad`).
   * **Referenz-Kit 1 (CVO Road Glide ST & New Touring):** `cvo_st_undercowl_skeleton_dock.stl` (aufrechtes Federsitz-Dock unter Carbonhutze) + `cvo_st_telemetry_fin.stl` (2,4 GHz Heckfinne) + `saddlebag_lid_dock.stl` (Kofferdeckel-Dock).
   * **Referenz-Kit 2 (Road King Special):** `pod3_touring_fender_console.stl` (organische Kotflügel-Konsole für 1/4"-20 Mutter) + `saddlebag_lid_dock.stl`.
   * **Referenz-Kit 3 (Classic Bagger & Cruiser):** `pod3_touring_stealth_console.stl` (flache Touring-Konsole).
@@ -166,7 +173,14 @@ Dieses Dokument enthält die vollständige Bauteilliste (Bill of Materials) und 
 | **M3 Gewindeeinsätze** | Ruthex M3 x 5.7 mm Messing (RX-M3x5.7) | Ruthex / Amazon | 8 Stk. | 4x Zentralbox Unterwanne, 4x Front-Node Unterwanne |
 | **M4 Gewindeeinsätze** | Ruthex M4 x 8.1 mm Messing (RX-M4x8.1) | Ruthex / Amazon | 4 Stk. | Front-Node Gehäuseboden (AMPS-Lochbild 30 x 38 mm) |
 | **M2 Schottwandschrauben** | M2 x 8 mm Senkkopf V4A (DIN 7991) | Normteil | 6 Stk. | Fixierung der 3 Pod-Schottwände (2x pro Pod) |
-| **M5 Radar-Klemmschraube** | M5 x 25 mm V4A (DIN 912) + Hutmutter | Normteil | 1 Stk. | Klemmschraube für Pod 3 GoPro-Radar-Schwenkarm |
+| **M5 Klemmschrauben (Rohr)** | M5 x 30 mm Zylinderkopf V4A (DIN 912) | Normteil / Schrauben-Express | 4 Stk. | Verschraubung der GSA Rohrträger-Klemmschellen |
+| **M5 Sicherungsmuttern** | DIN 985 M5 Sicherungsmuttern V4A (Stoppmuttern)| Normteil / Schrauben-Express | 5 Stk. | 4x Rohrträger-Klemmschellen, 1x Hirth-GoPro-Gelenk |
+| **M5 Radar-Klemmschraube** | M5 x 25 mm V4A (DIN 912) + DIN 985 Stoppmutter | Normteil | 1 Stk. | Klemmschraube für Pod 3 GoPro-Radar-Schwenkarm mit Hirth-Lock |
+| **M3 Diebstahlsicherung Varia**| M3 x 6 mm Madenschraube V4A (DIN 913 / 914 Torx-TR)| Normteil | 1 Stk. | Verdeckte Rotationssperre im Varia Quarter-Turn Dock |
+| **M2 Schwenkachse Wippe** | M2 x 8 mm Zylinderstift Edelstahl (DIN 7 / ISO 2338)| Normteil / Misumi | 2 Stk. | Drehachse für magnetische Diebstahlschutz-Wippe (Pod 1 & 2) |
+| **Magnetanker (Kassette)** | Ø 6 x 8 mm Zylinderstift ferromagnetisch (DIN 6325) | Normteil / Misumi | 2 Stk. | Stahlanker im hinteren Hebelarm der Kassetten-Wippe |
+| **Wippen-Rückstellfeder** | Edelstahl V4A ($\varnothing 3{,}5\,\text{mm}, L_0=10\,\text{mm}, R=0{,}8\,\text{N/mm}$) | Gutekunst / Sodemann | 2 Stk. | Automatische Rastung der Sägezahnkralle beim Einschieben |
+| **N52 Entriegelungsschlüssel**| N52 Neodym-Blockmagnet ($20 \times 10 \times 5\,\text{mm}$) | Supermagnete / Web | 1 Stk. | Externer Magnetschlüssel für schlüssellose Entriegelung |
 | **Auswerfer-Druckfedern** | Edelstahl V4A ($D=4{,}5\,\text{mm}, L_0=15\,\text{mm}, R=1{,}2\,\text{N/mm}$) | Gutekunst Federn / Sodemann | 6 Stk. | Auto-Eject Schnappmechanismus (2x pro Pod) |
 | **Silentblöcke / Gummipuffer**| Typ A M4 Außen/Innen ($\varnothing 15 \times 10\,\text{mm}$) + Stoppmuttern | Ganter / Normteil | 4 Stk. | Schwingungsentkoppelte Rahmenmontage Zentralbox |
 | **EPDM-Spannringe** | UV- & Ozonbeständiges EPDM ($\varnothing 45\dots 75\,\text{mm}$) | QuadLock / O-Ring-Shop | 6 Stk. | Rohrbett-Schnellmontage (Pods & Front-Node) |

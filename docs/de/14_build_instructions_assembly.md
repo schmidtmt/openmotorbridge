@@ -94,10 +94,17 @@ Um ein vollwertiges OpenMotorBridge (v8.0) Gesamtsystem für ein Motorrad aufzub
 | **Gehäuseschrauben Front**| Zylinderkopf DIN 912 V4A M3 $\times 20\,\text{mm}$ | **4** | 4-Eck-Verschraubung Front-Knoten |
 | **Platinenschrauben** | Zylinderkopf DIN 912 V4A M2.5 $\times 6\,\text{mm}$ | **8** | 4x Main Box PCBA, 4x Front-Node PCBA |
 | **Schottwandschrauben Pod**| Senkkopf DIN 7991 V4A M2 $\times 8\,\text{mm}$ | **6** | Fixierung der 3 Pod-Schottwände (2x pro Pod) |
+| **M5 Klemmschrauben Rohr** | Zylinderkopf DIN 912 V4A M5 $\times 30\,\text{mm}$ | **4** | Verschraubung der GSA Rohrträger-Klemmschellen (Ø 18 mm) |
+| **M5 Stoppmuttern** | DIN 985 M5 Sicherungsmuttern V4A | **5** | 4x Rohrträger-Klemmschellen, 1x Hirth-GoPro-Gelenk |
+| **M5 Klemmschraube & Stoppmutter**| DIN 912 V4A M5 $\times 25\,\text{mm}$ + DIN 985 M5 Mutter | **1** | Klemmung des GoPro-Radar-Schwenkarms mit Hirth-Formschluss |
+| **M3 Torx-TR Madenschraube** | DIN 913 / 914 V4A M3 $\times 6\,\text{mm}$ | **1** | Verdeckte mechanische Rotationssperre im Varia-Dock |
+| **M2 Schwenkachsen Wippe** | Zylinderstift Edelstahl DIN 7 M2 $\times 8\,\text{mm}$ | **2** | Drehachsen für magnetische Diebstahlschutz-Wippe (Pod 1 & 2) |
+| **Ferromagnetische Stahlanker**| Zylinderstift Stahl gehärtet DIN 6325 $\varnothing 6 \times 8\,\text{mm}$| **2** | Magnetanker im hinteren Hebelarm der Kassettenwippe |
+| **Wippen-Rückstellfedern** | Edelstahl V4A ($\varnothing 3{,}5\,\text{mm}, L_0=10\,\text{mm}, R=0{,}8\,\text{N/mm}$)| **2** | Rückstellung der Sägezahn-Rastkralle beim Kassetteneinschub |
+| **N52 Entriegelungsschlüssel**| Neodym N52 Blockmagnet ($20 \times 10 \times 5\,\text{mm}$) | **1** | Berührungsloser Magnetschlüssel für Kassetten-Auswurf |
 | **Auswerfer-Druckfedern** | Edelstahl V4A ($\varnothing 4{,}5\,\text{mm}, L_0=15\,\text{mm}, R=1{,}2\,\text{N/mm}$) | **6** | Auto-Eject Schnappmechanismus (2x pro Pod-Schottwand) |
 | **Silentblöcke / Puffer** | Gummipuffer Typ A (M4 Außengewinde / M4 Innen, $\varnothing 15 \times 10\,\text{mm}$) | **4** | Schwingungsentkoppelte Rahmenmontage der Zentralbox |
-| **Sicherungsmuttern / U-Scheiben**| DIN 985 M4 Stoppmuttern + DIN 125 Unterlegscheiben V4A | **4** | Konterung der Silentblöcke am Motorradrahmen |
-| **M5 Klemmschraube & Hutmutter** | DIN 912 V4A M5 $\times 25\,\text{mm}$ + M5 Hutmutter | **1** | Klemmung des GoPro-Radar-Schwenkarms an Pod 3 |
+| **Sicherungsmuttern M4 / Scheiben**| DIN 985 M4 Stoppmuttern + DIN 125 Unterlegscheiben V4A | **4** | Konterung der Silentblöcke am Motorradrahmen |
 
 ---
 
@@ -212,6 +219,29 @@ Für den sauberen, vibrationsfesten und IP67-dichten Zusammenbau aller Baugruppe
      * Schutzschlitten mit geschlossener Frontblende und O-Ring einsetzen, wenn der Beifahrer-Pod ungenutzt bleibt.
 3. **Flanschdichtung:** Silikon-Formdichtung auf den Kassettenkragen aufziehen und dünn mit dielektrischem Silikonfett benetzen.
 
+### Schritt 3.1: Montage des magnetischen Diebstahlschutzes (Kassetten-Wippen-Mechanismus)
+
+```
+                       MAGNETISCHER DIEBSTAHL-SCHUTZ & AUSWURF-KINEMATIK
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│ [Zustand 1: VERRIEGELT]                                                                │
+│ Druckfeder drückt Hebelarm ──► 1. Klasse Wippe dreht um M2 Stift ──► Sägezahnkralle     │
+│ schwenkt 2.5 mm nach außen in die Gehäusenut. 90°-Sperrflanke blockiert Auszug 100%!   │
+├────────────────────────────────────────────────────────────────────────────────────────┤
+│ [Zustand 2: ENTRIEGELN & AUSWURFKICK]                                                  │
+│ Externer N52 Neodym-Schlüssel an Gehäusemarkierung anlegen ──► Zieht Ø 6x8 mm Stahl-    │
+│ anker nach außen ──► Sägezahn schwenkt bündig ein ──► 2x V4A Druckfedern werfen        │
+│ Kassette blitzschnell 25 mm weit aus dem Pod-Gehäuse!                                  │
+└────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+1. **Stahlanker einpressen:** Den gehärteten ferromagnetischen Stahlstift ($\varnothing 6 \times 8\,\text{mm}$, DIN 6325) in die Querbohrung des hinteren Hebelarms der Wippe ([`05_magnetic_lock_latch.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/parts/05_magnetic_lock_latch.scad)) bündig einpressen.
+2. **Rückstellfeder einsetzen:** Die kleine $\varnothing 3{,}5 \times 10\,\text{mm}$ V4A Druckfeder in die innenseitige Federtasche des hinteren Hebelarms stecken.
+3. **Wippe im Schlitten montieren:** Die vormontierte Wippe in die Aussparung an der linken Führungswange des Kassetten-Schlittens ([`00_base_sled.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/00_base_sled.scad)) einsetzen. Den $\varnothing 2{,}0 \times 8\,\text{mm}$ Edelstahl-Zylinderstift (DIN 7) von oben durch die Lagerbohrung ($X = 58\,\text{mm}$) durchdrücken.
+4. **Funktionsprüfung vor dem Einschieben:**
+   * Die Sägezahn-Rastkralle am vorderen Arm ($X = 70\,\text{mm}$) muss durch Federkraft $2{,}5\,\text{mm}$ über die Führungsfeder hinausragen.
+   * Den N52 Neodym-Blockmagneten außen an die Höhe des Stahlankers ($X = 46\,\text{mm}$) halten: Die Wippe kippt um $-4{,}8^\circ$, und die Kralle taucht vollständig bündig in den Schlitten ein.
+
 ### Schritt 4: Heck-Kassette Pod 3 & HF-Pigtail-Montage (Dreifach-Koaxial-Bypass)
 1. **SMA-Bulkhead-Buchsen montieren:**
    * Die 3x SMA-Flanschbuchsen der Murata MM126036 Pigtails von außen durch die vorbereiteten $\varnothing 6{,}5\,\text{mm}$ Bohrungen der Kassetten-Stirnwand führen.
@@ -228,6 +258,46 @@ Für den sauberen, vibrationsfesten und IP67-dichten Zusammenbau aller Baugruppe
 4. **Funktionsweise der automatischen Umschaltung (Plug & Play):**
    * **Standardbetrieb (ohne externe Antennen):** Auf die SMA-Buchsen werden die IP67-Messing-Rändelkappen aufgeschraubt. Die internen Antennen (2.4 GHz IFA, 868 MHz Wendelantenne und 25x25 mm GNSS-Keramikpatch) arbeiten zu 100 % autark und wettergeschützt im Radom.
    * **Externer Antennenbetrieb:** Wird eine externe Antenne (z. B. Taoglas Collinear am Heck oder aktive Dachantenne am Koffer) aufgeschraubt, hebt die interne Kontaktfeder in der Murata MM8030-Buchse mechanisch ab: Die interne Antenne wird mit $> 25\,\text{dB}$ Isolation entkoppelt und das HF-Signal mit minimalster Einfügedämpfung ($< 0{,}15\,\text{dB}$) auf die externe Antenne geleitet.
+
+### Schritt 4.1: Adventure-Kit Montage am Motorrad (BMW GS / GSA, KTM, Tenere, Africa Twin)
+
+```
+                            OPENMOTORBRIDGE ADVENTURE-KIT MOUNTING SUITE
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│ CONFIG A: Rohrträger-Klemmschelle (BMW GSA / Touratech Kofferträger)                   │
+│ • Schutz im Rohrrahmen-Dreieck (Überrollkäfig-Effekt bei Stürzen auf Geröll/Sand)      │
+│ • Klemmt an Ø 18 mm Edelstahlrohr mit 2x M5x30 mm V4A Schrauben & DIN 985 Stoppmuttern │
+├────────────────────────────────────────────────────────────────────────────────────────┤
+│ CONFIG B: Standard-GS Transition Dock (Sitzbank-Bügelfalte)                            │
+│ • 100% kofferunabhängige Montage an Heckrahmen-Unterzügen (z. B. Ø 28 mm Rohr)         │
+│ • Flache Einbettung in der Fahrzeugsilhouette, kein Hängenbleiben beim Aufsteigen      │
+├────────────────────────────────────────────────────────────────────────────────────────┤
+│ CONFIG C: Gepäckbrücken-Ausleger "Heck-Balkon" & Garmin Varia Radar                    │
+│ • 65 mm Cantilever hinter Alutopcase: 360° freie HF-Sicht für OpenMotorMesh & GNSS   │
+│ • 45° Astabweiser-Finne schützt die Taoglas Dipolantenne vor Ästen im Enduro-Dickicht  │
+│ • 36-Zahn Hirth-Formschluss-Gelenk verhindert jedes Absacken (Pitch-Drift) des Radars  │
+│ • Garmin Quarter-Turn Bajonett mit verdeckter M3 Torx-TR Madenschraube (Diebstahlschutz)│
+└────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+1. **Konfiguration A (Rohrträger-Klemmschelle für Pod 1 & 2):**
+   * Einen Streifen $1{,}0\,\text{mm}$ EPDM-Schutzband um das $\varnothing 18\,\text{mm}$ Rohr wickeln.
+   * Die Unterschale (`adventure_pannier_rack_clamp_base.stl`) aufsetzen.
+   * Die Klemmschale (`adventure_pannier_rack_clamp_cap.stl`) ansetzen und mit 2x M5 x 30 mm Zylinderkopfschrauben und DIN 985 Stoppmuttern über Kreuz gleichmäßig mit $4{,}5\,\text{Nm}$ festziehen.
+   * Pod-Basisgehäuse mit M4 Schrauben direkt an den Befestigungsaugen der Schelle verschrauben.
+2. **Konfiguration B (Transition-Dock an Sitzbank-Bügelfalte):**
+   * Das Dock (`adventure_transition_dock.stl`) unterhalb der Sitzbankkante an das Rahmenrohr klemmen.
+   * Das M8 PUR-Zuleitungskabel durch den Kabelschacht an der Unterseite unter die Sitzbank zur Zentralbox führen.
+3. **Konfiguration C (Gepäckbrücken-Ausleger "Heck-Balkon" für Pod 3 & Radar):**
+   * Den Ausleger (`adventure_rack_tail_mount.stl`) mit 4x M6 Schrauben an den vorbereiteten Bohrungen der Aluminium-Gepäckbrücke verschrauben.
+   * Pod 3 in das Trägerbett einlegen und mit 2x EPDM-Sicherungsbändern in den Halteschlitzen arretieren.
+   * Die Taoglas 2,4 GHz Dipolantenne auf den SMA-Port schrauben und entlang der $45^\circ$-Astabweiser-Finne ausrichten.
+4. **Radar-Dock & 36-Zahn Hirth-Formschluss montieren:**
+   * Die Zentralzunge des Garmin Varia Docks (`radar_varia_gopro_lock_dock.stl`) in die Doppelgabel des Heck-Balkons einschieben.
+   * Die 36 radialen Hirth-Zähne formschlüssig in den gewünschten Neigungswinkel einrasten ($10^\circ$-Schritte, z. B. $+10^\circ$ bis $+15^\circ$ für exakten Radar-Horizont).
+   * M5 x 25 mm V4A Schraube durchstecken und mit DIN 985 M5 Sicherungsmutter mit $3{,}5\,\text{Nm}$ anziehen (durch den Formschluss ist ein Verdrehen durch Wellblech-Vibrationen physikalisch ausgeschlossen).
+   * Garmin Varia Radar senkrecht einsetzen, $90^\circ$ im Uhrzeigersinn drehen, bis die akustische Rastklinke einschnappt.
+   * Die M3 x 6 mm Torx-TR Sicherungsmadenschraube handfest eindrehen, sodass der Bajonettflügel blockiert ist (Diebstahlschutz ohne Werkzeug).
 
 ---
 

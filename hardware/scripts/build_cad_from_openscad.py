@@ -92,6 +92,15 @@ STL_TARGETS: List[Tuple] = [
     ("02_pod_base/parts/009_magsafe_frame_dock.scad", "02_pod_base/components/009_magsafe_frame_dock.stl", ["-D", 'part="body"']),
     ("02_pod_base/parts/009_magsafe_frame_dock.scad", "02_pod_base/components/009_magsafe_frame_lid.stl", ["-D", 'part="lid"']),
     ("02_pod_base/parts/009_magsafe_frame_dock.scad", "02_pod_base/components/009_magsafe_frame_clamp.stl", ["-D", 'part="clamp"']),
+
+    # 10. Adventure-Kit (BMW GS / GSA, KTM, Africa Twin)
+    ("02_pod_base/adventure_pannier_rack_clamp.scad", "02_pod_base/adventure_pannier_rack_clamp_base.stl", ["-D", 'part="base"']),
+    ("02_pod_base/adventure_pannier_rack_clamp.scad", "02_pod_base/adventure_pannier_rack_clamp_cap.stl", ["-D", 'part="cap"']),
+    ("02_pod_base/adventure_transition_dock.scad", "02_pod_base/adventure_transition_dock.stl"),
+    ("02_pod_base/adventure_rack_tail_mount.scad", "02_pod_base/adventure_rack_tail_mount.stl"),
+    ("02_pod_base/radar_varia_gopro_lock_dock.scad", "02_pod_base/radar_varia_gopro_lock_dock.stl"),
+    ("02_pod_base/parts/011_gopro_hirth_lock.scad", "02_pod_base/components/011_gopro_hirth_lock.stl"),
+    ("03_pod_cartridges/parts/05_magnetic_lock_latch.scad", "03_pod_cartridges/cartridge_magnetic_lock_latch.stl"),
 ]
 
 # List of High-Resolution 3D Render Targets
@@ -245,6 +254,18 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
         "02_pod_base/parts/009_magsafe_frame_dock.scad",
         os.path.join(CAD_IMG_DIR, "magsafe_frame_dock_cad.png"),
         "0,0,22,60,0,320,195",
+        "Tomorrow"
+    ),
+    (
+        "02_pod_base/99_adventure_kit_assembly.scad",
+        os.path.join(CAD_IMG_DIR, "adventure_kit_master_assembly_3d.png"),
+        "15,40,0,55,0,310,750",
+        "Tomorrow"
+    ),
+    (
+        "03_pod_cartridges/98_magnetic_anti_theft_inspection.scad",
+        os.path.join(CAD_IMG_DIR, "magnetic_anti_theft_lock_cad.png"),
+        "65,20,15,55,0,320,240",
         "Tomorrow"
     ),
 ]

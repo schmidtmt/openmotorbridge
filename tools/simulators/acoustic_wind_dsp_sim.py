@@ -88,6 +88,7 @@ def simulate_audio_dsp_at_speed(speed_kmh: float = 160.0) -> Dict[str, Any]:
     voice_signal = voice * voice_env * 0.350 # 350 mVpp at mic
     
     # 2. Helmet Interior Turbulent Wind Noise Model
+    np.random.seed(int(speed_kmh * 100) + 42)
     # Wind noise SPL scales with v^3: at 160 km/h ~ 98 dB SPL, at 80 km/h ~ 82 dB SPL
     spl_wind_db = 82.0 + 30.0 * math.log10(max(speed_kmh, 10.0) / 80.0)
     # Wind noise is low-frequency dominant (turbulent vortex shedding: 50 Hz - 500 Hz)
@@ -111,12 +112,13 @@ def simulate_audio_dsp_at_speed(speed_kmh: float = 160.0) -> Dict[str, Any]:
     hpf_filtered = apply_iir_filter(b_hpf, a_hpf, raw_mic_input)
     biquad_filtered = apply_iir_filter(b_peak, a_peak, hpf_filtered)
 
-    # Calculate low-frequency rumble attenuation at 50 Hz
-    # Compare raw vs filtered 50 Hz component
+    # Calculate low-frequency rumble attenuation around 50 Hz (narrow-band average)
     fft_raw = np.abs(np.fft.rfft(raw_mic_input))
     fft_filt = np.abs(np.fft.rfft(biquad_filtered))
     idx_50hz = int(50.0 * len(t) / sample_rate)
-    rumble_attenuation_db = 20.0 * math.log10(np.maximum(fft_raw[idx_50hz], 1e-6) / np.maximum(fft_filt[idx_50hz], 1e-6))
+    raw_50hz_power = np.mean(fft_raw[max(0, idx_50hz - 3) : idx_50hz + 4] ** 2)
+    filt_50hz_power = np.mean(fft_filt[max(0, idx_50hz - 3) : idx_50hz + 4] ** 2)
+    rumble_attenuation_db = 10.0 * math.log10(np.maximum(raw_50hz_power, 1e-12) / np.maximum(filt_50hz_power, 1e-12))
 
     # 4. DSP Pipeline: Adaptive VOX Voice Activity Detector with Noise-Floor Tracking
     # Dynamic threshold compensation: base -32 dBFS + 0.3 * (SPL - 75)
