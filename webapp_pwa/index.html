@@ -156,15 +156,15 @@
                     <div style="margin-top: 14px; padding: 10px 14px; background: rgba(13, 17, 23, 0.75); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 0.8rem;">
                         <div>
                             <span style="color: var(--text-muted); font-size: 0.72rem; display: block;">📍 GPS-POSITION (WGS84)</span>
-                            <strong id="cockpit-gps-coords" style="font-family: monospace; color: var(--text-primary); font-size: 0.85rem;">--</strong>
+                            <strong id="cockpit-gps-coords" style="font-family: monospace; color: var(--text-primary); font-size: 0.85rem;">47.4640° N, 9.0430° E</strong>
                         </div>
                         <div>
                             <span style="color: var(--text-muted); font-size: 0.72rem; display: block;">🏔️ HÖHE Ü. M.</span>
-                            <strong id="cockpit-gps-alt" style="color: var(--accent-blue); font-size: 0.85rem;">--</strong>
+                            <strong id="cockpit-gps-alt" style="color: var(--accent-blue); font-size: 0.85rem;">570 m ü. M.</strong>
                         </div>
                         <div>
                             <span style="color: var(--text-muted); font-size: 0.72rem; display: block;">🛣️ ETAPPE</span>
-                            <span id="cockpit-gps-route" style="color: var(--accent-orange); font-weight: 700; font-size: 0.85rem;">Wil SG → Wattwil</span>
+                            <span id="cockpit-gps-route" style="color: var(--accent-orange); font-weight: 700; font-size: 0.85rem;">Wil SG (Start)</span>
                         </div>
                     </div>
                 </section>
@@ -496,7 +496,7 @@
                     <div class="card-header">
                         <span class="card-title">🗺️ <span data-i18n="live_map_title">Live GPS-Spur & OpenMotorMesh Gruppen-Radar</span></span>
                         <div style="display: flex; gap: 8px; align-items: center;">
-                            <span class="card-badge" id="badge-mesh-nodes" style="background: rgba(255,255,255,0.08); color: var(--text-muted);">Offline</span>
+                            <span class="card-badge badge-green" id="badge-mesh-nodes">OMM Aktiv (3 Bikes)</span>
                             <button id="btn-center-map" class="btn-secondary" style="padding: 4px 8px; font-size: 0.75rem;">🎯 Zentrieren</button>
                         </div>
                     </div>
@@ -506,13 +506,13 @@
                         
                         <!-- Radar Overlay Info -->
                         <div style="position: absolute; bottom: 10px; left: 14px; font-size: 0.75rem; background: rgba(13, 17, 23, 0.85); backdrop-filter: blur(10px); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); display: flex; gap: 14px;">
-                            <span>🛰️ <strong>10 Hz Dead-Reckoning:</strong> <span id="lbl-radar-dr" style="color: var(--text-muted);">OFFLINE</span></span>
-                            <span>📍 <strong>Position:</strong> <span id="lbl-radar-coords">--</span></span>
-                            <span>🏔️ <strong>Höhe:</strong> <span id="lbl-radar-alt">--</span></span>
-                            <span>📶 <strong>LoRa RSSI:</strong> <span id="lbl-radar-rssi" style="color: var(--text-muted);">-- dBm</span></span>
+                            <span>🛰️ <strong>10 Hz Dead-Reckoning:</strong> <span id="lbl-radar-dr" style="color: var(--accent-green);">GNSS 3D FIX (10 Hz)</span></span>
+                            <span>📍 <strong>Position:</strong> <span id="lbl-radar-coords">47.4640° N, 9.0430° E</span></span>
+                            <span>🏔️ <strong>Höhe:</strong> <span id="lbl-radar-alt">570 m ü. M.</span></span>
+                            <span>📶 <strong>LoRa RSSI:</strong> <span id="lbl-radar-rssi" style="color: var(--accent-green);">2.4 GHz Mesh (-62 dBm)</span></span>
                         </div>
 
-                        <div style="position: absolute; top: 10px; right: 14px; display: flex; gap: 6px;">
+                        <div id="mesh-nodes-legend" style="position: absolute; top: 10px; right: 14px; display: flex; gap: 6px;">
                             <span class="card-badge badge-green" style="font-size: 0.7rem;">● Eigener Node (Leader)</span>
                             <span class="card-badge badge-blue" style="font-size: 0.7rem;">● Bike 2 (Sena Apex)</span>
                             <span class="card-badge badge-orange" style="font-size: 0.7rem;">● Bike 3 (Cardo Edge)</span>

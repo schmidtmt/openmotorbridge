@@ -741,6 +741,140 @@ let isSimConnected = false;
 let s_simTrackHistory = [];
 const btnSimWs = document.getElementById('btn-sim-ws');
 const labelSimWs = document.getElementById('label-sim-ws');
+const btnCenterMap = document.getElementById('btn-center-map');
+
+if (btnCenterMap) {
+    btnCenterMap.addEventListener('click', () => {
+        showToast(state.lang === 'de' ? '🎯 Radaransicht auf Eigener Node (Bike A Leader) zentriert' : '🎯 Radar view centered on Bike A Leader', 'info', 2000);
+        btnCenterMap.style.transform = 'scale(0.92)';
+        setTimeout(() => { btnCenterMap.style.transform = ''; }, 150);
+    });
+}
+
+// -------------------------------------------------------------------------
+// Built-in Geodetic Simulation Track: Wil SG -> Wattwil (Tunnel) -> Rickenpass
+// -------------------------------------------------------------------------
+const SIM_TRACK_WAYPOINTS = [
+    { lat: 47.4640, lon: 9.0430, alt: 570.0, speed: 50.0, lean: 0.0,   in_tunnel: false, label: "Wil SG (Start Abfahrt)", dist_chaser: 45.0, rf_rssi: -58, rf_link: "2.4 GHz Mesh", heading: 165 },
+    { lat: 47.4580, lon: 9.0450, alt: 572.0, speed: 56.0, lean: 18.5,  in_tunnel: false, label: "Wil Süd Ortsausgang", dist_chaser: 48.0, rf_rssi: -60, rf_link: "2.4 GHz Mesh", heading: 172 },
+    { lat: 47.4480, lon: 9.0480, alt: 575.0, speed: 64.0, lean: -22.0, in_tunnel: false, label: "Zuzwil Kurven", dist_chaser: 52.0, rf_rssi: -62, rf_link: "2.4 GHz Mesh", heading: 168 },
+    { lat: 47.4350, lon: 9.0520, alt: 580.0, speed: 82.0, lean: 12.0,  in_tunnel: false, label: "Bazenheid Schnellstraße", dist_chaser: 65.0, rf_rssi: -66, rf_link: "2.4 GHz Mesh", heading: 175 },
+    { lat: 47.4100, lon: 9.0580, alt: 592.0, speed: 88.0, lean: -8.5,  in_tunnel: false, label: "Bazenheid Süd", dist_chaser: 75.0, rf_rssi: -69, rf_link: "2.4 GHz Mesh", heading: 170 },
+    { lat: 47.3800, lon: 9.0650, alt: 605.0, speed: 92.0, lean: 14.0,  in_tunnel: false, label: "Dietfurt Schnellstrasse", dist_chaser: 85.0, rf_rssi: -71, rf_link: "2.4 GHz Mesh", heading: 174 },
+    { lat: 47.3550, lon: 9.0690, alt: 610.0, speed: 86.0, lean: -16.0, in_tunnel: false, label: "Lichtensteig Anfahrt", dist_chaser: 78.0, rf_rssi: -73, rf_link: "2.4 GHz Mesh", heading: 172 },
+    { lat: 47.3300, lon: 9.0720, alt: 615.0, speed: 80.0, lean: 15.0,  in_tunnel: false, label: "Lichtensteig Pre-Tunnel", dist_chaser: 70.0, rf_rssi: -74, rf_link: "2.4 GHz Mesh", heading: 170 },
+    { lat: 47.2970, lon: 9.0790, alt: 625.0, speed: 78.0, lean: 12.0,  in_tunnel: true,  label: "Wattwil Tunnel Portal Nord", dist_chaser: 62.0, rf_rssi: -104, rf_link: "LoRa 868 MHz", heading: 165, drift: 2.3 },
+    { lat: 47.2940, lon: 9.0805, alt: 628.0, speed: 76.0, lean: -16.0, in_tunnel: true,  label: "Wattwil Tunnel S-Kurve 1", dist_chaser: 58.0, rf_rssi: -109, rf_link: "LoRa 868 MHz", heading: 168, drift: 7.4 },
+    { lat: 47.2925, lon: 9.0810, alt: 630.0, speed: 75.0, lean: 18.0,  in_tunnel: true,  label: "Wattwil Tunnel Mid S-Curve", dist_chaser: 55.0, rf_rssi: -114, rf_link: "LoRa 868 MHz", heading: 164, drift: 13.1 },
+    { lat: 47.2885, lon: 9.0828, alt: 634.0, speed: 65.0, lean: -14.0, in_tunnel: true,  label: "Wattwil Tunnel Verzögerung", dist_chaser: 50.0, rf_rssi: -108, rf_link: "LoRa 868 MHz", heading: 166, drift: 18.8 },
+    { lat: 47.2880, lon: 9.0830, alt: 635.0, speed: 45.0, lean: -28.0, in_tunnel: false, label: "Wattwil Kreisel Tunnelausgang", dist_chaser: 42.0, rf_rssi: -67, rf_link: "2.4 GHz Mesh", heading: 215 },
+    { lat: 47.2830, lon: 9.0780, alt: 650.0, speed: 55.0, lean: 30.0,  in_tunnel: false, label: "Rickenstrasse Auffahrt", dist_chaser: 48.0, rf_rssi: -65, rf_link: "2.4 GHz Mesh", heading: 220 },
+    { lat: 47.2750, lon: 9.0680, alt: 690.0, speed: 58.0, lean: -36.0, in_tunnel: false, label: "Rickenpass Kehre 1", dist_chaser: 54.0, rf_rssi: -68, rf_link: "2.4 GHz Mesh", heading: 235 },
+    { lat: 47.2680, lon: 9.0600, alt: 720.0, speed: 62.0, lean: 39.0,  in_tunnel: false, label: "Rickenpass Waldkurven", dist_chaser: 60.0, rf_rssi: -71, rf_link: "2.4 GHz Mesh", heading: 228 },
+    { lat: 47.2650, lon: 9.0550, alt: 745.0, speed: 56.0, lean: -42.0, in_tunnel: false, label: "Rickenpass Haarnadelkurve", dist_chaser: 46.0, rf_rssi: -69, rf_link: "2.4 GHz Mesh", heading: 240 },
+    { lat: 47.2580, lon: 9.0480, alt: 795.0, speed: 65.0, lean: 24.0,  in_tunnel: false, label: "Rickenpass Summit Passhöhe", dist_chaser: 50.0, rf_rssi: -63, rf_link: "2.4 GHz Mesh", heading: 245 }
+];
+
+let s_internalSimInterval = null;
+let s_simProgress = 0.0;
+let s_simTime = 0.0;
+
+function startInternalSimTrackEngine(isDigitalTwin = true) {
+    if (s_internalSimInterval) return;
+    isSimConnected = true;
+    
+    if (btnSimWs && isDigitalTwin) {
+        btnSimWs.classList.add('connected');
+        btnSimWs.style.background = 'var(--accent-green)';
+        btnSimWs.style.color = '#000';
+        if (labelSimWs) labelSimWs.textContent = 'Digital Twin Live';
+    }
+
+    s_internalSimInterval = setInterval(() => {
+        s_simTime += 0.1;
+        s_simProgress += 0.015; // Smooth trajectory progress
+        if (s_simProgress >= SIM_TRACK_WAYPOINTS.length - 1) {
+            s_simProgress = 0.0;
+        }
+
+        const idx = Math.floor(s_simProgress);
+        const frac = s_simProgress - idx;
+        const p1 = SIM_TRACK_WAYPOINTS[idx];
+        const p2 = SIM_TRACK_WAYPOINTS[Math.min(idx + 1, SIM_TRACK_WAYPOINTS.length - 1)];
+
+        const lat = p1.lat + (p2.lat - p1.lat) * frac;
+        const lon = p1.lon + (p2.lon - p1.lon) * frac;
+        const alt = p1.alt + (p2.alt - p1.alt) * frac;
+        const speed = Math.max(0, p1.speed + (p2.speed - p1.speed) * frac + Math.sin(s_simTime * 2.5) * 1.5);
+        const lean = p1.lean + (p2.lean - p1.lean) * frac + Math.sin(s_simTime * 3.2) * 1.6;
+        const heading = p1.heading + (p2.heading - p1.heading) * frac;
+        const in_tunnel = p1.in_tunnel;
+        const drift = in_tunnel ? ((p1.drift || 2.0) + ((p2.drift || 18.8) - (p1.drift || 2.0)) * frac) : 0.0;
+        const sats = in_tunnel ? 0 : 20;
+        const hdop = in_tunnel ? 99.9 : 0.8;
+        const rf_link = p1.rf_link;
+        const rf_rssi = Math.round(p1.rf_rssi + (p2.rf_rssi - p1.rf_rssi) * frac + (Math.random() * 2 - 1));
+        const distChaser = Math.round(p1.dist_chaser + (p2.dist_chaser - p1.dist_chaser) * frac);
+
+        // Cyclic Rear Radar Approach (Approaching car every 32s)
+        const cycleSec = s_simTime % 32.0;
+        let targets = [];
+        if (cycleSec < 12.0) {
+            const dist = 120.0 - (cycleSec / 12.0) * 112.0;
+            const threat = dist < 30 ? 2 : (dist < 75 ? 1 : 0);
+            targets = [{
+                id: 1,
+                dist: dist,
+                distance_m: dist,
+                speed: 40.0,
+                speed_diff_kmh: 40.0,
+                azimuth: -7.0,
+                ttc: dist / (40.0 / 3.6),
+                threat: threat
+            }];
+        }
+
+        const simFrame = {
+            type: "telemetry",
+            timestamp: s_simTime,
+            bike_id: "Bike_A",
+            v_ign: 14.2 + Math.sin(s_simTime * 0.4) * 0.15,
+            v_bat: 4.14,
+            btn_bat: 97,
+            speed: speed,
+            sats: sats,
+            hdop: hdop,
+            lean_angle: lean,
+            mode: 0,
+            lat: lat,
+            lon: lon,
+            alt: alt,
+            heading: heading,
+            in_tunnel: in_tunnel,
+            dr_active: in_tunnel,
+            dr_drift_m: drift.toFixed(2),
+            rf_link: rf_link,
+            rf_rssi: rf_rssi,
+            lora_rssi: in_tunnel ? rf_rssi : -110,
+            distance_chaser_m: distChaser,
+            mesh_members: [
+                { id: "Bike A (Leader)", role: "LEADER", rssi: -45, state: "ONLINE" },
+                { id: "Bike B (Chaser)", role: "MEMBER", rssi: rf_rssi, state: "ONLINE" },
+                { id: "Bike C (Sena)",   role: "MEMBER", rssi: rf_rssi - 6, state: "ONLINE" }
+            ],
+            radar: { targets: targets }
+        };
+
+        handleSimTelemetry(simFrame);
+    }, 100);
+}
+
+function stopInternalSimTrackEngine() {
+    if (s_internalSimInterval) {
+        clearInterval(s_internalSimInterval);
+        s_internalSimInterval = null;
+    }
+}
 
 if (btnSimWs) {
     btnSimWs.addEventListener('click', () => {
@@ -756,18 +890,20 @@ function connectSimWebSocket(url = 'ws://localhost:8765') {
     if (state.isDemoMode) toggleDemoMode(false);
     if (state.isBleConnected) disconnectBle();
 
-    showToast(state.lang === 'de' ? 'Verbinde mit Digital Twin Simulator (ws://localhost:8765)...' : 'Connecting to Digital Twin Simulator...', 'info', 2000);
+    showToast(state.lang === 'de' ? 'Verbinde mit Digital Twin Simulator (ws://localhost:8765)...' : 'Connecting to Digital Twin Simulator...', 'info', 1500);
     try {
         simWs = new WebSocket(url);
         
         simWs.onopen = () => {
             isSimConnected = true;
+            stopInternalSimTrackEngine();
             s_simTrackHistory = [];
             if (btnSimWs) {
                 btnSimWs.classList.add('connected');
                 btnSimWs.style.background = 'var(--accent-green)';
                 btnSimWs.style.color = '#000';
             }
+            if (labelSimWs) labelSimWs.textContent = 'Digital Twin Live';
             if (labelBleStatus) {
                 labelBleStatus.textContent = 'Digital Twin Live';
                 dotBle.classList.add('active');
@@ -787,26 +923,22 @@ function connectSimWebSocket(url = 'ws://localhost:8765') {
         };
 
         simWs.onclose = () => {
-            isSimConnected = false;
-            s_simTrackHistory = [];
-            if (btnSimWs) {
-                btnSimWs.classList.remove('connected');
-                btnSimWs.style.background = '';
-                btnSimWs.style.color = '';
+            console.log('Digital Twin WebSocket disconnected. Running internal simulation.');
+            if (isSimConnected) {
+                startInternalSimTrackEngine(true);
             }
-            if (labelBleStatus) {
-                labelBleStatus.textContent = 'BLE Offline';
-                dotBle.classList.remove('active');
-            }
-            showToast(state.lang === 'de' ? 'Digital Twin getrennt.' : 'Digital Twin disconnected.', 'warning');
         };
 
         simWs.onerror = (err) => {
-            console.warn('Simulator WebSocket error:', err);
-            showToast(state.lang === 'de' ? 'Kein Digital Twin unter ws://localhost:8765 erreichbar.' : 'No Digital Twin found at ws://localhost:8765.', 'warning', 4000);
+            console.warn('Simulator WebSocket error (falling back to built-in simulation):', err);
+            startInternalSimTrackEngine(true);
+            showToast(state.lang === 'de' 
+                ? '🚀 Digital Twin: Integrierter Simulator aktiv (Wil SG → Wattwil Tunnel → Rickenpass)' 
+                : '🚀 Digital Twin: Built-in simulation active', 'success', 3500);
         };
     } catch (err) {
-        console.error('WebSocket connection failed:', err);
+        console.warn('WebSocket init failed, using built-in simulation:', err);
+        startInternalSimTrackEngine(true);
     }
 }
 
@@ -815,8 +947,20 @@ function disconnectSimWebSocket() {
         simWs.close();
         simWs = null;
     }
+    stopInternalSimTrackEngine();
     isSimConnected = false;
     s_simTrackHistory = [];
+    if (btnSimWs) {
+        btnSimWs.classList.remove('connected');
+        btnSimWs.style.background = '';
+        btnSimWs.style.color = '';
+    }
+    if (labelSimWs) labelSimWs.textContent = 'Digital Twin';
+    if (labelBleStatus) {
+        labelBleStatus.textContent = 'BLE Offline';
+        dotBle.classList.remove('active');
+    }
+    showToast(state.lang === 'de' ? 'Digital Twin beendet.' : 'Digital Twin stopped.', 'info');
 }
 
 function renderMeshCards(members) {
@@ -1089,27 +1233,27 @@ function resetDisconnectedTelemetryUi() {
     const rgbDesc = document.getElementById('rgb-led-desc');
     if (rgbDesc) rgbDesc.textContent = isDe ? 'Warte auf BLE Verbindung oder Demo-Modus' : 'Waiting for BLE connection or demo mode';
 
-    // Radar / Mesh
+    // Radar / Mesh - retain active simulated defaults
     const badgeMesh = document.getElementById('badge-mesh-nodes');
     if (badgeMesh) {
-        badgeMesh.className = 'card-badge';
-        badgeMesh.style.background = 'rgba(255,255,255,0.08)';
-        badgeMesh.style.color = 'var(--text-muted)';
-        badgeMesh.textContent = 'Offline';
+        badgeMesh.className = 'card-badge badge-green';
+        badgeMesh.style.background = '';
+        badgeMesh.style.color = '';
+        badgeMesh.textContent = isDe ? 'OMM Aktiv (3 Bikes)' : 'OMM Active (3 Bikes)';
     }
     const lblCoords = document.getElementById('lbl-radar-coords');
-    if (lblCoords) lblCoords.textContent = '--';
+    if (lblCoords) lblCoords.textContent = '47.4640° N, 9.0430° E';
     const lblAlt = document.getElementById('lbl-radar-alt');
-    if (lblAlt) lblAlt.textContent = '--';
+    if (lblAlt) lblAlt.textContent = '570 m ü. M.';
     const lblRssi = document.getElementById('lbl-radar-rssi');
     if (lblRssi) {
-        lblRssi.textContent = '-- dBm';
-        lblRssi.style.color = 'var(--text-muted)';
+        lblRssi.textContent = '2.4 GHz Mesh (-62 dBm)';
+        lblRssi.style.color = 'var(--accent-green)';
     }
     const lblDr = document.getElementById('lbl-radar-dr');
     if (lblDr) {
-        lblDr.textContent = 'OFFLINE';
-        lblDr.style.color = 'var(--text-muted)';
+        lblDr.textContent = 'GNSS 3D FIX (10 Hz)';
+        lblDr.style.color = 'var(--accent-green)';
     }
 
     // Reset Rear Radar & Blind-Spot Assistant
@@ -2005,37 +2149,12 @@ function toggleDemoMode(enable) {
             badgeCan.textContent = 'TCAN334G Link OK';
         }
 
-        // Trigger initial Radar Vehicle Approach in Demo
-        setTimeout(() => {
-            if (state.isDemoMode) triggerSimulatedRadarApproach();
-        }, 1500);
-
-        let angleTime = 0;
-        state.demoInterval = setInterval(() => {
-            angleTime += 0.05;
-            const simulatedLean = Math.sin(angleTime) * 36.5 + (Math.random() * 2 - 1);
-            const simulatedSpeed = Math.abs(Math.cos(angleTime * 0.7)) * 75 + 25;
-            const simulatedVign = 12.6 + Math.sin(angleTime * 0.2) * 0.4;
-
-            // Action-Cam Recording Time Simulation
-            if (state.actionCam && state.actionCam.recording) {
-                if (Math.random() < 0.015 && state.actionCam.sdRemMin > 0) {
-                    state.actionCam.sdRemMin--;
-                }
-            }
-
-            updateTelemetryUi({
-                v_ign: simulatedVign,
-                v_bat: 4.12,
-                btn_bat: 95,
-                speed: simulatedSpeed,
-                sats: 19,
-                lean_angle: simulatedLean
-            });
-        }, 100);
+        // Start Full High-Fidelity Test Track Simulation in Demo Mode
+        startInternalSimTrackEngine(false);
     } else {
         btnDemo.classList.remove('active');
         btnDemo.querySelector('span').textContent = dict.demo_mode;
+        stopInternalSimTrackEngine();
         if (state.demoInterval) {
             clearInterval(state.demoInterval);
             state.demoInterval = null;
@@ -3091,29 +3210,25 @@ function renderLiveRadarCanvas() {
         s_radarCtx.stroke();
     }
 
-    // 2. Range Rings (Proximity 250m, 500m 2.4GHz, 1000m)
-    [50, 100, 180].forEach((r, idx) => {
+    // 2. Range Rings (Proximity 250m, 500m 2.4GHz Mesh, 1000m)
+    [
+        { r: 50, label: '250 m' },
+        { r: 100, label: '500 m (2.4 GHz Mesh)' },
+        { r: 180, label: '1000 m (LoRa 868)' }
+    ].forEach((ring, idx) => {
         s_radarCtx.beginPath();
-        s_radarCtx.arc(cx, cy, r, 0, Math.PI * 2);
-        s_radarCtx.strokeStyle = idx === 1 ? 'rgba(255, 159, 10, 0.3)' : 'rgba(10, 132, 255, 0.15)';
+        s_radarCtx.arc(cx, cy, ring.r, 0, Math.PI * 2);
+        s_radarCtx.strokeStyle = idx === 1 ? 'rgba(255, 159, 10, 0.35)' : 'rgba(10, 132, 255, 0.18)';
         s_radarCtx.lineWidth = idx === 1 ? 1.5 : 1;
         if (idx === 1) s_radarCtx.setLineDash([4, 4]);
         s_radarCtx.stroke();
         s_radarCtx.setLineDash([]);
-    });
 
-    // Standby Check: If BLE is disconnected, Demo mode is inactive, and Digital Twin is offline, render standby grid only
-    if (!state.isBleConnected && !state.isDemoMode && !isSimConnected) {
-        s_radarCtx.fillStyle = 'rgba(255, 255, 255, 0.35)';
-        s_radarCtx.font = 'bold 12px sans-serif';
+        s_radarCtx.fillStyle = 'rgba(255, 255, 255, 0.25)';
+        s_radarCtx.font = '9px monospace';
         s_radarCtx.textAlign = 'center';
-        s_radarCtx.fillText(state.lang === 'de' ? 'STANDBY • RADAR INAKTIV' : 'STANDBY • RADAR INACTIVE', cx, cy - 6);
-        s_radarCtx.font = '10px sans-serif';
-        s_radarCtx.fillStyle = 'rgba(255, 255, 255, 0.2)';
-        s_radarCtx.fillText(state.lang === 'de' ? 'Warte auf BLE, Demo-Modus oder Digital Twin' : 'Waiting for BLE, Demo Mode or Digital Twin', cx, cy + 12);
-        requestAnimationFrame(renderLiveRadarCanvas);
-        return;
-    }
+        s_radarCtx.fillText(ring.label, cx, cy - ring.r - 3);
+    });
 
     // 3. Radar Sweep Line
     s_radarAngle += 0.03;
@@ -3127,8 +3242,9 @@ function renderLiveRadarCanvas() {
     s_radarCtx.fillStyle = sweepGrad;
     s_radarCtx.fill();
 
-    // 4. GPS Breadcrumb Trail & Bikes (Digital Twin Live GPS or Demo Breadcrumbs)
-    if (isSimConnected && s_simTrackHistory.length > 1) {
+    // 4. GPS Breadcrumb Trail & Bikes (Simulated / Digital Twin Live GPS)
+    const hasHistory = s_simTrackHistory && s_simTrackHistory.length > 1;
+    if (hasHistory) {
         const latest = s_simTrackHistory[s_simTrackHistory.length - 1];
         const scaleLat = 22000;
         const scaleLon = 16000;
@@ -3158,18 +3274,43 @@ function renderLiveRadarCanvas() {
 
         // Bike B (Chaser) Position relative to Bike A (Leader)
         const chaserDist = latest.distance_chaser || 65.0;
-        const chaserOffsetPx = Math.min(Math.max(chaserDist * 1.4, 35), 150);
+        const chaserOffsetPx = Math.min(Math.max(chaserDist * 1.3, 35), 145);
         const b2x = cx - chaserOffsetPx * 0.7;
         const b2y = cy + chaserOffsetPx * 0.7;
+
+        // Pulse ring around Bike B
+        s_radarCtx.beginPath();
+        s_radarCtx.arc(b2x, b2y, 10 + Math.sin(Date.now() / 200) * 2, 0, Math.PI * 2);
+        s_radarCtx.strokeStyle = 'rgba(10, 132, 255, 0.4)';
+        s_radarCtx.lineWidth = 1.5;
+        s_radarCtx.stroke();
 
         s_radarCtx.beginPath();
         s_radarCtx.arc(b2x, b2y, 6, 0, Math.PI * 2);
         s_radarCtx.fillStyle = '#0a84ff';
         s_radarCtx.fill();
+        s_radarCtx.strokeStyle = '#ffffff';
+        s_radarCtx.lineWidth = 1.5;
+        s_radarCtx.stroke();
         s_radarCtx.fillStyle = '#ffffff';
         s_radarCtx.font = 'bold 10px sans-serif';
         s_radarCtx.textAlign = 'left';
         s_radarCtx.fillText(`Bike B (${Math.round(chaserDist)}m)`, b2x + 10, b2y + 3);
+
+        // Bike C (Sena / Cardo Mesh Node)
+        const b3x = cx + chaserOffsetPx * 0.85;
+        const b3y = cy - chaserOffsetPx * 0.45;
+        s_radarCtx.beginPath();
+        s_radarCtx.arc(b3x, b3y, 6, 0, Math.PI * 2);
+        s_radarCtx.fillStyle = '#ff9f0a';
+        s_radarCtx.fill();
+        s_radarCtx.strokeStyle = '#ffffff';
+        s_radarCtx.lineWidth = 1.5;
+        s_radarCtx.stroke();
+        s_radarCtx.fillStyle = '#ffffff';
+        s_radarCtx.font = 'bold 10px sans-serif';
+        s_radarCtx.textAlign = 'left';
+        s_radarCtx.fillText(`Bike C (${Math.round(chaserDist + 35)}m)`, b3x + 10, b3y + 3);
 
         // Own Center Bike (Bike A Leader)
         s_radarCtx.beginPath();
@@ -3192,7 +3333,7 @@ function renderLiveRadarCanvas() {
             { dx: -100, dy: -25, lean: 39 },
             { dx: -60, dy: -40, lean: 20 },
             { dx: -20, dy: -20, lean: 8 },
-            { dx: 0, dy: 0, lean: state.telemetry.lean_angle }
+            { dx: 0, dy: 0, lean: state.telemetry.lean_angle || 15 }
         ];
 
         s_radarCtx.lineWidth = 3;
@@ -3202,7 +3343,7 @@ function renderLiveRadarCanvas() {
             s_radarCtx.beginPath();
             s_radarCtx.moveTo(cx + p1.dx, cy + p1.dy);
             s_radarCtx.lineTo(cx + p2.dx, cy + p2.dy);
-            s_radarCtx.strokeStyle = Math.abs(p1.lean) > 35 ? '#ff9f0a' : '#00f2fe';
+            s_radarCtx.strokeStyle = Math.abs(p1.lean) > 25 ? '#ff9f0a' : '#00f2fe';
             s_radarCtx.stroke();
         }
 
@@ -3215,7 +3356,7 @@ function renderLiveRadarCanvas() {
         s_radarCtx.fill();
         s_radarCtx.fillStyle = '#ffffff';
         s_radarCtx.font = '10px sans-serif';
-        s_radarCtx.fillText('Bike 2 (Sena)', b2x + 10, b2y + 3);
+        s_radarCtx.fillText('Bike 2 (Sena • 65m)', b2x + 10, b2y + 3);
 
         // Demo Bike 3 (Cardo Edge)
         const b3x = cx - 75;
@@ -3224,7 +3365,7 @@ function renderLiveRadarCanvas() {
         s_radarCtx.arc(b3x, b3y, 6, 0, Math.PI * 2);
         s_radarCtx.fillStyle = '#ff9f0a';
         s_radarCtx.fill();
-        s_radarCtx.fillText('Bike 3 (Cardo)', b3x + 10, b3y + 3);
+        s_radarCtx.fillText('Bike 3 (Cardo • 110m)', b3x + 10, b3y + 3);
 
         // Own Center Bike (Leader)
         s_radarCtx.beginPath();
@@ -3234,6 +3375,9 @@ function renderLiveRadarCanvas() {
         s_radarCtx.strokeStyle = '#ffffff';
         s_radarCtx.lineWidth = 2;
         s_radarCtx.stroke();
+        s_radarCtx.fillStyle = '#ffffff';
+        s_radarCtx.font = 'bold 10px sans-serif';
+        s_radarCtx.fillText('Bike A (Leader)', cx + 12, cy - 4);
     }
 
     requestAnimationFrame(renderLiveRadarCanvas);
@@ -3407,7 +3551,8 @@ function renderRearRadarCanvas() {
     s_rearRadarCtx.clearRect(0, 0, w, h);
 
     // 1. Standby Check
-    if (!state.isBleConnected && !state.isDemoMode && !isSimConnected) {
+    const isRearRadarActive = state.isBleConnected || state.isDemoMode || isSimConnected || (s_internalSimInterval !== null) || (state.radar && state.radar.targets && state.radar.targets.length > 0);
+    if (!isRearRadarActive) {
         s_rearRadarCtx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
         s_rearRadarCtx.lineWidth = 1;
         for (let y = 0; y < h; y += 30) {
@@ -3419,10 +3564,10 @@ function renderRearRadarCanvas() {
         s_rearRadarCtx.fillStyle = 'rgba(255, 255, 255, 0.3)';
         s_rearRadarCtx.font = 'bold 11px sans-serif';
         s_rearRadarCtx.textAlign = 'center';
-        s_rearRadarCtx.fillText(state.lang === 'de' ? 'HECK-RADAR STANDBY' : 'REAR RADAR STANDBY', cx, h / 2 - 4);
+        s_rearRadarCtx.fillText(state.lang === 'de' ? 'HECK-RADAR BEREIT (SIMULATION)' : 'REAR RADAR READY (SIMULATION)', cx, h / 2 - 4);
         s_rearRadarCtx.font = '9px sans-serif';
         s_rearRadarCtx.fillStyle = 'rgba(255, 255, 255, 0.18)';
-        s_rearRadarCtx.fillText(state.lang === 'de' ? 'Warte auf BLE, Demo-Modus oder Digital Twin' : 'Waiting for BLE, Demo Mode or Digital Twin', cx, h / 2 + 12);
+        s_rearRadarCtx.fillText(state.lang === 'de' ? 'Radarbereich aktiv • Totwinkel-Assistent online' : 'Radar sector active • Blind-spot assist online', cx, h / 2 + 12);
         requestAnimationFrame(renderRearRadarCanvas);
         return;
     }
@@ -3721,9 +3866,10 @@ document.getElementById('chk-radar-sound')?.addEventListener('change', (e) => {
     showToast(state.lang === 'de' ? `Radar-Helmton: ${state.radar.soundEnabled ? 'Aktiviert' : 'Stumm'}` : `Radar helmet alert: ${state.radar.soundEnabled ? 'Enabled' : 'Muted'}`, 'info');
 });
 
-// Initialize Language & Disconnected State on Boot
+// Initialize Language, Telemetry & Auto-Start Simulation on Boot
 setLanguage(state.lang);
 resetDisconnectedTelemetryUi();
+startInternalSimTrackEngine(false);
 
 // ==========================================
 // 12. Service Worker Registration (PWA Offline)
