@@ -51,6 +51,22 @@ Die OpenMotorBridge fungiert als aktive Audio-Kreuzschiene und Brückengateway z
 3. **Modus 2: Cruise Mode (Bordlautsprecher-Ausgabe):**  
    Intercom-Signale werden um $-6\,\text{dB}$ bedämpft und auf die Bordlautsprecher (Harley-Davidson Boom! Box GTS / BMW Soundanlage) geroutet.
 
+### 1.2 Cross-Intercom Bridge (Port 1 ↔ Port 2) mit Anti-Feedback Loopback-Gate
+* **Bidirektionale Kopplung:** Ermöglicht die nahtlose Audio-Brücke zwischen inkompatiblen Herstellern (z. B. Sena Apex Mesh 3.0 auf Port 1 und Cardo DMC Gen2 auf Port 2).
+* **Einstellbare Überblend-Dämpfung:** Bleed-Pegel stufenlos von $-18\,\text{dB}$ bis $0\,\text{dB}$ (Standard: $-6\,\text{dB}$) in der WebApp konfigurierbar.
+* **Anti-Feedback Loopback Gate ($-24\,\text{dB}$ Schutzschaltung):**  
+  Sobald auf Port 1 Sprache erkannt wird (VOX aktiv oder PTT gedrückt), dämpft der DSP den Rückkopplungspfad von Port 2 nach Port 1 schlagartig um $-24\,\text{dB}$. Dadurch wird verhindert, dass die aus dem Cardo-Kopfhörer des Sozius austretende Stimme des Fahrers über dessen Mikrofon wieder in das Sena-Mesh zurückgesendet wird (Unterdrückung von Echos und akustischen Pfeifschleifen).
+
+### 1.3 Sidetone Eigenstimmen-Rückführung
+* **Natürliche Stimmrückmeldung:** Im geschlossenen, geräuschgedämmten Integralhelm neigen Fahrer bei Autobahngeschwindigkeit zum unbewussten Schreien.
+* **Latenzfreier Rückhörpfad:** Der DSP führt das gefilterte Mikrofon-Signal latenzfrei (< 2,7 ms) mit einstellbarem Pegel ($-40\,\text{dB}$ bis $0\,\text{dB}$, Standard: $-12\,\text{dB}$, $< -35\,\text{dB} = \text{Mute}$) in die eigenen Helm-Lautsprecher zurück.
+* **VOX-Koppelung:** Sidetone wird nur aufgeschaltet, wenn VOX oder PTT aktiv ist.
+
+### 1.4 Intelligentes Navi Auto-Sensing (Pegelgesteuertes Ducking)
+* **Hardwareunabhängiges Ducking:** Funktioniert auch bei analogen Line-In-Navigationsgeräten (z. B. Garmin Zūmo XT2 oder BMW Motorrad Navigator) ohne dedizierte Steuerleitung.
+* **Schwellenwert-Logik:** Überschreitet das eingehende Navigations-Audio $-36\,\text{dBFS}$ für länger als $50\,\text{ms}$, leitet die Ducking-Engine sofort ein weiches Raised-Cosine Ducking ($-12\,\text{dB}$) auf Musik und Intercom ein.
+* **Hold & Release:** Nach Ende der Ansage (Pegel $< -42\,\text{dBFS}$) verbleibt das Ducking für $800\,\text{ms}$ im Hold-Zustand und blendet dann mit $250\,\text{ms}$ sanft auf Vollpegel zurück.
+
 ---
 
 ## 2. Zero-Latency PTT-Steuerung & Optokoppler-Zündung (< 1,8 ms)

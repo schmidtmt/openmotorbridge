@@ -118,6 +118,34 @@ GAIN
   * Target Level: $-6\,\text{dBFS}$, Max Gain: $+24\,\text{dB}$, Min Gain: $-12\,\text{dB}$.
   * Attack Time: $5\,\text{ms}$, Decay Time: $200\,\text{ms}$, Noise Gate Threshold: $-54\,\text{dBFS}$.
 
+### 3.2 Helm-Akustik Biquad IIR Filterung (Transposed Direct Form II)
+Um Helminnenraumresonanzen, tieffrequentes Winddröhnen und dumpfe Sprachübertragung zu kompensieren, durchläuft jeder Mikrofoneingang eine 2-stufige Biquad-Kaskade nach Robert Bristow-Johnson (RBJ Audio EQ Cookbook):
+
+1. **2nd-Order High-Pass Filter (HPF, Butterworth $Q=0{,}7071$):**
+   * Dämpft tieffrequente Windturbulenzen bei $50\,\text{Hz}$ um $> 15\,\text{dB}$ und eliminiert Membran-Übersteuerung.
+2. **2nd-Order Peaking EQ ($f_c = 2{,}5\,\text{kHz}, Q = 1{,}2$):**
+   * Hebt den Frequenzbereich menschlicher Sprachformanten gezielt an, was die Konsonantenverständlichkeit (STOI $> 0{,}85$) drastisch steigert.
+
+| Preset-ID | Helmtyp | HPF Eckfrequenz ($f_c$) | 2.5 kHz Peaking Gain | Akustischer Einsatzzweck |
+| :--- | :--- | :---: | :---: | :--- |
+| `HELMET_EQ_INTEGRAL` (1) | **Integralhelm** | **$120\,\text{Hz}$** | **$+3{,}5\,\text{dB}$** | Standard für geschlossene Visiere; eliminiert Kaminresonanzen |
+| `HELMET_EQ_OPEN_FACE` (2) | **Klapp- / Jethelm** | **$160\,\text{Hz}$** | **$+6{,}0\,\text{dB}$** | Aggressive Dämpfung direkter Windanströmung bei offenem Kinnteil |
+| `HELMET_EQ_TOURING` (3) | **Touring / Schild** | **$90\,\text{Hz}$** | **$+2{,}0\,\text{dB}$** | Optimiert für laminare Strömung hinter hohen Windschildern |
+| `HELMET_EQ_FLAT` (0) | **Studio / Flat** | $20\,\text{Hz}$ (Bypass) | $0{,}0\,\text{dB}$ | HiFi-Referenz / Kalibriermodus für externe Audioquellen |
+
+### 3.3 Adaptiver VOX Voice Activity Detector mit Wind-Schallpegelnachführung
+Statische Schwellenwerte versagen auf dem Motorrad: Bei Stadtfahrt öffnet die VOX zu spät, auf der Autobahn löst der Fahrtwind permanente Fehlauslösungen aus.
+
+* **Dynamische Schwellenwert-Formel:**
+  $$\text{Threshold}_{\text{dyn}} [\text{dBFS}] = \text{Threshold}_{\text{base}} + \max\left(0,\, (\text{SPL}_{\text{front}} [\text{dBA}] - 75\,\text{dB}) \times 0{,}3\right)$$
+  *Bei $160\,\text{km/h}$ ($91\,\text{dBA}$ Wind-SPL) verschiebt der DSP die Schwelle automatisch von $-32\,\text{dBFS}$ auf $-27{,}2\,\text{dBFS}$.*
+* **Zeitkonstanten:** Fast Attack ($1\dots 2\,\text{ms}$ zur verlustfreien Erfassung des ersten Wortlautes), Hangover Time ($400\,\text{ms}$, verhindert Abschneiden bei Atempause).
+* **Verifikation:** Bei $180\,\text{km/h}$ Windbelastung liegt die Falschauslöserate bei $0{,}0\,\%$.
+
+### 3.4 Sidetone & Cross-Intercom Anti-Feedback Gate
+* **Sidetone Feedback:** Führt das gefilterte Mikrofonsignal mit $-12\,\text{dB}$ direkt in den Fahrerhörer zurück.
+* **$-24\,\text{dB}$ Anti-Feedback Gate:** Sobald Fahrer oder Sozius spricht, unterdrückt ein schnelles Noise Gate den gegenläufigen Überblendpfad um $-24\,\text{dB}$ ($0{,}063$), wodurch akustische Rückkopplungsschleifen zwischen zwei gekoppelten Intercoms physikalisch unterbunden werden.
+
 ---
 
 ## 4. Digitaler Knowles MEMS Akustiksensor & AGC Fahrtwind-Kompensation

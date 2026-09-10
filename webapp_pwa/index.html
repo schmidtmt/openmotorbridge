@@ -627,6 +627,111 @@
                     </div>
                 </section>
 
+                <!-- Adaptive VOX & Sidetone Loop -->
+                <section class="card">
+                    <div class="card-header">
+                        <span class="card-title">🎙️ <span data-i18n="vox_sidetone_title">Adaptive VOX & Sidetone-Rückführung</span></span>
+                        <span class="card-badge badge-green" id="badge-vox-state">VOX: Standby</span>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; padding: 10px 12px; background: rgba(255,255,255,0.03); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                        <div>
+                            <div style="font-weight: 600; font-size: 0.9rem;">Sprachgesteuerte PTT (VOX)</div>
+                            <div class="stat-sub">Automatisches Senden beim Sprechen ins Helmmikrofon</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="cb-vox-enable" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+
+                    <div class="control-group">
+                        <div class="control-label">
+                            <span>VOX Ansprechschwelle (Basis)</span>
+                            <span id="label-vox-threshold">-32.0 dBFS</span>
+                        </div>
+                        <input type="range" id="slider-vox-threshold" class="control-slider" min="-45" max="-15" step="0.5" value="-32">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-secondary); margin-top: 4px;">
+                            <span>Empfindlich (-45 dBFS)</span>
+                            <span id="label-vox-dynamic-comp" style="color: var(--accent-orange);">Wind-Kompensation: +0.0 dB</span>
+                            <span>Taub (-15 dBFS)</span>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <div class="control-label">
+                            <span>VOX Hangover Time (Nachlauf)</span>
+                            <span id="label-vox-hangover">400 ms</span>
+                        </div>
+                        <input type="range" id="slider-vox-hangover" class="control-slider" min="100" max="800" step="50" value="400">
+                        <div class="stat-sub" style="margin-top: 4px;">Verhindert das Abschneiden von Wortendungen und Satzpausen</div>
+                    </div>
+
+                    <div class="control-group" style="margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border-subtle);">
+                        <div class="control-label">
+                            <span>Sidetone Eigenstimmen-Lautstärke</span>
+                            <span id="label-sidetone-gain">-12.0 dB (Aktiv)</span>
+                        </div>
+                        <input type="range" id="slider-sidetone-gain" class="control-slider" min="-40" max="0" step="0.5" value="-12">
+                        <div class="stat-sub" style="margin-top: 4px;">Natürliche akustische Eigenstimmen-Rückführung im geschlossenen Helm (&lt; -35 dB = Stumm)</div>
+                    </div>
+                </section>
+
+                <!-- Helmet Acoustic Biquad EQ & Cross-Intercom Bridge -->
+                <section class="card">
+                    <div class="card-header">
+                        <span class="card-title">🪖 <span data-i18n="helmet_eq_cross_title">Helm-Akustik Biquad & Cross-Bridge</span></span>
+                        <span class="card-badge badge-blue">IIR Transposed DF-II</span>
+                    </div>
+
+                    <div class="stat-label" style="margin-bottom: 8px;">Helm-Akustik Biquad EQ Profil (Sprachfilterung)</div>
+                    <div class="grid-2" style="gap: 8px; margin-bottom: 16px;">
+                        <button class="btn-secondary helmet-eq-btn active" data-preset="1" id="btn-eq-integral" style="text-align: left; padding: 10px; border-color: var(--accent-green);">
+                            <div style="font-weight: 700; font-size: 0.85rem; color: var(--accent-green);">🪖 Integralhelm</div>
+                            <div style="font-size: 0.72rem; color: var(--text-secondary);">120 Hz HPF + 2.5 kHz (+3.5 dB)</div>
+                        </button>
+                        <button class="btn-secondary helmet-eq-btn" data-preset="2" id="btn-eq-open" style="text-align: left; padding: 10px;">
+                            <div style="font-weight: 700; font-size: 0.85rem;">🏍️ Klapp- / Jethelm</div>
+                            <div style="font-size: 0.72rem; color: var(--text-secondary);">160 Hz HPF + 2.5 kHz (+6.0 dB)</div>
+                        </button>
+                        <button class="btn-secondary helmet-eq-btn" data-preset="3" id="btn-eq-touring" style="text-align: left; padding: 10px;">
+                            <div style="font-weight: 700; font-size: 0.85rem;">🛡️ Touring / Schild</div>
+                            <div style="font-size: 0.72rem; color: var(--text-secondary);">90 Hz HPF + 2.5 kHz (+2.0 dB)</div>
+                        </button>
+                        <button class="btn-secondary helmet-eq-btn" data-preset="0" id="btn-eq-flat" style="text-align: left; padding: 10px;">
+                            <div style="font-weight: 700; font-size: 0.85rem;">🎧 Studio / Flat</div>
+                            <div style="font-size: 0.72rem; color: var(--text-secondary);">Linear (HiFi / Studio-Referenz)</div>
+                        </button>
+                    </div>
+
+                    <!-- Cross-Intercom Bridge -->
+                    <div style="padding-top: 14px; border-top: 1px solid var(--border-subtle);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <div>
+                                <div style="font-weight: 600; font-size: 0.9rem;">Cross-Intercom Bridge (Port 1 ↔ Port 2)</div>
+                                <div class="stat-sub">Bidirektionale Audio-Kopplung (z. B. Sena Apex ↔ Cardo DMC)</div>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="cb-cross-bridge-enable" checked>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+
+                        <div class="control-group">
+                            <div class="control-label">
+                                <span>Kreuzschienen-Dämpfung (Bleed Gain)</span>
+                                <span id="label-cross-bleed">-6.0 dB</span>
+                            </div>
+                            <input type="range" id="slider-cross-bleed" class="control-slider" min="-18" max="0" step="0.5" value="-6">
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: rgba(0,0,0,0.3); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); margin-top: 8px;">
+                            <span style="font-size: 0.78rem;">🛡️ Anti-Feedback Gate (Loopback-Schutz)</span>
+                            <span class="card-badge badge-green" id="badge-cross-gate" style="font-size: 0.72rem;">Gate Bereit (-24 dB)</span>
+                        </div>
+                    </div>
+                </section>
+
                 <!-- Realtime 4-Channel Audio VU-Meter & Mixer Card -->
                 <section class="card" style="grid-column: 1 / -1;">
                     <div class="card-header">

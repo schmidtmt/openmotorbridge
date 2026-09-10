@@ -411,6 +411,23 @@ const labelDuckingDepth = document.getElementById('label-ducking-depth');
 const sliderGainAmbient = document.getElementById('slider-gain-ambient');
 const labelGainAmbient = document.getElementById('label-gain-ambient');
 
+// Adaptive VOX, Sidetone & Cross-Intercom Bridge DOM Elements
+const cbVoxEnable = document.getElementById('cb-vox-enable');
+const sliderVoxThreshold = document.getElementById('slider-vox-threshold');
+const labelVoxThreshold = document.getElementById('label-vox-threshold');
+const labelVoxDynamicComp = document.getElementById('label-vox-dynamic-comp');
+const sliderVoxHangover = document.getElementById('slider-vox-hangover');
+const labelVoxHangover = document.getElementById('label-vox-hangover');
+const badgeVoxState = document.getElementById('badge-vox-state');
+
+const sliderSidetoneGain = document.getElementById('slider-sidetone-gain');
+const labelSidetoneGain = document.getElementById('label-sidetone-gain');
+
+const cbCrossBridgeEnable = document.getElementById('cb-cross-bridge-enable');
+const sliderCrossBleed = document.getElementById('slider-cross-bleed');
+const labelCrossBleed = document.getElementById('label-cross-bleed');
+const badgeCrossGate = document.getElementById('badge-cross-gate');
+
 const wizardModal = document.getElementById('wizard-modal');
 const btnOpenWizard = document.getElementById('btn-open-wizard');
 const btnCloseWizard = document.getElementById('btn-close-wizard');
@@ -862,7 +879,23 @@ function startInternalSimTrackEngine(isDigitalTwin = true) {
                 { id: "Bike B (Chaser)", role: "MEMBER", rssi: rf_rssi, state: "ONLINE" },
                 { id: "Bike C (Sena)",   role: "MEMBER", rssi: rf_rssi - 6, state: "ONLINE" }
             ],
-            radar: { targets: targets }
+            radar: { targets: targets },
+            audio: {
+                front_mems_dba: Math.round((65.0 + Math.max(0, (speed - 40) * 0.35)) * 10) / 10,
+                codec: "Opus 24k Full-Duplex (48 kHz)",
+                ptt: false,
+                vox_active: (s_simTime % 14.0 > 2.5 && s_simTime % 14.0 < 6.8),
+                vox_threshold_dbfs: Math.round((-32.0 + Math.max(0, ((65.0 + Math.max(0, (speed - 40) * 0.35)) - 75.0) * 0.3)) * 10) / 10,
+                sidetone_gain_db: -12.0,
+                eq_preset: 1,
+                cross_bridge_active: true,
+                cross_bleed_db: -6.0,
+                nav_ducking_active: in_tunnel || (s_simTime % 24.0 > 18.0 && s_simTime % 24.0 < 22.0),
+                p1_rms: (s_simTime % 14.0 > 2.5 && s_simTime % 14.0 < 6.8) ? (-13.5 + Math.sin(s_simTime * 8) * 1.5) : (-38.0 + (speed > 80 ? 4 : 0)),
+                p2_rms: (s_simTime % 18.0 > 8.0 && s_simTime % 18.0 < 11.0) ? -17.5 : -42.0,
+                navi_rms: (in_tunnel || (s_simTime % 24.0 > 18.0 && s_simTime % 24.0 < 22.0)) ? -9.5 : -72.0,
+                ambient_rms: speed > 30 ? -96.0 : (-22.0 + Math.sin(s_simTime * 2) * 2.0)
+            }
         };
 
         handleSimTelemetry(simFrame);
@@ -1097,6 +1130,88 @@ function handleSimTelemetry(data) {
     // 7. Mesh Group Cards
     if (data.mesh_members) {
         renderMeshCards(data.mesh_members);
+    }
+
+    // 8. Audio DSP Live Status & VU-Meters
+    if (data.audio) {
+        const aud = data.audio;
+        // Codec badge
+        const badgeCodec = document.getElementById('badge-codec-state');
+        if (badgeCodec && aud.codec) {
+            badgeCodec.textContent = aud.codec;
+            badgeCodec.className = 'card-badge badge-green';
+            badgeCodec.style.background = '';
+            badgeCodec.style.color = '';
+        }
+
+        // VOX status badge
+        const bVox = document.getElementById('badge-vox-state');
+        if (bVox) {
+            if (aud.vox_active) {
+                bVox.className = 'card-badge badge-green';
+                bVox.textContent = aud.ptt ? 'PTT SPRECHEN (Hardware)' : 'VOX SPRECHEN (Aktiv)';
+            } else {
+                bVox.className = 'card-badge';
+                bVox.style.background = 'rgba(255,255,255,0.08)';
+                bVox.style.color = 'var(--text-muted)';
+                bVox.textContent = 'VOX: Standby';
+            }
+        }
+
+        // VOX Dynamic Wind Compensation Label
+        const lblComp = document.getElementById('label-vox-dynamic-comp');
+        if (lblComp && aud.vox_threshold_dbfs !== undefined) {
+            const baseThresh = parseFloat(document.getElementById('slider-vox-threshold')?.value || -32);
+            const delta = Math.max(0, aud.vox_threshold_dbfs - baseThresh);
+            lblComp.textContent = `Wind (${aud.front_mems_dba || 65} dBA): +${delta.toFixed(1)} dB (Eff: ${aud.vox_threshold_dbfs.toFixed(1)} dBFS)`;
+        }
+
+        // Cross-Intercom Gate Badge
+        const bGate = document.getElementById('badge-cross-gate');
+        if (bGate) {
+            if (aud.vox_active && aud.cross_bridge_active) {
+                bGate.className = 'card-badge badge-orange';
+                bGate.textContent = 'Schutz Aktiv (-24 dB Gate)';
+            } else {
+                bGate.className = 'card-badge badge-green';
+                bGate.textContent = 'Gate Bereit (-24 dB)';
+            }
+        }
+
+        // Live VU Bars
+        if (aud.p1_rms !== undefined) {
+            const elP1 = document.getElementById('lbl-vu-p1');
+            const barP1 = document.getElementById('bar-vu-p1');
+            if (elP1) elP1.textContent = `${aud.p1_rms.toFixed(1)} dBFS`;
+            if (barP1) barP1.style.width = `${Math.min(100, Math.max(5, 100 + aud.p1_rms * 2))}%`;
+        }
+        if (aud.p2_rms !== undefined) {
+            const elP2 = document.getElementById('lbl-vu-p2');
+            const barP2 = document.getElementById('bar-vu-p2');
+            if (elP2) elP2.textContent = `${aud.p2_rms.toFixed(1)} dBFS`;
+            if (barP2) barP2.style.width = `${Math.min(100, Math.max(5, 100 + aud.p2_rms * 2))}%`;
+        }
+        if (aud.navi_rms !== undefined) {
+            const elNavi = document.getElementById('lbl-vu-navi');
+            const barNavi = document.getElementById('bar-vu-navi');
+            if (elNavi) {
+                elNavi.textContent = aud.nav_ducking_active ? `${aud.navi_rms.toFixed(1)} dBFS (Ducking -12 dB)` : `${aud.navi_rms.toFixed(1)} dBFS (Standby)`;
+                elNavi.style.color = aud.nav_ducking_active ? 'var(--accent-orange)' : 'var(--text-muted)';
+            }
+            if (barNavi) barNavi.style.width = `${Math.min(100, Math.max(0, 100 + aud.navi_rms * 1.5))}%`;
+        }
+        if (aud.ambient_rms !== undefined) {
+            const elAmb = document.getElementById('lbl-vu-ambient');
+            const barAmb = document.getElementById('bar-vu-ambient');
+            if (elAmb) {
+                elAmb.textContent = data.speed > 30 
+                    ? '-96.0 dBFS (Stumm > 30 km/h)'
+                    : `${aud.ambient_rms.toFixed(1)} dBFS (Transparenz ON)`;
+            }
+            if (barAmb) {
+                barAmb.style.width = data.speed > 30 ? '0%' : `${Math.min(100, Math.max(5, 100 + aud.ambient_rms * 2))}%`;
+            }
+        }
     }
 }
 
@@ -2209,6 +2324,83 @@ sliderDuckingDepth.addEventListener('input', (e) => {
 sliderGainAmbient?.addEventListener('input', (e) => {
     const val = parseFloat(e.target.value);
     labelGainAmbient.textContent = `${val >= 0 ? '+' : ''}${val.toFixed(1)} dB (AGC aktiv)`;
+});
+
+// Adaptive VOX Controls
+cbVoxEnable?.addEventListener('change', (e) => {
+    const enabled = e.target.checked;
+    if (simWs && simWs.readyState === WebSocket.OPEN) {
+        simWs.send(JSON.stringify({ action: 'set_vox', enabled: enabled }));
+    }
+    showToast(state.lang === 'de' ? `VOX ${enabled ? 'aktiviert' : 'deaktiviert'}` : `VOX ${enabled ? 'enabled' : 'disabled'}`, 'info');
+});
+
+sliderVoxThreshold?.addEventListener('input', (e) => {
+    const val = parseFloat(e.target.value);
+    if (labelVoxThreshold) labelVoxThreshold.textContent = `${val.toFixed(1)} dBFS`;
+    if (simWs && simWs.readyState === WebSocket.OPEN) {
+        simWs.send(JSON.stringify({ action: 'set_vox', threshold_dbfs: val }));
+    }
+});
+
+sliderVoxHangover?.addEventListener('input', (e) => {
+    const val = parseInt(e.target.value, 10);
+    if (labelVoxHangover) labelVoxHangover.textContent = `${val} ms`;
+    if (simWs && simWs.readyState === WebSocket.OPEN) {
+        simWs.send(JSON.stringify({ action: 'set_vox', hangover_ms: val }));
+    }
+});
+
+// Sidetone Gain Control
+sliderSidetoneGain?.addEventListener('input', (e) => {
+    const val = parseFloat(e.target.value);
+    if (labelSidetoneGain) {
+        labelSidetoneGain.textContent = val < -35.0 ? 'Stumm (< -35 dB)' : `${val.toFixed(1)} dB (Aktiv)`;
+    }
+    if (simWs && simWs.readyState === WebSocket.OPEN) {
+        simWs.send(JSON.stringify({ action: 'set_sidetone', gain_db: val }));
+    }
+});
+
+// Helmet Acoustic Biquad EQ Preset Selector
+document.querySelectorAll('.helmet-eq-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.helmet-eq-btn').forEach(b => {
+            b.classList.remove('active');
+            b.style.borderColor = '';
+            const title = b.querySelector('div:first-child');
+            if (title) title.style.color = '';
+        });
+        const target = e.currentTarget;
+        target.classList.add('active');
+        target.style.borderColor = 'var(--accent-green)';
+        const title = target.querySelector('div:first-child');
+        if (title) title.style.color = 'var(--accent-green)';
+
+        const preset = parseInt(target.dataset.preset, 10);
+        if (simWs && simWs.readyState === WebSocket.OPEN) {
+            simWs.send(JSON.stringify({ action: 'set_eq_preset', preset: preset }));
+        }
+        const presetNames = ['Flat / Studio (Linear)', 'Integralhelm (120 Hz HPF + 2.5 kHz)', 'Klapp-/Jethelm (160 Hz HPF)', 'Touring/Schild (90 Hz HPF)'];
+        showToast(state.lang === 'de' ? `Helm-EQ: ${presetNames[preset] || 'Standard'}` : `Helmet EQ: ${presetNames[preset] || 'Standard'}`, 'success');
+    });
+});
+
+// Cross-Intercom Bridge (Port 1 <-> Port 2)
+cbCrossBridgeEnable?.addEventListener('change', (e) => {
+    const enabled = e.target.checked;
+    if (simWs && simWs.readyState === WebSocket.OPEN) {
+        simWs.send(JSON.stringify({ action: 'set_cross_bridge', enabled: enabled }));
+    }
+    showToast(state.lang === 'de' ? `Cross-Intercom Bridge ${enabled ? 'aktiviert' : 'deaktiviert'}` : `Cross-Intercom Bridge ${enabled ? 'enabled' : 'disabled'}`, 'info');
+});
+
+sliderCrossBleed?.addEventListener('input', (e) => {
+    const val = parseFloat(e.target.value);
+    if (labelCrossBleed) labelCrossBleed.textContent = `${val.toFixed(1)} dB`;
+    if (simWs && simWs.readyState === WebSocket.OPEN) {
+        simWs.send(JSON.stringify({ action: 'set_cross_bridge', bleed_db: val }));
+    }
 });
 
 // Hardware Trigger Buttons
@@ -3750,10 +3942,10 @@ function updateSpeedGatingVisual(speed) {
     dot.setAttribute('cy', mappedY);
 }
 
-// Live Audio VU Meter Loop
+// Live Audio VU Meter Fallback Loop (for standalone BLE/Demo mode when simulator is inactive)
 setInterval(() => {
-    // Only update live VU-meters when BLE is connected, Demo mode is active, or Digital Twin is connected!
-    if (!state.isBleConnected && !state.isDemoMode && !isSimConnected) {
+    if (isSimConnected) return;
+    if (!state.isBleConnected && !state.isDemoMode) {
         return;
     }
 
