@@ -30,6 +30,7 @@ SIMULATORS = [
     ("8. 180-Day Winter Standby Battery Drain", "tools/simulators/battery_winter_standby_sim.py"),
     ("9. Universal Front Node (PCBA 05)", "tools/simulators/front_node_wireless_hub_sim.py"),
     ("10. Rear Radar & Blind-Spot Detection", "tools/simulators/radar_blindspot_sim.py"),
+    ("11. Multi-Bike Digital Twin (10 PCBs)", "tools/simulators/openmotorbridge_digital_twin.py", ["--fast", "--duration", "1050", "--headless"]),
 ]
 
 def main():
@@ -41,12 +42,16 @@ def main():
     passed_count = 0
     failed_sims = []
     
-    for idx, (title, script_path) in enumerate(SIMULATORS, 1):
+    for idx, item in enumerate(SIMULATORS, 1):
+        title = item[0]
+        script_path = item[1]
+        extra_args = item[2] if len(item) > 2 else []
         print("-" * 80)
         print(f"[{idx}/{len(SIMULATORS)}] RUNNING: {title} ({script_path})")
         print("-" * 80)
         
-        result = subprocess.run([sys.executable, script_path], capture_output=False)
+        cmd = [sys.executable, script_path] + extra_args
+        result = subprocess.run(cmd, capture_output=False)
         if result.returncode == 0:
             passed_count += 1
             print(f"\n>>> [{title}] -> ✅ PASSED\n")

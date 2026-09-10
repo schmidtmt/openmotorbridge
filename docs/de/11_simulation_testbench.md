@@ -41,6 +41,10 @@ Um das Zusammenspiel von Hardware, Akustik, Fahrdynamik, Thermik, Hochfrequenz-P
 ├───────────────────────────┼───────────────────────────────────┼─────────────────────────┤
 │ 10. Live Audio DSP Studio │ `tools/audio_testbench/server.py` │ Interaktive Web-Audio   │
 │     & Echtzeit-Simulator  │                                   │ Suite, Mic/PTT/Tacho/EQ │
+├───────────────────────────┼───────────────────────────────────┼─────────────────────────┤
+│ 11. Multi-Motorrad        │ `openmotorbridge_digital_twin.py` │ 10 PCBs, Wil-Wattwil-   │
+│     Digital-Twin & HIL    │                                   │ Ricken, Tunnel EKF-DR,  │
+│                           │                                   │ 2.4G/LoRa Handover, PWA │
 └───────────────────────────┴───────────────────────────────────┴─────────────────────────┘
 ```
 
@@ -181,9 +185,75 @@ Verifiziert alle hochfrequenten, leistungselektronischen und funktechnischen Sub
 
 ---
 
-## 11. Interaktives Live Audio DSP Studio & Echtzeit-Simulator (`tools/audio_testbench/`)
+## 11. Multi-Motorrad Digital-Twin & 10-PCB HIL Simulator (`openmotorbridge_digital_twin.py`)
 
-Während die 9 numerischen Python-Module die Grenzparameter rechnerisch auditieren, dient das **Live Audio DSP Studio** der hörbaren Echtzeit-Erprobung im Webbrowser:
+Der **Digital Twin Simulator** ([`openmotorbridge_digital_twin.py`](file:///Users/schmidtm/openMotorBridge/tools/simulators/openmotorbridge_digital_twin.py)) emuliert einen realitätsgetreuen 2-Fahrzeuge-Verbund (Bike A = Leader, Bike B = Chaser) mit insgesamt **10 physikalisch modellierten Platinen** (5 PCBs pro Motorrad) entlang der geodätischen Referenzstrecke **Wil SG $\rightarrow$ Wattwil (Tunnel) $\rightarrow$ Wattwil-Kreisel $\rightarrow$ Rickenpass**:
+
+```
+                      DIGITAL TWIN ARCHITEKTUR (10 PLATINEN & 2 BIKES)
+═══════════════════════════════════════════════════════════════════════════════════════
+
+   [ GEODÄTISCHER TRACK: WIL ──► WATTWIL-TUNNEL (2.2km) ──► KREISEL ──► RICKENPASS ]
+                                         │
+         ┌───────────────────────────────┴───────────────────────────────┐
+         ▼                                                               ▼
+ ┌────────────────────────────────────────┐            ┌────────────────────────────────────────┐
+ │          MOTORRAD A (LEADER)           │            │          MOTORRAD B (CHASER)           │
+ │  • PCBA 01 (ESP32-S3 Main Controller)  │            │  • PCBA 01 (ESP32-S3 Main Controller)  │
+ │  • PCBA 02 (Satellite Pod Base)        │            │  • PCBA 02 (Satellite Pod Base)        │
+ │  • PCBA 03 (Pods 1/2 Cartridges)       │            │  • PCBA 03 (Pods 1/2 Cartridges)       │
+ │  • PCBA 04 (Rear Pod 3 GNSS/OMM/Radar) │            │  • PCBA 04 (Rear Pod 3 GNSS/OMM/Radar) │
+ │  • PCBA 05 (Universal Front Node C3)   │            │  • PCBA 05 (Universal Front Node C3)   │
+ └───────────────────┬────────────────────┘            └───────────────────┬────────────────────┘
+                     │                                                     │
+                     └────────────────► [ RF PROPAGATION ENGINE ] ◄────────┘
+                                        • Log-Distance Modell (Friis)
+                                        • 38 dB Dämpfung in Tunnelröhre
+                                        • 2.4 GHz OMM High-Speed Mesh (<150m)
+                                        • 868 MHz LoRa Fallback (>150m / Tunnel)
+                                        • Dynamic Leader Election (DLE)
+                                                       │
+                                                       ▼
+                                        ┌─────────────────────────────┐
+                                        │ PURE-PYTHON WEBSOCKET SERVER│  (Port 8765)
+                                        └──────────────┬──────────────┘
+                                                       │
+                                                       ▼
+                                        ┌─────────────────────────────┐
+                                        │    OPENMOTORBRIDGE PWA      │  Live Dashboard
+                                        │ (Tacho, Schräglage, Radar,  │  im Webbrowser
+                                        │  EKF-Tunnel-DR, Mesh-Topol.)│
+                                        └─────────────────────────────┘
+```
+
+### Die Kernkomponenten & Test-Features:
+1. **5 Platinen pro Motorrad:**
+   * **PCBA 01 (Zentralbox):** 15-State ADR-EKF Filterung, Power Supervisor (Bordnetz $14{,}2\,\text{V}$, USV-Pufferung $4{,}14\,\text{V}$), Audio DSP Matrix.
+   * **PCBA 02 (Pod Base):** M8-Schnittstelle, SP3012 TVS Schutzarray-Überwachung.
+   * **PCBA 03 (Kassetten):** 1-Wire DS2401 Silicon ROM ID Handshake (`sena_60s`, `cardo_edge`), PTT-Tastenerkennung.
+   * **PCBA 04 (Rear Pod 3):** u-blox MAX-M10S GNSS Receiver, 2.4 GHz IEEE 802.15.4 Transceiver, SX1262 LoRa 868 MHz PHY, Garmin Varia Radar-Zieltracker.
+   * **PCBA 05 (Universal Front Node):** Duale Knowles MEMS Akustikmessung (Fahrtwindrauschen skaliert mit $v^3$), Cockpit-PTT-Taste.
+2. **Geodätischer Track (`wil_wattwil_ricken.py`):**
+   * $11\,682$ Stützpunkte mit realistischer Beschleunigung, Kurvenschräglage ($\theta_{\text{lean}} = \arctan(v \cdot \dot{\psi} / g)$ bis $42^\circ$) und Höhenprofil ($570\dots 795\,\text{m}$ ü. M.).
+3. **15-State ADR-EKF Tunnelausfall & Koppelnavigation:**
+   * Bei Einfahrt in den $2{,}2\,\text{km}$ langen Wattwil-Tunnel bricht der GNSS-Fix schlagartig ab ($Sats = 0$, $HDOP = 99{,}9$).
+   * Das EKF integriert CAN-Raddrehzahl und IMU-Gierrate mit realistischem Rest-Drift.
+   * Nach $132\,\text{s}$ Tunnelfahrt beträgt die Positionsdrift am Wattwil-Kreisel lediglich **$18{,}83\,\text{m}$** (Automotive-Norm $< 30\,\text{m}$ bzw. $< 1{,}5\,\%$) $\rightarrow$ das Motorrad trifft die Kreiseleinfahrt geometrisch präzise.
+4. **HF-Propagation & Dynamischer Dual-PHY Handover:**
+   * **Freie Strecke ($d < 150\,\text{m}$):** 2.4 GHz High-Speed Mesh ($250\,\text{kbps}$, Opus 24k Full-Duplex Audio, 20 Hz Telemetrie).
+   * **Tunnelfahrt oder Abriss ($RSSI < -88\,\text{dBm}$):** Automatischer nahtloser Handover auf 868 MHz LoRa (Half-Duplex PTT, 1 Hz Telemetrie).
+   * **Wiederannäherung am Rickenpass:** Hysterese-gesteuerter Rück-Handover auf 2.4 GHz Mesh ($+4\,\text{dB}$ Marge).
+5. **Live PWA-Anbindung:**
+   * Pure-Python RFC 6455 WebSocket Server auf `ws://localhost:8765`.
+   * In der PWA ([`webapp_pwa/index.html`](file:///Users/schmidtm/openMotorBridge/webapp_pwa/index.html)) schaltet der Button **🚀 Digital Twin** die Verbindung sofort aktiv. Alle Tacho-, Schräglagen-, Radar-, Tunnel- und Mesh-Daten werden mit 10 Hz live visualisiert.
+6. **Containerisierung:**
+   * [`tools/simulators/Dockerfile.sim`](file:///Users/schmidtm/openMotorBridge/tools/simulators/Dockerfile.sim) ermöglicht die Ausführung in Podman oder Docker.
+
+---
+
+## 12. Interaktives Live Audio DSP Studio & Echtzeit-Simulator (`tools/audio_testbench/`)
+
+Während die 11 numerischen Python-Module die Grenzparameter rechnerisch auditieren, dient das **Live Audio DSP Studio** der hörbaren Echtzeit-Erprobung im Webbrowser:
 
 ```bash
 python3 tools/audio_testbench/server.py
@@ -201,9 +271,9 @@ python3 tools/audio_testbench/server.py
 
 ---
 
-## 12. Ausführung der Master-Testbench
+## 13. Ausführung der Master-Testbench
 
-Alle 9 numerischen Batch-Testbenches können vollautomatisiert mit einem einzigen Befehl ausgeführt werden:
+Alle 11 numerischen Batch-Testbenches können vollautomatisiert mit einem einzigen Befehl ausgeführt werden:
 
 ```bash
 python3 tools/run_all_simulations.py

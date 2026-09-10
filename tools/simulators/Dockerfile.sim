@@ -1,0 +1,28 @@
+# OpenMotorBridge - Multi-Motorcycle Digital Twin Simulator Container
+# ====================================================================
+# Runs the 10-PCB multi-bike HIL simulator with pure-Python WebSocket bridge.
+# Exposes:
+#   - 8765: RFC 6455 WebSocket Telemetry & Control Server
+#   - 8080: Optional Static Web Server for WebApp PWA
+
+FROM python:3.11-slim
+
+LABEL maintainer="OpenMotorBridge Team"
+LABEL description="OpenMotorBridge Multi-Motorcycle Digital Twin Simulator"
+
+WORKDIR /app
+
+# Install minimal numerical dependencies
+RUN pip install --no-cache-dir numpy
+
+# Copy simulator files and webapp
+COPY tools/simulators /app/tools/simulators
+COPY webapp_pwa /app/webapp_pwa
+
+ENV PYTHONUNBUFFERED=1
+
+EXPOSE 8765 8080
+
+# Default: Start digital twin simulator streaming to port 8765
+ENTRYPOINT ["python3", "tools/simulators/openmotorbridge_digital_twin.py", "--port", "8765"]
+CMD ["--speed", "1.0"]

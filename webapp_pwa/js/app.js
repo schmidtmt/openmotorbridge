@@ -733,6 +733,145 @@ function disconnectBle() {
     updateBleUiState(false);
 }
 
+// ==========================================
+// 4b. Digital Twin Simulator WebSocket Bridge
+// ==========================================
+let simWs = null;
+let isSimConnected = false;
+const btnSimWs = document.getElementById('btn-sim-ws');
+const labelSimWs = document.getElementById('label-sim-ws');
+
+if (btnSimWs) {
+    btnSimWs.addEventListener('click', () => {
+        if (isSimConnected) {
+            disconnectSimWebSocket();
+        } else {
+            connectSimWebSocket();
+        }
+    });
+}
+
+function connectSimWebSocket(url = 'ws://localhost:8765') {
+    if (state.isDemoMode) toggleDemoMode(false);
+    if (state.isBleConnected) disconnectBle();
+
+    showToast(state.lang === 'de' ? 'Verbinde mit Digital Twin Simulator (ws://localhost:8765)...' : 'Connecting to Digital Twin Simulator...', 'info', 2000);
+    try {
+        simWs = new WebSocket(url);
+        
+        simWs.onopen = () => {
+            isSimConnected = true;
+            if (btnSimWs) {
+                btnSimWs.classList.add('connected');
+                btnSimWs.style.background = 'var(--accent-green)';
+                btnSimWs.style.color = '#000';
+            }
+            if (labelBleStatus) {
+                labelBleStatus.textContent = 'Digital Twin Live';
+                dotBle.classList.add('active');
+            }
+            showToast(state.lang === 'de' ? '🚀 Digital Twin Simulator verbunden!' : '🚀 Digital Twin Connected!', 'success', 3000);
+        };
+
+        simWs.onmessage = (event) => {
+            try {
+                const msg = JSON.parse(event.data);
+                if (msg.type === 'telemetry') {
+                    handleSimTelemetry(msg);
+                }
+            } catch (e) {
+                console.error('Error parsing sim telemetry:', e);
+            }
+        };
+
+        simWs.onclose = () => {
+            isSimConnected = false;
+            if (btnSimWs) {
+                btnSimWs.classList.remove('connected');
+                btnSimWs.style.background = '';
+                btnSimWs.style.color = '';
+            }
+            if (labelBleStatus) {
+                labelBleStatus.textContent = 'BLE Offline';
+                dotBle.classList.remove('active');
+            }
+            showToast(state.lang === 'de' ? 'Digital Twin getrennt.' : 'Digital Twin disconnected.', 'warning');
+        };
+
+        simWs.onerror = (err) => {
+            console.warn('Simulator WebSocket error:', err);
+            showToast(state.lang === 'de' ? 'Kein Digital Twin unter ws://localhost:8765 erreichbar.' : 'No Digital Twin found at ws://localhost:8765.', 'warning', 4000);
+        };
+    } catch (err) {
+        console.error('WebSocket connection failed:', err);
+    }
+}
+
+function disconnectSimWebSocket() {
+    if (simWs) {
+        simWs.close();
+        simWs = null;
+    }
+    isSimConnected = false;
+}
+
+function handleSimTelemetry(data) {
+    // 1. Core Vehicle Telemetry
+    updateTelemetryUi({
+        v_ign: data.v_ign,
+        v_bat: data.v_bat,
+        btn_bat: data.btn_bat,
+        speed: data.speed,
+        sats: data.sats,
+        lean_angle: data.lean_angle,
+        mode: data.mode
+    });
+
+    // 2. GNSS & Tunnel Dead-Reckoning Badge
+    const badgeGnss = document.getElementById('badge-gnss-fix');
+    const subSats = document.getElementById('sub-sats');
+    if (badgeGnss) {
+        if (data.in_tunnel) {
+            badgeGnss.className = 'card-badge badge-red';
+            badgeGnss.textContent = `TUNNEL EKF-DR (Drift: ${data.dr_drift_m}m)`;
+            if (subSats) subSats.textContent = 'Tunnel-Blackout';
+        } else {
+            badgeGnss.className = 'card-badge badge-orange';
+            badgeGnss.textContent = `3D FIX (HDOP: ${data.hdop})`;
+            if (subSats) subSats.textContent = `${data.sats} Sats 10Hz`;
+        }
+    }
+
+    // 3. Radar & Threat Visualization
+    if (data.radar && data.radar.targets) {
+        updateRadarUi(data.radar);
+    }
+
+    // 4. Coordinates, Altitude & Mesh Topology
+    const lblCoords = document.getElementById('lbl-radar-coords');
+    if (lblCoords && data.lat && data.lon) {
+        lblCoords.textContent = `${data.lat.toFixed(4)}° N, ${data.lon.toFixed(4)}° E`;
+    }
+    const lblAlt = document.getElementById('lbl-radar-alt');
+    if (lblAlt && data.alt) {
+        lblAlt.textContent = `${Math.round(data.alt)} m`;
+    }
+    const lblRssi = document.getElementById('lbl-radar-rssi');
+    if (lblRssi && data.rf_rssi !== undefined) {
+        lblRssi.textContent = `${data.rf_link} (${data.rf_rssi} dBm)`;
+    }
+    const lblDr = document.getElementById('lbl-radar-dr');
+    if (lblDr) {
+        lblDr.textContent = data.in_tunnel ? `EKF-DR: ${data.dr_drift_m}m` : 'GNSS Fix OK';
+        lblDr.style.color = data.in_tunnel ? 'var(--accent-red)' : 'var(--accent-green)';
+    }
+
+    // 5. Mesh Group Cards
+    if (data.mesh_members) {
+        renderMeshCards(data.mesh_members);
+    }
+}
+
 function updateBleUiState(connected) {
     const dict = i18n[state.lang];
     if (connected) {
