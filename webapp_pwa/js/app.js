@@ -172,7 +172,10 @@ const i18n = {
         helmet_sandbox_title: 'WebAudio Helm-Akustik & DSP Sandbox (Live-Simulator)',
         btn_sandbox_start: 'Akustik Starten',
         btn_sandbox_stop: 'Akustik Stoppen',
-        gpx_kerenzerberg_title: 'Kerenzerberg GPX 1.1 & Serpentinen Map-Matching'
+        gpx_kerenzerberg_title: 'Kerenzerberg GPX 1.1 & Serpentinen Map-Matching',
+        mode_ride_hud: 'Fahrmodus (HUD)',
+        mode_detail: 'Detail-Cockpit',
+        mode_detail_short: 'Detail'
     },
     en: {
         app_subtitle: 'v8.0 Satellite Gateway',
@@ -336,13 +339,17 @@ const i18n = {
         helmet_sandbox_title: 'WebAudio Helmet Acoustics & DSP Sandbox (Live Simulator)',
         btn_sandbox_start: 'Start Acoustics',
         btn_sandbox_stop: 'Stop Acoustics',
-        gpx_kerenzerberg_title: 'Kerenzerberg GPX 1.1 & Serpentine Map Matching'
+        gpx_kerenzerberg_title: 'Kerenzerberg GPX 1.1 & Serpentine Map Matching',
+        mode_ride_hud: 'Ride HUD',
+        mode_detail: 'Detail Cockpit',
+        mode_detail_short: 'Detail'
     }
 };
 
 // Application State
 const state = {
     lang: localStorage.getItem('omb_lang') || (navigator.language.startsWith('de') ? 'de' : 'en'),
+    cockpitMode: localStorage.getItem('omb_cockpit_mode') || 'hud',
     isBleConnected: false,
     isDemoMode: false,
     demoInterval: null,
@@ -436,6 +443,45 @@ const valLeanAngle = document.getElementById('val-lean-angle');
 const bikeLeanVisual = document.getElementById('bike-lean-visual');
 const selectBatteryType = document.getElementById('select-battery-type');
 const labelBatteryChem = document.getElementById('label-battery-chem');
+
+// Smartphone Ride HUD DOM Elements
+const btnModeRideHud = document.getElementById('btn-mode-ride-hud');
+const btnModeDetail = document.getElementById('btn-mode-detail');
+const btnHudToDetail = document.getElementById('btn-hud-to-detail');
+const rideHudView = document.getElementById('ride-hud-view');
+const detailCockpitView = document.getElementById('detail-cockpit-view');
+const hudHeroCluster = document.getElementById('hud-hero-cluster');
+
+const valHudSpeed = document.getElementById('val-hud-speed');
+const valHudGear = document.getElementById('val-hud-gear');
+const valHudRpm = document.getElementById('val-hud-rpm');
+const valHudLean = document.getElementById('val-hud-lean');
+const valHudLeanMaxL = document.getElementById('val-hud-lean-max-l');
+const valHudLeanMaxR = document.getElementById('val-hud-lean-max-r');
+const hudBikeLeanVisual = document.getElementById('hud-bike-lean-visual');
+const valHudTrackName = document.getElementById('val-hud-track-name');
+const valHudAlt = document.getElementById('val-hud-alt');
+
+const hudTileRadar = document.getElementById('hud-tile-radar');
+const hudRadarStatus = document.getElementById('hud-radar-status');
+const valHudRadarDist = document.getElementById('val-hud-radar-dist');
+const valHudRadarRelSpeed = document.getElementById('val-hud-radar-rel-speed');
+const canvasHudRearRadar = document.getElementById('canvas-hud-rear-radar');
+const s_hudRadarCtx = canvasHudRearRadar ? canvasHudRearRadar.getContext('2d') : null;
+const hudBsdLeft = document.getElementById('hud-bsd-left');
+const hudBsdRight = document.getElementById('hud-bsd-right');
+
+const valHudIntercom = document.getElementById('val-hud-intercom');
+const valHudPower = document.getElementById('val-hud-power');
+const valHudBtnBat = document.getElementById('val-hud-btn-bat');
+const valHudEcall = document.getElementById('val-hud-ecall');
+const hudClockDisplay = document.getElementById('hud-clock-display');
+const hudLiveClock = document.getElementById('hud-live-clock');
+const hudStatusLink = document.getElementById('hud-status-link');
+const hudBikeProfileName = document.getElementById('hud-bike-profile-name');
+
+let s_hudMaxLeanL = 0;
+let s_hudMaxLeanR = 0;
 
 const sliderGainP1 = document.getElementById('slider-gain-p1');
 const labelGainP1 = document.getElementById('label-gain-p1');
@@ -1728,6 +1774,35 @@ function resetDisconnectedTelemetryUi() {
     if (state.radar) state.radar.targets = [];
     updateRadarUi({ targets: [] });
 
+    // Reset Ride HUD Telemetry
+    if (valHudSpeed) valHudSpeed.textContent = '--';
+    if (valHudGear) {
+        valHudGear.textContent = 'N';
+        valHudGear.classList.add('neutral');
+    }
+    if (valHudRpm) valHudRpm.textContent = '0 RPM';
+    if (valHudLean) valHudLean.textContent = '0.0°';
+    if (valHudLeanMaxL) valHudLeanMaxL.textContent = '0°';
+    if (valHudLeanMaxR) valHudLeanMaxR.textContent = '0°';
+    s_hudMaxLeanL = 0;
+    s_hudMaxLeanR = 0;
+    if (hudBikeLeanVisual) hudBikeLeanVisual.style.transform = 'rotate(0deg)';
+    if (valHudPower) valHudPower.textContent = '-- V • -- %';
+    if (valHudBtnBat) valHudBtnBat.textContent = 'CR2032 --';
+    if (hudStatusLink) {
+        hudStatusLink.textContent = isDe ? '⚡ Standby' : '⚡ Standby';
+        hudStatusLink.style.color = 'var(--text-secondary)';
+    }
+    if (valHudRadarDist) valHudRadarDist.textContent = '-- m';
+    if (valHudRadarRelSpeed) valHudRadarRelSpeed.textContent = isDe ? 'Freie Fahrt' : 'Clear road';
+    if (hudRadarStatus) {
+        hudRadarStatus.textContent = isDe ? 'FREI' : 'CLEAR';
+        hudRadarStatus.className = 'card-badge badge-green';
+    }
+    if (hudTileRadar) hudTileRadar.classList.remove('threat-warning', 'threat-critical');
+    if (hudBsdLeft) hudBsdLeft.classList.remove('active');
+    if (hudBsdRight) hudBsdRight.classList.remove('active');
+
     // 2. Tab Audio: Codec & 4-Channel VU-Meters
     const badgeCodec = document.getElementById('badge-codec-state');
     if (badgeCodec) {
@@ -1900,16 +1975,73 @@ function updateTelemetryUi(data) {
         valSpeed.textContent = data.speed.toFixed(1);
         state.telemetry.speed = data.speed;
         updateSpeedGatingVisual(data.speed);
+
+        if (valHudSpeed) {
+            valHudSpeed.textContent = data.speed < 0.5 ? '0' : Math.round(data.speed);
+        }
+        if (valHudGear) {
+            let gearStr = 'N';
+            if (data.can_gear !== undefined) {
+                gearStr = data.can_gear === 0 ? 'N' : String(data.can_gear);
+            } else if (data.speed > 2.0) {
+                if (data.speed < 28) gearStr = '1';
+                else if (data.speed < 48) gearStr = '2';
+                else if (data.speed < 70) gearStr = '3';
+                else if (data.speed < 90) gearStr = '4';
+                else if (data.speed < 115) gearStr = '5';
+                else gearStr = '6';
+            }
+            valHudGear.textContent = gearStr;
+            if (gearStr === 'N') {
+                valHudGear.classList.add('neutral');
+            } else {
+                valHudGear.classList.remove('neutral');
+            }
+        }
+        if (valHudRpm) {
+            const rpm = data.can_rpm !== undefined ? data.can_rpm : (data.speed > 1.0 ? Math.round(1800 + (data.speed % 25) * 80) : 0);
+            valHudRpm.textContent = `${rpm} RPM`;
+        }
     }
 
     if (data.sats !== undefined && data.sats !== null) {
         valSats.textContent = data.sats;
+        const hudGps = document.getElementById('hud-status-gps');
+        if (hudGps) hudGps.textContent = `🛰️ ${data.sats} Sats (10Hz)`;
     }
 
     if (data.lean_angle !== undefined && data.lean_angle !== null) {
         state.telemetry.lean_angle = data.lean_angle;
         valLeanAngle.textContent = `${data.lean_angle.toFixed(1)}°`;
         bikeLeanVisual.style.transform = `rotate(${data.lean_angle}deg)`;
+
+        if (valHudLean) valHudLean.textContent = `${Math.abs(data.lean_angle).toFixed(1)}°`;
+        if (hudBikeLeanVisual) hudBikeLeanVisual.style.transform = `rotate(${data.lean_angle}deg)`;
+
+        if (data.lean_angle < -s_hudMaxLeanL) {
+            s_hudMaxLeanL = Math.abs(data.lean_angle);
+            if (valHudLeanMaxL) valHudLeanMaxL.textContent = `${Math.round(s_hudMaxLeanL)}°`;
+        }
+        if (data.lean_angle > s_hudMaxLeanR) {
+            s_hudMaxLeanR = data.lean_angle;
+            if (valHudLeanMaxR) valHudLeanMaxR.textContent = `${Math.round(s_hudMaxLeanR)}°`;
+        }
+    }
+
+    if (valHudPower && (data.v_ign !== undefined || data.v_bat !== undefined)) {
+        const vIgnVal = data.v_ign !== undefined ? `${data.v_ign.toFixed(1)} V` : '-- V';
+        const vBatVal = data.v_bat !== undefined ? Math.min(100, Math.max(0, Math.round((data.v_bat - 3.4) / (4.2 - 3.4) * 100))) : 96;
+        valHudPower.textContent = `${vIgnVal} • 🔋 ${vBatVal}%`;
+    }
+
+    if (valHudBtnBat && data.btn_bat !== undefined) {
+        valHudBtnBat.textContent = `CR2032 ${data.btn_bat}%`;
+    }
+
+    if (hudStatusLink) {
+        const isOnline = state.isBleConnected || isSimConnected;
+        hudStatusLink.textContent = isOnline ? '🟢 Verbunden' : '⚡ Standby';
+        hudStatusLink.style.color = isOnline ? 'var(--accent-green)' : 'var(--text-secondary)';
     }
 
     if (data.mode !== undefined && data.mode !== null) {
@@ -4024,6 +4156,19 @@ function updateRadarUi(radarState) {
             mirrorRight.className = 'bsd-mirror-indicator';
             if (lblRightDist) lblRightDist.textContent = '--';
         }
+
+        // Ride HUD Radar Reset
+        if (valHudRadarDist) valHudRadarDist.textContent = '-- m';
+        if (valHudRadarRelSpeed) valHudRadarRelSpeed.textContent = isDe ? 'Freie Fahrt' : 'Clear road';
+        if (hudRadarStatus) {
+            hudRadarStatus.textContent = isDe ? 'FREI' : 'CLEAR';
+            hudRadarStatus.className = 'card-badge badge-green';
+        }
+        if (hudTileRadar) {
+            hudTileRadar.classList.remove('threat-warning', 'threat-critical');
+        }
+        if (hudBsdLeft) hudBsdLeft.classList.remove('active');
+        if (hudBsdRight) hudBsdRight.classList.remove('active');
         return;
     }
 
@@ -4056,27 +4201,57 @@ function updateRadarUi(radarState) {
     if (lblSpeed) lblSpeed.textContent = `+${Math.round(speed)} km/h`;
     if (lblTtc) lblTtc.textContent = ttc ? `${ttc.toFixed(1)} s` : '--';
 
+    // Ride HUD Distance & Speed
+    if (valHudRadarDist) valHudRadarDist.textContent = dist !== null ? `${Math.round(dist)} m` : '-- m';
+    if (valHudRadarRelSpeed) valHudRadarRelSpeed.textContent = speed > 0 ? `+${Math.round(speed)} km/h` : (isDe ? 'Folgt' : 'Following');
+
     if (threatLevel === 2) {
         if (badgeStatus) {
             badgeStatus.textContent = isDe ? '🚨 KOLLISIONSRISIKO!' : '🚨 COLLISION RISK!';
             badgeStatus.className = 'card-badge badge-red';
         }
         if (lblSpeedStatus) lblSpeedStatus.textContent = isDe ? 'Kritisch schnelle Annäherung!' : 'Critical high-speed approach!';
+
+        if (hudRadarStatus) {
+            hudRadarStatus.textContent = isDe ? '🚨 GEFAHR!' : '🚨 DANGER!';
+            hudRadarStatus.className = 'card-badge badge-red';
+        }
+        if (hudTileRadar) {
+            hudTileRadar.classList.add('threat-critical');
+            hudTileRadar.classList.remove('threat-warning');
+        }
     } else if (threatLevel === 1) {
         if (badgeStatus) {
             badgeStatus.textContent = isDe ? '⚠️ FAHRZEUG NÄHERT SICH' : '⚠️ VEHICLE APPROACHING';
             badgeStatus.className = 'card-badge badge-orange';
         }
         if (lblSpeedStatus) lblSpeedStatus.textContent = isDe ? 'Fahrzeug nähert sich' : 'Vehicle closing in';
+
+        if (hudRadarStatus) {
+            hudRadarStatus.textContent = isDe ? '⚠️ NÄHERT SICH' : '⚠️ CLOSING';
+            hudRadarStatus.className = 'card-badge badge-orange';
+        }
+        if (hudTileRadar) {
+            hudTileRadar.classList.add('threat-warning');
+            hudTileRadar.classList.remove('threat-critical');
+        }
     } else {
         if (badgeStatus) {
             badgeStatus.textContent = isDe ? 'FREI (NORMALABSTAND)' : 'CLEAR (NORMAL DISTANCE)';
             badgeStatus.className = 'card-badge badge-green';
         }
         if (lblSpeedStatus) lblSpeedStatus.textContent = isDe ? 'Gleichbleibender Abstand' : 'Constant distance';
+
+        if (hudRadarStatus) {
+            hudRadarStatus.textContent = isDe ? 'FREI' : 'CLEAR';
+            hudRadarStatus.className = 'card-badge badge-green';
+        }
+        if (hudTileRadar) {
+            hudTileRadar.classList.remove('threat-warning', 'threat-critical');
+        }
     }
 
-    // Mirror Blind Spot LEDs (Active if < 18 m)
+    // Mirror Blind Spot LEDs (Active if < 18 m in detail, < 22 m in Ride HUD)
     if (dist !== null && dist < 18.0 && azimuth < -1.5) {
         if (mirrorLeft) mirrorLeft.className = threatLevel === 2 ? 'bsd-mirror-indicator warning-red' : 'bsd-mirror-indicator warning-amber';
         if (lblLeftDist) lblLeftDist.textContent = `${dist.toFixed(0)} m`;
@@ -4091,6 +4266,19 @@ function updateRadarUi(radarState) {
     } else {
         if (mirrorRight) mirrorRight.className = 'bsd-mirror-indicator';
         if (lblRightDist) lblRightDist.textContent = '--';
+    }
+
+    // Ride HUD Blind Spot LEDs
+    if (dist !== null && dist < 22.0 && azimuth < -1.5) {
+        if (hudBsdLeft) hudBsdLeft.classList.add('active');
+    } else {
+        if (hudBsdLeft) hudBsdLeft.classList.remove('active');
+    }
+
+    if (dist !== null && dist < 22.0 && azimuth > 1.5) {
+        if (hudBsdRight) hudBsdRight.classList.add('active');
+    } else {
+        if (hudBsdRight) hudBsdRight.classList.remove('active');
     }
 
     // Audio Ping trigger on threat escalation
@@ -4244,9 +4432,99 @@ function renderRearRadarCanvas() {
         });
     }
 
+    // Also draw on Smartphone Ride HUD radar widget
+    renderHudRadarCanvas(state.radar && state.radar.targets, isRearRadarActive);
+
     requestAnimationFrame(renderRearRadarCanvas);
 }
 requestAnimationFrame(renderRearRadarCanvas);
+
+function renderHudRadarCanvas(targets, isRearRadarActive) {
+    if (!canvasHudRearRadar || !s_hudRadarCtx) return;
+    const w = canvasHudRearRadar.width;
+    const h = canvasHudRearRadar.height;
+    const cx = w / 2;
+    const bikeY = 16;
+
+    s_hudRadarCtx.clearRect(0, 0, w, h);
+
+    if (!isRearRadarActive) {
+        s_hudRadarCtx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+        s_hudRadarCtx.font = 'bold 9px sans-serif';
+        s_hudRadarCtx.textAlign = 'center';
+        s_hudRadarCtx.fillText('VARIA STANDBY', cx, h / 2 + 3);
+        return;
+    }
+
+    const coneLen = h - bikeY - 6;
+    const halfAngle = 0.44;
+
+    // Fan Background
+    s_hudRadarCtx.save();
+    s_hudRadarCtx.beginPath();
+    s_hudRadarCtx.moveTo(cx, bikeY);
+    s_hudRadarCtx.lineTo(cx - Math.sin(halfAngle) * coneLen, bikeY + Math.cos(halfAngle) * coneLen);
+    s_hudRadarCtx.arc(cx, bikeY, coneLen, Math.PI / 2 - halfAngle, Math.PI / 2 + halfAngle);
+    s_hudRadarCtx.closePath();
+
+    const coneGrad = s_hudRadarCtx.createRadialGradient(cx, bikeY, 8, cx, bikeY, coneLen);
+    coneGrad.addColorStop(0, 'rgba(10, 132, 255, 0.2)');
+    coneGrad.addColorStop(0.8, 'rgba(10, 132, 255, 0.04)');
+    coneGrad.addColorStop(1, 'rgba(10, 132, 255, 0.0)');
+    s_hudRadarCtx.fillStyle = coneGrad;
+    s_hudRadarCtx.fill();
+    s_hudRadarCtx.strokeStyle = 'rgba(10, 132, 255, 0.35)';
+    s_hudRadarCtx.lineWidth = 1;
+    s_hudRadarCtx.stroke();
+    s_hudRadarCtx.restore();
+
+    // Range Arcs (30m, 75m, 140m)
+    [
+        { r: coneLen * 0.25, stroke: 'rgba(255, 69, 58, 0.4)' },
+        { r: coneLen * 0.55, stroke: 'rgba(255, 159, 10, 0.4)' },
+        { r: coneLen * 1.0, stroke: 'rgba(255, 255, 255, 0.15)' }
+    ].forEach(a => {
+        s_hudRadarCtx.beginPath();
+        s_hudRadarCtx.arc(cx, bikeY, a.r, Math.PI / 2 - halfAngle, Math.PI / 2 + halfAngle);
+        s_hudRadarCtx.strokeStyle = a.stroke;
+        s_hudRadarCtx.lineWidth = 1;
+        s_hudRadarCtx.stroke();
+    });
+
+    // Bike Origin Dot
+    s_hudRadarCtx.beginPath();
+    s_hudRadarCtx.arc(cx, bikeY, 4.5, 0, Math.PI * 2);
+    s_hudRadarCtx.fillStyle = '#30d158';
+    s_hudRadarCtx.fill();
+
+    // Targets
+    if (targets && targets.length > 0) {
+        targets.forEach(t => {
+            const frac = Math.min(Math.max(t.dist / 140.0, 0.05), 1.0);
+            const targetR = coneLen * frac;
+            const targetAzimRad = (t.azimuth * Math.PI) / 180.0;
+            const tx = cx + Math.sin(targetAzimRad) * targetR;
+            const ty = bikeY + Math.cos(targetAzimRad) * targetR;
+            const color = t.threat === 2 ? '#ff453a' : (t.threat === 1 ? '#ff9f0a' : '#30d158');
+
+            // Pulse
+            s_hudRadarCtx.beginPath();
+            s_hudRadarCtx.arc(tx, ty, 7 + Math.sin(Date.now() / 150) * 2, 0, Math.PI * 2);
+            s_hudRadarCtx.strokeStyle = color;
+            s_hudRadarCtx.lineWidth = 1.2;
+            s_hudRadarCtx.stroke();
+
+            // Dot
+            s_hudRadarCtx.beginPath();
+            s_hudRadarCtx.arc(tx, ty, 4.5, 0, Math.PI * 2);
+            s_hudRadarCtx.fillStyle = color;
+            s_hudRadarCtx.fill();
+            s_hudRadarCtx.strokeStyle = '#ffffff';
+            s_hudRadarCtx.lineWidth = 1;
+            s_hudRadarCtx.stroke();
+        });
+    }
+}
 
 function triggerSimulatedRadarApproach() {
     if (state.radar.simCycle) {
@@ -5138,11 +5416,65 @@ document.getElementById('btn-validate-map-match')?.addEventListener('click', () 
     showToast(state.lang === 'de' ? '📐 Serpentinen-Validierung: HMM-Filter sichert Kerenzerberg Südhang ohne Terrassen-Sprünge!' : '📐 Serpentine Validation: HMM filter prevents terrace jumps!', 'success', 3500);
 });
 
-// Initialize Language, Telemetry & Auto-Start Simulation on Boot
+// ==========================================
+// 11i. Motorcycle Smartphone Ride HUD (Zero-Scroll Fahrmodus)
+// ==========================================
+function setCockpitMode(mode) {
+    state.cockpitMode = mode;
+    localStorage.setItem('omb_cockpit_mode', mode);
+
+    if (mode === 'hud') {
+        if (btnModeRideHud) btnModeRideHud.classList.add('active');
+        if (btnModeDetail) btnModeDetail.classList.remove('active');
+        if (rideHudView) rideHudView.style.display = 'flex';
+        if (detailCockpitView) detailCockpitView.style.display = 'none';
+        document.body.classList.add('ride-hud-active');
+    } else {
+        if (btnModeRideHud) btnModeRideHud.classList.remove('active');
+        if (btnModeDetail) btnModeDetail.classList.add('active');
+        if (rideHudView) rideHudView.style.display = 'none';
+        if (detailCockpitView) detailCockpitView.style.display = 'grid';
+        document.body.classList.remove('ride-hud-active');
+    }
+}
+
+function setupRideHudUi() {
+    if (btnModeRideHud) {
+        btnModeRideHud.addEventListener('click', () => setCockpitMode('hud'));
+    }
+    if (btnModeDetail) {
+        btnModeDetail.addEventListener('click', () => setCockpitMode('detail'));
+    }
+    if (btnHudToDetail) {
+        btnHudToDetail.addEventListener('click', () => setCockpitMode('detail'));
+    }
+    if (hudHeroCluster) {
+        hudHeroCluster.addEventListener('click', () => {
+            setCockpitMode(state.cockpitMode === 'hud' ? 'detail' : 'hud');
+        });
+    }
+
+    // Live Clock Updater
+    function updateHudClocks() {
+        const d = new Date();
+        const str = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        if (hudClockDisplay) hudClockDisplay.textContent = str;
+        if (hudLiveClock) hudLiveClock.textContent = str;
+    }
+    updateHudClocks();
+    setInterval(updateHudClocks, 10000);
+
+    // Initial Mode: Defaults to Glove-Friendly Ride HUD on mobile/handhelds
+    const savedMode = localStorage.getItem('omb_cockpit_mode') || 'hud';
+    setCockpitMode(savedMode);
+}
+
+// Initialize Language, Telemetry & Cockpit UI on Boot (Standby - Wait for BLE Hardware)
 setLanguage(state.lang);
 resetDisconnectedTelemetryUi();
 setupCanProfileManagerUi();
-startInternalSimTrackEngine(false);
+setupRideHudUi();
+// Note: Internal simulation is strictly opt-in via "Demo-Modus" or "Digital Twin" buttons.
 
 // ==========================================
 // 12. Service Worker Registration (PWA Offline)

@@ -1057,3 +1057,603 @@ body {
     overflow: hidden;
     margin-top: 10px;
 }
+
+/* ==========================================================================
+   Motorcycle Smartphone RIDE HUD (Zero-Scroll Fahrmodus)
+   Optimized for Pixel 10 Pro XL, iPhone Pro Max & Handlebar Mounts
+   ========================================================================== */
+.cockpit-mode-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    padding: 6px 12px;
+    background: rgba(13, 17, 23, 0.65);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    flex-wrap: wrap;
+}
+
+.cockpit-mode-switch {
+    display: flex;
+    gap: 4px;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 4px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border-subtle);
+}
+
+.btn-mode-pill {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 6px 16px;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-mode-pill:hover {
+    color: #fff;
+}
+
+.btn-mode-pill.active {
+    background: linear-gradient(135deg, var(--accent-orange), #ff6b00);
+    color: #000;
+    font-weight: 800;
+    box-shadow: 0 0 14px var(--accent-orange-glow);
+}
+
+.cockpit-mode-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.76rem;
+}
+
+.hud-pill {
+    padding: 3px 10px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-full);
+    color: var(--text-secondary);
+    font-weight: 600;
+    font-family: monospace;
+}
+
+.hud-pill-clock {
+    color: var(--accent-blue);
+    font-weight: 700;
+}
+
+/* 1. Main Ride HUD Container */
+.ride-hud-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: radial-gradient(circle at 50% 0%, rgba(10, 132, 255, 0.08) 0%, transparent 60%),
+                linear-gradient(180deg, #0a0e14 0%, #05070a 100%);
+    border: 1px solid rgba(10, 132, 255, 0.25);
+    border-radius: var(--radius-lg);
+    padding: 12px 14px;
+    box-shadow: var(--shadow-lg), 0 0 30px rgba(0, 0, 0, 0.7);
+    backdrop-filter: var(--glass-blur);
+    user-select: none;
+}
+
+/* HUD Top Status Bar */
+.hud-top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.hud-profile-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--accent-orange);
+    background: rgba(255, 159, 10, 0.1);
+    border: 1px solid rgba(255, 159, 10, 0.3);
+    padding: 3px 8px;
+    border-radius: var(--radius-full);
+}
+
+.hud-dot-pulse {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent-green);
+    box-shadow: 0 0 8px var(--accent-green);
+    animation: dotPulse 1.5s infinite;
+}
+
+@keyframes dotPulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.3); opacity: 0.6; }
+}
+
+.hud-top-center {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.hud-speed-limit-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 2px 6px;
+    border-radius: var(--radius-full);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.speed-limit-circle {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 2.5px solid #ff3b30;
+    color: #000000;
+    font-weight: 900;
+    font-size: 0.68rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading);
+}
+
+.speed-limit-zone {
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.btn-hud-action {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+    font-size: 0.74rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-hud-action:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* 2. Hero Speed & Gear Cluster */
+.hud-hero-cluster {
+    display: grid;
+    grid-template-columns: 80px 1fr 100px;
+    align-items: center;
+    background: linear-gradient(180deg, rgba(17, 24, 39, 0.95), rgba(9, 13, 20, 0.98));
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-md);
+    padding: 8px 14px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 8px 24px rgba(0, 0, 0, 0.5);
+    transition: transform 0.12s ease, border-color 0.2s ease;
+}
+
+.hud-hero-cluster:active {
+    transform: scale(0.99);
+    border-color: var(--accent-blue);
+}
+
+.hud-gear-container {
+    text-align: center;
+    padding: 6px 4px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-subtle);
+}
+
+.hud-gear-label {
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+}
+
+.hud-gear-value {
+    font-family: var(--font-heading);
+    font-size: 2.8rem;
+    font-weight: 900;
+    line-height: 1;
+    color: var(--accent-orange);
+    text-shadow: 0 0 16px var(--accent-orange-glow);
+}
+
+.hud-gear-value.neutral {
+    color: var(--accent-green);
+    text-shadow: 0 0 16px var(--accent-green-glow);
+}
+
+.hud-rpm-value {
+    font-size: 0.68rem;
+    font-family: monospace;
+    color: var(--text-secondary);
+    margin-top: 2px;
+}
+
+.hud-speed-container {
+    text-align: center;
+}
+
+.hud-speed-number {
+    font-family: var(--font-heading);
+    font-size: clamp(3.6rem, 12vw, 5.2rem);
+    font-weight: 900;
+    line-height: 0.92;
+    color: #ffffff;
+    letter-spacing: -2px;
+    text-shadow: 0 0 28px rgba(10, 132, 255, 0.4);
+}
+
+.hud-speed-unit {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--accent-blue);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-top: 2px;
+}
+
+.hud-glove-hint {
+    font-size: 0.58rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.35);
+    letter-spacing: 1px;
+    margin-top: 2px;
+}
+
+.hud-track-container {
+    text-align: right;
+    padding: 6px 4px;
+}
+
+.hud-track-label {
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+}
+
+.hud-track-name {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.hud-track-alt {
+    font-size: 0.72rem;
+    color: var(--accent-blue);
+    font-weight: 600;
+}
+
+/* 3. Dual-Action Focus Center (50/50 Split) */
+.hud-dual-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.hud-tile {
+    background: rgba(13, 17, 23, 0.88);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 10px 12px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.hud-tile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.hud-tile-title {
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: var(--text-secondary);
+    letter-spacing: 0.8px;
+}
+
+.hud-tile-badge {
+    font-size: 0.62rem;
+    padding: 2px 6px;
+    border-radius: var(--radius-full);
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-muted);
+}
+
+/* Tile 1: Lean Angle */
+.hud-horizon-box {
+    position: relative;
+    height: 105px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+}
+
+.hud-horizon-arc {
+    position: absolute;
+    width: 130px;
+    height: 65px;
+    border-top: 2px dashed rgba(255, 255, 255, 0.2);
+    border-radius: 130px 130px 0 0;
+    top: 15px;
+    pointer-events: none;
+}
+
+.hud-arc-mark {
+    position: absolute;
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.hud-arc-mark.left { left: 0; top: 46px; }
+.hud-arc-mark.center { left: 50%; transform: translateX(-50%); top: -14px; }
+.hud-arc-mark.right { right: 0; top: 46px; }
+
+.hud-bike-indicator {
+    transition: transform 0.08s linear;
+    transform-origin: 50% 68%;
+}
+
+.hud-lean-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 4px;
+    padding-top: 4px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.hud-lean-live {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--accent-orange);
+}
+
+.hud-lean-peaks {
+    font-size: 0.68rem;
+    color: var(--text-secondary);
+    display: flex;
+    gap: 8px;
+}
+
+.hud-lean-peaks strong {
+    color: var(--text-primary);
+}
+
+/* Tile 2: Garmin Varia Rear Radar & Blind Spot */
+.hud-tile-radar {
+    transition: all 0.25s ease;
+}
+
+.hud-tile-radar.threat-warning {
+    border-color: var(--accent-orange);
+    box-shadow: inset 0 0 20px rgba(255, 159, 10, 0.25), 0 0 16px rgba(255, 159, 10, 0.4);
+}
+
+.hud-tile-radar.threat-critical {
+    border-color: var(--accent-red);
+    box-shadow: inset 0 0 25px rgba(255, 69, 58, 0.35), 0 0 22px rgba(255, 69, 58, 0.6);
+    animation: bsdPulseRed 0.6s infinite alternate;
+}
+
+.hud-bsd-led {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 48px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 900;
+    transition: all 0.2s;
+    z-index: 5;
+}
+
+.hud-bsd-led.left { left: 4px; }
+.hud-bsd-led.right { right: 4px; }
+
+.hud-bsd-led.active {
+    background: #ff9f0a;
+    border-color: #ffd60a;
+    color: #000;
+    box-shadow: 0 0 16px #ff9f0a;
+    animation: bsdPulseOrange 0.5s infinite alternate;
+}
+
+.hud-radar-display {
+    position: relative;
+    height: 95px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hud-radar-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.hud-radar-threat-ring {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    pointer-events: none;
+    transition: all 0.2s;
+}
+
+.hud-radar-metrics {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 4px;
+    padding-top: 4px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.hud-radar-metric-box {
+    text-align: left;
+}
+
+.hud-radar-metric-box:last-child {
+    text-align: right;
+}
+
+.hud-metric-label {
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+.hud-metric-value {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+/* 4. Bottom Multi-Status Pill Strip */
+.hud-bottom-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    margin-top: 2px;
+}
+
+.hud-pill-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(13, 17, 23, 0.7);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: 6px 8px;
+    overflow: hidden;
+}
+
+.hud-pill-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.hud-pill-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+    overflow: hidden;
+}
+
+.hud-pill-sub {
+    font-size: 0.58rem;
+    font-weight: 800;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+}
+
+.hud-pill-text strong {
+    font-size: 0.76rem;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Responsive adjustments for Mobile & Handlebars */
+@media (max-width: 650px) {
+    .hud-hero-cluster {
+        grid-template-columns: 65px 1fr 75px;
+        padding: 6px 10px;
+    }
+    .hud-speed-number {
+        font-size: clamp(3.2rem, 14vw, 4.4rem);
+    }
+    .hud-gear-value {
+        font-size: 2.2rem;
+    }
+    .hud-dual-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+    }
+    .hud-tile {
+        padding: 8px 10px;
+    }
+    .hud-horizon-box {
+        height: 90px;
+    }
+    .hud-radar-display {
+        height: 80px;
+    }
+    .hud-bottom-strip {
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+    }
+}
+
+/* Fullscreen / Zero-Scroll Active Mode on Mobile Devices */
+body.ride-hud-active {
+    overflow: hidden;
+    padding-bottom: 0;
+}
+
+body.ride-hud-active .app-container {
+    padding: 6px;
+    max-width: 100%;
+}
+
+body.ride-hud-active .app-header {
+    margin-bottom: 6px;
+    padding: 6px 12px;
+}
+
+body.ride-hud-active .nav-tabs {
+    margin-bottom: 6px;
+    gap: 4px;
+}
+
+body.ride-hud-active .tab-btn {
+    padding: 4px 8px;
+    font-size: 0.74rem;
+}
