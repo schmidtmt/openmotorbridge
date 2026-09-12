@@ -41,8 +41,8 @@ const i18n = {
         vbat_label: 'USV-LiPo (Unter Sitzbank)',
         vbat_sub: '1000 mAh Puffer',
         bat_chem_label: 'Starterbatterie-Typ & Schutzschwelle',
-        handlebar_label: 'Lenkertaster & Funk-PTT (CR2032 Batterie)',
-        handlebar_sub: 'Bluetooth SIG Service 0x180F Überwachung',
+        handlebar_label: 'Lenkertaster & PTT (Front-Knoten PCBA 05)',
+        handlebar_sub: 'Direktverkabelung über GPIO 0 Optokoppler • Wartungsfrei',
         status_led_title: 'WS2812B RGB Status-LED (Gehäusedeckel)',
         gpx_modal_title: 'Erweiterter GPX-Export & Navi-Formatierung',
         audio_modes_title: 'Audio-Routing & Betriebsmodi',
@@ -208,8 +208,8 @@ const i18n = {
         vbat_label: 'UPS LiPo (Under Seat)',
         vbat_sub: '1000 mAh Buffer',
         bat_chem_label: 'Starter Battery Chemistry & Threshold',
-        handlebar_label: 'Handlebar Remote & Wireless PTT (CR2032 Battery)',
-        handlebar_sub: 'Bluetooth SIG Service 0x180F Monitoring',
+        handlebar_label: 'Handlebar Switch & PTT (Front-Node PCBA 05)',
+        handlebar_sub: 'Direct wiring via GPIO 0 optocoupler • Maintenance-free',
         status_led_title: 'WS2812B RGB Status LED (Enclosure Lid)',
         gpx_modal_title: 'Extended GPX Export & Navigation Formatting',
         live_map_title: 'Live GPS Trail & OpenMotorMesh Group Radar',
@@ -369,7 +369,7 @@ const state = {
     telemetry: {
         v_ign: null,
         v_bat: null,
-        btn_bat: null,
+        ptt_pressed: false,
         speed: null,
         lean_angle: 0.0,
         sats: null,
@@ -435,8 +435,9 @@ const labelBleStatus = document.getElementById('label-ble-status');
 
 const valVign = document.getElementById('val-vign');
 const valVbat = document.getElementById('val-vbat');
-const valBtnBat = document.getElementById('val-btn-bat');
-const barBtnBat = document.getElementById('bar-btn-bat');
+const valPttStatusDesc = document.getElementById('val-ptt-status-desc');
+const badgePttWired = document.getElementById('badge-ptt-wired');
+const btnTestPttTrigger = document.getElementById('btn-test-ptt-trigger');
 const valSpeed = document.getElementById('val-speed');
 const valSats = document.getElementById('val-sats');
 const valLeanAngle = document.getElementById('val-lean-angle');
@@ -473,7 +474,7 @@ const hudBsdRight = document.getElementById('hud-bsd-right');
 
 const valHudIntercom = document.getElementById('val-hud-intercom');
 const valHudPower = document.getElementById('val-hud-power');
-const valHudBtnBat = document.getElementById('val-hud-btn-bat');
+const valHudPttStatus = document.getElementById('val-hud-ptt-status');
 const valHudEcall = document.getElementById('val-hud-ecall');
 const hudClockDisplay = document.getElementById('hud-clock-display');
 const hudLiveClock = document.getElementById('hud-live-clock');
@@ -973,7 +974,7 @@ function startInternalSimTrackEngine(isDigitalTwin = true) {
             bike_id: "Bike_A",
             v_ign: 14.2 + Math.sin(s_simTime * 0.4) * 0.15,
             v_bat: 4.14,
-            btn_bat: 97,
+            ptt_pressed: false,
             speed: speed,
             sats: sats,
             hdop: hdop,
@@ -1150,7 +1151,7 @@ function handleSimTelemetry(data) {
     updateTelemetryUi({
         v_ign: data.v_ign,
         v_bat: data.v_bat,
-        btn_bat: data.btn_bat,
+        ptt_pressed: data.ptt_pressed,
         speed: data.speed,
         sats: data.sats,
         lean_angle: data.lean_angle,
@@ -1699,11 +1700,13 @@ function resetDisconnectedTelemetryUi() {
         valVbat.textContent = '-- V';
         valVbat.style.color = 'var(--text-muted)';
     }
-    if (valBtnBat) {
-        valBtnBat.textContent = '-- %';
-        valBtnBat.style.color = 'var(--text-muted)';
+    if (valPttStatusDesc) {
+        valPttStatusDesc.textContent = isDe ? 'Zero-Latency PTT (< 1.8 ms Latenz)' : 'Zero-Latency PTT (< 1.8 ms Latency)';
     }
-    if (barBtnBat) barBtnBat.style.width = '0%';
+    if (badgePttWired) {
+        badgePttWired.textContent = isDe ? 'DRAHTGEBUNDEN' : 'WIRED';
+        badgePttWired.className = 'card-badge badge-green';
+    }
 
     // Lean Angle
     if (valLeanAngle) valLeanAngle.textContent = '0.0°';
@@ -1788,7 +1791,10 @@ function resetDisconnectedTelemetryUi() {
     s_hudMaxLeanR = 0;
     if (hudBikeLeanVisual) hudBikeLeanVisual.style.transform = 'rotate(0deg)';
     if (valHudPower) valHudPower.textContent = '-- V • -- %';
-    if (valHudBtnBat) valHudBtnBat.textContent = 'CR2032 --';
+    if (valHudPttStatus) {
+        valHudPttStatus.textContent = isDe ? 'BEREIT (< 1.8ms)' : 'READY (< 1.8ms)';
+        valHudPttStatus.style.color = 'var(--accent-green)';
+    }
     if (hudStatusLink) {
         hudStatusLink.textContent = isDe ? '⚡ Standby' : '⚡ Standby';
         hudStatusLink.style.color = 'var(--text-secondary)';
@@ -1928,14 +1934,14 @@ function handleBleTelemetry(event) {
     if (view.byteLength >= 16) {
         const vign = view.getFloat32(0, true);
         const vbat = view.getFloat32(4, true);
-        const btnBat = view.getUint8(8);
+        const pttState = view.getUint8(8);
         const mode = view.getUint8(9);
         const lean = view.getInt8(10);
 
         updateTelemetryUi({
             v_ign: vign,
             v_bat: vbat,
-            btn_bat: btnBat,
+            ptt_pressed: pttState > 0,
             mode: mode,
             lean_angle: lean
         });
@@ -1965,10 +1971,17 @@ function updateTelemetryUi(data) {
         valVbat.style.color = 'var(--text)';
     }
 
-    if (data.btn_bat !== undefined && data.btn_bat !== null) {
-        valBtnBat.textContent = `${data.btn_bat} %`;
-        valBtnBat.style.color = data.btn_bat < 20 ? 'var(--accent-red)' : 'var(--accent-green)';
-        barBtnBat.style.width = `${data.btn_bat}%`;
+    if (data.ptt_pressed !== undefined) {
+        state.frontNode.pttPressed = !!data.ptt_pressed;
+        const isDe = state.lang === 'de';
+        if (badgePttWired) {
+            badgePttWired.className = data.ptt_pressed ? 'card-badge badge-blue' : 'card-badge badge-green';
+            badgePttWired.textContent = data.ptt_pressed ? 'PTT AKTIV (TX)' : (isDe ? 'DRAHTGEBUNDEN' : 'WIRED');
+        }
+        if (valHudPttStatus) {
+            valHudPttStatus.textContent = data.ptt_pressed ? 'PTT AKTIV (TX)' : (isDe ? 'BEREIT (< 1.8ms)' : 'READY (< 1.8ms)');
+            valHudPttStatus.style.color = data.ptt_pressed ? 'var(--accent-blue)' : 'var(--accent-green)';
+        }
     }
 
     if (data.speed !== undefined && data.speed !== null) {
@@ -2032,10 +2045,6 @@ function updateTelemetryUi(data) {
         const vIgnVal = data.v_ign !== undefined ? `${data.v_ign.toFixed(1)} V` : '-- V';
         const vBatVal = data.v_bat !== undefined ? Math.min(100, Math.max(0, Math.round((data.v_bat - 3.4) / (4.2 - 3.4) * 100))) : 96;
         valHudPower.textContent = `${vIgnVal} • 🔋 ${vBatVal}%`;
-    }
-
-    if (valHudBtnBat && data.btn_bat !== undefined) {
-        valHudBtnBat.textContent = `CR2032 ${data.btn_bat}%`;
     }
 
     if (hudStatusLink) {
@@ -3304,75 +3313,45 @@ btnSaveWebdav?.addEventListener('click', () => {
 });
 
 // ==========================================
-// 11b. Interactive Handlebar Remote & LED Simulators & USB MSC
+// 11b. Front-Node Wired PTT & WS2812B LED Simulator
 // ==========================================
-const pairRemoteButtons = document.querySelectorAll('.btn-pair-remote-action');
+const btnTestPttTrigger = document.getElementById('btn-test-ptt-trigger');
+if (btnTestPttTrigger) {
+    btnTestPttTrigger.addEventListener('click', () => {
+        const isDe = state.lang === 'de';
+        const valHudPtt = document.getElementById('val-hud-ptt-status');
+        const badgePtt = document.getElementById('badge-ptt-wired');
+        const tileFrontPtt = document.getElementById('tile-front-ptt');
 
-function handlePairRemoteClick() {
-    const isDe = state.lang === 'de';
-    showToast(isDe 
-        ? '🔍 BLE-Suchmodus aktiv: Halte jetzt die Taste am Lenkertaster / Funk-PTT 5 Sekunden lang gedrückt...' 
-        : '🔍 BLE Discovery active: Hold handlebar remote / wireless PTT button for 5 seconds...', 
-        'info',
-        4000
-    );
-
-    if (controlChar) {
-        try {
-            controlChar.writeValue(new Uint8Array([0x05, 0x01]));
-        } catch(e) {
-            console.warn('GATT Pair Remote command failed:', e);
+        if (badgePtt) {
+            badgePtt.className = 'card-badge badge-blue';
+            badgePtt.textContent = 'PTT AKTIV (TX)';
         }
-    }
-
-    pairRemoteButtons.forEach(btn => {
-        btn.disabled = true;
-        btn.textContent = isDe ? '⏳ Suche...' : '⏳ Searching...';
-    });
-
-    setTimeout(() => {
-        pairRemoteButtons.forEach(btn => {
-            btn.disabled = false;
-            btn.textContent = isDe ? '✓ Verbunden' : '✓ Paired';
-        });
-        if (valBtnBat) {
-            valBtnBat.textContent = '95 %';
-            valBtnBat.style.color = 'var(--accent-green)';
+        if (valHudPtt) {
+            valHudPtt.textContent = 'PTT AKTIV (TX)';
+            valHudPtt.style.color = 'var(--accent-blue)';
         }
-        if (barBtnBat) {
-            barBtnBat.style.width = '95%';
-            barBtnBat.style.background = 'var(--accent-green)';
+        if (tileFrontPtt) {
+            tileFrontPtt.style.borderColor = 'var(--accent-blue)';
+            tileFrontPtt.style.boxShadow = '0 0 16px rgba(10, 132, 255, 0.4)';
         }
-        showToast(isDe ? '✓ Funk-Lenkertaster (PTT) erfolgreich gekoppelt (CR2032: 95%)' : '✓ Handlebar remote (PTT) paired successfully (CR2032: 95%)', 'success', 3500);
-    }, 2500);
-}
 
-pairRemoteButtons.forEach(btn => {
-    btn.addEventListener('click', handlePairRemoteClick);
-});
-const btnToggleLowbat = document.getElementById('btn-toggle-lowbat');
-let s_isLowBatSim = false;
+        showToast(isDe ? '⚡ Lenker-PTT betätigt: Optokoppler GPIO 0 aktiv (< 1.8 ms Latenz)' : '⚡ Handlebar PTT pressed: Optocoupler GPIO 0 active (< 1.8 ms latency)', 'info', 2000);
 
-if (btnToggleLowbat) {
-    btnToggleLowbat.addEventListener('click', () => {
-        s_isLowBatSim = !s_isLowBatSim;
-        if (s_isLowBatSim) {
-            valBtnBat.textContent = '15 %';
-            valBtnBat.style.color = 'var(--accent-red)';
-            barBtnBat.style.width = '15%';
-            barBtnBat.style.background = 'var(--accent-red)';
-            btnToggleLowbat.textContent = '⚡ Normal (95%) Reset';
-            showToast(state.lang === 'de' ? '⚠️ CR2032 Batterie schwach (15%)! Warnung an CAN-Bus & LED ausgelöst.' : '⚠️ CR2032 Battery Low (15%)! CAN-Bus & LED Alert triggered.', 'error');
-            updateLedVisual('red');
-        } else {
-            valBtnBat.textContent = '95 %';
-            valBtnBat.style.color = 'var(--accent-green)';
-            barBtnBat.style.width = '95%';
-            barBtnBat.style.background = 'var(--accent-green)';
-            btnToggleLowbat.textContent = '⚡ Low-Bat (15%) Test';
-            showToast(state.lang === 'de' ? 'CR2032 Batterie auf 95% zurückgesetzt (Normal)' : 'CR2032 Battery restored to 95% (Normal)', 'success');
-            updateLedVisual('green');
-        }
+        setTimeout(() => {
+            if (badgePtt) {
+                badgePtt.className = 'card-badge badge-green';
+                badgePtt.textContent = 'DRAHTGEBUNDEN';
+            }
+            if (valHudPtt) {
+                valHudPtt.textContent = isDe ? 'BEREIT (< 1.8ms)' : 'READY (< 1.8ms)';
+                valHudPtt.style.color = 'var(--accent-green)';
+            }
+            if (tileFrontPtt) {
+                tileFrontPtt.style.borderColor = 'var(--border-subtle)';
+                tileFrontPtt.style.boxShadow = 'none';
+            }
+        }, 1200);
     });
 }
 
@@ -3410,7 +3389,7 @@ function updateLedVisual(colorKey) {
             badge: isDe ? 'Warnung (Rot)' : 'Alert (Red)',
             badgeClass: 'badge-purple',
             label: isDe ? 'Fehler / Unterspannung Starterbatterie' : 'Error / Starter Battery Under-Voltage',
-            desc: isDe ? 'Spannung < 11.8 V oder CR2032 Lenkertaster leer' : 'Voltage < 11.8 V or handlebar CR2032 depleted'
+            desc: isDe ? 'Spannung < 11.8 V (Bordnetz-Unterspannungsschutz aktiv)' : 'Voltage < 11.8 V (vehicle electrical system cut-off)'
         },
         purple: {
             color: '#bf5af2',

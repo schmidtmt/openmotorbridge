@@ -261,10 +261,10 @@
                         </div>
                     </div>
                     <div class="hud-pill-item hud-pill-remote">
-                        <span class="hud-pill-icon">🔘</span>
+                        <span class="hud-pill-icon">⚡</span>
                         <div class="hud-pill-text">
                             <span class="hud-pill-sub">LENKER-PTT</span>
-                            <strong id="val-hud-btn-bat">CR2032 --</strong>
+                            <strong id="val-hud-ptt-status" style="color: var(--accent-green);">BEREIT (&lt; 1.8ms)</strong>
                         </div>
                     </div>
                     <div class="hud-pill-item hud-pill-sos">
@@ -414,22 +414,17 @@
 
                     <div class="stat-tile" style="margin-top: 14px;">
                         <div class="stat-label" style="display: flex; justify-content: space-between; align-items: center;">
-                            <span data-i18n="handlebar_label">Lenkertaster & Funk-PTT (CR2032 Batterie)</span>
-                            <span id="val-btn-bat" style="color: var(--text-muted); font-weight: 800;">-- %</span>
+                            <span data-i18n="handlebar_label">Lenkertaster & PTT (Front-Knoten PCBA 05)</span>
+                            <span class="card-badge badge-green" id="badge-ptt-wired">DRAHTGEBUNDEN</span>
                         </div>
-                        <div class="progress-bar-container" style="margin: 8px 0;">
-                            <div class="progress-bar-fill" id="bar-btn-bat" style="width: 0%;"></div>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap;">
-                            <span class="stat-sub" data-i18n="handlebar_sub">Bluetooth SIG Service 0x180F Überwachung</span>
-                            <div style="display: flex; gap: 6px;">
-                                <button id="btn-pair-remote" class="btn-primary btn-pair-remote-action" style="padding: 5px 12px; font-size: 0.75rem;">
-                                    🔗 <span data-i18n="btn_pair_remote">PTT-Taster Koppeln</span>
-                                </button>
-                                <button id="btn-toggle-lowbat" class="btn-secondary" style="padding: 4px 8px; font-size: 0.72rem;">
-                                    ⚡ Low-Bat Test
-                                </button>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; flex-wrap: wrap; gap: 8px;">
+                            <div>
+                                <div style="font-size: 1.05rem; font-weight: 700; color: var(--accent-blue);" id="val-ptt-status-desc">Zero-Latency PTT (&lt; 1.8 ms Latenz)</div>
+                                <span class="stat-sub" data-i18n="handlebar_sub">Direktverkabelung über GPIO 0 Optokoppler • Wartungsfrei</span>
                             </div>
+                            <button id="btn-test-ptt-trigger" class="btn-secondary" style="padding: 5px 12px; font-size: 0.75rem;">
+                                ⚡ PTT Klick-Test
+                            </button>
                         </div>
                     </div>
 
