@@ -206,6 +206,14 @@ Harley-Davidson unterstützt bei neueren Baujahren nativ ausschließlich **Apple
   * Display-Rendering im Motorrad: **16 ms**
   * **Gesamtlatenz (Glass-to-Glass): 35 ms** (Vollkommen flüssig bei 60 fps, keine spürbare Verzögerung bei Touch-Eingaben).
 
+### 4.1 Community-Status & Zukunfts-Roadmap: Natives Android Auto in Skyline OS
+> [!NOTE]
+> **Roadmap & Reality-Check: Was ist mit dem schlummernden Android-Auto-Code in Skyline OS?**
+> * **Community-Funde:** In den Firmware-Dateien von Skyline OS (ab Modelljahr 2024) wurden vollständige Android-Auto-Bibliotheken (`libaao.so`, `libandroidauto.so`, Protobuf-RPCs) gefunden. Im Labor-Setup mit direktem Flash-Zugriff auf die eMMC konnte Android Auto auf Testbänken gestartet werden.
+> * **Aktuelle Praxis-Hürde:** Auf der echten Straße verhindert Harleys Cybersecurity-Architektur (Secure Boot mit dm-verity Signaturprüfung sowie UDS Service 0x27 Seed-Key-Schutz auf CAN-ID 0x7E2) bislang eine 1-Klick-Aktivierung via OBD. Weder *Diag4Bike* noch *TechnoResearch Centurion* bieten aktuell eine native Freischaltung an.
+> * **Periodischer Reality-Check:** Wir behalten künftige Harley OTA-Updates und Durchbrüche der Tuning-Community im Hinterkopf und führen in regelmäßigen Abständen einen Reality-Check durch.
+> * **Zukunftssicherer Umschaltpfad:** Sollte Harley das Feature offiziell freigeben oder ein stabiler UDS-Weg entstehen, schaltet der Front-Node (PCBA 05) per Firmware-Update automatisch vom CP2AA-Transcoder auf den ressourcenschonenden *Direct Wireless Pass-Through* um (< 2 % CPU-Last, < 15 ms Latenz). Bis dahin bleibt unsere integrierte CP2AA-Bridge die einzige praxiserprobte und thermisch stabile Lösung am Markt.
+
 ## 5. WHIM Headset-Bypass & Helmmikrofon-Routing
 
 ### Das Harley WHIM-Problem
