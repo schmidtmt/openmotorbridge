@@ -16,43 +16,34 @@ Modernere Motorräder – insbesondere **Harley-Davidson Modelle mit Boom! Box G
                      ziehen Ruhestrom, kein WHIM-Byp.     Verbindungsabbrüche, Kabelsalat
 ```
 
-### Die OpenMotorBridge Lösung: Integrierte Bridge auf PCBA 05
+### Die OpenMotorBridge Gesamtlösung: Modulare Zwei-Stufen-Architektur
 
-Die OpenMotorBridge v8.0 integriert die Dongle- und Headset-Emulationslogik direkt auf der **PCBA 05 (Universal Front-Knoten)** in der Frontverkleidung (Batwing / Sharknose / Lampenmaske). Dadurch entfallen externe Dongles, zusätzliche Kabel und teure OEM-Freischaltmodule restlos.
+OpenMotorBridge löst dieses Problem durch eine konsequent modulare **Zwei-Stufen-Architektur**, die vom puristischen Naked Bike bis zur voll ausgestatteten Touring-Maschine nahtlos skaliert:
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
-│               OPENMOTORBRIDGE DONGLE-FREE ARCHITEKTUR (PCBA 05 EMBEDDED)               │
+│            OPENMOTORBRIDGE MODULARE ZWEI-STUFEN ARCHITEKTUR                            │
 └────────────────────────────────────────────────────────────────────────────────────────┘
 
-  [Smartphone (iOS / Android)]
-              │ Wireless (Wi-Fi 5 GHz 802.11ac + BLE 5.2)
-              ▼
-  ┌────────────────────────────────────────────────────────────────────────────────────┐
-  │ PCBA 05: UNIVERSAL FRONT-NODE (In Fairing integriert)                              │
-  │                                                                                    │
-  │   ┌────────────────────────────────────────────────────────────────────────────┐   │
-  │   │ Linux SOM (Allwinner V3s / T113-S3 Dual-Core ARM Cortex-A7 @ 1.2 GHz)      │   │
-  │   │                                                                            │   │
-  │   │  • Wireless Host: Hostapd (5 GHz Wi-Fi) & BlueZ Bluetooth Stack            │   │
-  │   │  • Protocol Bridge Daemon:                                                 │   │
-  │   │      - Android Auto Client: Empfängt H.264 Video + Audio vom Android-Phone │   │
-  │   │      - CarPlay Accessory Emulator: Kapselt Video in Apple CarLife Stream   │   │
-  │   │      - WHIM / Headset Emulator: Simuliert aktives Apple MFi-Headset        │   │
-  │   │  • Video Transcoder Engine: H.264 Zero-Copy NAL Passthrough (< 35 ms)      │   │
-  │   │  • Audio Mixer & I2S Bridge: Kopplung mit Helmmikrofon (Sena/Cardo)        │   │
-  │   └────────────────────────────────────────────────────────────────────────────┘   │
-  │                                     │                                              │
-  │   ┌─────────────────────────────────┴──────────────────────────────────────────┐   │
-  │   │ ESP32-S3 Front Controller: Power-Gate MOSFET, CAN-Bus Sniffer, BLE-PTT     │   │
-  │   └─────────────────────────────────┬──────────────────────────────────────────┘   │
-  └─────────────────────────────────────┼──────────────────────────────────────────────┘
-                                        │ USB 2.0 High-Speed OTG (Kabel im Fach)
-                                        ▼
-                  [Harley-Davidson Skyline OS / Boom! Box GTS Display]
-                   • Erkennt "Offizielles Apple CarPlay mit Headset"
-                   • Vollbild-Navigation (Google Maps, Calimoto, Kurviger)
-                   • Volle Lenker-Fernbedienung (Joystick & Voice Button)
+  [STUFE 1: BASIS-SYSTEM (PCBA 01 ZENTRALBOX UNTER DER SITZBANK)]
+  • Funktioniert auf JEDEM Motorrad (Naked Bike, Enduro, Sportler, Classic, Cruiser)
+  • Single-Point-of-Contact: Smartphone, Helm und externes Navi koppeln sich NUR mit OMB!
+  • Musik-Streaming, Handy-Navigation (Google Maps, Kurviger, Calimoto) & Telefonie
+  • Externes Navi (Garmin Zūmo XT/XT2, TomTom): Empfängt Sprachansagen & liefert Live-Traffic
+  • Zentraler Audio-DSP: Raised-Cosine Ducking (-12 dB Navi, -18 dB Radar), Windfilter, Sidetone
+  • Volle Intercom-Matrix (Sena/Cardo Koffer-Pods), eCall-Notruf & Heck-Radar
+
+                               │ Optional erweiterbar via
+                               │ ESP-NOW Funkbrücke (< 2 ms, 128 kbps Opus Audio)
+                               ▼
+
+  [STUFE 2: COCKPIT-ERWEITERUNG (PCBA 05 FRONT-NODE IN DER VERKLEIDUNG)]
+  • Speziell für Motorräder mit Infotainment-Touchscreen (Harley Skyline OS, Boom! Box)
+  • Integriertes Automotive USB 2.0 Subsystem & Headless CP2AA Dongle-Management
+  • Verwandelt kabelgebundenes Skyline OS CarPlay in drahtloses Apple CarPlay & Android Auto
+  • Automatisches Power-Gating (echte 0.0 µA Ruhestrom bei Zündung-Aus)
+  • Digitales Knowles MEMS-Fahrtwindmikrofon & Action-Cam BLE Remote-Trigger
+  • 100% ohne neue Kabel durch den Lenkkopf!
 ```
 
 ---
