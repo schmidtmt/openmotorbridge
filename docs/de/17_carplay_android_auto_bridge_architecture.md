@@ -87,12 +87,16 @@ Für den lüfterlosen Dauerbetrieb im geschlossenen Hohlraum der Motorrad-Frontv
 >   - Wenn Android Auto und Skyline OS dieselbe native Auflösung ($1280 \times 720$ oder $1920 \times 720$) und kompatible H.264-Profile aushandeln, genügt *Zero-Copy NAL Passthrough* (reines Umpaketieren ohne Re-Encoding, CPU-Last $< 12\,\%$, Latenz $< 35\,\text{ms}$).
 >   - Müssen jedoch Auflösungen skaliert oder Frame-Raten umgerechnet werden, bricht die Dual-Core Cortex-A7 CPU beim Software-Encoding ein ($> 150\,\text{ms}$ Latenz, Ruckeln).
 
-### Hardware-Design auf PCBA 05
-* **SoC:** Allwinner T113-S3 im kompakten QFN128-Gehäuse mit 128 MB integriertem DDR3-RAM.
-* **Speicher:** 8 GB eMMC 5.1 (Automotive pSLC Mode für 100.000 Schreibzyklen, vibrationsfest).
-* **Wi-Fi / BT:** Realtek RTL8821CS (802.11a/b/g/n/ac 1T1R 5 GHz mit WPA3-Personal + Bluetooth 5.0 Dual Mode).
-* **Automotive USB-Switch:** TI TS3USB221 High-Speed USB 2.0 Multiplexer für unterbrechungsfreies Umschalten zwischen Accessory- und Host-Modus.
-* **P-Kanal Power-Gate (Kaltstart-Reset):** Vishay SI2301CDS P-MOSFET schaltet die 5V VBUS-Spannung zum SOM über einen GPIO des ESP32-S3 in 2.5 s ab (Warmstart-Funktion gegen Display-Freeze).
+### Hardware-Design auf PCBA 05 (Universal Front-Node)
+* **Controller:** ESP32-S3-WROOM-1U Dual-Core Xtensa LX7 @ 240 MHz mit Vektor-DSP (Windfilterung) und externem U.FL-Antennenport.
+* **USB-Hub:** Microchip USB2514B Automotive USB 2.0 High-Speed 480 Mbps 4-Port Hub.
+* **Port 1 (Lenker):** High-Speed Daten + 20W Automotive USB-PD Fast Charging (Southchip SC8102, 9V/2.2A & QC 3.0) für Smartphones am Lenker (QuadLock/SP Connect).
+* **Port 2 (Fairing Pigtail):** Geschalteter VBUS über TI TPS2051B Lastschalter. Führt über ein $25\dots 30\,\text{cm}$ geschirmtes Kabel zum CP2AA-Dongle im Verkleidungshohlraum (3M Dual-Lock).
+* **Port 3 (Handschuhfach):** Dediziertes USB-Kabel ins Handschuhfach – bleibt zu **$100\,\%$ frei für MP3/FLAC USB-Sticks und offizielle Infotainment-Software-Updates**.
+* **Port 4 (Cockpit-Zubehör):** High-Speed Daten für Dashcam-Speicher, Chigee-Display oder Zūmo-Navi.
+* **CAN-Bus Subsystem:** TI TCAN334G mit hardwaremäßigem Listen-Only Pin (`S`) und **elektronischem Auto-Sensing $120\,\Omega$ Relais (`CPC1017N`)**, das bei Boot-Impedanz $< 100\,\Omega$ automatisch offen bleibt und Bus-Kollaps verhindert.
+* **12V Cockpit-Kanäle:** Richtungsgetrennte Totwinkel-Spiegel-LEDs (`J9`, Radar BSD), 12V Qi-Power (`J10`, SP Connect / QuadLock) und optionaler High-Side Switch für Adventure-Zusatzscheinwerfer (`J11`).
+* **Diagnose & Audio:** Knowles SPH0645 I2S MEMS Fahrtwindmikrofon + WS2812B RGB-Status-LED mit Lichtleiter im Deckel.
 
 ---
 
@@ -106,13 +110,14 @@ In der Praxis existiert eine berechtigte Skepsis gegenüber einer „Linux-Black
 
 | Kriterium | Option A: Festes Linux-SOM auf PCBA 05 | Option B: Pure MCU / FreeRTOS (ESP32-S3 / Crossover MCU) | Option C: OpenMotorBridge Smart-Managed Dongle (Empfohlen) |
 | :--- | :--- | :--- | :--- |
-| **Linux-Blackbox?** | **Ja** (Kernel, Rootfs, Wartung) | **Nein** (100% Bare-Metal Firmware) | **Nein** (OMB bleibt 100% Linux-frei) |
+| **Linux-Blackbox auf PCB?** | **Ja** (Kernel, Rootfs, Wartung) | **Nein** (100% Bare-Metal Firmware) | **Nein** (OMB bleibt 100% Linux-frei) |
 | **Kaltstart / Bootzeit** | 15–20 Sekunden | **< 300 Millisekunden** | **< 300 Millisekunden (OMB instant-on)** |
 | **iPhone Wireless CarPlay** | Ja | **Ja** (Schlanker RTSP/CarPlay Bridge Stack)| **Ja** (Nativ über USB oder Crossover-MCU) |
-| **Android Auto ➔ CarPlay** | Ja (via NAL Passthrough) | Extrem limitiert (kein H.264 Scaling) | **Ja** (Über ausgelagerten Mini-Stick) |
+| **Android Auto ➔ CarPlay** | Ja (via NAL Passthrough) | Extrem limitiert (kein H.264 Scaling) | **Ja** (Über ausgelagerten COTS Mini-Stick) |
 | **Wartung bei Google/Apple Update** | Firmware-Flash der Motorrad-Hardware | Firmware-Flash nötig | **Einfaches 2-Minuten-App-Update des Sticks** |
-| **Platzbedarf in Sharknose** | Minimal (direkt auf PCB) | Minimal (direkt auf PCB) | **Minimal** (Kompakt im Sharknose-Handschuhfach) |
-| **Ruhestrom bei Standby** | Sleep-Mode Steuerung nötig | **0.0 µA** (Deep Sleep) | **Echte 0.0 µA** (TPS2553 Power-Switch trennt VBUS) |
+| **HF-Koexistenz (2.4G vs 5GHz)**| Kritisch bei Nahfeld-Kopplung | Gut | **Perfekt (> 30 dB Isolation via 30 cm Pigtail)** |
+| **Handschuhfach-Status** | Frei | Frei | **100 % frei für MP3-Stick & Updates** |
+| **Ruhestrom bei Standby** | Sleep-Mode Steuerung nötig | **0.0 µA** (Deep Sleep) | **Echte 0.0 µA** (TPS2051B trennt VBUS) |
 
 ### Das empfohlene hybride Referenzdesign: OpenMotorBridge Smart-Managed Frontnode
 

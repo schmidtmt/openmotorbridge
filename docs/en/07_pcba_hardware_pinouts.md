@@ -24,8 +24,9 @@ This document serves as the **authoritative hardware specification for all 6 pri
 │ **PCBA 04**│ **Rear Pod 3 Transceiver Hub** │ 55 x 48 mm    │ 4 Layer │ RP2040 Coprocessor,  │
 │       │ (Tail Pod: LoRa 868M & GNSS)  │ (46x19 mm M2) │ (ENIG)  │ SX1262 LoRa, MAX-M10S│
 ├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
-│ **PCBA 05**│ **Universal Front Node**      │ 68 x 44 mm    │ 4 Layer │ ESP32-C3 RISC-V,     │
-│       │ (Front Hub & Ottocast CarPlay)│ (62x38 mm M2.5│ (ENIG)  │ USB2512B, TPS2051B   │
+│ **PCBA 05**│ **Universal Front Node**      │ 82 x 50 mm    │ 4 Layers│ ESP32-S3 Xtensa,     │
+│            │ (Cockpit & Sensor Hub)        │               │         │ USB2514B 4-Port Hub, │
+│            │                               │               │         │ USB-PD 20W, Qi/BSD   │
 ├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
 │ **PCBA 06**│ **MagSafe Frame Dock Adapter** │ 28 x 11.5 mm  │ 2 Layer │ 500mA PPTC Fuse, 5V  │
 │       │ (Frame Dock: M8 to MagSafe)   │ (Central M2.5)│         │ TVS, USBLC6-4SC6 ESD │
@@ -277,48 +278,81 @@ The board features 3 automatic coaxial switch connectors (`Murata MM8030-2610`) 
 
 ![PCBA 05 Universal Front Node](../images/pcba/pcba05_front_node_3d.png)
 
-*Figure 7.5: KiCad 3D render of the Universal Front Node (PCBA 05, 68 x 44 mm, 4 layers) with ESP32-C3 RISC-V, Microchip USB2512B High-Speed hub, TI TPS2051B power gate, and Knowles I2S MEMS microphone.*
+*Figure 7.5: KiCad 3D render of the Universal Front Node (PCBA 05, 82 x 50 mm, 4 layers) with ESP32-S3-WROOM-1U (U.FL), Microchip USB2514B 4-Port hub, Southchip SC8102 USB-PD 20W Fast-Charge, TI TPS2051B power gate, Knowles I2S MEMS microphone, CPC1017N CAN auto-sensing relay, dual-MOSFET mirror BSD drivers, and WS2812B RGB status LED.*
 
 ### 7.1 Board Specifications & Features
-* **Dimensions:** $68{,}0 \times 44{,}0\,\text{mm}$ (Fits $84 \times 60 \times 23\,\text{mm}$ enclosure with 4-in-1 mounting).
+* **Dimensions:** $82{,}0 \times 50{,}0\,\text{mm}$ (Fits $86 \times 56 \times 24\,\text{mm}$ internal cavity, $98 \times 68 \times 25\,\text{mm}$ outer enclosure with 4-in-1 mounting).
 * **Layer Stackup:** 4 Layers FR-4 High-TG150 ($1{,}6\,\text{mm}$, $35\,\mu\text{m}$ copper).
-  * Layer 1 (Top): ESP32-C3 controller, USB2512B hub, Knowles MEMS, $90\,\Omega$ USB differential pairs.
+  * Layer 1 (Top): ESP32-S3 controller, USB2514B hub, Knowles MEMS, WS2812B RGB, $90\,\Omega$ USB differential pairs.
   * Layer 2 (Inner 1): Continuous low-impedance ground plane (Solid GND).
-  * Layer 3 (Inner 2): Split Power planes ($+5{,}0\,\text{V}_{\text{MAIN}}$, $+5{,}0\,\text{V}_{\text{OTTOCAST}}$, $+5{,}0\,\text{V}_{\text{CAM}}$, $+3{,}3\,\text{V}$).
-  * Layer 4 (Bottom): LMR36015 / TPS54302 buck converter, TPS2051B load switch, TVS diodes, and filters.
-* **KL15 Buffer Capacitor (`C_BUF`):** $470\dots 1000\,\mu\text{F}$ 10V low-ESR polymer SMD (7343 / D-case) in the upper-right corner keeps the ESP32-C3 alive for $1\dots 2\,\text{s}$ upon ignition shutoff, ensuring clean transmission of the BLE shutter-stop command to action cameras.
+  * Layer 3 (Inner 2): Split Power planes ($+5{,}0\,\text{V}_{\text{MAIN}}$, $+5{,}0\,\text{V}_{\text{DONGLE}}$, $+5{,}0\,\text{V}_{\text{CAM}}$, $+9\dots 12\,\text{V}_{\text{PD}}$, $+12\,\text{V}_{\text{SW}}$, $+3{,}3\,\text{V}$).
+  * Layer 4 (Bottom): LMR36015 / TPS54302 buck, SC8102 USB-PD controller, TPS2051B load switch, CPC1017N relay, DMN63D8 dual-MOSFET, TVS diodes, and filters.
+* **KL15 Buffer Capacitor (`C_BUF`):** $470\dots 1000\,\mu\text{F}$ 10V low-ESR polymer SMD (7343 / D-case) buffers the ESP32-S3 for $1\dots 2\,\text{s}$ upon ignition shutoff, ensuring clean transmission of the BLE shutter-stop command to action cameras.
+* **RF Antenna Concept:** ESP32-S3-WROOM-1U with U.FL antenna jack; 2.4 GHz FPC dipole antenna mounted at the rear housing flank pointing along the frame tunnel toward the Central Box under the seat for maximal range and total decoupling from fairing electronics.
 
 ### 7.2 Vehicle & Sensor Interfaces (JST-PH Headers)
 
 | Connector | Type | Pins | Signal Assignment & Function |
 | :--- | :--- | :---: | :--- |
 | **`J1`** | JST-PH / 2-Pin Terminal | 2-Pin | **12V Vehicle Input:** Pin 1: `KL15_12V_SW` ($+9\dots 36\,\text{V}$ DC Ignition+), Pin 2: `GND` (Vehicle chassis ground). Powered via LMR36015 buck converter. |
-| **`J2`** | JST-PH ($2{,}00\,\text{mm}$) | 3-Pin | **Cockpit CAN Bus:** Pin 1: `CAN_H`, Pin 2: `CAN_L`, Pin 3: `GND` (ISO 11898-2 with $120\,\Omega$ termination for cockpit gauge clusters). |
-| **`J3`** | JST-PH ($2{,}00\,\text{mm}$) | 2-Pin | **Handlebar PTT Interface:** Pin 1: `PTT_INPUT_N` (Active-Low interrupt on ESP32-C3 GPIO 0, internal pull-up, 100nF RC lowpass), Pin 2: `GND`. Supports single-press (PTT), double-click (action cam toggle), and long-press (HiLight tag). |
+| **`J2`** | JST-PH ($2{,}00\,\text{mm}$) | 3-Pin | **Cockpit CAN Bus:** Pin 1: `CAN_H`, Pin 2: `CAN_L`, Pin 3: `GND`. Equipped with **electronic auto-sensing $120\,\Omega$ solid-state relay (`CPC1017N`)** (probes bus impedance at boot; enables termination only if $R_{\text{Bus}} > 100\,\Omega$) and hardware Listen-Only Mode pin (`S`). |
+| **`J3`** | JST-PH ($2{,}00\,\text{mm}$) | 4-Pin | **Handlebar Multi-Button Interface:** Pin 1: `GND`, Pin 2: `PTT_INTERCOM` (Intercom transmit button), Pin 3: `CAM_ACTION` (Action-Cam bookmark/highlight), Pin 4: `MEDIA_VOICE` (Track Next / Siri / Google Assistant). All lines filtered with Schmitt-trigger, pull-ups, and 3.3V Zener/TVS overvoltage clamps against 12V shorts. (Standard 2-pin PTT switches fit directly onto Pins 1+2). |
+| **`J9`** | JST-PH ($2{,}00\,\text{mm}$) | 3-Pin | **Blind-Spot Mirror LEDs (Radar BSD):** Pin 1: `+12V_PROT`, Pin 2: `BSD_LEFT_N` (switched via N-MOSFET Ch A), Pin 3: `BSD_RIGHT_N` (switched via N-MOSFET Ch B). Drives stealth amber/red LEDs on mirror stems (left/right independent; steady illumination on blind-spot approach, 8 Hz flashing on acute collision hazard). |
+| **`J10`** | JST-PH ($2{,}00\,\text{mm}$) | 2-Pin | **12V Qi Smartphone Power:** Pin 1: `+12V_SW` (continuous switched power via ignition gate, up to $2{,}0\,\text{A}$ / $24\,\text{W}$), Pin 2: `GND`. Powers SP Connect / QuadLock Qi wireless charging heads on the handlebar with 0.0 µA quiescent drain at key-off. |
+| **`J11`** | JST-PH ($2{,}00\,\text{mm}$) | 2-Pin | **Auxiliary Light / Fog (Adventure):** Pin 1: `+12V_AUX` (switched via smart high-side switch `TPS1H100`, up to $3{,}5\,\text{A}$ / $40\,\text{W}$), Pin 2: `GND`. Controls auxiliary fog/driving lights or automatic 4–5 Hz strobe flashing under panic braking. Left unpopulated/unused on Cruisers/Tourers. |
+| **`J12`** | JST-SH ($1{,}00\,\text{mm}$) | 4-Pin | **I2C Sensor Expansion Port (Qwiic / STEMMA QT):** Pin 1: `GND`, Pin 2: `+3V3`, Pin 3: `I2C_SDA`, Pin 4: `I2C_SCL` with $4{,}7\,\text{k}\Omega$ pull-ups. Allows plug-and-play addition of ambient light sensors (`OPT3001` for automatic tunnel day/night display switching) or barometric altimeters. |
 
-### 7.3 Automotive USB 2.0 Subsystem & Action Cam Power (`Microchip USB2512B`)
+### 7.3 Automotive USB 2.0 Subsystem & Hub Architecture (`Microchip USB2514B`)
+
+The Front Node integrates an automotive-grade 4-port High-Speed hub (`USB2514B`), completely eliminating port starvation:
 
 | Port | Connector Type | Function & Performance Specifications |
 | :--- | :--- | :--- |
-| **`J4`** | JST-PH (4-Pin) | **Upstream Host Port:** Carries `USB_UP_VBUS` ($+5{,}0\,\text{V}$), `USB_UP_DM`, `USB_UP_DP`, `GND` linking the hub to the central host. |
-| **`J5`** | JST-PH (4-Pin) | **Downstream Port 1 (Glovebox / Phone):** Constant $+5{,}0\,\text{V}$ VBUS (up to $2{,}0\,\text{A}$) for uninterrupted smartphone or navigation unit charging. |
-| **`J6`** | JST-PH (4-Pin) | **Downstream Port 2 (Ottocast CarPlay / Android Auto):** Switched $+5{,}0\,\text{V}$ VBUS via `TI TPS2051B` load switch with **1-Click Cold Restart** (2.5s power cut) and **Auto-Café 60s Timer**. |
-| **`J7`** | USB-C 16-Pin Receptacle | **Service & Flashing Port (right edge adjacent to `D1`):** Native ESP32-C3 USB-JTAG / CDC-Serial interface for firmware upgrades and calibration. |
-| **`J8`** | JST-PH (2-Pin / 4-Pin) | **Action Cam Power Port (Charge-Only):** Dedicated $+5{,}0\,\text{V}$ DC power (up to $2{,}0\,\text{A}$) for GoPro / Insta360 / DJI — purposely without USB data to prevent mass-storage transfer lockout. |
+| **`J4`** | JST-PH (4-Pin) | **Upstream Host Port:** Carries `USB_UP_VBUS` ($+5{,}0\,\text{V}$), `USB_UP_DM`, `USB_UP_DP`, `GND` linking the hub to the motorcycle infotainment (Harley Skyline OS / Boom! Box GTS USB input). |
+| **`J5`** | JST-PH (4-Pin) | **Downstream Port 1 (Smartphone on Handlebar):** High-speed USB data line paired with **Automotive USB Power Delivery (USB-PD 20W, 9V/2.2A & QC 3.0)** via the `Southchip SC8102` fast-charge buck controller. Fast-charges smartphones even while navigating in full summer sunlight. |
+| **`J6`** | JST-PH (4-Pin) | **Downstream Port 2 (Fairing Pigtail to CP2AA Dongle):** Switched $+5{,}0\,\text{V}$ VBUS via `TI TPS2051B` load switch with **1-Click Cold Restart** (2.5s power cut) and Auto-Café timer. Feeds via a shielded $25\dots 30\,\text{cm}$ cable to a commercial wireless adapter (Carlinkit / Ottocast) secured with **3M Dual-Lock** in the fairing cavity (guarantees $> 30\,\text{dB}$ RF isolation to the ESP32-S3 and zero-tool maintenance). |
+| **`J5_MP3`**| JST-PH (4-Pin) | **Downstream Port 3 (Glovebox / Jukebox):** Runs as a dedicated USB lead into the bike's glovebox. Stays **100% free for local USB flash drives playing MP3/FLAC music** and official **dealer infotainment firmware updates**. |
+| **`J6_AUX`**| JST-PH (4-Pin) | **Downstream Port 4 (Cockpit Accessories):** High-speed data port for dashcam storage, external Zūmo GPS, or Chigee/Carpuride displays. |
+| **`J7`** | USB-C 16-Pin Receptacle | **Service & Flashing Port (right edge):** Native ESP32-S3 USB-JTAG / CDC-Serial interface for firmware upgrades and calibration (protected by TPU plug). |
+| **`J8`** | JST-PH (2-Pin / 4-Pin) | **Action Cam Power Port (Charge-Only):** Dedicated $+5{,}0\,\text{V}$ DC power (up to $2{,}0\,\text{A}$) for GoPro / Insta360 / DJI — purposely without USB data to prevent headunit mass-storage lockouts. |
 
-### 7.4 ESP32-C3 RISC-V Controller Pin Mapping
+### 7.4 ESP32-S3 Controller Pin Mapping
 
-| ESP32-C3 Pin | Signal Name | Direction | Function & Peripheral Assignment |
+| ESP32-S3 Pin | Signal Name | Direction | Function & Peripheral Assignment |
 | :--- | :--- | :---: | :--- |
-| **GPIO 0** | `PTT_INPUT_N` | Input | Mechanical handlebar switch interrupt (Active-Low, $12\,\mu\text{s}$ Schmitt-trigger latency) |
+| **GPIO 0** | `BOOT_BTN_N` | Input | Boot mode button (Active-Low) |
 | **GPIO 1** | `OTTOCAST_PWR_EN` | Output | Enable control signal for TPS2051B VBUS load switch (High = Active) |
-| **GPIO 3** | `OTTOCAST_FAULT_N`| Input | Overcurrent & thermal fault flag from TPS2051B (Active-Low interrupt) |
+| **GPIO 2** | `OTTOCAST_FAULT_N`| Input | Overcurrent & thermal fault flag from TPS2051B (Active-Low interrupt) |
+| **GPIO 3** | `CAN_TERM_EN` | Output | Controls CPC1017N solid-state relay for 120-Ohm CAN termination (Auto-Sensing) |
 | **GPIO 4** | `KL15_SENSE` | Input | Vehicle ignition monitoring via 10:1 voltage divider & Schmitt-trigger |
+| **GPIO 5** | `CAN_SILENT` | Output | Drives Pin 8 (S) of CAN transceiver for hardware Listen-Only Mode |
 | **GPIO 6** | `MIC_I2S_WS` | Output | I2S Word Select (LRCLK, 48 kHz) for Knowles SPH0645LM4H digital microphone |
 | **GPIO 7** | `MIC_I2S_BCLK` | Output | I2S Bit Clock ($3{,}072\,\text{MHz}$) for Knowles SPH0645LM4H digital microphone |
 | **GPIO 8** | `MIC_I2S_DATA` | Input | I2S Serial Audio Data from Knowles MEMS microphone (wind noise tracking) |
-| **GPIO 20** | `TWAI_RX` | Input | CAN Bus receive line from TI SN65HVD230 transceiver |
-| **GPIO 21** | `TWAI_TX` | Output | CAN Bus transmit line to TI SN65HVD230 transceiver |
+| **GPIO 9** | `I2C_SDA` | Bidir | I2C data line for Qwiic sensor port J12 (OPT3001 light sensor) |
+| **GPIO 10** | `I2C_SCL` | Output | I2C clock line for Qwiic sensor port J12 |
+| **GPIO 11** | `WS2812B_DIN` | Output | Data signal for onboard WS2812B-2020 RGB status LED (light pipe in lid) |
+| **GPIO 12** | `BSD_LED_LEFT` | Output | Gate control for left blind-spot mirror LED MOSFET (J9) |
+| **GPIO 13** | `BSD_LED_RIGHT` | Output | Gate control for right blind-spot mirror LED MOSFET (J9) |
+| **GPIO 14** | `AUX_LIGHT_EN` | Output | Enable control for TPS1H100 high-side switch (J11 aux driving light / strobe) |
+| **GPIO 15** | `PTT_IN1_N` | Input | Handlebar switch 1: PTT Intercom transmit (Active-Low, Schmitt-trigger) |
+| **GPIO 16** | `PTT_IN2_N` | Input | Handlebar switch 2: Action-Cam bookmark / highlight (Active-Low) |
+| **GPIO 17** | `PTT_IN3_N` | Input | Handlebar switch 3: Media Next / Siri / Voice Assist (Active-Low) |
+| **GPIO 18** | `USB_SERV_DM` | Bidir | Native USB D- for JTAG / CDC flashing port (J7) |
+| **GPIO 19** | `USB_SERV_DP` | Bidir | Native USB D+ for JTAG / CDC flashing port (J7) |
+| **GPIO 20** | `TWAI_RX` | Input | CAN Bus receive line from TI TCAN334G transceiver |
+| **GPIO 21** | `TWAI_TX` | Output | CAN Bus transmit line to TI TCAN334G transceiver |
+
+### 7.5 Status & Diagnostic LED (WS2812B with Light Pipe)
+
+Viewable through a flush polycarbonate light-pipe lens integrated into the top enclosure lid:
+* **Green breathing (1 Hz):** Normal operation, 12V stable, CAN bus active, ESP-NOW synchronized to Central Box.
+* **Blue blinking:** Bluetooth LE discovery/pairing active (Action-Cam search or PWA connection).
+* **Yellow steady:** CP2AA CarPlay/Android Auto dongle currently booting on Port 2.
+* **Red blinking (4 Hz):** USB overcurrent or cold restart in progress (dongle hard-reboot).
+* **White flash:** Handlebar button clicked (tactile confirmation).
+
+---
 
 ---
 
