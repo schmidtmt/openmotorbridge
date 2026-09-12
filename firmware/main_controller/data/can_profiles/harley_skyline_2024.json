@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "profile_id": "harley_skyline_2024",
+  "manufacturer": "Harley-Davidson",
+  "model_family": "Touring & CVO (2024+ Skyline OS)",
+  "bus_config": {
+    "baudrate_kbps": 500,
+    "listen_only": true,
+    "termination_120r": true,
+    "auto_recovery": true
+  },
+  "fingerprint": {
+    "characteristic_can_ids": ["0x280", "0x290", "0x380"],
+    "min_frame_count": 10
+  },
+  "signals": {
+    "speed_kmh": {
+      "can_id": "0x280",
+      "is_extended": false,
+      "start_bit": 16,
+      "length_bits": 16,
+      "endianness": "little",
+      "scale": 0.0625,
+      "offset": 0.0,
+      "min": 0.0,
+      "max": 299.0,
+      "unit": "km/h"
+    },
+    "engine_rpm": {
+      "can_id": "0x200",
+      "is_extended": false,
+      "start_bit": 0,
+      "length_bits": 16,
+      "endianness": "little",
+      "scale": 1.0,
+      "offset": 0.0,
+      "min": 0.0,
+      "max": 9000.0,
+      "unit": "rpm"
+    },
+    "gear_selected": {
+      "can_id": "0x280",
+      "is_extended": false,
+      "start_bit": 32,
+      "length_bits": 4,
+      "endianness": "little",
+      "scale": 1.0,
+      "offset": 0.0,
+      "enum_mapping": {
+        "0": "N",
+        "1": "1",
+        "2": "2",
+        "3": "3",
+        "4": "4",
+        "5": "5",
+        "6": "6",
+        "15": "Clutch"
+      }
+    },
+    "engine_temp_c": {
+      "can_id": "0x380",
+      "is_extended": false,
+      "start_bit": 0,
+      "length_bits": 8,
+      "endianness": "little",
+      "scale": 1.0,
+      "offset": -40.0,
+      "unit": "°C"
+    },
+    "fuel_remaining_liters": {
+      "can_id": "0x400",
+      "is_extended": false,
+      "start_bit": 8,
+      "length_bits": 8,
+      "endianness": "little",
+      "scale": 0.1,
+      "offset": 0.0,
+      "unit": "l"
+    },
+    "fuel_range_km": {
+      "can_id": "0x400",
+      "is_extended": false,
+      "start_bit": 16,
+      "length_bits": 16,
+      "endianness": "little",
+      "scale": 1.0,
+      "offset": 0.0,
+      "unit": "km"
+    },
+    "tire_pressure_front_bar": {
+      "can_id": "0x420",
+      "is_extended": false,
+      "start_bit": 0,
+      "length_bits": 8,
+      "endianness": "little",
+      "scale": 0.025,
+      "offset": 0.0,
+      "unit": "bar"
+    },
+    "tire_pressure_rear_bar": {
+      "can_id": "0x420",
+      "is_extended": false,
+      "start_bit": 8,
+      "length_bits": 8,
+      "endianness": "little",
+      "scale": 0.025,
+      "offset": 0.0,
+      "unit": "bar"
+    },
+    "turn_indicator": {
+      "can_id": "0x290",
+      "is_extended": false,
+      "start_bit": 0,
+      "length_bits": 2,
+      "endianness": "little",
+      "enum_mapping": {
+        "0": "off",
+        "1": "left",
+        "2": "right",
+        "3": "hazard"
+      }
+    },
+    "brake_front_active": {
+      "can_id": "0x280",
+      "is_extended": false,
+      "start_bit": 40,
+      "length_bits": 1,
+      "endianness": "little"
+    },
+    "brake_rear_active": {
+      "can_id": "0x280",
+      "is_extended": false,
+      "start_bit": 41,
+      "length_bits": 1,
+      "endianness": "little"
+    },
+    "handlebar_voice_btn": {
+      "can_id": "0x290",
+      "is_extended": false,
+      "start_bit": 16,
+      "length_bits": 1,
+      "endianness": "little"
+    },
+    "handlebar_joystick_left": {
+      "can_id": "0x290",
+      "is_extended": false,
+      "start_bit": 17,
+      "length_bits": 1,
+      "endianness": "little"
+    },
+    "handlebar_joystick_right": {
+      "can_id": "0x290",
+      "is_extended": false,
+      "start_bit": 18,
+      "length_bits": 1,
+      "endianness": "little"
+    },
+    "handlebar_joystick_click": {
+      "can_id": "0x290",
+      "is_extended": false,
+      "start_bit": 19,
+      "length_bits": 1,
+      "endianness": "little"
+    }
+  }
+}

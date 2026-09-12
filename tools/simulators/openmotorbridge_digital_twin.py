@@ -147,6 +147,25 @@ class MotorcycleNode:
         self.tunnel_drift_m = 0.0
         self.was_in_tunnel = False
 
+        # CAN-Bus Simulated Telemetry State
+        self.engine_rpm = 1050.0
+        self.gear = "N"
+        self.engine_temp_c = 88.0
+        self.fuel_liters = 18.5
+        self.fuel_range_km = 330
+        self.tire_front_bar = 2.45
+        self.tire_rear_bar = 2.80
+        self.turn_indicator = "off"
+        self.brake_front = False
+        self.brake_rear = False
+        self.btn_voice = False
+        self.joy_left = False
+        self.joy_right = False
+        self.joy_click = False
+        self.wonderwheel_scroll = 0
+        self.wonderwheel_tilt_left = False
+        self.wonderwheel_tilt_right = False
+
     def trigger_crash(self, pt: TrackPoint):
         self.ecall_triggered = True
         self.ecall_timestamp = time.time()
@@ -180,6 +199,49 @@ class MotorcycleNode:
         self.heading_deg = pt.heading_deg
         self.lean_angle_deg = pt.lean_angle_deg
         self.in_tunnel = pt.in_tunnel
+
+        # Dynamic CAN engine RPM & gear computation
+        if self.speed_kmh < 1.0:
+            self.gear = "N"
+            self.engine_rpm = 1050.0 + random.uniform(-15, 15)
+        elif self.speed_kmh < 28.0:
+            self.gear = "1"
+            self.engine_rpm = 1300.0 + (self.speed_kmh / 28.0) * 2000.0
+        elif self.speed_kmh < 48.0:
+            self.gear = "2"
+            self.engine_rpm = 1800.0 + ((self.speed_kmh - 28.0) / 20.0) * 1800.0
+        elif self.speed_kmh < 68.0:
+            self.gear = "3"
+            self.engine_rpm = 2000.0 + ((self.speed_kmh - 48.0) / 20.0) * 1700.0
+        elif self.speed_kmh < 88.0:
+            self.gear = "4"
+            self.engine_rpm = 2100.0 + ((self.speed_kmh - 68.0) / 20.0) * 1600.0
+        elif self.speed_kmh < 108.0:
+            self.gear = "5"
+            self.engine_rpm = 2300.0 + ((self.speed_kmh - 88.0) / 20.0) * 1400.0
+        else:
+            self.gear = "6"
+            self.engine_rpm = 2500.0 + ((self.speed_kmh - 108.0) / 40.0) * 1500.0
+
+        # Dynamic brakes based on longitudinal acceleration
+        accel = getattr(pt, "accel_g", 0.0)
+        self.brake_front = accel < -0.12
+        self.brake_rear = accel < -0.06
+
+        # Dynamic turn indicator based on cornering lean angle
+        if self.lean_angle_deg < -14.0:
+            self.turn_indicator = "left"
+        elif self.lean_angle_deg > 14.0:
+            self.turn_indicator = "right"
+        else:
+            self.turn_indicator = "off"
+
+        # Slow realistic fuel consumption
+        self.fuel_liters = max(1.0, 18.5 - (pt.time_s / 60.0) * 0.06)
+        self.fuel_range_km = int(self.fuel_liters * 17.8)
+
+        # Thermal engine warm-up (88°C baseline)
+        self.engine_temp_c = min(92.0, 75.0 + (pt.time_s / 60.0) * 2.5)
         
         v_mps = pt.speed_mps
         heading_rad = math.radians(pt.heading_deg)
@@ -492,11 +554,26 @@ class DigitalTwinSimulator:
         self.rf_engine = RfPropagationEngine()
         self.ws_server = WebSocketBroadcastServer(host="0.0.0.0", port=port)
         
+        # CAN Bus Profile Engine
+        self.can_profile_id = "harley_skyline_2024"
+        
         # Metrics for Automated Regression Test
         self.max_tunnel_drift_m = 0.0
         self.tunnel_blackout_detected = False
         self.handover_occurred = False
         self.return_to_mesh_occurred = False
+
+    def get_can_manufacturer(self) -> str:
+        if "bmw" in self.can_profile_id:
+            return "BMW Motorrad"
+        elif "ktm" in self.can_profile_id:
+            return "KTM / Husqvarna"
+        elif "ducati" in self.can_profile_id:
+            return "Ducati"
+        elif "obd" in self.can_profile_id:
+            return "Generic Euro 4/5 OBD2"
+        else:
+            return "Harley-Davidson"
 
     def load_track(self, track_name: str):
         self.track_name = track_name
@@ -598,6 +675,29 @@ class DigitalTwinSimulator:
                         if "bleed_db" in cmd:
                             self.bike_a.pcb_main.cross_bleed_db = float(cmd["bleed_db"])
                         print(f"{C_PWA}[PWA-CMD]{C_RST} Cross-Intercom Bridge -> En={self.bike_a.pcb_main.cross_bridge_enabled}, Bleed={self.bike_a.pcb_main.cross_bleed_db:.1f} dB")
+                    elif action == "set_can_profile":
+                        self.can_profile_id = cmd.get("profile_id", "harley_skyline_2024")
+                        print(f"{C_PWA}[PWA-CMD]{C_RST} CAN Vehicle Profile switched -> {self.can_profile_id} ({self.get_can_manufacturer()})")
+                    elif action == "trigger_can_btn":
+                        btn_name = cmd.get("button")
+                        pressed = bool(cmd.get("pressed", True))
+                        if btn_name == "voice":
+                            self.bike_a.btn_voice = pressed
+                        elif btn_name == "joy_left":
+                            self.bike_a.joy_left = pressed
+                        elif btn_name == "joy_right":
+                            self.bike_a.joy_right = pressed
+                        elif btn_name == "joy_click":
+                            self.bike_a.joy_click = pressed
+                        elif btn_name == "wheel_up":
+                            self.bike_a.wonderwheel_scroll += 1
+                        elif btn_name == "wheel_down":
+                            self.bike_a.wonderwheel_scroll -= 1
+                        elif btn_name == "wheel_tilt_left":
+                            self.bike_a.wonderwheel_tilt_left = pressed
+                        elif btn_name == "wheel_tilt_right":
+                            self.bike_a.wonderwheel_tilt_right = pressed
+                        print(f"{C_PWA}[PWA-CMD]{C_RST} CAN Button {btn_name} -> {pressed}")
 
                 # Dynamic audio calculations
                 spl_front = self.bike_a.pcb_front.acoustic_spl_dba
@@ -687,6 +787,35 @@ class DigitalTwinSimulator:
                         "p2_rms": round(p2_rms, 1),
                         "navi_rms": round(navi_rms, 1),
                         "ambient_rms": round(ambient_rms, 1)
+                    },
+                    "can_bus": {
+                        "profile_id": self.can_profile_id,
+                        "manufacturer": self.get_can_manufacturer(),
+                        "connected": True,
+                        "baudrate_kbps": 500,
+                        "listen_only": True,
+                        "fps": 142,
+                        "signals": {
+                            "speed_kmh": round(self.bike_a.speed_kmh, 1),
+                            "engine_rpm": int(self.bike_a.engine_rpm),
+                            "gear_selected": self.bike_a.gear,
+                            "engine_temp_c": int(self.bike_a.engine_temp_c),
+                            "fuel_remaining_liters": round(self.bike_a.fuel_liters, 1),
+                            "fuel_range_km": self.bike_a.fuel_range_km,
+                            "tire_pressure_front_bar": round(self.bike_a.tire_front_bar, 2),
+                            "tire_pressure_rear_bar": round(self.bike_a.tire_rear_bar, 2),
+                            "turn_indicator": self.bike_a.turn_indicator,
+                            "brake_front_active": self.bike_a.brake_front,
+                            "brake_rear_active": self.bike_a.brake_rear,
+                            "handlebar_voice_btn": self.bike_a.btn_voice,
+                            "handlebar_joystick_left": self.bike_a.joy_left,
+                            "handlebar_joystick_right": self.bike_a.joy_right,
+                            "handlebar_joystick_click": self.bike_a.joy_click,
+                            "wonderwheel_scroll": self.bike_a.wonderwheel_scroll,
+                            "wonderwheel_tilt_left": self.bike_a.wonderwheel_tilt_left,
+                            "wonderwheel_tilt_right": self.bike_a.wonderwheel_tilt_right
+                        },
+                        "adr_source": "CAN Wheel Speed (0.06 km/h Res, 50 Hz)" if not self.bike_a.in_tunnel else "CAN Wheel Speed (Tunnel EKF Active)"
                     }
                 }
                 

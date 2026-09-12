@@ -1374,16 +1374,132 @@
                     </div>
                 </section>
 
-                <!-- CAN & Diagnostics -->
+                <!-- CAN-Bus Profil-Manager & Live-Monitor -->
+                <section class="card" style="grid-column: 1 / -1;">
+                    <div class="card-header">
+                        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                            <span class="card-title">🚗 <span data-i18n="can_profile_title">Fahrzeug-CAN Profil-Manager & Live-Monitor</span></span>
+                            <span class="card-badge badge-green" id="badge-can-status">🟢 500 kbps (Listen-Only • Safe)</span>
+                            <span class="card-badge badge-blue" id="badge-can-fps">142 Frames/s</span>
+                        </div>
+                        <div class="card-badge badge-orange" id="can-adr-source-badge">🟢 ADR: CAN Wheel Speed (R=0.02 m²/s²)</div>
+                    </div>
+
+                    <!-- Profile Selector & Action Controls -->
+                    <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--border-subtle);">
+                        <div style="flex: 1; min-width: 260px;">
+                            <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 4px; display: block;" data-i18n="can_profile_select_label">Fahrzeugprofil:</label>
+                            <select id="select-can-profile" class="select-custom" style="width: 100%; padding: 8px 12px; font-size: 0.88rem; font-weight: 600; background: rgba(13,17,23,0.9); border: 1px solid var(--border-accent); border-radius: var(--radius-sm); color: var(--text-primary); cursor: pointer;">
+                                <option value="harley_skyline_2024" selected>🏍️ Harley-Davidson Touring & CVO (2024+ Skyline OS)</option>
+                                <option value="bmw_motorrad_k5x_r1250_r1300">🏍️ BMW Motorrad R 1250 / R 1300 GS & RT (Wonderwheel K5x/K6x)</option>
+                                <option value="ktm_bosch_can_gen3">🏍️ KTM 890 / 1290 / 1390 Super Adventure & Duke (Bosch CAN)</option>
+                                <option value="ducati_panigale_multistrada">🏍️ Ducati Multistrada V4 / Panigale V4 (Bosch CAN)</option>
+                                <option value="generic_obd2_iso15765">🚗 Generisch Euro-4 / Euro-5 OBD2 (ISO 15765-4)</option>
+                            </select>
+                        </div>
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap; align-self: flex-end;">
+                            <button id="btn-can-scan" class="btn-secondary" style="padding: 8px 14px; font-size: 0.82rem;" title="500 ms passiver Scan über CAN-Bus Signaturen">
+                                🔍 <span data-i18n="can_scan_btn">Bus automatisch scannen</span>
+                            </button>
+                            <button id="btn-can-import" class="btn-secondary" style="padding: 8px 14px; font-size: 0.82rem;" title="Community-Profil als JSON importieren">
+                                📥 <span data-i18n="can_import_btn">Profil importieren (.json)</span>
+                            </button>
+                            <button id="btn-can-reset" class="btn-secondary" style="padding: 8px 12px; font-size: 0.82rem;" title="Auf Werkseinstellung zurücksetzen">
+                                🔄 <span data-i18n="can_reset_btn">Reset</span>
+                            </button>
+                            <input type="file" id="input-can-profile-file" accept=".json" style="display: none;">
+                        </div>
+                    </div>
+
+                    <!-- Live Telemetry Tiles (Grid 4x2) -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-bottom: 20px;">
+                        <div class="stat-tile">
+                            <div class="stat-label"><span>Raddrehzahl</span><span class="card-badge badge-blue">CAN</span></div>
+                            <div class="stat-value" id="can-val-speed">0.0 <span style="font-size: 0.9rem; font-weight: 500;">km/h</span></div>
+                            <span class="stat-sub">Auflösung: 1/16 km/h</span>
+                        </div>
+                        <div class="stat-tile">
+                            <div class="stat-label"><span>Motordrehzahl</span><span class="card-badge badge-blue">CAN</span></div>
+                            <div class="stat-value" id="can-val-rpm">0 <span style="font-size: 0.9rem; font-weight: 500;">U/min</span></div>
+                            <span class="stat-sub">Motor-Status: Aktiv</span>
+                        </div>
+                        <div class="stat-tile">
+                            <div class="stat-label"><span>Gang</span><span class="card-badge badge-green" id="can-badge-gear">Getriebe</span></div>
+                            <div class="stat-value" id="can-val-gear" style="color: var(--accent-cyan);">N</div>
+                            <span class="stat-sub" id="can-sub-gear">Leerlauf</span>
+                        </div>
+                        <div class="stat-tile">
+                            <div class="stat-label"><span>Reifendruck V/H</span><span class="card-badge badge-orange" id="can-badge-tpms">TPMS</span></div>
+                            <div class="stat-value" style="font-size: 1.4rem;" id="can-val-tpms">2.45 / 2.80 <span style="font-size: 0.85rem; font-weight: 500;">bar</span></div>
+                            <span class="stat-sub" id="can-sub-tpms">🟢 Solldruck OK</span>
+                        </div>
+                        <div class="stat-tile">
+                            <div class="stat-label"><span>Kühlmitteltemp</span><span class="card-badge badge-green" id="can-badge-temp">ECU</span></div>
+                            <div class="stat-value" id="can-val-temp">88 <span style="font-size: 0.9rem; font-weight: 500;">°C</span></div>
+                            <span class="stat-sub">Betriebstemperatur</span>
+                        </div>
+                        <div class="stat-tile">
+                            <div class="stat-label"><span>Tank & Reichweite</span><span class="card-badge badge-blue">BCM</span></div>
+                            <div class="stat-value" style="font-size: 1.4rem;" id="can-val-fuel">18.5 L <span style="font-size: 0.85rem; font-weight: 500;">• 320 km</span></div>
+                            <span class="stat-sub" id="can-sub-fuel">Verbrauch normal</span>
+                        </div>
+                        <div class="stat-tile">
+                            <div class="stat-label"><span>Blinker / Licht</span><span class="card-badge badge-purple">Beleuchtung</span></div>
+                            <div class="stat-value" style="font-size: 1.25rem;" id="can-val-turn">⚪ Aus</div>
+                            <span class="stat-sub" id="can-sub-turn">Bremslicht: Inaktiv</span>
+                        </div>
+                        <div class="stat-tile">
+                            <div class="stat-label"><span>Bremsen</span><span class="card-badge badge-green" id="can-badge-brakes">ABS</span></div>
+                            <div class="stat-value" style="font-size: 1.25rem;" id="can-val-brakes">Vorn / Hinten: Aus</div>
+                            <span class="stat-sub" id="can-sub-brakes">Druck: 0.0 bar</span>
+                        </div>
+                    </div>
+
+                    <!-- Interaktiver Lenkertaster- & Wonderwheel-Test -->
+                    <div style="background: rgba(0,0,0,0.25); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 14px 18px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+                            <strong style="font-size: 0.88rem; color: #fff;">🎮 <span data-i18n="can_handlebar_title">Interaktiver Lenkertaster- & Wonderwheel-Test</span></strong>
+                            <span style="font-size: 0.75rem; color: var(--text-secondary);">Klicke auf einen Taster, um den CAN-Frame zu simulieren:</span>
+                        </div>
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                            <button id="btn-indicator-voice" class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem; border-color: rgba(255,255,255,0.15);">
+                                🎤 Voice / PTT
+                            </button>
+                            <button id="btn-indicator-joy-left" class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem; border-color: rgba(255,255,255,0.15);">
+                                ◀️ Joystick Links
+                            </button>
+                            <button id="btn-indicator-joy-click" class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem; border-color: rgba(255,255,255,0.15);">
+                                🔘 Joystick Click
+                            </button>
+                            <button id="btn-indicator-joy-right" class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem; border-color: rgba(255,255,255,0.15);">
+                                ▶️ Joystick Rechts
+                            </button>
+                            <button id="btn-indicator-wheel-up" class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem; border-color: rgba(0, 242, 254, 0.3);">
+                                🔼 Wonderwheel Scroll +
+                            </button>
+                            <button id="btn-indicator-wheel-down" class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem; border-color: rgba(0, 242, 254, 0.3);">
+                                🔽 Wonderwheel Scroll -
+                            </button>
+                            <button id="btn-indicator-wheel-tilt-l" class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem; border-color: rgba(0, 242, 254, 0.3);">
+                                ⬅️ Wheel Tilt Links
+                            </button>
+                            <button id="btn-indicator-wheel-tilt-r" class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem; border-color: rgba(0, 242, 254, 0.3);">
+                                ➡️ Wheel Tilt Rechts
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- System Hardware Diagnostik -->
                 <section class="card">
                     <div class="card-header">
-                        <span class="card-title">🚗 <span data-i18n="diagnostics_title">Fahrzeug-CAN & Diagnostik</span></span>
-                        <span class="card-badge" id="badge-can-link" style="background: rgba(255,255,255,0.08); color: var(--text-muted);">CAN: Standby</span>
+                        <span class="card-title">🛠️ <span data-i18n="diagnostics_title">Zentralbox Diagnostik & Hardware</span></span>
+                        <span class="card-badge badge-green">PCBA 01 OK</span>
                     </div>
 
                     <div class="stat-row">
-                        <span class="stat-sub" data-i18n="can_speed_label">CAN-Bus Geschwindigkeit:</span>
-                        <span style="font-weight: 700;">500 kbps (Harley-Davidson J1939)</span>
+                        <span class="stat-sub" data-i18n="can_speed_label">CAN-Transceiver PHY:</span>
+                        <span style="font-weight: 700;">TI TCAN334G (+/- 58V Fault Protect)</span>
                     </div>
                     <div class="stat-row">
                         <span class="stat-sub" data-i18n="codec_label">Audio-Codec:</span>

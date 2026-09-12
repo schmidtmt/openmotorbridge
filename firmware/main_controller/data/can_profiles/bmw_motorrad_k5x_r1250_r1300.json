@@ -1,0 +1,144 @@
+{
+  "schema_version": 1,
+  "profile_id": "bmw_motorrad_k5x_r1250_r1300",
+  "manufacturer": "BMW Motorrad",
+  "model_family": "R 1250 / R 1300 GS & RT Platform (K5x/K6x)",
+  "bus_config": {
+    "baudrate_kbps": 500,
+    "listen_only": true,
+    "termination_120r": true,
+    "auto_recovery": true
+  },
+  "fingerprint": {
+    "characteristic_can_ids": ["0x130", "0x2A0", "0x2D0"],
+    "min_frame_count": 10
+  },
+  "signals": {
+    "speed_kmh": {
+      "can_id": "0x130",
+      "is_extended": false,
+      "start_bit": 32,
+      "length_bits": 12,
+      "endianness": "little",
+      "scale": 0.1,
+      "offset": 0.0,
+      "min": 0.0,
+      "max": 320.0,
+      "unit": "km/h"
+    },
+    "wheel_speed_front": {
+      "can_id": "0x130",
+      "is_extended": false,
+      "start_bit": 0,
+      "length_bits": 12,
+      "endianness": "little",
+      "scale": 0.1,
+      "offset": 0.0,
+      "unit": "km/h"
+    },
+    "wheel_speed_rear": {
+      "can_id": "0x130",
+      "is_extended": false,
+      "start_bit": 32,
+      "length_bits": 12,
+      "endianness": "little",
+      "scale": 0.1,
+      "offset": 0.0,
+      "unit": "km/h"
+    },
+    "engine_rpm": {
+      "can_id": "0x10C",
+      "is_extended": false,
+      "start_bit": 16,
+      "length_bits": 16,
+      "endianness": "little",
+      "scale": 0.25,
+      "offset": 0.0,
+      "min": 0.0,
+      "max": 12000.0,
+      "unit": "rpm"
+    },
+    "gear_selected": {
+      "can_id": "0x130",
+      "is_extended": false,
+      "start_bit": 48,
+      "length_bits": 4,
+      "endianness": "little",
+      "scale": 1.0,
+      "offset": 0.0,
+      "enum_mapping": {
+        "0": "N",
+        "1": "1",
+        "2": "2",
+        "3": "3",
+        "4": "4",
+        "5": "5",
+        "6": "6"
+      }
+    },
+    "engine_temp_c": {
+      "can_id": "0x2A0",
+      "is_extended": false,
+      "start_bit": 0,
+      "length_bits": 8,
+      "endianness": "little",
+      "scale": 1.0,
+      "offset": -40.0,
+      "unit": "°C"
+    },
+    "ambient_temp_c": {
+      "can_id": "0x2D0",
+      "is_extended": false,
+      "start_bit": 0,
+      "length_bits": 8,
+      "endianness": "little",
+      "scale": 0.5,
+      "offset": -40.0,
+      "unit": "°C"
+    },
+    "tire_pressure_front_bar": {
+      "can_id": "0x2D0",
+      "is_extended": false,
+      "start_bit": 16,
+      "length_bits": 8,
+      "endianness": "little",
+      "scale": 0.02,
+      "offset": 0.0,
+      "unit": "bar"
+    },
+    "tire_pressure_rear_bar": {
+      "can_id": "0x2D0",
+      "is_extended": false,
+      "start_bit": 24,
+      "length_bits": 8,
+      "endianness": "little",
+      "scale": 0.02,
+      "offset": 0.0,
+      "unit": "bar"
+    },
+    "wonderwheel_scroll": {
+      "can_id": "0x2A0",
+      "is_extended": false,
+      "start_bit": 8,
+      "length_bits": 8,
+      "endianness": "little",
+      "scale": 1.0,
+      "offset": 0.0,
+      "unit": "clicks"
+    },
+    "wonderwheel_tilt_left": {
+      "can_id": "0x2A0",
+      "is_extended": false,
+      "start_bit": 16,
+      "length_bits": 1,
+      "endianness": "little"
+    },
+    "wonderwheel_tilt_right": {
+      "can_id": "0x2A0",
+      "is_extended": false,
+      "start_bit": 17,
+      "length_bits": 1,
+      "endianness": "little"
+    }
+  }
+}

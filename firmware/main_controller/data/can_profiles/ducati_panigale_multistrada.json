@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "profile_id": "ducati_panigale_multistrada",
+  "manufacturer": "Ducati",
+  "model_family": "Multistrada V4 / Panigale V4 (Bosch CAN)",
+  "bus_config": {
+    "baudrate_kbps": 500,
+    "listen_only": true,
+    "termination_120r": true,
+    "auto_recovery": true
+  },
+  "fingerprint": {
+    "characteristic_can_ids": ["0x100", "0x200", "0x300"],
+    "min_frame_count": 10
+  },
+  "signals": {
+    "speed_kmh": {
+      "can_id": "0x100",
+      "is_extended": false,
+      "start_bit": 16,
+      "length_bits": 16,
+      "endianness": "little",
+      "scale": 0.05,
+      "offset": 0.0,
+      "min": 0.0,
+      "max": 350.0,
+      "unit": "km/h"
+    },
+    "wheel_speed_front": {
+      "can_id": "0x100",
+      "is_extended": false,
+      "start_bit": 0,
+      "length_bits": 16,
+      "endianness": "little",
+      "scale": 0.05,
+      "offset": 0.0,
+      "unit": "km/h"
+    },
+    "wheel_speed_rear": {
+      "can_id": "0x100",
+      "is_extended": false,
+      "start_bit": 16,
+      "length_bits": 16,
+      "endianness": "little",
+      "scale": 0.05,
+      "offset": 0.0,
+      "unit": "km/h"
+    },
+    "engine_rpm": {
+      "can_id": "0x200",
+      "is_extended": false,
+      "start_bit": 0,
+      "length_bits": 16,
+      "endianness": "little",
+      "scale": 0.5,
+      "offset": 0.0,
+      "min": 0.0,
+      "max": 16000.0,
+      "unit": "rpm"
+    },
+    "gear_selected": {
+      "can_id": "0x200",
+      "is_extended": false,
+      "start_bit": 16,
+      "length_bits": 4,
+      "endianness": "little",
+      "scale": 1.0,
+      "offset": 0.0,
+      "enum_mapping": {
+        "0": "N",
+        "1": "1",
+        "2": "2",
+        "3": "3",
+        "4": "4",
+        "5": "5",
+        "6": "6"
+      }
+    },
+    "engine_temp_c": {
+      "can_id": "0x300",
+      "is_extended": false,
+      "start_bit": 0,
+      "length_bits": 8,
+      "endianness": "little",
+      "scale": 1.0,
+      "offset": -40.0,
+      "unit": "°C"
+    }
+  }
+}

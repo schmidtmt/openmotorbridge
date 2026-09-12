@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "profile_id": "generic_obd2_iso15765",
+  "manufacturer": "Generic Euro 4 / Euro 5",
+  "model_family": "Standard OBD-2 Motorcycle Diagnostics (ISO 15765-4)",
+  "bus_config": {
+    "baudrate_kbps": 500,
+    "listen_only": true,
+    "termination_120r": true,
+    "auto_recovery": true
+  },
+  "fingerprint": {
+    "characteristic_can_ids": ["0x7E8", "0x7E9"],
+    "min_frame_count": 5
+  },
+  "signals": {
+    "speed_kmh": {
+      "can_id": "0x7E8",
+      "is_extended": false,
+      "start_bit": 24,
+      "length_bits": 8,
+      "endianness": "little",
+      "scale": 1.0,
+      "offset": 0.0,
+      "min": 0.0,
+      "max": 255.0,
+      "unit": "km/h"
+    },
+    "engine_rpm": {
+      "can_id": "0x7E8",
+      "is_extended": false,
+      "start_bit": 24,
+      "length_bits": 16,
+      "endianness": "little",
+      "scale": 0.25,
+      "offset": 0.0,
+      "min": 0.0,
+      "max": 16383.0,
+      "unit": "rpm"
+    },
+    "engine_temp_c": {
+      "can_id": "0x7E8",
+      "is_extended": false,
+      "start_bit": 24,
+      "length_bits": 8,
+      "endianness": "little",
+      "scale": 1.0,
+      "offset": -40.0,
+      "min": -40.0,
+      "max": 215.0,
+      "unit": "°C"
+    },
+    "fuel_remaining_liters": {
+      "can_id": "0x7E8",
+      "is_extended": false,
+      "start_bit": 24,
+      "length_bits": 8,
+      "endianness": "little",
+      "scale": 0.392,
+      "offset": 0.0,
+      "min": 0.0,
+      "max": 100.0,
+      "unit": "%"
+    }
+  }
+}

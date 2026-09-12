@@ -113,6 +113,12 @@ const i18n = {
         reserve_b_inactive: 'Ausgang: INAKTIV (0V OFF)',
         reserve_b_sub: 'Zweck: Actioncam Power-Gate / Relais',
         btn_toggle_output: 'Toggle Output',
+        can_profile_title: 'Fahrzeug-CAN Profil-Manager & Live-Monitor',
+        can_profile_select_label: 'Fahrzeugprofil:',
+        can_scan_btn: 'Bus automatisch scannen',
+        can_import_btn: 'Profil importieren (.json)',
+        can_reset_btn: 'Reset',
+        can_handlebar_title: 'Interaktiver Lenkertaster- & Wonderwheel-Test',
         diagnostics_title: 'Fahrzeug-CAN & Diagnostik',
         can_speed_label: 'CAN-Bus Geschwindigkeit:',
         codec_label: 'Audio-Codec:',
@@ -276,6 +282,12 @@ const i18n = {
         reserve_b_inactive: 'Output: INACTIVE (0V OFF)',
         reserve_b_sub: 'Purpose: Action Cam Power Gate / Relay',
         btn_toggle_output: 'Toggle Output',
+        can_profile_title: 'Vehicle CAN Profile Manager & Live Monitor',
+        can_profile_select_label: 'Vehicle Profile:',
+        can_scan_btn: 'Auto-Scan Bus',
+        can_import_btn: 'Import Profile (.json)',
+        can_reset_btn: 'Reset',
+        can_handlebar_title: 'Interactive Handlebar & Wonderwheel Test',
         diagnostics_title: 'Vehicle CAN & Diagnostics',
         can_speed_label: 'CAN Bus Baudrate:',
         codec_label: 'Audio Codec:',
@@ -1327,6 +1339,229 @@ function handleSimTelemetry(data) {
             }
         }
     }
+
+    // 9. CAN Bus Telemetry & Profile Manager
+    if (data.can_bus) {
+        updateCanBusUi(data.can_bus);
+    }
+}
+
+// ==========================================
+// CAN-Bus Vehicle Profile & Live Telemetry UI
+// ==========================================
+
+function updateCanBusUi(canData) {
+    if (!canData) return;
+    const badgeStatus = document.getElementById('badge-can-status');
+    const badgeFps = document.getElementById('badge-can-fps');
+    const badgeAdr = document.getElementById('can-adr-source-badge');
+
+    if (badgeStatus) {
+        badgeStatus.textContent = `🟢 500 kbps (Listen-Only • ${canData.manufacturer || 'Safe'})`;
+    }
+    if (badgeFps) {
+        badgeFps.textContent = `${canData.fps || 142} Frames/s`;
+    }
+    if (badgeAdr) {
+        badgeAdr.textContent = canData.adr_source || '🟢 ADR: CAN Wheel Speed (R=0.02 m²/s²)';
+    }
+
+    const s = canData.signals || {};
+    const valSpeed = document.getElementById('can-val-speed');
+    const valRpm = document.getElementById('can-val-rpm');
+    const valGear = document.getElementById('can-val-gear');
+    const subGear = document.getElementById('can-sub-gear');
+    const valTpms = document.getElementById('can-val-tpms');
+    const valTemp = document.getElementById('can-val-temp');
+    const valFuel = document.getElementById('can-val-fuel');
+    const valTurn = document.getElementById('can-val-turn');
+    const valBrakes = document.getElementById('can-val-brakes');
+
+    if (valSpeed && s.speed_kmh !== undefined) {
+        valSpeed.innerHTML = `${s.speed_kmh.toFixed(1)} <span style="font-size: 0.9rem; font-weight: 500;">km/h</span>`;
+    }
+    if (valRpm && s.engine_rpm !== undefined) {
+        valRpm.innerHTML = `${s.engine_rpm} <span style="font-size: 0.9rem; font-weight: 500;">U/min</span>`;
+    }
+    if (valGear && s.gear_selected !== undefined) {
+        valGear.textContent = s.gear_selected;
+        if (subGear) subGear.textContent = s.gear_selected === 'N' ? 'Leerlauf' : `Gang ${s.gear_selected}`;
+    }
+    if (valTpms && s.tire_pressure_front_bar !== undefined && s.tire_pressure_rear_bar !== undefined) {
+        valTpms.innerHTML = `${s.tire_pressure_front_bar.toFixed(2)} / ${s.tire_pressure_rear_bar.toFixed(2)} <span style="font-size: 0.85rem; font-weight: 500;">bar</span>`;
+    }
+    if (valTemp && s.engine_temp_c !== undefined) {
+        valTemp.innerHTML = `${s.engine_temp_c} <span style="font-size: 0.9rem; font-weight: 500;">°C</span>`;
+    }
+    if (valFuel && s.fuel_remaining_liters !== undefined && s.fuel_range_km !== undefined) {
+        valFuel.innerHTML = `${s.fuel_remaining_liters.toFixed(1)} L <span style="font-size: 0.85rem; font-weight: 500;">• ${s.fuel_range_km} km</span>`;
+    }
+    if (valTurn && s.turn_indicator !== undefined) {
+        if (s.turn_indicator === 'left') {
+            valTurn.textContent = '⬅️ Links';
+            valTurn.style.color = 'var(--accent-orange)';
+        } else if (s.turn_indicator === 'right') {
+            valTurn.textContent = '➡️ Rechts';
+            valTurn.style.color = 'var(--accent-orange)';
+        } else {
+            valTurn.textContent = '⚪ Aus';
+            valTurn.style.color = '#fff';
+        }
+    }
+    if (valBrakes) {
+        const f = Boolean(s.brake_front_active);
+        const r = Boolean(s.brake_rear_active);
+        if (f && r) {
+            valBrakes.textContent = '🛑 Vorn & Hinten';
+            valBrakes.style.color = 'var(--accent-red)';
+        } else if (f) {
+            valBrakes.textContent = '🛑 Vorderradbremse';
+            valBrakes.style.color = 'var(--accent-red)';
+        } else if (r) {
+            valBrakes.textContent = '🛑 Hinterradbremse';
+            valBrakes.style.color = 'var(--accent-orange)';
+        } else {
+            valBrakes.textContent = 'Vorn / Hinten: Aus';
+            valBrakes.style.color = '#fff';
+        }
+    }
+
+    // Handlebar & Wonderwheel interactive button states
+    updateButtonIndicator('btn-indicator-voice', s.handlebar_voice_btn);
+    updateButtonIndicator('btn-indicator-joy-left', s.handlebar_joystick_left);
+    updateButtonIndicator('btn-indicator-joy-right', s.handlebar_joystick_right);
+    updateButtonIndicator('btn-indicator-joy-click', s.handlebar_joystick_click);
+    updateButtonIndicator('btn-indicator-wheel-tilt-l', s.wonderwheel_tilt_left);
+    updateButtonIndicator('btn-indicator-wheel-tilt-r', s.wonderwheel_tilt_right);
+}
+
+function updateButtonIndicator(btnId, isActive) {
+    const el = document.getElementById(btnId);
+    if (!el) return;
+    if (isActive) {
+        el.style.background = 'rgba(48, 209, 88, 0.4)';
+        el.style.borderColor = 'var(--accent-green)';
+        el.style.color = '#fff';
+        el.style.boxShadow = '0 0 10px rgba(48, 209, 88, 0.5)';
+    } else {
+        el.style.background = '';
+        el.style.borderColor = '';
+        el.style.color = '';
+        el.style.boxShadow = '';
+    }
+}
+
+function setupCanProfileManagerUi() {
+    const selectProfile = document.getElementById('select-can-profile');
+    const btnScan = document.getElementById('btn-can-scan');
+    const btnImport = document.getElementById('btn-can-import');
+    const inputImport = document.getElementById('input-can-profile-file');
+    const btnReset = document.getElementById('btn-can-reset');
+
+    if (selectProfile) {
+        selectProfile.addEventListener('change', (e) => {
+            const profileId = e.target.value;
+            if (simWs && simWs.readyState === WebSocket.OPEN) {
+                simWs.send(JSON.stringify({ action: 'set_can_profile', profile_id: profileId }));
+            }
+            showToast(state.lang === 'de' 
+                ? `🏍️ CAN-Profil gewechselt: ${e.target.options[e.target.selectedIndex].text}`
+                : `🏍️ CAN Profile switched: ${e.target.options[e.target.selectedIndex].text}`, 'info', 3000);
+        });
+    }
+
+    if (btnScan) {
+        btnScan.addEventListener('click', () => {
+            btnScan.innerHTML = '⏳ <span>Scanne Bus...</span>';
+            btnScan.disabled = true;
+            setTimeout(() => {
+                btnScan.innerHTML = '🔍 <span data-i18n="can_scan_btn">Bus automatisch scannen</span>';
+                btnScan.disabled = false;
+                // Auto-detect Harley or BMW based on current scenario
+                const currentTrack = document.getElementById('select-sim-track')?.value;
+                const detectedProfile = (currentTrack === 'kerenzerberg') ? 'bmw_motorrad_k5x_r1250_r1300' : 'harley_skyline_2024';
+                if (selectProfile) {
+                    selectProfile.value = detectedProfile;
+                    if (simWs && simWs.readyState === WebSocket.OPEN) {
+                        simWs.send(JSON.stringify({ action: 'set_can_profile', profile_id: detectedProfile }));
+                    }
+                }
+                showToast(state.lang === 'de'
+                    ? `✓ Auto-Scan: Fingerprint erkannt! Profil "${selectProfile ? selectProfile.options[selectProfile.selectedIndex].text : detectedProfile}" aktiviert.`
+                    : `✓ Auto-Scan: Profile fingerprint detected & activated!`, 'success', 4000);
+            }, 600);
+        });
+    }
+
+    if (btnImport && inputImport) {
+        btnImport.addEventListener('click', () => inputImport.click());
+        inputImport.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (evt) => {
+                try {
+                    const profileJson = JSON.parse(evt.target.result);
+                    const profId = profileJson.profile_id || `custom_${Date.now()}`;
+                    const profName = `${profileJson.manufacturer || 'Custom'} ${profileJson.model_family || 'Profile'}`;
+                    
+                    if (selectProfile) {
+                        const opt = document.createElement('option');
+                        opt.value = profId;
+                        opt.textContent = `📦 ${profName}`;
+                        selectProfile.appendChild(opt);
+                        selectProfile.value = profId;
+                        if (simWs && simWs.readyState === WebSocket.OPEN) {
+                            simWs.send(JSON.stringify({ action: 'set_can_profile', profile_id: profId }));
+                        }
+                    }
+                    showToast(state.lang === 'de'
+                        ? `📥 Community-Profil "${profName}" erfolgreich geladen & aktiviert!`
+                        : `📥 Community Profile "${profName}" loaded & activated!`, 'success', 3500);
+                } catch (err) {
+                    showToast(state.lang === 'de' ? '❌ Ungültiges JSON CAN-Profil!' : '❌ Invalid JSON Profile!', 'error', 3000);
+                }
+            };
+            reader.readAsText(file);
+        });
+    }
+
+    if (btnReset && selectProfile) {
+        btnReset.addEventListener('click', () => {
+            selectProfile.value = 'harley_skyline_2024';
+            if (simWs && simWs.readyState === WebSocket.OPEN) {
+                simWs.send(JSON.stringify({ action: 'set_can_profile', profile_id: 'harley_skyline_2024' }));
+            }
+            showToast(state.lang === 'de' ? '🔄 CAN-Profil auf Werkseinstellung zurückgesetzt.' : '🔄 CAN Profile reset to default.', 'info');
+        });
+    }
+
+    // Interactive button simulators
+    const btnMap = [
+        { id: 'btn-indicator-voice', name: 'voice' },
+        { id: 'btn-indicator-joy-left', name: 'joy_left' },
+        { id: 'btn-indicator-joy-click', name: 'joy_click' },
+        { id: 'btn-indicator-joy-right', name: 'joy_right' },
+        { id: 'btn-indicator-wheel-up', name: 'wheel_up' },
+        { id: 'btn-indicator-wheel-down', name: 'wheel_down' },
+        { id: 'btn-indicator-wheel-tilt-l', name: 'wheel_tilt_left' },
+        { id: 'btn-indicator-wheel-tilt-r', name: 'wheel_tilt_right' }
+    ];
+
+    btnMap.forEach(({ id, name }) => {
+        const btn = document.getElementById(id);
+        if (!btn) return;
+        const trigger = (pressed) => {
+            updateButtonIndicator(id, pressed);
+            if (simWs && simWs.readyState === WebSocket.OPEN) {
+                simWs.send(JSON.stringify({ action: 'trigger_can_btn', button: name, pressed: pressed }));
+            }
+        };
+        btn.addEventListener('mousedown', () => trigger(true));
+        btn.addEventListener('mouseup', () => trigger(false));
+        btn.addEventListener('touchstart', (e) => { e.preventDefault(); trigger(true); });
+        btn.addEventListener('touchend', (e) => { e.preventDefault(); trigger(false); });
+    });
 }
 
 function updateBleUiState(connected) {
@@ -4906,6 +5141,7 @@ document.getElementById('btn-validate-map-match')?.addEventListener('click', () 
 // Initialize Language, Telemetry & Auto-Start Simulation on Boot
 setLanguage(state.lang);
 resetDisconnectedTelemetryUi();
+setupCanProfileManagerUi();
 startInternalSimTrackEngine(false);
 
 // ==========================================
