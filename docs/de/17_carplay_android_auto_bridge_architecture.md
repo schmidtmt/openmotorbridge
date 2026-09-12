@@ -1,4 +1,4 @@
-# 17 - Dongle-Free CarPlay & Android Auto Bridge Architektur (PCBA 05)
+# 17 - Smart-Managed CarPlay & Android Auto Bridge Architektur (PCBA 05)
 
 ## 1. Systemüberblick & Problemstellung
 
@@ -43,7 +43,7 @@ OpenMotorBridge löst dieses Problem durch eine konsequent modulare **Zwei-Stufe
       Vollständige Eliminierung von fehleranfälligen Signalkabeln über den schwenkenden Lenkkopf.
     - Knowles I2S MEMS-Fahrtwindmikrofon: Misst Staudruck und Windpegel direkt an der Frontscheibe
       (unter der Sitzbank physikalisch unmöglich) für automatische Helmlautstärke-Nachführung (AGC).
-    - Cockpit USB-Ladehub: 5V 2A Power für Handy (SP Connect / QuadLock) & dedizierter Cam-Port.
+    - Cockpit USB-Ladehub: 20W USB-PD Fast Charging am Lenker & dedizierter Zubehör-Port.
     - Action-Cam BLE Shutter-Bridge: Steuert GoPro / Insta360 in direkter Sichtlinie (< 0.5 m).
   
   • MODULARE INFOTAINMENT- & DISPLAY-ERWEITERUNG (Für Bikes mit Touchscreen & Nachrüst-TFTs):
@@ -56,38 +56,44 @@ OpenMotorBridge löst dieses Problem durch eine konsequent modulare **Zwei-Stufe
 
 ---
 
-## 2. Hardware-Evaluation & SOM-Auswahl
+## 2. Architekturentscheidung: Warum kein Onboard-Linux-SOM auf PCBA 05? (Evaluation & verworfene Ansätze)
 
-Für den lüfterlosen Dauerbetrieb im geschlossenen Hohlraum der Motorrad-Frontverkleidung (Temperaturbereich nach ISO 16750-2 von **-40 °C bis +85 °C**) scheiden Standard-Einplatinencomputer (wie Raspberry Pi 4/5) aufgrund ihrer hohen Verlustleistung (> 5 W) und thermischen Drosselung aus.
+In frühen Entwurfsphasen wurde intensiv evaluiert, ob ein fest verlötetes Linux-System-on-Module (SOM) direkt auf der Platine PCBA 05 platziert werden sollte. Für den lüfterlosen Dauerbetrieb im geschlossenen Hohlraum der Motorrad-Frontverkleidung (Temperaturbereich nach ISO 16750-2 von **-40 °C bis +85 °C**) scheiden Standard-Einplatinencomputer (wie Raspberry Pi 4/5) aufgrund ihrer hohen Verlustleistung (> 5 W) und thermischen Drosselung von vornherein aus.
 
-### Vergleichsmatrix System-on-Module (SOM)
+### Evaluierungsmatrix System-on-Module (SOM) – Alle Ansätze verworfen
 
-| Kriterium | Allwinner V3s | Allwinner T113-S3 (Empfohlen) | NXP i.MX6ULL | Raspberry Pi CM4 |
-| :--- | :--- | :--- | :--- | :--- |
-| **CPU Core** | 1x Cortex-A7 @ 1.2 GHz | **2x Cortex-A7 @ 1.2 GHz** | 1x Cortex-A7 @ 792 MHz | 4x Cortex-A72 @ 1.5 GHz |
-| **DSP** | Kein | **HiFi4 Audio DSP (400 MHz)**| Kein | Kein |
-| **RAM (integriert)**| 64 MB DDR2 SIP | **128 MB DDR3 SIP** | Extern (128–512 MB) | Extern (1–8 GB) |
-| **Video Decoder** | 1080p @ 60 fps H.264 | **1080p @ 60 fps H.264/H.265**| 720p @ 30 fps (Software) | 4K @ 60 fps |
-| **USB Controller** | 1x OTG 2.0, 1x Host | **1x OTG 2.0, 1x Host 2.0** | 2x USB 2.0 OTG | 1x USB 2.0 |
-| **Leistungsaufnahme**| ~0.8 W (Volllast) | **~1.1 W (Streaming)** | ~1.0 W | > 4.5 W (Überhitzungsgefahr) |
-| **Gehäusetemp. (65°C)**| 72 °C (Passiv) | **76 °C (Passiv)** | 74 °C (Passiv) | > 95 °C (Thermal Throttle) |
-| **Kosten (1k Stk.)**| ca. 4.80 $ | **ca. 6.20 $** | ca. 14.50 $ | ca. 35.00 $ |
+| Kriterium | Allwinner V3s | Allwinner T113-S3 | NXP i.MX6ULL | Raspberry Pi CM4 | **OpenMotorBridge Hybrid (Option C)** |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Architektur-Status** | *Verworfen* | *Verworfen* | *Verworfen* | *Verworfen* | **Ausgewählt & Implementiert** |
+| **CPU / Controller** | 1x Cortex-A7 @ 1.2 GHz | 2x Cortex-A7 @ 1.2 GHz | 1x Cortex-A7 @ 792 MHz | 4x Cortex-A72 @ 1.5 GHz | **ESP32-S3 Dual-Core @ 240 MHz + COTS Dongle** |
+| **Betriebssystem PCBA**| Linux Kernel / Rootfs | Linux Kernel / Rootfs | Linux Kernel / Rootfs | Linux Kernel / Rootfs | **100 % Linux-frei (FreeRTOS / Bare-Metal)** |
+| **Kaltstart / Bootzeit**| 15–20 s | 15–20 s | 18–25 s | > 25 s | **< 300 ms Instant-On (Firmware)** |
+| **RAM (integriert)** | 64 MB DDR2 SIP | 128 MB DDR3 SIP | Extern (128–512 MB) | Extern (1–8 GB) | 512 kB SRAM + 8 MB PSRAM (ESP32-S3) |
+| **Video Decoding** | 1080p @ 60 H.264 | 1080p @ 60 H.264/H.265 | 720p @ 30 (Software) | 4K @ 60 | Im ausgelagerten Automotive COTS-Stick |
+| **Video Encoding (AA)**| Kein Hardware-Enc. | **Kein Hardware-Enc.** | Kein Hardware-Enc. | H.264 HW-Encoder | Im COTS-Stick (Dedizierte ASIC/DSP) |
+| **Leistungsaufnahme** | ~0.8 W | ~1.1 W (Streaming) | ~1.0 W | > 4.5 W | **~0.4 W PCBA 05 (Dongle 0.0 W bei Radio)** |
+| **Gehäusetemp. (65°C)**| 72 °C | 76 °C | 74 °C | > 95 °C (Throttle) | **Kühl (Dongle thermisch isoliert via Pigtail)** |
+| **Dateisystem-Risiko** | Ext4 Korruption | Ext4 Korruption | Ext4 Korruption | Ext4 Korruption | **Null Risiko (Kein eMMC, Flash read-only/FAT)**|
 
-### Display-Auflösungen: Boom! Box GTS vs. Skyline OS (12.3")
+### Warum ein Onboard-Linux-SOM technisch und praktisch verworfen wurde:
 
-| Infotainment-System | Display-Typ & Diagonale | Native Panel-Auflösung | CarPlay Streaming-Profil |
-| :--- | :--- | :--- | :--- |
-| **Boom! Box GTS** | 6.5" TFT Touchscreen | **800 × 480 (WVGA, 5:3)** | 800 × 480 @ 60 fps (H.264 Baseline) |
-| **Skyline OS (2024+)**| 12.3" Ultrawide TFT | **1920 × 720 (Ultrawide 8:3)** | 1920 × 720 / 1280 × 720 Fenster-Modus |
+1. **Die kritische Hardware-Grenze (Fehlender H.264-Hardware-Encoder):**
+   * Kostengünstige Automotive-SoCs wie der Allwinner T113-S3 besitzen zwar eine VPU zur Hardware-**Decodierung** von H.264/H.265 bis 1080p60, verfügen jedoch über **keinen schnellen H.264-Hardware-Encoder**.
+   * Wenn Android Auto und das Motorrad-Display (z. B. Harley 12.3" Panel mit $1920 \times 720$ oder 6.5" Panel mit $800 \times 480$) unterschiedliche Auflösungen oder Frameraten aushandeln, muss das Bildmaterial in Echtzeit umskaliert und neu encodiert werden.
+   * Die schwache Dual-Core Cortex-A7 CPU bricht beim reinen Software-Encoding sofort ein: Die Latenz explodiert auf $> 150\,\text{ms}$, der Stream ruckelt und das Touchscreen-Bediengefühl wird unbenutzbar zäh.
+2. **Kaltstart & Bootzeit (< 300 ms Instant-On gefordert):**
+   * Ein Linux-Kernel mit U-Boot, Device-Tree, Systemd und Netzwerk-Daemons benötigt selbst hochoptimiert mindestens **15 bis 25 Sekunden**, bis die erste Display-Ausgabe erfolgt.
+   * OpenMotorBridge verlangt absolute **Instant-On-Bereitschaft**: Schaltet der Fahrer die Zündung ein, ist der ESP32-S3 in **unter 300 Millisekunden** voll betriebsbereit.
+3. **Dateisystem-Sicherheit bei Zündung-AUS:**
+   * Motorräder werden oft unvermittelt über den Notaus-Killschalter oder das Zündschloss stromlos geschaltet. Ein schreibendes Linux-Dateisystem (Ext4/Journaling auf eMMC oder SD-Karte) korrumpiert dabei unweigerlich über kurz oder lang.
+   * Der ESP32-S3 nutzt LittleFS im NOR-Flash mit wear-leveling und ist absolut immun gegen abrupte Spannungsunterbrechungen.
+4. **Thermische Entkopplung in der Verkleidung:**
+   * In der geschlossenen Verkleidungsmaske direkt über dem Motorblock staut sich im Hochsommer die Hitze auf bis zu +75 °C bis +85 °C. Ein fest verlöteter Linux-SoC auf PCBA 05 würde die Platine thermisch überlasten.
+5. **Wartungsfreiheit bei Apple/Google Protokoll-Updates:**
+   * Ändern Google oder Apple Details ihrer Handshake- oder Krypto-Protokolle, müsste bei einem Onboard-Linux-SOM die gesamte Motorrad-Elektronik geflasht werden.
+   * Beim modularen Ansatz wird der 40-€-Zusatzstick bei Bedarf einfach in 2 Minuten per Smartphone-App aktualisiert, während die Hardware von OpenMotorBridge stabil bleibt.
 
-> [!IMPORTANT]
-> **Reichen 1080p beim Allwinner T113-S3 wirklich aus?**
-> - **Auflösungsbedarf Display:** Das physische 12.3"-Panel der neuen Harley-Generation hat eine native Auflösung von **$1920 \times 720$ Pixeln** (Automotive Breitbild-Standard, Seitenverhältnis 8:3). CarPlay nutzt auf der Harley entweder ein Teilfenster (z. B. $1280 \times 720$) neben den virtuellen Rundinstrumenten oder den vollen Breitbildbereich ($1920 \times 720$). Die CarPlay-Spezifikation unterstützt maximal **1080p ($1920 \times 1080$)** bzw. $1920 \times 720$. Rein auflösungsseitig reicht 1080p also vollkommen aus.
-> - **Die kritische Hardware-Grenze des Allwinner T113-S3:** Der T113-S3 besitzt zwar eine VPU zur Hardware-**Decodierung** von H.264/H.265 bis 1080p60, verfügt jedoch über **keinen schnellen H.264-Hardware-Encoder**!
->   - Wenn Android Auto und Skyline OS dieselbe native Auflösung ($1280 \times 720$ oder $1920 \times 720$) und kompatible H.264-Profile aushandeln, genügt *Zero-Copy NAL Passthrough* (reines Umpaketieren ohne Re-Encoding, CPU-Last $< 12\,\%$, Latenz $< 35\,\text{ms}$).
->   - Müssen jedoch Auflösungen skaliert oder Frame-Raten umgerechnet werden, bricht die Dual-Core Cortex-A7 CPU beim Software-Encoding ein ($> 150\,\text{ms}$ Latenz, Ruckeln).
-
-### Hardware-Design auf PCBA 05 (Universal Front-Node)
+### Das finale Hardware-Design auf PCBA 05 (Universal Front-Node)
 * **Controller:** ESP32-S3-WROOM-1U Dual-Core Xtensa LX7 @ 240 MHz mit Vektor-DSP (Windfilterung) und externem U.FL-Antennenport.
 * **USB-Hub:** Microchip USB2514B Automotive USB 2.0 High-Speed 480 Mbps 4-Port Hub.
 * **Port 1 (Lenker):** High-Speed Daten + 20W Automotive USB-PD Fast Charging (Southchip SC8102, 9V/2.2A & QC 3.0) für Smartphones am Lenker (QuadLock/SP Connect).
@@ -172,7 +178,7 @@ Harley-Davidson unterstützt bei neueren Baujahren nativ ausschließlich **Apple
 │                        PROTOKOLL-BRIDGING ABLAUF-DIAGRAMM                              │
 └────────────────────────────────────────────────────────────────────────────────────────┘
 
-  [Android Smartphone]               [OpenMotorBridge SOM]            [Harley Skyline OS]
+  [Android Smartphone]         [PCBA 05 & CP2AA-Dongle]        [Harley Skyline OS]
            │                                   │                                │
            │ 1. Wireless Android Auto Auth     │                                │
            ├──────────────────────────────────►│                                │
@@ -203,11 +209,11 @@ Harley-Davidson unterstützt bei neueren Baujahren nativ ausschließlich **Apple
 ```
 
 ### Video Pipeline & Latenz-Optimierung
-* **Zero-Copy H.264 NAL Passthrough:** Android Auto sendet Videoframes als standardkonforme H.264 Annex-B NAL-Units. Der Bridge-Daemon transkodiert das Video nicht neu, sondern verpackt die NAL-Units direkt in das von Apple CarPlay geforderte RTP/AVP-Containerformat.
+* **Zero-Copy H.264 NAL Passthrough:** Android Auto sendet Videoframes als standardkonforme H.264 Annex-B NAL-Units. Der im ausgelagerten COTS-Stick arbeitende Automotive Bridge-Chip transkodiert das Video nicht neu, sondern verpackt die NAL-Units direkt in das von Apple CarPlay geforderte RTP/AVP-Containerformat.
 * **Latenz-Budget:**
-  * Wi-Fi Übertragung Smartphone ➔ SOM: **12 ms**
+  * Wi-Fi Übertragung Smartphone ➔ Dongle: **12 ms**
   * NAL Repackaging & Socket Buffer: **3 ms**
-  * USB High-Speed Transfer SOM ➔ Skyline OS: **4 ms**
+  * USB High-Speed Transfer Dongle ➔ Skyline OS: **4 ms**
   * Display-Rendering im Motorrad: **16 ms**
   * **Gesamtlatenz (Glass-to-Glass): 35 ms** (Vollkommen flüssig bei 60 fps, keine spürbare Verzögerung bei Touch-Eingaben).
 
@@ -292,7 +298,7 @@ OpenMotorBridge verhindert dies durch **Source-Aware CAN Handlebar Gating (Quell
                   │                                                           │
                   ▼                                                           ▼
    [BEDINGUNG 1: Harley Quelle]                                [BEDINGUNG 2: Front-Node USB-Hub]
-Infotainment meldet auf CAN (0x388):                         Microchip USB2512B Port 1 Status:
+Infotainment meldet auf CAN (0x388):                         Microchip USB2514B Port 3 Status:
 • FM/AM Radio Tuner       ➔ BLOCKIEREN                      • MP3-Stick eingesteckt & aktiv
 • DAB+ / SiriusXM         ➔ BLOCKIEREN                        ➔ BLOCKIEREN (Harley liest Stick)
 • Lokaler USB-Stick (MP3) ➔ BLOCKIEREN                      • Kein Stick / Phone Charging Only
@@ -314,7 +320,7 @@ Infotainment meldet auf CAN (0x388):                         Microchip USB2512B 
 ```
 
 1. **CAN-Quellenfilter (`audio_source_active` auf `0x388`):** Wippen-Events werden nur weitergeleitet, wenn als Quelle Bluetooth, CarPlay, Android Auto oder der OMB-Proxy aktiv ist. Bei Radio oder internem MP3-Stick bleibt das Smartphone unberührt.
-2. **USB-Hub Status (`USB2512B` Port 1 Sense):** Erkennt hardwareseitig, ob an Port 1 ein Massenspeicher eingesteckt ist.
+2. **USB-Hub Status (`USB2514B` Port 3 Sense):** Erkennt hardwareseitig, ob an Port 3 (Handschuhfach) ein Massenspeicher eingesteckt und von der Headunit gemountet ist.
 3. **AVRCP Playback-State Lock:** Verhindert das automatische Starten von Musik, wenn die Smartphone-App im Zustand `STOPPED` ist.
 4. **WebApp PWA Einstellung:** In Tab 5 kann der Fahrer wählen zwischen `AUTOMATISCH (Quellengefiltert)` (Standard), `IMMER AKTIV` (für Naked Bikes) und `DEAKTIVIERT`.
 
@@ -331,7 +337,7 @@ Normalerweise verlangt Harley, dass der Fahrer vor jeder Fahrt am Smartphone man
 Über den Front-Node (PCBA 05) an der USB-Buchse im Handschuhfach (`J4`) löst OpenMotorBridge das Problem vollautomatisch:
 
 1. **Automotive USB-Ethernet-Schnittstelle:**
-   * Der Allwinner T113-S3 Controller meldet sich als standardisiertes **USB CDC-NCM / RNDIS Netzwerkgerät** bei Skyline OS an.
+   * Die Front-Node Infotainment-Bridge meldet sich als standardisiertes **USB CDC-NCM / RNDIS Netzwerkgerät** bei Skyline OS an (über den hardwarenahen USB-Device-Stack des ESP32-S3 bzw. der Bridge).
    * Skyline OS erkennt die Verbindung wie ein physikalisches Ethernet-Netzwerkkabel (`eth0`).
    * Der interne DHCP-Server des Front-Nodes weist der Harley sofort eine IP-Adresse (`192.168.4.2`) zu.
 2. **Transparenter Smartphone-Uplink:**
@@ -345,22 +351,22 @@ Normalerweise verlangt Harley, dass der Fahrer vor jeder Fahrt am Smartphone man
 
 ---
 
-## 8. Thermomanagement & Kaltstart-Schutz (Automotive Grade)
+## 8. Thermomanagement, Kaltstart-Schutz & Hard-Reboot (Automotive Grade)
 
 ### 1. Kaltstart-Sicherheit (ISO 7637-2 Pulse 4)
-Beim Betätigen des Motorrad-Anlassers bricht die Bordnetzspannung oft kurzzeitig auf **5.8 V bis 6.5 V** ein. Der integrierte Aufwärts-/Abwärtswandler (Buck-Boost TPS63070) auf PCBA 05 hält die 5.0 V VBUS-Versorgung des SOMs absolut stabil bei **5.00 V ± 1%**, sodass das Navigationssystem beim Starten des Motors **nicht** neu bootet.
+Beim Betätigen des Motorrad-Anlassers bricht die Bordnetzspannung oft kurzzeitig auf **5.8 V bis 6.5 V** ein. Der integrierte Aufwärts-/Abwärtswandler (Buck-Boost TPS63070) auf PCBA 05 hält die 5.0 V VBUS-Versorgung des USB2514B Hubs, des ESP32-S3 und der Peripherie absolut stabil bei **5.00 V ± 1%**, sodass das Navigationssystem beim Starten des Motors **nicht** neu bootet.
 
-### 2. Fairing-Hitzeschutz (Bis 85 °C Umgebung)
-In der geschlossenen Frontverkleidung über dem heißen V-Twin-Motor staut sich im Hochsommer die Hitze. Das SOM nutzt ein mehrstufiges DVFS-Profil (Dynamic Voltage and Frequency Scaling):
-* **< 65 °C:** Volle Leistung (Dual-Core @ 1.2 GHz, 1080p60 NAL passthrough).
-* **65 °C – 78 °C:** Taktfrequenz 1.0 GHz, Core-Spannung von 1.20 V auf 1.10 V gesenkt (-28 % Abwärme).
-* **> 78 °C:** Taktfrequenz 816 MHz, Core-Spannung 1.00 V (-48 % Abwärme). Der 720p60 Video-Stream läuft ruckelfrei weiter.
+### 2. Fairing-Hitzeschutz & Thermische Entkopplung (Bis 85 °C Umgebung)
+In der geschlossenen Frontverkleidung über dem heißen V-Twin-Motor staut sich im Hochsommer die Hitze. OpenMotorBridge schützt die Elektronik durch ein dreistufiges thermisches Schutzkonzept:
+* **Niedrigste Eigenabwärme auf PCBA 05:** Der ESP32-S3 läuft bei 240 MHz mit nur ca. 0.4 W Leistungsaufnahme. Selbst bei 65 °C Verkleidungstemperatur bleibt die Chiptemperatur weit unterhalb des Limits von 105 °C (AEC-Q100 Grade 2).
+* **Physisch ausgelagerter CP2AA-Dongle:** Der Dongle sitzt nicht auf der Platine, sondern ist über das geschirmte 25–30 cm Pigtail-Kabel mit 3M Dual-Lock am Verkleidungsträger in einer besser durchlüfteten Zone entkoppelt.
+* **Automatisches TPS2051B Not-Power-Gating:** Über den Onboard-Temperatursensor (SHTC3 / LM75) überwacht die Firmware das thermische Budget. Steigt die Temperatur im extremen Hochsommer-Stau über 75 °C oder ist kein Smartphone gekoppelt (Radio/FM aktiv), schaltet der ESP32-S3 den VBUS des Dongles über den TI TPS2051B Lastschalter sofort stromlos (0.0 W Verlustleistung). Der Dongle kühlt ab und wird vor thermischem Hitzetod geschützt.
 
 ### 3. One-Click Hard Reboot via PWA & Lenkertaste
-Sollte sich das Smartphone oder der CarPlay-Stack aufhängen, kann das SOM über die PWA (Tab 1 Cockpit & Tab 5 Hardware) oder durch 3-sekündiges Halten der PTT-Taste neu gestartet werden:
-* ESP32-S3 sperrt das P-MOSFET Gate für **2500 ms**.
-* SOM und USB-Bus sind restlos stromlos (0.0 V, Entladung über 100 Ω Pulldown).
-* Saubere Re-Initialisierung des USB-Handshakes mit dem Motorrad in unter 6 Sekunden.
+Sollte sich das Smartphone oder der CarPlay-Handshake einmal aufhängen, kann der Dongle über die PWA (Tab 1 Cockpit & Tab 5 Hardware) oder durch 3-sekündiges Halten der Lenker-PTT-Taste neu gestartet werden:
+* Der ESP32-S3 zieht den Enable-Pin des **TI TPS2051B High-Side-Schalters** für **2500 ms** auf Low.
+* Der Dongle-USB-Port (Port 2) wird restlos stromlos (0.0 V, aktive Schnellentladung).
+* Saubere Re-Initialisierung des USB-Handshakes mit dem Motorrad in unter 4 Sekunden.
 
 ---
 
@@ -373,4 +379,4 @@ Sollte sich das Smartphone oder der CarPlay-Stack aufhängen, kann das SOM über
 | **Android Auto** | Auf neueren Harleys oft nicht unterstützt | **Voll unterstützt via Android-Auto-to-CarPlay Bridge** |
 | **Helmmikrofon** | Nur eigenes Dongle-Mic oder schlechte BT-Kopplung| **Direktkopplung mit Sena/Cardo Helmen via I2S** |
 | **Radar Ducking** | Keine Verbindung zu Heck-Radar Sensoren | **Raised-Cosine Ducking (-18 dB) bei Annäherung** |
-| **Sommerhitze (>65°C)**| Stürzt nach 20–40 min ab | **Automotive DVFS & Kaltstart-geschützt bis 85 °C** |
+| **Sommerhitze (>65°C)**| Stürzt nach 20–40 min ab | **Thermisch isoliert (30 cm Pigtail) & TPS2051B Schutz-Gating bis 85 °C** |

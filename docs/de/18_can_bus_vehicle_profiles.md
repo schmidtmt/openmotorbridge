@@ -269,14 +269,17 @@ Da der CAN-Bus eines Motorrads sicherheitskritische Steuergeräte (ABS-Modulator
      • Bei Leitungsstörungen (z. B. Wackelkontakt) trennt der ESP32 TWAI-Controller den Bus
        in < 1 Millisekunde ab und führt erst nach 1.000 ms Ruhezeit einen Kaltstart durch.
 
-  3. FAHRZEUG-MASSENTRENNUNG
-     • Der CAN-Transceiver ist über die Spannungs- und Massenetzwerke auf PCBA 01 gegen
-       Masseversatz zwischen Heck- und Front-Knoten geschützt.
+  3. FAHRZEUG-MASSENTRENNUNG & DUAL-NODE ARCHITEKTUR
+     • Sowohl auf der Zentralbox (PCBA 01) als auch auf dem Front-Knoten (PCBA 05) schützt das
+       gefilterte Masse- und Schutznetzwerk des TI TCAN334G Transceivers gegen fahrzeugweiten
+       Masseversatz zwischen Heck und Cockpit.
+     • Das elektronische Solid-State Relais (CPC1017N) garantiert zudem eine automatische
+       120-Ohm-Abschlussimpedanz-Erkennung und verhindert Bus-Kollaps bei Parallelschaltung.
 
   4. SOURCE-AWARE HANDLEBAR GATING (KOLLISIONSSCHUTZ)
      • Um zu verhindern, dass Lenkertasten bei Radio- oder MP3-Stick-Wiedergabe versehentlich
        parallel das Smartphone-Streaming starten, wertet OMB die aktive Audioquelle
-       (z. B. 0x388 `infotainment_source_active`) und den USB-Hub-Status aus.
+       (z. B. 0x388 `infotainment_source_active`) und den USB2514B Hub-Status (Port 3 Sense) aus.
      • Events werden nur an das Smartphone durchgereicht, wenn OMB/CarPlay/BT aktiv ist!
 ```
 
