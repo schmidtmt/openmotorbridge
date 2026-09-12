@@ -74,6 +74,20 @@ Für den lüfterlosen Dauerbetrieb im geschlossenen Hohlraum der Motorrad-Frontv
 | **Gehäusetemp. (65°C)**| 72 °C (Passiv) | **76 °C (Passiv)** | 74 °C (Passiv) | > 95 °C (Thermal Throttle) |
 | **Kosten (1k Stk.)**| ca. 4.80 $ | **ca. 6.20 $** | ca. 14.50 $ | ca. 35.00 $ |
 
+### Display-Auflösungen: Boom! Box GTS vs. Skyline OS (12.3")
+
+| Infotainment-System | Display-Typ & Diagonale | Native Panel-Auflösung | CarPlay Streaming-Profil |
+| :--- | :--- | :--- | :--- |
+| **Boom! Box GTS** | 6.5" TFT Touchscreen | **800 × 480 (WVGA, 5:3)** | 800 × 480 @ 60 fps (H.264 Baseline) |
+| **Skyline OS (2024+)**| 12.3" Ultrawide TFT | **1920 × 720 (Ultrawide 8:3)** | 1920 × 720 / 1280 × 720 Fenster-Modus |
+
+> [!IMPORTANT]
+> **Reichen 1080p beim Allwinner T113-S3 wirklich aus?**
+> - **Auflösungsbedarf Display:** Das physische 12.3"-Panel der neuen Harley-Generation hat eine native Auflösung von **$1920 \times 720$ Pixeln** (Automotive Breitbild-Standard, Seitenverhältnis 8:3). CarPlay nutzt auf der Harley entweder ein Teilfenster (z. B. $1280 \times 720$) neben den virtuellen Rundinstrumenten oder den vollen Breitbildbereich ($1920 \times 720$). Die CarPlay-Spezifikation unterstützt maximal **1080p ($1920 \times 1080$)** bzw. $1920 \times 720$. Rein auflösungsseitig reicht 1080p also vollkommen aus.
+> - **Die kritische Hardware-Grenze des Allwinner T113-S3:** Der T113-S3 besitzt zwar eine VPU zur Hardware-**Decodierung** von H.264/H.265 bis 1080p60, verfügt jedoch über **keinen schnellen H.264-Hardware-Encoder**!
+>   - Wenn Android Auto und Skyline OS dieselbe native Auflösung ($1280 \times 720$ oder $1920 \times 720$) und kompatible H.264-Profile aushandeln, genügt *Zero-Copy NAL Passthrough* (reines Umpaketieren ohne Re-Encoding, CPU-Last $< 12\,\%$, Latenz $< 35\,\text{ms}$).
+>   - Müssen jedoch Auflösungen skaliert oder Frame-Raten umgerechnet werden, bricht die Dual-Core Cortex-A7 CPU beim Software-Encoding ein ($> 150\,\text{ms}$ Latenz, Ruckeln).
+
 ### Hardware-Design auf PCBA 05
 * **SoC:** Allwinner T113-S3 im kompakten QFN128-Gehäuse mit 128 MB integriertem DDR3-RAM.
 * **Speicher:** 8 GB eMMC 5.1 (Automotive pSLC Mode für 100.000 Schreibzyklen, vibrationsfest).
@@ -83,7 +97,40 @@ Für den lüfterlosen Dauerbetrieb im geschlossenen Hohlraum der Motorrad-Frontv
 
 ---
 
-## 3. Protokoll-Bridging: Android Auto zu Apple CarPlay Emulation
+## 3. Architektur-Dilemma: Linux-Blackbox vs. Embedded RTOS vs. Modularer Dongle
+
+In der Praxis existiert eine berechtigte Skepsis gegenüber einer „Linux-Blackbox“ im fest verbauten Front-Knoten:
+- **Nachteile einer integrierten Linux-Lösung:** Bootzeiten von 15–25 Sekunden, Dateisystem-Korruption (Ext4/eMMC) bei hartem Ausschalten der Zündung, ständiger Wartungsaufwand für Kernel-Sicherheits-Patches und Inkompatibilitäten bei neuen Android Auto / iOS Major-Updates.
+- **Warum scheidet ein FPGA aus?** Apple CarPlay und Android Auto sind keine reinen Videoschnittstellen (wie HDMI oder LVDS), sondern hochkomplexe Netzwerk- und Krypto-Software-Stacks (OSI Schichten 4–7: WPA3 Wi-Fi Direct, TLS 1.3, Bonjour/mDNS, Hunderte Google Protobuf RPCs). Eine Synthese in VHDL/Verilog ist unwirtschaftlich und erfordert im Endeffekt wiederum einen Soft-Core-Prozessor mit Betriebssystem.
+
+### Die drei Lösungswege im Vergleich
+
+| Kriterium | Option A: Festes Linux-SOM auf PCBA 05 | Option B: Pure MCU / FreeRTOS (ESP32-S3 / Crossover MCU) | Option C: OpenMotorBridge Smart-Managed Dongle (Empfohlen) |
+| :--- | :--- | :--- | :--- |
+| **Linux-Blackbox?** | **Ja** (Kernel, Rootfs, Wartung) | **Nein** (100% Bare-Metal Firmware) | **Nein** (OMB bleibt 100% Linux-frei) |
+| **Kaltstart / Bootzeit** | 15–20 Sekunden | **< 300 Millisekunden** | **< 300 Millisekunden (OMB instant-on)** |
+| **iPhone Wireless CarPlay** | Ja | **Ja** (Schlanker RTSP/CarPlay Bridge Stack)| **Ja** (Nativ über USB oder Crossover-MCU) |
+| **Android Auto ➔ CarPlay** | Ja (via NAL Passthrough) | Extrem limitiert (kein H.264 Scaling) | **Ja** (Über ausgelagerten Mini-Stick) |
+| **Wartung bei Google/Apple Update** | Firmware-Flash der Motorrad-Hardware | Firmware-Flash nötig | **Einfaches 2-Minuten-App-Update des Sticks** |
+| **Platzbedarf in Sharknose** | Minimal (direkt auf PCB) | Minimal (direkt auf PCB) | **Minimal** (Kompakt im Sharknose-Handschuhfach) |
+| **Ruhestrom bei Standby** | Sleep-Mode Steuerung nötig | **0.0 µA** (Deep Sleep) | **Echte 0.0 µA** (TPS2553 Power-Switch trennt VBUS) |
+
+### Das empfohlene hybride Referenzdesign: OpenMotorBridge Smart-Managed Frontnode
+1. **Die OpenMotorBridge PCBA 05 bleibt zu 100 % eine wartungsfreie Firmware-Plattform (FreeRTOS / ESP32-S3):**
+   - Garantiert 0.0 µA Standby-Verbrauch.
+   - Bootzeit $< 300\,\text{ms}$ beim Einschalten der Zündung.
+   - Steuert CAN-Bus, Lenkertaster, Schräglagensensorik, Audio-DSP, Raised-Cosine Ducking und die **vollständige WHIM-Headset-Emulation**.
+2. **Für iPhone-Nutzer:**
+   - Direktes, natives CarPlay ohne jeden Zusatzdongle über den Frontnode.
+3. **Für Android-Nutzer auf Harley-Davidson (Skyline OS / Boom! Box):**
+   - Ein ultrakompakter externer Adapter (z. B. Ottocast U2-X Pro oder Carlinkit 5.0) wird in das interne Fach der Sharknose/Batwing gelegt.
+   - **PCBA 05 übernimmt das intelligente Power-Management:** Ein Automotive-Lastschalter (TI TPS2553) kappt die 5V VBUS-Leitung bei Zündung-Aus vollständig (kein Leersaugen der Motorradbatterie!).
+   - **PCBA 05 emuliert das WHIM und das Helmmikrofon:** Der Dongle muss sich nicht um Harley-Sperren oder Helmkabel kümmern; OMB schaltet die Headunit frei und schleift das Bluetooth-Helmmikrofon direkt digital ein.
+   - **Wartungsfreiheit:** Wenn Google das Android Auto Protokoll patcht, aktualisiert der Nutzer einfach die Dongle-App über das Smartphone – die fest im Motorrad verbaute OpenMotorBridge bleibt absolut unangetastet.
+
+---
+
+## 4. Protokoll-Bridging: Android Auto zu Apple CarPlay Emulation
 
 Harley-Davidson unterstützt bei neueren Baujahren nativ ausschließlich **Apple CarPlay**. Android-Nutzer bleiben außen vor. Die OpenMotorBridge implementiert einen universellen Übersetzer:
 
@@ -131,21 +178,22 @@ Harley-Davidson unterstützt bei neueren Baujahren nativ ausschließlich **Apple
   * Display-Rendering im Motorrad: **16 ms**
   * **Gesamtlatenz (Glass-to-Glass): 35 ms** (Vollkommen flüssig bei 60 fps, keine spürbare Verzögerung bei Touch-Eingaben).
 
----
-
-## 4. WHIM Headset-Bypass & Helmmikrofon-Routing
+## 5. WHIM Headset-Bypass & Helmmikrofon-Routing
 
 ### Das Harley WHIM-Problem
 Harley-Davidson sperrt die CarPlay-Aktivierung im Infotainment-System, wenn kein kabelgebundenes 7-Pin-Headset oder das 450 € teure **Wireless Headset Interface Module (WHIM)** erkannt wird. Zubehör-Headsets (wie Standard-Sena oder Cardo) werden zwar per Bluetooth gekoppelt, schalten CarPlay aber **nicht** frei oder degradieren die Audioausgabe auf minderwertiges Mono (A2DP blockiert).
 
 ### OpenMotorBridge Virtual WHIM Generator
-1. **USB iAP2 Feature Descriptor:** Das SOM meldet sich am USB-Bus als zertifiziertes Apple MFi-Zubehör mit aktiviertem Sprach-Endpunkt (`VoiceOverAudio` Feature-Bit `0x04` aktiv).
-2. **Virtueller Mikrofon-Kanal:** Das Helmmikrofon des Fahrers (angeschlossen an Kassette Pod 1 oder Pod 2) wird digital über den ESP32-S3 I2S-Bus an das SOM übertragen.
-3. **Nahtlose Sprachassistenten:** Wenn der Fahrer die Lenkertaste drückt oder *"Hey Siri"* bzw. *"Hey Google"* sagt, öffnet das SOM den Mikrofonstream direkt zum Smartphone. Das Motorrad akzeptiert die Audioeingabe ohne Fehlermeldung.
+1. **USB iAP2 Feature Descriptor:** Die Bridge meldet sich am USB-Bus als zertifiziertes Apple MFi-Zubehör mit aktiviertem Sprach-Endpunkt (`VoiceOverAudio` Feature-Bit `0x04` aktiv).
+2. **Reines Bluetooth HD Audio Helmmikrofon-Routing (100% kabellos):**
+   - Der Fahrer- (und Sozius-)Helm ist **ausschließlich drahtlos per Bluetooth HD Audio** (LE Audio LC3 oder Bluetooth Classic HFP 1.8 Wideband Speech) mit OpenMotorBridge gekoppelt. Es gibt **keinerlei Kabelverbindung** zum Helm!
+   - Die Kassetten-Pods (Pod 1 / Pod 2) dienen rein als optionale **Fahrzeug-Schnittstellen** (z. B. für den kabelgebundenen Harley-OEM-Kabelbaum älterer Boom! Box GTS Modelle), niemals für das Headset des Fahrers.
+   - Der ESP32-S3 Audio-DSP übernimmt die Windgeräuschunterdrückung, AGC und das Raised-Cosine-Ducking (-18 dB bei Radar-Warnung) und schleift den aufbereiteten digitalen Sprachkanal via USB Audio Class (UAC) direkt in die Headunit ein.
+3. **Nahtlose Sprachassistenten:** Wenn der Fahrer die Lenkertaste drückt oder *"Hey Siri"* bzw. *"Hey Google"* sagt, öffnet die Bridge den Mikrofonstream direkt zum Smartphone. Das Motorrad akzeptiert die Audioeingabe ohne jede Fehlermeldung oder WHIM-Sperre.
 
 ---
 
-## 5. Lenkerbedienung & CAN-Bus Injektion
+## 6. Lenkerbedienung & CAN-Bus Injektion
 
 Über die Universal Front-Node (PCBA 05) werden die Bedienelemente des Motorrads direkt mit den Smartphone-Funktionen verknüpft:
 
@@ -167,7 +215,7 @@ Harley-Davidson sperrt die CarPlay-Aktivierung im Infotainment-System, wenn kein
 
 ---
 
-## 6. Thermomanagement & Kaltstart-Schutz (Automotive Grade)
+## 7. Thermomanagement & Kaltstart-Schutz (Automotive Grade)
 
 ### 1. Kaltstart-Sicherheit (ISO 7637-2 Pulse 4)
 Beim Betätigen des Motorrad-Anlassers bricht die Bordnetzspannung oft kurzzeitig auf **5.8 V bis 6.5 V** ein. Der integrierte Aufwärts-/Abwärtswandler (Buck-Boost TPS63070) auf PCBA 05 hält die 5.0 V VBUS-Versorgung des SOMs absolut stabil bei **5.00 V ± 1%**, sodass das Navigationssystem beim Starten des Motors **nicht** neu bootet.
@@ -186,7 +234,7 @@ Sollte sich das Smartphone oder der CarPlay-Stack aufhängen, kann das SOM über
 
 ---
 
-## 7. Zusammenfassung & Vorteile
+## 8. Zusammenfassung & Vorteile
 
 | Feature | Herkömmlicher Carlinkit / Ottocast Dongle | OpenMotorBridge PCBA 05 Bridge |
 | :--- | :--- | :--- |
