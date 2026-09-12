@@ -116,17 +116,46 @@ In der Praxis existiert eine berechtigte Skepsis gegenüber einer „Linux-Black
 | **Ruhestrom bei Standby** | Sleep-Mode Steuerung nötig | **0.0 µA** (Deep Sleep) | **Echte 0.0 µA** (TPS2553 Power-Switch trennt VBUS) |
 
 ### Das empfohlene hybride Referenzdesign: OpenMotorBridge Smart-Managed Frontnode
-1. **Die OpenMotorBridge PCBA 05 bleibt zu 100 % eine wartungsfreie Firmware-Plattform (FreeRTOS / ESP32-S3):**
-   - Garantiert 0.0 µA Standby-Verbrauch.
-   - Bootzeit $< 300\,\text{ms}$ beim Einschalten der Zündung.
-   - Steuert CAN-Bus, Lenkertaster, Schräglagensensorik, Audio-DSP, Raised-Cosine Ducking und die **vollständige WHIM-Headset-Emulation**.
-2. **Für iPhone-Nutzer:**
-   - Direktes, natives CarPlay ohne jeden Zusatzdongle über den Frontnode.
-3. **Für Android-Nutzer auf Harley-Davidson (Skyline OS / Boom! Box):**
-   - Ein ultrakompakter externer Adapter (z. B. Ottocast U2-X Pro oder Carlinkit 5.0) wird in das interne Fach der Sharknose/Batwing gelegt.
-   - **PCBA 05 übernimmt das intelligente Power-Management:** Ein Automotive-Lastschalter (TI TPS2553) kappt die 5V VBUS-Leitung bei Zündung-Aus vollständig (kein Leersaugen der Motorradbatterie!).
-   - **PCBA 05 emuliert das WHIM und das Helmmikrofon:** Der Dongle muss sich nicht um Harley-Sperren oder Helmkabel kümmern; OMB schaltet die Headunit frei und schleift das Bluetooth-Helmmikrofon direkt digital ein.
-   - **Wartungsfreiheit:** Wenn Google das Android Auto Protokoll patcht, aktualisiert der Nutzer einfach die Dongle-App über das Smartphone – die fest im Motorrad verbaute OpenMotorBridge bleibt absolut unangetastet.
+
+#### 1. Die Ausgangslage bei Harley-Davidson (Skyline OS & Boom! Box GTS)
+* **Apple CarPlay ist ab Werk nur KABELGEBUNDEN:** Der Fahrer muss das Smartphone jedes Mal umständlich im Fach an das USB-Kabel anstecken.
+* **Android Auto existiert ab Werk GAR NICHT:** Harley verweigert die native Android-Auto-Lizenzierung.
+* **Wichtige Dongle-Unterscheidung (CP2AA vs. reine AA-Dongles):**
+  Ein herkömmlicher Wireless-Android-Auto-Dongle (wie z. B. *Motorola MA1*) funktioniert an einer Harley **überhaupt nicht**, weil er eine fahrzeugseitige Android-Auto-Schnittstelle voraussetzt. An einer Harley muss der Adapter zwingend ein **Übersetzungs-Adapter (CP2AA: CarPlay-to-Android-Auto)** sein (z. B. *Ottocast U2-X Pro* oder *Carlinkit 4.0*), der sich gegenüber der Harley als Apple CarPlay ausgibt und dem Smartphone drahtloses Android Auto bereitstellt!
+
+#### 2. Der Mehrwert: Vollautomatischer, Headless-Betrieb durch OpenMotorBridge
+
+Normalerweise nerven diese 2-in-1-Adapter im Alltag, weil man zwischen CarPlay und Android Auto manuell umschalten oder auf dem Display warten muss. OpenMotorBridge eliminiert dieses Problem vollständig:
+
+```
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│             OPENMOTORBRIDGE HEADLESS DONGLE MANAGEMENT (PCBA 05)                       │
+└────────────────────────────────────────────────────────────────────────────────────────┘
+
+  [1. FAHRER-ERKENNUNG BEI ZÜNDUNG EIN (< 200 ms via BLE / PWA-Profil)]
+  ├──► Fall A: Fahrer hat Android-Smartphone erkannt
+  │    • OMB schaltet den TPS2051B Lastschalter EIN (5.0 V VBUS)
+  │    • OMB steuert den Dongle headless an ──► Direktstart im CP2AA-Übersetzungsmodus
+  │    • Kein Auswahldialog ("iPhone / Android?") auf dem Harley-Screen!
+  │    • Harley zeigt kabelloses Android Auto über CarPlay-Stream.
+  │
+  ├──► Fall B: Fahrer hat iPhone erkannt
+  │    • Option 1: Dongle wird von OMB im reinen Wireless-CarPlay Pass-Through gestartet
+  │      (macht aus dem kabelgebundenen Skyline OS CarPlay ein drahtloses CarPlay!).
+  │    • Option 2 (Handy am Ladekabel): OMB lässt den Dongle-Port STROMLOS.
+  │
+  └──► Fall C: Kein gekoppeltes Smartphone / Kurze Tour / Radio-Betrieb
+       • OMB lässt den Dongle-USB-Port KOMPLETT AUS (0.0 mA).
+       • Keine Erwärmung in der Verkleidung, kein Funkmüll, kein Boot-Overhead!
+```
+
+#### 3. Kernvorteile für den Fahrer
+1. **Drahtlose Freiheit für beide Welten:**
+   - iPhone-Fahrer erhalten **Wireless CarPlay** (ohne Kabel ins Fach fummeln zu müssen).
+   - Android-Fahrer erhalten **Wireless Android Auto** auf dem Harley-Display.
+2. **Absolut Headless:** Kein Tastendruck am Dongle, kein Menü im Webbrowser (`192.168.1.101`), kein Auswahlscreen.
+3. **Hardware-Schutz & Zero-Drain:** Der Dongle läuft nur dann, wenn er wirklich gebraucht wird. Ansonsten bleibt er stromlos.
+4. **Wartungsfreiheit:** Wenn Google oder Apple ihre Protokolle ändern, bleibt die feste Motorrad-Elektronik unberührt – man aktualisiert einfach den 40-€-Stick per Smartphone-App.
 
 ---
 
