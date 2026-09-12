@@ -956,6 +956,50 @@ Auf Cruisern und Baggern wird das Garmin Varia mmWave-Radar von Pod 3 **entkoppe
 
 ---
 
+### 9.7 Custom-Bikes & Bobber: Stealth Center-Underfender Mount vs. Seitlicher Kennzeichenhalter
+
+Auf vielen Custom-Bikes, Bobbern, Choppern und modifizierten Softails (z. B. Breakout, Fat Boy, Sportster S, Indian Scout) montieren Besitzer einen **seitlichen Kennzeichenhalter**, um den breiten Hinterreifen ($180\dots 260\,\text{mm}$) optisch vollständig freizulegen und den Heckfender extrem kurz („Short-Cut“) zu halten. 
+
+Obwohl diese Lösung ästhetisch oft kritisiert wird (asymmetrische Störung der Linienführung), stellt sich in der Praxis die entscheidende Frage: **Wo wird bei solchen Maschinen das Garmin Varia mmWave-Radar platziert?**
+
+#### 9.7.1 Warum Radar am seitlichen Kennzeichenhalter lebensgefährlich ist (Die 3 K.O.-Kriterien)
+
+Das mmWave-Radar darf **unter keinen Umständen** an den seitlichen Kennzeichenhalter montiert werden:
+
+1. **Tödliche RF-Abschattung (Blind Spot im rechten Hecksektor):**
+   * Das mmWave-Radar (24 GHz / 77 GHz) sendet in einem horizontalen Fächer von ca. $\pm 20^\circ$ bis $\pm 22{,}5^\circ$ ($40^\circ\dots 45^\circ$ Gesamtkegel).
+   * Bei einer linken Achsmontage ($25\dots 35\,\text{cm}$ Versatz zur Fahrzeuglängsachse) verdeckt der breite Hinterreifen ($200\dots 260\,\text{mm}$ Karkasse + Felge) den gesamten Signalpfad nach rechts-hinten.
+   * **Konsequenz:** Fahrzeuge, die auf mehrspurigen Straßen oder Autobahnen von rechts hinten auflaufen, rechts überholen oder im toten Winkel mitschwimmen, werden vom Radar **vollständig übersehen**.
+2. **100 % ungefederte Massen ($20\dots 30\,g$ Schockbelastung):**
+   * Seitliche Halter sind starr an der Schwinge oder direkt auf der Radachse verschraubt.
+   * Jeder Schlaglochstoß hämmert mit $20\dots 30\,g$ ungedämpft in den Ausleger. Durch den langen Hebelarm entstehen immense dynamische Biegemomente (Kuhschwanz-Vibrationen), die Bajonettverschlüsse und Leiterplatten-Lötstellen in kürzester Zeit zerstören.
+3. **Schräglagen-Asymmetrie & Boden-Clutter:**
+   * In Linkskurven sinkt das Radar durch den $30\,\text{cm}$-Hebelarm extrem nah an den Asphalt ab (führt zu Multipath-Bodenreflexionen und Falschalarmen), während es in Rechtskurven steil in den Himmel gerichtet ist.
+
+#### 9.7.2 Die OpenMotorBridge-Architektur: Striktes Entkopplungsprinzip & Stealth Center-Underfender Mount
+
+Für OpenMotorBridge gilt das fundamentale Sicherheitsprinzip: **Das Radar sitzt IMMER zentriert in der Fahrzeug-Symmetrieachse und an der gefederten Masse.**
+
+Hierfür wurde der **Stealth Center Under-Fender Mount** ([`02_pod_base/radar_center_underfender_mount.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/radar_center_underfender_mount.scad)) entwickelt:
+
+![Stealth Center Under-Fender Mount CAD](../images/cad/radar_center_underfender_mount_cad.png)
+
+*Abbildung 8.31: 3D-CAD-Modell des Stealth Center Under-Fender Mounts (`radar_center_underfender_mount.scad`). Sichtbar sind die gewölbte Basisflansch-Sattelplatte ($R = 210\,\text{mm}$) für Schraub- oder 3M-VHB-Klebemontage, die ultrakompakte Clevis-Gabel mit radialer 36-Zahn Hirth-Formschluss-Rastung ($10^\circ$-Ausrichtung) und der verdeckte M8-Kabelschacht zur Kotflügel-Innenseite.*
+
+* **Nahtlose Stealth-Ästhetik für Custom-Hecks:**
+  Der Halter sitzt direkt mittig unter der Abschlusskante des Heckkotflügels oder an den inneren Fender-Struts. Von hinten ist das Radar im Schatten des Kotflügels kaum wahrnehmbar und wirkt wie eine winzige, edle Designer-Rückleuchte. Der breite Hinterreifen bleibt optisch zu $100\,\%$ frei.
+* **Gefederte Masse & Schwingungsschutz:**
+  Da die Montage am Fender / Rahmen (gefederte Masse) erfolgt, reduzieren sich Fahrbahnschläge von $25\,g$ auf unkritische $2\dots 4\,g$.
+* **Formschluss-Hirth-Gelenk ($10^\circ$-Schritte):**
+  Die Clevis-Gabel nimmt das diebstahlhemmende Garmin Varia Dock ([`radar_varia_gopro_lock_dock.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/radar_varia_gopro_lock_dock.scad)) auf. Die formschlüssige 36-Zahn Hirth-Verzahnung arretiert den Neigungswinkel absolut rutschfest horizontal zur Fahrbahn.
+* **Flexible Montage (Kleben oder Schrauben):**
+  - **3M VHB 5952:** Breite plane Auflagefläche für bohrungsfreie Montage auf makellosen Custom-Lackierungen.
+  - **2x M4/M5 Senkkopfschrauben:** Zentraler Bohrungsabstand von $26\,\text{mm}$ für formschlüssige Verschraubung an vorhandenen Fender-Bohrungen.
+* **Verdeckte M8-Kabelführung:**
+  Das M8-Kabel verschwindet sofort nach oben durch einen integrierten $\varnothing 5{,}5\,\text{mm}$ Schacht an die Kotflügelinnenseite und läuft dort geschützt im serienmäßigen Kabelkanal nach vorne zur Zentralbox.
+
+---
+
 ## 10. CAD-Dateistruktur & OpenSCAD-Modulbaukasten (STL-Bibliothek)
 
 Die CAD-Dateistruktur von OpenMotorBridge folgt einer strengen hierarchischen CSG-Architektur (Constructive Solid Geometry):
@@ -1011,6 +1055,7 @@ Das stationäre MagSafe-Rahmendock ([`009_magsafe_frame_dock.scad`](file:///User
 | **Rahmendock** | MagSafe Rohrschellen-Bügel (Ø 26 mm) | `02_pod_base/components/009_magsafe_frame_clamp.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
 | **Rahmendock** | MagSafe Rahmen-Dock Gehäuseunterteil (PCB-Ledge & M2.5 Senkung) | `02_pod_base/components/009_magsafe_frame_lid.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
 | **Radarhalter** | Entkoppelte Kennzeichen-Radarhalterung | `02_pod_base/radar_license_plate_bracket.stl` | `02_pod_base/radar_license_plate_bracket.scad` |
+| **Radarhalter** | Stealth Center Under-Fender Radar-Mount (Custom / Bobber) | `02_pod_base/radar_center_underfender_mount.stl` | `02_pod_base/radar_center_underfender_mount.scad` |
 | **Radar-Zubehör** | Garmin Varia Quarter-Turn Anti-Theft Lock Dock | `02_pod_base/radar_varia_gopro_lock_dock.stl` | `02_pod_base/radar_varia_gopro_lock_dock.scad` |
 | **Kassette** | Universeller Basisschlitten mit Dichtung | `03_pod_cartridges/cartridge_base_sled.stl` | `03_pod_cartridges/00_base_sled.scad` |
 | **Kassette** | Magnetischer Diebstahlschutz-Rastbolzen (Sägezahn-Mechanik) | `03_pod_cartridges/cartridge_magnetic_lock_latch.stl` | `03_pod_cartridges/parts/05_magnetic_lock_latch.scad` |

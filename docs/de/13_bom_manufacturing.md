@@ -102,7 +102,8 @@ Dieses Dokument enthält die vollständige Bauteilliste (Bill of Materials) und 
   * **Referenz-Kit 1 (CVO Road Glide ST & New Touring):** `cvo_st_undercowl_skeleton_dock.stl` (aufrechtes Federsitz-Dock unter Carbonhutze) + `cvo_st_telemetry_fin.stl` (2,4 GHz Heckfinne) + `saddlebag_lid_dock.stl` (Kofferdeckel-Dock).
   * **Referenz-Kit 2 (Road King Special):** `pod3_touring_fender_console.stl` (organische Kotflügel-Konsole für 1/4"-20 Mutter) + `saddlebag_lid_dock.stl`.
   * **Referenz-Kit 3 (Classic Bagger & Cruiser):** `pod3_touring_stealth_console.stl` (flache Touring-Konsole).
-  * **Entkoppelter Radar-Halter (Cruiser / Bagger):** `radar_license_plate_bracket.stl` (zentrisch symmetrische M6-Klemmung unterhalb Kennzeichenhalter mit M5 GoPro-Gelenk & verdeckter M8-Kabelführung).
+  * **Entkoppelter Radar-Halter (Cruiser / Bagger normal):** `radar_license_plate_bracket.stl` (zentrisch symmetrische M6-Klemmung unterhalb Kennzeichenhalter mit M5 GoPro-Gelenk & verdeckter M8-Kabelführung).
+  * **Stealth Center Under-Fender Radar-Halter (Custom / Bobber mit seitlichem Halter):** `radar_center_underfender_mount.stl` (zentrisch gewölbte R=210 mm Unterfender-Sattelplatte für 3M VHB oder M4/M5 Schrauben, gefederte Masse, 100% freier RF-Sichtkegel).
 
 ---
 
