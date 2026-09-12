@@ -35,6 +35,18 @@
                     <span class="status-dot" id="dot-ble"></span>
                     <span id="label-ble-status" data-i18n="ble_offline">BLE Offline</span>
                 </div>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <select id="select-sim-track" class="select-custom" style="padding: 6px 10px; font-size: 0.78rem; font-weight: 600; background: rgba(13,17,23,0.9); border: 1px solid var(--border-accent); border-radius: var(--radius-sm); color: var(--text-primary); cursor: pointer;" title="Strecke auswählen / Select Track">
+                        <option value="wil_ricken">🛣️ Wil SG ➔ Rickenpass</option>
+                        <option value="kerenzerberg" selected>⛰️ Kerenzerberg ➔ Glarus</option>
+                    </select>
+                    <button id="btn-trigger-crash" class="btn-secondary" style="padding: 6px 10px; font-size: 0.78rem; border-color: rgba(255, 69, 58, 0.4); color: var(--accent-red);" title="eCall Sturzerkennung Simulieren (>6.5g + Schräglage >65°)">
+                        🚨 <span data-i18n="btn_crash_sim">Crash-Test</span>
+                    </button>
+                    <button id="btn-reset-crash" class="btn-secondary" style="padding: 6px 8px; font-size: 0.78rem; display: none;" title="eCall Notruf Zurücksetzen">
+                        🔄 Reset
+                    </button>
+                </div>
                 <button id="btn-demo-mode" class="btn-secondary" title="Live-Simulation aktivieren">
                     🎮 <span data-i18n="demo_mode">Demo-Modus</span>
                 </button>
@@ -46,6 +58,34 @@
                 </button>
             </div>
         </header>
+
+        <!-- eCall Emergency SOS Alert Banner -->
+        <div id="ecall-alert-banner" class="ecall-alert-banner" style="display: none;">
+            <div class="ecall-banner-content">
+                <div class="ecall-pulse-icon">🚨</div>
+                <div style="flex: 1;">
+                    <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                        <strong style="font-size: 1.05rem; color: #fff; letter-spacing: 0.5px;" data-i18n="ecall_alert_title">NOTRUF AKTIV (eCall LoRa SOS Flood 868 MHz)</strong>
+                        <span class="card-badge badge-red" id="ecall-banner-source">Bike 2 (Sena Apex)</span>
+                        <span class="card-badge badge-orange" id="ecall-banner-impact">Aufprall: 7.4 g • Schräglage 78°</span>
+                    </div>
+                    <div style="font-size: 0.8rem; color: #fca5a5; margin-top: 4px; display: flex; gap: 16px; flex-wrap: wrap;">
+                        <span>📍 Unfallort: <strong id="ecall-banner-coords">47.1155° N, 9.1530° E (Obstalden)</strong></span>
+                        <span>📏 Distanz: <strong id="ecall-banner-dist">230 m</strong></span>
+                        <span>🧭 Peilung: <strong id="ecall-banner-bearing">195° SSW</strong></span>
+                        <span>🎧 Intercom Audio: <strong style="color: #fff;">NOTFALL-PRIORITÄT (Musik stummgeschaltet)</strong></span>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <button id="btn-ecall-mute-alarm" class="btn-secondary" style="background: rgba(0,0,0,0.5); border-color: rgba(255,255,255,0.3); color: #fff; padding: 6px 12px; font-size: 0.8rem;">
+                        🔕 Alarm-Ton Mute
+                    </button>
+                    <button id="btn-ecall-ack" class="btn-primary" style="background: #fff; color: #b91c1c; font-weight: 800; padding: 6px 14px; font-size: 0.8rem;">
+                        ✓ SOS Quittieren
+                    </button>
+                </div>
+            </div>
+        </div>
 
         <!-- Navigation Tabs -->
         <nav class="nav-tabs" role="tablist">
@@ -510,6 +550,7 @@
                             <span>📍 <strong>Position:</strong> <span id="lbl-radar-coords">47.4640° N, 9.0430° E</span></span>
                             <span>🏔️ <strong>Höhe:</strong> <span id="lbl-radar-alt">570 m ü. M.</span></span>
                             <span>📶 <strong>LoRa RSSI:</strong> <span id="lbl-radar-rssi" style="color: var(--accent-green);">2.4 GHz Mesh (-62 dBm)</span></span>
+                            <span>🌲 <strong>Umgebung:</strong> <span id="lbl-radar-env" style="color: var(--accent-green);">🛣️ Freie Sicht</span></span>
                         </div>
 
                         <div id="mesh-nodes-legend" style="position: absolute; top: 10px; right: 14px; display: flex; gap: 6px;">
@@ -826,6 +867,127 @@
                                 <span>15–30 km/h: Raised-Cosine Fade</span>
                                 <span>&gt; 30 km/h: Mute (-96 dB)</span>
                             </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- WebAudio Helmet Acoustic Sandbox Card (Live-Simulator) -->
+                <section class="card" style="grid-column: 1 / -1; border-color: var(--border-cyan);">
+                    <div class="card-header">
+                        <span class="card-title">🎧 <span data-i18n="helmet_sandbox_title">WebAudio Helm-Akustik & DSP Sandbox (Live-Simulator)</span></span>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <span class="card-badge badge-blue" id="badge-sandbox-engine">Web Audio API: Bereit</span>
+                            <button id="btn-sandbox-toggle" class="btn-primary" style="padding: 5px 12px; font-size: 0.8rem; background: linear-gradient(135deg, var(--accent-blue), #005bb5);">
+                                ▶️ <span id="lbl-sandbox-toggle" data-i18n="btn_sandbox_start">Akustik Starten</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 14px;">
+                        Echtzeit-Simulation der Helm-Innenakustik unter Fahrt: Windgeräusch skaliert kubisch (<span style="font-family: monospace; color: var(--accent-orange);">p ~ v³</span>), Biquad-Sprachfilterung (HPF & 2.5 kHz Peaking EQ), Helm-Sidetone und Raised-Cosine Ducking bei Radar (-18 dB) oder Navigation (-12 dB).
+                    </div>
+
+                    <div class="grid-3" style="gap: 16px;">
+                        <!-- Col 1: Wind Noise & Speed Scaling -->
+                        <div class="sandbox-ctrl-panel">
+                            <strong style="font-size: 0.85rem; color: var(--accent-orange); display: block; margin-bottom: 8px;">
+                                💨 Fahrtwind & Lärmpegel (SPL)
+                            </strong>
+                            
+                            <div class="control-group">
+                                <div class="control-label">
+                                    <span>Simulierte Geschwindigkeit</span>
+                                    <span id="lbl-sandbox-speed" style="font-weight: 700; color: var(--accent-orange);">80 km/h</span>
+                                </div>
+                                <input type="range" id="slider-sandbox-speed" class="control-slider" min="0" max="180" step="1" value="80">
+                            </div>
+
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+                                <label style="display: flex; align-items: center; gap: 8px; font-size: 0.78rem; cursor: pointer;">
+                                    <input type="checkbox" id="chk-sandbox-autospeed" checked>
+                                    <span>Mit Bike-Speed synchronisieren</span>
+                                </label>
+                                <span class="card-badge" id="badge-sandbox-spl" style="font-size: 0.72rem; background: rgba(255,255,255,0.06);">82.4 dBA</span>
+                            </div>
+
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+                                <span style="font-size: 0.78rem;">Windgeräusch aktiv</span>
+                                <label class="switch">
+                                    <input type="checkbox" id="chk-sandbox-wind-enable" checked>
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Col 2: Voice Chatter & Biquad EQ -->
+                        <div class="sandbox-ctrl-panel">
+                            <strong style="font-size: 0.85rem; color: var(--accent-green); display: block; margin-bottom: 8px;">
+                                🎙️ Intercom-Stimme & Biquad EQ
+                            </strong>
+
+                            <div class="control-group">
+                                <div class="control-label">
+                                    <span>Helm-Filterprofil (Biquad)</span>
+                                    <span id="lbl-sandbox-eq" style="font-weight: 700; color: var(--accent-green);">Integralhelm</span>
+                                </div>
+                                <select id="select-sandbox-eq" class="select-custom" style="padding: 6px; font-size: 0.8rem;">
+                                    <option value="integral" selected>🪖 Integralhelm (120 Hz HPF + 2.5 kHz Boost)</option>
+                                    <option value="open">🏍️ Klapp- / Jethelm (160 Hz HPF + 2.5 kHz Boost)</option>
+                                    <option value="touring">🛡️ Touring / Schild (90 Hz HPF + 2.0 kHz Boost)</option>
+                                    <option value="flat">🎧 Flat / Bypass (Linear)</option>
+                                </select>
+                            </div>
+
+                            <div class="control-group" style="margin-top: 8px;">
+                                <div class="control-label">
+                                    <span>Sidetone Rückführung</span>
+                                    <span id="lbl-sandbox-sidetone">-12.0 dB</span>
+                                </div>
+                                <input type="range" id="slider-sandbox-sidetone" class="control-slider" min="-40" max="0" step="0.5" value="-12">
+                            </div>
+
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+                                <span style="font-size: 0.78rem;">Intercom Funk-Chatter</span>
+                                <label class="switch">
+                                    <input type="checkbox" id="chk-sandbox-voice-chatter" checked>
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Col 3: Ducking Triggers & Master Volume -->
+                        <div class="sandbox-ctrl-panel">
+                            <strong style="font-size: 0.85rem; color: var(--accent-blue); display: block; margin-bottom: 8px;">
+                                🎚️ Ducking-Reaktion & Master
+                            </strong>
+
+                            <div class="control-group">
+                                <div class="control-label">
+                                    <span>Helm-Lautstärke Master</span>
+                                    <span id="lbl-sandbox-vol">75%</span>
+                                </div>
+                                <input type="range" id="slider-sandbox-vol" class="control-slider" min="0" max="100" step="1" value="75">
+                            </div>
+
+                            <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 8px;">
+                                <button id="btn-sandbox-duck-radar" class="btn-secondary" style="font-size: 0.76rem; padding: 6px; border-color: rgba(255, 159, 10, 0.4); color: var(--accent-orange); text-align: left;">
+                                    🚗 Radar Ducking (-18 dB, 450ms)
+                                </button>
+                                <button id="btn-sandbox-duck-navi" class="btn-secondary" style="font-size: 0.76rem; padding: 6px; border-color: rgba(10, 132, 255, 0.4); color: var(--accent-blue); text-align: left;">
+                                    🧭 Navi Ducking (-12 dB, 800ms)
+                                </button>
+                                <button id="btn-sandbox-duck-ecall" class="btn-secondary" style="font-size: 0.76rem; padding: 6px; border-color: rgba(255, 69, 58, 0.4); color: var(--accent-red); text-align: left;">
+                                    🚨 eCall Prioritäts-Mute (-96 dB)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Realtime Spectrum Analyzer Canvas -->
+                    <div class="spectrum-canvas-container">
+                        <canvas id="canvas-helmet-spectrum" width="900" height="120" style="width: 100%; height: 100%; display: block;"></canvas>
+                        <div style="position: absolute; top: 6px; left: 10px; font-size: 0.72rem; color: var(--text-muted); pointer-events: none;">
+                            Spektrum Helm-Lautsprecher (FFT 20 Hz – 20 kHz) • <span id="lbl-sandbox-attenuation" style="color: var(--accent-green);">Dämpfung: 0.0 dB</span>
                         </div>
                     </div>
                 </section>
@@ -1154,6 +1316,24 @@
                             <!-- Populated dynamically via app.js / IndexedDB -->
                         </tbody>
                     </table>
+                </div>
+            <!-- Kerenzerberg GPX 1.1 Export & Terrace-Safe Map-Matching Card -->
+            <section class="card" style="grid-column: 1 / -1; margin-top: 16px; border-color: var(--border-accent);">
+                <div class="card-header">
+                    <span class="card-title">🗺️ <span data-i18n="gpx_kerenzerberg_title">Kerenzerberg GPX 1.1 & Serpentinen Map-Matching</span></span>
+                    <span class="card-badge badge-green">15-State EKF + LoRa RSSI</span>
+                </div>
+                <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 12px;">
+                    Exportiert die aktuelle hochauflösende Tour (Walenstadt ➔ Kerenzerberg ➔ Glarus ➔ Schwanden) als standardkonformes <strong>GPX 1.1</strong> inklusive Schräglage (<code style="color: var(--accent-orange);">&lt;omb:lean_deg&gt;</code>), Längsbeschleunigung (<code style="color: var(--accent-green);">&lt;omb:accel_g&gt;</code>) und HF-Feldstärke (<code style="color: var(--accent-blue);">&lt;omb:mesh_rssi&gt;</code>).
+                </div>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+                    <button id="btn-export-kerenzerberg-gpx" class="btn-primary" style="background: linear-gradient(135deg, var(--accent-orange), #d97706); color: #fff; padding: 8px 16px;">
+                        💾 GPX 1.1 Datei Herunterladen
+                    </button>
+                    <button id="btn-validate-map-match" class="btn-secondary" style="border-color: rgba(48, 209, 88, 0.4); color: var(--accent-green); padding: 8px 14px;">
+                        📐 Serpentinen Terrassen-Filter Prüfen
+                    </button>
+                    <span id="lbl-map-match-result" style="font-size: 0.8rem; color: var(--text-muted);">HMM-Filter aktiv (Verhindert Terrassen-Springen auf Kerenzerberg-Südhang)</span>
                 </div>
             </section>
         </main>

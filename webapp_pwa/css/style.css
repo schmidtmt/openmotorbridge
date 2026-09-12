@@ -993,3 +993,67 @@ body {
         box-shadow: 0 0 32px rgba(255, 69, 58, 0.9);
     }
 }
+
+/* ==========================================================================
+   eCall Emergency Alert & WebAudio Acoustic Sandbox Styles
+   ========================================================================== */
+.ecall-alert-banner {
+    background: linear-gradient(135deg, rgba(185, 28, 28, 0.95), rgba(127, 29, 29, 0.95));
+    border: 2px solid #ff453a;
+    border-radius: var(--radius-md);
+    box-shadow: 0 0 30px rgba(255, 69, 58, 0.6), 0 8px 24px rgba(0, 0, 0, 0.5);
+    backdrop-filter: var(--glass-blur);
+    padding: 14px 18px;
+    margin-bottom: 18px;
+    animation: ecallAlertPulse 1.2s infinite alternate ease-in-out;
+    position: relative;
+    z-index: 90;
+}
+
+.ecall-banner-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.ecall-pulse-icon {
+    font-size: 2.2rem;
+    animation: ecallIconShake 0.6s infinite ease-in-out;
+    filter: drop-shadow(0 0 8px #ff453a);
+}
+
+@keyframes ecallAlertPulse {
+    0% {
+        border-color: #ff453a;
+        box-shadow: 0 0 15px rgba(255, 69, 58, 0.4);
+    }
+    100% {
+        border-color: #ffd60a;
+        box-shadow: 0 0 35px rgba(255, 69, 58, 0.85), 0 0 15px rgba(255, 214, 10, 0.4);
+    }
+}
+
+@keyframes ecallIconShake {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    25% { transform: scale(1.15) rotate(-8deg); }
+    75% { transform: scale(1.15) rotate(8deg); }
+}
+
+.sandbox-ctrl-panel {
+    background: rgba(13, 17, 23, 0.7);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+}
+
+.spectrum-canvas-container {
+    position: relative;
+    height: 120px;
+    background: #05070a;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-subtle);
+    overflow: hidden;
+    margin-top: 10px;
+}

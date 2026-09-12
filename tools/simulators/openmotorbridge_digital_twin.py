@@ -33,7 +33,8 @@ from typing import Dict, List, Any, Optional, Tuple, Set
 
 # Add parent directory to path for imports
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from tracks.wil_wattwil_ricken import generate_full_track, TrackPoint, latlon_distance, latlon_bearing, latlon_offset
+from tracks.wil_wattwil_ricken import generate_full_track as gen_track_wil, TrackPoint, latlon_distance, latlon_bearing, latlon_offset
+from tracks.walenstadt_kerenzerberg_glarus import generate_full_track as gen_track_kerenzer
 
 # ANSI Colors for Terminal Output
 C_LEAD  = "\033[92m"    # Green (Bike A - Leader)
@@ -128,6 +129,15 @@ class MotorcycleNode:
         self.heading_deg = 0.0
         self.lean_angle_deg = 0.0
         self.in_tunnel = False
+        self.in_forest = False
+        self.is_nlos = False
+        
+        # eCall Crash Detection state
+        self.ecall_triggered = False
+        self.ecall_timestamp = 0.0
+        self.ecall_lat = 0.0
+        self.ecall_lon = 0.0
+        self.ecall_max_g = 0.0
         
         # EKF Ground Truth vs Estimated position tracker
         self.true_x = 0.0
@@ -137,11 +147,35 @@ class MotorcycleNode:
         self.tunnel_drift_m = 0.0
         self.was_in_tunnel = False
 
+    def trigger_crash(self, pt: TrackPoint):
+        self.ecall_triggered = True
+        self.ecall_timestamp = time.time()
+        self.ecall_lat = pt.lat
+        self.ecall_lon = pt.lon
+        self.ecall_max_g = 7.6 # High-G impact simulation
+        self.speed_kmh = 0.0
+        self.lean_angle_deg = 72.0 # Bike resting on side
+
+    def reset_crash(self):
+        self.ecall_triggered = False
+        self.ecall_max_g = 0.0
+
     def update_kinematics(self, pt: TrackPoint, dt: float):
         """Update vehicle dynamics and feed 15-State ADR-EKF."""
         self.lat = pt.lat
         self.lon = pt.lon
         self.alt = pt.alt_m
+        self.in_forest = getattr(pt, "in_forest", False)
+        self.is_nlos = getattr(pt, "is_nlos", False)
+
+        if self.ecall_triggered:
+            # Overwrite vehicle speed and lean angle when crashed
+            self.speed_kmh = 0.0
+            self.lean_angle_deg = 72.0
+            self.pcb_rear.sats_visible = pt.sats_visible
+            self.pcb_rear.hdop = pt.hdop
+            return
+
         self.speed_kmh = pt.speed_kmh
         self.heading_deg = pt.heading_deg
         self.lean_angle_deg = pt.lean_angle_deg
@@ -252,15 +286,28 @@ class RfPropagationEngine:
         if bike_a.in_tunnel or bike_b.in_tunnel:
             tunnel_loss_db = 38.0
 
-        rssi_24 = bike_a.pcb_rear.mesh_tx_power_dbm - path_loss_24 - tunnel_loss_db
+        # NLOS Rock Wall Attenuation (Felsrippe in Serpentinen)
+        nlos_rock_loss_db = 0.0
+        alt_diff = abs(bike_a.alt - bike_b.alt)
+        if (getattr(bike_a, 'is_nlos', False) or getattr(bike_b, 'is_nlos', False)) and alt_diff > 8.0:
+            nlos_rock_loss_db = 36.0 # Massive rock attenuation between hairpin terraces
+
+        # Forest Foliage Attenuation (Waldvegetation)
+        foliage_loss_db = 0.0
+        if getattr(bike_a, 'in_forest', False) or getattr(bike_b, 'in_forest', False):
+            foliage_loss_db = 12.5 # ITU-R P.833 canopy loss
+
+        rssi_24 = bike_a.pcb_rear.mesh_tx_power_dbm - path_loss_24 - tunnel_loss_db - nlos_rock_loss_db - foliage_loss_db
 
         # 2. Path Loss 868 MHz LoRa (Superior concrete penetration & diffraction)
         lambda_lora = 3e8 / (self.freq_lora_mhz * 1e6) # 0.345 m
         free_space_lora = 20.0 * math.log10((4.0 * math.pi * min(distance_m, 10.0)) / lambda_lora)
         path_loss_lora = free_space_lora + 10.0 * 2.2 * math.log10(max(1.0, distance_m / 10.0))
-        # LoRa tunnel loss is much lower due to waveguide effect at lower UHF (~12 dB)
         lora_tunnel_loss = 12.0 if (bike_a.in_tunnel or bike_b.in_tunnel) else 0.0
-        rssi_lora = bike_a.pcb_rear.lora_tx_power_dbm - path_loss_lora - lora_tunnel_loss
+        # Knife-edge diffraction allows LoRa to bend over rock ridges with minimal loss (~8 dB)
+        lora_nlos_loss = 8.0 if nlos_rock_loss_db > 0.0 else 0.0
+        lora_foliage_loss = 3.5 if foliage_loss_db > 0.0 else 0.0
+        rssi_lora = bike_a.pcb_rear.lora_tx_power_dbm - path_loss_lora - lora_tunnel_loss - lora_nlos_loss - lora_foliage_loss
 
         self.last_rssi_24 = rssi_24
         self.last_rssi_lora = rssi_lora
@@ -427,13 +474,14 @@ class WebSocketBroadcastServer:
 
 class DigitalTwinSimulator:
     """Master orchestrator running the multi-bike track simulation."""
-    def __init__(self, port: int = 8765, speed_multiplier: float = 1.0, headless: bool = False):
+    def __init__(self, port: int = 8765, speed_multiplier: float = 1.0, headless: bool = False, track_name: str = "wil_ricken"):
         self.port = port
         self.speed_multiplier = speed_multiplier
         self.headless = headless
-        
-        # Load Track
-        self.track = generate_full_track(sample_rate_hz=10.0)
+        self.track_name = track_name
+        self.track = []
+        self.track_title = ""
+        self.load_track(track_name)
         self.dt = 0.1 # 10 Hz simulation step
         
         # Instantiate 2 Motorcycle Nodes (10 PCBs total)
@@ -450,6 +498,15 @@ class DigitalTwinSimulator:
         self.handover_occurred = False
         self.return_to_mesh_occurred = False
 
+    def load_track(self, track_name: str):
+        self.track_name = track_name
+        if track_name == "kerenzerberg":
+            self.track = gen_track_kerenzer(sample_rate_hz=10.0)
+            self.track_title = "Walenstadt -> Kerenzerberg (743m) -> Glarus -> T-Kreuzung"
+        else:
+            self.track = gen_track_wil(sample_rate_hz=10.0)
+            self.track_title = "Wil SG -> Wattwil Tunnel (2.2km) -> Kreisel -> Rickenpass"
+
     async def run(self, max_duration_s: Optional[float] = None):
         """Main execution loop."""
         server = await asyncio.start_server(self.ws_server.client_handler, "0.0.0.0", self.port)
@@ -457,7 +514,7 @@ class DigitalTwinSimulator:
         print(f"\n{C_BOLD}==================================================================={C_RST}")
         print(f"{C_BOLD}   OpenMotorBridge Digital Twin Simulator (10 PCBs & 2 Bikes)      {C_RST}")
         print(f"{C_BOLD}==================================================================={C_RST}")
-        print(f"  • Route:      Wil SG -> Wattwil Tunnel (2.2km) -> Kreisel -> Rickenpass")
+        print(f"  • Route:      {self.track_title}")
         print(f"  • Track:      {len(self.track)} points ({self.track[-1].time_s / 60.0:.1f} min)")
         print(f"  • WebSocket:  ws://localhost:{self.port} (Connect OpenMotorBridge PWA)")
         print(f"  • Mode:       {'Headless Testbench' if self.headless else 'Interactive Live Mode'} (Speed: {self.speed_multiplier}x)")
@@ -518,6 +575,23 @@ class DigitalTwinSimulator:
                     elif action == "set_eq_preset":
                         self.bike_a.pcb_main.eq_preset = int(cmd.get("preset", 1))
                         print(f"{C_PWA}[PWA-CMD]{C_RST} Helmet EQ Preset -> {self.bike_a.pcb_main.eq_preset}")
+                    elif action == "trigger_ecall":
+                        target = cmd.get("bike", "Bike_B")
+                        if target == "Bike_B":
+                            self.bike_b.trigger_crash(pt_b)
+                        else:
+                            self.bike_a.trigger_crash(pt_a)
+                        print(f"{C_TUNN}[eCall]{C_RST} Crash Emergency Triggered for {target}!")
+                    elif action == "reset_ecall":
+                        self.bike_a.reset_crash()
+                        self.bike_b.reset_crash()
+                        print(f"{C_LEAD}[eCall]{C_RST} Emergency Cleared.")
+                    elif action == "set_track":
+                        req_track = cmd.get("track", "wil_ricken")
+                        self.load_track(req_track)
+                        total_steps = len(self.track)
+                        step_idx = 0
+                        print(f"{C_PWA}[PWA-CMD]{C_RST} Switched Track to: {self.track_title}")
                     elif action == "set_cross_bridge":
                         if "enabled" in cmd:
                             self.bike_a.pcb_main.cross_bridge_enabled = bool(cmd["enabled"])
@@ -544,9 +618,19 @@ class DigitalTwinSimulator:
                 ambient_rms = -96.0 if self.bike_a.speed_kmh > 30.0 else (-24.0 + (30.0 - self.bike_a.speed_kmh) * 0.2)
 
                 # 3. Construct Live Telemetry Frame for PWA
+                is_ecall_active = self.bike_b.ecall_triggered or self.bike_a.ecall_triggered
+                ecall_source = "Bike_B (Chaser)" if self.bike_b.ecall_triggered else ("Bike_A (Leader)" if self.bike_a.ecall_triggered else None)
+                ecall_lat = self.bike_b.ecall_lat if self.bike_b.ecall_triggered else self.bike_a.ecall_lat
+                ecall_lon = self.bike_b.ecall_lon if self.bike_b.ecall_triggered else self.bike_a.ecall_lon
+                ecall_max_g = self.bike_b.ecall_max_g if self.bike_b.ecall_triggered else self.bike_a.ecall_max_g
+                ecall_dist = round(latlon_distance(self.bike_a.lat, self.bike_a.lon, ecall_lat, ecall_lon), 1) if is_ecall_active else 0.0
+                ecall_bearing = round(latlon_bearing(self.bike_a.lat, self.bike_a.lon, ecall_lat, ecall_lon), 1) if is_ecall_active else 0.0
+
                 telemetry_frame = {
                     "type": "telemetry",
                     "timestamp": round(pt_a.time_s, 2),
+                    "track_name": self.track_name,
+                    "track_title": self.track_title,
                     "bike_id": "Bike_A",
                     "v_ign": self.bike_a.pcb_main.v_ign,
                     "v_bat": self.bike_a.pcb_main.v_bat,
@@ -561,6 +645,8 @@ class DigitalTwinSimulator:
                     "alt": round(self.bike_a.alt, 1),
                     "heading": round(self.bike_a.heading_deg, 1),
                     "in_tunnel": self.bike_a.in_tunnel,
+                    "in_forest": getattr(self.bike_a, 'in_forest', False),
+                    "is_nlos": getattr(self.bike_a, 'is_nlos', False),
                     "dr_active": self.bike_a.pcb_main.dr_active,
                     "dr_drift_m": round(self.bike_a.tunnel_drift_m, 2),
                     "rf_link": rf_state["link_type"],
@@ -568,6 +654,16 @@ class DigitalTwinSimulator:
                     "lora_rssi": rf_state["rssi_lora_dbm"],
                     "distance_chaser_m": rf_state["distance_m"],
                     "handover_count": rf_state["handover_count"],
+                    "ecall": {
+                        "active": is_ecall_active,
+                        "source_bike": ecall_source,
+                        "lat": ecall_lat,
+                        "lon": ecall_lon,
+                        "max_g": ecall_max_g,
+                        "distance_m": ecall_dist,
+                        "bearing_deg": ecall_bearing,
+                        "link_type": "LORA_868MHZ_SOS_BROADCAST"
+                    },
                     "mesh_members": [
                         {"id": "Bike_A (Leader)", "role": "LEADER", "rssi": -45, "state": "ONLINE"},
                         {"id": "Bike_B (Chaser)", "role": "MEMBER", "rssi": int(rf_state["rssi_24_dbm"]), "state": "ONLINE"}
@@ -631,16 +727,19 @@ class DigitalTwinSimulator:
 
         # Print final verification report
         print(f"\n{C_BOLD}==================================================================={C_RST}")
-        print(f"{C_BOLD}   SIMULATION SUMMARY & REGRESSION TEST RESULTS                    {C_RST}")
-        print(f"{C_BOLD}==================================================================={C_RST}")
+        is_full_run = max_duration_s is None or max_duration_s >= 600.0
+        tunnel_str = 'PASS (GNSS dropped to 0 Sats)' if self.tunnel_blackout_detected else ('SKIPPED (Short run < 600s)' if not is_full_run else 'FAIL')
+        handover_str = 'PASS (Switched on attenuation / NLOS)' if self.handover_occurred else ('SKIPPED (Short run < 600s)' if not is_full_run else 'FAIL')
+        return_str = 'PASS (Returned to 2.4 GHz Mesh)' if self.return_to_mesh_occurred else 'SKIPPED (Short run)'
+
         print(f"  • Simulated Time:        {pt_a.time_s:.1f} s")
-        print(f"  • Tunnel Blackout Check:  {'PASS (GNSS dropped to 0 Sats)' if self.tunnel_blackout_detected else 'FAIL'}")
+        print(f"  • Tunnel Blackout Check:  {tunnel_str}")
         print(f"  • Max EKF Tunnel Drift:   {self.max_tunnel_drift_m:.2f} m (Automotive Standard: < 30.0 m for 2.2 km tunnel)")
-        print(f"  • LoRa Handover Check:    {'PASS (Switched on attenuation)' if self.handover_occurred else 'FAIL'}")
-        print(f"  • Return Handover Check:  {'PASS (Returned to 2.4 GHz Mesh)' if self.return_to_mesh_occurred else 'SKIPPED (Short run)'}")
+        print(f"  • LoRa Handover Check:    {handover_str}")
+        print(f"  • Return Handover Check:  {return_str}")
         
         # Assertions for automated tests (when test duration covers tunnel section)
-        if max_duration_s is None or max_duration_s >= 600.0:
+        if is_full_run:
             assert self.tunnel_blackout_detected, "Tunnel GNSS blackout was not detected!"
             assert self.max_tunnel_drift_m < 30.0, f"Tunnel drift exceeded limit: {self.max_tunnel_drift_m:.2f}m >= 30m"
         print(f"{C_LEAD}{C_BOLD}  [PASS] ALL DIGITAL TWIN CHECKS COMPLETED SUCCESSFULLY!{C_RST}\n")
@@ -651,12 +750,13 @@ def main():
     parser.add_argument("--port", type=int, default=8765, help="WebSocket server port (default: 8765)")
     parser.add_argument("--speed", type=float, default=1.0, help="Simulation speed multiplier (default: 1.0, use 10.0+ for fast)")
     parser.add_argument("--duration", type=float, default=None, help="Stop after N simulated seconds")
+    parser.add_argument("--track", choices=["wil_ricken", "kerenzerberg"], default="wil_ricken", help="Select test track")
     parser.add_argument("--headless", action="store_true", help="Run without user interaction for CI/CD")
     parser.add_argument("--fast", action="store_true", help="Run at maximum compute speed (useful for tests)")
     args = parser.parse_args()
 
     speed = 50.0 if args.fast else args.speed
-    sim = DigitalTwinSimulator(port=args.port, speed_multiplier=speed, headless=args.headless)
+    sim = DigitalTwinSimulator(port=args.port, speed_multiplier=speed, headless=args.headless, track_name=args.track)
     
     try:
         asyncio.run(sim.run(max_duration_s=args.duration))
