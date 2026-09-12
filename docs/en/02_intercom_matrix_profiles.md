@@ -56,7 +56,7 @@ To trigger headset transmission (Push-to-Talk or Mesh Channel Toggle) cleanly wi
 HANDLEBAR PTT PUSHBUTTON (COCKPIT)
 ┌─────────────────────────────────────────────────────────────┐
 │ 1. Mechanical Handlebar Switch closes (Direct GPIO Interrupt)│
-│ 2. ESP32-C3 builds IEEE 802.11 Vendor Action Frame (ESP-NOW)│
+│ 2. ESP32-S3 builds IEEE 802.11 Vendor Action Frame (ESP-NOW)│
 │ 3. Over-the-Air Transmission to Central Box: 0.90 ms        │
 │ 4. ESP32-S3 Core 0 ISR decodes frame in 45 µs               │
 │ 5. Toshiba TLP222A PhotoMOS switches in 0.50 ms             │

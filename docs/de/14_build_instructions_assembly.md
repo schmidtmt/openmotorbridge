@@ -80,7 +80,7 @@ Um ein vollwertiges OpenMotorBridge (v8.0) Gesamtsystem für ein Motorrad aufzub
 | **PCBA 02** | Pod-Basis Trägerplatine (`kicad_pod_base`) | **3** | 2-Layer FR4, ENIG Gold | M8 6-Pin IP67 Buchse, SP3012 ESD-Schutzarray, Harwin 6-Pin Präzisions-Stiftleiste |
 | **PCBA 03** | Universal Kassettenplatine (`kicad_cartridge`)| **2** | 2-Layer FR4, ENIG Gold | Harwin 6-Pin Präzisionsbuchse, DS2401 1-Wire Seriennummer, JST-SH 6-Pin Header zum OEM-Headset |
 | **PCBA 04** | Heck-Pod 3 Transceiver (`kicad_rear_pod3`) | **1** | 4-Layer FR4 TG150, ENIG Gold | RP2040 Coprozessor, u-blox NEO-M9N / MAX-M10S GNSS, Semtech SX1262 LoRa, 3x Murata MM8030 HF-Umschalter |
-| **PCBA 05** | Universal Front-Knoten (`kicad_front_node`) | **1** | 4-Layer FR4 TG150, ENIG Gold | ESP32-C3 RISC-V, USB2512B Hub, LMR36015 DCDC, TPS2051B Lastschalter, Knowles MEMS Mikrofon, PTT-Interface |
+| **PCBA 05** | Universal Front-Knoten (`kicad_front_node`) | **1** | 4-Layer FR4 TG150, ENIG Gold | ESP32-S3 Dual-Core Xtensa, USB2514B 4-Port Hub, SC8102 USB-PD 20W, TPS2051B, TCAN334G CAN-FD, Knowles I2S MEMS, PTT-Interface |
 
 ---
 
@@ -137,7 +137,7 @@ Um ein vollwertiges OpenMotorBridge (v8.0) Gesamtsystem für ein Motorrad aufzub
 | **Automotive-Leitungen** | FLRY-B $0{,}5\,\text{mm}^2$ (Power/GND) und $0{,}35\,\text{mm}^2$ (Signale/Audio)| *nach Bedarf* | Fahrzeugkabelbaum nach [`central_breakout_harness_wirelist.csv`](file:///Users/schmidtm/openMotorBridge/hardware/production_packages/05_wiring_harness_spec/central_breakout_harness_wirelist.csv) |
 | **EPDM-Spannbänder** | UV- und ozonbeständiges EPDM ($\varnothing 45 \dots 75\,\text{mm}$) | **6** | Werkzeuglose Schnellmontage der Pods an Rahmen- & Sturzbügeln |
 | **Murata MM8030 Pigtails** | Murata MM126036 auf SMA-Bulkhead IP67 (150 mm, RG-178)| **3** | Koaxial-Bypass für Pod 3: J3 (2.4G), J4 (868M), J5 (GNSS) |
-| **U.FL Koaxial-Pigtail** | IPEX MHF1 / U.FL auf RP-SMA Bulkhead IP67 (150 mm, RG-178)| **1** | Koaxial-Zuleitung für Front-Knoten ESP32-C3 externe Antenne |
+| **U.FL Koaxial-Pigtail** | IPEX MHF1 / U.FL auf RP-SMA Bulkhead IP67 (150 mm, RG-178)| **1** | Koaxial-Zuleitung für Front-Knoten ESP32-S3 externe Antenne |
 | **SMA-Flansch-Doppelbuchse** | SMA-Buchse auf SMA-Buchse Bulkhead IP67 mit O-Ring & Mutter | **1** | Wasserdichte HF-Durchführung in Kassetten-Frontblende (Klasse A) |
 | **Koax-Pigtail intern** | RG-178 Koaxialkabel ($6\dots 10\,\text{cm}$, SMA 90° auf SMA) | **1** | HF-Verbindung von Sena +Mesh / OEM-Adapter zur Frontblende |
 | **SMA IP67 Schutzkappen** | Messing vernickelt mit Dichtungs-O-Ring (Rändelkappe) | **5** | Schutz ungenutzter SMA-Buchsen (3x Heck, 1x Front, 1x Pod) |
@@ -173,7 +173,7 @@ Für den sauberen, vibrationsfesten und IP67-dichten Zusammenbau aller Baugruppe
 | **Schraubensicherung (Loctite 243)**| Mittelfest (blau) | Schwingungsschutz aller Schrauben gegen Motorrad-Vibrationen | **Ja** |
 | **Elektronik-Schutzlack (Conformal)** | Peters Elpeguard SL 1307 oder Electrolube UR5041 (IPC-CC-830B) | Vollflächige Feuchte- & Salzsprühnebel-Versiegelung aller PCBAs | *Empfohlen* |
 | **Skalpell / Cuttermesser** | Mit frischer Klinge | Gratfreies Ablängen der Silikon-Dichtschnur & EPDM-Zuschnitte | **Ja** |
-| **USB-C Datenkabel** | Hochwertiges USB 2.0/3.0 Datenkabel (kein reines Ladekabel!) | Flashen von ESP32-S3, RP2040 und ESP32-C3 via PlatformIO | **Ja** |
+| **USB-C Datenkabel** | Hochwertiges USB 2.0/3.0 Datenkabel (kein reines Ladekabel!) | Flashen von ESP32-S3 (Main & Front) und RP2040 (Rear) via PlatformIO | **Ja** |
 
 ---
 
@@ -309,9 +309,9 @@ Für den sauberen, vibrationsfesten und IP67-dichten Zusammenbau aller Baugruppe
    * 4x M4 Messingeinsätze in das AMPS-Lochbild ($30 \times 38\,\text{mm}$) am Gehäuseboden einschmelzen.
 2. **Akustik-Membran einsetzen:** Hydrophobe Gore ePTFE-Membran über die Schallöffnung des Knowles MEMS Mikrofons kleben.
 3. **Platine montieren:** Front-Node Platine (`PCBA 05`) mit M2.5 Schrauben fixieren.
-4. **HF-Antennenmontage (ESP32-C3 2,4 GHz):**
+4. **HF-Antennenmontage (ESP32-S3 2,4 GHz):**
    * Die flexible 2,4-GHz-FPC-Dipolantenne (z. B. Molex 146153) in die $48 \times 12\,\text{mm}$ Klebetasche an der Innenseite des Gehäusedeckels einkleben.
-   * Das $1{,}13\,\text{mm}$ Mikro-Koaxialkabel in den Führungskanal der Deckeldecke einlegen und den U.FL / IPEX-MHF1 Stecker senkrecht auf die Antennenbuchse des ESP32-C3-WROOM-02U Moduls aufklicken. (Optional: Für extreme Einbaulagen wie Vollcarbon-Verkleidungen kann das Kabel durch einen EPDM-Kammschlitz nach außen geführt werden).
+   * Das $1{,}13\,\text{mm}$ Mikro-Koaxialkabel in den Führungskanal der Deckeldecke einlegen und den U.FL / IPEX-MHF1 Stecker senkrecht auf die Antennenbuchse des ESP32-S3-WROOM-1U Moduls aufklicken. (Optional: Für extreme Einbaulagen wie Vollcarbon-Verkleidungen kann das Kabel durch einen EPDM-Kammschlitz nach außen geführt werden).
 5. **Kabel in Front- & Flankenöffnungen einlegen:**
    * **Vordere Öffnung (Südwand, 4 Kanäle $\varnothing 4{,}2\,\text{mm}$ für USB):**
      * Kurzes USB-A Flachbandkabel in Kanal 1 einlegen und an Port `J6` (geschalteter VBUS für CarPlay / Dongle) anstecken.
@@ -376,7 +376,7 @@ pio run --target uploadfs
 cd ../rear_coprocessor
 pio run --target upload
 
-# 5. Front-Knoten flashen (ESP32-C3)
+# 5. Front-Knoten flashen (ESP32-S3)
 cd ../front_node
 pio run --target upload
 ```

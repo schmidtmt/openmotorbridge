@@ -33,7 +33,7 @@ Classic motorcycle communication systems are historically fragmented:
 │ • Intercom Bridge A (Sena    │ • Intercom Bridge B (Cardo   │ • 1-Tier Monolithic Sled    │
 │   50S/60S/MeshPort Sled)     │   Packtalk Edge / PMR446)    │ • u-blox MAX-M10S Multi-GNSS│
 │ • Saddlebag, Frame, Rear or  │ • Saddlebag, Frame, Rear or  │ • SX1262 LoRa 868MHz + RP2040│
-│   Helmet Mounting            │   Helmet Mounting            │ • 2.4 GHz OMM-Mesh (ESP32-C3)│
+│   Helmet Mounting            │   Helmet Mounting            │ • 2.4 GHz OMM-Mesh (RP2040) │
 └──────────────────────────────┴──────────────────────────────┴─────────────────────────────┘
   │                                                                                         │
   ├─► 6. VEHICLE POWER: AMP Superseal 1.5 4-Pin (KL30 Batt+, KL15 Ign+, Chassis Ground)       │
@@ -42,8 +42,9 @@ Classic motorcycle communication systems are historically fragmented:
   ▼ 2.4 GHz Ultra-Low-Latency Wireless Link (ESP-NOW < 3ms & BLE 5.0 2M-PHY)                │
 ┌───────────────────────────────────────────────────────────────────────────────────────────┤
 │ 8. COCKPIT SUBSYSTEM: Wireless Universal Front Node (PCBA 05 Cockpit & Cam Bridge)       │
-│ • Automotive 2-Port USB 2.0 Hub (Microchip USB2512B) for Boom! Box & CarPlay Adapter       │
-│ • Switched CarPlay Port via TI TPS2051B (Controlled 2.5s Cold Reboot & 60s Auto-Café)      │
+│ • Automotive 4-Port USB 2.0 Hub (Microchip USB2514B) for Boom! Box & CP2AA COTS Dongle   │
+│ • Switched Dongle Port via TI TPS2051B (Controlled 2.5s Cold Reboot & 60s Auto-Café)     │
+│ • 20W USB-PD Fast-Charging Handlebar Port via Southchip SC8102 Synchronous Buck-Boost      │
 │ • Digital I2S MEMS Ambient Mic with ePTFE Acoustic Vent (Edge RMS Noise Level Tracking)   │
 │ • Hardwired Handlebar PTT Pushbutton Input (Direct GPIO Interrupt, 100% Battery-Free!)    │
 │ • Integrated Cockpit CAN-Bus Transceiver (TCAN334G with 120 Ohm) for Fairing TFT Displays │
@@ -57,10 +58,10 @@ Classic motorcycle communication systems are historically fragmented:
 
 OpenMotorBridge v8.0 defines the platform across **5 standardized functional nodes**:
 1. **Central Box (Main ECU):** Central computational core (ESP32-S3), 24-bit audio DSP/codec (ES8388), galvanic isolation transformers, 72V automotive step-down (LM5164-Q1), and LiPo UPS (BQ24075). *(Typically mounted centrally under the seat in the battery compartment).*
-2. **Rear Pod 3 (Backbone & Telemetry):** Multi-GNSS (u-blox MAX-M10S), 868 MHz LoRa (Semtech SX1262), 2.4 GHz OMM Mesh co-processor (ESP32-C3), and 6-axis IMU (BMI270). *(Typically mounted at the rear with an unobstructed view of the zenith).*
+2. **Rear Pod 3 (Backbone & Telemetry):** Multi-GNSS (u-blox MAX-M10S), 868 MHz LoRa (Semtech SX1262), 2.4 GHz OMM Mesh co-processor (RP2040), and 6-axis IMU (BMI270). *(Typically mounted at the rear with an unobstructed view of the zenith).*
 3. **Satellite Pod 1 (Intercom Bridge A):** Universal cartridge bay for Sena (Mesh 2.0/3.0 / Bluetooth). *(Typically on the left vehicle side).*
 4. **Satellite Pod 2 (Intercom Bridge B):** Universal cartridge bay for Cardo (DMC Gen1/Gen2 / Bluetooth) or analog PMR446 radio. *(Typically on the right vehicle side for RF spatial diversity).*
-5. **Front Node (Cockpit & Camera Hub):** Autonomous ESP32-C3 satellite, automotive USB 2.0 hub (USB2512B) for Apple CarPlay/Ottocast, switched 5V action cam charge port with BLE shutter, digital PTT button input, and Knowles MEMS ambient noise microphone. *(Typically hidden behind fairings or inside the headlight nacelle).*
+5. **Front Node (Cockpit & Camera Hub):** Autonomous ESP32-S3 satellite, automotive USB 2.0 hub (USB2514B) for Apple CarPlay / Android Auto (CP2AA COTS dongle thermally decoupled), fast-charging handlebar smartphone port (Southchip SC8102 20W USB-PD), switched 5V accessory/cam ports, digital PTT button input, and Knowles MEMS ambient noise microphone. *(Typically hidden behind fairings or inside the headlight nacelle).*
 
 ```
                      THE 5 STANDARDIZED FUNCTIONAL NODES
@@ -152,26 +153,25 @@ All system signals converge at the central HD26 flanged connector:
 
 #### 5.1.2 Universal Cockpit & Front Hub (PCBA 05): USB Subsystem, Live Traffic & PTT
 The Front Node (PCBA 05) serves on **all motorcycle types** as the universal cockpit hub, eliminating vulnerable wiring across the flexed steering head:
-* **Wireless RF Bridge to Central Box:** An autonomous controller node (ESP32-C3 RISC-V / Allwinner SOM) inside the fairing communicates via **ESP-NOW ($< 0.9\,\text{ms}$ latency)** and **BLE 5.0 (2M-PHY)** directly to the Central Box.
+* **Wireless RF Bridge to Central Box:** An autonomous controller node (ESP32-S3 Dual-Core Xtensa LX7 @ 240 MHz with Vector DSP) inside the fairing communicates via **ESP-NOW ($< 0.9\,\text{ms}$ latency)** and **BLE 5.0 (2M-PHY)** directly to the Central Box.
 * **Wired Handlebar PTT (Optocoupler at `J3` / GPIO 0, $< 1.8\,\text{ms}$ Latency):** Minimal $30\dots 50\,\text{cm}$ harness at the handlebar — zero failure-prone signal wires crossing the steering neck!
 * **Digital I2S MEMS Ambient Microphone (Knowles SPH0645LM4H-6):** Edge-DSP ambient wind/road noise computation directly at the windshield (physically impossible under the seat) for automatic helmet volume AGC.
-* **Automotive USB 2.0 Subsystem (Microchip USB2512B & TI TPS2051B):**
+* **Automotive USB 2.0 Subsystem (Microchip USB2514B 4-Port Hub & Power Architecture):**
   * **Upstream Host Port (`J4`):** Connects directly to the USB input of the Harley-Davidson Boom! Box GTS / Skyline OS in the glovebox.
-  * **Downstream Port 1 (`J5` / Phone & Glovebox):** Uninterrupted $+5.0\,\text{V}$ VBUS (up to $2.0\,\text{A}$) for clean smartphone charging or navigation devices.
-  * **Downstream Port 2 (`J6` / Ottocast CarPlay / SOM):** Switched $+5.0\,\text{V}$ VBUS via `TI TPS2051B` power gate with software-controlled **2.5s cold restart** and **Auto-Café 60s timer** upon ignition off.
-  * **USB-C Service Port (`J7`):** Native diagnostic, calibration, and flashing receptacle.
+  * **Downstream Port 1 (Handlebar Phone Fast-Charging):** Dedicated $20\,\text{W}$ USB-PD fast-charging port via `Southchip SC8102` synchronous buck-boost converter directly on the handlebar.
+  * **Downstream Port 2 (CP2AA COTS Dongle):** Switched $+5.0\,\text{V}$ VBUS via `TI TPS2051B` power switch with software-controlled **2.5s cold restart** and **Auto-Café 60s timer** upon ignition off. The commercial CarPlay/Android Auto dongle is mounted inside the fairing cavity thermally decoupled via a $25\dots 30\,\text{cm}$ shielded pigtail (3M Dual-Lock).
+  * **Downstream Port 3 (Glovebox Passthrough & Media Port):** Transparent feedthrough with Port-Sense (100% free for USB MP3 sticks, firmware updates, and direct phone wired CarPlay).
+  * **Downstream Port 4 (Cockpit Accessories):** High-power accessory feed for dashcams, external displays (Chigee AIO-5), or navigation systems (Garmin Zūmo XT2).
+  * **USB-C Service Port (`J7`):** Native diagnostic, calibration, and flashing receptacle directly connected to the ESP32-S3 native USB-JTAG/OTG interface.
 * **USB-Media Proxy & Source-Aware CAN Gating:**
   * Emulates an MFi-iPod / USB Audio Class device to Skyline OS: Displays track, artist, album, and duration natively on the 12.3" Harley screen, while audio stays in the helmet via LDAC/aptX (no WHIM needed).
   * **Collision Protection:** Checks `infotainment_source_active` (CAN `0x388`) and Hub Port 1 to ensure handlebar media buttons only control the phone when OMB/CarPlay/BT is active (preventing phantom streaming while listening to MP3 sticks or radio).
 * **USB CDC-NCM Ethernet Tethering for Internal OEM Navigation:**
   * Presents as a virtual automotive network interface at port `J4`, routing phone data to the bike.
   * **Benefit:** Factory navigation (HERE / TomTom) gets **instant live traffic, congestion flow, and road closure alerts upon ignition ON** without manual phone hotspot setup.
-* **Dedicated 5V Action Cam Power Header (`J8` / Charge-Only) & BLE Shutter Bridge:**
-  * Clean $+5.0\,\text{V}$ DC charging power (up to $2.0\,\text{A}$) without disruptive data lines.
-  * Controls GoPro, Insta360, and DJI directly via BLE in line-of-sight ($< 0.5\,\text{m}$) via PTT double-clicks.
 * **Intelligent Standstill Filter & KL15 Buffer Capacitor (`C_BUF`):**
-  * Polymer buffer capacitor ($470\dots 1000\,\mu\text{F}$) keeps controller alive for $\approx 1\dots 2\,\text{s}$ upon ignition off, cleanly saving video files.
-* **Minimal Bike Wiring:** Single **2-core 12V automotive power lead (`J1`)** tapped at switched KL15 ignition; on-board TI TPS54302 buck converter produces the $+5\,\text{V}$ rail.
+  * Low-ESR buffer capacitors keep the controller alive for $\approx 1\dots 2\,\text{s}$ upon ignition off, cleanly closing all open files.
+* **Minimal Bike Wiring:** Single **2-core 12V automotive power lead (`J1`)** tapped at switched KL15 ignition; on-board TI TPS63070 buck-boost & LMR36015 buck converters provide full ISO 7637-2 cold-cranking compliance.
 
 ### 5.2 BMW Motorrad ConnectedRide & CAN-Bus Integration
 * **Real-time Telemetry:** Via the TCAN334G transceiver in listen-only mode, the bridge captures wheel speeds, lean angles, and turn indicators.

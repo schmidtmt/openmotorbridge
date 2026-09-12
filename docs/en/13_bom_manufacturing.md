@@ -65,20 +65,37 @@ This document provides the complete Bill of Materials (BOM) and manufacturing sp
 
 ---
 
-## 5. PCBA 05: Universal Front Node (`openmotorbridge_front_node`, 4-Layer FR4 TG150)
+## 5. PCBA 05: Universal Front Node (`openmotorbridge_front_node`, 4-Layer FR4 TG150, 82 x 50 mm)
 
 | Designator | Component / MPN | Manufacturer | Package | LCSC / JLCPCB Part # | Function |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **U1** | ESP32-C3-WROOM-02U-N4 | Espressif Systems | SMD Module | C2934560 | 32-Bit RISC-V Controller (160 MHz, ext. U.FL) |
-| **U2** | USB2512B-AEZG | Microchip | QFN-36 | C97184 | USB 2.0 High-Speed 480 Mbps 2-Port Hub Controller |
-| **U3** | LMR36015FSCQRNXRQ1 | Texas Instruments | VQFN-12 | C2843480 | Automotive 36V Synchronous Buck (5V / 2.0A, 91.8%) |
-| **U4** | TPS2051BDBVR | Texas Instruments | SOT-23-5 | C7818 | High-Side USB VBUS Power Switch (1.05A Clamp) |
-| **MIC1** | SPH0645LM4H-B | Knowles | 3.5x2.65 mm SMD | C119850 | Digital I2S MEMS Acoustic Microphone |
-| **L1** | 4.7 µH Automotive Inductor | Sunlord / Wurth | SMD 5x5 mm | C2843490 | Power Inductor for LMR36015 Buck Converter |
-| **J1** | USB-A Receptacle R/A | Amphenol / Korean Hro | SMD Right-Angle| C2934180 | Port 1: Switched VBUS for Ottocast Dongle |
-| **J2** | USB-C 16-Pin Receptacle IP67| GCT / Korean Hro | SMD Hybrid | C2765186 | Port 2: Constant VBUS Glovebox / Charging Port |
-| **J3** | JST-GH 2-Pin Header | JST | 1.25mm SMD | C2934185 | Handlebar PTT Interface (GPIO 0 Interrupt) |
-| **J7** | 2-Pin Screw Terminal / JST-GH| Phoenix / JST | 2.54mm THT | C289115 | 12V Vehicle Power Input (KL15 & GND) |
+| **U1** | ESP32-S3-WROOM-1U-N8R8 | Espressif Systems | SMD Module | `C2913200` | Dual-Core 32-Bit Xtensa LX7 (240 MHz, Vector-DSP, 8MB PSRAM, ext. U.FL) |
+| **U2** | USB2514B-AEZG | Microchip | QFN-36 | `C97185` | Automotive USB 2.0 High-Speed 480 Mbps 4-Port Hub Controller |
+| **U3** | LMR36015FSCQRNXRQ1 | Texas Instruments | VQFN-12 | `C2843480` | Automotive 36V Synchronous Buck (5V / 2.0A, 91.8%) for Hub & Peripherals |
+| **U4** | TPS2051BDBVR | Texas Instruments | SOT-23-5 | `C7818` | High-Side USB VBUS Power Switch (1.05A Clamp) for Port 2 Cold-Reboot Reset |
+| **U5** | SC8102QDER | Southchip | QFN-32 | `C2843510` | Automotive Synchronous Buck with USB-PD 20W (9V/2.2A & QC3.0) for Smartphone Port 1 |
+| **U6** | TCAN334GDCNT | Texas Instruments | SOT-23-8 | `C2843515` | 3.3V CAN Transceiver (5 Mbps CAN-FD capable, with Pin 8 Silent-Listen-Only Mode) |
+| **K1** | CPC1017NTR | IXYS / Littelfuse | SOP-4 | `C26789` | 60V / 100mA 1-Form-A Solid-State Relay for switchable 120R CAN Termination (Auto-Sensing) |
+| **Q1** | DMN63D8LDW-7 | Diodes Incorporated| SOT-363 | `C283890` | Dual N-Channel MOSFET (30V / 260mA) for directional mirror blind-spot LEDs (J9) |
+| **Q2** | TPS1H100BQPWPRQ1 | Texas Instruments | HTSSOP-14 | `C2843520` | Automotive Smart High-Side Power Switch (up to 3.5A / 40W) for 12V Aux Light (J11) |
+| **LED1**| WS2812B-2020 | Worldsemi | SMD 2020 | `C2843530` | Digitally controllable RGB status LED for enclosure lid light pipe |
+| **MIC1**| SPH0645LM4H-B | Knowles | 3.5x2.65 mm SMD | `C119850` | Digital I2S MEMS Acoustic Microphone for wind noise & dynamic pressure measurement |
+| **L1** | 4.7 µH Automotive Inductor | Sunlord / Wurth | SMD 5x5 mm | `C2843490` | Storage Inductor for LMR36015 5V Main Regulator |
+| **L2** | 10 µH Automotive Inductor | Coilcraft / Wurth | SMD 7x7 mm | `C2843525` | Storage Inductor for SC8102 USB-PD Fast-Charge Buck (Port 1) |
+| **J1** | JST-PH 2-Pin Header | JST | 2.00mm SMD | `C289115` | 12V Vehicle Power Input (KL15 & GND) |
+| **J2** | JST-PH 3-Pin Header | JST | 2.00mm SMD | `C289116` | Cockpit CAN-Bus (CAN_H, CAN_L, GND with Auto-Sensing Relay) |
+| **J3** | JST-PH 4-Pin Header | JST | 2.00mm SMD | `C289117` | Handlebar Multi-Button Interface (PTT, Cam-Action, Media-Voice, GND) |
+| **J4** | JST-PH 4-Pin Header | JST | 2.00mm SMD | `C289117` | Upstream USB Port to Motorcycle Infotainment (Skyline OS / Boom! Box) |
+| **J5** | JST-PH 4-Pin Header | JST | 2.00mm SMD | `C289117` | Port 1: Handlebar Smartphone (USB-PD 20W + High-Speed Data) |
+| **J6** | JST-PH 4-Pin Header | JST | 2.00mm SMD | `C289117` | Port 2: Fairing Pigtail (shielded, 30 cm) to CP2AA CarPlay/AA Dongle |
+| **J5_MP3**| JST-PH 4-Pin Header | JST | 2.00mm SMD | `C289117` | Port 3: Glovebox Cable for USB Drives (MP3s & Firmware Updates) |
+| **J6_AUX**| JST-PH 4-Pin Header | JST | 2.00mm SMD | `C289117` | Port 4: Cockpit Accessories / Dashcam Storage / Zūmo Navi |
+| **J7** | USB-C 16-Pin Receptacle IP67| GCT / Korean Hro | SMD Hybrid | `C2765186` | ESP32-S3 Service & Flash Port (Flank) with TPU Sealing Plug |
+| **J8** | JST-PH 2-Pin Header | JST | 2.00mm SMD | `C289115` | Action-Cam 5V Charge-Only Power Port (up to 2.0A) |
+| **J9** | JST-PH 3-Pin Header | JST | 2.00mm SMD | `C289116` | Mirror Blind-Spot Warning LEDs (12V_PROT, BSD_LEFT_N, BSD_RIGHT_N) |
+| **J10** | JST-PH 2-Pin Header | JST | 2.00mm SMD | `C289115` | 12V Qi Wireless Charging (SP Connect / QuadLock Head) |
+| **J11** | JST-PH 2-Pin Header | JST | 2.00mm SMD | `C289115` | 12V Aux Light (Adventure Auxiliary Spotlight / Emergency Brake Strobe) |
+| **J12** | JST-SH 4-Pin Header | JST | 1.00mm SMD | `C289118` | Qwiic / STEMMA QT I2C Sensor Port (3.3V, GND, SDA, SCL) |
 
 ---
 
@@ -102,7 +119,7 @@ This document provides the complete Bill of Materials (BOM) and manufacturing sp
 ## 7. Step-by-Step Commissioning, Measurement & Test Protocol
 
 ### Step 1: Visual Inspection (Prior to Initial Power-Up)
-* [ ] Exclude solder bridges beneath LM5164, BQ24075, ES8388, and USB2512B under inspection microscope.
+* [ ] Exclude solder bridges beneath LM5164, BQ24075, ES8388, USB2514B, and ESP32-S3 under inspection microscope.
 * [ ] Verify polarity of TVS diode D1 (SMBJ33CA) and P-channel MOSFET reverse polarity circuit.
 * [ ] Confirm the 2.5 mm isolation barrier around Bourns transformers T1/T2 and PhotoMOS OC1/OC2 is free of tin whiskers.
 
@@ -187,7 +204,7 @@ This document provides the complete Bill of Materials (BOM) and manufacturing sp
 | **M8 Extension Cable (Radar)**| M8 4-Pin A-Coded PUR Shielded (1.0m) | Binder / Phoenix / Murr | 1 pc | Connection to Garmin Varia / mmWave rear radar |
 | **Automotive Wire** | FLRY-B $0.5\,\text{mm}^2$ & $0.35\,\text{mm}^2$ (various colors) | Leoni / Helukabel | As req. | Bike harness per `central_breakout_harness_wirelist.csv` |
 | **Murata MM8030 Pigtails (Pod 3)**| Murata MM126036 to SMA Bulkhead IP67 (150 mm, RG-178)| Murata / Mouser | 3 pcs | Coaxial bypass for J3 (2.4G), J4 (868M), J5 (GNSS) |
-| **U.FL Pigtail (Front Node)**| IPEX MHF1 / U.FL to RP-SMA Bulkhead IP67 (150 mm, RG-178) | Taoglas / Molex | 1 pc | Coaxial lead for ESP32-C3 external fairing antenna |
+| **U.FL Pigtail (Front Node)**| IPEX MHF1 / U.FL to RP-SMA Bulkhead IP67 (150 mm, RG-178) | Taoglas / Molex | 1 pc | Coaxial lead for ESP32-S3 external fairing antenna |
 | **SMA Flange Double Bulkhead**| SMA Female to SMA Female Bulkhead IP67 with O-ring & nut | Amphenol / Radiall | 1 pc | Waterproof RF feedthrough in cartridge faceplate (Class A) |
 | **Internal Coax Pigtail (Cartridge)**| RG-178 Coaxial Cable ($6\dots 10\,\text{cm}$, 90° SMA Male to SMA Male)| Delock / Taoglas | 1 pc | RF connection from Sena +Mesh / OEM adapter to faceplate |
 | **SMA IP67 Protective Caps** | Nickel-plated brass with internal O-ring (knurled cap)| Amphenol / Radiall | 5 pcs | Waterproof seal for unpopulated external SMA ports (3x Pod 3, 1x Front, 1x Pod) |

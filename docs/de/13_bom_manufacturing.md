@@ -127,7 +127,7 @@ Dieses Dokument enthält die vollständige Bauteilliste (Bill of Materials) und 
 ## 7. Inbetriebnahme-, Mess- & Testprotokoll (Schritt-für-Schritt)
 
 ### Schritt 1: Visuelle Inspektion (Vor dem ersten Einschalten)
-* [ ] Lötbrücken unter LM5164, BQ24075, ES8388 und USB2512B mit Mikroskop/Lupe ausschließen.
+* [ ] Lötbrücken unter LM5164, BQ24075, ES8388, USB2514B und ESP32-S3 mit Mikroskop/Lupe ausschließen.
 * [ ] Polarität der TVS-Diode D1 (SMBJ33CA) und des P-FET Verpolschutzes kontrollieren.
 * [ ] Prüfen, ob die 2,5 mm Isolationsbarriere um T1/T2 und OC1/OC2 frei von Zinnresten ist.
 
@@ -219,7 +219,7 @@ Dieses Dokument enthält die vollständige Bauteilliste (Bill of Materials) und 
 | **M8 Zuleitungskabel (Radar)**| M8 4-Pin A-Coded PUR geschirmt (1.0m) | Binder / Phoenix / Murr | 1 Stk. | Zuleitung zu Garmin Varia / mmWave Heckradar |
 | **Automotive-Leitungen** | FLRY-B $0{,}5\,\text{mm}^2$ & $0{,}35\,\text{mm}^2$ (diverse Farben) | Leoni / Helukabel | nach Bed. | Fahrzeugkabelbaum nach `central_breakout_harness_wirelist.csv` |
 | **Murata MM8030 Pigtails (Pod 3)**| Murata MM126036 auf SMA-Bulkhead IP67 (150 mm, RG-178)| Murata / Mouser | 3 Stk. | Koaxial-Bypass für J3 (2.4G), J4 (868M), J5 (GNSS) |
-| **U.FL Pigtail (Front-Node)** | IPEX MHF1 / U.FL auf RP-SMA Bulkhead IP67 (150 mm, RG-178) | Taoglas / Molex | 1 Stk. | Koaxial-Zuleitung für ESP32-C3 externe Antenne |
+| **U.FL Pigtail (Front-Node)** | IPEX MHF1 / U.FL auf RP-SMA Bulkhead IP67 (150 mm, RG-178) | Taoglas / Molex | 1 Stk. | Koaxial-Zuleitung für ESP32-S3 externe Antenne |
 | **SMA-Flansch-Doppelbuchse** | SMA-Buchse auf SMA-Buchse Bulkhead IP67 mit O-Ring & Mutter | Amphenol / Radiall | 1 Stk. | Wasserdichte HF-Durchführung in Kassetten-Frontblende (Klasse A) |
 | **Koax-Pigtail intern (Kassette)**| RG-178 Koaxialkabel ($6\dots 10\,\text{cm}$, SMA-Stecker 90° auf SMA-Stecker)| Delock / Taoglas | 1 Stk. | HF-Verbindung von Sena +Mesh / OEM-Adapter zur Frontblende |
 | **SMA IP67 Schutzkappen** | Messing vernickelt mit Dichtungs-O-Ring (Rändelkappe) | Amphenol / Radiall | 5 Stk. | Wasserdichter Schutz ungenutzter externer SMA-Buchsen (3x Heck, 1x Front, 1x Pod) |

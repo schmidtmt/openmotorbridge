@@ -18,7 +18,7 @@ This document specifies the protection circuitry against vehicle electrical tran
 
 * **2.4 GHz Coexistence (Sena vs. Cardo):** Physical separation of Pod 1 (left frame rail) and Pod 2 (right frame rail) across the metallic chassis provides $> 35\,\text{dB}$ free-space path loss, preventing de-sensing and intermodulation.
 * **Rear Pod 3 Tri-RF Architecture:**
-  * **2.4 GHz ESP32-C3 PCB Antenna:** Placed at the front edge in a $15 \times 8\,\text{mm}$ copper keepout area.
+  * **2.4 GHz Mesh PCB Antenna:** Placed at the front edge in a $15 \times 8\,\text{mm}$ copper keepout area.
   * **868 MHz LoRa Helical Antenna:** Lateral mount with $50\,\Omega$ microstrip feed and dedicated $60 \times 36\,\text{mm}$ ground plane ($> -1{,}5\,\text{dBi}$ gain).
   * **u-blox Multi-GNSS Ceramic Patch ($25 \times 25 \times 4\,\text{mm}$):** Centered with an unobstructed $180^\circ$ hemispherical sky view through the RF-transparent PA12 ceiling ($\varepsilon_r \approx 3{,}2$).
 * **Central ePTFE Pressure Equalization Vent:** $\varnothing\,7{,}0\,\text{mm}$ Gore/Schreiner Air Vent centered on the pod roof symmetrically relieves thermal pressure pulses without distorting RF radiation patterns.

@@ -155,7 +155,7 @@ Zur automatischen Anpassung der Helm-Lautstärke an turbulente Windgeräusche be
 ```
                        AKUSTIK-PFAD (FRONT-KNOTEN -> HELM)
 ┌────────────────────────────┐              ┌────────────────────────────┐
-│ Knowles SPH0645 MEMS       │              │ ESP32-C3 Front Controller  │
+│ Knowles SPH0645 MEMS       │              │ ESP32-S3 Front Controller  │
 │ • Hydrophobe ePTFE-Membran │ I2S DMA Bus  │ • Biquad A-Weighting nach  │
 │ • 65.4 dB SNR, 120 dBA AOP ├─────────────►│   IEC 61672-1 Class 1      │
 │ • Integrierter 24-Bit ADC  │              │ • 50 Hz RMS-Schallpegel dBA│
@@ -170,7 +170,7 @@ Zur automatischen Anpassung der Helm-Lautstärke an turbulente Windgeräusche be
 ```
 
 ### 4.1 Digitalfilterung: Biquad A-Weighting nach IEC 61672-1
-Um unhörbare niederfrequente Luftdruckschwankungen (Wirbelschleppen von LKWs, $10\dots 40\,\text{Hz}$) nicht als Lärm fehlzuinterpretieren, filtert der ESP32-C3 das Audiosignal in Echtzeit mit einem biquadratischen IIR-Filter:
+Um unhörbare niederfrequente Luftdruckschwankungen (Wirbelschleppen von LKWs, $10\dots 40\,\text{Hz}$) nicht als Lärm fehlzuinterpretieren, filtert der ESP32-S3 das Audiosignal in Echtzeit mit seinem Vektor-DSP über ein biquadratisches IIR-Filter:
 * **Dämpfung bei $100\,\text{Hz}$:** $-19{,}1\,\text{dB}$ (korrespondierend zur menschlichen Hörempfindlichkeit).
 * **Durchlassbereich bei $1\dots 4\,\text{kHz}$:** $0{,}0\,\text{dB}$ (Sprachrelevanter Bereich).
 

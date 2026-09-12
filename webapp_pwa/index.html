@@ -1409,7 +1409,7 @@
                     <div class="stat-tile" style="margin-bottom: 12px;">
                         <span class="stat-label">Dual-PHY OpenMotorMesh & GNSS</span>
                         <div style="font-size: 1.05rem; font-weight: 700; margin: 6px 0;">2.4 GHz Mesh + SX1262 LoRa</div>
-                        <span class="stat-sub">ESP32-C3 Co-Prozessor + MAX-M10S @ 460.8k</span>
+                        <span class="stat-sub">RP2040 Dual-Core Coprozessor + MAX-M10S @ 460.8k</span>
                     </div>
                     <div class="stat-row">
                         <span class="stat-sub" data-i18n="dle_score_label">DLE Gateway Score:</span>
@@ -1879,23 +1879,31 @@
 
                     <div class="stat-row">
                         <span class="stat-sub">Mikrocontroller:</span>
-                        <span style="font-weight: 700;">ESP32-C3-WROOM-02U (160 MHz RISC-V)</span>
+                        <span style="font-weight: 700;">ESP32-S3-WROOM-1U (240 MHz Xtensa Dual-Core)</span>
                     </div>
                     <div class="stat-row">
-                        <span class="stat-sub">DCDC Abwärtswandler:</span>
-                        <span style="font-weight: 700; color: var(--accent-green);">TI LMR36015 (5.00V / 2.0A, 91.8% Eff.)</span>
+                        <span class="stat-sub">DCDC Wandler & Schutz:</span>
+                        <span style="font-weight: 700; color: var(--accent-green);">LMR36015 (5V/2A) + TPS63070 Kaltstart</span>
                     </div>
                     <div class="stat-row">
                         <span class="stat-sub">USB 2.0 High-Speed Hub:</span>
-                        <span style="font-weight: 700;">Microchip USB2512B (480 Mbps, 90Ω Diff.)</span>
+                        <span style="font-weight: 700;">Microchip USB2514B 4-Port (480 Mbps, 90Ω Diff.)</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-sub">20W USB-PD Fast-Charge:</span>
+                        <span style="font-weight: 700; color: var(--accent-green);">Southchip SC8102 (Lenker Port 1)</span>
                     </div>
                     <div class="stat-row">
                         <span class="stat-sub">VBUS Lastschalter:</span>
-                        <span style="font-weight: 700;">TI TPS2051B (1.05A Clamp, Soft-Start)</span>
+                        <span style="font-weight: 700;">TI TPS2051B (CP2AA Dongle Port 2 Power-Gate)</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-sub">Cockpit CAN-Bus & Term:</span>
+                        <span style="font-weight: 700;">TI TCAN334G CAN-FD + CPC1017N Auto-Term</span>
                     </div>
                     <div class="stat-row">
                         <span class="stat-sub">Digitales MEMS Mikrofon:</span>
-                        <span style="font-weight: 700;">Knowles SPH0645LM4H (16 kHz 24-Bit I2S)</span>
+                        <span style="font-weight: 700;">Knowles SPH0645LM4H (16 kHz 24-Bit I2S DSP)</span>
                     </div>
                     <div class="stat-row">
                         <span class="stat-sub">Funkbrücke & Latenz:</span>

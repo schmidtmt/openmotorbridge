@@ -36,7 +36,7 @@ Um das Zusammenspiel von Hardware, Akustik, Fahrdynamik, Thermik, Hochfrequenz-P
 │ 8. 180-Tage Winterpause   │ `battery_winter_standby_sim.py`   │ 16.5 µA ULP-Hibernate,  │
 │    Ruhestrom-Analyse      │                                   │ 0.59% Entladung / 6 Mon.│
 ├───────────────────────────┼───────────────────────────────────┼─────────────────────────┤
-│ 9. Universal Front Node   │ `front_node_wireless_hub_sim.py`  │ USB2512B Eye, MEMS DSP, │
+│ 9. Universal Front Node   │ `front_node_wireless_hub_sim.py`  │ USB2514B Eye, MEMS DSP, │
 │    (PCBA 05)              │                                   │ TPS2051B, ESP-NOW, BLE  │
 ├───────────────────────────┼───────────────────────────────────┼─────────────────────────┤
 │ 10. Live Audio DSP Studio │ `tools/audio_testbench/server.py` │ Interaktive Web-Audio   │
@@ -58,7 +58,7 @@ Um das Zusammenspiel von Hardware, Akustik, Fahrdynamik, Thermik, Hochfrequenz-P
   3. **Bourns Audio-Übertrager CMRR:** $85{,}0\,\text{dB}$ Gleichtaktunterdrückung gegen $1{,}2\,\text{kHz}$ Lichtmaschinen-Pfeifen $\rightarrow$ Restrauschen am Audio-Codec $< 141\,\mu\text{V}$ (glasklare $67{,}9\,\text{dB}$ Sprach-SNR).
   4. **1-Wire Signalintegrität über 1.5m Kabelbaum:** Flankenanstiegszeit $t_{\text{rise}} = 1{,}74\,\mu\text{s}$ über $167{,}9\,\text{pF}$ Gesamtkapazität ($65{,}3\,\%$ Sicherheitsmarge zur $5{,}0\,\mu\text{s}$-Norm).
   5. **PTT-zu-LoRa End-to-End Latenz:** Vom Tastendruck am Helm über Optokoppler, Opus-Encoder und UART-Bridge zum LoRa-Sendepuls in nur **$14{,}59\,\text{ms}$** ($< 25\,\text{ms}$ Aviation-Intercom-Norm).
-  6. **Universal Front Node DCDC & Hub:** LMR36015 Synchrongleichrichter mit $91{,}8\,\%$ Wirkungsgrad ($5{,}3\,\text{mV}$ Ripple), USB2512B High-Speed Augendiagramm mit $88{,}5\,\%$ Augenöffnung ($18{,}5\,\text{ps}$ Skew), Knowles MEMS mit $65{,}4\,\text{dB}$ SNR.
+  6. **Universal Front Node DCDC & Hub:** LMR36015 Synchrongleichrichter mit $91{,}8\,\%$ Wirkungsgrad ($5{,}3\,\text{mV}$ Ripple), USB2514B High-Speed Augendiagramm mit $88{,}5\,\%$ Augenöffnung ($18{,}5\,\text{ps}$ Skew), Knowles MEMS mit $65{,}4\,\text{dB}$ SNR.
   7. **Front-Node Zero-Latency PTT:** Gesamtlatenz vom Lenkertaster über ESP-NOW bis zur TLP222A Optokoppler-Zündung beträgt nur **$1{,}74\,\text{ms}$** ($< 5{,}0\,\text{ms}$ Anforderung).
   8. **Ottocast Auto-Café VBUS-Abschaltung:** Automatischer $60\,\text{s}$ Countdown nach Zündung AUS zur nahtlosen Übergabe des Smartphone-WLANs an Heim- oder Café-Netze.
 
@@ -161,10 +161,10 @@ Berechnet die Dämpfung nach ITU-R P.838-3 (Regen), ITU-R P.840-9 (Nebel) und IT
 
 Verifiziert alle hochfrequenten, leistungselektronischen und funktechnischen Subsysteme der Front-Knoten-Baugruppe (PCBA 05):
 
-1. **USB 2.0 High-Speed Augendiagramm (Microchip USB2512B):**
+1. **USB 2.0 High-Speed Augendiagramm (Microchip USB2514B):**
    * Datenrate: $480{,}0\,\text{Mbps}$ mit $Z_{\text{diff}} = 90{,}2\,\Omega$ (Toleranzfenster: $90 \pm 9\,\Omega$).
    * Intra-Pair Laufzeitversatz: nur $2{,}38\,\text{ps}$ (Spezifikation: $< 45\,\text{ps}$).
-   * Augenöffnung: $89{,}4\,\%$ Augenbreite ($1863\,\text{ps}$) und $362{,}7\,\text{mV}$ differentielle Höhe $\rightarrow$ Perfekt rauschfreie Datenübertragung zu Ottocast und Handschuhfach.
+   * Augenöffnung: $89{,}4\,\%$ Augenbreite ($1863\,\text{ps}$) und $362{,}7\,\text{mV}$ differentielle Höhe $\rightarrow$ Perfekt rauschfreie Datenübertragung zu Dongle und Handschuhfach.
 2. **TI TPS2051B VBUS Lastschalter & Schutzschaltung:**
    * Soft-Start Einschaltstrom: sanfter Anstieg in $1{,}20\,\text{ms}$ begrenzt Spitzenstrom bei $100\,\mu\text{F}$ Dongle-Pufferung auf $0{,}417\,\text{A}$ ($< 1{,}0\,\text{A}$ Limit).
    * Kurzschlussabschaltung: $6{,}2\,\mu\text{s}$ Reaktionszeit auf `FAULT_N` bei Überstrom.

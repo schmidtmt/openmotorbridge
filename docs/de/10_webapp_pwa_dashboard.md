@@ -80,7 +80,7 @@ Das Dashboard ist eine vollständig autarke Progressive Web App (PWA) basierend 
 
 ### 2.5 Tab 5: Hardware & Reserve (`#tab-hardware`)
 * **Front-Knoten Diagnostik & Pairing-Management:** 
-  * Anzeige der Hardware-Spezifikationen (ESP32-C3, LMR36015, USB2512B, TPS2051B, Knowles MEMS).
+  * Anzeige der Hardware-Spezifikationen (ESP32-S3, USB2514B 4-Port Hub, SC8102 USB-PD 20W, TPS2051B, TCAN334G CAN-FD, Knowles MEMS).
   * **1:1 Binding-Status:** Gepaarte MAC-Adresse, ESP-NOW Link-Zustand (`LINKED`, `OFFLINE`) und Signalpegel (RSSI).
   * **Interaktiver Koppel-Button:** `[Neuen Front-Knoten koppeln / Rescue-Übernahme]` – triggert den nahfeldbasierten Proximity-Rescue Beacon ($\text{RSSI} > -42\,\text{dBm}$) bei Tausch der Zentralbox.
   * Button zur Prüfung und Durchführung von **OTA-Firmware-Updates**.

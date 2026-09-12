@@ -71,7 +71,7 @@ The dashboard is a fully self-contained Progressive Web App (PWA) built with sta
 
 ### 2.5 Tab 5: Hardware & Reserve (`#tab-hardware`)
 * **Front Node Diagnostics & Pairing Management:** 
-  * Real-time hardware specifications (ESP32-C3, LMR36015, USB2512B, TPS2051B, Knowles MEMS).
+  * Real-time hardware specifications (ESP32-S3, USB2514B, SC8102, TCAN334G, TPS2051B, Knowles MEMS).
   * **1:1 Binding Status:** Registered MAC address, ESP-NOW link state (`LINKED`, `OFFLINE`), and signal strength (RSSI).
   * **Interactive Pairing Button:** `[Pair Front Node / Proximity Rescue]` – triggers the localized proximity rescue beacon ($\text{RSSI} > -42\,\text{dBm}$) if the Central Box was replaced.
   * Check and execute **OTA firmware updates**.

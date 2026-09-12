@@ -38,7 +38,7 @@ from typing import Dict, List, Any, Optional
 # ANSI Color formatting for multi-board serial console outputs
 C_MAIN  = "\033[92m"    # Green for Main Controller (ESP32-S3)
 C_REAR  = "\033[96m"    # Cyan for Rear Coprocessor (RP2040/ESP32-C6)
-C_FRONT = "\033[33m"    # Amber/Yellow for Front Node (ESP32-C3)
+C_FRONT = "\033[33m"    # Amber/Yellow for Front Node (ESP32-S3)
 C_CART  = "\033[93m"    # Bright Yellow for Pod Cartridge
 C_SYS   = "\033[95m"    # Magenta for Physical Interconnect / Cable Bus
 C_RST   = "\033[0m"     # Reset
@@ -50,7 +50,7 @@ def log_rear(msg: str):
     print(f"{C_REAR}[REAR POD3 COP]{C_RST} {msg}")
 
 def log_front(msg: str):
-    print(f"{C_FRONT}[FRONT NODE C3]{C_RST} {msg}")
+    print(f"{C_FRONT}[FRONT NODE S3]{C_RST} {msg}")
 
 def log_cart(msg: str):
     print(f"{C_CART}[POD CARTRIDGE]{C_RST} {msg}")
@@ -96,7 +96,7 @@ class RearPodHardware:
         self.pps_pulse_count = 0
 
 class FrontNodeHardware:
-    """Emulates physical Universal Front Node (ESP32-C3, USB2512B, TPS2051B, Knowles MEMS)"""
+    """Emulates physical Universal Front Node (ESP32-S3, USB2514B, TPS2051B, Knowles MEMS)"""
     def __init__(self):
         self.v_in = 13.8
         self.v_5v = 5.00
@@ -116,7 +116,7 @@ class FrontNodeFirmware:
         self.is_booted = False
 
     def boot(self):
-        log_front("Booting Universal Front Node ESP32-C3 Firmware v1.0.0...")
+        log_front("Booting Universal Front Node ESP32-S3 Firmware v1.0.0...")
         log_front("✓ Power Management: LMR36015 Synchronous Buck online (+5.00V / 2.0A)")
         log_front("✓ Knowles SPH0645LM4H Digital I2S MEMS Audio initialized (16 kHz, 24-Bit)")
         log_front("✓ Handlebar PTT Interrupt active on GPIO 0 (Active-Low, RC Debounce 15ms)")

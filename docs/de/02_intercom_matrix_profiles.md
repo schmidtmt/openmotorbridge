@@ -79,7 +79,7 @@ Klassische Bluetooth-Fernbedienungen am Lenker leiden unter hohen Latenzen ($80 
 │ 1. LENKERTRASTER (Am Front-Knoten verdrahtet):                                         │
 │    • Mechanischer Goldkontakt-Taster am Lenker (IP67, 100% batteriefrei)               │
 │    • Hardware-Schmitt-Trigger-Entprellung (12 µs Latenz)                               │
-│    • GPIO 0 Pegel-Interrupt auf ESP32-C3 RISC-V Controller                             │
+│    • GPIO Pegel-Interrupt auf ESP32-S3 Dual-Core Controller                            │
 ├────────────────────────────────────────────────────────────────────────────────────────┤
 │                                        ▼                                               │
 │ 2. ULTRA-LOW-LATENCY FUNKBRÜCKE (ESP-NOW 2.4 GHz):                                     │
@@ -91,7 +91,7 @@ Klassische Bluetooth-Fernbedienungen am Lenker leiden unter hohen Latenzen ($80 
 │ 3. ZENTRALBOX HARDWARE-TRIGGER:                                                        │
 │    • ESP32-S3 Core 0 ISR erfasst ESP-NOW Frame                                         │
 │    • Sofortiges Durchschalten des Toshiba TLP222A PhotoMOS Optokopplers (< 45 µs)      │
-│    • Gesamtzeit vom Tastendruck bis zum gezündeten Intercom-PTT: 1,74 ms               │
+│    • Gesamtzeit vom Tastendruck bis zum gezündeten Intercom-PTT: 1,70 ms               │
 └────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 

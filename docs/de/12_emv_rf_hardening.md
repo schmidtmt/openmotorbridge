@@ -18,7 +18,7 @@ Dieses Dokument spezifiziert die Schutzschaltungen gegen Kfz-Bordnetz-Transiente
 
 * **2,4-GHz-Koexistenz (Sena vs. Cardo):** Durch die räumliche Trennung von Pod 1 (Rahmen links) und Pod 2 (Rahmen rechts) über das metallische Fahrzeugchassis wird eine minimale Freiraumdämpfung von $> 35\,\text{dB}$ sichergestellt. Dies verhindert De-Sensing und HF-Intermodulation effektiv.
 * **Heck-Pod 3 Antennen-Architektur (Tri-RF Layout):**
-  * **2.4 GHz ESP32-C3 PCB-Antenne:** Platziert am vorderen Platinenrand in einer $15 \times 8\,\text{mm}$ Kupfer- und Bauteil-Freihaltezone (Keepout Area) ohne Masseflächen auf allen 4 Lagen.
+  * **2.4 GHz Mesh PCB-Antenne:** Platziert am vorderen Platinenrand in einer $15 \times 8\,\text{mm}$ Kupfer- und Bauteil-Freihaltezone (Keepout Area) ohne Masseflächen auf allen 4 Lagen.
   * **868 MHz LoRa-Wendelantenne:** Seitlich/hinten montiert mit dedizierter $50\,\Omega$ Microstrip-Speisung und symmetrischer $60 \times 36\,\text{mm}$ Groundplane für optimalen Wirkungsgrad ($> -1{,}5\,\text{dBi}$).
   * **u-blox Multi-GNSS Keramik-Patchantenne ($25 \times 25 \times 4\,\text{mm}$):** Zentriert mit ungehindertem $180^\circ$-Halbkugel-Himmelsblick nach oben durch die funktransparente PA12-Gehäusedecke ($3{,}0\,\text{mm}$ Wandstärke, $\varepsilon_r \approx 3{,}2$).
 * **Zentrale ePTFE-Druckausgleichsmembran:** $\varnothing\,7{,}0\,\text{mm}$ Gore/Schreiner Air Vent mittig auf dem Pod-Dach gleicht thermische Druckstöße symmetrisch aus, ohne das HF-Fernfeld zu verzerren.

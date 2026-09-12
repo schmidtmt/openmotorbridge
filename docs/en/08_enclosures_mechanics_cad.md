@@ -394,9 +394,9 @@ The physical arrangement of connectors and cable entries on the enclosure flanks
 ├─────────────────────────────────────────────────────────────────────────────┤
 │ LEFT SHORT FLANK (X = 0 mm)    │ INTERNAL CHAMBER     │ RIGHT SHORT FLANK (X = 84)  │
 │                                │                      │                             │
-│ • J1: 12V ACC Power (Y=38 mm)  │ • ESP32-C3 Controller│ • Enclosed solid wall (rear)│
+│ • J1: 12V ACC Power (Y=38 mm)  │ • ESP32-S3 Controller│ • Enclosed solid wall (rear)│
 │ • Mounting ear (M4, Y=30 mm)   │ • Knowles MEMS Mic   │ • Mounting ear (M4, Y=30 mm)│
-│ • J2: CAN-Bus (Y=25.75 mm)     │ • USB2512B Hub IC    │                             │
+│ • J2: CAN-Bus (Y=25.75 mm)     │ • USB2514B Hub IC    │                             │
 │ • J3: PTT button (Y=17.75 mm)  │ • Status LED D1      │ • J7: USB-C Service (Y=21.2)│
 │   (3-slot EPDM cable comb)     │                      │   (IP67 TPU sealing plug)   │
 ├─────────────────────────────────────────────────────────────────────────────┤
@@ -466,7 +466,7 @@ Due to factory inverted Showa remote reservoir rear shocks with thick braided hy
 
 #### A. Rear Integration: Under-Cowl Skeleton Dock & Telemetry Fin
 * **Skeleton Dock (`cvo_st_undercowl_skeleton_dock.scad`):** Receives the standard Pod 3 housing ($135 \times 70 \times 38.5\,\text{mm}$) upright. Two upward-arching spring arms brace against the ceiling of the carbon cowl, preventing any play or rattling over potholes and cobblestones.
-* **Telemetry Fin (`cvo_st_telemetry_fin.scad`):** Mounts directly onto the OEM rear mounting tab of the cowl. It passes the ESP32-C3 2.4 GHz mesh antenna outside into clean air while routing the coaxial cable invisibly beneath the tab into the cowl.
+* **Telemetry Fin (`cvo_st_telemetry_fin.scad`):** Mounts directly onto the OEM rear mounting tab of the cowl. It passes the Heck-Pod 3 2.4 GHz mesh antenna outside into clean air while routing the coaxial cable invisibly beneath the tab into the cowl.
 
 ![CVO ST Under-Cowl Skeleton Dock CAD](../images/cad/cvo_st_undercowl_skeleton_dock_cad.png)
 

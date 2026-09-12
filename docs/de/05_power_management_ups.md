@@ -18,7 +18,7 @@ Um hohe Wirkungsgrade bei minimaler Eigenerwärmung im geschlossenen IP67-Gehäu
 │ • Ausgang: 5.0 V DC / 1.0 A Dauer    │ • Ausgang: 5.0 V DC / 2.0 A Dauer    │
 │ • Wirkungsgrad: > 88 % bei Volllast  │ • Wirkungsgrad: 91.8 % bei 2.0 A     │
 │ • Transientenschutz bis 100 V        │ • Restwelligkeit: 5.3 mVpp           │
-│ • Versorgt: MCU, Audio, USV, Pod 1-3 │ • Versorgt: ESP32-C3, USB-Hub, VBUS  │
+│ • Versorgt: MCU, Audio, USV, Pod 1-3 │ • Versorgt: ESP32-S3, USB2514B, VBUS │
 └──────────────────────────────────────┴──────────────────────────────────────┘
 ```
 
@@ -71,7 +71,7 @@ Der Universal Front-Knoten verfügt über ein intelligentes Energiemanagement f�
 ```
                    FRONT-KNOTEN OTTOCAST POWER-GATE
 ┌────────────────────────────┐              ┌────────────────────────────┐
-│ 12V Bordnetz (KL15 Zündung)│              │ ESP32-C3 Firmware          │
+│ 12V Bordnetz (KL15 Zündung)│              │ ESP32-S3 Firmware          │
 │ • Scheinwerfer / Zubehör   │              │ • 1-Click Reboot Listener  │
 └─────────────┬──────────────┘              │ • Auto-Café 60s Countdown  │
               │                             └─────────────┬──────────────┘
@@ -87,15 +87,15 @@ Der Universal Front-Knoten verfügt über ein intelligentes Energiemanagement f�
                                                           │ 5.0V VBUS
                                                           ▼
                                             ┌────────────────────────────┐
-                                            │ Ottocast CarPlay Adapter   │
-                                            │ • USB-A Buchse Port 1      │
+                                            │ CP2AA CarPlay Adapter      │
+                                            │ • USB-Hub Port 2 (Pigtail) │
                                             └────────────────────────────┘
 ```
 
 ### 4.1 1-Klick Dongle Kaltstart (Hard Reset via PWA)
 Hängt sich der drahtlose CarPlay-Adapter auf, muss der Fahrer nicht mehr anhalten und den USB-Stecker ziehen:
 * Ein Klick auf den Button **"CarPlay 1-Klick Kaltstart"** im WebApp-Dashboard sendet den Befehl `PKT_TYPE_CMD_POWER_CYCLE` über ESP-NOW an den Front-Knoten.
-* Der ESP32-C3 zieht den Enable-Pin des TPS2051B für exakt $2{,}5\,\text{Sekunden}$ auf LOW.
+* Der ESP32-S3 zieht den Enable-Pin des TPS2051B für exakt $2{,}5\,\text{Sekunden}$ auf LOW.
 * Der Dongle wird vollständig spannungsfrei geschaltet ($0{,}00\,\text{V}$) und startet anschließend frisch durch.
 
 ### 4.2 Auto-Café Modus: 60s WLAN-Freigabe bei Zündung AUS

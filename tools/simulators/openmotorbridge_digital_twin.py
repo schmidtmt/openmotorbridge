@@ -10,7 +10,7 @@ PCBs per Motorcycle:
   2. PCBA 02: Satellite Pod Base (Passive M8 interface, SP3012 TVS line protection)
   3. PCBA 03: Pod Cartridge (1-Wire DS2401 Silicon ROM ID, PTT triggers, audio levels)
   4. PCBA 04: Rear Pod 3 (u-blox MAX-M10S GNSS, SX1262 LoRa 868MHz, 2.4GHz OMM Mesh, Garmin Radar)
-  5. PCBA 05: Universal Front Node (ESP32-C3, dual Knowles MEMS mics, cockpit PTT, VBUS)
+  5. PCBA 05: Universal Front Node (ESP32-S3, dual Knowles MEMS mics, cockpit PTT, VBUS)
 
 Physics & RF Simulation:
   - Geodetic Track: Wil SG -> Wattwil Umfahrung (2.2km Tunnel) -> Wattwil Kreisel -> Rickenpass
@@ -99,7 +99,7 @@ class EmulatedRearPod3:
         self.last_radar_update = 0.0
 
 class EmulatedFrontNode:
-    """PCBA 05: Universal Front Node (ESP32-C3, Knowles MEMS mics, Cockpit PTT)"""
+    """PCBA 05: Universal Front Node (ESP32-S3, Knowles MEMS mics, Cockpit PTT)"""
     def __init__(self, bike_id: str):
         self.bike_id = bike_id
         self.cockpit_ptt_pressed = False

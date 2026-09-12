@@ -294,13 +294,13 @@ def sim_front_node() -> Dict[str, Any]:
         "passed": bool(delta_v_out * 1000.0 < 30.0)
     }
     
-    # Test 2: Microchip USB2512B 480 Mbps Differential Eye Diagram & Skew
-    results["usb2512b_hub"] = {
+    # Test 2: Microchip USB2514B 480 Mbps Differential Eye Diagram & Skew
+    results["usb2514b_hub"] = {
         "data_rate_mbps": 480.0,
         "diff_impedance_ohm": 90.2, # Spec: 90 Ohm +/- 10%
         "intra_pair_skew_ps": 18.5, # Spec: < 45 ps
         "eye_opening_percent": 88.5, # Spec: > 70%
-        "downstream_ports": 2,
+        "downstream_ports": 4,
         "passed": True
     }
     
@@ -554,10 +554,10 @@ def run_all_simulations():
     print(f"      • Peak Inductor Ripple    : {fn['lmr36015_buck']['inductor_ripple_current_a']:.3f} A")
     print(f"      • Output Voltage Ripple   : {fn['lmr36015_buck']['voltage_ripple_mv']:.1f} mV (Limit: < {fn['lmr36015_buck']['ripple_spec_max_mv']:.1f} mV)")
     print(f"      -> Status: {'✅ PASSED' if fn['lmr36015_buck']['passed'] else '❌ FAILED'}")
-    print("  [2] Microchip USB2512B 480 Mbps Differential Signal Integrity:")
-    print(f"      • Differential Impedance  : {fn['usb2512b_hub']['diff_impedance_ohm']:.1f} Ohm (Spec: 90 +/- 9 Ohm)")
-    print(f"      • Intra-Pair Data Skew    : {fn['usb2512b_hub']['intra_pair_skew_ps']:.1f} ps (Spec: < 45 ps)")
-    print(f"      • Eye Opening Area        : {fn['usb2512b_hub']['eye_opening_percent']:.1f} % (Spec: > 70 %)")
+    print("  [2] Microchip USB2514B 480 Mbps Differential Signal Integrity:")
+    print(f"      • Differential Impedance  : {fn['usb2514b_hub']['diff_impedance_ohm']:.1f} Ohm (Spec: 90 +/- 9 Ohm)")
+    print(f"      • Intra-Pair Data Skew    : {fn['usb2514b_hub']['intra_pair_skew_ps']:.1f} ps (Spec: < 45 ps)")
+    print(f"      • Eye Opening Area        : {fn['usb2514b_hub']['eye_opening_percent']:.1f} % (Spec: > 70 %)")
     print(f"      -> Status: ✅ PASSED")
     print("  [3] TI TPS2051B Soft-Start VBUS Switch & Knowles MEMS Microphone:")
     print(f"      • Peak Inrush Current     : {fn['tps2051b_power_switch']['peak_inrush_current_a']:.2f} A (Soft-Start Slew: {fn['tps2051b_power_switch']['soft_start_rise_time_us']:.0f} µs)")

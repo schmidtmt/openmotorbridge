@@ -47,7 +47,7 @@ The comprehensive technical specification is split into 16 logically organized c
    *Universal pods & cartridges, 4-in-1 Front Node, and turnkey zero-drill reference kits for CVO ST, Road King Special, and Adventure bikes.*
 
 9. [**09 - Firmware Architecture, FreeRTOS & Rollback-OTA**](docs/en/09_firmware_architecture.md)  
-   *Multi-core ESP32-S3, RP2040, ESP32-C3, ESP-NOW low-latency protocol (< 1.8 ms), and dual-bank rollback OTA.*
+   *Multi-core ESP32-S3 (Main & Front), Rear Co-Processor, ESP-NOW low-latency protocol (< 1.8 ms), and dual-bank rollback OTA.*
 
 10. [**10 - WebApp PWA & Dashboard Operation**](docs/en/10_webapp_pwa_dashboard.md)  
     *Zero-cloud PWA web app, Web Bluetooth API (WebBLE), vehicle dynamics HUD, and Front Node controls.*
@@ -77,6 +77,7 @@ The comprehensive technical specification is split into 16 logically organized c
 * **`docs/de/`**: Complete technical specifications in German.
 * **`docs/en/`**: Complete technical specifications in English.
 * **`firmware/main_controller/`**: ESP-IDF / C++ source code for the central main box (ESP32-S3).
+* **`firmware/front_node/`**: ESP-IDF / C++ source code for the Universal Front Node (ESP32-S3).
 * **`firmware/rear_coprocessor/`**: ESP-IDF / C++ source code for the Rear Pod 3 co-processor (ESP32-C3).
 * **`webapp_pwa/`**: Zero-cloud offline WebBLE dashboard (HTML5, Vanilla JS, CSS3, Service Worker, i18n).
 * **`hardware/`**: KiCad schematics, Gerber files, and 3D enclosure CAD models.

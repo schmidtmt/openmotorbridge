@@ -80,7 +80,7 @@ To build a fully featured OpenMotorBridge (v8.0) installation for one motorcycle
 | **PCBA 02** | Pod Base Carrier Board (`kicad_pod_base`) | **3** | 2-Layer FR4, ENIG Gold | M8 6-pin IP67 socket, SP3012 ESD array, Harwin 6-pin precision header with 4.8mm wipe |
 | **PCBA 03** | Universal Cartridge Board (`kicad_cartridge`)| **2** | 2-Layer FR4, ENIG Gold | Harwin 6-pin precision socket, DS2401 1-Wire ID, JST-SH 6-pin ribbon header to OEM cradle |
 | **PCBA 04** | Rear Pod 3 Transceiver (`kicad_rear_pod3`) | **1** | 4-Layer FR4 TG150, ENIG Gold | RP2040 coprocessor, u-blox NEO-M9N / MAX-M10S GNSS, Semtech SX1262 LoRa, 3x Murata MM8030 RF switches |
-| **PCBA 05** | Universal Front Node (`kicad_front_node`) | **1** | 4-Layer FR4 TG150, ENIG Gold | ESP32-C3 RISC-V, USB2512B Hub, LMR36015 DCDC, TPS2051B power switch, Knowles MEMS mic, PTT trigger |
+| **PCBA 05** | Universal Front Node (`kicad_front_node`) | **1** | 4-Layer FR4 TG150, ENIG Gold | ESP32-S3 Dual-Core, USB2514B Hub, LMR36015 DCDC, SC8102 USB-PD, TPS2051B power switch, Knowles MEMS mic, PTT trigger |
 
 ---
 
@@ -130,7 +130,7 @@ To build a fully featured OpenMotorBridge (v8.0) installation for one motorcycle
 | **Automotive Wire** | FLRY-B $0.5\,\text{mm}^2$ (Power/GND) and $0.35\,\text{mm}^2$ (Signals/Audio) | *As req.* | Custom bike harness per [`central_breakout_harness_wirelist.csv`](file:///Users/schmidtm/openMotorBridge/hardware/production_packages/05_wiring_harness_spec/central_breakout_harness_wirelist.csv) |
 | **EPDM Frame Straps** | UV/Ozone-resistant EPDM ladder straps ($\varnothing 45 \dots 75\,\text{mm}$) | **6** | Tool-free rapid mounting of pods to crash bars or frame tubes |
 | **Murata MM8030 Pigtails** | Murata MM126036 to SMA Bulkhead IP67 (150 mm, RG-178)| **3** | Coaxial bypass for Pod 3: J3 (2.4G), J4 (868M), J5 (GNSS) |
-| **U.FL Coaxial Pigtail** | IPEX MHF1 / U.FL to RP-SMA Bulkhead IP67 (150 mm, RG-178)| **1** | Coaxial feed for Front Node ESP32-C3 external antenna |
+| **U.FL Coaxial Pigtail** | IPEX MHF1 / U.FL to RP-SMA Bulkhead IP67 (150 mm, RG-178)| **1** | Coaxial feed for Front Node ESP32-S3 external antenna |
 | **SMA Flange Double Bulkhead**| SMA Female to SMA Female Bulkhead IP67 with O-ring & nut | **1** | Waterproof RF feedthrough in cartridge faceplate (Class A) |
 | **Internal Coax Pigtail** | RG-178 Coaxial Cable ($6\dots 10\,\text{cm}$, 90° SMA Male to SMA Male)| **1** | RF connection from Sena +Mesh / OEM adapter to faceplate |
 | **SMA IP67 Protective Caps** | Nickel-plated brass with internal O-ring (knurled cap)| **5** | Waterproof seal for unpopulated SMA ports (3x Pod 3, 1x Front, 1x Pod) |
@@ -166,7 +166,7 @@ To assemble all subassemblies with vibration resistance and hermetic IP67 sealin
 | **Threadlocker (Loctite 243)** | Medium strength (blue) | Prevents motorcycle screw loosening under heavy vibrations | **Yes** |
 | **Conformal Coating** | Peters Elpeguard SL 1307 or Electrolube UR5041 (IPC-CC-830B) | Full PCB encapsulation against condensation and road salt spray | *Recommended* |
 | **Scalpel / Precision Knife** | With fresh sharp blade | Burr-free trimming of silicone cord gaskets & EPDM blocks | **Yes** |
-| **USB-C Data Cable** | High-quality USB 2.0/3.0 data cable (not a power-only cable!) | Flashing ESP32-S3, RP2040, and ESP32-C3 via PlatformIO | **Yes** |
+| **USB-C Data Cable** | High-quality USB 2.0/3.0 data cable (not a power-only cable!) | Flashing ESP32-S3 (Main & Front) and RP2040 (Rear) via PlatformIO | **Yes** |
 
 ---
 
@@ -239,9 +239,9 @@ To assemble all subassemblies with vibration resistance and hermetic IP67 sealin
    * Melt 4x M4 inserts into the AMPS pattern ($30 \times 38\,\text{mm}$) on the bottom.
 2. **Acoustic Membrane:** Adhere the hydrophobic Gore ePTFE acoustic membrane over the Knowles MEMS sound port.
 3. **Mount PCB:** Fasten `PCBA 05` using M2.5 screws.
-4. **RF Antenna Installation (ESP32-C3 2.4 GHz):**
+4. **RF Antenna Installation (ESP32-S3 2.4 GHz):**
    * Adhere the flexible 2.4 GHz FPC dipole antenna (e.g. Molex 146153) into the $48 \times 12\,\text{mm}$ recess pocket on the inside of the enclosure lid.
-   * Route the $1.13\,\text{mm}$ micro-coaxial lead into the ceiling guide canal and snap the U.FL / IPEX-MHF1 connector perpendicular onto the antenna port of the ESP32-C3-WROOM-02U module. (Optional: For extreme installations such as solid carbon fiber fairings, the lead can be routed outside through an EPDM gland slit).
+   * Route the $1.13\,\text{mm}$ micro-coaxial lead into the ceiling guide canal and snap the U.FL / IPEX-MHF1 connector perpendicular onto the antenna port of the ESP32-S3-WROOM-1U module. (Optional: For extreme installations such as solid carbon fiber fairings, the lead can be routed outside through an EPDM gland slit).
 5. **Insert Cables into Front & Flank Openings:**
    * **Front Opening (South Wall, 4x $\varnothing 4.2\,\text{mm}$ slitted channels for USB):**
      * Insert the short USB-A flat ribbon cable into Channel 1 and connect to Port `J6` (switched VBUS for CarPlay / Dongle).
@@ -299,7 +299,7 @@ pio run --target uploadfs
 cd ../rear_coprocessor
 pio run --target upload
 
-# 3. Flash Front Node (ESP32-C3)
+# 3. Flash Front Node (ESP32-S3)
 cd ../front_node
 pio run --target upload
 ```

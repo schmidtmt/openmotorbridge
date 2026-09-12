@@ -36,7 +36,7 @@ To exhaustively verify the interaction of hardware, acoustics, vehicle dynamics,
 │ 8. 180-Day Winter Storage │ `battery_winter_standby_sim.py`   │ 16.5 µA ULP-Hibernate,  │
 │    Quiescent Drain        │                                   │ 0.59% Drain / 6 Months  │
 ├───────────────────────────┼───────────────────────────────────┼─────────────────────────┤
-│ 9. Universal Front Node   │ `front_node_wireless_hub_sim.py`  │ USB2512B Eye, MEMS DSP, │
+│ 9. Universal Front Node   │ `front_node_wireless_hub_sim.py`  │ USB2514B Eye, MEMS DSP, │
 │    (PCBA 05)              │                                   │ TPS2051B, ESP-NOW, BLE  │
 ├───────────────────────────┼───────────────────────────────────┼─────────────────────────┤
 │ 10. Live Audio DSP Studio │ `tools/audio_testbench/server.py` │ Interactive Web Audio   │
@@ -54,7 +54,7 @@ To exhaustively verify the interaction of hardware, acoustics, vehicle dynamics,
   3. **Bourns Audio Transformer CMRR:** $85{,}0\,\text{dB}$ common-mode rejection against alternator whine $\rightarrow$ Residual noise at codec $< 141\,\mu\text{V}$ ($67{,}9\,\text{dB}$ SNR).
   4. **1-Wire Signal Integrity over 1.5m Harness:** Rise time $t_{\text{rise}} = 1{,}74\,\mu\text{s}$ across $167{,}9\,\text{pF}$ total capacitance ($65{,}3\,\%$ margin to $5{,}0\,\mu\text{s}$ spec).
   5. **PTT-to-LoRa End-to-End Latency:** Total path from helmet key through optocoupler, Opus encoder, and UART bridge takes **$14{,}59\,\text{ms}$** ($< 25\,\text{ms}$ aviation standard).
-  6. **Front Node DCDC & Hub:** LMR36015 buck converter delivers $91{,}8\,\%$ efficiency ($5{,}3\,\text{mV}$ ripple); USB2512B achieves $88{,}5\,\%$ eye opening with $18{,}5\,\text{ps}$ skew.
+  6. **Front Node DCDC & Hub:** LMR36015 buck converter delivers $91{,}8\,\%$ efficiency ($5{,}3\,\text{mV}$ ripple); USB2514B achieves $88{,}5\,\%$ eye opening with $18{,}5\,\text{ps}$ skew.
   7. **Front Node Zero-Latency PTT:** Glass-to-glass latency from mechanical handlebar switch over ESP-NOW to TLP222A optocoupler firing is only **$1{,}74\,\text{ms}$**.
 
 ---
@@ -156,7 +156,7 @@ Calculates atmospheric and precipitation attenuation according to ITU-R P.838-3 
 
 Simulates and verifies all high-speed, power, and wireless subsystems of the Front Node (PCBA 05):
 
-1. **USB 2.0 High-Speed Eye Diagram (Microchip USB2512B):**
+1. **USB 2.0 High-Speed Eye Diagram (Microchip USB2514B):**
    * Data rate: $480{,}0\,\text{Mbps}$ with $Z_{\text{diff}} = 90{,}2\,\Omega$ (target: $90 \pm 9\,\Omega$).
    * Intra-pair skew: only $2{,}38\,\text{ps}$ (spec allows up to $< 45\,\text{ps}$).
    * Eye opening: $89{,}4\,\%$ eye width ($1,863\,\text{ps}$) and $362{,}7\,\text{mV}$ differential height $\rightarrow$ Flawless, jitter-free link to Ottocast and phone.

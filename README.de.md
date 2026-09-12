@@ -47,7 +47,7 @@ Die modulare technische Gesamtspezifikation gliedert sich in 16 thematisch struk
    *Universelle Pods & Kassetten, 4-in-1 Front-Knoten sowie schraub- und klebefreie Referenzkits für CVO ST, Road King Special und Enduros.*
 
 9. [**09 - Firmware-Architektur, FreeRTOS & Rollback-OTA**](docs/de/09_firmware_architecture.md)  
-   *Multi-Core ESP32-S3, RP2040, ESP32-C3, ESP-NOW Low-Latency-Protokoll und ausfallsicheres Dual-Bank OTA.*
+   *Multi-Core ESP32-S3 (Main & Front), Heck-Co-Prozessor, ESP-NOW Low-Latency-Protokoll und ausfallsicheres Dual-Bank OTA.*
 
 10. [**10 - WebApp PWA & Dashboard-Bedienung**](docs/de/10_webapp_pwa_dashboard.md)  
     *Autarkes WebBLE Dashboard, Fahrdynamik-HUD, Front-Node Steuerung (1-Klick Reboot) & 4-stufiger GPX-Export.*
@@ -77,6 +77,7 @@ Die modulare technische Gesamtspezifikation gliedert sich in 16 thematisch struk
 * **`docs/de/`**: Sämtliche technische Spezifikationen und Designdokumente auf Deutsch.
 * **`docs/en/`**: Vollständige technische Spezifikationen auf Englisch.
 * **`firmware/main_controller/`**: ESP-IDF / C++ Quellcode für die zentrale Steuerbox (ESP32-S3).
+* **`firmware/front_node/`**: ESP-IDF / C++ Quellcode für den Universal Front-Knoten (ESP32-S3).
 * **`firmware/rear_coprocessor/`**: ESP-IDF / C++ Quellcode für den Heck-Pod 3 Co-Prozessor (ESP32-C3).
 * **`webapp_pwa/`**: Offlinefähiges WebBLE Dashboard (HTML5, Vanilla JS, CSS3, Service Worker, i18n).
 * **`hardware/`**: KiCad Schaltpläne, Gerber-Dateien und 3D-Modelle für das Gehäuse.

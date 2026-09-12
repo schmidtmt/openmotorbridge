@@ -4,7 +4,7 @@ OpenMotorBridge - Universal Front Node (PCBA 05) Dedicated Simulator
 ====================================================================
 Multi-Domain Simulation of PCBA 05 & Firmware Components:
   1. USB 2.0 High-Speed (480 Mbps) Differential Signal Integrity & Eye Diagram
-     - Microchip USB2512B downstream routing to Ottocast and Glovebox ports
+     - Microchip USB2514B downstream routing to Ottocast and Glovebox ports
      - 90 Ohm differential microstrip impedance, intra-pair skew, jitter & ISI
   2. TI TPS2051B VBUS Power Switch Dynamics & Fault Watchdog
      - Soft-start inrush current profile with 100 uF capacitive load
@@ -35,7 +35,7 @@ def format_banner(title: str, ch: str = "=") -> str:
     return f"\n{line}\n{title.center(80)}\n{line}"
 
 # =============================================================================
-# 1. USB 2.0 HIGH-SPEED SIGNAL INTEGRITY (USB2512B)
+# 1. USB 2.0 HIGH-SPEED SIGNAL INTEGRITY (USB2514B)
 # =============================================================================
 
 def sim_usb_signal_integrity() -> Dict[str, Any]:
@@ -187,7 +187,7 @@ def sim_espnow_ptt_latency() -> Dict[str, Any]:
     # Glass-to-Glass components:
     # 1. Mechanical switch contact bounce & hardware RC lowpass
     t_hw_rc_us = 15.0 # hardware RC (1k + 100nF to 1.65V threshold)
-    # 2. ESP32-C3 GPIO interrupt vector execution
+    # 2. ESP32-S3 GPIO interrupt vector execution
     t_isr_us = 8.5
     # 3. FreeRTOS ISR-to-Task context switch or immediate ISR tx
     t_queue_us = 12.0

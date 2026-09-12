@@ -18,7 +18,7 @@ To achieve high efficiency and minimal internal thermal rise within hermetically
 │ • Output: 5.0 V DC / 1.0 A Continuous│ • Output: 5.0 V DC / 2.0 A Continuous│
 │ • Full-Load Efficiency: > 88 %       │ • Full-Load Efficiency: 91.8 % @ 2.0A│
 │ • Transient Immunity: up to 100 V    │ • Output Ripple: 5.3 mVpp            │
-│ • Powers: MCU, Audio DSP, UPS, Pods  │ • Powers: ESP32-C3, USB Hub, VBUS    │
+│ • Powers: MCU, Audio DSP, UPS, Pods  │ • Powers: ESP32-S3, USB Hub, VBUS    │
 └──────────────────────────────────────┴──────────────────────────────────────┘
 ```
 
@@ -71,7 +71,7 @@ The Universal Front Node features intelligent power management for external wire
 ```
                    FRONT NODE OTTOCAST POWER-GATE
 ┌────────────────────────────┐              ┌────────────────────────────┐
-│ 12V Vehicle Net (KL15 IGN) │              │ ESP32-C3 Firmware          │
+│ 12V Vehicle Net (KL15 IGN) │              │ ESP32-S3 Firmware          │
 │ • Headlight / Accessory Tap├─────────────►│ • 1-Click Reboot Listener  │
 │ • Reverse-Polarity & TVS   │              │ • Auto-Café 60s Countdown  │
 └────────────────────────────┘              └─────────────┬──────────────┘
@@ -79,7 +79,7 @@ The Universal Front Node features intelligent power management for external wire
                                                           ▼
 ┌────────────────────────────┐              ┌────────────────────────────┐
 │ Ottocast CarPlay Dongle    │  5V VBUS     │ TI TPS2051B Load Switch    │
-│ • Port 1 (USB-A, Switched) │◄─────────────┤ • 1.05A Fast Short Clamp   │
+│ • Port 2 (USB-A, Switched) │◄─────────────┤ • 1.05A Fast Short Clamp   │
 │ • 1-Click Hard Restart     │ (max. 1.05A) │ • 1.2 ms Soft-Start Ramp   │
 └────────────────────────────┘              └────────────────────────────┘
 ```
