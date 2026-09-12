@@ -161,6 +161,23 @@
       "start_bit": 19,
       "length_bits": 1,
       "endianness": "little"
+    },
+    "infotainment_source_active": {
+      "can_id": "0x388",
+      "is_extended": false,
+      "start_bit": 0,
+      "length_bits": 4,
+      "endianness": "little",
+      "enum_mapping": {
+        "0": "off",
+        "1": "fm_am_tuner",
+        "2": "dab_siriusxm",
+        "3": "local_usb_mp3",
+        "4": "bluetooth_audio",
+        "5": "apple_carplay",
+        "6": "android_auto",
+        "7": "omb_usb_proxy"
+      }
     }
   }
 }

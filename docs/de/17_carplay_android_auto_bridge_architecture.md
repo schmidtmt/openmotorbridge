@@ -34,16 +34,24 @@ OpenMotorBridge löst dieses Problem durch eine konsequent modulare **Zwei-Stufe
   • Volle Intercom-Matrix (Sena/Cardo Koffer-Pods), eCall-Notruf & Heck-Radar
 
                                │ Optional erweiterbar via
-                               │ ESP-NOW Funkbrücke (< 2 ms, 128 kbps Opus Audio)
+                               │ ESP-NOW Funkbrücke (< 0.9 ms Latenz)
                                ▼
 
-  [STUFE 2: COCKPIT-ERWEITERUNG (PCBA 05 FRONT-NODE IN DER VERKLEIDUNG)]
-  • Speziell für Motorräder mit Infotainment-Touchscreen (Harley Skyline OS, Boom! Box)
-  • Integriertes Automotive USB 2.0 Subsystem & Headless CP2AA Dongle-Management
-  • Verwandelt kabelgebundenes Skyline OS CarPlay in drahtloses Apple CarPlay & Android Auto
-  • Automatisches Power-Gating (echte 0.0 µA Ruhestrom bei Zündung-Aus)
-  • Digitales Knowles MEMS-Fahrtwindmikrofon & Action-Cam BLE Remote-Trigger
-  • 100% ohne neue Kabel durch den Lenkkopf!
+  [STUFE 2: UNIVERSAL COCKPIT & FRONT HUB (PCBA 05 IM FRONTBEREICH / COCKPIT)]
+  • UNIVERSAL-FUNKTIONEN FÜR JEDES MOTORRAD (Naked Bike, Enduro, Tourer, Cruiser):
+    - Drahtgebundener Lenker-PTT (Optokoppler GPIO 0, < 1.8 ms): Nur 30–50 cm Leitung am Lenker!
+      Vollständige Eliminierung von fehleranfälligen Signalkabeln über den schwenkenden Lenkkopf.
+    - Knowles I2S MEMS-Fahrtwindmikrofon: Misst Staudruck und Windpegel direkt an der Frontscheibe
+      (unter der Sitzbank physikalisch unmöglich) für automatische Helmlautstärke-Nachführung (AGC).
+    - Cockpit USB-Ladehub: 5V 2A Power für Handy (SP Connect / QuadLock) & dedizierter Cam-Port.
+    - Action-Cam BLE Shutter-Bridge: Steuert GoPro / Insta360 in direkter Sichtlinie (< 0.5 m).
+  
+  • MODULARE INFOTAINMENT- & DISPLAY-ERWEITERUNG (Für Bikes mit Touchscreen & Nachrüst-TFTs):
+    - Für Harley Skyline OS / Boom! Box GTS, Honda Goldwing oder Nachrüst-Displays (Chigee/Carpuride)
+    - Verwandelt kabelgebundenes CarPlay in drahtloses Apple CarPlay & kabelloses Android Auto
+    - USB-Media Proxy für natives Harley-Display (Titelanzeige & Steuerung ohne CarPlay-Zwang)
+    - USB CDC-NCM Ethernet Tethering: Versorgt das interne Werks-Navi automatisch mit Live-Staudaten
+    - 100% ohne neue Signal- oder Videokabel durch den Lenkkopf!
 ```
 
 ---
@@ -211,9 +219,25 @@ Harley-Davidson sperrt die CarPlay-Aktivierung im Infotainment-System, wenn kein
    - Der ESP32-S3 Audio-DSP übernimmt die Windgeräuschunterdrückung, AGC und das Raised-Cosine-Ducking (-18 dB bei Radar-Warnung) und schleift den aufbereiteten digitalen Sprachkanal via USB Audio Class (UAC) direkt in die Headunit ein.
 3. **Nahtlose Sprachassistenten:** Wenn der Fahrer die Lenkertaste drückt oder *"Hey Siri"* bzw. *"Hey Google"* sagt, öffnet die Bridge den Mikrofonstream direkt zum Smartphone. Das Motorrad akzeptiert die Audioeingabe ohne jede Fehlermeldung oder WHIM-Sperre.
 
+### 5.3 Natives OEM-Display & USB-Media Proxy (Betrieb ohne CarPlay / Android Auto)
+Niemand wird gezwungen, Apple CarPlay oder Android Auto zu nutzen. Wer das originale, vom Fahrzeughersteller designte Medienmenü bevorzugt, profitiert von der **USB-Media Proxy Architektur** des Front-Nodes:
+
+1. **Funktionsweise:**
+   * Der Front-Node meldet sich an der USB-Buchse im Handschuhfach (`J4`) als zertifiziertes Apple MFi- bzw. USB Audio Class Gerät an.
+   * Das Smartphone streamt Musik (z. B. Spotify, Apple Music) via Bluetooth direkt an die OpenMotorBridge Zentralbox.
+   * OpenMotorBridge extrahiert die ID3-Metadaten (Titel, Interpret, Album, Spieldauer) und sendet sie per ESP-NOW an den Front-Node, der sie über USB an Skyline OS weiterreicht.
+2. **Was sieht der Fahrer auf dem Harley-Display?**
+   * Das 12.3" Skyline OS (oder 6.5" Boom! Box) Display öffnet seine native Medienansicht: Vollständiger Track-Titel, Interpret, Albumname und Playback-Fortschrittsbalken im originalen Harley-Look.
+3. **Hybrides Audio-Routing (Zwei wählbare Profile):**
+   * **Profil 1: „Helm-Fokus“ (Standard bei Fahrt mit Headset):**
+     Das Audiosignal wird **nicht** über das Motorrad geroutet, sondern geht direkt vom Smartphone in den HiFi-DSP von OpenMotorBridge und per LDAC / aptX-HD in den Helm.
+     *Vorteile:* Kein doppelter Bluetooth-Hop ($< 20\,\text{ms}$ statt $> 300\,\text{ms}$ Latenz), kein WHIM-Zwang und volles Raised-Cosine Ducking ($-18\,\text{dB}$ bei Radar-Warnung, $-12\,\text{dB}$ bei Intercom).
+   * **Profil 2: „Fairing-Lautsprecher“ (Cruising über Außenboxen):**
+     Der Front-Node speist das Audiosignal digital über USB (48 kHz / 16 Bit Stereo) in Skyline OS ein, sodass die Musik über die Rockford-Fosgate Verkleidungslautsprecher abgespielt wird.
+
 ---
 
-## 6. Lenkerbedienung & CAN-Bus Injektion
+## 6. Lenkerbedienung & Source-Aware CAN Handlebar Gating
 
 Über die Universal Front-Node (PCBA 05) werden die Bedienelemente des Motorrads direkt mit den Smartphone-Funktionen verknüpft:
 
@@ -233,9 +257,82 @@ Harley-Davidson sperrt die CarPlay-Aktivierung im Infotainment-System, wenn kein
   eCall Sturz erkannt (> 6.5 g)      Main-Box LoRa SOS            Vollbild SOS Notruf-Overlay
 ```
 
+### 6.1 Das Kollisionsproblem: Schutz vor Geister-Streaming bei lokalem MP3-Stick / Radio
+Bei naivem CAN-Sniffing von `0x290` (Lenker-Joystick) entstünde ein massiver Bedienkonflikt:
+*Hört der Fahrer Radio oder MP3s von einem lokalen USB-Stick und drückt am Lenker auf „Weiter“, würde parallel Spotify auf dem Smartphone aufwachen und ungewollt Musik in den Helm einspielen.*
+
+OpenMotorBridge verhindert dies durch **Source-Aware CAN Handlebar Gating (Quellengefilterte Lenkersteuerung)**:
+
+```
+                         ┌──────────────────────────────────────────────┐
+                         │       HARLEY-DAVIDSON CAN-BUS (0x290)        │
+                         │   Handlebar Joystick [NEXT / PREV / CLICK]   │
+                         └──────────────────────┬───────────────────────┘
+                                                │
+                                                ▼
+                                 ┌──────────────────────────────┐
+                                 │   OPENMOTORBRIDGE CAN-GATE   │
+                                 │   (Quellenprüfung vor Event) │
+                                 └──────────────┬───────────────┘
+                                                │
+                  ┌─────────────────────────────┴─────────────────────────────┐
+                  │                                                           │
+                  ▼                                                           ▼
+   [BEDINGUNG 1: Harley Quelle]                                [BEDINGUNG 2: Front-Node USB-Hub]
+Infotainment meldet auf CAN (0x388):                         Microchip USB2512B Port 1 Status:
+• FM/AM Radio Tuner       ➔ BLOCKIEREN                      • MP3-Stick eingesteckt & aktiv
+• DAB+ / SiriusXM         ➔ BLOCKIEREN                        ➔ BLOCKIEREN (Harley liest Stick)
+• Lokaler USB-Stick (MP3) ➔ BLOCKIEREN                      • Kein Stick / Phone Charging Only
+• Bluetooth Audio         ➔ ERLAUBEN                          ➔ ERLAUBEN
+• CarPlay / Android Auto  ➔ ERLAUBEN
+• OMB Virtual USB-Proxy   ➔ ERLAUBEN
+                  │                                                           │
+                  └─────────────────────────────┬─────────────────────────────┘
+                                                │
+                                                ▼
+                                 ┌──────────────────────────────┐
+                                 │  Ist OMB als Quelle aktiv?   │
+                                 └──────┬────────────────┬──────┘
+                                    NEIN│                │JA
+                                        ▼                ▼
+                                 [EVENT VERWERFEN]    [AVRCP SENDEN]
+                                 Harley steuert       Smartphone springt
+                                 eigenen Stick/Radio  zum nächsten Song!
+```
+
+1. **CAN-Quellenfilter (`audio_source_active` auf `0x388`):** Wippen-Events werden nur weitergeleitet, wenn als Quelle Bluetooth, CarPlay, Android Auto oder der OMB-Proxy aktiv ist. Bei Radio oder internem MP3-Stick bleibt das Smartphone unberührt.
+2. **USB-Hub Status (`USB2512B` Port 1 Sense):** Erkennt hardwareseitig, ob an Port 1 ein Massenspeicher eingesteckt ist.
+3. **AVRCP Playback-State Lock:** Verhindert das automatische Starten von Musik, wenn die Smartphone-App im Zustand `STOPPED` ist.
+4. **WebApp PWA Einstellung:** In Tab 5 kann der Fahrer wählen zwischen `AUTOMATISCH (Quellengefiltert)` (Standard), `IMMER AKTIV` (für Naked Bikes) und `DEAKTIVIERT`.
+
 ---
 
-## 7. Thermomanagement & Kaltstart-Schutz (Automotive Grade)
+## 7. Live-Traffic & Datenbrücke für das interne Werks-Navi
+
+Das werkseigene Navigationssystem von Harley-Davidson (Skyline OS / Boom! Box GTS) nutzt Karten- und Verkehrsdienste von **HERE Technologies / TomTom**. Um Staudaten, Baustellen, Unfälle und dynamische Umfahrungen anzuzeigen, benötigt das interne Navi einen Internet-Uplink.
+
+### Die herkömmliche Hürde
+Normalerweise verlangt Harley, dass der Fahrer vor jeder Fahrt am Smartphone manuell den *Persönlichen WLAN-Hotspot* einschaltet. Unter iOS schläft dieser Hotspot im Standby nach wenigen Minuten ein – das interne Navi verliert die Verbindung und zeigt keine Verkehrsdaten mehr an.
+
+### Die OpenMotorBridge Lösung: USB CDC-NCM Ethernet Tethering
+Über den Front-Node (PCBA 05) an der USB-Buchse im Handschuhfach (`J4`) löst OpenMotorBridge das Problem vollautomatisch:
+
+1. **Automotive USB-Ethernet-Schnittstelle:**
+   * Der Allwinner T113-S3 Controller meldet sich als standardisiertes **USB CDC-NCM / RNDIS Netzwerkgerät** bei Skyline OS an.
+   * Skyline OS erkennt die Verbindung wie ein physikalisches Ethernet-Netzwerkkabel (`eth0`).
+   * Der interne DHCP-Server des Front-Nodes weist der Harley sofort eine IP-Adresse (`192.168.4.2`) zu.
+2. **Transparenter Smartphone-Uplink:**
+   * OpenMotorBridge holt sich die Internetdaten transparent über das gekoppelte Smartphone (via Bluetooth PAN oder über die permanente Hintergrund-Verbindung der WebApp).
+   * **Ergebnis:** Das interne Harley-Navi ist **sofort bei Zündung-AN online**, zeigt Live-Verkehrsfluss (grün/gelb/rot) und berechnet Stauumfahrungen – völlig ohne manuelles Hotspot-Einschalten am Smartphone!
+3. **Cockpit-WLAN als Fallback:**
+   * Für ältere Boom! Box Firmware-Stände spannt der Front-Node alternativ ein fahrzeugeigenes WLAN auf (`OpenMotorBridge-Gateway`), in das sich die Harley nach einmaliger Einrichtung automatisch einbucht.
+4. **Sprachansagen-Ducking für das interne Navi:**
+   * Sprachansagen des internen Navis (*„In 300 m rechts abbiegen“*) werden über den Audio-Rückkanal des Front-Nodes digital an den OMB Audio-DSP übertragen.
+   * Der DSP führt automatisches Raised-Cosine Ducking ($-12\,\text{dB}$) auf der Helm-Musik aus, blendet die Harley-Naviansage ein und fährt die Musik danach sanft wieder hoch.
+
+---
+
+## 8. Thermomanagement & Kaltstart-Schutz (Automotive Grade)
 
 ### 1. Kaltstart-Sicherheit (ISO 7637-2 Pulse 4)
 Beim Betätigen des Motorrad-Anlassers bricht die Bordnetzspannung oft kurzzeitig auf **5.8 V bis 6.5 V** ein. Der integrierte Aufwärts-/Abwärtswandler (Buck-Boost TPS63070) auf PCBA 05 hält die 5.0 V VBUS-Versorgung des SOMs absolut stabil bei **5.00 V ± 1%**, sodass das Navigationssystem beim Starten des Motors **nicht** neu bootet.
@@ -254,7 +351,7 @@ Sollte sich das Smartphone oder der CarPlay-Stack aufhängen, kann das SOM über
 
 ---
 
-## 8. Zusammenfassung & Vorteile
+## 9. Zusammenfassung & Vorteile
 
 | Feature | Herkömmlicher Carlinkit / Ottocast Dongle | OpenMotorBridge PCBA 05 Bridge |
 | :--- | :--- | :--- |

@@ -150,28 +150,27 @@ All system signals converge at the central HD26 flanged connector:
 * **Result:** The Boom! Box GTS unlocks Apple CarPlay and Android Auto on the 6.5" or 12.3" touchscreen immediately — **without requiring the \$350 WHIM module** or unreliable jumper bypass plugs.
 * **Seamless Audio Ducking:** Boom! Box navigation announcements are prioritized and smoothly blended over active intercom conversations with adjustable ducking ($-12\,\text{dB}$).
 
-#### 5.1.2 Wireless Universal Front Node, Automotive USB Hub & Action Cam Subsystem (PCBA 05)
-To eliminate fragile signal wiring harnesses through the flexed steering head and provide uninterrupted infotainment, action cam, and PTT connectivity in the cockpit:
-* **Wireless RF Bridge to Central Box:** An autonomous controller node (ESP32-C3 RISC-V) inside the fairing communicates via **ESP-NOW ($< 0.9\,\text{ms}$ latency)** and **BLE 5.0 (2M-PHY)** directly to the Central Box.
-* **Automotive USB 2.0 High-Speed Subsystem (Microchip USB2512B & TI TPS2051B):**
+#### 5.1.2 Universal Cockpit & Front Hub (PCBA 05): USB Subsystem, Live Traffic & PTT
+The Front Node (PCBA 05) serves on **all motorcycle types** as the universal cockpit hub, eliminating vulnerable wiring across the flexed steering head:
+* **Wireless RF Bridge to Central Box:** An autonomous controller node (ESP32-C3 RISC-V / Allwinner SOM) inside the fairing communicates via **ESP-NOW ($< 0.9\,\text{ms}$ latency)** and **BLE 5.0 (2M-PHY)** directly to the Central Box.
+* **Wired Handlebar PTT (Optocoupler at `J3` / GPIO 0, $< 1.8\,\text{ms}$ Latency):** Minimal $30\dots 50\,\text{cm}$ harness at the handlebar — zero failure-prone signal wires crossing the steering neck!
+* **Digital I2S MEMS Ambient Microphone (Knowles SPH0645LM4H-6):** Edge-DSP ambient wind/road noise computation directly at the windshield (physically impossible under the seat) for automatic helmet volume AGC.
+* **Automotive USB 2.0 Subsystem (Microchip USB2512B & TI TPS2051B):**
   * **Upstream Host Port (`J4`):** Connects directly to the USB input of the Harley-Davidson Boom! Box GTS / Skyline OS in the glovebox.
   * **Downstream Port 1 (`J5` / Phone & Glovebox):** Uninterrupted $+5.0\,\text{V}$ VBUS (up to $2.0\,\text{A}$) for clean smartphone charging or navigation devices.
-  * **Downstream Port 2 (`J6` / Ottocast CarPlay):** Switched $+5.0\,\text{V}$ VBUS via `TI TPS2051B` power gate with software-controlled **2.5s cold restart** and **Auto-Café 60s timer** upon ignition off.
-  * **USB-C Service Port (`J7`):** Native diagnostic, calibration, and flashing receptacle (relocated to the right-side edge next to `D1`) for the ESP32-C3 controller.
-* **Dedicated 5V Action Cam Power Header (`J8` / Charge-Only):**
-  * Provides **clean $+5.0\,\text{V}$ DC charging power (up to $2.0\,\text{A}$)** for action cameras (GoPro, Insta360, DJI) – purposely **without data lines**, preventing the Boom! Box infotainment system from erroneously locking the camera into USB mass storage transfer mode.
-* **Integrated Action Cam BLE Shutter Bridge (GoPro, Insta360, DJI Action):**
-  * The ESP32-C3 controls cockpit action and 360° cameras directly via Bluetooth Low Energy (Open GoPro API, Insta360 Smart Remote GATT, DJI Remote profile) — completely eliminating the need for bulky separate handlebar remotes!
-  * **Handlebar Pushbutton Gesture Control (on `J3` / GPIO 0):**
-    * *Single short press ($< 400\,\text{ms}$):* Intercom / Radio PTT.
-    * *Double-click (2x short):* **Action Cam Start / Stop Recording Toggle** (with acoustic confirmation chime in helmet).
-    * *Long press ($> 1.5\,\text{s}$):* **HiLight Tag / Bookmark** in the active video track.
-  * **Insta360 Telemetry Injection:** Streams live GNSS telemetry (speed, lean angle, elevation) via BLE directly into the Insta360 video stream.
+  * **Downstream Port 2 (`J6` / Ottocast CarPlay / SOM):** Switched $+5.0\,\text{V}$ VBUS via `TI TPS2051B` power gate with software-controlled **2.5s cold restart** and **Auto-Café 60s timer** upon ignition off.
+  * **USB-C Service Port (`J7`):** Native diagnostic, calibration, and flashing receptacle.
+* **USB-Media Proxy & Source-Aware CAN Gating:**
+  * Emulates an MFi-iPod / USB Audio Class device to Skyline OS: Displays track, artist, album, and duration natively on the 12.3" Harley screen, while audio stays in the helmet via LDAC/aptX (no WHIM needed).
+  * **Collision Protection:** Checks `infotainment_source_active` (CAN `0x388`) and Hub Port 1 to ensure handlebar media buttons only control the phone when OMB/CarPlay/BT is active (preventing phantom streaming while listening to MP3 sticks or radio).
+* **USB CDC-NCM Ethernet Tethering for Internal OEM Navigation:**
+  * Presents as a virtual automotive network interface at port `J4`, routing phone data to the bike.
+  * **Benefit:** Factory navigation (HERE / TomTom) gets **instant live traffic, congestion flow, and road closure alerts upon ignition ON** without manual phone hotspot setup.
+* **Dedicated 5V Action Cam Power Header (`J8` / Charge-Only) & BLE Shutter Bridge:**
+  * Clean $+5.0\,\text{V}$ DC charging power (up to $2.0\,\text{A}$) without disruptive data lines.
+  * Controls GoPro, Insta360, and DJI directly via BLE in line-of-sight ($< 0.5\,\text{m}$) via PTT double-clicks.
 * **Intelligent Standstill Filter & KL15 Buffer Capacitor (`C_BUF`):**
-  * A compact buffer capacitor ($470\dots 1000\,\mu\text{F}$ 10V polymer SMD) in the top-right PCB corner keeps the ESP32-C3 powered for $\approx 1\dots 2\,\text{seconds}$ when switched ignition (KL15) turns off.
-  * The controller instantly senses the falling edge on `KL15_SENSE` and fires the BLE *"Stop Recording"* packet to the camera within $30\,\text{ms}$.
-  * **Advantage:** Fuel stops, red lights, and pauses are automatically cut from video footage; the camera finalizes its MP4 container and enters sleep mode. Upon turning ignition back on, recording resumes seamlessly.
-* **Digital I2S MEMS Ambient Microphone (Knowles SPH0645LM4H-6):** Edge-DSP ambient road/engine noise computation for automatic helmet volume AGC.
+  * Polymer buffer capacitor ($470\dots 1000\,\mu\text{F}$) keeps controller alive for $\approx 1\dots 2\,\text{s}$ upon ignition off, cleanly saving video files.
 * **Minimal Bike Wiring:** Single **2-core 12V automotive power lead (`J1`)** tapped at switched KL15 ignition; on-board TI TPS54302 buck converter produces the $+5\,\text{V}$ rail.
 
 ### 5.2 BMW Motorrad ConnectedRide & CAN-Bus Integration

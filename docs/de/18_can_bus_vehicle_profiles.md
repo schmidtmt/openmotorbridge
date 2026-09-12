@@ -209,7 +209,8 @@ Die Firmware liefert ab Werk vorkonfigurierte Profile für die gängigsten Fahrz
 ### 3.1 Harley-Davidson HD-LAN / Skyline OS (`harley_skyline_2024.json`)
 * **Plattformen:** Road Glide (FLTRX), Street Glide (FLHX), CVO Touring ab 2023.5 / 2024.
 * **Besonderheiten:** 
-  * Direkter Abgriff der Daumen-Joysticks am linken und rechten Lenkerschalter.
+  * Direkter Abgriff der Daumen-Joysticks am linken und rechten Lenkerschalter (`0x290`: Track Next, Prev, Click).
+  * Infotainment-Quellenfilterung (`0x388`: `infotainment_source_active`) verhindert Geister-Streaming bei lokalem MP3-Stick / Radio.
   * Reifendruck-Überwachung (TPMS) beider Räder in 0,025-bar-Schritten.
   * Tacho- und Drehzahlübertragung für den dead-reckoning EKF-Tunnelnavigationsfilter.
 
@@ -270,6 +271,12 @@ Da der CAN-Bus eines Motorrads sicherheitskritische Steuergeräte (ABS-Modulator
   3. FAHRZEUG-MASSENTRENNUNG
      • Der CAN-Transceiver ist über die Spannungs- und Massenetzwerke auf PCBA 01 gegen
        Masseversatz zwischen Heck- und Front-Knoten geschützt.
+
+  4. SOURCE-AWARE HANDLEBAR GATING (KOLLISIONSSCHUTZ)
+     • Um zu verhindern, dass Lenkertasten bei Radio- oder MP3-Stick-Wiedergabe versehentlich
+       parallel das Smartphone-Streaming starten, wertet OMB die aktive Audioquelle
+       (z. B. 0x388 `infotainment_source_active`) und den USB-Hub-Status aus.
+     • Events werden nur an das Smartphone durchgereicht, wenn OMB/CarPlay/BT aktiv ist!
 ```
 
 ---

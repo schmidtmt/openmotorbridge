@@ -146,29 +146,28 @@ Die Verbindung aller Komponenten erfolgt über den zentralen HD26-Flansch an der
 * **Ergebnis:** Die Boom! Box GTS schaltet Apple CarPlay und Android Auto im 6,5"- bzw. 12,3"-Fahrzeugdisplay sofort frei – **ohne teures WHIM-Modul** und ohne unsichere Jumper-Stecker.
 * **Nahtloses Ducking:** Navigationsansagen der Boom! Box werden über den ES8388 Codec priorisiert und über die aktiven Intercom-Gespräche mit einstellbarem Ducking ($-12\,\text{dB}$) sanft eingeblendet.
 
-#### 5.1.2 Wireless Universal Front-Knoten, Automotive USB-Hub & Action-Cam-Subsystem (PCBA 05)
-Um empfindliche Signal-Kabelbäume über den mechanisch beanspruchten Lenkkopf zu eliminieren und eine unterbrechungsfreie Infotainment-, Action-Cam- und PTT-Anbindung im Cockpit bereitzustellen:
-* **Drahtlose Funkbrücke zur Zentralbox:** Ein autonomer Controller-Knoten (ESP32-C3 RISC-V) hinter der Verkleidung kommuniziert über **ESP-NOW ($< 0{,}9\,\text{ms}$ Latenz)** und **BLE 5.0 (2M-PHY)** mit der Zentralbox.
-* **Automotive USB 2.0 High-Speed Subsystem (Microchip USB2512B & TI TPS2051B):**
+#### 5.1.2 Universal Cockpit & Front Hub (PCBA 05): USB-Subsystem, Live-Traffic & PTT
+Der Front-Knoten (PCBA 05) dient auf **allen Motorrädern** als universeller Cockpit-Knoten und eliminiert empfindliche Signalkabel über den mechanisch beanspruchten Lenkkopf:
+* **Drahtlose Funkbrücke zur Zentralbox:** Ein autonomer Controller-Knoten (ESP32-C3 RISC-V / Allwinner SOM) hinter der Verkleidung kommuniziert über **ESP-NOW ($< 0{,}9\,\text{ms}$ Latenz)** und **BLE 5.0 (2M-PHY)** mit der Zentralbox.
+* **Drahtgebundener Lenker-PTT (Optokoppler an `J3` / GPIO 0, $< 1{,}8\,\text{ms}$ Latenz):** Nur $30\dots 50\,\text{cm}$ kurzes, geschütztes Kabel am Lenker – kein bruchgefährdetes Signalkabel über den schwenkenden Lenkkopf nach hinten zur Zentralbox!
+* **Digitales I2S-MEMS Ambient-Mikrofon (Knowles SPH0645LM4H-6):** Berechnet Umgebungs- und Fahrtwindgeräusche (dB-A/RMS) direkt an der Front für automatische Helmlautstärke-Nachführung (AGC).
+* **Automotive USB 2.0 Subsystem (Microchip USB2512B & TI TPS2051B):**
   * **Upstream Host Port (`J4`):** Führt direkt zum USB-Eingang der Harley-Davidson Boom! Box GTS / Skyline OS im Handschuhfach.
   * **Downstream Port 1 (`J5` / Phone & Handschuhfach):** Dauerhafter $+5{,}0\,\text{V}$ VBUS (bis $2{,}0\,\text{A}$) für unterbrechungsfreies Laden von Smartphones oder Navi-Geräten.
-  * **Downstream Port 2 (`J6` / Ottocast CarPlay):** Geschalteter $+5{,}0\,\text{V}$ VBUS über `TI TPS2051B` Lastschalter mit softwaregesteuertem **2,5s-Kaltstart** und **Auto-Café 60s Timer** bei Zündungsaus.
-  * **USB-C Service Port (`J7`):** Nativer Diagnose-, Kalibrier- und Flash-Port (an die rechte Gehäuseflanke neben `D1` verlegt) für den ESP32-C3 Controller.
-* **Dedizierter 5V Action-Cam Power-Port (`J8` / Charge-Only):**
-  * Stellt **reine $+5{,}0\,\text{V}$ Ladespeisung (bis $2{,}0\,\text{A}$)** für Action-Cams (GoPro, Insta360, DJI) bereit – bewusst **ohne Datenleitungen**, um zu verhindern, dass die Boom! Box die Kamera fälschlich als Massenspeicher sperrt.
-* **Integrierte Action-Cam BLE Shutter-Bridge (GoPro, Insta360, DJI Action):**
-  * Der ESP32-C3 steuert Action- und 360°-Kameras im Cockpit direkt über Bluetooth Low Energy (Open GoPro API, Insta360 Smart Remote GATT, DJI Remote Profil) – ganz ohne separaten Bluetooth-Taster!
-  * **Lenkertaster-Gestensteuerung (an `J3` / GPIO 0):**
-    * *1x kurz ($< 400\,\text{ms}$):* Sprechfunk / Intercom PTT.
-    * *2x kurz (Doppelklick):* **Action-Cam Start / Stopp Aufnahme** (mit Quittungsdoppelton im Helm).
-    * *1x lang ($> 1{,}5\,\text{s}$):* **HiLight Tag / Bookmark** im laufenden Videostream.
-  * **Insta360 Telemetrie-Injektion:** Speist GNSS-Telemetrie (Speed, Schräglage, Höhe) per BLE direkt in den Insta360-Videotrack ein.
+  * **Downstream Port 2 (`J6` / Ottocast CarPlay / SOM):** Geschalteter $+5{,}0\,\text{V}$ VBUS über `TI TPS2051B` Lastschalter mit softwaregesteuertem **2,5s-Kaltstart** und **Auto-Café 60s Timer** bei Zündungsaus.
+  * **USB-C Service Port (`J7`):** Nativer Diagnose-, Kalibrier- und Flash-Port.
+* **USB-Media Proxy & Source-Aware CAN Gating:**
+  * Emuliert gegenüber Skyline OS ein MFi-iPod / USB Audio Class Gerät: Track-Titel, Interpret, Album und Spieldauer erscheinen nativ auf dem 12.3" Harley-Bildschirm, während das Audiosignal per LDAC/aptX direkt im Helm bleibt (kein WHIM-Zwang).
+  * **Kollisionsschutz:** Wertet `infotainment_source_active` (CAN `0x388`) und Hub-Port 1 aus, damit Wippen-Befehle nur an das Smartphone geleitet werden, wenn OMB/CarPlay/BT aktiv ist (kein versehentliches Streaming bei MP3-Stick oder Radio!).
+* **USB CDC-NCM Ethernet Tethering für das interne Werks-Navi:**
+  * Meldet sich am Port `J4` als virtueller Netzwerkadapter an und routet Internetdaten vom Smartphone an die Harley.
+  * **Vorteil:** Das interne Werks-Navi (HERE / TomTom) hat bei Zündung-AN **sofort Live-Traffic, Baustellen- und Stauwarnungen**, ohne dass der Fahrer manuell einen Smartphone-WLAN-Hotspot starten muss.
+* **Dedizierter 5V Action-Cam Power-Port (`J8` / Charge-Only) & BLE Shutter-Bridge:**
+  * $+5{,}0\,\text{V}$ Ladespeisung (bis $2{,}0\,\text{A}$) ohne störende Datenleitungen.
+  * Steuert GoPro, Insta360 und DJI direkt über BLE in direkter Sichtlinie ($< 0{,}5\,\text{m}$) via Lenker-PTT Doppel-Klick.
 * **Intelligente Tankpausen-Automatik & KL15-Pufferkondensator (`C_BUF`):**
-  * Ein kompakter Pufferkondensator ($470\dots 1000\,\mu\text{F}$ 10V Polymer-SMD) in der oberen rechten Platinenecke hält den ESP32-C3 bei Zündungsaus (Schaltplus KL15 fällt ab) für $\approx 1\dots 2\,\text{Sekunden}$ am Leben.
-  * Der Controller erkennt die fallende Flanke an `KL15_SENSE` sofort und sendet innerhalb von $30\,\text{ms}$ den BLE-Befehl *"Stop Recording"* an die Kamera.
-  * **Vorteil:** Tank- und Rastpausen werden automatisch herausgeschnitten; die Kamera schließt das MP4-File sauber ab und wechselt in den stromsparenden Standby. Bei Zündung-AN startet die Aufnahme automatisch wieder.
-* **Digitales I2S-MEMS Ambient-Mikrofon (Knowles SPH0645LM4H-6):** Berechnet Umgebungsgeräuschpegel (dB-A/RMS) per Edge-DSP für automatische Helmlautstärke-Nachführung.
-* **Minimaler Installationsaufwand:** Lediglich **eine 2-adrige 12V-Stromleitung (`J1`)** an Zündungsplus KL15; integrierter TI TPS54302 Buck-Wandler erzeugt die $+5\,\text{V}$ Busspannung.
+  * Pufferkondensator ($470\dots 1000\,\mu\text{F}$) hält den Controller bei Zündungsaus für $\approx 1\dots 2\,\text{s}$ am Leben, sendet *"Stop Recording"* an die Kamera und sichert die Datei.
+* **Minimaler Installationsaufwand:** Lediglich **eine 2-adrige 12V-Stromleitung (`J1`)** an Zündungsplus KL15; integrierter TI TPS54302 Buck-Wandler erzeugt die $+5\,\text{V}$ Cockpitspannung.
 
 ### 5.2 BMW Motorrad ConnectedRide & CAN-Bus Integration
 * **Echtzeit-Telemetrie:** Über den integrierten TCAN334G CAN-Transceiver lauscht die Zentralbox im Listen-Only-Modus auf dem Fahrzeugbus und erfasst Raddrehzahlen, Schräglage und Blinkersignale.
