@@ -178,6 +178,13 @@
         "6": "android_auto",
         "7": "omb_usb_proxy"
       }
+    },
+    "bcm_alarm_triggered": {
+      "can_id": "0x390",
+      "is_extended": false,
+      "start_bit": 0,
+      "length_bits": 1,
+      "endianness": "little"
     }
   }
 }

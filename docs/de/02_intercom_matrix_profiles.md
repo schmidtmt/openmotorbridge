@@ -389,3 +389,35 @@ Rüstet der Fahrer nach einiger Zeit sein Intercom auf (z. B. von Sena 20S auf S
 │    (220 – 320 €)      │ (Mesh 3.0, K1)          │ (Analogfunk Gateway, K7)  │
 └───────────────────────┴─────────────────────────┴───────────────────────────┘
 ```
+
+---
+
+## 9. Proximity & Standstill Privacy Mute (Lokal-Gesprächsmodus bei Zwischenstopps)
+
+### Problemstellung im Gruppen-Mesh
+Halten zwei Fahrer einer Motorradgruppe an einer roten Ampel, an einer Mautstation oder am Straßenrand nebeneinander an und klappen ihre Helmvisiere hoch, um sich direkt abzustimmen:
+1. **Akustische Echos & Rückkopplungsschleifen:** Das Mikrofon von Fahrer A erfasst die Stimme von Fahrer B mit einer Latenz von $15\dots 30\,\text{ms}$, wodurch im Helmlautsprecher ein störender Hall-Effekt entsteht.
+2. **Kanalbelastung für die restliche Gruppe:** Die anderen 6–10 Fahrer der Gruppe (die 500 Meter weiter vorne oder hinten fahren) müssen die private Abstimmung zwangsweise mitanhören.
+
+### Intelligente Nahbereichs-Stummschaltung
+OpenMotorBridge löst dieses Problem durch eine vollautomatische **Proximity-Mute-Logik**:
+
+```
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│               PROXIMITY & STANDSTILL PRIVACY MUTE LOGIK                                │
+└────────────────────────────────────────────────────────────────────────────────────────┘
+
+  [1. SENSORIK-AUSWERTUNG IN ECHTZEIT]
+  ├── Bedingung 1: Fahrzeug steht still (CAN-Geschwindigkeit v = 0.0 km/h)
+  └── Bedingung 2: Partner-Motorrad im extremen Nahbereich (< 3.0 m)
+                   Erkannt über 2.4 GHz ESP-NOW Mesh Signalstärke (RSSI > -45 dBm)
+
+  [2. AKUSTISCHER ÜBERGANG (Automatisch)]
+  ├── OpenMotorBridge schaltet den Mikrofon-Uplink in das Weitverkehrs-Mesh STUMM
+  ├── Diskreter Bestätigungston im Helm (Zweiklang "Lokal-Modus aktiv")
+  └── Fahrer unterhalten sich ganz natürlich durch die offenen Visiere von Angesicht zu Angesicht!
+
+  [3. AUTOMATISCHE REAKTIVIERUNG DES MESH-NETZES]
+  ├── Option A: Das Motorrad fährt wieder an (v > 8.0 km/h)
+  └── Option B: Fahrer tippt kurz den Lenker-PTT an (< 400 ms) ➔ Mesh sofort wieder offen!
+```

@@ -190,3 +190,48 @@ The Front Node (PCBA 05) serves on **all motorcycle types** as the universal coc
   * **Red (Collision Hazard):** $\text{TTC} < 3.5\,\text{s}$ or ($d \le 35\,\text{m}$ and $v_{\text{rel}} > 25\,\text{km/h}$).
 * **Acoustic Helmet Warnings (Priority-1 Ducking):** On amber/red hazard alerts, the audio DSP immediately ducks music/intercom to **$-18\,\text{dB}$** ($< 15\,\text{ms}$ attack) and injects a crisp **synthesized dual-tone chime** ($880\,\text{Hz} \rightarrow 1760\,\text{Hz}$ on Amber, $988\,\text{Hz} \rightarrow 1976\,\text{Hz}$ on Red) directly into the rider's helmet.
 * **Blind-Spot Detection (BSD) & Mirror LEDs:** When an approaching vehicle enters the close-range blind-spot zone ($d < 15\,\text{m}$, $|\text{azimuth}| > 3^\circ$), virtual left/right mirror indicator pills flash in amber or red on the WebApp HUD.
+
+#### 5.3.1 Emergency Stop Signal (ESS) Brake Flashing via Rear Radar & Aux Power Port
+* **100% CAN Listen-Only Compliant Operation:**
+  * When the Central Box 6-DOF IMU detects acute emergency deceleration ($a_x < -6.0\,\text{m/s}^2$ or $> 0.6\,\text{g}$ from speed):
+  * OpenMotorBridge dispatches the serial command `SET_LIGHT_MODE: STROBE_4HZ` to the Garmin Varia radar via Pigtail 5 (`RADAR_TX/RX`).
+  * **Result:** The ultra-bright high-power taillight LEDs on the radar flash at an aggressive **$4\dots 5\,\text{Hz}$ strobe rate**, warning trailing motorists of sudden hazard braking to prevent rear-end collisions.
+  * **Auxiliary Power Port:** Alternatively or simultaneously, the switched smart high-side power switch (`RESERVE_GPIO_B`) triggers auxiliary LED lighting or wireless helmet brake lights (e.g. Cosmo Moto / Cardo) without any splicing into factory bike wiring harnesses.
+
+### 5.4 LoRa 868 MHz Bike Alarm Pager & Parking Sentry (OEM BCM + Autonomous IMU)
+* **The Limitation of Traditional Bike Alarms:** When parked at a hotel or mountain pass café, the bike's audible horn alarm cannot be heard from $> 50\dots 100\,\text{m}$ away.
+* **OpenMotorBridge as Long-Range LoRa Pager:**
+  1. **OEM Alarm Integration (e.g. Harley Smart Security / BMW DWA):**
+     * OMB monitors the CAN bus in low-power standby (buffered by the onboard 18650 UPS cell).
+     * If the factory BCM triggers the vehicle alarm (`bcm_alarm_triggered == 1`), OMB immediately detects the broadcast.
+  2. **Autonomous Protection (for bikes without OEM alarm or luggage tamper):**
+     * Internal 6-DOF IMU detects attitude changes (lifting off sidestand, impact shocks).
+     * Reed switches on luggage sled docks detect unauthorized cartridge extraction.
+  3. **LoRa 868 MHz Long-Range Alert (Packet Type `0xFE`):**
+     * OMB transmits an instant emergency packet with $1\dots 5\,\text{km}$ penetration through concrete hotel walls to the rider's pocket receiver or group bikes:
+       > *„🚨 THEFT ALERT: Your motorcycle is being moved! (Distance: 180 m)“*
+
+### 5.5 Universal BLE Tire Pressure Monitoring (TPMS) for Non-CAN Bikes
+* **Target Motorcycles:** All bikes lacking factory CAN tire pressure sensors (Naked bikes, sportbikes, enduros like Yamaha Ténéré 700, KTM Adventure).
+* **Operation:**
+  * The Central Box Bluetooth 5.0 controller passively captures standard advertisement frames from commercial BLE valve cap sensors (e.g. FOBO Bike / Deelife).
+  * No wiring required; valve caps screw directly onto stems and pair in seconds via the WebApp PWA.
+  * **Cockpit Display & Voice Warnings:** Live tire pressure and temperature appear on the Ride HUD; sudden pressure drop triggers immediate priority acoustic warnings in the helmet.
+
+### 5.6 Proximity & Standstill Privacy Mute (Local Conversation Mode)
+* **Problem:** When two riders stop side-by-side at a stoplight or roadside with visors raised, their open helmet mics cause acoustic feedback and broadcast private discussions to the entire mesh group.
+* **Automated Proximity Muting:**
+  * **Condition:** Vehicle at rest ($v = 0\,\text{km/h}$) AND extreme proximity detected ($< 3\,\text{m}$, 2.4 GHz RSSI $> -45\,\text{dBm}$ to partner bike).
+  * OMB automatically mutes helmet mic transmission to the wide-area group mesh (playing a subtle confirmation chime: *"Local Mode"*).
+  * Riders speak naturally face-to-face through open visors.
+  * Resuming riding ($v > 8\,\text{km/h}$) or single-clicking PTT instantly reopens the group mesh.
+
+### 5.7 Action Cam Event Tagging & Video Telemetry (.srt / .csv)
+* **Automated Incident Bookmarking:**
+  * In addition to manual PTT bookmarking for scenic viewpoints, the Front Node automatically fires a BLE bookmark to GoPro / Insta360 cameras on safety events:
+    * Emergency braking ($a_x < -6.0\,\text{m/s}^2$)
+    * Radar collision hazard RED ($\text{TTC} < 2.5\,\text{s}$)
+    * eCall crash detection ($> 6.5\,\text{g}$)
+  * Eliminates tedious scrubbing through hours of raw tour footage to locate critical traffic incidents.
+* **Video Telemetry Export:**
+  * The PWA exports time-synchronized `.srt` or `.csv` telemetry alongside GPX tracks, enabling pixel-perfect speed, lean angle, and radar hazard overlays in Dashware or Insta360 Studio.

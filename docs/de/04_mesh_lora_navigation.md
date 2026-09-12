@@ -214,6 +214,19 @@ struct __attribute__((packed)) OmmEmergencyAlert_t {
 };
 ```
 
+#### Bike-Alarm & Diebstahlwarnpaket (`TYPE_BIKE_ALARM = 0xFE`)
+```cpp
+struct __attribute__((packed)) OmmBikeAlarmAlert_t {
+    uint8_t  packet_type;       // 0xFE = TYPE_BIKE_ALARM
+    uint8_t  alarm_source;      // 0x01: OEM BCM Alarm (Harley/BMW), 0x02: OMB IMU Erschütterung, 0x03: Koffer-Reed
+    uint64_t bike_uid;          // 64-Bit Chip UID des betroffenen Motorrads
+    int32_t  park_lat_1e7;      // Letzter bekannter GPS-Parkstandort
+    int32_t  park_lon_1e7;
+    uint8_t  battery_soc_pct;   // Ladezustand der internen USV-Zelle
+    uint8_t  crc8_checksum;     // CRC-8/AUTOSAR Prüfsumme
+};
+```
+
 ---
 
 ## 5. Heck-Pod 3 Transceiver-Architektur & UART-Protokoll

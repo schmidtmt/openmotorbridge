@@ -186,3 +186,49 @@ Der Front-Knoten (PCBA 05) dient auf **allen Motorrädern** als universeller Coc
   * **Rot (Kollisionsrisiko):** $\text{TTC} < 3{,}5\,\text{s}$ oder ($d \le 35\,\text{m}$ und $v_{\text{rel}} > 25\,\text{km/h}$).
 * **Akustische Helm-Warnung (Prio-1 Ducking):** Bei Bedrohung (Gelb/Rot) senkt die Audio-DSP-Pipeline Musik und Intercom sofort auf **$-18\,\text{dB}$** ab ($< 15\,\text{ms}$ Attack) und spielt einen prägnanten **synthetisierten Doppelton-Ping** ($880\,\text{Hz} \rightarrow 1760\,\text{Hz}$ bei Gelb bzw. $988\,\text{Hz} \rightarrow 1976\,\text{Hz}$ bei Rot) ins Fahrer-Headset.
 * **Totwinkel-Assistent (BSD) & Spiegel-LEDs:** Befindet sich ein herannahendes Fahrzeug im Nahbereich ($d < 15\,\text{m}$) auf der linken oder rechten Spur ($|\text{Azimut}| > 3^\circ$), warnen die virtuellen Spiegel-Pills im WebApp-Cockpit pulsierend in Bernstein oder Rot.
+
+#### 5.3.1 Notbremsblinken (Emergency Stop Signal - ESS) über das Heck-Radar & Power-Port
+* **Funktionsweise (100% CAN Listen-Only konform):**
+  * Erkennt die 6-Achsen-IMU der Zentralbox eine massive Gefahrenbremsung ($a_x < -6{,}0\,\text{m/s}^2$ bzw. $> 0{,}6\,\text{g}$ Verzögerung aus hohem Tempo):
+  * Sendet OpenMotorBridge über den seriellen Steuerkanal (`RADAR_TX/RX` an Peitsche 5) den Befehl `SET_LIGHT_MODE: STROBE_4HZ` an das Garmin Varia Radar.
+  * **Ergebnis:** Die ultrahellen High-Power-Rücklicht-LEDs des Radars blitzen mit **$4\dots 5\,\text{Hz}$ stroboskopartig** auf, um nachfolgende Autofahrer sofort vor einem Auffahrunfall zu warnen.
+  * **Zusatzausgang:** Alternativ oder parallel kann der geschaltete Leistungsausgang `RESERVE_GPIO_B` (High-Side Smart-MOSFET) ein Zusatzbremslicht oder Helmfunk-Bremslicht (z. B. Cosmo Moto) triggern – **völlig ohne Eingriff in die originale Fahrzeug-Bremsleitung**.
+
+### 5.4 LoRa 868 MHz Alarmanlagen-Pager & Parkplatzwächter (Werks-BCM + Autonom)
+* **Das Problem herkömmlicher Alarmanlagen:** Geht an der Passhöhe oder am Hotel die Alarmanlage des Motorrads los, ist der Fahrer oft zu weit entfernt ($> 50\dots 100\,\text{m}$) und hört die Hupe nicht.
+* **OpenMotorBridge als intelligenter LoRa-Pager:**
+  1. **Werksalarmanlagen-Integration (z. B. Harley Smart Security / BMW DWA):**
+     * OpenMotorBridge lauscht im Schlafmodus (versorgt über die interne 18650-USV-Zelle) auf dem CAN-Bus.
+     * Schlägt die Werksalarmanlage an (`bcm_alarm_triggered == 1`), erkennt OMB dies sofort.
+  2. **Autonome Überwachung (für Bikes ohne Werksalarm oder bei Koffer-Diebstahl):**
+     * Die interne 6-Achsen IMU erkennt Lageänderungen (Aufrichten vom Seitenständer, Erschütterung).
+     * Die Reed-Kontakte an den Koffer-Schlitten erkennen das unbefugte Entriegeln von Kassetten.
+  3. **Fernmelde-Alarm via LoRa 868 MHz (Packet Type `0xFE`):**
+     * OMB sendet blitzschnell ein LoRa-Notfallpaket mit $1\dots 5\,\text{km}$ Reichweite (durchdringt Hotelbetonwände) an den LoRa-Taschenempfänger des Fahrers oder die anderen Gruppen-Bikes:
+       > *„🚨 DIEBSTAHLWARNUNG: Dein Motorrad wird bewegt! (Distanz: 180 m)“*
+
+### 5.5 Universelles BLE-Reifendruckkontrollsystem (TPMS) für Bikes ohne CAN-RDKS
+* **Einsatzbereich:** Für alle Maschinen ohne werkseitigen CAN-Reifendruck (Naked Bikes, Sportler, Enduros wie Yamaha Tenere 700, KTM Adventure).
+* **Funktion:**
+  * Der integrierte Bluetooth 5.0 Controller der Zentralbox scannt passiv die Standard-Advertisement-Frames handelsüblicher BLE-Ventilkappen (z. B. FOBO Bike / Deelife).
+  * Kein Kabelaufwand, Ventilkappen werden einfach aufgeschraubt und in der WebApp PWA angelernt.
+  * **Anzeige & Warnung:** Reifendruck und Reifentemperatur werden live im Ride HUD dargestellt. Bei plötzlichem Druckverlust in Schräglage ertönt sofort ein akustischer Prioritäts-Warnton im Helm.
+
+### 5.6 Proximity & Standstill Privacy Mute (Lokal-Gesprächsmodus)
+* **Problemstellung:** Halten zwei Gruppenfahrer an einer Ampel oder am Straßenrand nebeneinander an und unterhalten sich bei offenem Visier, entstehen im Mesh-Intercom störende Echos und die restliche Gruppe wird mit privaten Absprachen beschallt.
+* **Automatische Nahbereichs-Stummschaltung:**
+  * **Bedingung:** Fahrzeugstillstand ($v = 0\,\text{km/h}$) UND Erkennung von extremem Nahbereich ($< 3\,\text{m}$, 2.4 GHz RSSI $> -45\,\text{dBm}$ zum Partner-Bike).
+  * OMB schaltet das Helmmikrofon für das Weitverkehrs-Mesh automatisch stumm (leiser Quittungston im Helm: *„Lokal-Modus“*).
+  * Beide Fahrer unterhalten sich ganz natürlich durch die offenen Visiere.
+  * Sobald wieder angefahren wird ($v > 8\,\text{km/h}$) oder der PTT kurz gedrückt wird, öffnet sich das Gruppen-Mesh automatisch wieder.
+
+### 5.7 Action-Cam Event-Tagging & Video-Telemetrie (.srt / .csv)
+* **Automatisches Bookmarken von Schrecksekunden:**
+  * Neben der manuellen PTT-Geste (1x lang für landschaftliche Highlights) setzt der Front-Node bei Sicherheitsereignissen automatisch einen BLE-Bookmark im Video:
+    * Notbremsung ($a_x < -6{,}0\,\text{m/s}^2$)
+    * Radar-Kollisionsgefahr ROT ($\text{TTC} < 2{,}5\,\text{s}$)
+    * eCall-Sturzerkennung ($> 6{,}5\,\text{g}$)
+  * Verhindert das zeitraubende Suchen nach heiklen Verkehrssituationen beim abendlichen Video-Schnitt.
+* **Video-Telemetrie-Export:**
+  * Die PWA exportiert passend zum GPX-Track eine zeitsynchronisierte `.srt`- oder `.csv`-Telemetriedatei.
+  * Ermöglicht das pixelgenaue Einblenden von Tacho, Schräglage und Radar-Gefahrenbalken in Programmen wie Dashware oder Insta360 Studio.

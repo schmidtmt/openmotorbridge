@@ -211,6 +211,7 @@ Die Firmware liefert ab Werk vorkonfigurierte Profile für die gängigsten Fahrz
 * **Besonderheiten:** 
   * Direkter Abgriff der Daumen-Joysticks am linken und rechten Lenkerschalter (`0x290`: Track Next, Prev, Click).
   * Infotainment-Quellenfilterung (`0x388`: `infotainment_source_active`) verhindert Geister-Streaming bei lokalem MP3-Stick / Radio.
+  * BCM Alarmanlagen-Überwachung (`0x390`: `bcm_alarm_triggered`) für stillen LoRa 868 MHz Diebstahlalarm.
   * Reifendruck-Überwachung (TPMS) beider Räder in 0,025-bar-Schritten.
   * Tacho- und Drehzahlübertragung für den dead-reckoning EKF-Tunnelnavigationsfilter.
 
