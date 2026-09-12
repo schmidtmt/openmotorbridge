@@ -55,6 +55,15 @@ uint8_t omm_get_capabilities_vector(void);
 esp_err_t omm_broadcast_siren_alert(void);
 
 /**
+ * @brief Sendet ein LoRa 868 MHz Alarmanlagen-Notrufpaket (TYPE_BIKE_ALARM = 0xFE)
+ * Wird ausgelöst bei Erschütterung im Parkmodus oder Werksalarm (bcm_alarm_triggered).
+ * @param alarm_source 0x01: OEM BCM Alarm, 0x02: OMB IMU Erschütterung, 0x03: Koffer-Reed
+ * @param lat Breitengrad (0.0f = aktuelle GPS Position verwenden)
+ * @param lon Längengrad (0.0f = aktuelle GPS Position verwenden)
+ */
+esp_err_t omm_broadcast_bike_alarm(uint8_t alarm_source, float lat, float lon);
+
+/**
  * @brief FreeRTOS Task zur Verarbeitung des UART-Streams von Pod 3 (Core 0)
  */
 void task_rear_pod_bridge(void *pvParameters);

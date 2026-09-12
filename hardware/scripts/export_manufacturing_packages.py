@@ -66,8 +66,8 @@ BOARDS = [
         "title": "OpenMotorBridge Universal Front Node PCB",
         "sch": os.path.join(BASE_DIR, "kicad_front_node/openmotorbridge_front_node.kicad_sch"),
         "pcb": os.path.join(BASE_DIR, "kicad_front_node/openmotorbridge_front_node.kicad_pcb"),
-        "layers": "F.Cu,B.Cu,In1.Cu,In2.Cu,F.Paste,B.Paste,F.SilkS,B.SilkS,F.Mask,B.Mask,Edge.Cuts",
-        "is_4layer": True
+        "layers": "F.Cu,B.Cu,F.Paste,B.Paste,F.SilkS,B.SilkS,F.Mask,B.Mask,Edge.Cuts",
+        "is_4layer": False
     },
     {
         "name": "06_magsafe_dock_pcba",

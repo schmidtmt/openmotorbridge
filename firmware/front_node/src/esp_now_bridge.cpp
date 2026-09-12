@@ -412,6 +412,27 @@ bool EspNowBridge::send_cam_scan_result(const uint8_t* mac, int8_t rssi, uint8_t
     return (res == ESP_OK);
 }
 
+bool EspNowBridge::send_cockpit_status(bool hub_port1, bool hub_port2, bool hub_port3, bool hub_port4,
+                                      bool bsd_l, bool bsd_r, bool aux_on, bool aux_strobe,
+                                      bool can_term, bool qi_active) {
+    uint8_t buf[12];
+    buf[0] = FRONT_NODE_PROTOCOL_VER;
+    buf[1] = PKT_TYPE_COCKPIT_STATUS;
+    buf[2] = hub_port1 ? 1 : 0;
+    buf[3] = hub_port2 ? 1 : 0;
+    buf[4] = hub_port3 ? 1 : 0;
+    buf[5] = hub_port4 ? 1 : 0;
+    buf[6] = bsd_l ? 1 : 0;
+    buf[7] = bsd_r ? 1 : 0;
+    buf[8] = aux_on ? 1 : 0;
+    buf[9] = aux_strobe ? 1 : 0;
+    buf[10] = can_term ? 1 : 0;
+    buf[11] = qi_active ? 1 : 0;
+
+    esp_err_t res = esp_now_send(m_peer_mac, buf, sizeof(buf));
+    return (res == ESP_OK);
+}
+
 bool EspNowBridge::send_heartbeat() {
     uint8_t buf[2];
     buf[0] = FRONT_NODE_PROTOCOL_VER;

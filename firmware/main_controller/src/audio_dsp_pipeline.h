@@ -113,6 +113,22 @@ bool audio_get_cross_intercom_bridge(void);
 void audio_set_front_wind_noise_spl(float spl_dba);
 
 /**
+ * @brief Konfiguriert den automatischen Proximity & Standstill Privacy Mute (Lokal-Gesprächsmodus)
+ * Wenn v == 0 km/h und Partner-Bike Abstand < 3 m (RSSI > -45 dBm), wird das Helmmikrofon zum Mesh stummgeschaltet.
+ */
+void audio_set_privacy_mute_config(bool enabled);
+
+/**
+ * @brief Gibt zurück, ob der Privacy Mute aktuell aktiv ist
+ */
+bool audio_get_privacy_mute_active(void);
+
+/**
+ * @brief Aktualisiert Stillstands- und Proximity-Status zur automatischen Mute-Steuerung
+ */
+void audio_update_standstill_proximity(float speed_kmh, int8_t partner_rssi);
+
+/**
  * @brief FreeRTOS Task für Echtzeit-Audioverarbeitung (Core 1)
  */
 void task_audio_dsp(void *pvParameters);

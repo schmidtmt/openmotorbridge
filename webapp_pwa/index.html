@@ -87,6 +87,30 @@
             </div>
         </div>
 
+        <!-- LoRa 868 MHz Bike Alarm / Parkplatzwächter Pager Banner -->
+        <div id="bike-alarm-banner" class="bike-alarm-banner" style="display: none;">
+            <div class="bike-alarm-banner-content">
+                <div class="alarm-pulse-icon">🔔</div>
+                <div style="flex: 1;">
+                    <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                        <strong style="font-size: 1.05rem; color: #fff; letter-spacing: 0.5px;">DIEBSTAHLWARNUNG: MOTORRAD-ALARM AKTIV (LoRa 868 MHz Pager)</strong>
+                        <span class="card-badge badge-red" id="alarm-banner-source">CAN BCM / DWA Sirene</span>
+                        <span class="card-badge badge-orange" id="alarm-banner-detail">Erschütterung > 2.5 g / Neigung</span>
+                    </div>
+                    <div style="font-size: 0.8rem; color: #fde68a; margin-top: 4px; display: flex; gap: 16px; flex-wrap: wrap;">
+                        <span>📍 Parkposition: <strong id="alarm-banner-coords">47.4640° N, 9.0430° E</strong></span>
+                        <span>🔋 USV-Puffer: <strong id="alarm-banner-soc">95 % (LiPo OK)</strong></span>
+                        <span>📡 LoRa Reichweite: <strong style="color: #fff;">SX1262 SF11 (~4.5 km Reichweite)</strong></span>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <button id="btn-alarm-ack" class="btn-primary" style="background: #fff; color: #b45309; font-weight: 800; padding: 6px 14px; font-size: 0.8rem;">
+                        ✓ Alarm Quittieren
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <!-- Navigation Tabs -->
         <nav class="nav-tabs" role="tablist">
             <button class="tab-btn active" data-tab="tab-cockpit">
@@ -154,6 +178,7 @@
                         <div class="hud-rpm-value" id="val-hud-rpm">0 RPM</div>
                     </div>
                     <div class="hud-speed-container">
+                        <div class="hud-badge-ess" id="hud-badge-ess" style="display: none;">⚠️ ESS NOTBREMSEN</div>
                         <div class="hud-speed-number" id="val-hud-speed">--</div>
                         <div class="hud-speed-unit">km/h</div>
                         <div class="hud-glove-hint">● HANDSCHUH-MODUS (ZERO-SCROLL)</div>
@@ -249,8 +274,18 @@
                     <div class="hud-pill-item hud-pill-audio" id="hud-pill-audio">
                         <span class="hud-pill-icon">🎧</span>
                         <div class="hud-pill-text">
-                            <span class="hud-pill-sub">INTERCOM</span>
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <span class="hud-pill-sub">INTERCOM</span>
+                                <span class="hud-privacy-badge" id="badge-hud-privacy-mute" style="display: none;">🤫 PRIVACY MUTE</span>
+                            </div>
                             <strong id="val-hud-intercom">Kanal 1 (Standby)</strong>
+                        </div>
+                    </div>
+                    <div class="hud-pill-item hud-pill-tpms" id="hud-pill-tpms">
+                        <span class="hud-pill-icon">🛞</span>
+                        <div class="hud-pill-text">
+                            <span class="hud-pill-sub">RDKS / TPMS</span>
+                            <strong id="val-hud-tpms">V: 2.45 • H: 2.80 bar</strong>
                         </div>
                     </div>
                     <div class="hud-pill-item hud-pill-power">
@@ -272,6 +307,13 @@
                         <div class="hud-pill-text">
                             <span class="hud-pill-sub">868 MHz LoRa</span>
                             <strong id="val-hud-ecall" style="color: var(--accent-green);">eCall BEREIT</strong>
+                        </div>
+                    </div>
+                    <div class="hud-pill-item hud-pill-aux" id="hud-pill-aux" title="Tippen zum Umschalten von Zusatzscheinwerfern / Strobe" style="cursor: pointer;">
+                        <span class="hud-pill-icon">💡</span>
+                        <div class="hud-pill-text">
+                            <span class="hud-pill-sub">AUX-LIGHT</span>
+                            <strong id="val-hud-aux-light" style="color: var(--text-muted);">AUS</strong>
                         </div>
                     </div>
                 </div>
@@ -482,39 +524,156 @@
                     </div>
                 </section>
 
+                <!-- LoRa 868 MHz Alarmanlagen-Pager & Parkplatzwächter Card -->
+                <section class="card" id="card-bike-alarm">
+                    <div class="card-header">
+                        <span class="card-title">🚨 <span data-i18n="alarm_guard_title">LoRa 868 MHz Alarmanlagen-Pager &amp; Parkplatzwächter</span></span>
+                        <span class="card-badge badge-green" id="badge-alarm-status">SCHARF (SX1262 Pod 3)</span>
+                    </div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 12px;">
+                        Überwacht CAN BCM DWA-Sirene und IMU-Erschütterungen im geparkten Zustand. Bei Manipulation sendet Pod 3 (SX1262 LoRa 868 MHz) sofort einen Pager-Alarm an Fahrer-Handheld &amp; Gruppen-Mesh.
+                    </div>
+                    <div class="grid-2">
+                        <div class="stat-tile">
+                            <span class="stat-label">Wächter-Modus Status</span>
+                            <div class="stat-value" id="val-alarm-guard-state" style="color: var(--accent-green); font-size: 1.25rem;">Aktiviert</div>
+                            <span class="stat-sub">Autom. Scharfschaltung nach Zündung AUS</span>
+                        </div>
+                        <div class="stat-tile">
+                            <span class="stat-label">LoRa Pager Reichweite</span>
+                            <div class="stat-value" style="font-size: 1.25rem; color: var(--accent-cyan);">~4.5 km</div>
+                            <span class="stat-sub">LoRa SF11 / 14 dBm / 868.1 MHz</span>
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; flex-wrap: wrap; gap: 10px;">
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.85rem;">
+                            <input type="checkbox" id="chk-alarm-guard" checked style="accent-color: var(--accent-green); width: 16px; height: 16px;">
+                            <span>Parkplatzwächter automatisch scharfschalten</span>
+                        </label>
+                        <button id="btn-test-bike-alarm" class="btn-secondary" style="border-color: rgba(255, 69, 58, 0.4); color: var(--accent-red); padding: 6px 14px; font-size: 0.8rem;">
+                            🔔 Test-Alarm Auslösen (Sim LoRa Pkt)
+                        </button>
+                    </div>
+                </section>
+
                 <!-- Universal Front Node (PCBA 05) Card -->
                 <section class="card" id="card-front-node">
                     <div class="card-header">
                         <span class="card-title">📡 <span data-i18n="front_node_title">Universal Front-Knoten</span></span>
                         <div style="display: flex; gap: 6px; align-items: center;">
+                            <span class="card-badge" id="badge-front-rgb-led" style="background: rgba(48,209,88,0.15); color: #30d158; border: 1px solid rgba(48,209,88,0.3); display: flex; align-items: center; gap: 5px;">
+                                <span id="dot-front-rgb" style="width: 8px; height: 8px; border-radius: 50%; background: #30d158; box-shadow: 0 0 6px #30d158;"></span>
+                                <span id="lbl-front-rgb-text">WS2812B GRÜN</span>
+                            </span>
                             <span class="card-badge badge-blue" id="badge-front-node-bind">1:1 GEKOPPELT</span>
                             <span class="card-badge badge-green" id="badge-front-node-link">ESP-NOW LINK (2.4 GHz)</span>
                         </div>
                     </div>
 
-                    <!-- 4-Column Subsystem Metric Tiles -->
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin: 10px 0 14px 0;">
-                        <!-- Tile 1: Wireless CarPlay / Android Auto (Ottocast) -->
-                        <div class="stat-tile" style="padding: 10px 12px; background: rgba(0,0,0,0.25); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
-                            <div style="font-size: 0.72rem; color: var(--text-secondary); display: flex; justify-content: space-between; align-items: center;">
-                                <span>📱 CarPlay / AA</span>
-                                <span class="card-badge badge-green" id="badge-ottocast-status" style="font-size: 0.62rem; padding: 2px 6px;">AKTIV</span>
-                            </div>
-                            <div style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin: 3px 0;" id="lbl-ottocast-power">5.00 V · 380 mA</div>
-                            <div style="font-size: 0.7rem; color: var(--text-muted);" id="lbl-ottocast-sub">TI TPS2051B Load Switch</div>
+                    <!-- 1. 4-Port Automotive USB 2.0 Subsystem (Microchip USB2514B) -->
+                    <div style="margin: 10px 0 14px 0;">
+                        <div style="font-size: 0.78rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+                            <span>🔌 4-Port High-Speed Hub (Microchip USB2514B AEC-Q100)</span>
+                            <span class="card-badge badge-blue" style="font-size: 0.62rem;">480 Mbps HS</span>
                         </div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px;">
+                            <!-- Port 1: Lenker Phone (Southchip SC8102 USB-PD 20W) -->
+                            <div class="stat-tile" style="padding: 10px 12px; background: rgba(0,0,0,0.25); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                                <div style="font-size: 0.72rem; color: var(--text-secondary); display: flex; justify-content: space-between; align-items: center;">
+                                    <span>Port 1: Lenker-Phone</span>
+                                    <span class="card-badge badge-green" id="badge-port1-pd" style="font-size: 0.60rem; padding: 2px 5px;">PD 20W</span>
+                                </div>
+                                <div style="font-size: 1.05rem; font-weight: 700; color: var(--accent-green); margin: 3px 0;" id="lbl-port1-status">9.0 V · 2.2 A</div>
+                                <div style="font-size: 0.68rem; color: var(--text-muted);">Southchip SC8102 Fast-Charge</div>
+                            </div>
 
-                        <!-- Tile 2: Lenker-PTT (Zero-Latency) -->
+                            <!-- Port 2: CP2AA Wireless Dongle (TI TPS2051B) -->
+                            <div class="stat-tile" style="padding: 10px 12px; background: rgba(0,0,0,0.25); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                                <div style="font-size: 0.72rem; color: var(--text-secondary); display: flex; justify-content: space-between; align-items: center;">
+                                    <span>Port 2: CarPlay/AA</span>
+                                    <span class="card-badge badge-green" id="badge-ottocast-status" style="font-size: 0.60rem; padding: 2px 5px;">AKTIV</span>
+                                </div>
+                                <div style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin: 3px 0;" id="lbl-ottocast-power">5.00 V · 380 mA</div>
+                                <div style="font-size: 0.68rem; color: var(--text-muted);" id="lbl-ottocast-sub">TI TPS2051B · Fairing Pigtail</div>
+                            </div>
+
+                            <!-- Port 3: Handschuhfach (J5_MP3 Jukebox) -->
+                            <div class="stat-tile" style="padding: 10px 12px; background: rgba(0,0,0,0.25); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                                <div style="font-size: 0.72rem; color: var(--text-secondary); display: flex; justify-content: space-between; align-items: center;">
+                                    <span>Port 3: Jukebox</span>
+                                    <span class="card-badge badge-blue" style="font-size: 0.60rem; padding: 2px 5px;">100% FREI</span>
+                                </div>
+                                <div style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin: 3px 0;">USB-Stick</div>
+                                <div style="font-size: 0.68rem; color: var(--text-muted);">MP3/FLAC & Skyline Updates</div>
+                            </div>
+
+                            <!-- Port 4: Cockpit Aux (J6_AUX) -->
+                            <div class="stat-tile" style="padding: 10px 12px; background: rgba(0,0,0,0.25); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                                <div style="font-size: 0.72rem; color: var(--text-secondary); display: flex; justify-content: space-between; align-items: center;">
+                                    <span>Port 4: Cockpit-Aux</span>
+                                    <span class="card-badge" style="font-size: 0.60rem; padding: 2px 5px;">BEREIT</span>
+                                </div>
+                                <div style="font-size: 1.05rem; font-weight: 700; color: var(--text-secondary); margin: 3px 0;">Standby</div>
+                                <div style="font-size: 0.68rem; color: var(--text-muted);">Dashcam / Display Zubehör</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Cockpit 12V Power & Smart Switches Subsystem (PCBA 05) -->
+                    <div style="margin-bottom: 14px; padding: 10px 12px; background: rgba(0,0,0,0.2); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                        <div style="font-size: 0.78rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px;">
+                            ⚡ Cockpit 12V Power, Spiegel-BSD & Zusatzscheinwerfer
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px;">
+                            <!-- 12V Qi-Ladehalterung -->
+                            <div style="padding: 8px 10px; background: rgba(255,255,255,0.03); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                                <div style="font-size: 0.70rem; color: var(--text-secondary);">🔋 12V Qi-Ladeport (J10)</div>
+                                <div style="font-size: 0.95rem; font-weight: 700; color: var(--accent-green); margin: 2px 0;" id="lbl-qi-status">12.0 V · BEREIT</div>
+                                <div style="font-size: 0.65rem; color: var(--text-muted);">0.0 µA Sleep bei Zündung AUS</div>
+                            </div>
+
+                            <!-- 12V Aux Light Switch -->
+                            <div style="padding: 8px 10px; background: rgba(255,255,255,0.03); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                                <div style="font-size: 0.70rem; color: var(--text-secondary); display: flex; justify-content: space-between;">
+                                    <span>💡 Aux-Light (J11)</span>
+                                    <span class="card-badge" id="badge-aux-mode" style="font-size: 0.60rem; padding: 1px 5px;">AUS</span>
+                                </div>
+                                <div style="display: flex; gap: 4px; margin-top: 5px;">
+                                    <button id="btn-aux-off" class="btn-secondary active" style="flex: 1; padding: 3px 6px; font-size: 0.68rem;">AUS</button>
+                                    <button id="btn-aux-on" class="btn-secondary" style="flex: 1; padding: 3px 6px; font-size: 0.68rem; color: var(--accent-yellow);">EIN</button>
+                                    <button id="btn-aux-strobe" class="btn-secondary" style="flex: 1; padding: 3px 6px; font-size: 0.68rem; color: var(--accent-red);">⚡ STROBE</button>
+                                </div>
+                            </div>
+
+                            <!-- CAN 120R Auto-Sensing Relais -->
+                            <div style="padding: 8px 10px; background: rgba(255,255,255,0.03); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                                <div style="font-size: 0.70rem; color: var(--text-secondary);">🔌 CAN-Abschluss (K1)</div>
+                                <div style="font-size: 0.95rem; font-weight: 700; color: var(--accent-blue); margin: 2px 0;" id="lbl-can-term-status">120 Ω AKTIV</div>
+                                <div style="font-size: 0.65rem; color: var(--text-muted);">CPC1017N Auto-Sense Relais</div>
+                            </div>
+
+                            <!-- Lenker-Multitaster (J3) -->
+                            <div style="padding: 8px 10px; background: rgba(255,255,255,0.03); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                                <div style="font-size: 0.70rem; color: var(--text-secondary);">🔘 Lenker-Taster (J3)</div>
+                                <div style="font-size: 0.95rem; font-weight: 700; color: var(--accent-green); margin: 2px 0;" id="lbl-handlebar-channels">3 Kanäle bereit</div>
+                                <div style="font-size: 0.65rem; color: var(--text-muted);">PTT · Cam Tag · Media</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. Cockpit Subsystems (PTT, Audio, Action-Cam) -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 14px;">
+                        <!-- Tile: Lenker-PTT (Zero-Latency) -->
                         <div class="stat-tile" id="tile-front-ptt" style="padding: 10px 12px; background: rgba(0,0,0,0.25); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); transition: all 0.2s;">
                             <div style="font-size: 0.72rem; color: var(--text-secondary); display: flex; justify-content: space-between; align-items: center;">
                                 <span>⚡ Lenker-PTT</span>
                                 <span class="card-badge badge-blue" id="badge-front-ptt" style="font-size: 0.62rem; padding: 2px 6px;">BEREIT</span>
                             </div>
                             <div style="font-size: 1.1rem; font-weight: 700; color: var(--accent-blue); margin: 3px 0;" id="lbl-front-ptt-latency">&lt; 1.8 ms Latenz</div>
-                            <div style="font-size: 0.7rem; color: var(--text-muted);" id="lbl-front-ptt-sub">GPIO 0 · Opto-Zündung</div>
+                            <div style="font-size: 0.7rem; color: var(--text-muted);" id="lbl-front-ptt-sub">GPIO 15 · Opto-Zündung</div>
                         </div>
 
-                        <!-- Tile 3: Cockpit-Akustik (Knowles MEMS) -->
+                        <!-- Tile: Cockpit-Akustik (Knowles MEMS) -->
                         <div class="stat-tile" style="padding: 10px 12px; background: rgba(0,0,0,0.25); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
                             <div style="font-size: 0.72rem; color: var(--text-secondary); display: flex; justify-content: space-between; align-items: center;">
                                 <span>🎙️ Cockpit-Lärm</span>
@@ -524,7 +683,7 @@
                             <div style="font-size: 0.7rem; color: var(--text-muted);">Knowles SPH0645 MEMS</div>
                         </div>
 
-                        <!-- Tile 4: Action-Cam BLE Bridge -->
+                        <!-- Tile: Action-Cam BLE Bridge -->
                         <div class="stat-tile" id="tile-front-cam" style="padding: 10px 12px; background: rgba(0,0,0,0.25); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); transition: all 0.2s;">
                             <div style="font-size: 0.72rem; color: var(--text-secondary); display: flex; justify-content: space-between; align-items: center;">
                                 <span>🎥 Action-Cam BLE</span>
@@ -1482,10 +1641,12 @@
                         </tbody>
                     </table>
                 </div>
+            </section>
+
             <!-- Kerenzerberg GPX 1.1 Export & Terrace-Safe Map-Matching Card -->
             <section class="card" style="grid-column: 1 / -1; margin-top: 16px; border-color: var(--border-accent);">
                 <div class="card-header">
-                    <span class="card-title">🗺️ <span data-i18n="gpx_kerenzerberg_title">Kerenzerberg GPX 1.1 & Serpentinen Map-Matching</span></span>
+                    <span class="card-title">🗺️ <span data-i18n="gpx_kerenzerberg_title">Kerenzerberg GPX 1.1 &amp; Serpentinen Map-Matching</span></span>
                     <span class="card-badge badge-green">15-State EKF + LoRa RSSI</span>
                 </div>
                 <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 12px;">
@@ -1499,6 +1660,26 @@
                         📐 Serpentinen Terrassen-Filter Prüfen
                     </button>
                     <span id="lbl-map-match-result" style="font-size: 0.8rem; color: var(--text-muted);">HMM-Filter aktiv (Verhindert Terrassen-Springen auf Kerenzerberg-Südhang)</span>
+                </div>
+            </section>
+
+            <!-- Action-Cam Video-Telemetrie & Overlay Export Card (.SRT / .CSV) -->
+            <section class="card" style="grid-column: 1 / -1; margin-top: 16px; border-color: var(--border-accent);">
+                <div class="card-header">
+                    <span class="card-title">🎬 <span data-i18n="video_telemetry_title">Action-Cam Video-Telemetrie &amp; Overlay-Export (.SRT / .CSV)</span></span>
+                    <span class="card-badge badge-purple">Insta360 / GoPro / Dashware</span>
+                </div>
+                <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 12px;">
+                    Exportiert synchronisierte Telemetriedaten der Fahrt (Geschwindigkeit, Schräglage, Längsbeschleunigung, Radar-Annäherung, ESS-Notbremsungen) für Bild-in-Bild Video-Overlays.
+                </div>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+                    <button id="btn-export-srt" class="btn-primary" style="background: linear-gradient(135deg, var(--accent-purple), #7c3aed); color: #fff; padding: 8px 16px;">
+                        🎬 Subtitle Overlay (.SRT) Exportieren
+                    </button>
+                    <button id="btn-export-csv" class="btn-secondary" style="border-color: rgba(168, 85, 247, 0.4); color: var(--accent-purple); padding: 8px 14px;">
+                        📊 Dashware / CSV Telemetrie Exportieren
+                    </button>
+                    <span id="lbl-telemetry-export-status" style="font-size: 0.8rem; color: var(--text-muted);">Synchronisiert auf 10 Hz EKF Zeitstempel</span>
                 </div>
             </section>
         </main>
@@ -1594,9 +1775,14 @@
                             <span class="stat-sub" id="can-sub-gear">Leerlauf</span>
                         </div>
                         <div class="stat-tile">
-                            <div class="stat-label"><span>Reifendruck V/H</span><span class="card-badge badge-orange" id="can-badge-tpms">TPMS</span></div>
-                            <div class="stat-value" style="font-size: 1.4rem;" id="can-val-tpms">2.45 / 2.80 <span style="font-size: 0.85rem; font-weight: 500;">bar</span></div>
-                            <span class="stat-sub" id="can-sub-tpms">🟢 Solldruck OK</span>
+                            <div class="stat-label"><span>Reifendruck V/H</span><span class="card-badge badge-orange" id="can-badge-tpms">CAN-RDKS</span></div>
+                            <div class="stat-value" style="font-size: 1.3rem;" id="can-val-tpms">2.45 / 2.80 <span style="font-size: 0.85rem; font-weight: 500;">bar</span></div>
+                            <span class="stat-sub" id="can-sub-tpms">🟢 V: 24°C • H: 26°C (Solldruck OK)</span>
+                            <div style="margin-top: 6px; display: flex; gap: 6px; font-size: 0.72rem;">
+                                <button id="btn-tpms-source-toggle" class="btn-secondary" style="padding: 2px 6px; font-size: 0.7rem; border-color: rgba(255,255,255,0.2);">
+                                    Quelle: <strong id="lbl-tpms-source-mode">CAN / BLE Auto</strong>
+                                </button>
+                            </div>
                         </div>
                         <div class="stat-tile">
                             <div class="stat-label"><span>Kühlmitteltemp</span><span class="card-badge badge-green" id="can-badge-temp">ECU</span></div>

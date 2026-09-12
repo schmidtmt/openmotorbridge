@@ -7,7 +7,8 @@
 #include "front_node_config.h"
 
 struct PttEvent {
-    bool pressed;          // true = Pressed (Key Down), false = Released (Key Up)
+    uint8_t  button_id;    // 1=Intercom (PTT_IN1_N), 2=Cam (PTT_IN2_N), 3=Media (PTT_IN3_N)
+    bool     pressed;      // true = Pressed (Key Down), false = Released (Key Up)
     uint64_t timestamp_us; // High-precision microsecond hardware timestamp
 };
 

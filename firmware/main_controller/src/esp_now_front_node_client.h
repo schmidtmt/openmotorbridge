@@ -25,6 +25,20 @@ typedef struct {
     uint16_t cam_sd_min_rem;      // Minutes remaining SD capacity
     bool cam_autoconnect_en;      // Persistent autoconnect flag
     bool cam_fuel_filter_en;      // KL15 Tankpausen-Filter active
+
+    // 4-Port USB Hub Subsystem (USB2514B on PCBA 05)
+    bool hub_port1_pd_active;     // Port 1: Lenker Phone (SC8102 USB-PD 20W Fast Charge)
+    bool hub_port2_cp2aa_active;  // Port 2: CP2AA Wireless Dongle
+    bool hub_port3_mp3_active;    // Port 3: Handschuhfach MP3 Jukebox & Updates
+    bool hub_port4_aux_active;    // Port 4: Cockpit Aux
+
+    // Cockpit 12V Power & Light
+    bool bsd_left_active;         // Left Mirror Radar BSD LED active
+    bool bsd_right_active;        // Right Mirror Radar BSD LED active
+    bool aux_light_on;            // TPS1H100 High-Side Switch (J11 Aux Light)
+    bool aux_light_strobe;        // Emergency Strobe active
+    bool can_term_active;         // CPC1017N 120-Ohm Termination Relay active
+    bool qi_power_active;         // 12V Qi Charger active
 } FrontNodeStatus;
 
 /**
@@ -66,6 +80,22 @@ esp_err_t esp_now_front_node_reboot_ottocast(void);
  * @brief Synchronizes vehicle ignition state (KL15) with the Front Node
  */
 esp_err_t esp_now_front_node_set_ignition(bool ignition_on);
+
+/**
+ * @brief Sends radar blind-spot detection warning to Front Node mirror LEDs
+ */
+esp_err_t esp_now_front_node_send_bsd_warning(bool left_active, uint8_t left_level,
+                                             bool right_active, uint8_t right_level);
+
+/**
+ * @brief Sets Cockpit Aux Light mode on Front Node (0=Off, 1=On, 2=Strobe)
+ */
+esp_err_t esp_now_front_node_set_aux_light(uint8_t mode);
+
+/**
+ * @brief Controls CAN bus 120-Ohm auto-sensing termination relay on Front Node
+ */
+esp_err_t esp_now_front_node_set_can_term(bool enable);
 
 /**
  * @brief Action-Cam Remote Control Commands sent to Front Node

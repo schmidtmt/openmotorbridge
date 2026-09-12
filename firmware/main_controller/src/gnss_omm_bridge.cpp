@@ -5,6 +5,7 @@
 #include "freertos/task.h"
 #include "driver/uart.h"
 #include "esp_log.h"
+#include "esp_mac.h"
 #include "sdio_ring_buffer.h"
 
 static const char *TAG = "GNSS_BRIDGE";
@@ -26,21 +27,25 @@ static GnssData_t s_latest_gnss = {
 };
 
 esp_err_t gnss_omm_bridge_init(void) {
-    ESP_LOGI(TAG, "Initializing High-Speed UART Bridge to Heck-Pod 3 (460.800 Baud)...");
+    ESP_LOGI(TAG, "Initializing High-Speed UART1 (460.800 Baud) to Rear Pod 3 (SX1262 LoRa / MAX-M10S)...");
 
-    uart_config_t uart_cfg = {
+    const uart_config_t uart_config = {
         .baud_rate = 460800,
         .data_bits = UART_DATA_8_BITS,
-        .parity    = UART_PARITY_DISABLE,
+        .parity = UART_PARITY_DISABLE,
         .stop_bits = UART_STOP_BITS_1,
         .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
         .source_clk = UART_SCLK_DEFAULT,
     };
-    uart_param_config(UART_NUM_POD3, &uart_cfg);
-    uart_set_pin(UART_NUM_POD3, PIN_POD3_TX, PIN_POD3_RX, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE);
-    uart_driver_install(UART_NUM_POD3, 2048, 1024, 0, NULL, 0);
 
-    return ESP_OK;
+    esp_err_t ret = uart_param_config(UART_NUM_POD3, &uart_config);
+    if (ret != ESP_OK) return ret;
+
+    ret = uart_set_pin(UART_NUM_POD3, PIN_POD3_TX, PIN_POD3_RX, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE);
+    if (ret != ESP_OK) return ret;
+
+    ret = uart_driver_install(UART_NUM_POD3, 2048, 0, 0, NULL, 0);
+    return ret;
 }
 
 GnssData_t gnss_bridge_get_latest_data(void) {
@@ -63,6 +68,46 @@ esp_err_t omm_broadcast_siren_alert(void) {
     ESP_LOGW(TAG, "🚨 SIREN DETECTED! Broadcasting ALERT_SIREN_APPROACHING to OMM group...");
     uint8_t siren_pkt[8] = { 0xFF, 0x53, 0x49, 0x52, 0x45, 0x4E, 0x01, 0xAA }; // [ALERT, S, I, R, E, N, ID, CHK]
     return gnss_bridge_send_omm_packet(siren_pkt, sizeof(siren_pkt));
+}
+
+esp_err_t omm_broadcast_bike_alarm(uint8_t alarm_source, float lat, float lon) {
+    ESP_LOGW(TAG, "🚨 BIKE ALARM! Broadcasting LoRa 868MHz packet (source 0x%02X)...", alarm_source);
+
+    if (lat == 0.0f && lon == 0.0f) {
+        lat = (float)s_latest_gnss.latitude;
+        lon = (float)s_latest_gnss.longitude;
+    }
+
+    struct __attribute__((packed)) {
+        uint8_t  packet_type;     // 0xFE = TYPE_BIKE_ALARM
+        uint8_t  alarm_source;    // 0x01: OEM BCM, 0x02: IMU Shock, 0x03: Pannier Reed
+        uint64_t bike_uid;
+        int32_t  park_lat_1e7;
+        int32_t  park_lon_1e7;
+        uint8_t  battery_soc_pct;
+        uint8_t  crc8_checksum;
+    } alarm_pkt;
+
+    uint8_t mac[6] = {0};
+    esp_read_mac(mac, ESP_MAC_WIFI_STA);
+    uint64_t uid = 0;
+    memcpy(&uid, mac, 6);
+
+    alarm_pkt.packet_type = 0xFE;
+    alarm_pkt.alarm_source = alarm_source;
+    alarm_pkt.bike_uid = uid;
+    alarm_pkt.park_lat_1e7 = (int32_t)(lat * 1e7);
+    alarm_pkt.park_lon_1e7 = (int32_t)(lon * 1e7);
+    alarm_pkt.battery_soc_pct = 95;
+
+    uint8_t sum = 0x5A;
+    const uint8_t *p = (const uint8_t *)&alarm_pkt;
+    for (size_t i = 0; i < sizeof(alarm_pkt) - 1; i++) {
+        sum ^= p[i];
+    }
+    alarm_pkt.crc8_checksum = sum;
+
+    return gnss_bridge_send_omm_packet((const uint8_t *)&alarm_pkt, sizeof(alarm_pkt));
 }
 
 void task_rear_pod_bridge(void *pvParameters) {

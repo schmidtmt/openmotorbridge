@@ -34,13 +34,13 @@ module front_node_upper_lid() {
             );
             
             // 3. Clamping Pressure Ribs over South & West Cable Combs
-            // South compression bar (over 53.0 mm 4-Port USB comb, X in [17.0, 70.0])
-            translate([17.0, 0, -1.5])
-                cube(size=[53.0, FRONT_NODE_WALL + 3.2, 1.5], center=false);
+            // South compression bar (over 70.0 mm 6-Port USB/Charge comb, X in [14.0, 84.0])
+            translate([14.0, 0, -1.5])
+                cube(size=[70.0, FRONT_NODE_WALL + 3.2, 1.5], center=false);
                 
-            // West compression bar (over 30.0 mm Signal/Power comb)
-            translate([0, FRONT_NODE_WALL + 3.5 + 11.0, -1.5])
-                cube(size=[FRONT_NODE_WALL + 3.2, 30.0, 1.5], center=false);
+            // West compression bar (over 47.0 mm 6-Port Signal/Power comb, Y in [9.0, 56.0])
+            translate([0, 9.0, -1.5])
+                cube(size=[FRONT_NODE_WALL + 3.2, 47.0, 1.5], center=false);
         }
         
         // 4. Internal cavity recess (reduces weight & creates headroom over tall parts)
@@ -58,28 +58,28 @@ module front_node_upper_lid() {
         for (co = corner_offsets) {
             // M3 screw through-hole Ø 3.4 mm
             translate([co[0], co[1], -2.0])
-                cylinder(r=1.7, h=FRONT_NODE_LID_H + 4.0, center=false);
+                cylinder(r=1.7, h=FRONT_NODE_LID_H + 4.0, center=false, $fn=24);
                 
             // DIN 912 M3 cap head counterbore Ø 6.2 mm, depth 3.5 mm
             translate([co[0], co[1], FRONT_NODE_LID_H - 3.2])
-                cylinder(r=3.1, h=3.5, center=false);
+                cylinder(r=3.1, h=3.5, center=false, $fn=24);
         }
         
-        // 6. Status LED Light-Pipe Tunnel (Ø 2.0 mm through-hole directly over D1)
-        // D1 is at PCB rel [64.75, 22.25] -> Tub [72.75, 30.25]
-        led_x = pcb_origin_x + 64.75;
-        led_y = pcb_origin_y + 22.25;
+        // 6. Status LED Light-Pipe Tunnel (Ø 3.0 mm through-hole directly over LED1 WS2812B)
+        // LED1 is at PCB rel [75.0, 42.0]
+        led_x = pcb_origin_x + 75.0;
+        led_y = pcb_origin_y + 42.0;
         translate([led_x, led_y, -0.1])
-            cylinder(r=1.0, h=FRONT_NODE_LID_H + 0.2, center=false);
+            cylinder(r=1.5, h=FRONT_NODE_LID_H + 0.2, center=false, $fn=24);
             
         // 7. Internal FPC Antenna Pocket & Coaxial Cable Retention System
-        // A. Recess pocket for adhesive 2.4 GHz FPC dipole (e.g. Molex 146153, 48 x 12 mm)
-        translate([FRONT_NODE_WALL + 10.0, FRONT_NODE_OUTER_W / 2.0 - 6.0, FRONT_NODE_LID_H - FRONT_NODE_WALL - 0.6])
+        // A. Recess pocket for adhesive 2.4 GHz FPC dipole (48 x 12 mm along rear wall)
+        translate([FRONT_NODE_OUTER_L / 2.0 - 24.0, FRONT_NODE_OUTER_W - FRONT_NODE_WALL - 12.0, FRONT_NODE_LID_H - FRONT_NODE_WALL - 0.6])
             cube(size=[48.0, 12.0, 0.7], center=false);
             
-        // B. Recessed cable guide canal (Ø 1.5 mm) for U.FL coax lead to ESP32-C3
-        translate([FRONT_NODE_WALL + 54.0, FRONT_NODE_OUTER_W / 2.0 - 2.5, FRONT_NODE_LID_H - FRONT_NODE_WALL - 1.0])
-            cube(size=[10.0, 2.0, 1.1], center=false);
+        // B. Recessed cable guide canal (Ø 1.5 mm) for U.FL coax lead to ESP32-S3
+        translate([FRONT_NODE_OUTER_L / 2.0 + 20.0, FRONT_NODE_OUTER_W - FRONT_NODE_WALL - 15.0, FRONT_NODE_LID_H - FRONT_NODE_WALL - 1.0])
+            cube(size=[12.0, 2.0, 1.1], center=false);
     }
 }
 

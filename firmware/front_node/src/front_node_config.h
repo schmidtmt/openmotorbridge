@@ -6,24 +6,37 @@
 // OpenMotorBridge - Universal Front Node (PCBA 05) Pinout & Configuration
 // =============================================================================
 
-// --- 1. GPIO Pin Assignments ---
-#define PIN_PTT_INPUT_N         GPIO_NUM_0   // Active-Low Handlebar PTT (Interrupt)
-#define PIN_MIC_I2S_WS          GPIO_NUM_1   // Knowles SPH0645 I2S Word Select / LRCLK
-#define PIN_MIC_I2S_BCLK        GPIO_NUM_2   // Knowles SPH0645 I2S Bit Clock
-#define PIN_MIC_I2S_DATA        GPIO_NUM_3   // Knowles SPH0645 I2S Serial Data
-#define PIN_CAN_RX             GPIO_NUM_4   // TCAN334G TWAI / CAN Receiver
-#define PIN_CAN_TX             GPIO_NUM_5   // TCAN334G TWAI / CAN Transmitter
-#define PIN_OTTOCAST_PWR_EN     GPIO_NUM_6   // TI TPS2051B USB VBUS Power Enable (Active High)
-#define PIN_OTTOCAST_FAULT_N    GPIO_NUM_7   // TI TPS2051B Fault Alert (Active Low, Open-Drain)
-#define PIN_STATUS_LED          GPIO_NUM_8   // Status LED D1 (Green, Active High)
-#define PIN_BOOT_BUTTON         GPIO_NUM_9   // Boot/Config Tactile Button SW2 (Active Low)
-#define PIN_USB_DM              GPIO_NUM_18  // Native USB D- (Service / Flash Port)
-#define PIN_USB_DP              GPIO_NUM_19  // Native USB D+ (Service / Flash Port)
+// --- 1. GPIO Pin Assignments (ESP32-S3 on PCBA 05) ---
+#define PIN_BOOT_BUTTON         GPIO_NUM_0   // Boot/Config Tactile Button SW1 (Active Low)
+#define PIN_OTTOCAST_PWR_EN     GPIO_NUM_1   // TI TPS2051B USB VBUS Power Enable (Active High)
+#define PIN_OTTOCAST_FAULT_N    GPIO_NUM_2   // TI TPS2051B Fault Alert (Active Low, Open-Drain)
+#define PIN_CAN_TERM_EN         GPIO_NUM_3   // CPC1017N Solid-State Relay for 120R CAN Termination (Auto-Sensing)
+#define PIN_KL15_SENSE          GPIO_NUM_4   // 12V Ignition KL15 Sense via voltage divider
+#define PIN_CAN_SILENT          GPIO_NUM_5   // TI TCAN334G Pin 8 Silent / Listen-Only Mode
+#define PIN_MIC_I2S_WS          GPIO_NUM_6   // Knowles SPH0645 I2S Word Select / LRCLK
+#define PIN_MIC_I2S_BCLK        GPIO_NUM_7   // Knowles SPH0645 I2S Bit Clock
+#define PIN_MIC_I2S_DATA        GPIO_NUM_8   // Knowles SPH0645 I2S Serial Data
+#define PIN_I2C_SDA             GPIO_NUM_9   // Qwiic J12 I2C SDA
+#define PIN_I2C_SCL             GPIO_NUM_10  // Qwiic J12 I2C SCL
+#define PIN_WS2812B_DIN         GPIO_NUM_11  // Onboard WS2812B-2020 RGB Status LED (Light-pipe in lid)
+#define PIN_BSD_LED_LEFT        GPIO_NUM_12  // Left Mirror Radar BSD Warning LED Gate (DMN63D8 Ch A)
+#define PIN_BSD_LED_RIGHT       GPIO_NUM_13  // Right Mirror Radar BSD Warning LED Gate (DMN63D8 Ch B)
+#define PIN_AUX_LIGHT_EN        GPIO_NUM_14  // TPS1H100 High-Side Switch (J11 Aux Light / Strobe)
+#define PIN_PTT_IN1_N           GPIO_NUM_15  // Handlebar Button 1: Intercom PTT (Active Low)
+#define PIN_PTT_IN2_N           GPIO_NUM_16  // Handlebar Button 2: Action-Cam Bookmark / Highlight (Active Low)
+#define PIN_PTT_IN3_N           GPIO_NUM_17  // Handlebar Button 3: Media Next / Siri / Voice (Active Low)
+#define PIN_USB_DM              GPIO_NUM_18  // Native USB D- (Service / Flash Port J7)
+#define PIN_USB_DP              GPIO_NUM_19  // Native USB D+ (Service / Flash Port J7)
+#define PIN_CAN_TX              GPIO_NUM_21  // TCAN334G TWAI / CAN Transmitter
+#define PIN_CAN_RX              GPIO_NUM_47  // TCAN334G TWAI / CAN Receiver
+
+// Legacy alias for single PTT button compatibility
+#define PIN_PTT_INPUT_N         PIN_PTT_IN1_N
 
 // --- 2. ESP-NOW Wireless Bridge Constants ---
 #define ESPNOW_WIFI_CHANNEL     1
 #define ESPNOW_MAX_PAYLOAD      250
-#define FRONT_NODE_PROTOCOL_VER 0x01
+#define FRONT_NODE_PROTOCOL_VER 0x02
 
 // Packet Types
 enum FrontNodePacketType : uint8_t {
@@ -36,13 +49,38 @@ enum FrontNodePacketType : uint8_t {
     PKT_TYPE_CAM_SCAN_RES    = 0x07,   // Discovered BLE camera item (mac, rssi, brand, name)
     PKT_TYPE_BINDING_BEACON  = 0x08,   // Rescue / pairing beacon from Central Box
     PKT_TYPE_BINDING_ACK     = 0x09,   // Binding confirmation from Front Node to Central Box
+    PKT_TYPE_BSD_TRIGGER     = 0x0A,   // Central Box -> Front Node: Rear Radar Mirror BSD Trigger
+    PKT_TYPE_COCKPIT_STATUS  = 0x0B,   // Front Node -> Central Box: 4-Port Hub, Qi, Aux Light, CAN Term
     PKT_TYPE_CMD_POWER_CYCLE = 0x10,
     PKT_TYPE_CMD_CONFIG      = 0x11,
     PKT_TYPE_CAM_CMD         = 0x12,   // Action-Cam remote command from Central Box / WebApp
     PKT_TYPE_CMD_UNBIND      = 0x13,   // Manual unpair / clear NVS binding command
+    PKT_TYPE_CMD_AUX_LIGHT   = 0x14,   // Central Box / PWA -> Front Node: Set Aux Light state (Off, On, Strobe)
+    PKT_TYPE_CMD_CAN_TERM    = 0x15,   // Central Box -> Front Node: Set CAN Termination Relay state
     PKT_TYPE_OTA_BEGIN       = 0x20,
     PKT_TYPE_OTA_CHUNK       = 0x21,
     PKT_TYPE_OTA_FINISH      = 0x22
+};
+
+// Aux Light Operating Modes
+enum AuxLightMode : uint8_t {
+    AUX_LIGHT_OFF            = 0x00,
+    AUX_LIGHT_ON             = 0x01,
+    AUX_LIGHT_STROBE         = 0x02    // 4-5 Hz Emergency Brake Strobe
+};
+
+// Radar Blind Spot Warning Alert Level
+enum BsdAlertLevel : uint8_t {
+    BSD_LEVEL_OFF            = 0x00,
+    BSD_LEVEL_SOLID_AMBER    = 0x01,   // Target in blind spot zone (< 15 m)
+    BSD_LEVEL_FAST_STROBE    = 0x02    // Rapid overtake / collision hazard (< 2.5s TTC, 8 Hz flash)
+};
+
+// Handlebar Button Identifier
+enum HandlebarButtonId : uint8_t {
+    BTN_INTERCOM_PTT         = 0x01,   // J3 Pin 2 (PTT_IN1_N)
+    BTN_CAM_HIGHLIGHT        = 0x02,   // J3 Pin 3 (PTT_IN2_N)
+    BTN_MEDIA_VOICE          = 0x03    // J3 Pin 4 (PTT_IN3_N)
 };
 
 // Front Node Hardware-Binding States (1:1 Binding Machine)

@@ -24,6 +24,8 @@ HandlebarPttHandler::HandlebarPttHandler()
 {
 }
 
+#include "ws2812b_led_manager.h"
+
 void IRAM_ATTR HandlebarPttHandler::isr_handler(void* arg) {
     HandlebarPttHandler* self = static_cast<HandlebarPttHandler*>(arg);
     uint64_t now = esp_timer_get_time();
@@ -34,12 +36,33 @@ void IRAM_ATTR HandlebarPttHandler::isr_handler(void* arg) {
     }
     self->m_last_edge_us = now;
 
-    // Pin is active-low (0 = Pressed, 1 = Released)
-    int level = gpio_get_level(PIN_PTT_INPUT_N);
-    bool pressed = (level == 0);
+    // Read all 3 active-low inputs (0 = Pressed, 1 = Released)
+    int lvl1 = gpio_get_level(PIN_PTT_IN1_N);
+    int lvl2 = gpio_get_level(PIN_PTT_IN2_N);
+    int lvl3 = gpio_get_level(PIN_PTT_IN3_N);
+
+    uint8_t btn_id = BTN_INTERCOM_PTT;
+    bool pressed = false;
+
+    if (lvl1 == 0) {
+        btn_id = BTN_INTERCOM_PTT;
+        pressed = true;
+    } else if (lvl2 == 0) {
+        btn_id = BTN_CAM_HIGHLIGHT;
+        pressed = true;
+    } else if (lvl3 == 0) {
+        btn_id = BTN_MEDIA_VOICE;
+        pressed = true;
+    } else {
+        // All released
+        pressed = false;
+        btn_id = BTN_INTERCOM_PTT;
+    }
+
     self->m_is_pressed = pressed;
 
     PttEvent evt = {
+        .button_id = btn_id,
         .pressed = pressed,
         .timestamp_us = now
     };
@@ -61,8 +84,12 @@ bool HandlebarPttHandler::init() {
         return false;
     }
 
+    uint64_t pin_mask = (1ULL << PIN_PTT_IN1_N) |
+                        (1ULL << PIN_PTT_IN2_N) |
+                        (1ULL << PIN_PTT_IN3_N);
+
     gpio_config_t io_conf = {
-        .pin_bit_mask = (1ULL << PIN_PTT_INPUT_N),
+        .pin_bit_mask = pin_mask,
         .mode = GPIO_MODE_INPUT,
         .pull_up_en = GPIO_PULLUP_ENABLE, // Internal pullup backup to external 10k resistor
         .pull_down_en = GPIO_PULLDOWN_DISABLE,
@@ -76,17 +103,17 @@ bool HandlebarPttHandler::init() {
     }
 
     // Read initial state
-    m_is_pressed = (gpio_get_level(PIN_PTT_INPUT_N) == 0);
+    m_is_pressed = (gpio_get_level(PIN_PTT_IN1_N) == 0) ||
+                   (gpio_get_level(PIN_PTT_IN2_N) == 0) ||
+                   (gpio_get_level(PIN_PTT_IN3_N) == 0);
 
     // Install ISR service if not already present
     gpio_install_isr_service(ESP_INTR_FLAG_IRAM);
-    err = gpio_isr_handler_add(PIN_PTT_INPUT_N, isr_handler, this);
-    if (err != ESP_OK) {
-        ESP_LOGE(TAG, "gpio_isr_handler_add failed: %s", esp_err_to_name(err));
-        return false;
-    }
+    gpio_isr_handler_add(PIN_PTT_IN1_N, isr_handler, this);
+    gpio_isr_handler_add(PIN_PTT_IN2_N, isr_handler, this);
+    gpio_isr_handler_add(PIN_PTT_IN3_N, isr_handler, this);
 
-    ESP_LOGI(TAG, "Handlebar PTT driver initialized (GPIO0, Active-Low, Interrupt-Driven). Initial: %s",
+    ESP_LOGI(TAG, "Handlebar Multi-Button driver initialized (GPIO15/16/17, Active-Low, Interrupt-Driven). Initial: %s",
              m_is_pressed ? "PRESSED" : "RELEASED");
     return true;
 }
@@ -101,7 +128,8 @@ bool HandlebarPttHandler::get_event(PttEvent* evt, TickType_t wait_ticks) {
     if (received) {
         uint64_t now = evt->timestamp_us;
         if (evt->pressed) {
-            // Key Down
+            // Key Down: Trigger white flash on WS2812B RGB light-pipe
+            Ws2812bLedManager::instance().trigger_click_flash();
             m_press_start_us = now;
             m_long_press_fired = false;
             m_reset_hold_fired = false;

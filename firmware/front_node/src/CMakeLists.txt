@@ -7,6 +7,8 @@ idf_component_register(
         "handlebar_ptt_handler.cpp"
         "front_cam_ble_manager.cpp"
         "cockpit_can_manager.cpp"
+        "cockpit_switches_manager.cpp"
+        "ws2812b_led_manager.cpp"
         "ota_service_manager.cpp"
     INCLUDE_DIRS
         "."

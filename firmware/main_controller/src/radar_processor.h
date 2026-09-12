@@ -66,6 +66,17 @@ void radar_trigger_test_alert(RadarThreatLevel_t threat);
  */
 void radar_inject_simulated_target(float distance_m, float rel_speed_kmh, int8_t azimuth_deg);
 
+/**
+ * @brief Überwacht Längsverzögerung ax für Notbremsblinken (Emergency Stop Signal - ESS)
+ * Schaltet bei ax < -0.6g das Garmin Varia Rücklicht und Front-Node Aux-Light in den 4.5 Hz Strobe.
+ */
+void radar_notify_vehicle_dynamics(float speed_kmh, float accel_x_g);
+
+/**
+ * @brief Gibt zurück, ob das Notbremsblinken (ESS) aktuell aktiv ist
+ */
+bool radar_is_ess_active(void);
+
 #ifdef __cplusplus
 }
 #endif

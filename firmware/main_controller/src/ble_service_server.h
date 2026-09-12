@@ -27,7 +27,28 @@ esp_err_t ble_server_init(void);
 /**
  * @brief Sendet ein Telemetrie-Update an verbundene PWA-Clients
  */
-void ble_server_notify_telemetry(const SystemTelemetry_t *telemetry);
+/**
+ * @brief Reifendruck- und Temperaturdaten (TPMS)
+ */
+typedef struct {
+    float front_bar;
+    float rear_bar;
+    int8_t front_temp_c;
+    int8_t rear_temp_c;
+    bool front_valid;
+    bool rear_valid;
+    bool is_ble_source;
+} TpmsData_t;
+
+/**
+ * @brief Aktualisiert BLE-Ventilkappendaten
+ */
+void ble_tpms_update(float front_bar, float rear_bar, int8_t front_temp_c, int8_t rear_temp_c);
+
+/**
+ * @brief Liefert die aktuellen TPMS Reifendruck- und Temperaturdaten
+ */
+TpmsData_t ble_tpms_get_data(void);
 
 /**
  * @brief FreeRTOS Task für NimBLE Server Host (Core 0)

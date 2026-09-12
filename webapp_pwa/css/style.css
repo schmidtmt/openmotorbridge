@@ -1657,3 +1657,141 @@ body.ride-hud-active .tab-btn {
     padding: 4px 8px;
     font-size: 0.74rem;
 }
+
+/* Cockpit Aux-Light HUD Pill States */
+.hud-pill-aux {
+    transition: all 0.25s ease;
+    user-select: none;
+}
+.hud-pill-aux:hover {
+    border-color: var(--accent-yellow);
+    background: rgba(255, 214, 10, 0.08);
+}
+.hud-pill-aux.hud-pill-aux-on {
+    border-color: var(--accent-yellow);
+    background: rgba(255, 214, 10, 0.15);
+    box-shadow: 0 0 12px rgba(255, 214, 10, 0.25);
+}
+.hud-pill-aux.hud-pill-aux-strobe {
+    border-color: var(--accent-red);
+    background: rgba(255, 69, 58, 0.2);
+    box-shadow: 0 0 16px rgba(255, 69, 58, 0.4);
+    animation: strobe-pill-pulse 0.44s infinite alternate;
+}
+
+@keyframes strobe-pill-pulse {
+    0% { opacity: 0.6; transform: scale(0.98); }
+    100% { opacity: 1; transform: scale(1.02); }
+}
+
+.btn-secondary.active {
+    background: rgba(255, 255, 255, 0.18);
+    border-color: rgba(255, 255, 255, 0.4);
+    font-weight: 700;
+}
+#btn-aux-on.active {
+    background: rgba(255, 214, 10, 0.2);
+    border-color: var(--accent-yellow);
+    color: var(--accent-yellow);
+    box-shadow: 0 0 8px rgba(255, 214, 10, 0.3);
+}
+#btn-aux-strobe.active {
+    background: rgba(255, 69, 58, 0.25);
+    border-color: var(--accent-red);
+    color: var(--accent-red);
+    box-shadow: 0 0 10px rgba(255, 69, 58, 0.4);
+    animation: strobe-btn-pulse 0.44s infinite alternate;
+}
+@keyframes strobe-btn-pulse {
+    0% { opacity: 0.7; }
+    100% { opacity: 1.0; }
+}
+
+#dot-front-rgb {
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* ==========================================================================
+   LoRa 868 MHz Bike Alarm / Parkplatzwächter Pager Banner
+   ========================================================================== */
+.bike-alarm-banner {
+    background: linear-gradient(135deg, rgba(180, 83, 9, 0.95), rgba(120, 53, 15, 0.95));
+    border: 2px solid #f59e0b;
+    border-radius: var(--radius-md);
+    box-shadow: 0 0 30px rgba(245, 158, 11, 0.6), 0 8px 24px rgba(0, 0, 0, 0.5);
+    backdrop-filter: var(--glass-blur);
+    padding: 14px 18px;
+    margin-bottom: 18px;
+    animation: alarmBannerPulse 1.2s infinite alternate ease-in-out;
+    position: relative;
+    z-index: 90;
+}
+
+.bike-alarm-banner-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.alarm-pulse-icon {
+    font-size: 2.2rem;
+    animation: alarmIconRing 0.5s infinite ease-in-out;
+    filter: drop-shadow(0 0 8px #f59e0b);
+}
+
+@keyframes alarmBannerPulse {
+    0% {
+        border-color: #f59e0b;
+        box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+    }
+    100% {
+        border-color: #ef4444;
+        box-shadow: 0 0 35px rgba(239, 68, 68, 0.85), 0 0 15px rgba(245, 158, 11, 0.4);
+    }
+}
+
+@keyframes alarmIconRing {
+    0%, 100% { transform: rotate(0deg) scale(1); }
+    25% { transform: rotate(-12deg) scale(1.15); }
+    75% { transform: rotate(12deg) scale(1.15); }
+}
+
+/* ==========================================================================
+   Ride HUD: ESS Emergency Stop Signal & Privacy Mute Badges
+   ========================================================================== */
+.hud-badge-ess {
+    display: inline-block;
+    background: #ff3b30;
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 900;
+    letter-spacing: 1px;
+    padding: 3px 10px;
+    border-radius: var(--radius-sm);
+    box-shadow: 0 0 14px rgba(255, 59, 48, 0.8);
+    animation: essBlink 0.22s infinite alternate ease-in-out;
+    margin-bottom: 4px;
+}
+
+@keyframes essBlink {
+    0% { opacity: 0.2; transform: scale(0.96); }
+    100% { opacity: 1.0; transform: scale(1.04); }
+}
+
+.hud-privacy-badge {
+    background: rgba(168, 85, 247, 0.25);
+    border: 1px solid rgba(168, 85, 247, 0.5);
+    color: #c084fc;
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.hud-pill-tpms {
+    border-left: 2px solid var(--accent-orange);
+}

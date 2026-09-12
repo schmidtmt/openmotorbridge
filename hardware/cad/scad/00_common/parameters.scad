@@ -86,22 +86,22 @@ M4_SCREW_HOLE_R       = 2.2;   // M4 clearance hole (r = 2.2 mm -> Ø 4.4 mm)
 M8_BORE_R             = 4.0;   // M8 cable through-bore (r = 4.0 mm -> Ø 8.0 mm)
 M8_STUDS_OUTER_R      = 6.0;   // M8 neck outer radius (Ø 12.0 mm)
 
-// --- 8. Universal Front Node Enclosure Dimensions ---
-FRONT_NODE_PCB_L      = 68.0;  // PCB length in X (mm)
-FRONT_NODE_PCB_W      = 44.0;  // PCB width in Y (mm)
+// --- 8. Universal Front Node Enclosure Dimensions (Type E: 98 x 68 x 25 mm) ---
+FRONT_NODE_PCB_L      = 82.0;  // PCB length in X (mm, PCBA 05)
+FRONT_NODE_PCB_W      = 50.0;  // PCB width in Y (mm, PCBA 05)
 FRONT_NODE_PCB_H      = 1.6;   // PCB thickness in Z (mm)
 FRONT_NODE_PCB_R      = 2.5;   // PCB corner radius (mm)
 
-FRONT_NODE_CHAMBER_L  = 72.0;  // Internal chamber length in X (mm, 2mm margin)
-FRONT_NODE_CHAMBER_W  = 48.0;  // Internal chamber width in Y (mm, 2mm margin)
-FRONT_NODE_TUB_H      = 16.0;  // Lower tub depth in Z (mm)
-FRONT_NODE_LID_H      = 7.0;   // Upper lid height in Z (mm)
+FRONT_NODE_CHAMBER_L  = 86.0;  // Internal chamber length in X (mm, 2mm margin per side)
+FRONT_NODE_CHAMBER_W  = 56.0;  // Internal chamber width in Y (mm, 3mm margin per side)
+FRONT_NODE_TUB_H      = 17.5;  // Lower tub depth in Z (mm)
+FRONT_NODE_LID_H      = 7.5;   // Upper lid height in Z (mm)
 FRONT_NODE_WALL       = 2.5;   // Wall thickness in HP MJF PA12 (mm)
 FRONT_NODE_CORNER_R   = 4.0;   // Outer enclosure corner radius (mm)
 
-FRONT_NODE_OUTER_L    = FRONT_NODE_CHAMBER_L + 2 * FRONT_NODE_WALL + 7.0; // 84.0 mm
-FRONT_NODE_OUTER_W    = FRONT_NODE_CHAMBER_W + 2 * FRONT_NODE_WALL + 7.0; // 60.0 mm
-FRONT_NODE_OUTER_H    = FRONT_NODE_TUB_H + FRONT_NODE_LID_H;              // 23.0 mm
+FRONT_NODE_OUTER_L    = FRONT_NODE_CHAMBER_L + 2 * FRONT_NODE_WALL + 7.0; // 98.0 mm
+FRONT_NODE_OUTER_W    = FRONT_NODE_CHAMBER_W + 2 * FRONT_NODE_WALL + 7.0; // 68.0 mm
+FRONT_NODE_OUTER_H    = FRONT_NODE_TUB_H + FRONT_NODE_LID_H;              // 25.0 mm
 
 // PCB Standoff Heights & Radii
 FRONT_NODE_STANDOFF_H = 3.0;   // Height of PCB standoffs from floor (mm)

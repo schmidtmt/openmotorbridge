@@ -11,6 +11,8 @@
 #include "ottocast_power_manager.h"
 #include "knowles_mems_dsp.h"
 #include "cockpit_can_manager.h"
+#include "cockpit_switches_manager.h"
+#include "ws2812b_led_manager.h"
 #include "esp_now_bridge.h"
 #include "ota_service_manager.h"
 
@@ -77,6 +79,34 @@ static void handle_remote_command(uint8_t cmd_type, const uint8_t* payload, size
                     default:
                         break;
                 }
+            }
+            break;
+
+        case PKT_TYPE_BSD_TRIGGER:
+            if (len >= 4) {
+                bool left_act = (payload[0] != 0);
+                BsdAlertLevel left_lvl = static_cast<BsdAlertLevel>(payload[1]);
+                bool right_act = (payload[2] != 0);
+                BsdAlertLevel right_lvl = static_cast<BsdAlertLevel>(payload[3]);
+                CockpitSwitchesManager::instance().set_bsd_warning(left_act, left_lvl, right_act, right_lvl);
+                ESP_LOGI(TAG, "ESP-NOW Command: BSD Mirror warning: L=%d (lvl %d), R=%d (lvl %d)",
+                         left_act, (int)left_lvl, right_act, (int)right_lvl);
+            }
+            break;
+
+        case PKT_TYPE_CMD_AUX_LIGHT:
+            if (len >= 1) {
+                AuxLightMode mode = static_cast<AuxLightMode>(payload[0]);
+                CockpitSwitchesManager::instance().set_aux_light_mode(mode);
+                ESP_LOGI(TAG, "ESP-NOW Command: Aux Light mode set to %d", (int)mode);
+            }
+            break;
+
+        case PKT_TYPE_CMD_CAN_TERM:
+            if (len >= 1) {
+                bool term_en = (payload[0] != 0);
+                CockpitSwitchesManager::instance().set_can_termination(term_en);
+                ESP_LOGI(TAG, "ESP-NOW Command: CAN Termination relay override: %s", term_en ? "ON" : "OFF");
             }
             break;
 
@@ -156,7 +186,8 @@ static void ptt_task(void* pvParameters) {
 
     while (1) {
         if (ptt.get_event(&evt, pdMS_TO_TICKS(20))) {
-            ESP_LOGI(TAG, "⚡ PTT Event: %s at %llu us -> Transmitting via ESP-NOW",
+            ESP_LOGI(TAG, "⚡ PTT Event (Btn %d): %s at %llu us -> Transmitting via ESP-NOW",
+                     evt.button_id,
                      evt.pressed ? "PRESSED (ON)" : "RELEASED (OFF)",
                      evt.timestamp_us);
 
@@ -180,7 +211,7 @@ static void audio_dsp_task(void* pvParameters) {
     TickType_t last_wake_time = xTaskGetTickCount();
 
     while (1) {
-        // Read 320 audio samples via I2S DMA, calculate A-weighted RMS
+        // Read audio samples via I2S DMA, calculate A-weighted RMS
         dsp.process_audio();
 
         uint8_t dba = dsp.get_latest_dba();
@@ -194,18 +225,19 @@ static void audio_dsp_task(void* pvParameters) {
 }
 
 // -----------------------------------------------------------------------------
-// Task 3: System Supervisor, Ottocast, Action Cam & CAN-Bus
+// Task 3: System Supervisor, Ottocast, Action Cam, Cockpit Switches & RGB LED
 // -----------------------------------------------------------------------------
 static void supervisor_task(void* pvParameters) {
     OttocastPowerManager& ottocast = OttocastPowerManager::instance();
     FrontCamBleManager& cam = FrontCamBleManager::instance();
     CockpitCanManager& can = CockpitCanManager::instance();
+    CockpitSwitchesManager& switches = CockpitSwitchesManager::instance();
+    Ws2812bLedManager& rgb = Ws2812bLedManager::instance();
     EspNowBridge& bridge = EspNowBridge::instance();
 
     ESP_LOGI(TAG, "System supervisor task active (10 Hz)");
 
     uint32_t heartbeat_counter = 0;
-    uint32_t led_tick = 0;
 
     while (1) {
         // 0. Advance ESP-NOW Bridge State Machine (Heartbeat timeout & Orphan supervision)
@@ -217,13 +249,16 @@ static void supervisor_task(void* pvParameters) {
         // 2. Advance Action-Cam BLE Manager (Autoconnect, Scan timer, Telemetry)
         cam.update();
 
-        // 3. Poll Cockpit CAN Messages
+        // 3. Advance Cockpit Switches (BSD 8 Hz & Aux Light 4.5 Hz Strobes)
+        switches.update(100);
+
+        // 4. Poll Cockpit CAN Messages
         CanMessage can_msg;
         while (can.receive_message(&can_msg, 0)) {
             ESP_LOGD(TAG, "CAN Frame RX: ID=0x%08lX, DLC=%d", can_msg.id, can_msg.dlc);
         }
 
-        // 4. Heartbeat & Ottocast / Action-Cam Status Telemetry (every 500 ms)
+        // 5. Heartbeat & Cockpit Telemetry (every 500 ms)
         heartbeat_counter++;
         if (heartbeat_counter >= 5) {
             heartbeat_counter = 0;
@@ -242,29 +277,35 @@ static void supervisor_task(void* pvParameters) {
                 cam.is_autoconnect_enabled(),
                 cam.is_fuel_filter_enabled()
             );
+            bridge.send_cockpit_status(
+                true,                                               // Port 1: Smartphone USB-PD 20W Fast-Charge
+                ottocast.is_power_on(),                             // Port 2: CP2AA Wireless Dongle (TPS2051B)
+                true,                                               // Port 3: Handschuhfach MP3 Jukebox / Update
+                false,                                              // Port 4: Cockpit Aux
+                switches.is_bsd_left_active(),                      // Mirror BSD Left
+                switches.is_bsd_right_active(),                     // Mirror BSD Right
+                switches.is_aux_light_on(),                         // Aux Light Active
+                switches.get_aux_light_mode() == AUX_LIGHT_STROBE,  // Aux Strobe
+                switches.is_can_termination_active(),               // CAN 120R Auto-Sense Relay
+                switches.is_qi_power_active()                       // Qi 12V Charger Active
+            );
         }
 
-        // 5. Status LED Blinking Logic (GPIO8)
-        led_tick++;
+        // 6. Update WS2812B RGB Smart LED Animation Mode
         if (OtaServiceManager::instance().is_updating()) {
-            // Rapid flash (10 Hz) during OTA firmware flashing
-            gpio_set_level(PIN_STATUS_LED, (led_tick % 2) == 0 ? 1 : 0);
+            rgb.set_mode(LED_MODE_FLASHING_BLUE);
         } else if (ottocast.has_fault()) {
-            // Double flash on hardware fault
-            gpio_set_level(PIN_STATUS_LED, (led_tick % 10 < 4 && (led_tick % 2) == 0) ? 1 : 0);
+            rgb.set_mode(LED_MODE_FLASHING_RED);
         } else if (cam.is_recording()) {
-            // Distinct heartbeat blink while action cam is actively recording
-            gpio_set_level(PIN_STATUS_LED, (led_tick % 10 == 0 || led_tick % 10 == 2) ? 1 : 0);
+            rgb.set_mode(LED_MODE_RECORDING_RED);
         } else if (bridge.get_binding_state() == BINDING_STATE_LINKED) {
-            // Solid ON or calm 1 Hz breathing blink when linked to Central Box
-            gpio_set_level(PIN_STATUS_LED, (led_tick % 10 < 8) ? 1 : 0);
+            rgb.set_mode(LED_MODE_BREATHING_GREEN);
         } else if (bridge.get_binding_state() == BINDING_STATE_ORPHAN) {
-            // Slow double-flash (re-pairing ready / orphan rescue mode)
-            gpio_set_level(PIN_STATUS_LED, (led_tick % 20 < 4 && (led_tick % 2) == 0) ? 1 : 0);
+            rgb.set_mode(LED_MODE_SOLID_YELLOW);
         } else {
-            // 2 Hz flashing when searching for Central Box in open UNPAIRED mode
-            gpio_set_level(PIN_STATUS_LED, (led_tick % 5 < 2) ? 1 : 0);
+            rgb.set_mode(LED_MODE_SEARCHING_CYAN);
         }
+        rgb.update(100);
 
         vTaskDelay(pdMS_TO_TICKS(100)); // 100 ms tick
     }
@@ -275,21 +316,12 @@ static void supervisor_task(void* pvParameters) {
 // -----------------------------------------------------------------------------
 extern "C" void app_main(void) {
     ESP_LOGI(TAG, "============================================================");
-    ESP_LOGI(TAG, "   OPENMOTORBRIDGE UNIVERSAL FRONT NODE FIRMWARE v1.0.0     ");
-    ESP_LOGI(TAG, "   Target: ESP32-C3-WROOM-02U (PCBA 05)                     ");
+    ESP_LOGI(TAG, "   OPENMOTORBRIDGE UNIVERSAL FRONT NODE FIRMWARE v2.0.0     ");
+    ESP_LOGI(TAG, "   Target: ESP32-S3-WROOM-1U (PCBA 05)                     ");
+    ESP_LOGI(TAG, "   Features: 4-Port Hub, USB-PD 20W, BSD, Aux, RGB LED     ");
     ESP_LOGI(TAG, "============================================================");
 
-    // 1. Configure Status LED & Boot Button
-    gpio_config_t led_conf = {
-        .pin_bit_mask = (1ULL << PIN_STATUS_LED),
-        .mode = GPIO_MODE_OUTPUT,
-        .pull_up_en = GPIO_PULLUP_DISABLE,
-        .pull_down_en = GPIO_PULLDOWN_DISABLE,
-        .intr_type = GPIO_INTR_DISABLE,
-    };
-    gpio_config(&led_conf);
-    gpio_set_level(PIN_STATUS_LED, 1);
-
+    // 1. Configure Boot Button
     gpio_config_t btn_conf = {
         .pin_bit_mask = (1ULL << PIN_BOOT_BUTTON),
         .mode = GPIO_MODE_INPUT,
@@ -299,7 +331,9 @@ extern "C" void app_main(void) {
     };
     gpio_config(&btn_conf);
 
-    // 2. Initialize Subsystems
+    // 2. Initialize Subsystems & Hardware Drivers
+    Ws2812bLedManager::instance().init();
+    CockpitSwitchesManager::instance().init();
     OtaServiceManager::instance().init();
     HandlebarPttHandler::instance().init();
     HandlebarPttHandler::instance().set_action_callback(on_ptt_action);

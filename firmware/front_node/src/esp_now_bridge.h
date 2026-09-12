@@ -22,6 +22,9 @@ public:
     bool send_ottocast_status(uint8_t state, bool power_on, bool fault, uint32_t cafe_sec);
     bool send_cam_status(uint8_t brand, uint8_t state, uint8_t bat_pct, uint16_t sd_min, bool autoconn, bool fuelfilt);
     bool send_cam_scan_result(const uint8_t* mac, int8_t rssi, uint8_t brand, const char* name);
+    bool send_cockpit_status(bool hub_port1, bool hub_port2, bool hub_port3, bool hub_port4,
+                             bool bsd_l, bool bsd_r, bool aux_on, bool aux_strobe,
+                             bool can_term, bool qi_active);
     bool send_heartbeat();
     bool send_binding_ack(const uint8_t* target_mac);
 

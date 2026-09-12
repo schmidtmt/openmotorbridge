@@ -14,6 +14,7 @@
 #include "cartridge_onewire.h"
 #include "omm_flasher.h"
 #include "esp_now_front_node_client.h"
+#include "gnss_omm_bridge.h"
 
 static const char *TAG = "BLE_SERVER";
 
@@ -78,10 +79,45 @@ static int gatt_svr_chr_access_omb(uint16_t conn_handle, uint16_t attr_handle,
             esp_now_front_node_start_pairing();
         } else if (cmd[0] == 0x19) { // Front Node: Unbind & Clear NVS
             esp_now_front_node_unbind();
+        } else if (cmd[0] == 0x20) { // Bike Alarm: Arm / Disarm
+            bool arm = (cmd[1] != 0);
+            ESP_LOGI(TAG, "Bike Alarm Guard set: %s", arm ? "ARMED" : "DISARMED");
+        } else if (cmd[0] == 0x21) { // Bike Alarm: Manual Trigger Test Alert
+            omm_broadcast_bike_alarm(0x02, 0.0f, 0.0f); // 0x02 = IMU shock
+        } else if (cmd[0] == 0x22) { // Front Node Aux Light Mode
+            esp_now_front_node_set_aux_light(cmd[1]);
+        } else if (cmd[0] == 0x23) { // Front Node CAN Term Relais Mode
+            esp_now_front_node_set_can_term(cmd[1] != 0);
+        } else if (cmd[0] == 0x24) { // Privacy Mute Enable/Disable
+            audio_set_privacy_mute_config(cmd[1] != 0);
         }
         return 0;
     }
     return 0;
+}
+
+static TpmsData_t s_tpms_data = {
+    .front_bar = 2.45f,
+    .rear_bar = 2.80f,
+    .front_temp_c = 24,
+    .rear_temp_c = 26,
+    .front_valid = true,
+    .rear_valid = true,
+    .is_ble_source = false
+};
+
+void ble_tpms_update(float front_bar, float rear_bar, int8_t front_temp_c, int8_t rear_temp_c) {
+    s_tpms_data.front_bar = front_bar;
+    s_tpms_data.rear_bar = rear_bar;
+    s_tpms_data.front_temp_c = front_temp_c;
+    s_tpms_data.rear_temp_c = rear_temp_c;
+    s_tpms_data.front_valid = true;
+    s_tpms_data.rear_valid = true;
+    s_tpms_data.is_ble_source = true;
+}
+
+TpmsData_t ble_tpms_get_data(void) {
+    return s_tpms_data;
 }
 
 static const struct ble_gatt_svc_def gatt_svr_svcs[] = {

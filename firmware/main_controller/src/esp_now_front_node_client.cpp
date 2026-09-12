@@ -196,6 +196,21 @@ static void on_esp_now_recv(const esp_now_recv_info_t* recv_info, const uint8_t*
             }
             break;
 
+        case PKT_TYPE_COCKPIT_STATUS:
+            if (len >= 12) {
+                s_status.hub_port1_pd_active    = (data[2] != 0);
+                s_status.hub_port2_cp2aa_active = (data[3] != 0);
+                s_status.hub_port3_mp3_active   = (data[4] != 0);
+                s_status.hub_port4_aux_active   = (data[5] != 0);
+                s_status.bsd_left_active        = (data[6] != 0);
+                s_status.bsd_right_active       = (data[7] != 0);
+                s_status.aux_light_on           = (data[8] != 0);
+                s_status.aux_light_strobe       = (data[9] != 0);
+                s_status.can_term_active        = (data[10] != 0);
+                s_status.qi_power_active        = (data[11] != 0);
+            }
+            break;
+
         default:
             break;
     }
@@ -338,5 +353,38 @@ esp_err_t esp_now_front_node_cam_set_autoconnect(bool enable) {
 
 esp_err_t esp_now_front_node_cam_set_fuel_filter(bool enable) {
     uint8_t buf[4] = {FRONT_NODE_PROTOCOL_VER, PKT_TYPE_CAM_CMD, 0x07, static_cast<uint8_t>(enable ? 1 : 0)};
+    return esp_now_send(s_front_node_mac, buf, sizeof(buf));
+}
+
+esp_err_t esp_now_front_node_send_bsd_warning(bool left_active, uint8_t left_level,
+                                             bool right_active, uint8_t right_level) {
+    uint8_t buf[6] = {
+        FRONT_NODE_PROTOCOL_VER,
+        PKT_TYPE_BSD_TRIGGER,
+        static_cast<uint8_t>(left_active ? 1 : 0),
+        left_level,
+        static_cast<uint8_t>(right_active ? 1 : 0),
+        right_level
+    };
+    return esp_now_send(s_front_node_mac, buf, sizeof(buf));
+}
+
+esp_err_t esp_now_front_node_set_aux_light(uint8_t mode) {
+    uint8_t buf[3] = {
+        FRONT_NODE_PROTOCOL_VER,
+        PKT_TYPE_CMD_AUX_LIGHT,
+        mode
+    };
+    ESP_LOGI(TAG, "Setting Front Node Aux Light mode to %d", mode);
+    return esp_now_send(s_front_node_mac, buf, sizeof(buf));
+}
+
+esp_err_t esp_now_front_node_set_can_term(bool enable) {
+    uint8_t buf[3] = {
+        FRONT_NODE_PROTOCOL_VER,
+        PKT_TYPE_CMD_CAN_TERM,
+        static_cast<uint8_t>(enable ? 1 : 0)
+    };
+    ESP_LOGI(TAG, "Setting Front Node CAN 120R termination to %s", enable ? "ENABLED" : "DISABLED");
     return esp_now_send(s_front_node_mac, buf, sizeof(buf));
 }

@@ -389,7 +389,12 @@ const state = {
         cafeTimer: null,
         ambientDba: 52.0,
         agcBoostDb: 0.0,
-        pttPressed: false
+        pttPressed: false,
+        auxLightMode: 'OFF', // 'OFF', 'ON', 'STROBE'
+        canTermActive: true,
+        qiCharging: true,
+        port1PdActive: true,
+        rgbMode: 'BREATHING_GREEN'
     },
     actionCam: {
         paired: true,
@@ -418,7 +423,27 @@ const state = {
         blindSpotRight: false,
         targets: [],
         simCycle: null
-    }
+    },
+    alarm: {
+        armed: true,
+        triggered: false,
+        source: 'CAN BCM / DWA Sirene',
+        detail: 'Erschütterung > 2.5 g / Neigung',
+        lat: 47.4640,
+        lon: 9.0430,
+        soc: 95
+    },
+    tpms: {
+        source: 'AUTO', // 'AUTO', 'CAN', 'BLE'
+        front_bar: 2.45,
+        rear_bar: 2.80,
+        front_temp: 24,
+        rear_temp: 26,
+        status: 'OK'
+    },
+    privacyMute: false,
+    essActive: false,
+    videoTelemetryBookmarks: []
 };
 
 // DOM Elements
@@ -481,6 +506,28 @@ const hudLiveClock = document.getElementById('hud-live-clock');
 const hudStatusLink = document.getElementById('hud-status-link');
 const hudBikeProfileName = document.getElementById('hud-bike-profile-name');
 
+const valHudTpms = document.getElementById('val-hud-tpms');
+const hudBadgeEss = document.getElementById('hud-badge-ess');
+const badgeHudPrivacyMute = document.getElementById('badge-hud-privacy-mute');
+
+const btnAlarmAck = document.getElementById('btn-alarm-ack');
+const btnTestBikeAlarm = document.getElementById('btn-test-bike-alarm');
+const chkAlarmGuard = document.getElementById('chk-alarm-guard');
+const valAlarmGuardState = document.getElementById('val-alarm-guard-state');
+const badgeAlarmStatus = document.getElementById('badge-alarm-status');
+const bikeAlarmBanner = document.getElementById('bike-alarm-banner');
+const alarmBannerSource = document.getElementById('alarm-banner-source');
+const alarmBannerDetail = document.getElementById('alarm-banner-detail');
+const alarmBannerCoords = document.getElementById('alarm-banner-coords');
+const alarmBannerSoc = document.getElementById('alarm-banner-soc');
+
+const btnTpmsSourceToggle = document.getElementById('btn-tpms-source-toggle');
+const lblTpmsSourceMode = document.getElementById('lbl-tpms-source-mode');
+
+const btnExportSrt = document.getElementById('btn-export-srt');
+const btnExportCsv = document.getElementById('btn-export-csv');
+const lblTelemetryExportStatus = document.getElementById('lbl-telemetry-export-status');
+
 let s_hudMaxLeanL = 0;
 let s_hudMaxLeanR = 0;
 
@@ -537,6 +584,22 @@ const btnTestHandlebarPtt = document.getElementById('btn-test-handlebar-ptt');
 const chkAutoCafe = document.getElementById('chk-auto-cafe');
 const lblAutoCafeStatus = document.getElementById('lbl-auto-cafe-status');
 const btnFrontNodeOta = document.getElementById('btn-front-node-ota');
+
+// Front Node PCBA 05 Cockpit Subsystem Elements
+const badgeFrontRgbLed = document.getElementById('badge-front-rgb-led');
+const dotFrontRgb = document.getElementById('dot-front-rgb');
+const lblFrontRgbText = document.getElementById('lbl-front-rgb-text');
+const badgePort1Pd = document.getElementById('badge-port1-pd');
+const lblPort1Status = document.getElementById('lbl-port1-status');
+const lblQiStatus = document.getElementById('lbl-qi-status');
+const badgeAuxMode = document.getElementById('badge-aux-mode');
+const btnAuxOff = document.getElementById('btn-aux-off');
+const btnAuxOn = document.getElementById('btn-aux-on');
+const btnAuxStrobe = document.getElementById('btn-aux-strobe');
+const lblCanTermStatus = document.getElementById('lbl-can-term-status');
+const lblHandlebarChannels = document.getElementById('lbl-handlebar-channels');
+const hudPillAux = document.getElementById('hud-pill-aux');
+const valHudAuxLight = document.getElementById('val-hud-aux-light');
 
 // Action Cam BLE Bridge DOM Elements
 const tileFrontCam = document.getElementById('tile-front-cam');
@@ -904,6 +967,8 @@ let s_currentSimTrack = 'kerenzerberg';
 let s_internalSimInterval = null;
 let s_simProgress = 0.0;
 let s_simTime = 0.0;
+let s_simPrevSpeed = 0.0;
+let s_lastThreatBookmarkTime = 0.0;
 
 function startInternalSimTrackEngine(isDigitalTwin = true) {
     if (s_internalSimInterval) return;
@@ -946,6 +1011,26 @@ function startInternalSimTrackEngine(isDigitalTwin = true) {
         const rf_rssi = Math.round(p1.rf_rssi + (p2.rf_rssi - p1.rf_rssi) * frac + (Math.random() * 2 - 1));
         const distChaser = Math.round(p1.dist_chaser + (p2.dist_chaser - p1.dist_chaser) * frac);
 
+        // Calculate longitudinal acceleration (ax in g)
+        let accel_x_g = 0.0;
+        if (s_simPrevSpeed !== null && s_simPrevSpeed !== undefined) {
+            accel_x_g = ((speed - s_simPrevSpeed) / 3.6) / (0.1 * 9.81);
+        }
+        s_simPrevSpeed = speed;
+
+        // ESS Emergency Stop Signal Check (ax < -0.6g & speed > 20 km/h or approaching Kreisel)
+        const isHardBraking = (accel_x_g < -0.6 && speed > 20.0) || (idx === 10 && frac < 0.06);
+        if (isHardBraking && !state.essActive) {
+            setEssActive(true);
+        }
+
+        // Standstill & Proximity Privacy Mute Check (< 5m & speed < 1 km/h)
+        if (speed < 1.0 && distChaser < 5.0) {
+            if (!state.privacyMute) setPrivacyMuteActive(true);
+        } else if (speed > 8.0) {
+            if (state.privacyMute) setPrivacyMuteActive(false);
+        }
+
         // Cyclic Rear Radar Approach (Approaching car every 32s)
         const cycleSec = s_simTime % 32.0;
         let targets = [];
@@ -962,6 +1047,14 @@ function startInternalSimTrackEngine(isDigitalTwin = true) {
                 ttc: dist / (40.0 / 3.6),
                 threat: threat
             }];
+
+            // Radar Critical Threat RED auto-bookmark Action-Cam
+            if (threat === 2 && targets[0].ttc < 2.5) {
+                if (!s_lastThreatBookmarkTime || (s_simTime - s_lastThreatBookmarkTime > 25.0)) {
+                    s_lastThreatBookmarkTime = s_simTime;
+                    bookmarkActionCamEvent('RADAR_THREAT_RED', `Annäherung ${dist.toFixed(0)}m, TTC ${targets[0].ttc.toFixed(1)}s`);
+                }
+            }
         }
 
         const simFrame = {
@@ -1015,7 +1108,30 @@ function startInternalSimTrackEngine(isDigitalTwin = true) {
                 p2_rms: (s_simTime % 18.0 > 8.0 && s_simTime % 18.0 < 11.0) ? -17.5 : -42.0,
                 navi_rms: (in_tunnel || (s_simTime % 24.0 > 18.0 && s_simTime % 24.0 < 22.0)) ? -9.5 : -72.0,
                 ambient_rms: speed > 30 ? -96.0 : (-22.0 + Math.sin(s_simTime * 2) * 2.0)
-            }
+            },
+            front_node: {
+                linked: true,
+                binding_state: 1,
+                ambient_dba: Math.round((52.0 + Math.max(0, (speed - 30) * 0.38)) * 10) / 10,
+                ottocast_state: 'ACTIVE',
+                ptt_pressed: false,
+                aux_light_mode: state.frontNode.auxLightMode,
+                can_term: state.frontNode.canTermActive ? 1 : 0,
+                qi_active: true,
+                port1_pd: true,
+                rgb_status: state.frontNode.auxLightMode === 'STROBE' ? 'FLASHING_RED' : (state.frontNode.auxLightMode === 'ON' ? 'SOLID_YELLOW' : 'BREATHING_GREEN')
+            },
+            accel_x_g: accel_x_g,
+            ess_active: state.essActive,
+            privacy_mute: state.privacyMute,
+            tpms: {
+                source: state.tpms.source,
+                front_bar: 2.45 + Math.sin(s_simTime * 0.08) * 0.02,
+                rear_bar: 2.80 + Math.cos(s_simTime * 0.08) * 0.02,
+                front_temp: Math.round(24 + Math.min(12, speed * 0.12)),
+                rear_temp: Math.round(26 + Math.min(14, speed * 0.15))
+            },
+            alarm: state.alarm
         };
 
         handleSimTelemetry(simFrame);
@@ -1155,7 +1271,8 @@ function handleSimTelemetry(data) {
         speed: data.speed,
         sats: data.sats,
         lean_angle: data.lean_angle,
-        mode: data.mode
+        mode: data.mode,
+        front_node: data.front_node
     });
 
     // 2. GNSS, Tunnel Dead-Reckoning & 1-PPS Sync
@@ -1279,6 +1396,20 @@ function handleSimTelemetry(data) {
     // 5c. Helmet Acoustic Simulator Speed Synchronization
     if (window.s_helmAudioSim && window.s_helmAudioSim.autoSync && data.speed !== undefined) {
         window.s_helmAudioSim.setSpeed(data.speed);
+    }
+
+    // 5d. TPMS, ESS, Alarm, and Privacy Mute
+    if (data.tpms) {
+        updateTpmsUi(data.tpms);
+    }
+    if (data.alarm) {
+        updateBikeAlarmUi(data.alarm);
+    }
+    if (data.ess_active !== undefined) {
+        if (hudBadgeEss) hudBadgeEss.style.display = data.ess_active ? 'inline-block' : 'none';
+    }
+    if (data.privacy_mute !== undefined) {
+        if (badgeHudPrivacyMute) badgeHudPrivacyMute.style.display = data.privacy_mute ? 'inline-block' : 'none';
     }
 
     // 6. Record to rolling track history for Live Radar Canvas
@@ -2169,6 +2300,27 @@ function updateTelemetryUi(data) {
             }
             updateActionCamUi();
         }
+
+        // PCBA 05 Cockpit Subsystems (Aux Light, Qi, CAN Term, RGB LED, 4-Port Hub)
+        if (fn.aux_light_mode !== undefined) {
+            const modeMap = { 0: 'OFF', 1: 'ON', 2: 'STROBE' };
+            state.frontNode.auxLightMode = typeof fn.aux_light_mode === 'number' ? (modeMap[fn.aux_light_mode] || 'OFF') : fn.aux_light_mode;
+        }
+        if (fn.can_term !== undefined) {
+            state.frontNode.canTermActive = Boolean(fn.can_term);
+        }
+        if (fn.qi_active !== undefined) {
+            state.frontNode.qiCharging = Boolean(fn.qi_active);
+        }
+        if (fn.rgb_status) {
+            state.frontNode.rgbMode = fn.rgb_status;
+        }
+        if (fn.port1_pd !== undefined) {
+            state.frontNode.port1PdActive = Boolean(fn.port1_pd);
+        }
+
+        updateCockpitAuxUi();
+        updateFrontNodeRgbVisual(state.frontNode.rgbMode);
     }
 }
 
@@ -2189,6 +2341,164 @@ function updateFrontNodePttVisual(pressed) {
         tileFrontPtt.classList.remove('ptt-active-pulse');
     }
 }
+
+function updateCockpitAuxUi() {
+    const aux = state.frontNode.auxLightMode || 'OFF';
+
+    // Aux Light Buttons & Badge
+    if (btnAuxOff && btnAuxOn && btnAuxStrobe && badgeAuxMode) {
+        btnAuxOff.classList.toggle('active', aux === 'OFF');
+        btnAuxOn.classList.toggle('active', aux === 'ON');
+        btnAuxStrobe.classList.toggle('active', aux === 'STROBE');
+
+        if (aux === 'OFF') {
+            badgeAuxMode.className = 'card-badge';
+            badgeAuxMode.textContent = 'AUS';
+        } else if (aux === 'ON') {
+            badgeAuxMode.className = 'card-badge badge-yellow';
+            badgeAuxMode.textContent = 'EIN';
+        } else if (aux === 'STROBE') {
+            badgeAuxMode.className = 'card-badge badge-red';
+            badgeAuxMode.textContent = '⚡ STROBE';
+        }
+    }
+
+    // Ride HUD Pill
+    if (hudPillAux && valHudAuxLight) {
+        hudPillAux.classList.toggle('hud-pill-aux-on', aux === 'ON');
+        hudPillAux.classList.toggle('hud-pill-aux-strobe', aux === 'STROBE');
+
+        if (aux === 'OFF') {
+            valHudAuxLight.textContent = 'AUS';
+            valHudAuxLight.style.color = 'var(--text-muted)';
+        } else if (aux === 'ON') {
+            valHudAuxLight.textContent = 'EIN';
+            valHudAuxLight.style.color = 'var(--accent-yellow)';
+        } else if (aux === 'STROBE') {
+            valHudAuxLight.textContent = '⚡ STROBE';
+            valHudAuxLight.style.color = 'var(--accent-red)';
+        }
+    }
+
+    // Qi Charger Status
+    if (lblQiStatus) {
+        if (state.frontNode.qiCharging) {
+            lblQiStatus.textContent = '12.0 V · LÄDT';
+            lblQiStatus.style.color = 'var(--accent-green)';
+        } else {
+            lblQiStatus.textContent = '12.0 V · BEREIT';
+            lblQiStatus.style.color = 'var(--accent-blue)';
+        }
+    }
+
+    // CAN Termination Status
+    if (lblCanTermStatus) {
+        if (state.frontNode.canTermActive) {
+            lblCanTermStatus.textContent = '120 Ω AKTIV';
+            lblCanTermStatus.style.color = 'var(--accent-blue)';
+        } else {
+            lblCanTermStatus.textContent = 'OFFEN (BUS-PASS)';
+            lblCanTermStatus.style.color = 'var(--text-muted)';
+        }
+    }
+
+    // Port 1 PD Status
+    if (lblPort1Status && badgePort1Pd) {
+        if (state.frontNode.port1PdActive) {
+            lblPort1Status.textContent = '9.0 V · 2.2 A';
+            lblPort1Status.style.color = 'var(--accent-green)';
+            badgePort1Pd.className = 'card-badge badge-green';
+            badgePort1Pd.textContent = 'PD 20W';
+        } else {
+            lblPort1Status.textContent = '5.0 V · Standby';
+            lblPort1Status.style.color = 'var(--text-muted)';
+            badgePort1Pd.className = 'card-badge';
+            badgePort1Pd.textContent = '5V STD';
+        }
+    }
+}
+
+function updateFrontNodeRgbVisual(mode) {
+    if (!badgeFrontRgbLed || !dotFrontRgb || !lblFrontRgbText) return;
+    switch(mode) {
+        case 'SOLID_BLUE':
+        case 'FLASHING_BLUE':
+            dotFrontRgb.style.background = '#0a84ff';
+            dotFrontRgb.style.boxShadow = '0 0 8px #0a84ff';
+            badgeFrontRgbLed.style.color = '#0a84ff';
+            badgeFrontRgbLed.style.borderColor = 'rgba(10,132,255,0.3)';
+            lblFrontRgbText.textContent = 'WS2812B BLAU (PAIR)';
+            break;
+        case 'SOLID_YELLOW':
+            dotFrontRgb.style.background = '#ffd60a';
+            dotFrontRgb.style.boxShadow = '0 0 8px #ffd60a';
+            badgeFrontRgbLed.style.color = '#ffd60a';
+            badgeFrontRgbLed.style.borderColor = 'rgba(255,214,10,0.3)';
+            lblFrontRgbText.textContent = 'WS2812B GELB (STANDBY)';
+            break;
+        case 'FLASHING_RED':
+        case 'ECALL_STROBE':
+            dotFrontRgb.style.background = '#ff453a';
+            dotFrontRgb.style.boxShadow = '0 0 8px #ff453a';
+            badgeFrontRgbLed.style.color = '#ff453a';
+            badgeFrontRgbLed.style.borderColor = 'rgba(255,69,58,0.3)';
+            lblFrontRgbText.textContent = 'WS2812B ROT (ALARM)';
+            break;
+        case 'SEARCHING_CYAN':
+            dotFrontRgb.style.background = '#64d2ff';
+            dotFrontRgb.style.boxShadow = '0 0 8px #64d2ff';
+            badgeFrontRgbLed.style.color = '#64d2ff';
+            badgeFrontRgbLed.style.borderColor = 'rgba(100,210,255,0.3)';
+            lblFrontRgbText.textContent = 'WS2812B CYAN (SCAN)';
+            break;
+        case 'CLICK_WHITE':
+            dotFrontRgb.style.background = '#ffffff';
+            dotFrontRgb.style.boxShadow = '0 0 10px #ffffff';
+            badgeFrontRgbLed.style.color = '#ffffff';
+            badgeFrontRgbLed.style.borderColor = 'rgba(255,255,255,0.5)';
+            lblFrontRgbText.textContent = 'WS2812B WEISS (CLICK)';
+            break;
+        case 'BREATHING_GREEN':
+        default:
+            dotFrontRgb.style.background = '#30d158';
+            dotFrontRgb.style.boxShadow = '0 0 6px #30d158';
+            badgeFrontRgbLed.style.color = '#30d158';
+            badgeFrontRgbLed.style.borderColor = 'rgba(48,209,88,0.3)';
+            lblFrontRgbText.textContent = 'WS2812B GRÜN (NORMAL)';
+            break;
+    }
+}
+
+function setCockpitAuxLightMode(mode) {
+    state.frontNode.auxLightMode = mode;
+    updateCockpitAuxUi();
+
+    // Momentary white click flash on WS2812B for tactile visual feedback
+    updateFrontNodeRgbVisual('CLICK_WHITE');
+    setTimeout(() => {
+        const nextRgb = mode === 'STROBE' ? 'FLASHING_RED' : (mode === 'ON' ? 'SOLID_YELLOW' : 'BREATHING_GREEN');
+        state.frontNode.rgbMode = nextRgb;
+        updateFrontNodeRgbVisual(nextRgb);
+    }, 150);
+
+    const modeLabels = {
+        'OFF': state.lang === 'de' ? 'AUS' : 'OFF',
+        'ON': state.lang === 'de' ? 'DAUERLICHT EIN (100%)' : 'STEADY ON (100%)',
+        'STROBE': state.lang === 'de' ? 'NOTBREMS-STROBE (4.5 Hz)' : 'BRAKE STROBE (4.5 Hz)'
+    };
+    showToast(state.lang === 'de' ? `💡 Zusatzscheinwerfer: ${modeLabels[mode]}` : `💡 Aux Light: ${modeLabels[mode]}`);
+
+    // Dispatch BLE GATT or WebSocket command
+    if (typeof bleCharCommand !== 'undefined' && bleCharCommand) {
+        const code = mode === 'ON' ? 0x01 : (mode === 'STROBE' ? 0x02 : 0x00);
+        const cmd = new Uint8Array([0x22, code]); // 0x22 = PKT_TYPE_CMD_AUX_LIGHT
+        bleCharCommand.writeValue(cmd).catch(console.error);
+    }
+    if (typeof simWs !== 'undefined' && simWs && simWs.readyState === WebSocket.OPEN) {
+        simWs.send(JSON.stringify({ action: 'set_aux_light', mode: mode }));
+    }
+}
+
 
 // ==========================================
 // Action-Cam BLE Bridge Logic
@@ -2537,6 +2847,20 @@ if (btnTestHandlebarPtt) {
     btnTestHandlebarPtt.addEventListener('touchstart', (e) => { e.preventDefault(); triggerPress(); });
     btnTestHandlebarPtt.addEventListener('touchend', (e) => { e.preventDefault(); triggerRelease(); });
 }
+
+// Cockpit Aux Light Listeners (PCBA 05)
+if (btnAuxOff) btnAuxOff.addEventListener('click', () => setCockpitAuxLightMode('OFF'));
+if (btnAuxOn) btnAuxOn.addEventListener('click', () => setCockpitAuxLightMode('ON'));
+if (btnAuxStrobe) btnAuxStrobe.addEventListener('click', () => setCockpitAuxLightMode('STROBE'));
+
+if (hudPillAux) {
+    hudPillAux.addEventListener('click', () => {
+        const cur = state.frontNode.auxLightMode || 'OFF';
+        const nxt = cur === 'OFF' ? 'ON' : (cur === 'ON' ? 'STROBE' : 'OFF');
+        setCockpitAuxLightMode(nxt);
+    });
+}
+
 
 // Action-Cam Buttons & Modal Listeners
 if (btnCamRecToggle) btnCamRecToggle.addEventListener('click', toggleActionCamRec);
@@ -3315,7 +3639,6 @@ btnSaveWebdav?.addEventListener('click', () => {
 // ==========================================
 // 11b. Front-Node Wired PTT & WS2812B LED Simulator
 // ==========================================
-const btnTestPttTrigger = document.getElementById('btn-test-ptt-trigger');
 if (btnTestPttTrigger) {
     btnTestPttTrigger.addEventListener('click', () => {
         const isDe = state.lang === 'de';
@@ -4849,6 +5172,204 @@ document.getElementById('btn-ecall-mute-alarm')?.addEventListener('click', () =>
 });
 
 // ==========================================
+// 11k. LoRa 868 MHz Alarmanlagen-Pager & Parkplatzwächter UI
+// ==========================================
+function updateBikeAlarmUi(alarm) {
+    if (!bikeAlarmBanner) return;
+    if (alarm && alarm.triggered) {
+        state.alarm.triggered = true;
+        state.alarm.source = alarm.source || 'CAN BCM / DWA Sirene';
+        state.alarm.detail = alarm.detail || 'Erschütterung > 2.5 g / Neigung';
+        state.alarm.lat = alarm.lat || 47.4640;
+        state.alarm.lon = alarm.lon || 9.0430;
+        state.alarm.soc = alarm.soc !== undefined ? alarm.soc : 95;
+
+        bikeAlarmBanner.style.display = 'block';
+        if (alarmBannerSource) alarmBannerSource.textContent = state.alarm.source;
+        if (alarmBannerDetail) alarmBannerDetail.textContent = state.alarm.detail;
+        if (alarmBannerCoords) alarmBannerCoords.textContent = `${state.alarm.lat.toFixed(4)}° N, ${state.alarm.lon.toFixed(4)}° E`;
+        if (alarmBannerSoc) alarmBannerSoc.textContent = `${state.alarm.soc} % (LiPo OK)`;
+
+        if (badgeAlarmStatus) {
+            badgeAlarmStatus.className = 'card-badge badge-red';
+            badgeAlarmStatus.textContent = 'ALARM AKTIV (LoRa SF11 TX)';
+        }
+        if (valAlarmGuardState) {
+            valAlarmGuardState.textContent = 'ALARM AUSGELÖST!';
+            valAlarmGuardState.style.color = 'var(--accent-red)';
+        }
+    } else {
+        state.alarm.triggered = false;
+        bikeAlarmBanner.style.display = 'none';
+        if (badgeAlarmStatus) {
+            badgeAlarmStatus.className = state.alarm.armed ? 'card-badge badge-green' : 'card-badge';
+            badgeAlarmStatus.textContent = state.alarm.armed ? 'SCHARF (SX1262 Pod 3)' : 'UNSCHARF';
+            badgeAlarmStatus.style.background = state.alarm.armed ? '' : 'rgba(255,255,255,0.08)';
+        }
+        if (valAlarmGuardState) {
+            valAlarmGuardState.textContent = state.alarm.armed ? 'Aktiviert' : 'Deaktiviert';
+            valAlarmGuardState.style.color = state.alarm.armed ? 'var(--accent-green)' : 'var(--text-muted)';
+        }
+    }
+}
+
+function resetBikeAlarmState() {
+    state.alarm.triggered = false;
+    updateBikeAlarmUi(state.alarm);
+    if (controlChar) {
+        controlChar.writeValue(new Uint8Array([0x20, state.alarm.armed ? 0x01 : 0x00])).catch(err => console.warn('GATT Alarm reset failed:', err));
+    }
+    showToast(state.lang === 'de' ? '✓ Diebstahlwarnung quittiert & LoRa Pager zurückgesetzt' : '✓ Bike alarm acknowledged & LoRa pager reset', 'success');
+}
+
+function triggerTestBikeAlarm() {
+    state.alarm.triggered = true;
+    state.alarm.source = 'IMU Schock-Sensor (Stufe 2)';
+    state.alarm.detail = 'Erschütterung 3.8 g • Heck-Pod 3 LoRa 868 MHz SF11 Broadcast';
+    state.alarm.lat = state.telemetry.lat || 47.4640;
+    state.alarm.lon = state.telemetry.lon || 9.0430;
+    updateBikeAlarmUi(state.alarm);
+
+    if (controlChar) {
+        controlChar.writeValue(new Uint8Array([0x21, 0x02])).catch(err => console.warn('GATT Test Alarm failed:', err));
+    }
+    showToast(state.lang === 'de' ? '🚨 LoRa 868 MHz Diebstahl-Alarmpaket (TYPE 0xFE) gesendet!' : '🚨 LoRa 868 MHz bike alarm packet transmitted!', 'danger', 4000);
+}
+
+btnAlarmAck?.addEventListener('click', resetBikeAlarmState);
+btnTestBikeAlarm?.addEventListener('click', triggerTestBikeAlarm);
+chkAlarmGuard?.addEventListener('change', (e) => {
+    state.alarm.armed = e.target.checked;
+    if (controlChar) {
+        controlChar.writeValue(new Uint8Array([0x20, state.alarm.armed ? 0x01 : 0x00])).catch(err => console.warn('GATT Alarm Guard toggle failed:', err));
+    }
+    updateBikeAlarmUi(state.alarm);
+    showToast(state.alarm.armed 
+        ? (state.lang === 'de' ? '🛡️ Parkplatzwächter & LoRa Pager SCHARF' : '🛡️ Bike Alarm Guard ARMED')
+        : (state.lang === 'de' ? '⚠️ Parkplatzwächter DEAKTIVIERT' : '⚠️ Bike Alarm Guard DISARMED'), 
+        state.alarm.armed ? 'success' : 'info');
+});
+
+// ==========================================
+// 11l. Universal TPMS (CAN & BLE Sniffer) UI
+// ==========================================
+function updateTpmsUi(tpms) {
+    if (!tpms) return;
+    state.tpms.front_bar = tpms.front_bar !== undefined ? tpms.front_bar : state.tpms.front_bar;
+    state.tpms.rear_bar = tpms.rear_bar !== undefined ? tpms.rear_bar : state.tpms.rear_bar;
+    state.tpms.front_temp = tpms.front_temp !== undefined ? tpms.front_temp : state.tpms.front_temp;
+    state.tpms.rear_temp = tpms.rear_temp !== undefined ? tpms.rear_temp : state.tpms.rear_temp;
+
+    const vBar = state.tpms.front_bar.toFixed(2);
+    const hBar = state.tpms.rear_bar.toFixed(2);
+    const vTemp = state.tpms.front_temp;
+    const hTemp = state.tpms.rear_temp;
+
+    const frontWarn = (state.tpms.front_bar < 2.1 || state.tpms.front_bar > 2.8);
+    const rearWarn = (state.tpms.rear_bar < 2.4 || state.tpms.rear_bar > 3.2);
+    const hasWarn = frontWarn || rearWarn;
+
+    if (valHudTpms) {
+        valHudTpms.textContent = `V: ${vBar} • H: ${hBar} bar`;
+        valHudTpms.style.color = hasWarn ? 'var(--accent-red)' : 'var(--text-primary)';
+    }
+
+    const valTpms = document.getElementById('can-val-tpms');
+    const subTpms = document.getElementById('can-sub-tpms');
+    const badgeTpms = document.getElementById('can-badge-tpms');
+
+    if (valTpms) {
+        valTpms.innerHTML = `${vBar} / ${hBar} <span style="font-size: 0.85rem; font-weight: 500;">bar</span>`;
+        valTpms.style.color = hasWarn ? 'var(--accent-red)' : 'var(--text-primary)';
+    }
+    if (subTpms) {
+        const icon = hasWarn ? '⚠️' : '🟢';
+        const statusText = hasWarn ? (state.lang === 'de' ? 'DRUCKABFALL WARNUNG' : 'LOW PRESSURE WARNING') : (state.lang === 'de' ? 'Solldruck OK' : 'Pressure OK');
+        subTpms.textContent = `${icon} V: ${vTemp}°C • H: ${hTemp}°C (${statusText})`;
+        subTpms.style.color = hasWarn ? 'var(--accent-red)' : 'var(--accent-green)';
+    }
+    if (badgeTpms) {
+        badgeTpms.textContent = state.tpms.source === 'BLE' ? 'BLE-RDKS' : (state.tpms.source === 'CAN' ? 'CAN-RDKS' : 'RDKS AUTO');
+        badgeTpms.className = hasWarn ? 'card-badge badge-red' : 'card-badge badge-orange';
+    }
+}
+
+function toggleTpmsSource() {
+    const modes = ['AUTO', 'CAN', 'BLE'];
+    const currentIdx = modes.indexOf(state.tpms.source);
+    state.tpms.source = modes[(currentIdx + 1) % modes.length];
+    if (lblTpmsSourceMode) {
+        lblTpmsSourceMode.textContent = state.tpms.source;
+    }
+    showToast(state.lang === 'de' ? `🛞 RDKS/TPMS Quelle gewechselt: ${state.tpms.source}` : `🛞 TPMS source switched: ${state.tpms.source}`, 'info', 2000);
+    updateTpmsUi(state.tpms);
+}
+btnTpmsSourceToggle?.addEventListener('click', toggleTpmsSource);
+
+// ==========================================
+// 11m. ESS Notbremsblinken, Privacy Mute & Action-Cam Bookmark
+// ==========================================
+let s_essTimer = null;
+
+function setEssActive(active) {
+    if (state.essActive === active) return;
+    state.essActive = active;
+    if (hudBadgeEss) {
+        hudBadgeEss.style.display = active ? 'inline-block' : 'none';
+    }
+    if (active) {
+        if (state.frontNode.linked && state.frontNode.auxLightMode !== 'STROBE') {
+            setAuxLightMode('STROBE');
+        }
+        bookmarkActionCamEvent('ESS_NOTBREMSEN', 'Notbremsung ax < -0.6g: Varia Taillight 4.5Hz Strobe');
+        if (s_essTimer) clearTimeout(s_essTimer);
+        s_essTimer = setTimeout(() => {
+            setEssActive(false);
+            if (state.frontNode.auxLightMode === 'STROBE') {
+                setAuxLightMode('OFF');
+            }
+        }, 2800);
+    }
+}
+
+function setPrivacyMuteActive(active) {
+    if (state.privacyMute === active) return;
+    state.privacyMute = active;
+    if (badgeHudPrivacyMute) {
+        badgeHudPrivacyMute.style.display = active ? 'inline-block' : 'none';
+    }
+    if (valHudIntercom) {
+        valHudIntercom.textContent = active 
+            ? (state.lang === 'de' ? 'Lokal Visier-zu-Visier (Mesh Stumm)' : 'Local Visor-to-Visor (Mesh Muted)')
+            : (state.lang === 'de' ? 'Kanal 1 (Bereit)' : 'Channel 1 (Ready)');
+        valHudIntercom.style.color = active ? '#c084fc' : '#fff';
+    }
+    if (controlChar) {
+        controlChar.writeValue(new Uint8Array([0x24, active ? 0x01 : 0x00])).catch(err => console.warn('GATT Privacy Mute failed:', err));
+    }
+}
+
+function bookmarkActionCamEvent(tag, reason) {
+    const timestampMs = Math.round(s_simTime * 1000);
+    const speed = state.telemetry.speed || 0;
+    const lean = state.telemetry.lean_angle || 0;
+    const entry = {
+        timestamp_ms: timestampMs,
+        time_iso: new Date().toISOString(),
+        tag: tag,
+        reason: reason,
+        speed_kmh: Math.round(speed),
+        lean_deg: Math.round(lean * 10) / 10
+    };
+    state.videoTelemetryBookmarks.push(entry);
+
+    if (state.actionCam.connected) {
+        triggerActionCamHiLight();
+    }
+    showToast(`📸 ActionCam Event-Bookmark: [${tag}] (${Math.round(speed)} km/h)`, 'warning', 2500);
+}
+
+// ==========================================
 // 11j. WebAudio Helmet Acoustic Sandbox Simulator
 // ==========================================
 class HelmAudioSimulator {
@@ -5394,6 +5915,105 @@ document.getElementById('btn-validate-map-match')?.addEventListener('click', () 
     }
     showToast(state.lang === 'de' ? '📐 Serpentinen-Validierung: HMM-Filter sichert Kerenzerberg Südhang ohne Terrassen-Sprünge!' : '📐 Serpentine Validation: HMM filter prevents terrace jumps!', 'success', 3500);
 });
+
+// ==========================================
+// 11n. Action-Cam Video-Telemetrie Export (.SRT / .CSV)
+// ==========================================
+function formatSrtTimestamp(seconds) {
+    const totalMs = Math.floor(seconds * 1000);
+    const ms = totalMs % 1000;
+    const totalSec = Math.floor(totalMs / 1000);
+    const sec = totalSec % 60;
+    const totalMin = Math.floor(totalSec / 60);
+    const min = totalMin % 60;
+    const hr = Math.floor(totalMin / 60);
+
+    const pad = (n, z = 2) => String(n).padStart(z, '0');
+    return `${pad(hr)}:${pad(min)}:${pad(sec)},${pad(ms, 3)}`;
+}
+
+function exportTrackSrt() {
+    const points = SIM_TRACK_KERENZERBERG_WAYPOINTS;
+    let srt = '';
+    let counter = 1;
+
+    points.forEach((pt, idx) => {
+        const startSec = idx * 2.0;
+        const endSec = startSec + 1.95;
+        const startTs = formatSrtTimestamp(startSec);
+        const endTs = formatSrtTimestamp(endSec);
+
+        const accelG = Math.round((Math.abs(pt.lean) / 45.0 * 0.55 + (pt.speed > 80 ? 0.15 : -0.1)) * 100) / 100;
+        const isEss = pt.speed < 40 && pt.label.includes('Kreisel');
+        const essNotice = isEss ? '⚠️ [ESS NOTBREMSUNG 4.5 Hz]' : '';
+
+        srt += `${counter}\n`;
+        srt += `${startTs} --> ${endTs}\n`;
+        srt += `🏍️ SPEED: ${Math.round(pt.speed)} km/h | SCHRÄGLAGE: ${pt.lean.toFixed(1)}° | G: ${accelG.toFixed(2)}g ${essNotice}\n`;
+        srt += `📍 ${pt.label} (Alt: ${Math.round(pt.alt)}m) | LoRa: ${pt.rf_rssi} dBm\n\n`;
+        counter++;
+    });
+
+    const blob = new Blob([srt], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `openmotorbridge_video_overlay_${new Date().toISOString().slice(0,10)}.srt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    showToast(state.lang === 'de' ? '🎬 Action-Cam Subtitle Overlay (.SRT) erfolgreich exportiert!' : '🎬 Video subtitle overlay (.SRT) exported successfully!', 'success', 3500);
+}
+
+function exportTrackCsv() {
+    const points = SIM_TRACK_KERENZERBERG_WAYPOINTS;
+    let csv = 'Index,Timestamp_ms,Time_ISO,Speed_kmh,RPM,Gear,Lean_deg,Accel_X_g,FrontBrake_bar,RearBrake_bar,Radar_Dist_m,Radar_TTC_s,ESS_Active,Privacy_Mute,TPMS_Front_bar,TPMS_Rear_bar,TPMS_Front_C,TPMS_Rear_C,LoRa_RSSI_dBm,Label\n';
+
+    points.forEach((pt, idx) => {
+        const timeMs = idx * 2000;
+        const iso = new Date(Date.now() - (points.length - idx) * 2000).toISOString();
+        const accelG = Math.round((Math.abs(pt.lean) / 45.0 * 0.55 + (pt.speed > 80 ? 0.15 : -0.1)) * 100) / 100;
+        const rpm = pt.speed > 2.0 ? Math.round(1800 + (pt.speed % 25) * 85) : 0;
+        let gear = 'N';
+        if (pt.speed > 2.0) {
+            if (pt.speed < 28) gear = '1';
+            else if (pt.speed < 48) gear = '2';
+            else if (pt.speed < 70) gear = '3';
+            else if (pt.speed < 90) gear = '4';
+            else if (pt.speed < 115) gear = '5';
+            else gear = '6';
+        }
+        const isEss = (pt.speed < 40 && pt.label.includes('Kreisel')) ? 1 : 0;
+        const fBrake = isEss ? 14.5 : (accelG < 0 ? 3.2 : 0.0);
+        const rBrake = isEss ? 8.2 : 0.0;
+        const privMute = (pt.speed < 1.0 || pt.dist_chaser < 4.0) ? 1 : 0;
+        const rDist = (idx % 8 === 0) ? 18.5 : 120.0;
+        const rTtc = (idx % 8 === 0) ? 1.6 : 99.0;
+        const tpmsFront = (2.45 + Math.sin(idx * 0.3) * 0.02).toFixed(2);
+        const tpmsRear = (2.80 + Math.cos(idx * 0.3) * 0.02).toFixed(2);
+        const tpmsFrontC = Math.round(24 + (pt.speed / 100) * 4);
+        const tpmsRearC = Math.round(26 + (pt.speed / 100) * 5);
+
+        csv += `${idx + 1},${timeMs},"${iso}",${pt.speed.toFixed(1)},${rpm},${gear},${pt.lean.toFixed(1)},${accelG.toFixed(2)},${fBrake.toFixed(1)},${rBrake.toFixed(1)},${rDist.toFixed(1)},${rTtc.toFixed(1)},${isEss},${privMute},${tpmsFront},${tpmsRear},${tpmsFrontC},${tpmsRearC},${pt.rf_rssi},"${pt.label}"\n`;
+    });
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `openmotorbridge_telemetry_${new Date().toISOString().slice(0,10)}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    showToast(state.lang === 'de' ? '📊 Dashware / CSV Telemetriedaten erfolgreich exportiert!' : '📊 Dashware / CSV telemetry exported successfully!', 'success', 3500);
+}
+
+document.getElementById('btn-export-srt')?.addEventListener('click', exportTrackSrt);
+document.getElementById('btn-export-csv')?.addEventListener('click', exportTrackCsv);
 
 // ==========================================
 // 11i. Motorcycle Smartphone Ride HUD (Zero-Scroll Fahrmodus)

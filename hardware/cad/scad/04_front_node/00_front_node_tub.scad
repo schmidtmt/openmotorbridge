@@ -47,12 +47,10 @@ module front_node_lower_tub() {
         }
         
         // 6. South USB Cable Comb Cutout Pocket
-        translate([FRONT_NODE_WALL + 3.5, 0, 0])
-            south_cable_comb_cutout(z_start = FRONT_NODE_TUB_H - 8.0, h = 8.1);
+        south_cable_comb_cutout(z_start = FRONT_NODE_TUB_H - 8.0, h = 8.1);
             
         // 7. West Signal/Power Cable Comb Cutout Pocket
-        translate([0, FRONT_NODE_WALL + 3.5, 0])
-            west_cable_comb_cutout(z_start = FRONT_NODE_TUB_H - 7.5, h = 7.6);
+        west_cable_comb_cutout(z_start = FRONT_NODE_TUB_H - 7.5, h = 7.6);
             
         // 8. USB-C Service Port Opening (East wall)
         front_node_usbc_service_cutout();

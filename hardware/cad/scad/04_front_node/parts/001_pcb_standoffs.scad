@@ -13,10 +13,10 @@ PCB_OFFSET_Y = (FRONT_NODE_CHAMBER_W - FRONT_NODE_PCB_W) / 2.0; // 2.0 mm
 
 // Standoff coordinates relative to inner chamber origin (0,0)
 FRONT_NODE_STANDOFF_COORDS = [
-    [PCB_OFFSET_X + 3.5,  PCB_OFFSET_Y + 3.5],  // H1 (bottom-left / SW)
-    [PCB_OFFSET_X + 64.5, PCB_OFFSET_Y + 3.5],  // H2 (bottom-right / SE)
-    [PCB_OFFSET_X + 3.5,  PCB_OFFSET_Y + 40.5], // H3 (top-left / NW)
-    [PCB_OFFSET_X + 64.5, PCB_OFFSET_Y + 40.5]  // H4 (top-right / NE)
+    [PCB_OFFSET_X + 3.5,                      PCB_OFFSET_Y + 3.5],                      // H1 (bottom-left / SW)
+    [PCB_OFFSET_X + FRONT_NODE_PCB_L - 3.5,   PCB_OFFSET_Y + 3.5],                      // H2 (bottom-right / SE)
+    [PCB_OFFSET_X + 3.5,                      PCB_OFFSET_Y + FRONT_NODE_PCB_W - 3.5],   // H3 (top-left / NW)
+    [PCB_OFFSET_X + FRONT_NODE_PCB_L - 3.5,   PCB_OFFSET_Y + FRONT_NODE_PCB_W - 3.5]    // H4 (top-right / NE)
 ];
 
 module front_node_pcb_standoffs(h = FRONT_NODE_STANDOFF_H) {

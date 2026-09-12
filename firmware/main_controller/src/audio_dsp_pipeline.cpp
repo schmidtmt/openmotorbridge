@@ -540,3 +540,30 @@ void task_audio_dsp(void *pvParameters) {
         i2s_channel_write(tx_chan, tx_buffer, bytes_read, &bytes_written, pdMS_TO_TICKS(10));
     }
 }
+
+static bool s_privacy_mute_enabled = true;
+static bool s_privacy_mute_active = false;
+
+void audio_set_privacy_mute_config(bool enabled) {
+    s_privacy_mute_enabled = enabled;
+    if (!enabled) s_privacy_mute_active = false;
+}
+
+bool audio_get_privacy_mute_active(void) {
+    return s_privacy_mute_active;
+}
+
+void audio_update_standstill_proximity(float speed_kmh, int8_t partner_rssi) {
+    if (!s_privacy_mute_enabled) return;
+
+    // Trigger: Standstill (speed < 1.0 km/h) AND partner bike closer than ~3m (RSSI > -45 dBm)
+    if (speed_kmh < 1.0f && partner_rssi > -45 && partner_rssi < 0) {
+        if (!s_privacy_mute_active) {
+            s_privacy_mute_active = true;
+            ESP_LOGI("AUDIO_DSP", "🔒 Proximity & Standstill Privacy Mute ACTIVE: Wide-area mesh mic muted.");
+        }
+    } else if (s_privacy_mute_active && speed_kmh > 8.0f) {
+        s_privacy_mute_active = false;
+        ESP_LOGI("AUDIO_DSP", "🔓 Moving (v = %.1f km/h) -> Privacy Mute RELEASED.", speed_kmh);
+    }
+}

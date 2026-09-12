@@ -1,6 +1,7 @@
 #include "radar_processor.h"
 #include "audio_dsp_pipeline.h"
 #include "can_bus_manager.h"
+#include "esp_now_front_node_client.h"
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -115,9 +116,21 @@ void radar_inject_simulated_target(float distance_m, float rel_speed_kmh, int8_t
     s_radar_state.closest_distance_m = distance_m;
     s_radar_state.highest_rel_speed_kmh = rel_speed_kmh;
 
-    // Blind spot evaluation (distance < 12m, off-center azimuth)
-    s_radar_state.blind_spot_left = (distance_m < 12.0f && azimuth_deg < -3);
-    s_radar_state.blind_spot_right = (distance_m < 12.0f && azimuth_deg > 3);
+    // Blind spot evaluation (distance < 15m, off-center azimuth)
+    s_radar_state.blind_spot_left = (distance_m < 15.0f && azimuth_deg < -3);
+    s_radar_state.blind_spot_right = (distance_m < 15.0f && azimuth_deg > 3);
+
+    // Relay to Front Node Hardware Mirror LEDs via ESP-NOW
+    uint8_t left_lvl = 0;
+    if (s_radar_state.blind_spot_left) {
+        left_lvl = (t->threat == RADAR_THREAT_RED) ? 2 : 1; // 2=Fast Strobe (8 Hz), 1=Solid Amber
+    }
+    uint8_t right_lvl = 0;
+    if (s_radar_state.blind_spot_right) {
+        right_lvl = (t->threat == RADAR_THREAT_RED) ? 2 : 1;
+    }
+    esp_now_front_node_send_bsd_warning(s_radar_state.blind_spot_left, left_lvl,
+                                        s_radar_state.blind_spot_right, right_lvl);
 
     // Audio Ping Triggering on Threat Escalation
     uint32_t now = esp_log_timestamp();
@@ -125,6 +138,16 @@ void radar_inject_simulated_target(float distance_m, float rel_speed_kmh, int8_t
         if (now - s_last_audio_alert_ms > 2000) { // 2.0s Hold / Debounce
             s_last_audio_alert_ms = now;
             audio_trigger_radar_alert((uint8_t)t->threat);
+        }
+    }
+
+    // Auto-Action Cam Bookmark Tagging on Critical Collision Threat (TTC < 2.5s)
+    if (t->threat == RADAR_THREAT_RED && t->time_to_collision_s < 2.5f) {
+        static uint32_t s_last_cam_tag_ms = 0;
+        if (now - s_last_cam_tag_ms > 10000) { // 10s cooldown
+            s_last_cam_tag_ms = now;
+            ESP_LOGW(TAG, "⚡ Critical Radar Threat RED (TTC < 2.5s): Auto-setting Action Cam Bookmark!");
+            esp_now_front_node_cam_hilight_tag();
         }
     }
 
@@ -156,6 +179,45 @@ static void parse_radar_stream(const uint8_t *data, size_t len) {
     }
 }
 
+static bool s_ess_active = false;
+static uint32_t s_ess_start_ms = 0;
+
+void radar_notify_vehicle_dynamics(float speed_kmh, float accel_x_g) {
+    uint32_t now = esp_log_timestamp();
+    // ESS Trigger: Deceleration a_x < -0.60g (-6.0 m/s^2) and vehicle moving (speed > 20 km/h)
+    if (accel_x_g < -0.60f && speed_kmh > 20.0f) {
+        if (!s_ess_active) {
+            s_ess_active = true;
+            s_ess_start_ms = now;
+            ESP_LOGW(TAG, "⚡ EMERGENCY STOP SIGNAL (ESS) TRIGGERED! (ax = %.2f g) -> Strobe Active!", accel_x_g);
+
+            // 1. Send 4.5 Hz Strobe to Garmin Varia Taillight via UART2
+            uint8_t varia_strobe_cmd[] = { 0xAA, 0x04, 0x30, 0x02, 0x00 }; // Varia Strobe Opcode
+            uart_write_bytes(RADAR_UART_NUM, varia_strobe_cmd, sizeof(varia_strobe_cmd));
+
+            // 2. Trigger Front Node Aux-Light Strobe
+            esp_now_front_node_set_aux_light(2); // 2 = AUX_LIGHT_MODE_STROBE
+
+            // 3. Auto-Bookmark Action Cam
+            esp_now_front_node_cam_hilight_tag();
+        }
+    } else if (s_ess_active && (now - s_ess_start_ms > 2500 || accel_x_g > -0.20f)) {
+        s_ess_active = false;
+        ESP_LOGI(TAG, "ESS Deactivated. Reverting lights to normal mode.");
+
+        // Revert Varia to solid
+        uint8_t varia_solid_cmd[] = { 0xAA, 0x04, 0x30, 0x01, 0x00 };
+        uart_write_bytes(RADAR_UART_NUM, varia_solid_cmd, sizeof(varia_solid_cmd));
+
+        // Revert Aux-Light to OFF
+        esp_now_front_node_set_aux_light(0); // 0 = AUX_LIGHT_MODE_OFF
+    }
+}
+
+bool radar_is_ess_active(void) {
+    return s_ess_active;
+}
+
 void task_radar_processor(void *pvParameters) {
     ESP_LOGI(TAG, "Radar Processor Task running on Core 0 (Priority 6, 20 Hz)...");
     uint8_t rx_buffer[128];
@@ -177,6 +239,7 @@ void task_radar_processor(void *pvParameters) {
                     s_radar_state.highest_rel_speed_kmh = 0.0f;
                     s_radar_state.blind_spot_left = false;
                     s_radar_state.blind_spot_right = false;
+                    esp_now_front_node_send_bsd_warning(false, 0, false, 0);
                 }
             }
             xSemaphoreGive(s_radar_mutex);

@@ -1,15 +1,15 @@
 // =============================================================================
-// OpenMotorBridge - Dummy 3D Model: Universal Front Node PCB
+// OpenMotorBridge - Dummy 3D Model: Universal Front Node PCB (PCBA 05)
 // =============================================================================
 // File: hardware/cad/scad/04_front_node/parts/006_dummy_front_node_pcb.scad
-// Description: Accurate 3D dummy of openmotorbridge_front_node PCB for
-//              collision verification, enclosure fitting, and rendering.
+// Description: Accurate 3D dummy of openmotorbridge_front_node PCB (82 x 50 mm)
+//              for collision verification, enclosure fitting, and rendering.
 // =============================================================================
 
 include <../../00_common/parameters.scad>;
 
 module dummy_front_node_pcb() {
-    // 1. PCB Substrate (FR4 4-Layer Green, 68 x 44 x 1.6 mm)
+    // 1. PCB Substrate (FR4 4-Layer Green, 82 x 50 x 1.6 mm)
     color("forestgreen") {
         difference() {
             // Rounded rectangle substrate
@@ -22,94 +22,96 @@ module dummy_front_node_pcb() {
             }
             
             // 4x M2.5 Mounting Holes (H1-H4)
-            translate([3.5, 3.5, -0.1]) cylinder(r=1.35, h=FRONT_NODE_PCB_H + 0.2);
-            translate([64.5, 3.5, -0.1]) cylinder(r=1.35, h=FRONT_NODE_PCB_H + 0.2);
-            translate([3.5, 40.5, -0.1]) cylinder(r=1.35, h=FRONT_NODE_PCB_H + 0.2);
-            translate([64.5, 40.5, -0.1]) cylinder(r=1.35, h=FRONT_NODE_PCB_H + 0.2);
+            translate([3.5, 3.5, -0.1]) cylinder(r=1.35, h=FRONT_NODE_PCB_H + 0.2, $fn=16);
+            translate([FRONT_NODE_PCB_L - 3.5, 3.5, -0.1]) cylinder(r=1.35, h=FRONT_NODE_PCB_H + 0.2, $fn=16);
+            translate([3.5, FRONT_NODE_PCB_W - 3.5, -0.1]) cylinder(r=1.35, h=FRONT_NODE_PCB_H + 0.2, $fn=16);
+            translate([FRONT_NODE_PCB_L - 3.5, FRONT_NODE_PCB_W - 3.5, -0.1]) cylinder(r=1.35, h=FRONT_NODE_PCB_H + 0.2, $fn=16);
             
             // Knowles MEMS Acoustic hole (Ø 0.5 mm)
-            translate([22.5, 15.46, -0.1]) cylinder(r=0.25, h=FRONT_NODE_PCB_H + 0.2);
+            translate([45.0, 40.0, -0.1]) cylinder(r=0.25, h=FRONT_NODE_PCB_H + 0.2, $fn=12);
         }
     }
 
-    // 2. South Connectors (J6: CarPlay, J5: Glovebox, J4: USB Host, J8: Action-Cam) - 4-Pin JST-PH
+    // 2. South Connectors (6x JST-PH along front rim Y = 0)
+    // J4 (Host), J5 (Phone PD), J6 (CP2AA), J5_MP3 (Glovebox), J6_AUX (Cockpit), J8 (Action-Cam)
     color("ghostwhite") {
-        translate([15.75 - 5.0, 0.5, FRONT_NODE_PCB_H])
-            cube(size=[10.0, 4.5, 7.5], center=false); // J6
-        translate([29.50 - 5.0, 0.5, FRONT_NODE_PCB_H])
-            cube(size=[10.0, 4.5, 7.5], center=false); // J5
-        translate([43.25 - 5.0, 0.5, FRONT_NODE_PCB_H])
-            cube(size=[10.0, 4.5, 7.5], center=false); // J4
-        translate([56.00 - 5.0, 0.5, FRONT_NODE_PCB_H])
-            cube(size=[10.0, 4.5, 7.5], center=false); // J8 (Action-Cam 5V Charge)
+        translate([12.5 - 5.0, 0.5, FRONT_NODE_PCB_H]) cube(size=[10.0, 4.5, 7.5], center=false); // J4
+        translate([24.5 - 5.0, 0.5, FRONT_NODE_PCB_H]) cube(size=[10.0, 4.5, 7.5], center=false); // J5
+        translate([36.5 - 5.0, 0.5, FRONT_NODE_PCB_H]) cube(size=[10.0, 4.5, 7.5], center=false); // J6
+        translate([48.5 - 5.0, 0.5, FRONT_NODE_PCB_H]) cube(size=[10.0, 4.5, 7.5], center=false); // J5_MP3
+        translate([60.5 - 5.0, 0.5, FRONT_NODE_PCB_H]) cube(size=[10.0, 4.5, 7.5], center=false); // J6_AUX
+        translate([70.5 - 3.0, 0.5, FRONT_NODE_PCB_H]) cube(size=[6.0, 4.5, 7.5], center=false);  // J8 (2-Pin)
     }
 
-    // 3. East USB-C Service Port (J7, 90° rotated facing East, forward right flank)
-    // Synchronized with KiCad J7 (Y=100.82 on board Y=70..114 mm -> 114 - 100.82 = 13.18 mm from front edge)
-    color("silver") {
-        translate([FRONT_NODE_PCB_L - 6.5, 13.18 - 4.5, FRONT_NODE_PCB_H])
-            cube(size=[7.5, 9.0, 3.2], center=false);
-    }
-
-    // 4. West Connectors (J3: PTT front, J2: CAN middle, J1: 12V ACC rear)
-    // Synchronized with KiCad (114 - Y_kicad: J3=9.75 mm, J2=17.75 mm, J1=30.0 mm from front edge)
+    // 3. West Connectors (6x JST-PH along vehicle rim X = 0)
+    // J9 (BSD, 3P), J3 (PTT, 4P), J2 (CAN, 3P), J11 (Aux, 2P), J10 (Qi, 2P), J1 (12V, 2P)
     color("ghostwhite") {
-        translate([0.5, 9.75 - 3.0, FRONT_NODE_PCB_H])
-            cube(size=[4.5, 6.0, 7.5], center=false); // J3 (PTT switch, 2-pin)
-        translate([0.5, 17.75 - 4.0, FRONT_NODE_PCB_H])
-            cube(size=[4.5, 8.0, 7.5], center=false); // J2 (CAN-Bus, 3-pin)
-        translate([0.5, 30.0 - 3.0, FRONT_NODE_PCB_H])
-            cube(size=[4.5, 6.0, 7.5], center=false); // J1 (12V ACC, 2-pin)
+        translate([0.5, 5.5 - 4.0, FRONT_NODE_PCB_H]) cube(size=[4.5, 8.0, 7.5], center=false);  // J9
+        translate([0.5, 13.0 - 5.0, FRONT_NODE_PCB_H]) cube(size=[4.5, 10.0, 7.5], center=false); // J3
+        translate([0.5, 20.5 - 4.0, FRONT_NODE_PCB_H]) cube(size=[4.5, 8.0, 7.5], center=false);  // J2
+        translate([0.5, 27.5 - 3.0, FRONT_NODE_PCB_H]) cube(size=[4.5, 6.0, 7.5], center=false);  // J11
+        translate([0.5, 34.5 - 3.0, FRONT_NODE_PCB_H]) cube(size=[4.5, 6.0, 7.5], center=false);  // J10
+        translate([0.5, 41.5 - 3.0, FRONT_NODE_PCB_H]) cube(size=[4.5, 6.0, 7.5], center=false);  // J1
     }
 
-    // 5. ESP32-C3-WROOM-02U Module with U.FL
+    // 4. East Connectors & Service Port (X = 82.0 mm)
+    // J7 USB-C Service Port (facing East)
     color("silver") {
-        translate([49.5 - 9.0, 15.25 - 6.6, FRONT_NODE_PCB_H])
-            cube(size=[18.0, 13.2, 3.2], center=false);
+        translate([FRONT_NODE_PCB_L - 7.5, 15.1 - 4.5, FRONT_NODE_PCB_H])
+            cube(size=[8.0, 9.0, 3.2], center=false);
+    }
+    // J12 Qwiic I2C (1.0mm JST-SH)
+    color("ghostwhite") {
+        translate([FRONT_NODE_PCB_L - 6.0, 35.0 - 2.5, FRONT_NODE_PCB_H])
+            cube(size=[5.0, 5.0, 3.0], center=false);
+    }
+
+    // 5. ESP32-S3-WROOM-1U Module with U.FL
+    color("silver") {
+        translate([52.0 - 9.0, 36.0 - 12.7, FRONT_NODE_PCB_H])
+            cube(size=[18.0, 25.5, 3.2], center=false);
     }
     color("gold") {
-        translate([49.5 + 6.0, 15.25 + 4.5, FRONT_NODE_PCB_H + 3.2])
+        translate([52.0, 46.0, FRONT_NODE_PCB_H + 3.2])
             cylinder(r=1.0, h=1.0, $fn=16); // U.FL connector
     }
 
-    // 6. Microchip USB2512B AEC-Q100 Hub IC (QFN-36)
+    // 6. Microchip USB2514B 4-Port Hub (QFN-36)
     color("darkslategray") {
-        translate([32.0 - 3.0, 29.8 - 3.0, FRONT_NODE_PCB_H])
+        translate([42.0 - 3.0, 18.0 - 3.0, FRONT_NODE_PCB_H])
             cube(size=[6.0, 6.0, 0.9], center=false);
     }
 
-    // 7. Knowles SPH0645 Digital I2S MEMS Microphone
-    color("goldenrod") {
-        translate([22.5 - 1.75, 15.46 - 1.32, FRONT_NODE_PCB_H])
-            cube(size=[3.5, 2.65, 1.0], center=false);
+    // 7. Southchip SC8102 USB-PD Buck (QFN-32)
+    color("darkslategray") {
+        translate([21.0 - 2.5, 30.0 - 2.5, FRONT_NODE_PCB_H])
+            cube(size=[5.0, 5.0, 0.9], center=false);
     }
 
-    // 8. Power Inductor L1 (4.7 uH Choke)
+    // 8. Power Inductor L1 (4.7 uH Main Choke) & L2 (10 uH PD Choke)
     color("dimgray") {
-        translate([22.38 - 3.5, 6.75 - 3.5, FRONT_NODE_PCB_H])
-            cube(size=[7.0, 7.0, 3.0], center=false);
+        translate([24.0 - 3.5, 41.0 - 3.5, FRONT_NODE_PCB_H]) cube(size=[7.0, 7.0, 3.0], center=false); // L1
+        translate([21.0 - 3.6, 22.0 - 3.6, FRONT_NODE_PCB_H]) cube(size=[7.3, 7.3, 4.5], center=false); // L2
     }
 
-    // 9. Buffer Capacitor C_BUF (7343 D-Case Polymer / Tantalum, Action-Cam hold-up)
+    // 9. Buffer Capacitor C_BUF (7343 D-Case Polymer)
     color("gold") {
-        translate([55.62 - 3.65, 3.75 - 2.15, FRONT_NODE_PCB_H])
+        translate([65.0 - 3.65, 42.0 - 2.15, FRONT_NODE_PCB_H])
             cube(size=[7.3, 4.3, 3.1], center=false);
     }
 
-    // 10. SMD Pushbuttons SW1 (Reset) & SW2 (Boot)
-    color("darkslategray") {
-        translate([65.15 - 2.0, 17.75 - 2.0, FRONT_NODE_PCB_H])
-            cube(size=[4.0, 4.0, 2.5], center=false); // SW1
-        translate([22.5 - 2.0, 22.0 - 2.0, FRONT_NODE_PCB_H])
-            cube(size=[4.0, 4.0, 2.5], center=false); // SW2
+    // 10. Status RGB LED (WS2812B-2020)
+    color("white") {
+        translate([75.0 - 1.0, 42.0 - 1.0, FRONT_NODE_PCB_H])
+            cube(size=[2.0, 2.0, 0.9], center=false);
     }
 
-    // 11. Status LED D1 (Green 0805)
-    color("limegreen") {
-        translate([64.75 - 0.6, 22.25 - 1.0, FRONT_NODE_PCB_H])
-            cube(size=[1.2, 2.0, 0.8], center=false);
+    // 11. SMD Pushbuttons SW1 (Boot) & SW2 (Reset)
+    color("darkslategray") {
+        translate([75.0 - 1.5, 35.0 - 1.5, FRONT_NODE_PCB_H]) cube(size=[3.0, 3.0, 1.5], center=false);
+        translate([75.0 - 1.5, 15.0 - 1.5, FRONT_NODE_PCB_H]) cube(size=[3.0, 3.0, 1.5], center=false);
     }
 }
 
-// Standalone render / STL export
+// Standalone compilation
 dummy_front_node_pcb();

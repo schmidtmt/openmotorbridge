@@ -8,6 +8,7 @@
 #include "esp_log.h"
 #include "esp_timer.h"
 #include "adr_ekf_filter.h"
+#include "gnss_omm_bridge.h"
 
 static const char *TAG = "CAN_MGR";
 
@@ -148,8 +149,14 @@ static void load_builtin_profile(const char *profile_id) {
         strncpy(s_signals[11].name, "handlebar_joystick_click", CAN_PROFILE_MAX_NAME_LEN);
         s_signals[11].can_id = 0x290; s_signals[11].start_bit = 19; s_signals[11].length_bits = 1; s_signals[11].scale = 1.0f;
 
-        s_num_signals = 12;
-        ESP_LOGI(TAG, "Loaded built-in profile: Harley-Davidson Skyline OS (12 signals configured).");
+        strncpy(s_signals[12].name, "infotainment_source_active", CAN_PROFILE_MAX_NAME_LEN);
+        s_signals[12].can_id = 0x388; s_signals[12].start_bit = 0; s_signals[12].length_bits = 8; s_signals[12].scale = 1.0f;
+
+        strncpy(s_signals[13].name, "bcm_alarm_triggered", CAN_PROFILE_MAX_NAME_LEN);
+        s_signals[13].can_id = 0x390; s_signals[13].start_bit = 0; s_signals[13].length_bits = 1; s_signals[13].scale = 1.0f;
+
+        s_num_signals = 14;
+        ESP_LOGI(TAG, "Loaded built-in profile: Harley-Davidson Skyline OS (14 signals configured).");
     }
 }
 
@@ -281,6 +288,16 @@ void task_can_bus_manager(void *pvParameters) {
                         strcmp(s_signals[i].name, "wheel_speed_rear") == 0) {
                         s_last_vehicle_speed_kmh = val;
                         adr_ekf_update_can_wheel_speed(val);
+                    }
+
+                    // BCM / DWA Werksalarmanlagen-Überwachung
+                    if (strcmp(s_signals[i].name, "bcm_alarm_triggered") == 0 && val > 0.5f) {
+                        static uint32_t s_last_alarm_tx_ms = 0;
+                        if (now_ms - s_last_alarm_tx_ms > 5000) {
+                            s_last_alarm_tx_ms = now_ms;
+                            ESP_LOGW(TAG, "🚨 BCM / DWA Factory Alarm triggered! Broadcasting LoRa Bike Alarm...");
+                            omm_broadcast_bike_alarm(0x01, 0.0f, 0.0f); // 0x01 = OEM BCM Alarm
+                        }
                     }
                 }
             }
