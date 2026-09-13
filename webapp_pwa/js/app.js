@@ -481,6 +481,9 @@ const state = {
     },
     deviceHub: {
         frontNodeWifiApEnabled: true,
+        frontNodeSsid: 'OMB-Skyline-742',
+        frontNodePass: 'openmotor2024',
+        activeUplink: 'rider',
         canSniffer: {
             running: true,
             filter: '',
@@ -1955,6 +1958,89 @@ function setupDeviceHubUi() {
     }
 
     // 3. Teil 2: Motorrad- & OMB-Zentrische Aktionen (Infrastruktur & Sensorik)
+
+    // Uplink Switch Handlers for Skyline OS Gateway Routing
+    const btnSetUplinkRider = document.getElementById('btn-set-uplink-rider');
+    const btnSetUplinkPax = document.getElementById('btn-set-uplink-pax');
+    const badgeRiderUplink = document.getElementById('badge-rider-uplink-status');
+    const badgePaxUplink = document.getElementById('badge-pax-uplink-status');
+    const lblSetUplinkRider = document.getElementById('lbl-set-uplink-rider');
+    const lblSetUplinkPax = document.getElementById('lbl-set-uplink-pax');
+    const valFnGatewayRouting = document.getElementById('val-fn-gateway-routing');
+
+    function updateUplinkUI(target) {
+        state.deviceHub.activeUplink = target;
+        if (target === 'rider') {
+            if (badgeRiderUplink) { badgeRiderUplink.className = 'card-badge badge-green'; badgeRiderUplink.textContent = 'AKTIV (Gateway für Skyline OS)'; }
+            if (badgePaxUplink) { badgePaxUplink.className = 'card-badge badge-blue'; badgePaxUplink.textContent = 'STANDBY (Bereit)'; }
+            if (lblSetUplinkRider) lblSetUplinkRider.textContent = 'Als Uplink gewählt ✓';
+            if (lblSetUplinkPax) lblSetUplinkPax.textContent = 'Als Uplink nutzen';
+            if (btnSetUplinkRider) { btnSetUplinkRider.className = 'btn-primary'; }
+            if (btnSetUplinkPax) { btnSetUplinkPax.className = 'btn-secondary'; }
+            if (valFnGatewayRouting) valFnGatewayRouting.textContent = '192.168.4.10 (Fahrer-Handy)';
+            showToast(state.lang === 'de' ? '🌐 Harley Internet-Uplink: Fahrer-Smartphone (192.168.4.10) als Gateway aktiv!' : '🌐 Skyline OS Gateway: Rider Phone active', 'success', 3000);
+        } else if (target === 'pax') {
+            if (badgeRiderUplink) { badgeRiderUplink.className = 'card-badge badge-blue'; badgeRiderUplink.textContent = 'STANDBY (Bereit)'; }
+            if (badgePaxUplink) { badgePaxUplink.className = 'card-badge badge-green'; badgePaxUplink.textContent = 'AKTIV (Gateway für Skyline OS)'; }
+            if (lblSetUplinkRider) lblSetUplinkRider.textContent = 'Als Uplink nutzen';
+            if (lblSetUplinkPax) lblSetUplinkPax.textContent = 'Als Uplink gewählt ✓';
+            if (btnSetUplinkRider) { btnSetUplinkRider.className = 'btn-secondary'; }
+            if (btnSetUplinkPax) { btnSetUplinkPax.className = 'btn-primary'; }
+            if (valFnGatewayRouting) valFnGatewayRouting.textContent = '192.168.4.11 (Sozius-Handy)';
+            showToast(state.lang === 'de' ? '🌐 Harley Internet-Uplink: Sozius-Smartphone (192.168.4.11) als Gateway aktiv!' : '🌐 Skyline OS Gateway: Pax Phone active', 'success', 3000);
+        }
+    }
+
+    if (btnSetUplinkRider) {
+        btnSetUplinkRider.addEventListener('click', () => updateUplinkUI('rider'));
+    }
+    if (btnSetUplinkPax) {
+        btnSetUplinkPax.addEventListener('click', () => updateUplinkUI('pax'));
+    }
+
+    const btnEditFnWifi = document.getElementById('btn-edit-fn-wifi');
+    const fnWifiEditBox = document.getElementById('fn-wifi-edit-box');
+    const btnSaveFnWifiCfg = document.getElementById('btn-save-fn-wifi-cfg');
+    const btnCancelFnWifiCfg = document.getElementById('btn-cancel-fn-wifi-cfg');
+    const inputFnWifiSsid = document.getElementById('input-fn-wifi-ssid');
+    const inputFnWifiPass = document.getElementById('input-fn-wifi-pass');
+
+    if (btnEditFnWifi && fnWifiEditBox) {
+        btnEditFnWifi.addEventListener('click', () => {
+            const isHidden = fnWifiEditBox.style.display === 'none';
+            fnWifiEditBox.style.display = isHidden ? 'block' : 'none';
+        });
+    }
+
+    if (btnCancelFnWifiCfg && fnWifiEditBox) {
+        btnCancelFnWifiCfg.addEventListener('click', () => {
+            fnWifiEditBox.style.display = 'none';
+        });
+    }
+
+    if (btnSaveFnWifiCfg && inputFnWifiSsid && inputFnWifiPass) {
+        btnSaveFnWifiCfg.addEventListener('click', () => {
+            const newSsid = inputFnWifiSsid.value.trim();
+            const newPass = inputFnWifiPass.value.trim();
+            if (newSsid.length < 2) {
+                showToast(state.lang === 'de' ? '⚠️ SSID muss mind. 2 Zeichen lang sein!' : '⚠️ SSID too short', 'error', 3000);
+                return;
+            }
+            if (newPass.length < 8) {
+                showToast(state.lang === 'de' ? '⚠️ WPA2 Passwort muss mind. 8 Zeichen lang sein!' : '⚠️ Password too short', 'error', 3000);
+                return;
+            }
+            state.deviceHub.frontNodeSsid = newSsid;
+            state.deviceHub.frontNodePass = newPass;
+            const valWifi = document.getElementById('val-fn-wifi-status');
+            if (valWifi) {
+                valWifi.textContent = `Aktiv ("${newSsid}")`;
+            }
+            if (fnWifiEditBox) fnWifiEditBox.style.display = 'none';
+            showToast(state.lang === 'de' ? `✓ Neue Wi-Fi AP Zugangsdaten im NVS gespeichert: ${newSsid} (SoftAP neu gestartet)` : `✓ Wi-Fi saved: ${newSsid}`, 'success', 4000);
+        });
+    }
+
     const btnToggleFnWifi = document.getElementById('btn-toggle-fn-wifi');
     if (btnToggleFnWifi) {
         btnToggleFnWifi.addEventListener('click', () => {
@@ -1962,12 +2048,12 @@ function setupDeviceHubUi() {
             const valWifi = document.getElementById('val-fn-wifi-status');
             if (valWifi) {
                 valWifi.textContent = state.deviceHub.frontNodeWifiApEnabled
-                    ? 'Aktiv ("OpenMotorBridge-Gateway")'
+                    ? `Aktiv ("${state.deviceHub.frontNodeSsid || 'OMB-Skyline-742'}")`
                     : 'Deaktiviert (Nur ESP-NOW)';
                 valWifi.style.color = state.deviceHub.frontNodeWifiApEnabled ? 'var(--accent-blue)' : 'var(--text-secondary)';
             }
             showToast(state.lang === 'de'
-                ? `📶 Front-Node Cockpit SoftAP: ${state.deviceHub.frontNodeWifiApEnabled ? 'Aktiviert (Kanal 1, WPA2)' : 'Deaktiviert'}`
+                ? `📶 Front-Node Cockpit SoftAP: ${state.deviceHub.frontNodeWifiApEnabled ? `Aktiviert ("${state.deviceHub.frontNodeSsid || 'OMB-Skyline-742'}", Kanal 1)` : 'Deaktiviert'}`
                 : `📶 SoftAP: ${state.deviceHub.frontNodeWifiApEnabled ? 'Active' : 'Disabled'}`, 'info', 3000);
         });
     }

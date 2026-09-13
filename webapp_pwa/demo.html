@@ -1818,12 +1818,23 @@
                             <span style="font-weight: 700; color: var(--accent-green);" id="val-rider-phone-rssi">-48 dBm (Exzellent)</span>
                         </div>
                         <div class="stat-row">
+                            <span class="stat-sub">Wi-Fi Gateway IP:</span>
+                            <span style="font-weight: 700; color: var(--accent-cyan);" id="val-rider-phone-ip">192.168.4.10 (No-Gateway 5G)</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">Harley Internet-Uplink:</span>
+                            <span class="card-badge badge-green" id="badge-rider-uplink-status">AKTIV (Gateway für Skyline OS)</span>
+                        </div>
+                        <div class="stat-row">
                             <span class="stat-sub">CarPlay / Android Auto:</span>
                             <span style="font-weight: 700; color: var(--accent-blue);" id="val-rider-phone-cp2aa">CP2AA Dongle Aktiv (Port 2)</span>
                         </div>
-                        <div style="display: flex; gap: 8px; margin-top: 14px;">
+                        <div style="display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap;">
+                            <button id="btn-set-uplink-rider" class="btn-primary" style="flex: 1; padding: 7px 12px; font-size: 0.78rem;" title="Wählt das Fahrer-Smartphone als aktiven Internet-Uplink für Skyline OS">
+                                🌐 <span id="lbl-set-uplink-rider">Als Uplink gewählt ✓</span>
+                            </button>
                             <button id="btn-cp2aa-reset" class="btn-secondary" style="flex: 1; padding: 7px 12px; font-size: 0.78rem; border-color: rgba(255, 159, 10, 0.4); color: var(--accent-orange);" title="Setzt die 5V VBUS-Stromversorgung des CP2AA-Dongles via TPS2051B Lastschalter für 2s zurück">
-                                🔌 <span data-i18n="btn_cp2aa_reset">CP2AA Kaltstart (VBUS Reset)</span>
+                                🔌 <span data-i18n="btn_cp2aa_reset">CP2AA Kaltstart</span>
                             </button>
                         </div>
                     </section>
@@ -1846,12 +1857,23 @@
                             <span style="font-weight: 700;" id="val-pax-phone-name">iPhone von Sarah (iOS 18)</span>
                         </div>
                         <div class="stat-row">
+                            <span class="stat-sub">Wi-Fi Gateway IP:</span>
+                            <span style="font-weight: 700; color: var(--accent-cyan);" id="val-pax-phone-ip">192.168.4.11 (No-Gateway 5G)</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">Harley Internet-Uplink:</span>
+                            <span class="card-badge badge-blue" id="badge-pax-uplink-status">STANDBY (Bereit)</span>
+                        </div>
+                        <div class="stat-row">
                             <span class="stat-sub">Mediensteuerung:</span>
                             <span style="font-weight: 700; color: var(--accent-green);">Spotify Playlist-Zugriff Aktiv</span>
                         </div>
-                        <div style="display: flex; gap: 8px; margin-top: 14px;">
+                        <div style="display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap;">
+                            <button id="btn-set-uplink-pax" class="btn-secondary" style="flex: 1; padding: 7px 12px; font-size: 0.78rem;" title="Wählt das Sozius-Smartphone als aktiven Internet-Uplink für Skyline OS">
+                                🌐 <span id="lbl-set-uplink-pax">Als Uplink nutzen</span>
+                            </button>
                             <button id="btn-pax-phone-toggle" class="btn-secondary" style="flex: 1; padding: 7px 12px; font-size: 0.78rem;">
-                                👥 <span data-i18n="btn_pax_phone_share">Audio-Share umschalten</span>
+                                👥 <span data-i18n="btn_pax_phone_share">Audio-Share</span>
                             </button>
                             <button id="btn-pax-phone-unpair" class="btn-secondary" style="padding: 7px 10px; font-size: 0.78rem; border-color: rgba(255, 69, 58, 0.3); color: var(--accent-red);">
                                 ✕
@@ -2027,19 +2049,56 @@
                             <span style="font-weight: 700; color: var(--accent-green);" id="val-fn-espnow-status">Kanal 1 • -52 dBm (&lt; 1.8 ms Latenz)</span>
                         </div>
                         <div class="stat-row">
-                            <span class="stat-sub">Cockpit Wi-Fi Fallback SoftAP:</span>
-                            <span style="font-weight: 700; color: var(--accent-blue);" id="val-fn-wifi-status">Aktiv ("OpenMotorBridge-Gateway")</span>
+                            <span class="stat-sub">Cockpit Wi-Fi AP:</span>
+                            <span style="font-weight: 700; color: var(--accent-blue);" id="val-fn-wifi-status">Aktiv ("OMB-Skyline-742")</span>
                         </div>
                         <div class="stat-row">
-                            <span class="stat-sub">Proximity Rescue Beacon:</span>
-                            <span style="font-weight: 700; color: var(--accent-cyan);">Bereit (Smart Re-Pairing bei Crash)</span>
+                            <span class="stat-sub">Skyline OS Gateway:</span>
+                            <span style="font-weight: 700; color: var(--accent-cyan);" id="val-fn-gateway-routing">192.168.4.10 (Fahrer-Handy)</span>
                         </div>
-                        <div style="display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap;">
-                            <button id="btn-toggle-fn-wifi" class="btn-secondary" style="flex: 1; padding: 7px 12px; font-size: 0.78rem;">
-                                📶 <span data-i18n="btn_toggle_fn_wifi">Wi-Fi SoftAP Ein/Aus</span>
+
+                        <!-- Wi-Fi Client Table -->
+                        <div style="margin-top: 10px; padding: 8px 10px; background: rgba(0,0,0,0.3); border-radius: 8px; border: 1px solid var(--border-subtle); font-size: 0.76rem;">
+                            <div style="font-weight: 700; color: var(--text-secondary); margin-bottom: 6px; display: flex; justify-content: space-between;">
+                                <span>Verbundene Wi-Fi Geräte (3):</span>
+                                <span style="color: var(--accent-green);">No-Gateway DHCP OK</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 2px 0;">
+                                <span>📱 Fahrer (iPhone):</span>
+                                <span style="font-family: monospace; color: var(--accent-cyan);">192.168.4.10 (Uplink ✓)</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 2px 0;">
+                                <span>📱 Sozius (Sarah):</span>
+                                <span style="font-family: monospace; color: var(--text-muted);">192.168.4.11 (Standby)</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 2px 0;">
+                                <span>🏍️ Harley Skyline OS:</span>
+                                <span style="font-family: monospace; color: var(--accent-orange);">192.168.4.20 (Gw: .10)</span>
+                            </div>
+                        </div>
+
+                        <!-- Inline SSID Config Area (collapsible / direct) -->
+                        <div id="fn-wifi-edit-box" style="display: none; margin-top: 10px; padding: 10px; background: rgba(22, 27, 34, 0.9); border-radius: 8px; border: 1px solid var(--accent-blue);">
+                            <div style="font-size: 0.8rem; font-weight: 700; color: var(--accent-blue); margin-bottom: 6px;">Wi-Fi AP Zugangsdaten (NVS Flash):</div>
+                            <div style="display: flex; gap: 8px; flex-direction: column;">
+                                <input type="text" id="input-fn-wifi-ssid" placeholder="SSID (z. B. OMB-Skyline-742)" value="OMB-Skyline-742" style="background: rgba(0,0,0,0.4); border: 1px solid var(--border-subtle); color: #fff; padding: 5px 8px; border-radius: 4px; font-size: 0.78rem;">
+                                <input type="password" id="input-fn-wifi-pass" placeholder="WPA2 Passwort (mind. 8 Zeichen)" value="openmotor2024" style="background: rgba(0,0,0,0.4); border: 1px solid var(--border-subtle); color: #fff; padding: 5px 8px; border-radius: 4px; font-size: 0.78rem;">
+                                <div style="display: flex; gap: 6px;">
+                                    <button id="btn-save-fn-wifi-cfg" class="btn-primary" style="flex: 1; padding: 5px; font-size: 0.76rem;">Speichern &amp; AP Neustart</button>
+                                    <button id="btn-cancel-fn-wifi-cfg" class="btn-secondary" style="padding: 5px 10px; font-size: 0.76rem;">Abbrechen</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap;">
+                            <button id="btn-edit-fn-wifi" class="btn-secondary" style="flex: 1; padding: 7px 10px; font-size: 0.78rem;">
+                                ✏️ <span>SSID / WPA2 anpassen</span>
                             </button>
-                            <button id="btn-fn-ping" class="btn-secondary" style="padding: 7px 14px; font-size: 0.78rem;">
-                                ⚡ Ping Test
+                            <button id="btn-toggle-fn-wifi" class="btn-secondary" style="padding: 7px 10px; font-size: 0.78rem;">
+                                📶 <span data-i18n="btn_toggle_fn_wifi">AP Ein/Aus</span>
+                            </button>
+                            <button id="btn-fn-ping" class="btn-secondary" style="padding: 7px 10px; font-size: 0.78rem;">
+                                ⚡ Ping
                             </button>
                         </div>
                     </section>

@@ -331,23 +331,47 @@ Infotainment meldet auf CAN (0x388):                         Microchip USB2514B 
 Das werkseigene Navigationssystem von Harley-Davidson (Skyline OS / Boom! Box GTS) nutzt Karten- und Verkehrsdienste von **HERE Technologies / TomTom**. Um Staudaten, Baustellen, Unfälle und dynamische Umfahrungen anzuzeigen, benötigt das interne Navi einen Internet-Uplink.
 
 ### Die herkömmliche Hürde
-Normalerweise verlangt Harley, dass der Fahrer vor jeder Fahrt am Smartphone manuell den *Persönlichen WLAN-Hotspot* einschaltet. Unter iOS schläft dieser Hotspot im Standby nach wenigen Minuten ein – das interne Navi verliert die Verbindung und zeigt keine Verkehrsdaten mehr an.
+Normalerweise verlangt Harley, dass der Fahrer vor jeder Fahrt am Smartphone manuell den *Persönlichen WLAN-Hotspot* einschaltet. Unter iOS schläft dieser Hotspot im Standby nach wenigen Minuten ein – das interne Navi verliert die Verbindung und zeigt keine Verkehrsdaten mehr an. Zudem erhitzt sich das Smartphone in der Tasche.
 
-### Die OpenMotorBridge Lösung: USB CDC-NCM Ethernet Tethering
-Über den Front-Node (PCBA 05) an der USB-Buchse im Handschuhfach (`J4`) löst OpenMotorBridge das Problem vollautomatisch:
+### Die OpenMotorBridge Lösung: Intelligentes Cockpit Wi-Fi AP Gateway
 
-1. **Automotive USB-Ethernet-Schnittstelle:**
-   * Die Front-Node Infotainment-Bridge meldet sich als standardisiertes **USB CDC-NCM / RNDIS Netzwerkgerät** bei Skyline OS an (über den hardwarenahen USB-Device-Stack des ESP32-S3 bzw. der Bridge).
-   * Skyline OS erkennt die Verbindung wie ein physikalisches Ethernet-Netzwerkkabel (`eth0`).
-   * Der interne DHCP-Server des Front-Nodes weist der Harley sofort eine IP-Adresse (`192.168.4.2`) zu.
-2. **Transparenter Smartphone-Uplink:**
-   * OpenMotorBridge holt sich die Internetdaten transparent über das gekoppelte Smartphone (via Bluetooth PAN oder über die permanente Hintergrund-Verbindung der WebApp).
-   * **Ergebnis:** Das interne Harley-Navi ist **sofort bei Zündung-AN online**, zeigt Live-Verkehrsfluss (grün/gelb/rot) und berechnet Stauumfahrungen – völlig ohne manuelles Hotspot-Einschalten am Smartphone!
-3. **Cockpit-WLAN als Fallback:**
-   * Für ältere Boom! Box Firmware-Stände spannt der Front-Node alternativ ein fahrzeugeigenes WLAN auf (`OpenMotorBridge-Gateway`), in das sich die Harley nach einmaliger Einrichtung automatisch einbucht.
-4. **Sprachansagen-Ducking für das interne Navi:**
-   * Sprachansagen des internen Navis (*„In 300 m rechts abbiegen“*) werden über den Audio-Rückkanal des Front-Nodes digital an den OMB Audio-DSP übertragen.
-   * Der DSP führt automatisches Raised-Cosine Ducking ($-12\,\text{dB}$) auf der Helm-Musik aus, blendet die Harley-Naviansage ein und fährt die Musik danach sanft wieder hoch.
+OpenMotorBridge löst das Problem über den Dual-Mode SoftAP des Front-Nodes (PCBA 05, ESP32-S3 auf Kanal 1) mit **differenziertem No-Gateway DHCP-Routing (RFC 3442)**:
+
+```
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│             INTELLIGENTES COCKPIT WI-FI AP ROUTING-GATEWAY (PCBA 05)                   │
+└────────────────────────────────────────────────────────────────────────────────────────┘
+
+  1. DYNAMISCHE, PRIVACY-KONFORME SSID-GENERIERUNG:
+     • Format: "OMB-[Modell]-[3-stellige ID]" (z. B. "OMB-Skyline-742" oder "OMB-HD-318")
+     • Modellkürzel: 100 % passiv aus dem CAN-Bus Fingerprint (keine störenden UDS-Frames!)
+     • 3-stellige ID: Deterministisch aus der Silizium-eFuse-MAC (100–999) ➔ Keine VIN im Äther!
+     • Personalisierbar: In der WebApp (Tab 5) jederzeit frei umbenennbar (NVS-gespeichert).
+
+  2. STATISCHES IP-MAPPING (192.168.4.0/24 & AP-Isolation AUS):
+     • 192.168.4.1:  Front-Node (Gateway & PWA-Server)
+     • 192.168.4.10: Fahrer-Smartphone (DHCP Option 3 WEGGELASSEN / 0.0.0.0)
+     • 192.168.4.11: Sozius-Smartphone (DHCP Option 3 WEGGELASSEN / 0.0.0.0)
+     • 192.168.4.20: Harley Skyline OS (DHCP Option 3 DYNAMISCH auf aktiven Uplink)
+
+  3. DIFFERENZIERTES NO-GATEWAY DHCP (RFC 3442):
+     • Smartphone behält 4G/5G Mobilfunk uneingeschränkt aktiv (kein "Kein Internet"-Drop).
+     • PWA Dashboard läuft flüssig und latenzfrei über Wi-Fi.
+
+  4. DYNAMISCHES UPLINK-ROUTING FÜR SKYLINE OS:
+     • In Tab 5 wählt der Fahrer: [X] Fahrer-Handy   [ ] Sozius-Handy   [ ] Offline.
+     • Skyline OS erhält die IP des gewählten Handys als Default Gateway (Option 3).
+     • HERE Traffic & Staudaten laufen transparent über das gewünschte Smartphone.
+
+  5. ROLLENTEILUNG: USB vs. WI-FI:
+     • USB-Port (J4 / USB2514B): Reiner Automotive Media- & Projection-Bus (CarPlay/AA, MP3-Sticks).
+       Verhindert "Unbekanntes USB-Gerät" Warnungen im restriktiven Harley-Kernel.
+     • Wi-Fi AP: Reiner IP- & Telemetrie-Bus über Harleys offizielles, natives Wi-Fi-Menü.
+```
+
+### Sprachansagen-Ducking für das interne Navi
+* Sprachansagen des internen Navis (*„In 300 m rechts abbiegen“*) werden über den Audio-Rückkanal des Front-Nodes digital an den OMB Audio-DSP übertragen.
+* Der DSP führt automatisches Raised-Cosine Ducking ($-12\,\text{dB}$) auf der Helm-Musik aus, blendet die Harley-Naviansage ein und fährt die Musik danach sanft wieder hoch.
 
 ---
 

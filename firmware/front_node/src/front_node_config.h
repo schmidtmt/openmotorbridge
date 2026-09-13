@@ -46,6 +46,9 @@
 #define COCKPIT_WIFI_AP_IP          "192.168.4.1"
 #define COCKPIT_WIFI_AP_GW          "192.168.4.1"
 #define COCKPIT_WIFI_AP_NETMASK     "255.255.255.0"
+#define COCKPIT_WIFI_IP_RIDER_PHONE "192.168.4.10"
+#define COCKPIT_WIFI_IP_PAX_PHONE   "192.168.4.11"
+#define COCKPIT_WIFI_IP_SKYLINE_OS  "192.168.4.20"
 
 // Packet Types
 enum FrontNodePacketType : uint8_t {
@@ -66,6 +69,8 @@ enum FrontNodePacketType : uint8_t {
     PKT_TYPE_CMD_UNBIND      = 0x13,   // Manual unpair / clear NVS binding command
     PKT_TYPE_CMD_AUX_LIGHT   = 0x14,   // Central Box / PWA -> Front Node: Set Aux Light state (Off, On, Strobe)
     PKT_TYPE_CMD_CAN_TERM    = 0x15,   // Central Box -> Front Node: Set CAN Termination Relay state
+    PKT_TYPE_CMD_WIFI_CONFIG = 0x16,   // Central Box / PWA -> Front Node: Set SSID, WPA2 Pass, Uplink
+    PKT_TYPE_WIFI_STATUS     = 0x17,   // Front Node -> Central Box / PWA: Live AP status & client table
     PKT_TYPE_OTA_BEGIN       = 0x20,
     PKT_TYPE_OTA_CHUNK       = 0x21,
     PKT_TYPE_OTA_FINISH      = 0x22
