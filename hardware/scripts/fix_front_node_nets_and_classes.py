@@ -162,10 +162,21 @@ def fix_pcb():
     content = re.sub(r'\t\(net_class\s+"[^"]+"[\s\S]*?\n\t\)\n', '', content)
 
     # 5. Build Net Classes S-Expression block
-    power_nets = ["GND", "KL15_12V_SW", "VIN_BUCK", "VCC_5V", "VCC_5V_OTTOCAST", "VCC_3V3", "SW_BUCK", "VBUS_BUCK_OUT", "USB_UP_VBUS"]
+    power_nets = [
+        "GND", "KL15_12V_SW", "+12V_PROT", "+12V_AUX", "VIN_BUCK",
+        "VCC_5V", "VCC_5V_OTTOCAST", "VBUS_PD1_OUT", "VBUS_PD3_OUT", "VCC_3V3",
+        "SW_BUCK", "VBUS_BUCK_OUT", "USB_UP_VBUS", "SW_PD1_BUCK", "SW_PD3_BUCK"
+    ]
     pwr_net_lines = "\n".join([f'\t\t(add_net "{n}")' for n in power_nets])
 
-    usb_diff_nets = ["USB_UP_DP", "USB_UP_DM", "USB_DN1_DP", "USB_DN1_DM", "USB_DN2_DP", "USB_DN2_DM", "USB_SERV_DP", "USB_SERV_DM"]
+    usb_diff_nets = [
+        "USB_UP_DP", "USB_UP_DM",
+        "USB_DN1_DP", "USB_DN1_DM",
+        "USB_DN2_DP", "USB_DN2_DM",
+        "USB_DN3_DP", "USB_DN3_DM",
+        "USB_DN4_DP", "USB_DN4_DM",
+        "USB_SERV_DP", "USB_SERV_DM"
+    ]
     usb_diff_net_lines = "\n".join([f'\t\t(add_net "{n}")' for n in usb_diff_nets])
 
     net_classes_block = f"""\t(net_class "Default" "Standard Signal Net Class"

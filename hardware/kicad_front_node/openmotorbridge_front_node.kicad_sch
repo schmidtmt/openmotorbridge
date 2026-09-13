@@ -6,10 +6,10 @@
 	(paper "A3")
 	(title_block
 		(title "OpenMotorBridge Universal Front Node (Cockpit & Sensor Hub PCBA 05)")
-		(date "2026-09-12")
-		(rev "v2.0")
+		(date "2026-09-13")
+		(rev "v2.1")
 		(company "OpenMotorBridge Open Source Hardware")
-		(comment 1 "ESP32-S3, USB2514B 4-Port Hub, SC8102 USB-PD 20W, Qi 12V, Aux Light, BSD LEDs")
+		(comment 1 "ESP32-S3, USB2514B Hub, Dual SW3526 USB-PD 20W, Qi 12V, Aux Light, BSD LEDs")
 	)
 
 	(global_label "KL15_12V_SW" (shape input) (at 30.0 40.0 180) (effects (font (size 1.27 1.27)) (justify right)))
@@ -20,7 +20,8 @@
 	(global_label "VCC_5V" (shape output) (at 80.0 45.0 0) (effects (font (size 1.27 1.27)) (justify left)))
 	(global_label "VCC_3V3" (shape output) (at 80.0 50.0 0) (effects (font (size 1.27 1.27)) (justify left)))
 	(global_label "VCC_5V_OTTOCAST" (shape output) (at 80.0 55.0 0) (effects (font (size 1.27 1.27)) (justify left)))
-	(global_label "VBUS_PD_OUT" (shape output) (at 80.0 60.0 0) (effects (font (size 1.27 1.27)) (justify left)))
+	(global_label "VBUS_PD1_OUT" (shape output) (at 80.0 60.0 0) (effects (font (size 1.27 1.27)) (justify left)))
+	(global_label "VBUS_PD3_OUT" (shape output) (at 80.0 65.0 0) (effects (font (size 1.27 1.27)) (justify left)))
 
 	(global_label "CAN_H" (shape bidirectional) (at 30.0 70.0 180) (effects (font (size 1.27 1.27)) (justify right)))
 	(global_label "CAN_L" (shape bidirectional) (at 30.0 75.0 180) (effects (font (size 1.27 1.27)) (justify right)))
@@ -34,6 +35,8 @@
 	(global_label "BSD_LED_LEFT" (shape output) (at 80.0 85.0 0) (effects (font (size 1.27 1.27)) (justify left)))
 	(global_label "BSD_LED_RIGHT" (shape output) (at 80.0 90.0 0) (effects (font (size 1.27 1.27)) (justify left)))
 	(global_label "AUX_LIGHT_EN" (shape output) (at 80.0 95.0 0) (effects (font (size 1.27 1.27)) (justify left)))
+	(global_label "USB_DN1_CC" (shape bidirectional) (at 80.0 100.0 0) (effects (font (size 1.27 1.27)) (justify left)))
+	(global_label "USB_DN3_CC" (shape bidirectional) (at 80.0 105.0 0) (effects (font (size 1.27 1.27)) (justify left)))
 
 	(global_label "USB_UP_DP" (shape bidirectional) (at 150.0 40.0 0) (effects (font (size 1.27 1.27)) (justify left)))
 	(global_label "USB_UP_DM" (shape bidirectional) (at 150.0 45.0 0) (effects (font (size 1.27 1.27)) (justify left)))

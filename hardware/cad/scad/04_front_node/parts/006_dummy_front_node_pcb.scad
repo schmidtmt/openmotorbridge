@@ -33,13 +33,13 @@ module dummy_front_node_pcb() {
     }
 
     // 2. South Connectors (6x JST-PH along front rim Y = 0)
-    // J4 (Host), J5 (Phone PD), J6 (CP2AA), J5_MP3 (Glovebox), J6_AUX (Cockpit), J8 (Action-Cam)
+    // J4 (Host 4P), J5 (Phone PD 5P), J6 (CP2AA 4P), J5_MP3 (Glovebox PD 5P), J6_AUX (Cockpit 4P), J8 (Action-Cam 2P)
     color("ghostwhite") {
-        translate([12.5 - 5.0, 0.5, FRONT_NODE_PCB_H]) cube(size=[10.0, 4.5, 7.5], center=false); // J4
-        translate([24.5 - 5.0, 0.5, FRONT_NODE_PCB_H]) cube(size=[10.0, 4.5, 7.5], center=false); // J5
-        translate([36.5 - 5.0, 0.5, FRONT_NODE_PCB_H]) cube(size=[10.0, 4.5, 7.5], center=false); // J6
-        translate([48.5 - 5.0, 0.5, FRONT_NODE_PCB_H]) cube(size=[10.0, 4.5, 7.5], center=false); // J5_MP3
-        translate([60.5 - 5.0, 0.5, FRONT_NODE_PCB_H]) cube(size=[10.0, 4.5, 7.5], center=false); // J6_AUX
+        translate([12.5 - 5.0, 0.5, FRONT_NODE_PCB_H]) cube(size=[10.0, 4.5, 7.5], center=false); // J4 (4-Pin)
+        translate([24.5 - 6.0, 0.5, FRONT_NODE_PCB_H]) cube(size=[12.0, 4.5, 7.5], center=false); // J5 (5-Pin mit CC)
+        translate([36.5 - 5.0, 0.5, FRONT_NODE_PCB_H]) cube(size=[10.0, 4.5, 7.5], center=false); // J6 (4-Pin)
+        translate([48.5 - 6.0, 0.5, FRONT_NODE_PCB_H]) cube(size=[12.0, 4.5, 7.5], center=false); // J5_MP3 (5-Pin mit CC)
+        translate([60.5 - 5.0, 0.5, FRONT_NODE_PCB_H]) cube(size=[10.0, 4.5, 7.5], center=false); // J6_AUX (4-Pin)
         translate([70.5 - 3.0, 0.5, FRONT_NODE_PCB_H]) cube(size=[6.0, 4.5, 7.5], center=false);  // J8 (2-Pin)
     }
 
@@ -82,16 +82,19 @@ module dummy_front_node_pcb() {
             cube(size=[6.0, 6.0, 0.9], center=false);
     }
 
-    // 7. Southchip SC8102 USB-PD Buck (QFN-32)
+    // 7. Dual SW3526 USB-PD 20W Fast Charge Controllers (QFN-28 4x4mm)
     color("darkslategray") {
-        translate([21.0 - 2.5, 30.0 - 2.5, FRONT_NODE_PCB_H])
-            cube(size=[5.0, 5.0, 0.9], center=false);
+        translate([15.0 - 2.0, 23.5 - 2.0, FRONT_NODE_PCB_H])
+            cube(size=[4.0, 4.0, 0.85], center=false); // U5 (PD1 Lenker)
+        translate([21.5 - 2.0, 24.0 - 2.0, FRONT_NODE_PCB_H])
+            cube(size=[4.0, 4.0, 0.85], center=false); // U8 (PD3 Handschuhfach)
     }
 
-    // 8. Power Inductor L1 (4.7 uH Main Choke) & L2 (10 uH PD Choke)
+    // 8. Power Inductors: L1 (Main 5V Buck), L2 (PD1 5x5mm), L3 (PD3 5x5mm)
     color("dimgray") {
-        translate([24.0 - 3.5, 41.0 - 3.5, FRONT_NODE_PCB_H]) cube(size=[7.0, 7.0, 3.0], center=false); // L1
-        translate([21.0 - 3.6, 22.0 - 3.6, FRONT_NODE_PCB_H]) cube(size=[7.3, 7.3, 4.5], center=false); // L2
+        translate([24.0 - 3.5, 41.0 - 3.5, FRONT_NODE_PCB_H]) cube(size=[7.0, 7.0, 3.0], center=false); // L1 (5V System)
+        translate([15.0 - 2.5, 31.5 - 2.5, FRONT_NODE_PCB_H]) cube(size=[5.0, 5.0, 3.0], center=false); // L2 (PD1 Lenker)
+        translate([21.5 - 2.5, 31.5 - 2.5, FRONT_NODE_PCB_H]) cube(size=[5.0, 5.0, 3.0], center=false); // L3 (PD3 Handschuhfach)
     }
 
     // 9. Buffer Capacitor C_BUF (7343 D-Case Polymer)
