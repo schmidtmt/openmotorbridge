@@ -57,11 +57,47 @@ esp_err_t omm_broadcast_siren_alert(void);
 /**
  * @brief Sendet ein LoRa 868 MHz Alarmanlagen-Notrufpaket (TYPE_BIKE_ALARM = 0xFE)
  * Wird ausgelöst bei Erschütterung im Parkmodus oder Werksalarm (bcm_alarm_triggered).
- * @param alarm_source 0x01: OEM BCM Alarm, 0x02: OMB IMU Erschütterung, 0x03: Koffer-Reed
+ * @param alarm_source 0x01: OEM BCM Alarm, 0x02: OMB IMU Erschütterung, 0x03: Koffer-Reed / Kassettenhebeln, 0x04: Test-Alarm
  * @param lat Breitengrad (0.0f = aktuelle GPS Position verwenden)
  * @param lon Längengrad (0.0f = aktuelle GPS Position verwenden)
  */
 esp_err_t omm_broadcast_bike_alarm(uint8_t alarm_source, float lat, float lon);
+
+typedef struct {
+    bool paired;
+    uint8_t pager_mac[6];
+    uint8_t aes_key[16];
+    uint32_t tx_seq;
+    bool buddy_mesh_relay;
+    bool keyfob_present; // Detected within BLE RSSI threshold (> -65 dBm)
+    uint8_t battery_pct;
+    int8_t rssi_dbm;
+} smart_keyfob_state_t;
+
+/**
+ * @brief Koppelt einen neuen 2-in-1 LoRa Smart-Keyfob mit generiertem AES-128 Schlüssel
+ */
+esp_err_t smart_keyfob_pair(const uint8_t *mac, const uint8_t *aes_key);
+
+/**
+ * @brief Sendet einen Test-Alarm an den gekoppelten Smart-Keyfob (LRA Haptik + LED)
+ */
+esp_err_t smart_keyfob_send_test_alert(void);
+
+/**
+ * @brief Aktiviert oder deaktiviert das Weiterleiten des Alarms an das Gruppen-Mesh (Buddy-Alarm)
+ */
+void smart_keyfob_set_buddy_relay(bool enable);
+
+/**
+ * @brief Aktualisiert den BLE-Präsenzstatus des Smart-Keyfobs (Zero-False-Alarm)
+ */
+void smart_keyfob_update_presence(bool present, int8_t rssi, uint8_t battery);
+
+/**
+ * @brief Liefert den aktuellen Status des gekoppelten Smart-Keyfobs
+ */
+smart_keyfob_state_t* smart_keyfob_get_state(void);
 
 /**
  * @brief FreeRTOS Task zur Verarbeitung des UART-Streams von Pod 3 (Core 0)

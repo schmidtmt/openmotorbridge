@@ -214,18 +214,34 @@ struct __attribute__((packed)) OmmEmergencyAlert_t {
 };
 ```
 
-#### Bike-Alarm & Diebstahlwarnpaket (`TYPE_BIKE_ALARM = 0xFE`)
+#### Bike-Alarm & Smart-Keyfob Notrufpaket (`TYPE_BIKE_ALARM = 0xFE`)
+Das Diebstahl- und Sabotagepaket wird bei Erschütterung im Parkmodus, Kofferöffnung oder Kassettenhebeln über SX1262 LoRa 868 MHz (SF11, +22 dBm) mit bis zu 4,5 km Reichweite direkt an den 2-in-1 Smart-Keyfob des Fahrers gesendet.
+
 ```cpp
 struct __attribute__((packed)) OmmBikeAlarmAlert_t {
     uint8_t  packet_type;       // 0xFE = TYPE_BIKE_ALARM
-    uint8_t  alarm_source;      // 0x01: OEM BCM Alarm (Harley/BMW), 0x02: OMB IMU Erschütterung, 0x03: Koffer-Reed
+    uint8_t  alarm_source;      // 0x01: OEM BCM Alarm, 0x02: IMU Erschütterung, 0x03: Kassettenhebeln, 0x04: Test-Alarm
+    uint32_t msg_seq;           // Monoton steigender 32-Bit Nonce (Anti-Replay Schutz)
     uint64_t bike_uid;          // 64-Bit Chip UID des betroffenen Motorrads
     int32_t  park_lat_1e7;      // Letzter bekannter GPS-Parkstandort
     int32_t  park_lon_1e7;
-    uint8_t  battery_soc_pct;   // Ladezustand der internen USV-Zelle
+    uint8_t  battery_soc_pct;   // Ladezustand der internen USV-Zelle (0..100 %)
+    uint8_t  flags;             // Bit 0: Buddy-Mesh-Relay (an Gruppenmitglieder weiterleiten)
+    uint8_t  auth_tag[4];       // 32-Bit Authentifizierungs-Tag (AES-128 GCM keyed)
     uint8_t  crc8_checksum;     // CRC-8/AUTOSAR Prüfsumme
 };
 ```
+
+##### Sicherheits- & Entriegelungskonzept (Smart-Keyfob Token):
+1. **AES-128 GCM Verschlüsselung & Anti-Replay:**
+   * Jeder Smart-Keyfob wird beim ersten Pairing mit einem 128-Bit Pre-Shared Key (PSK) versehen, der sicher im NVS des ESP32-S3 und des Keyfob-Controllers abgelegt ist.
+   * Der monoton steigende `msg_seq` Zähler verhindert Replay-Angriffe durch Funkaufzeichnung.
+2. **Zero-False-Alarm bei Kassettenentnahme:**
+   * Entnimmt der Fahrer eine Wechselkassette mit dem 2-in-1 Smart-Keyfob, registriert die Zentralbox gleichzeitig die unmittelbare BLE-Nahfeldpräsenz des Keyfobs ($d < 1{,}5\,\text{m}$, $\text{RSSI} > -60\,\text{dBm}$).
+   * Das Öffnen der Kassettenwippe wird als legitim erkannt $\rightarrow$ **kein Fehlalarm**.
+   * Wird die Wippe ohne anwesenden Keyfob aufgehebelt, wird sofort ein Prioritäts-Notruf `0xFE` mit `alarm_source = 0x03` ausgelöst.
+3. **Buddy-Alarm (Gruppen-Mesh Weiterleitung):**
+   * Ist das Flag `flags & 0x01` gesetzt, empfangen und quittieren auch benachbarte Motorräder der OMM-Gruppe den Alarm und leiten ihn weiter, falls sich der Fahrer weiter vom Parkplatz entfernt hat.
 
 ---
 

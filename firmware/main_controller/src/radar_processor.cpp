@@ -181,11 +181,39 @@ static void parse_radar_stream(const uint8_t *data, size_t len) {
 
 static bool s_ess_active = false;
 static uint32_t s_ess_start_ms = 0;
+static bool s_ess_enabled = true;
+static float s_ess_threshold_g = -0.60f;
+
+void radar_set_ess_config(bool enabled, float threshold_g) {
+    s_ess_enabled = enabled;
+    if (threshold_g < 0.0f) {
+        s_ess_threshold_g = threshold_g;
+    }
+    ESP_LOGI(TAG, "ESS Configuration: Enabled=%d, Threshold=%.2fg", s_ess_enabled, s_ess_threshold_g);
+}
+
+void radar_trigger_ess_test(void) {
+    ESP_LOGW(TAG, "⚡ Manual ESS Brake Light Test triggered! 4.5 Hz Strobe active for 2500ms.");
+    s_ess_active = true;
+    s_ess_start_ms = esp_log_timestamp();
+
+    // 1. Send 4.5 Hz Strobe to Garmin Varia Taillight via UART2
+    uint8_t varia_strobe_cmd[] = { 0xAA, 0x04, 0x30, 0x02, 0x00 };
+    uart_write_bytes(RADAR_UART_NUM, varia_strobe_cmd, sizeof(varia_strobe_cmd));
+
+    // 2. Trigger Front Node Aux-Light Strobe
+    esp_now_front_node_set_aux_light(2);
+
+    // 3. Highlight Bookmark
+    esp_now_front_node_cam_hilight_tag();
+}
 
 void radar_notify_vehicle_dynamics(float speed_kmh, float accel_x_g) {
+    if (!s_ess_enabled) return;
+
     uint32_t now = esp_log_timestamp();
-    // ESS Trigger: Deceleration a_x < -0.60g (-6.0 m/s^2) and vehicle moving (speed > 20 km/h)
-    if (accel_x_g < -0.60f && speed_kmh > 20.0f) {
+    // ESS Trigger: Deceleration a_x < threshold (-0.45g .. -0.75g) and vehicle moving (speed > 20 km/h)
+    if (accel_x_g < s_ess_threshold_g && speed_kmh > 20.0f) {
         if (!s_ess_active) {
             s_ess_active = true;
             s_ess_start_ms = now;

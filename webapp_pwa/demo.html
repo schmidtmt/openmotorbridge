@@ -1950,6 +1950,50 @@
                             </label>
                         </div>
                     </section>
+
+                    <!-- 5. 2-in-1 LoRa Smart-Keyfob (Alarm-Pager & N52 Kassetten-Key) -->
+                    <section class="card" id="card-device-smart-keyfob">
+                        <div class="card-header">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 1.2rem;">📟</span>
+                                <span class="card-title" data-i18n="device_smart_keyfob_title">LoRa Smart-Keyfob (Pager &amp; Key)</span>
+                            </div>
+                            <span class="card-badge badge-green" id="badge-keyfob-status">Gekoppelt &amp; Bereit</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">Hardware-Rolle:</span>
+                            <span style="font-weight: 700; color: var(--accent-orange);">2-in-1: Alarm-Pager + N52 Magnetschlüssel</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">Verschlüsselung / Auth:</span>
+                            <span style="font-weight: 600; color: var(--accent-cyan);" id="val-keyfob-crypto">AES-128 GCM • Anti-Replay Seq #1042</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">BLE Nahfeld-Präsenz:</span>
+                            <span style="font-weight: 700; color: var(--accent-green);" id="val-keyfob-presence">🟢 Am Bike erkannt (-58 dBm, &lt; 2m)</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">Akku &amp; MagSafe Dock:</span>
+                            <span style="font-weight: 700;" id="val-keyfob-battery">92 % (LiPo Puffer) • Qi Dock Bereit</span>
+                        </div>
+                        <div class="stat-sub" style="font-size: 0.76rem; color: var(--text-muted); margin-top: 6px;">
+                            🛡️ <strong>Zero-False-Alarm:</strong> Kassettenentnahme mit anwesendem Keyfob wird als legitim erkannt. Hebelversuche ohne Keyfob lösen stummen LoRa 868 MHz Pager-Alarm aus.
+                        </div>
+                        <div style="display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap;">
+                            <button id="btn-keyfob-test-alarm" class="btn-secondary" style="flex: 1; padding: 7px 12px; font-size: 0.78rem; border-color: rgba(255, 69, 58, 0.4); color: var(--accent-red);" title="Löst einen Test-Alarm mit LRA-Vibrationsmuster auf dem Pager aus">
+                                🔔 <span data-i18n="btn_keyfob_test">Test-Alarm (LRA)</span>
+                            </button>
+                            <button id="btn-keyfob-pair" class="btn-secondary" style="flex: 1; padding: 7px 12px; font-size: 0.78rem; border-color: rgba(0, 242, 254, 0.4); color: var(--accent-cyan);" title="Generiert einen neuen AES-128 GCM Schlüssel und koppelt den Pager">
+                                🔑 <span data-i18n="btn_keyfob_pair">Pager neu koppeln</span>
+                            </button>
+                        </div>
+                        <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border-subtle);">
+                            <label style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; cursor: pointer;">
+                                <input type="checkbox" id="chk-keyfob-buddy-relay" checked>
+                                <span>👥 <strong>Buddy-Alarm:</strong> Diebstahlwarnung bei Alarm im Gruppen-Mesh teilen</span>
+                            </label>
+                        </div>
+                    </section>
                 </div>
             </div>
 
@@ -2091,6 +2135,66 @@
                         <div class="stat-row">
                             <span class="stat-sub">6-Achs IMU Dynamik:</span>
                             <span style="font-weight: 700;">Bosch BMI088 (Schräglage & EKF Dead-Reckoning)</span>
+                        </div>
+                    </section>
+
+                    <!-- 5. Sicherheits-Lichtmanagement (ESS Notbremsblinken & Front-Zusatzlicht J11) -->
+                    <section class="card" id="card-device-safety-lighting">
+                        <div class="card-header">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 1.2rem;">💡</span>
+                                <span class="card-title" data-i18n="device_safety_lighting_title">Sicherheits-Lichtmanagement</span>
+                            </div>
+                            <span class="card-badge badge-orange" id="badge-lighting-status">ESS Bereit (-0.60g)</span>
+                        </div>
+                        
+                        <!-- ESS Emergency Stop Signal -->
+                        <div style="padding: 10px 12px; background: rgba(0,0,0,0.25); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); margin-bottom: 12px;">
+                            <div style="display: justify; justify-content: space-between; align-items: center; margin-bottom: 8px; display: flex;">
+                                <strong style="font-size: 0.85rem; color: var(--accent-orange);">⚡ ESS Notbremsblinken (4.5 Hz Strobe)</strong>
+                                <label class="switch-custom" style="position: relative; display: inline-block; width: 36px; height: 20px; margin: 0;">
+                                    <input type="checkbox" id="chk-ess-master" checked style="opacity: 0; width: 0; height: 0;">
+                                    <span class="slider-round" style="position: absolute; cursor: pointer; inset: 0; background-color: var(--accent-green); border-radius: 20px; transition: .25s;"></span>
+                                </label>
+                            </div>
+                            <div style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 8px;">
+                                Stroboskopiert bei starker Bremsverzögerung Garmin Varia (UART2) &amp; RESERVE_GPIO_B (Cosmo Moto Zusatzbremslicht).
+                            </div>
+                            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                                <div style="flex: 1; min-width: 140px;">
+                                    <div class="control-label" style="margin-bottom: 4px; font-size: 0.75rem;"><span>Ansprechschwelle (Verzögerung):</span></div>
+                                    <select id="select-ess-threshold" class="select-custom" style="padding: 6px 10px; font-size: 0.78rem; width: 100%;">
+                                        <option value="-45">-0.45 g (Frühzeitig / Sport)</option>
+                                        <option value="-60" selected>-0.60 g (Standard / Empfohlen)</option>
+                                        <option value="-75">-0.75 g (Spät / Notbremsung)</option>
+                                    </select>
+                                </div>
+                                <button id="btn-trigger-ess-test" class="btn-secondary" style="padding: 7px 14px; font-size: 0.78rem; align-self: flex-end; border-color: rgba(255, 69, 58, 0.4); color: var(--accent-red);" title="Löst einen 2.5 Sekunden Notbremsblitz auf Rücklicht und Zusatzleuchte aus">
+                                    ⚡ Bremsblitz-Test
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Front Auxiliary Light J11 (Front Node TPS1H100) -->
+                        <div style="padding: 10px 12px; background: rgba(0,0,0,0.25); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                <strong style="font-size: 0.85rem; color: var(--accent-blue);">🔦 Front-Zusatzscheinwerfer (J11 an Front-Node)</strong>
+                                <span class="card-badge badge-blue" id="badge-front-aux-status">AUTO-STROBE</span>
+                            </div>
+                            <div style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 8px;">
+                                Lastschalter TPS1H100 (bis 4.5A) für LED-Nebelscheinwerfer oder Tagfahrlicht.
+                            </div>
+                            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                                <button id="btn-aux-mode-off" class="btn-secondary" style="flex: 1; padding: 6px 10px; font-size: 0.76rem;">
+                                    AUS
+                                </button>
+                                <button id="btn-aux-mode-on" class="btn-secondary" style="flex: 1; padding: 6px 10px; font-size: 0.76rem;">
+                                    DAUER-EIN
+                                </button>
+                                <button id="btn-aux-mode-auto" class="btn-secondary active" style="flex: 1.4; padding: 6px 10px; font-size: 0.76rem; border-color: var(--accent-cyan); color: var(--accent-cyan);">
+                                    AUTO-STROBE BEI ESS
+                                </button>
+                            </div>
                         </div>
                     </section>
                 </div>

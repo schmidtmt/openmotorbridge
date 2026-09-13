@@ -17,6 +17,7 @@
 #include "gnss_omm_bridge.h"
 #include "tpms_ble_scanner.h"
 #include "bluetooth_audio_manager.h"
+#include "radar_processor.h"
 
 static const char *TAG = "BLE_SERVER";
 
@@ -110,6 +111,27 @@ static int gatt_svr_chr_access_omb(uint16_t conn_handle, uint16_t attr_handle,
             ESP_LOGI(TAG, "GATT: Radar Power set to %s", (cmd[1] != 0) ? "ACTIVE" : "STANDBY");
         } else if (cmd[0] == 0x2A) { // Mirror BSD LEDs Toggle & Test Flash
             ESP_LOGI(TAG, "GATT: Mirror BSD LEDs set to %s (Test: %d)", (cmd[1] != 0) ? "ENABLED" : "DISABLED", cmd[2]);
+        } else if (cmd[0] == 0x2B) { // Smart-Keyfob: Pair & Key Exchange
+            ESP_LOGI(TAG, "GATT: Smart-Keyfob Pair command received");
+            if (len >= 7) {
+                smart_keyfob_pair(&cmd[1], (len >= 23) ? &cmd[7] : nullptr);
+            }
+        } else if (cmd[0] == 0x2C) { // Smart-Keyfob: Trigger Test Alert (Haptic/Chime)
+            ESP_LOGI(TAG, "GATT: Smart-Keyfob Test Alert requested");
+            smart_keyfob_send_test_alert();
+        } else if (cmd[0] == 0x2D) { // Smart-Keyfob: Set Buddy Mesh Relay
+            ESP_LOGI(TAG, "GATT: Smart-Keyfob Buddy Relay set to %d", cmd[1]);
+            smart_keyfob_set_buddy_relay(cmd[1] != 0);
+        } else if (cmd[0] == 0x2E) { // Safety Lighting: ESS Emergency Stop Signal Config
+            bool ess_enable = (cmd[1] != 0);
+            float threshold_g = ((int8_t)cmd[2] < 0) ? ((int8_t)cmd[2] / 100.0f) : -0.60f;
+            radar_set_ess_config(ess_enable, threshold_g);
+            if (cmd[3] != 0) { // Bit/byte 3 = Test Strobe Trigger
+                radar_trigger_ess_test();
+            }
+        } else if (cmd[0] == 0x2F) { // Safety Lighting: Front Aux Light Mode
+            ESP_LOGI(TAG, "GATT: Front Aux Light Mode set to %d", cmd[1]);
+            esp_now_front_node_set_aux_light(cmd[1]);
         }
         return 0;
     }

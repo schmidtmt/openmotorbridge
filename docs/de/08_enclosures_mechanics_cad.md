@@ -836,6 +836,23 @@ Auf frei zugänglichen Reiseenduros und bei Zwischenstopps auf Fernreisen müsse
    * Herkömmliche Zylinderschlösser oder Schieberiegel versagen im Geländeeinsatz schnell durch eindringenden Staub, Schlamm oder Frost.
    * Der magnetische Kassettenverschluss besitzt keinerlei Öffnungen nach außen, ist vollständig gekapselt und arbeitet wartungsfrei unter härtesten Witterungsbedingungen.
 
+#### 9.4.1 OpenMotorBridge 2-in-1 Smart-Keyfob (`smart_keyfob_pager.scad`)
+
+Um zu verhindern, dass der Fahrer neben dem Motorradschlüssel einen separaten Magnetschlüssel und einen Pager mitführen muss, integriert der **OpenMotorBridge 2-in-1 Smart-Keyfob** (`smart_keyfob_pager.scad`) beide Funktionen in einem kompakten, ergonomischen Gehäuse:
+
+* **Abmessungen & Werkstoffe:** $58 \times 34 \times 13\,\text{mm}$, gefertigt aus hochfestem PA12-MJF (Anthrazit) mit umlaufendem, stoßabsorbierendem TPU-Kantenschutz (Orange `#ff9f0a`) und robuster 316L-Edelstahlöse für den Motorrad-Schlüsselbund.
+* **Integrierter N52 Neodym-Schlüsselblock ($20 \times 10 \times 5\,\text{mm}$):**
+  * Auf der schmalen Längsseite formschlüssig eingepresst und mit einem taktilen Nordpol-Ausrichtungssteg versehen.
+  * Tritt der Keyfob an den $X = 64\,\text{mm}$ Zielkreis des Pod-Gehäuses heran, zieht das konzentrierte B-Feld ($B_r \approx 1{,}48\,\text{T}$) den innenliegenden Stahlanker an und entriegelt die Auswerferfedern.
+* **0,5 mm Weicheisen- / Mu-Metall-Abschirmblech (Flux Shield):**
+  * Direkt hinter dem N52-Magneten platziert. Schirmt die interne Elektronik (SX1262 LoRa-Transceiver, Nordic BLE-SoC, 180 mAh LiPo-Pouch-Akku) hermetisch gegen magnetische Sättigung ab und lenkt den magnetischen Fluss zu 100 % nach außen auf die Gehäusewand.
+* **Stummer Alarm-Pager mit LRA-Vibrationsmotor:**
+  * Ein $\varnothing 10 \times 3\,\text{mm}$ Linear Resonant Actuator (LRA) warnt den Fahrer bei Erschütterung, unbefugtem Aufbocken oder Kassettenhebeln lautlos über haptische Vibrationsmuster in der Jackentasche.
+* **MagSafe / Qi Induktiv-Ladeaufnahme:**
+  * Auf der Rückseite ist ein magnetischer Ausrichtungsring ($\varnothing 28\,\text{mm}$ außen, $\varnothing 22\,\text{mm}$ innen) integriert. Der Keyfob rastet während der Fahrt auf dem Cockpit-Dock (PCBA 06) magnetisch ein und wird induktiv nachgeladen.
+* **Zero-False-Alarm & Präsenz-Token:**
+  * Durch den Nahfeld-BLE-Beacon des Keyfobs erkennt OpenMotorBridge, dass der rechtmäßige Besitzer die Kassette entnimmt. Ein Diebstahlalarm wird nur ausgelöst, wenn ein Hebelversuch am Kassettenverschluss ohne anwesenden Keyfob registriert wird.
+
 ---
 
 ### 9.5 Universal Kofferdeckel-Dock (`saddlebag_lid_dock.scad`)

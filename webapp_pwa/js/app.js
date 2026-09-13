@@ -2069,6 +2069,154 @@ function setupDeviceHubUi() {
         });
     }
 
+    // 5. LoRa Smart-Keyfob (Pager & Kassetten-Key) Listeners
+    const btnKeyfobTest = document.getElementById('btn-keyfob-test-alarm');
+    if (btnKeyfobTest) {
+        btnKeyfobTest.addEventListener('click', () => {
+            btnKeyfobTest.disabled = true;
+            btnKeyfobTest.innerHTML = '⏳ <span>Sende Ping...</span>';
+            if (state.bleServer) {
+                sendBleControlCommand(new Uint8Array([0x2C]));
+            }
+            setTimeout(() => {
+                btnKeyfobTest.disabled = false;
+                btnKeyfobTest.innerHTML = '🔔 <span data-i18n="btn_keyfob_test">Test-Alarm (LRA)</span>';
+                showToast(state.lang === 'de' 
+                    ? '📟 Test-Alarm an Smart-Keyfob gesendet: LRA-Vibrationsmuster & LED aktiv!' 
+                    : '📟 Test alert sent to Smart-Keyfob: LRA haptic active!', 'success', 3500);
+            }, 800);
+        });
+    }
+
+    const btnKeyfobPair = document.getElementById('btn-keyfob-pair');
+    if (btnKeyfobPair) {
+        btnKeyfobPair.addEventListener('click', () => {
+            btnKeyfobPair.disabled = true;
+            btnKeyfobPair.innerHTML = '⏳ <span>Kopple & AES-Handshake...</span>';
+            const valCrypto = document.getElementById('val-keyfob-crypto');
+            const valPres = document.getElementById('val-keyfob-presence');
+            setTimeout(() => {
+                btnKeyfobPair.disabled = false;
+                btnKeyfobPair.innerHTML = '🔑 <span data-i18n="btn_keyfob_pair">Pager neu koppeln</span>';
+                if (valCrypto) {
+                    valCrypto.textContent = 'AES-128 GCM (Neuer PSK) • Anti-Replay Seq #1';
+                }
+                if (valPres) {
+                    valPres.textContent = '🟢 Am Bike erkannt (-54 dBm, < 1m)';
+                }
+                if (state.bleServer) {
+                    const pairPayload = new Uint8Array(23);
+                    pairPayload[0] = 0x2B;
+                    pairPayload.set([0x44, 0x17, 0x93, 0x88, 0xAF, 0x01], 1);
+                    crypto.getRandomValues(pairPayload.subarray(7));
+                    sendBleControlCommand(pairPayload);
+                }
+                showToast(state.lang === 'de' 
+                    ? '✓ Smart-Keyfob erfolgreich neu gekoppelt! AES-128 GCM Schlüssel im NVS gesichert.' 
+                    : '✓ Smart-Keyfob paired! AES-128 GCM key stored.', 'success', 4000);
+            }, 1500);
+        });
+    }
+
+    const chkKeyfobBuddy = document.getElementById('chk-keyfob-buddy-relay');
+    if (chkKeyfobBuddy) {
+        chkKeyfobBuddy.addEventListener('change', (e) => {
+            if (state.bleServer) {
+                sendBleControlCommand(new Uint8Array([0x2D, e.target.checked ? 1 : 0]));
+            }
+            showToast(e.target.checked 
+                ? (state.lang === 'de' ? '👥 Buddy-Alarm aktiviert: Alarm wird im 2.4 GHz & LoRa Gruppen-Mesh verteilt' : '👥 Buddy-Alarm enabled')
+                : (state.lang === 'de' ? 'Buddy-Alarm deaktiviert (Nur lokaler Pager)' : 'Buddy-Alarm disabled'), 'info', 3000);
+        });
+    }
+
+    // 6. Sicherheits-Lichtmanagement Listeners
+    const chkEssMaster = document.getElementById('chk-ess-master');
+    const selectEssThresh = document.getElementById('select-ess-threshold');
+    const badgeLighting = document.getElementById('badge-lighting-status');
+
+    function updateEssConfig(triggerTest = 0) {
+        const enabled = chkEssMaster ? chkEssMaster.checked : true;
+        const threshVal = selectEssThresh ? parseInt(selectEssThresh.value, 10) : -60;
+        if (badgeLighting) {
+            badgeLighting.textContent = enabled ? `ESS Bereit (${(threshVal/100).toFixed(2)}g)` : 'ESS Deaktiviert';
+            badgeLighting.className = enabled ? 'card-badge badge-orange' : 'card-badge';
+            if (!enabled) {
+                badgeLighting.style.background = 'rgba(255,255,255,0.08)';
+                badgeLighting.style.color = 'var(--text-muted)';
+            } else {
+                badgeLighting.style.background = '';
+                badgeLighting.style.color = '';
+            }
+        }
+        if (state.bleServer) {
+            sendBleControlCommand(new Uint8Array([0x2E, enabled ? 1 : 0, threshVal & 0xFF, triggerTest]));
+        }
+    }
+
+    if (chkEssMaster) {
+        chkEssMaster.addEventListener('change', () => {
+            updateEssConfig(0);
+            showToast(chkEssMaster.checked 
+                ? (state.lang === 'de' ? '⚡ Notbremsblinken (ESS 4.5 Hz) aktiviert' : '⚡ ESS Emergency Brake Strobe enabled')
+                : (state.lang === 'de' ? 'Notbremsblinken (ESS) deaktiviert' : 'ESS disabled'), 'info', 2500);
+        });
+    }
+
+    if (selectEssThresh) {
+        selectEssThresh.addEventListener('change', () => {
+            updateEssConfig(0);
+            showToast(state.lang === 'de' 
+                ? `⚡ ESS Ansprechschwelle auf ${(parseInt(selectEssThresh.value, 10)/100).toFixed(2)} g gesetzt`
+                : `⚡ ESS threshold set`, 'info', 2500);
+        });
+    }
+
+    const btnTriggerEss = document.getElementById('btn-trigger-ess-test');
+    if (btnTriggerEss) {
+        btnTriggerEss.addEventListener('click', () => {
+            btnTriggerEss.disabled = true;
+            if (badgeLighting) {
+                badgeLighting.className = 'card-badge badge-red';
+                badgeLighting.textContent = '4.5 Hz STROBE TEST';
+            }
+            updateEssConfig(1);
+            showToast(state.lang === 'de' 
+                ? '⚡ 2.5s Bremsblitz aktiv: Garmin Varia (UART2) & Front-Aux Stroboskop!' 
+                : '⚡ 2.5s Brake Strobe Active!', 'warning', 3000);
+            setTimeout(() => {
+                btnTriggerEss.disabled = false;
+                updateEssConfig(0);
+            }, 2500);
+        });
+    }
+
+    const btnAuxOff = document.getElementById('btn-aux-mode-off');
+    const btnAuxOn = document.getElementById('btn-aux-mode-on');
+    const btnAuxAuto = document.getElementById('btn-aux-mode-auto');
+    const badgeFrontAux = document.getElementById('badge-front-aux-status');
+
+    function setFrontAuxMode(mode) {
+        [btnAuxOff, btnAuxOn, btnAuxAuto].forEach(b => { if (b) b.classList.remove('active'); });
+        if (mode === 0) {
+            if (btnAuxOff) btnAuxOff.classList.add('active');
+            if (badgeFrontAux) { badgeFrontAux.textContent = 'AUS'; badgeFrontAux.className = 'card-badge'; badgeFrontAux.style.background = 'rgba(255,255,255,0.08)'; badgeFrontAux.style.color = 'var(--text-muted)'; }
+        } else if (mode === 1) {
+            if (btnAuxOn) btnAuxOn.classList.add('active');
+            if (badgeFrontAux) { badgeFrontAux.textContent = 'DAUER-EIN'; badgeFrontAux.className = 'card-badge badge-green'; badgeFrontAux.style.background = ''; badgeFrontAux.style.color = ''; }
+        } else if (mode === 2) {
+            if (btnAuxAuto) btnAuxAuto.classList.add('active');
+            if (badgeFrontAux) { badgeFrontAux.textContent = 'AUTO-STROBE'; badgeFrontAux.className = 'card-badge badge-blue'; badgeFrontAux.style.background = ''; badgeFrontAux.style.color = ''; }
+        }
+        if (state.bleServer) {
+            sendBleControlCommand(new Uint8Array([0x2F, mode]));
+        }
+    }
+
+    if (btnAuxOff) btnAuxOff.addEventListener('click', () => setFrontAuxMode(0));
+    if (btnAuxOn) btnAuxOn.addEventListener('click', () => setFrontAuxMode(1));
+    if (btnAuxAuto) btnAuxAuto.addEventListener('click', () => setFrontAuxMode(2));
+
     // Initialize CAN Sniffer Engine
     setupCanSnifferUi();
 }

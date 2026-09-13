@@ -78,14 +78,32 @@ Das Dashboard ist eine vollständig autarke Progressive Web App (PWA) basierend 
 * **GPX-Export & Tour-Replay:** Download in 4 spezialisierten Profilen (Moto-Navi Shaping, Video-Sync, Clean Track, Raw EKF) sowie visuelles Abspielen der Tour im Cockpit-Radar.
 * **WebDAV-Konfiguration:** Zugangsdaten für automatisches Hochladen zu Nextcloud/Synology.
 
-### 2.5 Tab 5: Hardware & Reserve (`#tab-hardware`)
-* **Front-Knoten Diagnostik & Pairing-Management:** 
-  * Anzeige der Hardware-Spezifikationen (ESP32-S3, USB2514B 4-Port Hub, SC8102 USB-PD 20W, TPS2051B, TCAN334G CAN-FD, Knowles MEMS).
-  * **1:1 Binding-Status:** Gepaarte MAC-Adresse, ESP-NOW Link-Zustand (`LINKED`, `OFFLINE`) und Signalpegel (RSSI).
-  * **Interaktiver Koppel-Button:** `[Neuen Front-Knoten koppeln / Rescue-Übernahme]` – triggert den nahfeldbasierten Proximity-Rescue Beacon ($\text{RSSI} > -42\,\text{dBm}$) bei Tausch der Zentralbox.
-  * Button zur Prüfung und Durchführung von **OTA-Firmware-Updates**.
-* **Reserve I/O:** Status und Toggle-Schalter für HD26 Pin 25 (`RESERVE_GPIO_A`) und Pin 26 (`RESERVE_GPIO_B`).
-* **Zentralbox Soft-Reboot:** Gesteuerter Warmstart des Hauptsystems.
+### 2.5 Tab 5: Geräte- & Verbindungs-Manager (Device Hub • `#tab-hardware`)
+Der Geräte-Manager ist in zwei klar voneinander getrennte Bereiche strukturiert:
+
+#### Teil 1: Persönliche Geräte (Fahrer & Sozius)
+* **Fahrer- & Sozius-Smartphones:** WebBLE Verbindungsstatus, Signalstärke (RSSI), 1-Klick Kaltstart des CarPlay/AA CP2AA-Dongles (TPS2051B VBUS Power-Cycle), Audio-Share Toggle für Sozius.
+* **Dual-Headset Hub (Fahrer & Sozius):** Bluetooth Audio Manager für Schuberth/Sena, Cardo DMC und Bluetooth-Headsets (LC3/aptX Codec, Akkustand, Suchlauf).
+* **Dual Action-Cam Hub:** Verwaltung von GoPro (Hero 11/12/13), Insta360 (X3/X4/Ace) und DJI Action-Cams mit Auto-REC, Tankpausen-Filter und PTT-HiLight Marker.
+* **2-in-1 LoRa Smart-Keyfob (Alarm-Pager & Kassetten-Key):**
+  * AES-128 GCM Verschlüsselungs-Status & Monotonic Sequence Nonce.
+  * BLE Nahfeld-Präsenzerkennung (Zero-False-Alarm bei legitimer Kassettenentnahme).
+  * `[Test-Alarm (LRA)]`: Sendet einen haptischen Test-Alarm an den Pager.
+  * `[Pager neu koppeln]`: Neuer kryptografischer Schlüssel-Handshake via Dock/BLE.
+  * `[Buddy-Alarm]`: Checkbox zum automatischen Weiterleiten von Diebstahlalarmen ins Gruppen-Mesh.
+
+#### Teil 2: Motorrad & OpenMotorBridge Systemknoten
+* **Universal Front-Node (Cockpit-Hub • PCBA 05):** ESP-NOW Funklink, Wi-Fi SoftAP Fallback Toggle, Proximity-Rescue Beacon.
+* **Heck-Radar & Spiegel-Totwinkel-LEDs (BSD):** Master-Schalter für Radar-Power und Spiegel-Totwinkel-LEDs (Header `J9` via MOSFET `Q1`) mit 2-Sekunden-Testblitz.
+* **Sicherheits-Lichtmanagement:**
+  * **ESS Notbremsblinken:** Master-Toggle für 4,5 Hz Stroboskop-Warnblinken (Garmin Varia UART2 & `RESERVE_GPIO_B`), konfigurierbare Verzögerungsschwelle ($-0{,}45\,\text{g}$, $-0{,}60\,\text{g}$, $-0{,}75\,\text{g}$) und Button `[Bremsblitz-Test]`.
+  * **Front-Zusatzscheinwerfer (J11 an Front-Node via TPS1H100):** Modi `[AUS]`, `[DAUER-EIN]` und `[AUTO-STROBE BEI ESS]`.
+* **Reifendruck-Kontrollsystem (TPMS):** Live-Druck/Temperatur aus BLE GAP Ventilkappen (FOBO / Deelife) & Anlernassistent.
+* **Fahrzeug-CAN Profil-Manager & Live Hex Sniffer:** Community-Profil-Auswahl (Harley, BMW, KTM, Ducati, OBD2) und interaktiver Sniffer mit ID-Filterung und CSV-Export.
+
+### 2.6 Architektonische Trennung: Echte Hardware (`index.html`) vs. Simulations-Suite (`demo.html`)
+* **`index.html` (Produktions-Cockpit):** Reine Instrumentenanzeige für den echten Motorradbetrieb (`window.OMB_MODE = 'hardware'`). Vollständig bereinigt von Simulationsbuttons und Teststrecken; alle Kacheln zeigen im unverbundenen Zustand sauber `Standby` / `--`.
+* **`demo.html` (Interaktive Simulations-Suite):** Dedizierte Präsentations- und HIL-Testbench (`window.OMB_MODE = 'demo'`) mit Sticky-Banner, Streckenauswahl (Wil SG $\rightarrow$ Rickenpass, Kerenzerberg), eCall-Crashtest und ausklappbarem **Live-Injektionspanel** (Echtzeit-Schieberegler für Tempo, Schräglage, Heckradar-Distanz, TPMS und Notbremsung).
 
 ---
 

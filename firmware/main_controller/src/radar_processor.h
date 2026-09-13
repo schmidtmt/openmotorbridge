@@ -77,6 +77,16 @@ void radar_notify_vehicle_dynamics(float speed_kmh, float accel_x_g);
  */
 bool radar_is_ess_active(void);
 
+/**
+ * @brief Konfiguriert das ESS Notbremsblinken (Aktivierung & Schwellenwert in g)
+ */
+void radar_set_ess_config(bool enabled, float threshold_g);
+
+/**
+ * @brief Löst einen 2.5-Sekunden Test-Bremsblitz aus (Garmin Varia 4.5 Hz + Front Aux-Light)
+ */
+void radar_trigger_ess_test(void);
+
 #ifdef __cplusplus
 }
 #endif
