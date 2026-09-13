@@ -373,6 +373,30 @@ OpenMotorBridge löst das Problem über den Dual-Mode SoftAP des Front-Nodes (PC
 * Sprachansagen des internen Navis (*„In 300 m rechts abbiegen“*) werden über den Audio-Rückkanal des Front-Nodes digital an den OMB Audio-DSP übertragen.
 * Der DSP führt automatisches Raised-Cosine Ducking ($-12\,\text{dB}$) auf der Helm-Musik aus, blendet die Harley-Naviansage ein und fährt die Musik danach sanft wieder hoch.
 
+### 7.1 Architektur-Analyse & Zukunfts-Roadmap: PWA vs. Native Companion-App & Tailscale-Koexistenz
+
+Bei der Konzeption von mobilen Datenbrücken für Motorrad-Cockpits treten in der Praxis typische Stolpersteine mobiler Betriebssysteme (iOS & Android) zutage. Folgende Erkenntnisse sind in die OpenMotorBridge-Architektur eingeflossen:
+
+#### 1. Warum die Progressive Web App (PWA) die überlegene Basis ist
+* **Unabhängigkeit & 0 € Betriebskosten:** Eine native iOS-App erfordert das kostenpflichtige *Apple Developer Program* (99 $/Jahr Dauer-Abo) sowie restriktive App-Store-Prüfprozesse bei jedem Firmware-Update.
+* **Store-freie Bereitstellung:** Die OpenMotorBridge PWA wird direkt aus dem internen Flash des Front-Node (ESP32-S3) via HTTP serviert. Sie funktioniert sofort im Browser jedes Endgeräts (iPhone, Android, Tablet), ohne Installation und ohne Zensur.
+
+#### 2. Das "Single-VPN"-Dilemma (Tailscale & Smart-Home Koexistenz)
+* Auf modernen Smartphones (iOS `NEPacketTunnelProvider` und Android `VpnService`) darf per Systemrichtlinie nur **ein einziger aktiver VPN-Tunnel** existieren.
+* Viele Motorradfahrer betreiben auf dem Smartphone dauerhaft **Tailscale** oder WireGuard (z. B. für die *Homesphere*-App, Home Assistant, Garagentorsteuerung oder private Kameras).
+* Würde OpenMotorBridge einen L3-WireGuard-Tunnel zwischen Front-Node und Smartphone aufbauen, würde das Betriebssystem die bestehende Tailscale-Verbindung sofort trennen.
+
+#### 3. Perspektivischer Ausblick: Layer-5 SOCKS5/Stream Relay (Companion-App)
+Sollte künftig eine native OpenMotorBridge Companion-App (iOS/Android) bereitgestellt werden, löst sie das Routing elegant ohne VPN-Konflikte:
+* **Layer 5 statt Layer 3:** Statt roher IP-Pakete (L3, was Raw-Sockets und Root-Rechte erfordern würde) terminiert der Front-Node TCP-Verbindungen (Port 80/443) lokal und leitet die opaken TLS-Byte-Streams über unprivilegierte Standard-Sockets (`connect()`) an die Smartphone-App weiter.
+* **Kein VPN-Slot belegt:** Da die App gewöhnliche POSIX-Sockets über das Mobilfunknetz öffnet, bleibt Tailscale zu 100 % ungestört aktiv.
+* **Offizielle Store-Konformität via BLE:** Über den Hintergrundmodus `UIBackgroundModes = bluetooth-central` bleibt die App auf iOS legitim im Hintergrund aktiv, solange die Zündung des Motorrads eingeschaltet und die BLE-Verbindung zu OpenMotorBridge aktiv ist (analoge Architektur zu Garmin Smartphone Link und Sena).
+
+#### 4. Die Alltags-Praxis für Skyline OS
+* **95 % aller Fahrten:** Fahrer nutzen Apple CarPlay oder Android Auto über den USB-Port `J4` – Navigation, Spotify und Staudaten laufen nativ auf dem Smartphone.
+* **Internes Werks-Navi (HERE):** Benötigt der Fahrer Live-Traffic im originalen Harley-Display, genügt das Aktivieren des **Persönlichen Hotspots** am Smartphone (wo Tailscale unbeeinflusst weiterläuft). Der Front-Node bucht sich per AP+STA Concurrency ein und schleift die Verkehrsdaten per lwIP NAPT transparent durch.
+* **Autarke Alternative (Zukunft):** Für Always-On Diebstahltracking und unabhängiges Internet kann an Port 4 des `USB2514B` Hubs auf PCBA 05 ein kompaktes LTE-M/Cat-1 Modem mit eSIM nachgerüstet werden.
+
 ---
 
 ## 8. Thermomanagement, Kaltstart-Schutz & Hard-Reboot (Automotive Grade)
