@@ -2,11 +2,10 @@
 
 Dieses Dokument spezifiziert die mechanische Konstruktion, das Thermomanagement, das IP67/IP69K-Gehäusedesign, die Kinematik des Auto-Eject-Schnellwechselsystems sowie alle CAD- und STL-Modelle aller Gehäuse-Baugruppen der OpenMotorBridge v8.0:
 1. **Zentrale Steuerbox (Typ A):** 3-teiliges Sandwich-Gehäuse mit Zwischenboden, integrierter Akku-Wanne, stirnseitiger Schnittstellenleiste (HD26, USB-C, RGB-LED) und planarem 4-Layer Kupfer-Wärmespreader.
-2. **Universelle Satelliten-Pods (Typ B):** Baugleiches 5-seitiges Monocoque-Schachtgehäuse für Pod 1, 2 und 3 mit $120^\circ$-V-Nut Rohrbett, M8 6-Pin IP67-Rückanschluss, Schutz-Schottwand und federbelastetem Auto-Eject.
-3. **Modulare Wechselkassetten (Typ C):** Generischer 2-teiliger Universal-Basisschlitten mit asymmetrischer Poka-Yoke Nut-und-Feder-Führung für Sena 50S/60S, Cardo Packtalk Edge/Bold, OMM-Transceiver und hermetische IP67 Blindkassette (Dry Box).
-4. **Heck-Pod 3 & Radar-Ausleger (Typ D):** Strömungsgünstiger Heckbürzel-Transceiver mit dielektrischem Antennenradom für 868 MHz LoRa und Multi-GNSS sowie winkelverstellbarem Halter für Totwinkel-Radar (Garmin Varia).
-5. **Universal Front-Knoten (Typ E):** Ultrakompakter Cockpit- & Sensor-Hub ($98{,}0 \times 68{,}0 \times 25{,}0\,\text{mm}$) für die vergrößerte $82 \times 50\,\text{mm}$ 4-Lagen PCBA 05 mit **4-in-1 Universal-Befestigungssystem** (AMPS, Rohrbügel-Prisma, Silentblöcke, 3M Dual-Lock), getrennten EPDM-Kabelkämmen für USB (Süd) und Fahrzeugleitungen (Nord), Dual-SW3526 20W USB-PD und Knowles MEMS Akustikkanal.
-6. **Fahrzeugspezifische Referenz-Montagekits (Zero-Drill):** Vollständig konstruierte, zerstörungsfreie Bolt-On Montagekits für CVO Road Glide ST (Kit 1), Road King Special (Kit 2), Classic Bagger & Cruiser (Kit 3) sowie Adventure & Touring Enduros (BMW GS, KTM Adventure, Africa Twin – Kit 4).
+2. **Modulares Satelliten-Pod- & Wechselsystem (Typ B & Typ C):** Baugleiches 5-seitiges Monocoque-Schachtgehäuse und generische Wechselkassetten mit $120^\circ$-V-Nut Rohrbett, Dual-Port M8/USB-C, Poka-Yoke Nut-und-Feder-Führung, federbelastetem Auto-Eject und unsichtbarem Neodym-Magnet-Diebstahlschutz.
+3. **Heck-Pod 3 & Radar-Ausleger (Typ D):** Strömungsgünstiger Heckbürzel-Transceiver mit dielektrischem Antennenradom für 868 MHz LoRa und Multi-GNSS sowie winkelverstellbarem Halter für Totwinkel-Radar (Garmin Varia).
+4. **Universal Front-Knoten (Typ E):** Ultrakompakter Cockpit- & Sensor-Hub ($98{,}0 \times 68{,}0 \times 25{,}0\,\text{mm}$) für die vergrößerte $82 \times 50\,\text{mm}$ 4-Lagen PCBA 05 mit **4-in-1 Universal-Befestigungssystem** (AMPS, Rohrbügel-Prisma, Silentblöcke, 3M Dual-Lock), getrennten EPDM-Kabelkämmen für USB (Süd) und Fahrzeugleitungen (Nord), Dual-SW3526 20W USB-PD und Knowles MEMS Akustikkanal.
+5. **Fahrzeugspezifische Referenz-Montagekits (Zero-Drill):** Vollständig konstruierte, zerstörungsfreie Bolt-On Montagekits für CVO Road Glide ST (Kit 1), Road King Special (Kit 2), Classic Bagger & Cruiser (Kit 3) sowie Adventure & Touring Enduros (BMW GS, KTM Adventure, Africa Twin – Kit 4).
 
 ---
 
@@ -141,91 +140,119 @@ Die Gesamtabwärme der Zentralbox liegt im normalen Fahrbetrieb bei lediglich **
 
 ---
 
-## 4. Gehäuse Typ B: Universeller Satelliten-Pod (Pod 1, 2 und 3)
+## 4. Gehäusesystem Typ B & C: Universeller Satelliten-Pod & Modulare Wechselkassetten
 
-Alle 3 Pod-Positionen nutzen dasselbe 5-seitige Monocoque-Schachtgehäuse im erweiterten Envelope ($135{,}0 \times 70{,}0 \times 38{,}0\,\text{mm}$):
+OpenMotorBridge trennt das mechanische Gehäuse der Satelliten in zwei untrennbar aufeinander abgestimmte Systemkomponenten:
+1. **Typ B (Pod-Basisschacht):** Ein zu 100 % baugleiches 5-seitiges Monocoque-Gehäuse ($135{,}0 \times 70{,}0 \times 38{,}0\,\text{mm}$), das dauerhaft am Motorrad verbleibt (an Rahmenrohren, im Kofferdeckel oder am Heckbürzel).
+2. **Typ C (Modulare Wechselkassette):** Ein universeller 2-teiliger Basisschlitten ($116{,}0 \times 58{,}0 \times 28{,}0\,\text{mm}$), der systemspezifische OEM-Funkgeräte (Sena 50S/60S, Cardo Packtalk Edge, Midland, PMR446) oder eine wasserdichte Dry Box aufnimmt und werkzeuglos eingeschoben wird.
 
 ![OpenMotorBridge Satelliten-Pod & Kassetten 3D Anschnitt CAD](../images/cad/pod_cartridge_cutaway_3d.png)
 
 *Abbildung 8.6: Photorealistischer 3D-CAD-Schräganschnitt des Satelliten-Pods mit eingeschobener Wechselkassette. Gut zu erkennen sind die 120°-V-Nut mit EPDM-Spannringen um das Motorrad-Rahmenrohr, die M8 6-Pin-Buchse, die innere Schottwand mit den beiden komprimierten V4A-Edelstahlfedern, die asymmetrischen Poka-Yoke Gleitschienen mit 8 mm Höhenversatz, der 6-polige Goldkontakt-Eingriff (4,8 mm Wipe-Weg) und die formbündige Dichtung an der Frontblende.*
 
-![OpenMotorBridge Satelliten-Pod CAD Explosionsdarstellung](../images/cad/openmotorbridge_pod_exploded_view.png)
+---
 
-*Abbildung 8.7: 3D-CAD-Explosionsdarstellung des universellen Satelliten-Pods.*
+### 4.1 Gesamtsystem-Kinematik: Poka-Yoke, Auto-Eject & Unsichtbarer Magnet-Diebstahlschutz
 
-![OpenMotorBridge Satelliten-Pod Röntgenansicht](../images/cad/openmotorbridge_pod_assembly_render_xray.png)
+Das Zusammenspiel von Pod-Schacht (Typ B) und Wechselkassette (Typ C) wird durch ein vollkommen gekapseltes, werkzeugloses und diebstahlgeschütztes Führungs- und Verriegelungssystem bestimmt:
 
-*Abbildung 8.8: 3D-Röntgen- und Transparenzdarstellung des geschlossenen Satelliten-Pods.*
+#### 4.1.1 Asymmetrisches Poka-Yoke Nut-und-Feder Führungskonzept
 
-### 4.1 Rohrbett-Prisma ($120^\circ$) & EPDM-Spannbefestigung
-* **An der Unterseite:** $120^\circ$-V-Nut ($R = 15\,\text{mm}$) schmiegt sich formschlüssig an alle Rohre von $\varnothing 18\dots 35\,\text{mm}$ an ($1"$ Sturzbügel, $7/8"$ Heckrahmen).
-* **4x Einhängenasen:** Blitzschnelle Montage mit 2 UV-beständigen EPDM-Gummiringen bei gleichzeitiger Schwingungsdämpfung.
+![OpenMotorBridge Pod Poka-Yoke Cross Section](../images/cad/pod_poka_yoke_cross_section_cad.png)
 
-### 4.2 Kinematik des Auto-Eject & Snap-Fit Systems
+*Abbildung 8.7: 3D-CAD-Querschnitt (Y-Z Ebene) durch das Satelliten-Pod-Gehäuse und den Kassetten-Grundschlitten. Sichtbar ist der $8{,}0\,\text{mm}$ Höhenversatz der Führungsnuten (Links: $Z=10{,}0\,\text{mm}$, Rechts: $Z=18{,}0\,\text{mm}$). Ein $180^\circ$-Falscheinbau ist mechanisch ausgeschlossen.*
+
+* **Führungsgeometrie:** Die Führungsnuten an den Innenwänden des Pods und die Gegenfedern am Kassetten-Schlitten sind um $8{,}0\,\text{mm}$ vertikal versetzt. Ein versehentliches Einschieben auf dem Kopf ($180^\circ$-Verdrehung) ist physisch blockiert, bevor elektrische Kontakte berührt werden können.
+* **Vorzentrierungs-Fase:** $30^\circ$-Einlaufschrägen verengen das seitliche Führungsspiel auf den ersten $80\,\text{mm}$ auf präzise $\pm 0{,}2\,\text{mm}$.
+
+#### 4.1.2 Serienmäßiger Unsichtbarer Magnet-Diebstahlschutz (2-Arm-Wippe)
+
+Um Wechselkassetten auf allen Motorrädern (von frei zugänglichen Reiseenduro-Sturzbügeln über Naked-Bikes bis zu Cruisern) wirksam gegen unbefugtes Herausziehen und Gelegenheitsdiebstahl zu sichern, verfügen **alle Pods und Kassetten serienmäßig** über einen unsichtbaren, magnetisch entsperrbaren Verriegelungsmechanismus (`parts/05_magnetic_lock_latch.scad`):
 
 ```
-                       AUTO-EJECT & SNAP-FIT KINEMATIK (DRAUFSICHT X-Y)
-┌──────────────────────────────────────────────────────────────────────────────────────────────┐
-│ POD-GEHÄUSE-TUNNEL (PA12, 100 x 60 mm)                                                       │
-│                                                                                              │
-│   ┌──────────────┐                                                     ┌─────────────────┐   │
-│   │ Schutz-      │  ◄── V4A Auswerferfeder (k = 1.2 N/mm)              │ Rasttasche      │   │
-│   │ Schottwand   ├───[§§§§§§§§§]───────────────┐                       │ in Tunnelwand   │   │
-│   │ (x = 22 mm)  │   F_preload = 7.2 N         │                       │ (x = 86 mm)     │   │
-│   │              │                             │                       │    ┌───────┐    │   │
-│   │              │   6-Pin Vergoldeter         │ KASSETTEN-SCHLITTEN   │    │ 85°   │    │   │
-│   │   ┌──────┐   │   Steckverbinder-Eingriff   │ (openmotorbridge_     │    │ Zahn  │    │   │
-│   │   │6-Pin ├───┼════════════════════════════►│  cartridge_sled)      ├────┴┤ ▲    │    │   │
-│   │   │Stift ├───┤   Wipe = 4.8 mm             │                       │  ┌──┘ │    └───┐│   │
-│   │   └──────┘   │                             │                       │  │30° │        ││   │
-│   │              │                             │                       │  │Ein-│        ││   │
-│   │              ├───[§§§§§§§§§]───────────────┘                       │  │lauf│        ││   │
-│   │              │  ◄── V4A Auswerferfeder                             │  └──┬─┘        ││   │
-│   └──────────────┘                                                     │     │          ││   │
-│                                                                        │  ┌──▼────────┐ ││   │
-│                                                   Federnder PA12-Arm   │  │DRUCKTASTE │ ││   │
-│                                                   (L=14 mm, b=10 mm) ──┴──┤(Geriffelt)│ ◄┼───┼── Daumen-/Zeigefinger-
-│                                                                           └───────────┘ ││   │   Druck (F_squeeze = 10 N)
-│                                                                           FRONTBLENDE   ││   │
-└─────────────────────────────────────────────────────────────────────────────────────────┴┴───┘
+        MAGNETISCHER DIEBSTAHL-SCHUTZ: 2-ARM-WIPPE (KINEMATIK-SCHNITT)
+═════════════════════════════════════════════════════════════════════════════════
+
+                 POD-GEHÄUSEWAND (PA12-MJF, NICHT-MAGNETISCH)
+ ─────────────────────────┬───────────────────────┬──────────────────────────────
+  [EXTERNER NEODYM-KEY]   │                       │ [GEHÄUSE-FÜHRUNGSNUT]
+   (Zielkreis bei X=64)   │                       │  (Rastkerbe bei X=88 mm)
+            ▼             │                       │            ▲
+      ┌───────────┐       │                       │            │ 90° Sperrflanke:
+      │ NEODYM-   │       │                       │            │ blockiert Auszug!
+      │ MAGNET N52│       │                       │            │
+      └─────┬─────┘       │                       │            │
+ ═══════════╪═════════════╪═══════════════════════╪════════════╪═════════════════
+  KASSETTE  │             │                       │            │
+            ▼ Zieht nach  │   M2 SCHWENKACHSE     │            ▼
+      ┌───────────┐ außen!│    (DREHPUNKT)        │   ┌─────────────────┐
+      │STAHLANKER ├───────┴─────────⊙─────────────┴───┤ SÄGEZAHN-KRALLE │
+      │(Ø 6.2 mm) │   Hinterarm     │     Vorderarm   │ (30° Ein / 90°)|
+      └─────┬─────┘   (X = 46 mm)   │    (X = 70 mm)  └─────────────────┘
+            ▲                       │                          ▲
+     [V4A-FEDER] █ Drückt           │                          │ Schwenkt nach
+     (Normalst.)   nach innen       │                          │ innen frei!
 ```
+
+![OpenMotorBridge Magnetischer Diebstahlschutz 3D CAD Kinematik](../images/cad/magnetic_anti_theft_lock_cad.png)
+
+*Abbildung 8.8: Kinematische 3D-Schnittansicht des magnetischen Kassetten-Diebstahlschutzes (`98_magnetic_anti_theft_inspection.scad`). Erkennbar sind das transparente Pod-Gehäuse, der Schlitten mit 1. Klasse Wipphebel (grün), die 90°-Sägezahnkralle im Gehäuserasteingriff ($X = 88\,\text{mm}$), der $\varnothing\,6{,}2 \times 8\,\text{mm}$ Stahlanker mit V4A Rückstellfeder ($X = 46\,\text{mm}$), die M2 Edelstahl-Drehachse ($X = 58\,\text{mm}$) sowie die stirnseitigen V4A Auswerffedern.*
+
+1. **Glatte, diebstahlsichere Kassettenfront:**
+   * Äußere Squeeze-Tasten entfallen vollständig. Die Frontblende der Kassette schließt absolut glatt und spaltbündig mit dem Pod-Gehäuse ab. Ein manuelles Aushebeln per Hand oder mit Werkzeug ist ohne Zerstörung des Gehäuses unmöglich.
+2. **Kinetische 2-Arm-Wippe (`parts/05_magnetic_lock_latch.scad`):**
+   * Arbeitet als Hebel 1. Ordnung um eine rostfreie M2-Schwenkachse bei $X = 58\,\text{mm}$.
+   * **Vorderer Arm ($X = 70\,\text{mm}$):** Trägt die $90^\circ$-Sägezahn-Rastkralle mit $30^\circ$-Einlaufschräge. Sie gleitet beim Einschieben federnd über die Schiene und rastet am Endanschlag formschlüssig in die Gehäusetasche bei $X = 88\,\text{mm}$ ein.
+   * **Hinterer Arm ($X = 46\,\text{mm}$):** Trägt den eingepressten ferromagnetischen Stahlanker ($\varnothing\,6{,}2 \times 8\,\text{mm}$). Eine V4A-Druckfeder stützt sich gegen die innere Schlittenwand ab und hält die Sperrkralle im Ruhezustand permanent unter Verriegelung.
+3. **Kontaktlose Neodym-Entriegelung & Taktiler Zielkreis:**
+   * Auf der linken Gehäuseaußenwand von `pod_base_housing.scad` ist bei $X = 64\,\text{mm}$ ein taktiler Zielkreis ($\varnothing\,18\,\text{mm} \times 0{,}6\,\text{mm}$) eingelassen.
+   * Nähert der Fahrer den [Smart-Keyfob](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/05_accessories/smart_keyfob_pager.scad) (oder einen N52-Magnetschlüssel) an diesen Zielkreis an, zieht das Magnetfeld den innenliegenden Stahlanker nach außen. Die Wippe schwenkt um die M2-Achse, zieht die Sperrkralle nach innen in den Schlitten und gibt die Rastung frei.
+4. **Automatischer Federauswurf (Auto-Eject):**
+   * Im selben Moment stoßen die beiden in der Schottwand sitzenden V4A-Druckfedern die Kassette definiert um **$15\dots 20\,\text{mm}$ nach vorne aus**, sodass sie bequem gegriffen und entnommen werden kann.
+5. **Hermetischer Offroad- & Allwetterschutz:**
+   * Keine offenen Gehäuseschlitze, Schieber oder Tastenöffnungen nach außen. Vollkommen resistent gegen Schlamm, Staub, Regen und winterlichen Frost.
 
 | Parameter | Berechneter Wert | Funktion & Sicherheitsnachweis |
 | :--- | :---: | :--- |
-| **Federrate (2x V4A Federn)** | **$2{,}4\,\text{N/mm}$** | Parallelschaltung zweier Edelstahl-Druckfedern (DIN EN 13906-1) |
+| **Federrate (2x V4A Auswerffedern)** | **$2{,}4\,\text{N/mm}$** | Parallelschaltung zweier Edelstahl-Druckfedern (DIN EN 13906-1) |
 | **Vorspannfederweg** | **$6{,}0\,\text{mm}$** | Kompression von $L_0 = 15\,\text{mm}$ auf $L_{\text{mated}} = 9\,\text{mm}$ |
 | **Axiale Haltekraft (Preload)** | **$7{,}2\,\text{N}$** | Hält Dichtsitz permanent unter Druck gegen $20\,\text{g}$ Vibration |
 | **Dichtungs-Gegenkraft** | **$4{,}5\,\text{N}$** | $30\,\%$ Kompression der umlaufenden $1{,}5\,\text{mm}$ Silikon-Dichtschnur |
-| **Auszugskraft (Rückhalt)** | **$> 65\,\text{N}$** | Verhindert unbeabsichtigtes Lösen durch Zugbelastung am Kabel |
-| **Entriegelungskraft (Squeeze)**| **$9{,}8\,\text{N}$** | Ergonomisch optimierter Daumen-Zeigefinger-Druck ($\approx 1\,\text{kg}$) |
-| **Automatischer Auswurfhub** | **$9{,}0\,\text{mm}$** | Trennt 6-Pin Wipe ($4{,}8\,\text{mm}$) mit **$+4{,}2\,\text{mm}$ Überhub** |
+| **Auszugskraft (Verriegelung)** | **$> 120\,\text{N}$** | $90^\circ$-Formschluss sperrt Auszug zuverlässig gegen unbefugtes Ziehen |
+| **Entriegelungsmagnetfeld** | **$B_r \ge 1{,}2\,\text{T}$ (N52)** | Kontaktlose Schwenkauslenkung der 2-Arm-Wippe am Zielkreis $X = 64\,\text{mm}$ |
+| **Automatischer Auswurfhub** | **$15\dots 20\,\text{mm}$** | Trennt den $4{,}8\,\text{mm}$ 6-Pin Wipe mit großem Sicherheits-Überhub |
 
-#### 4.2.1 Die 4 kinematischen Bewegungsphasen des Kassetteneinschubs
-1. **Phase 1 - Vorzentrierung ($x = 0\dots 80\,\text{mm}$):** Asymmetrische Führungsrippen greifen in die Gehäusenuten ein. Seitliches Spiel wird auf $\pm 0{,}2\,\text{mm}$ eingeengt.
-2. **Phase 2 - Feder-Kompression ($x = 80\dots 86\,\text{mm}$):** Die Stirnseite des Schlittens trifft auf die beiden V4A-Auswerferfedern in der Schottwand. Die Federn bauen die $7{,}2\,\text{N}$ Vorspannkraft auf.
-3. **Phase 3 - 6-Pin Kontakt-Eingriff & Schnapp-Rastung ($x = 86\dots 91\,\text{mm}$):** Die 6 Hartgold-Stifte dringen $4{,}8\,\text{mm}$ tief in die Doppelschenkel-Buchsenleiste ein (Wipe). Die $30^\circ$-Einlaufschrägen der Rastnasen spreizen die federnden PA12-Arme nach innen.
-4. **Phase 4 - Formbündige Verriegelung ($x = 91\,\text{mm}$):** Die $85^\circ$-Sperrkanten der Rastarme schnappen mit hörbarem Klick in die Rasttaschen der Gehäusewand. Die Silikon-Dichtung wird um $30\,\%$ komprimiert.
+#### 4.1.3 Die 4 kinematischen Bewegungsphasen des Kassetteneinschubs
 
-#### 4.2.2 Spannungs- & Ermüdungsnachweis des PA12-Biegebalkens
-* **Abmessungen:** Länge $L = 14{,}0\,\text{mm}$, Breite $b = 10{,}0\,\text{mm}$, Dicke $h = 1{,}8\,\text{mm}$, Auslenkung $\delta = 1{,}8\,\text{mm}$.
-* **Maximale Randfaserdehnung:**
-  $$\epsilon_{\max} = \frac{3 \cdot h \cdot \delta}{2 \cdot L^2} = \frac{3 \cdot 1{,}8\,\text{mm} \cdot 1{,}8\,\text{mm}}{2 \cdot (14{,}0\,\text{mm})^2} = \mathbf{1{,}38\,\%}$$
-* **Zulässige Dauerdehnung für MJF PA12:** $\epsilon_{\text{zul}} \le 2{,}0\,\%$.
-* **Biegespannung:** $\sigma_b = \epsilon_{\max} \cdot E_{\text{PA12}} = 0{,}0138 \times 1.700\,\text{MPa} = \mathbf{23{,}5\,\text{MPa}}$ (Weit unterhalb der PA12-Streckgrenze von $48\,\text{MPa} \rightarrow$ **Sicherheitsfaktor $S = 2{,}04$**).
-* **Dauerfestigkeit:** Ausgelegt für $> 10.000$ Ver- und Entriegelungszyklen ohne plastische Verformung.
+1. **Phase 1 - Vorzentrierung ($x = 0\dots 80\,\text{mm}$):** Die asymmetrischen Poka-Yoke Führungsrippen greifen in die Gehäusenuten ein. Das seitliche Spiel wird auf $\pm 0{,}2\,\text{mm}$ begrenzt.
+2. **Phase 2 - Feder-Kompression ($x = 80\dots 86\,\text{mm}$):** Die Stirnseite des Schlittens trifft auf die beiden V4A-Auswerferfedern in der Schottwand und baut die $7{,}2\,\text{N}$ Vorspannkraft auf.
+3. **Phase 3 - 6-Pin Kontakt-Eingriff & Schnapp-Rastung ($x = 86\dots 91\,\text{mm}$):** Die 6 Hartgold-Stifte dringen $4{,}8\,\text{mm}$ tief in die Doppelschenkel-Buchsenleiste ein (Wipe). Die $30^\circ$-Einlaufschräge der Sägezahnkralle drückt die Wippe federnd nach innen, bis sie bei $X = 88\,\text{mm}$ in die Gehäusekerbe schnappt.
+4. **Phase 4 - Formbündige Verriegelung ($x = 91\,\text{mm}$):** Die $90^\circ$-Sperrkante verriegelt formschlüssig. Die umlaufende Silikon-Dichtung wird um $30\,\%$ komprimiert (IP67 Dichtsitz).
 
-#### 4.2.3 Kontaktsicherheit & Wipe-Länge
+#### 4.1.4 Kontaktsicherheit & Wipe-Länge
 * **Freie Stiftlänge:** $6{,}5\,\text{mm}$ Vierkant-Prägestifte ($0{,}64 \times 0{,}64\,\text{mm}$, $0{,}76\,\mu\text{m}$ Hartgold über Nickel).
 * **Effektiver Wipe-Weg:** **$4{,}8\,\text{mm}$** Eingriff in die Buchsenleiste (übertrifft die USCAR-2 Kfz-Norm von $\ge 1{,}5\,\text{mm}$ um den **Faktor 3,2**).
 * **Prellfreiheit:** $7{,}2\,\text{N}$ permanente Vorspannung verhindert Kontaktprellen selbst bei Vibrationen bis $20\,\text{g}$.
 
-### 4.3 Asymmetrisches Poka-Yoke Nut-und-Feder Führungskonzept
+---
 
-![OpenMotorBridge Pod Poka-Yoke Cross Section](../images/cad/pod_poka_yoke_cross_section_cad.png)
+### 4.2 Gehäuse Typ B: Der universelle Satelliten-Pod (Pod 1, 2 und 3)
 
-*Abbildung 8.9: 3D-CAD-Querschnitt (Y-Z Ebene) durch das Satelliten-Pod-Gehäuse und den Kassetten-Grundschlitten. Sichtbar ist der $8{,}0\,\text{mm}$ Höhenversatz der Führungsnuten (Links: $Z=10{,}0\,\text{mm}$, Rechts: $Z=18{,}0\,\text{mm}$). Ein $180^\circ$-Falscheinbau ist mechanisch ausgeschlossen.*
+Alle 3 Pod-Positionen nutzen dasselbe 5-seitige Monocoque-Schachtgehäuse im standardisierten Envelope ($135{,}0 \times 70{,}0 \times 38{,}0\,\text{mm}$):
 
-### 4.4 Dual-Port Anschluss-Architektur der Pod-Basis (Entflechtung & Koffer-Integration)
+![OpenMotorBridge Satelliten-Pod CAD Explosionsdarstellung](../images/cad/openmotorbridge_pod_exploded_view.png)
+
+*Abbildung 8.9: 3D-CAD-Explosionsdarstellung des universellen Satelliten-Pods.*
+
+![OpenMotorBridge Satelliten-Pod Röntgenansicht](../images/cad/openmotorbridge_pod_assembly_render_xray.png)
+
+*Abbildung 8.10: 3D-Röntgen- und Transparenzdarstellung des geschlossenen Satelliten-Pods.*
+
+#### 4.2.1 Rohrbett-Prisma ($120^\circ$) & EPDM-Spannbefestigung
+* **An der Unterseite:** $120^\circ$-V-Nut ($R = 15\,\text{mm}$) schmiegt sich formschlüssig an alle Rohre von $\varnothing 18\dots 35\,\text{mm}$ an ($1"$ Sturzbügel, $7/8"$ Heckrahmen).
+* **4x Einhängenasen:** Blitzschnelle Montage mit 2 UV-beständigen EPDM-Gummiringen bei gleichzeitiger Schwingungsdämpfung.
+
+#### 4.2.2 Dual-Port Anschluss-Architektur der Pod-Basis (Entflechtung & Koffer-Integration)
 
 Um sowohl exponierte Outdoor-Einsätze (z. B. Sturzbügel-Montage bei Adventure-Bikes oder Heckradar Pod 3) als auch geschützte Koffer-Innenmontagen ohne selbstgelötete Adapterkabel abzudecken, verfügt die Pod-Bodenplatine ([`openmotorbridge_pod_base.kicad_pcb`](file:///Users/schmidtm/openMotorBridge/hardware/kicad_pod_base/openmotorbridge_pod_base.kicad_pcb)) über eine **Dual-Port-Architektur**:
 
@@ -251,35 +278,30 @@ Um sowohl exponierte Outdoor-Einsätze (z. B. Sturzbügel-Montage bei Adventure-
 ```
 
 1. **Mechanische Entflechtung von `J1` und `J2`:**
-   * Bisher saß die M8-Buchse (`J2`) auf der Unterseite der Platine direkt axial hinter der 6-poligen Mill-Max Pogo-Pin-Leiste (`J1`), was zu einem engen vertikalen Bauraumkonflikt entlang der Z-Achse führte.
-   * Durch die Aufteilung in **Port A (M8, links)** und **Port B (Slim-Port, rechts)** liegt die Pogo-Pin-Leiste in der Mitte frei. Die mechanische Aufbauhöhe entspannt sich signifikant.
+   * Aufteilung in **Port A (M8, links)** und **Port B (Slim-Port, rechts)** lässt die mittige Pogo-Pin-Leiste `J1` frei zugänglich.
 2. **100 % Erhalt der Gehäuse- & Platinenabmessungen (Null Längenzuwachs):**
    * Die Pod-Basisplatine behält ihre kompakten Abmessungen von **$36{,}0 \times 20{,}0\,\text{mm}$** bei.
-   * Das äußere 5-seitige Monocoque-Gehäuse verbleibt exakt im standardisierten Envelope von **$135{,}0 \times 70{,}0 \times 38{,}0\,\text{mm}$**. Die Abmessungen wurden historisch exakt auf das ungeöffnete Originalgehäuse des Sena +Mesh Adapters (B2M-01) mit seinen Clip-Führungen kalibriert und bleiben für 100 % OEM-Garantieerhalt unverändert.
-   * **Port A Quadratischer Durchbruch ($11{,}5 \times 11{,}5\,\text{mm}$):** Damit der Pod für die massive Basis des M8-Printsteckers nicht künstlich um mehrere Millimeter verlängert werden muss, besitzt die Heckwand eine exakt angepasste quadratische Öffnung mit $R = 1{,}5\,\text{mm}$ Verrundung. Die quadratische Basis der Buchse taucht vollständig durch die $3{,}5\,\text{mm}$ Wand nach außen durch; das M8-Messinggewinde liegt für die Überwurfmutter des Motorrad-Kabelbaums frei zugänglich außen.
-   * **Planare Platinenabstützung ohne Wipp-Effekt (2x M2-Verschraubung an H1 & H2):** An der Schottwand bei $X = 18{,}0\,\text{mm}$ sind zwei präzise M2-Schraubdome angeformt, die exakt auf die Platinenbohrungen **H1 ($Y = 20\,\text{mm}$)** und **H2 ($Y = 50\,\text{mm}$)** bei $Z = 19{,}0\,\text{mm}$ treffen. Beim Verschrauben wird die Platine absolut plan gegen die Schottwand gezogen. Da die M8-Basis frei durch die Heckwand tritt, gibt es keinen einseitigen Hochpunkt – ein Verkippen oder Wackeln der Platine ist mechanisch ausgeschlossen.
+   * Das äußere 5-seitige Monocoque-Gehäuse verbleibt exakt im Envelope von **$135{,}0 \times 70{,}0 \times 38{,}0\,\text{mm}$**.
+   * **Port A Quadratischer Durchbruch ($11{,}5 \times 11{,}5\,\text{mm}$):** Die quadratische Buchsenbasis taucht vollständig durch die $3{,}5\,\text{mm}$ Wand nach außen; das M8-Messinggewinde liegt für die Überwurfmutter frei zugänglich außen.
+   * **Planare Platinenabstützung (2x M2-Verschraubung an H1 & H2):** An der Schottwand bei $X = 18{,}0\,\text{mm}$ angeformte M2-Dome sichern die Platine absolut plan gegen Verkippen.
 3. **Hardware-Arbitrierung (Prioritäts- & Rückspeiseschutz):**
-   * Ein integrierter Ideal-Dioden-Power-Multiplexer (z. B. TI LM66100 / P-Kanal MOSFETs) schaltet automatisch die jeweils aktive Versorgungsspannung durch.
-   * Wird Port A (M8) mit Bordnetz versorgt, wird Port B (Slim-Port) rückspeisefest gesperrt. Wird im Koffer Port B versorgt, ist Port A inaktiv. Ein versehentlicher Kurzschluss oder Parallelbetrieb ist physikalisch ausgeschlossen.
+   * Integrierter LM66100 Ideal-Dioden-Power-Multiplexer schaltet automatisch die aktive Versorgungsspannung durch.
 4. **Axiale Ausrichtung & Eingelassene Stecktasche (Tiefenkompensation):**
-   * **Senkrechte Buchsenausrichtung:** Die USB-C-Buchse (`J3`) auf `B.Cu` steht wie die M8-Buchse **senkrecht** (normal zur Platinenoberfläche) in axialer Steckrichtung.
-   * **Tiefen-Kompensation ($7{,}0\,\text{mm}$ Stecktasche):** Da die Platine durch die $116\,\text{mm}$ Kassettenlänge an der Schottwand bei $X = 18{,}0\,\text{mm}$ ($X = 16{,}4\,\text{mm}$ Platinenrückseite `B.Cu`) fixiert ist, reicht eine standardmäßige vertikale USB-C-Buchse ($H \approx 9{,}5 \dots 10{,}0\,\text{mm}$) bis $X \approx 6{,}9\,\text{mm}$. An der Gehäuserückwand ist daher eine **$7{,}0\,\text{mm}$ tiefe Stecktasche** ($14{,}0 \times 8{,}5\,\text{mm}$) mit $45^\circ$ Einlaufschräge und innenliegendem Dichtkragen (`pod_rear_usbc_internal_sleeve`) eingeformt.
-   * **Mechanischer Schlagschutz & Querkraft-Entlastung:** Durch das tiefe Einlassen im Gehäuse fängt die Gehäusewand sämtliche Biege- und Hebelkräfte des Kabels ab. Der Stecker wird seitlich geführt, die filigrane Kontaktzunge der USB-Buchse ist vor Abreißen und Stoß geschützt.
-   * **Passgenauigkeit:** Die Buchsenöffnung schließt am Grund der Stecktasche exakt bündig ab. Handelsübliche USB-C-Kabelstecker finden kollisionsfreien Halt und rasten spürbar ein.
-   * **TPU-Versiegelung:** Bei Außenbetrieb über Port A dichtet der formangepasste TPU-Schutzstopfen ([`008_pod_base_usbc_cap_tpu.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/parts/008_pod_base_usbc_cap_tpu.scad)) die $7{,}0\,\text{mm}$ tiefe Stecktasche mit doppelten Dichtlippen hermetisch (IP67) und gehäusebündig ab.
+   * Senkrechte USB-C-Buchse auf `B.Cu` taucht in eine **$7{,}0\,\text{mm}$ tiefe Stecktasche** ($14{,}0 \times 8{,}5\,\text{mm}$) mit $45^\circ$ Einlaufschräge und Dichtkragen ein.
+   * Mechanischer Schlagschutz: Die Gehäusewand fängt sämtliche Biege- und Querkräfte des Kabels ab.
+   * Bei Nichtnutzung von Port B versiegelt der formangepasste TPU-Stopfen ([`008_pod_base_usbc_cap_tpu.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/parts/008_pod_base_usbc_cap_tpu.scad)) die Tasche hermetisch (IP67).
 5. **Universelle Multi-Plattform-Nutzung (Begleitfahrzeug / Pkw-Cockpit / Werkbank):**
-   * Derselbe Pod kann ohne Modifikation oder zusätzliche Adapterplatinen in einem Begleitfahrzeug (Support-Van, Tour-Guide-Pkw, Besenfahrzeug) eingesetzt werden: Statt starre, schwere Industrie-M8-Kabelbäume durch den Fahrzeuginnenraum zum Armaturenbrett zu verlegen, wird der Pod einfach über Port B mit einem handelsüblichen, extrem flexiblen Slim-USB-C-Kabel an einen 12V-USB-Adapter oder eine Bordbuchse angeschlossen.
-   * **100 % Universalität:** Ein einziges physikalisches Pod-Design deckt somit nahtlos **Outdoor-Motorrad** (Port A, M8 IP67), **Koffer-Innenraum** (Port B, MagSafe-Kupplung) und **Begleitfahrzeug / Testbench** (Port B, Standard-Slim-Kabel) ab.
+   * Über Port B kann derselbe Pod mit einem Standard-Slim-USB-C-Kabel im Begleitfahrzeug oder am PC-Prüfplatz betrieben werden.
 
 ---
 
-## 5. Gehäuse Typ C: Modulare Wechselkassetten
+### 4.3 Gehäuse Typ C: Modulare Wechselkassetten
 
 ![OpenMotorBridge Modular Cartridge Variants CAD Trio](../images/cad/cartridge_variants_trio.png)
 
-*Abbildung 8.10: Die modularen Wechselkassetten-Varianten im Überblick: OMM Heck-Transceiver (vorne links), Sena 50S/60S Quick-Snap Cradle (vorne rechts), Cardo Magnetic Air Mount (hinten links) und wasserdichte IP67 Blindkassette (hinten rechts).*
+*Abbildung 8.11: Die modularen Wechselkassetten-Varianten im Überblick: OMM Heck-Transceiver (vorne links), Sena 50S/60S Quick-Snap Cradle (vorne rechts), Cardo Magnetic Air Mount (hinten links) und wasserdichte IP67 Blindkassette (hinten rechts).*
 
-### 5.1 Benutzerzentrierte Plug & Play Docking-Architektur (0 Lötaufwand)
+#### 4.3.1 Benutzerzentrierte Plug & Play Docking-Architektur (0 Lötaufwand)
 Um Signale vom 90°-abgewinkelten **JST-SH 1.0 mm 6-Pin SMD-Steckverbinder (`J2`)** auf der Kassetten-Trägerplatine verwechslungs- und knickfrei zu den Kontaktpunkten des jeweiligen Adapters zu führen, besitzt der Kassetten-Schlitten:
 * **Geschützten Unterflur-Kabelkanal:** Im Boden des PA12-Schlittens ist eine **$1{,}5\,\text{mm}$ tiefe und $8{,}0\,\text{mm}$ breite Kabelführung** direkt unterhalb des Konturbetts integriert.
 * **Zwischenboden-Durchführung:** Ein präziser **$10{,}0 \times 3{,}0\,\text{mm}$ Durchbruch mit beidseitig $R=1{,}0\,\text{mm}$ verrundeten Kanten** führt das Flachbandkabel von Header `J2` auf der unteren Platine nach oben ins Nest.
@@ -294,12 +316,12 @@ Um Signale vom 90°-abgewinkelten **JST-SH 1.0 mm 6-Pin SMD-Steckverbinder (`J2`
 | **5** | `MIC_IN+` | Audio Diff-In + (vom Mikrofon-Out) | Pin 6 (Mic +) | Pin 5 (Mic +) | Mic Out + |
 | **6** | `OPTO_PTT` | Optokoppler PTT / Button Synthesis | Pin 7 (Mesh-Btn)| N/C (Aux) | PTT Switch |
 
-### 5.2 Sena 50S / 60S Kontur-Nest & Snap-Cradle
+#### 4.3.2 Sena 50S / 60S Kontur-Nest & Snap-Cradle
 ![OpenMotorBridge Sena 50S Cartridge Assembly 3D CAD Fitting](../images/cad/sena_cartridge_assembly_cad.png)
 
-*Abbildung 8.11: CAD-Visualisierung der Sena 50S/60S Wechselkassette mit federnder 7-Pin Pogo-Kontaktleiste.*
+*Abbildung 8.12: CAD-Visualisierung der Sena 50S/60S Wechselkassette mit federnder 7-Pin Pogo-Kontaktleiste.*
 
-### 5.3 Sena +Mesh & Universal Slide-Inlay (Klasse A mit externem Antennenanschluss)
+#### 4.3.3 Sena +Mesh & Universal Slide-Inlay (Klasse A mit externem Antennenanschluss)
 Für das Sena +Mesh (oder andere OEM-Adapter mit Antennen- und Ladeanschluss) bietet die Kassetten-Frontblende (`00_base_sled.scad` & `01_insert_sena.scad`):
 * **100 % zerstörungsfreie Nutzung des ungeöffneten OEM-Geräts:** Das Sena +Mesh wird im Originalgehäuse belassen.
 * **Formschlüssiges Schlitten-Inlay:** Bildet exakt die OEM-Rahmenbefestigungsplatte mit 2x Quer-Schiebestegen (Hakenabstand $30\,\text{mm}$) und federnder Rastzunge ab.
@@ -308,34 +330,34 @@ Für das Sena +Mesh (oder andere OEM-Adapter mit Antennen- und Ladeanschluss) bi
 * **EPDM-Spannband-Aufnahme:** Einhängehaken für ein elastisches EPDM-Gummiband ($35 \times 10\,\text{mm}$), das den Adapter vibrationsfest im Negativbett sichert.
 * **Elektrische Speisung:** Flaches 90° Micro-USB / USB-C Pigtail von Pin 1 (`GND`) und Pin 2 (`5V_VBUS`) des JST-SH Headers `J2`.
 
-### 5.4 Cardo Packtalk Edge / Pro Magnetic Air Mount
+#### 4.3.4 Cardo Packtalk Edge / Pro Magnetic Air Mount
 ![OpenMotorBridge Cardo Packtalk Edge Cartridge Assembly 3D CAD Fitting](../images/cad/cardo_cartridge_assembly_cad.png)
 
-*Abbildung 8.12: CAD-Visualisierung der Cardo Packtalk Edge Wechselkassette mit N52-Neodym-Magnetsitz und 5 gefederten Kontaktpads.*
+*Abbildung 8.13: CAD-Visualisierung der Cardo Packtalk Edge Wechselkassette mit N52-Neodym-Magnetsitz und 5 gefederten Kontaktpads.*
 
-### 5.5 Cardo Packtalk Bold / Black Edition
+#### 4.3.5 Cardo Packtalk Bold / Black Edition
 Nutzt die formschlüssigen Schiebe-Gegenkontakte der originalen Cardo-Audiokit-Basisplatte. Das Gerät wird von oben in die mechanische Führung geschoben und federnd arretiert.
 
-### 5.6 Midland BT Mini / BTR1 Advanced & XT30 Slide
+#### 4.3.6 Midland BT Mini / BTR1 Advanced & XT30 Slide
 * **Midland Intercom Edition (BTR1 / Rush / BT Mini):** Kontur-Aufnahme für Midland Bluetooth- und Wave-Mesh-Intercoms ($70\dots 85\,\text{mm}$ Baubreite).
 * **Midland XT Bare-Board Edition:** Nimmt die entkernte Platine eines kompakten Handfunkgeräts (XT10/XT30/G5, $\approx 68 \times 42 \times 10\,\text{mm}$) direkt auf.
 
-### 5.7 PMR446 Transceiver & Bare-Board Modul (SA818S / RDA1846)
+#### 4.3.7 PMR446 Transceiver & Bare-Board Modul (SA818S / RDA1846)
 Vollständig integriertes 500 mW PMR446-Analogfunkmodul ($38 \times 20\,\text{mm}$) direkt auf der Kassetten-Trägerplatine – wahlweise mit interner 446-MHz-Helix oder robuster SMA-Frontbuchse für große Distanzen.
 
-### 5.8 Längsschnitt-Vergleich Sena & Cardo
+#### 4.3.8 Längsschnitt-Vergleich Sena & Cardo
 ![OpenMotorBridge Sena & Cardo Cartridges Longitudinal Cross Section](../images/cad/sena_cardo_cartridge_cross_section.png)
 
-*Abbildung 8.13: 2D-Längsschnitt (X-Z Ebene) durch die Sena 50S (oben) und Cardo Packtalk Edge (unten) Kassetten im geschlossenen Pod.*
+*Abbildung 8.14: 2D-Längsschnitt (X-Z Ebene) durch die Sena 50S (oben) und Cardo Packtalk Edge (unten) Kassetten im geschlossenen Pod.*
 
-### 5.9 IP67 Blind- / Leerkassette (Dry Box Dummy)
+#### 4.3.9 IP67 Blind- / Leerkassette (Dry Box Dummy)
 ![OpenMotorBridge IP67 Blindkassette 3D CAD Render](../images/cad/dummy_cartridge_cad.png)
 
-*Abbildung 8.14: Formidentische IP67 Blindkassette mit integriertem $80 \times 46 \times 16\,\text{mm}$ Notfall-Trockenstaufach.*
+*Abbildung 8.15: Formidentische IP67 Blindkassette mit integriertem $80 \times 46 \times 16\,\text{mm}$ Notfall-Trockenstaufach.*
 
 ---
 
-## 6. Belegung der 6-Pin M8 / Pogo-Schnittstelle & PUR-Kabelbaum-Farbcodierung
+### 4.4 Belegung der 6-Pin M8 / Pogo-Schnittstelle & PUR-Kabelbaum-Farbcodierung
 
 | M8 / Pogo-Pin | Leitungsfarbe (PUR-Kabel) | Querschnitt | Signal Pod 1 & 2 (Audio & Intercom) | Signal Pod 3 (Heck-Transceiver) | Schirmung & Verdrillung |
 | :---: | :--- | :---: | :--- | :--- | :--- |
@@ -349,7 +371,7 @@ Vollständig integriertes 500 mW PMR446-Analogfunkmodul ($38 \times 20\,\text{mm
 
 ---
 
-## 7. Gehäuse Typ D: Heck-Pod 3 Transceiver (Backbone & Telemetrie)
+## 5. Gehäuse Typ D: Heck-Pod 3 Transceiver (Backbone & Telemetrie)
 
 Der Heck-Pod 3 vereint den OMM-Transceiver, 868 MHz LoRa und Multi-GNSS (`PCBA 04`, RP2040) in geschützter Heckposition. 
 
@@ -359,15 +381,15 @@ Der Heck-Pod 3 vereint den OMM-Transceiver, 868 MHz LoRa und Multi-GNSS (`PCBA 0
 
 ![Pod 3 Full Assembly Exploded 3D](../images/cad/pod3_full_assembly_exploded_3d.png)
 
-*Abbildung 8.15: CAD-Explosionsdarstellung des Heck-Pods 3 mit Antennen-Radom, Platine und M8-Bajonettsockel.*
+*Abbildung 8.16: CAD-Explosionsdarstellung des Heck-Pods 3 mit Antennen-Radom, Platine und M8-Bajonettsockel.*
 
 ![Pod 3 Assembly Cross Section](../images/cad/pod3_assembly_cross_section.png)
 
-*Abbildung 8.16: Längsschnitt durch den Heck-Pod 3 mit koaxial geschirmter Antennenkammer und $25 \times 25\,\text{mm}$ GNSS-Groundplane.*
+*Abbildung 8.17: Längsschnitt durch den Heck-Pod 3 mit koaxial geschirmter Antennenkammer und $25 \times 25\,\text{mm}$ GNSS-Groundplane.*
 
 ---
 
-## 8. Gehäuse Typ E: Universal Front-Knoten (Cockpit- & Sensor-Hub)
+## 6. Gehäuse Typ E: Universal Front-Knoten (Cockpit- & Sensor-Hub)
 
 Das Gehäuse des Front-Knotens wurde speziell für die geschützte Montage in Motorrad-Frontverkleidungen (Batwing, Sharknose, BMW GS/RT Schnabel) oder an Sturzbügeln entwickelt:
 
@@ -377,21 +399,21 @@ Das Gehäuse des Front-Knotens wurde speziell für die geschützte Montage in Mo
 
 ![Universal Front Node Closed CAD](../images/cad/front_node_closed_cad.png)
 
-*Abbildung 8.17: Geschlossenes Front-Node IP67-Gehäuse.*
+*Abbildung 8.18: Geschlossenes Front-Node IP67-Gehäuse.*
 
 ![Universal Front Node Exploded 3D](../images/cad/front_node_exploded_3d.png)
 
-*Abbildung 8.18: 3D-Explosionsdarstellung des Front-Knotens entlang der Z-Achse.*
+*Abbildung 8.19: 3D-Explosionsdarstellung des Front-Knotens entlang der Z-Achse.*
 
 ![Universal Front Node Cutaway 3D](../images/cad/front_node_cutaway_3d.png)
 
-*Abbildung 8.19: Transparente 3D-Schnittansicht des Front-Knotens mit Knowles MEMS Schallkanal und VBUS-Lastschalter.*
+*Abbildung 8.20: Transparente 3D-Schnittansicht des Front-Knotens mit Knowles MEMS Schallkanal und VBUS-Lastschalter.*
 
-### 8.1 Das 4-in-1 Universal-Befestigungssystem des Front-Knotens
+### 6.1 Das 4-in-1 Universal-Befestigungssystem des Front-Knotens
 
 ![Universal Front Node Bottom CAD 4-in-1](../images/cad/front_node_bottom_cad.png)
 
-*Abbildung 8.20: Gehäuseunterseite des Front-Knotens mit AMPS-Bohrbild, $120^\circ$ V-Nut Rohrbett, EPDM-Spannnasen, Silentblock-Lochungen und 3M Dual-Lock Klettnuten.*
+*Abbildung 8.21: Gehäuseunterseite des Front-Knotens mit AMPS-Bohrbild, $120^\circ$ V-Nut Rohrbett, EPDM-Spannnasen, Silentblock-Lochungen und 3M Dual-Lock Klettnuten.*
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
@@ -416,7 +438,7 @@ Das Gehäuse des Front-Knotens wurde speziell für die geschützte Montage in Mo
 └────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 8.2 Schnittstellen- & Flankenlayout des Front-Knotens
+### 6.2 Schnittstellen- & Flankenlayout des Front-Knotens
 
 Die Anordnung der Steckverbinder und Durchführungen an den Gehäuseflanken ist exakt auf das vergrößerte 4-Layer-Platinenlayout der PCBA 05 ($82 \times 50\,\text{mm}$, `openmotorbridge_front_node.kicad_pcb`) und die Cockpit-Kabelführung abgestimmt:
 
@@ -481,13 +503,13 @@ Die Anordnung der Steckverbinder und Durchführungen an den Gehäuseflanken ist 
 
 ---
 
-## 9. Fahrzeugspezifische Referenz-Montagekits (Zero-Drill / Bolt-On)
+## 7. Fahrzeugspezifische Referenz-Montagekits (Zero-Drill / Bolt-On)
 
 Während die 5 Hardware-Gehäuse (Typ A bis E) zu **100 % universell und einheitlich standardisiert** sind, liefert OpenMotorBridge für ausgewählte Motorradplattformen komplett durchentwickelte, schraub- und klebefreie Referenz-Montagekits. Diese nutzen originale Werksbefestigungspunkte oder elastische Spannsysteme, um das Gesamtsystem ohne Lackschäden oder irreversible Karosseriebohrungen perfekt ins Fahrzeug zu integrieren.
 
 ---
 
-### 9.1 Referenz-Kit 1: Harley-Davidson CVO Road Glide ST (2024+) & New Touring Platform
+### 7.1 Referenz-Kit 1: Harley-Davidson CVO Road Glide ST (2024+) & New Touring Platform
 
 Für High-Performance Bagger mit werkseitiger Einzelsitzbank und Forged-Carbon-Hutze (FLTRXSTSE):
 Aufgrund der werkseitigen Showa Inverted-Remote-Reservoir-Stoßdämpfer mit dicken Hydraulikleitungen und des neuen 2024er Heckabschlusses scheiden externe Strut-Konsolen mechanisch aus. Das ST-Referenzkit integriert die 5 Knoten daher zu 100 % unsichtbar und zerstörungsfrei:
@@ -523,24 +545,24 @@ Aufgrund der werkseitigen Showa Inverted-Remote-Reservoir-Stoßdämpfer mit dick
 
 ![CVO ST Under-Cowl Skeleton Dock CAD](../images/cad/cvo_st_undercowl_skeleton_dock_cad.png)
 
-*Abbildung 8.21: 3D-CAD-Ansicht des Under-Cowl Skeleton Docks (`cvo_st_undercowl_skeleton_dock.scad`). Monolithische Halbschale mit nach oben gewölbten Federbögen zur Abstützung an der Innendecke der Carbonhutze, seitlichen Dämpfungsflügeln und formschlüssigem Einschubschacht für Pod 3.*
+*Abbildung 8.22: 3D-CAD-Ansicht des Under-Cowl Skeleton Docks (`cvo_st_undercowl_skeleton_dock.scad`). Monolithische Halbschale mit nach oben gewölbten Federbögen zur Abstützung an der Innendecke der Carbonhutze, seitlichen Dämpfungsflügeln und formschlüssigem Einschubschacht für Pod 3.*
 
 ![CVO ST Telemetry Fin CAD](../images/cad/cvo_st_telemetry_fin_cad.png)
 
-*Abbildung 8.22: 3D-CAD-Modell der externen 2,4-GHz-Telemetrie-Finne (`cvo_st_telemetry_fin.scad`). Aerodynamisch geformte Finne zur Montage auf der werksseitigen Hecklasche der Forged-Carbon-Hutze mit geschützter Koaxialkabel-Durchführung und Knickschutz.*
+*Abbildung 8.23: 3D-CAD-Modell der externen 2,4-GHz-Telemetrie-Finne (`cvo_st_telemetry_fin.scad`). Aerodynamisch geformte Finne zur Montage auf der werksseitigen Hecklasche der Forged-Carbon-Hutze mit geschützter Koaxialkabel-Durchführung und Knickschutz.*
 
 ![Pod 3 Fender Assembly ST 3D](../images/cad/pod3_fender_assembly_st_3d.png)
 
-*Abbildung 8.23: Fotorealistische Gesamtheck-Montage an der CVO Road Glide ST: Unsichtbare, rüttelfeste Integration von Pod 3 im Skeleton Dock unter der Forged-Carbon-Hutze, strömungsgünstige Telemetrie-Finne auf der Hecklasche und vollständige Freigängigkeit zu den Showa Inverted-Remote-Reservoirs.*
+*Abbildung 8.24: Fotorealistische Gesamtheck-Montage an der CVO Road Glide ST: Unsichtbare, rüttelfeste Integration von Pod 3 im Skeleton Dock unter der Forged-Carbon-Hutze, strömungsgünstige Telemetrie-Finne auf der Hecklasche und vollständige Freigängigkeit zu den Showa Inverted-Remote-Reservoirs.*
 
 #### B. Kofferdeckel-Integration: Pod 1 (Links) & Pod 2 (Rechts)
-* **Top-Lid Montage:** Beide Pods sitzen im vorderen Drittel der Kofferdeckel, verschraubt an den originalen Torx-Punkten der Scharnier- bzw. Fangbandhalterung (siehe [Abschnitt 9.5](#95-universal-kofferdeckel-dock-saddlebag_lid_dockscad)).
+* **Top-Lid Montage:** Beide Pods sitzen im vorderen Drittel der Kofferdeckel, verschraubt an den originalen Torx-Punkten der Scharnier- bzw. Fangbandhalterung (siehe [Abschnitt 7.5](#75-universal-kofferdeckel-dock-saddlebag_lid_dockscad)).
 * **Gepäck- und Getränke-Sicherheit:** Liegen ca. $30\,\text{cm}$ über dem Kofferboden. Schwere Kaltgetränke, Werkzeug oder feuchte Kleidung am Boden liegen vollständig unterhalb der Funk-Fresnel-Zone.
 * **Maximale HF-Isolation ($> 40\,\text{dB}$):** Sena (links) und Cardo (rechts) sind über $60\,\text{cm}$ voneinander getrennt, mit Heckfender und Rahmen als HF-Schild.
 
 ---
 
-### 9.2 Referenz-Kit 2: Harley-Davidson Road King Special (FLHRXS / Classic Naked Touring)
+### 7.2 Referenz-Kit 2: Harley-Davidson Road King Special (FLHRXS / Classic Naked Touring)
 
 Für klassische Touring-Modelle ohne Frontverkleidung und mit 2-Up-Komfortsitzbank oder klassischem Heckfender:
 
@@ -571,34 +593,34 @@ Für klassische Touring-Modelle ohne Frontverkleidung und mit 2-Up-Komfortsitzba
 
 ![Pod 3 Touring Fender Console CAD](../images/cad/pod3_touring_fender_console.png)
 
-*Abbildung 8.24: Isolierte 3D-CAD-Ansicht der Touring Fender Console (`pod3_touring_fender_console.scad`) für Road King Special. Organisch fließende Tropfenform mit Heck-Einschuböffnung für Pod 3 und Kassetten-Schnellwechsel.*
+*Abbildung 8.25: Isolierte 3D-CAD-Ansicht der Touring Fender Console (`pod3_touring_fender_console.scad`) für Road King Special. Organisch fließende Tropfenform mit Heck-Einschuböffnung für Pod 3 und Kassetten-Schnellwechsel.*
 
 ![Pod 3 Touring Fender Console CAD Underside](../images/cad/pod3_touring_fender_console_cad.png)
 
-*Abbildung 8.25: Unterseite der Touring Fender Console CAD: Konkav gewölbter 195-mm-Kotflügel-Sattel, vordere $1/4"-20$-Schraublasche für die Soziussitz-Mutter und vertiefter Kabelkanal zur scheuerfreien Durchführung des M8-Kabels unter die Sitzbank.*
+*Abbildung 8.26: Unterseite der Touring Fender Console CAD: Konkav gewölbter 195-mm-Kotflügel-Sattel, vordere $1/4"-20$-Schraublasche für die Soziussitz-Mutter und vertiefter Kabelkanal zur scheuerfreien Durchführung des M8-Kabels unter die Sitzbank.*
 
 ---
 
-### 9.3 Referenz-Kit 3: Classic Bagger & Cruiser (Touring Stealth Console)
+### 7.3 Referenz-Kit 3: Classic Bagger & Cruiser (Touring Stealth Console)
 
 Für Harley-Davidson Street Glide, Electra Glide und Ultra Limited mit 2-Up-Komfortsitzbank:
 
 ![Pod 3 Touring Stealth Console CAD](../images/cad/pod3_touring_stealth_cad.png)
 
-*Abbildung 8.26: Isolierte 3D-CAD-Ansicht der Touring Stealth Console (`pod3_touring_stealth_console.scad`). Vollständig organisch verrundete Konturen ($R = 6\dots 7\,\text{mm}$) ohne harte Boxkanten. Vordere Montagelasche für die originale $1/4"-20$ Soziussitz-Schraube im Schutzblech, anschmiegende Sitzbankkontur mit M8-Kabelkanal nach vorne unter die Bank, Anbindung der Frontschräge auf halber Einschubhöhe ($Z = 22\,\text{mm}$), offenes zentrales Dock und sanft abfallender Teardrop-Heckbürzel mit integrierter Einklips-Nut für die Heckantenne.*
+*Abbildung 8.27: Isolierte 3D-CAD-Ansicht der Touring Stealth Console (`pod3_touring_stealth_console.scad`). Vollständig organisch verrundete Konturen ($R = 6\dots 7\,\text{mm}$) ohne harte Boxkanten. Vordere Montagelasche für die originale $1/4"-20$ Soziussitz-Schraube im Schutzblech, anschmiegende Sitzbankkontur mit M8-Kabelkanal nach vorne unter die Bank, Anbindung der Frontschräge auf halber Einschubhöhe ($Z = 22\,\text{mm}$), offenes zentrales Dock und sanft abfallender Teardrop-Heckbürzel mit integrierter Einklips-Nut für die Heckantenne.*
 
 ![Pod 3 Fender Assembly Touring 3D](../images/cad/pod3_fender_assembly_touring_3d.png)
 
-*Abbildung 8.27: Fotorealistische Gesamtheck-Montage an der Classic Touring-Maschine: Nahtlose Anschmiegung an die Beifahrersitzbank, M8-Kabel unsichtbar nach vorne geführt, freiliegendes Pod-Dach für ungestörten GNSS-Empfang, Kassetteneinschub von hinten und entkoppeltes Garmin Varia Radar unter dem Kennzeichen.*
+*Abbildung 8.28: Fotorealistische Gesamtheck-Montage an der Classic Touring-Maschine: Nahtlose Anschmiegung an die Beifahrersitzbank, M8-Kabel unsichtbar nach vorne geführt, freiliegendes Pod-Dach für ungestörten GNSS-Empfang, Kassetteneinschub von hinten und entkoppeltes Garmin Varia Radar unter dem Kennzeichen.*
 
 ---
 
-### 9.4 Referenz-Kit 4: Adventure & Touring Enduros (BMW GS / GSA, KTM Adventure, Africa Twin)
+### 7.4 Referenz-Kit 4: Adventure & Touring Enduros (BMW GS / GSA, KTM Adventure, Africa Twin)
 
 Für großvolumige Reiseenduros und Offroad-Tourer mit offenem Gitterrohr-Heckrahmen, Rohrgepäckbrücke und optionalem Aluminium-3-Koffersystem (z. B. Touratech Zega Pro/Evo, BMW Adventure oder Wunderlich):
 
 ![OpenMotorBridge Adventure-Kit Master Assembly 3D Studio](../images/cad/adventure_kit_master_assembly_3d.png)
-*Abbildung 8.21: Photorealistisches 3D-CAD-Studio des modularen Adventure-Kits (`99_adventure_kit_assembly.scad`). Links: GSA Rohrträger-Klemmschelle im geschützten Rahmendreieck (Pod 1 & Sena). Mitte: Standard-GS Transition Dock in der Sitzbank-Bügelfalte (Pod 2 & Cardo). Rechts: Gepäckbrücken-Ausleger "Heck-Balkon" hinter Alutopcase mit 45°-Astabweiser-Finne für die 2.4 GHz Dipolantenne, Pod 3 Transceiver und Garmin Varia Radar mit 36-Zahn Hirth-Formschluss-Gelenk.*
+*Abbildung 8.29: Photorealistisches 3D-CAD-Studio des modularen Adventure-Kits (`99_adventure_kit_assembly.scad`). Links: GSA Rohrträger-Klemmschelle im geschützten Rahmendreieck (Pod 1 & Sena). Mitte: Standard-GS Transition Dock in der Sitzbank-Bügelfalte (Pod 2 & Cardo). Rechts: Gepäckbrücken-Ausleger "Heck-Balkon" hinter Alutopcase mit 45°-Astabweiser-Finne für die 2.4 GHz Dipolantenne, Pod 3 Transceiver und Garmin Varia Radar mit 36-Zahn Hirth-Formschluss-Gelenk.*
 
 ```
             ADVENTURE BIKE (BMW GS / KTM / AFRICA TWIN) INTEGRATION
@@ -631,7 +653,7 @@ Für großvolumige Reiseenduros und Offroad-Tourer mit offenem Gitterrohr-Heckra
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-#### 9.4.1 Kassetten-Pods 1 & 2 (Seitenmodule) – Die zwei Montage-Varianten
+#### 7.4.1 Kassetten-Pods 1 & 2 (Seitenmodule) – Die zwei Montage-Varianten
 
 Auf Reiseenduros existieren je nach Einsatzzweck und Koffersystem zwei grundverschiedene Fahrzeughecks. OpenMotorBridge bietet dafür zwei perfekt abgestimmte Montagevarianten:
 
@@ -653,7 +675,7 @@ Auf Reiseenduros existieren je nach Einsatzzweck und Koffersystem zwei grundvers
 
 ---
 
-#### 9.4.2 Heck-Pod 3 (Transceiver) – Das universelle "Rack-Tail Mount" & Heck-Balkon-Konzept
+#### 7.4.2 Heck-Pod 3 (Transceiver) – Das universelle "Rack-Tail Mount" & Heck-Balkon-Konzept
 
 Wird eine Reiseenduro mit einem Aluminium-Topcase (z. B. Touratech Zega Evo 38L oder BMW Adventure Topcase) bestückt, schirmt das massive $1{,}5\,\text{mm}$ Aluminiumblech Funkwellen nach oben ab (Faraday-Käfig). Das universelle "Rack-Tail Mount" (`adventure_rack_tail_mount.scad`) löst diesen Konflikt als stabiler Heck-Balkon, der fest an der Gepäckbrücke des Motorrads verschraubt wird und ca. $65\,\text{mm}$ hinter die senkrechte Rückwand des Topcases kragt:
 
@@ -796,56 +818,14 @@ Wird eine Reiseenduro mit einem Aluminium-Topcase (z. B. Touratech Zega Evo 38L 
 
 ---
 
-#### 9.4.3 Unsichtbarer Magnet-Diebstahlschutz für Wechselkassetten
+#### 7.4.3 Unsichtbarer Magnet-Diebstahlschutz im Fernreise-Einsatz
 
-Auf frei zugänglichen Reiseenduros und bei Zwischenstopps auf Fernreisen müssen die modularen Einschubkassetten (Sena, Cardo, Transceiver) zuverlässig gegen schnellen Gelegenheitsdiebstahl geschützt werden. Während die Pod-Gehäuse selbst durch feste M8-Verschraubungen und Halteklammern fahrzeugfest montiert sind, wurde für den Kassettenmechanismus ein innovatives, vollkommen unsichtbares Verriegelungskonzept entwickelt:
+Auf frei zugänglichen Reiseenduros und bei Zwischenstopps auf Fernreisen (z. B. auf TET-Pisten, Pässen oder unbewachten Rastplätzen) schützt der in [Abschnitt 4.1](#41-gesamtsystem-kinematik-poka-yoke-auto-eject--unsichtbarer-magnet-diebstahlschutz) als plattformweiter Standard spezifizierte, vollkommen unsichtbare Magnetverschluss die modularen Einschubkassetten (Sena, Cardo, Transceiver) zuverlässig gegen schnellen Gelegenheitsdiebstahl:
 
-```
-        MAGNETISCHER DIEBSTAHL-SCHUTZ: 2-ARM-WIPPE (KINEMATIK-SCHNITT)
-═════════════════════════════════════════════════════════════════════════════════
+* **100 % Schlamm-, Staub- & Eissicherheit:** Da der Mechanismus hermetisch im Inneren des Gehäuses gekapselt ist und ohne Schlüsselloch oder Außenschieber auskommt, ist er absolut resistent gegen eindringenden Offroad-Schlamm, Pistenstaub, Hochdruckreiniger oder Frost auf winterlichen Pässen.
+* **Verdeckte Entriegelung:** Das Entriegeln erfolgt kontaktlos in Sekundenbruchteilen durch Anhalten des N52-Magnetschlüssels an den Zielkreis ($X = 64\,\text{mm}$), woraufhin die V4A-Federn die Kassette formschön um $15\dots 20\,\text{mm}$ auswerfen.
 
-                 POD-GEHÄUSEWAND (PA12-MJF, NICHT-MAGNETISCH)
- ─────────────────────────┬───────────────────────┬──────────────────────────────
-  [EXTERNER NEODYM-KEY]   │                       │ [GEHÄUSE-FÜHRUNGSNUT]
-   (Zielkreis bei X=64)   │                       │  (Rastkerbe bei X=88 mm)
-            ▼             │                       │            ▲
-      ┌───────────┐       │                       │            │ 90° Sperrflanke:
-      │ NEODYM-   │       │                       │            │ blockiert Auszug!
-      │ MAGNET N52│       │                       │            │
-      └─────┬─────┘       │                       │            │
- ═══════════╪═════════════╪═══════════════════════╪════════════╪═════════════════
-  KASSETTE  │             │                       │            │
-            ▼ Zieht nach  │   M2 SCHWENKACHSE     │            ▼
-      ┌───────────┐ außen!│    (DREHPUNKT)        │   ┌─────────────────┐
-      │STAHLANKER ├───────┴─────────⊙─────────────┴───┤ SÄGEZAHN-KRALLE │
-      │(Ø 6.2 mm) │   Hinterarm     │     Vorderarm   │ (30° Ein / 90°)|
-      └─────┬─────┘   (X = 46 mm)   │    (X = 70 mm)  └─────────────────┘
-            ▲                       │                          ▲
-     [V4A-FEDER] █ Drückt           │                          │ Schwenkt nach
-     (Normalst.)   nach innen       │                          │ innen frei!
-```
-
-![OpenMotorBridge Magnetischer Diebstahlschutz 3D CAD Kinematik](../images/cad/magnetic_anti_theft_lock_cad.png)
-*Abbildung 8.24: Kinematische 3D-Schnittansicht des magnetischen Kassetten-Diebstahlschutzes (`98_magnetic_anti_theft_inspection.scad`). Erkennbar sind das transparente Pod-Gehäuse, der Schlitten mit 1. Klasse Wipphebel (grün), die 90°-Sägezahnkralle im Gehäuserasteingriff, der Ø 6x8 mm Stahlanker mit V4A Rückstellfeder, die M2 Edelstahl-Drehachse sowie die stirnseitigen V4A Auswerffedern.*
-
-##### Funktionsweise & Konstruktionsmerkmale:
-1. **Keine Gehäusevergrößerung & plane Kassettenfront:**
-   * Der Mechanismus nutzt die bestehenden seitlichen Wandstärken des Kassetten-Basisschlittens (`00_base_sled.scad`, Parameter `magnetic_lock = true`). Das Außenvolumen der Pods ($135 \times 70 \times 38{,}5\,\text{mm}$) bleibt unverändert.
-   * **Diebstahlsichere Front:** Die außenliegenden Squeeze-Buttons der Standardkassette entfallen im Anti-Theft-Modus; die Flanken der Frontplatte schließen glatt und bündig ab, sodass ein manuelles Aushebeln per Hand unmöglich ist.
-2. **Kinetische 2-Arm-Wippe (`parts/05_magnetic_lock_latch.scad`):**
-   * Die Verriegelung arbeitet als Hebel 1. Ordnung mit zentralem Drehpunkt (M2-Schwenkachse auf $X = 58\,\text{mm}$).
-   * **Vorderer Arm ($X = 70\,\text{mm}$):** Trägt die Sägezahn-Rastkralle, die durch einen Schlitz der linken Führungsfeder $2{,}5\,\text{mm}$ nach außen in die Gehäusenut ragt. Beim Einschieben gleitet die $30^\circ$-Anlaufschräge butterweich über die Schiene und schnappt am Endanschlag mit einem satten Klick in die Gehäuseraste bei $X = 88\,\text{mm}$ ein.
-   * **Hinterer Arm ($X = 46\,\text{mm}$):** Trägt den eingepressten, ferromagnetischen Stahlanker ($\varnothing 6{,}2 \times 8\,\text{mm}$). Eine V4A-Druckfeder stützt sich gegen die innere Schlittenwand ab und hält die vordere Kralle im Ruhezustand permanent unter formschlüssiger Sperrung.
-3. **Kontaktlose Neodym-Entriegelung & Taktiler Zielkreis:**
-   * Auf der linken Gehäuseaußenwand von `pod_base_housing.scad` ist bei $X = 64\,\text{mm}$ ein dezenter Zielkreis ($\varnothing 18\,\text{mm} \times 0{,}6\,\text{mm}$) eingelassen.
-   * Hält der Fahrer einen handlichen Neodym-Magnetschlüssel (N52 am Schlüsselbund) an diesen Zielkreis, zieht das Magnetfeld den Stahlanker um ca. $2\,\text{mm}$ nach außen an die Innenwand.
-   * Durch die Wippen-Kinematik schwenkt die vordere Rastkralle nach innen in den Schlitten und gibt die Gehäuseraste frei.
-   * Die im Gehäusegrund sitzende Auswerffeder stößt die Kassette sofort definiert um $15\dots 20\,\text{mm}$ nach vorne aus.
-4. **Hermetischer Offroad-Schutz (Sand-, Schlamm- & Eissicher):**
-   * Herkömmliche Zylinderschlösser oder Schieberiegel versagen im Geländeeinsatz schnell durch eindringenden Staub, Schlamm oder Frost.
-   * Der magnetische Kassettenverschluss besitzt keinerlei Öffnungen nach außen, ist vollständig gekapselt und arbeitet wartungsfrei unter härtesten Witterungsbedingungen.
-
-#### 9.4.1 OpenMotorBridge 2-in-1 Smart-Keyfob (`smart_keyfob_pager.scad`)
+#### 7.4.4 OpenMotorBridge 2-in-1 Smart-Keyfob (`smart_keyfob_pager.scad`)
 
 Um zu verhindern, dass der Fahrer neben dem Motorradschlüssel einen separaten Magnetschlüssel und einen Pager mitführen muss, integriert der **OpenMotorBridge 2-in-1 Smart-Keyfob** (`smart_keyfob_pager.scad`) beide Funktionen in einem kompakten, ergonomischen Gehäuse:
 
@@ -864,30 +844,30 @@ Um zu verhindern, dass der Fahrer neben dem Motorradschlüssel einen separaten M
 
 ---
 
-### 9.5 Universal Kofferdeckel-Dock (`saddlebag_lid_dock.scad`)
+### 7.5 Universal Kofferdeckel-Dock (`saddlebag_lid_dock.scad`)
 
 Das universelle Kofferdeckel-Dock ([`saddlebag_lid_dock.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/saddlebag_lid_dock.scad)) wurde speziell für die geschützte, vibrationsfeste und 100 % zerstörungsfreie Innenmontage der Satelliten-Pods 1 (Sena Mesh) und 2 (Cardo DMC) in Motorrad-Seitenkoffern entwickelt (Referenz: Harley-Davidson One-Touch Hartschalenkoffer 2014–2024+):
 
 ![Universal Saddlebag Lid Dock CAD](../images/cad/saddlebag_lid_dock_iso.png)
 
-*Abbildung 8.29: 3D-CAD-Visualisierung des Kofferdeckel-Docks (`saddlebag_lid_dock.scad`). Sichtbar sind der inboard gerichtete Torx-Montageflansch für die originalen Scharnierschrauben, die frontale Dual-Port-Kabelschnauze mit Zugentlastung (Port B USB-C Durchgang & Port A M8 Freisparung), die umlaufende Halbschale mit EPDM-Spannbandschlitzen und die obere Tropfkante über dem Kassetteneinschub.*
+*Abbildung 8.30: 3D-CAD-Visualisierung des Kofferdeckel-Docks (`saddlebag_lid_dock.scad`). Sichtbar sind der inboard gerichtete Torx-Montageflansch für die originalen Scharnierschrauben, die frontale Dual-Port-Kabelschnauze mit Zugentlastung (Port B USB-C Durchgang & Port A M8 Freisparung), die umlaufende Halbschale mit EPDM-Spannbandschlitzen und die obere Tropfkante über dem Kassetteneinschub.*
 
-#### 9.5.1 Zero-Drill-Befestigung & Mechanisches Konzept
+#### 7.5.1 Zero-Drill-Befestigung & Mechanisches Konzept
 1. **Nutzung originaler Befestigungspunkte (Zero-Drill):**
-   * Der $4\,	ext{mm}$ dicke Montageflansch greift die beiden werksseitigen M5 / Torx T20-Schrauben des Scharnier- bzw. Fangbandbeschlags ab (Lochabstand $52\,	ext{mm}$).
-   * Großzügige Langlöcher ($arnothing 5{,}6 	imes 9{,}0\,	ext{mm}$) ermöglichen den Ausgleich von Fertigungstoleranzen der ABS-Koffer.
+   * Der $4\,\text{mm}$ dicke Montageflansch greift die beiden werksseitigen M5 / Torx T20-Schrauben des Scharnier- bzw. Fangbandbeschlags ab (Lochabstand $52\,\text{mm}$).
+   * Großzügige Langlöcher ($\varnothing 5{,}6 \times 9{,}0\,\text{mm}$) ermöglichen den Ausgleich von Fertigungstoleranzen der ABS-Koffer.
    * **Keine Bohrungen im Koffer:** Das Motorrad und die Koffer bleiben zu 100 % im unversehrten Originalzustand (Werterhalt & Dichtigkeit garantiert).
 2. **Alternative / Zusätzliche Klebemontage (3M VHB):**
-   * Auf der Unterseite sind vier definierte Taschen ($18 	imes 12 	imes 0{,}8\,	ext{mm}$) für 3M VHB Hochleistungs-Acrylatschaum-Klebebänder eingelassen, um eine optionale Montage an glatten Kofferinnenwänden anderer Hersteller (z. B. BMW Vario- oder Alukoffer) zu ermöglichen.
-3. **Halbschalen-Architektur ($H = 26\,	ext{mm}$):**
-   * Die $3\,	ext{mm}$ dicke PA12-Wanne umschließt das Pod 3-Gehäuse ($135 	imes 70 	imes 38\,	ext{mm}$) formschlüssig bis auf halbe Höhe.
+   * Auf der Unterseite sind vier definierte Taschen ($18 \times 12 \times 0{,}8\,\text{mm}$) für 3M VHB Hochleistungs-Acrylatschaum-Klebebänder eingelassen, um eine optionale Montage an glatten Kofferinnenwänden anderer Hersteller (z. B. BMW Vario- oder Alukoffer) zu ermöglichen.
+3. **Halbschalen-Architektur ($H = 26\,\text{mm}$):**
+   * Die $3\,\text{mm}$ dicke PA12-Wanne umschließt das Pod 3-Gehäuse ($135 \times 70 \times 38\,\text{mm}$) formschlüssig bis auf halbe Höhe.
    * Die modulare Wechselkassette bleibt von hinten voll zugänglich und kann mit Daumen und Zeigefinger in Sekunden entriegelt und gewechselt werden, ohne das Dock zu demontieren.
 4. **Schutz vor Tropfwasser (Overhead Drip Lip):**
-   * Über dem Kassetteneingang kragt eine integrierte **Tropfkante ($16 	imes 2\,	ext{mm}$ mit $30^\circ$-Dachschräge)** aus. Sie leitet Kondenswasser oder herablaufende Regentropfen beim Öffnen des Kofferdeckels zuverlässig seitlich an der Kassetten-Dichtfuge vorbei.
+   * Über dem Kassetteneingang kragt eine integrierte **Tropfkante ($16 \times 2\,\text{mm}$ mit $30^\circ$-Dachschräge)** aus. Sie leitet Kondenswasser oder herablaufende Regentropfen beim Öffnen des Kofferdeckels zuverlässig seitlich an der Kassetten-Dichtfuge vorbei.
 5. **Vibrationsfeste EPDM-Sicherung:**
-   * Zwei seitliche Durchbrüche ($25 	imes 3\,	ext{mm}$) nehmen ein elastisches Spannband auf, das den Pod bei harten Fahrbahnschlägen spielfrei in der Wanne arretiert.
+   * Zwei seitliche Durchbrüche ($25 \times 3\,\text{mm}$) nehmen ein elastisches Spannband auf, das den Pod bei harten Fahrbahnschlägen spielfrei in der Wanne arretiert.
 
-#### 9.5.2 Kabelführung, Zündungsplus & Werkstattsichere MagSafe-Abreißkupplung
+#### 7.5.2 Kabelführung, Zündungsplus & Werkstattsichere MagSafe-Abreißkupplung
 
 Die Verkabelung der Kofferdeckel-Pods löst das fundamentale Praxiskriterium des Alltags- und Werkstattbetriebs: **Zündungsgesteuerter Dauerstrom ohne Akku-Sorgen bei gleichzeitiger 100 % zerstörungsfreier Kofferdemontage („Mechaniker-Sicherheit“)**.
 
@@ -957,98 +937,25 @@ Die Verkabelung der Kofferdeckel-Pods löst das fundamentale Praxiskriterium des
    * **Stufe 2 (Kofferdeckel):** Im Schnauz des Kofferdeckel-Docks ([`saddlebag_lid_dock.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/saddlebag_lid_dock.scad)) wird das Kabel $15\,\text{mm}$ vor dem Stecker erneut formschlüssig abgefangen.
    * **Ergebnis an Port B:** Der USB-C-Stecker im Pod ist vollständig mechanisch entkoppelt und unterliegt **0 Newton dynamischer oder statischer Zugkraft**.
 
-#### 9.5.3 HF-Physik: Warum Kofferdeckel statt Kofferboden?
+#### 7.5.3 HF-Physik: Warum Kofferdeckel statt Kofferboden?
 
-Die Platzierung der Intercom-Pods im Kofferdeckel ($pprox 70\dots 75\,	ext{cm}$ über Fahrbahnniveau) löst fundamentale hochfrequenztechnische Probleme:
+Die Platzierung der Intercom-Pods im Kofferdeckel ($\approx 70\dots 75\,\text{cm}$ über Fahrbahnniveau) löst fundamentale hochfrequenztechnische Probleme:
 
 | Kriterium | Montage am Kofferboden / Seitenwand | Montage im Kofferdeckel (OpenMotorBridge) | Physikalische Begründung |
 | :--- | :--- | :--- | :--- |
-| **Flüssigkeitsdämpfung** | **Massive Dämpfung ($> 20\,	ext{dB}$)** | **Keine Dämpfung ($0\,	ext{dB}$)** | 2,4 GHz ist die Resonanzfrequenz von Wasser ($2\dots 4\,	ext{dB/cm}$ Verlust). Kalte Getränkedosen / Wasserflaschen liegen am Boden und blockieren die Line-of-Sight (LOS). Im Deckel liegt der Pod weit über dem Gepäck. |
-| **Fresnel-Zonen-Höhe** | Bodennah ($30\,	ext{cm}$), starke Reflexion an Asphalt | Optimal ($70\dots 75\,	ext{cm}$ über Asphalt) | Die erste Fresnel-Zone zu Gruppenmitgliedern (Helme auf $1{,}2\dots 1{,}5\,	ext{m}$) bleibt frei von Bodenhindernissen und Fahrbahninterferenzen. |
-| **Gehäuse-Dämpfung** | ABS-Kofferwand ($< 0{,}2\,	ext{dB}$) | ABS-Kofferdeckel ($< 0{,}2\,	ext{dB}$) | ABS-Kunststoff ist für 2,4 GHz dielektrisch nahezu transparent ($\epsilon_r pprox 2{,}6$, $	an\delta pprox 0{,}005$). |
-| **Schließgestänge** | Im Schwenkbereich | $> 15\,	ext{cm}$ Abstand zum Gestänge | Die metallische One-Touch Striker Bar reflektiert nur lokal und verursacht bei $\lambda = 12{,}5\,	ext{cm}$ keinerlei Abschattung nach vorne/oben. |
-| **HF-Entkopplung** | $< 20\,	ext{dB}$ bei benachbarter Montage | **$> 40\,	ext{dB}$ Raumdiversität** | Sena (linker Koffer) und Cardo (rechter Koffer) sind $> 60\,	ext{cm}$ getrennt; Heckfender und Rahmen dienen als HF-Schirm $\implies$ 0 De-Sensing. |
+| **Flüssigkeitsdämpfung** | **Massive Dämpfung ($> 20\,\text{dB}$)** | **Keine Dämpfung ($0\,\text{dB}$)** | 2,4 GHz ist die Resonanzfrequenz von Wasser ($2\dots 4\,\text{dB/cm}$ Verlust). Kalte Getränkedosen / Wasserflaschen liegen am Boden und blockieren die Line-of-Sight (LOS). Im Deckel liegt der Pod weit über dem Gepäck. |
+| **Fresnel-Zonen-Höhe** | Bodennah ($30\,\text{cm}$), starke Reflexion an Asphalt | Optimal ($70\dots 75\,\text{cm}$ über Asphalt) | Die erste Fresnel-Zone zu Gruppenmitgliedern (Helme auf $1{,}2\dots 1{,}5\,\text{m}$) bleibt frei von Bodenhindernissen und Fahrbahninterferenzen. |
+| **Gehäuse-Dämpfung** | ABS-Kofferwand ($< 0{,}2\,\text{dB}$) | ABS-Kofferdeckel ($< 0{,}2\,\text{dB}$) | ABS-Kunststoff ist für 2,4 GHz dielektrisch nahezu transparent ($\epsilon_r \approx 2{,}6$, $\tan\delta \approx 0{,}005$). |
+| **Schließgestänge** | Im Schwenkbereich | $> 15\,\text{cm}$ Abstand zum Gestänge | Die metallische One-Touch Striker Bar reflektiert nur lokal und verursacht bei $\lambda = 12{,}5\,\text{cm}$ keinerlei Abschattung nach vorne/oben. |
+| **HF-Entkopplung** | $< 20\,\text{dB}$ bei benachbarter Montage | **$> 40\,\text{dB}$ Raumdiversität** | Sena (linker Koffer) und Cardo (rechter Koffer) sind $> 60\,\text{cm}$ getrennt; Heckfender und Rahmen dienen als HF-Schirm $\implies$ 0 De-Sensing. |
 
----
-
-### 9.6 Entkoppeltes Kennzeichen-Radar-Bracket & Rechtliche Konformität
-
-Auf Cruisern und Baggern wird das Garmin Varia mmWave-Radar von Pod 3 **entkoppelt** und mittig unter dem Kennzeichen montiert:
-
-![Radar License Plate Bracket CAD](../images/cad/radar_license_plate_bracket_cad.png)
-
-*Abbildung 8.30: 3D-CAD-Modell des entkoppelten Kennzeichen-Radarhalters mit M6-Klemmung, M5-Schwenkscharnier und verdecktem rückseitigem M8-Kabelkanal.*
-
-* **Rechtliche Vorschrift (§ 10 Abs. 6 FZV / ECE R138):**
-  Das Kennzeichen muss von oben in einem vertikalen Winkel von **mindestens $+30^\circ$ vollständig und ohne Verdeckung** einsehbar sein.
-* **Vermeidung des Dachüberstand-Problems:**
-  Durch die Platzierung des Radars **unter** dem Kennzeichen muss die obere Pod-Konsole nicht weit nach hinten auskragen. Der $+30^\circ$-Sichtbereich auf die Zulassungs- und TÜV-Plaketten bleibt zu $100\,\%$ frei.
-* **Schwingungs- und Vibrationsfestigkeit (Formschluss-Hirth-Gelenk):**
-  Das Radar sitzt direkt an der massiven Grundplatte ohne langen Hebelarm. Die Gabelwangen besitzen eine integrierte formschlüssige 36-Zahn Hirth-Rosette ([`011_gopro_hirth_lock.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/parts/011_gopro_hirth_lock.scad)), die zusammen mit dem diebstahlhemmenden Garmin Varia Dock ([`radar_varia_gopro_lock_dock.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/radar_varia_gopro_lock_dock.scad)) ein unbeabsichtigtes Absacken durch die harten Vibrationen des Milwaukee-Eight 117 cui Motors zuverlässig verhindert.
-* **Diebstahlschutz:**
-  Die Bajonettaufnahme fixiert das Radar mit einer verdeckten M3-Sicherheitsmadenschraube und M5-Sicherheits-Torx-TR Schraube am Hirth-Gelenk gegen Entwendung im Straßenverkehr.
-* **Verdeckte Kabelführung:**
-  Das M8-Signalkabel des Radars verläuft unsichtbar in einem rückseitig eingeformten Schacht hinter dem Kennzeichen nach oben und vereinigt sich hinter der Blinkerbrücke mit dem Heckkabelbaum.
-
----
-
-### 9.7 Custom-Bikes & Bobber: Stealth Center-Underfender Mount vs. Seitlicher Kennzeichenhalter
-
-Auf vielen Custom-Bikes, Bobbern, Choppern und modifizierten Softails (z. B. Breakout, Fat Boy, Sportster S, Indian Scout) montieren Besitzer einen **seitlichen Kennzeichenhalter**, um den breiten Hinterreifen ($180\dots 260\,\text{mm}$) optisch vollständig freizulegen und den Heckfender extrem kurz („Short-Cut“) zu halten. 
-
-Obwohl diese Lösung ästhetisch oft kritisiert wird (asymmetrische Störung der Linienführung), stellt sich in der Praxis die entscheidende Frage: **Wo wird bei solchen Maschinen das Garmin Varia mmWave-Radar platziert?**
-
-#### 9.7.1 Warum Radar am seitlichen Kennzeichenhalter lebensgefährlich ist (Die 3 K.O.-Kriterien)
-
-Das mmWave-Radar darf **unter keinen Umständen** an den seitlichen Kennzeichenhalter montiert werden:
-
-1. **Tödliche RF-Abschattung (Blind Spot im rechten Hecksektor):**
-   * Das mmWave-Radar (24 GHz / 77 GHz) sendet in einem horizontalen Fächer von ca. $\pm 20^\circ$ bis $\pm 22{,}5^\circ$ ($40^\circ\dots 45^\circ$ Gesamtkegel).
-   * Bei einer linken Achsmontage ($25\dots 35\,\text{cm}$ Versatz zur Fahrzeuglängsachse) verdeckt der breite Hinterreifen ($200\dots 260\,\text{mm}$ Karkasse + Felge) den gesamten Signalpfad nach rechts-hinten.
-   * **Konsequenz:** Fahrzeuge, die auf mehrspurigen Straßen oder Autobahnen von rechts hinten auflaufen, rechts überholen oder im toten Winkel mitschwimmen, werden vom Radar **vollständig übersehen**.
-2. **100 % ungefederte Massen ($20\dots 30\,g$ Schockbelastung):**
-   * Seitliche Halter sind starr an der Schwinge oder direkt auf der Radachse verschraubt.
-   * Jeder Schlaglochstoß hämmert mit $20\dots 30\,g$ ungedämpft in den Ausleger. Durch den langen Hebelarm entstehen immense dynamische Biegemomente (Kuhschwanz-Vibrationen), die Bajonettverschlüsse und Leiterplatten-Lötstellen in kürzester Zeit zerstören.
-3. **Schräglagen-Asymmetrie & Boden-Clutter:**
-   * In Linkskurven sinkt das Radar durch den $30\,\text{cm}$-Hebelarm extrem nah an den Asphalt ab (führt zu Multipath-Bodenreflexionen und Falschalarmen), während es in Rechtskurven steil in den Himmel gerichtet ist.
-
-#### 9.7.2 Die OpenMotorBridge-Architektur: Striktes Entkopplungsprinzip & Stealth Center-Underfender Mount
-
-Für OpenMotorBridge gilt das fundamentale Sicherheitsprinzip: **Das Radar sitzt IMMER zentriert in der Fahrzeug-Symmetrieachse und an der gefederten Masse.**
-
-Hierfür wurde der **Stealth Center Under-Fender Mount** ([`02_pod_base/radar_center_underfender_mount.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/radar_center_underfender_mount.scad)) entwickelt:
-
-![Stealth Center Under-Fender Mount CAD](../images/cad/radar_center_underfender_mount_cad.png)
-
-*Abbildung 8.31: 3D-CAD-Modell des Stealth Center Under-Fender Mounts (`radar_center_underfender_mount.scad`). Sichtbar sind die gewölbte Basisflansch-Sattelplatte ($R = 210\,\text{mm}$) für Schraub- oder 3M-VHB-Klebemontage, die ultrakompakte Clevis-Gabel mit radialer 36-Zahn Hirth-Formschluss-Rastung ($10^\circ$-Ausrichtung) und der verdeckte M8-Kabelschacht zur Kotflügel-Innenseite.*
-
-* **Nahtlose Stealth-Ästhetik für Custom-Hecks:**
-  Der Halter sitzt direkt mittig unter der Abschlusskante des Heckkotflügels oder an den inneren Fender-Struts. Von hinten ist das Radar im Schatten des Kotflügels kaum wahrnehmbar und wirkt wie eine winzige, edle Designer-Rückleuchte. Der breite Hinterreifen bleibt optisch zu $100\,\%$ frei.
-* **Gefederte Masse & Schwingungsschutz:**
-  Da die Montage am Fender / Rahmen (gefederte Masse) erfolgt, reduzieren sich Fahrbahnschläge von $25\,g$ auf unkritische $2\dots 4\,g$.
-* **Formschluss-Hirth-Gelenk ($10^\circ$-Schritte):**
-  Die Clevis-Gabel nimmt das diebstahlhemmende Garmin Varia Dock ([`radar_varia_gopro_lock_dock.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/radar_varia_gopro_lock_dock.scad)) auf. Die formschlüssige 36-Zahn Hirth-Verzahnung arretiert den Neigungswinkel absolut rutschfest horizontal zur Fahrbahn.
-* **Flexible Montage (Kleben oder Schrauben):**
-  - **3M VHB 5952:** Breite plane Auflagefläche für bohrungsfreie Montage auf makellosen Custom-Lackierungen.
-  - **2x M4/M5 Senkkopfschrauben:** Zentraler Bohrungsabstand von $26\,\text{mm}$ für formschlüssige Verschraubung an vorhandenen Fender-Bohrungen.
-* **Verdeckte M8-Kabelführung:**
-  Das M8-Kabel verschwindet sofort nach oben durch einen integrierten $\varnothing 5{,}5\,\text{mm}$ Schacht an die Kotflügelinnenseite und läuft dort geschützt im serienmäßigen Kabelkanal nach vorne zur Zentralbox.
-
----
-
-## 10. CAD-Dateistruktur & OpenSCAD-Modulbaukasten (STL-Bibliothek)
-
-Die CAD-Dateistruktur von OpenMotorBridge folgt einer strengen hierarchischen CSG-Architektur (Constructive Solid Geometry):
-- **Hauptverzeichnisse (`01_main_box/`, `02_pod_base/`, `03_pod_cartridges/`, `04_front_node/`)**: Enthalten **ausschließlich monolithische, direkt 3D-druckbare Produktions-STLs** (100 % single-manifold, wasserdicht, 0 frei schwebende Körper).
-- **Unterordner (`components/`)**: Enthalten die parametrischen CSG-Einzelkomponenten (z. B. unbeschnittene Basiskörper, Flansche, Schraubdome, Dichtkämme und PCB-/Akku-Dummies) für Baugruppenmontagen und modulare Adaptionen.
-
-#### 9.5.4 Stationäres MagSafe-Rahmendock (`009_magsafe_frame_dock.scad`) & Horizontale Clamshell-Architektur
+#### 7.5.4 Stationäres MagSafe-Rahmendock (`009_magsafe_frame_dock.scad`) & Horizontale Clamshell-Architektur
 
 Das stationäre MagSafe-Rahmendock ([`009_magsafe_frame_dock.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/parts/009_magsafe_frame_dock.scad)) wird fahrzeugfest am Rahmenrohr unter dem Sitzüberhang montiert (passend für Harley Touring / Softail / CVO ST Rahmenrohre mit $\varnothing 25{,}4\dots 28{,}6\,\text{mm}$ bzw. $1"\dots 1{,}125"$):
 
 ![MagSafe Frame Dock CAD](../images/cad/magsafe_frame_dock_cad.png)
 
-*Abbildung 8.30: 3D-CAD-Explosionsansicht des MagSafe-Rahmendocks (`009_magsafe_frame_dock.scad`). Sichtbar sind das Obergehäuse mit integrierter Ø 26 mm Rahmensattelwiege und M3-Gewindeeinsätzen, die mittige PCBA 06 Schutzplatine, das Untergehäuse mit Halbschalen-Cradles für M8 und MagSafe, der obere Halbschellen-Rohrbügel (`009_magsafe_frame_clamp.stl`) sowie die zentrale M2.5 Zylinderkopf-Klemmschraube.*
+*Abbildung 8.31: 3D-CAD-Explosionsansicht des MagSafe-Rahmendocks (`009_magsafe_frame_dock.scad`). Sichtbar sind das Obergehäuse mit integrierter Ø 26 mm Rahmensattelwiege und M3-Gewindeeinsätzen, die mittige PCBA 06 Schutzplatine, das Untergehäuse mit Halbschalen-Cradles für M8 und MagSafe, der obere Halbschellen-Rohrbügel (`009_magsafe_frame_clamp.stl`) sowie die zentrale M2.5 Zylinderkopf-Klemmschraube.*
 
 1. **Horizontale Clamshell-Teilung & Zugfreie Drop-In Montage:**
    * **Horizontale Teilungsebene ($Z = 8{,}5\,\text{mm}$):** Das Gehäuse ist entlang der Stecker- und Platinen-Mittelebene in zwei formschlüssige Halbschalen getrennt:
@@ -1071,7 +978,78 @@ Das stationäre MagSafe-Rahmendock ([`009_magsafe_frame_dock.scad`](file:///User
 
 ---
 
-### 10.1 Druckfertige Produktions-STLs (Hauptverzeichnisse)
+### 7.6 Entkoppeltes Kennzeichen-Radar-Bracket & Rechtliche Konformität
+
+Auf Cruisern und Baggern wird das Garmin Varia mmWave-Radar von Pod 3 **entkoppelt** und mittig unter dem Kennzeichen montiert:
+
+![Radar License Plate Bracket CAD](../images/cad/radar_license_plate_bracket_cad.png)
+
+*Abbildung 8.32: 3D-CAD-Modell des entkoppelten Kennzeichen-Radarhalters mit M6-Klemmung, M5-Schwenkscharnier und verdecktem rückseitigem M8-Kabelkanal.*
+
+* **Rechtliche Vorschrift (§ 10 Abs. 6 FZV / ECE R138):**
+  Das Kennzeichen muss von oben in einem vertikalen Winkel von **mindestens $+30^\circ$ vollständig und ohne Verdeckung** einsehbar sein.
+* **Vermeidung des Dachüberstand-Problems:**
+  Durch die Platzierung des Radars **unter** dem Kennzeichen muss die obere Pod-Konsole nicht weit nach hinten auskragen. Der $+30^\circ$-Sichtbereich auf die Zulassungs- und TÜV-Plaketten bleibt zu $100\,\%$ frei.
+* **Schwingungs- und Vibrationsfestigkeit (Formschluss-Hirth-Gelenk):**
+  Das Radar sitzt direkt an der massiven Grundplatte ohne langen Hebelarm. Die Gabelwangen besitzen eine integrierte formschlüssige 36-Zahn Hirth-Rosette ([`011_gopro_hirth_lock.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/parts/011_gopro_hirth_lock.scad)), die zusammen mit dem diebstahlhemmenden Garmin Varia Dock ([`radar_varia_gopro_lock_dock.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/radar_varia_gopro_lock_dock.scad)) ein unbeabsichtigtes Absacken durch die harten Vibrationen des Milwaukee-Eight 117 cui Motors zuverlässig verhindert.
+* **Diebstahlschutz:**
+  Die Bajonettaufnahme fixiert das Radar mit einer verdeckten M3-Sicherheitsmadenschraube und M5-Sicherheits-Torx-TR Schraube am Hirth-Gelenk gegen Entwendung im Straßenverkehr.
+* **Verdeckte Kabelführung:**
+  Das M8-Signalkabel des Radars verläuft unsichtbar in einem rückseitig eingeformten Schacht hinter dem Kennzeichen nach oben und vereinigt sich hinter der Blinkerbrücke mit dem Heckkabelbaum.
+
+---
+
+### 7.7 Custom-Bikes & Bobber: Stealth Center-Underfender Mount vs. Seitlicher Kennzeichenhalter
+
+Auf vielen Custom-Bikes, Bobbern, Choppern und modifizierten Softails (z. B. Breakout, Fat Boy, Sportster S, Indian Scout) montieren Besitzer einen **seitlichen Kennzeichenhalter**, um den breiten Hinterreifen ($180\dots 260\,\text{mm}$) optisch vollständig freizulegen und den Heckfender extrem kurz („Short-Cut“) zu halten. 
+
+Obwohl diese Lösung ästhetisch oft kritisiert wird (asymmetrische Störung der Linienführung), stellt sich in der Praxis die entscheidende Frage: **Wo wird bei solchen Maschinen das Garmin Varia mmWave-Radar platziert?**
+
+#### 7.7.1 Warum Radar am seitlichen Kennzeichenhalter lebensgefährlich ist (Die 3 K.O.-Kriterien)
+
+Das mmWave-Radar darf **unter keinen Umständen** an den seitlichen Kennzeichenhalter montiert werden:
+
+1. **Tödliche RF-Abschattung (Blind Spot im rechten Hecksektor):**
+   * Das mmWave-Radar (24 GHz / 77 GHz) sendet in einem horizontalen Fächer von ca. $\pm 20^\circ$ bis $\pm 22{,}5^\circ$ ($40^\circ\dots 45^\circ$ Gesamtkegel).
+   * Bei einer linken Achsmontage ($25\dots 35\,\text{cm}$ Versatz zur Fahrzeuglängsachse) verdeckt der breite Hinterreifen ($200\dots 260\,\text{mm}$ Karkasse + Felge) den gesamten Signalpfad nach rechts-hinten.
+   * **Konsequenz:** Fahrzeuge, die auf mehrspurigen Straßen oder Autobahnen von rechts hinten auflaufen, rechts überholen oder im toten Winkel mitschwimmen, werden vom Radar **vollständig übersehen**.
+2. **100 % ungefederte Massen ($20\dots 30\,g$ Schockbelastung):**
+   * Seitliche Halter sind starr an der Schwinge oder direkt auf der Radachse verschraubt.
+   * Jeder Schlaglochstoß hämmert mit $20\dots 30\,g$ ungedämpft in den Ausleger. Durch den langen Hebelarm entstehen immense dynamische Biegemomente (Kuhschwanz-Vibrationen), die Bajonettverschlüsse und Leiterplatten-Lötstellen in kürzester Zeit zerstören.
+3. **Schräglagen-Asymmetrie & Boden-Clutter:**
+   * In Linkskurven sinkt das Radar durch den $30\,\text{cm}$-Hebelarm extrem nah an den Asphalt ab (führt zu Multipath-Bodenreflexionen und Falschalarmen), während es in Rechtskurven steil in den Himmel gerichtet ist.
+
+#### 7.7.2 Die OpenMotorBridge-Architektur: Striktes Entkopplungsprinzip & Stealth Center-Underfender Mount
+
+Für OpenMotorBridge gilt das fundamentale Sicherheitsprinzip: **Das Radar sitzt IMMER zentriert in der Fahrzeug-Symmetrieachse und an der gefederten Masse.**
+
+Hierfür wurde der **Stealth Center Under-Fender Mount** ([`02_pod_base/radar_center_underfender_mount.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/radar_center_underfender_mount.scad)) entwickelt:
+
+![Stealth Center Under-Fender Mount CAD](../images/cad/radar_center_underfender_mount_cad.png)
+
+*Abbildung 8.33: 3D-CAD-Modell des Stealth Center Under-Fender Mounts (`radar_center_underfender_mount.scad`). Sichtbar sind die gewölbte Basisflansch-Sattelplatte ($R = 210\,\text{mm}$) für Schraub- oder 3M-VHB-Klebemontage, die ultrakompakte Clevis-Gabel mit radialer 36-Zahn Hirth-Formschluss-Rastung ($10^\circ$-Ausrichtung) und der verdeckte M8-Kabelschacht zur Kotflügel-Innenseite.*
+
+* **Nahtlose Stealth-Ästhetik für Custom-Hecks:**
+  Der Halter sitzt direkt mittig unter der Abschlusskante des Heckkotflügels oder an den inneren Fender-Struts. Von hinten ist das Radar im Schatten des Kotflügels kaum wahrnehmbar und wirkt wie eine winzige, edle Designer-Rückleuchte. Der breite Hinterreifen bleibt optisch zu $100\,\%$ frei.
+* **Gefederte Masse & Schwingungsschutz:**
+  Da die Montage am Fender / Rahmen (gefederte Masse) erfolgt, reduzieren sich Fahrbahnschläge von $25\,g$ auf unkritische $2\dots 4\,g$.
+* **Formschluss-Hirth-Gelenk ($10^\circ$-Schritte):**
+  Die Clevis-Gabel nimmt das diebstahlhemmende Garmin Varia Dock ([`radar_varia_gopro_lock_dock.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/radar_varia_gopro_lock_dock.scad)) auf. Die formschlüssige 36-Zahn Hirth-Verzahnung arretiert den Neigungswinkel absolut rutschfest horizontal zur Fahrbahn.
+* **Flexible Montage (Kleben oder Schrauben):**
+  - **3M VHB 5952:** Breite plane Auflagefläche für bohrungsfreie Montage auf makellosen Custom-Lackierungen.
+  - **2x M4/M5 Senkkopfschrauben:** Zentraler Bohrungsabstand von $26\,\text{mm}$ für formschlüssige Verschraubung an vorhandenen Fender-Bohrungen.
+* **Verdeckte M8-Kabelführung:**
+  Das M8-Kabel verschwindet sofort nach oben durch einen integrierten $\varnothing 5{,}5\,\text{mm}$ Schacht an die Kotflügelinnenseite und läuft dort geschützt im serienmäßigen Kabelkanal nach vorne zur Zentralbox.
+
+---
+
+## 8. CAD-Dateistruktur & OpenSCAD-Modulbaukasten (STL-Bibliothek)
+
+Die CAD-Dateistruktur von OpenMotorBridge folgt einer strengen hierarchischen CSG-Architektur (Constructive Solid Geometry):
+- **Hauptverzeichnisse (`01_main_box/`, `02_pod_base/`, `03_pod_cartridges/`, `04_front_node/`)**: Enthalten **ausschließlich monolithische, direkt 3D-druckbare Produktions-STLs** (100 % single-manifold, wasserdicht, 0 frei schwebende Körper).
+- **Unterordner (`components/`)**: Enthalten die parametrischen CSG-Einzelkomponenten (z. B. unbeschnittene Basiskörper, Flansche, Schraubdome, Dichtkämme und PCB-/Akku-Dummies) für Baugruppenmontagen und modulare Adaptionen.
+
+### 8.1 Druckfertige Produktions-STLs (Hauptverzeichnisse)
 
 | Baugruppe | Funktion / Bauteil | Druckfertige STL-Datei | Parametrischer OpenSCAD Code |
 | :--- | :--- | :--- | :--- |
@@ -1104,7 +1082,7 @@ Das stationäre MagSafe-Rahmendock ([`009_magsafe_frame_dock.scad`](file:///User
 | **Front-Knoten** | EPDM/TPU Dichtkamm-Paar mit Steg | `04_front_node/front_node_cable_glands_tpu.stl` | `04_front_node/02_front_node_cable_glands.scad` |
 | **Front-Knoten** | TPU USB-C Staubschutzstopfen | `04_front_node/front_node_usbc_cap_tpu.stl` | `04_front_node/03_front_node_usbc_plug.scad` |
 
-### 10.2 Baukasten-Komponenten & Dummies (`components/`-Verzeichnisse)
+### 8.2 Baukasten-Komponenten & Dummies (`components/`-Verzeichnisse)
 
 In den `components/`-Verzeichnissen liegen die isolierten Basiskörper (vor Differenzoperationen) und Zubehörteile:
 - **`01_main_box/components/`**: `01_lower_tub_empty.stl`, `02_corner_screws_enclosure.stl`, `03_pcb_standoffs.stl`, `04_mounting_ears.stl`, `05_sealing_groove.stl`, `06_mid_tray_frame.stl`, `07_mid_partition_floor.stl`, `08_lid_plate.stl`, `dummy_main_pcb.stl`, `dummy_lipo_battery.stl`.
@@ -1118,14 +1096,14 @@ In den `components/`-Verzeichnissen liegen die isolierten Basiskörper (vor Diff
 
 ---
 
-## 11. Fertigungsspezifikation & 3D-Druck Parameter (HP MJF vs. FDM)
+## 9. Fertigungsspezifikation & 3D-Druck Parameter (HP MJF vs. FDM)
 
-### 11.1 Industrieller 3D-Druck (HP MJF PA12)
+### 9.1 Industrieller 3D-Druck (HP MJF PA12)
 * **Verfahren:** HP Multi Jet Fusion (MJF), schwarz eingefärbt, kugelgestrahlt und chemisch dampfgeglättet.
 * **Toleranzen:** $\pm 0{,}15\,\text{mm}$ (DIN ISO 2768-m).
 * **Eigenschaften:** Isotrope Zugfestigkeit $48\,\text{MPa}$, temperaturbeständig bis $+95\,^\circ\text{C}$, $100\,\%$ porenfrei.
 
-### 11.2 Heimischer FDM-Druck (Bambu Lab / Prusa / Voron)
+### 9.2 Heimischer FDM-Druck (Bambu Lab / Prusa / Voron)
 * **Materialien:** ASA oder PETG (niemals Standard-PLA!).
 * **Wandlinien:** 4 bis 5 Perimeter ($1{,}6\dots 2{,}0\,\text{mm}$ massiv).
 * **Infill:** $25\dots 40\,\%$ Gyroid.

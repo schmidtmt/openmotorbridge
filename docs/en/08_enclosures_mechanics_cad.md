@@ -2,13 +2,13 @@
 
 This document specifies the mechanical engineering, thermal dissipation, IP67/IP69K sealing concepts, kinematics of the quick-change auto-eject system, and all CAD and STL assets of OpenMotorBridge v8.0:
 1. **Central Control Box (Type A):** 3-piece sandwich enclosure with intermediate tray, battery cradle, front interface panel (HD26, USB-C, LED), and planar 4-layer copper heat spreader.
-2. **Universal Satellite Pods (Type B):** Mechanically identical 5-sided monocoque enclosure for Pods 1, 2, and 3 with $120^\circ$ V-groove pipe saddle, M8 6-pin IP67 connector, protective bulkhead, and spring-loaded auto-eject.
-3. **Modular Cartridge Sleds (Type C):** Generic 2-piece base sled with asymmetrical Poka-Yoke tongue-and-groove rails for Sena 50S/60S, Cardo Packtalk Edge, OMM Transceiver, and IP67 blank cartridge (Dry Box).
-4. **Rear Pod 3 & Radar Mount (Type D):** Aerodynamic tail cowl transceiver with dielectric radome for 868 MHz LoRa and Multi-GNSS, plus angle-adjustable mount for blind-spot radar (Garmin Varia).
-5. **Universal Front Node (Type E):** Ultra-compact Cockpit & Sensor Hub ($98.0 \times 68.0 \times 25.0\,\text{mm}$) tailored for the enlarged $82 \times 50\,\text{mm}$ 4-layer PCBA 05, featuring a **4-in-1 universal mounting system** (AMPS, pipe saddle, silentblocks, 3M Dual-Lock), dedicated EPDM cable combs for USB (South) and vehicle wiring (North), Dual SW3526 20W USB-PD, and Knowles MEMS acoustic channel.
-6. **Vehicle-Specific Reference Mounting Kits (Zero-Drill):** Fully engineered, non-destructive bolt-on mounting kits for CVO Road Glide ST (Kit 1), Road King Special (Kit 2), Classic Bagger & Cruiser (Kit 3), and Adventure & Touring Enduros (BMW GS, KTM Adventure, Africa Twin – Kit 4).
+2. **Modular Satellite Pod & Cartridge System (Type B & Type C):** Mechanically identical 5-sided monocoque enclosure and generic swap cartridges with $120^\circ$ V-groove pipe saddle, Dual-Port M8/USB-C, Poka-Yoke tongue-and-groove guidance, spring-loaded auto-eject, and invisible neodymium magnetic anti-theft locking.
+3. **Rear Pod 3 & Radar Mount (Type D):** Aerodynamic tail cowl transceiver with dielectric radome for 868 MHz LoRa and Multi-GNSS, plus angle-adjustable mount for blind-spot radar (Garmin Varia).
+4. **Universal Front Node (Type E):** Ultra-compact Cockpit & Sensor Hub ($98.0 \times 68.0 \times 25.0\,\text{mm}$) tailored for the enlarged $82 \times 50\,\text{mm}$ 4-layer PCBA 05, featuring a **4-in-1 universal mounting system** (AMPS, pipe saddle, silentblocks, 3M Dual-Lock), dedicated EPDM cable combs for USB (South) and vehicle wiring (North), Dual SW3526 20W USB-PD, and Knowles MEMS acoustic channel.
+5. **Vehicle-Specific Reference Mounting Kits (Zero-Drill):** Fully engineered, non-destructive bolt-on mounting kits for CVO Road Glide ST (Kit 1), Road King Special (Kit 2), Classic Bagger & Cruiser (Kit 3), and Adventure & Touring Enduros (BMW GS, KTM Adventure, Africa Twin – Kit 4).
 
 ---
+
 
 ## 1. Type A: Central Control Box (3-Piece Sandwich Architecture)
 
@@ -22,6 +22,8 @@ The Central Box enclosure is engineered in **PA12 (HP Multi Jet Fusion)** for ha
 ![OpenMotorBridge Central Box 3D Cutaway CAD](../images/cad/main_box_cutaway_3d.png)
 
 *Figure 8.1: Photorealistic 3D CAD diagonal cutaway render of the Central Control Box. The 3-tier sandwich is exposed: bottom tub with 4-layer PCB (ENIG) on M2.5 standoffs, intermediate tray with 11 convection cooling slots, upper LiPo UPS battery cradle with EPDM strap, HD26 flange, USB-C service port, and lid with Gore ePTFE vent.*
+
+### 1.1 3D CAD Model & 3-Piece Sandwich Architecture
 
 ![OpenMotorBridge Central Box 3-Piece Sandwich IP67](../images/cad/main_box_enclosure_cad.png)
 
@@ -46,9 +48,13 @@ The Central Box enclosure is engineered in **PA12 (HP Multi Jet Fusion)** for ha
 └────────────────────────────────────────────────────────────┘  ▼
 ```
 
+### 1.2 3D Exploded View & Layer Architecture (1:1:1 CAD Fitting)
+
 ![OpenMotorBridge Central Box Exploded 3D CAD Fitting](../images/cad/main_box_full_assembly_exploded_3d.png)
 
 *Figure 8.3: 1:1:1 Euclidean CAD exploded view of the Central Box along the Z-axis.*
+
+### 1.3 3D X-Ray Assembly & Component Clearance
 
 ![OpenMotorBridge Central Box Mated 3D X-Ray CAD Fitting](../images/cad/main_box_assembly_mated_3d.png)
 
@@ -107,91 +113,120 @@ Total heat dissipation during standard riding is only **$\approx 1{,}5\,\text{W}
 
 ---
 
-## 4. Type B: Universal Satellite Pods (Pods 1, 2, and 3)
+---
 
-All 3 pod locations use the identical 5-sided monocoque enclosure ($135{,}0 \times 70{,}0 \times 38{,}0\,\text{mm}$):
+## 4. Enclosure System Type B & C: Universal Satellite Pod & Modular Cartridges
+
+OpenMotorBridge divides the mechanical enclosure of the satellites into two harmonized, interdependent system components:
+1. **Type B (Pod Base Chassis):** A 100% mechanically identical 5-sided monocoque housing ($135.0 \times 70.0 \times 38.0\,\text{mm}$) permanently installed on the motorcycle (on frame tubes, inside saddlebag lids, or on the rear cowl).
+2. **Type C (Modular Swap Cartridge):** A universal 2-piece base sled ($116.0 \times 58.0 \times 28.0\,\text{mm}$) that accommodates system-specific OEM intercoms (Sena 50S/60S, Cardo Packtalk Edge, Midland, PMR446) or a waterproof dry box, sliding into the pod without tools.
 
 ![OpenMotorBridge Satellite Pod & Cartridge 3D Cutaway CAD](../images/cad/pod_cartridge_cutaway_3d.png)
 
 *Figure 8.6: Photorealistic 3D CAD diagonal cutaway render of the Satellite Pod with docked Cartridge. Clearly visible: 120° V-groove pipe saddle with EPDM O-rings around frame tube, M8 6-pin connector, internal bulkhead with dual compressed V4A springs, asymmetrical Poka-Yoke rails with 8mm height offset, 6-pin gold contact mating (4.8mm wipe length), and front bezel gasket.*
 
-![OpenMotorBridge Satellite Pod Exploded View](../images/cad/openmotorbridge_pod_exploded_view.png)
+---
 
-*Figure 8.7: Exploded view of the Satellite Pod with M8 socket, baseboard, bulkhead, and cartridge sled.*
+### 4.1 System Kinematics: Poka-Yoke, Auto-Eject & Invisible Magnetic Anti-Theft Lock
 
-![OpenMotorBridge Satellite Pod X-Ray Assembly](../images/cad/openmotorbridge_pod_assembly_render_xray.png)
+The interaction between Pod Chassis (Type B) and Swap Cartridge (Type C) is governed by a fully encapsulated, toolless, and theft-protected guidance and locking system:
 
-*Figure 8.8: X-ray cutaway view of the closed Satellite Pod.*
-
-### 4.1 V-Groove Pipe Saddle ($120^\circ$) & EPDM Strap Mounting
-* **Underside Profile:** $120^\circ$-V-saddle ($R = 15\,\text{mm}$) contours snugly to frame tubes from $\varnothing 18\dots 35\,\text{mm}$ ($1"$ crash bars, $7/8"$ subframes).
-* **4x Anchor Lugs:** Fast, scratch-free attachment using 2 UV-resistant EPDM O-rings providing vibration dampening.
-
-### 4.2 Kinematics of Auto-Eject & Snap-Fit
-
-```
-                       AUTO-EJECT & SNAP-FIT KINEMATICS (TOP VIEW X-Y)
-┌──────────────────────────────────────────────────────────────────────────────────────────────┐
-│ POD HOUSING TUNNEL (PA12, 100 x 60 mm)                                                       │
-│                                                                                              │
-│   ┌──────────────┐                                                     ┌─────────────────┐   │
-│   │ Protective   │  ◄── V4A Ejection Springs (k = 1.2 N/mm)            │ Snap Retention  │   │
-│   │ Bulkhead     ├───[§§§§§§§§§]───────────────┐                       │ Pocket in Wall  │   │
-│   │ (x = 22 mm)  │   F_preload = 7.2 N         │                       │ (x = 86 mm)     │   │
-│   │              │                             │                       │    ┌───────┐    │   │
-│   │              │   6-Pin Gold-Plated         │ CARTRIDGE SLED        │    │ 85°   │    │   │
-│   │   ┌──────┐   │   Connector Mating          │ (openmotorbridge_     │    │ Tooth │    │   │
-│   │   │6-Pin ├───┼════════════════════════════►│  cartridge_sled)      ├────┴┤ ▲    │    │   │
-│   │   │Header├───┤   Wipe = 4.8 mm             │                       │  ┌──┘ │    └───┐│   │
-│   │   └──────┘   │                             │                       │  │30° │        ││   │
-│   │              │                             │                       │  │Lead│        ││   │
-│   │              ├───[§§§§§§§§§]───────────────┘                       │  │-in │        ││   │
-│   │              │  ◄── V4A Ejection Springs                           │  └──┬─┘        ││   │
-│   └──────────────┘                                                     │     │          ││   │
-│                                                                        │  ┌──▼────────┐ ││   │
-│                                                   Flexible PA12 Arm    │  │PUSH BUTTON│ ││   │
-│                                                   (L=14 mm, b=10 mm) ──┴──┤(Ribbed)   │ ◄┼───┼── Thumb/Finger Squeeze
-│                                                                           └───────────┘ ││   │   (F_squeeze = 10 N)
-│                                                                           FRONT BEZEL   ││   │
-└─────────────────────────────────────────────────────────────────────────────────────────┴┴───┘
-```
-
-| Parameter | Calculated Value | Verification & Function |
-| :--- | :---: | :--- |
-| **Spring Rate (2x V4A Springs)** | **$2{,}4\,\text{N/mm}$** | Dual parallel stainless steel springs (DIN EN 13906-1) |
-| **Preload Travel** | **$6{,}0\,\text{mm}$** | Compressed from $L_0 = 15\,\text{mm}$ to $L_{\text{mated}} = 9\,\text{mm}$ |
-| **Axial Retention Force** | **$7{,}2\,\text{N}$** | Maintains constant seal compression against 20 g shock |
-| **Gasket Compression Force** | **$4{,}5\,\text{N}$** | $30\,\%$ compression of $1{,}5\,\text{mm}$ silicone cord |
-| **Extraction Resistance** | **$> 65\,\text{N}$** | Prevents accidental detachment under cable pull |
-| **Release Squeeze Force** | **$9{,}8\,\text{N}$** | Ergonomic thumb-and-finger squeeze ($\approx 1\,\text{kg}$) |
-| **Auto-Eject Throw** | **$9{,}0\,\text{mm}$** | Clears 6-pin wipe ($4{,}8\,\text{mm}$) with $+4{,}2\,\text{mm}$ overtravel |
-
-#### 4.2.1 The 4 Kinematic Phases of Cartridge Insertion
-1. **Phase 1 - Pre-Centering ($x = 0\dots 80\,\text{mm}$):** Asymmetrical guide ribs engage housing channels. Lateral play is restricted to $\pm 0{,}2\,\text{mm}$.
-2. **Phase 2 - Spring Compression ($x = 80\dots 86\,\text{mm}$):** The front face of the sled contacts the two stainless steel ejection springs in the bulkhead, building the $7{,}2\,\text{N}$ preload.
-3. **Phase 3 - 6-Pin Contact Mating & Snap Lead-In ($x = 86\dots 91\,\text{mm}$):** The 6 gold-plated square pins enter $4{,}8\,\text{mm}$ deep into the dual-beam female header (Wipe). The $30^\circ$ lead-in ramps deflect the flexible PA12 arms inward.
-4. **Phase 4 - Flush Locking ($x = 91\,\text{mm}$):** The $85^\circ$ locking teeth snap with an audible click into the wall retention pockets. The perimeter silicone gasket compresses by $30\,\%$.
-
-#### 4.2.2 Stress & Fatigue Verification of PA12 Cantilever Arm
-* **Dimensions:** Length $L = 14{,}0\,\text{mm}$, width $b = 10{,}0\,\text{mm}$, thickness $h = 1{,}8\,\text{mm}$, deflection $\delta = 1{,}8\,\text{mm}$.
-* **Maximum Outer Fiber Strain:**
-  $$\epsilon_{\max} = \frac{3 \cdot h \cdot \delta}{2 \cdot L^2} = \frac{3 \cdot 1{,}8\,\text{mm} \cdot 1{,}8\,\text{mm}}{2 \cdot (14{,}0\,\text{mm})^2} = \mathbf{1{,}38\,\%}$$
-* **Permissible Continuous Strain for MJF PA12:** $\epsilon_{\text{zul}} \le 2{,}0\,\%$.
-* **Bending Stress:** $\sigma_b = \epsilon_{\max} \cdot E_{\text{PA12}} = 0{,}0138 \times 1,700\,\text{MPa} = \mathbf{23{,}5\,\text{MPa}}$ (Well below the PA12 yield point of $48\,\text{MPa} \rightarrow$ **Safety Factor $S = 2{,}04$**).
-* **Fatigue Life:** Validated for $> 10,000$ insertion/release cycles without plastic deformation.
-
-#### 4.2.3 Contact Reliability & Wipe Length
-* **Header Geometry:** $6{,}5\,\text{mm}$ square pin extension ($0{,}64 \times 0{,}64\,\text{mm}$, $0{,}76\,\mu\text{m}$ hard gold over nickel).
-* **Effective Wipe Length:** **$4{,}8\,\text{mm}$** engagement inside female socket (exceeds USCAR-2 automotive spec of $\ge 1{,}5\,\text{mm}$ by a **factor of 3.2**).
-* **Contact Bounce Prevention:** $7{,}2\,\text{N}$ continuous axial spring preload completely prevents contact micro-chatter under vibrations up to $20\,\text{g}$.
-
-### 4.3 Asymmetrical Poka-Yoke Guide Rails
+#### 4.1.1 Asymmetrical Poka-Yoke Tongue-and-Groove Guidance
 
 ![OpenMotorBridge Pod Poka-Yoke Cross Section](../images/cad/pod_poka_yoke_cross_section_cad.png)
 
-*Figure 8.9: Cross-section showing the $8{,}0\,\text{mm}$ vertical height offset of the guide rails ($Z=10{,}0\,\text{mm}$ left, $Z=18{,}0\,\text{mm}$ right), rendering inverted insertion physically impossible.*
+*Figure 8.7: 3D CAD cross-section (Y-Z plane) through the Satellite Pod housing and cartridge base sled. Visible is the $8.0\,\text{mm}$ vertical height offset of the guide rails (Left: $Z=10.0\,\text{mm}$, Right: $Z=18.0\,\text{mm}$). An inverted $180^\circ$ insertion is physically impossible.*
 
-### 4.4 Dual-Port Pod Base Architecture (Z-Axis Decoupling & Saddlebag Integration)
+* **Guide Geometry:** The guide grooves in the pod inner walls and the corresponding ribs on the cartridge sled are vertically offset by $8.0\,\text{mm}$. Accidental upside-down insertion ($180^\circ$ flipped) is physically blocked before electrical contacts can make contact.
+* **Pre-Centering Chamfer:** $30^\circ$ lead-in ramps narrow lateral play over the first $80\,\text{mm}$ to precisely $\pm 0.2\,\text{mm}$.
+
+#### 4.1.2 Standard Invisible Magnetic Anti-Theft Lock (2-Arm Rocker Latch)
+
+To effectively protect swap cartridges across all motorcycle types (from freely accessible adventure crash bars to naked bikes and cruisers) against unauthorized extraction and opportunist theft, **all pods and cartridges feature an invisible, magnetically unlatched locking mechanism as standard** (`parts/05_magnetic_lock_latch.scad`):
+
+```
+        MAGNETIC ANTI-THEFT LOCK: 2-ARM ROCKER LATCH (KINEMATIC CUTAWAY)
+═════════════════════════════════════════════════════════════════════════════════
+
+                 POD ENCLOSURE WALL (PA12-MJF, NON-MAGNETIC)
+ ─────────────────────────┬───────────────────────┬──────────────────────────────
+  [EXTERNAL NEODYMIUM KEY]│                       │ [HOUSING GUIDE GROOVE]
+  (Target circle at X=64) │                       │  (Retention notch at X=88 mm)
+            ▼             │                       │            ▲
+      ┌───────────┐       │                       │            │ 90° locking flank:
+      │ NEODYMIUM │       │                       │            │ blocks extraction!
+      │ MAGNET N52│       │                       │            │
+      └─────┬─────┘       │                       │            │
+ ═══════════╪═════════════╪═══════════════════════╪════════════╪═════════════════
+  CARTRIDGE │             │                       │            │
+            ▼ Pulls       │   M2 PIVOT AXLE       │            ▼
+      ┌───────────┐outward│     (FULCRUM)         │   ┌─────────────────┐
+      │STEEL ANCHOR├──────┴─────────⊙─────────────┴───┤ SAWTOOTH CLAW   │
+      │(Ø 6.2 mm) │   Rear Arm      │     Front Arm   │ (30° in / 90°)| │
+      └─────┬─────┘   (X = 46 mm)   │    (X = 70 mm)  └─────────────────┘
+            ▲                       │                          ▲
+     [V4A SPRING] █ Pushes          │                          │ Swivels inward
+     (Rest pos.)    inward          │                          │ to release!
+```
+
+![OpenMotorBridge Magnetic Anti-Theft Lock 3D CAD Kinematics](../images/cad/magnetic_anti_theft_lock_cad.png)
+
+*Figure 8.8: Kinematic 3D cutaway view of the magnetic cartridge anti-theft lock (`98_magnetic_anti_theft_inspection.scad`). Visible: transparent pod housing, sled with 1st-class rocker arm (green), 90° sawtooth claw in housing notch ($X = 88\,\text{mm}$), $\varnothing\,6.2 \times 8\,\text{mm}$ steel anchor with V4A return spring ($X = 46\,\text{mm}$), M2 stainless pivot pin ($X = 58\,\text{mm}$), and bulkhead V4A ejection springs.*
+
+1. **Flush, Tamper-Proof Cartridge Front:**
+   * External squeeze buttons are completely eliminated. The front bezel of the cartridge sits entirely flush and gapless against the pod housing. Manual prying with fingers or screwdrivers is impossible without destroying the enclosure.
+2. **Kinetic 2-Arm Rocker Latch (`parts/05_magnetic_lock_latch.scad`):**
+   * Operates as a class 1 lever around a rust-free M2 pivot axle at $X = 58\,\text{mm}$.
+   * **Front Arm ($X = 70\,\text{mm}$):** Carries the $90^\circ$ sawtooth retention claw with a $30^\circ$ lead-in ramp. Upon insertion, it slides smoothly over the rail and snaps positively into the housing notch at $X = 88\,\text{mm}$.
+   * **Rear Arm ($X = 46\,\text{mm}$):** Houses the press-fit ferromagnetic steel anchor ($\varnothing\,6.2 \times 8\,\text{mm}$). A V4A compression spring braces against the inner sled wall, keeping the locking claw permanently engaged in the rest state.
+3. **Contactless Neodymium Release & Tactile Target Circle:**
+   * On the left outer wall of `pod_base_housing.scad` at $X = 64\,\text{mm}$, a subtle tactile target circle ($\varnothing\,18\,\text{mm} \times 0.6\,\text{mm}$) is molded.
+   * When the rider approaches the [Smart Keyfob](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/05_accessories/smart_keyfob_pager.scad) (or an N52 magnet key) to this circle, the magnetic field pulls the internal steel anchor outward. The rocker swivels around the M2 pin, retracts the locking claw into the sled, and releases the latch.
+4. **Automatic Spring Ejection (Auto-Eject):**
+   * Simultaneously, the dual V4A compression springs in the bulkhead push the cartridge forward by a controlled **$15\dots 20\,\text{mm}$**, allowing easy single-handed removal.
+5. **Hermetic Offroad & All-Weather Protection:**
+   * Zero external slots, sliders, or push buttons. 100% impervious to sand, mud, rain, and winter road salt.
+
+| Parameter | Calculated Value | Verification & Function |
+| :--- | :---: | :--- |
+| **Spring Rate (2x V4A Springs)** | **$2.4\,\text{N/mm}$** | Dual parallel stainless steel springs (DIN EN 13906-1) |
+| **Preload Travel** | **$6.0\,\text{mm}$** | Compressed from $L_0 = 15\,\text{mm}$ to $L_{\text{mated}} = 9\,\text{mm}$ |
+| **Axial Retention Force** | **$7.2\,\text{N}$** | Maintains constant seal compression against 20 g vibration |
+| **Gasket Compression Force** | **$4.5\,\text{N}$** | $30\,\%$ compression of $1.5\,\text{mm}$ silicone seal cord |
+| **Extraction Resistance** | **$> 120\,\text{N}$** | $90^\circ$ positive latch prevents unauthorized extraction |
+| **Release Magnetic Field** | **$B_r \ge 1.2\,\text{T}$ (N52)** | Contactless deflection of the rocker at target circle $X = 64\,\text{mm}$ |
+| **Auto-Eject Throw** | **$15\dots 20\,\text{mm}$** | Clears the $4.8\,\text{mm}$ 6-pin wipe with generous margin |
+
+#### 4.1.3 The 4 Kinematic Phases of Cartridge Insertion
+1. **Phase 1 - Pre-Centering ($x = 0\dots 80\,\text{mm}$):** Asymmetrical Poka-Yoke guide ribs engage housing channels. Lateral play is restricted to $\pm 0.2\,\text{mm}$.
+2. **Phase 2 - Spring Compression ($x = 80\dots 86\,\text{mm}$):** Sled face contacts the two stainless steel ejection springs in the bulkhead, building the $7.2\,\text{N}$ preload.
+3. **Phase 3 - 6-Pin Contact Mating & Snap Latch ($x = 86\dots 91\,\text{mm}$):** The 6 gold-plated square pins enter $4.8\,\text{mm}$ deep into the dual-beam female header (Wipe). The $30^\circ$ lead-in ramp deflects the rocker inward until it snaps into the notch at $X = 88\,\text{mm}$.
+4. **Phase 4 - Flush Locking ($x = 91\,\text{mm}$):** The $90^\circ$ locking flank dead-locks positively. The perimeter silicone gasket compresses by $30\,\%$ (IP67 weather seal).
+
+#### 4.1.4 Contact Reliability & Wipe Length
+* **Header Geometry:** $6.5\,\text{mm}$ square pin extension ($0.64 \times 0.64\,\text{mm}$, $0.76\,\mu\text{m}$ hard gold over nickel).
+* **Effective Wipe Length:** **$4.8\,\text{mm}$** engagement inside female socket (exceeds USCAR-2 automotive spec of $\ge 1.5\,\text{mm}$ by a **factor of 3.2**).
+* **Contact Bounce Prevention:** $7.2\,\text{N}$ continuous axial spring preload completely prevents contact micro-chatter under vibrations up to $20\,\text{g}$.
+
+---
+
+### 4.2 Enclosure Type B: Universal Satellite Pod Housing (Pods 1, 2, and 3)
+
+All 3 pod locations use the identical 5-sided monocoque enclosure ($135.0 \times 70.0 \times 38.0\,\text{mm}$):
+
+![OpenMotorBridge Satellite Pod Exploded View](../images/cad/openmotorbridge_pod_exploded_view.png)
+
+*Figure 8.9: 3D CAD exploded view of the universal Satellite Pod.*
+
+![OpenMotorBridge Satellite Pod X-Ray Assembly](../images/cad/openmotorbridge_pod_assembly_render_xray.png)
+
+*Figure 8.10: 3D X-ray view of the closed Satellite Pod showing internal clearances.*
+
+#### 4.2.1 V-Groove Pipe Saddle ($120^\circ$) & EPDM Strap Mounting
+* **Underside Profile:** $120^\circ$-V-saddle ($R = 15\,\text{mm}$) contours snugly to frame tubes from $\varnothing 18\dots 35\,\text{mm}$ ($1"$ crash bars, $7/8"$ subframes).
+* **4x Anchor Lugs:** Fast, scratch-free attachment using 2 UV-resistant EPDM O-rings providing vibration dampening.
+
+#### 4.2.2 Dual-Port Pod Base Architecture (Z-Axis Decoupling & Saddlebag Integration)
 
 To support both exposed outdoor deployments (e.g. crash-bar clamps on adventure bikes or rear radar Pod 3) and protected saddlebag internal installations without requiring DIY soldered adapter cables, the Pod Base PCB ([`openmotorbridge_pod_base.kicad_pcb`](file:///Users/schmidtm/openMotorBridge/hardware/kicad_pod_base/openmotorbridge_pod_base.kicad_pcb)) incorporates a **Dual-Port Architecture**:
 
@@ -217,38 +252,33 @@ To support both exposed outdoor deployments (e.g. crash-bar clamps on adventure 
 ```
 
 1. **Mechanical Decoupling of `J1` and `J2`:**
-   * Previously, the M8 receptacle (`J2`) sat on the PCB underside directly axial behind the 6-pin Mill-Max pogo array (`J1`), creating tight Z-axis vertical stacking clearances.
    * By placing **Port A (M8, left)** and **Port B (Slim-Port, right)** side-by-side, the central pogo-pin region remains completely unobstructed. Mechanical assembly clearances and stack heights relax significantly.
 2. **100% Preservation of Enclosure & PCB Envelopes (Zero Length Increase):**
    * The Pod Base PCB strictly maintains its ultra-compact dimensions of **$36.0 \times 20.0\,\text{mm}$**.
-   * The external 5-sided monocoque housing remains locked to its standardized envelope of **$135.0 \times 70.0 \times 38.0\,\text{mm}$**. These dimensions were historically dictated by the unopened OEM housing of the Sena +Mesh adapter (B2M-01) with its slide-in lugs, ensuring 100% warranty preservation.
-   * **Port A Square Pass-Through Cutout ($11.5 \times 11.5\,\text{mm}$):** To prevent extending the pod body by extra millimeters to accommodate the bulky M8 PCB receptacle base, the rear wall incorporates a dedicated square cutout ($R = 1.5\,\text{mm}$ corner radius). The square solder base passes completely through the $3.5\,\text{mm}$ wall, leaving the external M8 brass thread exposed and fully accessible for the cable coupling nut.
-   * **Planar PCB Seating without Wobble (Dual M2 Screws at H1 & H2):** The bulkhead partition at $X = 18.0\,\text{mm}$ features dual precision M2 screw bosses mating directly with board holes **H1 ($Y = 20\,\text{mm}$)** and **H2 ($Y = 50\,\text{mm}$)** at $Z = 19.0\,\text{mm}$. Clamping the PCB at both ends eliminates any seesaw or rocking effect on the M8 connector.
+   * The external 5-sided monocoque housing remains locked to its standardized envelope of **$135.0 \times 70.0 \times 38.0\,\text{mm}$**.
+   * **Port A Square Pass-Through Cutout ($11.5 \times 11.5\,\text{mm}$):** The square solder base passes completely through the $3.5\,\text{mm}$ wall, leaving the external M8 brass thread exposed and fully accessible for the cable coupling nut.
+   * **Planar PCB Seating without Wobble (Dual M2 Screws at H1 & H2):** The bulkhead partition at $X = 18.0\,\text{mm}$ features dual precision M2 screw bosses mating directly with board holes **H1 ($Y = 20\,\text{mm}$)** and **H2 ($Y = 50\,\text{mm}$)** at $Z = 19.0\,\text{mm}$, preventing any rocking effect.
 3. **Hardware Arbitration (Priority & Reverse-Current Protection):**
-   * An integrated ideal-diode power multiplexer (e.g. TI LM66100 / Dual P-FETs) automatically routes power from the active port while preventing reverse current feeding into the inactive port.
-   * If Port A (M8) receives bike power, Port B is isolated. If Port B receives power in the saddlebag, Port A is isolated. Cross-conduction and short circuits are physically impossible.
+   * An integrated ideal-diode power multiplexer (LM66100) automatically routes power from the active port while preventing reverse current feeding into the inactive port.
 4. **Axial Alignment & Recessed Plug-Well (Depth Compensation & Mechanical Protection):**
-   * **Vertical Connector Orientation:** The USB-C receptacle (`J3`) on `B.Cu` stands **vertical** (normal to the PCB plane), aligned with the axial mating direction matching the M8 connector.
-   * **Depth Compensation ($7.0\,\text{mm}$ Plug-Well):** Because the PCB is positioned against the bulkhead at $X = 18.0\,\text{mm}$ ($X = 16.4\,\text{mm}$ on `B.Cu`) to accommodate the $116\,\text{mm}$ long cartridge sled, a standard vertical USB-C connector ($H \approx 9.5\dots 10.0\,\text{mm}$) reaches to $X \approx 6.9\,\text{mm}$. The rear housing wall is molded with a **$7.0\,\text{mm}$ deep recessed plug-well** ($14.0 \times 8.5\,\text{mm}$) featuring a $45^\circ$ lead-in chamfer and internal isolating sleeve (`pod_rear_usbc_internal_sleeve`).
-   * **Mechanical Impact & Strain Relief:** By recessing the port $7\,\text{mm}$ inside the housing, the solid enclosure walls absorb all lateral shear and bending moments from cable pulling or snagging. The delicate internal contact tongue is fully shielded from mechanical damage.
-   * **Plug Clearance:** The USB-C receptacle mouth sits flush at the base of this well, allowing standard USB-C cable overmolds to insert and latch securely without housing collision.
-   * **TPU Sealing:** When operating outdoors via Port A, the molded TPU dust cap ([`008_pod_base_usbc_cap_tpu.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/parts/008_pod_base_usbc_cap_tpu.scad)) seals the $7.0\,\text{mm}$ well with dual sealing ribs flush with the outer shell (IP67).
+   * Vertical USB-C receptacle on `B.Cu` recesses into a **$7.0\,\text{mm}$ deep plug-well** ($14.0 \times 8.5\,\text{mm}$) with $45^\circ$ lead-in chamfer.
+   * The solid housing wall absorbs all lateral shear and bending forces from the cable.
+   * When Port B is not in use, the molded TPU cap ([`008_pod_base_usbc_cap_tpu.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/parts/008_pod_base_usbc_cap_tpu.scad)) seals it watertight (IP67).
 5. **Universal Multi-Platform Deployment (Support Vehicles / Cabin / Lab Bench):**
-   * The exact same pod can be deployed without modifications or secondary adapter boards in a chase/support vehicle (tour guide van, rally support car, sag wagon): Instead of routing bulky, rigid industrial M8 harness cables across the vehicle cabin or dashboard, the pod is powered via Port B using an off-the-shelf, ultra-flexible slim USB-C cable plugged into a standard 12V USB charger or dashboard port.
-   * **100% Universal Hardware:** A single physical pod design seamlessly covers **outdoor motorcycle duty** (Port A, M8 IP67), **saddlebag interior mounting** (Port B via MagSafe coupling), and **support vehicle / testbench operation** (Port B, standard slim cable).
+   * Via Port B, the exact same pod operates with a standard slim USB-C cable in support vehicles or on the test bench.
 
 ---
 
-## 5. Type C: Modular Cartridges & Sleds
+### 4.3 Enclosure Type C: Modular Cartridges & Sleds
 
 ![OpenMotorBridge Modular Cartridge Variants CAD Trio](../images/cad/cartridge_variants_trio.png)
 
-*Figure 8.10: The modular cartridge variants (OMM Transceiver, Sena 50S/60S, Cardo Packtalk Edge, IP67 Dry Box).*
+*Figure 8.11: The modular cartridge variants (OMM Transceiver, Sena 50S/60S, Cardo Packtalk Edge, IP67 Dry Box).*
 
-### 5.1 User-Centric Plug & Play Docking Architecture (Zero Solder)
+#### 4.3.1 User-Centric Plug & Play Docking Architecture (Zero Solder)
 To route signals from the right-angled **JST-SH 1.0 mm 6-pin SMD header (`J2`)** on the cartridge carrier PCB to adapter contact points without crimp or bend fatigue:
-* **Under-Bed Cable Channel:** A recessed channel ($8{,}0 \times 1{,}5\,\text{mm}$) runs directly beneath the contoured cradle cavity.
-* **Tray Pass-Through Slot:** A precision opening ($10{,}0 \times 3{,}0\,\text{mm}$ with $R = 1{,}0\,\text{mm}$ radiused edges) guides the flexible flat ribbon cable from header `J2` upward into the nest.
+* **Under-Bed Cable Channel:** A recessed channel ($8.0 \times 1.5\,\text{mm}$) runs directly beneath the contoured cradle cavity.
+* **Tray Pass-Through Slot:** A precision opening ($10.0 \times 3.0\,\text{mm}$ with $R = 1.0\,\text{mm}$ radiused edges) guides the flexible flat ribbon cable from header `J2` upward into the nest.
 * **Standardized Pinout on JST-SH 6P Header (`J2`):**
 
 | Pin | Signal Name | Adapter Function | Sena 50S/60S Pad | Cardo Edge Pad | Midland XT / PMR |
@@ -258,64 +288,64 @@ To route signals from the right-angled **JST-SH 1.0 mm 6-pin SMD header (`J2`)**
 | **3** | `AUDIO_R+` | Audio Diff-Out + (to speaker input) | Pin 4 (Spk R+) | Pin 3 (Spk +) | Speaker In + |
 | **4** | `AUDIO_R-` | Audio Diff-Out - (speaker return) | Pin 5 (Spk R-) | Pin 4 (Spk -) | Speaker In - |
 | **5** | `MIC_IN+` | Audio Diff-In + (from microphone out) | Pin 6 (Mic +) | Pin 5 (Mic +) | Mic Out + |
-| **6** | `OPTO_PTT` | Optocoupler PTT / Button Keying | Pin 7 (Mesh-Btn)| N/C (Aux) | PTT Switch |
+| **6** | `OPTO_PTT` | Optocoupler PTT / Button Simulation | Pin 7 (Mesh-Btn)| N/C (Aux) | PTT Switch |
 
-### 5.2 Sena 50S / 60S Cradle
+#### 4.3.2 Sena 50S / 60S Cradle
 ![OpenMotorBridge Sena 50S Cartridge Assembly 3D CAD Fitting](../images/cad/sena_cartridge_assembly_cad.png)
 
-*Figure 8.11: CAD visualization of the Sena 50S/60S quick-change cartridge with spring-loaded 7-pin pogo array.*
+*Figure 8.12: 3D CAD visualization of the Sena 50S/60S swap cartridge with sprung 7-pin pogo pin interface.*
 
-### 5.3 Sena +Mesh & Universal Slide-Inlay (Class A with External RF Bulkhead)
-For Sena +Mesh (or other OEM adapters requiring external antenna feeds):
-* **100% Non-Destructive OEM Mount:** The Sena +Mesh remains in its unmodified original casing.
-* **Form-Fitting Sled Inlay:** Mirrors the OEM bracket plate with 2x transverse sliding lugs (hook spacing $30\,\text{mm}$) and flexible snap tongue.
-* **Integrated SMA Flange Bore ($\varnothing\,6{,}5\,\text{mm}$):** Features an O-ring sealing counterbore ($\varnothing\,9{,}5 \times 1{,}2\,\text{mm}$) on the front bezel for an IP67 SMA flange double-bulkhead (Female-to-Female).
-* **Internal Coaxial Routing Channel:** Recessed cable window in the sled base routes the $8\,\text{cm}$ RG-178 internal pigtail (with 90° right-angle SMA male plug) without sharp bends.
-* **EPDM Retention Strap:** Molded hook lugs accommodate an elastic EPDM band ($35 \times 10\,\text{mm}$) securing the adapter rattle-free in the contoured cavity.
-* **Power Supply:** Ultra-flat right-angled Micro-USB / USB-C ribbon pigtail fed from Pin 1 (`GND`) and Pin 2 (`5V_VBUS`) of JST-SH header `J2`.
+#### 4.3.3 Sena +Mesh & Universal Slide-Inlay (Class A with External RF Bulkhead)
+* **100% Non-Destructive OEM Integration:** The Sena +Mesh remains unopened in its original housing.
+* **Form-Fitting Sled Inlay:** Replicates the OEM frame mount with 2x sliding tabs (spacing $30\,\text{mm}$) and flexible snap tongue.
+* **Integrated SMA Bulkhead Bore ($\varnothing\,6.5\,\text{mm}$):** With O-ring counterbore ($\varnothing\,9.5 \times 1.2\,\text{mm}$) on front bezel for an IP67 SMA female-female bulkhead adapter.
+* **Internal Coax Duct:** Cutout in sled floor for kink-free routing of internal $8\,\text{cm}$ RG-178 pigtail (with 90° SMA plug to Sena +Mesh).
+* **EPDM Retention Strap:** Anchor tabs for elastic EPDM band ($35 \times 10\,\text{mm}$) securing the unit vibration-free.
+* **Power Feed:** Flat right-angle Micro-USB / USB-C pigtail from Pin 1 (`GND`) and Pin 2 (`5V_VBUS`) of JST-SH header `J2`.
 
-### 5.4 Cardo Packtalk Edge / Pro Magnetic Air Mount
+#### 4.3.4 Cardo Packtalk Edge / Pro Magnetic Air Mount
 ![OpenMotorBridge Cardo Packtalk Edge Cartridge Assembly 3D CAD Fitting](../images/cad/cardo_cartridge_assembly_cad.png)
 
-*Figure 8.12: CAD visualization of the Cardo Packtalk Edge cartridge with dual N52 neodymium magnets and 5 sprung contact pads.*
+*Figure 8.13: 3D CAD visualization of the Cardo Packtalk Edge swap cartridge with N52 neodymium magnetic seat and 5 sprung contact pads.*
 
-### 5.5 Cardo Packtalk Bold / Black Edition
-Utilizes the slide-locking mechanical shoe of the original Cardo audio kit cradle. The unit slides in from the top and snaps into place against vibration.
+#### 4.3.5 Cardo Packtalk Bold / Black Edition
+Accommodates the sliding contacts of the original Cardo audio kit plate. The device slides down the guide rails and clicks positively into place.
 
-### 5.6 Midland BT Mini / BTR1 Advanced & XT30 Slide
-* **Midland Intercom Edition (BTR1 / Rush / BT Mini):** Contoured dock for Midland Bluetooth and Wave Mesh intercom units ($70\dots 85\,\text{mm}$ body width).
-* **Midland XT Bare-Board Edition:** Houses the stripped PCB of a compact handheld transceiver (XT10/XT30/G5, $\approx 68 \times 42 \times 10\,\text{mm}$) directly inside the sled.
+#### 4.3.6 Midland BT Mini / BTR1 Advanced & XT30 Slide
+* **Midland Intercom Edition (BTR1 / Rush / BT Mini):** Form-fitting nest for Midland Bluetooth and Wave Mesh intercoms ($70\dots 85\,\text{mm}$ width).
+* **Midland XT Bare-Board Edition:** Directly houses the decased PCB of compact walkie-talkies (XT10/XT30/G5, $\approx 68 \times 42 \times 10\,\text{mm}$).
 
-### 5.7 PMR446 Transceiver & Bare-Board Module (SA818S / RDA1846)
-Fully integrated 500 mW PMR446 analog radio module ($38 \times 20\,\text{mm}$) mounted on the cartridge PCB – optionally using an internal 446 MHz helical coil or a front-mounted SMA connector for long-range antennas.
+#### 4.3.7 PMR446 Transceiver & Bare-Board Module (SA818S / RDA1846)
+Fully integrated 500 mW PMR446 analog RF module ($38 \times 20\,\text{mm}$) seated directly on the cartridge carrier PCB—optionally with internal 446 MHz helical antenna or robust SMA front socket.
 
-### 5.8 Longitudinal Cross-Section Comparison (Sena vs. Cardo)
+#### 4.3.8 Longitudinal Cross-Section Comparison (Sena vs. Cardo)
 ![OpenMotorBridge Sena & Cardo Cartridges Longitudinal Cross Section](../images/cad/sena_cardo_cartridge_cross_section.png)
 
-*Figure 8.13: 2D longitudinal cutaway (X-Z plane) through Sena 50S (top) and Cardo Packtalk Edge (bottom) cartridges.*
+*Figure 8.14: 2D longitudinal cross section (X-Z plane) through Sena 50S (top) and Cardo Packtalk Edge (bottom) cartridges docked inside the pod.*
 
-### 5.9 IP67 Blank Cartridge (Dry Box Dummy)
+#### 4.3.9 IP67 Blank Cartridge (Dry Box Dummy)
 ![OpenMotorBridge IP67 Blindkassette 3D CAD Render](../images/cad/dummy_cartridge_cad.png)
 
-*Figure 8.14: Hermetic IP67 blank cartridge providing an $80 \times 46 \times 16\,\text{mm}$ dry storage compartment.*
+*Figure 8.15: Identically contoured IP67 blank cartridge providing an integrated $80 \times 46 \times 16\,\text{mm}$ emergency dry compartment.*
 
 ---
 
-## 6. Standardized 6-Pin M8 / PUR Harness Wire Color Coding
+### 4.4 Standardized 6-Pin M8 / PUR Harness Wire Color Coding
 
-| M8 / Pogo Pin | Wire Color (PUR Cable) | Gauge | Signal Pod 1 & 2 (Audio & Intercom) | Signal Pod 3 (Rear Transceiver) | Shielding & Twisting |
+| M8 / Pogo Pin | Conductor Color (PUR Cable) | Cross Section | Signal Pods 1 & 2 (Audio & Intercom) | Signal Pod 3 (Rear Transceiver) | Shielding & Twisting |
 | :---: | :--- | :---: | :--- | :--- | :--- |
-| **Pin 1** | **Red (RD)** | $0{,}34\,\text{mm}^2$ (AWG22) | **`VCC`** (5V switched via MOSFET) | **`VCC`** (5V supply) | Discrete conductor (Power) |
-| **Pin 2** | **Black (BK)** | $0{,}34\,\text{mm}^2$ (AWG22) | **`GND`** (Dedicated power & signal ground) | **`GND`** (Dedicated power & signal ground) | Discrete conductor (Power Ground) |
-| **Pin 3** | **White (WH)** | $0{,}14\,\text{mm}^2$ (AWG26) | **`NF_P`** (Balanced audio + via Bourns) | **`UART_TX`** (Rear Coprocessor $\rightarrow$ Box) | **Pair 1 twisted** (with Pin 4) |
-| **Pin 4** | **Blue (BU)** | $0{,}14\,\text{mm}^2$ (AWG26) | **`NF_N`** (Balanced audio - via Bourns) | **`UART_RX`** (Box $\rightarrow$ Rear Coprocessor) | **Pair 1 twisted** (with Pin 3) |
-| **Pin 5** | **Yellow (YE)** | $0{,}14\,\text{mm}^2$ (AWG26) | **`OPTO`** (TLP222A keying trigger) | **`GNSS_PPS`** (1-PPS hardware timecode) | Discrete conductor (Control) |
-| **Pin 6** | **Green (GN)** | $0{,}14\,\text{mm}^2$ (AWG26) | **`1-WIRE_ID`** (DS2401 Silicon Serial Number) | **`1-WIRE_ID`** (DS2401 Tail cartridge ID) | Discrete conductor (1-Wire bus) |
-| **M8 Shell** | **Tinned Copper Braid (BL)**| $> 85\,\%$ coverage | **`GND_SHIELD`** (360° chassis shield) | **`GND_SHIELD`** (360° chassis shield) | Overall shield over M8 collar |
+| **Pin 1** | **Red (RD)** | $0.34\,\text{mm}^2$ (AWG22) | **`VCC`** (5V switched via MOSFET) | **`VCC`** (5V power supply) | Single core (Power) |
+| **Pin 2** | **Black (BK)** | $0.34\,\text{mm}^2$ (AWG22) | **`GND`** (Dedicated power & signal ground)| **`GND`** (Dedicated power & signal ground)| Single core (Power GND) |
+| **Pin 3** | **White (WH)** | $0.14\,\text{mm}^2$ (AWG26) | **`NF_P`** (Balanced Audio + via Bourns) | **`UART_TX`** (Rear Co-Processor $\rightarrow$ Box) | **Pair 1 twisted** (with Pin 4) |
+| **Pin 4** | **Blue (BU)** | $0.14\,\text{mm}^2$ (AWG26) | **`NF_N`** (Balanced Audio - via Bourns) | **`UART_RX`** (Box $\rightarrow$ Rear Co-Processor) | **Pair 1 twisted** (with Pin 3) |
+| **Pin 5** | **Yellow (YE)** | $0.14\,\text{mm}^2$ (AWG26) | **`OPTO`** (TLP222A PTT Trigger) | **`GNSS_PPS`** (1-PPS Hardware Timebase) | Single core (Control) |
+| **Pin 6** | **Green (GN)** | $0.14\,\text{mm}^2$ (AWG26) | **`1-WIRE_ID`** (DS2401 Silicon Serial Number) | **`1-WIRE_ID`** (DS2401 Cartridge ID) | Single core (1-Wire Bus) |
+| **M8 Shell** | **Tinned Copper (BL)** | $> 85\,\%$ Braid | **`GND_SHIELD`** (360° Chassis Shield) | **`GND_SHIELD`** (360° Chassis Shield) | Overall shield via M8 metal body |
+
 
 ---
 
-## 7. Type D: Rear Pod 3 Transceiver (Backbone & Telemetry)
+## 5. Type D: Rear Pod 3 Transceiver (Backbone & Telemetry)
 
 Rear Pod 3 integrates the OMM transceiver, 868 MHz LoRa, and Multi-GNSS (`PCBA 04`, RP2040) in a protected rear position.
 
@@ -325,15 +355,17 @@ Rear Pod 3 integrates the OMM transceiver, 868 MHz LoRa, and Multi-GNSS (`PCBA 0
 
 ![Pod 3 Full Assembly Exploded 3D](../images/cad/pod3_full_assembly_exploded_3d.png)
 
-*Figure 8.15: 3D CAD exploded view of rear Pod 3 with antenna radome, internal PCB, and M8 bayonet socket.*
+*Figure 8.16: 3D CAD exploded view of rear Pod 3 with antenna radome, internal PCB, and M8 bayonet socket.*
 
 ![Pod 3 Assembly Cross Section](../images/cad/pod3_assembly_cross_section.png)
 
-*Figure 8.16: Longitudinal cross-section through rear Pod 3 showing coaxially shielded antenna chamber and $25 \times 25\,\text{mm}$ GNSS ground plane.*
+*Figure 8.17: Longitudinal cross-section through rear Pod 3 showing coaxially shielded antenna chamber and $25 \times 25\,\text{mm}$ GNSS ground plane.*
 
 ---
 
-## 8. Type E: Universal Front Node (Cockpit & Sensor Hub)
+---
+
+## 6. Type E: Universal Front Node (Cockpit & Sensor Hub)
 
 The Front Node enclosure was specially engineered for protected installation inside motorcycle front fairings (Batwing, Sharknose, BMW GS/RT beak) or on crash bars:
 
@@ -343,21 +375,21 @@ The Front Node enclosure was specially engineered for protected installation ins
 
 ![Universal Front Node Closed CAD](../images/cad/front_node_closed_cad.png)
 
-*Figure 8.17: Closed Front Node IP67 enclosure.*
+*Figure 8.18: Closed Front Node IP67 enclosure.*
 
 ![Universal Front Node Exploded 3D](../images/cad/front_node_exploded_3d.png)
 
-*Figure 8.18: 3D exploded view of the Front Node along the vertical Z-axis.*
+*Figure 8.19: 3D exploded view of the Front Node along the vertical Z-axis.*
 
 ![Universal Front Node Cutaway 3D](../images/cad/front_node_cutaway_3d.png)
 
-*Figure 8.19: Transparent 3D cutaway view of the Front Node showing Knowles MEMS acoustic duct and VBUS load switch.*
+*Figure 8.20: Transparent 3D cutaway view of the Front Node showing Knowles MEMS acoustic duct and VBUS load switch.*
 
-### 8.1 The 4-in-1 Universal Mounting System of the Front Node
+### 6.1 The 4-in-1 Universal Mounting System of the Front Node
 
 ![Universal Front Node Bottom CAD 4-in-1](../images/cad/front_node_bottom_cad.png)
 
-*Figure 8.20: Enclosure bottom view of the Front Node showing AMPS hole pattern, $120^\circ$ V-groove tube saddle, EPDM strap anchor tabs, silentblock mounting holes, and 3M Dual-Lock hook-and-loop channels.*
+*Figure 8.21: Enclosure bottom view of the Front Node showing AMPS hole pattern, $120^\circ$ V-groove tube saddle, EPDM strap anchor tabs, silentblock mounting holes, and 3M Dual-Lock hook-and-loop channels.*
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
@@ -382,7 +414,7 @@ The Front Node enclosure was specially engineered for protected installation ins
 └────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 8.2 Front Node Connector & Flank Layout
+### 6.2 Front Node Connector & Flank Layout
 
 The physical arrangement of connectors and cable entries on the enclosure flanks aligns with the enlarged 4-layer PCBA 05 PCB design ($82 \times 50\,\text{mm}$, `openmotorbridge_front_node.kicad_pcb`) and cockpit cable routing ergonomics:
 
@@ -445,318 +477,326 @@ The physical arrangement of connectors and cable entries on the enclosure flanks
 
 ---
 
-## 9. Vehicle-Specific Reference Mounting Kits (Zero-Drill / Bolt-On)
+---
 
-While all 5 hardware enclosures (Types A through E) are **100% universal and uniformly standardized**, OpenMotorBridge provides fully engineered, zero-drill and non-adhesive reference mounting kits for selected motorcycle platforms. These utilize original factory mounting points or elastic tensioning systems to seamlessly integrate the complete system without paint damage or irreversible body drilling.
+## 7. Vehicle-Specific Reference Mounting Kits (Zero-Drill / Bolt-On)
+
+While the 5 hardware units (Type A through E) are **100% universally standardized**, OpenMotorBridge delivers fully engineered, non-destructive bolt-on mounting kits for selected motorcycle platforms. These kits exploit OEM factory mounting points or elastic clamping systems to integrate the system into the vehicle without paint damage or irreversible body drilling.
 
 ---
 
-### 9.1 Reference Kit 1: Harley-Davidson CVO Road Glide ST (2024+) & New Touring Platform
+### 7.1 Reference Kit 1: Harley-Davidson CVO Road Glide ST (2024+) & New Touring Platform
 
-For high-performance baggers with factory solo seating and forged carbon cowl (FLTRXSTSE):
-Due to factory inverted Showa remote reservoir rear shocks with thick braided hydraulic lines and the redesigned 2024 rear tail end, external strut brackets cannot be fitted. The ST Reference Kit therefore integrates the 5 nodes 100% invisibly and non-destructively:
+For high-performance baggers with factory solo seat and forged carbon tail cowl (FLTRXSTSE):
+Due to factory Showa inverted remote-reservoir shock absorbers with heavy hydraulic lines and the redesigned 2024 tail section, external strut brackets are mechanically obstructed. The ST reference kit integrates all nodes 100% invisibly and non-destructively:
 
 ```
           CVO ROAD GLIDE ST (2024+) COMPLETE SYSTEM INTEGRATION
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│ 1. COCKPIT (Front, concealed behind outer fairing skin):                    │
-│    • Front Node (PCBA 05) + Ottocast mounted to aluminum fairing bracket   │
-│    • 12V switched power tapped from internal fairing accessory port        │
-│    • Wireless link (ESP-NOW) to Central Box -> 0 cables across steering stem│
+│ 1. COCKPIT (Forward, invisible behind outer fairing skin):                  │
+│    • Front Node (PCBA 05) + Ottocast mounted on aluminum fairing bracket   │
+│    • 12V switched power tapped from internal fairing accessory port         │
+│    • ESP-NOW wireless link to Central Box -> 0 cables across steering stem  │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ 2. CENTER (Under Solo Seat):                                                │
-│    • Central Box centrally mounted in battery tray cavity                   │
+│ 2. CENTER (Under Rider Seat):                                               │
+│    • Central Box centered in battery well                                   │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ 3. REAR (Under Forged Carbon Cowl & License Plate):                         │
-│    • Pod 3 upright in Skeleton Dock (cvo_st_undercowl_skeleton_dock.scad)   │
-│      Tensioned upward against road shocks, 0 holes drilled, 0 glue on paint │
-│    • External 2.4 GHz Telemetry Fin (cvo_st_telemetry_fin.scad) on OEM tab  │
+│ 3. REAR (Beneath Forged Carbon Cowl & License Plate):                       │
+│    • Pod 3 vertical in Skeleton Dock (cvo_st_undercowl_skeleton_dock.scad)  │
+│      Braced upward against road shocks, 0 drilling, 0 paint tape            │
+│    • External 2.4 GHz Telemetry Fin (cvo_st_telemetry_fin.scad) on cowl tab │
 │    • Radar centered below license plate (radar_license_plate_bracket.scad)  │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ 4. SADDLEBAGS (Group Intercom Bridge Sena & Cardo):                         │
+│ 4. SADDLEBAGS (Intercom Bridge Sena & Cardo):                               │
 │    • Pod 1 (Sena Mesh) inside left saddlebag lid                            │
 │    • Pod 2 (Cardo DMC) inside right saddlebag lid                           │
-│    • Mounted to OEM hinge/check-strap screws (Zero-Drill)                   │
-│    • Cable routed along check-strap, weatherproof quick disconnect at gap   │
+│    • Mounted on OEM hinge / check-strap Torx screws (Zero-Drill)            │
+│    • Cable along check strap, weatherproof MagSafe breakaway connector     │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
 #### A. Rear Integration: Under-Cowl Skeleton Dock & Telemetry Fin
-* **Skeleton Dock (`cvo_st_undercowl_skeleton_dock.scad`):** Receives the standard Pod 3 housing ($135 \times 70 \times 38.5\,\text{mm}$) upright. Two upward-arching spring arms brace against the ceiling of the carbon cowl, preventing any play or rattling over potholes and cobblestones.
-* **Telemetry Fin (`cvo_st_telemetry_fin.scad`):** Mounts directly onto the OEM rear mounting tab of the cowl. It passes the Heck-Pod 3 2.4 GHz mesh antenna outside into clean air while routing the coaxial cable invisibly beneath the tab into the cowl.
+* **Skeleton Dock (`cvo_st_undercowl_skeleton_dock.scad`):** Accommodates the standard Pod 3 housing ($135 \times 70 \times 38.5\,\text{mm}$) vertically. Two upward-arched leaf springs brace against the inner ceiling of the forged carbon cowl, preventing rattle or pitch motion over potholes.
+* **Telemetry Fin (`cvo_st_telemetry_fin.scad`):** Sleek aerodynamic shark-fin bolted to the OEM tail tab, housing a high-efficiency 2.4 GHz dipole with internal coax pass-through.
 
-![CVO ST Under-Cowl Skeleton Dock CAD](../images/cad/cvo_st_undercowl_skeleton_dock_cad.png)
+![Under-Cowl Skeleton Dock CAD](../images/cad/cvo_st_undercowl_dock_cad.png)
 
-*Figure 8.21: 3D CAD view of the Under-Cowl Skeleton Dock (`cvo_st_undercowl_skeleton_dock.scad`). Monolithic cradle with dual upward-curving spring arches that brace against the underside of the carbon cowl, lateral damping wings, and form-fitting insertion dock for Pod 3.*
+*Figure 8.22: 3D CAD model of the Under-Cowl Skeleton Dock (`cvo_st_undercowl_skeleton_dock.scad`). Monolithic cradle with arched leaf springs for ceiling bracing, lateral vibration wings, and form-fitting vertical slot for Pod 3.*
 
 ![CVO ST Telemetry Fin CAD](../images/cad/cvo_st_telemetry_fin_cad.png)
 
-*Figure 8.22: 3D CAD model of the external 2.4 GHz Telemetry Fin (`cvo_st_telemetry_fin.scad`). Aerodynamically profiled fin bolted to the OEM rear tab of the forged carbon cowl with protected coaxial cable pass-through and strain relief.*
+*Figure 8.23: 3D CAD model of the external 2.4 GHz Telemetry Fin (`cvo_st_telemetry_fin.scad`). Aerodynamic fin mounting onto the factory cowl tab with sealed internal coax conduit and strain relief.*
 
 ![Pod 3 Fender Assembly ST 3D](../images/cad/pod3_fender_assembly_st_3d.png)
 
-*Figure 8.23: Photorealistic complete rear assembly on the CVO Road Glide ST: Invisible, vibration-proof integration of Pod 3 inside the Skeleton Dock beneath the forged carbon cowl, sleek telemetry fin atop the rear tab, and complete clearance around the Showa inverted remote reservoirs.*
+*Figure 8.24: Photorealistic complete rear assembly on the CVO Road Glide ST: Invisible, vibration-proof integration of Pod 3 in the Skeleton Dock beneath the forged carbon cowl, streamlined telemetry fin on the rear tab, and complete clearance to the Showa inverted remote reservoirs.*
 
 #### B. Saddlebag Lid Integration: Pod 1 (Left) & Pod 2 (Right)
-* **Top-Lid Mounting:** Both pods mount in the forward third of the saddlebag lids, bolted to the OEM Torx fasteners of the hinge/check-strap bracket (see [Section 9.5](#95-universal-saddlebag-lid-dock-saddlebag_lid_dockscad)).
-* **Luggage & Beverage Safety:** Located approx. $30\,\text{cm}$ above the bag floor. Heavy cold drinks, tools, or damp rain gear on the bag floor remain completely outside the RF Fresnel zone.
-* **Maximum RF Isolation ($> 40\,\text{dB}$):** Sena (left) and Cardo (right) are separated by $> 60\,\text{cm}$, with the steel rear fender and frame serving as an RF shield.
+* **Top-Lid Mounting:** Both pods sit inside the forward third of the saddlebag lids, bolted to OEM Torx mounting points of the hinge / check-strap bracket (see [Section 7.5](#75-universal-saddlebag-lid-dock-saddlebag_lid_dockscad)).
+* **Luggage & Beverage Safety:** Positioned approx. $30\,\text{cm}$ above the bag floor. Heavy cold drinks, tools, or wet gear at the bottom remain entirely below the RF Fresnel zone.
+* **Maximum RF Isolation ($> 40\,\text{dB}$):** Sena (left) and Cardo (right) are separated by over $60\,\text{cm}$, using rear fender and chassis as an RF shield.
+Pods 1 and 2 mount inside the saddlebag lids using the [Universal Saddlebag Lid Dock](#75-universal-saddlebag-lid-dock-saddlebag_lid_dockscad).
 
 ---
 
-### 9.2 Reference Kit 2: Harley-Davidson Road King Special (FLHRXS / Classic Naked Touring)
+### 7.2 Reference Kit 2: Harley-Davidson Road King Special (FLHRXS / Classic Naked Touring)
 
-For classic touring models without front fairing and with 2-Up comfort touring seat or classic rear fender:
+![Touring Fender Console CAD](../images/cad/pod3_fender_console_cad.png)
 
-```
-             ROAD KING SPECIAL (RKS) COMPLETE SYSTEM INTEGRATION
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ 1. COCKPIT (Nacelle, concealed behind 7" LED Headlight):                    │
-│    • Front Node (PCBA 05) housed inside aluminum headlight nacelle cavity   │
-│    • Powers Garmin Nav / smartphone handlebar mount & handlebar action cam  │
-│    • Handlebar PTT button & Knowles wind-noise microphone                   │
-│    • 100% wireless via ESP-NOW to Central Box -> 0 cables along fuel tank   │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ 2. CENTER (Under Touring Seat):                                             │
-│    • Central Box centrally mounted in battery tray cavity                   │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ 3. REAR (Fender Console & License Plate):                                   │
-│    • Pod 3 in Touring Fender Console (pod3_touring_fender_console.scad)     │
-│      Contoured onto fender, bolted to OEM 1/4"-20 pillion seat knurled nut  │
-│    • Radar centered below license plate                                     │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ 4. SADDLEBAGS:                                                              │
-│    • Pod 1 (Sena) & Pod 2 (Cardo) inside saddlebag lids (analogous to ST)   │
-└─────────────────────────────────────────────────────────────────────────────┘
-```
+*Figure 8.25: Isolated 3D CAD view of the Touring Fender Console (`pod3_touring_fender_console.scad`) for Road King Special. Organic teardrop form with rear insertion opening for Pod 3 and quick cartridge swapping.*
 
-* **Touring Fender Console (`pod3_touring_fender_console.scad`):** Organic teardrop shape ($R = 6\dots 7\,\text{mm}$) form-fitting Pod 3. Bolted to the OEM $1/4"-20$ knurled nut in the rear fender. The M8 cable dives invisibly forward under the seat.
-* **Headlight Nacelle Front Node:** Utilizes the generous cavity behind the 7" LED headlight. Power supplied via the OEM Harley accessory connector located there.
+![Touring Fender Console Underside CAD](../images/cad/pod3_fender_console_bottom_cad.png)
 
-![Pod 3 Touring Fender Console CAD](../images/cad/pod3_touring_fender_console.png)
-
-*Figure 8.24: Isolated 3D CAD view of the Touring Fender Console (`pod3_touring_fender_console.scad`) for Road King Special. Organic teardrop styling with rear slide opening for Pod 3 and rapid cartridge swap.*
-
-![Pod 3 Touring Fender Console CAD Underside](../images/cad/pod3_touring_fender_console_cad.png)
-
-*Figure 8.25: Underside of the Touring Fender Console CAD: Concave 195 mm curved fender saddle, forward $1/4"-20$ mounting tab for the pillion seat nut, and recessed cable duct for chafe-free M8 routing under the seat.*
+*Figure 8.26: Underside of the Touring Fender Console CAD: Concave $195\,\text{mm}$ fender saddle, forward $1/4"-20$ screw tab for the OEM pillion seat nut, and recessed cable channel for chafing-free routing of the M8 harness beneath the seat.*
 
 ---
 
-### 9.3 Reference Kit 3: Classic Bagger & Cruiser (Touring Stealth Console)
-
-For Harley-Davidson Street Glide, Electra Glide, and Ultra Limited with 2-Up comfort seat:
+### 7.3 Reference Kit 3: Classic Bagger & Cruiser (Touring Stealth Console)
 
 ![Pod 3 Touring Stealth Console CAD](../images/cad/pod3_touring_stealth_cad.png)
 
-*Figure 8.26: Isolated 3D CAD view of the Touring Stealth Console (`pod3_touring_stealth_console.scad`). Completely organic smoothed contours ($R = 6\dots 7\,\text{mm}$) without hard box edges. Forward mounting tab for the OEM $1/4"-20$ pillion seat screw in the fender, form-fitting seat transition with M8 cable duct heading forward under the seat, front slope integration at mid-insertion height ($Z = 22\,\text{mm}$), open central dock, and gently sloping teardrop rear tail with integrated clip-in slot for the rear antenna.*
+*Figure 8.27: Isolated 3D CAD view of the Touring Stealth Console (`pod3_touring_stealth_console.scad`). Completely organic smoothed contours ($R = 6\dots 7\,\text{mm}$) without hard box edges. Forward mounting tab for the OEM $1/4"-20$ pillion seat screw in the fender, form-fitting seat transition with M8 cable duct heading forward under the seat, front slope integration at mid-insertion height ($Z = 22\,\text{mm}$), open central dock, and gently sloping teardrop rear tail with integrated clip-in slot for the rear antenna.*
 
 ![Pod 3 Fender Assembly Touring 3D](../images/cad/pod3_fender_assembly_touring_3d.png)
 
-*Figure 8.27: Photorealistic complete rear assembly on the Classic Touring bike: Seamless transition against passenger seat, M8 cable routed invisibly forward, unobstructed pod roof for uncompromised GNSS reception, rearward cartridge insertion, and decoupled Garmin Varia radar below the license plate.*
+*Figure 8.28: Photorealistic complete rear assembly on the Classic Touring bike: Seamless transition against passenger seat, M8 cable routed invisibly forward, unobstructed pod roof for uncompromised GNSS reception, rearward cartridge insertion, and decoupled Garmin Varia radar below the license plate.*
 
 ---
 
-### 9.4 Reference Kit 4: Adventure & Touring Enduros (BMW GS, KTM Adventure, Africa Twin)
+### 7.4 Reference Kit 4: Adventure & Touring Enduros (BMW GS, KTM Adventure, Africa Twin)
 
-For adventure motorcycles and naked bikes with tubular trellis subframes, rear racks, or aluminum luggage bridges:
+![Modular Adventure Kit CAD Studio](../images/cad/adventure_kit_cad_studio.png)
 
-```
-            ADVENTURE BIKE (BMW GS / KTM / AFRICA TWIN) INTEGRATION
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ 1. COCKPIT (Windscreen / Navigation Bar / Beak):                            │
-│    • Front Node (PCBA 05) via AMPS hole pattern (30 x 38 mm) on nav bar     │
-│      or vibration-isolated via M4 silentblocks inside the beak              │
-│    • Direct power feed for Garmin Nav / Smartphone & handlebar action cam   │
-│    • Knowles MEMS microphone samples turbulent wind level behind windscreen │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ 2. CENTER (Under Rider Seat / Battery Compartment):                         │
-│    • Central Box splash-proof mounted in battery compartment                │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ 3. REAR (Luggage Rack / Tubular Subframe):                                  │
-│    • Pod 3 with integrated 120° V-groove directly on rear rack / tube frame  │
-│    • Secured with 2x weatherproof EPDM tension rings or heavy-duty zip ties │
-│    • Blind-spot radar directly on integrated M5 GoPro swivel arm of Pod 3   │
-│      (optimal ground clearance, no vulnerable overhangs)                    │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ 4. CRASH BARS (Left & Right):                                               │
-│    • Pod 1 (Sena) on left crash bar (120° V-groove for Ø 22..32 mm tubes)   │
-│    • Pod 2 (Cardo) on right crash bar (EPDM tension rings)                  │
-│    • Highest RF isolation (> 40 dB) across massive fuel tank & engine block │
-└─────────────────────────────────────────────────────────────────────────────┘
-```
+*Figure 8.29: Photorealistic 3D CAD studio render of the modular Adventure Kit (`99_adventure_kit_assembly.scad`). Left: GSA pannier rack clamp in the protected frame triangle (Pod 1 & Sena). Center: Standard GS Transition Dock in the seat crease (Pod 2 & Cardo). Right: Luggage bridge extension "Tail Balcony" behind aluminum topcase with 45° deflector fin for 2.4 GHz dipole antenna, Pod 3 transceiver, and Garmin Varia radar with 36-tooth Hirth coupling.*
 
-* **V-Groove Tube Saddle ($120^\circ$ Prism):**
-  The enclosure bottom of Pods 1, 2, and 3 features an integrated concave saddle ($R=15\,\text{mm}$) that clamps free of play onto all common crash bar and luggage rack tubes ($\varnothing 18\dots 35\,\text{mm}$, e.g. $22\,\text{mm}$ or $25.4\,\text{mm} / 1"$).
-* **Integrated M5 GoPro Radar Arm on Pod 3:**
-  Unlike low-slung cruisers and baggers, adventure enduros do not require decoupling the radar below the license plate: Due to the tall ride height and steep tail geometry, the radar mounts via the swiveling M5 GoPro arm directly on the Pod 3 base plate at optimal detection height ($80\dots 100\,\text{cm}$) with unobstructed beam clearance above the rear tire.
+#### 7.4.1 Cartridge Pods 1 & 2 (Lateral Modules) – The Dual Mounting Strategy
 
-![Pod 3 Transceiver & Radar 3D Cutaway CAD](../images/cad/pod3_radar_cutaway_3d.png)
-
-*Figure 8.28: Photorealistic 3D CAD isometric cutaway of rear Pod 3 in the Adventure Configuration (BMW GS / KTM Adventure). On adventure bikes, the Garmin Varia blind-spot radar mounts directly on the integrated M5 GoPro swivel arm of the Pod 3 base plate at optimal detection height above the rear tire, while the 120° V-groove and EPDM tension straps cradle securely onto the luggage rack or tubular subframe.*
+Depending on luggage configurations, adventure bikes deploy two specialized mounting options:
+* **Option A: Tubular Pannier Racks (BMW GS Adventure, Touratech, Hepco&Becker):**
+  Mounted on the inside of the robust $\varnothing 18\,\text{mm}$ steel/stainless rack structure using form-fitting clamp halves (`adventure_pannier_rack_clamp.scad`). The tubes serve as a roll cage, protecting the pods during spills or tip-overs.
+* **Option B: Standard GS & Naked Adventure Bikes (Without Luggage Racks):**
+  Mounted via the sculpted "Transition Dock" (`adventure_transition_dock.scad`), a curved bridge bolted or strapped across the upper subframe tubes directly in the waist crease between rider and passenger seat.
 
 ---
 
-### 9.5 Universal Saddlebag Lid Dock (`saddlebag_lid_dock.scad`)
+#### 7.4.2 Rear Pod 3 (Transceiver) – Universal "Rack-Tail Mount" & Tail-Balcony Concept
+
+When aluminum topcases (e.g. Touratech Zega Evo or BMW Adventure) are installed, the solid $1.5\,\text{mm}$ aluminum wall blocks RF radiation upward (Faraday cage). The universal "Rack-Tail Mount" (`adventure_rack_tail_mount.scad`) resolves this as a rigid tail balcony bolted to the bike rack, cantilevering approx. $65\,\text{mm}$ behind the rear wall of the topcase:
+
+```
+         SIDE VIEW (CUTAWAY): GS TAIL WITH ALUMINUM TOPCASE & BALCONY
+═════════════════════════════════════════════════════════════════════════════════
+
+                 ┌──────────────────────────────────────┐
+                 │                                      │
+                 │       ALUMINUM TOPCASE (RIGID)       │
+                 │      (e.g. Touratech Zega Evo /      │
+                 │       BMW Adventure Alu Case)        │
+                 │                                      │
+                 │     [Lid opens forward / upward!]    │
+                 │                                      │
+                 └──────────────────┬───────────────────┘
+                                    │ Case bottom seam (rigid)
+  ════╦═════════════════════════════╧═════════════════════╦════════════════════
+      │     BMW GS STAINLESS LUGGAGE RACK (Ø 18 mm)       │
+  ════╩═══════════════════════════════════════════════════╩══════════╗
+                                                                      ║
+                                    "TAIL BALCONY" (CANTILEVER)       ║
+                           ┌──────────────────────────────────────────╜
+                           │
+       Clear 140° Zenith   │           ┌────────────────────────┐
+       upward & rearward   ▼           │ 45° DEFLECTOR FIN      │
+               \       /               │ (Branches & straps     │
+                \  ▲  /                │  glide cleanly off!)   │
+                 \ │ /                 └───────────┬────────────┘
+        ┌──────────┴──────────┐                    │
+        │    POD 3 HOUSING    │       ┌────────────┴───────────┐
+        │ (MAX-M10S GNSS top, │       │ 2.4 GHz +5 dBi ANTENNA │  ◄── Fully recessed
+        │  SX1262 LoRa inside,│──────►│ (Integrated clamp nut, │      in PA12 channel,
+        │  6-axis IMU BMI270) │       │  RG178 coax 100% inside│      zero branch snags!
+        └──────────┬──────────┘       └────────────────────────┘
+                   │                               │
+                   ▼                               ▼
+          ┌────────────────────────────────────────────────────┐
+          │   UNDERSIDE: M5 GOPRO SWIVEL ARM (2-PRONG CLEVIS)  │
+          └────────────────────────┬───────────────────────────┘
+                                   │
+                                   ▼
+                      ┌────────────────────────┐
+                      │   GARMIN VARIA RADAR   │  ◄── At 90..95 cm height:
+                      │   24 GHz mmWave Sensor │      100% clear radar cone,
+                      │ (±20° pitch adjust)    │      shielded from stone roost,
+                      └────────────────────────┘      mud & water crossings!
+```
+
+```
+           TOP VIEW: TAIL BALCONY WITH INTEGRATED 2.4 GHz ANTENNA
+═════════════════════════════════════════════════════════════════════════════════
+
+                     [VERTICAL WALL ALUMINUM TOPCASE]
+ ═══════════════════════════════════════════════════════════════════════════════
+        ▲                                                              ▲
+        │  2x M6 carrier plate screws or Ø 18 mm tube half-clamps     │
+ ───────┴──────────────────────────────────────────────────────────────┴───────
+ │  ┌───────────────────────────────────────────────────────────────────────┐  │
+ │  │                                                                       │  │
+ │  │                      POD 3 HOUSING CRADLE                             │  │
+ │  │        (Form-fitting tub for Pod 3: 135 x 70 x 38 mm)                 │  │
+ │  │      • u-blox MAX-M10S ceramic patch antenna faces clear sky          │  │
+ │  │      • M8 harness (Port A) enters concealed from underneath           │  │
+ │  │                                                                       │  │
+ │  └───────────────────────────────────┬───────────────────────────────────┘  │
+ │                                      │ Internal coax duct (RG178 pigtail)   │
+ │                                      ▼                                      │
+ │                     ┌─────────────────────────────────┐                     │
+ │                     │    DEFLECTOR FIN (PA12-CF)      │                     │
+ │                     │  ┌───────────────────────────┐  │                     │
+ │                     │  │  2.4 GHz +5 dBi ANTENNA   │  │                     │
+ │                     │  │  (Clip-in dipole in       │  │                     │
+ │                     │  │   protected channel)      │  │                     │
+ │                     │  └───────────────────────────┘  │                     │
+ │                     └────────────────┬────────────────┘                     │
+ ───────────────────────────────────────┼───────────────────────────────────────
+                                        ▼
+                           (GoPro M5 2-prong fork)
+                                        │
+                            [GARMIN VARIA RADAR BELOW]
+```
+
+##### Mechanical & RF Core Advantages:
+1. **100% Preservation of Topcase Quick-Release (5-Second Latch):**
+   * The cantilever bolts to the luggage rack or adapter plate—**not to the topcase itself**.
+   * The topcase can be removed in seconds. Pod 3, antenna, and radar stay on the motorcycle for full tracking during solo rides without luggage.
+2. **Collision-Free Lid Opening:**
+   * Because the bracket cantilevers immediately below the lower case seam, topcase lids open forward or swing sideways without contact.
+3. **Sensor Protection & Dual Lock Mechanism:**
+   * Radar sits at 90..95 cm height, far above tire spray and roost.
+   * **Dual Lock Mechanism (Vibration Lock + Theft Deterrence):**
+
+```
+           DUAL RADAR LOCK: HIRTH COUPLING & ANTI-THEFT DOCK
+═════════════════════════════════════════════════════════════════════════════════
+
+    A. HIRTH POSITIVE LOCK (10° STEPS)          B. GARMIN ANTI-THEFT LATCH
+    ----------------------------------          --------------------------
+      (Zero drooping on washboard!)               (No grab-and-run at stops!)
+
+              M5 Clamping Screw                           Garmin Varia Radar
+             (Torx-TR Security)                         (RTL515 / RCT715 / eRTL615)
+                     │                                            │
+                     ▼                                            ▼
+               ┌───────────┐                            ┌───────────────────┐
+     Clevis    │ ▓▓▓▓▓▓▓▓▓ │                            │  [Varia Body]     │
+     flange    │ ▓▓ 10° ▓▓ │                            │   Turn 90°        │
+     left ────►│ ▓▓Hirth▓▓ │                            └─────────┬─────────┘
+               │ ▓▓Teeth▓▓ │                                      │
+               └───┬───┬───┘                       Bayonet wings  │ (latched)
+                   │   │                                          ▼
+     ┌─────────────┘   └─────────────┐              ┌───────────────────────────┐
+     │ 6 mm GoPro tongue with dual-  │              │ █ 90° Bayonet Chamber   █ │
+     │ sided radial Hirth rosette    │◄────────────►│ █                       █ │
+     │ (100% positive form lock)     │              │ █   [M3 Grub Screw]  ◄──┼── Torx-TR pin bit
+     └─────────────┬───┬─────────────┘              │ █  (blocks reverse-turn)█ │   locks radar
+                   │   │                            └─────────────┬─────────────┘   while parked!
+               ┌───┴───┴───┐                                      │
+     Clevis    │ ▓▓Teeth▓▓ │                                      ▼
+     flange───►│ ▓▓Hirth▓▓ │                             M8 PUR Signal Cable
+     right     │ ▓▓ 10° ▓▓ │                            (Concealed strain relief)
+               │ ▓▓▓▓▓▓▓▓▓ │
+               └───────────┘
+```
+
+* **Vibration & Sagging Protection (Radial Hirth Coupling):** Clevis cheeks and GoPro tongue feature a 36-tooth radial Hirth rosette ([`011_gopro_hirth_lock.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/parts/011_gopro_hirth_lock.scad)). Loosening the M5 security screw by 1–2 turns enables $10^\circ$ pitch leveling (compensating passenger and baggage sag). Once clamped, radar droop on corrugated washboard tracks is physically impossible.
+* **Garmin Varia Anti-Theft Dock ([`radar_varia_gopro_lock_dock.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/radar_varia_gopro_lock_dock.scad)):** Standard quarter-turn bayonet twists 90° into the dock. An internal retention pawl snaps in, and a concealed M3 Torx-TR grub screw blocks counter-rotation.
+
+#### 7.4.3 Field Deployment of Magnetic Anti-Theft Lock on Expeditions
+
+On exposed adventure bikes and remote expedition tracks (e.g. TET routes, alpine gravel passes, unattended fuel stops), the invisible magnetic locking mechanism specified in [Section 4.1](#41-system-kinematics-poka-yoke-auto-eject--invisible-magnetic-anti-theft-lock) safeguards swap cartridges:
+* **100% Dust, Mud & Ice Proof:** Lacking keyholes or external sliding latches, the mechanism is hermetically sealed inside the pod wall and immune to mud pack, river crossings, dust storms, and freezing rain.
+* **Concealed Fast Release:** The rider touches the N52 keyfob to target circle $X = 64\,\text{mm}$, instantly ejecting the cartridge $15\dots 20\,\text{mm}$.
+
+#### 7.4.4 OpenMotorBridge 2-in-1 Smart Keyfob (`smart_keyfob_pager.scad`)
+
+Combines the magnetic release key and an RF alert pager into a single ergonomic fob:
+* **Dimensions & Materials:** $58 \times 34 \times 13\,\text{mm}$, PA12-MJF body with shock-absorbing orange TPU bumper (`#ff9f0a`) and 316L stainless keyring eyelet.
+* **Integrated N52 Neodymium Block ($20 \times 10 \times 5\,\text{mm}$):** Delivers $B_r \approx 1.48\,\text{T}$ to release the cartridge latch.
+* **0.5 mm Mu-Metal Flux Shield:** Prevents magnetic saturation of internal electronics (SX1262 LoRa, Nordic BLE, 180 mAh LiPo).
+* **Silent Alarm Pager:** $\varnothing 10 \times 3\,\text{mm}$ Linear Resonant Actuator (LRA) vibrates silently in the rider's jacket pocket upon tamper detection.
+* **MagSafe / Qi Inductive Charging:** Snaps onto the cockpit dock (PCBA 06) for in-flight wireless recharge.
+* **Zero-False-Alarm Presence Token:** Proximity BLE beacon authenticates the legitimate rider, distinguishing intentional swaps from tampering.
+
+---
+
+### 7.5 Universal Saddlebag Lid Dock (`saddlebag_lid_dock.scad`)
 
 The universal Saddlebag Lid Dock ([`saddlebag_lid_dock.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/saddlebag_lid_dock.scad)) was specifically developed for protected, vibration-proof, and 100% non-destructive interior mounting of satellite Pods 1 (Sena Mesh) and 2 (Cardo DMC) in hard saddlebags (Reference: Harley-Davidson One-Touch hard saddlebags 2014–2024+):
 
 ![Universal Saddlebag Lid Dock CAD](../images/cad/saddlebag_lid_dock_iso.png)
 
-*Figure 8.29: 3D CAD visualization of the Saddlebag Lid Dock (`saddlebag_lid_dock.scad`). Visible are the inboard-oriented Torx mounting flange for OEM hinge screws, forward Dual-Port cable snout with strain relief (Port B USB-C pass-through & Port A M8 clearance), perimeter half-shell with EPDM strap slots, and upper drip lip shielding the cartridge entrance.*
+*Figure 8.30: 3D CAD visualization of the Saddlebag Lid Dock (`saddlebag_lid_dock.scad`). Visible are the inboard-oriented Torx mounting flange for OEM hinge screws, forward Dual-Port cable snout with strain relief (Port B USB-C pass-through & Port A M8 clearance), perimeter half-shell with EPDM strap slots, and upper drip lip shielding the cartridge entrance.*
 
-#### 9.5.1 Zero-Drill Mounting & Mechanical Design
+#### 7.5.1 Zero-Drill Mounting & Mechanical Design
 1. **OEM Mounting Point Utilization (Zero-Drill):**
    * The $4\,\text{mm}$ thick mounting flange picks up the two factory M5 / Torx T20 screws of the hinge/check-strap bracket (hole center spacing $52\,\text{mm}$).
    * Generous slotted holes ($\varnothing 5.6 \times 9.0\,\text{mm}$) accommodate manufacturing tolerances across ABS saddlebags.
-   * **Zero holes drilled in the saddlebag:** The motorcycle and luggage remain 100% unmarred in original factory condition (preserves resale value and factory weather seal).
+   * **Zero holes drilled in the saddlebag:** The motorcycle and luggage remain 100% unmarred in original factory condition.
 2. **Alternative / Additional Adhesive Mounting (3M VHB):**
-   * The underside features four defined pockets ($18 \times 12 \times 0.8\,\text{mm}$) for 3M VHB high-performance acrylic foam tape, enabling optional mounting onto smooth inner walls of other luggage systems (e.g. BMW Vario or aluminum cases).
+   * Underside features four defined pockets ($18 \times 12 \times 0.8\,\text{mm}$) for 3M VHB acrylic foam tape.
 3. **Half-Shell Architecture ($H = 26\,\text{mm}$):**
    * The $3\,\text{mm}$ thick PA12 cradle encloses the Pod 3 housing ($135 \times 70 \times 38\,\text{mm}$) form-fittingly up to half its height.
-   * The modular swap cartridge remains fully accessible from the rear and can be pinched and swapped in seconds without unbolting the dock.
 4. **Overhead Drip Lip Protection:**
-   * Over the cartridge entryway, an integrated **drip lip ($16 \times 2\,\text{mm}$ with $30^\circ$ roof angle)** deflects condensation or running rainwater sideways past the cartridge seal seam whenever the bag lid is opened in wet conditions.
-5. **Vibration-Proof EPDM Retention:**
-   * Two lateral slots ($25 \times 3\,\text{mm}$) accept an elastic retention strap that locks the pod securely in the cradle during severe road impacts.
+   * An integrated **drip lip ($16 \times 2\,\text{mm}$ with $30^\circ$ roof angle)** deflects condensation or rainwater sideways when opening the lid in rain.
 
-#### 9.5.2 Cable Routing, Switched Power & Mechanic-Proof MagSafe Breakaway
+#### 7.5.2 Cable Routing, Switched Power & Mechanic-Proof MagSafe Breakaway
+* **Concealed Wire Run:** PUR cable runs along the check strap into the bike.
+* **MagSafe Breakaway Coupling:** If bags are detached for maintenance, magnetic pogo breakaway releases cleanly without wire ripping.
 
-The wiring of the saddlebag lid pods resolves the fundamental operational challenge of daily and dealership workshop service: **Ignition-switched continuous power without battery babysitting alongside 100% non-destructive saddlebag removal ("Mechanic-Proof Breakaway")**.
+#### 7.5.3 RF Physics: Why Saddlebag Lids Beat Bag Floors
+Mounting in the lid provides a $> 25\,\text{cm}$ elevated ground clearance, line-of-sight radiation through composite bag lids, and complete isolation from road heat.
 
-```
-               SADDLEBAG CABLING & MAGSAFE BREAKAWAY INTERFACE
- ═════════════════════════════════════════════════════════════════════════════════
-  ON MOTORCYCLE FRAME (Permanently routed, weather- & stone-chip protected)
- ─────────────────────────────────────────────────────────────────────────────────
-  [Central Box under the seat]
-         │ • KL15 Ignition Sense (Wake-Up) & LM5164 DCDC 5.0V
-         │ • BQ24075 LiPo UPS (buffers 6.5V cold-crank voltage dips)
-         │ • TLP222A Optocouplers (automated OEM headset boot & PTT trigger)
-         ▼
-  [ Rugged M8 automotive system harness ]
-         ▼
-  [ Stationary MagSafe Frame Dock (009_magsafe_frame_dock.scad) ]
-         │ (Fastened to subframe tube, with PCBA 06 TVS-ESD protection diodes)
-         ▼
-  [ 6-Pin MagSafe Receptacle (IP67) ] ──► Mounted to frame under seat overhang
- ═════════════════════════════════════════════════════════════════════════════════
-         ▲
-    ═══ SNAP! ═══  (Self-aligning N52 neodymium magnetic coupling)
-    ═══ POP!  ═══  (Non-destructive breakaway during bag removal: ~10-15 N pull)
-         ▼
- ═════════════════════════════════════════════════════════════════════════════════
-  INSIDE SADDLEBAG (Dry, clean, protected – 0 adapters inside bag)
- ─────────────────────────────────────────────────────────────────────────────────
-  [ 6-Pin MagSafe Pigtail ] ─────► At front bag edge (slim wire < 2 mm)
-         │
-         ▼
-  [ 19 mm Tub Floor Grommet ] ───► Asymmetric split seal (EPDM/TPU)
-         │
-         ▼
-  [ Stage-1 Strain Relief ] ─────► Integrated clamping tower absorbs 100% pull force
-         │
-         │ (Slim, ultra-flexible flat/silicone ribbon, 100% strain- & tension-free)
-         ▼
-  [ Routed along Lid Tether ] ──► Ascends protected into saddlebag lid
-         │
-         ▼
-  [ Stage-2 Strain Relief ] ─────► Zip-tie tunnel in 46 mm snout secures cable
-         │
-         ▼
-  [ Direct Plug-in to PORT B ] ──► USB-C Slim-Port on Pod Base PCB (Zero-Stress!)
-  [ (Zero M8 adapters inside!) ]
- ═════════════════════════════════════════════════════════════════════════════════
-```
+#### 7.5.4 Stationary MagSafe Frame Dock (`009_magsafe_frame_dock.scad`) & Horizontal Clamshell Architecture
 
-1. **Intelligent Power Delivery & UPS Buffering via Central Box (Terminal 15 / BQ24075):**
-   * Saddlebag pods are **not directly or unregulatively fed** from the raw bike bus, but supplied with regulated, conditioned power from the **Central Box** beneath the seat.
-   * **Ignition-Switched Wake-Up & UPS Buffering:** The Central Box monitors ignition voltage (Terminal 15, e.g. via the Harley P&A connector). When ignition turns ON, the LM5164-Q1 step-down regulator provides clean $5.0\,\text{V}$, while the integrated **LiPo UPS buffer (BQ24075)** seamlessly bridges cranking dips (cold crank down to $6.5\,\text{V}$ in $8.5\,\mu\text{s}$)—the saddlebag pods and radio modules never reboot during engine start.
-   * **Automated OEM Headset Boot via Optocouplers:** Once power is stabilized, the Central Box triggers the power/wake sequence of the OEM intercom adapters (Sena Mesh / Cardo DMC) inside the cartridges using galvanically isolated **Toshiba TLP222A optocouplers**.
-   * **Zero Battery Maintenance & Seamless Shutdown:** The intercom modules power up and down automatically with the bike's ignition. The hassle of charging standalone headset batteries or suffering unexpected battery drain mid-ride is 100% eliminated.
-2. **Mechanic-Proof 6-Pin MagSafe Breakaway (IP67):**
-   * At dealerships and independent shops, mechanics performing inspections, tire changes, or brake pad replacements loosen the two quarter-turn pins and yank the bags off in seconds without inspecting for aftermarket wiring. A rigid screwed or latched connector would inevitably shear.
-   * The **6-pin IP67 magnetic coupling with N52 neodymium magnets and gold-plated pogo pins** releases cleanly at $\approx 10\dots 15\,\text{N}$ of axial pull **without any structural or electrical damage**.
-   * Upon re-attaching the bag, magnetic polarity ensures instant self-centering (*Snap!*)—power and signal lines resume immediately.
-3. **Dual-Zone Cabling Architecture:**
-   * **Zone 1 (External on Bike):** Fully ruggedized automotive standard (M8 PUR jacket) from Central Box to the frame-mounted MagSafe adapter.
-   * **Zone 2 (Inside Saddlebag):** Since the interior is dry, clean, and luggage-safe, a lightweight consumer-grade silicone or flat ribbon cable ($< 2\,\text{mm}$ OD) is utilized. It consumes zero usable packing volume and avoids distorting lid gaskets.
-4. **Adapter-Free Direct Plug-In at Pod Port B:**
-   * The slim cable routes along the textile check-strap directly into **Slim-Port B of the Pod Base**.
-   * Port A (M8 threaded neck) is capped with a protective dust plug inside the bag. No auxiliary adapter PCBs, breakout blocks, or loose solder joints exist inside the saddlebag.
-5. **2-Stage Strain Relief & Zero-Drill Bottom Grommet ([`010_saddlebag_hole_grommet_split.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/parts/010_saddlebag_hole_grommet_split.scad)):**
-   * Cable enters through the factory $19\,\text{mm}$ tub floor hole alongside the M8 steel spacer sleeve.
-   * **Stage 1 (Tub Floor):** An integrated strain-relief tower on the grommet's interior flange clamps the cable via mini zip-tie. MagSafe breakaway tension ($10\dots 15\,\text{N}$) and shifting cargo loads are 100% grounded into the bag floor.
-   * **Stage 2 (Lid Dock):** The cable is clamped again in the $46\,\text{mm}$ dual-port snout of [`saddlebag_lid_dock.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/saddlebag_lid_dock.scad) just $15\,\text{mm}$ before the connector.
-   * **Result at Port B:** The internal USB-C plug is entirely mechanically decoupled, experiencing **exactly 0 Newtons of mechanical tension or vibration shear**.
+![MagSafe Frame Dock Exploded View CAD](../images/cad/magsafe_frame_dock_exploded_cad.png)
 
-#### 9.5.3 RF Physics: Why Saddlebag Lids Beat Bag Floors
+*Figure 8.31: 3D CAD exploded view of the MagSafe Frame Dock (`009_magsafe_frame_dock.scad`). Visible: Upper case with integrated Ø 26 mm frame tube saddle and M3 inserts, center PCBA 06 protection board, lower case with half-shell cradles for M8 and MagSafe, upper clamp bracket (`009_magsafe_frame_clamp.stl`), and central M2.5 clamp bolt.*
 
-Placing intercom pods inside the saddlebag lid ($\approx 70\dots 75\,\text{cm}$ above the road surface) solves fundamental RF transmission challenges:
-
-| Criterion | Mounting on Bag Floor / Lower Wall | Mounting in Saddlebag Lid (OpenMotorBridge) | Physical Justification |
-| :--- | :--- | :--- | :--- |
-| **Liquid Attenuation** | **Severe attenuation ($> 20\,\text{dB}$)** | **Zero attenuation ($0\,\text{dB}$)** | 2.4 GHz matches the resonant absorption frequency of water ($2\dots 4\,\text{dB/cm}$ loss). Cold beverage cans and water bottles settle on the floor and block Line-of-Sight (LOS). In the lid, the pod sits far above luggage. |
-| **Fresnel Zone Clearance** | Close to ground ($30\,\text{cm}$), strong asphalt reflections | Optimal ($70\dots 75\,\text{cm}$ above pavement) | The first Fresnel zone toward group riders (helmets at $1.2\dots 1.5\,\text{m}$) remains unobstructed by ground interference and road surface multipath. |
-| **Enclosure Attenuation** | ABS bag wall ($< 0.2\,\text{dB}$) | ABS bag lid ($< 0.2\,\text{dB}$) | Injection-molded ABS plastic is virtually transparent at 2.4 GHz ($\epsilon_r \approx 2.6$, $\tan\delta \approx 0.005$). |
-| **Latching Mechanism** | Inside swing path of striker bar | $> 15\,\text{cm}$ clearance from striker bar | The metallic One-Touch striker bar causes only localized reflections and at $\lambda = 12.5\,\text{cm}$ produces zero forward/upward shadowing. |
-| **RF Decoupling** | $< 20\,\text{dB}$ with adjacent mounting | **$> 40\,\text{dB}$ spatial diversity** | Sena (left bag) and Cardo (right bag) are separated by $> 60\,\text{cm}$; steel rear fender and frame act as RF shield $\implies$ 0 receiver de-sensing. |
-
-#### 9.5.4 Stationary MagSafe Frame Dock (`009_magsafe_frame_dock.scad`) & Horizontal Clamshell Architecture
-
-The stationary MagSafe Frame Dock ([`009_magsafe_frame_dock.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/parts/009_magsafe_frame_dock.scad)) mounts securely to the motorcycle frame tube beneath the seat overhang (sized for Harley Touring / Softail / CVO ST frame tube $\varnothing 25.4\dots 28.6\,\text{mm}$ / $1"\dots 1.125"$):
-
-![MagSafe Frame Dock CAD](../images/cad/magsafe_frame_dock_cad.png)
-
-*Figure 8.30: 3D CAD exploded assembly of the MagSafe Frame Dock (`009_magsafe_frame_dock.scad`). Visible are the upper shell with integrated Ø 26 mm tube saddle and M3 threaded inserts, the central PCBA 06 protection board, the lower shell with half-cradles for M8 and MagSafe, the upper tube clamp strap (`009_magsafe_frame_clamp.stl`), and the single central DIN 912 M2.5 clamping screw.*
-
-1. **Horizontal Clamshell Split & Zero-Stress Drop-In Assembly:**
-   * **Horizontal Split Plane ($Z = 8.5\,\text{mm}$):** The housing is split along the connector and board centerline into two form-fitting halves:
-     - **Upper Shell (`009_magsafe_frame_dock.stl`):** Houses the upper half-cradles for the M8 cable gland and MagSafe coupling nest, the concave $\varnothing 26\,\text{mm}$ frame tube saddle with M3 clamp wings, and an internal reinforced tapered screw boss with Ruthex M2.5 brass heat-set insert ($\varnothing 3.6 \times 4.5\,\text{mm}$).
-     - **Lower Shell (`009_magsafe_frame_lid.stl`):** Houses the lower half-cradles for M8 and MagSafe, a perimeter resting ledge for PCBA 06 ($Z = 7.7\,\text{mm}$), and an internal screw boss with M2.5 clearance through-hole ($\varnothing 2.8\,\text{mm}$) and DIN 912 Allen socket counterbore ($\varnothing 5.2 \times 2.8\,\text{mm}$).
-   * **Stress-Free Assembly:** The pre-soldered, rigid assembly (M8 harness + PCBA 06 + MagSafe connector) drops directly into the lower shell from above. No axial sliding, zero bending stress on wire leads or solder joints!
-2. **Sleek Monocoque Envelope WITHOUT External Side Screw Tabs ($W = 16.0\,\text{mm}$):**
-   * Eliminating bulky side screw ears preserves an ultra-compact width of exactly $16.0\,\text{mm}$, tucking discreetly beneath the seat tube without frame interference.
-   * Clamping is accomplished by **a single central DIN 912 M2.5 stainless steel screw (M2.5 x 12 mm)** passing through the center of the PCB.
-3. **Central M2.5 Clamping Boss Through PCB Hole:**
-   * The upper and lower internal cylindrical bosses ($\varnothing 4.4\,\text{mm}$) mate directly through the central $\varnothing 2.7\,\text{mm}$ mounting hole (`H1`) of PCBA 06.
-   * The upper boss is strongly anchored into the solid housing ceiling ($Z \le 16\,\text{mm}$) with a structural draft angle.
-   * Tightening the central screw draws both shells, the PCB, and the connectors into a rigid, vibration-proof sandwich.
-4. **Perimeter Labyrinth Tongue-and-Groove Seal & IP67 Potting:**
-   * An $0.8\,\text{mm}$ perimeter tongue on the upper shell engages with a matching groove on the lower shell at $Z = 8.5\,\text{mm}$.
-   * Applying silicone sealant or conformal potting compound during assembly ensures 100% IP67 submersible waterproof protection against road spray and high-pressure bike washing.
-5. **Frame Tube Clamping & Zip-Tie Provision:**
-   * **Split Clamp Strap:** The upper strap collar (`009_magsafe_frame_clamp.stl`) locks the assembly to the frame tube via 4x M3 screws. Four axial $0.6\,\text{mm}$ friction ribs prevent any slipping or twisting under vibration.
-   * **Zip-Tie Slots:** Two integrated transverse $5.2 \times 2.8\,\text{mm}$ slots provide universal tool-free mounting options.
+1. **Stationary Bike-Side Docking:** Fixed to the frame tube beneath the side cover, providing safe pogo breakaway whenever the saddlebag is detached.
+2. **Horizontal Clamshell Design:** Split along the central horizontal plane for water-tight assembly.
 
 ---
 
-### 9.6 Decoupled License Plate Radar Bracket & Legal Compliance
+### 7.6 Decoupled License Plate Radar Bracket & Legal Compliance
 
-On cruisers and baggers, the Garmin Varia mmWave radar is **decoupled** from Pod 3 and mounted centered beneath the license plate:
+![Decoupled License Plate Radar Bracket CAD](../images/cad/radar_license_plate_bracket_cad.png)
 
-![Radar License Plate Bracket CAD](../images/cad/radar_license_plate_bracket_cad.png)
-
-*Figure 8.31: 3D CAD model of the decoupled license plate radar bracket with M6 clamping, M5 swivel hinge, and concealed rear M8 cable channel.*
-
-* **Legal Requirement (§ 10 Para. 6 FZV / ECE R138):**
-  The license plate must remain completely visible and unobstructed from above at a vertical angle of **at least $+30^\circ$**.
-* **Avoiding the Roof Overhang Issue:**
-  By placing the radar **under** the license plate, the upper pod console does not have to extend far rearward. The $+30^\circ$ line-of-sight to the registration seals and inspection decals remains 100% unobstructed.
-* **Vibration & Shock Resistance:**
-  The radar mounts directly to the sturdy base bracket without a long cantilever lever arm – fully vibration-proof against the low-frequency pulses of the Milwaukee-Eight 117 engine.
-* **Concealed Cable Routing:**
-  The M8 radar signal cable runs invisibly inside a recessed channel behind the license plate upward and merges behind the turn signal bar into the rear wiring harness.
+*Figure 8.32: 3D CAD model of the decoupled license plate radar bracket with M6 clamping, M5 swivel hinge, and concealed rear M8 cable channel.*
 
 ---
 
-## 10. CAD File Structure & OpenSCAD Parametric Library (STL Library)
+### 7.7 Custom Bikes & Bobbers: Stealth Center Under-Fender Mount vs. Side License Plate Bracket
+
+![Stealth Center Under-Fender Radar Mount CAD](../images/cad/radar_center_underfender_mount_cad.png)
+
+*Figure 8.33: 3D CAD model of the Stealth Center Under-Fender Mount (`radar_center_underfender_mount.scad`). Visible: curved base flange saddle plate ($R = 210\,\text{mm}$), ultra-compact clevis fork with radial 36-tooth Hirth coupling ($10^\circ$ indexing), and concealed M8 cable pass-through.*
+
+#### 7.7.1 Why Side-Mounted Radar Is Inherently Hazardous (The 3 Critical Flaws)
+1. Asymmetric detection blind spots on the offside.
+2. Severe lean-angle ground dip (multipath reflections and false alarms in left-hand turns).
+3. Extreme vibration amplification on long unsprung bracket arms.
+
+#### 7.7.2 OpenMotorBridge Architecture: Rigid Centerline Alignment & Stealth Under-Fender Mount
+The radar is strictly centered on the vehicle longitudinal symmetry axis and attached to the sprung chassis.
+
+
+---
+
+## 8. CAD File Structure & OpenSCAD Parametric Library (STL Library)
  
 The OpenMotorBridge CAD repository follows a strict hierarchical Constructive Solid Geometry (CSG) architecture:
 - **Root Directories (`01_main_box/`, `02_pod_base/`, `03_pod_cartridges/`, `04_front_node/`)**: Contain **exclusively monolithic, directly 3D-printable production STLs** (100% single-manifold, watertight, 0 disconnected bodies).
 - **Subdirectories (`components/`)**: Contain parametric modular subcomponents (e.g. un-cut solid base bodies, mounting ears, screw bosses, EPDM sealing combs, and PCB/battery inspection dummies) for assembly visualization and custom adaptations.
 
-### 10.1 Ready-to-Print Production STLs (Root Folders)
+### 8.1 Ready-to-Print Production STLs (Root Folders)
 
 | Assembly | Component / Function | Ready-to-Print STL | Parametric OpenSCAD Source |
 | :--- | :--- | :--- | :--- |
@@ -782,7 +822,7 @@ The OpenMotorBridge CAD repository follows a strict hierarchical Constructive So
 | **Front Node** | EPDM/TPU cable glands (pair with sprue runner) | `04_front_node/front_node_cable_glands_tpu.stl` | `04_front_node/02_front_node_cable_glands.scad` |
 | **Front Node** | TPU USB-C protective sealing plug | `04_front_node/front_node_usbc_cap_tpu.stl` | `04_front_node/03_front_node_usbc_plug.scad` |
 
-### 10.2 Modular Component Breakdowns & Dummies (`components/` Folders)
+### 8.2 Modular Component Breakdowns & Dummies (`components/` Folders)
 
 The `components/` directories host isolated base bodies (prior to CSG difference operations) and inspection parts:
 - **`01_main_box/components/`**: `01_lower_tub_empty.stl`, `02_corner_screws_enclosure.stl`, `03_pcb_standoffs.stl`, `04_mounting_ears.stl`, `05_sealing_groove.stl`, `06_mid_tray_frame.stl`, `07_mid_partition_floor.stl`, `08_lid_plate.stl`, `dummy_main_pcb.stl`, `dummy_lipo_battery.stl`.
@@ -796,14 +836,16 @@ The `components/` directories host isolated base bodies (prior to CSG difference
 
 ---
 
-## 11. Manufacturing Specifications & 3D Printing Parameters (HP MJF vs. FDM)
+---
 
-### 11.1 Industrial Production (HP MJF PA12)
+## 9. Manufacturing Specifications & 3D Printing Parameters (HP MJF vs. FDM)
+
+### 9.1 Industrial Production (HP MJF PA12)
 * **Process:** HP Multi Jet Fusion (MJF), dyed black, glass-bead blasted, and chemically vapor smoothed.
 * **Tolerances:** $\pm 0{,}15\,\text{mm}$ (DIN ISO 2768-m).
 * **Mechanical Properties:** Isotropic tensile strength $48\,\text{MPa}$, heat deflection temperature $+95\,^\circ\text{C}$, 100% airtight and watertight.
 
-### 11.2 Prototyping on Desktop FDM (Bambu Lab / Prusa / Voron)
+### 9.2 Prototyping on Desktop FDM (Bambu Lab / Prusa / Voron)
 * **Filaments:** ASA or PETG (PLA strictly prohibited due to heat distortion under seat).
 * **Perimeters:** 4 to 5 wall lines ($1{,}6\dots 2{,}0\,\text{mm}$ solid shell).
 * **Infill:** $25\dots 40\,\%$ Gyroid pattern.
