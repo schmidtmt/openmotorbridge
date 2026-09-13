@@ -16,6 +16,7 @@
 #include "esp_now_bridge.h"
 #include "ota_service_manager.h"
 #include "cockpit_wifi_fallback.h"
+#include "usb_ethernet_tethering.h"
 
 static const char* TAG = "FRONT_NODE_MAIN";
 
@@ -308,6 +309,10 @@ static void supervisor_task(void* pvParameters) {
         }
         rgb.update(100);
 
+        // 7. Update USB CDC-NCM Ethernet Tethering & OTA Health Checks
+        usb_ethernet_update(100);
+        OtaServiceManager::instance().update_health_check(100);
+
         vTaskDelay(pdMS_TO_TICKS(100)); // 100 ms tick
     }
 }
@@ -354,6 +359,7 @@ extern "C" void app_main(void) {
     bridge.init();
     bridge.set_command_callback(handle_remote_command);
     cockpit_wifi_fallback_init();
+    usb_ethernet_tethering_init();
 
     // 5. Spawn Real-Time FreeRTOS Tasks
     xTaskCreate(ptt_task, "ptt_task", 3072, NULL, 10, NULL);          // Highest priority

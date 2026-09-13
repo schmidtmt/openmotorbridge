@@ -15,6 +15,7 @@ idf_component_register(
         "esp_now_front_node_client.cpp"
         "radar_processor.cpp"
         "tpms_ble_scanner.cpp"
+        "bluetooth_audio_manager.cpp"
     INCLUDE_DIRS 
         "."
     REQUIRES 

@@ -16,6 +16,7 @@
 #include "esp_now_front_node_client.h"
 #include "gnss_omm_bridge.h"
 #include "tpms_ble_scanner.h"
+#include "bluetooth_audio_manager.h"
 
 static const char *TAG = "BLE_SERVER";
 
@@ -93,10 +94,15 @@ static int gatt_svr_chr_access_omb(uint16_t conn_handle, uint16_t attr_handle,
             audio_set_privacy_mute_config(cmd[1] != 0);
         } else if (cmd[0] == 0x25) { // Headset Scan Start
             ESP_LOGI(TAG, "GATT: Headset Scan requested (Role: %d)", cmd[1]);
+            bt_audio_start_scan(cmd[1], 10);
         } else if (cmd[0] == 0x26) { // Headset Pair
             ESP_LOGI(TAG, "GATT: Headset Pair MAC requested");
+            if (rc > 7) {
+                bt_audio_pair_device(cmd[1], &cmd[2]);
+            }
         } else if (cmd[0] == 0x27) { // Headset Disconnect
-            ESP_LOGI(TAG, "GATT: Headset Disconnect requested");
+            ESP_LOGI(TAG, "GATT: Headset Disconnect requested (Role: %d)", cmd[1]);
+            bt_audio_disconnect(cmd[1]);
         } else if (cmd[0] == 0x28) { // TPMS Learn Sensor
             tpms_wheel_pos_t pos = (cmd[1] == 1) ? TPMS_WHEEL_REAR : TPMS_WHEEL_FRONT;
             tpms_ble_scanner_start_learn(pos);
@@ -214,6 +220,7 @@ void task_ble_services(void *pvParameters) {
     ble_gap_adv_start(BLE_OWN_ADDR_PUBLIC, NULL, BLE_HS_FOREVER, &adv_params, ble_gap_event, NULL);
 
     while (true) {
+        bt_audio_update(1000);
         vTaskDelay(pdMS_TO_TICKS(1000));
     }
 }

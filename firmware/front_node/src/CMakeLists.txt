@@ -11,6 +11,7 @@ idf_component_register(
         "ws2812b_led_manager.cpp"
         "ota_service_manager.cpp"
         "cockpit_wifi_fallback.cpp"
+        "usb_ethernet_tethering.cpp"
     INCLUDE_DIRS
         "."
     REQUIRES
