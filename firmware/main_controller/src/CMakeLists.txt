@@ -14,6 +14,7 @@ idf_component_register(
         "can_bus_manager.cpp"
         "esp_now_front_node_client.cpp"
         "radar_processor.cpp"
+        "tpms_ble_scanner.cpp"
     INCLUDE_DIRS 
         "."
     REQUIRES 

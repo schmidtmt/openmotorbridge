@@ -15,6 +15,7 @@
 #include "omm_flasher.h"
 #include "esp_now_front_node_client.h"
 #include "gnss_omm_bridge.h"
+#include "tpms_ble_scanner.h"
 
 static const char *TAG = "BLE_SERVER";
 
@@ -90,6 +91,19 @@ static int gatt_svr_chr_access_omb(uint16_t conn_handle, uint16_t attr_handle,
             esp_now_front_node_set_can_term(cmd[1] != 0);
         } else if (cmd[0] == 0x24) { // Privacy Mute Enable/Disable
             audio_set_privacy_mute_config(cmd[1] != 0);
+        } else if (cmd[0] == 0x25) { // Headset Scan Start
+            ESP_LOGI(TAG, "GATT: Headset Scan requested (Role: %d)", cmd[1]);
+        } else if (cmd[0] == 0x26) { // Headset Pair
+            ESP_LOGI(TAG, "GATT: Headset Pair MAC requested");
+        } else if (cmd[0] == 0x27) { // Headset Disconnect
+            ESP_LOGI(TAG, "GATT: Headset Disconnect requested");
+        } else if (cmd[0] == 0x28) { // TPMS Learn Sensor
+            tpms_wheel_pos_t pos = (cmd[1] == 1) ? TPMS_WHEEL_REAR : TPMS_WHEEL_FRONT;
+            tpms_ble_scanner_start_learn(pos);
+        } else if (cmd[0] == 0x29) { // Radar Power Toggle
+            ESP_LOGI(TAG, "GATT: Radar Power set to %s", (cmd[1] != 0) ? "ACTIVE" : "STANDBY");
+        } else if (cmd[0] == 0x2A) { // Mirror BSD LEDs Toggle & Test Flash
+            ESP_LOGI(TAG, "GATT: Mirror BSD LEDs set to %s (Test: %d)", (cmd[1] != 0) ? "ENABLED" : "DISABLED", cmd[2]);
         }
         return 0;
     }

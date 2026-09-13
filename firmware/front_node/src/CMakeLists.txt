@@ -10,11 +10,13 @@ idf_component_register(
         "cockpit_switches_manager.cpp"
         "ws2812b_led_manager.cpp"
         "ota_service_manager.cpp"
+        "cockpit_wifi_fallback.cpp"
     INCLUDE_DIRS
         "."
     REQUIRES
         esp_timer
         esp_wifi
+        esp_netif
         esp_now
         driver
         nvs_flash

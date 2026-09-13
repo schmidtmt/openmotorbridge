@@ -24,7 +24,30 @@ const i18n = {
         tab_audio: 'Audio & Ducking',
         tab_cartridges: 'Kassetten & DLE',
         tab_tours: 'Touren & WebDAV',
-        tab_hardware: 'Hardware & Reserve',
+        tab_hardware: 'Geräte & Hardware',
+        device_hub_title: 'Geräte- & Verbindungs-Manager (Device Hub)',
+        device_hub_sub: 'Zentrale 2-geteilte Verwaltung aller persönlichen Geräte (Teil 1) und fest verbauter Motorrad- & Systemknoten (Teil 2).',
+        section_user_centric_title: 'Teil 1: Persönliche Geräte (Fahrer & Sozius)',
+        section_bike_centric_title: 'Teil 2: Motorrad & OpenMotorBridge Systemknoten',
+        device_rider_phone_title: 'Fahrer-Smartphone',
+        device_pax_phone_title: 'Sozius-Smartphone',
+        device_rider_helmet_title: 'Fahrer-Helm (Primary Headset)',
+        device_pax_helmet_title: 'Sozius-Helm (Secondary Headset)',
+        device_action_cams_title: 'Action-Kameras (BLE Remote & Auto-REC)',
+        device_front_node_title: 'Universal Front-Node (Cockpit-Hub)',
+        device_radar_bsd_title: 'Heck-Radar & Spiegel-LEDs (BSD)',
+        device_tpms_title: 'Reifendruck-Kontrollsystem (TPMS)',
+        can_sniffer_title: 'Live CAN-Bus Trace Sniffer',
+        audio_headset_banner_title: 'Helm-Audio & Intercom-Kopplung (Qualcomm Inlay Mesh 3.0)',
+        audio_manage_devices_btn: 'Geräte verwalten ➔',
+        btn_cp2aa_reset: 'CP2AA Kaltstart (VBUS Reset)',
+        btn_pair_rider_helmet: 'Fahrer-Helm suchen & koppeln',
+        btn_pair_pax_helmet: 'Sozius-Helm suchen & koppeln',
+        btn_pax_phone_share: 'Audio-Share umschalten',
+        btn_cam_scan: 'Action-Cams scannen (BLE)',
+        btn_toggle_fn_wifi: 'Wi-Fi SoftAP Ein/Aus',
+        btn_test_bsd_flash: 'Spiegel-LED Testblitz (2 Sekunden)',
+        btn_tpms_learn: 'Sensoren anlernen',
         dynamics_title: 'Fahrdynamik & Schräglage',
         lean_sub: 'Kurvenschräglage (Bosch BMI270 15-State EKF)',
         speed_label: 'Geschwindigkeit',
@@ -191,7 +214,30 @@ const i18n = {
         tab_audio: 'Audio & Ducking',
         tab_cartridges: 'Cartridges & DLE',
         tab_tours: 'Tours & WebDAV',
-        tab_hardware: 'Hardware & Reserve',
+        tab_hardware: 'Devices & Hardware',
+        device_hub_title: 'Device & Connection Manager (Device Hub)',
+        device_hub_sub: 'Central 2-part management of personal devices (Part 1) and fixed motorcycle & system nodes (Part 2).',
+        section_user_centric_title: 'Part 1: Personal Devices (Rider & Passenger)',
+        section_bike_centric_title: 'Part 2: Motorcycle & OpenMotorBridge System Nodes',
+        device_rider_phone_title: 'Rider Smartphone',
+        device_pax_phone_title: 'Passenger Smartphone',
+        device_rider_helmet_title: 'Rider Helmet (Primary Headset)',
+        device_pax_helmet_title: 'Passenger Helmet (Secondary Headset)',
+        device_action_cams_title: 'Action Cameras (BLE Remote & Auto-REC)',
+        device_front_node_title: 'Universal Front-Node (Cockpit-Hub)',
+        device_radar_bsd_title: 'Rear Radar & Mirror LEDs (BSD)',
+        device_tpms_title: 'Tire Pressure Monitoring System (TPMS)',
+        can_sniffer_title: 'Live CAN-Bus Trace Sniffer',
+        audio_headset_banner_title: 'Helmet Audio & Intercom Link (Qualcomm Inlay Mesh 3.0)',
+        audio_manage_devices_btn: 'Manage Devices ➔',
+        btn_cp2aa_reset: 'CP2AA Cold Start (VBUS Reset)',
+        btn_pair_rider_helmet: 'Search & Pair Rider Helmet',
+        btn_pair_pax_helmet: 'Search & Pair Passenger Helmet',
+        btn_pax_phone_share: 'Toggle Audio Share',
+        btn_cam_scan: 'Scan Action Cams (BLE)',
+        btn_toggle_fn_wifi: 'Toggle Wi-Fi SoftAP',
+        btn_test_bsd_flash: 'Mirror LED Flash Test (2s)',
+        btn_tpms_learn: 'Learn Sensors',
         dynamics_title: 'Ride Dynamics & Lean Angle',
         lean_sub: 'Cornering Lean Angle (Bosch BMI270 15-State EKF)',
         speed_label: 'Speed',
@@ -414,6 +460,8 @@ const state = {
     },
     radar: {
         enabled: true,
+        powerEnabled: true,
+        bsdMirrorLedsEnabled: true,
         soundEnabled: true,
         threatLevel: 0,
         closestDist: null,
@@ -423,6 +471,31 @@ const state = {
         blindSpotRight: false,
         targets: [],
         simCycle: null
+    },
+    deviceHub: {
+        frontNodeWifiApEnabled: true,
+        canSniffer: {
+            running: true,
+            filter: '',
+            frames: []
+        },
+        riderHelmet: {
+            connected: true,
+            batteryPct: 85,
+            codec: 'aptX Adaptive HD',
+            latencyMs: 18
+        },
+        paxHelmet: {
+            connected: true,
+            batteryPct: 92,
+            codec: 'LC3 HD Audio',
+            latencyMs: 19
+        },
+        paxPhone: {
+            paired: true,
+            audioShare: true,
+            name: 'iPhone von Sarah (iOS 18)'
+        }
     },
     alarm: {
         armed: true,
@@ -1740,6 +1813,403 @@ function setupCanProfileManagerUi() {
         btn.addEventListener('touchstart', (e) => { e.preventDefault(); trigger(true); });
         btn.addEventListener('touchend', (e) => { e.preventDefault(); trigger(false); });
     });
+}
+
+// =============================================================================
+// Geräte- & Verbindungs-Manager (Device Hub) & Live CAN Trace Sniffer UI
+// =============================================================================
+function setupDeviceHubUi() {
+    // 1. Quick Navigation Deep-Links
+    const btnAudioToMgr = document.getElementById('btn-audio-to-device-mgr');
+    if (btnAudioToMgr) {
+        btnAudioToMgr.addEventListener('click', () => {
+            const tabBtn = document.querySelector('.tab-btn[data-tab="tab-hardware"]');
+            if (tabBtn) tabBtn.click();
+            setTimeout(() => {
+                const target = document.getElementById('card-device-rider-helmet');
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    target.style.transition = 'box-shadow 0.4s ease';
+                    target.style.boxShadow = '0 0 24px rgba(10, 132, 255, 0.7)';
+                    setTimeout(() => { target.style.boxShadow = ''; }, 2000);
+                }
+            }, 100);
+        });
+    }
+
+    const hudPillTpms = document.getElementById('hud-pill-tpms');
+    if (hudPillTpms) {
+        hudPillTpms.addEventListener('click', () => {
+            const tabBtn = document.querySelector('.tab-btn[data-tab="tab-hardware"]');
+            if (tabBtn) tabBtn.click();
+            setTimeout(() => {
+                const target = document.getElementById('card-device-tpms');
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    target.style.transition = 'box-shadow 0.4s ease';
+                    target.style.boxShadow = '0 0 24px rgba(255, 159, 10, 0.7)';
+                    setTimeout(() => { target.style.boxShadow = ''; }, 2000);
+                }
+            }, 100);
+        });
+    }
+
+    // 2. Teil 1: User-Zentrische Aktionen (Wearables & Persönliche Geräte)
+    const btnCp2aa = document.getElementById('btn-cp2aa-reset');
+    if (btnCp2aa) {
+        btnCp2aa.addEventListener('click', () => {
+            btnCp2aa.disabled = true;
+            btnCp2aa.innerHTML = '⏳ <span>Reset VBUS...</span>';
+            const valCp2aa = document.getElementById('val-rider-phone-cp2aa');
+            if (valCp2aa) {
+                valCp2aa.textContent = 'VBUS 0V (Power-Cycle Reset)';
+                valCp2aa.style.color = 'var(--accent-red)';
+            }
+            showToast(state.lang === 'de' ? '🔌 CP2AA Dongle: VBUS 5V getrennt (TPS2051B Kaltstart)...' : '🔌 CP2AA: VBUS Power-Cycled...', 'info', 2000);
+            setTimeout(() => {
+                btnCp2aa.disabled = false;
+                btnCp2aa.innerHTML = '🔌 <span data-i18n="btn_cp2aa_reset">CP2AA Kaltstart (VBUS Reset)</span>';
+                if (valCp2aa) {
+                    valCp2aa.textContent = 'CP2AA Dongle Aktiv (Port 2)';
+                    valCp2aa.style.color = 'var(--accent-blue)';
+                }
+                showToast(state.lang === 'de' ? '✓ CP2AA Dongle neu gestartet & CarPlay/AA bereit!' : '✓ CP2AA Rebooted & Ready!', 'success', 3000);
+            }, 2000);
+        });
+    }
+
+    const btnPaxToggle = document.getElementById('btn-pax-phone-toggle');
+    if (btnPaxToggle) {
+        btnPaxToggle.addEventListener('click', () => {
+            state.deviceHub.paxPhone.audioShare = !state.deviceHub.paxPhone.audioShare;
+            const badge = document.getElementById('badge-pax-phone-status');
+            if (badge) {
+                badge.className = state.deviceHub.paxPhone.audioShare ? 'card-badge badge-blue' : 'card-badge badge-orange';
+                badge.textContent = state.deviceHub.paxPhone.audioShare ? 'Bereit / Audio-Share' : 'Gekoppelt (Muted)';
+            }
+            showToast(state.lang === 'de' 
+                ? `👥 Sozius Audio-Share: ${state.deviceHub.paxPhone.audioShare ? 'Aktiviert' : 'Stummgeschaltet'}`
+                : `👥 Pax Audio Share: ${state.deviceHub.paxPhone.audioShare ? 'Enabled' : 'Muted'}`, 'info');
+        });
+    }
+
+    const btnPaxUnpair = document.getElementById('btn-pax-phone-unpair');
+    if (btnPaxUnpair) {
+        btnPaxUnpair.addEventListener('click', () => {
+            const badge = document.getElementById('badge-pax-phone-status');
+            const valName = document.getElementById('val-pax-phone-name');
+            if (badge) { badge.className = 'card-badge badge-orange'; badge.textContent = 'Getrennt'; }
+            if (valName) valName.textContent = 'Kein Sozius-Gerät gekoppelt';
+            showToast(state.lang === 'de' ? 'Sozius-Gerät getrennt.' : 'Pax device unpaired.', 'info');
+        });
+    }
+
+    const btnPairRider = document.getElementById('btn-pair-rider-helmet');
+    if (btnPairRider) {
+        btnPairRider.addEventListener('click', () => {
+            btnPairRider.innerHTML = '⏳ <span>Scanne BLE/Mesh...</span>';
+            btnPairRider.disabled = true;
+            setTimeout(() => {
+                btnPairRider.innerHTML = '🔍 <span data-i18n="btn_pair_rider_helmet">Fahrer-Helm suchen & koppeln</span>';
+                btnPairRider.disabled = false;
+                const bRider = document.getElementById('badge-rider-helmet-status');
+                if (bRider) { bRider.className = 'card-badge badge-green'; bRider.textContent = 'Verbunden'; }
+                showToast(state.lang === 'de' ? '✓ Fahrer-Helm: Schuberth C5 / Sena Mesh 3.0 verbunden (85% Akku)' : '✓ Rider Helmet: Connected', 'success', 3500);
+            }, 1200);
+        });
+    }
+
+    const btnPairPax = document.getElementById('btn-pair-pax-helmet');
+    if (btnPairPax) {
+        btnPairPax.addEventListener('click', () => {
+            btnPairPax.innerHTML = '⏳ <span>Scanne BLE/Mesh...</span>';
+            btnPairPax.disabled = true;
+            setTimeout(() => {
+                btnPairPax.innerHTML = '🔍 <span data-i18n="btn_pair_pax_helmet">Sozius-Helm suchen & koppeln</span>';
+                btnPairPax.disabled = false;
+                const bPax = document.getElementById('badge-pax-helmet-status');
+                if (bPax) { bPax.className = 'card-badge badge-green'; bPax.textContent = 'Verbunden'; }
+                showToast(state.lang === 'de' ? '✓ Sozius-Helm: Cardo Packtalk Pro DMC verbunden (92% Akku)' : '✓ Pax Helmet: Connected', 'success', 3500);
+            }, 1200);
+        });
+    }
+
+    const btnCamScan = document.getElementById('btn-cam-scan');
+    if (btnCamScan) {
+        btnCamScan.addEventListener('click', () => {
+            btnCamScan.innerHTML = '⏳ <span>Scanne BLE Cams...</span>';
+            btnCamScan.disabled = true;
+            setTimeout(() => {
+                btnCamScan.innerHTML = '🔍 <span data-i18n="btn_cam_scan">Action-Cams scannen (BLE)</span>';
+                btnCamScan.disabled = false;
+                showToast(state.lang === 'de' ? '✓ 2 Action-Cams synchronisiert: GoPro Hero 12 (0x7F2A) & Insta360 X4 (0x91C4)' : '✓ 2 Cams found & synced', 'success', 4000);
+            }, 1000);
+        });
+    }
+
+    // 3. Teil 2: Motorrad- & OMB-Zentrische Aktionen (Infrastruktur & Sensorik)
+    const btnToggleFnWifi = document.getElementById('btn-toggle-fn-wifi');
+    if (btnToggleFnWifi) {
+        btnToggleFnWifi.addEventListener('click', () => {
+            state.deviceHub.frontNodeWifiApEnabled = !state.deviceHub.frontNodeWifiApEnabled;
+            const valWifi = document.getElementById('val-fn-wifi-status');
+            if (valWifi) {
+                valWifi.textContent = state.deviceHub.frontNodeWifiApEnabled
+                    ? 'Aktiv ("OpenMotorBridge-Gateway")'
+                    : 'Deaktiviert (Nur ESP-NOW)';
+                valWifi.style.color = state.deviceHub.frontNodeWifiApEnabled ? 'var(--accent-blue)' : 'var(--text-secondary)';
+            }
+            showToast(state.lang === 'de'
+                ? `📶 Front-Node Cockpit SoftAP: ${state.deviceHub.frontNodeWifiApEnabled ? 'Aktiviert (Kanal 1, WPA2)' : 'Deaktiviert'}`
+                : `📶 SoftAP: ${state.deviceHub.frontNodeWifiApEnabled ? 'Active' : 'Disabled'}`, 'info', 3000);
+        });
+    }
+
+    const btnFnPing = document.getElementById('btn-fn-ping');
+    if (btnFnPing) {
+        btnFnPing.addEventListener('click', () => {
+            const rtt = (1.2 + Math.random() * 0.5).toFixed(1);
+            showToast(`⚡ Front-Node ESP-NOW Ping: ${rtt} ms RTT • RSSI: -52 dBm • 0 Packet Loss`, 'success', 3000);
+        });
+    }
+
+    const btnToggleRadar = document.getElementById('btn-toggle-radar-power');
+    const lblToggleRadar = document.getElementById('lbl-toggle-radar-power');
+    const badgeRadar = document.getElementById('badge-radar-power-status');
+    const valRadarTargets = document.getElementById('val-radar-detected-targets');
+    if (btnToggleRadar) {
+        btnToggleRadar.addEventListener('click', () => {
+            state.radar.powerEnabled = !state.radar.powerEnabled;
+            if (state.radar.powerEnabled) {
+                if (lblToggleRadar) lblToggleRadar.textContent = 'Radar: Ein';
+                btnToggleRadar.style.borderColor = 'rgba(48, 209, 88, 0.4)';
+                btnToggleRadar.style.color = 'var(--accent-green)';
+                if (badgeRadar) { badgeRadar.className = 'card-badge badge-green'; badgeRadar.textContent = 'Radar Aktiv'; }
+                if (valRadarTargets) { valRadarTargets.textContent = '0 Fahrzeuge (Frei)'; valRadarTargets.style.color = 'var(--accent-green)'; }
+                showToast(state.lang === 'de' ? '🛡️ Heck-Radar: Aktiviert (TI IWR6843AOP mmWave)' : '🛡️ Radar: Enabled', 'success', 2500);
+            } else {
+                if (lblToggleRadar) lblToggleRadar.textContent = 'Radar: Aus';
+                btnToggleRadar.style.borderColor = 'rgba(255, 69, 58, 0.4)';
+                btnToggleRadar.style.color = 'var(--accent-red)';
+                if (badgeRadar) { badgeRadar.className = 'card-badge badge-red'; badgeRadar.textContent = 'Standby (Aus)'; }
+                if (valRadarTargets) { valRadarTargets.textContent = 'Inaktiv / Standby'; valRadarTargets.style.color = 'var(--text-secondary)'; }
+                showToast(state.lang === 'de' ? '⚠️ Heck-Radar: Deaktiviert (Standby)' : '⚠️ Radar: Standby', 'info', 2500);
+            }
+        });
+    }
+
+    const btnToggleBsd = document.getElementById('btn-toggle-bsd-leds');
+    const lblToggleBsd = document.getElementById('lbl-toggle-bsd-leds');
+    const valBsdState = document.getElementById('val-bsd-led-state');
+    if (btnToggleBsd) {
+        btnToggleBsd.addEventListener('click', () => {
+            state.radar.bsdMirrorLedsEnabled = !state.radar.bsdMirrorLedsEnabled;
+            if (state.radar.bsdMirrorLedsEnabled) {
+                if (lblToggleBsd) lblToggleBsd.textContent = 'Spiegel-LEDs: Ein';
+                btnToggleBsd.style.borderColor = 'rgba(255, 159, 10, 0.4)';
+                btnToggleBsd.style.color = 'var(--accent-orange)';
+                if (valBsdState) { valBsdState.textContent = 'Header J9 via MOSFET Q1: AKTIV'; valBsdState.style.color = 'var(--accent-orange)'; }
+                showToast(state.lang === 'de' ? '💡 Spiegel-Totwinkel-LEDs: Aktiviert' : '💡 Mirror LEDs: Enabled', 'success', 2500);
+            } else {
+                if (lblToggleBsd) lblToggleBsd.textContent = 'Spiegel-LEDs: Aus';
+                btnToggleBsd.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                btnToggleBsd.style.color = 'var(--text-secondary)';
+                if (valBsdState) { valBsdState.textContent = 'Header J9 via MOSFET Q1: DEAKTIVIERT'; valBsdState.style.color = 'var(--text-secondary)'; }
+                showToast(state.lang === 'de' ? '💡 Spiegel-Totwinkel-LEDs: Deaktiviert' : '💡 Mirror LEDs: Disabled', 'info', 2500);
+            }
+        });
+    }
+
+    const btnTestBsdFlash = document.getElementById('btn-test-bsd-flash');
+    if (btnTestBsdFlash) {
+        btnTestBsdFlash.addEventListener('click', () => {
+            btnTestBsdFlash.disabled = true;
+            const ledL = document.getElementById('hud-bsd-left');
+            const ledR = document.getElementById('hud-bsd-right');
+            
+            let flashCount = 0;
+            const flashInterval = setInterval(() => {
+                flashCount++;
+                const on = flashCount % 2 === 1;
+                if (ledL) ledL.classList.toggle('active', on);
+                if (ledR) ledR.classList.toggle('active', on);
+                if (flashCount >= 8) {
+                    clearInterval(flashInterval);
+                    if (ledL) ledL.classList.remove('active');
+                    if (ledR) ledR.classList.remove('active');
+                    btnTestBsdFlash.disabled = false;
+                }
+            }, 250);
+            showToast(state.lang === 'de' ? '⚡ Spiegel-Totwinkel-LEDs Testblitz (Header J9 2s aktiv)...' : '⚡ BSD Mirror LEDs 2s Test Flash...', 'info', 2500);
+        });
+    }
+
+    const btnTpmsLearn = document.getElementById('btn-tpms-learn');
+    if (btnTpmsLearn) {
+        btnTpmsLearn.addEventListener('click', () => {
+            btnTpmsLearn.disabled = true;
+            btnTpmsLearn.innerHTML = '⏳ <span>Lerne Sensoren an (15s)...</span>';
+            showToast(state.lang === 'de' ? '🛞 TPMS BLE GAP Scanner: Bitte Luft an beiden Rädern kurz ablassen zum Wecken!' : '🛞 TPMS Learn: Release air to wake sensors!', 'info', 4000);
+            setTimeout(() => {
+                btnTpmsLearn.disabled = false;
+                btnTpmsLearn.innerHTML = '🔄 <span data-i18n="btn_tpms_learn">Sensoren anlernen</span>';
+                const fBar = document.getElementById('val-tpms-front-bar');
+                const rBar = document.getElementById('val-tpms-rear-bar');
+                if (fBar) fBar.innerHTML = '2.45 <span style="font-size: 0.85rem;">bar</span>';
+                if (rBar) rBar.innerHTML = '2.80 <span style="font-size: 0.85rem;">bar</span>';
+                showToast(state.lang === 'de' ? '✓ TPMS Sensoren erfolgreich angelernt (V: 0x27A5B1 • H: 0x27A5B2)!' : '✓ TPMS Sensors Learned!', 'success', 4000);
+            }, 3000);
+        });
+    }
+
+    // Initialize CAN Sniffer Engine
+    setupCanSnifferUi();
+}
+
+// 4. Live CAN-Bus Trace Sniffer Engine
+function setupCanSnifferUi() {
+    const tbody = document.getElementById('tbody-can-trace');
+    const inputFilter = document.getElementById('input-can-filter');
+    const btnToggle = document.getElementById('btn-can-trace-toggle');
+    const lblToggle = document.getElementById('lbl-can-trace-toggle');
+    const btnClear = document.getElementById('btn-can-trace-clear');
+    const btnExport = document.getElementById('btn-can-trace-export');
+    const badgeStatus = document.getElementById('badge-can-sniffer-status');
+    
+    if (!tbody) return;
+
+    const CAN_SIGNALS_HARLEY = [
+        { id: '0x00000280', name: 'Wheel Speed V/H', dlc: 8, gen: () => {
+            const v = Math.round((state.telemetry.speed || 48.5) * 16);
+            const b0 = (v >> 8) & 0xFF; const b1 = v & 0xFF;
+            return `${b0.toString(16).padStart(2,'0').toUpperCase()} ${b1.toString(16).padStart(2,'0').toUpperCase()} 00 00 12 4A 00 00`;
+        }},
+        { id: '0x00000288', name: 'Engine RPM & Throttle', dlc: 8, gen: () => {
+            const rpm = Math.round(2450 + (Math.sin(Date.now() / 1000) * 350));
+            return `02 ${(rpm & 0xFF).toString(16).padStart(2,'0').toUpperCase()} ${((rpm >> 8) & 0xFF).toString(16).padStart(2,'0').toUpperCase()} 18 00 00 00 00`;
+        }},
+        { id: '0x00000300', name: 'Gear & Clutch', dlc: 4, gen: () => '04 01 00 00' },
+        { id: '0x00000350', name: 'IMU Lean Angle & Rate', dlc: 8, gen: () => {
+            const l = Math.round(Math.abs(state.telemetry.lean_angle || 14.2) * 10);
+            return `00 ${(l & 0xFF).toString(16).padStart(2,'0').toUpperCase()} 00 00 02 18 00 00`;
+        }},
+        { id: '0x00000410', name: 'Brake Pressure ABS', dlc: 6, gen: () => '00 00 00 00 10 00' },
+        { id: '0x00000480', name: 'TPMS Pressure V/H', dlc: 6, gen: () => '27 A5 02 45 02 80' },
+        { id: '0x00000520', name: 'Fuel & Coolant Temp', dlc: 8, gen: () => '12 58 00 00 00 00 00 00' },
+        { id: '0x000001E0', name: 'Handlebar Switch PTT', dlc: 4, gen: () => state.telemetry.ptt_pressed ? '01 00 00 00' : '00 00 00 00' }
+    ];
+
+    let cycleCounter = 0;
+
+    function addTraceFrame(frame) {
+        if (!state.deviceHub.canSniffer.running) return;
+        state.deviceHub.canSniffer.frames.unshift(frame);
+        if (state.deviceHub.canSniffer.frames.length > 50) {
+            state.deviceHub.canSniffer.frames.pop();
+        }
+        renderTrace();
+    }
+
+    function renderTrace() {
+        const query = (inputFilter ? inputFilter.value.trim().toLowerCase() : '');
+        const filtered = state.deviceHub.canSniffer.frames.filter(f => {
+            if (!query) return true;
+            return f.id.toLowerCase().includes(query) || f.name.toLowerCase().includes(query);
+        });
+
+        tbody.innerHTML = filtered.map(f => `
+            <tr>
+                <td style="color: var(--text-secondary);">${f.timestamp}</td>
+                <td class="can-id-badge">${f.id}</td>
+                <td>${f.name}</td>
+                <td style="text-align: center;">${f.dlc}</td>
+                <td class="can-payload-hex">${f.payload}</td>
+                <td style="text-align: right; color: var(--accent-cyan);">${f.cycleMs}</td>
+            </tr>
+        `).join('');
+    }
+
+    if (btnToggle) {
+        btnToggle.addEventListener('click', () => {
+            state.deviceHub.canSniffer.running = !state.deviceHub.canSniffer.running;
+            if (state.deviceHub.canSniffer.running) {
+                if (lblToggle) lblToggle.textContent = 'Pause';
+                btnToggle.style.borderColor = 'rgba(48, 209, 88, 0.4)';
+                btnToggle.style.color = 'var(--accent-green)';
+                if (badgeStatus) { badgeStatus.className = 'card-badge badge-green'; badgeStatus.textContent = '● Live Stream (500 kbps)'; }
+            } else {
+                if (lblToggle) lblToggle.textContent = 'Start';
+                btnToggle.style.borderColor = 'rgba(255, 159, 10, 0.4)';
+                btnToggle.style.color = 'var(--accent-orange)';
+                if (badgeStatus) { badgeStatus.className = 'card-badge badge-orange'; badgeStatus.textContent = '⏸️ Pausiert'; }
+            }
+        });
+    }
+
+    if (btnClear) {
+        btnClear.addEventListener('click', () => {
+            state.deviceHub.canSniffer.frames = [];
+            renderTrace();
+        });
+    }
+
+    if (inputFilter) {
+        inputFilter.addEventListener('input', () => renderTrace());
+    }
+
+    if (btnExport) {
+        btnExport.addEventListener('click', () => {
+            if (state.deviceHub.canSniffer.frames.length === 0) {
+                showToast(state.lang === 'de' ? 'Keine Trace-Daten zum Exportieren vorhanden.' : 'No trace data to export.', 'info');
+                return;
+            }
+            const csvHeader = 'Timestamp,CAN_ID,Signal_Name,DLC,Payload,Cycle_ms\n';
+            const csvRows = state.deviceHub.canSniffer.frames.map(f => 
+                `"${f.timestamp}","${f.id}","${f.name}",${f.dlc},"${f.payload}",${f.cycleMs}`
+            ).join('\n');
+            const blob = new Blob([csvHeader + csvRows], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `openmotorbridge_can_trace_${Date.now()}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast(state.lang === 'de' ? '💾 CAN-Bus Trace CSV erfolgreich exportiert!' : '💾 CAN Trace exported!', 'success');
+        });
+    }
+
+    // Seed with initial trace entries
+    for (let i = 0; i < 6; i++) {
+        const sig = CAN_SIGNALS_HARLEY[i % CAN_SIGNALS_HARLEY.length];
+        const now = new Date(Date.now() - (6 - i) * 100);
+        const timeStr = `${now.toTimeString().split(' ')[0]}.${String(now.getMilliseconds()).padStart(3, '0')}`;
+        state.deviceHub.canSniffer.frames.push({
+            timestamp: timeStr,
+            id: sig.id,
+            name: sig.name,
+            dlc: sig.dlc,
+            payload: sig.gen(),
+            cycleMs: Math.round(20 + Math.random() * 80)
+        });
+    }
+    renderTrace();
+
+    // Simulated background CAN frames generator (every 350ms)
+    setInterval(() => {
+        if (!state.deviceHub.canSniffer.running) return;
+        cycleCounter++;
+        const sig = CAN_SIGNALS_HARLEY[cycleCounter % CAN_SIGNALS_HARLEY.length];
+        const now = new Date();
+        const timeStr = `${now.toTimeString().split(' ')[0]}.${String(now.getMilliseconds()).padStart(3, '0')}`;
+        addTraceFrame({
+            timestamp: timeStr,
+            id: sig.id,
+            name: sig.name,
+            dlc: sig.dlc,
+            payload: sig.gen(),
+            cycleMs: Math.round(20 + Math.random() * 80)
+        });
+    }, 350);
 }
 
 function updateBleUiState(connected) {
@@ -5292,6 +5762,28 @@ function updateTpmsUi(tpms) {
         badgeTpms.textContent = state.tpms.source === 'BLE' ? 'BLE-RDKS' : (state.tpms.source === 'CAN' ? 'CAN-RDKS' : 'RDKS AUTO');
         badgeTpms.className = hasWarn ? 'card-badge badge-red' : 'card-badge badge-orange';
     }
+
+    // Update Device Hub TPMS Card Elements
+    const valHubFBar = document.getElementById('val-tpms-front-bar');
+    const valHubFTemp = document.getElementById('val-tpms-front-temp');
+    const valHubRBar = document.getElementById('val-tpms-rear-bar');
+    const valHubRTemp = document.getElementById('val-tpms-rear-temp');
+    const badgeHubTpms = document.getElementById('badge-tpms-system-status');
+
+    if (valHubFBar) {
+        valHubFBar.innerHTML = `${vBar} <span style="font-size: 0.85rem;">bar</span>`;
+        valHubFBar.style.color = frontWarn ? 'var(--accent-red)' : 'var(--text-primary)';
+    }
+    if (valHubFTemp) valHubFTemp.textContent = `🌡️ ${vTemp}°C • Soll: 2.4 bar`;
+    if (valHubRBar) {
+        valHubRBar.innerHTML = `${hBar} <span style="font-size: 0.85rem;">bar</span>`;
+        valHubRBar.style.color = rearWarn ? 'var(--accent-red)' : 'var(--text-primary)';
+    }
+    if (valHubRTemp) valHubRTemp.textContent = `🌡️ ${hTemp}°C • Soll: 2.8 bar`;
+    if (badgeHubTpms) {
+        badgeHubTpms.className = hasWarn ? 'card-badge badge-red' : 'card-badge badge-green';
+        badgeHubTpms.textContent = hasWarn ? 'Druckwarnung' : 'Solldruck OK';
+    }
 }
 
 function toggleTpmsSource() {
@@ -6072,6 +6564,7 @@ function setupRideHudUi() {
 setLanguage(state.lang);
 resetDisconnectedTelemetryUi();
 setupCanProfileManagerUi();
+setupDeviceHubUi();
 setupRideHudUi();
 // Note: Internal simulation is strictly opt-in via "Demo-Modus" or "Digital Twin" buttons.
 

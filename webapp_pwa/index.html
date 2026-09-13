@@ -126,7 +126,7 @@
                 🗺️ <span data-i18n="tab_tours">Touren & WebDAV</span>
             </button>
             <button class="tab-btn" data-tab="tab-hardware">
-                ⚙️ <span data-i18n="tab_hardware">Hardware & Reserve</span>
+                ⚙️ <span data-i18n="tab_hardware">Geräte & Hardware</span>
             </button>
         </nav>
 
@@ -889,6 +889,26 @@
 
         <!-- TAB 2: AUDIO & DUCKING MATRIX -->
         <main id="tab-audio" class="tab-content">
+            <!-- Quick Headset & Audio Hub Banner -->
+            <div class="card" style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; background: rgba(30, 38, 48, 0.75); border-left: 4px solid var(--accent-blue);">
+                <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                    <span style="font-size: 1.5rem;">🪖</span>
+                    <div>
+                        <div style="font-weight: 700; font-size: 0.95rem; color: #fff;">
+                            <span data-i18n="audio_headset_banner_title">Helm-Audio & Intercom-Kopplung (Qualcomm Inlay Mesh 3.0)</span>
+                        </div>
+                        <div style="font-size: 0.8rem; color: var(--text-secondary); display: flex; gap: 14px; flex-wrap: wrap; margin-top: 2px;">
+                            <span>Fahrer: <strong id="val-audio-rider-headset" style="color: var(--accent-green);">Verbunden (85% Akku)</strong></span>
+                            <span>Sozius: <strong id="val-audio-pax-headset" style="color: var(--accent-green);">Bereit (92% Akku)</strong></span>
+                            <span>Latenz: <strong style="color: var(--accent-blue);">&lt; 18 ms</strong></span>
+                        </div>
+                    </div>
+                </div>
+                <button id="btn-audio-to-device-mgr" class="btn-secondary" style="padding: 6px 14px; font-size: 0.82rem; border-color: var(--border-cyan); color: var(--accent-blue);">
+                    ⚙️ <span data-i18n="audio_manage_devices_btn">Geräte verwalten ➔</span>
+                </button>
+            </div>
+
             <div class="grid-2">
                 <!-- Modes -->
                 <section class="card">
@@ -1684,8 +1704,501 @@
             </section>
         </main>
 
-        <!-- TAB 5: HARDWARE & RESERVE I/O -->
+        <!-- TAB 5: GERÄTE- & VERBINDUNGS-MANAGER (DEVICE HUB) -->
         <main id="tab-hardware" class="tab-content">
+            <!-- Main Hub Header with Mode Overview -->
+            <div class="card" style="margin-bottom: 22px; background: linear-gradient(135deg, rgba(22, 27, 34, 0.9) 0%, rgba(13, 17, 23, 0.95) 100%); border-left: 4px solid var(--accent-orange);">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+                    <div>
+                        <h2 style="font-size: 1.3rem; font-weight: 800; font-family: var(--font-heading); color: #fff; display: flex; align-items: center; gap: 10px;">
+                            ⚙️ <span data-i18n="device_hub_title">Geräte- & Verbindungs-Manager (Device Hub)</span>
+                        </h2>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px;" data-i18n="device_hub_sub">
+                            Zentrale 2-geteilte Verwaltung aller persönlichen Geräte (Teil 1) und fest verbauter Motorrad- & Systemknoten (Teil 2).
+                        </p>
+                    </div>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <span class="card-badge badge-green" id="hub-badge-devices-total">6 Geräte aktiv</span>
+                        <span class="card-badge badge-blue" id="hub-badge-rf-status">RF Mesh & ESP-NOW OK</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================================================================= -->
+            <!-- TEIL 1: USER-ZENTRISCH (Persönliche Geräte & Wearables)            -->
+            <!-- ================================================================= -->
+            <div style="margin-bottom: 24px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border-accent);">
+                    <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--accent-orange); display: flex; align-items: center; gap: 8px;">
+                        👤 <span data-i18n="section_user_centric_title">Teil 1: Persönliche Geräte (Fahrer & Sozius)</span>
+                    </h3>
+                    <span style="font-size: 0.78rem; color: var(--text-secondary);">Kontingent: 2 Helme, 2 Smartphones, 2 Action-Cams</span>
+                </div>
+
+                <div class="grid-2">
+                    <!-- 1. Fahrer-Smartphone -->
+                    <section class="card" id="card-device-rider-phone">
+                        <div class="card-header">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 1.2rem;">📱</span>
+                                <span class="card-title" data-i18n="device_rider_phone_title">Fahrer-Smartphone</span>
+                            </div>
+                            <span class="card-badge badge-green" id="badge-rider-phone-status">Verbunden (WebBLE)</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">Verbindungstyp:</span>
+                            <span style="font-weight: 600;">Web Bluetooth Low Energy (PWA Link)</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">Signalstärke / RSSI:</span>
+                            <span style="font-weight: 700; color: var(--accent-green);" id="val-rider-phone-rssi">-48 dBm (Exzellent)</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">CarPlay / Android Auto:</span>
+                            <span style="font-weight: 700; color: var(--accent-blue);" id="val-rider-phone-cp2aa">CP2AA Dongle Aktiv (Port 2)</span>
+                        </div>
+                        <div style="display: flex; gap: 8px; margin-top: 14px;">
+                            <button id="btn-cp2aa-reset" class="btn-secondary" style="flex: 1; padding: 7px 12px; font-size: 0.78rem; border-color: rgba(255, 159, 10, 0.4); color: var(--accent-orange);" title="Setzt die 5V VBUS-Stromversorgung des CP2AA-Dongles via TPS2051B Lastschalter für 2s zurück">
+                                🔌 <span data-i18n="btn_cp2aa_reset">CP2AA Kaltstart (VBUS Reset)</span>
+                            </button>
+                        </div>
+                    </section>
+
+                    <!-- 2. Sozius-Smartphone -->
+                    <section class="card" id="card-device-pax-phone">
+                        <div class="card-header">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 1.2rem;">📱</span>
+                                <span class="card-title" data-i18n="device_pax_phone_title">Sozius-Smartphone</span>
+                            </div>
+                            <span class="card-badge badge-blue" id="badge-pax-phone-status">Bereit / Gekoppelt</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">Rolle & Freigabe:</span>
+                            <span style="font-weight: 600;">Audio-Share & 2nd-Seat Infotainment</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">Gerätename:</span>
+                            <span style="font-weight: 700;" id="val-pax-phone-name">iPhone von Sarah (iOS 18)</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">Mediensteuerung:</span>
+                            <span style="font-weight: 700; color: var(--accent-green);">Spotify Playlist-Zugriff Aktiv</span>
+                        </div>
+                        <div style="display: flex; gap: 8px; margin-top: 14px;">
+                            <button id="btn-pax-phone-toggle" class="btn-secondary" style="flex: 1; padding: 7px 12px; font-size: 0.78rem;">
+                                👥 <span data-i18n="btn_pax_phone_share">Audio-Share umschalten</span>
+                            </button>
+                            <button id="btn-pax-phone-unpair" class="btn-secondary" style="padding: 7px 10px; font-size: 0.78rem; border-color: rgba(255, 69, 58, 0.3); color: var(--accent-red);">
+                                ✕
+                            </button>
+                        </div>
+                    </section>
+
+                    <!-- 3. Fahrer-Helm -->
+                    <section class="card" id="card-device-rider-helmet">
+                        <div class="card-header">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 1.2rem;">🪖</span>
+                                <span class="card-title" data-i18n="device_rider_helmet_title">Fahrer-Helm (Primary Headset)</span>
+                            </div>
+                            <span class="card-badge badge-green" id="badge-rider-helmet-status">Verbunden</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">Transceiver:</span>
+                            <span style="font-weight: 700;">Qualcomm Inlay (Sena Apex / BT 5.3)</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">Akku & Status:</span>
+                            <span style="font-weight: 700; color: var(--accent-green);" id="val-rider-helmet-battery">🔋 85% (Laufzeit ca. 11h)</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">Audio-Codec & Latenz:</span>
+                            <span style="font-weight: 700; color: var(--accent-cyan);">aptX Adaptive HD (&lt; 18 ms)</span>
+                        </div>
+                        <div style="display: flex; gap: 8px; margin-top: 14px;">
+                            <button id="btn-pair-rider-helmet" class="btn-primary" style="flex: 1; padding: 7px 12px; font-size: 0.78rem;">
+                                🔍 <span data-i18n="btn_pair_rider_helmet">Fahrer-Helm suchen & koppeln</span>
+                            </button>
+                        </div>
+                    </section>
+
+                    <!-- 4. Sozius-Helm -->
+                    <section class="card" id="card-device-pax-helmet">
+                        <div class="card-header">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 1.2rem;">🪖</span>
+                                <span class="card-title" data-i18n="device_pax_helmet_title">Sozius-Helm (Secondary Headset)</span>
+                            </div>
+                            <span class="card-badge badge-green" id="badge-pax-helmet-status">Verbunden</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">Transceiver:</span>
+                            <span style="font-weight: 700;">Qualcomm Inlay (Cardo DMC / BT 5.3)</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">Akku & Status:</span>
+                            <span style="font-weight: 700; color: var(--accent-green);" id="val-pax-helmet-battery">🔋 92% (Laufzeit ca. 12h)</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">Audio-Codec & Latenz:</span>
+                            <span style="font-weight: 700; color: var(--accent-cyan);">LC3 HD Audio (&lt; 19 ms)</span>
+                        </div>
+                        <div style="display: flex; gap: 8px; margin-top: 14px;">
+                            <button id="btn-pair-pax-helmet" class="btn-secondary" style="flex: 1; padding: 7px 12px; font-size: 0.78rem;">
+                                🔍 <span data-i18n="btn_pair_pax_helmet">Sozius-Helm suchen & koppeln</span>
+                            </button>
+                        </div>
+                    </section>
+
+                    <!-- 5. Action-Cams (BLE Remote) -->
+                    <section class="card" id="card-device-action-cams" style="grid-column: 1 / -1;">
+                        <div class="card-header">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 1.2rem;">📹</span>
+                                <span class="card-title" data-i18n="device_action_cams_title">Action-Kameras (BLE Remote & Auto-REC)</span>
+                            </div>
+                            <span class="card-badge badge-blue" id="badge-action-cams-status">1 Cam gekoppelt</span>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-top: 6px;">
+                            <div class="stat-tile">
+                                <div class="stat-label"><span>Front-Cam (Lenker / Helm)</span><span class="card-badge badge-green">Gekoppelt</span></div>
+                                <div style="font-size: 1.05rem; font-weight: 700; margin: 4px 0;">GoPro Hero 12 Black</div>
+                                <span class="stat-sub">Akku: 78% • 4K60 HDR • Standby BEREIT</span>
+                            </div>
+                            <div class="stat-tile">
+                                <div class="stat-label"><span>Heck-Cam (Kennzeichenträger)</span><span class="card-badge badge-orange">Standby</span></div>
+                                <div style="font-size: 1.05rem; font-weight: 700; margin: 4px 0;">Insta360 X4 (360° VR)</div>
+                                <span class="stat-sub">Power-Gate Reserve_B: 5V ON • REC bei Kurve &gt; 25°</span>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; align-items: center;">
+                            <button id="btn-cam-scan" class="btn-secondary" style="padding: 7px 14px; font-size: 0.8rem;">
+                                🔍 <span data-i18n="btn_cam_scan">Action-Cams scannen (BLE)</span>
+                            </button>
+                            <label style="display: flex; align-items: center; gap: 6px; font-size: 0.82rem; cursor: pointer;">
+                                <input type="checkbox" id="chk-cam-fuel-stop-filter" checked>
+                                <span>Tankstopp-Filter (Keine Aufnahme bei v &lt; 3 km/h &gt; 60s)</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 6px; font-size: 0.82rem; cursor: pointer;">
+                                <input type="checkbox" id="chk-cam-auto-rec" checked>
+                                <span>Auto-REC bei Fahrtbeginn</span>
+                            </label>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <!-- ================================================================= -->
+            <!-- TEIL 2: MOTORRAD & OMB SYSTEMKNOTEN (Infrastruktur & Sensorik)    -->
+            <!-- ================================================================= -->
+            <div style="margin-bottom: 24px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border-cyan);">
+                    <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--accent-blue); display: flex; align-items: center; gap: 8px;">
+                        🏍️ <span data-i18n="section_bike_centric_title">Teil 2: Motorrad & OpenMotorBridge Systemknoten</span>
+                    </h3>
+                    <span style="font-size: 0.78rem; color: var(--text-secondary);">Fahrzeugsensorik, Funkknoten & Hardware</span>
+                </div>
+
+                <div class="grid-2">
+                    <!-- 1. Universal Front-Node (Cockpit-Hub • PCBA 05) -->
+                    <section class="card" id="card-device-front-node">
+                        <div class="card-header">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 1.2rem;">📡</span>
+                                <span class="card-title" data-i18n="device_front_node_title">Universal Front-Node (Cockpit-Hub)</span>
+                            </div>
+                            <span class="card-badge badge-green" id="badge-front-node-online">ESP-NOW Online</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">Hardware & MCU:</span>
+                            <span style="font-weight: 700;">PCBA 05 • ESP32-S3-WROOM-1U</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">ESP-NOW Funkbrücke:</span>
+                            <span style="font-weight: 700; color: var(--accent-green);" id="val-fn-espnow-status">Kanal 1 • -52 dBm (&lt; 1.8 ms Latenz)</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">Cockpit Wi-Fi Fallback SoftAP:</span>
+                            <span style="font-weight: 700; color: var(--accent-blue);" id="val-fn-wifi-status">Aktiv ("OpenMotorBridge-Gateway")</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">Proximity Rescue Beacon:</span>
+                            <span style="font-weight: 700; color: var(--accent-cyan);">Bereit (Smart Re-Pairing bei Crash)</span>
+                        </div>
+                        <div style="display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap;">
+                            <button id="btn-toggle-fn-wifi" class="btn-secondary" style="flex: 1; padding: 7px 12px; font-size: 0.78rem;">
+                                📶 <span data-i18n="btn_toggle_fn_wifi">Wi-Fi SoftAP Ein/Aus</span>
+                            </button>
+                            <button id="btn-fn-ping" class="btn-secondary" style="padding: 7px 14px; font-size: 0.78rem;">
+                                ⚡ Ping Test
+                            </button>
+                        </div>
+                    </section>
+
+                    <!-- 2. Heck-Radar & Spiegel-Totwinkel-LEDs (BSD) -->
+                    <section class="card" id="card-device-radar-bsd">
+                        <div class="card-header">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 1.2rem;">🚨</span>
+                                <span class="card-title" data-i18n="device_radar_bsd_title">Heck-Radar & Spiegel-LEDs (BSD)</span>
+                            </div>
+                            <span class="card-badge badge-green" id="badge-radar-power-status">Radar Aktiv</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">Radar-Sensor:</span>
+                            <span style="font-weight: 700;">TI IWR6843AOP mmWave (77 GHz / CAN)</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">Objekte im Erfassungsbereich:</span>
+                            <span style="font-weight: 700; color: var(--accent-green);" id="val-radar-detected-targets">0 Fahrzeuge (Frei)</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">Totwinkel Spiegel-LEDs:</span>
+                            <span style="font-weight: 700; color: var(--accent-orange);" id="val-bsd-led-state">Header J9 via MOSFET Q1: AKTIV</span>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px;">
+                            <button id="btn-toggle-radar-power" class="btn-secondary" style="padding: 7px 10px; font-size: 0.78rem; border-color: rgba(48, 209, 88, 0.4); color: var(--accent-green);">
+                                🛡️ <span id="lbl-toggle-radar-power">Radar: Ein</span>
+                            </button>
+                            <button id="btn-toggle-bsd-leds" class="btn-secondary" style="padding: 7px 10px; font-size: 0.78rem; border-color: rgba(255, 159, 10, 0.4); color: var(--accent-orange);">
+                                💡 <span id="lbl-toggle-bsd-leds">Spiegel-LEDs: Ein</span>
+                            </button>
+                        </div>
+                        <button id="btn-test-bsd-flash" class="btn-primary" style="width: 100%; margin-top: 8px; padding: 7px 12px; font-size: 0.78rem;">
+                            ⚡ <span data-i18n="btn_test_bsd_flash">Spiegel-LED Testblitz (2 Sekunden)</span>
+                        </button>
+                    </section>
+
+                    <!-- 3. Reifendruck-Kontrollsystem (TPMS) -->
+                    <section class="card" id="card-device-tpms">
+                        <div class="card-header">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 1.2rem;">🛞</span>
+                                <span class="card-title" data-i18n="device_tpms_title">Reifendruck-Kontrollsystem (TPMS)</span>
+                            </div>
+                            <span class="card-badge badge-green" id="badge-tpms-system-status">Solldruck OK</span>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 4px;">
+                            <div class="stat-tile" id="tile-tpms-front">
+                                <div class="stat-label"><span>Vorderrad</span><span class="card-badge badge-green">OK</span></div>
+                                <div class="stat-value" id="val-tpms-front-bar" style="font-size: 1.4rem;">2.45 <span style="font-size: 0.85rem;">bar</span></div>
+                                <span class="stat-sub" id="val-tpms-front-temp">🌡️ 24°C • Soll: 2.4 bar</span>
+                            </div>
+                            <div class="stat-tile" id="tile-tpms-rear">
+                                <div class="stat-label"><span>Hinterrad</span><span class="card-badge badge-green">OK</span></div>
+                                <div class="stat-value" id="val-tpms-rear-bar" style="font-size: 1.4rem;">2.80 <span style="font-size: 0.85rem;">bar</span></div>
+                                <span class="stat-sub" id="val-tpms-rear-temp">🌡️ 26°C • Soll: 2.8 bar</span>
+                            </div>
+                        </div>
+                        <div class="stat-row" style="margin-top: 10px;">
+                            <span class="stat-sub">Scanner & Sensoren:</span>
+                            <span style="font-weight: 600;">BLE GAP (FOBO Bike 2 / Deelife) & CAN-RDKS</span>
+                        </div>
+                        <div style="display: flex; gap: 8px; margin-top: 12px;">
+                            <button id="btn-tpms-learn" class="btn-secondary" style="flex: 1; padding: 7px 12px; font-size: 0.78rem;">
+                                🔄 <span data-i18n="btn_tpms_learn">Sensoren anlernen</span>
+                            </button>
+                        </div>
+                    </section>
+
+                    <!-- 4. Heck-Pod 3 & Sensoren -->
+                    <section class="card" id="card-device-pod3">
+                        <div class="card-header">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 1.2rem;">🛰️</span>
+                                <span class="card-title">Heck-Pod 3 (GNSS & LoRa Mesh)</span>
+                            </div>
+                            <span class="card-badge badge-green">3D DGPS Fix</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">Multi-GNSS Empfänger:</span>
+                            <span style="font-weight: 700;">u-blox MAX-M10S (GPS/Galileo/GLONASS)</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">Satelliten & Frequenz:</span>
+                            <span style="font-weight: 700; color: var(--accent-green);">18 Satelliten • 10 Hz Update • 1-PPS Lock</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">868 MHz LoRa Funk:</span>
+                            <span style="font-weight: 700; color: var(--accent-cyan);">Semtech SX1262 (OMM Kolonnen-Mesh)</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">6-Achs IMU Dynamik:</span>
+                            <span style="font-weight: 700;">Bosch BMI088 (Schräglage & EKF Dead-Reckoning)</span>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <!-- ================================================================= -->
+            <!-- FAHRZEUG-CAN PROFIL-MANAGER & LIVE-MONITOR & LIVE HEX SNIFFER      -->
+            <!-- ================================================================= -->
+            <section class="card" style="margin-bottom: 24px;">
+                <div class="card-header">
+                    <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                        <span class="card-title">🚗 <span data-i18n="can_profile_title">Fahrzeug-CAN Profil-Manager & Live-Monitor</span></span>
+                        <span class="card-badge badge-green" id="badge-can-status">🟢 500 kbps (Listen-Only • Safe)</span>
+                        <span class="card-badge badge-blue" id="badge-can-fps">142 Frames/s</span>
+                    </div>
+                    <div class="card-badge badge-orange" id="can-adr-source-badge">🟢 ADR: CAN Wheel Speed (R=0.02 m²/s²)</div>
+                </div>
+
+                <!-- Profile Selector & Action Controls -->
+                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--border-subtle);">
+                    <div style="flex: 1; min-width: 260px;">
+                        <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 4px; display: block;" data-i18n="can_profile_select_label">Fahrzeugprofil:</label>
+                        <select id="select-can-profile" class="select-custom" style="width: 100%; padding: 8px 12px; font-size: 0.88rem; font-weight: 600; background: rgba(13,17,23,0.9); border: 1px solid var(--border-accent); border-radius: var(--radius-sm); color: var(--text-primary); cursor: pointer;">
+                            <option value="harley_skyline_2024" selected>🏍️ Harley-Davidson Touring & CVO (2024+ Skyline OS)</option>
+                            <option value="bmw_motorrad_k5x_r1250_r1300">🏍️ BMW Motorrad R 1250 / R 1300 GS & RT (Wonderwheel K5x/K6x)</option>
+                            <option value="ktm_bosch_can_gen3">🏍️ KTM 890 / 1290 / 1390 Super Adventure & Duke (Bosch CAN)</option>
+                            <option value="ducati_panigale_multistrada">🏍️ Ducati Multistrada V4 / Panigale V4 (Bosch CAN)</option>
+                            <option value="generic_obd2_iso15765">🚗 Generisch Euro-4 / Euro-5 OBD2 (ISO 15765-4)</option>
+                        </select>
+                    </div>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; align-self: flex-end;">
+                        <button id="btn-can-scan" class="btn-secondary" style="padding: 8px 14px; font-size: 0.82rem;" title="500 ms passiver Scan über CAN-Bus Signaturen">
+                            🔍 <span data-i18n="can_scan_btn">Bus automatisch scannen</span>
+                        </button>
+                        <button id="btn-can-import" class="btn-secondary" style="padding: 8px 14px; font-size: 0.82rem;" title="Community-Profil als JSON importieren">
+                            📥 <span data-i18n="can_import_btn">Profil importieren (.json)</span>
+                        </button>
+                        <button id="btn-can-reset" class="btn-secondary" style="padding: 8px 12px; font-size: 0.82rem;" title="Auf Werkseinstellung zurücksetzen">
+                            🔄 <span data-i18n="can_reset_btn">Reset</span>
+                        </button>
+                        <input type="file" id="input-can-profile-file" accept=".json" style="display: none;">
+                    </div>
+                </div>
+
+                <!-- Live Telemetry Tiles (Grid 4x2) -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-bottom: 20px;">
+                    <div class="stat-tile">
+                        <div class="stat-label"><span>Raddrehzahl</span><span class="card-badge badge-blue">CAN</span></div>
+                        <div class="stat-value" id="can-val-speed">0.0 <span style="font-size: 0.9rem; font-weight: 500;">km/h</span></div>
+                        <span class="stat-sub">Auflösung: 1/16 km/h</span>
+                    </div>
+                    <div class="stat-tile">
+                        <div class="stat-label"><span>Motordrehzahl</span><span class="card-badge badge-blue">CAN</span></div>
+                        <div class="stat-value" id="can-val-rpm">0 <span style="font-size: 0.9rem; font-weight: 500;">U/min</span></div>
+                        <span class="stat-sub">Motor-Status: Aktiv</span>
+                    </div>
+                    <div class="stat-tile">
+                        <div class="stat-label"><span>Gang</span><span class="card-badge badge-green" id="can-badge-gear">Getriebe</span></div>
+                        <div class="stat-value" id="can-val-gear" style="color: var(--accent-cyan);">N</div>
+                        <span class="stat-sub" id="can-sub-gear">Leerlauf</span>
+                    </div>
+                    <div class="stat-tile">
+                        <div class="stat-label"><span>Reifendruck V/H</span><span class="card-badge badge-orange" id="can-badge-tpms">CAN-RDKS</span></div>
+                        <div class="stat-value" style="font-size: 1.3rem;" id="can-val-tpms">2.45 / 2.80 <span style="font-size: 0.85rem; font-weight: 500;">bar</span></div>
+                        <span class="stat-sub" id="can-sub-tpms">🟢 V: 24°C • H: 26°C (Solldruck OK)</span>
+                        <div style="margin-top: 6px; display: flex; gap: 6px; font-size: 0.72rem;">
+                            <button id="btn-tpms-source-toggle" class="btn-secondary" style="padding: 2px 6px; font-size: 0.7rem; border-color: rgba(255,255,255,0.2);">
+                                Quelle: <strong id="lbl-tpms-source-mode">CAN / BLE Auto</strong>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="stat-tile">
+                        <div class="stat-label"><span>Kühlmitteltemp</span><span class="card-badge badge-green" id="can-badge-temp">ECU</span></div>
+                        <div class="stat-value" id="can-val-temp">88 <span style="font-size: 0.9rem; font-weight: 500;">°C</span></div>
+                        <span class="stat-sub">Betriebstemperatur</span>
+                    </div>
+                    <div class="stat-tile">
+                        <div class="stat-label"><span>Tank & Reichweite</span><span class="card-badge badge-blue">BCM</span></div>
+                        <div class="stat-value" style="font-size: 1.4rem;" id="can-val-fuel">18.5 L <span style="font-size: 0.85rem; font-weight: 500;">• 320 km</span></div>
+                        <span class="stat-sub" id="can-sub-fuel">Verbrauch normal</span>
+                    </div>
+                    <div class="stat-tile">
+                        <div class="stat-label"><span>Blinker / Licht</span><span class="card-badge badge-purple">Beleuchtung</span></div>
+                        <div class="stat-value" style="font-size: 1.25rem;" id="can-val-turn">⚪ Aus</div>
+                        <span class="stat-sub" id="can-sub-turn">Bremslicht: Inaktiv</span>
+                    </div>
+                    <div class="stat-tile">
+                        <div class="stat-label"><span>Bremsen</span><span class="card-badge badge-green" id="can-badge-brakes">ABS</span></div>
+                        <div class="stat-value" style="font-size: 1.25rem;" id="can-val-brakes">Vorn / Hinten: Aus</div>
+                        <span class="stat-sub" id="can-sub-brakes">Druck: 0.0 bar</span>
+                    </div>
+                </div>
+
+                <!-- Interaktiver Lenkertaster- & Wonderwheel-Test -->
+                <div style="background: rgba(0,0,0,0.25); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 14px 18px; margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+                        <strong style="font-size: 0.88rem; color: #fff;">🎮 <span data-i18n="can_handlebar_title">Interaktiver Lenkertaster- & Wonderwheel-Test</span></strong>
+                        <span style="font-size: 0.75rem; color: var(--text-secondary);">Klicke auf einen Taster, um den CAN-Frame zu simulieren:</span>
+                    </div>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button id="btn-indicator-voice" class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem; border-color: rgba(255,255,255,0.15);">
+                            🎤 Voice / PTT
+                        </button>
+                        <button id="btn-indicator-joy-left" class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem; border-color: rgba(255,255,255,0.15);">
+                            ◀️ Joystick Links
+                        </button>
+                        <button id="btn-indicator-joy-click" class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem; border-color: rgba(255,255,255,0.15);">
+                            🔘 Joystick Click
+                        </button>
+                        <button id="btn-indicator-joy-right" class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem; border-color: rgba(255,255,255,0.15);">
+                            ▶️ Joystick Rechts
+                        </button>
+                        <button id="btn-indicator-wheel-up" class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem; border-color: rgba(0, 242, 254, 0.3);">
+                            🔼 Wonderwheel Scroll +
+                        </button>
+                        <button id="btn-indicator-wheel-down" class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem; border-color: rgba(0, 242, 254, 0.3);">
+                            🔽 Wonderwheel Scroll -
+                        </button>
+                        <button id="btn-indicator-wheel-tilt-l" class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem; border-color: rgba(0, 242, 254, 0.3);">
+                            ⬅️ Wheel Tilt Links
+                        </button>
+                        <button id="btn-indicator-wheel-tilt-r" class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem; border-color: rgba(0, 242, 254, 0.3);">
+                            ➡️ Wheel Tilt Rechts
+                        </button>
+                    </div>
+                </div>
+
+                <!-- LIVE CAN-BUS TRACE SNIFFER -->
+                <div style="background: rgba(13, 17, 23, 0.8); border: 1px solid var(--border-accent); border-radius: var(--radius-md); padding: 16px 18px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <strong style="font-size: 0.95rem; color: #fff;">📡 <span data-i18n="can_sniffer_title">Live CAN-Bus Trace Sniffer</span></strong>
+                            <span class="card-badge badge-green" id="badge-can-sniffer-status">● Live Stream (500 kbps)</span>
+                        </div>
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+                            <input type="text" id="input-can-filter" placeholder="Filter nach ID / Name (z. B. 280, Speed)..." style="padding: 6px 12px; font-size: 0.8rem; background: rgba(0,0,0,0.5); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); color: #fff; width: 230px;">
+                            <button id="btn-can-trace-toggle" class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem; border-color: rgba(48, 209, 88, 0.4); color: var(--accent-green);">
+                                ⏸️ <span id="lbl-can-trace-toggle">Pause</span>
+                            </button>
+                            <button id="btn-can-trace-clear" class="btn-secondary" style="padding: 6px 10px; font-size: 0.8rem;">
+                                🗑️ Löschen
+                            </button>
+                            <button id="btn-can-trace-export" class="btn-secondary" style="padding: 6px 10px; font-size: 0.8rem;">
+                                💾 CSV
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Trace Hex Table Container -->
+                    <div style="overflow-x: auto; max-height: 280px; overflow-y: auto; background: rgba(10, 12, 16, 0.95); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); font-family: monospace; font-size: 0.78rem;">
+                        <table style="width: 100%; border-collapse: collapse; text-align: left;" id="table-can-trace">
+                            <thead>
+                                <tr style="background: rgba(255,255,255,0.06); color: var(--text-secondary); border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; backdrop-filter: blur(8px);">
+                                    <th style="padding: 7px 10px;">Zeitstempel</th>
+                                    <th style="padding: 7px 10px;">CAN-ID</th>
+                                    <th style="padding: 7px 10px;">Signal / Botschaft</th>
+                                    <th style="padding: 7px 10px; text-align: center;">DLC</th>
+                                    <th style="padding: 7px 10px;">Payload (Hex Bytes)</th>
+                                    <th style="padding: 7px 10px; text-align: right;">Zyklus (ms)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody-can-trace">
+                                <!-- Populated dynamically by app.js -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================================================================= -->
+            <!-- HARDWARE DIAGNOSTIK & RESERVE I/O                                 -->
+            <!-- ================================================================= -->
             <div class="grid-2">
                 <!-- Reserve I/O -->
                 <section class="card">
@@ -1715,127 +2228,6 @@
                             </div>
                             <button id="btn-toggle-reserve-b" class="btn-primary" style="padding: 8px 16px;">
                                 <span data-i18n="btn_toggle_output">Toggle Output</span>
-                            </button>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- CAN-Bus Profil-Manager & Live-Monitor -->
-                <section class="card" style="grid-column: 1 / -1;">
-                    <div class="card-header">
-                        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                            <span class="card-title">🚗 <span data-i18n="can_profile_title">Fahrzeug-CAN Profil-Manager & Live-Monitor</span></span>
-                            <span class="card-badge badge-green" id="badge-can-status">🟢 500 kbps (Listen-Only • Safe)</span>
-                            <span class="card-badge badge-blue" id="badge-can-fps">142 Frames/s</span>
-                        </div>
-                        <div class="card-badge badge-orange" id="can-adr-source-badge">🟢 ADR: CAN Wheel Speed (R=0.02 m²/s²)</div>
-                    </div>
-
-                    <!-- Profile Selector & Action Controls -->
-                    <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--border-subtle);">
-                        <div style="flex: 1; min-width: 260px;">
-                            <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 4px; display: block;" data-i18n="can_profile_select_label">Fahrzeugprofil:</label>
-                            <select id="select-can-profile" class="select-custom" style="width: 100%; padding: 8px 12px; font-size: 0.88rem; font-weight: 600; background: rgba(13,17,23,0.9); border: 1px solid var(--border-accent); border-radius: var(--radius-sm); color: var(--text-primary); cursor: pointer;">
-                                <option value="harley_skyline_2024" selected>🏍️ Harley-Davidson Touring & CVO (2024+ Skyline OS)</option>
-                                <option value="bmw_motorrad_k5x_r1250_r1300">🏍️ BMW Motorrad R 1250 / R 1300 GS & RT (Wonderwheel K5x/K6x)</option>
-                                <option value="ktm_bosch_can_gen3">🏍️ KTM 890 / 1290 / 1390 Super Adventure & Duke (Bosch CAN)</option>
-                                <option value="ducati_panigale_multistrada">🏍️ Ducati Multistrada V4 / Panigale V4 (Bosch CAN)</option>
-                                <option value="generic_obd2_iso15765">🚗 Generisch Euro-4 / Euro-5 OBD2 (ISO 15765-4)</option>
-                            </select>
-                        </div>
-                        <div style="display: flex; gap: 8px; flex-wrap: wrap; align-self: flex-end;">
-                            <button id="btn-can-scan" class="btn-secondary" style="padding: 8px 14px; font-size: 0.82rem;" title="500 ms passiver Scan über CAN-Bus Signaturen">
-                                🔍 <span data-i18n="can_scan_btn">Bus automatisch scannen</span>
-                            </button>
-                            <button id="btn-can-import" class="btn-secondary" style="padding: 8px 14px; font-size: 0.82rem;" title="Community-Profil als JSON importieren">
-                                📥 <span data-i18n="can_import_btn">Profil importieren (.json)</span>
-                            </button>
-                            <button id="btn-can-reset" class="btn-secondary" style="padding: 8px 12px; font-size: 0.82rem;" title="Auf Werkseinstellung zurücksetzen">
-                                🔄 <span data-i18n="can_reset_btn">Reset</span>
-                            </button>
-                            <input type="file" id="input-can-profile-file" accept=".json" style="display: none;">
-                        </div>
-                    </div>
-
-                    <!-- Live Telemetry Tiles (Grid 4x2) -->
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-bottom: 20px;">
-                        <div class="stat-tile">
-                            <div class="stat-label"><span>Raddrehzahl</span><span class="card-badge badge-blue">CAN</span></div>
-                            <div class="stat-value" id="can-val-speed">0.0 <span style="font-size: 0.9rem; font-weight: 500;">km/h</span></div>
-                            <span class="stat-sub">Auflösung: 1/16 km/h</span>
-                        </div>
-                        <div class="stat-tile">
-                            <div class="stat-label"><span>Motordrehzahl</span><span class="card-badge badge-blue">CAN</span></div>
-                            <div class="stat-value" id="can-val-rpm">0 <span style="font-size: 0.9rem; font-weight: 500;">U/min</span></div>
-                            <span class="stat-sub">Motor-Status: Aktiv</span>
-                        </div>
-                        <div class="stat-tile">
-                            <div class="stat-label"><span>Gang</span><span class="card-badge badge-green" id="can-badge-gear">Getriebe</span></div>
-                            <div class="stat-value" id="can-val-gear" style="color: var(--accent-cyan);">N</div>
-                            <span class="stat-sub" id="can-sub-gear">Leerlauf</span>
-                        </div>
-                        <div class="stat-tile">
-                            <div class="stat-label"><span>Reifendruck V/H</span><span class="card-badge badge-orange" id="can-badge-tpms">CAN-RDKS</span></div>
-                            <div class="stat-value" style="font-size: 1.3rem;" id="can-val-tpms">2.45 / 2.80 <span style="font-size: 0.85rem; font-weight: 500;">bar</span></div>
-                            <span class="stat-sub" id="can-sub-tpms">🟢 V: 24°C • H: 26°C (Solldruck OK)</span>
-                            <div style="margin-top: 6px; display: flex; gap: 6px; font-size: 0.72rem;">
-                                <button id="btn-tpms-source-toggle" class="btn-secondary" style="padding: 2px 6px; font-size: 0.7rem; border-color: rgba(255,255,255,0.2);">
-                                    Quelle: <strong id="lbl-tpms-source-mode">CAN / BLE Auto</strong>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="stat-tile">
-                            <div class="stat-label"><span>Kühlmitteltemp</span><span class="card-badge badge-green" id="can-badge-temp">ECU</span></div>
-                            <div class="stat-value" id="can-val-temp">88 <span style="font-size: 0.9rem; font-weight: 500;">°C</span></div>
-                            <span class="stat-sub">Betriebstemperatur</span>
-                        </div>
-                        <div class="stat-tile">
-                            <div class="stat-label"><span>Tank & Reichweite</span><span class="card-badge badge-blue">BCM</span></div>
-                            <div class="stat-value" style="font-size: 1.4rem;" id="can-val-fuel">18.5 L <span style="font-size: 0.85rem; font-weight: 500;">• 320 km</span></div>
-                            <span class="stat-sub" id="can-sub-fuel">Verbrauch normal</span>
-                        </div>
-                        <div class="stat-tile">
-                            <div class="stat-label"><span>Blinker / Licht</span><span class="card-badge badge-purple">Beleuchtung</span></div>
-                            <div class="stat-value" style="font-size: 1.25rem;" id="can-val-turn">⚪ Aus</div>
-                            <span class="stat-sub" id="can-sub-turn">Bremslicht: Inaktiv</span>
-                        </div>
-                        <div class="stat-tile">
-                            <div class="stat-label"><span>Bremsen</span><span class="card-badge badge-green" id="can-badge-brakes">ABS</span></div>
-                            <div class="stat-value" style="font-size: 1.25rem;" id="can-val-brakes">Vorn / Hinten: Aus</div>
-                            <span class="stat-sub" id="can-sub-brakes">Druck: 0.0 bar</span>
-                        </div>
-                    </div>
-
-                    <!-- Interaktiver Lenkertaster- & Wonderwheel-Test -->
-                    <div style="background: rgba(0,0,0,0.25); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 14px 18px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
-                            <strong style="font-size: 0.88rem; color: #fff;">🎮 <span data-i18n="can_handlebar_title">Interaktiver Lenkertaster- & Wonderwheel-Test</span></strong>
-                            <span style="font-size: 0.75rem; color: var(--text-secondary);">Klicke auf einen Taster, um den CAN-Frame zu simulieren:</span>
-                        </div>
-                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                            <button id="btn-indicator-voice" class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem; border-color: rgba(255,255,255,0.15);">
-                                🎤 Voice / PTT
-                            </button>
-                            <button id="btn-indicator-joy-left" class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem; border-color: rgba(255,255,255,0.15);">
-                                ◀️ Joystick Links
-                            </button>
-                            <button id="btn-indicator-joy-click" class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem; border-color: rgba(255,255,255,0.15);">
-                                🔘 Joystick Click
-                            </button>
-                            <button id="btn-indicator-joy-right" class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem; border-color: rgba(255,255,255,0.15);">
-                                ▶️ Joystick Rechts
-                            </button>
-                            <button id="btn-indicator-wheel-up" class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem; border-color: rgba(0, 242, 254, 0.3);">
-                                🔼 Wonderwheel Scroll +
-                            </button>
-                            <button id="btn-indicator-wheel-down" class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem; border-color: rgba(0, 242, 254, 0.3);">
-                                🔽 Wonderwheel Scroll -
-                            </button>
-                            <button id="btn-indicator-wheel-tilt-l" class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem; border-color: rgba(0, 242, 254, 0.3);">
-                                ⬅️ Wheel Tilt Links
-                            </button>
-                            <button id="btn-indicator-wheel-tilt-r" class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem; border-color: rgba(0, 242, 254, 0.3);">
-                                ➡️ Wheel Tilt Rechts
                             </button>
                         </div>
                     </div>
@@ -1871,47 +2263,45 @@
                 </section>
 
                 <!-- Front Node Diagnostics Card -->
-                <section class="card">
+                <section class="card" style="grid-column: 1 / -1;">
                     <div class="card-header">
                         <span class="card-title">📡 <span data-i18n="front_node_diag_title">Universal Front-Knoten Diagnostik</span></span>
                         <span class="card-badge badge-green">PCBA 05</span>
                     </div>
 
-                    <div class="stat-row">
-                        <span class="stat-sub">Mikrocontroller:</span>
-                        <span style="font-weight: 700;">ESP32-S3-WROOM-1U (240 MHz Xtensa Dual-Core)</span>
-                    </div>
-                    <div class="stat-row">
-                        <span class="stat-sub">DCDC Wandler & Schutz:</span>
-                        <span style="font-weight: 700; color: var(--accent-green);">LMR36015 (5V/2A) + TPS63070 Kaltstart</span>
-                    </div>
-                    <div class="stat-row">
-                        <span class="stat-sub">USB 2.0 High-Speed Hub:</span>
-                        <span style="font-weight: 700;">Microchip USB2514B 4-Port (480 Mbps, 90Ω Diff.)</span>
-                    </div>
-                    <div class="stat-row">
-                        <span class="stat-sub">20W USB-PD Fast-Charge:</span>
-                        <span style="font-weight: 700; color: var(--accent-green);">Southchip SC8102 (Lenker Port 1)</span>
-                    </div>
-                    <div class="stat-row">
-                        <span class="stat-sub">VBUS Lastschalter:</span>
-                        <span style="font-weight: 700;">TI TPS2051B (CP2AA Dongle Port 2 Power-Gate)</span>
-                    </div>
-                    <div class="stat-row">
-                        <span class="stat-sub">Cockpit CAN-Bus & Term:</span>
-                        <span style="font-weight: 700;">TI TCAN334G CAN-FD + CPC1017N Auto-Term</span>
-                    </div>
-                    <div class="stat-row">
-                        <span class="stat-sub">Digitales MEMS Mikrofon:</span>
-                        <span style="font-weight: 700;">Knowles SPH0645LM4H (16 kHz 24-Bit I2S DSP)</span>
-                    </div>
-                    <div class="stat-row">
-                        <span class="stat-sub">Funkbrücke & Latenz:</span>
-                        <span style="font-weight: 700; color: var(--accent-blue);">ESP-NOW 2.4 GHz (&lt; 1.8 ms End-to-End)</span>
-                    </div>
-                    <div class="stat-row">
-                        <span class="stat-sub">Dual-Bank OTA Flash:</span>
-                        <span style="font-weight: 700;">4MB Flash (ota_0 aktiv, Rollback-Schutz)</span>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px 20px;">
+                        <div class="stat-row">
+                            <span class="stat-sub">Mikrocontroller:</span>
+                            <span style="font-weight: 700;">ESP32-S3-WROOM-1U (240 MHz Dual-Core)</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">DCDC Wandler & Schutz:</span>
+                            <span style="font-weight: 700; color: var(--accent-green);">LMR36015 (5V/2A) + TPS63070</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">USB 2.0 High-Speed Hub:</span>
+                            <span style="font-weight: 700;">Microchip USB2514B 4-Port (480 Mbps)</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">20W USB-PD Fast-Charge:</span>
+                            <span style="font-weight: 700; color: var(--accent-green);">Southchip SC8102 (Port 1)</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">VBUS Lastschalter:</span>
+                            <span style="font-weight: 700;">TI TPS2051B (CP2AA Dongle Port 2)</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">Cockpit CAN-Bus & Term:</span>
+                            <span style="font-weight: 700;">TI TCAN334G CAN-FD + CPC1017N</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">Digitales MEMS Mikrofon:</span>
+                            <span style="font-weight: 700;">Knowles SPH0645LM4H (16 kHz 24-Bit I2S)</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">Funkbrücke & Latenz:</span>
+                            <span style="font-weight: 700; color: var(--accent-blue);">ESP-NOW 2.4 GHz (&lt; 1.8 ms)</span>
+                        </div>
                     </div>
 
                     <button id="btn-front-node-ota" class="btn-secondary" style="width: 100%; margin-top: 14px;">

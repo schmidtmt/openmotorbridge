@@ -33,10 +33,19 @@
 // Legacy alias for single PTT button compatibility
 #define PIN_PTT_INPUT_N         PIN_PTT_IN1_N
 
-// --- 2. ESP-NOW Wireless Bridge Constants ---
-#define ESPNOW_WIFI_CHANNEL     1
-#define ESPNOW_MAX_PAYLOAD      250
-#define FRONT_NODE_PROTOCOL_VER 0x02
+// --- 2. ESP-NOW Wireless Bridge & Cockpit Wi-Fi SoftAP Constants ---
+#define ESPNOW_WIFI_CHANNEL         1
+#define ESPNOW_MAX_PAYLOAD          250
+#define FRONT_NODE_PROTOCOL_VER     0x02
+
+// Cockpit Wi-Fi Fallback SoftAP Configuration (WIFI_MODE_APSTA on Channel 1)
+#define COCKPIT_WIFI_AP_SSID        "OpenMotorBridge-Gateway"
+#define COCKPIT_WIFI_AP_PASS        "openmotor2024"
+#define COCKPIT_WIFI_AP_CHANNEL     ESPNOW_WIFI_CHANNEL   // Channel 1: Zero RF switching jitter with ESP-NOW
+#define COCKPIT_WIFI_AP_MAX_CONN    4
+#define COCKPIT_WIFI_AP_IP          "192.168.4.1"
+#define COCKPIT_WIFI_AP_GW          "192.168.4.1"
+#define COCKPIT_WIFI_AP_NETMASK     "255.255.255.0"
 
 // Packet Types
 enum FrontNodePacketType : uint8_t {

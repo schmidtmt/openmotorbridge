@@ -15,6 +15,7 @@
 #include "ws2812b_led_manager.h"
 #include "esp_now_bridge.h"
 #include "ota_service_manager.h"
+#include "cockpit_wifi_fallback.h"
 
 static const char* TAG = "FRONT_NODE_MAIN";
 
@@ -352,6 +353,7 @@ extern "C" void app_main(void) {
     EspNowBridge& bridge = EspNowBridge::instance();
     bridge.init();
     bridge.set_command_callback(handle_remote_command);
+    cockpit_wifi_fallback_init();
 
     // 5. Spawn Real-Time FreeRTOS Tasks
     xTaskCreate(ptt_task, "ptt_task", 3072, NULL, 10, NULL);          // Highest priority
