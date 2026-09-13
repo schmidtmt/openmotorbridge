@@ -255,12 +255,12 @@ def create_pcb_board():
 
         # 2. Connectors South Edge (USB & Charging Subsystem)
         # J4: Upstream Host (zum Bike Infotainment)
-        ("Connector_JST.pretty", "JST_PH_B4B-PH-K_1x04_P2.00mm_Vertical", "J4", "USB_UPSTREAM_HOST", 116.50, 116.00, 180,
+        ("Connector_JST.pretty", "JST_PH_B4B-PH-K_1x04_P2.00mm_Vertical", "J4", "USB_UPSTREAM_HOST", 115.25, 116.00, 180,
          {"1": "USB_UP_VBUS", "2": "USB_UP_DM", "3": "USB_UP_DP", "4": "GND"},
          "Connector_JST.3dshapes/JST_PH_B4B-PH-K_1x04_P2.00mm_Vertical.step"),
 
         # J5: Port 1 Downstream (Smartphone USB-PD 20W Fast Charge, 5-Pin JST-PH mit CC)
-        ("Connector_JST.pretty", "JST_PH_B5B-PH-K_1x05_P2.00mm_Vertical", "J5", "USB_DN1_PHONE_PD20W", 128.50, 116.00, 180,
+        ("Connector_JST.pretty", "JST_PH_B5B-PH-K_1x05_P2.00mm_Vertical", "J5", "USB_DN1_PHONE_PD20W", 129.00, 116.00, 180,
          {"1": "VBUS_PD1_OUT", "2": "USB_DN1_DM", "3": "USB_DN1_DP", "4": "USB_DN1_CC", "5": "GND"},
          "Connector_JST.3dshapes/JST_PH_B5B-PH-K_1x05_P2.00mm_Vertical.step"),
 
@@ -270,17 +270,17 @@ def create_pcb_board():
          "Connector_JST.3dshapes/JST_PH_B4B-PH-K_1x04_P2.00mm_Vertical.step"),
 
         # J5_MP3: Port 3 Downstream (Handschuhfach / Jukebox USB-Stick & Smartphone PD20W, 5-Pin JST-PH mit CC)
-        ("Connector_JST.pretty", "JST_PH_B5B-PH-K_1x05_P2.00mm_Vertical", "J5_MP3", "USB_DN3_GLOVEBOX_PD20W", 152.50, 116.00, 180,
+        ("Connector_JST.pretty", "JST_PH_B5B-PH-K_1x05_P2.00mm_Vertical", "J5_MP3", "USB_DN3_GLOVEBOX_PD20W", 153.75, 116.00, 180,
          {"1": "VBUS_PD3_OUT", "2": "USB_DN3_DM", "3": "USB_DN3_DP", "4": "USB_DN3_CC", "5": "GND"},
          "Connector_JST.3dshapes/JST_PH_B5B-PH-K_1x05_P2.00mm_Vertical.step"),
 
         # J6_AUX: Port 4 Downstream (Cockpit-Zubehör / Dashcam / Navi)
-        ("Connector_JST.pretty", "JST_PH_B4B-PH-K_1x04_P2.00mm_Vertical", "J6_AUX", "USB_DN4_COCKPIT_AUX", 164.50, 116.00, 180,
+        ("Connector_JST.pretty", "JST_PH_B4B-PH-K_1x04_P2.00mm_Vertical", "J6_AUX", "USB_DN4_COCKPIT_AUX", 165.25, 116.00, 180,
          {"1": "VCC_5V", "2": "USB_DN4_DM", "3": "USB_DN4_DP", "4": "GND"},
          "Connector_JST.3dshapes/JST_PH_B4B-PH-K_1x04_P2.00mm_Vertical.step"),
 
         # J8: Action-Cam Power-Port (Charge-Only 5V / 2.0A)
-        ("Connector_JST.pretty", "JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical", "J8", "ACTION_CAM_5V_PWR", 172.50, 116.00, 180,
+        ("Connector_JST.pretty", "JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical", "J8", "ACTION_CAM_5V_PWR", 172.75, 116.00, 180,
          {"1": "VCC_5V", "2": "GND"},
          "Connector_JST.3dshapes/JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical.step"),
 
@@ -317,7 +317,7 @@ def create_pcb_board():
         ("Diode_SMD.pretty", "D_SMA", "D7", "SS34_USB_OR", 156.75, 106.00, 90,
          {"1": "VCC_5V", "2": "USB_UP_VBUS"},
          "Diode_SMD.3dshapes/D_SMA.step"),
-        ("Diode_SMD.pretty", "D_SMA", "D8", "SS34_BUCK_OR", 142.75, 83.25, 0,
+        ("Diode_SMD.pretty", "D_SMA", "D8", "SS34_BUCK_OR", 143.25, 79.50, 0,
          {"1": "VBUS_BUCK_OUT", "2": "VCC_5V"},
          "Diode_SMD.3dshapes/D_SMA.step"),
         ("Diode_SMD.pretty", "D_SMA", "D5", "SS34_REV_POL", 116.75, 72.75, 180,
@@ -329,7 +329,7 @@ def create_pcb_board():
         ("Package_TO_SOT_SMD.pretty", "SOT-23-6", "U3", "TPS54302_5V_BUCK", 110.89, 78.20, 0,
          {"1": "GND", "2": "SW_BUCK", "3": "+12V_PROT", "4": "FB_BUCK", "5": "+12V_PROT", "6": "BST_BUCK"},
          "Package_TO_SOT_SMD.3dshapes/SOT-23-6.step"),
-        ("Inductor_SMD.pretty", "L_Sunlord_MWSA1206S-470", "L1", "4.7uH_Power_Choke", 129.88, 86.50, 0,
+        ("Inductor_SMD.pretty", "L_Sunlord_MWSA1206S-470", "L1", "4.7uH_Power_Choke", 131.38, 86.25, 0,
          {"1": "SW_BUCK", "2": "VBUS_BUCK_OUT"},
          "Inductor_SMD.3dshapes/L_2816_7142Metric.step"),
         ("Package_TO_SOT_SMD.pretty", "SOT-23-5", "U7", "TLV75533P_3V3_LDO", 170.80, 95.64, -90,
@@ -346,7 +346,7 @@ def create_pcb_board():
         ("Inductor_SMD.pretty", "L_Sunlord_MWSA0503S", "L2", "4.7uH_PD1_Choke", 115.00, 101.50, 0,
          {"1": "SW_PD1_BUCK", "2": "VBUS_PD1_OUT"},
          "Inductor_SMD.3dshapes/L_Sunlord_MWSA0503S.step"),
-        ("Capacitor_SMD.pretty", "C_0805_2012Metric", "C25", "10uF_50V_PD1", 115.00, 86.00, 0,
+        ("Capacitor_SMD.pretty", "C_0805_2012Metric", "C25", "10uF_50V_PD1", 115.00, 88.25, 0,
          {"1": "+12V_PROT", "2": "GND"},
          "Capacitor_SMD.3dshapes/C_0805_2012Metric.step"),
         ("Capacitor_SMD.pretty", "C_0805_2012Metric", "C26", "22uF_25V_PD1", 115.00, 107.00, 0,
@@ -362,7 +362,7 @@ def create_pcb_board():
         ("Inductor_SMD.pretty", "L_Sunlord_MWSA0503S", "L3", "4.7uH_PD3_Choke", 121.50, 101.50, 0,
          {"1": "SW_PD3_BUCK", "2": "VBUS_PD3_OUT"},
          "Inductor_SMD.3dshapes/L_Sunlord_MWSA0503S.step"),
-        ("Capacitor_SMD.pretty", "C_0805_2012Metric", "C27", "10uF_50V_PD3", 118.50, 86.00, 0,
+        ("Capacitor_SMD.pretty", "C_0805_2012Metric", "C27", "10uF_50V_PD3", 121.45, 88.75, 0,
          {"1": "+12V_PROT", "2": "GND"},
          "Capacitor_SMD.3dshapes/C_0805_2012Metric.step"),
         ("Capacitor_SMD.pretty", "C_0805_2012Metric", "C28", "22uF_25V_PD3", 121.50, 107.00, 0,
@@ -381,12 +381,12 @@ def create_pcb_board():
           "29": "VCC_3V3", "30": "USB_UP_DM", "31": "USB_UP_DP", "32": "XTAL_OUT",
           "33": "XTAL_IN", "34": "GND", "35": "HUB_RBIAS", "36": "VCC_3V3", "37": "GND"},
          "Package_DFN_QFN.3dshapes/QFN-36-1EP_6x6mm_P0.5mm_EP3.7x3.7mm.step"),
-        ("Crystal.pretty", "Crystal_SMD_3225-4Pin_3.2x2.5mm", "Y1", "24.000MHz", 132.00, 102.00, 180,
+        ("Crystal.pretty", "Crystal_SMD_3225-4Pin_3.2x2.5mm", "Y1", "24.000MHz", 133.40, 101.85, 180,
          {"1": "XTAL_IN", "2": "GND", "3": "XTAL_OUT", "4": "GND"},
          "Crystal.3dshapes/Crystal_SMD_3225-4Pin_3.2x2.5mm.step"),
 
         # 7. CP2AA Power Switch (TI TPS2051B SOT-23-5)
-        ("Package_TO_SOT_SMD.pretty", "SOT-23-5", "U4", "TPS2051B_PORT2_GATE", 142.55, 89.61, 90,
+        ("Package_TO_SOT_SMD.pretty", "SOT-23-5", "U4", "TPS2051B_PORT2_GATE", 143.70, 84.36, 90,
          {"1": "VCC_5V_OTTOCAST", "2": "GND", "3": "OTTOCAST_FAULT_N", "4": "OTTOCAST_PWR_EN", "5": "VCC_5V"},
          "Package_TO_SOT_SMD.3dshapes/SOT-23-5.step"),
 
@@ -399,7 +399,7 @@ def create_pcb_board():
          None),
 
         # 9. Smart Switches: Q1 (BSD Mirror Dual MOSFET) & Q2 (TPS1H100 Aux Light High-Side Switch)
-        ("Package_TO_SOT_SMD.pretty", "SOT-363_SC-70-6", "Q1", "DMN63D8_BSD_MOSFET", 127.59, 100.75, 0,
+        ("Package_TO_SOT_SMD.pretty", "SOT-363_SC-70-6", "Q1", "DMN63D8_BSD_MOSFET", 129.34, 99.40, 0,
          {"1": "GND", "2": "BSD_LED_LEFT", "3": "BSD_RIGHT_N", "4": "GND", "5": "BSD_LED_RIGHT", "6": "BSD_LEFT_N"},
          None),
         ("Package_SO.pretty", "Texas_HTSSOP-14-1EP_4.4x5mm_P0.65mm_EP3.4x5mm_Mask3.155x3.255mm_ThermalVias", "Q2", "TPS1H100_AUX_LIGHT", 105.36, 91.00, 0,
@@ -420,16 +420,16 @@ def create_pcb_board():
          None),
 
         # 11. Ambient I2S MEMS Microphone (Knowles SPH0645)
-        ("Sensor_Audio.pretty", "Knowles_SPH0645LM4H-6_3.5x2.65mm", "MIC1", "SPH0645_I2S_MIC", 148.25, 108.79, 0,
+        ("Sensor_Audio.pretty", "Knowles_SPH0645LM4H-6_3.5x2.65mm", "MIC1", "SPH0645_I2S_MIC", 143.00, 91.04, 0,
          {"1": "MIC_I2S_DATA", "2": "MIC_I2S_BCLK", "3": "MIC_I2S_WS", "4": "GND", "5": "VCC_3V3"},
          "Sensor_Audio.3dshapes/Knowles_SPH0645LM4H-6_3.5x2.65mm.step"),
 
         # 12. Key Discrete Passives
         ("Capacitor_SMD.pretty", "C_0805_2012Metric", "C19", "10uF_50V", 119.58, 78.80, 0, {"1": "+12V_PROT", "2": "GND"}, "Capacitor_SMD.3dshapes/C_0805_2012Metric.step"),
-        ("Capacitor_SMD.pretty", "C_0805_2012Metric", "C22", "22uF_16V", 130.45, 97.00, 0, {"1": "VCC_5V", "2": "GND"}, "Capacitor_SMD.3dshapes/C_0805_2012Metric.step"),
+        ("Capacitor_SMD.pretty", "C_0805_2012Metric", "C22", "22uF_16V", 130.70, 95.75, 0, {"1": "VCC_5V", "2": "GND"}, "Capacitor_SMD.3dshapes/C_0805_2012Metric.step"),
         ("Capacitor_SMD.pretty", "C_0603_1608Metric", "C24", "2.2uF_3V3", 152.03, 101.25, 180, {"1": "VCC_3V3", "2": "GND"}, "Capacitor_SMD.3dshapes/C_0603_1608Metric.step"),
-        ("Resistor_SMD.pretty", "R_0603_1608Metric", "R10", "120R_CAN", 126.08, 109.50, 0, {"1": "CAN_TERM_R", "2": "CAN_L"}, "Resistor_SMD.3dshapes/R_0603_1608Metric.step"),
-        ("Resistor_SMD.pretty", "R_0603_1608Metric", "R5", "12k_RBIAS", 135.00, 107.00, 0, {"1": "HUB_RBIAS", "2": "GND"}, "Resistor_SMD.3dshapes/R_0603_1608Metric.step"),
+        ("Resistor_SMD.pretty", "R_0603_1608Metric", "R10", "120R_CAN", 102.92, 109.75, 0, {"1": "CAN_TERM_R", "2": "CAN_L"}, "Resistor_SMD.3dshapes/R_0603_1608Metric.step"),
+        ("Resistor_SMD.pretty", "R_0603_1608Metric", "R5", "12k_RBIAS", 142.07, 95.50, 0, {"1": "HUB_RBIAS", "2": "GND"}, "Resistor_SMD.3dshapes/R_0603_1608Metric.step"),
         ("Resistor_SMD.pretty", "R_0603_1608Metric", "R15", "5.1k_CC1", 167.93, 106.00, 180, {"1": "USB_CC1", "2": "GND"}, "Resistor_SMD.3dshapes/R_0603_1608Metric.step"),
         ("Resistor_SMD.pretty", "R_0603_1608Metric", "R16", "5.1k_CC2", 169.75, 102.42, 90, {"1": "USB_CC2", "2": "GND"}, "Resistor_SMD.3dshapes/R_0603_1608Metric.step"),
         ("Resistor_SMD.pretty", "R_0603_1608Metric", "R8", "10k_FAULT", 136.18, 97.50, 0, {"1": "VCC_3V3", "2": "OTTOCAST_FAULT_N"}, "Resistor_SMD.3dshapes/R_0603_1608Metric.step"),
