@@ -392,12 +392,19 @@ const i18n = {
     }
 };
 
+// Detect Runtime Mode: Hardware Mode (index.html) vs. Demo / Simulator Suite (demo.html)
+const isDemoModeInitial = (typeof window !== 'undefined' && window.OMB_MODE === 'demo') || 
+                          (typeof window !== 'undefined' && window.location.pathname.includes('demo.html')) || 
+                          (typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('demo'));
+const isRealHardwareInitial = !isDemoModeInitial;
+
 // Application State
 const state = {
     lang: localStorage.getItem('omb_lang') || (navigator.language.startsWith('de') ? 'de' : 'en'),
     cockpitMode: localStorage.getItem('omb_cockpit_mode') || 'hud',
     isBleConnected: false,
-    isDemoMode: false,
+    isRealHardware: isRealHardwareInitial,
+    isDemoMode: isDemoModeInitial,
     demoInterval: null,
     batteryChemistry: localStorage.getItem('omb_bat_chem') || 'agm',
     webdavConfig: JSON.parse(localStorage.getItem('omb_webdav_cfg') || '{}'),
@@ -2345,29 +2352,52 @@ function resetDisconnectedTelemetryUi() {
     const rgbLabel = document.getElementById('rgb-led-label');
     if (rgbLabel) rgbLabel.textContent = isDe ? 'Offline (Nicht verbunden)' : 'Offline (Disconnected)';
     const rgbDesc = document.getElementById('rgb-led-desc');
-    if (rgbDesc) rgbDesc.textContent = isDe ? 'Warte auf BLE Verbindung oder Demo-Modus' : 'Waiting for BLE connection or demo mode';
+    if (rgbDesc) rgbDesc.textContent = state.isRealHardware 
+        ? (isDe ? 'Warte auf BLE Verbindung' : 'Waiting for BLE connection')
+        : (isDe ? 'Warte auf BLE Verbindung oder Demo-Modus' : 'Waiting for BLE connection or demo mode');
 
-    // Radar / Mesh - retain active simulated defaults
+    // Radar / Mesh
     const badgeMesh = document.getElementById('badge-mesh-nodes');
     if (badgeMesh) {
-        badgeMesh.className = 'card-badge badge-green';
-        badgeMesh.style.background = '';
-        badgeMesh.style.color = '';
-        badgeMesh.textContent = isDe ? 'OMM Aktiv (3 Bikes)' : 'OMM Active (3 Bikes)';
+        if (state.isRealHardware) {
+            badgeMesh.className = 'card-badge';
+            badgeMesh.style.background = 'rgba(255,255,255,0.08)';
+            badgeMesh.style.color = 'var(--text-muted)';
+            badgeMesh.textContent = isDe ? 'Standby (Warte auf BLE)' : 'Standby (Waiting for BLE)';
+        } else {
+            badgeMesh.className = 'card-badge badge-green';
+            badgeMesh.style.background = '';
+            badgeMesh.style.color = '';
+            badgeMesh.textContent = isDe ? 'OMM Aktiv (3 Bikes)' : 'OMM Active (3 Bikes)';
+        }
     }
     const lblCoords = document.getElementById('lbl-radar-coords');
-    if (lblCoords) lblCoords.textContent = '47.4640° N, 9.0430° E';
+    if (lblCoords) lblCoords.textContent = state.isRealHardware ? '--° N, --° E' : '47.4640° N, 9.0430° E';
     const lblAlt = document.getElementById('lbl-radar-alt');
-    if (lblAlt) lblAlt.textContent = '570 m ü. M.';
+    if (lblAlt) lblAlt.textContent = state.isRealHardware ? '-- m ü. M.' : '570 m ü. M.';
     const lblRssi = document.getElementById('lbl-radar-rssi');
     if (lblRssi) {
-        lblRssi.textContent = '2.4 GHz Mesh (-62 dBm)';
-        lblRssi.style.color = 'var(--accent-green)';
+        if (state.isRealHardware) {
+            lblRssi.textContent = 'Mesh: Standby';
+            lblRssi.style.color = 'var(--text-muted)';
+        } else {
+            lblRssi.textContent = '2.4 GHz Mesh (-62 dBm)';
+            lblRssi.style.color = 'var(--accent-green)';
+        }
     }
     const lblDr = document.getElementById('lbl-radar-dr');
     if (lblDr) {
-        lblDr.textContent = 'GNSS 3D FIX (10 Hz)';
-        lblDr.style.color = 'var(--accent-green)';
+        if (state.isRealHardware) {
+            lblDr.textContent = 'GNSS: Standby';
+            lblDr.style.color = 'var(--text-muted)';
+        } else {
+            lblDr.textContent = 'GNSS 3D FIX (10 Hz)';
+            lblDr.style.color = 'var(--accent-green)';
+        }
+    }
+    const hudStatusGps = document.getElementById('hud-status-gps');
+    if (hudStatusGps) {
+        hudStatusGps.textContent = state.isRealHardware ? '🛰️ Standby' : '🛰️ GNSS 10Hz';
     }
 
     // Reset Rear Radar & Blind-Spot Assistant
@@ -2527,6 +2557,74 @@ function resetDisconnectedTelemetryUi() {
         badgeCan.style.background = 'rgba(255,255,255,0.08)';
         badgeCan.style.color = 'var(--text-muted)';
         badgeCan.textContent = 'CAN: Standby';
+    }
+
+    // 5. Tab 5 Device Hub Standby State (When in Hardware Mode and BLE is Disconnected)
+    if (!state.isDemoMode) {
+        const badgeRiderPhone = document.getElementById('badge-rider-phone-status');
+        if (badgeRiderPhone) {
+            badgeRiderPhone.className = 'card-badge';
+            badgeRiderPhone.style.background = 'rgba(255,255,255,0.08)';
+            badgeRiderPhone.style.color = 'var(--text-muted)';
+            badgeRiderPhone.textContent = isDe ? 'Standby (Getrennt)' : 'Standby (Offline)';
+        }
+        const valRiderRssi = document.getElementById('val-rider-phone-rssi');
+        if (valRiderRssi) {
+            valRiderRssi.textContent = '-- dBm';
+            valRiderRssi.style.color = 'var(--text-muted)';
+        }
+        const badgeFn = document.getElementById('badge-front-node-online');
+        if (badgeFn) {
+            badgeFn.className = 'card-badge';
+            badgeFn.style.background = 'rgba(255,255,255,0.08)';
+            badgeFn.style.color = 'var(--text-muted)';
+            badgeFn.textContent = isDe ? 'Standby (Getrennt)' : 'Standby (Offline)';
+        }
+        const valFnEspnow = document.getElementById('val-fn-espnow-status');
+        if (valFnEspnow) {
+            valFnEspnow.textContent = isDe ? 'Standby (Warte auf Verbindung)' : 'Standby (Waiting for link)';
+            valFnEspnow.style.color = 'var(--text-muted)';
+        }
+        const badgeRadarPwr = document.getElementById('badge-radar-power-status');
+        if (badgeRadarPwr) {
+            badgeRadarPwr.className = 'card-badge';
+            badgeRadarPwr.style.background = 'rgba(255,255,255,0.08)';
+            badgeRadarPwr.style.color = 'var(--text-muted)';
+            badgeRadarPwr.textContent = isDe ? 'Standby (Getrennt)' : 'Standby';
+        }
+        const valRadarTargets = document.getElementById('val-radar-detected-targets');
+        if (valRadarTargets) {
+            valRadarTargets.textContent = isDe ? 'Standby (Sensor offline)' : 'Standby (Offline)';
+            valRadarTargets.style.color = 'var(--text-muted)';
+        }
+        const badgeTpms = document.getElementById('badge-tpms-system-status');
+        if (badgeTpms) {
+            badgeTpms.className = 'card-badge';
+            badgeTpms.style.background = 'rgba(255,255,255,0.08)';
+            badgeTpms.style.color = 'var(--text-muted)';
+            badgeTpms.textContent = 'Standby';
+        }
+        const valTpmsF = document.getElementById('val-tpms-front-bar');
+        if (valTpmsF) valTpmsF.innerHTML = '-- <span style="font-size: 0.85rem;">bar</span>';
+        const valTpmsR = document.getElementById('val-tpms-rear-bar');
+        if (valTpmsR) valTpmsR.innerHTML = '-- <span style="font-size: 0.85rem;">bar</span>';
+        const hudTpms = document.getElementById('val-hud-tpms');
+        if (hudTpms) {
+            hudTpms.textContent = '-- / -- bar';
+            hudTpms.style.color = 'var(--text-muted)';
+        }
+        const badgeCanMgr = document.getElementById('badge-can-status');
+        if (badgeCanMgr) {
+            badgeCanMgr.className = 'card-badge';
+            badgeCanMgr.style.background = 'rgba(255,255,255,0.08)';
+            badgeCanMgr.style.color = 'var(--text-muted)';
+            badgeCanMgr.textContent = isDe ? 'Standby (Warte auf Bus)' : 'Standby (Waiting for bus)';
+        }
+        const badgeCanFps = document.getElementById('badge-can-fps');
+        if (badgeCanFps) {
+            badgeCanFps.textContent = '0 Frames/s';
+            badgeCanFps.style.color = 'var(--text-muted)';
+        }
     }
 }
 
@@ -3381,17 +3479,22 @@ if (btnFrontNodeOta) {
 // ==========================================
 // 6. Demo / Simulation Mode
 // ==========================================
-btnDemo.addEventListener('click', () => {
-    toggleDemoMode(!state.isDemoMode);
-});
+if (btnDemo) {
+    btnDemo.addEventListener('click', () => {
+        toggleDemoMode(!state.isDemoMode);
+    });
+}
 
 function toggleDemoMode(enable) {
     const dict = i18n[state.lang];
     const isDe = state.lang === 'de';
     state.isDemoMode = enable;
     if (enable) {
-        btnDemo.classList.add('active');
-        btnDemo.querySelector('span').textContent = dict.demo_active;
+        if (btnDemo) {
+            btnDemo.classList.add('active');
+            const span = btnDemo.querySelector('span');
+            if (span) span.textContent = dict.demo_active;
+        }
         showToast(isDe ? 'Live-Simulation gestartet' : 'Live simulation started', 'success');
 
         // Activate indicators
@@ -3551,8 +3654,11 @@ function toggleDemoMode(enable) {
         // Start Full High-Fidelity Test Track Simulation in Demo Mode
         startInternalSimTrackEngine(false);
     } else {
-        btnDemo.classList.remove('active');
-        btnDemo.querySelector('span').textContent = dict.demo_mode;
+        if (btnDemo) {
+            btnDemo.classList.remove('active');
+            const span = btnDemo.querySelector('span');
+            if (span) span.textContent = dict.demo_mode;
+        }
         stopInternalSimTrackEngine();
         if (state.demoInterval) {
             clearInterval(state.demoInterval);
@@ -6560,13 +6666,117 @@ function setupRideHudUi() {
     setCockpitMode(savedMode);
 }
 
+function setupDemoSuiteUi() {
+    // 1. Toggle Manual Injection Panel
+    const btnToggleInjection = document.getElementById('btn-toggle-injection-panel');
+    const panelInjection = document.getElementById('demo-injection-panel');
+    if (btnToggleInjection && panelInjection) {
+        btnToggleInjection.addEventListener('click', () => {
+            const isHidden = panelInjection.style.display === 'none';
+            panelInjection.style.display = isHidden ? 'block' : 'none';
+            btnToggleInjection.style.background = isHidden ? 'rgba(0, 242, 254, 0.2)' : '';
+            btnToggleInjection.style.borderColor = isHidden ? 'var(--accent-cyan)' : '';
+        });
+    }
+
+    // 2. Live Dynamics Injection Sliders
+    const sliderSpeed = document.getElementById('slider-inject-speed');
+    const dispSpeed = document.getElementById('disp-inject-speed');
+    if (sliderSpeed && dispSpeed) {
+        sliderSpeed.addEventListener('input', (e) => {
+            const val = parseFloat(e.target.value);
+            dispSpeed.textContent = `${val.toFixed(0)} km/h`;
+            updateTelemetryUi({ speed: val });
+        });
+    }
+
+    const sliderLean = document.getElementById('slider-inject-lean');
+    const dispLean = document.getElementById('disp-inject-lean');
+    if (sliderLean && dispLean) {
+        sliderLean.addEventListener('input', (e) => {
+            const val = parseFloat(e.target.value);
+            dispLean.textContent = `${val > 0 ? '+' : ''}${val.toFixed(1)}°`;
+            updateTelemetryUi({ lean_angle: val });
+        });
+    }
+
+    const sliderRadar = document.getElementById('slider-inject-radar');
+    const dispRadar = document.getElementById('disp-inject-radar');
+    if (sliderRadar && dispRadar) {
+        sliderRadar.addEventListener('input', (e) => {
+            const dist = parseFloat(e.target.value);
+            let threatName = 'Grün (Frei)';
+            let threatLevel = 0;
+            if (dist < 18) {
+                threatName = 'Rot (Kollisionsgefahr)';
+                threatLevel = 2;
+            } else if (dist < 48) {
+                threatName = 'Gelb (Annäherung)';
+                threatLevel = 1;
+            }
+            dispRadar.textContent = `${dist.toFixed(0)} m (${threatName})`;
+
+            // Inject simulated radar target
+            if (state.radar) {
+                state.radar.targets = [{
+                    id: 1,
+                    distance: dist,
+                    rel_speed: -25,
+                    azimuth: -4,
+                    ttc: dist / 12.0
+                }];
+                updateRadarUi(state.radar);
+            }
+        });
+    }
+
+    const sliderTpmsF = document.getElementById('slider-inject-tpms-f');
+    const dispTpmsF = document.getElementById('disp-inject-tpms-f');
+    if (sliderTpmsF && dispTpmsF) {
+        sliderTpmsF.addEventListener('input', (e) => {
+            const val = parseFloat(e.target.value);
+            dispTpmsF.textContent = `${val.toFixed(2)} bar`;
+            const elHudTpms = document.getElementById('val-hud-tpms');
+            if (elHudTpms) elHudTpms.textContent = `${val.toFixed(2)} / 2.80 bar`;
+            const elFrontBar = document.getElementById('val-tpms-front-bar');
+            if (elFrontBar) elFrontBar.textContent = `${val.toFixed(2)} bar`;
+        });
+    }
+
+    // 3. ESS Emergency Brake Trigger
+    const btnEss = document.getElementById('btn-inject-ess');
+    if (btnEss) {
+        btnEss.addEventListener('click', () => {
+            setEssActive(true);
+            showToast(state.lang === 'de' ? '⚡ Notbremsung simuliert: ESS 4.5 Hz Strobe aktiv!' : '⚡ Emergency braking triggered: ESS 4.5 Hz Strobe active!', 'warning');
+        });
+    }
+
+    // 4. Reset Injection Defaults
+    const btnResetInject = document.getElementById('btn-reset-injection');
+    if (btnResetInject) {
+        btnResetInject.addEventListener('click', () => {
+            if (sliderSpeed) { sliderSpeed.value = 65; sliderSpeed.dispatchEvent(new Event('input')); }
+            if (sliderLean) { sliderLean.value = 18.5; sliderLean.dispatchEvent(new Event('input')); }
+            if (sliderRadar) { sliderRadar.value = 45; sliderRadar.dispatchEvent(new Event('input')); }
+            if (sliderTpmsF) { sliderTpmsF.value = 2.45; sliderTpmsF.dispatchEvent(new Event('input')); }
+        });
+    }
+
+    // 5. Auto-start simulation if in Demo Mode (demo.html)
+    if (state.isDemoMode) {
+        console.log('OpenMotorBridge: Booting in DEMO / SIMULATION MODE.');
+        toggleDemoMode(true);
+    }
+}
+
 // Initialize Language, Telemetry & Cockpit UI on Boot (Standby - Wait for BLE Hardware)
 setLanguage(state.lang);
 resetDisconnectedTelemetryUi();
 setupCanProfileManagerUi();
 setupDeviceHubUi();
 setupRideHudUi();
-// Note: Internal simulation is strictly opt-in via "Demo-Modus" or "Digital Twin" buttons.
+setupDemoSuiteUi();
 
 // ==========================================
 // 12. Service Worker Registration (PWA Offline)

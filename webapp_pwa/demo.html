@@ -14,6 +14,70 @@
 
 <body>
     <div class="app-container">
+        <!-- DEMO & SIMULATION SUITE STICKY TOP BAR -->
+        <div class="demo-suite-banner" id="demo-suite-banner">
+            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                <span class="demo-suite-badge">🎮 DEMO- & SIMULATIONS-SUITE</span>
+                <span style="font-size: 0.8rem; color: var(--text-secondary);">Synthetischer Telemetrie-Generator & HIL Testbench</span>
+            </div>
+            <div class="demo-controls-bar">
+                <a href="index.html" class="btn-secondary" style="text-decoration: none; display: flex; align-items: center; gap: 6px; font-size: 0.78rem; padding: 6px 12px; border-color: rgba(255, 159, 10, 0.45); color: var(--accent-orange);" title="Zurück zur echten Hardware-App">
+                    ⬅️ <span>Echte App (Hardware)</span>
+                </a>
+                <button id="btn-toggle-injection-panel" class="btn-secondary" style="padding: 6px 12px; font-size: 0.78rem; border-color: rgba(0, 242, 254, 0.4); color: var(--accent-cyan);" title="Manuelle Regler für Tempo, Schräglage und Radar einblenden">
+                    🎛️ <span>Manuelle Regler</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- COLLAPSIBLE LIVE DYNAMICS INJECTION PANEL -->
+        <div class="demo-injection-panel" id="demo-injection-panel" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 6px;">
+                <strong style="font-size: 0.85rem; color: var(--accent-cyan); display: flex; align-items: center; gap: 6px;">
+                    🎛️ Manuelle Live-Injektion (Simulator Controls)
+                </strong>
+                <span style="font-size: 0.75rem; color: var(--text-secondary);">Überschreibt Sensorwerte in Echtzeit</span>
+            </div>
+            <div class="demo-injection-grid">
+                <div class="demo-slider-group">
+                    <div class="demo-slider-label">
+                        <span>Geschwindigkeit:</span>
+                        <strong id="disp-inject-speed">65 km/h</strong>
+                    </div>
+                    <input type="range" id="slider-inject-speed" class="demo-slider" min="0" max="220" value="65" step="1">
+                </div>
+                <div class="demo-slider-group">
+                    <div class="demo-slider-label">
+                        <span>Schräglage (Roll):</span>
+                        <strong id="disp-inject-lean">+18.5°</strong>
+                    </div>
+                    <input type="range" id="slider-inject-lean" class="demo-slider" min="-55" max="55" value="18.5" step="0.5">
+                </div>
+                <div class="demo-slider-group">
+                    <div class="demo-slider-label">
+                        <span>Heck-Radar Distanz:</span>
+                        <strong id="disp-inject-radar">45 m (Gelb)</strong>
+                    </div>
+                    <input type="range" id="slider-inject-radar" class="demo-slider" min="2" max="140" value="45" step="1">
+                </div>
+                <div class="demo-slider-group">
+                    <div class="demo-slider-label">
+                        <span>TPMS Reifendruck Vorn:</span>
+                        <strong id="disp-inject-tpms-f">2.45 bar</strong>
+                    </div>
+                    <input type="range" id="slider-inject-tpms-f" class="demo-slider" min="1.0" max="3.5" value="2.45" step="0.05">
+                </div>
+                <div class="demo-slider-group" style="grid-column: 1 / -1; display: flex; flex-direction: row; gap: 10px; align-items: center; justify-content: flex-end;">
+                    <button id="btn-inject-ess" class="btn-secondary" style="padding: 7px 14px; font-size: 0.8rem; border-color: rgba(255, 69, 58, 0.4); color: var(--accent-red);">
+                        ⚠️ Notbremsung (ESS Strobe -0.65g)
+                    </button>
+                    <button id="btn-reset-injection" class="btn-secondary" style="padding: 7px 12px; font-size: 0.8rem;">
+                        🔄 Werte Zurücksetzen
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <!-- Top App Header -->
         <header class="app-header">
             <div class="brand-section">
@@ -35,9 +99,24 @@
                     <span class="status-dot" id="dot-ble"></span>
                     <span id="label-ble-status" data-i18n="ble_offline">BLE Offline</span>
                 </div>
-                <a href="demo.html" id="link-open-demo" class="btn-secondary" style="text-decoration: none; display: flex; align-items: center; gap: 6px; font-size: 0.78rem; padding: 6px 11px; border-color: rgba(0, 242, 254, 0.35); color: var(--accent-cyan);" title="Zur interaktiven Demo- und Simulationsversion wechseln">
-                    🎮 <span>Demo-Modus</span>
-                </a>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <select id="select-sim-track" class="select-custom" style="padding: 6px 10px; font-size: 0.78rem; font-weight: 600; background: rgba(13,17,23,0.9); border: 1px solid var(--border-accent); border-radius: var(--radius-sm); color: var(--text-primary); cursor: pointer;" title="Strecke auswählen / Select Track">
+                        <option value="wil_ricken">🛣️ Wil SG ➔ Rickenpass</option>
+                        <option value="kerenzerberg" selected>⛰️ Kerenzerberg ➔ Glarus</option>
+                    </select>
+                    <button id="btn-trigger-crash" class="btn-secondary" style="padding: 6px 10px; font-size: 0.78rem; border-color: rgba(255, 69, 58, 0.4); color: var(--accent-red);" title="eCall Sturzerkennung Simulieren (>6.5g + Schräglage >65°)">
+                        🚨 <span data-i18n="btn_crash_sim">Crash-Test</span>
+                    </button>
+                    <button id="btn-reset-crash" class="btn-secondary" style="padding: 6px 8px; font-size: 0.78rem; display: none;" title="eCall Notruf Zurücksetzen">
+                        🔄 Reset
+                    </button>
+                </div>
+                <button id="btn-demo-mode" class="btn-secondary" title="Live-Simulation aktivieren">
+                    🎮 <span data-i18n="demo_mode">Demo-Modus</span>
+                </button>
+                <button id="btn-sim-ws" class="btn-secondary" title="Digital Twin Simulator (ws://localhost:8765)">
+                    🚀 <span id="label-sim-ws">Digital Twin</span>
+                </button>
                 <button id="btn-connect" class="btn-primary">
                     ⚡ <span id="label-connect-btn" data-i18n="ble_connect">BLE Verbinden</span>
                 </button>
@@ -492,14 +571,20 @@
                         <div id="rgb-led-visual" style="width: 36px; height: 36px; border-radius: 50%; background: #475569; box-shadow: none; border: 2px solid rgba(255,255,255,0.2); flex-shrink: 0;"></div>
                         <div>
                             <div id="rgb-led-label" style="font-weight: 700; font-size: 1.05rem;">Offline (Nicht verbunden)</div>
-                            <div class="stat-sub" id="rgb-led-desc">Warte auf BLE Verbindung</div>
+                            <div class="stat-sub" id="rgb-led-desc">Warte auf BLE Verbindung oder Demo-Modus</div>
                         </div>
                     </div>
 
-                    <div style="margin-top: 12px; padding: 10px 14px; background: rgba(0,0,0,0.2); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
-                        <div style="font-size: 0.8rem; color: var(--text-secondary);">
-                            💡 <strong>Hardware WS2812B RGB-LED:</strong> Spiegelt live den Systemstatus des Main Controllers (Grün = Normalbetrieb, Blau = BLE/Pairing, Gelb = USV-Akkupuffer, Rot = Fehler/Unterspannung).
-                        </div>
+                    <div style="margin-top: 12px;">
+                        <div class="control-label"><span>LED-Status Simulator</span></div>
+                        <select id="select-led-sim" class="select-custom">
+                            <option value="green" selected>🟢 Normalbetrieb (Pulsierend Grün 1 Hz)</option>
+                            <option value="blue">🔵 BLE Dashboard / Pairing (Blinkend Blau 2 Hz)</option>
+                            <option value="yellow">🟡 USV-Akkubetrieb (Pulsierend Gelb 0.5 Hz)</option>
+                            <option value="red">🔴 Fehler / Unterspannung Starterbatterie (Rot schnell)</option>
+                            <option value="purple">🟣 OMM DLE Leader-Knoten (Lila leuchtend)</option>
+                            <option value="white">⚪ Actioncam Highlight Marker (Doppelblitz Weiß)</option>
+                        </select>
                     </div>
                 </section>
 
@@ -814,6 +899,9 @@
                     <!-- Radar Controls & Simulation Triggers -->
                     <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; padding-top: 10px; border-top: 1px solid var(--border-subtle);">
                         <div style="display: flex; align-items: center; gap: 8px;">
+                            <button id="btn-radar-sim-approach" class="btn-secondary" style="font-size: 0.8rem; padding: 7px 12px; border-color: rgba(255, 159, 10, 0.4); color: var(--accent-orange);">
+                                <span>🚗</span> <span data-i18n="btn_radar_sim">Annäherung Simulieren</span>
+                            </button>
                             <button id="btn-radar-test-chime" class="btn-secondary" style="font-size: 0.8rem; padding: 7px 12px;">
                                 <span>🔔</span> <span data-i18n="btn_radar_chime">Warnping Testen</span>
                             </button>
@@ -1191,20 +1279,124 @@
                     </div>
                 </section>
 
-                <!-- WebAudio Helmet Acoustic Sandbox Link Card -->
-                <section class="card" style="grid-column: 1 / -1; border-color: rgba(0, 242, 254, 0.25); background: linear-gradient(135deg, rgba(13, 17, 23, 0.8), rgba(0, 242, 254, 0.05));">
-                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-                        <div>
-                            <div style="font-weight: 700; font-size: 0.95rem; color: var(--accent-cyan); display: flex; align-items: center; gap: 8px;">
-                                🎧 <span>WebAudio Helm-Akustik & DSP Sandbox (Simulator)</span>
+                <!-- WebAudio Helmet Acoustic Sandbox Card (Live-Simulator) -->
+                <section class="card" style="grid-column: 1 / -1; border-color: var(--border-cyan);">
+                    <div class="card-header">
+                        <span class="card-title">🎧 <span data-i18n="helmet_sandbox_title">WebAudio Helm-Akustik & DSP Sandbox (Live-Simulator)</span></span>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <span class="card-badge badge-blue" id="badge-sandbox-engine">Web Audio API: Bereit</span>
+                            <button id="btn-sandbox-toggle" class="btn-primary" style="padding: 5px 12px; font-size: 0.8rem; background: linear-gradient(135deg, var(--accent-blue), #005bb5);">
+                                ▶️ <span id="lbl-sandbox-toggle" data-i18n="btn_sandbox_start">Akustik Starten</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 14px;">
+                        Echtzeit-Simulation der Helm-Innenakustik unter Fahrt: Windgeräusch skaliert kubisch (<span style="font-family: monospace; color: var(--accent-orange);">p ~ v³</span>), Biquad-Sprachfilterung (HPF & 2.5 kHz Peaking EQ), Helm-Sidetone und Raised-Cosine Ducking bei Radar (-18 dB) oder Navigation (-12 dB).
+                    </div>
+
+                    <div class="grid-3" style="gap: 16px;">
+                        <!-- Col 1: Wind Noise & Speed Scaling -->
+                        <div class="sandbox-ctrl-panel">
+                            <strong style="font-size: 0.85rem; color: var(--accent-orange); display: block; margin-bottom: 8px;">
+                                💨 Fahrtwind & Lärmpegel (SPL)
+                            </strong>
+                            
+                            <div class="control-group">
+                                <div class="control-label">
+                                    <span>Simulierte Geschwindigkeit</span>
+                                    <span id="lbl-sandbox-speed" style="font-weight: 700; color: var(--accent-orange);">80 km/h</span>
+                                </div>
+                                <input type="range" id="slider-sandbox-speed" class="control-slider" min="0" max="180" step="1" value="80">
                             </div>
-                            <div style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px;">
-                                Die interaktive WebAudio-Simulation mit Fahrtwind (<span style="font-family: monospace; color: var(--accent-orange);">p ~ v³</span>), Helm-Biquad-Filterprofilen & Ducking-Prüfstand befindet sich in der Demo-Suite.
+
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+                                <label style="display: flex; align-items: center; gap: 8px; font-size: 0.78rem; cursor: pointer;">
+                                    <input type="checkbox" id="chk-sandbox-autospeed" checked>
+                                    <span>Mit Bike-Speed synchronisieren</span>
+                                </label>
+                                <span class="card-badge" id="badge-sandbox-spl" style="font-size: 0.72rem; background: rgba(255,255,255,0.06);">82.4 dBA</span>
+                            </div>
+
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+                                <span style="font-size: 0.78rem;">Windgeräusch aktiv</span>
+                                <label class="switch">
+                                    <input type="checkbox" id="chk-sandbox-wind-enable" checked>
+                                    <span class="slider round"></span>
+                                </label>
                             </div>
                         </div>
-                        <a href="demo.html" class="btn-secondary" style="text-decoration: none; display: flex; align-items: center; gap: 6px; font-size: 0.8rem; padding: 7px 14px; border-color: rgba(0, 242, 254, 0.4); color: var(--accent-cyan);" title="Zur interaktiven Demo- und Simulationsversion wechseln">
-                            🎮 <span>In Demo-Suite öffnen ➔</span>
-                        </a>
+
+                        <!-- Col 2: Voice Chatter & Biquad EQ -->
+                        <div class="sandbox-ctrl-panel">
+                            <strong style="font-size: 0.85rem; color: var(--accent-green); display: block; margin-bottom: 8px;">
+                                🎙️ Intercom-Stimme & Biquad EQ
+                            </strong>
+
+                            <div class="control-group">
+                                <div class="control-label">
+                                    <span>Helm-Filterprofil (Biquad)</span>
+                                    <span id="lbl-sandbox-eq" style="font-weight: 700; color: var(--accent-green);">Integralhelm</span>
+                                </div>
+                                <select id="select-sandbox-eq" class="select-custom" style="padding: 6px; font-size: 0.8rem;">
+                                    <option value="integral" selected>🪖 Integralhelm (120 Hz HPF + 2.5 kHz Boost)</option>
+                                    <option value="open">🏍️ Klapp- / Jethelm (160 Hz HPF + 2.5 kHz Boost)</option>
+                                    <option value="touring">🛡️ Touring / Schild (90 Hz HPF + 2.0 kHz Boost)</option>
+                                    <option value="flat">🎧 Flat / Bypass (Linear)</option>
+                                </select>
+                            </div>
+
+                            <div class="control-group" style="margin-top: 8px;">
+                                <div class="control-label">
+                                    <span>Sidetone Rückführung</span>
+                                    <span id="lbl-sandbox-sidetone">-12.0 dB</span>
+                                </div>
+                                <input type="range" id="slider-sandbox-sidetone" class="control-slider" min="-40" max="0" step="0.5" value="-12">
+                            </div>
+
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+                                <span style="font-size: 0.78rem;">Intercom Funk-Chatter</span>
+                                <label class="switch">
+                                    <input type="checkbox" id="chk-sandbox-voice-chatter" checked>
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Col 3: Ducking Triggers & Master Volume -->
+                        <div class="sandbox-ctrl-panel">
+                            <strong style="font-size: 0.85rem; color: var(--accent-blue); display: block; margin-bottom: 8px;">
+                                🎚️ Ducking-Reaktion & Master
+                            </strong>
+
+                            <div class="control-group">
+                                <div class="control-label">
+                                    <span>Helm-Lautstärke Master</span>
+                                    <span id="lbl-sandbox-vol">75%</span>
+                                </div>
+                                <input type="range" id="slider-sandbox-vol" class="control-slider" min="0" max="100" step="1" value="75">
+                            </div>
+
+                            <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 8px;">
+                                <button id="btn-sandbox-duck-radar" class="btn-secondary" style="font-size: 0.76rem; padding: 6px; border-color: rgba(255, 159, 10, 0.4); color: var(--accent-orange); text-align: left;">
+                                    🚗 Radar Ducking (-18 dB, 450ms)
+                                </button>
+                                <button id="btn-sandbox-duck-navi" class="btn-secondary" style="font-size: 0.76rem; padding: 6px; border-color: rgba(10, 132, 255, 0.4); color: var(--accent-blue); text-align: left;">
+                                    🧭 Navi Ducking (-12 dB, 800ms)
+                                </button>
+                                <button id="btn-sandbox-duck-ecall" class="btn-secondary" style="font-size: 0.76rem; padding: 6px; border-color: rgba(255, 69, 58, 0.4); color: var(--accent-red); text-align: left;">
+                                    🚨 eCall Prioritäts-Mute (-96 dB)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Realtime Spectrum Analyzer Canvas -->
+                    <div class="spectrum-canvas-container">
+                        <canvas id="canvas-helmet-spectrum" width="900" height="120" style="width: 100%; height: 100%; display: block;"></canvas>
+                        <div style="position: absolute; top: 6px; left: 10px; font-size: 0.72rem; color: var(--text-muted); pointer-events: none;">
+                            Spektrum Helm-Lautsprecher (FFT 20 Hz – 20 kHz) • <span id="lbl-sandbox-attenuation" style="color: var(--accent-green);">Dämpfung: 0.0 dB</span>
+                        </div>
                     </div>
                 </section>
             </div>
@@ -1992,11 +2184,11 @@
                     </div>
                 </div>
 
-                <!-- Live Lenkertaster- & Wonderwheel-Bus-Monitor -->
+                <!-- Interaktiver Lenkertaster- & Wonderwheel-Test -->
                 <div style="background: rgba(0,0,0,0.25); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 14px 18px; margin-bottom: 20px;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
-                        <strong style="font-size: 0.88rem; color: #fff;">🕹️ <span data-i18n="can_handlebar_title">Lenkertaster- & Wonderwheel-Bus-Monitor</span></strong>
-                        <span style="font-size: 0.75rem; color: var(--text-secondary);">Live-Tastenerkennung über Fahrzeug-CAN-Bus:</span>
+                        <strong style="font-size: 0.88rem; color: #fff;">🎮 <span data-i18n="can_handlebar_title">Interaktiver Lenkertaster- & Wonderwheel-Test</span></strong>
+                        <span style="font-size: 0.75rem; color: var(--text-secondary);">Klicke auf einen Taster, um den CAN-Frame zu simulieren:</span>
                     </div>
                     <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                         <button id="btn-indicator-voice" class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem; border-color: rgba(255,255,255,0.15);">
@@ -2520,7 +2712,7 @@
     <div class="toast-container" id="toast-container"></div>
 
     <script>
-        window.OMB_MODE = 'hardware';
+        window.OMB_MODE = 'demo';
     </script>
     <script src="js/app.js?v=8.12"></script>
 </body>
