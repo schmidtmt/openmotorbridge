@@ -5,7 +5,7 @@ Dieses Dokument spezifiziert die mechanische Konstruktion, das Thermomanagement,
 2. **Universelle Satelliten-Pods (Typ B):** Baugleiches 5-seitiges Monocoque-Schachtgehäuse für Pod 1, 2 und 3 mit $120^\circ$-V-Nut Rohrbett, M8 6-Pin IP67-Rückanschluss, Schutz-Schottwand und federbelastetem Auto-Eject.
 3. **Modulare Wechselkassetten (Typ C):** Generischer 2-teiliger Universal-Basisschlitten mit asymmetrischer Poka-Yoke Nut-und-Feder-Führung für Sena 50S/60S, Cardo Packtalk Edge/Bold, OMM-Transceiver und hermetische IP67 Blindkassette (Dry Box).
 4. **Heck-Pod 3 & Radar-Ausleger (Typ D):** Strömungsgünstiger Heckbürzel-Transceiver mit dielektrischem Antennenradom für 868 MHz LoRa und Multi-GNSS sowie winkelverstellbarem Halter für Totwinkel-Radar (Garmin Varia).
-5. **Universal Front-Knoten (Typ E):** Ultrakompakter Cockpit- & Sensor-Hub ($84 \times 60 \times 23\,\text{mm}$) mit **4-in-1 Universal-Befestigungssystem** (AMPS, Rohrbügel-Prisma, Silentblöcke, 3M Dual-Lock), EPDM-Kabelkämmen und Knowles MEMS Akustikkanal.
+5. **Universal Front-Knoten (Typ E):** Ultrakompakter Cockpit- & Sensor-Hub ($98{,}0 \times 68{,}0 \times 25{,}0\,\text{mm}$) für die vergrößerte $82 \times 50\,\text{mm}$ 4-Lagen PCBA 05 mit **4-in-1 Universal-Befestigungssystem** (AMPS, Rohrbügel-Prisma, Silentblöcke, 3M Dual-Lock), getrennten EPDM-Kabelkämmen für USB (Süd) und Fahrzeugleitungen (Nord), Dual-SW3526 20W USB-PD und Knowles MEMS Akustikkanal.
 6. **Fahrzeugspezifische Referenz-Montagekits (Zero-Drill):** Vollständig konstruierte, zerstörungsfreie Bolt-On Montagekits für CVO Road Glide ST (Kit 1), Road King Special (Kit 2), Classic Bagger & Cruiser (Kit 3) sowie Adventure & Touring Enduros (BMW GS, KTM Adventure, Africa Twin – Kit 4).
 
 ---
@@ -418,55 +418,64 @@ Das Gehäuse des Front-Knotens wurde speziell für die geschützte Montage in Mo
 
 ### 8.2 Schnittstellen- & Flankenlayout des Front-Knotens
 
-Die Anordnung der Steckverbinder und Durchführungen an den Gehäuseflanken ist exakt auf das 4-Layer-Platinenlayout der PCBA 05 (`openmotorbridge_front_node.kicad_pcb`) und die Cockpit-Kabelführung abgestimmt:
+Die Anordnung der Steckverbinder und Durchführungen an den Gehäuseflanken ist exakt auf das vergrößerte 4-Layer-Platinenlayout der PCBA 05 ($82 \times 50\,\text{mm}$, `openmotorbridge_front_node.kicad_pcb`) und die Cockpit-Kabelführung abgestimmt:
 
 ```
-                  FRONT-KNOTEN FLANKEN- & SCHNITTSTELLENLAYOUT
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                                HINTERSEITE                                  │
-│             (Vollwandig geschlossenes HP MJF PA12 Gehäuse, Y = 68 mm)       │
-│             U.FL 2.4 GHz Dipolantenne Richtung Rahmentunnel / Sitzbank      │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ LINKE SCHMALSEITE (X = 0 mm)   │ INNENRAUM (PCBA 05)  │ RECHTE SCHMALSEITE (X = 98) │
-│                                │                      │                             │
-│ • J1: 12V ACC Speisung         │ • ESP32-S3 Controller│ • Geschlossene Wandung      │
-│ • J2: CAN-Bus Auto-Sensing     │ • Knowles MEMS Mic   │ • Flansch-Ohr (M4, Y=34 mm) │
-│ • J3: Lenker Multi-Button (4P) │ • USB2514B 4-Port Hub│                             │
-│ • J9: Spiegel-BSD LEDs (3-Pin) │ • WS2812B RGB-LED    │ • J7: USB-C Service         │
-│ • J10: 12V Qi-Power (2-Pin)    │ • SC8102 USB-PD Buck │   (IP67 TPU-Schutzstopfen)  │
-│ • J11: 12V Aux-Light (2-Pin)   │                      │ • RGB Polycarbonat-Linse    │
-│   (6-fach EPDM-Dichtkamm West) │                      │   (Lichtleiter im Deckel)   │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                VORDERSEITE                                  │
-│        (6-fach EPDM-Dichtkamm für Cockpit- & USB-Kabel, Y = 0 mm)           │
-│    J4: Upstream   J5: Phone-PD   J6: CP2AA-Dongle  J5_MP3: Fach  J6_AUX   J8│
-└─────────────────────────────────────────────────────────────────────────────┘
+                               FRONT-KNOTEN FLANKEN- & SCHNITTSTELLENLAYOUT
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                                 HINTERSEITE / NORDKANTE (Y = 68 mm)                                         │
+│                      (6-fach EPDM-Dichtkamm für Bordnetz, Sensorik & Antenne: north_epdm_cable_comb)                         │
+│   U.FL Antenne     J9: Spiegel-BSD     J3: Lenker-PTT     J1: 12V KL15     J10: Qi-Lader     J11: Aux-Licht     J2: CAN-Bus │
+│   (2.4 GHz ESP)    (3-Pin Radar LED)   (4-Pin Taster)     (2-Pin Zündung)  (2-Pin 12V Sw)    (2-Pin Scheinw)    (3-Pin CAN) │
+├──────────────────────────────────────┬─────────────────────────────────────────────────┬────────────────────────────────────┤
+│ LINKE SCHMALSEITE / WEST (X = 0 mm)  │              INNENRAUM (PCBA 05, 82 x 50 mm)    │ RECHTE SCHMALSEITE / OST (X = 98)  │
+│                                      │                                                 │                                    │
+│ • Vollwandiges MJF PA12 Monocoque-   │ • ESP32-S3-WROOM-1-N16R8 Dual-Core MC           │ • J7: Wasserdichte USB-C Service-  │
+│   Gehäuse (0 Durchbrüche)            │ • USB2514B Automotive 4-Port USB 2.0 Hub        │   Buchse mit TPU-Dichtstopfen      │
+│ • Schirmt interne Leistungsschaltung:│ • Dual SW3526 Synchron-Buck USB-PD (2x 20W)     │ • J12: Qwiic / Stemma QT I2C Port  │
+│   - D4: SMCJ24CA 24V TVS-Diode       │ • 2x L2 & L3 geschirmte Speicherdrosseln        │ • SW1 (Boot) & SW2 (Reset) Taster  │
+│   - U3 / L1: TPS54302 5V/3A Buck     │ • U3: TPS54302 5V System-Buck-Converter         │ • LED1: WS2812B RGB-Status-LED     │
+│   - U6: TCAN334G CAN-Transceiver     │ • MIC1: Knowles SPH0645 I2S MEMS-Mikrofon       │   (Polycarbonat-Lichtleiter-Dom)   │
+│   - K1: CPC1017N CAN Auto-Sensing    │ • K1: CPC1017N 120 Ohm Bus-Terminierungs-Relais │                                    │
+│   - Q2: DMP3017SFG Verpolschutz      │ • Q1: DMN63D8LDW Spiegel-BSD Treiber-Stufe      │ • M4/M5 Silentblock-Flanschohr     │
+│ • M4/M5 Silentblock-Flanschohr       │ • U4: TPS2051B USB-Power-Gate für Port 2        │   (Mitte Y = 34.0 mm, Z = 0..5 mm) │
+│   (Mitte Y = 34.0 mm, Z = 0..5 mm)   │ • U7: TLV75533P 3.3V Ultra-Low-Noise LDO        │                                    │
+├──────────────────────────────────────┴─────────────────────────────────────────────────┴────────────────────────────────────┤
+│                                                 VORDERSEITE / SÜDKANTE (Y = 0 mm)                                           │
+│                         (6-fach EPDM-Dichtkamm für Cockpit- & USB-Kabel: south_epdm_cable_comb)                             │
+│   J4: USB Host       J5: Phone 20W PD    J6: CP2AA Dongle   J5_MP3: 20W PD + MP3     J6_AUX: Dashcam    J8: Action-Cam 5V   │
+│   (Upstream Skyline) (Downstream 1, 5P)  (Downstream 2, 4P) (Downstream 3, 5P Data)  (Downstream 4, 4P) (2-Pin Switched 5V) │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 1. **Vorderseite / Südflanke ($Y = 0\,\text{mm}$):**
-   - **6-fach EPDM-Dichtkamm (`south_epdm_cable_comb`):** Führt USB- und Ladeleitungen verwechslungs- und vibrationsfest nach vorne heraus:
-     - `J4`: USB-Upstream Verbindung zum Motorrad-Infotainment (Skyline OS / Boom! Box).
-     - `J5`: Smartphone-Kabel am Lenker mit **20W USB-PD Fast Charging (9V / 2.2A)**.
-     - `J6`: **Fairing Pigtail (25–30 cm)** zum CP2AA CarPlay/Android Auto Dongle (mit 3M Dual-Lock im Verkleidungshohlraum).
-     - `J5_MP3`: Handschuhfach-Kabel für **lokale MP3/FLAC USB-Sticks und offizielle Firmware-Updates**.
-     - `J6_AUX`: Freier Cockpit-Datenport für Dashcam, Chigee-Display oder Zūmo-Navi.
-     - `J8`: Action-Cam 5V-Ladeleitung (reine Spannungsversorgung).
-2. **Rechte Schmalseite / Ostflanke ($X = 98{,}0\,\text{mm}$):**
-   - **Vordere Flanke:** Wasserdichter USB-C Service-Port (`J7`) mit TPU-Dichtstopfen (`front_node_usbc_cap_tpu.stl`) für Firmware-Flashen und Kalibrierung.
-   - **Deckel:** Polycarbonat-Lichtleiter für die **WS2812B RGB-Status-LED** (visuelle Betriebsanzeige: Grün = OK, Blau = BLE, Gelb = Dongle Boot, Rot = Kaltstart-Reset).
-   - **Mitte ($Y = 34{,}0\,\text{mm}$):** M4/M5 Silentblock-Flanschbefestigungslasche.
-3. **Linke Schmalseite / Westflanke ($X = 0\,\text{mm}$):**
-   - **6-fach EPDM-Dichtkamm (`west_epdm_cable_comb`):** Führt Fahrzeug- und Cockpit-Steuerleitungen heraus:
-     - `J1`: 12V Zündungsplus (KL15) Speisung.
-     - `J2`: Zweidraht-CAN-Bus mit elektronischem $120\,\Omega$ Auto-Sensing Relais (`CPC1017N`).
-     - `J3`: 4-Pin Multi-Button Lenkertaster (PTT, Cam-Bookmark, Media-Voice).
-     - `J9`: 3-Pin Totwinkel-Spiegel-LEDs (Radar BSD links/rechts getrennt angesteuert).
-     - `J10`: 2-Pin 12V Qi-Power für SP Connect / QuadLock Ladekopf (geschaltet, 0.0 µA Ruhestrom).
-     - `J11`: 2-Pin 12V Aux-Light für Adventure-Zusatzscheinwerfer oder Notbrems-Warnblitz.
-4. **Hinterseite ($Y = 68{,}0\,\text{mm}$):**
-   - Auslass für die U.FL 2.4 GHz Dipolantenne des ESP32-S3, die entlang des Rahmentunnels zur Zentralbox unter der Sitzbank strahlt (vollkommen abgeschirmt von der Frontverkleidungs-Elektronik).
+   - **6-fach EPDM-Dichtkamm (`south_epdm_cable_comb`):** Führt USB- und Ladeleitungen vibrations- und zugentlastet durch eine 70 mm breite Dichtkammer nach vorne zum Cockpit:
+     - `J4` ($X_{\text{tub}} = 23{,}25\,\text{mm}$): JST-GH 4-Pin Upstream USB 2.0 Verbindung zum Motorrad-Infotainment (Harley Skyline OS / Boom! Box GTS).
+     - `J5` ($X_{\text{tub}} = 37{,}00\,\text{mm}$): JST-GH 5-Pin Downstream Port 1 zum Smartphone am Lenker mit **20W USB-PD Fast Charging (5V/3A, 9V/2.22A, 12V/1.67A)** via Synchron-Buck-Controller `U5` (SW3526) und Hochstrom-Speicherdrossel `L2`. Unterstützt USB-PD 3.0, QC 3.0/4.0+, AFC und FCP für unterbrechungsfreies Schnellladen auch bei Navigation unter voller Sommersonne.
+     - `J6` ($X_{\text{tub}} = 48{,}50\,\text{mm}$): JST-GH 4-Pin Downstream Port 2 mit 25–30 cm Fairing-Pigtail zum thermisch entkoppelten CP2AA Wireless CarPlay / Android Auto Dongle (Ottocast / Carlinkit, befestigt per 3M Dual-Lock im Verkleidungshohlraum).
+     - `J5_MP3` ($X_{\text{tub}} = 61{,}75\,\text{mm}$): JST-GH 5-Pin Downstream Port 3 ins Handschuhfach / Media-Bay. **Dual-Rolle:** Vollwertiges **20W USB-PD Fast Charging** via `U8` (SW3526) und Speicherdrossel `L3` für Powerbanks, Zweithandy oder Kamera-Akkus PLUS **High-Speed USB 2.0 Datenverbindung** zum USB2514B Hub für lokale MP3/FLAC Musik-USB-Sticks und offizielle Firmware-Updates.
+     - `J6_AUX` ($X_{\text{tub}} = 73{,}25\,\text{mm}$): JST-GH 4-Pin Downstream Port 4 als freier Cockpit-Datenport für Dashcam, Chigee AIO-5 Display, Garmin Zūmo oder Reifendruck-Sensorempfänger.
+     - `J8` ($X_{\text{tub}} = 80{,}75\,\text{mm}$): JST-GH 2-Pin geschaltete 5V/1.5A Spannungsversorgung für Helm- oder Verkleidungs-Action-Cam (GoPro / Insta360).
+2. **Hinterseite / Nordflanke ($Y = 68{,}0\,\text{mm}$):**
+   - **6-fach EPDM-Dichtkamm (`north_epdm_cable_comb`):** Führt Fahrzeug- und Sensorleitungen durch eine 58 mm breite Dichtkammer nach hinten zum Rahmentunnel:
+     - `J9` ($X_{\text{tub}} = 33{,}50\,\text{mm}$): JST-GH 3-Pin Totwinkel-Spiegelwarnleuchten (Radar BSD links / rechts getrennt geschaltet über Dual-MOSFET `Q1` DMN63D8LDW).
+     - `J3` ($X_{\text{tub}} = 43{,}25\,\text{mm}$): JST-GH 4-Pin digitaler Lenkertaster (PTT Gruppenfunk, Cam-Bookmark, Media-Voice-Taste, Masse).
+     - `J1` ($X_{\text{tub}} = 54{,}75\,\text{mm}$): JST-GH 2-Pin 12V Zündungsplus (KL15) Speisung mit Verpolschutz-PMOS `Q2` (DMP3017SFG) und 24V SMCJ24CA TVS-Diode `D4`.
+     - `J10` ($X_{\text{tub}} = 61{,}75\,\text{mm}$): JST-GH 2-Pin 12V geschaltete Speisung für induktive Handy-Ladehalterungen (SP Connect / QuadLock Wireless Charging Head, Ruhestrom 0.0 µA im Standby).
+     - `J11` ($X_{\text{tub}} = 68{,}75\,\text{mm}$): JST-GH 2-Pin 12V geschalteter Hilfsausgang für Adventure-Zusatzscheinwerfer oder Notbrems-Stroboskop.
+     - `J2` ($X_{\text{tub}} = 75{,}75\,\text{mm}$): JST-GH 3-Pin Automotive CAN-Bus (CAN_H, CAN_L, GND) mit TCAN334G Transceiver `U6` und elektronischem $120\,\Omega$ Bus-Terminierungs-Relais `K1` (`CPC1017N`).
+   - **U.FL 2.4 GHz Antennenauslass:** Koaxialer U.FL Anschluss auf PCBA 05 führt zur externen 2.4 GHz Dipol- oder Patchantenne für störungsfreie ESP-NOW / BLE Funkverbindung zur Zentralbox unter der Sitzbank (vollkommen unbeeinflusst von der Fairing-Elektronik).
+3. **Rechte Schmalseite / Ostflanke ($X = 98{,}0\,\text{mm}$):**
+   - **Service & Diagnose:** IP67 wasserdichte USB-C Service-Buchse (`J7`, $Y_{\text{tub}} = 24{,}1\,\text{mm}$) mit formschlüssigem TPU-Schutzstopfen (`front_node_usbc_cap_tpu.stl`) zum direkten Flashen, Debuggen und Protokoll-Auslesen ohne Gehäuseöffnung.
+   - **Sensor-Bus:** 4-Pin JST-SH Qwiic / Stemma QT $I^2C$-Erweiterungsport (`J12`, $Y_{\text{tub}} = 34{,}05\,\text{mm}$) für BME280 Umweltsensorik oder Cockpit-IMU.
+   - **Taster:** Taktile Miniaturtaster `SW1` (Boot) und `SW2` (Reset) für MCU-Wartungsarbeiten.
+   - **Visuelle Statusanzeige:** Polycarbonat-Lichtleiter im Gehäusedeckel für die **WS2812B RGB-Status-LED** (`LED1`, $Y_{\text{tub}} = 40{,}05\,\text{mm}$): Grün = OK / Normalbetrieb, Blau = BLE/ESP-NOW Link aktiv, Gelb = USB-Enumeration / CP2AA Dongle Boot, Rot = CAN-Fehler / Failsafe.
+   - **Flanschbefestigung:** M4/M5 Silentblock-Flanschbefestigungslasche in der Flankenmitte ($Y_{\text{tub}} = 34{,}0\,\text{mm}$, $Z = 0\dots 5\,\text{mm}$).
+4. **Linke Schmalseite / Westflanke ($X = 0\,\text{mm}$):**
+   - **Monocoque-Schutzwand:** Vollwandiges MJF PA12 Monocoque ohne Gehäusedurchbrüche. Bietet maximalen mechanischen Schutz und Spritzwasserschutz für die direkt dahinter liegende Leistungsschaltung (TVS-Diode `D4`, 12V-Haupt-Buck-Converter `U3` TPS54302 mit Induktivität `L1`, CAN-Transceiver `U6`, Optorelais `K1`, PMOS-Verpolschutz `Q2`).
+   - **Flanschbefestigung:** Symmetrische M4/M5 Silentblock-Flanschbefestigungslasche in der Flankenmitte ($Y_{\text{tub}} = 34{,}0\,\text{mm}$, $Z = 0\dots 5\,\text{mm}$).
 5. **Gehäuseunterseite ($Z = 0\,\text{mm}$):**
-   - Schwingungsdämpfender Knowles SPH0645 MEMS Akustikkanal ($\varnothing\,2{,}5\,\text{mm}$) mit wasserdichter, ölabweisender Gore ePTFE-Schutzmembran ($\varnothing\,6{,}0 \times 0{,}8\,\text{mm}$) zur Windgeräusch- und Staudruckanalyse.
+   - Knowles SPH0645LM4H-B $I^2S$ MEMS-Mikrofon (`MIC1`) mit durchgehendem Schallkanal ($\varnothing\,2{,}5\,\text{mm}$) und wasserdichter, ölabweisender Gore ePTFE-Schutzmembran ($\varnothing\,6{,}0 \times 0{,}8\,\text{mm}$) zur Echtzeit-Windgeräusch- und Staudruckanalyse für dynamische Geschwindigkeits-/Geräusch-Lautstärkeanpassung (Speed-Volume-Control).
 
 ---
 

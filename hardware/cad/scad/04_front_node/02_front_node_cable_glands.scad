@@ -16,9 +16,9 @@ module front_node_cable_glands_printable_pair() {
         translate([0, 0, 0])
             south_epdm_cable_comb();
             
-        // 2. West Signal/Power Comb
+        // 2. North Signal/Power Comb
         translate([0, 15.0, 0])
-            west_epdm_cable_comb();
+            north_epdm_cable_comb();
             
         // 3. Breakaway sprue runner connecting the two parts (1.0 mm thick)
         translate([2.0, 5.5, 0])

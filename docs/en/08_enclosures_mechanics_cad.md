@@ -5,7 +5,7 @@ This document specifies the mechanical engineering, thermal dissipation, IP67/IP
 2. **Universal Satellite Pods (Type B):** Mechanically identical 5-sided monocoque enclosure for Pods 1, 2, and 3 with $120^\circ$ V-groove pipe saddle, M8 6-pin IP67 connector, protective bulkhead, and spring-loaded auto-eject.
 3. **Modular Cartridge Sleds (Type C):** Generic 2-piece base sled with asymmetrical Poka-Yoke tongue-and-groove rails for Sena 50S/60S, Cardo Packtalk Edge, OMM Transceiver, and IP67 blank cartridge (Dry Box).
 4. **Rear Pod 3 & Radar Mount (Type D):** Aerodynamic tail cowl transceiver with dielectric radome for 868 MHz LoRa and Multi-GNSS, plus angle-adjustable mount for blind-spot radar (Garmin Varia).
-5. **Universal Front Node (Type E):** Ultra-compact Cockpit & Sensor Hub ($84 \times 60 \times 23\,\text{mm}$) featuring a **4-in-1 universal mounting system** (AMPS, pipe saddle, silentblocks, 3M Dual-Lock), EPDM cable combs, and Knowles MEMS acoustic channel.
+5. **Universal Front Node (Type E):** Ultra-compact Cockpit & Sensor Hub ($98.0 \times 68.0 \times 25.0\,\text{mm}$) tailored for the enlarged $82 \times 50\,\text{mm}$ 4-layer PCBA 05, featuring a **4-in-1 universal mounting system** (AMPS, pipe saddle, silentblocks, 3M Dual-Lock), dedicated EPDM cable combs for USB (South) and vehicle wiring (North), Dual SW3526 20W USB-PD, and Knowles MEMS acoustic channel.
 6. **Vehicle-Specific Reference Mounting Kits (Zero-Drill):** Fully engineered, non-destructive bolt-on mounting kits for CVO Road Glide ST (Kit 1), Road King Special (Kit 2), Classic Bagger & Cruiser (Kit 3), and Adventure & Touring Enduros (BMW GS, KTM Adventure, Africa Twin – Kit 4).
 
 ---
@@ -337,9 +337,9 @@ Rear Pod 3 integrates the OMM transceiver, 868 MHz LoRa, and Multi-GNSS (`PCBA 0
 
 The Front Node enclosure was specially engineered for protected installation inside motorcycle front fairings (Batwing, Sharknose, BMW GS/RT beak) or on crash bars:
 
-- **Outer Dimensions:** Ultra-compact **$84.0 \times 60.0 \times 23.0\,\text{mm}$** (L x W x H).
+- **Outer Dimensions:** Compact **$98.0 \times 68.0 \times 25.0\,\text{mm}$** (L x W x H, tailored for the $82 \times 50\,\text{mm}$ 4-layer PCBA 05).
 - **Material:** HP Multi Jet Fusion (MJF) PA12, black glass-bead blasted and chemically vapor smoothed.
-- **Protection Class:** IP67 (submersion and high-pressure water jet proof).
+- **Protection Class:** IP67 (submersion and high-pressure water jet proof) with integrated Gore-Tex pressure equalization vent (ePTFE vent) against condensation.
 
 ![Universal Front Node Closed CAD](../images/cad/front_node_closed_cad.png)
 
@@ -384,47 +384,64 @@ The Front Node enclosure was specially engineered for protected installation ins
 
 ### 8.2 Front Node Connector & Flank Layout
 
-The physical arrangement of connectors and cable entries on the enclosure flanks aligns with the 4-layer PCBA 05 PCB design (`openmotorbridge_front_node.kicad_pcb`) and cockpit cable routing ergonomics:
+The physical arrangement of connectors and cable entries on the enclosure flanks aligns with the enlarged 4-layer PCBA 05 PCB design ($82 \times 50\,\text{mm}$, `openmotorbridge_front_node.kicad_pcb`) and cockpit cable routing ergonomics:
 
 ```
-                   FRONT NODE FLANK & CONNECTOR LAYOUT
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                                 REAR FACE                                   │
-│            (Fully enclosed HP MJF PA12 protective wall, Y = 60 mm)          │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ LEFT SHORT FLANK (X = 0 mm)    │ INTERNAL CHAMBER     │ RIGHT SHORT FLANK (X = 84)  │
-│                                │                      │                             │
-│ • J1: 12V ACC Power (Y=38 mm)  │ • ESP32-S3 Controller│ • Enclosed solid wall (rear)│
-│ • Mounting ear (M4, Y=30 mm)   │ • Knowles MEMS Mic   │ • Mounting ear (M4, Y=30 mm)│
-│ • J2: CAN-Bus (Y=25.75 mm)     │ • USB2514B Hub IC    │                             │
-│ • J3: PTT button (Y=17.75 mm)  │ • Status LED D1      │ • J7: USB-C Service (Y=21.2)│
-│   (3-slot EPDM cable comb)     │                      │   (IP67 TPU sealing plug)   │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                FRONT FACE                                   │
-│       (4-slot EPDM cable comb for cockpit & sensor cables, Y = 0 mm)        │
-│    J6: CarPlay      J5: Glovebox           J4: USB Host      J8: Action-Cam │
-│    (X = 23.75 mm)   (X = 37.50 mm)         (X = 51.25 mm)    (X = 64.00 mm) │
-└─────────────────────────────────────────────────────────────────────────────┘
+                               FRONT NODE FLANK & CONNECTOR LAYOUT
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                                  REAR FACE / NORTH RIM (Y = 68 mm)                                          │
+│                     (6-slot EPDM Cable Comb for Vehicle Harness & Sensors: north_epdm_cable_comb)                           │
+│   U.FL Antenna     J9: Mirror BSD      J3: Handlebar PTT   J1: 12V KL15     J10: Qi Charger   J11: Aux Light     J2: CAN-Bus│
+│   (2.4 GHz ESP)    (3-Pin Radar LED)   (4-Pin Switch)      (2-Pin Ignition) (2-Pin 12V Sw)    (2-Pin Headlight)  (3-Pin CAN)│
+├──────────────────────────────────────┬─────────────────────────────────────────────────┬────────────────────────────────────┤
+│ LEFT SHORT FLANK / WEST (X = 0 mm)   │              INTERNAL CHAMBER (82 x 50 mm PCB)  │ RIGHT SHORT FLANK / EAST (X = 98)  │
+│                                      │                                                 │                                    │
+│ • Solid MJF PA12 Monocoque Wall      │ • ESP32-S3-WROOM-1-N16R8 Dual-Core MC           │ • J7: Waterproof USB-C Service     │
+│   (Zero penetrations)                │ • USB2514B Automotive 4-Port USB 2.0 Hub        │   Port with TPU sealing cap        │
+│ • Shields internal power stage:      │ • Dual SW3526 Sync-Buck USB-PD (2x 20W)         │ • J12: Qwiic / Stemma QT I2C Port  │
+│   - D4: SMCJ24CA 24V TVS Diode       │ • 2x L2 & L3 shielded power inductors           │ • SW1 (Boot) & SW2 (Reset) Buttons │
+│   - U3 / L1: TPS54302 5V/3A Buck     │ • U3: TPS54302 5V System Buck Converter         │ • LED1: WS2812B RGB Status LED     │
+│   - U6: TCAN334G CAN Transceiver     │ • MIC1: Knowles SPH0645 I2S MEMS Microphone     │   (Polycarbonate Light-Pipe Dome)  │
+│   - K1: CPC1017N CAN Auto-Sensing    │ • K1: CPC1017N 120 Ohm Bus-Termination Relay    │                                    │
+│   - Q2: DMP3017SFG Reverse-Polarity  │ • Q1: DMN63D8LDW Mirror BSD Driver Stage        │ • M4/M5 Silentblock Flange Ear     │
+│ • M4/M5 Silentblock Flange Ear       │ • U4: TPS2051B USB Power Gate for Port 2        │   (Center Y = 34.0 mm, Z = 0..5 mm)│
+│   (Center Y = 34.0 mm, Z = 0..5 mm)  │ • U7: TLV75533P 3.3V Ultra-Low-Noise LDO        │                                    │
+├──────────────────────────────────────┴─────────────────────────────────────────────────┴────────────────────────────────────┤
+│                                                  FRONT FACE / SOUTH RIM (Y = 0 mm)                                          │
+│                         (6-slot EPDM Cable Comb for Cockpit & USB Cables: south_epdm_cable_comb)                            │
+│   J4: USB Host       J5: Phone 20W PD    J6: CP2AA Dongle   J5_MP3: 20W PD + MP3     J6_AUX: Dashcam    J8: Action-Cam 5V   │
+│   (Upstream Skyline) (Downstream 1, 5P)  (Downstream 2, 4P) (Downstream 3, 5P Data)  (Downstream 4, 4P) (2-Pin Switched 5V) │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 1. **Front Face / South Flank ($Y = 0\,\text{mm}$):**
-   - **4-Slot EPDM Cable Comb (`south_epdm_cable_comb`):** Directs four cockpit USB connections strain-relieved and water-sealed forwards:
-     - `J6` ($X = 23.75\,\text{mm}$): Apple CarPlay / Android Auto smartphone connection.
-     - `J5` ($X = 37.50\,\text{mm}$): Glovebox / cockpit USB-C charging feed.
-     - `J4` ($X = 51.25\,\text{mm}$): USB host interface.
-     - `J8` ($X = 64.00\,\text{mm}$): Action-Cam 5V power and hardware shutter trigger line.
-2. **Right Short Flank / East Flank ($X = 84.0\,\text{mm}$):**
-   - **Forward Flank ($Y = 21.18\,\text{mm}$):** Waterproof USB-C Service Port (`J7`), located on the **forward right flank** (immediately adjacent to the front corner and status LED `D1`, exactly $13.18\,\text{mm}$ from the PCB front edge). Enables easy access for firmware flashing and diagnostic log extraction while installed on the bike. Sealed flush by an elastomeric TPU protective cap (`front_node_usbc_cap_tpu.stl`) with a captive collar loop.
-   - **Center ($Y = 30.0\,\text{mm}$):** M4/M5 silentblock flange mounting ear ($Z = 0\dots 5\,\text{mm}$).
-   - **Rear Flank ($Y = 37\dots 60\,\text{mm}$):** Enclosed solid PA12 wall.
-3. **Left Short Flank / West Flank ($X = 0\,\text{mm}$):**
-   - **3-Slot EPDM Cable Comb (`west_epdm_cable_comb`):** Routes vehicle harness and control signals:
-     - `J3` ($Y = 17.75\,\text{mm}$, forward): PTT handlebar switch input.
-     - `J2` ($Y = 25.75\,\text{mm}$, middle): 2-wire CAN-Bus interface to Central Box / vehicle.
-     - `J1` ($Y = 38.0\,\text{mm}$, rearward): 12V switched ignition power (KL15).
-   - **Center ($Y = 30.0\,\text{mm}$):** M4/M5 silentblock flange mounting ear ($Z = 0\dots 5\,\text{mm}$).
-4. **Bottom Face ($Z = 0\,\text{mm}$):**
-   - Acoustic through-hole canal ($\varnothing\,2.5\,\text{mm}$) with a protective Gore ePTFE waterproof membrane ($\varnothing\,6.0 \times 0.8\,\text{mm}$) directly beneath the Knowles SPH0645 MEMS sensor for ambient noise and speech analysis.
+   - **6-Slot EPDM Cable Comb (`south_epdm_cable_comb`):** Directs USB and charging cables vibration-damped and strain-relieved through a 70 mm wide sealing chamber forwards towards the cockpit:
+     - `J4` ($X_{\text{tub}} = 23.25\,\text{mm}$): JST-GH 4-Pin Upstream USB 2.0 connection to the motorcycle head unit (Harley Skyline OS / Boom! Box GTS).
+     - `J5` ($X_{\text{tub}} = 37.00\,\text{mm}$): JST-GH 5-Pin Downstream Port 1 to handlebar-mounted smartphone with **20W USB-PD Fast Charging (5V/3A, 9V/2.22A, 12V/1.67A)** via synchronous buck controller `U5` (SW3526) and shielded high-current choke `L2`. Supports USB-PD 3.0, QC 3.0/4.0+, AFC, and FCP for uninterrupted rapid charging under navigation loads in blazing summer heat.
+     - `J6` ($X_{\text{tub}} = 48.50\,\text{mm}$): JST-GH 4-Pin Downstream Port 2 with 25–30 cm fairing pigtail to the thermally decoupled CP2AA Wireless CarPlay / Android Auto dongle (Ottocast / Carlinkit, secured via 3M Dual-Lock inside fairing void).
+     - `J5_MP3` ($X_{\text{tub}} = 61.75\,\text{mm}$): JST-GH 5-Pin Downstream Port 3 into glovebox / media bay. **Dual Role:** Full **20W USB-PD Fast Charging** via `U8` (SW3526) and choke `L3` for powerbanks, second phone, or camera batteries PLUS **High-Speed USB 2.0 Data** to the USB2514B hub for local MP3/FLAC music flash drives and official firmware updates.
+     - `J6_AUX` ($X_{\text{tub}} = 73.25\,\text{mm}$): JST-GH 4-Pin Downstream Port 4 as an auxiliary cockpit data port for dashcams, Chigee AIO-5 display, Garmin Zūmo, or TPMS receivers.
+     - `J8` ($X_{\text{tub}} = 80.75\,\text{mm}$): JST-GH 2-Pin switched 5V/1.5A power output for helmet or fairing action-cam (GoPro / Insta360).
+2. **Rear Face / North Flank ($Y = 68.0\,\text{mm}$):**
+   - **6-Slot EPDM Cable Comb (`north_epdm_cable_comb`):** Directs vehicle harness and sensor leads through a 58 mm wide sealing chamber rearwards towards the frame tunnel:
+     - `J9` ($X_{\text{tub}} = 33.50\,\text{mm}$): JST-GH 3-Pin Blind Spot Detection mirror warning LEDs (radar BSD left / right individually driven via dual-MOSFET `Q1` DMN63D8LDW).
+     - `J3` ($X_{\text{tub}} = 43.25\,\text{mm}$): JST-GH 4-Pin digital handlebar switch input (PTT intercom group call, camera bookmark, media-voice key, GND).
+     - `J1` ($X_{\text{tub}} = 54.75\,\text{mm}$): JST-GH 2-Pin 12V switched ignition power (KL15) with reverse-polarity PMOS `Q2` (DMP3017SFG) and 24V SMCJ24CA TVS diode `D4`.
+     - `J10` ($X_{\text{tub}} = 61.75\,\text{mm}$): JST-GH 2-Pin 12V switched power feed for inductive phone wireless charging heads (SP Connect / QuadLock Wireless Charging Head, zero quiescent current in standby).
+     - `J11` ($X_{\text{tub}} = 68.75\,\text{mm}$): JST-GH 2-Pin 12V switched auxiliary output for adventure auxiliary lights or emergency brake-strobe flashers.
+     - `J2` ($X_{\text{tub}} = 75.75\,\text{mm}$): JST-GH 3-Pin automotive CAN-Bus (CAN_H, CAN_L, GND) with TCAN334G transceiver `U6` and electronic $120\,\Omega$ bus-termination relay `K1` (`CPC1017N`).
+   - **U.FL 2.4 GHz Antenna Exit:** Coaxial U.FL connector on PCBA 05 leads to an external 2.4 GHz dipole or patch antenna for reliable ESP-NOW / BLE wireless connection to the Central Box under the seat (completely unaffected by fairing electronics).
+3. **Right Short Flank / East Flank ($X = 98.0\,\text{mm}$):**
+   - **Service & Diagnostics:** IP67 waterproof USB-C service receptacle (`J7`, $Y_{\text{tub}} = 24.1\,\text{mm}$) with form-fitting TPU sealing cap (`front_node_usbc_cap_tpu.stl`) for direct on-bike flashing, debugging, and log extraction.
+   - **Sensor Bus:** 4-Pin JST-SH Qwiic / Stemma QT $I^2C$ expansion port (`J12`, $Y_{\text{tub}} = 34.05\,\text{mm}$) for BME280 environmental sensors or cockpit IMU.
+   - **Tactile Switches:** Miniature tactile switches `SW1` (Boot) and `SW2` (Reset) for MCU maintenance.
+   - **Visual Status Display:** Polycarbonate light-pipe in enclosure lid for **WS2812B RGB Status LED** (`LED1`, $Y_{\text{tub}} = 40.05\,\text{mm}$): Green = Normal Operation, Blue = BLE/ESP-NOW Connected, Yellow = USB Enumeration / CP2AA Dongle Boot, Red = CAN Error / Failsafe.
+   - **Flange Mount:** M4/M5 silentblock flange mounting ear at flank center ($Y_{\text{tub}} = 34.0\,\text{mm}$, $Z = 0\dots 5\,\text{mm}$).
+4. **Left Short Flank / West Flank ($X = 0\,\text{mm}$):**
+   - **Monocoque Shielding Wall:** Solid MJF PA12 wall without any penetrations. Provides maximum mechanical protection and splash resistance for the directly adjacent internal power stage (TVS diode `D4`, 12V main buck converter `U3` TPS54302 with inductor `L1`, CAN transceiver `U6`, opto-relay `K1`, PMOS reverse-polarity `Q2`).
+   - **Flange Mount:** Symmetrical M4/M5 silentblock flange mounting ear at flank center ($Y_{\text{tub}} = 34.0\,\text{mm}$, $Z = 0\dots 5\,\text{mm}$).
+5. **Bottom Face ($Z = 0\,\text{mm}$):**
+   - Knowles SPH0645LM4H-B $I^2S$ MEMS microphone (`MIC1`) with continuous acoustic duct ($\varnothing\,2.5\,\text{mm}$) and waterproof, oleophobic Gore ePTFE protective membrane ($\varnothing\,6.0 \times 0.8\,\text{mm}$) for real-time wind noise and dynamic air pressure analysis (speed-dependent volume control).
 
 ---
 

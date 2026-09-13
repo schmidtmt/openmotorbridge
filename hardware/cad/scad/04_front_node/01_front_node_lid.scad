@@ -12,7 +12,7 @@ use <parts/003_sealing_system.scad>;
 
 module front_node_upper_lid() {
     pcb_origin_x = FRONT_NODE_WALL + 3.5 + (FRONT_NODE_CHAMBER_L - FRONT_NODE_PCB_L) / 2.0; // 8.0 mm
-    pcb_origin_y = FRONT_NODE_WALL + 3.5 + (FRONT_NODE_CHAMBER_W - FRONT_NODE_PCB_W) / 2.0; // 8.0 mm
+    pcb_origin_y = FRONT_NODE_WALL + 3.5 + (FRONT_NODE_CHAMBER_W - FRONT_NODE_PCB_W) / 2.0; // 9.0 mm
 
     difference() {
         union() {
@@ -33,14 +33,14 @@ module front_node_upper_lid() {
                 lip_h  = 1.4
             );
             
-            // 3. Clamping Pressure Ribs over South & West Cable Combs
+            // 3. Clamping Pressure Ribs over South & North Cable Combs
             // South compression bar (over 70.0 mm 6-Port USB/Charge comb, X in [14.0, 84.0])
             translate([14.0, 0, -1.5])
                 cube(size=[70.0, FRONT_NODE_WALL + 3.2, 1.5], center=false);
                 
-            // West compression bar (over 47.0 mm 6-Port Signal/Power comb, Y in [9.0, 56.0])
-            translate([0, 9.0, -1.5])
-                cube(size=[FRONT_NODE_WALL + 3.2, 47.0, 1.5], center=false);
+            // North compression bar (over 58.0 mm 6-Port Vehicle/Sensor comb, X in [24.0, 82.0])
+            translate([24.0, FRONT_NODE_OUTER_W - FRONT_NODE_WALL - 3.2, -1.5])
+                cube(size=[58.0, FRONT_NODE_WALL + 3.2, 1.5], center=false);
         }
         
         // 4. Internal cavity recess (reduces weight & creates headroom over tall parts)
@@ -66,9 +66,9 @@ module front_node_upper_lid() {
         }
         
         // 6. Status LED Light-Pipe Tunnel (Ø 3.0 mm through-hole directly over LED1 WS2812B)
-        // LED1 is at PCB rel [75.0, 42.0]
-        led_x = pcb_origin_x + 75.0;
-        led_y = pcb_origin_y + 42.0;
+        // LED1 is at PCB rel [79.41, 31.05]
+        led_x = pcb_origin_x + 79.41; // 87.41 mm
+        led_y = pcb_origin_y + 31.05; // 40.05 mm
         translate([led_x, led_y, -0.1])
             cylinder(r=1.5, h=FRONT_NODE_LID_H + 0.2, center=false, $fn=24);
             
@@ -85,4 +85,3 @@ module front_node_upper_lid() {
 
 // Standalone compilation
 front_node_upper_lid();
-
