@@ -1,48 +1,48 @@
-# 05 - Power Management, UPS Battery & Front Node Power Gate
+# 05 - Power Management, UPS & Vehicle Electrical Protection
 
-This document specifies the complete power management architecture of OpenMotorBridge v8.0: the 72V automotive step-down converter, the uninterruptible LiPo power supply (UPS), the **Universal Front Node power gate (TI LMR36015 & TPS2051B)** with 1-click CarPlay hard reboot, and the ultra-low-power hibernation mode.
+This document specifies the dynamic power and protection management of OpenMotorBridge v8.0: the primary switching regulators (Central Box LM5164-Q1 & Front Node LMR36015), the uninterruptible power supply (UPS with BQ24075 and **2,200 mAh Flat LiPo**), automotive transient and reverse-polarity protection (ISO 7637-2), intelligent **dongle power management (1-click cold reboot & Auto-Café mode)**, **Apple Find My & Google Find My Device dual-beaconing**, and the multi-stage winter hibernation cascade (< 16.5 µA).
 
 ---
 
-## 1. DCDC Buck Converter System Architecture
+## 1. Primary Switching Regulators of the Assemblies
 
-To achieve high efficiency and minimal internal thermal rise within hermetically sealed IP67 enclosures, both the Central Box and Front Node employ high-voltage synchronous buck converters:
+To achieve high efficiency with minimal self-heating inside sealed IP67 enclosures, both the Central Box and Front Node employ highly integrated synchronous step-down converters:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                   DCDC CONVERTER SYSTEM ARCHITECTURE                        │
+│                    DCDC CONVERTER ARCHITECTURE IN THE SYSTEM                │
 ├──────────────────────────────────────┬──────────────────────────────────────┤
 │ 1. CENTRAL BOX (PCBA 01): LM5164-Q1  │ 2. FRONT NODE (PCBA 05): LMR36015    │
 ├──────────────────────────────────────┼──────────────────────────────────────┤
-│ • Wide-Vin Input: 6.0 V - 65 V       │ • Wide-Vin Input: 4.2 V - 36 V       │
+│ • Wide input range: 6.0 V - 65 V     │ • Input voltage: 4.2 V - 36 V        │
 │ • Output: 5.0 V DC / 1.0 A Continuous│ • Output: 5.0 V DC / 2.0 A Continuous│
-│ • Full-Load Efficiency: > 88 %       │ • Full-Load Efficiency: 91.8 % @ 2.0A│
-│ • Transient Immunity: up to 100 V    │ • Output Ripple: 5.3 mVpp            │
-│ • Powers: MCU, Audio DSP, UPS, Pods  │ • Powers: ESP32-S3, USB Hub, VBUS    │
+│ • Efficiency: > 88 % at full load    │ • Efficiency: 91.8 % at 2.0 A        │
+│ • Transient protection up to 100 V   │ • Output ripple: 5.3 mVpp            │
+│ • Supplies: MCU, Audio, UPS, Pod 1-3 │ • Supplies: ESP32-S3, USB2514B, VBUS │
 └──────────────────────────────────────┴──────────────────────────────────────┘
 ```
 
-### 1.1 LM5164-Q1 Inductor & Output Filter Dimensioning
-The energy storage inductor $L$ of the synchronous step-down converter is calculated for continuous conduction mode (CCM) and minimal output voltage ripple:
+### 1.1 LM5164-Q1 Inductor & Filter Dimensioning
+The energy storage inductance $L$ of the synchronous buck converter is calculated for continuous conduction mode (CCM) and minimal output ripple:
 
 $$L = \frac{V_{\text{OUT}} \cdot (V_{\text{IN,max}} - V_{\text{OUT}})}{V_{\text{IN,max}} \cdot \Delta I_L \cdot f_{\text{sw}}}$$
 
-* **Design Parameters:** $V_{\text{IN,max}} = 65\,\text{V}$, $V_{\text{OUT}} = 5{,}0\,\text{V}$, $f_{\text{sw}} = 400\,\text{kHz}$, ripple current ratio $\Delta I_L = 0{,}30 \times I_{\text{OUT}} = 300\,\text{mA}$.
+* **Calculation Parameters:** $V_{\text{IN,max}} = 65\,\text{V}$, $V_{\text{OUT}} = 5{,}0\,\text{V}$, $f_{\text{sw}} = 400\,\text{kHz}$, ripple current ratio $\Delta I_L = 0{,}30 \times I_{\text{OUT}} = 300\,\text{mA}$.
 * **Result:** $L = \frac{5{,}0 \cdot (65 - 5)}{65 \cdot 0{,}30 \cdot 400 \times 10^3} \approx 38{,}4\,\mu\text{H} \rightarrow$ **Selected: $47\,\mu\text{H}$** (Würth WE-PD 744770147 / Coilcraft XAL5030-473, $I_{\text{sat}} = 2{,}1\,\text{A}$, $R_{\text{DC}} = 115\,\text{m}\Omega$).
-* **Input Capacitance:** $2 \times 10\,\mu\text{F}$ 100V X7R ceramic capacitors in parallel damp vehicle wiring harness inductance spikes.
+* **Input Capacitance:** $2 \times 10\,\mu\text{F}$ 100V X7R multilayer ceramic capacitors (MLCC) reliably damp wiring harness inductances.
 
-### 1.2 Laboratory Current Measurements (INA226 Precision Shunt @ 12.0 V Vehicle Rail)
-* **Normal Operation (Full Load):** $185\,\text{mA}$ ($2{,}22\,\text{W}$ with dual-pod audio bridge, 868 MHz LoRa RX, and 10 Hz Multi-GNSS active).
-* **UPS Run-On (Wi-Fi WebDAV Sync):** $45\,\text{mA}$ ($0{,}54\,\text{W}$ active upload with vehicle ignition OFF).
-* **Standby Deep Sleep (KL15 Wakeup Ready):** **$92\,\mu\text{A}$** (wakes in $< 5\,\text{ms}$ upon ignition switch ON).
-* **ULP-Winter-Hibernate (> 72 h Dormant):** **$14{,}8\,\mu\text{A}$** (INA226 calibrated; guarantees starter battery preservation over 12 months).
+### 1.2 Laboratory Current Measurements (INA226 Precision Log @ 12.0 V Vehicle Net)
+* **Normal Operation (Full Load):** $185\,\text{mA}$ ($2{,}22\,\text{W}$ with active Sena & Cardo audio bridge, LoRa 868MHz RX, and 10 Hz Multi-GNSS).
+* **UPS Post-Run (Wi-Fi WebDAV Sync):** $45\,\text{mA}$ ($0{,}54\,\text{W}$ during active transfer with ignition OFF).
+* **Standby Deep Sleep (KL15 Ext-Interrupt):** **$92\,\mu\text{A}$** (System wakes in $< 5\,\text{ms}$ upon ignition ON).
+* **ULP Winter Hibernate (> 72 h Inactive):** **$14{,}8\,\mu\text{A}$** (Measured with INA226; preserves starter battery from deep discharge even after 12 months).
 
 ---
 
-## 2. Dynamic Power-Path Management & Integrated UPS Battery
+## 2. Dynamic Power-Path Management & Integrated UPS
 
 - **Power-Path Controller:** Texas Instruments **BQ24075** with automatic load and charge current distribution.
-- **UPS Battery Cell:** 1000 mAh wide-temperature single-cell LiPo ($3{,}7\,\text{V}$ nominal, $4{,}2\,\text{V}$ charge cutoff, operating discharge range $-20\,^\circ\text{C}$ to $+60\,^\circ\text{C}$).
+- **UPS Battery Cell:** 2,200 mAh wide-temperature single-cell flat LiPo ($3{,}7\,\text{V}$ nominal, $4{,}2\,\text{V}$ charge cutoff, operating discharge range $-20\,^\circ\text{C}$ to $+60\,^\circ\text{C}$, Type 504068 / 503870, $68 \times 39 \times 5{,}0\,\text{mm}$).
 - **JEITA NTC Thermal Management (Murata 10k NTC on BQ24075 TS Pin):**
   - **Cold Inhibit ($T < 0\,^\circ\text{C}$):** Charging current is clamped to $0\,\text{mA}$ in hardware to prevent lithium plating and dendrite growth during winter riding. The system operates normally directly from vehicle power.
   - **Heat Inhibit ($T > 45\,^\circ\text{C}$):** Charging stops to protect the pouch cell against gas swelling from engine heat soak under the seat.
@@ -52,6 +52,12 @@ $$L = \frac{V_{\text{OUT}} \cdot (V_{\text{IN,max}} - V_{\text{OUT}})}{V_{\text{
   - Finalizing and flushing GPX telemetry blackbox files to the MicroSD card.
   - Searching for authorized home Wi-Fi networks and executing TLS 1.3 WebDAV synchronization.
   - Sending clean BLE disconnect events to paired smartphones.
+
+### 2.1 Autonomous Crowdsourced Tracking & Anti-Theft Battery Endurance (Apple & Google Dual-Beacon)
+When parked or if thieves sever the 12V motorcycle battery, the Central Box switches to the internal 2,200 mAh LiPo cell:
+* **Interleaved Dual-Beaconing:** The ESP32-S3 broadcasts alternating Apple Find My (FMNP) and Google Find My Device (FMDN) BLE advertisements every 2.0 seconds ($2{,}5\,\text{ms}$ TX burst, average current draw $\approx 15\,\mu\text{A}$).
+* **Shock Monitoring (Wake-on-Motion):** The 6-axis IMU (LIS3DH / ICM-42688) monitors physical tampering consuming only $6\,\mu\text{A}$.
+* **Battery Budget:** With total quiescent draw of $\approx 31\,\mu\text{A}$ ($0{,}031\,\text{mA}$), the 2,200 mAh cell provides a theoretical standby endurance of over **70,000 hours (~8 years)**, or practically **3 to 4 years of autonomous tracking and alarm standby** accounting for self-discharge and sub-zero winter temperatures ($-15\,^\circ\text{C}$).
 
 ---
 

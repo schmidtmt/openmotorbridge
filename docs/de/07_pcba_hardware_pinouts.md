@@ -1,14 +1,14 @@
-# 07 - Hardware-Architektur & Platinen-Pinouts (PCBA 01 bis 06)
+# 07 - Hardware-Architektur & Platinen-Pinouts (PCBA 01 bis 07)
 
-Dieses Dokument bildet die **zentrale, autoritative Hardware-Spezifikation aller 6 Platinen-Baugruppen (PCBA 01 bis PCBA 06)** des OpenMotorBridge Gesamtsystems, einschließlich Lagenaufbau, Impedanzkontrolle, Net-Klassen, Funktionszonen und vollständigen Pinout-Tabellen.
+Dieses Dokument bildet die **zentrale, autoritative Hardware-Spezifikation aller 7 Platinen-Baugruppen (PCBA 01 bis PCBA 07)** des OpenMotorBridge Gesamtsystems, einschließlich Lagenaufbau, Impedanzkontrolle, Net-Klassen, Funktionszonen und vollständigen Pinout-Tabellen.
 
 ---
 
-## 1. Systemübersicht der 6 Platinen-Baugruppen
+## 1. Systemübersicht der 7 Platinen-Baugruppen
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                   DIE 6 HARDWARE-BAUGRUPPEN (PCBAs) DER OPENMOTORBRIDGE                │
+│                   DIE 7 HARDWARE-BAUGRUPPEN (PCBAs) DER OPENMOTORBRIDGE                │
 ├───────┬───────────────────────────────┬───────────────┬─────────┬──────────────────────┤
 │ Baugruppe │ Name & Funktion           │ Platinenmaße  │ Lagen   │ Kern-ICs / Bauteile  │
 ├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
@@ -30,6 +30,9 @@ Dieses Dokument bildet die **zentrale, autoritative Hardware-Spezifikation aller
 ├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
 │ **PCBA 06**│ **MagSafe Frame Dock Adapter** │ 28 x 11.5 mm  │ 2 Lagen │ 500mA PPTC Fuse, 5V  │
 │       │ (Rahmendock: M8 auf MagSafe)  │ (Zentral M2.5)│         │ TVS, USBLC6-4SC6 ESD │
+├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
+│ **PCBA 07**│ **2-in-1 LoRa Smart-Keyfob**  │ 46 x 26 mm    │ 2 Lagen │ nRF52840 SoC, SX1262 │
+│       │ (Silent Pager, N52 Key & Qi)  │ (Tasche M2)   │ (ENIG)  │ DRV2605L LRA, BQ51003│
 └───────┴───────────────────────────────┴───────────────┴─────────┴──────────────────────┘
 ```
 
@@ -350,7 +353,43 @@ Der Front-Node nutzt einen Automotive-zertifizierten 4-Port High-Speed Hub (`USB
 * **Blau blinkend:** Bluetooth LE Kopplung aktiv (Action-Cam Suche oder PWA-Verbindung).
 * **Gelb leuchtend:** CP2AA CarPlay/Android Auto Dongle bootet gerade an Port 2.
 * **Rot blinkend (4 Hz):** USB-Überstrom oder Kaltstart-Reset (Hard-Reboot des Dongles läuft).
-* **Weißer Blitz:** Lenkertaster betätigt (visuelle Bestätigung bei Klick).
+### 7.6 Geräte-Erkennung & Docking-Logik (Qi J10 vs. Lenker-USB J5 vs. Handschuhfach J5_MP3)
+
+Um im Fahrbetrieb und beim Abstellen des Motorrads zwischen USB-Sticks mit Musik, Standalone-MP3-Playern und ladenden Smartphones zu unterscheiden, nutzt der Front-Knoten eine 3-stufige Erkennungsmatrix:
+
+```
+┌───────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                        GERÄTE-ERKENNUNG AN DEN PORTS (PCBA 05 FRONT-KNOTEN)                       │
+├────────────────────┬──────────────────┬─────────────────┬─────────────────┬───────────────────────┤
+│ Angestecktes Gerät │ USB-Enumeration  │ Ladeleistung    │ BLE-Fahrer-Link │ Systemreaktion        │
+├────────────────────┼──────────────────┼─────────────────┼─────────────────┼───────────────────────┤
+│ **USB-Stick**      │ **Class 0x08**   │ Minimal         │ Nein / Irrelevant│ • Mountet MP3/FLAC    │
+│ (Handschuhfach)    │ (Mass Storage)   │ < 100 mA (0.5W) │                 │ • Kein Fehlalarm!     │
+├────────────────────┼──────────────────┼─────────────────┼─────────────────┼───────────────────────┤
+│ **MP3-Player**     │ **Class 0x08**   │ Gering          │ Nein / Irrelevant│ • Liest Musikdatenbank│
+│ (iPod / Clip)      │ oder MTP         │ 200 - 500 mA    │                 │ • Lädt langsam (5V)   │
+├────────────────────┼──────────────────┼─────────────────┼─────────────────┼───────────────────────┤
+│ **Fahrer-Handy**   │ Gesperrt (Daten  │ **USB-PD 20W**  │ **JA (Aktiv)**  │ • Fahrmodus aktiv     │
+│ (Handschuhfach/J5) │ geblockt)        │ 9V / 1.5 - 2.2A │ Handy meldet    │ • **"Handy vergessen!"│
+│                    │                  │ (> 15 Watt)     │ 'charging=true' │    bei Zündung AUS**  │
+├────────────────────┼──────────────────┼─────────────────┼─────────────────┼───────────────────────┤
+│ **Fahrer-Handy**   │ Keine (Reines Qi)│ **12V Qi-Last** │ **JA (Aktiv)**  │ • Fahrmodus aktiv     │
+│ (am Qi-Dock J10)   │                  │ 10W - 15W Qi    │ Handy meldet    │ • **"Handy vergessen!"│
+│                    │                  │                 │ 'charging=true' │    bei Zündung AUS**  │
+├────────────────────┼──────────────────┼─────────────────┼─────────────────┼───────────────────────┤
+│ **Beifahrer-Handy**│ Gesperrt         │ USB-PD oder Qi  │ **NEIN**        │ • Neutrales Laden     │
+│ (Gast-Gerät)       │                  │ Schnellladung   │ (Kein Handshake)│ • Kein Tacho-Wechsel  │
+└────────────────────┴──────────────────┴─────────────────┴─────────────────┴───────────────────────┘
+```
+
+1. **USB-Stick / Jukebox im Handschuhfach (`J5_MP3`):**
+   * Enumeriert über den `USB2514B` als USB Mass Storage Class (`0x08`). Die Stromaufnahme bleibt minimal ($< 0{,}5\,\text{W}$).
+   * Das Dateisystem wird gemountet und an die Infotainment-Headunit oder den lokalen Audiocodec übergeben.
+   * **Kein Fehlalarm beim Verlassen des Fahrzeugs:** Da das Gerät als permanenter USB-Speicher erkannt wird und kein Smartphone-Ladehandshake vorliegt, wird bei Zündung AUS kein "Handy vergessen"-Alarm ausgelöst.
+2. **Smartphone am Lenker (`J5` / `J10`) oder im Handschuhfach (`J5_MP3`):**
+   * Erkennt der Ladecontroller hohe Ladelast (USB-PD $9\,\text{V}$ oder Qi $12\,\text{V}$) und meldet das gekoppelte Fahrer-Handy über Bluetooth LE gleichzeitig `battery.charging == true`, weiß OMB verlässlich: *Das autorisierte Fahrer-Handy dockt*.
+   * **Flankengetriggerter Wechsel in den Fahrmodus:** Die WebApp wechselt **einmalig bei Ladebeginn (steigende Flanke)** in die Cockpit-Ansicht. Navigiert der Fahrer anschließend manuell in Einstellungen, Medien oder Diagnose, wird diese Auswahl respektiert – das System erzwingt keinen Rücksprung.
+   * **"Handy vergessen"-Warnung:** Schaltet der Fahrer die Zündung ab und entfernt sich vom Motorrad (BLE-Link bricht ab), während Qi oder USB weiterhin Last melden, quittiert das Motorrad dies sofort mit einem Doppel-Hupton bzw. der LoRa-Pager vibriert energisch.
 
 ---
 
@@ -405,4 +444,76 @@ Wird der Koffer bei montiertem Koffer-Pod abgenommen (z. B. zum Waschen oder im 
 | **`J1`** | M8 Wire Pads | SMD/THT 1x07 | 7-poliges Lötpad-Array mit 0,6mm Durchkontaktierung für M8-Kabeladern | Custom |
 | **`J2`** | MagSafe 6P Pads | SMD 1x06 | 6-polige vergoldete Kontaktflächen für MagSafe Magnet-Pogo-Kupplung | `C224376` |
 | **`H1`** | MountingHole_Pad | M2.5 (Ø 2.7 mm) | Bohrung Ø 2.7 mm, Pad Ø 4.5 mm, geerdet an System-GND | Hardware |
+
+---
+
+## 9. PCBA 07: 2-in-1 LoRa Smart-Keyfob (`openmotorbridge_smart_keyfob`)
+
+Die Baugruppe PCBA 07 bildet die elektronische Seele des kompakten Schlüsselanhängers (`smart_keyfob_pager.scad`, $58 \times 34 \times 13\,\text{mm}$) und löst die gravierenden Schwächen herkömmlicher Motorrad-Schlüsseltransponder (schwache CR2032-Knopfzellen, Kälteempfindlichkeit, fehlender Rückkanal):
+
+```
+                                PCBA 07 SYSTEMARCHITEKTUR
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                        NORDIC nRF52840 BLUETOOTH LE 5.4 SoC                           │
+│ • ARM Cortex-M4F @ 64 MHz, 1 MB Flash, 256 KB RAM • AES-128 Hardware-Crypto          │
+│ • Verwaltet BLE-Fahrer-Präsenztoken, Pager-Status, Batterieanzeige & Smartphone-Bridge │
+└──────────────┬─────────────────────────┬─────────────────────────┬─────────────────────┘
+               │ SPI                     │ I2C                     │ PWM / GPIO
+               ▼                         ▼                         ▼
+┌───────────────────────────┐ ┌─────────────────────┐ ┌──────────────────────────────────┐
+│ SEMTECH SX1262 LoRa       │ │ TI DRV2605L HAPTIK  │ │ STATUS-ANZEIGE & AKUSTIK         │
+│ • 868 MHz Notrufempfang   │ │ • I2C Haptic Driver │ │ • WS2812B RGB Status-LED         │
+│ • Bis zu 4,5 km Reichweite│ │ • 10x3.6mm LRA Coin │ │ • Murata SMD-Piezosummer (85 dB) │
+│ • Empfängt 0xFE Notruf    │ │   (Vybronics LRA)   │ │ • Diffuse Lichtleiteroptik       │
+└───────────────────────────┘ └─────────────────────┘ └──────────────────────────────────┘
+               ▲
+               │ DC 3.3V Power Rail
+┌──────────────┴─────────────────────────────────────────────────────────────────────────┐
+│                           ENERGIE- & INDUKTIONSLADESYSTEM                              │
+│ • 250 mAh 1S LiPo-Pouchzelle (30 x 20 x 4.5 mm) mit integrierter Schutzschaltung (PCM) │
+│ • TI BQ51003 Qi Wireless Power Receiver: Lädt induktiv am PCBA 06 Cockpit-Dock         │
+│ • TI BQ25100 Linearer LiPo-Ladecontroller mit Ruhestrom < 50 nA (Monatelange Standzeit)│
+│ • 2x Vergoldete Pogo-Pads auf der Unterseite für optionale Direktladung                │
+└────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### 9.1 Technische Platinen-Kenndaten
+* **Abmessungen:** $46{,}0 \times 26{,}0 \times 1{,}0\,\text{mm}$ (Kompaktes 2-Lagen FR-4, $35\,\mu\text{m}$ Cu, ENIG Goldfinish).
+* **Magnetabschirmung:** Direkt neben der Platine sitzt die Aussparung für den $20 \times 10 \times 5\,\text{mm}$ N52-Neodym-Schlüssel. Ein $0{,}5\,\text{mm}$ Weicheisen-/Mu-Metall-Schirmblech schirmt die Hochfrequenz-Leiterbahnen, den LRA-Aktor und den LiPo-Puffer vollständig gegen magnetische Sättigung ab.
+* **LRA-Haptikmuster:** Der TI DRV2605L erzeugt scharfe, unverwechselbare Vibrationsmuster:
+  * *Vor-Alarm (Erschütterung):* 2 kurze Klicks ($150\,\text{Hz}$).
+  * *Diebstahl / Kassettenhebeln:* Durchdringendes Crescendo-Stakkato (spürbar selbst durch dicke Kordura-Motorradjacken oder auf dem Nachttisch).
+* **Induktives Cockpit-Laden:** Beim Aufstecken des Schlüsselbunds auf das MagSafe-Rahmendock (PCBA 06) am Lenker richtet der rückseitige Neodymring die 28-mm-Empfängerspule zentrisch aus $\rightarrow$ der Keyfob lädt während jeder Fahrt automatisch nach und ist niemals leer.
+
+### 9.2 Schnittstellen & Pin-Mapping des nRF52840
+
+| nRF52840 Pin | Signalname | Richtung | Funktion & Peripherie |
+| :--- | :--- | :---: | :--- |
+| **P0.02** | `AIN0_VBAT` | Eingang | Batteriemessung über hochohmigen 1M/1M Teiler ($< 1\,\mu\text{A}$ Last) |
+| **P0.05** | `LRA_SDA` | Bidir | I2C Data zum TI DRV2605L Haptiktreiber |
+| **P0.06** | `LRA_SCL` | Ausgang | I2C Clock zum TI DRV2605L Haptiktreiber |
+| **P0.08** | `LRA_EN` | Ausgang | Hardware-Enable für DRV2605L (Spart Ruhestrom im Standby) |
+| **P0.12** | `LORA_SCK` | Ausgang | SPI Serial Clock zum SX1262 |
+| **P0.13** | `LORA_MISO` | Eingang | SPI Master-In Slave-Out vom SX1262 |
+| **P0.14** | `LORA_MOSI` | Ausgang | SPI Master-Out Slave-In zum SX1262 |
+| **P0.15** | `LORA_NSS` | Ausgang | SPI Chip Select (Active-Low) zum SX1262 |
+| **P0.16** | `LORA_BUSY` | Eingang | SX1262 Busy-Signal |
+| **P0.17** | `LORA_DIO1` | Eingang | SX1262 IRQ (Empfangenes 0xFE Notrufpaket) |
+| **P0.20** | `PIEZO_PWM` | Ausgang | PWM-Takt (2,7 kHz) für Murata SMD-Piezosummer |
+| **P0.22** | `WS2812_DATA`| Ausgang | Datensignal für RGB-Status-LED (Lichtleiter im Deckel) |
+| **P0.24** | `CHG_STAT` | Eingang | Ladestatus vom BQ25100 (Low = Lädt, High = Voll) |
+| **P0.26** | `QI_DETECT` | Eingang | Digitales Erkennungssignal vom BQ51003 (High = Auf Qi-Dock aufgelegt) |
+
+### 9.3 Stückliste (BOM) PCBA 07
+| Ref | Bauteil / Typ | Gehäuse | Spezifikation & Funktion | LCSC Part |
+| :--- | :--- | :--- | :--- | :--- |
+| **`U1`** | nRF52840-QIAA-R | aQFN-73 | 32-Bit ARM Cortex-M4F SoC mit Bluetooth 5.4, NFC & Crypto | `C190767` |
+| **`U2`** | SX1262IMLTRT | QFN-24 | Semtech 868 MHz LoRa Transceiver (+22 dBm, TCXO) | `C90039` |
+| **`U3`** | DRV2605LDGSR | VSSOP-10 | TI ERM/LRA Haptic Driver mit integrierter Effekt-Bibliothek | `C61633` |
+| **`U4`** | BQ51003YFPR | DSBGA-28 | TI 2.5W Qi Wireless Power Receiver Controller | `C144862` |
+| **`U5`** | BQ25100YFPR | DSBGA-6 | TI Linearer LiPo-Ladecontroller mit 50 nA Ruhestrom | `C144857` |
+| **`M1`** | VG1036001D | Coin 10x3.6mm | Vybronics LRA Linearmotor (235 Hz Resonanzfrequenz) | Custom / Distrelec |
+| **`BZ1`**| PKLCS1212E4001 | SMD 12x12mm | Murata SMD-Piezo-Schallwandler (85 dB @ 10 cm, 4 kHz) | `C94511` |
+| **`D1`** | WS2812B-2020 | SMD 2020 | Intelligente RGB-Status-LED mit integriertem WS2811 IC | `C2843785` |
+| **`BAT`**| LiPo 1S 250mAh | Pouch 30x20x4.5 | 3.7V 250 mAh LiPo mit PCM-Schutzschaltung & 10k NTC | EEMB / Custom |
 

@@ -30,7 +30,7 @@ module main_box_xray_inspection_assembly() {
             main_box_mid_tray();
 
     // 4. 1S LiPo Backup Battery (Opaque Silver Pouch)
-    translate([MAIN_BOX_WALL + 28.0, MAIN_BOX_WALL + 17.5, MAIN_BOX_LOWER_H + 2.0])
+    translate([MAIN_BOX_WALL + 18.5, MAIN_BOX_WALL + 14.5, MAIN_BOX_LOWER_H + 2.0])
         dummy_lipo_battery();
 
     // 5. Top Enclosure Lid (Translucent Graphite Grey, 28% alpha)

@@ -107,16 +107,15 @@ Die Gesamtabwärme der Zentralbox liegt im normalen Fahrbetrieb bei lediglich **
    * **1S LiPo Akku:** Verbleibt in der oberen Kammer sicher unter $60\,^\circ\text{C}$ (JEITA-NTC pausiert Ladevorgang bei $> 45\,^\circ\text{C}$).
 
 ### 2.2 Oberwanne: 1S LiPo-Akkuaufnahme & Zwischenboden-Durchführungen
-* **Integrierte LiPo-Akkutasche:** Auf der Oberseite des Zwischenbodens sitzt eine formschlüssige Aussparung ($55{,}0 \times 32{,}0 \times 8{,}5\,\text{mm}$) für eine 1000 mAh 1S LiPo-Pufferzelle (Typ 103040 oder 803048).
-* **Vibrationssicherung:** Eine $1{,}0\,\text{mm}$ dämpfende EPDM-Schaumstoffmatte an der Unterseite und ein quer verlaufendes EPDM-Gummispannband ($35 \times 10\,\text{mm}$) über seitliche Einhängenocken halten die Zelle auch bei $20\,\text{g}$ Stößen absolut spielfrei.
-* **4-Poliger JST-PH Akkuanschluss (`J3`):**
+* **Integrierte LiPo-Akkutasche:** Auf der Oberseite des Zwischenbodens sitzt eine formschlüssige Aussparung ($68{,}0 \times 39{,}0 \times 5{,}0\,\text{mm}$) für eine ultra-flache **2.200 mAh 1S LiPo-Pufferzelle** (Typ 504068 oder 503870). Durch die gezielte Vergrößerung der horizontalen Grundfläche statt der Bauhöhe bleibt die gesamte Gehäusehöhe der Zentralbox strikt bei **$38{,}0\,\text{mm}$**, sodass unter der Motorradsitzbank kein einziger Millimeter Freigang verloren geht.
+* **100 % freier Querschnitt aller 11 Konvektionsschlitze:** Das Akkubett ist zentral bei $X = 17{,}0\dots 88{,}0\,\text{mm}$ und $Y = 13{,}0\dots 55{,}0\,\text{mm}$ platziert. Dadurch halten alle 11 Lüftungsschlitze (5 an der Rückwand, 4 an den Flanken, 2 an der Front) mindestens $2{,}5\dots 4{,}5\,\text{mm}$ Randabstand ein. Die Kaminwirkung und Innenluft-Zirkulation für die Abwärme von LM5164-Q1 und BQ24075 im Unterdeck bleibt uneingeschränkt erhalten.
+* **Vibrationssicherung:** Eine $1{,}0\,\text{mm}$ dämpfende EPDM-Schaumstoffmatte an der Unterseite und ein quer verlaufendes EPDM-Gummispannband ($40 \times 12\,\text{mm}$) über seitliche Einhängenocken halten die Zelle auch bei $20\,\text{g}$ Stößen absolut spielfrei.
+* **Molex Micro-Fit 3.0 Akkuanschluss (`J_BAT`):**
   * Pin 1: `VBAT+` ($+3{,}7\,\text{V}$ LiPo Pluspol über BQ24075)
-  * Pin 2: `NTC_10K` (Murata 10k NTC Temperaturfühler für JEITA-Ladeüberwachung)
-  * Pin 3: `GND` (LiPo Masse)
-  * Pin 4: `NC` / Schirmung
-* **Zwischenboden-Durchführungen:**
-  * Zentraler Kabeldurchbruch ($14{,}0 \times 4{,}0\,\text{mm}$) mit beidseitig verrundeten Kanten ($R = 1{,}5\,\text{mm}$) zur knickfreien Führung des internen 2x13 Flachbandkabels von der Hauptplatine zum HD26-Flansch in der Stirnwand.
-  * 2x Montagefenster für den Zugriff auf die M2.5 Befestigungsschrauben der Hauptplatine.
+  * Pin 2: `GND` (LiPo Masse mit integriertem Murata 10k NTC Temperaturfühler für JEITA-Ladeüberwachung)
+* **Kabeldurchbruch & Zwischenboden-Führung:**
+  * Großzügiger Front-Kabeldurchbruch ($25{,}0 \times 4{,}0\,\text{mm}$ bei $Y = 4\dots 8\,\text{mm}$) mit beidseitig verrundeten Kanten ($R = 1{,}5\,\text{mm}$) liegt $5{,}0\,\text{mm}$ vor der Akkutasche.
+  * Führt die Akku-Silikonleitungen knickfrei nach unten auf den `J_BAT`-Header sowie das interne 2x13 Flachbandkabel von der Hauptplatine zum HD26-Flansch in der Stirnwand.
 
 ---
 

@@ -80,16 +80,15 @@ Total heat dissipation during standard riding is only **$\approx 1{,}5\,\text{W}
    * **1S LiPo Battery:** Safely remains below $60^\circ\text{C}$ (JEITA NTC pauses charging above $45^\circ\text{C}$).
 
 ### 2.2 Upper Enclosure Tray: 1S LiPo Battery Cradle & Intermediate Pass-Throughs
-* **Integrated LiPo Battery Pocket:** Form-fitting recess ($55{,}0 \times 32{,}0 \times 8{,}5\,\text{mm}$) molded into the top of the intermediate tray accommodating a 1000 mAh 1S LiPo backup cell (Type 103040 or 803048).
-* **Vibration Isolation:** A $1{,}0\,\text{mm}$ damping EPDM foam mat underneath and a transverse elastic EPDM strap ($35 \times 10\,\text{mm}$) anchored to molded retention lugs hold the cell securely under 20 g shocks.
-* **4-Pin JST-PH Battery Connector (`J3`):**
+* **Integrated LiPo Battery Pocket:** Form-fitting recess ($68{,}0 \times 39{,}0 \times 5{,}0\,\text{mm}$) molded into the top of the intermediate tray accommodating an ultra-flat **2,200 mAh 1S LiPo backup cell** (Type 504068 or 503870). By expanding horizontal footprint rather than vertical thickness, the overall Central Box height remains strictly at **$38{,}0\,\text{mm}$**, preserving crucial clearance beneath motorcycle seat pans.
+* **100 % Free Cross-Section for all 11 Convective Slots:** The battery cradle is centrally located from $X = 17{,}0\dots 88{,}0\,\text{mm}$ and $Y = 13{,}0\dots 55{,}0\,\text{mm}$. This maintains a solid $2{,}5\dots 4{,}5\,\text{mm}$ clearance to all 11 perimeter ventilation slots (5 rear, 4 flanks, 2 front), preserving thermal chimney circulation for the LM5164-Q1 and BQ24075 regulators on the lower PCB.
+* **Vibration Isolation:** A $1{,}0\,\text{mm}$ damping EPDM foam mat underneath and a transverse elastic EPDM strap ($40 \times 12\,\text{mm}$) anchored to molded retention lugs hold the cell securely under $20\,\text{g}$ shocks.
+* **Molex Micro-Fit 3.0 Battery Header (`J_BAT`):**
   * Pin 1: `VBAT+` ($+3{,}7\,\text{V}$ LiPo positive via BQ24075)
-  * Pin 2: `NTC_10K` (Murata 10k NTC temperature thermistor for JEITA charging guard)
-  * Pin 3: `GND` (LiPo ground)
-  * Pin 4: `NC` / Shield
-* **Tray Pass-Through Slots:**
-  * Central cable aperture ($14{,}0 \times 4{,}0\,\text{mm}$) with rounded radiused edges ($R = 1{,}5\,\text{mm}$) routing the 2x13 internal ribbon cable from main board to front-panel HD26 flange without pinch points.
-  * 2x access windows permitting tool access to lower PCB M2.5 mounting screws.
+  * Pin 2: `GND` (LiPo ground with embedded Murata 10k NTC thermistor for JEITA charging guard)
+* **Pass-Through Slot & Cable Routing:**
+  * Generous front cable aperture ($25{,}0 \times 4{,}0\,\text{mm}$ at $Y = 4\dots 8\,\text{mm}$) with radiused edges ($R = 1{,}5\,\text{mm}$) positioned $5{,}0\,\text{mm}$ ahead of the battery cradle.
+  * Routes battery silicone wiring cleanly down to the `J_BAT` header on PCBA 01 alongside the internal 2x13 ribbon cable connecting to the front-panel HD26 flange.
 
 ---
 

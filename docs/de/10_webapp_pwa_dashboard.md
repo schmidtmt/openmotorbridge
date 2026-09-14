@@ -101,7 +101,24 @@ Der Geräte-Manager ist in zwei klar voneinander getrennte Bereiche strukturiert
 * **Reifendruck-Kontrollsystem (TPMS):** Live-Druck/Temperatur aus BLE GAP Ventilkappen (FOBO / Deelife) & Anlernassistent.
 * **Fahrzeug-CAN Profil-Manager & Live Hex Sniffer:** Community-Profil-Auswahl (Harley, BMW, KTM, Ducati, OBD2) und interaktiver Sniffer mit ID-Filterung und CSV-Export.
 
-### 2.6 Architektonische Trennung: Echte Hardware (`index.html`) vs. Simulations-Suite (`demo.html`)
+### 2.6 Smart Docking & Einmalig flankengetriggerter Fahrmodus (User-Override Schutz)
+
+Wird das Fahrer-Smartphone am Cockpit-Dock (Qi `J10`) oder per USB-Kabel am Lenker (`J5`) bzw. im Handschuhfach (`J5_MP3`) eingesteckt, schaltet die WebApp das Dashboard intelligent um:
+
+* **Einmalige Flankentriggerung (Single-Edge Transition):**
+  * Der automatische Wechsel auf den Tab `#tab-cockpit` (Fahrmodus) wird **strikt nur auf der steigenden Flanke** des Ladezustands ausgeführt (Übergang von `charging == false` auf `charging == true`).
+  * **Schutz vor Rauswerfen bei manueller Bedienung (User Override):**
+    * Möchte der Fahrer nach dem Einstecken des Telefons bewusst in den Einstellungen etwas justieren, einen Musiktitel in den Medien wählen oder Sensordiagnosen prüfen, klickt er einfach auf den gewünschten Tab.
+    * Die WebApp merkt sich diesen benutzerinitiierten Tab-Wechsel und erzwingt **keinen** Rücksprung, solange das Gerät im Dock verbleibt. Die Zustandsmaschine kämpft niemals gegen den Benutzer!
+    * Erst nach einem vollständigen Abnehmen und erneuten Andocken (neue steigende Flanke) oder beim Losfahren (Geschwindigkeit $v > 5\,\text{km/h}$) wird das Cockpit wieder automatisch fokussiert.
+* **Konfigurierbarkeit in den App-Einstellungen:**
+  * In Tab 5 (Einstellungen) lässt sich die Automatik individuell anpassen:
+    `[x] Bei Smartphone-Docking automatisch ins Cockpit wechseln (Standard: Aktiv)`.
+* **"Handy vergessen"-Warnlogik (Lenker & Handschuhfach):**
+  * Erkennt die Zentralbox beim Abstellen des Motors `KL15 == 0` (Zündung AUS) und meldet der Qi- oder USB-Port weiterhin ein aufliegendes/ladendes Gerät, während die BLE-Signalstärke des Fahrers schwindet ($d > 3\,\text{m}$), schlägt das System Alarm:
+  * Zwei kurze Huptöne am Motorrad (*Doppel-Chirp*) und ein hämmerndes LRA-Vibrationsmuster auf dem Smart-Keyfob warnen den Fahrer sofort, bevor er sich vom Motorrad entfernt.
+
+### 2.7 Architektonische Trennung: Echte Hardware (`index.html`) vs. Simulations-Suite (`demo.html`)
 * **`index.html` (Produktions-Cockpit):** Reine Instrumentenanzeige für den echten Motorradbetrieb (`window.OMB_MODE = 'hardware'`). Vollständig bereinigt von Simulationsbuttons und Teststrecken; alle Kacheln zeigen im unverbundenen Zustand sauber `Standby` / `--`.
 * **`demo.html` (Interaktive Simulations-Suite):** Dedizierte Präsentations- und HIL-Testbench (`window.OMB_MODE = 'demo'`) mit Sticky-Banner, Streckenauswahl (Wil SG $\rightarrow$ Rickenpass, Kerenzerberg), eCall-Crashtest und ausklappbarem **Live-Injektionspanel** (Echtzeit-Schieberegler für Tempo, Schräglage, Heckradar-Distanz, TPMS und Notbremsung).
 

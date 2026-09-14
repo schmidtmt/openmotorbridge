@@ -22,7 +22,7 @@ Klassische Motorrad-Kommunikationssysteme sind historisch stark fragmentiert:
 ├─────────────────────────────────────────────────────────────────────────────────────────────┤
 │ 2. ZENTRALE STEUERBOX (Unter der Sitzbank, IP67):                                           │
 │    • ESP32-S3 Dual-Core MCU (240 MHz) • ES8388 Audio-Codec & DSP Audio-Mixer                │
-│    • LM5164-Q1 72V Automotive Step-Down • BQ24075 USV & 1000mAh LiPo-Pufferakku             │
+│    • LM5164-Q1 72V Automotive Step-Down • BQ24075 USV & 2200mAh Flat-LiPo-Pufferakku        │
 │    • 4-Bit High-Speed SDIO MicroSD-Ringspeicher • 2x Bourns 1500 V RMS Audio-Übertrager     │
 └─┬─────────────────────────────────────────────────────────────────────────────────────────┬─┘
   │                                                                                         │
@@ -56,7 +56,7 @@ Klassische Motorrad-Kommunikationssysteme sind historisch stark fragmentiert:
 ## 2. Modulare Systemphilosophie & Montagefreiheit (Die 5 Funktionsknoten)
 
 OpenMotorBridge v8.0 definiert die Plattform über **5 standardisierte Funktionsknoten**:
-1. **Zentralbox (Main ECU):** Zentraler Rechenkern (ESP32-S3), 24-Bit Audio-DSP/Codec (ES8388), galvanische Trennübertrager, 72V Automotive Step-Down (LM5164-Q1) und LiPo-USV (BQ24075). *(Typischerweise mittig unter der Sitzbank im Batteriefach montiert).*
+1. **Zentralbox (Main ECU):** Zentraler Rechenkern (ESP32-S3), 24-Bit Audio-DSP/Codec (ES8388), galvanische Trennübertrager, 72V Automotive Step-Down (LM5164-Q1) und LiPo-USV (BQ24075 mit 2.200 mAh Flachzelle). *(Typischerweise mittig unter der Sitzbank im Batteriefach montiert).*
 2. **Heck-Pod 3 (Backbone & Telemetrie):** Multi-GNSS (u-blox MAX-M10S), 868 MHz LoRa (Semtech SX1262), 2.4 GHz OMM-Mesh-Co-Prozessor (RP2040) und 6-Achs-IMU (BMI270). *(Typischerweise am Heck mit ungestörter Sicht in den Zenit).*
 3. **Satelliten-Pod 1 (Intercom-Brücke A):** Universal-Wechselschacht für Sena (Mesh 2.0/3.0 / Bluetooth). *(Typischerweise linke Fahrzeugseite).*
 4. **Satelliten-Pod 2 (Intercom-Brücke B):** Universal-Wechselschacht für Cardo (DMC Gen1/Gen2 / Bluetooth) oder analogen Funk (PMR446). *(Typischerweise rechte Fahrzeugseite zur HF-Raumdiversität).*
@@ -251,3 +251,25 @@ Der Front-Knoten (PCBA 05) dient auf **allen Motorrädern** als universeller Coc
   * Bei einer Gefahrenbremsung taktet OMB das Garmin Varia Rücklicht über UART2 und externe Zusatzleuchten (z. B. Cosmo Moto via `RESERVE_GPIO_B`) mit einem hochfrequenten **4,5 Hz Stroboskop-Warnblinken**, um den nachfolgenden Verkehr vor Auffahrunfällen zu schützen.
 * **Front-Zusatzscheinwerfer (Front-Node J11 via TPS1H100):**
   * Der 4,5A Smart High-Side Switch auf dem Universal Front-Node steuert LED-Zusatzscheinwerfer in drei wählbaren Betriebsmodi: `[AUS]`, `[DAUER-EIN]` (Tagfahrlicht/Nebel) oder `[AUTO-STROBE BEI ESS]` (visuelles Warnsignal nach vorne bei Vollbremsung).
+
+### 5.10 Apple Find My & Google Find My Device Schwarmortung (Dual-Beaconing)
+* **Globale Ortung ohne SIM-Karte & laufende Gebühren:**
+  * Im Standby / Deep Sleep sendet der ESP32-S3 im Zeitmultiplex abwechselnd **Apple Find My (FMNP)** und **Google Find My Device (FMDN)** BLE-Werbepakete (alle 2,0 Sekunden, Sendedauer ca. $2{,}5\,\text{ms}$).
+  * Über **~1,5 Mrd. iPhones und ~3 Mrd. Android-Smartphones** weltweit wird das Motorrad bei Diebstahl selbst in Tiefgaragen und fremden Städten anonym und hochpräzise geortet.
+* **Autarkes USV-Powermanagement:**
+  * Der mittlere Ruhestrom des Dual-Beaconings liegt bei nur ca. **$15\,\mu\text{A}$**.
+  * Zusammen mit der IMU-Erschütterungsüberwachung ($6\,\mu\text{A}$) liefert der interne **2.200 mAh LiPo-Pufferakku** eine autarke Ortungs- und Alarmbereitschaft von **3 bis 4 Jahren** – selbst wenn Diebe die 12V-Bordbatterie trennen.
+
+### 5.11 Smart Docking Telemetrie & "Handy vergessen"-Alarmierung
+* **Ablaufunabhängige Korrelationslogik (Fahrer-Alltag):**
+  * Biker starten häufig erst das Motorrad (Handy noch in der Jackentasche) und docken das Smartphone erst nach dem Warmlaufen am Lenker (Qi `J10` / USB `J5`) oder im Handschuhfach (`J5_MP3`) an.
+  * Das Smartphone ist bereits per Bluetooth LE mit OMB gekoppelt. Sobald der Ladevorgang startet, meldet das Smartphone über das OS-Event `chargingchange` seinen Ladezustand per BLE $\rightarrow$ OMB korreliert Ladelast und BLE-Identität verlässlich.
+* **3-Stufen-Geräteerkennung:**
+  * *USB-Stick / MP3-Player (Klasse `0x08`):* Minimaler Strom ($< 0{,}5\,\text{W}$), lokale Musikwiedergabe, **kein Fehlalarm** beim Verlassen des Fahrzeugs.
+  * *Fahrer-Handy:* USB-PD ($> 15\,\text{W}$) oder Qi ($10\dots 15\,\text{W}$) mit aktivem BLE-Handshake.
+  * *Gast-Gerät:* Neutrales Laden ohne Profilwechsel.
+* **Flankengetriggerter Wechsel & "Handy vergessen"-Alarm:**
+  * Der automatische Wechsel in die Cockpit-Ansicht erfolgt **strikt einmalig auf der steigenden Flanke** des Ladebeginns. Manuelle Navigationen zu anderen Tabs werden respektiert (User Override Protection).
+  * Schaltet der Fahrer die Zündung aus (`KL15 == 0`) und entfernt sich vom Motorrad ($d > 3\,\text{m}$), während Qi oder USB weiterhin ein aufliegendes Smartphone melden, schlägt das System sofort Alarm: Zwei Huptöne am Motorrad und ein LRA-Vibrationsstakkato auf dem Smart-Keyfob warnen vor dem Zurücklassen des teuren Geräts.
+* **Architektonische Entscheidung zu UWB (Ultra-Wideband):**
+  * Da OpenMotorBridge als Telemetrie-, Audio- und Alarmsystem arbeitet und die Freigabe des Motorstarts beim originalen OEM-Zündschloss/Schlüssel verbleibt, ist UWB (hoher Ruhestrom 30–50 mA, Zusatz-ICs, Antennenaufwand) als reines Zubehörsystem **Overengineering** und wird bewusst zu Gunsten von BLE, LoRa und Find My Device weggelassen.

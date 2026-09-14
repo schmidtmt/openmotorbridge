@@ -22,7 +22,7 @@ Classic motorcycle communication systems are historically fragmented:
 ├─────────────────────────────────────────────────────────────────────────────────────────────┤
 │ 2. CENTRAL CONTROL BOX (Under-Seat, IP67 Sealed):                                           │
 │    • ESP32-S3 Dual-Core MCU (240 MHz) • ES8388 Audio Codec & DSP Audio Mixer               │
-│    • LM5164-Q1 72V Automotive Step-Down • BQ24075 UPS & 1000mAh LiPo Backup Battery         │
+│    • LM5164-Q1 72V Automotive Step-Down • BQ24075 UPS & 2200mAh Flat LiPo Backup Battery    │
 │    • 4-Bit High-Speed SDIO MicroSD Ringbuffer • 2x Bourns 1500 V RMS Audio Isolation Xfmrs  │
 └─┬─────────────────────────────────────────────────────────────────────────────────────────┬─┘
   │                                                                                         │
@@ -57,7 +57,7 @@ Classic motorcycle communication systems are historically fragmented:
 ## 2. Modular System Philosophy & Mounting Freedom (The 5 Functional Nodes)
 
 OpenMotorBridge v8.0 defines the platform across **5 standardized functional nodes**:
-1. **Central Box (Main ECU):** Central computational core (ESP32-S3), 24-bit audio DSP/codec (ES8388), galvanic isolation transformers, 72V automotive step-down (LM5164-Q1), and LiPo UPS (BQ24075). *(Typically mounted centrally under the seat in the battery compartment).*
+1. **Central Box (Main ECU):** Central computational core (ESP32-S3), 24-bit audio DSP/codec (ES8388), galvanic isolation transformers, 72V automotive step-down (LM5164-Q1), and LiPo UPS (BQ24075 with 2,200 mAh flat pouch cell). *(Typically mounted centrally under the seat in the battery compartment).*
 2. **Rear Pod 3 (Backbone & Telemetry):** Multi-GNSS (u-blox MAX-M10S), 868 MHz LoRa (Semtech SX1262), 2.4 GHz OMM Mesh co-processor (RP2040), and 6-axis IMU (BMI270). *(Typically mounted at the rear with an unobstructed view of the zenith).*
 3. **Satellite Pod 1 (Intercom Bridge A):** Universal cartridge bay for Sena (Mesh 2.0/3.0 / Bluetooth). *(Typically on the left vehicle side).*
 4. **Satellite Pod 2 (Intercom Bridge B):** Universal cartridge bay for Cardo (DMC Gen1/Gen2 / Bluetooth) or analog PMR446 radio. *(Typically on the right vehicle side for RF spatial diversity).*
@@ -235,3 +235,42 @@ The Front Node (PCBA 05) serves on **all motorcycle types** as the universal coc
   * Eliminates tedious scrubbing through hours of raw tour footage to locate critical traffic incidents.
 * **Video Telemetry Export:**
   * The PWA exports time-synchronized `.srt` or `.csv` telemetry alongside GPX tracks, enabling pixel-perfect speed, lean angle, and radar hazard overlays in Dashware or Insta360 Studio.
+
+### 5.8 2-in-1 LoRa Smart-Keyfob (Alarm-Pager, N52 Key & MagSafe Qi Dock)
+* **All-in-One Keychain Token:**
+  * Combines the $20 \times 10 \times 5\,\text{mm}$ N52 neodymium magnetic key for cartridge mechanical latch release with a silent LoRa 868 MHz alarm pager inside a compact PA12-MJF enclosure ($58 \times 34 \times 13\,\text{mm}$).
+  * An integrated $0{,}5\,\text{mm}$ mu-metal shield isolates internal electronics, LRA actuator, and LiPo cell from magnetic saturation.
+* **Rechargeable LiPo & MagSafe Cockpit Docking:**
+  * Features a rechargeable 250 mAh 1S LiPo pouch cell, eliminating coin-cell failures in sub-zero winter rides.
+  * Recharges inductively whenever snapped onto the PCBA 06 MagSafe frame dock at the handlebar.
+* **Tactile LRA & Acoustic Alerting:**
+  * Powered by a TI DRV2605L driver driving a $10 \times 3{,}6\,\text{mm}$ LRA coin motor for crisp pre-alarm clicks and crescendo theft alarms easily felt through heavy leather riding gear.
+
+### 5.9 Active Safety Light Management (ESS Hazard Strobe & Aux Light J11)
+* **Emergency Stop Signal (ESS):**
+  * Monitors longitudinal deceleration $a_x$ via the 6-axis IMU (default threshold $a_x < -0{,}60\,\text{g}$).
+  * On emergency hard braking, OMB pulses the Garmin Varia taillight and auxiliary indicators with high-frequency **4.5 Hz stroboscopic hazard flashing** to alert trailing traffic.
+* **Auxiliary Headlights (Front Node J11 via TPS1H100):**
+  * The 4.5A smart high-side switch drives auxiliary LED fog/driving lights across three modes: `[OFF]`, `[ALWAYS-ON]`, or `[AUTO-STROBE ON ESS]`.
+
+### 5.10 Apple Find My & Google Find My Device Crowdsourced Tracking (Dual-Beaconing)
+* **Global Tracking with Zero SIM & Zero Monthly Fees:**
+  * In standby / deep sleep, the ESP32-S3 broadcasts alternating **Apple Find My (FMNP)** and **Google Find My Device (FMDN)** BLE advertisements every 2.0 seconds ($2{,}5\,\text{ms}$ duration).
+  * Leverages over **~1.5 billion iPhones and ~3 billion Android smartphones** globally to locate stolen motorcycles even inside underground parking garages and unfamiliar cities.
+* **Ultra-Low-Power Autonomous Endurance:**
+  * Dual-beaconing draws an average current of only $\approx 15\,\mu\text{A}$.
+  * Combined with IMU wake-on-motion ($6\,\mu\text{A}$), the internal **2,200 mAh LiPo backup cell** delivers **3 to 4 years of autonomous tracking readiness**, even if thieves sever the motorcycle's 12V starter battery.
+
+### 5.11 Smart Docking Telemetry & "Phone Left-Behind" Alerting
+* **Workflow-Agnostic Correlation Engine:**
+  * Riders frequently start the motorcycle while their phone is still in their jacket pocket, docking it on the handlebar (Qi `J10` / USB `J5`) or in the glove box (`J5_MP3`) minutes later after engine warmup.
+  * The smartphone connects over Bluetooth LE on startup. Once placed in the dock, the smartphone reports its charging state (`battery.charging == true`) over BLE, allowing OMB to immediately correlate charging current with the rider's identity.
+* **3-Tier Device Detection Matrix:**
+  * *USB Memory Stick / MP3 Player (Class `0x08`):* Minimal current draw ($< 0{,}5\,\text{W}$), media mounted locally, **zero false alarms** on departure.
+  * *Rider Smartphone:* High USB-PD ($> 15\,\text{W}$) or Qi ($10\dots 15\,\text{W}$) charging draw with active BLE owner handshake.
+  * *Guest Device:* Neutral charging without dashboard profile changes.
+* **Single-Edge Transition & Left-Behind Warning:**
+  * Automatic switching to the Cockpit view executes **strictly once upon the rising edge** of docking. Manual navigation to other tabs is strictly respected without force-redirecting (User Override Protection).
+  * If the rider turns ignition OFF (`KL15 == 0`) and walks away ($d > 3\,\text{m}$) while Qi or USB still detects a seated smartphone, the system sounds two rapid horn chirps and vibrates the Smart-Keyfob to prevent leaving expensive phones behind.
+* **Architectural Decision Regarding UWB (Ultra-Wideband):**
+  * Because OpenMotorBridge serves as an accessory, telemetry, and alarm platform while ignition control remains with the OEM lock and transponder, UWB (high quiescent draw 30–50 mA, specialized silicon, antenna tuning) represents unnecessary **overengineering** and is deliberately omitted in favor of BLE, LoRa, and Find My Device.

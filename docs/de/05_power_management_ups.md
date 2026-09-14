@@ -1,6 +1,6 @@
 # 05 - Energie-Management, USV & Kfz-Bordnetzschutz
 
-Dieses Dokument spezifiziert das dynamische Energie- und Schutzmanagement der OpenMotorBridge v8.0: die primären Schaltregler (Zentralbox LM5164-Q1 & Front-Knoten LMR36015), die unterbrechungsfreie Stromversorgung (USV mit BQ24075 und 1000 mAh LiPo), den automobilen Transienten- und Verpolschutz (ISO 7637-2), das intelligente **Dongle-Powermanagement (1-Klick Kaltstart & Auto-Café Mode)** sowie die mehrstufige Winterschlaf-Kaskade (< 16,5 µA).
+Dieses Dokument spezifiziert das dynamische Energie- und Schutzmanagement der OpenMotorBridge v8.0: die primären Schaltregler (Zentralbox LM5164-Q1 & Front-Knoten LMR36015), die unterbrechungsfreie Stromversorgung (USV mit BQ24075 und **2.200 mAh Flat-LiPo**), den automobilen Transienten- und Verpolschutz (ISO 7637-2), das intelligente **Dongle-Powermanagement (1-Klick Kaltstart & Auto-Café Mode)**, das **Apple Find My & Google Find My Device Dual-Beaconing** sowie die mehrstufige Winterschlaf-Kaskade (< 16,5 µA).
 
 ---
 
@@ -42,7 +42,7 @@ $$L = \frac{V_{\text{OUT}} \cdot (V_{\text{IN,max}} - V_{\text{OUT}})}{V_{\text{
 ## 2. Dynamisches Power-Path Management & Integrierte USV
 
 - **Power-Path Controller:** Texas Instruments **BQ24075** mit automatischer Last- und Ladestromaufteilung.
-- **USV-Akkuzelle:** 1000 mAh Wide-Temperature Single-Cell LiPo-Akku ($3{,}7\,\text{V}$ Nennspannung, $4{,}2\,\text{V}$ Ladeschluss, Entladebereich $-20\,^\circ\text{C}$ bis $+60\,^\circ\text{C}$).
+- **USV-Akkuzelle:** 2.200 mAh Wide-Temperature Single-Cell Flat-LiPo ($3{,}7\,\text{V}$ Nennspannung, $4{,}2\,\text{V}$ Ladeschluss, Entladebereich $-20\,^\circ\text{C}$ bis $+60\,^\circ\text{C}$, Typ 504068 / 503870, $68 \times 39 \times 5{,}0\,\text{mm}$).
 - **JEITA NTC-Thermomanagement (Murata 10k NTC an BQ24075 TS-Pin):**
   - **Kältestopp ($T < 0\,^\circ\text{C}$):** Ladestrom wird in Hardware auf $0\,\text{mA}$ gestoppt (verhindert Lithium-Plating / Dendritenbildung im Winter). Das System wird normal über das Bordnetz versorgt.
   - **Hitzestopp ($T > 45\,^\circ\text{C}$):** Ladestrom wird auf $0\,\text{mA}$ gestoppt (Schutz vor Akkublähen durch Motorabwärme unter der Sitzbank).
@@ -52,6 +52,12 @@ $$L = \frac{V_{\text{OUT}} \cdot (V_{\text{IN,max}} - V_{\text{OUT}})}{V_{\text{
   - Finalisierung und Flush des GPX-Dateisystems auf die MicroSD-Karte.
   - Suche nach bekannten Heim-WLAN-SSIDs und Durchführung des WebDAV-Uploads.
   - Geordnetes Senden von BLE-Disconnect-Events.
+
+### 2.1 Autonome Schwarmortung & Diebstahl-Laufzeit (Apple & Google Dual-Beacon)
+Wird das Motorrad abgestellt oder trennen Diebe die 12V-Starterbatterie ab, schaltet die Zentralbox auf die interne 2.200 mAh Zelle um:
+* **Interleaved Dual-Beaconing:** Der ESP32-S3 sendet alle 2,0 Sekunden abwechselnd ein Apple Find My (FMNP) und ein Google Find My Device (FMDN) BLE-Paket ($2{,}5\,\text{ms}$ Sendedauer, mittlerer Stromverbrauch ca. $15\,\mu\text{A}$).
+* **Erschütterungserkennung (Wake-on-Motion):** Die 6-Achs-IMU (LIS3DH / ICM-42688) überwacht Erschütterungen mit nur $6\,\mu\text{A}$.
+* **Laufzeitbilanz:** Bei einem Gesamtwachstrom von ca. $31\,\mu\text{A}$ ($0{,}031\,\text{mA}$) bietet die 2.200 mAh Zelle eine theoretische Standby-Dauer von über **70.000 Stunden (~8 Jahre)** bzw. real unter Berücksichtigung von Selbstentladung und Frostverlusten ($-15\,^\circ\text{C}$) eine **autarke Ortungs- und Alarmbereitschaft von 3 bis 4 Jahren** ohne jegliche externe 12V-Versorgung.
 
 ---
 

@@ -40,7 +40,7 @@ module main_box_full_assembly() {
             main_box_mid_tray();
 
     // Layer 4: 1S LiPo Backup Battery (Floating into battery compartment tray)
-    translate([MAIN_BOX_WALL + 28.0, MAIN_BOX_WALL + 17.5, Z_LIPO_BATTERY])
+    translate([MAIN_BOX_WALL + 18.5, MAIN_BOX_WALL + 14.5, Z_LIPO_BATTERY])
         dummy_lipo_battery();
 
     // Layer 5: Enclosure Top Lid (Gehäusedeckel, Graphite Grey with Vent & Lightpipe)

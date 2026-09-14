@@ -75,8 +75,24 @@ The dashboard is a fully self-contained Progressive Web App (PWA) built with sta
   * **1:1 Binding Status:** Registered MAC address, ESP-NOW link state (`LINKED`, `OFFLINE`), and signal strength (RSSI).
   * **Interactive Pairing Button:** `[Pair Front Node / Proximity Rescue]` – triggers the localized proximity rescue beacon ($\text{RSSI} > -42\,\text{dBm}$) if the Central Box was replaced.
   * Check and execute **OTA firmware updates**.
-* **Reserve I/O:** Status and toggle switches for HD26 Pin 25 (`RESERVE_GPIO_A`) and Pin 26 (`RESERVE_GPIO_B`).
-* **Central Box Soft-Reboot:** Controlled warm restart of the main system.
+### 2.6 Smart Docking & Single-Edge Ride Mode Transition (User Override Protection)
+
+When the rider's smartphone is plugged in or mounted to the cockpit dock (Qi `J10`, Handlebar USB `J5`, or Glove Box `J5_MP3`), the WebApp intelligently transitions the dashboard:
+
+* **Single-Edge Transition:**
+  * Auto-switching to `#tab-cockpit` (Ride Mode) triggers **strictly on the rising edge** of the charging status (transition from `charging == false` to `charging == true`).
+  * **User Override Protection:**
+    * If the rider deliberately taps Settings, Media, or Diagnostics after docking, the WebApp remembers this manual selection and **never forces a redirect back to the Cockpit** while the phone remains docked. The state machine never fights the user!
+    * Only upon a full undock-and-redock cycle or upon ride departure (speed $v > 5\,\text{km/h}$) does auto-focusing re-engage.
+* **App Settings Configurable Toggle:**
+  * Configurable under Tab 5 (Settings): `[x] Automatically switch to Cockpit on smartphone docking (Default: Active)`.
+* **"Phone Left-Behind" Alert Logic (Handlebars & Glove Box):**
+  * If the Central Box detects `KL15 == 0` (Ignition OFF) while the Qi dock or USB port still senses a seated device, and the rider's BLE signal fades ($d > 3\,\text{m}$), the system alerts immediately:
+  * Two rapid horn chirps on the motorcycle and a vigorous LRA tactile vibration pattern on the Smart-Keyfob notify the rider before walking away.
+
+### 2.7 Architectural Division: Hardware Cockpit (`index.html`) vs Simulation Suite (`demo.html`)
+* **`index.html` (Production Cockpit):** Clean instrument dashboard for actual motorcycle rides (`window.OMB_MODE = 'hardware'`). Fully stripped of simulation controls; all telemetry widgets cleanly display `Standby` / `--` when disconnected.
+* **`demo.html` (Interactive Simulation Suite):** Dedicated presentation and HIL testbench (`window.OMB_MODE = 'demo'`) with sticky banner, alpine route selector (Wil SG $\rightarrow$ Ricken Pass, Kerenzerberg), eCall crash simulation, and expandable **live injection panel** (real-time sliders for speed, lean angle, radar blips, TPMS, and emergency braking).
 
 ---
 

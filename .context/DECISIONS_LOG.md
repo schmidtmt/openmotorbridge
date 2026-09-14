@@ -29,3 +29,13 @@
 * **Datum:** 2026-08
 * **Entscheidung:** Einführung eines 3-Stufen-QoS-Kaskadenmodells (2.4 GHz Full-Duplex -> Randbereich ohne Music Sharing -> LoRa Codec2 PTT & Radar) und Adaption von 3GPP C-V2X / ProSe Sidelink Cluster Head Discovery bei getrennten Teilgruppen (Ampel- / Pass-Abriss).
 * **Grund:** Verhindert den Totalabriss der Gruppenkommunikation bei Verbindungsverlust; ermöglicht Weitbereichs-Sprachtunnel zwischen autonom gewählten Gruppen-Koordinatoren bei minimalem LoRa-Duty-Cycle-Verbrauch.
+
+### ADR-007: Akku-Grundfläche (2.200 mAh Flat-LiPo), Find My Dual-Beaconing, Smart Docking & Verzicht auf UWB
+* **Datum:** 2026-09
+* **Entscheidungen:**
+  1. **Akku-Fläche statt Bauhöhe:** Vergrößerung der LiPo-Akkutasche auf $71 \times 42\,\text{mm}$ für eine flache 2.200 mAh Pouchzelle ($68 \times 39 \times 5{,}0\,\text{mm}$, Typ 504068 / 503870). Die Gehäuse-Außenhöhe bleibt strikt bei $38{,}0\,\text{mm}$ (maximaler Freigang unter der Sitzbank). Alle 11 Konvektionsschlitze und der Front-Kabeldurchbruch ($25 \times 4\,\text{mm}$) bleiben zu 100 % frei.
+  2. **Apple & Google Find My Dual-Beaconing:** Interleaved BLE-Werbebursts ($15\,\mu\text{A}$) für weltweites Schwarm-Tracking über ~4,5 Milliarden Geräte ohne SIM-Karte oder Monatskosten. Ergibt zusammen mit der 2.200 mAh Zelle 3 bis 4 Jahre autarke Standby-Bereitschaft im Winter.
+  3. **PCBA 07 (2-in-1 LoRa Smart-Keyfob):** Standardisierung als 7. Baugruppe mit nRF52840, SX1262 LoRa, TI DRV2605L LRA-Haptikmotor, 250 mAh LiPo und TI BQ51003 MagSafe Qi-Ladeempfänger.
+  4. **Smart Docking & Ablauf-Agnostische Geräteerkennung:** Trennung zwischen dauerhaften USB-Speichersticks (Class 0x08 / < 0.5W, kein Alarm) und ladenden Fahrer-Smartphones (USB-PD / Qi > 10W mit BLE-Kopplung). Löst bei Zündung AUS und Entfernen des Fahrers (> 3 m) den "Handy am Lenker / Handschuhfach vergessen"-Alarm aus.
+  5. **Flankengetriggerter Fahrmodus (User-Override Schutz):** Dashboard-Umschaltung ins Cockpit erfolgt nur einmalig auf der steigenden Flanke bei Ladebeginn. Manuelle Navigation zu anderen Tabs wird respektiert; kein aggressives Zurückspringen.
+  6. **Verzicht auf UWB:** Da OpenMotorBridge kein OEM-Zündschloss ersetzt und der Motorstart am originalen Fahrzeugschlüssel hängt, bietet UWB keinen praktischen Schutz vor Fahrzeug-Entwendung, sondern würde Ruhestrom (30–50 mA) und Bauteilkosten unnötig in die Höhe treiben.
