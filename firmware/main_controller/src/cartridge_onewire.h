@@ -17,6 +17,7 @@ typedef struct {
     float input_gain_db;
     float output_gain_db;
     uint32_t toggle_mesh_ms;
+    uint32_t toggle_group_mesh_ms;
     uint32_t channel_next_ms;
     bool is_connected;
 } CartridgeInfo_t;

@@ -35,14 +35,32 @@ void opto_trigger_single_click(gpio_num_t pin, uint32_t duration_ms) {
     vTaskDelay(pdMS_TO_TICKS(300)); // Entprellzeit & Erholungspause
 }
 
+void opto_trigger_double_click(gpio_num_t pin, uint32_t click_ms, uint32_t pause_ms) {
+    ESP_LOGI(TAG, "Triggering TLP222A PhotoMOS Double-Click on GPIO %d (%lu ms on, %lu ms pause)...", pin, click_ms, pause_ms);
+    gpio_set_level(pin, 1);
+    vTaskDelay(pdMS_TO_TICKS(click_ms));
+    gpio_set_level(pin, 0);
+    vTaskDelay(pdMS_TO_TICKS(pause_ms));
+    gpio_set_level(pin, 1);
+    vTaskDelay(pdMS_TO_TICKS(click_ms));
+    gpio_set_level(pin, 0);
+    vTaskDelay(pdMS_TO_TICKS(300)); // Entprellzeit & Erholungspause
+}
+
 void opto_port1_toggle_mesh(void) {
-    // 200 ms Puls für Sena Apex (Mesh On/Off)
+    // 200 ms Puls für Sena Mesh (Mesh On/Off, Handbuch S. 25)
     opto_trigger_single_click(PIN_PORT1_KEY, 200);
 }
 
+void opto_port1_toggle_group_mesh(void) {
+    // 3000 ms Puls für Sena Spider X Slim (Wechsel Open Mesh ↔ Group Mesh, Handbuch S. 29)
+    opto_trigger_single_click(PIN_PORT1_KEY, 3000);
+}
+
 void opto_port1_channel_next(void) {
-    // 1000 ms Puls für Sena Apex (Kanalwechsel)
-    opto_trigger_single_click(PIN_PORT1_KEY, 1000);
+    // Doppelklick für Sena Spider X Slim (Kanaleinstellungen aufrufen, Handbuch S. 26)
+    // 2x 150 ms mit 150 ms Pause ruft Kanaleinstellung auf; automatisches Speichern nach 10s Timeout
+    opto_trigger_double_click(PIN_PORT1_KEY, 150, 150);
 }
 
 void opto_port2_channel_next(void) {

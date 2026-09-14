@@ -155,8 +155,9 @@ static void load_profile_class(CartridgeInfo_t *cart, const char *profile_id) {
         cart->hardware_tier = 1; // Tier 1 DLE score due to Mesh 3.0 & Wave
         cart->input_gain_db = 1.5f;
         cart->output_gain_db = 0.0f;
-        cart->toggle_mesh_ms = 200;
-        cart->channel_next_ms = 800;
+        cart->toggle_mesh_ms = 200;           // 1x Tap: Mesh Intercom Ein/Aus (S. 25)
+        cart->toggle_group_mesh_ms = 3000;    // 3s Hold: Wechsel Open ↔ Group Mesh (S. 29)
+        cart->channel_next_ms = 150;          // 2x 150ms Doppelklick: Kanaleinstellung (S. 26)
     } else if (strcmp(profile_id, "sena_spider") == 0) {
         strncpy(cart->name, "Sena Spider RT1 / ST1 (Mesh-Only)", sizeof(cart->name) - 1);
         strncpy(cart->vendor, "Sena Technologies", sizeof(cart->vendor) - 1);

@@ -4028,13 +4028,18 @@ sliderCrossBleed?.addEventListener('input', (e) => {
 });
 
 // Hardware Trigger Buttons
-document.getElementById('btn-trigger-p1-toggle').addEventListener('click', async () => {
-    showToast(state.lang === 'de' ? 'Sena Apex: Mesh Toggle Puls (200ms) ausgelöst' : 'Sena Apex: Mesh Toggle Pulse (200ms) triggered', 'info');
+document.getElementById('btn-trigger-p1-toggle')?.addEventListener('click', async () => {
+    showToast(state.lang === 'de' ? 'Sena SPIDER X: Mesh Ein/Aus Puls (200ms) ausgelöst' : 'Sena SPIDER X: Mesh On/Off Pulse (200ms) triggered', 'info');
     if (controlChar) await controlChar.writeValue(new Uint8Array([0x02, 0x00]));
 });
 
-document.getElementById('btn-trigger-p1-next').addEventListener('click', async () => {
-    showToast(state.lang === 'de' ? 'Sena Apex: Kanalwechsel Puls (1000ms) ausgelöst' : 'Sena Apex: Channel Next Pulse (1000ms) triggered', 'info');
+document.getElementById('btn-trigger-p1-group')?.addEventListener('click', async () => {
+    showToast(state.lang === 'de' ? 'Sena SPIDER X: Wechsel Open ↔ Group Mesh (3s Hold, Handbuch S. 29) ausgelöst' : 'Sena SPIDER X: Open ↔ Group Mesh Toggle (3s Hold, Manual p. 29) triggered', 'success');
+    if (controlChar) await controlChar.writeValue(new Uint8Array([0x08, 0x00]));
+});
+
+document.getElementById('btn-trigger-p1-next')?.addEventListener('click', async () => {
+    showToast(state.lang === 'de' ? 'Sena SPIDER X: Kanalauswahl Doppelklick (2x 150ms, Handbuch S. 26) ausgelöst' : 'Sena SPIDER X: Channel menu double-click (2x 150ms, Manual p. 26) triggered', 'info');
     if (controlChar) await controlChar.writeValue(new Uint8Array([0x03, 0x00]));
 });
 

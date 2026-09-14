@@ -101,6 +101,48 @@ Klassische Bluetooth-Fernbedienungen am Lenker leiden unter hohen Latenzen ($80 
 * **Prellfreiheit:** Da rein photo-elektronisch (Halbleiter-MOSFET-Schalter), treten im Gegensatz zu mechanischen Relais keinerlei Kontaktprellen oder Funkenstörungen auf.
 * **Schonung der Headset-Elektronik:** Schaltet direkt gegen Masse oder Signal-Bias, exakt entsprechend der OEM-Tasterbeschaltung (z. B. Sena Mesh-Taste oder Cardo Phone-Button).
 
+### 2.2 Spezifische Tastensteuerung & Pulssequenzen für Sena SPIDER X Slim (Handbuch v1.0.0)
+
+Das Sena SPIDER X Slim weicht in seiner Bedienlogik grundlegend von älteren Dreh-Jog-Dial-Systemen (wie Sena 20S/50S) ab. Für eine fehlerfreie Automatisierung über den Toshiba TLP222A Optokoppler auf Pin 6 (`OPTO_PTT`) gelten die folgenden, aus dem offiziellen Benutzerhandbuch abgeleiteten Pulssequenzen:
+
+```
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│        SENA SPIDER X SLIM – OPTOPULS- & TASTENSTEUERUNG (Handbuch v1.0.0)              │
+├─────────────────────────┬──────────────────────┬───────────────────────────────────────┤
+│ Funktion                │ TLP222A Optopuls     │ Sena-Reaktion & Sprachansage          │
+├─────────────────────────┼──────────────────────┼───────────────────────────────────────┤
+│ **Mesh Intercom Ein/Aus**│ **1x 200 ms** (kurz) │ Ein: „Mesh Intercom einschalten“      │
+│ (Handbuch Seite 25)     │                      │ Aus: „Mesh Intercom ausschalten“      │
+├─────────────────────────┼──────────────────────┼───────────────────────────────────────┤
+│ **Kanalauswahl Menü**   │ **2x 150 ms**        │ Einstieg: „Kanaleinstellungen, 1“     │
+│ (Handbuch Seite 26)     │ (Pause 150 ms)       │ Speichern: Automatisch nach 10s Inakt.│
+├─────────────────────────┼──────────────────────┼───────────────────────────────────────┤
+│ **Mikrofon Stumm/Aktiv**│ **1x 1000 ms** (1 s) │ Stumm: „Mikrofon aus“                 │
+│ (Handbuch Seite 26)     │                      │ Aktiv: „Mikrofon an“                  │
+├─────────────────────────┼──────────────────────┼───────────────────────────────────────┤
+│ **Open ↔ Group Mesh**   │ **1x 3000 ms** (3 s) │ Umschalten: „Open Mesh“ bzw.          │
+│ (Handbuch Seite 29)     │                      │             „Group Mesh“              │
+├─────────────────────────┼──────────────────────┼───────────────────────────────────────┤
+│ **Mesh-Gruppierung**    │ **1x 5000 ms** (5 s) │ Startet privates Pairing:             │
+│ (Handbuch Seite 27/28)  │                      │             „Mesh-Gruppierung“        │
+├─────────────────────────┼──────────────────────┼───────────────────────────────────────┤
+│ **Mesh Reset**          │ **1x 8000 ms** (8 s) │ Reset auf Werkseinstellung Kanal 1:   │
+│ (Handbuch Seite 30)     │                      │             „Mesh zurücksetzen“       │
+└─────────────────────────┴──────────────────────┴───────────────────────────────────────┘
+```
+
+#### Wichtige Praxiserkenntnisse zur Firmware-Steuerung:
+1. **Kanalwechsel (`opto_port1_channel_next()`):**
+   * *Achtung:* Bei älteren Senas war der Kanalwechsel ein einfacher langer Tastendruck (1000 ms). Beim SPIDER X Slim würde ein 1000-ms-Dauerdruck jedoch das **Mikrofon stummschalten**!
+   * Der Einstieg in die Kanaleinstellung erfordert zwingend einen **Doppelklick ($2 \times 150\,\text{ms}$ mit $150\,\text{ms}$ Pause)**.
+   * Das Speichern des neu eingestellten Kanals übernimmt das Headset nach 10 Sekunden Inaktivitäts-Timeout vollautomatisch.
+2. **Wechsel zwischen Open Mesh und Group Mesh (`opto_port1_toggle_group_mesh()`):**
+   * Ein exakter **3000-ms-Haltepuls** schaltet nahtlos zwischen dem öffentlichen Open Mesh (Kanäle 1–6) und dem privaten Gruppen-Mesh um. In der OpenMotorBridge WebApp wird dieser Befehl über GATT-Kommando `0x08` ausgelöst.
+3. **Power-Management & Automatischer Tiefschlaf (Handbuch Seite 17):**
+   * *Manuelle Tastenkombo:* Einschalten erfordert `C` (Center) + `+` gleichzeitig 1 Sekunde; Ausschalten erfordert `C` + `+` 1x kurz.
+   * *Direct-DC Automatisierung via Erschütterungssensor:* Das SPIDER X Slim verfügt ab Werk über einen integrierten Bewegungssensor. Ist die Funktion *„Automatisch ein/aus“* in der Sena-App aktiv, wechselt das Gerät nach 2 Minuten Stillstand selbstständig in den energiesparenden Tiefschlaf ($< 1\,\text{mA}$).
+   * **Automatisches Aufwachen beim Losfahren:** Sobald das Motorrad innerhalb von 3 Tagen bewegt wird (Aufrichten vom Seitenständer, Zündung EIN, Motorstart), wacht das SPIDER X Slim **ohne jeden manuellen Tastendruck vollautomatisch** auf! Im Fahralltag an der $3{,}85\,\text{V}$-Festspannungsschiene von OpenMotorBridge muss der Fahrer somit weder beim Starten noch beim Abstellen Tasten am Pod bedienen.
+
 ---
 
 ## 3. Klassenorientierte Hardwareprofile & Gerätehierarchie

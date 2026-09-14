@@ -12,7 +12,20 @@
     "noise_gate_threshold_db": -44,
     "control_mode": "pulse_mesh_only",
     "toggle_mesh_ms": 200,
-    "channel_next_ms": 800,
+    "toggle_group_mesh_ms": 3000,
+    "channel_next_mode": "double_click",
+    "channel_next_ms": 150,
+    "channel_next_gap_ms": 150,
+    "mic_mute_toggle_ms": 1000,
+    "mesh_grouping_ms": 5000,
+    "mesh_reset_ms": 8000,
+    "power_management": {
+        "auto_wake_motion_sensor": true,
+        "deep_sleep_timeout_min": 2,
+        "motion_reactivation_window_days": 3,
+        "cold_start_combo": "center_plus_1s",
+        "power_off_combo": "center_plus_1x"
+    },
     "ptt_hold": false,
     "mesh_capabilities": {
         "protocol": "Sena_Mesh_3.0_Wave",

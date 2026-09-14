@@ -66,7 +66,55 @@ HANDLEBAR PTT PUSHBUTTON (COCKPIT)
 
 * **Galvanic Isolation:** The Toshiba TLP222A solid-state PhotoMOS relay isolates up to $1500\,\text{V}_{\text{RMS}}$ between motorcycle logic and the headset mic/key lines.
 * **Bounce-Free:** Clean optical switching eliminates contact bounce and audio clicks.
-* **Firmware Pulse Sequencer:** Supports configurable click patterns (Single-Click 200 ms for Mesh On/Off; Long-Press 1000 ms for Channel Switch).
+* **Firmware Pulse Sequencer:** Supports configurable click patterns (Single-Click 200 ms, Double-Click $2 \times 150\,\text{ms}$, Long-Press $3000\,\text{ms}$).
+
+### 3.1 Hardware Characteristics of Toshiba TLP222A Optocoupler
+* **Galvanic Isolation:** $1500\,\text{V}_{\text{RMS}}$ dielectric breakdown voltage between control and load circuits.
+* **Switching Time:** Turn-on time $t_{\text{ON}} \le 0.5\,\text{ms}$, turn-off time $t_{\text{OFF}} \le 0.2\,\text{ms}$.
+* **Bounce-Free:** Purely photo-electronic semiconductor MOSFET switch prevents contact chatter, arcing, and audible clicks.
+* **Headset Circuit Protection:** Switches directly to ground or signal bias, exactly matching OEM button circuitry (e.g. Sena Mesh button or Cardo Phone button).
+
+### 3.2 Specific Key Controls & Pulse Sequences for Sena SPIDER X Slim (User Guide v1.0.0)
+
+The Sena SPIDER X Slim operating logic differs fundamentally from classic jog-dial headsets (such as Sena 20S/50S). For reliable automation via the Toshiba TLP222A optocoupler on Pin 6 (`OPTO_PTT`), the following pulse sequences derived from the official user guide apply:
+
+```
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│        SENA SPIDER X SLIM – OPTO-PULSE & BUTTON AUTOMATION (User Guide v1.0.0)         │
+├─────────────────────────┬──────────────────────┬───────────────────────────────────────┤
+│ Function                │ TLP222A Opto-Pulse   │ Sena Reaction & Voice Prompt          │
+├─────────────────────────┼──────────────────────┼───────────────────────────────────────┤
+│ **Mesh Intercom On/Off**│ **1x 200 ms** (short)│ On: "Mesh Intercom On"                │
+│ (User Guide page 25)    │                      │ Off: "Mesh Intercom Off"              │
+├─────────────────────────┼──────────────────────┼───────────────────────────────────────┤
+│ **Channel Select Menu** │ **2x 150 ms**        │ Enter: "Channel settings, 1"          │
+│ (User Guide page 26)    │ (Pause 150 ms)       │ Save: Automatic after 10s inactivity  │
+├─────────────────────────┼──────────────────────┼───────────────────────────────────────┤
+│ **Microphone Mute/Unmute**│ **1x 1000 ms** (1 s)│ Mute: "Mic off"                       │
+│ (User Guide page 26)    │                      │ Active: "Mic on"                      │
+├─────────────────────────┼──────────────────────┼───────────────────────────────────────┤
+│ **Open ↔ Group Mesh**   │ **1x 3000 ms** (3 s) │ Toggle: "Open Mesh" /                 │
+│ (User Guide page 29)    │                      │         "Group Mesh"                  │
+├─────────────────────────┼──────────────────────┼───────────────────────────────────────┤
+│ **Mesh Grouping**       │ **1x 5000 ms** (5 s) │ Starts private pairing:               │
+│ (User Guide page 27/28) │                      │         "Mesh Grouping"               │
+├─────────────────────────┼──────────────────────┼───────────────────────────────────────┤
+│ **Mesh Reset**          │ **1x 8000 ms** (8 s) │ Factory reset to Channel 1:           │
+│ (User Guide page 30)    │                      │         "Reset Mesh"                  │
+└─────────────────────────┴──────────────────────┴───────────────────────────────────────┘
+```
+
+#### Key Implementation Insights for Firmware & Automation:
+1. **Channel Selection (`opto_port1_channel_next()`):**
+   * *Critical Distinction:* On older Sena headsets, channel switching was triggered by a 1000 ms long press. On the SPIDER X Slim, a 1000 ms press **toggles microphone mute**!
+   * Accessing channel selection requires a **double click ($2 \times 150\,\text{ms}$ with $150\,\text{ms}$ inter-pulse gap)**.
+   * Saving the selected channel is handled autonomously by the headset after a 10-second inactivity timeout.
+2. **Switching Between Open Mesh and Group Mesh (`opto_port1_toggle_group_mesh()`):**
+   * An exact **3000 ms hold pulse** toggles seamlessly between public Open Mesh (Channels 1–6) and private Group Mesh. In the OpenMotorBridge WebApp, this is triggered via BLE GATT command `0x08`.
+3. **Power Management & Vibration Sensor Auto-Wakeup (User Guide page 17):**
+   * *Manual Button Combo:* Power ON requires Center (`C`) + `+` held for 1s; Power OFF requires Center (`C`) + `+` tapped once.
+   * *Direct-DC Automation via G-Sensor:* The SPIDER X Slim features a built-in accelerometer/motion sensor. When *"Auto Power On/Off"* is enabled in the Sena app, the device enters ultra-low power sleep ($< 1\,\text{mA}$) after 2 minutes without motion.
+   * **Automatic Wakeup on Ride Start:** If the motorcycle is moved within 3 days (lifting off side stand, ignition on, engine vibration), the SPIDER X Slim wakes up **completely automatically without pressing any button**! Operating on the $3.85\,\text{V}$ regulated DC rail from OpenMotorBridge, daily rides require zero physical button presses.
 
 ---
 
