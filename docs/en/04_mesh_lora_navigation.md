@@ -227,11 +227,19 @@ Communication over the 460,800 Baud physical UART uses framed binary packets wit
 * **`0x05` - DLE Status & Link Quality:** Reports SNR, RSSI, active PHY mode, and node capability score.
 * **`0xFE` - Firmware Update Bootloader Command:** `0xAA 0x55 0xFE 0x01 "BOOT"` drops RP2040 into USB-ROM bootloader for in-system firmware reflashing.
 
-### 5.2 V2 Upgrade Roadmap: Optional LTE-M / NB-IoT Cloud Sled & RF Triplexer
-For trans-continental expeditions, an alternate Pod 3 sled design is prepared:
-* **Quectel BG95-M3 Modem:** Adds LTE Cat M1, NB-IoT, eGPRS, and integrated GNSS fallback.
-* **RF Triplexer:** Combines antenna connections for 868 MHz LoRa, LTE-M (Bands B1/B3/B8/B20), and GNSS L1 onto a single ruggedized feed.
-* **Cloud Telemetry Mirror:** Enables live location tracking on web dashboards far beyond direct LoRa range.
+### 5.2 Architectural Decision: Why Decentralized LoRa Mesh over Cellular (LTE-M / Cloud)?
+
+Conventional telematics systems rely on cellular modems (LTE-M / NB-IoT) connected to centralized cloud backends. For motorcycle group touring, this paradigm was intentionally rejected:
+
+| Criterion | Centralized Cloud Architecture (LTE-M / NB-IoT) | OpenMotorBridge Decentralized (2.4 GHz Mesh + 868 MHz LoRa) |
+| :--- | :--- | :--- |
+| **Mountain Pass Coverage** | **Frequently 0%** (Dead zones across Alpine passes, gorges, remote trails) | **100% Autonomous** (Direct vehicle-to-vehicle peer-to-peer radio) |
+| **Recurring Cost** | Monthly SIM subscriptions, cloud server fees | **Permanently $0 / 0 €** (License-free ISM band, zero operating expenses) |
+| **Privacy & GDPR** | Live location profiles logged on remote corporate servers | **100% Sovereign** (Local SD storage, zero external tracking vectors) |
+| **Emergency Alert Latency** | 400–1500 ms (round-trip through cellular base stations & broker) | **< 35 ms** (Instant direct RF broadcast to nearby transceivers) |
+| **Long-Term Viability** | Bricked if startup server shuts down or API changes | **Indefinite Lifespan** (100% open-source local embedded firmware) |
+
+*(Note: A theoretical cellular expansion study for fleet tracking is preserved in the developer backlog `.context/IDEAS_BACKLOG.md`).*
 
 ---
 

@@ -1,4 +1,4 @@
-# 13 - Bill of Materials (BOM) & SMT Manufacturing (All 5 PCBAs)
+# 15 - Bill of Materials (BOM) & SMT Manufacturing (All 7 PCBAs)
 
 This document provides the complete Bill of Materials (BOM) and manufacturing specifications for all 5 printed circuit board assemblies (PCBA 01 to PCBA 05) for production at JLCPCB / Eurocircuits, mechanical 3D printed parts, testing protocols, the JLCPCB SMT ordering guide, and COTS component procurement lists.
 
@@ -206,7 +206,7 @@ This document provides the complete Bill of Materials (BOM) and manufacturing sp
 | **AMP Superseal 1.5 Plug**| TE Connectivity 4-Pin Housing with female contacts | TE Connectivity | 1 pc | 12V vehicle power connection on harness |
 | **M8 Extension Cables (Pods)**| M8 6-Pin A-Coded PUR Shielded (1.0m / 1.5m) | Binder / Phoenix / Murr | 3 pcs | Pigtail to Pod 1, 2, and 3 Interconnect |
 | **M8 Extension Cable (Radar)**| M8 4-Pin A-Coded PUR Shielded (1.0m) | Binder / Phoenix / Murr | 1 pc | Connection to Garmin Varia / mmWave rear radar |
-| **Automotive Wire** | FLRY-B $0.5\,\text{mm}^2$ & $0.35\,\text{mm}^2$ (various colors) | Leoni / Helukabel | As req. | Bike harness per `central_breakout_harness_wirelist.csv` |
+| **Automotive Wire** | FLRY-B $0.5\,\text{mm}^2$ & $0.35\,\text{mm}^2$ (various colors) | Leoni / Helukabel | As req. | Bike harness per [`central_breakout_harness_wirelist.csv`](file:///Users/schmidtm/openMotorBridge/hardware/production_packages/05_wiring_harness/central_breakout_harness_wirelist.csv) |
 | **Murata MM8030 Pigtails (Pod 3)**| Murata MM126036 to SMA Bulkhead IP67 (150 mm, RG-178)| Murata / Mouser | 3 pcs | Coaxial bypass for J3 (2.4G), J4 (868M), J5 (GNSS) |
 | **U.FL Pigtail (Front Node)**| IPEX MHF1 / U.FL to RP-SMA Bulkhead IP67 (150 mm, RG-178) | Taoglas / Molex | 1 pc | Coaxial lead for ESP32-S3 external fairing antenna |
 | **SMA Flange Double Bulkhead**| SMA Female to SMA Female Bulkhead IP67 with O-ring & nut | Amphenol / Radiall | 1 pc | Waterproof RF feedthrough in cartridge faceplate (Class A) |
@@ -225,7 +225,7 @@ This document provides the complete Bill of Materials (BOM) and manufacturing sp
 
 ## 11. Required Tools & Workshop Equipment
 
-To assemble all 5 subassemblies, crimp the harness, and perform commissioning, the following minimum equipment and assembly chemicals are required (for details, see [Chapter 14, Section 2.6](file:///Users/schmidtm/openMotorBridge/docs/en/14_build_instructions_assembly.md#26-category-f-required-tools-measurement-equipment--assembly-chemicals)):
+To assemble all 5 subassemblies, crimp the harness, and perform commissioning, the following minimum equipment and assembly chemicals are required (for details, see [Chapter 16, Section 2.6](file:///Users/schmidtm/openMotorBridge/docs/en/16_build_instructions_assembly.md#26-category-f-required-tools-measurement-equipment--assembly-chemicals)):
 
 | Tool Category | Tools & Specification | Primary Project Purpose |
 | :--- | :--- | :--- |

@@ -31,7 +31,7 @@ This document serves as the **authoritative hardware specification for all 7 pri
 │ **PCBA 06**│ **MagSafe Frame Dock Adapter** │ 28 x 11.5 mm  │ 2 Layer │ 500mA PPTC Fuse, 5V  │
 │       │ (Frame Dock: M8 to MagSafe)   │ (Central M2.5)│         │ TVS, USBLC6-4SC6 ESD │
 ├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
-│ **PCBA 07**│ **2-in-1 LoRa Smart-Keyfob**  │ 46 x 26 mm    │ 2 Layer │ nRF52840 SoC, SX1262 │
+│ **PCBA 07**│ **2-in-1 LoRa Smart-Keyfob**  │ 38 x 19 mm    │ 2 Layer │ nRF52840 SoC, SX1262 │
 │       │ (Silent Pager, N52 Key & Qi)  │ (Pocket M2)   │ (ENIG)  │ DRV2605L LRA, BQ51003│
 └───────┴───────────────────────────────┴───────────────┴─────────┴──────────────────────┘
 ```
@@ -465,6 +465,10 @@ When the saddlebag is removed from the motorcycle (e.g. for cleaning, service, o
 
 The PCBA 07 assembly constitutes the electronics core inside the pocket keyfob enclosure (`smart_keyfob_pager.scad`, $58 \times 34 \times 13\,\text{mm}$), overcoming the traditional weaknesses of motorcycle key fobs (exhausted CR2032 coin cells, winter sub-zero failure, and lack of two-way feedback):
 
+![PCBA 07 2-in-1 LoRa Smart-Keyfob](../images/pcba/pcba07_smart_keyfob_3d.png)
+
+*Figure 7.7: 3D board render of the ultra-compact PCBA 07 carrier board ($38.0 \times 19.0\,\text{mm}$) hosting the Nordic nRF52840 SoC, Semtech SX1262 LoRa transceiver, TI DRV2605L haptic driver, BQ51003 Qi receiver, and BQ25100 LiPo charger.*
+
 ```
                                 PCBA 07 SYSTEM ARCHITECTURE
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
@@ -484,7 +488,7 @@ The PCBA 07 assembly constitutes the electronics core inside the pocket keyfob e
                │ DC 3.3V Power Rail
 ┌──────────────┴─────────────────────────────────────────────────────────────────────────┐
 │                           POWER & INDUCTIVE CHARGING SUB-SYSTEM                        │
-│ • 250 mAh 1S LiPo pouch cell (30 x 20 x 4.5 mm) with integrated PCM protection board   │
+│ • 180–200 mAh 1S LiPo pouch cell (25 x 18 x 3.8 mm) with PCM protection board          │
 │ • TI BQ51003 Qi Wireless Power Receiver: Charges inductively on PCBA 06 Cockpit Dock   │
 │ • TI BQ25100 Linear LiPo charger with quiescent current < 50 nA (Months of standby)    │
 │ • 2x Gold-plated pogo contact pads on bottom face for optional direct charging         │
@@ -492,8 +496,8 @@ The PCBA 07 assembly constitutes the electronics core inside the pocket keyfob e
 ```
 
 ### 9.1 Technical Board Characteristics
-* **Dimensions:** $46{,}0 \times 26{,}0 \times 1{,}0\,\text{mm}$ (Compact 2-layer FR-4, $35\,\mu\text{m}$ Cu, ENIG gold finish).
-* **Magnetic Flux Shielding:** Adjacent to the PCB sits the pocket for the $20 \times 10 \times 5\,\text{mm}$ N52 neodymium key. A $0{,}5\,\text{mm}$ soft-iron / mu-metal shield isolates RF traces, the LRA actuator, and the LiPo cell from magnetic saturation.
+* **Dimensions:** $38.0 \times 19.0 \times 1.0\,\text{mm}$ (Ultra-compact 2-layer FR-4, $35\,\mu\text{m}$ Cu, ENIG gold finish, corner radius $R = 3\,\text{mm}$).
+* **Magnetic Flux Shielding:** Adjacent to the PCB sits the pocket for the $20 \times 10 \times 5\,\text{mm}$ N52 neodymium key. A $0.5\,\text{mm}$ soft-iron / mu-metal shield isolates RF traces, the LRA actuator, and the LiPo cell from magnetic saturation.
 * **LRA Haptic Signatures:** The TI DRV2605L generates distinct, crisp tactile patterns:
   * *Pre-Alarm (Minor Shock):* 2 short clicks ($150\,\text{Hz}$).
   * *Theft / Cartridge Tamper:* Piercing crescendo staccato (readily felt through heavy leather motorcycle jackets or on a nightstand).
@@ -529,6 +533,6 @@ The PCBA 07 assembly constitutes the electronics core inside the pocket keyfob e
 | **`M1`** | VG1036001D | Coin 10x3.6mm | Vybronics LRA Linear Resonant Actuator (235 Hz resonance) | Custom / Distrelec |
 | **`BZ1`**| PKLCS1212E4001 | SMD 12x12mm | Murata SMD Piezo Transducer (85 dB @ 10 cm, 4 kHz) | `C94511` |
 | **`D1`** | WS2812B-2020 | SMD 2020 | Intelligent RGB Status LED with integrated WS2811 IC | `C2843785` |
-| **`BAT`**| LiPo 1S 250mAh | Pouch 30x20x4.5 | 3.7V 250 mAh LiPo with PCM protection circuit & 10k NTC | EEMB / Custom |
+| **`BAT`**| LiPo 1S 180-200mAh| Pouch 25x18x3.8| 3.7V 180-200 mAh LiPo with PCM protection circuit & 10k NTC | EEMB / Custom |
 
 

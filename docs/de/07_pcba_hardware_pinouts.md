@@ -31,7 +31,7 @@ Dieses Dokument bildet die **zentrale, autoritative Hardware-Spezifikation aller
 │ **PCBA 06**│ **MagSafe Frame Dock Adapter** │ 28 x 11.5 mm  │ 2 Lagen │ 500mA PPTC Fuse, 5V  │
 │       │ (Rahmendock: M8 auf MagSafe)  │ (Zentral M2.5)│         │ TVS, USBLC6-4SC6 ESD │
 ├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
-│ **PCBA 07**│ **2-in-1 LoRa Smart-Keyfob**  │ 46 x 26 mm    │ 2 Lagen │ nRF52840 SoC, SX1262 │
+│ **PCBA 07**│ **2-in-1 LoRa Smart-Keyfob**  │ 38 x 19 mm    │ 2 Lagen │ nRF52840 SoC, SX1262 │
 │       │ (Silent Pager, N52 Key & Qi)  │ (Tasche M2)   │ (ENIG)  │ DRV2605L LRA, BQ51003│
 └───────┴───────────────────────────────┴───────────────┴─────────┴──────────────────────┘
 ```
@@ -465,6 +465,10 @@ Wird der Koffer bei montiertem Koffer-Pod abgenommen (z. B. zum Waschen oder im 
 
 Die Baugruppe PCBA 07 bildet die elektronische Seele des kompakten Schlüsselanhängers (`smart_keyfob_pager.scad`, $58 \times 34 \times 13\,\text{mm}$) und löst die gravierenden Schwächen herkömmlicher Motorrad-Schlüsseltransponder (schwache CR2032-Knopfzellen, Kälteempfindlichkeit, fehlender Rückkanal):
 
+![PCBA 07 2-in-1 LoRa Smart-Keyfob](../images/pcba/pcba07_smart_keyfob_3d.png)
+
+*Abbildung 7.7: 3D-Render der ultrakompakten PCBA 07 Trägerplatine ($38{,}0 \times 19{,}0\,\text{mm}$) mit Nordic nRF52840 SoC, Semtech SX1262 LoRa Transceiver, TI DRV2605L Haptik-Treiber, BQ51003 Qi-Ladecontroller und BQ25100 LiPo-Ladeschaltung.*
+
 ```
                                 PCBA 07 SYSTEMARCHITEKTUR
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
@@ -484,7 +488,7 @@ Die Baugruppe PCBA 07 bildet die elektronische Seele des kompakten Schlüsselanh
                │ DC 3.3V Power Rail
 ┌──────────────┴─────────────────────────────────────────────────────────────────────────┐
 │                           ENERGIE- & INDUKTIONSLADESYSTEM                              │
-│ • 250 mAh 1S LiPo-Pouchzelle (30 x 20 x 4.5 mm) mit integrierter Schutzschaltung (PCM) │
+│ • 180–200 mAh 1S LiPo-Pouchzelle (25 x 18 x 3.8 mm) mit Schutzschaltung (PCM)          │
 │ • TI BQ51003 Qi Wireless Power Receiver: Lädt induktiv am PCBA 06 Cockpit-Dock         │
 │ • TI BQ25100 Linearer LiPo-Ladecontroller mit Ruhestrom < 50 nA (Monatelange Standzeit)│
 │ • 2x Vergoldete Pogo-Pads auf der Unterseite für optionale Direktladung                │
@@ -492,7 +496,7 @@ Die Baugruppe PCBA 07 bildet die elektronische Seele des kompakten Schlüsselanh
 ```
 
 ### 9.1 Technische Platinen-Kenndaten
-* **Abmessungen:** $46{,}0 \times 26{,}0 \times 1{,}0\,\text{mm}$ (Kompaktes 2-Lagen FR-4, $35\,\mu\text{m}$ Cu, ENIG Goldfinish).
+* **Abmessungen:** $38{,}0 \times 19{,}0 \times 1{,}0\,\text{mm}$ (Ultrakompaktes 2-Lagen FR-4, $35\,\mu\text{m}$ Cu, ENIG Goldfinish, Kantenradius $R = 3\,\text{mm}$).
 * **Magnetabschirmung:** Direkt neben der Platine sitzt die Aussparung für den $20 \times 10 \times 5\,\text{mm}$ N52-Neodym-Schlüssel. Ein $0{,}5\,\text{mm}$ Weicheisen-/Mu-Metall-Schirmblech schirmt die Hochfrequenz-Leiterbahnen, den LRA-Aktor und den LiPo-Puffer vollständig gegen magnetische Sättigung ab.
 * **LRA-Haptikmuster:** Der TI DRV2605L erzeugt scharfe, unverwechselbare Vibrationsmuster:
   * *Vor-Alarm (Erschütterung):* 2 kurze Klicks ($150\,\text{Hz}$).
@@ -529,5 +533,5 @@ Die Baugruppe PCBA 07 bildet die elektronische Seele des kompakten Schlüsselanh
 | **`M1`** | VG1036001D | Coin 10x3.6mm | Vybronics LRA Linearmotor (235 Hz Resonanzfrequenz) | Custom / Distrelec |
 | **`BZ1`**| PKLCS1212E4001 | SMD 12x12mm | Murata SMD-Piezo-Schallwandler (85 dB @ 10 cm, 4 kHz) | `C94511` |
 | **`D1`** | WS2812B-2020 | SMD 2020 | Intelligente RGB-Status-LED mit integriertem WS2811 IC | `C2843785` |
-| **`BAT`**| LiPo 1S 250mAh | Pouch 30x20x4.5 | 3.7V 250 mAh LiPo mit PCM-Schutzschaltung & 10k NTC | EEMB / Custom |
+| **`BAT`**| LiPo 1S 180-200mAh| Pouch 25x18x3.8| 3.7V 180-200 mAh LiPo mit PCM-Schutzschaltung & 10k NTC | EEMB / Custom |
 

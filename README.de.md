@@ -20,10 +20,10 @@ Die **OpenMotorBridge (OMB)** ist eine offene, herstellerübergreifende Kommunik
 
 ## 📚 Inhaltsverzeichnis der Dokumentation
 
-Die modulare technische Gesamtspezifikation gliedert sich in 16 thematisch strukturierte Kapitel:
+Die modulare technische Gesamtspezifikation gliedert sich in 18 thematisch strukturierte Kapitel:
 
 1. [**01 - Systemarchitektur & Satelliten-Topologie**](docs/de/01_system_architecture.md)  
-   *Die 5 standardisierten Funktionsknoten, freie Montagephilosophie („Your Bike, Your Choice“), HF-Diversität und Cockpit-Integration.*
+   *Die 5 standardisierten Funktionsknoten, De-Sensing-Philosophie, HF-Diversität, Whitepaper-Entwurfsentscheidungen und Cockpit-Integration.*
 
 2. [**02 - Intercom-Matrix, Profile & Dynamisches Routing**](docs/de/02_intercom_matrix_profiles.md)  
    *Die 5 OEM-Adapterklassen A–E, LittleFS-Profil-Engine, Zero-Latency PTT (< 1,8 ms) und Audio-Cross-Matrix.*
@@ -40,34 +40,40 @@ Die modulare technische Gesamtspezifikation gliedert sich in 16 thematisch struk
 6. [**06 - Telemetrie-Blackbox, SDIO-Ringpuffer & WebDAV-Sync**](docs/de/06_telemetry_blackbox_webdav.md)  
    *4-Bit High-Speed SDIO, BGH- und DSGVO-konformer Ringspeicher, ECDSA SHA-256 & automatischer Cloud-Sync.*
 
-7. [**07 - Hardware-Architektur & Platinen-Pinouts (PCBA 01 bis 05)**](docs/de/07_pcba_hardware_pinouts.md)  
-   *Alle 5 Leiterplatten im Detail: Lagenaufbau, Impedanzen, Net-Klassen, Funktionszonen und Pinout-Tabellen.*
+7. [**07 - Hardware-Architektur & Platinen-Pinouts (Alle 7 PCBAs)**](docs/de/07_pcba_hardware_pinouts.md)  
+   *Alle 7 Leiterplatten im Detail: Lagenaufbau, Impedanzen, Net-Klassen, Funktionszonen und Pinout-Tabellen (PCBA 01 bis 07).*
 
 8. [**08 - Mechanische Gehäuse, CAD & Referenz-Montagekits**](docs/de/08_enclosures_mechanics_cad.md)  
-   *Universelle Pods & Kassetten, 4-in-1 Front-Knoten sowie schraub- und klebefreie Referenzkits für CVO ST, Road King Special und Enduros.*
+   *Universelle Pods & Kassetten, 4-in-1 Front-Knoten, LoRa Smart-Keyfob (Typ D) sowie schraub- und klebefreie Referenzkits für CVO ST, Road King Special und Enduros.*
 
 9. [**09 - Firmware-Architektur, FreeRTOS & Rollback-OTA**](docs/de/09_firmware_architecture.md)  
    *Multi-Core ESP32-S3 (Main & Front), Heck-Co-Prozessor, ESP-NOW Low-Latency-Protokoll und ausfallsicheres Dual-Bank OTA.*
 
 10. [**10 - WebApp PWA & Dashboard-Bedienung**](docs/de/10_webapp_pwa_dashboard.md)  
-    *Autarkes WebBLE Dashboard, Fahrdynamik-HUD, Front-Node Steuerung (1-Klick Reboot) & 4-stufiger GPX-Export.*
+    *Autarkes WebBLE Dashboard, Fahrdynamik-HUD, Front-Node Steuerung (1-Klick Reboot), Smart-Keyfob Pager & 4-stufiger GPX-Export.*
 
-11. [**11 - Digitale Simulation & Multi-Physik Master-Testbench**](docs/de/11_simulation_testbench.md)  
+11. [**11 - Smart-Managed CarPlay & Android Auto Bridge Architektur (PCBA 05)**](docs/de/11_carplay_android_auto_bridge_architecture.md)  
+    *Harley Skyline OS / Boom! Box Integration, CP2AA-Protokollbrücke, virtueller WHIM-Bypass, Quellengefilterte Lenkersteuerung & Headless Dongle Management.*
+
+12. [**12 - Fahrzeug-CAN-Bus-Profile, DBC-JSON-Schema & Universal Telemetrie-Engine**](docs/de/12_can_bus_vehicle_profiles.md)  
+    *Datengetriebene LittleFS-Profile für Harley-Davidson, BMW Motorrad, KTM und OBD2, passiver Listen-Only Schutz & EKF-Tunnelführung.*
+
+13. [**13 - Digitale Simulation & Multi-Physik Master-Testbench**](docs/de/13_simulation_testbench.md)  
     *9 modulare Python-Testbenches und 10 HIL-Szenarien für SPICE, Thermik, Transienten, RF und Akustik.*
 
-12. [**12 - EMV-Härtung, Schirmung & ESD-Schutz**](docs/de/12_emv_rf_hardening.md)  
+14. [**14 - EMV-Härtung, Schirmung & ESD-Schutz**](docs/de/14_emv_rf_hardening.md)  
     *Kfz-Transienten nach ISO 7637-2, 2.4 GHz vs 868 MHz Entkopplung, IPC-CC-830B Schutzlack & ISO 16750-3.*
 
-13. [**13 - Stücklisten (BOM) & SMT-Fertigungsdaten**](docs/de/13_bom_manufacturing.md)  
-    *Komplette Bauteilliste für alle 5 PCBAs, JLCPCB SMT-Bestellcheckliste, Kabelbaum-Pigtail & Normteile.*
+15. [**15 - Stücklisten (BOM) & SMT-Fertigungsdaten (Alle 7 PCBAs)**](docs/de/15_bom_manufacturing.md)  
+    *Komplette Bauteilliste für alle 7 PCBAs, JLCPCB SMT-Bestellcheckliste, Kabelbaum-Pigtail & COTS-Einkaufsliste.*
 
-14. [**14 - Bauanleitung, Verkabelung & Fahrzeug-Installation**](docs/de/14_build_instructions_assembly.md)  
-    *Schritt-für-Schritt Aufbau, 3D-Druck (FDM vs. MJF), Front-Node Montage (BMW GS / Harley) & Inbetriebnahme.*
+16. [**16 - Bauanleitung, Verkabelung & Fahrzeug-Installation**](docs/de/16_build_instructions_assembly.md)  
+    *Schritt-für-Schritt Aufbau, 3D-Druck (FDM vs. MJF), Front-Node Montage (BMW GS / Harley), Smart-Keyfob Zusammenbau & Inbetriebnahme.*
 
-15. [**15 - Automotive-Standards & Normen-Referenzen**](docs/de/15_standards_references.md)  
+17. [**17 - Automotive-Standards & Normen-Referenzen**](docs/de/17_standards_references.md)  
     *Industrienormen: ISO 7637-2, ISO 16750, ECE R10, RED 2014/53/EU, IEC 61672-1 Class 1 und Bluetooth SIG.*
 
-16. [**16 - Datenschutz (DSGVO), Recht & Konformität**](docs/de/16_legal_compliance_dsgvo.md)  
+18. [**18 - Datenschutz (DSGVO), Recht & Konformität**](docs/de/18_legal_compliance_dsgvo.md)  
     *Open-Source-Lizenzen (GPL-3.0, CERN-OHL-S v2, CC BY-SA 4.0), DSGVO/BGH-Konformität & Haftungsausschluss.*
 
 ---

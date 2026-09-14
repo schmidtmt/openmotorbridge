@@ -32,6 +32,9 @@ Das Dashboard ist eine vollständig autarke Progressive Web App (PWA) basierend 
 ```
 
 ### 2.1 Tab 1: Cockpit & Power (`#tab-cockpit`)
+
+![PWA Tab 1: Cockpit, EKF Schräglage & Heck-Radar HUD](../images/pwa/pwa_tab1_cockpit_radar_hud.png)
+
 * **Fahrdynamik & Schräglage:** Animierte Neigungsanzeige des Motorrads (15-State EKF mit Bosch BMI270), 10 Hz Dead-Reckoning Status.
 * **Spannungs- & Thermomanagement:** Live-Anzeige von Bordnetz (KL15), USV-LiPo und Starterbatterie-Entladeschutz.
 * **Universal Front-Knoten Card:**
@@ -64,6 +67,9 @@ Das Dashboard ist eine vollständig autarke Progressive Web App (PWA) basierend 
     * **`Akustischer Helm-Warnping` Toggle:** Erlaubt das vorübergehende Stummschalten der Helmpings.
 
 ### 2.2 Tab 2: Audio & Ducking (`#tab-audio`)
+
+![PWA Tab 2: Audio Routing, Ducking & Smart Cartridge Mechatronik](../images/pwa/pwa_tab2_audio_smart_cartridge.png)
+
 * **Betriebsmodus-Wahl:** Umschaltung zwischen Standard Mode (Mesh Bridge), Single Rider Mode und Cruise Mode.
 * **Schieberegler:** Eingangspegel Port 1 (Sena), Port 2 (Cardo), Ducking-Dämpfung und Transparenz-Lautstärke.
 * **Echtzeit-Pegelbalken:** Live-Pegelüberwachung aller 4 Audio-Eingangskanäle.
@@ -76,17 +82,26 @@ Das Dashboard ist eine vollständig autarke Progressive Web App (PWA) basierend 
   * `👥 Group Mesh`: 3000 ms Haltepuls (`0x06`) für nahtloses Umschalten zwischen öffentlichem Open Mesh und privatem Gruppen-Mesh.
 
 ### 2.3 Tab 3: Kassetten & DLE (`#tab-cartridges`)
+
+![PWA Tab 3: Kassetten-Erkennung & DLE Live-Status](../images/pwa/pwa_tab3_cartridges_dle_status.png)
+
 * **Live-Status:** Anzeige der eingesteckten Kassetten in Slot 1 und Slot 2 mit 1-Wire UIDs (nativ emuliert oder DS2401).
 * **Smart Cartridge Kennzeichnung:** Visualisierung von Hardware-Architektur (RISC-V CH32V003, 4x MOSFETs, In-System Flashing aktiv).
 * **Kassetten-Onboarding-Wizard:** Interaktive 3-Schritte-Anleitung beim Einsetzen neuer Headsets.
 * **Ground-Truth Sync & ISP-Flashing:** Re-Synchronisation der Konfigurationstabellen direkt in das EEPROM des Kassetten-MCUs über Pin 5 Single-Wire UART.
 
 ### 2.4 Tab 4: Touren & WebDAV (`#tab-tours`)
+
+![PWA Tab 4: Touren-Historie, Replay & BGH-konformer GPX-Export](../images/pwa/pwa_tab4_tours_gpx_export.png)
+
 * **Tour-Historie:** Tabellarische Auflistung aller auf der MicroSD gespeicherten GPX-Dateien mit Datum, Distanz und maximaler Schräglage.
 * **GPX-Export & Tour-Replay:** Download in 4 spezialisierten Profilen (Moto-Navi Shaping, Video-Sync, Clean Track, Raw EKF) sowie visuelles Abspielen der Tour im Cockpit-Radar.
 * **WebDAV-Konfiguration:** Zugangsdaten für automatisches Hochladen zu Nextcloud/Synology.
 
 ### 2.5 Tab 5: Geräte- & Verbindungs-Manager (Device Hub • `#tab-hardware`)
+
+![PWA Tab 5: Geräte- & Verbindungs-Manager, Dual-Headset Hub & LoRa Smart-Keyfob](../images/pwa/pwa_tab5_device_hub_keyfob.png)
+
 Der Geräte-Manager ist in zwei klar voneinander getrennte Bereiche strukturiert:
 
 #### Teil 1: Persönliche Geräte (Fahrer & Sozius)

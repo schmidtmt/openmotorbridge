@@ -1,4 +1,4 @@
-# 14 - Bauanleitung, Verkabelung & Fahrzeug-Installation
+# 16 - Bauanleitung, Verkabelung & Fahrzeug-Installation
 
 Dieses Dokument ist die vollständige, praxisorientierte Schritt-für-Schritt-Bauanleitung für den Eigenbau eines kompletten **OpenMotorBridge (v8.0)** Gesamtsystems. Es enthält eine exakte Bedarfsaufstellung aller 3D-Druckteile, bestückten Leiterplatten (PCBAs), mechanischen Normteile, Dichtungen, Kabelbaumkomponenten sowie das Inbetriebnahmeprotokoll.
 
@@ -59,14 +59,14 @@ Um ein vollwertiges OpenMotorBridge (v8.0) Gesamtsystem für ein Motorrad aufzub
 | **Main Box Deckel** | [`main_box_lid.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_lid.stl) | **1** | Abschlussdeckel mit Gore ePTFE-Ventildom & 4x M3 Schraubenlöchern |
 | **Pod-Basisgehäuse** | [`pod_base_housing.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod_base_housing.stl) | **3** | Schachtgehäuse für Pod 1 (Links), Pod 2 (Rechts) und Pod 3 (Heck) mit 120°-Rohrbett |
 | **Pod-Schottwände** | [`03_pod_bulkhead_partition.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/components/03_pod_bulkhead_partition.stl) | **3** | Schottwand mit Dichtkragen & Federaufnahmen (1x pro Pod) |
-| **Kassette 1 (Fahrer)** | [`cartridge_sena_sled.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_sena_sled.stl) *(oder Cardo)* | **1** | Kassetten-Schlitten für Fahrer-Headset (Sena 50S/60S oder Cardo Packtalk Edge) |
-| **Kassette 2 (Sozius)** | [`cartridge_cardo_sled.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_cardo_sled.stl) *(oder Blind)* | **1** | Kassetten-Schlitten für Zweit-Headset oder hermetische Blindkassette |
-| **Kassette 3 (Heckbürzel)**| [`cartridge_omm_transceiver_sled.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_omm_transceiver_sled.stl) | **1** | Heck-Kassette für RP2040 Coprozessor, GNSS-Patch und LoRa-Antenne |
+| **Kassette 1 (Fahrer)** | [`cartridge_insert_sena.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_sena.stl) *(oder Cardo)* | **1** | Kassetten-Schlitten/Inlay für Fahrer-Headset (Sena SPIDER X Slim / 50S / 60S) |
+| **Kassette 2 (Sozius)** | [`cartridge_insert_cardo.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_cardo.stl) *(oder Blind)* | **1** | Kassetten-Schlitten/Inlay für Zweit-Headset (Cardo Packtalk Edge) oder Blindkassette |
+| **Kassetten-Basisschlitten**| [`cartridge_base_sled.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl) | **2** | Schlittengrundkörper zur Aufnahme der Inlays und PCBA 03 |
 | **Front-Knoten Unterwanne** | [`front_node_lower_tub.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_lower_tub.stl) | **1** | Cockpit-Gehäusewanne mit AMPS-Lochbild, EPDM-Dichtkämmen & V-Rohrbett (PA12 / ASA) |
 | **Front-Knoten Deckel** | [`front_node_upper_lid.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_upper_lid.stl) | **1** | Gehäusedeckel mit Knowles MEMS Schalleintritt & O-Ring-Dichtnut (PA12 / ASA) |
 | **Front-Knoten Dichtkämme** | [`front_node_cable_glands_tpu.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_cable_glands_tpu.stl) | **1 Paar** | Elastische Dichtkämme für Front (3x USB) & Flanke (3x Signale) (TPU 95A / 85A) |
 | **Front-Knoten USB-C Kappe**| [`front_node_usbc_cap_tpu.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_usbc_cap_tpu.stl) | **1** | Elastische Staubschutzkappe mit Haltekollier für Service-Port (TPU 95A / 85A) |
-| **Heck-Radar Kombihalter** | [`pod3_radar_bracket.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod3_radar_bracket.stl) | **1** | M5 GoPro-Ausleger zur horizontalen Ausrichtung des Garmin Varia / mmWave Radars |
+| **Heck-Radar Kombihalter** | [`radar_varia_gopro_lock_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_varia_gopro_lock_dock.stl) | **1** | M5 GoPro-Ausleger zur horizontalen Ausrichtung des Garmin Varia / mmWave Radars |
 | **Summe 3D-Druckteile** | | **17** | **Vollständiger Teilesatz für 1 Gesamtsystem (15x PA12/ASA + 2x TPU)** |
 
 ---
@@ -134,7 +134,7 @@ Um ein vollwertiges OpenMotorBridge (v8.0) Gesamtsystem für ein Motorrad aufzub
 | **M8 Verbindungskabel** | M8 6-Pin A-kodiert Stecker/Buchse (PUR, 1.0 m bzw. 1.5 m) | **3** | Zuleitungskabel vom Pigtail unter der Sitzbank zu den Pods |
 | **Pufferakku (LiPo USV)** | 1S 3.7V LiPo 1000 mAh mit integriertem 10k NTC | **1** | USV-Notstrompuffer in der Zentralbox (Molex Micro-Fit 3.0) |
 | **KFZ-Sicherungshalter** | Wasserdichter Mini-Flachsicherungshalter IP67 + **2A Sicherung**| **1** | Absicherung der 12V Dauerplus-Leitung (KL30) direkt am Batteriepol |
-| **Automotive-Leitungen** | FLRY-B $0{,}5\,\text{mm}^2$ (Power/GND) und $0{,}35\,\text{mm}^2$ (Signale/Audio)| *nach Bedarf* | Fahrzeugkabelbaum nach [`central_breakout_harness_wirelist.csv`](file:///Users/schmidtm/openMotorBridge/hardware/production_packages/05_wiring_harness_spec/central_breakout_harness_wirelist.csv) |
+| **Automotive-Leitungen** | FLRY-B $0{,}5\,\text{mm}^2$ (Power/GND) und $0{,}35\,\text{mm}^2$ (Signale/Audio)| *nach Bedarf* | Fahrzeugkabelbaum nach [`central_breakout_harness_wirelist.csv`](file:///Users/schmidtm/openMotorBridge/hardware/production_packages/05_wiring_harness/central_breakout_harness_wirelist.csv) |
 | **EPDM-Spannbänder** | UV- und ozonbeständiges EPDM ($\varnothing 45 \dots 75\,\text{mm}$) | **6** | Werkzeuglose Schnellmontage der Pods an Rahmen- & Sturzbügeln |
 | **Murata MM8030 Pigtails** | Murata MM126036 auf SMA-Bulkhead IP67 (150 mm, RG-178)| **3** | Koaxial-Bypass für Pod 3: J3 (2.4G), J4 (868M), J5 (GNSS) |
 | **U.FL Koaxial-Pigtail** | IPEX MHF1 / U.FL auf RP-SMA Bulkhead IP67 (150 mm, RG-178)| **1** | Koaxial-Zuleitung für Front-Knoten ESP32-S3 externe Antenne |

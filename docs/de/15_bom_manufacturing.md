@@ -1,4 +1,4 @@
-# 13 - Stücklisten (BOM) & SMT-Fertigungsdaten (Alle 5 PCBAs)
+# 15 - Stücklisten (BOM) & SMT-Fertigungsdaten (Alle 7 PCBAs)
 
 Dieses Dokument enthält die vollständige Bauteilliste (Bill of Materials) und Fertigungsspezifikation für alle 5 Leiterplatten (PCBA 01 bis PCBA 05) bei JLCPCB / Eurocircuits, alle mechanischen 3D-Druck-Komponenten, das Inbetriebnahmeprotokoll, den JLCPCB SMT-Bestellleitfaden sowie die COTS-Einkaufsliste.
 
@@ -221,7 +221,7 @@ Dieses Dokument enthält die vollständige Bauteilliste (Bill of Materials) und 
 | **AMP Superseal 1.5 Buchse**| TE Connectivity 4-Pin Buchsengehäuse mit Kontakten | TE Connectivity | 1 Stk. | 12V Bordnetz-Einspeisung am Kabelbaum |
 | **M8 Zuleitungskabel (Pods)** | M8 6-Pin A-Coded PUR geschirmt (1.0m / 1.5m) | Binder / Phoenix / Murr | 3 Stk. | Verbindung Kabelbaum-Pigtail zu Pod 1, 2 und 3 |
 | **M8 Zuleitungskabel (Radar)**| M8 4-Pin A-Coded PUR geschirmt (1.0m) | Binder / Phoenix / Murr | 1 Stk. | Zuleitung zu Garmin Varia / mmWave Heckradar |
-| **Automotive-Leitungen** | FLRY-B $0{,}5\,\text{mm}^2$ & $0{,}35\,\text{mm}^2$ (diverse Farben) | Leoni / Helukabel | nach Bed. | Fahrzeugkabelbaum nach `central_breakout_harness_wirelist.csv` |
+| **Automotive-Leitungen** | FLRY-B $0{,}5\,\text{mm}^2$ & $0{,}35\,\text{mm}^2$ (diverse Farben) | Leoni / Helukabel | nach Bed. | Fahrzeugkabelbaum nach [`central_breakout_harness_wirelist.csv`](file:///Users/schmidtm/openMotorBridge/hardware/production_packages/05_wiring_harness/central_breakout_harness_wirelist.csv) |
 | **Murata MM8030 Pigtails (Pod 3)**| Murata MM126036 auf SMA-Bulkhead IP67 (150 mm, RG-178)| Murata / Mouser | 3 Stk. | Koaxial-Bypass für J3 (2.4G), J4 (868M), J5 (GNSS) |
 | **U.FL Pigtail (Front-Node)** | IPEX MHF1 / U.FL auf RP-SMA Bulkhead IP67 (150 mm, RG-178) | Taoglas / Molex | 1 Stk. | Koaxial-Zuleitung für ESP32-S3 externe Antenne |
 | **SMA-Flansch-Doppelbuchse** | SMA-Buchse auf SMA-Buchse Bulkhead IP67 mit O-Ring & Mutter | Amphenol / Radiall | 1 Stk. | Wasserdichte HF-Durchführung in Kassetten-Frontblende (Klasse A) |
@@ -240,7 +240,7 @@ Dieses Dokument enthält die vollständige Bauteilliste (Bill of Materials) und 
 
 ## 11. Benötigte Werkzeuge & Fertigungshilfsmittel (Werkstatt-Ausstattung)
 
-Für die Montage aller 5 Baugruppen, die Kabelkonfektionierung und die Erstinbetriebnahme wird folgende Mindestausstattung an Werkzeugen und Montagechemie benötigt (Details siehe [Kapitel 14, Abschnitt 2.6](file:///Users/schmidtm/openMotorBridge/docs/de/14_build_instructions_assembly.md#26-kategorie-f-ben%C3%B6tigte-werkzeuge-messmittel--montagechemie)):
+Für die Montage aller 5 Baugruppen, die Kabelkonfektionierung und die Erstinbetriebnahme wird folgende Mindestausstattung an Werkzeugen und Montagechemie benötigt (Details siehe [Kapitel 16, Abschnitt 2.6](file:///Users/schmidtm/openMotorBridge/docs/de/16_build_instructions_assembly.md#26-kategorie-f-ben%C3%B6tigte-werkzeuge-messmittel--montagechemie)):
 
 | Werkzeug-Kategorie | Enthaltene Werkzeuge & Spezifikation | Hauptzweck im OpenMotorBridge-Aufbau |
 | :--- | :--- | :--- |

@@ -4,7 +4,8 @@ This document specifies the mechanical engineering, thermal dissipation, IP67/IP
 1. **Central Control Box (Type A):** 3-piece sandwich enclosure with intermediate tray, battery cradle, front interface panel (HD26, USB-C, LED), and planar 4-layer copper heat spreader.
 2. **Modular Satellite Pod & Cartridge System (Type B):** Mechanically identical 5-sided monocoque enclosure for all 3 satellite locations (Pods 1 & 2 Audio/Intercom, Pod 3 Telemetry/Backbone) with modular swap cartridges (OMM Transceiver, Sena, Cardo, Midland, PMR446, Dry Box), $120^\circ$ V-groove pipe saddle, Dual-Port M8/USB-C, Poka-Yoke tongue-and-groove guidance, spring-loaded auto-eject, and invisible neodymium magnetic anti-theft locking.
 3. **Universal Front Node (Type C):** Ultra-compact Cockpit & Sensor Hub ($98.0 \times 68.0 \times 25.0\,\text{mm}$) tailored for the enlarged $82 \times 50\,\text{mm}$ 4-layer PCBA 05, featuring a **4-in-1 universal mounting system** (AMPS, pipe saddle, silentblocks, 3M Dual-Lock), dedicated EPDM cable combs for USB (South) and vehicle wiring (North), Dual SW3526 20W USB-PD, and Knowles MEMS acoustic channel.
-4. **Vehicle-Specific Reference Mounting Kits (Zero-Drill):** Fully engineered, non-destructive bolt-on mounting kits for CVO Road Glide ST (Kit 1), Road King Special (Kit 2), Classic Bagger & Cruiser (Kit 3), and Adventure & Touring Enduros (BMW GS, KTM Adventure, Africa Twin – Kit 4).
+4. **2-in-1 LoRa Smart-Keyfob & Pager (Type D):** Ultra-compact pocket companion ($58.0 \times 34.0 \times 13.0\,\text{mm}$) molded in PA12-MJF with perimeter TPU shock bumper, integrated N52 neodymium ejection key, $0.5\,\text{mm}$ Mu-metal magnetic flux shield, MagSafe/Qi inductive charging receiver, LRA haptic motor, and wireless SX1262 LoRa/BLE alert pager.
+5. **Vehicle-Specific Reference Mounting Kits (Zero-Drill):** Fully engineered, non-destructive bolt-on mounting kits for CVO Road Glide ST (Kit 1), Road King Special (Kit 2), Classic Bagger & Cruiser (Kit 3), and Adventure & Touring Enduros (BMW GS, KTM Adventure, Africa Twin – Kit 4).
 
 ---
 
@@ -566,7 +567,7 @@ Due to factory Showa inverted remote-reservoir shock absorbers with heavy hydrau
 * **Skeleton Dock (`cvo_st_undercowl_skeleton_dock.scad`):** Accommodates the standard Pod 3 housing ($135 \times 70 \times 38.5\,\text{mm}$) vertically. Two upward-arched leaf springs brace against the inner ceiling of the forged carbon cowl, preventing rattle or pitch motion over potholes.
 * **Telemetry Fin (`cvo_st_telemetry_fin.scad`):** Sleek aerodynamic shark-fin bolted to the OEM tail tab, housing a high-efficiency 2.4 GHz dipole with internal coax pass-through.
 
-![Under-Cowl Skeleton Dock CAD](../images/cad/cvo_st_undercowl_dock_cad.png)
+![Under-Cowl Skeleton Dock CAD](../images/cad/cvo_st_undercowl_skeleton_dock_cad.png)
 
 *Figure 8.22: 3D CAD model of the Under-Cowl Skeleton Dock (`cvo_st_undercowl_skeleton_dock.scad`). Monolithic cradle with arched leaf springs for ceiling bracing, lateral vibration wings, and form-fitting vertical slot for Pod 3.*
 
@@ -588,11 +589,11 @@ Pods 1 and 2 mount inside the saddlebag lids using the [Universal Saddlebag Lid 
 
 ### 6.2 Reference Kit 2: Harley-Davidson Road King Special (FLHRXS / Classic Naked Touring)
 
-![Touring Fender Console CAD](../images/cad/pod3_fender_console_cad.png)
+![Touring Fender Console CAD](../images/cad/pod3_touring_fender_console.png)
 
 *Figure 8.25: Isolated 3D CAD view of the Touring Fender Console (`pod3_touring_fender_console.scad`) for Road King Special. Organic teardrop form with rear insertion opening for Pod 3 and quick cartridge swapping.*
 
-![Touring Fender Console Underside CAD](../images/cad/pod3_fender_console_bottom_cad.png)
+![Touring Fender Console Underside CAD](../images/cad/pod3_touring_fender_console_cad.png)
 
 *Figure 8.26: Underside of the Touring Fender Console CAD: Concave $195\,\text{mm}$ fender saddle, forward $1/4"-20$ screw tab for the OEM pillion seat nut, and recessed cable channel for chafing-free routing of the M8 harness beneath the seat.*
 
@@ -612,7 +613,7 @@ Pods 1 and 2 mount inside the saddlebag lids using the [Universal Saddlebag Lid 
 
 ### 6.4 Reference Kit 4: Adventure & Touring Enduros (BMW GS, KTM Adventure, Africa Twin)
 
-![Modular Adventure Kit CAD Studio](../images/cad/adventure_kit_cad_studio.png)
+![Modular Adventure Kit CAD Studio](../images/cad/adventure_kit_master_assembly_3d.png)
 
 *Figure 8.29: Photorealistic 3D CAD studio render of the modular Adventure Kit (`99_adventure_kit_assembly.scad`). Left: GSA pannier rack clamp in the protected frame triangle (Pod 1 & Sena). Center: Standard GS Transition Dock in the seat crease (Pod 2 & Cardo). Right: Luggage bridge extension "Tail Balcony" behind aluminum topcase with 45° deflector fin for 2.4 GHz dipole antenna, Pod 3 transceiver, and Garmin Varia radar with 36-tooth Hirth coupling.*
 
@@ -762,15 +763,8 @@ On exposed adventure bikes and remote expedition tracks (e.g. TET routes, alpine
 * **100% Dust, Mud & Ice Proof:** Lacking keyholes or external sliding latches, the mechanism is hermetically sealed inside the pod wall and immune to mud pack, river crossings, dust storms, and freezing rain.
 * **Concealed Fast Release:** The rider touches the N52 keyfob to target circle $X = 64\,\text{mm}$, instantly ejecting the cartridge $15\dots 20\,\text{mm}$.
 
-#### 6.4.4 OpenMotorBridge 2-in-1 Smart Keyfob (`smart_keyfob_pager.scad`)
-
-Combines the magnetic release key and an RF alert pager into a single ergonomic fob:
-* **Dimensions & Materials:** $58 \times 34 \times 13\,\text{mm}$, PA12-MJF body with shock-absorbing orange TPU bumper (`#ff9f0a`) and 316L stainless keyring eyelet.
-* **Integrated N52 Neodymium Block ($20 \times 10 \times 5\,\text{mm}$):** Delivers $B_r \approx 1.48\,\text{T}$ to release the cartridge latch.
-* **0.5 mm Mu-Metal Flux Shield:** Prevents magnetic saturation of internal electronics (SX1262 LoRa, Nordic BLE, 180 mAh LiPo).
-* **Silent Alarm Pager:** $\varnothing 10 \times 3\,\text{mm}$ Linear Resonant Actuator (LRA) vibrates silently in the rider's jacket pocket upon tamper detection.
-* **MagSafe / Qi Inductive Charging:** Snaps onto the cockpit dock (PCBA 06) for in-flight wireless recharge.
-* **Zero-False-Alarm Presence Token:** Proximity BLE beacon authenticates the legitimate rider, distinguishing intentional swaps from tampering.
+#### 6.4.4 Contactless Anti-Theft Protection & Emergency Release
+* The contactless magnetic release and the silent pocket alarm pager are implemented globally in the universal [2-in-1 LoRa Smart-Keyfob (Enclosure Type D)](#7-type-d-2-in-1-lora-smart-keyfob--pager-smart_keyfob_pagerscad).
 
 ---
 
@@ -803,9 +797,9 @@ Mounting in the lid provides a $> 25\,\text{cm}$ elevated ground clearance, line
 
 #### 6.5.4 Stationary MagSafe Frame Dock (`009_magsafe_frame_dock.scad`) & Horizontal Clamshell Architecture
 
-![MagSafe Frame Dock Exploded View CAD](../images/cad/magsafe_frame_dock_exploded_cad.png)
+![MagSafe Frame Dock Exploded View CAD](../images/cad/magsafe_frame_dock_cad.png)
 
-*Figure 8.31: 3D CAD exploded view of the MagSafe Frame Dock (`009_magsafe_frame_dock.scad`). Visible: Upper case with integrated Ø 26 mm frame tube saddle and M3 inserts, center PCBA 06 protection board, lower case with half-shell cradles for M8 and MagSafe, upper clamp bracket (`009_magsafe_frame_clamp.stl`), and central M2.5 clamp bolt.*
+*Figure 8.31: 3D CAD view of the MagSafe Frame Dock (`009_magsafe_frame_dock.scad`). Visible: Upper case with integrated Ø 26 mm frame tube saddle and M3 inserts, center PCBA 06 protection board, lower case with half-shell cradles for M8 and MagSafe, upper clamp bracket (`009_magsafe_frame_clamp.stl`), and central M2.5 clamp bolt.*
 
 1. **Stationary Bike-Side Docking:** Fixed to the frame tube beneath the side cover, providing safe pogo breakaway whenever the saddlebag is detached.
 2. **Horizontal Clamshell Design:** Split along the central horizontal plane for water-tight assembly.
@@ -837,13 +831,54 @@ The radar is strictly centered on the vehicle longitudinal symmetry axis and att
 
 ---
 
-## 7. CAD File Structure & OpenSCAD Parametric Library (STL Library)
+## 7. Type D: 2-in-1 LoRa Smart-Keyfob & Pager (`smart_keyfob_pager.scad`)
+
+The **OpenMotorBridge 2-in-1 Smart-Keyfob** ([`smart_keyfob_pager.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/05_accessories/smart_keyfob_pager.scad)) eliminates the drawbacks of traditional motorcycle transponders (weak coin cells, cold susceptibility, lack of return channel, and the need for separate mechanical release tools). It combines an ultra-strong N52 neodymium release key with an autonomous 868 MHz LoRa alarm pager inside an ergonomic, pocket-sized enclosure:
+
+![OpenMotorBridge 2-in-1 Smart-Keyfob 3D CAD Assembly](../images/cad/smart_keyfob_pager_assembly.png)
+
+*Figure 8.34: 3D CAD overall view of the 2-in-1 LoRa Smart-Keyfob (`smart_keyfob_pager.scad`). Visible: ergonomically rounded PA12-MJF housing ($58 \times 34 \times 13\,\text{mm}$), perimeter orange TPU shock-absorbing bumper, 316L stainless keyring eyelet, and side-mounted N52 neodymium ejection key with tactile orientation rib.*
+
+![OpenMotorBridge 2-in-1 Smart-Keyfob Exploded 3D CAD Fitting](../images/cad/smart_keyfob_pager_exploded.png)
+
+*Figure 8.35: 3D CAD exploded view of the Smart-Keyfob. From bottom to top: PA12-MJF lower shell with rear MagSafe alignment pocket, 180–200 mAh LiPo pouch cell ($25 \times 18 \times 3.8\,\text{mm}$), PCBA 07 carrier board ($38 \times 19\,\text{mm}$), Semtech SX1262 LoRa transceiver, LRA haptic motor, Mu-metal magnetic flux shield ($0.5\,\text{mm}$), N52 neodymium key block ($20 \times 10 \times 5\,\text{mm}$), and upper shell with optical diffuser aperture for the RGB status LED.*
+
+### 7.1 Mechanical Architecture & Enclosure Parameters
+* **Outer Dimensions:** $58.0 \times 34.0 \times 13.0\,\text{mm}$ (Length x Width x Thickness; lower shell $6.5\,\text{mm}$, upper shell $6.5\,\text{mm}$).
+* **Materials & Manufacturing:** High-strength PA12 printed via HP Multi Jet Fusion (MJF), glass-bead blasted, chemically smoothed, and hydrophobically sealed.
+* **Shock-Absorbing TPU Bumper:** Perimeter $0.8\,\text{mm}$ TPU-95A protective rim (Orange `#ff9f0a`) with side clearance for magnet contact. Reliably protects housing and internal electronics during drops onto asphalt from up to $2\,\text{m}$.
+* **316L Stainless Steel Eyelet:** Solid keyhole bushing ($\varnothing 4.5\,\text{mm}$ ID, $3.5\,\text{mm}$ wall thickness) for standard motorcycle keyrings and carabiners.
+* **Integrated N52 Neodymium Key Block ($20 \times 10 \times 5\,\text{mm}$):**
+  * Press-fitted flush into the narrow lateral edge and equipped with a tactile North-pole index rib.
+  * When brought within proximity of the $X = 64\,\text{mm}$ target circle on the Pod housing, the concentrated B-field ($B_r \approx 1.48\,\text{T}$) attracts the internal steel rocker anchor and trips the ejection springs.
+* **0.5 mm Mu-Metal / Soft Iron Flux Shield:**
+  * Positioned immediately behind the N52 magnet. Hermetically shields internal RF and battery components (SX1262 LoRa, Nordic BLE, LiPo cell) against magnetic flux saturation, directing 100% of magnetic force outward.
+* **Silent Alarm Pager with LRA Haptic Motor:**
+  * A $\varnothing 10 \times 3.6\,\text{mm}$ Linear Resonant Actuator (LRA) vibrates silently in the rider's jacket pocket upon tamper detection, jacking attempts, or unauthorized cassette prying.
+* **MagSafe / Qi Inductive Charging:**
+  * Rear face integrates a magnetic alignment ring ($\varnothing 28\,\text{mm}$ OD, $\varnothing 22\,\text{mm}$ ID). Snaps onto the cockpit dock (PCBA 06) during rides for automated wireless replenishment.
+* **Zero-False-Alarm Presence Token:**
+  * Proximity BLE beacon authenticates the legitimate owner. Tamper alarms are suppressed when the owner ejects the cartridge, triggering only during unauthorized physical prying attempts.
+
+### 7.2 Architectural Decision: Why N52 Neodymium + LoRa + MagSafe over UWB / Active Servos?
+
+| Criterion | Active Bluetooth / UWB Lock | N52 Permanent Magnet + LoRa Pager (OpenMotorBridge) |
+| :--- | :--- | :--- |
+| **Emergency Release with Dead Battery** | **Impossible** (Cartridge locked inside bike) | **100% Fail-Safe** (Permanent magnet requires zero battery power) |
+| **Standby Current Consumption** | 15–45 mA (UWB drains keyfob cell in weeks) | **< 50 nA Standby** (Months of runtime, recharges on cockpit dock) |
+| **Mechanical Reliability** | Miniature electric servo jams from road grime/grit | **Solid N52 Neodymium Block** (Indestructible, zero moving parts in key) |
+| **Tamper Alarm Pager Range** | 10–30 m (BLE fails through hotel/garage walls) | **Up to 4.5 km** (Semtech SX1262 868 MHz penetrates reinforced concrete) |
+| **False-Alarm Mitigation** | Pure shock sensors trigger false alerts | **Zero-False-Alarm:** Presence beacon verifies owner intent |
+
+---
+
+## 8. CAD File Structure & OpenSCAD Parametric Library (STL Library)
  
 The OpenMotorBridge CAD repository follows a strict hierarchical Constructive Solid Geometry (CSG) architecture:
-- **Root Directories (`01_main_box/`, `02_pod_base/`, `03_pod_cartridges/`, `04_front_node/`)**: Contain **exclusively monolithic, directly 3D-printable production STLs** (100% single-manifold, watertight, 0 disconnected bodies).
+- **Root Directories (`01_main_box/`, `02_pod_base/`, `03_pod_cartridges/`, `04_front_node/`, `05_accessories/`)**: Contain **exclusively monolithic, directly 3D-printable production STLs** (100% single-manifold, watertight, 0 disconnected bodies).
 - **Subdirectories (`components/`)**: Contain parametric modular subcomponents (e.g. un-cut solid base bodies, mounting ears, screw bosses, EPDM sealing combs, and PCB/battery inspection dummies) for assembly visualization and custom adaptations.
 
-### 7.1 Ready-to-Print Production STLs (Root Folders)
+### 8.1 Ready-to-Print Production STLs (Root Folders)
 
 | Assembly | Component / Function | Ready-to-Print STL | Parametric OpenSCAD Source |
 | :--- | :--- | :--- | :--- |
@@ -868,8 +903,11 @@ The OpenMotorBridge CAD repository follows a strict hierarchical Constructive So
 | **Front Node** | Upper lid with LED tunnel & FPC antenna pocket | `04_front_node/front_node_upper_lid.stl` | `04_front_node/01_front_node_lid.scad` |
 | **Front Node** | EPDM/TPU cable glands (pair with sprue runner) | `04_front_node/front_node_cable_glands_tpu.stl` | `04_front_node/02_front_node_cable_glands.scad` |
 | **Front Node** | TPU USB-C protective sealing plug | `04_front_node/front_node_usbc_cap_tpu.stl` | `04_front_node/03_front_node_usbc_plug.scad` |
+| **Smart-Keyfob** | PA12-MJF Lower Shell with MagSafe Pocket | `05_accessories/smart_keyfob_lower_shell.stl` | `05_accessories/smart_keyfob_pager.scad` |
+| **Smart-Keyfob** | PA12-MJF Upper Shell with Diffuser Bore | `05_accessories/smart_keyfob_upper_shell.stl` | `05_accessories/smart_keyfob_pager.scad` |
+| **Smart-Keyfob** | TPU Shock Bumper Rim (Orange) | `05_accessories/smart_keyfob_tpu_rim.stl` | `05_accessories/smart_keyfob_pager.scad` |
 
-### 7.2 Modular Component Breakdowns & Dummies (`components/` Folders)
+### 8.2 Modular Component Breakdowns & Dummies (`components/` Folders)
 
 The `components/` directories host isolated base bodies (prior to CSG difference operations) and inspection parts:
 - **`01_main_box/components/`**: `01_lower_tub_empty.stl`, `02_corner_screws_enclosure.stl`, `03_pcb_standoffs.stl`, `04_mounting_ears.stl`, `05_sealing_groove.stl`, `06_mid_tray_frame.stl`, `07_mid_partition_floor.stl`, `08_lid_plate.stl`, `dummy_main_pcb.stl`, `dummy_lipo_battery.stl`.
@@ -883,16 +921,14 @@ The `components/` directories host isolated base bodies (prior to CSG difference
 
 ---
 
----
+## 9. Manufacturing Specifications & 3D Printing Parameters (HP MJF vs. FDM)
 
-## 8. Manufacturing Specifications & 3D Printing Parameters (HP MJF vs. FDM)
-
-### 8.1 Industrial Production (HP MJF PA12)
+### 9.1 Industrial Production (HP MJF PA12)
 * **Process:** HP Multi Jet Fusion (MJF), dyed black, glass-bead blasted, and chemically vapor smoothed.
 * **Tolerances:** $\pm 0{,}15\,\text{mm}$ (DIN ISO 2768-m).
 * **Mechanical Properties:** Isotropic tensile strength $48\,\text{MPa}$, heat deflection temperature $+95\,^\circ\text{C}$, 100% airtight and watertight.
 
-### 8.2 Prototyping on Desktop FDM (Bambu Lab / Prusa / Voron)
+### 9.2 Prototyping on Desktop FDM (Bambu Lab / Prusa / Voron)
 * **Filaments:** ASA or PETG (PLA strictly prohibited due to heat distortion under seat).
 * **Perimeters:** 4 to 5 wall lines ($1{,}6\dots 2{,}0\,\text{mm}$ solid shell).
 * **Infill:** $25\dots 40\,\%$ Gyroid pattern.

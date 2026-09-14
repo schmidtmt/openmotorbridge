@@ -250,7 +250,13 @@ Each cartridge carrier PCB (`openmotorbridge_pod_cartridge`) provides a globally
 
 ## 5. OEM Adapter Connection System: Classes & Pinouts
 
-OpenMotorBridge supports all standard commercial intercom units intact without opening their housings:
+OpenMotorBridge supports all standard commercial intercom units intact without opening their housings.
+
+> [!IMPORTANT]
+> **Exclusion Criteria for Cardo Packtalk Neo & Custom ("Charge-While-Riding"):**
+> * The **Cardo Packtalk Neo** does not feature the magnetic Air-Mount, but a hardwired click cradle. More fundamentally, the electronic barrier: according to official Cardo specifications, the Neo **does not support charging during active operation** (*"Charge while riding: No"*). Because OpenMotorBridge is permanently installed and powered from the motorcycle's 12V electrical system via PCBA 03, the Neo is ruled out—the headset shuts down or disables mesh networking when USB power is applied, making it unusable on full-day rides.
+> * The **Cardo Packtalk Custom** enforces monthly/annual paywall subscriptions to unlock core mesh features, violating OpenMotorBridge's 100% zero-subscription principle.
+> * **Recommendation for Cardo Mesh:** Exclusively deploy the **Cardo Packtalk Edge** (or Packtalk Pro), which natively supports fast charging during active mesh communication.
 
 ### 5.1 Cartridge Pinout Specification (`J2` / JST-SH 1.0 mm)
 

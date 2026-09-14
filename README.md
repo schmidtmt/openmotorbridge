@@ -20,10 +20,10 @@
 
 ## 📚 Technical Documentation
 
-The comprehensive technical specification is split into 16 logically organized chapters:
+The comprehensive technical specification is split into 18 logically organized chapters:
 
 1. [**01 - System Architecture & Satellite Topology**](docs/en/01_system_architecture.md)  
-   *The 5 standardized functional nodes, open mounting philosophy ("Your Bike, Your Choice"), RF diversity, and cockpit integration.*
+   *The 5 standardized functional nodes, de-sensing philosophy, RF diversity, whitepaper engineering decisions, and cockpit integration.*
 
 2. [**02 - Intercom Matrix, Hardware Profiles & Routing**](docs/en/02_intercom_matrix_profiles.md)  
    *The 5 OEM adapter classes A–E, LittleFS profile engine, zero-latency PTT (< 1.8 ms), and audio cross-matrix.*
@@ -40,34 +40,40 @@ The comprehensive technical specification is split into 16 logically organized c
 6. [**06 - Telemetry Blackbox, SDIO Ringbuffer & WebDAV Sync**](docs/en/06_telemetry_blackbox_webdav.md)  
    *4-bit high-speed SDIO, GDPR/court-compliant ringbuffer, ECDSA SHA-256, and automated private cloud sync.*
 
-7. [**07 - Hardware Architecture & Board Pinouts (PCBA 01 to 05)**](docs/en/07_pcba_hardware_pinouts.md)  
-   *All 5 circuit boards: layer stackup, controlled impedance, net classes, functional zoning, and pinouts.*
+7. [**07 - Hardware Architecture & Board Pinouts (All 7 PCBAs)**](docs/en/07_pcba_hardware_pinouts.md)  
+   *All 7 circuit boards: layer stackup, controlled impedance, net classes, functional zoning, and pinout tables (PCBA 01 to 07).*
 
 8. [**08 - Mechanical Enclosures, CAD & Reference Mounting Kits**](docs/en/08_enclosures_mechanics_cad.md)  
-   *Universal pods & cartridges, 4-in-1 Front Node, and turnkey zero-drill reference kits for CVO ST, Road King Special, and Adventure bikes.*
+   *Universal pods & cartridges, 4-in-1 Front Node, LoRa Smart-Keyfob (Type D), and turnkey zero-drill reference kits for CVO ST, Road King Special, and Adventure bikes.*
 
 9. [**09 - Firmware Architecture, FreeRTOS & Rollback-OTA**](docs/en/09_firmware_architecture.md)  
    *Multi-core ESP32-S3 (Main & Front), Rear Co-Processor, ESP-NOW low-latency protocol (< 1.8 ms), and dual-bank rollback OTA.*
 
 10. [**10 - WebApp PWA & Dashboard Operation**](docs/en/10_webapp_pwa_dashboard.md)  
-    *Zero-cloud PWA web app, Web Bluetooth API (WebBLE), vehicle dynamics HUD, and Front Node controls.*
+    *Zero-cloud PWA web app, Web Bluetooth API (WebBLE), vehicle dynamics HUD, Front Node controls, and 4-tier GPX export.*
 
-11. [**11 - Digital Simulation & Multi-Physics Master Testbench**](docs/en/11_simulation_testbench.md)  
+11. [**11 - Smart-Managed CarPlay & Android Auto Bridge Architecture (PCBA 05)**](docs/en/11_carplay_android_auto_bridge_architecture.md)  
+    *Harley Skyline OS / Boom! Box integration, CP2AA protocol bridge, Virtual WHIM bypass, source-gated handlebar controls & headless dongle management.*
+
+12. [**12 - Vehicle CAN-Bus Profiles, DBC JSON Schema & Universal Telemetry Engine**](docs/en/12_can_bus_vehicle_profiles.md)  
+    *Data-driven LittleFS profiles for Harley-Davidson, BMW Motorrad, KTM, and OBD2, passive listen-only protection, and EKF tunnel dead reckoning.*
+
+13. [**13 - Digital Simulation & Multi-Physics Master Testbench**](docs/en/13_simulation_testbench.md)  
     *9 modular Python testbenches and 10 HIL scenarios verifying SPICE, thermal, transients, RF, and acoustics.*
 
-12. [**12 - EMC Hardening, RF Shielding & Environmental Protection**](docs/en/12_emv_rf_hardening.md)  
+14. [**14 - EMC Hardening, RF Shielding & Environmental Protection**](docs/en/14_emv_rf_hardening.md)  
     *Automotive transient immunity (ISO 7637-2), 2.4 GHz vs 868 MHz isolation, IPC-CC-830B coating, and shock damping.*
 
-13. [**13 - Bill of Materials (BOM) & SMT Manufacturing**](docs/en/13_bom_manufacturing.md)  
-    *Complete 5-board BOM for JLCPCB SMT production, ordering checklist, wiring harness pigtail, and COTS items.*
+15. [**15 - Bill of Materials (BOM) & SMT Manufacturing (All 7 PCBAs)**](docs/en/15_bom_manufacturing.md)  
+    *Complete 7-board BOM for JLCPCB SMT production, ordering checklist, wiring harness pigtail, and COTS items.*
 
-14. [**14 - Build Instructions, Wiring & Vehicle Installation**](docs/en/14_build_instructions_assembly.md)  
-    *Step-by-step assembly guide, 3D printing parameters (FDM vs. MJF), Front Node mounting, and commissioning.*
+16. [**16 - Build Instructions, Wiring & Vehicle Installation**](docs/en/16_build_instructions_assembly.md)  
+    *Step-by-step assembly guide, 3D printing parameters (FDM vs. MJF), Front Node mounting, Smart-Keyfob build, and commissioning.*
 
-15. [**15 - Automotive Standards & Technical References**](docs/en/15_standards_references.md)  
+17. [**17 - Automotive Standards & Technical References**](docs/en/17_standards_references.md)  
     *Index for ISO 7637-2, ISO 16750, ECE R10, RED 2014/53/EU, IEC 61672-1 Class 1, and Bluetooth SIG.*
 
-16. [**16 - Legal Compliance, Privacy (GDPR) & Licensing**](docs/en/16_legal_compliance_dsgvo.md)  
+18. [**18 - Legal Compliance, Privacy (GDPR) & Licensing**](docs/en/18_legal_compliance_dsgvo.md)  
     *Open-source licenses (GPL-3.0, CERN-OHL-S v2, CC BY-SA 4.0), GDPR compliance, and liability disclaimer.*
 
 ---

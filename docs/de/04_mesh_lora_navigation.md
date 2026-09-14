@@ -269,11 +269,19 @@ Die Kommunikation über die 460.800-Baud-Schnittstelle erfolgt paketorientiert m
 * **`0x05` - DLE Status & Link Quality:** Signal-to-Noise Ratio (SNR), RSSI, PHY-Modus (2.4G vs 868M) und DLE Gateway-Score des Knotens.
 * **`0xFE` - Firmware Update Bootloader Command:** `0xAA 0x55 0xFE 0x01 "BOOT"` schaltet den RP2040 in den USB-ROM-Bootloader-Modus für Push-Flashen.
 
-### 5.2 V2 Upgrade-Roadmap: Optionale LTE-M / NB-IoT Cloud-Kassette & HF-Triplexer
-Für Langstreckenfahrer und weltweite Gruppenvernetzung ist eine alternative Monolith-Kassette für Pod 3 vorbereitet:
-* **Quectel BG95-M3 Modem:** Unterstützt LTE Cat M1, NB-IoT, eGPRS und integriertes GNSS.
-* **HF-Triplexer:** Ermöglicht die gemeinsame Nutzung der Antennenports für 868 MHz LoRa, LTE-M (Bänder B1/B3/B8/B20) und GNSS L1.
-* **Cloud Telemetry Mirror:** Automatischer Live-Standort-Upload ins Web-Portal auch außerhalb von Mesh- und LoRa-Reichweiten.
+### 5.2 Architekturentscheidung: Warum dezentrales LoRa-Mesh statt Mobilfunk (LTE-M / Cloud)?
+
+Klassische Telematiksysteme setzen auf Mobilfunkmodems (LTE-M / NB-IoT) mit zentralen Cloud-Servern. Für Motorrad-Gruppenfahrten wurde dieser Ansatz nach eingehender Evaluierung bewusst verworfen:
+
+| Kriterium | Zentraler Cloud-Ansatz (LTE-M / NB-IoT) | OpenMotorBridge Dezentral (2.4 GHz Mesh + 868 MHz LoRa) |
+| :--- | :--- | :--- |
+| **Verfügbarkeit in Gebirgsregionen** | **Häufig 0 %** (Funklöcher in Alpenpässen, Tälern, Wäldern) | **100 % Autark** (Direkte Fahrzeug-zu-Fahrzeug Peer-to-Peer-Verbindung) |
+| **Laufende Kosten** | SIM-Karten-Gebühren, monatliche Cloud-Abos | **Dauerhaft 0 €** (Lizenzfreies ISM-Band, keine laufenden Kosten) |
+| **Datenschutz & Privatsphäre** | Bewegungsprofile liegen auf fremden Servern | **100 % DSGVO-konform** (Lokaler Speicher, keine externen Datenspuren) |
+| **Audio-Latenz für Notrufe** | 400–1500 ms (über Server & Mobilfunkzelle) | **< 35 ms** (Direkte LoRa-Transceiver-Übertragung) |
+| **System-Autonomie** | Totalschaden bei Serverabschaltung oder Insolvenz | **Lebenslang funktionsfähig** (Vollständig dezentraler Open-Source Stack) |
+
+*(Hinweis: Eine theoretische LTE-M Erweiterung für kommerzielle Flottenbetreiber ist als Machbarkeitsstudie im internen Ideenspeicher `.context/IDEAS_BACKLOG.md` dokumentiert).*
 
 ---
 

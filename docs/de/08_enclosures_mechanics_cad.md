@@ -4,7 +4,8 @@ Dieses Dokument spezifiziert die mechanische Konstruktion, das Thermomanagement,
 1. **Zentrale Steuerbox (Typ A):** 3-teiliges Sandwich-Gehäuse mit Zwischenboden, integrierter Akku-Wanne, stirnseitiger Schnittstellenleiste (HD26, USB-C, RGB-LED) und planarem 4-Layer Kupfer-Wärmespreader.
 2. **Modulares Satelliten-Pod- & Wechselsystem (Typ B):** Baugleiches 5-seitiges Monocoque-Schachtgehäuse für alle 3 Satellitenpositionen (Pod 1 & 2 Audio/Intercom, Pod 3 Telemetrie/Backbone) mit modularen Wechselkassetten (OMM-Transceiver, Sena, Cardo, Midland, PMR446, Dry Box), $120^\circ$-V-Nut Rohrbett, Dual-Port M8/USB-C, Poka-Yoke Nut-und-Feder-Führung, federbelastetem Auto-Eject und unsichtbarem Neodym-Magnet-Diebstahlschutz.
 3. **Universal Front-Knoten (Typ C):** Ultrakompakter Cockpit- & Sensor-Hub ($98{,}0 \times 68{,}0 \times 25{,}0\,\text{mm}$) für die vergrößerte $82 \times 50\,\text{mm}$ 4-Lagen PCBA 05 mit **4-in-1 Universal-Befestigungssystem** (AMPS, Rohrbügel-Prisma, Silentblöcke, 3M Dual-Lock), getrennten EPDM-Kabelkämmen für USB (Süd) und Fahrzeugleitungen (Nord), Dual-SW3526 20W USB-PD und Knowles MEMS Akustikkanal.
-4. **Fahrzeugspezifische Referenz-Montagekits (Zero-Drill):** Vollständig konstruierte, zerstörungsfreie Bolt-On Montagekits für CVO Road Glide ST (Kit 1), Road King Special (Kit 2), Classic Bagger & Cruiser (Kit 3) sowie Adventure & Touring Enduros (BMW GS, KTM Adventure, Africa Twin – Kit 4).
+4. **2-in-1 LoRa Smart-Keyfob & Pager (Typ D):** Ultrakompakter Taschenbegleiter ($58{,}0 \times 34{,}0 \times 13{,}0\,\text{mm}$) aus PA12-MJF mit umlaufendem TPU-Kantenschutz, integriertem N52-Neodym-Auswerferschlüssel, $0{,}5\,\text{mm}$ Mu-Metall-Flussschirmung, MagSafe/Qi-Induktionsladeaufnahme, LRA-Haptikmotor und drahtlosem SX1262 LoRa/BLE Alarm-Pager.
+5. **Fahrzeugspezifische Referenz-Montagekits (Zero-Drill):** Vollständig konstruierte, zerstörungsfreie Bolt-On Montagekits für CVO Road Glide ST (Kit 1), Road King Special (Kit 2), Classic Bagger & Cruiser (Kit 3) sowie Adventure & Touring Enduros (BMW GS, KTM Adventure, Africa Twin – Kit 4).
 
 ---
 
@@ -879,22 +880,8 @@ Auf frei zugänglichen Reiseenduros und bei Zwischenstopps auf Fernreisen (z. B.
 * **100 % Schlamm-, Staub- & Eissicherheit:** Da der Mechanismus hermetisch im Inneren des Gehäuses gekapselt ist und ohne Schlüsselloch oder Außenschieber auskommt, ist er absolut resistent gegen eindringenden Offroad-Schlamm, Pistenstaub, Hochdruckreiniger oder Frost auf winterlichen Pässen.
 * **Verdeckte Entriegelung:** Das Entriegeln erfolgt kontaktlos in Sekundenbruchteilen durch Anhalten des N52-Magnetschlüssels an den Zielkreis ($X = 64\,\text{mm}$), woraufhin die V4A-Federn die Kassette formschön um $15\dots 20\,\text{mm}$ auswerfen.
 
-#### 6.4.4 OpenMotorBridge 2-in-1 Smart-Keyfob (`smart_keyfob_pager.scad`)
-
-Um zu verhindern, dass der Fahrer neben dem Motorradschlüssel einen separaten Magnetschlüssel und einen Pager mitführen muss, integriert der **OpenMotorBridge 2-in-1 Smart-Keyfob** (`smart_keyfob_pager.scad`) beide Funktionen in einem kompakten, ergonomischen Gehäuse:
-
-* **Abmessungen & Werkstoffe:** $58 \times 34 \times 13\,\text{mm}$, gefertigt aus hochfestem PA12-MJF (Anthrazit) mit umlaufendem, stoßabsorbierendem TPU-Kantenschutz (Orange `#ff9f0a`) und robuster 316L-Edelstahlöse für den Motorrad-Schlüsselbund.
-* **Integrierter N52 Neodym-Schlüsselblock ($20 \times 10 \times 5\,\text{mm}$):**
-  * Auf der schmalen Längsseite formschlüssig eingepresst und mit einem taktilen Nordpol-Ausrichtungssteg versehen.
-  * Tritt der Keyfob an den $X = 64\,\text{mm}$ Zielkreis des Pod-Gehäuses heran, zieht das konzentrierte B-Feld ($B_r \approx 1{,}48\,\text{T}$) den innenliegenden Stahlanker an und entriegelt die Auswerferfedern.
-* **0,5 mm Weicheisen- / Mu-Metall-Abschirmblech (Flux Shield):**
-  * Direkt hinter dem N52-Magneten platziert. Schirmt die interne Elektronik (SX1262 LoRa-Transceiver, Nordic BLE-SoC, 180 mAh LiPo-Pouch-Akku) hermetisch gegen magnetische Sättigung ab und lenkt den magnetischen Fluss zu 100 % nach außen auf die Gehäusewand.
-* **Stummer Alarm-Pager mit LRA-Vibrationsmotor:**
-  * Ein $\varnothing 10 \times 3\,\text{mm}$ Linear Resonant Actuator (LRA) warnt den Fahrer bei Erschütterung, unbefugtem Aufbocken oder Kassettenhebeln lautlos über haptische Vibrationsmuster in der Jackentasche.
-* **MagSafe / Qi Induktiv-Ladeaufnahme:**
-  * Auf der Rückseite ist ein magnetischer Ausrichtungsring ($\varnothing 28\,\text{mm}$ außen, $\varnothing 22\,\text{mm}$ innen) integriert. Der Keyfob rastet während der Fahrt auf dem Cockpit-Dock (PCBA 06) magnetisch ein und wird induktiv nachgeladen.
-* **Zero-False-Alarm & Präsenz-Token:**
-  * Durch den Nahfeld-BLE-Beacon des Keyfobs erkennt OpenMotorBridge, dass der rechtmäßige Besitzer die Kassette entnimmt. Ein Diebstahlalarm wird nur ausgelöst, wenn ein Hebelversuch am Kassettenverschluss ohne anwesenden Keyfob registriert wird.
+#### 6.4.4 Kontaktlose Kassetten-Entriegelung & Diebstahlschutz
+* Die magnetische Notentriegelung und der stumme Taschenalarm sind hersteller- und fahrzeugunabhängig im universellen [2-in-1 LoRa Smart-Keyfob (Gehäuse Typ D)](#7-gehäuse-typ-d-2-in-1-lora-smart-keyfob--pager-smart_keyfob_pagerscad) realisiert.
 
 ---
 
@@ -1097,13 +1084,54 @@ Hierfür wurde der **Stealth Center Under-Fender Mount** ([`02_pod_base/radar_ce
 
 ---
 
-## 7. CAD-Dateistruktur & OpenSCAD-Modulbaukasten (STL-Bibliothek)
+## 7. Gehäuse Typ D: 2-in-1 LoRa Smart-Keyfob & Pager (`smart_keyfob_pager.scad`)
+
+Der **OpenMotorBridge 2-in-1 Smart-Keyfob** ([`smart_keyfob_pager.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/05_accessories/smart_keyfob_pager.scad)) löst die gravierenden Schwächen herkömmlicher Motorrad-Schlüsseltransponder (schwache Knopfzellen, Kälteempfindlichkeit, fehlender Rückkanal und Notwendigkeit separater Kassettenwerkzeuge). Er vereint einen ultrastarken N52-Neodym-Entriegelungsschlüssel und einen autarken 868-MHz-LoRa-Alarmpager in einem ergonomischen, taschentauglichen Gehäuse:
+
+![OpenMotorBridge 2-in-1 Smart-Keyfob 3D CAD Assembly](../images/cad/smart_keyfob_pager_assembly.png)
+
+*Abbildung 8.34: 3D-CAD-Gesamtansicht des 2-in-1 LoRa Smart-Keyfobs (`smart_keyfob_pager.scad`). Sichtbar sind das ergonomisch gerundete PA12-MJF Gehäuse ($58 \times 34 \times 13\,\text{mm}$), der umlaufende orangefarbene TPU-Kantenschutz, die 316L-Edelstahl-Schlüsselringöse sowie der seitlich eingelassene N52-Neodym-Auswerferschlüssel mit taktilem Ausrichtungssteg.*
+
+![OpenMotorBridge 2-in-1 Smart-Keyfob Exploded 3D CAD Fitting](../images/cad/smart_keyfob_pager_exploded.png)
+
+*Abbildung 8.35: 3D-CAD-Explosionsdarstellung des Smart-Keyfobs. Von unten nach oben: PA12-MJF Unterschale mit rückseitiger MagSafe-Zentrierringtasche, 180–200 mAh LiPo-Pouch-Zelle ($25 \times 18 \times 3{,}8\,\text{mm}$), PCBA 07 Trägerplatine ($38 \times 19\,\text{mm}$), Semtech SX1262 LoRa Transceiver, LRA-Haptikmotor, Mu-Metall-Flussleitblech ($0{,}5\,\text{mm}$), N52-Neodym-Schlüsselblock ($20 \times 10 \times 5\,\text{mm}$) und Oberschale mit Diffusor-Bohrung für die RGB-Statusanzeige.*
+
+### 7.1 Mechanischer Aufbau & Gehäuseparameter
+* **Außenabmessungen:** $58{,}0 \times 34{,}0 \times 13{,}0\,\text{mm}$ (Länge x Breite x Dicke; Unterschale $6{,}5\,\text{mm}$, Oberschale $6{,}5\,\text{mm}$).
+* **Materialien & Fertigung:** Hochfestes PA12 im HP Multi Jet Fusion (MJF) Verfahren, kugelgestrahlt, chemisch geglättet und hydrophob versiegelt.
+* **Stoßabsorbierender TPU-Kantenschutz:** Umlaufender $0{,}8\,\text{mm}$ TPU-95A Schutzrahmen (Orange `#ff9f0a`) mit Freisparung für die seitliche Magnetkontaktfläche. Schützt Gehäuse und Elektronik zuverlässig bei Stürzen auf Asphalt aus bis zu $2\,\text{m}$ Höhe.
+* **316L Edelstahl-Öse:** Massive Schlüsselloch-Durchführung ($\varnothing 4{,}5\,\text{mm}$ innen, $3{,}5\,\text{mm}$ Wandstärke) für Standard-Motorrad-Schlüsselringe und Karabiner.
+* **Integrierter N52 Neodym-Schlüsselblock ($20 \times 10 \times 5\,\text{mm}$):**
+  * Auf der schmalen Längsseite formschlüssig eingepresst und mit einem taktilen Nordpol-Ausrichtungssteg versehen.
+  * Tritt der Keyfob an den $X = 64\,\text{mm}$ Zielkreis des Pod-Gehäuses heran, zieht das konzentrierte B-Feld ($B_r \approx 1{,}48\,\text{T}$) den innenliegenden Stahlanker an und entriegelt die Auswerferfedern.
+* **0,5 mm Weicheisen- / Mu-Metall-Abschirmblech (Flux Shield):**
+  * Direkt hinter dem N52-Magneten platziert. Schirmt die interne Elektronik (SX1262 LoRa-Transceiver, Nordic BLE-SoC, 180 mAh LiPo-Pouch-Akku) hermetisch gegen magnetische Sättigung ab und lenkt den magnetischen Fluss zu 100 % nach außen auf die Gehäusewand.
+* **Stummer Alarm-Pager mit LRA-Vibrationsmotor:**
+  * Ein $\varnothing 10 \times 3{,}6\,\text{mm}$ Linear Resonant Actuator (LRA) warnt den Fahrer bei Erschütterung, unbefugtem Aufbocken oder Kassettenhebeln lautlos über haptische Vibrationsmuster in der Jackentasche.
+* **MagSafe / Qi Induktiv-Ladeaufnahme:**
+  * Auf der Rückseite ist ein magnetischer Ausrichtungsring ($\varnothing 28\,\text{mm}$ außen, $\varnothing 22\,\text{mm}$ innen) integriert. Der Keyfob rastet während der Fahrt auf dem Cockpit-Dock (PCBA 06) magnetisch ein und wird induktiv nachgeladen.
+* **Zero-False-Alarm & Präsenz-Token:**
+  * Durch den Nahfeld-BLE-Beacon des Keyfobs erkennt OpenMotorBridge, dass der rechtmäßige Besitzer die Kassette entnimmt. Ein Diebstahlalarm wird nur ausgelöst, wenn ein Hebelversuch am Kassettenverschluss ohne anwesenden Keyfob registriert wird.
+
+### 7.2 Architekturentscheidung: Warum N52-Permanentmagnet + LoRa + MagSafe statt UWB / aktiver Servos?
+
+| Kriterium | Aktive Bluetooth / UWB Verriegelung | N52-Permanentmagnet + LoRa Pager (OpenMotorBridge) |
+| :--- | :--- | :--- |
+| **Notentriegelung bei leerer Batterie** | **Unmöglich** (Kassette bleibt im Motorrad gefangen) | **100 % Zuverlässig** (Permanentmagnet funktioniert rein physikalisch ohne Strom) |
+| **Ruhestromverbrauch am Schlüsselbund** | 15–45 mA (UWB-Transceiver leert Knopfzelle in Wochen) | **< 50 nA Standby** (Monatelange Standzeit, lädt induktiv am Cockpit-Dock) |
+| **Mechanische Robustheit & Bauraum** | Miniatur-Servomotor blockiert bei Schmutz/Vibration | **Formschlüssiger N52-Neodymblock** (Unverwüstlich, keine beweglichen Teile im Key) |
+| **Reichweite für Diebstahl-Pager** | 10–30 m (Bluetooth LE bricht hinter Wänden ab) | **Bis zu 4,5 km** (Semtech SX1262 LoRa 868 MHz durchdringt Hotelwände & Garagen) |
+| **Falschalarm-Unterdrückung** | Oft Fehlalarme durch reine Erschütterungssensoren | **Zero-False-Alarm:** Entriegelung durch rechtmäßigen Besitzer via BLE-Präsenz erkannt |
+
+---
+
+## 8. CAD-Dateistruktur & OpenSCAD-Modulbaukasten (STL-Bibliothek)
 
 Die CAD-Dateistruktur von OpenMotorBridge folgt einer strengen hierarchischen CSG-Architektur (Constructive Solid Geometry):
-- **Hauptverzeichnisse (`01_main_box/`, `02_pod_base/`, `03_pod_cartridges/`, `04_front_node/`)**: Enthalten **ausschließlich monolithische, direkt 3D-druckbare Produktions-STLs** (100 % single-manifold, wasserdicht, 0 frei schwebende Körper).
+- **Hauptverzeichnisse (`01_main_box/`, `02_pod_base/`, `03_pod_cartridges/`, `04_front_node/`, `05_accessories/`)**: Enthalten **ausschließlich monolithische, direkt 3D-druckbare Produktions-STLs** (100 % single-manifold, wasserdicht, 0 frei schwebende Körper).
 - **Unterordner (`components/`)**: Enthalten die parametrischen CSG-Einzelkomponenten (z. B. unbeschnittene Basiskörper, Flansche, Schraubdome, Dichtkämme und PCB-/Akku-Dummies) für Baugruppenmontagen und modulare Adaptionen.
 
-### 7.1 Druckfertige Produktions-STLs (Hauptverzeichnisse)
+### 8.1 Druckfertige Produktions-STLs (Hauptverzeichnisse)
 
 | Baugruppe | Funktion / Bauteil | Druckfertige STL-Datei | Parametrischer OpenSCAD Code |
 | :--- | :--- | :--- | :--- |
@@ -1135,8 +1163,11 @@ Die CAD-Dateistruktur von OpenMotorBridge folgt einer strengen hierarchischen CS
 | **Front-Knoten** | Gehäusedeckel mit LED & FPC-Tasche | `04_front_node/front_node_upper_lid.stl` | `04_front_node/01_front_node_lid.scad` |
 | **Front-Knoten** | EPDM/TPU Dichtkamm-Paar mit Steg | `04_front_node/front_node_cable_glands_tpu.stl` | `04_front_node/02_front_node_cable_glands.scad` |
 | **Front-Knoten** | TPU USB-C Staubschutzstopfen | `04_front_node/front_node_usbc_cap_tpu.stl` | `04_front_node/03_front_node_usbc_plug.scad` |
+| **Smart-Keyfob** | PA12-MJF Unterschale mit MagSafe-Tasche | `05_accessories/smart_keyfob_lower_shell.stl` | `05_accessories/smart_keyfob_pager.scad` |
+| **Smart-Keyfob** | PA12-MJF Oberschale mit Diffusor-Bohrung | `05_accessories/smart_keyfob_upper_shell.stl` | `05_accessories/smart_keyfob_pager.scad` |
+| **Smart-Keyfob** | TPU Stoßdämpfer-Kantenband (Orange) | `05_accessories/smart_keyfob_tpu_rim.stl` | `05_accessories/smart_keyfob_pager.scad` |
 
-### 7.2 Baukasten-Komponenten & Dummies (`components/`-Verzeichnisse)
+### 8.2 Baukasten-Komponenten & Dummies (`components/`-Verzeichnisse)
 
 In den `components/`-Verzeichnissen liegen die isolierten Basiskörper (vor Differenzoperationen) und Zubehörteile:
 - **`01_main_box/components/`**: `01_lower_tub_empty.stl`, `02_corner_screws_enclosure.stl`, `03_pcb_standoffs.stl`, `04_mounting_ears.stl`, `05_sealing_groove.stl`, `06_mid_tray_frame.stl`, `07_mid_partition_floor.stl`, `08_lid_plate.stl`, `dummy_main_pcb.stl`, `dummy_lipo_battery.stl`.
@@ -1150,14 +1181,14 @@ In den `components/`-Verzeichnissen liegen die isolierten Basiskörper (vor Diff
 
 ---
 
-## 8. Fertigungsspezifikation & 3D-Druck Parameter (HP MJF vs. FDM)
+## 9. Fertigungsspezifikation & 3D-Druck Parameter (HP MJF vs. FDM)
 
-### 8.1 Industrieller 3D-Druck (HP MJF PA12)
+### 9.1 Industrieller 3D-Druck (HP MJF PA12)
 * **Verfahren:** HP Multi Jet Fusion (MJF), schwarz eingefärbt, kugelgestrahlt und chemisch dampfgeglättet.
 * **Toleranzen:** $\pm 0{,}15\,\text{mm}$ (DIN ISO 2768-m).
 * **Eigenschaften:** Isotrope Zugfestigkeit $48\,\text{MPa}$, temperaturbeständig bis $+95\,^\circ\text{C}$, $100\,\%$ porenfrei.
 
-### 8.2 Heimischer FDM-Druck (Bambu Lab / Prusa / Voron)
+### 9.2 Heimischer FDM-Druck (Bambu Lab / Prusa / Voron)
 * **Materialien:** ASA oder PETG (niemals Standard-PLA!).
 * **Wandlinien:** 4 bis 5 Perimeter ($1{,}6\dots 2{,}0\,\text{mm}$ massiv).
 * **Infill:** $25\dots 40\,\%$ Gyroid.

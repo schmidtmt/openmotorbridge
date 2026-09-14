@@ -32,6 +32,9 @@ The dashboard is a fully self-contained Progressive Web App (PWA) built with sta
 ```
 
 ### 2.1 Tab 1: Cockpit & Power (`#tab-cockpit`)
+
+![PWA Tab 1: Cockpit, EKF Lean Angle & Rear Radar HUD](../images/pwa/pwa_tab1_cockpit_radar_hud.png)
+
 * **Vehicle Dynamics & Lean Angle:** Real-time animated motorcycle attitude indicator (15-state EKF with Bosch BMI270).
 * **Universal Front Node Dashboard Card:**
   * **Link Status:** Live 2.4 GHz ESP-NOW wireless status badge.
@@ -58,6 +61,9 @@ The dashboard is a fully self-contained Progressive Web App (PWA) built with sta
     * **`Acoustic Helmet Alert` Toggle:** Mutes/unmutes the radar warning chimes.
 
 ### 2.2 Tab 2: Audio & Ducking (`#tab-audio`)
+
+![PWA Tab 2: Audio Routing, Ducking & Smart Cartridge Mechatronics](../images/pwa/pwa_tab2_audio_smart_cartridge.png)
+
 * **Mode Selector:** Standard Mode (Mesh Bridge), Single Rider Mode, Cruise Mode.
 * **Sliders:** Input sensitivity for Port 1 (Sena) and Port 2 (Cardo), Ducking depth, and Transparency volume.
 * **🦾 Smart Cartridge Mechatronic Control Panel (PCBA 03 Rev 2.0):**
@@ -69,21 +75,47 @@ The dashboard is a fully self-contained Progressive Web App (PWA) built with sta
   * `👥 Group Mesh`: 3,000 ms hold pulse (`0x06`) toggling between Open Mesh and private Group Mesh.
 
 ### 2.3 Tab 3: Cartridges & DLE (`#tab-cartridges`)
+
+![PWA Tab 3: Cartridge Identification & DLE Live Status](../images/pwa/pwa_tab3_cartridges_dle_status.png)
+
 * **Live Slot Status:** Visual display of active cartridges in Slot 1 and Slot 2 with 1-Wire UIDs (emulated by MCU or physical DS2401).
 * **Smart Cartridge Badging:** Highlights hardware architecture (RISC-V CH32V003, 4x MOSFETs, In-System Flashing active).
 * **Cartridge Onboarding Wizard:** 3-step interactive pairing guide for newly detected cartridges.
 * **Ground-Truth Sync & ISP Flashing:** Autonomous re-flashing of profile tables directly into the Cartridge MCU EEPROM via Pin 5 single-wire UART.
 
 ### 2.4 Tab 4: Tours & WebDAV (`#tab-tours`)
+
+![PWA Tab 4: Ride History, Replay & BGH-Compliant GPX Export](../images/pwa/pwa_tab4_tours_gpx_export.png)
+
 * **Tour History:** Tabular list of all recorded GPX rides with dates, distances, and peak lean angles.
 * **GPX Export Engine:** Download rides in 4 optimized formats (Moto-Navi Shaping, Video-Sync, Clean Track, Raw EKF).
+* **WebDAV Configuration:** Server credentials and automatic background sync for Nextcloud/Synology NAS.
 
-### 2.5 Tab 5: Hardware & Reserve (`#tab-hardware`)
-* **Front Node Diagnostics & Pairing Management:** 
-  * Real-time hardware specifications (ESP32-S3, USB2514B, SC8102, TCAN334G, TPS2051B, Knowles MEMS).
-  * **1:1 Binding Status:** Registered MAC address, ESP-NOW link state (`LINKED`, `OFFLINE`), and signal strength (RSSI).
-  * **Interactive Pairing Button:** `[Pair Front Node / Proximity Rescue]` – triggers the localized proximity rescue beacon ($\text{RSSI} > -42\,\text{dBm}$) if the Central Box was replaced.
-  * Check and execute **OTA firmware updates**.
+### 2.5 Tab 5: Device & Connection Manager (Device Hub • `#tab-hardware`)
+
+![PWA Tab 5: Device Hub, Dual-Headset Hub & LoRa Smart-Keyfob](../images/pwa/pwa_tab5_device_hub_keyfob.png)
+
+The Device Manager is organized into two distinct sections:
+
+#### Part 1: Personal Devices (Rider & Pillion)
+* **Rider & Pillion Smartphones:** WebBLE connection status, signal strength (RSSI), 1-click cold restart of the CarPlay/AA dongle (TPS2051B VBUS power-cycle), and pillion audio sharing toggle.
+* **Dual-Headset Hub (Rider & Pillion):** Bluetooth audio manager for Schuberth/Sena, Cardo DMC, and generic BT headsets (LC3/aptX codecs, battery level, discovery scan).
+* **Dual Action Cam Hub:** Management for GoPro (Hero 11/12/13), Insta360 (X3/X4/Ace), and DJI cameras with auto-REC, fuel-stop pause filter, and PTT-triggered HiLight tagging.
+* **2-in-1 LoRa Smart-Keyfob (Alarm Pager & Cartridge Key):**
+  * AES-128 GCM encryption verification & monotonic sequence counter.
+  * BLE near-field presence detection (zero false alarms during legitimate cartridge swaps).
+  * `[Test Alarm (LRA)]`: Dispatches an emergency haptic vibration pattern to the pager.
+  * `[Re-pair Keyfob]`: Initiates fresh cryptographic key exchange over docking contacts/BLE.
+  * `[Buddy Alarm]`: Forwards theft alerts automatically over the decentralized LoRa group mesh.
+
+#### Part 2: Motorcycle & OpenMotorBridge System Nodes
+* **Universal Front Node (Cockpit Hub • PCBA 05):** ESP-NOW wireless status, Wi-Fi SoftAP fallback toggle, and proximity-rescue beacon.
+* **Rear Radar & Mirror Blind-Spot LEDs (BSD):** Master power switch and mirror indicator controls (Header `J9` via MOSFET `Q1`) with a 2-second diagnostic flash.
+* **Safety Lighting Management:**
+  * **ESS Emergency Brake Strobing:** Master toggle for 4.5 Hz hazard flashing (Garmin Varia UART2 & `RESERVE_GPIO_B`), configurable deceleration threshold ($-0.45\,\text{g}$, $-0.60\,\text{g}$, $-0.75\,\text{g}$), and `[Brake Strobe Test]` button.
+  * **Auxiliary Driving Lights (J11 on Front Node via TPS1H100):** Modes `[OFF]`, `[ALWAYS-ON]`, and `[AUTO-STROBE ON ESS]`.
+* **Tire Pressure Monitoring System (TPMS):** Real-time pressure and temperature telemetry from BLE valve caps (FOBO / Deelife) with an interactive learning wizard.
+* **Vehicle CAN Profile Manager & Hex Sniffer:** Community vehicle profile selector (Harley, BMW, KTM, Ducati, OBD2) and interactive live sniffer with ID filtering and CSV export.
 ### 2.6 Smart Docking & Single-Edge Ride Mode Transition (User Override Protection)
 
 When the rider's smartphone is plugged in or mounted to the cockpit dock (Qi `J10`, Handlebar USB `J5`, or Glove Box `J5_MP3`), the WebApp intelligently transitions the dashboard:

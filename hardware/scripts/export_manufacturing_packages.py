@@ -76,6 +76,14 @@ BOARDS = [
         "pcb": os.path.join(BASE_DIR, "kicad_magsafe_dock/openmotorbridge_magsafe_dock.kicad_pcb"),
         "layers": "F.Cu,B.Cu,F.Paste,B.Paste,F.SilkS,B.SilkS,F.Mask,B.Mask,Edge.Cuts",
         "is_4layer": False
+    },
+    {
+        "name": "07_smart_keyfob_pcba",
+        "title": "OpenMotorBridge 2-in-1 LoRa Smart-Keyfob & Pager PCB",
+        "sch": os.path.join(BASE_DIR, "kicad_smart_keyfob/openmotorbridge_smart_keyfob.kicad_sch"),
+        "pcb": os.path.join(BASE_DIR, "kicad_smart_keyfob/openmotorbridge_smart_keyfob.kicad_pcb"),
+        "layers": "F.Cu,B.Cu,F.Paste,B.Paste,F.SilkS,B.SilkS,F.Mask,B.Mask,Edge.Cuts",
+        "is_4layer": False
     }
 ]
 
@@ -298,6 +306,19 @@ def package_3d_print_stls():
             if os.path.exists(p):
                 z.write(p, arcname=f)
     print(f"  ✅ Created Front Node STL Package: {os.path.basename(front_node_zip)}")
+
+    # 5. Smart Keyfob Enclosure Package
+    keyfob_zip = os.path.join(stl_dir, "05_smart_keyfob_3d_print_mjf.zip")
+    with zipfile.ZipFile(keyfob_zip, 'w', zipfile.ZIP_DEFLATED) as z:
+        for f in [
+            "smart_keyfob_lower_shell.stl",
+            "smart_keyfob_upper_shell.stl",
+            "smart_keyfob_tpu_rim.stl"
+        ]:
+            p = os.path.join(src_stl_base, "05_accessories", f)
+            if os.path.exists(p):
+                z.write(p, arcname=f)
+    print(f"  ✅ Created Smart Keyfob STL Package: {os.path.basename(keyfob_zip)}")
 
 if __name__ == "__main__":
     os.makedirs(OUTPUT_BASE, exist_ok=True)

@@ -99,22 +99,45 @@ OpenMotorBridge v8.0 definiert die Plattform über **5 standardisierte Funktions
 >
 > Ihr könnt diese Referenzen 1:1 nachbauen, für euer eigenes Modell adaptieren oder anhand der offenen CAD-/STEP-Maße völlig eigene Halterungen designen, die perfekt zu eurem Motorrad passen!
 
-### 2.1 Universelle Gehäuse-Grundformen & Rohrbett-Option (Universal-V-Nut)
+### 2.1 Whitepaper-Entwurfsentscheidung: Dezentrale Satelliten-Topologie vs. Monolithische Single-Box
+
+In der frühen Konzeptphase wurde intensiv evaluiert, ob das gesamte System in einem einzigen, großen Zentralgehäuse (z. B. unter der Sitzbank oder hinter der Frontverkleidung) untergebracht werden sollte. Der monolithische Ansatz wurde nach physikalischen und messtechnischen Voruntersuchungen einstimmig verworfen:
+
+#### Evaluierungsmatrix: Monolithische Zentralbox vs. OpenMotorBridge Satelliten-Architektur
+
+| Bewertungskriterium | Option A: Monolithische Single-Box | Option B: Reine Lenker/Cockpit-Box | **Option C: OMB Dezentrale Satelliten (Gewählt)** |
+| :--- | :--- | :--- | :--- |
+| **HF-Selbststörung (Desensing)**| **Kritisch:** 2.4 GHz BLE, Wi-Fi, 868 MHz LoRa, GNSS L1/L5 & 72V Buck-Regler auf engstem Raum | **Kritisch:** Starkes Übersprechen auf Cockpit-TFT und Radio-Antenne | **Optimal (> 45 dB Isolation):** GNSS/LoRa am Heck, Intercoms an den Flanken, Display vorn |
+| **Kabelbaum-Durchmesser** | **Massiv:** 26+ Einzelleitungen müssen quer durch das gesamte Motorrad gezogen werden | **Schlecht:** 18 Leitungen über den schwenkenden Lenkkopf (Kabelbruch-Risiko) | **Ultra-Schlank:** Nur 6-polige M8-Verbindung zum Heck; Front-Node autark via ESP-NOW |
+| **Thermische Verlustleistung** | **Hot-Spot (> 18 W):** 72V DC/DC + Audio-Endstufen + Akkuladung unter der Sitzbank | **Thermischer Hitzetod (> 85 °C):** Stauwärme direkt hinter der Scheinwerfermaske | **Perfekt verteilt:** Max. 3–4 W pro Gehäuse; passive Wärmeabfuhr ohne Hotspots |
+| **GNSS-Zenitsicht & Radar** | **Verschattet:** Sitzbank und Fahrer-Körper blockieren Satelliten & Heck-Sichtfeld | **Schlecht:** Heck-Radar vom Lenker aus physikalisch unmöglich | **Ideal:** Heck-Pod 3 hat 360°-Horizontblick und freie Radarsicht nach hinten |
+| **Fahrtwind-Abtastung (AGC)** | **Physikalisch unmöglich:** Unter der Sitzbank herrscht kein dynamischer Staudruck | **Möglich:** Windmessung direkt am Lenker | **Exzellent:** Knowles I2S MEMS direkt an der Frontscheibe im Front-Node |
+
+1. **Die Physik der HF-Koexistenz (Vermeidung von Receiver Desensitization):**
+   * GNSS-Signale treffen die Erde mit extrem schwachen Pegeln von ca. **$-130\,\text{dBm}$ bis $-160\,\text{dBm}$**.
+   * Befinden sich ein 72V-Schaltregler (LM5164-Q1 mit schnellen Schaltflanken), ein 868-MHz-LoRa-Sender (+22 dBm / 160 mW) und zwei 2.4-GHz-Mesh-Transceiver im selben Metallgehäuse auf wenigen Zentimetern Abstand, heben die Breitband-Oberwellen das Grundrauschen an (*Noise Floor Lift*). Das GNSS verliert die Phasenverriegelung (Cycle Slip) und die Ortungsgenauigkeit bricht ein.
+   * Die räumliche Trennung (Heck-Pod 3 für Navigation, Pod 1/2 für Intercom an den Flanken) garantiert physikalisch über **$45\,\text{dB}$ Freiraumdämpfung** zwischen den HF-Stufen.
+2. **Kabelbaum-Zuverlässigkeit über den Lenkkopf:**
+   * Jedes Kabel, das über den beweglichen Lenkkopf geführt wird, unterliegt während der Fahrzeuglebensdauer Millionen von Biegewechseln.
+   * Durch die Auslagerung der Cockpit-, Display- und PTT-Funktionen in den **Front-Node (PCBA 05)**, der über die hochzuverlässige, drahtlose **ESP-NOW Funkbrücke (< 0.9 ms Latenz)** mit der Zentralbox kommuniziert, entfallen sämtliche empfindlichen Datenleitungen über die Lenkachse.
+3. **Ergebnis:** Höchste Signalintegrität, null Hotspots, maximale Langlebigkeit und unübertroffene Montageflexibilität auf jedem Motorradtyp.
+
+### 2.2 Universelle Gehäuse-Grundformen & Rohrbett-Option (Universal-V-Nut)
 Für Naked Bikes, Enduros und klassische Rahmenrohre verfügen die Universal-Pod-Gehäuse (Typ B) an der Unterseite über eine integrierte $120^\circ$-Prismenkehle ($R = 15\,\text{mm}$):
 * Passend für alle typischen Rohre von $\varnothing 18\,\text{mm}$ bis $\varnothing 35\,\text{mm}$ ($7/8"$, $1"$, $1\,1/8"$, $1\,1/4"$).
 * 4 Einhängenasen für wetterfeste EPDM-Spannringe zur werkzeuglosen Schnellmontage ohne Lackkontakt.
 * Durchgangsschlitze ($5{,}0 \times 2{,}5\,\text{mm}$) für Kabelbinder oder Schellen bei dauerhafter Diebstahlsicherung.
 
-### 2.2 Kabelloser Helm-Komfort
+### 2.3 Kabelloser Helm-Komfort
 * Die schweren Intercom-Geräte (Sena 50S / Cardo Edge) verbleiben wetter- und diebstahlgeschützt an den Motorrad-Pods (z. B. im Kofferdeckel oder unter der Abdeckung).
 * Die Helme von Fahrer und Sozius bleiben zu $100\,\%$ leicht, aerodynamisch original und frei von Kabeln. Die Audio-Ein- und Ausgabe erfolgt vollkommen drahtlos über die integrierte Bluetooth-Schnittstelle der Zentralbox.
 
-### 2.3 Universelle OEM-Adapter-Kompatibilität (Off-the-Shelf)
+### 2.4 Universelle OEM-Adapter-Kompatibilität (Off-the-Shelf)
 Die erweiterten Pod-Kassetten ($110 \times 54 \times 28\,\text{mm}$ Innenraum) nehmen alle handelsüblichen OEM-Geräte im ungeöffneten Originalzustand auf:
 * **Klasse S (Smart Modular Cartridge mit Mechatronik • OMB-Referenz):** z. B. Sena SPIDER X Slim (Primärempfehlung), Sena 60S, Cardo Edge – 100 % ungeöffnetes Originalgerät im PA12-MJF Konturbett mit 3-Punkt EPDM-Dämpfung gegen $20\,\text{g}$ Vibration, 4 unabhängige mechatronische Aktuatoren auf PCBA 03 Rev 2.0 (WCH CH32V003 RISC-V Controller, In-System Flashing via Pin 5 UART), direkte $3{,}85\,\text{V}$ DC-Speisung ab Werk, null Pogo-Pins, null Löten, 100 % Erhalt von Werksgarantie & IPX-Schutz.
 * **Klasse A (Drahtlos-Bridges & USB-Speisung):** z. B. Sena +Mesh (B2M-01), Sena MeshPort Blue/Red – versorgt über flaches 90° Micro-USB/USB-C Kabel, drahtlose Audioübertragung zum Helm, externe SMA-Bulkhead-Doppelbuchse mit Schutzkappe an der Frontblende.
 * **Klasse B (Pogo-Pin Federkontakt-Cradles):** z. B. Sena 50S/60S/30K/20S EVO – vollwertiges analoges Audio (ES8388 Codec) und TLP222A PTT-Synthese.
-* **Klasse C (Magnetischer Air-Mount):** z. B. Cardo Packtalk Edge/Pro/Neo – werkzeugloses magnetisches Andocken über 2x N52 Neodym-Magnete.
+* **Klasse C (Magnetischer Air-Mount):** z. B. Cardo Packtalk Edge / Pro (Hinweis: Packtalk Neo unterstützt kein Laden während der Fahrt und ist ausgeschlossen) – werkzeugloses magnetisches Andocken über 2x N52 Neodym-Magnete.
 * **Klasse D (Schiebe-Cradles):** z. B. Cardo Packtalk Bold/Black, Freecom-Serie – mechanische Gleitschiene mit Arretierfeder.
 * **Klasse E (Analoger PMR446 Funk):** z. B. Midland G7/G9 Pro, XT30, Kenwood – 2-Pin Doppelklinkenanschluss mit PhotoMOS-PTT-Tastung.
 *(Detaillierte Verkabelungsmatrix siehe [Spezifikation 02](file:///Users/schmidtm/openMotorBridge/docs/de/02_intercom_matrix_profiles.md)).*

@@ -1,4 +1,4 @@
-# 17 - Smart-Managed CarPlay & Android Auto Bridge Architektur (PCBA 05)
+# 11 - Smart-Managed CarPlay & Android Auto Bridge Architektur (PCBA 05)
 
 ## 1. Systemüberblick & Problemstellung
 
@@ -394,8 +394,7 @@ Sollte künftig eine native OpenMotorBridge Companion-App (iOS/Android) bereitge
 
 #### 4. Die Alltags-Praxis für Skyline OS
 * **95 % aller Fahrten:** Fahrer nutzen Apple CarPlay oder Android Auto über den USB-Port `J4` – Navigation, Spotify und Staudaten laufen nativ auf dem Smartphone.
-* **Internes Werks-Navi (HERE):** Benötigt der Fahrer Live-Traffic im originalen Harley-Display, genügt das Aktivieren des **Persönlichen Hotspots** am Smartphone (wo Tailscale unbeeinflusst weiterläuft). Der Front-Node bucht sich per AP+STA Concurrency ein und schleift die Verkehrsdaten per lwIP NAPT transparent durch.
-* **Autarke Alternative (Zukunft):** Für Always-On Diebstahltracking und unabhängiges Internet kann an Port 4 des `USB2514B` Hubs auf PCBA 05 ein kompaktes LTE-M/Cat-1 Modem mit eSIM nachgerüstet werden.
+* **Autarke Alternative (Zero-Subscription):** Für Always-On Diebstahltracking und Alarmierung setzt OpenMotorBridge auf das abonnementfreie, dezentrale 868 MHz LoRa-Mesh (PCBA 04 & PCBA 07 Keyfob) statt auf monatliche Mobilfunk-Gebühren (Details im internen `.context/IDEAS_BACKLOG.md`).
 
 ---
 

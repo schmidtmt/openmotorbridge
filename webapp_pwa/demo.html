@@ -2936,6 +2936,24 @@
         window.OMB_MODE = 'demo';
     </script>
     <script src="js/app.js?v=8.12"></script>
+    <script>
+        // Automatic tab activation from URL param: ?tab=tab-audio
+        (function() {
+            function activateUrlTab() {
+                const params = new URLSearchParams(window.location.search);
+                const tab = params.get('tab');
+                if (tab) {
+                    const btn = document.querySelector(`.tab-btn[data-tab="${tab}"]`);
+                    if (btn) btn.click();
+                }
+            }
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', activateUrlTab);
+            } else {
+                activateUrlTab();
+            }
+        })();
+    </script>
 </body>
 
 </html>

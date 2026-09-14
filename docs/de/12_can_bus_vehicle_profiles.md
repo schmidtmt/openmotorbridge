@@ -1,4 +1,4 @@
-# 18 - Fahrzeug-CAN-Bus-Profile, DBC-JSON-Schema & Universal Telemetrie-Engine
+# 12 - Fahrzeug-CAN-Bus-Profile, DBC-JSON-Schema & Universal Telemetrie-Engine
 
 ## 1. Problemstellung & Systemüberblick
 
@@ -24,6 +24,29 @@ Analog zu unserem bewährten **Kassetten-Profilmanager für Intercom-Module** (S
 1. Sämtliche herstellerspezifischen CAN-Definitionen liegen als **schlanke JSON-Dateien im internen LittleFS-Flash** (`/data/can_profiles/*.json`).
 2. Die Firmware enthält **keine fest einprogrammierten Hersteller-Sonderlocken** mehr, sondern parst eingehende Frames rein datengetrieben über ein hardwarebeschleunigtes Bit-Extraktions-Gitter.
 3. Der Fahrer kann sein Modell entweder in der **PWA unter Tab 5 auswählen**, oder OpenMotorBridge erkennt das Motorrad vollautomatisch über einen **passiven 500-ms-Bus-Fingerprint**.
+
+### 1.1 Whitepaper-Entwurfsentscheidung: Datengetriebene LittleFS-JSON-Engine vs. Kompilierter C++-Code vs. Vector DBC
+
+Bei der Konzeption der fahrzeugseitigen CAN-Bus-Dekodierung standen drei grundlegende architektonische Ansätze zur Auswahl. In der Automobil- und Motorrad-Industrie dominieren historisch proprietäre Vector DBC-Dateien oder tief verschachtelte `switch-case`-Blöcke in der Firmware. OpenMotorBridge hat sich nach systematischer Analyse für eine offene, datengetriebene JSON-Engine im LittleFS entschieden:
+
+#### Evaluierungsmatrix: CAN-Dekodierungs-Architekturen
+
+| Kriterium | Option A: Kompilierte C++ Switch/Case | Option B: Proprietäre Vector DBC-Binärblobs | **Option C: OpenMotorBridge LittleFS JSON Engine (Gewählt)** |
+| :--- | :--- | :--- | :--- |
+| **Community-Erweiterbarkeit** | **Mangelhaft:** Jedes neue Motorrad erfordert C++-Codeänderung, Compiler-Toolchain & Full-Firmware-Flash | **Schlecht:** Erfordert proprietäre Vector CANdb++ Software oder komplexe Python-DBC-Generatoren | **Exzellent:** Reine Text-/JSON-Datei; kann per PWA Web-Bluetooth / Wi-Fi ohne Flashen hochgeladen werden |
+| **OTA-Update-Bandbreite** | **Groß (> 2,5 MB):** Vollständiges Firmware-Image muss übertragen werden | **Mittel (~ 150 KB):** Binäre DBC-Tabellen im SPIFFS | **Minimal (< 4 KB):** Schlankes JSON-Profil für genau das Zielfahrzeug; in 1 Sekunde via BLE übertragbar |
+| **Speicherverbrauch (RAM/Flash)** | **Hoch im Flash:** Unzählige hardcodierte Decoder belegen permanenten IRAM/Flash | **Komplex:** Hoher RAM-Bedarf für generische AST-/Signal-Graph-Parser | **Optimal:** 1 aktives Profil im RAM (~ 2,8 KB); Zero-Copy Bitextraktion per Mask/Shift |
+| **Funktionale Sicherheit (ASIL-B)** | **Riskant:** Ein Pufferüberlauf oder Typfehler in einem Switch-Zweig gefährdet das Gesamtsystem | **Mittel:** Komplexe Binärdekoder mit undefiniertem Verhalten bei Corrupt-Data | **Isoliert:** JSON-Schema wird strikt validiert; Parser läuft mit statischer O(1)-Prüfung und Fail-Safe-Fallback |
+| **Offenheit & Reverse Engineering** | **Niedrig:** Logik in Binärdateien verborgen | **Proprietär:** CANdb++ / DBC ist ein proprietäres Vektor-Format | **100 % Open Source:** Menschenlesbare Schemas nach RFC 8259; einfachste Anpassung durch Rider |
+
+1. **Vollständige Entkopplung von Firmware und Fahrzeug-Spezifika:**
+   * Ein Motorradfahrer, der eine neu erschienene BMW R 1300 GS Adventure oder KTM 1390 Super Duke fährt, muss nicht auf ein vierteljährliches Firmware-Release warten.
+   * Er erstellt oder lädt eine 3 KB kleine `.json`-Profildatei aus der Community-Datenbank herunter und schiebt sie per Drag & Drop in die OpenMotorBridge PWA. Die Central Box übernimmt das Profil im laufenden Betrieb.
+2. **Deterministic Bit-Slicing ohne Interpreter-Overhead:**
+   * Entgegen der Annahme, JSON-Parsing sei langsam, wird die JSON-Datei nur **einmalig beim Booten oder Profilwechsel** deserialisiert und in eine flache C-Array-Struktur im internen SRAM überführt (`can_signal_descriptor_t`).
+   * Im 500-kbps-Echtzeitbetrieb operiert die Engine mit rein deterministischen Bit-Masken- und Shift-Operationen, die weniger als **$4{,}2\,\mu\text{s}$ pro Frame** auf dem 240-MHz-ESP32-S3 beanspruchen.
+3. **Listen-Only Sicherheit als Hardware-Garantie:**
+   * Das gewählte Profil erzwingt standardmäßig den `listen_only: true` Modus des ESP32-S3 TWAI-Controllers (Two-Wire Automotive Interface). Es werden physisch keinerlei ACK-Bits oder Frames auf den Fahrzeugbus gesendet – ein Eingriff in die Fahrdynamik oder das Triggern von Fehlerspeichereinträgen (DTCs) ist hardwareseitig ausgeschlossen.
 
 ---
 

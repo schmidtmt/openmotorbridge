@@ -1,0 +1,48 @@
+(kicad_sch
+	(version 20240108)
+	(generator "openmotorbridge_gen")
+	(generator_version "10.0")
+	(uuid "f0000000-0000-0000-0000-000000000001")
+	(paper "A3")
+	(title_block
+		(title "OpenMotorBridge 2-in-1 LoRa Smart-Keyfob & Pager (PCBA 07)")
+		(date "2026-09-14")
+		(rev "v2.0")
+		(company "OpenMotorBridge Open Source Hardware")
+		(comment 1 "Nordic nRF52840, SX1262 LoRa, DRV2605L Haptics, BQ51003 Qi RX, BQ25100 Charger")
+	)
+
+	(global_label "VBAT" (shape bidirectional) (at 30.0 30.0 180) (effects (font (size 1.27 1.27)) (justify right)))
+	(global_label "VCC_3V3" (shape output) (at 80.0 30.0 0) (effects (font (size 1.27 1.27)) (justify left)))
+	(global_label "VCC_QI_5V" (shape input) (at 30.0 35.0 180) (effects (font (size 1.27 1.27)) (justify right)))
+	(global_label "GND" (shape passive) (at 30.0 40.0 180) (effects (font (size 1.27 1.27)) (justify right)))
+
+	(global_label "LORA_SCK" (shape output) (at 120.0 30.0 0) (effects (font (size 1.27 1.27)) (justify left)))
+	(global_label "LORA_MISO" (shape input) (at 120.0 35.0 180) (effects (font (size 1.27 1.27)) (justify right)))
+	(global_label "LORA_MOSI" (shape output) (at 120.0 40.0 0) (effects (font (size 1.27 1.27)) (justify left)))
+	(global_label "LORA_NSS" (shape output) (at 120.0 45.0 0) (effects (font (size 1.27 1.27)) (justify left)))
+	(global_label "LORA_DIO1" (shape input) (at 120.0 50.0 180) (effects (font (size 1.27 1.27)) (justify right)))
+	(global_label "LORA_BUSY" (shape input) (at 120.0 55.0 180) (effects (font (size 1.27 1.27)) (justify right)))
+	(global_label "LORA_RESET" (shape output) (at 120.0 60.0 0) (effects (font (size 1.27 1.27)) (justify left)))
+	(global_label "LORA_ANT_50R" (shape bidirectional) (at 120.0 65.0 0) (effects (font (size 1.27 1.27)) (justify left)))
+
+	(global_label "BLE_ANT_50R" (shape bidirectional) (at 120.0 75.0 0) (effects (font (size 1.27 1.27)) (justify left)))
+
+	(global_label "I2C_SDA" (shape bidirectional) (at 180.0 30.0 0) (effects (font (size 1.27 1.27)) (justify left)))
+	(global_label "I2C_SCL" (shape output) (at 180.0 35.0 0) (effects (font (size 1.27 1.27)) (justify left)))
+	(global_label "DRV_EN" (shape output) (at 180.0 40.0 0) (effects (font (size 1.27 1.27)) (justify left)))
+	(global_label "LRA_POS" (shape output) (at 180.0 45.0 0) (effects (font (size 1.27 1.27)) (justify left)))
+	(global_label "LRA_NEG" (shape output) (at 180.0 50.0 0) (effects (font (size 1.27 1.27)) (justify left)))
+
+	(global_label "BUZZER_PWM" (shape output) (at 180.0 60.0 0) (effects (font (size 1.27 1.27)) (justify left)))
+	(global_label "LED_DATA" (shape output) (at 180.0 65.0 0) (effects (font (size 1.27 1.27)) (justify left)))
+	(global_label "BTN_ARM_N" (shape input) (at 180.0 70.0 180) (effects (font (size 1.27 1.27)) (justify right)))
+	(global_label "BTN_SOS_N" (shape input) (at 180.0 75.0 180) (effects (font (size 1.27 1.27)) (justify right)))
+
+	(global_label "QI_AC1" (shape input) (at 240.0 30.0 180) (effects (font (size 1.27 1.27)) (justify right)))
+	(global_label "QI_AC2" (shape input) (at 240.0 35.0 180) (effects (font (size 1.27 1.27)) (justify right)))
+	(global_label "CHG_STAT" (shape input) (at 240.0 40.0 180) (effects (font (size 1.27 1.27)) (justify right)))
+
+	(global_label "SWDIO" (shape bidirectional) (at 240.0 50.0 0) (effects (font (size 1.27 1.27)) (justify left)))
+	(global_label "SWDCLK" (shape input) (at 240.0 55.0 180) (effects (font (size 1.27 1.27)) (justify right)))
+)

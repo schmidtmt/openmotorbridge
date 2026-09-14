@@ -1,4 +1,4 @@
-# 12 - EMC Hardening, RF Shielding & Environmental Protection
+# 14 - EMC Hardening, RF Shielding & Environmental Protection
 
 This document specifies the protection circuitry against vehicle electrical transients (ISO 7637-2), RF decoupling across the 2.4 GHz and 868 MHz bands, conformal coating per IPC-CC-830B, and mechanical vibration isolation according to ISO 16750-3.
 

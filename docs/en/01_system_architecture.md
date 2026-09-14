@@ -100,7 +100,30 @@ OpenMotorBridge v8.0 defines the platform across **5 standardized functional nod
 >
 > Riders are encouraged to replicate these kits, adapt them for other motorcycle models, or design custom brackets based on our open CAD/STEP dimensional envelopes!
 
-### 2.1 Vehicle Mounting (Crash Bars, Frame Tubes, Luggage Racks)
+### 2.1 Whitepaper Design Rationale: Decentralized Satellite Topology vs. Monolithic Single-Box
+
+During the initial concept phase, an in-depth engineering evaluation analyzed whether the entire system should be housed within a single, large central enclosure (e.g. under the seat or behind the front fairing). The monolithic approach was unanimously rejected after electromagnetic simulation and physical prototyping:
+
+#### Evaluation Matrix: Monolithic Single-Box vs. OpenMotorBridge Decentralized Satellite Architecture
+
+| Evaluation Metric | Option A: Monolithic Single-Box | Option B: Handlebar/Cockpit-Only Box | **Option C: OMB Decentralized Satellites (Selected)** |
+| :--- | :--- | :--- | :--- |
+| **RF Self-Interference (De-Sensing)** | **Critical:** 2.4 GHz BLE, Wi-Fi, 868 MHz LoRa, GNSS L1/L5 & 72V buck converter in extreme proximity | **Critical:** Severe cross-talk into cockpit TFT and motorcycle radio antenna | **Optimal (> 45 dB Isolation):** GNSS/LoRa at rear, Intercoms on lateral flanks, display at front |
+| **Harness Bundle Diameter** | **Bulky:** 26+ discrete wire conductors routed through the motorcycle chassis | **Poor:** 18 conductors routed across the pivoting steering head (harness fatigue risk) | **Ultra-Slim:** Only a 6-pole M8 bus connection to the rear; Front Node autonomous via ESP-NOW |
+| **Thermal Dissipation** | **Hot-Spot (> 18 W):** 72V DC/DC + audio power amplifiers + battery charging under seat | **Thermal Overheating (> 85 °C):** Trapped heat accumulation directly behind headlight nacelle | **Evenly Distributed:** Max. 3–4 W per enclosure; passive convection cooling with zero hot-spots |
+| **GNSS Zenith View & Radar** | **Obstructed:** Seat bench and rider's body block satellites & rear radar aperture | **Poor:** Rear blind-spot radar from handlebars is physically impossible | **Ideal:** Rear Pod 3 has unobstructed 360° sky view and clear backward radar field-of-view |
+| **Dynamic Wind Sampling (AGC)** | **Physically impossible:** Zero dynamic ram-air pressure underneath the seat | **Feasible:** Wind pressure measurement directly at handlebar | **Excellent:** Knowles I2S MEMS positioned directly at windshield line in Front Node |
+
+1. **Physics of RF Coexistence (Mitigating Receiver De-Sensitization):**
+   * GNSS satellite signals reach the ground at ultra-low power levels of approximately **$-130\,\text{dBm}$ to $-160\,\text{dBm}$**.
+   * Placing a high-voltage switching regulator (LM5164-Q1 with fast switching edges), an 868 MHz LoRa transmitter (+22 dBm / 160 mW), and dual 2.4 GHz mesh radios inside the same metallic chassis within inches of each other lifts the wideband thermal noise floor (*Noise Floor Lift*). The GNSS receiver suffers cycle slips, losing carrier phase lock and degrading precision.
+   * Physical spatial separation (Rear Pod 3 for navigation, Pods 1 & 2 for intercoms on the lateral flanks) naturally enforces **$> 45\,\text{dB}$ of free-space path loss** between RF stages.
+2. **Harness Reliability Across the Steering Head:**
+   * Every copper conductor traversing the rotating steering head suffers millions of bending cycles over a motorcycle's operational life.
+   * By segregating cockpit, USB display, and PTT functions into the **Front Node (PCBA 05)** communicating over an ultra-low-latency **ESP-NOW wireless bridge (< 0.9 ms latency)** with the Central Box, zero vulnerable data signal wires cross the steering axis.
+3. **Conclusion:** Maximum signal integrity, zero thermal hot-spots, superior long-term mechanical reliability, and unmatched installation flexibility across all motorcycle categories.
+
+### 2.2 Vehicle Mounting (Crash Bars, Frame Tubes, Luggage Racks)
 * **Universal Prism (V-Groove):** The bottom of each pod housing features a $120^\circ$ prism contour ($R = 15\,\text{mm}$) that cradles all standard motorcycle frame tubes:
   * $\varnothing 22\,\text{mm}$ ($7/8"$ handlebars and rear subframe tubes)
   * $\varnothing 25.4\,\text{mm}$ ($1"$ crash bars and cruiser frame tubes)
@@ -110,19 +133,19 @@ OpenMotorBridge v8.0 defines the platform across **5 standardized functional nod
 * **EPDM Tension Ring Retention:** Two UV-resistant EPDM rubber rings (or silicone ladder straps) wrap around the tube and hook into the 4 lateral side lugs. This simultaneously isolates high-frequency engine vibrations.
 * **Theft-Resistant Fixed Mounting:** Integrated $5.0 \times 2.5\,\text{mm}$ passthrough slots allow threading standard $4.8\,\text{mm}$ zip-ties or stainless hose clamps.
 
-### 2.2 Wireless Helmet Audio
+### 2.3 Wireless Helmet Audio
 * Heavy intercom hardware (Sena 50S / Cardo Edge) stays safely locked and weather-protected on the motorcycle.
 * Helmets remain $100\%$ lightweight, aerodynamically stock, and completely cable-free. Audio I/O connects wirelessly via the Central Box's integrated Bluetooth interface.
 
-### 2.3 Universal Off-the-Shelf OEM Adapter Interfacing
+### 2.4 Universal Off-the-Shelf OEM Adapter Interfacing
 The enlarged pod cartridges ($110 \times 54 \times 28\,\text{mm}$ interior cavity) accommodate all commercial off-the-shelf OEM adapters in their factory-unopened state:
 * **Class S (Smart Modular Cartridge with Mechatronics • OMB Reference):** e.g. Sena SPIDER X Slim (primary recommendation), Sena 60S, Cardo Edge – 100% factory-unopened original device seated in a PA12-MJF form-fit cradle with 3-point EPDM damping against $20\,\text{g}$ shock/vibration, 4 independent mechatronic actuators on PCBA 03 Rev 2.0 (WCH CH32V003 RISC-V MCU, In-System Flashing via Pin 5 UART), factory $3.85\,\text{V}$ DC direct power supply, zero pogo pins, zero soldering, 100% preservation of manufacturer warranty and IPX weatherproofing.
 * **Class A (Wireless Bridges & USB Power):** e.g. Sena +Mesh (B2M-01), Sena MeshPort Blue/Red – powered via low-profile 90° Micro-USB/USB-C, wireless BT audio bridge to helmet, external SMA bulkhead double-jack with silicone protection plug on faceplate.
 * **Class B (Pogo-Pin Spring-Contact Cradles):** e.g. Sena 50S/60S/30K/20S EVO – full analog audio (ES8388 codec) and TLP222A PTT synthesis.
-* **Class C (Magnetic Air-Mount):** e.g. Cardo Packtalk Edge/Pro/Neo – tool-free magnetic latching via dual N52 Neodymium magnets.
+* **Class C (Magnetic Air-Mount):** e.g. Cardo Packtalk Edge / Pro (Note: Packtalk Neo lacks charge-while-riding and is excluded) – tool-free magnetic latching via dual N52 Neodymium magnets.
 * **Class D (Slide Cradles):** e.g. Cardo Packtalk Bold/Black, Freecom series – mechanical slide rail with catch spring.
 * **Class E (Analogue PMR446 Radios):** e.g. Midland G7/G9 Pro, XT30, Kenwood – 2-pin dual audio jack with PhotoMOS PTT keying.
-*(Detailed wiring matrix and pinouts available in [Specification 06, Section 8](file:///Users/schmidtm/openMotorBridge/docs/en/06_dynamic_profiles_spec.md#8-taxonomy-of-oem-adapter-interfacing-connection-classes--wiring-matrix)).*
+*(Detailed wiring matrix and pinouts available in [Specification 02 (Intercom Matrix & Profiles)](file:///Users/schmidtm/openMotorBridge/docs/en/02_intercom_matrix_profiles.md)).*
 
 ---
 

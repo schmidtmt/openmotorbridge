@@ -1,4 +1,4 @@
-# 14 - Build Instructions, Wiring & Vehicle Installation
+# 16 - Build Instructions, Wiring & Vehicle Installation
 
 This document is the comprehensive, hands-on assembly guide for building a complete **OpenMotorBridge (v8.0)** hardware kit for a motorcycle. It details 3D printing parameters, mechanical assembly, cable harnessing, Front Node installation, and the step-by-step commissioning checklist.
 
@@ -59,14 +59,14 @@ To build a fully featured OpenMotorBridge (v8.0) installation for one motorcycle
 | **Main Box Lid** | [`main_box_lid.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_lid.stl) | **1** | Heavy-duty top lid with Gore ePTFE AVS 41 vent boss & 4x M3 screw counterbores |
 | **Pod Base Enclosures** | [`pod_base_housing.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod_base_housing.stl) | **3** | Universal bay enclosure for Pod 1 (Left), Pod 2 (Right), and Pod 3 (Tail) with 120° pipe bed |
 | **Pod Bulkhead Partitions**| [`03_pod_bulkhead_partition.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/components/03_pod_bulkhead_partition.stl) | **3** | Internal bulkhead with sealing collar & dual spring retainer posts (1 per pod) |
-| **Cartridge 1 (Rider)** | [`cartridge_sena_sled.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_sena_sled.stl) *(or Cardo)* | **1** | Hot-swap sled for primary rider headset (Sena 50S/60S or Cardo Packtalk Edge) |
-| **Cartridge 2 (Passenger)**| [`cartridge_cardo_sled.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_cardo_sled.stl) *(or Blank)* | **1** | Hot-swap sled for passenger headset or hermetic blank protector cartridge |
-| **Cartridge 3 (Tail)** | [`cartridge_omm_transceiver_sled.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_omm_transceiver_sled.stl) | **1** | Rear pod sled holding RP2040 coprocessor, active GNSS patch, and 868 MHz LoRa helical antenna |
+| **Cartridge 1 (Rider)** | [`cartridge_insert_sena.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_sena.stl) *(or Cardo)* | **1** | Hot-swap sled inlay for primary rider headset (Sena SPIDER X Slim / 50S / 60S) |
+| **Cartridge 2 (Passenger)**| [`cartridge_insert_cardo.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_cardo.stl) *(or Blank)* | **1** | Hot-swap sled inlay for passenger headset (Cardo Packtalk Edge) or blank cartridge |
+| **Cartridge Base Sleds** | [`cartridge_base_sled.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl) | **2** | Sled chassis holding modular inlays and PCBA 03 |
 | **Front Node Lower Tub** | [`front_node_lower_tub.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_lower_tub.stl) | **1** | Cockpit fairing tub with AMPS hole pattern ($30 \times 38\,\text{mm}$), EPDM cable combs & V-bed (PA12 / ASA) |
 | **Front Node Upper Lid** | [`front_node_upper_lid.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_upper_lid.stl) | **1** | Front lid with acoustic sound entry port for Knowles MEMS & perimeter gasket groove (PA12 / ASA) |
 | **Front Node Cable Glands**| [`front_node_cable_glands_tpu.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_cable_glands_tpu.stl) | **1 Pair** | Elastomeric cable glands for Front (3x USB) & Left (3x Signals/Power) (TPU 95A / 85A) |
 | **Front Node USB-C Cap** | [`front_node_usbc_cap_tpu.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_usbc_cap_tpu.stl) | **1** | Elastomeric protective dust cap with retaining tether for service port (TPU 95A / 85A) |
-| **Rear Radar Dual Bracket**| [`pod3_radar_bracket.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod3_radar_bracket.stl) | **1** | M5 GoPro-style swivel hinge for horizontal leveling of Garmin Varia / mmWave radar |
+| **Rear Radar Dual Bracket**| [`radar_varia_gopro_lock_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_varia_gopro_lock_dock.stl) | **1** | M5 GoPro-style swivel hinge for horizontal leveling of Garmin Varia / mmWave radar |
 | **Total 3D Printed Parts** | | **17** | **Complete hardware set for 1 motorcycle installation (15x PA12/ASA + 2x TPU)** |
 
 ---
@@ -127,7 +127,7 @@ To build a fully featured OpenMotorBridge (v8.0) installation for one motorcycle
 | **M8 Extension Cables** | M8 6-Pin A-coded Male/Female (PUR shielded, 1.0 m / 1.5 m) | **3** | Extension cables from under-seat pigtails to pods |
 | **UPS Backup Battery** | 1S 3.7V LiPo 1000 mAh with integrated 10k NTC | **1** | Seamless UPS power reserve inside Main Box (Molex Micro-Fit 3.0) |
 | **Automotive Fuse Holder** | Waterproof Mini-Blade Inline Fuse Holder IP67 + **2A Fuse** | **1** | Protects permanent 12V supply (KL30) directly at battery terminal |
-| **Automotive Wire** | FLRY-B $0.5\,\text{mm}^2$ (Power/GND) and $0.35\,\text{mm}^2$ (Signals/Audio) | *As req.* | Custom bike harness per [`central_breakout_harness_wirelist.csv`](file:///Users/schmidtm/openMotorBridge/hardware/production_packages/05_wiring_harness_spec/central_breakout_harness_wirelist.csv) |
+| **Automotive Wire** | FLRY-B $0.5\,\text{mm}^2$ (Power/GND) and $0.35\,\text{mm}^2$ (Signals/Audio) | *As req.* | Custom bike harness per [`central_breakout_harness_wirelist.csv`](file:///Users/schmidtm/openMotorBridge/hardware/production_packages/05_wiring_harness/central_breakout_harness_wirelist.csv) |
 | **EPDM Frame Straps** | UV/Ozone-resistant EPDM ladder straps ($\varnothing 45 \dots 75\,\text{mm}$) | **6** | Tool-free rapid mounting of pods to crash bars or frame tubes |
 | **Murata MM8030 Pigtails** | Murata MM126036 to SMA Bulkhead IP67 (150 mm, RG-178)| **3** | Coaxial bypass for Pod 3: J3 (2.4G), J4 (868M), J5 (GNSS) |
 | **U.FL Coaxial Pigtail** | IPEX MHF1 / U.FL to RP-SMA Bulkhead IP67 (150 mm, RG-178)| **1** | Coaxial feed for Front Node ESP32-S3 external antenna |

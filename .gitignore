@@ -24,10 +24,11 @@ _autosave-*
 .history/
 
 # Python Virtual Environments & PyCache
-.venv/
-venv/
-env/
 __pycache__/
 *.pyc
 *.pyo
+
+# Local Simulation
+sim/
+sim
 

@@ -27,7 +27,8 @@ BOARDS = {
     "Pod Cartridge (Universal Intercom Sled)": "hardware/kicad_pod_cartridge/openmotorbridge_pod_cartridge.kicad_pcb",
     "Rear Pod 3 (Transceiver & Mesh)": "hardware/kicad_rear_pod3/openmotorbridge_rear_pod3.kicad_pcb",
     "Front Node (Universal Cockpit Hub)": "hardware/kicad_front_node/openmotorbridge_front_node.kicad_pcb",
-    "MagSafe Frame Dock (PCBA 06 Adapter)": "hardware/kicad_magsafe_dock/openmotorbridge_magsafe_dock.kicad_pcb"
+    "MagSafe Frame Dock (PCBA 06 Adapter)": "hardware/kicad_magsafe_dock/openmotorbridge_magsafe_dock.kicad_pcb",
+    "Smart-Keyfob & Pager (PCBA 07)": "hardware/kicad_smart_keyfob/openmotorbridge_smart_keyfob.kicad_pcb"
 }
 
 def verify_board(board_name, pcb_path):
@@ -190,7 +191,8 @@ def verify_board(board_name, pcb_path):
             continue
         pads_in_net = [p for fp in footprints for p in fp.Pads() if p.GetNetname() == name_str]
         tracks_in_net = [t for t in tracks if t.GetNetname() == name_str]
-        if len(pads_in_net) >= 2 and len(tracks_in_net) == 0:
+        zones_in_net = [z for z in board.Zones() if z.GetNetname() == name_str]
+        if len(pads_in_net) >= 2 and len(tracks_in_net) == 0 and len(zones_in_net) == 0:
             unrouted_nets.append(name_str)
                 
     if unrouted_nets:

@@ -1,4 +1,4 @@
-# 11 - Digital Simulation & Multi-Physics Master Testbench (9 Modules)
+# 13 - Digital Simulation & Multi-Physics Master Testbench (9 Modules)
 
 To exhaustively verify the interaction of hardware, acoustics, vehicle dynamics, thermal behavior, high-frequency physics, and network protocols prior to physical manufacturing, OpenMotorBridge features a modular Python simulation suite.
 

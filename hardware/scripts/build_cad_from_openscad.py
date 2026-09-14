@@ -102,6 +102,11 @@ STL_TARGETS: List[Tuple] = [
     ("02_pod_base/radar_varia_gopro_lock_dock.scad", "02_pod_base/radar_varia_gopro_lock_dock.stl"),
     ("02_pod_base/parts/011_gopro_hirth_lock.scad", "02_pod_base/components/011_gopro_hirth_lock.stl"),
     ("03_pod_cartridges/parts/05_magnetic_lock_latch.scad", "03_pod_cartridges/cartridge_magnetic_lock_latch.stl"),
+
+    # 11. 2-in-1 LoRa Smart-Keyfob (PCBA 07 Enclosure Type D)
+    ("05_accessories/smart_keyfob_pager.scad", "05_accessories/smart_keyfob_lower_shell.stl", ["-D", 'part="lower"']),
+    ("05_accessories/smart_keyfob_pager.scad", "05_accessories/smart_keyfob_upper_shell.stl", ["-D", 'part="upper"']),
+    ("05_accessories/smart_keyfob_pager.scad", "05_accessories/smart_keyfob_tpu_rim.stl", ["-D", 'part="rim"']),
 ]
 
 # List of High-Resolution 3D Render Targets
@@ -275,6 +280,18 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
         "65,20,15,55,0,320,240",
         "Tomorrow"
     ),
+    (
+        "05_accessories/smart_keyfob_pager.scad",
+        os.path.join(CAD_IMG_DIR, "smart_keyfob_pager_assembly.png"),
+        "29,17,6.5,55,0,310,130",
+        "Tomorrow"
+    ),
+    (
+        "05_accessories/smart_keyfob_pager.scad",
+        os.path.join(CAD_IMG_DIR, "smart_keyfob_pager_exploded.png"),
+        "29,17,16,55,0,310,180",
+        "Tomorrow"
+    ),
 ]
 
 import threading
@@ -290,6 +307,7 @@ def clean_old_stls():
     os.makedirs(os.path.join(STL_BASE, "02_pod_base/components"), exist_ok=True)
     os.makedirs(os.path.join(STL_BASE, "03_pod_cartridges/components"), exist_ok=True)
     os.makedirs(os.path.join(STL_BASE, "04_front_node/components"), exist_ok=True)
+    os.makedirs(os.path.join(STL_BASE, "05_accessories"), exist_ok=True)
     sys.stdout.flush()
 
 def compile_single_stl(target: Tuple, idx: int, total: int) -> Tuple[bool, str, float]:

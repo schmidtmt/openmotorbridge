@@ -277,11 +277,9 @@ OpenMotorBridge unterstützt alle marktgängigen Intercom-Geräte im Originalzus
 │ Pogo-Pin Klemmen  │ Sena 20S EVO, SRL3          │ • 6-adriges Flachband von J2 auf     │
 │ (Federkontakt-Bett│                             │   Pogo-Pin Kontaktleiste im Inlay    │
 │                   │                             │ • TLP222A PTT-Trigger (Pin 6)        │
-│                   │                             │ • Mechanik: Klick-Bett wie Helmclip  │
-├───────────────────┼─────────────────────────────┼──────────────────────────────────────┤
 │ **Klasse C:**     │ Cardo Packtalk Edge,        │ • Vollwertig analog (Audio In & Out) │
-│ Magnetischer      │ Cardo Packtalk Pro,         │ • 5-Pol Federkontaktfeld im Inlay    │
-│ Air-Mount         │ Cardo Packtalk Neo          │ • 2x N52 Neodym-Magnete mit Führungs-│
+│ Magnetischer      │ Cardo Packtalk Pro          │ • 5-Pol Federkontaktfeld im Inlay    │
+│ Air-Mount         │ *(Neo/Custom ausgeschlossen)│ • 2x N52 Neodym-Magnete mit Führungs-│
 │                   │                             │   keil für werkzeugloses Andocken    │
 ├───────────────────┼─────────────────────────────┼──────────────────────────────────────┤
 │ **Klasse D:**     │ Cardo Packtalk Bold / Black,│ • Vollwertig analog (Audio In & Out) │
@@ -294,6 +292,12 @@ OpenMotorBridge unterstützt alle marktgängigen Intercom-Geräte im Originalzus
 │                   │                             │ • Feste 446MHz Wendel oder SMA-Front │
 └───────────────────┴─────────────────────────────┴──────────────────────────────────────┘
 ```
+
+> [!IMPORTANT]
+> **Ausschlusskriterium für Cardo Packtalk Neo & Custom („Laden während Betrieb“):**
+> * Das **Cardo Packtalk Neo** besitzt keinen magnetischen Air-Mount, sondern ein fest verkabeltes Klick-Cradle. Entscheidender ist jedoch die elektronische Inkompatibilität: Laut offizieller Cardo-Spezifikation unterstützt das Neo **kein Laden während des Betriebs** (*„Charge while riding: Nein“*). Da OpenMotorBridge prinzipbedingt als fahrzeuggebundenes System permanent über das 12V-Bordnetz (via PCBA 03) gespeist wird, scheidet das Neo aus – das Headset schaltet bei USB-Spannung ab bzw. kann auf ganztägigen Touren nicht unterbrechungsfrei betrieben werden.
+> * Das **Cardo Packtalk Custom** erfordert zudem kostenpflichtige Monats-/Jahresabonnements zur Freischaltung von Kernfunktionen und widerspricht damit dem abofreien Open-Source-Grundsatz von OpenMotorBridge.
+> * **Empfehlung für Cardo-Mesh:** Ausschließlich **Cardo Packtalk Edge** (oder Packtalk Pro) einsetzen, da diese Modelle vollwertiges Schnellladen während aktiver Mesh-Kommunikation unterstützen.
 
 ### 5.1 Detaillierte Pin-Belegung der Kassetten-Schnittstelle (`J2`)
 Der 6-polige **JST-SH 1.0 mm Header (`J2`)** auf der Kassettenplatine führt alle Signale:

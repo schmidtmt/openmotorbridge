@@ -1,4 +1,4 @@
-# 12 - EMV-Härtung, Schirmung & ESD-Schutz
+# 14 - EMV-Härtung, Schirmung & ESD-Schutz
 
 Dieses Dokument spezifiziert die Schutzschaltungen gegen Kfz-Bordnetz-Transienten (ISO 7637-2), die HF-Entkopplung im 2.4-GHz- und 868-MHz-Band, die Schutzlackierung nach IPC-CC-830B sowie die mechanische Vibrations- und Schockdämpfung nach ISO 16750-3.
 

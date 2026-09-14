@@ -1,4 +1,4 @@
-# 16 - Legal Compliance, Privacy (GDPR) & Licensing
+# 18 - Legal Compliance, Privacy (GDPR) & Licensing
 
 This document defines the open-source licensing model, regulatory radio and automotive frameworks, data protection architecture (GDPR / BGH court rulings), and legal disclaimers for OpenMotorBridge.
 

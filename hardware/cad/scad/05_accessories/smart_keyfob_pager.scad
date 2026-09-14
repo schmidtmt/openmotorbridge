@@ -172,8 +172,8 @@ module tpu_protective_rim() {
 }
 
 // 8. Complete Assembly
-module smart_keyfob_assembly() {
-    z_expl = EXPLODED_VIEW ? 18.0 : 0.0;
+module smart_keyfob_assembly(is_exploded = false) {
+    z_expl = (EXPLODED_VIEW || is_exploded) ? 18.0 : 0.0;
 
     // Lower Shell
     color("#222831")
@@ -205,5 +205,18 @@ module smart_keyfob_assembly() {
         tpu_protective_rim();
 }
 
-// Render Master Scene
-smart_keyfob_assembly();
+// Configurable Output Part Selector
+part = "assembly"; // "assembly", "lower", "upper", "rim", "exploded"
+
+if (part == "lower") {
+    fob_lower_shell();
+} else if (part == "upper") {
+    fob_upper_shell();
+} else if (part == "rim") {
+    tpu_protective_rim();
+} else if (part == "exploded") {
+    smart_keyfob_assembly(is_exploded = true);
+} else {
+    smart_keyfob_assembly(is_exploded = false);
+}
+

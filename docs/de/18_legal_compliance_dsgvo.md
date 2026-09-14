@@ -1,4 +1,4 @@
-# 16 - Datenschutz (DSGVO), Recht & Konformität
+# 18 - Datenschutz (DSGVO), Recht & Konformität
 
 Dieses Dokument definiert das Open-Source-Lizenzmodell, die regulatorischen Funk- und Kfz-Rahmenbedingungen, die Datenschutz-Architektur (DSGVO / BGH-Dashcam-Rechtsprechung) sowie den rechtlichen Haftungsausschluss für das Projekt OpenMotorBridge.
 
