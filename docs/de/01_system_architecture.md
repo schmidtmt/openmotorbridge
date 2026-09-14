@@ -51,6 +51,19 @@ Klassische Motorrad-Kommunikationssysteme sind historisch stark fragmentiert:
 └───────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
+### 1.1 Das Leitmotiv: Den Lead unterstützen, nicht ersetzen
+
+Klassische Telematik- und Assistenzsysteme neigen zum digitalen Paternalismus: Sie überfrachten das Cockpit mit Schaltempfehlungen, unaufgeforderten Stau-Warnungen und Navigations-Pop-ups. OpenMotorBridge folgt einer radikal gegensätzlichen Philosophie, die auf realer Gruppen-Fahrpraxis basiert:
+
+* **Der Lead-Fahrer ist der beste Sensor der Welt:**
+  * Kein Algorithmus und kein Satelliten-Uplink erkennt in Echtzeit Rollsplitt in der Kurve, eine unübersichtliche Baugrube, einen schleichenden Traktor oder Wildwechsel so präzise wie das geschulte Auge des vorausschauenden Tourguides.
+  * Eine dreisekündige Ansage über die Intercom (*„Achtung, Baustelle rechts, wir fädeln links ein!“*) erreicht die gesamte Gruppe in Millisekunden, erfordert null Blickabwendung vom Asphalt und ermöglicht sofortige Anpassung von Tempo und Schräglage.
+* **Primat der stabilen, markenübergreifenden Intercom:**
+  * Die primäre Aufgabe von OpenMotorBridge ist es daher nicht, den Fahrer zu belehren, sondern die **unterbrechungsfreie Sprachkommunikation zwischen inkompatiblen Headset-Ökosystemen (Sena, Cardo, OMM)** felsenfest zu garantieren.
+* **Respekt vor bewährten visuellen Signalen:**
+  * Selbst bei einem unvorhergesehenen Funkausfall (z. B. leere Headset-Akkus) bricht eine gut geführte Gruppe nicht zusammen: Der aufmerksame Lead-Fahrer kontrolliert regelmäßig die Rückspiegel. Setzt ein Gruppenmitglied den rechten Blinker oder gibt Lichthupe, reagiert der Tourguide sofort und steuert die nächste Haltemöglichkeit an.
+  * Digitale Systeme dürfen diese erprobten menschlichen Routinen niemals durch störende Cockpit-Menüs behindern.
+
 ---
 
 ## 2. Modulare Systemphilosophie & Montagefreiheit (Die 5 Funktionsknoten)
@@ -273,3 +286,13 @@ Der Front-Knoten (PCBA 05) dient auf **allen Motorrädern** als universeller Coc
   * Schaltet der Fahrer die Zündung aus (`KL15 == 0`) und entfernt sich vom Motorrad ($d > 3\,\text{m}$), während Qi oder USB weiterhin ein aufliegendes Smartphone melden, schlägt das System sofort Alarm: Zwei Huptöne am Motorrad und ein LRA-Vibrationsstakkato auf dem Smart-Keyfob warnen vor dem Zurücklassen des teuren Geräts.
 * **Architektonische Entscheidung zu UWB (Ultra-Wideband):**
   * Da OpenMotorBridge als Telemetrie-, Audio- und Alarmsystem arbeitet und die Freigabe des Motorstarts beim originalen OEM-Zündschloss/Schlüssel verbleibt, ist UWB (hoher Ruhestrom 30–50 mA, Zusatz-ICs, Antennenaufwand) als reines Zubehörsystem **Overengineering** und wird bewusst zu Gunsten von BLE, LoRa und Find My Device weggelassen.
+
+### 5.12 Kognitive Cockpit-Entlastung & Stille Absicherung im Hintergrund
+* **Strikte Grenzziehung: Wann Automatisierung eingreift – und wann sie schweigt:**
+  * Digitale Telemetrie und Sensorik greifen ausschließlich dort ein, wo die menschliche Sprache oder Wahrnehmung physikalisch versagt:
+    1. **Sturz & eCall bei Handlungsunfähigkeit:** Liegt ein Fahrer nach einem Unfall mit $> 6{,}5\,\text{g}$ und $> 70^\circ$ Schräglage regungslos im Graben, ist er oft bewusstlos oder das Headset-Kabel ist abgerissen. Hier alarmiert die automatische LoRa-Notrufflut (868 MHz) mit GPS-Koordinaten autonom die Gruppe.
+    2. **Gruppen-Abriss über Funkdistanz (Lost-Rider Tracking):** Überschreitet der Abstand zum Schlusslicht im Gebirge die 2,4-GHz-Audio-Reichweite ($> 1{,}5\,\text{km}$), meldet das 868-MHz-LoRa-Paket dem Guide lautlos und dezent die Distanz zum Zurückgefallenen.
+    3. **Unsichtbare Gefahrenzonen:** Ein sich mit $+60\,\text{km/h}$ im toten Winkel näherndes Fahrzeug (Heck-Radar Garmin Varia) oder ein schleichender Druckabfall im Reifen (TPMS) werden frühzeitig erkannt, bevor das Motorrad instabil wird.
+    4. **Parkplatzwächter (Zündung AUS):** Erschütterungen des abgestellten Motorrads werden lautlos an den 2-in-1 LoRa Smart-Keyfob (LRA-Pager) in der Jackentasche des Fahrers gemeldet.
+* **Absolutes Push-Verbot für allgemeine Verkehrs- & Wettertexte während der Fahrt ($v > 0$):**
+  * Weder Staumeldungen noch Wettertexte oder CAN-Spritstand-Broadcasts werden während der Fahrt auf das Display gepusht. Die kognitive Last des Fahrers bleibt zu 100 % für die Fahrzeugbeherrschung und die Blickführung frei.

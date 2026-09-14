@@ -94,6 +94,21 @@ When the rider's smartphone is plugged in or mounted to the cockpit dock (Qi `J1
 * **`index.html` (Production Cockpit):** Clean instrument dashboard for actual motorcycle rides (`window.OMB_MODE = 'hardware'`). Fully stripped of simulation controls; all telemetry widgets cleanly display `Standby` / `--` when disconnected.
 * **`demo.html` (Interactive Simulation Suite):** Dedicated presentation and HIL testbench (`window.OMB_MODE = 'demo'`) with sticky banner, alpine route selector (Wil SG $\rightarrow$ Ricken Pass, Kerenzerberg), eCall crash simulation, and expandable **live injection panel** (real-time sliders for speed, lean angle, radar blips, TPMS, and emergency braking).
 
+### 2.8 Cognitive Cockpit Decluttering & Strict Riding Display Silence (v > 0)
+
+A smartphone screen mounted to a motorcycle handlebar (6.1" to 6.7") offers severely constrained screen real estate compared to a 10.25" automotive cluster. An inadvertent banner popup in the rider's peripheral vision immediately triggers an involuntary glance reflex (*saccade*). At high lean angles in a curve's apex or under hard braking, this causes hazardous blind flight and target fixation.
+
+* **Zero-Distraction Principle in Motion ($v > 0$):**
+  * **Strict Ban on Non-Safety Push Notifications:**
+    * Traffic jam alerts, road closures, weather radar text summaries, and group fuel alerts are **strictly forbidden** from displaying as pop-ups or animated banners while moving.
+    * No modal dialogs ever overlay speed, lean angle, or rear radar widgets.
+* **Division of Responsibility: Navigation vs. Cockpit Telemetry:**
+  * Turn-by-turn routing, dynamic traffic rerouting, and road closure handling belong exclusively inside the **dedicated navigation application** (Apple CarPlay / Android Auto via PCBA 05 Front Node, Kurviger, Calimoto, or Garmin).
+  * The navigation engine calculates alternate routes silently in the background and delivers concise voice cues over the helmet intercom (*"In 300 meters, turn right"*). The rider never needs to parse text congestion reports while riding.
+* **Information Delivery Exclusively at Standstill ($v = 0\,\text{km/h}$):**
+  * Only when the motorcycle comes to a **complete stop for at least 5 seconds** ($v = 0\,\text{km/h}$ at a red traffic light, railroad crossing, or scenic stop) does the PWA present a calm, static informational summary card (local weather trend, upcoming regional closures).
+  * The instant the motorcycle begins rolling ($v > 3\,\text{km/h}$), the display immediately and silently reverts to the minimalist primary ride cockpit.
+
 ---
 
 ## 3. Advanced GPX Export & Navigation Formatting

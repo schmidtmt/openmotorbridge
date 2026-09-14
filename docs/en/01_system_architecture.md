@@ -52,6 +52,19 @@ Classic motorcycle communication systems are historically fragmented:
 └───────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
+### 1.1 Guiding Principle: "Empower the Lead, Don't Replace Him"
+
+Traditional telematics and motorcycle rider assistance systems tend toward digital paternalism: they clutter the cockpit with gearshift recommendations, unsolicited traffic jam warnings, and modal navigation pop-ups. OpenMotorBridge follows a radically opposite philosophy grounded in real-world group riding:
+
+* **The Lead Rider is the Ultimate Sensor:**
+  * No algorithm and no satellite uplink can detect mid-corner gravel, an obscured construction trench, a slow tractor around a blind bend, or crossing wildlife as rapidly and accurately as the trained eyes of an attentive road captain.
+  * A 3-second voice announcement over the intercom (*"Watch out, road work on the right, merge left!"*) reaches every group member in milliseconds, requires zero glance diversion from the road surface, and allows immediate adjustment of speed and line.
+* **Primacy of Stable, Cross-Brand Intercom:**
+  * OpenMotorBridge's primary mission is not to lecture the rider, but to provide **unshakeable, uninterrupted voice communication between incompatible headset brands (Sena, Cardo, OMM)** with zero latency.
+* **Respect for Established Visual Riding Habits:**
+  * Even during an unforeseen radio dropout (e.g. depleted headset batteries), an organized group never falls apart: an attentive lead rider regularly scans the rear-view mirrors. If a following rider indicates right or flashes their high beam, the lead immediately recognizes the signal and pulls over at the next safe opportunity.
+  * Digital electronics must respect and support these proven human routines rather than disrupting them with distracting on-screen menus.
+
 ---
 
 ## 2. Modular System Philosophy & Mounting Freedom (The 5 Functional Nodes)
@@ -274,3 +287,13 @@ The Front Node (PCBA 05) serves on **all motorcycle types** as the universal coc
   * If the rider turns ignition OFF (`KL15 == 0`) and walks away ($d > 3\,\text{m}$) while Qi or USB still detects a seated smartphone, the system sounds two rapid horn chirps and vibrates the Smart-Keyfob to prevent leaving expensive phones behind.
 * **Architectural Decision Regarding UWB (Ultra-Wideband):**
   * Because OpenMotorBridge serves as an accessory, telemetry, and alarm platform while ignition control remains with the OEM lock and transponder, UWB (high quiescent draw 30–50 mA, specialized silicon, antenna tuning) represents unnecessary **overengineering** and is deliberately omitted in favor of BLE, LoRa, and Find My Device.
+
+### 5.12 Cognitive Cockpit Decluttering & Silent Background Protection
+* **Strict Demarcation: When Automation Acts – and When It Stays Silent:**
+  * Digital telemetry and automated alerts trigger exclusively where human voice or perception physically fails:
+    1. **Crash Detection & eCall on Incapacitation:** If a rider lies motionless in a ditch following an impact with $> 6.5\,\text{g}$ and $> 70^\circ$ lean angle, they are often unconscious or their helmet cable has severed. Here, the autonomous LoRa emergency broadcast (868 MHz) floods GPS distress packets to the entire group.
+    2. **Group Separation Beyond Audio Range (Lost-Rider Tracking):** If the gap to the sweep rider in mountain terrain exceeds the 2.4 GHz audio range ($> 1.5\,\text{km}$), an 868 MHz LoRa packet silently alerts the lead rider with the exact distance to the separated member.
+    3. **Invisible Hazard Zones:** Vehicles approaching rapidly ($+60\,\text{km/h}$) in the blind spot (Garmin Varia rear radar) or creeping tire pressure loss (TPMS) are caught before motorcycle stability is compromised.
+    4. **Silent Parking Sentry (Ignition OFF):** Tampering with the parked motorcycle silently triggers the 2-in-1 LoRa Smart-Keyfob (LRA haptic pager) in the rider's jacket pocket.
+* **Strict Ban on Riding-Time Push Alerts ($v > 0$):**
+  * General traffic congestion alerts, weather radar text summaries, and CAN fuel broadcast spam are strictly banned from pushing onto the screen while in motion. The rider's cognitive bandwidth remains 100% dedicated to vehicle control and apex sightlines.

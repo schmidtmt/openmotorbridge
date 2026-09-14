@@ -122,6 +122,21 @@ Wird das Fahrer-Smartphone am Cockpit-Dock (Qi `J10`) oder per USB-Kabel am Lenk
 * **`index.html` (Produktions-Cockpit):** Reine Instrumentenanzeige für den echten Motorradbetrieb (`window.OMB_MODE = 'hardware'`). Vollständig bereinigt von Simulationsbuttons und Teststrecken; alle Kacheln zeigen im unverbundenen Zustand sauber `Standby` / `--`.
 * **`demo.html` (Interaktive Simulations-Suite):** Dedizierte Präsentations- und HIL-Testbench (`window.OMB_MODE = 'demo'`) mit Sticky-Banner, Streckenauswahl (Wil SG $\rightarrow$ Rickenpass, Kerenzerberg), eCall-Crashtest und ausklappbarem **Live-Injektionspanel** (Echtzeit-Schieberegler für Tempo, Schräglage, Heckradar-Distanz, TPMS und Notbremsung).
 
+### 2.8 Kognitive Cockpit-Ruhe & Strikte Anzeigestille während der Fahrt (v > 0)
+
+Ein Smartphone-Display am Motorradlenker (6,1" bis 6,7") hat im Vergleich zu 10,25"-Automotive-Displays eine sehr begrenzte Fläche. Jedes unbedachte Aufploppen eines Banners löst im peripheren Sichtfeld (*Augenwinkel*) einen unwillkürlichen Fixierungsreflex (*Sakkade*) aus. Bei Schräglage im Kurvenscheitelpunkt oder beim Anbremsen führt dies zu gefährlichem Blindflug und Zielfixierung (*Target Fixation*).
+
+* **Zero-Distraction Prinzip während der Fahrt ($v > 0$):**
+  * **Absolutes Push-Verbot für Nicht-Sicherheits-Informationen:**
+    * Staumeldungen, Straßensperrungen, Wetterradar-Texte und Gruppen-Spritwarnungen werden während der Fahrt **unter keinen Umständen** als Pop-up oder animiertes Banner eingeblendet.
+    * Es gibt keine modalen Fenster, die den Tacho, die Schräglage oder das Heck-Radar überlagern.
+* **Aufgabenteilung Navigation vs. Cockpit-Telemetrie:**
+  * Routenführung, dynamische Stauumfahrung und Sperrungs-Handling gehören exklusiv in die **spezialisierte Navigations-App** (Apple CarPlay / Android Auto via PCBA 05 Front-Knoten, Kurviger, Calimoto oder Garmin).
+  * Die Navi-App berechnet Ausweichrouten geräuschlos im Hintergrund und leitet den Fahrer per dezenter Sprachansage im Helm um (*„In 300 Metern rechts abbiegen“*). Der Fahrer muss auf dem Motorrad keine Stauberichte lesen.
+* **Informationsausgabe ausschließlich im Stillstand ($v = 0\,\text{km/h}$):**
+  * Erst wenn das Motorrad für mindestens **$5\,\text{Sekunden}$ vollständig steht** ($v = 0\,\text{km/h}$ an einer roten Ampel, Schranke oder Rastpause), blendet die PWA auf Wunsch eine ruhige, statische Informationskarte ein (Wetter-Trend, Streckensperrungen der Umgebung).
+  * Sobald das Fahrzeug wieder anrollt ($v > 3\,\text{km/h}$), schaltet die Ansicht verzögerungsfrei und lautlos zurück in das minimalistische Primär-Cockpit.
+
 ---
 
 ## 3. Erweiterter GPX-Export & Navi-Formatierung
