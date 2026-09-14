@@ -67,11 +67,19 @@ Das Dashboard ist eine vollständig autarke Progressive Web App (PWA) basierend 
 * **Betriebsmodus-Wahl:** Umschaltung zwischen Standard Mode (Mesh Bridge), Single Rider Mode und Cruise Mode.
 * **Schieberegler:** Eingangspegel Port 1 (Sena), Port 2 (Cardo), Ducking-Dämpfung und Transparenz-Lautstärke.
 * **Echtzeit-Pegelbalken:** Live-Pegelüberwachung aller 4 Audio-Eingangskanäle.
+* **🦾 Smart Cartridge Mechatronik-Bedienfeld (PCBA 03 Rev 2.0):**
+  * Live-Statusanzeige des Kassetten-Controllers (CH32V003 Synced).
+  * `⚡ Power Boot`: Löst über Opcode `0x01` den synchronen Tastendruck `Center + (+)` (1000 ms) aus – autom. Kaltstart nach Standzeiten $> 3$ Tage.
+  * `🔘 Mesh Ein/Aus`: Opcode `0x05` (200 ms Einzelpuls).
+  * `⏭️ Kanal +1 / ⏮️ Kanal -1`: Autonome Kassetten-Makros (`0x07` / `0x08`, 2x Mesh + 1x Plus/Minus).
+  * `🔊 Lauter / 🔉 Leiser`: Einzeltasten-Impulse (`0x03` / `0x04`, 100 ms) über unabhängige Aktuatoren `ACT_PLUS` bzw. `ACT_MINUS`.
+  * `👥 Group Mesh`: 3000 ms Haltepuls (`0x06`) für nahtloses Umschalten zwischen öffentlichem Open Mesh und privatem Gruppen-Mesh.
 
 ### 2.3 Tab 3: Kassetten & DLE (`#tab-cartridges`)
-* **Live-Status:** Anzeige der eingesteckten Kassetten in Slot 1 und Slot 2 mit 1-Wire UIDs.
+* **Live-Status:** Anzeige der eingesteckten Kassetten in Slot 1 und Slot 2 mit 1-Wire UIDs (nativ emuliert oder DS2401).
+* **Smart Cartridge Kennzeichnung:** Visualisierung von Hardware-Architektur (RISC-V CH32V003, 4x MOSFETs, In-System Flashing aktiv).
 * **Kassetten-Onboarding-Wizard:** Interaktive 3-Schritte-Anleitung beim Einsetzen neuer Headsets.
-* **Ground-Truth Sync:** Button zur Synchronisation des LittleFS-Mappings.
+* **Ground-Truth Sync & ISP-Flashing:** Re-Synchronisation der Konfigurationstabellen direkt in das EEPROM des Kassetten-MCUs über Pin 5 Single-Wire UART.
 
 ### 2.4 Tab 4: Touren & WebDAV (`#tab-tours`)
 * **Tour-Historie:** Tabellarische Auflistung aller auf der MicroSD gespeicherten GPX-Dateien mit Datum, Distanz und maximaler Schräglage.

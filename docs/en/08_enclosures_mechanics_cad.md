@@ -360,6 +360,10 @@ For modern intercom cartridges such as the Sena SPIDER X Slim (as well as Cardo 
 * **3. Kink-Free Strain Relief for 3-Port Cable Whip:**
   * Sled base channels guide the factory cable whip of the SPIDER X Slim (DC Power ⑧, Microphone ⑨, Speaker ⑩) across smooth bend radii ($R \ge 5\,\text{mm}$) directly into headers `J2` and `J_ACT` on PCBA 03 Rev 2.0.
 
+![OpenMotorBridge Mechatronic Smart Cartridge Sena SPIDER X Slim 3D CAD Fitting](../images/cad/smart_cartridge_spider_x_cad.png)
+
+*Figure 8.14b: CAD visualization of the mechatronic Smart Modular Cartridge Rev 2.0 for Sena SPIDER X Slim: Form-fit PA12-MJF cradle, 3-point EPDM vibration damping resisting 20g shock/vibration, quick-release hold-down clamp, and monolithic actuator guide bridge with 4 independent solenoid plungers on PCBA 03.*
+
 #### 4.3.5 Sena +Mesh & Universal Slide-Inlay (Class A with External RF Bulkhead)
 * **100% Non-Destructive OEM Integration:** The Sena +Mesh remains unopened in its original housing.
 * **Form-Fitting Sled Inlay:** Replicates the OEM frame mount with 2x sliding tabs (spacing $30\,\text{mm}$) and flexible snap tongue.

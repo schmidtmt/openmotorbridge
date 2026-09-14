@@ -1,6 +1,6 @@
 # 02 - Intercom-Matrix, PTT-Steuerung & Dynamische Kassetten-Profile
 
-Dieses Dokument spezifiziert die universelle **Intercom-Routing-Matrix**, die latenzfreie **Lenker-PTT-Steuerung** (< 1,8 ms) sowie das klassenorientierte **Hardwareprofil-System** der OpenMotorBridge v8.0 auf Basis des 1-Wire DS2401 ID-Chips und der LittleFS-Profil-Engine.
+Dieses Dokument spezifiziert die universelle **Intercom-Routing-Matrix**, die latenzfreie **Lenker-PTT-Steuerung** (< 1,8 ms) sowie das klassenorientierte **Hardwareprofil-System** der OpenMotorBridge v8.0 auf Basis der 1-Wire Kassetten-Identifikation (WCH CH32V003 native Emulation oder DS2401 ROM-ID) und der LittleFS-Profil-Engine.
 
 ---
 
@@ -14,9 +14,9 @@ Die OpenMotorBridge fungiert als aktive Audio-Kreuzschiene und Brückengateway z
 │                                                                                        │
 │   SATELLITEN-POD 1 (Sena Mesh)           SATELLITEN-POD 2 (Cardo DMC / PMR446)         │
 │   ┌──────────────────────────┐           ┌──────────────────────────┐                  │
-│   │ • Sena 50S / 60S / Apex  │           │ • Cardo Edge / Pro / Neo │                  │
-│   │ • 1-Wire DS2401 ROM-ID   │           │ • 1-Wire DS2401 ROM-ID   │                  │
-│   │ • TLP222A Opto-Trigger   │           │ • TLP222A Opto-Trigger   │                  │
+│   │ • Sena SPIDER X / 50S/60S│           │ • Cardo Edge / Pro / Neo │                  │
+│   │ • 1-Wire ID (CH32V003/DS)│           │ • 1-Wire ID (CH32V003/DS)│                  │
+│   │ • 4x Mechatronik / Optos │           │ • 4x Mechatronik / Optos │                  │
 │   └────────────┬─────────────┘           └────────────┬─────────────┘                  │
 │                │ NF_P1_OUT/IN                         │ NF_P2_OUT/IN                   │
 │                ▼                                      ▼                                │
@@ -231,9 +231,11 @@ Jedes Hardwareprofil liegt als eigenständige JSON-Datei im internen Flash-Datei
 
 ---
 
-## 4. 1-Wire DS2401 Kassetten-Erkennung & 3-Phasen Plug-and-Play
+## 4. 1-Wire Kassetten-Erkennung & 3-Phasen Plug-and-Play
 
-Jede Kassetten-Trägerplatine (`openmotorbridge_pod_cartridge`) besitzt einen fest verlöteten **Maxim/Analog Devices DS2401** Silizium-Seriennummern-Chip. Dieser übermittelt eine weltweit eindeutige 64-Bit-UID (`Family-Code 0x01 + 48-Bit Seriennummer + 8-Bit CRC`) über nur eine einzige Datenleitung.
+Jede Kassetten-Trägerplatine (`openmotorbridge_pod_cartridge`) stellt dem System eine weltweit eindeutige 64-Bit-UID (`Family-Code 0x01 + 48-Bit Seriennummer + 8-Bit CRC`) über nur eine einzige Datenleitung (Pin 5) bereit:
+* **Smart Modular Cartridge Rev 2.0 (ADR-010):** Der integrierte **WCH CH32V003 RISC-V Mikrocontroller** emuliert das 1-Wire DS2401-Protokoll nativ auf Pin 5 (`1W_UART_ISP`). Ein separater diskreter DS2401-Chip entfällt vollständig; die UID wird deterministisch aus der 64-Bit Factory-Unique-ID des Chips abgeleitet oder via In-System Profile Flashing zugewiesen.
+* **Passive / Legacy Kassetten (Rev 1.0):** Nutzen einen fest verlöteten diskreten **Maxim/Analog Devices DS2401** Silizium-Seriennummern-Chip im SOT-23-Gehäuse.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -247,8 +249,9 @@ Jede Kassetten-Trägerplatine (`openmotorbridge_pod_cartridge`) besitzt einen fe
 
 1. **Strombegrenzte Erkennungsphase:** Beim Einstecken bleibt die Haupt-Speisung (5V MOSFET) gesperrt. Der 1-Wire-Treiber pollt mit strombegrenzter Hilfsspannung ($< 20\,\text{mA}$) und liest die UID aus.
 2. **Automatische Routing-Zuweisung:**
+   * **Smart Cartridge UID erkannt:** Zentralbox identifiziert die Kassetten-Klasse (z. B. Sena SPIDER X Slim), initialisiert die serielle Opcode-Kommunikation und mechatronische Tastensteuerung und lädt das entsprechende JSON-Profil.
    * **Heck-Pod 3 UID erkannt:** Zentralbox schaltet Pins 15/16 auf High-Speed UART (@ 460.800 Baud) und initialisiert den NMEA/LoRa-Parser.
-   * **Audio-Kassette (Sena/Cardo) erkannt:** Pins werden an den Bourns NF-Pfad und ES8388 I2S-DSP geschaltet; das zugehörige JSON-Profil wird geladen.
+   * **Passive Audio-Kassette erkannt:** Pins werden an den Bourns NF-Pfad und ES8388 I2S-DSP geschaltet; das zugehörige Legacy-Profil wird geladen.
    * **Dummy-Kassette oder Open-Pin erkannt:** Slot bleibt dauerhaft stromlos geschaltet (`disabled.json`).
 3. **Soft-Start:** Nach erfolgreicher Validierung schaltet der P-FET die Speisespannung über eine definierte Soft-Start-Rampe ($100-150\,\text{ms}$) ein.
 

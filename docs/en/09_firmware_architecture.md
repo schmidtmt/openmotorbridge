@@ -23,8 +23,8 @@ This document specifies the system-wide firmware architecture of OpenMotorBridge
 #### CORE 0 (Communication, Telemetry & System):
 - **BLE GATT Server:** Web-Bluetooth connection for the PWA dashboard (`0x180D`, `0x180A`).
 - **ESP-NOW Front Node Client (`esp_now_front_node_client.cpp`):** Handles zero-latency handlebar PTT events ($< 1{,}8\,\text{ms}$) and Knowles MEMS dB(A) noise telemetry.
-- **Dual 1-Wire Cartridge Manager:** Polls DS2401 ROM IDs on Ports 1 & 2 to dynamically mount LittleFS JSON profiles.
-- **Opto-Pulse Sequencer:** Toshiba TLP222A button synthesis for OEM Sena/Cardo inlays.
+- **Dual 1-Wire Cartridge Manager (`cartridge_onewire.cpp`):** Polls 64-bit ROM IDs (emulated by Cartridge MCU or physical DS2401) on Ports 1 & 2 to dynamically mount LittleFS JSON profiles.
+- **Smart Cartridge Dispatcher & Opto-Pulse Sequencer (`opto_pulse_sequencer.cpp`):** Detects Smart Cartridges (PCBA 03 Rev 2.0) and dispatches 1-byte opcodes via single-wire UART on Pin 5 (19,200 baud) to drive the 4 mechatronic actuators; switches to TLP222A relay keying for analog PMR446 radios.
 - **WebDAV TLS 1.3 Client:** Asynchronous upload of GPX rides to Nextcloud/Synology on home Wi-Fi.
 - **SDIO Logging Task:** 4-bit high-speed SD card logger with rolling BGH privacy auto-purge.
 
@@ -56,91 +56,86 @@ enum FrontNodePktType : uint8_t {
 1. **Handlebar Switch Closure:** $12\,\mu\text{s}$ hardware debouncing.
 2. **ESP32-S3 GPIO Interrupt:** $25\,\mu\text{s}$ ISR execution time.
 3. **ESP-NOW Radio Transmission (2.4 GHz):** $0{,}90\,\text{ms}$ over-the-air flight time (99.8% PDR).
-4. **Central Box ESP32-S3 Core 0 ISR:** $45\,\mu\text{s}$ frame decode & pin toggle.
-5. **Toshiba TLP222A Optocoupler:** $0{,}50\,\text{ms}$ turn-on time $t_{\text{ON}}$.
-* **Total Glass-to-Glass Latency:** **$1{,}74\,\text{ms}$** (far below the human perceptual threshold of 10 ms).
+4. **Central Box ESP32-S3 Core 0 ISR:** $45\,\mu\text{s}$ frame decode & opcode dispatch.
+5. **Cartridge Controller & N-MOSFETs (`AO3400`):** $< 0{,}10\,\text{ms}$ actuator gate trigger.
+* **Total Glass-to-Glass Latency:** **$1{,}70\,\text{ms}$** (far below the human perceptual threshold of 10 ms).
 
 ### 2.2 Front-Node Binding, Proximity-Pairing & Zero-Touch Re-Pairing
 
 To completely prevent cross-talk, accidental triggering, or packet interference during group rides and at red lights (where multiple OpenMotorBridge-equipped motorcycles are clustered together), the system implements a strict **1:1 hardware binding** stored in NVS flash:
 
 ```
-                FRONT NODE BINDING & RE-PAIRING STATE MACHINE
+                  FRONT-NODE BINDING- & RE-PAIRING STATE MACHINE
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│ 1. STATE [UNPAIRED] (First-Time Commissioning / Factory Defaults):          │
-│    • NVS flash is blank (no Central Box MAC registered).                    │
-│    • Front Node automatically enters pairing mode on boot.                  │
-│    • Initial setup occurs in home garage (zero neighboring OMB bikes).      │
-│    • Central Box scans via WebApp -> Synchronizes 128-bit AES key & MAC.    │
-│    • Status transitions to [LINKED] and is permanently saved in NVS.        │
+│ 1. INITIAL FACTORY STATE:                                                   │
+│    • No Front Node MAC in NVS (Status: UNPAIRED)                            │
+│    • Central Box opens 60s pairing window upon first boot                   │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ 2. STATE [LINKED] (Normal Daily Riding & Group Packs):                      │
-│    • Dedicated unicast on Wi-Fi Channel 1 to registered Central Box MAC.    │
-│    • Foreign ESP-NOW packets rejected at hardware MAC layer                 │
-│      -> 0 CPU overhead, 0 false triggers, 0 cross-talk.                     │
-│    • Central Box broadcasts periodic heartbeats (500 ms interval).          │
+│                                        ▼                                    │
+│ 2. PROXIMITY-PAIRING & RSSI-GATING:                                         │
+│    • Front Node broadcasts pairing beacon at reduced TX power (-12 dBm)     │
+│    • Central Box accepts pairing ONLY if RSSI > -45 dBm (< 30 cm distance)  │
+│    • Rider holds Front Node directly against Central Box                    │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ 3. STATE [ORPHAN / RE-PAIRING READY] (Central Box Replaced / Dead):         │
-│    • If heartbeats from the registered Central Box cease for > 60 seconds   │
-│      (e.g., box replaced or damaged), Front Node enters rescue readiness.   │
-│    • Anti-Hijacking Protection: As long as the registered box is active,    │
-│      the Front Node remains completely deaf to foreign pairing attempts!    │
+│                                        ▼                                    │
+│ 3. PAIRING HANDSHAKE & NVS PERSISTENCE:                                     │
+│    • Central Box acknowledges with vendor action frame (pairing token)      │
+│    • Both nodes store peer MAC & token in encrypted NVS                     │
+│    • State transitions to PAIRED & LOCKED                                   │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ 4. PROXIMITY RESCUE TAKEOVER (Zero-Drill & Zero Tool Access):               │
-│    • Rider taps [Pair Front Node] in WebApp of the NEW Central Box.         │
-│    • New Central Box transmits ESP-NOW Rescue Beacon.                       │
-│    • Front Node accepts the new Central Box ONLY IF:                        │
-│      a) Heartbeat loss from old box persists for > 60 seconds.              │
-│      b) Received signal strength of new box satisfies RSSI > -42 dBm        │
-│         (physically achievable only across the 1-meter span of same bike).  │
-│    • Previous NVS binding overwritten -> Seamless transition to [LINKED].   │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ 5. RAPID OVERRIDE VIA HANDLEBAR PTT (If Button Installed):                  │
-│    • Hold handlebar PTT continuously for 10 seconds while stationary.       │
-│    • Manually clears NVS binding and forces state back to [UNPAIRED].       │
+│                                        ▼                                    │
+│ 4. ZERO-TOUCH AUTOMATIC RE-CONNECT:                                         │
+│    • On every ignition ON (KL15), Front Node sends heartbeat frame          │
+│    • Central Box verifies MAC & token in < 5 ms -> Instant PTT readiness   │
+│    • Zero manual button presses or pairing required for daily rides         │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 3. Dual-Bank Rollback-OTA Partitioning
+## 3. BLE GATT Server Architecture (`ble_service_server.cpp`)
 
-To completely eliminate the risk of bricking when the vehicle ignition is turned off during an update:
+The system exposes standardized Bluetooth SIG services and vendor-specific characteristics for the PWA dashboard:
 
-```csv
-# Name,   Type, SubType, Offset,  Size, Flags
-nvs,      data, nvs,     0x9000,  0x4000,
-otadata,  data, ota,     0xd000,  0x2000,
-phy_init, data, phy,     0xf000,  0x1000,
-factory,  app,  factory, 0x10000, 0x180000,
-ota_0,    app,  ota_0,   0x190000,0x140000,
-ota_1,    app,  ota_1,   0x2d0000,0x140000,
-storage,  data, littlefs,0x410000,0x3f0000,
-```
-
-* **Automatic Rollback:** The bootloader verifies firmware image integrity via SHA-256 before committing. If power cuts out mid-flash, the bootloader automatically reverts to the previous working slot (`ota_0`) $\rightarrow$ **0.0% brick risk**.
+| Service UUID | Characteristic UUID | Properties | Function & Data Payload |
+| :--- | :--- | :--- | :--- |
+| **`0x180D`** (Heart Rate / Audio RMS) | **`0x2A37`** | Notify | Knowles MEMS wind noise level (50 Hz, 8-bit dB(A) + Peak). |
+| **`0x180A`** (Device Information)   | **`0x2A24`** | Read   | Hardware revision (`OMB-V8-2026.1`), Serial, Firmware build. |
+| **`0xFFE0`** (Proprietary Control)   | **`0xFFE1`** | Write  | Control commands: `0x01` Profile switch, `0x02` Reset, `0x09` Smart Cartridge Opcode. |
+| **`0xFFE0`** (Proprietary Telemetry) | **`0xFFE2`** | Notify | 10 Hz Telemetry stream: Lean-Angle (Roll/Pitch), Speed, TTC, Battery status. |
+| **`0xFFE0`** (1-Wire & DLE Gateway)  | **`0xFFE3`** | Notify/Read | Cartridge status Ports 1 & 2: 64-bit UID, detected class, DLE score. |
 
 ---
 
-## 4. In-System UART Push-Flasher (`omm_flasher.cpp`)
+## 4. OMM In-System UART-Push-Flasher (`omm_flasher.cpp`)
 
-For firmware updates of Rear Pod 3 without dismantling the vehicle cowl:
-* The Central Box reads `omm_rear.bin` from the storage partition and commands the RP2040 coprocessor via UART sequence `0xAA 0x55 0xFE 0x01 "BOOT"` into bootloader mode.
-* The flash transfer runs at $460,800\,\text{Baud}$ in 1024-byte chunks with CRC-16 error checking (< 6 seconds duration).
+For zero-disassembly firmware updates of rear Pod 3:
+* The Central Box reads the binary image `omm_rear.bin` and triggers bootloader mode on the RP2040 via UART with command `0xAA 0x55 0xFE 0x01 "BOOT"`.
+* Flashing completes over $460{,}800\,\text{baud}$ UART in 1024-byte chunks in $< 6\,\text{s}$.
+* The Front Node (PCBA 05) is updated via dual-partition OTA rollback partitions over ESP-NOW or through the WebApp dashboard.
 
 ---
 
-## 5. TLP222A Optocoupler Pulse Synthesis & Button Simulation
+## 5. Cartridge Key Automation: Mechatronic Smart Cartridge (PCBA 03 Rev 2.0) & Legacy Mode
 
-Button presses are synthesized with sub-millisecond precision to trigger OEM headsets according to exact manufacturer specifications:
+OpenMotorBridge actuates intercoms and two-way radios via two optimized modes:
 
-| Command / Gesture | Pulse Duration ($t_{\text{ON}}$) | Release Time ($t_{\text{OFF}}$) | Function & Headset Response |
-| :--- | :---: | :---: | :--- |
-| **Single Click (Mesh On/Off)** | $200\,\text{ms}$ | $> 300\,\text{ms}$ | Toggles Open Mesh or DMC group talk (Sena Mesh button, Cardo Intercom). |
-| **Double Click (Radio / Pair)** | 2x $150\,\text{ms}$ | $150\,\text{ms}$ | Activates FM radio or switches between music and intercom. |
-| **Channel Next (Channel Cycle)**| $1000\,\text{ms}$ | $> 500\,\text{ms}$ | Advances to the next channel in Sena Open Mesh (Channels 1 through 9). |
-| **Long Press (Power Toggle)** | $3500\,\text{ms}$ | $> 1000\,\text{ms}$ | Powers the headset fully ON or OFF. |
-| **Mute Toggle (Mute Mic)** | $500\,\text{ms}$ | $> 300\,\text{ms}$ | Temporarily mutes the rider microphone. |
+### 5.1 Smart Cartridge Mechatronic Mode (PCBA 03 Rev 2.0 – Default for Intercoms)
+The Central Box communicates over Pin 5 (`TRIGGER_PPS`) via 19,200-baud single-wire UART with the Cartridge MCU (WCH CH32V003). The MCU independently drives 4 N-MOSFETs (`AO3400`):
+
+| Opcode | Function / Gesture | Active Actuators | Pulse Duration / Sequence | Headset Response (Sena SPIDER X Slim) |
+| :---: | :--- | :--- | :--- | :--- |
+| **`0x01`** | **Power Boot (Cold Start)**| **ACT_CENTER + PLUS** | $1000\,\text{ms}$ synchronous | Automatically boots headset on ignition ON |
+| **`0x02`** | **Power Off** | **ACT_CENTER + PLUS** | $200\,\text{ms}$ synchronous | Clean graceful shutdown prior to power cut |
+| **`0x03`** | **Volume Up (+)** | **ACT_PLUS** (solo) | $100\,\text{ms}$ single pulse | Volume +1 step |
+| **`0x04`** | **Volume Down (-)** | **ACT_MINUS** (solo) | $100\,\text{ms}$ single pulse | Volume -1 step |
+| **`0x05`** | **Mesh Intercom On/Off**| **ACT_MESH** (solo) | $200\,\text{ms}$ single pulse | Mesh toggle voice prompt ("Mesh On/Off") |
+| **`0x06`** | **Open ↔ Group Mesh** | **ACT_MESH** (solo) | $3000\,\text{ms}$ hold pulse | Toggles between Open Mesh and private Group Mesh |
+| **`0x07`** | **Channel +1 (Macro)** | **ACT_MESH (2x) + PLUS (1x)** | 2x $150\,\text{ms}$, pause $200\,\text{ms}$, 1x $150\,\text{ms}$ | Enters channel menu and advances channel autonomously |
+| **`0x08`** | **Channel -1 (Macro)** | **ACT_MESH (2x) + MINUS (1x)**| 2x $150\,\text{ms}$, pause $200\,\text{ms}$, 1x $150\,\text{ms}$ | Enters channel menu and decrements channel autonomously |
+
+### 5.2 TLP222A Legacy Mode (PMR446 Radios / K7)
+For analog radios (e.g. Midland G9 / SA818S), Pin 5/6 provides isolated solid-state relay keying (PhotoMOS TLP222A) synchronized with the handlebar PTT.
 
 ---
 
@@ -152,12 +147,12 @@ The overall system orchestrates 13 specialized tasks across 3 physically separat
 | :--- | :--- | :---: | :---: | :---: | :--- | :--- |
 | **`audio_dsp_task`** | ESP32-S3 (Core 1) | **24** | 8 KB | 48 kHz DMA ISR | FreeRTOS StreamBuffer | Zero-latency I2S audio mix, Raised-Cosine ducking & AGC. |
 | **`esp_now_rx_task`** | ESP32-S3 (Core 0) | **22** | 4 KB | Event-Queue | Direct-to-Task Notify | Handles Front Node PTT events ($< 1{,}8\,\text{ms}$) & noise RMS. |
-| **`opto_seq_task`** | ESP32-S3 (Core 0) | **18** | 2 KB | Event-Queue | FreeRTOS Queue | Synthesizes bounce-free pulses to TLP222A PhotoMOS relays. |
+| **`smart_act_task`** | ESP32-S3 (Core 0) | **18** | 2 KB | Event-Queue | FreeRTOS Queue | Dispatches 1-byte opcodes via single-wire UART or triggers TLP222A relays. |
 | **`radar_proc_task`** | ESP32-S3 (Core 0) | **16** | 4 KB | 20 Hz UART2 ISR | FreeRTOS Queue / UART | Garmin Varia / mmWave parsing, TTC calculation & Prio-1 ducking. |
 | **`adr_ekf_task`** | ESP32-S3 (Core 0) | **15** | 4 KB | 50 Hz Timer | I2C / CAN Buffer | 15-State Kalman filter (GNSS + IMU + wheel speed). |
 | **`ble_server_task`** | ESP32-S3 (Core 0) | **10** | 4 KB | Event-Driven | NimBLE Stack | Web-Bluetooth PWA dashboard (GATT services `0x180D`/`0x180A`). |
 | **`sdio_log_task`** | ESP32-S3 (Core 0) | **8** | 8 KB | 10 Hz Ringbuffer | FreeRTOS RingBuffer | 4-Bit SDIO blackbox telemetry logging with ECDSA SHA-256. |
-| **`onewire_task`** | ESP32-S3 (Core 0) | **5** | 2 KB | 0.5 Hz cyclic | Bit-Banging Driver | Polls DS2401 Silicon Serial ROM IDs on Pods 1 & 2. |
+| **`onewire_task`** | ESP32-S3 (Core 0) | **5** | 2 KB | 0.5 Hz cyclic | Bit-Banging Driver | Polls 1-Wire UIDs on Pods 1 & 2 (CH32V003 emulation or physical DS2401). |
 | **`webdav_sync_task`**| ESP32-S3 (Core 0) | **3** | 8 KB | Graceful Shutdown | LwIP TLS 1.3 | Automatic GPX tour upload via home Wi-Fi upon ignition OFF. |
 | **`rear_nmea_task`** | RP2040 (Core 0) | **High**| 2 KB | 10 Hz DMA | UART0 (460.8k Baud) | High-speed UBX/NMEA parsing & 1-PPS timecode capture. |
 | **`rear_lora_task`** | RP2040 (Core 1) | **High**| 2 KB | SX1262 IRQ | SPI0 Bus | 868 MHz LoRa mesh packet scheduling & emergency voice. |

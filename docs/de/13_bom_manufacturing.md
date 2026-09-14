@@ -37,16 +37,20 @@ Dieses Dokument enthält die vollständige Bauteilliste (Bill of Materials) und 
 
 ---
 
-## 3. PCBA 03: Universalschlitten Cartridge (`openmotorbridge_pod_cartridge`, 2-Layer FR4)
+## 3. PCBA 03: Smart Modular Cartridge Rev 2.0 (`openmotorbridge_pod_cartridge`, 2-Layer FR4)
 
 | Designator | Bauteil / MPN | Hersteller | Gehäuse | LCSC / JLCPCB Part # | Funktion |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **J1** | PinSocket_1x06_P2.54mm_SMD | Harwin / Samtec | SMD Horizontal | C2934177 | Stirnseitige 6-Pin Präzisionsbuchse |
-| **J2** | JST-SH 1.0mm 6-Pin Horizontal| JST | SMD Liegend | C136657 | Flachbandkabel-Anschluss zum Headset-Inlay |
-| **U1** | DS2401Z+ | Maxim / ADI | SOT-223 / SOT-23 | C2834570 | 64-Bit 1-Wire Silicon Serial ROM (Kassetten-ID) |
+| **U1** | CH32V003F4P6 | WCH | TSSOP-20 / QFN-20 | C3011382 | 32-Bit RISC-V MCU (1-Wire ROM-ID Emulation & ISP Makro-Controller) |
+| **Q1, Q2, Q3, Q4** | AO3400A | Alpha & Omega | SOT-23 | C20917 | 30V / 5.7A N-Kanal Power-MOSFETs für 4x Mechatronik-Aktuatoren |
+| **D3, D4, D5, D6** | 1N4148WS | Diodes Inc. / LRC | SOD-323 | C81598 | Freilauf-Schutzdioden für induktive Aktuator-Spulen |
+| **J1** | PinSocket_1x06_P2.54mm_SMD | Harwin / Samtec | SMD Horizontal | C2934177 | Stirnseitige 6-Pin Präzisionsbuchse zur Pod-Base |
+| **J2** | JST-SH 1.0mm 6-Pin Horizontal| JST | SMD Liegend | C136657 | Audio Diff & Direct-DC Kabelpeitsche zum Headset-Inlay |
+| **J_ACT** | JST-SH 1.0mm 8-Pin Horizontal| JST | SMD Liegend | C136659 | Mechatronik-Header für 4 unabhängige Miniatur-Hubmagnete |
 | **F1** | MF-MSMF050-2 (500mA) | Bourns | 1812 SMD | C22668 | Rückstellbare PPTC-Sicherung für Kassettenstromkreis |
-| **D1** | Grüne 5V Power-LED | Everlight | 0805 SMD | C2297 | Optische Betriebsanzeige für 5V Speisung |
-| **D2** | SP3012-06UTG | Littelfuse | DFN-14 | C2834580 | 6-Kanal ESD-Schutzmatrix für Audio & Daten |
+| **D1** | Duo-Status-LED Grün/Blau | Everlight / Xinglight | 0805 SMD | C2834575 | Status-LED: Grün = 1-Wire Active / Config Synced, Blau = Aktuator-Impuls |
+| **D2** | SP3012-06UTG | Littelfuse | DFN-14 | C2834580 | 6-Kanal Ultra-Low-Cap ESD-Schutzmatrix für Audio & Daten |
+| **C1, C2** | 100nF 50V X7R | Samsung | 0603 SMD | C14663 | Entkopplungskondensatoren für VCC und MCU |
 
 ---
 

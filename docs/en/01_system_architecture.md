@@ -116,6 +116,7 @@ OpenMotorBridge v8.0 defines the platform across **5 standardized functional nod
 
 ### 2.3 Universal Off-the-Shelf OEM Adapter Interfacing
 The enlarged pod cartridges ($110 \times 54 \times 28\,\text{mm}$ interior cavity) accommodate all commercial off-the-shelf OEM adapters in their factory-unopened state:
+* **Class S (Smart Modular Cartridge with Mechatronics • OMB Reference):** e.g. Sena SPIDER X Slim (primary recommendation), Sena 60S, Cardo Edge – 100% factory-unopened original device seated in a PA12-MJF form-fit cradle with 3-point EPDM damping against $20\,\text{g}$ shock/vibration, 4 independent mechatronic actuators on PCBA 03 Rev 2.0 (WCH CH32V003 RISC-V MCU, In-System Flashing via Pin 5 UART), factory $3.85\,\text{V}$ DC direct power supply, zero pogo pins, zero soldering, 100% preservation of manufacturer warranty and IPX weatherproofing.
 * **Class A (Wireless Bridges & USB Power):** e.g. Sena +Mesh (B2M-01), Sena MeshPort Blue/Red – powered via low-profile 90° Micro-USB/USB-C, wireless BT audio bridge to helmet, external SMA bulkhead double-jack with silicone protection plug on faceplate.
 * **Class B (Pogo-Pin Spring-Contact Cradles):** e.g. Sena 50S/60S/30K/20S EVO – full analog audio (ES8388 codec) and TLP222A PTT synthesis.
 * **Class C (Magnetic Air-Mount):** e.g. Cardo Packtalk Edge/Pro/Neo – tool-free magnetic latching via dual N52 Neodymium magnets.

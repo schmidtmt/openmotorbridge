@@ -37,16 +37,20 @@ This document provides the complete Bill of Materials (BOM) and manufacturing sp
 
 ---
 
-## 3. PCBA 03: Universal Cartridge Carrier (`openmotorbridge_pod_cartridge`, 2-Layer FR4)
+## 3. PCBA 03: Smart Modular Cartridge Rev 2.0 (`openmotorbridge_pod_cartridge`, 2-Layer FR4)
 
 | Designator | Component / MPN | Manufacturer | Package | LCSC / JLCPCB Part # | Function |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **J1** | PinSocket_1x06_P2.54mm_SMD | Harwin / Samtec | SMD Horizontal | C2934177 | Front 6-Pin Precision Socket (Sled Insertion) |
-| **J2** | JST-SH 1.0mm 6-Pin Horizontal| JST | SMD Right-Angle| C136657 | Ribbon Cable Connection to Headset Cradle |
-| **U1** | DS2401Z+ | Maxim / ADI | SOT-23 | C2834570 | 64-Bit 1-Wire Silicon Serial ROM (Cartridge ID)|
+| **U1** | CH32V003F4P6 | WCH | TSSOP-20 / QFN-20 | C3011382 | 32-Bit RISC-V MCU (1-Wire ROM-ID Emulation & ISP Macro Controller) |
+| **Q1, Q2, Q3, Q4** | AO3400A | Alpha & Omega | SOT-23 | C20917 | 30V / 5.7A N-Channel Power MOSFETs for 4x Mechatronic Actuators |
+| **D3, D4, D5, D6** | 1N4148WS | Diodes Inc. / LRC | SOD-323 | C81598 | Flyback Protection Diodes for Inductive Actuator Coils |
+| **J1** | PinSocket_1x06_P2.54mm_SMD | Harwin / Samtec | SMD Horizontal | C2934177 | Front 6-Pin Precision Socket to Pod Base |
+| **J2** | JST-SH 1.0mm 6-Pin Horizontal| JST | SMD Right-Angle| C136657 | Audio Diff & Direct-DC Cable Whip to Headset Inlay |
+| **J_ACT** | JST-SH 1.0mm 8-Pin Horizontal| JST | SMD Right-Angle| C136659 | Mechatronics Header for 4 Independent Miniature Solenoids |
 | **F1** | MF-MSMF050-2 (500mA) | Bourns | 1812 SMD | C22668 | Resettable PPTC Fuse for 5V Cartridge Rail |
-| **D1** | Green 5V Power LED | Everlight | 0805 SMD | C2297 | Visual Power Status Indicator |
-| **D2** | SP3012-06UTG | Littelfuse | DFN-14 | C2834580 | 6-Channel ESD Protection Matrix |
+| **D1** | Duo-Status LED Green/Blue | Everlight / Xinglight | 0805 SMD | C2834575 | Status LED: Green = 1-Wire Active / Config Synced, Blue = Actuator Pulse |
+| **D2** | SP3012-06UTG | Littelfuse | DFN-14 | C2834580 | 6-Channel Ultra-Low-Cap ESD Protection Matrix |
+| **C1, C2** | 100nF 50V X7R | Samsung | 0603 SMD | C14663 | Decoupling Capacitors for VCC and MCU Rail |
 
 ---
 

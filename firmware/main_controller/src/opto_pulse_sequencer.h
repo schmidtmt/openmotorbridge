@@ -24,22 +24,32 @@ void opto_trigger_single_click(gpio_num_t pin, uint32_t duration_ms);
 void opto_trigger_double_click(gpio_num_t pin, uint32_t click_ms, uint32_t pause_ms);
 
 /**
- * @brief Port 1: Mesh On/Off Toggle (200 ms Puls für Sena Mesh)
+ * @brief Port 1 bzw. 2: Power-On Boot Sequenz (Smart Cartridge Opcode 0x01 oder 1000 ms Puls)
+ */
+void opto_port_power_boot(uint8_t port);
+
+/**
+ * @brief Port 1 bzw. 2: Schrittweise Lautstärkeregelung (Opcode 0x03 Plus / 0x04 Minus)
+ */
+void opto_port_volume_step(uint8_t port, bool volume_up);
+
+/**
+ * @brief Port 1: Mesh On/Off Toggle (Opcode 0x05 oder 200 ms Puls)
  */
 void opto_port1_toggle_mesh(void);
 
 /**
- * @brief Port 1: Wechsel Open Mesh ↔ Group Mesh (3000 ms Haltepuls, Handbuch S. 29)
+ * @brief Port 1: Wechsel Open Mesh ↔ Group Mesh (Opcode 0x06 oder 3000 ms Haltepuls)
  */
 void opto_port1_toggle_group_mesh(void);
 
 /**
- * @brief Port 1: Kanalauswahl (Doppelklick 2x 150 ms für Sena SPIDER X Slim, Handbuch S. 26)
+ * @brief Port 1: Kanalauswahl (Opcode 0x07 Autonomes Makro oder Doppelklick 2x 150 ms)
  */
 void opto_port1_channel_next(void);
 
 /**
- * @brief Port 2: Kanalweiterschaltung (800 ms Puls für Cardo DMC Gen2)
+ * @brief Port 2: Kanalweiterschaltung (Opcode 0x07 oder 800 ms Puls für Cardo DMC Gen2)
  */
 void opto_port2_channel_next(void);
 

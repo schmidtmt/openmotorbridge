@@ -961,6 +961,8 @@
                             <span style="font-size: 0.85rem; font-weight: 600; color: var(--accent-blue);">🦾 Smart Cartridge Aktuatoren (PCBA 03)</span>
                             <span class="badge badge-success" style="font-size: 0.7rem;">CH32V003 Synced</span>
                         </div>
+                        <!-- Pod 1 Aktuatoren (Links) -->
+                        <div style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">1️⃣ Pod 1 (Sena SPIDER X Slim):</div>
                         <div class="grid-2" style="gap: 8px;">
                             <button id="btn-trigger-p1-power" class="btn-secondary" style="font-size: 0.82rem; border-color: rgba(255, 159, 10, 0.4); color: var(--accent-orange);">
                                 ⚡ <span data-i18n="btn_p1_power">Power Boot (Center++)</span>
@@ -986,6 +988,28 @@
                             </button>
                             <button id="btn-trigger-p1-group" class="btn-secondary" style="font-size: 0.78rem; padding: 6px 4px; border-color: rgba(52, 199, 89, 0.4); color: var(--accent-green);">
                                 👥 <span>Group Mesh</span>
+                            </button>
+                        </div>
+
+                        <!-- Pod 2 Aktuatoren (Rechts) -->
+                        <div style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); margin: 12px 0 6px 0; border-top: 1px dashed var(--border-subtle); padding-top: 8px;">2️⃣ Pod 2 (Cardo Packtalk / Smart):</div>
+                        <div class="grid-2" style="gap: 8px;">
+                            <button id="btn-trigger-p2-power" class="btn-secondary" style="font-size: 0.82rem; border-color: rgba(255, 159, 10, 0.4); color: var(--accent-orange);">
+                                ⚡ <span>Power Boot (P2)</span>
+                            </button>
+                            <button id="btn-trigger-p2-toggle" class="btn-secondary" style="font-size: 0.82rem;">
+                                🔘 <span>Intercom Toggle (P2)</span>
+                            </button>
+                        </div>
+                        <div class="grid-3" style="margin-top: 8px; gap: 6px;">
+                            <button id="btn-trigger-p2-ch-next" class="btn-secondary" style="font-size: 0.78rem; padding: 6px 4px; border-color: rgba(10, 132, 255, 0.4); color: var(--accent-blue);">
+                                ⏭️ <span>Kanal (+)</span>
+                            </button>
+                            <button id="btn-trigger-p2-vol-up" class="btn-secondary" style="font-size: 0.78rem; padding: 6px 4px;">
+                                🔊 <span>Lauter</span>
+                            </button>
+                            <button id="btn-trigger-p2-vol-down" class="btn-secondary" style="font-size: 0.78rem; padding: 6px 4px;">
+                                🔉 <span>Leiser</span>
                             </button>
                         </div>
                     </div>
@@ -1263,8 +1287,11 @@
                         <span class="stat-sub" id="pod1-vendor">Sena Technologies • Mesh 3.0 & Wave (Direct-DC)</span>
                     </div>
                     <div class="stat-row">
-                        <span class="stat-sub">1-Wire DS2401 ID:</span>
-                        <span style="font-family: monospace; font-size: 0.85rem;" id="pod1-uid">01:4F:2A:90:12:00:8C</span>
+                        <span class="stat-sub">1-Wire Kassetten-UID:</span>
+                        <div style="display: flex; align-items: center; gap: 6px;">
+                            <span style="font-family: monospace; font-size: 0.85rem;" id="pod1-uid">01:4F:2A:90:12:00:8C</span>
+                            <span class="badge badge-success" style="font-size: 0.65rem; padding: 2px 6px;">Smart CH32V003</span>
+                        </div>
                     </div>
                     <div class="stat-row">
                         <span class="stat-sub">Status:</span>
@@ -1302,8 +1329,11 @@
                         <span class="stat-sub" id="pod2-vendor">Cardo Systems • DMC Gen2</span>
                     </div>
                     <div class="stat-row">
-                        <span class="stat-sub">1-Wire DS2401 ID:</span>
-                        <span style="font-family: monospace; font-size: 0.85rem;" id="pod2-uid">01:B3:78:11:44:90:3A</span>
+                        <span class="stat-sub">1-Wire Kassetten-UID:</span>
+                        <div style="display: flex; align-items: center; gap: 6px;">
+                            <span style="font-family: monospace; font-size: 0.85rem;" id="pod2-uid">01:B3:78:11:44:90:3A</span>
+                            <span class="badge badge-blue" style="font-size: 0.65rem; padding: 2px 6px;">Smart / Legacy</span>
+                        </div>
                     </div>
                     <div class="stat-row">
                         <span class="stat-sub">Status:</span>

@@ -4,6 +4,7 @@
 #include "freertos/task.h"
 #include "driver/gpio.h"
 #include "esp_log.h"
+#include "cartridge_onewire.h"
 
 static const char *TAG = "OPTO_SEQ";
 
@@ -47,25 +48,69 @@ void opto_trigger_double_click(gpio_num_t pin, uint32_t click_ms, uint32_t pause
     vTaskDelay(pdMS_TO_TICKS(300)); // Entprellzeit & Erholungspause
 }
 
+void opto_port_power_boot(uint8_t port) {
+    if (cartridge_is_smart(port)) {
+        ESP_LOGI(TAG, "Port %d: Smart Cartridge detected -> Dispatching Opcode POWER_BOOT (0x01)", port);
+        smart_cartridge_send_cmd(port, SMART_CMD_POWER_BOOT);
+    } else {
+        gpio_num_t pin = (port == 1) ? PIN_PORT1_KEY : PIN_PORT2_KEY;
+        ESP_LOGI(TAG, "Port %d: Legacy Cartridge -> Triggering 1000 ms Power-On pulse", port);
+        opto_trigger_single_click(pin, 1000);
+    }
+}
+
+void opto_port_volume_step(uint8_t port, bool volume_up) {
+    if (cartridge_is_smart(port)) {
+        uint8_t opcode = volume_up ? SMART_CMD_VOL_PLUS : SMART_CMD_VOL_MINUS;
+        ESP_LOGI(TAG, "Port %d: Smart Cartridge detected -> Dispatching Opcode %s (0x%02X)",
+                 port, volume_up ? "VOL_PLUS" : "VOL_MINUS", opcode);
+        smart_cartridge_send_cmd(port, opcode);
+    } else {
+        gpio_num_t pin = (port == 1) ? PIN_PORT1_KEY : PIN_PORT2_KEY;
+        ESP_LOGI(TAG, "Port %d: Legacy Cartridge -> Triggering 100 ms Volume pulse", port);
+        opto_trigger_single_click(pin, 100);
+    }
+}
+
 void opto_port1_toggle_mesh(void) {
-    // 200 ms Puls für Sena Mesh (Mesh On/Off, Handbuch S. 25)
-    opto_trigger_single_click(PIN_PORT1_KEY, 200);
+    if (cartridge_is_smart(1)) {
+        ESP_LOGI(TAG, "Port 1: Smart Cartridge detected -> Dispatching Opcode MESH_TOGGLE (0x05)");
+        smart_cartridge_send_cmd(1, SMART_CMD_MESH_TOGGLE);
+    } else {
+        // 200 ms Puls für Sena Mesh (Mesh On/Off, Handbuch S. 25)
+        opto_trigger_single_click(PIN_PORT1_KEY, 200);
+    }
 }
 
 void opto_port1_toggle_group_mesh(void) {
-    // 3000 ms Puls für Sena Spider X Slim (Wechsel Open Mesh ↔ Group Mesh, Handbuch S. 29)
-    opto_trigger_single_click(PIN_PORT1_KEY, 3000);
+    if (cartridge_is_smart(1)) {
+        ESP_LOGI(TAG, "Port 1: Smart Cartridge detected -> Dispatching Opcode GROUP_MESH_TOGGLE (0x06)");
+        smart_cartridge_send_cmd(1, SMART_CMD_GROUP_MESH_TOGGLE);
+    } else {
+        // 3000 ms Puls für Sena Spider X Slim (Wechsel Open Mesh ↔ Group Mesh, Handbuch S. 29)
+        opto_trigger_single_click(PIN_PORT1_KEY, 3000);
+    }
 }
 
 void opto_port1_channel_next(void) {
-    // Doppelklick für Sena Spider X Slim (Kanaleinstellungen aufrufen, Handbuch S. 26)
-    // 2x 150 ms mit 150 ms Pause ruft Kanaleinstellung auf; automatisches Speichern nach 10s Timeout
-    opto_trigger_double_click(PIN_PORT1_KEY, 150, 150);
+    if (cartridge_is_smart(1)) {
+        ESP_LOGI(TAG, "Port 1: Smart Cartridge detected -> Dispatching Opcode CHANNEL_NEXT_MACRO (0x07)");
+        smart_cartridge_send_cmd(1, SMART_CMD_CHANNEL_NEXT);
+    } else {
+        // Doppelklick für Sena Spider X Slim (Kanaleinstellungen aufrufen, Handbuch S. 26)
+        // 2x 150 ms mit 150 ms Pause ruft Kanaleinstellung auf; automatisches Speichern nach 10s Timeout
+        opto_trigger_double_click(PIN_PORT1_KEY, 150, 150);
+    }
 }
 
 void opto_port2_channel_next(void) {
-    // 800 ms Puls für Cardo DMC Gen2 (Kanalwechsel)
-    opto_trigger_single_click(PIN_PORT2_KEY, 800);
+    if (cartridge_is_smart(2)) {
+        ESP_LOGI(TAG, "Port 2: Smart Cartridge detected -> Dispatching Opcode CHANNEL_NEXT (0x07)");
+        smart_cartridge_send_cmd(2, SMART_CMD_CHANNEL_NEXT);
+    } else {
+        // 800 ms Puls für Cardo DMC Gen2 (Kanalwechsel)
+        opto_trigger_single_click(PIN_PORT2_KEY, 800);
+    }
 }
 
 void opto_port_pairing_mode(uint8_t port) {

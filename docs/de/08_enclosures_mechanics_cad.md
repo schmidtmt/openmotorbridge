@@ -386,6 +386,10 @@ Für moderne Intercom-Kassetten wie das Sena SPIDER X Slim (sowie Cardo Edge / S
 * **3. Knickfreie Zugentlastung der Kabelpeitsche:**
   * Im Kassettenboden führen drei separate Führungskanäle die werkseitige Kabelpeitsche des SPIDER X Slim (DC-Power ⑧, Mikrofon ⑨, Lautsprecher ⑩) über großzügig gerundete Radien ($R \ge 5\,\text{mm}$) direkt zu den Buchsen `J2` und `J_ACT` auf PCBA 03 Rev 2.0.
 
+![OpenMotorBridge Mechatronische Smart Cartridge Sena SPIDER X Slim 3D CAD Fitting](../images/cad/smart_cartridge_spider_x_cad.png)
+
+*Abbildung 8.14b: CAD-Visualisierung der mechatronischen Smart Cartridge Rev 2.0 für Sena SPIDER X Slim: Formschlüssiges PA12-MJF Konturbett, 3-Punkt EPDM-Schwingungsdämpfung gegen 20g Vibration, Niederhaltebügel und monolithische Führungsbrücke mit 4 unabhängigen Tauchanker-Aktuatoren auf PCBA 03.*
+
 #### 4.3.5 Sena +Mesh & Universal Slide-Inlay (Klasse A mit externem Antennenanschluss)
 Für das Sena +Mesh (oder andere OEM-Adapter mit Antennen- und Ladeanschluss) bietet die Kassetten-Frontblende (`00_base_sled.scad` & `01_insert_sena.scad`):
 * **100 % zerstörungsfreie Nutzung des ungeöffneten OEM-Geräts:** Das Sena +Mesh wird im Originalgehäuse belassen.

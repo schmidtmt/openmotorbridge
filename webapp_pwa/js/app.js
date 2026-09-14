@@ -4063,6 +4063,32 @@ document.getElementById('btn-trigger-p1-group')?.addEventListener('click', async
     if (controlChar) await controlChar.writeValue(new Uint8Array([0x09, 0x01, 0x06]));
 });
 
+// Smart Cartridge Port 2 Aktuatoren (PCBA 03)
+document.getElementById('btn-trigger-p2-power')?.addEventListener('click', async () => {
+    showToast(state.lang === 'de' ? '⚡ Port 2: Power Boot Sequenz ausgelöst' : '⚡ Port 2: Power Boot Sequence triggered', 'warning');
+    if (controlChar) await controlChar.writeValue(new Uint8Array([0x09, 0x02, 0x01]));
+});
+
+document.getElementById('btn-trigger-p2-toggle')?.addEventListener('click', async () => {
+    showToast(state.lang === 'de' ? '🔘 Port 2: Intercom Ein/Aus (200ms) ausgelöst' : '🔘 Port 2: Intercom On/Off (200ms) triggered', 'info');
+    if (controlChar) await controlChar.writeValue(new Uint8Array([0x09, 0x02, 0x05]));
+});
+
+document.getElementById('btn-trigger-p2-ch-next')?.addEventListener('click', async () => {
+    showToast(state.lang === 'de' ? '⏭️ Port 2: Kanalweiterschaltung (+1) ausgelöst' : '⏭️ Port 2: Channel Next (+1) triggered', 'info');
+    if (controlChar) await controlChar.writeValue(new Uint8Array([0x09, 0x02, 0x07]));
+});
+
+document.getElementById('btn-trigger-p2-vol-up')?.addEventListener('click', async () => {
+    showToast(state.lang === 'de' ? '🔊 Port 2: Lauter (+) Impuls (100ms)' : '🔊 Port 2: Volume Up (+) Pulse (100ms)', 'info');
+    if (controlChar) await controlChar.writeValue(new Uint8Array([0x09, 0x02, 0x03]));
+});
+
+document.getElementById('btn-trigger-p2-vol-down')?.addEventListener('click', async () => {
+    showToast(state.lang === 'de' ? '🔉 Port 2: Leiser (-) Impuls (100ms)' : '🔉 Port 2: Volume Down (-) Pulse (100ms)', 'info');
+    if (controlChar) await controlChar.writeValue(new Uint8Array([0x09, 0x02, 0x04]));
+});
+
 document.getElementById('btn-p1-resync')?.addEventListener('click', () => {
     const uid = document.getElementById('pod1-uid')?.textContent?.trim();
     if (uid && uid !== '--:--:--:--:--:--:--') {

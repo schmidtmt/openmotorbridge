@@ -18,8 +18,8 @@ This document serves as the **authoritative hardware specification for all 7 pri
 │ **PCBA 02**│ **Satellite Pod Base Carrier** │ 36 x 20 mm    │ 2 Layer │ SP3012 TVS, M8 6-Pin,│
 │       │ (Docking Base for Pod 1 & 2)  │ (30 mm M2)    │         │ Cartridge Receptacle │
 ├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
-│ **PCBA 03**│ **Universal Cartridge Carrier**│ 35 x 25 mm    │ 2 Layer │ DS2401 1-Wire ID,    │
-│       │ (Carrier PCB in 116x58 Sled)  │ (29x19 mm M2) │         │ TLP222A PhotoMOS Opto│
+│ **PCBA 03**│ **Smart Modular Cartridge**   │ 35 x 25 mm    │ 2 Layer │ CH32V003 RISC-V MCU, │
+│       │ (Rev 2.0 Mechatronic Carrier) │ (29x19 mm M2) │         │ 4x MOSFETs, J_ACT 8P │
 ├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
 │ **PCBA 04**│ **Rear Pod 3 Transceiver Hub** │ 55 x 48 mm    │ 4 Layer │ RP2040 Coprocessor,  │
 │       │ (Tail Pod: LoRa 868M & GNSS)  │ (46x19 mm M2) │ (ENIG)  │ SX1262 LoRa, MAX-M10S│

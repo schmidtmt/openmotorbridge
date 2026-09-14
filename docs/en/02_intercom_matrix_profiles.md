@@ -222,9 +222,11 @@ Each hardware profile resides as an autonomous JSON file in the ESP32-S3 interna
 
 ---
 
-## 4. 1-Wire DS2401 Cartridge Recognition & 3-Phase Plug-and-Play
+## 4. 1-Wire Cartridge Recognition & 3-Phase Plug-and-Play
 
-Each cartridge carrier PCB (`openmotorbridge_pod_cartridge`) features a factory-soldered **Maxim/Analog Devices DS2401** silicon serial number chip, reporting a globally unique 64-bit UID (`Family Code 0x01 + 48-bit Serial + 8-bit CRC`) over a single data line.
+Each cartridge carrier PCB (`openmotorbridge_pod_cartridge`) provides a globally unique 64-bit UID (`Family Code 0x01 + 48-bit Serial + 8-bit CRC`) over a single data line (Pin 5):
+* **Smart Modular Cartridge Rev 2.0 (ADR-010):** The onboard **WCH CH32V003 RISC-V microcontroller** emulates the 1-Wire DS2401 protocol natively on Pin 5 (`1W_UART_ISP`). A separate discrete DS2401 IC is completely eliminated; the 64-bit ROM-ID is deterministically derived from the MCU's factory unique ID or programmed via In-System Profile Flashing.
+* **Passive / Legacy Cartridges (Rev 1.0):** Feature a factory-soldered discrete **Maxim/Analog Devices DS2401** silicon serial number chip in a SOT-23 package.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -236,10 +238,11 @@ Each cartridge carrier PCB (`openmotorbridge_pod_cartridge`) features a factory-
 └─────────────────────────────────────────────────────────────┘
 ```
 
-1. **Current-Limited Interrogation:** Upon cartridge insertion, the 5V high-side switch remains OFF. The 1-Wire driver polls with a current-limited sense voltage ($< 20\,\text{mA}$) to read the DS2401 UID.
+1. **Current-Limited Interrogation:** Upon cartridge insertion, the 5V high-side switch remains OFF. The 1-Wire driver polls with a current-limited sense voltage ($< 20\,\text{mA}$) to read the UID.
 2. **Dynamic Routing Assignment:**
+   * **Smart Cartridge UID detected:** Central Box identifies the cartridge class (e.g. Sena SPIDER X Slim), initializes serial opcode communication and mechatronic key control, and loads the corresponding JSON profile.
    * **Rear Pod 3 UID detected:** Central Box switches pins 15/16 to high-speed UART (460,800 Baud) and initializes the NMEA/LoRa parser.
-   * **Audio Cartridge (Sena/Cardo) detected:** Pins are routed to the Bourns audio path and ES8388 I2S DSP; the matching JSON profile is loaded.
+   * **Passive Audio Cartridge detected:** Pins are routed to the Bourns audio path and ES8388 I2S DSP; the matching legacy profile is loaded.
    * **Blank Cartridge or Unassigned UID:** Bay remains unpowered (`disabled.json`).
 3. **Controlled Soft-Start:** Once validated, the P-channel MOSFET energizes the cartridge via a soft-start ramp ($100-150\,\text{ms}$) preventing inrush dips.
 

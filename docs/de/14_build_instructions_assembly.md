@@ -78,7 +78,7 @@ Um ein vollwertiges OpenMotorBridge (v8.0) Gesamtsystem für ein Motorrad aufzub
 | :--- | :--- | :---: | :--- | :--- |
 | **PCBA 01** | Zentralbox Hauptplatine (`kicad_main_box`) | **1** | 4-Layer FR4 TG150, ENIG Gold | ESP32-S3 Dual-Core, LM5164 DCDC, BQ24075 USV, ES8388 Codec, Bourns Audio-Übertrager, BMI270 IMU, MicroSD |
 | **PCBA 02** | Pod-Basis Trägerplatine (`kicad_pod_base`) | **3** | 2-Layer FR4, ENIG Gold | M8 6-Pin IP67 Buchse, SP3012 ESD-Schutzarray, Harwin 6-Pin Präzisions-Stiftleiste |
-| **PCBA 03** | Universal Kassettenplatine (`kicad_cartridge`)| **2** | 2-Layer FR4, ENIG Gold | Harwin 6-Pin Präzisionsbuchse, DS2401 1-Wire Seriennummer, JST-SH 6-Pin Header zum OEM-Headset |
+| **PCBA 03** | Smart Modular Kassettenplatine Rev 2.0 (`kicad_cartridge`)| **2** | 2-Layer FR4, ENIG Gold | WCH CH32V003 RISC-V MCU (1-Wire Emulation & Opcode-Engine), 4x AO3400A N-MOSFETs, Harwin 6-Pin Buchse, J_ACT 8-Pin Mechatronik-Header, J2 6-Pin Audio/Power |
 | **PCBA 04** | Heck-Pod 3 Transceiver (`kicad_rear_pod3`) | **1** | 4-Layer FR4 TG150, ENIG Gold | RP2040 Coprozessor, u-blox NEO-M9N / MAX-M10S GNSS, Semtech SX1262 LoRa, 3x Murata MM8030 HF-Umschalter |
 | **PCBA 05** | Universal Front-Knoten (`kicad_front_node`) | **1** | 4-Layer FR4 TG150, ENIG Gold | ESP32-S3 Dual-Core Xtensa, USB2514B 4-Port Hub, SC8102 USB-PD 20W, TPS2051B, TCAN334G CAN-FD, Knowles I2S MEMS, PTT-Interface |
 
@@ -208,12 +208,18 @@ Für den sauberen, vibrationsfesten und IP67-dichten Zusammenbau aller Baugruppe
 ### Schritt 3: Headset-Kassetten 1 & 2 montieren (Fahrer & Sozius)
 1. **Platine einsetzen:** Kassettenplatine (`openmotorbridge_pod_cartridge`) in den Kassetten-Schlitten einklicken.
 2. **OEM-Adapter / Cradle anschließen (nach Gerätetyp):**
+   * **Klasse S (Smart Modular Cartridge mit Mechatronik • OMB-Referenz: Sena SPIDER X Slim / 60S / Cardo Edge):**
+     * PCBA 03 Rev 2.0 (mit WCH CH32V003 RISC-V MCU und 4x AO3400A MOSFETs) in den Kassetten-Schlitten einsetzen.
+     * Monolithische Aktuator-Führungsbrücke mit den 4 Miniatur-Tauchankern (`ACT_PLUS`, `ACT_MINUS`, `ACT_CENTER`, `ACT_MESH`), Rückstellfedern und TPU-Druckspitzen aufsetzen.
+     * 8-poliges J_ACT Flachbandkabel von der Brücke mit Header J_ACT auf PCBA 03 verbinden.
+     * Headset in das formschlüssige PA12-MJF Konturbett einlegen (3-Punkt EPDM-Dämpfung gegen 20g Vibration) und mit dem werkzeuglosen Schnellspann-Niederhalter fixieren.
+     * 3,85V DC Batteriefach-Speisung (oder Flachkabel-USB) an Header J2 anschließen.
    * **Klasse A (Sena +Mesh B2M-01 / MeshPort Adapter):**
      * Adapter seitlich in die Quer-Führungsschienen des Inlays ([`01_insert_sena.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/parts/01_insert_sena.scad)) einschieben, bis die Rastklinke hörbar arretiert.
      * **USB-Speisung verbinden:** Das flache $90^\circ$-Winkelkabel (Micro-USB bzw. USB-C) vom 5V/GND-Header der Kassettenplatine durch die Deckaussparung führen und in den USB-Ladeport des +Mesh stecken (reine 5V-Dauerversorgung; Audio läuft drahtlos via Bluetooth zum Helm).
      * **Antenne:** Die wasserdichte SMA-Flansch-Doppelbuchse mit O-Ring von außen in die $\varnothing 6{,}5\,\text{mm}$ Frontblenden-Bohrung einsetzen und von innen mit der Flanschmutter kontern. Das interne $90^\circ$-Koaxial-Pigtail an den Antennenanschluss des +Mesh schrauben, durch das vordere Kassettenfenster führen und an der Innenseite der Frontblenden-Buchse verschrauben. Bei Nichtgebrauch einer externen Antenne die stirnseitige SMA-Schutzkappe aufschrauben.
      * Mit dem elastischen EPDM-Spannband über die beiden seitlichen Haltenasen gegen Erschütterungen sichern.
-   * **Klasse B & C (Sena 50S/60S oder Cardo Packtalk Edge Cradles):**
+   * **Klasse B & C (Sena 50S/60S oder Cardo Packtalk Edge Cradles mit Pogo-Pins):**
      * 6-poliges JST-SH Flachbandkabel von der Kassettenplatine direkt mit der OEM-Pogo-Pin-Leiste (Sena) bzw. dem magnetischen Cardo Air-Mount verbinden (galvanisch getrennte Analog-Audio-Kanäle, Mikrofon und Optokoppler-PTT).
    * **Klasse D (Hermetische Blindkassette):**
      * Schutzschlitten mit geschlossener Frontblende und O-Ring einsetzen, wenn der Beifahrer-Pod ungenutzt bleibt.

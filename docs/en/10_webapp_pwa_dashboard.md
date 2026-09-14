@@ -60,10 +60,19 @@ The dashboard is a fully self-contained Progressive Web App (PWA) built with sta
 ### 2.2 Tab 2: Audio & Ducking (`#tab-audio`)
 * **Mode Selector:** Standard Mode (Mesh Bridge), Single Rider Mode, Cruise Mode.
 * **Sliders:** Input sensitivity for Port 1 (Sena) and Port 2 (Cardo), Ducking depth, and Transparency volume.
+* **🦾 Smart Cartridge Mechatronic Control Panel (PCBA 03 Rev 2.0):**
+  * Live status indicator of the Cartridge MCU (CH32V003 Synced).
+  * `⚡ Power Boot`: Dispatches Opcode `0x01` (`Center + (+)` held for 1,000 ms) for automatic cold-booting after storage $> 3$ days.
+  * `🔘 Mesh On/Off`: Opcode `0x05` (200 ms short pulse).
+  * `⏭️ Channel +1 / ⏮️ Channel -1`: Autonomous cartridge macros (`0x07` / `0x08`, 2x Mesh + 1x Plus/Minus).
+  * `🔊 Vol Up / 🔉 Vol Down`: Single-button pulses (`0x03` / `0x04`, 100 ms) via dedicated actuators `ACT_PLUS` / `ACT_MINUS`.
+  * `👥 Group Mesh`: 3,000 ms hold pulse (`0x06`) toggling between Open Mesh and private Group Mesh.
 
 ### 2.3 Tab 3: Cartridges & DLE (`#tab-cartridges`)
-* **Live Slot Status:** Visual display of active cartridges in Slot 1 and Slot 2 with 1-Wire UIDs.
-* **Cartridge Onboarding Wizard:** 3-step interactive pairing guide.
+* **Live Slot Status:** Visual display of active cartridges in Slot 1 and Slot 2 with 1-Wire UIDs (emulated by MCU or physical DS2401).
+* **Smart Cartridge Badging:** Highlights hardware architecture (RISC-V CH32V003, 4x MOSFETs, In-System Flashing active).
+* **Cartridge Onboarding Wizard:** 3-step interactive pairing guide for newly detected cartridges.
+* **Ground-Truth Sync & ISP Flashing:** Autonomous re-flashing of profile tables directly into the Cartridge MCU EEPROM via Pin 5 single-wire UART.
 
 ### 2.4 Tab 4: Tours & WebDAV (`#tab-tours`)
 * **Tour History:** Tabular list of all recorded GPX rides with dates, distances, and peak lean angles.

@@ -106,6 +106,11 @@ CartridgeInfo_t cartridge_get_info(uint8_t port_num) {
     return s_cartridge_port2;
 }
 
+bool cartridge_is_smart(uint8_t port_num) {
+    if (port_num == 1) return s_cartridge_port1.is_connected && s_cartridge_port1.is_smart_cartridge;
+    return s_cartridge_port2.is_connected && s_cartridge_port2.is_smart_cartridge;
+}
+
 static void load_profile_class(CartridgeInfo_t *cart, const char *profile_id) {
     strncpy(cart->profile_id, profile_id, sizeof(cart->profile_id) - 1);
 

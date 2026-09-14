@@ -78,7 +78,7 @@ To build a fully featured OpenMotorBridge (v8.0) installation for one motorcycle
 | :--- | :--- | :---: | :--- | :--- |
 | **PCBA 01** | Central Main Controller (`kicad_main_box`) | **1** | 4-Layer FR4 TG150, ENIG Gold | ESP32-S3 Dual-Core, LM5164 DCDC, BQ24075 UPS, ES8388 Codec, Bourns audio transformers, BMI270 IMU, MicroSD |
 | **PCBA 02** | Pod Base Carrier Board (`kicad_pod_base`) | **3** | 2-Layer FR4, ENIG Gold | M8 6-pin IP67 socket, SP3012 ESD array, Harwin 6-pin precision header with 4.8mm wipe |
-| **PCBA 03** | Universal Cartridge Board (`kicad_cartridge`)| **2** | 2-Layer FR4, ENIG Gold | Harwin 6-pin precision socket, DS2401 1-Wire ID, JST-SH 6-pin ribbon header to OEM cradle |
+| **PCBA 03** | Smart Modular Cartridge Board Rev 2.0 (`kicad_cartridge`)| **2** | 2-Layer FR4, ENIG Gold | WCH CH32V003 RISC-V MCU (1-Wire emulation & opcode engine), 4x AO3400A N-MOSFETs, Harwin 6-pin socket, J_ACT 8-pin mechatronics header, J2 6-pin audio/power |
 | **PCBA 04** | Rear Pod 3 Transceiver (`kicad_rear_pod3`) | **1** | 4-Layer FR4 TG150, ENIG Gold | RP2040 coprocessor, u-blox NEO-M9N / MAX-M10S GNSS, Semtech SX1262 LoRa, 3x Murata MM8030 RF switches |
 | **PCBA 05** | Universal Front Node (`kicad_front_node`) | **1** | 4-Layer FR4 TG150, ENIG Gold | ESP32-S3 Dual-Core, USB2514B Hub, LMR36015 DCDC, SC8102 USB-PD, TPS2051B power switch, Knowles MEMS mic, PTT trigger |
 
@@ -201,12 +201,18 @@ To assemble all subassemblies with vibration resistance and hermetic IP67 sealin
 ### Step 3: Headset Cartridges 1 & 2 (Rider & Passenger)
 1. **Assemble Cartridge:** Snap the cartridge carrier (`PCBA 03`) into the sled.
 2. **Connect OEM Adapter / Cradle (by device class):**
+   * **Class S (Smart Modular Cartridge with Mechatronics • OMB Reference: Sena SPIDER X Slim / 60S / Cardo Edge):**
+     * Seat PCBA 03 Rev 2.0 (with WCH CH32V003 RISC-V MCU and 4x AO3400A MOSFETs) into the cartridge sled.
+     * Mount the monolithic actuator guide bridge with the 4 miniature plungers (`ACT_PLUS`, `ACT_MINUS`, `ACT_CENTER`, `ACT_MESH`), return springs, and TPU contact tips.
+     * Connect the 8-pin J_ACT ribbon cable from the actuator bridge to header J_ACT on PCBA 03.
+     * Place the factory-unopened headset into the PA12-MJF form-fit contour bed (3-point EPDM damping against 20g shock/vibration) and lock the tool-free quick-release clamp.
+     * Connect the factory 3.85V DC direct battery compartment supply (or low-profile USB) to header J2.
    * **Class A (Sena +Mesh B2M-01 / MeshPort Adapter):**
      * Slide the adapter laterally into the transverse slide rails of the cradle insert ([`01_insert_sena.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/parts/01_insert_sena.scad)) until the retaining snap latch clicks into place.
      * **Connect USB Power:** Route the low-profile $90^\circ$ right-angle cable (Micro-USB or USB-C) from the cartridge PCB 5V/GND header through the deck window into the +Mesh USB charging port (pure 5V continuous power supply; intercom audio routes wirelessly over Bluetooth to the helmet).
      * **RF Antenna:** Insert the waterproof SMA female-to-female flange bulkhead with O-ring from the outside into the $\varnothing 6.5\,\text{mm}$ faceplate bore and secure from the inside with the locknut. Connect the internal $90^\circ$ coaxial pigtail to the +Mesh antenna port, route through the front window, and fasten tightly to the inside of the faceplate SMA bulkhead. Fasten the external SMA IP67 protective cap whenever an external antenna is not connected.
      * Secure the +Mesh adapter against vibration shocks using the elastic EPDM retention strap across both lateral hooks.
-   * **Class B & C (Sena 50S/60S or Cardo Packtalk Edge Cradles):**
+   * **Class B & C (Sena 50S/60S or Cardo Packtalk Edge Cradles with Pogo Pins):**
      * Connect the 6-pin JST-SH ribbon cable from the cartridge PCB directly to the OEM pogo-pin dock (Sena) or magnetic Cardo Air-Mount (providing galvanically isolated analog audio channels, mic, and optocoupled PTT).
    * **Class D (Hermetic Blank Cartridge):**
      * Insert the blank sled with solid faceplate and O-ring seal when running solo without a passenger pod.
