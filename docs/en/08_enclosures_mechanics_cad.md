@@ -277,16 +277,16 @@ To support both exposed outdoor deployments (e.g. crash-bar clamps on adventure 
 To route signals from the right-angled **JST-SH 1.0 mm 6-pin SMD header (`J2`)** on the cartridge carrier PCB to adapter contact points without crimp or bend fatigue:
 * **Under-Bed Cable Channel:** A recessed channel ($8.0 \times 1.5\,\text{mm}$) runs directly beneath the contoured cradle cavity.
 * **Tray Pass-Through Slot:** A precision opening ($10.0 \times 3.0\,\text{mm}$ with $R = 1.0\,\text{mm}$ radiused edges) guides the flexible flat ribbon cable from header `J2` upward into the nest.
-* **Standardized Pinout on JST-SH 6P Header (`J2`):**
+* **Standardized Pinout on JST-SH 6P Header (`J2`) for Audio & Direct-DC:**
 
-| Pin | Signal Name | Adapter Function | Sena 50S/60S Pad | Cardo Edge Pad | Midland XT / PMR |
-| :---: | :--- | :--- | :--- | :--- | :--- |
-| **1** | `GND` | Common Ground Reference | Pin 1 (GND) | Pin 1 (GND) | Ground / Shield |
-| **2** | `5V_VBUS` | Filtered 5V Charge (500mA PTC) | Pin 2 (USB-5V) | Pin 2 (5V Charge)| 5V DC In |
-| **3** | `AUDIO_R+` | Audio Diff-Out + (to speaker input) | Pin 4 (Spk R+) | Pin 3 (Spk +) | Speaker In + |
-| **4** | `AUDIO_R-` | Audio Diff-Out - (speaker return) | Pin 5 (Spk R-) | Pin 4 (Spk -) | Speaker In - |
-| **5** | `MIC_IN+` | Audio Diff-In + (from microphone out) | Pin 6 (Mic +) | Pin 5 (Mic +) | Mic Out + |
-| **6** | `OPTO_PTT` | Optocoupler PTT / Button Simulation | Pin 7 (Mesh-Btn)| N/C (Aux) | PTT Switch |
+| Pin | Signal Name | Adapter Function | Sena SPIDER X Slim | Sena 50S/60S Pad | Cardo Edge Pad | Midland XT / PMR |
+| :---: | :--- | :--- | :--- | :--- | :--- | :--- |
+| **1** | `VCC_DIRECT_DC` | Direct-DC Power (3.85V / 5V) | Battery Plug ⑧ (DC In) | Pin 2 (USB-5V) | Pin 2 (5V Charge)| 5V DC In |
+| **2** | `GND` | Common Ground Reference | Battery Plug ⑧ (GND) | Pin 1 (GND) | Pin 1 (GND) | Ground / Shield |
+| **3** | `AUDIO_R+` | Audio Diff-Out + (to speaker input) | Speaker ⑩ (Spk +) | Pin 4 (Spk R+) | Pin 3 (Spk +) | Speaker In + |
+| **4** | `AUDIO_R-` | Audio Diff-Out - (speaker return) | Speaker ⑩ (Spk -) | Pin 5 (Spk R-) | Pin 4 (Spk -) | Speaker In - |
+| **5** | `MIC_IN+` | Audio Diff-In + (from microphone out) | Microphone ⑨ (Mic +) | Pin 6 (Mic +) | Pin 5 (Mic +) | Mic Out + |
+| **6** | `RESERVE_IO` | Diagnostics / Auxiliary / PTT | N/C | Pin 7 (Mesh-Btn)| N/C (Aux) | PTT Switch |
 
 #### 4.3.2 OMM Transceiver Cartridge & Telemetry Backbone (Pod 3)
 
@@ -311,7 +311,56 @@ The OMM Transceiver swap cartridge ([`cartridge_antenna_bracket_omm.scad`](file:
 
 *Figure 8.14: 3D CAD visualization of the Sena 50S/60S swap cartridge with sprung 7-pin pogo pin interface.*
 
-#### 4.3.4 Sena +Mesh & Universal Slide-Inlay (Class A with External RF Bulkhead)
+#### 4.3.4 Mechatronic Smart Cartridge: Form-Fit Retention & 4-Channel Actuator Guide (Sena SPIDER X Slim)
+For modern intercom cartridges such as the Sena SPIDER X Slim (as well as Cardo Edge / Sena 60S in mechatronic direct mode), the cartridge mechanical architecture addresses the dual core challenges: **Absolute vibration resistance for the OEM adapter** and **accurate, permanent alignment of the 4 actuators onto the rubber button pads**.
+
+```
+    MECHATRONIC SMART CARTRIDGE – CROSS SECTION THROUGH ACTUATOR GUIDE & BED
+┌──────────────────────────────────────────────────────────────────────────────────┐
+│ CARTRIDGE TOP COVER (PA12-MJF):                                                  │
+│                                                                                  │
+│   [ Solenoid 1 ]     [ Solenoid 2 ]     [ Solenoid 3 ]     [ Solenoid 4 ]        │
+│     (ACT_PLUS)         (ACT_MINUS)        (ACT_CENTER)        (ACT_MESH)         │
+│          │                  │                  │                  │              │
+│   ┌──────┴──────┐    ┌──────┴──────┐    ┌──────┴──────┐    ┌──────┴──────┐       │
+│   │Spring 0.15N │    │Spring 0.15N │    │Spring 0.15N │    │Spring 0.15N │       │
+│   └──────┬──────┘    └──────┬──────┘    └──────┬──────┘    └──────┬──────┘       │
+│          ▼                  ▼                  ▼                  ▼              │
+│   ┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐       │
+│   │Guide Bushing│    │Guide Bushing│    │Guide Bushing│    │Guide Bushing│       │
+│   │ Ø3.2 mm (H8)│    │ Ø3.2 mm (H8)│    │ Ø3.2 mm (H8)│    │ Ø3.2 mm (H8)│       │
+│   └──────┬──────┘    └──────┬──────┘    └──────┬──────┘    └──────┬──────┘       │
+│          │                  │                  │                  │              │
+│    [TPU Plunger]      [TPU Plunger]      [TPU Plunger]      [TPU Plunger]        │
+│          │ (0.4mm gap)      │ (0.4mm gap)      │ (0.4mm gap)      │ (0.4mm gap)  │
+├──────────┼──────────────────┼──────────────────┼──────────────────┼──────────────┤
+│ OEM INTERCOM HOUSING (Sena SPIDER X Slim):                                       │
+│          ▼                  ▼                  ▼                  ▼              │
+│     [ Button + ]       [ Button - ]       [ Button C ]       [ Button Mesh ]     │
+│                                                                                  │
+│ ┌──────────────────────────────────────────────────────────────────────────────┐ │
+│ │ 3-Point EPDM Damping Liners (60° Shore A, 1.5 mm) resisting 20g shock/vibe  │ │
+│ └──────────────────────────────────────────────────────────────────────────────┘ │
+│ CARTRIDGE BASE SLED WITH MONOCOQUE LOCKING (PA12-MJF Negative Contour)           │
+└──────────────────────────────────────────────────────────────────────────────────┘
+```
+
+* **1. Form-Fit Negative Nest & Vibration Locking Resisting $20\,\text{g}$ Shock:**
+  * **Precision Tolerancing:** The receiver cavity replicates the OEM SPIDER X Slim housing ($74.5 \times 31.0 \times 16.0\,\text{mm}$) with an engineered $0.2\,\text{mm}$ clearance in SLS/MJF PA12.
+  * **3-Point EPDM Vibration Isolation:** Three profiled EPDM damping pads ($60^\circ$ Shore A, $1.5\,\text{mm}$ thickness) at the base and lateral flanks absorb high-frequency engine vibration ($50\dots 500\,\text{Hz}$) and road shocks up to $20\,\text{g}$ (ISO 16750-3).
+  * **Form-Fit Quick-Release Clamp:** A pivoting hold-down bracket with captive M3 knurled thumbscrew and EPDM pressure pad clamps the OEM adapter into the nest with calibrated $15\dots 20\,\text{N}$ retention force. Creeping, shifting, or rattling under riding conditions is physically impossible.
+
+* **2. Precision Actuator Guide Bridge & Pinpoint Button Alignment:**
+  * **Monolithic Guide Bushings:** The cartridge top cover incorporates four laser-sintered guide cylinders ($\varnothing\,3.2\,\text{mm}$, H8 tolerance).
+  * **Coaxial Alignment:** Each bushing axis is positioned exactly concentric to the target OEM rubber button (`ACT_PLUS`, `ACT_MINUS`, `ACT_CENTER`, `ACT_MESH`) with positional deviation $< \pm 0.15\,\text{mm}$.
+  * **TPU / Silicone Plunger Tips (Shore 70A):** The plunger heads feature convex elastomeric tips. They eliminate slippage against the contoured rubber buttons, absorb lateral tolerance stack-up, and protect the factory button coating from frictional wear.
+  * **Integrated Return Springs (Stainless Steel 1.4310):** Every actuator axis is suspended by a coil spring ($c \approx 0.15\,\text{N/mm}$). A defined $0.4\,\text{mm}$ air gap ensures that severe road shocks never cause unintended physical button contact in the unpowered state.
+  * **Mechanical Travel Limiters ($1.1 \pm 0.1\,\text{mm}$):** Plunger travel is bounded by rigid mechanical stops. This ensures full tactile actuation of internal micro-switches while protecting the OEM internal PCB from over-compression.
+
+* **3. Kink-Free Strain Relief for 3-Port Cable Whip:**
+  * Sled base channels guide the factory cable whip of the SPIDER X Slim (DC Power ⑧, Microphone ⑨, Speaker ⑩) across smooth bend radii ($R \ge 5\,\text{mm}$) directly into headers `J2` and `J_ACT` on PCBA 03 Rev 2.0.
+
+#### 4.3.5 Sena +Mesh & Universal Slide-Inlay (Class A with External RF Bulkhead)
 * **100% Non-Destructive OEM Integration:** The Sena +Mesh remains unopened in its original housing.
 * **Form-Fitting Sled Inlay:** Replicates the OEM frame mount with 2x sliding tabs (spacing $30\,\text{mm}$) and flexible snap tongue.
 * **Integrated SMA Bulkhead Bore ($\varnothing\,6.5\,\text{mm}$):** With O-ring counterbore ($\varnothing\,9.5 \times 1.2\,\text{mm}$) on front bezel for an IP67 SMA female-female bulkhead adapter.
@@ -319,27 +368,27 @@ The OMM Transceiver swap cartridge ([`cartridge_antenna_bracket_omm.scad`](file:
 * **EPDM Retention Strap:** Anchor tabs for elastic EPDM band ($35 \times 10\,\text{mm}$) securing the unit vibration-free.
 * **Power Feed:** Flat right-angle Micro-USB / USB-C pigtail from Pin 1 (`GND`) and Pin 2 (`5V_VBUS`) of JST-SH header `J2`.
 
-#### 4.3.5 Cardo Packtalk Edge / Pro Magnetic Air Mount
+#### 4.3.6 Cardo Packtalk Edge / Pro Magnetic Air Mount
 ![OpenMotorBridge Cardo Packtalk Edge Cartridge Assembly 3D CAD Fitting](../images/cad/cardo_cartridge_assembly_cad.png)
 
 *Figure 8.15: 3D CAD visualization of the Cardo Packtalk Edge swap cartridge with N52 neodymium magnetic seat and 5 sprung contact pads.*
 
-#### 4.3.6 Cardo Packtalk Bold / Black Edition
+#### 4.3.7 Cardo Packtalk Bold / Black Edition
 Accommodates the sliding contacts of the original Cardo audio kit plate. The device slides down the guide rails and clicks positively into place.
 
-#### 4.3.7 Midland BT Mini / BTR1 Advanced & XT30 Slide
+#### 4.3.8 Midland BT Mini / BTR1 Advanced & XT30 Slide
 * **Midland Intercom Edition (BTR1 / Rush / BT Mini):** Form-fitting nest for Midland Bluetooth and Wave Mesh intercoms ($70\dots 85\,\text{mm}$ width).
 * **Midland XT Bare-Board Edition:** Directly houses the decased PCB of compact walkie-talkies (XT10/XT30/G5, $\approx 68 \times 42 \times 10\,\text{mm}$).
 
-#### 4.3.8 PMR446 Transceiver & Bare-Board Module (SA818S / RDA1846)
+#### 4.3.9 PMR446 Transceiver & Bare-Board Module (SA818S / RDA1846)
 Fully integrated 500 mW PMR446 analog RF module ($38 \times 20\,\text{mm}$) seated directly on the cartridge carrier PCB—optionally with internal 446 MHz helical antenna or robust SMA front socket.
 
-#### 4.3.9 Longitudinal Cross-Section Comparison (Sena vs. Cardo)
+#### 4.3.10 Longitudinal Cross-Section Comparison (Sena vs. Cardo)
 ![OpenMotorBridge Sena & Cardo Cartridges Longitudinal Cross Section](../images/cad/sena_cardo_cartridge_cross_section.png)
 
 *Figure 8.16: 2D longitudinal cross section (X-Z plane) through Sena 50S (top) and Cardo Packtalk Edge (bottom) cartridges docked inside the pod.*
 
-#### 4.3.10 IP67 Blank Cartridge (Dry Box Dummy)
+#### 4.3.11 IP67 Blank Cartridge (Dry Box Dummy)
 ![OpenMotorBridge IP67 Blindkassette 3D CAD Render](../images/cad/dummy_cartridge_cad.png)
 
 *Figure 8.17: Identically contoured IP67 blank cartridge providing an integrated $80 \times 46 \times 16\,\text{mm}$ emergency dry compartment.*

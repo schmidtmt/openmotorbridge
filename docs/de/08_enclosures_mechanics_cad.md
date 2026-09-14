@@ -300,19 +300,19 @@ Um sowohl exponierte Outdoor-Einsätze (z. B. Sturzbügel-Montage bei Adventure-
 *Abbildung 8.11: Die modularen Wechselkassetten-Varianten im Überblick: OMM Heck-Transceiver (vorne links), Sena 50S/60S Quick-Snap Cradle (vorne rechts), Cardo Magnetic Air Mount (hinten links) und wasserdichte IP67 Blindkassette (hinten rechts).*
 
 #### 4.3.1 Benutzerzentrierte Plug & Play Docking-Architektur (0 Lötaufwand)
-Um Signale vom 90°-abgewinkelten **JST-SH 1.0 mm 6-Pin SMD-Steckverbinder (`J2`)** auf der Kassetten-Trägerplatine verwechslungs- und knickfrei zu den Kontaktpunkten des jeweiligen Adapters zu führen, besitzt der Kassetten-Schlitten:
+Um Signale vom 90°-abgewinkelten **JST-SH 1.0 mm 6-Pin SMD-Steckverbinder (`J2`)** sowie dem **8-Pin Mechatronik-Header (`J_ACT`)** auf der Kassetten-Trägerplatine (PCBA 03 Rev 2.0) verwechslungs- und knickfrei zu den Kontaktpunkten des jeweiligen Adapters zu führen, besitzt der Kassetten-Schlitten:
 * **Geschützten Unterflur-Kabelkanal:** Im Boden des PA12-Schlittens ist eine **$1{,}5\,\text{mm}$ tiefe und $8{,}0\,\text{mm}$ breite Kabelführung** direkt unterhalb des Konturbetts integriert.
-* **Zwischenboden-Durchführung:** Ein präziser **$10{,}0 \times 3{,}0\,\text{mm}$ Durchbruch mit beidseitig $R=1{,}0\,\text{mm}$ verrundeten Kanten** führt das Flachbandkabel von Header `J2` auf der unteren Platine nach oben ins Nest.
-* **Standardisierte Pin-Belegung am JST-SH 6P Header (`J2`):**
+* **Zwischenboden-Durchführung:** Ein präziser **$10{,}0 \times 3{,}0\,\text{mm}$ Durchbruch mit beidseitig $R=1{,}0\,\text{mm}$ verrundeten Kanten** führt die Kabelstränge von Header `J2` und `J_ACT` auf der unteren Platine nach oben ins Nest.
+* **Standardisierte Pin-Belegung am JST-SH 6P Header (`J2`) für Audio & Direct-DC:**
 
-| Pin | Signal-Name | Funktion am Headset-Adapter | Sena 50S/60S Pad | Cardo Edge Pad | Midland XT / PMR |
-| :---: | :--- | :--- | :--- | :--- | :--- |
-| **1** | `GND` | Gemeinsamer Massebezug | Pin 1 (GND) | Pin 1 (GND) | Masse / Shield |
-| **2** | `5V_VBUS` | Gefilterte Ladespeisung (500mA PTC) | Pin 2 (USB-5V) | Pin 2 (5V Charge)| 5V DC In |
-| **3** | `AUDIO_R+` | Audio Diff-Out + (zum Lautsprecher-In) | Pin 4 (Spk R+) | Pin 3 (Spk +) | Speaker In + |
-| **4** | `AUDIO_R-` | Audio Diff-Out - (Lautsprecher-Rückleiter)| Pin 5 (Spk R-) | Pin 4 (Spk -) | Speaker In - |
-| **5** | `MIC_IN+` | Audio Diff-In + (vom Mikrofon-Out) | Pin 6 (Mic +) | Pin 5 (Mic +) | Mic Out + |
-| **6** | `OPTO_PTT` | Optokoppler PTT / Button Synthesis | Pin 7 (Mesh-Btn)| N/C (Aux) | PTT Switch |
+| Pin | Signal-Name | Funktion am Headset-Adapter | Sena SPIDER X Slim | Sena 50S/60S Pad | Cardo Edge Pad | Midland XT / PMR |
+| :---: | :--- | :--- | :--- | :--- | :--- | :--- |
+| **1** | `VCC_DIRECT_DC` | Direct-DC Speisung (3.85V / 5V) | Akkustecker ⑧ (DC In) | Pin 2 (USB-5V) | Pin 2 (5V Charge)| 5V DC In |
+| **2** | `GND` | Gemeinsamer Massebezug | Akkustecker ⑧ (GND) | Pin 1 (GND) | Pin 1 (GND) | Masse / Shield |
+| **3** | `AUDIO_R+` | Audio Diff-Out + (zum Lautsprecher-In) | Lautsprecher ⑩ (Spk +) | Pin 4 (Spk R+) | Pin 3 (Spk +) | Speaker In + |
+| **4** | `AUDIO_R-` | Audio Diff-Out - (Lautsprecher-Rückleiter)| Lautsprecher ⑩ (Spk -) | Pin 5 (Spk R-) | Pin 4 (Spk -) | Speaker In - |
+| **5** | `MIC_IN+` | Audio Diff-In + (vom Mikrofon-Out) | Mikrofon ⑨ (Mic +) | Pin 6 (Mic +) | Pin 5 (Mic +) | Mic Out + |
+| **6** | `RESERVE_IO` | Diagnose / Auxiliary / PTT | N/C | Pin 7 (Mesh-Btn)| N/C (Aux) | PTT Switch |
 
 #### 4.3.2 OMM-Transceiver-Kassette & Telemetrie-Backbone (Pod 3)
 
@@ -337,7 +337,56 @@ Die OMM-Transceiver-Wechselkassette ([`cartridge_antenna_bracket_omm.scad`](file
 
 *Abbildung 8.14: CAD-Visualisierung der Sena 50S/60S Wechselkassette mit federnder 7-Pin Pogo-Kontaktleiste.*
 
-#### 4.3.4 Sena +Mesh & Universal Slide-Inlay (Klasse A mit externem Antennenanschluss)
+#### 4.3.4 Mechatronische Smart Cartridge: Formschlüssige Arretierung & 4-Kanal Aktuator-Führung (Sena SPIDER X Slim)
+Für moderne Intercom-Kassetten wie das Sena SPIDER X Slim (sowie Cardo Edge / Sena 60S im mechatronischen Direkt-Modus) löst die Kassettenmechanik die doppelte Kernherausforderung: **Absolute Schwingungsfestigkeit des OEM-Adapters** und **präzise, dauerhafte Ausrichtung der 4 Aktuatoren auf die Tastenfelder**.
+
+```
+    MECHATRONISCHE SMART CARTRIDGE – SCHNITT DURCH TASTENFÜHRUNG & KONTURBETT
+┌──────────────────────────────────────────────────────────────────────────────────┐
+│ KASSETTEN-OBERDECKEL (PA12-MJF):                                                 │
+│                                                                                  │
+│   [ Hubmagnet 1 ]    [ Hubmagnet 2 ]    [ Hubmagnet 3 ]    [ Hubmagnet 4 ]       │
+│     (ACT_PLUS)         (ACT_MINUS)        (ACT_CENTER)        (ACT_MESH)         │
+│          │                  │                  │                  │              │
+│   ┌──────┴──────┐    ┌──────┴──────┐    ┌──────┴──────┐    ┌──────┴──────┐       │
+│   │Feder 0,15N/mm│   │Feder 0,15N/mm│   │Feder 0,15N/mm│   │Feder 0,15N/mm│      │
+│   └──────┬──────┘    └──────┬──────┘    └──────┬──────┘    └──────┬──────┘       │
+│          ▼                  ▼                  ▼                  ▼              │
+│   ┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐       │
+│   │Führungsbuchse│   │Führungsbuchse│   │Führungsbuchse│   │Führungsbuchse│      │
+│   │ Ø3,2 mm (H8)│    │ Ø3,2 mm (H8)│    │ Ø3,2 mm (H8)│    │ Ø3,2 mm (H8)│       │
+│   └──────┬──────┘    └──────┬──────┘    └──────┬──────┘    └──────┬──────┘       │
+│          │                  │                  │                  │              │
+│    [TPU-Puffer]       [TPU-Puffer]       [TPU-Puffer]       [TPU-Puffer]         │
+│          │ (0,4mm Spalt)    │ (0,4mm Spalt)    │ (0,4mm Spalt)    │ (0,4mm Spalt)│
+├──────────┼──────────────────┼──────────────────┼──────────────────┼──────────────┤
+│ OEM INTERCOM GEHÄUSE (Sena SPIDER X Slim):                                       │
+│          ▼                  ▼                  ▼                  ▼              │
+│     [ Taste + ]        [ Taste - ]        [ Taste C ]        [ Taste Mesh ]      │
+│                                                                                  │
+│ ┌──────────────────────────────────────────────────────────────────────────────┐ │
+│ │ 3-Punkt EPDM-Dämpfungseinlagen (60° Shore A, 1,5 mm) gegen 20g Vibration     │ │
+│ └──────────────────────────────────────────────────────────────────────────────┘ │
+│ KASSETTEN-UNTERTEIL MIT MONOCOQUE-VERRIEGELUNG (PA12-MJF Negativkontur)          │
+└──────────────────────────────────────────────────────────────────────────────────┘
+```
+
+* **1. Formschlüssiges Negativbett & Vibrationssicherung gegen $20\,\text{g}$ Shock:**
+  * **Präzisions-Passung:** Die Aufnahmeschale bildet das OEM-Gehäuse des SPIDER X Slim ($74{,}5 \times 31{,}0 \times 16{,}0\,\text{mm}$) mit einer Passungstoleranz von $0{,}2\,\text{mm}$ im SLS/MJF-Verfahren ab.
+  * **3-Punkt EPDM-Schwingungsentkopplung:** Drei profilierte EPDM-Dämpfungspolster ($60^\circ$ Shore A, Dicke $1{,}5\,\text{mm}$) am Boden und an den Stirnflanken absorbieren hochfrequente Motorvibrationen ($50\dots 500\,\text{Hz}$) sowie Stoßbelastungen bis $20\,\text{g}$ (nach ISO 16750-3).
+  * **Formschlüssige Schnellspann-Klammer (Quick-Clamp):** Ein schwenkbarer Niederhaltebügel mit unverlierbarer M3-Rändelschraube presst den OEM-Adapter mit definierter Haltekraft ($15\dots 20\,\text{N}$) spielfrei und unbeweglich in das Nest. Ein Verrutschen oder Klappern während der Fahrt ist physikalisch ausgeschlossen.
+
+* **2. Präzisions-Führungsbrücke & Zuverlässiges Treffen der Gegenstelle:**
+  * **Monolithische Führungsbuchsen:** Im Kassetten-Deckel sind vier hochpräzise Führungszylinder ($\varnothing\,3{,}2\,\text{mm}$, Passung H8) direkt eingesintert.
+  * **Fluchtende Achsausrichtung:** Jeder Zylinder fluchtet exakt zentrisch über der entsprechenden OEM-Gummitaste (`ACT_PLUS`, `ACT_MINUS`, `ACT_CENTER`, `ACT_MESH`) mit einer Achsabweichung von $< \pm 0{,}15\,\text{mm}$.
+  * **TPU-/Silikon-Druckkappen (Shore 70A):** Die Stößelspitzen tragen elastische Kappen mit leicht balliger Stirnfläche. Sie verhindern Abrutschen auf der gewölbten Gummitaste, gleichen Bauteiltoleranzen aus und schützen die Original-Tastenbeschichtung vor Reibverschleiß.
+  * **Integrierte Rückstellfedern (Edelstahl 1.4310):** Jede Stößelachse wird durch eine Spiralfeder ($c \approx 0{,}15\,\text{N/mm}$) in Ruhelage gehalten. Ein definierter Freihub von $0{,}4\,\text{mm}$ ("Luftspalt") stellt sicher, dass selbst extreme Fahrbahnstöße niemals zu einem ungewollten Berühren oder Drücken der Taste führen.
+  * **Mechanischer Endanschlag ($1{,}1 \pm 0{,}1\,\text{mm}$):** Die Betätigungstiefe ist mechanisch begrenzt. Der interne Mikrotaster schaltet sicher durch, eine Überlastung oder Quetschung der internen SMD-Taster auf der Headset-Platine wird zuverlässig verhindert.
+
+* **3. Knickfreie Zugentlastung der Kabelpeitsche:**
+  * Im Kassettenboden führen drei separate Führungskanäle die werkseitige Kabelpeitsche des SPIDER X Slim (DC-Power ⑧, Mikrofon ⑨, Lautsprecher ⑩) über großzügig gerundete Radien ($R \ge 5\,\text{mm}$) direkt zu den Buchsen `J2` und `J_ACT` auf PCBA 03 Rev 2.0.
+
+#### 4.3.5 Sena +Mesh & Universal Slide-Inlay (Klasse A mit externem Antennenanschluss)
 Für das Sena +Mesh (oder andere OEM-Adapter mit Antennen- und Ladeanschluss) bietet die Kassetten-Frontblende (`00_base_sled.scad` & `01_insert_sena.scad`):
 * **100 % zerstörungsfreie Nutzung des ungeöffneten OEM-Geräts:** Das Sena +Mesh wird im Originalgehäuse belassen.
 * **Formschlüssiges Schlitten-Inlay:** Bildet exakt die OEM-Rahmenbefestigungsplatte mit 2x Quer-Schiebestegen (Hakenabstand $30\,\text{mm}$) und federnder Rastzunge ab.
@@ -346,28 +395,30 @@ Für das Sena +Mesh (oder andere OEM-Adapter mit Antennen- und Ladeanschluss) bi
 * **EPDM-Spannband-Aufnahme:** Einhängehaken für ein elastisches EPDM-Gummiband ($35 \times 10\,\text{mm}$), das den Adapter vibrationsfest im Negativbett sichert.
 * **Elektrische Speisung:** Flaches 90° Micro-USB / USB-C Pigtail von Pin 1 (`GND`) und Pin 2 (`5V_VBUS`) des JST-SH Headers `J2`.
 
-#### 4.3.5 Cardo Packtalk Edge / Pro Magnetic Air Mount
+#### 4.3.6 Cardo Packtalk Edge / Pro Magnetic Air Mount
 ![OpenMotorBridge Cardo Packtalk Edge Cartridge Assembly 3D CAD Fitting](../images/cad/cardo_cartridge_assembly_cad.png)
 
 *Abbildung 8.15: CAD-Visualisierung der Cardo Packtalk Edge Wechselkassette mit N52-Neodym-Magnetsitz und 5 gefederten Kontaktpads.*
 
-#### 4.3.6 Cardo Packtalk Bold / Black Edition
+#### 4.3.7 Cardo Packtalk Bold / Black Edition
 Nutzt die formschlüssigen Schiebe-Gegenkontakte der originalen Cardo-Audiokit-Basisplatte. Das Gerät wird von oben in die mechanische Führung geschoben und federnd arretiert.
 
-#### 4.3.7 Midland BT Mini / BTR1 Advanced & XT30 Slide
+#### 4.3.8 Midland BT Mini / BTR1 Advanced & XT30 Slide
 * **Midland Intercom Edition (BTR1 / Rush / BT Mini):** Kontur-Aufnahme für Midland Bluetooth- und Wave-Mesh-Intercoms ($70\dots 85\,\text{mm}$ Baubreite).
 * **Midland XT Bare-Board Edition:** Nimmt die entkernte Platine eines kompakten Handfunkgeräts (XT10/XT30/G5, $\approx 68 \times 42 \times 10\,\text{mm}$) direkt auf.
 
-#### 4.3.8 PMR446 Transceiver & Bare-Board Modul (SA818S / RDA1846)
+#### 4.3.9 PMR446 Transceiver & Bare-Board Modul (SA818S / RDA1846)
 Vollständig integriertes 500 mW PMR446-Analogfunkmodul ($38 \times 20\,\text{mm}$) direkt auf der Kassetten-Trägerplatine – wahlweise mit interner 446-MHz-Helix oder robuster SMA-Frontbuchse für große Distanzen.
 
-#### 4.3.9 Längsschnitt-Vergleich Sena & Cardo
+#### 4.3.10 Längsschnitt-Vergleich Sena & Cardo
 ![OpenMotorBridge Sena & Cardo Cartridges Longitudinal Cross Section](../images/cad/sena_cardo_cartridge_cross_section.png)
 
 *Abbildung 8.16: 2D-Längsschnitt (X-Z Ebene) durch die Sena 50S (oben) und Cardo Packtalk Edge (unten) Kassetten im geschlossenen Pod.*
 
-#### 4.3.10 IP67 Blind- / Leerkassette (Dry Box Dummy)
+#### 4.3.11 IP67 Blind- / Leerkassette (Dry Box Dummy)
 ![OpenMotorBridge IP67 Blindkassette 3D CAD Render](../images/cad/dummy_cartridge_cad.png)
+
+*Abbildung 8.17: Formidentische IP67 Blindkassette mit integriertem $80 \times 46 \times 16\,\text{mm}$ Notfall-Trockenstaufach.*
 
 *Abbildung 8.17: Formidentische IP67 Blindkassette mit integriertem $80 \times 46 \times 16\,\text{mm}$ Notfall-Trockenstaufach.*
 

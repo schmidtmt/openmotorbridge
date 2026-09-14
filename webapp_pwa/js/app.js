@@ -4027,20 +4027,40 @@ sliderCrossBleed?.addEventListener('input', (e) => {
     }
 });
 
-// Hardware Trigger Buttons
+// Smart Cartridge Mechatronische Aktuatoren (PCBA 03)
+document.getElementById('btn-trigger-p1-power')?.addEventListener('click', async () => {
+    showToast(state.lang === 'de' ? '⚡ Smart Cartridge: Power Boot (Center + +, 1000ms) ausgelöst' : '⚡ Smart Cartridge: Power Boot (Center + +, 1000ms) triggered', 'warning');
+    if (controlChar) await controlChar.writeValue(new Uint8Array([0x09, 0x01, 0x01]));
+});
+
 document.getElementById('btn-trigger-p1-toggle')?.addEventListener('click', async () => {
-    showToast(state.lang === 'de' ? 'Sena SPIDER X: Mesh Ein/Aus Puls (200ms) ausgelöst' : 'Sena SPIDER X: Mesh On/Off Pulse (200ms) triggered', 'info');
-    if (controlChar) await controlChar.writeValue(new Uint8Array([0x02, 0x00]));
+    showToast(state.lang === 'de' ? '🔘 Smart Cartridge: Mesh Ein/Aus (200ms) ausgelöst' : '🔘 Smart Cartridge: Mesh On/Off (200ms) triggered', 'info');
+    if (controlChar) await controlChar.writeValue(new Uint8Array([0x09, 0x01, 0x05]));
+});
+
+document.getElementById('btn-trigger-p1-ch-next')?.addEventListener('click', async () => {
+    showToast(state.lang === 'de' ? '⏭️ Smart Cartridge: Kanal +1 Autonomes Makro (2x Mesh + 1x Plus) ausgeführt' : '⏭️ Smart Cartridge: Channel +1 Autonomous Macro executed', 'info');
+    if (controlChar) await controlChar.writeValue(new Uint8Array([0x09, 0x01, 0x07]));
+});
+
+document.getElementById('btn-trigger-p1-ch-prev')?.addEventListener('click', async () => {
+    showToast(state.lang === 'de' ? '⏮️ Smart Cartridge: Kanal -1 Autonomes Makro (2x Mesh + 1x Minus) ausgeführt' : '⏮️ Smart Cartridge: Channel -1 Autonomous Macro executed', 'info');
+    if (controlChar) await controlChar.writeValue(new Uint8Array([0x09, 0x01, 0x08]));
+});
+
+document.getElementById('btn-trigger-p1-vol-up')?.addEventListener('click', async () => {
+    showToast(state.lang === 'de' ? '🔊 Smart Cartridge: Lauter (+) Impuls (100ms)' : '🔊 Smart Cartridge: Volume Up (+) Pulse (100ms)', 'info');
+    if (controlChar) await controlChar.writeValue(new Uint8Array([0x09, 0x01, 0x03]));
+});
+
+document.getElementById('btn-trigger-p1-vol-down')?.addEventListener('click', async () => {
+    showToast(state.lang === 'de' ? '🔉 Smart Cartridge: Leiser (-) Impuls (100ms)' : '🔉 Smart Cartridge: Volume Down (-) Pulse (100ms)', 'info');
+    if (controlChar) await controlChar.writeValue(new Uint8Array([0x09, 0x01, 0x04]));
 });
 
 document.getElementById('btn-trigger-p1-group')?.addEventListener('click', async () => {
-    showToast(state.lang === 'de' ? 'Sena SPIDER X: Wechsel Open ↔ Group Mesh (3s Hold, Handbuch S. 29) ausgelöst' : 'Sena SPIDER X: Open ↔ Group Mesh Toggle (3s Hold, Manual p. 29) triggered', 'success');
-    if (controlChar) await controlChar.writeValue(new Uint8Array([0x08, 0x00]));
-});
-
-document.getElementById('btn-trigger-p1-next')?.addEventListener('click', async () => {
-    showToast(state.lang === 'de' ? 'Sena SPIDER X: Kanalauswahl Doppelklick (2x 150ms, Handbuch S. 26) ausgelöst' : 'Sena SPIDER X: Channel menu double-click (2x 150ms, Manual p. 26) triggered', 'info');
-    if (controlChar) await controlChar.writeValue(new Uint8Array([0x03, 0x00]));
+    showToast(state.lang === 'de' ? '👥 Smart Cartridge: Open ↔ Group Mesh Umschaltung (3000ms Hold)' : '👥 Smart Cartridge: Open ↔ Group Mesh Toggle (3000ms Hold)', 'success');
+    if (controlChar) await controlChar.writeValue(new Uint8Array([0x09, 0x01, 0x06]));
 });
 
 document.getElementById('btn-p1-resync')?.addEventListener('click', () => {

@@ -183,16 +183,21 @@ Vertical, gold-plated SMD pin header ($2{,}54\,\text{mm}$ pitch, $4{,}8\,\text{m
 
 ---
 
-## 5. PCBA 03: Universal Cartridge Carrier (`openmotorbridge_pod_cartridge`)
+## 5. PCBA 03: Smart Modular Cartridge (`openmotorbridge_pod_cartridge` Rev 2.0)
 
 ![PCBA 03 Universal Cartridge Carrier](../images/pcba/pcba03_pod_cartridge_3d.png)
 
-*Figure 7.3: KiCad 3D render of the Universal Cartridge carrier (PCBA 03, 35 x 25 mm, 2 layers) with DS2401 1-Wire ID chip, horizontal mating socket, and headset JST-SH connector.*
+*Figure 7.3: KiCad 3D render of the Smart Modular Cartridge carrier (PCBA 03 Rev 2.0, 35 x 25 mm, 2 layers) with WCH CH32V003 RISC-V controller (native 1-Wire emulation & ISP), 4x MOSFET driver stages for mechatronic actuators, and headset JST-SH connector.*
 
 ### 5.1 Board Specifications & Features
-* **Dimensions:** $35{,}0 \times 25{,}0\,\text{mm}$ (compact carrier PCB with 4x M2 mounting holes in $29{,}0 \times 19{,}0\,\text{mm}$ grid, housed inside the $116 \times 58\,\text{mm}$ base sled with $105 \times 48\,\text{mm}$ contour bed).
-* **Layer Stackup:** 2 Layers FR-4 High-TG150 ($1{,}6\,\text{mm}$ thickness, $35\,\mu\text{m}$ copper).
-* **On-Board Components:** DS2401 1-Wire ID (`U1`), Toshiba TLP222A PhotoMOS relay (`U2`), PPTC 500mA fuse (`F1`), Green power LED (`D1`).
+* **Dimensions:** $35{,}0 \times 25{,}0\,\text{mm}$ (compact carrier PCB with 4x M2 mounting holes in $29{,}0 \times 19{,}0\,\text{mm}$ grid, form-fit integrated into the $116 \times 58\,\text{mm}$ base sled with EPDM vibration-dampened contour bed).
+* **Layer Stackup:** 2 Layers FR-4 High-TG150 ($1{,}6\,\text{mm}$ thickness, $35\,\mu\text{m}$ copper both sides).
+* **On-Board Components (Rev 2.0):**
+  * `U1`: WCH `CH32V003F4P6` (32-Bit RISC-V, 48 MHz, 16 KB Flash, 2 KB SRAM, SOIC-8 or QFN-20) providing autonomous pattern timing, In-System Flashing, and native 1-Wire ROM-ID emulation (completely eliminating dedicated DS2401 silicon!).
+  * `Q1` – `Q4`: 4x N-Channel Power MOSFETs (`AO3400`, SOT-23, $30\,\text{V} / 5.7\,\text{A}$, $R_{\text{ON}} < 28\,\text{m}\Omega$) for independent, low-loss driving of up to 4 miniature solenoids/actuators.
+  * `F1`: Resettable PPTC 500mA fuse (Bourns `MF-MSMF050-2`).
+  * `D1`: Dual-color status LED Green/Blue (Green = 1-Wire Active / Config Synced, Blue = Actuator Pulse).
+  * *Optocoupler Elimination:* Because mechatronic fingers actuate the rubber buttons from the outside without physical electrical contact, galvanic isolation is physically infinite (air/plastic). The high-resistance TLP222A is replaced by 4 direct N-MOSFETs (a legacy relay solder pad remains available only for analog PMR446 two-way radio cartridges).
 
 ### 5.2 Pinout of Horizontal Docking Socket (`J1` / Pod Base Mating)
 
@@ -202,26 +207,34 @@ Vertical, gold-plated SMD pin header ($2{,}54\,\text{mm}$ pitch, $4{,}8\,\text{m
 | **Pin 2** | `2_GND` | Power Ground | System ground connection to Pod socket |
 | **Pin 3** | `3_NF_P` | Audio Line In/Out | Differential audio Positive to isolation transformer |
 | **Pin 4** | `4_NF_N` | Audio Line In/Out | Differential audio Negative to isolation transformer |
-| **Pin 5** | `5_OPTO` | PTT Trigger Line | Controls Toshiba TLP222A PhotoMOS solid-state relay |
-| **Pin 6** | `6_1WIRE` | 1-Wire Data Bus | Transmits unique 64-bit UID from `U1` (DS2401) |
+| **Pin 5** | `5_TRIGGER_PPS`| Single-Wire UART / Pattern | Bidirectional configuration and opcode bus to Cartridge MCU `U1` (19,200 Baud) |
+| **Pin 6** | `6_1WIRE` | 1-Wire Data Bus | Native 64-bit ROM-ID emulation by `U1` (cartridge discovery and class matching) |
 
-### 5.3 Pinout of Internal 6-Pin JST-SH Header (`J2` / Headset Cradle Link)
-
-The $1{,}0\,\text{mm}$ right-angle JST-SH connector links the cartridge board to the pogo-pin array or headset harness:
+### 5.3 Pinout of Internal 6-Pin JST-SH Header (`J2` / Headset Harness Link)
 
 | Pin (J2) | Signal Name | Direction | Function by OEM Headset Class |
 | :---: | :--- | :---: | :--- |
-| **Pin 1** | `VCC_5V` | Output $\rightarrow$ Cradle | 5V charging power (Sena 50S Pogo 2, Cardo Edge Pad 2, USB 5V) |
-| **Pin 2** | `GND` | Ground | Ground return (Sena 50S Pogo 1, Cardo Edge Pad 1, USB GND) |
-| **Pin 3** | `AUDIO_R+` | Output $\rightarrow$ Headset | Speaker / Line-In Signal Positive (Sena Pogo 4, Cardo Pad 3) |
-| **Pin 4** | `AUDIO_R-` | Output $\rightarrow$ Headset | Speaker / Line-In Signal Negative (Sena Pogo 5, Cardo Pad 4) |
-| **Pin 5** | `MIC_IN+` | Input $\leftarrow$ Headset | Headset microphone signal to codec (Sena Pogo 6, Cardo Pad 5) |
-| **Pin 6** | `OPTO_PTT` | Switch Output | TLP222A contact closing to GND (Sena Mesh button Pogo 7) |
+| **Pin 1** | `VCC_DIRECT_DC` | Output $\rightarrow$ Intercom | $+3.85\,\text{V}$ / $+5.0\,\text{V}$ Direct-DC power supply (Sena SPIDER X battery port ⑧) |
+| **Pin 2** | `GND` | Ground | Ground return (battery ground, audio ground) |
+| **Pin 3** | `AUDIO_R+` | Output $\rightarrow$ Headset | Speaker / Line-In Signal Positive (Port ⑩) |
+| **Pin 4** | `AUDIO_R-` | Output $\rightarrow$ Headset | Speaker / Line-In Signal Negative (Port ⑩) |
+| **Pin 5** | `MIC_IN+` | Input $\leftarrow$ Headset | Headset microphone signal to codec (Port ⑨) |
+| **Pin 6** | `RESERVE_IO` | Bidirectional | Diagnostic and programming pin for Cartridge MCU `U1` |
 
-### 5.4 Active Semiconductors & Circuit Identification
-* **1-Wire Silicon Serial Number (`U1`):** Maxim/Analog Devices `DS2401Z+` in SOT-23 package. Broadcasts a factory-lasered 64-bit UID (`Family Code 0x01 + 48-Bit Serial + 8-Bit CRC`) for zero-touch configuration.
-* **Solid-State PhotoMOS Relay (`U2`):** Toshiba `TLP222A` (Switching time $t_{\text{ON}} < 0{,}5\,\text{ms}$, galvanic isolation $1500\,\text{V}_{\text{RMS}}$, completely bounce-free).
-* **Resettable PPTC Fuse (`F1`):** Bourns `MF-MSMF050-2` (1812 SMD, $I_{\text{hold}} = 500\,\text{mA}$, $I_{\text{trip}} = 1{,}0\,\text{A}$).
+### 5.4 Pinout of Mechatronic 8-Pin Actuator Header (`J_ACT` / $1{,}0\,\text{mm}$ JST-SH)
+
+| Pin (J_ACT) | Signal Name | Driving Switch | Function for Sena SPIDER X Slim |
+| :---: | :--- | :---: | :--- |
+| **Pin 1 & 2** | `VCC_5V` | Continuous 5V | Common power rail for all miniature solenoids / actuators |
+| **Pin 3** | `ACT1_OUT` | N-MOSFET `Q1` | **`ACT_PLUS`**: Volume Up (+) & Channel/Menu Advance |
+| **Pin 4** | `ACT2_OUT` | N-MOSFET `Q2` | **`ACT_MINUS`**: Volume Down (-) & Channel/Menu Decrement |
+| **Pin 5** | `ACT3_OUT` | N-MOSFET `Q3` | **`ACT_CENTER`**: Center Button (Center / Confirm / Phone) |
+| **Pin 6** | `ACT4_OUT` | N-MOSFET `Q4` | **`ACT_MESH`**: Mesh Intercom Button (Mesh On/Off, Group Mesh, Menu) |
+| **Pin 7 & 8** | `GND` | Power Ground | Shield and return ground |
+
+### 5.5 In-System Profile Flashing (ISP / IAP via Single-Wire)
+* **Zero Programmers Required:** When a profile (e.g. `sena_spider_x.json`) is assigned via the WebApp, the ESP32-S3 transmits an encrypted configuration packet via Pin 5 (`TRIGGER_PPS`) containing timing tables, pulse durations, and macro steps.
+* **Persistent EEPROM Storage:** The Cartridge MCU burns the configuration table into internal EEPROM. The cartridge operates fully autonomously thereafter, executing multi-step macros (e.g. Channel Step via Double-Click Mesh + Pause + 1x Plus) locally.
 
 ---
 

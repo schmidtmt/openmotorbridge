@@ -183,16 +183,21 @@ Vertikale, hochpräzise SMD-Stiftleiste ($2{,}54\,\text{mm}$ Raster, vergoldet, 
 
 ---
 
-## 5. PCBA 03: Universalschlitten Cartridge (`openmotorbridge_pod_cartridge`)
+## 5. PCBA 03: Smart Modular Cartridge (`openmotorbridge_pod_cartridge` Rev 2.0)
 
 ![PCBA 03 Universalschlitten Cartridge](../images/pcba/pcba03_pod_cartridge_3d.png)
 
-*Abbildung 7.3: KiCad 3D-Render des Universalschlitten-Kassettenträgers (PCBA 03, 35 x 25 mm, 2 Lagen) mit DS2401 1-Wire ID-Chip, horizontaler Mating-Buchse und Headset-JST-SH Schnittstelle.*
+*Abbildung 7.3: KiCad 3D-Render des Smart Modular Cartridge-Trägers (PCBA 03 Rev 2.0, 35 x 25 mm, 2 Lagen) mit WCH CH32V003 RISC-V Controller (native 1-Wire Emulation & ISP), 4x MOSFET-Treiberstufen für mechatronische Aktuatoren und Headset-JST-SH Schnittstelle.*
 
 ### 5.1 Technische Platinen-Kenndaten
-* **Abmessungen:** $35{,}0 \times 25{,}0\,\text{mm}$ (kompakte Trägerplatine mit 4x M2 Befestigungsbohrungen im Raster $29{,}0 \times 19{,}0\,\text{mm}$, formschlüssig integriert in den $116 \times 58\,\text{mm}$ Wechselschlitten mit $105 \times 48\,\text{mm}$ Adapter-Konturbett).
-* **Lagenaufbau:** 2 Lagen FR-4 High-TG150 ($1{,}6\,\text{mm}$ Dicke, $35\,\mu\text{m}$ Kupfer).
-* **Ausstattung:** DS2401 1-Wire Chip (`U1`), Toshiba TLP222A PhotoMOS Relais (`U2`), PPTC 500mA Sicherung (`F1`), Grüne Status-LED (`D1`).
+* **Abmessungen:** $35{,}0 \times 25{,}0\,\text{mm}$ (kompakte Trägerplatine mit 4x M2 Befestigungsbohrungen im Raster $29{,}0 \times 19{,}0\,\text{mm}$, formschlüssig integriert in den $116 \times 58\,\text{mm}$ Wechselschlitten mit vibrationsdämpfendem EPDM-Konturbett).
+* **Lagenaufbau:** 2 Lagen FR-4 High-TG150 ($1{,}6\,\text{mm}$ Dicke, $35\,\mu\text{m}$ Kupfer beidseitig).
+* **Ausstattung (Rev 2.0):**
+  * `U1`: WCH `CH32V003F4P6` (32-Bit RISC-V, 48 MHz, 16 KB Flash, 2 KB SRAM, SOIC-8 oder QFN-20) zur autonomen Pattern-Steuerung, In-System-Flashing und nativen 1-Wire-ID-Emulation (DS2401 entfällt ersatzlos!).
+  * `Q1` – `Q4`: 4x N-Kanal Power-MOSFETs (`AO3400`, SOT-23, $30\,\text{V} / 5{,}7\,\text{A}$, $R_{\text{ON}} < 28\,\text{m}\Omega$) zur unabhängigen, verlustfreien Ansteuerung von bis zu 4 mechatronischen Miniatur-Hubmagneten (Aktuatoren).
+  * `F1`: Selbstrückstellende PPTC 500mA Sicherung (Bourns `MF-MSMF050-2`).
+  * `D1`: Duo-Status-LED Grün/Blau (Grün = 1-Wire Active / Config Synced, Blau = Aktuator-Impuls).
+  * *Entfall des Optokopplers:* Da mechatronische Finger die Original-Gummitasten von außen berührungslos bedienen, ist die galvanische Isolation physikalisch absolut (Luft/Kunststoff). Der hochohmige TLP222A entfällt zugunsten von 4 verlustfreien N-MOSFETs (nur bei analogem PMR446-Funk bleibt ein Lötpad für ein Relais vorhanden).
 
 ### 5.2 Pinbelegung der horizontalen Docking-Buchse (`J1` / Verbindung zur Pod-Base)
 
@@ -202,26 +207,34 @@ Vertikale, hochpräzise SMD-Stiftleiste ($2{,}54\,\text{mm}$ Raster, vergoldet, 
 | **Pin 2** | `2_GND` | Power-Masse | Masseverbindung zum Pod-Sockel |
 | **Pin 3** | `3_NF_P` | Audio Line In/Out | Differenzielles Audio Positiv zum Übertrager |
 | **Pin 4** | `4_NF_N` | Audio Line In/Out | Differenzielles Audio Negativ zum Übertrager |
-| **Pin 5** | `5_OPTO` | PTT-Tastsignal | Steuert das Toshiba TLP222A PhotoMOS Relais an |
-| **Pin 6** | `6_1WIRE` | 1-Wire Datenbus | Liest die weltweit eindeutige UID aus Chip `U1` (DS2401) aus |
+| **Pin 5** | `5_TRIGGER_PPS`| Single-Wire UART / Pattern | Bidirektionaler Konfigurations- und Opcode-Bus zum Kassetten-MCU `U1` (19.200 Baud) |
+| **Pin 6** | `6_1WIRE` | 1-Wire Datenbus | Native 64-Bit ROM-ID Emulation durch `U1` (Kassetten- und Typ-Erkennung) |
 
-### 5.3 Pinbelegung des internen 6-poligen JST-SH Headers (`J2` / Headset-Cradle Anbindung)
-
-Der $1{,}0\,\text{mm}$ JST-SH Winkelstecker verbindet die Kassettenplatine mit dem modellspezifischen Pogo-Pin-Feld:
+### 5.3 Pinbelegung des internen 6-poligen JST-SH Headers (`J2` / Headset-Anbindung)
 
 | Pin (J2) | Signalname | Richtung | Belegung nach OEM-Headset-Klasse |
-| :---: | :--- | :---: | :--- |
-| **Pin 1** | `VCC_5V` | Ausgang $\rightarrow$ Cradle | 5V Ladespeisung (Sena 50S Pogo 2, Cardo Edge Pad 2, USB 5V) |
-| **Pin 2** | `GND` | Masse | Systemmasse (Sena 50S Pogo 1, Cardo Edge Pad 1, USB GND) |
-| **Pin 3** | `AUDIO_R+` | Ausgang $\rightarrow$ Headset | Lautsprecher/Line-In Signal Positiv (Sena Pogo 4, Cardo Pad 3) |
-| **Pin 4** | `AUDIO_R-` | Ausgang $\rightarrow$ Headset | Lautsprecher/Line-In Signal Negativ (Sena Pogo 5, Cardo Pad 4) |
-| **Pin 5** | `MIC_IN+` | Eingang $\leftarrow$ Headset | Headset-Mikrofonsignal zum Codec (Sena Pogo 6, Cardo Pad 5) |
-| **Pin 6** | `OPTO_PTT` | Schaltausgang | TLP222A Schließerkontakt gegen Masse (Sena Mesh-Taste Pogo 7) |
+| :---: | :--- | :--- :---: | :--- |
+| **Pin 1** | `VCC_DIRECT_DC` | Ausgang $\rightarrow$ Intercom | $+3{,}85\,\text{V}$ / $+5{,}0\,\text{V}$ Direct-DC Ladespeisung (Sena SPIDER X Akkuanschluss ⑧) |
+| **Pin 2** | `GND` | Masse | Systemmasse (Akkumasse, Audiomasse) |
+| **Pin 3** | `AUDIO_R+` | Ausgang $\rightarrow$ Headset | Lautsprecher/Line-In Signal Positiv (Anschluss ⑩) |
+| **Pin 4** | `AUDIO_R-` | Ausgang $\rightarrow$ Headset | Lautsprecher/Line-In Signal Negativ (Anschluss ⑩) |
+| **Pin 5** | `MIC_IN+` | Eingang $\leftarrow$ Headset | Headset-Mikrofonsignal zum Codec (Anschluss ⑨) |
+| **Pin 6** | `RESERVE_IO` | Bidirektional | Diagnose- und Programmierpin für Kassetten-MCU `U1` |
 
-### 5.4 On-Board Elektronik & Hardware-ID
-* **1-Wire ROM-ID Chip (`U1`):** Maxim/Analog Devices `DS2401Z+` im SOT-23 Gehäuse. Sendet eine 64-Bit-UID (`Family-Code 0x01 + 48-Bit Seriennummer + 8-Bit CRC`) zur lückenlosen Profil-Identifikation in LittleFS.
-* **PhotoMOS Halbleiterrelais (`U2`):** Toshiba `TLP222A` (Schaltzeit $t_{\text{ON}} < 0{,}5\,\text{ms}$, galvanische Trennung $1500\,\text{V}_{\text{RMS}}$, prellfreies Tasten ohne Kontaktfunken).
-* **Selbstrückstellende Sicherung (`F1`):** Bourns `MF-MSMF050-2` (1812 SMD, $I_{\text{hold}} = 500\,\text{mA}$, $I_{\text{trip}} = 1{,}0\,\text{A}$).
+### 5.4 Pinbelegung des mechatronischen 8-poligen Aktuator-Headers (`J_ACT` / $1{,}0\,\text{mm}$ JST-SH)
+
+| Pin (J_ACT) | Signalname | Ansteuerung | Funktion beim Sena SPIDER X Slim |
+| :---: | :--- | :---: | :--- |
+| **Pin 1 & 2** | `VCC_5V` | Dauer-5V | Gemeinsame Spannungsversorgung für alle Hubmagnete / Aktuatoren |
+| **Pin 3** | `ACT1_OUT` | N-MOSFET `Q1` | **`ACT_PLUS`**: Taste (+) für Lauter & Menü-Weiterschaltung |
+| **Pin 4** | `ACT2_OUT` | N-MOSFET `Q2` | **`ACT_MINUS`**: Taste (-) für Leiser & Menü-Zurückschaltung |
+| **Pin 5** | `ACT3_OUT` | N-MOSFET `Q3` | **`ACT_CENTER`**: Mittlere Taste (Center / Bestätigen / Phone) |
+| **Pin 6** | `ACT4_OUT` | N-MOSFET `Q4` | **`ACT_MESH`**: Mesh Intercom-Taste (Mesh On/Off, Group Mesh, Menü) |
+| **Pin 7 & 8** | `GND` | Power-Masse | Schirm- und Rückstrommasse |
+
+### 5.5 In-System Profil-Flashing (ISP / IAP via Single-Wire)
+* **Kein Programmiergerät erforderlich:** Sobald in der WebApp ein Profil (z. B. `sena_spider_x.json`) zugewiesen wird, sendet der ESP32-S3 über Pin 5 (`TRIGGER_PPS`) ein Konfigurationspaket mit Timing-Werten, Impulsdauern und Makro-Schritten.
+* **Permanente Speicherung:** Der Kassetten-MCU brennt die Tabelle in seinen internen EEPROM. Die Kassette arbeitet danach vollkommen autonom und führt Sequenzen (wie Kanalwechsel über Doppelklick Mesh + Pause + 1x Plus) selbstständig aus.
 
 ---
 

@@ -63,3 +63,19 @@
      * **Power ON/OFF (Handbuch S. 17):** Manuell `C` + `+` 1s (Ein) bzw. 1x kurz (Aus). Durch Aktivierung von *„Automatisch ein/aus“* (G-Sensor) schläft das Modul nach 2 min Stillstand ein ($< 1\,\text{mA}$) und wacht bei Motorrad-Bewegung innerhalb von 3 Tagen vollautomatisch auf. An der $3{,}85\,\text{V}$-Festspannungsschiene ist im Fahralltag keinerlei manueller Tastendruck zum Einschalten nötig.
      * **Kanalwechsel (Handbuch S. 26):** Doppelklick ($2 \times 150\,\text{ms}$ mit $150\,\text{ms}$ Pause) auf die Mesh-Taste aktiviert das Menü *„Kanaleinstellungen“*. Die Speicherung erfolgt nach 10s Inaktivitäts-Timeout automatisch. (Wichtig: Ein 1000-ms-Dauerdruck schaltet das Mikrofon stumm und darf nicht für Kanalwechsel verwendet werden).
      * **Open ↔ Group Mesh Umschaltung (Handbuch S. 29):** Ein 3000-ms-Haltepuls schaltet nahtlos zwischen Open Mesh und Group Mesh um (GATT-Kommando `0x08`, WebApp-Taste `btn-trigger-p1-group`).
+
+### ADR-010: Smart Modular Cartridge (PCBA 03) mit In-System Profil-Flashing, 4 unabhängigen MOSFET-Aktuatoren & Entfall von Optokoppler und DS2401
+* **Datum:** 2026-09
+* **Entscheidungen:**
+  1. **Smart Cartridge Controller (PCBA 03 Rev 2.0):** Integration eines kostengünstigen 32-Bit RISC-V Mikrocontrollers (WCH CH32V003 / ATtiny404, ca. 0,15 €) direkt auf die Kassetten-Trägerplatine.
+  2. **Ersatzloser Entfall des DS2401-Chips:** Der Kassetten-MCU emuliert das 64-Bit 1-Wire ROM-ID-Protokoll nativ in Firmware auf Pin 6 (`ONEWIRE_ID`). Der separate Maxim DS2401Z+ Silizium-Chip entfällt.
+  3. **Vollständiger Entfall des Optokopplers für Intercom-Kassetten:** Da mechatronische Aktuatoren die Original-Gummitasten von außen berührungslos bedienen, ist die galvanische Isolation physikalisch unendlich (Luft/Kunststoff). Der hochohmige TLP222A PhotoMOS entfällt zugunsten von 4 niederohmigen N-Kanal Power-MOSFETs (`AO3400`, $R_{\text{ON}} < 30\,\text{m}\Omega$). (Nur für analoge PMR446-Funkgeräte mit galvanischer PTT-Tastung bleibt eine Bestückungsoption bestehen).
+  4. **4 unabhängige mechatronische Aktuatoren:** Volle Entkopplung der Tasterbedienung mit 4 dedizierten Kanälen:
+     * `ACT_PLUS`: Taste (+) für Lauter & Menü-Weiterschaltung
+     * `ACT_MINUS`: Taste (-) für Leiser & Menü-Zurückschaltung
+     * `ACT_CENTER`: Mittlere Taste (Center / Bestätigen / Phone)
+     * `ACT_MESH`: Mesh Intercom-Taste
+     Kombinationen (wie `Power ON = Center + (+)` für 1.000 ms) werden synchron per Software angesteuert.
+  5. **In-System Profil-Flashing (ISP) durch die Zentralbox:** Bei Zuweisung eines Profils in der WebApp (z. B. `sena_spider_x`) überträgt der ESP32-S3 über die Single-Wire Steuerleitung Pin 5 (`TRIGGER_PPS`) per 19.200-Baud UART vollautomatisch die Timing- und Makro-Konfiguration in den EEPROM des Kassetten-MCUs. Der Nutzer benötigt keinerlei Programmiergeräte.
+  6. **Autonome Kassetten-Makros:** Komplexe Choreografien (wie Doppelklick Mesh + Pause + 1x Lauter für Kanalwechsel) taktet der Kassetten-Controller autonom auf der Platine.
+  7. **Formbündige Fixierung im Kassettenbett:** Das Kassetten-Inlay (PA12-MJF) arretiert das OEM-Headset spielfrei gegen $20\,\text{g}$ Vibration, sodass die gefederten Aktuatorstößel die Gummitasten zentrisch und mit kalibriertem Hub ($1{,}0\dots 1{,}2\,\text{mm}$) treffen.

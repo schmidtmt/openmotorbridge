@@ -62,6 +62,8 @@ static int gatt_svr_chr_access_omb(uint16_t conn_handle, uint16_t attr_handle,
             cartridge_apply_profile_merge(cmd[1], (cmd[1] == 1) ? "sena_spider_x" : "cardo_dmc_gen2", 0.0f);
         } else if (cmd[0] == 0x08) { // Trigger Port 1 Group Mesh Toggle (3s Hold, S. 29)
             opto_port1_toggle_group_mesh();
+        } else if (cmd[0] == 0x09) { // Smart Cartridge Opcode Dispatch (cmd[1] = port, cmd[2] = opcode)
+            smart_cartridge_send_cmd(cmd[1], cmd[2]);
         } else if (cmd[0] == 0x10) { // Action-Cam: REC Start/Stop Toggle
             esp_now_front_node_cam_toggle_rec();
         } else if (cmd[0] == 0x11) { // Action-Cam: HiLight Bookmark Tag
