@@ -184,10 +184,11 @@ Vertical, gold-plated SMD pin header ($2{,}54\,\text{mm}$ pitch, $4{,}8\,\text{m
 ---
 
 ## 5. PCBA 03: Smart Modular Cartridge (`openmotorbridge_pod_cartridge` Rev 2.0)
+*KiCad Project Directory: [`hardware/kicad_pod_cartridge/`](file:///Users/schmidtm/openMotorBridge/hardware/kicad_pod_cartridge)*
 
 ![PCBA 03 Universal Cartridge Carrier](../images/pcba/pcba03_pod_cartridge_3d.png)
 
-*Figure 7.3: KiCad 3D render of the Smart Modular Cartridge carrier (PCBA 03 Rev 2.0, 35 x 25 mm, 2 layers) with WCH CH32V003 RISC-V controller (native 1-Wire emulation & ISP), 4x MOSFET driver stages for mechatronic actuators, and headset JST-SH connector.*
+*Figure 7.3: KiCad 3D render of the Smart Modular Cartridge carrier (PCBA 03 Rev 2.0, 35 x 25 mm, 2 layers) featuring the horizontal 6-pin precision docking receptacle J1 along the rear edge (mating with the counterpart on PCBA 02 Pod-Base), WCH CH32V003 RISC-V controller (native 1-Wire emulation & ISP), 4x MOSFET driver stages for mechatronic actuators (J_ACT 8-pin), and headset interface (J2 6-pin).*
 
 ### 5.1 Board Specifications & Features
 * **Dimensions:** $35{,}0 \times 25{,}0\,\text{mm}$ (compact carrier PCB with 4x M2 mounting holes in $29{,}0 \times 19{,}0\,\text{mm}$ grid, form-fit integrated into the $116 \times 58\,\text{mm}$ base sled with EPDM vibration-dampened contour bed).

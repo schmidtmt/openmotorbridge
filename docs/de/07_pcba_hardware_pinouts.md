@@ -184,10 +184,11 @@ Vertikale, hochpräzise SMD-Stiftleiste ($2{,}54\,\text{mm}$ Raster, vergoldet, 
 ---
 
 ## 5. PCBA 03: Smart Modular Cartridge (`openmotorbridge_pod_cartridge` Rev 2.0)
+*KiCad-Projektverzeichnis: [`hardware/kicad_pod_cartridge/`](file:///Users/schmidtm/openMotorBridge/hardware/kicad_pod_cartridge)*
 
 ![PCBA 03 Universalschlitten Cartridge](../images/pcba/pcba03_pod_cartridge_3d.png)
 
-*Abbildung 7.3: KiCad 3D-Render des Smart Modular Cartridge-Trägers (PCBA 03 Rev 2.0, 35 x 25 mm, 2 Lagen) mit WCH CH32V003 RISC-V Controller (native 1-Wire Emulation & ISP), 4x MOSFET-Treiberstufen für mechatronische Aktuatoren und Headset-JST-SH Schnittstelle.*
+*Abbildung 7.3: KiCad 3D-Render des Smart Modular Cartridge-Trägers (PCBA 03 Rev 2.0, 35 x 25 mm, 2 Lagen) mit horizontaler 6-Pin Docking-Buchse J1 an der hinteren Kante (zur formschlüssigen Kontaktierung der Gegenstelle auf PCBA 02 Pod-Base), WCH CH32V003 RISC-V Controller (native 1-Wire Emulation & ISP), 4x MOSFET-Treiberstufen für mechatronische Aktuatoren (J_ACT 8-Pin) und Headset-Schnittstelle (J2 6-Pin).*
 
 ### 5.1 Technische Platinen-Kenndaten
 * **Abmessungen:** $35{,}0 \times 25{,}0\,\text{mm}$ (kompakte Trägerplatine mit 4x M2 Befestigungsbohrungen im Raster $29{,}0 \times 19{,}0\,\text{mm}$, formschlüssig integriert in den $116 \times 58\,\text{mm}$ Wechselschlitten mit vibrationsdämpfendem EPDM-Konturbett).
