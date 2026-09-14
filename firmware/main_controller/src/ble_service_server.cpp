@@ -59,7 +59,7 @@ static int gatt_svr_chr_access_omb(uint16_t conn_handle, uint16_t attr_handle,
         } else if (cmd[0] == 0x06) { // Trigger OMM High-Speed UART Push
             omm_flasher_push_from_storage("/spiffs/omm_rear.bin");
         } else if (cmd[0] == 0x07) { // Trigger Profile Merge & Hot-Reload
-            cartridge_apply_profile_merge(cmd[1], "sena_apex", 0.0f);
+            cartridge_apply_profile_merge(cmd[1], (cmd[1] == 1) ? "sena_spider_x" : "cardo_dmc_gen2", 0.0f);
         } else if (cmd[0] == 0x10) { // Action-Cam: REC Start/Stop Toggle
             esp_now_front_node_cam_toggle_rec();
         } else if (cmd[0] == 0x11) { // Action-Cam: HiLight Bookmark Tag

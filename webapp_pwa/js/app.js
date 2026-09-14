@@ -4042,7 +4042,7 @@ document.getElementById('btn-p1-resync')?.addEventListener('click', () => {
     const uid = document.getElementById('pod1-uid')?.textContent?.trim();
     if (uid && uid !== '--:--:--:--:--:--:--') {
         const mapping = JSON.parse(localStorage.getItem('omb_cartridge_mapping') || '{}');
-        const profile = mapping[uid] || 'sena_apex';
+        const profile = mapping[uid] || 'sena_spider_x';
         const select = document.getElementById('select-pod1-profile');
         if (select) select.value = profile;
         updatePodDisplay(1, profile);
@@ -4132,11 +4132,22 @@ const CARTRIDGE_PROFILES = {
         idle_ma: 45,
         dle_bonus: 60
     },
-    sena_spider: {
-        vendor: 'Sena Technologies • Mesh-Only',
-        vendor_en: 'Sena Technologies • Mesh-Only',
+    sena_spider_x: {
+        vendor: 'Sena Technologies • Mesh 3.0 & Wave (Direct-DC)',
+        vendor_en: 'Sena Technologies • Mesh 3.0 & Wave (Direct-DC)',
         badge: 'badge_online',
         badge_class: 'badge-green',
+        status: 'Power ON • DLE +60 Pkt.',
+        status_en: 'Power ON • DLE +60 Pts.',
+        status_color: 'var(--accent-green)',
+        idle_ma: 35,
+        dle_bonus: 60
+    },
+    sena_spider: {
+        vendor: 'Sena Technologies • Mesh 2.0 (Legacy)',
+        vendor_en: 'Sena Technologies • Mesh 2.0 (Legacy)',
+        badge: 'badge_online',
+        badge_class: 'badge-blue',
         status: 'Power ON • DLE +40 Pkt.',
         status_en: 'Power ON • DLE +40 Pts.',
         status_color: 'var(--accent-blue)',
@@ -4234,7 +4245,7 @@ function updatePodDisplay(podNum, profileKey) {
     }
     
     // Recalculate DLE Score
-    const p1Key = document.getElementById('select-pod1-profile')?.value || 'sena_apex';
+    const p1Key = document.getElementById('select-pod1-profile')?.value || 'sena_spider_x';
     const p2Key = document.getElementById('select-pod2-profile')?.value || 'cardo_dmc_gen2';
     const p1Bonus = CARTRIDGE_PROFILES[p1Key]?.dle_bonus || 0;
     const p2Bonus = CARTRIDGE_PROFILES[p2Key]?.dle_bonus || 0;
@@ -5800,7 +5811,7 @@ document.getElementById('btn-trigger-oem-pairing')?.addEventListener('click', ()
 });
 
 document.getElementById('btn-trigger-profile-merge')?.addEventListener('click', () => {
-    showToast(state.lang === 'de' ? '✓ Profil \'sena_apex.json\' erfolgreich mit Mesh 3.0 Parametern zusammengeführt & aktiviert!' : '✓ Profile \'sena_apex.json\' merged with Mesh 3.0 parameters & activated!', 'success');
+    showToast(state.lang === 'de' ? '✓ Profil \'sena_spider_x.json\' erfolgreich mit Mesh 3.0 Parametern zusammengeführt & aktiviert!' : '✓ Profile \'sena_spider_x.json\' merged with Mesh 3.0 parameters & activated!', 'success');
 });
 
 // Radar UI Handlers

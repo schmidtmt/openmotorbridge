@@ -1,0 +1,33 @@
+{
+    "id": "sena_spider_x",
+    "name": "Sena Spider X Slim (Mesh 3.0 Direct-DC)",
+    "vendor": "Sena Technologies",
+    "hardware_tier": 1,
+    "vcc_enabled": true,
+    "direct_dc_supported": true,
+    "direct_dc_voltage_v": 3.85,
+    "soft_start_ms": 80,
+    "input_gain_db": 1.5,
+    "output_gain_db": 0.0,
+    "noise_gate_threshold_db": -44,
+    "control_mode": "pulse_mesh_only",
+    "toggle_mesh_ms": 200,
+    "channel_next_ms": 800,
+    "ptt_hold": false,
+    "mesh_capabilities": {
+        "protocol": "Sena_Mesh_3.0_Wave",
+        "generation": 3,
+        "max_nodes": 32,
+        "open_mesh": true,
+        "preconfig_channels": 6,
+        "wave_intercom": true,
+        "dle_bonus_score": 60
+    },
+    "rf_hardening": {
+        "disable_bluetooth_classic": true,
+        "clear_phone_gps_pairings": true,
+        "enforce_mesh_only_mode": true,
+        "disable_audio_multitasking": true,
+        "expected_idle_current_ma": 35
+    }
+}

@@ -94,7 +94,8 @@ To protect active headsets against electrical shorts and hot-plug transients, Op
 │ Class   │ Device Families               │ Mesh Protocol   │ DLE Score Bonus │
 ├─────────┼───────────────────────────────┼─────────────────┼─────────────────┤
 │ **K1**  │ Sena 60S, Apex, 50S/R/C, SRL3 │ Sena Mesh 3.0/2 │ **+60 Points**  │
-│ **K2**  │ Sena Spider RT1/ST1           │ Mesh 2.0 Basic  │ **+40 Points**  │
+│ **K2a** │ Sena SPIDER X Slim            │ Mesh 3.0 & Wave │ **+60 Points**  │
+│ **K2b** │ Sena Spider RT1/ST1           │ Mesh 2.0 Basic  │ **+40 Points**  │
 │ **K3**  │ Sena Vortex, 20S, 10S, SF, 5S │ Bluetooth 5.1/4 │ **+20 Points**  │
 │ **K4**  │ Cardo Edge, Pro, Custom, Neo  │ Cardo DMC Gen2  │ **+60 Points**  │
 │ **K5**  │ Cardo Freecom 4x/2x, Spirit HD│ Live Intercom   │ **+40 Points**  │
@@ -110,8 +111,11 @@ To protect active headsets against electrical shorts and hot-plug transients, Op
   * *Sena 60S:* Wave Mesh Intercom, up to 64 participants, dual-chip RF hardening, DLE +60 pts.
   * *Sena Apex / Apex Plus:* Mesh 3.0 reference cartridge, 32 nodes, DLE +60 pts.
   * *Sena 50S, 50R, 50C, SRL3, MeshPort Blue/Red:* Mesh 2.0/3.0, 24–32 nodes.
-* **Class 2: Sena Spider & Mesh-Only (`sena_spider.json`):**
-  * *Sena Spider RT1 / ST1:* Pure mesh devices without legacy Bluetooth intercom overhead, DLE +40 pts.
+* **Class 2: Sena Spider & Lean Mesh-Only (`sena_spider_x.json`, `sena_spider.json`):**
+  * *Sena SPIDER X Slim (K2a - `sena_spider_x.json`):* The ideal lean mesh transceiver module for OpenMotorBridge. Delivers native **Mesh 3.0 & 2.0** as well as Wave Intercom with Bluetooth 5.3 and Sound by BOSE, completely eliminating helmet flagship bloat (no jog dial, no ambient helmet lights, no internal battery).
+    * *Factory 3-Port Cable Whip (Manual p. 6):* The main unit ($74.5 \times 31 \times 16\,\text{mm}$, only $23.2\,\text{g}$) exposes all interfaces via molded OEM micro-connectors on a single flexible harness: **Port ⑧ Battery Pack** (Direct-DC $3.85\,\text{V}$), **Port ⑨ Microphone** (direct injection from ES8388 DAC), and **Port ⑩ Speakers** (analog audio tap into ES8388 ADC).
+    * *Direct-DC & Zero Pogo Pins:* Requires no fragile pogo-pin cradle. Powered via the 2-wire battery harness at $3.85\,\text{V}$ DC directly from the Carrier PCB – **zero LiPo swelling/aging, zero opening of enclosures, zero soldering, and zero voided warranties!** DLE Score: **+60 pts** (full parity with 60S/Apex at half the price and zero helmet overhead).
+  * *Sena Spider RT1 / ST1 (K2b - `sena_spider.json`):* Pure Mesh 2.0 devices with integrated battery and zero Bluetooth intercom overhead, DLE +40 pts.
 * **Class 3: Sena Bluetooth & 2-Way Intercom (`sena_vortex.json`, `sena_legacy_bt.json`):**
   * *Sena Vortex:* Bluetooth 5.1 2-way intercom (1:1 up to 1.2 km), quick-pair button trigger, DLE +20 pts.
   * *Sena 20S EVO, 30K, 10S, 10R, SF4/SF2, 5S, SMH10:* Jog-dial pulse sequence for BT multi-hop, DLE +20 pts.
@@ -323,16 +327,78 @@ When upgrading an intercom inside an existing sled (e.g. replacing a Sena 20S wi
 ├───────────────────────┬─────────────────────────┬───────────────────────────┤
 │ Setup Category        │ Pod 1 (Left)            │ Pod 2 (Right)             │
 ├───────────────────────┼─────────────────────────┼───────────────────────────┤
-│ 💎 **High-End Leader**│ **Sena 60S / Apex**     │ **Cardo Packtalk Edge**   │
-│    (350 – 550 €)      │ (Mesh 3.0 Wave, Class B)│ (DMC Gen2 Air-Mount, Cl. C│
+│ ⭐ **OMB Recommendation**│ **Sena SPIDER X Slim**│ **Cardo Packtalk Edge**   │
+│   (Price-Performance  │ (Mesh 3.0 Direct-DC,K2a)│ (DMC Gen2 Air-Mount, K4)  │
+│    Leader & Reference)│ (DLE +60 pts, ~210 €)   │ (DLE +60 pts, ~320 €)     │
 ├───────────────────────┼─────────────────────────┼───────────────────────────┤
-│ ⚖️ **Price-Perf.**    │ **Sena Spider RT1/ST1** │ **Cardo Freecom 4x / Bold**│
-│    (180 – 280 €)      │ (Mesh 2.0 Pure, Class B)│ (Live Intercom/DMC, Cl. D)│
+│ 💎 **High-End Leader**│ **Sena 60S / Apex**     │ **Cardo Packtalk Edge**   │
+│    (350 – 550 €)      │ (Mesh 3.0 Wave, K1)     │ (DMC Gen2 Air-Mount, K4)  │
+├───────────────────────┼─────────────────────────┼───────────────────────────┤
+│ ⚖️ **Lean & Modern**  │ **Sena SPIDER X Slim**  │ **Cardo Freecom 4x / Bold**│
+│    (180 – 260 €)      │ (Mesh 3.0 Direct-DC,K2a)│ (Live Intercom/DMC, K5/K6)│
 ├───────────────────────┼─────────────────────────┼───────────────────────────┤
 │ 💰 **Budget Entry**   │ **Sena MeshPort Blue**  │ **IP67 Blank Cartridge**  │
-│    (80 – 140 €)       │ (or Sena 20S/SF, Cl. A) │ (Slot unpowered/disabled) │
+│    (80 – 140 €)       │ (or Sena 20S/SF, K3)    │ (Slot unpowered/disabled) │
 ├───────────────────────┼─────────────────────────┼───────────────────────────┤
 │ 🏔️ **Adventure/Offroad**│ **Sena Apex / 50S**   │ **Midland G9 Pro PMR446** │
-│    (220 – 320 €)      │ (Mesh 3.0, Class B)     │ (Analog Radio Gateway, E) │
+│    (220 – 320 €)      │ (Mesh 3.0, K1)          │ (Analog Radio Gateway, K7)│
 └───────────────────────┴─────────────────────────┴───────────────────────────┘
 ```
+
+### 8.1 Why the Sena SPIDER X Slim is Our Official Reference Recommendation for Pod 1
+
+The **Sena SPIDER X Slim** (Class 2a – `sena_spider_x.json`) is the **official primary recommendation** of the OpenMotorBridge project for Satellite Pod 1. It combines all required next-generation wireless capabilities with ideal mechanical and electrical characteristics for motorcycle pod cartridge operation:
+
+1. **Full Mesh 3.0 & Wave Parity (Future-Proof Without Compromise):**
+   * Delivers the exact same state-of-the-art mesh architecture as Sena's costly flagships (Sena 60S / Apex), featuring native **Mesh 3.0 & 2.0**, Wave Intercom, and Bluetooth 5.3.
+   * Supports up to 32 participants in mesh (Multi-Channel Open Mesh Channels 1–6) and receives the **full DLE Score Bonus of +60 points**.
+
+2. **Free from Useless Helmet Overhead (Lean Transceiver Design):**
+   * Traditional flagship helmet headsets (like the 60S or 50S) are burdened with costly rotary dials (jog dials), helmet LED spotlights, LCD status panels, and permanently integrated speaker/mic wiring looms — components that are completely useless inside an enclosed pod on a motorcycle, consume unnecessary space, and introduce mechanical failure points.
+   * The SPIDER X Slim is radically streamlined to pure core essentials: With ultra-compact dimensions of $74.5 \times 31 \times 16\,\text{mm}$ and a featherweight of just **$23.2\,\text{g}$**, it fits perfectly inside the cartridge bay.
+
+3. **Direct-DC & Integrated 3-Port Cable Whip (No Pogo-Pin Cradle Needed!):**
+   * **The Greatest Design & Practical Breakthrough:** According to the official Sena documentation (*SPIDER X Slim User Guide v1.0.0*, page 6), the main unit routes all three fundamental interfaces through rugged factory micro-connectors on a flexible cable whip:
+     * **Port ⑧: Battery Pack Connector (Direct-DC):** 2-wire line for permanent $3.85\,\text{V}$ regulated DC directly from the carrier PCB (no LiPo battery inside the pod, zero fire hazard, zero aging!).
+     * **Port ⑨: Microphone Jack:** Direct injection of audio signals from the ES8388 Audio Codec / DAC on the carrier PCB (no external mic capsule needed).
+     * **Port ⑩: Speaker Jacks:** Direct line-level audio capture of incoming mesh chatter into the Line-In / ADC of the ES8388 Codec.
+     * *(Additionally: Port ⑦ USB-C on the front face for optional service / OTA maintenance).*
+   * **Mechanical Milestone (Zero Pogo Pins):** It requires **no bulky, failure-prone clamp cradle with spring-loaded pogo pins** (unlike Sena 50S/60S or Cardo Packtalk)! Pogo pins suffer from contact bounce, contact resistance, and corrosion under motorcycle vibrations ($> 20\,\text{g}$) and moisture. With the SPIDER X Slim, all three connectors plug directly and securely via a passive adapter harness into the 6-pin JST-SH header `J2` of the OMB cartridge carrier board (PCBA 03).
+   * **100% Plug & Play, Zero Soldering, Full Warranty Retention:** The OEM enclosure remains completely unopened and undamaged. The module is simply taken out of the retail packaging, placed into the 3D-printed sled, and plugged in.
+   * **Clean Automatic Power Cycling:** Boots reliably with motorcycle ignition (KL15) and powers down cleanly when switched OFF.
+
+4. **Unbeatable Price-to-Performance Ratio:**
+   * At a typical retail street price of **~180 – 240 €**, the SPIDER X Slim delivers identical DLE network performance (+60 pts) to the €450 – €550 flagship Sena 60S — offering over 50% cost savings for builders!
+
+---
+
+## 9. Proximity & Standstill Privacy Mute (Local Conversation Mode at Intermediate Stops)
+
+### Problem in Group Mesh Riding
+When two group riders pull up next to each other at a red traffic light, a toll booth, or a roadside turnout and flip open their modular helmet visors to talk face-to-face:
+1. **Acoustic Echoes & Feedback Loops:** Rider A's microphone captures Rider B's voice with a $15\dots 30\,\text{ms}$ latency, creating a jarring, disorienting echo inside their helmet speakers.
+2. **Channel Congestion for the Entire Group:** The other 6–10 riders in the group (who may be 500 meters ahead or trailing behind) are forced to listen to the private side conversation over the mesh.
+
+### Intelligent Near-Field Privacy Mute
+OpenMotorBridge solves this challenge through a fully automated **Proximity Mute Logic**:
+
+```
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                   PROXIMITY & STANDSTILL PRIVACY MUTE LOGIC                            │
+└────────────────────────────────────────────────────────────────────────────────────────┘
+
+  [1. REAL-TIME SENSOR EVALUATION]
+  ├── Condition 1: Motorcycle is stationary (CAN vehicle speed v = 0.0 km/h)
+  └── Condition 2: Companion motorcycle in immediate proximity (< 3.0 m)
+                   Detected via 2.4 GHz ESP-NOW mesh signal strength (RSSI > -45 dBm)
+
+  [2. ACOUSTIC TRANSITION (Automatic)]
+  ├── OpenMotorBridge MUTES the microphone uplink to the wide-area group mesh
+  ├── Discreet acoustic confirmation tone in helmet (dual-tone "Local Mode Active")
+  └── Riders communicate naturally through open visors face-to-face!
+
+  [3. AUTOMATIC GROUP MESH RE-ENGAGEMENT]
+  ├── Option A: Motorcycle accelerates away (v > 8.0 km/h)
+  └── Option B: Rider taps handlebar PTT button (< 400 ms) ➔ Mesh immediately live!
+```
+

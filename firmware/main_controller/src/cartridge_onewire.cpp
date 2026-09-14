@@ -149,6 +149,14 @@ static void load_profile_class(CartridgeInfo_t *cart, const char *profile_id) {
         cart->output_gain_db = 0.0f;
         cart->toggle_mesh_ms = 200;
         cart->channel_next_ms = 1000;
+    } else if (strcmp(profile_id, "sena_spider_x") == 0) {
+        strncpy(cart->name, "Sena Spider X Slim (Mesh 3.0 Direct-DC)", sizeof(cart->name) - 1);
+        strncpy(cart->vendor, "Sena Technologies", sizeof(cart->vendor) - 1);
+        cart->hardware_tier = 1; // Tier 1 DLE score due to Mesh 3.0 & Wave
+        cart->input_gain_db = 1.5f;
+        cart->output_gain_db = 0.0f;
+        cart->toggle_mesh_ms = 200;
+        cart->channel_next_ms = 800;
     } else if (strcmp(profile_id, "sena_spider") == 0) {
         strncpy(cart->name, "Sena Spider RT1 / ST1 (Mesh-Only)", sizeof(cart->name) - 1);
         strncpy(cart->vendor, "Sena Technologies", sizeof(cart->vendor) - 1);
@@ -292,7 +300,7 @@ void task_cartridge_manager(void *pvParameters) {
     ESP_LOGI(TAG, "Dedicated Dual-Channel 1-Wire Manager Task running on Core 0.");
 
     while (true) {
-        scan_port(PIN_POD1_1WIRE_ID, &s_cartridge_port1, 1, "sena_apex");
+        scan_port(PIN_POD1_1WIRE_ID, &s_cartridge_port1, 1, "sena_spider_x");
         scan_port(PIN_POD2_1WIRE_ID, &s_cartridge_port2, 2, "cardo_dmc_gen2");
         vTaskDelay(pdMS_TO_TICKS(2000));
     }

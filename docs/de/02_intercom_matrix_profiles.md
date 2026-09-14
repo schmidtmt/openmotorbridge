@@ -114,7 +114,8 @@ Alle unterstützten Intercom- und Funkkassetten sind in 8 standardisierte Hardwa
 │ Klasse  │ Gerätefamilien                │ Mesh-Protokoll  │ DLE-Score Bonus │
 ├─────────┼───────────────────────────────┼─────────────────┼─────────────────┤
 │ **K1**  │ Sena 60S, Apex, 50S/R/C, SRL3 │ Sena Mesh 3.0/2 │ **+60 Punkte**  │
-│ **K2**  │ Sena Spider RT1/ST1           │ Mesh 2.0 Basic  │ **+40 Punkte**  │
+│ **K2a** │ Sena SPIDER X Slim            │ Mesh 3.0 & Wave │ **+60 Punkte**  │
+│ **K2b** │ Sena Spider RT1/ST1           │ Mesh 2.0 Basic  │ **+40 Punkte**  │
 │ **K3**  │ Sena Vortex, 20S, 10S, SF, 5S │ Bluetooth 5.1/4 │ **+20 Punkte**  │
 │ **K4**  │ Cardo Edge, Pro, Custom, Neo  │ Cardo DMC Gen2  │ **+60 Punkte**  │
 │ **K5**  │ Cardo Freecom 4x/2x, Spirit HD│ Live Intercom   │ **+40 Punkte**  │
@@ -130,8 +131,11 @@ Alle unterstützten Intercom- und Funkkassetten sind in 8 standardisierte Hardwa
   * *Sena 60S:* Wave-Mesh-Intercom, bis zu 64 Teilnehmer, Dual-Chip RF-Hardening, DLE +60 Pkt.
   * *Sena Apex / Apex Plus:* Mesh 3.0 Referenzkassette, 32 Nodes, DLE +60 Pkt.
   * *Sena 50S, 50R, 50C, SRL3, MeshPort Blue/Red:* Mesh 2.0/3.0, 24–32 Nodes.
-* **Klasse 2: Sena Spider & Mesh-Only (`sena_spider.json`):**
-  * *Sena Spider RT1 / ST1:* Reine Mesh-Geräte ohne Bluetooth-Intercom-Overhead, DLE +40 Pkt.
+* **Klasse 2: Sena Spider & Lean Mesh-Only (`sena_spider_x.json`, `sena_spider.json`):**
+  * *Sena SPIDER X Slim (K2a - `sena_spider_x.json`):* Das ideale, schlanke Mesh-Modul für OpenMotorBridge. Bietet natives **Mesh 3.0 & 2.0** sowie Wave Intercom mit Bluetooth 5.3 und Sound by BOSE, verzichtet aber vollständig auf den Ballast von Flaggschiff-Helmsystemen (kein Jog-Dial, keine Helmlampen, kein integrierter Akku).
+    * *Integrierte 3-fach Kabelpeitsche ab Werk (Handbuch S. 6):* Die Haupteinheit ($74{,}5 \times 31 \times 16\,\text{mm}$, nur $23{,}2\,\text{g}$) führt alle Schnittstellen über werkseitige Miniatur-Steckverbinder an einer Kabelpeitsche heraus: **Anschluss ⑧ Akkupack** (Direct-DC $3{,}85\,\text{V}$), **Anschluss ⑨ Mikrofon** (Direkteinspeisung vom ES8388 Codec) und **Anschluss ⑩ Lautsprecher** (Audio-Abgriff in den ES8388 ADC).
+    * *Direct-DC & Null Pogo-Pins:* Benötigt kein fehleranfälliges Pogo-Pin-Cradle. Die Stromversorgung wird über die externe 2-Draht-Akkuleitung direkt mit $3{,}85\,\text{V}$ Festspannung von der Trägerplatine im Pod gespeist – **vollkommen ohne Akku-Alterung, ohne Gehäuseöffnung, ohne Lötarbeiten und ohne Garantieverlust!** DLE-Score: **+60 Pkt.** (volle Mesh 3.0 Gleichstellung mit 60S/Apex bei halbem Preis und null Helm-Overhead).
+  * *Sena Spider RT1 / ST1 (K2b - `sena_spider.json`):* Reine Mesh-2.0-Geräte mit integriertem Akku ohne Bluetooth-Intercom-Overhead, DLE +40 Pkt.
 * **Klasse 3: Sena Bluetooth & 2-Way Intercom (`sena_vortex.json`, `sena_legacy_bt.json`):**
   * *Sena Vortex:* Bluetooth 5.1 2-Wege-Intercom (1:1 bis 1,2 km), Quick-Pair Button-Trigger, DLE +20 Pkt.
   * *Sena 20S EVO, 30K, 10S, 10R, SF4/SF2, 5S, SMH10:* Jog-Dial Pulsmuster für BT-Multi-Hop, DLE +20 Pkt.
@@ -376,11 +380,15 @@ Rüstet der Fahrer nach einiger Zeit sein Intercom auf (z. B. von Sena 20S auf S
 ├───────────────────────┬─────────────────────────┬───────────────────────────┤
 │ Setup-Kategorie       │ Pod 1 (Links)           │ Pod 2 (Rechts)            │
 ├───────────────────────┼─────────────────────────┼───────────────────────────┤
+│ ⭐ **OMB-Empfehlung** │ **Sena SPIDER X Slim**  │ **Cardo Packtalk Edge**   │
+│   (Preis-Leistungs-   │ (Mesh 3.0 Direct-DC,K2a)│ (DMC Gen2 Air-Mount, K4)  │
+│    Sieger & Referenz) │ (DLE +60 Pkt., ~210 €)  │ (DLE +60 Pkt., ~320 €)    │
+├───────────────────────┼─────────────────────────┼───────────────────────────┤
 │ 💎 **High-End Leader**│ **Sena 60S / Apex**     │ **Cardo Packtalk Edge**   │
 │    (350 – 550 €)      │ (Mesh 3.0 Wave, K1)     │ (DMC Gen2 Air-Mount, K4)  │
 ├───────────────────────┼─────────────────────────┼───────────────────────────┤
-│ ⚖️ **Preis-Leistung** │ **Sena Spider RT1/ST1** │ **Cardo Freecom 4x / Bold**│
-│    (180 – 280 €)      │ (Mesh 2.0 Pure, K2)     │ (Live Intercom/DMC, K5/K6)│
+│ ⚖️ **Lean & Modern**  │ **Sena SPIDER X Slim**  │ **Cardo Freecom 4x / Bold**│
+│    (180 – 260 €)      │ (Mesh 3.0 Direct-DC,K2a)│ (Live Intercom/DMC, K5/K6)│
 ├───────────────────────┼─────────────────────────┼───────────────────────────┤
 │ 💰 **Budget Einstieg**│ **Sena MeshPort Blue**  │ **IP67 Blind-Kassette**   │
 │    (80 – 140 €)       │ (oder Sena 20S/SF, K3)  │ (Slot stromlos / disabled)│
@@ -389,6 +397,31 @@ Rüstet der Fahrer nach einiger Zeit sein Intercom auf (z. B. von Sena 20S auf S
 │    (220 – 320 €)      │ (Mesh 3.0, K1)          │ (Analogfunk Gateway, K7)  │
 └───────────────────────┴─────────────────────────┴───────────────────────────┘
 ```
+
+### 8.1 Warum das Sena SPIDER X Slim unsere offizielle Referenz-Empfehlung für Pod 1 ist
+
+Das **Sena SPIDER X Slim** (Klasse 2a – `sena_spider_x.json`) ist die **offizielle Primärempfehlung** des OpenMotorBridge-Projekts für Satelliten-Pod 1. Es vereint alle geforderten Next-Gen-Funkmerkmale mit einer idealen mechanischen und elektrischen Eignung für den Kassettenbetrieb:
+
+1. **Volle Mesh 3.0 & Wave Parität (Zukunftssicher ohne Kompromisse):**
+   * Bietet die identische, modernste Mesh-Architektur wie Senas teure Flaggschiffe (Sena 60S / Apex) mit **Mesh 3.0 & 2.0**, Wave Intercom und Bluetooth 5.3.
+   * Unterstützt bis zu 32 Teilnehmer im Mesh (Multi-Channel Open Mesh Kanäle 1–6) und erhält den **vollen DLE-Score-Bonus von +60 Punkten**.
+
+2. **Befreit von nutzlosem Helm-Overhead (Schlankes Transceiver-Design):**
+   * Klassische Flaggschiff-Headsets (wie das 60S oder 50S) sind mit teuren Drehrädern (Jog-Dial), Helmlampen, LCD-Statusschirmchen und fest integrierten Lautsprecher-Kabelsträngen überfrachtet – Komponenten, die im geschlossenen Pod-Gehäuse am Motorrad völlig nutzlos sind, Platz rauben und mechanisch verschleißen können.
+   * Das SPIDER X Slim ist radikal auf das Wesentliche reduziert: Mit ultrakompakten Abmessungen von $74{,}5 \times 31 \times 16\,\text{mm}$ und einem Federgewicht von nur **$23{,}2\,\text{g}$** passt es ideal in den Kassetten-Einschub.
+
+3. **Direct-DC & Integrierte 3-fach Kabelpeitsche (Kein Pogo-Pin-Cradle nötig!):**
+   * **Der größte Konstruktions- und Praxiserfolg:** Laut offizieller Sena-Dokumentation (*SPIDER X Slim Benutzerhandbuch v1.0.0*, S. 6) führt die Haupteinheit alle drei elementaren Schnittstellen über robuste, werkseitige Miniatur-Steckverbinder an einer flexiblen Kabelpeitsche heraus:
+     * **Anschluss ⑧: Akkupack-Anschluss (Direct-DC):** 2-polige Zuleitung für permanente $3{,}85\,\text{V}$-Festspannung direkt vom Träger-PCB (kein LiPo-Akku im Pod, keine Brandgefahr, keine Alterung!).
+     * **Anschluss ⑨: Mikrofon-Buchse:** Direkte Einspeisung des analogen Sprachsignals vom ES8388 Audio-Codec / DAC auf der Trägerplatine (keine externe Mikrofon-Kapsel nötig).
+     * **Anschluss ⑩: Lautsprecher-Buchsen:** Direkter Audio-Line-Abgriff des ankommenden Mesh-Funkverkehrs in den Line-In / ADC des ES8388 Codecs.
+     * *(Zusätzlich: Anschluss ⑦ USB-C an der Stirnseite für optionale Service-/OTA-Wartung).*
+   * **Mechanischer Meilenstein (Null Pogo-Pins):** Es ist **kein klobiges, fehleranfälliges Klemm-Cradle mit Federkontakt-Pogo-Pins** (wie bei Sena 50S/60S oder Cardo Packtalk) erforderlich! Pogo-Pins neigen bei Motorrad-Vibrationen ($> 20\,\text{g}$) und Feuchtigkeit zu Kontaktprellen, Übergangswiderständen und Korrosion. Beim SPIDER X Slim werden alle drei Stecker direkt, formschlüssig und vibrationsfest über einen passiven Adapterkabelstrang auf den 6-poligen JST-SH Header `J2` des OMB-Kassettenträgers (PCBA 03) gesteckt.
+   * **100 % Plug & Play, Null Lötarbeiten, voller Garantieerhalt:** Das Originalgehäuse muss nicht geöffnet, mechanisch beschädigt oder umgelötet werden. Das Modul wird einfach aus der Verkaufsverpackung in den 3D-Druck-Schlitten gelegt und angesteckt.
+   * **Automatisches Booten & Abschalten:** Das Modul startet stabil mit der Zündung (KL15) und schaltet bei Zündung-AUS sauber ab.
+
+4. **Überragendes Preis-Leistungs-Verhältnis:**
+   * Mit einem Marktpreis von ca. **180 – 240 €** (Straßenpreis) bietet das SPIDER X Slim die exakt gleiche DLE-Netzwerkleistung (+60 Pkt.) wie ein Sena 60S (ca. 450 – 550 €) – bei mehr als 50 % Kostenersparnis!
 
 ---
 
