@@ -352,6 +352,8 @@ For modern intercom cartridges such as the Sena SPIDER X Slim and Cardo Packtalk
   * This allows the cartridge top cover inlay to be custom-tailored for any intercom geometry:
     * **Sena SPIDER X Slim:** 3 actuators arranged vertically in the top face guide row (Plus, Center, Minus) and 1 actuator mounted in a $45^\circ$-angled guide tower on the side flank to actuate the triangular Mesh button.
     * **Cardo Packtalk Edge:** 3 actuators for the primary buttons (Media, Mobile, Intercom) and 1 actuator driving the axial center push switch of the Control Wheel (Center-Press). Mechanically rolling the wheel while riding is rendered unnecessary, as system master volume and gain are adjusted digitally via the ES8388 DSP in the Central Box.
+  * **Mechanical Retention via Clamping Plate:** The actuators slide from the interior into the monolithic guide towers and are securely seated against their shoulder by a shared PA12-CF retainer plate fastened with 4x M2 countersunk screws and backed by a $1.0\,\text{mm}$ EPDM vibration pad. Loosening or misalignment under 20g road vibration is physically prevented.
+  * **Anti-Pinch Cable Routing:** Recessed $1.8 \times 2.0\,\text{mm}$ cable channels with integral retaining snap clips line the inner wall of the sled. The ultra-flexible AWG30 silicone leads of the 8-pin Y-harness route safely and pinch-free from `J_ACT` to the 4 actuators.
 
 * **2. Form-Fit Negative Nest & Vibration Locking Resisting $20\,\text{g}$ Shock:**
   * **Precision Tolerancing:** The receiver cavity replicates the OEM SPIDER X Slim housing ($74.5 \times 31.0 \times 16.0\,\text{mm}$) with an engineered $0.2\,\text{mm}$ clearance in SLS/MJF PA12.

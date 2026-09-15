@@ -378,6 +378,8 @@ Für moderne Intercom-Kassetten wie das Sena SPIDER X Slim und das Cardo Packtal
   * Dadurch kann das Inlay des Kassettenoberteils für jedes Intercom-Modell maßgeschneidert werden:
     * **Sena SPIDER X Slim:** 3 Aktuatoren axial von oben auf die Tastenreihe (Plus, Center, Minus) sowie 1 Aktuator in einem $45^\circ$-Winkelturm auf der Seitenflanke zur Betätigung der exponierten Mesh-Intercom-Taste.
     * **Cardo Packtalk Edge:** 3 Aktuatoren auf die drei Haupttasten (Media, Mobile, Intercom) sowie 1 Aktuator zur axialen Betätigung des integrierten Tasters im Control Wheel (Center-Press). Ein mechanisches Drehen des Rades im Fahrbetrieb entfällt, da Lautstärke und Gain volldigital über den ES8388 DSP in der Zentralbox geregelt werden.
+  * **Mechanische Befestigung via Niederhalteplatte:** Die Aktuatoren werden von innen in die monolithischen Führungsdome geschoben und durch eine gemeinsame, mit 4x M2-Senkkopfschrauben verschraubte PA12-CF-Halteplatte mit $1{,}0\,\text{mm}$ EPDM-Dämpfungsunterlage vibrationsfest und spielfrei auf ihren Bund gepresst.
+  * **Anti-Pinch-Kabelführung:** Entlang der Schlitteninnenwand sind vertiefte $1{,}8 \times 2{,}0\,\text{mm}$ Führungskanäle mit angeformten Halteclips integriert. Die hochflexiblen AWG30-Silikonlitzen des 8-Pin Y-Kabelbaums werden darin vollkommen knickfrei und quetschgeschützt von `J_ACT` zu den 4 Aktuatoren geführt.
 
 * **2. Formschlüssiges Negativbett & Vibrationssicherung gegen $20\,\text{g}$ Shock:**
   * **Präzisions-Passung:** Die Aufnahmeschale bildet das OEM-Gehäuse des SPIDER X Slim ($74{,}5 \times 31{,}0 \times 16{,}0\,\text{mm}$) mit einer Passungstoleranz von $0{,}2\,\text{mm}$ im SLS/MJF-Verfahren ab.
