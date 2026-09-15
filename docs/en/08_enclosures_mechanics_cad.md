@@ -312,32 +312,33 @@ The OMM Transceiver swap cartridge ([`cartridge_antenna_bracket_omm.scad`](file:
 
 *Figure 8.14: 3D CAD visualization of the Sena 50S/60S swap cartridge with sprung 7-pin pogo pin interface.*
 
-#### 4.3.4 Mechatronic Smart Cartridge: Form-Fit Retention & 4-Channel Actuator Guide (Sena SPIDER X Slim)
-For modern intercom cartridges such as the Sena SPIDER X Slim (as well as Cardo Edge / Sena 60S in mechatronic direct mode), the cartridge mechanical architecture addresses the dual core challenges: **Absolute vibration resistance for the OEM adapter** and **accurate, permanent alignment of the 4 actuators onto the rubber button pads**.
+#### 4.3.4 Mechatronic Smart Cartridge: Form-Fit Retention & 4-Channel Actuator Guide (Sena SPIDER X Slim & Cardo Packtalk Edge)
+For modern intercom cartridges such as the Sena SPIDER X Slim and Cardo Packtalk Edge, the cartridge mechanical architecture addresses the dual core challenges: **Absolute vibration resistance for the OEM adapter** and **accurate, permanent alignment of 4 discrete, independently positioned actuators onto the target button fields**.
 
 ```
-    MECHATRONIC SMART CARTRIDGE – CROSS SECTION THROUGH ACTUATOR GUIDE & BED
+    MECHATRONIC SMART CARTRIDGE – DISCRETE 4-CHANNEL ACTUATOR GUIDE
 ┌──────────────────────────────────────────────────────────────────────────────────┐
-│ CARTRIDGE TOP COVER (PA12-MJF):                                                  │
+│ CARTRIDGE TOP COVER (PA12-MJF with model-specific guide domes):                  │
 │                                                                                  │
-│   [ Solenoid 1 ]     [ Solenoid 2 ]     [ Solenoid 3 ]     [ Solenoid 4 ]        │
-│     (ACT_PLUS)         (ACT_MINUS)        (ACT_CENTER)        (ACT_MESH)         │
-│          │                  │                  │                  │              │
-│   ┌──────┴──────┐    ┌──────┴──────┐    ┌──────┴──────┐    ┌──────┴──────┐       │
-│   │Spring 0.15N │    │Spring 0.15N │    │Spring 0.15N │    │Spring 0.15N │       │
-│   └──────┬──────┘    └──────┬──────┘    └──────┬──────┘    └──────┬──────┘       │
-│          ▼                  ▼                  ▼                  ▼              │
-│   ┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐       │
-│   │Guide Bushing│    │Guide Bushing│    │Guide Bushing│    │Guide Bushing│       │
-│   │ Ø3.2 mm (H8)│    │ Ø3.2 mm (H8)│    │ Ø3.2 mm (H8)│    │ Ø3.2 mm (H8)│       │
-│   └──────┬──────┘    └──────┬──────┘    └──────┬──────┘    └──────┬──────┘       │
-│          │                  │                  │                  │              │
-│    [TPU Plunger]      [TPU Plunger]      [TPU Plunger]      [TPU Plunger]        │
-│          │ (0.4mm gap)      │ (0.4mm gap)      │ (0.4mm gap)      │ (0.4mm gap)  │
-├──────────┼──────────────────┼──────────────────┼──────────────────┼──────────────┤
-│ OEM INTERCOM HOUSING (Sena SPIDER X Slim):                                       │
-│          ▼                  ▼                  ▼                  ▼              │
-│     [ Button + ]       [ Button - ]       [ Button C ]       [ Button Mesh ]     │
+│   TOP FACE (3x Vertical Domes):                   SIDE FLANK (1x 45° Angle):     │
+│   [ Actuator 1 ]   [ Actuator 2 ]   [ Actuator 3 ]           [ Actuator 4 ]      │
+│   (Sena: + /       (Sena: Center/   (Sena: - /               (Sena: Mesh 45° /   │
+│    Cardo: Media)    Cardo: Mobile)   Cardo: Intercom)         Cardo: Wheel-Press)│
+│         │                │                │                         │            │
+│   ┌─────┴─────┐    ┌─────┴─────┐    ┌─────┴─────┐             ┌─────┴─────┐      │
+│   │Spring 0.15│    │Spring 0.15│    │Spring 0.15│             │Spring 0.15│      │
+│   └─────┬─────┘    └─────┬─────┘    └─────┬─────┘             └─────┬─────┘      │
+│         ▼                ▼                ▼                         ▼            │
+│   ┌───────────┐    ┌───────────┐    ┌───────────┐             ┌───────────┐      │
+│   │Vertical   │    │Vertical   │    │Vertical   │             │45°-Angle  │      │
+│   │Bushing H8 │    │Bushing H8 │    │Bushing H8 │             │Bushing H8 │      │
+│   └─────┬─────┘    └─────┬─────┘    └─────┬─────┘             └─────┬─────┘      │
+│         │ (TPU)          │ (TPU)          │ (TPU)                   │ (TPU)      │
+│         ▼ (0.4mm)        ▼ (0.4mm)        ▼ (0.4mm)                 ▼ (0.4mm)    │
+├─────────┼────────────────┼────────────────┼─────────────────────────┼────────────┤
+│ OEM INTERCOM HOUSING (In vibration-dampened EPDM contour nest):                  │
+│         ▼                ▼                ▼                         ▼            │
+│   [ Button 1 ]     [ Button 2 ]     [ Button 3 ]              [ Button 4 / Wheel]│
 │                                                                                  │
 │ ┌──────────────────────────────────────────────────────────────────────────────┐ │
 │ │ 3-Point EPDM Damping Liners (60° Shore A, 1.5 mm) resisting 20g shock/vibe  │ │
@@ -346,19 +347,25 @@ For modern intercom cartridges such as the Sena SPIDER X Slim (as well as Cardo 
 └──────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-* **1. Form-Fit Negative Nest & Vibration Locking Resisting $20\,\text{g}$ Shock:**
+* **1. Discrete, Modular Actuator Architecture:**
+  * Instead of a rigid single-block actuator comb, OpenMotorBridge utilizes **4 miniaturized discrete actuators** (solenoids with return springs and elastomeric TPU tips), each wired via its own flexible 2-wire AWG30 silicone cable to the 8-pin `J_ACT` header on PCBA 03.
+  * This allows the cartridge top cover inlay to be custom-tailored for any intercom geometry:
+    * **Sena SPIDER X Slim:** 3 actuators arranged vertically in the top face guide row (Plus, Center, Minus) and 1 actuator mounted in a $45^\circ$-angled guide tower on the side flank to actuate the triangular Mesh button.
+    * **Cardo Packtalk Edge:** 3 actuators for the primary buttons (Media, Mobile, Intercom) and 1 actuator driving the axial center push switch of the Control Wheel (Center-Press). Mechanically rolling the wheel while riding is rendered unnecessary, as system master volume and gain are adjusted digitally via the ES8388 DSP in the Central Box.
+
+* **2. Form-Fit Negative Nest & Vibration Locking Resisting $20\,\text{g}$ Shock:**
   * **Precision Tolerancing:** The receiver cavity replicates the OEM SPIDER X Slim housing ($74.5 \times 31.0 \times 16.0\,\text{mm}$) with an engineered $0.2\,\text{mm}$ clearance in SLS/MJF PA12.
   * **3-Point EPDM Vibration Isolation:** Three profiled EPDM damping pads ($60^\circ$ Shore A, $1.5\,\text{mm}$ thickness) at the base and lateral flanks absorb high-frequency engine vibration ($50\dots 500\,\text{Hz}$) and road shocks up to $20\,\text{g}$ (ISO 16750-3).
   * **Form-Fit Quick-Release Clamp:** A pivoting hold-down bracket with captive M3 knurled thumbscrew and EPDM pressure pad clamps the OEM adapter into the nest with calibrated $15\dots 20\,\text{N}$ retention force. Creeping, shifting, or rattling under riding conditions is physically impossible.
 
-* **2. Precision Actuator Guide Bridge & Pinpoint Button Alignment:**
+* **3. Precision Actuator Guide Bridge & Pinpoint Button Alignment:**
   * **Monolithic Guide Bushings:** The cartridge top cover incorporates four laser-sintered guide cylinders ($\varnothing\,3.2\,\text{mm}$, H8 tolerance).
   * **Coaxial Alignment:** Each bushing axis is positioned exactly concentric to the target OEM rubber button (`ACT_PLUS`, `ACT_MINUS`, `ACT_CENTER`, `ACT_MESH`) with positional deviation $< \pm 0.15\,\text{mm}$.
   * **TPU / Silicone Plunger Tips (Shore 70A):** The plunger heads feature convex elastomeric tips. They eliminate slippage against the contoured rubber buttons, absorb lateral tolerance stack-up, and protect the factory button coating from frictional wear.
   * **Integrated Return Springs (Stainless Steel 1.4310):** Every actuator axis is suspended by a coil spring ($c \approx 0.15\,\text{N/mm}$). A defined $0.4\,\text{mm}$ air gap ensures that severe road shocks never cause unintended physical button contact in the unpowered state.
   * **Mechanical Travel Limiters ($1.1 \pm 0.1\,\text{mm}$):** Plunger travel is bounded by rigid mechanical stops. This ensures full tactile actuation of internal micro-switches while protecting the OEM internal PCB from over-compression.
 
-* **3. Kink-Free Strain Relief for 3-Port Cable Whip:**
+* **4. Kink-Free Strain Relief for 3-Port Cable Whip:**
   * Sled base channels guide the factory cable whip of the SPIDER X Slim (DC Power ⑧, Microphone ⑨, Speaker ⑩) across smooth bend radii ($R \ge 5\,\text{mm}$) directly into headers `J2` and `J_ACT` on PCBA 03 Rev 2.0.
 
 ![OpenMotorBridge Mechatronic Smart Cartridge Sena SPIDER X Slim 3D CAD Fitting](../images/cad/smart_cartridge_spider_x_cad.png)
@@ -398,6 +405,11 @@ Fully integrated 500 mW PMR446 analog RF module ($38 \times 20\,\text{mm}$) seat
 
 *Figure 8.17: Identically contoured IP67 blank cartridge providing an integrated $80 \times 46 \times 16\,\text{mm}$ emergency dry compartment.*
 
+The IP67 Blank Cartridge (`cartridge_blindkassette.scad`) reliably protects the pod slot whenever no intercom is docked:
+* **Identical Latching & Ejection Kinematics:** The blank cartridge integrates the exact same standardized 2-arm magnetic latch (`parts/05_magnetic_lock_latch.scad`), Poka-Yoke guide rails, and spring pockets for the V4A ejection springs. It engages with the same positive click and ejects contactlessly upon approaching the N52 magnetic key.
+* **Hermetic Connector Protection (EPDM Dummy Seal):** On the rear face, an integrated molded EPDM sealing block seals the 6-pin socket on PCBA 02 against water, road salt, and dirt intrusion.
+* **Emergency Dry Compartment:** The internal $80 \times 46 \times 16\,\text{mm}$ cavity functions as a sealed dry box for vehicle registration papers, cash, spare keys, or emergency O-rings.
+
 ---
 
 ### 4.4 Standardized 6-Pin M8 / PUR Harness Wire Color Coding
@@ -408,8 +420,8 @@ Fully integrated 500 mW PMR446 analog RF module ($38 \times 20\,\text{mm}$) seat
 | **Pin 2** | **Black (BK)** | $0.34\,\text{mm}^2$ (AWG22) | **`GND`** (Dedicated power & signal ground)| **`GND`** (Dedicated power & signal ground)| Single core (Power GND) |
 | **Pin 3** | **White (WH)** | $0.14\,\text{mm}^2$ (AWG26) | **`NF_P`** (Balanced Audio + via Bourns) | **`UART_TX`** (Rear Co-Processor $\rightarrow$ Box) | **Pair 1 twisted** (with Pin 4) |
 | **Pin 4** | **Blue (BU)** | $0.14\,\text{mm}^2$ (AWG26) | **`NF_N`** (Balanced Audio - via Bourns) | **`UART_RX`** (Box $\rightarrow$ Rear Co-Processor) | **Pair 1 twisted** (with Pin 3) |
-| **Pin 5** | **Yellow (YE)** | $0.14\,\text{mm}^2$ (AWG26) | **`OPTO`** (TLP222A PTT Trigger) | **`GNSS_PPS`** (1-PPS Hardware Timebase) | Single core (Control) |
-| **Pin 6** | **Green (GN)** | $0.14\,\text{mm}^2$ (AWG26) | **`1-WIRE_ID`** (DS2401 Silicon Serial Number) | **`1-WIRE_ID`** (DS2401 Cartridge ID) | Single core (1-Wire Bus) |
+| **Pin 5** | **Yellow (YE)** | $0.14\,\text{mm}^2$ (AWG26) | **`TRIGGER_PPS`** (Single-Wire UART / Opto-Trigger) | **`GNSS_PPS`** (1-PPS Hardware Timebase) | Single core (Control) |
+| **Pin 6** | **Green (GN)** | $0.14\,\text{mm}^2$ (AWG26) | **`1-WIRE_ID`** (Native Emulation / DS2401 ID) | **`1-WIRE_ID`** (Cartridge ID) | Single core (1-Wire Bus) |
 | **M8 Shell** | **Tinned Copper (BL)** | $> 85\,\%$ Braid | **`GND_SHIELD`** (360° Chassis Shield) | **`GND_SHIELD`** (360° Chassis Shield) | Overall shield via M8 metal body |
 
 
@@ -587,7 +599,14 @@ Pods 1 and 2 mount inside the saddlebag lids using the [Universal Saddlebag Lid 
 
 ---
 
-### 6.2 Reference Kit 2: Harley-Davidson Road King Special (FLHRXS / Classic Naked Touring)
+### 6.2 Reference Kit 2: Harley-Davidson Touring, Bagger & Cruiser (Road King Special, Street Glide, Electra Glide)
+
+For classic touring and bagger models with 2-Up comfort seats or exposed rear fenders, OpenMotorBridge provides a universal, sculpted fender integration:
+
+The fender integration is available in two aerodynamically optimized styles, both utilizing the factory $1/4"-20$ pillion seat retention nut in the rear fender and routing the M8 signal cable invisibly forward beneath the seat:
+
+#### Option A: Touring Fender Console (`pod3_touring_fender_console.scad` / RKS & Naked Touring)
+Organic teardrop form tailored specifically to the exposed rear fender of naked touring models like the Road King Special (FLHRXS):
 
 ![Touring Fender Console CAD](../images/cad/pod3_touring_fender_console.png)
 
@@ -597,9 +616,8 @@ Pods 1 and 2 mount inside the saddlebag lids using the [Universal Saddlebag Lid 
 
 *Figure 8.26: Underside of the Touring Fender Console CAD: Concave $195\,\text{mm}$ fender saddle, forward $1/4"-20$ screw tab for the OEM pillion seat nut, and recessed cable channel for chafing-free routing of the M8 harness beneath the seat.*
 
----
-
-### 6.3 Reference Kit 3: Classic Bagger & Cruiser (Touring Stealth Console)
+#### Option B: Touring Stealth Console (`pod3_touring_stealth_console.scad` / Classic Bagger & Cruiser)
+For Street Glide, Electra Glide, and Ultra Limited with 2-Up comfort passenger seats. Hugs the rear contour of the passenger seat:
 
 ![Pod 3 Touring Stealth Console CAD](../images/cad/pod3_touring_stealth_cad.png)
 
@@ -611,7 +629,7 @@ Pods 1 and 2 mount inside the saddlebag lids using the [Universal Saddlebag Lid 
 
 ---
 
-### 6.4 Reference Kit 4: Adventure & Touring Enduros (BMW GS, KTM Adventure, Africa Twin)
+### 6.3 Reference Kit 3: Adventure & Touring Enduros (BMW GS, KTM Adventure, Africa Twin)
 
 ![Modular Adventure Kit CAD Studio](../images/cad/adventure_kit_master_assembly_3d.png)
 
@@ -849,7 +867,7 @@ The **OpenMotorBridge 2-in-1 Smart-Keyfob** ([`smart_keyfob_pager.scad`](file://
 * **Shock-Absorbing TPU Bumper:** Perimeter $0.8\,\text{mm}$ TPU-95A protective rim (Orange `#ff9f0a`) with side clearance for magnet contact. Reliably protects housing and internal electronics during drops onto asphalt from up to $2\,\text{m}$.
 * **316L Stainless Steel Eyelet:** Solid keyhole bushing ($\varnothing 4.5\,\text{mm}$ ID, $3.5\,\text{mm}$ wall thickness) for standard motorcycle keyrings and carabiners.
 * **Integrated N52 Neodymium Key Block ($20 \times 10 \times 5\,\text{mm}$):**
-  * Press-fitted flush into the narrow lateral edge and equipped with a tactile North-pole index rib.
+  * Press-fitted flush into the narrow lateral edge with a corrosion-resistant Ni-Cu-Ni triple plating (bright metallic finish, clearly depicted in the CAD renders) and equipped with a tactile North-pole index rib.
   * When brought within proximity of the $X = 64\,\text{mm}$ target circle on the Pod housing, the concentrated B-field ($B_r \approx 1.48\,\text{T}$) attracts the internal steel rocker anchor and trips the ejection springs.
 * **0.5 mm Mu-Metal / Soft Iron Flux Shield:**
   * Positioned immediately behind the N52 magnet. Hermetically shields internal RF and battery components (SX1262 LoRa, Nordic BLE, LiPo cell) against magnetic flux saturation, directing 100% of magnetic force outward.

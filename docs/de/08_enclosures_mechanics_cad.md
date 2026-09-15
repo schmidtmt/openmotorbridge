@@ -338,32 +338,33 @@ Die OMM-Transceiver-Wechselkassette ([`cartridge_antenna_bracket_omm.scad`](file
 
 *Abbildung 8.14: CAD-Visualisierung der Sena 50S/60S Wechselkassette mit federnder 7-Pin Pogo-Kontaktleiste.*
 
-#### 4.3.4 Mechatronische Smart Cartridge: Formschlüssige Arretierung & 4-Kanal Aktuator-Führung (Sena SPIDER X Slim)
-Für moderne Intercom-Kassetten wie das Sena SPIDER X Slim (sowie Cardo Edge / Sena 60S im mechatronischen Direkt-Modus) löst die Kassettenmechanik die doppelte Kernherausforderung: **Absolute Schwingungsfestigkeit des OEM-Adapters** und **präzise, dauerhafte Ausrichtung der 4 Aktuatoren auf die Tastenfelder**.
+#### 4.3.4 Mechatronische Smart Cartridge: Formschlüssige Arretierung & 4-Kanal Aktuator-Führung (Sena SPIDER X Slim & Cardo Packtalk Edge)
+Für moderne Intercom-Kassetten wie das Sena SPIDER X Slim und das Cardo Packtalk Edge löst die Kassettenmechanik die doppelte Kernherausforderung: **Absolute Schwingungsfestigkeit des OEM-Adapters** und **präzise, dauerhafte Ausrichtung von 4 diskreten, unabhängig platzierten Aktuatoren auf die Tastenfelder**.
 
 ```
-    MECHATRONISCHE SMART CARTRIDGE – SCHNITT DURCH TASTENFÜHRUNG & KONTURBETT
+    MECHATRONISCHE SMART CARTRIDGE – DISKRETE 4-KANAL AKTUATOR-FÜHRUNG
 ┌──────────────────────────────────────────────────────────────────────────────────┐
-│ KASSETTEN-OBERDECKEL (PA12-MJF):                                                 │
+│ KASSETTEN-OBERDECKEL (PA12-MJF mit modellspezifischen Führungsdomen):            │
 │                                                                                  │
-│   [ Hubmagnet 1 ]    [ Hubmagnet 2 ]    [ Hubmagnet 3 ]    [ Hubmagnet 4 ]       │
-│     (ACT_PLUS)         (ACT_MINUS)        (ACT_CENTER)        (ACT_MESH)         │
-│          │                  │                  │                  │              │
-│   ┌──────┴──────┐    ┌──────┴──────┐    ┌──────┴──────┐    ┌──────┴──────┐       │
-│   │Feder 0,15N/mm│   │Feder 0,15N/mm│   │Feder 0,15N/mm│   │Feder 0,15N/mm│      │
-│   └──────┬──────┘    └──────┬──────┘    └──────┬──────┘    └──────┬──────┘       │
-│          ▼                  ▼                  ▼                  ▼              │
-│   ┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐       │
-│   │Führungsbuchse│   │Führungsbuchse│   │Führungsbuchse│   │Führungsbuchse│      │
-│   │ Ø3,2 mm (H8)│    │ Ø3,2 mm (H8)│    │ Ø3,2 mm (H8)│    │ Ø3,2 mm (H8)│       │
-│   └──────┬──────┘    └──────┬──────┘    └──────┬──────┘    └──────┬──────┘       │
-│          │                  │                  │                  │              │
-│    [TPU-Puffer]       [TPU-Puffer]       [TPU-Puffer]       [TPU-Puffer]         │
-│          │ (0,4mm Spalt)    │ (0,4mm Spalt)    │ (0,4mm Spalt)    │ (0,4mm Spalt)│
-├──────────┼──────────────────┼──────────────────┼──────────────────┼──────────────┤
-│ OEM INTERCOM GEHÄUSE (Sena SPIDER X Slim):                                       │
-│          ▼                  ▼                  ▼                  ▼              │
-│     [ Taste + ]        [ Taste - ]        [ Taste C ]        [ Taste Mesh ]      │
+│   TOP-FLÄCHE (3x Vertikal-Dome):                  SEITENFLANKE (1x 45°-Winkel):  │
+│   [ Aktuator 1 ]   [ Aktuator 2 ]   [ Aktuator 3 ]           [ Aktuator 4 ]      │
+│   (Sena: + /       (Sena: Center/   (Sena: - /               (Sena: Mesh 45° /   │
+│    Cardo: Media)    Cardo: Mobile)   Cardo: Intercom)         Cardo: Wheel-Press)│
+│         │                │                │                         │            │
+│   ┌─────┴─────┐    ┌─────┴─────┐    ┌─────┴─────┐             ┌─────┴─────┐      │
+│   │Feder 0,15N│    │Feder 0,15N│    │Feder 0,15N│             │Feder 0,15N│      │
+│   └─────┬─────┘    └─────┬─────┘    └─────┬─────┘             └─────┬─────┘      │
+│         ▼                ▼                ▼                         ▼            │
+│   ┌───────────┐    ┌───────────┐    ┌───────────┐             ┌───────────┐      │
+│   │Vertikal-  │    │Vertikal-  │    │Vertikal-  │             │45°-Winkel-│      │
+│   │Führung H8 │    │Führung H8 │    │Führung H8 │             │Führung H8 │      │
+│   └─────┬─────┘    └─────┬─────┘    └─────┬─────┘             └─────┬─────┘      │
+│         │ (TPU)          │ (TPU)          │ (TPU)                   │ (TPU)      │
+│         ▼ (0,4mm)        ▼ (0,4mm)        ▼ (0,4mm)                 ▼ (0,4mm)    │
+├─────────┼────────────────┼────────────────┼─────────────────────────┼────────────┤
+│ OEM INTERCOM GEHÄUSE (Im vibrationsdämpfenden EPDM-Konturbett):                  │
+│         ▼                ▼                ▼                         ▼            │
+│   [ Taste 1 ]      [ Taste 2 ]      [ Taste 3 ]               [ Taste 4 / Wheel ]│
 │                                                                                  │
 │ ┌──────────────────────────────────────────────────────────────────────────────┐ │
 │ │ 3-Punkt EPDM-Dämpfungseinlagen (60° Shore A, 1,5 mm) gegen 20g Vibration     │ │
@@ -372,19 +373,25 @@ Für moderne Intercom-Kassetten wie das Sena SPIDER X Slim (sowie Cardo Edge / S
 └──────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-* **1. Formschlüssiges Negativbett & Vibrationssicherung gegen $20\,\text{g}$ Shock:**
+* **1. Diskrete, flexible Aktuator-Architektur:**
+  * Anstelle eines starren 4er-Kammblocks setzt OpenMotorBridge auf **4 miniaturisierte Einzel-Aktuatoren** (Hubmagnete mit Federrückstellung und dämpfender TPU-Druckspitze), die jeweils über ein flexibles 2-poliges AWG30-Silikonkabel an den 8-Pin Header `J_ACT` von PCBA 03 angeschlossen werden.
+  * Dadurch kann das Inlay des Kassettenoberteils für jedes Intercom-Modell maßgeschneidert werden:
+    * **Sena SPIDER X Slim:** 3 Aktuatoren axial von oben auf die Tastenreihe (Plus, Center, Minus) sowie 1 Aktuator in einem $45^\circ$-Winkelturm auf der Seitenflanke zur Betätigung der exponierten Mesh-Intercom-Taste.
+    * **Cardo Packtalk Edge:** 3 Aktuatoren auf die drei Haupttasten (Media, Mobile, Intercom) sowie 1 Aktuator zur axialen Betätigung des integrierten Tasters im Control Wheel (Center-Press). Ein mechanisches Drehen des Rades im Fahrbetrieb entfällt, da Lautstärke und Gain volldigital über den ES8388 DSP in der Zentralbox geregelt werden.
+
+* **2. Formschlüssiges Negativbett & Vibrationssicherung gegen $20\,\text{g}$ Shock:**
   * **Präzisions-Passung:** Die Aufnahmeschale bildet das OEM-Gehäuse des SPIDER X Slim ($74{,}5 \times 31{,}0 \times 16{,}0\,\text{mm}$) mit einer Passungstoleranz von $0{,}2\,\text{mm}$ im SLS/MJF-Verfahren ab.
   * **3-Punkt EPDM-Schwingungsentkopplung:** Drei profilierte EPDM-Dämpfungspolster ($60^\circ$ Shore A, Dicke $1{,}5\,\text{mm}$) am Boden und an den Stirnflanken absorbieren hochfrequente Motorvibrationen ($50\dots 500\,\text{Hz}$) sowie Stoßbelastungen bis $20\,\text{g}$ (nach ISO 16750-3).
   * **Formschlüssige Schnellspann-Klammer (Quick-Clamp):** Ein schwenkbarer Niederhaltebügel mit unverlierbarer M3-Rändelschraube presst den OEM-Adapter mit definierter Haltekraft ($15\dots 20\,\text{N}$) spielfrei und unbeweglich in das Nest. Ein Verrutschen oder Klappern während der Fahrt ist physikalisch ausgeschlossen.
 
-* **2. Präzisions-Führungsbrücke & Zuverlässiges Treffen der Gegenstelle:**
+* **3. Präzisions-Führungsbrücke & Zuverlässiges Treffen der Gegenstelle:**
   * **Monolithische Führungsbuchsen:** Im Kassetten-Deckel sind vier hochpräzise Führungszylinder ($\varnothing\,3{,}2\,\text{mm}$, Passung H8) direkt eingesintert.
   * **Fluchtende Achsausrichtung:** Jeder Zylinder fluchtet exakt zentrisch über der entsprechenden OEM-Gummitaste (`ACT_PLUS`, `ACT_MINUS`, `ACT_CENTER`, `ACT_MESH`) mit einer Achsabweichung von $< \pm 0{,}15\,\text{mm}$.
   * **TPU-/Silikon-Druckkappen (Shore 70A):** Die Stößelspitzen tragen elastische Kappen mit leicht balliger Stirnfläche. Sie verhindern Abrutschen auf der gewölbten Gummitaste, gleichen Bauteiltoleranzen aus und schützen die Original-Tastenbeschichtung vor Reibverschleiß.
   * **Integrierte Rückstellfedern (Edelstahl 1.4310):** Jede Stößelachse wird durch eine Spiralfeder ($c \approx 0{,}15\,\text{N/mm}$) in Ruhelage gehalten. Ein definierter Freihub von $0{,}4\,\text{mm}$ ("Luftspalt") stellt sicher, dass selbst extreme Fahrbahnstöße niemals zu einem ungewollten Berühren oder Drücken der Taste führen.
   * **Mechanischer Endanschlag ($1{,}1 \pm 0{,}1\,\text{mm}$):** Die Betätigungstiefe ist mechanisch begrenzt. Der interne Mikrotaster schaltet sicher durch, eine Überlastung oder Quetschung der internen SMD-Taster auf der Headset-Platine wird zuverlässig verhindert.
 
-* **3. Knickfreie Zugentlastung der Kabelpeitsche:**
+* **4. Knickfreie Zugentlastung der Kabelpeitsche:**
   * Im Kassettenboden führen drei separate Führungskanäle die werkseitige Kabelpeitsche des SPIDER X Slim (DC-Power ⑧, Mikrofon ⑨, Lautsprecher ⑩) über großzügig gerundete Radien ($R \ge 5\,\text{mm}$) direkt zu den Buchsen `J2` und `J_ACT` auf PCBA 03 Rev 2.0.
 
 ![OpenMotorBridge Mechatronische Smart Cartridge Sena SPIDER X Slim 3D CAD Fitting](../images/cad/smart_cartridge_spider_x_cad.png)
@@ -425,7 +432,10 @@ Vollständig integriertes 500 mW PMR446-Analogfunkmodul ($38 \times 20\,\text{mm
 
 *Abbildung 8.17: Formidentische IP67 Blindkassette mit integriertem $80 \times 46 \times 16\,\text{mm}$ Notfall-Trockenstaufach.*
 
-*Abbildung 8.17: Formidentische IP67 Blindkassette mit integriertem $80 \times 46 \times 16\,\text{mm}$ Notfall-Trockenstaufach.*
+Die IP67 Blindkassette (`cartridge_blindkassette.scad`) schützt den Pod-Schacht zuverlässig, wenn kein Intercom montiert ist:
+* **Identischer Verriegelungs- & Auswurfmechanismus:** Auch die Blindkassette verfügt über die standardisierte 2-Arm-Magnetwippe (`parts/05_magnetic_lock_latch.scad`), Poka-Yoke-Führungsschienen und Federtaschen für die V4A-Auswerferfedern. Sie verriegelt mit demselben satten Klick und wird kontaktlos über den N52-Magnetschlüssel ausgeworfen.
+* **Hermetischer Steckerschutz (EPDM-Dichtblock):** An der Rückseite dichtet ein integrierter EPDM-Formblock die 6-Pin Kontaktleiste auf PCBA 02 absolut wasser- und staubdicht ab.
+* **Notfall-Trockenstaufach:** Der $80 \times 46 \times 16\,\text{mm}$ große Innenraum dient als wasserdichte Mini-Dry-Box für Fahrzeugschein, Bargeld, Notfallschlüssel oder Ersatz-O-Ringe.
 
 ---
 
@@ -437,8 +447,8 @@ Vollständig integriertes 500 mW PMR446-Analogfunkmodul ($38 \times 20\,\text{mm
 | **Pin 2** | **Schwarz (BK)** | $0{,}34\,\text{mm}^2$ (AWG22) | **`GND`** (Dedizierte Power- & Signalmasse) | **`GND`** (Dedizierte Power- & Signalmasse) | Einzelader (Power Ground) |
 | **Pin 3** | **Weiß (WH)** | $0{,}14\,\text{mm}^2$ (AWG26) | **`NF_P`** (Symmetrisches Audio + via Bourns) | **`UART_TX`** (Heck-Co-Prozessor $\rightarrow$ Box) | **Paar 1 verdrillt** (mit Pin 4) |
 | **Pin 4** | **Blau (BU)** | $0{,}14\,\text{mm}^2$ (AWG26) | **`NF_N`** (Symmetrisches Audio - via Bourns) | **`UART_RX`** (Box $\rightarrow$ Heck-Co-Prozessor) | **Paar 1 verdrillt** (mit Pin 3) |
-| **Pin 5** | **Gelb (YE)** | $0{,}14\,\text{mm}^2$ (AWG26) | **`OPTO`** (TLP222A Tastensimulations-Trigger) | **`GNSS_PPS`** (1-PPS Hardware-Zeitnormal) | Einzelader (Steuersignal) |
-| **Pin 6** | **Grün (GN)** | $0{,}14\,\text{mm}^2$ (AWG26) | **`1-WIRE_ID`** (DS2401 Silicon Serial Number) | **`1-WIRE_ID`** (DS2401 Heck-Kassetten-ID) | Einzelader (1-Wire Bus) |
+| **Pin 5** | **Gelb (YE)** | $0{,}14\,\text{mm}^2$ (AWG26) | **`TRIGGER_PPS`** (Single-Wire UART / Opto-Trigger) | **`GNSS_PPS`** (1-PPS Hardware-Zeitnormal) | Einzelader (Steuersignal) |
+| **Pin 6** | **Grün (GN)** | $0{,}14\,\text{mm}^2$ (AWG26) | **`1-WIRE_ID`** (Native Emulation / DS2401 ID) | **`1-WIRE_ID`** (Heck-Kassetten-ID) | Einzelader (1-Wire Bus) |
 | **M8-Gehäuse**| **Kupfergeflecht (BL)**| $> 85\,\%$ Geflecht | **`GND_SHIELD`** (360° Gehäuseschirmung) | **`GND_SHIELD`** (360° Gehäuseschirmung) | Gesamtschirm über M8-Metallkragen |
 
 
@@ -617,15 +627,15 @@ Aufgrund der werkseitigen Showa Inverted-Remote-Reservoir-Stoßdämpfer mit dick
 
 ---
 
-### 6.2 Referenz-Kit 2: Harley-Davidson Road King Special (FLHRXS / Classic Naked Touring)
+### 6.2 Referenz-Kit 2: Harley-Davidson Touring, Bagger & Cruiser (Road King Special, Street Glide, Electra Glide)
 
-Für klassische Touring-Modelle ohne Frontverkleidung und mit 2-Up-Komfortsitzbank oder klassischem Heckfender:
+Für klassische Touring- und Bagger-Modelle mit 2-Up-Komfortsitzbank oder freiem Heckkotflügel bietet OpenMotorBridge eine universelle, formvollendete Kotflügel-Integration:
 
 ```
-             ROAD KING SPECIAL (RKS) GESAMTSYSTEM-INTEGRATION
+        HARLEY-DAVIDSON TOURING & BAGGER GESAMTSYSTEM-INTEGRATION
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│ 1. COCKPIT (Nacelle, unsichtbar hinter 7" LED-Scheinwerfer):                │
-│    • Front-Node (PCBA 05) im Hohlraum der Aluminium-Headlight-Nacelle       │
+│ 1. COCKPIT (Nacelle / Batwing / Sharknose):                                 │
+│    • Front-Node (PCBA 05) im Hohlraum der Headlight-Nacelle oder Verkleidung │
 │    • Speist Garmin Navi / Smartphone-Halterung & Action-Cam am Lenker       │
 │    • PTT-Lenkertaster & Knowles Windgeräusch-Mikrofon                       │
 │    • 100 % drahtlos via ESP-NOW zur Zentralbox -> 0 Kabel am Tank nach hinten│
@@ -634,17 +644,19 @@ Für klassische Touring-Modelle ohne Frontverkleidung und mit 2-Up-Komfortsitzba
 │    • Zentralbox mittig im Batteriefach                                      │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │ 3. HECK (Kotflügel-Konsole & Kennzeichen):                                  │
-│    • Pod 3 in der Touring Fender Console (pod3_touring_fender_console.scad)  │
+│    • Pod 3 in der Touring Fender Console oder Touring Stealth Console       │
 │      Formvollendet auf Kotflügel geschraubt an 1/4"-20 Soziussitz-Mutter    │
 │    • Radar mittig unter dem Kennzeichen                                     │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │ 4. KOFFER:                                                                  │
-│    • Pod 1 (Sena) & Pod 2 (Cardo) in den Kofferdeckeln (analog ST)          │
+│    • Pod 1 (Sena) & Pod 2 (Cardo) in den Kofferdeckeln                      │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-* **Touring Fender Console (`pod3_touring_fender_console.scad`):** Organische Tropfenform ($R = 6\dots 7\,\text{mm}$), die das Pod 3 formschlüssig aufnimmt. Nutzt die originale $1/4"-20$ Rändelmutter im Kotflügel. M8-Kabel taucht unsichtbar nach vorne unter die Sitzbank ab.
-* **Headlight Nacelle Front-Knoten:** Nutzt den gigantischen Raum hinter dem 7"-LED-Scheinwerfer. Stromversorgung über den dort liegenden Harley-Zubehörstecker.
+Die Kotflügel-Integration ist in zwei aerodynamisch optimierten Ausführungen verfügbar, die beide die originale $1/4"-20$ Rändelmutter der Soziussitz-Befestigung im Kotflügel nutzen und das M8-Signalkabel unsichtbar nach vorne unter die Sitzbank leiten:
+
+#### Option A: Touring Fender Console (`pod3_touring_fender_console.scad` / RKS & Naked Touring)
+Organische Tropfenform ($R = 6\dots 7\,\text{mm}$), die das Pod 3 formschlüssig aufnimmt und speziell auf den freiliegenden Heckfender der Road King Special (FLHRXS) abgestimmt ist:
 
 ![Pod 3 Touring Fender Console CAD](../images/cad/pod3_touring_fender_console.png)
 
@@ -654,11 +666,8 @@ Für klassische Touring-Modelle ohne Frontverkleidung und mit 2-Up-Komfortsitzba
 
 *Abbildung 8.26: Unterseite der Touring Fender Console CAD: Konkav gewölbter 195-mm-Kotflügel-Sattel, vordere $1/4"-20$-Schraublasche für die Soziussitz-Mutter und vertiefter Kabelkanal zur scheuerfreien Durchführung des M8-Kabels unter die Sitzbank.*
 
----
-
-### 6.3 Referenz-Kit 3: Classic Bagger & Cruiser (Touring Stealth Console)
-
-Für Harley-Davidson Street Glide, Electra Glide und Ultra Limited mit 2-Up-Komfortsitzbank:
+#### Option B: Touring Stealth Console (`pod3_touring_stealth_console.scad` / Classic Bagger & Cruiser)
+Für Street Glide, Electra Glide und Ultra Limited mit 2-Up-Komfortsitzbank. Schmiegt sich formschlüssig an die Hinterkante der Beifahrersitzbank an:
 
 ![Pod 3 Touring Stealth Console CAD](../images/cad/pod3_touring_stealth_cad.png)
 
@@ -670,7 +679,7 @@ Für Harley-Davidson Street Glide, Electra Glide und Ultra Limited mit 2-Up-Komf
 
 ---
 
-### 6.4 Referenz-Kit 4: Adventure & Touring Enduros (BMW GS / GSA, KTM Adventure, Africa Twin)
+### 6.3 Referenz-Kit 3: Adventure & Touring Enduros (BMW GS / GSA, KTM Adventure, Africa Twin)
 
 Für großvolumige Reiseenduros und Offroad-Tourer mit offenem Gitterrohr-Heckrahmen, Rohrgepäckbrücke und optionalem Aluminium-3-Koffersystem (z. B. Touratech Zega Pro/Evo, BMW Adventure oder Wunderlich):
 
@@ -1102,7 +1111,7 @@ Der **OpenMotorBridge 2-in-1 Smart-Keyfob** ([`smart_keyfob_pager.scad`](file://
 * **Stoßabsorbierender TPU-Kantenschutz:** Umlaufender $0{,}8\,\text{mm}$ TPU-95A Schutzrahmen (Orange `#ff9f0a`) mit Freisparung für die seitliche Magnetkontaktfläche. Schützt Gehäuse und Elektronik zuverlässig bei Stürzen auf Asphalt aus bis zu $2\,\text{m}$ Höhe.
 * **316L Edelstahl-Öse:** Massive Schlüsselloch-Durchführung ($\varnothing 4{,}5\,\text{mm}$ innen, $3{,}5\,\text{mm}$ Wandstärke) für Standard-Motorrad-Schlüsselringe und Karabiner.
 * **Integrierter N52 Neodym-Schlüsselblock ($20 \times 10 \times 5\,\text{mm}$):**
-  * Auf der schmalen Längsseite formschlüssig eingepresst und mit einem taktilen Nordpol-Ausrichtungssteg versehen.
+  * Auf der schmalen Längsseite formschlüssig eingepresst mit korrosionsfester Ni-Cu-Ni Dreifachbeschichtung (silbern-metallisch glänzend, in den CAD-Renderings deutlich sichtbar) und mit einem taktilen Nordpol-Ausrichtungssteg versehen.
   * Tritt der Keyfob an den $X = 64\,\text{mm}$ Zielkreis des Pod-Gehäuses heran, zieht das konzentrierte B-Feld ($B_r \approx 1{,}48\,\text{T}$) den innenliegenden Stahlanker an und entriegelt die Auswerferfedern.
 * **0,5 mm Weicheisen- / Mu-Metall-Abschirmblech (Flux Shield):**
   * Direkt hinter dem N52-Magneten platziert. Schirmt die interne Elektronik (SX1262 LoRa-Transceiver, Nordic BLE-SoC, 180 mAh LiPo-Pouch-Akku) hermetisch gegen magnetische Sättigung ab und lenkt den magnetischen Fluss zu 100 % nach außen auf die Gehäusewand.

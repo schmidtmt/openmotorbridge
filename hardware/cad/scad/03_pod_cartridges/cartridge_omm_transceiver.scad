@@ -23,9 +23,9 @@ module cartridge_omm_transceiver_assembly(exploded = false) {
     z_insert  = exploded ? 36.0 : 9.5;
     z_screws  = exploded ? 48.0 : 13.0;
 
-    // 1. Universal Base Sled (Anthracite PA12 - 100% Identical for All Pods)
+    // 1. Universal Base Sled (Anthracite PA12 - 100% Identical for All Pods) with visible magnetic lock latch
     color("darkslategray", 0.92)
-        cartridge_base_sled();
+        cartridge_base_sled(show_latch = true);
 
     // 2. Compact Rear Pod 3 Transceiver PCBA (55x48mm in front bay X = 1.5 .. 56.5 mm)
     translate([1.5, (CARTRIDGE_BASE_W - 48.0)/2.0, z_pcb])

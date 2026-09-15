@@ -138,7 +138,10 @@ To build a fully featured OpenMotorBridge (v8.0) installation for one motorcycle
 | **USB-A Flat Ribbon Cable (Front)**| Short 90° USB-A male-to-female adapter ($10\dots 15\,\text{cm}$)| **1** | Ottocast connection to J1 via front cable gland |
 | **USB-C Glovebox Cable (Front)**| Right-angle USB-C male-to-male ($1.0\,\text{m}$, PUR/Nylon) | **1** | Smartphone charging from J2 via front cable gland |
 | **JST-GH Connector Kit (Left)** | JST-GH 1.25mm 2-pin female housings + crimp terminals | **2 sets** | Pre-crimped harness leads for J3 (PTT) & J7 (12V) |
-| **90° USB Cartridge Cable** | Low-profile 90° right-angle Micro-USB/USB-C ($5\dots 8\,\text{cm}$) | **1** | 5V power feed for Sena +Mesh / MeshPort inside cartridge |
+| **J_ACT Actuator Wiring Harness**| JST-SH 1.0mm 8-Pin housing to 4x 2-Pin AWG30 silicone leads ($8\,\text{cm}$)| **1–2** | Independent connection of the 4 discrete miniature actuators on PCBA 03 |
+| **Miniature Actuators (Solenoids)**| 5V DC miniature pull/push solenoids ($\varnothing 6\dots 8\,\text{mm}$, stroke $1.5\,\text{mm}$) with TPU tip | **4** | Mechatronic button actuation (Sena SPIDER X: 3x Top, 1x 45° Mesh; Cardo: 3x Buttons, 1x Wheel-Click) |
+| **J2 Cartridge Wiring Harness** | JST-SH 1.0mm 6-Pin housing to modular Audio & DC interface | **1–2** | Modular cartridge harness: Var. A (Sena SPIDER X), Var. B (Cardo Edge Air Mount), Var. C (PMR446/COTS) |
+| **90° USB Cartridge Cable** | Low-profile 90° right-angle Micro-USB/USB-C ($5\dots 8\,\text{cm}$) | **Opt. (1)**| Legacy/optional only for passive Class A cartridges (Sena +Mesh / MeshPort continuous charging) |
 | **EPDM Cartridge Retaining Band**| Elastic EPDM rubber strap ($\approx 35 \times 10\,\text{mm}$) | **1** | Vibration-proof retention of OEM adapter via cartridge hooks |
 
 ---

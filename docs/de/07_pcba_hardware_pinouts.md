@@ -192,13 +192,14 @@ Vertikale, hochpräzise SMD-Stiftleiste ($2{,}54\,\text{mm}$ Raster, vergoldet, 
 
 ### 5.1 Technische Platinen-Kenndaten
 * **Abmessungen:** $35{,}0 \times 25{,}0\,\text{mm}$ (kompakte Trägerplatine mit 4x M2 Befestigungsbohrungen im Raster $29{,}0 \times 19{,}0\,\text{mm}$, formschlüssig integriert in den $116 \times 58\,\text{mm}$ Wechselschlitten mit vibrationsdämpfendem EPDM-Konturbett).
+* **Formschlüssiges Docking:** Die horizontale 6-Pin Docking-Buchse `J1` fluchtet exakt auf $(X=14\,\text{mm}, Y=35\,\text{mm})$ mit der Gegensteckleiste `J2` der Pod-Base (PCBA 02). Die asymmetrischen Führungsschienen der Kassette ($Z=10\,\text{mm}$ links, $Z=18\,\text{mm}$ rechts) verhindern ein Verkanten und garantieren blindes Einstecken.
 * **Lagenaufbau:** 2 Lagen FR-4 High-TG150 ($1{,}6\,\text{mm}$ Dicke, $35\,\mu\text{m}$ Kupfer beidseitig).
 * **Ausstattung (Rev 2.0):**
   * `U1`: WCH `CH32V003F4P6` (32-Bit RISC-V, 48 MHz, 16 KB Flash, 2 KB SRAM, SOIC-8 oder QFN-20) zur autonomen Pattern-Steuerung, In-System-Flashing und nativen 1-Wire-ID-Emulation (DS2401 entfällt ersatzlos!).
-  * `Q1` – `Q4`: 4x N-Kanal Power-MOSFETs (`AO3400`, SOT-23, $30\,\text{V} / 5{,}7\,\text{A}$, $R_{\text{ON}} < 28\,\text{m}\Omega$) zur unabhängigen, verlustfreien Ansteuerung von bis zu 4 mechatronischen Miniatur-Hubmagneten (Aktuatoren).
+  * `Q1` – `Q4`: 4x N-Kanal Power-MOSFETs (`AO3400`, SOT-23, $30\,\text{V} / 5{,}7\,\text{A}$, $R_{\text{ON}} < 28\,\text{m}\Omega$) zur unabhängigen, verlustfreien Ansteuerung von 4 diskreten Miniatur-Aktuatoren.
   * `F1`: Selbstrückstellende PPTC 500mA Sicherung (Bourns `MF-MSMF050-2`).
   * `D1`: Duo-Status-LED Grün/Blau (Grün = 1-Wire Active / Config Synced, Blau = Aktuator-Impuls).
-  * *Entfall des Optokopplers:* Da mechatronische Finger die Original-Gummitasten von außen berührungslos bedienen, ist die galvanische Isolation physikalisch absolut (Luft/Kunststoff). Der hochohmige TLP222A entfällt zugunsten von 4 verlustfreien N-MOSFETs (nur bei analogem PMR446-Funk bleibt ein Lötpad für ein Relais vorhanden).
+  * **Rolle des TLP222A Optokopplers auf PCBA 01:** Auf der Zentralbox PCBA 01 bleiben die TLP222A PhotoMOS-Optokoppler bewusst erhalten. Sie dienen als potentialfreier Kontaktschluss für passive Kassetten (Rev 1.0), COTS-Helmeinbausätze (Klasse B) sowie analoge PMR446-Funkgeräte (Klasse E, z. B. Kenwood-PTT). Bei Smart Cartridges (Rev 2.0) schalten dagegen die nativen MOSFETs `Q1`..`Q4` direkt gegen Masse, während die galvanische Isolation über die isolierenden Kunststoff-Stößel zu den Tasten zu 100 % mechanisch gewährleistet ist.
 
 ### 5.2 Pinbelegung der horizontalen Docking-Buchse (`J1` / Verbindung zur Pod-Base)
 
@@ -211,27 +212,33 @@ Vertikale, hochpräzise SMD-Stiftleiste ($2{,}54\,\text{mm}$ Raster, vergoldet, 
 | **Pin 5** | `5_TRIGGER_PPS`| Single-Wire UART / Pattern | Bidirektionaler Konfigurations- und Opcode-Bus zum Kassetten-MCU `U1` (19.200 Baud) |
 | **Pin 6** | `6_1WIRE` | 1-Wire Datenbus | Native 64-Bit ROM-ID Emulation durch `U1` (Kassetten- und Typ-Erkennung) |
 
-### 5.3 Pinbelegung des internen 6-poligen JST-SH Headers (`J2` / Headset-Anbindung)
+### 5.3 Pinbelegung des internen 6-poligen JST-SH Headers (`J2` / Audio- & Speise-Kabelbaum)
 
-| Pin (J2) | Signalname | Richtung | Belegung nach OEM-Headset-Klasse |
-| :---: | :--- | :--- :---: | :--- |
-| **Pin 1** | `VCC_DIRECT_DC` | Ausgang $\rightarrow$ Intercom | $+3{,}85\,\text{V}$ / $+5{,}0\,\text{V}$ Direct-DC Ladespeisung (Sena SPIDER X Akkuanschluss ⑧) |
+| Pin (J2) | Signalname | Richtung | Funktion & Signalpegel |
+| :---: | :--- | :---: | :--- |
+| **Pin 1** | `VCC_DIRECT_DC` | Ausgang $\rightarrow$ Intercom | $+5{,}0\,\text{V}$ DC Dauerladespeisung bzw. $+3{,}85\,\text{V}$ Akkuspeisung |
 | **Pin 2** | `GND` | Masse | Systemmasse (Akkumasse, Audiomasse) |
-| **Pin 3** | `AUDIO_R+` | Ausgang $\rightarrow$ Headset | Lautsprecher/Line-In Signal Positiv (Anschluss ⑩) |
-| **Pin 4** | `AUDIO_R-` | Ausgang $\rightarrow$ Headset | Lautsprecher/Line-In Signal Negativ (Anschluss ⑩) |
-| **Pin 5** | `MIC_IN+` | Eingang $\leftarrow$ Headset | Headset-Mikrofonsignal zum Codec (Anschluss ⑨) |
+| **Pin 3** | `AUDIO_R+` | Ausgang $\leftarrow$ Headset | Lautsprecher/Line-Out vom Intercom $\rightarrow$ zu OMB Codec Line-In via Trafo |
+| **Pin 4** | `AUDIO_R-` | Ausgang $\leftarrow$ Headset | Lautsprecher/Line-Out Masse/Negativ |
+| **Pin 5** | `MIC_IN+` | Eingang $\rightarrow$ Headset | Mikrofon-Signal vom OMB Codec DAC $\rightarrow$ Intercom Mic-Eingang |
 | **Pin 6** | `RESERVE_IO` | Bidirektional | Diagnose- und Programmierpin für Kassetten-MCU `U1` |
 
-### 5.4 Pinbelegung des mechatronischen 8-poligen Aktuator-Headers (`J_ACT` / $1{,}0\,\text{mm}$ JST-SH)
+#### Modulare Kabelpeitschen-Varianten für `J2`:
+* **Kabelbaum-Variante A (Sena SPIDER X Slim):** 2-Pin DC-Lötpigtail auf Akku-Terminal ⑧, 2-Pin Klinkenleitung auf Audio-Ausgang ⑩, 2-Pin Leitung auf Mikrofon-Eingang ⑨.
+* **Kabelbaum-Variante B (Cardo Packtalk Edge Air Mount Cradle):** Verwendet die OEM-Kabelpeitsche des Cradles: 3,5 mm Klinkenbuchse (Lautsprecher) an Pin 3/4, 2-Pin Miniatur-Buchse (Mikrofon) an Pin 5/2, sowie USB-C 5V Ladekabel an Pin 1/2 für Dauerladung.
+* **Kabelbaum-Variante C (Universal COTS / PMR446):** Freie Litzenenden (AWG28 geschirmt) zum direkten Konfektionieren an Kenwood 2-Pin Funkstecker oder universelle Bluetooth-Headsets.
 
-| Pin (J_ACT) | Signalname | Ansteuerung | Funktion beim Sena SPIDER X Slim |
-| :---: | :--- | :---: | :--- |
-| **Pin 1 & 2** | `VCC_5V` | Dauer-5V | Gemeinsame Spannungsversorgung für alle Hubmagnete / Aktuatoren |
-| **Pin 3** | `ACT1_OUT` | N-MOSFET `Q1` | **`ACT_PLUS`**: Taste (+) für Lauter & Menü-Weiterschaltung |
-| **Pin 4** | `ACT2_OUT` | N-MOSFET `Q2` | **`ACT_MINUS`**: Taste (-) für Leiser & Menü-Zurückschaltung |
-| **Pin 5** | `ACT3_OUT` | N-MOSFET `Q3` | **`ACT_CENTER`**: Mittlere Taste (Center / Bestätigen / Phone) |
-| **Pin 6** | `ACT4_OUT` | N-MOSFET `Q4` | **`ACT_MESH`**: Mesh Intercom-Taste (Mesh On/Off, Group Mesh, Menü) |
-| **Pin 7 & 8** | `GND` | Power-Masse | Schirm- und Rückstrommasse |
+### 5.4 Pinbelegung des mechatronischen 8-poligen Aktuator-Headers (`J_ACT` / $1{,}0\,\text{mm}$ JST-SH)
+Um Geräte mit unterschiedlichen Tastenlayouts (Sena Spider X Slim vs. Cardo Packtalk Edge) flexibel zu steuern, werden **4 diskrete, unabhängig montierbare Miniatur-Aktuatoren** verwendet. Jeder Aktuator besitzt ein eigenes 2-adriges AWG30 Silikonkabel:
+
+| Pin (J_ACT) | Signalname | Ansteuerung | Mapping: Sena SPIDER X Slim | Mapping: Cardo Packtalk Edge |
+| :---: | :--- | :---: | :--- | :--- |
+| **Pin 1 & 2** | `VCC_5V` | Dauer-5V | Gemeinsame $+5\,\text{V}$ Speiseschiene für alle 4 Aktuatoren | Gemeinsame $+5\,\text{V}$ Speiseschiene |
+| **Pin 3** | `ACT1_OUT` | MOSFET `Q1` | **Plus (+)** (Lauter / Menü vor) | **Media Button** (Front/Top) |
+| **Pin 4** | `ACT2_OUT` | MOSFET `Q2` | **Minus (-)** (Leiser / Menü zurück)| **Mobile Button** (Phone/Pairing) |
+| **Pin 5** | `ACT3_OUT` | MOSFET `Q3` | **Center / Phone** (Bestätigen)   | **Intercom Button** (DMC Grouping) |
+| **Pin 6** | `ACT4_OUT` | MOSFET `Q4` | **Mesh Button** (45° seitlich)    | **Control Wheel Center-Press** |
+| **Pin 7 & 8** | `GND` | Power-Masse | Schirm- und Rückstrommasse | Schirm- und Rückstrommasse |
 
 ### 5.5 In-System Profil-Flashing (ISP / IAP via Single-Wire)
 * **Kein Programmiergerät erforderlich:** Sobald in der WebApp ein Profil (z. B. `sena_spider_x.json`) zugewiesen wird, sendet der ESP32-S3 über Pin 5 (`TRIGGER_PPS`) ein Konfigurationspaket mit Timing-Werten, Impulsdauern und Makro-Schritten.

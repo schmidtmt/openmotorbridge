@@ -16,8 +16,9 @@ Klassische Motorrad-Kommunikationssysteme sind historisch stark fragmentiert:
 ```
                                   GESAMTSYSTEM-TOPOLOGIE
 ┌─────────────────────────────────────────────────────────────────────────────────────────────┐
-│ 1. COCKPIT / LENKER (100 % Drahtlos):                                                       │
-│    • BLE 5.0 Funk-Lenkertaster (CR2032 mit Batterie-Service 0x180F & PTT-Trigger)           │
+│ 1. COCKPIT / LENKER & KEYFOB:                                                               │
+│    • Front-Node (PCBA 05): Kabelgebundener Lenkertaster- / PTT-Eingang (optogekoppelt)       │
+│    • Smart-Keyfob (PCBA 07): BLE/LoRa Pager (LiPo mit MAX17048 Fuel Gauge & Funk-PTT)       │
 │    • PWA Dashboard auf Smartphone / TFT via Web-Bluetooth (WebBLE)                          │
 ├─────────────────────────────────────────────────────────────────────────────────────────────┤
 │ 2. ZENTRALE STEUERBOX (Unter der Sitzbank, IP67):                                           │

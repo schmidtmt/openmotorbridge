@@ -16,8 +16,9 @@ Classic motorcycle communication systems are historically fragmented:
 ```
                                      SYSTEM TOPOLOGY OVERVIEW
 ┌─────────────────────────────────────────────────────────────────────────────────────────────┐
-│ 1. COCKPIT / HANDLEBAR (100% Wireless):                                                     │
-│    • BLE 5.0 Wireless Remote (CR2032 with Battery Service 0x180F & PTT trigger)             │
+│ 1. COCKPIT / HANDLEBAR & KEYFOB:                                                            │
+│    • Front Node (PCBA 05): Hardwired Handlebar Switch / PTT Input (Optocoupled)             │
+│    • Smart Keyfob (PCBA 07): BLE/LoRa Pager (LiPo with MAX17048 Fuel Gauge & Wireless PTT)  │
 │    • PWA Dashboard on Smartphone / TFT display via Web Bluetooth (WebBLE)                   │
 ├─────────────────────────────────────────────────────────────────────────────────────────────┤
 │ 2. CENTRAL CONTROL BOX (Under-Seat, IP67 Sealed):                                           │

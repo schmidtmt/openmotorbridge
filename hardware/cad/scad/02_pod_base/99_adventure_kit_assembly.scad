@@ -225,17 +225,17 @@ module adventure_kit_master_scene() {
     } else if (VIEW_MODE == "RACK_TAIL_RADAR") {
         adventure_config_c_rack_tail_radar();
     } else {
-        // Full Side-by-Side Studio Stage View
-        // Left (-160 mm): GSA Rohrträger-Klemmschelle
-        translate([-160.0, 0, 0])
+        // Full Side-by-Side Studio Stage View with generous spacing
+        // Left (-260 mm): GSA Rohrträger-Klemmschelle
+        translate([-260.0, 0, 0])
             adventure_config_a_gsa_rack();
 
         // Center (0 mm): Standard-GS Transition Dock
         translate([0, 0, 0])
             adventure_config_b_transition_dock();
 
-        // Right (+190 mm): Gepäckbrücken-Ausleger "Heck-Balkon" & Radar
-        translate([190.0, 0, 0])
+        // Right (+280 mm): Gepäckbrücken-Ausleger "Heck-Balkon" & Radar
+        translate([280.0, 0, 0])
             adventure_config_c_rack_tail_radar();
     }
 }

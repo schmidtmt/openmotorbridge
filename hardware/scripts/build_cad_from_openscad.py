@@ -169,7 +169,7 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
     (
         "02_pod_base/pod_poka_yoke_cross_section.scad",
         os.path.join(CAD_IMG_DIR, "pod_poka_yoke_cross_section_cad.png"),
-        "65,35,19,18,0,80,180",
+        "55,35,19,86,0,90,140",
         "Tomorrow"
     ),
     (
@@ -271,7 +271,7 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
     (
         "02_pod_base/99_adventure_kit_assembly.scad",
         os.path.join(CAD_IMG_DIR, "adventure_kit_master_assembly_3d.png"),
-        "15,40,0,55,0,310,750",
+        "10,20,10,48,0,325,980",
         "Tomorrow"
     ),
     (
@@ -283,13 +283,13 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
     (
         "05_accessories/smart_keyfob_pager.scad",
         os.path.join(CAD_IMG_DIR, "smart_keyfob_pager_assembly.png"),
-        "29,17,6.5,55,0,310,130",
+        "29,17,6.5,50,0,50,135",
         "Tomorrow"
     ),
     (
         "05_accessories/smart_keyfob_pager.scad",
         os.path.join(CAD_IMG_DIR, "smart_keyfob_pager_exploded.png"),
-        "29,17,16,55,0,310,180",
+        "29,17,16,50,0,50,185",
         "Tomorrow"
     ),
 ]
@@ -364,9 +364,10 @@ def render_single_image(scad_rel: str, img_path: str, camera_args: str, scheme: 
     img_name = os.path.basename(img_path)
     
     t0 = time.time()
+    render_flag = "--render" if "cross_section" in scad_rel else "--preview"
     cmd = [
         OPENSCAD_BIN,
-        "--preview",
+        render_flag,
         "-o", img_path,
         f"--camera={camera_args}",
         f"--colorscheme={scheme}",

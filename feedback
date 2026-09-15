@@ -1,0 +1,34 @@
+kapitel 1:
+veraltet:
+│ 1. COCKPIT / LENKER (100 % Drahtlos):                                                       │
+│    • BLE 5.0 Funk-Lenkertaster (CR2032 mit Batterie-Service 0x180F & PTT-Trigger)           │
+│    • PWA Dashboard auf Smartphone / TFT via Web-Bluetooth (WebBLE)  
+kapitel 4;
+1.3 Dreifach-Koaxial-Bypass (Murata MM8030 HF-Umschaltbuchsen) - ist das noch aktuelle
+kapitel 5:
+6. Lenkertaster CR2032-Batterieüberwachung (BLE Service 0x180F) - ist eigenbtlich auch überholt
+kapitel 7:
+PCBA 01: Zentralbox Main Controller (openmotorbridge_central_box)- wie war das wollten wir die optokoppler drin lassen oder eben wg der smart cartige ersetzen?
+auch wenn wir es schon überprüft haben aber einfach nochmal zur sicherheit: trifft die anschlussleiste von PCBA 03: Smart Modular Cartridge bzw. PCBA 04: Rear Pod 3 Transceiver & Coprozessor sauber auf PCBA 02: Satelliten Pod Base Carrier wenn sie in den pods/kassetten montiert sind
+wie werden die aktuatoren an PCBA 03: Smart Modular Cartridge angeschlossen
+wie wird audio in/out an PCBA 03: Smart Modular Cartridge angeschlossen
+PCBA 07: 2-in-1 LoRa Smart-Keyfob müssen wir placement und routing nochmal anpassen das sieht teilweise schon sehr auf kante oder arge dicht aus. mein job und ich geb dann bescheid
+kapitel 8:
+passt die PCBA 03: Smart Modular Cartridge noch sauber in die kassette und kann man die kabel entsprechend verlegen
+Abbildung 8.7: 3D-CAD-Querschnitt (Y-Z Ebene) hier sieht man nur den deckel
+Abbildung 8.11: nur die kassette vorne hat eine anschlussleiste bei den anderen sieht das nach stiften aus und sieht man dort den lock mechanismus
+Abbildung 8.14 sieht man den lock mechanismus und die dummy platine hat keine kontaktleiste sondern stifte
+4.3.4 Mechatronische Smart Cartridge: Formschlüssige Arretierung & 4-Kanal Aktuator-Führung (Sena SPIDER X Slim) haben wir da eine cad zeichnung und wenn ich mit das x slim anschaue ist das so dass 3 schalter auf der oberseite sind und der mesh button eher seitlich aussieht. evtl einzelne aktuatoren und kein verbund?.
+Abbildung 8.15: CAD-Visualisierung auch hier wieder keine anschlussleiste auf der dummy platine und wieder sieht man den lock mechanism,us
+4.3.11 IP67 Blind- / Leerkassette (Dry Box Dummy) hat diese auch einen lock mechanismus
+4.4 Belegung der 6-Pin M8 / Pogo-Schnittstelle & PUR-Kabelbaum-Farbcodierung ist das noch aktuell
+6.2 Referenz-Kit 2: Harley-Davidson Road King Special (FLHRXS / Classic Naked Touring) passt hier wirklich die bildbeschreibung zu dem was man auff den bildern sieht
+6.3 Referenz-Kit 3: Classic Bagger & Cruiser (Touring Stealth Console) wollen wir das evtl mit der version für die rks zusammenlegen und das rks kit generell verwenden. ansonsten sind die bilder akutell?
+6.4 Referenz-Kit 4: Adventure & Touring Enduros haben wir das gehäuse/halterung für die normale gs was sich in die sattelkante optisch integriert als cad. bei der normalen gs muss ja der halter von beiden seiten unter dem sitz befestigt werden. hats ein cad für den gsa halter
+Abbildung 8.29 wirkt irgendwie komisch mit den 2 boxen. ist das so absicht
+6.4.2 Heck-Pod 3 (Transceiver) – Das universelle "Rack-Tail Mount" & Heck-Balkon-Konzept hats dafür auch cad oder nur das ascii art
+6.4.3 Unsichtbarer Magnet-Diebstahlschutz im Fernreise-Einsatz den haben wir doch für alle pods übernommen und müsste entsprechend weiter oben integriert werden
+7. Gehäuse Typ D: 2-in-1 LoRa Smart-Keyfob & Pager sollte man den Integrierter N52 Neodym-Schlüsselblock in den bildern sehen
+kapitel 16:
+2.5 Kategorie E: Kabelbaum, Steckverbinder, Pufferakku & HF-Pigtails -> 90° USB Kassetten-Kabel ist das so? und anschlüsse für aktuatpren und die buchsen am x slim?
+ist das wirklich vollständig und auch bei der auswahl auf unsere empfehlung abgestimmt?

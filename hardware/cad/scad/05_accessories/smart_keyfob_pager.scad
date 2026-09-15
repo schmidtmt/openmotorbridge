@@ -98,16 +98,22 @@ module fob_upper_shell() {
     }
 }
 
-// 3. N52 Neodymium Permanent Magnet Block (20x10x5 mm)
+// 3. N52 Neodymium Permanent Magnet Block (20x10x5 mm) - Glanzvernickelt mit taktilem Nordpol-Steg
 module magnet_block() {
-    color("#ff453a") { // High-Energy Rare Earth Red
+    // Nickel-plated N52 Rare Earth Core
+    color("silver") {
         difference() {
             cube([MAG_L, MAG_W, MAG_H], center=false);
-            // Laser Engraved North Pole Stripe
-            translate([MAG_L / 2.0 - 0.5, -0.1, MAG_H / 2.0 - 1.5])
-                cube([1.0, 0.4, 3.0]);
+            // Polished outer chamfer
+            translate([-0.1, MAG_W - 0.8, -0.1])
+                rotate([45, 0, 0])
+                    cube([MAG_L + 0.2, 1.5, 1.5]);
         }
     }
+    // High-Visibility Crimson Red Tactile North Pole Alignment Indicator
+    color("crimson")
+        translate([MAG_L / 2.0 - 1.0, MAG_W - 0.2, 0.8])
+            cube([2.0, 0.8, MAG_H - 1.6]);
 }
 
 // 4. Soft Iron / Mu-Metal Magnetic Shield (0.5 mm)

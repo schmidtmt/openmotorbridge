@@ -18,7 +18,8 @@ module cartridge_base_sled(
     sled_w        = CARTRIDGE_BASE_W,
     sled_h        = CARTRIDGE_BASE_H,
     wall          = 2.5,
-    magnetic_lock = true
+    magnetic_lock = true,
+    show_latch    = false
 ) {
     difference() {
         union() {
@@ -230,7 +231,31 @@ module cartridge_base_sled(
         translate([45.0, sled_w - wall - 1.5, 11.5])
             cube(size=[20.0, wall + 3.0, sled_h + 8.0], center=false);
     }
+
+    // 15. Optional Kinematic Anti-Theft Latch Mechanism (Visible in Assembly Previews)
+    if (magnetic_lock && show_latch) {
+        translate([0, 0, POD_GROOVE_LEFT_Z - CARTRIDGE_TONGUE_W/2.0 + 3.0]) {
+            translate([LATCH_PIVOT_X, 1.25, 0]) {
+                translate([-LATCH_PIVOT_X, -1.25, 0]) {
+                    // Rocker Lever (Lime Green PA12-CF)
+                    color("#30d158", 1.0)
+                        magnetic_lock_rocker_lever();
+                    // Ferromagnetic Steel Dowel Pin (Ø 6 x 8 mm)
+                    color("silver", 1.0)
+                        translate([LATCH_MAGNET_X, 0, 0])
+                            rotate([90, 0, 0])
+                                cylinder(r=3.0, h=8.0, center=true, $fn=24);
+                    // Return Compression Spring (Ø 3.5 x 8 mm)
+                    color("gold", 1.0)
+                        translate([LATCH_MAGNET_X, 2.0, 0])
+                            rotate([-90, 0, 0])
+                                cylinder(r=1.75, h=6.0, center=false, $fn=16);
+                }
+            }
+        }
+    }
 }
 
 // Standalone preview
-cartridge_base_sled();
+cartridge_base_sled(show_latch = true);
+

@@ -145,7 +145,10 @@ Um ein vollwertiges OpenMotorBridge (v8.0) Gesamtsystem für ein Motorrad aufzub
 | **USB-A Flachbandkabel (Front)**| USB-A Stecker/Kupplung kurz ($10\dots 15\,\text{cm}$, 90°-Winkel)| **1** | Ottocast-Anbindung an J1 durch vorderen Dichtkamm |
 | **USB-C Ladekabel (Handschuhf.)**| USB-C Stecker/Stecker ($1{,}0\,\text{m}$, 90°-Winkel, PUR)| **1** | Smartphone-Ladekabel von J2 durch vorderen Dichtkamm |
 | **JST-GH Crimpstecker-Set** | JST-GH 1.25mm 2-Pin Gehäuse + Crimpkontakte | **2 Sätze**| Vorkonfektionierte Litzen für J3 (PTT) & J7 (12V) durch linken Kamm |
-| **90° USB Kassetten-Kabel** | Ultraflaches 90°-Winkelkabel Micro-USB/USB-C ($5\dots 8\,\text{cm}$) | **1** | 5V-Speisung für Sena +Mesh / MeshPort Adapter in Kassette |
+| **J_ACT Aktuator-Kabelbaum** | JST-SH 1.0mm 8-Pin Gehäuse auf 4x 2-Pin AWG30 Silikonlitzen ($8\,\text{cm}$)| **1–2** | Unabhängige Anbindung der 4 diskreten Miniatur-Aktuatoren auf PCBA 03 |
+| **Miniatur-Aktuatoren (Hubmagnete)**| 5V DC Miniatur-Hubmagnete ($\varnothing 6\dots 8\,\text{mm}$, Hub $1{,}5\,\text{mm}$) mit TPU-Spitze | **4** | Mechatronische Tastenbetätigung (Sena SPIDER X: 3x Top, 1x 45° Mesh; Cardo: 3x Tasten, 1x Wheel-Click) |
+| **J2 Kassetten-Kabelbaum** | JST-SH 1.0mm 6-Pin Gehäuse auf Audio- & DC-Schnittstelle | **1–2** | Modularer Kassetten-Kabelbaum: Var. A (Sena SPIDER X), Var. B (Cardo Edge Air Mount), Var. C (PMR446/COTS) |
+| **90° USB Kassetten-Kabel** | Ultraflaches 90°-Winkelkabel Micro-USB/USB-C ($5\dots 8\,\text{cm}$) | **Opt. (1)**| Nur für passive Klasse A Kassetten (Sena +Mesh / MeshPort Dauerladung) |
 | **EPDM Kassetten-Spannband** | Elastisches EPDM-Gummiband ($\approx 35 \times 10\,\text{mm}$) | **1** | Vibrationssichere Arretierung des OEM-Adapters über Kassettennasen |
 
 ---

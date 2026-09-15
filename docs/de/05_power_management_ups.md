@@ -144,18 +144,25 @@ Die Bordnetzspannung an KL15 und KL30 wird über hochpräzise Spannungsteiler ($
 
 ---
 
-## 6. Lenkertaster CR2032-Batterieüberwachung (BLE Service 0x180F)
+## 6. Dezentrale Spannungsüberwachung: Smart-Keyfob LiPo & Front-Node
 
-Der drahtlose Bluetooth-Lenkertaster sendet seinen Batterieladezustand zyklisch über den standardisierten **Bluetooth SIG Battery Service (`UUID 0x180F`)** an die Zentralbox:
+Das OpenMotorBridge-Ökosystem überwacht dezentrale Peripherie-Knoten kontinuierlich:
+
+### 6.1 Front-Node (PCBA 05): Bordnetzüberwachung
+Der im Cockpit montierte Front-Node ist fest über das 12V-Bordnetz versorgt (mit eigenem TI LM5164-Q1 Step-Down). Ein hochohmiger Präzisions-Spannungsteiler speist den internen ADC, um lokale Spannungsabfälle an Lenkerarmaturen und Bordsteckdosen in Echtzeit an die Zentralbox zu melden.
+
+### 6.2 Smart-Keyfob & Pager (PCBA 07): LiPo Fuel Gauge (BLE Service 0x180F & LoRa)
+Der tragbare Smart-Keyfob wird von einem internen 3,7V LiPo-Akku (350–500 mAh) versorgt, der über USB-C geladen wird. Ein **Maxim MAX17048 I2C Fuel Gauge** misst Ladezustand (SoC in %), Zellspannung und Entladerate präzise ohne Shunt-Widerstand. Der Keyfob sendet diesen Status zyklisch über den standardisierten **Bluetooth SIG Battery Service (`UUID 0x180F`)** sowie im periodischen LoRa-Health-Paket:
 
 ```
 ┌──────────────┬───────────────┬──────────────────────────────────────────────┐
-│ Batteriestand│ Spannung CR2032│ System-Reaktion & Warnstufe                  │
+│ SoC (LiPo)   │ Zellspannung  │ System-Reaktion & Warnstufe                  │
 ├──────────────┼───────────────┼──────────────────────────────────────────────┤
-│ **> 20 %**   │ > 2.5 V       │ Normalbetrieb (Grüne Anzeige im WebApp Dash) │
-│ **≤ 15 %**   │ ≤ 2.3 V       │ **Gelbe Frühwarnung:** Status-LED Wechsel-   │
-│              │               │ blitz Gelb-Rot • WebApp Push-Notification    │
-│              │               │ • CAN-Bus Warnung an Motorrad-TFT-Display    │
-│ **≤ 5 %**    │ ≤ 2.0 V       │ **Kritischer Alarm:** Rote Dauerwarnung      │
+│ **> 20 %**   │ 3.7 V - 4.2 V │ Normalbetrieb (Grüne Anzeige im WebApp Dash) │
+│ **≤ 15 %**   │ ≤ 3.6 V       │ **Gelbe Frühwarnung:** Status-LED Wechsel-   │
+│              │               │ blitz Gelb • Push: "Keyfob per USB-C laden"  │
+│              │               │ • Pager-Display zeigt Low-Bat-Symbol         │
+│ **≤ 5 %**    │ ≤ 3.3 V       │ **Kritischer Alarm:** Rote LED, automatischer│
+│              │               │ ULP-Deep-Sleep zum Schutz vor Tiefentladung  │
 └──────────────┴───────────────┴──────────────────────────────────────────────┘
 ```

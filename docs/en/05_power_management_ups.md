@@ -126,18 +126,25 @@ Vehicle battery voltage at KL15 and KL30 is monitored via precision voltage divi
 
 ---
 
-## 6. Handlebar Remote CR2032 Battery Monitoring (BLE Service 0x180F)
+## 6. Decentralized Power Monitoring: Smart Keyfob LiPo & Front Node
 
-The wireless Bluetooth handlebar remote periodically reports its coin cell voltage via the standard **Bluetooth SIG Battery Service (`UUID 0x180F`)** to the Central Box:
+The OpenMotorBridge ecosystem continuously monitors its decentralized peripheral nodes:
+
+### 6.1 Front Node (PCBA 05): Electrical System Monitoring
+Mounted in the cockpit, the Front Node is powered directly from the 12V vehicle electrical system via an onboard TI LM5164-Q1 buck converter. A high-impedance precision divider feeds an ADC input to report handlebar switchgear and cockpit socket voltages to the Central Box in real time.
+
+### 6.2 Smart Keyfob & Pager (PCBA 07): LiPo Fuel Gauge (BLE Service 0x180F & LoRa)
+The portable Smart Keyfob is powered by an internal 3.7V LiPo cell (350–500 mAh) charged via USB-C. A **Maxim MAX17048 I2C fuel gauge** measures State of Charge (SoC in %), cell voltage, and discharge rate without requiring an external sense resistor. The Keyfob reports its battery status periodically via the standard **Bluetooth SIG Battery Service (`UUID 0x180F`)** and within its periodic LoRa health beacons:
 
 ```
 ┌──────────────┬───────────────┬──────────────────────────────────────────────┐
-│ Battery Level│ CR2032 Voltage│ System Reaction & Warning Level              │
+│ SoC (LiPo)   │ Cell Voltage  │ System Reaction & Warning Level              │
 ├──────────────┼───────────────┼──────────────────────────────────────────────┤
-│ **> 20 %**   │ > 2.5 V       │ Normal Operation (Green indicator in WebApp) │
-│ **≤ 15 %**   │ ≤ 2.3 V       │ **Yellow Early Warning:** Alternating yellow-│
-│              │               │ red LED blink • WebApp push notification     │
-│              │               │ • Optional CAN warning on bike TFT display   │
-│ **≤ 5 %**    │ ≤ 2.0 V       │ **Critical Alarm:** Persistent red warning   │
+│ **> 20 %**   │ 3.7 V - 4.2 V │ Normal Operation (Green indicator in WebApp) │
+│ **≤ 15 %**   │ ≤ 3.6 V       │ **Yellow Early Warning:** Alternating yellow │
+│              │               │ LED blink • Push: "Recharge Keyfob via USB-C"│
+│              │               │ • Pager display shows low-battery icon       │
+│ **≤ 5 %**    │ ≤ 3.3 V       │ **Critical Alarm:** Persistent red warning,  │
+│              │               │ automatic ULP deep sleep to protect cell     │
 └──────────────┴───────────────┴──────────────────────────────────────────────┘
 ```

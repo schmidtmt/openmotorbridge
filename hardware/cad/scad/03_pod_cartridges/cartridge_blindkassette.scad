@@ -17,13 +17,14 @@ module cartridge_blindkassette_assembly(exploded = false) {
     z_insert = exploded ? 24.0 : 8.0;
     z_screws = exploded ? 36.0 : 11.0;
 
-    // 1. Universal Base Sled (Anthracite PA12)
+    // 1. Universal Base Sled (Anthracite PA12) with visible magnetic lock latch
     color("darkslategray", 0.92)
         cartridge_base_sled(
-            sled_l = CARTRIDGE_BASE_L,
-            sled_w = CARTRIDGE_BASE_W,
-            sled_h = CARTRIDGE_BASE_H,
-            wall   = 2.5
+            sled_l     = CARTRIDGE_BASE_L,
+            sled_w     = CARTRIDGE_BASE_W,
+            sled_h     = CARTRIDGE_BASE_H,
+            wall       = 2.5,
+            show_latch = true
         );
 
     // 2. Interchangeable Solid Top Lid (Graphite Grey PA12)
