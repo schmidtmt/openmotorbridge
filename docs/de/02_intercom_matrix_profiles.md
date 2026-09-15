@@ -180,8 +180,24 @@ Alle unterstützten Intercom- und Funkkassetten sind in 8 standardisierte Hardwa
 * **Klasse 3: Sena Bluetooth & 2-Way Intercom (`sena_vortex.json`, `sena_legacy_bt.json`):**
   * *Sena Vortex:* Bluetooth 5.1 2-Wege-Intercom (1:1 bis 1,2 km), Quick-Pair Button-Trigger, DLE +20 Pkt.
   * *Sena 20S EVO, 30K, 10S, 10R, SF4/SF2, 5S, SMH10:* Jog-Dial Pulsmuster für BT-Multi-Hop, DLE +20 Pkt.
-* **Klasse 4: Cardo Dynamic Mesh Communications Gen2 (`cardo_dmc_gen2.json`):**
-  * *Cardo Packtalk Pro, Edge, Custom, Neo:* DMC Gen2 mit Open DMC, schnellem Auto-Reconnect und DLE +60 Pkt.
+* **Klasse 4: Cardo Dynamic Mesh Communications Gen2 (`cardo_dmc_gen2.json` / `cardo_packtalk_edge.json`):**
+  * *Cardo Packtalk Edge / Pro (K4 - Smart Cartridge Mechatronik):* DMC Gen2 Referenz-Kassette mit Air-Mount-Magnethalterung, USB-C-Dauerladung und autonomer 4-Kanal-Aktuatorsteuerung über den CH32V003 RISC-V Kassetten-Controller. DLE-Score: **+60 Pkt.**
+    * *Kabelpeitsche an `J2`:* Verwendet die werkseitige Kabelpeitsche des OEM-Air-Mount-Cradles (3,5 mm Klinke für Audio-Ausgang an Pin 3/4, 2-Pin Miniatur-Buchse für Mikrofon an Pin 5/2, USB-C 5V Ladeleitung an Pin 1/2). Dauerladung während des aktiven Mesh-Betriebs wird voll unterstützt.
+    * *4-Aktuator Tasten-Mapping (`J_ACT`):*
+      * `ch1`: `ACT_MEDIA` (Front/Top Media-Taste)
+      * `ch2`: `ACT_MOBILE` (Mobile/Phone-Taste)
+      * `ch3`: `ACT_INTERCOM` (Intercom DMC-Taste)
+      * `ch4`: `ACT_WHEEL_PRESS` (Control Wheel axialer Center-Press)
+    * *In-System Makros & Klicksequenzen:*
+      * **Power On / Off (`0x01` / `0x02`):** Simultaner 2-Sekunden-Haltepuls auf Media + Mobile Taste.
+      * **DMC Mute Toggle (`0x03`):** 2-Sekunden-Haltepuls auf Control Wheel Center-Press (stummschalten/aktivieren der DMC-Gruppe).
+      * **DMC Intercom Toggle (`0x05`):** Kurzer Tastendruck (200 ms) auf Intercom-Taste.
+      * **DMC Grouping Mode (`0x06`):** 5-Sekunden-Haltepuls auf Intercom-Taste (LED blinkt rot/grün zur Schnellkopplung).
+      * **Private Chat Makro (`0x07`):** Autonomer Doppelklick auf Intercom-Taste (2x 150 ms Puls, 150 ms Pause).
+      * **DMC Bridge Makro (`0x08`):** Autonomer Dreifachklick auf Intercom-Taste (3x 150 ms Puls, 150 ms Pause) zum Einbinden eines Bluetooth-Gastes in das DMC-Mesh.
+      * **Phone / BLE Pairing (`0x09`):** 5-Sekunden-Haltepuls auf Mobile-Taste (LED blinkt rot/blau).
+      * **Lautstärkeregelung:** Volldigital über den ES8388 DSP auf dem OMB Mainboard (Control Wheel bleibt im Fahrbetrieb unberührt auf ca. 85 % Festpegel).
+  * *Cardo Packtalk Custom, Neo:* Eingeschränkte Modelle; Packtalk Neo unterstützt kein Laden während der Fahrt und ist für Dauerbetrieb ausgeschlossen.
 * **Klasse 5: Cardo Live Intercom & Freecom Serie (`cardo_freecom_live.json`):**
   * *Cardo Freecom 4x, Freecom 2x, Spirit HD:* Bluetooth 5.2 Live Intercom mit automatischem Reconnect, DLE +40 Pkt.
 * **Klasse 6: Cardo Legacy DMC Gen1 (`cardo_dmc_legacy.json`):**

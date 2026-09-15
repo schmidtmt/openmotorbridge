@@ -190,14 +190,18 @@ static void load_profile_class(CartridgeInfo_t *cart, const char *profile_id) {
         cart->output_gain_db = 0.0f;
         cart->toggle_mesh_ms = 350;
         cart->channel_next_ms = 0;
-    } else if (strcmp(profile_id, "cardo_dmc_gen2") == 0) {
-        strncpy(cart->name, "Cardo Packtalk Pro / Edge (DMC Gen2)", sizeof(cart->name) - 1);
+    } else if (strcmp(profile_id, "cardo_dmc_gen2") == 0 || strcmp(profile_id, "cardo_packtalk_edge") == 0) {
+        strncpy(cart->name, "Cardo Packtalk Edge / Pro (Smart Cartridge 4-Actuator DMC Gen2)", sizeof(cart->name) - 1);
         strncpy(cart->vendor, "Cardo Systems", sizeof(cart->vendor) - 1);
         cart->hardware_tier = 1;
         cart->input_gain_db = 1.5f;
         cart->output_gain_db = -0.5f;
-        cart->toggle_mesh_ms = 200;
-        cart->channel_next_ms = 800;
+        cart->toggle_mesh_ms = 200;           // DMC Audio Toggle (Actuator 3 tap)
+        cart->toggle_group_mesh_ms = 5000;    // DMC Grouping (Actuator 3 5s hold)
+        cart->channel_next_ms = 150;          // Private Chat Double-Click Macro
+        cart->is_smart_cartridge = true;
+        cart->num_actuators = 4;
+        cart->smart_mcu_protocol_ver = 2;     // Revision 2.0 with CH32V003 & 4x MOSFET
     } else if (strcmp(profile_id, "cardo_freecom_live") == 0) {
         strncpy(cart->name, "Cardo Freecom 4x/2x / Spirit (Live)", sizeof(cart->name) - 1);
         strncpy(cart->vendor, "Cardo Systems", sizeof(cart->vendor) - 1);

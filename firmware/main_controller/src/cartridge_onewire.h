@@ -26,14 +26,15 @@ typedef struct {
 } CartridgeInfo_t;
 
 // Smart Cartridge Opcodes (Single-Wire UART 19200 Baud / GATT 0x09)
-#define SMART_CMD_POWER_BOOT        0x01 // Gleichzeitig ACT_PLUS + ACT_CENTER (1000 ms)
-#define SMART_CMD_POWER_OFF         0x02 // Gleichzeitig ACT_PLUS + ACT_CENTER (200 ms)
-#define SMART_CMD_VOL_PLUS          0x03 // Einzelpuls ACT_PLUS (100 ms)
-#define SMART_CMD_VOL_MINUS         0x04 // Einzelpuls ACT_MINUS (100 ms)
-#define SMART_CMD_MESH_TOGGLE       0x05 // Einzelpuls ACT_MESH (200 ms)
-#define SMART_CMD_GROUP_MESH_TOGGLE 0x06 // Haltepuls ACT_MESH (3000 ms)
-#define SMART_CMD_CHANNEL_NEXT      0x07 // Autonomes Makro: 2x ACT_MESH + 1x ACT_PLUS
-#define SMART_CMD_CHANNEL_PREV      0x08 // Autonomes Makro: 2x ACT_MESH + 1x ACT_MINUS
+#define SMART_CMD_POWER_BOOT        0x01 // Sena: ACT_PLUS + ACT_CENTER (1000 ms) / Cardo: ACT_MEDIA + ACT_MOBILE (2000 ms)
+#define SMART_CMD_POWER_OFF         0x02 // Sena: ACT_PLUS + ACT_CENTER (200 ms)  / Cardo: ACT_MEDIA + ACT_MOBILE (2000 ms)
+#define SMART_CMD_VOL_PLUS          0x03 // Sena: ACT_PLUS (100 ms) / Cardo: ACT_WHEEL_PRESS (2000 ms, DMC Mute Toggle)
+#define SMART_CMD_VOL_MINUS         0x04 // Sena: ACT_MINUS (100 ms) / Cardo: ACT_WHEEL_PRESS tap (150 ms, Audio Stop)
+#define SMART_CMD_MESH_TOGGLE       0x05 // Sena: ACT_MESH (200 ms) / Cardo: ACT_INTERCOM tap (200 ms, DMC Audio Toggle)
+#define SMART_CMD_GROUP_MESH_TOGGLE 0x06 // Sena: ACT_MESH 3s hold / Cardo: ACT_INTERCOM 5s hold (DMC Grouping)
+#define SMART_CMD_CHANNEL_NEXT      0x07 // Autonomes Makro: Sena 2x MESH + 1x PLUS / Cardo 2x INTERCOM (Private Chat)
+#define SMART_CMD_CHANNEL_PREV      0x08 // Autonomes Makro: Sena 2x MESH + 1x MINUS / Cardo 3x INTERCOM (DMC Bridge)
+#define SMART_CMD_PHONE_PAIRING     0x09 // Haltepuls 5000 ms: Sena ACT_CENTER / Cardo ACT_MOBILE (Phone/BLE Pairing)
 
 /**
  * @brief Initialisiert den 1-Wire Bus an PIN_ONEWIRE_ID (GPIO 2)

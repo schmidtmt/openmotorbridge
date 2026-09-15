@@ -240,9 +240,23 @@ To control devices with different button layouts (Sena Spider X Slim vs. Cardo P
 | **Pin 6** | `ACT4_OUT` | MOSFET `Q4` | **Mesh Button** (45° angled side)      | **Control Wheel Center-Press** |
 | **Pin 7 & 8** | `GND` | Power Ground | Shield and return ground | Shield and return ground |
 
-### 5.5 In-System Profile Flashing (ISP / IAP via Single-Wire)
-* **Zero Programmers Required:** When a profile (e.g. `sena_spider_x.json`) is assigned via the WebApp, the ESP32-S3 transmits an encrypted configuration packet via Pin 5 (`TRIGGER_PPS`) containing timing tables, pulse durations, and macro steps.
-* **Persistent EEPROM Storage:** The Cartridge MCU burns the configuration table into internal EEPROM. The cartridge operates fully autonomously thereafter, executing multi-step macros (e.g. Channel Step via Double-Click Mesh + Pause + 1x Plus) locally.
+### 5.5 In-System Profile Flashing (ISP / IAP via Single-Wire) & Click Sequence Table
+* **Zero Programmers Required:** When a profile (e.g. `sena_spider_x.json` or `cardo_dmc_gen2.json`) is assigned via the WebApp, the ESP32-S3 transmits an encrypted configuration packet via Pin 5 (`TRIGGER_PPS`) containing timing tables, pulse durations, and macro steps.
+* **Persistent EEPROM Storage:** The Cartridge MCU burns the configuration table into internal EEPROM. The cartridge operates fully autonomously thereafter, executing multi-step macros locally.
+
+#### Autonomous Smart Cartridge Click Sequences & Opcode Table:
+| Opcode | Semantic Function | Sequence: Sena SPIDER X Slim | Sequence: Cardo Packtalk Edge |
+| :---: | :--- | :--- | :--- |
+| **`0x01`** | **Power Boot / Auto-On** | Simultaneous Plus + Center ($1000\,\text{ms}$) | Simultaneous Media + Mobile ($2000\,\text{ms}$) |
+| **`0x02`** | **Power Off** | Simultaneous Plus + Center ($200\,\text{ms}$) | Simultaneous Media + Mobile ($2000\,\text{ms}$) |
+| **`0x03`** | **Mute / Primary Action**| Single click Plus ($100\,\text{ms}$) | Wheel Center-Press $2000\,\text{ms}$ (DMC Group Mute) |
+| **`0x04`** | **Stop / Secondary Action**| Single click Minus ($100\,\text{ms}$) | Wheel Center-Press $150\,\text{ms}$ tap (Audio Stop) |
+| **`0x05`** | **Mesh Audio Toggle** | Mesh button $200\,\text{ms}$ tap (Open Mesh) | Intercom button $200\,\text{ms}$ tap (DMC Intercom) |
+| **`0x06`** | **Group Pairing Mode** | Mesh button $3000\,\text{ms}$ hold pulse | Intercom button $5000\,\text{ms}$ hold pulse (Grouping) |
+| **`0x07`** | **Channel / Macro 1** | Autonomous: 2x Mesh ($150\,\text{ms}$) + Pause + 1x Plus | Autonomous: 2x Intercom ($150\,\text{ms}$) (Private Chat) |
+| **`0x08`** | **Channel / Macro 2** | Autonomous: 2x Mesh ($150\,\text{ms}$) + Pause + 1x Minus | Autonomous: 3x Intercom ($150\,\text{ms}$) (DMC Bridge) |
+| **`0x09`** | **Phone / BLE Pairing** | Center button $5000\,\text{ms}$ hold pulse | Mobile button $5000\,\text{ms}$ hold pulse |
+
 
 ---
 

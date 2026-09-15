@@ -240,9 +240,23 @@ Um Geräte mit unterschiedlichen Tastenlayouts (Sena Spider X Slim vs. Cardo Pac
 | **Pin 6** | `ACT4_OUT` | MOSFET `Q4` | **Mesh Button** (45° seitlich)    | **Control Wheel Center-Press** |
 | **Pin 7 & 8** | `GND` | Power-Masse | Schirm- und Rückstrommasse | Schirm- und Rückstrommasse |
 
-### 5.5 In-System Profil-Flashing (ISP / IAP via Single-Wire)
-* **Kein Programmiergerät erforderlich:** Sobald in der WebApp ein Profil (z. B. `sena_spider_x.json`) zugewiesen wird, sendet der ESP32-S3 über Pin 5 (`TRIGGER_PPS`) ein Konfigurationspaket mit Timing-Werten, Impulsdauern und Makro-Schritten.
-* **Permanente Speicherung:** Der Kassetten-MCU brennt die Tabelle in seinen internen EEPROM. Die Kassette arbeitet danach vollkommen autonom und führt Sequenzen (wie Kanalwechsel über Doppelklick Mesh + Pause + 1x Plus) selbstständig aus.
+### 5.5 In-System Profil-Flashing (ISP / IAP via Single-Wire) & Klicksequenzen-Tabelle
+* **Kein Programmiergerät erforderlich:** Sobald in der WebApp ein Profil (z. B. `sena_spider_x.json` oder `cardo_dmc_gen2.json`) zugewiesen wird, sendet der ESP32-S3 über Pin 5 (`TRIGGER_PPS`) ein Konfigurationspaket mit Timing-Werten, Impulsdauern und Makro-Schritten.
+* **Permanente Speicherung:** Der Kassetten-MCU brennt die Tabelle in seinen internen EEPROM. Die Kassette arbeitet danach vollkommen autonom und führt Sequenzen selbstständig aus.
+
+#### Autonome Smart Cartridge Klicksequenzen & Opcode-Tabelle:
+| Opcode | Semantische Funktion | Sequenz: Sena SPIDER X Slim | Sequenz: Cardo Packtalk Edge |
+| :---: | :--- | :--- | :--- |
+| **`0x01`** | **Power Boot / Auto-On** | Simultan Plus + Center ($1000\,\text{ms}$) | Simultan Media + Mobile ($2000\,\text{ms}$) |
+| **`0x02`** | **Power Off** | Simultan Plus + Center ($200\,\text{ms}$) | Simultan Media + Mobile ($2000\,\text{ms}$) |
+| **`0x03`** | **Mute / Primärfunktion**| Einzeltastendruck Plus ($100\,\text{ms}$) | Wheel Center-Press $2000\,\text{ms}$ (DMC Group Mute) |
+| **`0x04`** | **Stop / Sekundärfunktion**| Einzeltastendruck Minus ($100\,\text{ms}$) | Wheel Center-Press $150\,\text{ms}$ Klick (Audio Stop) |
+| **`0x05`** | **Mesh Audio Toggle** | Mesh-Taste $200\,\text{ms}$ Klick (Open Mesh) | Intercom-Taste $200\,\text{ms}$ Klick (DMC Intercom) |
+| **`0x06`** | **Group Pairing Mode** | Mesh-Taste $3000\,\text{ms}$ Haltepuls | Intercom-Taste $5000\,\text{ms}$ Haltepuls (Grouping) |
+| **`0x07`** | **Kanal / Macro 1** | Autonom: 2x Mesh ($150\,\text{ms}$) + Pause + 1x Plus | Autonom: 2x Intercom ($150\,\text{ms}$) (Private Chat) |
+| **`0x08`** | **Kanal / Macro 2** | Autonom: 2x Mesh ($150\,\text{ms}$) + Pause + 1x Minus | Autonom: 3x Intercom ($150\,\text{ms}$) (DMC Bridge) |
+| **`0x09`** | **Phone / BLE Pairing** | Center-Taste $5000\,\text{ms}$ Haltepuls | Mobile-Taste $5000\,\text{ms}$ Haltepuls |
+
 
 ---
 
