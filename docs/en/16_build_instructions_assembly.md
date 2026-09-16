@@ -283,6 +283,12 @@ Because **no soldering, no crimping, and no thermal thread-embedding** are requi
 1. **BMW GS (Standard) Installation:**
    * **Pods 1 & 2:** Clamp transition docks ([`adventure_transition_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_transition_dock.stl)) beneath seat crease to frame tubes (Ø 28 mm). Route M8 PUR cables through lower channel directly under seat to Main Box.
    * **Pod 3:** Fasten onto rack-tail mount ([`adventure_rack_tail_mount.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_rack_tail_mount.stl)) on luggage rack.
+   * **Cockpit & Front-Node Fairing Disassembly:**
+     * Remove 4x Torx T25 windshield mounting screws and lift off windscreen.
+     * Unclip upper TFT cockpit shroud forward out of retaining tabs.
+     * Secure Front Node via AMPS mount or tube clamp to handlebar / nav bar.
+     * Route M8 PUR cable through OEM BMW steering head rubber grommet. Fasten with zip ties along OEM harness so that at full left and right steering lock there is **zero tension, pinching, or chafing**.
+     * Route cable along frame tunnel under fuel tank rearwards to battery compartment/seat area.
 2. **BMW GSA (Adventure) Installation:**
    * **Pods 1 & 2:** Wrap 1.0 mm EPDM strip around Ø 18 mm rack tube. Fasten clamp base ([`adventure_pannier_rack_clamp_base.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_base.stl)) and cap ([`adventure_pannier_rack_clamp_cap.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_cap.stl)) using 2x M5 x 30 mm stainless bolts and Nyloc nuts to $4.5\,\text{Nm}$. Bolt pod base housing to clamp eyelets.
    * **Pod 3 & Radar (Tail Balcony):** Bolt cantilever ([`adventure_rack_tail_mount.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_rack_tail_mount.stl)) with 4x M6 bolts to rear rack. Align antenna along 45° fin.
@@ -306,14 +312,21 @@ Because **no soldering, no crimping, and no thermal thread-embedding** are requi
 └────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-1. **Classic Touring Installation:**
+1. **Classic Touring Installation & Fairing Disassembly:**
    * **Pods 1 & 2:** Mount saddlebag lid docks ([`saddlebag_lid_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/saddlebag_lid_dock.stl)) using M4 countersunk screws with sealing washers at OEM points or via 3M VHB tape. Route M8 cable through grommet to quick-disconnect at frame.
    * **Pod 3:** Center and fasten fender console ([`pod3_touring_fender_console.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod3_touring_fender_console.stl)) flat onto rear fender.
    * **Radar:** Fasten license plate bracket ([`radar_license_plate_bracket.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_license_plate_bracket.stl)) beneath license plate frame.
-2. **CVO ST / Performance Bagger Installation:**
+   * **Fairing Disassembly (Street Glide Batwing):**
+     * Remove 3x Torx T27 windshield screws (center screw last).
+     * Remove 4x Torx T27 screws on the inner fairing (2x below instruments, 2x beside speakers).
+     * Carefully tilt outer fairing forward, disconnect main headlight multi-plug.
+     * Bolt Front Node to handlebar riser. Route M8 PUR cable through rubber boot into fairing and run through cable conduit below tank console back to battery tray.
+     * Reinstall outer fairing and torque T27 screws to $3.8\,\text{Nm}$.
+2. **CVO ST / Performance Bagger Installation (Road Glide Sharknose):**
    * **Pods 1 & 2:** Mount upright skeleton dock ([`cvo_st_undercowl_skeleton_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/cvo_st_undercowl_skeleton_dock.stl)) under solo seat cowl. Pods stand vertically, clearing suspension remote reservoirs.
    * **Pod 3:** Mount telemetry fin ([`cvo_st_telemetry_fin.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/cvo_st_telemetry_fin.stl)) on rear cowl tab.
    * **Radar:** Mount centered under-fender plate ([`radar_center_underfender_mount.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_center_underfender_mount.stl)) under shortened rear fender.
+   * **Sharknose Fairing Disassembly:** Remove turn signal bolts, back out 4x T27 inner fairing screws, lift off Sharknose outer fairing forward, and pass M8 PUR cable through the media compartment tunnel.
 
 ---
 
@@ -373,32 +386,33 @@ Because **no soldering, no crimping, and no thermal thread-embedding** are requi
 
 ---
 
-## 6. First Commissioning & Flashing Checklist
+## 6. First Commissioning, WebSerial 1-Click Flasher & Smoke-Test
 
+Thanks to the modern **WebSerial integration** within the OpenMotorBridge PWA, initial commissioning requires **no installation of Python, PlatformIO, drivers, or terminal tools**:
+
+### 6.1 Method A: WebSerial 1-Click Installer (Recommended for End Users)
+1. Connect Main Box to PC/Mac/Laptop via standard USB-C cable.
+2. Open Chrome, Edge, or Opera and launch the PWA (or open locally via the System Builder).
+3. In the *System Builder* tab, click **"Connect USB-C & Flash"**.
+4. Select the detected serial port (e.g. `CP2102N` / `ESP32-S3`).
+5. The PWA flashes bootloader, partition table, firmware (`openmotorbridge_main_v8.12.bin`), and SPIFFS filesystem fully automatically with progress bar and live log.
+
+### 6.2 The Guided 4-Point IKEA Smoke-Test
+Before screwing on the enclosure lid, execute the interactive self-test in the PWA:
+1. [x] **Vehicle Power & UPS (Check 1):** 12.6V battery voltage, 5.04V buck rail, UPS LiPo at 4.18V.
+2. [x] **Cartridges & Actuators (Check 2):** 1-Wire DS2431 cartridge ID readout (Sena / Cardo), pogo pin contact integrity, and automated 4-actuator click sequence (Clicks 1 to 4).
+3. [x] **Front Node & Cockpit (Check 3):** I2C ping Knowles MEMS microphone, SDP31 dynamic air pressure sensor (0.02 hPa), and handlebar PTT button.
+4. [x] **Rear Pod 3 (Check 4):** SX1262 LoRa 868 MHz ping-echo and u-blox GNSS 3D fix.
+
+### 6.3 Method B: Manual Flashing via PlatformIO (Power-User Fallback)
 ```bash
-# 1. Flash Central Main Controller (ESP32-S3)
-cd openMotorBridge/firmware/main_controller
-pio run --target upload
-pio run --target uploadfs
-
+# 1. Flash Central Main Controller via USB-C (ESP32-S3)
+cd openMotorBridge/firmware/main_controller && pio run --target upload && pio run --target uploadfs
 # 2. Flash Rear Tail Coprocessor (RP2040 in Pod 3)
-cd ../rear_coprocessor
-pio run --target upload
-
+cd ../rear_coprocessor && pio run --target upload
 # 3. Flash Front Node (ESP32-S3)
-cd ../front_node
-pio run --target upload
+cd ../front_node && pio run --target upload
 ```
-
-### Verification Checklist:
-1. [ ] **Bench Power:** Apply $12{,}0\,\text{V DC}$ (current limit $150\,\text{mA}$). Quiescent draw should measure $45 \dots 75\,\text{mA}$.
-2. [ ] **Status LED:** Pulses green (system ready, UPS charging).
-3. [ ] **Web Dashboard:** Connect via Web Bluetooth or WiFi to `OpenMotorBridge_v8`.
-4. [ ] **Cartridge Detection:** Insert cartridges into Pods 1 and 2 $\rightarrow$ Gateway profiles appear immediately with serial numbers.
-5. [ ] **Front Node Wireless Link:** Dashboard displays `ESP-NOW LINK (2.4 GHz) - READY`.
-6. [ ] **PTT Test:** Press handlebar button $\rightarrow$ Dashboard PTT tile illuminates green (`< 1.8 ms Latency`).
-7. [ ] **CarPlay Hard Reboot:** Click "CarPlay 1-Click Hard Reboot" $\rightarrow$ VBUS drops to $0{,}00\,\text{V}$ for $2{,}5\,\text{s}$ and restarts cleanly.
-8. [ ] **Audio Check:** Pair headset and play music $\rightarrow$ Crystal-clear audio free of ground loops.
 
 ---
 

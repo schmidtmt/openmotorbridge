@@ -2779,6 +2779,27 @@
                             <div class="builder-option-badge">DIY Budget</div>
                         </div>
                     </div>
+
+                    <!-- Bed Size Sub-Selection (visible when DIY is selected) -->
+                    <div id="builder-bedsize-container" style="display: none; margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--border-color);">
+                        <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+                            📐 <span data-i18n="builder_bedsize_title">OrcaSlicer 3MF Bauraum-Größe auswählen:</span>
+                        </div>
+                        <div class="builder-grid" id="builder-bedsize-grid" style="grid-template-columns: 1fr 1fr;">
+                            <div class="builder-option-card selected" data-type="bedsize" data-value="standard">
+                                <div class="builder-option-icon">📏</div>
+                                <div class="builder-option-title">Standard & Groß (≥ 220×220 mm)</div>
+                                <div class="builder-option-desc">Bambu Lab X1/P1/A1 (256²), Prusa MK4 (250×210), Creality K1, Voron (250–350 mm). Nur 4 Druckplatten!</div>
+                                <div class="builder-option-badge">4 Platten Projekt</div>
+                            </div>
+                            <div class="builder-option-card" data-type="bedsize" data-value="mini">
+                                <div class="builder-option-icon">📐</div>
+                                <div class="builder-option-title">Kompakt & Mini (180×180 mm)</div>
+                                <div class="builder-option-desc">Bambu Lab A1 Mini (180³), Prusa Mini+ (180³). Feinmodular aufgeteilt, Main-Box diagonal.</div>
+                                <div class="builder-option-badge">8 Platten Projekt</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -2881,6 +2902,109 @@
                 </div>
                 <div id="builder-instructions-container">
                     <!-- Populated dynamically by app.js -->
+                </div>
+            </div>
+
+            <!-- Interactive Smoke-Test & Diagnostic Wizard -->
+            <div class="smoke-test-card" id="builder-smoke-test-card">
+                <div class="smoke-test-header">
+                    <div>
+                        <div class="smoke-test-title">
+                            🩺 <span data-i18n="smoke_test_title">Interaktiver IKEA Smoke-Test & Hardware-Diagnose</span>
+                        </div>
+                        <div class="smoke-test-desc" data-i18n="smoke_test_sub">
+                            Führe den geführten 4-Punkte-Check vor dem finalen Verschrauben durch: Spannungen, 1-Wire Kassetten-Erkennung, Aktuator-Klicksequenzen, Front-Node und LoRa/GNSS.
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button id="btn-run-smoke-test" class="btn-primary" style="display: flex; align-items: center; gap: 6px;">
+                            ▶️ <span data-i18n="btn_run_smoke_test">Smoke-Test starten</span>
+                        </button>
+                        <button id="btn-test-actuators" class="btn-secondary" style="display: flex; align-items: center; gap: 6px;">
+                            🔊 <span data-i18n="btn_test_actuators">Aktuatoren testen (Klick 1-4)</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="smoke-grid">
+                    <!-- Step 1: Power & Bus -->
+                    <div class="smoke-step" id="smoke-step-power">
+                        <div class="smoke-step-head">
+                            <span class="smoke-step-num">Check 1</span>
+                            <span class="smoke-status-pill" id="smoke-status-power">BEREIT</span>
+                        </div>
+                        <div class="smoke-step-title">⚡ Bordnetz & USV-Akku</div>
+                        <div class="smoke-step-detail" id="smoke-detail-power">Prüft 12V Bordnetz, 5V System-Schiene und 1000 mAh LiPo-Zelle.</div>
+                    </div>
+
+                    <!-- Step 2: Pod 1 & 2 Cartridges -->
+                    <div class="smoke-step" id="smoke-step-cartridges">
+                        <div class="smoke-step-head">
+                            <span class="smoke-step-num">Check 2</span>
+                            <span class="smoke-status-pill" id="smoke-status-cartridges">BEREIT</span>
+                        </div>
+                        <div class="smoke-step-title">🎧 Kassetten & Aktuatoren</div>
+                        <div class="smoke-step-detail" id="smoke-detail-cartridges">1-Wire Chip-Erkennung, Pogo-Pin Kontakt und Aktuator-Tastenhub.</div>
+                        <div class="actuator-visualizer">
+                            <span class="actuator-btn-indicator" id="act-btn-1">Klick 1 (Power)</span>
+                            <span class="actuator-btn-indicator" id="act-btn-2">Klick 2 (Mesh)</span>
+                            <span class="actuator-btn-indicator" id="act-btn-3">Klick 3 (Plus)</span>
+                            <span class="actuator-btn-indicator" id="act-btn-4">Klick 4 (Minus)</span>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Front Node -->
+                    <div class="smoke-step" id="smoke-step-front">
+                        <div class="smoke-step-head">
+                            <span class="smoke-step-num">Check 3</span>
+                            <span class="smoke-status-pill" id="smoke-status-front">BEREIT</span>
+                        </div>
+                        <div class="smoke-step-title">🏍️ Front-Knoten & Cockpit</div>
+                        <div class="smoke-step-detail" id="smoke-detail-front">Lenker-PTT, Knowles MEMS Akustik, Staudruck & 20W USB-PD.</div>
+                    </div>
+
+                    <!-- Step 4: Rear Pod 3 -->
+                    <div class="smoke-step" id="smoke-step-rear">
+                        <div class="smoke-step-head">
+                            <span class="smoke-step-num">Check 4</span>
+                            <span class="smoke-status-pill" id="smoke-status-rear">BEREIT</span>
+                        </div>
+                        <div class="smoke-step-title">📡 Heck-Pod 3 (LoRa/GNSS)</div>
+                        <div class="smoke-step-detail" id="smoke-detail-rear">SX1262 LoRa 868 MHz Ping, u-blox GNSS 3D-Fix und Varia-Radar.</div>
+                    </div>
+                </div>
+
+                <div class="smoke-terminal" id="smoke-terminal-log">
+                    <div>[OMB-DIAG] Diagnose-System bereit. Klicke auf 'Smoke-Test starten', um die Verkabelung zu überprüfen...</div>
+                </div>
+            </div>
+
+            <!-- WebSerial 1-Click Firmware Flasher -->
+            <div class="flasher-card" id="builder-flasher-card">
+                <div class="flasher-header">
+                    <div>
+                        <div class="flasher-title">
+                            ⚡ <span data-i18n="flasher_title">WebSerial 1-Click Firmware Installer</span>
+                        </div>
+                        <div class="flasher-desc" data-i18n="flasher_sub">
+                            Flashe ESP32-S3 und RP2040 direkt aus dem Browser – kein Terminal, kein Python, keine Treiber!
+                        </div>
+                    </div>
+                    <button id="btn-flasher-connect" class="btn-primary" style="display: flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #1f6feb 0%, #238636 100%);">
+                        🔌 <span data-i18n="btn_connect_serial">USB-C verbinden & Flashen</span>
+                    </button>
+                </div>
+
+                <div class="flasher-progress-bar">
+                    <div class="flasher-progress-fill" id="flasher-progress-fill"></div>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 8px;">
+                    <span id="flasher-status-label">Bereit für USB-C Verbindung</span>
+                    <span id="flasher-percent-label">0%</span>
+                </div>
+
+                <div class="smoke-terminal" id="flasher-terminal-log" style="max-height: 110px;">
+                    <div>[WEB-SERIAL] WebSerial API verfügbar. Schließe die Zentralbox per USB-C an und starte den 1-Click Flash.</div>
                 </div>
             </div>
         </main>

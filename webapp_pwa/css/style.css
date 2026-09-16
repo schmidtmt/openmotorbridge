@@ -2153,6 +2153,204 @@ body.ride-hud-active .tab-btn {
     margin-bottom: 4px;
 }
 
+/* ==========================================
+   13. Interactive Smoke-Test & WebSerial Flasher
+   ========================================== */
+.smoke-test-card, .flasher-card {
+    margin-bottom: 24px;
+    background: linear-gradient(135deg, rgba(22, 27, 34, 0.95) 0%, rgba(13, 17, 23, 0.98) 100%);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.smoke-test-header, .flasher-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.smoke-test-title, .flasher-title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    font-family: var(--font-heading);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.smoke-test-desc, .flasher-desc {
+    font-size: 0.83rem;
+    color: var(--text-secondary);
+    margin-top: 3px;
+}
+
+.smoke-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+    margin-bottom: 16px;
+}
+
+.smoke-step {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 14px;
+    position: relative;
+    transition: all 0.25s ease;
+}
+
+.smoke-step.testing {
+    border-color: var(--accent-orange);
+    background: rgba(234, 88, 12, 0.05);
+    animation: smokePulse 1.5s infinite alternate;
+}
+
+@keyframes smokePulse {
+    0% { box-shadow: 0 0 0 rgba(234, 88, 12, 0.1); }
+    100% { box-shadow: 0 0 14px rgba(234, 88, 12, 0.35); }
+}
+
+.smoke-step.pass {
+    border-color: #238636;
+    background: rgba(35, 134, 54, 0.08);
+}
+
+.smoke-step.fail {
+    border-color: #da3633;
+    background: rgba(218, 54, 51, 0.08);
+}
+
+.smoke-step-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.smoke-step-num {
+    font-size: 0.75rem;
+    font-weight: 800;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    padding: 2px 7px;
+    border-radius: 4px;
+}
+
+.smoke-status-pill {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-secondary);
+}
+
+.smoke-step.pass .smoke-status-pill {
+    background: rgba(35, 134, 54, 0.3);
+    color: #3fb950;
+    border: 1px solid rgba(63, 185, 80, 0.4);
+}
+
+.smoke-step.testing .smoke-status-pill {
+    background: rgba(234, 88, 12, 0.3);
+    color: #ffaa5b;
+    border: 1px solid rgba(234, 88, 12, 0.4);
+}
+
+.smoke-step.fail .smoke-status-pill {
+    background: rgba(218, 54, 51, 0.3);
+    color: #f85149;
+    border: 1px solid rgba(248, 81, 73, 0.4);
+}
+
+.smoke-step-title {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+}
+
+.smoke-step-detail {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+.actuator-visualizer {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    padding: 8px;
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 6px;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.actuator-btn-indicator {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-secondary);
+    transition: all 0.15s ease;
+}
+
+.actuator-btn-indicator.active {
+    background: var(--accent-orange);
+    color: #fff;
+    transform: scale(1.1);
+    box-shadow: 0 0 8px rgba(234, 88, 12, 0.6);
+}
+
+.smoke-terminal {
+    background: #090d13;
+    border: 1px solid #1f2937;
+    border-radius: 8px;
+    padding: 12px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.75rem;
+    color: #8b949e;
+    max-height: 140px;
+    overflow-y: auto;
+    margin-top: 14px;
+    line-height: 1.5;
+}
+
+.smoke-terminal .log-ok { color: #3fb950; font-weight: 600; }
+.smoke-terminal .log-warn { color: #ffaa5b; }
+.smoke-terminal .log-err { color: #f85149; font-weight: 700; }
+.smoke-terminal .log-info { color: #58a6ff; }
+
+/* WebSerial Flasher */
+.flasher-progress-bar {
+    width: 100%;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 5px;
+    overflow: hidden;
+    margin: 14px 0 8px 0;
+}
+
+.flasher-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent-blue) 0%, var(--accent-orange) 100%);
+    border-radius: 5px;
+    transition: width 0.2s ease;
+}
+
 /* Print Styles */
 @media print {
     body {

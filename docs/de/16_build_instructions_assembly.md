@@ -283,40 +283,53 @@ Da **weder Löten, noch Crimpen, noch thermisches Einschmelzen von Gewinden** er
 └────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-1. **BMW GS (Standard) Montage:**
-   * **Pod 1 & 2:** Die Transition-Docks ([`adventure_transition_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_transition_dock.stl)) unterhalb der Sitzbankkante an die Rahmenrohre (Ø 28 mm) klemmen. Die M8 Zuleitungskabel im Unterflurkanal direkt unter die Sitzbank zur Zentralbox führen.
-   * **Pod 3:** Auf dem Rack-Tail Mount ([`adventure_rack_tail_mount.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_rack_tail_mount.stl)) an der Gepäckbrücke verschrauben.
-2. **BMW GSA (Adventure) Montage:**
-   * **Pod 1 & 2:** 1,0 mm EPDM-Schutzstreifen um das Ø 18 mm Kofferträgerrohr wickeln. Unterschale ([`adventure_pannier_rack_clamp_base.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_base.stl)) und Kappe ([`adventure_pannier_rack_clamp_cap.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_cap.stl)) mit 2x M5 x 30 mm V4A Schrauben und DIN 985 Stoppmuttern über Kreuz mit $4{,}5\,\text{Nm}$ anziehen. Pod-Basisgehäuse an den Augen der Schelle verschrauben.
-   * **Pod 3 & Radar (Heck-Balkon):** Ausleger ([`adventure_rack_tail_mount.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_rack_tail_mount.stl)) mit 4x M6 Schrauben an der Gepäckbrücke montieren. Taoglas Antenne an der 45°-Finne ausrichten.
-   * **Radar Varia Dock:** Zunge des Garmin Varia Docks ([`radar_varia_gopro_lock_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_varia_gopro_lock_dock.stl)) in die Hirth-Rosette ([`011_gopro_hirth_lock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/components/011_gopro_hirth_lock.stl)) einrasten ($10^\circ$-Schritte für exakten Radar-Horizont). Mit M5 x 25 mm Schraube und Stoppmutter sichern ($3{,}5\,\text{Nm}$). Varia einklinken und M3 Madenschraube als Diebstahlschutz eindrehen.
-
-### Schritt 4.2: Montage Harley-Davidson Kit (Classic Touring vs. CVO ST / Performance Bagger)
-
-```
-                       OPENMOTORBRIDGE HARLEY-DAVIDSON MOUNTING SUITE
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│ HARLEY-DAVIDSON TOURING & BAGGER (CLASSIC: STREET GLIDE, ROAD GLIDE, ROAD KING)        │
-│ • Kofferdeckel-Docks (saddlebag_lid_dock.stl) auf Hartschalenkoffern (Pod 1 & Pod 2)   │
-│ • Touring Fender Console (pod3_touring_fender_console.stl) strömungsgünstig am Fender  │
-│ • Kennzeichen-Radarhalter (radar_license_plate_bracket.stl) entkoppelt unter Kennzeichen│
-├────────────────────────────────────────────────────────────────────────────────────────┤
-│ HARLEY-DAVIDSON CVO ROAD GLIDE ST / PERFORMANCE BAGGER                                 │
-│ • Under-Cowl Skeleton Dock (cvo_st_undercowl_skeleton_dock.stl) unter Forged Carbon    │
-│   Sitz-Hutze: Schützt vor Hitze und Ausgleichsbehältern der Showa-Stoßdämpfer          │
-│ • CVO ST Telemetrie-Finne (cvo_st_telemetry_fin.stl) als Haifischflosse am Heck        │
-│ • Zentrische Underfender-Platte (radar_center_underfender_mount.stl) bei Side-Mount    │
-└────────────────────────────────────────────────────────────────────────────────────────┘
-```
-
-1. **Classic Touring Montage:**
-   * **Pod 1 & 2:** Die Kofferdeckel-Docks ([`saddlebag_lid_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/saddlebag_lid_dock.stl)) mit M4 Senkkopfschrauben und rückseitigen Dichtscheiben an den OEM-Befestigungspunkten oder per 3M VHB Tape auf den Kofferdeckeln montieren. Vorkonfektioniertes M8 Kabel durch die Gummitülle in den Koffer und über Schnellkupplung zum Rahmen führen.
-   * **Pod 3:** Die Fender-Konsole ([`pod3_touring_fender_console.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod3_touring_fender_console.stl)) flach auf dem Kotflügel zentrieren und verschrauben.
-   * **Radar:** Kennzeichen-Halter ([`radar_license_plate_bracket.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_license_plate_bracket.stl)) unter dem Kennzeichenrahmen verschrauben.
-2. **CVO ST / Performance Bagger Montage:**
+286: 1. **BMW GS (Standard) Montage:**
+287:    * **Pod 1 & 2:** Die Transition-Docks ([`adventure_transition_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_transition_dock.stl)) unterhalb der Sitzbankkante an die Rahmenrohre (Ø 28 mm) klemmen. Die M8 Zuleitungskabel im Unterflurkanal direkt unter die Sitzbank zur Zentralbox führen.
+288:    * **Pod 3:** Auf dem Rack-Tail Mount ([`adventure_rack_tail_mount.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_rack_tail_mount.stl)) an der Gepäckbrücke verschrauben.
+289:    * **Cockpit & Front-Node Fairing-Demontage:**
+290:      * 4x Torx T25 Schrauben der Windschild-Befestigung lösen und Scheibe abnehmen.
+291:      * Obere TFT-Cockpitblende nach vorne aus den Rastnasen ausclipsen.
+292:      * Front-Node mit AMPS-Verschraubung oder Rohrklemmen am Lenker / Navi-Bügel fixieren.
+293:      * M8 PUR-Kabel durch die originale BMW Lenkkopf-Kabeltülle führen. Kabel mit Kabelbindern so am Hauptstrang abfangen, dass bei vollem Lenkanschlag nach links und rechts **keinerlei Zug, Knicken oder Scheuern** auftritt.
+294:      * Kabel entlang des Rahmentunnels unter dem Tank nach hinten zum Batteriefach/Sitzbank führen.
+295: 2. **BMW GSA (Adventure) Montage:**
+296:    * **Pod 1 & 2:** 1,0 mm EPDM-Schutzstreifen um das Ø 18 mm Kofferträgerrohr wickeln. Unterschale ([`adventure_pannier_rack_clamp_base.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_base.stl)) und Kappe ([`adventure_pannier_rack_clamp_cap.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_cap.stl)) mit 2x M5 x 30 mm V4A Schrauben und DIN 985 Stoppmuttern über Kreuz mit $4{,}5\,\text{Nm}$ anziehen. Pod-Basisgehäuse an den Augen der Schelle verschrauben.
+297:    * **Pod 3 & Radar (Heck-Balkon):** Ausleger ([`adventure_rack_tail_mount.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_rack_tail_mount.stl)) mit 4x M6 Schrauben an der Gepäckbrücke montieren. Taoglas Antenne an der 45°-Finne ausrichten.
+298:    * **Radar Varia Dock:** Zunge des Garmin Varia Docks ([`radar_varia_gopro_lock_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_varia_gopro_lock_dock.stl)) in die Hirth-Rosette ([`011_gopro_hirth_lock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/components/011_gopro_hirth_lock.stl)) einrasten ($10^\circ$-Schritte für exakten Radar-Horizont). Mit M5 x 25 mm Schraube und Stoppmutter sichern ($3{,}5\,\text{Nm}$). Varia einklinken und M3 Madenschraube als Diebstahlschutz eindrehen.
+299: 
+300: ### Schritt 4.2: Montage Harley-Davidson Kit (Classic Touring vs. CVO ST / Performance Bagger)
+301: 
+302: ```
+303:                        OPENMOTORBRIDGE HARLEY-DAVIDSON MOUNTING SUITE
+304: ┌────────────────────────────────────────────────────────────────────────────────────────┐
+305: │ HARLEY-DAVIDSON TOURING & BAGGER (CLASSIC: STREET GLIDE, ROAD GLIDE, ROAD KING)        │
+306: │ • Kofferdeckel-Docks (saddlebag_lid_dock.stl) auf Hartschalenkoffern (Pod 1 & Pod 2)   │
+307: │ • Touring Fender Console (pod3_touring_fender_console.stl) strömungsgünstig am Fender  │
+308: │ • Kennzeichen-Radarhalter (radar_license_plate_bracket.stl) entkoppelt unter Kennzeichen│
+309: ├────────────────────────────────────────────────────────────────────────────────────────┤
+310: │ HARLEY-DAVIDSON CVO ROAD GLIDE ST / PERFORMANCE BAGGER                                 │
+311: │ • Under-Cowl Skeleton Dock (cvo_st_undercowl_skeleton_dock.stl) unter Forged Carbon    │
+312: │   Sitz-Hutze: Schützt vor Hitze und Ausgleichsbehältern der Showa-Stoßdämpfer          │
+313: │ • CVO ST Telemetrie-Finne (cvo_st_telemetry_fin.stl) als Haifischflosse am Heck        │
+314: │ • Zentrische Underfender-Platte (radar_center_underfender_mount.stl) bei Side-Mount    │
+315: └────────────────────────────────────────────────────────────────────────────────────────┘
+316: ```
+317: 
+318: 1. **Classic Touring Montage & Fairing-Demontage:**
+319:    * **Pod 1 & 2:** Die Kofferdeckel-Docks ([`saddlebag_lid_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/saddlebag_lid_dock.stl)) mit M4 Senkkopfschrauben und rückseitigen Dichtscheiben an den OEM-Befestigungspunkten oder per 3M VHB Tape auf den Kofferdeckeln montieren. Vorkonfektioniertes M8 Kabel durch die Gummitülle in den Koffer und über Schnellkupplung zum Rahmen führen.
+320:    * **Pod 3:** Die Fender-Konsole ([`pod3_touring_fender_console.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod3_touring_fender_console.stl)) flach auf dem Kotflügel zentrieren und verschrauben.
+321:    * **Radar:** Kennzeichen-Halter ([`radar_license_plate_bracket.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_license_plate_bracket.stl)) unter dem Kennzeichenrahmen verschrauben.
+322:    * **Fairing-Demontage (Street Glide Batwing):**
+323:      * Die 3x Torx T27 Schrauben der Windschutzscheibe entfernen (mittlere Schraube zuletzt).
+324:      * Die 4x Torx T27 Schrauben an der Innenseite der Verkleidung lösen (2x unter den Instrumenten, 2x neben den Lautsprechern).
+325:      * Outer Fairing vorsichtig nach vorne abnehmen, Scheinwerfer-Kompaktstecker trennen.
+326:      * Front-Node am Lenkerriser verschrauben. M8 PUR-Kabel durch die Gummikabeltülle in die Fairing führen und durch den Kabelkanal unter der Tankkonsole nach hinten zum Batteriekasten verlegen.
+327:      * Outer Fairing wieder ansetzen und T27 Schrauben mit $3{,}8\,\text{Nm}$ anziehen.
+2. **CVO ST / Performance Bagger Montage (Road Glide Sharknose):**
    * **Pod 1 & 2:** Das aufrechte Skeleton Dock ([`cvo_st_undercowl_skeleton_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/cvo_st_undercowl_skeleton_dock.stl)) unter der Einzelsitz-Hutze montieren. Die Pods stehen senkrecht und haben vollen Abstand zu den Ausgleichsbehältern der Federbeine.
    * **Pod 3:** Die aerodynamische Telemetrie-Finne ([`cvo_st_telemetry_fin.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/cvo_st_telemetry_fin.stl)) auf der Heck-Hutze montieren.
    * **Radar:** Die zentrische Underfender-Halterung ([`radar_center_underfender_mount.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_center_underfender_mount.stl)) mittig unter dem gekürzten Heckfender verschrauben.
+   * **Sharknose-Demontage:** Blinkerschrauben lösen, 4x T27 Innenschrauben herausdrehen, Sharknose-Verkleidung nach vorn abheben und M8 Kabel durch den Media-Schacht führen.
 
 ---
 
@@ -377,36 +390,33 @@ Da **weder Löten, noch Crimpen, noch thermisches Einschmelzen von Gewinden** er
 
 ---
 
-## 6. Erstinbetriebnahme & Software-Flash (Schritt-für-Schritt)
+## 6. Erstinbetriebnahme, WebSerial 1-Click Flasher & Smoke-Test
 
-```bash
-# 1. Firmware-Repository klonen & in Zentralcontroller-Verzeichnis wechseln
-cd openMotorBridge/firmware/main_controller
+Dank der modernen **WebSerial-Integration** in der OpenMotorBridge PWA ist für die Erstinbetriebnahme **keine Installation von Python, PlatformIO, Treibern oder Terminal-Tools** erforderlich:
 
-# 2. Zentralcontroller via USB-C flashen (ESP32-S3)
-pio run --target upload
+### 6.1 Methode A: WebSerial 1-Click Installer (Empfohlen für Endanwender)
+1. Zentralbox per Standard USB-C Kabel an den PC/Mac/Laptop anschließen.
+2. Chrome, Edge oder Opera öffnen und die PWA aufrufen (oder lokal über den System-Builder).
+3. Im Tab *System Builder* auf **„USB-C verbinden & Flashen“** klicken.
+344: 4. Den erkannten seriellen Port (z. B. `CP2102N` / `ESP32-S3`) auswählen.
+345: 5. Die PWA flasht Bootloader, Partitionen, Firmware (`openmotorbridge_main_v8.12.bin`) und SPIFFS-Dateisystem vollautomatisch mit Fortschrittsbalken und Live-Protokoll.
 
-# 3. Kassetten-Profile auf das LittleFS-Dateisystem hochladen
-pio run --target uploadfs
-
-# 4. Heck-Co-Prozessor flashen (RP2040 in Pod 3)
-cd ../rear_coprocessor
-pio run --target upload
-
-# 5. Front-Knoten flashen (ESP32-S3)
-cd ../front_node
-pio run --target upload
-```
-
-### Selbsttest-Checkliste:
-1. [ ] **Labornetzteil:** $12{,}0\,\text{V}$ anlegen (Strombegrenzung $150\,\text{mA}$). Ruhestrom messen: Sollwert $= 45 \dots 75\,\text{mA}$.
-2. [ ] **Status-LED:** Blinkt nach dem Start grün (System bereit, Pufferakku lädt).
-3. [ ] **Web-Dashboard:** Im Browser via Web-Bluetooth mit `OpenMotorBridge_v8` koppeln.
-4. [ ] **Kassettenerkennung:** Kassetten in Pod 1 und 2 einstecken $\rightarrow$ Profile werden im Dashboard sofort mit Seriennummer angezeigt.
-5. [ ] **Front-Knoten Funkverbindung:** Status-Kachel im Dashboard zeigt `ESP-NOW LINK (2.4 GHz) - BEREIT`.
-6. [ ] **PTT-Test:** Lenkertaster drücken $\rightarrow$ Grüne PTT-Anzeige im Dashboard leuchtet auf (`< 1.8 ms Latenz`), TLP222A Optokoppler schaltet durch.
-7. [ ] **CarPlay Kaltstart-Test:** Im Dashboard auf "CarPlay 1-Klick Kaltstart" klicken $\rightarrow$ VBUS schaltet für $2{,}5\,\text{s}$ auf $0{,}00\,\text{V}$ ab und startet sauber neu.
-8. [ ] **Audio-Check:** Headset koppeln, Musik abspielen $\rightarrow$ sauberes, glasklares Signal ohne Lichtmaschinenpfeifen oder Masseschleifen (dank 1500V Bourns Übertrager-Trennung).
+347: ### 6.2 Der geführte 4-Punkte IKEA Smoke-Test
+Vor dem Aufsetzen der Gehäusedeckel wird der interaktive Selbsttest in der PWA gestartet:
+349: 1. [x] **Bordnetz & USV (Check 1):** 12.6V Batteriespannung, 5.04V Buck-Schiene, USV-LiPo auf 4.18V.
+350: 2. [x] **Kassetten & Aktuatoren (Check 2):** 1-Wire DS2431 Auslesen der Kassetten-IDs (Sena / Cardo), Pogo-Pin Kontaktierung und automatischer 4-Aktuator Klicktest (Klick 1 bis 4).
+351: 3. [x] **Front-Knoten & Cockpit (Check 3):** I2C-Ping Knowles MEMS Mikrofon, SDP31 Staudruck-Sensor (0.02 hPa) und Lenker-PTT Taster.
+352: 4. [x] **Heck-Pod 3 (Check 4):** SX1262 LoRa 868 MHz Ping-Echo und u-blox GNSS 3D-Fix.
+353: 
+354: ### 6.3 Methode B: Manuelles Flashen via PlatformIO (Power-User Fallback)
+355: ```bash
+356: # 1. Zentralcontroller via USB-C flashen (ESP32-S3)
+357: cd openMotorBridge/firmware/main_controller && pio run --target upload && pio run --target uploadfs
+358: # 2. Heck-Co-Prozessor flashen (RP2040 in Pod 3)
+359: cd ../rear_coprocessor && pio run --target upload
+360: # 3. Front-Knoten flashen (ESP32-S3)
+361: cd ../front_node && pio run --target upload
+362: ```
 
 ---
 

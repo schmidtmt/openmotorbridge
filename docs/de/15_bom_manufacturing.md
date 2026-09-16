@@ -160,24 +160,50 @@ Alle Gehäuseteile sind für das **IKEA-Prinzip** optimiert: **Kein Einschmelzen
 | **Smart-Keyfob Oberschale** | [`smart_keyfob_upper_shell.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/05_accessories/smart_keyfob_upper_shell.stl) | **1** | MJF PA12 / ASA | Deckel mit 3 Tastenfeldern & Lichtleiter |
 | **Smart-Keyfob Bumper** | [`smart_keyfob_tpu_rim.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/05_accessories/smart_keyfob_tpu_rim.stl) | **1** | TPU 85A / 95A | Elastischer Stoßschutz-Umlaufring |
 
+### 6.5 OrcaSlicer 3MF Projekt-Platten (Standard vs. Kompakt Bauraum)
+Für Selbstdrucker stehen vorkonfigurierte `.3mf`-Projektdateien für **OrcaSlicer** (voll kompatibel mit Bambu Studio und PrusaSlicer) bereit. Alle Platten sind mit **6 Wandlinien** (für 100 %ige Wasserdichtigkeit ohne Infiltration), 40 % Gyroid-Infill und optimierter Nahtplatzierung in verdeckten Radien vorkonfiguriert:
+
+#### Profil A: Standard & Großes Druckbett (≥ 220×220 mm bis 300×300 mm)
+*Geeignet für: Bambu Lab X1C / P1S / P1P / A1 (256×256 mm), Prusa MK3/MK4 (250×210 mm), Creality K1 / Ender-3, Voron 2.4 / Trident (250–350 mm).*
+| Platte | Projekt-Dateiname | Material | Enthaltene Bauteile |
+| :---: | :--- | :---: | :--- |
+| **Platte 1** | `main_box_standard_plate.3mf` | ASA / PA-CF | Komplette Zentralbox auf 1 Platte: Unterwanne, Zwischenboden & Deckel |
+| **Platte 2** | `pods_standard_plate.3mf` | ASA / PA-CF | Alle 3 Pod-Gehäuse (Pod 1, 2 & Heck-Pod 3) + 3x Schottwände |
+| **Platte 3** | `cartridges_frontnode_standard_plate.3mf`| ASA / PA-CF | 3x Basisschlitten, Gateway-Inlays, Verriegelungen & Front-Node Gehäuse |
+| **Platte 4** | `glands_tpu_standard_plate.3mf` | TPU 95A | Alle flexiblen Dichtkämme, USB-C Staubkappe & Dichtschnüre |
+| **Platte 5** | `bike_mounts_standard_plate.3mf` | ASA / PA-CF | Fahrzeugspezifisches Kit (BMW Rohrschellen bzw. Harley Docks) |
+
+#### Profil B: Kompaktes Druckbett (180×180 mm)
+*Geeignet für: Bambu Lab A1 Mini (180×180×180 mm), Prusa Mini+ (180×180×180 mm).*
+| Platte | Projekt-Dateiname | Material | Enthaltene Bauteile |
+| :---: | :--- | :---: | :--- |
+| **Platte 1** | `main_box_tub_mini_plate.3mf` | ASA / PA-CF | Main Box Unterwanne (diagonal 45° im Bauraum platziert) |
+| **Platte 2** | `main_box_lid_tray_mini_plate.3mf` | ASA / PA-CF | Main Box Zwischenboden & Gehäusedeckel |
+| **Platte 3** | `pod_1_2_mini_plate.3mf` | ASA / PA-CF | Pod 1 & Pod 2 Basisgehäuse (aufrecht stehend) |
+| **Platte 4** | `pod_3_bulkheads_mini_plate.3mf` | ASA / PA-CF | Heck-Pod 3 Gehäuse & 3x Schottwände |
+| **Platte 5** | `cartridges_mini_plate.3mf` | ASA / PA-CF | 3x Kassetten-Basisschlitten, Inlays & Verriegelungswippen |
+| **Platte 6** | `front_node_mini_plate.3mf` | ASA / PA-CF | Universal Front-Knoten Unterwanne & Deckel |
+| **Platte 7** | `glands_tpu_mini_plate.3mf` | TPU 95A | TPU-Dichtkämme, USB-C Schutzkappe & Dichtungen |
+| **Platte 8** | `bike_mounts_mini_plate.3mf` | ASA / PA-CF | Fahrzeugspezifische Docks / Schellen |
+
 ---
 
-## 7. Inbetriebnahme- & Testprotokoll (100% Lötfrei)
+## 7. Inbetriebnahme, WebSerial 1-Click Flasher & Smoke-Test
 
-Da alle Platinen fertig bestückt und vorgetestet geliefert werden, reduziert sich die Inbetriebnahme auf einen reinen Funktionstest:
+Da alle Platinen fertig bestückt und vorgetestet geliefert werden, reduziert sich die Inbetriebnahme auf wenige geführte Schritte direkt im Browser:
 
-### Schritt 1: Steckkontrolle & Sichtprüfung
-* [ ] Sichtprüfung aller PCBAs auf Transportschäden.
-* [ ] Prüfen, ob die Dichtungen sauber in den Gehäusenuten liegen.
+### Schritt 1: WebSerial 1-Click Firmware Installer (PWA)
+* Kein Terminal, kein Python, keine Treiberinstallation!
+* Zentralbox per USB-C an den PC/Mac anschließen.
+* In der OpenMotorBridge PWA im Tab *System Builder* auf **„USB-C verbinden & Flashen“** klicken.
+* Der Browser überträgt Bootloader, Partitionen, Firmware und SPIFFS-Profile automatisch auf den ESP32-S3 und RP2040.
 
-### Schritt 2: Spannungsprüfung mit Labornetzteil oder Motorradbatterie
-* [ ] 12V Versorgungsleitung anschließen (abgesichert über 2A Flachsicherung).
-* [ ] Ruhestrom messen: Sollwert $= 45\,\text{mA}$ bis $75\,\text{mA}$ (ohne Ladevorgang).
-* [ ] Status-LED an Zentralbox und Front-Knoten leuchtet grün.
-
-### Schritt 3: Firmware-Selbsttest & WebApp-Verbindung
-* [ ] Smartphone / Notebook mit WLAN `OpenMotorBridge-Setup` verbinden.
-* [ ] PWA im Browser aufrufen (`http://192.168.4.1`).
+### Schritt 2: Der interaktive 4-Punkte IKEA Smoke-Test
+Vor dem endgültigen Zudrücken und Verschrauben der Gehäusedeckel führt die PWA einen automatischen Diagnose-Check durch:
+* [x] **Check 1 (Bordnetz & USV):** 12.6V Batteriespannung, 5.04V Buck-Schiene, 1000 mAh LiPo-Zelle auf 4.18V.
+* [x] **Check 2 (Kassetten & Aktuatoren):** 1-Wire DS2431 Auslesen der Kassetten-IDs (Sena / Cardo), Pogo-Pin Kontaktierung und automatischer 4-Aktuator Klicktest.
+* [x] **Check 3 (Front-Knoten & Cockpit):** I2C-Ping Knowles MEMS Mikrofon, SDP31 Staudruck-Sensor (0.02 hPa) und Lenker-PTT Taster.
+* [x] **Check 4 (Heck-Pod 3):** SX1262 LoRa 868 MHz Ping-Echo und u-blox GNSS 3D-Satellitenfix.
 * [ ] Status-Check: Beide Gateway-Slots (Pod 1 & Pod 2) werden erkannt, Heck-Pod 3 liefert GNSS-Fix.
 
 ---
