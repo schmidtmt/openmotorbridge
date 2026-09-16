@@ -1,10 +1,10 @@
-# 15 - Stücklisten (BOM) & SMT-Fertigungsdaten (Alle 7 PCBAs)
+# 15 - Stücklisten (BOM), COTS-Kaufteile & SMT-Fertigungsdaten (Alle 7 PCBAs)
 
-Dieses Dokument enthält die vollständige Bauteilliste (Bill of Materials) und Fertigungsspezifikation für alle 5 Leiterplatten (PCBA 01 bis PCBA 05) bei JLCPCB / Eurocircuits, alle mechanischen 3D-Druck-Komponenten, das Inbetriebnahmeprotokoll, den JLCPCB SMT-Bestellleitfaden sowie die COTS-Einkaufsliste.
+Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die vollständige Bauteilliste (Bill of Materials), die Fertigungsspezifikationen aller 7 Leiterplatten (PCBA 01 bis PCBA 07) bei JLCPCB / Eurocircuits, alle mechanischen 3D-Druck-Komponenten, die COTS-Einkaufslisten sowie eine detaillierte Kosten- und Bestellkalkulation (Solo-Aufbau vs. Sammelbestellung).
 
 ---
 
-## 1. PCBA 01: Zentralbox Hauptplatine (`kicad_main_box`, 4-Layer FR4 TG150)
+## 1. PCBA 01: Zentralbox Hauptplatine (`openmotorbridge_central_box`, 4-Layer FR4 TG150)
 
 | Designator | Bauteil / MPN | Hersteller | Gehäuse | LCSC / JLCPCB Part # | Funktion |
 | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -21,7 +21,7 @@ Dieses Dokument enthält die vollständige Bauteilliste (Bill of Materials) und 
 | **LED1** | WS2812B-B | Worldsemi | 5050 SMD | C114586 | RGB Status-LED für optische Betriebsmodusanzeige |
 | **J1** | 2x13 Wannenstecker | Standard 2.54 mm | THT Box Header | C2934175 | Interner Pfostenverbinder zur HD26-Flanschbuchse |
 | **J2** | MicroSD Slot Push-Push | Molex / Korean Hro | SMD Push-Push | C266624 | 4-Bit SDIO Speicherkarte für Tour-Logging |
-| **J_BAT** | Molex Micro-Fit 3.0 2P | Molex | SMD Header | C289110 | Steckverbindung zum LiPo Pufferakku |
+| **J_BAT** | Molex Micro-Fit 3.0 2P | Molex | SMD Header | C289110 | Steckverbindung zum 2.200 mAh LiPo Pufferakku |
 | **CN1** | HD26 Buchse IP67 | Amphenol LTW | Flansch D-Sub | Kundenteil | Wasserdichte 26-polige Gehäuseschnittstelle |
 
 ---
@@ -103,27 +103,71 @@ Dieses Dokument enthält die vollständige Bauteilliste (Bill of Materials) und 
 
 ---
 
-## 6. Mechanik- & Gehäuse-BOM (3D-Druck MJF PA12 & Normteile)
+## 6. PCBA 06: MagSafe Rahmendock-Adapter (`openmotorbridge_magsafe_dock`, 2-Layer FR4, 28 x 11.5 mm)
 
-Alle Gehäuseteile sind für das **IKEA-Prinzip** optimiert: **Kein Einschmelzen von Gewindeeinsätzen mit dem Lötkolben erforderlich!** Die Gehäuse verfügen über integrierte Sechskant-Mutternaschen (Nut Pockets für Standard DIN 934 / DIN 985 Edelstahlmuttern) bzw. Kernlöcher für selbstfurchende Kunststoffschrauben.
+| Ref | Bauteil / Typ | Gehäuse | Spezifikation & Funktion | LCSC Part |
+| :--- | :--- | :--- | :--- | :--- |
+| **`F1`** | 0ZCG0050FF2C | SMD 1206 | 500 mA Hold / 1000 mA Trip, 16V PPTC Selbstrückstellende Sicherung | `C207936` |
+| **`D1`** | ESD5Z5.0T1G | SOD-323 | 5,0V Unidirektionale TVS-Diode (Transient-Schutz) | `C2834585` |
+| **`U1`** | USBLC6-4SC6 | SOT-23-6 | 4-Kanal ESD-Schutzarray ($<0{,}8\,\text{pF}$, $\pm 15\,\text{kV}$ ESD) | `C7519` |
+| **`C1`** | 100nF 50V X7R | SMD 0603 | Keramischer Entkoppelkondensator auf VCC_PROT | `C14663` |
+| **`J1`** | M8 Wire Pads | SMD/THT 1x07 | 7-poliges Lötpad-Array mit 0,6mm Durchkontaktierung für M8-Kabeladern | Custom |
+| **`J2`** | MagSafe 6P Pads | SMD 1x06 | 6-polige vergoldete Kontaktflächen für MagSafe Magnet-Pogo-Kupplung | `C224376` |
+| **`H1`** | MountingHole_Pad | M2.5 (Ø 2.7 mm) | Bohrung Ø 2.7 mm, Pad Ø 4.5 mm, geerdet an System-GND | Hardware |
 
-### 6.1 Basis-System (Universal für jedes Motorrad)
+---
+
+## 7. PCBA 07: 2-in-1 LoRa Smart-Keyfob (`openmotorbridge_smart_keyfob`, 2-Layer FR4, 38 x 19 mm)
+
+| Ref | Bauteil / Typ | Gehäuse | Spezifikation & Funktion | LCSC Part |
+| :--- | :--- | :--- | :--- | :--- |
+| **`U1`** | nRF52840-QIAA-R | aQFN-73 | 32-Bit ARM Cortex-M4F SoC mit Bluetooth 5.4, NFC & Crypto | `C190767` |
+| **`U2`** | SX1262IMLTRT | QFN-24 | Semtech 868 MHz LoRa Transceiver (+22 dBm, TCXO) | `C90039` |
+| **`U3`** | DRV2605LDGSR | VSSOP-10 | TI ERM/LRA Haptic Driver mit integrierter Effekt-Bibliothek | `C61633` |
+| **`U4`** | BQ51003YFPR | DSBGA-28 | TI 2.5W Qi Wireless Power Receiver Controller | `C144862` |
+| **`U5`** | BQ25100YFPR | DSBGA-6 | TI Linearer LiPo-Ladecontroller mit 50 nA Ruhestrom | `C144857` |
+| **`M1`** | VG1036001D | Coin 10x3.6mm | Vybronics LRA Linearmotor (235 Hz Resonanzfrequenz) | Custom / Distrelec |
+| **`BZ1`**| PKLCS1212E4001 | SMD 12x12mm | Murata SMD-Piezo-Schallwandler (85 dB @ 10 cm, 4 kHz) | `C94511` |
+
+---
+
+## 8. 1-Click Bestellleitfaden für JLCPCB (Alle Leiterplatten fertig bestückt)
+
+Alle Fertigungsdaten liegen im Repository unter `hardware/pcba/` als fertige ZIP- und CSV-Pakete vor:
+
+| Baugruppe / PCBA | Gerber-ZIP Datei | BOM CSV Datei | CPL (Pick & Place) CSV | Lagen | Fertigungs-Hinweis |
+| :--- | :--- | :--- | :--- | :---: | :--- |
+| **PCBA 01: Zentralbox** | `01_main_box_pcba_gerbers_jlcpcb.zip` | `01_main_box_pcba_bom_jlcpcb.csv` | `01_main_box_pcba_cpl_jlcpcb.csv` | **4 Lagen** | ENIG (Gold), 1.6 mm, TG150, SMT beidseitig |
+| **PCBA 02: Pod-Basis** | `02_pod_base_pcba_gerbers_jlcpcb.zip` | `02_pod_base_pcba_bom_jlcpcb.csv` | `02_pod_base_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG (Gold), 1.6 mm, SMT Top |
+| **PCBA 03: Kassetten-Träger**| `03_pod_cartridge_pcba_gerbers_jlcpcb.zip` | `03_pod_cartridge_pcba_bom_jlcpcb.csv` | `03_pod_cartridge_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG (Gold), 1.2 mm, SMT Top |
+| **PCBA 04: Heck-Pod 3** | `04_rear_pod3_pcba_gerbers_jlcpcb.zip` | `04_rear_pod3_pcba_bom_jlcpcb.csv` | `04_rear_pod3_pcba_cpl_jlcpcb.csv` | **4 Lagen** | ENIG (Gold), 1.6 mm, TG150, SMT Top |
+| **PCBA 05: Front-Knoten** | `05_front_node_pcba_gerbers_jlcpcb.zip` | `05_front_node_pcba_bom_jlcpcb.csv` | `05_front_node_pcba_cpl_jlcpcb.csv` | **4 Lagen** | ENIG (Gold), 1.6 mm, TG150, SMT beidseitig |
+| **PCBA 06: MagSafe Dock** | `06_magsafe_dock_pcba_gerbers_jlcpcb.zip` | `06_magsafe_dock_pcba_bom_jlcpcb.csv` | `06_magsafe_dock_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG (Gold), 1.6 mm, SMT Top |
+| **PCBA 07: Smart-Keyfob** | `07_smart_keyfob_pcba_gerbers_jlcpcb.zip` | `07_smart_keyfob_pcba_bom_jlcpcb.csv` | `07_smart_keyfob_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG (Gold), 1.0 mm, SMT beidseitig |
+
+---
+
+## 9. Mechanik- & Gehäuse-BOM (3D-Druck MJF PA12 & Normteile)
+
+Alle Gehäuseteile sind konsequent für das **IKEA-Prinzip** konstruiert: **Kein Einschmelzen von Gewindeeinsätzen mit dem Lötkolben erforderlich!** Die Gehäuse verfügen über integrierte Sechskant-Mutternaschen (Nut Pockets für Standard DIN 934 / DIN 985 Edelstahlmuttern) bzw. präzise Kernlöcher für gewindefurchende Kunststoffschrauben.
+
+### 9.1 Basis-System (Universal für jedes Motorrad)
 | Baugruppe | STL-Dateiname | Stück | Material & Fertigung | Funktion & Beschreibung |
 | :--- | :--- | :---: | :--- | :--- |
 | **Main Box Unterteil** | [`main_box_lower_case.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_lower_case.stl) | **1** | MJF PA12 / ASA | Monocoque-Unterwanne mit 4x M4 Silentblock-Ohren, Mutternaschen & Dichtnut |
-| **Main Box Zwischenboden** | [`main_box_mid_tray.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_mid_tray.stl) | **1** | MJF PA12 / ASA | Akku-Wanne für 1000 mAh LiPo, 10x Konvektionsschlitze & Dichtfeder |
+| **Main Box Zwischenboden** | [`main_box_mid_tray.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_mid_tray.stl) | **1** | MJF PA12 / ASA | Akku-Wanne für 2.200 mAh Flat-LiPo ($68 \times 39 \times 5{,}0\,\text{mm}$), 11x Konvektionsschlitze & Dichtfeder |
 | **Main Box Deckel** | [`main_box_lid.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_lid.stl) | **1** | MJF PA12 / ASA | Gehäusedeckel mit Gore ePTFE-Ventilsitz & Schraubensenkungen |
 | **Pod-Basisgehäuse** | [`pod_base_housing.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod_base_housing.stl) | **3** | MJF PA12 / ASA | Universal-Schachtgehäuse für Pod 1 (Links), Pod 2 (Rechts) und Heck-Pod 3 |
 | **Pod-Schottwände** | [`03_pod_bulkhead_partition.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/components/03_pod_bulkhead_partition.stl) | **3** | MJF PA12 / ASA | Schottwand mit Dichtkragen & Federaufnahmen (1x pro Pod) |
 | **Kassetten-Basisschlitten**| [`cartridge_base_sled.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl) | **3** | MJF PA12 / ASA | Universalschlitten für Gateway 1 (Pod 1), Gateway 2 (Pod 2) und OMM (Pod 3) |
 | **Kassetten-Riegel / Wippe**| [`cartridge_magnetic_lock_latch.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_magnetic_lock_latch.stl) | **2** | MJF PA12 / ASA | Magnetische Diebstahlschutz-Rastwippen für Kassetten-Slots 1 & 2 |
 | **Heck-Pod 3 OMM-Radom** | [`cartridge_antenna_bracket_omm.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_antenna_bracket_omm.stl) | **1** | MJF PA12 / ASA | Dielektrisches Antennenradom & Trägerbrücke für PCBA 04 im Heck-Pod 3 |
-| **Front-Knoten Unterwanne** | [`front_node_lower_tub.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_lower_tub.stl) | **1** | MJF PA12 / ASA | Cockpit-Wanne mit AMPS-Bohrbild, Rohrbett & Mutternaschen |
+| **Front-Knoten Unterwanne** | [`front_node_lower_tub.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_lower_tub.stl) | **1** | MJF PA12 / ASA | Cockpit-Wanne mit AMPS-Bohrbild (DIN 934 M4 Taschen), Rohrbett & Mutternaschen |
 | **Front-Knoten Deckel** | [`front_node_upper_lid.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_upper_lid.stl) | **1** | MJF PA12 / ASA | Deckel mit Knowles MEMS Schalleintritt & O-Ring-Dichtnut |
 | **Front-Knoten Dichtkämme** | [`front_node_cable_glands_tpu.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_cable_glands_tpu.stl) | **1 Paar**| TPU 95A / 85A | Elastische Dichtkämme für Front-USB & Signale |
 | **Front-Knoten USB-C Kappe**| [`front_node_usbc_cap_tpu.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_usbc_cap_tpu.stl) | **1** | TPU 95A / 85A | Elastische Staubschutzkappe mit Haltekollier für Service-Port |
 
-### 6.2 Gateway-Kassetten-Inlays (Passend zur gewünschten Intercom-Ausstattung)
+### 9.2 Gateway-Kassetten-Inlays (Passend zur gewünschten Intercom-Ausstattung)
 > **Hinweis zur Architektur:** Slot 1 und Slot 2 sind **Multi-Protokoll Gateway-Transceiver**, keine Fahrer/Beifahrer-Kopfhörer! Sie verbinden das Motorrad gleichzeitig mit Sena Mesh und Cardo DMC. Fahrer und Sozius funken drahtlos mit ihren normalen Helmen.
 
 | Baugruppe | STL-Dateiname | Stück | Material | Funktion & Beschreibung |
@@ -132,7 +176,7 @@ Alle Gehäuseteile sind für das **IKEA-Prinzip** optimiert: **Kein Einschmelzen
 | **Gateway-Inlay Cardo** | [`cartridge_insert_cardo.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_cardo.stl) | *Opt. (1)* | MJF PA12 / ASA | Inlay für Cardo Packtalk Edge / Pro (DMC Gen2) mit Air-Mount |
 | **Blindkassette / Dry Box** | [`cartridge_insert_blindkassette.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_blindkassette.stl) | *Opt. (1)* | MJF PA12 / ASA | Hermetischer Schutzschlitten für ungenutzten Slot oder regendichte Dry Box |
 
-### 6.3 Fahrzeugspezifische Montage-Kits (3D-Druckteile)
+### 9.3 Fahrzeugspezifische Montage-Kits (3D-Druckteile)
 * **Kit 1: BMW R1250 / R1300 GS (Standard / Vario-Koffer):**
   * `adventure_transition_dock.stl` (2 Stk.): Kofferunabhängige Docks für die Sitzbank-Bügelfalte (Ø 28 mm Rahmenrohr).
   * `adventure_rack_tail_mount.stl` (1 Stk.): Heckbrücken-Ausleger für Pod 3 & Radar.
@@ -145,22 +189,26 @@ Alle Gehäuseteile sind für das **IKEA-Prinzip** optimiert: **Kein Einschmelzen
   * `saddlebag_lid_dock.stl` (2 Stk.): Kofferdeckel-Montagedocks für Pod 1 & 2.
   * `pod3_touring_fender_console.stl` (1 Stk.): Organische Heckkotflügel-Konsole für Pod 3 (Road King Special).
   * `radar_license_plate_bracket.stl` (1 Stk.): Entkoppelter Kennzeichen-Radarhalter.
+  * `magsafe_cockpit_mount_harley.stl` (1 Stk.), `magsafe_frame_dock.stl` (1 Stk.) & `magsafe_clamp_wings.stl` (1 Stk.): MagSafe Rahmendock-Komponenten.
 * **Kit 4: Harley-Davidson CVO ST & Performance Bagger (Road Glide ST):**
   * `saddlebag_lid_dock.stl` (2 Stk.): Kofferdeckel-Montagedocks für Pod 1 & 2.
-  * `cvo_st_undercowl_skeleton_dock.stl` (1 Stk.): Aufrechtes Federsitz-Dock für Pod 3 unter der Forged-Carbon-Hutze.
+  * `cvo_st_undercowl_skeleton_dock.stl` (1 Stk.): Aufrechtes Federsitz-Dock für Pod 3 unter der Forged-Carbon-Hutze (vollständiger Freigang zu Showa-Ausgleichsbehältern).
   * `cvo_st_telemetry_fin.stl` (1 Stk.): Aerodynamische Haifischflosse / Telemetrie-Finne auf der Hecklasche.
-  * `radar_center_underfender_mount.stl` (1 Stk.): Zentrische Unter-Kotflügel-Platte für Radar (freie Showa-Reservoirs).
-* **Kit 5: Universal (Andere Motorräder):**
+  * `radar_license_plate_bracket.stl` (1 Stk.): Entkoppelter Kennzeichen-Radarhalter *(CVO ST verfügt serienmäßig über das mittige Kennzeichen wie alle Touring-Modelle!)*.
+* **Kit 5: Custom-Bikes, Bobber & Universal:**
+  * `radar_center_underfender_mount.stl` (1 Stk.): Zentrische Unter-Kotflügel-Platte für Heck-Radar *(speziell für Custom-Bikes & Umbauten mit seitlichem Kennzeichenhalter!)*.
   * Standard 120°-V-Nut am Pod-Basisgehäuse für Rahmenrohre (Ø 22–32 mm) mit EPDM-Spannringen oder M4 Silentblöcken.
 
-### 6.4 Zubehör (Optional)
+### 9.4 Zubehör (Optional)
 | Baugruppe | STL-Dateiname | Stück | Material | Funktion & Beschreibung |
 | :--- | :--- | :---: | :--- | :--- |
 | **Smart-Keyfob Unterschale**| [`smart_keyfob_lower_shell.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/05_accessories/smart_keyfob_lower_shell.stl) | **1** | MJF PA12 / ASA | Wanne mit LRA-Dämpfungsbett und Magnetaufnahme für PCBA 07 |
 | **Smart-Keyfob Oberschale** | [`smart_keyfob_upper_shell.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/05_accessories/smart_keyfob_upper_shell.stl) | **1** | MJF PA12 / ASA | Deckel mit 3 Tastenfeldern & Lichtleiter |
 | **Smart-Keyfob Bumper** | [`smart_keyfob_tpu_rim.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/05_accessories/smart_keyfob_tpu_rim.stl) | **1** | TPU 85A / 95A | Elastischer Stoßschutz-Umlaufring |
+| **MagSafe Rahmendock** | [`magsafe_frame_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/magsafe_frame_dock.stl) | **1** | MJF PA12 / ASA | Cockpit-Dockkörper mit M2.5 & M3 Mutternaschen für PCBA 06 |
+| **MagSafe Klemmflügel** | [`magsafe_clamp_wings.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/magsafe_clamp_wings.stl) | **1** | MJF PA12 / ASA | Klemmflügel zur Rohrbefestigung am Lenker |
 
-### 6.5 OrcaSlicer 3MF Projekt-Platten (Standard vs. Kompakt Bauraum)
+### 9.5 OrcaSlicer 3MF Projekt-Platten (Standard vs. Kompakt Bauraum)
 Für Selbstdrucker stehen vorkonfigurierte `.3mf`-Projektdateien für **OrcaSlicer** (voll kompatibel mit Bambu Studio und PrusaSlicer) bereit. Alle Platten sind mit **6 Wandlinien** (für 100 %ige Wasserdichtigkeit ohne Infiltration), 40 % Gyroid-Infill und optimierter Nahtplatzierung in verdeckten Radien vorkonfiguriert:
 
 #### Profil A: Standard & Großes Druckbett (≥ 220×220 mm bis 300×300 mm)
@@ -188,42 +236,7 @@ Für Selbstdrucker stehen vorkonfigurierte `.3mf`-Projektdateien für **OrcaSlic
 
 ---
 
-## 7. Inbetriebnahme, WebSerial 1-Click Flasher & Smoke-Test
-
-Da alle Platinen fertig bestückt und vorgetestet geliefert werden, reduziert sich die Inbetriebnahme auf wenige geführte Schritte direkt im Browser:
-
-### Schritt 1: WebSerial 1-Click Firmware Installer (PWA)
-* Kein Terminal, kein Python, keine Treiberinstallation!
-* Zentralbox per USB-C an den PC/Mac anschließen.
-* In der OpenMotorBridge PWA im Tab *System Builder* auf **„USB-C verbinden & Flashen“** klicken.
-* Der Browser überträgt Bootloader, Partitionen, Firmware und SPIFFS-Profile automatisch auf den ESP32-S3 und RP2040.
-
-### Schritt 2: Der interaktive 4-Punkte IKEA Smoke-Test
-Vor dem endgültigen Zudrücken und Verschrauben der Gehäusedeckel führt die PWA einen automatischen Diagnose-Check durch:
-* [x] **Check 1 (Bordnetz & USV):** 12.6V Batteriespannung, 5.04V Buck-Schiene, 1000 mAh LiPo-Zelle auf 4.18V.
-* [x] **Check 2 (Kassetten & Aktuatoren):** 1-Wire DS2431 Auslesen der Kassetten-IDs (Sena / Cardo), Pogo-Pin Kontaktierung und automatischer 4-Aktuator Klicktest.
-* [x] **Check 3 (Front-Knoten & Cockpit):** I2C-Ping Knowles MEMS Mikrofon, SDP31 Staudruck-Sensor (0.02 hPa) und Lenker-PTT Taster.
-* [x] **Check 4 (Heck-Pod 3):** SX1262 LoRa 868 MHz Ping-Echo und u-blox GNSS 3D-Satellitenfix.
-* [ ] Status-Check: Beide Gateway-Slots (Pod 1 & Pod 2) werden erkannt, Heck-Pod 3 liefert GNSS-Fix.
-
----
-
-## 8. 1-Click Bestellleitfaden für JLCPCB (Alle Leiterplatten fertig bestückt)
-
-Alle Fertigungsdaten liegen im Repository als fertige ZIP- und CSV-Pakete vor:
-
-| Baugruppe / PCBA | Gerber-ZIP Datei | BOM CSV Datei | CPL (Pick & Place) CSV | Lagen | Fertigungs-Hinweis |
-| :--- | :--- | :--- | :--- | :---: | :--- |
-| **1. Zentralbox Hauptplatine** | `01_main_box_pcba_gerbers_jlcpcb.zip` | `01_main_box_pcba_bom_jlcpcb.csv` | `01_main_box_pcba_cpl_jlcpcb.csv` | **4 Lagen** | ENIG (Gold), 1.6 mm, TG150, SMT beidseitig |
-| **2. Pod-Basisplatine** | `02_pod_base_pcba_gerbers_jlcpcb.zip` | `02_pod_base_pcba_bom_jlcpcb.csv` | `02_pod_base_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG (Gold), 1.6 mm, SMT Top |
-| **3. Kassetten-Trägerplatine** | `03_pod_cartridge_pcba_gerbers_jlcpcb.zip` | `03_pod_cartridge_pcba_bom_jlcpcb.csv` | `03_pod_cartridge_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG (Gold), 1.2 mm, SMT Top |
-| **4. Heck-Pod 3 Transceiver** | `04_rear_pod3_pcba_gerbers_jlcpcb.zip` | `04_rear_pod3_pcba_bom_jlcpcb.csv` | `04_rear_pod3_pcba_cpl_jlcpcb.csv` | **4 Lagen** | ENIG (Gold), 1.6 mm, TG150, SMT Top |
-| **5. Universal Front-Knoten** | `05_front_node_pcba_gerbers_jlcpcb.zip` | `05_front_node_pcba_bom_jlcpcb.csv` | `05_front_node_pcba_cpl_jlcpcb.csv` | **4 Lagen** | ENIG (Gold), 1.6 mm, TG150, SMT beidseitig |
-| **7. Smart-Keyfob (Zubehör)** | `07_smart_keyfob_pcba_gerbers_jlcpcb.zip` | `07_smart_keyfob_pcba_bom_jlcpcb.csv` | `07_smart_keyfob_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG (Gold), 1.0 mm, SMT beidseitig |
-
----
-
-## 9. Vorkonfektionierte COTS-Kabel (Kein Crimpen, kein Löten!)
+## 10. Vorkonfektionierte COTS-Kabel & Pufferakku (Kein Crimpen, kein Löten!)
 
 Für den Aufbau müssen **keine Kabelbäume selbst gecrimpt oder gelötet werden**. Das System verwendet zu 100 % handelsübliche, industriell gefertigte Standard-Kabel (COTS):
 
@@ -237,18 +250,20 @@ Für den Aufbau müssen **keine Kabelbäume selbst gecrimpt oder gelötet werden
   ├─► M8 6-Pin PUR-Kabel (1.0 m / 1.5 m): Fertiges Standard Sensor-/Aktorkabel ──► Pod 2 (Gateway 2)
   ├─► M8 6-Pin PUR-Kabel (1.5 m / 2.0 m): Fertiges Standard Sensor-/Aktorkabel ──► Pod 3 (Heck-Transceiver)
   ├─► AMP Superseal 12V-Kabel (1.0 m): Vorkonfektioniertes Batteriekabel mit Sicherung ──► 12V Bordnetz
-  └─► M8 4-Pin Buchse (Peitsche 5, 250 mm): Heck-Radar (Garmin Varia) / Heck-OBD2/CAN (Front-Node verbindet sich drahtlos via ESP-NOW!)
+  └─► M8 4-Pin Buchse (Peitsche 5, 250 mm): Heck-Radar (Garmin Varia: 12V + UART) / Heck-OBD2
+      (Hinweis: Der Front-Node benötigt KEIN Kabel nach hinten – er verbindet sich drahtlos via ESP-NOW!)
 ```
 
 ---
 
-## 10. Zukaufteile & Normteile-Einkaufsliste (1 Komplettset)
+## 11. Zukaufteile & Normteile-Einkaufsliste (1 Komplettset)
 
 | Bauteil | Spezifikation / Typ | Bezugsquelle | Menge | Montageort & Funktion |
 | :--- | :--- | :--- | :---: | :--- |
 | **M3 Edelstahlschrauben** | M3 x 40 mm Zylinderkopf V4A (DIN 912) | Normteil / Amazon | 4 Stk. | Zentralbox-Gehäuse (greift in Nut-Pockets) |
 | **M3 Edelstahlschrauben (Front)** | M3 x 20 mm Zylinderkopf V4A (DIN 912) | Normteil / Amazon | 4 Stk. | Front-Node Gehäuse (greift in Nut-Pockets) |
 | **M3 Edelstahlmuttern** | DIN 934 / DIN 985 M3 V4A Muttern | Normteil / Amazon | 8 Stk. | Unverlierbar in Nut-Pockets eingelegt (kein Lötkolben nötig!) |
+| **M4 Edelstahlmuttern (AMPS)**| DIN 934 M4 V4A Muttern | Normteil / Amazon | 4 Stk. | Unverlierbar in Nut-Pockets der Front-Node Wanne |
 | **M2.5 Platinenschrauben** | M2.5 x 6 mm Zylinderkopf V4A (DIN 912) | Normteil | 8 Stk. | 4x Zentralbox-Platine, 4x Front-Node-Platine |
 | **M2 Schottwandschrauben** | M2 x 8 mm Senkkopf V4A (DIN 7991) | Normteil | 6 Stk. | Fixierung der 3 Pod-Schottwände (2x pro Pod) |
 | **M2 Kassetten-Halteplattenschrauben**| M2 x 6 mm Senkkopf V4A (DIN 7991) | Normteil | 8 Stk. | Fixierung der Aktuator-Niederhalteplatten (4x pro Gateway) |
@@ -260,7 +275,7 @@ Für den Aufbau müssen **keine Kabelbäume selbst gecrimpt oder gelötet werden
 | **Silentblöcke / Gummipuffer**| Typ A M4 Außen/Innen ($\varnothing 15 \times 10\,\text{mm}$) | Ganter / Normteil | 4 Stk. | Schwingungsentkoppelte Zentralbox-Montage |
 | **Silikon-Dichtschnur** | Silikon-Rundschnur $\varnothing 1{,}5\,\text{mm}$ Shore 40A (1.0 m) | O-Ring-Shop | 1 Stk. | $40\,\text{cm}$ Zentralbox-Nut, $30\,\text{cm}$ Front-Node Nut |
 | **Kassetten-Flanschdichtungen**| Silikon-Formdichtung Shore 40A ($54 \times 18\,\text{mm}$) | Sonderfertigung | 3 Stk. | Stirnseitige Mundloch-Abdichtung an Pod 1, 2 und 3 |
-| **Pufferakku (LiPo USV)** | 1S LiPo (3.7V 1000mAh) mit Micro-Fit Stecker | EEMB / Enerpower | 1 Stk. | USV-Pufferung in der Zentralbox |
+| **Pufferakku (LiPo USV)** | 1S LiPo Flat-Pack 2.200 mAh ($68 \times 39 \times 5{,}0\,\text{mm}$) mit Molex Micro-Fit | EEMB / Enerpower | 1 Stk. | USV-Pufferung in der Zentralbox (Typ 504068 / 503870) |
 | **KFZ-Sicherungshalter** | Wasserdichter Flachsicherungshalter + 2A Sicherung | Hella / MTA | 1 Stk. | Dauerplus-Absicherung an Batteriepol |
 | **M8 6-Pin Fertigkabel (PUR)**| M8 6-Pin A-Coded Stecker/Buchse (1.0m / 1.5m) | Binder / Phoenix | 3 Stk. | Plug-and-Play Verbindung zu Pod 1, 2 und 3 |
 | **M8 4-Pin Fertigkabel (PUR)**| M8 4-Pin A-Coded Stecker/Buchse (0.5–1.5m) | Binder / Phoenix | Opt. (1)| Peitsche 5: Heck-Radar (Garmin Varia: 12V + UART) / Heck-OBD2 (nur bei Radar-Nutzung) |
@@ -271,7 +286,7 @@ Für den Aufbau müssen **keine Kabelbäume selbst gecrimpt oder gelötet werden
 
 ---
 
-## 11. Minimalistische Werkzeugliste (Das echte IKEA-Prinzip)
+## 12. Minimalistische Werkzeugliste (Das echte IKEA-Prinzip)
 
 Da **weder Löten, noch Crimpen, noch thermisches Einschmelzen von Gewinden** erforderlich ist, schrumpft die Werkzeugliste auf ein absolutes Minimum zusammen, das jeder Motorradfahrer in seinem Standard-Bordwerkzeug besitzt:
 
@@ -286,7 +301,40 @@ Da **weder Löten, noch Crimpen, noch thermisches Einschmelzen von Gewinden** er
 > [!TIP]
 > **Es wird keine Lötstation, keine Heißluftpistole, keine Spezial-Crimpzange und kein Einschmelzwerkzeug benötigt.** Alle mechanischen und elektronischen Baugruppen werden ausschließlich gesteckt und geschraubt!
 
+---
 
+## 13. Kostenkalkulation, Bestelltaktik & Skaleneffekt (Solo vs. 2–3 Bikes)
 
+> [!IMPORTANT]
+> **Wichtiger Preishinweis zu OEM-Adaptern & Fremdgeräten:**
+> Die hier kalkulierten Hardware-Kosten von **ca. 135 € bis 260 €** beziehen sich **ausschließlich auf das OpenMotorBridge-Gesamtsystem** (bestückte PCBAs, 3D-Druckteile, COTS-Kabelbäume, 2.200 mAh Pufferakku, Dichtungen, Normteile).
+> Eventuell in die Gateway-Slots eingesetzte kommerzielle Fremd-Intercoms (wie z. B. **Sena SPIDER X Slim**, **Cardo Packtalk Edge**) oder Radargeräte (**Garmin Varia RTL515 / eRTL615**) sind **Zukaufteile des Benutzers** und nicht in den genannten Selbstbau-Kosten enthalten!
 
+### 13.1 Warum schwanken die Kosten zwischen ~135 € und ~260 €?
+Bei Fertigungsdienstleistern wie JLCPCB oder PCBWay entstehen die Stückkosten primär durch **fixe Rüst- und Einrichtungskosten** pro Platinen-Design:
+1. **Mindestbestellmenge (MOQ):** JLCPCB fertigt bei Leiterplatten immer mindestens **5 Stück** pro Design.
+2. **SMT-Rüstpauschale:** Für jedes PCBA-Design fällt eine feste Einrichtungsgebühr für Schablone (Stencil), Feeder-Rüstung und Pick-and-Place-Programmierung an (ca. 15–25 $ pro Platinentyp, in Summe über alle Boards ca. 110–130 $).
+3. **SMT-Bestückungsanzahl:** Standardmäßig lässt man bei JLCPCB entweder 2 Stück (Minimum) oder direkt alle 5 Stück bestücken.
 
+### 13.2 Szenario A: Der Solo-Builder (1 Gesamtsystem für 1 Motorrad)
+Bestellt ein einzelner Anwender alle Platinen für sich allein:
+* JLCPCB liefert 5 Platinen pro Design (davon 2 voll bestückt und 3 unbestückte Ersatzplatinen).
+* Die gesamten SMT-Rüstkosten (ca. 110 €) lasten voll auf diesem einen fertigen System.
+* **Kostenaufstellung Solo-Builder:**
+  * JLCPCB PCBAs (PCBA 01 bis 05 bestückt inkl. Versand & Zoll): ca. 140–165 €
+  * 3D-Druck (MJF PA12 Dienstleister oder eigenes ASA-Filament): ca. 35–50 €
+  * COTS-Kabel, 2.200 mAh LiPo, V4A Normteile & Dichtungen: ca. 35–45 €
+  * **Gesamtkosten Solo-System: ca. 210 € bis 260 €**
+
+### 13.3 Szenario B: Community- / Gruppenbestellung (2 bis 3 Motorräder)
+Bestellen 2 bis 3 Motorradfahrer gemeinsam (oder ein Fahrer stattet Erst- und Zweitbike aus):
+* Bei JLCPCB werden direkt **alle 5 Platinen voll bestückt** bestellt.
+* Die fixen Rüstkosten (110 €) verteilen sich nun auf 5 voll funktionsfähige Platinensätze.
+* Die Bauteilpreise sinken durch höhere Abnahmemengen (Staffelpreise bei LCSC).
+* **Kostenaufstellung pro Motorrad (bei 3 Bikes):**
+  * JLCPCB PCBAs (Anteil pro Bike): ca. 75–85 €
+  * 3D-Druck (pro Bike): ca. 30–40 €
+  * COTS-Kabel, 2.200 mAh LiPo, Normteile (Mengenrabatt): ca. 30 €
+  * **Gesamtkosten pro Motorrad: nur noch ca. 135 € bis 155 €!**
+
+*(Alle Preisangaben Stand 2026, Richtwerte inkl. MwSt., zzgl. optionaler OEM-Intercom-Module).*

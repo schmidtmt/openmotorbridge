@@ -24,8 +24,9 @@ module front_node_pcb_standoffs(h = FRONT_NODE_STANDOFF_H) {
         translate([pos[0], pos[1], 0]) {
             difference() {
                 cylinder(r=FRONT_NODE_STANDOFF_R, h=h, center=false);
+                // 100% Soldering-Iron Free: Direct thread forming pilot hole
                 translate([0, 0, -0.1])
-                    cylinder(r=FRONT_NODE_INSERT_R, h=h + 0.2, center=false);
+                    cylinder(r=FRONT_NODE_CORE_HOLE_R, h=h + 0.2, center=false);
             }
         }
     }

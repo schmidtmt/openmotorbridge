@@ -53,14 +53,6 @@ module dummy_main_pcb() {
     color("dimgray")
         translate([42.0, 22.0, 1.6])
             cube(size=[7.0, 7.0, 3.0], center=false);
-
-    // 8. 4x Copper Thermal Stud Contact Pads (under the PCB floor)
-    color("darkorange") {
-        translate([35.0, 25.0, -2.5]) cylinder(r=COPPER_STUD_R, h=2.5);
-        translate([45.0, 25.0, -2.5]) cylinder(r=COPPER_STUD_R, h=2.5);
-        translate([30.0, 48.0, -2.5]) cylinder(r=COPPER_STUD_R, h=2.5);
-        translate([70.0, 40.0, -2.5]) cylinder(r=COPPER_STUD_R, h=2.5);
-    }
 }
 
 // Preview standalone

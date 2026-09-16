@@ -60,23 +60,22 @@ LATCH_ARM_THICK       = 2.6;   // Rocker beam thickness in Y (mm)
 LATCH_MAGNET_PIN_DIA  = 6.2;   // Bore for Ø 6.0 mm steel dowel pin (mm)
 LATCH_SPRING_DIA      = 3.8;   // Bore for Ø 3.5 mm return compression spring (mm)
 
-// --- 6. Thermal Copper Studs (Kühlbolzen) ---
-COPPER_STUD_DIA       = 8.0;   // Diameter of thermal copper studs (mm)
-COPPER_STUD_R         = COPPER_STUD_DIA / 2.0; // Radius = 4.0 mm
+// --- 6. Standard Captive Hex Nut Pockets (DIN 934 / DIN 985 with +0.2 mm MJF/FDM clearance) ---
+NUT_M2_SW             = 4.2;   // M2 across flats (nominal 4.0 mm)
+NUT_M2_H              = 1.8;   // M2 thickness (nominal 1.6 mm)
+NUT_M2_5_SW           = 5.2;   // M2.5 across flats (nominal 5.0 mm)
+NUT_M2_5_H            = 2.2;   // M2.5 thickness (nominal 2.0 mm)
+NUT_M3_SW             = 5.7;   // M3 across flats (nominal 5.5 mm)
+NUT_M3_H              = 2.6;   // M3 thickness (nominal 2.4 mm)
+NUT_M4_SW             = 7.2;   // M4 across flats (nominal 7.0 mm)
+NUT_M4_H              = 3.4;   // M4 thickness (nominal 3.2 mm)
+NUT_M5_SW             = 8.2;   // M5 across flats (nominal 8.0 mm)
+NUT_M5_H              = 4.2;   // M5 thickness (nominal 4.0 mm)
 
-// Main Box Thermal Stud Positions (4x in lower case floor)
-MAIN_BOX_CU_POS = [
-    [35.0, 25.0], // Position 1 (LM5164 DCDC Buck Regulator)
-    [45.0, 25.0], // Position 2 (BQ25798 LiPo Charger)
-    [30.0, 48.0], // Position 3 (ESP32-S3 Dual-Core SoC)
-    [70.0, 40.0]  // Position 4 (Automotive TVS & LC Filter Zone)
-];
-
-// Pod & Cartridge Thermal Stud Positions (2x in floor)
-POD_CU_POS = [
-    [42.0, 30.0], // Forward thermal zone
-    [72.0, 30.0]  // Rearward thermal zone
-];
+// Direct Plastic Thread-Forming / Self-Tapping Pilot Holes in PA12 (100% Soldering-Iron Free)
+M2_PILOT_HOLE_R       = 0.85;  // Core hole for M2 screws in PA12 (Ø 1.7 mm)
+M2_5_PILOT_HOLE_R     = 1.05;  // Core hole for M2.5 screws in PA12 (Ø 2.1 mm)
+M3_PILOT_HOLE_R       = 1.25;  // Core hole for M3 screws in PA12 (Ø 2.5 mm)
 
 // --- 7. Screw & Clearance Dimensions ---
 M2_SCREW_HOLE_R       = 1.1;   // M2 clearance hole (r = 1.1 mm -> Ø 2.2 mm)
@@ -103,15 +102,16 @@ FRONT_NODE_OUTER_L    = FRONT_NODE_CHAMBER_L + 2 * FRONT_NODE_WALL + 7.0; // 98.
 FRONT_NODE_OUTER_W    = FRONT_NODE_CHAMBER_W + 2 * FRONT_NODE_WALL + 7.0; // 68.0 mm
 FRONT_NODE_OUTER_H    = FRONT_NODE_TUB_H + FRONT_NODE_LID_H;              // 25.0 mm
 
-// PCB Standoff Heights & Radii
+// PCB Standoff Heights & Radii (100% Soldering-Iron Free)
 FRONT_NODE_STANDOFF_H = 3.0;   // Height of PCB standoffs from floor (mm)
 FRONT_NODE_STANDOFF_R = 3.0;   // Outer radius of M2.5 screw bosses (mm)
-FRONT_NODE_INSERT_R   = 1.7;   // Core hole for Ruthex M2.5 heat-set inserts (Ø 3.4 mm)
+FRONT_NODE_CORE_HOLE_R= M2_5_PILOT_HOLE_R; // Core hole for direct M2.5 screw engagement (Ø 2.1 mm)
 
-// AMPS 4-Hole Mounting Pattern (38 x 30 mm, M4 threaded inserts)
+// AMPS 4-Hole Mounting Pattern (38 x 30 mm with DIN 934 M4 Captive Nut Pockets)
 AMPS_SPACING_X        = 38.0;  // AMPS hole distance in X (mm)
 AMPS_SPACING_Y        = 30.0;  // AMPS hole distance in Y (mm)
-AMPS_INSERT_R         = 2.3;   // Core hole for Ruthex M4 heat-set inserts (Ø 4.6 mm)
+AMPS_NUT_SW           = NUT_M4_SW; // Captive M4 hex nut pocket across flats (7.2 mm)
+AMPS_NUT_H            = NUT_M4_H;  // Captive M4 hex nut pocket depth (3.4 mm)
 
 // Acoustic Vent for Knowles SPH0645 MEMS
 FRONT_NODE_MIC_HOLE_R = 1.25;  // Sound canal radius (Ø 2.5 mm)

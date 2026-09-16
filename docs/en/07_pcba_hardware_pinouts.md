@@ -44,19 +44,19 @@ All 4-layer boards (PCBA 01, PCBA 04, and PCBA 05) utilize an identical controll
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│ Layer 1 (F.Cu - Top): High-Speed Signals, USB Diff, SMDs    │  (35 µm Cu)
+│ Layer 1 (F.Cu - Top): High-Speed Signals, USB Diff, SMDs    │  (35 µm / 1 oz Cu)
 ├─────────────────────────────────────────────────────────────┤
 │ ── Prepreg 7628 (Dielectric, Er = 4.4, Thickness 0.2 mm) ── │
 ├─────────────────────────────────────────────────────────────┤
-│ Layer 2 (In1.Cu): Solid Ground Plane (GND_PWR / AGND)       │  (35 µm Cu)
+│ Layer 2 (In1.Cu): Solid Ground Plane (GND_PWR / AGND)       │  (17.5 µm Standard / opt. 35 µm)
 ├─────────────────────────────────────────────────────────────┤
 │ ── FR4 Core (Dielectric Core, Thickness 1.0 mm) ─────────── │
 ├─────────────────────────────────────────────────────────────┤
-│ Layer 3 (In2.Cu): Power Planes (VCC_3V3, VCC_5V Polygons)   │  (35 µm Cu)
+│ Layer 3 (In2.Cu): Power Planes (VCC_3V3, VCC_5V Polygons)   │  (17.5 µm Standard / opt. 35 µm)
 ├─────────────────────────────────────────────────────────────┤
 │ ── Prepreg 7628 (Dielectric, Er = 4.4, Thickness 0.2 mm) ── │
 ├─────────────────────────────────────────────────────────────┤
-│ Layer 4 (B.Cu - Bottom): Secondary Routing & Sensors        │  (35 µm Cu)
+│ Layer 4 (B.Cu - Bottom): Secondary Routing & Sensors        │  (35 µm / 1 oz Cu)
 └─────────────────────────────────────────────────────────────┘
 ```
 

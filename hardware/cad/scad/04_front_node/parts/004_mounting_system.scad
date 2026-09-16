@@ -15,8 +15,8 @@ include <../../00_common/screw_bosses.scad>;
 CENTER_X = FRONT_NODE_OUTER_L / 2.0; // 42.0 mm
 CENTER_Y = FRONT_NODE_OUTER_W / 2.0; // 30.0 mm
 
-// 1. AMPS 4-Hole Threaded Insert Pockets (Subtractive in floor)
-module front_node_amps_cutouts(h_depth = 5.0) {
+// 1. AMPS 4-Hole Captive Hex Nut Pockets (DIN 934 M4, 100% Soldering-Iron Free)
+module front_node_amps_cutouts(h_depth = 3.6) {
     amps_coords = [
         [CENTER_X - AMPS_SPACING_X / 2.0, CENTER_Y - AMPS_SPACING_Y / 2.0], // [23.0, 15.0]
         [CENTER_X + AMPS_SPACING_X / 2.0, CENTER_Y - AMPS_SPACING_Y / 2.0], // [61.0, 15.0]
@@ -26,7 +26,7 @@ module front_node_amps_cutouts(h_depth = 5.0) {
     
     for (pt = amps_coords) {
         translate([pt[0], pt[1], -0.1])
-            cylinder(r=AMPS_INSERT_R, h=h_depth + 0.1, center=false);
+            hex_nut_pocket(sw=AMPS_NUT_SW, h=AMPS_NUT_H, screw_r=M4_SCREW_HOLE_R, through_h=8.0);
     }
 }
 

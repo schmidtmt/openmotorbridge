@@ -41,6 +41,7 @@ const i18n = {
         builder_bedsize_title: 'OrcaSlicer 3MF Bauraum-Größe auswählen:',
         btn_builder_print: 'Anleitung Drucken / PDF',
         btn_builder_export_bom: 'BOM als CSV',
+        builder_cost_disclaimer: 'zzgl. OEM-Intercom-Module (Sena/Cardo)',
         smoke_test_title: 'Interaktiver IKEA Smoke-Test & Hardware-Diagnose',
         smoke_test_sub: 'Führe den geführten 4-Punkte-Check vor dem finalen Verschrauben durch: Spannungen, 1-Wire Kassetten-Erkennung, Aktuator-Klicksequenzen, Front-Node und LoRa/GNSS.',
         btn_run_smoke_test: 'Smoke-Test starten',
@@ -85,7 +86,7 @@ const i18n = {
         vign_inactive: 'Status: INAKTIV',
         vign_warning: 'WARNUNG: Unterspannung!',
         vbat_label: 'USV-LiPo (Unter Sitzbank)',
-        vbat_sub: '1000 mAh Puffer',
+        vbat_sub: '2.200 mAh Puffer',
         bat_chem_label: 'Starterbatterie-Typ & Schutzschwelle',
         handlebar_label: 'Lenkertaster & PTT (Front-Knoten PCBA 05)',
         handlebar_sub: 'Direktverkabelung über GPIO 0 Optokoppler • Wartungsfrei',
@@ -254,6 +255,7 @@ const i18n = {
         builder_bedsize_title: 'Select OrcaSlicer 3MF Print Bed Size:',
         btn_builder_print: 'Print Guide / PDF',
         btn_builder_export_bom: 'BOM as CSV',
+        builder_cost_disclaimer: 'excl. OEM intercom units (Sena/Cardo)',
         smoke_test_title: 'Interactive IKEA Smoke-Test & Hardware Diagnostics',
         smoke_test_sub: 'Run the guided 4-point verification before final assembly: Voltages, 1-Wire cartridge identification, actuator click sequences, Front-Node, and LoRa/GNSS.',
         btn_run_smoke_test: 'Run Smoke Test',
@@ -298,7 +300,7 @@ const i18n = {
         vign_inactive: 'Status: INACTIVE',
         vign_warning: 'WARNING: Undervoltage!',
         vbat_label: 'UPS LiPo (Under Seat)',
-        vbat_sub: '1000 mAh Buffer',
+        vbat_sub: '2,200 mAh Buffer',
         bat_chem_label: 'Starter Battery Chemistry & Threshold',
         handlebar_label: 'Handlebar Switch & PTT (Front-Node PCBA 05)',
         handlebar_sub: 'Direct wiring via GPIO 0 optocoupler • Maintenance-free',
@@ -7245,6 +7247,11 @@ function renderSystemBuilder() {
         costEl.textContent = `~ ${baseCostMin} – ${baseCostMax} €`;
     }
 
+    const costDisclaimerEl = document.getElementById('builder-cost-disclaimer');
+    if (costDisclaimerEl) {
+        costDisclaimerEl.textContent = isDe ? 'zzgl. OEM-Intercom-Module (Sena/Cardo)' : 'excl. OEM intercom units (Sena/Cardo)';
+    }
+
     // Toggle bed size container visibility
     const bedSizeContainer = document.getElementById('builder-bedsize-container');
     if (bedSizeContainer) {
@@ -7303,13 +7310,20 @@ function renderSystemBuilder() {
         parts3D.push({ group: 'Bike-Kit (HD)', file: 'saddlebag_lid_dock.stl', qty: 2, desc: isDe ? 'Kofferdeckel-Montagedocks (Pod 1 & 2)' : 'Saddlebag lid docks (Pods 1 & 2)' });
         parts3D.push({ group: 'Bike-Kit (HD)', file: 'pod3_touring_fender_console.stl', qty: 1, desc: isDe ? 'Organische Heckkotflügel-Konsole' : 'Organic rear fender console' });
         parts3D.push({ group: 'Bike-Kit (HD)', file: 'radar_license_plate_bracket.stl', qty: 1, desc: isDe ? 'Entkoppelter Kennzeichen-Radarhalter' : 'Decoupled license plate radar mount' });
-    } else if (builderState.bike === 'hd-cvo-st') {
+    } else if (builderState.bike === 'hd-cVO-st' || builderState.bike === 'hd-cvo-st') {
         parts3D.push({ group: 'Bike-Kit (CVO)', file: 'saddlebag_lid_dock.stl', qty: 2, desc: isDe ? 'Kofferdeckel-Montagedocks (Pod 1 & 2)' : 'Saddlebag lid docks (Pods 1 & 2)' });
         parts3D.push({ group: 'Bike-Kit (CVO)', file: 'cvo_st_undercowl_skeleton_dock.stl', qty: 1, desc: isDe ? 'Aufrechtes Federsitz-Dock unter Solo-Hutze' : 'Upright skeleton dock under solo seat cowl' });
         parts3D.push({ group: 'Bike-Kit (CVO)', file: 'cvo_st_telemetry_fin.stl', qty: 1, desc: isDe ? 'Aerodynamische Haifischflosse am Heck' : 'Aerodynamic tail fin on rear tab' });
-        parts3D.push({ group: 'Bike-Kit (CVO)', file: 'radar_center_underfender_mount.stl', qty: 1, desc: isDe ? 'Zentrische Underfender-Radarplatte' : 'Centered under-fender radar mount' });
+        parts3D.push({ group: 'Bike-Kit (CVO)', file: 'radar_license_plate_bracket.stl', qty: 1, desc: isDe ? 'Entkoppelter Kennzeichen-Radarhalter (OEM-Mitte)' : 'Decoupled license plate radar mount (OEM center)' });
     } else {
         parts3D.push({ group: 'Bike-Kit (Universal)', file: 'Integriertes V-Bett', qty: 2, desc: isDe ? '120° V-Nut Rohrsattel an Pod-Gehäusen' : '120° V-cradle on Pod enclosures' });
+        parts3D.push({ group: 'Bike-Kit (Universal)', file: 'radar_center_underfender_mount.stl', qty: 1, desc: isDe ? 'Zentrische Underfender-Radarplatte (für seitl. Kennzeichen)' : 'Centered under-fender radar mount (for side-mount plates)' });
+    }
+
+    if (builderState.bike === 'hd-touring' || builderState.bike === 'hd-cvo-st') {
+        parts3D.push({ group: 'Cockpit-Dock', file: 'magsafe_cockpit_mount_harley.stl', qty: 1, desc: isDe ? 'MagSafe Cockpit-Montageflansch Harley' : 'MagSafe cockpit mount flange Harley' });
+        parts3D.push({ group: 'Cockpit-Dock', file: 'magsafe_frame_dock.stl', qty: 1, desc: isDe ? 'MagSafe Rahmendock-Körper' : 'MagSafe frame dock chassis' });
+        parts3D.push({ group: 'Cockpit-Dock', file: 'magsafe_clamp_wings.stl', qty: 1, desc: isDe ? 'MagSafe Lenker-Klemmflügel' : 'MagSafe handlebar clamp wings' });
     }
 
     if (builderState.addons.keyfob) {
@@ -7337,6 +7351,10 @@ function renderSystemBuilder() {
         pcbas.push({ name: 'PCBA 05', id: 'kicad_front_node', qty: 1, desc: isDe ? 'Universal Front-Knoten (ESP32-S3, USB-Hub, PD)' : 'Universal Front Node (ESP32-S3, USB Hub, PD)' });
     }
 
+    if (builderState.bike === 'hd-touring' || builderState.bike === 'hd-cvo-st') {
+        pcbas.push({ name: 'PCBA 06', id: 'kicad_magsafe_dock', qty: 1, desc: isDe ? 'MagSafe Cockpit-Dock Adapter (500mA Sicherung, TVS)' : 'MagSafe cockpit dock adapter (500mA fuse, TVS)' });
+    }
+
     if (builderState.addons.keyfob) {
         pcbas.push({ name: 'PCBA 07', id: 'kicad_smart_keyfob', qty: 1, desc: isDe ? 'Smart-Keyfob (BLE Tracker, LRA Haptik)' : 'Smart keyfob (BLE tracker, LRA haptic)' });
     }
@@ -7345,7 +7363,7 @@ function renderSystemBuilder() {
     const cots = [
         { name: 'HD26 Fertigkabelpeitsche', spec: 'Amphenol LTW COTS HD26 Breakout', qty: 1, desc: isDe ? 'Zentraler Hauptanschluss (100% wasserdicht)' : 'Central main harness plug (100% waterproof)' },
         { name: 'M8 6-Pin PUR Fertigkabel', spec: 'A-kodiert Stecker/Buchse (1.0m / 1.5m)', qty: numPods, desc: isDe ? `Plug-and-Play Verbindung zu den Pods (${numPods} Stk.)` : `Plug-and-play connection to pods (${numPods} pcs)` },
-        { name: 'Pufferakku (LiPo USV)', spec: '1S 3.7V 1000 mAh mit Micro-Fit Stecker', qty: 1, desc: isDe ? 'Notstrom-Pufferung in der Zentralbox' : 'Seamless UPS reserve inside main box' },
+        { name: 'Pufferakku (LiPo USV)', spec: '1S 3.7V 2.200 mAh Flat-Pack (Typ 504068) mit Micro-Fit', qty: 1, desc: isDe ? 'Notstrom-Pufferung in der Zentralbox' : 'Seamless UPS reserve inside main box' },
         { name: 'KFZ-Sicherungshalter', spec: 'Wasserdichter Halter + 2A Sicherung', qty: 1, desc: isDe ? 'Dauerplus-Absicherung an Batteriepol' : 'Direct battery terminal protection (KL30)' },
         { name: 'M3 Gehäuseschrauben', spec: 'DIN 912 V4A M3 x 40 mm', qty: 4, desc: isDe ? 'Zentralbox Gehäuse (greift in Nut-Pockets)' : 'Main box enclosure (threads into nut pockets)' },
         { name: 'M3 Edelstahlmuttern', spec: 'DIN 934 / 985 M3 V4A', qty: builderState.addons.frontNode ? 8 : 4, desc: isDe ? 'Unverlierbar in Nut-Pockets eingelegt (kein Lötkolben!)' : 'Captive in nut pockets (no soldering iron needed!)' }
@@ -7491,7 +7509,7 @@ function renderSystemBuilder() {
                 <span class="builder-part-tag">PCBA 01 (kicad_main_box)</span>
                 <span class="builder-part-tag">4x DIN 934 M3 Muttern</span>
                 <span class="builder-part-tag">4x M3x40 mm Schrauben</span>
-                <span class="builder-part-tag">1000 mAh LiPo</span>
+                <span class="builder-part-tag">2.200 mAh LiPo</span>
             </div>
             <div class="builder-instructions-body">
                 <ol>
@@ -7848,7 +7866,7 @@ function setupSmokeTestUi() {
         await new Promise(r => setTimeout(r, 550));
         setStepState('power', 'pass', '12.6V OK');
         logSmoke(state.lang === 'de' ? '✓ Bordnetz: 12.62 V (Idealbereich 11.5–14.8 V).' : '✓ Power Rail: 12.62 V (Nominal range 11.5–14.8 V).', 'ok');
-        logSmoke(state.lang === 'de' ? '✓ 5V Buck-Rail: 5.04 V, USV LiPo 1000 mAh: 4.18 V (98% geladen).' : '✓ 5V Buck Rail: 5.04 V, UPS LiPo 1000 mAh: 4.18 V (98% charged).', 'ok');
+        logSmoke(state.lang === 'de' ? '✓ 5V Buck-Rail: 5.04 V, USV LiPo 2.200 mAh: 4.18 V (98% geladen).' : '✓ 5V Buck Rail: 5.04 V, UPS LiPo 2,200 mAh: 4.18 V (98% charged).', 'ok');
 
         // Check 2: Pod 1 & 2 Cartridges + Actuators
         setStepState('cartridges', 'testing', state.lang === 'de' ? 'PRÜFE...' : 'TESTING...');

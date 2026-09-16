@@ -42,7 +42,7 @@ Das Basisgehäuse der Zentralbox ist als modulares, 3-teiliges IP67/IP69K-Sandwi
 │      - Wasserdichter USB-C Service-Port (Alu-Schraubkappe) │  │
 │      - Wasserdichtes RGB-Status-LED-Sichtfenster (Ø 3 mm)  │  │
 │    • Oberes Fach (auf dem Zwischenboden):                  │  │
-│      - 1S LiPo-USV-Pufferakku (52x36x6.5mm) in Akkuwanne   │  │
+│      - 1S LiPo-Pufferakku (68x39x5.0mm, 2.200 mAh)         │  │
 │      - EPDM-Gummispannband zur vibrationsfesten Fixierung  │  │
 │    • Zwischenboden (Optimierte Zirkulationsebene):         │  │
 │      - 25,0 x 4,0 mm Kabeldurchbruchsschlitz               │  │
@@ -50,7 +50,7 @@ Das Basisgehäuse der Zentralbox ist als modulares, 3-teiliges IP67/IP69K-Sandwi
 ├────────────────────────────────────────────────────────────┤  │
 │ 3. UNTERWANNE (17,0 mm Höhe - Geschlossene Monocoque-Wanne)│  │
 │    • 4-Layer Hauptplatine (85 x 55 mm) auf M2.5 Dämpfern   │  │
-│    • 2x 35 µm massive Kupfer-Innenlagen als Wärmespreader  │  │
+│    • Integrierte M3 Sechskant-Nut-Pockets (IKEA-Prinzip)   │  │
 │    • 4x M4 Silentblock-Befestigungsohren (vibrationsfest)  │  │
 │    • 100% geschlossener PA12-Boden ohne Gehäusedurchbrüche │  │
 └────────────────────────────────────────────────────────────┘  ▼
@@ -86,10 +86,10 @@ Die Gesamtabwärme der Zentralbox liegt im normalen Fahrbetrieb bei lediglich **
 │ [ LM5164 Buck ]     [ BQ24075 UPS ]     [ ESP32-S3 ]   │ ◄── Bauelemente (SMD)
 │   (100V DCDC)       (Power-Path)        (Dual-Core)    │
 ├────────────────────────────────────────────────────────┤
-│ ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ │ ◄── Layer 2: 35 µm Solid GND Plane
+│ ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ │ ◄── Layer 2: Durchgehende Solid GND Plane
 ├────────────────────────────────────────────────────────┤
-│ ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ │ ◄── Layer 3: 35 µm Solid PWR/GND Plane
-└──────────────────────────┬─────────────────────────────┘     (λ = 390 W/m·K, 93.5 cm² Fläche)
+│ ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ │ ◄── Layer 3: Split Power / GND Planes
+└──────────────────────────┬─────────────────────────────┘     (JLC04161H-7628 Standard, 93.5 cm² Fläche)
                            │
  ┌─────────────────────────▼─────────────────────────────┐
  │ 11x ZWISCHENBODEN-KONVEKTIONSSCHLITZE & INNENLUFT     │ ◄── Freie Zirkulation in 210 cm³
@@ -99,7 +99,7 @@ Die Gesamtabwärme der Zentralbox liegt im normalen Fahrbetrieb bei lediglich **
           Abgabe über PA12-Gehäuseoberfläche (300 cm²) an Fahrtwind
 ```
 
-1. **Planarer 4-Layer Kupfer-Wärmespreader ($85 \times 55\,\text{mm}$):** Die beiden massiven $35\,\mu\text{m}$ Innenlagen der FR4-Platine leiten die Wärme blitzschnell ab ($\lambda = 390\,\text{W/(m}\cdot\text{K)}$).
+1. **Planare 4-Layer PCB-Entwärmung ($85 \times 55\,\text{mm}$):** Die durchgehenden Kupfer-Innenlagen der FR4-Platine (JLC04161H-7628 Standard mit $17{,}5\,\mu\text{m}$ bzw. optional $35\,\mu\text{m}$) leiten die geringe Abwärme von $\approx 1{,}5\,\text{W}$ blitzschnell ab ($\lambda = 390\,\text{W/(m}\cdot\text{K)}$) und verteilen sie homogen über die gesamte Platinenfläche – ganz ohne mechanische Kühlkörper oder Kupferbolzen.
 2. **11x Optimierte Konvektionsschlitze im Zwischenboden:** 5 Schlitze an der Rückkante ($Y = 58\,\text{mm}$), 4 an den Flanken und 2 an der Front lassen die Luft ungehindert in die Deckelkammer aufsteigen.
 3. **Thermische Sicherheitsmargen im Extrem-Stresstest (Stau bei $45\,^\circ\text{C}$ Hitze + $13\,^\circ\text{C}$ Motorwärme = $58\,^\circ\text{C}$ unter Sitz):**
    * **LM5164-Q1:** $T_j = 93{,}8\,^\circ\text{C}$ (Zulässig bis $+150\,^\circ\text{C}$ $\rightarrow$ $+56{,}2\,^\circ\text{C}$ Reserve).
@@ -487,7 +487,7 @@ Das Gehäuse des Front-Knotens wurde speziell für die geschützte Montage in Mo
 │                   DAS 4-IN-1 UNIVERSAL-BEFESTIGUNGSSYSTEM (BODENANSICHT)               │
 ├────────────────────────────────────────────────────────────────────────────────────────┤
 │ 1. AMPS-LOCHBILD (30 x 38 mm):                                                         │
-│    • 4x M4 Messing-Gewindeeinsätze (Ruthex) im Standard-AMPS-Raster                    │
+│    • 4x formschlüssige DIN 934 M4 Nut-Pockets im AMPS-Raster (100 % lötkolbenfrei!)   │
 │    • Kompatibel mit allen RAM-Mount Kugeladaptern, Garmin-Haltern & Cockpitstreben     │
 ├────────────────────────────────────────────────────────────────────────────────────────┤
 │ 2. ROHRBÜGEL-PRISMA (120° V-Nut):                                                      │
@@ -1007,11 +1007,11 @@ Das stationäre MagSafe-Rahmendock ([`009_magsafe_frame_dock.scad`](file:///User
 
 ![MagSafe Frame Dock CAD](../images/cad/magsafe_frame_dock_cad.png)
 
-*Abbildung 8.31: 3D-CAD-Explosionsansicht des MagSafe-Rahmendocks (`009_magsafe_frame_dock.scad`). Sichtbar sind das Obergehäuse mit integrierter Ø 26 mm Rahmensattelwiege und M3-Gewindeeinsätzen, die mittige PCBA 06 Schutzplatine, das Untergehäuse mit Halbschalen-Cradles für M8 und MagSafe, der obere Halbschellen-Rohrbügel (`009_magsafe_frame_clamp.stl`) sowie die zentrale M2.5 Zylinderkopf-Klemmschraube.*
+*Abbildung 8.31: 3D-CAD-Explosionsansicht des MagSafe-Rahmendocks (`009_magsafe_frame_dock.scad`). Sichtbar sind das Obergehäuse mit integrierter Ø 26 mm Rahmensattelwiege und DIN 934 M3 Mutternaschen, die mittige PCBA 06 Schutzplatine, das Untergehäuse mit Halbschalen-Cradles für M8 und MagSafe, der obere Halbschellen-Rohrbügel (`009_magsafe_frame_clamp.stl`) sowie die zentrale M2.5 Zylinderkopf-Klemmschraube.*
 
 1. **Horizontale Clamshell-Teilung & Zugfreie Drop-In Montage:**
    * **Horizontale Teilungsebene ($Z = 8{,}5\,\text{mm}$):** Das Gehäuse ist entlang der Stecker- und Platinen-Mittelebene in zwei formschlüssige Halbschalen getrennt:
-     - **Obergehäuse (`009_magsafe_frame_dock.stl`):** Beinhaltet die obere Halbschale für den M8-Kabelkonus und das MagSafe-Kupplungsnest, die $\varnothing 26\,\text{mm}$ Rohrwiege mit M3-Klemmflügeln sowie den oberen massiven Schraubdom mit Ruthex M2.5 Messing-Gewindeeinsatz ($\varnothing 3{,}6 \times 4{,}5\,\text{mm}$).
+     - **Obergehäuse (`009_magsafe_frame_dock.stl`):** Beinhaltet die obere Halbschale für den M8-Kabelkonus und das MagSafe-Kupplungsnest, die $\varnothing 26\,\text{mm}$ Rohrwiege mit M3-Klemmflügeln (mit DIN 934 M3 Sechskant-Nut-Pockets) sowie den oberen massiven Schraubdom mit integrierter DIN 934 M2.5 Sechskant-Nut-Pocket (100 % lötkolbenfrei).
      - **Untergehäuse (`009_magsafe_frame_lid.stl`):** Beinhaltet die untere Halbschale für M8 und MagSafe, die umlaufende PCB-Auflagekante ($Z = 7{,}7\,\text{mm}$) sowie den unteren Schraubdom mit M2.5 Durchgangsbohrung ($\varnothing 2{,}8\,\text{mm}$) und DIN 912 Innensechskant-Senkung ($\varnothing 5{,}2 \times 2{,}8\,\text{mm}$).
    * **Stressfreie Montage:** Die vorkonfektionierte und verlötete Baugruppe (M8-Kabel + PCBA 06 + MagSafe-Kupplung) wird von oben spannungsfrei in die untere Halbschale eingelegt. Kein axiales Hineinschieben, kein Biegedruck auf Adern oder Lötpads!
 2. **Schlanke Monocoque-Bauform OHNE seitliche Schraublaschen ($B = 16{,}0\,\text{mm}$):**
@@ -1158,7 +1158,7 @@ Die CAD-Dateistruktur von OpenMotorBridge folgt einer strengen hierarchischen CS
 | **Adventure Pods 1/2**| GS Transition Dock (Sitzbank-Bügelfalten-Brücke) | `02_pod_base/adventure_transition_dock.stl` | `02_pod_base/adventure_transition_dock.scad` |
 | **Adventure Pods 1/2**| GSA Rohrträger-Klemmschelle Basis (Ø 18 mm Rohr) | `02_pod_base/adventure_pannier_rack_clamp_base.stl` | `02_pod_base/adventure_pannier_rack_clamp.scad` |
 | **Adventure Pods 1/2**| GSA Rohrträger-Klemmschelle Kappe (Ø 18 mm Rohr) | `02_pod_base/adventure_pannier_rack_clamp_cap.stl` | `02_pod_base/adventure_pannier_rack_clamp.scad` |
-| **Rahmendock** | MagSafe Rahmen-Dock Gehäuseoberteil (Rohrsattel, Flügel & M2.5 Insert) | `02_pod_base/components/009_magsafe_frame_dock.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
+| **Rahmendock** | MagSafe Rahmen-Dock Gehäuseoberteil (Rohrsattel, Flügel & M2.5 Nut-Pocket) | `02_pod_base/components/009_magsafe_frame_dock.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
 | **Rahmendock** | MagSafe Rohrschellen-Bügel (Ø 26 mm) | `02_pod_base/components/009_magsafe_frame_clamp.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
 | **Rahmendock** | MagSafe Rahmen-Dock Gehäuseunterteil (PCB-Ledge & M2.5 Senkung) | `02_pod_base/components/009_magsafe_frame_lid.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
 | **Radarhalter** | Entkoppelte Kennzeichen-Radarhalterung | `02_pod_base/radar_license_plate_bracket.stl` | `02_pod_base/radar_license_plate_bracket.scad` |

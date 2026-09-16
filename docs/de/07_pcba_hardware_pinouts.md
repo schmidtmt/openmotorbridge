@@ -44,19 +44,19 @@ Für alle 4-Lagen-Platinen (PCBA 01, PCBA 04 und PCBA 05) wird der identische, s
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│ Layer 1 (F.Cu - Top): High-Speed Signale, USB-Diff, Bauteile│  (35 µm Cu)
+│ Layer 1 (F.Cu - Top): High-Speed Signale, USB-Diff, Bauteile│  (35 µm / 1 oz Cu)
 ├─────────────────────────────────────────────────────────────┤
 │ ── Prepreg 7628 (Dielektrikum, Er = 4.4, Dicke 0.2 mm) ──   │
 ├─────────────────────────────────────────────────────────────┤
-│ Layer 2 (In1.Cu): Durchgängige Massefläche (GND_PWR / AGND) │  (35 µm Cu)
+│ Layer 2 (In1.Cu): Durchgängige Massefläche (GND_PWR / AGND) │  (17.5 µm Standard / opt. 35 µm)
 ├─────────────────────────────────────────────────────────────┤
 │ ── FR4 Core (Isolationskern, Dicke 1.0 mm) ──────────────   │
 ├─────────────────────────────────────────────────────────────┤
-│ Layer 3 (In2.Cu): Power-Planes (VCC_3V3, VCC_5V Polygone)   │  (35 µm Cu)
+│ Layer 3 (In2.Cu): Power-Planes (VCC_3V3, VCC_5V Polygone)   │  (17.5 µm Standard / opt. 35 µm)
 ├─────────────────────────────────────────────────────────────┤
 │ ── Prepreg 7628 (Dielektrikum, Er = 4.4, Dicke 0.2 mm) ──   │
 ├─────────────────────────────────────────────────────────────┤
-│ Layer 4 (B.Cu - Bottom): Sekundär-Routing & SMD-Sensorik    │  (35 µm Cu)
+│ Layer 4 (B.Cu - Bottom): Sekundär-Routing & SMD-Sensorik    │  (35 µm / 1 oz Cu)
 └─────────────────────────────────────────────────────────────┘
 ```
 

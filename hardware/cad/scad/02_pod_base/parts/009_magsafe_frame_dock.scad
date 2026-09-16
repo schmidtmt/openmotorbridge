@@ -11,7 +11,7 @@
 //   1. Upper Shell (magsafe_frame_dock_body):
 //      - Semicircular upper M8 cradle & MagSafe nest
 //      - Ø 26 mm frame tube cradle saddle & M3 clamp wings
-//      - Internal central boss with M2.5 brass heat-set insert pocket (Ruthex Ø 3.6 x 4.5mm)
+//      - Internal central boss with captive M2.5 nut pocket (DIN 934 SW 5.0 mm)
 //      - Perimeter sealing tongue for IP67 watertight seal
 //   2. Lower Shell (magsafe_frame_dock_lid):
 //      - Semicircular lower M8 cradle & MagSafe nest
@@ -45,10 +45,10 @@ pcb_t_default         = 1.6;    // PCB substrate thickness (mm)
 pcb_z_bot_default     = 7.7;    // Z-level of PCB bottom face (mm)
 pcb_z_top_default     = 9.3;    // Z-level of PCB top face (mm)
 
-// Central Mounting Boss (M2.5)
-boss_dia_default      = 4.4;    // Boss outer diameter (fits PCB Ø 4.5mm keepout, mm)
-insert_dia_default    = 3.6;    // Heat-set insert hole diameter (Ruthex M2.5, mm)
-insert_depth_default  = 4.5;    // Heat-set insert hole depth (mm)
+// Central Mounting Boss (M2.5 - 100% Soldering-Iron Free DIN 934 Nut-Pocket)
+boss_dia_default      = 4.8;    // Boss outer diameter (fits PCB Ø 4.5mm keepout, mm)
+nut_m2_5_sw_default   = 5.2;    // DIN 934 M2.5 across flats (mm)
+nut_m2_5_h_default    = 2.4;    // DIN 934 M2.5 pocket depth (mm)
 screw_pass_dia_default= 2.8;    // M2.5 screw clearance pass hole (mm)
 screw_head_dia_default= 5.2;    // DIN 912 M2.5 Allen head counterbore diameter (mm)
 screw_head_h_default  = 2.8;    // DIN 912 M2.5 counterbore depth (mm)
@@ -162,12 +162,13 @@ module magsafe_frame_dock_body(
                     }
                 }
 
-                // M3 Threaded Insert Pockets in Clamp Wings (4x at X = +/- 8.0, Y = +/- 14.0 mm)
+                // M3 Captive Hex Nut Pockets in Clamp Wings (DIN 934 M3, 100% Soldering-Iron Free)
                 for (sx = [-8.0, 8.0]) {
                     for (sy = [-wing_w/2 + 4.0, wing_w/2 - 4.0]) {
                         translate([sx, sy, dock_h - 10.0]) {
-                            cylinder(r=1.7, h=12.0, center=false);
-                            cylinder(r=2.2, h=6.0, center=false);
+                            cylinder(r=5.7/sqrt(3), h=2.6 + 0.2, center=false, $fn=6);
+                            translate([0, 0, -5.0])
+                                cylinder(r=1.65, h=15.0, center=false);
                         }
                     }
                 }
@@ -213,9 +214,9 @@ module magsafe_frame_dock_body(
                 cylinder(r1=boss_dia/2, r2=3.2, h=16.0 - 9.3, center=false);
         }
 
-        // Central Boss Heat-Set Insert Pocket (Ruthex M2.5: Ø 3.6 mm x 4.5 mm)
+        // Central Boss Captive Hex Nut Pocket (DIN 934 M2.5, 100% Soldering-Iron Free)
         translate([0, 0, 9.3 - 0.1])
-            cylinder(r=insert_dia/2, h=insert_depth + 0.1, center=false);
+            cylinder(r=nut_m2_5_sw_default/sqrt(3), h=nut_m2_5_h_default + 0.1, center=false, $fn=6);
     }
 }
 

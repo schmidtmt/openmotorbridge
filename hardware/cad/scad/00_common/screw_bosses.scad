@@ -40,8 +40,15 @@ module mounting_ear_m4(ear_len=14.0, ear_w=12.0, ear_h=5.0, hole_r=2.2) {
     }
 }
 
-// 4. Copper Thermal Stud Pad / Pocket
-module copper_stud(r=COPPER_STUD_R, h=2.5) {
-    color("darkorange")
-        cylinder(r=r, h=h, center=false);
+// 4. Captive Hex Nut Pocket (DIN 934 / DIN 985 with center screw through-hole)
+module hex_nut_pocket(sw=NUT_M4_SW, h=NUT_M4_H, screw_r=M4_SCREW_HOLE_R, through_h=10.0) {
+    // Hexagonal pocket (flat-to-flat SW converted to circle radius: r = sw / sqrt(3))
+    hex_r = sw / sqrt(3);
+    union() {
+        // Hexagonal nut pocket
+        cylinder(r=hex_r, h=h, center=false, $fn=6);
+        // Screw clearance through-hole
+        translate([0, 0, -through_h/2.0])
+            cylinder(r=screw_r, h=through_h + h, center=false, $fn=30);
+    }
 }

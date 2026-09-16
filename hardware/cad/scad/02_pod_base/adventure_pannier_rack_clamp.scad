@@ -64,10 +64,10 @@ module adventure_pannier_rack_clamp_base() {
             }
         }
 
-        // Pod Base Housing Interface Mounting Holes (M4 inserts on back face)
+        // Pod Base Housing Interface Mounting Holes (M4, 100% Soldering-Iron Free)
         for (x_pos = [-12.0, 12.0]) {
             translate([x_pos, 0, CLAMP_HEIGHT_Z - 6.0])
-                cylinder(r=2.1, h=8.0); // M4 brass heat-set insert pocket
+                cylinder(r=M4_SCREW_HOLE_R, h=8.0);
         }
     }
 }

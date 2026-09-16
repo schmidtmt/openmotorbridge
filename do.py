@@ -154,7 +154,7 @@ docs["docs/de/05_mechanical_enclosure_pods.md"] = """# 05 - Mechanische Konstruk
 - **Schutzart:** IP67.
 
 ### 1.1 Sandwich-Aufbau & Platinenbefestigung
-1. **Bodenwanne:** Vertiefte Akkutasche (52.0 x 36.0 x 6.5 mm) fuer den 1000 mAh LiPo-Akku, gedaempft durch 2.0 mm EPDM-Moosgummi. Vier Ruthex M3 x 5.7 mm Messing-Gewindeeinsaetze.
+1. **Bodenwanne:** Vertiefte Akkutasche fuer den 2.200 mAh LiPo-Akku, gedaempft durch EPDM-Moosgummi. Vier M3 Sechskant-Mutternaschen (Nut Pockets).
 2. **Elektronik-Ebene:** 4-Lagen-Platine (85.0 x 55.0 mm) auf vier 4.0-mm-Domen mit M3 x 6 mm Torx-Schrauben (ISO 14581, Edelstahl A2, Loctite 243) fixiert.
 3. **Gehaeusedeckel:** Verschraubt ueber sechs M3 x 12 mm Zylinderschrauben (ISO 4762) mit 0.8 Nm Anzugsmoment.
 

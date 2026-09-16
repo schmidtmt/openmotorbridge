@@ -38,11 +38,12 @@ The Central Box enclosure is engineered in **PA12 (HP Multi Jet Fusion)** for ha
 ├────────────────────────────────────────────────────────────┤  │
 │ 2. UPPER CASE WITH INTERMEDIATE TRAY (15.0 mm Height)      │  │
 │    • Front Panel: HD26 D-Sub flange, USB-C port, Status-LED│  │
-│    • Upper Chamber: 1S LiPo UPS battery with EPDM strap    │  │
+│    • Upper Chamber: 1S LiPo battery (68x39x5.0mm, 2,200mAh)│  │
 │    • Intermediate Tray: 11x convection vents & cable slot  │  │
 ├────────────────────────────────────────────────────────────┤  │
 │ 3. LOWER CASE (17.0 mm Height - Monocoque Tub)             │  │
 │    • 4-Layer Main PCB (85 x 55 mm) on M2.5 dampers         │  │
+│    • Captive M3 hex nut pockets (IKEA assembly principle)  │  │
 │    • 4x M4 silentblock mounting ears                       │  │
 │    • 100% solid PA12 floor without through-holes           │  │
 └────────────────────────────────────────────────────────────┘  ▼
@@ -458,7 +459,7 @@ The Front Node enclosure was specially engineered for protected installation ins
 │                   THE 4-IN-1 UNIVERSAL MOUNTING SYSTEM (BOTTOM VIEW)                   │
 ├────────────────────────────────────────────────────────────────────────────────────────┤
 │ 1. AMPS HOLE PATTERN (30 x 38 mm):                                                     │
-│    • 4x M4 brass threaded inserts (Ruthex) in standard AMPS layout                    │
+│    • 4x form-fitting DIN 934 M4 captive hex nut pockets in AMPS layout (100% iron-free)│
 │    • Compatible with all RAM-Mount ball adapters, Garmin brackets & cockpit crossbars  │
 ├────────────────────────────────────────────────────────────────────────────────────────┤
 │ 2. TUBE SADDLE PRISM (120° V-Groove):                                                  │
@@ -819,7 +820,7 @@ Mounting in the lid provides a $> 25\,\text{cm}$ elevated ground clearance, line
 
 ![MagSafe Frame Dock Exploded View CAD](../images/cad/magsafe_frame_dock_cad.png)
 
-*Figure 8.31: 3D CAD view of the MagSafe Frame Dock (`009_magsafe_frame_dock.scad`). Visible: Upper case with integrated Ø 26 mm frame tube saddle and M3 inserts, center PCBA 06 protection board, lower case with half-shell cradles for M8 and MagSafe, upper clamp bracket (`009_magsafe_frame_clamp.stl`), and central M2.5 clamp bolt.*
+*Figure 8.31: 3D CAD view of the MagSafe Frame Dock (`009_magsafe_frame_dock.scad`). Visible: Upper case with integrated Ø 26 mm frame tube saddle and DIN 934 M3 nut pockets, center PCBA 06 protection board, lower case with half-shell cradles for M8 and MagSafe, upper clamp bracket (`009_magsafe_frame_clamp.stl`), and central M2.5 clamp bolt.*
 
 1. **Stationary Bike-Side Docking:** Fixed to the frame tube beneath the side cover, providing safe pogo breakaway whenever the saddlebag is detached.
 2. **Horizontal Clamshell Design:** Split along the central horizontal plane for water-tight assembly.
@@ -910,10 +911,11 @@ The OpenMotorBridge CAD repository follows a strict hierarchical Constructive So
 | **Satellite Pod**| CVO ST Telemetry Fin (2.4 GHz Mesh) | `02_pod_base/cvo_st_telemetry_fin.stl` | `02_pod_base/cvo_st_telemetry_fin.scad` |
 | **Satellite Pod**| Road King Special Touring Fender Console | `02_pod_base/pod3_touring_fender_console.stl` | `02_pod_base/pod3_touring_fender_console.scad` |
 | **Satellite Pod**| Touring Saddlebag Lid Dock (Pods 1 & 2) | `02_pod_base/saddlebag_lid_dock.stl` | `02_pod_base/saddlebag_lid_dock.scad` |
-| **Frame Dock** | MagSafe Frame Dock Upper Shell (Tube Saddle, Wings & M2.5 Insert) | `02_pod_base/components/009_magsafe_frame_dock.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
+| **Frame Dock** | MagSafe Frame Dock Upper Shell (Tube Saddle, Wings & M2.5 Nut-Pocket) | `02_pod_base/components/009_magsafe_frame_dock.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
 | **Frame Dock** | MagSafe Tube Clamp Strap (Ø 26 mm) | `02_pod_base/components/009_magsafe_frame_clamp.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
 | **Frame Dock** | MagSafe Frame Dock Lower Shell (PCB Ledge & M2.5 Counterbore) | `02_pod_base/components/009_magsafe_frame_lid.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
 | **Radar Mount** | Decoupled License-Plate Radar Bracket | `02_pod_base/radar_license_plate_bracket.stl` | `02_pod_base/radar_license_plate_bracket.scad` |
+| **Radar Mount** | Stealth Center Under-Fender Radar Mount (Custom / Bobber) | `02_pod_base/radar_center_underfender_mount.stl` | `02_pod_base/radar_center_underfender_mount.scad` |
 | **Cartridge** | Universal base sled with O-ring groove | `03_pod_cartridges/cartridge_base_sled.stl` | `03_pod_cartridges/00_base_sled.scad` |
 | **Cartridge** | Sena 50S/60S adapter sled | `03_pod_cartridges/cartridge_insert_sena.stl` | `03_pod_cartridges/parts/01_insert_sena.scad` |
 | **Cartridge** | Cardo Packtalk Edge adapter sled | `03_pod_cartridges/cartridge_insert_cardo.stl` | `03_pod_cartridges/parts/02_insert_cardo.scad` |
