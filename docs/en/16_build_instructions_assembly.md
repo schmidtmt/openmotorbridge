@@ -1,10 +1,10 @@
 # 16 - Build Instructions, Wiring & Vehicle Installation
 
-This document is the comprehensive, hands-on assembly guide for building a complete **OpenMotorBridge (v8.0)** hardware kit for a motorcycle. It details 3D printing parameters, mechanical assembly, cable harnessing, Front Node installation, and the step-by-step commissioning checklist.
+This document is the comprehensive, hands-on assembly guide for building a complete **OpenMotorBridge (v8.0)** hardware kit for a motorcycle. It details 3D printing parameters, mechanical assembly, plug-and-play cabling, Front Node installation, and the step-by-step commissioning checklist.
 
 ---
 
-## 1. Kit Architecture Overview
+## 1. Kit Architecture Overview (What Are We Building?)
 
 A complete OpenMotorBridge motorcycle installation comprises:
 
@@ -27,7 +27,7 @@ A complete OpenMotorBridge motorcycle installation comprises:
 │ (Frame / Bar)    │             │ (Frame / Bar)    │              │ (Tail Cowl)      │
 │ • Pod Enclosure  │             │ • Pod Enclosure  │              │ • Pod Enclosure  │
 │ • Baseboard      │             │ • Baseboard      │              │ • Baseboard      │
-│ • CARTRIDGE 1    │             │ • CARTRIDGE 2    │              │ • CARTRIDGE 3    │
+│ • GATEWAY SLOT 1 │             │ • GATEWAY SLOT 2 │              │ • CARTRIDGE 3    │
 │   (e.g., Sena)   │             │   (e.g., Cardo)  │              │   (LoRa + GNSS)  │
 └──────────────────┘             └──────────────────┘              └──────────────────┘
                                            │
@@ -52,52 +52,96 @@ To build a fully featured OpenMotorBridge (v8.0) installation for one motorcycle
 ### 2.1 Category A: 3D Printed Parts (MJF PA12 Black or FDM ASA/PETG)
 *Recommended manufacturing method: HP Multi Jet Fusion (MJF) or SLS in PA12 (glass-bead blasted, black dyed) or FDM in ASA/PET-CF. CAD files located in [`hardware/cad/stl/`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/).*
 
+#### 2.1.1 Base System (Universal for 1 Complete Motorcycle Setup)
 | Subassembly | STL File Name | Qty | Function & Description |
 | :--- | :--- | :---: | :--- |
-| **Main Box Lower Tub** | [`main_box_lower_case.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_lower_case.stl) | **1** | Monocoque tub with 4x M4 silentblock tabs, 4x PCB standoffs, and perimeter O-ring groove |
+| **Main Box Lower Tub** | [`main_box_lower_case.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_lower_case.stl) | **1** | Monocoque tub with 4x M4 silentblock tabs, nut pockets, and perimeter O-ring groove |
 | **Main Box Mid Tray** | [`main_box_mid_tray.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_mid_tray.stl) | **1** | Battery tray for 1000 mAh LiPo, 10x convection chimney slots & tongue-and-groove rib |
 | **Main Box Lid** | [`main_box_lid.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_lid.stl) | **1** | Heavy-duty top lid with Gore ePTFE AVS 41 vent boss & 4x M3 screw counterbores |
-| **Pod Base Enclosures** | [`pod_base_housing.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod_base_housing.stl) | **3** | Universal bay enclosure for Pod 1 (Left), Pod 2 (Right), and Pod 3 (Tail) with 120° pipe bed |
+| **Pod Base Enclosures** | [`pod_base_housing.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod_base_housing.stl) | **3** | Universal bay enclosure for Pod 1 (Gateway 1 Left), Pod 2 (Gateway 2 Right), and Pod 3 (Tail) with 120° pipe bed |
 | **Pod Bulkhead Partitions**| [`03_pod_bulkhead_partition.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/components/03_pod_bulkhead_partition.stl) | **3** | Internal bulkhead with sealing collar & dual spring retainer posts (1 per pod) |
-| **Cartridge 1 (Rider)** | [`cartridge_insert_sena.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_sena.stl) *(or Cardo)* | **1** | Hot-swap sled inlay for primary rider headset (Sena SPIDER X Slim / 50S / 60S) |
-| **Cartridge 2 (Passenger)**| [`cartridge_insert_cardo.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_cardo.stl) *(or Blank)* | **1** | Hot-swap sled inlay for passenger headset (Cardo Packtalk Edge) or blank cartridge |
-| **Cartridge Base Sleds** | [`cartridge_base_sled.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl) | **2** | Sled chassis holding modular inlays and PCBA 03 |
-| **Front Node Lower Tub** | [`front_node_lower_tub.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_lower_tub.stl) | **1** | Cockpit fairing tub with AMPS hole pattern ($30 \times 38\,\text{mm}$), EPDM cable combs & V-bed (PA12 / ASA) |
+| **Cartridge Base Sleds** | [`cartridge_base_sled.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl) | **3** | Universal sled chassis holding modular inlays and PCBA 03 (Pods 1 & 2) or PCBA 04 (Pod 3) |
+| **Cartridge Locking Rocker**| [`cartridge_magnetic_lock_latch.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_magnetic_lock_latch.stl) | **2** | Magnetic anti-theft locking rocker latches with sawtooth lock for Pods 1 & 2 |
+| **Rear Pod 3 OMM Radome** | [`cartridge_antenna_bracket_omm.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_antenna_bracket_omm.stl) | **1** | Dielectric antenna radome & carrier bridge for PCBA 04 transceiver in Rear Pod 3 |
+| **Front Node Lower Tub** | [`front_node_lower_tub.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_lower_tub.stl) | **1** | Cockpit fairing tub with AMPS hole pattern ($30 \times 38\,\text{mm}$), nut pockets & V-bed (PA12 / ASA) |
 | **Front Node Upper Lid** | [`front_node_upper_lid.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_upper_lid.stl) | **1** | Front lid with acoustic sound entry port for Knowles MEMS & perimeter gasket groove (PA12 / ASA) |
 | **Front Node Cable Glands**| [`front_node_cable_glands_tpu.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_cable_glands_tpu.stl) | **1 Pair** | Elastomeric cable glands for Front (3x USB) & Left (3x Signals/Power) (TPU 95A / 85A) |
 | **Front Node USB-C Cap** | [`front_node_usbc_cap_tpu.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_usbc_cap_tpu.stl) | **1** | Elastomeric protective dust cap with retaining tether for service port (TPU 95A / 85A) |
-| **Rear Radar Dual Bracket**| [`radar_varia_gopro_lock_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_varia_gopro_lock_dock.stl) | **1** | M5 GoPro-style swivel hinge for horizontal leveling of Garmin Varia / mmWave radar |
-| **Total 3D Printed Parts** | | **17** | **Complete hardware set for 1 motorcycle installation (15x PA12/ASA + 2x TPU)** |
+
+#### 2.1.2 Cartridge Inlays for Gateway Slots 1 & 2 (Choose 2 Based on Desired Intercoms)
+> **Architecture Principle:** OpenMotorBridge is a multi-protocol mesh bridge. Cartridge slots 1 and 2 are **hardware gateway transceivers**, not isolated driver/passenger headsets. They enable simultaneous dual-mesh bridging (e.g., Slot 1 = Sena Mesh 3.0 / Wave and Slot 2 = Cardo DMC 2.0 or PMR446), allowing riders and passengers to communicate wirelessly across both networks.
+
+| Subassembly | STL File Name | Qty | Function & Description |
+| :--- | :--- | :---: | :--- |
+| **Gateway Inlay Sena** | [`cartridge_insert_sena.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_sena.stl) | *Opt. (1)* | Form-fitting inlay for Sena SPIDER X Slim / 50S / 60S (Mesh 3.0 Wave) |
+| **Gateway Inlay Cardo** | [`cartridge_insert_cardo.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_cardo.stl) | *Opt. (1)* | Inlay for Cardo Packtalk Edge / Pro (DMC Gen2) with Air-Mount |
+| **Blank Cartridge / Dry Box**| [`cartridge_insert_blindkassette.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_blindkassette.stl) | *Opt. (1)* | Hermetic protective sled with O-ring for unused slot or dry storage box |
+
+#### 2.1.3 Vehicle-Specific Mounting Kits (3D Printed Parts)
+*Mounting pods to frames, luggage, or tails uses vehicle-specific 3D printed components:*
+
+* **Option A: Adventure Kit (BMW R1250/R1300 GS / GSA, Africa Twin, KTM):**
+  | Subassembly | STL File Name | Qty | Function & Description |
+  | :--- | :--- | :---: | :--- |
+  | **Pannier Clamp Base** | [`adventure_pannier_rack_clamp_base.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_base.stl) | **4** | Clamp base for Ø 18 mm stainless pannier racks (BMW GSA) |
+  | **Pannier Clamp Cap** | [`adventure_pannier_rack_clamp_cap.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_cap.stl) | **4** | Clamp cap with M5 bolt through-holes |
+  | **Rack-Tail Mount Heck** | [`adventure_rack_tail_mount.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_rack_tail_mount.stl) | **1** | Tail Balcony cantilever for Pod 3 behind topcase with branch deflector |
+  | **Transition Dock** | [`adventure_transition_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_transition_dock.stl) | **2** | Luggage-independent dock in seat crease for BMW GS (Ø 28 mm tube) |
+  | **Radar Varia Dock** | [`radar_varia_gopro_lock_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_varia_gopro_lock_dock.stl) | **1** | Garmin Varia quarter-turn dock with M3 anti-theft set screw |
+  | **Hirth Gear Lock** | [`011_gopro_hirth_lock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/components/011_gopro_hirth_lock.stl) | **1** | 36-tooth positive-locking rosette for vibration-proof radar angle |
+
+* **Option B: Harley-Davidson Touring & Bagger Kit (Street Glide, Road Glide, CVO ST, Road King):**
+  | Subassembly | STL File Name | Qty | Function & Description |
+  | :--- | :--- | :---: | :--- |
+  | **Saddlebag Lid Dock** | [`saddlebag_lid_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/saddlebag_lid_dock.stl) | **2** | Low-profile hard saddlebag lid dock for Pod 1 & Pod 2 |
+  | **Touring Fender Console** | [`pod3_touring_fender_console.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod3_touring_fender_console.stl) | **1** | Organic rear fender console for Pod 3 (Road King Special) |
+  | *Alternative: CVO ST Fin* | [`cvo_st_telemetry_fin.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/cvo_st_telemetry_fin.stl) | *(1)* | Aerodynamic tail fin for CVO Road Glide ST |
+  | *Alternative: Skeleton Dock*| [`cvo_st_undercowl_skeleton_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/cvo_st_undercowl_skeleton_dock.stl) | *(1)* | Upright spring dock under forged carbon solo seat cowl |
+  | **License Plate Radar Mount**| [`radar_license_plate_bracket.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_license_plate_bracket.stl) | **1** | Decoupled radar bracket below license plate |
+  | *Alternative: Underfender* | [`radar_center_underfender_mount.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_center_underfender_mount.stl) | *(1)* | Centered under-fender mount for custom baggers with side license plates |
+
+#### 2.1.4 Accessories (Optional)
+| Subassembly | STL File Name | Qty | Function & Description |
+| :--- | :--- | :---: | :--- |
+| **Smart Keyfob Lower Shell**| [`smart_keyfob_lower_shell.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/05_accessories/smart_keyfob_lower_shell.stl) | **1** | Tub with LRA dampening cradle & magnet pocket for PCBA 07 |
+| **Smart Keyfob Upper Shell**| [`smart_keyfob_upper_shell.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/05_accessories/smart_keyfob_upper_shell.stl) | **1** | Lid with 3 button keypads & optical light pipe port |
+| **Smart Keyfob Bumper** | [`smart_keyfob_tpu_rim.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/05_accessories/smart_keyfob_tpu_rim.stl) | **1** | Shock-absorbing perimeter rim (TPU 85A/95A) |
 
 ---
 
-### 2.2 Category B: Assembled Circuit Boards (5 PCBAs from JLCPCB / Eurocircuits)
-*Production files (Gerber ZIP, BOM CSV, CPL Pick & Place) located in [`hardware/production_packages/`](file:///Users/schmidtm/openMotorBridge/hardware/production_packages).*
+### 2.2 Category B: Factory-Assembled Circuit Boards (100% SMT from JLCPCB / Eurocircuits)
+*All circuit boards arrive fully assembled and pre-tested via automated SMT. **Zero soldering required by the builder!***
+*Production files (Gerber ZIP, BOM CSV, CPL Pick & Place) detailed in [Chapter 15, Section 8](file:///Users/schmidtm/openMotorBridge/docs/en/15_bom_manufacturing.md#8-1-click-jlcpcb-ordering-guide-all-circuit-boards-pre-assembled).*
 
-| Circuit Board | Project / Identifier | Qty | Layer Count & Spec | Core Functions |
-| :--- | :--- | :---: | :--- | :--- |
-| **PCBA 01** | Central Main Controller (`kicad_main_box`) | **1** | 4-Layer FR4 TG150, ENIG Gold | ESP32-S3 Dual-Core, LM5164 DCDC, BQ24075 UPS, ES8388 Codec, Bourns audio transformers, BMI270 IMU, MicroSD |
-| **PCBA 02** | Pod Base Carrier Board (`kicad_pod_base`) | **3** | 2-Layer FR4, ENIG Gold | M8 6-pin IP67 socket, SP3012 ESD array, Harwin 6-pin precision header with 4.8mm wipe |
-| **PCBA 03** | Smart Modular Cartridge Board Rev 2.0 (`kicad_cartridge`)| **2** | 2-Layer FR4, ENIG Gold | WCH CH32V003 RISC-V MCU (1-Wire emulation & opcode engine), 4x AO3400A N-MOSFETs, Harwin 6-pin socket, J_ACT 8-pin mechatronics header, J2 6-pin audio/power |
-| **PCBA 04** | Rear Pod 3 Transceiver (`kicad_rear_pod3`) | **1** | 4-Layer FR4 TG150, ENIG Gold | RP2040 coprocessor, u-blox NEO-M9N / MAX-M10S GNSS, Semtech SX1262 LoRa, 3x Murata MM8030 RF switches |
-| **PCBA 05** | Universal Front Node (`kicad_front_node`) | **1** | 4-Layer FR4 TG150, ENIG Gold | ESP32-S3 Dual-Core, USB2514B Hub, LMR36015 DCDC, SC8102 USB-PD, TPS2051B power switch, Knowles MEMS mic, PTT trigger |
+| Circuit Board | Project / Identifier | Qty | Core Functions |
+| :--- | :--- | :---: | :--- |
+| **PCBA 01** | Central Main Controller (`kicad_main_box`) | **1** | ESP32-S3 Dual-Core, LM5164 DCDC, BQ24075 UPS, ES8388 Codec, Bourns audio transformers, IMU |
+| **PCBA 02** | Pod Base Carrier Board (`kicad_pod_base`) | **3** | M8 6-pin IP67 socket, SP3012 ESD array, Harwin 6-pin precision docking header |
+| **PCBA 03** | Smart Modular Cartridge Board Rev 2.0 (`kicad_cartridge`)| **2** | WCH CH32V003 RISC-V MCU (1-Wire emulation & opcode engine), 4x MOSFETs, J_ACT header |
+| **PCBA 04** | Rear Pod 3 Transceiver (`kicad_rear_pod3`) | **1** | RP2040 coprocessor, u-blox Multi-GNSS, Semtech SX1262 LoRa, 3x Murata MM8030 RF switches |
+| **PCBA 05** | Universal Front Node (`kicad_front_node`) | **1** | ESP32-S3 Xtensa, USB2514B Hub, SC8102 USB-PD 20W, TCAN334G CAN-FD, Knowles MEMS, PTT |
+| **PCBA 07** | Smart Keyfob (Accessory, `kicad_smart_keyfob`)| *Opt.* | Bluetooth LE tracker, LRA haptic motor, MAX17048 fuel-gauge, 3 tactile buttons |
 
 ---
 
-### 2.3 Category C: Mechanical Fasteners, Screws & Springs (A4 Stainless Steel / Brass)
+### 2.3 Category C: Mechanical Fasteners & Screws (A4 Stainless Steel)
+*The enclosure design uses integrated **Nut-Pockets (hexagonal nut slots)**. Standard nuts slide right in – **no heat-set threaded inserts or soldering irons!***
 
 | Fastener | Specification / Standard | Qty | Location & Purpose |
 | :--- | :--- | :---: | :--- |
-| **M3 Threaded Inserts** | Ruthex Brass M3 $\times 5.7\,\text{mm}$ (RX-M3x5.7) | **8** | 4x Main Box tub corners, 4x Front Node tub corners (heat-set at $220\,^\circ\text{C}$) |
-| **M4 Threaded Inserts** | Ruthex Brass M4 $\times 8.1\,\text{mm}$ (RX-M4x8.1) | **4** | Front Node AMPS base pattern ($30 \times 38\,\text{mm}$) |
-| **Main Case Screws** | Socket Head Cap DIN 912 A4 M3 $\times 40\,\text{mm}$ | **4** | Through-bolt 4-corner clamp for Central Main Box |
-| **Front Node Screws** | Socket Head Cap DIN 912 A4 M3 $\times 20\,\text{mm}$ | **4** | 4-corner clamp for Universal Front Node |
-| **PCB Mounting Screws** | Socket Head Cap DIN 912 A4 M2.5 $\times 6\,\text{mm}$| **8** | 4x Main Box PCB, 4x Front Node PCB |
-| **Pod Bulkhead Screws** | Countersunk DIN 7991 A4 M2 $\times 8\,\text{mm}$ | **6** | Secures internal bulkheads in Pod 1, 2, and 3 (2 per pod) |
-| **Ejector Coil Springs** | A4 Stainless Steel ($\varnothing 4.5\,\text{mm}, L_0=15\,\text{mm}, R=1.2\,\text{N/mm}$) | **6** | Auto-eject snap release mechanism (2 per pod bulkhead) |
-| **Rubber Silentblocks** | Type A Rubber Bobbins (M4 Male / M4 Female, $\varnothing 15 \times 10\,\text{mm}$) | **4** | Vibration-isolated frame mounting for Central Main Box |
+| **Main Case Screws** | Socket Head Cap DIN 912 A4 M3 $\times 40\,\text{mm}$ | **4** | Central Main Box enclosure (threads into captive nuts) |
+| **Front Node Screws** | Socket Head Cap DIN 912 A4 M3 $\times 20\,\text{mm}$ | **4** | Front Node enclosure (threads into captive nuts) |
+| **M3 Stainless Nuts** | DIN 934 / DIN 985 M3 A4 Stainless Nuts | **8** | Captive in Nut-Pockets (enclosures) |
+| **PCB Mounting Screws** | Socket Head Cap DIN 912 A4 M2.5 $\times 6\,\text{mm}$| **8** | 4x Main Box PCBA, 4x Front Node PCBA |
+| **Pod Bulkhead Screws** | Countersunk DIN 7991 A4 M2 $\times 8\,\text{mm}$ | **6** | Secures 3 Pod bulkheads (2 per pod) |
+| **Cartridge Bracket Screws**| Countersunk DIN 7991 A4 M2 $\times 6\,\text{mm}$ | **8** | Secures actuator retainer plates (4 per gateway) |
+| **M2 Rocker Hinge Pins** | Dowel Pin Stainless DIN 7 M2 $\times 8\,\text{mm}$ | **2** | Pivot pins for magnetic cartridge latches (Pods 1 & 2) |
+| **Ferromagnetic Steel Pins**| Hardened Steel Pin DIN 6325 $\varnothing 6 \times 8\,\text{mm}$ | **2** | Magnetic steel armature in rocker arm |
+| **Rocker Return Springs** | A4 Stainless Steel ($\varnothing 3.5\,\text{mm}, L_0=10\,\text{mm}$) | **2** | Return spring for cartridge locking claw |
+| **Ejector Compression Springs**| A4 Stainless Steel ($\varnothing 4.5\,\text{mm}, L_0=15\,\text{mm}$) | **6** | Auto-eject snap release springs (2 per pod bulkhead) |
+| **N52 Magnetic Key** | Neodymium N52 Block Magnet ($20 \times 10 \times 5\,\text{mm}$) | **1** | Contactless key for rapid cartridge ejection |
+| **Rubber Silentblocks** | Type A Rubber Bobbins (M4 Male / M4 Female, $\varnothing 15 \times 10\,\text{mm}$) | **4** | Vibration-isolated subframe mounting for Main Box |
 | **Nyloc Nuts & Washers** | DIN 985 M4 Nyloc Nuts + DIN 125 A4 Washers | **4** | Secures silentblocks to motorcycle subframe tabs |
-| **M5 Clamp Screw & Nut** | Socket Head Cap DIN 912 A4 M5 $\times 25\,\text{mm}$ + M5 Acorn Nut | **1** | Secures GoPro-style radar hinge arm on Pod 3 |
 
 ---
 
@@ -105,168 +149,199 @@ To build a fully featured OpenMotorBridge (v8.0) installation for one motorcycle
 
 | Component | Specification | Qty | Location & Function |
 | :--- | :--- | :---: | :--- |
-| **Silicone O-Ring Cord Main**| Silicone Solid Cord $\varnothing 1.5\,\text{mm}$ Shore 40A/50A ($40\,\text{cm}$) | **1** | Perimeter tongue-and-groove seal on Central Main Box |
-| **Silicone O-Ring Cord Front**| Silicone Solid Cord $\varnothing 1.5\,\text{mm}$ Shore 40A/50A ($30\,\text{cm}$) | **1** | Perimeter lid seal on Universal Front Node |
+| **Silicone Gasket Cord Main**| Silicone Solid Cord $\varnothing 1.5\,\text{mm}$ Shore 40A ($40\,\text{cm}$) | **1** | Perimeter tongue-and-groove seal on Central Main Box |
+| **Silicone Gasket Cord Front**| Silicone Solid Cord $\varnothing 1.5\,\text{mm}$ Shore 40A ($30\,\text{cm}$) | **1** | Perimeter lid seal on Universal Front Node |
 | **Cartridge Face Seals** | Molded Silicone Flange Seal Shore 40A ($54 \times 18\,\text{mm}$, $1.5\,\text{mm}$) | **3** | Mouth opening seal on Pod 1, 2, and 3 |
-| **EPDM Slotted Cable Combs** | EPDM Closed-Cell Rubber Slotted Block ($15 \times 8 \times 4\,\text{mm}$) | **2** | Waterproof cable feedthrough sealing in Front Node |
+| **EPDM Slotted Cable Combs** | EPDM Slotted Cable Comb Block ($15 \times 8 \times 4\,\text{mm}$) | **2** | Waterproof cable feedthrough in Front Node |
 | **Pressure Relief Vent** | Gore Automotive AVS 41 (M8x1.25 screw-in vent) | **1** | Pressure equalization & condensation prevention in Main Box lid |
-| **ePTFE Adhesive Vents** | Gore / Porex IP67 Adhesive Vent Disc $\varnothing 6.0 \dots 7.0\,\text{mm}$ | **5** | 3x Pod vent bosses, 1x Front Node, 1x Knowles MEMS acoustic port |
+| **ePTFE Adhesive Vents** | Gore IP67 Adhesive Vent Disc $\varnothing 6.0 \dots 7.0\,\text{mm}$ | **5** | 3x Pod vent bosses, 1x Front Node, 1x Knowles MEMS acoustic port |
 | **Optical Light Pipe** | Bivar PLPC3-3MM or Mentor PMMA $\varnothing 3.0\,\text{mm}$ ($L=8\,\text{mm}$) | **1** | Waterproof transmission of WS2812B RGB LED through Main Box lid |
 
 ---
 
-### 2.5 Category E: Wiring Harness, Connectors, Backup Battery & RF Pigtails
+### 2.5 Category E: Pre-Molded COTS Cabling & Backup Battery (No Crimping!)
 
 | Component | Specification / Type | Qty | Purpose & Function |
 | :--- | :--- | :---: | :--- |
-| **HD26 IP67 Flange Socket**| Amphenol LTW HD26 Female (Front-mount with silicone seal) | **1** | Waterproof chassis interface on Central Main Box |
-| **HD26 IP67 Cable Plug** | HD26 Male Connector with thumb screws & compression gland | **1** | Primary connector terminating the bike breakout harness |
-| **M8 6-Pin Socket Leads** | M8 6-Pin A-coded IP67 Female (PUR shielded, 250 mm) | **3** | Pigtails 1, 2, and 3 on harness connecting to Pods |
-| **M8 4-Pin Socket Lead** | M8 4-Pin A-coded IP67 Female (PUR shielded, 250 mm) | **1** | Pigtail 5 on harness for Rear Radar (Garmin Varia / mmWave) |
-| **AMP Superseal 1.5 Socket**| TE Connectivity AMP Superseal 1.5 4-Pin Female Housing | **1** | Pigtail 4 on harness for 12V vehicle power (KL30, KL15, GND) |
-| **M8 Extension Cables** | M8 6-Pin A-coded Male/Female (PUR shielded, 1.0 m / 1.5 m) | **3** | Extension cables from under-seat pigtails to pods |
-| **UPS Backup Battery** | 1S 3.7V LiPo 1000 mAh with integrated 10k NTC | **1** | Seamless UPS power reserve inside Main Box (Molex Micro-Fit 3.0) |
-| **Automotive Fuse Holder** | Waterproof Mini-Blade Inline Fuse Holder IP67 + **2A Fuse** | **1** | Protects permanent 12V supply (KL30) directly at battery terminal |
-| **Automotive Wire** | FLRY-B $0.5\,\text{mm}^2$ (Power/GND) and $0.35\,\text{mm}^2$ (Signals/Audio) | *As req.* | Custom bike harness per [`central_breakout_harness_wirelist.csv`](file:///Users/schmidtm/openMotorBridge/hardware/production_packages/05_wiring_harness/central_breakout_harness_wirelist.csv) |
-| **EPDM Frame Straps** | UV/Ozone-resistant EPDM ladder straps ($\varnothing 45 \dots 75\,\text{mm}$) | **6** | Tool-free rapid mounting of pods to crash bars or frame tubes |
-| **Murata MM8030 Pigtails** | Murata MM126036 to SMA Bulkhead IP67 (150 mm, RG-178)| **3** | Coaxial bypass for Pod 3: J3 (2.4G), J4 (868M), J5 (GNSS) |
-| **U.FL Coaxial Pigtail** | IPEX MHF1 / U.FL to RP-SMA Bulkhead IP67 (150 mm, RG-178)| **1** | Coaxial feed for Front Node ESP32-S3 external antenna |
-| **SMA Flange Double Bulkhead**| SMA Female to SMA Female Bulkhead IP67 with O-ring & nut | **1** | Waterproof RF feedthrough in cartridge faceplate (Class A) |
-| **Internal Coax Pigtail** | RG-178 Coaxial Cable ($6\dots 10\,\text{cm}$, 90° SMA Male to SMA Male)| **1** | RF connection from Sena +Mesh / OEM adapter to faceplate |
-| **SMA IP67 Protective Caps** | Nickel-plated brass with internal O-ring (knurled cap)| **5** | Waterproof seal for unpopulated SMA ports (3x Pod 3, 1x Front, 1x Pod) |
-| **External Antennas (Opt.)**| 2.4G Collinear (+5 dBi), 868M LoRa (+3 dBi), Active GNSS Puck | *Optional* | High-gain external antennas for long range & unobstructed sky view |
-| **USB-A Flat Ribbon Cable (Front)**| Short 90° USB-A male-to-female adapter ($10\dots 15\,\text{cm}$)| **1** | Ottocast connection to J1 via front cable gland |
-| **USB-C Glovebox Cable (Front)**| Right-angle USB-C male-to-male ($1.0\,\text{m}$, PUR/Nylon) | **1** | Smartphone charging from J2 via front cable gland |
-| **JST-GH Connector Kit (Left)** | JST-GH 1.25mm 2-pin female housings + crimp terminals | **2 sets** | Pre-crimped harness leads for J3 (PTT) & J7 (12V) |
-| **J_ACT Actuator Wiring Harness**| JST-SH 1.0mm 8-Pin housing to 4x 2-Pin AWG30 silicone leads ($8\,\text{cm}$)| **1–2** | Independent connection of the 4 discrete miniature actuators on PCBA 03 |
-| **Miniature Actuators (Solenoids)**| 5V DC miniature pull/push solenoids ($\varnothing 6\dots 8\,\text{mm}$, stroke $1.5\,\text{mm}$) with TPU tip | **4** | Mechatronic button actuation (Sena SPIDER X: 3x Top, 1x 45° Mesh; Cardo: 3x Buttons, 1x Wheel-Click) |
-| **J2 Cartridge Wiring Harness** | JST-SH 1.0mm 6-Pin housing to modular Audio & DC interface | **1–2** | Modular cartridge harness: Var. A (Sena SPIDER X), Var. B (Cardo Edge Air Mount), Var. C (PMR446/COTS) |
-| **90° USB Cartridge Cable** | Low-profile 90° right-angle Micro-USB/USB-C ($5\dots 8\,\text{cm}$) | **Opt. (1)**| Legacy/optional only for passive Class A cartridges (Sena +Mesh / MeshPort continuous charging) |
-| **EPDM Cartridge Retaining Band**| Elastic EPDM rubber strap ($\approx 35 \times 10\,\text{mm}$) | **1** | Vibration-proof retention of OEM adapter via cartridge hooks |
+| **HD26 IP67 Breakout Harness**| Factory pre-molded HD26 breakout harness (Amphenol LTW COTS)| **1** | Main harness plug at Central Box, completely overmolded |
+| **M8 6-Pin PUR Cables** | M8 6-Pin A-coded Male/Female (PUR, 1.0 m / 1.5 m) | **3** | Standard sensor/actuator cables to Pods 1, 2, and 3 |
+| **M8 4-Pin PUR Cable** | M8 4-Pin A-coded Male/Female (PUR, 1.5 m) | **1** | Standard cable to Front Node (CAN & signals) |
+| **UPS Backup Battery** | 1S 3.7V LiPo 1000 mAh with NTC & Molex Micro-Fit 3.0 | **1** | Seamless UPS power reserve inside Main Box (plug-in) |
+| **Automotive Fuse Cable** | Waterproof Mini-Blade Inline Fuse Holder with 2A Fuse | **1** | Protects permanent 12V supply (KL30) directly at battery terminal |
+| **J_ACT Actuator Harness** | Pre-crimped 8-Pin JST-SH to 4x 2-Pin silicone leads ($8\,\text{cm}$)| **1–2** | Pre-molded wiring harness for the 4 miniature actuators |
+| **Miniature Actuators** | 5V DC Push/Pull Solenoids ($\varnothing 6.5 \times 12\,\text{mm}$) + TPU tip | **4–8** | Mechatronic button actuation (4 per Smart Cartridge) |
+| **J2 Gateway Harness** | Pre-crimped 6-Pin JST-SH to Audio & DC interface | **1–2** | Modular cartridge harness (Sena or Cardo Air-Mount) |
 
 ---
 
-### 2.6 Category F: Required Tools, Measurement Equipment & Assembly Chemicals
+### 2.6 Category F: Minimalist Tool List (The True IKEA Principle)
 
-To assemble all subassemblies with vibration resistance and hermetic IP67 sealing, the following toolkit and consumables are recommended:
+Because **no soldering, no crimping, and no thermal thread-embedding** are required, standard household tools are all that is needed:
 
-| Tool / Equipment | Recommended Model / Specification | Purpose in the Project | Essential? |
-| :--- | :--- | :--- | :---: |
-| **Hex Key Set (Ball End)** | Sizes 1.5 mm / 2.0 mm / 2.5 mm / 3.0 mm | M2 bulkheads, M2.5 PCBAs, M3 cases, M5 radar hinge | **Yes** |
-| **Open Wrenches / Sockets** | 7 mm (M4 nuts), 8 mm (SMA bulkheads), 10 mm (Battery terminal) | Tightening silentblock nuts & SMA RF receptacles | **Yes** |
-| **Precision Torque Screwdriver**| $0.2 \dots 1.5\,\text{Nm}$ (e.g. Wera 7440) | Even torque on M3 lids ($0.8\,\text{Nm}$) & PCBAs ($0.4\,\text{Nm}$) | *Recommended* |
-| **Adjustable Soldering Station**| $200 \dots 450\,^\circ\text{C}$ (e.g. TS101, Pinecil, Weller) | Heat-set insert installation & harness soldering | **Yes** |
-| **Ruthex Heat-Set Tips** | Dedicated brass soldering tips for M3 & M4 (Ruthex / CNC Kitchen)| Perpendicular, ridge-free insert seating ($220 \dots 240\,^\circ\text{C}$) | *Recommended* |
-| **Micro-Crimp Pliers** | Engineer PA-09 or IWISS IWS-2820M ($1.0 \dots 1.6\,\text{mm}$ pitch) | Crimping JST-SH (1.0 mm Cartridges) & JST-GH (1.25 mm Front Node) | **Yes** |
-| **Automotive Crimper** | For uninsulated open-barrel automotive terminals ($0.5 \dots 1.5\,\text{mm}^2$)| 12V spade terminals & M6 battery terminal ring lugs | **Yes** |
-| **Precision Wire Stripper** | $0.08 \dots 1.0\,\text{mm}^2$ (AWG 28–18, e.g. Knipex 12 62 180) | Nick-free stripping of thin FLRY-B wires | **Yes** |
-| **Flush Wire Cutters** | Precision electronics diagonal cutter (e.g. Knipex Super Knips) | Flush cuts on wires, pins, and zip-ties without sharp burrs | **Yes** |
-| **Heat Gun / Hot Air Blower**| With reduction nozzle ($150 \dots 300\,^\circ\text{C}$) | Shrinking dual-wall adhesive-lined heatshrink tubing on harness | **Yes** |
-| **ESD Precision Tweezers** | Fine curved plastic/ceramic tipped tweezers | Damage-free perpendicular snapping of Murata MM8030 & U.FL plugs | **Yes** |
-| **Digital Multimeter (DMM)** | With continuity buzzer & mV/mA ranges | Harness continuity checking, quiescent current & 5V/3.3V rails | **Yes** |
-| **Benchtop Power Supply** | $0 \dots 30\,\text{V DC}, 0 \dots 3\,\text{A}$ (adjustable current limit) | Safe first power-up at 12.0V / 150mA to prevent short-circuit damage | **Yes** |
-| **Dielectric Silicone Grease**| OKS 1110 or Liqui Moly Silicone Paste (transparent, dielectric) | Lubrication of silicone O-rings, EPDM combs & cartridge lips | **Yes** |
-| **Threadlocker (Loctite 243)** | Medium strength (blue) | Prevents motorcycle screw loosening under heavy vibrations | **Yes** |
-| **Conformal Coating** | Peters Elpeguard SL 1307 or Electrolube UR5041 (IPC-CC-830B) | Full PCB encapsulation against condensation and road salt spray | *Recommended* |
-| **Scalpel / Precision Knife** | With fresh sharp blade | Burr-free trimming of silicone cord gaskets & EPDM blocks | **Yes** |
-| **USB-C Data Cable** | High-quality USB 2.0/3.0 data cable (not a power-only cable!) | Flashing ESP32-S3 (Main & Front) and RP2040 (Rear) via PlatformIO | **Yes** |
+| Tool | Size / Specification | Purpose during Assembly |
+| :--- | :--- | :--- |
+| **Hex Key Set** | **1.5 mm / 2.0 mm / 2.5 mm / 3.0 mm** | Tightening all enclosures, boards, and clamps |
+| **Torx / Screwdriver** | **TX10 / PH1** | Enclosure lid and anti-theft locking screw |
+| **Wrench / Socket** | **SW 7 mm / SW 8 mm** | Countering M4/M5 nuts on tube clamps |
+| **Scissors / Cutter** | Standard | Sizing silicone gasket cord to length |
+| **Silicone Grease** | Liqui Moly / OKS 1110 (small tube) | Light coating on enclosure gaskets |
+
+> [!TIP]
+> **No soldering iron, no heat gun, no specialized micro-crimping pliers, and no insert melting tips required.** All mechanical and electronic assemblies are exclusively snapped, plugged, and bolted!
 
 ---
 
-## 3. 3D Printing Guidelines (FDM vs. Industrial MJF)
+## 3. Subsystem Assembly Steps (Step-by-Step)
 
-### Recommended Filaments for Outdoor Motorcycle Use (FDM):
-* **PETG:** *Ideal for open-frame printers.* UV-resistant, oil/chemical tolerant, heat stable up to $80\,^\circ\text{C}$.
-* **ASA (or ABS):** *Best choice for enclosed printers (Bambu X1/P1, Prusa XL).* 100% UV stable, heat resistant to $100\,^\circ\text{C}$.
-* **PA-CF / PET-CF:** Extreme stiffness and OEM-grade matte carbon texture.
-* ❌ *Warning:* **Do NOT use standard PLA**, as it softens and deforms in direct sunlight (exceeding $55\,^\circ\text{C}$).
+### Step 1: Central Main Box Assembly
+1. **Insert Nuts (Nut-Pockets):** Press 4x DIN 934 / DIN 985 M3 stainless steel nuts into the hexagonal nut pockets in the lower tub from underneath.
+2. **Install Main PCB:** Seat the factory-assembled PCBA 01 (`kicad_main_box`) onto the damping standoffs and secure with 4x M2.5 $\times 6\,\text{mm}$ screws finger-tight.
+3. **Mid Tray & Battery:** Place the mid tray on top, lay the 1000 mAh LiPo battery into the tray, plug the Molex Micro-Fit connector into `J_BAT`, and secure with the EPDM strap.
+4. **Gasket & Lid:** Lay the $\varnothing 1.5\,\text{mm}$ silicone gasket cord into the lid perimeter groove, adhere the Gore vent, and tighten the 4x M3 $\times 40\,\text{mm}$ screws in a cross pattern ($0.8\,\text{Nm}$).
 
-### Optimal Slicer Settings for IP67 Water Resistance:
-* **Perimeters (Walls):** Set to 4–5 walls ($\approx 1{,}6 \dots 2{,}0\,\text{mm}$ thickness, resulting in 100% solid shell).
-* **Infill:** $25 \dots 40\,\%$ Gyroid.
-* **Layer Height:** $0{,}16\,\text{mm}$ (produces smooth O-ring sealing grooves).
-* **Flow Rate:** $102 \dots 104\,\%$ (slight over-extrusion fuses inter-layer micropores).
+### Step 2: Satellite Pods 1, 2, and Rear Pod 3 (Base Housing & Bulkhead)
+1. **Install Baseboard:** Slide factory-assembled PCBA 02 (`kicad_pod_base`) into the guide grooves of the pod base housing ([`pod_base_housing.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod_base_housing.stl)). Feed the M8 6-pin IP67 connector through the rear hole, seat the O-ring, and tighten the M8 hex nut from outside using an open wrench (SW 10) to $1.2\,\text{Nm}$.
+2. **Insert Auto-Eject Springs:** Slide one A4 stainless steel compression spring ($\varnothing 4.5 \times 15\,\text{mm}$) into each of the two rear spring pockets of the bulkhead ([`03_pod_bulkhead_partition.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/components/03_pod_bulkhead_partition.stl)).
+3. **Secure Bulkhead:** Push the bulkhead with springs forward into the pod housing until it rests against the stop shoulder. Fasten with 2x M2 $\times 8\,\text{mm}$ countersunk screws through the housing wall.
+4. **Verification:** The spring-loaded Harwin 6-pin docking pogo pins must protrude centered and flush through the bulkhead aperture. Repeat for Pod 1, Pod 2, and Pod 3.
 
----
+### Step 3: Multi-Protocol Gateway Cartridges 1 & 2 (e.g., Sena & Cardo)
+> **Architecture Principle:** Slot 1 and Slot 2 are **Multi-Protocol Gateway Transceivers**, not isolated driver/passenger headsets! They connect the motorcycle simultaneously to Sena Mesh and Cardo DMC networks. Driver and passenger communicate wirelessly using their standard helmets.
 
-## 4. Subsystem Assembly Steps
-
-### Step 1: Central Control Box Assembly
-1. **Heat-Set Inserts:** Melt 4x M3 brass threaded inserts (Ruthex) into the lower tub using a soldering iron ($240\,^\circ\text{C}$).
-2. **Mount Main PCB:** Secure the main controller (`PCBA 01`) onto the damping standoffs using M2.5 screws.
-3. **Mid Tray & Battery:** Position the upper case with the intermediate tray, place the 1000 mAh LiPo into the battery pocket, and secure with the EPDM strap.
-4. **Gasket & Lid:** Seat the $\varnothing 1{,}5\,\text{mm}$ silicone O-ring cord into the perimeter groove, adhere the Gore ePTFE vent, and tighten the 4x M3 x 40 mm stainless screws in a cross pattern.
-
-### Step 2: Satellite Pods 1, 2, and Rear Pod 3 (Tub & Bulkhead)
-1. **Install Baseboard:** Slide `openmotorbridge_pod_base` into the pod tub and tighten the M8 hex nut.
-2. **Mount Bulkhead:** Secure the protective partition wall with 2x M2 countersunk screws.
-
-### Step 3: Headset Cartridges 1 & 2 (Rider & Passenger)
-1. **Assemble Cartridge:** Snap the cartridge carrier (`PCBA 03`) into the sled.
-2. **Connect OEM Adapter / Cradle (by device class):**
-   * **Class S (Smart Modular Cartridge with Mechatronics • OMB Reference: Sena SPIDER X Slim / 60S / Cardo Edge):**
-     * Seat PCBA 03 Rev 2.0 (with WCH CH32V003 RISC-V MCU and 4x AO3400A MOSFETs) into the cartridge sled.
-     * Mount the monolithic actuator guide bridge with the 4 miniature plungers (`ACT_PLUS`, `ACT_MINUS`, `ACT_CENTER`, `ACT_MESH`), return springs, and TPU contact tips.
-     * Connect the 8-pin J_ACT ribbon cable from the actuator bridge to header J_ACT on PCBA 03.
-     * Place the factory-unopened headset into the PA12-MJF form-fit contour bed (3-point EPDM damping against 20g shock/vibration) and lock the tool-free quick-release clamp.
-     * Connect the factory 3.85V DC direct battery compartment supply (or low-profile USB) to header J2.
+1. **Install PCB:** Snap the cartridge carrier PCBA 03 Rev 2.0 into the cartridge sled ([`cartridge_base_sled.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl)).
+2. **Mount Gateway Inlay & Mechatronics (by device class):**
+   * **Class S (Smart Modular Cartridge with Mechatronics • OMB Reference: Sena SPIDER X Slim / Cardo Packtalk Edge):**
+     * Place 4x miniature actuators ($\varnothing 6.5 \times 12\,\text{mm}$) with attached flexible TPU tips into the guide bridge of the inlay ([`cartridge_insert_sena.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_sena.stl) or [`cartridge_insert_cardo.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_cardo.stl)).
+     * Place the actuator retainer plate on top and secure with 4x M2 $\times 6\,\text{mm}$ countersunk screws.
+     * Connect the pre-molded 8-pin JST-SH cable `J_ACT` directly from the actuators to header `J_ACT` on PCBA 03 (zero crimping or soldering!).
+     * Place the headset into the form-fit PA12 contour bed and lock with the tool-free quick-release clamp.
+     * Plug the pre-molded J2 power cable (3.85V continuous direct feed or ribbon USB) into header `J2`.
    * **Class A (Sena +Mesh B2M-01 / MeshPort Adapter):**
-     * Slide the adapter laterally into the transverse slide rails of the cradle insert ([`01_insert_sena.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/03_pod_cartridges/parts/01_insert_sena.scad)) until the retaining snap latch clicks into place.
-     * **Connect USB Power:** Route the low-profile $90^\circ$ right-angle cable (Micro-USB or USB-C) from the cartridge PCB 5V/GND header through the deck window into the +Mesh USB charging port (pure 5V continuous power supply; intercom audio routes wirelessly over Bluetooth to the helmet).
-     * **RF Antenna:** Insert the waterproof SMA female-to-female flange bulkhead with O-ring from the outside into the $\varnothing 6.5\,\text{mm}$ faceplate bore and secure from the inside with the locknut. Connect the internal $90^\circ$ coaxial pigtail to the +Mesh antenna port, route through the front window, and fasten tightly to the inside of the faceplate SMA bulkhead. Fasten the external SMA IP67 protective cap whenever an external antenna is not connected.
-     * Secure the +Mesh adapter against vibration shocks using the elastic EPDM retention strap across both lateral hooks.
-   * **Class B & C (Sena 50S/60S or Cardo Packtalk Edge Cradles with Pogo Pins):**
-     * Connect the 6-pin JST-SH ribbon cable from the cartridge PCB directly to the OEM pogo-pin dock (Sena) or magnetic Cardo Air-Mount (providing galvanically isolated analog audio channels, mic, and optocoupled PTT).
+     * Slide the adapter laterally into the transverse slide rails of the inlay until the snap latch locks.
+     * Connect low-profile 90° USB power cable (continuous 5V supply).
+     * Connect coaxial pigtail to SMA bulkhead port on front face.
+     * Secure against shock with elastic EPDM retention strap.
    * **Class D (Hermetic Blank Cartridge):**
-     * Insert the blank sled with solid faceplate and O-ring seal when running solo without a passenger pod.
-3. **Mouth Seal:** Fit the silicone molded flange gasket over the cartridge collar and lightly coat with dielectric silicone grease.
+     * Insert blank sled [`cartridge_insert_blindkassette.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_blindkassette.stl) with solid faceplate and O-ring when a slot is unused or used as a waterproof storage box.
+3. **Flange Gasket:** Slide the molded silicone face seal over the cartridge collar and lightly coat with dielectric silicone grease.
 
-### Step 4: Rear Pod 3 Cartridge & RF Pigtails (Triple Coaxial Bypass)
-1. **Install SMA Bulkheads:**
-   * Feed the 3x SMA female bulkhead connectors of the Murata MM126036 pigtails from the outside through the prepared $\varnothing 6.5\,\text{mm}$ bores in the cartridge front face.
-   * The integrated silicone O-ring seats hermetically in the $\varnothing 9.5 \times 1.2\,\text{mm}$ counterbore.
-   * From inside, place the lock washer and tighten the hex nut (8 mm wrench) to approx. $0.8\,\text{Nm}$.
-2. **Route Coaxial Cables:**
-   * Lay the flexible 1.13mm / RG-178 coaxial leads neatly into the floor channel of the sled.
-3. **Insert PCB & Connect Pigtails:**
-   * Mount the rear transceiver board (`PCBA 04`) with M2.5 screws.
-   * Using plastic tweezers, snap the right-angle Murata MM8030 plugs vertically onto the SMD switch receptacles until they click:
+### Step 3.1: Magnetic Anti-Theft Lock & Ejector Mechanism (Rocker Latches)
+
+```
+                       MAGNETIC ANTI-THEFT LOCK & AUTO-EJECT KINEMATICS
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│ [STATE 1: LOCKED]                                                                      │
+│ Compression spring pushes lever arm ──► 1st class rocker pivots on M2 pin ──► Sawtooth │
+│ claw swings 2.5 mm outward into housing notch. 90° stop face blocks extraction 100%!   │
+├────────────────────────────────────────────────────────────────────────────────────────┤
+│ [STATE 2: UNLOCK & FAST EJECTION]                                                      │
+│ External N52 neodymium key held to housing mark ──► Pulls Ø 6x8 mm steel armature out ──►│
+│ Sawtooth retracts flush ──► 2x stainless compression springs eject cartridge 25 mm!    │
+└────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+1. **Press Steel Armature:** Press the hardened steel pin ($\varnothing 6 \times 8\,\text{mm}$, DIN 6325) flush into the transverse hole of the rocker lever arm ([`cartridge_magnetic_lock_latch.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_magnetic_lock_latch.stl)).
+2. **Insert Return Spring:** Insert the small $\varnothing 3.5 \times 10\,\text{mm}$ stainless spring into the inner pocket of the rear lever arm.
+3. **Mount Rocker in Sled:** Place the pre-assembled rocker into the slot on the left guide cheek of the sled ([`cartridge_base_sled.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl)). Push the $\varnothing 2.0 \times 8\,\text{mm}$ stainless pin (DIN 7) through the pivot hole from above.
+4. **Pre-Insertion Functional Test:**
+   * The locking claw on the front arm must protrude $2.5\,\text{mm}$ beyond the guide tongue under spring tension.
+   * Hold the N52 block magnet outside adjacent to the steel pin: The rocker pivots by $-4.8^\circ$, and the claw retracts completely flush into the sled.
+
+### Step 4: Rear Pod 3 Cartridge & OMM Radome (LoRa, GNSS & Triple Coaxial Bypass)
+1. **Mount Transceiver PCB:** Seat PCBA 04 (`kicad_rear_pod3`) into the 3rd base sled ([`cartridge_base_sled.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl)) and secure with M2.5 screws.
+2. **Mount OMM Radome:** Position the dielectric radome ([`cartridge_antenna_bracket_omm.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_antenna_bracket_omm.stl)) on top.
+3. **Install SMA Bulkhead Connectors (External Antenna Bypass Option):**
+   * Feed the 3x SMA flange bulkheads through the $\varnothing 6.5\,\text{mm}$ holes in the faceplate from outside (integrated O-ring seals).
+   * Fasten lock washer and nut (SW 8) from inside to $0.8\,\text{Nm}$.
+   * Using plastic tweezers, snap the Murata MM8030 coaxial plugs vertically onto the SMD switch receptacles:
      * `J3` $\rightarrow$ 2.4 GHz OpenMotorMesh Bypass
      * `J4` $\rightarrow$ 868 MHz Semtech SX1262 LoRa Bypass
-     * `J5` $\rightarrow$ Multi-GNSS u-blox M9N Bypass (with 3.3V phantom power)
-4. **Automatic RF Switch Operation (Plug & Play):**
-   * **Standard Operation (No external antennas):** The IP67 knurled brass caps are screwed onto the SMA ports. The internal antennas (2.4G IFA, 868M helical, and 25x25mm GNSS patch) operate 100% autonomously protected inside the dielectric radome.
-   * **External High-Gain Operation:** When an external antenna is threaded on, the mechanical leaf switch inside the Murata MM8030 receptacle lifts: The internal antenna is electrically disconnected ($> 25\,\text{dB}$ isolation) and the RF energy flows to the external antenna with $< 0.15\,\text{dB}$ insertion loss.
+     * `J5` $\rightarrow$ Multi-GNSS u-blox M9N Bypass (3.3V phantom power)
+4. **Automatic Switch Mechanism:**
+   * **Internal Antennas (Standard):** Knurled brass IP67 caps installed. Internal antennas operate 100% inside radome.
+   * **External Antennas:** Threading an external antenna automatically decouples internal antennas ($> 25\,\text{dB}$ isolation).
+
+### Step 4.1: Adventure Kit Bike Mounting (BMW GS vs. BMW GSA / Enduro)
+
+```
+                            OPENMOTORBRIDGE ADVENTURE-KIT MOUNTING SUITE
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│ BMW R1250 / R1300 GS (STANDARD)                                                        │
+│ • Transition Dock (adventure_transition_dock.stl) in seat crease (Ø 28 mm tube)        │
+│ • 100% luggage-independent – does not protrude beyond bike silhouette                  │
+│ • Rack-Tail Mount (adventure_rack_tail_mount.stl) on OEM luggage rack                  │
+├────────────────────────────────────────────────────────────────────────────────────────┤
+│ BMW R1250 / R1300 GSA (ADVENTURE / TOURATECH PANNIER RACKS)                            │
+│ • Tubular rack clamp cage (adventure_pannier_rack_clamp_base.stl + cap.stl)            │
+│ • Mounts Pods 1 & 2 protected inside rack triangle (Ø 18 mm stainless tube)           │
+│ • Tail Balcony luggage cantilever extends 65 mm behind aluminum topcase:               │
+│   360° clear RF line-of-sight for LoRa/Mesh + 45° branch deflector fin for woods       │
+│ • 36-tooth Hirth gear lock & Garmin Varia radar dock with anti-theft set screw         │
+└────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+1. **BMW GS (Standard) Installation:**
+   * **Pods 1 & 2:** Clamp transition docks ([`adventure_transition_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_transition_dock.stl)) beneath seat crease to frame tubes (Ø 28 mm). Route M8 PUR cables through lower channel directly under seat to Main Box.
+   * **Pod 3:** Fasten onto rack-tail mount ([`adventure_rack_tail_mount.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_rack_tail_mount.stl)) on luggage rack.
+2. **BMW GSA (Adventure) Installation:**
+   * **Pods 1 & 2:** Wrap 1.0 mm EPDM strip around Ø 18 mm rack tube. Fasten clamp base ([`adventure_pannier_rack_clamp_base.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_base.stl)) and cap ([`adventure_pannier_rack_clamp_cap.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_cap.stl)) using 2x M5 x 30 mm stainless bolts and Nyloc nuts to $4.5\,\text{Nm}$. Bolt pod base housing to clamp eyelets.
+   * **Pod 3 & Radar (Tail Balcony):** Bolt cantilever ([`adventure_rack_tail_mount.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_rack_tail_mount.stl)) with 4x M6 bolts to rear rack. Align antenna along 45° fin.
+   * **Radar Varia Dock:** Insert Garmin Varia dock tongue ([`radar_varia_gopro_lock_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_varia_gopro_lock_dock.stl)) into Hirth rosette ([`011_gopro_hirth_lock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/components/011_gopro_hirth_lock.stl)) in $10^\circ$ increments for level horizon. Lock with M5 x 25 mm bolt and nut ($3.5\,\text{Nm}$). Click Varia into bayonet and tighten M3 set screw.
+
+### Step 4.2: Harley-Davidson Kit Bike Mounting (Classic Touring vs. CVO ST / Performance Bagger)
+
+```
+                       OPENMOTORBRIDGE HARLEY-DAVIDSON MOUNTING SUITE
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│ HARLEY-DAVIDSON TOURING & BAGGER (CLASSIC: STREET GLIDE, ROAD GLIDE, ROAD KING)        │
+│ • Saddlebag lid docks (saddlebag_lid_dock.stl) on hard bags (Pod 1 & Pod 2)           │
+│ • Touring fender console (pod3_touring_fender_console.stl) streamlined on rear fender  │
+│ • License plate radar mount (radar_license_plate_bracket.stl) decoupled under plate    │
+├────────────────────────────────────────────────────────────────────────────────────────┤
+│ HARLEY-DAVIDSON CVO ROAD GLIDE ST / PERFORMANCE BAGGER                                 │
+│ • Under-Cowl skeleton dock (cvo_st_undercowl_skeleton_dock.stl) under solo seat cowl:  │
+│   Shields from exhaust heat and clears Showa remote reservoir shock canisters          │
+│ • CVO ST telemetry fin (cvo_st_telemetry_fin.stl) as shark fin on rear tab            │
+│ • Centered under-fender mount (radar_center_underfender_mount.stl) for side-mount plates│
+└────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+1. **Classic Touring Installation:**
+   * **Pods 1 & 2:** Mount saddlebag lid docks ([`saddlebag_lid_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/saddlebag_lid_dock.stl)) using M4 countersunk screws with sealing washers at OEM points or via 3M VHB tape. Route M8 cable through grommet to quick-disconnect at frame.
+   * **Pod 3:** Center and fasten fender console ([`pod3_touring_fender_console.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod3_touring_fender_console.stl)) flat onto rear fender.
+   * **Radar:** Fasten license plate bracket ([`radar_license_plate_bracket.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_license_plate_bracket.stl)) beneath license plate frame.
+2. **CVO ST / Performance Bagger Installation:**
+   * **Pods 1 & 2:** Mount upright skeleton dock ([`cvo_st_undercowl_skeleton_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/cvo_st_undercowl_skeleton_dock.stl)) under solo seat cowl. Pods stand vertically, clearing suspension remote reservoirs.
+   * **Pod 3:** Mount telemetry fin ([`cvo_st_telemetry_fin.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/cvo_st_telemetry_fin.stl)) on rear cowl tab.
+   * **Radar:** Mount centered under-fender plate ([`radar_center_underfender_mount.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_center_underfender_mount.stl)) under shortened rear fender.
 
 ---
 
 ## 5. Universal Front Node Assembly & Vehicle Installation
 
-### 5.1 Enclosure Assembly
-1. **Heat-Set Inserts:**
-   * Melt 4x M3 inserts into the enclosure corners.
-   * Melt 4x M4 inserts into the AMPS pattern ($30 \times 38\,\text{mm}$) on the bottom.
-2. **Acoustic Membrane:** Adhere the hydrophobic Gore ePTFE acoustic membrane over the Knowles MEMS sound port.
-3. **Mount PCB:** Fasten `PCBA 05` using M2.5 screws.
+### 5.1 Front Node Box Assembly (100% Solder-Free & Zero Melting)
+1. **Insert Captive Nuts (Nut-Pockets):**
+   * Press 4x DIN 934 / DIN 985 M3 stainless nuts into the corner nut pockets of the lower tub ([`front_node_lower_tub.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_lower_tub.stl)).
+   * Insert 4x DIN 934 M4 nuts into the rear hex pockets of the AMPS pattern ($30 \times 38\,\text{mm}$) at the tub floor.
+2. **Acoustic Membrane:** Adhere hydrophobic Gore ePTFE acoustic membrane over the Knowles MEMS microphone port.
+3. **Mount Circuit Board:** Fasten factory-assembled PCBA 05 (`kicad_front_node`) using 4x M2.5 screws finger-tight.
 4. **RF Antenna Installation (ESP32-S3 2.4 GHz):**
-   * Adhere the flexible 2.4 GHz FPC dipole antenna (e.g. Molex 146153) into the $48 \times 12\,\text{mm}$ recess pocket on the inside of the enclosure lid.
-   * Route the $1.13\,\text{mm}$ micro-coaxial lead into the ceiling guide canal and snap the U.FL / IPEX-MHF1 connector perpendicular onto the antenna port of the ESP32-S3-WROOM-1U module. (Optional: For extreme installations such as solid carbon fiber fairings, the lead can be routed outside through an EPDM gland slit).
-5. **Insert Cables into Front & Flank Openings:**
-   * **Front Opening (South Wall, 4x $\varnothing 4.2\,\text{mm}$ slitted channels for USB):**
-     * Insert the short USB-A flat ribbon cable into Channel 1 and connect to Port `J6` (switched VBUS for CarPlay / Dongle).
-     * Insert the $1.0\,\text{m}$ right-angle USB-C charging cable into Channel 2 and connect to Port `J5` (glovebox charging).
-     * Insert the USB cable into Channel 3 and connect to Port `J4` (USB host).
-     * Insert the 5V Action-Cam charging cable into Channel 4 and connect to Port `J8` (continuous 5V charging backed by buffer capacitor C_BUF).
-   * **Right Opening (East Wall, USB-C Service Port):**
-     * Seat the elastomeric USB-C service dust cap (`front_node_usbc_cap_tpu.stl`) with its sealing flange collar into the East wall pocket over service port `J7`.
-   * **Left Opening (West Wall, 3x $\varnothing 3.2\,\text{mm}$ slitted channels for Signals & Power):**
-     * Route 12V vehicle power (KL15 & GND) with JST-PH 2-pin connector into Channel 1 and latch into `J1`.
-     * Route CAN-Bus twisted pair with JST-PH 3-pin connector into Channel 2 and latch into `J2`.
-     * Route Handlebar PTT switch lead with JST-PH 2-pin connector into Channel 3 and latch into `J3`.
-6. **Seat Glands & Close Enclosure:**
-   * Lightly coat the outer flanks of the EPDM/TPU cable glands with silicone grease.
-   * Slide the combs into the enclosure cutouts (the slits close snugly around the wires).
-   * Lay the $\varnothing 1.5\,\text{mm}$ silicone O-ring cord ($30\,\text{cm}$) into the lid perimeter groove and tighten the 4x M3 x 20 mm bolts in a cross pattern (compressing the glands by approx. 15% for hermetic IP67 sealing).
+   * Adhere flexible 2.4 GHz FPC dipole antenna (Molex 146153) into the lid pocket ([`front_node_upper_lid.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_upper_lid.stl)).
+   * Snap micro-coax U.FL connector vertically onto ESP32-S3 module.
+5. **Insert Pre-Molded COTS Cables (Zero Crimping!):**
+   * **Front Opening (South Wall for USB):**
+     * Short USB-A flat ribbon cable to Port `J6` (switched VBUS for CarPlay dongle / Ottocast).
+     * 1.0 m USB-C cable to Port `J5` (glovebox phone charging).
+     * USB host cable to `J4`.
+   * **Right Opening (East Wall):** Insert elastomeric dust cap ([`front_node_usbc_cap_tpu.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_usbc_cap_tpu.stl)) into service port `J7`.
+   * **Left Opening (West Wall for Power & Signals):**
+     * Pre-crimped JST-PH 2-pin lead for 12V supply (KL15 & GND) to `J1`.
+     * Pre-crimped JST-PH 3-pin lead for CAN-Bus to `J2`.
+     * Pre-crimped JST-PH 2-pin lead from handlebar switch to `J3` (PTT).
+6. **Insert Cable Glands & Fasten Lid:**
+   * Apply light film of silicone grease to TPU cable glands ([`front_node_cable_glands_tpu.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_cable_glands_tpu.stl)) and push into housing pockets.
+   * Seat silicone gasket cord (Ø 1.5 mm, $30\,\text{cm}$) in lid groove.
+   * Tighten lid with 4x M3 $\times 20\,\text{mm}$ screws in a cross pattern (threads into captive M3 nuts in nut pockets).
 
 ### 5.2 Motorcycle Mounting (4 Options)
 
@@ -276,9 +351,11 @@ To assemble all subassemblies with vibration resistance and hermetic IP67 sealin
 ├────────────────────────────────────────────────────────────────────────┤
 │ Option 1: AMPS Pattern (30 x 38 mm)                                    │
 │ • Bolts directly to RAM-Mount balls, Garmin brackets, nav towers       │
+│ • Ideal for adventure bikes and naked bikes                            │
 ├────────────────────────────────────────────────────────────────────────┤
 │ Option 2: 120° V-Groove Tube Saddle with EPDM O-Rings                  │
-│ • Toolless attachment to Ø 22 mm to Ø 32 mm crash bars (BMW GS)        │
+│ • Toolless attachment to Ø 22 mm to Ø 32 mm crash bars (BMW GS/RT)     │
+│ • Vibration-isolated, will not scratch powdercoat                      │
 ├────────────────────────────────────────────────────────────────────────┤
 │ Option 3: M4 Silentblocks                                              │
 │ • Vibration-isolated screw mounting inside the fairing beak            │
@@ -288,11 +365,11 @@ To assemble all subassemblies with vibration resistance and hermetic IP67 sealin
 └────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 4.3 Electrical Connections
-* **12V Vehicle Power:** Connect a single 2-core wire (KL15 switched ignition and chassis ground) to the parking light or accessory socket.
-* **Ottocast Dongle:** Plug into USB-A Port `J1` and affix with 3M Dual-Lock inside the fairing.
-* **Glovebox Extension:** Route a USB-C cable from Port `J2` to the glovebox for smartphone charging.
-* **Handlebar PTT:** Wire the mechanical handlebar button to 2-pin header `J3`.
+### 5.3 Electrical Connections (Plug-and-Play)
+* **12V Vehicle Power:** Single 2-core wire (KL15 switched ignition and ground) tapped from parking light or accessory plug.
+* **Ottocast Dongle:** Plugs into USB-A Port `J6` and mounts with 3M Dual-Lock inside fairing.
+* **Glovebox Extension:** USB-C cable from Port `J5` leads to glovebox for phone charging.
+* **Handlebar PTT:** 2-wire lead from handlebar momentary button leads to socket `J3` (GPIO 0).
 
 ---
 
@@ -304,7 +381,7 @@ cd openMotorBridge/firmware/main_controller
 pio run --target upload
 pio run --target uploadfs
 
-# 2. Flash Rear Tail Coprocessor (RP2040)
+# 2. Flash Rear Tail Coprocessor (RP2040 in Pod 3)
 cd ../rear_coprocessor
 pio run --target upload
 
@@ -316,8 +393,8 @@ pio run --target upload
 ### Verification Checklist:
 1. [ ] **Bench Power:** Apply $12{,}0\,\text{V DC}$ (current limit $150\,\text{mA}$). Quiescent draw should measure $45 \dots 75\,\text{mA}$.
 2. [ ] **Status LED:** Pulses green (system ready, UPS charging).
-3. [ ] **Web Dashboard:** Connect via Web Bluetooth to `OpenMotorBridge_v8`.
-4. [ ] **Cartridge Detection:** Insert cartridges into Pods 1 and 2 $\rightarrow$ Headset profiles appear immediately.
+3. [ ] **Web Dashboard:** Connect via Web Bluetooth or WiFi to `OpenMotorBridge_v8`.
+4. [ ] **Cartridge Detection:** Insert cartridges into Pods 1 and 2 $\rightarrow$ Gateway profiles appear immediately with serial numbers.
 5. [ ] **Front Node Wireless Link:** Dashboard displays `ESP-NOW LINK (2.4 GHz) - READY`.
 6. [ ] **PTT Test:** Press handlebar button $\rightarrow$ Dashboard PTT tile illuminates green (`< 1.8 ms Latency`).
 7. [ ] **CarPlay Hard Reboot:** Click "CarPlay 1-Click Hard Reboot" $\rightarrow$ VBUS drops to $0{,}00\,\text{V}$ for $2{,}5\,\text{s}$ and restarts cleanly.

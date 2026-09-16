@@ -105,154 +105,160 @@ Dieses Dokument enthält die vollständige Bauteilliste (Bill of Materials) und 
 
 ## 6. Mechanik- & Gehäuse-BOM (3D-Druck MJF PA12 & Normteile)
 
-### 6.1 Druckdateien-Übersicht (Modulare STLs für 1 Fahrzeug)
-* **Zentralbox (3 Teile, PA12 / ASA):** `main_box_lower_case.stl`, `main_box_mid_tray.stl`, `main_box_lid.stl`.
-* **Satelliten-Pods Basis (6 Teile, PA12 / ASA):** 3x `pod_base_housing.stl`, 3x `03_pod_bulkhead_partition.stl`.
-* **Kassetten (3 Teile, PA12 / ASA):** `cartridge_sena_sled.stl` (oder Cardo), `cartridge_cardo_sled.stl` (oder Blindkassette), `cartridge_omm_transceiver_sled.stl`.
-* **Front-Knoten Gehäuse (2 Teile, PA12 / ASA):** `front_node_lower_tub.stl`, `front_node_upper_lid.stl`.
-* **Front-Knoten Dichtungen & Kappe (2 Teile, TPU 95A / 85A):** `front_node_cable_glands_tpu.stl` (Paar Dichtkämme für Front-USB & Flanken-Signale), `front_node_usbc_cap_tpu.stl` (elastische USB-C Staubschutzkappe mit Haltekollier).
-* **Heck-Montage & Konsolen-Optionen für Pod 3 & Koffer (Referenz-Kits):**
-  * **Adventure-Kit (BMW R1250/1300 GS & GSA, KTM Super Adventure, Africa Twin):**
-    * `adventure_pannier_rack_clamp_base.stl` & `adventure_pannier_rack_clamp_cap.stl`: Schwerlast-Rohrträger-Klemmschellen-Paar (Ø 18 mm Edelstahlrohr, schützt Pods 1 & 2 als Überrollkäfig im Kofferträger-Rahmendreieck).
-    * `adventure_transition_dock.stl`: Ergonomisches Sitzbank-Bügelfalten-Dock (100% kofferunabhängig, feste Klemmung an Ø 28 mm Rahmenrohr).
-    * `adventure_rack_tail_mount.stl`: Heck-Balkon Gepäckbrücken-Ausleger (65 mm Cantilever hinter Alutopcase, 45° Astabweiser-Finne für Dipolantenne, integrierte M5 GoPro-Gabel).
-    * `radar_varia_gopro_lock_dock.stl`: Garmin Varia Quarter-Turn Bajonett-Dock (akustische Formschluss-Rastung + verdeckte M3 Torx-TR Diebstahlsicherung + untere Hirth-Lasche).
-    * `011_gopro_hirth_lock.stl`: 36-Zahn Radial-Hirth-Formschluss-Rosette (10°-Schritte gegen Nick-Wandern bei Wellblechpiste).
-    * `cartridge_magnetic_lock_latch.stl`: Magnetischer Diebstahlschutz-Wipphebel mit 90°-Sägezahn-Sperrflanke und Aufnahme für Ø 6x8 mm Stahlanker.
-  * **Typ D1 (Adventure / Rohrträger klassisch):** `pod3_radar_bracket.stl` (M5 GoPro-Schwenkarm direkt an Pod 3) & Standard-Rohrsattel (`005_pod_strap_hooks.scad`).
-  * **Referenz-Kit 1 (CVO Road Glide ST & New Touring):** `cvo_st_undercowl_skeleton_dock.stl` (aufrechtes Federsitz-Dock unter Carbonhutze) + `cvo_st_telemetry_fin.stl` (2,4 GHz Heckfinne) + `saddlebag_lid_dock.stl` (Kofferdeckel-Dock).
-  * **Referenz-Kit 2 (Road King Special):** `pod3_touring_fender_console.stl` (organische Kotflügel-Konsole für 1/4"-20 Mutter) + `saddlebag_lid_dock.stl`.
-  * **Referenz-Kit 3 (Classic Bagger & Cruiser):** `pod3_touring_stealth_console.stl` (flache Touring-Konsole).
-  * **Entkoppelter Radar-Halter (Cruiser / Bagger normal):** `radar_license_plate_bracket.stl` (zentrisch symmetrische M6-Klemmung unterhalb Kennzeichenhalter mit M5 GoPro-Gelenk & verdeckter M8-Kabelführung).
-  * **Stealth Center Under-Fender Radar-Halter (Custom / Bobber mit seitlichem Halter):** `radar_center_underfender_mount.stl` (zentrisch gewölbte R=210 mm Unterfender-Sattelplatte für 3M VHB oder M4/M5 Schrauben, gefederte Masse, 100% freier RF-Sichtkegel).
+Alle Gehäuseteile sind für das **IKEA-Prinzip** optimiert: **Kein Einschmelzen von Gewindeeinsätzen mit dem Lötkolben erforderlich!** Die Gehäuse verfügen über integrierte Sechskant-Mutternaschen (Nut Pockets für Standard DIN 934 / DIN 985 Edelstahlmuttern) bzw. Kernlöcher für selbstfurchende Kunststoffschrauben.
+
+### 6.1 Basis-System (Universal für jedes Motorrad)
+| Baugruppe | STL-Dateiname | Stück | Material & Fertigung | Funktion & Beschreibung |
+| :--- | :--- | :---: | :--- | :--- |
+| **Main Box Unterteil** | [`main_box_lower_case.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_lower_case.stl) | **1** | MJF PA12 / ASA | Monocoque-Unterwanne mit 4x M4 Silentblock-Ohren, Mutternaschen & Dichtnut |
+| **Main Box Zwischenboden** | [`main_box_mid_tray.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_mid_tray.stl) | **1** | MJF PA12 / ASA | Akku-Wanne für 1000 mAh LiPo, 10x Konvektionsschlitze & Dichtfeder |
+| **Main Box Deckel** | [`main_box_lid.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_lid.stl) | **1** | MJF PA12 / ASA | Gehäusedeckel mit Gore ePTFE-Ventilsitz & Schraubensenkungen |
+| **Pod-Basisgehäuse** | [`pod_base_housing.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod_base_housing.stl) | **3** | MJF PA12 / ASA | Universal-Schachtgehäuse für Pod 1 (Links), Pod 2 (Rechts) und Heck-Pod 3 |
+| **Pod-Schottwände** | [`03_pod_bulkhead_partition.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/components/03_pod_bulkhead_partition.stl) | **3** | MJF PA12 / ASA | Schottwand mit Dichtkragen & Federaufnahmen (1x pro Pod) |
+| **Kassetten-Basisschlitten**| [`cartridge_base_sled.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl) | **3** | MJF PA12 / ASA | Universalschlitten für Gateway 1 (Pod 1), Gateway 2 (Pod 2) und OMM (Pod 3) |
+| **Kassetten-Riegel / Wippe**| [`cartridge_magnetic_lock_latch.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_magnetic_lock_latch.stl) | **2** | MJF PA12 / ASA | Magnetische Diebstahlschutz-Rastwippen für Kassetten-Slots 1 & 2 |
+| **Heck-Pod 3 OMM-Radom** | [`cartridge_antenna_bracket_omm.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_antenna_bracket_omm.stl) | **1** | MJF PA12 / ASA | Dielektrisches Antennenradom & Trägerbrücke für PCBA 04 im Heck-Pod 3 |
+| **Front-Knoten Unterwanne** | [`front_node_lower_tub.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_lower_tub.stl) | **1** | MJF PA12 / ASA | Cockpit-Wanne mit AMPS-Bohrbild, Rohrbett & Mutternaschen |
+| **Front-Knoten Deckel** | [`front_node_upper_lid.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_upper_lid.stl) | **1** | MJF PA12 / ASA | Deckel mit Knowles MEMS Schalleintritt & O-Ring-Dichtnut |
+| **Front-Knoten Dichtkämme** | [`front_node_cable_glands_tpu.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_cable_glands_tpu.stl) | **1 Paar**| TPU 95A / 85A | Elastische Dichtkämme für Front-USB & Signale |
+| **Front-Knoten USB-C Kappe**| [`front_node_usbc_cap_tpu.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_usbc_cap_tpu.stl) | **1** | TPU 95A / 85A | Elastische Staubschutzkappe mit Haltekollier für Service-Port |
+
+### 6.2 Gateway-Kassetten-Inlays (Passend zur gewünschten Intercom-Ausstattung)
+> **Hinweis zur Architektur:** Slot 1 und Slot 2 sind **Multi-Protokoll Gateway-Transceiver**, keine Fahrer/Beifahrer-Kopfhörer! Sie verbinden das Motorrad gleichzeitig mit Sena Mesh und Cardo DMC. Fahrer und Sozius funken drahtlos mit ihren normalen Helmen.
+
+| Baugruppe | STL-Dateiname | Stück | Material | Funktion & Beschreibung |
+| :--- | :--- | :---: | :--- | :--- |
+| **Gateway-Inlay Sena** | [`cartridge_insert_sena.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_sena.stl) | *Opt. (1)* | MJF PA12 / ASA | Formschlüssiges Inlay für Sena SPIDER X Slim / 50S / 60S (Mesh 3.0 Wave) |
+| **Gateway-Inlay Cardo** | [`cartridge_insert_cardo.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_cardo.stl) | *Opt. (1)* | MJF PA12 / ASA | Inlay für Cardo Packtalk Edge / Pro (DMC Gen2) mit Air-Mount |
+| **Blindkassette / Dry Box** | [`cartridge_insert_blindkassette.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_blindkassette.stl) | *Opt. (1)* | MJF PA12 / ASA | Hermetischer Schutzschlitten für ungenutzten Slot oder regendichte Dry Box |
+
+### 6.3 Fahrzeugspezifische Montage-Kits (3D-Druckteile)
+* **Kit 1: BMW R1250 / R1300 GS (Standard / Vario-Koffer):**
+  * `adventure_transition_dock.stl` (2 Stk.): Kofferunabhängige Docks für die Sitzbank-Bügelfalte (Ø 28 mm Rahmenrohr).
+  * `adventure_rack_tail_mount.stl` (1 Stk.): Heckbrücken-Ausleger für Pod 3 & Radar.
+  * `radar_varia_gopro_lock_dock.stl` (1 Stk.) & `011_gopro_hirth_lock.stl` (1 Stk.): Radar-Bajonett-Dock mit Hirth-Verzahnung.
+* **Kit 2: BMW R1250 / R1300 GSA (Adventure mit Ø 18 mm Edelstahl-Alukofferträger):**
+  * `adventure_pannier_rack_clamp_base.stl` & `adventure_pannier_rack_clamp_cap.stl` (je 4 Stk.): Schwerlast-Klemmschellen-Paare für Pod 1 & 2 im Kofferträger-Rahmendreieck.
+  * `adventure_rack_tail_mount.stl` (1 Stk.): Heck-Balkon hinter Alutopcase mit 45°-Astabweiser für Dipolantenne.
+  * `radar_varia_gopro_lock_dock.stl` (1 Stk.) & `011_gopro_hirth_lock.stl` (1 Stk.): Radar-Dock mit Hirth-Verzahnung.
+* **Kit 3: Harley-Davidson Touring & Classic Bagger (Street Glide, Road Glide, Road King):**
+  * `saddlebag_lid_dock.stl` (2 Stk.): Kofferdeckel-Montagedocks für Pod 1 & 2.
+  * `pod3_touring_fender_console.stl` (1 Stk.): Organische Heckkotflügel-Konsole für Pod 3 (Road King Special).
+  * `radar_license_plate_bracket.stl` (1 Stk.): Entkoppelter Kennzeichen-Radarhalter.
+* **Kit 4: Harley-Davidson CVO ST & Performance Bagger (Road Glide ST):**
+  * `saddlebag_lid_dock.stl` (2 Stk.): Kofferdeckel-Montagedocks für Pod 1 & 2.
+  * `cvo_st_undercowl_skeleton_dock.stl` (1 Stk.): Aufrechtes Federsitz-Dock für Pod 3 unter der Forged-Carbon-Hutze.
+  * `cvo_st_telemetry_fin.stl` (1 Stk.): Aerodynamische Haifischflosse / Telemetrie-Finne auf der Hecklasche.
+  * `radar_center_underfender_mount.stl` (1 Stk.): Zentrische Unter-Kotflügel-Platte für Radar (freie Showa-Reservoirs).
+* **Kit 5: Universal (Andere Motorräder):**
+  * Standard 120°-V-Nut am Pod-Basisgehäuse für Rahmenrohre (Ø 22–32 mm) mit EPDM-Spannringen oder M4 Silentblöcken.
+
+### 6.4 Zubehör (Optional)
+| Baugruppe | STL-Dateiname | Stück | Material | Funktion & Beschreibung |
+| :--- | :--- | :---: | :--- | :--- |
+| **Smart-Keyfob Unterschale**| [`smart_keyfob_lower_shell.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/05_accessories/smart_keyfob_lower_shell.stl) | **1** | MJF PA12 / ASA | Wanne mit LRA-Dämpfungsbett und Magnetaufnahme für PCBA 07 |
+| **Smart-Keyfob Oberschale** | [`smart_keyfob_upper_shell.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/05_accessories/smart_keyfob_upper_shell.stl) | **1** | MJF PA12 / ASA | Deckel mit 3 Tastenfeldern & Lichtleiter |
+| **Smart-Keyfob Bumper** | [`smart_keyfob_tpu_rim.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/05_accessories/smart_keyfob_tpu_rim.stl) | **1** | TPU 85A / 95A | Elastischer Stoßschutz-Umlaufring |
 
 ---
 
-## 7. Inbetriebnahme-, Mess- & Testprotokoll (Schritt-für-Schritt)
+## 7. Inbetriebnahme- & Testprotokoll (100% Lötfrei)
 
-### Schritt 1: Visuelle Inspektion (Vor dem ersten Einschalten)
-* [ ] Lötbrücken unter LM5164, BQ24075, ES8388, USB2514B und ESP32-S3 mit Mikroskop/Lupe ausschließen.
-* [ ] Polarität der TVS-Diode D1 (SMBJ33CA) und des P-FET Verpolschutzes kontrollieren.
-* [ ] Prüfen, ob die 2,5 mm Isolationsbarriere um T1/T2 und OC1/OC2 frei von Zinnresten ist.
+Da alle Platinen fertig bestückt und vorgetestet geliefert werden, reduziert sich die Inbetriebnahme auf einen reinen Funktionstest:
 
-### Schritt 2: Spannungsprüfung & Strombegrenzung
-* [ ] Labornetzteil auf $12{,}0\,\text{V DC}$ einstellen, Strombegrenzung auf $150\,\text{mA}$.
-* [ ] Ruhestrom messen: Sollwert $= 45\,\text{mA}$ bis $75\,\text{mA}$ (ohne Akkuladung).
-* [ ] Prüfpunkt `TP_5V`: Sollwert $= 5{,}15\,\text{V} \pm 0{,}05\,\text{V}$.
-* [ ] Prüfpunkt `TP_3V3`: Sollwert $= 3{,}30\,\text{V} \pm 0{,}02\,\text{V}$.
+### Schritt 1: Steckkontrolle & Sichtprüfung
+* [ ] Sichtprüfung aller PCBAs auf Transportschäden.
+* [ ] Prüfen, ob die Dichtungen sauber in den Gehäusenuten liegen.
 
-### Schritt 3: Flashen & System-Selbsttest
-* [ ] ESP-IDF / PlatformIO Flash via USB-C Port ausführen (`firmware/main_controller/`).
-* [ ] LittleFS-Partition formatieren und Profile hochladen.
-* [ ] Serielle Konsole ($115.200\,\text{Baud}$): Meldungen "LittleFS Mount OK", "1-Wire Manager Task OK", "I2S ES8388 Codec Init OK", "TCAN334G CAN-FD OK" verifizieren.
+### Schritt 2: Spannungsprüfung mit Labornetzteil oder Motorradbatterie
+* [ ] 12V Versorgungsleitung anschließen (abgesichert über 2A Flachsicherung).
+* [ ] Ruhestrom messen: Sollwert $= 45\,\text{mA}$ bis $75\,\text{mA}$ (ohne Ladevorgang).
+* [ ] Status-LED an Zentralbox und Front-Knoten leuchtet grün.
 
-### Schritt 4: Audio- & Ducking-Funktionstest
-* [ ] $1\,\text{kHz}$ Sinuston ($1{,}0\,\text{V}_{\text{RMS}}$) an Audio-Input anlegen.
-* [ ] Oszilloskop an `PORT1_AUDIO_OUT`: Überprüfen, ob Signal innerhalb von $15\,\text{ms}$ weich gedämpft wird.
-* [ ] Signal abschalten: Prüfen, ob nach $600\,\text{ms}$ Hold-Zeit die weiche $250\,\text{ms}$-Raised-Cosine-Rückkehr erfolgt.
-
-### Schritt 5: IP67-Dichtheitsprüfung
-* [ ] Montiertes Gehäuse in Vakuumkammer bei $-20\,\text{kPa}$ Unterdruck für 60 Sekunden halten (Druckverlust $< 0{,}5\,\text{kPa}$).
+### Schritt 3: Firmware-Selbsttest & WebApp-Verbindung
+* [ ] Smartphone / Notebook mit WLAN `OpenMotorBridge-Setup` verbinden.
+* [ ] PWA im Browser aufrufen (`http://192.168.4.1`).
+* [ ] Status-Check: Beide Gateway-Slots (Pod 1 & Pod 2) werden erkannt, Heck-Pod 3 liefert GNSS-Fix.
 
 ---
 
-## 8. Schritt-für-Schritt Bestellleitfaden für JLCPCB (Alle 5 Leiterplatten)
+## 8. 1-Click Bestellleitfaden für JLCPCB (Alle Leiterplatten fertig bestückt)
 
-| Baugruppe / PCBA | Gerber-ZIP Datei | BOM CSV Datei | CPL (Pick & Place) CSV | Lagen & Stackup | Oberfläche & Dicke |
+Alle Fertigungsdaten liegen im Repository als fertige ZIP- und CSV-Pakete vor:
+
+| Baugruppe / PCBA | Gerber-ZIP Datei | BOM CSV Datei | CPL (Pick & Place) CSV | Lagen | Fertigungs-Hinweis |
 | :--- | :--- | :--- | :--- | :---: | :--- |
-| **1. Zentralbox Hauptplatine** | `01_main_box_pcba_gerbers_jlcpcb.zip` | `01_main_box_pcba_bom_jlcpcb.csv` | `01_main_box_pcba_cpl_jlcpcb.csv` | **4 Lagen** (JLC04161H-7628) | **ENIG (Gold)**, 1.6 mm, TG150 |
-| **2. Pod-Basisplatine** | `02_pod_base_pcba_gerbers_jlcpcb.zip` | `02_pod_base_pcba_bom_jlcpcb.csv` | `02_pod_base_pcba_cpl_jlcpcb.csv` | **2 Lagen** (Standard) | **ENIG (Gold)**, 1.6 mm |
-| **3. Kassetten-Trägerplatine** | `03_pod_cartridge_pcba_gerbers_jlcpcb.zip` | `03_pod_cartridge_pcba_bom_jlcpcb.csv` | `03_pod_cartridge_pcba_cpl_jlcpcb.csv` | **2 Lagen** (Standard) | **ENIG (Gold)**, 1.2 mm |
-| **4. Heck-Pod 3 Transceiver** | `04_rear_pod3_pcba_gerbers_jlcpcb.zip` | `04_rear_pod3_pcba_bom_jlcpcb.csv` | `04_rear_pod3_pcba_cpl_jlcpcb.csv` | **4 Lagen** (JLC04161H-7628) | **ENIG (Gold)**, 1.6 mm, TG150 |
-| **5. Universal Front-Knoten** | `05_front_node_pcba_gerbers_jlcpcb.zip` | `05_front_node_pcba_bom_jlcpcb.csv` | `05_front_node_pcba_cpl_jlcpcb.csv` | **4 Lagen** (JLC04161H-7628) | **ENIG (Gold)**, 1.6 mm, TG150 |
+| **1. Zentralbox Hauptplatine** | `01_main_box_pcba_gerbers_jlcpcb.zip` | `01_main_box_pcba_bom_jlcpcb.csv` | `01_main_box_pcba_cpl_jlcpcb.csv` | **4 Lagen** | ENIG (Gold), 1.6 mm, TG150, SMT beidseitig |
+| **2. Pod-Basisplatine** | `02_pod_base_pcba_gerbers_jlcpcb.zip` | `02_pod_base_pcba_bom_jlcpcb.csv` | `02_pod_base_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG (Gold), 1.6 mm, SMT Top |
+| **3. Kassetten-Trägerplatine** | `03_pod_cartridge_pcba_gerbers_jlcpcb.zip` | `03_pod_cartridge_pcba_bom_jlcpcb.csv` | `03_pod_cartridge_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG (Gold), 1.2 mm, SMT Top |
+| **4. Heck-Pod 3 Transceiver** | `04_rear_pod3_pcba_gerbers_jlcpcb.zip` | `04_rear_pod3_pcba_bom_jlcpcb.csv` | `04_rear_pod3_pcba_cpl_jlcpcb.csv` | **4 Lagen** | ENIG (Gold), 1.6 mm, TG150, SMT Top |
+| **5. Universal Front-Knoten** | `05_front_node_pcba_gerbers_jlcpcb.zip` | `05_front_node_pcba_bom_jlcpcb.csv` | `05_front_node_pcba_cpl_jlcpcb.csv` | **4 Lagen** | ENIG (Gold), 1.6 mm, TG150, SMT beidseitig |
+| **7. Smart-Keyfob (Zubehör)** | `07_smart_keyfob_pcba_gerbers_jlcpcb.zip` | `07_smart_keyfob_pcba_bom_jlcpcb.csv` | `07_smart_keyfob_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG (Gold), 1.0 mm, SMT beidseitig |
 
 ---
 
-## 9. Fertigung des zentralen Kabelbaums (HD26-Breakout-Pigtail)
+## 9. Vorkonfektionierte COTS-Kabel (Kein Crimpen, kein Löten!)
+
+Für den Aufbau müssen **keine Kabelbäume selbst gecrimpt oder gelötet werden**. Das System verwendet zu 100 % handelsübliche, industriell gefertigte Standard-Kabel (COTS):
 
 ```
-                               ZENTRALER HD26 BREAKOUT-KABELBAUM
+                       DAS PLUG-AND-PLAY KABELKONZEPT (COTS FERTIGKABEL)
 ┌─────────────────────────┐
-│ HD26 IP67 Stecker       │ ──► Gesamtlänge Peitschen: je 250 mm (mit schwarzem Geflechtschlauch)
-│ (Amphenol LTW / D-Sub)  │ ──► Y-Verteilerpunkt vergossen mit Schmelzkleber / Schrumpfkappe
+│ HD26 IP67 Fertig-Kabel  │ ──► Fertig umspritzte HD26-Breakout-Kabelpeitsche (Amphenol LTW COTS)
+│ (Zentralbox-Hauptanschl)│ ──► Keine Einzeladern konfektionieren, 100 % wasserdicht vergossen
 └─┬───────────────────────┘
-  ├─► PEITSCHE 1 (250 mm): M8 6-Pin Buchse (A-kodiert, IP67) ──► Pod 1 (Helm Fahrer Links)
-  ├─► PEITSCHE 2 (250 mm): M8 6-Pin Buchse (A-kodiert, IP67) ──► Pod 2 (Helm Sozius Rechts)
-  ├─► PEITSCHE 3 (250 mm): M8 6-Pin Buchse (A-kodiert, IP67) ──► Pod 3 (Heckbürzel OMM & GNSS)
-  ├─► PEITSCHE 4 (250 mm): AMP Superseal 1.5 4-Pin Buchse     ──► 12V Bordnetz (KL30, KL15, GND, Masse)
-  └─► PEITSCHE 5 (250 mm): M8 4-Pin Buchse (A-kodiert, IP67) ──► CAN-Bus & IP67 Front-Mikrofon
+  ├─► M8 6-Pin PUR-Kabel (1.0 m / 1.5 m): Fertiges Standard Sensor-/Aktorkabel ──► Pod 1 (Gateway 1)
+  ├─► M8 6-Pin PUR-Kabel (1.0 m / 1.5 m): Fertiges Standard Sensor-/Aktorkabel ──► Pod 2 (Gateway 2)
+  ├─► M8 6-Pin PUR-Kabel (1.5 m / 2.0 m): Fertiges Standard Sensor-/Aktorkabel ──► Pod 3 (Heck-Transceiver)
+  ├─► AMP Superseal 12V-Kabel (1.0 m): Vorkonfektioniertes Batteriekabel mit Sicherung ──► 12V Bordnetz
+  └─► M8 4-Pin PUR-Kabel (1.5 m): Fertiges geschirmtes CAN/Front-Kabel ──► Front-Knoten (Cockpit)
 ```
 
 ---
 
-## 10. Zukaufteile & Normteile-Einkaufsliste (COTS-Komponenten für 1 Komplettset)
+## 10. Zukaufteile & Normteile-Einkaufsliste (1 Komplettset)
 
-| Bauteil | Spezifikation / Typ | Bezugsquelle / Hersteller | Menge | Montageort & Funktion |
+| Bauteil | Spezifikation / Typ | Bezugsquelle | Menge | Montageort & Funktion |
 | :--- | :--- | :--- | :---: | :--- |
-| **M3 Gehäuseschrauben** | M3 x 40 mm Zylinderkopf V4A (DIN 912) | Normteil / Schrauben-Express | 4 Stk. | 4-Eck Zentralbox-Verschraubung |
-| **M3 Gehäuseschrauben (Front)** | M3 x 20 mm Zylinderkopf V4A (DIN 912) | Normteil / Schrauben-Express | 4 Stk. | 4-Eck Front-Node Gehäuseverschraubung |
-| **M2.5 Platinenschrauben** | M2.5 x 6 mm Zylinderkopf V4A (DIN 912) | Normteil / Schrauben-Express | 8 Stk. | 4x Zentralbox-Platine, 4x Front-Node-Platine |
-| **M3 Gewindeeinsätze** | Ruthex M3 x 5.7 mm Messing (RX-M3x5.7) | Ruthex / Amazon | 8 Stk. | 4x Zentralbox Unterwanne, 4x Front-Node Unterwanne |
-| **M4 Gewindeeinsätze** | Ruthex M4 x 8.1 mm Messing (RX-M4x8.1) | Ruthex / Amazon | 4 Stk. | Front-Node Gehäuseboden (AMPS-Lochbild 30 x 38 mm) |
+| **M3 Edelstahlschrauben** | M3 x 40 mm Zylinderkopf V4A (DIN 912) | Normteil / Amazon | 4 Stk. | Zentralbox-Gehäuse (greift in Nut-Pockets) |
+| **M3 Edelstahlschrauben (Front)** | M3 x 20 mm Zylinderkopf V4A (DIN 912) | Normteil / Amazon | 4 Stk. | Front-Node Gehäuse (greift in Nut-Pockets) |
+| **M3 Edelstahlmuttern** | DIN 934 / DIN 985 M3 V4A Muttern | Normteil / Amazon | 8 Stk. | Unverlierbar in Nut-Pockets eingelegt (kein Lötkolben nötig!) |
+| **M2.5 Platinenschrauben** | M2.5 x 6 mm Zylinderkopf V4A (DIN 912) | Normteil | 8 Stk. | 4x Zentralbox-Platine, 4x Front-Node-Platine |
 | **M2 Schottwandschrauben** | M2 x 8 mm Senkkopf V4A (DIN 7991) | Normteil | 6 Stk. | Fixierung der 3 Pod-Schottwände (2x pro Pod) |
-| **M5 Klemmschrauben (Rohr)** | M5 x 30 mm Zylinderkopf V4A (DIN 912) | Normteil / Schrauben-Express | 4 Stk. | Verschraubung der GSA Rohrträger-Klemmschellen |
-| **M5 Sicherungsmuttern** | DIN 985 M5 Sicherungsmuttern V4A (Stoppmuttern)| Normteil / Schrauben-Express | 5 Stk. | 4x Rohrträger-Klemmschellen, 1x Hirth-GoPro-Gelenk |
-| **M5 Radar-Klemmschraube** | M5 x 25 mm V4A (DIN 912) + DIN 985 Stoppmutter | Normteil | 1 Stk. | Klemmschraube für Pod 3 GoPro-Radar-Schwenkarm mit Hirth-Lock |
-| **M3 Diebstahlsicherung Varia**| M3 x 6 mm Madenschraube V4A (DIN 913 / 914 Torx-TR)| Normteil | 1 Stk. | Verdeckte Rotationssperre im Varia Quarter-Turn Dock |
-| **M2 Schwenkachse Wippe** | M2 x 8 mm Zylinderstift Edelstahl (DIN 7 / ISO 2338)| Normteil / Misumi | 2 Stk. | Drehachse für magnetische Diebstahlschutz-Wippe (Pod 1 & 2) |
-| **Magnetanker (Kassette)** | Ø 6 x 8 mm Zylinderstift ferromagnetisch (DIN 6325) | Normteil / Misumi | 2 Stk. | Stahlanker im hinteren Hebelarm der Kassetten-Wippe |
-| **Wippen-Rückstellfeder** | Edelstahl V4A ($\varnothing 3{,}5\,\text{mm}, L_0=10\,\text{mm}, R=0{,}8\,\text{N/mm}$) | Gutekunst / Sodemann | 2 Stk. | Automatische Rastung der Sägezahnkralle beim Einschieben |
-| **N52 Entriegelungsschlüssel**| N52 Neodym-Blockmagnet ($20 \times 10 \times 5\,\text{mm}$) | Supermagnete / Web | 1 Stk. | Externer Magnetschlüssel für schlüssellose Entriegelung |
-| **Auswerfer-Druckfedern** | Edelstahl V4A ($D=4{,}5\,\text{mm}, L_0=15\,\text{mm}, R=1{,}2\,\text{N/mm}$) | Gutekunst Federn / Sodemann | 6 Stk. | Auto-Eject Schnappmechanismus (2x pro Pod) |
-| **Silentblöcke / Gummipuffer**| Typ A M4 Außen/Innen ($\varnothing 15 \times 10\,\text{mm}$) + Stoppmuttern | Ganter / Normteil | 4 Stk. | Schwingungsentkoppelte Rahmenmontage Zentralbox |
-| **EPDM-Spannringe** | UV- & Ozonbeständiges EPDM ($\varnothing 45\dots 75\,\text{mm}$) | QuadLock / O-Ring-Shop | 6 Stk. | Rohrbett-Schnellmontage (Pods & Front-Node) |
-| **EPDM-Dichtkämme (Front)** | EPDM Zellkautschuk geschlitzt ($15 \times 8 \times 4\,\text{mm}$) | Sonderfertigung / EPDM-Shop | 2 Stk. | Wasserdichte Flachkabel-Einführung im Front-Knoten |
-| **Silikon-Dichtschnur** | Silikon-Rundschnur $\varnothing 1{,}5\,\text{mm}$ Shore 40A (1.0 m) | O-Ring-Shop | 1 Stk. | $40\,\text{cm}$ Zentralbox-Nut, $30\,\text{cm}$ Front-Node Deckelnut |
-| **Kassetten-Flanschdichtungen**| Silikon-Formdichtung Shore 40A ($54 \times 18\,\text{mm}$) | Sonderfertigung / Silikon | 3 Stk. | Stirnseitige Mundloch-Abdichtung an Pod 1, 2 und 3 |
-| **Silikon USB-C Schutzkappe** | Wasserdichte Schutzkappe mit Haltelasche | GCT / Amazon | 1 Stk. | IP67 Schutzabdeckung für Front-Node Port J2 |
-| **Lenker-PTT Taster** | IP67 Taster (Schließer) mit Schelle ($\varnothing 22/28\,\text{mm}$) | Daytona / Oxford / APEM | 1 Stk. | Batteriefreier Lenker-PTT am Front-Knoten (Port J3) |
-| **Gore Druckausgleichsventil** | Gore Automotive AVS 41 (M8x1.25 Schraubventil) | W. L. Gore & Associates | 1 Stk. | Zentralbox-Deckelbelüftung & Kondensatschutz |
-| **Gore Klebemembranen** | Gore Adhesive Vent $\varnothing 6{,}0\,\text{mm}$ IP67 | W. L. Gore & Associates | 5 Stk. | 3x Pods, 1x Front-Node, 1x Knowles MEMS Akustikport |
-| **PMMA Lichtleiter** | Bivar PLPC3-3MM ($\varnothing 3{,}0\,\text{mm}, L=8\,\text{mm}$) | Bivar / Mentor | 1 Stk. | Optische WS2812B Statusübertragung im Deckel |
-| **3M Dual-Lock Klettband** | 3M Dual-Lock SJ3550 (Pilzkopfband, 25 mm breit) | 3M / Amazon | 25 cm | Vibrationsfeste Verkleidungsmontage für Ottocast & Node |
-| **Pufferakku (LiPo USV)** | 1S LiPo (3.7V 1000mAh) mit 10k NTC & Molex Micro-Fit | EEMB / Enerpower | 1 Stk. | USV-Pufferung in der Zentralbox |
-| **KFZ-Sicherungshalter** | Wasserdichter Mini-Flachsicherungshalter + **2A Sicherung** | Hella / MTA | 1 Stk. | Absicherung Dauerplus (KL30) direkt am Batteriepol |
-| **HD26 Flanschbuchse & Stecker**| Amphenol LTW HD26 IP67 (Buchse + Stecker mit Tülle) | Amphenol LTW | 1 Satz | 26-Pin Hauptschnittstelle Box & Kabelbaum |
-| **AMP Superseal 1.5 Buchse**| TE Connectivity 4-Pin Buchsengehäuse mit Kontakten | TE Connectivity | 1 Stk. | 12V Bordnetz-Einspeisung am Kabelbaum |
-| **M8 Zuleitungskabel (Pods)** | M8 6-Pin A-Coded PUR geschirmt (1.0m / 1.5m) | Binder / Phoenix / Murr | 3 Stk. | Verbindung Kabelbaum-Pigtail zu Pod 1, 2 und 3 |
-| **M8 Zuleitungskabel (Radar)**| M8 4-Pin A-Coded PUR geschirmt (1.0m) | Binder / Phoenix / Murr | 1 Stk. | Zuleitung zu Garmin Varia / mmWave Heckradar |
-| **Automotive-Leitungen** | FLRY-B $0{,}5\,\text{mm}^2$ & $0{,}35\,\text{mm}^2$ (diverse Farben) | Leoni / Helukabel | nach Bed. | Fahrzeugkabelbaum nach [`central_breakout_harness_wirelist.csv`](file:///Users/schmidtm/openMotorBridge/hardware/production_packages/05_wiring_harness/central_breakout_harness_wirelist.csv) |
-| **Murata MM8030 Pigtails (Pod 3)**| Murata MM126036 auf SMA-Bulkhead IP67 (150 mm, RG-178)| Murata / Mouser | 3 Stk. | Koaxial-Bypass für J3 (2.4G), J4 (868M), J5 (GNSS) |
-| **U.FL Pigtail (Front-Node)** | IPEX MHF1 / U.FL auf RP-SMA Bulkhead IP67 (150 mm, RG-178) | Taoglas / Molex | 1 Stk. | Koaxial-Zuleitung für ESP32-S3 externe Antenne |
-| **SMA-Flansch-Doppelbuchse** | SMA-Buchse auf SMA-Buchse Bulkhead IP67 mit O-Ring & Mutter | Amphenol / Radiall | 1 Stk. | Wasserdichte HF-Durchführung in Kassetten-Frontblende (Klasse A) |
-| **Koax-Pigtail intern (Kassette)**| RG-178 Koaxialkabel ($6\dots 10\,\text{cm}$, SMA-Stecker 90° auf SMA-Stecker)| Delock / Taoglas | 1 Stk. | HF-Verbindung von Sena +Mesh / OEM-Adapter zur Frontblende |
-| **SMA IP67 Schutzkappen** | Messing vernickelt mit Dichtungs-O-Ring (Rändelkappe) | Amphenol / Radiall | 5 Stk. | Wasserdichter Schutz ungenutzter externer SMA-Buchsen (3x Heck, 1x Front, 1x Pod) |
-| **Externe 2.4 GHz Mesh-Antenne**| 2.4 GHz Collinear Dipol (+5 dBi / +7 dBi) mit SMA-Stecker | Taoglas / Linx | 1 Stk. | Optionale High-Gain Antenne am Heck/Topcase |
-| **Externe 868 MHz LoRa-Antenne**| 868 MHz Monopol / Dipol (+3 dBi / +5 dBi) mit SMA-Stecker | Linx ANT-868 / Taoglas | 1 Stk. | Optionale Long-Range Bergpass-Antenne |
-| **Externe aktive GNSS-Antenne** | Aktiver Flachpuck (+28 dB LNA, 3.3V Phantomspeisung, SMA) | Taoglas AA.162 / Garmin | 1 Stk. | Optionale Dach-/Koffermontage bei verdecktem Heck |
-| **USB-A Flachbandkabel (Front)**| USB-A Stecker/Kupplung kurz ($10\dots 15\,\text{cm}$, 90°-Winkel)| Delock / Amazon | 1 Stk. | Ottocast-Anbindung an J1 durch vorderen Dichtkamm |
-| **USB-C Ladekabel (Handschuhf.)**| USB-C Stecker/Stecker ($1{,}0\,\text{m}$, 90°-Winkel, PUR)| Anker / Baseus | 1 Stk. | Smartphone-Ladekabel von J2 durch vorderen Dichtkamm |
-| **JST-GH Crimpstecker-Set** | JST-GH 1.25mm 2-Pin Gehäuse + Crimpkontakte | JST / Mouser | 2 Sätze| Vorkonfektionierte Litzen für J3 (PTT) & J7 (12V) durch linken Kamm |
-| **J_ACT Aktuator-Kabelbaum** | JST-SH 1.0mm 8-Pin Gehäuse auf 4x 2-Pin AWG30 Silikonlitzen ($8\,\text{cm}$)| JST / Adafruit | 1–2 Stk.| Unabhängige Anbindung der 4 diskreten Miniatur-Aktuatoren auf PCBA 03 |
-| **Miniatur-Aktuatoren (Hubmagnete)**| 5V DC Miniatur-Hubmagnete ($\varnothing 6\dots 8\,\text{mm}$, Hub $1{,}5\,\text{mm}$) mit TPU-Spitze | Solenoid / Adafruit | 4 Stk. | Mechatronische Tastenbetätigung (Sena SPIDER X: 3x Top, 1x 45° Mesh; Cardo: 3x Tasten, 1x Wheel-Click) |
-| **J2 Kassetten-Kabelbaum** | JST-SH 1.0mm 6-Pin Gehäuse auf Audio- & DC-Schnittstelle | JST / Custom | 1–2 Stk.| Modularer Kassetten-Kabelbaum: Var. A (Sena SPIDER X), Var. B (Cardo Edge Air Mount), Var. C (PMR446/COTS) |
-| **90° USB Kassetten-Kabel** | Ultraflaches 90°-Winkelkabel Micro-USB/USB-C ($5\dots 8\,\text{cm}$) | Delock / Amazon | Opt. (1 Stk.)| Nur für passive Klasse A Kassetten (Sena +Mesh / MeshPort Dauerladung) |
-| **EPDM Kassetten-Spannband** | Elastisches EPDM-Gummiband ($\approx 35 \times 10\,\text{mm}$) | Sonderfertigung / Sena | 1 Stk. | Vibrationssichere Arretierung des OEM-Adapters über Kassettennasen |
+| **M2 Kassetten-Halteplattenschrauben**| M2 x 6 mm Senkkopf V4A (DIN 7991) | Normteil | 8 Stk. | Fixierung der Aktuator-Niederhalteplatten (4x pro Gateway) |
+| **M2 Schwenkachsen Wippe** | M2 x 8 mm Zylinderstift Edelstahl (DIN 7) | Normteil / Misumi | 2 Stk. | Drehachsen für magnetische Kassetten-Rastwippen |
+| **Magnetanker (Kassette)** | Ø 6 x 8 mm Zylinderstift gehärtet (DIN 6325) | Normteil / Misumi | 2 Stk. | Stahlanker im Hebelarm der Kassetten-Wippe |
+| **Wippen-Rückstellfedern** | Edelstahl V4A ($\varnothing 3{,}5\,\text{mm}, L_0=10\,\text{mm}$) | Gutekunst / Web | 2 Stk. | Rückstellfedern für Kassetten-Rastkralle |
+| **Auswerfer-Druckfedern** | Edelstahl V4A ($D=4{,}5\,\text{mm}, L_0=15\,\text{mm}$) | Gutekunst / Web | 6 Stk. | Auto-Eject Federn in den Schottwänden (2x pro Pod) |
+| **N52 Entriegelungsschlüssel**| N52 Neodym-Block ($20 \times 10 \times 5\,\text{mm}$) | Supermagnete / Web | 1 Stk. | Magnetschlüssel für Kassettenauswurf |
+| **Silentblöcke / Gummipuffer**| Typ A M4 Außen/Innen ($\varnothing 15 \times 10\,\text{mm}$) | Ganter / Normteil | 4 Stk. | Schwingungsentkoppelte Zentralbox-Montage |
+| **Silikon-Dichtschnur** | Silikon-Rundschnur $\varnothing 1{,}5\,\text{mm}$ Shore 40A (1.0 m) | O-Ring-Shop | 1 Stk. | $40\,\text{cm}$ Zentralbox-Nut, $30\,\text{cm}$ Front-Node Nut |
+| **Kassetten-Flanschdichtungen**| Silikon-Formdichtung Shore 40A ($54 \times 18\,\text{mm}$) | Sonderfertigung | 3 Stk. | Stirnseitige Mundloch-Abdichtung an Pod 1, 2 und 3 |
+| **Pufferakku (LiPo USV)** | 1S LiPo (3.7V 1000mAh) mit Micro-Fit Stecker | EEMB / Enerpower | 1 Stk. | USV-Pufferung in der Zentralbox |
+| **KFZ-Sicherungshalter** | Wasserdichter Flachsicherungshalter + 2A Sicherung | Hella / MTA | 1 Stk. | Dauerplus-Absicherung an Batteriepol |
+| **M8 6-Pin Fertigkabel (PUR)**| M8 6-Pin A-Coded Stecker/Buchse (1.0m / 1.5m) | Binder / Phoenix | 3 Stk. | Plug-and-Play Verbindung zu Pod 1, 2 und 3 |
+| **M8 4-Pin Fertigkabel (PUR)**| M8 4-Pin A-Coded Stecker/Buchse (1.5m) | Binder / Phoenix | 1 Stk. | Plug-and-Play Verbindung zum Front-Knoten |
+| **J_ACT Aktuator-Kabelbaum** | Fertiges 8-Pin JST-SH Kabel auf 4x 2-Pin Litzen | Adafruit / SparkFun | 1–2 Stk.| Vorkonfektioniertes Fertigkabel für 4 Hubmagnete |
+| **Miniatur-Aktuatoren** | 5V DC Hubmagnete ($\varnothing 6{,}5 \times 12\,\text{mm}$) mit TPU-Spitze | Solenoid / Web | 4–8 Stk.| 4 Stk. pro Smart Cartridge (Sena / Cardo) |
+| **J2 Gateway-Kabelbaum** | Fertiges 6-Pin JST-SH Kabel auf Klinke / USB | COTS Standard | 1–2 Stk.| Fertigkabel für Headset-Audio & Dauerstrom |
 
 ---
 
-## 11. Benötigte Werkzeuge & Fertigungshilfsmittel (Werkstatt-Ausstattung)
+## 11. Minimalistische Werkzeugliste (Das echte IKEA-Prinzip)
 
-Für die Montage aller 5 Baugruppen, die Kabelkonfektionierung und die Erstinbetriebnahme wird folgende Mindestausstattung an Werkzeugen und Montagechemie benötigt (Details siehe [Kapitel 16, Abschnitt 2.6](file:///Users/schmidtm/openMotorBridge/docs/de/16_build_instructions_assembly.md#26-kategorie-f-ben%C3%B6tigte-werkzeuge-messmittel--montagechemie)):
+Da **weder Löten, noch Crimpen, noch thermisches Einschmelzen von Gewinden** erforderlich ist, schrumpft die Werkzeugliste auf ein absolutes Minimum zusammen, das jeder Motorradfahrer in seinem Standard-Bordwerkzeug besitzt:
 
-| Werkzeug-Kategorie | Enthaltene Werkzeuge & Spezifikation | Hauptzweck im OpenMotorBridge-Aufbau |
+| Werkzeug | Größe / Spezifikation | Zweck beim Zusammenbau |
 | :--- | :--- | :--- |
-| **Mechanik & Schrauben** | Inbus 1,5 / 2,0 / 2,5 / 3,0 mm; Gabelschlüssel SW 7, 8, 10; Drehmomentschlüssel ($0{,}2 \dots 1{,}5\,\text{Nm}$) | Verzugsfreies Verschrauben aller Gehäuse, PCBAs und SMA-Buchsen |
-| **Thermisches Fügen** | Lötstation ($200 \dots 450\,^\circ\text{C}$) mit Ruthex M3/M4 Einschmelzspitzen & feiner Lötspitze | Lotrechtes Einschmelzen der 12x Messinggewinde; Kabelbaumlötung |
-| **Kabel- & Crimpmittel** | Fein-Crimpzange (Engineer PA-09 / IWISS IWS-2820M); Kfz-Crimpzange; Abisolierzange; Heißluftföhn | Konfektionierung von JST-SH (1.0 mm), JST-GH (1.25 mm) und Schrumpfschläuchen |
-| **HF- & Feinelektronik** | ESD-Präzisionspinzette (abgewinkelt, kunststoffbeschichtet) | Zerstörungsfreies Aufstecken der Murata MM8030 und U.FL Koax-Stecker |
-| **Montagechemie & Dichten**| OKS 1110 / Liqui Moly Silikonfett; Loctite 243 mittelfest; Peters Elpeguard Conformal Coating | IP67-Gleitdichtung, Vibrationssicherung und Feuchteschutz der Leiterplatten |
-| **Prüf- & Flash-Hardware**| Digitalmultimeter; Labornetzteil mit Strombegrenzung ($12\,\text{V} / 150\,\text{mA}$); USB-C Datenkabel | Kurzschluss-Schutz, Spannungs-Check und Firmware-Flash aller 3 Controller |
+| **Innensechskant-Schlüsselsatz**| **1,5 mm / 2,0 mm / 2,5 mm / 3,0 mm** | Verschrauben aller Gehäuse, Platinen und Klemmen |
+| **Kreuzschlitz- / Torx-Schlüssel**| **TX10 / PH1** | Gehäusedeckel und Diebstahlsicherungsschraube |
+| **Gabelschlüssel / Stecknuss** | **SW 7 mm / SW 8 mm** | Kontern der M4/M5 Muttern bei Schellenmontage |
+| **Schere / Cuttermesser** | Standard | Ablängen der Silikon-Dichtschnur |
+| **Silikonfett** | Liqui Moly / OKS 1110 (kleine Tube) | Leichtes Einölen der Gehäusedichtungen |
+
+> [!TIP]
+> **Es wird keine Lötstation, keine Heißluftpistole, keine Spezial-Crimpzange und kein Einschmelzwerkzeug benötigt.** Alle mechanischen und elektronischen Baugruppen werden ausschließlich gesteckt und geschraubt!
+
 
 
 

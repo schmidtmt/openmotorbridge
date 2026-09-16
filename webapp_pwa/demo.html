@@ -192,6 +192,9 @@
             <button class="tab-btn" data-tab="tab-hardware">
                 ⚙️ <span data-i18n="tab_hardware">Geräte & Hardware</span>
             </button>
+            <button class="tab-btn" data-tab="tab-builder">
+                🛠️ <span data-i18n="tab_builder">System Builder</span>
+            </button>
         </nav>
 
         <!-- TAB 1: COCKPIT & POWER -->
@@ -2592,6 +2595,293 @@
                         🔄 <span data-i18n="btn_front_node_ota">Front-Node OTA Firmware-Update prüfen</span>
                     </button>
                 </section>
+            </div>
+        </main>
+
+        <!-- TAB 6: SYSTEM BUILDER & KONFIGURATOR (DAS IKEA-PRINZIP) -->
+        <main id="tab-builder" class="tab-content">
+            <!-- Builder Header Card -->
+            <div class="card" style="margin-bottom: 22px; background: linear-gradient(135deg, rgba(22, 27, 34, 0.92) 0%, rgba(13, 17, 23, 0.98) 100%); border-left: 4px solid var(--accent-orange);">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+                    <div>
+                        <h2 style="font-size: 1.35rem; font-weight: 800; font-family: var(--font-heading); color: #fff; display: flex; align-items: center; gap: 10px;">
+                            🛠️ <span data-i18n="builder_title">System-Builder & Konfigurator</span>
+                        </h2>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px; max-width: 820px;" data-i18n="builder_sub">
+                            Das OpenMotorBridge IKEA-Prinzip: Wähle dein Motorrad, deine Funkgeräte und Erweiterungen. Du erhältst deine exakt maßgeschneiderte, 100% lötfreie Einkaufsliste (BOM) und Schritt-für-Schritt Montageanleitung – kein Crimpen, kein Lötkolben, kein Einschmelzen von Gewinden!
+                        </p>
+                    </div>
+                    <div class="builder-badges-cluster">
+                        <span class="builder-pill-verified">✓ 100% Lötfrei (SMT)</span>
+                        <span class="builder-pill-verified">✓ 100% Crimpfrei (COTS)</span>
+                        <span class="builder-pill-verified">✓ Nut-Pockets (Kein Schmelzen)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4-Step Interactive Configurator -->
+            <div class="grid-2" style="margin-bottom: 20px;">
+                <!-- Step 1: Bike Selection -->
+                <div class="builder-step-card">
+                    <div class="builder-step-header">
+                        <span class="builder-step-num">1</span>
+                        <div>
+                            <div class="builder-step-title" data-i18n="builder_step1_title">Motorrad & Montagekit auswählen</div>
+                            <div class="builder-step-desc" data-i18n="builder_step1_desc">Passgenaue Halterungen, Schellen und Docks für dein Modell</div>
+                        </div>
+                    </div>
+                    <div class="builder-grid" id="builder-bikes-grid">
+                        <div class="builder-option-card selected" data-type="bike" data-value="bmw-gs">
+                            <div class="builder-option-icon">🏍️</div>
+                            <div class="builder-option-title">BMW R1250 / R1300 GS</div>
+                            <div class="builder-option-desc">Standard / Vario-Koffer. Transition-Dock in Sitzbank-Bügelfalte (Ø 28 mm) + Rack-Tail Mount.</div>
+                            <div class="builder-option-badge">Referenz-Kit 1</div>
+                        </div>
+                        <div class="builder-option-card" data-type="bike" data-value="bmw-gsa">
+                            <div class="builder-option-icon">🏔️</div>
+                            <div class="builder-option-title">BMW R1250 / R1300 GSA</div>
+                            <div class="builder-option-desc">Adventure mit Alukoffer-Rohrträger. Ø 18 mm Klemmschellen-Käfig + Heck-Balkon hinter Topcase.</div>
+                            <div class="builder-option-badge">Referenz-Kit 2</div>
+                        </div>
+                        <div class="builder-option-card" data-type="bike" data-value="hd-touring">
+                            <div class="builder-option-icon">🦅</div>
+                            <div class="builder-option-title">Harley-Davidson Classic</div>
+                            <div class="builder-option-desc">Street/Road Glide, Road King. Kofferdeckel-Docks + Fender-Konsole + Kennzeichen-Radarhalter.</div>
+                            <div class="builder-option-badge">Referenz-Kit 3</div>
+                        </div>
+                        <div class="builder-option-card" data-type="bike" data-value="hd-cvo-st">
+                            <div class="builder-option-icon">⚡</div>
+                            <div class="builder-option-title">Harley CVO ST / Bagger</div>
+                            <div class="builder-option-desc">Under-Cowl Skeleton Dock + Telemetrie-Finne + zentrische Under-Fender Radarplatte (freie Showa-Behälter).</div>
+                            <div class="builder-option-badge">Referenz-Kit 4</div>
+                        </div>
+                        <div class="builder-option-card" data-type="bike" data-value="universal">
+                            <div class="builder-option-icon">🔧</div>
+                            <div class="builder-option-title">Universal / Andere Bikes</div>
+                            <div class="builder-option-desc">120° V-Nut Rohrbett mit EPDM-Spannbändern für Sturzbügel (Ø 22–32 mm) oder M4 Silentblöcke.</div>
+                            <div class="builder-option-badge">Universal-Kit</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Gateway Slots -->
+                <div class="builder-step-card">
+                    <div class="builder-step-header">
+                        <span class="builder-step-num">2</span>
+                        <div>
+                            <div class="builder-step-title" data-i18n="builder_step2_title">Intercom Gateway-Slots konfigurieren</div>
+                            <div class="builder-step-desc" data-i18n="builder_step2_desc">Multi-Protokoll Bridge: Verbindet beide Funknetze simultan für alle Fahrer</div>
+                        </div>
+                    </div>
+
+                    <!-- Slot 1 -->
+                    <div style="margin-bottom: 14px;">
+                        <label class="control-label" style="margin-bottom: 6px;">
+                            <span>Pod 1 (Gateway Slot 1 Links):</span>
+                        </label>
+                        <div class="builder-grid" id="builder-slot1-grid">
+                            <div class="builder-option-card selected" data-type="slot1" data-value="sena-spider-x">
+                                <div class="builder-option-title">Sena SPIDER X Slim</div>
+                                <div class="builder-option-desc">Mesh 3.0 / Wave. Inlay mit 4 Miniatur-Hubmagneten für mechatronische Steuerung.</div>
+                                <div class="builder-option-badge">Smart Cartridge</div>
+                            </div>
+                            <div class="builder-option-card" data-type="slot1" data-value="sena-50s">
+                                <div class="builder-option-title">Sena 50S / 60S</div>
+                                <div class="builder-option-desc">Pogo-Pin Docking für kabelgebundene Audioübertragung.</div>
+                                <div class="builder-option-badge">Pogo Cartridge</div>
+                            </div>
+                            <div class="builder-option-card" data-type="slot1" data-value="blind">
+                                <div class="builder-option-title">Blindkassette</div>
+                                <div class="builder-option-desc">Hermetisch dichte Dry Box mit O-Ring für ungenutzten Slot.</div>
+                                <div class="builder-option-badge">Dry Box</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slot 2 -->
+                    <div>
+                        <label class="control-label" style="margin-bottom: 6px;">
+                            <span>Pod 2 (Gateway Slot 2 Rechts):</span>
+                        </label>
+                        <div class="builder-grid" id="builder-slot2-grid">
+                            <div class="builder-option-card selected" data-type="slot2" data-value="cardo-edge">
+                                <div class="builder-option-title">Cardo Packtalk Edge</div>
+                                <div class="builder-option-desc">DMC Gen2. Inlay mit 4 Miniatur-Aktuatoren für 3 Tasten + Air-Mount.</div>
+                                <div class="builder-option-badge">Smart Cartridge</div>
+                            </div>
+                            <div class="builder-option-card" data-type="slot2" data-value="pmr446">
+                                <div class="builder-option-title">PMR446 Funk / COTS</div>
+                                <div class="builder-option-desc">Standard Funkgerät oder analoge Audioquelle via J2 Klinkenkabel.</div>
+                                <div class="builder-option-badge">Analog Funk</div>
+                            </div>
+                            <div class="builder-option-card" data-type="slot2" data-value="blind">
+                                <div class="builder-option-title">Blindkassette</div>
+                                <div class="builder-option-desc">Hermetisch dichte Dry Box mit O-Ring für ungenutzten Slot.</div>
+                                <div class="builder-option-badge">Dry Box</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-2" style="margin-bottom: 22px;">
+                <!-- Step 3: Addon Modules -->
+                <div class="builder-step-card">
+                    <div class="builder-step-header">
+                        <span class="builder-step-num">3</span>
+                        <div>
+                            <div class="builder-step-title" data-i18n="builder_step3_title">Erweiterungsmodule & Sensoren</div>
+                            <div class="builder-step-desc" data-i18n="builder_step3_desc">Erweitere dein Bike um Cockpit-Hub, LoRa-Bergpassfunk und Smart-Keyfob</div>
+                        </div>
+                    </div>
+                    <div class="builder-grid" id="builder-addons-grid">
+                        <div class="builder-option-card selected" data-type="addon" data-value="frontNode">
+                            <div class="builder-option-icon">📱</div>
+                            <div class="builder-option-title">Universal Front-Knoten</div>
+                            <div class="builder-option-desc">Cockpit-Hub mit AMPS-Bett, CarPlay Ottocast-Port, 20W USB-PD Lader, Knowles MEMS Wind-Sensor und Lenker-PTT.</div>
+                            <div class="builder-option-badge">Empfohlen</div>
+                        </div>
+                        <div class="builder-option-card selected" data-type="addon" data-value="rearPod3">
+                            <div class="builder-option-icon">🛰️</div>
+                            <div class="builder-option-title">Heck-Pod 3 (LoRa & GNSS)</div>
+                            <div class="builder-option-desc">868 MHz Semtech LoRa für Bergpass-Reichweite ohne Mobilfunk, 10Hz u-blox GNSS und Garmin Varia Radar-Halter.</div>
+                            <div class="builder-option-badge">Empfohlen</div>
+                        </div>
+                        <div class="builder-option-card" data-type="addon" data-value="keyfob">
+                            <div class="builder-option-icon">🔑</div>
+                            <div class="builder-option-title">Smart-Keyfob Pager</div>
+                            <div class="builder-option-desc">Drahtloser Bluetooth-Schlüsselanhänger mit LRA-Haptik-Feedback und N52 Magnetschlüssel für Kassetten-Auswurf.</div>
+                            <div class="builder-option-badge">Zubehör</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Manufacturing Path -->
+                <div class="builder-step-card">
+                    <div class="builder-step-header">
+                        <span class="builder-step-num">4</span>
+                        <div>
+                            <div class="builder-step-title" data-i18n="builder_step4_title">Fertigungsweg & Gehäuse</div>
+                            <div class="builder-step-desc" data-i18n="builder_step4_desc">Fertige Teile direkt bestellen oder Gehäuse im 3D-Drucker drucken</div>
+                        </div>
+                    </div>
+                    <div class="builder-grid" id="builder-mfg-grid">
+                        <div class="builder-option-card selected" data-type="mfg" data-value="jlcpcb">
+                            <div class="builder-option-icon">📦</div>
+                            <div class="builder-option-title">1-Click JLCPCB Komplettpaket</div>
+                            <div class="builder-option-desc">Platinen 100% fertig bestückt (SMT) + Gehäuseteile professionell in SLS/MJF PA12 schwarz gefertigt. Nur noch zusammenstecken!</div>
+                            <div class="builder-option-badge">Das echte IKEA-Prinzip</div>
+                        </div>
+                        <div class="builder-option-card" data-type="mfg" data-value="diy">
+                            <div class="builder-option-icon">🖨️</div>
+                            <div class="builder-option-title">DIY 3D-Druck (Eigener Drucker)</div>
+                            <div class="builder-option-desc">Drucke alle Gehäuseteile selbst in ASA oder PETG mit integrierten Nut-Pockets. Platinen fertig von JLCPCB.</div>
+                            <div class="builder-option-badge">DIY Budget</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dynamic Output Section: Summary Bar -->
+            <div class="builder-summary-bar">
+                <div>
+                    <div style="font-size: 0.82rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em;">Deine Systemkonfiguration</div>
+                    <div style="font-size: 1.25rem; font-weight: 800; color: #fff; font-family: var(--font-heading);" id="builder-summary-title">BMW R1250/R1300 GS · Dual-Mesh Bridge</div>
+                    <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px;" id="builder-summary-sub">Sena SPIDER X Slim (Slot 1) + Cardo Packtalk Edge (Slot 2) + Front-Node + Heck-Pod 3</div>
+                </div>
+                <div style="display: flex; gap: 14px; align-items: center; flex-wrap: wrap;">
+                    <div style="text-align: right;">
+                        <div style="font-size: 0.75rem; color: var(--text-secondary);">Geschätzte Gesamtkosten</div>
+                        <div style="font-size: 1.35rem; font-weight: 800; color: var(--accent-orange);" id="builder-estimated-cost">~ 210 – 260 €</div>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <button id="btn-builder-print" class="btn-primary" style="display: flex; align-items: center; gap: 6px;">
+                            🖨️ <span data-i18n="btn_builder_print">Anleitung Drucken / PDF</span>
+                        </button>
+                        <button id="btn-builder-export-bom" class="btn-secondary" style="display: flex; align-items: center; gap: 6px;">
+                            📋 <span data-i18n="btn_builder_export_bom">BOM als CSV</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tailored BOM Tables -->
+            <div class="card" style="margin-bottom: 22px;">
+                <div class="card-header">
+                    <div class="card-title">📦 <span data-i18n="builder_bom_title">Maßgeschneiderte Stückliste (BOM)</span></div>
+                    <span class="card-badge badge-blue" id="builder-bom-parts-count">24 Teile gesamt</span>
+                </div>
+
+                <!-- 3D Print Parts Table -->
+                <div style="margin-bottom: 18px;">
+                    <h4 style="font-size: 0.92rem; color: var(--accent-orange); margin-bottom: 8px; font-weight: 700;">1. 3D-Druckteile (MJF PA12 / ASA mit Nut-Pockets)</h4>
+                    <div style="overflow-x: auto;">
+                        <table class="data-table" style="width: 100%; font-size: 0.82rem;" id="builder-table-3d">
+                            <thead>
+                                <tr>
+                                    <th>Baugruppe / Teil</th>
+                                    <th>Dateiname</th>
+                                    <th>Stück</th>
+                                    <th>Funktion & Montageort</th>
+                                </tr>
+                            </thead>
+                            <tbody id="builder-tbody-3d">
+                                <!-- Populated dynamically by app.js -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- PCBAs Table -->
+                <div style="margin-bottom: 18px;">
+                    <h4 style="font-size: 0.92rem; color: var(--accent-green); margin-bottom: 8px; font-weight: 700;">2. Bestückte Platinen (100% fertig von JLCPCB SMT)</h4>
+                    <div style="overflow-x: auto;">
+                        <table class="data-table" style="width: 100%; font-size: 0.82rem;" id="builder-table-pcb">
+                            <thead>
+                                <tr>
+                                    <th>Platine</th>
+                                    <th>Projekt-ID</th>
+                                    <th>Stück</th>
+                                    <th>Hauptfunktion im System</th>
+                                </tr>
+                            </thead>
+                            <tbody id="builder-tbody-pcb">
+                                <!-- Populated dynamically by app.js -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Fasteners & COTS Cables -->
+                <div>
+                    <h4 style="font-size: 0.92rem; color: var(--accent-blue); margin-bottom: 8px; font-weight: 700;">3. Vorkonfektionierte COTS-Kabel & Edelstahl-Normteile</h4>
+                    <div style="overflow-x: auto;">
+                        <table class="data-table" style="width: 100%; font-size: 0.82rem;" id="builder-table-cots">
+                            <thead>
+                                <tr>
+                                    <th>Komponente</th>
+                                    <th>Spezifikation / Bezug</th>
+                                    <th>Menge</th>
+                                    <th>Montageort & Zweck</th>
+                                </tr>
+                            </thead>
+                            <tbody id="builder-tbody-cots">
+                                <!-- Populated dynamically by app.js -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tailored Step-by-Step Assembly Guide (IKEA-Style) -->
+            <div class="card" style="margin-bottom: 24px;">
+                <div class="card-header">
+                    <div class="card-title">📖 <span data-i18n="builder_guide_title">Schritt-für-Schritt Montageanleitung (IKEA-Style)</span></div>
+                    <span class="card-badge badge-green">100% Lötfrei & Crimpfrei</span>
+                </div>
+                <div id="builder-instructions-container">
+                    <!-- Populated dynamically by app.js -->
+                </div>
             </div>
         </main>
     </div>

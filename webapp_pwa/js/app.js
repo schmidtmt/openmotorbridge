@@ -25,6 +25,21 @@ const i18n = {
         tab_cartridges: 'Kassetten & DLE',
         tab_tours: 'Touren & WebDAV',
         tab_hardware: 'Geräte & Hardware',
+        tab_builder: 'System Builder',
+        builder_title: 'System-Builder & Konfigurator',
+        builder_sub: 'Das OpenMotorBridge IKEA-Prinzip: Wähle dein Motorrad, deine Funkgeräte und Erweiterungen. Du erhältst deine exakt maßgeschneiderte, 100% lötfreie Einkaufsliste (BOM) und Schritt-für-Schritt Montageanleitung – kein Crimpen, kein Lötkolben, kein Einschmelzen von Gewinden!',
+        builder_step1_title: '1. Motorrad & Montagekit auswählen',
+        builder_step1_desc: 'Passgenaue Halterungen, Schellen und Docks für dein Modell',
+        builder_step2_title: '2. Intercom Gateway-Slots konfigurieren',
+        builder_step2_desc: 'Multi-Protokoll Bridge: Verbindet beide Funknetze simultan für alle Fahrer',
+        builder_step3_title: '3. Erweiterungsmodule & Sensoren',
+        builder_step3_desc: 'Erweitere dein Bike um Cockpit-Hub, LoRa-Bergpassfunk und Smart-Keyfob',
+        builder_step4_title: '4. Fertigungsweg & Gehäuse',
+        builder_step4_desc: 'Fertige Teile direkt bestellen oder Gehäuse im 3D-Drucker drucken',
+        builder_bom_title: 'Maßgeschneiderte Stückliste (BOM)',
+        builder_guide_title: 'Schritt-für-Schritt Montageanleitung (IKEA-Style)',
+        btn_builder_print: 'Anleitung Drucken / PDF',
+        btn_builder_export_bom: 'BOM als CSV',
         device_hub_title: 'Geräte- & Verbindungs-Manager (Device Hub)',
         device_hub_sub: 'Zentrale 2-geteilte Verwaltung aller persönlichen Geräte (Teil 1) und fest verbauter Motorrad- & Systemknoten (Teil 2).',
         section_user_centric_title: 'Teil 1: Persönliche Geräte (Fahrer & Sozius)',
@@ -215,6 +230,21 @@ const i18n = {
         tab_cartridges: 'Cartridges & DLE',
         tab_tours: 'Tours & WebDAV',
         tab_hardware: 'Devices & Hardware',
+        tab_builder: 'System Builder',
+        builder_title: 'System Builder & Configurator',
+        builder_sub: 'The OpenMotorBridge IKEA Principle: Select your motorcycle, intercoms, and expansion modules. Get your tailored, 100% solder-free BOM and step-by-step assembly guide – no crimping, no soldering irons, no melting threaded inserts!',
+        builder_step1_title: '1. Select Motorcycle & Mounting Kit',
+        builder_step1_desc: 'Precision brackets, clamps, and docks tailored to your bike model',
+        builder_step2_title: '2. Configure Intercom Gateway Slots',
+        builder_step2_desc: 'Multi-Protocol Bridge: Bridges both intercom networks simultaneously for all riders',
+        builder_step3_title: '3. Expansion Modules & Sensors',
+        builder_step3_desc: 'Expand your bike with cockpit hub, LoRa mountain pass comms, and smart keyfob',
+        builder_step4_title: '4. Manufacturing Path & Enclosures',
+        builder_step4_desc: 'Order turn-key parts via JLCPCB or 3D-print enclosures yourself',
+        builder_bom_title: 'Tailored Bill of Materials (BOM)',
+        builder_guide_title: 'Step-by-Step Assembly Guide (IKEA-Style)',
+        btn_builder_print: 'Print Guide / PDF',
+        btn_builder_export_bom: 'BOM as CSV',
         device_hub_title: 'Device & Connection Manager (Device Hub)',
         device_hub_sub: 'Central 2-part management of personal devices (Part 1) and fixed motorcycle & system nodes (Part 2).',
         section_user_centric_title: 'Part 1: Personal Devices (Rider & Passenger)',
@@ -738,6 +768,9 @@ function setLanguage(lang) {
     updateBatteryOptionsText(lang);
     updateBleUiState(state.isBleConnected);
     updateFullscreenUi();
+    if (typeof renderSystemBuilder === 'function') {
+        renderSystemBuilder();
+    }
 
     showToast(lang === 'de' ? 'Sprache: Deutsch' : 'Language: English', 'info');
 }
@@ -7066,6 +7099,598 @@ function setupDemoSuiteUi() {
     }
 }
 
+// ==========================================
+// 12. System Builder & Konfigurator (IKEA-Prinzip)
+// ==========================================
+const builderState = {
+    bike: 'bmw-gs',
+    slot1: 'sena-spider-x',
+    slot2: 'cardo-edge',
+    addons: {
+        frontNode: true,
+        rearPod3: true,
+        keyfob: false
+    },
+    manufacturing: 'jlcpcb'
+};
+
+function setupSystemBuilderUi() {
+    // 1. Setup click listeners on all option cards
+    const gridBikes = document.getElementById('builder-bikes-grid');
+    const gridSlot1 = document.getElementById('builder-slot1-grid');
+    const gridSlot2 = document.getElementById('builder-slot2-grid');
+    const gridAddons = document.getElementById('builder-addons-grid');
+    const gridMfg = document.getElementById('builder-mfg-grid');
+
+    if (!gridBikes) return; // Tab not present in DOM
+
+    // Helper for single-choice group
+    function setupRadioGroup(container, stateProp) {
+        if (!container) return;
+        container.querySelectorAll('.builder-option-card').forEach(card => {
+            card.addEventListener('click', () => {
+                container.querySelectorAll('.builder-option-card').forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+                builderState[stateProp] = card.getAttribute('data-value');
+                renderSystemBuilder();
+            });
+        });
+    }
+
+    setupRadioGroup(gridBikes, 'bike');
+    setupRadioGroup(gridSlot1, 'slot1');
+    setupRadioGroup(gridSlot2, 'slot2');
+    setupRadioGroup(gridMfg, 'manufacturing');
+
+    // Multi-choice for addons
+    if (gridAddons) {
+        gridAddons.querySelectorAll('.builder-option-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const addonKey = card.getAttribute('data-value');
+                builderState.addons[addonKey] = !builderState.addons[addonKey];
+                if (builderState.addons[addonKey]) {
+                    card.classList.add('selected');
+                } else {
+                    card.classList.remove('selected');
+                }
+                renderSystemBuilder();
+            });
+        });
+    }
+
+    // 2. Action buttons
+    const btnPrint = document.getElementById('btn-builder-print');
+    if (btnPrint) {
+        btnPrint.addEventListener('click', () => {
+            window.print();
+        });
+    }
+
+    const btnExportBom = document.getElementById('btn-builder-export-bom');
+    if (btnExportBom) {
+        btnExportBom.addEventListener('click', () => {
+            exportBuilderBomCsv();
+        });
+    }
+
+    // Initial render
+    renderSystemBuilder();
+}
+
+function renderSystemBuilder() {
+    const isDe = state.lang === 'de';
+
+    // 1. Title & Subtitle strings
+    const bikeNames = {
+        'bmw-gs': 'BMW R1250 / R1300 GS (Standard)',
+        'bmw-gsa': 'BMW R1250 / R1300 GSA (Adventure)',
+        'hd-touring': 'Harley-Davidson Classic Touring (Bagger)',
+        'hd-cvo-st': 'Harley-Davidson CVO ST / Performance',
+        'universal': 'Universal Motorrad-Kit'
+    };
+
+    const slotNames = {
+        'sena-spider-x': 'Sena SPIDER X Slim',
+        'sena-50s': 'Sena 50S / 60S',
+        'cardo-edge': 'Cardo Packtalk Edge',
+        'pmr446': 'PMR446 Funk',
+        'blind': isDe ? 'Blindkassette' : 'Blank Cartridge'
+    };
+
+    const titleEl = document.getElementById('builder-summary-title');
+    const subEl = document.getElementById('builder-summary-sub');
+    const costEl = document.getElementById('builder-estimated-cost');
+
+    if (titleEl) {
+        titleEl.textContent = `${bikeNames[builderState.bike]} · Dual-Mesh Bridge`;
+    }
+
+    if (subEl) {
+        const addonList = [];
+        if (builderState.addons.frontNode) addonList.push(isDe ? 'Front-Knoten' : 'Front Node');
+        if (builderState.addons.rearPod3) addonList.push(isDe ? 'Heck-Pod 3' : 'Rear Pod 3');
+        if (builderState.addons.keyfob) addonList.push('Smart-Keyfob');
+        const addonTxt = addonList.length > 0 ? ` + ${addonList.join(' + ')}` : '';
+        subEl.textContent = `${slotNames[builderState.slot1]} (Slot 1) + ${slotNames[builderState.slot2]} (Slot 2)${addonTxt}`;
+    }
+
+    // Cost estimation
+    let baseCostMin = 135;
+    let baseCostMax = 165;
+    if (builderState.addons.frontNode) { baseCostMin += 42; baseCostMax += 55; }
+    if (builderState.addons.rearPod3) { baseCostMin += 48; baseCostMax += 62; }
+    if (builderState.addons.keyfob) { baseCostMin += 22; baseCostMax += 30; }
+    if (builderState.manufacturing === 'diy') { baseCostMin -= 25; baseCostMax -= 35; }
+
+    if (costEl) {
+        costEl.textContent = `~ ${baseCostMin} – ${baseCostMax} €`;
+    }
+
+    // 2. Generate 3D parts list
+    const numPods = builderState.addons.rearPod3 ? 3 : 2;
+    const parts3D = [
+        { group: 'Main Box', file: 'main_box_lower_case.stl', qty: 1, desc: isDe ? 'Unterwanne mit Nut-Pockets & Dichtnut' : 'Lower tub with nut pockets & seal groove' },
+        { group: 'Main Box', file: 'main_box_mid_tray.stl', qty: 1, desc: isDe ? 'Zwischenboden & Akkuwanne' : 'Mid tray & battery cradle' },
+        { group: 'Main Box', file: 'main_box_lid.stl', qty: 1, desc: isDe ? 'Deckel mit Gore ePTFE-Ventilaufnahme' : 'Lid with Gore ePTFE vent boss' },
+        { group: 'Pod Base', file: 'pod_base_housing.stl', qty: numPods, desc: isDe ? `Satelliten-Gehäuse (1x pro Pod: ${numPods} Stk.)` : `Satellite bay enclosure (1 per pod: ${numPods} pcs)` },
+        { group: 'Pod Base', file: '03_pod_bulkhead_partition.stl', qty: numPods, desc: isDe ? `Schottwand mit Auswerffedern (${numPods} Stk.)` : `Bulkhead partition with ejector springs (${numPods} pcs)` },
+        { group: 'Cartridge', file: 'cartridge_base_sled.stl', qty: numPods, desc: isDe ? `Universalschlitten (${numPods} Stk.)` : `Universal sled chassis (${numPods} pcs)` },
+        { group: 'Cartridge', file: 'cartridge_magnetic_lock_latch.stl', qty: 2, desc: isDe ? 'Magnetische Diebstahlschutz-Rastwippen (2 Stk.)' : 'Magnetic anti-theft locking rocker latches (2 pcs)' }
+    ];
+
+    // Inlays
+    if (builderState.slot1 === 'sena-spider-x' || builderState.slot1 === 'sena-50s') {
+        parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_sena.stl', qty: 1, desc: isDe ? 'Inlay für Sena SPIDER X / 50S / 60S' : 'Inlay for Sena SPIDER X / 50S / 60S' });
+    } else {
+        parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_blindkassette.stl', qty: 1, desc: isDe ? 'Hermetische Blindkassette (Dry Box)' : 'Hermetic blank cartridge (Dry Box)' });
+    }
+
+    if (builderState.slot2 === 'cardo-edge') {
+        parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_cardo.stl', qty: 1, desc: isDe ? 'Inlay für Cardo Packtalk Edge / Pro' : 'Inlay for Cardo Packtalk Edge / Pro' });
+    } else if (builderState.slot2 === 'blind') {
+        parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_blindkassette.stl', qty: 1, desc: isDe ? 'Hermetische Blindkassette (Dry Box)' : 'Hermetic blank cartridge (Dry Box)' });
+    }
+
+    if (builderState.addons.rearPod3) {
+        parts3D.push({ group: 'Heck-Pod 3', file: 'cartridge_antenna_bracket_omm.stl', qty: 1, desc: isDe ? 'Dielektrisches Antennenradom für PCBA 04' : 'Dielectric antenna radome for PCBA 04' });
+    }
+
+    if (builderState.addons.frontNode) {
+        parts3D.push({ group: 'Front-Node', file: 'front_node_lower_tub.stl', qty: 1, desc: isDe ? 'Cockpit-Wanne mit AMPS & Nut-Pockets' : 'Cockpit tub with AMPS & nut pockets' });
+        parts3D.push({ group: 'Front-Node', file: 'front_node_upper_lid.stl', qty: 1, desc: isDe ? 'Deckel mit Knowles MEMS Schalleintritt' : 'Lid with Knowles MEMS acoustic port' });
+        parts3D.push({ group: 'Front-Node', file: 'front_node_cable_glands_tpu.stl', qty: '1 Paar', desc: isDe ? 'Elastische Dichtkämme (TPU)' : 'Elastomeric sealing combs (TPU)' });
+        parts3D.push({ group: 'Front-Node', file: 'front_node_usbc_cap_tpu.stl', qty: 1, desc: isDe ? 'Elastische USB-C Staubkappe (TPU)' : 'Elastomeric USB-C dust cap (TPU)' });
+    }
+
+    // Bike-specific parts
+    if (builderState.bike === 'bmw-gs') {
+        parts3D.push({ group: 'Bike-Kit (GS)', file: 'adventure_transition_dock.stl', qty: 2, desc: isDe ? 'Sitzbank-Bügelfalte Transition-Docks (Ø 28 mm)' : 'Seat crease transition docks (Ø 28 mm)' });
+        parts3D.push({ group: 'Bike-Kit (GS)', file: 'adventure_rack_tail_mount.stl', qty: 1, desc: isDe ? 'Gepäckbrücken-Ausleger für Heck-Pod' : 'Luggage rack cantilever for rear pod' });
+        parts3D.push({ group: 'Bike-Kit (GS)', file: 'radar_varia_gopro_lock_dock.stl', qty: 1, desc: isDe ? 'Garmin Varia Quarter-Turn Dock' : 'Garmin Varia quarter-turn dock' });
+        parts3D.push({ group: 'Bike-Kit (GS)', file: '011_gopro_hirth_lock.stl', qty: 1, desc: isDe ? '36-Zahn Hirth-Formschluss-Gelenk' : '36-tooth Hirth gear lock' });
+    } else if (builderState.bike === 'bmw-gsa') {
+        parts3D.push({ group: 'Bike-Kit (GSA)', file: 'adventure_pannier_rack_clamp_base.stl', qty: 4, desc: isDe ? 'Ø 18 mm Rohrträger-Klemmschellen-Unterteile' : 'Ø 18 mm pannier rack clamp bases' });
+        parts3D.push({ group: 'Bike-Kit (GSA)', file: 'adventure_pannier_rack_clamp_cap.stl', qty: 4, desc: isDe ? 'Ø 18 mm Rohrträger-Klemmschellen-Kappen' : 'Ø 18 mm pannier rack clamp caps' });
+        parts3D.push({ group: 'Bike-Kit (GSA)', file: 'adventure_rack_tail_mount.stl', qty: 1, desc: isDe ? 'Heck-Balkon hinter Alutopcase mit 45°-Finne' : 'Tail Balcony behind topcase with 45° fin' });
+        parts3D.push({ group: 'Bike-Kit (GSA)', file: 'radar_varia_gopro_lock_dock.stl', qty: 1, desc: isDe ? 'Garmin Varia Quarter-Turn Dock' : 'Garmin Varia quarter-turn dock' });
+        parts3D.push({ group: 'Bike-Kit (GSA)', file: '011_gopro_hirth_lock.stl', qty: 1, desc: isDe ? '36-Zahn Hirth-Formschluss-Gelenk' : '36-tooth Hirth gear lock' });
+    } else if (builderState.bike === 'hd-touring') {
+        parts3D.push({ group: 'Bike-Kit (HD)', file: 'saddlebag_lid_dock.stl', qty: 2, desc: isDe ? 'Kofferdeckel-Montagedocks (Pod 1 & 2)' : 'Saddlebag lid docks (Pods 1 & 2)' });
+        parts3D.push({ group: 'Bike-Kit (HD)', file: 'pod3_touring_fender_console.stl', qty: 1, desc: isDe ? 'Organische Heckkotflügel-Konsole' : 'Organic rear fender console' });
+        parts3D.push({ group: 'Bike-Kit (HD)', file: 'radar_license_plate_bracket.stl', qty: 1, desc: isDe ? 'Entkoppelter Kennzeichen-Radarhalter' : 'Decoupled license plate radar mount' });
+    } else if (builderState.bike === 'hd-cvo-st') {
+        parts3D.push({ group: 'Bike-Kit (CVO)', file: 'saddlebag_lid_dock.stl', qty: 2, desc: isDe ? 'Kofferdeckel-Montagedocks (Pod 1 & 2)' : 'Saddlebag lid docks (Pods 1 & 2)' });
+        parts3D.push({ group: 'Bike-Kit (CVO)', file: 'cvo_st_undercowl_skeleton_dock.stl', qty: 1, desc: isDe ? 'Aufrechtes Federsitz-Dock unter Solo-Hutze' : 'Upright skeleton dock under solo seat cowl' });
+        parts3D.push({ group: 'Bike-Kit (CVO)', file: 'cvo_st_telemetry_fin.stl', qty: 1, desc: isDe ? 'Aerodynamische Haifischflosse am Heck' : 'Aerodynamic tail fin on rear tab' });
+        parts3D.push({ group: 'Bike-Kit (CVO)', file: 'radar_center_underfender_mount.stl', qty: 1, desc: isDe ? 'Zentrische Underfender-Radarplatte' : 'Centered under-fender radar mount' });
+    } else {
+        parts3D.push({ group: 'Bike-Kit (Universal)', file: 'Integriertes V-Bett', qty: 2, desc: isDe ? '120° V-Nut Rohrsattel an Pod-Gehäusen' : '120° V-cradle on Pod enclosures' });
+    }
+
+    if (builderState.addons.keyfob) {
+        parts3D.push({ group: 'Zubehör', file: 'smart_keyfob_lower_shell.stl', qty: 1, desc: isDe ? 'Keyfob Wanne mit LRA-Dämpfungsbett' : 'Keyfob tub with LRA damping bed' });
+        parts3D.push({ group: 'Zubehör', file: 'smart_keyfob_upper_shell.stl', qty: 1, desc: isDe ? 'Keyfob Deckel mit 3 Tastenfeldern' : 'Keyfob lid with 3 button keypads' });
+        parts3D.push({ group: 'Zubehör', file: 'smart_keyfob_tpu_rim.stl', qty: 1, desc: isDe ? 'Keyfob Elastischer Bumper (TPU)' : 'Keyfob elastomeric bumper (TPU)' });
+    }
+
+    // 3. Generate PCBAs list
+    const numSmart = (builderState.slot1 === 'sena-spider-x' ? 1 : 0) + (builderState.slot2 === 'cardo-edge' ? 1 : 0);
+    const pcbas = [
+        { name: 'PCBA 01', id: 'kicad_main_box', qty: 1, desc: isDe ? 'Zentralbox Hauptplatine (ESP32-S3, Codec, USV)' : 'Central box main controller (ESP32-S3, Codec, UPS)' },
+        { name: 'PCBA 02', id: 'kicad_pod_base', qty: numPods, desc: isDe ? `Pod-Basisplatine mit Harwin-Docking (${numPods} Stk.)` : `Pod baseboard with Harwin docking (${numPods} pcs)` }
+    ];
+
+    if (numSmart > 0) {
+        pcbas.push({ name: 'PCBA 03', id: 'kicad_cartridge', qty: numSmart, desc: isDe ? `Smart Modular Kassettenplatine (${numSmart} Stk.)` : `Smart modular cartridge board (${numSmart} pcs)` });
+    }
+
+    if (builderState.addons.rearPod3) {
+        pcbas.push({ name: 'PCBA 04', id: 'kicad_rear_pod3', qty: 1, desc: isDe ? 'Heck-Pod 3 Transceiver (RP2040, LoRa, GNSS)' : 'Rear Pod 3 transceiver (RP2040, LoRa, GNSS)' });
+    }
+
+    if (builderState.addons.frontNode) {
+        pcbas.push({ name: 'PCBA 05', id: 'kicad_front_node', qty: 1, desc: isDe ? 'Universal Front-Knoten (ESP32-S3, USB-Hub, PD)' : 'Universal Front Node (ESP32-S3, USB Hub, PD)' });
+    }
+
+    if (builderState.addons.keyfob) {
+        pcbas.push({ name: 'PCBA 07', id: 'kicad_smart_keyfob', qty: 1, desc: isDe ? 'Smart-Keyfob (BLE Tracker, LRA Haptik)' : 'Smart keyfob (BLE tracker, LRA haptic)' });
+    }
+
+    // 4. Generate COTS & Fasteners list
+    const cots = [
+        { name: 'HD26 Fertigkabelpeitsche', spec: 'Amphenol LTW COTS HD26 Breakout', qty: 1, desc: isDe ? 'Zentraler Hauptanschluss (100% wasserdicht)' : 'Central main harness plug (100% waterproof)' },
+        { name: 'M8 6-Pin PUR Fertigkabel', spec: 'A-kodiert Stecker/Buchse (1.0m / 1.5m)', qty: numPods, desc: isDe ? `Plug-and-Play Verbindung zu den Pods (${numPods} Stk.)` : `Plug-and-play connection to pods (${numPods} pcs)` },
+        { name: 'Pufferakku (LiPo USV)', spec: '1S 3.7V 1000 mAh mit Micro-Fit Stecker', qty: 1, desc: isDe ? 'Notstrom-Pufferung in der Zentralbox' : 'Seamless UPS reserve inside main box' },
+        { name: 'KFZ-Sicherungshalter', spec: 'Wasserdichter Halter + 2A Sicherung', qty: 1, desc: isDe ? 'Dauerplus-Absicherung an Batteriepol' : 'Direct battery terminal protection (KL30)' },
+        { name: 'M3 Gehäuseschrauben', spec: 'DIN 912 V4A M3 x 40 mm', qty: 4, desc: isDe ? 'Zentralbox Gehäuse (greift in Nut-Pockets)' : 'Main box enclosure (threads into nut pockets)' },
+        { name: 'M3 Edelstahlmuttern', spec: 'DIN 934 / 985 M3 V4A', qty: builderState.addons.frontNode ? 8 : 4, desc: isDe ? 'Unverlierbar in Nut-Pockets eingelegt (kein Lötkolben!)' : 'Captive in nut pockets (no soldering iron needed!)' }
+    ];
+
+    if (builderState.addons.frontNode) {
+        cots.push({ name: 'M8 4-Pin PUR Fertigkabel', spec: 'A-kodiert Stecker/Buchse (1.5m)', qty: 1, desc: isDe ? 'Verbindung zum Front-Knoten (CAN & Signale)' : 'Connection to Front Node (CAN & signals)' });
+        cots.push({ name: 'M3 Front-Schrauben', spec: 'DIN 912 V4A M3 x 20 mm', qty: 4, desc: isDe ? 'Front-Node Gehäusedeckel' : 'Front Node enclosure lid' });
+        cots.push({ name: 'M4 Edelstahlmuttern', spec: 'DIN 934 M4 V4A', qty: 4, desc: isDe ? 'AMPS-Befestigungstaschen am Gehäuseboden' : 'AMPS mounting pockets in tub floor' });
+    }
+
+    if (numSmart > 0) {
+        cots.push({ name: 'M2 Halteplattenschrauben', spec: 'DIN 7991 V4A M2 x 6 mm', qty: numSmart * 4, desc: isDe ? 'Aktuator-Niederhalteplatten (4x pro Gateway)' : 'Actuator retainer plates (4x per gateway)' });
+        cots.push({ name: 'Miniatur-Hubmagnete', spec: '5V DC Ø 6,5x12mm + TPU-Spitzen', qty: numSmart * 4, desc: isDe ? 'Mechatronische Tastenbetätigung (4x pro Smart Slot)' : 'Mechatronic button actuation (4x per smart slot)' });
+        cots.push({ name: 'J_ACT Aktuator-Kabelbaum', spec: 'Fertiges 8-Pin JST-SH Kabel auf 4x Litzen', qty: numSmart, desc: isDe ? 'Vorkonfektioniertes Fertigkabel (kein Crimpen!)' : 'Pre-molded harness lead (zero crimping!)' });
+    }
+
+    cots.push({ name: 'M2 Schwenkachsen Wippe', spec: 'Zylinderstift DIN 7 M2 x 8 mm', qty: 2, desc: isDe ? 'Drehachsen für Kassetten-Rastwippen' : 'Pivot pins for cartridge locking rockers' });
+    cots.push({ name: 'Stahlanker (Kassette)', spec: 'Gehärteter Stift DIN 6325 Ø 6 x 8 mm', qty: 2, desc: isDe ? 'Magnetanker im Hebelarm der Kassetten-Wippe' : 'Steel armature in cartridge rocker arm' });
+    cots.push({ name: 'Wippen-Rückstellfedern', spec: 'Edelstahl V4A Ø 3,5 mm, L0=10 mm', qty: 2, desc: isDe ? 'Rückstellfedern für Kassetten-Rastkralle' : 'Return springs for cartridge locking claw' });
+    cots.push({ name: 'Auswerfer-Druckfedern', spec: 'Edelstahl V4A D=4,5 mm, L0=15 mm', qty: numPods * 2, desc: isDe ? `Auto-Eject Federn in Schottwänden (2x pro Pod: ${numPods * 2} Stk.)` : `Auto-eject springs in bulkheads (2 per pod: ${numPods * 2} pcs)` });
+    cots.push({ name: 'N52 Entriegelungsschlüssel', spec: 'Neodym-Block 20 x 10 x 5 mm', qty: 1, desc: isDe ? 'Berührungsloser Magnetschlüssel für Auswurf' : 'Contactless magnetic key for ejection' });
+    cots.push({ name: 'Silikon-Dichtschnur', spec: 'Rundschnur Ø 1,5 mm Shore 40A', qty: '1.0 m', desc: isDe ? 'Nut-Dichtung Main Box & Front-Node' : 'Groove gasket for Main Box & Front Node' });
+    cots.push({ name: 'Kassetten-Flanschdichtungen', spec: 'Silikon-Formdichtung 54 x 18 mm', qty: numPods, desc: isDe ? `Stirnseitige Mundloch-Dichtungen (${numPods} Stk.)` : `Mouth opening seals (${numPods} pcs)` });
+    cots.push({ name: 'M4 Silentblöcke / Gummipuffer', spec: 'Typ A M4 Außen/Innen Ø 15 x 10 mm', qty: 4, desc: isDe ? 'Schwingungsentkoppelte Zentralbox-Montage' : 'Vibration-isolated main box mounting' });
+
+    if (builderState.bike === 'bmw-gsa') {
+        cots.push({ name: 'M5 Schellen-Schrauben', spec: 'DIN 912 V4A M5 x 30 mm + Stoppmuttern', qty: 8, desc: isDe ? 'Verschraubung der 4 Rohrschellen am Kofferträger' : 'Fastening 4 tube clamps to pannier rack' });
+    }
+
+    // Update total count badge
+    const totalPartsCount = parts3D.reduce((acc, p) => acc + (typeof p.qty === 'number' ? p.qty : 1), 0) +
+                            pcbas.reduce((acc, p) => acc + p.qty, 0) +
+                            cots.reduce((acc, p) => acc + (typeof p.qty === 'number' ? p.qty : 1), 0);
+    const countBadge = document.getElementById('builder-bom-parts-count');
+    if (countBadge) {
+        countBadge.textContent = `${totalPartsCount} ${isDe ? 'Teile gesamt' : 'parts total'}`;
+    }
+
+    // Render Tables
+    const tbody3D = document.getElementById('builder-tbody-3d');
+    if (tbody3D) {
+        tbody3D.innerHTML = parts3D.map(p => `
+            <tr>
+                <td><strong>${p.group}</strong></td>
+                <td><code style="color: var(--accent-blue); font-size: 0.78rem;">${p.file}</code></td>
+                <td><span class="card-badge badge-blue" style="font-size: 0.72rem;">${p.qty}</span></td>
+                <td>${p.desc}</td>
+            </tr>
+        `).join('');
+    }
+
+    const tbodyPcb = document.getElementById('builder-tbody-pcb');
+    if (tbodyPcb) {
+        tbodyPcb.innerHTML = pcbas.map(p => `
+            <tr>
+                <td><strong>${p.name}</strong></td>
+                <td><code style="color: var(--accent-green); font-size: 0.78rem;">${p.id}</code></td>
+                <td><span class="card-badge badge-green" style="font-size: 0.72rem;">${p.qty}</span></td>
+                <td>${p.desc}</td>
+            </tr>
+        `).join('');
+    }
+
+    const tbodyCots = document.getElementById('builder-tbody-cots');
+    if (tbodyCots) {
+        tbodyCots.innerHTML = cots.map(p => `
+            <tr>
+                <td><strong>${p.name}</strong></td>
+                <td><span style="color: var(--text-secondary); font-size: 0.78rem;">${p.spec}</span></td>
+                <td><span class="card-badge badge-orange" style="font-size: 0.72rem;">${p.qty}</span></td>
+                <td>${p.desc}</td>
+            </tr>
+        `).join('');
+    }
+
+    // 5. Generate Tailored Step-by-Step Instructions (IKEA-Style)
+    const instructionsContainer = document.getElementById('builder-instructions-container');
+    if (!instructionsContainer) return;
+
+    let instructionsHtml = `
+        <!-- Step 1 -->
+        <div class="builder-instruction-step">
+            <div class="builder-step-headline">
+                <span class="builder-step-name">1. ${isDe ? 'Zentralbox (Main Box) werkzeuglos montieren' : 'Assemble Central Main Box (Solder-Free)'}</span>
+                <span class="builder-pill-verified">✓ 0% Löten / 0% Schmelzen</span>
+            </div>
+            <div class="builder-parts-tag-list">
+                <span class="builder-part-tag">main_box_lower_case.stl</span>
+                <span class="builder-part-tag">PCBA 01 (kicad_main_box)</span>
+                <span class="builder-part-tag">4x DIN 934 M3 Muttern</span>
+                <span class="builder-part-tag">4x M3x40 mm Schrauben</span>
+                <span class="builder-part-tag">1000 mAh LiPo</span>
+            </div>
+            <div class="builder-instructions-body">
+                <ol>
+                    <li>${isDe ? '<strong>Nut-Pockets bestücken:</strong> Drücke 4x M3 Edelstahlmuttern von unten in die Sechskant-Mutternaschen der Unterwanne ein (sitzen unverlierbar, kein Lötkolben nötig!).' : '<strong>Insert nuts into pockets:</strong> Press 4x M3 stainless nuts into the hex nut pockets of the lower tub from underneath (seated securely, no soldering iron required!).'}</li>
+                    <li>${isDe ? '<strong>Platine einsetzen:</strong> Lege die fertig bestückte PCBA 01 auf die Dämpferdome und ziehe die 4x M2.5 Schrauben handfest an.' : '<strong>Insert PCB:</strong> Place factory-assembled PCBA 01 onto standoffs and tighten 4x M2.5 screws finger-tight.'}</li>
+                    <li>${isDe ? '<strong>Zwischenboden & Akku:</strong> Setze den Zwischenboden auf, lege den LiPo-Akku ein und stecke den Stecker an <code>J_BAT</code> an.' : '<strong>Mid tray & battery:</strong> Place mid tray on top, insert LiPo battery, and plug into <code>J_BAT</code>.'}</li>
+                    <li>${isDe ? '<strong>Dichtung & Deckel:</strong> Lege die Silikon-Rundschnur in die Deckelnut und ziehe die 4x M3x40 mm Schrauben über Kreuz fest.' : '<strong>Seal & lid:</strong> Lay silicone gasket cord into lid groove and fasten 4x M3x40 mm screws crosswise.'}</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="builder-instruction-step">
+            <div class="builder-step-headline">
+                <span class="builder-step-name">2. ${isDe ? `Satelliten-Pods vorbereiten (${numPods} Pod-Gehäuse)` : `Prepare Satellite Pods (${numPods} Pods)`}</span>
+                <span class="builder-pill-verified">✓ COTS Plug & Play</span>
+            </div>
+            <div class="builder-parts-tag-list">
+                <span class="builder-part-tag">pod_base_housing.stl</span>
+                <span class="builder-part-tag">PCBA 02 (kicad_pod_base)</span>
+                <span class="builder-part-tag">03_pod_bulkhead_partition.stl</span>
+                <span class="builder-part-tag">${numPods * 2}x Auswerffedern</span>
+            </div>
+            <div class="builder-instructions-body">
+                <ol>
+                    <li>${isDe ? '<strong>Basisplatine einschieben:</strong> Schiebe die PCBA 02 in die Führungsnuten des Gehäuses, stecke die M8-Buchse durch die Rückwand und ziehe die Mutter mit SW 10 handfest an.' : '<strong>Insert baseboard:</strong> Slide PCBA 02 into guide grooves, pass M8 socket through rear hole, and tighten nut with 10mm wrench.'}</li>
+                    <li>${isDe ? '<strong>Auswerffedern einstecken:</strong> Stecke je 2 Druckfedern in die rückseitigen Federtaschen der Schottwand.' : '<strong>Insert ejector springs:</strong> Place 2 compression springs into rear pockets of bulkhead.'}</li>
+                    <li>${isDe ? '<strong>Schottwand sichern:</strong> Schottwand mit den Federn voran einschieben und mit 2x M2x8 mm Senkkopfschrauben bündig verschrauben.' : '<strong>Secure bulkhead:</strong> Push bulkhead forward and secure with 2x M2x8 mm countersunk screws.'}</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Step 3: Gateway 1 -->
+        <div class="builder-instruction-step">
+            <div class="builder-step-headline">
+                <span class="builder-step-name">3. ${isDe ? `Gateway-Kassette 1: ${slotNames[builderState.slot1]}` : `Gateway Cartridge 1: ${slotNames[builderState.slot1]}`}</span>
+                <span class="builder-pill-verified">✓ 100% Crimpfrei</span>
+            </div>
+            <div class="builder-instructions-body">
+                ${builderState.slot1 === 'sena-spider-x' ? `
+                    <ol>
+                        <li>${isDe ? 'PCBA 03 in den Basisschlitten einklicken.' : 'Snap PCBA 03 into base sled.'}</li>
+                        <li>${isDe ? '4x Miniatur-Hubmagnete mit TPU-Spitzen in die Führungsbrücke von <code>cartridge_insert_sena.stl</code> einlegen und mit Halteplatte verschrauben (4x M2x6 mm).' : 'Place 4x miniature solenoids with TPU tips into guide bridge of <code>cartridge_insert_sena.stl</code> and secure with retainer plate (4x M2x6 mm).'}</li>
+                        <li>${isDe ? 'Fertiges 8-Pin JST-SH Kabel <code>J_ACT</code> an PCBA 03 stecken (kein Crimpen!).' : 'Plug pre-crimped 8-pin JST-SH cable <code>J_ACT</code> into PCBA 03 (zero crimping!).'}</li>
+                        <li>${isDe ? 'Sena SPIDER X Slim einlegen, mit Schnellspann-Niederhalter arretieren und Stromkabel anstecken.' : 'Insert Sena SPIDER X Slim, lock with clamp, and connect power cable.'}</li>
+                        <li>${isDe ? 'Stahlanker und Rückstellfeder in die Wippe (<code>cartridge_magnetic_lock_latch.stl</code>) einsetzen und mit M2 Stift im Schlitten lagern.' : 'Insert steel pin and spring into latch rocker (<code>cartridge_magnetic_lock_latch.stl</code>) and pin with M2 dowel into sled.'}</li>
+                    </ol>
+                ` : builderState.slot1 === 'sena-50s' ? `
+                    <ol>
+                        <li>${isDe ? 'PCBA 03 in Basisschlitten einklicken, Pogo-Pin Flachkabel anstecken und Sena 50S/60S Cradle montieren.' : 'Snap PCBA 03 into sled, connect pogo-pin cable, and mount Sena 50S/60S cradle.'}</li>
+                        <li>${isDe ? 'Wippenmechanismus montieren und Silikon-Flanschdichtung aufziehen.' : 'Assemble latch mechanism and fit silicone flange seal.'}</li>
+                    </ol>
+                ` : `
+                    <ol>
+                        <li>${isDe ? 'Blindkassette mit O-Ring in den Schlitten einsetzen – hermetisch regendichte Dry Box für Kleinteile.' : 'Insert blank cartridge with O-ring – hermetic waterproof dry box.'}</li>
+                    </ol>
+                `}
+            </div>
+        </div>
+
+        <!-- Step 4: Gateway 2 -->
+        <div class="builder-instruction-step">
+            <div class="builder-step-headline">
+                <span class="builder-step-name">4. ${isDe ? `Gateway-Kassette 2: ${slotNames[builderState.slot2]}` : `Gateway Cartridge 2: ${slotNames[builderState.slot2]}`}</span>
+                <span class="builder-pill-verified">✓ 100% Crimpfrei</span>
+            </div>
+            <div class="builder-instructions-body">
+                ${builderState.slot2 === 'cardo-edge' ? `
+                    <ol>
+                        <li>${isDe ? 'PCBA 03 in Basisschlitten einsetzen.' : 'Seat PCBA 03 into base sled.'}</li>
+                        <li>${isDe ? '4x Miniatur-Aktuatoren in <code>cartridge_insert_cardo.stl</code> einlegen und Halteplatte verschrauben (4x M2x6 mm).' : 'Place 4x miniature actuators into <code>cartridge_insert_cardo.stl</code> and secure retainer plate (4x M2x6 mm).'}</li>
+                        <li>${isDe ? 'Cardo Packtalk Edge Air-Mount montieren, fertiges JST-Kabel anstecken und Wippenmechanismus montieren.' : 'Mount Cardo Air-Mount, connect pre-crimped JST cable, and install latch rocker.'}</li>
+                    </ol>
+                ` : builderState.slot2 === 'pmr446' ? `
+                    <ol>
+                        <li>${isDe ? 'PMR446 Funkgerät in den Schlitten einlegen und Klinkenkabel an Header J2 anstecken.' : 'Place PMR446 radio into sled and plug audio jack into J2.'}</li>
+                    </ol>
+                ` : `
+                    <ol>
+                        <li>${isDe ? 'Blindkassette mit O-Ring einsetzen – schützt Pod 2 vor Schmutz und Feuchtigkeit.' : 'Insert blank cartridge with O-ring – protects Pod 2 from dirt and moisture.'}</li>
+                    </ol>
+                `}
+            </div>
+        </div>
+    `;
+
+    // Step 5: Heck-Pod 3 (if active)
+    if (builderState.addons.rearPod3) {
+        instructionsHtml += `
+            <div class="builder-instruction-step">
+                <div class="builder-step-headline">
+                    <span class="builder-step-name">5. ${isDe ? 'Heck-Pod 3 Transceiver & OMM-Radom montieren' : 'Assemble Rear Pod 3 Transceiver & OMM Radome'}</span>
+                    <span class="builder-pill-verified">✓ LoRa + GNSS</span>
+                </div>
+                <div class="builder-instructions-body">
+                    <ol>
+                        <li>${isDe ? 'PCBA 04 in den 3. Basisschlitten einsetzen und mit 4x M2.5 Schrauben fixieren.' : 'Place PCBA 04 into 3rd base sled and secure with 4x M2.5 screws.'}</li>
+                        <li>${isDe ? 'Dielektrisches OMM-Radom (<code>cartridge_antenna_bracket_omm.stl</code>) aufklicken.' : 'Snap dielectric OMM radome (<code>cartridge_antenna_bracket_omm.stl</code>) into place.'}</li>
+                        <li>${isDe ? 'Optional: Externe SMA-Pigtails auf Murata MM8030 Buchsen aufklicken (J3 Mesh, J4 LoRa, J5 GNSS) für externe Antennen.' : 'Optional: Snap external SMA pigtails onto Murata MM8030 switches (J3 Mesh, J4 LoRa, J5 GNSS) for external antennas.'}</li>
+                    </ol>
+                </div>
+            </div>
+        `;
+    }
+
+    // Step 6: Front Node (if active)
+    if (builderState.addons.frontNode) {
+        instructionsHtml += `
+            <div class="builder-instruction-step">
+                <div class="builder-step-headline">
+                    <span class="builder-step-name">6. ${isDe ? 'Universal Front-Knoten zusammenbauen' : 'Assemble Universal Front Node'}</span>
+                    <span class="builder-pill-verified">✓ Nut-Pockets & COTS</span>
+                </div>
+                <div class="builder-instructions-body">
+                    <ol>
+                        <li>${isDe ? '<strong>Nut-Pockets:</strong> 4x M3 Muttern in die Ecktaschen und 4x M4 Muttern in das AMPS-Bett am Wannenboden einlegen.' : '<strong>Nut-Pockets:</strong> Insert 4x M3 nuts into corner pockets and 4x M4 nuts into AMPS base pockets.'}</li>
+                        <li>${isDe ? 'PCBA 05 einlegen und mit 4x M2.5 Schrauben fixieren. Hydrophobe Gore-Membran über MEMS-Mikrofon kleben.' : 'Insert PCBA 05 and secure with 4x M2.5 screws. Adhere Gore membrane over MEMS port.'}</li>
+                        <li>${isDe ? 'Fertige USB-Kabel (J6 CarPlay, J5 Handschuhfach) und Bordnetzkabel (J1 12V, J2 CAN, J3 PTT) anstecken.' : 'Plug in pre-molded USB cables (J6 CarPlay, J5 Glovebox) and power/signal cables (J1 12V, J2 CAN, J3 PTT).'}</li>
+                        <li>${isDe ? 'Silikon-Dichtschnur einlegen, TPU-Kämme einschieben und Deckel mit 4x M3x20 mm Schrauben festziehen.' : 'Lay silicone gasket cord, slide TPU combs in, and tighten lid with 4x M3x20 mm screws.'}</li>
+                    </ol>
+                </div>
+            </div>
+        `;
+    }
+
+    // Step 7: Bike Installation (Tailored dynamically to bike model!)
+    let bikeInstructions = '';
+    if (builderState.bike === 'bmw-gs') {
+        bikeInstructions = `
+            <div class="builder-instruction-step">
+                <div class="builder-step-headline">
+                    <span class="builder-step-name">7. ${isDe ? 'Montage an deiner BMW R1250 / R1300 GS (Standard)' : 'Installation on your BMW R1250 / R1300 GS (Standard)'}</span>
+                    <span class="builder-pill-verified">✓ Sitzbank-Bügelfalte</span>
+                </div>
+                <div class="builder-instructions-body">
+                    <ol>
+                        <li>${isDe ? '<strong>Zentralbox:</strong> Unter der Sitzbank im Heckrahmen auf den 4x M4 Silentblöcken schwingungsentkoppelt verschrauben.' : '<strong>Central Box:</strong> Bolt under the seat in the rear frame using 4x M4 silentblocks for vibration isolation.'}</li>
+                        <li>${isDe ? '<strong>Pod 1 & 2:</strong> Transition-Docks (<code>adventure_transition_dock.stl</code>) in der Sitzbank-Bügelfalte an das Ø 28 mm Rahmenrohr klemmen. Pod-Gehäuse verschrauben. M8 PUR-Kabel im Unterflurkanal zur Zentralbox führen.' : '<strong>Pods 1 & 2:</strong> Clamp transition docks (<code>adventure_transition_dock.stl</code>) in the seat crease to the Ø 28 mm frame tube. Fasten pod housings. Route M8 cables to main box.'}</li>
+                        <li>${isDe ? '<strong>Heck-Pod & Radar:</strong> Rack-Tail Mount an der Gepäckbrücke verschrauben. Hirth-Zahngelenk auf gewünschten Radar-Winkel (+10° bis +15°) einrasten, Varia einklinken und M3 Sicherungsmadenschraube eindrehen.' : '<strong>Rear Pod & Radar:</strong> Bolt rack-tail mount to luggage rack. Set Hirth gear lock to desired radar angle (+10° to +15°), snap Varia in, and secure with M3 set screw.'}</li>
+                    </ol>
+                </div>
+            </div>
+        `;
+    } else if (builderState.bike === 'bmw-gsa') {
+        bikeInstructions = `
+            <div class="builder-instruction-step">
+                <div class="builder-step-headline">
+                    <span class="builder-step-name">7. ${isDe ? 'Montage an deiner BMW R1250 / R1300 GSA (Adventure)' : 'Installation on your BMW R1250 / R1300 GSA (Adventure)'}</span>
+                    <span class="builder-pill-verified">✓ Rohrträger-Käfig</span>
+                </div>
+                <div class="builder-instructions-body">
+                    <ol>
+                        <li>${isDe ? '<strong>Zentralbox:</strong> Unter der Sitzbank auf 4x M4 Silentblöcken montieren.' : '<strong>Central Box:</strong> Bolt under the seat on 4x M4 silentblocks.'}</li>
+                        <li>${isDe ? '<strong>Pod 1 & 2 (Sturzsicher im Kofferträger-Käfig):</strong> EPDM-Schutzstreifen um das Ø 18 mm Rohr wickeln. Klemmschellen (<code>adventure_pannier_rack_clamp_base.stl</code> + <code>cap.stl</code>) mit M5x30 mm Schrauben und Stoppmuttern über Kreuz mit 4,5 Nm anziehen. Pod-Basisgehäuse an den Schellenaugen verschrauben.' : '<strong>Pods 1 & 2 (Protected in rack cage):</strong> Wrap EPDM strip around Ø 18 mm tube. Clamp bases and caps with M5x30 mm bolts and Nyloc nuts (4.5 Nm). Bolt pod base housings to clamp eyelets.'}</li>
+                        <li>${isDe ? '<strong>Heck-Balkon hinter Alutopcase:</strong> Ausleger (<code>adventure_rack_tail_mount.stl</code>) an der Gepäckbrücke verschrauben (ragt 65 mm hinter das Topcase für freie 360° Sicht). Dipolantenne an der 45°-Astabweiser-Finne ausrichten. Radar im Hirth-Dock sichern.' : '<strong>Tail Balcony behind topcase:</strong> Bolt cantilever (<code>adventure_rack_tail_mount.stl</code>) to rear rack (extends 65 mm behind topcase for 360° clear RF line of sight). Align dipole antenna along 45° fin. Lock radar in Hirth dock.'}</li>
+                    </ol>
+                </div>
+            </div>
+        `;
+    } else if (builderState.bike === 'hd-touring') {
+        bikeInstructions = `
+            <div class="builder-instruction-step">
+                <div class="builder-step-headline">
+                    <span class="builder-step-name">7. ${isDe ? 'Montage an deiner Harley-Davidson Classic Touring (Bagger)' : 'Installation on your Harley-Davidson Classic Touring (Bagger)'}</span>
+                    <span class="builder-pill-verified">✓ Kofferdeckel & Fender</span>
+                </div>
+                <div class="builder-instructions-body">
+                    <ol>
+                        <li>${isDe ? '<strong>Zentralbox:</strong> Unter der Sitzbank auf der Rahmenbrücke auf 4x Silentblöcken montieren.' : '<strong>Central Box:</strong> Mount under seat on frame crossmember using 4x silentblocks.'}</li>
+                        <li>${isDe ? '<strong>Pod 1 & 2:</strong> Kofferdeckel-Docks (<code>saddlebag_lid_dock.stl</code>) auf den Kofferdeckeln verschrauben (M4 Senkkopf + Dichtscheiben) oder per 3M VHB Tape befestigen. M8 PUR-Kabel durch Gummitülle in den Koffer und über Schnellkupplung zum Rahmen führen.' : '<strong>Pods 1 & 2:</strong> Mount saddlebag lid docks (<code>saddlebag_lid_dock.stl</code>) to bag lids using M4 screws or 3M VHB tape. Route M8 cables through grommet to frame disconnect.'}</li>
+                        <li>${isDe ? '<strong>Heck-Pod 3:</strong> Organische Fender-Konsole (<code>pod3_touring_fender_console.stl</code>) zentrisch auf dem Heckkotflügel verschrauben.' : '<strong>Rear Pod 3:</strong> Center and bolt organic fender console (<code>pod3_touring_fender_console.stl</code>) to rear fender.'}</li>
+                        <li>${isDe ? '<strong>Radar:</strong> Kennzeichen-Radarhalter (<code>radar_license_plate_bracket.stl</code>) unterhalb des Kennzeichens verschrauben.' : '<strong>Radar:</strong> Bolt decoupled radar bracket (<code>radar_license_plate_bracket.stl</code>) beneath license plate frame.'}</li>
+                    </ol>
+                </div>
+            </div>
+        `;
+    } else if (builderState.bike === 'hd-cvo-st') {
+        bikeInstructions = `
+            <div class="builder-instruction-step">
+                <div class="builder-step-headline">
+                    <span class="builder-step-name">7. ${isDe ? 'Montage an deiner Harley-Davidson CVO ST / Performance Bagger' : 'Installation on your Harley-Davidson CVO ST / Performance Bagger'}</span>
+                    <span class="builder-pill-verified">✓ Under-Cowl Skeleton</span>
+                </div>
+                <div class="builder-instructions-body">
+                    <ol>
+                        <li>${isDe ? '<strong>Zentralbox:</strong> Unter dem Solositz im Rahmendreieck auf Silentblöcken fixieren.' : '<strong>Central Box:</strong> Mount under solo seat on silentblocks.'}</li>
+                        <li>${isDe ? '<strong>Pod 1 & 2:</strong> Aufrechtes Skeleton Dock (<code>cvo_st_undercowl_skeleton_dock.stl</code>) unter der Forged-Carbon-Sitzhutze montieren. Pods stehen aufrecht – voller Abstand zu den Showa-Ausgleichsbehältern und dem heißen Auspuffrohr.' : '<strong>Pods 1 & 2:</strong> Mount upright skeleton dock (<code>cvo_st_undercowl_skeleton_dock.stl</code>) under forged carbon cowl. Pods stand vertically, completely clearing Showa canisters and exhaust heat.'}</li>
+                        <li>${isDe ? '<strong>Heck-Pod 3:</strong> Aerodynamische Telemetrie-Finne (<code>cvo_st_telemetry_fin.stl</code>) auf der Heck-Hutze verschrauben.' : '<strong>Rear Pod 3:</strong> Bolt aerodynamic telemetry fin (<code>cvo_st_telemetry_fin.stl</code>) to rear tail cowl tab.'}</li>
+                        <li>${isDe ? '<strong>Radar:</strong> Zentrische Underfender-Platte (<code>radar_center_underfender_mount.stl</code>) unter dem gekürzten Heckfender verschrauben.' : '<strong>Radar:</strong> Bolt centered under-fender plate (<code>radar_center_underfender_mount.stl</code>) under shortened rear fender.'}</li>
+                    </ol>
+                </div>
+            </div>
+        `;
+    } else {
+        bikeInstructions = `
+            <div class="builder-instruction-step">
+                <div class="builder-step-headline">
+                    <span class="builder-step-name">7. ${isDe ? 'Montage am Motorrad (Universal-Kit)' : 'Installation on Motorcycle (Universal Kit)'}</span>
+                    <span class="builder-pill-verified">✓ Universal 120° V-Nut</span>
+                </div>
+                <div class="builder-instructions-body">
+                    <ol>
+                        <li>${isDe ? '<strong>Zentralbox:</strong> Unter der Sitzbank auf 4x M4 Silentblöcken verschrauben.' : '<strong>Central Box:</strong> Mount under seat using 4x M4 silentblocks.'}</li>
+                        <li>${isDe ? '<strong>Pod 1 & 2:</strong> Mit dem 120° V-Nut Rohrbett an Rahmenrohren oder Sturzbügeln (Ø 22–32 mm) anlegen und mit EPDM-Spannbändern werkzeuglos fixieren.' : '<strong>Pods 1 & 2:</strong> Place 120° V-cradle onto frame tubes or crash bars (Ø 22–32 mm) and secure tool-free with EPDM ladder straps.'}</li>
+                        <li>${isDe ? '<strong>Verkabelung:</strong> M8 PUR-Kabel entlang des Kabelbaums mit Kabelbindern verlegen.' : '<strong>Cabling:</strong> Route M8 PUR cables along main harness using cable ties.'}</li>
+                    </ol>
+                </div>
+            </div>
+        `;
+    }
+    instructionsHtml += bikeInstructions;
+
+    // Step 8: Plug & Play Finalization
+    instructionsHtml += `
+        <div class="builder-instruction-step done">
+            <div class="builder-step-headline">
+                <span class="builder-step-name">8. ${isDe ? 'Plug-and-Play Anstecken & Erstinbetriebnahme' : 'Plug-and-Play Connection & First Boot'}</span>
+                <span class="builder-pill-verified">✓ 100% Fertig!</span>
+            </div>
+            <div class="builder-instructions-body">
+                <ol>
+                    <li>${isDe ? 'Alle fertigen M8 PUR-Kabel an die Pods und den Front-Knoten anstecken und Überwurfmuttern handfest anziehen.' : 'Plug all pre-molded M8 PUR cables into pods and Front Node, tightening locking rings finger-tight.'}</li>
+                    <li>${isDe ? 'HD26 Hauptstecker an der Zentralbox verriegeln.' : 'Lock HD26 main plug at Central Box.'}</li>
+                    <li>${isDe ? 'Bordnetzkabel (rot mit 2A Sicherung an Batterie-Dauerplus, schwarz an Masse) anschließen.' : 'Connect power harness (red with 2A fuse to battery +, black to ground).'}</li>
+                    <li>${isDe ? 'Zündung EINschalten: Status-LEDs an Box und Front-Knoten leuchten grün. PWA öffnen und Kassetten einschieben – das System ist sofort betriebsbereit!' : 'Switch ignition ON: Status LEDs illuminate green. Open PWA and slide cartridges in – the system is instantly operational!'}</li>
+                </ol>
+            </div>
+        </div>
+    `;
+
+    instructionsContainer.innerHTML = instructionsHtml;
+}
+
+function exportBuilderBomCsv() {
+    const isDe = state.lang === 'de';
+    let csv = 'Kategorie;Komponente;Dateiname_MPN;Stueck;Funktion_Zweck\n';
+
+    // 3D Parts
+    const rows3D = document.querySelectorAll('#builder-tbody-3d tr');
+    rows3D.forEach(tr => {
+        const cols = tr.querySelectorAll('td');
+        if (cols.length >= 4) {
+            csv += `3D-Druck;${cols[0].innerText.trim()};${cols[1].innerText.trim()};${cols[2].innerText.trim()};"${cols[3].innerText.trim()}"\n`;
+        }
+    });
+
+    // PCBAs
+    const rowsPcb = document.querySelectorAll('#builder-tbody-pcb tr');
+    rowsPcb.forEach(tr => {
+        const cols = tr.querySelectorAll('td');
+        if (cols.length >= 4) {
+            csv += `PCBA;${cols[0].innerText.trim()};${cols[1].innerText.trim()};${cols[2].innerText.trim()};"${cols[3].innerText.trim()}"\n`;
+        }
+    });
+
+    // COTS
+    const rowsCots = document.querySelectorAll('#builder-tbody-cots tr');
+    rowsCots.forEach(tr => {
+        const cols = tr.querySelectorAll('td');
+        if (cols.length >= 4) {
+            csv += `COTS_Normteile;${cols[0].innerText.trim()};${cols[1].innerText.trim()};${cols[2].innerText.trim()};"${cols[3].innerText.trim()}"\n`;
+        }
+    });
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `openmotorbridge_bom_${builderState.bike}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    showToast(isDe ? 'Stückliste als CSV heruntergeladen!' : 'BOM exported as CSV!', 'success');
+}
+
 // Initialize Language, Telemetry & Cockpit UI on Boot (Standby - Wait for BLE Hardware)
 setLanguage(state.lang);
 resetDisconnectedTelemetryUi();
@@ -7073,9 +7698,10 @@ setupCanProfileManagerUi();
 setupDeviceHubUi();
 setupRideHudUi();
 setupDemoSuiteUi();
+setupSystemBuilderUi();
 
 // ==========================================
-// 12. Service Worker Registration (PWA Offline)
+// 13. Service Worker Registration (PWA Offline)
 // ==========================================
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
