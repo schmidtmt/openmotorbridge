@@ -10,9 +10,9 @@ This document serves as the master reference (Single Source of Truth) for the co
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **U1** | ESP32-S3-WROOM-1-N16R8 | Espressif Systems | SMD Module | C2913200 | Host MCU (Dual-Core, 16 MB Flash, 8 MB PSRAM) |
 | **U2** | LM5164-Q1 | Texas Instruments | SOIC-8-EP | C2843477 | Automotive 65V Synchronous Buck Converter |
-| **U3** | BQ24075RGTR | Texas Instruments | VQFN-16 | C128509 | Dynamic Power-Path Controller & LiPo Charger with TS |
-| **U4** | BMI270 | Bosch Sensortec | LGA-14 | C2838380 | 6-Axis IMU for Lean Angle & Dynamics |
-| **U5** | ES8388 | Everest Semi | QFN-28 | C144547 | 24-Bit Stereo Audio Codec (I2S ADC/DAC) |
+| **U3** | BQ24075RGTR | Texas Instruments | VQFN-16 | C15464 | Dynamic Power-Path Controller & LiPo Charger with TS |
+| **U4** | BMI270 | Bosch Sensortec | LGA-14 | C2836813 | 6-Axis IMU for Lean Angle & Dynamics |
+| **U5** | ES8388 | Everest Semi | QFN-28 | C365736 | 24-Bit Stereo Audio Codec (I2S ADC/DAC) |
 | **U6** | TCAN334GDCNR | Texas Instruments | SOT-23-8 | C842340 | 3.3V Automotive CAN-FD Transceiver (±58V Fault) |
 | **T1, T2** | LM-NP-1001-B1L | Bourns Inc. | SMD Transformer| C114402 | 1:1 Audio Transformer (1500 V RMS Galvanic Isolation) |
 | **OC1, OC2**| TLP222A(F) | Toshiba | SOP-4 | C112444 | Solid-State PhotoMOS Relay for PTT Keying |
@@ -74,7 +74,7 @@ This document serves as the master reference (Single Source of Truth) for the co
 | Designator | Component / MPN | Manufacturer | Package | LCSC / JLCPCB Part # | Function |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **U1** | ESP32-S3-WROOM-1U-N8R8 | Espressif Systems | SMD Module | `C2913200` | Dual-Core 32-Bit Xtensa LX7 (240 MHz, Vector-DSP, 8MB PSRAM, ext. U.FL) |
-| **U2** | USB2514B-AEZG | Microchip | QFN-36 | `C97185` | Automotive USB 2.0 High-Speed 480 Mbps 4-Port Hub Controller |
+| **U2** | USB2514Bi-AEZG / USB2514B | Microchip | QFN-36 | `C16251` | Automotive/Industrial USB 2.0 High-Speed 480 Mbps 4-Port Hub Controller |
 | **U3** | LMR36015FSCQRNXRQ1 | Texas Instruments | VQFN-12 | `C2843480` | Automotive 36V Synchronous Buck (5V / 2.0A, 91.8%) for Hub & Peripherals |
 | **U4** | TPS2051BDBVR | Texas Instruments | SOT-23-5 | `C7818` | High-Side USB VBUS Power Switch (1.05A Clamp) for Port 2 Cold-Reboot Reset |
 | **U5** | SC8102QDER | Southchip | QFN-32 | `C2843510` | Automotive Synchronous Buck with USB-PD 20W (9V/2.2A & QC3.0) for Smartphone Port 1 |
@@ -83,7 +83,7 @@ This document serves as the master reference (Single Source of Truth) for the co
 | **Q1** | DMN63D8LDW-7 | Diodes Incorporated| SOT-363 | `C283890` | Dual N-Channel MOSFET (30V / 260mA) for directional mirror blind-spot LEDs (J9) |
 | **Q2** | TPS1H100BQPWPRQ1 | Texas Instruments | HTSSOP-14 | `C2843520` | Automotive Smart High-Side Power Switch (up to 3.5A / 40W) for 12V Aux Light (J11) |
 | **LED1**| WS2812B-2020 | Worldsemi | SMD 2020 | `C2843530` | Digitally controllable RGB status LED for enclosure lid light pipe |
-| **MIC1**| SPH0645LM4H-B | Knowles | 3.5x2.65 mm SMD | `C119850` | Digital I2S MEMS Acoustic Microphone for wind noise & dynamic pressure measurement |
+| **MIC1**| MSM261S4030H0R / SPH0645 | Sipeed / Knowles | 3.5x2.65 mm SMD | `C544577` | Digital I2S MEMS Acoustic Microphone (Standard I2S, high availability) |
 | **L1** | 4.7 µH Automotive Inductor | Sunlord / Wurth | SMD 5x5 mm | `C2843490` | Storage Inductor for LMR36015 5V Main Regulator |
 | **L2** | 10 µH Automotive Inductor | Coilcraft / Wurth | SMD 7x7 mm | `C2843525` | Storage Inductor for SC8102 USB-PD Fast-Charge Buck (Port 1) |
 | **J1** | JST-PH 2-Pin Header | JST | 2.00mm SMD | `C289115` | 12V Vehicle Power Input (KL15 & GND) |
@@ -338,3 +338,34 @@ When 2 to 3 riders team up (or one rider equips a primary and secondary bike):
   * **Total Cost Per Motorcycle: only approx. 135 € to 155 €!**
 
 *(All cost estimates as of 2026, indicative figures including VAT, excluding optional third-party OEM intercom units).*
+
+---
+
+## 14. Component Lifecycle Audit (EOL/NRND) & Second-Source Alternatives
+
+To ensure long-term reproducibility and smooth automated turnkey assembly at JLCPCB / LCSC, the complete Bill of Materials has been audited for component lifecycles and supply chain resilience:
+
+### 14.1 Critical Lifecycle Notice: MEMS Microphone (Knowles SPH0645LM4H-B is EOL)
+* **Status:** The originally specified Knowles **SPH0645LM4H-B** has been officially discontinued by the manufacturer (**Obsolete / End-of-Life**) and is flagged as not recommended for new designs at major distributors. Additionally, the old SPH0645 utilized non-standard I2S framing (1-bit timing offset).
+* **Recommended Successor / Primary Part:** **Sipeed / Zilltek MSM261S4030H0R** (LCSC Part: **`C544577`**).
+  * *Advantages:* Fully standard Phillips I2S compliant (zero driver workarounds needed in ESP-IDF DMA engine), abundant mass-production inventory at LCSC/JLCPCB, pin- and footprint-compatible.
+  * *Secondary Alternatives:* **TDK InvenSense ICS-43434 / ICS-43432** or **Knowles SPK0641HT4H-1**.
+
+### 14.2 JLCPCB Extended Parts & Second-Source Alternatives
+
+| Subassembly / Function | Primary Component | JLCPCB / LCSC Part | Status / Availability | Recommended Second-Source / Drop-In Alternative |
+| :--- | :--- | :--- | :--- | :--- |
+| **Central Box 12V Buck** | TI LM5164-Q1 | `C2843477` | Active (TI), often JLCPCB Extended | **TI LMR36015** (60V 1.5A, `C2843480`) or **XLSEMI XL7005A** (80V, JLCPCB Basic Part!) |
+| **Front Node USB Hub** | Microchip USB2514Bi | `C16251` | Active, Industrial (-40..+85°C) | **Terminus FE1.1s / FE8.1** (JLCPCB Basic Part, cent-cost, massive stock) |
+| **CAN-FD Transceiver (3.3V)** | TI TCAN334GDCNR | `C842340` | Active (TI) | **TI TCAN332G / TCAN337G** or **SITCORE SIT1051T/3** (pin-compatible, massive LCSC stock) |
+| **Audio Transformer (1500V)**| Bourns LM-NP-1001-B1L| `C114402` | Active, often JLCPCB Extended | **Triad Magnetics SP-66** or **Bourns SM-LP-5001** |
+| **Stereo DSP Codec** | Everest Semi ES8388 | `C365736` | Active (Native in ESP-ADF) | **Everest Semi ES8311** (modern low-power variant) or **TI TLV320AIC3104** |
+
+### 14.3 Future-Proof Core Components (Guaranteed Longevity Through 2034+)
+* **Espressif ESP32-S3-WROOM-1 / 1U:** Espressif guarantees a minimum 10-year longevity roadmap (at least until 2034).
+* **Raspberry Pi RP2040:** Massive multi-million stock availability (~$0.70). *Note on the new RP2350:* Released in late 2024, the RP2350 is in early silicon adoption (with known hardware errata E9 on pull-down pins) – the mature RP2040 remains the proven, rock-solid choice for OpenMotorBridge.
+* **Semtech SX1262 LoRa:** Current industry benchmark transceiver for 868 MHz (+22 dBm) across OpenMotorMesh / Meshtastic.
+* **Bosch Sensortec BMI270:** Current 6-axis IMU (replaced the obsolete BMI160).
+* **WCH CH32V003F4P6:** 32-bit RISC-V cartridge controller, cent-cost with massive inventory at LCSC.
+* **Nordic nRF52840:** Global market leader for BLE 5.4 and Thread/Zigbee with guaranteed automotive/industrial supply.
+
