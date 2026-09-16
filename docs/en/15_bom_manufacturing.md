@@ -235,7 +235,7 @@ Riders **never need to crimp or solder wiring harnesses**. The system relies 100
   ├─► M8 6-Pin PUR Cable (1.0 m / 1.5 m): Standard sensor/actuator cable ──► Pod 2 (Gateway 2)
   ├─► M8 6-Pin PUR Cable (1.5 m / 2.0 m): Standard sensor/actuator cable ──► Pod 3 (Rear Transceiver)
   ├─► AMP Superseal 12V Cable (1.0 m): Pre-terminated battery wire with blade fuse ──► 12V Bike Supply
-  └─► M8 4-Pin PUR Cable (1.5 m): Shielded CAN/Front umbilical cable ──► Front Node (Cockpit)
+  └─► M8 4-Pin Receptacle (Pigtail 5, 250 mm): Rear Radar (Garmin Varia) / Rear OBD2/CAN (Front Node connects wirelessly via ESP-NOW!)
 ```
 
 ---
@@ -261,7 +261,8 @@ Riders **never need to crimp or solder wiring harnesses**. The system relies 100
 | **Backup Battery (LiPo UPS)**| 1S LiPo (3.7V 1000mAh) with Micro-Fit plug | EEMB / Enerpower | 1 pc | Seamless UPS reserve in Central Box |
 | **Automotive Fuse Holder** | Waterproof inline blade fuse holder + 2A fuse | Hella / MTA | 1 pc | Battery-terminal protection for KL30 |
 | **M8 6-Pin Pre-Molded Cable**| M8 6-Pin A-Coded Male/Female (1.0m / 1.5m PUR) | Binder / Phoenix | 3 pcs | Plug-and-play connection to Pods 1, 2, and 3 |
-| **M8 4-Pin Pre-Molded Cable**| M8 4-Pin A-Coded Male/Female (1.5m PUR) | Binder / Phoenix | 1 pc | Plug-and-play connection to Front Node |
+| **M8 4-Pin Pre-Molded Cable**| M8 4-Pin A-Coded Male/Female (0.5–1.5m PUR) | Binder / Phoenix | Opt. (1)| Pigtail 5: Rear Radar (Garmin Varia: 12V + UART) / Rear OBD2 (only if using radar) |
+| **Front Node Power Pigtail**| 2-Pin JST-PH Lead with Posi-Tap | COTS Standard | 1 pc | Local cockpit power tap (parking light / nav plug) – *Wireless via ESP-NOW / BLE!* |
 | **J_ACT Actuator Harness** | Pre-crimped 8-Pin JST-SH to 4x 2-Pin leads | Adafruit / SparkFun | 1–2 pcs | Pre-molded wiring for 4 solenoids |
 | **Miniature Actuators** | 5V DC Push/Pull Solenoids ($\varnothing 6.5 \times 12\,\text{mm}$) + TPU tip | Solenoid / Web | 4–8 pcs | 4 pcs per Smart Cartridge (Sena / Cardo) |
 | **J2 Gateway Harness** | Pre-crimped 6-Pin JST-SH to Jack / USB | COTS Standard | 1–2 pcs | Pre-molded harness for headset audio & DC power |

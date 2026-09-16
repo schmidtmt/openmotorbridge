@@ -237,7 +237,7 @@ Für den Aufbau müssen **keine Kabelbäume selbst gecrimpt oder gelötet werden
   ├─► M8 6-Pin PUR-Kabel (1.0 m / 1.5 m): Fertiges Standard Sensor-/Aktorkabel ──► Pod 2 (Gateway 2)
   ├─► M8 6-Pin PUR-Kabel (1.5 m / 2.0 m): Fertiges Standard Sensor-/Aktorkabel ──► Pod 3 (Heck-Transceiver)
   ├─► AMP Superseal 12V-Kabel (1.0 m): Vorkonfektioniertes Batteriekabel mit Sicherung ──► 12V Bordnetz
-  └─► M8 4-Pin PUR-Kabel (1.5 m): Fertiges geschirmtes CAN/Front-Kabel ──► Front-Knoten (Cockpit)
+  └─► M8 4-Pin Buchse (Peitsche 5, 250 mm): Heck-Radar (Garmin Varia) / Heck-OBD2/CAN (Front-Node verbindet sich drahtlos via ESP-NOW!)
 ```
 
 ---
@@ -263,7 +263,8 @@ Für den Aufbau müssen **keine Kabelbäume selbst gecrimpt oder gelötet werden
 | **Pufferakku (LiPo USV)** | 1S LiPo (3.7V 1000mAh) mit Micro-Fit Stecker | EEMB / Enerpower | 1 Stk. | USV-Pufferung in der Zentralbox |
 | **KFZ-Sicherungshalter** | Wasserdichter Flachsicherungshalter + 2A Sicherung | Hella / MTA | 1 Stk. | Dauerplus-Absicherung an Batteriepol |
 | **M8 6-Pin Fertigkabel (PUR)**| M8 6-Pin A-Coded Stecker/Buchse (1.0m / 1.5m) | Binder / Phoenix | 3 Stk. | Plug-and-Play Verbindung zu Pod 1, 2 und 3 |
-| **M8 4-Pin Fertigkabel (PUR)**| M8 4-Pin A-Coded Stecker/Buchse (1.5m) | Binder / Phoenix | 1 Stk. | Plug-and-Play Verbindung zum Front-Knoten |
+| **M8 4-Pin Fertigkabel (PUR)**| M8 4-Pin A-Coded Stecker/Buchse (0.5–1.5m) | Binder / Phoenix | Opt. (1)| Peitsche 5: Heck-Radar (Garmin Varia: 12V + UART) / Heck-OBD2 (nur bei Radar-Nutzung) |
+| **Front-Node 12V Anschlusskabel**| 2-Pin JST-PH Litzenkabel mit Posi-Tap | COTS Standard | 1 Stk. | Lokale Cockpit-Stromversorgung (Standlicht/Navistecker) – *Funkbrücke via ESP-NOW / BLE!* |
 | **J_ACT Aktuator-Kabelbaum** | Fertiges 8-Pin JST-SH Kabel auf 4x 2-Pin Litzen | Adafruit / SparkFun | 1–2 Stk.| Vorkonfektioniertes Fertigkabel für 4 Hubmagnete |
 | **Miniatur-Aktuatoren** | 5V DC Hubmagnete ($\varnothing 6{,}5 \times 12\,\text{mm}$) mit TPU-Spitze | Solenoid / Web | 4–8 Stk.| 4 Stk. pro Smart Cartridge (Sena / Cardo) |
 | **J2 Gateway-Kabelbaum** | Fertiges 6-Pin JST-SH Kabel auf Klinke / USB | COTS Standard | 1–2 Stk.| Fertigkabel für Headset-Audio & Dauerstrom |

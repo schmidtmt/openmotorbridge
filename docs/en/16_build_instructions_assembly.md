@@ -165,7 +165,8 @@ To build a fully featured OpenMotorBridge (v8.0) installation for one motorcycle
 | :--- | :--- | :---: | :--- |
 | **HD26 IP67 Breakout Harness**| Factory pre-molded HD26 breakout harness (Amphenol LTW COTS)| **1** | Main harness plug at Central Box, completely overmolded |
 | **M8 6-Pin PUR Cables** | M8 6-Pin A-coded Male/Female (PUR, 1.0 m / 1.5 m) | **3** | Standard sensor/actuator cables to Pods 1, 2, and 3 |
-| **M8 4-Pin PUR Cable** | M8 4-Pin A-coded Male/Female (PUR, 1.5 m) | **1** | Standard cable to Front Node (CAN & signals) |
+| **M8 4-Pin PUR Cable** | M8 4-Pin A-coded Male/Female (PUR, 0.5–1.5 m) | *Opt. (1)* | Pigtail 5: Rear Radar (Garmin Varia: 12V + UART) or Rear OBD2/CAN (only when using radar or as hardwired fallback) |
+| **Front Node Power Pigtail** | Pre-crimped JST-PH 2-Pin lead with Posi-Tap connectors | **1** | Local 12V power tap at cockpit (parking light / nav plug) – *Front Node connects wirelessly via ESP-NOW / BLE!* |
 | **UPS Backup Battery** | 1S 3.7V LiPo 1000 mAh with NTC & Molex Micro-Fit 3.0 | **1** | Seamless UPS power reserve inside Main Box (plug-in) |
 | **Automotive Fuse Cable** | Waterproof Mini-Blade Inline Fuse Holder with 2A Fuse | **1** | Protects permanent 12V supply (KL30) directly at battery terminal |
 | **J_ACT Actuator Harness** | Pre-crimped 8-Pin JST-SH to 4x 2-Pin silicone leads ($8\,\text{cm}$)| **1–2** | Pre-molded wiring harness for the 4 miniature actuators |
@@ -283,12 +284,12 @@ Because **no soldering, no crimping, and no thermal thread-embedding** are requi
 1. **BMW GS (Standard) Installation:**
    * **Pods 1 & 2:** Clamp transition docks ([`adventure_transition_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_transition_dock.stl)) beneath seat crease to frame tubes (Ø 28 mm). Route M8 PUR cables through lower channel directly under seat to Main Box.
    * **Pod 3:** Fasten onto rack-tail mount ([`adventure_rack_tail_mount.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_rack_tail_mount.stl)) on luggage rack.
-   * **Cockpit & Front-Node Fairing Disassembly:**
+   * **Cockpit & Front-Node Fairing Disassembly (Wireless Connection):**
      * Remove 4x Torx T25 windshield mounting screws and lift off windscreen.
      * Unclip upper TFT cockpit shroud forward out of retaining tabs.
      * Secure Front Node via AMPS mount or tube clamp to handlebar / nav bar.
-     * Route M8 PUR cable through OEM BMW steering head rubber grommet. Fasten with zip ties along OEM harness so that at full left and right steering lock there is **zero tension, pinching, or chafing**.
-     * Route cable along frame tunnel under fuel tank rearwards to battery compartment/seat area.
+     * **Zero Cables Through Steering Head:** The Front Node communicates 100% wirelessly over the integrated 2.4 GHz wireless link (ESP-NOW / BLE, latency < 1.8 ms) with the Central Box under the seat.
+     * Local Power: Plug the 2-pin JST-PH power lead directly into the OEM BMW Cartool nav connector (or parking light KL15 ignition + ground) in the cockpit. Optionally connect the 3-pin JST-PH lead to local front CAN/LIN.
 2. **BMW GSA (Adventure) Installation:**
    * **Pods 1 & 2:** Wrap 1.0 mm EPDM strip around Ø 18 mm rack tube. Fasten clamp base ([`adventure_pannier_rack_clamp_base.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_base.stl)) and cap ([`adventure_pannier_rack_clamp_cap.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_cap.stl)) using 2x M5 x 30 mm stainless bolts and Nyloc nuts to $4.5\,\text{Nm}$. Bolt pod base housing to clamp eyelets.
    * **Pod 3 & Radar (Tail Balcony):** Bolt cantilever ([`adventure_rack_tail_mount.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_rack_tail_mount.stl)) with 4x M6 bolts to rear rack. Align antenna along 45° fin.
@@ -316,17 +317,18 @@ Because **no soldering, no crimping, and no thermal thread-embedding** are requi
    * **Pods 1 & 2:** Mount saddlebag lid docks ([`saddlebag_lid_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/saddlebag_lid_dock.stl)) using M4 countersunk screws with sealing washers at OEM points or via 3M VHB tape. Route M8 cable through grommet to quick-disconnect at frame.
    * **Pod 3:** Center and fasten fender console ([`pod3_touring_fender_console.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod3_touring_fender_console.stl)) flat onto rear fender.
    * **Radar:** Fasten license plate bracket ([`radar_license_plate_bracket.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_license_plate_bracket.stl)) beneath license plate frame.
-   * **Fairing Disassembly (Street Glide Batwing):**
+   * **Fairing Disassembly (Street Glide Batwing) & Local Hookup:**
      * Remove 3x Torx T27 windshield screws (center screw last).
      * Remove 4x Torx T27 screws on the inner fairing (2x below instruments, 2x beside speakers).
      * Carefully tilt outer fairing forward, disconnect main headlight multi-plug.
-     * Bolt Front Node to handlebar riser. Route M8 PUR cable through rubber boot into fairing and run through cable conduit below tank console back to battery tray.
+     * Bolt Front Node to handlebar riser.
+     * Local Power: Tap the 2-pin JST-PH power lead directly into the internal fairing accessory plug (or parking light KL15 switched power). **No wiring harness through the tank tunnel is required**, as the Front Node connects 100% wirelessly to the Central Box via ESP-NOW / BLE!
      * Reinstall outer fairing and torque T27 screws to $3.8\,\text{Nm}$.
 2. **CVO ST / Performance Bagger Installation (Road Glide Sharknose):**
    * **Pods 1 & 2:** Mount upright skeleton dock ([`cvo_st_undercowl_skeleton_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/cvo_st_undercowl_skeleton_dock.stl)) under solo seat cowl. Pods stand vertically, clearing suspension remote reservoirs.
    * **Pod 3:** Mount telemetry fin ([`cvo_st_telemetry_fin.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/cvo_st_telemetry_fin.stl)) on rear cowl tab.
    * **Radar:** Mount centered under-fender plate ([`radar_center_underfender_mount.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_center_underfender_mount.stl)) under shortened rear fender.
-   * **Sharknose Fairing Disassembly:** Remove turn signal bolts, back out 4x T27 inner fairing screws, lift off Sharknose outer fairing forward, and pass M8 PUR cable through the media compartment tunnel.
+   * **Sharknose Fairing Disassembly:** Remove turn signal bolts, back out 4x T27 inner fairing screws, lift off Sharknose outer fairing forward. Mount Front Node in media compartment / riser and connect locally to 12V switched power.
 
 ---
 
