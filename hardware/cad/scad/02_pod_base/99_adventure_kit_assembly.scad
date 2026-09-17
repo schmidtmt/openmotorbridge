@@ -25,6 +25,7 @@
 
 include <../00_common/parameters.scad>;
 use <adventure_pannier_rack_clamp.scad>;
+use <adventure_gsa_cage_dock.scad>;
 use <adventure_transition_dock.scad>;
 use <adventure_underseat_cross_rail.scad>;
 use <adventure_rack_tail_mount.scad>;
@@ -75,42 +76,32 @@ module dummy_garmin_varia_radar() {
 // CONFIG A: GSA Stainless Steel Pannier Rack Clamp Installation
 // -----------------------------------------------------------------------------
 module adventure_config_a_gsa_rack() {
-    // 1. Ø 18 mm Stainless Steel Rack Tube (Touratech / OEM GSA)
+    // 1. Ø 18 mm Stainless Steel Rack Tube Structure (Touratech / OEM GSA)
     color("lightgray", 0.95) {
-        translate([0, 0, -120.0])
-            cylinder(r=9.0, h=240.0, center=false, $fn=32);
-        // Cross brace tube at 60°
-        rotate([0, 60, 0])
-            translate([-9.0, 0, -40.0])
-                cylinder(r=9.0, h=160.0, center=false, $fn=32);
+        // Main longitudinal carrier tube running through the dual clamps
+        translate([-30.0, -11.1, 22.0])
+            rotate([0, 90, 0])
+                cylinder(r=9.0, h=220.0, center=false, $fn=32);
+
+        // Vertical strut tube at rear
+        translate([-30.0, -11.1, -80.0])
+            cylinder(r=9.0, h=180.0, center=false, $fn=32);
+
+        // Diagonal cross-brace tube at 50°
+        translate([130.0, -11.1, 22.0])
+            rotate([0, 50, 0])
+                cylinder(r=9.0, h=140.0, center=false, $fn=32);
     }
 
-    // 2. Heavy-Duty Ø 18 mm Clamping Shells (PA12-CF)
-    translate([0, 0, 0]) {
-        color("#222831", 0.95)
-            adventure_pannier_rack_clamp_base();
-        color("#222831", 0.95)
-            translate([0, 0, -2.0])
-                rotate([180, 0, 0])
-                    adventure_pannier_rack_clamp_cap();
-    }
+    // 2. Heavy-Duty Armored Cage Dock (PA12-CF Exoskeleton with Dual Clamps)
+    adventure_gsa_cage_dock(part = "assembly");
 
-    // Clamping Hardware (2x M5 DIN 912 socket bolts & DIN 985 locknuts)
-    color("silver") {
-        for (y_pos = [-17.0, 17.0]) {
-            translate([0, y_pos, -18.0])
-                cylinder(r=2.5, h=38.0, $fn=16);
-            translate([0, y_pos, 16.0])
-                cylinder(r=4.5, h=4.0, $fn=16);
-        }
-    }
-
-    // 3. Pod 1 Base Housing (Securely nested in the inner frame triangle)
-    translate([12.0, -POD_OUTER_W/2.0, 20.0]) {
+    // 3. Pod 1 Base Housing (Deeply recessed inside the armored cage)
+    translate([12.0, 7.5, 4.0]) {
         color("slategray", 0.85)
             pod_base_housing();
 
-        // M8 Industrial Pur-Cable at Port A
+        // M8 Industrial PUR Cable at Port A (routes in tube shadow forward)
         translate([0, POD_OUTER_W/2.0 - 8.0, POD_OUTER_H/2.0])
             rotate([0, 180, 0])
                 dummy_m8_connector();

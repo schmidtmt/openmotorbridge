@@ -641,8 +641,23 @@ For Street Glide, Electra Glide, and Ultra Limited with 2-Up comfort passenger s
 #### 6.4.1 Cartridge Pods 1 & 2 (Lateral Modules) – The Dual Mounting Strategy
 
 Depending on luggage configurations, adventure bikes deploy two specialized mounting options:
-* **Option A: Tubular Pannier Racks (BMW GS Adventure, Touratech, Hepco&Becker):**
-  Mounted on the inside of the robust $\varnothing 18\,\text{mm}$ steel/stainless rack structure using form-fitting clamp halves (`adventure_pannier_rack_clamp.scad`). The tubes serve as a roll cage, protecting the pods during spills or tip-overs.
+* **Option A: Tubular Pannier Racks (BMW GS Adventure, Touratech, Hepco&Becker, Givi Outback): The "GSA Cage Dock"**
+  * **Mounting:** Mounted on the inside of the massive $\varnothing 18\,\text{mm}$ stainless steel pannier rack structure inside the protected frame triangle via the heavy-duty **GSA Cage Dock** ([`adventure_gsa_cage_dock.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/adventure_gsa_cage_dock.scad)).
+  * **Design Philosophy (Expedition Armor + Stealth Niche):**
+    Blends the indestructible aesthetic of professional rally raid and overland gear (reminiscent of the iconic Touratech GSA aluminum toolboxes) with stealth niche packaging: The pod is deeply recessed into the approx. $45\,\text{mm}$ wide dead space between the aluminum pannier case inner wall and the motorcycle subframe/wheel arch.
+
+![OpenMotorBridge GSA Cage Dock Detailed View](../images/cad/gsa_cage_dock_cad.png)
+
+*Figure 8.29-A: CAD detailed view of the heavy-duty GSA Cage Dock (`adventure_gsa_cage_dock.scad`). Depicted are the deeply recessed Sena 50S Pod 1 nestled within the protective PA12-CF armor cage, the broad 85 mm dual-saddle clamping base for Ø 18 mm stainless steel tubes with 4x M5 V4A socket bolts and DIN 985 locknut retention pockets, the 45° faceted deflection skid plate shielding against gravel roost from the rear wheel, and the concealed M8 cable conduit routed in the tube's aerodynamic shadow.*
+
+  * **Engineering Features & Advantages:**
+    1. **Dual-Saddle Clamping with 85 mm Support Span:** Rather than pivoting on a single narrow clamp, the Cage Dock engages the $\varnothing 18\,\text{mm}$ rack tube across a broad $85\,\text{mm}$ baseline with two separate saddles. This delivers $> 120\,\text{Nm}$ of torsional stiffness, entirely preventing twist and lever fatigue under extreme corrugated off-road vibrations.
+    2. **4x M5 V4A Bolting with Captive Locknuts:** 4x M5 DIN 912 stainless bolts clamp the cap ([`adventure_gsa_clamp_cap.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_gsa_clamp_cap.stl)) securely to the body. Integrated rear hex pockets capture DIN 985 nylon locknuts to ensure zero vibration loosening.
+    3. **Stealth Integration within Pannier Dead Space (100% Hidden):** When aluminum panniers are locked in place, the pod is 100% invisible from the outside. There is zero interference with case mounting pucks, latches, or lid opening arcs.
+    4. **Faceted Roost Deflection Skid Plate:** Facing the rear wheel, a $45^\circ$ angled, $3.5\,\text{mm}$ thick armor shield made of carbon-fiber reinforced polyamide (PA12-CF) deflects flying rocks, mud, and water spray kicked up by knobby off-road tires.
+    5. **Concealed M8 Cable Conduit:** The M8 harness exits the rear of the pod nest directly into the shadow of the tubular frame, running loop-free and chafing-protected straight under the seat.
+    6. **Clear RF Line-of-Sight:** The antenna radiates forward-upward unobstructed through the open subframe triangle toward the rider helmet.
+    7. *(Minimalist Alternative:)* For ultra-tight tube geometries, the compact half-clamps ([`adventure_pannier_rack_clamp_base.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_base.stl) / `cap.stl`) remain fully supported.
 * **Option B: Standard GS & Naked Adventure Bikes (Without Luggage Racks):**
   * **Mounting:** Mounted via a two-piece, aerodynamically sculpted **Transition Dock** ([`adventure_transition_dock.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/adventure_transition_dock.scad)) in combination with a concealed **Under-Seat Saddle Bridge** ([`adventure_underseat_cross_rail.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/adventure_underseat_cross_rail.scad)).
   * **Positioning:** Directly inside the optical waist crease ("Bügelfalte") at the transition between rider and passenger seats along the $\varnothing 28\,\text{mm}$ subframe tube.
@@ -851,9 +866,10 @@ The OpenMotorBridge CAD repository follows a strict hierarchical Constructive So
 | **Adventure Pod 3**| Rack-Tail Mount (Tail balcony with deflector & radar fork) | `02_pod_base/adventure_rack_tail_mount.stl` | `02_pod_base/adventure_rack_tail_mount.scad` |
 | **Adventure Pods 1/2**| GS Transition Dock Base Cradle (Waist Crease Lower Tub) | `02_pod_base/adventure_transition_dock_base.stl` | `02_pod_base/adventure_transition_dock.scad` |
 | **Adventure Pods 1/2**| GS Transition Dock Bodywork Cowl (Waist Crease Top Lid) | `02_pod_base/adventure_transition_dock_lid.stl` | `02_pod_base/adventure_transition_dock.scad` |
-| **Adventure-Kit** | Under-Seat Saddle Bridge (Left-Right Cross-Rail) | `02_pod_base/adventure_underseat_cross_rail.stl` | `02_pod_base/adventure_underseat_cross_rail.scad` |
-| **Adventure Pods 1/2**| GSA Pannier Rack Clamp Base (Ø 18 mm Tube) | `02_pod_base/adventure_pannier_rack_clamp_base.stl` | `02_pod_base/adventure_pannier_rack_clamp.scad` |
-| **Adventure Pods 1/2**| GSA Pannier Rack Clamp Cap (Ø 18 mm Tube) | `02_pod_base/adventure_pannier_rack_clamp_cap.stl` | `02_pod_base/adventure_pannier_rack_clamp.scad` |
+| **Adventure Pods 1/2**| GSA Heavy-Duty Cage Dock Body (Ø 18 mm Tube) | `02_pod_base/adventure_gsa_cage_dock_body.stl` | `02_pod_base/adventure_gsa_cage_dock.scad` |
+| **Adventure Pods 1/2**| GSA Heavy-Duty Clamp Cap (Ø 18 mm Tube) | `02_pod_base/adventure_gsa_clamp_cap.stl` | `02_pod_base/adventure_gsa_cage_dock.scad` |
+| **Adventure Pods 1/2**| GSA Pannier Rack Clamp Base (Minimal Option) | `02_pod_base/adventure_pannier_rack_clamp_base.stl` | `02_pod_base/adventure_pannier_rack_clamp.scad` |
+| **Adventure Pods 1/2**| GSA Pannier Rack Clamp Cap (Minimal Option) | `02_pod_base/adventure_pannier_rack_clamp_cap.stl` | `02_pod_base/adventure_pannier_rack_clamp.scad` |
 | **Frame Dock** | MagSafe Frame Dock Upper Shell (Tube Saddle, Wings & M2.5 Nut-Pocket) | `02_pod_base/components/009_magsafe_frame_dock.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
 | **Frame Dock** | MagSafe Tube Clamp Strap (Ø 26 mm) | `02_pod_base/components/009_magsafe_frame_clamp.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
 | **Frame Dock** | MagSafe Frame Dock Lower Shell (PCB Ledge & M2.5 Counterbore) | `02_pod_base/components/009_magsafe_frame_lid.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |

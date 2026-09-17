@@ -441,8 +441,8 @@ The adventure mounting suite is standardized across the entire **BMW GS model fa
 │   Transition Dock (adventure_transition_dock.stl) in seat crease (Ø 28 mm frame tube)  │
 │   -> 100% luggage-independent, builds zero additional width beyond bike silhouette     │
 │ • Option B (Stainless Pannier Tube Racks - BMW GSA, Touratech, Hepco&Becker, Alucases):│
-│   Pannier rack clamp cage (adventure_pannier_rack_clamp_base.stl + cap.stl)            │
-│   -> Mounts Pod 1 & 2 protected inside frame triangle (Ø 18 mm) in front of alu cases  │
+│   GSA Heavy-Duty Cage Dock (adventure_gsa_cage_dock_body.stl + clamp_cap.stl)          │
+│   -> Mounts Pod 1 & 2 in 45 mm dead space behind rack (100% hidden & roost-shielded)   │
 └────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -471,9 +471,12 @@ The adventure mounting suite is standardized across the entire **BMW GS model fa
   * Install the bodywork cowls ([`adventure_transition_dock_lid.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_transition_dock_lid.stl)) flush using 4x M3 Torx screws.
   * **100% Luggage-Independent & Clean Look:** Zero exposed clamps or zip-ties from the outside; the console flows smoothly with the seat's optical waist crease.
 * **Option B: Stainless Tubular Pannier Racks (BMW GSA All Generations incl. K25 & F800 GSA, Touratech, Hepco&Becker, Aluminum Cases):**
-  * Wrap 1.0 mm EPDM strip around the Ø 18 mm pannier rack tube.
-  * Fasten clamp base ([`adventure_pannier_rack_clamp_base.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_base.stl)) and cap ([`adventure_pannier_rack_clamp_cap.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_cap.stl)) using 2x M5 x 30 mm V4A screws and DIN 985 locknuts tightened in a cross pattern ($4.5\,\text{Nm}$).
-  * Mount Pod base housing securely within the frame triangle ahead of the aluminum cases. All BMW Adventure aluminum rack cages (from 2006 to present day) utilize the identical standardized Ø 18 mm tube dimension.
+  * Wrap 1.0 mm EPDM strip around the Ø 18 mm pannier rack tube along the inboard face.
+  * Position the **GSA Cage Dock** ([`adventure_gsa_cage_dock_body.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_gsa_cage_dock_body.stl)) with its dual semi-circular saddles on the tube. Place the clamp cap ([`adventure_gsa_clamp_cap.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_gsa_clamp_cap.stl)) and tighten 4x M5 x 25 mm V4A socket bolts with DIN 985 locknuts in a criss-cross pattern ($4.5\,\text{Nm}$; 85 mm baseline eliminates all tilt and twist).
+  * Slide Pod 1 or Pod 2 into the armored pod nest. The pod sits 80% recessed within the $45\,\text{mm}$ dead space between rack tube and wheel arch.
+  * Route the M8 PUR cable through the concealed conduit in the tube's shadow directly under the seat into the battery tray.
+  * **Result:** With aluminum panniers mounted, the pod is 100% hidden from exterior view. Wheel-facing $45^\circ$ deflection armor repels flying gravel (roost) and mud.
+  * *(Minimalist Option:)* For cramped installations, the compact 2x M5 half-clamp pairs ([`adventure_pannier_rack_clamp_base.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_base.stl) / `cap.stl`) remain supported.
 
 #### 4.2.3 Front Node Bike Mounting Options (Universal)
 * **Option 1: AMPS Pattern (30 x 38 mm):** Direct bolt-on to RAM-Mount ball, Garmin cradle, or GPS bar (utilizing the 4x captive M4 nuts).

@@ -442,8 +442,8 @@ Die Adventure-Montage ist für die gesamte **BMW GS Modellfamilie** (Boxer und P
 │   Transition-Dock (adventure_transition_dock.stl) in der Sitzbank-Bügelfalte (Ø 28 mm) │
 │   -> 100 % kofferunabhängig, baut nicht breiter als die schlanke Fahrzeug-Silhouette   │
 │ • Option B (Edelstahl-Rohrkofferträger - BMW GSA, Touratech, Hepco&Becker, Alukoffer): │
-│   Rohrträger-Klemmschellen-Käfig (adventure_pannier_rack_clamp_base.stl + cap.stl)     │
-│   -> Montiert Pod 1 & 2 geschützt im Rohrrahmen-Dreieck (Ø 18 mm) vor den Alukoffern  │
+│   GSA Heavy-Duty Cage Dock (adventure_gsa_cage_dock_body.stl + clamp_cap.stl)          │
+│   -> Montiert Pod 1 & 2 im 45 mm Totraum hinter dem Träger (100 % verdeckt & geschützt)│
 └────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -472,9 +472,12 @@ Die Adventure-Montage ist für die gesamte **BMW GS Modellfamilie** (Boxer und P
   * Karosserie-Deckel ([`adventure_transition_dock_lid.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_transition_dock_lid.stl)) aufsetzen und mit 4x M3 Torx-Schrauben bündig verschrauben.
   * **100 % kofferunabhängig & Clean Look:** Keine sichtbaren Schellen oder Kabel von außen; die Konsole schmiegt sich aerodynamisch an die Bügelfalte an.
 * **Option B: Edelstahl-Rohrkofferträger (BMW GSA aller Baujahre inkl. K25 & F800 GSA, Touratech, Hepco&Becker, Alukoffer):**
-  * 1,0 mm EPDM-Schutzstreifen um das Ø 18 mm Kofferträgerrohr wickeln.
-  * Unterschale ([`adventure_pannier_rack_clamp_base.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_base.stl)) und Kappe ([`adventure_pannier_rack_clamp_cap.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_cap.stl)) mit 2x M5 x 30 mm V4A Schrauben und DIN 985 Stoppmuttern über Kreuz mit $4{,}5\,\text{Nm}$ anziehen.
-  * Das Pod-Basisgehäuse wird geschützt im Rohrrahmen-Dreieck vor den Alukoffern verschraubt. Alle BMW Adventure Alukofferträger (vom Modelljahr 2006 bis heute) nutzen denselben standardisierten Ø 18 mm Rohrdurchmesser.
+  * 1,0 mm EPDM-Schutzstreifen um das Ø 18 mm Kofferträgerrohr an der Innenseite wickeln.
+  * Das **GSA Cage Dock** ([`adventure_gsa_cage_dock_body.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_gsa_cage_dock_body.stl)) mit seinen zwei Rohrsätteln am Rohr ansetzen. Die Klemmschellen-Kappe ([`adventure_gsa_clamp_cap.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_gsa_clamp_cap.stl)) auflegen und mit 4x M5 x 25 mm V4A Zylinderschrauben und DIN 985 Stoppmuttern über Kreuz mit $4{,}5\,\text{Nm}$ anziehen (85 mm Stützbasis verhindert jedes Verdrehen oder Kippen).
+  * Pod 1 bzw. 2 in die gepanzerte Schutznische einschieben. Der Pod sitzt zu 80 % tief versenkt im $45\,\text{mm}$ breiten Totraum zwischen Trägerrohr und Radkasten.
+  * Das M8-PUR-Kabel verläuft verdeckt in der M8-Kabelrinne im Rohrschatten direkt ins Batteriefach.
+  * **Ergebnis:** Bei eingehängtem Alukoffer ist der Pod von außen 100 % unsichtbar. Radseitig schützt der $45^\circ$-Gleitkeil vor Steinschlag (Roost) und Schlamm.
+  * *(Minimalistische Option:)* Für besonders beengte Rohrrahmenverläufe können alternativ die einfachen 2x M5 Halbschellen ([`adventure_pannier_rack_clamp_base.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_base.stl) / `cap.stl`) verwendet werden.
 
 ---
 

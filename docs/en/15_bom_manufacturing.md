@@ -184,7 +184,8 @@ All enclosure parts are designed around the **IKEA Principle**: **Zero heat-set 
   * `adventure_rack_tail_mount.stl` (1 pc): Luggage rack cantilever for Pod 3 & radar.
   * `radar_varia_gopro_lock_dock.stl` (1 pc) & `011_gopro_hirth_lock.stl` (1 pc): Radar bayonet dock with 36-tooth Hirth gear lock.
 * **Kit 2: BMW R1250 / R1300 GSA (Adventure with Ø 18 mm Stainless Pannier Rack Cage):**
-  * `adventure_pannier_rack_clamp_base.stl` & `adventure_pannier_rack_clamp_cap.stl` (4 pairs): Heavy-duty clamp pairs for Pod 1 & 2 in the pannier rack cage triangle.
+  * `adventure_gsa_cage_dock_body.stl` & `adventure_gsa_clamp_cap.stl` (2 pairs): Heavy-duty cage docks ("GSA Cage Dock") for Pod 1 & 2 in the $45\,\text{mm}$ dead space of the pannier rack with $85\,\text{mm}$ dual-saddle baseline, 4x M5 bolting, roost deflection plate & concealed M8 conduit.
+  * *(Minimalist alternative)* `adventure_pannier_rack_clamp_base.stl` & `adventure_pannier_rack_clamp_cap.stl` (4 pairs): Compact half-clamp pairs for exposed open tube struts.
   * `adventure_rack_tail_mount.stl` (1 pc): Tail Balcony behind aluminum topcase with 45° branch deflector fin for dipole antenna.
   * `radar_varia_gopro_lock_dock.stl` (1 pc) & `011_gopro_hirth_lock.stl` (1 pc): Radar dock with Hirth gear lock.
 * **Kit 3: Harley-Davidson Touring & Classic Bagger (Street Glide, Road Glide, Road King):**

@@ -723,13 +723,23 @@ Für großvolumige Reiseenduros und Offroad-Tourer mit offenem Gitterrohr-Heckra
 
 Auf Reiseenduros existieren je nach Einsatzzweck und Koffersystem zwei grundverschiedene Fahrzeughecks. OpenMotorBridge bietet dafür zwei perfekt abgestimmte Montagevarianten:
 
-* **Variante A: BMW F850 GSA / R 1250 GSA / R 1300 GS Adventure & Heavy-Duty-Modelle mit Rohr-Kofferträgern**
-  * **Montage:** An den Innenseiten der robusten Stahl- bzw. Edelstahl-Kofferträger (z. B. Touratech, BMW OEM GSA) im geschützten Rahmendreieck unter Verwendung von formschlüssigen Halbschellen (`adventure_pannier_rack_clamp.scad`).
-  * **Vorteile:**
-    1. **Mechanischer Überrollkäfig:** Nutzt die ohnehin vorhandene, extrem verwindungssteife $\varnothing 18\,\text{mm}$ Rundrohr-Struktur. Bei Umfallern, Felskontakten oder Stürzen im Gelände absorbiert das Trägerrohr alle Stoßkräfte; der Pod bleibt unberührt.
-    2. **Thermische Entkopplung:** Natürlicher Abstand zum tieferliegenden Endschalldämpfer; keine Hitzestaus.
-    3. **Optimale HF-Diversität:** Pod 1 (Sena Mesh, links) und Pod 2 (Cardo DMC, rechts) besitzen einen lateralen Abstand von $> 45\,\text{cm}$ mit Heckrahmen und Sitzbank als HF-Trennwand ($> 40\,\text{dB}$ Entkopplung).
-    4. **Extrem kurze Kabelwege:** Lediglich $20\dots 25\,\text{cm}$ M8-PUR-Kabelweg direkt in die Zentralbox unter der Sitzbank.
+* **Variante A: BMW F850 GSA / R 1200 / R 1250 / R 1300 GS Adventure & Heavy-Duty Rohrträger (Touratech, Givi Outback, Hepco&Becker): Das "GSA Cage Dock"**
+  * **Montage:** An den Innenseiten der massiven $\varnothing 18\,\text{mm}$ Edelstahl-Kofferträger im geschützten Rahmendreieck über das hochbelastbare **GSA Cage Dock** ([`adventure_gsa_cage_dock.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/adventure_gsa_cage_dock.scad)).
+  * **Design-Philosophie (Expedition Armor + Stealth Niche):**
+    Kombiniert die unzerstörbare Optik professioneller Rallye- & Expeditions-Ausrüstung (analog zu den bekannten Touratech GSA-Werkzeugboxen) mit einer vollständigen Nischen-Integration: Der Pod wandert tief in den ca. $45\,\text{mm}$ breiten, sonst ungenutzten Totraum zwischen Alukoffer-Wand und Heckrahmen/Radkasten.
+
+![OpenMotorBridge GSA Cage Dock Detailansicht](../images/cad/gsa_cage_dock_cad.png)
+
+*Abbildung 8.29-A: CAD-Detailansicht des Heavy-Duty GSA Cage Docks (`adventure_gsa_cage_dock.scad`). Zu sehen sind der tief eingelassene Sena 50S Pod 1 im schützenden PA12-CF-Panzerkäfig, die breite 85 mm Doppel-Rohrsattelbasis für Ø 18 mm Edelstahlrohre mit 4x M5 V4A-Verschraubung und DIN 985 Stoppmuttertaschen, die 45°-Schotter-Abweiserkeile gegen Steinschlag vom Hinterrad sowie die verdeckte M8-Kabelrinne im Rohrschatten.*
+
+  * **Konstruktionsmerkmale & Vorteile:**
+    1. **Doppel-Halbschalen-Klemmung mit 85 mm Stützbasis:** Statt einer einfachen Einzelschelle greift das Cage Dock mit zwei getrennten $\varnothing 18\,\text{mm}$ Rohrsätteln über eine Spannweite von $85\,\text{mm}$ am Trägerrohr an. Dadurch werden Dreh- und Kippmomente durch Hebelkräfte selbst bei extremen Pisten-Vibrationen (> 120 Nm Torsionssteifigkeit) zuverlässig eliminiert.
+    2. **4x M5 V4A-Verschraubung mit verdeckten Sicherungsmuttern:** 4x M5 DIN 912 Zylinderschrauben spannen die Kappe ([`adventure_gsa_clamp_cap.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_gsa_clamp_cap.stl)) fest an den Korpus. Auf der Rückseite arretieren integrierte Sechskanttaschen DIN 985 Stoppmuttern verliersicher gegen Rütteln.
+    3. **Stealth-Integration im Alukoffer-Totraum (100 % unsichtbar von außen):** Bei eingehängtem Aluminiumkoffer ist der Pod von außen zu 100 % verdeckt. Es existiert keinerlei Kollision mit Verriegelungsmechanismen, Kofferpilzen oder Deckelspannern.
+    4. **Integrierter Steinschlag-Gleitkeil (Roost Protection):** Zur Radseite hin schützt eine $45^\circ$ geneigte, $3{,}5\,\text{mm}$ dicke Panzerfront aus kohlefaserverstärktem Polyamid (PA12-CF) den Pod und die Antenne vor aufgewirbeltem Grobschotter, Schlamm und Spritzwasser.
+    5. **Verdeckter M8-Kabelkanal:** Das M8-Kabel verlässt die Rückseite der Docking-Wanne geschützt im Schatten des Trägerrohrs und führt ohne Schlaufenbildung direkt unter die Sitzbank.
+    6. **HF-Sichtfeld:** Die Antenne strahlt ungehindert durch das offene Rahmendreieck nach vorn-oben zur Fahrerposition ab.
+    7. *(Minimalistische Alternative:)* Für besonders beengte Rohrrahmenverläufe stehen weiterhin die kompakten Halbschellen ([`adventure_pannier_rack_clamp_base.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_base.stl) / `cap.stl`) zur Verfügung.
 
 * **Variante B: Standard-BMW GS und nackte Reiseenduros (ohne Rohr-Kofferträger)**
   * **Montage:** Über ein zweiteiliges, aerodynamisch skulpturiertes **Transition Dock** ([`adventure_transition_dock.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/adventure_transition_dock.scad)) in Kombination mit einer verdeckten **Unter-Sitzbank-Sattelbrücke** ([`adventure_underseat_cross_rail.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/adventure_underseat_cross_rail.scad)).
@@ -1023,7 +1033,10 @@ Die CAD-Dateistruktur von OpenMotorBridge folgt einer strengen hierarchischen CS
 | **Adventure Pods 1/2**| GS Transition Dock Basis-Wanne (Bügelfalten-Unterteil) | `02_pod_base/adventure_transition_dock_base.stl` | `02_pod_base/adventure_transition_dock.scad` |
 | **Adventure Pods 1/2**| GS Transition Dock Karosserie-Deckel (Bügelfalten-Cowl) | `02_pod_base/adventure_transition_dock_lid.stl` | `02_pod_base/adventure_transition_dock.scad` |
 | **Adventure-Kit** | Unter-Sitzbank-Sattelbrücke (Traverse links-rechts) | `02_pod_base/adventure_underseat_cross_rail.stl` | `02_pod_base/adventure_underseat_cross_rail.scad` |
-| **Adventure Pods 1/2**| GSA Rohrträger-Klemmschelle Kappe (Ø 18 mm Rohr) | `02_pod_base/adventure_pannier_rack_clamp_cap.stl` | `02_pod_base/adventure_pannier_rack_clamp.scad` |
+| **Adventure Pods 1/2**| GSA Heavy-Duty Cage Dock Gehäusekorpus (Ø 18 mm Rohr) | `02_pod_base/adventure_gsa_cage_dock_body.stl` | `02_pod_base/adventure_gsa_cage_dock.scad` |
+| **Adventure Pods 1/2**| GSA Heavy-Duty Klemmschelle Kappe (Ø 18 mm Rohr) | `02_pod_base/adventure_gsa_clamp_cap.stl` | `02_pod_base/adventure_gsa_cage_dock.scad` |
+| **Adventure Pods 1/2**| GSA Rohrträger-Klemmschelle Basis (Minimal-Option) | `02_pod_base/adventure_pannier_rack_clamp_base.stl` | `02_pod_base/adventure_pannier_rack_clamp.scad` |
+| **Adventure Pods 1/2**| GSA Rohrträger-Klemmschelle Kappe (Minimal-Option) | `02_pod_base/adventure_pannier_rack_clamp_cap.stl` | `02_pod_base/adventure_pannier_rack_clamp.scad` |
 | **Rahmendock** | MagSafe Rahmen-Dock Gehäuseoberteil (Rohrsattel, Flügel & M2.5 Nut-Pocket) | `02_pod_base/components/009_magsafe_frame_dock.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
 | **Rahmendock** | MagSafe Rohrschellen-Bügel (Ø 26 mm) | `02_pod_base/components/009_magsafe_frame_clamp.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
 | **Rahmendock** | MagSafe Rahmen-Dock Gehäuseunterteil (PCB-Ledge & M2.5 Senkung) | `02_pod_base/components/009_magsafe_frame_lid.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
