@@ -85,7 +85,7 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 1. **Muttern einlegen:** 4x DIN 934 / DIN 985 M3 Edelstahlmuttern von unten in die Sechskant-Mutternaschen (Nut Pockets) der Unterwanne ([`main_box_lower_case.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_lower_case.stl)) eindrücken.
 2. **Hauptplatine einsetzen:** Fertig bestückte PCBA 01 (`openmotorbridge_central_box`) auf die Dämpferdome setzen und mit 4x M2.5 $\times 6\,\text{mm}$ Schrauben handfest fixieren.
 3. **Zwischenboden & 2.200 mAh LiPo-Akku:** Den Zwischenboden ([`main_box_mid_tray.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_mid_tray.stl)) aufsetzen. Den **2.200 mAh Flat-LiPo-Akku** ($68 \times 39 \times 5{,}0\,\text{mm}$) in die Wanne einlegen, das Molex Micro-Fit Kabel durch die Zwischenbodenöffnung an `J_BAT` anstecken und die Zelle mit einem Streifen EPDM-Band schwingungsdämpfend sichern.
-4. **Dichtung & Deckel:** Silikon-Rundschnur (Ø 1,5 mm, $40\,\text{cm}$) dünn mit Silikonfett einreiben und in die Deckelnut einlegen. Gore-Membran auf den Belüftungssitz kleben. Den Deckel ([`main_box_lid.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_lid.stl)) aufsetzen und mit 4x M3 $\times 40\,\text{mm}$ Schrauben über Kreuz handfest festziehen ($0{,}8\,\text{Nm}$).
+4. **Dichtung & Deckel:** Silikon-Rundschnur (Ø 1,5 mm, $40\,\text{cm}$) dünn mit Silikonfett einreiben und in die Deckelnut einlegen. Gore-Membran auf den Belüftungssitz kleben. Den Deckel ([`main_box_lid.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_lid.stl)) vorerst nur lose aufsetzen. *(Wichtiger Hinweis: Die finale 4x M3-Verschraubung und Dichtungskompression erfolgt erst nach dem erfolgreichen Tisch-Smoke-Test in Abschnitt 4!)*
 
 ---
 
@@ -179,13 +179,129 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 6. **Dichtkämme einsetzen & Deckel verschließen:**
    * Dünnen Film Silikonfett auf die elastischen TPU-Dichtkämme ([`front_node_cable_glands_tpu.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_cable_glands_tpu.stl)) auftragen und in die Gehäusetaschen schieben.
    * Silikon-Rundschnur (Ø 1,5 mm, $30\,\text{cm}$) in die Deckelnut einlegen.
-   * Deckel mit 4x M3 $\times 20\,\text{mm}$ Schrauben über Kreuz festziehen (greifen direkt in die unverlierbaren M3 Muttern in den Nut-Pockets).
+   * Den Deckel vorerst nur lose aufsetzen (die 4x M3 Schrauben werden erst nach dem erfolgreichen Tisch-Smoke-Test in Abschnitt 4 festgezogen).
 
 ---
 
-## 4. Fahrzeugspezifische Montage & Verkabelung am Motorrad
+## 4. Tisch-Testaufbau & Dry-Run (Werkstatt / Schreibtisch / Wohnung) mit USB-Kabeln VOR der Bike-Montage
 
-### Schritt 4.1: Montage Harley-Davidson Plattform (Touring, CVO ST, Limited, Road King & Cruiser mit Saddlebags)
+Der größte und teuerste Fehler beim Motorrad-Customizing ist es, Module ungetestet in enge Verkleidungen und unter Kraftstofftanks einzubauen, um erst bei der ersten Probefahrt festzustellen, dass ein Stecker wackelt, eine Firmware fehlt oder ein Intercom-Kanal nicht schaltet.
+
+OpenMotorBridge ist von Grund auf so konstruiert, dass das **vollständige Gesamtsystem auf dem Schreibtisch oder Werkbank-Tisch mit Standard-USB-C-Kabeln zu 100 % in Betrieb genommen, geflasht, gekoppelt und getestet werden kann – ganz ohne Motorradbatterie, ohne Kfz-Kabelbaum und im Warmen**.
+
+### 4.1 Warum der Tisch-Trockentest unbezahlbar ist
+* **Im Warmen & Bequemen:** Fehlersuche auf der Couch, am Schreibtisch oder in der warmen Werkstatt statt auf Knien in der kalten Garage bei schlechtem Licht.
+* **Sichtkontrolle bei offenen Gehäusen:** Status-LEDs (ESP32-S3 RGB-LEDs, RP2040 Status, Ladeanzeige des BQ24074-Controllers) und Prüfpunkte sind direkt sichtbar.
+* **Akustischer Klick-Check:** Die mechanischen Tauchanker-Hubmagnete der Kassetten (`PCBA 03`) sind ohne Motor- oder Umgebungsgeräusche klar hör- und fühlbar ("Klack-Klack-Klack-Klack").
+* **Kabelbaum-Schonung:** Der 26-polige HD26-Hauptkabelbaum bleibt während des Tischtests sicher verpackt im Karton und wird erst verlegt, wenn alle Platinen und Kassetten nachweislich fehlerfrei arbeiten.
+* **Minimale Werkzeuge:** 2 bis 3 handelsübliche USB-C-Kabel (Handy-Ladekabel) und ein normales Multiport-USB-Netzteil / Powerbank / Laptop ($5\,\text{V} / \ge 2{,}0\,\text{A}$) genügen.
+
+### 4.2 Was wird benötigt (Tisch-Labor-Bedarf)
+* [ ] 1x USB-Netzteil (Multiport $5\,\text{V} / \ge 2{,}4\,\text{A}$) oder Powerbank / Laptop
+* [ ] 2–3x Standard USB-C Kabel (Slim-Steckergehäuse für Port B der Pods)
+* [ ] 1x Kurzes M8-Prüfkabel (optional zur direkten Kopplung von Heck-Pod 3 an Port A der Zentralbox)
+* [ ] 1x PC/Mac/Laptop oder Smartphone/Tablet mit Google Chrome oder MS Edge (für WebSerial Flasher & WebBLE PWA)
+* [ ] Die eigenen Intercom-Geräte (z. B. Sena 50S, Cardo Packtalk Edge) und der Fahrerhelm
+
+### 4.3 Der Tisch-Verdrahtungsplan (Labor- & Wohnungs-Setup)
+
+```text
+┌─────────────────────────────────────────────────────────────────────────────┐
+│       OPENMOTORBRIDGE TISCH-TESTAUFBAU & DRY-RUN (BENCH-LABOR SETUP)        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   [ 230V USB-Netzteil / Powerbank / Laptop (5V / ≥ 2.4A) ]                  │
+│       │                      │                      │                       │
+│  USB-C│Kabel 1          USB-C│Kabel 2          USB-C│Kabel 3                │
+│       ▼                      ▼                      ▼                       │
+│  ┌───────────────┐     ┌───────────────┐      ┌───────────────┐             │
+│  │  ZENTRALBOX   │     │  FRONT-NODE   │      │ SATELLIT-POD  │             │
+│  │   (PCBA 01)   │     │   (PCBA 05)   │      │   (PCBA 02)   │             │
+│  │  Port J7 USB-C│     │  Port J5 USB-C│      │ Port B (USB-C)│             │
+│  └───────┬───────┘     └───────┬───────┘      └───────┬───────┘             │
+│          │                     │                      │                     │
+│          │   ESP-NOW Funk      │                      │ 1-Wire & Pogo       │
+│          │◄───────────────────►│                      ▼                     │
+│          │   (< 1.8 ms Latenz) │             ┌───────────────────┐          │
+│          │                     │             │ SMR-KASSETTE      │          │
+│          │                     │             │ (Sena / Cardo)    │          │
+│          │                     │             └────────┬──────────┘          │
+│          │ WebBLE / WebSerial  │                      │                     │
+│          ▼                     ▼                      ▼                     │
+│    [ SMARTPHONE / LAPTOP MIT PWA ]             [ FAHRER-HELM ]              │
+│    (Chrome / Edge: Flasher & Dashboard)        (Bluetooth gekoppelt)        │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### 4.4 Schritt-für-Schritt Tischverkabelung & Modulprüfung
+
+1. **Zentralbox (PCBA 01) anstecken:**
+   * Standard USB-C Kabel in Port `J7` (hinter der Service-Schraubkappe) stecken und mit Laptop oder USB-Netzteil verbinden.
+   * Der ESP32-S3 bootet sofort, das BQ24074 Powermanagement lädt den 2.200 mAh LiPo-Pufferakku und die blaue Status-LED pulsiert langsam.
+   * Bei Verbindung mit dem Laptop meldet sich der interne USB-JTAG/Serial-Controller direkt als COM-Port bzw. `/dev/ttyACM0` an.
+
+2. **Universal Front-Node (PCBA 05) anstecken:**
+   * Ein zweites USB-C Kabel in Port `J5` (20W PD Schnellladebuchse) einstecken.
+   * Der ESP32-S3 des Front-Knotens startet und synchronisiert sich per ESP-NOW vollautomatisch mit der Zentralbox ($< 1{,}8\,\text{ms}$ Latenz, keine manuelle IP- oder WLAN-Konfiguration erforderlich).
+   * Die grüne Sync-LED auf PCBA 05 leuchtet dauerhaft als Bestätigung der Funkbrücke.
+
+3. **Satelliten-Pods 1 & 2 (PCBA 02) mit Kassetten testen:**
+   * Ein USB-C Kabel in **Port B (USB-C Slim-Port)** der Pod-Basis einstecken.
+   * Die Basisplatine wird mit $+5\,\text{V}$ versorgt; die gefederte Pogo-Pin-Kontaktleiste `J1` wird scharfgeschaltet.
+   * Wechselkassette (Sena 50S, Cardo Packtalk Edge oder Sena SPIDER X) in die Führungsschiene einschieben, bis die Haltekralle hörbar einrastet.
+   * Der integrierte 1-Wire EEPROM (DS2431) übermittelt Kassetten-Typ und Seriennummer an die Zentralbox.
+
+4. **Heck-Pod 3 (PCBA 04) prüfen:**
+   * Provisorisch mit dem kurzen M8-Testkabel an Port A der Zentralbox anstecken.
+   * RP2040 Co-Prozessor und SX1262 LoRa melden sich im PWA-Dashboard grün.
+   * Am Fensterbrett platziert liefert der u-blox MAX-M10S innerhalb von 25–35 Sekunden den ersten GNSS-3D-Fix.
+
+### 4.5 Erstinbetriebnahme: WebSerial 1-Click Flasher & der 4-Punkte IKEA Smoke-Test
+
+Dank der modernen **WebSerial-Integration** in der OpenMotorBridge PWA ist für die Erstinbetriebnahme **keine Installation von Python, PlatformIO, Treibern oder Terminal-Tools** erforderlich:
+
+#### Methode A: WebSerial 1-Click Installer (Empfohlen für Endanwender)
+1. Zentralbox per USB-C Kabel an den PC/Mac/Laptop anschließen.
+2. Chrome, Edge oder Opera öffnen und die PWA aufrufen (oder lokal über den System-Builder).
+3. Im Tab *System Builder* auf **„USB-C verbinden & Flashen“** klicken.
+4. Den erkannten seriellen Port (z. B. `CP2102N` / `ESP32-S3`) auswählen.
+5. Die PWA flasht Bootloader, Partitionen, Firmware (`openmotorbridge_main_v8.12.bin`) und SPIFFS-Dateisystem vollautomatisch mit Fortschrittsbalken und Live-Protokoll.
+
+#### Der geführte 4-Punkte IKEA Smoke-Test
+Vor dem Aufsetzen der Gehäusedeckel wird der interaktive Selbsttest in der PWA gestartet:
+1. [x] **Bordnetz & USV (Check 1):** 5.04V Buck-Schiene aktiv, USV-LiPo (2.200 mAh) lädt mit 4.18V Ladeschlussspannung.
+2. [x] **Kassetten & Aktuatoren (Check 2):** 1-Wire DS2431 Auslesen der Kassetten-IDs (Sena / Cardo), Pogo-Pin Kontaktierung und automatischer 4-Aktuator Klicktest (Klick 1 bis 4).
+3. [x] **Front-Knoten & Cockpit (Check 3):** I2C-Ping Sipeed/Knowles MEMS Mikrofon, SDP31 Staudruck-Sensor (0.02 hPa) und Lenker-PTT Taster.
+4. [x] **Heck-Pod 3 (Check 4):** SX1262 LoRa 868 MHz Ping-Echo und u-blox GNSS 3D-Fix.
+
+#### Methode B: Manuelles Flashen via PlatformIO (Power-User Fallback)
+```bash
+# 1. Zentralcontroller via USB-C flashen (ESP32-S3)
+cd openMotorBridge/firmware/main_controller && pio run --target upload && pio run --target uploadfs
+# 2. Heck-Co-Prozessor flashen (RP2040 in Pod 3)
+cd ../rear_coprocessor && pio run --target upload
+# 3. Front-Knoten flashen (ESP32-S3)
+cd ../front_node && pio run --target upload
+```
+
+### 4.6 Kassetten-Klicktest, Intercom- & Helm-Pairing im Warmen
+* **Mechanischer Klick-Check:** Im PWA-Diagnosemenü die 4 Aktuatoren manuell oder zyklisch ansteuern. Die Tauchanker drücken die Tasten des Sena/Cardo spür- und hörbar durch.
+* **Helm-Pairing:** Fahrer- und Soziushelm per Bluetooth mit den Intercoms koppeln.
+* **Audio-Routing & Ducking:** Musik vom Smartphone abspielen. Beim Druck auf den Lenker-PTT-Taster (oder PIN 1/2 an `J3` des Front-Knotens) duckt sich die Musik sofort um $-18\,\text{dB}$ ab und die Sprachbrücke öffnet verzögerungsfrei ($< 5\,\text{ms}$).
+
+### 4.7 Finaler Gehäuseverschluss vor dem Gang in die Garage
+Erst wenn im PWA-Dashboard alle 4 Checks grün leuchten und Audio- sowie Funkbrücken stehen:
+1. **Dichtungsprüfung:** Silikon-Profildichtungen (Ø 1,5 mm Rundschnur) in die Deckelnuten von Zentralbox, Front-Knoten und Pods einlegen und hauchdünn mit dielektrischem Silikonfett benetzen.
+2. **Schrauben anziehen:** Deckel aufsetzen und M3-Schrauben über Kreuz festziehen (greifen vibrationssicher in die unverlierbaren Sechskantmuttern an der Gehäuseunterseite).
+3. **Ports versiegeln:** TPU-Staubschutzkappen in ungenutzte Buchsen einsetzen.
+4. **Ergebnis:** Das Gesamtsystem ist zu 100 % funktionsgeprüft, wasserdicht versiegelt (IP67) und bereit für die mechanische Montage am Motorrad!
+
+---
+
+## 5. Fahrzeugspezifische Montage & Verkabelung am Motorrad
+
+### Schritt 5.1: Montage Harley-Davidson Plattform (Touring, CVO ST, Limited, Road King & Cruiser mit Saddlebags)
 
 ```text
                        OPENMOTORBRIDGE HARLEY-DAVIDSON MOUNTING SUITE
@@ -215,12 +331,12 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 └────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-#### 4.1.1 Gemeinsame System-Basis (alle Modelle)
+#### 5.1.1 Gemeinsame System-Basis (alle Modelle)
 * **Zentralbox:** Unter der Fahrersitzbank auf der massiven Rahmenbrücke vor der Batterie auf 4x M4 Silentblöcken (EPDM Shore 50A) verschrauben. Bei Softail-Modellen sitzt die Zentralbox im Hohlraum unter der Sitzbank oder im seitlichen Rahmendreieck. Die Kabelpeitsche des HD26-Steckers führt nach hinten links und rechts zu den M8 Trennstellen der Koffer sowie zum BCM / Diagnosestecker.
 * **Pod 1 & Pod 2 (Satelliten):** Die Kofferdeckel-Docks ([`saddlebag_lid_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/saddlebag_lid_dock.stl)) mit M4 Senkkopfschrauben und rückseitigen EPDM-Dichtscheiben an den Befestigungspunkten oder per 3M VHB Tape auf den Koffern montieren. *(Hinweis: Neben Street Glide, Road Glide, CVO ST, Road King und Ultra Limited verfügen auch die Cruiser mit Saddlebags wie Low Rider ST und Sport Glide über feste Clamshell-Koffer sowie die Heritage Classic über formstabile Leder-/Vinylkoffer mit flachem Deckel – alle nutzen dieselben Kofferdeckel-Docks [`saddlebag_lid_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/saddlebag_lid_dock.stl)!)* Das vorkonfektionierte M8 Kabel durch die Gummitülle in den Koffer und über eine Schnellkupplung zum Rahmen führen.
 * **Radar:** Der Kennzeichen-Radarhalter ([`radar_license_plate_bracket.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_license_plate_bracket.stl)) wird direkt unter dem Kennzeichenrahmen verschraubt. *(Hinweis: Alle Touring-, CVO ST- und Softail-Cruiser-Modelle besitzen standardmäßig mittige US/EU-Kennzeichenaufnahmen).*
 
-#### 4.1.2 Cockpit-Verkleidung & Front-Node Installation
+#### 5.1.2 Cockpit-Verkleidung & Front-Node Installation
 * **Option A: Batwing-Verkleidung (Street Glide / Electra Glide / Ultra):**
   * **Aktuelle Generation (2024+ All-New Street Glide mit 12.3" Skyline OS):**
     1. Die **2x Torx T25 Schrauben** der Windschutzscheibe oben lösen und Scheibe nach oben herausnehmen (kein 3-Schrauben-System mehr!).
@@ -272,7 +388,7 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
     - *Low Rider ST / Sport Glide:* Front-Node hinter der FXRT-/Mini-Batwing-Verkleidung oder an der Lenkerbrücke / Riser verschrauben.
     - **Front-Verkabelung:** Port `J1` (12V KL15 & GND) wird direkt am Standlicht oder Zubehörstecker in der Front angeschlossen. Optional werden Lenker-PTT an `J3`, Totwinkel-LEDs an `J9` und Smartphone Qi-Power an `J5`/`J10` angeschlossen.
 
-#### 4.1.3 Modulare Heck-Montage (Pod 3)
+#### 5.1.3 Modulare Heck-Montage (Pod 3)
 * **Variante 1: Standard Bagger & Softail Cruiser (Street Glide, Road Glide, Road King, Heritage Classic, Low Rider ST, Sport Glide):**
   - Die flache Fender-Konsole ([`pod3_touring_fender_console.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod3_touring_fender_console.stl)) wird zentrisch auf dem Kotflügel an der $1/4"-20$ Soziussitz-Mutter verschraubt. *(Hinweis: Softail- und Touring-Heckfender nutzen dasselbe genormte 1/4"-20 Gewinde).*
 * **Variante 2: Touring Limited & Ultra (Ultra Limited FLHTK, Road Glide Limited FLTRK, CVO Limited):**
@@ -285,7 +401,7 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 
 ---
 
-### Schritt 4.2: Montage Adventure- & Reiseenduro-Plattform (BMW GS / GSA Familie, KTM, Africa Twin, Universal)
+### Schritt 5.2: Montage Adventure- & Reiseenduro-Plattform (BMW GS / GSA Familie, KTM, Africa Twin, Universal)
 
 Die Adventure-Montage ist für die gesamte **BMW GS Modellfamilie** (Boxer und Paralleltwins aller Modelljahre) sowie vergleichbare Reiseenduros standardisiert:
 
@@ -331,7 +447,7 @@ Die Adventure-Montage ist für die gesamte **BMW GS Modellfamilie** (Boxer und P
 └────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-#### 4.2.1 Gemeinsame System-Basis
+#### 5.2.1 Gemeinsame System-Basis
 * **Zentralbox:** Im Rahmendreieck unter der Fahrersitzbank auf 4x M4 Silentblöcken montieren. M8 Kabelpeitschen nach hinten links/rechts und zum Heck führen.
 * **Cockpit & Front-Node:**
   * 4x Torx T25 Schrauben der Windschild-Befestigung lösen und Scheibe abnehmen.
@@ -348,7 +464,7 @@ Die Adventure-Montage ist für die gesamte **BMW GS Modellfamilie** (Boxer und P
   * Pod 3 auf dem Rack-Tail Mount ([`adventure_rack_tail_mount.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_rack_tail_mount.stl)) an der serienmäßigen Gepäckbrücke verschrauben.
   * Zunge des Garmin Varia Docks ([`radar_varia_gopro_lock_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_varia_gopro_lock_dock.stl)) in die Hirth-Rosette ([`011_gopro_hirth_lock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/components/011_gopro_hirth_lock.stl)) einrasten ($10^\circ$-Schritte für exakt waagerechten Radar-Horizont). Mit M5 x 25 mm Schraube und Stoppmutter sichern ($3{,}5\,\text{Nm}$). Varia einklinken und M3 Madenschraube als Diebstahlschutz eindrehen.
 
-#### 4.2.2 Modulare Koffer- & Pod 1/2-Befestigung
+#### 5.2.2 Modulare Koffer- & Pod 1/2-Befestigung
 * **Option A: Vario-Koffer & Rahmenrohr-Montage (BMW GS Standard R1200/R1250/R1300, F750/F850/F900, KTM / Enduro ohne Rohrträger):**
   * Die Transition-Docks ([`adventure_transition_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_transition_dock.stl)) unterhalb der Sitzbankkante an die Hauptrahmenrohre (Ø 28 mm) klemmen.
   * **100 % kofferunabhängig:** Die Pods bauen nicht über die Kontur der Maschine hinaus und können sowohl mit Vario-Koffern als auch komplett ohne Koffer gefahren werden.
@@ -359,7 +475,7 @@ Die Adventure-Montage ist für die gesamte **BMW GS Modellfamilie** (Boxer und P
 
 ---
 
-### Schritt 4.3: Montage & Anschluss optionaler Cockpit- & Zubehör-Komponenten
+### Schritt 5.3: Montage & Anschluss optionaler Cockpit- & Zubehör-Komponenten
 
 Der Universal Front-Knoten (PCBA 05) dient als zentrale Anschlussstelle für das gesamte Fahrer-Cockpit. Folgende optionale Zubehörteile können nach Bedarf per vorkonfektioniertem Plug-and-Play-Kabel angeschlossen werden:
 
@@ -385,7 +501,7 @@ Der Universal Front-Knoten (PCBA 05) dient als zentrale Anschlussstelle für das
 └───────────────────────┴─────────┴────────────────────────────────────────────────────────┘
 ```
 
-#### 4.3.1 Lenker-PTT (Push-To-Talk) & Multi-Button Bedieneinheit (`J3`)
+#### 5.3.1 Lenker-PTT (Push-To-Talk) & Multi-Button Bedieneinheit (`J3`)
 * **Mechanische Montage:**
   - Der taktile IP67-Lenkertaster wird mit einer schlanken Rohrklemmschelle (passend für Ø 22 mm / 7/8", Ø 25,4 mm / 1" oder Ø 31,8 mm / 1 1/4" Lenker) in ergonomischer Daumenreichweite neben dem linken Lenkergriff / Spiegelfuß montiert.
   - Alternativ kann ein 3-fach Tastercluster montiert werden (z. B. Daytona Slim oder motogadget m-switch).
@@ -397,7 +513,7 @@ Der Universal Front-Knoten (PCBA 05) dient als zentrale Anschlussstelle für das
   - *(Hinweis: Ein handelsüblicher 2-Pin PTT-Taster passt direkt auf Pin 1 und Pin 2).*
 * **Systemvorteil:** 100 % batteriefrei, keine Verzögerung durch Funk-Latenz (< 5 ms Reaktionszeit), hardwareseitig über Schmitt-Trigger entprellt und gegen 12V-Überspannung geschützt.
 
-#### 4.3.2 Totwinkel-Spiegelanzeigen (Radar Blind Spot Detection - BSD) (`J9`)
+#### 5.3.2 Totwinkel-Spiegelanzeigen (Radar Blind Spot Detection - BSD) (`J9`)
 * **Mechanische Montage:**
   - Zwei kompakte, bernsteinfarbene oder rote 12V LED-Indikatoren (z. B. Verguss-LEDs oder gefräste LED-Clips) werden dezent an den linken und rechten Spiegelarmen bzw. am Spiegeldreieck der Verkleidung befestigt.
   - Die LEDs sitzen im peripheren Blickfeld des Fahrers, sodass herannahender Verkehr erfasst wird, ohne die Nachtsicht zu beeinträchtigen.
@@ -411,7 +527,7 @@ Der Universal Front-Knoten (PCBA 05) dient als zentrale Anschlussstelle für das
     - **Schnelles Warnblitzen (8 Hz, Rot/Bernstein):** Akute Kollisionsgefahr (hohe Differenzgeschwindigkeit oder Blinker in Richtung des herannahenden Fahrzeugs gesetzt).
   - *Automatisches Dimmen:* Über den optionalen Umgebungslichtsensor (`OPT3001` an `J12`) werden die LEDs bei Dunkelheit blendfrei heruntergedimmt.
 
-#### 4.3.3 Stromversorgung für Actioncam (GoPro, Insta360, DJI) (`J8`)
+#### 5.3.3 Stromversorgung für Actioncam (GoPro, Insta360, DJI) (`J8`)
 * **Mechanische Montage:**
   - Actioncam am Lenker, am Windschild-Träger oder am Sturzbügel befestigen.
 * **Elektrischer Anschluss an Port `J8` (JST-PH):**
@@ -420,7 +536,7 @@ Der Universal Front-Knoten (PCBA 05) dient als zentrale Anschlussstelle für das
   - Port `J8` führt **bewusst keine USB-Datenleitungen**. Dadurch wird zuverlässig verhindert, dass die Kamera beim Einschalten der Motorradzündung in den lästigen PC-Massenspeichermodus ("USB verbunden") wechselt oder die Infotainment-Headunit (Boom! Box / Skyline OS) zum Einfrieren bringt.
   - **Automatischer BLE-Shutter-Stop:** Über den integrierten KL15-Pufferkondensator (`C_BUF`) auf der Front-Node Platine bleibt der ESP32-S3 beim Ausschalten der Zündung noch für 1,5 Sekunden aktiv und sendet per Bluetooth LE den "Record Stop"-Befehl an die Kamera – Videodateien werden sauber finalisiert und korrumpieren nicht.
 
-#### 4.3.4 Anschluss Qi-Induktionshalterung (Quad Lock, SP Connect) (`J10` & `J5`)
+#### 5.3.4 Anschluss Qi-Induktionshalterung (Quad Lock, SP Connect) (`J10` & `J5`)
 * **Mechanische Montage:**
   - Quad Lock Handlebar Mount mit wetterfestem Wireless Charging Head oder SP Connect Moto Mount mit Wireless Charging Module.
 * **Elektrischer Anschluss – Zwei flexible Optionen:**
@@ -437,37 +553,26 @@ Der Universal Front-Knoten (PCBA 05) dient als zentrale Anschlussstelle für das
 
 ---
 
-## 5. Erstinbetriebnahme, WebSerial 1-Click Flasher & Smoke-Test
+## 6. Endabnahme am Motorrad, Probefahrt & Sign-Off Checkliste
 
-Dank der modernen **WebSerial-Integration** in der OpenMotorBridge PWA ist für die Erstinbetriebnahme **keine Installation von Python, PlatformIO, Treibern oder Terminal-Tools** erforderlich:
+Nachdem das System am Motorrad mechanisch befestigt und elektrisch verkabelt ist:
 
-### 5.1 Methode A: WebSerial 1-Click Installer (Empfohlen für Endanwender)
-1. Zentralbox per Standard USB-C Kabel an den PC/Mac/Laptop anschließen.
-2. Chrome, Edge oder Opera öffnen und die PWA aufrufen (oder lokal über den System-Builder).
-3. Im Tab *System Builder* auf **„USB-C verbinden & Flashen“** klicken.
-4. Den erkannten seriellen Port (z. B. `CP2102N` / `ESP32-S3`) auswählen.
-5. Die PWA flasht Bootloader, Partitionen, Firmware (`openmotorbridge_main_v8.12.bin`) und SPIFFS-Dateisystem vollautomatisch mit Fortschrittsbalken und Live-Protokoll.
-
-### 5.2 Der geführte 4-Punkte IKEA Smoke-Test
-Vor dem Aufsetzen der Gehäusedeckel wird der interaktive Selbsttest in der PWA gestartet:
-1. [x] **Bordnetz & USV (Check 1):** 12.6V Bordspannung, 5.04V Buck-Schiene, USV-LiPo (2.200 mAh) auf 4.18V.
-2. [x] **Kassetten & Aktuatoren (Check 2):** 1-Wire DS2431 Auslesen der Kassetten-IDs (Sena / Cardo), Pogo-Pin Kontaktierung und automatischer 4-Aktuator Klicktest (Klick 1 bis 4).
-3. [x] **Front-Knoten & Cockpit (Check 3):** I2C-Ping Knowles MEMS Mikrofon, SDP31 Staudruck-Sensor (0.02 hPa) und Lenker-PTT Taster.
-4. [x] **Heck-Pod 3 (Check 4):** SX1262 LoRa 868 MHz Ping-Echo und u-blox GNSS 3D-Fix.
-
-### 5.3 Methode B: Manuelles Flashen via PlatformIO (Power-User Fallback)
-```bash
-# 1. Zentralcontroller via USB-C flashen (ESP32-S3)
-cd openMotorBridge/firmware/main_controller && pio run --target upload && pio run --target uploadfs
-# 2. Heck-Co-Prozessor flashen (RP2040 in Pod 3)
-cd ../rear_coprocessor && pio run --target upload
-# 3. Front-Knoten flashen (ESP32-S3)
-cd ../front_node && pio run --target upload
-```
+1. **Zündungs-Check (KL15):**
+   * Motorrad-Zündung einschalten: Die Zentralbox und der Front-Node erwachen synchron innerhalb von $800\,\text{ms}$.
+   * Display / Infotainment (Boom! Box / Skyline OS / TFT) zeigt die OpenMotorBridge Headset-Verbindung und CarPlay/Android Auto Icon.
+2. **Totwinkel-Radar-Test (Garmin Varia):**
+   * Hinter das Motorrad treten: Die bernsteinfarbenen Spiegel-LEDs (`J9`) leuchten kontinuierlich auf.
+   * Blinker setzen: Bei herantretender Person wechselt die entsprechende LED in schnelles Warnblitzen (8 Hz).
+3. **Probefahrt & Audio-Ducking:**
+   * Motor starten und Probefahrt durchführen: Der SDP31 Staudrucksensor und das Sipeed/Knowles MEMS Fahrtwind-Mikrofon regeln die Lautstärke adaptiv und pegelfest nach.
+   * PTT-Taster am Lenker bedienen: Glasklare Funkübertragung zu Mitfahrern und Sozius.
+4. **Zündung aus (KL15 Nachlauf & Diebstahlschutz):**
+   * Zündung ausschalten: Actioncam stoppt sauber per Bluetooth-Shutter, USV puffert System herunter.
+   * Bei unbefugter Fahrzeugbewegung im Stand löst der 6-Achs-Beschleunigungssensor (BMI270) sofort Alarm über den LoRa-Pager am Schlüsselbund aus.
 
 ---
 
-## 6. Wartung & Pflege
+## 7. Wartung & Pflege
 
 * **Dichtungsinspektion:** 1x pro Saison die Silikon-Rundschnur der Main Box, des Front-Knotens und der Kassetten dünn mit dielektrischem Silikonfett pflegen.
 * **Druckausgleich:** Sicherstellen, dass die ePTFE-Gore-Membranen sauber und frei von Schlamm sind.
