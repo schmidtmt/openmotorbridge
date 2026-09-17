@@ -186,13 +186,13 @@ All enclosure parts are designed around the **IKEA Principle**: **Zero heat-set 
   * `adventure_rack_tail_mount.stl` (1 pc): Tail Balcony behind aluminum topcase with 45° branch deflector fin for dipole antenna.
   * `radar_varia_gopro_lock_dock.stl` (1 pc) & `011_gopro_hirth_lock.stl` (1 pc): Radar dock with Hirth gear lock.
 * **Kit 3: Harley-Davidson Touring & Classic Bagger (Street Glide, Road Glide, Road King):**
-  * `saddlebag_lid_dock.stl` (2 pcs): Saddlebag lid mounting docks for Pod 1 & 2.
-  * `pod3_touring_fender_console.stl` (1 pc): Organic rear fender console for Pod 3 (Road King Special).
+  * `saddlebag_lid_dock.stl` (2 pcs): Saddlebag lid mounting docks for Pod 1 & 2 on hard saddlebags.
+  * `pod3_touring_fender_console.stl` (1 pc): Organic rear fender console for Pod 3 *(for non-Tour-Pak baggers; on Ultra Limited / Road Glide Limited with factory King Tour-Pak, the fender console is omitted due to the tubular rack frame in favor of a tube clamp mount on the Tour-Pak frame!)*.
   * `radar_license_plate_bracket.stl` (1 pc): Decoupled license plate radar mount.
   * `magsafe_cockpit_mount_harley.stl` (1 pc), `magsafe_frame_dock.stl` (1 pc) & `magsafe_clamp_wings.stl` (1 pc): MagSafe frame dock components.
 * **Kit 4: Harley-Davidson CVO ST & Performance Bagger (Road Glide ST):**
-  * `saddlebag_lid_dock.stl` (2 pcs): Saddlebag lid mounting docks for Pod 1 & 2.
-  * `cvo_st_undercowl_skeleton_dock.stl` (1 pc): Upright dock for Pod 3 under forged carbon solo seat cowl (clears Showa remote reservoirs).
+  * `saddlebag_lid_dock.stl` (2 pcs): Saddlebag lid mounting docks for Pod 1 & 2 on hard saddlebags.
+  * `cvo_st_undercowl_skeleton_dock.stl` (1 pc): Upright bionic skeleton dock for Pod 3 under forged carbon solo seat cowl (clears Showa remote reservoirs & exhaust heat).
   * `cvo_st_telemetry_fin.stl` (1 pc): Aerodynamic tail fin / telemetry radome on rear tab.
   * `radar_license_plate_bracket.stl` (1 pc): Decoupled license plate radar mount *(CVO ST features the stock centered license plate mount identical to all Touring bikes!)*.
 * **Kit 5: Custom Bikes, Bobbers & Universal:**

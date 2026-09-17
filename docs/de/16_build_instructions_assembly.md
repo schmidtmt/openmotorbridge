@@ -183,7 +183,7 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 
 ---
 
-### Schritt 4.2: Montage Harley-Davidson Kit (Touring vs. CVO ST vs. Custom/Bobber)
+### Schritt 4.2: Montage Harley-Davidson Kit (Touring vs. CVO ST vs. Limited vs. Custom/Bobber)
 
 ```text
                        OPENMOTORBRIDGE HARLEY-DAVIDSON MOUNTING SUITE
@@ -193,9 +193,16 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 │ • Touring Fender Console (pod3_touring_fender_console.stl) strömungsgünstig am Fender  │
 │ • Kennzeichen-Radarhalter (radar_license_plate_bracket.stl) entkoppelt unter Kennzeichen│
 ├────────────────────────────────────────────────────────────────────────────────────────┤
+│ HARLEY-DAVIDSON TOURING LIMITED & ULTRA (ULTRA LIMITED, ROAD GLIDE LIMITED)            │
+│ • Kofferdeckel-Docks (saddlebag_lid_dock.stl) auf Hartschalenkoffern (Pod 1 & Pod 2)   │
+│ • Tour-Pak Einschränkung: Fender-Konsole entfällt wegen des King Tour-Pak Rohrrahmens! │
+│   Pod 3 wird per Rohrschelle am Tour-Pak Trägerrohr oder unter dem Gepäckträger montiert│
+│ • Kennzeichen-Radarhalter (radar_license_plate_bracket.stl) entkoppelt unter Kennzeichen│
+├────────────────────────────────────────────────────────────────────────────────────────┤
 │ HARLEY-DAVIDSON CVO ROAD GLIDE ST / PERFORMANCE BAGGER                                 │
-│ • Under-Cowl Skeleton Dock (cvo_st_undercowl_skeleton_dock.stl) unter Forged Carbon    │
-│   Sitz-Hutze: Voller Freigang zu den Ausgleichsbehältern der Showa-Stoßdämpfer         │
+│ • Kofferdeckel-Docks (saddlebag_lid_dock.stl) auf Hartschalenkoffern (Pod 1 & Pod 2)   │
+│ • Under-Cowl Skeleton Dock (cvo_st_undercowl_skeleton_dock.stl) für Pod 3 unter Forged │
+│   Carbon Sitz-Hutze: Voller Freigang zu den Ausgleichsbehältern der Showa-Stoßdämpfer │
 │ • CVO ST Telemetrie-Finne (cvo_st_telemetry_fin.stl) als Haifischflosse am Heck        │
 │ • Kennzeichen-Radarhalter (radar_license_plate_bracket.stl): Gleicher Halter wie alle  │
 │   Touring-Modelle, da Kennzeichen auch bei der CVO ST serienmäßig mittig montiert ist! │
@@ -207,8 +214,12 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 ```
 
 1. **Classic Touring Montage & Fairing-Demontage:**
-   * **Pod 1 & 2:** Die Kofferdeckel-Docks ([`saddlebag_lid_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/saddlebag_lid_dock.stl)) mit M4 Senkkopfschrauben und rückseitigen Dichtscheiben an den OEM-Befestigungspunkten oder per 3M VHB Tape auf den Kofferdeckeln montieren. Vorkonfektioniertes M8 Kabel durch die Gummitülle in den Koffer und über Schnellkupplung zum Rahmen führen.
-   * **Pod 3:** Die Fender-Konsole ([`pod3_touring_fender_console.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod3_touring_fender_console.stl)) flach auf dem Kotflügel zentrieren und verschrauben.
+   * **Pod 1 & 2:** Die Kofferdeckel-Docks ([`saddlebag_lid_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/saddlebag_lid_dock.stl)) mit M4 Senkkopfschrauben und rückseitigen Dichtscheiben an den OEM-Befestigungspunkten oder per 3M VHB Tape auf den Hartschalenkoffern montieren. Vorkonfektioniertes M8 Kabel durch die Gummitülle in den Koffer und über Schnellkupplung zum Rahmen führen.
+   * **Pod 3 (Non-Tour-Pak Bagger):** Die Fender-Konsole ([`pod3_touring_fender_console.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod3_touring_fender_console.stl)) flach auf dem Kotflügel an der $1/4"-20$ Soziussitz-Mutter verschrauben.
+   * **Wichtige Einschränkung für Touring Limited / Ultra mit King Tour-Pak (Ultra Limited FLHTK, Road Glide Limited FLTRK, CVO Limited):**
+     * Bei allen Limited- und Ultra-Modellen mit werkseitig fest verbautem King Tour-Pak stützt sich der massive Stahlrohr-Trägerrahmen direkt über dem hinteren Schutzblech ab.
+     * **Die Fender-Konsole (`pod3_touring_fender_console.stl`) kann bei Limited-Modellen bauartbedingt NICHT montiert werden**, da der Tour-Pak-Träger den Bauraum auf dem Kotflügel blockiert und ein Einschieben der Kassette unmöglich macht.
+     * **Lösung für Limited-Modelle:** Pod 1 & 2 sitzen wie gewohnt auf den Koffern. Pod 3 wird stattdessen per Rohrträger-Klemmschelle ([`adventure_pannier_rack_clamp_base.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_base.stl) / `cap.stl`) direkt am Tour-Pak-Stahlrohrrahmen oder unter der Gepäckträger-Brücke montiert.
    * **Radar:** Kennzeichen-Halter ([`radar_license_plate_bracket.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_license_plate_bracket.stl)) unter dem Kennzeichenrahmen verschrauben.
    * **Batwing Fairing-Demontage (Street Glide):**
      * Die 3x Torx T27 Schrauben der Windschutzscheibe entfernen (mittlere Schraube zuletzt).
@@ -218,8 +229,9 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
      * Lokale Stromversorgung: Das 2-polige JST-PH Stromkabel direkt an der internen Verkleidungs-Zubehörbuchse (oder Standlicht KL15 Zündungsplus) anklemmen. **Kein Kabel nach hinten durch den Tanktunnel erforderlich**, da die Verbindung zur Zentralbox vollkommen drahtlos via ESP-NOW / BLE erfolgt!
      * Outer Fairing wieder ansetzen und T27 Schrauben mit $3{,}8\,\text{Nm}$ anziehen.
 2. **CVO ST / Performance Bagger Montage (Road Glide Sharknose):**
-   * **Pod 1 & 2:** Das aufrechte Skeleton Dock ([`cvo_st_undercowl_skeleton_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/cvo_st_undercowl_skeleton_dock.stl)) unter der Einzelsitz-Hutze montieren. Die Pods stehen senkrecht und haben vollen Abstand zu den Ausgleichsbehältern der Federbeine.
-   * **Pod 3:** Die aerodynamische Telemetrie-Finne ([`cvo_st_telemetry_fin.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/cvo_st_telemetry_fin.stl)) auf der Heck-Hutze montieren.
+   * **Pod 1 & 2:** Genau wie bei den Classic Touring Modellen sitzen Pod 1 & 2 in den Kofferdeckel-Docks ([`saddlebag_lid_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/saddlebag_lid_dock.stl)) auf den Hartschalenkoffern der ST.
+   * **Pod 3:** Das aufrechte Skeleton Dock ([`cvo_st_undercowl_skeleton_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/cvo_st_undercowl_skeleton_dock.stl)) wird für **Pod 3** unsichtbar unter der Forged-Carbon-Einzelsitz-Hutze montiert. Es hält Pod 3 federbelastet und vibrationsentkoppelt mit vollem Freigang zu den Showa-Ausgleichsbehältern der Stoßdämpfer.
+   * **Pod 3 Telemetrie-Finne:** Die aerodynamische Haifischflosse ([`cvo_st_telemetry_fin.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/cvo_st_telemetry_fin.stl)) auf der Heck-Hutze verschrauben.
    * **Radar:** Auch bei der CVO ST kommt der Kennzeichen-Halter ([`radar_license_plate_bracket.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_license_plate_bracket.stl)) zum Einsatz, da das Kennzeichen serienmäßig mittig montiert ist!
    * **Sharknose-Demontage:** Blinkerschrauben lösen, 4x T27 Innenschrauben herausdrehen, Sharknose-Verkleidung nach vorn abheben. Front-Node im Media-Fach / Riser montieren und lokal an die 12V-Zuleitung anstecken.
 3. **Custom-Bikes & Bobber mit seitlichem Kennzeichen:**

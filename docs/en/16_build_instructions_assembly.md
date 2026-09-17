@@ -182,7 +182,7 @@ All parts, circuit board production files, and COTS procurement links are catalo
 
 ---
 
-### Step 4.2: Harley-Davidson Mounting Suite (Touring vs. CVO ST vs. Custom/Bobber)
+### Step 4.2: Harley-Davidson Mounting Suite (Touring vs. CVO ST vs. Limited vs. Custom/Bobber)
 
 ```text
                        OPENMOTORBRIDGE HARLEY-DAVIDSON MOUNTING SUITE
@@ -192,9 +192,16 @@ All parts, circuit board production files, and COTS procurement links are catalo
 │ • Touring fender console (pod3_touring_fender_console.stl) contoured on rear fender   │
 │ • License plate radar mount (radar_license_plate_bracket.stl) decoupled below plate    │
 ├────────────────────────────────────────────────────────────────────────────────────────┤
+│ HARLEY-DAVIDSON TOURING LIMITED & ULTRA (ULTRA LIMITED, ROAD GLIDE LIMITED)            │
+│ • Saddlebag lid docks (saddlebag_lid_dock.stl) on hard bags (Pod 1 & Pod 2)           │
+│ • Tour-Pak Limitation: Fender console eliminated due to King Tour-Pak steel frame!    │
+│   Pod 3 is mounted to Tour-Pak tube rail via tube clamp or underneath luggage rack     │
+│ • License plate radar mount (radar_license_plate_bracket.stl) decoupled below plate    │
+├────────────────────────────────────────────────────────────────────────────────────────┤
 │ HARLEY-DAVIDSON CVO ROAD GLIDE ST / PERFORMANCE BAGGER                                 │
-│ • Under-cowl skeleton dock (cvo_st_undercowl_skeleton_dock.stl) under solo cowl:       │
-│   Full clearance from Showa remote reservoir canisters                                 │
+│ • Saddlebag lid docks (saddlebag_lid_dock.stl) on hard bags (Pod 1 & Pod 2)           │
+│ • Under-cowl skeleton dock (cvo_st_undercowl_skeleton_dock.stl) for Pod 3 under solo   │
+│   cowl: Full clearance from Showa remote reservoir canisters & exhaust heat            │
 │ • CVO ST telemetry fin (cvo_st_telemetry_fin.stl) as tail sharkfin                     │
 │ • License plate radar mount (radar_license_plate_bracket.stl): Identical bracket to     │
 │   Touring models, as CVO ST uses the stock centered license plate mount!               │
@@ -206,8 +213,12 @@ All parts, circuit board production files, and COTS procurement links are catalo
 ```
 
 1. **Classic Touring Installation & Fairing Removal:**
-   * **Pod 1 & 2:** Mount saddlebag lid docks ([`saddlebag_lid_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/saddlebag_lid_dock.stl)) using M4 countersunk screws and sealing washers or 3M VHB tape. Route M8 cable through grommet into bag and via quick-disconnect to frame.
-   * **Pod 3:** Center and bolt fender console ([`pod3_touring_fender_console.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod3_touring_fender_console.stl)) flat on fender.
+   * **Pod 1 & 2:** Mount saddlebag lid docks ([`saddlebag_lid_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/saddlebag_lid_dock.stl)) using M4 countersunk screws and sealing washers or 3M VHB tape on the hard saddlebags. Route M8 cable through grommet into bag and via quick-disconnect to frame.
+   * **Pod 3 (Non-Tour-Pak Bagger):** Center and bolt fender console ([`pod3_touring_fender_console.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod3_touring_fender_console.stl)) flat on fender to the $1/4"-20$ passenger seat nut.
+   * **Important Restriction for Touring Limited / Ultra with King Tour-Pak (Ultra Limited FLHTK, Road Glide Limited FLTRK, CVO Limited):**
+     * On all Limited and Ultra models equipped with a factory-installed rigid King Tour-Pak, the massive tubular steel carrier frame bolts directly over the rear fender.
+     * **The fender console (`pod3_touring_fender_console.stl`) CANNOT be installed on Limited models**, as the Tour-Pak frame occupies that space on the fender and blocks cartridge sliding access.
+     * **Solution for Limited Models:** Pod 1 & 2 mount on saddlebags as usual. Pod 3 is bolted to the Tour-Pak tubular frame using the Ø 18 mm tube clamp pair ([`adventure_pannier_rack_clamp_base.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_base.stl) / `cap.stl`) or placed flat beneath the Tour-Pak baseplate / luggage rack.
    * **Radar:** Fasten license plate mount ([`radar_license_plate_bracket.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_license_plate_bracket.stl)) beneath license plate frame.
    * **Batwing Fairing Removal (Street Glide):**
      * Remove 3x Torx T27 windshield screws (center screw last).
@@ -217,8 +228,9 @@ All parts, circuit board production files, and COTS procurement links are catalo
      * Connect local power: Plug 2-pin JST-PH power lead to fairing aux connector (or parking light 12V switched). **No wire run back through the tank tunnel**, as connection to Central Box is fully wireless via ESP-NOW / BLE!
      * Reinstall outer fairing and torque T27 screws to $3.8\,\text{Nm}$.
 2. **CVO ST / Performance Bagger Installation (Road Glide Sharknose):**
-   * **Pod 1 & 2:** Mount upright skeleton dock ([`cvo_st_undercowl_skeleton_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/cvo_st_undercowl_skeleton_dock.stl)) beneath solo seat cowl. Pods stand vertically, completely clearing Showa remote reservoirs.
-   * **Pod 3:** Mount aerodynamic telemetry fin ([`cvo_st_telemetry_fin.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/cvo_st_telemetry_fin.stl)) on tail cowl.
+   * **Pod 1 & 2:** Exactly like standard Touring models, Pod 1 & 2 mount on the hard saddlebag lids using [`saddlebag_lid_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/saddlebag_lid_dock.stl) on the ST's factory hard bags.
+   * **Pod 3:** The upright bionic skeleton dock ([`cvo_st_undercowl_skeleton_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/cvo_st_undercowl_skeleton_dock.stl)) is installed for **Pod 3** concealed under the Forged Carbon solo seat cowl. It holds Pod 3 spring-preloaded and vibration-isolated with full clearance from the Showa piggyback shock canisters.
+   * **Pod 3 Telemetry Fin:** Mount aerodynamic telemetry fin ([`cvo_st_telemetry_fin.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/cvo_st_telemetry_fin.stl)) on tail cowl.
    * **Radar:** CVO ST also uses the standard license plate bracket ([`radar_license_plate_bracket.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_license_plate_bracket.stl)), since the license plate is factory-centered!
    * **Sharknose Disassembly:** Remove turn signal bolts, remove 4x T27 inner screws, lift Sharknose fairing off. Mount Front Node in media compartment / riser and tap local 12V supply.
 3. **Custom Bikes & Bobbers with Side-Mounted License Plates:**

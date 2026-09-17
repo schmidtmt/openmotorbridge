@@ -186,13 +186,13 @@ Alle Gehäuseteile sind konsequent für das **IKEA-Prinzip** konstruiert: **Kein
   * `adventure_rack_tail_mount.stl` (1 Stk.): Heck-Balkon hinter Alutopcase mit 45°-Astabweiser für Dipolantenne.
   * `radar_varia_gopro_lock_dock.stl` (1 Stk.) & `011_gopro_hirth_lock.stl` (1 Stk.): Radar-Dock mit Hirth-Verzahnung.
 * **Kit 3: Harley-Davidson Touring & Classic Bagger (Street Glide, Road Glide, Road King):**
-  * `saddlebag_lid_dock.stl` (2 Stk.): Kofferdeckel-Montagedocks für Pod 1 & 2.
-  * `pod3_touring_fender_console.stl` (1 Stk.): Organische Heckkotflügel-Konsole für Pod 3 (Road King Special).
+  * `saddlebag_lid_dock.stl` (2 Stk.): Kofferdeckel-Montagedocks für Pod 1 & 2 auf den Hartschalenkoffern.
+  * `pod3_touring_fender_console.stl` (1 Stk.): Organische Heckkotflügel-Konsole für Pod 3 *(für Non-Tour-Pak Bagger; bei Ultra Limited / Road Glide Limited mit werkseitigem King Tour-Pak entfällt die Fender-Konsole wegen des Stahlrohr-Trägerrahmens zugunsten einer Rohr-Klemmschellenmontage am Tour-Pak-Träger!)*.
   * `radar_license_plate_bracket.stl` (1 Stk.): Entkoppelter Kennzeichen-Radarhalter.
   * `magsafe_cockpit_mount_harley.stl` (1 Stk.), `magsafe_frame_dock.stl` (1 Stk.) & `magsafe_clamp_wings.stl` (1 Stk.): MagSafe Rahmendock-Komponenten.
 * **Kit 4: Harley-Davidson CVO ST & Performance Bagger (Road Glide ST):**
-  * `saddlebag_lid_dock.stl` (2 Stk.): Kofferdeckel-Montagedocks für Pod 1 & 2.
-  * `cvo_st_undercowl_skeleton_dock.stl` (1 Stk.): Aufrechtes Federsitz-Dock für Pod 3 unter der Forged-Carbon-Hutze (vollständiger Freigang zu Showa-Ausgleichsbehältern).
+  * `saddlebag_lid_dock.stl` (2 Stk.): Kofferdeckel-Montagedocks für Pod 1 & 2 auf den Hartschalenkoffern.
+  * `cvo_st_undercowl_skeleton_dock.stl` (1 Stk.): Aufrechtes bionisches Skeleton-Dock für Pod 3 unter der Forged-Carbon-Hutze (vollständiger Freigang zu Showa-Ausgleichsbehältern & Auspuffhitze).
   * `cvo_st_telemetry_fin.stl` (1 Stk.): Aerodynamische Haifischflosse / Telemetrie-Finne auf der Hecklasche.
   * `radar_license_plate_bracket.stl` (1 Stk.): Entkoppelter Kennzeichen-Radarhalter *(CVO ST verfügt serienmäßig über das mittige Kennzeichen wie alle Touring-Modelle!)*.
 * **Kit 5: Custom-Bikes, Bobber & Universal:**
