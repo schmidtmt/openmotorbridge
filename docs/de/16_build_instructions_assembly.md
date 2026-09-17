@@ -303,8 +303,10 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
   * 4x Torx T25 Schrauben der Windschild-Befestigung lösen und Scheibe abnehmen.
   * Obere TFT-Cockpitblende nach vorne ausclipsen.
   * Front-Node mit AMPS-Halterung oder Rohrschelle an der Ø 12 mm GPS-Querstrebe bzw. am Lenker fixieren.
-  * **100 % drahtlos:** Verbindung zur Zentralbox erfolgt über die integrierte 2,4 GHz ESP-NOW Funkbrücke (Latenz < 1,8 ms). Es muss kein Kabel durch die Gabelbrücke verlegt werden.
-  * **Stromversorgung:** 2-Pin JST-PH Kabel direkt am originalen BMW Cartool-Navistecker (oder Standlicht KL15 & Masse) anstecken.
+  * **Stromversorgung & CAN-Bus Anbindung (2 Optionen):**
+    * **Stromversorgung:** 2-Pin JST-PH Kabel an `J1` direkt am originalen BMW Cartool-Navistecker (SZ-Stecker im Cockpit: Pin 1 Masse, Pin 3 +12V geschaltet KL15) anstecken.
+    * **CAN-Bus Option 1 (Empfohlen – Plug & Play unter Sitzbank):** Der CAN-Bus wird an der Zentralbox über den HD26-Kabelbaum (Pins 17 `CAN_H` und 18 `CAN_L`) am OBD2-Diagnosestecker bzw. RDC/DWA-Stecker unter der Sitzbank abgegriffen (analog zu Hex ezCAN / WunderLINQ). Port `J2` am Front-Knoten bleibt frei und wird automatisch deaktiviert. Keinerlei Kabelbeschädigung im Cockpit!
+    * **CAN-Bus Option 2 (Cockpit-Abgriff am 12-Pin TFT):** Das BMW 6,5" TFT-Display führt auf seiner Rückseite an Pin 2 (`CAN_H`, weiß/schwarz) und Pin 3 (`CAN_L`, weiß/braun) ebenfalls K-CAN. Wer ein 12-Pin Y-Adapterkabel nutzt, kann diesen direkt an `J2` des Front-Knotens anschließen. Der Front-Knoten streamt Drehzahl, Tacho und Wonder-Wheel dann drahtlos via ESP-NOW zur Zentralbox.
 * **Pod 3 & Radar:**
   * Pod 3 auf dem Rack-Tail Mount ([`adventure_rack_tail_mount.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_rack_tail_mount.stl)) an der serienmäßigen Gepäckbrücke verschrauben.
   * Zunge des Garmin Varia Docks ([`radar_varia_gopro_lock_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_varia_gopro_lock_dock.stl)) in die Hirth-Rosette ([`011_gopro_hirth_lock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/components/011_gopro_hirth_lock.stl)) einrasten ($10^\circ$-Schritte für exakt waagerechten Radar-Horizont). Mit M5 x 25 mm Schraube und Stoppmutter sichern ($3{,}5\,\text{Nm}$). Varia einklinken und M3 Madenschraube als Diebstahlschutz eindrehen.

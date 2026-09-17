@@ -302,8 +302,10 @@ All parts, circuit board production files, and COTS procurement links are catalo
   * Remove 4x Torx T25 windshield screws and lift windscreen off.
   * Unclip upper TFT instrument surround forward.
   * Fasten Front Node via AMPS mount or tube clamp to the Ø 12 mm GPS crossbar or handlebar.
-  * **100% Wireless Link:** Connection to Central Box operates via the integrated 2.4 GHz ESP-NOW wireless link (< 1.8 ms latency). No wiring is required through the steering head.
-  * **Power Supply:** Connect 2-pin JST-PH power lead directly to the BMW Cartool nav accessory connector (or parking light KL15 & GND).
+  * **Power Supply & CAN-Bus Options (2 Ingress Paths):**
+    * **Power Supply:** Connect 2-pin JST-PH power lead at `J1` directly to the factory BMW Cartool accessory connector (SZ plug in cockpit: Pin 1 GND, Pin 3 switched +12V KL15).
+    * **CAN-Bus Option 1 (Recommended – Plug & Play Under Seat):** Tapped at Central Box via HD26 harness (pins 17 `CAN_H` and 18 `CAN_L`) at the OBD2 diagnostic port or RDC/DWA module under the seat (identical to Hex ezCAN / WunderLINQ). Port `J2` on Front Node remains empty and auto-deactivates. Zero wiring tampering in the cockpit!
+    * **CAN-Bus Option 2 (Cockpit Tapping at 12-Pin TFT):** The BMW 6.5" TFT display routes K-CAN directly on its rear connector (Pin 2 `CAN_H`, White/Black and Pin 3 `CAN_L`, White/Brown). Riders using a 12-pin PnP Y-cable can connect directly to `J2` on the Front Node. The Front Node streams RPM, speed, and Wonder Wheel wirelessly via ESP-NOW to Central Box.
 * **Pod 3 & Radar:**
   * Bolt Pod 3 onto the Rack-Tail Mount ([`adventure_rack_tail_mount.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_rack_tail_mount.stl)) on the factory luggage rack.
   * Engage Garmin Varia dock ([`radar_varia_gopro_lock_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_varia_gopro_lock_dock.stl)) into Hirth rosette ([`011_gopro_hirth_lock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/components/011_gopro_hirth_lock.stl)) ($10^\circ$ increments for an exact horizontal radar line). Secure with M5 x 25 mm screw and locknut ($3.5\,\text{Nm}$). Slide Varia into dock and tighten M3 grub screw as anti-theft lock.
