@@ -176,26 +176,28 @@ All parts, circuit board production files, and COTS procurement links are catalo
 
 ## 4. Vehicle-Specific Mounting & Motorcycle Wiring
 
-### Step 4.1: Harley-Davidson Platform Installation (Touring, CVO ST, Limited & Road King)
+### Step 4.1: Harley-Davidson Platform Installation (Touring, CVO ST, Limited, Road King & Cruisers with Saddlebags)
 
 ```text
                        OPENMOTORBRIDGE HARLEY-DAVIDSON MOUNTING SUITE
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
-│ 1. COMMON SYSTEM FOUNDATION (IDENTICAL FOR ALL HARLEY-DAVIDSON TOURING MODELS)         │
+│ 1. COMMON SYSTEM FOUNDATION (IDENTICAL FOR TOURING & SOFTAIL CRUISER PLATFORMS)        │
 │ • Central Box: Mounted under seat on frame crossmember on 4x M4 EPDM silentblocks      │
-│ • Pod 1 & 2: Saddlebag lid docks (saddlebag_lid_dock.stl) on OEM hard bags             │
+│ • Pod 1 & 2: Saddlebag lid docks (saddlebag_lid_dock.stl) on OEM hard bags or          │
+│   Heritage structured cases (also Sport Glide & Low Rider ST clamshells!)              │
 │ • Radar: Decoupled radar mount (radar_license_plate_bracket.stl) underneath stock      │
-│   centered license plate bracket (identical on Touring, Limited, and CVO ST!)          │
+│   centered license plate bracket (identical on Touring, Limited, Softails, & CVO ST!)  │
 ├────────────────────────────────────────────────────────────────────────────────────────┤
 │ 2. COCKPIT & FRONT NODE INSTALLATION (THREE MODULAR FAIRING OPTIONS)                   │
 │ • Option A (Batwing): Street Glide / Ultra / Electra Glide (2024+ vs. 2014–2023)       │
 │ • Option B (Sharknose): Road Glide / CVO ST / Performance Bagger (2024+ vs. 2015–2023) │
-│ • Option C (Headlight Nacelle): Road King & Road King Special (RK / RKS)               │
-│   -> No Fairing: Front Node mounts in nacelle cavity behind 7" Daymaker LED;           │
-│      CAN-bus connects directly at Central Box under seat (Front Node 100% wireless!)   │
+│ • Option C (Nacelle & Cruiser): Road King (RK/RKS) & Softail Cruisers with Bags        │
+│   (Heritage Classic FLHCS, Low Rider ST FXLRST, Sport Glide FLSB, Fat Boy with Bags):  │
+│   -> No Fairing Headunit: Front Node mounts in headlight nacelle / mini-fairing;       │
+│      CAN-bus connects directly at Central Box under seat/side cover (100% wireless!)   │
 ├────────────────────────────────────────────────────────────────────────────────────────┤
 │ 3. MODULAR TAIL POD 3 INSTALLATION (FOUR VEHICLE-SPECIFIC VARIANTS)                    │
-│ • Standard Bagger: Touring fender console (pod3_touring_fender_console.stl) on 1/4"-20 │
+│ • Bagger / Cruiser: Touring fender console (pod3_touring_fender_console.stl) on 1/4"  │
 │ • Limited / Ultra: King Tour-Pak steel frame blocks fender! Pod 3 mounts via tube      │
 │   clamp (adventure_pannier_rack_clamp_base.stl) to Tour-Pak tube rail or rack bridge   │
 │ • CVO ST / Performance: Under-Cowl Skeleton Dock (cvo_st_undercowl_skeleton_dock.stl) │
@@ -205,9 +207,9 @@ All parts, circuit board production files, and COTS procurement links are catalo
 ```
 
 #### 4.1.1 Common System Foundation (All Models)
-* **Central Box:** Fasten under the rider seat onto the massive frame crossmember in front of the battery using 4x M4 silentblocks (EPDM Shore 50A). The HD26 harness whip branches rearward left and right to the M8 saddlebag disconnects and directly to the BCM.
-* **Pod 1 & Pod 2 (Satellites):** Fasten saddlebag lid docks ([`saddlebag_lid_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/saddlebag_lid_dock.stl)) using M4 countersunk screws with backing EPDM sealing washers or 3M VHB high-bond tape onto the hard saddlebags. *(Note: Street Glide, Road Glide, CVO ST, Road King, and Ultra Limited all share identical hard saddlebag lid geometry!)* Route the pre-molded M8 PUR cable through the bag rubber grommet and connect via quick-disconnect to the main harness.
-* **Radar:** The license plate radar bracket ([`radar_license_plate_bracket.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_license_plate_bracket.stl)) bolts directly beneath the license plate frame. *(Note: Even the CVO Road Glide ST retains the identical factory-centered US/EU license plate location as all Touring models).*
+* **Central Box:** Fasten under the rider seat onto the massive frame crossmember in front of the battery using 4x M4 silentblocks (EPDM Shore 50A). On Softail Cruiser models, the Central Box sits in the cavity beneath the seat or within the side frame triangle. The HD26 harness whip branches rearward left and right to the M8 saddlebag disconnects and directly to the BCM / diagnostic plug.
+* **Pod 1 & Pod 2 (Satellites):** Fasten saddlebag lid docks ([`saddlebag_lid_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/saddlebag_lid_dock.stl)) using M4 countersunk screws with backing EPDM sealing washers or 3M VHB high-bond tape onto the saddlebags. *(Note: Alongside Street Glide, Road Glide, CVO ST, Road King, and Ultra Limited, Cruisers with saddlebags like Low Rider ST and Sport Glide feature rigid clamshell bags, while the Heritage Classic has structured leather/vinyl bags with flat top lids—all share identical saddlebag lid dock [`saddlebag_lid_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/saddlebag_lid_dock.stl) mounting!)* Route the pre-molded M8 PUR cable through the bag rubber grommet and connect via quick-disconnect to the main harness.
+* **Radar:** The license plate radar bracket ([`radar_license_plate_bracket.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_license_plate_bracket.stl)) bolts directly beneath the license plate frame. *(Note: All Touring, CVO ST, and Softail Cruiser models feature standardized centered US/EU license plate mounts).*
 
 #### 4.1.2 Cockpit Fairing & Front Node Installation
 * **Option A: Batwing Fairing (Street Glide / Electra Glide / Ultra):**
@@ -244,26 +246,26 @@ All parts, circuit board production files, and COTS procurement links are catalo
     4. Unhook Sharknose forward and disconnect harness.
   * **Wiring:** Identical to Option A (media compartment / riser mounting, `J1` 12V, `J2` CAN-bus, `J4` upstream to display, `J6` Ottocast dongle with TPS2051B watchdog reset, `J5` 20W PD cable).
 
-* **Option C: Headlight Nacelle (Road King & Road King Special - RK / RKS):**
-  * **Packaging & Mounting:**
-    - Road King models have *no* fairing; they feature the classic two-piece cast aluminum headlight nacelle.
-    - Loosen the pinch screw at the bottom of the 7" headlight trim ring, remove trim ring, and lift out the 7" Daymaker LED / reflector bucket.
-    - Mount the Front Node inside the roomy cavity behind the headlight bucket or against the triple tree rear wall using 3M Dual-Lock or silentblocks.
-  * **CAN-Bus Architecture on Road King (Central Box vs. Front):**
-    - Road King models have **no front P&A audio CAN-bus**, as no head unit / radio is installed at the front.
-    - **Clean Architecture Solution:** CAN-bus connects **directly under the seat to the Central Box**!
-      - Adjacent to the Central Box lies the 6-pin red BCM diagnostic connector (HD-LAN CAN-bus, 500 kbps).
-      - The Central Box HD26 main harness taps CAN directly from the BCM via pins 17 (`CAN_H`) and 18 (`CAN_L`).
-      - **Major Advantage:** The Front Node in the headlight nacelle requires **ZERO CAN WIRING** at `J2`! It communicates 100% wirelessly with the Central Box via the 2.4 GHz ESP-NOW link (< 1.8 ms latency).
-      - **No wiring harness needs to be pulled through the steering head or fuel tank tunnel!**
-  * **Front Wiring:**
-    - Port `J1` (12V KL15 & GND): Tap parking light / auxiliary accessory wiring inside the nacelle.
-    - Port `J5` (USB-PD): Short cable to handlebar smartphone mount.
-    - Port `J3` (PTT): Handlebar push-button lead.
+* **Option C: Headlight Nacelle & Softail Cruisers with Saddlebags (Road King / RKS, Heritage Classic, Low Rider ST, Sport Glide):**
+  * **Conceptual Architectural Equivalence (Cruisers with Saddlebags = Road King Architecture):**
+    - All Harley-Davidson Cruisers with bags (whether Touring Road King FLHR/FLHRXS or Softail models like Heritage Classic FLHC/FLHCS, Sport Glide FLSB, and Low Rider ST FXLRST) share the exact same architecture:
+      - They have **no large infotainment head unit** (Boom! Box GTS or 12.3" Skyline OS) in the cockpit.
+      - They feature **saddlebags** (factory hard bags on RKS, rigid clamshells on Sport Glide and Low Rider ST, structured leather/vinyl cases on Heritage).
+      - Onboard vehicle electronics and the CAN-bus (HD-LAN at 250 or 500 kbps) are readily accessible beneath the seat or behind the left side cover at the BCM (Body Control Module) and diagnostic port.
+  * **CAN-Bus Architecture (Direct Tap at Central Box under Seat / Side Cover):**
+    - Because no front P&A audio CAN-bus exists, the CAN-bus connects **directly to the Central Box under the seat or at the BCM/diagnostic port**.
+      - *Pre-2021 Models:* 6-pin red Deutsch diagnostic socket.
+      - *2021+ Models (Euro 5 / Euro 5+):* 16-pin standardized OBD2 socket.
+      - The Central Box HD26 harness taps CAN directly from the BCM via pins 17 (`CAN_H`) and 18 (`CAN_L`). All telemetry (vehicle speed, engine RPM, engine temperature, turn signals, brake status, clutch switch, gear position) is broadcast.
+      - **100% Wireless Link to Front:** The Front Node requires **ZERO CAN WIRING** at `J2` (port automatically deactivates). It communicates 100% wirelessly with the Central Box via 2.4 GHz ESP-NOW (< 1.8 ms). **Zero wiring needs to be routed through the steering neck or beneath the fuel tank!**
+  * **Cockpit & Fairing Front Node Mounting:**
+    - *Road King / Heritage Classic / Fat Boy:* Loosen pinch screw on 7" headlight trim ring, remove Daymaker. Front Node mounts vibration-isolated inside the aluminum headlight nacelle cavity behind the reflector.
+    - *Low Rider ST / Sport Glide:* Fasten Front Node behind the FXRT / mini-batwing fairing or onto the triple tree clamp / handlebar riser.
+    - **Front Wiring:** Port `J1` (12V KL15 & GND) connects directly to parking light or front accessory harness. Optional handlebar PTT (`J3`), blind-spot LEDs (`J9`), and smartphone Qi power (`J5`/`J10`) connect locally at the Front Node.
 
 #### 4.1.3 Modular Rear Mounting (Pod 3)
-* **Variant 1: Standard Bagger (Street Glide, Road Glide, Road King without Tour-Pak):**
-  - Bolt the flat touring fender console ([`pod3_touring_fender_console.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod3_touring_fender_console.stl)) centered onto the rear fender to the stock $1/4"-20$ passenger seat nut.
+* **Variant 1: Standard Bagger & Softail Cruisers (Street Glide, Road Glide, Road King, Heritage Classic, Low Rider ST, Sport Glide):**
+  - Bolt the flat touring fender console ([`pod3_touring_fender_console.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod3_touring_fender_console.stl)) centered onto the rear fender to the stock $1/4"-20$ passenger seat nut. *(Note: Softail and Touring rear fenders utilize the exact same standardized 1/4"-20 seat thread).*
 * **Variant 2: Touring Limited & Ultra (Ultra Limited FLHTK, Road Glide Limited FLTRK, CVO Limited):**
   - *Important Restriction:* On all models with a factory-installed rigid King Tour-Pak, the massive tubular steel carrier frame bolts directly over the rear fender. The fender console (`pod3_touring_fender_console.stl`) *cannot* be installed due to physical clearance and sliding cartridge access!
   - *Solution:* Pod 3 is instead bolted directly to the Ø 18 mm tubular frame of the Tour-Pak or underneath the luggage rack using the tube clamp pair ([`adventure_pannier_rack_clamp_base.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_base.stl) / `cap.stl`).

@@ -177,26 +177,28 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 
 ## 4. Fahrzeugspezifische Montage & Verkabelung am Motorrad
 
-### Schritt 4.1: Montage Harley-Davidson Plattform (Touring, CVO ST, Limited & Road King)
+### Schritt 4.1: Montage Harley-Davidson Plattform (Touring, CVO ST, Limited, Road King & Cruiser mit Saddlebags)
 
 ```text
                        OPENMOTORBRIDGE HARLEY-DAVIDSON MOUNTING SUITE
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
-│ 1. GEMEINSAME BASIS (FÜR ALLE HARLEY-DAVIDSON TOURING-MODELLE IDENTISCH)                │
+│ 1. GEMEINSAME BASIS (TOURING- & SOFTAIL CRUISER-PLATTFORM IDENTISCH)                   │
 │ • Zentralbox: Unter der Sitzbank auf der Rahmenbrücke auf 4x M4 Silentblöcken montiert │
-│ • Pod 1 & 2: Kofferdeckel-Docks (saddlebag_lid_dock.stl) auf Serien-Hartschalenkoffern │
+│ • Pod 1 & 2: Kofferdeckel-Docks (saddlebag_lid_dock.stl) auf Serien-Hartschalen- oder  │
+│   Heritage-Formkoffern (auch Sport Glide & Low Rider ST Clamshell-Koffer!)             │
 │ • Radar: Entkoppelter Kennzeichen-Radarhalter (radar_license_plate_bracket.stl)        │
 │   unter dem serienmäßig zentrischen Kennzeichenrahmen (auch bei CVO ST identisch!)     │
 ├────────────────────────────────────────────────────────────────────────────────────────┤
 │ 2. COCKPIT & FRONT-NODE MONTAGE (DREI MODULARE VERKLEIDUNGS-OPTIONEN)                  │
 │ • Option A (Batwing): Street Glide / Ultra / Electra Glide (2024+ vs. 2014–2023)       │
 │ • Option B (Sharknose): Road Glide / CVO ST / Performance Bagger (2024+ vs. 2015–2023) │
-│ • Option C (Headlight Nacelle): Road King & Road King Special (RK / RKS)               │
-│   -> Keine Verkleidung: Front-Node sitzt in Scheinwerfergondel hinter 7" Daymaker;     │
-│      CAN-Bus wird direkt an Zentralbox unter Sitzbank angeschlossen (Front 100% Funk!) │
+│ • Option C (Nacelle & Cruiser): Road King (RK/RKS) sowie Softail Cruiser mit Koffern   │
+│   (Heritage Classic FLHCS, Low Rider ST FXLRST, Sport Glide FLSB, Fat Boy mit Bags):   │
+│   -> Keine Fairing-Headunit: Front-Node sitzt in Scheinwerfergondel / Mini-Fairing;    │
+│      CAN-Bus wird direkt an Zentralbox unter Sitzbank/Seitendeckel abgegriffen (100% Funk!) │
 ├────────────────────────────────────────────────────────────────────────────────────────┤
 │ 3. HECK-MONTAGE POD 3 (VIER FAHRZEUGSPEZIFISCHE VARIANTEN)                             │
-│ • Normal Bagger: Fender-Konsole (pod3_touring_fender_console.stl) an 1/4"-20 Schraube  │
+│ • Bagger / Cruiser: Fender-Konsole (pod3_touring_fender_console.stl) an 1/4"-20 Mutter │
 │ • Limited / Ultra: King Tour-Pak Stahlrohrrahmen blockiert Fender! Pod 3 wird per      │
 │   Rohrschellen (adventure_pannier_rack_clamp_base.stl) am Tour-Pak-Träger montiert     │
 │ • CVO ST / Performance: Under-Cowl Skeleton Dock (cvo_st_undercowl_skeleton_dock.stl) │
@@ -206,9 +208,9 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 ```
 
 #### 4.1.1 Gemeinsame System-Basis (alle Modelle)
-* **Zentralbox:** Unter der Fahrersitzbank auf der massiven Rahmenbrücke vor der Batterie auf 4x M4 Silentblöcken (EPDM Shore 50A) verschrauben. Die Kabelpeitsche des HD26-Steckers führt nach hinten links und rechts zu den M8 Trennstellen der Koffer sowie zum BCM.
-* **Pod 1 & Pod 2 (Satelliten):** Die Kofferdeckel-Docks ([`saddlebag_lid_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/saddlebag_lid_dock.stl)) mit M4 Senkkopfschrauben und rückseitigen EPDM-Dichtscheiben an den OEM-Befestigungspunkten oder per 3M VHB Tape auf den Hartschalenkoffern montieren. *(Hinweis: Street Glide, Road Glide, CVO ST, Road King und Ultra Limited verfügen alle über die baugleichen Hartschalenkoffer!)* Das vorkonfektionierte M8 Kabel durch die Gummitülle in den Koffer und über eine Schnellkupplung zum Rahmen führen.
-* **Radar:** Der Kennzeichen-Radarhalter ([`radar_license_plate_bracket.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_license_plate_bracket.stl)) wird direkt unter dem Kennzeichenrahmen verschraubt. *(Hinweis: Auch die CVO Road Glide ST besitzt das identische mittige US/EU-Kennzeichen wie alle Touring-Modelle).*
+* **Zentralbox:** Unter der Fahrersitzbank auf der massiven Rahmenbrücke vor der Batterie auf 4x M4 Silentblöcken (EPDM Shore 50A) verschrauben. Bei Softail-Modellen sitzt die Zentralbox im Hohlraum unter der Sitzbank oder im seitlichen Rahmendreieck. Die Kabelpeitsche des HD26-Steckers führt nach hinten links und rechts zu den M8 Trennstellen der Koffer sowie zum BCM / Diagnosestecker.
+* **Pod 1 & Pod 2 (Satelliten):** Die Kofferdeckel-Docks ([`saddlebag_lid_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/saddlebag_lid_dock.stl)) mit M4 Senkkopfschrauben und rückseitigen EPDM-Dichtscheiben an den Befestigungspunkten oder per 3M VHB Tape auf den Koffern montieren. *(Hinweis: Neben Street Glide, Road Glide, CVO ST, Road King und Ultra Limited verfügen auch die Cruiser mit Saddlebags wie Low Rider ST und Sport Glide über feste Clamshell-Koffer sowie die Heritage Classic über formstabile Leder-/Vinylkoffer mit flachem Deckel – alle nutzen dieselben Kofferdeckel-Docks [`saddlebag_lid_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/saddlebag_lid_dock.stl)!)* Das vorkonfektionierte M8 Kabel durch die Gummitülle in den Koffer und über eine Schnellkupplung zum Rahmen führen.
+* **Radar:** Der Kennzeichen-Radarhalter ([`radar_license_plate_bracket.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_license_plate_bracket.stl)) wird direkt unter dem Kennzeichenrahmen verschraubt. *(Hinweis: Alle Touring-, CVO ST- und Softail-Cruiser-Modelle besitzen standardmäßig mittige US/EU-Kennzeichenaufnahmen).*
 
 #### 4.1.2 Cockpit-Verkleidung & Front-Node Installation
 * **Option A: Batwing-Verkleidung (Street Glide / Electra Glide / Ultra):**
@@ -245,26 +247,26 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
     4. Sharknose nach vorn aushängen und Multistecker trennen.
   * **Verkabelung:** Identisch zu Option A (Media-Fach / Riser-Montage, `J1` 12V, `J2` CAN-Bus, `J4` Upstream zum Display, `J6` Ottocast-Dongle, `J5` 20W PD-Ladekabel).
 
-* **Option C: Scheinwerfergondel / Headlight Nacelle (Road King & Road King Special - RK / RKS):**
-  * **Bauraum & Montage:**
-    - Road King Modelle besitzen ab Werk *keine* Kunststoffverkleidung, sondern die klassische zweiteilige Aluminium-Scheinwerfergondel (Headlight Nacelle).
-    - Klemmschraube des 7"-Scheinwerfer-Zierrings unten lösen, Zierring abnehmen und Scheinwerfereinsatz (Daymaker / Reflektor) herausnehmen.
-    - Im geräumigen Hohlraum hinter dem Scheinwerfertopf oder an der Rückwand der Gabelbrücke wird der Front-Node vibrationsgedämpft mit 3M Dual-Lock befestigt.
-  * **CAN-Bus Architektur bei Road King (Zentralbox vs. Front):**
-    - An der Frontmaske der Road King gibt es **keinen P&A-Audio-CAN-Bus**, da ab Werk kein Infotainment-Radio verbaut ist.
-    - **Saubere Lösung:** Der CAN-Bus wird **direkt unter der Sitzbank an der Zentralbox** angeschlossen!
-      - Direkt neben der Zentralbox liegt der 6-polige rote BCM-Diagnosestecker (HD-LAN CAN-Bus, 500 kbps).
-      - Der HD26-Hauptstecker greift den CAN-Bus über die Pins 17 (`CAN_H`) und 18 (`CAN_L`) direkt am BCM ab.
-      - **Vorteil:** Der Front-Node in der Scheinwerfergondel benötigt **KEINERLEI CAN-KABEL** an `J2`! Er kommuniziert zu 100 % drahtlos über die 2,4 GHz Funkbrücke (ESP-NOW < 1,8 ms) mit der Zentralbox.
-      - Es muss **kein Kabel durch den Lenkkopf oder Tanktunnel** gezogen werden!
-  * **Verkabelung an der Front:**
-    - Port `J1` (12V KL15 & GND): Direkt am Standlicht-/Zubehörkabelbaum in der Gondel anklemmen.
-    - Port `J5` (USB-PD): Kurzes Ladekabel zum Lenker (Smartphone-Halterung).
-    - Port `J3` (PTT): Lenkertaster anschließen.
+* **Option C: Scheinwerfergondel & Softail Cruiser mit Saddlebags (Road King / RKS, Heritage Classic, Low Rider ST, Sport Glide):**
+  * **Konzept-Gleichheit (Cruiser mit Saddlebags = Road King Architektur):**
+    - Alle Harley-Davidson Cruiser mit Koffern (ob Touring Road King FLHR/FLHRXS oder Softail-Cruiser wie Heritage Classic FLHC/FLHCS, Sport Glide FLSB und Low Rider ST FXLRST) teilen sich dieselbe Architektur:
+      - Sie haben **keine große Infotainment-Headunit** (Boom! Box GTS oder 12.3" Skyline OS) im Cockpit.
+      - Sie besitzen **Saddlebags** (Hartschalenkoffer bei RKS, feste Clamshells bei Sport Glide und Low Rider ST, formstabile Koffer bei Heritage).
+      - Die Bordelektronik und der CAN-Bus (HD-LAN mit 250 bzw. 500 kbps) sind unter der Sitzbank bzw. hinter dem linken Seitendeckel am BCM (Body Control Module) und Diagnosestecker direkt zugänglich.
+  * **CAN-Bus Architektur (Abgriff an der Zentralbox unter der Sitzbank / Seitendeckel):**
+    - Da im Cockpit kein P&A-Audio-CAN-Bus existiert, wird der CAN-Bus **direkt an der Zentralbox unter der Sitzbank bzw. am BCM/Diagnosestecker** angeschlossen.
+      - *Pre-2021 Modelle:* 6-poliger roter Deutsch-Diagnosestecker.
+      - *Ab 2021 (Euro 5 / Euro 5+):* 16-poliger Standard-OBD2-Stecker.
+      - Der HD26-Kabelbaum greift den CAN-Bus über die Pins 17 (`CAN_H`) und 18 (`CAN_L`) direkt am BCM ab. Sämtliche Fahrdaten (Geschwindigkeit, Drehzahl, Motortemperatur, Blinker, Bremsstatus, Ganganzeige) stehen bereit.
+      - **100 % Funkbrücke zur Front:** Der Front-Node benötigt **KEINERLEI CAN-KABEL** an `J2` (Port wird automatisch deaktiviert). Er kommuniziert komplett kabellos über 2,4 GHz ESP-NOW (< 1,8 ms) mit der Zentralbox. Es muss **kein einziges Kabel durch den Lenkkopf oder unter dem Tank hindurch** gezogen werden!
+  * **Cockpit- & Verkleidungsmontage des Front-Nodes:**
+    - *Road King / Heritage Classic / Fat Boy:* Klemmschraube des 7"-Scheinwerfer-Zierrings lösen, Daymaker herausnehmen. Front-Node sitzt schwingungsentkoppelt im Hohlraum der Aluminium-Scheinwerfergondel hinter dem Reflektor.
+    - *Low Rider ST / Sport Glide:* Front-Node hinter der FXRT-/Mini-Batwing-Verkleidung oder an der Lenkerbrücke / Riser verschrauben.
+    - **Front-Verkabelung:** Port `J1` (12V KL15 & GND) wird direkt am Standlicht oder Zubehörstecker in der Front angeschlossen. Optional werden Lenker-PTT an `J3`, Totwinkel-LEDs an `J9` und Smartphone Qi-Power an `J5`/`J10` angeschlossen.
 
 #### 4.1.3 Modulare Heck-Montage (Pod 3)
-* **Variante 1: Standard Bagger (Street Glide, Road Glide, Road King ohne Tour-Pak):**
-  - Die flache Fender-Konsole ([`pod3_touring_fender_console.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod3_touring_fender_console.stl)) wird zentrisch auf dem Kotflügel an der $1/4"-20$ Soziussitz-Mutter verschraubt.
+* **Variante 1: Standard Bagger & Softail Cruiser (Street Glide, Road Glide, Road King, Heritage Classic, Low Rider ST, Sport Glide):**
+  - Die flache Fender-Konsole ([`pod3_touring_fender_console.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod3_touring_fender_console.stl)) wird zentrisch auf dem Kotflügel an der $1/4"-20$ Soziussitz-Mutter verschraubt. *(Hinweis: Softail- und Touring-Heckfender nutzen dasselbe genormte 1/4"-20 Gewinde).*
 * **Variante 2: Touring Limited & Ultra (Ultra Limited FLHTK, Road Glide Limited FLTRK, CVO Limited):**
   - *Wichtige Einschränkung:* Bei allen Modellen mit werkseitig fest verbautem King Tour-Pak stützt sich der massive Stahlrohr-Trägerrahmen direkt über dem Kotflügel ab. Die Fender-Konsole (`pod3_touring_fender_console.stl`) kann bauartbedingt *nicht* montiert werden!
   - *Lösung:* Pod 3 wird stattdessen mit dem formschlüssigen Rohrträger-Klemmschellen-Paar ([`adventure_pannier_rack_clamp_base.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_base.stl) / `cap.stl`) direkt am Ø 18 mm Stahlrohrrahmen des Tour-Paks oder unter der Gepäckträger-Brücke montiert.
