@@ -325,6 +325,84 @@ All parts, circuit board production files, and COTS procurement links are catalo
 
 ---
 
+### Step 4.3: Installation & Wiring of Optional Cockpit & Accessory Components
+
+The Universal Front Node (PCBA 05) serves as the central wiring and communication hub for all cockpit peripherals. The following optional accessories can be integrated as needed via pre-molded plug-and-play wiring:
+
+```text
+              COCKPIT ACCESSORY WIRING OVERVIEW (FRONT NODE PCBA 05)
+┌───────────────────────┬─────────┬────────────────────────────────────────────────────────┐
+│ Accessory Component   │ Port    │ Connection & Pinout                                    │
+├───────────────────────┼─────────┼────────────────────────────────────────────────────────┤
+│ **Handlebar PTT**     │ **J3**  │ 4-Pin JST-PH (Pin 1: GND, Pin 2: PTT Intercom,         │
+│ (Intercom & Action)   │         │ Pin 3: Action-Cam Bookmark, Pin 4: Siri/Voice Assist)  │
+├───────────────────────┼─────────┼────────────────────────────────────────────────────────┤
+│ **Blind Spot LEDs**   │ **J9**  │ 3-Pin JST-PH (Pin 1: +12V_PROT, Pin 2: BSD Left,       │
+│ (Radar Mirror Alerts) │         │ Pin 3: BSD Right via Low-Side N-MOSFET drivers)        │
+├───────────────────────┼─────────┼────────────────────────────────────────────────────────┤
+│ **Actioncam Power**   │ **J8**  │ 2-Pin/4-Pin JST-PH (+5.0V / 2.0A, Charge-Only without  │
+│ (GoPro/Insta360/DJI)  │         │ USB data lines to prevent head unit lockups)           │
+├───────────────────────┼─────────┼────────────────────────────────────────────────────────┤
+│ **Qi Wireless Mount** │ **J10** │ 2-Pin JST-PH (+12V switched ignition gate, up to 2.0A  │
+│ (Quad Lock / SP Conn.)│ / **J5**│ / 24W) or 20W USB-C PD Fast Charging port J5           │
+├───────────────────────┼─────────┼────────────────────────────────────────────────────────┤
+│ **Auxiliary Lights**  │ **J11** │ 2-Pin JST-PH (+12V High-Side Switch up to 3.5A / 40W,  │
+│ (Emergency Strobe)    │         │ automated 4–5 Hz hazard strobe on hard braking > 0.8g) │
+└───────────────────────┴─────────┴────────────────────────────────────────────────────────┘
+```
+
+#### 4.3.1 Handlebar PTT (Push-To-Talk) & Multi-Button Control Cluster (`J3`)
+* **Mechanical Mounting:**
+  - Secure the tactile IP67 handlebar button with a slim clamp bracket (sized for Ø 22 mm / 7/8", Ø 25.4 mm / 1", or Ø 31.8 mm / 1 1/4" bars) directly adjacent to the left grip / mirror mount within ergonomic thumb reach.
+  - Alternatively, a 3-button slim cluster (e.g. Daytona Slim or motogadget m-switch) can be used.
+* **Electrical Connection at Port `J3` (4-Pin JST-PH):**
+  - **Pin 1:** `GND` (Common ground reference)
+  - **Pin 2:** `PTT_INTERCOM` (Closes to ground: triggers instant intercom mesh / radio transmit)
+  - **Pin 3:** `CAM_ACTION` (Closes to ground: sets highlight bookmark in video or toggles recording)
+  - **Pin 4:** `MEDIA_VOICE` (Closes to ground: triggers Siri / Google Assistant or skips audio track)
+  - *(Note: Standard 2-pin momentary push buttons plug directly onto Pin 1 and Pin 2).*
+* **System Benefit:** 100% battery-free, zero wireless latency (< 5 ms response time), hardware Schmitt-trigger debounced, and protected against accidental 12V shorts.
+
+#### 4.3.2 Blind Spot Detection Mirror LED Indicators (`J9`)
+* **Mechanical Mounting:**
+  - Affix two compact, amber or red 12V LED indicators (sealed micro-LEDs or machined mirror clips) subtly onto the left and right mirror arms or inside the fairing mirror triangles.
+  - Positioned within the rider's peripheral vision to capture overtaking traffic without blinding night vision.
+* **Electrical Connection at Port `J9` (3-Pin JST-PH):**
+  - **Pin 1:** `+12V_PROT` (Protected 12V anode supply)
+  - **Pin 2:** `BSD_LEFT_N` (Left mirror cathode, switched via low-side N-MOSFET Ch A)
+  - **Pin 3:** `BSD_RIGHT_N` (Right mirror cathode, switched via low-side N-MOSFET Ch B)
+* **Operational Logic:**
+  - Fed by real-time telemetry from the rear radar (Garmin Varia or OMM Radar):
+    - **Solid Amber Glow:** Vehicle detected in blind spot or adjacent overtaking lane.
+    - **Rapid 8 Hz Flash (Red/Amber):** Imminent collision hazard (high closing speed or turn signal activated toward overtaking vehicle).
+  - *Automated Night Dimming:* Controlled via ambient light sensor (`OPT3001` on `J12`) for glare-free night operation.
+
+#### 4.3.3 Action-Cam Power Supply (GoPro, Insta360, DJI) (`J8`)
+* **Mechanical Mounting:**
+  - Secure camera to handlebar, windshield bar, crash bar, or helmet tether.
+* **Electrical Connection at Port `J8` (JST-PH):**
+  - Clean $+5.0\,\text{V}$ dedicated power (up to $2.0\,\text{A}$) directly from Front Node.
+* **Critical System Advantage (Charge-Only):**
+  - Port `J8` **deliberately omits USB data lines**. This completely prevents the action camera from defaulting into "USB Mass Storage Mode" upon bike ignition, ensuring uninterrupted video recording and preventing bike head unit lockups.
+  - **Automated BLE Shutter Stop:** With onboard polymer buffer capacitor `C_BUF`, the ESP32-S3 stays powered for 1.5 seconds after ignition off to send a clean Bluetooth LE "Record Stop" packet, cleanly finalizing video clips without file corruption.
+
+#### 4.3.4 Qi Wireless Charging Cradle Integration (Quad Lock, SP Connect) (`J10` & `J5`)
+* **Mechanical Mounting:**
+  - Quad Lock Handlebar / Stem Mount with Weatherproof Wireless Charging Head or SP Connect Moto Mount with Wireless Charging Module.
+* **Electrical Connection – Two Flexible Options:**
+  - **Option 1 (Recommended: 12V Hardwire to Port `J10`):**
+    - 2-Pin JST-PH: Pin 1 = `+12V_SW`, Pin 2 = `GND`.
+    - Handles continuous loads up to $2.0\,\text{A}$ ($24\,\text{W}$).
+    - Connects Quad Lock / SP Connect hardwire cables cleanly without flying fuses.
+    - **Zero Parasitic Battery Drain:** Switched completely via Front Node internal power gate—zero drain during bike parking.
+  - **Option 2 (USB-PD Fast-Charging at Port `J5`):**
+    - Connect short USB-C cable from Port `J5` directly into charging head.
+    - Delivers full 20W USB Power Delivery ($9\,\text{V} / 2.2\,\text{A}$, QC 4+) for maximum Qi fast charging under high sun navigation.
+* **"Forgot Phone" Proximity Warning:**
+  - If the ignition is turned off and the rider walks away (BLE proximity lost) while the Qi mount (`J10`) or USB port (`J5`) still senses phone load, OpenMotorBridge triggers an immediate double-beep on the horn or vibrates the LoRa smart keyfob.
+
+---
+
 ## 5. Commissioning, WebSerial 1-Click Flasher & Smoke Test
 
 With **WebSerial integration** inside the OpenMotorBridge PWA, commissioning requires **zero installation of Python, PlatformIO, drivers, or terminal utilities**:

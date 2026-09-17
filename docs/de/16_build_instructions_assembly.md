@@ -318,6 +318,83 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
   * Unterschale ([`adventure_pannier_rack_clamp_base.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_base.stl)) und Kappe ([`adventure_pannier_rack_clamp_cap.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_cap.stl)) mit 2x M5 x 30 mm V4A Schrauben und DIN 985 Stoppmuttern über Kreuz mit $4{,}5\,\text{Nm}$ anziehen.
   * Das Pod-Basisgehäuse wird geschützt im Rohrrahmen-Dreieck vor den Alukoffern verschraubt.
 
+---
+
+### Schritt 4.3: Montage & Anschluss optionaler Cockpit- & Zubehör-Komponenten
+
+Der Universal Front-Knoten (PCBA 05) dient als zentrale Anschlussstelle für das gesamte Fahrer-Cockpit. Folgende optionale Zubehörteile können nach Bedarf per vorkonfektioniertem Plug-and-Play-Kabel angeschlossen werden:
+
+```text
+               COCKPIT-ZUBEHÖR & ANSCHLUSSÜBERSICHT (FRONT-KNOTEN PCBA 05)
+┌───────────────────────┬─────────┬────────────────────────────────────────────────────────┐
+│ Zubehör-Komponente    │ Port    │ Anschluss & Signalbelegung                             │
+├───────────────────────┼─────────┼────────────────────────────────────────────────────────┤
+│ **Lenker-PTT Taster** │ **J3**  │ 4-Pin JST-PH (Pin 1: GND, Pin 2: PTT Sprechtaste,       │
+│ (Intercom & Action)   │         │ Pin 3: Cam-Bookmark/Highlight, Pin 4: Siri/Voice)      │
+├───────────────────────┼─────────┼────────────────────────────────────────────────────────┤
+│ **Totwinkel-LEDs**    │ **J9**  │ 3-Pin JST-PH (Pin 1: +12V_PROT, Pin 2: BSD Links,       │
+│ (Radar Blind Spot)    │         │ Pin 3: BSD Rechts über N-MOSFET Low-Side Treiber)      │
+├───────────────────────┼─────────┼────────────────────────────────────────────────────────┤
+│ **Actioncam-Power**   │ **J8**  │ 2-Pin/4-Pin JST-PH (+5.0V / 2.0A, Charge-Only ohne     │
+│ (GoPro/Insta360/DJI)  │         │ USB-Daten zur Vermeidung von Headunit-Lockups)         │
+├───────────────────────┼─────────┼────────────────────────────────────────────────────────┤
+│ **Qi-Ladehalterung**  │ **J10** │ 2-Pin JST-PH (+12V geschaltet über Zündungs-Gate,      │
+│ (Quad Lock / SP Conn.)│ / **J5**│ bis 2.0A / 24W) oder 20W USB-C PD Fast Charging an J5  │
+├───────────────────────┼─────────┼────────────────────────────────────────────────────────┤
+│ **Zusatzscheinwerfer**│ **J11** │ 2-Pin JST-PH (+12V High-Side Switch bis 3.5A / 40W,    │
+│ (Notbrems-Stroboskop) │         │ automatischer 4–5 Hz Warnblitz bei Notbremsung > 0.8g) │
+└───────────────────────┴─────────┴────────────────────────────────────────────────────────┘
+```
+
+#### 4.3.1 Lenker-PTT (Push-To-Talk) & Multi-Button Bedieneinheit (`J3`)
+* **Mechanische Montage:**
+  - Der taktile IP67-Lenkertaster wird mit einer schlanken Rohrklemmschelle (passend für Ø 22 mm / 7/8", Ø 25,4 mm / 1" oder Ø 31,8 mm / 1 1/4" Lenker) in ergonomischer Daumenreichweite neben dem linken Lenkergriff / Spiegelfuß montiert.
+  - Alternativ kann ein 3-fach Tastercluster montiert werden (z. B. Daytona Slim oder motogadget m-switch).
+* **Elektrischer Anschluss an Port `J3` (4-Pin JST-PH):**
+  - **Pin 1:** `GND` (Gemeinsamer Massebezug)
+  - **Pin 2:** `PTT_INTERCOM` (Schließt gegen Masse: Tastet sofort das Intercom-Mesh / Funknetzwerk)
+  - **Pin 3:** `CAM_ACTION` (Schließt gegen Masse: Setzt Highlight-Tag in GoPro/Insta360 Videoaufzeichnung oder startet/stoppt Aufnahme)
+  - **Pin 4:** `MEDIA_VOICE` (Schließt gegen Masse: Sprachassistent Siri/Google Assistant oder nächster Musiktitel)
+  - *(Hinweis: Ein handelsüblicher 2-Pin PTT-Taster passt direkt auf Pin 1 und Pin 2).*
+* **Systemvorteil:** 100 % batteriefrei, keine Verzögerung durch Funk-Latenz (< 5 ms Reaktionszeit), hardwareseitig über Schmitt-Trigger entprellt und gegen 12V-Überspannung geschützt.
+
+#### 4.3.2 Totwinkel-Spiegelanzeigen (Radar Blind Spot Detection - BSD) (`J9`)
+* **Mechanische Montage:**
+  - Zwei kompakte, bernsteinfarbene oder rote 12V LED-Indikatoren (z. B. Verguss-LEDs oder gefräste LED-Clips) werden dezent an den linken und rechten Spiegelarmen bzw. am Spiegeldreieck der Verkleidung befestigt.
+  - Die LEDs sitzen im peripheren Blickfeld des Fahrers, sodass herannahender Verkehr erfasst wird, ohne die Nachtsicht zu beeinträchtigen.
+* **Elektrischer Anschluss an Port `J9` (3-Pin JST-PH):**
+  - **Pin 1:** `+12V_PROT` (Geschützte 12V Anoden-Speisung)
+  - **Pin 2:** `BSD_LEFT_N` (Kathode linke Spiegel-LED, geschaltet über N-MOSFET Kanal A)
+  - **Pin 3:** `BSD_RIGHT_N` (Kathode rechte Spiegel-LED, geschaltet über N-MOSFET Kanal B)
+* **Funktionsweise:**
+  - Gesteuert über das Heckradar (Garmin Varia oder OMM Radar über die Zentralbox):
+    - **Dauerleuchten (Bernstein):** Ein Fahrzeug befindet sich im toten Winkel oder nähert sich auf der jeweiligen Spur.
+    - **Schnelles Warnblitzen (8 Hz, Rot/Bernstein):** Akute Kollisionsgefahr (hohe Differenzgeschwindigkeit oder Blinker in Richtung des herannahenden Fahrzeugs gesetzt).
+  - *Automatisches Dimmen:* Über den optionalen Umgebungslichtsensor (`OPT3001` an `J12`) werden die LEDs bei Dunkelheit blendfrei heruntergedimmt.
+
+#### 4.3.3 Stromversorgung für Actioncam (GoPro, Insta360, DJI) (`J8`)
+* **Mechanische Montage:**
+  - Actioncam am Lenker, am Windschild-Träger oder am Sturzbügel befestigen.
+* **Elektrischer Anschluss an Port `J8` (JST-PH):**
+  - Reine $+5{,}0\,\text{V}$ Speisung (bis zu $2{,}0\,\text{A}$) direkt vom Front-Node.
+* **Kritischer Systemvorteil (Charge-Only):**
+  - Port `J8` führt **bewusst keine USB-Datenleitungen**. Dadurch wird zuverlässig verhindert, dass die Kamera beim Einschalten der Motorradzündung in den lästigen PC-Massenspeichermodus ("USB verbunden") wechselt oder die Infotainment-Headunit (Boom! Box / Skyline OS) zum Einfrieren bringt.
+  - **Automatischer BLE-Shutter-Stop:** Über den integrierten KL15-Pufferkondensator (`C_BUF`) auf der Front-Node Platine bleibt der ESP32-S3 beim Ausschalten der Zündung noch für 1,5 Sekunden aktiv und sendet per Bluetooth LE den "Record Stop"-Befehl an die Kamera – Videodateien werden sauber finalisiert und korrumpieren nicht.
+
+#### 4.3.4 Anschluss Qi-Induktionshalterung (Quad Lock, SP Connect) (`J10` & `J5`)
+* **Mechanische Montage:**
+  - Quad Lock Handlebar Mount mit wetterfestem Wireless Charging Head oder SP Connect Moto Mount mit Wireless Charging Module.
+* **Elektrischer Anschluss – Zwei flexible Optionen:**
+  - **Option 1 (Empfohlen: 12V Hardwire an Port `J10`):**
+    - 2-Pin JST-PH Stecker: Pin 1 = `+12V_SW`, Pin 2 = `GND`.
+    - Dauerlast bis $2{,}0\,\text{A}$ ($24\,\text{W}$).
+    - Das Direktanschlusskabel von Quad Lock / SP Connect wird ohne fliegende Sicherungen sauber am Front-Node eingesteckt.
+    - **Null Ruhestrom:** Die Speisung wird über das interne Zündungs-Gate des Front-Nodes geschaltet – die Motorradbatterie wird bei Standzeit niemals entladen.
+  - **Option 2 (USB-PD Fast-Charging an Port `J5`):**
+    - Standard USB-C Kabel von Port `J5` direkt in den Ladekopf.
+    - Unterstützt echte 20W USB-PD Schnellladung ($9\,\text{V} / 2{,}2\,\text{A}$, QC 4+ und Apple Fast Charge) – lädt Smartphones auch bei voller Displayhelligkeit und Navigation im Sommer zuverlässig schnell.
+* **„Handy vergessen“-Warnung:**
+  - Schaltet der Fahrer die Zündung ab und entfernt sich vom Motorrad (Bluetooth-Signal reißt ab), während die Qi-Ladeschale (`J10`) oder USB-Buchse (`J5`) noch eine Last misst, warnt OpenMotorBridge sofort über die Fahrzeughupe oder den LoRa-Pager am Schlüsselbund.
 
 ---
 

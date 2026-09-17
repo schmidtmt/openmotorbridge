@@ -7620,14 +7620,24 @@ function renderSystemBuilder() {
         instructionsHtml += `
             <div class="builder-instruction-step">
                 <div class="builder-step-headline">
-                    <span class="builder-step-name">6. ${isDe ? 'Universal Front-Knoten zusammenbauen' : 'Assemble Universal Front Node'}</span>
-                    <span class="builder-pill-verified">✓ Nut-Pockets & COTS</span>
+                    <span class="builder-step-name">6. ${isDe ? 'Universal Front-Knoten zusammenbauen & Zubehör anschließen' : 'Assemble Universal Front Node & Connect Accessories'}</span>
+                    <span class="builder-pill-verified">✓ Nut-Pockets & Cockpit-Hub</span>
                 </div>
                 <div class="builder-instructions-body">
                     <ol>
                         <li>${isDe ? '<strong>Nut-Pockets:</strong> 4x M3 Muttern in die Ecktaschen und 4x M4 Muttern in das AMPS-Bett am Wannenboden einlegen.' : '<strong>Nut-Pockets:</strong> Insert 4x M3 nuts into corner pockets and 4x M4 nuts into AMPS base pockets.'}</li>
                         <li>${isDe ? 'PCBA 05 einlegen und mit 4x M2.5 Schrauben fixieren. Hydrophobe Gore-Membran über MEMS-Mikrofon kleben.' : 'Insert PCBA 05 and secure with 4x M2.5 screws. Adhere Gore membrane over MEMS port.'}</li>
-                        <li>${isDe ? 'Fertige USB-Kabel (J6 CarPlay, J5 Handschuhfach) und Bordnetzkabel (J1 12V, J2 CAN, J3 PTT) anstecken.' : 'Plug in pre-molded USB cables (J6 CarPlay, J5 Glovebox) and power/signal cables (J1 12V, J2 CAN, J3 PTT).'}</li>
+                        <li>${isDe ? '<strong>Standard-Verkabelung:</strong> 12V Zündungsplus (<code>J1</code>), Display-Audio-CAN (<code>J2</code>, nur bei Fairing nötig), OEM-USB Upstream (<code>J4</code>), Wireless CarPlay/AA Dongle (<code>J6</code> mit 1-Click TPS2051B Watchdog-Reset) und 20W PD Ladekabel (<code>J5</code>) anstecken.' : '<strong>Standard Wiring:</strong> Plug in 12V switched power (<code>J1</code>), display audio CAN (<code>J2</code>, fairing only), OEM USB upstream (<code>J4</code>), wireless CarPlay/AA dongle (<code>J6</code> with 1-click TPS2051B watchdog reset), and 20W PD charging cable (<code>J5</code>).'}</li>
+                        <li>${isDe ? '<strong>Optionale Cockpit-Zusatzteile nach Bedarf anstecken:</strong><br>' +
+                            '• <em>Lenker-PTT Taster (Port J3):</em> 4-Pin JST-PH Kabel anschließen (Pin 1: GND, Pin 2: PTT Intercom, Pin 3: Actioncam-Bookmark, Pin 4: Siri/Voice). 100% batteriefrei und latenzfrei (< 5 ms).<br>' +
+                            '• <em>Totwinkel-Spiegel-LEDs (Port J9):</em> 3-Pin JST-PH Kabel zu den Bernstein/Rot-LEDs an den Spiegelarmen führen (Pin 1: +12V, Pin 2: BSD Links, Pin 3: BSD Rechts über N-MOSFETs; Dauerlicht bei Überholer, 8 Hz Warnblitz bei Kollisionskurs).<br>' +
+                            '• <em>Actioncam-Strom (Port J8):</em> 2-Pin JST-PH für GoPro/Insta360 (+5V/2A Charge-Only ohne Daten, verhindert Headunit-Lockups; automatischer BLE-Shutter-Stop bei Zündung-Aus).<br>' +
+                            '• <em>Qi-Ladehalterung Quad Lock / SP Connect (Port J10 oder J5):</em> 2-Pin JST-PH an J10 (+12V geschaltet bis 24W ohne Ruhestromverlust bei Standzeit) oder 20W USB-C PD an J5.' :
+                            '<strong>Optional Cockpit Peripherals (Plug-and-Play as needed):</strong><br>' +
+                            '• <em>Handlebar PTT Button (Port J3):</em> 4-Pin JST-PH cable (Pin 1: GND, Pin 2: PTT Intercom, Pin 3: Actioncam bookmark, Pin 4: Siri/Voice). 100% battery-free and zero-latency (< 5 ms).<br>' +
+                            '• <em>Blind Spot Mirror LEDs (Port J9):</em> 3-Pin JST-PH cable to amber/red LEDs at mirror arms (Pin 1: +12V, Pin 2: BSD Left, Pin 3: BSD Right via N-MOSFETs; steady amber on traffic, 8 Hz flash on collision hazard).<br>' +
+                            '• <em>Actioncam Power (Port J8):</em> 2-Pin JST-PH for GoPro/Insta360 (+5V/2A charge-only without USB data to prevent head unit lockups; automated BLE shutter stop on ignition off).<br>' +
+                            '• <em>Qi Wireless Cradle Quad Lock / SP Connect (Port J10 or J5):</em> 2-Pin JST-PH at J10 (+12V switched up to 24W with zero parasitic drain) or 20W USB-C PD at J5.'}</li>
                         <li>${isDe ? 'Silikon-Dichtschnur einlegen, TPU-Kämme einschieben und Deckel mit 4x M3x20 mm Schrauben festziehen.' : 'Lay silicone gasket cord, slide TPU combs in, and tighten lid with 4x M3x20 mm screws.'}</li>
                     </ol>
                 </div>
