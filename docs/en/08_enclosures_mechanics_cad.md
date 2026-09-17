@@ -852,13 +852,43 @@ The **OpenMotorBridge 2-in-1 Smart-Keyfob** ([`smart_keyfob_pager.scad`](file://
 
 ---
 
-## 8. CAD File Structure & OpenSCAD Parametric Library (STL Library)
+## 8. Cockpit Accessories & Ergonomic Controls (`05_accessories/`)
+
+### 8.1 Under-Perch Tactile Switch Bracket (`under_perch_switch_bracket.scad`)
+
+The **Under-Perch Switch Bracket** ([`under_perch_switch_bracket.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/05_accessories/under_perch_switch_bracket.scad)) resolves the critical space and ergonomic challenge on the left handlebar of cruisers and touring bikes:
+
+![Under-Perch Tactile Switch Bracket 3D CAD](../images/cad/under_perch_switch_bracket_cad.png)
+
+*Figure 8.36: 3D CAD view of the Under-Perch Tactile Switch Bracket (`under_perch_switch_bracket_cad.png`). Depicted are the M4 mounting flange with anti-rotation locating shoulder to the Harley switchgear, the bionic drop rib, the switch barrel angled 28° toward the rider's thumb pad with protective bezel, the red IP67 tactile micro-button, and the rear PUR cable exit conduit.*
+
+* **Mechanical & Ergonomic Highlights:**
+  * **0 mm Handlebar Space:** Consumes zero straight handlebar tubing. The upper master cylinder perch clamp remains **100% unobstructed for valved exhaust switches** (Dr. Jekill & Mr. Hyde / KessTech).
+  * **Continuous 2-Finger Lever Covering:** Index and middle fingers remain uninterruptedly covering the clutch lever. The button is positioned exactly 15 mm below the left turn signal switch in the thumb's natural downward sweep.
+  * **Universal Mounting:** Anchored either via the factory lower M4 Torx bolt of the Harley switch housing or through the M8/M10 mirror stem adapter plate ([`under_perch_mirror_plate.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/05_accessories/under_perch_mirror_plate.stl)).
+
+### 8.2 Blind Spot Detection (BSD) Mirror Indicator Pod (`bsd_mirror_indicator_pod.scad`)
+
+The **BSD Mirror Indicator Pod** ([`bsd_mirror_indicator_pod.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/05_accessories/bsd_mirror_indicator_pod.scad)) aerodynamically integrates rear radar alerts (Port `J9` on Front Node PCBA 05) into the rider's peripheral cockpit vision:
+
+![Blind Spot Detection Mirror Indicator Pod 3D CAD](../images/cad/bsd_mirror_indicator_pod_cad.png)
+
+*Figure 8.37: 3D CAD view of the aerodynamic BSD Mirror Indicator Pod (`bsd_mirror_indicator_pod_cad.png`). Visible: low-drag teardrop shape on the Ø 10 mm mirror stem, 2-point M3 stainless clamp collar, 38° inward-angled anti-glare visor hood, and amber translucent diffuser lens.*
+
+* **Optical Safety & StVZO / ECE R50 Compliance:**
+  * **Targeted Eye-Box Projection:** The 38° inward-angled light tunnel projects the amber/red radar alert pulse precisely into the rider helmet's peripheral eye box.
+  * **100% Glare-Free (TÜV Compliant):** A 3.8 mm deep visor overhang and opaque forward wall block 100% of light from escaping forward or sideways, eliminating oncoming driver glare.
+  * **Universal Stem Clamping:** Clamshell architecture fits standard Ø 10 mm (Harley, BMW, KTM) and Ø 12 mm mirror stems with concealed underside cable routing to Port `J9`.
+
+---
+
+## 9. CAD File Structure & OpenSCAD Parametric Library (STL Library)
  
 The OpenMotorBridge CAD repository follows a strict hierarchical Constructive Solid Geometry (CSG) architecture:
 - **Root Directories (`01_main_box/`, `02_pod_base/`, `03_pod_cartridges/`, `04_front_node/`, `05_accessories/`)**: Contain **exclusively monolithic, directly 3D-printable production STLs** (100% single-manifold, watertight, 0 disconnected bodies).
 - **Subdirectories (`components/`)**: Contain parametric modular subcomponents (e.g. un-cut solid base bodies, mounting ears, screw bosses, EPDM sealing combs, and PCB/battery inspection dummies) for assembly visualization and custom adaptations.
 
-### 8.1 Ready-to-Print Production STLs (Root Folders)
+### 9.1 Ready-to-Print Production STLs (Root Folders)
 
 | Assembly | Component / Function | Ready-to-Print STL | Parametric OpenSCAD Source |
 | :--- | :--- | :--- | :--- |
@@ -895,12 +925,17 @@ The OpenMotorBridge CAD repository follows a strict hierarchical Constructive So
 | **Smart-Keyfob** | PA12-MJF Lower Shell with MagSafe Pocket | `05_accessories/smart_keyfob_lower_shell.stl` | `05_accessories/smart_keyfob_pager.scad` |
 | **Smart-Keyfob** | PA12-MJF Upper Shell with Diffuser Bore | `05_accessories/smart_keyfob_upper_shell.stl` | `05_accessories/smart_keyfob_pager.scad` |
 | **Smart-Keyfob** | TPU Shock Bumper Rim (Orange) | `05_accessories/smart_keyfob_tpu_rim.stl` | `05_accessories/smart_keyfob_pager.scad` |
+| **Switch Bracket**| Under-Perch Switch Bracket for M4 Harley Switchgear | `05_accessories/under_perch_switch_bracket.stl` | `05_accessories/under_perch_switch_bracket.scad` |
+| **Switch Bracket**| Mirror Stem Adapter Plate (M8/M10) | `05_accessories/under_perch_mirror_plate.stl` | `05_accessories/under_perch_switch_bracket.scad` |
+| **Mirror Radar** | BSD Mirror Indicator Pod Upper Cowl (38° Tunnel) | `05_accessories/bsd_mirror_upper_pod.stl` | `05_accessories/bsd_mirror_indicator_pod.scad` |
+| **Mirror Radar** | BSD Mirror Clamp Strap Lower Halfshell (Ø 10 mm) | `05_accessories/bsd_mirror_lower_clamp.stl` | `05_accessories/bsd_mirror_indicator_pod.scad` |
+| **Mirror Radar** | BSD Diffuser Lens Disc (Amber / Translucent) | `05_accessories/bsd_mirror_lens.stl` | `05_accessories/bsd_mirror_indicator_pod.scad` |
 
-### 8.2 Modular Component Breakdowns & Dummies (`components/` Folders)
+### 9.2 Modular Component Breakdowns & Dummies (`components/` Folders)
 
 The `components/` directories host isolated base bodies (prior to CSG difference operations) and inspection parts:
 - **`01_main_box/components/`**: `01_lower_tub_empty.stl`, `02_corner_screws_enclosure.stl`, `03_pcb_standoffs.stl`, `04_mounting_ears.stl`, `05_sealing_groove.stl`, `06_mid_tray_frame.stl`, `07_mid_partition_floor.stl`, `08_lid_plate.stl`, `dummy_main_pcb.stl`, `dummy_lipo_battery.stl`.
-- **`02_pod_base/components/`**: `01_pod_tunnel_base.stl`, `02_pod_rear_m8_gland.stl`, `03_pod_bulkhead_partition.stl`, `04_pod_guide_grooves.stl`, `05_pod_strap_hooks.stl`, `06_fender_curved_saddle.stl`, `07_pod_slide_dock_core.stl`, `dummy_m8_connector.stl`.
+- **`02_pod_base/components/`**: `01_pod_tunnel_base.stl`, `02_pod_rear_m8_gland.stl`, `03_pod_bulkhead_partition.stl`, `04_pod_guide_grooves.stl`, `05_pod_strap_hooks.stl`, `06_fender_curved_saddle.stl`, `07_pod_slide_dock_core.stl`, `011_gopro_hirth_lock.stl` (Radial Hirth lock), `dummy_m8_connector.stl`.
 - **`03_pod_cartridges/components/`**: `dummy_adapter_pcb.stl`, `dummy_omm_transceiver_pcb.stl`.
 - **`04_front_node/components/`**:
   - `01_front_node_base_tub.stl`: Monolithic solid base tub with hollowed inner chamber (CSG base cube).
@@ -910,9 +945,9 @@ The `components/` directories host isolated base bodies (prior to CSG difference
 
 ---
 
-## 9. Manufacturing Specifications & 3D Printing Parameters (HP MJF vs. FDM)
+## 10. Manufacturing Specifications & 3D Printing Parameters (HP MJF vs. FDM)
 
-### 9.1 Industrial Production (HP MJF PA12)
+### 10.1 Industrial Production (HP MJF PA12)
 * **Process:** HP Multi Jet Fusion (MJF), dyed black, glass-bead blasted, and chemically vapor smoothed.
 * **Tolerances:** $\pm 0{,}15\,\text{mm}$ (DIN ISO 2768-m).
 * **Mechanical Properties:** Isotropic tensile strength $48\,\text{MPa}$, heat deflection temperature $+95\,^\circ\text{C}$, 100% airtight and watertight.

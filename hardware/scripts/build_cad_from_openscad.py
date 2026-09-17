@@ -112,6 +112,13 @@ STL_TARGETS: List[Tuple] = [
     ("05_accessories/smart_keyfob_pager.scad", "05_accessories/smart_keyfob_lower_shell.stl", ["-D", 'part="lower"']),
     ("05_accessories/smart_keyfob_pager.scad", "05_accessories/smart_keyfob_upper_shell.stl", ["-D", 'part="upper"']),
     ("05_accessories/smart_keyfob_pager.scad", "05_accessories/smart_keyfob_tpu_rim.stl", ["-D", 'part="rim"']),
+
+    # 12. Cockpit Accessories (Under-Perch Switch Bracket & BSD Mirror Indicator Pod)
+    ("05_accessories/under_perch_switch_bracket.scad", "05_accessories/under_perch_switch_bracket.stl", ["-D", 'part="bracket"']),
+    ("05_accessories/under_perch_switch_bracket.scad", "05_accessories/under_perch_mirror_plate.stl", ["-D", 'part="mirror_plate"']),
+    ("05_accessories/bsd_mirror_indicator_pod.scad", "05_accessories/bsd_mirror_upper_pod.stl", ["-D", 'part="pod"']),
+    ("05_accessories/bsd_mirror_indicator_pod.scad", "05_accessories/bsd_mirror_lower_clamp.stl", ["-D", 'part="clamp"']),
+    ("05_accessories/bsd_mirror_indicator_pod.scad", "05_accessories/bsd_mirror_lens.stl", ["-D", 'part="lens"']),
 ]
 
 # List of High-Resolution 3D Render Targets
@@ -313,6 +320,18 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
         "05_accessories/smart_keyfob_pager.scad",
         os.path.join(CAD_IMG_DIR, "smart_keyfob_pager_exploded.png"),
         "29,17,16,50,0,50,185",
+        "Tomorrow"
+    ),
+    (
+        "05_accessories/under_perch_switch_bracket.scad",
+        os.path.join(CAD_IMG_DIR, "under_perch_switch_bracket_cad.png"),
+        "3,-5,-8,52,0,325,115",
+        "Tomorrow"
+    ),
+    (
+        "05_accessories/bsd_mirror_indicator_pod.scad",
+        os.path.join(CAD_IMG_DIR, "bsd_mirror_indicator_pod_cad.png"),
+        "0,0,0,50,0,315,100",
         "Tomorrow"
     ),
 ]

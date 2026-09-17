@@ -545,7 +545,9 @@ OpenMotorBridge implements a versatile **Dual-Input Architecture** for handlebar
 ##### Option B: Dedicated Tactile Hardware Button (Port `J3` on Front Node)
 * **Application:** For motorcycles lacking handlebar CAN-bus access or riders who prefer a dedicated tactile switch with mechanical snap action.
 * **Mechanical Mounting – Two Non-Interfering Configurations:**
-  1. **Under-Perch / Mirror Stem Bracket (Recommended for Cruisers):** A slim 1.5 mm stainless steel or PA12-CF bracket mounts beneath the lower M4 housing bolt of the left hand control or under the M8/M10 mirror stem thread. The micro-switch sits approx. 15 mm **below** the turn signal paddle—completely clear of any top-mounted Jekill & Hyde exhaust switches and positioned directly within the thumb's natural downward sweep.
+  1. **Under-Perch / Mirror Stem Bracket (Recommended for Cruisers):**
+     - 3D printed in MJF PA12-CF / ASA: [`under_perch_switch_bracket.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/05_accessories/under_perch_switch_bracket.stl) (for M4 housing bolt) or with adapter plate [`under_perch_mirror_plate.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/05_accessories/under_perch_mirror_plate.stl) (for M8/M10 mirror stems).
+     - The micro-switch sits approx. 15 mm **below** the turn signal paddle—completely clear of any top-mounted Jekill & Hyde exhaust switches and positioned directly within the thumb's natural downward sweep.
   2. **Slim Clamp Collar (10 mm):** Mounting an ultra-narrow switch (e.g., Daytona Slimline or motogadget m-switch mini) directly flush against the inner flange of the left grip.
 * **Electrical Connection at Port `J3` (4-Pin JST-PH):**
   - **Pin 1:** `GND` (Common ground reference)
@@ -556,9 +558,12 @@ OpenMotorBridge implements a versatile **Dual-Input Architecture** for handlebar
 * **System Benefit:** 100% battery-free, zero wireless latency (< 1.8 ms response time), hardware Schmitt-trigger debounced, and protected against accidental 12V shorts.
 
 #### 5.3.2 Blind Spot Detection Mirror LED Indicators (`J9`)
-* **Mechanical Mounting:**
-  - Affix two compact, amber or red 12V LED indicators (sealed micro-LEDs or machined mirror clips) subtly onto the left and right mirror arms or inside the fairing mirror triangles.
-  - Positioned within the rider's peripheral vision to capture overtaking traffic without blinding night vision.
+* **Mechanical Mounting (Aerodynamic 2-Shell Mirror Pod):**
+  - Clamps onto left and right mirror stems (Ø 10 mm / Ø 12 mm) via a 2-piece clamp assembly:
+    - Upper pod with 38° inward light tunnel and 3.8 mm anti-glare visor hood: [`bsd_mirror_upper_pod.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/05_accessories/bsd_mirror_upper_pod.stl)
+    - Lower clamp shell with captive M3 nut/insert pockets: [`bsd_mirror_lower_clamp.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/05_accessories/bsd_mirror_lower_clamp.stl)
+    - Translucent amber/red diffuser lens: [`bsd_mirror_lens.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/05_accessories/bsd_mirror_lens.stl)
+  - **100% StVZO & ECE R50 Compliant:** The opaque front cowl and 3.8 mm visor hood strictly shield oncoming traffic from forward/lateral glare while ensuring high-contrast visibility within the rider's peripheral vision.
 * **Electrical Connection at Port `J9` (3-Pin JST-PH):**
   - **Pin 1:** `+12V_PROT` (Protected 12V anode supply)
   - **Pin 2:** `BSD_LEFT_N` (Left mirror cathode, switched via low-side N-MOSFET Ch A)

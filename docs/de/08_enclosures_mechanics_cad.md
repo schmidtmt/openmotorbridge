@@ -1019,13 +1019,43 @@ Der **OpenMotorBridge 2-in-1 Smart-Keyfob** ([`smart_keyfob_pager.scad`](file://
 
 ---
 
-## 8. CAD-Dateistruktur & OpenSCAD-Modulbaukasten (STL-Bibliothek)
+## 8. Cockpit-Zubehör & Ergonomie-Bedienelemente (`05_accessories/`)
+
+### 8.1 Under-Perch Tasterhalter (`under_perch_switch_bracket.scad`)
+
+Der **Under-Perch Tasterhalter** ([`under_perch_switch_bracket.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/05_accessories/under_perch_switch_bracket.scad)) löst das fundamentale Bauraum- und Ergonomie-Dilemma am linken Lenkergriff von Cruisern und Touring-Maschinen:
+
+![Under-Perch Tactile Switch Bracket 3D CAD](../images/cad/under_perch_switch_bracket_cad.png)
+
+*Abbildung 8.36: 3D-CAD-Ansicht des Under-Perch Tasterhalters (`under_perch_switch_bracket_cad.png`). Dargestellt sind der M4-Befestigungsflansch mit Antirotations-Führung zur Harley-Schalterarmatur, der bionische Absenksteg, das um 28° zum Fahrerdaumen geneigte Schalterrohr mit Schutzblende, der rote IP67-Mikrotaster sowie die rückwärtige PUR-Kabeldurchführung.*
+
+* **Mechanische Vorteile:**
+  * **0 mm Lenkerrohr-Bedarf:** Verbraucht keinen Millimeter auf dem geraden Lenkerrohr. Die obere Klemmschelle der Armatur bleibt zu **100 % frei für die Steuereinheit eines Klappenauspuffs** (Dr. Jekill & Mr. Hyde / KessTech).
+  * **2-Finger-Hebelüberdeckung:** Zeige- und Mittelfinger bleiben unterbrechungsfrei auf dem Kupplungshebel. Der Taster sitzt exakt 15 mm unterhalb des Blinkerschalters in der natürlichen Daumenabsenkzone.
+  * **Universelle Befestigung:** Verschraubung entweder über die originale M4-Gehäuse-Torxschraube der Harley-Armatur oder über den M8/M10-Spiegelschaftadapter ([`under_perch_mirror_plate.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/05_accessories/under_perch_mirror_plate.stl)).
+
+### 8.2 Spiegel-Totwinkel-LED Gehäuse (`bsd_mirror_indicator_pod.scad`)
+
+Das **Spiegel-Totwinkel-LED Gehäuse** ([`bsd_mirror_indicator_pod.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/05_accessories/bsd_mirror_indicator_pod.scad)) integriert die Radarwarnung (Port `J9` am Front-Node) aerodynamisch und blendfrei in das Cockpit:
+
+![Blind Spot Detection Mirror Indicator Pod 3D CAD](../images/cad/bsd_mirror_indicator_pod_cad.png)
+
+*Abbildung 8.37: 3D-CAD-Ansicht des aerodynamischen Spiegel-Totwinkel-Pods (`bsd_mirror_indicator_pod_cad.png`). Sichtbar sind die strömungsgünstige Tropfenform auf dem Ø 10 mm Spiegelarm, die 2-Punkt M3-Edelstahl-Klemmschelle, die 38° nach innen zum Fahrerhelm gerichtete Blendschutzhaube sowie die bernsteinfarbene Diffusorlinse.*
+
+* **Optische & Gesetzliche Sicherheit (StVZO / ECE R50):**
+  * **Gezielte Fahrer-Projektion:** Der um 38° nach innen geneigte Lichttunnel projiziert das gelb/rote Radar-Stroboskoplicht exakt in das periphere Sichtfeld des Fahrerhelms.
+  * **100 % Blendfreiheit:** Ein 3,8 mm tiefer Visier-Überhang und die blickdichte Vorderwand schirmen das Licht vollständig nach vorne und zur Seite ab. Kein Blenden des Gegenverkehrs, kein Irritieren anderer Verkehrsteilnehmer – voll TÜV-konform.
+  * **Universalklemmung:** Zweiteilige Halbschale für Ø 10 mm (Harley, BMW, KTM) und Ø 12 mm Spiegelarme mit verdeckter Kabelführung zu Port `J9`.
+
+---
+
+## 9. CAD-Dateistruktur & OpenSCAD-Modulbaukasten (STL-Bibliothek)
 
 Die CAD-Dateistruktur von OpenMotorBridge folgt einer strengen hierarchischen CSG-Architektur (Constructive Solid Geometry):
 - **Hauptverzeichnisse (`01_main_box/`, `02_pod_base/`, `03_pod_cartridges/`, `04_front_node/`, `05_accessories/`)**: Enthalten **ausschließlich monolithische, direkt 3D-druckbare Produktions-STLs** (100 % single-manifold, wasserdicht, 0 frei schwebende Körper).
 - **Unterordner (`components/`)**: Enthalten die parametrischen CSG-Einzelkomponenten (z. B. unbeschnittene Basiskörper, Flansche, Schraubdome, Dichtkämme und PCB-/Akku-Dummies) für Baugruppenmontagen und modulare Adaptionen.
 
-### 8.1 Druckfertige Produktions-STLs (Hauptverzeichnisse)
+### 9.1 Druckfertige Produktions-STLs (Hauptverzeichnisse)
 
 | Baugruppe | Funktion / Bauteil | Druckfertige STL-Datei | Parametrischer OpenSCAD Code |
 | :--- | :--- | :--- | :--- |
@@ -1065,8 +1095,13 @@ Die CAD-Dateistruktur von OpenMotorBridge folgt einer strengen hierarchischen CS
 | **Smart-Keyfob** | PA12-MJF Unterschale mit MagSafe-Tasche | `05_accessories/smart_keyfob_lower_shell.stl` | `05_accessories/smart_keyfob_pager.scad` |
 | **Smart-Keyfob** | PA12-MJF Oberschale mit Diffusor-Bohrung | `05_accessories/smart_keyfob_upper_shell.stl` | `05_accessories/smart_keyfob_pager.scad` |
 | **Smart-Keyfob** | TPU Stoßdämpfer-Kantenband (Orange) | `05_accessories/smart_keyfob_tpu_rim.stl` | `05_accessories/smart_keyfob_pager.scad` |
+| **Tasterhalter** | Under-Perch Tasterhalter für M4 Harley-Armatur | `05_accessories/under_perch_switch_bracket.stl` | `05_accessories/under_perch_switch_bracket.scad` |
+| **Tasterhalter** | Spiegelschaft-Adapterplatte für M8/M10 | `05_accessories/under_perch_mirror_plate.stl` | `05_accessories/under_perch_switch_bracket.scad` |
+| **Spiegel-Radar** | BSD Spiegel-Totwinkel-Pod Oberteil (38° Trichter) | `05_accessories/bsd_mirror_upper_pod.stl` | `05_accessories/bsd_mirror_indicator_pod.scad` |
+| **Spiegel-Radar** | BSD Spiegel-Klemmschelle Unterteil (Ø 10 mm) | `05_accessories/bsd_mirror_lower_clamp.stl` | `05_accessories/bsd_mirror_indicator_pod.scad` |
+| **Spiegel-Radar** | BSD Diffusorlinse (Bernstein / transluzent) | `05_accessories/bsd_mirror_lens.stl` | `05_accessories/bsd_mirror_indicator_pod.scad` |
 
-### 8.2 Baukasten-Komponenten & Dummies (`components/`-Verzeichnisse)
+### 9.2 Baukasten-Komponenten & Dummies (`components/`-Verzeichnisse)
 
 In den `components/`-Verzeichnissen liegen die isolierten Basiskörper (vor Differenzoperationen) und Zubehörteile:
 - **`01_main_box/components/`**: `01_lower_tub_empty.stl`, `02_corner_screws_enclosure.stl`, `03_pcb_standoffs.stl`, `04_mounting_ears.stl`, `05_sealing_groove.stl`, `06_mid_tray_frame.stl`, `07_mid_partition_floor.stl`, `08_lid_plate.stl`, `dummy_main_pcb.stl`, `dummy_lipo_battery.stl`.
@@ -1080,9 +1115,9 @@ In den `components/`-Verzeichnissen liegen die isolierten Basiskörper (vor Diff
 
 ---
 
-## 9. Fertigungsspezifikation & 3D-Druck Parameter (HP MJF vs. FDM)
+## 10. Fertigungsspezifikation & 3D-Druck Parameter (HP MJF vs. FDM)
 
-### 9.1 Industrieller 3D-Druck (HP MJF PA12)
+### 10.1 Industrieller 3D-Druck (HP MJF PA12)
 * **Verfahren:** HP Multi Jet Fusion (MJF), schwarz eingefärbt, kugelgestrahlt und chemisch dampfgeglättet.
 * **Toleranzen:** $\pm 0{,}15\,\text{mm}$ (DIN ISO 2768-m).
 * **Eigenschaften:** Isotrope Zugfestigkeit $48\,\text{MPa}$, temperaturbeständig bis $+95\,^\circ\text{C}$, $100\,\%$ porenfrei.

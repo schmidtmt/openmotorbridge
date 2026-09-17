@@ -540,7 +540,9 @@ OpenMotorBridge implementiert eine flexible **Dual-Input-Architektur** für die 
 ##### Option B: Dedizierter taktiler Hardware-Taster (Port `J3` am Front-Node)
 * **Einsatzbereich:** Für Fahrzeuge ohne CAN-Bus-Zugriff am Lenker oder Fahrer, die einen separaten physischen Taster mit spürbarem mechanischem Klick bevorzugen.
 * **Mechanische Montage – Zwei kollisionsfreie Varianten:**
-  1. **Under-Perch / Spiegelfuß-Halter (Empfohlen für Cruiser):** Ein flacher 1,5 mm Edelstahl- oder PA12-CF-Winkel wird unter die untere M4-Gehäuseschraube der linken Armatur oder unter das M8/M10 Spiegelschaftgewinde geschraubt. Der Mikrotaster sitzt ca. 15 mm **unterhalb** des Blinkerschalters – vollkommen kollisionsfrei unterhalb einer eventuell montierten Jekill & Hyde Klappensteuerung und ergonomisch im natürlichen Absenkbereich des Daumens.
+  1. **Under-Perch / Spiegelfuß-Halter (Empfohlen für Cruiser):**
+     - Gedruckt aus MJF PA12-CF / ASA: [`under_perch_switch_bracket.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/05_accessories/under_perch_switch_bracket.stl) (für M4 Armaturschraube) bzw. mit Adapterplatte [`under_perch_mirror_plate.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/05_accessories/under_perch_mirror_plate.stl) (für M8/M10 Spiegelschaft).
+     - Der Mikrotaster sitzt ca. 15 mm **unterhalb** des Blinkerschalters – vollkommen kollisionsfrei unterhalb einer eventuell montierten Jekill & Hyde Klappensteuerung und ergonomisch im natürlichen Absenkbereich des Daumens.
   2. **Schlanke Rohrklemmschelle (10 mm):** Montage eines schmalen Tasters (z. B. Daytona Slimline oder motogadget m-switch mini) unmittelbar am Innenflansch des linken Griffgummis.
 * **Elektrischer Anschluss an Port `J3` (4-Pin JST-PH):**
   - **Pin 1:** `GND` (Gemeinsamer Massebezug)
@@ -551,9 +553,12 @@ OpenMotorBridge implementiert eine flexible **Dual-Input-Architektur** für die 
 * **Systemvorteil:** 100 % batteriefrei, keine Verzögerung durch Funk-Latenz (< 1,8 ms Reaktionszeit), hardwareseitig über Schmitt-Trigger entprellt und gegen 12V-Überspannung geschützt.
 
 #### 5.3.2 Totwinkel-Spiegelanzeigen (Radar Blind Spot Detection - BSD) (`J9`)
-* **Mechanische Montage:**
-  - Zwei kompakte, bernsteinfarbene oder rote 12V LED-Indikatoren (z. B. Verguss-LEDs oder gefräste LED-Clips) werden dezent an den linken und rechten Spiegelarmen bzw. am Spiegeldreieck der Verkleidung befestigt.
-  - Die LEDs sitzen im peripheren Blickfeld des Fahrers, sodass herannahender Verkehr erfasst wird, ohne die Nachtsicht zu beeinträchtigen.
+* **Mechanische Montage (Aerodynamisches 2-Schalen Mirror-Pod):**
+  - Montage am linken und rechten Spiegelschaft (Ø 10 mm / Ø 12 mm) mittels 2-teiliger Klemmschelle:
+    - Oberschale mit 38° Lichttunnel und 3,8 mm Blendschutzvisier: [`bsd_mirror_upper_pod.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/05_accessories/bsd_mirror_upper_pod.stl)
+    - Unterschale mit M3 Einschmelz- bzw. Sechskantmuttern-Taschen: [`bsd_mirror_lower_clamp.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/05_accessories/bsd_mirror_lower_clamp.stl)
+    - Bernstein/Rot-transluzente Diffusorlinse: [`bsd_mirror_lens.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/05_accessories/bsd_mirror_lens.stl)
+  - **100 % StVZO- und ECE-R50-konform:** Durch die opake Vorwand und das 3,8 mm Schutzdach wird jegliche Vorwärts- und Seitenabstrahlung verhindert – der Gegenverkehr wird niemals geblendet, während das Signal im Fahrer-Blickfeld unübersehbar leuchtet.
 * **Elektrischer Anschluss an Port `J9` (3-Pin JST-PH):**
   - **Pin 1:** `+12V_PROT` (Geschützte 12V Anoden-Speisung)
   - **Pin 2:** `BSD_LEFT_N` (Kathode linke Spiegel-LED, geschaltet über N-MOSFET Kanal A)
