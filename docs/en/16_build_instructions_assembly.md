@@ -148,127 +148,180 @@ All parts, circuit board production files, and COTS procurement links are catalo
 
 ---
 
-### Step 4.1: Adventure Kit Mounting (BMW GS vs. BMW GSA / Enduro)
-
-```text
-                             OPENMOTORBRIDGE ADVENTURE-KIT MOUNTING SUITE
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│ BMW R1250 / R1300 GS (STANDARD)                                                        │
-│ • Transition-Dock (adventure_transition_dock.stl) in the seat crease (Ø 28 mm tube)    │
-│ • 100% luggage-independent – zero protrusion beyond bike silhouette                    │
-│ • Rack-Tail Mount (adventure_rack_tail_mount.stl) bolted to OEM luggage rack           │
-├────────────────────────────────────────────────────────────────────────────────────────┤
-│ BMW R1250 / R1300 GSA (ADVENTURE / STAINLESS PANNIER RACKS)                            │
-│ • Pannier cage clamp pair (adventure_pannier_rack_clamp_base.stl + cap.stl)            │
-│ • Mounts Pod 1 & 2 protected inside frame triangle (Ø 18 mm stainless tube)            │
-│ • Tail Balcony luggage cantilever extends 65 mm behind aluminum topcase                │
-│ • 36-tooth Hirth gear lock & Garmin Varia radar dock with grub screw                   │
-└────────────────────────────────────────────────────────────────────────────────────────┘
-```
-
-1. **BMW GS (Standard) Installation:**
-   * **Pod 1 & 2:** Clamp transition docks ([`adventure_transition_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_transition_dock.stl)) onto frame tubes (Ø 28 mm) below seat lip. Route M8 cables along under-seat channels to Central Box.
-   * **Pod 3:** Fasten onto rack tail mount ([`adventure_rack_tail_mount.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_rack_tail_mount.stl)) on rear luggage bridge.
-   * **Cockpit & Front Node Fairing Disassembly:**
-     * Remove 4x Torx T25 windshield screws and lift windscreen off.
-     * Unclip upper TFT cockpit surround forwards.
-     * Mount Front Node using AMPS bolts or tube clamps to handlebar / GPS bar.
-     * **No wiring run through the steering stem:** The Front Node connects 100% wirelessly to the Central Box under the seat via 2.4 GHz ESP-NOW / BLE (< 1.8 ms latency).
-     * Local power: Connect the 2-pin JST-PH power lead directly to the BMW Cartool nav connector (or parking light 12V switched & ground) in the cockpit.
-2. **BMW GSA (Adventure) Installation:**
-   * **Pod 1 & 2:** Wrap 1.0 mm EPDM strip around Ø 18 mm tube. Clamp base ([`adventure_pannier_rack_clamp_base.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_base.stl)) and cap ([`adventure_pannier_rack_clamp_cap.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_cap.stl)) using 2x M5 x 30 mm V4A screws and DIN 985 locknuts ($4.5\,\text{Nm}$). Bolt Pod base to clamp tabs.
-   * **Pod 3 & Radar:** Bolt cantilever ([`adventure_rack_tail_mount.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_rack_tail_mount.stl)) to rear luggage bridge.
-   * **Radar Varia Dock:** Seat Garmin Varia dock ([`radar_varia_gopro_lock_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_varia_gopro_lock_dock.stl)) into Hirth rosette ([`011_gopro_hirth_lock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/components/011_gopro_hirth_lock.stl)) ($10^\circ$ increments for level horizon). Secure with M5 x 25 mm screw and locknut ($3.5\,\text{Nm}$). Slide Varia in and turn M3 grub screw to lock.
+### Step 5: Universal Front Node (PCBA 05) Assembly (100% Solder-Free)
+1. **Insert Captive Nuts (Nut Pockets):**
+   * Press 4x DIN 934 / DIN 985 M3 stainless nuts from below into the corner hexagonal nut pockets of the lower tub ([`front_node_lower_tub.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_lower_tub.stl)).
+   * Press 4x DIN 934 M4 nuts into the hexagonal pockets of the AMPS hole pattern ($30 \times 38\,\text{mm}$) on the bottom of the tub.
+2. **Affix Acoustic Membrane:** Stick hydrophobic Gore ePTFE membrane disc over the sound port of the digital MEMS acoustic sensor (MSM261S4030H0R / SPH0645).
+3. **Mount Circuit Board:** Fasten turnkey assembled Front Node board PCBA 05 (`openmotorbridge_front_node`) with 4x M2.5 screws finger-tight.
+4. **RF Antenna Installation (ESP32-S3 2.4 GHz):**
+   * Adhere flexible 2.4 GHz FPC dipole antenna (Molex 146153) into the adhesive pocket on the inside of the lid ([`front_node_upper_lid.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_upper_lid.stl)).
+   * Click U.FL connector of the micro-coaxial cable squarely onto the ESP32-S3 module receptacle.
+5. **Connect Pre-Molded COTS Cables (No Crimping!):**
+   * **Front Opening (South Wall for USB):**
+     * Connect short USB-A/C flat ribbon cable to port `J6` (CarPlay / Android Auto Dongle / Ottocast).
+     * Connect 1.0 m USB-C charging cable to port `J5` (glovebox / phone mount for 20W Fast Charging).
+     * Connect USB host cable to `J4` (upstream connection to OEM display / head unit).
+   * **Right Opening (East Wall):** Insert elastomeric dust plug ([`front_node_usbc_cap_tpu.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_usbc_cap_tpu.stl)) into service port `J7`.
+   * **Left Opening (West Wall for Power & Signals):**
+     * Plug pre-crimped JST-PH 2-pin power lead for 12V switched bike supply (KL15 & Ground) into `J1`.
+     * Plug JST-PH 3-pin lead for CAN-bus into `J2` (only required on fairing models with front audio CAN).
+     * Plug pre-crimped JST-PH 2-pin lead from handlebar push-button into `J3` (PTT).
+6. **Insert Sealing Glands & Fasten Lid:**
+   * Apply a thin film of silicone grease to the elastic TPU cable gland blocks ([`front_node_cable_glands_tpu.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_cable_glands_tpu.stl)) and slide into the enclosure slots.
+   * Seat silicone cord (Ø 1.5 mm, $30\,\text{cm}$) into the lid seal groove.
+   * Fasten lid with 4x M3 $\times 20\,\text{mm}$ screws in a cross pattern (threading directly into the captive M3 nuts in the lower pockets).
 
 ---
 
-### Step 4.2: Harley-Davidson Mounting Suite (Touring vs. CVO ST vs. Limited vs. Custom/Bobber)
+## 4. Vehicle-Specific Mounting & Motorcycle Wiring
+
+### Step 4.1: Harley-Davidson Platform Installation (Touring, CVO ST, Limited & Road King)
 
 ```text
                        OPENMOTORBRIDGE HARLEY-DAVIDSON MOUNTING SUITE
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
-│ HARLEY-DAVIDSON TOURING & BAGGER (STREET GLIDE, ROAD GLIDE, ROAD KING)                 │
-│ • Saddlebag lid docks (saddlebag_lid_dock.stl) on hard bags (Pod 1 & Pod 2)           │
-│ • Touring fender console (pod3_touring_fender_console.stl) contoured on rear fender   │
-│ • License plate radar mount (radar_license_plate_bracket.stl) decoupled below plate    │
+│ 1. COMMON SYSTEM FOUNDATION (IDENTICAL FOR ALL HARLEY-DAVIDSON TOURING MODELS)         │
+│ • Central Box: Mounted under seat on frame crossmember on 4x M4 EPDM silentblocks      │
+│ • Pod 1 & 2: Saddlebag lid docks (saddlebag_lid_dock.stl) on OEM hard bags             │
+│ • Radar: Decoupled radar mount (radar_license_plate_bracket.stl) underneath stock      │
+│   centered license plate bracket (identical on Touring, Limited, and CVO ST!)          │
 ├────────────────────────────────────────────────────────────────────────────────────────┤
-│ HARLEY-DAVIDSON TOURING LIMITED & ULTRA (ULTRA LIMITED, ROAD GLIDE LIMITED)            │
-│ • Saddlebag lid docks (saddlebag_lid_dock.stl) on hard bags (Pod 1 & Pod 2)           │
-│ • Tour-Pak Limitation: Fender console eliminated due to King Tour-Pak steel frame!    │
-│   Pod 3 is mounted to Tour-Pak tube rail via tube clamp or underneath luggage rack     │
-│ • License plate radar mount (radar_license_plate_bracket.stl) decoupled below plate    │
+│ 2. COCKPIT & FRONT NODE INSTALLATION (THREE MODULAR FAIRING OPTIONS)                   │
+│ • Option A (Batwing): Street Glide / Ultra / Electra Glide (2024+ vs. 2014–2023)       │
+│ • Option B (Sharknose): Road Glide / CVO ST / Performance Bagger (2024+ vs. 2015–2023) │
+│ • Option C (Headlight Nacelle): Road King & Road King Special (RK / RKS)               │
+│   -> No Fairing: Front Node mounts in nacelle cavity behind 7" Daymaker LED;           │
+│      CAN-bus connects directly at Central Box under seat (Front Node 100% wireless!)   │
 ├────────────────────────────────────────────────────────────────────────────────────────┤
-│ HARLEY-DAVIDSON CVO ROAD GLIDE ST / PERFORMANCE BAGGER                                 │
-│ • Saddlebag lid docks (saddlebag_lid_dock.stl) on hard bags (Pod 1 & Pod 2)           │
-│ • Under-cowl skeleton dock (cvo_st_undercowl_skeleton_dock.stl) for Pod 3 under solo   │
-│   cowl: Full clearance from Showa remote reservoir canisters & exhaust heat            │
-│ • CVO ST telemetry fin (cvo_st_telemetry_fin.stl) as tail sharkfin                     │
-│ • License plate radar mount (radar_license_plate_bracket.stl): Identical bracket to     │
-│   Touring models, as CVO ST uses the stock centered license plate mount!               │
-├────────────────────────────────────────────────────────────────────────────────────────┤
-│ CUSTOM BIKES, BOBBERS & UNIVERSAL (SIDE-MOUNTED LICENSE PLATE)                         │
-│ • Centered under-fender plate (radar_center_underfender_mount.stl) mounted beneath     │
-│   rear fender for unobstructed 140° radar field of view with side-mount plates         │
+│ 3. MODULAR TAIL POD 3 INSTALLATION (FOUR VEHICLE-SPECIFIC VARIANTS)                    │
+│ • Standard Bagger: Touring fender console (pod3_touring_fender_console.stl) on 1/4"-20 │
+│ • Limited / Ultra: King Tour-Pak steel frame blocks fender! Pod 3 mounts via tube      │
+│   clamp (adventure_pannier_rack_clamp_base.stl) to Tour-Pak tube rail or rack bridge   │
+│ • CVO ST / Performance: Under-Cowl Skeleton Dock (cvo_st_undercowl_skeleton_dock.stl) │
+│   under Forged-Carbon solo cowl with full clearance from Showa remote canisters        │
+│ • Custom / Bobber: Centered under-fender plate (radar_center_underfender_mount.stl)    │
 └────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-1. **Classic Touring Installation & Fairing Removal:**
-   * **Pod 1 & 2:** Mount saddlebag lid docks ([`saddlebag_lid_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/saddlebag_lid_dock.stl)) using M4 countersunk screws and sealing washers or 3M VHB tape on the hard saddlebags. Route M8 cable through grommet into bag and via quick-disconnect to frame.
-   * **Pod 3 (Non-Tour-Pak Bagger):** Center and bolt fender console ([`pod3_touring_fender_console.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod3_touring_fender_console.stl)) flat on fender to the $1/4"-20$ passenger seat nut.
-   * **Important Restriction for Touring Limited / Ultra with King Tour-Pak (Ultra Limited FLHTK, Road Glide Limited FLTRK, CVO Limited):**
-     * On all Limited and Ultra models equipped with a factory-installed rigid King Tour-Pak, the massive tubular steel carrier frame bolts directly over the rear fender.
-     * **The fender console (`pod3_touring_fender_console.stl`) CANNOT be installed on Limited models**, as the Tour-Pak frame occupies that space on the fender and blocks cartridge sliding access.
-     * **Solution for Limited Models:** Pod 1 & 2 mount on saddlebags as usual. Pod 3 is bolted to the Tour-Pak tubular frame using the Ø 18 mm tube clamp pair ([`adventure_pannier_rack_clamp_base.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_base.stl) / `cap.stl`) or placed flat beneath the Tour-Pak baseplate / luggage rack.
-   * **Radar:** Fasten license plate mount ([`radar_license_plate_bracket.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_license_plate_bracket.stl)) beneath license plate frame.
-   * **Batwing Fairing Removal (Street Glide):**
-     * Remove 3x Torx T27 windshield screws (center screw last).
-     * Remove 4x Torx T27 screws on inner fairing (2 below gauges, 2 beside speakers).
-     * Lift outer fairing forward, disconnect headlight plug.
-     * Mount Front Node to handlebar riser.
-     * Connect local power: Plug 2-pin JST-PH power lead to fairing aux connector (or parking light 12V switched). **No wire run back through the tank tunnel**, as connection to Central Box is fully wireless via ESP-NOW / BLE!
-     * Reinstall outer fairing and torque T27 screws to $3.8\,\text{Nm}$.
-2. **CVO ST / Performance Bagger Installation (Road Glide Sharknose):**
-   * **Pod 1 & 2:** Exactly like standard Touring models, Pod 1 & 2 mount on the hard saddlebag lids using [`saddlebag_lid_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/saddlebag_lid_dock.stl) on the ST's factory hard bags.
-   * **Pod 3:** The upright bionic skeleton dock ([`cvo_st_undercowl_skeleton_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/cvo_st_undercowl_skeleton_dock.stl)) is installed for **Pod 3** concealed under the Forged Carbon solo seat cowl. It holds Pod 3 spring-preloaded and vibration-isolated with full clearance from the Showa piggyback shock canisters.
-   * **Pod 3 Telemetry Fin:** Mount aerodynamic telemetry fin ([`cvo_st_telemetry_fin.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/cvo_st_telemetry_fin.stl)) on tail cowl.
-   * **Radar:** CVO ST also uses the standard license plate bracket ([`radar_license_plate_bracket.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_license_plate_bracket.stl)), since the license plate is factory-centered!
-   * **Sharknose Disassembly:** Remove turn signal bolts, remove 4x T27 inner screws, lift Sharknose fairing off. Mount Front Node in media compartment / riser and tap local 12V supply.
-3. **Custom Bikes & Bobbers with Side-Mounted License Plates:**
-   * For builds with an offset side-mount license plate, the centered under-fender plate ([`radar_center_underfender_mount.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_center_underfender_mount.stl)) is bolted centered beneath the fender curve to ensure an unobstructed 140° radar sweep.
+#### 4.1.1 Common System Foundation (All Models)
+* **Central Box:** Fasten under the rider seat onto the massive frame crossmember in front of the battery using 4x M4 silentblocks (EPDM Shore 50A). The HD26 harness whip branches rearward left and right to the M8 saddlebag disconnects and directly to the BCM.
+* **Pod 1 & Pod 2 (Satellites):** Fasten saddlebag lid docks ([`saddlebag_lid_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/saddlebag_lid_dock.stl)) using M4 countersunk screws with backing EPDM sealing washers or 3M VHB high-bond tape onto the hard saddlebags. *(Note: Street Glide, Road Glide, CVO ST, Road King, and Ultra Limited all share identical hard saddlebag lid geometry!)* Route the pre-molded M8 PUR cable through the bag rubber grommet and connect via quick-disconnect to the main harness.
+* **Radar:** The license plate radar bracket ([`radar_license_plate_bracket.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_license_plate_bracket.stl)) bolts directly beneath the license plate frame. *(Note: Even the CVO Road Glide ST retains the identical factory-centered US/EU license plate location as all Touring models).*
+
+#### 4.1.2 Cockpit Fairing & Front Node Installation
+* **Option A: Batwing Fairing (Street Glide / Electra Glide / Ultra):**
+  * **Current Generation (2024+ All-New Street Glide with 12.3" Skyline OS):**
+    1. Remove the **2x Torx T25 screws** on the windshield and lift windscreen out upward (no 3-screw system anymore!).
+    2. Gently pry out the two lateral speaker grilles / trim panels forward from their snap catches using a plastic pry tool.
+    3. Remove the **2x T25 screws** at the upper cowl edge beneath the windshield, and the **2x T25/T27 screws** on the outer flanks (exposed behind the speaker grilles).
+    4. Pull the outer fairing forward off its locating guide pins and disconnect the central multi-pin harness connector.
+  * **Previous Generation (2014–2023 Rushmore / Boom! Box GTS / 6.5GT):**
+    1. Remove the **3x Torx T27 screws** securing the windshield (hold center screw last to prevent windshield from dropping).
+    2. Remove the **4x Torx T27 screws** on the inner fairing: 2x below the instrument cluster, 2x low beside the speaker pods.
+    3. Tilt outer fairing forward, disconnect headlight and turn signal connectors.
+  * **Wiring Inside Batwing Fairing:**
+    * Mount Front Node to handlebar riser or fairing subframe securely using 3M Dual-Lock or AMPS bracket.
+    * **12V Power (`J1`):** Tap the 2-pin JST-PH power lead to the internal 12V P&A accessory connector or parking light circuit.
+    * **CAN-Bus (`J2`):** Plug 3-pin JST-PH cable. On Rushmore (2014–2023), pin into the 4-pole P&A audio CAN socket behind the Boom! Box. On 2024+ models, connect directly to the Skyline OS display harness.
+    * **External Wireless CarPlay / Android Auto Dongle (e.g., Ottocast U2Air Pro / CarlinKit 5.0):**
+      * Port `J4` (USB Host Upstream): Connect to the motorcycle's OEM USB media pigtail leading to Boom! Box / Skyline OS.
+      * Port `J6` (USB Downstream 2): Connect via short USB pigtail to the external wireless dongle secured inside the media compartment. In case of smartphone dropouts or frozen dongles, the OpenMotorBridge firmware triggers a 1-click watchdog hard power-cycle by cutting 5V VBUS for 2.5 seconds via the integrated TI TPS2051B power switch.
+    * **Smartphone Fast-Charging (`J5`):** Route 20W USB-PD cable to the glovebox or handlebar phone cradle.
+    * Reinstall outer fairing and torque screws to $3.8\,\text{Nm}$.
+
+* **Option B: Sharknose Fairing (Road Glide, Road Glide ST, CVO Road Glide ST):**
+  * **Current Generation (2024+ New Road Glide & CVO ST with 12.3" Skyline OS):**
+    1. The LED turn signals are integral in the fairing outer blades—there are **no turn signal brackets** to unbolt from the fork tubes!
+    2. Remove the **4x Torx T25 screws** on the windshield and lift windscreen off.
+    3. Remove **1x T27 screw** inside each of the two inner glove compartments (2x T27 total).
+    4. Remove **2x T25 screws** on the lower mounting tabs near the engine crash bar.
+    5. Lift fairing forward and up off its catching hooks and unplug the central main harness connector.
+  * **Previous Generation (2015–2023 Rushmore Road Glide / ST):**
+    1. Unclip instrument gauge nacelle upward.
+    2. Unbolt turn signals left and right (2x 1/2" hex bolts per side).
+    3. Remove the **4x Torx T27 screws** on the inner fairing (adjacent to speakers / air ducts).
+    4. Unhook Sharknose forward and disconnect harness.
+  * **Wiring:** Identical to Option A (media compartment / riser mounting, `J1` 12V, `J2` CAN-bus, `J4` upstream to display, `J6` Ottocast dongle with TPS2051B watchdog reset, `J5` 20W PD cable).
+
+* **Option C: Headlight Nacelle (Road King & Road King Special - RK / RKS):**
+  * **Packaging & Mounting:**
+    - Road King models have *no* fairing; they feature the classic two-piece cast aluminum headlight nacelle.
+    - Loosen the pinch screw at the bottom of the 7" headlight trim ring, remove trim ring, and lift out the 7" Daymaker LED / reflector bucket.
+    - Mount the Front Node inside the roomy cavity behind the headlight bucket or against the triple tree rear wall using 3M Dual-Lock or silentblocks.
+  * **CAN-Bus Architecture on Road King (Central Box vs. Front):**
+    - Road King models have **no front P&A audio CAN-bus**, as no head unit / radio is installed at the front.
+    - **Clean Architecture Solution:** CAN-bus connects **directly under the seat to the Central Box**!
+      - Adjacent to the Central Box lies the 6-pin red BCM diagnostic connector (HD-LAN CAN-bus, 500 kbps).
+      - The Central Box HD26 main harness taps CAN directly from the BCM via pins 17 (`CAN_H`) and 18 (`CAN_L`).
+      - **Major Advantage:** The Front Node in the headlight nacelle requires **ZERO CAN WIRING** at `J2`! It communicates 100% wirelessly with the Central Box via the 2.4 GHz ESP-NOW link (< 1.8 ms latency).
+      - **No wiring harness needs to be pulled through the steering head or fuel tank tunnel!**
+  * **Front Wiring:**
+    - Port `J1` (12V KL15 & GND): Tap parking light / auxiliary accessory wiring inside the nacelle.
+    - Port `J5` (USB-PD): Short cable to handlebar smartphone mount.
+    - Port `J3` (PTT): Handlebar push-button lead.
+
+#### 4.1.3 Modular Rear Mounting (Pod 3)
+* **Variant 1: Standard Bagger (Street Glide, Road Glide, Road King without Tour-Pak):**
+  - Bolt the flat touring fender console ([`pod3_touring_fender_console.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod3_touring_fender_console.stl)) centered onto the rear fender to the stock $1/4"-20$ passenger seat nut.
+* **Variant 2: Touring Limited & Ultra (Ultra Limited FLHTK, Road Glide Limited FLTRK, CVO Limited):**
+  - *Important Restriction:* On all models with a factory-installed rigid King Tour-Pak, the massive tubular steel carrier frame bolts directly over the rear fender. The fender console (`pod3_touring_fender_console.stl`) *cannot* be installed due to physical clearance and sliding cartridge access!
+  - *Solution:* Pod 3 is instead bolted directly to the Ø 18 mm tubular frame of the Tour-Pak or underneath the luggage rack using the tube clamp pair ([`adventure_pannier_rack_clamp_base.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_base.stl) / `cap.stl`).
+* **Variant 3: CVO ST / Performance Bagger:**
+  - Pod 3 is mounted concealed beneath the Forged Carbon solo seat cowl in the upright Bionic Skeleton Dock ([`cvo_st_undercowl_skeleton_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/cvo_st_undercowl_skeleton_dock.stl)) (providing full clearance from the Showa remote reservoir canisters). The aerodynamic telemetry fin ([`cvo_st_telemetry_fin.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/cvo_st_telemetry_fin.stl)) bolts to the cowl apex.
+* **Variant 4: Custom Bikes & Bobbers with Side-Mounted License Plate:**
+  - On custom conversions with a side-mounted plate, the centered under-fender plate ([`radar_center_underfender_mount.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_center_underfender_mount.stl)) is bolted centered beneath the rear fender arch to ensure an unobstructed 140° radar field of view.
 
 ---
 
-## 4. Universal Front Node Assembly & Installation
+### Step 4.2: Adventure & Enduro Platform Installation (BMW GS / GSA, KTM, Africa Twin, Universal)
 
-### 4.1 Assembling the Front Node (100% Solder-Free)
-1. **Insert Captive Nuts (Nut Pockets):**
-   * Press 4x DIN 934 / DIN 985 M3 stainless nuts from below into the corner nut pockets of the lower tub ([`front_node_lower_tub.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_lower_tub.stl)).
-   * Press 4x DIN 934 M4 nuts into the hexagonal pockets of the AMPS pattern ($30 \times 38\,\text{mm}$) on the bottom of the tub.
-2. **Affix Acoustic Disc:** Stick hydrophobic Gore ePTFE membrane disc over Knowles MEMS acoustic opening.
-3. **Mount Board:** Fasten assembled Front Node board PCBA 05 (`openmotorbridge_front_node`) with 4x M2.5 screws finger-tight.
-4. **RF Antenna Installation (ESP32-S3 2.4 GHz):**
-   * Stick flexible 2.4 GHz FPC dipole antenna (Molex 146153) into the adhesive recess on the inside of the lid ([`front_node_upper_lid.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_upper_lid.stl)).
-   * Click micro-coax U.FL connector squarely onto the ESP32-S3 module.
-5. **Connect Pre-Molded COTS Cables (No Crimping!):**
-   * **Front Opening (South Wall for USB):**
-     * Connect short USB-A flat ribbon cable to port `J6` (CarPlay Dongle / Ottocast).
-     * Connect 1.0 m USB-C charging cable to port `J5` (glovebox).
-     * Connect USB host cable to `J4`.
-   * **Right Opening (East Wall):** Insert elastomeric dust plug ([`front_node_usbc_cap_tpu.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_usbc_cap_tpu.stl)) into port `J7`.
-   * **Left Opening (West Wall for Power & Signals):**
-     * Plug pre-crimped JST-PH 2-pin power lead for 12V bike supply (KL15 & Ground) into `J1`.
-     * Optional: Plug JST-PH 3-pin lead for CAN-bus into `J2` (only needed for local cockpit CAN).
-     * Plug pre-crimped JST-PH 2-pin lead from handlebar switch into `J3` (PTT).
-6. **Insert Sealing Combs & Fasten Lid:**
-   * Apply thin film of silicone grease to TPU cable glands ([`front_node_cable_glands_tpu.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_cable_glands_tpu.stl)) and slide into housing slots.
-   * Seat silicone cord (Ø 1.5 mm, $30\,\text{cm}$) into lid groove.
-   * Fasten lid with 4x M3 $\times 20\,\text{mm}$ screws in a cross pattern (threading into the captive M3 nuts in the pockets).
+```text
+                             OPENMOTORBRIDGE ADVENTURE-KIT MOUNTING SUITE
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│ 1. COMMON SYSTEM FOUNDATION (IDENTICAL FOR ALL ADVENTURE / DUAL-SPORT BIKES)           │
+│ • Central Box: Mounted vibration-damped in rear subframe under rider seat              │
+│ • Cockpit & Front Node: Clamped to Ø 12 mm GPS bar above TFT / windscreen              │
+│   (12V Cartool power, wireless 2.4 GHz link to Central Box, zero steering head wiring) │
+│ • Rear Pod 3: Fastened to luggage bridge via Rack-Tail Mount (adventure_rack_tail_mount)│
+│ • Radar Varia Dock: Mounted to 36-tooth Hirth rosette in 10° increments for level horizon│
+├────────────────────────────────────────────────────────────────────────────────────────┤
+│ 2. MODULAR POD 1 & 2 PANNIER MOUNTING (TWO MODULAR OPTIONS)                            │
+│ • Option A (Vario Panniers / Frame Mount - BMW GS Standard, KTM without tube racks):   │
+│   Transition Dock (adventure_transition_dock.stl) in seat crease (Ø 28 mm frame tube)  │
+│   -> 100% luggage-independent, builds zero additional width beyond bike silhouette     │
+│ • Option B (Stainless Pannier Tube Racks - BMW GSA, Touratech, Hepco&Becker, Alucases):│
+│   Pannier rack clamp cage (adventure_pannier_rack_clamp_base.stl + cap.stl)            │
+│   -> Mounts Pod 1 & 2 protected inside frame triangle (Ø 18 mm) in front of alu cases  │
+└────────────────────────────────────────────────────────────────────────────────────────┘
+```
 
-### 4.2 Front Node Bike Mounting Options
+#### 4.2.1 Common System Foundation
+* **Central Box:** Install in the frame triangle beneath the rider seat on 4x M4 silentblocks. Route M8 harness leads rearward left and right and toward the tail.
+* **Cockpit & Front Node:**
+  * Remove 4x Torx T25 windshield screws and lift windscreen off.
+  * Unclip upper TFT instrument surround forward.
+  * Fasten Front Node via AMPS mount or tube clamp to the Ø 12 mm GPS crossbar or handlebar.
+  * **100% Wireless Link:** Connection to Central Box operates via the integrated 2.4 GHz ESP-NOW wireless link (< 1.8 ms latency). No wiring is required through the steering head.
+  * **Power Supply:** Connect 2-pin JST-PH power lead directly to the BMW Cartool nav accessory connector (or parking light KL15 & GND).
+* **Pod 3 & Radar:**
+  * Bolt Pod 3 onto the Rack-Tail Mount ([`adventure_rack_tail_mount.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_rack_tail_mount.stl)) on the factory luggage rack.
+  * Engage Garmin Varia dock ([`radar_varia_gopro_lock_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_varia_gopro_lock_dock.stl)) into Hirth rosette ([`011_gopro_hirth_lock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/components/011_gopro_hirth_lock.stl)) ($10^\circ$ increments for an exact horizontal radar line). Secure with M5 x 25 mm screw and locknut ($3.5\,\text{Nm}$). Slide Varia into dock and tighten M3 grub screw as anti-theft lock.
+
+#### 4.2.2 Modular Pannier & Pod 1/2 Mounting
+* **Option A: Vario Panniers & Frame Tube Mount (BMW GS Standard, KTM / Enduro without racks):**
+  * Clamp Transition Docks ([`adventure_transition_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_transition_dock.stl)) onto main subframe tubes (Ø 28 mm) below seat lip.
+  * **100% Luggage-Independent:** The pods do not protrude beyond the motorcycle silhouette and can be ridden with Vario cases or completely without luggage.
+* **Option B: Stainless Tubular Pannier Racks (BMW GSA, Touratech, Hepco&Becker, Aluminum Cases):**
+  * Wrap 1.0 mm EPDM strip around the Ø 18 mm pannier rack tube.
+  * Fasten clamp base ([`adventure_pannier_rack_clamp_base.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_base.stl)) and cap ([`adventure_pannier_rack_clamp_cap.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_cap.stl)) using 2x M5 x 30 mm V4A screws and DIN 985 locknuts tightened in a cross pattern ($4.5\,\text{Nm}$).
+  * Mount Pod base housing securely within the frame triangle ahead of the aluminum cases.
+
+#### 4.2.3 Front Node Bike Mounting Options (Universal)
 * **Option 1: AMPS Pattern (30 x 38 mm):** Direct bolt-on to RAM-Mount ball, Garmin cradle, or GPS bar (utilizing the 4x captive M4 nuts).
 * **Option 2: 120° V-Cradle:** Toolless mounting on Ø 22 to Ø 32 mm handlebars / crash bars using EPDM strap rings.
 * **Option 3: M4 Silentblocks:** Vibration-isolated stud mounting inside fairing nose.
-* **Option 4: 3M Dual-Lock Hook-and-Loop:** Concealed mounting inside Harley Batwing / Sharknose inner fairings.
+* **Option 4: 3M Dual-Lock Hook-and-Loop:** Concealed mounting inside Harley Batwing / Sharknose inner fairings or headlight nacelle.
 
 ---
 
