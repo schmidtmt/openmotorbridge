@@ -652,85 +652,13 @@ Depending on luggage configurations, adventure bikes deploy two specialized moun
 
 When aluminum topcases (e.g. Touratech Zega Evo or BMW Adventure) are installed, the solid $1.5\,\text{mm}$ aluminum wall blocks RF radiation upward (Faraday cage). The universal "Rack-Tail Mount" (`adventure_rack_tail_mount.scad`) resolves this as a rigid tail balcony bolted to the bike rack, cantilevering approx. $65\,\text{mm}$ behind the rear wall of the topcase:
 
-```
-         SIDE VIEW (CUTAWAY): GS TAIL WITH ALUMINUM TOPCASE & BALCONY
-═════════════════════════════════════════════════════════════════════════════════
+![OpenMotorBridge Rear Pod 3 Rack-Tail Mount & Tail-Balcony Cutaway Section](../images/cad/rack_tail_mount_side_cross_section.png)
 
-                 ┌──────────────────────────────────────┐
-                 │                                      │
-                 │       ALUMINUM TOPCASE (RIGID)       │
-                 │      (e.g. Touratech Zega Evo /      │
-                 │       BMW Adventure Alu Case)        │
-                 │                                      │
-                 │     [Lid opens forward / upward!]    │
-                 │                                      │
-                 └──────────────────┬───────────────────┘
-                                    │ Case bottom seam (rigid)
-  ════╦═════════════════════════════╧═════════════════════╦════════════════════
-      │     BMW GS STAINLESS LUGGAGE RACK (Ø 18 mm)       │
-  ════╩═══════════════════════════════════════════════════╩══════════╗
-                                                                      ║
-                                    "TAIL BALCONY" (CANTILEVER)       ║
-                           ┌──────────────────────────────────────────╜
-                           │
-       Clear 140° Zenith   │           ┌────────────────────────┐
-       upward & rearward   ▼           │ 45° DEFLECTOR FIN      │
-               \       /               │ (Branches & straps     │
-                \  ▲  /                │  glide cleanly off!)   │
-                 \ │ /                 └───────────┬────────────┘
-        ┌──────────┴──────────┐                    │
-        │    POD 3 HOUSING    │       ┌────────────┴───────────┐
-        │ (MAX-M10S GNSS top, │       │ 2.4 GHz +5 dBi ANTENNA │  ◄── Fully recessed
-        │  SX1262 LoRa inside,│──────►│ (Integrated clamp nut, │      in PA12 channel,
-        │  6-axis IMU BMI270) │       │  RG178 coax 100% inside│      zero branch snags!
-        └──────────┬──────────┘       └────────────────────────┘
-                   │                               │
-                   ▼                               ▼
-          ┌────────────────────────────────────────────────────┐
-          │   UNDERSIDE: M5 GOPRO SWIVEL ARM (2-PRONG CLEVIS)  │
-          └────────────────────────┬───────────────────────────┘
-                                   │
-                                   ▼
-                      ┌────────────────────────┐
-                      │   GARMIN VARIA RADAR   │  ◄── At 90..95 cm height:
-                      │   24 GHz mmWave Sensor │      100% clear radar cone,
-                      │ (±20° pitch adjust)    │      shielded from stone roost,
-                      └────────────────────────┘      mud & water crossings!
-```
+*Figure 8.29a: CAD cutaway cross-section of the Rear Pod 3 Rack-Tail Mount ("Tail Balcony") on the BMW GS luggage rack. Depicted are the secure mounting to the Ø 18 mm stainless steel tubes, 100% full lid clearance of the 38L aluminum topcase, 65..68 mm cantilever overhang ensuring clear 140° sky zenith coverage (MAX-M10S GNSS / LoRa), 45° deflector fin with recessed 2.4 GHz +5 dBi dipole antenna, and underside mounting of the Garmin Varia mmWave radar at 90..95 cm road clearance.*
 
-```
-           TOP VIEW: TAIL BALCONY WITH INTEGRATED 2.4 GHz ANTENNA
-═════════════════════════════════════════════════════════════════════════════════
+![OpenMotorBridge Rear Pod 3 Rack-Tail Mount Top View](../images/cad/rack_tail_mount_top_view.png)
 
-                     [VERTICAL WALL ALUMINUM TOPCASE]
- ═══════════════════════════════════════════════════════════════════════════════
-        ▲                                                              ▲
-        │  2x M6 carrier plate screws or Ø 18 mm tube half-clamps     │
- ───────┴──────────────────────────────────────────────────────────────┴───────
- │  ┌───────────────────────────────────────────────────────────────────────┐  │
- │  │                                                                       │  │
- │  │                      POD 3 HOUSING CRADLE                             │  │
- │  │        (Form-fitting tub for Pod 3: 135 x 70 x 38 mm)                 │  │
- │  │      • u-blox MAX-M10S ceramic patch antenna faces clear sky          │  │
- │  │      • M8 harness (Port A) enters concealed from underneath           │  │
- │  │                                                                       │  │
- │  └───────────────────────────────────┬───────────────────────────────────┘  │
- │                                      │ Internal coax duct (RG178 pigtail)   │
- │                                      ▼                                      │
- │                     ┌─────────────────────────────────┐                     │
- │                     │    DEFLECTOR FIN (PA12-CF)      │                     │
- │                     │  ┌───────────────────────────┐  │                     │
- │                     │  │  2.4 GHz +5 dBi ANTENNA   │  │                     │
- │                     │  │  (Clip-in dipole in       │  │                     │
- │                     │  │   protected channel)      │  │                     │
- │                     │  └───────────────────────────┘  │                     │
- │                     └────────────────┬────────────────┘                     │
- ───────────────────────────────────────┼───────────────────────────────────────
-                                        ▼
-                           (GoPro M5 2-prong fork)
-                                        │
-                            [GARMIN VARIA RADAR BELOW]
-```
+*Figure 8.29b: CAD top view (X-Y plane) of the Tail Balcony with 110 mm mounting flange, 2x M6 slotted holes for tube clamps, form-fitting Pod 3 tub (136.5 x 71.5 mm), concealed underside M8 cable entry, internal RG178 coaxial duct, and 45° PA12-CF deflector fin with snap-in groove for the 2.4 GHz antenna.*
 
 ##### Mechanical & RF Core Advantages:
 1. **100% Preservation of Topcase Quick-Release (5-Second Latch):**
@@ -738,42 +666,16 @@ When aluminum topcases (e.g. Touratech Zega Evo or BMW Adventure) are installed,
    * The topcase can be removed in seconds. Pod 3, antenna, and radar stay on the motorcycle for full tracking during solo rides without luggage.
 2. **Collision-Free Lid Opening:**
    * Because the bracket cantilevers immediately below the lower case seam, topcase lids open forward or swing sideways without contact.
-3. **Sensor Protection & Dual Lock Mechanism:**
+3. **Platform-Independent Interface:**
+   * Identical geometry for standard GS, GS Adventure, Africa Twin, and KTM 1290 Super Adventure.
+4. **Sensor Protection & Dual Lock Mechanism:**
    * Radar sits at 90..95 cm height, far above tire spray and roost.
    * **Dual Lock Mechanism (Vibration Lock + Theft Deterrence):**
+     Standard GoPro friction joints and Garmin quarter-turn mounts are insufficient on severe washboard or during roadside parking. OpenMotorBridge implements a dual locking system:
 
-```
-           DUAL RADAR LOCK: HIRTH COUPLING & ANTI-THEFT DOCK
-═════════════════════════════════════════════════════════════════════════════════
+![OpenMotorBridge Dual Radar Lock: Hirth Coupling & Anti-Theft Dock](../images/cad/radar_hirth_lock_dock_cad.png)
 
-    A. HIRTH POSITIVE LOCK (10° STEPS)          B. GARMIN ANTI-THEFT LATCH
-    ----------------------------------          --------------------------
-      (Zero drooping on washboard!)               (No grab-and-run at stops!)
-
-              M5 Clamping Screw                           Garmin Varia Radar
-             (Torx-TR Security)                         (RTL515 / RCT715 / eRTL615)
-                     │                                            │
-                     ▼                                            ▼
-               ┌───────────┐                            ┌───────────────────┐
-     Clevis    │ ▓▓▓▓▓▓▓▓▓ │                            │  [Varia Body]     │
-     flange    │ ▓▓ 10° ▓▓ │                            │   Turn 90°        │
-     left ────►│ ▓▓Hirth▓▓ │                            └─────────┬─────────┘
-               │ ▓▓Teeth▓▓ │                                      │
-               └───┬───┬───┘                       Bayonet wings  │ (latched)
-                   │   │                                          ▼
-     ┌─────────────┘   └─────────────┐              ┌───────────────────────────┐
-     │ 6 mm GoPro tongue with dual-  │              │ █ 90° Bayonet Chamber   █ │
-     │ sided radial Hirth rosette    │◄────────────►│ █                       █ │
-     │ (100% positive form lock)     │              │ █   [M3 Grub Screw]  ◄──┼── Torx-TR pin bit
-     └─────────────┬───┬─────────────┘              │ █  (blocks reverse-turn)█ │   locks radar
-                   │   │                            └─────────────┬─────────────┘   while parked!
-               ┌───┴───┴───┐                                      │
-     Clevis    │ ▓▓Teeth▓▓ │                                      ▼
-     flange───►│ ▓▓Hirth▓▓ │                             M8 PUR Signal Cable
-     right     │ ▓▓ 10° ▓▓ │                            (Concealed strain relief)
-               │ ▓▓▓▓▓▓▓▓▓ │
-               └───────────┘
-```
+*Figure 8.29c: Dual Radar Lock featuring a positive 36-tooth radial Hirth rosette (10° indexing pitch preventing vibration-induced tilt sag on washboard tracks) and anti-theft Garmin quarter-turn bayonet dock with concealed M3 security grub screw (preventing quick grab-and-run theft at roadside stops).*
 
 * **Vibration & Sagging Protection (Radial Hirth Coupling):** Clevis cheeks and GoPro tongue feature a 36-tooth radial Hirth rosette ([`011_gopro_hirth_lock.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/parts/011_gopro_hirth_lock.scad)). Loosening the M5 security screw by 1–2 turns enables $10^\circ$ pitch leveling (compensating passenger and baggage sag). Once clamped, radar droop on corrugated washboard tracks is physically impossible.
 * **Garmin Varia Anti-Theft Dock ([`radar_varia_gopro_lock_dock.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/radar_varia_gopro_lock_dock.scad)):** Standard quarter-turn bayonet twists 90° into the dock. An internal retention pawl snaps in, and a concealed M3 Torx-TR grub screw blocks counter-rotation.

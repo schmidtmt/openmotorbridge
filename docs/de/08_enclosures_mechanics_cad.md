@@ -745,85 +745,13 @@ Auf Reiseenduros existieren je nach Einsatzzweck und Koffersystem zwei grundvers
 
 Wird eine Reiseenduro mit einem Aluminium-Topcase (z. B. Touratech Zega Evo 38L oder BMW Adventure Topcase) bestückt, schirmt das massive $1{,}5\,\text{mm}$ Aluminiumblech Funkwellen nach oben ab (Faraday-Käfig). Das universelle "Rack-Tail Mount" (`adventure_rack_tail_mount.scad`) löst diesen Konflikt als stabiler Heck-Balkon, der fest an der Gepäckbrücke des Motorrads verschraubt wird und ca. $65\,\text{mm}$ hinter die senkrechte Rückwand des Topcases kragt:
 
-```
-        SEITENANSICHT (SCHNITT): GS-HECK MIT ALU-TOPCASE & HECK-BALKON
-═════════════════════════════════════════════════════════════════════════════════
+![OpenMotorBridge Heck-Pod 3 Rack-Tail Mount & Heck-Balkon Seiten-Schnittansicht](../images/cad/rack_tail_mount_side_cross_section.png)
 
-                 ┌──────────────────────────────────────┐
-                 │                                      │
-                 │         ALU-TOPCASE (STARR)          │
-                 │      (z. B. Touratech Zega Evo /     │
-                 │       BMW Adventure Alukoffer)       │
-                 │                                      │
-                 │   [Deckel öffnet nach vorn/oben!]    │
-                 │                                      │
-                 └──────────────────┬───────────────────┘
-                                    │ Koffer-Bodenfuge (starr)
-  ════╦═════════════════════════════╧═════════════════════╦════════════════════
-      │     BMW GS EDELSTAHL-GEPÄCKBRÜCKE (Ø 18 mm)       │
-  ════╩═══════════════════════════════════════════════════╩══════════╗
-                                                                      ║
-                                    "HECK-BALKON" (AUSLEGER)          ║
-                           ┌──────────────────────────────────────────╜
-                           │
-       Freier 140°-Zenit   │           ┌────────────────────────┐
-       nach oben & hinten  ▼           │ 45°-ASTABWEISER-KEIL   │
-               \       /               │ (Äste & Gurte gleiten  │
-                \  ▲  /                │  glatt nach oben ab!)  │
-                 \ │ /                 └───────────┬────────────┘
-        ┌──────────┴──────────┐                    │
-        │    POD 3 GEHÄUSE    │       ┌────────────┴───────────┐
-        │ (MAX-M10S GNSS oben,│       │ 2.4 GHz +5 dBi ANTENNE │  ◄── Voll versenkt
-        │  SX1262 LoRa intern,│──────►│ (Integrierte Klemmnut, │      im PA12-Kanal,
-        │  6-Achs IMU BMI270) │       │  RG178-Koax 100% intern│      kein Ast-Abriss!
-        └──────────┬──────────┘       └────────────────────────┘
-                   │                               │
-                   ▼                               ▼
-          ┌────────────────────────────────────────────────────┐
-          │  UNTERSEITE: M5 GOPRO-SCHWENKARM (2-AUGEN-GABEL)   │
-          └────────────────────────┬───────────────────────────┘
-                                   │
-                                   ▼
-                      ┌────────────────────────┐
-                      │   GARMIN VARIA RADAR   │  ◄── In 90..95 cm Höhe:
-                      │   24 GHz mmWave Sensor │      100 % freier Erfassungskegel,
-                      │ (±20° Neigungsjustage) │      geschützt vor Steinschlag/Roost,
-                      └────────────────────────┘      Schlamm & Wasserdurchfahrten!
-```
+*Abbildung 8.29a: CAD-Schnittansicht des Heck-Pod 3 Rack-Tail Mounts ("Heck-Balkon") am BMW GS Gepäckträger. Dargestellt sind die Abstützung an den Ø 18 mm Edelstahlrohren, die vollständige Deckelfreigängigkeit des 38L Alu-Topcases, der 65..68 mm Ausleger für ungestörten 140°-Zenit-Empfang (MAX-M10S GNSS / LoRa), der 45°-Astabweiser-Keil mit vertiefter 2.4-GHz-Dipolantenne (+5 dBi) sowie die geschützte Unterseiten-Montage des Garmin Varia Radars in 90..95 cm Höhe über der Fahrbahn.*
 
-```
-           DRAUFSICHT: HECK-BALKON MIT INTEGRIERTER 2.4 GHz ANTENNE
-═════════════════════════════════════════════════════════════════════════════════
+![OpenMotorBridge Heck-Pod 3 Rack-Tail Mount Draufsicht](../images/cad/rack_tail_mount_top_view.png)
 
-                     [SENKRECHTE RÜCKWAND ALU-TOPCASE]
- ═══════════════════════════════════════════════════════════════════════════════
-        ▲                                                              ▲
-        │  2x M6 Trägerplatten-Verschraubung oder Ø 18 mm Halbschellen │
- ───────┴──────────────────────────────────────────────────────────────┴───────
- │  ┌───────────────────────────────────────────────────────────────────────┐  │
- │  │                                                                       │  │
- │  │                      POD 3 GEHÄUSEAUFNAHME                            │  │
- │  │         (Formbündige Wanne für Pod 3: 135 x 70 x 38 mm)               │  │
- │  │       • u-blox MAX-M10S Keramik-Patchantenne blickt frei nach oben    │  │
- │  │       • M8-Zuleitung (Port A) läuft verdeckt von unten ein            │  │
- │  │                                                                       │  │
- │  └───────────────────────────────────┬───────────────────────────────────┘  │
- │                                      │ Interner Koax-Kanal (RG178 pigtail)  │
- │                                      ▼                                      │
- │                     ┌─────────────────────────────────┐                     │
- │                     │   ASTABWEISER-FINNE (PA12-CF)   │                     │
- │                     │  ┌───────────────────────────┐  │                     │
- │                     │  │  2.4 GHz +5 dBi ANTENNE   │  │                     │
- │                     │  │  (Eingeclipster Dipol     │  │                     │
- │                     │  │   in geschützter Nut)     │  │                     │
- │                     │  └───────────────────────────┘  │                     │
- │                     └────────────────┬────────────────┘                     │
- ───────────────────────────────────────┼───────────────────────────────────────
-                                        ▼
-                           (GoPro M5-Zweiaugen-Gabel)
-                                        │
-                            [GARMIN VARIA RADAR UNTEN]
-```
+*Abbildung 8.29b: CAD-Draufsicht des Heck-Balkons (X-Y-Ebene) mit 110-mm-Montageflansch, 2x M6 Langlöchern für Rohrschellen, formbündiger Pod-3-Wanne (136,5 x 71,5 mm), unterer M8-Kabeldurchführung, innenliegendem RG178-Koaxialkanal und 45°-Astabweiser-Finne aus PA12-CF mit Einklipsnut für die 2.4-GHz-Antenne.*
 
 ##### Die mechanischen & funktechnischen Kernvorteile:
 1. **100 % Erhalt des Topcase-Schnellverschlusses (5-Sekunden-Klick):**
@@ -840,38 +768,9 @@ Wird eine Reiseenduro mit einem Aluminium-Topcase (z. B. Touratech Zega Evo 38L 
    * **Dualer Lock-Mechanismus (Neigungssicherung + Diebstahlschutz):**
      Standardmäßige GoPro-Reibgelenke und Garmin-Vierteldreh-Halterungen sind auf extremen Rüttelstrecken (Wellblech/Waschbrett auf TET-Tracks) oder bei Raststätten-Zwischenstopps unzureichend. OpenMotorBridge implementiert daher ein doppeltes Verriegelungssystem:
 
-```
-           DUALER RADAR-LOCK: HIRTH-VERZAHNUNG & DIEBSTAHLSICHERES DOCK
-═════════════════════════════════════════════════════════════════════════════════
+![OpenMotorBridge Dualer Radar-Lock: Hirth-Verzahnung & Diebstahlsicheres Dock](../images/cad/radar_hirth_lock_dock_cad.png)
 
-    A. HIRTH-FORMSCHLUSS (10°-RASTUNG)          B. GARMIN DIEBSTAHL-VERRIEGELUNG
-    ----------------------------------          --------------------------------
-      (Kein Absacken bei Wellblech!)              (Kein Abziehen bei Zwischenstopp!)
-
-              M5-Klemmschraube                            Garmin Varia Radar
-             (Torx-TR Security)                         (RTL515 / RCT715 / eRTL615)
-                     │                                            │
-                     ▼                                            ▼
-               ┌───────────┐                            ┌───────────────────┐
-     Gabel-    │ ▓▓▓▓▓▓▓▓▓ │                            │  [Varia Gehäuse]  │
-     wange     │ ▓▓ 10° ▓▓ │                            │   Drehung um 90°  │
-     links ───►│ ▓▓Hirth▓▓ │                            └─────────┬─────────┘
-               │ ▓▓Zähne▓▓ │                                      │
-               └───┬───┬───┘                       Bajonett-Flügel│(verriegelt)
-                   │   │                                          ▼
-     ┌─────────────┘   └─────────────┐              ┌───────────────────────────┐
-     │ 6 mm GoPro-Zunge mit beid-    │              │ █ 90°-Bajonett-Kammer   █ │
-     │ seitiger Hirth-Rosette        │◄────────────►│ █                       █ │
-     │ (100% formschlüssig arretiert)│              │ █   [M3 Madenschraube] ◄──┼── Torx-TR / Inbus
-     └─────────────┬───┬─────────────┘              │ █  (sperrt Rückdrehung) █ │   verhindert Drehen
-                   │   │                            └─────────────┬─────────────┘   im Parkzustand!
-               ┌───┴───┴───┐                                      │
-     Gabel-    │ ▓▓Zähne▓▓ │                                      ▼
-     wange ───►│ ▓▓Hirth▓▓ │                             M8 PUR Signalkabel
-     rechts    │ ▓▓ 10° ▓▓ │                            (verdeckte Zugentlastung)
-               │ ▓▓▓▓▓▓▓▓▓ │
-               └───────────┘
-```
+*Abbildung 8.29c: Dualer Radar-Lock mit formschlüssiger 36-Zahn-Hirth-Rosette (10°-Rastung gegen Neigungsabsacken auf Wellblechpisten) und diebstahlsicherem Garmin-Bajonettdock mit verdeckter M3-Sicherheits-Madenschraube (Verhinderung von Entwendung bei Zwischenstopps).*
 
      - **Schwingungs- & Neigungsschutz (Radiale Hirth-Verzahnung):**
        Anstelle reiner Reibung besitzen die Gabelwangen und die zentrale GoPro-Zunge eine formschlüssige 36-Zahn-Hirth-Rosette ([`011_gopro_hirth_lock.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/parts/011_gopro_hirth_lock.scad)). Durch Lösen der M5-Sicherheitsschraube um 1–2 Umdrehungen kann die Radar-Neigung in feinen $10^\circ$-Schritten präzise nivelliert werden (Ausgleich von Sozius- und Gepäckzuladung). Nach Festziehen der Schraube ist ein Absacken des Radars selbst bei härtestem Offroad-Pistenrütteln physikalisch unmöglich.
