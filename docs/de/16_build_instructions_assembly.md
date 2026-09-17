@@ -460,9 +460,11 @@ Die Adventure-Montage ist für die gesamte **BMW GS Modellfamilie** (Boxer und P
       * *Klassische Modelle bis 2016 (Euro 3, K25 / K72 / frühe K50):* Über ein handelsübliches 10-Pin-Rundstecker-auf-OBD2-Adapterkabel (ICOM-Adapter).
       * Port `J2` am Front-Knoten bleibt frei und wird automatisch deaktiviert. Keinerlei Kabelbeschädigung im Cockpit!
     * **CAN-Bus Option 2 (Cockpit-Abgriff am 12-Pin TFT – nur Modelle mit TFT):** Das BMW 6,5" TFT-Display führt auf seiner Rückseite an Pin 2 (`CAN_H`, weiß/schwarz) und Pin 3 (`CAN_L`, weiß/braun) K-CAN. Wer ein 12-Pin Y-Adapterkabel nutzt, kann diesen direkt an `J2` des Front-Knotens anschließen. Der Front-Knoten streamt Drehzahl, Tacho und Wonder-Wheel dann drahtlos via ESP-NOW zur Zentralbox.
-* **Pod 3 & Radar:**
-  * Pod 3 auf dem Rack-Tail Mount ([`adventure_rack_tail_mount.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_rack_tail_mount.stl)) an der serienmäßigen Gepäckbrücke verschrauben.
-  * Zunge des Garmin Varia Docks ([`radar_varia_gopro_lock_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_varia_gopro_lock_dock.stl)) in die Hirth-Rosette ([`011_gopro_hirth_lock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/components/011_gopro_hirth_lock.stl)) einrasten ($10^\circ$-Schritte für exakt waagerechten Radar-Horizont). Mit M5 x 25 mm Schraube und Stoppmutter sichern ($3{,}5\,\text{Nm}$). Varia einklinken und M3 Madenschraube als Diebstahlschutz eindrehen.
+* **Pod 3 & Radar (Rallye-Aero-Balkon Montage):**
+  * Basis-Wanne ([`adventure_rack_tail_mount_base.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_rack_tail_mount_base.stl)) mit 2x M6 Schrauben und Halbschellen am Ø 18 mm Gepäckbrückenrohr oder an den M6-Punkten der Trägerplatte befestigen.
+  * M8-PUR-Kabel durch die untere Kabelrinne führen und von oben an Port A des Pod 3 anschließen. Pod 3 in die Wanne einlegen.
+  * Karosserie-Deckel ([`adventure_rack_tail_cowl.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_rack_tail_cowl.stl)) aufsetzen (2.4-GHz-Dipolantenne in die Shark-Finne einrasten) und mit 4x M3 Torx-Schrauben bündig verschrauben.
+  * Zunge des Garmin Varia Docks ([`radar_varia_gopro_lock_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_varia_gopro_lock_dock.stl)) in die bionische Hirth-Rosette des Unterseiten-Pylons einrasten ($10^\circ$-Schritte für exakt waagerechten Radar-Horizont). Mit M5 x 25 mm Schraube und Stoppmutter sichern ($3{,}5\,\text{Nm}$). Varia einklinken und M3 Madenschraube als Diebstahlschutz eindrehen.
 
 #### 5.2.2 Modulare Koffer- & Pod 1/2-Befestigung
 * **Option A: Vario-Koffer & Rahmenrohr-Montage (BMW GS Standard R1200/R1250/R1300, F750/F850/F900, KTM / Enduro ohne Rohrträger):**

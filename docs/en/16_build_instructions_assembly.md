@@ -459,9 +459,11 @@ The adventure mounting suite is standardized across the entire **BMW GS model fa
       * *Pre-2017 Classic Models (Euro 3, K25 / K72 / early K50):* Via standard COTS 10-pin round to OBD2 adapter cable (ICOM adapter).
       * Port `J2` on Front Node remains empty and auto-deactivates. Zero wiring tampering in the cockpit!
     * **CAN-Bus Option 2 (Cockpit Tapping at 12-Pin TFT – TFT Models Only):** The BMW 6.5" TFT display routes K-CAN directly on its rear connector (Pin 2 `CAN_H`, White/Black and Pin 3 `CAN_L`, White/Brown). Riders using a 12-pin PnP Y-cable can connect directly to `J2` on the Front Node. The Front Node streams RPM, speed, and Wonder Wheel wirelessly via ESP-NOW to Central Box.
-* **Pod 3 & Radar:**
-  * Bolt Pod 3 onto the Rack-Tail Mount ([`adventure_rack_tail_mount.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_rack_tail_mount.stl)) on the factory luggage rack.
-  * Engage Garmin Varia dock ([`radar_varia_gopro_lock_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_varia_gopro_lock_dock.stl)) into Hirth rosette ([`011_gopro_hirth_lock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/components/011_gopro_hirth_lock.stl)) ($10^\circ$ increments for an exact horizontal radar line). Secure with M5 x 25 mm screw and locknut ($3.5\,\text{Nm}$). Slide Varia into dock and tighten M3 grub screw as anti-theft lock.
+* **Pod 3 & Radar (Rallye Aero-Balcony Assembly):**
+  * Bolt the base cradle ([`adventure_rack_tail_mount_base.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_rack_tail_mount_base.stl)) with 2x M6 screws and tube clamps to the Ø 18 mm luggage bridge or to the M6 mounting holes of the adapter plate.
+  * Route the M8 PUR harness through the underbelly conduit and connect from above onto Port A of Pod 3. Drop Pod 3 into the cradle.
+  * Install the bodywork cowl ([`adventure_rack_tail_cowl.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_rack_tail_cowl.stl)) (snapping the 2.4 GHz dipole antenna into the integrated Shark-Fin) and secure flush with 4x M3 Torx screws.
+  * Engage the Garmin Varia dock ([`radar_varia_gopro_lock_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_varia_gopro_lock_dock.stl)) into the bionic Hirth rosette on the underside pylon ($10^\circ$ increments for an exact level radar horizon). Secure with M5 x 25 mm screw and locknut ($3.5\,\text{Nm}$). Slide Varia into dock and tighten M3 grub screw as anti-theft lock.
 
 #### 4.2.2 Modular Pannier & Pod 1/2 Mounting
 * **Option A: Vario Panniers & Frame Tube Mount (BMW GS Standard R1200/R1250/R1300, F750/F850/F900, KTM / Enduro without racks):**

@@ -181,12 +181,12 @@ Alle Gehäuseteile sind konsequent für das **IKEA-Prinzip** konstruiert: **Kein
   * `adventure_transition_dock_base.stl` (2 Stk.): Kofferunabhängige Basis-Wannen für die Sitzbank-Bügelfalte (Ø 28 mm Rahmenrohr).
   * `adventure_transition_dock_lid.stl` (2 Stk.): Aerodynamische Karosserie-Deckel mit Bügelfalten-Lichtkante & Cardo/Sena-Ausschnitt.
   * `adventure_underseat_cross_rail.stl` (1 Stk.): Verwindungssteife Unter-Sitzbank-Sattelbrücke zur 100 % verdrehsicheren Verbindung von links und rechts mit integrierter M8-Kabelrinne.
-  * `adventure_rack_tail_mount.stl` (1 Stk.): Heckbrücken-Ausleger für Pod 3 & Radar.
+  * `adventure_rack_tail_mount_base.stl` & `adventure_rack_tail_cowl.stl` (je 1 Stk.): Zweiteiliger Rallye-Aero-Balkon für Pod 3 hinter dem Topcase mit 45°-Shark-Finne & bionischem Radar-Ausleger.
   * `radar_varia_gopro_lock_dock.stl` (1 Stk.) & `011_gopro_hirth_lock.stl` (1 Stk.): Radar-Bajonett-Dock mit Hirth-Verzahnung.
 * **Kit 2: BMW R1250 / R1300 GSA (Adventure mit Ø 18 mm Edelstahl-Alukofferträger):**
   * `adventure_gsa_cage_dock_body.stl` & `adventure_gsa_clamp_cap.stl` (je 2 Stk.): Schwerlast-Käfigdocks ("GSA Cage Dock") für Pod 1 & 2 im $45\,\text{mm}$ Totraum des Trägerrahmens mit $85\,\text{mm}$ Doppel-Rohrsattelbasis, 4x M5 Verschraubung, Steinschlag-Gleitkeil & verdecktem M8-Kanal.
   * *(Alternativ für Minimalisten)* `adventure_pannier_rack_clamp_base.stl` & `adventure_pannier_rack_clamp_cap.stl` (je 4 Stk.): Einfache Halbschellen-Paare für offene Rohrstreben.
-  * `adventure_rack_tail_mount.stl` (1 Stk.): Heck-Balkon hinter Alutopcase mit 45°-Astabweiser für Dipolantenne.
+  * `adventure_rack_tail_mount_base.stl` & `adventure_rack_tail_cowl.stl` (je 1 Stk.): Zweiteiliger Rallye-Aero-Balkon hinter Alutopcase mit 45°-Shark-Finne für Dipolantenne.
   * `radar_varia_gopro_lock_dock.stl` (1 Stk.) & `011_gopro_hirth_lock.stl` (1 Stk.): Radar-Dock mit Hirth-Verzahnung.
 * **Kit 3: Harley-Davidson Touring & Classic Bagger (Street Glide, Road Glide, Road King):**
   * `saddlebag_lid_dock.stl` (2 Stk.): Kofferdeckel-Montagedocks für Pod 1 & 2 auf den Hartschalenkoffern.

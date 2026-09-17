@@ -41,8 +41,9 @@ use <../00_common/dummies/dummy_m8_connector.scad>;
 RTM_POD_L           = 136.5;
 RTM_POD_W           = 71.5;
 RTM_WALL            = 3.5;
-RTM_RIM_H           = 18.0;
-FIN_BASE_L          = 28.0;
+RTM_SPLIT_Z         = 20.0;
+RTM_TOTAL_H         = 43.0;
+FIN_BASE_L          = 34.0;
 FIN_HEIGHT          = 32.0;
 RADAR_DROP_Z        = 22.0;
 TD_POD_L            = 136.0;
@@ -186,20 +187,20 @@ module adventure_config_c_rack_tail_radar() {
                 cylinder(r=9.0, h=160.0, center=true, $fn=32);
     }
 
-    // 2. Adventure Rack-Tail Mount Cantilever Tray (PA12-CF)
-    translate([-15.0, -42.0, 0]) {
-        color("#1a1f26", 0.95)
-            adventure_rack_tail_mount();
+    // 2. Adventure Rack-Tail Mount Cantilever Tray (PA12-CF Two-Piece Rallye-Aero-Balkon)
+    translate([-15.0, 0, 0]) {
+        // Base Cradle and Sculpted Top Cowl with Integrated Shark-Fin
+        adventure_rack_tail_mount(part = "assembly");
 
         // 3. Dipol 2.4 GHz +5 dBi Antenna (Snag-proof inside Astabweiser Fin)
         color("#00adb5", 0.95) {
-            translate([RTM_POD_L + 2*RTM_WALL - 5.0 + FIN_BASE_L/2.0, (RTM_POD_W + 2*RTM_WALL)/2.0, (RTM_RIM_H + FIN_HEIGHT)/2.0])
+            translate([RTM_POD_L - 5.0 + FIN_BASE_L/2.0, 0, (RTM_TOTAL_H - RTM_SPLIT_Z + FIN_HEIGHT)/2.0])
                 rotate([0, -35, 0])
                     cylinder(r=4.8, h=46.0, center=true, $fn=16);
         }
 
         // 4. Pod 3 Base Housing (Horizontal in tray with clear sky view)
-        translate([3.5, 3.5, 4.0]) {
+        translate([0, -POD_OUTER_W/2.0, 4.0]) {
             color("slategray", 0.85)
                 pod_base_housing();
 
@@ -210,7 +211,7 @@ module adventure_config_c_rack_tail_radar() {
         }
 
         // 5. Underside M5 GoPro Hinge with 36-Tooth Hirth Anti-Slip Lock & Garmin Varia Radar
-        translate([RTM_POD_L/2.0 + RTM_WALL, (RTM_POD_W + 2*RTM_WALL)/2.0, -RADAR_DROP_Z]) {
+        translate([RTM_POD_L/2.0, 0, -RADAR_DROP_Z]) {
             // GoPro Quarter-Turn Anti-Theft Lock Adapter Dock
             rotate([0, 12, 0]) { // 12° Pitch Trim for Level Radar Horizon
                 color("#2b323c", 0.95)

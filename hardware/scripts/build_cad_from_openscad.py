@@ -101,7 +101,9 @@ STL_TARGETS: List[Tuple] = [
     ("02_pod_base/adventure_transition_dock.scad", "02_pod_base/adventure_transition_dock_base.stl", ["-D", 'part="base"']),
     ("02_pod_base/adventure_transition_dock.scad", "02_pod_base/adventure_transition_dock_lid.stl", ["-D", 'part="lid"']),
     ("02_pod_base/adventure_underseat_cross_rail.scad", "02_pod_base/adventure_underseat_cross_rail.stl"),
-    ("02_pod_base/adventure_rack_tail_mount.scad", "02_pod_base/adventure_rack_tail_mount.stl"),
+    ("02_pod_base/adventure_rack_tail_mount.scad", "02_pod_base/adventure_rack_tail_mount_base.stl", ["-D", 'part="base"']),
+    ("02_pod_base/adventure_rack_tail_mount.scad", "02_pod_base/adventure_rack_tail_cowl.stl", ["-D", 'part="cowl"']),
+    ("02_pod_base/adventure_rack_tail_mount.scad", "02_pod_base/adventure_rack_tail_mount.stl", ["-D", 'part="base"']),
     ("02_pod_base/radar_varia_gopro_lock_dock.scad", "02_pod_base/radar_varia_gopro_lock_dock.stl"),
     ("02_pod_base/parts/011_gopro_hirth_lock.scad", "02_pod_base/components/011_gopro_hirth_lock.stl"),
     ("03_pod_cartridges/parts/05_magnetic_lock_latch.scad", "03_pod_cartridges/cartridge_magnetic_lock_latch.stl"),
@@ -287,6 +289,12 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
         "02_pod_base/adventure_transition_dock.scad",
         os.path.join(CAD_IMG_DIR, "adventure_transition_dock_cad.png"),
         "68,0,20,55,0,310,300",
+        "Tomorrow"
+    ),
+    (
+        "02_pod_base/adventure_rack_tail_mount.scad",
+        os.path.join(CAD_IMG_DIR, "rack_tail_mount_cad.png"),
+        "68,0,20,55,0,310,320",
         "Tomorrow"
     ),
     (

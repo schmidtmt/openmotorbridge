@@ -679,9 +679,13 @@ Depending on luggage configurations, adventure bikes deploy two specialized moun
 
 ---
 
-#### 6.4.2 Rear Pod 3 (Transceiver) – Universal "Rack-Tail Mount" & Tail-Balcony Concept
+#### 6.4.2 Rear Pod 3 (Transceiver) – Universal "Rack-Tail Mount" & Rallye Aero-Balcony Concept
 
-When aluminum topcases (e.g. Touratech Zega Evo or BMW Adventure) are installed, the solid $1.5\,\text{mm}$ aluminum wall blocks RF radiation upward (Faraday cage). The universal "Rack-Tail Mount" (`adventure_rack_tail_mount.scad`) resolves this as a rigid tail balcony bolted to the bike rack, cantilevering approx. $65\,\text{mm}$ behind the rear wall of the topcase:
+When aluminum topcases (e.g. Touratech Zega Evo or BMW Adventure) are installed, the solid $1.5\,\text{mm}$ aluminum wall blocks RF radiation upward (Faraday cage). The universal "Rack-Tail Mount" ([`adventure_rack_tail_mount.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/adventure_rack_tail_mount.scad)) resolves this as a rigid, two-piece **Rallye Aero-Balcony** bolted to the bike rack, cantilevering approx. $68\,\text{mm}$ behind the rear wall of the topcase:
+
+![OpenMotorBridge Rear Pod 3 Rallye Aero-Balcony CAD Detailed View](../images/cad/rack_tail_mount_cad.png)
+
+*Figure 8.29-Aero: CAD detailed view of the redesigned two-piece Rallye Aero-Balcony (`adventure_rack_tail_mount.scad`). Displayed are the rising wedge silhouette, 15° tumblehome with 45° stone-deflector undercuts, the form-fitting bodywork cowl (`adventure_rack_tail_cowl.stl`) with integrated 45° Shark-Fin for the 2.4 GHz dipole antenna, 140° zenith window for GNSS/LoRa, and the bionic teardrop radar pylon on the underside.*
 
 ![OpenMotorBridge Rear Pod 3 Rack-Tail Mount & Tail-Balcony Cutaway Section](../images/cad/rack_tail_mount_side_cross_section.png)
 
@@ -866,7 +870,8 @@ The OpenMotorBridge CAD repository follows a strict hierarchical Constructive So
 | **Satellite Pod**| CVO ST Telemetry Fin (2.4 GHz Mesh) | `02_pod_base/cvo_st_telemetry_fin.stl` | `02_pod_base/cvo_st_telemetry_fin.scad` |
 | **Satellite Pod**| Road King Special Touring Fender Console | `02_pod_base/pod3_touring_fender_console.stl` | `02_pod_base/pod3_touring_fender_console.scad` |
 | **Satellite Pod**| Touring Saddlebag Lid Dock (Pods 1 & 2) | `02_pod_base/saddlebag_lid_dock.stl` | `02_pod_base/saddlebag_lid_dock.scad` |
-| **Adventure Pod 3**| Rack-Tail Mount (Tail balcony with deflector & radar fork) | `02_pod_base/adventure_rack_tail_mount.stl` | `02_pod_base/adventure_rack_tail_mount.scad` |
+| **Adventure Pod 3**| Rallye Aero-Balcony Base Cradle (Cantilever Tray) | `02_pod_base/adventure_rack_tail_mount_base.stl` | `02_pod_base/adventure_rack_tail_mount.scad` |
+| **Adventure Pod 3**| Rallye Aero-Balcony Bodywork Cowl (with Shark-Fin) | `02_pod_base/adventure_rack_tail_cowl.stl` | `02_pod_base/adventure_rack_tail_mount.scad` |
 | **Adventure Pods 1/2**| GS Transition Dock Base Cradle (Waist Crease Lower Tub) | `02_pod_base/adventure_transition_dock_base.stl` | `02_pod_base/adventure_transition_dock.scad` |
 | **Adventure Pods 1/2**| GS Transition Dock Bodywork Cowl (Waist Crease Top Lid) | `02_pod_base/adventure_transition_dock_lid.stl` | `02_pod_base/adventure_transition_dock.scad` |
 | **Adventure Pods 1/2**| GSA Heavy-Duty Cage Dock Body (Ø 18 mm Tube) | `02_pod_base/adventure_gsa_cage_dock_body.stl` | `02_pod_base/adventure_gsa_cage_dock.scad` |

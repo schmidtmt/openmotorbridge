@@ -762,17 +762,21 @@ Auf Reiseenduros existieren je nach Einsatzzweck und Koffersystem zwei grundvers
 
 ---
 
-#### 6.4.2 Heck-Pod 3 (Transceiver) – Das universelle "Rack-Tail Mount" & Heck-Balkon-Konzept
+#### 6.4.2 Heck-Pod 3 (Transceiver) – Das universelle "Rack-Tail Mount" & Rallye-Aero-Balkon-Konzept
 
-Wird eine Reiseenduro mit einem Aluminium-Topcase (z. B. Touratech Zega Evo 38L oder BMW Adventure Topcase) bestückt, schirmt das massive $1{,}5\,\text{mm}$ Aluminiumblech Funkwellen nach oben ab (Faraday-Käfig). Das universelle "Rack-Tail Mount" (`adventure_rack_tail_mount.scad`) löst diesen Konflikt als stabiler Heck-Balkon, der fest an der Gepäckbrücke des Motorrads verschraubt wird und ca. $65\,\text{mm}$ hinter die senkrechte Rückwand des Topcases kragt:
+Wird eine Reiseenduro mit einem Aluminium-Topcase (z. B. Touratech Zega Evo 38L oder BMW Adventure Topcase) bestückt, schirmt das massive $1{,}5\,\text{mm}$ Aluminiumblech Funkwellen nach oben ab (Faraday-Käfig). Das universelle "Rack-Tail Mount" ([`adventure_rack_tail_mount.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/adventure_rack_tail_mount.scad)) löst diesen Konflikt als hochfester **Rallye-Aero-Balkon** im edlen Zwei-Teil-Design, der fest an der Gepäckbrücke verschraubt wird und ca. $68\,\text{mm}$ hinter die senkrechte Rückwand des Topcases kragt:
+
+![OpenMotorBridge Heck-Pod 3 Rallye-Aero-Balkon CAD-Detailansicht](../images/cad/rack_tail_mount_cad.png)
+
+*Abbildung 8.29-Aero: CAD-Detailansicht des neu gestalteten, zweiteiligen Heck-Balkons (`adventure_rack_tail_mount.scad`). Zu sehen sind die dynamisch ansteigende Keilform, das 15°-Tumblehome mit 45°-Unterzug gegen Steinschlag, der formschlüssige Karosserie-Deckel (`adventure_rack_tail_cowl.stl`) mit integrierter Shark-Finne für die 2.4-GHz-Dipolantenne, das 140°-Zenitfenster für GNSS/LoRa sowie der bionische Tropfen-Ausleger für das Garmin Varia Radar auf der Unterseite.*
 
 ![OpenMotorBridge Heck-Pod 3 Rack-Tail Mount & Heck-Balkon Seiten-Schnittansicht](../images/cad/rack_tail_mount_side_cross_section.png)
 
-*Abbildung 8.29a: CAD-Schnittansicht des Heck-Pod 3 Rack-Tail Mounts ("Heck-Balkon") am BMW GS Gepäckträger. Dargestellt sind die Abstützung an den Ø 18 mm Edelstahlrohren, die vollständige Deckelfreigängigkeit des 38L Alu-Topcases, der 65..68 mm Ausleger für ungestörten 140°-Zenit-Empfang (MAX-M10S GNSS / LoRa), der 45°-Astabweiser-Keil mit vertiefter 2.4-GHz-Dipolantenne (+5 dBi) sowie die geschützte Unterseiten-Montage des Garmin Varia Radars in 90..95 cm Höhe über der Fahrbahn.*
+*Abbildung 8.29a: Technische CAD-Schnittansicht des Heck-Pod 3 Rack-Tail Mounts ("Heck-Balkon") am BMW GS Gepäckträger. Dargestellt sind die Abstützung an den Ø 18 mm Edelstahlrohren, die vollständige Deckelfreigängigkeit des 38L Alu-Topcases, der 65..68 mm Ausleger für ungestörten 140°-Zenit-Empfang (MAX-M10S GNSS / LoRa), der 45°-Astabweiser-Keil mit vertiefter 2.4-GHz-Dipolantenne (+5 dBi) sowie die geschützte Unterseiten-Montage des Garmin Varia Radars in 90..95 cm Höhe über der Fahrbahn.*
 
 ![OpenMotorBridge Heck-Pod 3 Rack-Tail Mount Draufsicht](../images/cad/rack_tail_mount_top_view.png)
 
-*Abbildung 8.29b: CAD-Draufsicht des Heck-Balkons (X-Y-Ebene) mit 110-mm-Montageflansch, 2x M6 Langlöchern für Rohrschellen, formbündiger Pod-3-Wanne (136,5 x 71,5 mm), unterer M8-Kabeldurchführung, innenliegendem RG178-Koaxialkanal und 45°-Astabweiser-Finne aus PA12-CF mit Einklipsnut für die 2.4-GHz-Antenne.*
+*Abbildung 8.29b: Technische CAD-Draufsicht des Heck-Balkons (X-Y-Ebene) mit 110-mm-Montageflansch, 2x M6 Langlöchern für Rohrschellen, formbündiger Pod-3-Wanne (136,5 x 71,5 mm), unterer M8-Kabeldurchführung, innenliegendem RG178-Koaxialkanal und 45°-Astabweiser-Finne aus PA12-CF mit Einklipsnut für die 2.4-GHz-Antenne.*
 
 ##### Die mechanischen & funktechnischen Kernvorteile:
 1. **100 % Erhalt des Topcase-Schnellverschlusses (5-Sekunden-Klick):**
@@ -1033,6 +1037,8 @@ Die CAD-Dateistruktur von OpenMotorBridge folgt einer strengen hierarchischen CS
 | **Satelliten-Pod**| CVO ST Telemetrie-Finne (2.4 GHz Mesh) | `02_pod_base/cvo_st_telemetry_fin.stl` | `02_pod_base/cvo_st_telemetry_fin.scad` |
 | **Satelliten-Pod**| Road King Special Touring Fender Console | `02_pod_base/pod3_touring_fender_console.stl` | `02_pod_base/pod3_touring_fender_console.scad` |
 | **Satelliten-Pod**| Touring Kofferdeckel-Halter (Pod 1 & 2) | `02_pod_base/saddlebag_lid_dock.stl` | `02_pod_base/saddlebag_lid_dock.scad` |
+| **Adventure Pod 3**| Rallye-Aero-Balkon Basis-Wanne (Heckbrücken-Ausleger) | `02_pod_base/adventure_rack_tail_mount_base.stl` | `02_pod_base/adventure_rack_tail_mount.scad` |
+| **Adventure Pod 3**| Rallye-Aero-Balkon Karosserie-Deckel (mit Shark-Finne) | `02_pod_base/adventure_rack_tail_cowl.stl` | `02_pod_base/adventure_rack_tail_mount.scad` |
 | **Adventure Pods 1/2**| GS Transition Dock Basis-Wanne (Bügelfalten-Unterteil) | `02_pod_base/adventure_transition_dock_base.stl` | `02_pod_base/adventure_transition_dock.scad` |
 | **Adventure Pods 1/2**| GS Transition Dock Karosserie-Deckel (Bügelfalten-Cowl) | `02_pod_base/adventure_transition_dock_lid.stl` | `02_pod_base/adventure_transition_dock.scad` |
 | **Adventure-Kit** | Unter-Sitzbank-Sattelbrücke (Traverse links-rechts) | `02_pod_base/adventure_underseat_cross_rail.stl` | `02_pod_base/adventure_underseat_cross_rail.scad` |
