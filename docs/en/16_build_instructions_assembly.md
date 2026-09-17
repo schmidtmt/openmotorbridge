@@ -467,7 +467,11 @@ The adventure mounting suite is standardized across the entire **BMW GS model fa
 * **Option A: Vario Panniers & Frame Tube Mount (BMW GS Standard R1200/R1250/R1300, F750/F850/F900, KTM / Enduro without racks):**
   * Lay the Under-Seat Saddle Bridge ([`adventure_underseat_cross_rail.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_underseat_cross_rail.stl)) flat onto the frame crossbar beneath the seat and secure using existing OEM bolts (M5/M6).
   * Align the Transition Dock Base Cradles ([`adventure_transition_dock_base.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_transition_dock_base.stl)) against the Ø 28 mm subframe tubes in the waist crease and bolt tightly to the saddle bridge using 2x M4 screws per side (rigid anti-rotation U-portal).
-  * Insert Pods, routing the M8 PUR cable through the internal channel of the cross-rail directly into the Central Box inside the battery tray.
+  * **Harness Routing & Top-Access Ingress:**
+    * Route the M8 PUR harness lead from Central Box underneath the seat foam towards the flank.
+    * Push the cable through the inboard oval port (Ø 10 mm) into the front connector/service bay of the Transition Dock base cradle.
+    * With the top cowl removed, plug and hand-tighten the M8 connector onto Port A of the Pod with 100% open-air hand clearance.
+    * Drop the Pod into the cradle (the connector and cable loop rest stress-free inside the 24 mm nose bay).
   * Install the bodywork cowls ([`adventure_transition_dock_lid.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_transition_dock_lid.stl)) flush using 4x M3 Torx screws.
   * **100% Luggage-Independent & Clean Look:** Zero exposed clamps or zip-ties from the outside; the console flows smoothly with the seat's optical waist crease.
 * **Option B: Stainless Tubular Pannier Racks (BMW GSA All Generations incl. K25 & F800 GSA, Touratech, Hepco&Becker, Aluminum Cases):**

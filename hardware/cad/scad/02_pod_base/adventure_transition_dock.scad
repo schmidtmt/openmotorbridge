@@ -151,9 +151,14 @@ module adventure_transition_dock_base(side = "right") {
 
         // --- SUBTRACTIONS ---
 
-        // A. Pod Main Reception Cavity (136 x 71 mm, sits on floor at Z = TD_FLOOR)
+        // A1. Pod Main Reception Cavity (136 x 71 mm, sits on floor at Z = TD_FLOOR)
         translate([0, -TD_POD_W/2.0, TD_FLOOR])
             cube([TD_POD_L, TD_POD_W, CONSOLE_CREASE_Z + 10.0]);
+
+        // A2. Front Nose M8 Connector & Wiring Chamber / Service-Bucht
+        // Provides 24 mm longitudinal clearance for M8 overmolded plug, strain relief, and 90° lateral cable bend
+        translate([-24.0, -25.0, TD_FLOOR])
+            cube([26.0, 50.0, CONSOLE_CREASE_Z + 10.0]);
 
         // B. Subframe Tube Saddle (Concave Hohlkehle on bottom, fitting Ø 28 mm tube)
         translate([-CONSOLE_NOSE_L - 5.0, 0, -TUBE_DROP_Z])
@@ -171,7 +176,17 @@ module adventure_transition_dock_base(side = "right") {
             }
         }
 
-        // D. Inboard M8 PUR Cable 90° Conduit (Passes through tongue under seat)
+        // D1. Direct Inboard Under-Seat Cable Ingress Port (Front Nose Chamber)
+        // Passes through the inboard wall directly under the rider seat cushion into the dry subframe / battery tray
+        translate([-12.0, 0, TD_FLOOR]) {
+            hull() {
+                cylinder(r=5.0, h=16.0, $fn=24);
+                translate([0, y_dir * (CONSOLE_MAX_W/2.0 + 10.0), 0])
+                    cylinder(r=5.0, h=16.0, $fn=24);
+            }
+        }
+
+        // D2. Inboard M8 PUR Cable 90° Conduit (Passes through tongue under seat to cross-rail)
         translate([12.0, 0, TD_FLOOR]) {
             hull() {
                 cylinder(r=4.8, h=15.0, $fn=20);
@@ -238,6 +253,10 @@ module adventure_transition_dock_lid(variant = "open_intercom") {
                 }
             }
         }
+
+        // D. Underside Nose Wiring Pocket (Extra headroom for cable bend)
+        translate([-22.0, -22.0, CONSOLE_CREASE_Z - 1.0])
+            cube([22.0, 44.0, 8.0]);
     }
 }
 
