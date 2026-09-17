@@ -274,7 +274,31 @@ All parts, circuit board production files, and COTS procurement links are catalo
 
 ---
 
-### Step 4.2: Adventure & Enduro Platform Installation (BMW GS / GSA, KTM, Africa Twin, Universal)
+### Step 4.2: Adventure & Enduro Platform Installation (BMW GS / GSA Family, KTM, Africa Twin, Universal)
+
+The adventure mounting suite is standardized across the entire **BMW GS model family** (Boxer and Parallel-Twin generations) and comparable dual-sport motorcycles:
+
+```text
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                        BMW GS MODEL & PLATFORM COMPATIBILITY                           │
+├───────────────────────────────────┬────────────────────────────────────────────────────┤
+│ Model Line                        │ Specifics & Electrical Ingress Details             │
+├───────────────────────────────────┼────────────────────────────────────────────────────┤
+│ • R 1250 GS / R 1300 GS           │ 6.5" TFT Connectivity, Wonder Wheel, 16-Pin OBD2,  │
+│   F 750 GS / F 850 GS / F 900 GS  │ Cockpit Cartool power, Vario frame docks (Opt. A)  │
+├───────────────────────────────────┼────────────────────────────────────────────────────┤
+│ • R 1250 GSA / R 1300 GSA         │ 6.5" TFT Connectivity, Wonder Wheel, 16-Pin OBD2,  │
+│   F 850 GSA / F 900 GSA           │ Cockpit Cartool power, Ø 18 mm stainless (Opt. B)  │
+├───────────────────────────────────┼────────────────────────────────────────────────────┤
+│ • R 1200 GS LC / GSA LC           │ Wonder Wheel, Cartool present. Diagnostic socket:  │
+│   (K50/K51, 2013–2018)            │ 2013–2016 round 10-pin, 2017+ rectangular 16-pin   │
+├───────────────────────────────────┼────────────────────────────────────────────────────┤
+│ • Classic R 1200 GS / GSA (K25)   │ Analog/LCD dials, Cartool present at headstock.    │
+│   & F 650 / 700 / 800 GS (K70/72) │ Round 10-pin diagnostic plug under seat.           │
+│   (oil-cooled, up to 2012/2018)   │ Control via OMB BLE handlebar remote (no Wonderwh.)│
+│                                   │ GSA tube racks: Identical Ø 18 mm tube diameter!   │
+└───────────────────────────────────┴────────────────────────────────────────────────────┘
+```
 
 ```text
                              OPENMOTORBRIDGE ADVENTURE-KIT MOUNTING SUITE
@@ -300,24 +324,27 @@ All parts, circuit board production files, and COTS procurement links are catalo
 * **Central Box:** Install in the frame triangle beneath the rider seat on 4x M4 silentblocks. Route M8 harness leads rearward left and right and toward the tail.
 * **Cockpit & Front Node:**
   * Remove 4x Torx T25 windshield screws and lift windscreen off.
-  * Unclip upper TFT instrument surround forward.
+  * Unclip upper TFT instrument surround forward (on K25 / F800: remove instrument shroud).
   * Fasten Front Node via AMPS mount or tube clamp to the Ø 12 mm GPS crossbar or handlebar.
   * **Power Supply & CAN-Bus Options (2 Ingress Paths):**
-    * **Power Supply:** Connect 2-pin JST-PH power lead at `J1` directly to the factory BMW Cartool accessory connector (SZ plug in cockpit: Pin 1 GND, Pin 3 switched +12V KL15).
-    * **CAN-Bus Option 1 (Recommended – Plug & Play Under Seat):** Tapped at Central Box via HD26 harness (pins 17 `CAN_H` and 18 `CAN_L`) at the OBD2 diagnostic port or RDC/DWA module under the seat (identical to Hex ezCAN / WunderLINQ). Port `J2` on Front Node remains empty and auto-deactivates. Zero wiring tampering in the cockpit!
-    * **CAN-Bus Option 2 (Cockpit Tapping at 12-Pin TFT):** The BMW 6.5" TFT display routes K-CAN directly on its rear connector (Pin 2 `CAN_H`, White/Black and Pin 3 `CAN_L`, White/Brown). Riders using a 12-pin PnP Y-cable can connect directly to `J2` on the Front Node. The Front Node streams RPM, speed, and Wonder Wheel wirelessly via ESP-NOW to Central Box.
+    * **Power Supply:** Connect 2-pin JST-PH power lead at `J1` directly to the factory BMW Cartool accessory connector (SZ plug in cockpit / headstock: Pin 1 GND, Pin 3 switched +12V KL15).
+    * **CAN-Bus Option 1 (Recommended – Plug & Play Under Seat):** Tapped at Central Box via HD26 harness (pins 17 `CAN_H` and 18 `CAN_L`):
+      * *2017+ Models (Euro 4 / Euro 5 / Euro 5+):* Directly into 16-pin OBD2 socket or RDC/DWA module (identical to Hex ezCAN / WunderLINQ).
+      * *Pre-2017 Classic Models (Euro 3, K25 / K72 / early K50):* Via standard COTS 10-pin round to OBD2 adapter cable (ICOM adapter).
+      * Port `J2` on Front Node remains empty and auto-deactivates. Zero wiring tampering in the cockpit!
+    * **CAN-Bus Option 2 (Cockpit Tapping at 12-Pin TFT – TFT Models Only):** The BMW 6.5" TFT display routes K-CAN directly on its rear connector (Pin 2 `CAN_H`, White/Black and Pin 3 `CAN_L`, White/Brown). Riders using a 12-pin PnP Y-cable can connect directly to `J2` on the Front Node. The Front Node streams RPM, speed, and Wonder Wheel wirelessly via ESP-NOW to Central Box.
 * **Pod 3 & Radar:**
   * Bolt Pod 3 onto the Rack-Tail Mount ([`adventure_rack_tail_mount.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_rack_tail_mount.stl)) on the factory luggage rack.
   * Engage Garmin Varia dock ([`radar_varia_gopro_lock_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_varia_gopro_lock_dock.stl)) into Hirth rosette ([`011_gopro_hirth_lock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/components/011_gopro_hirth_lock.stl)) ($10^\circ$ increments for an exact horizontal radar line). Secure with M5 x 25 mm screw and locknut ($3.5\,\text{Nm}$). Slide Varia into dock and tighten M3 grub screw as anti-theft lock.
 
 #### 4.2.2 Modular Pannier & Pod 1/2 Mounting
-* **Option A: Vario Panniers & Frame Tube Mount (BMW GS Standard, KTM / Enduro without racks):**
+* **Option A: Vario Panniers & Frame Tube Mount (BMW GS Standard R1200/R1250/R1300, F750/F850/F900, KTM / Enduro without racks):**
   * Clamp Transition Docks ([`adventure_transition_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_transition_dock.stl)) onto main subframe tubes (Ø 28 mm) below seat lip.
   * **100% Luggage-Independent:** The pods do not protrude beyond the motorcycle silhouette and can be ridden with Vario cases or completely without luggage.
-* **Option B: Stainless Tubular Pannier Racks (BMW GSA, Touratech, Hepco&Becker, Aluminum Cases):**
+* **Option B: Stainless Tubular Pannier Racks (BMW GSA All Generations incl. K25 & F800 GSA, Touratech, Hepco&Becker, Aluminum Cases):**
   * Wrap 1.0 mm EPDM strip around the Ø 18 mm pannier rack tube.
   * Fasten clamp base ([`adventure_pannier_rack_clamp_base.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_base.stl)) and cap ([`adventure_pannier_rack_clamp_cap.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_cap.stl)) using 2x M5 x 30 mm V4A screws and DIN 985 locknuts tightened in a cross pattern ($4.5\,\text{Nm}$).
-  * Mount Pod base housing securely within the frame triangle ahead of the aluminum cases.
+  * Mount Pod base housing securely within the frame triangle ahead of the aluminum cases. All BMW Adventure aluminum rack cages (from 2006 to present day) utilize the identical standardized Ø 18 mm tube dimension.
 
 #### 4.2.3 Front Node Bike Mounting Options (Universal)
 * **Option 1: AMPS Pattern (30 x 38 mm):** Direct bolt-on to RAM-Mount ball, Garmin cradle, or GPS bar (utilizing the 4x captive M4 nuts).

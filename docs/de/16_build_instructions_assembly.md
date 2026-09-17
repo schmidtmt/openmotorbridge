@@ -275,7 +275,31 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 
 ---
 
-### Schritt 4.2: Montage Adventure- & Reiseenduro-Plattform (BMW GS / GSA, KTM, Africa Twin, Universal)
+### Schritt 4.2: Montage Adventure- & Reiseenduro-Plattform (BMW GS / GSA Familie, KTM, Africa Twin, Universal)
+
+Die Adventure-Montage ist für die gesamte **BMW GS Modellfamilie** (Boxer und Paralleltwins aller Modelljahre) sowie vergleichbare Reiseenduros standardisiert:
+
+```text
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                        BMW GS MODELL- & PLATTFORM-ZUORDNUNG                            │
+├───────────────────────────────────┬────────────────────────────────────────────────────┤
+│ Modellreihe                       │ Besonderheiten & Anschlussspezifika                │
+├───────────────────────────────────┼────────────────────────────────────────────────────┤
+│ • R 1250 GS / R 1300 GS           │ 6.5" TFT Connectivity, Wonder Wheel, 16-Pin OBD2,  │
+│   F 750 GS / F 850 GS / F 900 GS  │ Cartool im Cockpit, Vario-Aufnahmen (Option A)     │
+├───────────────────────────────────┼────────────────────────────────────────────────────┤
+│ • R 1250 GSA / R 1300 GSA         │ 6.5" TFT Connectivity, Wonder Wheel, 16-Pin OBD2,  │
+│   F 850 GSA / F 900 GSA           │ Cartool im Cockpit, Ø 18 mm Edelstahlrohr (Opt. B) │
+├───────────────────────────────────┼────────────────────────────────────────────────────┤
+│ • R 1200 GS LC / GSA LC           │ Wonder Wheel, Cartool vorhanden. Diagnosestecker:  │
+│   (K50/K51, 2013–2018)            │ 2013–2016 rund 10-Pin, ab 2017 rechteckig 16-Pin   │
+├───────────────────────────────────┼────────────────────────────────────────────────────┤
+│ • Klassische R 1200 GS / GSA (K25)│ Analog/LCD Cockpit, Cartool am Lenkkopf vorhanden. │
+│   & F 650 / 700 / 800 GS (K70/72) │ Runder 10-Pin Diagnosestecker unter Sitzbank.      │
+│   (luft-/ölgekühlt, bis 2012/2018)│ Steuerung via OMB BLE-Lenkertaster (kein Wonderwh.)│
+│                                   │ GSA-Rohrträger: Exakt identischer Ø 18 mm Träger!  │
+└───────────────────────────────────┴────────────────────────────────────────────────────┘
+```
 
 ```text
                              OPENMOTORBRIDGE ADVENTURE-KIT MOUNTING SUITE
@@ -301,24 +325,27 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 * **Zentralbox:** Im Rahmendreieck unter der Fahrersitzbank auf 4x M4 Silentblöcken montieren. M8 Kabelpeitschen nach hinten links/rechts und zum Heck führen.
 * **Cockpit & Front-Node:**
   * 4x Torx T25 Schrauben der Windschild-Befestigung lösen und Scheibe abnehmen.
-  * Obere TFT-Cockpitblende nach vorne ausclipsen.
+  * Obere TFT-Cockpitblende nach vorne ausclipsen (bei K25/F800: Instrumentenabdeckung lösen).
   * Front-Node mit AMPS-Halterung oder Rohrschelle an der Ø 12 mm GPS-Querstrebe bzw. am Lenker fixieren.
   * **Stromversorgung & CAN-Bus Anbindung (2 Optionen):**
-    * **Stromversorgung:** 2-Pin JST-PH Kabel an `J1` direkt am originalen BMW Cartool-Navistecker (SZ-Stecker im Cockpit: Pin 1 Masse, Pin 3 +12V geschaltet KL15) anstecken.
-    * **CAN-Bus Option 1 (Empfohlen – Plug & Play unter Sitzbank):** Der CAN-Bus wird an der Zentralbox über den HD26-Kabelbaum (Pins 17 `CAN_H` und 18 `CAN_L`) am OBD2-Diagnosestecker bzw. RDC/DWA-Stecker unter der Sitzbank abgegriffen (analog zu Hex ezCAN / WunderLINQ). Port `J2` am Front-Knoten bleibt frei und wird automatisch deaktiviert. Keinerlei Kabelbeschädigung im Cockpit!
-    * **CAN-Bus Option 2 (Cockpit-Abgriff am 12-Pin TFT):** Das BMW 6,5" TFT-Display führt auf seiner Rückseite an Pin 2 (`CAN_H`, weiß/schwarz) und Pin 3 (`CAN_L`, weiß/braun) ebenfalls K-CAN. Wer ein 12-Pin Y-Adapterkabel nutzt, kann diesen direkt an `J2` des Front-Knotens anschließen. Der Front-Knoten streamt Drehzahl, Tacho und Wonder-Wheel dann drahtlos via ESP-NOW zur Zentralbox.
+    * **Stromversorgung:** 2-Pin JST-PH Kabel an `J1` direkt am originalen BMW Cartool-Navistecker (SZ-Stecker im Cockpit/Lenkkopf: Pin 1 Masse, Pin 3 +12V geschaltet KL15) anstecken.
+    * **CAN-Bus Option 1 (Empfohlen – Plug & Play unter Sitzbank):** Der CAN-Bus wird an der Zentralbox über den HD26-Kabelbaum (Pins 17 `CAN_H` und 18 `CAN_L`) abgegriffen:
+      * *Modelle ab 2017 (Euro 4 / Euro 5 / Euro 5+):* Direkt am 16-poligen Standard-OBD2-Stecker bzw. RDC/DWA-Stecker (analog zu Hex ezCAN / WunderLINQ).
+      * *Klassische Modelle bis 2016 (Euro 3, K25 / K72 / frühe K50):* Über ein handelsübliches 10-Pin-Rundstecker-auf-OBD2-Adapterkabel (ICOM-Adapter).
+      * Port `J2` am Front-Knoten bleibt frei und wird automatisch deaktiviert. Keinerlei Kabelbeschädigung im Cockpit!
+    * **CAN-Bus Option 2 (Cockpit-Abgriff am 12-Pin TFT – nur Modelle mit TFT):** Das BMW 6,5" TFT-Display führt auf seiner Rückseite an Pin 2 (`CAN_H`, weiß/schwarz) und Pin 3 (`CAN_L`, weiß/braun) K-CAN. Wer ein 12-Pin Y-Adapterkabel nutzt, kann diesen direkt an `J2` des Front-Knotens anschließen. Der Front-Knoten streamt Drehzahl, Tacho und Wonder-Wheel dann drahtlos via ESP-NOW zur Zentralbox.
 * **Pod 3 & Radar:**
   * Pod 3 auf dem Rack-Tail Mount ([`adventure_rack_tail_mount.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_rack_tail_mount.stl)) an der serienmäßigen Gepäckbrücke verschrauben.
   * Zunge des Garmin Varia Docks ([`radar_varia_gopro_lock_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_varia_gopro_lock_dock.stl)) in die Hirth-Rosette ([`011_gopro_hirth_lock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/components/011_gopro_hirth_lock.stl)) einrasten ($10^\circ$-Schritte für exakt waagerechten Radar-Horizont). Mit M5 x 25 mm Schraube und Stoppmutter sichern ($3{,}5\,\text{Nm}$). Varia einklinken und M3 Madenschraube als Diebstahlschutz eindrehen.
 
 #### 4.2.2 Modulare Koffer- & Pod 1/2-Befestigung
-* **Option A: Vario-Koffer & Rahmenrohr-Montage (BMW GS Standard, KTM / Enduro ohne Rohrträger):**
+* **Option A: Vario-Koffer & Rahmenrohr-Montage (BMW GS Standard R1200/R1250/R1300, F750/F850/F900, KTM / Enduro ohne Rohrträger):**
   * Die Transition-Docks ([`adventure_transition_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_transition_dock.stl)) unterhalb der Sitzbankkante an die Hauptrahmenrohre (Ø 28 mm) klemmen.
   * **100 % kofferunabhängig:** Die Pods bauen nicht über die Kontur der Maschine hinaus und können sowohl mit Vario-Koffern als auch komplett ohne Koffer gefahren werden.
-* **Option B: Edelstahl-Rohrkofferträger (BMW GSA, Touratech, Hepco&Becker, Alukoffer):**
+* **Option B: Edelstahl-Rohrkofferträger (BMW GSA aller Baujahre inkl. K25 & F800 GSA, Touratech, Hepco&Becker, Alukoffer):**
   * 1,0 mm EPDM-Schutzstreifen um das Ø 18 mm Kofferträgerrohr wickeln.
   * Unterschale ([`adventure_pannier_rack_clamp_base.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_base.stl)) und Kappe ([`adventure_pannier_rack_clamp_cap.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_cap.stl)) mit 2x M5 x 30 mm V4A Schrauben und DIN 985 Stoppmuttern über Kreuz mit $4{,}5\,\text{Nm}$ anziehen.
-  * Das Pod-Basisgehäuse wird geschützt im Rohrrahmen-Dreieck vor den Alukoffern verschraubt.
+  * Das Pod-Basisgehäuse wird geschützt im Rohrrahmen-Dreieck vor den Alukoffern verschraubt. Alle BMW Adventure Alukofferträger (vom Modelljahr 2006 bis heute) nutzen denselben standardisierten Ø 18 mm Rohrdurchmesser.
 
 ---
 
