@@ -732,12 +732,20 @@ Auf Reiseenduros existieren je nach Einsatzzweck und Koffersystem zwei grundvers
     4. **Extrem kurze Kabelwege:** Lediglich $20\dots 25\,\text{cm}$ M8-PUR-Kabelweg direkt in die Zentralbox unter der Sitzbank.
 
 * **Variante B: Standard-BMW GS und nackte Reiseenduros (ohne Rohr-Kofferträger)**
-  * **Montage:** Über ein formschönes "Transition Dock" (`adventure_transition_dock.scad`), das als geschwungene Brücke direkt an den oberen Heckrahmenrohren unter der Sitzbank verschraubt oder mit EPDM-Spannbändern fixiert wird.
-  * **Positionierung:** Exakt in der optischen "Bügelfalte" am Übergang von der Fahrer- zur Soziussitzbank.
-  * **Vorteile:**
-    1. **100 % unabhängig von Koffersystemen:** Funktioniert auch dann perfekt, wenn das Motorrad komplett "nackt" ohne Träger, mit Vario-Koffern oder mit leichten Soft-Bags / Hufeisen-Taschen gefahren wird.
-    2. **Ergonomisch geschützt:** Vollständig außerhalb des dynamischen Bewegungsbereichs von Fahrerstiefeln und Sozius-Fersen platziert; kein Hängenbleiben beim Aufsteigen.
-    3. **Freie Abstrahlcharakteristik:** Ungestörte $180^\circ$-HF-Sichtachse zur Seite und schräg nach oben zum Fahrer- und Soziushelm.
+  * **Montage:** Über ein zweiteiliges, aerodynamisch skulpturiertes **Transition Dock** ([`adventure_transition_dock.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/adventure_transition_dock.scad)) in Kombination mit einer verdeckten **Unter-Sitzbank-Sattelbrücke** ([`adventure_underseat_cross_rail.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/adventure_underseat_cross_rail.scad)).
+  * **Positionierung:** Exakt in der optischen "Bügelfalte" am Übergang von der Fahrer- zur Soziussitzbank entlang des $\varnothing 28\,\text{mm}$ Heckrahmenrohrs.
+
+![OpenMotorBridge GS Transition Dock & Unter-Sitzbank-Sattelbrücke](../images/cad/adventure_transition_dock_cad.png)
+
+*Abbildung 8.29-B: CAD-Detailansicht des GS Transition Docks mit Unter-Sitzbank-Sattelbrücke. Zu sehen sind das zweitteilige Konsolengehäuse (Unterteil mit Rohrsattel und Oberteil mit formbündigem Karosserie-Deckel entlang der Bügelfalten-Lichtkante), der eingelassene Cardo Packtalk Edge Pod 2 sowie die flache, U-verrippte Sattelbrücke (`adventure_underseat_cross_rail.scad`), die links und rechts unter der Sitzbank durch verbindet, Hebelkräfte als starres U-Portal neutralisiert und das M8-Kabel unsichtbar ins Batteriefach leitet.*
+
+  * **Vorteile & Konstruktionsmerkmale:**
+    1. **100 % Verdrehsicherheit durch Unter-Sitzbank-Sattelbrücke:** Statt ein Gehäuse wackelig an einem einzelnen Rundrohr zu klemmen, verbindet eine flache PA12-CF-Traverse ($7{,}5\,\text{mm}$ flaches U-Profil) die linke und rechte Flanke unter der Sitzbankschale zu einem verwindungssteifen U-Portal.
+    2. **Zero-Drill & 100 % unsichtbare Befestigung von außen:** Keine Schellen, Kabelbinder oder Schraubenköpfe am sichtbaren Rahmenrohr. Die Verschraubung erfolgt an vorhandenen OEM-Befestigungspunkten (Batteriefach / Quersteg) geschützt im Trockenen unter der Sitzbank.
+    3. **Formschlüssige Bügelfalten-Integration & Karosserie-Deckel:** Wie bei der Touring Fender Console bildet das Dock keinen offenen Kasten, sondern eine geschlossene, aerodynamische Rahmenblende. Die Trennfuge liegt exakt in der scharfen Bügelfalten-Lichtkante; der $22^\circ$-Einlaufkeil vorn schließt bündig an den Fahrersitz an (kein Hängenbleiben beim Aufsteigen oder bei Knieschluss).
+    4. **Integrierter M8-Kabelkanal direkt zur Zentralbox:** Das M8-PUR-Kabel taucht im Inneren der Konsole direkt in die Unterseite der Querschiene ab und führt trocken und scheuergeschützt ins Batteriefach.
+    5. **100 % unabhängig von Koffersystemen:** Funktioniert auch dann perfekt, wenn das Motorrad komplett "nackt" ohne Träger, mit Vario-Koffern oder mit leichten Soft-Bags / Hufeisen-Taschen gefahren wird.
+    6. **Freie Abstrahlcharakteristik:** Ungestörte $180^\circ$-HF-Sichtachse zur Seite und schräg nach oben zum Fahrer- und Soziushelm.
 
 ---
 
@@ -1012,9 +1020,9 @@ Die CAD-Dateistruktur von OpenMotorBridge folgt einer strengen hierarchischen CS
 | **Satelliten-Pod**| CVO ST Telemetrie-Finne (2.4 GHz Mesh) | `02_pod_base/cvo_st_telemetry_fin.stl` | `02_pod_base/cvo_st_telemetry_fin.scad` |
 | **Satelliten-Pod**| Road King Special Touring Fender Console | `02_pod_base/pod3_touring_fender_console.stl` | `02_pod_base/pod3_touring_fender_console.scad` |
 | **Satelliten-Pod**| Touring Kofferdeckel-Halter (Pod 1 & 2) | `02_pod_base/saddlebag_lid_dock.stl` | `02_pod_base/saddlebag_lid_dock.scad` |
-| **Adventure Pod 3**| Rack-Tail Mount (Heck-Balkon mit Astabweiser & Radar-Gabel) | `02_pod_base/adventure_rack_tail_mount.stl` | `02_pod_base/adventure_rack_tail_mount.scad` |
-| **Adventure Pods 1/2**| GS Transition Dock (Sitzbank-Bügelfalten-Brücke) | `02_pod_base/adventure_transition_dock.stl` | `02_pod_base/adventure_transition_dock.scad` |
-| **Adventure Pods 1/2**| GSA Rohrträger-Klemmschelle Basis (Ø 18 mm Rohr) | `02_pod_base/adventure_pannier_rack_clamp_base.stl` | `02_pod_base/adventure_pannier_rack_clamp.scad` |
+| **Adventure Pods 1/2**| GS Transition Dock Basis-Wanne (Bügelfalten-Unterteil) | `02_pod_base/adventure_transition_dock_base.stl` | `02_pod_base/adventure_transition_dock.scad` |
+| **Adventure Pods 1/2**| GS Transition Dock Karosserie-Deckel (Bügelfalten-Cowl) | `02_pod_base/adventure_transition_dock_lid.stl` | `02_pod_base/adventure_transition_dock.scad` |
+| **Adventure-Kit** | Unter-Sitzbank-Sattelbrücke (Traverse links-rechts) | `02_pod_base/adventure_underseat_cross_rail.stl` | `02_pod_base/adventure_underseat_cross_rail.scad` |
 | **Adventure Pods 1/2**| GSA Rohrträger-Klemmschelle Kappe (Ø 18 mm Rohr) | `02_pod_base/adventure_pannier_rack_clamp_cap.stl` | `02_pod_base/adventure_pannier_rack_clamp.scad` |
 | **Rahmendock** | MagSafe Rahmen-Dock Gehäuseoberteil (Rohrsattel, Flügel & M2.5 Nut-Pocket) | `02_pod_base/components/009_magsafe_frame_dock.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
 | **Rahmendock** | MagSafe Rohrschellen-Bügel (Ø 26 mm) | `02_pod_base/components/009_magsafe_frame_clamp.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |

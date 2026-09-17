@@ -465,8 +465,11 @@ The adventure mounting suite is standardized across the entire **BMW GS model fa
 
 #### 4.2.2 Modular Pannier & Pod 1/2 Mounting
 * **Option A: Vario Panniers & Frame Tube Mount (BMW GS Standard R1200/R1250/R1300, F750/F850/F900, KTM / Enduro without racks):**
-  * Clamp Transition Docks ([`adventure_transition_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_transition_dock.stl)) onto main subframe tubes (Ø 28 mm) below seat lip.
-  * **100% Luggage-Independent:** The pods do not protrude beyond the motorcycle silhouette and can be ridden with Vario cases or completely without luggage.
+  * Lay the Under-Seat Saddle Bridge ([`adventure_underseat_cross_rail.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_underseat_cross_rail.stl)) flat onto the frame crossbar beneath the seat and secure using existing OEM bolts (M5/M6).
+  * Align the Transition Dock Base Cradles ([`adventure_transition_dock_base.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_transition_dock_base.stl)) against the Ø 28 mm subframe tubes in the waist crease and bolt tightly to the saddle bridge using 2x M4 screws per side (rigid anti-rotation U-portal).
+  * Insert Pods, routing the M8 PUR cable through the internal channel of the cross-rail directly into the Central Box inside the battery tray.
+  * Install the bodywork cowls ([`adventure_transition_dock_lid.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_transition_dock_lid.stl)) flush using 4x M3 Torx screws.
+  * **100% Luggage-Independent & Clean Look:** Zero exposed clamps or zip-ties from the outside; the console flows smoothly with the seat's optical waist crease.
 * **Option B: Stainless Tubular Pannier Racks (BMW GSA All Generations incl. K25 & F800 GSA, Touratech, Hepco&Becker, Aluminum Cases):**
   * Wrap 1.0 mm EPDM strip around the Ø 18 mm pannier rack tube.
   * Fasten clamp base ([`adventure_pannier_rack_clamp_base.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_base.stl)) and cap ([`adventure_pannier_rack_clamp_cap.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_cap.stl)) using 2x M5 x 30 mm V4A screws and DIN 985 locknuts tightened in a cross pattern ($4.5\,\text{Nm}$).

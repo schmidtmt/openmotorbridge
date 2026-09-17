@@ -26,6 +26,7 @@
 include <../00_common/parameters.scad>;
 use <adventure_pannier_rack_clamp.scad>;
 use <adventure_transition_dock.scad>;
+use <adventure_underseat_cross_rail.scad>;
 use <adventure_rack_tail_mount.scad>;
 use <pod_base_housing.scad>;
 use <radar_varia_gopro_lock_dock.scad>;
@@ -43,6 +44,8 @@ RTM_RIM_H           = 18.0;
 FIN_BASE_L          = 28.0;
 FIN_HEIGHT          = 32.0;
 RADAR_DROP_Z        = 22.0;
+TD_POD_L            = 136.0;
+TD_POD_W            = 71.0;
 
 // View Selector: "ALL", "GSA_CLAMP", "GS_TRANSITION", "RACK_TAIL_RADAR"
 VIEW_MODE = "ALL";
@@ -120,31 +123,53 @@ module adventure_config_a_gsa_rack() {
 }
 
 // -----------------------------------------------------------------------------
-// CONFIG B: Standard GS Transition Dock (Sitzbank-Bügelfalte)
+// CONFIG B: Standard GS Transition Dock (Sitzbank-Bügelfalte & Sattelbrücke)
 // -----------------------------------------------------------------------------
 module adventure_config_b_transition_dock() {
-    // 1. Ø 28 mm Rear Subframe Tube (R1250/1300 GS under-seat trellis)
+    // 1. Dual Ø 28 mm Rear Subframe Trellis (Left & Right tubes at 10° rise angle)
     color("#404756", 0.95) {
-        rotate([0, 80, 0])
-            cylinder(r=14.0, h=260.0, center=true, $fn=32);
+        // Right frame tube (where the dock rests)
+        translate([0, 0, -10.0])
+            rotate([0, 80, 0])
+                cylinder(r=14.0, h=260.0, center=true, $fn=32);
+
+        // Left frame tube (Opposite flank under seat, 200 mm span)
+        translate([0, -200.0, -10.0])
+            rotate([0, 80, 0])
+                cylinder(r=14.0, h=260.0, center=true, $fn=32);
     }
 
-    // 2. Adventure Transition Dock Cradle (PA12-CF)
-    translate([-68.0, -42.0, 5.0]) {
-        color("#1c222b", 0.95)
-            adventure_transition_dock();
+    // 2. Under-Seat Cross-Rail (Sattelbrücke - 100% hidden beneath seat foam)
+    translate([0, -100.0, 0.0]) {
+        color("#222831", 0.92)
+            adventure_underseat_cross_rail();
 
-        // 3. Pod 2 Base Housing (Mounted inside dock)
-        translate([3.2, 3.2, 3.5]) {
+        // Fastening hardware: 2x M4 stainless bolts connecting dock tongue to rail
+        color("silver") {
+            for (dx = [-12.0, 12.0]) {
+                translate([dx, 46.0, -2.0])
+                    cylinder(r=2.0, h=10.0, center=true, $fn=16);
+            }
+        }
+    }
+
+    // 3. Adventure Transition Dock (Sculpted OEM Console: Base + Styled Lid)
+    // Aligned along the subframe tube at the seat waist crease
+    translate([-TD_POD_L/2.0 + 8.0, 0, 0]) {
+        // Base Cradle & Upper Styled Lid
+        adventure_transition_dock(part = "assembly", side = "right", lid_variant = "open_intercom");
+
+        // 4. Pod 2 Base Housing (Nested inside the sculpted console)
+        translate([0, -TD_POD_W/2.0, 3.5]) {
             color("slategray", 0.85)
                 pod_base_housing();
 
-            // M8 Cable at Port A
+            // M8 Cable at Port A routing into the under-seat bridge channel
             translate([0, POD_OUTER_W/2.0 - 8.0, POD_OUTER_H/2.0])
                 rotate([0, 180, 0])
                     dummy_m8_connector();
 
-            // 4. Cardo DMC Gen2 Cartridge (Inserted)
+            // 5. Cardo DMC Gen2 Cartridge (Flush inside the lid's sculpted bezel)
             translate([POD_BULKHEAD_X + 2.0, (POD_OUTER_W - CARTRIDGE_BASE_W)/2.0, POD_WALL]) {
                 cartridge_cardo_assembly(exploded = false);
             }
@@ -226,16 +251,16 @@ module adventure_kit_master_scene() {
         adventure_config_c_rack_tail_radar();
     } else {
         // Full Side-by-Side Studio Stage View with generous spacing
-        // Left (-260 mm): GSA Rohrträger-Klemmschelle
-        translate([-260.0, 0, 0])
+        // Left (-320 mm): GSA Rohrträger-Klemmschelle
+        translate([-320.0, 0, 0])
             adventure_config_a_gsa_rack();
 
         // Center (0 mm): Standard-GS Transition Dock
         translate([0, 0, 0])
             adventure_config_b_transition_dock();
 
-        // Right (+280 mm): Gepäckbrücken-Ausleger "Heck-Balkon" & Radar
-        translate([280.0, 0, 0])
+        // Right (+320 mm): Gepäckbrücken-Ausleger "Heck-Balkon" & Radar
+        translate([320.0, 0, 0])
             adventure_config_c_rack_tail_radar();
     }
 }

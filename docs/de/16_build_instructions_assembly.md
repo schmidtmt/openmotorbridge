@@ -466,8 +466,11 @@ Die Adventure-Montage ist für die gesamte **BMW GS Modellfamilie** (Boxer und P
 
 #### 5.2.2 Modulare Koffer- & Pod 1/2-Befestigung
 * **Option A: Vario-Koffer & Rahmenrohr-Montage (BMW GS Standard R1200/R1250/R1300, F750/F850/F900, KTM / Enduro ohne Rohrträger):**
-  * Die Transition-Docks ([`adventure_transition_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_transition_dock.stl)) unterhalb der Sitzbankkante an die Hauptrahmenrohre (Ø 28 mm) klemmen.
-  * **100 % kofferunabhängig:** Die Pods bauen nicht über die Kontur der Maschine hinaus und können sowohl mit Vario-Koffern als auch komplett ohne Koffer gefahren werden.
+  * Die Unter-Sitzbank-Sattelbrücke ([`adventure_underseat_cross_rail.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_underseat_cross_rail.stl)) unter der Sitzbank flach auf den Rahmensteg auflegen und an vorhandenen OEM-Punkten (M5/M6) verschrauben.
+  * Die Transition-Dock Basis-Wannen ([`adventure_transition_dock_base.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_transition_dock_base.stl)) an den Ø 28 mm Heckrahmenrohren in der Bügelfalte ansetzen und über die inneren Zungen mit je 2x M4-Schrauben fest mit der Sattelbrücke verschrauben (100 % verdrehsicheres U-Portal).
+  * Pods einsetzen, M8-PUR-Kabel durch die integrierte Kabelrinne der Sattelbrücke direkt zur Zentralbox ins Batteriefach führen.
+  * Karosserie-Deckel ([`adventure_transition_dock_lid.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_transition_dock_lid.stl)) aufsetzen und mit 4x M3 Torx-Schrauben bündig verschrauben.
+  * **100 % kofferunabhängig & Clean Look:** Keine sichtbaren Schellen oder Kabel von außen; die Konsole schmiegt sich aerodynamisch an die Bügelfalte an.
 * **Option B: Edelstahl-Rohrkofferträger (BMW GSA aller Baujahre inkl. K25 & F800 GSA, Touratech, Hepco&Becker, Alukoffer):**
   * 1,0 mm EPDM-Schutzstreifen um das Ø 18 mm Kofferträgerrohr wickeln.
   * Unterschale ([`adventure_pannier_rack_clamp_base.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_base.stl)) und Kappe ([`adventure_pannier_rack_clamp_cap.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_cap.stl)) mit 2x M5 x 30 mm V4A Schrauben und DIN 985 Stoppmuttern über Kreuz mit $4{,}5\,\text{Nm}$ anziehen.

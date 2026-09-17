@@ -178,7 +178,9 @@ Alle Gehäuseteile sind konsequent für das **IKEA-Prinzip** konstruiert: **Kein
 
 ### 9.3 Fahrzeugspezifische Montage-Kits (3D-Druckteile)
 * **Kit 1: BMW R1250 / R1300 GS (Standard / Vario-Koffer):**
-  * `adventure_transition_dock.stl` (2 Stk.): Kofferunabhängige Docks für die Sitzbank-Bügelfalte (Ø 28 mm Rahmenrohr).
+  * `adventure_transition_dock_base.stl` (2 Stk.): Kofferunabhängige Basis-Wannen für die Sitzbank-Bügelfalte (Ø 28 mm Rahmenrohr).
+  * `adventure_transition_dock_lid.stl` (2 Stk.): Aerodynamische Karosserie-Deckel mit Bügelfalten-Lichtkante & Cardo/Sena-Ausschnitt.
+  * `adventure_underseat_cross_rail.stl` (1 Stk.): Verwindungssteife Unter-Sitzbank-Sattelbrücke zur 100 % verdrehsicheren Verbindung von links und rechts mit integrierter M8-Kabelrinne.
   * `adventure_rack_tail_mount.stl` (1 Stk.): Heckbrücken-Ausleger für Pod 3 & Radar.
   * `radar_varia_gopro_lock_dock.stl` (1 Stk.) & `011_gopro_hirth_lock.stl` (1 Stk.): Radar-Bajonett-Dock mit Hirth-Verzahnung.
 * **Kit 2: BMW R1250 / R1300 GSA (Adventure mit Ø 18 mm Edelstahl-Alukofferträger):**

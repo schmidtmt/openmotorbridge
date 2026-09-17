@@ -1,17 +1,24 @@
 // =============================================================================
-// OpenMotorBridge - Adventure Transition Dock (Sitzbank-Bügelfalten-Brücke)
+// OpenMotorBridge - Adventure Transition Dock (Sitzbank-Bügelfalten-Konsole)
 // =============================================================================
 // File: hardware/cad/scad/02_pod_base/adventure_transition_dock.scad
-// Description: Under-seat frame bridge dock for standard BMW GS (R1200/1250/1300 GS,
-//              F750/850 GS, KTM, Africa Twin) without pannier luggage racks.
-//              Mounts Pod 1 or Pod 2 precisely in the optical waist crease
-//              between rider and passenger seats.
-//              Features:
-//              1. Contoured subframe saddle fitting Ø 22-32 mm frame tubes.
-//              2. 100% pannier-independent: usable naked, with Vario or soft bags.
-//              3. Positioned clear of rider boots and passenger footpegs.
-//              4. Dual EPDM tension strap slots & M5 frame bolt tabs.
-//              5. Outward-facing RF clearance with 0 dB shadowing.
+// Description: Two-piece automotive-sculpted console for universal Satellite Pods
+//              (Pod 1 Left, Pod 2 Right) on BMW GS / Adventure bikes.
+//              Integrates seamlessly into the optical waist crease ("Bügelfalte")
+//              between rider and pillion seat.
+//
+//              Key Engineering Features:
+//              1. Two-Piece Architecture: Lower Base Cradle + Upper Styled Deckel (Cowl).
+//              2. Parting line hidden along the sharp lateral "Bügelfalte" character crease.
+//              3. Rigid Under-Seat Bridge Interface: Inboard tongue bolts directly to
+//                 `adventure_underseat_cross_rail.scad` (Zero-Drill, Zero-Torque).
+//              4. 100% Hidden Cable Routing: 90° downward M8 PUR conduit routes directly
+//                 into the under-seat rail and Central Box (zero visible external wires).
+//              5. Aerodynamic Wedge Form: 22° tapered leading wedge blends into rider seat,
+//                 eliminating snag with rider pants or boots.
+//              6. Dual Lid Options:
+//                 - "open_intercom": Sculpted bezel framing Cardo/Sena unit flush like OEM.
+//                 - "closed_smooth": Seamless aerodynamic cover for blind box or internal transceiver.
 // =============================================================================
 
 include <../00_common/parameters.scad>;
@@ -19,104 +26,237 @@ include <../00_common/parameters.scad>;
 // --- Parametric Dimensions ---
 TD_POD_L            = 136.0; // Internal pod length clearance (mm)
 TD_POD_W            = 71.0;  // Internal pod width clearance (mm)
+TD_POD_H            = 38.5;  // Pod height (mm)
 TD_WALL             = 3.2;   // Wall thickness (mm)
-TD_FLOOR            = 3.5;   // Floor thickness (mm)
-TD_CRADLE_H         = 24.0;  // Half-height cradle for lean integration (mm)
-TD_CORNER_R         = 4.0;   // Fillet radius (mm)
+TD_FLOOR            = 3.5;   // Base floor thickness (mm)
 
-// Subframe tube interface & mounting tabs
-TUBE_SADDLE_R       = 14.0;  // Subframe tube radius (Ø 28 mm typical)
-MOUNT_TAB_L         = 24.0;  // Length of front/rear mounting tabs (mm)
-MOUNT_TAB_THICK     = 4.5;   // Tab thickness (mm)
-MOUNT_HOLE_R        = 2.8;   // M5 clearance hole (Ø 5.6 mm)
+// Outer Console Envelope
+CONSOLE_TOTAL_L     = 192.0; // Stretched aerodynamic length (mm)
+CONSOLE_NOSE_L      = 32.0;  // Front leading wedge extension (mm)
+CONSOLE_TAIL_L      = 24.0;  // Rear tapering aero tail extension (mm)
+CONSOLE_MAX_W       = 84.0;  // Outer maximum width at waist (mm)
+CONSOLE_CREASE_Z    = 22.0;  // Height of lateral Bügelfalte character line (mm)
+CONSOLE_TOTAL_H     = 42.0;  // Total height with lid (mm)
 
-module td_rounded_box(l, w, h, r) {
-    hull() {
-        translate([r, r, 0]) cylinder(r=r, h=h);
-        translate([l-r, r, 0]) cylinder(r=r, h=h);
-        translate([r, w-r, 0]) cylinder(r=r, h=h);
-        translate([l-r, w-r, 0]) cylinder(r=r, h=h);
+// Subframe tube interface (Ø 28 mm typical)
+TUBE_R              = 14.0;  // Tube radius (mm)
+TUBE_DROP_Z         = 10.0;  // Centerline drop below pod floor (mm)
+
+// Under-Seat Cross-Rail Inboard Tongue
+TONGUE_EXT_Y        = 24.0;  // Inboard tongue extension into bike center (mm)
+TONGUE_WIDTH_X      = 40.0;  // Longitudinal width of tongue (mm)
+TONGUE_THICK        = 5.0;   // Solid thickness (mm)
+TONGUE_SCREW_DIST   = 24.0;  // Distance between M4 fastening holes (mm)
+
+// Fastening Screws (4x M3 Torx connecting Lid to Base)
+LID_SCREW_X1        = 12.0;
+LID_SCREW_X2        = TD_POD_L - 12.0;
+LID_SCREW_Y1        = 6.0;
+LID_SCREW_Y2        = TD_POD_W - 6.0;
+
+// Lofting Profile Helper
+module console_hull_slice(x, w_base, w_crease, w_roof, z_crease, z_roof, r_fillet=3.0) {
+    translate([x, 0, 0])
+    rotate([0, -90, 0])
+    linear_extrude(height=1.0, center=true) {
+        hull() {
+            // Lower base corners
+            translate([0, -w_base/2.0 + r_fillet]) circle(r=r_fillet, $fn=16);
+            translate([0,  w_base/2.0 - r_fillet]) circle(r=r_fillet, $fn=16);
+            // Lateral Bügelfalte character crease points
+            translate([z_crease, -w_crease/2.0 + 1.0]) circle(r=1.0, $fn=12);
+            translate([z_crease,  w_crease/2.0 - 1.0]) circle(r=1.0, $fn=12);
+            // Upper roof corners (Tumblehome)
+            translate([z_roof - r_fillet, -w_roof/2.0 + r_fillet]) circle(r=r_fillet, $fn=16);
+            translate([z_roof - r_fillet,  w_roof/2.0 - r_fillet]) circle(r=r_fillet, $fn=16);
+        }
     }
 }
 
-module adventure_transition_dock() {
+// Full 3D Automotive Lofted Console Body
+module console_full_lofted_hull() {
+    hull() {
+        // 1. Front Nose Tip (Tapered leading wedge under rider seat)
+        console_hull_slice(-CONSOLE_NOSE_L, 36.0, 42.0, 32.0, 14.0, 24.0, 2.0);
+        // 2. Front Ramp Transition
+        console_hull_slice(-12.0, 56.0, 68.0, 54.0, 18.0, 34.0, 3.0);
+        // 3. Pod Front Bulkhead (Waist start)
+        console_hull_slice(10.0, 72.0, CONSOLE_MAX_W, 70.0, CONSOLE_CREASE_Z, CONSOLE_TOTAL_H, 3.5);
+    }
+    hull() {
+        // 3. Pod Front Bulkhead
+        console_hull_slice(10.0, 72.0, CONSOLE_MAX_W, 70.0, CONSOLE_CREASE_Z, CONSOLE_TOTAL_H, 3.5);
+        // 4. Pod Midsection (Deepest waist crease)
+        console_hull_slice(TD_POD_L/2.0, 74.0, CONSOLE_MAX_W + 2.0, 72.0, CONSOLE_CREASE_Z, CONSOLE_TOTAL_H, 3.5);
+        // 5. Pod Rear Bulkhead
+        console_hull_slice(TD_POD_L - 10.0, 72.0, CONSOLE_MAX_W, 70.0, CONSOLE_CREASE_Z, CONSOLE_TOTAL_H, 3.5);
+    }
+    hull() {
+        // 5. Pod Rear Bulkhead
+        console_hull_slice(TD_POD_L - 10.0, 72.0, CONSOLE_MAX_W, 70.0, CONSOLE_CREASE_Z, CONSOLE_TOTAL_H, 3.5);
+        // 6. Rear Tail Transition
+        console_hull_slice(TD_POD_L + 12.0, 58.0, 68.0, 52.0, 18.0, 32.0, 3.0);
+        // 7. Rear Tail Tip (Aero diffusor trailing edge)
+        console_hull_slice(TD_POD_L + CONSOLE_TAIL_L, 40.0, 46.0, 34.0, 12.0, 20.0, 2.0);
+    }
+}
+
+// Longitudinal Style Grooves on Roof
+module console_roof_style_grooves() {
+    for (side = [-1, 1]) {
+        translate([0, side * 16.0, CONSOLE_TOTAL_H]) {
+            hull() {
+                translate([-CONSOLE_NOSE_L + 14.0, 0, 0]) sphere(r=1.0, $fn=12);
+                translate([TD_POD_L + CONSOLE_TAIL_L - 12.0, 0, 0]) sphere(r=1.0, $fn=12);
+            }
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+// MODULE 1: ADVENTURE TRANSITION DOCK - BASE CRADLE (UNTERTEIL)
+// -----------------------------------------------------------------------------
+module adventure_transition_dock_base(side = "right") {
+    // Inboard direction: towards bike centerline (right side -> -Y; left side -> +Y)
+    y_dir = (side == "right") ? -1.0 : 1.0;
+
     difference() {
         union() {
-            // 1. Main Pod Carrier Cradle
-            td_rounded_box(TD_POD_L + 2*TD_WALL, TD_POD_W + 2*TD_WALL, TD_CRADLE_H, TD_CORNER_R);
+            // Cut lofted body below the Bügelfalte crease line (Z <= CONSOLE_CREASE_Z)
+            intersection() {
+                console_full_lofted_hull();
+                translate([-CONSOLE_NOSE_L - 5.0, -CONSOLE_MAX_W, -TUBE_DROP_Z - 10.0])
+                    cube([CONSOLE_TOTAL_L + 15.0, 2 * CONSOLE_MAX_W, CONSOLE_CREASE_Z + TUBE_DROP_Z + 10.0]);
+            }
 
-            // 2. Front Subframe Mounting Tab (Bolts to seat bracket / frame tab)
-            translate([-MOUNT_TAB_L, (TD_POD_W + 2*TD_WALL)/2.0 - 15.0, 0]) {
-                hull() {
-                    translate([TD_CORNER_R, TD_CORNER_R, 0]) cylinder(r=TD_CORNER_R, h=MOUNT_TAB_THICK);
-                    translate([MOUNT_TAB_L + 5.0, TD_CORNER_R, 0]) cylinder(r=TD_CORNER_R, h=MOUNT_TAB_THICK);
-                    translate([TD_CORNER_R, 30.0 - TD_CORNER_R, 0]) cylinder(r=TD_CORNER_R, h=MOUNT_TAB_THICK);
-                    translate([MOUNT_TAB_L + 5.0, 30.0 - TD_CORNER_R, 0]) cylinder(r=TD_CORNER_R, h=MOUNT_TAB_THICK);
+            // Inboard Tongue to Under-Seat Cross-Rail
+            translate([TD_POD_L/2.0 - TONGUE_WIDTH_X/2.0, 0, 0]) {
+                if (y_dir < 0) {
+                    translate([0, -CONSOLE_MAX_W/2.0 - TONGUE_EXT_Y + 4.0, 0])
+                        cube([TONGUE_WIDTH_X, TONGUE_EXT_Y + 4.0, TONGUE_THICK]);
+                } else {
+                    translate([0, CONSOLE_MAX_W/2.0 - 8.0, 0])
+                        cube([TONGUE_WIDTH_X, TONGUE_EXT_Y + 8.0, TONGUE_THICK]);
                 }
             }
 
-            // 3. Rear Subframe Mounting Tab
-            translate([TD_POD_L + 2*TD_WALL - 5.0, (TD_POD_W + 2*TD_WALL)/2.0 - 15.0, 0]) {
-                hull() {
-                    translate([0, TD_CORNER_R, 0]) cylinder(r=TD_CORNER_R, h=MOUNT_TAB_THICK);
-                    translate([MOUNT_TAB_L - TD_CORNER_R, TD_CORNER_R, 0]) cylinder(r=TD_CORNER_R, h=MOUNT_TAB_THICK);
-                    translate([0, 30.0 - TD_CORNER_R, 0]) cylinder(r=TD_CORNER_R, h=MOUNT_TAB_THICK);
-                    translate([MOUNT_TAB_L - TD_CORNER_R, 30.0 - TD_CORNER_R, 0]) cylinder(r=TD_CORNER_R, h=MOUNT_TAB_THICK);
+            // 4x Internal Lid Screw Bosses (M3 Brass Heat-Set or Nut-Pocket Seats)
+            for (bx = [LID_SCREW_X1, LID_SCREW_X2]) {
+                for (by = [-LID_SCREW_Y2/2.0 + 2.0, LID_SCREW_Y2/2.0 - 2.0]) {
+                    translate([bx, by, 0])
+                        cylinder(r=4.2, h=CONSOLE_CREASE_Z, $fn=20);
                 }
             }
-
-            // 4. Underside Subframe Tube Saddles (Form-fit rest for frame tubes)
-            translate([TD_WALL + 20.0, -4.0, -10.0])
-                cube([25.0, TD_POD_W + 2*TD_WALL + 8.0, 12.0]);
-            translate([TD_POD_L - 35.0, -4.0, -10.0])
-                cube([25.0, TD_POD_W + 2*TD_WALL + 8.0, 12.0]);
         }
 
         // --- SUBTRACTIONS ---
 
-        // A. Internal Pod Chamber Pocket
-        translate([TD_WALL, TD_WALL, TD_FLOOR])
-            cube([TD_POD_L, TD_POD_W, TD_CRADLE_H + 5.0]);
+        // A. Pod Main Reception Cavity (136 x 71 mm, sits on floor at Z = TD_FLOOR)
+        translate([0, -TD_POD_W/2.0, TD_FLOOR])
+            cube([TD_POD_L, TD_POD_W, CONSOLE_CREASE_Z + 10.0]);
 
-        // Open front throat for quick-release cartridge sliding
-        translate([-1.0, TD_WALL + 5.0, TD_FLOOR])
-            cube([TD_WALL + 2.0, TD_POD_W - 10.0, TD_CRADLE_H + 5.0]);
+        // B. Subframe Tube Saddle (Concave Hohlkehle on bottom, fitting Ø 28 mm tube)
+        translate([-CONSOLE_NOSE_L - 5.0, 0, -TUBE_DROP_Z])
+            rotate([0, 90, 0])
+                cylinder(r=TUBE_R, h=CONSOLE_TOTAL_L + 15.0, $fn=36);
 
-        // B. Mounting Holes on Front and Rear Tabs (M5 with washer recesses)
-        translate([-MOUNT_TAB_L/2.0, (TD_POD_W + 2*TD_WALL)/2.0, -1.0]) {
-            cylinder(r=MOUNT_HOLE_R, h=MOUNT_TAB_THICK + 2.0);
-            translate([0, 0, MOUNT_TAB_THICK - 1.5])
-                cylinder(r=5.5, h=3.0); // Washer recess
-        }
-        translate([TD_POD_L + 2*TD_WALL + MOUNT_TAB_L/2.0 - 5.0, (TD_POD_W + 2*TD_WALL)/2.0, -1.0]) {
-            cylinder(r=MOUNT_HOLE_R, h=MOUNT_TAB_THICK + 2.0);
-            translate([0, 0, MOUNT_TAB_THICK - 1.5])
-                cylinder(r=5.5, h=3.0);
-        }
-
-        // C. Subframe Tube Hohlkehlen (Concave saddle cuts on bottom)
-        translate([TD_WALL + 32.5, -10.0, -10.0])
-            rotate([-90, 0, 0])
-                cylinder(r=TUBE_SADDLE_R, h=TD_POD_W + 2*TD_WALL + 20.0);
-
-        translate([TD_POD_L - 22.5, -10.0, -10.0])
-            rotate([-90, 0, 0])
-                cylinder(r=TUBE_SADDLE_R, h=TD_POD_W + 2*TD_WALL + 20.0);
-
-        // D. Dual Heavy-Duty EPDM Strap / Zip-Tie Channels
-        for (strap_x = [TD_WALL + 32.5, TD_POD_L - 22.5]) {
-            translate([strap_x - 3.0, -1.0, TD_FLOOR + 1.5])
-                cube([6.0, TD_POD_W + 2*TD_WALL + 2.0, 3.2]);
-        }
-
-        // E. Underside M8 Harness Pass-Through Slot (Routes under seat to battery)
-        translate([TD_POD_L - 5.0, (TD_POD_W + 2*TD_WALL)/2.0, -12.0])
-            hull() {
-                cylinder(r=5.5, h=20.0);
-                translate([0, -15.0, 0]) cylinder(r=5.5, h=20.0);
+        // C. Fastening Holes on Inboard Tongue (2x M4 to Under-Seat Rail)
+        translate([TD_POD_L/2.0, y_dir * (CONSOLE_MAX_W/2.0 + TONGUE_EXT_Y/2.0), -1.0]) {
+            for (dx = [-TONGUE_SCREW_DIST/2.0, TONGUE_SCREW_DIST/2.0]) {
+                translate([dx, 0, 0]) {
+                    cylinder(r=2.2, h=TONGUE_THICK + 3.0, $fn=16); // M4 through-bore
+                    translate([0, 0, TONGUE_THICK - 1.5])
+                        cylinder(r=4.5, h=3.0, $fn=16); // Counterbore
+                }
             }
+        }
+
+        // D. Inboard M8 PUR Cable 90° Conduit (Passes through tongue under seat)
+        translate([12.0, 0, TD_FLOOR]) {
+            hull() {
+                cylinder(r=4.8, h=15.0, $fn=20);
+                translate([0, y_dir * (CONSOLE_MAX_W/2.0 + TONGUE_EXT_Y + 2.0), 0])
+                    cylinder(r=4.8, h=15.0, $fn=20);
+            }
+        }
+
+        // E. 4x M3 Screw Holes in Bosses (Ø 3.2 mm for heat-set or tapping)
+        for (bx = [LID_SCREW_X1, LID_SCREW_X2]) {
+            for (by = [-LID_SCREW_Y2/2.0 + 2.0, LID_SCREW_Y2/2.0 - 2.0]) {
+                translate([bx, by, CONSOLE_CREASE_Z - 12.0])
+                    cylinder(r=1.8, h=15.0, $fn=16);
+            }
+        }
+
+        // F. Concealed EPDM Under-Pod Strap Channels (Optional backup securing)
+        for (sx = [30.0, TD_POD_L - 30.0]) {
+            translate([sx - 3.0, -CONSOLE_MAX_W, TD_FLOOR - 2.0])
+                cube([6.0, 2 * CONSOLE_MAX_W, 2.5]);
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+// MODULE 2: ADVENTURE TRANSITION DOCK - DESIGN DECKEL / COWL (OBERTEIL)
+// -----------------------------------------------------------------------------
+module adventure_transition_dock_lid(variant = "open_intercom") {
+    difference() {
+        union() {
+            // Cut lofted body above the Bügelfalte crease line (Z >= CONSOLE_CREASE_Z)
+            intersection() {
+                console_full_lofted_hull();
+                translate([-CONSOLE_NOSE_L - 5.0, -CONSOLE_MAX_W, CONSOLE_CREASE_Z])
+                    cube([CONSOLE_TOTAL_L + 15.0, 2 * CONSOLE_MAX_W, CONSOLE_TOTAL_H - CONSOLE_CREASE_Z + 5.0]);
+            }
+        }
+
+        // --- SUBTRACTIONS ---
+
+        // A. Style Grooves along roof
+        console_roof_style_grooves();
+
+        // B. Cartridge / Intercom Cutout Window (Variant Dependent)
+        if (variant == "open_intercom") {
+            // Sculpted bezel framing the Cardo Packtalk Edge / Sena unit flush like OEM
+            translate([18.0, 0, CONSOLE_CREASE_Z - 1.0]) {
+                hull() {
+                    translate([0, -26.0, 0]) cylinder(r=5.0, h=CONSOLE_TOTAL_H, $fn=20);
+                    translate([92.0, -26.0, 0]) cylinder(r=5.0, h=CONSOLE_TOTAL_H, $fn=20);
+                    translate([0,  26.0, 0]) cylinder(r=5.0, h=CONSOLE_TOTAL_H, $fn=20);
+                    translate([92.0,  26.0, 0]) cylinder(r=5.0, h=CONSOLE_TOTAL_H, $fn=20);
+                }
+            }
+        }
+
+        // C. 4x M3 Fastening Screw Counterbores
+        for (bx = [LID_SCREW_X1, LID_SCREW_X2]) {
+            for (by = [-LID_SCREW_Y2/2.0 + 2.0, LID_SCREW_Y2/2.0 - 2.0]) {
+                translate([bx, by, CONSOLE_CREASE_Z - 2.0]) {
+                    cylinder(r=1.7, h=25.0, $fn=16); // M3 through
+                    translate([0, 0, CONSOLE_TOTAL_H - CONSOLE_CREASE_Z - 3.5])
+                        cylinder(r=3.4, h=6.0, $fn=20); // M3 Torx-TR head counterbore
+                }
+            }
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+// MASTER MODULE: ADVENTURE TRANSITION DOCK ASSEMBLY & STL RENDERER
+// -----------------------------------------------------------------------------
+module adventure_transition_dock(part = "assembly", side = "right", lid_variant = "open_intercom") {
+    if (part == "base") {
+        adventure_transition_dock_base(side = side);
+    } else if (part == "lid") {
+        adventure_transition_dock_lid(variant = lid_variant);
+    } else {
+        // Combined Assembly View with contrasting two-tone finishes
+        color("#1c222b", 0.96)
+            adventure_transition_dock_base(side = side);
+        color("#2b3442", 0.98)
+            adventure_transition_dock_lid(variant = lid_variant);
     }
 }
 
 // Standalone render
-adventure_transition_dock();
+adventure_transition_dock(part = "assembly", side = "right", lid_variant = "open_intercom");

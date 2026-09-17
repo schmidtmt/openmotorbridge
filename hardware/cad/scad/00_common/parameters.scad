@@ -19,7 +19,7 @@ MAIN_BOX_WALL         = 2.5;   // Nominal wall thickness (mm)
 MAIN_BOX_CORNER_POST  = 7.0;   // Corner clamping screw post size (mm, for M3 hex nut pockets)
 
 // --- 3. Satellite Pod Dimensions (Universal Enlarged Envelope) ---
-
+POD_OUTER_L           = 135.0; // Outer length in X (mm)
 POD_OUTER_W           = 70.0;  // Outer width in Y (mm)
 POD_OUTER_H           = 38.0;  // Outer height in Z (mm)
 POD_WALL              = 3.5;   // Nominal wall thickness (mm)

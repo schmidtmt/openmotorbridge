@@ -644,7 +644,20 @@ Depending on luggage configurations, adventure bikes deploy two specialized moun
 * **Option A: Tubular Pannier Racks (BMW GS Adventure, Touratech, Hepco&Becker):**
   Mounted on the inside of the robust $\varnothing 18\,\text{mm}$ steel/stainless rack structure using form-fitting clamp halves (`adventure_pannier_rack_clamp.scad`). The tubes serve as a roll cage, protecting the pods during spills or tip-overs.
 * **Option B: Standard GS & Naked Adventure Bikes (Without Luggage Racks):**
-  Mounted via the sculpted "Transition Dock" (`adventure_transition_dock.scad`), a curved bridge bolted or strapped across the upper subframe tubes directly in the waist crease between rider and passenger seat.
+  * **Mounting:** Mounted via a two-piece, aerodynamically sculpted **Transition Dock** ([`adventure_transition_dock.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/adventure_transition_dock.scad)) in combination with a concealed **Under-Seat Saddle Bridge** ([`adventure_underseat_cross_rail.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/adventure_underseat_cross_rail.scad)).
+  * **Positioning:** Directly inside the optical waist crease ("Bügelfalte") at the transition between rider and passenger seats along the $\varnothing 28\,\text{mm}$ subframe tube.
+
+![OpenMotorBridge GS Transition Dock & Under-Seat Saddle Bridge](../images/cad/adventure_transition_dock_cad.png)
+
+*Figure 8.29-B: CAD detailed view of the GS Transition Dock with Under-Seat Saddle Bridge. Displayed are the two-piece console enclosure (base cradle with subframe saddle and upper sculpted bodywork cowl parting along the sharp waist crease line), the recessed Cardo Packtalk Edge Pod 2, and the flat U-ribbed saddle bridge rail (`adventure_underseat_cross_rail.scad`) linking left and right flanks under the seat to neutralize rotation torque and route the M8 harness invisibly into the battery tray.*
+
+  * **Key Mechanical Advantages:**
+    1. **100% Anti-Rotation Stability via Under-Seat Saddle Bridge:** Instead of clamping loosely to a single round tube, a rigid PA12-CF cross-rail ($7.5\,\text{mm}$ low-profile U-channel) spans under the seat between both subframe tubes, locking both sides into a rigid U-portal.
+    2. **Zero-Drill & 100% Invisible Mounting from Outside:** Zero exposed clamps, zip-ties, or screw heads on the visible subframe tube. Fastening utilizes existing OEM under-seat bracket points inside the dry battery tray.
+    3. **Seamless Bodywork Integration & Top Cowl:** Styled after the Touring Fender Console, the dock forms a closed aerodynamic fairing rather than an open tray. The parting line sits inside the crisp waist crease, and the $22^\circ$ leading wedge blends flush against the rider seat flank (zero boot/knee snag).
+    4. **Concealed M8 Cable Conduit directly to Central Box:** The M8 PUR cable routes internally through the dock's inboard tongue into the underside channel of the cross-rail straight into the Central Box.
+    5. **100% Luggage-Independent:** Usable naked, with BMW Vario cases, or with soft horseshoe bags.
+    6. **Clear RF Horizon:** Unobstructed $180^\circ$ lateral and upward line-of-sight to rider and passenger helmets.
 
 ---
 
@@ -835,6 +848,12 @@ The OpenMotorBridge CAD repository follows a strict hierarchical Constructive So
 | **Satellite Pod**| CVO ST Telemetry Fin (2.4 GHz Mesh) | `02_pod_base/cvo_st_telemetry_fin.stl` | `02_pod_base/cvo_st_telemetry_fin.scad` |
 | **Satellite Pod**| Road King Special Touring Fender Console | `02_pod_base/pod3_touring_fender_console.stl` | `02_pod_base/pod3_touring_fender_console.scad` |
 | **Satellite Pod**| Touring Saddlebag Lid Dock (Pods 1 & 2) | `02_pod_base/saddlebag_lid_dock.stl` | `02_pod_base/saddlebag_lid_dock.scad` |
+| **Adventure Pod 3**| Rack-Tail Mount (Tail balcony with deflector & radar fork) | `02_pod_base/adventure_rack_tail_mount.stl` | `02_pod_base/adventure_rack_tail_mount.scad` |
+| **Adventure Pods 1/2**| GS Transition Dock Base Cradle (Waist Crease Lower Tub) | `02_pod_base/adventure_transition_dock_base.stl` | `02_pod_base/adventure_transition_dock.scad` |
+| **Adventure Pods 1/2**| GS Transition Dock Bodywork Cowl (Waist Crease Top Lid) | `02_pod_base/adventure_transition_dock_lid.stl` | `02_pod_base/adventure_transition_dock.scad` |
+| **Adventure-Kit** | Under-Seat Saddle Bridge (Left-Right Cross-Rail) | `02_pod_base/adventure_underseat_cross_rail.stl` | `02_pod_base/adventure_underseat_cross_rail.scad` |
+| **Adventure Pods 1/2**| GSA Pannier Rack Clamp Base (Ø 18 mm Tube) | `02_pod_base/adventure_pannier_rack_clamp_base.stl` | `02_pod_base/adventure_pannier_rack_clamp.scad` |
+| **Adventure Pods 1/2**| GSA Pannier Rack Clamp Cap (Ø 18 mm Tube) | `02_pod_base/adventure_pannier_rack_clamp_cap.stl` | `02_pod_base/adventure_pannier_rack_clamp.scad` |
 | **Frame Dock** | MagSafe Frame Dock Upper Shell (Tube Saddle, Wings & M2.5 Nut-Pocket) | `02_pod_base/components/009_magsafe_frame_dock.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
 | **Frame Dock** | MagSafe Tube Clamp Strap (Ø 26 mm) | `02_pod_base/components/009_magsafe_frame_clamp.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
 | **Frame Dock** | MagSafe Frame Dock Lower Shell (PCB Ledge & M2.5 Counterbore) | `02_pod_base/components/009_magsafe_frame_lid.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |

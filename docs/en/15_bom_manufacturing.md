@@ -178,7 +178,9 @@ All enclosure parts are designed around the **IKEA Principle**: **Zero heat-set 
 
 ### 9.3 Vehicle-Specific Mounting Kits (3D Printed Parts)
 * **Kit 1: BMW R1250 / R1300 GS (Standard / Vario Cases):**
-  * `adventure_transition_dock.stl` (2 pcs): Luggage-independent docks in the seat crease (Ø 28 mm frame tube).
+  * `adventure_transition_dock_base.stl` (2 pcs): Luggage-independent base cradles for the seat waist crease (Ø 28 mm frame tube).
+  * `adventure_transition_dock_lid.stl` (2 pcs): Aerodynamic bodywork cowls with waist crease line & Cardo/Sena bezel cutout.
+  * `adventure_underseat_cross_rail.stl` (1 pc): Rigid under-seat saddle bridge locking left and right docks with integrated M8 cable trough.
   * `adventure_rack_tail_mount.stl` (1 pc): Luggage rack cantilever for Pod 3 & radar.
   * `radar_varia_gopro_lock_dock.stl` (1 pc) & `011_gopro_hirth_lock.stl` (1 pc): Radar bayonet dock with 36-tooth Hirth gear lock.
 * **Kit 2: BMW R1250 / R1300 GSA (Adventure with Ø 18 mm Stainless Pannier Rack Cage):**

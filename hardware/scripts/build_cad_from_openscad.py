@@ -96,8 +96,9 @@ STL_TARGETS: List[Tuple] = [
 
     # 10. Adventure-Kit (BMW GS / GSA, KTM, Africa Twin)
     ("02_pod_base/adventure_pannier_rack_clamp.scad", "02_pod_base/adventure_pannier_rack_clamp_base.stl", ["-D", 'part="base"']),
-    ("02_pod_base/adventure_pannier_rack_clamp.scad", "02_pod_base/adventure_pannier_rack_clamp_cap.stl", ["-D", 'part="cap"']),
-    ("02_pod_base/adventure_transition_dock.scad", "02_pod_base/adventure_transition_dock.stl"),
+    ("02_pod_base/adventure_transition_dock.scad", "02_pod_base/adventure_transition_dock_base.stl", ["-D", 'part="base"']),
+    ("02_pod_base/adventure_transition_dock.scad", "02_pod_base/adventure_transition_dock_lid.stl", ["-D", 'part="lid"']),
+    ("02_pod_base/adventure_underseat_cross_rail.scad", "02_pod_base/adventure_underseat_cross_rail.stl"),
     ("02_pod_base/adventure_rack_tail_mount.scad", "02_pod_base/adventure_rack_tail_mount.stl"),
     ("02_pod_base/radar_varia_gopro_lock_dock.scad", "02_pod_base/radar_varia_gopro_lock_dock.stl"),
     ("02_pod_base/parts/011_gopro_hirth_lock.scad", "02_pod_base/components/011_gopro_hirth_lock.stl"),
@@ -271,7 +272,13 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
     (
         "02_pod_base/99_adventure_kit_assembly.scad",
         os.path.join(CAD_IMG_DIR, "adventure_kit_master_assembly_3d.png"),
-        "10,20,10,48,0,325,980",
+        "10,20,10,48,0,325,1080",
+        "Tomorrow"
+    ),
+    (
+        "02_pod_base/adventure_transition_dock.scad",
+        os.path.join(CAD_IMG_DIR, "adventure_transition_dock_cad.png"),
+        "68,0,20,55,0,310,300",
         "Tomorrow"
     ),
     (
