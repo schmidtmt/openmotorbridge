@@ -237,3 +237,22 @@ Upon cartridge insertion, the 1-Wire driver queries the 64-bit UID and loads the
 ```
 
 * **Zero-Trust Fallback (`disabled.json`):** On unrecognized UIDs, electrical shorts, or empty bays, the 5V MOSFET remains off (`vcc_enabled: false`), codec gain drops to `-96 dB`, and DLE score is clamped to `0`.
+
+---
+
+## 8. Modular Hardware Topology & Graceful Degradation (Operation without Pod 3 or Front Node)
+
+OpenMotorBridge is designed from the ground up as a **resilient, fault-tolerant modular architecture**. No subsystem blocks Central Box boot or crashes if optional modules are omitted or unplugged:
+
+| Configuration | Installed Hardware | System Behavior & Graceful Degradation |
+| :--- | :--- | :--- |
+| **Tier 1: Minimal Core** | Central Box only<br>*(No Pod 3, no Front Node)* | • **Audio Bridge & Intercoms fully operational:** Pod 1 & 2 mix with zero latency.<br>• **CAN-Bus active:** Speed, RPM & BCM telemetry via HD26 pins 17/18 under seat.<br>• **IMU active:** Bosch BMI270 provides lean angle, pitch & vibration sensing.<br>• **UART1 (Pod 3):** Polls with 100 ms timeout without error; reports `has_3d_fix = false`.<br>• **ESP-NOW (Front Node):** Waits in discovery mode; AGC operates at nominal gain.<br>• **DLE Score:** LoRa, GNSS, and Front-Mic capability bits are dynamically omitted. |
+| **Tier 2: Cockpit Extension** | Central Box + Front Node<br>*(No Pod 3)* | • All Tier 1 features + 4-Port USB Hub & 20W PD Charger.<br>• Ottocast Watchdog & automatic ignition power-gating enabled.<br>• Handlebar PTT (< 1.8 ms) and dynamic acoustic wind AGC via Knowles MEMS.<br>• CAN-Bus can be tapped at Front Node `J2` or under the seat.<br>• Blind spot mirror LEDs (`J9`) remain dark (no radar attached). |
+| **Tier 3: Tail & Radar Extension** | Central Box + Pod 3<br>*(No Front Node)* | • All Tier 1 features + u-blox MAX-M10S GNSS & SX1262 LoRa Mesh.<br>• Garmin Varia / mmWave radar active: Audible warning pings in helmet & WebApp.<br>• Because Front Node is omitted, only mirror LEDs and USB cockpit are absent.<br>• Handlebar control is performed wirelessly via BLE Handlebar Remote (CR2032). |
+| **Tier 4: Full System** | Central Box + Front Node + Pod 3 | • 100% of all features: 3-Node mesh, mirror LEDs (8 Hz strobe on TTC hazard), automatic action cam bookmarking on critical radar threats (< 2.5s), and 1-PPS timecode master. |
+
+### 8.1 Zero-Crash Resiliency Mechanisms
+1. **Asynchronous Non-Blocking UARTs:** Communications to Pod 3 (UART1) and Radar (UART2) use FreeRTOS timeouts (`pdMS_TO_TICKS(50)` / `100`). There are **zero blocking `while(1)` polling loops** awaiting serial bytes.
+2. **Dynamic DLE Capabilities (`omm_get_capabilities_vector`):** Central Box advertises only those hardware flags to the mesh that physically acknowledge presence (`gnss_bridge_is_pod3_connected()`, `is_linked`, `can_bus_is_connected()`).
+3. **Sensor-Fusion Autarky (`adr_ekf_filter.cpp`):** If GNSS is absent (or Pod 3 missing), the EKF immediately falls back to **Dead Reckoning** supported by IMU and CAN wheel speed.
+4. **Fault-Tolerant Audio Mixer (`audio_dsp_pipeline.cpp`):** If the Front Node Knowles MEMS microphone is absent, the brickwall limiter and AGC level run at a fixed nominal baseline (Unity Gain `1.0f`).

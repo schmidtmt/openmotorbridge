@@ -237,3 +237,22 @@ Wird eine Kassette eingesteckt, liest der 1-Wire Treiber die 64-Bit-UID aus und 
 ```
 
 * **Zero-Trust Fallback (`disabled.json`):** Bei unbekannter UID, Kurzschluss oder leerem Schacht bleibt der 5V MOSFET gesperrt (`vcc_enabled: false`), der Codec wird auf `-96 dB` gedämpft und der DLE-Score auf `0` gesetzt.
+
+---
+
+## 8. Modulare Hardware-Topologie & Graceful Degradation (Betrieb ohne Pod 3 oder Front Node)
+
+OpenMotorBridge ist als **losgelöstes, fehlertolerantes Baukastensystem** konzipiert. Kein Subsystem blockiert den Start der Zentralbox, wenn optionale Module nicht verbaut oder ausgesteckt sind:
+
+| Konfiguration | Verbaute Komponenten | Systemverhalten & Graceful Degradation |
+| :--- | :--- | :--- |
+| **Tier 1: Minimal Core** | Nur Zentralbox<br>*(Kein Pod 3, kein Front Node)* | • **Audio-Bridge & Intercoms voll aktiv:** Pod 1 & 2 mischen latenzfrei.<br>• **CAN-Bus aktiv:** Tacho, Drehzahl & BCM-Telemetrie über HD26 Pins 17/18.<br>• **IMU aktiv:** Bosch BMI270 liefert Schräglage, Pitch & Erschütterung.<br>• **UART1 (Pod 3):** Pollt mit 100 ms Timeout ohne Fehler; meldet `has_3d_fix = false`.<br>• **ESP-NOW (Front Node):** Wartet passiv im Pairing-Modus; AGC bleibt auf Nominalpegel.<br>• **DLE-Score:** LoRa-, GNSS- und Front-Mic-Bits werden dynamisch ausgeblendet. |
+| **Tier 2: Cockpit-Erweiterung** | Zentralbox + Front Node<br>*(Kein Pod 3)* | • Alle Tier 1 Funktionen + 4-Port USB-Hub & 20W PD Lader.<br>• Ottocast Watchdog & automatische Zündungstrennung aktiv.<br>• Lenker-PTT (< 1,8 ms) und dynamische Fahrtwind-AGC über Knowles MEMS.<br>• CAN-Bus kann wahlweise vorne an `J2` oder unter der Sitzbank angeschlossen werden.<br>• Totwinkel-Spiegel-LEDs (`J9`) bleiben dunkel (da kein Radar angeschlossen). |
+| **Tier 3: Heck- & Radar-Erweiterung** | Zentralbox + Pod 3<br>*(Kein Front Node)* | • Alle Tier 1 Funktionen + u-blox MAX-M10S GNSS & SX1262 LoRa Mesh.<br>• Garmin Varia / mmWave Radar aktiv: Akustische Warn-Pings im Helm & WebApp.<br>• Da kein Front Node existiert, entfallen lediglich die Spiegel-LEDs und das USB-Cockpit.<br>• Lenker-Bedienung erfolgt kabellos über den BLE-Lenkertaster (CR2032). |
+| **Tier 4: Vollsystem** | Zentralbox + Front Node + Pod 3 | • 100 % aller Features: 3-Knoten Mesh, Spiegel-LEDs (8 Hz Kollisionsblitz), automatische Actioncam-Bookmarks bei kritischem Radar TTC (< 2,5 s) und 1-PPS Timecode-Master. |
+
+### 8.1 Schutzmechanismen gegen fehlende Daten (Zero-Crash Policy)
+1. **Asynchrone Non-Blocking UARTs:** Die Kommunikation zu Pod 3 (UART1) und Radar (UART2) läuft mit FreeRTOS Timeouts (`pdMS_TO_TICKS(50)` / `100`). Es existieren **keine blockierenden `while(1)`-Warteschleifen** auf Antwortbytes.
+2. **Dynamische DLE-Fähigkeiten (`omm_get_capabilities_vector`):** Die Zentralbox deklariert nur jene Hardware-Flags im Mesh, die physisch antworten (`gnss_bridge_is_pod3_connected()`, `is_linked`, `can_bus_is_connected()`).
+3. **Sensor-Fusion Autarkie (`adr_ekf_filter.cpp`):** Fällt GNSS weg (oder fehlt Pod 3), schaltet der EKF verzögerungsfrei auf **Dead Reckoning** um und stützt sich auf IMU und CAN-Raddrehzahl.
+4. **Fehlertoleranter Audiomixer (`audio_dsp_pipeline.cpp`):** Fehlt das Knowles MEMS Mikrofon des Front Nodes, läuft der Brickwall-Limiter und AGC-Level auf festem Rider-Standardwert (Unity Gain `1.0f`).

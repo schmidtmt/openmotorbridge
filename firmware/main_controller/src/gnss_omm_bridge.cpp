@@ -6,7 +6,10 @@
 #include "driver/uart.h"
 #include "esp_log.h"
 #include "esp_mac.h"
+#include "esp_timer.h"
 #include "sdio_ring_buffer.h"
+#include "esp_now_front_node_client.h"
+#include "can_bus_manager.h"
 
 static const char *TAG = "GNSS_BRIDGE";
 
@@ -14,16 +17,19 @@ static const char *TAG = "GNSS_BRIDGE";
 #define PIN_POD3_TX     GPIO_NUM_18 // Main Controller TX -> Pod 3 RX
 #define PIN_POD3_RX     GPIO_NUM_17 // Main Controller RX <- Pod 3 TX
 
+static bool s_pod3_connected = false;
+static uint32_t s_last_pod3_rx_ms = 0;
+
 static GnssData_t s_latest_gnss = {
-    .latitude = 47.3769,
-    .longitude = 8.5417,
-    .altitude = 408.2f,
+    .latitude = 0.0,
+    .longitude = 0.0,
+    .altitude = 0.0f,
     .speed_kmh = 0.0f,
     .heading_deg = 0.0f,
-    .pdop = 1.2f,
-    .satellites_visible = 18,
-    .has_3d_fix = true,
-    .utc_time = "2026-08-23T10:00:00Z"
+    .pdop = 99.9f,
+    .satellites_visible = 0,
+    .has_3d_fix = false,
+    .utc_time = ""
 };
 
 esp_err_t gnss_omm_bridge_init(void) {
@@ -52,15 +58,38 @@ GnssData_t gnss_bridge_get_latest_data(void) {
     return s_latest_gnss;
 }
 
+bool gnss_bridge_is_pod3_connected(void) {
+    uint32_t now_ms = (uint32_t)(esp_timer_get_time() / 1000ULL);
+    return (s_pod3_connected && (now_ms - s_last_pod3_rx_ms < 3000));
+}
+
 esp_err_t gnss_bridge_send_omm_packet(const uint8_t *payload, size_t length) {
     int written = uart_write_bytes(UART_NUM_POD3, payload, length);
     return (written == (int)length) ? ESP_OK : ESP_FAIL;
 }
 
 uint8_t omm_get_capabilities_vector(void) {
-    uint8_t caps = FEAT_LORA_HIGH_POWER | FEAT_GNSS_1PPS_LOCK | FEAT_USV_BAT_BUFFER;
-    caps |= FEAT_DUAL_MESH_BRIDGE; // Sena + Cardo
-    caps |= FEAT_ENV_MIC_ACTIVE;   // Front Ambient-Mic an M8-Abzweig aktiv (+5 Pkt)
+    uint8_t caps = FEAT_USV_BAT_BUFFER;
+    caps |= FEAT_DUAL_MESH_BRIDGE; // Sena + Cardo (Hauptplatine Zentralbox)
+
+    // Pod 3 Hardware (LoRa 868MHz + MAX-M10S GNSS)
+    if (gnss_bridge_is_pod3_connected()) {
+        caps |= FEAT_LORA_HIGH_POWER;
+        if (s_latest_gnss.has_3d_fix) {
+            caps |= FEAT_GNSS_1PPS_LOCK;
+        }
+    }
+
+    // Front Node Hardware (Knowles MEMS Fahrtwind-Mikrofon)
+    if (esp_now_front_node_get_status().is_linked) {
+        caps |= FEAT_ENV_MIC_ACTIVE;
+    }
+
+    // CAN-Bus Telemetrie (Lokal oder Remote via Front Node)
+    if (can_bus_is_connected()) {
+        caps |= FEAT_CAN_TELEMETRY;
+    }
+
     return caps;
 }
 
@@ -178,8 +207,12 @@ void task_rear_pod_bridge(void *pvParameters) {
     uint8_t buffer[256];
     while (true) {
         int len = uart_read_bytes(UART_NUM_POD3, buffer, sizeof(buffer) - 1, pdMS_TO_TICKS(100));
+        uint32_t now_ms = (uint32_t)(esp_timer_get_time() / 1000ULL);
         if (len > 0) {
             buffer[len] = '\0';
+            s_last_pod3_rx_ms = now_ms;
+            s_pod3_connected = true;
+            s_latest_gnss.has_3d_fix = true;
             // NMEA / UBX Frame Parsing Simulation
             sdio_track_append_point(s_latest_gnss.latitude,
                                     s_latest_gnss.longitude,
@@ -187,6 +220,11 @@ void task_rear_pod_bridge(void *pvParameters) {
                                     s_latest_gnss.speed_kmh,
                                     0.0f,
                                     s_latest_gnss.utc_time);
+        } else {
+            if (s_last_pod3_rx_ms == 0 || (now_ms - s_last_pod3_rx_ms > 3000)) {
+                s_pod3_connected = false;
+                s_latest_gnss.has_3d_fix = false;
+            }
         }
         vTaskDelay(pdMS_TO_TICKS(100)); // 10 Hz Zyklus
     }

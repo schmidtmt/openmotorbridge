@@ -31,6 +31,11 @@ esp_err_t gnss_omm_bridge_init(void);
 GnssData_t gnss_bridge_get_latest_data(void);
 
 /**
+ * @brief Prüft, ob Heck-Pod 3 über UART1 aktiv antwortet
+ */
+bool gnss_bridge_is_pod3_connected(void);
+
+/**
  * @brief Sendet ein OpenMotorMesh Steuer- oder Audioframe an den Heck-Pod 3 Co-Prozessor
  */
 esp_err_t gnss_bridge_send_omm_packet(const uint8_t *payload, size_t length);
