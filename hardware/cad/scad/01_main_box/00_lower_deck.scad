@@ -55,8 +55,19 @@ module main_box_lower_case() {
             width=MAIN_BOX_OUTER_W,
             z_top=MAIN_BOX_LOWER_H
         );
+
+        // 6. 4x Captive DIN 934 / DIN 985 M3 Hex Nut Pockets (Underside z=0)
+        main_box_corner_nut_pockets(
+            length=MAIN_BOX_OUTER_L,
+            width=MAIN_BOX_OUTER_W,
+            post_size=MAIN_BOX_CORNER_POST,
+            sw=NUT_M3_SW,
+            h=NUT_M3_H,
+            screw_r=M3_SCREW_HOLE_R
+        );
     }
 }
+
 
 // Render complete lower case
 main_box_lower_case();

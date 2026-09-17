@@ -369,8 +369,8 @@ def create_pcb_board():
          {"1": "VBUS_PD3_OUT", "2": "GND"},
          "Capacitor_SMD.3dshapes/C_0805_2012Metric.step"),
 
-        # 6. USB Hub Controller (Microchip USB2514B 36-QFN)
-        ("Package_DFN_QFN.pretty", "QFN-36-1EP_6x6mm_P0.5mm_EP4.1x4.1mm", "U2", "USB2514B_AEC_HUB", 142.00, 102.00, 0,
+        # 6. USB Hub Controller (Microchip USB2514Bi Industrial 36-QFN)
+        ("Package_DFN_QFN.pretty", "QFN-36-1EP_6x6mm_P0.5mm_EP4.1x4.1mm", "U2", "USB2514Bi-AEZG", 142.00, 102.00, 0,
          {"1": "USB_DN1_DM", "2": "USB_DN1_DP", "3": "USB_DN2_DM", "4": "USB_DN2_DP",
           "5": "VCC_3V3", "6": "USB_DN3_DM", "7": "USB_DN3_DP", "8": "USB_DN4_DM",
           "9": "USB_DN4_DP", "10": "VCC_3V3", "11": "GND", "12": "VCC_3V3",
@@ -419,10 +419,10 @@ def create_pcb_board():
           "39": "OTTOCAST_PWR_EN", "40": "GND", "41": "GND"},
          None),
 
-        # 11. Ambient I2S MEMS Microphone (Knowles SPH0645)
-        ("Sensor_Audio.pretty", "Knowles_SPH0645LM4H-6_3.5x2.65mm", "MIC1", "SPH0645_I2S_MIC", 143.00, 91.04, 0,
-         {"1": "MIC_I2S_DATA", "2": "MIC_I2S_BCLK", "3": "MIC_I2S_WS", "4": "GND", "5": "VCC_3V3"},
-         "Sensor_Audio.3dshapes/Knowles_SPH0645LM4H-6_3.5x2.65mm.step"),
+        # 11. Ambient I2S MEMS Microphone (Zilltek / Sipeed MSM261S4030H0R / InvenSense ICS-43434)
+        ("Sensor_Audio.pretty", "InvenSense_ICS-43434-6_3.5x2.65mm", "MIC1", "MSM261S4030H0R", 143.00, 91.04, 0,
+         {"1": "MIC_I2S_WS", "2": "GND", "3": "GND", "4": "MIC_I2S_BCLK", "5": "VCC_3V3", "6": "MIC_I2S_DATA"},
+         "Sensor_Audio.3dshapes/InvenSense_ICS-43434-6_3.5x2.65mm.step"),
 
         # 12. Key Discrete Passives
         ("Capacitor_SMD.pretty", "C_0805_2012Metric", "C19", "10uF_50V", 119.58, 78.80, 0, {"1": "+12V_PROT", "2": "GND"}, "Capacitor_SMD.3dshapes/C_0805_2012Metric.step"),

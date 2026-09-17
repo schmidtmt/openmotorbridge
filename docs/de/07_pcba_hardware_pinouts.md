@@ -364,9 +364,9 @@ Der Front-Node nutzt einen Automotive-zertifizierten 4-Port High-Speed Hub (`USB
 | **GPIO 3** | `CAN_TERM_EN` | Ausgang | Schaltet das CPC1017N Solid-State-Relais für den 120-Ohm CAN-Abschluss (Auto-Sensing) |
 | **GPIO 4** | `KL15_SENSE` | Eingang | Bordnetz-Zündungsüberwachung über 10:1 Spannungsteiler & Schmitt-Trigger |
 | **GPIO 5** | `CAN_SILENT` | Ausgang | Steuert Pin 8 (S) des CAN-Transceivers für hardwaremäßigen Listen-Only Modus |
-| **GPIO 6** | `MIC_I2S_WS` | Ausgang | I2S Word Select (LRCLK, 48 kHz) für Knowles SPH0645LM4H Digitalmikrofon |
-| **GPIO 7** | `MIC_I2S_BCLK` | Ausgang | I2S Bit Clock ($3{,}072\,\text{MHz}$) für Knowles SPH0645LM4H Digitalmikrofon |
-| **GPIO 8** | `MIC_I2S_DATA` | Eingang | I2S Serial Audio Data vom Knowles MEMS Mikrofon (Fahrtwind-Erfassung) |
+| **GPIO 6** | `MIC_I2S_WS` | Ausgang | I2S Word Select (LRCLK, 48 kHz) für MSM261S4030H0R / SPH0645 Digitalmikrofon |
+| **GPIO 7** | `MIC_I2S_BCLK` | Ausgang | I2S Bit Clock ($3{,}072\,\text{MHz}$) für MSM261S4030H0R / SPH0645 Digitalmikrofon |
+| **GPIO 8** | `MIC_I2S_DATA` | Eingang | I2S Serial Audio Data vom MEMS-Mikrofon (Standard Philips I2S, Fahrtwind-Erfassung) |
 | **GPIO 9** | `I2C_SDA` | Bidir | I2C Datenleitung für Qwiic Sensorport J12 (OPT3001 Lichtsensor) |
 | **GPIO 10** | `I2C_SCL` | Ausgang | I2C Taktleitung für Qwiic Sensorport J12 |
 | **GPIO 11** | `WS2812B_DIN` | Ausgang | Datensignal für die Onboard WS2812B-2020 RGB-Status-LED (Lichtleiter im Deckel) |

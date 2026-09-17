@@ -32,16 +32,18 @@ module main_box_lid_plate(length=110.0, width=74.0, plate_h=3.0, lip_h=1.5, lip_
             cylinder(r=1.5, h=plate_h + lip_h + 2.5, center=false);
 
         // 5. 4x M3 Corner Countersunk Screw Holes
-        translate([3.0, 3.0, -lip_h - 0.5])
+        corner_offset = MAIN_BOX_CORNER_POST / 2.0;
+        translate([corner_offset, corner_offset, -lip_h - 0.5])
             cylinder(r=M3_SCREW_HOLE_R, h=plate_h + lip_h + 1.0, center=false);
-        translate([length - 3.0, 3.0, -lip_h - 0.5])
+        translate([length - corner_offset, corner_offset, -lip_h - 0.5])
             cylinder(r=M3_SCREW_HOLE_R, h=plate_h + lip_h + 1.0, center=false);
-        translate([3.0, width - 3.0, -lip_h - 0.5])
+        translate([corner_offset, width - corner_offset, -lip_h - 0.5])
             cylinder(r=M3_SCREW_HOLE_R, h=plate_h + lip_h + 1.0, center=false);
-        translate([length - 3.0, width - 3.0, -lip_h - 0.5])
+        translate([length - corner_offset, width - corner_offset, -lip_h - 0.5])
             cylinder(r=M3_SCREW_HOLE_R, h=plate_h + lip_h + 1.0, center=false);
     }
 }
+
 
 // Standalone preview
 main_box_lid_plate();

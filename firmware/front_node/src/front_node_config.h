@@ -13,9 +13,9 @@
 #define PIN_CAN_TERM_EN         GPIO_NUM_3   // CPC1017N Solid-State Relay for 120R CAN Termination (Auto-Sensing)
 #define PIN_KL15_SENSE          GPIO_NUM_4   // 12V Ignition KL15 Sense via voltage divider
 #define PIN_CAN_SILENT          GPIO_NUM_5   // TI TCAN334G Pin 8 Silent / Listen-Only Mode
-#define PIN_MIC_I2S_WS          GPIO_NUM_6   // Knowles SPH0645 I2S Word Select / LRCLK
-#define PIN_MIC_I2S_BCLK        GPIO_NUM_7   // Knowles SPH0645 I2S Bit Clock
-#define PIN_MIC_I2S_DATA        GPIO_NUM_8   // Knowles SPH0645 I2S Serial Data
+#define PIN_MIC_I2S_WS          GPIO_NUM_6   // MSM261S4030H0R / SPH0645 I2S Word Select / LRCLK
+#define PIN_MIC_I2S_BCLK        GPIO_NUM_7   // MSM261S4030H0R / SPH0645 I2S Bit Clock
+#define PIN_MIC_I2S_DATA        GPIO_NUM_8   // MSM261S4030H0R / SPH0645 I2S Serial Data
 #define PIN_I2C_SDA             GPIO_NUM_9   // Qwiic J12 I2C SDA
 #define PIN_I2C_SCL             GPIO_NUM_10  // Qwiic J12 I2C SCL
 #define PIN_WS2812B_DIN         GPIO_NUM_11  // Onboard WS2812B-2020 RGB Status LED (Light-pipe in lid)

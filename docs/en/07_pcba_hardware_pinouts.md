@@ -364,9 +364,9 @@ The Front Node integrates an automotive-grade 4-port High-Speed hub (`USB2514B`)
 | **GPIO 3** | `CAN_TERM_EN` | Output | Controls CPC1017N solid-state relay for 120-Ohm CAN termination (Auto-Sensing) |
 | **GPIO 4** | `KL15_SENSE` | Input | Vehicle ignition monitoring via 10:1 voltage divider & Schmitt-trigger |
 | **GPIO 5** | `CAN_SILENT` | Output | Drives Pin 8 (S) of CAN transceiver for hardware Listen-Only Mode |
-| **GPIO 6** | `MIC_I2S_WS` | Output | I2S Word Select (LRCLK, 48 kHz) for Knowles SPH0645LM4H digital microphone |
-| **GPIO 7** | `MIC_I2S_BCLK` | Output | I2S Bit Clock ($3{,}072\,\text{MHz}$) for Knowles SPH0645LM4H digital microphone |
-| **GPIO 8** | `MIC_I2S_DATA` | Input | I2S Serial Audio Data from Knowles MEMS microphone (wind noise tracking) |
+| **GPIO 6** | `MIC_I2S_WS` | Output | I2S Word Select (LRCLK, 48 kHz) for MSM261S4030H0R / SPH0645 digital microphone |
+| **GPIO 7** | `MIC_I2S_BCLK` | Output | I2S Bit Clock ($3{,}072\,\text{MHz}$) for MSM261S4030H0R / SPH0645 digital microphone |
+| **GPIO 8** | `MIC_I2S_DATA` | Input | I2S Serial Audio Data from digital MEMS microphone (standard Philips I2S, wind noise tracking) |
 | **GPIO 9** | `I2C_SDA` | Bidir | I2C data line for Qwiic sensor port J12 (OPT3001 light sensor) |
 | **GPIO 10** | `I2C_SCL` | Output | I2C clock line for Qwiic sensor port J12 |
 | **GPIO 11** | `WS2812B_DIN` | Output | Data signal for onboard WS2812B-2020 RGB status LED (light pipe in lid) |

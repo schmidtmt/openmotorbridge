@@ -24,13 +24,13 @@ KnowlesMemsDsp::KnowlesMemsDsp()
 }
 
 bool KnowlesMemsDsp::init() {
-    // 1. Configure I2S driver for Knowles SPH0645LM4H
-    // The SPH0645 outputs 24-bit data in a 32-bit slot, MSB first, standard Philips I2S.
+    // 1. Configure I2S driver for MSM261S4030H0R (compatible with Knowles SPH0645LM4H)
+    // The MSM261S4030H0R outputs standard Philips I2S 24-bit data in a 32-bit slot, MSB first.
     i2s_config_t i2s_config = {
         .mode = (i2s_mode_t)(I2S_MODE_MASTER | I2S_MODE_RX),
         .sample_rate = SAMPLE_RATE_HZ,
         .bits_per_sample = I2S_BITS_PER_SAMPLE_32BIT,
-        .channel_format = I2S_CHANNEL_FMT_ONLY_LEFT, // SPH0645 left channel
+        .channel_format = I2S_CHANNEL_FMT_ONLY_LEFT, // Left channel (LR tied to GND)
         .communication_format = I2S_COMM_FORMAT_STAND_I2S,
         .intr_alloc_flags = ESP_INTR_FLAG_LEVEL1,
         .dma_buf_count = 4,
@@ -59,7 +59,8 @@ bool KnowlesMemsDsp::init() {
         return false;
     }
 
-    ESP_LOGI(TAG, "Knowles SPH0645LM4H I2S driver initialized (16 kHz, 24/32-Bit, WS=GPIO1, BCLK=GPIO2, DIN=GPIO3)");
+    ESP_LOGI(TAG, "Digital MEMS Microphone I2S driver initialized (16 kHz, 24/32-Bit, WS=GPIO%d, BCLK=GPIO%d, DIN=GPIO%d)",
+             PIN_MIC_I2S_WS, PIN_MIC_I2S_BCLK, PIN_MIC_I2S_DATA);
     return true;
 }
 
