@@ -112,6 +112,14 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
      * Schutzschlitten [`cartridge_insert_blindkassette.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_blindkassette.stl) einsetzen, falls ein Slot vorübergehend ungenutzt bleibt oder als regendichte Dry Box für Kleinteile dient.
 3. **Flanschdichtung:** Silikon-Formdichtung auf den Kassettenkragen aufziehen und dünn mit dielektrischem Silikonfett benetzen.
 
+> [!TIP]
+> **Vorrüstungs-Strategie für geplante Zweit-Headsets (z. B. "Black-Friday-Kauf"):**
+> Wer im Frühjahr startet und vorerst nur ein Headset besitzt (z. B. Sena SPIDER X in Slot 1) und bereits weiß, dass später ein zweites System hinzukommt (z. B. Cardo Packtalk Edge im Herbst/Winter), hat zwei clevere Optionen:
+> 1. **Option A (Hermetische Blindkassette / Dry Box):** Man druckt [`cartridge_insert_blindkassette.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_blindkassette.stl). Slot 2 dient bis zum Upgrade als wasserdichtes Notfall-Staufach (Bargeld, Ersatzsicherungen, Ventileinsatz). Zum Aufrüsten werden lediglich die 4x M2 Schrauben gelöst und das Cardo-Inlay auf denselben Basisschlitten geschraubt.
+> 2. **Option B (Direkte Cardo-Vorrüstung ohne Gerät):** Man baut direkt die vollständige Cardo-Kassette ([`cartridge_insert_cardo.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_cardo.stl)) ein, lässt aber die interne Adapter-Platine/Verkabelung noch weg (oder verschließt den leeren AirMount-Sockel mit der beiliegenden Cardo-Silikonschutzkappe bzw. einem TPU-Dummystopfen).
+>    * **Firmware-Verhalten:** Da ohne Platine kein 1-Wire DS2431 EEPROM antwortet, erkennt die openMotorBridge Firmware den Slot automatisch als *„Empty Slot / Blindkassette“* und schaltet den DSP-Audiokanal hardwareseitig auf **-96 dB Mute**. Es gibt kein Rauschen, Brummen oder Fehlauslösungen!
+>    * **Upgrade-Vorteil:** Sobald das Zweitgerät da ist, wird es einfach in den bereits montierten Sockel eingeklinkt – null Umbauaufwand am Motorrad!
+
 ---
 
 ### Schritt 3.1: Montage des magnetischen Diebstahlschutzes (Kassetten-Wippen-Mechanismus)

@@ -112,6 +112,14 @@ All parts, circuit board production files, and COTS procurement links are catalo
      * Insert blank sled [`cartridge_insert_blindkassette.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_blindkassette.stl) if a slot is temporarily unused or serves as a waterproof dry storage box.
 3. **Flange Gasket:** Stretch the molded silicone face seal over the cartridge collar and lubricate lightly with silicone grease.
 
+> [!TIP]
+> **Pre-Staging Strategy for Planned Second Intercoms (e.g. "Black Friday Upgrade"):**
+> If you are setting up openMotorBridge in spring with only one intercom (e.g. Sena SPIDER X in Slot 1) and plan to acquire a second system later (e.g. Cardo Packtalk Edge on Black Friday), you have two smart options:
+> 1. **Option A (Hermetic Blank Cartridge / Dry Box):** Print [`cartridge_insert_blindkassette.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_blindkassette.stl). Slot 2 serves as a waterproof dry storage compartment (emergency cash, spare fuses, valve cores) until you upgrade. When upgrading, simply remove the 4x M2 screws and swap the top lid for the Cardo insert on the very same universal sled.
+> 2. **Option B (Direct Pre-Installed Target Cartridge without OEM Unit):** Assemble the Cardo cartridge ([`cartridge_insert_cardo.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_cardo.stl)) right away, but omit the internal carrier PCB/cable (or protect the empty AirMount shoe with Cardo's silicone weather cap or a 3D-printed TPU weather plug).
+>    * **Firmware Behavior:** With no 1-Wire DS2431 EEPROM present, the openMotorBridge firmware automatically identifies the slot as *“Empty Slot / Blank Cartridge”* and sets the DSP channel to **-96 dB mute**. No hiss, ground hum, or false trigger clicks occur!
+>    * **Upgrade Advantage:** Once the intercom arrives, simply snap it into the pre-mounted cradle—zero tools or disassembly required at the motorcycle!
+
 ---
 
 ### Step 3.1: Magnetic Anti-Theft Rocker Mechanism
