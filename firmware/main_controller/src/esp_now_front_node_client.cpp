@@ -7,6 +7,7 @@
 #include "nvs.h"
 #include "opto_pulse_sequencer.h"
 #include "audio_dsp_pipeline.h"
+#include "can_bus_manager.h"
 #include <string.h>
 
 static const char* TAG = "FRONT_NODE_CLIENT";
@@ -208,6 +209,17 @@ static void on_esp_now_recv(const esp_now_recv_info_t* recv_info, const uint8_t*
                 s_status.aux_light_strobe       = (data[9] != 0);
                 s_status.can_term_active        = (data[10] != 0);
                 s_status.qi_power_active        = (data[11] != 0);
+            }
+            break;
+
+        case PKT_TYPE_CAN_TELEMETRY:
+            if (len >= 8) {
+                uint32_t can_id = 0;
+                memcpy(&can_id, &data[2], sizeof(uint32_t));
+                uint8_t dlc = data[6];
+                bool is_ext = (data[7] != 0);
+                const uint8_t* can_payload = (len >= 8 + dlc) ? &data[8] : nullptr;
+                can_bus_inject_remote_frame(can_id, dlc, can_payload, is_ext);
             }
             break;
 

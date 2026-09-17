@@ -25,6 +25,7 @@ public:
     bool send_cockpit_status(bool hub_port1, bool hub_port2, bool hub_port3, bool hub_port4,
                              bool bsd_l, bool bsd_r, bool aux_on, bool aux_strobe,
                              bool can_term, bool qi_active);
+    bool send_can_telemetry(uint32_t can_id, uint8_t dlc, const uint8_t* data, bool is_extended);
     bool send_heartbeat();
     bool send_binding_ack(const uint8_t* target_mac);
 

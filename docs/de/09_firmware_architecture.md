@@ -91,6 +91,42 @@ Um gegenseitige Funk-Interferenzen oder Geister-Trigger bei Gruppenfahrten und a
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
+### 2.3 CAN Dual-Ingress-Architektur & Auto-Sensing / Deaktivierung
+
+OpenMotorBridge unterstützt die Einspeisung von Fahrzeug-CAN-Daten aus zwei redundanten Quellen:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    CAN DUAL-INGRESS & AUTO-SENSING MATRIX                   │
+├───────────────────────────────────┬─────────────────────────────────────────┤
+│ Szenario 1: Touring Fairing       │ Szenario 2: Naked / Road King / Adv     │
+│ (Street Glide / Road Glide)       │ (Road King Special, BMW R1250/R1300 GS) │
+├───────────────────────────────────┼─────────────────────────────────────────┤
+│ • CAN-Anschluss am FRONT NODE     │ • Kein CAN im Frontscheinwerfer         │
+│   Port J2 (4-Pin JST-PH)          │ • CAN-Anschluss an der ZENTRALBOX       │
+│ • Front Node erkennt Bus-Frames   │   HD26-Stecker Pins 17/18 am BCM / OBD2 │
+│ • 120R-Relais CPC1017N SCHLIESST  │ • Front Node J2 bleibt UNVERBUNDEN      │
+│ • Telemetrie wird per ESP-NOW     │ • Front Node deaktiviert J2 nach 2,5 s: │
+│   (PKT_TYPE_CAN_TELEMETRY) zur     │   - 120R-Relais bleibt OFFEN            │
+│   Zentralbox gestreamt            │   - TCAN334G geht in Silent High-Z      │
+│ • Zentralbox schaltet auf         │   - TWAI-Treiber wird gestoppt          │
+│   `CAN_SOURCE_REMOTE_FRONT_NODE`  │ • Zentralbox nutzt lokalen HD26 CAN als │
+│                                   │   `CAN_SOURCE_LOCAL_CENTRAL_BOX`        │
+└───────────────────────────────────┴─────────────────────────────────────────┘
+```
+
+1. **Front-Node Auto-Sensing & Deaktivierung (`cockpit_can_manager.cpp`):**
+   - Bootet im sicheren **Listen-Only Modus** (`TWAI_MODE_LISTEN_ONLY`) mit geöffnetem Abschlussrelais (`PIN_CAN_TERM_EN = 0`).
+   - Innerhalb eines $2{,}5\,\text{s}$ Zeitfensters wird der Bus überwacht.
+   - **Bus erkannt:** Status wechselt auf `CAN_STATE_CONNECTED`, das OptoMOS-Relais `CPC1017N` schließt den $120\,\Omega$-Terminierungswiderstand, der Transceiver geht auf Normalbetrieb (`PIN_CAN_SILENT = 0`) und streamt Frames per ESP-NOW zur Zentralbox.
+   - **Kein Bus erkannt (z. B. Road King / GS):** Status wechselt auf `CAN_STATE_DEACTIVATED`. Das Relais bleibt offen, `PIN_CAN_SILENT` wird auf HIGH (Standby/High-Z) gesetzt und der TWAI-Treiber gestoppt (`twai_stop()`). Es entstehen 0 Bus-Fehler, keine Interrupt-Belastung und minimaler Ruhestrom.
+
+2. **Zentralbox Quellen-Arbitrierung (`can_bus_manager.cpp`):**
+   - Die Zentralbox überwacht ihren lokalen HD26-CAN-Eingang und den eingehenden ESP-NOW-Telemetriestrom.
+   - Empfängt die Zentralbox lokale Frames (Road King / BMW), wird `CAN_SOURCE_LOCAL_CENTRAL_BOX` aktiv.
+   - Bleibt der lokale HD26-Port frei (Fairing Bikes), schaltet der Manager nahtlos auf `CAN_SOURCE_REMOTE_FRONT_NODE` um.
+   - Raddrehzahl (`adr_ekf_update_can_wheel_speed`), Lenkertasten und Telemetriedaten werden für alle nachgelagerten Subsysteme (ADR Dead Reckoning, Radar-TTC, Helm-AGC, WebApp) absolut identisch und transparent verarbeitet.
+
 ---
 
 ## 3. BLE GATT Server Architektur (`ble_service_server.cpp`)

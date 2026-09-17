@@ -254,10 +254,12 @@ static void supervisor_task(void* pvParameters) {
         // 3. Advance Cockpit Switches (BSD 8 Hz & Aux Light 4.5 Hz Strobes)
         switches.update(100);
 
-        // 4. Poll Cockpit CAN Messages
+        // 4. Poll & Advance Cockpit CAN Auto-Sensing / Telemetry
+        can.update(100);
         CanMessage can_msg;
         while (can.receive_message(&can_msg, 0)) {
-            ESP_LOGD(TAG, "CAN Frame RX: ID=0x%08lX, DLC=%d", can_msg.id, can_msg.dlc);
+            ESP_LOGD(TAG, "CAN Frame RX: ID=0x%08lX, DLC=%d -> Forwarding via ESP-NOW", can_msg.id, can_msg.dlc);
+            bridge.send_can_telemetry(can_msg.id, can_msg.dlc, can_msg.data, can_msg.is_extended);
         }
 
         // 5. Heartbeat & Cockpit Telemetry (every 500 ms)

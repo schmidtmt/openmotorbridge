@@ -109,6 +109,25 @@ esp_err_t can_bus_start_fingerprint_scan(void);
 bool can_bus_is_fingerprint_scan_running(void);
 
 /**
+ * @brief Active CAN ingress source
+ */
+typedef enum {
+    CAN_SOURCE_NONE              = 0,
+    CAN_SOURCE_LOCAL_CENTRAL_BOX = 1, // Wired via HD26 pins 17/18 under seat (Road King / BMW)
+    CAN_SOURCE_REMOTE_FRONT_NODE = 2  // Wireless via Front Node J2 + ESP-NOW (Street Glide / Road Glide)
+} CanSourceType_t;
+
+/**
+ * @brief Inject remote CAN frame received from Front Node via ESP-NOW.
+ */
+void can_bus_inject_remote_frame(uint32_t can_id, uint8_t dlc, const uint8_t *data, bool is_extended);
+
+/**
+ * @brief Get the currently active CAN ingress source.
+ */
+CanSourceType_t can_bus_get_active_source(void);
+
+/**
  * @brief Get the profile ID detected by fingerprint scan (or NULL if unresolved).
  */
 const char* can_bus_get_detected_profile_id(void);

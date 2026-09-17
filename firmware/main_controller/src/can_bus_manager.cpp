@@ -232,6 +232,80 @@ bool can_bus_get_signal(const char *signal_name, float *out_value) {
     return false;
 }
 
+static CanSourceType_t s_active_source = CAN_SOURCE_NONE;
+static uint32_t s_last_local_rx_ms = 0;
+static uint32_t s_last_remote_rx_ms = 0;
+
+static void process_can_frame_payload(uint32_t identifier, uint8_t dlc, const uint8_t *data, uint32_t now_ms) {
+    if (!data || dlc == 0) return;
+
+    // Fingerprint Scan Tracking
+    if (s_fingerprint_scan_active) {
+        bool already_seen = false;
+        for (size_t k = 0; k < s_seen_id_count; k++) {
+            if (s_seen_ids[k] == identifier) {
+                already_seen = true;
+                break;
+            }
+        }
+        if (!already_seen && s_seen_id_count < 32) {
+            s_seen_ids[s_seen_id_count++] = identifier;
+        }
+    }
+
+    // Dynamisches Parsen nach aktiver Signal-Tabelle
+    for (size_t i = 0; i < s_num_signals; i++) {
+        if (s_signals[i].can_id == identifier) {
+            uint64_t raw = extract_raw_bits(
+                data,
+                dlc,
+                s_signals[i].start_bit,
+                s_signals[i].length_bits,
+                s_signals[i].is_big_endian
+            );
+            float val = ((float)raw * s_signals[i].scale) + s_signals[i].offset;
+            s_signals[i].current_val = val;
+            s_signals[i].last_update_ms = now_ms;
+            s_signals[i].valid = true;
+
+            // Sensor-Fusion Schnittstelle mit ADR-EKF (Raddrehzahl)
+            if (strcmp(s_signals[i].name, "speed_kmh") == 0 ||
+                strcmp(s_signals[i].name, "wheel_speed_rear") == 0) {
+                s_last_vehicle_speed_kmh = val;
+                adr_ekf_update_can_wheel_speed(val);
+            }
+
+            // BCM / DWA Werksalarmanlagen-Überwachung
+            if (strcmp(s_signals[i].name, "bcm_alarm_triggered") == 0 && val > 0.5f) {
+                static uint32_t s_last_alarm_tx_ms = 0;
+                if (now_ms - s_last_alarm_tx_ms > 5000) {
+                    s_last_alarm_tx_ms = now_ms;
+                    ESP_LOGW(TAG, "🚨 BCM / DWA Factory Alarm triggered! Broadcasting LoRa Bike Alarm...");
+                    omm_broadcast_bike_alarm(0x01, 0.0f, 0.0f); // 0x01 = OEM BCM Alarm
+                }
+            }
+        }
+    }
+}
+
+void can_bus_inject_remote_frame(uint32_t can_id, uint8_t dlc, const uint8_t *data, bool is_extended) {
+    if (!data || dlc == 0) return;
+    uint32_t now_ms = (uint32_t)(esp_timer_get_time() / 1000ULL);
+    s_last_remote_rx_ms = now_ms;
+    s_rx_msg_count++;
+    s_can_traffic_active = true;
+
+    // Falls lokaler CAN-Port (HD26) keine Frames empfängt, Front Node als primäre Quelle setzen
+    if (now_ms - s_last_local_rx_ms > 2000) {
+        if (s_active_source != CAN_SOURCE_REMOTE_FRONT_NODE) {
+            ESP_LOGI(TAG, "CAN Ingress: Front Node (ESP-NOW) designated as PRIMARY CAN source.");
+            s_active_source = CAN_SOURCE_REMOTE_FRONT_NODE;
+        }
+    }
+
+    process_can_frame_payload(can_id, dlc, data, now_ms);
+}
+
 void task_can_bus_manager(void *pvParameters) {
     ESP_LOGI(TAG, "CAN-Bus Manager Task running on Core 0.");
 
@@ -253,54 +327,10 @@ void task_can_bus_manager(void *pvParameters) {
             s_can_traffic_active = true;
             s_rx_msg_count++;
             fps_frame_counter++;
+            s_last_local_rx_ms = now_ms;
+            s_active_source = CAN_SOURCE_LOCAL_CENTRAL_BOX;
 
-            // Fingerprint Scan Tracking
-            if (s_fingerprint_scan_active) {
-                bool already_seen = false;
-                for (size_t k = 0; k < s_seen_id_count; k++) {
-                    if (s_seen_ids[k] == rx_msg.identifier) {
-                        already_seen = true;
-                        break;
-                    }
-                }
-                if (!already_seen && s_seen_id_count < 32) {
-                    s_seen_ids[s_seen_id_count++] = rx_msg.identifier;
-                }
-            }
-
-            // Dynamisches Parsen nach aktiver Signal-Tabelle
-            for (size_t i = 0; i < s_num_signals; i++) {
-                if (s_signals[i].can_id == rx_msg.identifier) {
-                    uint64_t raw = extract_raw_bits(
-                        rx_msg.data,
-                        rx_msg.data_length_code,
-                        s_signals[i].start_bit,
-                        s_signals[i].length_bits,
-                        s_signals[i].is_big_endian
-                    );
-                    float val = ((float)raw * s_signals[i].scale) + s_signals[i].offset;
-                    s_signals[i].current_val = val;
-                    s_signals[i].last_update_ms = now_ms;
-                    s_signals[i].valid = true;
-
-                    // Sensor-Fusion Schnittstelle mit ADR-EKF (Raddrehzahl)
-                    if (strcmp(s_signals[i].name, "speed_kmh") == 0 ||
-                        strcmp(s_signals[i].name, "wheel_speed_rear") == 0) {
-                        s_last_vehicle_speed_kmh = val;
-                        adr_ekf_update_can_wheel_speed(val);
-                    }
-
-                    // BCM / DWA Werksalarmanlagen-Überwachung
-                    if (strcmp(s_signals[i].name, "bcm_alarm_triggered") == 0 && val > 0.5f) {
-                        static uint32_t s_last_alarm_tx_ms = 0;
-                        if (now_ms - s_last_alarm_tx_ms > 5000) {
-                            s_last_alarm_tx_ms = now_ms;
-                            ESP_LOGW(TAG, "🚨 BCM / DWA Factory Alarm triggered! Broadcasting LoRa Bike Alarm...");
-                            omm_broadcast_bike_alarm(0x01, 0.0f, 0.0f); // 0x01 = OEM BCM Alarm
-                        }
-                    }
-                }
-            }
+            process_can_frame_payload(rx_msg.identifier, rx_msg.data_length_code, rx_msg.data, now_ms);
         }
 
         // FPS Berechnung jede Sekunde
@@ -362,7 +392,15 @@ void can_bus_send_remote_battery_warning(uint8_t battery_pct) {
 }
 
 bool can_bus_is_connected(void) {
-    return s_can_traffic_active;
+    uint32_t now_ms = (uint32_t)(esp_timer_get_time() / 1000ULL);
+    bool local_alive = (s_last_local_rx_ms > 0 && (now_ms - s_last_local_rx_ms < 3000));
+    bool remote_alive = (s_last_remote_rx_ms > 0 && (now_ms - s_last_remote_rx_ms < 3000));
+    return (local_alive || remote_alive);
+}
+
+CanSourceType_t can_bus_get_active_source(void) {
+    if (!can_bus_is_connected()) return CAN_SOURCE_NONE;
+    return s_active_source;
 }
 
 bool can_bus_is_listen_only(void) {

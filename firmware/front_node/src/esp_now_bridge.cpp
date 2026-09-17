@@ -433,6 +433,24 @@ bool EspNowBridge::send_cockpit_status(bool hub_port1, bool hub_port2, bool hub_
     return (res == ESP_OK);
 }
 
+bool EspNowBridge::send_can_telemetry(uint32_t can_id, uint8_t dlc, const uint8_t* data, bool is_extended) {
+    if (!m_link_active) return false;
+
+    uint8_t payload_len = (dlc > 8) ? 8 : dlc;
+    uint8_t buf[16] = {0};
+    buf[0] = FRONT_NODE_PROTOCOL_VER;
+    buf[1] = PKT_TYPE_CAN_TELEMETRY;
+    memcpy(&buf[2], &can_id, sizeof(uint32_t));
+    buf[6] = payload_len;
+    buf[7] = is_extended ? 1 : 0;
+    if (data && payload_len > 0) {
+        memcpy(&buf[8], data, payload_len);
+    }
+
+    esp_err_t res = esp_now_send(m_peer_mac, buf, 8 + payload_len);
+    return (res == ESP_OK);
+}
+
 bool EspNowBridge::send_heartbeat() {
     uint8_t buf[2];
     buf[0] = FRONT_NODE_PROTOCOL_VER;

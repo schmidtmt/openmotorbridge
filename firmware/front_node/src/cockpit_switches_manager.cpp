@@ -68,15 +68,11 @@ esp_err_t CockpitSwitchesManager::init(void) {
 }
 
 void CockpitSwitchesManager::perform_can_auto_sense(void) {
-    // Check if the bus is already terminated externally (e.g. 60 Ohm measured across CAN_H / CAN_L).
+    // Check if the bus is connected.
     // In our hardware circuit, the CPC1017N Solid-State Relay inserts the local 120R resistor R10.
-    // If we are operating in standalone bench mode or an un-terminated harness branch,
-    // auto-sense defaults to activating the termination to ensure stable 250k/500k CAN communication.
-    ESP_LOGI(TAG, "Running CAN Bus 120-Ohm Termination Auto-Sensing...");
-
-    // Default: Enable 120-Ohm termination on Front Node
-    set_can_termination(true);
-    ESP_LOGI(TAG, "CAN Auto-Sense: Local 120R termination ENABLED via CPC1017N (Pin %d = HIGH)", PIN_CAN_TERM_EN);
+    // We default to OPEN (disabled) until CockpitCanManager confirms active bus frames at J2.
+    ESP_LOGI(TAG, "CAN Auto-Sense: Keeping 120R termination OPEN until bus traffic is detected at J2.");
+    set_can_termination(false);
 }
 
 void CockpitSwitchesManager::set_can_termination(bool enable) {
