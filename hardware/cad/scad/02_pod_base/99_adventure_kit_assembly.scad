@@ -173,47 +173,75 @@ module adventure_config_b_transition_dock() {
 // CONFIG C: Luggage Rack-Tail Mount ("Heck-Balkon" with Astabweiser & Radar)
 // -----------------------------------------------------------------------------
 module adventure_config_c_rack_tail_radar() {
-    // 1. Emulated Aluminum Topcase Back Wall & Tubular Luggage Rack
-    color("silver", 0.75) {
-        // Vertical Topcase Back Wall (2 mm aluminum plate)
-        translate([-90.0, -70.0, 12.0])
-            cube([4.0, 140.0, 150.0]);
-        // Topcase base lip
-        translate([-90.0, -70.0, 8.0])
-            cube([35.0, 140.0, 6.0]);
-        // Rack transverse tube
-        translate([-40.0, 0, 0])
+    // 1. BMW GS Tubular Stainless Steel Luggage Rack Structure (Ø 18 mm tubes)
+    color("lightgray", 0.95) {
+        // Transverse rear rack tube (where the mounting flange clamps onto)
+        translate([-42.0, 0, 0])
             rotate([90, 0, 0])
-                cylinder(r=9.0, h=160.0, center=true, $fn=32);
+                cylinder(r=9.0, h=170.0, center=true, $fn=32);
+
+        // Left longitudinal rack carrier tube
+        translate([-130.0, -45.0, 0])
+            rotate([0, 90, 0])
+                cylinder(r=9.0, h=100.0, center=false, $fn=32);
+
+        // Right longitudinal rack carrier tube
+        translate([-130.0, 45.0, 0])
+            rotate([0, 90, 0])
+                cylinder(r=9.0, h=100.0, center=false, $fn=32);
+
+        // Diagonal rack support struts
+        for (side = [-1, 1]) {
+            translate([-110.0, side * 45.0, -70.0])
+                rotate([0, 40, 0])
+                    cylinder(r=8.0, h=110.0, center=false, $fn=24);
+        }
     }
 
-    // 2. Adventure Rack-Tail Mount Cantilever Tray (PA12-CF Two-Piece Rallye-Aero-Balkon)
-    translate([-15.0, 0, 0]) {
-        // Base Cradle and Sculpted Top Cowl with Integrated Shark-Fin
+    // 2. Aluminum Topcase Reference Floor & Rear Lip (Touratech Zega / BMW Adventure)
+    // Low-profile base contour clearly shows the topcase boundary while leaving the
+    // entire Rallye-Aero-Balkon, clamp flange, and radar 100% visible!
+    color("silver", 0.9) {
+        // Lower aluminum bottom tray of topcase
+        translate([-165.0, -80.0, 8.0])
+            cube([115.0, 160.0, 5.0]);
+        // Lower rear edge extrusion & lid seal lip (height 28 mm)
+        translate([-53.0, -80.0, 8.0])
+            cube([4.0, 160.0, 28.0]);
+        // Black polymer corner crash protectors
+        color("#222831") {
+            for (side = [-1, 1]) {
+                translate([-54.0, side * 75.0 - 5.0, 8.0])
+                    cube([6.0, 10.0, 24.0]);
+            }
+        }
+    }
+
+    // 3. Adventure Rack-Tail Mount (Two-Piece Rallye-Aero-Balkon)
+    // Clamped securely to the Ø 18 mm transverse rack tube
+    translate([-14.0, 0, 0]) {
+        // Complete Two-Piece Aero Assembly (Base Cradle + Sculpted Aero Cowl)
         adventure_rack_tail_mount(part = "assembly");
 
-        // 3. Dipol 2.4 GHz +5 dBi Antenna (Snag-proof inside Astabweiser Fin)
-        color("#00adb5", 0.95) {
-            translate([RTM_POD_L - 5.0 + FIN_BASE_L/2.0, 0, (RTM_TOTAL_H - RTM_SPLIT_Z + FIN_HEIGHT)/2.0])
-                rotate([0, -35, 0])
-                    cylinder(r=4.8, h=46.0, center=true, $fn=16);
-        }
-
-        // 4. Pod 3 Base Housing (Horizontal in tray with clear sky view)
-        translate([0, -POD_OUTER_W/2.0, 4.0]) {
-            color("slategray", 0.85)
-                pod_base_housing();
-
-            // Rear Transceiver Cartridge (u-blox MAX-M10S & SX1262 LoRa)
-            translate([POD_BULKHEAD_X + 2.0, (POD_OUTER_W - CARTRIDGE_BASE_W)/2.0, POD_WALL]) {
-                cartridge_omm_transceiver_assembly(exploded = false);
+        // 2x M6 V4A Mounting Bolts in Flange Slots
+        color("silver") {
+            for (offset_y = [-40.0, 40.0]) {
+                translate([-28.0, offset_y, 7.5])
+                    cylinder(r=5.0, h=4.0, center=true, $fn=24);
             }
         }
 
+        // 4. Dipol 2.4 GHz +5 dBi Antenna (Accent cyan nested inside Astabweiser Fin)
+        color("#00adb5", 0.95) {
+            translate([RTM_POD_L - 8.0 + FIN_BASE_L/2.0 + 2.0, 0, (RTM_TOTAL_H - RTM_SPLIT_Z + FIN_HEIGHT)/2.0])
+                rotate([0, -35, 0])
+                    cylinder(r=4.8, h=52.0, center=true, $fn=20);
+        }
+
         // 5. Underside M5 GoPro Hinge with 36-Tooth Hirth Anti-Slip Lock & Garmin Varia Radar
-        translate([RTM_POD_L/2.0, 0, -RADAR_DROP_Z]) {
+        translate([RTM_POD_L/2.0 + 8.0, 0, -RADAR_DROP_Z]) {
             // GoPro Quarter-Turn Anti-Theft Lock Adapter Dock
-            rotate([0, 12, 0]) { // 12° Pitch Trim for Level Radar Horizon
+            rotate([0, 10, 0]) { // 10° Pitch Trim for Level Radar Horizon
                 color("#2b323c", 0.95)
                     radar_varia_gopro_lock_dock(hinge_axis = "X");
 
@@ -242,20 +270,21 @@ module adventure_kit_master_scene() {
     } else if (VIEW_MODE == "RACK_TAIL_RADAR") {
         adventure_config_c_rack_tail_radar();
     } else {
-        // Full Side-by-Side Studio Stage View with generous spacing
-        // Left (-320 mm): GSA Rohrträger-Klemmschelle
-        translate([-320.0, 0, 0])
+        // Full Side-by-Side Studio Stage View with balanced spacing (280 mm span)
+        // Left (-280 mm): GSA Rohrträger-Klemmschelle
+        translate([-280.0, 0, 0])
             adventure_config_a_gsa_rack();
 
         // Center (0 mm): Standard-GS Transition Dock
         translate([0, 0, 0])
             adventure_config_b_transition_dock();
 
-        // Right (+320 mm): Gepäckbrücken-Ausleger "Heck-Balkon" & Radar
-        translate([320.0, 0, 0])
+        // Right (+280 mm): Gepäckbrücken-Ausleger "Heck-Balkon" & Radar
+        translate([280.0, 0, 0])
             adventure_config_c_rack_tail_radar();
     }
 }
 
 // Render the complete assembly
 adventure_kit_master_scene();
+

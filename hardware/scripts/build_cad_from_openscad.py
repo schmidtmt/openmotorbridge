@@ -276,7 +276,7 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
     (
         "02_pod_base/99_adventure_kit_assembly.scad",
         os.path.join(CAD_IMG_DIR, "adventure_kit_master_assembly_3d.png"),
-        "10,20,10,48,0,325,1080",
+        "0,20,10,48,0,325,1020",
         "Tomorrow"
     ),
     (
@@ -294,7 +294,7 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
     (
         "02_pod_base/adventure_rack_tail_mount.scad",
         os.path.join(CAD_IMG_DIR, "rack_tail_mount_cad.png"),
-        "68,0,20,55,0,310,320",
+        "55,0,14,50,0,318,390",
         "Tomorrow"
     ),
     (
