@@ -822,50 +822,9 @@ Das universelle Kofferdeckel-Dock ([`saddlebag_lid_dock.scad`](file:///Users/sch
 
 Die Verkabelung der Kofferdeckel-Pods löst das fundamentale Praxiskriterium des Alltags- und Werkstattbetriebs: **Zündungsgesteuerter Dauerstrom ohne Akku-Sorgen bei gleichzeitiger 100 % zerstörungsfreier Kofferdemontage („Mechaniker-Sicherheit“)**.
 
-```
-                  KOFFER-VERKABELUNG & MAGSAFE-ABREISS-SCHNITTSTELLE
- ═════════════════════════════════════════════════════════════════════════════════
-  AM MOTORRADRAHMEN (Fest verlegt, wetter- & steinschlaggeschützt)
- ─────────────────────────────────────────────────────────────────────────────────
-  [Central Box unter der Sitzbank]
-         │ • KL15 Zündungsplus-Erkennung (Wake-Up) & LM5164 DCDC 5.0V
-         │ • BQ24075 LiPo-USV (puffert 6,5V Cold-Crank-Spannungseinbrüche)
-         │ • TLP222A Optokoppler (automatisierter OEM-Headset-Boot & PTT)
-         ▼
-  [ M8-Automotive-Systemkabel ]
-         ▼
-  [ Stationäres MagSafe-Rahmen-Dock (009_magsafe_frame_dock.scad) ]
-         │ (Fixiert am Rahmenrohr, mit PCBA 06 TVS-ESD-Schutzdioden)
-         ▼
-  [ 6-Pin MagSafe-Buchse (IP67) ] ──► Unter Sitzbankkante am Rahmen befestigt
- ═════════════════════════════════════════════════════════════════════════════════
-         ▲
-    ═══ KLACK! ═══  (Selbstzentrierende N52-Neodym-Magnetkupplung)
-    ═══ PLOPP! ═══  (Zerstörungsfreie Abreißtrennung bei Kofferabnahme: ~10-15 N)
-         ▼
- ═════════════════════════════════════════════════════════════════════════════════
-  IM KOFFER (Trocken, sauber, geschützt – 0 Adapter im Koffer)
- ─────────────────────────────────────────────────────────────────────────────────
-  [ 6-Pin MagSafe-Pigtail ] ────────► An Koffer-Vorderkante (Kabel < 2 mm)
-         │
-         ▼
-  [ 19-mm-Bodendurchführung ] ──────► Asymmetrische Split-Dichtung (EPDM/TPU)
-         │
-         ▼
-  [ Stufe-1-Zugentlastung am Boden ] ► Integrierter Klemmturm fängt 100 % Abreißkraft ab
-         │
-         │ (Schlankes, hochflexibles Flach-/Silikonkabel, völlig last- & zugfrei)
-         ▼
-  [ Führung am Deckel-Fangband ] ──► Steigt geschützt in den Kofferdeckel auf
-         │
-         ▼
-  [ Stufe-2-Zugentlastung am Dock ] ─► Kabelbinder-Tunnel im 46-mm-Schnauz klemmt Kabel
-         │
-         ▼
-  [ Direktanschluss an PORT B ] ────► USB-C Slim-Port der Pod-Basis (100 % lastfrei)
-  [ (Kein M8-Adapter im Koffer!) ]
- ═════════════════════════════════════════════════════════════════════════════════
-```
+![OpenMotorBridge Koffer-Verkabelung & MagSafe-Abreiß-Schnittstelle](../images/cad/saddlebag_magsafe_wiring_cad.png)
+
+*Abbildung 8.30b: CAD-Systemarchitektur der Koffer-Verkabelung mit selbstzentrierender MagSafe-Abreißkupplung (IP67). Dargestellt sind die zündungsgesteuerte 5V-Versorgung über die Zentralbox (KL15/BQ24075-USV), das rahmenfeste MagSafe-Dock (`009_magsafe_frame_dock.scad`) mit PCBA 06 TVS-Schutz, die zerstörungsfreie magnetische Abreißtrennung (~10–15 N) bei Kofferabnahme durch Werkstattmechaniker, die 19-mm-Bodendurchführung mit Stufe-1-Klemmturm, die lastfreie Flachkabelführung parallel zum Deckel-Fangband sowie die Stufe-2-Zugentlastung am Kofferdeckel-Dock mit 0 Newton Zugkraft am USB-C Port B.*
 
 1. **Intelligente Stromversorgung & USV-Pufferung über die Zentralbox (Klemme 15 / BQ24075):**
    * Die Koffer-Pods werden **nicht direkt unreguliert** aus dem Bordnetz gespeist, sondern zentral und konditioniert von der **Zentralbox** unter der Sitzbank versorgt.

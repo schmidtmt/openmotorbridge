@@ -712,8 +712,30 @@ The universal Saddlebag Lid Dock ([`saddlebag_lid_dock.scad`](file:///Users/schm
    * An integrated **drip lip ($16 \times 2\,\text{mm}$ with $30^\circ$ roof angle)** deflects condensation or rainwater sideways when opening the lid in rain.
 
 #### 6.5.2 Cable Routing, Switched Power & Mechanic-Proof MagSafe Breakaway
-* **Concealed Wire Run:** PUR cable runs along the check strap into the bike.
-* **MagSafe Breakaway Coupling:** If bags are detached for maintenance, magnetic pogo breakaway releases cleanly without wire ripping.
+
+Wiring the saddlebag lid pods resolves the quintessential operational requirement of daily riding and dealership maintenance: **Switched continuous power without battery anxiety coupled with 100% non-destructive saddlebag removal ("Mechanic Safety")**.
+
+![OpenMotorBridge Saddlebag Cable Routing & MagSafe Breakaway Interface](../images/cad/saddlebag_magsafe_wiring_cad.png)
+
+*Figure 8.30b: CAD system architecture of the saddlebag cable routing with self-centering MagSafe breakaway interface (IP67). Depicted are the switched 5V power supply from the Central Box (KL15/BQ24075 UPS), the stationary frame dock (`009_magsafe_frame_dock.scad`) with PCBA 06 TVS protection, the non-destructive magnetic breakaway separation (~10–15 N) during bag detachment, the 19 mm floor pass-through with Stage 1 clamp tower, the zero-load ribbon cable routing along the check strap, and the Stage 2 strain relief at the lid dock ensuring 0 Newton dynamic load on USB-C Port B.*
+
+1. **Intelligent Power Delivery & UPS Buffering via Central Box (Ignition KL15 / BQ24075):**
+   * Saddlebag pods are not fed unregulated 12V bike power directly, but conditioned 5.0V from the Central Box beneath the seat.
+   * **Ignition-Switched Wake-Up & Cold-Crank Buffering:** The Central Box senses switched 12V (KL15). The onboard LM5164-Q1 regulates clean 5.0V, while the integrated **LiPo UPS (BQ24075)** absorbs severe starter crank dips (down to 6.5V) within $8.5\,\mu\text{s}$—pods and transceivers never reboot during engine start.
+   * **Automated OEM Headset Boot via Optocouplers:** Toshiba TLP222A solid-state optocouplers trigger the power-on sequences of the Sena/Cardo modules inside the cartridges automatically upon ignition.
+2. **Mechanic-Proof 6-Pin MagSafe Breakaway Coupling (IP67):**
+   * During routine service (tires, brakes, belt tensioning), dealership technicians unbolt the saddlebags and lift them off in seconds without checking for aftermarket wiring. A rigid plug would shear or tear immediately.
+   * The **6-pin IP67 magnetic coupling with N52 neodymium magnets and gold-plated pogo pins** releases cleanly at approx. $10\dots 15\,\text{N}$ axial tension with **zero mechanical damage**.
+   * Re-installing the saddlebag pulls the coupling self-centering back together with a magnetic snap (*"Klack"*), instantly restoring power and data links.
+3. **Two-Zone Cable Architecture:**
+   * **Zone 1 (External Bike Chassis):** Heavy-duty automotive-grade M8 PUR cable from Central Box to the frame dock.
+   * **Zone 2 (Inside Saddlebag):** Ultra-slim, flexible silicone/ribbon wire ($< 2\,\text{mm}$ outer profile) running in the dry interior, taking zero luggage space.
+4. **Adapter-Free Direct Connection to Pod Port B:**
+   * The internal saddlebag cable routes along the textile check strap straight into the **USB-C Slim Port B** of the Pod baseboard. Port A (M8) remains capped inside the bag—zero redundant adapter boards or intermediate solder joints inside the bag.
+5. **Two-Stage Strain Relief & Zero-Drill Floor Grommet ([`010_saddlebag_hole_grommet_split.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/parts/010_saddlebag_hole_grommet_split.scad)):**
+   * **Stage 1 (Floor Grommet):** A clamp tower molded into the split EPDM/TPU grommet anchors the cable at the 19 mm OEM hole, transferring 100% of magnetic breakaway forces ($10\dots 15\,\text{N}$) and luggage shifting shocks directly into the saddlebag floor.
+   * **Stage 2 (Lid Dock):** A zip-tie tunnel in the 46 mm snout of the lid dock secures the cable $15\,\text{mm}$ before the plug.
+   * **Result at Port B:** The USB-C connector experiences strictly **0 Newton dynamic or static strain**.
 
 #### 6.5.3 RF Physics: Why Saddlebag Lids Beat Bag Floors
 Mounting in the lid provides a $> 25\,\text{cm}$ elevated ground clearance, line-of-sight radiation through composite bag lids, and complete isolation from road heat.
