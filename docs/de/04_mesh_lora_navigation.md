@@ -332,7 +332,8 @@ OpenMotorBridge steuert gekoppelte Actioncams drahtlos über den Lenkertaster un
    * **GoPro (Hero 9/10/11/12/13):** Open GoPro BLE API (GATT Service `0xFEA6`).
    * **Insta360 (X3 / X4 / Ace Pro):** Emulation der offiziellen Insta360 GPS Smart Remote; Telemetriedaten werden nativ in den Videocontainer (GPMF/INSV) eingebettet.
    * **DJI (Osmo Action 3/4/5 Pro):** DJI BLE Remote Protokoll.
-3. **Lenkertaster-Gesten:**
-   * **Klick:** Video-Highlight Marker im GPX-Track setzen.
-   * **Doppelklick:** Aufnahme Start/Stopp.
-   * **Apex-Auto-Trigger:** Schräglagen über $45^\circ$ setzen automatisch einen Highlight-Tag.
+3. **Lenkertaster-Gesten (Dual-Input: OEM CAN TRIP-Taste oder Hardware-Taster an `J3`):**
+   * **Kurzer Klick (< 300 ms):** Aufnahme Start/Stopp (weckt die Kamera via BLE aus dem Tiefschlaf auf; Doppel-Beep Bestätigung im Helm).
+   * **Gedrückt halten (> 300 ms):** PTT Push-to-Talk (Mesh-Intercom Sprachkanal aktiv solange gehalten).
+   * **Doppelklick:** Video-Highlight Marker (HiLight-Tag in MP4/INSV-Metadaten und GPX-Track setzen).
+   * **Apex-Auto-Trigger:** Schräglagen über $45^\circ$ setzen vollautomatisch einen Highlight-Tag.

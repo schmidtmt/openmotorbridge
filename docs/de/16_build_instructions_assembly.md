@@ -507,8 +507,8 @@ Der Universal Front-Knoten (PCBA 05) dient als zentrale Anschlussstelle für das
 ┌───────────────────────┬─────────┬────────────────────────────────────────────────────────┐
 │ Zubehör-Komponente    │ Port    │ Anschluss & Signalbelegung                             │
 ├───────────────────────┼─────────┼────────────────────────────────────────────────────────┤
-│ **Lenker-PTT Taster** │ **J3**  │ 4-Pin JST-PH (Pin 1: GND, Pin 2: PTT Sprechtaste,       │
-│ (Intercom & Action)   │         │ Pin 3: Cam-Bookmark/Highlight, Pin 4: Siri/Voice)      │
+│ **Lenker-Bedienung**  │ **CAN** │ CAN-ID 0x290 (Harley TRIP) / 0x2A0 (BMW Wonder Wheel)   │
+│ (Cam, PTT & Marker)   │ / **J3**│ oder 4-Pin JST-PH Hardware-Taster (Under-Perch / Klemme)│
 ├───────────────────────┼─────────┼────────────────────────────────────────────────────────┤
 │ **Totwinkel-LEDs**    │ **J9**  │ 3-Pin JST-PH (Pin 1: +12V_PROT, Pin 2: BSD Links,       │
 │ (Radar Blind Spot)    │         │ Pin 3: BSD Rechts über N-MOSFET Low-Side Treiber)      │
@@ -524,17 +524,31 @@ Der Universal Front-Knoten (PCBA 05) dient als zentrale Anschlussstelle für das
 └───────────────────────┴─────────┴────────────────────────────────────────────────────────┘
 ```
 
-#### 5.3.1 Lenker-PTT (Push-To-Talk) & Multi-Button Bedieneinheit (`J3`)
-* **Mechanische Montage:**
-  - Der taktile IP67-Lenkertaster wird mit einer schlanken Rohrklemmschelle (passend für Ø 22 mm / 7/8", Ø 25,4 mm / 1" oder Ø 31,8 mm / 1 1/4" Lenker) in ergonomischer Daumenreichweite neben dem linken Lenkergriff / Spiegelfuß montiert.
-  - Alternativ kann ein 3-fach Tastercluster montiert werden (z. B. Daytona Slim oder motogadget m-switch).
+#### 5.3.1 Lenker-Bedieneinheit: Dual-Input Architektur (OEM CAN-Bus & Dedizierter Hardware-Taster `J3`)
+
+OpenMotorBridge implementiert eine flexible **Dual-Input-Architektur** für die Lenkerbedienung. Beide Signalquellen speisen dieselbe interne Zustandsmaschine im Front-Node und können wahlweise autark oder parallel betrieben werden:
+
+##### Option A: OEM CAN-Bus Daumen-Integration (Empfohlen – 0 mm Lenker-Platzbedarf)
+* **Mechanischer Platzbedarf:** **0 mm** – keine zusätzliche Klemmschelle am Lenkerrohr. Die obere Klemmschelle der Kupplungsarmatur bleibt vollkommen frei für die Steuereinheit eines Klappenauspuffs (z. B. Dr. Jekill & Mr. Hyde oder KessTech).
+* **Fahrergonomie bei 2-Finger-Hebelüberdeckung:** Zeige- und Mittelfinger verbleiben unterbrechungsfrei auf dem Kupplungshebel. Der linke Daumen steuert die Funktionen ermüdungsfrei über die serienmäßige **TRIP-Taste** am oberen Armaturengehäuse (Harley-Davidson HD-LAN CAN-ID `0x290`, Bit 20) bzw. den Multicontroller / Wonder Wheel (BMW K-CAN):
+* **„Cam-First“ Gestensteuerung während der Fahrt ($v > 0$):**
+  - **Kurzer Klick ($< 300\,\text{ms}$):** Action-Cam REC Start / Stopp. Weckt GoPro (Hero 9–13 via Open GoPro BLE `0xFEA6`), Insta360 (X3/X4 via Smart Remote BLE) oder DJI Action verzögerungsfrei aus dem Ruhezustand auf. Ein heller Bestätigungs-Doppelton (*„Ding-Ding“*) bzw. Tiefton (*„Dong“*) im Helm-Headset bestätigt den Aufnahmestatus ohne Blickabwendung.
+  - **Gedrückt halten ($> 300\,\text{ms}$):** Push-to-Talk (PTT) für Intercom-Mesh / Funk. Solange der Taster gehalten wird, ist der Sprachkanal offen; beim Loslassen schließt er verzögerungsfrei (klassisches Walkie-Talkie-Prinzip).
+  - **Doppelklick:** Setzt einen Video-Highlight-Marker (HiLight-Tag) in der Videoaufzeichnung und der GPX-Telemetrie zur schnellen Auffindung von Schlüsselstellen im späteren Videoschnitt.
+  - *(Hinweis zum Bordcomputer: Bei kurzem Klick im Stand $v = 0$ sowie während der Fahrt wechselt der originale Harley-Tacho wie gewohnt durch Trip A, Trip B, Uhrzeit und Restreichweite. Ein Trip-Reset erfolgt auf der Harley weiterhin nur durch langes Halten im Stillstand).*
+
+##### Option B: Dedizierter taktiler Hardware-Taster (Port `J3` am Front-Node)
+* **Einsatzbereich:** Für Fahrzeuge ohne CAN-Bus-Zugriff am Lenker oder Fahrer, die einen separaten physischen Taster mit spürbarem mechanischem Klick bevorzugen.
+* **Mechanische Montage – Zwei kollisionsfreie Varianten:**
+  1. **Under-Perch / Spiegelfuß-Halter (Empfohlen für Cruiser):** Ein flacher 1,5 mm Edelstahl- oder PA12-CF-Winkel wird unter die untere M4-Gehäuseschraube der linken Armatur oder unter das M8/M10 Spiegelschaftgewinde geschraubt. Der Mikrotaster sitzt ca. 15 mm **unterhalb** des Blinkerschalters – vollkommen kollisionsfrei unterhalb einer eventuell montierten Jekill & Hyde Klappensteuerung und ergonomisch im natürlichen Absenkbereich des Daumens.
+  2. **Schlanke Rohrklemmschelle (10 mm):** Montage eines schmalen Tasters (z. B. Daytona Slimline oder motogadget m-switch mini) unmittelbar am Innenflansch des linken Griffgummis.
 * **Elektrischer Anschluss an Port `J3` (4-Pin JST-PH):**
   - **Pin 1:** `GND` (Gemeinsamer Massebezug)
-  - **Pin 2:** `PTT_INTERCOM` (Schließt gegen Masse: Tastet sofort das Intercom-Mesh / Funknetzwerk)
-  - **Pin 3:** `CAM_ACTION` (Schließt gegen Masse: Setzt Highlight-Tag in GoPro/Insta360 Videoaufzeichnung oder startet/stoppt Aufnahme)
+  - **Pin 2:** `PTT_INTERCOM` (Schließt gegen Masse: Tastet sofort das Intercom-Mesh / Funknetzwerk oder führt bei 2-Pin-Taster die obige Gestensteuerung aus)
+  - **Pin 3:** `CAM_ACTION` (Schließt gegen Masse: Separater Actioncam Start/Stopp & Highlight Taster bei 3-fach Clustern)
   - **Pin 4:** `MEDIA_VOICE` (Schließt gegen Masse: Sprachassistent Siri/Google Assistant oder nächster Musiktitel)
   - *(Hinweis: Ein handelsüblicher 2-Pin PTT-Taster passt direkt auf Pin 1 und Pin 2).*
-* **Systemvorteil:** 100 % batteriefrei, keine Verzögerung durch Funk-Latenz (< 5 ms Reaktionszeit), hardwareseitig über Schmitt-Trigger entprellt und gegen 12V-Überspannung geschützt.
+* **Systemvorteil:** 100 % batteriefrei, keine Verzögerung durch Funk-Latenz (< 1,8 ms Reaktionszeit), hardwareseitig über Schmitt-Trigger entprellt und gegen 12V-Überspannung geschützt.
 
 #### 5.3.2 Totwinkel-Spiegelanzeigen (Radar Blind Spot Detection - BSD) (`J9`)
 * **Mechanische Montage:**

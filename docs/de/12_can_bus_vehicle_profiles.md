@@ -218,6 +218,13 @@ Jedes Fahrzeugprofil definiert die physikalischen Bus-Parameter sowie ein Feld v
       "start_bit": 19,
       "length_bits": 1,
       "endianness": "little"
+    },
+    "handlebar_trip_btn": {
+      "can_id": "0x290",
+      "is_extended": false,
+      "start_bit": 20,
+      "length_bits": 1,
+      "endianness": "little"
     }
   }
 }
@@ -229,10 +236,11 @@ Jedes Fahrzeugprofil definiert die physikalischen Bus-Parameter sowie ein Feld v
 
 Die Firmware liefert ab Werk vorkonfigurierte Profile für die gängigsten Fahrzeugplattformen aus:
 
-### 3.1 Harley-Davidson HD-LAN / Skyline OS (`harley_skyline_2024.json`)
-* **Plattformen:** Road Glide (FLTRX), Street Glide (FLHX), CVO Touring ab 2023.5 / 2024.
+### 3.1 Harley-Davidson HD-LAN / Skyline OS (`harley_skyline_2024.json` & `harley_m8_rushmore.json`)
+* **Plattformen:** Road Glide (FLTRX), Street Glide (FLHX), CVO Touring ab 2023.5 / 2024 sowie Road King Special (FLHRXS) & M8 Softails ab 2018.
 * **Besonderheiten:** 
   * Direkter Abgriff der Daumen-Joysticks am linken und rechten Lenkerschalter (`0x290`: Track Next, Prev, Click).
+  * **TRIP-Taste Daumen-Integration (`0x290`, Bit 20):** Gestensteuerung für Action-Cam REC Start/Stopp (Klick) und PTT-Funk (Halten) ohne Lenkerplatzbedarf.
   * Infotainment-Quellenfilterung (`0x388`: `infotainment_source_active`) verhindert Geister-Streaming bei lokalem MP3-Stick / Radio.
   * BCM Alarmanlagen-Überwachung (`0x390`: `bcm_alarm_triggered`) für stillen LoRa 868 MHz Diebstahlalarm.
   * Reifendruck-Überwachung (TPMS) beider Räder in 0,025-bar-Schritten.

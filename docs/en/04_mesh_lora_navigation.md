@@ -290,7 +290,8 @@ OpenMotorBridge controls mounted action cameras wirelessly via handlebar control
    * **GoPro (Hero 9/10/11/12/13):** Open GoPro BLE API (GATT Service `0xFEA6`).
    * **Insta360 (X3 / X4 / Ace Pro):** Emulates official Insta360 GPS Smart Remote; telemetry is written natively into GPMF/INSV streams.
    * **DJI (Osmo Action 3/4/5 Pro):** DJI BLE Remote protocol.
-3. **Handlebar Remote Gestures:**
-   * **Single Click:** Places a video highlight marker in the GPX log.
-   * **Double Click:** Start / Stop recording.
+3. **Handlebar Switch Gestures (Dual-Input: OEM CAN TRIP Button or Hardware Switch on `J3`):**
+   * **Short Tap (< 300 ms):** Start / Stop recording (wakes camera from BLE deep standby; double-beep audio confirmation in helmet).
+   * **Press & Hold (> 300 ms):** PTT Push-to-Talk (mesh intercom speech channel active while held).
+   * **Double-Click:** Video highlight marker (HiLight tag in MP4/INSV metadata and GPX track).
    * **Apex Auto-Trigger:** Lean angles exceeding $45^\circ$ automatically generate a highlight tag.

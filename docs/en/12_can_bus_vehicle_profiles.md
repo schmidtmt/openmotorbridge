@@ -218,6 +218,13 @@ Each vehicle profile defines physical bus parameters along with an array of sign
       "start_bit": 19,
       "length_bits": 1,
       "endianness": "little"
+    },
+    "handlebar_trip_btn": {
+      "can_id": "0x290",
+      "is_extended": false,
+      "start_bit": 20,
+      "length_bits": 1,
+      "endianness": "little"
     }
   }
 }
@@ -229,10 +236,11 @@ Each vehicle profile defines physical bus parameters along with an array of sign
 
 Firmware releases bundle pre-configured profiles for the most prevalent vehicle platforms:
 
-### 3.1 Harley-Davidson HD-LAN / Skyline OS (`harley_skyline_2024.json`)
-* **Platforms:** Road Glide (FLTRX), Street Glide (FLHX), CVO Touring 2023.5 / 2024+.
+### 3.1 Harley-Davidson HD-LAN / Skyline OS (`harley_skyline_2024.json` & `harley_m8_rushmore.json`)
+* **Platforms:** Road Glide (FLTRX), Street Glide (FLHX), CVO Touring 2023.5 / 2024+ as well as Road King Special (FLHRXS) & M8 Softails from 2018+.
 * **Key Capabilities:**
   * Direct decoding of left and right handlebar thumb joysticks (`0x290`: Track Next, Prev, Click).
+  * **TRIP Button Thumb Integration (`0x290`, Bit 20):** Gesture control for action-cam REC start/stop (tap) and PTT intercom (hold) with zero handlebar footprint.
   * Infotainment source filtering (`0x388`: `infotainment_source_active`) prevents ghost media streaming when playing radio or local MP3 thumb drives.
   * BCM alarm monitoring (`0x390`: `bcm_alarm_triggered`) dispatches silent LoRa 868 MHz theft alerts.
   * Dual-wheel TPMS monitoring with 0.025 bar precision.

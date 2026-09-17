@@ -512,8 +512,8 @@ The Universal Front Node (PCBA 05) serves as the central wiring and communicatio
 ┌───────────────────────┬─────────┬────────────────────────────────────────────────────────┐
 │ Accessory Component   │ Port    │ Connection & Pinout                                    │
 ├───────────────────────┼─────────┼────────────────────────────────────────────────────────┤
-│ **Handlebar PTT**     │ **J3**  │ 4-Pin JST-PH (Pin 1: GND, Pin 2: PTT Intercom,         │
-│ (Intercom & Action)   │         │ Pin 3: Action-Cam Bookmark, Pin 4: Siri/Voice Assist)  │
+│ **Handlebar Control** │ **CAN** │ CAN-ID 0x290 (Harley TRIP) / 0x2A0 (BMW Wonder Wheel)   │
+│ (Cam, PTT & Marker)   │ / **J3**│ or 4-Pin JST-PH Hardware Button (Under-Perch / Clamp)   │
 ├───────────────────────┼─────────┼────────────────────────────────────────────────────────┤
 │ **Blind Spot LEDs**   │ **J9**  │ 3-Pin JST-PH (Pin 1: +12V_PROT, Pin 2: BSD Left,       │
 │ (Radar Mirror Alerts) │         │ Pin 3: BSD Right via Low-Side N-MOSFET drivers)        │
@@ -529,17 +529,31 @@ The Universal Front Node (PCBA 05) serves as the central wiring and communicatio
 └───────────────────────┴─────────┴────────────────────────────────────────────────────────┘
 ```
 
-#### 5.3.1 Handlebar PTT (Push-To-Talk) & Multi-Button Control Cluster (`J3`)
-* **Mechanical Mounting:**
-  - Secure the tactile IP67 handlebar button with a slim clamp bracket (sized for Ø 22 mm / 7/8", Ø 25.4 mm / 1", or Ø 31.8 mm / 1 1/4" bars) directly adjacent to the left grip / mirror mount within ergonomic thumb reach.
-  - Alternatively, a 3-button slim cluster (e.g. Daytona Slim or motogadget m-switch) can be used.
+#### 5.3.1 Handlebar Control Unit: Dual-Input Architecture (OEM CAN-Bus & Dedicated Hardware Switch `J3`)
+
+OpenMotorBridge implements a versatile **Dual-Input Architecture** for handlebar controls. Both signal paths feed the exact same internal state machine on the Front Node and can be deployed individually or in parallel:
+
+##### Option A: OEM CAN-Bus Thumb Integration (Recommended – 0 mm Handlebar Space)
+* **Mechanical Footprint:** **0 mm** – zero additional clamps on the handlebar tubing. The upper perch clamp of the clutch master cylinder remains completely available for valved exhaust switches (e.g., Dr. Jekill & Mr. Hyde or KessTech).
+* **Rider Ergonomics with 2-Finger Lever Covering:** Index and middle fingers remain continuously covering the clutch lever. The left thumb effortlessly controls all functions via the factory **TRIP button** located on the upper rear housing (Harley-Davidson HD-LAN CAN-ID `0x290`, Bit 20) or the BMW Wonder Wheel / Multicontroller (BMW K-CAN):
+* **"Cam-First" Gesture Control While Riding ($v > 0$):**
+  - **Short Tap ($< 300\,\text{ms}$):** Action-Cam REC Start / Stop. Instantly wakes GoPro (Hero 9–13 via Open GoPro BLE `0xFEA6`), Insta360 (X3/X4 via Smart Remote BLE), or DJI Action from low-power BLE standby. A crisp high-pitch double-beep (*"Ding-Ding"*) or low-tone (*"Dong"*) in the helmet headset immediately confirms recording state without diverting the rider's eyes.
+  - **Press & Hold ($> 300\,\text{ms}$):** Push-to-Talk (PTT) for intercom mesh / radio. The speech channel remains open as long as the button is held down and cleanly closes upon release (classic walkie-talkie principle).
+  - **Double-Click:** Drops a video highlight marker (HiLight tag) directly into the video container and GPX telemetry file for rapid location of apex passes during post-ride editing.
+  - *(Note on ODO / Trip Meter: Short presses at standstill $v = 0$ as well as regular taps during riding continue to cycle OEM Harley trip meters A, B, clock, and range normally. A trip reset on Harley still requires holding the button while stationary).*
+
+##### Option B: Dedicated Tactile Hardware Button (Port `J3` on Front Node)
+* **Application:** For motorcycles lacking handlebar CAN-bus access or riders who prefer a dedicated tactile switch with mechanical snap action.
+* **Mechanical Mounting – Two Non-Interfering Configurations:**
+  1. **Under-Perch / Mirror Stem Bracket (Recommended for Cruisers):** A slim 1.5 mm stainless steel or PA12-CF bracket mounts beneath the lower M4 housing bolt of the left hand control or under the M8/M10 mirror stem thread. The micro-switch sits approx. 15 mm **below** the turn signal paddle—completely clear of any top-mounted Jekill & Hyde exhaust switches and positioned directly within the thumb's natural downward sweep.
+  2. **Slim Clamp Collar (10 mm):** Mounting an ultra-narrow switch (e.g., Daytona Slimline or motogadget m-switch mini) directly flush against the inner flange of the left grip.
 * **Electrical Connection at Port `J3` (4-Pin JST-PH):**
   - **Pin 1:** `GND` (Common ground reference)
-  - **Pin 2:** `PTT_INTERCOM` (Closes to ground: triggers instant intercom mesh / radio transmit)
-  - **Pin 3:** `CAM_ACTION` (Closes to ground: sets highlight bookmark in video or toggles recording)
+  - **Pin 2:** `PTT_INTERCOM` (Closes to ground: triggers instant intercom mesh / radio transmit or executes the gesture state machine on 2-pin switches)
+  - **Pin 3:** `CAM_ACTION` (Closes to ground: dedicated actioncam trigger on 3-button clusters)
   - **Pin 4:** `MEDIA_VOICE` (Closes to ground: triggers Siri / Google Assistant or skips audio track)
   - *(Note: Standard 2-pin momentary push buttons plug directly onto Pin 1 and Pin 2).*
-* **System Benefit:** 100% battery-free, zero wireless latency (< 5 ms response time), hardware Schmitt-trigger debounced, and protected against accidental 12V shorts.
+* **System Benefit:** 100% battery-free, zero wireless latency (< 1.8 ms response time), hardware Schmitt-trigger debounced, and protected against accidental 12V shorts.
 
 #### 5.3.2 Blind Spot Detection Mirror LED Indicators (`J9`)
 * **Mechanical Mounting:**
