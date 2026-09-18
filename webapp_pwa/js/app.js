@@ -4513,11 +4513,66 @@ document.getElementById('btn-trigger-video-marker')?.addEventListener('click', (
     showToast(state.lang === 'de' ? 'Actioncam 1-PPS Video-Marker im GPX 2.0 Track gesetzt!' : 'Action cam 1-PPS video marker embedded in GPX 2.0 track!', 'success');
 });
 
-document.getElementById('btn-trigger-webdav-now')?.addEventListener('click', () => {
-    showToast(state.lang === 'de' ? 'WebDAV Sync gestartet: Verbinde mit Nextcloud...' : 'WebDAV sync started: Connecting to Nextcloud...', 'info');
-    setTimeout(() => {
-        showToast(state.lang === 'de' ? '2 GPX-Touren erfolgreich via TLS 1.3 hochgeladen!' : '2 GPX tours uploaded via TLS 1.3 successfully!', 'success');
-    }, 1200);
+document.getElementById('btn-trigger-webdav-now')?.addEventListener('click', async () => {
+    const isDe = state.lang === 'de';
+    const inputUrl = document.getElementById('input-webdav-url');
+    const inputUser = document.getElementById('input-webdav-user');
+    const inputPass = document.getElementById('input-webdav-pass');
+
+    const url = (inputUrl?.value || state.webdavConfig?.url || '').trim();
+    const user = (inputUser?.value || state.webdavConfig?.user || '').trim();
+    const pass = inputPass?.value || state.webdavConfig?.pass || '';
+
+    if (!url) {
+        showToast(isDe ? 'Bitte zuerst eine WebDAV-Server URL eintragen!' : 'Please enter a WebDAV server URL first!', 'warning');
+        return;
+    }
+
+    showToast(isDe ? `WebDAV Test-Upload gestartet: Verbinde mit Server...` : `WebDAV test upload started: Connecting to server...`, 'info');
+
+    const now = new Date();
+    const timestamp = now.toISOString().replace(/[:.]/g, '-');
+    const filename = `test_ride_${timestamp}.gpx`;
+    const targetUrl = url.endsWith('/') ? `${url}${filename}` : `${url}/${filename}`;
+
+    const sampleGpx = `<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="OpenMotorBridge PWA" xmlns="http://www.topografix.com/GPX/1/1" xmlns:omb="http://openmotorbridge.org/gpx/1/0">
+  <metadata><name>PWA WebDAV Test Ride</name><time>${now.toISOString()}</time></metadata>
+  <trk>
+    <name>PWA WebDAV Test Ride</name>
+    <trkseg>
+      <trkpt lat="47.4125" lon="9.0435"><ele>550.0</ele><time>${now.toISOString()}</time><extensions><omb:lean>14.2</omb:lean></extensions></trkpt>
+      <trkpt lat="47.4140" lon="9.0460"><ele>558.0</ele><time>${now.toISOString()}</time><extensions><omb:lean>43.1</omb:lean></extensions></trkpt>
+      <trkpt lat="47.4160" lon="9.0490"><ele>565.0</ele><time>${now.toISOString()}</time><extensions><omb:lean>28.5</omb:lean></extensions></trkpt>
+    </trkseg>
+  </trk>
+</gpx>`;
+
+    try {
+        const headers = {
+            'Content-Type': 'application/gpx+xml',
+        };
+        if (user || pass) {
+            headers['Authorization'] = 'Basic ' + btoa(`${user}:${pass}`);
+        }
+
+        const resp = await fetch(targetUrl, {
+            method: 'PUT',
+            headers: headers,
+            body: sampleGpx,
+        });
+
+        if (resp.status === 200 || resp.status === 201) {
+            showToast(isDe ? `✓ Test-Tour '${filename}' erfolgreich hochgeladen!` : `✓ Test tour '${filename}' uploaded successfully!`, 'success');
+        } else {
+            const errText = await resp.text().catch(() => '');
+            showToast(isDe ? `Fehler beim Upload: HTTP ${resp.status} ${resp.statusText}` : `Upload failed: HTTP ${resp.status} ${resp.statusText}`, 'error');
+            console.error('WebDAV upload failed:', resp.status, errText);
+        }
+    } catch (err) {
+        console.error('WebDAV connection error:', err);
+        showToast(isDe ? `Verbindungsfehler: ${err.message}` : `Connection error: ${err.message}`, 'error');
+    }
 });
 
 // Save Heim-WLAN & WebDAV credentials

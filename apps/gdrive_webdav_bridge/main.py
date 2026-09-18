@@ -11,6 +11,8 @@ from typing import Annotated
 from fastapi import BackgroundTasks, Depends, FastAPI, HTTPException, Request, Response, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 
+from fastapi.middleware.cors import CORSMiddleware
+
 from config import settings
 from gdrive import gdrive_client
 from notifier import dispatch_upload_event
@@ -26,6 +28,16 @@ app = FastAPI(
     title="OpenMotorBridge Google Drive WebDAV Bridge",
     description="Minimal WebDAV-to-Google-Drive upload bridge for motorcycle telemetry and GPX tracks.",
     version="1.0.0",
+)
+
+# Enable CORS for PWA and external web clients
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+    expose_headers=["Location", "ETag", "DAV"],
 )
 
 security = HTTPBasic(auto_error=False)
