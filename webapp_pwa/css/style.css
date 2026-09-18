@@ -2351,6 +2351,292 @@ body.ride-hud-active .tab-btn {
     transition: width 0.2s ease;
 }
 
+/* ==============================================================================
+   MULTI-BIKE FLEET & GROUP ORDER CONFIGURATOR (SAMMELBESTELLUNG)
+   ============================================================================== */
+.builder-fleet-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    padding: 14px 18px;
+    background: linear-gradient(135deg, rgba(22, 27, 34, 0.95) 0%, rgba(13, 17, 23, 0.98) 100%);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-sm);
+}
+
+.builder-fleet-tabs {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.builder-bike-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-full);
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 0.84rem;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.builder-bike-chip:hover {
+    background: rgba(255, 255, 255, 0.09);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.builder-bike-chip.active {
+    background: linear-gradient(135deg, rgba(255, 149, 0, 0.2) 0%, rgba(255, 149, 0, 0.08) 100%);
+    border-color: var(--accent-orange);
+    color: #fff;
+    font-weight: 700;
+    box-shadow: 0 0 14px rgba(255, 149, 0, 0.22);
+}
+
+.builder-bike-chip-name {
+    display: inline-block;
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.builder-bike-chip-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: 2px;
+}
+
+.builder-chip-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 2px 4px;
+    font-size: 0.78rem;
+    border-radius: 4px;
+    line-height: 1;
+    transition: color 0.15s ease, background 0.15s ease;
+}
+
+.builder-chip-btn:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.builder-chip-btn.delete:hover {
+    color: var(--accent-red);
+    background: rgba(255, 69, 58, 0.15);
+}
+
+.btn-add-bike {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: rgba(10, 132, 255, 0.08);
+    border: 1px dashed var(--accent-blue);
+    border-radius: var(--radius-full);
+    color: var(--accent-blue);
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.btn-add-bike:hover {
+    background: rgba(10, 132, 255, 0.18);
+    border-style: solid;
+    color: #fff;
+}
+
+.builder-view-toggle {
+    display: inline-flex;
+    background: rgba(0, 0, 0, 0.35);
+    padding: 4px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
+    gap: 4px;
+}
+
+.builder-toggle-btn {
+    padding: 6px 14px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.builder-toggle-btn:hover {
+    color: #fff;
+}
+
+.builder-toggle-btn.active {
+    background: linear-gradient(135deg, var(--accent-blue) 0%, #005bb5 100%);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(10, 132, 255, 0.35);
+}
+
+.builder-toggle-badge {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 1px 6px;
+    border-radius: 10px;
+    font-size: 0.72rem;
+}
+
+/* Group Order View Hero Banner */
+.fleet-hero-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 20px 24px;
+    background: linear-gradient(135deg, rgba(30, 38, 48, 0.95) 0%, rgba(13, 17, 23, 0.98) 100%);
+    border: 1px solid var(--border-accent);
+    border-radius: var(--radius-md);
+    margin-bottom: 22px;
+    box-shadow: var(--shadow-md);
+}
+
+.fleet-savings-callout {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    background: rgba(48, 209, 88, 0.12);
+    border: 1px solid rgba(48, 209, 88, 0.4);
+    border-radius: var(--radius-md);
+    color: var(--accent-green);
+}
+
+.fleet-bikes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+}
+
+.fleet-bike-card {
+    background: rgba(22, 27, 34, 0.75);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.fleet-bike-card:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+.fleet-bike-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    gap: 8px;
+}
+
+.fleet-bike-name {
+    font-weight: 700;
+    font-size: 1rem;
+    color: #fff;
+}
+
+.fleet-bike-model {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 2px;
+}
+
+.fleet-bike-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: var(--radius-full);
+    background: rgba(10, 132, 255, 0.15);
+    color: var(--accent-blue);
+    border: 1px solid rgba(10, 132, 255, 0.3);
+    white-space: nowrap;
+}
+
+.fleet-bike-details {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 12px;
+}
+
+.fleet-bike-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+    border-top: 1px solid var(--border-subtle);
+    font-size: 0.82rem;
+}
+
+.pcba-matrix-table td.moq-cell {
+    font-weight: 700;
+    color: var(--accent-green);
+}
+
+.moq-pill {
+    display: inline-block;
+    padding: 2px 7px;
+    background: rgba(48, 209, 88, 0.15);
+    border: 1px solid rgba(48, 209, 88, 0.35);
+    border-radius: 4px;
+    color: var(--accent-green);
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.spare-pill {
+    display: inline-block;
+    padding: 2px 7px;
+    background: rgba(255, 149, 0, 0.12);
+    border: 1px solid rgba(255, 149, 0, 0.3);
+    border-radius: 4px;
+    color: var(--accent-orange);
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.bulk-pack-tag {
+    font-size: 0.74rem;
+    color: var(--accent-blue);
+    background: rgba(10, 132, 255, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 6px;
+    white-space: nowrap;
+}
+
 /* Print Styles */
 @media print {
     body {

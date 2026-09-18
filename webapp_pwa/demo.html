@@ -2619,10 +2619,31 @@
                 </div>
             </div>
 
-            <!-- 4-Step Interactive Configurator -->
-            <div class="grid-2" style="margin-bottom: 20px;">
-                <!-- Step 1: Bike Selection -->
-                <div class="builder-step-card">
+            <!-- Multi-Bike Fleet & Group Order Bar -->
+            <div class="builder-fleet-bar">
+                <div class="builder-fleet-tabs" id="builder-fleet-tabs">
+                    <!-- Bike chips populated dynamically by app.js -->
+                </div>
+                <button id="btn-add-bike" class="btn-add-bike" type="button">
+                    ➕ <span data-i18n="btn_add_bike">Weiteres Bike hinzufügen</span>
+                </button>
+                <div class="builder-view-toggle">
+                    <button id="btn-view-single" class="builder-toggle-btn active" type="button">
+                        🛠️ <span data-i18n="builder_mode_single">Einzel-Konfiguration</span>
+                    </button>
+                    <button id="btn-view-group" class="builder-toggle-btn" type="button">
+                        📦 <span data-i18n="builder_mode_group">Sammelbestellung &amp; Bundles</span>
+                        <span class="builder-toggle-badge" id="lbl-fleet-count">1 Bike</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Single Bike View Container -->
+            <div id="builder-single-view">
+                <!-- 4-Step Interactive Configurator -->
+                <div class="grid-2" style="margin-bottom: 20px;">
+                    <!-- Step 1: Bike Selection -->
+                    <div class="builder-step-card">
                     <div class="builder-step-header">
                         <span class="builder-step-num">1</span>
                         <div>
@@ -3004,10 +3025,152 @@
                     <span id="flasher-percent-label">0%</span>
                 </div>
 
-                <div class="smoke-terminal" id="flasher-terminal-log" style="max-height: 110px;">
-                    <div>[WEB-SERIAL] WebSerial API verfügbar. Schließe die Zentralbox per USB-C an und starte den 1-Click Flash.</div>
                 </div>
             </div>
+            <!-- End of builder-single-view -->
+
+            <!-- Group Order & Bundles View Container -->
+            <div id="builder-group-view" style="display: none;">
+                <!-- Group Hero Banner -->
+                <div class="fleet-hero-banner">
+                    <div>
+                        <h3 style="font-size: 1.35rem; font-weight: 800; font-family: var(--font-heading); color: #fff; display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+                            📦 <span data-i18n="group_hero_title">Sammelbestellung &amp; Bundle-Kalkulator</span>
+                        </h3>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); max-width: 680px; margin-bottom: 0;">
+                            Bündelt alle Platinen, SMT-Bestückungen, 3D-Druckteile und COTS-Normteile für deine Gruppe. Spart Versandkosten, amortisiert JLCPCB Rüstkosten und nutzt die 5er Mindestbestellmenge (MOQ) optimal aus!
+                        </p>
+                    </div>
+                    <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
+                        <div style="text-align: right;">
+                            <div style="font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 700;">Geschätzte Gruppenkosten</div>
+                            <div id="group-total-cost" style="font-size: 1.5rem; font-weight: 800; color: var(--accent-orange);">~ 210 – 260 €</div>
+                            <div id="group-per-rider-cost" style="font-size: 0.8rem; color: var(--text-secondary);">~ 210 – 260 € pro Bike (1 Bike)</div>
+                        </div>
+                        <div class="fleet-savings-callout" id="group-savings-callout">
+                            🎉 <span>Ersparnis: <strong id="group-savings-amount">~ 0 €</strong> ggü. Einzelbestellung</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fleet Bikes Overview Grid -->
+                <div style="margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
+                    <strong style="font-size: 0.95rem; color: #fff; display: flex; align-items: center; gap: 8px;">
+                        🏍️ <span data-i18n="fleet_overview_title">Konfigurierte Motorräder in dieser Sammelbestellung</span>
+                    </strong>
+                    <span style="font-size: 0.8rem; color: var(--text-secondary);" id="group-fleet-summary-count">1 Motorrad konfiguriert</span>
+                </div>
+                <div class="fleet-bikes-grid" id="fleet-bikes-cards-grid">
+                    <!-- Populated dynamically by app.js -->
+                </div>
+
+                <!-- 1. Consolidated JLCPCB PCBA & SMT Matrix -->
+                <div class="card" style="margin-bottom: 22px;">
+                    <div class="card-header">
+                        <div class="card-title">📦 <span data-i18n="group_pcba_title">1. Konsolidierte JLCPCB Platinen-Matrix (SMT-Bestückung &amp; 5er MOQ)</span></div>
+                        <span class="card-badge badge-green" id="group-pcba-badge">7 Platinentypen</span>
+                    </div>
+                    <div style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 14px; line-height: 1.45;">
+                        💡 <strong>JLCPCB 5er Mindestmenge:</strong> JLCPCB fertigt standardmäßig minimal 5 Platinen pro Design. Bei einer Sammelbestellung für mehrere Fahrer amortisieren sich die festen SMT-Rüstkosten (~8–15 € pro Board-Typ), und übrig bleibende Platinen dienen als kostenlose Gruppen-Reserve!
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table class="data-table pcba-matrix-table" style="width: 100%; font-size: 0.82rem;" id="builder-group-table-pcba">
+                            <thead>
+                                <tr>
+                                    <th>Platine / PCBA</th>
+                                    <th>KiCad Projekt</th>
+                                    <th>Netto-Bedarf</th>
+                                    <th>JLCPCB Bestellung (5x MOQ)</th>
+                                    <th>Gruppen-Reserve</th>
+                                    <th>Bestückung (SMT) &amp; Rüstkosten</th>
+                                </tr>
+                            </thead>
+                            <tbody id="builder-group-tbody-pcba">
+                                <!-- Populated dynamically by app.js -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 2. Consolidated 3D Print Parts -->
+                <div class="card" style="margin-bottom: 22px;">
+                    <div class="card-header">
+                        <div class="card-title">🖨️ <span data-i18n="group_3d_title">2. Konsolidierte 3D-Druckteile (MJF PA12 / ASA)</span></div>
+                        <span class="card-badge badge-blue" id="group-3d-parts-count">0 Druckteile gesamt</span>
+                    </div>
+                    <div style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 14px;">
+                        Teilt Gehäuseteile in <strong>universelle Basis-Baugruppen</strong> (gleiche STL für alle Bikes) und <strong>modellspezifische Halterungen</strong> (nach Fahrer sortiert).
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table class="data-table" style="width: 100%; font-size: 0.82rem;" id="builder-group-table-3d">
+                            <thead>
+                                <tr>
+                                    <th>Baugruppe / Teil</th>
+                                    <th>Dateiname</th>
+                                    <th>Gesamtstück</th>
+                                    <th>Aufteilung nach Fahrern &amp; Motorrädern</th>
+                                </tr>
+                            </thead>
+                            <tbody id="builder-group-tbody-3d">
+                                <!-- Populated dynamically by app.js -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 3. Consolidated COTS & Fasteners -->
+                <div class="card" style="margin-bottom: 22px;">
+                    <div class="card-header">
+                        <div class="card-title">🔩 <span data-i18n="group_cots_title">3. Konsolidierte COTS-Kabel &amp; Edelstahl-Normteile (Sammel-Einkaufswagen)</span></div>
+                        <span class="card-badge badge-blue" id="group-cots-count">0 Positionen</span>
+                    </div>
+                    <div style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 14px;">
+                        Aufsummierte Mengen für Schrauben, Dichtungen, Federn, Magnete und Kabelpeitschen mit Empfehlungen für übliche Großhandels-Packungsgrößen (AliExpress / Amazon / McMaster).
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table class="data-table" style="width: 100%; font-size: 0.82rem;" id="builder-group-table-cots">
+                            <thead>
+                                <tr>
+                                    <th>Komponente</th>
+                                    <th>Spezifikation / Bezug</th>
+                                    <th>Gesamtmenge</th>
+                                    <th>Empfohlene Packungsgröße</th>
+                                    <th>Verwendung im Gesamtsystem</th>
+                                </tr>
+                            </thead>
+                            <tbody id="builder-group-tbody-cots">
+                                <!-- Populated dynamically by app.js -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 4. Group Actions & Sharing -->
+                <div class="card" style="margin-bottom: 24px; background: linear-gradient(135deg, rgba(22, 27, 34, 0.95) 0%, rgba(13, 17, 23, 0.98) 100%);">
+                    <div class="card-header">
+                        <div class="card-title">💾 <span data-i18n="group_actions_title">4. Sammelbestellung Teilen &amp; Exportieren</span></div>
+                    </div>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 16px;">
+                        Lade die konsolidierte Sammel-Stückliste für Excel/JLCPCB herunter oder speichere die Gruppenkonfiguration als JSON-Datei, um sie per Chat an deine Mitfahrer zu senden.
+                    </p>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button id="btn-group-export-bom" class="btn-primary" style="display: flex; align-items: center; gap: 6px;">
+                            📋 <span data-i18n="btn_group_export_bom">Sammel-BOM als CSV</span>
+                        </button>
+                        <button id="btn-group-export-json" class="btn-secondary" style="display: flex; align-items: center; gap: 6px;">
+                            💾 <span data-i18n="btn_group_export_json">Gruppe als JSON speichern</span>
+                        </button>
+                        <button id="btn-group-import-json" class="btn-secondary" style="display: flex; align-items: center; gap: 6px;">
+                            📂 <span data-i18n="btn_group_import_json">Gruppe laden (.json)</span>
+                        </button>
+                        <button id="btn-group-print" class="btn-secondary" style="display: flex; align-items: center; gap: 6px;">
+                            🖨️ <span data-i18n="btn_group_print">Sammel-Anleitung Drucken / PDF</span>
+                        </button>
+                        <input type="file" id="input-group-file-import" accept=".json" style="display: none;">
+                    </div>
+                </div>
+            </div>
+            <!-- End of builder-group-view -->
         </main>
     </div>
 

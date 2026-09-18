@@ -7173,20 +7173,183 @@ function setupDemoSuiteUi() {
 }
 
 // ==========================================
-// 12. System Builder & Konfigurator (IKEA-Prinzip)
+// 12. System Builder & Konfigurator (IKEA-Prinzip) & Multi-Bike Fleet Aggregator
 // ==========================================
-const builderState = {
-    bike: 'bmw-gs',
-    slot1: 'sena-spider-x',
-    slot2: 'cardo-edge',
-    addons: {
-        frontNode: true,
-        rearPod3: true,
-        keyfob: false
-    },
-    manufacturing: 'jlcpcb',
-    bedSize: 'standard'
+const fleetState = {
+    activeBikeIndex: 0,
+    viewMode: 'single', // 'single' | 'group'
+    bikes: [
+        {
+            id: 'bike_1',
+            name: 'Fahrer 1 (BMW GS)',
+            bike: 'bmw-gs',
+            slot1: 'sena-spider-x',
+            slot2: 'cardo-edge',
+            addons: {
+                frontNode: true,
+                rearPod3: true,
+                keyfob: false
+            },
+            manufacturing: 'jlcpcb',
+            bedSize: 'standard'
+        }
+    ]
 };
+
+// Seamless backward-compatible proxy:
+// Any existing access to builderState reads and writes the currently active bike in fleetState!
+const builderState = new Proxy({}, {
+    get(target, prop) {
+        const active = fleetState.bikes[fleetState.activeBikeIndex] || fleetState.bikes[0];
+        return active ? active[prop] : undefined;
+    },
+    set(target, prop, value) {
+        const active = fleetState.bikes[fleetState.activeBikeIndex] || fleetState.bikes[0];
+        if (active) {
+            active[prop] = value;
+        }
+        return true;
+    }
+});
+
+function createDefaultBike(index, template = null) {
+    if (template) {
+        const clone = JSON.parse(JSON.stringify(template));
+        clone.id = 'bike_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+        clone.name = template.name + (state.lang === 'de' ? ' (Kopie)' : ' (Copy)');
+        return clone;
+    }
+    const defaultModels = ['bmw-gs', 'hd-touring', 'universal', 'bmw-gsa', 'hd-cvo-st'];
+    const model = defaultModels[index % defaultModels.length];
+    const isDe = state.lang === 'de';
+    const riderName = isDe ? `Fahrer ${index + 1}` : `Rider ${index + 1}`;
+    const modelNames = {
+        'bmw-gs': 'BMW GS',
+        'hd-touring': 'Harley Touring',
+        'universal': 'Universal Naked',
+        'bmw-gsa': 'BMW Adventure',
+        'hd-cvo-st': 'Harley CVO ST'
+    };
+    return {
+        id: 'bike_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
+        name: `${riderName} (${modelNames[model] || 'Bike'})`,
+        bike: model,
+        slot1: index % 2 === 0 ? 'sena-spider-x' : 'sena-50s',
+        slot2: index % 3 === 0 ? 'cardo-edge' : 'pmr446',
+        addons: {
+            frontNode: true,
+            rearPod3: index % 2 === 0,
+            keyfob: false
+        },
+        manufacturing: 'jlcpcb',
+        bedSize: 'standard'
+    };
+}
+
+function addBikeToFleet(template = null) {
+    const isDe = state.lang === 'de';
+    if (fleetState.bikes.length >= 8) {
+        showToast(isDe ? 'Maximal 8 Motorräder in einer Sammelbestellung möglich' : 'Maximum of 8 motorcycles supported per group order', 'warning');
+        return;
+    }
+    const newBike = createDefaultBike(fleetState.bikes.length, template);
+    fleetState.bikes.push(newBike);
+    fleetState.activeBikeIndex = fleetState.bikes.length - 1;
+    syncFormToActiveBike();
+    renderSystemBuilder();
+    showToast(isDe ? `✓ ${newBike.name} zur Sammelbestellung hinzugefügt!` : `✓ ${newBike.name} added to group order!`, 'success');
+}
+
+function removeBikeFromFleet(index) {
+    const isDe = state.lang === 'de';
+    if (fleetState.bikes.length <= 1) {
+        showToast(isDe ? 'Mindestens ein Motorrad muss konfiguriert bleiben' : 'At least one motorcycle must remain in configuration', 'warning');
+        return;
+    }
+    const removedName = fleetState.bikes[index].name;
+    fleetState.bikes.splice(index, 1);
+    if (fleetState.activeBikeIndex >= fleetState.bikes.length) {
+        fleetState.activeBikeIndex = fleetState.bikes.length - 1;
+    }
+    syncFormToActiveBike();
+    renderSystemBuilder();
+    showToast(isDe ? `Motorrad '${removedName}' entfernt` : `Removed '${removedName}'`, 'info');
+}
+
+function duplicateBike(index) {
+    const sourceBike = fleetState.bikes[index];
+    if (!sourceBike) return;
+    addBikeToFleet(sourceBike);
+}
+
+function setActiveBike(index) {
+    if (index < 0 || index >= fleetState.bikes.length) return;
+    fleetState.activeBikeIndex = index;
+    syncFormToActiveBike();
+    renderSystemBuilder();
+}
+
+function setViewMode(mode) {
+    fleetState.viewMode = mode;
+    const singleView = document.getElementById('builder-single-view');
+    const groupView = document.getElementById('builder-group-view');
+    const btnSingle = document.getElementById('btn-view-single');
+    const btnGroup = document.getElementById('btn-view-group');
+
+    if (mode === 'group') {
+        if (singleView) singleView.style.display = 'none';
+        if (groupView) groupView.style.display = 'block';
+        if (btnSingle) btnSingle.classList.remove('active');
+        if (btnGroup) btnGroup.classList.add('active');
+        renderGroupBuilder();
+    } else {
+        if (singleView) singleView.style.display = 'block';
+        if (groupView) groupView.style.display = 'none';
+        if (btnSingle) btnSingle.classList.add('active');
+        if (btnGroup) btnGroup.classList.remove('active');
+        renderSingleBuilder();
+    }
+}
+
+function syncFormToActiveBike() {
+    const active = fleetState.bikes[fleetState.activeBikeIndex];
+    if (!active) return;
+
+    const syncGroup = (containerId, value) => {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        container.querySelectorAll('.builder-option-card').forEach(c => {
+            if (c.getAttribute('data-value') === value) {
+                c.classList.add('selected');
+            } else {
+                c.classList.remove('selected');
+            }
+        });
+    };
+
+    syncGroup('builder-bikes-grid', active.bike);
+    syncGroup('builder-slot1-grid', active.slot1);
+    syncGroup('builder-slot2-grid', active.slot2);
+    syncGroup('builder-mfg-grid', active.manufacturing);
+    syncGroup('builder-bedsize-grid', active.bedSize);
+
+    const addonsGrid = document.getElementById('builder-addons-grid');
+    if (addonsGrid) {
+        addonsGrid.querySelectorAll('.builder-option-card').forEach(c => {
+            const key = c.getAttribute('data-value');
+            if (active.addons && active.addons[key]) {
+                c.classList.add('selected');
+            } else {
+                c.classList.remove('selected');
+            }
+        });
+    }
+
+    const bedSizeContainer = document.getElementById('builder-bedsize-container');
+    if (bedSizeContainer) {
+        bedSizeContainer.style.display = active.manufacturing === 'diy' ? 'block' : 'none';
+    }
+}
 
 function setupSystemBuilderUi() {
     // 1. Setup click listeners on all option cards
@@ -7234,7 +7397,7 @@ function setupSystemBuilderUi() {
         });
     }
 
-    // 2. Action buttons
+    // 2. Action buttons (Single Bike View)
     const btnPrint = document.getElementById('btn-builder-print');
     if (btnPrint) {
         btnPrint.addEventListener('click', () => {
@@ -7249,14 +7412,74 @@ function setupSystemBuilderUi() {
         });
     }
 
-    // Initial render
+    // 3. Multi-Bike Fleet & Group Order Buttons
+    const btnAddBike = document.getElementById('btn-add-bike');
+    if (btnAddBike) {
+        btnAddBike.addEventListener('click', () => addBikeToFleet());
+    }
+
+    const btnViewSingle = document.getElementById('btn-view-single');
+    if (btnViewSingle) {
+        btnViewSingle.addEventListener('click', () => setViewMode('single'));
+    }
+
+    const btnViewGroup = document.getElementById('btn-view-group');
+    if (btnViewGroup) {
+        btnViewGroup.addEventListener('click', () => setViewMode('group'));
+    }
+
+    const btnGroupExportBom = document.getElementById('btn-group-export-bom');
+    if (btnGroupExportBom) {
+        btnGroupExportBom.addEventListener('click', () => exportGroupBomCsv());
+    }
+
+    const btnGroupExportJson = document.getElementById('btn-group-export-json');
+    if (btnGroupExportJson) {
+        btnGroupExportJson.addEventListener('click', () => exportGroupOrderJson());
+    }
+
+    const btnGroupImportJson = document.getElementById('btn-group-import-json');
+    const inputGroupFileImport = document.getElementById('input-group-file-import');
+    if (btnGroupImportJson && inputGroupFileImport) {
+        btnGroupImportJson.addEventListener('click', () => {
+            inputGroupFileImport.click();
+        });
+        inputGroupFileImport.addEventListener('change', (e) => {
+            importGroupOrderJson(e);
+        });
+    }
+
+    const btnGroupPrint = document.getElementById('btn-group-print');
+    if (btnGroupPrint) {
+        btnGroupPrint.addEventListener('click', () => {
+            window.print();
+        });
+    }
+
+    // Initial sync & render
+    syncFormToActiveBike();
     renderSystemBuilder();
 }
 
-function renderSystemBuilder() {
-    const isDe = state.lang === 'de';
+function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+}
 
-    // 1. Title & Subtitle strings
+function calculateSingleBikeBom(bikeConfig) {
+    const isDe = state.lang === 'de';
+    const cfg = bikeConfig || fleetState.bikes[fleetState.activeBikeIndex] || fleetState.bikes[0];
+    const addons = cfg.addons || {};
+    const bikeModel = cfg.bike || 'bmw-gs';
+    const slot1 = cfg.slot1 || 'sena-spider-x';
+    const slot2 = cfg.slot2 || 'cardo-edge';
+    const mfg = cfg.manufacturing || 'jlcpcb';
+    const bedSize = cfg.bedSize || 'standard';
+
     const bikeNames = {
         'bmw-gs': isDe ? 'BMW GS Familie (R 1200 LC / 1250 / 1300 · F 750 / 850 / 900 · Vario)' : 'BMW GS Family (R 1200 LC / 1250 / 1300 · F 750 / 850 / 900 · Vario)',
         'bmw-gsa': isDe ? 'BMW GSA Adventure (R 1200 / 1250 / 1300 GSA · F 850 / 900 GSA · Rohrträger)' : 'BMW GSA Adventure (R 1200 / 1250 / 1300 GSA · F 850 / 900 GSA · Stainless Rack)',
@@ -7273,48 +7496,18 @@ function renderSystemBuilder() {
         'blind': isDe ? 'Blindkassette' : 'Blank Cartridge'
     };
 
-    const titleEl = document.getElementById('builder-summary-title');
-    const subEl = document.getElementById('builder-summary-sub');
-    const costEl = document.getElementById('builder-estimated-cost');
-
-    if (titleEl) {
-        titleEl.textContent = `${bikeNames[builderState.bike]} · Dual-Mesh Bridge`;
-    }
-
-    if (subEl) {
-        const addonList = [];
-        if (builderState.addons.frontNode) addonList.push(isDe ? 'Front-Knoten' : 'Front Node');
-        if (builderState.addons.rearPod3) addonList.push(isDe ? 'Heck-Pod 3' : 'Rear Pod 3');
-        if (builderState.addons.keyfob) addonList.push('Smart-Keyfob');
-        const addonTxt = addonList.length > 0 ? ` + ${addonList.join(' + ')}` : '';
-        subEl.textContent = `${slotNames[builderState.slot1]} (Slot 1) + ${slotNames[builderState.slot2]} (Slot 2)${addonTxt}`;
-    }
-
     // Cost estimation
-    let baseCostMin = 135;
-    let baseCostMax = 165;
-    if (builderState.addons.frontNode) { baseCostMin += 42; baseCostMax += 55; }
-    if (builderState.addons.rearPod3) { baseCostMin += 48; baseCostMax += 62; }
-    if (builderState.addons.keyfob) { baseCostMin += 22; baseCostMax += 30; }
-    if (builderState.manufacturing === 'diy') { baseCostMin -= 25; baseCostMax -= 35; }
+    let costMin = 135;
+    let costMax = 165;
+    if (addons.frontNode) { costMin += 42; costMax += 55; }
+    if (addons.rearPod3) { costMin += 48; costMax += 62; }
+    if (addons.keyfob) { costMin += 22; costMax += 30; }
+    if (mfg === 'diy') { costMin -= 25; costMax -= 35; }
 
-    if (costEl) {
-        costEl.textContent = `~ ${baseCostMin} – ${baseCostMax} €`;
-    }
+    const numPods = addons.rearPod3 ? 3 : 2;
+    const numSmart = (slot1 === 'sena-spider-x' ? 1 : 0) + (slot2 === 'cardo-edge' ? 1 : 0);
 
-    const costDisclaimerEl = document.getElementById('builder-cost-disclaimer');
-    if (costDisclaimerEl) {
-        costDisclaimerEl.textContent = isDe ? 'zzgl. OEM-Intercom-Module (Sena/Cardo)' : 'excl. OEM intercom units (Sena/Cardo)';
-    }
-
-    // Toggle bed size container visibility
-    const bedSizeContainer = document.getElementById('builder-bedsize-container');
-    if (bedSizeContainer) {
-        bedSizeContainer.style.display = builderState.manufacturing === 'diy' ? 'block' : 'none';
-    }
-
-    // 2. Generate 3D parts list
-    const numPods = builderState.addons.rearPod3 ? 3 : 2;
+    // 3D Parts
     const parts3D = [
         { group: 'Main Box', file: 'main_box_lower_case.stl', qty: 1, desc: isDe ? 'Unterwanne mit Nut-Pockets & Dichtnut' : 'Lower tub with nut pockets & seal groove' },
         { group: 'Main Box', file: 'main_box_mid_tray.stl', qty: 1, desc: isDe ? 'Zwischenboden & Akkuwanne' : 'Mid tray & battery cradle' },
@@ -7326,23 +7519,23 @@ function renderSystemBuilder() {
     ];
 
     // Inlays
-    if (builderState.slot1 === 'sena-spider-x' || builderState.slot1 === 'sena-50s') {
+    if (slot1 === 'sena-spider-x' || slot1 === 'sena-50s') {
         parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_sena.stl', qty: 1, desc: isDe ? 'Inlay für Sena SPIDER X / 50S / 60S' : 'Inlay for Sena SPIDER X / 50S / 60S' });
     } else {
         parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_blindkassette.stl', qty: 1, desc: isDe ? 'Hermetische Blindkassette (Dry Box)' : 'Hermetic blank cartridge (Dry Box)' });
     }
 
-    if (builderState.slot2 === 'cardo-edge') {
+    if (slot2 === 'cardo-edge') {
         parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_cardo.stl', qty: 1, desc: isDe ? 'Inlay für Cardo Packtalk Edge / Pro' : 'Inlay for Cardo Packtalk Edge / Pro' });
-    } else if (builderState.slot2 === 'blind') {
+    } else if (slot2 === 'blind') {
         parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_blindkassette.stl', qty: 1, desc: isDe ? 'Hermetische Blindkassette (Dry Box)' : 'Hermetic blank cartridge (Dry Box)' });
     }
 
-    if (builderState.addons.rearPod3) {
+    if (addons.rearPod3) {
         parts3D.push({ group: 'Heck-Pod 3', file: 'cartridge_antenna_bracket_omm.stl', qty: 1, desc: isDe ? 'Dielektrisches Antennenradom für PCBA 04' : 'Dielectric antenna radome for PCBA 04' });
     }
 
-    if (builderState.addons.frontNode) {
+    if (addons.frontNode) {
         parts3D.push({ group: 'Front-Node', file: 'front_node_lower_tub.stl', qty: 1, desc: isDe ? 'Cockpit-Wanne mit AMPS & Nut-Pockets' : 'Cockpit tub with AMPS & nut pockets' });
         parts3D.push({ group: 'Front-Node', file: 'front_node_upper_lid.stl', qty: 1, desc: isDe ? 'Deckel mit Knowles MEMS Schalleintritt' : 'Lid with Knowles MEMS acoustic port' });
         parts3D.push({ group: 'Front-Node', file: 'front_node_cable_glands_tpu.stl', qty: '1 Paar', desc: isDe ? 'Elastische Dichtkämme (TPU)' : 'Elastomeric sealing combs (TPU)' });
@@ -7350,22 +7543,22 @@ function renderSystemBuilder() {
     }
 
     // Bike-specific parts
-    if (builderState.bike === 'bmw-gs') {
+    if (bikeModel === 'bmw-gs') {
         parts3D.push({ group: 'Bike-Kit (GS)', file: 'adventure_transition_dock.stl', qty: 2, desc: isDe ? 'Sitzbank-Bügelfalte Transition-Docks (Ø 28 mm)' : 'Seat crease transition docks (Ø 28 mm)' });
         parts3D.push({ group: 'Bike-Kit (GS)', file: 'adventure_rack_tail_mount.stl', qty: 1, desc: isDe ? 'Gepäckbrücken-Ausleger für Heck-Pod' : 'Luggage rack cantilever for rear pod' });
         parts3D.push({ group: 'Bike-Kit (GS)', file: 'radar_varia_gopro_lock_dock.stl', qty: 1, desc: isDe ? 'Garmin Varia Quarter-Turn Dock' : 'Garmin Varia quarter-turn dock' });
         parts3D.push({ group: 'Bike-Kit (GS)', file: '011_gopro_hirth_lock.stl', qty: 1, desc: isDe ? '36-Zahn Hirth-Formschluss-Gelenk' : '36-tooth Hirth gear lock' });
-    } else if (builderState.bike === 'bmw-gsa') {
+    } else if (bikeModel === 'bmw-gsa') {
         parts3D.push({ group: 'Bike-Kit (GSA)', file: 'adventure_pannier_rack_clamp_base.stl', qty: 4, desc: isDe ? 'Ø 18 mm Rohrträger-Klemmschellen-Unterteile' : 'Ø 18 mm pannier rack clamp bases' });
         parts3D.push({ group: 'Bike-Kit (GSA)', file: 'adventure_pannier_rack_clamp_cap.stl', qty: 4, desc: isDe ? 'Ø 18 mm Rohrträger-Klemmschellen-Kappen' : 'Ø 18 mm pannier rack clamp caps' });
         parts3D.push({ group: 'Bike-Kit (GSA)', file: 'adventure_rack_tail_mount.stl', qty: 1, desc: isDe ? 'Heck-Balkon hinter Alutopcase mit 45°-Finne' : 'Tail Balcony behind topcase with 45° fin' });
         parts3D.push({ group: 'Bike-Kit (GSA)', file: 'radar_varia_gopro_lock_dock.stl', qty: 1, desc: isDe ? 'Garmin Varia Quarter-Turn Dock' : 'Garmin Varia quarter-turn dock' });
         parts3D.push({ group: 'Bike-Kit (GSA)', file: '011_gopro_hirth_lock.stl', qty: 1, desc: isDe ? '36-Zahn Hirth-Formschluss-Gelenk' : '36-tooth Hirth gear lock' });
-    } else if (builderState.bike === 'hd-touring') {
+    } else if (bikeModel === 'hd-touring') {
         parts3D.push({ group: 'Bike-Kit (HD)', file: 'saddlebag_lid_dock.stl', qty: 2, desc: isDe ? 'Kofferdeckel-Montagedocks (Pod 1 & 2)' : 'Saddlebag lid docks (Pods 1 & 2)' });
         parts3D.push({ group: 'Bike-Kit (HD)', file: 'pod3_touring_fender_console.stl', qty: 1, desc: isDe ? 'Organische Heckkotflügel-Konsole' : 'Organic rear fender console' });
         parts3D.push({ group: 'Bike-Kit (HD)', file: 'radar_license_plate_bracket.stl', qty: 1, desc: isDe ? 'Entkoppelter Kennzeichen-Radarhalter' : 'Decoupled license plate radar mount' });
-    } else if (builderState.bike === 'hd-cVO-st' || builderState.bike === 'hd-cvo-st') {
+    } else if (bikeModel === 'hd-cvo-st' || bikeModel === 'hd-cVO-st') {
         parts3D.push({ group: 'Bike-Kit (CVO)', file: 'saddlebag_lid_dock.stl', qty: 2, desc: isDe ? 'Kofferdeckel-Montagedocks (Pod 1 & 2)' : 'Saddlebag lid docks (Pods 1 & 2)' });
         parts3D.push({ group: 'Bike-Kit (CVO)', file: 'cvo_st_undercowl_skeleton_dock.stl', qty: 1, desc: isDe ? 'Aufrechtes Federsitz-Dock unter Solo-Hutze' : 'Upright skeleton dock under solo seat cowl' });
         parts3D.push({ group: 'Bike-Kit (CVO)', file: 'cvo_st_telemetry_fin.stl', qty: 1, desc: isDe ? 'Aerodynamische Haifischflosse am Heck' : 'Aerodynamic tail fin on rear tab' });
@@ -7375,20 +7568,19 @@ function renderSystemBuilder() {
         parts3D.push({ group: 'Bike-Kit (Universal)', file: 'radar_center_underfender_mount.stl', qty: 1, desc: isDe ? 'Zentrische Underfender-Radarplatte (für seitl. Kennzeichen)' : 'Centered under-fender radar mount (for side-mount plates)' });
     }
 
-    if (builderState.bike === 'hd-touring' || builderState.bike === 'hd-cvo-st') {
+    if (bikeModel === 'hd-touring' || bikeModel === 'hd-cvo-st' || bikeModel === 'hd-cVO-st') {
         parts3D.push({ group: 'Cockpit-Dock', file: 'magsafe_cockpit_mount_harley.stl', qty: 1, desc: isDe ? 'MagSafe Cockpit-Montageflansch Harley' : 'MagSafe cockpit mount flange Harley' });
         parts3D.push({ group: 'Cockpit-Dock', file: 'magsafe_frame_dock.stl', qty: 1, desc: isDe ? 'MagSafe Rahmendock-Körper' : 'MagSafe frame dock chassis' });
         parts3D.push({ group: 'Cockpit-Dock', file: 'magsafe_clamp_wings.stl', qty: 1, desc: isDe ? 'MagSafe Lenker-Klemmflügel' : 'MagSafe handlebar clamp wings' });
     }
 
-    if (builderState.addons.keyfob) {
+    if (addons.keyfob) {
         parts3D.push({ group: 'Zubehör', file: 'smart_keyfob_lower_shell.stl', qty: 1, desc: isDe ? 'Keyfob Wanne mit LRA-Dämpfungsbett' : 'Keyfob tub with LRA damping bed' });
         parts3D.push({ group: 'Zubehör', file: 'smart_keyfob_upper_shell.stl', qty: 1, desc: isDe ? 'Keyfob Deckel mit 3 Tastenfeldern' : 'Keyfob lid with 3 button keypads' });
         parts3D.push({ group: 'Zubehör', file: 'smart_keyfob_tpu_rim.stl', qty: 1, desc: isDe ? 'Keyfob Elastischer Bumper (TPU)' : 'Keyfob elastomeric bumper (TPU)' });
     }
 
-    // 3. Generate PCBAs list
-    const numSmart = (builderState.slot1 === 'sena-spider-x' ? 1 : 0) + (builderState.slot2 === 'cardo-edge' ? 1 : 0);
+    // PCBAs
     const pcbas = [
         { name: 'PCBA 01', id: 'kicad_main_box', qty: 1, desc: isDe ? 'Zentralbox Hauptplatine (ESP32-S3, Codec, USV)' : 'Central box main controller (ESP32-S3, Codec, UPS)' },
         { name: 'PCBA 02', id: 'kicad_pod_base', qty: numPods, desc: isDe ? `Pod-Basisplatine mit Harwin-Docking (${numPods} Stk.)` : `Pod baseboard with Harwin docking (${numPods} pcs)` }
@@ -7398,33 +7590,33 @@ function renderSystemBuilder() {
         pcbas.push({ name: 'PCBA 03', id: 'kicad_cartridge', qty: numSmart, desc: isDe ? `Smart Modular Kassettenplatine (${numSmart} Stk.)` : `Smart modular cartridge board (${numSmart} pcs)` });
     }
 
-    if (builderState.addons.rearPod3) {
+    if (addons.rearPod3) {
         pcbas.push({ name: 'PCBA 04', id: 'kicad_rear_pod3', qty: 1, desc: isDe ? 'Heck-Pod 3 Transceiver (RP2040, LoRa, GNSS)' : 'Rear Pod 3 transceiver (RP2040, LoRa, GNSS)' });
     }
 
-    if (builderState.addons.frontNode) {
+    if (addons.frontNode) {
         pcbas.push({ name: 'PCBA 05', id: 'kicad_front_node', qty: 1, desc: isDe ? 'Universal Front-Knoten (ESP32-S3, USB-Hub, PD)' : 'Universal Front Node (ESP32-S3, USB Hub, PD)' });
     }
 
-    if (builderState.bike === 'hd-touring' || builderState.bike === 'hd-cvo-st') {
+    if (bikeModel === 'hd-touring' || bikeModel === 'hd-cvo-st' || bikeModel === 'hd-cVO-st') {
         pcbas.push({ name: 'PCBA 06', id: 'kicad_magsafe_dock', qty: 1, desc: isDe ? 'MagSafe Cockpit-Dock Adapter (500mA Sicherung, TVS)' : 'MagSafe cockpit dock adapter (500mA fuse, TVS)' });
     }
 
-    if (builderState.addons.keyfob) {
+    if (addons.keyfob) {
         pcbas.push({ name: 'PCBA 07', id: 'kicad_smart_keyfob', qty: 1, desc: isDe ? 'Smart-Keyfob (BLE Tracker, LRA Haptik)' : 'Smart keyfob (BLE tracker, LRA haptic)' });
     }
 
-    // 4. Generate COTS & Fasteners list
+    // COTS & Fasteners
     const cots = [
         { name: 'HD26 Fertigkabelpeitsche', spec: 'Amphenol LTW COTS HD26 Breakout', qty: 1, desc: isDe ? 'Zentraler Hauptanschluss (100% wasserdicht)' : 'Central main harness plug (100% waterproof)' },
         { name: 'M8 6-Pin PUR Fertigkabel', spec: 'A-kodiert Stecker/Buchse (1.0m / 1.5m)', qty: numPods, desc: isDe ? `Plug-and-Play Verbindung zu den Pods (${numPods} Stk.)` : `Plug-and-play connection to pods (${numPods} pcs)` },
         { name: 'Pufferakku (LiPo USV)', spec: '1S 3.7V 2.200 mAh Flat-Pack (Typ 504068) mit Micro-Fit', qty: 1, desc: isDe ? 'Notstrom-Pufferung in der Zentralbox' : 'Seamless UPS reserve inside main box' },
         { name: 'KFZ-Sicherungshalter', spec: 'Wasserdichter Halter + 2A Sicherung', qty: 1, desc: isDe ? 'Dauerplus-Absicherung an Batteriepol' : 'Direct battery terminal protection (KL30)' },
         { name: 'M3 Gehäuseschrauben', spec: 'DIN 912 V4A M3 x 40 mm', qty: 4, desc: isDe ? 'Zentralbox Gehäuse (greift in Nut-Pockets)' : 'Main box enclosure (threads into nut pockets)' },
-        { name: 'M3 Edelstahlmuttern', spec: 'DIN 934 / 985 M3 V4A', qty: builderState.addons.frontNode ? 8 : 4, desc: isDe ? 'Unverlierbar in Nut-Pockets eingelegt (kein Lötkolben!)' : 'Captive in nut pockets (no soldering iron needed!)' }
+        { name: 'M3 Edelstahlmuttern', spec: 'DIN 934 / 985 M3 V4A', qty: addons.frontNode ? 8 : 4, desc: isDe ? 'Unverlierbar in Nut-Pockets eingelegt (kein Lötkolben!)' : 'Captive in nut pockets (no soldering iron needed!)' }
     ];
 
-    if (builderState.addons.frontNode) {
+    if (addons.frontNode) {
         cots.push({ name: isDe ? 'Front-Node 12V Anschlusskabel' : 'Front Node 12V Power Pigtail', spec: '2-Pin JST-PH mit Posi-Tap', qty: 1, desc: isDe ? 'Lokale 12V-Cockpit-Versorgung (Drahtlos via ESP-NOW / BLE)' : 'Local 12V cockpit tap (Wireless via ESP-NOW / BLE)' });
         cots.push({ name: 'M3 Front-Schrauben', spec: 'DIN 912 V4A M3 x 20 mm', qty: 4, desc: isDe ? 'Front-Node Gehäusedeckel' : 'Front Node enclosure lid' });
         cots.push({ name: 'M4 Edelstahlmuttern', spec: 'DIN 934 M4 V4A', qty: 4, desc: isDe ? 'AMPS-Befestigungstaschen am Gehäuseboden' : 'AMPS mounting pockets in tub floor' });
@@ -7445,14 +7637,163 @@ function renderSystemBuilder() {
     cots.push({ name: 'Kassetten-Flanschdichtungen', spec: 'Silikon-Formdichtung 54 x 18 mm', qty: numPods, desc: isDe ? `Stirnseitige Mundloch-Dichtungen (${numPods} Stk.)` : `Mouth opening seals (${numPods} pcs)` });
     cots.push({ name: 'M4 Silentblöcke / Gummipuffer', spec: 'Typ A M4 Außen/Innen Ø 15 x 10 mm', qty: 4, desc: isDe ? 'Schwingungsentkoppelte Zentralbox-Montage' : 'Vibration-isolated main box mounting' });
 
-    if (builderState.bike === 'bmw-gsa') {
+    if (bikeModel === 'bmw-gsa') {
         cots.push({ name: 'M5 Schellen-Schrauben', spec: 'DIN 912 V4A M5 x 30 mm + Stoppmuttern', qty: 8, desc: isDe ? 'Verschraubung der 4 Rohrschellen am Kofferträger' : 'Fastening 4 tube clamps to pannier rack' });
     }
 
+    return {
+        bikeName: bikeNames[bikeModel] || bikeModel,
+        slotNames,
+        costMin,
+        costMax,
+        numPods,
+        numSmart,
+        parts3D,
+        pcbas,
+        cots
+    };
+}
+
+function renderFleetBar() {
+    const isDe = state.lang === 'de';
+    const container = document.getElementById('builder-fleet-tabs');
+    if (!container) return;
+
+    const lblFleetCount = document.getElementById('lbl-fleet-count');
+    if (lblFleetCount) {
+        lblFleetCount.textContent = `${fleetState.bikes.length} ${fleetState.bikes.length === 1 ? 'Bike' : 'Bikes'}`;
+    }
+
+    container.innerHTML = fleetState.bikes.map((bike, idx) => {
+        const isActive = idx === fleetState.activeBikeIndex;
+        const canDelete = fleetState.bikes.length > 1;
+        return `
+            <div class="builder-bike-chip ${isActive ? 'active' : ''}" data-index="${idx}">
+                <span class="chip-icon">🏍️</span>
+                <span class="chip-name" data-index="${idx}" title="${isDe ? 'Doppelklick zum Umbenennen' : 'Double-click to rename'}">${escapeHtml(bike.name)}</span>
+                <button class="chip-btn chip-dup" data-index="${idx}" title="${isDe ? 'Motorrad duplizieren' : 'Duplicate bike'}">⎘</button>
+                ${canDelete ? `<button class="chip-btn chip-del" data-index="${idx}" title="${isDe ? 'Motorrad entfernen' : 'Remove bike'}">✕</button>` : ''}
+            </div>
+        `;
+    }).join('');
+
+    // Event listeners on chips
+    container.querySelectorAll('.builder-bike-chip').forEach(chip => {
+        const idx = parseInt(chip.getAttribute('data-index'), 10);
+        chip.addEventListener('click', (e) => {
+            if (e.target.closest('.chip-btn') || e.target.closest('input')) return;
+            setActiveBike(idx);
+        });
+    });
+
+    container.querySelectorAll('.chip-dup').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const idx = parseInt(btn.getAttribute('data-index'), 10);
+            duplicateBike(idx);
+        });
+    });
+
+    container.querySelectorAll('.chip-del').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const idx = parseInt(btn.getAttribute('data-index'), 10);
+            removeBikeFromFleet(idx);
+        });
+    });
+
+    // Inline renaming on double click
+    container.querySelectorAll('.chip-name').forEach(nameSpan => {
+        nameSpan.addEventListener('dblclick', (e) => {
+            e.stopPropagation();
+            const idx = parseInt(nameSpan.getAttribute('data-index'), 10);
+            const currentName = fleetState.bikes[idx].name;
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = currentName;
+            input.className = 'chip-rename-input';
+            input.style.cssText = 'background: #0d1117; color: #fff; border: 1px solid var(--accent-orange); border-radius: 4px; padding: 2px 6px; font-size: 0.8rem; font-family: inherit; width: 140px;';
+
+            const finishRename = () => {
+                const newName = input.value.trim();
+                if (newName) {
+                    fleetState.bikes[idx].name = newName;
+                }
+                renderFleetBar();
+                if (fleetState.viewMode === 'group') {
+                    renderGroupBuilder();
+                } else {
+                    renderSingleBuilder();
+                }
+            };
+
+            input.addEventListener('blur', finishRename);
+            input.addEventListener('keydown', (ke) => {
+                if (ke.key === 'Enter') {
+                    input.blur();
+                } else if (ke.key === 'Escape') {
+                    input.value = currentName;
+                    input.blur();
+                }
+            });
+
+            nameSpan.replaceWith(input);
+            input.focus();
+            input.select();
+        });
+    });
+}
+
+function renderSystemBuilder() {
+    renderFleetBar();
+    if (fleetState.viewMode === 'group') {
+        renderGroupBuilder();
+    } else {
+        renderSingleBuilder();
+    }
+}
+
+function renderSingleBuilder() {
+    const isDe = state.lang === 'de';
+    const active = fleetState.bikes[fleetState.activeBikeIndex] || fleetState.bikes[0];
+    const bom = calculateSingleBikeBom(active);
+
+    const titleEl = document.getElementById('builder-summary-title');
+    const subEl = document.getElementById('builder-summary-sub');
+    const costEl = document.getElementById('builder-estimated-cost');
+
+    if (titleEl) {
+        titleEl.textContent = `${bom.bikeName} · Dual-Mesh Bridge`;
+    }
+
+    if (subEl) {
+        const addonList = [];
+        if (active.addons?.frontNode) addonList.push(isDe ? 'Front-Knoten' : 'Front Node');
+        if (active.addons?.rearPod3) addonList.push(isDe ? 'Heck-Pod 3' : 'Rear Pod 3');
+        if (active.addons?.keyfob) addonList.push('Smart-Keyfob');
+        const addonTxt = addonList.length > 0 ? ` + ${addonList.join(' + ')}` : '';
+        subEl.textContent = `${bom.slotNames[active.slot1]} (Slot 1) + ${bom.slotNames[active.slot2]} (Slot 2)${addonTxt}`;
+    }
+
+    if (costEl) {
+        costEl.textContent = `~ ${bom.costMin} – ${bom.costMax} €`;
+    }
+
+    const costDisclaimerEl = document.getElementById('builder-cost-disclaimer');
+    if (costDisclaimerEl) {
+        costDisclaimerEl.textContent = isDe ? 'zzgl. OEM-Intercom-Module (Sena/Cardo)' : 'excl. OEM intercom units (Sena/Cardo)';
+    }
+
+    // Toggle bed size container visibility
+    const bedSizeContainer = document.getElementById('builder-bedsize-container');
+    if (bedSizeContainer) {
+        bedSizeContainer.style.display = active.manufacturing === 'diy' ? 'block' : 'none';
+    }
+
     // Update total count badge
-    const totalPartsCount = parts3D.reduce((acc, p) => acc + (typeof p.qty === 'number' ? p.qty : 1), 0) +
-                            pcbas.reduce((acc, p) => acc + p.qty, 0) +
-                            cots.reduce((acc, p) => acc + (typeof p.qty === 'number' ? p.qty : 1), 0);
+    const totalPartsCount = bom.parts3D.reduce((acc, p) => acc + (typeof p.qty === 'number' ? p.qty : 1), 0) +
+                            bom.pcbas.reduce((acc, p) => acc + p.qty, 0) +
+                            bom.cots.reduce((acc, p) => acc + (typeof p.qty === 'number' ? p.qty : 1), 0);
     const countBadge = document.getElementById('builder-bom-parts-count');
     if (countBadge) {
         countBadge.textContent = `${totalPartsCount} ${isDe ? 'Teile gesamt' : 'parts total'}`;
@@ -7462,20 +7803,20 @@ function renderSystemBuilder() {
     const tbody3D = document.getElementById('builder-tbody-3d');
     if (tbody3D) {
         let rowsHtml = '';
-        if (builderState.manufacturing === 'diy') {
-            const isMini = builderState.bedSize === 'mini';
+        if (active.manufacturing === 'diy') {
+            const isMini = active.bedSize === 'mini';
             const plates = isMini ? [
                 { plate: 'Platte 1 (180²)', file: 'main_box_tub_mini_plate.3mf', mat: 'ASA / PA-CF', desc: isDe ? 'Main Box Unterwanne (diagonal 45° im Bauraum platziert)' : 'Main Box lower tub (angled 45° across bed)' },
                 { plate: 'Platte 2 (180²)', file: 'main_box_lid_tray_mini_plate.3mf', mat: 'ASA / PA-CF', desc: isDe ? 'Main Box Zwischenboden & Gehäusedeckel' : 'Main Box mid-tray & upper lid' },
                 { plate: 'Platte 3 (180²)', file: 'pod_1_2_mini_plate.3mf', mat: 'ASA / PA-CF', desc: isDe ? 'Pod 1 & Pod 2 Basisgehäuse (aufrecht)' : 'Pod 1 & Pod 2 base housings (vertical)' },
-                { plate: 'Platte 4 (180²)', file: 'pod_3_bulkheads_mini_plate.3mf', mat: 'ASA / PA-CF', desc: isDe ? `Heck-Pod 3 Gehäuse & ${numPods}x Schottwände` : `Rear Pod 3 housing & ${numPods}x bulkheads` },
+                { plate: 'Platte 4 (180²)', file: 'pod_3_bulkheads_mini_plate.3mf', mat: 'ASA / PA-CF', desc: isDe ? `Heck-Pod 3 Gehäuse & ${bom.numPods}x Schottwände` : `Rear Pod 3 housing & ${bom.numPods}x bulkheads` },
                 { plate: 'Platte 5 (180²)', file: 'cartridges_mini_plate.3mf', mat: 'ASA / PA-CF', desc: isDe ? 'Kassetten-Basisschlitten, Gateway-Inlays & Riegel' : 'Cartridge sleds, gateway inlays & latches' },
                 { plate: 'Platte 6 (180²)', file: 'front_node_mini_plate.3mf', mat: 'ASA / PA-CF', desc: isDe ? 'Universal Front-Knoten Unterwanne & Deckel' : 'Universal Front Node lower tub & lid' },
                 { plate: 'Platte 7 (180²)', file: 'glands_tpu_mini_plate.3mf', mat: 'TPU 95A', desc: isDe ? 'Elastische Dichtkämme, USB-C Kappe & O-Ringe' : 'Sealing combs, USB-C dust cap & O-rings' },
                 { plate: 'Platte 8 (180²)', file: 'bike_mounts_mini_plate.3mf', mat: 'ASA / PA-CF', desc: isDe ? 'Fahrzeugspezifisches Montage-Kit (Schellen/Docks)' : 'Bike-specific mounting kit (clamps/docks)' }
             ] : [
                 { plate: 'Platte 1 (≥220²)', file: 'main_box_standard_plate.3mf', mat: 'ASA / PA-CF', desc: isDe ? 'Komplette Zentralbox: Unterwanne, Zwischenboden & Deckel auf 1 Platte' : 'Complete Central Box: Lower tub, mid-tray & lid on 1 plate' },
-                { plate: 'Platte 2 (≥220²)', file: 'pods_standard_plate.3mf', mat: 'ASA / PA-CF', desc: isDe ? `Alle ${numPods} Pod-Gehäuse + ${numPods} Schottwände nebeneinander` : `All ${numPods} Pod housings + ${numPods} bulkheads side-by-side` },
+                { plate: 'Platte 2 (≥220²)', file: 'pods_standard_plate.3mf', mat: 'ASA / PA-CF', desc: isDe ? `Alle ${bom.numPods} Pod-Gehäuse + ${bom.numPods} Schottwände nebeneinander` : `All ${bom.numPods} Pod housings + ${bom.numPods} bulkheads side-by-side` },
                 { plate: 'Platte 3 (≥220²)', file: 'cartridges_frontnode_standard_plate.3mf', mat: 'ASA / PA-CF', desc: isDe ? 'Kassetten-Schlitten, Gateway-Inlays, Verriegelungen & Front-Node' : 'Cartridge sleds, inlays, latches & Front Node' },
                 { plate: 'Platte 4 (≥220²)', file: 'glands_tpu_standard_plate.3mf', mat: 'TPU 95A', desc: isDe ? 'Alle flexiblen Dichtkämme, Kappen & O-Ringe (TPU 95A)' : 'All elastomeric combs, caps & O-rings (TPU 95A)' },
                 { plate: 'Platte 5 (≥220²)', file: 'bike_mounts_standard_plate.3mf', mat: 'ASA / PA-CF', desc: isDe ? 'Fahrzeugspezifisches Montage-Kit (BMW Schellen bzw. Harley Docks)' : 'Bike-specific mounting kit (BMW clamps or Harley docks)' }
@@ -7512,7 +7853,7 @@ function renderSystemBuilder() {
             `;
         }
 
-        rowsHtml += parts3D.map(p => `
+        rowsHtml += bom.parts3D.map(p => `
             <tr>
                 <td><strong>${p.group}</strong></td>
                 <td><code style="color: var(--accent-blue); font-size: 0.78rem;">${p.file}</code></td>
@@ -7526,7 +7867,7 @@ function renderSystemBuilder() {
 
     const tbodyPcb = document.getElementById('builder-tbody-pcb');
     if (tbodyPcb) {
-        tbodyPcb.innerHTML = pcbas.map(p => `
+        tbodyPcb.innerHTML = bom.pcbas.map(p => `
             <tr>
                 <td><strong>${p.name}</strong></td>
                 <td><code style="color: var(--accent-green); font-size: 0.78rem;">${p.id}</code></td>
@@ -7538,7 +7879,7 @@ function renderSystemBuilder() {
 
     const tbodyCots = document.getElementById('builder-tbody-cots');
     if (tbodyCots) {
-        tbodyCots.innerHTML = cots.map(p => `
+        tbodyCots.innerHTML = bom.cots.map(p => `
             <tr>
                 <td><strong>${p.name}</strong></td>
                 <td><span style="color: var(--text-secondary); font-size: 0.78rem;">${p.spec}</span></td>
@@ -7568,7 +7909,7 @@ function renderSystemBuilder() {
             </div>
             <div class="builder-instructions-body">
                 <ol>
-                    <li>${isDe ? '<strong>Nut-Pockets bestücken:</strong> Drücke 4x M3 Edelstahlmuttern von unten in die Sechskant-Mutternaschen der Unterwanne ein (sitzen unverlierbar, kein Lötkolben nötig!).' : '<strong>Insert nuts into pockets:</strong> Press 4x M3 stainless nuts into the hex nut pockets of the lower tub from underneath (seated securely, no soldering iron required!).'}</li>
+                    <li>${isDe ? '<strong>Nut-Pockets bestücken:</strong> Drücke 4x M3 Edelstahlmuttern von unten in die Sechskant-Mutterntaschen der Unterwanne ein (sitzen unverlierbar, kein Lötkolben nötig!).' : '<strong>Insert nuts into pockets:</strong> Press 4x M3 stainless nuts into the hex nut pockets of the lower tub from underneath (seated securely, no soldering iron required!).'}</li>
                     <li>${isDe ? '<strong>Platine einsetzen:</strong> Lege die fertig bestückte PCBA 01 auf die Dämpferdome und ziehe die 4x M2.5 Schrauben handfest an.' : '<strong>Insert PCB:</strong> Place factory-assembled PCBA 01 onto standoffs and tighten 4x M2.5 screws finger-tight.'}</li>
                     <li>${isDe ? '<strong>Zwischenboden & Akku:</strong> Setze den Zwischenboden auf, lege den LiPo-Akku ein und stecke den Stecker an <code>J_BAT</code> an.' : '<strong>Mid tray & battery:</strong> Place mid tray on top, insert LiPo battery, and plug into <code>J_BAT</code>.'}</li>
                     <li>${isDe ? '<strong>Dichtung & Deckel:</strong> Lege die Silikon-Rundschnur in die Deckelnut und ziehe die 4x M3x40 mm Schrauben über Kreuz fest.' : '<strong>Seal & lid:</strong> Lay silicone gasket cord into lid groove and fasten 4x M3x40 mm screws crosswise.'}</li>
@@ -7579,14 +7920,14 @@ function renderSystemBuilder() {
         <!-- Step 2 -->
         <div class="builder-instruction-step">
             <div class="builder-step-headline">
-                <span class="builder-step-name">2. ${isDe ? `Satelliten-Pods vorbereiten (${numPods} Pod-Gehäuse)` : `Prepare Satellite Pods (${numPods} Pods)`}</span>
+                <span class="builder-step-name">2. ${isDe ? `Satelliten-Pods vorbereiten (${bom.numPods} Pod-Gehäuse)` : `Prepare Satellite Pods (${bom.numPods} Pods)`}</span>
                 <span class="builder-pill-verified">✓ COTS Plug & Play</span>
             </div>
             <div class="builder-parts-tag-list">
                 <span class="builder-part-tag">pod_base_housing.stl</span>
                 <span class="builder-part-tag">PCBA 02 (kicad_pod_base)</span>
                 <span class="builder-part-tag">03_pod_bulkhead_partition.stl</span>
-                <span class="builder-part-tag">${numPods * 2}x Auswerffedern</span>
+                <span class="builder-part-tag">${bom.numPods * 2}x Auswerffedern</span>
             </div>
             <div class="builder-instructions-body">
                 <ol>
@@ -7600,11 +7941,11 @@ function renderSystemBuilder() {
         <!-- Step 3: Gateway 1 -->
         <div class="builder-instruction-step">
             <div class="builder-step-headline">
-                <span class="builder-step-name">3. ${isDe ? `Gateway-Kassette 1: ${slotNames[builderState.slot1]}` : `Gateway Cartridge 1: ${slotNames[builderState.slot1]}`}</span>
+                <span class="builder-step-name">3. ${isDe ? `Gateway-Kassette 1: ${bom.slotNames[active.slot1]}` : `Gateway Cartridge 1: ${bom.slotNames[active.slot1]}`}</span>
                 <span class="builder-pill-verified">✓ 100% Crimpfrei</span>
             </div>
             <div class="builder-instructions-body">
-                ${builderState.slot1 === 'sena-spider-x' ? `
+                ${active.slot1 === 'sena-spider-x' ? `
                     <ol>
                         <li>${isDe ? 'PCBA 03 in den Basisschlitten einklicken.' : 'Snap PCBA 03 into base sled.'}</li>
                         <li>${isDe ? '4x Miniatur-Hubmagnete mit TPU-Spitzen in die Führungsbrücke von <code>cartridge_insert_sena.stl</code> einlegen und mit Halteplatte verschrauben (4x M2x6 mm).' : 'Place 4x miniature solenoids with TPU tips into guide bridge of <code>cartridge_insert_sena.stl</code> and secure with retainer plate (4x M2x6 mm).'}</li>
@@ -7612,7 +7953,7 @@ function renderSystemBuilder() {
                         <li>${isDe ? 'Sena SPIDER X Slim einlegen, mit Schnellspann-Niederhalter arretieren und Stromkabel anstecken.' : 'Insert Sena SPIDER X Slim, lock with clamp, and connect power cable.'}</li>
                         <li>${isDe ? 'Stahlanker und Rückstellfeder in die Wippe (<code>cartridge_magnetic_lock_latch.stl</code>) einsetzen und mit M2 Stift im Schlitten lagern.' : 'Insert steel pin and spring into latch rocker (<code>cartridge_magnetic_lock_latch.stl</code>) and pin with M2 dowel into sled.'}</li>
                     </ol>
-                ` : builderState.slot1 === 'sena-50s' ? `
+                ` : active.slot1 === 'sena-50s' ? `
                     <ol>
                         <li>${isDe ? 'PCBA 03 in Basisschlitten einklicken, Pogo-Pin Flachkabel anstecken und Sena 50S/60S Cradle montieren.' : 'Snap PCBA 03 into sled, connect pogo-pin cable, and mount Sena 50S/60S cradle.'}</li>
                         <li>${isDe ? 'Wippenmechanismus montieren und Silikon-Flanschdichtung aufziehen.' : 'Assemble latch mechanism and fit silicone flange seal.'}</li>
@@ -7628,17 +7969,17 @@ function renderSystemBuilder() {
         <!-- Step 4: Gateway 2 -->
         <div class="builder-instruction-step">
             <div class="builder-step-headline">
-                <span class="builder-step-name">4. ${isDe ? `Gateway-Kassette 2: ${slotNames[builderState.slot2]}` : `Gateway Cartridge 2: ${slotNames[builderState.slot2]}`}</span>
+                <span class="builder-step-name">4. ${isDe ? `Gateway-Kassette 2: ${bom.slotNames[active.slot2]}` : `Gateway Cartridge 2: ${bom.slotNames[active.slot2]}`}</span>
                 <span class="builder-pill-verified">✓ 100% Crimpfrei</span>
             </div>
             <div class="builder-instructions-body">
-                ${builderState.slot2 === 'cardo-edge' ? `
+                ${active.slot2 === 'cardo-edge' ? `
                     <ol>
                         <li>${isDe ? 'PCBA 03 in Basisschlitten einsetzen.' : 'Seat PCBA 03 into base sled.'}</li>
                         <li>${isDe ? '4x Miniatur-Aktuatoren in <code>cartridge_insert_cardo.stl</code> einlegen und Halteplatte verschrauben (4x M2x6 mm).' : 'Place 4x miniature actuators into <code>cartridge_insert_cardo.stl</code> and secure retainer plate (4x M2x6 mm).'}</li>
                         <li>${isDe ? 'Cardo Packtalk Edge Air-Mount montieren, fertiges JST-Kabel anstecken und Wippenmechanismus montieren.' : 'Mount Cardo Air-Mount, connect pre-crimped JST cable, and install latch rocker.'}</li>
                     </ol>
-                ` : builderState.slot2 === 'pmr446' ? `
+                ` : active.slot2 === 'pmr446' ? `
                     <ol>
                         <li>${isDe ? 'PMR446 Funkgerät in den Schlitten einlegen und Klinkenkabel an Header J2 anstecken.' : 'Place PMR446 radio into sled and plug audio jack into J2.'}</li>
                     </ol>
@@ -7652,7 +7993,7 @@ function renderSystemBuilder() {
     `;
 
     // Step 5: Heck-Pod 3 (if active)
-    if (builderState.addons.rearPod3) {
+    if (active.addons?.rearPod3) {
         instructionsHtml += `
             <div class="builder-instruction-step">
                 <div class="builder-step-headline">
@@ -7671,7 +8012,7 @@ function renderSystemBuilder() {
     }
 
     // Step 6: Front Node (if active)
-    if (builderState.addons.frontNode) {
+    if (active.addons?.frontNode) {
         instructionsHtml += `
             <div class="builder-instruction-step">
                 <div class="builder-step-headline">
@@ -7702,7 +8043,7 @@ function renderSystemBuilder() {
 
     // Step 7: Bike Installation (Tailored dynamically to bike model!)
     let bikeInstructions = '';
-    if (builderState.bike === 'bmw-gs') {
+    if (active.bike === 'bmw-gs') {
         bikeInstructions = `
             <div class="builder-instruction-step">
                 <div class="builder-step-headline">
@@ -7714,12 +8055,12 @@ function renderSystemBuilder() {
                         <li>${isDe ? '<strong>Zentralbox (Gemeinsame Basis):</strong> Unter der Fahrersitzbank im Heckrahmen auf den 4x M4 Silentblöcken schwingungsentkoppelt verschrauben. M8 Kabelpeitschen nach hinten links/rechts und zum Heck führen.' : '<strong>Central Box (Common Base):</strong> Bolt under rider seat in rear frame using 4x M4 silentblocks for vibration isolation. Route M8 cables rearward.'}</li>
                         <li>${isDe ? '<strong>Pod 1 & 2 (Option A: Vario / Rahmenrohr):</strong> Transition-Docks (<code>adventure_transition_dock.stl</code>) in der Sitzbank-Bügelfalte an das Ø 28 mm Hauptrahmenrohr klemmen (kompatibel mit R 1200 LC / 1250 / 1300 GS sowie F 750 / 850 / 900 GS). Pod-Gehäuse verschrauben. <em>100% kofferunabhängig:</em> Baut nicht breiter als die schlanke Fahrzeug-Silhouette – fahrbar mit Vario-Koffern oder komplett ohne Koffer!' : '<strong>Pods 1 & 2 (Option A: Vario / Frame Tube):</strong> Clamp transition docks (<code>adventure_transition_dock.stl</code>) in seat crease to Ø 28 mm frame tube (compatible with R 1200 LC / 1250 / 1300 GS and F 750 / 850 / 900 GS). <em>100% luggage-independent:</em> Does not build wider than bike silhouette – rideable with Vario cases or completely without luggage!'}</li>
                         <li>${isDe ? '<strong>Heck-Pod 3 & Radar (Gemeinsame Basis):</strong> Rack-Tail Mount (<code>adventure_rack_tail_mount.stl</code>) an der Gepäckbrücke verschrauben. Hirth-Zahngelenk auf gewünschten Radar-Winkel (+10° bis +15°) einrasten, Varia einklinken und M3 Sicherungsmadenschraube eindrehen.' : '<strong>Rear Pod 3 & Radar (Common Base):</strong> Bolt rack-tail mount (<code>adventure_rack_tail_mount.stl</code>) to luggage rack. Set Hirth gear lock to desired radar angle (+10° to +15°), snap Varia in, and secure with M3 set screw.'}</li>
-                        ${builderState.addons.frontNode ? `<li>${isDe ? '<strong>Front-Node & Cockpit:</strong> Front-Node mit AMPS-Halter am Ø 12 mm GPS/Navibügel fixieren. Stromversorgung über den 3-Pin Cartool-Stecker (Pin 1 GND, Pin 3 +12V KL15) am Steuerkopf. <em>100% drahtlose Funkbrücke:</em> ESP-NOW (< 1,8 ms) zur Zentralbox (kein Kabel durch den Lenkkopf!). <em>CAN-Bus & Steuerung:</em> Bei 6.5" TFT-Modellen liest der Front-Node das Wonder Wheel via K-CAN (<code>0x2A0</code>); bei Modellen ohne Wonder Wheel erfolgt die Bedienung über die OMB BLE-Fernbedienung oder WebApp.' : '<strong>Front Node & Cockpit:</strong> Mount Front Node using AMPS pattern to Ø 12 mm GPS bar. 12V switched KL15 power via 3-pin Cartool plug at headstock. <em>100% Wireless Link:</em> ESP-NOW (< 1.8 ms) to Central Box (zero wires through steering head!). <em>CAN & Controls:</em> On 6.5" TFT models, Front Node reads Wonder Wheel via K-CAN (<code>0x2A0</code>); on models without Wonder Wheel, control via OMB BLE remote or WebApp.'}</li>` : ''}
+                        ${active.addons?.frontNode ? `<li>${isDe ? '<strong>Front-Node & Cockpit:</strong> Front-Node mit AMPS-Halter am Ø 12 mm GPS/Navibügel fixieren. Stromversorgung über den 3-Pin Cartool-Stecker (Pin 1 GND, Pin 3 +12V KL15) am Steuerkopf. <em>100% drahtlose Funkbrücke:</em> ESP-NOW (< 1,8 ms) zur Zentralbox (kein Kabel durch den Lenkkopf!). <em>CAN-Bus & Steuerung:</em> Bei 6.5" TFT-Modellen liest der Front-Node das Wonder Wheel via K-CAN (<code>0x2A0</code>); bei Modellen ohne Wonder Wheel erfolgt die Bedienung über die OMB BLE-Fernbedienung oder WebApp.' : '<strong>Front Node & Cockpit:</strong> Mount Front Node using AMPS pattern to Ø 12 mm GPS bar. 12V switched KL15 power via 3-pin Cartool plug at headstock. <em>100% Wireless Link:</em> ESP-NOW (< 1.8 ms) to Central Box (zero wires through steering head!). <em>CAN & Controls:</em> On 6.5" TFT models, Front Node reads Wonder Wheel via K-CAN (<code>0x2A0</code>); on models without Wonder Wheel, control via OMB BLE remote or WebApp.'}</li>` : ''}
                     </ol>
                 </div>
             </div>
         `;
-    } else if (builderState.bike === 'bmw-gsa') {
+    } else if (active.bike === 'bmw-gsa') {
         bikeInstructions = `
             <div class="builder-instruction-step">
                 <div class="builder-step-headline">
@@ -7731,12 +8072,12 @@ function renderSystemBuilder() {
                         <li>${isDe ? '<strong>Zentralbox (Gemeinsame Basis):</strong> Unter der Fahrersitzbank im Heckrahmen auf 4x M4 Silentblöcken montieren.' : '<strong>Central Box (Common Base):</strong> Bolt under rider seat on 4x M4 silentblocks.'}</li>
                         <li>${isDe ? '<strong>Pod 1 & 2 (Option B: Edelstahl-Rohrkofferträger Ø 18 mm):</strong> 1,0 mm EPDM-Schutzstreifen um das Rohr wickeln. Klemmschellen (<code>adventure_pannier_rack_clamp_base.stl</code> + <code>cap.stl</code>) mit M5x30 mm V4A Schrauben und Stoppmuttern über Kreuz mit 4,5 Nm anziehen. <em>100% einheitlich:</em> Passt universell an alle originalen Adventure-Edelstahl-Rohrträger (R 1200 GSA LC, R 1250 GSA, R 1300 GSA, F 850 GSA, F 900 GSA sowie klassische luftgekühlte R 1200 GSA K25 ab 2006 und F 800 GS/GSA K72/K75)!' : '<strong>Pods 1 & 2 (Option B: Stainless Pannier Racks Ø 18 mm):</strong> Wrap 1.0 mm EPDM strip around tube. Clamp bases and caps with M5x30 mm bolts and Nyloc nuts (4.5 Nm). <em>100% uniform:</em> Fits universally on all OEM Adventure stainless racks (R 1200 GSA LC, R 1250 GSA, R 1300 GSA, F 850 GSA, F 900 GSA and classic air-cooled R 1200 GSA K25 from 2006 + F 800 GS/GSA K72/K75)!'}</li>
                         <li>${isDe ? '<strong>Heck-Balkon hinter Alutopcase & Radar:</strong> Ausleger (<code>adventure_rack_tail_mount.stl</code>) an der Gepäckbrücke verschrauben (ragt 65 mm hinter das Topcase für freie 360° Sicht). Dipolantenne an der 45°-Astabweiser-Finne ausrichten. Radar im Hirth-Dock mit M3 Madenschraube sichern.' : '<strong>Tail Balcony behind Topcase & Radar:</strong> Bolt cantilever (<code>adventure_rack_tail_mount.stl</code>) to rear rack (extends 65 mm behind topcase for 360° clear RF line of sight). Align dipole antenna along 45° fin. Lock radar in Hirth dock with M3 grub screw.'}</li>
-                        ${builderState.addons.frontNode ? `<li>${isDe ? '<strong>Front-Node, Cartool-Strom & CAN-Bus:</strong> Front-Node am Ø 12 mm GPS-Bügel montieren und am 3-Pin Cartool-Stecker mit 12V Zündungsplus versorgen (100% drahtloser ESP-NOW Link). <em>CAN-Bus Integration:</em> Bei TFT-Modellen K-CAN direkt am TFT; bei klassischen Modellen (K25 / K72 mit 10-Pin Rundstecker) CAN-Bus unter der Sitzbank per Rund-zu-OBD2 Adapter an Zentralbox HD26 (Pins 17/18) abgreifen. Bedienung bei Modellen ohne Wonder Wheel über OMB BLE-Lenkerfernbedienung (CR2032).' : '<strong>Front Node, Cartool Power & CAN Bus:</strong> Mount Front Node on Ø 12 mm GPS bar and connect to 3-pin Cartool plug for 12V switched power (100% wireless ESP-NOW link). <em>CAN Bus Integration:</em> On TFT models, K-CAN at TFT; on classic models (K25 / K72 with 10-pin round plug), tap CAN bus under seat via 10-pin round-to-OBD2 adapter to Central Box HD26 (pins 17/18). Handlebar control on bikes without Wonder Wheel via OMB BLE remote (CR2032).'}</li>` : ''}
+                        ${active.addons?.frontNode ? `<li>${isDe ? '<strong>Front-Node, Cartool-Strom & CAN-Bus:</strong> Front-Node am Ø 12 mm GPS-Bügel montieren und am 3-Pin Cartool-Stecker mit 12V Zündungsplus versorgen (100% drahtloser ESP-NOW Link). <em>CAN-Bus Integration:</em> Bei TFT-Modellen K-CAN direkt am TFT; bei klassischen Modellen (K25 / K72 mit 10-Pin Rundstecker) CAN-Bus unter der Sitzbank per Rund-zu-OBD2 Adapter an Zentralbox HD26 (Pins 17/18) abgreifen. Bedienung bei Modellen ohne Wonder Wheel über OMB BLE-Lenkerfernbedienung (CR2032).' : '<strong>Front Node, Cartool Power & CAN Bus:</strong> Mount Front Node on Ø 12 mm GPS bar and connect to 3-pin Cartool plug for 12V switched power (100% wireless ESP-NOW link). <em>CAN Bus Integration:</em> On TFT models, K-CAN at TFT; on classic models (K25 / K72 with 10-pin round plug), tap CAN bus under seat via 10-pin round-to-OBD2 adapter to Central Box HD26 (pins 17/18). Handlebar control on bikes without Wonder Wheel via OMB BLE remote (CR2032).'}</li>` : ''}
                     </ol>
                 </div>
             </div>
         `;
-    } else if (builderState.bike === 'hd-touring') {
+    } else if (active.bike === 'hd-touring') {
         bikeInstructions = `
             <div class="builder-instruction-step">
                 <div class="builder-step-headline">
@@ -7754,7 +8095,7 @@ function renderSystemBuilder() {
                             '• <em>Baggers & Softail Cruisers (Street/Road Glide, Road King, Heritage Classic, Low Rider ST, Sport Glide):</em> Bolt organic fender console (<code>pod3_touring_fender_console.stl</code>) flat on rear fender to standardized 1/4"-20 seat nut.<br>' +
                             '• <em>Touring Limited & Ultra (King Tour-Pak):</em> Steel Tour-Pak rack blocks fender space! Instead, clamp Pod 3 via tube clamp pair (<code>adventure_pannier_rack_clamp_base.stl</code> + <code>cap.stl</code>) to Ø 18 mm Tour-Pak tube rail or beneath rack bridge.'}</li>
                         <li>${isDe ? '<strong>Radar (Gemeinsame Basis):</strong> Entkoppelten Halter (<code>radar_license_plate_bracket.stl</code>) direkt unter dem serienmäßig zentrierten Kennzeichenrahmen verschrauben (Touring & Softail identisch).' : '<strong>Radar (Common Base):</strong> Bolt decoupled radar bracket (<code>radar_license_plate_bracket.stl</code>) directly beneath the factory-centered license plate frame (Touring & Softails identical).'}</li>
-                        ${builderState.addons.frontNode ? `<li>${isDe ? '<strong>Cockpit & Front-Node (Modulare Fairing-Optionen):</strong><br>' +
+                        ${active.addons?.frontNode ? `<li>${isDe ? '<strong>Cockpit & Front-Node (Modulare Fairing-Optionen):</strong><br>' +
                             '• <em>Option A (Batwing - Street Glide / Ultra):</em><br>' +
                             '  - <strong>2024+ (12.3" Skyline OS):</strong> 2x T25 Schrauben der Scheibe lösen (kein 3-Schrauben-System mehr!), seitliche Lautsprechergitter nach vorn abclipsen, 2x T25 oben und 2x T25/T27 Flankenschrauben herausdrehen, Zentralstecker trennen.<br>' +
                             '  - <strong>2014–2023 (Rushmore / GTS):</strong> 3x T27 Schrauben der Scheibe lösen (mittlere zuletzt halten), 4x T27 Innenschrauben herausdrehen, Outer Fairing nach vorn klappen.<br>' +
@@ -7780,7 +8121,7 @@ function renderSystemBuilder() {
                 </div>
             </div>
         `;
-    } else if (builderState.bike === 'hd-cvo-st') {
+    } else if (active.bike === 'hd-cvo-st' || active.bike === 'hd-cVO-st') {
         bikeInstructions = `
             <div class="builder-instruction-step">
                 <div class="builder-step-headline">
@@ -7793,7 +8134,7 @@ function renderSystemBuilder() {
                         <li>${isDe ? '<strong>Pod 1 & 2:</strong> Kofferdeckel-Docks (<code>saddlebag_lid_dock.stl</code>) auf den serienmäßigen Hartschalenkoffern der ST montieren (identisch zu allen Touring-Modellen).' : '<strong>Pods 1 & 2:</strong> Mount saddlebag lid docks (<code>saddlebag_lid_dock.stl</code>) on the ST factory hard saddlebags (identical to all Touring models).'}</li>
                         <li>${isDe ? '<strong>Heck-Pod 3 (Under-Cowl Skeleton Dock):</strong> Aufrechtes Skeleton Dock (<code>cvo_st_undercowl_skeleton_dock.stl</code>) für Pod 3 unter der Forged-Carbon-Sitzhutze montieren (federbelastet mit vollem Abstand zu den Showa-Ausgleichsbehältern & Auspuffhitze). Aerodynamische Telemetrie-Finne (<code>cvo_st_telemetry_fin.stl</code>) auf der Heck-Hutze verschrauben.' : '<strong>Rear Pod 3 (Under-Cowl Skeleton Dock):</strong> Mount upright skeleton dock (<code>cvo_st_undercowl_skeleton_dock.stl</code>) for Pod 3 under forged carbon cowl (spring-preloaded, clearing Showa canisters and exhaust heat). Bolt aerodynamic telemetry fin (<code>cvo_st_telemetry_fin.stl</code>) to rear tail cowl tab.'}</li>
                         <li>${isDe ? '<strong>Radar:</strong> Entkoppelter Kennzeichen-Radarhalter (<code>radar_license_plate_bracket.stl</code>) unter dem Kennzeichen verschrauben (CVO ST verfügt serienmäßig über das identische mittige Kennzeichen wie alle Touring-Modelle!).' : '<strong>Radar:</strong> Bolt decoupled license plate radar mount (<code>radar_license_plate_bracket.stl</code>) beneath license plate (CVO ST features the stock centered license plate mount identical to all Touring bikes!).'}</li>
-                        ${builderState.addons.frontNode ? `<li>${isDe ? '<strong>Front-Node & Sharknose Fairing (2024+ Skyline OS):</strong> Die 4x T25 Scheibenschrauben, 2x T27 in den Handschuhfächern und 2x T25 Haltelaschen unten lösen. Verkleidung nach vorn abnehmen (Blinker sind integral in den Blades!). Front-Node an der Forged-Carbon-Lenkerbrücke verschrauben. <code>J1</code> an 12V Zündungsplus, <code>J2</code> an CAN-Bus, <code>J4</code> an OEM-USB Upstream zum Skyline OS Display, <code>J6</code> an Ottocast Wireless CarPlay/AA Dongle (mit 1-Click TPS2051B Watchdog-Hardreset bei Verbindungsstörung) und <code>J5</code> an 20W PD Smartphone-Ladekabel.' : '<strong>Front Node & Sharknose Fairing (2024+ Skyline OS):</strong> Remove 4x T25 screen screws, 2x T27 inside gloveboxes, and 2x T25 lower tabs. Lift fairing off forward (LED turn signals are integral in blades!). Mount Front Node to forged carbon handlebar clamp. Connect <code>J1</code> to 12V switched, <code>J2</code> to CAN, <code>J4</code> upstream to Skyline OS display, <code>J6</code> to Ottocast wireless CarPlay/AA dongle (with 1-click TPS2051B watchdog hard reset on dropout), and <code>J5</code> to 20W PD fast-charging cable.'}</li>` : ''}
+                        ${active.addons?.frontNode ? `<li>${isDe ? '<strong>Front-Node & Sharknose Fairing (2024+ Skyline OS):</strong> Die 4x T25 Scheibenschrauben, 2x T27 in den Handschuhfächern und 2x T25 Haltelaschen unten lösen. Verkleidung nach vorn abnehmen (Blinker sind integral in den Blades!). Front-Node an der Forged-Carbon-Lenkerbrücke verschrauben. <code>J1</code> an 12V Zündungsplus, <code>J2</code> an CAN-Bus, <code>J4</code> an OEM-USB Upstream zum Skyline OS Display, <code>J6</code> an Ottocast Wireless CarPlay/AA Dongle (mit 1-Click TPS2051B Watchdog-Hardreset bei Verbindungsstörung) und <code>J5</code> an 20W PD Smartphone-Ladekabel.' : '<strong>Front Node & Sharknose Fairing (2024+ Skyline OS):</strong> Remove 4x T25 screen screws, 2x T27 inside gloveboxes, and 2x T25 lower tabs. Lift fairing off forward (LED turn signals are integral in blades!). Mount Front Node to forged carbon handlebar clamp. Connect <code>J1</code> to 12V switched, <code>J2</code> to CAN, <code>J4</code> upstream to Skyline OS display, <code>J6</code> to Ottocast wireless CarPlay/AA dongle (with 1-click TPS2051B watchdog hard reset on dropout), and <code>J5</code> to 20W PD fast-charging cable.'}</li>` : ''}
                     </ol>
                 </div>
             </div>
@@ -7838,8 +8179,273 @@ function renderSystemBuilder() {
     instructionsContainer.innerHTML = instructionsHtml;
 }
 
+function renderGroupBuilder() {
+    const isDe = state.lang === 'de';
+    const count = fleetState.bikes.length;
+    const allBoms = fleetState.bikes.map((b, idx) => ({ bike: b, index: idx, bom: calculateSingleBikeBom(b) }));
+
+    // 1. Update Fleet Count Summary
+    const summaryCountEl = document.getElementById('group-fleet-summary-count');
+    if (summaryCountEl) {
+        summaryCountEl.textContent = `${count} ${isDe ? (count === 1 ? 'Motorrad konfiguriert' : 'Motorräder konfiguriert') : (count === 1 ? 'motorcycle configured' : 'motorcycles configured')}`;
+    }
+
+    // 2. Budget & Savings Calculation
+    const sumMin = allBoms.reduce((acc, item) => acc + item.bom.costMin, 0);
+    const sumMax = allBoms.reduce((acc, item) => acc + item.bom.costMax, 0);
+    const savingsMin = (count - 1) * 65;
+    const savingsMax = (count - 1) * 95;
+    const groupMin = Math.max(sumMin - savingsMin, Math.round(sumMin * 0.72));
+    const groupMax = Math.max(sumMax - savingsMax, Math.round(sumMax * 0.75));
+    const perRiderMin = Math.round(groupMin / count);
+    const perRiderMax = Math.round(groupMax / count);
+
+    const totalCostEl = document.getElementById('group-total-cost');
+    if (totalCostEl) totalCostEl.textContent = `~ ${groupMin} – ${groupMax} €`;
+
+    const perRiderCostEl = document.getElementById('group-per-rider-cost');
+    if (perRiderCostEl) {
+        perRiderCostEl.textContent = `~ ${perRiderMin} – ${perRiderMax} € ${isDe ? 'pro Bike' : 'per bike'} (${count} ${count === 1 ? 'Bike' : 'Bikes'})`;
+    }
+
+    const savingsAmtEl = document.getElementById('group-savings-amount');
+    if (savingsAmtEl) {
+        savingsAmtEl.textContent = count > 1 ? `~ ${savingsMin} – ${savingsMax} € (${Math.round((savingsMin / sumMin) * 100)} %)` : `~ 0 €`;
+    }
+
+    // 3. Render Fleet Overview Cards
+    const cardsGrid = document.getElementById('fleet-bikes-cards-grid');
+    if (cardsGrid) {
+        cardsGrid.innerHTML = allBoms.map(({ bike, index, bom }) => {
+            const isActive = index === fleetState.activeBikeIndex;
+            const addonBadges = [];
+            if (bike.addons?.frontNode) addonBadges.push(`<span class="card-badge badge-blue" style="font-size: 0.7rem;">Cockpit Front-Node</span>`);
+            if (bike.addons?.rearPod3) addonBadges.push(`<span class="card-badge badge-green" style="font-size: 0.7rem;">Heck-Pod 3 (LoRa/GNSS)</span>`);
+            if (bike.addons?.keyfob) addonBadges.push(`<span class="card-badge badge-orange" style="font-size: 0.7rem;">Smart-Keyfob</span>`);
+
+            return `
+                <div class="fleet-bike-card ${isActive ? 'active' : ''}">
+                    <div class="fleet-card-header">
+                        <div class="fleet-card-rider">🏍️ ${escapeHtml(bike.name)}</div>
+                        <span class="card-badge badge-orange" style="font-size: 0.75rem; font-weight: 700;">~ ${bom.costMin} – ${bom.costMax} €</span>
+                    </div>
+                    <div style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 8px;">
+                        <strong style="color: #fff;">${bom.bikeName}</strong>
+                    </div>
+                    <div style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 8px; line-height: 1.4;">
+                        <div>• <strong>Slot 1:</strong> ${bom.slotNames[bike.slot1] || bike.slot1}</div>
+                        <div>• <strong>Slot 2:</strong> ${bom.slotNames[bike.slot2] || bike.slot2}</div>
+                        <div>• <strong>Fertigung:</strong> ${bike.manufacturing === 'diy' ? 'DIY 3D-Druck' : 'JLCPCB 3D-Druck'}</div>
+                    </div>
+                    <div style="display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 12px;">
+                        ${addonBadges.length > 0 ? addonBadges.join('') : '<span style="font-size: 0.72rem; color: var(--text-secondary); font-style: italic;">Standard Dual-Pod Setup</span>'}
+                    </div>
+                    <div class="fleet-card-actions">
+                        <button class="btn-secondary" onclick="setActiveBike(${index}); setViewMode('single');" style="font-size: 0.75rem; padding: 4px 8px; flex: 1;">
+                            ✏️ ${isDe ? 'Konfigurieren' : 'Configure'}
+                        </button>
+                        <button class="btn-secondary" onclick="duplicateBike(${index});" style="font-size: 0.75rem; padding: 4px 8px;" title="${isDe ? 'Duplizieren' : 'Duplicate'}">
+                            ⎘
+                        </button>
+                        ${count > 1 ? `
+                            <button class="btn-secondary" onclick="removeBikeFromFleet(${index});" style="font-size: 0.75rem; padding: 4px 8px; color: var(--accent-red);" title="${isDe ? 'Entfernen' : 'Remove'}">
+                                ✕
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    // 4. Render Consolidated JLCPCB PCBA & SMT Matrix
+    const tbodyPcba = document.getElementById('builder-group-tbody-pcba');
+    const masterPcbas = [
+        { id: 'kicad_main_box', code: 'PCBA 01', name: isDe ? 'Zentralbox Hauptplatine' : 'Central Main Box', desc: isDe ? 'ESP32-S3, Codec, USV-Ladung' : 'ESP32-S3, Codec, UPS' },
+        { id: 'kicad_pod_base', code: 'PCBA 02', name: isDe ? 'Pod-Basisplatine' : 'Pod Baseboard', desc: isDe ? 'Harwin Docking, M8 Buchse' : 'Harwin Docking, M8 socket' },
+        { id: 'kicad_cartridge', code: 'PCBA 03', name: isDe ? 'Smart Kassettenplatine' : 'Smart Modular Cartridge', desc: isDe ? 'Aktuatoren, Pogo-Pins, JST' : 'Actuators, Pogo pins, JST' },
+        { id: 'kicad_rear_pod3', code: 'PCBA 04', name: isDe ? 'Heck-Pod 3 Transceiver' : 'Rear Pod 3 Transceiver', desc: isDe ? 'RP2040, LoRa, GNSS, Radom' : 'RP2040, LoRa, GNSS' },
+        { id: 'kicad_front_node', code: 'PCBA 05', name: isDe ? 'Universal Front-Knoten' : 'Universal Front Node', desc: isDe ? 'ESP32-S3, USB Hub, 20W PD' : 'ESP32-S3, USB Hub, PD' },
+        { id: 'kicad_magsafe_dock', code: 'PCBA 06', name: isDe ? 'MagSafe Dock Adapter' : 'MagSafe Dock Adapter', desc: isDe ? '500mA Sicherung, TVS Diode' : '500mA Fuse, TVS Diode' },
+        { id: 'kicad_smart_keyfob', code: 'PCBA 07', name: isDe ? 'Smart-Keyfob Platine' : 'Smart Keyfob', desc: isDe ? 'BLE Tracker, LRA Haptik' : 'BLE Tracker, LRA Haptic' }
+    ];
+
+    let activeDesignsCount = 0;
+    if (tbodyPcba) {
+        tbodyPcba.innerHTML = masterPcbas.map(p => {
+            let netQty = 0;
+            const ridersUsing = [];
+            allBoms.forEach(({ bike, bom }) => {
+                const found = bom.pcbas.find(item => item.id === p.id);
+                if (found && found.qty > 0) {
+                    netQty += found.qty;
+                    ridersUsing.push(`${escapeHtml(bike.name)} (${found.qty}x)`);
+                }
+            });
+
+            if (netQty > 0) activeDesignsCount++;
+
+            const moqQty = netQty > 0 ? Math.ceil(netQty / 5) * 5 : 0;
+            const spareQty = moqQty - netQty;
+            const packs = moqQty / 5;
+
+            const isUsed = netQty > 0;
+            return `
+                <tr style="${isUsed ? '' : 'opacity: 0.45;'}">
+                    <td>
+                        <strong>${p.code}</strong>
+                        <div style="font-size: 0.75rem; color: var(--text-secondary);">${p.name}</div>
+                    </td>
+                    <td><code style="color: var(--accent-green); font-size: 0.78rem;">${p.id}</code></td>
+                    <td>
+                        ${isUsed ? `<span class="card-badge badge-blue" style="font-weight: 700; font-size: 0.78rem;">${netQty} Stk.</span>` : `<span style="color: var(--text-secondary);">0</span>`}
+                    </td>
+                    <td>
+                        ${isUsed ? `<span class="moq-pill">${packs}x 5er-Pack (${moqQty} Stk.)</span>` : '<span style="color: var(--text-secondary); font-size: 0.75rem;">—</span>'}
+                    </td>
+                    <td>
+                        ${isUsed ? (spareQty > 0 ? `<span class="spare-pill">+${spareQty} ${isDe ? 'Reserve' : 'spare'}</span>` : `<span style="color: var(--text-secondary); font-size: 0.75rem;">0 (${isDe ? 'Exakt' : 'Exact'})</span>`) : '<span style="color: var(--text-secondary); font-size: 0.75rem;">—</span>'}
+                    </td>
+                    <td>
+                        ${isUsed ? `
+                            <div><strong>1x SMT Tooling (~12 €)</strong> ${isDe ? `geteilt durch ${ridersUsing.length} Bikes` : `shared across ${ridersUsing.length} bikes`}</div>
+                            <div style="font-size: 0.74rem; color: var(--text-secondary); margin-top: 2px;">
+                                ${ridersUsing.join(' · ')}
+                            </div>
+                        ` : `<span style="color: var(--text-secondary); font-size: 0.75rem;">${isDe ? 'Nicht im Setup benötigt' : 'Not required in setup'}</span>`}
+                    </td>
+                </tr>
+            `;
+        }).join('');
+    }
+
+    const pcbaBadge = document.getElementById('group-pcba-badge');
+    if (pcbaBadge) {
+        pcbaBadge.textContent = `${activeDesignsCount} ${isDe ? 'aktive Board-Designs / 7' : 'active designs / 7'}`;
+    }
+
+    // 5. Render Consolidated 3D Print Parts
+    const tbody3D = document.getElementById('builder-group-tbody-3d');
+    const partsMap = {};
+    allBoms.forEach(({ bike, bom }) => {
+        bom.parts3D.forEach(p => {
+            if (!partsMap[p.file]) {
+                partsMap[p.file] = {
+                    group: p.group,
+                    file: p.file,
+                    desc: p.desc,
+                    totalQty: 0,
+                    bikes: {}
+                };
+            }
+            const q = typeof p.qty === 'number' ? p.qty : 1;
+            partsMap[p.file].totalQty += q;
+            partsMap[p.file].bikes[bike.name] = (partsMap[p.file].bikes[bike.name] || 0) + q;
+        });
+    });
+
+    let total3DCount = 0;
+    if (tbody3D) {
+        tbody3D.innerHTML = Object.values(partsMap).map(p => {
+            total3DCount += p.totalQty;
+            const bikeKeys = Object.keys(p.bikes);
+            let distHtml = '';
+            if (bikeKeys.length === count && Object.values(p.bikes).every(v => v === p.bikes[bikeKeys[0]])) {
+                distHtml = `<span class="card-badge badge-green" style="font-size: 0.72rem;">${isDe ? `Alle ${count} Bikes (je ${p.bikes[bikeKeys[0]]}x)` : `All ${count} bikes (${p.bikes[bikeKeys[0]]}x each)`}</span>`;
+            } else {
+                distHtml = Object.entries(p.bikes).map(([bn, q]) => `
+                    <span class="card-badge badge-blue" style="font-size: 0.7rem; margin-right: 4px; margin-bottom: 2px; display: inline-block;">
+                        ${escapeHtml(bn)}: <strong>${q}x</strong>
+                    </span>
+                `).join('');
+            }
+
+            return `
+                <tr>
+                    <td><strong>${p.group}</strong></td>
+                    <td><code style="color: var(--accent-blue); font-size: 0.78rem;">${p.file}</code></td>
+                    <td><span class="card-badge badge-orange" style="font-size: 0.78rem; font-weight: 700;">${p.totalQty} Stk.</span></td>
+                    <td>${distHtml}</td>
+                </tr>
+            `;
+        }).join('');
+    }
+
+    const count3dEl = document.getElementById('group-3d-parts-count');
+    if (count3dEl) {
+        count3dEl.textContent = `${total3DCount} ${isDe ? 'Druckteile gesamt' : '3D printed parts'}`;
+    }
+
+    // 6. Render Consolidated COTS & Fasteners
+    const tbodyCots = document.getElementById('builder-group-tbody-cots');
+    const cotsMap = {};
+    allBoms.forEach(({ bike, bom }) => {
+        bom.cots.forEach(c => {
+            const key = c.name + '__' + c.spec;
+            if (!cotsMap[key]) {
+                cotsMap[key] = {
+                    name: c.name,
+                    spec: c.spec,
+                    desc: c.desc,
+                    totalQty: 0,
+                    unit: 'Stk.',
+                    bikes: {}
+                };
+            }
+            let q = 1;
+            if (typeof c.qty === 'number') {
+                q = c.qty;
+            } else if (typeof c.qty === 'string') {
+                const m = c.qty.match(/([\d.]+)\s*([a-zA-Z]+)?/);
+                if (m) {
+                    q = parseFloat(m[1]) || 1;
+                    if (m[2]) cotsMap[key].unit = m[2];
+                }
+            }
+            cotsMap[key].totalQty += q;
+            cotsMap[key].bikes[bike.name] = (cotsMap[key].bikes[bike.name] || 0) + q;
+        });
+    });
+
+    const cotsList = Object.values(cotsMap);
+    if (tbodyCots) {
+        tbodyCots.innerHTML = cotsList.map(c => {
+            let bulkTip = `${c.totalQty} ${c.unit}`;
+            if (c.name.includes('Schrauben') || c.name.includes('Muttern')) {
+                bulkTip = c.totalQty > 20 ? '100er Großpackung (AliExpress/Amazon)' : '50er Packung';
+            } else if (c.name.includes('feder')) {
+                bulkTip = `${Math.ceil(c.totalQty / 10) * 10}er Sortiment`;
+            } else if (c.name.includes('Silikon')) {
+                bulkTip = '5m Spule Ø 1.5mm (reicht für bis zu 5 Bikes)';
+            } else if (c.name.includes('Hubmagnete')) {
+                bulkTip = `${Math.ceil(c.totalQty / 4) * 4}er Los (4x pro Smart-Kassette)`;
+            } else if (c.name.includes('PUR')) {
+                bulkTip = `${c.totalQty}x Fertigkabel M8`;
+            } else if (c.name.includes('LiPo')) {
+                bulkTip = `${c.totalQty}x 1S 3.7V 2200mAh Micro-Fit`;
+            }
+
+            return `
+                <tr>
+                    <td><strong>${c.name}</strong></td>
+                    <td><span style="color: var(--text-secondary); font-size: 0.78rem;">${c.spec}</span></td>
+                    <td><span class="card-badge badge-blue" style="font-weight: 700; font-size: 0.78rem;">${c.totalQty} ${c.unit}</span></td>
+                    <td><span class="bulk-pack-tag">📦 ${bulkTip}</span></td>
+                    <td style="font-size: 0.78rem; color: var(--text-secondary);">${c.desc}</td>
+                </tr>
+            `;
+        }).join('');
+    }
+
+    const cotsBadge = document.getElementById('group-cots-count');
+    if (cotsBadge) {
+        cotsBadge.textContent = `${cotsList.length} ${isDe ? 'Positionen' : 'positions'}`;
+    }
+}
+
 function exportBuilderBomCsv() {
     const isDe = state.lang === 'de';
+    const active = fleetState.bikes[fleetState.activeBikeIndex] || fleetState.bikes[0];
     let csv = 'Kategorie;Komponente;Dateiname_MPN;Stueck;Funktion_Zweck\n';
 
     // 3D Parts
@@ -7873,7 +8479,7 @@ function exportBuilderBomCsv() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `openmotorbridge_bom_${builderState.bike}.csv`;
+    a.download = `openmotorbridge_bom_${active.bike}.csv`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -7881,6 +8487,224 @@ function exportBuilderBomCsv() {
 
     showToast(isDe ? 'Stückliste als CSV heruntergeladen!' : 'BOM exported as CSV!', 'success');
 }
+
+function exportGroupBomCsv() {
+    const isDe = state.lang === 'de';
+    const count = fleetState.bikes.length;
+    const allBoms = fleetState.bikes.map((b, idx) => ({ bike: b, index: idx, bom: calculateSingleBikeBom(b) }));
+
+    const sumMin = allBoms.reduce((acc, item) => acc + item.bom.costMin, 0);
+    const sumMax = allBoms.reduce((acc, item) => acc + item.bom.costMax, 0);
+    const savingsMin = (count - 1) * 65;
+    const savingsMax = (count - 1) * 95;
+    const groupMin = Math.max(sumMin - savingsMin, Math.round(sumMin * 0.72));
+    const groupMax = Math.max(sumMax - savingsMax, Math.round(sumMax * 0.75));
+    const perRiderMin = Math.round(groupMin / count);
+    const perRiderMax = Math.round(groupMax / count);
+
+    let csv = '\uFEFF'; // UTF-8 BOM for Excel
+    csv += '==================================================================\n';
+    csv += 'OpenMotorBridge (OMB) Sammelbestellung & Bundle-Kalkulation\n';
+    csv += `Datum:;${new Date().toLocaleDateString('de-DE')} ${new Date().toLocaleTimeString('de-DE')}\n`;
+    csv += `Anzahl Motorräder:;${count}\n`;
+    csv += `Geschätztes Gesamtbudget:;ca. ${groupMin} - ${groupMax} EUR\n`;
+    csv += `Geschätzte Kosten pro Fahrer:;ca. ${perRiderMin} - ${perRiderMax} EUR\n`;
+    csv += `Ersparnis durch Sammelbestellung:;ca. ${count > 1 ? `${savingsMin} - ${savingsMax} EUR` : '0 EUR'}\n`;
+    csv += '==================================================================\n\n';
+
+    // 1. JLCPCB Matrix
+    csv += '1. JLCPCB PLATINEN-MATRIX & SMT-BESTÜCKUNG (5er MOQ BUNDLES)\n';
+    csv += 'Platine;Code;KiCad_Projekt;Netto_Bedarf;JLCPCB_MOQ_Bestellung;Gruppen_Reserve;SMT_Rüstkosten_Ersparnis;Fahrer_Aufteilung\n';
+
+    const masterPcbas = [
+        { id: 'kicad_main_box', code: 'PCBA 01', name: 'Zentralbox Hauptplatine' },
+        { id: 'kicad_pod_base', code: 'PCBA 02', name: 'Pod-Basisplatine' },
+        { id: 'kicad_cartridge', code: 'PCBA 03', name: 'Smart Kassettenplatine' },
+        { id: 'kicad_rear_pod3', code: 'PCBA 04', name: 'Heck-Pod 3 Transceiver' },
+        { id: 'kicad_front_node', code: 'PCBA 05', name: 'Universal Front-Knoten' },
+        { id: 'kicad_magsafe_dock', code: 'PCBA 06', name: 'MagSafe Dock Adapter' },
+        { id: 'kicad_smart_keyfob', code: 'PCBA 07', name: 'Smart-Keyfob Platine' }
+    ];
+
+    masterPcbas.forEach(p => {
+        let net = 0;
+        const riders = [];
+        allBoms.forEach(({ bike, bom }) => {
+            const found = bom.pcbas.find(item => item.id === p.id);
+            if (found && found.qty > 0) {
+                net += found.qty;
+                riders.push(`${bike.name} (${found.qty}x)`);
+            }
+        });
+        const moq = net > 0 ? Math.ceil(net / 5) * 5 : 0;
+        const spare = moq - net;
+        const packs = moq / 5;
+        const smtNote = net > 0 ? `1x Tooling (~12 EUR) geteilt durch ${riders.length} Bikes` : 'Nicht benötigt';
+        csv += `"${p.name}";"${p.code}";"${p.id}";${net};"${packs > 0 ? `${packs}x 5er-Pack (${moq} Stk.)` : '0'}";"${spare > 0 ? `+${spare} Reserve` : '0'}";"${smtNote}";"${riders.join(', ')}"\n`;
+    });
+    csv += '\n';
+
+    // 2. 3D Parts
+    csv += '2. KONSOLIDIERTE 3D-DRUCKTEILE (MJF PA12 / ASA)\n';
+    csv += 'Baugruppe;Dateiname;Gesamtstück;Zuordnung nach Fahrern;Beschreibung\n';
+    const partsMap = {};
+    allBoms.forEach(({ bike, bom }) => {
+        bom.parts3D.forEach(p => {
+            if (!partsMap[p.file]) {
+                partsMap[p.file] = {
+                    group: p.group,
+                    file: p.file,
+                    desc: p.desc,
+                    totalQty: 0,
+                    bikes: {}
+                };
+            }
+            const q = typeof p.qty === 'number' ? p.qty : 1;
+            partsMap[p.file].totalQty += q;
+            partsMap[p.file].bikes[bike.name] = (partsMap[p.file].bikes[bike.name] || 0) + q;
+        });
+    });
+
+    Object.values(partsMap).forEach(p => {
+        const bikeKeys = Object.keys(p.bikes);
+        let dist = '';
+        if (bikeKeys.length === count && Object.values(p.bikes).every(v => v === p.bikes[bikeKeys[0]])) {
+            dist = `Alle ${count} Bikes (je ${p.bikes[bikeKeys[0]]}x)`;
+        } else {
+            dist = Object.entries(p.bikes).map(([bn, q]) => `${bn} (${q}x)`).join(', ');
+        }
+        csv += `"${p.group}";"${p.file}";${p.totalQty};"${dist}";"${p.desc}"\n`;
+    });
+    csv += '\n';
+
+    // 3. COTS & Fasteners
+    csv += '3. KONSOLIDIERTE COTS-KABEL & EDELSTAHL-NORMTEILE (BULK PACKS)\n';
+    csv += 'Komponente;Spezifikation;Gesamtmenge;Empfohlene_Packungsgröße;Verwendung\n';
+    const cotsMap = {};
+    allBoms.forEach(({ bike, bom }) => {
+        bom.cots.forEach(c => {
+            const key = c.name + '__' + c.spec;
+            if (!cotsMap[key]) {
+                cotsMap[key] = {
+                    name: c.name,
+                    spec: c.spec,
+                    desc: c.desc,
+                    totalQty: 0,
+                    unit: 'Stk.',
+                    bikes: {}
+                };
+            }
+            let q = 1;
+            if (typeof c.qty === 'number') {
+                q = c.qty;
+            } else if (typeof c.qty === 'string') {
+                const m = c.qty.match(/([\d.]+)\s*([a-zA-Z]+)?/);
+                if (m) {
+                    q = parseFloat(m[1]) || 1;
+                    if (m[2]) cotsMap[key].unit = m[2];
+                }
+            }
+            cotsMap[key].totalQty += q;
+            cotsMap[key].bikes[bike.name] = (cotsMap[key].bikes[bike.name] || 0) + q;
+        });
+    });
+
+    Object.values(cotsMap).forEach(c => {
+        let bulk = `${c.totalQty} ${c.unit}`;
+        if (c.name.includes('Schrauben') || c.name.includes('Muttern')) {
+            bulk = c.totalQty > 20 ? '100er Großpackung' : '50er Packung';
+        } else if (c.name.includes('feder')) {
+            bulk = `${Math.ceil(c.totalQty / 10) * 10}er Packung`;
+        } else if (c.name.includes('Silikon')) {
+            bulk = '5m Spule Ø 1.5mm';
+        } else if (c.name.includes('Hubmagnete')) {
+            bulk = `${Math.ceil(c.totalQty / 4) * 4}er Los`;
+        }
+        csv += `"${c.name}";"${c.spec}";"${c.totalQty} ${c.unit}";"${bulk}";"${c.desc}"\n`;
+    });
+    csv += '\n';
+
+    // 4. Per Bike Details
+    csv += '4. EINZELAUFSCHLÜSSELUNG NACH MOTORRAD\n';
+    csv += 'Fahrer;Motorrad_Modell;Slot_1;Slot_2;Front_Node;Heck_Pod_3;Keyfob;Fertigung;Einzelkosten_ca\n';
+    allBoms.forEach(({ bike, bom }) => {
+        csv += `"${bike.name}";"${bom.bikeName}";"${bom.slotNames[bike.slot1] || bike.slot1}";"${bom.slotNames[bike.slot2] || bike.slot2}";"${bike.addons?.frontNode ? 'Ja' : 'Nein'}";"${bike.addons?.rearPod3 ? 'Ja' : 'Nein'}";"${bike.addons?.keyfob ? 'Ja' : 'Nein'}";"${bike.manufacturing}";"${bom.costMin} - ${bom.costMax} EUR"\n`;
+    });
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `openmotorbridge_sammelbestellung_${count}_bikes.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    showToast(isDe ? `✓ Sammel-Stückliste für ${count} Motorräder heruntergeladen!` : `✓ Group BOM for ${count} motorcycles exported!`, 'success');
+}
+
+function exportGroupOrderJson() {
+    const isDe = state.lang === 'de';
+    const payload = {
+        app: 'OpenMotorBridge',
+        type: 'group_fleet_config',
+        version: '1.0',
+        exportedAt: new Date().toISOString(),
+        bikesCount: fleetState.bikes.length,
+        bikes: fleetState.bikes
+    };
+    const jsonStr = JSON.stringify(payload, null, 2);
+    const blob = new Blob([jsonStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `openmotorbridge_fleet_config_${fleetState.bikes.length}_bikes.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast(isDe ? '✓ Gruppenkonfiguration als JSON exportiert!' : '✓ Group configuration exported as JSON!', 'success');
+}
+
+function importGroupOrderJson(event) {
+    const isDe = state.lang === 'de';
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        try {
+            const data = JSON.parse(e.target.result);
+            let importedBikes = [];
+            if (Array.isArray(data)) {
+                importedBikes = data;
+            } else if (data.bikes && Array.isArray(data.bikes)) {
+                importedBikes = data.bikes;
+            } else {
+                throw new Error('Ungültiges Dateiformat');
+            }
+
+            if (importedBikes.length === 0) {
+                showToast(isDe ? 'Die Datei enthält keine Motorrad-Konfigurationen' : 'File contains no motorcycle configurations', 'warning');
+                return;
+            }
+
+            fleetState.bikes = importedBikes.slice(0, 8); // cap at 8
+            fleetState.activeBikeIndex = 0;
+            syncFormToActiveBike();
+            renderSystemBuilder();
+            showToast(isDe ? `✓ ${fleetState.bikes.length} Motorräder erfolgreich geladen!` : `✓ ${fleetState.bikes.length} bikes loaded successfully!`, 'success');
+        } catch (err) {
+            console.error('Group JSON import failed:', err);
+            showToast(isDe ? 'Fehler beim Laden der JSON-Datei' : 'Error importing JSON file', 'danger');
+        } finally {
+            event.target.value = '';
+        }
+    };
+    reader.readAsText(file);
+}
+
 
 // ==========================================
 // 13. Interactive Smoke-Test & Hardware Diagnostics
