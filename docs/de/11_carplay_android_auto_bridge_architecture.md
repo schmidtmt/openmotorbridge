@@ -386,11 +386,11 @@ Bei der Konzeption von mobilen Datenbrücken für Motorrad-Cockpits treten in de
 * Viele Motorradfahrer betreiben auf dem Smartphone dauerhaft **Tailscale** oder WireGuard (z. B. für die *Homesphere*-App, Home Assistant, Garagentorsteuerung oder private Kameras).
 * Würde OpenMotorBridge einen L3-WireGuard-Tunnel zwischen Front-Node und Smartphone aufbauen, würde das Betriebssystem die bestehende Tailscale-Verbindung sofort trennen.
 
-#### 3. Perspektivischer Ausblick: Layer-5 SOCKS5/Stream Relay (Companion-App)
-Sollte künftig eine native OpenMotorBridge Companion-App (iOS/Android) bereitgestellt werden, löst sie das Routing elegant ohne VPN-Konflikte:
+#### 3. Perspektivischer Ausblick: Layer-5 SOCKS5/Stream Relay (Companion-App `bar.f0o.omb`)
+Sollte künftig eine native OpenMotorBridge Companion-App (reservierte Android Application ID `bar.f0o.omb` im Google Play Store) bereitgestellt werden, löst sie das Routing elegant ohne VPN-Konflikte:
 * **Layer 5 statt Layer 3:** Statt roher IP-Pakete (L3, was Raw-Sockets und Root-Rechte erfordern würde) terminiert der Front-Node TCP-Verbindungen (Port 80/443) lokal und leitet die opaken TLS-Byte-Streams über unprivilegierte Standard-Sockets (`connect()`) an die Smartphone-App weiter.
 * **Kein VPN-Slot belegt:** Da die App gewöhnliche POSIX-Sockets über das Mobilfunknetz öffnet, bleibt Tailscale zu 100 % ungestört aktiv.
-* **Offizielle Store-Konformität via BLE:** Über den Hintergrundmodus `UIBackgroundModes = bluetooth-central` bleibt die App auf iOS legitim im Hintergrund aktiv, solange die Zündung des Motorrads eingeschaltet und die BLE-Verbindung zu OpenMotorBridge aktiv ist (analoge Architektur zu Garmin Smartphone Link und Sena).
+* **Offizielle Store-Konformität via BLE / Foreground Service:** Über `UIBackgroundModes = bluetooth-central` (iOS) bzw. einen schlanken Foreground Service mit Sticky Notification (Android `bar.f0o.omb`) bleibt die App legitim im Hintergrund aktiv, solange die Zündung des Motorrads eingeschaltet und die BLE-Verbindung zu OpenMotorBridge aktiv ist (analoge Architektur zu Garmin Smartphone Link und Sena).
 
 #### 4. Die Alltags-Praxis für Skyline OS
 * **95 % aller Fahrten:** Fahrer nutzen Apple CarPlay oder Android Auto über den USB-Port `J4` – Navigation, Spotify und Staudaten laufen nativ auf dem Smartphone.

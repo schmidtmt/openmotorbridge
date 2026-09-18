@@ -380,10 +380,11 @@ When architecting mobile data bridges for motorcycle cockpits, mobile operating 
 * Many riders continuously run **Tailscale** or WireGuard on their smartphones (e.g. for Home Assistant, garage door automation, or security cameras).
 * If OpenMotorBridge were to establish an L3 WireGuard tunnel between Front Node and phone, the mobile OS would immediately kill the rider's existing Tailscale link.
 
-#### 3. Future Companion App: Layer-5 SOCKS5/Stream Relay
-If a native OpenMotorBridge companion app is introduced in the future, it avoids VPN conflicts cleanly:
+#### 3. Future Companion App: Layer-5 SOCKS5/Stream Relay (`bar.f0o.omb`)
+If a native OpenMotorBridge companion app is deployed in the future (reserved Android Application ID `bar.f0o.omb` in the Google Play Console), it resolves routing without VPN interference:
 * **Layer 5 Instead of Layer 3:** Rather than handling raw IP packets (L3, which requires root privileges or VPN adapters), the Front Node terminates TCP connections (Port 80/443) locally and streams opaque TLS byte streams over unprivileged standard sockets (`connect()`) to the companion app.
 * **Zero VPN Slots Consumed:** Because the app opens standard POSIX sockets over the cellular network, Tailscale remains 100% active and undisturbed.
+* **Store-Compliant Background Link:** Leverages `UIBackgroundModes = bluetooth-central` (iOS) or a lean Foreground Service with a persistent sticky notification (Android `bar.f0o.omb`) to keep the uplink active as long as bike ignition is ON.
 * **Zero Cellular Subscription (Zero-Cost Principle):** In alignment with OpenMotorBridge core principles, the system avoids recurring cellular SIM fees by relying on the decentralized 868 MHz LoRa mesh (PCBA 04 & PCBA 07 Keyfob) for off-grid messaging and anti-theft tracking (documented in `.context/IDEAS_BACKLOG.md`).
 
 ---

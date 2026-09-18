@@ -25,6 +25,10 @@ For riders who prefer installation directly via the Google Play Store, automated
 * **Integration & Architecture Paths:**
   1. **Trusted Web Activity (TWA):** Lightweight Android wrapper package leveraging Chrome Custom Tabs and Google Digital Asset Links (`.well-known/assetlinks.json`). Delivers 1-click Google Play installation, full-screen immersive rendering without browser chrome, and native Web Bluetooth performance with zero maintenance overhead compared to the PWA.
   2. **Native Foreground Service (BLE Auto-Reconnect & Background Sync):** Optional native companion service with a persistent sticky notification (*"OpenMotorBridge Active"*). Maintains a rock-solid BLE GATT link to the Central Box even when the smartphone is locked in a riding jacket pocket, initiates automated GPX trip logging upon ignition ON, and dispatches eCall crash telemetry without foreground app launch requirements.
+  3. **Integrated Internet Uplink Proxy (Layer-5 SOCKS5 / HTTP Relay):** Functions as a transparent local uplink proxy for the Front Node (PCBA 05) and OEM head units (such as Harley Skyline OS / Boom! Box GTS for HERE real-time traffic data).
+     * **Zero VPN Conflicts:** Operates strictly at application layer (L5 POSIX sockets) and consumes **no** Android `VpnService` slot. Always-on VPNs such as **Tailscale** (used for smart home access / *Homesphere* / Home Assistant) remain 100% active and unhindered.
+     * **No Hotspot Requirement:** Eliminates the need to manually toggle the battery-draining phone Wi-Fi hotspot; head unit telemetry requests route silently through the companion app via 4G/5G cellular data.
+     * **Automated Cloud & WebDAV Synchronization:** Telemetry data, battery health, and completed GPX tours can be synced automatically to private clouds or MQTT brokers live during rides or upon ignition cutoff.
 
 ---
 

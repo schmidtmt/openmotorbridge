@@ -25,6 +25,10 @@ Für Fahrer, die eine Installation über den Google Play Store, automatische Hin
 * **Integrations- & Architekturpfade:**
   1. **Trusted Web Activity (TWA):** Schlankes Android-Package basierend auf Chrome Custom Tabs und Google Digital Asset Links (`.well-known/assetlinks.json`). Ermöglicht 1-Klick-Installation aus dem Google Play Store, native Vollbild-Darstellung ohne Browserleiste und native WebBLE-Unterstützung mit null Wartungs-Overhead zur WebApp.
   2. **Nativer Foreground Service (BLE Auto-Reconnect & Background Sync):** Optionaler nativer Begleitdienst mit Sticky-Notification (*„OpenMotorBridge aktiv“*). Hält die BLE-GATT-Verbindung zur Zentralbox auch dann stabil aufrecht, wenn das Smartphone bei ausgeschaltetem Display in der Jackentasche verbleibt, startet automatisches GPX-Fahrt-Logging bei Zündung EIN und leitet eCall-Notrufe selbst im Hintergrund verzögerungsfrei weiter.
+  3. **Integrierter Internet-Uplink Proxy (Layer-5 SOCKS5 / HTTP-Relay):** Fungiert als transparenter lokaler Uplink-Proxy für den Front-Node (PCBA 05) und das Werks-Navi (z. B. Harley Skyline OS / Boom! Box GTS für HERE-Live-Traffic).
+     * **Kein VPN-Konflikt:** Arbeitet rein auf Anwendungsebene (L5 POSIX-Sockets) und belegt **keinen** Android `VpnService`-Slot. Dauerhafte VPNs wie **Tailscale** (z. B. für Smart-Home-Zugriff / *Homesphere* / Home Assistant) bleiben uneingeschränkt aktiv.
+     * **Kein Hotspot-Zwang:** Der Akku-fressende persönliche WLAN-Hotspot am Smartphone muss nicht manuell aktiviert werden; Datenanfragen der Headunit laufen geräuschlos über die Companion-App via Mobilfunk.
+     * **Automatischer Cloud- & WebDAV-Sync:** Telemetriedaten und GPX-Touren können live oder nach Fahrtende direkt über den Proxy in private Clouds oder MQTT-Broker gepusht werden.
 
 ---
 
