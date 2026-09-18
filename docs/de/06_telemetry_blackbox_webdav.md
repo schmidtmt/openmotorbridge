@@ -151,6 +151,7 @@ Während Power-User mit eigener Nextcloud oder Synology-NAS direkt deren native 
    * **Volle Datensouveränität:** OpenMotorBridge betreibt keinen zentralen Sammeldienst für Nutzerdaten. Der Microservice `omb-gdrive-bridge` wird als schlüsselfertiges Open-Source-Image (`Dockerfile` / `podman-compose.yml`) bereitgestellt.
    * **Eigene Google-Credentials:** Jeder Nutzer richtet seinen Dienst bei sich selbst ein (z. B. auf dem eigenen Server `omb.f0o.bar`, Synology Docker, Raspberry Pi oder Unraid) und hinterlegt dort seine eigenen Google-Cloud-API-Credentials.
    * **Null Haftung & Null DSGVO-Schnittstellen:** Niemand muss dem OpenMotorBridge-Projekt Zugriff auf sein privates Google Drive gewähren. Bewegungsprofile, Schräglagendaten und Fahrstrecken verbleiben zu 100 % in der Hand des jeweiligen Fahrers.
+   * **Quellcode & Setup-Anleitung:** Vollständiger Code, Dockerfile und das interaktive Token-Setup-Tool liegen einsatzbereit im Repository unter [`apps/gdrive_webdav_bridge/`](file:///Users/schmidtm/openMotorBridge/apps/gdrive_webdav_bridge/README.md).
 
 ---
 
