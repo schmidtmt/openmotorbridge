@@ -132,6 +132,22 @@ MOTORRAD ROLLT IN DIE GARAGE (ZÜNDUNG AUS)
 
 * **Vollautomatisch:** Der Fahrer muss weder sein Smartphone zücken noch Speicherkarten entnehmen. Die Touren des Tages liegen beim Eintreten ins Haus bereits fertig im Nextcloud-Ordner bereit.
 
+### 7.1 Cloud-Speicher-Architektur: Nextcloud vs. Schlanker Google-Drive WebDAV-Proxy (`omb.f0o.bar`)
+
+Während Power-User mit eigener Nextcloud oder Synology-NAS direkt deren native WebDAV-URL ansprechen, können Fahrer ohne eigenen Server den schlanken **OpenMotorBridge Google-Drive WebDAV-Proxy** einsetzen:
+
+1. **Vorteile der Cloud-Service-Architektur:**
+   * **100 % plattformunabhängig:** Vollkommen identische Funktion für iPhone- (iOS ohne teure App-Store-Entwicklerlizenz) und Android-Fahrer.
+   * **Autark & Smartphone-frei:** Das Motorrad lädt bei Ankunft im Heim-WLAN (oder unterwegs über den Mobilfunk-Proxy) völlig selbstständig hoch – das Smartphone kann ausgeschaltet in der Tasche bleiben.
+2. **Warum kein klobiges Rclone?**
+   * Rclone ist mit über 100 MB Binary und unzähligen Cloud-Subsystemen für diesen Zweck überdimensioniert.
+   * Der WebDAV-Bedarf der Zentralbox beschränkt sich auf den Standard-HTTP-Befehl `PUT /tracks/<dateiname>.gpx` (Dateigröße typisch 200 KB bis 3 MB) mit HTTP Basic Auth.
+3. **Architektur des Microservice (`omb-gdrive-bridge` auf `omb.f0o.bar`):**
+   * Ein leichtgewichtiger Python/FastAPI-Container (< 30 MB RAM) empfängt den WebDAV-`PUT`-Stream.
+   * Über das einmalig hinterlegte Google OAuth2-Refresh-Token (Google Drive API v3) wird die GPX-Datei direkt in den Zielordner `omb/tracks/` auf Google Drive abgelegt.
+   * Nach erfolgreichem Upload antwortet der Server mit `201 Created`.
+   * **Optionaler Smart-Home-Hook:** Sendet via MQTT einen Status an Home Assistant / *Homesphere* (*„Neue Tour synchronisiert: 164 km, 42° Schräglage“*).
+
 ---
 
 ## 8. Minimaler USB Mass Storage Class (MSC) Modus
