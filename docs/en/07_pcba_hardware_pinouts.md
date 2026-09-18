@@ -309,6 +309,21 @@ The board features 3 automatic coaxial switch connectors (`Murata MM8030-2610`) 
 | **GPIO 2** | `LORA_BUSY` | SX1262 State Flag (hardware hold condition for SPI commands) |
 | **GPIO 3** | `LORA_DIO1` | SX1262 IRQ (Packet Received / Packet Sent Interrupt) |
 | **GPIO 16** | `WS2812B_LED` | Serial data stream to RGB status indicator LED |
+| **GPIO 14** | `I2C1_SDA` / `1WIRE_BUS` | I2C Data / 1-Wire data link for external antenna fin sensor port (`J6`) |
+| **GPIO 15** | `I2C1_SCL` | I2C Clock for high-precision temperature probe (TI TMP117) & barometer |
+
+### 6.5 External Antenna Base Sensor Port (`J6` / `J_EXT_TEMP`)
+
+To ensure stable ambient air temperature readings unaffected by heat buildup under the tail cowl ($45\text{–}55\,^\circ\text{C}$), PCBA 04 integrates a dedicated 3-pin JST-SH micro header (`J6`). The wiring harness routes directly through the antenna mounting boss into the slipstream duct of the telemetry fin (`cvo_st_telemetry_fin.stl`):
+
+| Pin (J6) | Signal | Level | Description |
+| :---: | :--- | :--- | :--- |
+| **Pin 1** | `+3V3_SENS` | $+3.3\,\text{V}$ DC switched | Sensor power supply (low-noise LDO rail) |
+| **Pin 2** | `EXT_TEMP_DATA` | $3.3\,\text{V}$ open-drain (4.7 kΩ pullup) | 1-Wire (Dallas DS18B20) or I2C SDA (TI TMP117) |
+| **Pin 3** | `GND` | $0\,\text{V}$ | Signal ground reference (RF shielded) |
+
+* **Thermal Isolation:** Sensor probe sits completely outside the frame and exhaust heat plume directly in laminar oncoming airflow.
+* **No Steering Head Cabling:** Siting ambient sensing at the tail preserves the 100% wireless Front-Node design (ESP-NOW).
 
 ---
 

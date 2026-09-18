@@ -37,8 +37,10 @@ GNSS multipath reflections (e.g. $40\,\text{m}$ lateral position spikes caused b
 ## 3. MotoGP-Style Telemetry & GPX 2.0 XML Specification
 
 Every trackpoint recorded at $10\,\text{Hz}$ is enriched with high-rate motorcycle dynamics:
-* **Lean Angle Left/Right (°):** $\text{Lean\_Angle} = \arctan\left(\frac{v \cdot \dot{\psi}}{g}\right)$
-* **Longitudinal & Lateral G-Forces:** Calibrated braking, cornering, and acceleration forces.
+* **Lean Angle Left/Right (°):** $\text{Lean\_Angle} = \arctan\left(\frac{v \cdot \dot{\psi}}{g}\right)$ (captured independently for left and right curves).
+* **Longitudinal & Lateral G-Forces:** Calibrated acceleration ($+g$) and braking deceleration ($-g$) forces.
+* **Ambient Temperature (°C):** High-precision ambient air temperature via the 2-tier architecture.
+* **Engine RPM:** Direct $10\,\text{Hz}$ engine speed capture via vehicle CAN-bus broadcast.
 * **Vehicle Battery Voltage:** Monitors alternator health and stator output under load.
 * **1-PPS Hardware Timecode:** Sub-15ns jitter reference for frame-accurate action camera video overlays.
 
@@ -52,6 +54,8 @@ Every trackpoint recorded at $10\,\text{Hz}$ is enriched with high-rate motorcyc
       <omb:speed_kmh>84.6</omb:speed_kmh>
       <omb:accel_g_lon>-0.72</omb:accel_g_lon>
       <omb:accel_g_lat>0.98</omb:accel_g_lat>
+      <omb:temp>21.4</omb:temp>
+      <omb:rpm>4850</omb:rpm>
       <omb:battery_v>12.6</omb:battery_v>
       <omb:satellites>18</omb:satellites>
       <omb:hdop>0.8</omb:hdop>
@@ -59,6 +63,32 @@ Every trackpoint recorded at $10\,\text{Hz}$ is enriched with high-rate motorcyc
   </extensions>
 </trkpt>
 ```
+
+### 3.1 2-Tier Architecture for Ambient Temperature Sensing
+
+To strictly avoid running cables through the steering stem to the wireless Front-Node while eliminating false readings from engine heat dissipation, OpenMotorBridge implements a 2-tier sensing design:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│              2-TIER AMBIENT TEMPERATURE SENSING ARCHITECTURE                │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ TIER 1: CAN-Bus Broadcast (BMW R1250/R1300 GS, Harley Pan America / HD-LAN) │
+│ • Reads OEM ambient/intake air temperature from CAN frames (ID 0x2D0 etc.)  │
+│ • 0 extra wires, 0 hardware cost, factory calibrated                        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ TIER 2: Rear Pod 3 Antenna Fin Probe (Universal / CVO ST / Non-CAN)         │
+│ • Dedicated sensor (DS18B20 1-Wire or TI TMP117 I2C) on PCBA 04 (RP2040)    │
+│ • Installation: Antenna base / airstream duct inside the telemetry fin     │
+│   (cvo_st_telemetry_fin.stl) surrounding the external 2.4 GHz antenna       │
+│ • Thermal Isolation: Eliminates false readings from engine heat trapped     │
+│   under the solo seat cowl (45–55 °C)                                        │
+│ • Wireless Steering Head: Front-Node remains 100% wireless (no stem harness)│
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### 3.2 Barometric Altitude Fusion (15-State Kalman Filter)
+
+In addition to GNSS 3D height, a Bosch BMP390 / BMP581 barometric pressure sensor on the Rear Pod measures relative vertical displacement down to $\pm 10\,\text{cm}$. The 15-state Error-State Extended Kalman Filter continuously cross-references barometric delta with u-blox MAX-M10S 3D GNSS fixes during steady cruise to auto-calibrate QNH reference pressure without any manual zeroing required by the rider.
 
 ---
 
@@ -145,7 +175,16 @@ While power users with a private Nextcloud or Synology NAS point directly to the
    * A lean Python/FastAPI container (< 30 MB RAM) ingests the WebDAV `PUT` stream.
    * Using a stored Google OAuth2 refresh token (Google Drive API v3), the GPX file streams directly into the target folder `omb/tracks/` in Google Drive.
    * Returns HTTP `201 Created` upon completion.
-   * **Optional Smart Home Webhook/MQTT:** Dispatches an event to Home Assistant / *Homesphere* (*"New tour synced: 164 km, 42° max lean angle"*).
+   * **Smart Home Hook & Rich Ride Summary Statistics:** Immediately following upload, publishes structured telemetry events via MQTT (`omb/tracks/uploaded` as JSON and `omb/tracks/summary` as formatted text) and/or Webhook:
+     * **Times & Net Moving Time:** Gross departure and arrival timestamps, true net moving time (automatic standstill filter $< 3\,\text{km/h}$), and total pause duration.
+     * **Elevation & Cumulative Climb:** Min/Max altitude above sea level and cumulative elevation gain ($\sum \Delta h_{\text{up}}$) and descent ($\sum \Delta h_{\text{down}}$).
+     * **Ambient Temperature:** Min, max, and tour average ambient temperature ($T_{\min}, T_{\max}, T_{\text{avg}}$).
+     * **Speed Metrics:** Maximum speed ($v_{\max}$) and true net average moving speed ($\bar{v}_{\text{net}}$).
+     * **Vehicle Dynamics (G-Forces):** Maximum forward acceleration ($+g$) and maximum braking deceleration ($-g$).
+     * **Lean Angle Analysis:** Maximum lean angle tracked independently for left and right turns.
+     * **Corner Counter:** Hysteresis state-machine detecting left, right, and total corner counts.
+     * **Engine Speed (CAN):** Maximum and average engine RPM.
+     * **Electrical Health:** Minimum and average vehicle battery voltage during the tour.
 4. **Self-Hosted & Zero-Trust Privacy (Zero Third-Party Drive Access):**
    * **Full Data Sovereignty:** OpenMotorBridge does not operate a centralized cloud harvesting service. The `omb-gdrive-bridge` microservice is published as an open-source container template (`Dockerfile` / `podman-compose.yml`).
    * **Private Google Credentials:** Each rider runs the container on their personal infrastructure (e.g. home server, Synology Docker, Raspberry Pi, Unraid, or private VPS) and configures their own Google Cloud API credentials.

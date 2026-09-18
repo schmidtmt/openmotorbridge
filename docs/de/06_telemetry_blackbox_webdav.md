@@ -37,8 +37,10 @@ GNSS-Messausreißer (z. B. $40\,\text{m}$-Positionssprünge durch Signalreflexio
 ## 3. MotoGP-Style Telemetrie & GPX 2.0 XML-Spezifikation
 
 Jeder Wegpunkt im GPX-Datensatz wird mit $10\,\text{Hz}$ um hochpräzise Fahrdynamik-Metadaten erweitert:
-* **Kurvenschräglage links/rechts (°):** $\text{Lean\_Angle} = \arctan\left(\frac{v \cdot \dot{\psi}}{g}\right)$
-* **Längs- und Querbeschleunigung (Brems- und Beschleunigungs-G-Kräfte):** Aus kalibrierten IMU-Werten.
+* **Kurvenschräglage links/rechts (°):** $\text{Lean\_Angle} = \arctan\left(\frac{v \cdot \dot{\psi}}{g}\right)$ (separat erfasst für Links- und Rechtskurven).
+* **Längs- und Querbeschleunigung (Brems- und Beschleunigungs-G-Kräfte):** Aus kalibrierten IMU-Werten ($+g$ Beschleunigung, $-g$ Bremsverzögerung).
+* **Umgebungstemperatur (°C):** Hochpräzise Außentemperaturmessung über die 2-Stufen-Architektur.
+* **Motordrehzahl (U/min):** Bei CAN-Bus Anbindung ausgelesene Motordrehzahl mit $10\,\text{Hz}$.
 * **Bordnetz- und Batteriespannung:** Zur Diagnose von Lichtmaschine und Regler.
 * **1-PPS Hardware-Zeitsynchronisation:** Mit $< 15\,\text{ns}$ Jitter für framegenaue Actioncam-Videomarker.
 
@@ -52,6 +54,8 @@ Jeder Wegpunkt im GPX-Datensatz wird mit $10\,\text{Hz}$ um hochpräzise Fahrdyn
       <omb:speed_kmh>84.6</omb:speed_kmh>
       <omb:accel_g_lon>-0.72</omb:accel_g_lon>
       <omb:accel_g_lat>0.98</omb:accel_g_lat>
+      <omb:temp>21.4</omb:temp>
+      <omb:rpm>4850</omb:rpm>
       <omb:battery_v>12.6</omb:battery_v>
       <omb:satellites>18</omb:satellites>
       <omb:hdop>0.8</omb:hdop>
@@ -59,6 +63,32 @@ Jeder Wegpunkt im GPX-Datensatz wird mit $10\,\text{Hz}$ um hochpräzise Fahrdyn
   </extensions>
 </trkpt>
 ```
+
+### 3.1 2-Stufen-Architektur für Außentemperatur-Sensorik
+
+Um Leitungen durch den Lenkkopf zum kabellosen Frontnode strikt zu vermeiden und Fehlmessungen durch Motorwärme auszuschließen, nutzt OpenMotorBridge ein 2-Stufen-Konzept:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│             2-STUFEN ARCHITEKTUR FÜR UMGEBUNGSTEMPERATUR                    │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ STUFE 1: CAN-Bus Broadcast (BMW R1250/R1300 GS, Harley Pan America / HD-LAN) │
+│ • Nutzt OEM-Ansaugluft-/Außentemperatursensor des Motorrads (CAN-ID 0x2D0)   │
+│ • 0 zusätzliche Kabel, 0 Bauteilekosten, 100 % werkskalibriert               │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ STUFE 2: Heck-Pod 3 Antennenfuß-Sensorik (Universal / CVO ST / Non-CAN)     │
+│ • Sensorik (DS18B20 1-Wire oder TI TMP117 I2C) an PCBA 04 (RP2040)          │
+│ • Montage: Im Antennensockel / Fahrtwindkanal der Telemetrieflosse           │
+│   (cvo_st_telemetry_fin.stl) direkt an der externen 2.4 GHz Antenne          │
+│ • Thermische Entkopplung: Verhindert Fehlmessungen durch Motorstauwärme      │
+│   unter der Solositz-Hutze (45–55 °C)                                        │
+│ • Kabelfrei am Lenkkopf: Das 100 % kabellose Frontnode-Prinzip bleibt gewahrt│
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### 3.2 Barometrische Höhenkalibrierung (Kalman-Fusion)
+
+Neben GNSS-Höhenmessungen erfasst der Bosch BMP390 / BMP581 Luftdrucksensor am Heck-Pod barometrische Höhendifferenzen auf $\pm 10\,\text{cm}$ genau. Ein kontinuierlicher Abgleich im 15-State Extended Kalman Filter gegen die u-blox MAX-M10S 3D-Fix-Koordinaten bei stabiler Fahrt kalibriert den QNH-Referenzdruck vollautomatisch – ganz ohne manuelle Höhen-Nullung durch den Fahrer.
 
 ---
 
@@ -146,7 +176,16 @@ Während Power-User mit eigener Nextcloud oder Synology-NAS direkt deren native 
    * Ein leichtgewichtiger Python/FastAPI-Container (< 30 MB RAM) empfängt den WebDAV-`PUT`-Stream.
    * Über das einmalig hinterlegte Google OAuth2-Refresh-Token (Google Drive API v3) wird die GPX-Datei direkt in den Zielordner `omb/tracks/` auf Google Drive abgelegt.
    * Nach erfolgreichem Upload antwortet der Server mit `201 Created`.
-   * **Optionaler Smart-Home-Hook:** Sendet via MQTT einen Status an Home Assistant / *Homesphere* (*„Neue Tour synchronisiert: 164 km, 42° Schräglage“*).
+   * **Smart-Home-Hook & Rich Tour-Statistiken:** Sendet unmittelbar nach Upload vollautomatisierte Telemetrie-Events via MQTT (`omb/tracks/uploaded` als JSON sowie `omb/tracks/summary` als formatierte Textnachricht) und/oder Webhook:
+     * **Uhrzeiten & Nettofahrzeit:** Start- und Endzeitpunkt sowie reine Netto-Fahrzeit (automatischer Stillstandsfilter $< 3\,\text{km/h}$) und Pausendauer.
+     * **Höhenprofil & Höhenmeter:** Min./Max. Höhe über NN sowie kumulierte Höhenmeter aufwärts ($\sum \Delta h_{\text{auf}}$) und abwärts ($\sum \Delta h_{\text{ab}}$).
+     * **Umgebungstemperatur:** Minimal-, Maximal- und Durchschnittstemperatur der Tour ($T_{\min}, T_{\max}, T_{\text{avg}}$).
+     * **Geschwindigkeiten:** Höchstgeschwindigkeit ($v_{\max}$) und echte Netto-Durchschnittsgeschwindigkeit ($\bar{v}_{\text{netto}}$).
+     * **Fahrdynamik (G-Kräfte):** Maximale Beschleunigung ($+g$) und maximale Bremsverzögerung ($-g$).
+     * **Schräglagen-Auswertung:** Maximale Schräglage getrennt nach Links- und Rechtskurven.
+     * **Kurvenzähler:** Intelligente Hysterese-Erkennung für Links-, Rechts- und Gesamtkurvenanzahl.
+     * **Motordrehzahl (CAN):** Maximale und durchschnittliche Drehzahl (U/min).
+     * **Bordnetz-Gesundheit:** Minimale und durchschnittliche Batteriespannung während der Fahrt.
 4. **Self-Hosted & Zero-Trust Datenschutz (Kein Fremdzugriff auf fremde Drives):**
    * **Volle Datensouveränität:** OpenMotorBridge betreibt keinen zentralen Sammeldienst für Nutzerdaten. Der Microservice `omb-gdrive-bridge` wird als schlüsselfertiges Open-Source-Image (`Dockerfile` / `podman-compose.yml`) bereitgestellt.
    * **Eigene Google-Credentials:** Jeder Nutzer richtet seinen Dienst bei sich selbst ein (z. B. auf dem eigenen Server `omb.f0o.bar`, Synology Docker, Raspberry Pi oder Unraid) und hinterlegt dort seine eigenen Google-Cloud-API-Credentials.

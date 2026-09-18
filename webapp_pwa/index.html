@@ -3164,33 +3164,64 @@
                 <button class="modal-close" id="btn-close-inspect-modal">&times;</button>
             </div>
 
-            <!-- Stats Bar -->
-            <div class="grid-4" style="gap: 8px; margin-bottom: 16px;">
+            <!-- Extended Telemetry Stats Grid (4x2) -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); gap: 8px; margin-bottom: 14px;">
+                <!-- Tile 1: Distanz & Fahrzeit -->
                 <div class="stat-tile" style="padding: 10px;">
-                    <span class="stat-label">Distanz</span>
-                    <div class="stat-value" id="inspect-dist" style="font-size: 1.1rem; color: var(--accent-orange);">84.6 km</div>
-                    <span class="stat-sub" id="inspect-dur">1h 42m</span>
+                    <span class="stat-label">Distanz &amp; Zeit</span>
+                    <div class="stat-value" id="inspect-dist" style="font-size: 1.15rem; color: var(--accent-orange);">84.6 km</div>
+                    <span class="stat-sub" id="inspect-dur">Netto: 1h 42m</span>
                 </div>
+                <!-- Tile 2: Höhenprofil & Barometer -->
                 <div class="stat-tile" style="padding: 10px;">
-                    <span class="stat-label">Max. Schräglage</span>
-                    <div class="stat-value" id="inspect-lean" style="font-size: 1.1rem; color: var(--accent-purple);">44.2°</div>
-                    <span class="stat-sub">Links 44° / Rechts 42°</span>
+                    <span class="stat-label">Höhenprofil</span>
+                    <div class="stat-value" id="inspect-ele-gain" style="font-size: 1.15rem; color: var(--accent-green);">+1.420 hm</div>
+                    <span class="stat-sub" id="inspect-ele-range">620 – 2.224 m</span>
                 </div>
+                <!-- Tile 3: Umgebungstemperatur -->
                 <div class="stat-tile" style="padding: 10px;">
-                    <span class="stat-label">Top Speed</span>
-                    <div class="stat-value" id="inspect-speed" style="font-size: 1.1rem; color: var(--accent-blue);">118 km/h</div>
-                    <span class="stat-sub">Ø 64 km/h</span>
+                    <span class="stat-label">Außentemperatur</span>
+                    <div class="stat-value" id="inspect-temp" style="font-size: 1.15rem; color: var(--accent-cyan);">14 – 24 °C</div>
+                    <span class="stat-sub" id="inspect-temp-sub">Ø 18.8 °C (CAN OEM)</span>
                 </div>
+                <!-- Tile 4: Max Schräglage L/R -->
                 <div class="stat-tile" style="padding: 10px;">
-                    <span class="stat-label">Höhenmeter</span>
-                    <div class="stat-value" id="inspect-ele-gain" style="font-size: 1.1rem; color: var(--accent-green);">+1.420 m</div>
-                    <span class="stat-sub">Passhöhe 2.224 m</span>
+                    <span class="stat-label">Schräglage (L/R)</span>
+                    <div class="stat-value" id="inspect-lean" style="font-size: 1.15rem; color: var(--accent-purple);">44.2°</div>
+                    <span class="stat-sub" id="inspect-lean-sub">L: 44.2° · R: 42.8°</span>
+                </div>
+                <!-- Tile 5: Kurvenzähler -->
+                <div class="stat-tile" style="padding: 10px;">
+                    <span class="stat-label">Kurvenzähler</span>
+                    <div class="stat-value" id="inspect-curves" style="font-size: 1.15rem; color: #ffd60a;">186</div>
+                    <span class="stat-sub" id="inspect-curves-sub">91 L / 95 R</span>
+                </div>
+                <!-- Tile 6: Geschwindigkeiten -->
+                <div class="stat-tile" style="padding: 10px;">
+                    <span class="stat-label">Geschwindigkeit</span>
+                    <div class="stat-value" id="inspect-speed" style="font-size: 1.15rem; color: var(--accent-blue);">118 km/h</div>
+                    <span class="stat-sub" id="inspect-speed-sub">Ø 58.4 km/h netto</span>
+                </div>
+                <!-- Tile 7: G-Forces Fahrdynamik -->
+                <div class="stat-tile" style="padding: 10px;">
+                    <span class="stat-label">Fahrdynamik</span>
+                    <div class="stat-value" id="inspect-accel" style="font-size: 1.15rem; color: #ff375f;">-0.82 g</div>
+                    <span class="stat-sub" id="inspect-accel-sub">+0.65g / -0.82g</span>
+                </div>
+                <!-- Tile 8: Motor & Bordnetz -->
+                <div class="stat-tile" style="padding: 10px;">
+                    <span class="stat-label">Motor &amp; Bordnetz</span>
+                    <div class="stat-value" id="inspect-motor" style="font-size: 1.15rem; color: #5e5ce6;">7.850 U/m</div>
+                    <span class="stat-sub" id="inspect-motor-sub">Min: 13.9 V</span>
                 </div>
             </div>
 
             <!-- Interactive Elevation Chart SVG -->
-            <div class="control-label"><span>🏔️ Höhenprofil & Kurvenintensität:</span></div>
-            <div style="width: 100%; height: 160px; background: #07090d; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); padding: 8px; margin-bottom: 16px; position: relative;">
+            <div class="control-label" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <span>🏔️ Höhenprofil &amp; Barometrische Kurvenintensität:</span>
+                <span class="card-badge badge-green" style="font-size: 0.68rem;">15-State Kalman Fusion</span>
+            </div>
+            <div style="width: 100%; height: 150px; background: #07090d; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); padding: 8px; margin-bottom: 14px; position: relative;">
                 <svg id="svg-inspect-elevation" viewBox="0 0 500 140" width="100%" height="100%">
                     <defs>
                         <linearGradient id="ele-grad" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -3218,6 +3249,17 @@
                     <circle cx="360" cy="55" r="4" fill="#0a84ff" stroke="#fff" stroke-width="1.5"/>
                     <text x="365" y="52" fill="#0a84ff" font-size="8" font-weight="700">📸 Kehren-Highlight</text>
                 </svg>
+            </div>
+
+            <!-- Telemetry Summary Card (Human Text / Chat Share) -->
+            <div style="margin-bottom: 14px; background: rgba(0, 0, 0, 0.4); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 12px 14px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span style="font-size: 0.8rem; font-weight: 700; color: var(--accent-orange);">🏁 Tour-Zusammenfassung (MQTT / Smart Home / Chat)</span>
+                    <button id="btn-copy-tour-summary" class="btn-secondary" style="padding: 4px 10px; font-size: 0.72rem; border-color: rgba(255, 159, 10, 0.4); color: var(--accent-orange);">
+                        📋 Text Kopieren
+                    </button>
+                </div>
+                <pre id="inspect-summary-text" style="margin: 0; font-family: ui-monospace, SFMono-Regular, monospace; font-size: 0.76rem; color: #d0d7de; white-space: pre-wrap; line-height: 1.45; background: rgba(0,0,0,0.3); padding: 8px 10px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.06);"></pre>
             </div>
 
             <!-- Actioncam Timeline & Action Buttons -->

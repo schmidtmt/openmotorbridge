@@ -7,7 +7,7 @@ from fastapi.testclient import TestClient
 
 from config import settings
 from main import app
-from notifier import parse_gpx_stats
+from notifier import parse_gpx_stats, build_human_summary
 
 SAMPLE_GPX = b"""<?xml version="1.0" encoding="UTF-8"?>
 <gpx version="1.1" creator="OpenMotorBridge v8.0" xmlns="http://www.topografix.com/GPX/1/1" xmlns:omb="http://openmotorbridge.org/gpx/1/0">
@@ -28,6 +28,106 @@ SAMPLE_GPX = b"""<?xml version="1.0" encoding="UTF-8"?>
         <ele>565.0</ele>
         <time>2026-09-18T10:02:00Z</time>
         <extensions><omb:lean>31.2</omb:lean></extensions>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>"""
+
+RICH_TELEMETRY_GPX = b"""<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="OpenMotorBridge v8.0" xmlns="http://www.topografix.com/GPX/1/1" xmlns:omb="http://openmotorbridge.org/gpx/1/0">
+  <trk>
+    <name>Silvretta Pass High Telemetry</name>
+    <trkseg>
+      <!-- Point 1: Upright departure -->
+      <trkpt lat="47.0100" lon="10.0500">
+        <ele>1200.0</ele>
+        <time>2026-09-18T09:00:00Z</time>
+        <speed>8.33</speed> <!-- 30 km/h -->
+        <extensions>
+          <omb:lean>0.0</omb:lean>
+          <omb:temp>15.0</omb:temp>
+          <omb:accel>0.15</omb:accel>
+          <omb:rpm>3200</omb:rpm>
+          <omb:battery>14.2</omb:battery>
+        </extensions>
+      </trkpt>
+      <!-- Point 2: Left turn entry -->
+      <trkpt lat="47.0110" lon="10.0515">
+        <ele>1225.0</ele>
+        <time>2026-09-18T09:01:00Z</time>
+        <speed>16.66</speed> <!-- 60 km/h -->
+        <extensions>
+          <omb:lean>-24.5</omb:lean>
+          <omb:temp>15.5</omb:temp>
+          <omb:accel>0.42</omb:accel>
+          <omb:rpm>4800</omb:rpm>
+          <omb:battery>14.2</omb:battery>
+        </extensions>
+      </trkpt>
+      <!-- Point 3: Left turn apex (max left lean) -->
+      <trkpt lat="47.0125" lon="10.0530">
+        <ele>1250.0</ele>
+        <time>2026-09-18T09:02:00Z</time>
+        <speed>15.0</speed> <!-- 54 km/h -->
+        <extensions>
+          <omb:lean>-38.6</omb:lean>
+          <omb:temp>16.0</omb:temp>
+          <omb:accel>-0.55</omb:accel>
+          <omb:rpm>5100</omb:rpm>
+          <omb:battery>14.1</omb:battery>
+        </extensions>
+      </trkpt>
+      <!-- Point 4: Straight transition -->
+      <trkpt lat="47.0140" lon="10.0550">
+        <ele>1270.0</ele>
+        <time>2026-09-18T09:03:00Z</time>
+        <speed>22.22</speed> <!-- 80 km/h -->
+        <extensions>
+          <omb:lean>2.0</omb:lean>
+          <omb:temp>17.2</omb:temp>
+          <omb:accel>0.62</omb:accel>
+          <omb:rpm>6200</omb:rpm>
+          <omb:battery>14.3</omb:battery>
+        </extensions>
+      </trkpt>
+      <!-- Point 5: Right turn entry -->
+      <trkpt lat="47.0155" lon="10.0570">
+        <ele>1265.0</ele>
+        <time>2026-09-18T09:04:00Z</time>
+        <speed>16.0</speed>
+        <extensions>
+          <omb:lean>26.0</omb:lean>
+          <omb:temp>18.0</omb:temp>
+          <omb:accel>-0.68</omb:accel>
+          <omb:rpm>4500</omb:rpm>
+          <omb:battery>14.1</omb:battery>
+        </extensions>
+      </trkpt>
+      <!-- Point 6: Right turn apex (max right lean) -->
+      <trkpt lat="47.0170" lon="10.0590">
+        <ele>1245.0</ele>
+        <time>2026-09-18T09:05:00Z</time>
+        <speed>14.0</speed>
+        <extensions>
+          <omb:lean>44.2</omb:lean>
+          <omb:temp>18.5</omb:temp>
+          <omb:accel>0.30</omb:accel>
+          <omb:rpm>5800</omb:rpm>
+          <omb:battery>14.2</omb:battery>
+        </extensions>
+      </trkpt>
+      <!-- Point 7: Straight arrival / stop -->
+      <trkpt lat="47.0180" lon="10.0600">
+        <ele>1240.0</ele>
+        <time>2026-09-18T09:06:00Z</time>
+        <speed>0.0</speed>
+        <extensions>
+          <omb:lean>0.0</omb:lean>
+          <omb:temp>19.0</omb:temp>
+          <omb:accel>0.0</omb:accel>
+          <omb:rpm>1100</omb:rpm>
+          <omb:battery>13.8</omb:battery>
+        </extensions>
       </trkpt>
     </trkseg>
   </trk>
@@ -158,3 +258,98 @@ def test_gpx_statistics_parsing():
     assert stats["duration_s"] == 120  # 10:00:00 to 10:02:00
     assert "2026-09-18T10:00:00" in stats["start_time"]
     assert "2026-09-18T10:02:00" in stats["end_time"]
+
+
+def test_gpx_extended_statistics_parsing():
+    """Verifies rich telemetry: elevation gain/loss, temperature min/max/avg, acceleration, lean left/right, RPM and curves."""
+    stats = parse_gpx_stats(RICH_TELEMETRY_GPX)
+
+    # Point count & timing
+    assert stats["point_count"] == 7
+    assert stats["duration_s"] == 360  # 09:00 to 09:06 = 6 mins
+    assert stats["netto_duration_s"] > 0
+    assert stats["distance_km"] > 0.5
+
+    # Elevation profile
+    assert stats["elevation_min_m"] == 1200.0
+    assert stats["elevation_max_m"] == 1270.0
+    assert stats["elevation_gain_m"] == 70.0   # 1200 -> 1225 (+25) -> 1250 (+25) -> 1270 (+20) = 70
+    assert stats["elevation_loss_m"] == 30.0   # 1270 -> 1265 (-5) -> 1245 (-20) -> 1240 (-5) = 30
+
+    # Ambient Temperature
+    assert stats["temp_min_c"] == 15.0
+    assert stats["temp_max_c"] == 19.0
+    assert 17.0 <= stats["temp_avg_c"] <= 17.5
+
+    # Accelerations & Decelerations
+    assert stats["max_accel_g"] == 0.62
+    assert stats["max_decel_g"] == 0.68
+
+    # Lean Angles & Curves
+    assert stats["max_lean_left_deg"] == 38.6
+    assert stats["max_lean_right_deg"] == 44.2
+    assert stats["max_lean_deg"] == 44.2
+    assert stats["curve_count_left"] == 1
+    assert stats["curve_count_right"] == 1
+    assert stats["curve_count_total"] == 2
+
+    # Engine RPM & Battery
+    assert stats["rpm_max"] == 6200
+    assert stats["rpm_avg"] > 3000
+    assert stats["battery_v_min"] == 13.8
+
+    # Summary text
+    summary = stats.get("summary_text", "")
+    assert "Silvretta Pass High Telemetry" in summary or "Tour" in summary
+    assert "15.0 °C – 19.0 °C" in summary
+    assert "38.6° L / 44.2° R" in summary
+    assert "Beschl.: +0.62g" in summary
+    assert "Bremsen: -0.68g" in summary
+    assert "6.200 U/min" in summary
+    assert "+70 hm" in summary
+
+
+def test_build_human_summary_formatting():
+    """Verifies that build_human_summary generates structured text with all key metrics."""
+    mock_stats = {
+        "start_time": "2026-09-18T10:15:00+02:00",
+        "end_time": "2026-09-18T12:45:00+02:00",
+        "duration_s": 9000,         # 2h 30m
+        "netto_duration_s": 7800,   # 2h 10m
+        "distance_km": 142.5,
+        "speed_max_kmh": 118.4,
+        "speed_avg_kmh": 65.8,
+        "elevation_min_m": 420.0,
+        "elevation_max_m": 1890.0,
+        "elevation_gain_m": 2150.0,
+        "temp_min_c": 11.5,
+        "temp_max_c": 24.2,
+        "temp_avg_c": 18.3,
+        "max_lean_left_deg": 41.5,
+        "max_lean_right_deg": 43.8,
+        "curve_count_left": 128,
+        "curve_count_right": 134,
+        "curve_count_total": 262,
+        "max_accel_g": 0.74,
+        "max_decel_g": 0.89,
+        "rpm_max": 7800,
+        "rpm_avg": 4250,
+        "battery_v_min": 13.9,
+    }
+    summary = build_human_summary(mock_stats, "Stelvio_Pass.gpx")
+
+    assert "Stelvio_Pass.gpx" in summary
+    assert "10:15 – 12:45 Uhr" in summary
+    assert "2h 10m" in summary
+    assert "142.5 km" in summary
+    assert "+2.150 hm" in summary
+    assert "(420 m – 1890 m)" in summary
+    assert "11.5 °C – 24.2 °C (Ø 18.3 °C)" in summary
+    assert "118.4 km/h" in summary
+    assert "Ø 65.8 km/h" in summary
+    assert "Beschl.: +0.74g" in summary
+    assert "Bremsen: -0.89g" in summary
+    assert "41.5° L / 43.8° R" in summary
+    assert "262 Kurven (128 L / 134 R)" in summary
+    assert "7.800 U/min" in summary
+

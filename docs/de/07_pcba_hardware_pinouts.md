@@ -309,6 +309,21 @@ Die Platine verfügt über 3 automatische Koaxial-Umschaltbuchsen (`Murata MM803
 | **GPIO 2** | `LORA_BUSY` | SX1262 State-Flag (Hardware-Wartebedingung für SPI-Befehle) |
 | **GPIO 3** | `LORA_DIO1` | SX1262 IRQ (Packet Received / Packet Sent Interrupt) |
 | **GPIO 16** | `WS2812B_LED` | Digitaler Datenausgang für die mehrfarbige Gehäuse-Status-LED |
+| **GPIO 14** | `I2C1_SDA` / `1WIRE_BUS` | I2C Data / 1-Wire Datenleitung für externe Antennenfuß-Sensorik (`J6`) |
+| **GPIO 15** | `I2C1_SCL` | I2C Clock für hochpräzisen Temperatursensor (TI TMP117) & Barometer |
+
+### 6.5 Externer Antennenfuß-Sensorport (`J6` / `J_EXT_TEMP`)
+
+Zur temperaturstabilen Erfassung der Umgebungstemperatur ohne thermische Verfälschung durch Motorstauwärme unter der Heck-Abdeckung ($45\text{–}55\,^\circ\text{C}$) verfügt PCBA 04 über einen dedizierten 3-Pin JST-SH Micro-Steckverbinder (`J6`), dessen Zuleitung formschlüssig durch den Antennensockel in den Fahrtwindkanal der Telemetrieflosse (`cvo_st_telemetry_fin.stl`) geführt wird:
+
+| Pin (J6) | Signal | Pegel | Beschreibung |
+| :---: | :--- | :--- | :--- |
+| **Pin 1** | `+3V3_SENS` | $+3{,}3\,\text{V}$ DC geschaltet | Sensor-Stromversorgung (Low-Noise LDO) |
+| **Pin 2** | `EXT_TEMP_DATA` | $3{,}3\,\text{V}$ Open-Drain (4,7 kΩ Pullup) | 1-Wire (Dallas DS18B20) oder I2C SDA (TI TMP117) |
+| **Pin 3** | `GND` | $0\,\text{V}$ | Signalmasse (geschirmt gegen HF) |
+
+* **Thermische Isolation:** Sensor sitzt vollständig außerhalb des Rahmens und des Auspuff-Wärmefeldes im direkten laminaren Fahrtwind.
+* **Keine Lenkkopf-Kabel:** Die Erfassung am Heck bewahrt die vollständige Funkentkopplung des Frontknotens (ESP-NOW).
 
 ---
 

@@ -923,17 +923,22 @@ function showToast(message, type = 'info', durationMs = 3500) {
 // ==========================================
 // 3. Tab Navigation
 // ==========================================
+window.switchTab = function(tabId) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+    const btn = document.querySelector(`.tab-btn[data-tab="${tabId}"]`);
+    if (btn) btn.classList.add('active');
+    const targetTab = document.getElementById(tabId);
+    if (targetTab) {
+        targetTab.classList.add('active');
+    }
+};
+
 document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-
-        btn.classList.add('active');
         const tabId = btn.getAttribute('data-tab');
-        const targetTab = document.getElementById(tabId);
-        if (targetTab) {
-            targetTab.classList.add('active');
-        }
+        if (tabId) window.switchTab(tabId);
     });
 });
 
@@ -4954,12 +4959,38 @@ window.openTourInspectModal = function (tourId) {
     if (!tour) return;
     s_inspectingTour = tour;
 
-    document.getElementById('inspect-tour-title').textContent = tour.name;
-    document.getElementById('inspect-dist').textContent = tour.distance;
-    document.getElementById('inspect-dur').textContent = tour.duration;
-    document.getElementById('inspect-lean').textContent = tour.maxLean;
-    document.getElementById('inspect-speed').textContent = `${tour.topSpeed} km/h`;
-    document.getElementById('inspect-ele-gain').textContent = tour.eleGain;
+    const setText = (id, val) => {
+        const el = document.getElementById(id);
+        if (el && val !== undefined) el.textContent = val;
+    };
+
+    setText('inspect-tour-title', tour.name);
+    setText('inspect-dist', tour.distance);
+    setText('inspect-dur', `Netto: ${tour.nettoDuration || tour.duration}`);
+    setText('inspect-ele-gain', tour.eleGain);
+    setText('inspect-ele-range', tour.eleRange || '620 – 2.224 m');
+    setText('inspect-temp', tour.tempRange || '14.2 – 23.5 °C');
+    setText('inspect-temp-sub', `Ø ${tour.tempAvg || '18.8'} °C (${tour.tempSource || 'CAN OEM'})`);
+    setText('inspect-lean', tour.maxLean);
+    setText('inspect-lean-sub', `L: ${tour.leanLeft || '44.2°'} · R: ${tour.leanRight || '42.8°'}`);
+    setText('inspect-curves', String(tour.curvesTotal || 186));
+    setText('inspect-curves-sub', `${tour.curvesLeft || 91} L / ${tour.curvesRight || 95} R`);
+    setText('inspect-speed', `${tour.topSpeed} km/h`);
+    setText('inspect-speed-sub', `Ø ${tour.avgSpeed || '58.4 km/h'} netto`);
+    setText('inspect-accel', tour.maxDecel || '-0.82 g');
+    setText('inspect-accel-sub', `${tour.maxAccel || '+0.65g'} / ${tour.maxDecel || '-0.82g'}`);
+    setText('inspect-motor', tour.maxRpm || '7.850 U/m');
+    setText('inspect-motor-sub', `Min: ${tour.batteryMin || '13.9 V'}`);
+
+    // Generate human summary text matching notifier.py format
+    const summaryText = `🏁 OpenMotorBridge: Tour abgeschlossen (${tour.filename})\n` +
+        `📅 ${tour.datetime.split(' ')[0]} · ${tour.timeRange || '09:15 – 11:20 Uhr'} (Netto: ${tour.nettoDuration || tour.duration})\n` +
+        `📍 ${tour.distance} · ⛰️ ${tour.eleGain} (${tour.eleRange || '620 – 2.224 m'})\n` +
+        `🌡️ Temp: ${tour.tempRange || '14.2 °C – 23.5 °C'} (Ø ${tour.tempAvg || '18.8'} °C)\n` +
+        `🏍️ Schräglage: ${tour.leanLeft || '44.2°'} L / ${tour.leanRight || '42.8°'} R · 🔄 ${tour.curvesTotal || 186} Kurven (${tour.curvesLeft || 91} L / ${tour.curvesRight || 95} R)\n` +
+        `⚡ Max: ${tour.topSpeed} km/h (Ø ${tour.avgSpeed || '58.4 km/h'}) · Beschl.: ${tour.maxAccel || '+0.65g'} · Bremsen: ${tour.maxDecel || '-0.82g'} · RPM max: ${tour.maxRpm || '7.850 U/min'}`;
+
+    setText('inspect-summary-text', summaryText);
 
     tourInspectModal?.classList.add('active');
 };
@@ -4969,6 +5000,17 @@ if (btnCloseInspectModal) {
         tourInspectModal?.classList.remove('active');
     });
 }
+
+document.getElementById('btn-copy-tour-summary')?.addEventListener('click', () => {
+    const text = document.getElementById('inspect-summary-text')?.textContent;
+    if (text) {
+        navigator.clipboard?.writeText(text).then(() => {
+            showToast(state.lang === 'de' ? '📋 Tour-Zusammenfassung in Zwischenablage kopiert!' : '📋 Tour summary copied to clipboard!', 'success');
+        }).catch(() => {
+            showToast(state.lang === 'de' ? 'Fehler beim Kopieren' : 'Copy failed', 'error');
+        });
+    }
+});
 
 document.getElementById('btn-inspect-export-gpx')?.addEventListener('click', () => {
     if (s_inspectingTour) {
@@ -5023,11 +5065,28 @@ const s_defaultTours = [
         filename: 'sustenpass_tour.gpx',
         name: 'Sustenpass Kurvenrausch',
         datetime: '2026-08-23 09:15',
-        duration: '1h 42m',
+        timeRange: '09:15 – 11:20 Uhr',
+        duration: '2h 05m',
+        nettoDuration: '1h 42m',
+        pauseDuration: '23m',
         distance: '84.6 km',
         maxLean: '44.2°',
+        leanLeft: '44.2°',
+        leanRight: '42.8°',
+        curvesTotal: 186,
+        curvesLeft: 91,
+        curvesRight: 95,
         topSpeed: 118,
-        eleGain: '+1.420 m',
+        avgSpeed: '58.4 km/h',
+        eleGain: '+1.420 hm',
+        eleRange: '620 – 2.224 m',
+        tempRange: '14.2 – 23.5 °C',
+        tempAvg: '18.8',
+        tempSource: 'CAN OEM',
+        maxAccel: '+0.65g',
+        maxDecel: '-0.82g',
+        maxRpm: '7.850 U/min',
+        batteryMin: '13.9 V',
         status: 'uploaded'
     },
     {
@@ -5035,11 +5094,28 @@ const s_defaultTours = [
         filename: 'gotthard_tremola.fav.gpx',
         name: 'Gotthard Pass Tremola Classic',
         datetime: '2026-08-22 14:30',
-        duration: '3h 15m',
+        timeRange: '14:30 – 18:15 Uhr',
+        duration: '3h 45m',
+        nettoDuration: '3h 15m',
+        pauseDuration: '30m',
         distance: '192.3 km',
         maxLean: '47.8°',
+        leanLeft: '47.8°',
+        leanRight: '45.1°',
+        curvesTotal: 342,
+        curvesLeft: 174,
+        curvesRight: 168,
         topSpeed: 134,
-        eleGain: '+2.150 m',
+        avgSpeed: '64.2 km/h',
+        eleGain: '+2.150 hm',
+        eleRange: '450 – 2.106 m',
+        tempRange: '11.8 – 27.4 °C',
+        tempAvg: '19.4',
+        tempSource: 'Heck-Pod Flosse',
+        maxAccel: '+0.78g',
+        maxDecel: '-0.91g',
+        maxRpm: '8.400 U/min',
+        batteryMin: '14.1 V',
         status: 'favorite'
     },
     {
@@ -5047,11 +5123,28 @@ const s_defaultTours = [
         filename: 'b500_schwarzwald.gpx',
         name: 'Schwarzwaldhochstraße B500',
         datetime: '2026-08-19 11:00',
-        duration: '2h 05m',
+        timeRange: '11:00 – 13:20 Uhr',
+        duration: '2h 20m',
+        nettoDuration: '2h 05m',
+        pauseDuration: '15m',
         distance: '128.4 km',
         maxLean: '41.5°',
+        leanLeft: '40.8°',
+        leanRight: '41.5°',
+        curvesTotal: 214,
+        curvesLeft: 106,
+        curvesRight: 108,
         topSpeed: 112,
-        eleGain: '+980 m',
+        avgSpeed: '61.6 km/h',
+        eleGain: '+980 hm',
+        eleRange: '280 – 1.028 m',
+        tempRange: '17.5 – 26.0 °C',
+        tempAvg: '21.5',
+        tempSource: 'CAN OEM',
+        maxAccel: '+0.58g',
+        maxDecel: '-0.74g',
+        maxRpm: '6.900 U/min',
+        batteryMin: '14.2 V',
         status: 'uploaded'
     }
 ];
