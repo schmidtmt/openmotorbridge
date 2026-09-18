@@ -18,6 +18,14 @@ The dashboard is a fully self-contained Progressive Web App (PWA) built with sta
 | **Android / PC / Mac / Linux** | **Google Chrome, MS Edge, Opera** | **Native:** Direct Web Bluetooth support under HTTPS or `http://localhost`. |
 | **Apple iOS / iPadOS** (iPhone, iPad) | **[Bluefy – Web BLE Browser](https://apps.apple.com/app/bluefy-web-ble-browser/id1492822055)** | **Required:** Apple restricts WebBLE in WebKit/Safari. Bluefy provides a standard-compliant bridge using Apple CoreBluetooth. |
 
+### 1.2 Native Android Companion App & Google Play Store (TWA / Native Companion)
+For riders who prefer installation directly via the Google Play Store, automated background services, or zero-touch Bluetooth reconnection, the official Android application identity is reserved in the Google Play Console:
+* **App Name:** `OpenMotorBridge`
+* **Package Name / Application ID:** `bar.f0o.omb`
+* **Integration & Architecture Paths:**
+  1. **Trusted Web Activity (TWA):** Lightweight Android wrapper package leveraging Chrome Custom Tabs and Google Digital Asset Links (`.well-known/assetlinks.json`). Delivers 1-click Google Play installation, full-screen immersive rendering without browser chrome, and native Web Bluetooth performance with zero maintenance overhead compared to the PWA.
+  2. **Native Foreground Service (BLE Auto-Reconnect & Background Sync):** Optional native companion service with a persistent sticky notification (*"OpenMotorBridge Active"*). Maintains a rock-solid BLE GATT link to the Central Box even when the smartphone is locked in a riding jacket pocket, initiates automated GPX trip logging upon ignition ON, and dispatches eCall crash telemetry without foreground app launch requirements.
+
 ---
 
 ## 2. Dashboard Navigation & Functional Tabs

@@ -18,6 +18,14 @@ Das Dashboard ist eine vollständig autarke Progressive Web App (PWA) basierend 
 | **Android / PC / Mac / Linux** | **Google Chrome, MS Edge, Opera** | **Nativ:** Direkte Unterstützung der Web Bluetooth API. Voraussetzung: Sicherer Kontext (`https://` oder `http://localhost`). |
 | **Apple iOS / iPadOS** (iPhone, iPad) | **[Bluefy – Web BLE Browser](https://apps.apple.com/app/bluefy-web-ble-browser/id1492822055)** | **Erforderlich:** Apple blockiert in WebKit/Safari den direkten BLE-Zugriff. *Bluefy* stellt eine standardkonforme Brücke über Apples natives *CoreBluetooth* bereit. |
 
+### 1.2 Native Android Begleit-App & Google Play Store (TWA / Native Companion)
+Für Fahrer, die eine Installation über den Google Play Store, automatische Hintergrund-Dienste oder Zero-Touch Bluetooth-Wiederverbindung bevorzugen, ist die Android-App-Identität in der Google Play Console reserviert:
+* **App-Name:** `OpenMotorBridge`
+* **Package Name / Application ID:** `bar.f0o.omb`
+* **Integrations- & Architekturpfade:**
+  1. **Trusted Web Activity (TWA):** Schlankes Android-Package basierend auf Chrome Custom Tabs und Google Digital Asset Links (`.well-known/assetlinks.json`). Ermöglicht 1-Klick-Installation aus dem Google Play Store, native Vollbild-Darstellung ohne Browserleiste und native WebBLE-Unterstützung mit null Wartungs-Overhead zur WebApp.
+  2. **Nativer Foreground Service (BLE Auto-Reconnect & Background Sync):** Optionaler nativer Begleitdienst mit Sticky-Notification (*„OpenMotorBridge aktiv“*). Hält die BLE-GATT-Verbindung zur Zentralbox auch dann stabil aufrecht, wenn das Smartphone bei ausgeschaltetem Display in der Jackentasche verbleibt, startet automatisches GPX-Fahrt-Logging bei Zündung EIN und leitet eCall-Notrufe selbst im Hintergrund verzögerungsfrei weiter.
+
 ---
 
 ## 2. Dashboard Tabs & Funktionsumfang
