@@ -154,27 +154,27 @@ All enclosure parts are designed around the **IKEA Principle**: **Zero heat-set 
 ### 9.1 Base System (Universal for Every Motorcycle)
 | Assembly | STL Filename | Qty | Material & Process | Function & Description |
 | :--- | :--- | :---: | :--- | :--- |
-| **Main Box Lower Tub** | [`main_box_lower_case.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_lower_case.stl) | **1** | MJF PA12 / ASA | Monocoque lower tub with 4x M4 silentblock ears, nut pockets & seal groove |
-| **Main Box Mid Tray** | [`main_box_mid_tray.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_mid_tray.stl) | **1** | MJF PA12 / ASA | Battery tray for 2,200 mAh Flat-LiPo ($68 \times 39 \times 5.0\,\text{mm}$), 11x convection louvers & sealing lip |
-| **Main Box Lid** | [`main_box_lid.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_lid.stl) | **1** | MJF PA12 / ASA | Enclosure lid with Gore ePTFE valve dome & bolt counterbores |
-| **Pod Base Housing** | [`pod_base_housing.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod_base_housing.stl) | **3** | MJF PA12 / ASA | Universal chassis housing for Pod 1 (Left), Pod 2 (Right), and Rear Pod 3 |
-| **Pod Bulkhead Partitions**| [`03_pod_bulkhead_partition.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/components/03_pod_bulkhead_partition.stl) | **3** | MJF PA12 / ASA | Bulkhead partition with sealing collar & spring pockets (1 per pod) |
-| **Cartridge Base Sled** | [`cartridge_base_sled.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl) | **3** | MJF PA12 / ASA | Universal sled for Gateway 1 (Pod 1), Gateway 2 (Pod 2), and OMM (Pod 3) |
-| **Cartridge Magnetic Latch**| [`cartridge_magnetic_lock_latch.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_magnetic_lock_latch.stl) | **2** | MJF PA12 / ASA | Magnetic anti-theft locking rocker latches for Cartridge Slots 1 & 2 |
-| **Rear Pod 3 OMM Radome** | [`cartridge_antenna_bracket_omm.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_antenna_bracket_omm.stl) | **1** | MJF PA12 / ASA | Dielectric antenna radome & carrier bridge for PCBA 04 in Rear Pod 3 |
-| **Front Node Lower Tub** | [`front_node_lower_tub.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_lower_tub.stl) | **1** | MJF PA12 / ASA | Cockpit tub with AMPS pattern (DIN 934 M4 pockets), tube cradle & nut pockets |
-| **Front Node Lid** | [`front_node_upper_lid.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_upper_lid.stl) | **1** | MJF PA12 / ASA | Lid with Knowles MEMS acoustic port & perimeter O-ring groove |
-| **Front Node Cable Glands**| [`front_node_cable_glands_tpu.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_cable_glands_tpu.stl) | **1 Pair**| TPU 95A / 85A | Elastomeric sealing combs for front USB & lateral signals |
-| **Front Node USB-C Cap** | [`front_node_usbc_cap_tpu.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_usbc_cap_tpu.stl) | **1** | TPU 95A / 85A | Elastomeric dust cap with retention tether for service port |
+| **Main Box Lower Tub** | [`main_box_lower_case.stl`](../../hardware/cad/stl/01_main_box/main_box_lower_case.stl) | **1** | MJF PA12 / ASA | Monocoque lower tub with 4x M4 silentblock ears, nut pockets & seal groove |
+| **Main Box Mid Tray** | [`main_box_mid_tray.stl`](../../hardware/cad/stl/01_main_box/main_box_mid_tray.stl) | **1** | MJF PA12 / ASA | Battery tray for 2,200 mAh Flat-LiPo ($68 \times 39 \times 5.0\,\text{mm}$), 11x convection louvers & sealing lip |
+| **Main Box Lid** | [`main_box_lid.stl`](../../hardware/cad/stl/01_main_box/main_box_lid.stl) | **1** | MJF PA12 / ASA | Enclosure lid with Gore ePTFE valve dome & bolt counterbores |
+| **Pod Base Housing** | [`pod_base_housing.stl`](../../hardware/cad/stl/02_pod_base/pod_base_housing.stl) | **3** | MJF PA12 / ASA | Universal chassis housing for Pod 1 (Left), Pod 2 (Right), and Rear Pod 3 |
+| **Pod Bulkhead Partitions**| [`03_pod_bulkhead_partition.stl`](../../hardware/cad/stl/02_pod_base/components/03_pod_bulkhead_partition.stl) | **3** | MJF PA12 / ASA | Bulkhead partition with sealing collar & spring pockets (1 per pod) |
+| **Cartridge Base Sled** | [`cartridge_base_sled.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl) | **3** | MJF PA12 / ASA | Universal sled for Gateway 1 (Pod 1), Gateway 2 (Pod 2), and OMM (Pod 3) |
+| **Cartridge Magnetic Latch**| [`cartridge_magnetic_lock_latch.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_magnetic_lock_latch.stl) | **2** | MJF PA12 / ASA | Magnetic anti-theft locking rocker latches for Cartridge Slots 1 & 2 |
+| **Rear Pod 3 OMM Radome** | [`cartridge_antenna_bracket_omm.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_antenna_bracket_omm.stl) | **1** | MJF PA12 / ASA | Dielectric antenna radome & carrier bridge for PCBA 04 in Rear Pod 3 |
+| **Front Node Lower Tub** | [`front_node_lower_tub.stl`](../../hardware/cad/stl/04_front_node/front_node_lower_tub.stl) | **1** | MJF PA12 / ASA | Cockpit tub with AMPS pattern (DIN 934 M4 pockets), tube cradle & nut pockets |
+| **Front Node Lid** | [`front_node_upper_lid.stl`](../../hardware/cad/stl/04_front_node/front_node_upper_lid.stl) | **1** | MJF PA12 / ASA | Lid with Knowles MEMS acoustic port & perimeter O-ring groove |
+| **Front Node Cable Glands**| [`front_node_cable_glands_tpu.stl`](../../hardware/cad/stl/04_front_node/front_node_cable_glands_tpu.stl) | **1 Pair**| TPU 95A / 85A | Elastomeric sealing combs for front USB & lateral signals |
+| **Front Node USB-C Cap** | [`front_node_usbc_cap_tpu.stl`](../../hardware/cad/stl/04_front_node/front_node_usbc_cap_tpu.stl) | **1** | TPU 95A / 85A | Elastomeric dust cap with retention tether for service port |
 
 ### 9.2 Gateway Cartridge Inlays (Choose 2 Based on Desired Intercoms)
 > **Architecture Principle:** Slot 1 and Slot 2 are **Multi-Protocol Gateway Transceivers**, not isolated driver/passenger headsets! They connect the motorcycle simultaneously to Sena Mesh and Cardo DMC networks. Driver and passenger communicate wirelessly using their standard helmets.
 
 | Assembly | STL Filename | Qty | Material | Function & Description |
 | :--- | :--- | :---: | :--- | :--- |
-| **Gateway Inlay Sena** | [`cartridge_insert_sena.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_sena.stl) | *Opt. (1)* | MJF PA12 / ASA | Form-fitting inlay for Sena SPIDER X Slim / 50S / 60S (Mesh 3.0 Wave) |
-| **Gateway Inlay Cardo** | [`cartridge_insert_cardo.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_cardo.stl) | *Opt. (1)* | MJF PA12 / ASA | Inlay for Cardo Packtalk Edge / Pro (DMC Gen2) with Air-Mount |
-| **Blank Cartridge / Dry Box**| [`cartridge_insert_blindkassette.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_blindkassette.stl) | *Opt. (1)* | MJF PA12 / ASA | Hermetic protective sled for unused slot or waterproof dry storage box |
+| **Gateway Inlay Sena** | [`cartridge_insert_sena.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_sena.stl) | *Opt. (1)* | MJF PA12 / ASA | Form-fitting inlay for Sena SPIDER X Slim / 50S / 60S (Mesh 3.0 Wave) |
+| **Gateway Inlay Cardo** | [`cartridge_insert_cardo.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_cardo.stl) | *Opt. (1)* | MJF PA12 / ASA | Inlay for Cardo Packtalk Edge / Pro (DMC Gen2) with Air-Mount |
+| **Blank Cartridge / Dry Box**| [`cartridge_insert_blindkassette.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_blindkassette.stl) | *Opt. (1)* | MJF PA12 / ASA | Hermetic protective sled for unused slot or waterproof dry storage box |
 
 ### 9.3 Vehicle-Specific Mounting Kits (3D Printed Parts)
 * **Kit 1: BMW R1250 / R1300 GS (Standard / Vario Cases):**
@@ -205,16 +205,16 @@ All enclosure parts are designed around the **IKEA Principle**: **Zero heat-set 
 ### 9.4 Accessories (Optional)
 | Assembly | STL Filename | Qty | Material | Function & Description |
 | :--- | :--- | :---: | :--- | :--- |
-| **Smart Keyfob Lower Shell**| [`smart_keyfob_lower_shell.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/05_accessories/smart_keyfob_lower_shell.stl) | **1** | MJF PA12 / ASA | Tub with LRA dampening cradle & magnet pocket for PCBA 07 |
-| **Smart Keyfob Upper Shell**| [`smart_keyfob_upper_shell.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/05_accessories/smart_keyfob_upper_shell.stl) | **1** | MJF PA12 / ASA | Lid with 3 button keypads & optical light pipe port |
-| **Smart Keyfob Bumper** | [`smart_keyfob_tpu_rim.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/05_accessories/smart_keyfob_tpu_rim.stl) | **1** | TPU 85A / 95A | Shock-absorbing perimeter rim |
-| **Under-Perch Switch Bracket**| [`under_perch_switch_bracket.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/05_accessories/under_perch_switch_bracket.stl) | **1** | MJF PA12-CF / ASA | Zero-footprint switch bracket for M4 Harley perch bolt |
-| **Mirror Stem Adapter Plate** | [`under_perch_mirror_plate.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/05_accessories/under_perch_mirror_plate.stl) | **1** | MJF PA12 / Stainless | M8/M10 mounting bracket plate for mirror stem base |
-| **BSD Mirror Upper Pod**      | [`bsd_mirror_upper_pod.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/05_accessories/bsd_mirror_upper_pod.stl) | **2** | MJF PA12 / ASA | BSD blind-spot mirror pod upper shell with 38° inward visor hood |
-| **BSD Mirror Lower Clamp**    | [`bsd_mirror_lower_clamp.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/05_accessories/bsd_mirror_lower_clamp.stl) | **2** | MJF PA12 / ASA | Mirror stem clamp lower half for Ø 10 mm stems |
-| **BSD Mirror Diffuser Lens**  | [`bsd_mirror_lens.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/05_accessories/bsd_mirror_lens.stl) | **2** | PETG / Acrylic | Translucent amber diffuser lens |
-| **MagSafe Frame Dock** | [`magsafe_frame_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/magsafe_frame_dock.stl) | **1** | MJF PA12 / ASA | Cockpit dock chassis with M2.5 & M3 nut pockets for PCBA 06 |
-| **MagSafe Clamp Wings** | [`magsafe_clamp_wings.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/magsafe_clamp_wings.stl) | **1** | MJF PA12 / ASA | Clamp wings for handlebar tube mounting |
+| **Smart Keyfob Lower Shell**| [`smart_keyfob_lower_shell.stl`](../../hardware/cad/stl/05_accessories/smart_keyfob_lower_shell.stl) | **1** | MJF PA12 / ASA | Tub with LRA dampening cradle & magnet pocket for PCBA 07 |
+| **Smart Keyfob Upper Shell**| [`smart_keyfob_upper_shell.stl`](../../hardware/cad/stl/05_accessories/smart_keyfob_upper_shell.stl) | **1** | MJF PA12 / ASA | Lid with 3 button keypads & optical light pipe port |
+| **Smart Keyfob Bumper** | [`smart_keyfob_tpu_rim.stl`](../../hardware/cad/stl/05_accessories/smart_keyfob_tpu_rim.stl) | **1** | TPU 85A / 95A | Shock-absorbing perimeter rim |
+| **Under-Perch Switch Bracket**| [`under_perch_switch_bracket.stl`](../../hardware/cad/stl/05_accessories/under_perch_switch_bracket.stl) | **1** | MJF PA12-CF / ASA | Zero-footprint switch bracket for M4 Harley perch bolt |
+| **Mirror Stem Adapter Plate** | [`under_perch_mirror_plate.stl`](../../hardware/cad/stl/05_accessories/under_perch_mirror_plate.stl) | **1** | MJF PA12 / Stainless | M8/M10 mounting bracket plate for mirror stem base |
+| **BSD Mirror Upper Pod**      | [`bsd_mirror_upper_pod.stl`](../../hardware/cad/stl/05_accessories/bsd_mirror_upper_pod.stl) | **2** | MJF PA12 / ASA | BSD blind-spot mirror pod upper shell with 38° inward visor hood |
+| **BSD Mirror Lower Clamp**    | [`bsd_mirror_lower_clamp.stl`](../../hardware/cad/stl/05_accessories/bsd_mirror_lower_clamp.stl) | **2** | MJF PA12 / ASA | Mirror stem clamp lower half for Ø 10 mm stems |
+| **BSD Mirror Diffuser Lens**  | [`bsd_mirror_lens.stl`](../../hardware/cad/stl/05_accessories/bsd_mirror_lens.stl) | **2** | PETG / Acrylic | Translucent amber diffuser lens |
+| **MagSafe Frame Dock** | [`magsafe_frame_dock.stl`](../../hardware/cad/stl/02_pod_base/magsafe_frame_dock.stl) | **1** | MJF PA12 / ASA | Cockpit dock chassis with M2.5 & M3 nut pockets for PCBA 06 |
+| **MagSafe Clamp Wings** | [`magsafe_clamp_wings.stl`](../../hardware/cad/stl/02_pod_base/magsafe_clamp_wings.stl) | **1** | MJF PA12 / ASA | Clamp wings for handlebar tube mounting |
 
 ### 9.5 OrcaSlicer 3MF Project Plates (Standard vs. Compact Bed Sizes)
 For DIY 3D printing, pre-configured `.3mf` project files for **OrcaSlicer** (fully compatible with Bambu Studio and PrusaSlicer) are available. All plates are pre-configured with **6 perimeters** (for 100% watertightness without resin sealing), 40% gyroid infill, and concealed seam placement in rear radii:

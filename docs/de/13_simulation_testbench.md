@@ -187,7 +187,7 @@ Verifiziert alle hochfrequenten, leistungselektronischen und funktechnischen Sub
 
 ## 11. Multi-Motorrad Digital-Twin & 10-PCB HIL Simulator (`openmotorbridge_digital_twin.py`)
 
-Der **Digital Twin Simulator** ([`openmotorbridge_digital_twin.py`](file:///Users/schmidtm/openMotorBridge/tools/simulators/openmotorbridge_digital_twin.py)) emuliert einen realitätsgetreuen 2-Fahrzeuge-Verbund (Bike A = Leader, Bike B = Chaser) mit insgesamt **10 physikalisch modellierten Platinen** (5 PCBs pro Motorrad) entlang der geodätischen Referenzstrecke **Wil SG $\rightarrow$ Wattwil (Tunnel) $\rightarrow$ Wattwil-Kreisel $\rightarrow$ Rickenpass**:
+Der **Digital Twin Simulator** ([`openmotorbridge_digital_twin.py`](../../tools/simulators/openmotorbridge_digital_twin.py)) emuliert einen realitätsgetreuen 2-Fahrzeuge-Verbund (Bike A = Leader, Bike B = Chaser) mit insgesamt **10 physikalisch modellierten Platinen** (5 PCBs pro Motorrad) entlang der geodätischen Referenzstrecke **Wil SG $\rightarrow$ Wattwil (Tunnel) $\rightarrow$ Wattwil-Kreisel $\rightarrow$ Rickenpass**:
 
 ```
                       DIGITAL TWIN ARCHITEKTUR (10 PLATINEN & 2 BIKES)
@@ -245,9 +245,9 @@ Der **Digital Twin Simulator** ([`openmotorbridge_digital_twin.py`](file:///User
    * **Wiederannäherung am Rickenpass:** Hysterese-gesteuerter Rück-Handover auf 2.4 GHz Mesh ($+4\,\text{dB}$ Marge).
 5. **Live PWA-Anbindung:**
    * Pure-Python RFC 6455 WebSocket Server auf `ws://localhost:8765`.
-   * In der PWA ([`webapp_pwa/index.html`](file:///Users/schmidtm/openMotorBridge/webapp_pwa/index.html)) schaltet der Button **🚀 Digital Twin** die Verbindung sofort aktiv. Alle Tacho-, Schräglagen-, Radar-, Tunnel- und Mesh-Daten werden mit 10 Hz live visualisiert.
+   * In der PWA ([`webapp_pwa/index.html`](../../webapp_pwa/index.html)) schaltet der Button **🚀 Digital Twin** die Verbindung sofort aktiv. Alle Tacho-, Schräglagen-, Radar-, Tunnel- und Mesh-Daten werden mit 10 Hz live visualisiert.
 6. **Containerisierung:**
-   * [`tools/simulators/Dockerfile.sim`](file:///Users/schmidtm/openMotorBridge/tools/simulators/Dockerfile.sim) ermöglicht die Ausführung in Podman oder Docker.
+   * [`tools/simulators/Dockerfile.sim`](../../tools/simulators/Dockerfile.sim) ermöglicht die Ausführung in Podman oder Docker.
 
 ---
 

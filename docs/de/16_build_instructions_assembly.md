@@ -47,7 +47,7 @@ Ein vollständiges OpenMotorBridge-Fahrzeugkit besteht aus folgenden Kern-Baugru
 
 ## 2. Bereitstellung vor Montagebeginn (Pre-Assembly Checklist)
 
-Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert in **[Kapitel 15: Stücklisten & SMT-Fertigungsdaten](file:///Users/schmidtm/openMotorBridge/docs/de/15_bom_manufacturing.md)** aufgeführt. Vor Montagebeginn sicherstellen, dass folgende Baugruppen bereitliegen:
+Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert in **[Kapitel 15: Stücklisten & SMT-Fertigungsdaten](15_bom_manufacturing.md)** aufgeführt. Vor Montagebeginn sicherstellen, dass folgende Baugruppen bereitliegen:
 
 * [ ] **3D-Druckteile (MJF PA12 schwarz oder FDM ASA/PET-CF):**
   * 1x Main Box (Unterwanne, Zwischenboden mit Wanne für 2.200 mAh LiPo, Deckel)
@@ -82,16 +82,16 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 ## 3. Montage der Baugruppen (Schritt-für-Schritt)
 
 ### Schritt 1: Zentralbox (Main Box) montieren
-1. **Muttern einlegen:** 4x DIN 934 / DIN 985 M3 Edelstahlmuttern von unten in die Sechskant-Mutternaschen (Nut Pockets) der Unterwanne ([`main_box_lower_case.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_lower_case.stl)) eindrücken.
+1. **Muttern einlegen:** 4x DIN 934 / DIN 985 M3 Edelstahlmuttern von unten in die Sechskant-Mutternaschen (Nut Pockets) der Unterwanne ([`main_box_lower_case.stl`](../../hardware/cad/stl/01_main_box/main_box_lower_case.stl)) eindrücken.
 2. **Hauptplatine einsetzen:** Fertig bestückte PCBA 01 (`openmotorbridge_central_box`) auf die Dämpferdome setzen und mit 4x M2.5 $\times 6\,\text{mm}$ Schrauben handfest fixieren.
-3. **Zwischenboden & 2.200 mAh LiPo-Akku:** Den Zwischenboden ([`main_box_mid_tray.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_mid_tray.stl)) aufsetzen. Den **2.200 mAh Flat-LiPo-Akku** ($68 \times 39 \times 5{,}0\,\text{mm}$) in die Wanne einlegen, das Molex Micro-Fit Kabel durch die Zwischenbodenöffnung an `J_BAT` anstecken und die Zelle mit einem Streifen EPDM-Band schwingungsdämpfend sichern.
-4. **Dichtung & Deckel:** Silikon-Rundschnur (Ø 1,5 mm, $40\,\text{cm}$) dünn mit Silikonfett einreiben und in die Deckelnut einlegen. Gore-Membran auf den Belüftungssitz kleben. Den Deckel ([`main_box_lid.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/01_main_box/main_box_lid.stl)) vorerst nur lose aufsetzen. *(Wichtiger Hinweis: Die finale 4x M3-Verschraubung und Dichtungskompression erfolgt erst nach dem erfolgreichen Tisch-Smoke-Test in Abschnitt 4!)*
+3. **Zwischenboden & 2.200 mAh LiPo-Akku:** Den Zwischenboden ([`main_box_mid_tray.stl`](../../hardware/cad/stl/01_main_box/main_box_mid_tray.stl)) aufsetzen. Den **2.200 mAh Flat-LiPo-Akku** ($68 \times 39 \times 5{,}0\,\text{mm}$) in die Wanne einlegen, das Molex Micro-Fit Kabel durch die Zwischenbodenöffnung an `J_BAT` anstecken und die Zelle mit einem Streifen EPDM-Band schwingungsdämpfend sichern.
+4. **Dichtung & Deckel:** Silikon-Rundschnur (Ø 1,5 mm, $40\,\text{cm}$) dünn mit Silikonfett einreiben und in die Deckelnut einlegen. Gore-Membran auf den Belüftungssitz kleben. Den Deckel ([`main_box_lid.stl`](../../hardware/cad/stl/01_main_box/main_box_lid.stl)) vorerst nur lose aufsetzen. *(Wichtiger Hinweis: Die finale 4x M3-Verschraubung und Dichtungskompression erfolgt erst nach dem erfolgreichen Tisch-Smoke-Test in Abschnitt 4!)*
 
 ---
 
 ### Schritt 2: Satelliten-Pods 1, 2 und Heck-Pod 3 montieren
-1. **Basisplatine einsetzen:** Die fertig bestückte PCBA 02 (`openmotorbridge_pod_base`) in die Führungsnuten des Pod-Basisgehäuses ([`pod_base_housing.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod_base_housing.stl)) einschieben. Die M8 6-Pin IP67 Buchse durch die rückseitige Bohrung führen, O-Ring aufschieben und von außen die M8-Mutter mit Gabelschlüssel SW 10 handfest anziehen ($1{,}2\,\text{Nm}$).
-2. **Auto-Eject Schnappfedern einsetzen:** In die beiden rückseitigen Federtaschen der Schottwand ([`03_pod_bulkhead_partition.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/components/03_pod_bulkhead_partition.stl)) je eine V4A Druckfeder ($\varnothing 4{,}5 \times 15\,\text{mm}$) einstecken.
+1. **Basisplatine einsetzen:** Die fertig bestückte PCBA 02 (`openmotorbridge_pod_base`) in die Führungsnuten des Pod-Basisgehäuses ([`pod_base_housing.stl`](../../hardware/cad/stl/02_pod_base/pod_base_housing.stl)) einschieben. Die M8 6-Pin IP67 Buchse durch die rückseitige Bohrung führen, O-Ring aufschieben und von außen die M8-Mutter mit Gabelschlüssel SW 10 handfest anziehen ($1{,}2\,\text{Nm}$).
+2. **Auto-Eject Schnappfedern einsetzen:** In die beiden rückseitigen Federtaschen der Schottwand ([`03_pod_bulkhead_partition.stl`](../../hardware/cad/stl/02_pod_base/components/03_pod_bulkhead_partition.stl)) je eine V4A Druckfeder ($\varnothing 4{,}5 \times 15\,\text{mm}$) einstecken.
 3. **Schottwand fixieren:** Die Schottwand mit den Federn voran in das Pod-Gehäuse einschieben, bis sie an der inneren Anschlagschulter anliegt. Mit 2x M2 $\times 8\,\text{mm}$ Senkkopfschrauben von außen durch die Gehäusewand bündig verschrauben.
 4. **Prüfung:** Die federbelasteten Harwin 6-Pin Docking-Pogo-Pins müssen zentriert und plan durch das Schottwandfenster ragen. Wiederholen für Pod 1, Pod 2 und Pod 3.
 
@@ -100,23 +100,23 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 ### Schritt 3: Multi-Protokoll Gateway-Kassetten 1 & 2 montieren (z. B. Sena & Cardo)
 > **Architektur-Grundsatz:** Slot 1 und Slot 2 sind **Multi-Protokoll Mesh-Gateway-Einschübe**, keine isolierten Fahrer- oder Sozius-Headsets. Ein Modul (z. B. Sena SPIDER X Slim in Slot 1) dockt an das Sena Mesh-Netzwerk an, während das zweite Modul (z. B. Cardo Packtalk Edge in Slot 2) parallel das Cardo DMC-Netzwerk bedient. Die Zentralbox vermittelt die Audiodaten digital zwischen beiden Funkwelten.
 
-1. **Platine einsetzen:** Kassettenplatine PCBA 03 Rev 2.0 in den Kassetten-Schlitten ([`cartridge_base_sled.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl)) einklicken.
+1. **Platine einsetzen:** Kassettenplatine PCBA 03 Rev 2.0 in den Kassetten-Schlitten ([`cartridge_base_sled.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl)) einklicken.
 2. **Gateway-Inlay & Mechatronik montieren:**
    * **Klasse S (Smart Modular Cartridge mit Mechatronik • Sena SPIDER / Cardo Packtalk):**
-     * 4x Miniatur-Aktuatoren ($\varnothing 6{,}5 \times 12\,\text{mm}$) mit TPU-Schutzkappen in die Führungsbrücke des Inlays ([`cartridge_insert_sena.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_sena.stl) bzw. [`cartridge_insert_cardo.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_cardo.stl)) einlegen.
+     * 4x Miniatur-Aktuatoren ($\varnothing 6{,}5 \times 12\,\text{mm}$) mit TPU-Schutzkappen in die Führungsbrücke des Inlays ([`cartridge_insert_sena.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_sena.stl) bzw. [`cartridge_insert_cardo.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_cardo.stl)) einlegen.
      * Aktuator-Niederhalteplatte auflegen und mit 4x M2 $\times 6\,\text{mm}$ Senkkopfschrauben sichern.
      * Vorkonfektioniertes 8-poliges JST-SH Kabel `J_ACT` von den Aktuatoren auf Header `J_ACT` von PCBA 03 stecken (kein Crimpen!).
      * Headset in das Konturbett einlegen und mit dem Schnellspann-Niederhalter fixieren.
      * Vorkonfektioniertes J2-Kabel anstecken.
    * **Klasse D (Hermetische Blindkassette):**
-     * Schutzschlitten [`cartridge_insert_blindkassette.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_blindkassette.stl) einsetzen, falls ein Slot vorübergehend ungenutzt bleibt oder als regendichte Dry Box für Kleinteile dient.
+     * Schutzschlitten [`cartridge_insert_blindkassette.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_blindkassette.stl) einsetzen, falls ein Slot vorübergehend ungenutzt bleibt oder als regendichte Dry Box für Kleinteile dient.
 3. **Flanschdichtung:** Silikon-Formdichtung auf den Kassettenkragen aufziehen und dünn mit dielektrischem Silikonfett benetzen.
 
 > [!TIP]
 > **Vorrüstungs-Strategie für geplante Zweit-Headsets (z. B. "Black-Friday-Kauf"):**
 > Wer im Frühjahr startet und vorerst nur ein Headset besitzt (z. B. Sena SPIDER X in Slot 1) und bereits weiß, dass später ein zweites System hinzukommt (z. B. Cardo Packtalk Edge im Herbst/Winter), hat zwei clevere Optionen:
-> 1. **Option A (Hermetische Blindkassette / Dry Box):** Man druckt [`cartridge_insert_blindkassette.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_blindkassette.stl). Slot 2 dient bis zum Upgrade als wasserdichtes Notfall-Staufach (Bargeld, Ersatzsicherungen, Ventileinsatz). Zum Aufrüsten werden lediglich die 4x M2 Schrauben gelöst und das Cardo-Inlay auf denselben Basisschlitten geschraubt.
-> 2. **Option B (Direkte Cardo-Vorrüstung ohne Gerät):** Man baut direkt die vollständige Cardo-Kassette ([`cartridge_insert_cardo.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_insert_cardo.stl)) ein, lässt aber die interne Adapter-Platine/Verkabelung noch weg (oder verschließt den leeren AirMount-Sockel mit der beiliegenden Cardo-Silikonschutzkappe bzw. einem TPU-Dummystopfen).
+> 1. **Option A (Hermetische Blindkassette / Dry Box):** Man druckt [`cartridge_insert_blindkassette.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_blindkassette.stl). Slot 2 dient bis zum Upgrade als wasserdichtes Notfall-Staufach (Bargeld, Ersatzsicherungen, Ventileinsatz). Zum Aufrüsten werden lediglich die 4x M2 Schrauben gelöst und das Cardo-Inlay auf denselben Basisschlitten geschraubt.
+> 2. **Option B (Direkte Cardo-Vorrüstung ohne Gerät):** Man baut direkt die vollständige Cardo-Kassette ([`cartridge_insert_cardo.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_cardo.stl)) ein, lässt aber die interne Adapter-Platine/Verkabelung noch weg (oder verschließt den leeren AirMount-Sockel mit der beiliegenden Cardo-Silikonschutzkappe bzw. einem TPU-Dummystopfen).
 >    * **Firmware-Verhalten:** Da ohne Platine kein 1-Wire DS2431 EEPROM antwortet, erkennt die openMotorBridge Firmware den Slot automatisch als *„Empty Slot / Blindkassette“* und schaltet den DSP-Audiokanal hardwareseitig auf **-96 dB Mute**. Es gibt kein Rauschen, Brummen oder Fehlauslösungen!
 >    * **Upgrade-Vorteil:** Sobald das Zweitgerät da ist, wird es einfach in den bereits montierten Sockel eingeklinkt – null Umbauaufwand am Motorrad!
 
@@ -138,9 +138,9 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 └────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-1. **Stahlanker einpressen:** Den gehärteten ferromagnetischen Stahlstift ($\varnothing 6 \times 8\,\text{mm}$, DIN 6325) in die Querbohrung des hinteren Hebelarms der Wippe ([`cartridge_magnetic_lock_latch.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_magnetic_lock_latch.stl)) bündig einpressen.
+1. **Stahlanker einpressen:** Den gehärteten ferromagnetischen Stahlstift ($\varnothing 6 \times 8\,\text{mm}$, DIN 6325) in die Querbohrung des hinteren Hebelarms der Wippe ([`cartridge_magnetic_lock_latch.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_magnetic_lock_latch.stl)) bündig einpressen.
 2. **Rückstellfeder einsetzen:** Die kleine $\varnothing 3{,}5 \times 10\,\text{mm}$ V4A Druckfeder in die innenseitige Federtasche des hinteren Hebelarms stecken.
-3. **Wippe im Schlitten montieren:** Die vormontierte Wippe in die Aussparung an der linken Führungswange des Kassetten-Schlittens ([`cartridge_base_sled.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl)) einsetzen. Den $\varnothing 2{,}0 \times 8\,\text{mm}$ Edelstahl-Zylinderstift (DIN 7) von oben durch die Lagerbohrung durchdrücken.
+3. **Wippe im Schlitten montieren:** Die vormontierte Wippe in die Aussparung an der linken Führungswange des Kassetten-Schlittens ([`cartridge_base_sled.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl)) einsetzen. Den $\varnothing 2{,}0 \times 8\,\text{mm}$ Edelstahl-Zylinderstift (DIN 7) von oben durch die Lagerbohrung durchdrücken.
 4. **Funktionsprüfung:**
    * Die Sägezahn-Rastkralle am vorderen Arm muss durch Federkraft $2{,}5\,\text{mm}$ über die Führungsfeder hinausragen.
    * Den N52 Neodym-Blockmagneten außen an die Höhe des Stahlankers halten: Die Wippe kippt um $-4{,}8^\circ$, und die Kralle taucht vollständig bündig in den Schlitten ein.
@@ -148,8 +148,8 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 ---
 
 ### Schritt 4: Heck-Kassette Pod 3 & OMM-Radom (LoRa, GNSS & HF-Bypass)
-1. **Transceiver-Platine einsetzen:** PCBA 04 (`openmotorbridge_rear_pod3`) in den 3. Basisschlitten ([`cartridge_base_sled.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl)) einlegen und mit M2.5 Schrauben sichern.
-2. **OMM-Radom montieren:** Das dielektrische Radom ([`cartridge_antenna_bracket_omm.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/03_pod_cartridges/cartridge_antenna_bracket_omm.stl)) aufsetzen.
+1. **Transceiver-Platine einsetzen:** PCBA 04 (`openmotorbridge_rear_pod3`) in den 3. Basisschlitten ([`cartridge_base_sled.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl)) einlegen und mit M2.5 Schrauben sichern.
+2. **OMM-Radom montieren:** Das dielektrische Radom ([`cartridge_antenna_bracket_omm.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_antenna_bracket_omm.stl)) aufsetzen.
 3. **SMA-Bulkhead-Buchsen montieren (Bypass für externe Antennen):**
    * Die 3x SMA-Flanschbuchsen durch die Kassetten-Stirnwand führen und festziehen ($0{,}8\,\text{Nm}$).
    * Koax-Stecker auf die Murata MM8030 Umschaltbuchsen klicken (`J3` = 2.4 GHz Mesh, `J4` = 868 MHz LoRa, `J5` = GNSS).
@@ -159,25 +159,25 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 
 ### Schritt 5: Universal Front-Knoten (PCBA 05) zusammenbauen (100 % lötfrei)
 1. **Muttern einlegen (Nut-Pockets):**
-   * 4x DIN 934 / DIN 985 M3 Edelstahlmuttern von unten in die Sechskant-Mutternaschen der Gehäuse-Ecken der Unterwanne ([`front_node_lower_tub.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_lower_tub.stl)) eindrücken.
+   * 4x DIN 934 / DIN 985 M3 Edelstahlmuttern von unten in die Sechskant-Mutternaschen der Gehäuse-Ecken der Unterwanne ([`front_node_lower_tub.stl`](../../hardware/cad/stl/04_front_node/front_node_lower_tub.stl)) eindrücken.
    * 4x DIN 934 M4 Muttern in die Sechskant-Taschen des AMPS-Lochbilds ($30 \times 38\,\text{mm}$) am Gehäuseboden einlegen.
 2. **Akustik-Membran aufkleben:** Hydrophobe Gore ePTFE-Membran über die Schallöffnung des digitalen MEMS-Mikrofons (MSM261S4030H0R / SPH0645) kleben.
 3. **Platine montieren:** Fertig bestückte Front-Node Platine PCBA 05 (`openmotorbridge_front_node`) mit 4x M2.5 Schrauben handfest fixieren.
 4. **HF-Antennenmontage (ESP32-S3 2,4 GHz):**
-   * Die flexible 2,4-GHz-FPC-Dipolantenne (Molex 146153) in die Klebetasche an der Innenseite des Deckels ([`front_node_upper_lid.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_upper_lid.stl)) einkleben.
+   * Die flexible 2,4-GHz-FPC-Dipolantenne (Molex 146153) in die Klebetasche an der Innenseite des Deckels ([`front_node_upper_lid.stl`](../../hardware/cad/stl/04_front_node/front_node_upper_lid.stl)) einkleben.
    * U.FL-Stecker des Mikro-Koaxialkabels senkrecht auf das ESP32-S3 Modul aufklicken.
 5. **Vorkonfektionierte COTS-Kabel einlegen (kein Crimpen!):**
    * **Vordere Öffnung (Südwand für USB):**
      * Kurzes USB-A/C Flachbandkabel an Port `J6` (CarPlay/Android Auto Dongle / Ottocast) stecken.
      * 1,0 m USB-C Ladekabel an Port `J5` (Handschuhfach / 20W Fast Charging) stecken.
      * USB-Host Kabel an `J4` stecken (Verbindung zum OEM-Display / Radio).
-   * **Rechte Öffnung (Ostwand):** Elastische Staubschutzkappe ([`front_node_usbc_cap_tpu.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_usbc_cap_tpu.stl)) in Service-Port `J7` einsetzen.
+   * **Rechte Öffnung (Ostwand):** Elastische Staubschutzkappe ([`front_node_usbc_cap_tpu.stl`](../../hardware/cad/stl/04_front_node/front_node_usbc_cap_tpu.stl)) in Service-Port `J7` einsetzen.
    * **Linke Öffnung (Westwand für Strom & Signale):**
      * Fertiges JST-PH 2-Pin Litzenkabel für 12V Bordnetz (KL15 & Masse) an `J1` stecken.
      * JST-PH 3-Pin Kabel für CAN-Bus an `J2` stecken (nur bei Fairing-Bikes mit Front-Audio-CAN nötig).
      * Fertiges JST-PH 2-Pin Litzenkabel vom Lenkertaster an `J3` (PTT) stecken.
 6. **Dichtkämme einsetzen & Deckel verschließen:**
-   * Dünnen Film Silikonfett auf die elastischen TPU-Dichtkämme ([`front_node_cable_glands_tpu.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/04_front_node/front_node_cable_glands_tpu.stl)) auftragen und in die Gehäusetaschen schieben.
+   * Dünnen Film Silikonfett auf die elastischen TPU-Dichtkämme ([`front_node_cable_glands_tpu.stl`](../../hardware/cad/stl/04_front_node/front_node_cable_glands_tpu.stl)) auftragen und in die Gehäusetaschen schieben.
    * Silikon-Rundschnur (Ø 1,5 mm, $30\,\text{cm}$) in die Deckelnut einlegen.
    * Den Deckel vorerst nur lose aufsetzen (die 4x M3 Schrauben werden erst nach dem erfolgreichen Tisch-Smoke-Test in Abschnitt 4 festgezogen).
 
@@ -333,19 +333,19 @@ Erst wenn im PWA-Dashboard alle 4 Checks grün leuchten und Audio- sowie Funkbr�
 
 #### 5.1.1 Gemeinsame System-Basis (alle Modelle)
 * **Zentralbox:** Unter der Fahrersitzbank auf der massiven Rahmenbrücke vor der Batterie auf 4x M4 Silentblöcken (EPDM Shore 50A) verschrauben. Bei Softail-Modellen sitzt die Zentralbox im Hohlraum unter der Sitzbank oder im seitlichen Rahmendreieck. Die Kabelpeitsche des HD26-Steckers führt nach hinten links und rechts zu den M8 Trennstellen der Koffer sowie zum BCM / Diagnosestecker.
-* **Pod 1 & Pod 2 (Satelliten auf Kofferdeckel):** Die Kofferdeckel-Docks ([`saddlebag_lid_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/saddlebag_lid_dock.stl)) mit M4 Senkkopfschrauben und rückseitigen EPDM-Dichtscheiben an den Befestigungspunkten oder per 3M VHB Tape auf den Koffern montieren. *(Hinweis: Neben Street Glide, Road Glide, CVO ST, Road King und Ultra Limited verfügen auch die Cruiser mit Saddlebags wie Low Rider ST und Sport Glide über feste Clamshell-Koffer sowie die Heritage Classic über formstabile Leder-/Vinylkoffer mit flachem Deckel – alle nutzen dieselben Kofferdeckel-Docks [`saddlebag_lid_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/saddlebag_lid_dock.stl)!)*
+* **Pod 1 & Pod 2 (Satelliten auf Kofferdeckel):** Die Kofferdeckel-Docks ([`saddlebag_lid_dock.stl`](../../hardware/cad/stl/02_pod_base/saddlebag_lid_dock.stl)) mit M4 Senkkopfschrauben und rückseitigen EPDM-Dichtscheiben an den Befestigungspunkten oder per 3M VHB Tape auf den Koffern montieren. *(Hinweis: Neben Street Glide, Road Glide, CVO ST, Road King und Ultra Limited verfügen auch die Cruiser mit Saddlebags wie Low Rider ST und Sport Glide über feste Clamshell-Koffer sowie die Heritage Classic über formstabile Leder-/Vinylkoffer mit flachem Deckel – alle nutzen dieselben Kofferdeckel-Docks [`saddlebag_lid_dock.stl`](../../hardware/cad/stl/02_pod_base/saddlebag_lid_dock.stl)!)*
 * **Stationäres MagSafe-Rahmendock & Werkstattsichere Koffer-Abreißkupplung:**
-  * **Stationäres Rahmendock am Motorrad montieren ([`009_magsafe_frame_dock.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/parts/009_magsafe_frame_dock.scad)):**
-    - Das Gehäuseoberteil ([`009_magsafe_frame_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/components/009_magsafe_frame_dock.stl)) mit seiner integrierten Ø 26 mm Rohrwiege unter dem Sitzüberhang am Rahmenrohr ansetzen (passend für alle Harley Touring- und Softail-Rahmenrohre mit $\varnothing 25{,}4\dots 28{,}6\,\text{mm}$).
-    - Den Rohrschellen-Bügel ([`009_magsafe_frame_clamp.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/components/009_magsafe_frame_clamp.stl)) auflegen und mit 4x M3 Schrauben und DIN 934 Muttern über Kreuz anziehen ($2{,}2\,\text{Nm}$).
-    - Die vorkonfektionierte Baugruppe aus M8-PUR-Zuleitung (von der Zentralbox), PCBA 06 Schutzplatine (mit 500mA PPTC-Sicherung & TVS-Dioden) und dem 6-Pin IP67 MagSafe-Magnetpuck spannungsfrei von oben in das Gehäuseunterteil ([`009_magsafe_frame_lid.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/components/009_magsafe_frame_lid.stl)) einlegen.
+  * **Stationäres Rahmendock am Motorrad montieren ([`009_magsafe_frame_dock.scad`](../../hardware/cad/scad/02_pod_base/parts/009_magsafe_frame_dock.scad)):**
+    - Das Gehäuseoberteil ([`009_magsafe_frame_dock.stl`](../../hardware/cad/stl/02_pod_base/components/009_magsafe_frame_dock.stl)) mit seiner integrierten Ø 26 mm Rohrwiege unter dem Sitzüberhang am Rahmenrohr ansetzen (passend für alle Harley Touring- und Softail-Rahmenrohre mit $\varnothing 25{,}4\dots 28{,}6\,\text{mm}$).
+    - Den Rohrschellen-Bügel ([`009_magsafe_frame_clamp.stl`](../../hardware/cad/stl/02_pod_base/components/009_magsafe_frame_clamp.stl)) auflegen und mit 4x M3 Schrauben und DIN 934 Muttern über Kreuz anziehen ($2{,}2\,\text{Nm}$).
+    - Die vorkonfektionierte Baugruppe aus M8-PUR-Zuleitung (von der Zentralbox), PCBA 06 Schutzplatine (mit 500mA PPTC-Sicherung & TVS-Dioden) und dem 6-Pin IP67 MagSafe-Magnetpuck spannungsfrei von oben in das Gehäuseunterteil ([`009_magsafe_frame_lid.stl`](../../hardware/cad/stl/02_pod_base/components/009_magsafe_frame_lid.stl)) einlegen.
     - Ober- und Untergehäuse zusammenfügen und mit der zentralen **M2.5 x 12 mm Edelstahlschraube (DIN 912)** durch die Zentralbohrung der PCBA 06 fest verschrauben. Das Dock baut mit nur $16\,\text{mm}$ Breite extrem schlank und verschwindet vollkommen im Rohrschatten.
-  * **Kofferboden-Durchführung & 2-Stufen-Zugentlastung ([`010_saddlebag_hole_grommet_split.scad`](file:///Users/schmidtm/openMotorBridge/hardware/cad/scad/02_pod_base/parts/010_saddlebag_hole_grommet_split.scad)):**
+  * **Kofferboden-Durchführung & 2-Stufen-Zugentlastung ([`010_saddlebag_hole_grommet_split.scad`](../../hardware/cad/scad/02_pod_base/parts/010_saddlebag_hole_grommet_split.scad)):**
     - Die geteilte TPU-Dichtung in das serienmäßige $19\,\text{mm}$-Bodenloch des Koffers einsetzen.
     - Das schlanke Koffer-Innenkabel mit der Gegen-MagSafe-Magnetkupplung durchführen und am angeformten Klemmturm per Kabelbinder fixieren (**Stufe 1 Zugentlastung:** Nimmt alle magnetischen Trennkräfte von $10\dots 15\,\text{N}$ auf).
     - Das Flachkabel lastfrei parallel zum textilen Deckel-Fangband in den Kofferdeckel führen, im Schnauz des Kofferdeckel-Docks formschlüssig abfangen (**Stufe 2 Zugentlastung**) und direkt in den Slim-Port B des Pods einstecken.
     - **Werkstatt-Vorteil:** Mechaniker heben die Koffer für Inspektion oder Reifenwechsel ohne Werkzeug einfach ab – die Magnetkupplung trennt sich zerstörungsfrei und schnappt beim Aufsetzen des Koffers automatisch zentriert wieder ein (*Klack*).
-* **Radar:** Der Kennzeichen-Radarhalter ([`radar_license_plate_bracket.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_license_plate_bracket.stl)) wird direkt unter dem Kennzeichenrahmen verschraubt. *(Hinweis: Alle Touring-, CVO ST- und Softail-Cruiser-Modelle besitzen standardmäßig mittige US/EU-Kennzeichenaufnahmen).*
+* **Radar:** Der Kennzeichen-Radarhalter ([`radar_license_plate_bracket.stl`](../../hardware/cad/stl/02_pod_base/radar_license_plate_bracket.stl)) wird direkt unter dem Kennzeichenrahmen verschraubt. *(Hinweis: Alle Touring-, CVO ST- und Softail-Cruiser-Modelle besitzen standardmäßig mittige US/EU-Kennzeichenaufnahmen).*
 
 #### 5.1.2 Cockpit-Verkleidung & Front-Node Installation
 * **Option A: Batwing-Verkleidung (Street Glide / Electra Glide / Ultra):**
@@ -401,14 +401,14 @@ Erst wenn im PWA-Dashboard alle 4 Checks grün leuchten und Audio- sowie Funkbr�
 
 #### 5.1.3 Modulare Heck-Montage (Pod 3)
 * **Variante 1: Standard Bagger & Softail Cruiser (Street Glide, Road Glide, Road King, Heritage Classic, Low Rider ST, Sport Glide):**
-  - Die flache Fender-Konsole ([`pod3_touring_fender_console.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/pod3_touring_fender_console.stl)) wird zentrisch auf dem Kotflügel an der $1/4"-20$ Soziussitz-Mutter verschraubt. *(Hinweis: Softail- und Touring-Heckfender nutzen dasselbe genormte 1/4"-20 Gewinde).*
+  - Die flache Fender-Konsole ([`pod3_touring_fender_console.stl`](../../hardware/cad/stl/02_pod_base/pod3_touring_fender_console.stl)) wird zentrisch auf dem Kotflügel an der $1/4"-20$ Soziussitz-Mutter verschraubt. *(Hinweis: Softail- und Touring-Heckfender nutzen dasselbe genormte 1/4"-20 Gewinde).*
 * **Variante 2: Touring Limited & Ultra (Ultra Limited FLHTK, Road Glide Limited FLTRK, CVO Limited):**
   - *Wichtige Einschränkung:* Bei allen Modellen mit werkseitig fest verbautem King Tour-Pak stützt sich der massive Stahlrohr-Trägerrahmen direkt über dem Kotflügel ab. Die Fender-Konsole (`pod3_touring_fender_console.stl`) kann bauartbedingt *nicht* montiert werden!
-  - *Lösung:* Pod 3 wird stattdessen mit dem formschlüssigen Rohrträger-Klemmschellen-Paar ([`adventure_pannier_rack_clamp_base.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_base.stl) / `cap.stl`) direkt am Ø 18 mm Stahlrohrrahmen des Tour-Paks oder unter der Gepäckträger-Brücke montiert.
+  - *Lösung:* Pod 3 wird stattdessen mit dem formschlüssigen Rohrträger-Klemmschellen-Paar ([`adventure_pannier_rack_clamp_base.stl`](../../hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_base.stl) / `cap.stl`) direkt am Ø 18 mm Stahlrohrrahmen des Tour-Paks oder unter der Gepäckträger-Brücke montiert.
 * **Variante 3: CVO ST / Performance Bagger:**
-  - Pod 3 wird im aufrechten Bionic Skeleton Dock ([`cvo_st_undercowl_skeleton_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/cvo_st_undercowl_skeleton_dock.stl)) unsichtbar unter der Forged-Carbon-Einzelsitzhutze montiert (voller Freigang zu den Showa-Ausgleichsbehältern). Die aerodynamische Telemetrie-Finne ([`cvo_st_telemetry_fin.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/cvo_st_telemetry_fin.stl)) wird oben auf der Heck-Hutze verschraubt.
+  - Pod 3 wird im aufrechten Bionic Skeleton Dock ([`cvo_st_undercowl_skeleton_dock.stl`](../../hardware/cad/stl/02_pod_base/cvo_st_undercowl_skeleton_dock.stl)) unsichtbar unter der Forged-Carbon-Einzelsitzhutze montiert (voller Freigang zu den Showa-Ausgleichsbehältern). Die aerodynamische Telemetrie-Finne ([`cvo_st_telemetry_fin.stl`](../../hardware/cad/stl/02_pod_base/cvo_st_telemetry_fin.stl)) wird oben auf der Heck-Hutze verschraubt.
 * **Variante 4: Custom-Bikes & Bobber mit seitlichem Kennzeichen:**
-  - Bei Umbauten mit seitlich versetztem Kennzeichenhalter wird die zentrische Underfender-Platte ([`radar_center_underfender_mount.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_center_underfender_mount.stl)) mittig unter der Heckfender-Rundung montiert, um eine freie 140°-Sicht des Radars nach hinten zu gewährleisten.
+  - Bei Umbauten mit seitlich versetztem Kennzeichenhalter wird die zentrische Underfender-Platte ([`radar_center_underfender_mount.stl`](../../hardware/cad/stl/02_pod_base/radar_center_underfender_mount.stl)) mittig unter der Heckfender-Rundung montiert, um eine freie 140°-Sicht des Radars nach hinten zu gewährleisten.
 
 ---
 
@@ -472,29 +472,29 @@ Die Adventure-Montage ist für die gesamte **BMW GS Modellfamilie** (Boxer und P
       * Port `J2` am Front-Knoten bleibt frei und wird automatisch deaktiviert. Keinerlei Kabelbeschädigung im Cockpit!
     * **CAN-Bus Option 2 (Cockpit-Abgriff am 12-Pin TFT – nur Modelle mit TFT):** Das BMW 6,5" TFT-Display führt auf seiner Rückseite an Pin 2 (`CAN_H`, weiß/schwarz) und Pin 3 (`CAN_L`, weiß/braun) K-CAN. Wer ein 12-Pin Y-Adapterkabel nutzt, kann diesen direkt an `J2` des Front-Knotens anschließen. Der Front-Knoten streamt Drehzahl, Tacho und Wonder-Wheel dann drahtlos via ESP-NOW zur Zentralbox.
 * **Pod 3 & Radar (Rallye-Aero-Balkon Montage):**
-  * Basis-Wanne ([`adventure_rack_tail_mount_base.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_rack_tail_mount_base.stl)) mit 2x M6 Schrauben und Halbschellen am Ø 18 mm Gepäckbrückenrohr oder an den M6-Punkten der Trägerplatte befestigen.
+  * Basis-Wanne ([`adventure_rack_tail_mount_base.stl`](../../hardware/cad/stl/02_pod_base/adventure_rack_tail_mount_base.stl)) mit 2x M6 Schrauben und Halbschellen am Ø 18 mm Gepäckbrückenrohr oder an den M6-Punkten der Trägerplatte befestigen.
   * M8-PUR-Kabel durch die untere Kabelrinne führen und von oben an Port A des Pod 3 anschließen. Pod 3 in die Wanne einlegen.
-  * Karosserie-Deckel ([`adventure_rack_tail_cowl.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_rack_tail_cowl.stl)) aufsetzen (2.4-GHz-Dipolantenne in die Shark-Finne einrasten) und mit 4x M3 Torx-Schrauben bündig verschrauben.
-  * Zunge des Garmin Varia Docks ([`radar_varia_gopro_lock_dock.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/radar_varia_gopro_lock_dock.stl)) in die bionische Hirth-Rosette des Unterseiten-Pylons einrasten ($10^\circ$-Schritte für exakt waagerechten Radar-Horizont). Mit M5 x 25 mm Schraube und Stoppmutter sichern ($3{,}5\,\text{Nm}$). Varia einklinken und M3 Madenschraube als Diebstahlschutz eindrehen.
+  * Karosserie-Deckel ([`adventure_rack_tail_cowl.stl`](../../hardware/cad/stl/02_pod_base/adventure_rack_tail_cowl.stl)) aufsetzen (2.4-GHz-Dipolantenne in die Shark-Finne einrasten) und mit 4x M3 Torx-Schrauben bündig verschrauben.
+  * Zunge des Garmin Varia Docks ([`radar_varia_gopro_lock_dock.stl`](../../hardware/cad/stl/02_pod_base/radar_varia_gopro_lock_dock.stl)) in die bionische Hirth-Rosette des Unterseiten-Pylons einrasten ($10^\circ$-Schritte für exakt waagerechten Radar-Horizont). Mit M5 x 25 mm Schraube und Stoppmutter sichern ($3{,}5\,\text{Nm}$). Varia einklinken und M3 Madenschraube als Diebstahlschutz eindrehen.
 
 #### 5.2.2 Modulare Koffer- & Pod 1/2-Befestigung
 * **Option A: Vario-Koffer & Rahmenrohr-Montage (BMW GS Standard R1200/R1250/R1300, F750/F850/F900, KTM / Enduro ohne Rohrträger):**
-  * Die Unter-Sitzbank-Sattelbrücke ([`adventure_underseat_cross_rail.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_underseat_cross_rail.stl)) unter der Sitzbank flach auf den Rahmensteg auflegen und an vorhandenen OEM-Punkten (M5/M6) verschrauben.
-  * Die Transition-Dock Basis-Wannen ([`adventure_transition_dock_base.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_transition_dock_base.stl)) an den Ø 28 mm Heckrahmenrohren in der Bügelfalte ansetzen und über die inneren Zungen mit je 2x M4-Schrauben fest mit der Sattelbrücke verschrauben (100 % verdrehsicheres U-Portal).
+  * Die Unter-Sitzbank-Sattelbrücke ([`adventure_underseat_cross_rail.stl`](../../hardware/cad/stl/02_pod_base/adventure_underseat_cross_rail.stl)) unter der Sitzbank flach auf den Rahmensteg auflegen und an vorhandenen OEM-Punkten (M5/M6) verschrauben.
+  * Die Transition-Dock Basis-Wannen ([`adventure_transition_dock_base.stl`](../../hardware/cad/stl/02_pod_base/adventure_transition_dock_base.stl)) an den Ø 28 mm Heckrahmenrohren in der Bügelfalte ansetzen und über die inneren Zungen mit je 2x M4-Schrauben fest mit der Sattelbrücke verschrauben (100 % verdrehsicheres U-Portal).
   * **Kabelführung & Anschluss (Top-Access):**
     * Das M8-PUR-Kabel von der Zentralbox aus dem Batterietrog unter dem Sitzbankschaumstoff durchschieben.
     * Das Kabel tritt durch die fahrzeuginnere ovale Öffnung (Ø 10 mm) direkt in die vordere Stecker- und Service-Bucht der Transition-Dock-Basis ein.
     * Bei noch abgenommenem Karosserie-Deckel wird das M8-Kabel bequem von oben auf Port A des Pods gesteckt und handfest angezogen.
     * Den Pod in die Wanne absenken (der Stecker und die Kabelschlaufe betten sich spannungsfrei in der 24-mm-Nasenbucht).
-  * Karosserie-Deckel ([`adventure_transition_dock_lid.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_transition_dock_lid.stl)) aufsetzen und mit 4x M3 Torx-Schrauben bündig verschrauben.
+  * Karosserie-Deckel ([`adventure_transition_dock_lid.stl`](../../hardware/cad/stl/02_pod_base/adventure_transition_dock_lid.stl)) aufsetzen und mit 4x M3 Torx-Schrauben bündig verschrauben.
   * **100 % kofferunabhängig & Clean Look:** Keine sichtbaren Schellen oder Kabel von außen; die Konsole schmiegt sich aerodynamisch an die Bügelfalte an.
 * **Option B: Edelstahl-Rohrkofferträger (BMW GSA aller Baujahre inkl. K25 & F800 GSA, Touratech, Hepco&Becker, Alukoffer):**
   * 1,0 mm EPDM-Schutzstreifen um das Ø 18 mm Kofferträgerrohr an der Innenseite wickeln.
-  * Das **GSA Cage Dock** ([`adventure_gsa_cage_dock_body.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_gsa_cage_dock_body.stl)) mit seinen zwei Rohrsätteln am Rohr ansetzen. Die Klemmschellen-Kappe ([`adventure_gsa_clamp_cap.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_gsa_clamp_cap.stl)) auflegen und mit 4x M5 x 25 mm V4A Zylinderschrauben und DIN 985 Stoppmuttern über Kreuz mit $4{,}5\,\text{Nm}$ anziehen (85 mm Stützbasis verhindert jedes Verdrehen oder Kippen).
+  * Das **GSA Cage Dock** ([`adventure_gsa_cage_dock_body.stl`](../../hardware/cad/stl/02_pod_base/adventure_gsa_cage_dock_body.stl)) mit seinen zwei Rohrsätteln am Rohr ansetzen. Die Klemmschellen-Kappe ([`adventure_gsa_clamp_cap.stl`](../../hardware/cad/stl/02_pod_base/adventure_gsa_clamp_cap.stl)) auflegen und mit 4x M5 x 25 mm V4A Zylinderschrauben und DIN 985 Stoppmuttern über Kreuz mit $4{,}5\,\text{Nm}$ anziehen (85 mm Stützbasis verhindert jedes Verdrehen oder Kippen).
   * Pod 1 bzw. 2 in die gepanzerte Schutznische einschieben. Der Pod sitzt zu 80 % tief versenkt im $45\,\text{mm}$ breiten Totraum zwischen Trägerrohr und Radkasten.
   * Das M8-PUR-Kabel verläuft verdeckt in der M8-Kabelrinne im Rohrschatten direkt ins Batteriefach.
   * **Ergebnis:** Bei eingehängtem Alukoffer ist der Pod von außen 100 % unsichtbar. Radseitig schützt der $45^\circ$-Gleitkeil vor Steinschlag (Roost) und Schlamm.
-  * *(Minimalistische Option:)* Für besonders beengte Rohrrahmenverläufe können alternativ die einfachen 2x M5 Halbschellen ([`adventure_pannier_rack_clamp_base.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_base.stl) / `cap.stl`) verwendet werden.
+  * *(Minimalistische Option:)* Für besonders beengte Rohrrahmenverläufe können alternativ die einfachen 2x M5 Halbschellen ([`adventure_pannier_rack_clamp_base.stl`](../../hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_base.stl) / `cap.stl`) verwendet werden.
 
 ---
 
@@ -541,7 +541,7 @@ OpenMotorBridge implementiert eine flexible **Dual-Input-Architektur** für die 
 * **Einsatzbereich:** Für Fahrzeuge ohne CAN-Bus-Zugriff am Lenker oder Fahrer, die einen separaten physischen Taster mit spürbarem mechanischem Klick bevorzugen.
 * **Mechanische Montage – Zwei kollisionsfreie Varianten:**
   1. **Under-Perch / Spiegelfuß-Halter (Empfohlen für Cruiser):**
-     - Gedruckt aus MJF PA12-CF / ASA: [`under_perch_switch_bracket.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/05_accessories/under_perch_switch_bracket.stl) (für M4 Armaturschraube) bzw. mit Adapterplatte [`under_perch_mirror_plate.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/05_accessories/under_perch_mirror_plate.stl) (für M8/M10 Spiegelschaft).
+     - Gedruckt aus MJF PA12-CF / ASA: [`under_perch_switch_bracket.stl`](../../hardware/cad/stl/05_accessories/under_perch_switch_bracket.stl) (für M4 Armaturschraube) bzw. mit Adapterplatte [`under_perch_mirror_plate.stl`](../../hardware/cad/stl/05_accessories/under_perch_mirror_plate.stl) (für M8/M10 Spiegelschaft).
      - Der Mikrotaster sitzt ca. 15 mm **unterhalb** des Blinkerschalters – vollkommen kollisionsfrei unterhalb einer eventuell montierten Jekill & Hyde Klappensteuerung und ergonomisch im natürlichen Absenkbereich des Daumens.
   2. **Schlanke Rohrklemmschelle (10 mm):** Montage eines schmalen Tasters (z. B. Daytona Slimline oder motogadget m-switch mini) unmittelbar am Innenflansch des linken Griffgummis.
 * **Elektrischer Anschluss an Port `J3` (4-Pin JST-PH):**
@@ -555,9 +555,9 @@ OpenMotorBridge implementiert eine flexible **Dual-Input-Architektur** für die 
 #### 5.3.2 Totwinkel-Spiegelanzeigen (Radar Blind Spot Detection - BSD) (`J9`)
 * **Mechanische Montage (Aerodynamisches 2-Schalen Mirror-Pod):**
   - Montage am linken und rechten Spiegelschaft (Ø 10 mm / Ø 12 mm) mittels 2-teiliger Klemmschelle:
-    - Oberschale mit 38° Lichttunnel und 3,8 mm Blendschutzvisier: [`bsd_mirror_upper_pod.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/05_accessories/bsd_mirror_upper_pod.stl)
-    - Unterschale mit M3 Einschmelz- bzw. Sechskantmuttern-Taschen: [`bsd_mirror_lower_clamp.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/05_accessories/bsd_mirror_lower_clamp.stl)
-    - Bernstein/Rot-transluzente Diffusorlinse: [`bsd_mirror_lens.stl`](file:///Users/schmidtm/openMotorBridge/hardware/cad/stl/05_accessories/bsd_mirror_lens.stl)
+    - Oberschale mit 38° Lichttunnel und 3,8 mm Blendschutzvisier: [`bsd_mirror_upper_pod.stl`](../../hardware/cad/stl/05_accessories/bsd_mirror_upper_pod.stl)
+    - Unterschale mit M3 Einschmelz- bzw. Sechskantmuttern-Taschen: [`bsd_mirror_lower_clamp.stl`](../../hardware/cad/stl/05_accessories/bsd_mirror_lower_clamp.stl)
+    - Bernstein/Rot-transluzente Diffusorlinse: [`bsd_mirror_lens.stl`](../../hardware/cad/stl/05_accessories/bsd_mirror_lens.stl)
   - **100 % StVZO- und ECE-R50-konform:** Durch die opake Vorwand und das 3,8 mm Schutzdach wird jegliche Vorwärts- und Seitenabstrahlung verhindert – der Gegenverkehr wird niemals geblendet, während das Signal im Fahrer-Blickfeld unübersehbar leuchtet.
 * **Elektrischer Anschluss an Port `J9` (3-Pin JST-PH):**
   - **Pin 1:** `+12V_PROT` (Geschützte 12V Anoden-Speisung)

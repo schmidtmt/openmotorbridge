@@ -20,7 +20,7 @@ Modern motorcycles feature digital communication buses (ISO 11898-2 CAN-Bus, CAN
 
 ### The OpenMotorBridge Solution: The Cartridge Principle for the CAN-Bus
 
-Analogous to our proven **Cartridge Profile Manager for intercom hardware** (Sena, Cardo, etc. in [Specification 02](file:///Users/schmidtm/openMotorBridge/docs/en/02_intercom_matrix_profiles.md)), OpenMotorBridge implements a **dynamic CAN Profile Engine**:
+Analogous to our proven **Cartridge Profile Manager for intercom hardware** (Sena, Cardo, etc. in [Specification 02](02_intercom_matrix_profiles.md)), OpenMotorBridge implements a **dynamic CAN Profile Engine**:
 1. All manufacturer-specific CAN definitions reside as **compact JSON files in internal LittleFS NOR flash** (`/data/can_profiles/*.json`).
 2. The firmware contains **zero hardcoded vendor-specific hacks**, but parses incoming frames strictly data-driven via a hardware-accelerated bit extraction grid.
 3. The rider can select their bike model either in the **PWA under Tab 5**, or OpenMotorBridge identifies the platform automatically via a **passive 500 ms bus fingerprint**.

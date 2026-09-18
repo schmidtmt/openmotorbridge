@@ -184,7 +184,7 @@ Vertical, gold-plated SMD pin header ($2{,}54\,\text{mm}$ pitch, $4{,}8\,\text{m
 ---
 
 ## 5. PCBA 03: Smart Modular Cartridge (`openmotorbridge_pod_cartridge` Rev 2.0)
-*KiCad Project Directory: [`hardware/kicad_pod_cartridge/`](file:///Users/schmidtm/openMotorBridge/hardware/kicad_pod_cartridge)*
+*KiCad Project Directory: [`hardware/kicad_pod_cartridge/`](../../hardware/kicad_pod_cartridge)*
 
 ![PCBA 03 Universal Cartridge Carrier](../images/pcba/pcba03_pod_cartridge_3d.png)
 

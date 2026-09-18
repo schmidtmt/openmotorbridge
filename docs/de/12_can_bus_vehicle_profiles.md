@@ -20,7 +20,7 @@ Moderne Motorräder verfügen über digitale Datenbusse (ISO 11898-2 CAN-Bus, CA
 
 ### Die OpenMotorBridge Lösung: Das Kassetten-Prinzip für den CAN-Bus
 
-Analog zu unserem bewährten **Kassetten-Profilmanager für Intercom-Module** (Sena, Cardo etc. in [Spezifikation 02](file:///Users/schmidtm/openMotorBridge/docs/de/02_intercom_matrix_profiles.md)) implementiert OpenMotorBridge eine **dynamische CAN-Profil-Engine**:
+Analog zu unserem bewährten **Kassetten-Profilmanager für Intercom-Module** (Sena, Cardo etc. in [Spezifikation 02](02_intercom_matrix_profiles.md)) implementiert OpenMotorBridge eine **dynamische CAN-Profil-Engine**:
 1. Sämtliche herstellerspezifischen CAN-Definitionen liegen als **schlanke JSON-Dateien im internen LittleFS-Flash** (`/data/can_profiles/*.json`).
 2. Die Firmware enthält **keine fest einprogrammierten Hersteller-Sonderlocken** mehr, sondern parst eingehende Frames rein datengetrieben über ein hardwarebeschleunigtes Bit-Extraktions-Gitter.
 3. Der Fahrer kann sein Modell entweder in der **PWA unter Tab 5 auswählen**, oder OpenMotorBridge erkennt das Motorrad vollautomatisch über einen **passiven 500-ms-Bus-Fingerprint**.

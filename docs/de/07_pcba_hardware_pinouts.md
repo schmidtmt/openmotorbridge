@@ -184,7 +184,7 @@ Vertikale, hochpräzise SMD-Stiftleiste ($2{,}54\,\text{mm}$ Raster, vergoldet, 
 ---
 
 ## 5. PCBA 03: Smart Modular Cartridge (`openmotorbridge_pod_cartridge` Rev 2.0)
-*KiCad-Projektverzeichnis: [`hardware/kicad_pod_cartridge/`](file:///Users/schmidtm/openMotorBridge/hardware/kicad_pod_cartridge)*
+*KiCad-Projektverzeichnis: [`hardware/kicad_pod_cartridge/`](../../hardware/kicad_pod_cartridge)*
 
 ![PCBA 03 Universalschlitten Cartridge](../images/pcba/pcba03_pod_cartridge_3d.png)
 

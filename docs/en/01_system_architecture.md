@@ -93,7 +93,7 @@ OpenMotorBridge v8.0 defines the platform across **5 standardized functional nod
 > [!NOTE]
 > **Mounting Freedom – *Your Bike, Your Choice*:**  
 > Where and how you place these 5 enclosures on your motorcycle is deliberately **entirely up to you**! OpenMotorBridge provides the standardized electronic layouts, enclosure dimensions, and interfaces.  
-> For popular motorcycle categories, we deliver turnkey, 100% zero-drill and adhesive-free **Reference Mounting Kits** in **[Chapter 08 (Mechanics & CAD)](file:///Users/schmidtm/openMotorBridge/docs/en/08_enclosures_mechanics_cad.md)**:
+> For popular motorcycle categories, we deliver turnkey, 100% zero-drill and adhesive-free **Reference Mounting Kits** in **[Chapter 08 (Mechanics & CAD)](08_enclosures_mechanics_cad.md)**:
 > * **Reference Kit 1 (Harley-Davidson CVO Road Glide ST & New Touring):** Pod 3 inside the Under-Cowl Skeleton Dock under the forged carbon cowl, Pods 1 & 2 protected inside the saddlebag lids (zero-drill Torx hinge screws, quick disconnect), Front Node on fairing bracket behind outer sharknose skin.
 > * **Reference Kit 2 (Harley-Davidson Road King Special / FLHRXS):** Pod 3 in the Touring Fender Console on the rear fender, Pods 1 & 2 in the saddlebag lids, Front Node hidden inside the 7" headlight nacelle.
 > * **Reference Kit 3 (Classic Bagger & Cruiser – Street Glide / Electra Glide):** Pod 3 in the Touring Stealth Console seamless to passenger seat, decoupled radar below the license plate, Pods 1 & 2 in the saddlebag lids.
@@ -146,7 +146,7 @@ The enlarged pod cartridges ($110 \times 54 \times 28\,\text{mm}$ interior cavit
 * **Class C (Magnetic Air-Mount):** e.g. Cardo Packtalk Edge / Pro (Note: Packtalk Neo lacks charge-while-riding and is excluded) – tool-free magnetic latching via dual N52 Neodymium magnets.
 * **Class D (Slide Cradles):** e.g. Cardo Packtalk Bold/Black, Freecom series – mechanical slide rail with catch spring.
 * **Class E (Analogue PMR446 Radios):** e.g. Midland G7/G9 Pro, XT30, Kenwood – 2-pin dual audio jack with PhotoMOS PTT keying.
-*(Detailed wiring matrix and pinouts available in [Specification 02 (Intercom Matrix & Profiles)](file:///Users/schmidtm/openMotorBridge/docs/en/02_intercom_matrix_profiles.md)).*
+*(Detailed wiring matrix and pinouts available in [Specification 02 (Intercom Matrix & Profiles)](02_intercom_matrix_profiles.md)).*
 
 ---
 

@@ -150,7 +150,7 @@ While power users with a private Nextcloud or Synology NAS point directly to the
    * **Full Data Sovereignty:** OpenMotorBridge does not operate a centralized cloud harvesting service. The `omb-gdrive-bridge` microservice is published as an open-source container template (`Dockerfile` / `podman-compose.yml`).
    * **Private Google Credentials:** Each rider runs the container on their personal infrastructure (e.g. home server, Synology Docker, Raspberry Pi, Unraid, or private VPS) and configures their own Google Cloud API credentials.
    * **Zero Liability & Zero GDPR Risk:** No user ever grants the OpenMotorBridge maintainers access or tokens to their Google Drive. GPS routes, lean angle profiles, and driving logs remain strictly under personal control.
-   * **Source Code & Setup Walkthrough:** Production source code, Dockerfile, and the interactive token generator CLI are located in [`apps/gdrive_webdav_bridge/`](file:///Users/schmidtm/openMotorBridge/apps/gdrive_webdav_bridge/README.md).
+   * **Source Code & Setup Walkthrough:** Production source code, Dockerfile, and the interactive token generator CLI are located in [`apps/gdrive_webdav_bridge/`](../../apps/gdrive_webdav_bridge/README.md).
 
 ---
 
