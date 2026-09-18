@@ -8,6 +8,7 @@ event dispatching to Home Assistant / Homesphere.
 import logging
 import secrets
 from typing import Annotated
+import httpx
 from fastapi import BackgroundTasks, Depends, FastAPI, HTTPException, Request, Response, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 
@@ -194,6 +195,13 @@ async def webdav_put(
     try:
         # Upload to Google Drive
         file_info = await gdrive_client.upload_file(clean_filename, body, mime_type)
+    except httpx.HTTPStatusError as e:
+        err_msg = e.response.text if hasattr(e, "response") and e.response is not None else str(e)
+        logger.error(f"Google Drive API error ({e.response.status_code if e.response else 'unknown'}): {err_msg}")
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail=f"Google Drive API rejected request ({e.response.status_code if e.response else 'ERR'}): {err_msg}",
+        )
     except Exception as e:
         logger.exception(f"Failed to upload '{clean_filename}' to Google Drive: {e}")
         raise HTTPException(

@@ -96,6 +96,10 @@ class GoogleDriveClient:
                 params = {"q": query, "fields": "files(id, name)", "spaces": "drive"}
 
                 search_resp = await client.get(search_url, headers=headers, params=params)
+                if search_resp.status_code != 200:
+                    logger.error(
+                        f"Google Drive search error ({search_resp.status_code}) for '{segment}': {search_resp.text}"
+                    )
                 search_resp.raise_for_status()
                 files = search_resp.json().get("files", [])
 
@@ -115,6 +119,10 @@ class GoogleDriveClient:
                         headers=headers,
                         json=create_payload,
                     )
+                    if create_resp.status_code not in (200, 201):
+                        logger.error(
+                            f"Google Drive folder create error ({create_resp.status_code}) for '{segment}': {create_resp.text}"
+                        )
                     create_resp.raise_for_status()
                     folder_id = create_resp.json()["id"]
                     logger.info(f"Created folder '{segment}' -> ID: {folder_id}")
