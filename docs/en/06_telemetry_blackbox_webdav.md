@@ -146,6 +146,10 @@ While power users with a private Nextcloud or Synology NAS point directly to the
    * Using a stored Google OAuth2 refresh token (Google Drive API v3), the GPX file streams directly into the target folder `omb/tracks/` in Google Drive.
    * Returns HTTP `201 Created` upon completion.
    * **Optional Smart Home Webhook/MQTT:** Dispatches an event to Home Assistant / *Homesphere* (*"New tour synced: 164 km, 42° max lean angle"*).
+4. **Self-Hosted & Zero-Trust Privacy (Zero Third-Party Drive Access):**
+   * **Full Data Sovereignty:** OpenMotorBridge does not operate a centralized cloud harvesting service. The `omb-gdrive-bridge` microservice is published as an open-source container template (`Dockerfile` / `podman-compose.yml`).
+   * **Private Google Credentials:** Each rider runs the container on their personal infrastructure (e.g. home server, Synology Docker, Raspberry Pi, Unraid, or private VPS) and configures their own Google Cloud API credentials.
+   * **Zero Liability & Zero GDPR Risk:** No user ever grants the OpenMotorBridge maintainers access or tokens to their Google Drive. GPS routes, lean angle profiles, and driving logs remain strictly under personal control.
 
 ---
 
