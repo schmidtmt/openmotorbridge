@@ -27,7 +27,7 @@ logger = logging.getLogger("omb.bridge")
 app = FastAPI(
     title="OpenMotorBridge Google Drive WebDAV Bridge",
     description="Minimal WebDAV-to-Google-Drive upload bridge for motorcycle telemetry and GPX tracks.",
-    version="1.0.0",
+    version="1.0.1",
 )
 
 # Enable CORS for PWA and external web clients
@@ -35,7 +35,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH", "MKCOL", "PROPFIND"],
     allow_headers=["*"],
     expose_headers=["Location", "ETag", "DAV"],
 )
@@ -67,26 +67,26 @@ def authenticate(credentials: Annotated[HTTPBasicCredentials, Depends(security)]
         logger.warning(f"Failed authentication attempt for user '{credentials.username}'")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid credentials",
+            detail="Invalid WebDAV username or password",
             headers={"WWW-Authenticate": 'Basic realm="OpenMotorBridge WebDAV"'},
         )
 
     return True
 
 
+# ==============================================================================
+# HEALTH & STATUS ENDPOINTS
+# ==============================================================================
+
 @app.get("/health")
 async def health_check():
-    """Health check endpoint for container orchestrators and monitoring."""
-    gdrive_ready = bool(
-        settings.GOOGLE_CLIENT_ID
-        and settings.GOOGLE_CLIENT_SECRET
-        and settings.GOOGLE_REFRESH_TOKEN
-    )
+    """Service health and connectivity probe."""
     return {
         "status": "healthy",
         "service": "omb-gdrive-bridge",
-        "version": "1.0.0",
-        "gdrive_ready": gdrive_ready,
+        "version": "1.0.1",
+        "cors_ready": True,
+        "gdrive_ready": gdrive_client.is_configured(),
         "target_folder": settings.GOOGLE_DRIVE_FOLDER,
         "mqtt_enabled": settings.MQTT_ENABLED or bool(settings.MQTT_BROKER),
     }
@@ -111,10 +111,15 @@ async def root_info():
 @app.api_route("/{filename:path}", methods=["OPTIONS"], include_in_schema=False)
 async def webdav_options(request: Request):
     """Responds to WebDAV OPTIONS queries confirming DAV Level 1 compliance."""
+    origin = request.headers.get("origin", "*")
     headers = {
         "DAV": "1",
         "Allow": "OPTIONS, GET, HEAD, PUT, MKCOL, PROPFIND",
         "MS-Author-Via": "DAV",
+        "Access-Control-Allow-Origin": origin if origin != "*" else "*",
+        "Access-Control-Allow-Methods": "OPTIONS, GET, HEAD, PUT, MKCOL, PROPFIND",
+        "Access-Control-Allow-Headers": "Authorization, Content-Type, Depth, Destination, If, Overwrite, Timeout, X-Requested-With",
+        "Access-Control-Allow-Credentials": "true",
     }
     return Response(content="", status_code=status.HTTP_200_OK, headers=headers)
 
