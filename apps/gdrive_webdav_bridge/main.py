@@ -81,12 +81,17 @@ def authenticate(credentials: Annotated[HTTPBasicCredentials, Depends(security)]
 @app.get("/health")
 async def health_check():
     """Service health and connectivity probe."""
+    gdrive_ready = bool(
+        settings.GOOGLE_CLIENT_ID
+        and settings.GOOGLE_CLIENT_SECRET
+        and settings.GOOGLE_REFRESH_TOKEN
+    )
     return {
         "status": "healthy",
         "service": "omb-gdrive-bridge",
         "version": "1.0.1",
         "cors_ready": True,
-        "gdrive_ready": gdrive_client.is_configured(),
+        "gdrive_ready": gdrive_ready,
         "target_folder": settings.GOOGLE_DRIVE_FOLDER,
         "mqtt_enabled": settings.MQTT_ENABLED or bool(settings.MQTT_BROKER),
     }
