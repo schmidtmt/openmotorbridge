@@ -2637,6 +2637,26 @@ body.ride-hud-active .tab-btn {
     white-space: nowrap;
 }
 
+/* Tour Inspector Mode Switcher Pills */
+.inspect-mode-pill {
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.inspect-mode-pill:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+.inspect-mode-pill.active {
+    background: var(--accent-orange) !important;
+    color: #0d1117 !important;
+    font-weight: 700 !important;
+    border-color: var(--accent-orange) !important;
+    box-shadow: 0 0 12px rgba(255, 159, 10, 0.35);
+}
+
 /* Print Styles */
 @media print {
     body {

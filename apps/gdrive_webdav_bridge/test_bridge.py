@@ -49,6 +49,8 @@ RICH_TELEMETRY_GPX = b"""<?xml version="1.0" encoding="UTF-8"?>
           <omb:accel>0.15</omb:accel>
           <omb:rpm>3200</omb:rpm>
           <omb:battery>14.2</omb:battery>
+          <omb:gear>2</omb:gear>
+          <omb:comm_tier>hd</omb:comm_tier>
         </extensions>
       </trkpt>
       <!-- Point 2: Left turn entry -->
@@ -62,6 +64,8 @@ RICH_TELEMETRY_GPX = b"""<?xml version="1.0" encoding="UTF-8"?>
           <omb:accel>0.42</omb:accel>
           <omb:rpm>4800</omb:rpm>
           <omb:battery>14.2</omb:battery>
+          <omb:gear>3</omb:gear>
+          <omb:comm_tier>hd</omb:comm_tier>
         </extensions>
       </trkpt>
       <!-- Point 3: Left turn apex (max left lean) -->
@@ -75,6 +79,8 @@ RICH_TELEMETRY_GPX = b"""<?xml version="1.0" encoding="UTF-8"?>
           <omb:accel>-0.55</omb:accel>
           <omb:rpm>5100</omb:rpm>
           <omb:battery>14.1</omb:battery>
+          <omb:gear>2</omb:gear>
+          <omb:comm_tier>lora</omb:comm_tier>
         </extensions>
       </trkpt>
       <!-- Point 4: Straight transition -->
@@ -88,6 +94,8 @@ RICH_TELEMETRY_GPX = b"""<?xml version="1.0" encoding="UTF-8"?>
           <omb:accel>0.62</omb:accel>
           <omb:rpm>6200</omb:rpm>
           <omb:battery>14.3</omb:battery>
+          <omb:gear>4</omb:gear>
+          <omb:comm_tier>hd</omb:comm_tier>
         </extensions>
       </trkpt>
       <!-- Point 5: Right turn entry -->
@@ -101,6 +109,8 @@ RICH_TELEMETRY_GPX = b"""<?xml version="1.0" encoding="UTF-8"?>
           <omb:accel>-0.68</omb:accel>
           <omb:rpm>4500</omb:rpm>
           <omb:battery>14.1</omb:battery>
+          <omb:gear>3</omb:gear>
+          <omb:comm_tier>hd</omb:comm_tier>
         </extensions>
       </trkpt>
       <!-- Point 6: Right turn apex (max right lean) -->
@@ -114,6 +124,8 @@ RICH_TELEMETRY_GPX = b"""<?xml version="1.0" encoding="UTF-8"?>
           <omb:accel>0.30</omb:accel>
           <omb:rpm>5800</omb:rpm>
           <omb:battery>14.2</omb:battery>
+          <omb:gear>2</omb:gear>
+          <omb:comm_tier>hd</omb:comm_tier>
         </extensions>
       </trkpt>
       <!-- Point 7: Straight arrival / stop -->
@@ -127,6 +139,8 @@ RICH_TELEMETRY_GPX = b"""<?xml version="1.0" encoding="UTF-8"?>
           <omb:accel>0.0</omb:accel>
           <omb:rpm>1100</omb:rpm>
           <omb:battery>13.8</omb:battery>
+          <omb:gear>1</omb:gear>
+          <omb:comm_tier>hd</omb:comm_tier>
         </extensions>
       </trkpt>
     </trkseg>
@@ -298,7 +312,23 @@ def test_gpx_extended_statistics_parsing():
     assert stats["rpm_avg"] > 3000
     assert stats["battery_v_min"] == 13.8
 
-    # Summary text
+    # Gear Shift Counter
+    assert stats["shifts_total"] == 6
+    assert stats["shifts_up"] == 2
+    assert stats["shifts_down"] == 4
+    assert stats["shifts_per_km"] > 0
+
+    # Hard Braking & Dynamics
+    assert stats["hard_braking_count"] == 1
+    assert stats["time_at_lean_pct"] > 0
+    assert stats["corner_density_per_km"] > 0
+
+    # Radio Intercom QoS & LoRa Fallback
+    assert stats["comm_lora_fallback_count"] == 1
+    assert stats["comm_lora_fallback_duration_s"] == 60
+    assert stats["comm_hd_pct"] == 83.3
+
+    # Summary texts in default, sport, group, and cruise modes
     summary = stats.get("summary_text", "")
     assert "Silvretta Pass High Telemetry" in summary or "Tour" in summary
     assert "15.0 °C – 19.0 °C" in summary
@@ -307,6 +337,26 @@ def test_gpx_extended_statistics_parsing():
     assert "Bremsen: -0.68g" in summary
     assert "6.200 U/min" in summary
     assert "+70 hm" in summary
+    assert "Schaltvorgänge: 6" in summary
+    assert "83.3% HD" in summary
+    assert "1x LoRa-Fallback" in summary
+
+    # Sport summary
+    sport_summary = stats.get("summary_sport", "")
+    assert "[Sportlich]" in sport_summary
+    assert "Schaltvorgänge" in sport_summary
+    assert "1 Notbremsungen" in sport_summary
+
+    # Group summary
+    group_summary = stats.get("summary_group", "")
+    assert "[Gruppe / Mesh]" in group_summary
+    assert "83.3% HD-Voice" in group_summary
+    assert "1x LoRa-Fallback" in group_summary
+
+    # Cruise summary
+    cruise_summary = stats.get("summary_cruise", "")
+    assert "[Cruising & Tour]" in cruise_summary
+    assert "Reisegeschwindigkeit" in cruise_summary
 
 
 def test_build_human_summary_formatting():
@@ -352,4 +402,67 @@ def test_build_human_summary_formatting():
     assert "41.5° L / 43.8° R" in summary
     assert "262 Kurven (128 L / 134 R)" in summary
     assert "7.800 U/min" in summary
+
+
+def test_mode_tailored_summaries():
+    """Verifies that each mode (sport, group, cruise) highlights its respective domain scorecard."""
+    mock_stats = {
+        "start_time": "2026-09-18T14:00:00+02:00",
+        "end_time": "2026-09-18T16:00:00+02:00",
+        "duration_s": 7200,
+        "netto_duration_s": 6300,
+        "pause_duration_s": 900,
+        "distance_km": 94.0,
+        "speed_max_kmh": 124.0,
+        "speed_avg_kmh": 53.7,
+        "elevation_min_m": 800.0,
+        "elevation_max_m": 1950.0,
+        "elevation_gain_m": 1450.0,
+        "temp_min_c": 14.0,
+        "temp_max_c": 22.0,
+        "temp_avg_c": 17.5,
+        "max_lean_left_deg": 46.2,
+        "max_lean_right_deg": 48.0,
+        "curve_count_left": 85,
+        "curve_count_right": 87,
+        "curve_count_total": 172,
+        "time_at_lean_pct": 24.5,
+        "corner_density_per_km": 1.8,
+        "max_accel_g": 0.82,
+        "max_decel_g": 0.95,
+        "hard_braking_count": 2,
+        "rpm_max": 9400,
+        "shifts_total": 312,
+        "shifts_per_km": 3.3,
+        "comm_hd_pct": 94.2,
+        "comm_lora_fallback_count": 2,
+        "comm_lora_fallback_duration_s": 180,
+        "battery_v_min": 13.8,
+        "battery_v_avg": 14.2,
+    }
+
+    # 1. Sport mode
+    sport = build_human_summary(mock_stats, "Hahntennjoch.gpx", mode="sport")
+    assert "[Sportlich]" in sport
+    assert "46.2° L / 48.0° R (24.5% in Schräglage)" in sport
+    assert "312 Schaltvorgänge (3.3/km)" in sport
+    assert "1.8 Kurven/km" in sport
+    assert "Bremsen: -0.95g (2 Notbremsungen)" in sport
+    assert "RPM max: 9.400 U/min" in sport
+
+    # 2. Group mode
+    group = build_human_summary(mock_stats, "Hahntennjoch.gpx", mode="group")
+    assert "[Gruppe / Mesh]" in group
+    assert "94.2% HD-Voice" in group
+    assert "2x LoRa-Fallback (3m)" in group
+    assert "Kolonnen-Tempo: Ø 53.7 km/h" in group
+
+    # 3. Cruise mode
+    cruise = build_human_summary(mock_stats, "Hahntennjoch.gpx", mode="cruise")
+    assert "[Cruising & Tour]" in cruise
+    assert "Pausen: 15m" in cruise
+    assert "Reisegeschwindigkeit: Ø 53.7 km/h" in cruise
+    assert "Bremsruhe: 2 stärkere Bremsungen" in cruise
+    assert "Temp: 14.0 °C – 22.0 °C (Ø 17.5 °C)" in cruise
+
 

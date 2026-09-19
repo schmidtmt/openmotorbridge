@@ -43,6 +43,8 @@ Every trackpoint recorded at $10\,\text{Hz}$ is enriched with high-rate motorcyc
 * **Engine RPM:** Direct $10\,\text{Hz}$ engine speed capture via vehicle CAN-bus broadcast.
 * **Vehicle Battery Voltage:** Monitors alternator health and stator output under load.
 * **1-PPS Hardware Timecode:** Sub-15ns jitter reference for frame-accurate action camera video overlays.
+* **CAN Gear Position (`<omb:gear>`):** Active gear (0 = Neutral, 1..6) extracted from vehicle CAN-bus broadcast.
+* **Intercom Link QoS (`<omb:comm_tier>`):** Active communication layer (`hd` = 2.4 GHz Opus HD-Voice, `lora` = 868 MHz Codec2 Fallback).
 
 ```xml
 <trkpt lat="47.3769" lon="8.5417">
@@ -56,6 +58,8 @@ Every trackpoint recorded at $10\,\text{Hz}$ is enriched with high-rate motorcyc
       <omb:accel_g_lat>0.98</omb:accel_g_lat>
       <omb:temp>21.4</omb:temp>
       <omb:rpm>4850</omb:rpm>
+      <omb:gear>4</omb:gear>
+      <omb:comm_tier>hd</omb:comm_tier>
       <omb:battery_v>12.6</omb:battery_v>
       <omb:satellites>18</omb:satellites>
       <omb:hdop>0.8</omb:hdop>
@@ -89,6 +93,48 @@ To strictly avoid running cables through the steering stem to the wireless Front
 ### 3.2 Barometric Altitude Fusion (15-State Kalman Filter)
 
 In addition to GNSS 3D height, a Bosch BMP390 / BMP581 barometric pressure sensor on the Rear Pod measures relative vertical displacement down to $\pm 10\,\text{cm}$. The 15-state Error-State Extended Kalman Filter continuously cross-references barometric delta with u-blox MAX-M10S 3D GNSS fixes during steady cruise to auto-calibrate QNH reference pressure without any manual zeroing required by the rider.
+
+### 3.3 Shift Counter State Machine & Radio Link QoS Fallback Tracking
+
+1. **Shift Counter State Machine:**
+   * Parsed from `<omb:gear>` CAN telemetry, detecting upshifts (`shifts_up`) and downshifts (`shifts_down`).
+   * A debounce filter ignores transient neutral blips (`1 -> N -> 2` registers as 1 upshift) to prevent artificial shift inflating.
+   * `shifts_per_km` provides an objective metric for aggressive twisty shifting vs. calm highway cruising.
+
+2. **Intercom QoS & LoRa Fallback Tracking:**
+   * Every fallback from 2.4 GHz Opus HD-Voice to 868 MHz Codec2 LoRa is tagged (`<omb:comm_tier>lora</omb:comm_tier>`).
+   * Computes HD-Voice availability (`comm_hd_pct`), total fallback count (`comm_lora_fallback_count`), and cumulative fallback duration (`comm_lora_fallback_duration_s`).
+
+### 3.4 Direct Drive & Audio Mode Coupling (Zero-Overkill Scorecards)
+
+Rather than introducing cluttered configuration menus, OpenMotorBridge couples telemetry reporting directly to the 3 active modes from `🎛️ Audio-Routing & Operating Modes`:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                   TELEMETRY SCORECARDS BY OPERATING MODE                    │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ MODE 1: Single Rider Mode 🏍️ (Sport & Dynamic Telemetry)                    │
+│ • Lean angles L/R, corner density (turns/km), % time at lean (≥20°)          │
+│ • Shift Counter (Total, Up/Down, Shifts/km), G-Forces, Panic Brakes, Max RPM│
+├─────────────────────────────────────────────────────────────────────────────┤
+│ MODE 0: Standard Mesh Bridge 👥 (Group & Intercom QoS)                      │
+│ • Radio availability (% HD-Voice), LoRa fallback count/duration, Drops       │
+│ • Formation pace (Ø km/h), total turns, electrical bus stability            │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ MODE 2: Cruise Mode 🛣️ (Cruising & Touring Comfort)                         │
+│ • Net/pause times, elevation gain/loss, ambient temperature range            │
+│ • Braking smoothness (panic-free braking), cruising pace, shift index        │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+The PWA Tour Inspector features 3 instantaneous pills (`[ 🏍️ Sportlich ]`, `[ 👥 Gruppe / Funk ]`, `[ 🛣️ Cruising ]`) to switch scorecard perspectives on the fly.
+
+### 3.5 GPS Co-Existence & RF De-Sensing Protection (+22 dBm LoRa Bursts)
+
+Operating +22 dBm (160 mW) LoRa transmissions at 868 MHz near a high-gain GNSS receiver risks de-sensing the LNA at 1575.42 MHz. OpenMotorBridge prevents interference through a 3-tier protection design:
+1. **SAW Bandpass Pre-Filter:** A steep surface acoustic wave (SAW) filter placed immediately before the GNSS LNA attenuates 868 MHz by $> 55\,\text{dB}$.
+2. **Geometric Antenna Isolation:** The vertical 868 MHz whip antenna is geometrically isolated and orthogonally oriented relative to the horizontal GNSS ceramic patch antenna inside the fin.
+3. **Inertial EKF Bridging:** The 15-state EKF Dead Reckoning engine uses 50 Hz IMU inertial data to seamlessly bridge any transient SNR dip during packet bursts.
 
 ---
 

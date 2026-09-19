@@ -4953,6 +4953,156 @@ document.getElementById('btn-save-indexeddb')?.addEventListener('click', async (
 const tourInspectModal = document.getElementById('tour-inspect-modal');
 const btnCloseInspectModal = document.getElementById('btn-close-inspect-modal');
 let s_inspectingTour = null;
+let s_inspectMode = 'sport';
+
+window.switchInspectMode = function (mode) {
+    if (!mode) mode = 'sport';
+    s_inspectMode = mode;
+
+    // Update Pill active states
+    document.querySelectorAll('.inspect-mode-pill').forEach(btn => {
+        if (btn.getAttribute('data-inspect-mode') === mode) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+
+    if (!s_inspectingTour) return;
+    const tour = s_inspectingTour;
+
+    const setText = (id, val) => {
+        const el = document.getElementById(id);
+        if (el && val !== undefined) el.textContent = val;
+    };
+
+    if (mode === 'sport') {
+        // Mode 1: Sportlich (Single Rider / Dynamic Telemetry)
+        setText('inspect-lbl-1', 'Distanz & Fahrzeit');
+        setText('inspect-dist', tour.distance);
+        setText('inspect-dur', `Netto: ${tour.nettoDuration || tour.duration}`);
+
+        setText('inspect-lbl-2', 'Kurven & Dichte');
+        setText('inspect-ele-gain', `${tour.curvesTotal || 186} Kurven`);
+        setText('inspect-ele-range', `${tour.cornerDensity || '2.2 Kurven/km'} · ${tour.curvesLeft || 91}L / ${tour.curvesRight || 95}R`);
+
+        setText('inspect-lbl-3', 'Schräglage (L/R)');
+        setText('inspect-temp', `${tour.leanLeft || '44.2°'} / ${tour.leanRight || '42.8°'}`);
+        setText('inspect-temp-sub', `${tour.timeAtLeanPct || '22.4%'} der Fahrt in Schräglage`);
+
+        setText('inspect-lbl-4', 'Schaltvorgänge');
+        setText('inspect-lean', `${tour.shiftsTotal || 248} Shifts`);
+        setText('inspect-lean-sub', `${tour.shiftsPerKm || '2.9/km'} · ${tour.shiftsUp || 126}⬆️ / ${tour.shiftsDown || 122}⬇️`);
+
+        setText('inspect-lbl-5', 'Fahrdynamik & Bremsen');
+        setText('inspect-curves', tour.maxDecel || '-0.82 g');
+        setText('inspect-curves-sub', `${tour.maxAccel || '+0.65g'} · ${tour.hardBrakingCount || 1} Notbremsung(en)`);
+
+        setText('inspect-lbl-6', 'Geschwindigkeit');
+        setText('inspect-speed', `${tour.topSpeed} km/h`);
+        setText('inspect-speed-sub', `Ø ${tour.avgSpeed || '58.4 km/h'} netto`);
+
+        setText('inspect-lbl-7', 'Motor-Drehzahl');
+        setText('inspect-accel', tour.maxRpm || '7.850 U/m');
+        setText('inspect-accel-sub', `Ø ${tour.avgRpm || '4.320 U/min'} (CAN OEM)`);
+
+        setText('inspect-lbl-8', 'Höhenprofil');
+        setText('inspect-motor', tour.eleGain);
+        setText('inspect-motor-sub', tour.eleRange || '620 – 2.224 m');
+
+        const sportSummary = `🏁 OpenMotorBridge [Sportlich]: Tour abgeschlossen (${tour.filename})\n` +
+            `📅 ${tour.datetime.split(' ')[0]} · ${tour.timeRange || '09:15 – 11:20 Uhr'} (Netto: ${tour.nettoDuration || tour.duration})\n` +
+            `📍 ${tour.distance} · ⛰️ ${tour.eleGain} (${tour.eleRange || '620 – 2.224 m'})\n` +
+            `🏍️ Schräglage: ${tour.leanLeft || '44.2°'} L / ${tour.leanRight || '42.8°'} R (${tour.timeAtLeanPct || '22.4%'} in Schräglage)\n` +
+            `🔄 ${tour.curvesTotal || 186} Kurven (${tour.curvesLeft || 91} L / ${tour.curvesRight || 95} R) · ${tour.cornerDensity || '2.2 Kurven/km'} · ⚙️ ${tour.shiftsTotal || 248} Schaltvorgänge (${tour.shiftsPerKm || '2.9/km'})\n` +
+            `⚡ Max: ${tour.topSpeed} km/h (Ø ${tour.avgSpeed || '58.4 km/h'}) · Beschl.: ${tour.maxAccel || '+0.65g'} · Bremsen: ${tour.maxDecel || '-0.82g'} (${tour.hardBrakingCount || 1} Notbremsungen) · RPM max: ${tour.maxRpm || '7.850 U/min'}`;
+        setText('inspect-summary-text', sportSummary);
+
+    } else if (mode === 'group') {
+        // Mode 0: Gruppe / Funk (Standard Mesh Bridge & Radio QoS)
+        setText('inspect-lbl-1', 'Distanz & Tourzeit');
+        setText('inspect-dist', tour.distance);
+        setText('inspect-dur', `Netto: ${tour.nettoDuration || tour.duration} · Pausen: ${tour.pauseDuration || '23m'}`);
+
+        setText('inspect-lbl-2', 'Funk-Verfügbarkeit');
+        setText('inspect-ele-gain', `${tour.commHdPct || 98.4}% HD`);
+        setText('inspect-ele-range', '2.4 GHz Opus HD-Voice Mesh');
+
+        setText('inspect-lbl-3', 'LoRa-Fallback');
+        setText('inspect-temp', `${tour.commLoraFallbacks || 1}x Fallback`);
+        setText('inspect-temp-sub', `Dauer: ${tour.commLoraDuration || '45s'} (868 MHz Codec2)`);
+
+        setText('inspect-lbl-4', 'Störungsstatus');
+        setText('inspect-lean', '0 Abrisse');
+        setText('inspect-lean-sub', '🟢 100% Intercom-Zustellung');
+
+        setText('inspect-lbl-5', 'Kolonnen-Tempo');
+        setText('inspect-curves', `Ø ${tour.avgSpeed || '58.4 km/h'}`);
+        setText('inspect-curves-sub', `Max: ${tour.topSpeed} km/h`);
+
+        setText('inspect-lbl-6', 'Kurvenanzahl');
+        setText('inspect-speed', `${tour.curvesTotal || 186} Kurven`);
+        setText('inspect-speed-sub', `${tour.curvesLeft || 91} L / ${tour.curvesRight || 95} R`);
+
+        setText('inspect-lbl-7', 'Bordnetz-Stabilität');
+        setText('inspect-accel', `Min: ${tour.batteryMin || '13.9 V'}`);
+        setText('inspect-accel-sub', 'Ø 14.2 V Generator');
+
+        setText('inspect-lbl-8', 'Höhenprofil');
+        setText('inspect-motor', tour.eleGain);
+        setText('inspect-motor-sub', `Passhöhe: ${(tour.eleRange || '2.224 m').split('–').pop().trim()}`);
+
+        const groupSummary = `🏁 OpenMotorBridge [Gruppe / Mesh]: Tour abgeschlossen (${tour.filename})\n` +
+            `📅 ${tour.datetime.split(' ')[0]} · ${tour.timeRange || '09:15 – 11:20 Uhr'} (Netto: ${tour.nettoDuration || tour.duration} · Pausen: ${tour.pauseDuration || '23m'})\n` +
+            `📍 ${tour.distance} · ⛰️ ${tour.eleGain} (${tour.eleRange || '620 – 2.224 m'}) · 🌡️ Ø ${tour.tempAvg || '18.8'} °C\n` +
+            `📡 Funk: ${tour.commHdPct || 98.4}% HD-Voice · ${tour.commLoraFallbacks || 1}x LoRa-Fallback (${tour.commLoraDuration || '45s'}) · 0 Totalabrisse\n` +
+            `🔄 ${tour.curvesTotal || 186} Kurven · Kolonnen-Tempo: Ø ${tour.avgSpeed || '58.4 km/h'} · Bordnetz: ${tour.batteryMin || '13.9 V'}`;
+        setText('inspect-summary-text', groupSummary);
+
+    } else if (mode === 'cruise') {
+        // Mode 2: Cruising & Tour-Komfort
+        setText('inspect-lbl-1', 'Distanz & Pausen');
+        setText('inspect-dist', tour.distance);
+        setText('inspect-dur', `Netto: ${tour.nettoDuration || tour.duration} (Pause: ${tour.pauseDuration || '23m'})`);
+
+        setText('inspect-lbl-2', 'Höhenprofil');
+        setText('inspect-ele-gain', tour.eleGain);
+        setText('inspect-ele-range', tour.eleRange || '620 – 2.224 m');
+
+        setText('inspect-lbl-3', 'Außentemperatur');
+        setText('inspect-temp', tour.tempRange || '14.2 – 23.5 °C');
+        setText('inspect-temp-sub', `Ø ${tour.tempAvg || '18.8'} °C (${tour.tempSource || 'CAN OEM'})`);
+
+        setText('inspect-lbl-4', 'Bremskomfort');
+        const isSmooth = (tour.hardBrakingCount || 0) === 0;
+        setText('inspect-lean', isSmooth ? '🛋️ Sanft' : 'Bremsruhe');
+        setText('inspect-lean-sub', isSmooth ? '0 Schreckbremsungen' : `${tour.hardBrakingCount} stärkere Bremsungen`);
+
+        setText('inspect-lbl-5', 'Reisegeschwindigkeit');
+        setText('inspect-curves', `Ø ${tour.avgSpeed || '58.4 km/h'}`);
+        setText('inspect-curves-sub', `Max: ${tour.topSpeed} km/h`);
+
+        setText('inspect-lbl-6', 'Schräglagen-Spanne');
+        setText('inspect-speed', `Bis ${tour.maxLean || '44.2°'}`);
+        setText('inspect-speed-sub', 'Entspanntes Kurvenfahren');
+
+        setText('inspect-lbl-7', 'Schaltkomfort');
+        setText('inspect-accel', tour.shiftsPerKm || '2.9/km');
+        setText('inspect-accel-sub', `Gesamt: ${tour.shiftsTotal || 248} Shifts`);
+
+        setText('inspect-lbl-8', 'Ladespannung');
+        setText('inspect-motor', 'Ø 14.2 V');
+        setText('inspect-motor-sub', `Bordnetz Min: ${tour.batteryMin || '13.9 V'}`);
+
+        const cruiseSummary = `🏁 OpenMotorBridge [Cruising & Tour]: Tour abgeschlossen (${tour.filename})\n` +
+            `📅 ${tour.datetime.split(' ')[0]} · ${tour.timeRange || '09:15 – 11:20 Uhr'} · Netto: ${tour.nettoDuration || tour.duration} (Pausen: ${tour.pauseDuration || '23m'})\n` +
+            `📍 ${tour.distance} · ⛰️ ${tour.eleGain} (${tour.eleRange || '620 – 2.224 m'})\n` +
+            `🌡️ Temp: ${tour.tempRange || '14.2 °C – 23.5 °C'} (Ø ${tour.tempAvg || '18.8'} °C)\n` +
+            `${isSmooth ? '🛋️ Sanfte Bremsungen (0 Schreckbremsungen)' : `Bremsruhe: ${tour.hardBrakingCount} stärkere Bremsungen`} · Schräglagen bis ${tour.maxLean || '44.2°'}\n` +
+            `⚡ Reisegeschwindigkeit: Ø ${tour.avgSpeed || '58.4 km/h'} (Max: ${tour.topSpeed} km/h) · Ladespannung: Ø 14.2 V`;
+        setText('inspect-summary-text', cruiseSummary);
+    }
+};
 
 window.openTourInspectModal = function (tourId) {
     const tour = s_defaultTours.find(t => t.id === tourId);
@@ -4965,33 +5115,14 @@ window.openTourInspectModal = function (tourId) {
     };
 
     setText('inspect-tour-title', tour.name);
-    setText('inspect-dist', tour.distance);
-    setText('inspect-dur', `Netto: ${tour.nettoDuration || tour.duration}`);
-    setText('inspect-ele-gain', tour.eleGain);
-    setText('inspect-ele-range', tour.eleRange || '620 – 2.224 m');
-    setText('inspect-temp', tour.tempRange || '14.2 – 23.5 °C');
-    setText('inspect-temp-sub', `Ø ${tour.tempAvg || '18.8'} °C (${tour.tempSource || 'CAN OEM'})`);
-    setText('inspect-lean', tour.maxLean);
-    setText('inspect-lean-sub', `L: ${tour.leanLeft || '44.2°'} · R: ${tour.leanRight || '42.8°'}`);
-    setText('inspect-curves', String(tour.curvesTotal || 186));
-    setText('inspect-curves-sub', `${tour.curvesLeft || 91} L / ${tour.curvesRight || 95} R`);
-    setText('inspect-speed', `${tour.topSpeed} km/h`);
-    setText('inspect-speed-sub', `Ø ${tour.avgSpeed || '58.4 km/h'} netto`);
-    setText('inspect-accel', tour.maxDecel || '-0.82 g');
-    setText('inspect-accel-sub', `${tour.maxAccel || '+0.65g'} / ${tour.maxDecel || '-0.82g'}`);
-    setText('inspect-motor', tour.maxRpm || '7.850 U/m');
-    setText('inspect-motor-sub', `Min: ${tour.batteryMin || '13.9 V'}`);
 
-    // Generate human summary text matching notifier.py format
-    const summaryText = `🏁 OpenMotorBridge: Tour abgeschlossen (${tour.filename})\n` +
-        `📅 ${tour.datetime.split(' ')[0]} · ${tour.timeRange || '09:15 – 11:20 Uhr'} (Netto: ${tour.nettoDuration || tour.duration})\n` +
-        `📍 ${tour.distance} · ⛰️ ${tour.eleGain} (${tour.eleRange || '620 – 2.224 m'})\n` +
-        `🌡️ Temp: ${tour.tempRange || '14.2 °C – 23.5 °C'} (Ø ${tour.tempAvg || '18.8'} °C)\n` +
-        `🏍️ Schräglage: ${tour.leanLeft || '44.2°'} L / ${tour.leanRight || '42.8°'} R · 🔄 ${tour.curvesTotal || 186} Kurven (${tour.curvesLeft || 91} L / ${tour.curvesRight || 95} R)\n` +
-        `⚡ Max: ${tour.topSpeed} km/h (Ø ${tour.avgSpeed || '58.4 km/h'}) · Beschl.: ${tour.maxAccel || '+0.65g'} · Bremsen: ${tour.maxDecel || '-0.82g'} · RPM max: ${tour.maxRpm || '7.850 U/min'}`;
+    // Initial mode selection couples to active audio / drive mode
+    let initialMode = 'sport';
+    if (state.audioMode === 0) initialMode = 'group';
+    else if (state.audioMode === 2) initialMode = 'cruise';
+    else if (state.audioMode === 1) initialMode = 'sport';
 
-    setText('inspect-summary-text', summaryText);
-
+    switchInspectMode(initialMode);
     tourInspectModal?.classList.add('active');
 };
 
@@ -5000,6 +5131,12 @@ if (btnCloseInspectModal) {
         tourInspectModal?.classList.remove('active');
     });
 }
+
+['sport', 'group', 'cruise'].forEach(m => {
+    document.getElementById(`pill-inspect-${m}`)?.addEventListener('click', () => {
+        switchInspectMode(m);
+    });
+});
 
 document.getElementById('btn-copy-tour-summary')?.addEventListener('click', () => {
     const text = document.getElementById('inspect-summary-text')?.textContent;
@@ -5076,6 +5213,16 @@ const s_defaultTours = [
         curvesTotal: 186,
         curvesLeft: 91,
         curvesRight: 95,
+        cornerDensity: '2.2 Kurven/km',
+        timeAtLeanPct: '22.4%',
+        shiftsTotal: 248,
+        shiftsUp: 126,
+        shiftsDown: 122,
+        shiftsPerKm: '2.9/km',
+        hardBrakingCount: 1,
+        commHdPct: 98.4,
+        commLoraFallbacks: 1,
+        commLoraDuration: '45s',
         topSpeed: 118,
         avgSpeed: '58.4 km/h',
         eleGain: '+1.420 hm',
@@ -5086,6 +5233,7 @@ const s_defaultTours = [
         maxAccel: '+0.65g',
         maxDecel: '-0.82g',
         maxRpm: '7.850 U/min',
+        avgRpm: '4.320 U/min',
         batteryMin: '13.9 V',
         status: 'uploaded'
     },
@@ -5105,6 +5253,16 @@ const s_defaultTours = [
         curvesTotal: 342,
         curvesLeft: 174,
         curvesRight: 168,
+        cornerDensity: '1.8 Kurven/km',
+        timeAtLeanPct: '28.6%',
+        shiftsTotal: 612,
+        shiftsUp: 310,
+        shiftsDown: 302,
+        shiftsPerKm: '3.2/km',
+        hardBrakingCount: 3,
+        commHdPct: 94.2,
+        commLoraFallbacks: 2,
+        commLoraDuration: '3m 10s',
         topSpeed: 134,
         avgSpeed: '64.2 km/h',
         eleGain: '+2.150 hm',
@@ -5115,6 +5273,7 @@ const s_defaultTours = [
         maxAccel: '+0.78g',
         maxDecel: '-0.91g',
         maxRpm: '8.400 U/min',
+        avgRpm: '4.850 U/min',
         batteryMin: '14.1 V',
         status: 'favorite'
     },
@@ -5134,6 +5293,16 @@ const s_defaultTours = [
         curvesTotal: 214,
         curvesLeft: 106,
         curvesRight: 108,
+        cornerDensity: '1.7 Kurven/km',
+        timeAtLeanPct: '16.8%',
+        shiftsTotal: 380,
+        shiftsUp: 192,
+        shiftsDown: 188,
+        shiftsPerKm: '3.0/km',
+        hardBrakingCount: 0,
+        commHdPct: 100.0,
+        commLoraFallbacks: 0,
+        commLoraDuration: '0s',
         topSpeed: 112,
         avgSpeed: '61.6 km/h',
         eleGain: '+980 hm',
@@ -5144,6 +5313,7 @@ const s_defaultTours = [
         maxAccel: '+0.58g',
         maxDecel: '-0.74g',
         maxRpm: '6.900 U/min',
+        avgRpm: '3.940 U/min',
         batteryMin: '14.2 V',
         status: 'uploaded'
     }

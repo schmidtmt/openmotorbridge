@@ -3164,53 +3164,66 @@
                 <button class="modal-close" id="btn-close-inspect-modal">&times;</button>
             </div>
 
+            <!-- Telemetry Mode Profile Switcher (Coupled to Audio-Routing & Drive Modes) -->
+            <div style="display: flex; gap: 8px; margin-bottom: 12px; background: rgba(0, 0, 0, 0.35); padding: 4px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+                <button type="button" class="btn-secondary inspect-mode-pill active" id="pill-inspect-sport" data-inspect-mode="sport" style="flex: 1; padding: 7px 4px; font-size: 0.78rem; font-weight: 600; border-radius: 6px;">
+                    🏍️ Sportlich
+                </button>
+                <button type="button" class="btn-secondary inspect-mode-pill" id="pill-inspect-group" data-inspect-mode="group" style="flex: 1; padding: 7px 4px; font-size: 0.78rem; font-weight: 600; border-radius: 6px;">
+                    👥 Gruppe / Funk
+                </button>
+                <button type="button" class="btn-secondary inspect-mode-pill" id="pill-inspect-cruise" data-inspect-mode="cruise" style="flex: 1; padding: 7px 4px; font-size: 0.78rem; font-weight: 600; border-radius: 6px;">
+                    🛣️ Cruising
+                </button>
+            </div>
+
             <!-- Extended Telemetry Stats Grid (4x2) -->
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); gap: 8px; margin-bottom: 14px;">
-                <!-- Tile 1: Distanz & Fahrzeit -->
+                <!-- Tile 1 -->
                 <div class="stat-tile" style="padding: 10px;">
-                    <span class="stat-label">Distanz &amp; Zeit</span>
+                    <span class="stat-label" id="inspect-lbl-1">Distanz &amp; Zeit</span>
                     <div class="stat-value" id="inspect-dist" style="font-size: 1.15rem; color: var(--accent-orange);">84.6 km</div>
                     <span class="stat-sub" id="inspect-dur">Netto: 1h 42m</span>
                 </div>
-                <!-- Tile 2: Höhenprofil & Barometer -->
+                <!-- Tile 2 -->
                 <div class="stat-tile" style="padding: 10px;">
-                    <span class="stat-label">Höhenprofil</span>
+                    <span class="stat-label" id="inspect-lbl-2">Höhenprofil</span>
                     <div class="stat-value" id="inspect-ele-gain" style="font-size: 1.15rem; color: var(--accent-green);">+1.420 hm</div>
                     <span class="stat-sub" id="inspect-ele-range">620 – 2.224 m</span>
                 </div>
-                <!-- Tile 3: Umgebungstemperatur -->
+                <!-- Tile 3 -->
                 <div class="stat-tile" style="padding: 10px;">
-                    <span class="stat-label">Außentemperatur</span>
+                    <span class="stat-label" id="inspect-lbl-3">Außentemperatur</span>
                     <div class="stat-value" id="inspect-temp" style="font-size: 1.15rem; color: var(--accent-cyan);">14 – 24 °C</div>
                     <span class="stat-sub" id="inspect-temp-sub">Ø 18.8 °C (CAN OEM)</span>
                 </div>
-                <!-- Tile 4: Max Schräglage L/R -->
+                <!-- Tile 4 -->
                 <div class="stat-tile" style="padding: 10px;">
-                    <span class="stat-label">Schräglage (L/R)</span>
+                    <span class="stat-label" id="inspect-lbl-4">Schräglage (L/R)</span>
                     <div class="stat-value" id="inspect-lean" style="font-size: 1.15rem; color: var(--accent-purple);">44.2°</div>
                     <span class="stat-sub" id="inspect-lean-sub">L: 44.2° · R: 42.8°</span>
                 </div>
-                <!-- Tile 5: Kurvenzähler -->
+                <!-- Tile 5 -->
                 <div class="stat-tile" style="padding: 10px;">
-                    <span class="stat-label">Kurvenzähler</span>
+                    <span class="stat-label" id="inspect-lbl-5">Kurvenzähler</span>
                     <div class="stat-value" id="inspect-curves" style="font-size: 1.15rem; color: #ffd60a;">186</div>
                     <span class="stat-sub" id="inspect-curves-sub">91 L / 95 R</span>
                 </div>
-                <!-- Tile 6: Geschwindigkeiten -->
+                <!-- Tile 6 -->
                 <div class="stat-tile" style="padding: 10px;">
-                    <span class="stat-label">Geschwindigkeit</span>
+                    <span class="stat-label" id="inspect-lbl-6">Geschwindigkeit</span>
                     <div class="stat-value" id="inspect-speed" style="font-size: 1.15rem; color: var(--accent-blue);">118 km/h</div>
                     <span class="stat-sub" id="inspect-speed-sub">Ø 58.4 km/h netto</span>
                 </div>
-                <!-- Tile 7: G-Forces Fahrdynamik -->
+                <!-- Tile 7 -->
                 <div class="stat-tile" style="padding: 10px;">
-                    <span class="stat-label">Fahrdynamik</span>
+                    <span class="stat-label" id="inspect-lbl-7">Fahrdynamik</span>
                     <div class="stat-value" id="inspect-accel" style="font-size: 1.15rem; color: #ff375f;">-0.82 g</div>
                     <span class="stat-sub" id="inspect-accel-sub">+0.65g / -0.82g</span>
                 </div>
-                <!-- Tile 8: Motor & Bordnetz -->
+                <!-- Tile 8 -->
                 <div class="stat-tile" style="padding: 10px;">
-                    <span class="stat-label">Motor &amp; Bordnetz</span>
+                    <span class="stat-label" id="inspect-lbl-8">Motor &amp; Bordnetz</span>
                     <div class="stat-value" id="inspect-motor" style="font-size: 1.15rem; color: #5e5ce6;">7.850 U/m</div>
                     <span class="stat-sub" id="inspect-motor-sub">Min: 13.9 V</span>
                 </div>

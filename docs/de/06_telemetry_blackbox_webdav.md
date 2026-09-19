@@ -43,6 +43,8 @@ Jeder Wegpunkt im GPX-Datensatz wird mit $10\,\text{Hz}$ um hochpräzise Fahrdyn
 * **Motordrehzahl (U/min):** Bei CAN-Bus Anbindung ausgelesene Motordrehzahl mit $10\,\text{Hz}$.
 * **Bordnetz- und Batteriespannung:** Zur Diagnose von Lichtmaschine und Regler.
 * **1-PPS Hardware-Zeitsynchronisation:** Mit $< 15\,\text{ns}$ Jitter für framegenaue Actioncam-Videomarker.
+* **CAN-Gangstufe (`<omb:gear>`):** Eingelegter Gang (0 = Neutral, 1..6) aus CAN-Telemetrie zur Auswertung von Schaltvorgängen.
+* **Funkverbindungs-QoS (`<omb:comm_tier>`):** Aktive Funkebene (`hd` = 2.4 GHz Opus HD-Voice, `lora` = 868 MHz Codec2 Fallback).
 
 ```xml
 <trkpt lat="47.3769" lon="8.5417">
@@ -56,6 +58,8 @@ Jeder Wegpunkt im GPX-Datensatz wird mit $10\,\text{Hz}$ um hochpräzise Fahrdyn
       <omb:accel_g_lat>0.98</omb:accel_g_lat>
       <omb:temp>21.4</omb:temp>
       <omb:rpm>4850</omb:rpm>
+      <omb:gear>4</omb:gear>
+      <omb:comm_tier>hd</omb:comm_tier>
       <omb:battery_v>12.6</omb:battery_v>
       <omb:satellites>18</omb:satellites>
       <omb:hdop>0.8</omb:hdop>
@@ -89,6 +93,48 @@ Um Leitungen durch den Lenkkopf zum kabellosen Frontnode strikt zu vermeiden und
 ### 3.2 Barometrische Höhenkalibrierung (Kalman-Fusion)
 
 Neben GNSS-Höhenmessungen erfasst der Bosch BMP390 / BMP581 Luftdrucksensor am Heck-Pod barometrische Höhendifferenzen auf $\pm 10\,\text{cm}$ genau. Ein kontinuierlicher Abgleich im 15-State Extended Kalman Filter gegen die u-blox MAX-M10S 3D-Fix-Koordinaten bei stabiler Fahrt kalibriert den QNH-Referenzdruck vollautomatisch – ganz ohne manuelle Höhen-Nullung durch den Fahrer.
+
+### 3.3 Schaltvorgang-Zähler (Shift Counter) & Funk-QoS-Tracking
+
+1. **Shift Counter State-Machine:**
+   * Aus den CAN-Tags `<omb:gear>` ermittelt der Bridge-Parser Gangwechsel mit Unterscheidung in Hoch- (`shifts_up`) und Runterschalten (`shifts_down`).
+   * Zur Vermeidung von Doppelzählungen bei schnellen Schaltfolgen filtert ein Hysterese-Entpreller temporäre Neutral-Zwischenschritte (`1 -> N -> 2` zählt als 1 Hochschaltvorgang).
+   * Die Kennzahl `shifts_per_km` liefert einen objektiven Indikator für kurvenreiches Schalten vs. entspanntes Gleiten im höchsten Gang.
+
+2. **Funk-QoS & LoRa-Fallback-Protokollierung:**
+   * Das Intercom-Subsystem loggt jede Umschaltung von 2.4 GHz Opus HD-Voice auf 868 MHz Codec2 LoRa (`<omb:comm_tier>lora</omb:comm_tier>`).
+   * Erfasst werden Verfügbarkeit in Prozent (`comm_hd_pct`), Anzahl der Rückfall-Ereignisse (`comm_lora_fallback_count`) sowie die Gesamtdauer im LoRa-Modus (`comm_lora_fallback_duration_s`).
+
+### 3.4 Direkte Kopplung an Betriebsmodi (Zero-Overkill Scorecards)
+
+Statt unübersichtlicher Einstellungsmenüs koppelt OpenMotorBridge die Telemetrie-Auswertung direkt an die drei existierenden Modi aus `🎛️ Audio-Routing & Betriebsmodi`:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                 TELEMETRIE-SCORECARDS NACH BETRIEBSMODUS                    │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ MODUS 1: Single Rider Mode 🏍️ (Sportlich & Fahrdynamik)                     │
+│ • Schräglagen L/R, Kurvendichte (Kurven/km), Zeitanteil in Schräglage (%)    │
+│ • Shift Counter (Gesamt, Up/Down, Shifts/km), G-Forces, Notbremsungen, RPM  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ MODUS 0: Standard Mesh Bridge 👥 (Gruppe & Intercom-Verfügbarkeit)          │
+│ • Funk-Verfügbarkeit (% HD-Voice), LoRa-Fallbacks, Cluster-Zustellung        │
+│ • Kolonnen-Tempo (Ø km/h), Gesamtkurven, Bordnetz-Stabilität                 │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ MODUS 2: Cruise Mode 🛣️ (Cruising & Tour-Komfort)                           │
+│ • Netto-/Pausenzeiten, Höhenprofil & Höhenmeter, Außentemperatur-Spanne     │
+│ • Bremsruhe (Sanfte Bremsungen), Reisetempo, Schaltkomfort-Index            │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+In der WebApp PWA ermöglicht der Tour Inspector über drei Pills (`[ 🏍️ Sportlich ]`, `[ 👥 Gruppe / Funk ]`, `[ 🛣️ Cruising ]`) jederzeit den sofortigen Wechsel der Scorecard-Perspektive.
+
+### 3.5 GPS-Koexistenz & HF-Entstörung bei LoRa-Sendeimpulsen (+22 dBm)
+
+Bei +22 dBm (160 mW) LoRa-Sendeleistung auf 868 MHz besteht theoretisch das Risiko einer Übersteuerung (De-Sensing) des hochempfindlichen GNSS-Eingangsverstärkers (LNA des u-blox MAX-M10S bei 1575,42 MHz). OpenMotorBridge verhindert Störungen durch ein 3-fach Schutzkonzept:
+1. **SAW-Bandpass-Vorfilter:** Ein steilflankiger Oberflächenwellen-Filter (SAW) vor dem LNA dämpft 868 MHz um $> 55\,\text{dB}$.
+2. **Geometrische Antennen-Isolation:** Die LoRa-Antenne sitzt im Heck-Pod vertikal polarisiert und orthogonal versetzt zur horizontalen GNSS-Keramik-Patchantenne in der CVO-ST-Finne.
+3. **Inertiale EKF-Stützung:** Bei kurzzeitigen HF-Bursts überbrückt das 15-State Kalman-Filter eventuelle SNR-Dips nahtlos über die IMU-Koppelnavigation.
 
 ---
 
