@@ -121,7 +121,8 @@ STL_TARGETS: List[Tuple] = [
     ("05_accessories/bsd_mirror_indicator_pod.scad", "05_accessories/bsd_mirror_lens.stl", ["-D", 'part="lens"']),
 
     # 13. Radar 2.0, Inductive Qi Dock, Car Visor Clip & Universal Actuators
-    ("05_accessories/radar_mr20_housing.scad", "05_accessories/radar_mr20_housing.stl"),
+    ("05_accessories/radar_mr20_housing.scad", "05_accessories/radar_mr20_housing.stl", ["-D", 'part="tub"']),
+    ("05_accessories/radar_mr20_housing.scad", "05_accessories/radar_mr20_radome.stl", ["-D", 'part="radome"']),
     ("05_accessories/road_glide_inductive_cam_dock.scad", "05_accessories/road_glide_inductive_cam_dock.stl"),
     ("05_accessories/car_sun_visor_pod3_clip.scad", "05_accessories/car_sun_visor_pod3_clip.stl"),
     ("03_pod_cartridges/cartridge_universal_actuator_rails.scad", "03_pod_cartridges/cartridge_universal_actuator_rails.stl"),
@@ -344,14 +345,16 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
     (
         "05_accessories/radar_mr20_housing.scad",
         os.path.join(CAD_IMG_DIR, "radar_mr20_housing_cad.png"),
-        "0,0,0,55,0,320,380",
-        "Tomorrow"
+        "0,-17,-5,55,0,140,250",
+        "Tomorrow",
+        ["-D", 'part="assembly"']
     ),
     (
         "05_accessories/radar_mr20_housing.scad",
         os.path.join(CAD_IMG_DIR, "radar_mr20_housing_bayonet_cad.png"),
-        "0,-20,0,55,0,140,380",
-        "Tomorrow"
+        "0,-17,-5,55,0,320,250",
+        "Tomorrow",
+        ["-D", 'part="tub"']
     ),
     (
         "05_accessories/car_sun_visor_pod3_clip.scad",
@@ -431,7 +434,12 @@ def compile_stls():
     print(f"✨ All {total} STLs compiled in {time.time() - start_total:.1f}s.")
     sys.stdout.flush()
 
-def render_single_image(scad_rel: str, img_path: str, camera_args: str, scheme: str, idx: int, total: int) -> Tuple[bool, str, float]:
+def render_single_image(target: Tuple, idx: int, total: int) -> Tuple[bool, str, float]:
+    scad_rel = target[0]
+    img_path = target[1]
+    camera_args = target[2]
+    scheme = target[3]
+    extra_args = target[4] if len(target) > 4 else []
     scad_path = os.path.join(SCAD_DIR, scad_rel)
     os.makedirs(os.path.dirname(img_path), exist_ok=True)
     img_name = os.path.basename(img_path)
@@ -445,6 +453,7 @@ def render_single_image(scad_rel: str, img_path: str, camera_args: str, scheme: 
         f"--camera={camera_args}",
         f"--colorscheme={scheme}",
         "--imgsize=1920,1080",
+        *extra_args,
         scad_path
     ]
     
@@ -466,8 +475,8 @@ def render_images():
     completed_count = 0
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
         future_map = {
-            executor.submit(render_single_image, scad_rel, img_path, camera_args, scheme, idx, total): img_path
-            for idx, (scad_rel, img_path, camera_args, scheme) in enumerate(RENDER_TARGETS, 1)
+            executor.submit(render_single_image, target, idx, total): target[1]
+            for idx, target in enumerate(RENDER_TARGETS, 1)
         }
         for future in as_completed(future_map):
             completed_count += 1

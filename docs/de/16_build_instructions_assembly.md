@@ -43,6 +43,10 @@ Ein vollständiges OpenMotorBridge-Fahrzeugkit besteht aus folgenden Kern-Baugru
                                  └──────────────────────────────────┘
 ```
 
+![Automotive Kabelbaum Architektur](../images/cad/wiring_harness_cad.png)
+
+*Abbildung 16.1b: CAD-Systemarchitektur des zentralen OpenMotorBridge v8.0 Automotive-Kabelbaums (HD26 Seal-D Hauptflansch mit robuster IP67 Formmuffe zu den 3x M8 Pod-Abgängen, M8 Aux/CAN-Bus und abgesicherter 12V KL30/KL15 Bordnetzversorgung).*
+
 ---
 
 ## 2. Bereitstellung vor Montagebeginn (Pre-Assembly Checklist)
@@ -209,7 +213,7 @@ OpenMotorBridge ist von Grund auf so konstruiert, dass das **vollständige Gesam
 
 ### 4.1 Warum der Tisch-Trockentest unbezahlbar ist
 * **Im Warmen & Bequemen:** Fehlersuche auf der Couch, am Schreibtisch oder in der warmen Werkstatt statt auf Knien in der kalten Garage bei schlechtem Licht.
-* **Sichtkontrolle bei offenen Gehäusen:** Status-LEDs (ESP32-S3 RGB-LEDs, RP2040 Status, Ladeanzeige des BQ24074-Controllers) und Prüfpunkte sind direkt sichtbar.
+* **Sichtkontrolle bei offenen Gehäusen:** Status-LEDs (ESP32-S3 RGB-LEDs, ESP32-C3 Status, Ladeanzeige des BQ24074-Controllers) und Prüfpunkte sind direkt sichtbar.
 * **Akustischer Klick-Check:** Die mechanischen Tauchanker-Hubmagnete der Kassetten (`PCBA 03`) sind ohne Motor- oder Umgebungsgeräusche klar hör- und fühlbar ("Klack-Klack-Klack-Klack").
 * **Kabelbaum-Schonung:** Der 26-polige HD26-Hauptkabelbaum bleibt während des Tischtests sicher verpackt im Karton und wird erst verlegt, wenn alle Platinen und Kassetten nachweislich fehlerfrei arbeiten.
 * **Minimale Werkzeuge:** 2 bis 3 handelsübliche USB-C-Kabel (Handy-Ladekabel) und ein normales Multiport-USB-Netzteil / Powerbank / Laptop ($5\,\text{V} / \ge 2{,}0\,\text{A}$) genügen.
@@ -272,7 +276,7 @@ OpenMotorBridge ist von Grund auf so konstruiert, dass das **vollständige Gesam
 
 4. **Heck-Pod 3 (PCBA 04) prüfen:**
    * Provisorisch mit dem kurzen M8-Testkabel an Port A der Zentralbox anstecken.
-   * RP2040 Co-Prozessor und SX1262 LoRa melden sich im PWA-Dashboard grün.
+   * ESP32-C3 Co-Prozessor und SX1262 LoRa melden sich im PWA-Dashboard grün.
    * Am Fensterbrett platziert liefert der u-blox MAX-M10S innerhalb von 25–35 Sekunden den ersten GNSS-3D-Fix.
 
 ### 4.5 Erstinbetriebnahme: WebSerial 1-Click Flasher & der 4-Punkte IKEA Smoke-Test
@@ -297,7 +301,7 @@ Vor dem Aufsetzen der Gehäusedeckel wird der interaktive Selbsttest in der PWA 
 ```bash
 # 1. Zentralcontroller via USB-C flashen (ESP32-S3)
 cd openMotorBridge/firmware/main_controller && pio run --target upload && pio run --target uploadfs
-# 2. Heck-Co-Prozessor flashen (RP2040 in Pod 3)
+# 2. Heck-Co-Prozessor flashen (ESP32-C3 in Pod 3)
 cd ../rear_coprocessor && pio run --target upload
 # 3. Front-Knoten flashen (ESP32-S3)
 cd ../front_node && pio run --target upload

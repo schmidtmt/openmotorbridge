@@ -58,7 +58,7 @@ This document serves as the master reference (Single Source of Truth) for the co
 
 | Designator | Component / MPN | Manufacturer | Package | LCSC / JLCPCB Part # | Function |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **U10** | RP2040 Dual Cortex-M0+ | Raspberry Pi | QFN-56 | C2040 | Coprocessor for NMEA Parsing & OMM LoRa Engine |
+| **U1** | ESP32-C3-WROOM-02U-N4 | Espressif Systems | SMD-18 (U.FL) | C2934579 | 2.4 GHz OMM Mesh & NMEA/LoRa Coprocessor |
 | **U11** | NEO-M9N-00B / MAX-M10S | u-blox | LCC-24 / LGA-18 | C3006240 | Multi-Constellation GNSS Engine (10 Hz, 1-PPS) |
 | **U12** | SX1262IMLTRT | Semtech | QFN-24 | C190184 | Secondary Fallback 868 MHz LoRa Transceiver (+22 dBm)|
 | **U13** | DS2401Z+ | Maxim / ADI | SOT-23 | C2834570 | 64-Bit 1-Wire Silicon Serial Number ID |
@@ -131,7 +131,21 @@ This document serves as the master reference (Single Source of Truth) for the co
 
 ---
 
-## 8. 1-Click JLCPCB Ordering Guide (All Circuit Boards Pre-Assembled)
+## 8. PCBA 08: Radar 2.0 Sub-MCU & 36-LED Warning Wings Carrier (`openmotorbridge_radar_submcu`, 4-Layer FR4 TG150, 115 x 65 mm)
+
+| Ref | Component / Type | Package | Specification & Function | LCSC Part |
+| :--- | :--- | :--- | :--- | :--- |
+| **`U1`** | ESP32-C5-WROOM-1-N8 | SMD Module | 32-Bit RISC-V Dual-Band Sub-MCU (2.4 GHz + 5.9 GHz V2X, 4MB Flash) | `C2843550` |
+| **`U2`** | LDO 3.3V 500mA | SOT-23-5 | TI TPS7A0533 / Richtek RT9013 Low-Dropout Voltage Regulator | `C505293` |
+| **`D1..36`**| WS2812B-2020 | SMD 2020 | 36x Digital RGB LEDs in Dual Warning Wings (18 left, 18 right) | `C2843530` |
+| **`ANT1`** | 5.9 GHz V2X Patch | 20x20x4 mm | Ceramic Patch Antenna for ITS-G5 Car-to-X Hazard Warnings | `C290456` |
+| **`J1`** | JST-SH 1.0mm 4-Pin | SMD Horizontal| Decoupled internal signal harness to Binder M5 housing socket | `C136657` |
+| **`J2`** | JST-SH 1.0mm 4-Pin | SMD Horizontal| UART link to Wheeltec MR20 Transceiver (RX/TX/5V/GND) | `C136657` |
+| **`D_TVS`**| PESD5V0S2BT | SOT-23 | TVS Diode Array for UART & Power Clamping | `C2834580` |
+
+---
+
+## 9. 1-Click JLCPCB Ordering Guide (All Circuit Boards Pre-Assembled)
 
 All production files are stored in the repository under `hardware/pcba/` as ready-to-upload ZIP and CSV archives:
 
@@ -144,10 +158,11 @@ All production files are stored in the repository under `hardware/pcba/` as read
 | **PCBA 05: Front Node** | `05_front_node_pcba_gerbers_jlcpcb.zip` | `05_front_node_pcba_bom_jlcpcb.csv` | `05_front_node_pcba_cpl_jlcpcb.csv` | **4 Layers** | ENIG (Gold), 1.6 mm, TG150, SMT top & bottom |
 | **PCBA 06: MagSafe Dock** | `06_magsafe_dock_pcba_gerbers_jlcpcb.zip` | `06_magsafe_dock_pcba_bom_jlcpcb.csv` | `06_magsafe_dock_pcba_cpl_jlcpcb.csv` | **2 Layers** | ENIG (Gold), 1.6 mm, SMT top |
 | **PCBA 07: Smart Keyfob** | `07_smart_keyfob_pcba_gerbers_jlcpcb.zip` | `07_smart_keyfob_pcba_bom_jlcpcb.csv` | `07_smart_keyfob_pcba_cpl_jlcpcb.csv` | **2 Layers** | ENIG (Gold), 1.0 mm, SMT top & bottom |
+| **PCBA 08: Radar 2.0 Sub-MCU** | `08_radar_submcu_pcba_gerbers_jlcpcb.zip` | `08_radar_submcu_pcba_bom_jlcpcb.csv` | `08_radar_submcu_pcba_cpl_jlcpcb.csv` | **4 Layers** | ENIG (Gold), 1.6 mm, TG150, SMT top |
 
 ---
 
-## 9. Mechanical & Enclosure BOM (MJF PA12 3D Printing & Hardware)
+## 10. Mechanical & Enclosure BOM (MJF PA12 3D Printing & Hardware)
 
 All enclosure parts are designed around the **IKEA Principle**: **Zero heat-set brass threaded inserts or soldering irons required!** The enclosures integrate captive hexagonal nut pockets (Nut Pockets for standard DIN 934 / DIN 985 stainless nuts) and precision pilot holes for direct plastic thread-forming.
 
@@ -371,7 +386,7 @@ To ensure long-term reproducibility and smooth automated turnkey assembly at JLC
 
 ### 14.3 Future-Proof Core Components (Guaranteed Longevity Through 2034+)
 * **Espressif ESP32-S3-WROOM-1 / 1U:** Espressif guarantees a minimum 10-year longevity roadmap (at least until 2034).
-* **Raspberry Pi RP2040:** Massive multi-million stock availability (~$0.70). *Note on the new RP2350:* Released in late 2024, the RP2350 is in early silicon adoption (with known hardware errata E9 on pull-down pins) – the mature RP2040 remains the proven, rock-solid choice for OpenMotorBridge.
+* **Espressif ESP32-C3-WROOM-02U:** Single-core 32-bit RISC-V SoC with native 2.4 GHz radio (Wi-Fi 4 / BLE 5 / ESP-NOW) and hardware ROM-SLIP bootloader for UART push-flashing (~$1.20). Guaranteed availability through at least 2034.
 * **Semtech SX1262 LoRa:** Current industry benchmark transceiver for 868 MHz (+22 dBm) across OpenMotorMesh / Meshtastic.
 * **Bosch Sensortec BMI270:** Current 6-axis IMU (replaced the obsolete BMI160).
 * **WCH CH32V003F4P6:** 32-bit RISC-V cartridge controller, cent-cost with massive inventory at LCSC.

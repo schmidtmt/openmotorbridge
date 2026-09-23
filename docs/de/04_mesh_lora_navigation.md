@@ -247,9 +247,9 @@ struct __attribute__((packed)) OmmBikeAlarmAlert_t {
 
 ## 5. Heck-Pod 3 Transceiver-Architektur & UART-Protokoll
 
-Der Heck-Pod 3 (`PCBA 04`) dient als zentraler RF-Gateway- und GNSS-Knoten und beherbergt einen **Raspberry Pi RP2040** Dual-Core Coprozessor:
-* **Core 0 (`rear_nmea_task`):** Parst UBX/NMEA Datenströme des u-blox MAX-M10S Multi-GNSS mit 10 Hz und berechnet Positionsprädiktionen.
-* **Core 1 (`rear_lora_task`):** Steuert den Semtech SX1262 LoRa Transceiver über SPI (@ 16 MHz), verwaltet CSMA/CA Kanalzugriffe und puffert ein- und ausgehende OMM-Frames.
+Der Heck-Pod 3 (`PCBA 04`) dient als zentraler RF-Gateway- und GNSS-Knoten und beherbergt einen **ESP32-C3** 32-Bit RISC-V Coprozessor (ESP32-C3-WROOM-02U):
+* **GNSS & Telemetrie (`rear_nmea_task`):** Parst UBX/NMEA Datenströme des u-blox MAX-M10S Multi-GNSS mit 10 Hz und erfasst externe I2C-Sensorik (SHT40 / TMP117 an J6).
+* **RF & LoRa Engine (`rear_lora_task`):** Steuert das native 2.4 GHz OpenMotorMesh / ESP-NOW Funkinterface und den Semtech SX1262 868 MHz LoRa Transceiver über SPI (@ 16 MHz), verwaltet CSMA/CA Kanalzugriffe und puffert ein- und ausgehende OMM-Frames.
 
 ### 5.1 Protokoll-Spezifikation (Heck-Pod $\leftrightarrow$ Zentralbox)
 Die Kommunikation über die 460.800-Baud-Schnittstelle erfolgt paketorientiert mit CRC16-CCITT-Prüfsumme:
@@ -267,7 +267,7 @@ Die Kommunikation über die 460.800-Baud-Schnittstelle erfolgt paketorientiert m
 * **`0x03` - OMM 868 MHz LoRa Fallback Frame:** Codec2 Audio- oder Radar-Paket aus dem Long-Range Fallback.
 * **`0x04` - OMM Tx Request (Dual-PHY):** Sendeauftrag der Zentralbox an das 2.4 GHz Mesh oder den SX1262 LoRa Transceiver.
 * **`0x05` - DLE Status & Link Quality:** Signal-to-Noise Ratio (SNR), RSSI, PHY-Modus (2.4G vs 868M) und DLE Gateway-Score des Knotens.
-* **`0xFE` - Firmware Update Bootloader Command:** `0xAA 0x55 0xFE 0x01 "BOOT"` schaltet den RP2040 in den USB-ROM-Bootloader-Modus für Push-Flashen.
+* **`0xFE` - Firmware Update Bootloader Command:** Die Zentralbox versetzt den ESP32-C3 über dedizierte GPIO-Reset/Boot-Leitungen in den Hardware-ROM-Bootloader-Modus für Push-Flashen via SLIP-Protokoll (`omm_flasher.cpp`).
 
 ### 5.2 Architekturentscheidung: Warum dezentrales LoRa-Mesh statt Mobilfunk (LTE-M / Cloud)?
 

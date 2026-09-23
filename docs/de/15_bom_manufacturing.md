@@ -58,7 +58,7 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 
 | Designator | Bauteil / MPN | Hersteller | Gehäuse | LCSC / JLCPCB Part # | Funktion |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **U10** | RP2040 Dual Cortex-M0+ | Raspberry Pi | QFN-56 | C2040 | Coprozessor für NMEA-Parsing & OMM-LoRa |
+| **U1** | ESP32-C3-WROOM-02U-N4 | Espressif Systems | SMD-18 (U.FL) | C2934579 | 2.4 GHz OMM-Mesh & NMEA/LoRa Coprozessor |
 | **U11** | NEO-M9N-00B / MAX-M10S | u-blox | LCC-24 / LGA-18 | C3006240 | Multi-Konstellation GNSS Engine (10 Hz, 1-PPS) |
 | **U12** | SX1262IMLTRT | Semtech | QFN-24 | C190184 | Secondary Fallback 868 MHz LoRa Transceiver (+22 dBm)|
 | **U13** | DS2401Z+ | Maxim / ADI | SOT-23 | C2834570 | 64-Bit 1-Wire Silicon Serial Number ID |
@@ -131,13 +131,14 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 
 ---
 
-## 8. PCBA 08: Radar 2.0 Sub-MCU & 24-LED Halo Carrier (`openmotorbridge_radar_submcu`, 2-Layer FR4 TG150, 38 x 28 mm)
+## 8. PCBA 08: Radar 2.0 Sub-MCU & 36-LED Flügel-Träger (`openmotorbridge_radar_submcu`, 4-Lagen FR4 TG150, 115 x 65 mm)
 
 | Ref | Bauteil / Typ | Gehäuse | Spezifikation & Funktion | LCSC Part |
 | :--- | :--- | :--- | :--- | :--- |
-| **`U1`** | ESP32-C3-WROOM-02-N4 | SMD Modul | 32-Bit RISC-V Sub-MCU (160 MHz, 4MB Flash, USB-CDC/JTAG) | `C2843550` |
+| **`U1`** | ESP32-C5-WROOM-1-N8 | SMD Modul | 32-Bit RISC-V Dual-Band Sub-MCU (2.4 GHz + 5.9 GHz V2X, 4MB Flash) | `C2843550` |
 | **`U2`** | LDO 3.3V 500mA | SOT-23-5 | TI TPS7A0533 / Richtek RT9013 LDO Spannungsregler | `C505293` |
-| **`D1..24`**| WS2812B-2020 | SMD 2020 | 24x Digital RGB-LEDs im Annular-Halo (TTC-Strobe & Standby-Glow) | `C2843530` |
+| **`D1..36`**| WS2812B-2020 | SMD 2020 | 36x Digital RGB-LEDs in Doppel-Warnflügeln (18 links, 18 rechts) | `C2843530` |
+| **`ANT1`** | 5.9 GHz V2X Patch | 20x20x4 mm | Keramik-Patchantenne für ITS-G5 Car-to-X Sicherheitswarnungen | `C290456` |
 | **`J1`** | JST-SH 1.0mm 4-Pin | SMD Liegend | Entkoppelte interne Signalpeitsche zur Binder M5 Gehäuse-Buchse | `C136657` |
 | **`J2`** | JST-SH 1.0mm 4-Pin | SMD Liegend | UART-Verbindung zum Wheeltec MR20 Transceiver (RX/TX/5V/GND) | `C136657` |
 | **`D_TVS`**| PESD5V0S2BT | SOT-23 | TVS-Dioden-Array für UART & Stromversorgung | `C2834580` |
@@ -391,7 +392,7 @@ Um böse Überraschungen bei der Bauteilbeschaffung und automatisierten Bestück
 
 ### 14.3 Langzeit-gesicherte Schlüsselkomponenten (Liefergarantie bis mindestens 2034)
 * **Espressif ESP32-S3-WROOM-1 / 1U:** Espressif garantiert eine Mindestverfügbarkeit von 10 Jahren (mindestens bis 2034).
-* **Raspberry Pi RP2040:** Extreme Millionen-Verfügbarkeit (~0,70 €). *Hinweis zum neuen RP2350:* Der im Herbst 2024 erschienene RP2350 ist software- und hardwareseitig noch in der frühen Einführungsphase (bekannter Hardware-Errata E9 am Pull-Down-Pin) – der bewährte RP2040 ist für OpenMotorBridge die stabilere und günstigere Wahl.
+* **Espressif ESP32-C3-WROOM-02U:** Single-Core 32-Bit RISC-V SoC mit nativer 2,4-GHz-Funkstufe (Wi-Fi 4 / BLE 5 / ESP-NOW) und seriellem ROM-SLIP-Bootloader für Push-Flashen über UART (~1,20 €). Garantiert lieferbar bis mindestens 2034.
 * **Semtech SX1262 LoRa:** Aktueller Standard-Transceiver für 868 MHz (+22 dBm) in OpenMotorMesh / Meshtastic.
 * **Bosch Sensortec BMI270:** Moderne 6-Achsen-IMU (hat den veralteten/abgekündigten BMI160 abgelöst).
 * **WCH CH32V003F4P6:** 32-Bit RISC-V Kassettentreiber, Cent-Artikel mit gigantischen LCSC-Lagerbeständen.

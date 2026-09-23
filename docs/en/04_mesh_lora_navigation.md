@@ -205,9 +205,9 @@ struct __attribute__((packed)) OmmEmergencyAlert_t {
 
 ## 5. Rear Pod 3 Transceiver Architecture & UART Protocol
 
-Rear Pod 3 (`PCBA 04`) operates as the central RF gateway and positioning node, powered by a **Raspberry Pi RP2040** dual-core coprocessor:
-* **Core 0 (`rear_nmea_task`):** Parses UBX/NMEA binary streams from the u-blox MAX-M10S Multi-GNSS at 10 Hz and performs dead-reckoning position extrapolation.
-* **Core 1 (`rear_lora_task`):** Drives the Semtech SX1262 LoRa transceiver over high-speed SPI (@ 16 MHz), handling CSMA/CA channel access and packet buffering.
+Rear Pod 3 (`PCBA 04`) operates as the central RF gateway and positioning node, powered by an **ESP32-C3** 32-bit RISC-V coprocessor (ESP32-C3-WROOM-02U):
+* **GNSS & Telemetry (`rear_nmea_task`):** Parses UBX/NMEA binary streams from the u-blox MAX-M10S Multi-GNSS at 10 Hz and handles external I2C environmental sensing (SHT40 / TMP117 on J6).
+* **RF & LoRa Engine (`rear_lora_task`):** Controls the native 2.4 GHz OpenMotorMesh / ESP-NOW radio and Semtech SX1262 LoRa transceiver over high-speed SPI (@ 16 MHz), handling CSMA/CA channel access and packet buffering.
 
 ### 5.1 Protocol Specification (Rear Pod $\leftrightarrow$ Central Box)
 Communication over the 460,800 Baud physical UART uses framed binary packets with CRC16-CCITT integrity checks:
@@ -225,7 +225,7 @@ Communication over the 460,800 Baud physical UART uses framed binary packets wit
 * **`0x03` - OMM 868 MHz LoRa Fallback Frame:** Codec2 voice frame or radar telemetry from long-range link.
 * **`0x04` - OMM Tx Request (Dual-PHY):** Transmit request from Central Box to 2.4 GHz mesh or SX1262 LoRa PA.
 * **`0x05` - DLE Status & Link Quality:** Reports SNR, RSSI, active PHY mode, and node capability score.
-* **`0xFE` - Firmware Update Bootloader Command:** `0xAA 0x55 0xFE 0x01 "BOOT"` drops RP2040 into USB-ROM bootloader for in-system firmware reflashing.
+* **`0xFE` - Firmware Update Bootloader Command:** The Central Box triggers the ESP32-C3 hardware ROM bootloader via dedicated GPIO reset/boot lines using the SLIP protocol (`omm_flasher.cpp`) for zero-touch in-system flashing.
 
 ### 5.2 Architectural Decision: Why Decentralized LoRa Mesh over Cellular (LTE-M / Cloud)?
 

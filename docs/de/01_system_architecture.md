@@ -33,8 +33,8 @@ Klassische Motorrad-Kommunikationssysteme sind historisch stark fragmentiert:
 │ • Universal Pod-Gehäuse      │ • Universal Pod-Gehäuse      │ • Universal Pod-Gehäuse     │
 │ • Intercom-Brücke A (Sena    │ • Intercom-Brücke B (Cardo   │ • 1-Tier Monolith-Schlitten │
 │   50S/60S/MeshPort-Kassette) │   Packtalk Edge / PMR446)    │ • u-blox MAX-M10S Multi-GNSS│
-│ • Koffer-, Rahmen-, Heck-    │ • Koffer-, Rahmen-, Heck-    │ • SX1262 LoRa 868MHz + RP2040│
-│   oder Helm-Montage          │   oder Helm-Montage          │ • 2.4 GHz OMM-Mesh (RP2040) │
+│ • Koffer-, Rahmen-, Heck-    │ • Koffer-, Rahmen-, Heck-    │ • SX1262 LoRa 868MHz + ESP32│
+│   oder Helm-Montage          │   oder Helm-Montage          │ • 2.4 GHz OMM-Mesh (ESP32-C3)│
 └──────────────────────────────┴──────────────────────────────┴─────────────────────────────┘
   │                                                                                         │
   ├─► 6. BORDNETZ-ANSCHLUSS: AMP Superseal 1.5 4-Pin (KL30 Dauerplus, KL15 Zündung, Masse)   │
@@ -71,7 +71,7 @@ Klassische Telematik- und Assistenzsysteme neigen zum digitalen Paternalismus: S
 
 OpenMotorBridge v8.0 definiert die Plattform über **5 standardisierte Funktionsknoten**:
 1. **Zentralbox (Main ECU):** Zentraler Rechenkern (ESP32-S3), 24-Bit Audio-DSP/Codec (ES8388), galvanische Trennübertrager, 72V Automotive Step-Down (LM5164-Q1) und LiPo-USV (BQ24075 mit 2.200 mAh Flachzelle). *(Typischerweise mittig unter der Sitzbank im Batteriefach montiert).*
-2. **Heck-Pod 3 (Backbone & Telemetrie):** Multi-GNSS (u-blox MAX-M10S), 868 MHz LoRa (Semtech SX1262), 2.4 GHz OMM-Mesh-Co-Prozessor (RP2040) und 6-Achs-IMU (BMI270). *(Typischerweise am Heck mit ungestörter Sicht in den Zenit).*
+2. **Heck-Pod 3 (Backbone & Telemetrie):** Multi-GNSS (u-blox MAX-M10S), 868 MHz LoRa (Semtech SX1262), 2.4 GHz OMM-Mesh-Co-Prozessor (ESP32-C3) und 6-Achs-IMU (BMI270). *(Typischerweise am Heck mit ungestörter Sicht in den Zenit).*
 3. **Satelliten-Pod 1 (Intercom-Brücke A):** Universal-Wechselschacht für Sena (Mesh 2.0/3.0 / Bluetooth). *(Typischerweise linke Fahrzeugseite).*
 4. **Satelliten-Pod 2 (Intercom-Brücke B):** Universal-Wechselschacht für Cardo (DMC Gen1/Gen2 / Bluetooth) oder analogen Funk (PMR446). *(Typischerweise rechte Fahrzeugseite zur HF-Raumdiversität).*
 5. **Front-Node (Cockpit & Camera Hub):** Autonomer ESP32-S3 Satellit, Automotive USB 2.0 4-Port Hub (USB2514B) für Apple CarPlay/Android Auto CP2AA-Dongle, 20W USB-PD Fast-Charging (Southchip SC8102), geschalteter VBUS mit TPS2051B, digitaler PTT-Tastereingang, TCAN334G CAN-Transceiver und Knowles I2S MEMS-Windgeräuschmikrofon. *(Typischerweise unsichtbar in der Cockpitverkleidung oder Scheinwerfermaske).*
@@ -216,9 +216,10 @@ Der Front-Knoten (PCBA 05) dient auf **allen Motorrädern** als universeller Coc
 * **Heck-Kombihalter & Justage:** Der Montagehalter für Pod 3 bzw. der entkoppelte Kennzeichenträger ([`radar_license_plate_bracket.scad`](../../hardware/cad/scad/02_pod_base/radar_license_plate_bracket.scad)) integriert eine bionische 36-Zahn Hirth-Verzahnung zur verzugsfreien Ausrichtung des Radarsensors.
 * **Dual-Radar-Architektur (Zwei austauschbare Radar-Engines):**
   * **Radar 2.0 (Wheeltec MR20 77 GHz mmWave – Standard):**
-    - Integriert in IP67-Gehäuse ([`radar_mr20_housing.scad`](../../hardware/cad/scad/05_accessories/radar_mr20_housing.scad)) mit PCBA 08 (ESP32-C3 Sub-MCU).
+    - Integriert in IP67-Flügel-Gehäuse ([`radar_mr20_housing.scad`](../../hardware/cad/scad/05_accessories/radar_mr20_housing.scad)) mit PCBA 08 (ESP32-C5 Dual-Band Sub-MCU).
     - 77 GHz FMCW Horn-Array mit $\pm 60^\circ$ ($120^\circ$) horizontaler Erfassung und bis zu $90\,\text{m}$ Reichweite.
-    - 24-LED Neopixel-Perimeter-Halo: Bremslicht-Strobe bei Verzögerung $> 0{,}4\,g$, dynamisch expandierender Annäherungs-Halo bei herannahendem Verkehr ($TTC < 2{,}5\,\text{s}$).
+    - 36-LED Neopixel-Doppel-Warnflügel (18 links, 18 rechts): Richtungsbezogene Totwinkel-Warnung, Bremslicht-Strobe bei Verzögerung $> 0{,}4\,g$, dynamisch expandierender Annäherungs-Halo bei herannahendem Verkehr ($TTC < 2{,}5\,\text{s}$).
+    - Autarke 5.9 GHz ITS-G5 (V2X) Keramik-Patchantennenkammer im linken Flügel für Car-to-X Sicherheitswarnungen.
     - Binder Serie 707 M5 4-Pin IP67 Schnittstelle (Power + Macro-UART), mechanisch entkoppelt.
   * **Radar 1.0 (Garmin Varia RTL515 / eRTL615 – Legacy):**
     - 24 GHz Doppler-Streaming (0xAA Preamble, $140\,\text{m}$ Erfassung, $20\,\text{Hz}$ Update) über GoPro Lock Dock.
@@ -242,7 +243,7 @@ Der Front-Knoten (PCBA 05) dient auf **allen Motorrädern** als universeller Coc
 * **Funktionsweise (100% CAN Listen-Only konform):**
   * Erkennt die 6-Achsen-IMU der Zentralbox eine massive Gefahrenbremsung ($a_x < -6{,}0\,\text{m/s}^2$ bzw. $> 0{,}6\,\text{g}$ Verzögerung aus hohem Tempo):
   * Sendet OpenMotorBridge über UART Makrobefehle:
-    - Am Radar 2.0 (Wheeltec MR20): Triggert den 24-LED Neopixel-Halo in einen ultrahellen, pulsierenden $4\dots 5\,\text{Hz}$ Bremslicht-Stroboskop-Blitz.
+    - Am Radar 2.0 (Wheeltec MR20): Triggert die beiden 18-LED Neopixel-Warnflügel (36 LEDs gesamt) in einen ultrahellen, synchron pulsierenden $4{,}5\,\text{Hz}$ Bremslicht-Stroboskop-Blitz.
     - Am Garmin Varia: Sendet `SET_LIGHT_MODE: STROBE_4HZ`.
   * **Ergebnis:** Höchste Warnwirkung für nachfolgende Fahrzeuge, **völlig ohne Eingriff in die originale Fahrzeug-Bremsleitung**.
 

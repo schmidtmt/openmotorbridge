@@ -1,6 +1,6 @@
 # 09 - Firmware-Architektur, FreeRTOS Tasks & Rollback-OTA
 
-Dieses Dokument spezifiziert die systemweite Firmware-Architektur der OpenMotorBridge v8.0: die Multi-Core-Aufteilung des ESP32-S3 Hauptcontrollers, die Coprozessoren (RP2040 im Heck-Pod 3 und ESP32-S3 im Front-Knoten), das **ESP-NOW Low-Latency-Protokoll (< 1,8 ms)**, die LittleFS-Profil-Engine sowie die **Dual-Bank Rollback-OTA-Architektur** gegen Stromausfälle während des Flashvorgangs.
+Dieses Dokument spezifiziert die systemweite Firmware-Architektur der OpenMotorBridge v8.0: die Multi-Core-Aufteilung des ESP32-S3 Hauptcontrollers, die Coprozessoren (ESP32-C3 im Heck-Pod 3 und ESP32-S3 im Front-Knoten), das **ESP-NOW Low-Latency-Protokoll (< 1,8 ms)**, die LittleFS-Profil-Engine sowie die **Dual-Bank Rollback-OTA-Architektur** gegen Stromausfälle während des Flashvorgangs.
 
 ---
 
@@ -10,10 +10,10 @@ Dieses Dokument spezifiziert die systemweite Firmware-Architektur der OpenMotorB
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
 │                        DIE 3 FIRMWARE-KONTROLLER IM VERBUND                            │
 ├──────────────────────────────────────┬─────────────────────────┬───────────────────────┤
-│ 1. ZENTRALBOX (ESP32-S3 Dual-Core)   │ 2. REAR POD 3 (RP2040)  │ 3. FRONT-NODE (ESP32-S3)│
+│ 1. ZENTRALBOX (ESP32-S3 Dual-Core)   │ 2. REAR POD 3 (ESP32-C3)│ 3. FRONT-NODE (ESP32-S3)│
 ├──────────────────────────────────────┼─────────────────────────┼───────────────────────┤
-│ • Core 0: BLE, WebDAV, SDIO, ESP-NOW │ • Core 0: NMEA/UBX 10Hz │ • Core 0: ESP-NOW/BLE │
-│ • Core 1: Echtzeit 48kHz Audio-DSP   │ • Core 1: LoRa SX1262   │ • Core 1: Vector-DSP  │
+│ • Core 0: BLE, WebDAV, SDIO, ESP-NOW │ • NMEA/UBX & I2C-Sensor │ • Core 0: ESP-NOW/BLE │
+│ • Core 1: Echtzeit 48kHz Audio-DSP   │ • 2.4G OMM & SX1262 LoRa│ • Core 1: Vector-DSP  │
 └──────────────────────────────────────┴─────────────────────────┴───────────────────────┘
 ```
 
@@ -146,7 +146,7 @@ Das System exponiert standardkonforme Bluetooth SIG Services sowie proprietäre 
 ## 4. OMM In-System UART-Push-Flasher (`omm_flasher.cpp`)
 
 Für Firmware-Updates des Heck-Pods 3 ohne Ausbau aus dem Fahrzeug:
-* Die Zentralbox liest das Binär-Image `omm_rear.bin` und versetzt den RP2040 über UART mit dem Steuerbefehl `0xAA 0x55 0xFE 0x01 "BOOT"` in den Download-Modus.
+* Die Zentralbox liest das Binär-Image `omm_rear.bin` und versetzt den ESP32-C3 über dedizierte GPIO-Reset/Boot-Leitungen in den Hardware-ROM-Bootloader-Modus (SLIP-Protokoll, `omm_flasher.cpp`).
 * Die Übertragung erfolgt mit $460{,}800\,\text{Baud}$ in 1024-Byte-Blöcken ($< 6\,\text{s}$ Gesamtdauer).
 * Der Front-Node (PCBA 05) wird über OTA Rollback-Partitionen via ESP-NOW bzw. das WebApp PWA Dashboard geflasht.
 
@@ -190,8 +190,8 @@ Das Gesamtsystem orchestriert 16 spezialisierte Tasks über 3 physikalisch getre
 | **`sdio_log_task`** | ESP32-S3 Main (Core 0) | **8** | 8 KB | 10 Hz Ringpuffer | FreeRTOS RingBuffer | 4-Bit SDIO Blackbox-Logging mit ECDSA SHA-256 Signatur. |
 | **`onewire_task`** | ESP32-S3 Main (Core 0) | **5** | 2 KB | 0,5 Hz zyklisch | Bit-Banging Driver | Pollt 1-Wire UIDs an Pod 1 & 2 (CH32V003 Emulation oder DS2401). |
 | **`webdav_sync_task`**| ESP32-S3 Main (Core 0) | **3** | 8 KB | Nachlauf (Graceful)| LwIP TLS 1.3 | Automatischer GPX-Upload im Heim-WLAN bei Zündung AUS. |
-| **`rear_nmea_task`** | RP2040 (Core 0) | **High**| 2 KB | 10 Hz DMA | UART0 (460.8k Baud) | High-Speed UBX/NMEA Parsing & 1-PPS Timecode Capture. |
-| **`rear_lora_task`** | RP2040 (Core 1) | **High**| 2 KB | SX1262 IRQ | SPI0 Bus | 868 MHz LoRa Mesh Paketierung & Notfall-Sprachtunnel. |
+| **`rear_nmea_task`** | ESP32-C3 (RISC-V) | **High**| 2 KB | 10 Hz DMA | UART0 (460.8k Baud) | High-Speed UBX/NMEA Parsing & 1-PPS Timecode Capture & I2C SHT40. |
+| **`rear_lora_task`** | ESP32-C3 (RISC-V) | **High**| 2 KB | SX1262 IRQ | SPI Bus / ESP-NOW | 868 MHz LoRa Mesh & 2.4 GHz OMM Paketierung. |
 | **`front_ptt_task`** | ESP32-S3 Front (Core 0)| **24** | 2 KB | GPIO Edge ISR | ESP-NOW TX Queue | Überträgt Lenker-PTT: 1x kurz = Funk-PTT via ESP-NOW in $< 0{,}9\,\text{ms}$; 2x kurz = Action-Cam Toggle; 1x lang = HiLight Tag. |
 | **`front_mems_task`** | ESP32-S3 Front (Core 1)| **18** | 4 KB | 48 kHz DMA | Vector-DSP Filter | Knowles SPH0645 Digitalmikrofon A-Weighting & RMS-Pegel via Xtensa DSP. |
 | **`front_cam_ble_task`**| ESP32-S3 Front (Core 0)| **12** | 4 KB | Event / KL15 ISR | NimBLE Client | Steuert GoPro / Insta360 / DJI per BLE; führt bei Zündungsaus sofortigen Auto-Stop aus. |

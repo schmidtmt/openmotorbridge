@@ -12,7 +12,7 @@
 
 static const char *TAG = "RADAR2_SUBMCU";
 
-// Pinout for Radar 2.0 Sub-MCU (ESP32-C3)
+// Pinout for Radar 2.0 Sub-MCU (ESP32-C5 Dual-Band)
 #define UART_BRIDGE_PORT            UART_NUM_0
 #define PIN_BRIDGE_TX               GPIO_NUM_21 // to Central Box Binder M5 RX
 #define PIN_BRIDGE_RX               GPIO_NUM_20 // to Central Box Binder M5 TX
@@ -24,7 +24,8 @@ static const char *TAG = "RADAR2_SUBMCU";
 #define MR20_BAUDRATE               115200
 
 #define PIN_NEOPIXEL                GPIO_NUM_8  // WS2812B-2020 Data line
-#define NUM_LEDS                    24          // 24-LED Halo around radar horn
+#define NUM_LEDS                    36          // 36-LED Visual Warning Wings (18 Left, 18 Right)
+#define WING_LEDS                   18          // 18 LEDs per wing (Left: 0..17, Right: 18..35)
 
 static SemaphoreHandle_t s_radar_data_mutex = NULL;
 static RadarTelemetryPacket_t s_current_telemetry;
@@ -44,7 +45,7 @@ static RgbColor_t s_led_buffer[NUM_LEDS];
 // Helper to write simulated WS2812B bits via RMT or fast GPIO bit-banging
 static void update_neopixel_halo(void) {
     // In hardware this is dispatched to the ESP-IDF RMT or SPI-MOSI driver.
-    // For ESP32-C3, SPI2 MOSI (GPIO 8) delivers zero-jitter 800kHz WS2812 pulses.
+    // For ESP32-C5, SPI2 MOSI (GPIO 8) delivers zero-jitter 800kHz WS2812 pulses.
 }
 
 static void init_uarts(void) {
@@ -226,21 +227,39 @@ static void task_neopixel_halo(void *arg) {
                 s_led_buffer[i].b = 0;
             }
         }
-        // Effect 3: Threat Halo Warning (expanding red or amber ring)
-        else if (max_threat == RADAR_THREAT_LVL_RED) {
-            // Rapid alternating red flash on halo
+        // Effect 3: Threat Warning on Dual Wings (Directional BSD & TTC Level)
+        else if (max_threat == RADAR_THREAT_LVL_RED || max_threat == RADAR_THREAT_LVL_AMBER) {
             bool strobe = (frame_count % 3) == 0;
-            for (int i = 0; i < NUM_LEDS; i++) {
-                s_led_buffer[i].r = strobe ? (uint8_t)(255 * brightness_scale) : 0;
-                s_led_buffer[i].g = 0;
-                s_led_buffer[i].b = 0;
+            uint8_t target_r = (uint8_t)(255 * brightness_scale);
+            uint8_t target_g = (max_threat == RADAR_THREAT_LVL_AMBER) ? (uint8_t)(140 * brightness_scale) : 0;
+            uint8_t base_r = (uint8_t)(40 * brightness_scale);
+
+            // Left Wing (LEDs 0..17)
+            bool flash_left = bsd_left || (!bsd_right); // flash if left threat or general threat
+            for (int i = 0; i < WING_LEDS; i++) {
+                if (flash_left && (strobe || max_threat == RADAR_THREAT_LVL_AMBER)) {
+                    s_led_buffer[i].r = target_r;
+                    s_led_buffer[i].g = target_g;
+                    s_led_buffer[i].b = 0;
+                } else {
+                    s_led_buffer[i].r = base_r;
+                    s_led_buffer[i].g = 0;
+                    s_led_buffer[i].b = 0;
+                }
             }
-        } else if (max_threat == RADAR_THREAT_LVL_AMBER) {
-            // Solid amber halo
-            for (int i = 0; i < NUM_LEDS; i++) {
-                s_led_buffer[i].r = (uint8_t)(255 * brightness_scale);
-                s_led_buffer[i].g = (uint8_t)(140 * brightness_scale);
-                s_led_buffer[i].b = 0;
+
+            // Right Wing (LEDs 18..35)
+            bool flash_right = bsd_right || (!bsd_left); // flash if right threat or general threat
+            for (int i = WING_LEDS; i < NUM_LEDS; i++) {
+                if (flash_right && (strobe || max_threat == RADAR_THREAT_LVL_AMBER)) {
+                    s_led_buffer[i].r = target_r;
+                    s_led_buffer[i].g = target_g;
+                    s_led_buffer[i].b = 0;
+                } else {
+                    s_led_buffer[i].r = base_r;
+                    s_led_buffer[i].g = 0;
+                    s_led_buffer[i].b = 0;
+                }
             }
         }
         // Effect 4: Standby Position Glow / Night Light

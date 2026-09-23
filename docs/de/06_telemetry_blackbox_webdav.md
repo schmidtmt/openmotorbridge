@@ -81,7 +81,7 @@ Um Leitungen durch den Lenkkopf zum kabellosen Frontnode strikt zu vermeiden und
 │ • 0 zusätzliche Kabel, 0 Bauteilekosten, 100 % werkskalibriert               │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │ STUFE 2: Heck-Pod 3 Antennenfuß-Sensorik (Universal / CVO ST / Non-CAN)     │
-│ • Sensorik (DS18B20 1-Wire oder TI TMP117 I2C) an PCBA 04 (RP2040)          │
+│ • Sensorik (DS18B20 1-Wire oder TI TMP117 / SHT40 I2C an J6) an PCBA 04 (ESP32-C3) │
 │ • Montage: Im Antennensockel / Fahrtwindkanal der Telemetrieflosse           │
 │   (cvo_st_telemetry_fin.stl) direkt an der externen 2.4 GHz Antenne          │
 │ • Thermische Entkopplung: Verhindert Fehlmessungen durch Motorstauwärme      │

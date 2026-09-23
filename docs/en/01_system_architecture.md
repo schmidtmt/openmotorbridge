@@ -33,8 +33,8 @@ Classic motorcycle communication systems are historically fragmented:
 │ • Universal Pod Enclosure    │ • Universal Pod Enclosure    │ • Universal Pod Enclosure   │
 │ • Intercom Bridge A (Sena    │ • Intercom Bridge B (Cardo   │ • 1-Tier Monolithic Sled    │
 │   50S/60S/MeshPort Sled)     │   Packtalk Edge / PMR446)    │ • u-blox MAX-M10S Multi-GNSS│
-│ • Saddlebag, Frame, Rear or  │ • Saddlebag, Frame, Rear or  │ • SX1262 LoRa 868MHz + RP2040│
-│   Helmet Mounting            │   Helmet Mounting            │ • 2.4 GHz OMM-Mesh (RP2040) │
+│ • Saddlebag, Frame, Rear or  │ • Saddlebag, Frame, Rear or  │ • SX1262 LoRa 868MHz + ESP32-C3│
+│   Helmet Mounting            │   Helmet Mounting            │ • 2.4 GHz OMM-Mesh (ESP32-C3) │
 └──────────────────────────────┴──────────────────────────────┴─────────────────────────────┘
   │                                                                                         │
   ├─► 6. VEHICLE POWER: AMP Superseal 1.5 4-Pin (KL30 Batt+, KL15 Ign+, Chassis Ground)       │
@@ -72,7 +72,7 @@ Traditional telematics and motorcycle rider assistance systems tend toward digit
 
 OpenMotorBridge v8.0 defines the platform across **5 standardized functional nodes**:
 1. **Central Box (Main ECU):** Central computational core (ESP32-S3), 24-bit audio DSP/codec (ES8388), galvanic isolation transformers, 72V automotive step-down (LM5164-Q1), and LiPo UPS (BQ24075 with 2,200 mAh flat pouch cell). *(Typically mounted centrally under the seat in the battery compartment).*
-2. **Rear Pod 3 (Backbone & Telemetry):** Multi-GNSS (u-blox MAX-M10S), 868 MHz LoRa (Semtech SX1262), 2.4 GHz OMM Mesh co-processor (RP2040), and 6-axis IMU (BMI270). *(Typically mounted at the rear with an unobstructed view of the zenith).*
+2. **Rear Pod 3 (Backbone & Telemetry):** Multi-GNSS (u-blox MAX-M10S), 868 MHz LoRa (Semtech SX1262), 2.4 GHz OMM Mesh co-processor (ESP32-C3), and 6-axis IMU (BMI270). *(Typically mounted at the rear with an unobstructed view of the zenith).*
 3. **Satellite Pod 1 (Intercom Bridge A):** Universal cartridge bay for Sena (Mesh 2.0/3.0 / Bluetooth). *(Typically on the left vehicle side).*
 4. **Satellite Pod 2 (Intercom Bridge B):** Universal cartridge bay for Cardo (DMC Gen1/Gen2 / Bluetooth) or analog PMR446 radio. *(Typically on the right vehicle side for RF spatial diversity).*
 5. **Front Node (Cockpit & Camera Hub):** Autonomous ESP32-S3 satellite, automotive USB 2.0 hub (USB2514B) for Apple CarPlay / Android Auto (CP2AA COTS dongle thermally decoupled), fast-charging handlebar smartphone port (Southchip SC8102 20W USB-PD), switched 5V accessory/cam ports, digital PTT button input, and Knowles MEMS ambient noise microphone. *(Typically hidden behind fairings or inside the headlight nacelle).*
@@ -215,26 +215,40 @@ The Front Node (PCBA 05) serves on **all motorcycle types** as the universal coc
 * **Real-time Telemetry:** Via the TCAN334G transceiver in listen-only mode, the bridge captures wheel speeds, lean angles, and turn indicators.
 * **TFT Display Notifications:** System alerts can be rendered directly on the motorcycle TFT dashboard.
 
-### 5.3 Rear Radar & Blind-Spot Assistant (Garmin Varia / 24 GHz mmWave) on Pod 3 Dual-Mount Bracket
-* **Pod 3 Dual-Mount Bracket & Alignment:** The rear mounting bracket securely holds the universal Pod 3 housing while integrating an angle-adjustable GoPro-compatible M5 arm for horizontal radar leveling ($\pm 5^\circ$).
-* **Direct Connection to Pigtail 5:** Provides switched 12V power and bidirectional telemetry (UART2 on `RESERVE_GPIO_A/B` or CAN-Bus) through the waterproof M8 4-pin interface.
-* **Supported Radar Hardware:**
-  * **Garmin Varia Radar:** RTL515 / eRTL615 serial streaming protocol (0xAA preamble, $140\,\text{m}$ range, $20\,\text{Hz}$ update rate).
-  * **24 GHz mmWave Doppler Radars:** Automotive compact modules (e.g. BGT24LTR11 / HLK-LD2410 / DFROBOT).
+### 5.3 Rear Radar 2.0 & Blind-Spot Assistant (Wheeltec MR20 77 GHz mmWave & Garmin Varia) on Pod 3 Dual-Mount Bracket
+* **Dual-Mount Bracket & Alignment:** The rear mounting bracket for Pod 3 or the decoupled license plate carrier ([`radar_license_plate_bracket.scad`](../../hardware/cad/scad/02_pod_base/radar_license_plate_bracket.scad)) integrates a bionic 36-tooth Hirth coupling for distortion-free horizontal radar leveling.
+* **Dual-Radar Architecture (Two Interchangeable Radar Engines):**
+  * **Radar 2.0 (Wheeltec MR20 77 GHz mmWave – Standard):**
+    - Integrated in an IP67 winged monocoque housing ([`radar_mr20_housing.scad`](../../hardware/cad/scad/05_accessories/radar_mr20_housing.scad)) with PCBA 08 (ESP32-C5 Dual-Band Sub-MCU).
+    - 77 GHz FMCW horn-array antenna with $\pm 60^\circ$ ($120^\circ$) horizontal FoV and up to $90\,\text{m}$ detection range.
+    - 36-LED Neopixel dual warning wings (18 left, 18 right): Directional blind-spot detection (BSD), brake-light strobe on deceleration $> 0.4\,g$, and dynamically expanding proximity halo on rapid overtaking traffic ($TTC < 2.5\,\text{s}$).
+    - Autonomous 5.9 GHz ITS-G5 (V2X) ceramic patch antenna cradle in the left wing for Car-to-X safety broadcasts.
+    - Binder Series 707 M5 4-pin IP67 connector (power + macro-UART), mechanically decoupled.
+  * **Radar 1.0 (Garmin Varia RTL515 / eRTL615 – Legacy):**
+    - 24 GHz Doppler streaming (0xAA preamble, $140\,\text{m}$ detection range, $20\,\text{Hz}$ update) via GoPro Lock Dock.
 * **Dynamic Threat Estimation & Time-To-Collision (TTC):**
   * $\text{TTC} = \frac{d}{v_{\text{rel}}}$.
   * **Clear (Green):** No vehicle in danger zone or $v_{\text{rel}} \le 10\,\text{km/h}$.
   * **Amber (Approaching):** $d \le 80\,\text{m}$ and $v_{\text{rel}} > 15\,\text{km/h}$ (standard vehicle closing in).
   * **Red (Collision Hazard):** $\text{TTC} < 3.5\,\text{s}$ or ($d \le 35\,\text{m}$ and $v_{\text{rel}} > 25\,\text{km/h}$).
 * **Acoustic Helmet Warnings (Priority-1 Ducking):** On amber/red hazard alerts, the audio DSP immediately ducks music/intercom to **$-18\,\text{dB}$** ($< 15\,\text{ms}$ attack) and injects a crisp **synthesized dual-tone chime** ($880\,\text{Hz} \rightarrow 1760\,\text{Hz}$ on Amber, $988\,\text{Hz} \rightarrow 1976\,\text{Hz}$ on Red) directly into the rider's helmet.
-* **Blind-Spot Detection (BSD) & Mirror LEDs:** When an approaching vehicle enters the close-range blind-spot zone ($d < 15\,\text{m}$, $|\text{azimuth}| > 3^\circ$), virtual left/right mirror indicator pills flash in amber or red on the WebApp HUD.
+* **Astronomical Dimming & Tunnel Detection:**
+  * Computes the solar elevation angle $\alpha_{\text{sun}}$ from GNSS coordinates and UTC time: Dimming levels transition smoothly from 100% (daylight) down to 18% (night).
+  * **Tunnel Detector:** Immediate loss of GNSS signal ($Fix = 0$ for $> 1.5\,\text{s}$) at speed $> 30\,\text{km/h}$ forces BSD LEDs to night dimming (18%) to eliminate rear-view mirror glare.
+* **Turn Signal Coupling:** Right turn signal monitors left overtaking lane; left turn signal enforces dual-lane threat monitoring.
 
-#### 5.3.1 Emergency Stop Signal (ESS) Brake Flashing via Rear Radar & Aux Power Port
+#### 5.3.1 Autonomous Weather Trend Engine (BMP390 with GNSS Altitude Compensation)
+* **Physical Barometric Trend:** Normalizes ambient absolute pressure against GNSS ellipsoid altitude ($P_0 = P \cdot (1 - h / 44330)^{-5.255}$).
+* **Trend Classification:** Detects barometric drops $> 2.0\,\text{hPa/h}$ or temperature plunges $> 3\,^\circ\text{C}/15\,\text{min}$ as incoming storm fronts without requiring any cellular data uplink.
+* **Safe Delivery:** Weather alerts are announced while stationary ($v = 0\,\text{km/h}$) or during rest stops.
+
+#### 5.3.2 Emergency Stop Signal (ESS) Brake Flashing via Rear Radar & Aux Power Port
 * **100% CAN Listen-Only Compliant Operation:**
   * When the Central Box 6-DOF IMU detects acute emergency deceleration ($a_x < -6.0\,\text{m/s}^2$ or $> 0.6\,\text{g}$ from speed):
-  * OpenMotorBridge dispatches the serial command `SET_LIGHT_MODE: STROBE_4HZ` to the Garmin Varia radar via Pigtail 5 (`RADAR_TX/RX`).
-  * **Result:** The ultra-bright high-power taillight LEDs on the radar flash at an aggressive **$4\dots 5\,\text{Hz}$ strobe rate**, warning trailing motorists of sudden hazard braking to prevent rear-end collisions.
-  * **Auxiliary Power Port:** Alternatively or simultaneously, the switched smart high-side power switch (`RESERVE_GPIO_B`) triggers auxiliary LED lighting or wireless helmet brake lights (e.g. Cosmo Moto / Cardo) without any splicing into factory bike wiring harnesses.
+  * OpenMotorBridge dispatches serial macro commands over UART:
+    - On Radar 2.0 (Wheeltec MR20): Triggers the dual 18-LED Neopixel warning wings (36 LEDs total) into an ultra-bright, synchronized $4.5\,\text{Hz}$ emergency brake strobe.
+    - On Garmin Varia: Transmits `SET_LIGHT_MODE: STROBE_4HZ`.
+  * **Result:** Maximum warning conspicuity for trailing drivers with **zero splicing into factory motorcycle hydraulic lines or wiring**.
 
 ### 5.4 LoRa 868 MHz Bike Alarm Pager & Parking Sentry (OEM BCM + Autonomous IMU)
 * **The Limitation of Traditional Bike Alarms:** When parked at a hotel or mountain pass café, the bike's audible horn alarm cannot be heard from $> 50\dots 100\,\text{m}$ away.

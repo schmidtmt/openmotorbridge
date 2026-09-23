@@ -81,7 +81,7 @@ To strictly avoid running cables through the steering stem to the wireless Front
 │ • 0 extra wires, 0 hardware cost, factory calibrated                        │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │ TIER 2: Rear Pod 3 Antenna Fin Probe (Universal / CVO ST / Non-CAN)         │
-│ • Dedicated sensor (DS18B20 1-Wire or TI TMP117 I2C) on PCBA 04 (RP2040)    │
+│ • Dedicated sensor (DS18B20 1-Wire or TI TMP117 / SHT40 I2C on J6) on PCBA 04 (ESP32-C3) │
 │ • Installation: Antenna base / airstream duct inside the telemetry fin     │
 │   (cvo_st_telemetry_fin.stl) surrounding the external 2.4 GHz antenna       │
 │ • Thermal Isolation: Eliminates false readings from engine heat trapped     │

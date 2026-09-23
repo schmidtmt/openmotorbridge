@@ -21,7 +21,7 @@ This document serves as the **authoritative hardware specification for all 8 pri
 │ **PCBA 03**│ **Smart Modular Cartridge**   │ 35 x 25 mm    │ 2 Layer │ CH32V003 RISC-V MCU, │
 │       │ (Rev 2.0 Mechatronic Carrier) │ (29x19 mm M2) │         │ 4x MOSFETs, J_ACT 8P │
 ├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
-│ **PCBA 04**│ **Rear Pod 3 Transceiver Hub** │ 55 x 48 mm    │ 4 Layer │ RP2040 Coprocessor,  │
+│ **PCBA 04**│ **Rear Pod 3 Transceiver Hub** │ 55 x 48 mm    │ 4 Layer │ ESP32-C3 Coprocessor,│
 │       │ (Tail Pod: LoRa 868M & GNSS)  │ (46x19 mm M2) │ (ENIG)  │ SX1262 LoRa, MAX-M10S│
 ├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
 │ **PCBA 05**│ **Universal Front Node**      │ 82 x 50 mm    │ 4 Layers│ ESP32-S3 Xtensa,     │
@@ -89,6 +89,10 @@ All 4-layer boards (PCBA 01, PCBA 04, and PCBA 05) utilize an identical controll
 * **Galvanic Isolation Barrier:** $4{,}0\,\text{mm}$ clearance and creepage distance beneath Bourns transformers `T1` and `T2`.
 
 ### 3.2 Pinout of Central 26-Pin Flange Connector (`J1` / HD26)
+
+![Automotive Wiring Harness Architecture](../images/cad/wiring_harness_cad.png)
+
+*Figure 7.1b: CAD system architecture of the central 26-pin automotive wiring harness (HD26 Seal-D to 5x modular branch pigtails with IP67 overmolded Y-hub).*
 
 | Pin (HD26/J1) | Signal Name | Signal Type / Level | Function & Protection |
 | :--- | :--- | :--- | :--- |
@@ -267,7 +271,7 @@ To control devices with different button layouts (Sena Spider X Slim vs. Cardo P
 
 ![PCBA 04 Rear Pod 3 Transceiver Hub](../images/pcba/pcba04_rear_pod3_3d.png)
 
-*Figure 7.4: KiCad 3D render of the Rear Pod 3 Transceiver PCB (PCBA 04, 55 x 48 mm, 4 layers) with RP2040 coprocessor, Semtech SX1262 LoRa, u-blox Multi-GNSS, and U.FL/Murata MM8030 RF switch ports.*
+*Figure 7.4: KiCad 3D render of the Rear Pod 3 Transceiver PCB (PCBA 04, 55 x 48 mm, 4 layers) with ESP32-C3-WROOM-02U RISC-V coprocessor (2.4 GHz OMM Mesh), Semtech SX1262 LoRa, u-blox Multi-GNSS, and U.FL/Murata MM8030 RF switch ports.*
 
 ### 6.1 Board Specifications & RF Layout
 * **Dimensions:** $55{,}0 \times 48{,}0\,\text{mm}$ (4 Layers FR-4 High-TG150, 4x M2 mounting holes in $46{,}0 \times 19{,}0\,\text{mm}$ grid, housed inside aerodynamic tail cowl with dielectric RF radome).
@@ -275,7 +279,7 @@ To control devices with different button layouts (Sena Spider X Slim vs. Cardo P
   * Layer 1 (Top): RF transceivers, GNSS module, Murata MM8030 switches, $50\,\Omega$ coplanar RF traces.
   * Layer 2 (Inner 1): Continuous, unslotted RF ground reference plane.
   * Layer 3 (Inner 2): Split Power planes ($+3{,}3\,\text{V}_{\text{RF}}$, $+3{,}3\,\text{V}_{\text{DIG}}$, $+5{,}0\,\text{V}$).
-  * Layer 4 (Bottom): RP2040 coprocessor, SPI Flash, passives, and secondary logic traces.
+  * Layer 4 (Bottom): ESP32-C3-WROOM-02U coprocessor (2.4 GHz OMM Mesh), SPI Flash, passives, and secondary logic traces.
 
 ### 6.2 Pinout of 6-Pin Interface to Central Box (`J1`)
 
@@ -298,22 +302,22 @@ The board features 3 automatic coaxial switch connectors (`Murata MM8030-2610`) 
 | **`J4`** | $868\,\text{MHz}$ LoRa | Internal helical coil antenna ($+1{,}5\,\text{dBi}$) | External $\lambda/4$ monopole antenna for maximum range |
 | **`J5`** | $1{,}575\,\text{GHz}$ GNSS | Internal $25 \times 25\,\text{mm}$ ceramic patch antenna | External active patch antenna with $+3{,}3\,\text{V}$ phantom power |
 
-### 6.4 RP2040 Dual-Cortex-M0+ Coprocessor Pin Mapping
+### 6.4 ESP32-C3 RISC-V Coprocessor Pin Mapping
 
-| RP2040 Pin | Net Name | Function & Peripheral Assignment |
+| ESP32-C3 Pin | Net Name | Function & Peripheral Assignment |
 | :--- | :--- | :--- |
-| **GPIO 0 / 1** | `UART0_TX` / `RX` | High-Speed UART link to Central Box (460,800 Baud, DMA-buffered) |
-| **GPIO 4 / 5** | `UART1_TX` / `RX` | High-Speed UBX/NMEA binary link to u-blox NEO-M9N GNSS module |
-| **GPIO 6** | `TIMEPULSE_1PPS` | Hardware capture timer input for frame-accurate action cam synchronization |
-| **GPIO 8** | `SPI0_SCK` | SPI Serial Clock to Semtech SX1262 LoRa transceiver |
-| **GPIO 9** | `SPI0_MISO` | SPI Master-In Slave-Out from SX1262 |
-| **GPIO 10** | `SPI0_MOSI` | SPI Master-Out Slave-In to SX1262 |
-| **GPIO 11** | `SPI0_NSS` | SPI Chip Select (Active-Low) to SX1262 |
-| **GPIO 2** | `LORA_BUSY` | SX1262 State Flag (hardware hold condition for SPI commands) |
-| **GPIO 3** | `LORA_DIO1` | SX1262 IRQ (Packet Received / Packet Sent Interrupt) |
-| **GPIO 16** | `WS2812B_LED` | Serial data stream to RGB status indicator LED |
-| **GPIO 14** | `I2C1_SDA` / `1WIRE_BUS` | I2C Data / 1-Wire data link for external antenna fin sensor port (`J6`) |
-| **GPIO 15** | `I2C1_SCL` | I2C Clock for high-precision temperature probe (TI TMP117) & barometer |
+| **GPIO 20 / 21** | `UART0_RX` / `TX` | High-Speed UART link to Central Box (460,800 Baud, ROM-SLIP Bootloader) |
+| **GPIO 0 / 1** | `UART1_TX` / `RX` | High-Speed UBX/NMEA binary link to u-blox NEO-M9N GNSS module |
+| **GPIO 10** | `TIMEPULSE_1PPS` | Hardware capture timer input for frame-accurate action cam synchronization |
+| **GPIO 4** | `SPI_SCK` | SPI Serial Clock to Semtech SX1262 LoRa transceiver |
+| **GPIO 5** | `SPI_MISO` | SPI Master-In Slave-Out from SX1262 |
+| **GPIO 6** | `SPI_MOSI` | SPI Master-Out Slave-In to SX1262 |
+| **GPIO 7** | `SPI_NSS` | SPI Chip Select (Active-Low) to SX1262 |
+| **GPIO 3** | `LORA_BUSY` | SX1262 State Flag (hardware hold condition for SPI commands) |
+| **GPIO 2** | `LORA_DIO1` | SX1262 IRQ (Packet Received / Packet Sent Interrupt) |
+| **GPIO 8** | `I2C_SDA` / `1WIRE` | I2C Data / 1-Wire data link for external antenna fin sensor port (`J6`) |
+| **GPIO 9** | `I2C_SCL` | I2C Clock for high-precision temperature probe (TI TMP117) & SHT40 |
+| **U.FL Port** | `ESP_RF_ANT` | 2.4 GHz RF port for native OMM Mesh & Wi-Fi uplink |
 
 ### 6.5 External Antenna Base Sensor Port (`J6` / `J_EXT_TEMP`)
 

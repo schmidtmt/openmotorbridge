@@ -317,7 +317,7 @@ Um Signale vom 90°-abgewinkelten **JST-SH 1.0 mm 6-Pin SMD-Steckverbinder (`J2`
 
 #### 4.3.2 OMM-Transceiver-Kassette & Telemetrie-Backbone (Pod 3)
 
-Die OMM-Transceiver-Wechselkassette ([`cartridge_antenna_bracket_omm.scad`](../../hardware/cad/scad/03_pod_cartridges/parts/04_antenna_bracket_omm.scad) / [`cartridge_omm_transceiver.scad`](../../hardware/cad/scad/03_pod_cartridges/cartridge_omm_transceiver.scad)) bildet das datentechnische Rückgrat des OpenMotorBridge-Mesh-Netzwerks. Sie vereint den OMM-Transceiver, 868 MHz LoRa, 5.9 GHz V2X und Multi-GNSS (`PCBA 04`, RP2040 Dual-Core Co-Prozessor, SX1262 LoRa, u-blox MAX-M10S mit $25 \times 25\,\text{mm}$ Groundplane und Bosch Sensortec BMI270 6-Achs-IMU) in geschützter Heckposition.
+Die OMM-Transceiver-Wechselkassette ([`cartridge_antenna_bracket_omm.scad`](../../hardware/cad/scad/03_pod_cartridges/parts/04_antenna_bracket_omm.scad) / [`cartridge_omm_transceiver.scad`](../../hardware/cad/scad/03_pod_cartridges/cartridge_omm_transceiver.scad)) bildet das datentechnische Rückgrat des OpenMotorBridge-Mesh-Netzwerks. Sie vereint den OMM-Transceiver, 868 MHz LoRa, 5.9 GHz V2X und Multi-GNSS (`PCBA 04`, ESP32-C3 32-Bit RISC-V Co-Prozessor, SX1262 LoRa, u-blox MAX-M10S mit $25 \times 25\,\text{mm}$ Groundplane und Bosch Sensortec BMI270 6-Achs-IMU) in geschützter Heckposition.
 
 ##### Mechatronische Neuerungen (Feedback-Optimierungen):
 1. **Sensirion SHT40 Fahrtwind-Führung (Stauwärme-Schutz):**
@@ -944,20 +944,22 @@ Auf Cruisern und Baggern wird das Heckradar von Pod 3 **entkoppelt** und mittig 
 #### Option 1: Legacy Garmin Varia mmWave-Radar (24 GHz)
 * Verwendet das diebstahlhemmende Garmin Varia Dock ([`radar_varia_gopro_lock_dock.scad`](../../hardware/cad/scad/02_pod_base/radar_varia_gopro_lock_dock.scad)) mit Bajonettverschluss und verdeckter M3-Sicherheitsmadenschraube.
 
-#### Option 2: Radar 2.0 – 77 GHz mmWave (Wheeltec MR20) & 24-LED Halo (`radar_mr20_housing.scad`)
-Für maximale Reichweite ($90\,\text{m}$), weite $\pm 60^\circ$ ($120^\circ$) Winkelerfassung und autarke optische Warnung steht das dedizierte Radar 2.0 Gehäuse zur Verfügung:
-1. **Formschlüssiges PA12-MJF Gehäuse:**
-   * Außenmaße: $56{,}0 \times 52{,}0 \times 32{,}0\,\text{mm}$ (Länge x Breite x Tiefe).
-   * Rückseitige Aufnahme: Monolithisch angeformte GoPro/Hirth-Gelenklasche passend zur 36-Zahn Hirth-Rosette des Kennzeichenträgers.
-2. **Glattes dielektrisches Radome-Sichtfenster:**
-   * Vor dem Horn-Array des MR20 und dem 24-LED Neopixel-Ring sitzt ein transparentes, glattes Polycarbonat-/PETG-Sichtfenster.
-   * Absolut ruß-, graphit- und metallfrei zur Gewährleistung von 100 % HF-Transparenz bei 77 GHz.
+#### Option 2: Radar 2.0 – 77 GHz mmWave (Wheeltec MR20) & 36-LED Warnflügel (`radar_mr20_housing.scad`)
+Für maximale Reichweite ($90\,\text{m}$), weite $\pm 60^\circ$ ($120^\circ$) Winkelerfassung, autarke optische Warnung und 5.9 GHz ITS-G5 (V2X) Car-to-X Vernetzung steht das dedizierte Radar 2.0 Flügel-Gehäuse zur Verfügung:
+1. **Formschlüssiges PA12-MJF Flügel-Gehäuse:**
+   * Außenmaße: $121{,}0 \times 71{,}0 \times 34{,}0\,\text{mm}$ (Breite x Höhe x Tiefe).
+   * Rückseitige Aufnahme: Monolithisch angeformter Garmin Quarter-Turn Bajonett-Zapfen (kompatibel mit `radar_varia_gopro_lock_dock.scad` und Standard-Varia-Haltern) sowie untere 6-mm-Hirth-Gelenklasche und symmetrische M4-Gewindebuchsen ($40\,\text{mm}$ Stichmaß).
+2. **Glattes dielektrisches Polycarbonat-Radom-Sichtfenster:**
+   * Vor dem Horn-Array des MR20, den beiden 18-LED Neopixel-Warnflügeln und der 5.9 GHz V2X-Patchantenne sitzt ein transparentes, planes $116 \times 66 \times 1{,}6\,\text{mm}$ PC-Sichtfenster mit 4x M2.5 Torx-Eckverschraubung.
+   * Absolut ruß-, graphit- und metallfrei zur Gewährleistung von 100 % HF-Transparenz bei 77 GHz und 5.9 GHz.
 3. **Interner Splitter- & Kabelbaum-Hohlraum:**
-   * Der originale Kabelstrang des MR20 und das Signal-/Strom-Splittermodul finden **vollständig im inneren Gehäusehohlraum ($48 \times 44 \times 16\,\text{mm}$)** hinter der PCBA 08 Platz.
+   * Der originale Kabelstrang des MR20 und das Signal-/Strom-Adaptermodul finden **vollständig im inneren Gehäusehohlraum ($108 \times 58 \times 20\,\text{mm}$)** hinter der PCBA 08 Platz.
    * Keine unschönen externen Kabelpeitschen oder DC-Hohlstecker außerhalb des Gehäuses!
 4. **Mechanisch entkoppelte Binder Serie 707 M5 Flanschbuchse:**
-   * Am Gehäuseboden ist eine 4-polige Binder Serie 707 M5 Buchse (IP67, $\varnothing 7{,}5\,\text{mm}$) mit O-Ring fest verschraubt.
+   * Am Gehäuseboden ist eine 4-polige Binder Serie 707 M5 Buchse (IP67, $\varnothing 5{,}2\,\text{mm}$ mit Verdrehschutz-Fläche) mit O-Ring fest verschraubt.
    * Elektrische Anbindung an PCBA 08 über ein flexibles 4-adriges JST-SH Kabel. Schläge und Zugkräfte vom Kabelbaum wirken niemals auf die Lötstellen der Platine.
+5. **Autarke 5.9 GHz V2X-Keramik-Patchantennenkammer:**
+   * In der linken Gehäusekammer sitzt eine monolithische Snap-Fit-Aufnahme für eine $20 \times 20\,\text{mm}$ (oder $25 \times 25\,\text{mm}$) Keramik-Patchantenne mit U.FL-Mikrokoaxialkabel-Führung direkt zum ESP32-C5 Sub-MCU.
 
 ---
 

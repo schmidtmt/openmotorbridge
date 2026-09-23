@@ -24,7 +24,7 @@ To support every intercom and radio standard on the market without proprietary l
 │       │ (Wave Mesh & Analog PMR446)   │ 2-Pin 2.5/3.5mm Double Jack   │ PhotoMOS PTT   │
 ├───────┼───────────────────────────────┼───────────────────────────────┼────────────────┤
 │ **D** │ **OpenMotorMesh Transceiver** │ Direct Pod 3 Integration      │ LoRa 868 MHz,  │
-│       │ (Long-Range LoRa & Multi-GNSS)│ RP2040 Coprocessor + SX1262   │ 10 Hz DGPS     │
+│       │ (Long-Range LoRa & Multi-GNSS)│ ESP32-C3 Coprocessor + SX1262 │ 10 Hz DGPS     │
 ├───────┼───────────────────────────────┼───────────────────────────────┼────────────────┤
 │ **E** │ **Hermetic Dry-Box Blind Pod**│ Closed Front Bezel with       │ Mute (-96 dB), │
 │       │ (Weatherproof Blank Cartridge)│ Internal 80x46x16mm Storage   │ 5V Rail OFF    │

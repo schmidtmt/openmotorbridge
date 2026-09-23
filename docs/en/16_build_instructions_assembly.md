@@ -43,6 +43,10 @@ A complete OpenMotorBridge motorcycle installation comprises:
                                  └──────────────────────────────────┘
 ```
 
+![Automotive Wiring Harness Architecture](../images/cad/wiring_harness_cad.png)
+
+*Figure 16.1b: CAD system architecture of the central OpenMotorBridge v8.0 automotive wiring harness (HD26 Seal-D main flange connector with heavy-duty IP67 overmolded Y-hub branching to 3x M8 Pod pigtails, M8 Aux/CAN-Bus, and fused 12V KL30/KL15 motorcycle battery feed).*
+
 ---
 
 ## 2. Pre-Assembly Checklist
@@ -190,7 +194,7 @@ OpenMotorBridge is designed from the ground up so that the **entire multi-node s
 
 ### 4.1 Why the Bench Dry Run Is Indispensable
 * **Warmth & Convenience:** Troubleshoot comfortably on your desk or workbench rather than kneeling in a cold, dim garage.
-* **Direct Visual Verification with Open Enclosures:** Status LEDs (ESP32-S3 RGB LEDs, RP2040 status, BQ24074 charger indicator) and test points remain directly accessible.
+* **Direct Visual Verification with Open Enclosures:** Status LEDs (ESP32-S3 RGB LEDs, ESP32-C3 status, BQ24074 charger indicator) and test points remain directly accessible.
 * **Acoustic & Tactile Solenoid Check:** The mechanical solenoid plungers on the Cartridge board (`PCBA 03`) can be clearly heard and felt ("click-click-click-click") without engine vibration or ambient road noise.
 * **Harness Preservation:** The 26-pin HD26 main bike harness stays clean in its original packaging—it is only routed once all boards and cartridges are verified to work flawlessly.
 * **Minimal Tooling:** 2 to 3 standard consumer USB-C cables (phone charging cords) and a typical multiport USB wall charger, laptop, or power bank ($5\,\text{V} / \ge 2.0\,\text{A}$) are all that is required.
@@ -253,7 +257,7 @@ OpenMotorBridge is designed from the ground up so that the **entire multi-node s
 
 4. **Testing Rear Pod 3 (PCBA 04):**
    * Temporarily connect Rear Pod 3 to Main Box Port A using a short M8 test pigtail.
-   * The RP2040 coprocessor and SX1262 LoRa module report green in the PWA dashboard.
+   * The ESP32-C3 coprocessor and SX1262 LoRa module report green in the PWA dashboard.
    * Placed near a window, the u-blox MAX-M10S achieves a full 3D GNSS fix within 25–35 seconds.
 
 ### 4.5 Commissioning: WebSerial 1-Click Flasher & Interactive 4-Point Smoke Test
@@ -278,7 +282,7 @@ Before fastening the lids permanently, start the interactive self-test in the PW
 ```bash
 # 1. Flash Main Controller via USB-C (ESP32-S3)
 cd openMotorBridge/firmware/main_controller && pio run --target upload && pio run --target uploadfs
-# 2. Flash Rear Co-Processor (RP2040 in Pod 3)
+# 2. Flash Rear Co-Processor (ESP32-C3 in Pod 3)
 cd ../rear_coprocessor && pio run --target upload
 # 3. Flash Front Node (ESP32-S3)
 cd ../front_node && pio run --target upload

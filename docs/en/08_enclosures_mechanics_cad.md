@@ -292,7 +292,7 @@ To route signals from the right-angled **JST-SH 1.0 mm 6-pin SMD header (`J2`)**
 
 #### 4.3.2 OMM Transceiver Cartridge & Telemetry Backbone (Pod 3)
 
-The OMM Transceiver swap cartridge ([`cartridge_antenna_bracket_omm.scad`](../../hardware/cad/scad/03_pod_cartridges/parts/04_antenna_bracket_omm.scad) / [`cartridge_omm_transceiver.scad`](../../hardware/cad/scad/03_pod_cartridges/cartridge_omm_transceiver.scad)) forms the data backbone of the OpenMotorBridge network. It combines the OMM Transceiver, 868 MHz LoRa, and Multi-GNSS (`PCBA 04`, RP2040 dual-core co-processor, Semtech SX1262 LoRa, u-blox MAX-M10S with $25 \times 25\,\text{mm}$ ground plane, and Bosch Sensortec BMI270 6-axis IMU) in a protected rear position.
+The OMM Transceiver swap cartridge ([`cartridge_antenna_bracket_omm.scad`](../../hardware/cad/scad/03_pod_cartridges/parts/04_antenna_bracket_omm.scad) / [`cartridge_omm_transceiver.scad`](../../hardware/cad/scad/03_pod_cartridges/cartridge_omm_transceiver.scad)) forms the data backbone of the OpenMotorBridge network. It combines the OMM Transceiver, 868 MHz LoRa, and Multi-GNSS (`PCBA 04`, ESP32-C3 32-bit RISC-V co-processor, Semtech SX1262 LoRa, u-blox MAX-M10S with $25 \times 25\,\text{mm}$ ground plane, and Bosch Sensortec BMI270 6-axis IMU) in a protected rear position.
 
 > [!IMPORTANT]
 > **Architectural Modularity (Type-B Inviolability):**
