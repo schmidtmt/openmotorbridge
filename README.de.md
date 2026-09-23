@@ -40,17 +40,17 @@ Die modulare technische Gesamtspezifikation gliedert sich in 18 thematisch struk
 6. [**06 - Telemetrie-Blackbox, SDIO-Ringpuffer & WebDAV-Sync**](docs/de/06_telemetry_blackbox_webdav.md)  
    *4-Bit High-Speed SDIO, BGH- und DSGVO-konformer Ringspeicher, ECDSA SHA-256 & automatischer Cloud-Sync.*
 
-7. [**07 - Hardware-Architektur & Platinen-Pinouts (Alle 7 PCBAs)**](docs/de/07_pcba_hardware_pinouts.md)  
-   *Alle 7 Leiterplatten im Detail: Lagenaufbau, Impedanzen, Net-Klassen, Funktionszonen und Pinout-Tabellen (PCBA 01 bis 07).*
+7. [**07 - Hardware-Architektur & Platinen-Pinouts (Alle 8 PCBAs)**](docs/de/07_pcba_hardware_pinouts.md)  
+   *Alle 8 Leiterplatten im Detail: Lagenaufbau, Impedanzen, Net-Klassen, Funktionszonen und Pinout-Tabellen (PCBA 01 bis 08 inklusive ESP32-C5 V2X Radar Sub-MCU).*
 
 8. [**08 - Mechanische Gehäuse, CAD & Referenz-Montagekits**](docs/de/08_enclosures_mechanics_cad.md)  
-   *Universelle Pods & Kassetten, 4-in-1 Front-Knoten, LoRa Smart-Keyfob (Typ D) sowie schraub- und klebefreie Referenzkits für CVO ST, Road King Special und Enduros.*
+   *Universelle Pods & Kassetten, 4-in-1 Front-Knoten, Radar 2.0 Flügel-Gehäuse mit Garmin-Bajonett, Durch-die-Verkleidung 15W Qi Cam-Dock, Sonnenblenden-Clip für Autokolonnen sowie lochfreie seitliche MagSafe-Kofferintegration.*
 
 9. [**09 - Firmware-Architektur, FreeRTOS & Rollback-OTA**](docs/de/09_firmware_architecture.md)  
    *Multi-Core ESP32-S3 (Main & Front), Heck-Co-Prozessor, ESP-NOW Low-Latency-Protokoll und ausfallsicheres Dual-Bank OTA.*
 
 10. [**10 - WebApp PWA & Dashboard-Bedienung**](docs/de/10_webapp_pwa_dashboard.md)  
-    *Autarkes WebBLE Dashboard, Fahrdynamik-HUD, Front-Node Steuerung (1-Klick Reboot), Smart-Keyfob Pager & 4-stufiger GPX-Export.*
+    *Autarkes WebBLE Dashboard, Fahrdynamik-HUD, Front-Node Steuerung (1-Klick Reboot), Begleitfahrzeug- & Kolonnen-Modi, Smart-Keyfob Pager & 4-stufiger GPX-Export.*
 
 11. [**11 - Smart-Managed CarPlay & Android Auto Bridge Architektur (PCBA 05)**](docs/de/11_carplay_android_auto_bridge_architecture.md)  
     *Harley Skyline OS / Boom! Box Integration, CP2AA-Protokollbrücke, virtueller WHIM-Bypass, Quellengefilterte Lenkersteuerung & Headless Dongle Management.*
@@ -64,11 +64,11 @@ Die modulare technische Gesamtspezifikation gliedert sich in 18 thematisch struk
 14. [**14 - EMV-Härtung, Schirmung & ESD-Schutz**](docs/de/14_emv_rf_hardening.md)  
     *Kfz-Transienten nach ISO 7637-2, 2.4 GHz vs 868 MHz Entkopplung, IPC-CC-830B Schutzlack & ISO 16750-3.*
 
-15. [**15 - Stücklisten (BOM) & SMT-Fertigungsdaten (Alle 7 PCBAs)**](docs/de/15_bom_manufacturing.md)  
-    *Komplette Bauteilliste für alle 7 PCBAs, JLCPCB SMT-Bestellcheckliste, Kabelbaum-Pigtail & COTS-Einkaufsliste.*
+15. [**15 - Stücklisten (BOM) & SMT-Fertigungsdaten (Alle 8 PCBAs)**](docs/de/15_bom_manufacturing.md)  
+    *Komplette Bauteilliste für alle 8 PCBAs, JLCPCB SMT-Bestellcheckliste, Kabelbaum-Pigtail & COTS-Einkaufsliste.*
 
 16. [**16 - Bauanleitung, Verkabelung & Fahrzeug-Installation**](docs/de/16_build_instructions_assembly.md)  
-    *Schritt-für-Schritt Aufbau, 3D-Druck (FDM vs. MJF), Front-Node Montage (BMW GS / Harley), Smart-Keyfob Zusammenbau & Inbetriebnahme.*
+    *Schritt-für-Schritt Aufbau, 3D-Druck (FDM vs. MJF), Front-Node Montage, seitliche Koffer-Durchführung (Boden 100% lochfrei), Begleitfahrzeug-Sonnenblendenclip, Smart-Keyfob Zusammenbau & Inbetriebnahme.*
 
 17. [**17 - Automotive-Standards & Normen-Referenzen**](docs/de/17_standards_references.md)  
     *Industrienormen: ISO 7637-2, ISO 16750, ECE R10, RED 2014/53/EU, IEC 61672-1 Class 1 und Bluetooth SIG.*

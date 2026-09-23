@@ -752,7 +752,7 @@ Wiring the saddlebag lid pods resolves the quintessential operational requiremen
 
 ![OpenMotorBridge Saddlebag Cable Routing & MagSafe Breakaway Interface](../images/cad/saddlebag_magsafe_wiring_cad.png)
 
-*Figure 8.30b: CAD system architecture of the saddlebag cable routing with self-centering MagSafe breakaway interface (IP67). Depicted are the switched 5V power supply from the Central Box (KL15/BQ24075 UPS), the stationary frame dock (`009_magsafe_frame_dock.scad`) with PCBA 06 TVS protection, the non-destructive magnetic breakaway separation (~10–15 N) during bag detachment, the 19 mm floor pass-through with Stage 1 clamp tower, the zero-load ribbon cable routing along the check strap, and the Stage 2 strain relief at the lid dock ensuring 0 Newton dynamic load on USB-C Port B.*
+*Figure 8.30b: CAD system architecture of the saddlebag cable routing with self-centering MagSafe breakaway interface (IP67). Depicted are the switched 5V power supply from the Central Box (KL15/BQ24075 UPS), the stationary frame dock (`009_magsafe_frame_dock.scad`) with PCBA 06 TVS protection, the non-destructive magnetic breakaway separation (~10–15 N) during bag detachment, the side-wall pass-through on the forward bag wall (above the swingarm pivot) with split TPU grommet (`010_saddlebag_hole_grommet_split.scad`) and Stage 1 clamp tower (leaving the saddlebag floor 100% intact and puddle-proof), the zero-load ribbon cable routing along the check strap, and the Stage 2 strain relief at the lid dock ensuring 0 Newton dynamic load on USB-C Port B.*
 
 1. **Intelligent Power Delivery & UPS Buffering via Central Box (Ignition KL15 / BQ24075):**
    * Saddlebag pods are not fed unregulated 12V bike power directly, but conditioned 5.0V from the Central Box beneath the seat.
@@ -808,6 +808,27 @@ Mounting in the lid provides a $> 25\,\text{cm}$ elevated ground clearance, line
 #### 6.7.2 OpenMotorBridge Architecture: Rigid Centerline Alignment & Stealth Under-Fender Mount
 The radar is strictly centered on the vehicle longitudinal symmetry axis and attached to the sprung chassis.
 
+---
+
+### 6.8 Support Vehicle & Convoy Kit: Universal Sun Visor Clip (`car_sun_visor_pod3_clip.scad`)
+
+For deployment in support vehicles (support vans on group motorcycle tours) or automotive convoys (e.g. sports car rallies), the **Universal Sun Visor Clip for Pod 3** ([`car_sun_visor_pod3_clip.scad`](../../hardware/cad/scad/05_accessories/car_sun_visor_pod3_clip.scad)) was designed:
+
+![Universal Sun Visor Clip for Pod 3](../images/cad/car_sun_visor_pod3_clip_cad.png)
+
+*Figure 8.33b: 3D CAD view of the Universal Sun Visor Clip for Pod 3 (`car_sun_visor_pod3_clip_cad.png`). Depicted are the compliant spring clamp jaws (14–22 mm grip range for passenger sun visors across all car brands) with curved lead-in lip and non-marring grip ridges, the form-fitting Pod 3 docking cradle, and the concealed cable channel for tool-free roof headliner routing.*
+
+1. **Universal Fit for All Automobile Classes (Van, SUV, Wagon, Sedan, Coupe):**
+   * Modern cars lack rigid rear parcel shelves, and the central windshield area behind the rearview mirror is congested with massive ADAS camera and rain sensor pods.
+   * The ergonomic spring clamp anchors securely to the **passenger sun visor** (thickness $12\dots 22\,\text{mm}$), totally isolated from central windshield camera enclosures.
+2. **Optimal RF Line-of-Sight to the Sky:**
+   * Stationed at the top edge of the windshield, Pod 3 enjoys an unobstructed $180^\circ$ skyward hemispherical view for u-blox GNSS, 868 MHz LoRa (OMM), and 5.9 GHz V2X.
+3. **Tool-Free 5-Minute Zero-Damage Routing:**
+   * The ultra-thin USB-C cable tucks into the soft **roof headliner seam** above the windshield with fingertip pressure.
+   * Runs down behind the compliant A-pillar rubber gasket into the glovebox area and connects directly to the Central Box in the center console.
+   * **Zero tools, zero visible wires, 100% reversible in minutes.**
+4. **Stealth & Anti-Theft Protection:**
+   * From the outside, Pod 3 on the sun visor resembles a standard electronic toll transponder (Telepass / FasTrak) or garage door opener—offering zero attraction to opportunist thieves.
 
 ---
 
@@ -875,10 +896,43 @@ The **BSD Mirror Indicator Pod** ([`bsd_mirror_indicator_pod.scad`](../../hardwa
 
 *Figure 8.37: 3D CAD view of the aerodynamic BSD Mirror Indicator Pod (`bsd_mirror_indicator_pod_cad.png`). Visible: low-drag teardrop shape on the Ø 10 mm mirror stem, 2-point M3 stainless clamp collar, 38° inward-angled anti-glare visor hood, and amber translucent diffuser lens.*
 
-* **Optical Safety & StVZO / ECE R50 Compliance:**
-  * **Targeted Eye-Box Projection:** The 38° inward-angled light tunnel projects the amber/red radar alert pulse precisely into the rider helmet's peripheral eye box.
-  * **100% Glare-Free (TÜV Compliant):** A 3.8 mm deep visor overhang and opaque forward wall block 100% of light from escaping forward or sideways, eliminating oncoming driver glare.
-  * **Universal Stem Clamping:** Clamshell architecture fits standard Ø 10 mm (Harley, BMW, KTM) and Ø 12 mm mirror stems with concealed underside cable routing to Port `J9`.
+### 8.3 Radar 2.0 mmWave Winged Housing & Garmin Bayonet (`radar_mr20_housing.scad`)
+
+The **Radar 2.0 Winged Housing** ([`radar_mr20_housing.scad`](../../hardware/cad/scad/05_accessories/radar_mr20_housing.scad)) integrates the Wheeltec MR20 77-GHz mmWave radar transceiver, the routed carrier board PCBA 08 (featuring 36-LED visual warning wings and ESP32-C5 Dual-Band Sub-MCU), the Garmin Quarter-Turn Bayonet interface, and an autonomous 5.9 GHz ITS-G5 (V2X) ceramic patch antenna:
+
+![Radar 2.0 Winged Housing 3D CAD](../images/cad/radar_mr20_housing_cad.png)
+
+*Figure 8.38: 3D CAD front view of the Radar 2.0 Winged Housing (`radar_mr20_housing_cad.png`). Visible: symmetrical $121 \times 71 \times 34\,\text{mm}$ PA12-MJF monocoque enclosure, flat optical polycarbonate radome window ($116 \times 66 \times 1.6\,\text{mm}$) with 4x M2.5 Torx corner fasteners, centered $61 \times 51\,\text{mm}$ radar cutout for the MR20 77-GHz horn array, dual-side LED warning wing chambers, and left-side dedicated antenna cradle for the 5.9 GHz V2X ceramic patch antenna.*
+
+![Radar 2.0 Garmin Bayonet & Anti-Theft Latch](../images/cad/radar_mr20_housing_bayonet_cad.png)
+
+*Figure 8.38b: 3D CAD rear view of the Radar 2.0 Housing (`radar_mr20_housing_bayonet_cad.png`). Depicted are the monolithic Garmin Quarter-Turn male bayonet lug (compatible with `radar_varia_gopro_lock_dock.scad` and standard Garmin Varia mounts), the compliant snap-lock anti-theft detent, the symmetrical M4 threaded insert bolt pattern ($40\,\text{mm}$ center spacing), and the centered Binder Series 707 M5 IP67 bulkhead connector bore on the floor.*
+
+* **Key Architectural & RF Features:**
+  * **Symmetrical Winged Rectangle ($121.0 \times 71.0 \times 34.0\,\text{mm}$):** Aerodynamic airfoil profile blending seamlessly with motorcycle license plate brackets and rear fender arches.
+  * **Garmin Quarter-Turn Bayonet with Anti-Theft Snap Lock:** Tool-free 90° twist lock. An integrated compliant latch detent prevents accidental road-vibration twist-off and deters casual opportunistic theft.
+  * **5.9 GHz V2X Ceramic Patch Antenna Chamber:** Monolithically molded cradle on the left flank houses either $20 \times 20\,\text{mm}$ or $25 \times 25\,\text{mm}$ ceramic patch antennas. Guarantees maximum antenna gain with zero enclosure attenuation and zero internal PCB antenna ground detuning.
+  * **Generous Cavity for Cable Adapter & Harness Loops ($112 \times 62 \times 17\,\text{mm}$):** Seamlessly encloses the original MR20 in-line breakout board and harness loops with zero wire pinching.
+  * **Optical Polycarbonate Radome & IP67 Sealing:** Flat, untextured PC radome ($116 \times 66 \times 1.6\,\text{mm}$) with perimeter EPDM cord groove provides zero RF insertion loss at 77 GHz and IK08 impact resistance.
+
+### 8.4 Road Glide ST Sharknose: Through-Fairing Inductive Cam Dock (`road_glide_inductive_cam_dock.scad`)
+
+The **Through-Fairing Inductive Cam Dock** ([`road_glide_inductive_cam_dock.scad`](../../hardware/cad/scad/05_accessories/road_glide_inductive_cam_dock.scad)) solves the problem of continuous power delivery to action cams (Insta360 X3/X4, GoPro) mounted on Harley Sharknose fairings **with zero drilled holes and zero visible external wiring**:
+
+![Road Glide Inductive Cam Dock](../images/cad/road_glide_inductive_cam_dock_cad.png)
+
+*Figure 8.39: 3D CAD system view of the Through-Fairing Inductive Cam Dock (`road_glide_inductive_cam_dock_cad.png`). Visible: 15W Qi transmitter tray (underside, concealed inside inner fairing), dielectric ABS fairing deck (center amber shell), aerodynamic teardrop outer dock with 3M Dual Lock base, integrated TI BQ51013B Qi receiver, and universal 3-prong camera mounting clevis.*
+
+1. **Electromagnetic Principle:** The factory ABS fairing deck is non-magnetic and dielectric ($2.5\dots 3\,\text{mm}$ wall thickness). Alternating magnetic inductive fields pass through with near-zero loss.
+2. **Inner Assembly (TX Cradle):** A slim 15W Qi transmitter coil bonds directly to the inside surface of the outer fairing deck and plugs into Port 1 (USB-PD) of Front Node PCBA 05.
+3. **Outer Assembly (RX Cradle with 3M Dual Lock):**
+   * Snaps securely onto the fairing nose via heavy-duty 3M Dual Lock SJ3550 interlocking tape.
+   * Houses an internal Qi receiver coil backed by a TI BQ51013B rectifier/step-down converter ($5\,\text{V} / 2\,\text{A} = 10\,\text{W}$ continuous output).
+   * Features an ultra-short $3\,\text{cm}$ flexible USB-C pigtail directly connecting to the action cam charging port.
+4. **Benefits:**
+   * **100% Factory Paint Intact:** Absolutely zero holes drilled, zero paint marring, 100% weatherproof.
+   * **10+ Hours Continuous Recording:** Keeps camera batteries at 100% even during high-bitrate 5.7K recording.
+   * **Tool-Free Removal:** Simply unclick the camera dock from the Dual Lock—leaving only a sleek, flat black strip on the fairing.
 
 ---
 

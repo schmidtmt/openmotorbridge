@@ -187,21 +187,26 @@ def generate_saddlebag_wiring_diagram():
     ax.add_patch(patches.PathPatch(lid_outer, facecolor='#1e293b', edgecolor='#64748b', linewidth=1.5, zorder=2))
     ax.text(32, 46.5, "KOFFERDECKEL (Hinged Lid)", color='#94a3b8', fontsize=8, fontweight='bold', ha='left', zorder=12)
 
-    # 1. Stufe: Koffer-Bodendurchführung & Zugentlastungsturm (19 mm OEM-Loch)
-    grommet_box = patches.Rectangle((22, -37), 14, 11, facecolor='#334155', edgecolor=CYAN_HIGHLIGHT, linewidth=1.2, zorder=4)
+    # 1. Stufe: Seitliche Koffer-Durchführung (oberhalb Schwingenlager) & 2-Stufen-Zugentlastung
+    grommet_box = patches.Rectangle((17, -24), 6, 12, facecolor='#334155', edgecolor=CYAN_HIGHLIGHT, linewidth=1.2, zorder=4)
     ax.add_patch(grommet_box)
-    ax.text(29, -41, "19 mm OEM-Bodenloch\nSplit-Dichtung (EPDM/TPU)", color=TEXT_MUTED, fontsize=6.8, ha='center', zorder=12)
+    ax.text(20, -8, "SEITLICHE DURCHFÜHRUNG\n(Koffer-Vorderwand oberhalb Schwingenlager)\nSplit-Dichtung (010_saddlebag_hole_grommet_split.scad)", color=CYAN_HIGHLIGHT, fontsize=6.8, ha='center', fontweight='bold', zorder=12)
 
-    clamp_tower = patches.Rectangle((24, -26), 10, 9, facecolor='#1e293b', edgecolor='#38bdf8', linewidth=1.0, zorder=5)
+    clamp_tower = patches.Rectangle((23, -23), 8, 10, facecolor='#1e293b', edgecolor='#38bdf8', linewidth=1.0, zorder=5)
     ax.add_patch(clamp_tower)
-    ax.text(29, -21.5, "STUFE 1\nKLEMMTURM", color='#38bdf8', fontsize=6.5, fontweight='bold', ha='center', va='center', zorder=12)
+    ax.text(27, -18, "STUFE 1\nKLEMMTURM", color='#38bdf8', fontsize=6.5, fontweight='bold', ha='center', va='center', zorder=12)
 
     # Kraft-Einleitungspfeil an Stufe 1
-    ax.annotate("100% Abreißkraft (10-15 N)\nwird hier in Kofferboden eingeleitet!",
-                xy=(34, -22), xytext=(50, -22),
+    ax.annotate("100% Abreißkraft (10-15 N)\nwird hier in Koffer-Vorderwand eingeleitet!\n(0 N Zuglast im Innenraum)",
+                xy=(31, -18), xytext=(48, -18),
                 arrowprops=dict(arrowstyle="->", color=WARNING_ORANGE, lw=1.5),
                 color='#fed7aa', fontsize=7.5, va='center',
                 bbox=dict(boxstyle="round,pad=0.3", facecolor='#431407', edgecolor=WARNING_ORANGE, lw=0.8), zorder=12)
+
+    # Kofferboden Intakt Callout (Wasser-/Pfützenschutz)
+    ax.text(68, -40, "KEIN LOCH IM KOFFERBODEN!\n• Koffer kann bedenkenlos auf nassem Asphalt / in Pfützen abgestellt werden\n• Durchführung liegt im geschützten Wind- & Spritzwasserschatten des Rahmens",
+            color='#bbf7d0', fontsize=7.2, ha='center', va='center',
+            bbox=dict(boxstyle="round,pad=0.4", facecolor='#064e3b', edgecolor=SUCCESS_GREEN, lw=1.0), zorder=12)
 
     # Gepäck- & Dosen-Symbol am Kofferboden (zeigt Flüssigkeitsdämpfung)
     ax.add_patch(patches.Rectangle((75, -28), 12, 12, facecolor='#1e293b', edgecolor='#64748b', linewidth=0.8, zorder=3))
@@ -209,16 +214,16 @@ def generate_saddlebag_wiring_diagram():
     ax.text(88, -22, "Gepäck / Getränkedosen\n(Bodendämpfung > 20 dB)", color='#64748b', fontsize=6.5, ha='center', zorder=12)
 
     # Kofferdeckel-Fangband (Textilband, steigt schräg auf)
-    ax.plot([30, 92], [-16, 42], color='#52525b', linewidth=7.0, zorder=3)
-    ax.plot([30, 92], [-16, 42], color='#71717a', linewidth=4.0, linestyle='--', zorder=3)
-    ax.text(60, 10, "Textiles Deckel-Fangband (Check Strap)", color='#a1a1aa', fontsize=7.2, ha='center', rotation=43, zorder=12)
+    ax.plot([30, 92], [-14, 42], color='#52525b', linewidth=7.0, zorder=3)
+    ax.plot([30, 92], [-14, 42], color='#71717a', linewidth=4.0, linestyle='--', zorder=3)
+    ax.text(62, 12, "Textiles Deckel-Fangband (Check Strap)", color='#a1a1aa', fontsize=7.2, ha='center', rotation=43, zorder=12)
 
-    # Pigtail-Kabelverlauf: MagSafe-Stecker -> 19 mm Loch -> Stufe 1 -> Fangband -> Stufe 2
-    cable_koffer_x = [4, 16, 20, 29, 29, 92, 97]
-    cable_koffer_y = [-19, -19, -35, -35, -16, 42, 45]
+    # Pigtail-Kabelverlauf: MagSafe-Stecker -> Seitliche Durchführung -> Stufe 1 -> Fangband -> Stufe 2
+    cable_koffer_x = [4, 17, 27, 33, 92, 97]
+    cable_koffer_y = [-19, -19, -19, -12, 42, 45]
     ax.plot(cable_koffer_x, cable_koffer_y, color='#0284c7', linewidth=2.5, zorder=5)
     ax.plot(cable_koffer_x, cable_koffer_y, color='#38bdf8', linewidth=1.0, zorder=6)
-    ax.text(54, 17, "Schlankes Flachkabel (< 2 mm, 0 N Zuglast)", color='#38bdf8', fontsize=7.2, ha='center', rotation=43, zorder=12)
+    ax.text(56, 19, "Schlankes Flachkabel (< 2 mm, 0 N Zuglast)", color='#38bdf8', fontsize=7.2, ha='center', rotation=43, zorder=12)
 
     # Kofferdeckel-Dock (saddlebag_lid_dock.scad) im Deckel
     dock_cradle = patches.FancyBboxPatch((82, 37), 44, 19, boxstyle="round,pad=0.5,rounding_size=1.5",

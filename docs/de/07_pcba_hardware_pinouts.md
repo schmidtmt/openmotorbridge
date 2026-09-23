@@ -34,8 +34,8 @@ Dieses Dokument bildet die **zentrale, autoritative Hardware-Spezifikation aller
 | **PCBA 07**| **2-in-1 LoRa Smart-Keyfob**  | 38 x 19 mm    | 2 Lagen │ nRF52840 SoC, SX1262 │
 │       │ (Silent Pager, N52 Key & Qi)  │ (Tasche M2)   │ (ENIG)  │ DRV2605L LRA, BQ51003│
 ├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
-| **PCBA 08**| **Radar 2.0 Sub-MCU & Halo**  | 84 x 74 mm    | 2 Lagen │ ESP32-C3FN4 (QFN-32),│
-│       │ (Wheeltec MR20 77GHz mmWave)  │ (Zentriert)   │ (ENIG)  │ 24x WS2812B, BinderM5│
+| **PCBA 08**| **Radar 2.0 Sub-MCU & Wings** | 115 x 65 mm   | 2 Lagen │ ESP32-C5 Dual-Band,  │
+│       │ (Wheeltec MR20 & V2X Patch)   │ (Flügel M2.5) │ (ENIG)  │ 36x WS2812B, BinderM5│
 └───────┴───────────────────────────────┴───────────────┴─────────┴──────────────────────┘
 ```
 
@@ -576,46 +576,53 @@ Die Baugruppe PCBA 07 bildet die elektronische Seele des kompakten Schlüsselanh
 
 ---
 
-## 10. PCBA 08: 77 GHz mmWave Radar Sub-MCU & Faceplate (`openmotorbridge_radar_submcu`)
+## 10. PCBA 08: 77 GHz mmWave Radar Sub-MCU & Warnflügel (`openmotorbridge_radar_submcu`)
 
-Die Baugruppe **PCBA 08** bildet die Frontplatine und den intelligenten Vorverarbeitungs-Knoten für das **Wheeltec MR20 77-GHz-mmWave-Radar** (integriert in `hardware/cad/scad/05_accessories/radar_mr20_housing.scad`). Sie entlastet die Zentralbox durch lokales 20-Hz-Rohdaten-Parsing und steuert die integrierte 24-LED-Neopixel-Warnmatrix latenzfrei an:
+Die Baugruppe **PCBA 08** bildet die Trägerplatine und den intelligenten Vorverarbeitungs-Knoten für das **Wheeltec MR20 77-GHz-mmWave-Radar** (integriert in `hardware/cad/scad/05_accessories/radar_mr20_housing.scad`). Sie entlastet die Zentralbox durch lokales 20-Hz-Rohdaten-Parsing, verwaltet das 5.9 GHz V2X Mesh und steuert die integrierte 36-LED-Neopixel-Warnmatrix latenzfrei an:
+
+![PCBA 08 Radar 2.0 Sub-MCU & Warnflügel 3D](../images/pcba/pcba08_radar_submcu_3d.png)
+
+*Abbildung 7.8: 3D-CAD-Ansicht der gefertigten und gerouteten PCBA 08 (`openmotorbridge_radar_submcu.kicad_pcb`). Zu sehen sind der symmetrische $115 \times 65\,\text{mm}$ Flügel-Platinenkörper mit zentralem $61 \times 51\,\text{mm}$ Radardurchbruch, die 36x WS2812B-2020 LEDs auf den linken und rechten Warnflügeln sowie der rückseitige ESP32-C5 Dual-Band Sub-MCU mit U.FL Buchse zur externen 5.9 GHz V2X-Keramik-Patchantenne.*
+
+![PCBA 08 Leiterplatten-Layout Top-Ansicht](../images/pcba/pcba08_radar_submcu_top.png)
+
+*Abbildung 7.8b: 2D-Layout-Draufsicht von PCBA 08 mit Bestückungsdruck und Leiterbahnführung (820 Tracks, 95 Vias, 0 DRC-Fehler).*
 
 ```
                                 PCBA 08 SYSTEMARCHITEKTUR
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                        ESPRESSIF ESP32-C3 RISC-V SoC (160 MHz)                         │
+│                   ESPRESSIF ESP32-C5 DUAL-BAND RISC-V SoC (240 MHz)                    │
 │ • 20 Hz UART-Treiber für Wheeltec MR20 Rohdaten-Parsing                                │
-│ • Latenzfreie Neopixel-Halo-Steuerung (Bremslicht-Strobe, Annäherungs-Halo)             │
+│ • 5.9 GHz ITS-G5 (V2X) Mesh & 2.4/5GHz Wi-Fi 6 Telemetrie-Uplink                       │
+│ • Latenzfreie Neopixel-Warnflügel-Steuerung (Bremslicht-Strobe, Kollisions-Warnung)    │
 │ • Makro-Befehlsschnittstelle zur Zentralbox (ESP32-S3) via Binder M5 4-Pin             │
 │ • Remote Bootloader Flasher Support (Firmware-Push über UART direkt von Zentralbox)    │
 └──────────────┬─────────────────────────┬─────────────────────────┬─────────────────────┘
                │ UART1 (MR20 Raw 115k2)  │ GPIO8 (RMT / NeoPixel)  │ UART0 (Zentralbox Macro)
                ▼                         ▼                         ▼
 ┌───────────────────────────┐ ┌─────────────────────┐ ┌──────────────────────────────────┐
-│ WHEELTEC MR20 (77 GHz)    │ │ 24x WS2812B-2020    │ │ BINDER SERIE 707 M5 (4-Pin IP67) │
+│ WHEELTEC MR20 (77 GHz)    │ │ 36x WS2812B-2020    │ │ BINDER SERIE 707 M5 (4-Pin IP67) │
 │ • mmWave Horn-Array       │ │ • Bremslicht-Strobe │ │ • Pin 1: +5.0V DC Power In       │
-│ • ±60° (120°) Erfassung   │ │ • Annäherungs-Halo  │ │ • Pin 2: UART RX (Makrobefehle)  │
+│ • ±60° (120°) Erfassung   │ │ • Kollisions-Flügel │ │ • Pin 2: UART RX (Makrobefehle)  │
 │ • Bis zu 90 m Reichweite  │ │ • Dämmerungs-Dimmer │ │ • Pin 3: UART TX (Target-Liste)  │
-│ • Sitzt im 28x24mm Window │ │ • Entlang Platinen- │ │ • Pin 4: GND (Power & Signal)    │
-│   hinter PC-Radome-Deckel │ │   Außenkante        │ │   (Entkoppelt via JST-SH Kabel)  │
+│ • Sitzt im 61x51mm Window │ │ • 18 links /        │ │ • Pin 4: GND (Power & Signal)    │
+│   hinter PC-Radome-Deckel │ │   18 rechts         │ │   (Entkoppelt via JST-SH Kabel)  │
 └───────────────────────────┘ └─────────────────────┘ └──────────────────────────────────┘
 ```
 
 ### 10.1 Technische Platinen-Kenndaten & Geometrie
-* **Abmessungen:** $84{,}0 \times 74{,}0 \times 1{,}6\,\text{mm}$ (2 Lagen FR-4 High-TG150, ENIG Goldfinish, JLC2313 Stackup).
+* **Abmessungen:** $115{,}0 \times 65{,}0 \times 1{,}6\,\text{mm}$ (2 Lagen FR-4 High-TG150, ENIG Goldfinish, JLC2313 Stackup).
 * **Zentraler Ausschnitt:** $61{,}0 \times 51{,}0\,\text{mm}$ rechteckiges Durchgangsfenster mit $R = 2{,}0\,\text{mm}$ Eckradien, exakt zentriert bei $(X=0, Y=0)$. Das Wheeltec MR20 77-GHz Sensormodul taucht bündig durch diesen Ausschnitt ein und strahlt ungehindert durch das transparente Polycarbonat-Sichtfenster des Gehäuses ab.
-* **Symmetrischer Randrahmen:** Auf allen vier Seiten entsteht ein gleichmäßiger, stabiler Steg von **$11{,}5\,\text{mm}$ Breite** um das Radarfenster herum.
-* **Befestigung:** 4x M2.5 Montagebohrungen ($\varnothing 2{,}7\,\text{mm}$) mit $76{,}0 \times 66{,}0\,\text{mm}$ Lochabstand ($X = \pm 38{,}0, Y = \pm 33{,}0\,\text{mm}$), verschraubt in M2.5-Messing-Gewindeeinsätze des Gehäuses.
-* **LED-Matrix (Symmetrischer Perimeter Halo):** 24x SMD WS2812B-2020 adressierbare RGB-LEDs auf der Vorderseite (F.Cu) im $11{,}5\,\text{mm}$ Rand:
-  * **Obere Zeile:** 7 LEDs (`D1` bis `D7`) symmetrisch verteilt
-  * **Rechte Flanke:** 5 LEDs (`D8` bis `D12`) symmetrisch verteilt
-  * **Untere Zeile:** 7 LEDs (`D13` bis `D19`) symmetrisch verteilt
-  * **Linke Flanke:** 5 LEDs (`D20` bis `D24`) symmetrisch verteilt
+* **Symmetrische Warnflügel:** Links und rechts des Radarfensters befinden sich je **$27{,}0\,\text{mm}$ breite Warnflügel** für maximale periphere Sichtbarkeit im Rückspiegel des Fahrers.
+* **Befestigung:** 4x M2.5 Montagebohrungen ($\varnothing 2{,}7\,\text{mm}$) mit $105{,}0 \times 55{,}0\,\text{mm}$ Lochabstand ($X = \pm 52{,}5, Y = \pm 27{,}5\,\text{mm}$), verschraubt in M2.5-Messing-Gewindeeinsätze des Gehäuses.
+* **LED-Matrix (Symmetrische Warnflügel):** 36x SMD WS2812B-2020 adressierbare RGB-LEDs auf der Vorderseite (F.Cu):
+  * **Linker Warnflügel:** 18 LEDs (`D1` bis `D18`) in 3 Spalten à 6 LEDs
+  * **Rechter Warnflügel:** 18 LEDs (`D19` bis `D36`) in 3 Spalten à 6 LEDs
 * **Rückseiten-Komponenten (B.Cu – vollständig außerhalb des Fensters):**
-  * **Oberer Steg:** ESP32-C3FN4 (QFN-32 5x5mm, zentriert bei $X=0, Y=+31\,\text{mm}$), 3.3V LDO `U2` und 40 MHz Quarz `Y1`.
-  * **Unterer Steg:** `J1` (JST-SH 4-Pin zu Binder M5) und `J2` (JST-SH 4-Pin zu MR20 Kabel-Adapter).
-* **Spannungsversorgung:** Eingangsspannung $+5{,}0\,\text{V}$ (über Binder M5 von Zentralbox). Lokaler Low-Drop-Linearregler `U2` (3.3V 500mA SOT-23-5) versorgt den ESP32-C3; die 24 LEDs und das MR20 werden direkt aus der $+5\,\text{V}$-Schiene gespeist.
-* **ESD- & Überspannungsschutz:** PESD5V0S2BT TVS-Array (`D25`) auf den UART-Datenleitungen; 10 µF Keramik-Glättungskondensator (`C1`, `C2`) und 100 nF X7R Entkopplung (`C3`, `C4`).
+  * **Rechter Flügel:** ESP32-C5 Dual-Band SoC, 3.3V LDO `U2`, 40 MHz Quarz `Y1` und U.FL Koaxialbuchse `J3`.
+  * **Linker Flügel:** `J1` (JST-SH 4-Pin zu Binder M5) und `J2` (JST-SH 4-Pin zu MR20 Kabel-Adapter).
+* **Spannungsversorgung:** Eingangsspannung $+5{,}0\,\text{V}$ (über Binder M5 von Zentralbox). Lokaler Low-Drop-Linearregler `U2` (3.3V 500mA SOT-23-5) versorgt den ESP32-C5; die 36 LEDs und das MR20 werden direkt aus der $+5\,\text{V}$-Schiene gespeist.
+* **ESD- & Überspannungsschutz:** PESD5V0S2BT TVS-Array (`D37`) auf den UART-Datenleitungen; 10 µF Keramik-Glättungskondensator (`C1`, `C2`) und 100 nF X7R Entkopplung (`C3`, `C4`).
 
 ### 10.2 Schnittstellen, JST-SH Header & Binder M5 Entkopplung
 Gemäß Vorgabe zur Vermeidung von Vibrationsschäden ist die Binder M5 707 Buchse **mechanisch im Gehäuseboden verschraubt** und elektrisch über ein flexibles Litzenkabel mit Stecker `J1` verbunden:

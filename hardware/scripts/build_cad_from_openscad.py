@@ -341,6 +341,30 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
         "0,0,0,50,0,315,100",
         "Tomorrow"
     ),
+    (
+        "05_accessories/radar_mr20_housing.scad",
+        os.path.join(CAD_IMG_DIR, "radar_mr20_housing_cad.png"),
+        "0,0,0,55,0,320,380",
+        "Tomorrow"
+    ),
+    (
+        "05_accessories/radar_mr20_housing.scad",
+        os.path.join(CAD_IMG_DIR, "radar_mr20_housing_bayonet_cad.png"),
+        "0,-20,0,55,0,140,380",
+        "Tomorrow"
+    ),
+    (
+        "05_accessories/car_sun_visor_pod3_clip.scad",
+        os.path.join(CAD_IMG_DIR, "car_sun_visor_pod3_clip_cad.png"),
+        "70,0,10,55,0,315,350",
+        "Tomorrow"
+    ),
+    (
+        "05_accessories/road_glide_inductive_cam_dock.scad",
+        os.path.join(CAD_IMG_DIR, "road_glide_inductive_cam_dock_cad.png"),
+        "0,0,5,55,0,320,190",
+        "Tomorrow"
+    ),
 ]
 
 import threading

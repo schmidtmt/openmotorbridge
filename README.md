@@ -40,17 +40,17 @@ The comprehensive technical specification is split into 18 logically organized c
 6. [**06 - Telemetry Blackbox, SDIO Ringbuffer & WebDAV Sync**](docs/en/06_telemetry_blackbox_webdav.md)  
    *4-bit high-speed SDIO, GDPR/court-compliant ringbuffer, ECDSA SHA-256, and automated private cloud sync.*
 
-7. [**07 - Hardware Architecture & Board Pinouts (All 7 PCBAs)**](docs/en/07_pcba_hardware_pinouts.md)  
-   *All 7 circuit boards: layer stackup, controlled impedance, net classes, functional zoning, and pinout tables (PCBA 01 to 07).*
+7. [**07 - Hardware Architecture & Board Pinouts (All 8 PCBAs)**](docs/en/07_pcba_hardware_pinouts.md)  
+   *All 8 circuit boards: layer stackup, controlled impedance, net classes, functional zoning, and pinout tables (PCBA 01 to 08 including ESP32-C5 V2X Radar Sub-MCU).*
 
 8. [**08 - Mechanical Enclosures, CAD & Reference Mounting Kits**](docs/en/08_enclosures_mechanics_cad.md)  
-   *Universal pods & cartridges, 4-in-1 Front Node, LoRa Smart-Keyfob (Type D), and turnkey zero-drill reference kits for CVO ST, Road King Special, and Adventure bikes.*
+   *Universal pods & cartridges, 4-in-1 Front Node, Radar 2.0 Winged Housing with Garmin Bayonet, Through-Fairing 15W Qi Cam Dock, Car Sun Visor Clip for convoys, and zero-drill side-wall MagSafe saddlebag integration.*
 
 9. [**09 - Firmware Architecture, FreeRTOS & Rollback-OTA**](docs/en/09_firmware_architecture.md)  
    *Multi-core ESP32-S3 (Main & Front), Rear Co-Processor, ESP-NOW low-latency protocol (< 1.8 ms), and dual-bank rollback OTA.*
 
 10. [**10 - WebApp PWA & Dashboard Operation**](docs/en/10_webapp_pwa_dashboard.md)  
-    *Zero-cloud PWA web app, Web Bluetooth API (WebBLE), vehicle dynamics HUD, Front Node controls, and 4-tier GPX export.*
+    *Zero-cloud PWA web app, Web Bluetooth API (WebBLE), vehicle dynamics HUD, Front Node controls, Support-Van / Convoy profile modes, and 4-tier GPX export.*
 
 11. [**11 - Smart-Managed CarPlay & Android Auto Bridge Architecture (PCBA 05)**](docs/en/11_carplay_android_auto_bridge_architecture.md)  
     *Harley Skyline OS / Boom! Box integration, CP2AA protocol bridge, Virtual WHIM bypass, source-gated handlebar controls & headless dongle management.*
@@ -64,11 +64,11 @@ The comprehensive technical specification is split into 18 logically organized c
 14. [**14 - EMC Hardening, RF Shielding & Environmental Protection**](docs/en/14_emv_rf_hardening.md)  
     *Automotive transient immunity (ISO 7637-2), 2.4 GHz vs 868 MHz isolation, IPC-CC-830B coating, and shock damping.*
 
-15. [**15 - Bill of Materials (BOM) & SMT Manufacturing (All 7 PCBAs)**](docs/en/15_bom_manufacturing.md)  
-    *Complete 7-board BOM for JLCPCB SMT production, ordering checklist, wiring harness pigtail, and COTS items.*
+15. [**15 - Bill of Materials (BOM) & SMT Manufacturing (All 8 PCBAs)**](docs/en/15_bom_manufacturing.md)  
+    *Complete 8-board BOM for JLCPCB SMT production, ordering checklist, wiring harness pigtail, and COTS items.*
 
 16. [**16 - Build Instructions, Wiring & Vehicle Installation**](docs/en/16_build_instructions_assembly.md)  
-    *Step-by-step assembly guide, 3D printing parameters (FDM vs. MJF), Front Node mounting, Smart-Keyfob build, and commissioning.*
+    *Step-by-step assembly guide, 3D printing parameters (FDM vs. MJF), Front Node mounting, Harley side-wall pass-through (puddle-proof floor), Support-Van visor mounting, Smart-Keyfob build, and commissioning.*
 
 17. [**17 - Automotive Standards & Technical References**](docs/en/17_standards_references.md)  
     *Index for ISO 7637-2, ISO 16750, ECE R10, RED 2014/53/EU, IEC 61672-1 Class 1, and Bluetooth SIG.*

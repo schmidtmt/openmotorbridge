@@ -859,7 +859,7 @@ Die Verkabelung der Kofferdeckel-Pods löst das fundamentale Praxiskriterium des
 
 ![OpenMotorBridge Koffer-Verkabelung & MagSafe-Abreiß-Schnittstelle](../images/cad/saddlebag_magsafe_wiring_cad.png)
 
-*Abbildung 8.30b: CAD-Systemarchitektur der Koffer-Verkabelung mit selbstzentrierender MagSafe-Abreißkupplung (IP67). Dargestellt sind die zündungsgesteuerte 5V-Versorgung über die Zentralbox (KL15/BQ24075-USV), das rahmenfeste MagSafe-Dock (`009_magsafe_frame_dock.scad`) mit PCBA 06 TVS-Schutz, die zerstörungsfreie magnetische Abreißtrennung (~10–15 N) bei Kofferabnahme durch Werkstattmechaniker, die 19-mm-Bodendurchführung mit Stufe-1-Klemmturm, die lastfreie Flachkabelführung parallel zum Deckel-Fangband sowie die Stufe-2-Zugentlastung am Kofferdeckel-Dock mit 0 Newton Zugkraft am USB-C Port B.*
+*Abbildung 8.30b: CAD-Systemarchitektur der Koffer-Verkabelung mit selbstzentrierender MagSafe-Abreißkupplung (IP67). Dargestellt sind die zündungsgesteuerte 5V-Versorgung über die Zentralbox (KL15/BQ24075-USV), das rahmenfeste MagSafe-Dock (`009_magsafe_frame_dock.scad`) mit PCBA 06 TVS-Schutz, die zerstörungsfreie magnetische Abreißtrennung (~10–15 N) bei Kofferabnahme durch Werkstattmechaniker, die seitliche Durchführung an der Koffer-Vorderwand (oberhalb des Schwingenlagers) mit geteilter TPU-Dichtung (`010_saddlebag_hole_grommet_split.scad`) und Stufe-1-Klemmturm (Kofferboden bleibt zu 100 % intakt und lochfrei), die lastfreie Flachkabelführung parallel zum Deckel-Fangband sowie die Stufe-2-Zugentlastung am Kofferdeckel-Dock mit 0 Newton Zugkraft am USB-C Port B.*
 
 1. **Intelligente Stromversorgung & USV-Pufferung über die Zentralbox (Klemme 15 / BQ24075):**
    * Die Koffer-Pods werden **nicht direkt unreguliert** aus dem Bordnetz gespeist, sondern zentral und konditioniert von der **Zentralbox** unter der Sitzbank versorgt.
@@ -1009,6 +1009,10 @@ Hierfür wurde der **Stealth Center Under-Fender Mount** ([`02_pod_base/radar_ce
 
 Für den Einsatz in Begleitfahrzeugen (Support-Vans bei Motorradtouren) oder in reinen Autokolonnen (z. B. Sportwagen-Rallyes) wurde der **universelle Sonnenblenden-Clip für Pod 3** ([`car_sun_visor_pod3_clip.scad`](../../hardware/cad/scad/05_accessories/car_sun_visor_pod3_clip.scad)) konstruiert:
 
+![Universal Sonnenblenden-Clip für Pod 3](../images/cad/car_sun_visor_pod3_clip_cad.png)
+
+*Abbildung 8.33b: 3D-CAD-Ansicht des Universal Sonnenblenden-Clips für Pod 3 (`car_sun_visor_pod3_clip_cad.png`). Sichtbar sind die ergonomische Federspange (Spannweite 14–22 mm für alle Kfz-Sonnenblenden) mit gerundeter Einführlippe und Anti-Rutsch-Rippen, die passgenaue Pod 3 Aufnahmewanne sowie die verdeckte Aussparung für die werkzeuglose Dachhimmel-Kabelverlegung.*
+
 1. **Universelle Passform für ALLE Pkw-Klassen (Kombi, SUV, Limousine, Coupé):**
    * Moderne Fahrzeuge besitzen selten feste Heck-Hutablagen und hinter dem Rückspiegel sitzt meist ein massiver Kasten mit ADAS-Kameras, Notbremsradar und Regensensoren.
    * Der ergonomische Feder-Klemmbügel greift an der **Beifahrer-Sonnenblende** (Dicke $12\dots 22\,\text{mm}$) an – links oder rechts völlig unbeeinflusst vom mittleren Kamerakasten.
@@ -1092,15 +1096,33 @@ Das **Spiegel-Totwinkel-LED Gehäuse** ([`bsd_mirror_indicator_pod.scad`](../../
   * **100 % Blendfreiheit:** Ein 3,8 mm tiefer Visier-Überhang und die blickdichte Vorderwand schirmen das Licht vollständig nach vorne und zur Seite ab. Kein Blenden des Gegenverkehrs, kein Irritieren anderer Verkehrsteilnehmer – voll TÜV-konform.
   * **Universalklemmung:** Zweiteilige Halbschale für Ø 10 mm (Harley, BMW, KTM) und Ø 12 mm Spiegelarme mit verdeckter Kabelführung zu Port `J9`.
 
-### 8.3 Radar 2.0 mmWave Gehäuse (`radar_mr20_housing.scad`)
-Das **Radar 2.0 Gehäuse** ([`radar_mr20_housing.scad`](../../hardware/cad/scad/05_accessories/radar_mr20_housing.scad)) integriert das 77-GHz-mmWave-Sensormodul Wheeltec MR20, die Frontplatine PCBA 08 (mit 24-LED Neopixel-Halo) sowie den originalen Kabel-Zwischenadapter:
-* **Vollkommen symmetrisches PA12-MJF Gehäuse:** $90{,}0 \times 80{,}0 \times 36{,}0\,\text{mm}$ (Breite x Höhe x Tiefe) mit exakt zentriertem Radarausschnitt $(X=0, Z=0)$, symmetrischer M4 Heckverschraubung ($40\,\text{mm}$ Abstand) und integrierter GoPro/Hirth-Gelenklasche zur Befestigung am Kennzeichenhalter (`radar_license_plate_bracket.scad`).
-* **Glattes PC-Radome:** Transparentes Polycarbonat-Sichtfenster ($85 \times 75 \times 1{,}6\,\text{mm}$) schützt Horn-Array und LEDs wetterfest nach IP67 mit umlaufender O-Ring-Dichtung, ohne das 77-GHz-Signal zu dämpfen.
-* **Großzügiger Kabelbaum- & Adapterraum:** Die hintere Hauptkammer ($78 \times 68 \times 16{,}5\,\text{mm}$) nimmt den originalen Zwischen-Adapter des MR20 mitsamt Kabelbaum-Schleife vollständig und knickfrei auf.
-* **Binder Serie 707 M5 Flanschbuchse:** 4-polig, vibrationsentkoppelt im Gehäuseboden zentriert bei $X=0$ verschraubt, per JST-SH Litze an PCBA 08 angebunden.
+### 8.3 Radar 2.0 mmWave Flügel-Gehäuse & Garmin-Bajonett (`radar_mr20_housing.scad`)
+
+Das **Radar 2.0 Flügel-Gehäuse** ([`radar_mr20_housing.scad`](../../hardware/cad/scad/05_accessories/radar_mr20_housing.scad)) integriert das 77-GHz-mmWave-Sensormodul Wheeltec MR20, die geroutete Trägerplatine PCBA 08 (mit 36-LED Warnflügeln und ESP32-C5 Dual-Band Sub-MCU), den Garmin Quarter-Turn Bajonettverschluss sowie die autarke 5.9 GHz ITS-G5 (V2X) Keramik-Patchantenne:
+
+![Radar 2.0 Flügel-Gehäuse 3D CAD](../images/cad/radar_mr20_housing_cad.png)
+
+*Abbildung 8.38: 3D-CAD-Frontansicht des Radar 2.0 Flügel-Gehäuses (`radar_mr20_housing_cad.png`). Sichtbar sind das symmetrische $121 \times 71 \times 34\,\text{mm}$ PA12-MJF Monocoque-Gehäuse, der plane PC-Radom-Fensterrahmen ($116 \times 66 \times 1{,}6\,\text{mm}$) mit 4x M2.5 Torx-Eckverschraubung, der zentrierte $61 \times 51\,\text{mm}$ Radarausschnitt für das MR20 77-GHz-Horn-Array, die beidseitigen LED-Warnflügel-Kammern sowie die linke Antennenkammer für die 5.9 GHz V2X-Keramik-Patchantenne.*
+
+![Radar 2.0 Garmin-Bajonett & Diebstahlsicherung](../images/cad/radar_mr20_housing_bayonet_cad.png)
+
+*Abbildung 8.38b: 3D-CAD-Rückansicht des Radar 2.0 Gehäuses (`radar_mr20_housing_bayonet_cad.png`). Dargestellt sind der monolithische Garmin Quarter-Turn Bajonett-Zapfen (kompatibel mit `radar_varia_gopro_lock_dock.scad` und allen Standard-Varia-Haltern), die federnde Rastklinken-Diebstahlsicherung, das symmetrische M4-Gewindebuchsen-Lochbild ($40\,\text{mm}$ Stichmaß) sowie die zentrierte Binder Serie 707 M5 Flanschbuchsenbohrung am Gehäuseboden.*
+
+* **Konstruktionsmerkmale & HF-Architektur:**
+  * **Symmetrisches Flügel-Rechteck ($121{,}0 \times 71{,}0 \times 34{,}0\,\text{mm}$):** Optimale aerodynamische Schaufelform, die sich harmonisch an Kennzeichenträger und Heckfender anschmiegt.
+  * **Garmin Quarter-Turn Bajonett mit Diebstahlsicherung:** Werkzeugloses Aufsetzen und Verriegeln durch 90°-Drehung. Eine federnde Rastklinke verhindert versehentliches Lösen durch Fahrbahnstöße und erschwert Gelegenheitsdiebstahl.
+  * **Integrierte 5.9 GHz V2X Keramik-Patchantennen-Kammerturm:** Auf der linken Gehäuseflanke ist eine Rastkammer für $20 \times 20\,\text{mm}$ oder $25 \times 25\,\text{mm}$ Keramik-Patchantennen monolithisch eingeformt. Dies garantiert maximale Antennenreichweite ohne Gehäusedämpfung und ohne interne PCB-Antennen-Verluste.
+  * **Großzügiger Adapter- & Verkabelungsraum ($112 \times 62 \times 17\,\text{mm}$):** Nimmt den originalen MR20-Zwischenadapter und Kabelbaum-Schlaufen knickfrei im Gehäuseinneren auf.
+  * **Optisches PC-Radom & IP67-Dichtung:** Glattes, unstrukturiertes Polycarbonat ($116 \times 66 \times 1{,}6\,\text{mm}$) mit umlaufender EPDM-Schnurnut garantiert 0 dB RF-Dämpfung bei 77 GHz und Schlagfestigkeit nach IK08.
 
 ### 8.4 Road Glide ST Sharknose: Induktives Durch-die-Verkleidung Cam-Dock (`road_glide_inductive_cam_dock.scad`)
+
 Das **induktive Cam-Dock** ([`road_glide_inductive_cam_dock.scad`](../../hardware/cad/scad/05_accessories/road_glide_inductive_cam_dock.scad)) löst das Problem der Dauerstromversorgung von Action- und 360°-Kameras (Insta360 X3/X4, GoPro) auf der Nase der Sharknose-Verkleidung **ohne ein einziges Loch zu bohren und ohne sichtbare Außenkabel**:
+
+![Road Glide Induktives Cam-Dock](../images/cad/road_glide_inductive_cam_dock_cad.png)
+
+*Abbildung 8.39: 3D-CAD-Gesamtansicht des Durch-die-Verkleidung Induktiv-Docks (`road_glide_inductive_cam_dock_cad.png`). Sichtbar sind die 15W Qi-Transmitter-Wanne (Unterseite, verdeckt im Verkleidungsinneren), das dielektrische ABS-Verkleidungsdeck der Harley Road Glide (mittig dargestellt) sowie das aerodynamische Tropfenform-Außendock mit 3M Dual-Lock-Boden, integriertem TI BQ51013B Qi-Empfänger und 3-Finger-Gelenk für Actioncams.*
+
 1. **Physikalisches Prinzip:** Das ABS-Verkleidungsdeck der Harley ist unmagnetisch und dielektrisch ($2{,}5\dots 3\,\text{mm}$ Wandstärke). Induktive Wechselfelder durchdringen diesen Kunststoff verlustarm.
 2. **Innen-Baugruppe (TX-Cradle):** Eine flache 15W Qi-Senderspule wird von innen direkt unter das ebene Verkleidungsdeck geklebt und an Port 1 (USB-PD) des Front-Knotens angeschlossen.
 3. **Außen-Baugruppe (RX-Cradle mit 3M Dual Lock):**

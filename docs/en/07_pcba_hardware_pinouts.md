@@ -1,14 +1,14 @@
-# 07 - Hardware Architecture & Board Pinouts (PCBA 01 to 07)
+# 07 - Hardware Architecture & Board Pinouts (PCBA 01 to 08)
 
-This document serves as the **authoritative hardware specification for all 7 printed circuit board assemblies (PCBA 01 through PCBA 07)** of the OpenMotorBridge v8.0 system, detailing layer stackups, controlled impedance classes, zoning concepts, and complete pinout tables.
+This document serves as the **authoritative hardware specification for all 8 printed circuit board assemblies (PCBA 01 through PCBA 08)** of the OpenMotorBridge system, detailing layer stackups, controlled impedance classes, zoning concepts, and complete pinout tables.
 
 ---
 
-## 1. Overview of the 7 Hardware Assemblies (PCBAs)
+## 1. Overview of the 8 Hardware Assemblies (PCBAs)
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                   THE 7 HARDWARE ASSEMBLIES (PCBAs) OF OPENMOTORBRIDGE                 │
+│                   THE 8 HARDWARE ASSEMBLIES (PCBAs) OF OPENMOTORBRIDGE                 │
 ├───────┬───────────────────────────────┬───────────────┬─────────┬──────────────────────┤
 │ Assy  │ Name & Function               │ PCB Outline   │ Layers  │ Key ICs / Components │
 ├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
@@ -33,6 +33,9 @@ This document serves as the **authoritative hardware specification for all 7 pri
 ├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
 │ **PCBA 07**│ **2-in-1 LoRa Smart-Keyfob**  │ 38 x 19 mm    │ 2 Layer │ nRF52840 SoC, SX1262 │
 │       │ (Silent Pager, N52 Key & Qi)  │ (Pocket M2)   │ (ENIG)  │ DRV2605L LRA, BQ51003│
+├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
+│ **PCBA 08**│ **Radar 2.0 Sub-MCU & Wings** │ 115 x 65 mm   │ 2 Layer │ ESP32-C5 Dual-Band,  │
+│       │ (Wheeltec MR20 & V2X Patch)   │ (Wings M2.5)  │ (ENIG)  │ 36x WS2812B, BinderM5│
 └───────┴───────────────────────────────┴───────────────┴─────────┴──────────────────────┘
 ```
 
@@ -570,5 +573,64 @@ The PCBA 07 assembly constitutes the electronics core inside the pocket keyfob e
 | **`BZ1`**| PKLCS1212E4001 | SMD 12x12mm | Murata SMD Piezo Transducer (85 dB @ 10 cm, 4 kHz) | `C94511` |
 | **`D1`** | WS2812B-2020 | SMD 2020 | Intelligent RGB Status LED with integrated WS2811 IC | `C2843785` |
 | **`BAT`**| LiPo 1S 180-200mAh| Pouch 25x18x3.8| 3.7V 180-200 mAh LiPo with PCM protection circuit & 10k NTC | EEMB / Custom |
+
+---
+
+## 10. PCBA 08: 77 GHz mmWave Radar Sub-MCU & Visual Warning Wings (`openmotorbridge_radar_submcu`)
+
+The **PCBA 08** assembly serves as the carrier board and intelligent pre-processing node for the **Wheeltec MR20 77-GHz mmWave radar** (integrated within `hardware/cad/scad/05_accessories/radar_mr20_housing.scad`). It offloads the Central Box via localized 20 Hz raw data parsing, operates the 5.9 GHz ITS-G5 (V2X) mesh uplink, and drives the integrated 36-LED visual warning wings with zero latency:
+
+![PCBA 08 Radar 2.0 Sub-MCU & Warning Wings 3D](../images/pcba/pcba08_radar_submcu_3d.png)
+
+*Figure 7.8: 3D CAD view of the manufactured and routed PCBA 08 (`openmotorbridge_radar_submcu.kicad_pcb`). Depicted are the symmetrical $115 \times 65\,\text{mm}$ winged PCB body with centered $61 \times 51\,\text{mm}$ radar aperture, the 36x WS2812B-2020 LEDs arranged on the left and right warning wings, and the rear ESP32-C5 Dual-Band Sub-MCU with U.FL RF connector routed to the external 5.9 GHz V2X ceramic patch antenna.*
+
+![PCBA 08 Board Layout Top View](../images/pcba/pcba08_radar_submcu_top.png)
+
+*Figure 7.8b: 2D PCB layout top view of PCBA 08 showing silkscreen and trace routing (820 tracks, 95 vias, 0 DRC violations).*
+
+```
+                                PCBA 08 SYSTEM ARCHITECTURE
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                   ESPRESSIF ESP32-C5 DUAL-BAND RISC-V SoC (240 MHz)                    │
+│ • 20 Hz UART driver for Wheeltec MR20 raw packet parsing                               │
+│ • 5.9 GHz ITS-G5 (V2X) mesh & 2.4/5GHz Wi-Fi 6 telemetry uplink                        │
+│ • Zero-latency visual warning wing drive (brake light strobe, collision alerts)        │
+│ • Macro command interface to Central Box (ESP32-S3) via Binder M5 4-pin                │
+│ • Remote bootloader flasher support (firmware push over UART directly from Central Box)│
+└──────────────┬─────────────────────────┬─────────────────────────┬─────────────────────┘
+               │ UART1 (MR20 Raw 115k2)  │ GPIO8 (RMT / NeoPixel)  │ UART0 (Central Box Macro)
+               ▼                         ▼                         ▼
+┌───────────────────────────┐ ┌─────────────────────┐ ┌──────────────────────────────────┐
+│ WHEELTEC MR20 (77 GHz)    │ │ 36x WS2812B-2020    │ │ BINDER SERIES 707 M5 (4-Pin IP67)│
+│ • mmWave Horn Array       │ │ • Brake strobe      │ │ • Pin 1: +5.0V DC Power In       │
+│ • ±60° (120°) Azimuth     │ │ • Collision wings   │ │ • Pin 2: UART RX (Macro Command) │
+│ • Up to 90 m Range        │ │ • Dusk auto-dimming │ │ • Pin 3: UART TX (Target Array)  │
+│ • Fits in 61x51mm Aperture│ │ • 18 left /         │ │ • Pin 4: GND (Power & Signal)    │
+│   behind optical PC window│ │   18 right          │ │   (Decoupled via JST-SH cable)   │
+└───────────────────────────┘ └─────────────────────┘ └──────────────────────────────────┘
+```
+
+### 10.1 Technical Board Specifications & Geometry
+* **Dimensions:** $115.0 \times 65.0 \times 1.6\,\text{mm}$ (2-layer FR-4 High-TG150, ENIG gold finish, JLC2313 stackup).
+* **Central Cutout:** $61.0 \times 51.0\,\text{mm}$ rectangular pass-through with $R = 2.0\,\text{mm}$ corner radii, perfectly centered at $(X=0, Y=0)$. The Wheeltec MR20 77-GHz transceiver sinks flush into this window, emitting unimpeded through the transparent polycarbonate radome.
+* **Symmetrical Warning Wings:** Flanking the radar cutout left and right are **$27.0\,\text{mm}$ wide visual warning wings** providing peripheral visibility into the rider's rear-view mirrors.
+* **Mounting Pattern:** 4x M2.5 mounting holes ($\varnothing 2.7\,\text{mm}$) spaced $105.0 \times 55.0\,\text{mm}$ ($X = \pm 52.5, Y = \pm 27.5\,\text{mm}$), threading into brass heat-set inserts in the enclosure.
+* **LED Matrix (36x WS2812B-2020 Addressable LEDs):**
+  * **Left Warning Wing:** 18 LEDs (`D1` through `D18`) in 3 vertical columns of 6 LEDs each.
+  * **Right Warning Wing:** 18 LEDs (`D19` through `D36`) in 3 vertical columns of 6 LEDs each.
+* **Rear Layer Components (B.Cu – strictly clear of radar window):**
+  * **Right Wing:** ESP32-C5 Dual-Band SoC, 3.3V LDO `U2`, 40 MHz crystal `Y1`, and U.FL RF receptacle `J3`.
+  * **Left Wing:** `J1` (JST-SH 4-pin to Binder M5) and `J2` (JST-SH 4-pin to MR20 breakout adapter).
+* **Power Supply:** $+5.0\,\text{V}$ input via Binder M5 from Central Box. Local low-dropout regulator `U2` (3.3V 500mA SOT-23-5) powers the ESP32-C5; the 36 LEDs and the MR20 sensor run directly from the conditioned $+5\,\text{V}$ rail.
+* **ESD & Transient Protection:** PESD5V0S2BT TVS array (`D37`) on UART lines; 10 µF MLCC bulk smoothing (`C1`, `C2`) and 100 nF X7R local decoupling (`C3`, `C4`).
+
+### 10.2 Header Pinouts & Mechanical Decoupling
+To eliminate road vibration shear stress, the Binder M5 707 receptacle is **bolted rigidly into the enclosure floor** and connected electrically to PCBA 08 via a flexible 4-wire JST-SH flying lead:
+
+| Receptacle | Type & Pins | Pinout | Function & Destination |
+| :--- | :--- | :--- | :--- |
+| **`J1`** | JST-SH 1.0mm 4-Pin Horiz. | Pin 1: `+5V_IN`<br>Pin 2: `ZBOX_RX`<br>Pin 3: `ZBOX_TX`<br>Pin 4: `GND` | Internal link to chassis-mounted Binder M5 bulkhead (cable link to Central Box) |
+| **`J2`** | JST-SH 1.0mm 4-Pin Horiz. | Pin 1: `+5V_MR20`<br>Pin 2: `MR20_TX`<br>Pin 3: `MR20_RX`<br>Pin 4: `GND` | Direct link to Wheeltec MR20 breakout pigtail inside rear cavity |
+| **`J3`** | U.FL / IPEX Coaxial Receptacle | Center: `RF_5G9_V2X`<br>Shield: `GND` | Micro-coax to external 5.9 GHz ceramic patch antenna in left wing cradle |
 
 
