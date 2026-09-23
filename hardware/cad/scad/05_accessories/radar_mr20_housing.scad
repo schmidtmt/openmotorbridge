@@ -80,6 +80,14 @@ GARMIN_WING_OFFSET  = 0.7;   // Axial gap between back wall and wing bottom (mm)
 SCREW_PCD_X         = 51.5;  // X pitch: 103.0 mm
 SCREW_PCD_Z         = 26.5;  // Z pitch: 53.0 mm
 
+// --- Precision Y-Stackup Parameters (Front to Back) ---
+RADOME_FRONT_Y      = 0.0;                                                 // Radome exterior flush face (mm)
+RADOME_BACK_Y       = RADOME_FRONT_Y - RADOME_WINDOW_THICK;                // Y = -1.6 mm (inner radome face)
+PCBA_AIR_GAP        = 1.0;                                                 // Clear air gap for 0.75mm WS2812B LEDs (mm)
+PCBA_FRONT_Y        = RADOME_BACK_Y - PCBA_AIR_GAP;                        // Y = -2.6 mm (PCBA front face)
+PCBA_BACK_Y         = PCBA_FRONT_Y - PCBA08_THICK;                         // Y = -4.2 mm (PCBA back face / cavity start)
+MR20_FRONT_Y        = RADOME_BACK_Y - 0.2;                                 // Y = -1.8 mm (0.2mm RF gap behind radome)
+
 // Helper: Rounded 2D rectangle in X-Y plane (centered at X=0, Y=0)
 module rounded_rect_2d(w, h, r) {
     hull() {
@@ -226,6 +234,17 @@ module radar_mr20_main_tub(include_lower_clevis=true) {
                         cylinder(r=5.5, h=3.0, center=false, $fn=24);
                 }
             }
+
+            // 4 Corner Standoff Pillars around M2.5 screws (support PCBA 08 shelf & hold M2.5 inserts)
+            for (sx = [-SCREW_PCD_X, SCREW_PCD_X]) {
+                for (sz = [-SCREW_PCD_Z, SCREW_PCD_Z]) {
+                    translate([sx, PCBA_BACK_Y, sz]) {
+                        rotate([90, 0, 0]) {
+                            cylinder(r=3.2, h=10.0, center=false, $fn=24);
+                        }
+                    }
+                }
+            }
         }
 
         // --- INTERNAL CAVITIES & SUBTRACTIONS ---
@@ -233,35 +252,32 @@ module radar_mr20_main_tub(include_lower_clevis=true) {
         // 1. Front Radome Window Recess Step (Y = 0.5 down to -1.6 mm)
         translate([0, 0.5, 0]) {
             rotate([90, 0, 0])
-                linear_extrude(height=RADOME_WINDOW_THICK + 0.6, center=false)
+                linear_extrude(height=RADOME_WINDOW_THICK + 0.5, center=false)
                     rounded_rect_2d(RADOME_WINDOW_W + 0.4, RADOME_WINDOW_H + 0.4, 4.0);
         }
 
-        // 2. PCBA 08 Shelf Pocket (Y = -1.6 down to -3.4 mm)
-        translate([0, -RADOME_WINDOW_THICK, 0]) {
+        // 2. PCBA 08 Shelf Pocket (from Y = -1.6 down to PCBA_BACK_Y = -4.2 mm)
+        translate([0, RADOME_BACK_Y, 0]) {
             rotate([90, 0, 0])
-                linear_extrude(height=PCBA08_THICK + 0.4, center=false)
+                linear_extrude(height=PCBA_AIR_GAP + PCBA08_THICK + 0.1, center=false)
                     rounded_rect_2d(PCBA08_W + 0.4, PCBA08_H + 0.4, 3.0);
         }
 
-        // 3. Central Wheeltec MR20 Radar Pocket (Centered at X=0, Z=0, Y = -1.6 to -10.5 mm)
-        translate([0, -MR20_MODULE_D/2 - RADOME_WINDOW_THICK, 0]) {
-            cube([MR20_MODULE_W + 0.6, MR20_MODULE_D + 0.5, MR20_MODULE_H + 0.6], center=true);
-        }
-
-        // 4. Center Cable Pass-Through Window into Rear Cavity
-        translate([0, -11.0, 0]) {
-            cube([45.0, 3.0, 25.0], center=true);
-        }
-
-        // 5. Main Rear Cavity for Inline Adapter Module & Wiring Loop (Y = -11.0 to -31.0 mm)
-        translate([0, -11.0, 0]) {
+        // 3. Deep Internal Cavity (starts at Y = PCBA_BACK_Y = -4.2 mm right behind the PCB)
+        // Provides 27.0 mm deep open space for ESP32-C5 (B.Cu), JST-SH connectors, wiring loops & adapter
+        translate([0, PCBA_BACK_Y, 0]) {
             rotate([90, 0, 0])
-                linear_extrude(height=ADAPTER_CAVITY_D, center=false)
+                linear_extrude(height=RADAR_HOUSING_D - RADAR_WALL_THICK + PCBA_BACK_Y, center=false)
                     rounded_rect_2d(ADAPTER_CAVITY_W, ADAPTER_CAVITY_H, 3.5);
         }
 
-        // 6. Bottom Binder M5 Bulkhead Connector Bore & Anti-Rotation D-Flat (Centered on X = 0)
+        // 4. Central Wheeltec MR20 Radar Pocket (Centered at X=0, Z=0)
+        // Sits at MR20_FRONT_Y = -1.8 mm (0.2 mm air gap behind radome)
+        translate([0, MR20_FRONT_Y - MR20_MODULE_D/2, 0]) {
+            cube([MR20_MODULE_W + 0.6, MR20_MODULE_D + 0.5, MR20_MODULE_H + 0.6], center=true);
+        }
+
+        // 5. Bottom Binder M5 Bulkhead Connector Bore & Anti-Rotation D-Flat (Centered on X = 0)
         translate([0, -RADAR_HOUSING_D/2, -RADAR_HOUSING_H/2 - 12.0]) {
             intersection() {
                 cylinder(r=BINDER_M5_BORE_DIA/2, h=22.0, center=false, $fn=32);
@@ -270,7 +286,7 @@ module radar_mr20_main_tub(include_lower_clevis=true) {
             }
         }
 
-        // 7. Rear M4 Brass Threaded Insert Pockets (Ruthex M4x8.1, Symmetrical at X = ±20 mm, Z = 0)
+        // 6. Rear M4 Brass Threaded Insert Pockets (Ruthex M4x8.1, Symmetrical at X = ±20 mm, Z = 0)
         for (dx = [-REAR_M4_PITCH/2, REAR_M4_PITCH/2]) {
             translate([dx, -RADAR_HOUSING_D - 0.5, 0.0]) {
                 rotate([90, 0, 0])
@@ -278,12 +294,12 @@ module radar_mr20_main_tub(include_lower_clevis=true) {
             }
         }
 
-        // 8. 4x M2.5 Corner Brass Insert Pockets (Ruthex M2.5, Symmetrical at X = ±51.5 mm, Z = ±26.5 mm)
+        // 7. 4x M2.5 Corner Brass Insert Pockets (Ruthex M2.5, Symmetrical at X = ±51.5 mm, Z = ±26.5 mm)
         for (sx = [-SCREW_PCD_X, SCREW_PCD_X]) {
             for (sz = [-SCREW_PCD_Z, SCREW_PCD_Z]) {
                 translate([sx, 1.0, sz]) {
                     rotate([90, 0, 0]) {
-                        cylinder(r=1.8, h=10.0, center=false, $fn=20); // 3.6 mm bore for M2.5 brass heat-set insert
+                        cylinder(r=1.8, h=14.0, center=false, $fn=20); // 3.6 mm bore for M2.5 brass heat-set insert
                     }
                 }
             }
@@ -296,7 +312,7 @@ module radar_mr20_main_tub(include_lower_clevis=true) {
 
 // 2. Optical Radome Window Insert (Laser-cut / Molded PC or PETG)
 module radar_mr20_radome_window() {
-    color([0.9, 0.95, 1.0, 0.35]) {
+    color([0.90, 0.95, 1.0, 0.18]) {
         difference() {
             // Flat RF-transparent PC radome plate (116.0 x 66.0 x 1.6 mm)
             rotate([90, 0, 0])
@@ -326,7 +342,7 @@ module radar_mr20_radome_window() {
                 translate([sx, 0.3, sz]) {
                     rotate([90, 0, 0]) {
                         cylinder(r=2.5, h=1.2, center=false, $fn=24);
-                        cylinder(r=1.25, h=8.0, center=false, $fn=16);
+                        cylinder(r=1.25, h=10.0, center=false, $fn=16);
                     }
                 }
             }
@@ -338,7 +354,7 @@ module radar_mr20_radome_window() {
 
 // Dummy: Wheeltec MR20 77-GHz mmWave Radar Transceiver Module
 module mr20_radar_dummy() {
-    translate([0, -1.6 - MR20_MODULE_D/2, 0]) {
+    translate([0, MR20_FRONT_Y - MR20_MODULE_D/2, 0]) {
         // Metallic shielding enclosure
         color([0.24, 0.25, 0.28])
             cube([MR20_MODULE_W, MR20_MODULE_D, MR20_MODULE_H], center=true);
@@ -361,7 +377,7 @@ module mr20_radar_dummy() {
 
 // Dummy: PCBA 08 Sub-MCU Carrier Board with Dual 18-LED Warning Wings
 module pcba08_radar_dummy() {
-    translate([0, -1.6 - PCBA08_THICK/2, 0]) {
+    translate([0, PCBA_FRONT_Y - PCBA08_THICK/2, 0]) {
         // Matte Black 4-Layer FR4 Substrate
         color([0.14, 0.14, 0.16]) {
             difference() {
@@ -383,22 +399,76 @@ module pcba08_radar_dummy() {
             }
         }
 
-        // 36x WS2812B-2020 LEDs (18 Left, 18 Right) Glowing Amber / Hazard Warning
-        color([1.0, 0.42, 0.05]) {
-            // Left Wing: 2 columns of 9 LEDs
-            for (col = [-48.0, -38.0]) {
-                for (row = [-24.0 : 6.0 : 24.0]) {
-                    translate([col, PCBA08_THICK/2 + 0.3, row])
-                        cube([2.0, 0.6, 2.0], center=true);
+        // 36x WS2812B-2020 LEDs Glowing Amber / Hazard Warning
+        // Matches exact PCB coordinates from openmotorbridge_radar_submcu.kicad_pcb
+        // Mounted on PCB front face (protruding forward by 0.7mm into the 1.0mm air gap)
+        color([1.0, 0.52, 0.04]) {
+            // Left Wing: 3 columns x 4 rows = 12 LEDs (D1..D12)
+            for (col = [-48.0, -42.0, -36.0]) {
+                for (row = [-18.0, -6.0, 6.0, 18.0]) {
+                    translate([col, PCBA08_THICK/2 + 0.95, row])
+                        cube([2.0, 0.7, 2.0], center=true);
                 }
             }
-            // Right Wing: 2 columns of 9 LEDs
-            for (col = [38.0, 48.0]) {
-                for (row = [-24.0 : 6.0 : 24.0]) {
-                    translate([col, PCBA08_THICK/2 + 0.3, row])
-                        cube([2.0, 0.6, 2.0], center=true);
+            // Top Edge: 6 LEDs (D13..D18)
+            for (col = [-25.0, -15.0, -5.0, 5.0, 15.0, 25.0]) {
+                translate([col, PCBA08_THICK/2 + 0.95, 28.5])
+                    cube([2.0, 0.7, 2.0], center=true);
+            }
+            // Right Wing: 3 columns x 4 rows = 12 LEDs (D19..D30)
+            for (col = [36.0, 42.0, 48.0]) {
+                for (row = [-18.0, -6.0, 6.0, 18.0]) {
+                    translate([col, PCBA08_THICK/2 + 0.95, row])
+                        cube([2.0, 0.7, 2.0], center=true);
                 }
             }
+            // Bottom Edge: 6 LEDs (D31..D36)
+            for (col = [-25.0, -15.0, -5.0, 5.0, 15.0, 25.0]) {
+                translate([col, PCBA08_THICK/2 + 0.95, -28.5])
+                    cube([2.0, 0.7, 2.0], center=true);
+            }
+        }
+
+        // --- Bottom Layer Components (B.Cu) ---
+        // U1: ESP32-C5 Sub-MCU Module (Left Wing, X = -44 mm, Z = 0 mm)
+        translate([-44.0, -PCBA08_THICK/2 - 1.6, 0]) {
+            color([0.75, 0.76, 0.78])
+                cube([18.0, 3.2, 25.5], center=true); // Shield can
+            translate([0, -1.65, 9.5])
+                color([0.85, 0.72, 0.25])
+                    cylinder(r=1.5, h=0.8, center=true, $fn=16); // U.FL connector
+        }
+
+        // J1 & J2: JST-SH 1.0mm 4-Pin Horizontal Connectors (Right Wing, X = +44 mm)
+        // J1: Central Interconnect at Z = +4 mm, J2: MR20 Sensor Link at Z = +20 mm
+        for (jz = [4.0, 20.0]) {
+            translate([44.0, -PCBA08_THICK/2 - 1.5, jz]) {
+                color([0.92, 0.90, 0.85])
+                    cube([5.0, 3.0, 4.2], center=true);
+            }
+        }
+
+        // U2: 3.3V LDO Regulator TPS7A0533 (Right Wing, X = +44 mm, Z = -16 mm)
+        translate([44.0, -PCBA08_THICK/2 - 0.65, -16.0]) {
+            color([0.1, 0.1, 0.1])
+                cube([3.0, 1.3, 1.8], center=true);
+        }
+
+        // SW1 (Boot) & SW2 (Reset) SMD Tactile Switches (Left Wing Upper Area)
+        for (sw = [[-36.0, 22.0], [-51.0, 22.0]]) {
+            translate([sw[0], -PCBA08_THICK/2 - 0.8, sw[1]]) {
+                color([0.85, 0.85, 0.88])
+                    cube([3.5, 1.6, 3.5], center=true);
+                translate([0, -0.9, 0])
+                    color([0.2, 0.2, 0.2])
+                        cylinder(r=1.0, h=0.4, center=true, $fn=16);
+            }
+        }
+
+        // J3: U.FL V2X Antenna RF Connector (Left Wing Lower Area, X = -44 mm, Z = -18 mm)
+        translate([-44.0, -PCBA08_THICK/2 - 0.65, -18.0]) {
+            color([0.85, 0.72, 0.25])
+                cylinder(r=1.5, h=1.3, center=true, $fn=16);
         }
     }
 }
