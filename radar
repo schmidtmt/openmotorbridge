@@ -1,0 +1,34 @@
+idee
+
+MR20 Radar mit 77GHz statt einem Framin
+
+Das MR20 wird mitsamt seinem Adapter in ein kleines Gehäuse mit eigener Platine integriert,
+In die Gehäuse-Front zu der auch das Radar raus sendet ist um das Radar ein LED-Ring oder Mehrfachring
+Die Platine beinhaltet einen Chip, der die Steuerung der LEDs und direkte Kommunikation mit dem MR20 übernimmt.
+Der Chip kommuniziert via UART m,it der Zentralbox (4-pliger Anschluss (2x Signal, 2x Strom))
+
+"Schichtaufbau" des Gehäuses aus?
+Ganz vorne: Der 3D-Druck-Deckel (als glattes Radar-Fenster).
+
+Dahinter (0 bis 5 mm Tiefe): Deine Frontplatine mit dem zentralen Ausschnitt für das Radar und dem LED-Ring auf der Vorderseite.
+
+Dahinter (5 bis 25 mm Tiefe): Das Anschluss-Modul (4 Pins Richtung Zentralbox) und der flache USB/UART-Adapter, die sich in den freien Raum hinter der Platine schmiegen.
+
+Unten / Hinten an der Gehäusewand: Der fest eingeschraubte M8-Anschluss, der über ein kurzes Kabel-Häppchen mit der Platine verbunden ist.
+
+
+Grib-Skizze Platine mit Loch für das MR20-Radar und kompletter LED Front, Evtl aber auch nur Ringe.
+Als LEDs addressierbare WS2812B / Neopixel .
++---------------------------------------+
+| X   X   X   X   X   X   X   X . X   X |
+|   X   X   X  +---------+  X   X   X   |
+| X   X   X   X|         |X   X   X   X |
+|   X   X   X  |         |  X   X   X   |
+| X   X   X   X|         |X   X   X   X |
+|   X   X   X  +---------+  X . X   X.  |
+| X.  X.  X.  X.  X.  X.  X.  X.  X.  X |
++---------------------------------------+
+
+Auf der Rückseite wäre dann der UART-Anschluss für das Radar, sowie eine Leiste für den 4-pligen Anschluss Richtung Zentralbox. Eigenliche Buchse wäre in die Gehäusehinterwand integriert.
+
+Als Chip evtl. einen ESP C3 oder RP2040, die die Events vom MR20 schon mal vorfiltern und die Ansteuerung der LEDs übernehmen. Von der Zentral-Box kommen dann nur Macro-Befehle für die LEDs. Richtung Zentralbox gehen dann nur die relevanten Events vom MR20

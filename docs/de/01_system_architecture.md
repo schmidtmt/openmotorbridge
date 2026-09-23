@@ -212,26 +212,39 @@ Der Front-Knoten (PCBA 05) dient auf **allen Motorrädern** als universeller Coc
 * **Echtzeit-Telemetrie:** Über den integrierten TCAN334G CAN-Transceiver lauscht die Zentralbox im Listen-Only-Modus auf dem Fahrzeugbus und erfasst Raddrehzahlen, Schräglage und Blinkersignale.
 * **Display-Warnmeldungen:** Statusmeldungen können direkt im Motorrad-TFT-Display generiert werden.
 
-### 5.3 Heck-Radar & Totwinkel-Assistent (Garmin Varia / 24 GHz mmWave) am Pod 3 Kombihalter
-* **Heck-Kombihalter & Justage:** Der Montagehalter für Pod 3 am Heck integriert einen winkelverstellbaren GoPro-kompatiblen M5-Ausleger zur präzisen horizontalen Justage des Radarsensors ($\pm 5^\circ$).
-* **Direktanschluss an Peitsche 5:** 12V-Power und bidirektionale Telemetrie (UART2 auf `RESERVE_GPIO_A/B` oder CAN-Bus) über die wasserdichte M8 4-Pin Schnittstelle.
-* **Unterstützte Radarsysteme:**
-  * **Garmin Varia Radar:** RTL515 / eRTL615 serielles Streaming-Protokoll (0xAA Preamble, $140\,\text{m}$ Erfassung, $20\,\text{Hz}$ Update).
-  * **24 GHz mmWave Doppler-Radare:** Kompakte Automotive-Radarmodule (z. B. BGT24LTR11 / HLK-LD2410 / DFROBOT).
+### 5.3 Heck-Radar 2.0 & Totwinkel-Assistent (Wheeltec MR20 77 GHz mmWave & Garmin Varia) am Pod 3 Kombihalter
+* **Heck-Kombihalter & Justage:** Der Montagehalter für Pod 3 bzw. der entkoppelte Kennzeichenträger ([`radar_license_plate_bracket.scad`](../../hardware/cad/scad/02_pod_base/radar_license_plate_bracket.scad)) integriert eine bionische 36-Zahn Hirth-Verzahnung zur verzugsfreien Ausrichtung des Radarsensors.
+* **Dual-Radar-Architektur (Zwei austauschbare Radar-Engines):**
+  * **Radar 2.0 (Wheeltec MR20 77 GHz mmWave – Standard):**
+    - Integriert in IP67-Gehäuse ([`radar_mr20_housing.scad`](../../hardware/cad/scad/05_accessories/radar_mr20_housing.scad)) mit PCBA 08 (ESP32-C3 Sub-MCU).
+    - 77 GHz FMCW Horn-Array mit $\pm 60^\circ$ ($120^\circ$) horizontaler Erfassung und bis zu $90\,\text{m}$ Reichweite.
+    - 24-LED Neopixel-Perimeter-Halo: Bremslicht-Strobe bei Verzögerung $> 0{,}4\,g$, dynamisch expandierender Annäherungs-Halo bei herannahendem Verkehr ($TTC < 2{,}5\,\text{s}$).
+    - Binder Serie 707 M5 4-Pin IP67 Schnittstelle (Power + Macro-UART), mechanisch entkoppelt.
+  * **Radar 1.0 (Garmin Varia RTL515 / eRTL615 – Legacy):**
+    - 24 GHz Doppler-Streaming (0xAA Preamble, $140\,\text{m}$ Erfassung, $20\,\text{Hz}$ Update) über GoPro Lock Dock.
 * **Dynamische Bedrohungs-Klassifikation & Time-To-Collision (TTC):**
   * $\text{TTC} = \frac{d}{v_{\text{rel}}}$.
   * **Grün (Clear):** Kein Fahrzeug im Gefahrenbereich oder $v_{\text{rel}} \le 10\,\text{km/h}$.
   * **Gelb (Annäherung):** $d \le 80\,\text{m}$ und $v_{\text{rel}} > 15\,\text{km/h}$ (Fahrzeug nähert sich normal).
   * **Rot (Kollisionsrisiko):** $\text{TTC} < 3{,}5\,\text{s}$ oder ($d \le 35\,\text{m}$ und $v_{\text{rel}} > 25\,\text{km/h}$).
 * **Akustische Helm-Warnung (Prio-1 Ducking):** Bei Bedrohung (Gelb/Rot) senkt die Audio-DSP-Pipeline Musik und Intercom sofort auf **$-18\,\text{dB}$** ab ($< 15\,\text{ms}$ Attack) und spielt einen prägnanten **synthetisierten Doppelton-Ping** ($880\,\text{Hz} \rightarrow 1760\,\text{Hz}$ bei Gelb bzw. $988\,\text{Hz} \rightarrow 1976\,\text{Hz}$ bei Rot) ins Fahrer-Headset.
-* **Totwinkel-Assistent (BSD) & Spiegel-LEDs:** Befindet sich ein herannahendes Fahrzeug im Nahbereich ($d < 15\,\text{m}$) auf der linken oder rechten Spur ($|\text{Azimut}| > 3^\circ$), warnen die virtuellen Spiegel-Pills im WebApp-Cockpit pulsierend in Bernstein oder Rot.
+* **Astronomische Dimmung & Tunnel-Erkennung:**
+  * Berechnung des Sonnenstandswinkels $\alpha_{\text{sun}}$ aus GNSS-Koordinaten und UTC-Zeit: Dimm-Level von 100 % (Tag) über Dämmerung bis 18 % (Nacht).
+  * **Tunnel-Detektor:** Abriss des GNSS-Signals ($Fix = 0$ für $> 1{,}5\,\text{s}$) bei $v > 30\,\text{km/h}$ schaltet die Totwinkel-LEDs sofort auf Nacht-Dimmung (18 %), um Blendung im Rückspiegel zu verhindern.
+* **Blinker-Kopplung:** Bei Rechtsblinken Überwachung der linken Vorfahrtsspur; bei Linksblinken zwingende Überwachung beider Spuren.
 
-#### 5.3.1 Notbremsblinken (Emergency Stop Signal - ESS) über das Heck-Radar & Power-Port
+#### 5.3.1 Autarke Wettertrend-Engine (BMP390 mit GNSS-Höhenkompensation)
+* **Physikalischer Luftdruck-Trend:** Normierung des gemessenen Absolutdrucks über die GNSS-Ellipsoidhöhe ($P_0 = P \cdot (1 - h / 44330)^{-5.255}$).
+* **Trend-Klassifikation:** Erkennt barometrische Druckabfälle $> 2{,}0\,\text{hPa/h}$ oder Temperaturstürze $> 3\,^\circ\text{C}/15\,\text{min}$ als herannahende Unwetterfront – autark ohne Mobilfunk-Uplink.
+* **Fahrsicherheits-Anzeige:** Warnmeldung erfolgt im Stillstand ($v = 0\,\text{km/h}$) oder bei Rastpausen.
+
+#### 5.3.2 Notbremsblinken (Emergency Stop Signal - ESS) über das Heck-Radar & Power-Port
 * **Funktionsweise (100% CAN Listen-Only konform):**
   * Erkennt die 6-Achsen-IMU der Zentralbox eine massive Gefahrenbremsung ($a_x < -6{,}0\,\text{m/s}^2$ bzw. $> 0{,}6\,\text{g}$ Verzögerung aus hohem Tempo):
-  * Sendet OpenMotorBridge über den seriellen Steuerkanal (`RADAR_TX/RX` an Peitsche 5) den Befehl `SET_LIGHT_MODE: STROBE_4HZ` an das Garmin Varia Radar.
-  * **Ergebnis:** Die ultrahellen High-Power-Rücklicht-LEDs des Radars blitzen mit **$4\dots 5\,\text{Hz}$ stroboskopartig** auf, um nachfolgende Autofahrer sofort vor einem Auffahrunfall zu warnen.
-  * **Zusatzausgang:** Alternativ oder parallel kann der geschaltete Leistungsausgang `RESERVE_GPIO_B` (High-Side Smart-MOSFET) ein Zusatzbremslicht oder Helmfunk-Bremslicht (z. B. Cosmo Moto) triggern – **völlig ohne Eingriff in die originale Fahrzeug-Bremsleitung**.
+  * Sendet OpenMotorBridge über UART Makrobefehle:
+    - Am Radar 2.0 (Wheeltec MR20): Triggert den 24-LED Neopixel-Halo in einen ultrahellen, pulsierenden $4\dots 5\,\text{Hz}$ Bremslicht-Stroboskop-Blitz.
+    - Am Garmin Varia: Sendet `SET_LIGHT_MODE: STROBE_4HZ`.
+  * **Ergebnis:** Höchste Warnwirkung für nachfolgende Fahrzeuge, **völlig ohne Eingriff in die originale Fahrzeug-Bremsleitung**.
 
 ### 5.4 LoRa 868 MHz Alarmanlagen-Pager & Parkplatzwächter (Werks-BCM + Autonom)
 * **Das Problem herkömmlicher Alarmanlagen:** Geht an der Passhöhe oder am Hotel die Alarmanlage des Motorrads los, ist der Fahrer oft zu weit entfernt ($> 50\dots 100\,\text{m}$) und hört die Hupe nicht.

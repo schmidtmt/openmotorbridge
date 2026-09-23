@@ -52,13 +52,14 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 * [ ] **3D-Druckteile (MJF PA12 schwarz oder FDM ASA/PET-CF):**
   * 1x Main Box (Unterwanne, Zwischenboden mit Wanne für 2.200 mAh LiPo, Deckel)
   * 3x Pod-Basisgehäuse & 3x Pod-Schottwände
-  * 3x Kassetten-Basisschlitten, Inlays (z. B. Sena, Cardo oder Blindkassette) & 2x Rastwippen
-  * 1x Heck-Pod 3 OMM-Radom
+  * 3x Kassetten-Basisschlitten, Inlays (z. B. Sena, Cardo, Blindkassette oder `cartridge_universal_actuator_rails.stl`) & 2x Rastwippen
+  * 1x Heck-Pod 3 OMM-Radom (mit SHT40 Fahrtwindkanal & V2X-Aufnahme)
   * 1x Front-Knoten (Unterwanne mit AMPS-Nut-Pockets, Deckel, TPU-Dichtkämme & USB-C Kappe)
-  * 1x Fahrzeugspezifisches Montage-Kit (BMW GS Klemmen / Harley Kofferdeckel-Docks)
+  * 1x Fahrzeugspezifisches Montage-Kit (BMW GS Klemmen / Harley Kofferdeckel-Docks / Fender-Konsole)
+  * *(Zubehör nach Bedarf: `radar_mr20_housing.stl`, `road_glide_inductive_cam_dock.stl`, `car_sun_visor_pod3_clip.stl`)*
 * [ ] **Vollautomatisch bestückte Platinen (von JLCPCB / Eurocircuits):**
   * 1x PCBA 01 (Zentralbox), 3x PCBA 02 (Pod-Base), 2x PCBA 03 (Cartridge), 1x PCBA 04 (Heck-Pod 3), 1x PCBA 05 (Front-Knoten)
-  * *(Optional: PCBA 06 MagSafe Dock, PCBA 07 Smart-Keyfob)*
+  * *(Erweitert: 1x PCBA 08 Radar 2.0 Sub-MCU & Faceplate, PCBA 06 MagSafe Dock, PCBA 07 Smart-Keyfob)*
 * [ ] **V4A Edelstahl-Normteile & Federn (IKEA-Prinzip – 100 % lötfrei):**
   * 8x DIN 934 / DIN 985 M3 Edelstahlmuttern (für Gehäuse-Nut-Pockets)
   * 4x DIN 934 M4 Muttern (für AMPS-Nut-Pockets in Front-Node Wanne)
@@ -70,12 +71,18 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
   * Silikon-Rundschnur Ø 1,5 mm Shore 40A ($40\,\text{cm}$ Main Box, $30\,\text{cm}$ Front-Knoten)
   * 3x Silikon-Flanschdichtungen für Pod-Mundlöcher, Gore ePTFE Membranpads
   * **1x 1S LiPo Flat-Pack 2.200 mAh** ($68 \times 39 \times 5{,}0\,\text{mm}$, Typ 504068 / 503870) mit Molex Micro-Fit 3.0 Stecker
+* [ ] **Sensoren & Radar-Hardware:**
+  * 1x Wheeltec MR20 77-GHz-mmWave-Radarmodul (oder Legacy Garmin Varia RTL515/eRTL615)
+  * 1x Binder Serie 707 M5 4-Pin IP67 Flanschbuchse & M5-Kabelpeitsche
+  * 1x Sensirion SHT40 Präzisions-Temperatur-/Feuchtesensor mit $60\,\text{cm}$ dünner Litze
+  * 1x 15W Qi Induktiv-Ladekit (TX-Spule für Verkleidungsinnenraum + RX-Spule mit TI BQ51013B für Cam-Dock)
+  * 1x CarlinKit 4.0 CPC200-CP2A Wireless CarPlay/AA Adapter
 * [ ] **Vorkonfektionierte COTS-Kabel (kein Crimpen nötig):**
   * 1x HD26 IP67 Kabelpeitsche, 3x M8 6-Pin PUR-Kabel (1.0 m / 1.5 m)
   * 1x 2-Pin JST-PH Stromkabel mit Posi-Tap Abzweigverbindern (Cockpit 12V Zündungsplus & Masse)
-  * JST-SH Kassetten-Kabelbäume (8-Pin `J_ACT` für Hubmagnete, 6-Pin `J2` für Audio/DC)
+  * JST-SH Kassetten-Kabelbäume (8-Pin `J_ACT` für Hubmagnete, 6-Pin `J2` für Audio/DC, 4-Pin für Radar)
 * [ ] **Werkzeuge:**
-  * Innensechskantschlüsselsatz (1.5 / 2.0 / 2.5 / 3.0 mm), Torx TX10 / PH1 Schraubendreher, Gabelschlüssel SW 7 / 8 mm, Cuttermesser, Silikonfett
+  * Innensechskantschlüsselsatz (1.5 / 2.0 / 2.5 / 3.0 mm), Torx TX10 / PH1 Schraubendreher, Gabelschlüssel SW 7 / 8 / 10 mm, Cuttermesser, dielektrisches Silikonfett
 
 ---
 
@@ -108,6 +115,10 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
      * Vorkonfektioniertes 8-poliges JST-SH Kabel `J_ACT` von den Aktuatoren auf Header `J_ACT` von PCBA 03 stecken (kein Crimpen!).
      * Headset in das Konturbett einlegen und mit dem Schnellspann-Niederhalter fixieren.
      * Vorkonfektioniertes J2-Kabel anstecken.
+   * **Klasse U (Universelle Aktuatoren-Kassette für Fremd-Headsets mit Center- & Seitentasten):**
+     * Das universelle Rastersystem ([`cartridge_universal_actuator_rails.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_universal_actuator_rails.stl)) auf den Schlitten setzen.
+     * **Top-Tasten:** Bei Geräten mit asymmetrischen oder mittigen Tasten die Hubmagnete in der 2D-Langlochplatte ($3\,\text{mm}$ Raster) stufenlos auf die Tasterkonturen zentrieren und per M2-Rändelmutter kontern.
+     * **Gegenüberliegende Seitentasten:** Bei Geräten mit Tasten auf beiden Flanken die zwei unabhängigen seitlichen Ausleger-Arme (links und rechts) anbringen – beide Flanken werden völlig unabhängig und kraftfrei angesteuert.
    * **Klasse D (Hermetische Blindkassette):**
      * Schutzschlitten [`cartridge_insert_blindkassette.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_blindkassette.stl) einsetzen, falls ein Slot vorübergehend ungenutzt bleibt oder als regendichte Dry Box für Kleinteile dient.
 3. **Flanschdichtung:** Silikon-Formdichtung auf den Kassettenkragen aufziehen und dünn mit dielektrischem Silikonfett benetzen.
@@ -147,13 +158,20 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 
 ---
 
-### Schritt 4: Heck-Kassette Pod 3 & OMM-Radom (LoRa, GNSS & HF-Bypass)
+### Schritt 4: Heck-Kassette Pod 3 & OMM-Radom (LoRa, GNSS, V2X & SHT40 Fahrtwindkanal)
 1. **Transceiver-Platine einsetzen:** PCBA 04 (`openmotorbridge_rear_pod3`) in den 3. Basisschlitten ([`cartridge_base_sled.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl)) einlegen und mit M2.5 Schrauben sichern.
 2. **OMM-Radom montieren:** Das dielektrische Radom ([`cartridge_antenna_bracket_omm.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_antenna_bracket_omm.stl)) aufsetzen.
 3. **SMA-Bulkhead-Buchsen montieren (Bypass für externe Antennen):**
    * Die 3x SMA-Flanschbuchsen durch die Kassetten-Stirnwand führen und festziehen ($0{,}8\,\text{Nm}$).
    * Koax-Stecker auf die Murata MM8030 Umschaltbuchsen klicken (`J3` = 2.4 GHz Mesh, `J4` = 868 MHz LoRa, `J5` = GNSS).
    * Werden keine externen Antennen angeschraubt, arbeiten die internen Antennen im Radom zu 100 % autark.
+4. **Sensirion SHT40 Fahrtwind-Führung (Stauwärme-Schutz):**
+   * Das Sensorkabel des SHT40 wird durch die rückwärtige Dichtmanschette von [`cartridge_antenna_bracket_omm.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_antenna_bracket_omm.stl) nach außen geführt.
+   * Der Sensor wird geschützt unter dem Kennzeichenträger / Heckbalkon im echten Fahrtwind montiert. Dies verhindert zuverlässig, dass Stauwärme unter der Forged-Carbon-Hutze der Road Glide ST oder unter Hecktaschen die Temperaturmessung verfälscht!
+5. **5.9 GHz V2X Keramik-Patchantenne (OpenTrafficMap):**
+   * In die integrierte $20 \times 20\,\text{mm}$ Schnappaufnahme im dielektrischen Radom einsetzen und per U.FL-Koaxialleitung mit dem V2X-Tochterboard auf PCBA 04 verbinden.
+
+---
 
 ---
 
@@ -340,12 +358,16 @@ Erst wenn im PWA-Dashboard alle 4 Checks grün leuchten und Audio- sowie Funkbr�
     - Den Rohrschellen-Bügel ([`009_magsafe_frame_clamp.stl`](../../hardware/cad/stl/02_pod_base/components/009_magsafe_frame_clamp.stl)) auflegen und mit 4x M3 Schrauben und DIN 934 Muttern über Kreuz anziehen ($2{,}2\,\text{Nm}$).
     - Die vorkonfektionierte Baugruppe aus M8-PUR-Zuleitung (von der Zentralbox), PCBA 06 Schutzplatine (mit 500mA PPTC-Sicherung & TVS-Dioden) und dem 6-Pin IP67 MagSafe-Magnetpuck spannungsfrei von oben in das Gehäuseunterteil ([`009_magsafe_frame_lid.stl`](../../hardware/cad/stl/02_pod_base/components/009_magsafe_frame_lid.stl)) einlegen.
     - Ober- und Untergehäuse zusammenfügen und mit der zentralen **M2.5 x 12 mm Edelstahlschraube (DIN 912)** durch die Zentralbohrung der PCBA 06 fest verschrauben. Das Dock baut mit nur $16\,\text{mm}$ Breite extrem schlank und verschwindet vollkommen im Rohrschatten.
-  * **Kofferboden-Durchführung & 2-Stufen-Zugentlastung ([`010_saddlebag_hole_grommet_split.scad`](../../hardware/cad/scad/02_pod_base/parts/010_saddlebag_hole_grommet_split.scad)):**
-    - Die geteilte TPU-Dichtung in das serienmäßige $19\,\text{mm}$-Bodenloch des Koffers einsetzen.
+  * **Seitliche Koffer-Durchführung (oberhalb Schwingenlager) & 2-Stufen-Zugentlastung ([`010_saddlebag_hole_grommet_split.scad`](../../hardware/cad/scad/02_pod_base/parts/010_saddlebag_hole_grommet_split.scad)):**
+    - Die geteilte TPU-Dichtung wird **seitlich-innen an der Koffer-Vorderwand (oberhalb des Schwingenlagers, zum Rahmenrohr gerichtet)** montiert (Feedback-Entscheidung).
+    - **Vorteil:** Die Durchführung liegt im absoluten Wind- und Spritzwasserschatten des Rahmens. Am Kofferboden sammelt sich weder Schmutz noch Pfützenwasser, und beim Abstellen des Koffers auf dem Boden kann nichts beschädigt werden.
     - Das schlanke Koffer-Innenkabel mit der Gegen-MagSafe-Magnetkupplung durchführen und am angeformten Klemmturm per Kabelbinder fixieren (**Stufe 1 Zugentlastung:** Nimmt alle magnetischen Trennkräfte von $10\dots 15\,\text{N}$ auf).
     - Das Flachkabel lastfrei parallel zum textilen Deckel-Fangband in den Kofferdeckel führen, im Schnauz des Kofferdeckel-Docks formschlüssig abfangen (**Stufe 2 Zugentlastung**) und direkt in den Slim-Port B des Pods einstecken.
     - **Werkstatt-Vorteil:** Mechaniker heben die Koffer für Inspektion oder Reifenwechsel ohne Werkzeug einfach ab – die Magnetkupplung trennt sich zerstörungsfrei und schnappt beim Aufsetzen des Koffers automatisch zentriert wieder ein (*Klack*).
-* **Radar:** Der Kennzeichen-Radarhalter ([`radar_license_plate_bracket.stl`](../../hardware/cad/stl/02_pod_base/radar_license_plate_bracket.stl)) wird direkt unter dem Kennzeichenrahmen verschraubt. *(Hinweis: Alle Touring-, CVO ST- und Softail-Cruiser-Modelle besitzen standardmäßig mittige US/EU-Kennzeichenaufnahmen).*
+* **Radar (Dual-Option am Kennzeichenträger):**
+  - Der Kennzeichen-Radarhalter ([`radar_license_plate_bracket.stl`](../../hardware/cad/stl/02_pod_base/radar_license_plate_bracket.stl)) wird direkt unter dem Kennzeichenrahmen verschraubt.
+  - **Option 1 (Radar 2.0 - Empfohlen):** Das **Wheeltec MR20 77-GHz-mmWave-Radar** im Gehäuse ([`radar_mr20_housing.stl`](../../hardware/cad/stl/05_accessories/radar_mr20_housing.stl)) mit 24-LED Neopixel-Halo montieren. Die 4-Pin Binder Serie 707 M5 Buchse am Boden wird mit dem Heck-Kabelbaum verbunden.
+  - **Option 2 (Legacy):** Das Garmin Varia mmWave-Radar im Dock ([`radar_varia_gopro_lock_dock.stl`](../../hardware/cad/stl/02_pod_base/radar_varia_gopro_lock_dock.stl)) einrasten und mit M3-Madenschraube sichern.
 
 #### 5.1.2 Cockpit-Verkleidung & Front-Node Installation
 * **Option A: Batwing-Verkleidung (Street Glide / Electra Glide / Ultra):**
@@ -361,11 +383,12 @@ Erst wenn im PWA-Dashboard alle 4 Checks grün leuchten und Audio- sowie Funkbr�
   * **Verkabelung in der Batwing-Verkleidung:**
     * Front-Node am Lenkerriser / Verkleidungsträger vibrationsfest mit 3M Dual-Lock oder AMPS-Halterung montieren.
     * **12V Strom (`J1`):** 2-Pin JST-PH Kabel an die interne 12V Zubehörbuchse (P&A Accessory) oder Standlichtleitung anklemmen.
-    * **CAN-Bus (`J2`):** 3-Pin JST-PH Kabel anstecken. Bei Rushmore (2014–2023) an den 4-poligen P&A Audio-CAN-Stecker hinter der Boom! Box einpinnen. Bei 2024+ Modellen direkt am Skyline OS Display-Kabelbaum anschließen.
-    * **Externer Wireless CarPlay / Android Auto Dongle (z. B. Ottocast U2Air Pro / CarlinKit 5.0):**
+    * **CAN-Bus (`J2`):** 3-Pin JST-PH Kabel anstecken (100 % passives Mithören, kein Senden). Bei Rushmore (2014–2023) an den 4-poligen P&A Audio-CAN-Stecker hinter der Boom! Box einpinnen. Bei 2024+ Modellen direkt am Skyline OS Display-Kabelbaum anschließen.
+    * **CarlinKit 4.0 Wireless CarPlay / Android Auto Wandler:**
       * Port `J4` (USB Host Upstream): Mit dem OEM-USB-Medienkabel des Motorrads (Boom! Box / Skyline OS) verbinden.
-      * Port `J6` (USB Downstream 2): Mit kurzem USB-Pigtail an den externen Wireless-Dongle anschließen. Der Dongle wird im Fach fixiert. Bei Verbindungsverlust kann die OpenMotorBridge Firmware per 1-Click-Hardreset die 5V VBUS-Spannung über den integrierten TPS2051B Lastschalter für 2,5 s trennen und den Dongle neu starten.
-    * **Smartphone Fast-Charging (`J5`):** 20W PD Ladekabel ins Handschuhfach oder an die Lenkerhalterung führen.
+      * Port `J6` (USB Downstream 2): Mit kurzem USB-Pigtail an den CarlinKit 4.0 anschließen. Über die PWA das 300ms Low-Latency-Profil aktivieren.
+    * **Handschuhfach-Micro-Hub & Smartphone-Laden:**
+      * Aktiver 2-Port Micro-Hub an der OEM-USB-Buchse im Handschuhfach (Port 1: USB-Stick für Offline-Musik; Port 2: Ladekabel/MagSafe fürs Handy – kein Bohren, keine Buskollisionen!).
     * Fairing wieder aufsetzen und Schrauben mit $3{,}8\,\text{Nm}$ anziehen.
 
 * **Option B: Sharknose-Verkleidung (Road Glide, Road Glide ST, CVO Road Glide ST):**
@@ -380,7 +403,11 @@ Erst wenn im PWA-Dashboard alle 4 Checks grün leuchten und Audio- sowie Funkbr�
     2. Blinker links und rechts abschrauben (je 2x 1/2" Sechskantschrauben pro Seite).
     3. Die **4x Torx T27 Schrauben** an der Innenseite (neben Lautsprechern/Luftkanälen) herausdrehen.
     4. Sharknose nach vorn aushängen und Multistecker trennen.
-  * **Verkabelung:** Identisch zu Option A (Media-Fach / Riser-Montage, `J1` 12V, `J2` CAN-Bus, `J4` Upstream zum Display, `J6` Ottocast-Dongle, `J5` 20W PD-Ladekabel).
+  * **Verkabelung:** Identisch zu Option A (`J1` 12V, `J2` CAN-Bus, `J4` Upstream zum Display, `J6` CarlinKit-Dongle).
+  * **Durch-die-Verkleidung Induktives Action-Cam Dock ([`road_glide_inductive_cam_dock.stl`](../../hardware/cad/stl/05_accessories/road_glide_inductive_cam_dock.stl)):**
+    1. **Innen (TX-Spule):** Die flache 15W Qi-Senderspule von innen direkt unter das ebene ABS-Verkleidungsdeck der Sharknose kleben und mit dem USB-PD Port 1 des Front-Nodes verbinden.
+    2. **Außen (RX-Kameradock):** Das formschlüssige Kameradock mit 3M Dual Lock auf die Verkleidungsnase über der TX-Spule aufklicken.
+    3. **Ergebnis:** Das ultrakurze 3-cm-USB-C-Kabel versorgt die Kamera (Insta360 X3/X4, GoPro) dauerhaft mit $5\,\text{V} / 2\,\text{A}$ ($10\,\text{W}$) – **ohne ein einziges Bohrloch und ohne sichtbare Außenkabel**! Bei Nichtbenutzung Dock mit einem Handgriff abziehen.
 
 * **Option C: Scheinwerfergondel & Softail Cruiser mit Saddlebags (Road King / RKS, Heritage Classic, Low Rider ST, Sport Glide):**
   * **Konzept-Gleichheit (Cruiser mit Saddlebags = Road King Architektur):**
@@ -498,7 +525,26 @@ Die Adventure-Montage ist für die gesamte **BMW GS Modellfamilie** (Boxer und P
 
 ---
 
-### Schritt 5.3: Montage & Anschluss optionaler Cockpit- & Zubehör-Komponenten
+### Schritt 5.3: Begleitfahrzeug- & Autokolonnen-Installation (Universal Sonnenblenden-Clip)
+
+OpenMotorBridge lässt sich in wenigen Minuten spurlos in jedem Begleitfahrzeug (Support-Van für Motorradgruppen) oder in Führungsfahrzeugen von Autokolonnen installieren:
+
+1. **Pod 3 an der Beifahrer-Sonnenblende montieren:**
+   * Den Universal-Clip ([`car_sun_visor_pod3_clip.stl`](../../hardware/cad/stl/05_accessories/car_sun_visor_pod3_clip.stl)) auf die Beifahrer-Sonnenblende aufschieben.
+   * Pod 3 in den Clip einklicken.
+   * **Vorteil:** Ungehinderter $180^\circ$-Blick durch die obere Windschutzscheibenkante in den Himmel für u-blox GNSS, 868 MHz LoRa (OMM) und 5.9 GHz V2X. Sitzt seitlich versetzt, völlig unbeeinflusst vom zentralen ADAS-Kamerakasten am Rückspiegel!
+2. **Unsichtbare Werkzeuglose Verkabelung (5 Minuten):**
+   * Das dünne USB-C-Kabel mit den Fingerkuppen in die weiche **Dachhimmel-Fuge (Headliner Seam)** über der Scheibe drücken.
+   * Weiter hinter die weiche Gummidichtung der rechten A-Säule klemmen und unter dem Teppich/Handschuhfach zur Mittelkonsole führen.
+   * **Null Bohren, null Beschädigung, 100 % rückstandslos entfernbar.**
+3. **Zentralbox & Stromversorgung in der Mittelkonsole:**
+   * Zentralbox in der Mittelkonsole oder im Handschuhfach ablegen.
+   * Stromversorgung über den 12V Zigarettenanzünder / Zubehörsteckdose (über Front-Node oder 12V PD Triggerkabel).
+   * **Audio-Integration:** USB-Verbindung von Zentralbox in den USB-Media-Port des Fahrzeugs (Startet kabelgebundenes Apple CarPlay / Android Auto auf dem Auto-Display; Ton der Biker-Gruppe über die Autolautsprecher).
+
+---
+
+### Schritt 5.4: Montage & Anschluss optionaler Cockpit- & Zubehör-Komponenten
 
 Der Universal Front-Knoten (PCBA 05) dient als zentrale Anschlussstelle für das gesamte Fahrer-Cockpit. Folgende optionale Zubehörteile können nach Bedarf per vorkonfektioniertem Plug-and-Play-Kabel angeschlossen werden:
 
@@ -602,9 +648,10 @@ Nachdem das System am Motorrad mechanisch befestigt und elektrisch verkabelt ist
 1. **Zündungs-Check (KL15):**
    * Motorrad-Zündung einschalten: Die Zentralbox und der Front-Node erwachen synchron innerhalb von $800\,\text{ms}$.
    * Display / Infotainment (Boom! Box / Skyline OS / TFT) zeigt die OpenMotorBridge Headset-Verbindung und CarPlay/Android Auto Icon.
-2. **Totwinkel-Radar-Test (Garmin Varia):**
-   * Hinter das Motorrad treten: Die bernsteinfarbenen Spiegel-LEDs (`J9`) leuchten kontinuierlich auf.
-   * Blinker setzen: Bei herantretender Person wechselt die entsprechende LED in schnelles Warnblitzen (8 Hz).
+2. **Totwinkel-Radar- & Halo-Test (Radar 2.0 Wheeltec MR20 / Garmin Varia):**
+   * Hinter das Motorrad treten: Die bernsteinfarbenen Spiegel-LEDs (`J9`) leuchten auf. Am Wheeltec MR20 Gehäuse aktiviert die Sub-MCU PCBA 08 den dynamischen Annäherungs-Halo auf den 24 Neopixel-LEDs.
+   * Blinker setzen: Bei herantretender Person wechselt die entsprechende Spiegel-LED in schnelles Warnblitzen (8 Hz).
+   * Bremshebel ziehen / Erschütterung: Der Neopixel-Halo triggert das ultrahelle rote Bremslicht-Stroboskop.
 3. **Probefahrt & Audio-Ducking:**
    * Motor starten und Probefahrt durchführen: Der SDP31 Staudrucksensor und das Sipeed/Knowles MEMS Fahrtwind-Mikrofon regeln die Lautstärke adaptiv und pegelfest nach.
    * PTT-Taster am Lenker bedienen: Glasklare Funkübertragung zu Mitfahrern und Sozius.

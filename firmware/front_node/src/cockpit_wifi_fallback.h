@@ -85,6 +85,19 @@ uint8_t cockpit_wifi_get_client_list(WifiClientInfo_t *out_clients, uint8_t max_
  */
 void cockpit_wifi_notify_can_model(const char *model_tag);
 
+/**
+ * @brief Prüft, ob ein funktionierender Internet-Uplink aktiv ist.
+ *        Gibt false zurück bei rein lokalen Verbindungen (z.B. iPhone ohne Hotspot)
+ *        oder wenn kein Uplink-Gateway erreichbar ist.
+ *        Verhindert blockierende DNS/HTTP-Calls in Telemetrie, Wetter und V2X.
+ */
+bool cockpit_wifi_has_internet_uplink(void);
+
+/**
+ * @brief Führt einen asynchronen HTTP 204 Connectivity Check aus
+ */
+void cockpit_wifi_trigger_connectivity_probe(void);
+
 #ifdef __cplusplus
 }
 #endif

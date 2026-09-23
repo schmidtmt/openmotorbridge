@@ -1,14 +1,14 @@
-# 07 - Hardware-Architektur & Platinen-Pinouts (PCBA 01 bis 07)
+# 07 - Hardware-Architektur & Platinen-Pinouts (PCBA 01 bis 08)
 
-Dieses Dokument bildet die **zentrale, autoritative Hardware-Spezifikation aller 7 Platinen-Baugruppen (PCBA 01 bis PCBA 07)** des OpenMotorBridge Gesamtsystems, einschließlich Lagenaufbau, Impedanzkontrolle, Net-Klassen, Funktionszonen und vollständigen Pinout-Tabellen.
+Dieses Dokument bildet die **zentrale, autoritative Hardware-Spezifikation aller 8 Platinen-Baugruppen (PCBA 01 bis PCBA 08)** des OpenMotorBridge Gesamtsystems, einschließlich Lagenaufbau, Impedanzkontrolle, Net-Klassen, Funktionszonen und vollständigen Pinout-Tabellen.
 
 ---
 
-## 1. Systemübersicht der 7 Platinen-Baugruppen
+## 1. Systemübersicht der 8 Platinen-Baugruppen
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                   DIE 7 HARDWARE-BAUGRUPPEN (PCBAs) DER OPENMOTORBRIDGE                │
+│                   DIE 8 HARDWARE-BAUGRUPPEN (PCBAs) DER OPENMOTORBRIDGE                │
 ├───────┬───────────────────────────────┬───────────────┬─────────┬──────────────────────┤
 │ Baugruppe │ Name & Funktion           │ Platinenmaße  │ Lagen   │ Kern-ICs / Bauteile  │
 ├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
@@ -31,8 +31,11 @@ Dieses Dokument bildet die **zentrale, autoritative Hardware-Spezifikation aller
 │ **PCBA 06**│ **MagSafe Frame Dock Adapter** │ 28 x 11.5 mm  │ 2 Lagen │ 500mA PPTC Fuse, 5V  │
 │       │ (Rahmendock: M8 auf MagSafe)  │ (Zentral M2.5)│         │ TVS, USBLC6-4SC6 ESD │
 ├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
-│ **PCBA 07**│ **2-in-1 LoRa Smart-Keyfob**  │ 38 x 19 mm    │ 2 Lagen │ nRF52840 SoC, SX1262 │
+| **PCBA 07**| **2-in-1 LoRa Smart-Keyfob**  | 38 x 19 mm    | 2 Lagen │ nRF52840 SoC, SX1262 │
 │       │ (Silent Pager, N52 Key & Qi)  │ (Tasche M2)   │ (ENIG)  │ DRV2605L LRA, BQ51003│
+├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
+| **PCBA 08**| **Radar 2.0 Sub-MCU & Halo**  | 84 x 74 mm    | 2 Lagen │ ESP32-C3FN4 (QFN-32),│
+│       │ (Wheeltec MR20 77GHz mmWave)  │ (Zentriert)   │ (ENIG)  │ 24x WS2812B, BinderM5│
 └───────┴───────────────────────────────┴───────────────┴─────────┴──────────────────────┘
 ```
 
@@ -40,7 +43,7 @@ Dieses Dokument bildet die **zentrale, autoritative Hardware-Spezifikation aller
 
 ## 2. Fertigungsstandard & JLCPCB 4-Lagen Stackup (JLC04161H-7628)
 
-Für alle 4-Lagen-Platinen (PCBA 01, PCBA 04 und PCBA 05) wird der identische, streng impedanzkontrollierte Lagenaufbau verwendet:
+Für alle 4-Lagen-Platinen (PCBA 01, PCBA 04, PCBA 05 und PCBA 08) wird der identische, streng impedanzkontrollierte Lagenaufbau verwendet:
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -570,4 +573,88 @@ Die Baugruppe PCBA 07 bildet die elektronische Seele des kompakten Schlüsselanh
 | **`BZ1`**| PKLCS1212E4001 | SMD 12x12mm | Murata SMD-Piezo-Schallwandler (85 dB @ 10 cm, 4 kHz) | `C94511` |
 | **`D1`** | WS2812B-2020 | SMD 2020 | Intelligente RGB-Status-LED mit integriertem WS2811 IC | `C2843785` |
 | **`BAT`**| LiPo 1S 180-200mAh| Pouch 25x18x3.8| 3.7V 180-200 mAh LiPo mit PCM-Schutzschaltung & 10k NTC | EEMB / Custom |
+
+---
+
+## 10. PCBA 08: 77 GHz mmWave Radar Sub-MCU & Faceplate (`openmotorbridge_radar_submcu`)
+
+Die Baugruppe **PCBA 08** bildet die Frontplatine und den intelligenten Vorverarbeitungs-Knoten für das **Wheeltec MR20 77-GHz-mmWave-Radar** (integriert in `hardware/cad/scad/05_accessories/radar_mr20_housing.scad`). Sie entlastet die Zentralbox durch lokales 20-Hz-Rohdaten-Parsing und steuert die integrierte 24-LED-Neopixel-Warnmatrix latenzfrei an:
+
+```
+                                PCBA 08 SYSTEMARCHITEKTUR
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                        ESPRESSIF ESP32-C3 RISC-V SoC (160 MHz)                         │
+│ • 20 Hz UART-Treiber für Wheeltec MR20 Rohdaten-Parsing                                │
+│ • Latenzfreie Neopixel-Halo-Steuerung (Bremslicht-Strobe, Annäherungs-Halo)             │
+│ • Makro-Befehlsschnittstelle zur Zentralbox (ESP32-S3) via Binder M5 4-Pin             │
+│ • Remote Bootloader Flasher Support (Firmware-Push über UART direkt von Zentralbox)    │
+└──────────────┬─────────────────────────┬─────────────────────────┬─────────────────────┘
+               │ UART1 (MR20 Raw 115k2)  │ GPIO8 (RMT / NeoPixel)  │ UART0 (Zentralbox Macro)
+               ▼                         ▼                         ▼
+┌───────────────────────────┐ ┌─────────────────────┐ ┌──────────────────────────────────┐
+│ WHEELTEC MR20 (77 GHz)    │ │ 24x WS2812B-2020    │ │ BINDER SERIE 707 M5 (4-Pin IP67) │
+│ • mmWave Horn-Array       │ │ • Bremslicht-Strobe │ │ • Pin 1: +5.0V DC Power In       │
+│ • ±60° (120°) Erfassung   │ │ • Annäherungs-Halo  │ │ • Pin 2: UART RX (Makrobefehle)  │
+│ • Bis zu 90 m Reichweite  │ │ • Dämmerungs-Dimmer │ │ • Pin 3: UART TX (Target-Liste)  │
+│ • Sitzt im 28x24mm Window │ │ • Entlang Platinen- │ │ • Pin 4: GND (Power & Signal)    │
+│   hinter PC-Radome-Deckel │ │   Außenkante        │ │   (Entkoppelt via JST-SH Kabel)  │
+└───────────────────────────┘ └─────────────────────┘ └──────────────────────────────────┘
+```
+
+### 10.1 Technische Platinen-Kenndaten & Geometrie
+* **Abmessungen:** $84{,}0 \times 74{,}0 \times 1{,}6\,\text{mm}$ (2 Lagen FR-4 High-TG150, ENIG Goldfinish, JLC2313 Stackup).
+* **Zentraler Ausschnitt:** $61{,}0 \times 51{,}0\,\text{mm}$ rechteckiges Durchgangsfenster mit $R = 2{,}0\,\text{mm}$ Eckradien, exakt zentriert bei $(X=0, Y=0)$. Das Wheeltec MR20 77-GHz Sensormodul taucht bündig durch diesen Ausschnitt ein und strahlt ungehindert durch das transparente Polycarbonat-Sichtfenster des Gehäuses ab.
+* **Symmetrischer Randrahmen:** Auf allen vier Seiten entsteht ein gleichmäßiger, stabiler Steg von **$11{,}5\,\text{mm}$ Breite** um das Radarfenster herum.
+* **Befestigung:** 4x M2.5 Montagebohrungen ($\varnothing 2{,}7\,\text{mm}$) mit $76{,}0 \times 66{,}0\,\text{mm}$ Lochabstand ($X = \pm 38{,}0, Y = \pm 33{,}0\,\text{mm}$), verschraubt in M2.5-Messing-Gewindeeinsätze des Gehäuses.
+* **LED-Matrix (Symmetrischer Perimeter Halo):** 24x SMD WS2812B-2020 adressierbare RGB-LEDs auf der Vorderseite (F.Cu) im $11{,}5\,\text{mm}$ Rand:
+  * **Obere Zeile:** 7 LEDs (`D1` bis `D7`) symmetrisch verteilt
+  * **Rechte Flanke:** 5 LEDs (`D8` bis `D12`) symmetrisch verteilt
+  * **Untere Zeile:** 7 LEDs (`D13` bis `D19`) symmetrisch verteilt
+  * **Linke Flanke:** 5 LEDs (`D20` bis `D24`) symmetrisch verteilt
+* **Rückseiten-Komponenten (B.Cu – vollständig außerhalb des Fensters):**
+  * **Oberer Steg:** ESP32-C3FN4 (QFN-32 5x5mm, zentriert bei $X=0, Y=+31\,\text{mm}$), 3.3V LDO `U2` und 40 MHz Quarz `Y1`.
+  * **Unterer Steg:** `J1` (JST-SH 4-Pin zu Binder M5) und `J2` (JST-SH 4-Pin zu MR20 Kabel-Adapter).
+* **Spannungsversorgung:** Eingangsspannung $+5{,}0\,\text{V}$ (über Binder M5 von Zentralbox). Lokaler Low-Drop-Linearregler `U2` (3.3V 500mA SOT-23-5) versorgt den ESP32-C3; die 24 LEDs und das MR20 werden direkt aus der $+5\,\text{V}$-Schiene gespeist.
+* **ESD- & Überspannungsschutz:** PESD5V0S2BT TVS-Array (`D25`) auf den UART-Datenleitungen; 10 µF Keramik-Glättungskondensator (`C1`, `C2`) und 100 nF X7R Entkopplung (`C3`, `C4`).
+
+### 10.2 Schnittstellen, JST-SH Header & Binder M5 Entkopplung
+Gemäß Vorgabe zur Vermeidung von Vibrationsschäden ist die Binder M5 707 Buchse **mechanisch im Gehäuseboden verschraubt** und elektrisch über ein flexibles Litzenkabel mit Stecker `J1` verbunden:
+
+| Buchse / Header | Typ & Polzahl | Belegung | Funktion & Ziel |
+| :--- | :--- | :--- | :--- |
+| **`J1`** | JST-SH 1.0mm 4-Pin Horiz. | Pin 1: `+5V_IN`<br>Pin 2: `ZBOX_RX`<br>Pin 3: `ZBOX_TX`<br>Pin 4: `GND` | Interne Schnittstelle zur Gehäuse-M5-Flanschbuchse (Verbindung zur Zentralbox) |
+| **`J2`** | JST-SH 1.0mm 4-Pin Horiz. | Pin 1: `+5V_RADAR`<br>Pin 2: `MR20_RX`<br>Pin 3: `MR20_TX`<br>Pin 4: `GND` | Schnittstelle zum intern im Gehäuse verbleibenden MR20 Kabel-Adapter |
+
+### 10.3 Binder Serie 707 M5 Pin-Mapping (Gehäuse-Boden auf X=0)
+| Binder M5 Pin | Drahtfarbe (PUR) | Signalname | Beschreibung |
+| :---: | :--- | :--- | :--- |
+| **1** | Rot (`RD`) | `+5V_DC` | $+5{,}0\,\text{V}$ Versorgung von Zentralbox (`POD3_VCC` / Hilfs-DCDC) |
+| **2** | Weiß (`WH`) | `UART_TX_MACRO` | Sub-MCU sendet Target-Liste an Zentralbox (115.200 Baud) |
+| **3** | Gelb (`YE`) | `UART_RX_MACRO` | Zentralbox sendet Makrobefehle & Helligkeit an Sub-MCU |
+| **4** | Schwarz (`BK`) | `GND` | Gemeinsame Systemmasse |
+
+### 10.4 ESP32-C3 Pin-Mapping
+| ESP32-C3 Pin | Signalname | Richtung | Funktion & Peripherie |
+| :--- | :--- | :---: | :--- |
+| **GPIO20 (U0RXD)** | `ZBOX_RX` | Eingang | UART0 RX: Makrobefehle & In-System-Firmware-Push von Zentralbox |
+| **GPIO21 (U0TXD)** | `ZBOX_TX` | Ausgang | UART0 TX: Target-Vektoren & Status an Zentralbox |
+| **GPIO0 (U1RXD)**  | `MR20_TX` | Eingang | UART1 RX: 20 Hz Rohdaten-Frames vom Wheeltec MR20 mmWave Radar |
+| **GPIO1 (U1TXD)**  | `MR20_RX` | Ausgang | UART1 TX: Konfigurations-Kommandos an Wheeltec MR20 |
+| **GPIO8**          | `NEOPIXEL_DATA` | Ausgang | RMT-getaktetes Datensignal für die 24x WS2812B-2020 LEDs |
+| **GPIO9**          | `BOOT0` | Eingang | Boot-Strap Pin (interner 10k Pull-Up; LOW = UART Bootloader Flashing) |
+| **CHIP_EN**        | `EN_RST` | Eingang | Hardware-Reset mit 10k Pull-Up und 100nF Entstörkondensator |
+
+### 10.5 Stückliste (BOM) PCBA 08
+| Ref | Bauteil / Typ | Gehäuse | Spezifikation & Funktion | LCSC Part |
+| :--- | :--- | :--- | :--- | :--- |
+| **`U1`** | ESP32-C3FN4 | QFN-32 (5x5mm)| 32-Bit RISC-V SoC @ 160 MHz, 4MB embedded Flash, kein Antennen-Keepout | `C2834571` |
+| **`U2`** | TPS7A0533 / ME6211 | SOT-23-5 | LDO 3.3V 500mA, Ultra-Low-Noise, PSRR 65dB | `C505293` |
+| **`Y1`** | 40 MHz Crystal | SMD 2016-4P | 40.000 MHz Präzisions-Systemquarz für ESP32-C3 | `C2843560` |
+| **`D1`..`D24`** | WS2812B-2020 | SMD 2020 | 24x Intelligente adressierbare RGB-LEDs ($2{,}0 \times 2{,}0\,\text{mm}$) im Halo | `C2843530` |
+| **`D25`** | PESD5V0S2BT | SOT-23 | Bidirektionales TVS-Dioden-Array für UART-Leitungen | `C2834580` |
+| **`J1`** | JST-SH SM04B-SRSS-TB | 1x04 1.0mm | Horizontaler 4-Pin SMD-Steckverbinder (zur M5-Flanschbuchse) | `C136657` |
+| **`J2`** | JST-SH SM04B-SRSS-TB | 1x04 1.0mm | Horizontaler 4-Pin SMD-Steckverbinder (zum MR20 Kabel-Adapter) | `C136657` |
+| **`C1`, `C2`** | 10uF 16V X7R | SMD 0805 | Keramische Glättungskondensatoren (5V Eingang, 3.3V Ausgang) | `C15850` |
+| **`C3`, `C4`** | 100nF 50V X7R | SMD 0603 | Entkopplungskondensatoren für VDD_3V3 und Reset | `C14663` |
+
 

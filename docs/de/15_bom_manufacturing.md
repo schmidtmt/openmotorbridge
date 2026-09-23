@@ -131,7 +131,20 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 
 ---
 
-## 8. 1-Click Bestellleitfaden für JLCPCB (Alle Leiterplatten fertig bestückt)
+## 8. PCBA 08: Radar 2.0 Sub-MCU & 24-LED Halo Carrier (`openmotorbridge_radar_submcu`, 2-Layer FR4 TG150, 38 x 28 mm)
+
+| Ref | Bauteil / Typ | Gehäuse | Spezifikation & Funktion | LCSC Part |
+| :--- | :--- | :--- | :--- | :--- |
+| **`U1`** | ESP32-C3-WROOM-02-N4 | SMD Modul | 32-Bit RISC-V Sub-MCU (160 MHz, 4MB Flash, USB-CDC/JTAG) | `C2843550` |
+| **`U2`** | LDO 3.3V 500mA | SOT-23-5 | TI TPS7A0533 / Richtek RT9013 LDO Spannungsregler | `C505293` |
+| **`D1..24`**| WS2812B-2020 | SMD 2020 | 24x Digital RGB-LEDs im Annular-Halo (TTC-Strobe & Standby-Glow) | `C2843530` |
+| **`J1`** | JST-SH 1.0mm 4-Pin | SMD Liegend | Entkoppelte interne Signalpeitsche zur Binder M5 Gehäuse-Buchse | `C136657` |
+| **`J2`** | JST-SH 1.0mm 4-Pin | SMD Liegend | UART-Verbindung zum Wheeltec MR20 Transceiver (RX/TX/5V/GND) | `C136657` |
+| **`D_TVS`**| PESD5V0S2BT | SOT-23 | TVS-Dioden-Array für UART & Stromversorgung | `C2834580` |
+
+---
+
+## 9. 1-Click Bestellleitfaden für JLCPCB (Alle Leiterplatten fertig bestückt)
 
 Alle Fertigungsdaten liegen im Repository unter `hardware/pcba/` als fertige ZIP- und CSV-Pakete vor:
 
@@ -144,6 +157,7 @@ Alle Fertigungsdaten liegen im Repository unter `hardware/pcba/` als fertige ZIP
 | **PCBA 05: Front-Knoten** | `05_front_node_pcba_gerbers_jlcpcb.zip` | `05_front_node_pcba_bom_jlcpcb.csv` | `05_front_node_pcba_cpl_jlcpcb.csv` | **4 Lagen** | ENIG (Gold), 1.6 mm, TG150, SMT beidseitig |
 | **PCBA 06: MagSafe Dock** | `06_magsafe_dock_pcba_gerbers_jlcpcb.zip` | `06_magsafe_dock_pcba_bom_jlcpcb.csv` | `06_magsafe_dock_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG (Gold), 1.6 mm, SMT Top |
 | **PCBA 07: Smart-Keyfob** | `07_smart_keyfob_pcba_gerbers_jlcpcb.zip` | `07_smart_keyfob_pcba_bom_jlcpcb.csv` | `07_smart_keyfob_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG (Gold), 1.0 mm, SMT beidseitig |
+| **PCBA 08: Radar 2.0 Sub-MCU** | `08_radar_submcu_pcba_gerbers_jlcpcb.zip` | `08_radar_submcu_pcba_bom_jlcpcb.csv` | `08_radar_submcu_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG (Gold), 1.2 mm, TG150, SMT Top |
 
 ---
 
@@ -289,6 +303,14 @@ Für den Aufbau müssen **keine Kabelbäume selbst gecrimpt oder gelötet werden
 | **J_ACT Aktuator-Kabelbaum** | Fertiges 8-Pin JST-SH Kabel auf 4x 2-Pin Litzen | Adafruit / SparkFun | 1–2 Stk.| Vorkonfektioniertes Fertigkabel für 4 Hubmagnete |
 | **Miniatur-Aktuatoren** | 5V DC Hubmagnete ($\varnothing 6{,}5 \times 12\,\text{mm}$) mit TPU-Spitze | Solenoid / Web | 4–8 Stk.| 4 Stk. pro Smart Cartridge (Sena / Cardo) |
 | **J2 Gateway-Kabelbaum** | Fertiges 6-Pin JST-SH Kabel auf Klinke / USB | COTS Standard | 1–2 Stk.| Fertigkabel für Headset-Audio & Dauerstrom |
+| **Binder M5 4-Pin IP67 Buchse**| Serie 707 M5 4-Pol Einbaubuchse mit D-Flat | Binder | 1 Stk. | Gehäuse-Flanschanschluss Radar 2.0 Sub-MCU |
+| **Wheeltec MR20 77-GHz mmWave**| 77-GHz FMCW Automotive Radar (150m Reichweite)| Wheeltec | 1 Stk. | Radar 2.0 Transceiver-Modul im Heck-Gehäuse |
+| **PC Radom-Sichtfenster** | Laserzuschnitt Polycarbonat 1.6 mm (RF-transparent)| COTS / Plexiglas | 1 Stk. | Mikrowellen- & optisches Fenster für MR20 & 24-LED Halo |
+| **Aktiver 2-Port Micro-Hub** | Genesys GL850G / Terminus FE1.1s mit PD Pass-Through| COTS / Amazon | 1 Stk. | Zero-Drill Road Glide ST Handschuhfach (Stick + Ladekabel)|
+| **Durch-die-Verkleidung Qi IPT**| 15W Qi TX Spule + TI BQ51013B 5V/2A RX Modul | COTS / LCSC | 1 Set | Drahtlose 10W Action-Cam Dauerstromversorgung durch Verkleidung|
+| **3M Dual Lock SJ3550** | Pilzkopf-Klettband selbstklebend (VHB-Klebstoff) | 3M | 0.5 m | Rüttelfeste, werkzeuglose Action-Cam & Dongle-Montage |
+| **SHT40 externer Sensor** | Sensirion SHT40 in geschützter Metall-Kappe mit Kabel| Sensirion / Adafruit| 1 Stk. | Externer Temperatursensor im Fahrtwind (Heck-Pod 3) |
+| **Universal Sonnenblenden-Clip**| 3D-Druck PA12 / PETG Federspange für Pod 3 | OMB CAD | Opt. (1)| Universal-Halterung für Begleitfahrzeug / Kolonne |
 
 ---
 
@@ -374,4 +396,37 @@ Um böse Überraschungen bei der Bauteilbeschaffung und automatisierten Bestück
 * **Bosch Sensortec BMI270:** Moderne 6-Achsen-IMU (hat den veralteten/abgekündigten BMI160 abgelöst).
 * **WCH CH32V003F4P6:** 32-Bit RISC-V Kassettentreiber, Cent-Artikel mit gigantischen LCSC-Lagerbeständen.
 * **Nordic nRF52840:** Marktführer für BLE 5.4 und Thread/Zigbee mit garantierter Langzeitfertigung.
+
+---
+
+## 15. Fertigungs- & Schutzlackierungs-Richtlinien (Conformal Coating IPC-CC-830B)
+
+Motorräder sind extremen Umwelteinflüssen ausgesetzt (Temperaturschocks von -20 °C bis +85 °C, Regen, Straßensalz im Frühjahr/Herbst, Kondensfeuchtigkeit in der Verkleidung und Hochdruckreinigung). Um eine 100%ige Langzeitausfallsicherheit nach Automotive-Standard zu gewährleisten, werden alle 8 PCBAs im Serienbestellprozess schutzlackiert:
+
+### 15.1 Lackspezifikation & Qualifikation
+* **Standard:** Zertifiziert nach **IPC-CC-830B** und **MIL-I-46058C**.
+* **Lacktyp:** 
+  * *Option 1 (Empfohlen):* **Modifizierter Acryllack (AR)**, z. B. *Peters ELPEGUARD SL 1307 FLZ* (schnell trocknend, fluoreszierend unter UV-Licht zur optischen Qualitätskontrolle, bei Service-Reparaturen mit dem Lötkolben durchlötbar).
+  * *Option 2 (Extrembedingungen):* **Silikonlack (SR)**, z. B. *Dow Corning 1-2577* (höchste Elastizität bei starken Vibrationen).
+* **Schichtdicke:** $30\,\mu\text{m}$ bis $60\,\mu\text{m}$ gleichmäßig auf Top- und Bottom-Layer.
+
+### 15.2 Bestellvorgabe für JLCPCB / Eurocircuits SMT Service
+Im Bestellmenü unter *„Surface Treatment & Advanced Options“* auswählen:
+> **Conformal Coating:** `Top & Bottom Layers (Acrylic / Silicone IPC-CC-830B)`
+
+### 15.3 Maskierungsvorgaben (Kapton-Tape Schutzmaske)
+Folgende Bereiche dürfen **unter keinen Umständen** mit Schutzlack benetzt werden und müssen vor dem Tauch- oder Sprühlackieren mit temperaturbeständigem Kapton-Klebeband maskiert werden:
+1. **Steckverbinder & Kontaktbuchsen:**
+   * USB-C Buchsen (`J7` Front-Node, `J2` Zentralbox, Service-Ports)
+   * M8 / M5 Buchsenkontakte (`J2` Pod-Base, Binder M5 Radar)
+   * JST-SH / JST-PH Buchsenleisten (`J1..J6` Front-Node, `J1..J2` Kassetten)
+   * MicroSD Kartenleser-Slot (`J2` Zentralbox)
+   * Pogo-Pins und Federkontakt-Pads
+2. **Akustische Sensoren & Ventile:**
+   * **MEMS-Mikrofon (`MIC1` MSM261S4030H0R auf PCBA 05):** Die Schalleintrittsöffnung ($\varnothing 0{,}5\,\text{mm}$) muss zwingend mit einem Kapton-Punkt versiegelt werden! Lackeintritt zerstört die MEMS-Membran sofort unumkehrbar.
+   * **Druckausgleichsmembran (Gore ePTFE Vent):** Darf nicht verkleben.
+3. **HF-Antennen & Messpunkte:**
+   * U.FL / I-PEX Koaxial-Buchsen (`ANT1..ANT4`)
+   * Testpunkte für In-Circuit-Flash & Oszilloskop-Abgriffe
+
 

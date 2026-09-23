@@ -50,6 +50,16 @@ module omm_antenna_bracket(
             translate([2.0, 0, 14.5])
                 cube([bracket_l - 8.0, 3.5, 1.5], center=false);
 
+            // 4b. Lateral 5.9 GHz V2X Ceramic Patch Antenna Snap Bed (Right vertical wall along Y = bracket_w - 3.5 .. bracket_w)
+            translate([4.0, bracket_w - 3.0, 0])
+                cube([28.0, 3.0, 17.0], center=false);
+
+            // Dual Snap Retention Tabs for 25x25mm V2X ceramic patch
+            translate([4.0, bracket_w - 4.2, 15.5])
+                cube([6.0, 1.4, 1.5], center=false);
+            translate([24.0, bracket_w - 4.2, 15.5])
+                cube([6.0, 1.4, 1.5], center=false);
+
             // 5. Center-to-Side Structural Ribs (Kreuzverrippung)
             translate([2.0, bracket_w/2.0 - 1.0, 0])
                 cube([bracket_l - 6.0, 2.0, 6.0], center=false);
@@ -83,9 +93,19 @@ module omm_antenna_bracket(
         translate([2.0, -0.5, 2.5])
             cube([3.0, 4.0, 4.0], center=false);
 
+        // C2. 5.9 GHz V2X Ceramic Patch Pocket & Cable Feed Slot (25.5 x 4.2 mm, Right wall)
+        translate([5.0, bracket_w - 2.8, 1.5])
+            cube([25.5, 3.0, 14.5], center=false);
+        translate([15.0, bracket_w - 4.5, 0.5])
+            cube([6.0, 4.5, 3.5], center=false); // V2X micro-coax exit slot
+
         // D. Longitudinal Cable Channel (runs through floor for 2.4G coax to front/rear SMA)
         translate([-0.5, bracket_w/2.0 + 8.0, -0.5])
             cube([bracket_l + 2.0, 5.0, 2.0], center=false);
+
+        // D2. External SHT40 Temperature Sensor Wire Channel & Strain Relief Groove (Floor Ø 3.2 mm)
+        translate([-0.5, bracket_w/2.0 - 10.0, -0.5])
+            cube([bracket_l + 2.0, 3.4, 2.0], center=false);
 
         // E. Weight Reduction Hollow Under GNSS Tower
         translate([15.0, (bracket_w - 22.0)/2.0, -0.5])

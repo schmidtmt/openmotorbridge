@@ -8,11 +8,21 @@
 extern "C" {
 #endif
 
+// =============================================================================
+// OpenMotorBridge - Rear Radar Subsystem (Garmin Varia & Wheeltec MR20 Radar 2.0)
+// =============================================================================
+
 typedef enum {
     RADAR_THREAT_CLEAR = 0,    // 0 = Kein Fahrzeug im Gefahrenbereich (Grün)
     RADAR_THREAT_AMBER = 1,    // 1 = Annäherung normal (< 80m, v_rel > 15 km/h) (Gelb)
-    RADAR_THREAT_RED = 2       // 2 = Schnelle Annäherung / Kollisionsgefahr (TTC < 3.5s) (Rot)
+    RADAR_THREAT_RED = 2       // 2 = Schnelle Annäherung / Kollisionsgefahr (TTC < 2.5s) (Rot)
 } RadarThreatLevel_t;
+
+typedef enum {
+    RADAR_HW_TYPE_UNKNOWN   = 0,
+    RADAR_HW_TYPE_GARMIN    = 1, // Legacy Garmin Varia RTL515 / eRTL615
+    RADAR_HW_TYPE_MR20_V2   = 2  // Radar 2.0 (Wheeltec MR20 77-GHz + ESP32-C3 Sub-MCU)
+} RadarHardwareType_t;
 
 typedef struct {
     uint8_t id;
@@ -20,13 +30,14 @@ typedef struct {
     float rel_speed_kmh;         // Relativgeschwindigkeit in km/h (+ = nähert sich)
     float time_to_collision_s;   // Berechnete Zeit bis zum Aufprall (TTC)
     RadarThreatLevel_t threat;   // Bedrohungsstufe (CLEAR, AMBER, RED)
-    int8_t azimuth_deg;          // Peilung: -15° (Links / Totwinkel) bis +15° (Rechts)
+    int8_t azimuth_deg;          // Peilung: -60° (Links / Totwinkel) bis +60° (Rechts)
     uint32_t last_seen_ms;       // Timestamp der letzten Reflexion
 } RadarTarget_t;
 
 typedef struct {
     bool enabled;
     bool sound_alert_enabled;
+    RadarHardwareType_t hw_type; // Erkanntes Radar-Modell
     uint8_t target_count;
     RadarTarget_t targets[8];
     RadarThreatLevel_t max_threat;
@@ -34,10 +45,12 @@ typedef struct {
     float highest_rel_speed_kmh;
     bool blind_spot_left;
     bool blind_spot_right;
+    uint8_t current_dimming_pct; // 18% - 100%
+    bool tunnel_mode_active;
 } RadarState_t;
 
 /**
- * @brief Initialisiert das Radar-Subsystem (UART2 / CAN-Bus Listener)
+ * @brief Initialisiert das Radar-Subsystem (UART2 / Binder M5 Schnittstelle)
  */
 esp_err_t radar_processor_init(void);
 
@@ -68,7 +81,6 @@ void radar_inject_simulated_target(float distance_m, float rel_speed_kmh, int8_t
 
 /**
  * @brief Überwacht Längsverzögerung ax für Notbremsblinken (Emergency Stop Signal - ESS)
- * Schaltet bei ax < -0.6g das Garmin Varia Rücklicht und Front-Node Aux-Light in den 4.5 Hz Strobe.
  */
 void radar_notify_vehicle_dynamics(float speed_kmh, float accel_x_g);
 
@@ -83,9 +95,24 @@ bool radar_is_ess_active(void);
 void radar_set_ess_config(bool enabled, float threshold_g);
 
 /**
- * @brief Löst einen 2.5-Sekunden Test-Bremsblitz aus (Garmin Varia 4.5 Hz + Front Aux-Light)
+ * @brief Löst einen 2.5-Sekunden Test-Bremsblitz aus
  */
 void radar_trigger_ess_test(void);
+
+/**
+ * @brief Setzt die GNSS-Positions- und Zeitdaten für den astronomischen Dimmer
+ */
+void radar_update_gnss_context(float lat, float lon, uint32_t utc_epoch, bool fix_valid);
+
+/**
+ * @brief Schaltet den Cruise Mode (Audio auf Lautsprecher) um
+ */
+void radar_set_cruise_mode(bool cruise_mode);
+
+/**
+ * @brief Triggert den In-System Bootloader auf der Radar 2.0 Sub-MCU
+ */
+esp_err_t radar_trigger_submcu_bootloader(void);
 
 #ifdef __cplusplus
 }

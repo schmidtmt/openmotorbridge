@@ -1971,26 +1971,93 @@
                         </div>
                     </section>
 
-                    <!-- 2. Heck-Radar & Spiegel-Totwinkel-LEDs (BSD) -->
+                    <!-- 1b. CarlinKit 4.0 (CPC200-CP2A) Low-Latency Audio/Video Bridge -->
+                    <section class="card" id="card-device-carlinkit">
+                        <div class="card-header">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 1.2rem;">⚡</span>
+                                <span class="card-title">CarlinKit 4.0 (CP2A) Low-Latency</span>
+                            </div>
+                            <span class="card-badge badge-green" id="badge-carlinkit-status">300 ms Tweak OK</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">Dongle IP & Web-UI:</span>
+                            <span style="font-weight: 700; color: var(--accent-cyan);" id="val-carlinkit-ip">http://192.168.50.2</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">Latenz (Media Delay):</span>
+                            <span style="font-weight: 700; color: var(--accent-green);" id="val-carlinkit-delay">300 ms (Optimiert • Werks-Reset: 1500 ms)</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">Audio-Qualität / FPS:</span>
+                            <span style="font-weight: 600;">High (48 kHz / 16-bit PCM) • 60 FPS</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">SkylineOS CAN Modus:</span>
+                            <span style="font-weight: 700; color: var(--accent-orange);">100% Read-Only (HFP Profil-Audio Automation)</span>
+                        </div>
+                        <div style="display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap;">
+                            <button id="btn-carlinkit-tweak" class="btn-primary" style="flex: 1; padding: 7px 12px; font-size: 0.78rem;" title="Sendet Low-Latency Parameter (Media Delay=300ms) an 192.168.50.2">
+                                🚀 <span id="lbl-carlinkit-tweak">300ms Tweak senden</span>
+                            </button>
+                            <a href="http://192.168.50.2" target="_blank" class="btn-secondary" style="flex: 1; padding: 7px 12px; font-size: 0.78rem; text-decoration: none; text-align: center; display: flex; align-items: center; justify-content: center; gap: 6px; border-color: rgba(0, 242, 254, 0.4); color: var(--accent-cyan);" title="Öffnet das CarlinKit Web-Konfigurationsmenü im Browser">
+                                🌐 <span>Web-UI öffnen</span>
+                            </a>
+                        </div>
+                    </section>
+
+                    <!-- 1c. Internet-Uplink & Gatekeeper Status -->
+                    <section class="card" id="card-device-uplink-gatekeeper">
+                        <div class="card-header">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 1.2rem;">🌐</span>
+                                <span class="card-title">Internet-Uplink &amp; Gatekeeper</span>
+                            </div>
+                            <span class="card-badge badge-green" id="badge-uplink-gatekeeper">HTTP 204 Online</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">Connectivity Probe:</span>
+                            <span style="font-weight: 700; color: var(--accent-green);" id="val-uplink-probe">HTTP 204 OK (gstatic.com • 42 ms)</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">Client OS / DHCP Mode:</span>
+                            <span style="font-weight: 700; color: var(--accent-cyan);" id="val-dhcp-client-mode">Apple iOS (Option 3 Omitted • 5G Aktiv)</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">Autarker Wettertrend:</span>
+                            <span style="font-weight: 600;" id="val-autarkic-weather-status">BMP390 Local dP/dt + GNSS h Aktiv</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">Cloud Sync / WebDAV:</span>
+                            <span style="font-weight: 600;" id="val-webdav-sync-status">Uplink Aktiv (Live-Upload aktiv)</span>
+                        </div>
+                        <div style="display: flex; gap: 8px; margin-top: 14px;">
+                            <button id="btn-probe-uplink" class="btn-secondary" style="flex: 1; padding: 7px 12px; font-size: 0.78rem;">
+                                🔄 <span>Uplink-Probe prüfen</span>
+                            </button>
+                        </div>
+                    </section>
+
+                    <!-- 2. Heck-Radar 2.0 Sub-MCU & Spiegel-Totwinkel-LEDs (BSD) -->
                     <section class="card" id="card-device-radar-bsd">
                         <div class="card-header">
                             <div style="display: flex; align-items: center; gap: 8px;">
                                 <span style="font-size: 1.2rem;">🚨</span>
-                                <span class="card-title" data-i18n="device_radar_bsd_title">Heck-Radar & Spiegel-LEDs (BSD)</span>
+                                <span class="card-title" data-i18n="device_radar_bsd_title">Heck-Radar 2.0 (MR20 + Halo) &amp; BSD</span>
                             </div>
-                            <span class="card-badge badge-green" id="badge-radar-power-status">Radar Aktiv</span>
+                            <span class="card-badge badge-green" id="badge-radar-power-status">Radar 2.0 Aktiv</span>
                         </div>
                         <div class="stat-row">
                             <span class="stat-sub">Radar-Sensor:</span>
-                            <span style="font-weight: 700;">TI IWR6843AOP mmWave (77 GHz / CAN)</span>
+                            <span style="font-weight: 700;">Radar 2.0 (Wheeltec MR20 77-GHz + Sub-MCU ESP32-C3)</span>
                         </div>
                         <div class="stat-row">
                             <span class="stat-sub">Objekte im Erfassungsbereich:</span>
                             <span style="font-weight: 700; color: var(--accent-green);" id="val-radar-detected-targets">0 Fahrzeuge (Frei)</span>
                         </div>
                         <div class="stat-row">
-                            <span class="stat-sub">Totwinkel Spiegel-LEDs:</span>
-                            <span style="font-weight: 700; color: var(--accent-orange);" id="val-bsd-led-state">Header J9 via MOSFET Q1: AKTIV</span>
+                            <span class="stat-sub">24-LED Halo & Spiegel-LEDs:</span>
+                            <span style="font-weight: 700; color: var(--accent-orange);" id="val-bsd-led-state">Halo Bereit • Astro-Dimmung 18%-100%</span>
                         </div>
 
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px;">
@@ -2002,7 +2069,7 @@
                             </button>
                         </div>
                         <button id="btn-test-bsd-flash" class="btn-primary" style="width: 100%; margin-top: 8px; padding: 7px 12px; font-size: 0.78rem;">
-                            ⚡ <span data-i18n="btn_test_bsd_flash">Spiegel-LED Testblitz (2 Sekunden)</span>
+                            ⚡ <span data-i18n="btn_test_bsd_flash">Radar 2.0 Halo & Spiegel Testblitz (2s)</span>
                         </button>
                     </section>
 
@@ -2150,6 +2217,8 @@
                             <option value="ktm_bosch_can_gen3">🏍️ KTM 890 / 1290 / 1390 Super Adventure & Duke (Bosch CAN)</option>
                             <option value="ducati_panigale_multistrada">🏍️ Ducati Multistrada V4 / Panigale V4 (Bosch CAN)</option>
                             <option value="generic_obd2_iso15765">🚗 Generisch Euro-4 / Euro-5 OBD2 (ISO 15765-4)</option>
+                            <option value="car_support_van">🚐 Begleitfahrzeug (Support-Van: 12V PD, Pod 1/2 Mesh zu Bikes, Auto-Lautsprecher)</option>
+                            <option value="car_convoy_standalone">🏎️ Standalone Autokolonne (Rallye: Sonnenblenden-Clip Pod 3 V2X + Midland 27MHz CB)</option>
                         </select>
                     </div>
                     <div style="display: flex; gap: 8px; flex-wrap: wrap; align-self: flex-end;">

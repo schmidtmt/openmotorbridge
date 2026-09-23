@@ -317,7 +317,14 @@ Um Signale vom 90°-abgewinkelten **JST-SH 1.0 mm 6-Pin SMD-Steckverbinder (`J2`
 
 #### 4.3.2 OMM-Transceiver-Kassette & Telemetrie-Backbone (Pod 3)
 
-Die OMM-Transceiver-Wechselkassette ([`cartridge_antenna_bracket_omm.scad`](../../hardware/cad/scad/03_pod_cartridges/parts/04_antenna_bracket_omm.scad) / [`cartridge_omm_transceiver.scad`](../../hardware/cad/scad/03_pod_cartridges/cartridge_omm_transceiver.scad)) bildet das datentechnische Rückgrat des OpenMotorBridge-Mesh-Netzwerks. Sie vereint den OMM-Transceiver, 868 MHz LoRa und Multi-GNSS (`PCBA 04`, RP2040 Dual-Core Co-Prozessor, SX1262 LoRa, u-blox MAX-M10S mit $25 \times 25\,\text{mm}$ Groundplane und Bosch Sensortec BMI270 6-Achs-IMU) in geschützter Heckposition.
+Die OMM-Transceiver-Wechselkassette ([`cartridge_antenna_bracket_omm.scad`](../../hardware/cad/scad/03_pod_cartridges/parts/04_antenna_bracket_omm.scad) / [`cartridge_omm_transceiver.scad`](../../hardware/cad/scad/03_pod_cartridges/cartridge_omm_transceiver.scad)) bildet das datentechnische Rückgrat des OpenMotorBridge-Mesh-Netzwerks. Sie vereint den OMM-Transceiver, 868 MHz LoRa, 5.9 GHz V2X und Multi-GNSS (`PCBA 04`, RP2040 Dual-Core Co-Prozessor, SX1262 LoRa, u-blox MAX-M10S mit $25 \times 25\,\text{mm}$ Groundplane und Bosch Sensortec BMI270 6-Achs-IMU) in geschützter Heckposition.
+
+##### Mechatronische Neuerungen (Feedback-Optimierungen):
+1. **Sensirion SHT40 Fahrtwind-Führung (Stauwärme-Schutz):**
+   * Unter der Forged-Carbon-Hutze der Road Glide ST entsteht durch Motor- und Auspuffabwärme massive Stauwärme, die interne Temperatursensoren um bis zu $+8\dots 15\,^\circ\text{C}$ verfälschen würde.
+   * `cartridge_antenna_bracket_omm.scad` integriert einen **abgedichteten rückwärtigen Kabelkanal**, durch den der Sensirion SHT40 Präzisionssensor zusammen mit dem Antennenkabel **nach außen in den echten Fahrtwind** (unter den Kennzeichenträger / Heckbalkon) geführt wird.
+2. **5.9 GHz V2X Keramik-Patchantennenaufnahme (OpenTrafficMap):**
+   * Neben LoRa und GNSS besitzt das dielektrische Radom eine formschlüssige $20 \times 20\,\text{mm}$ Schnappaufnahme für eine 5.9 GHz V2X Keramik-Patchantenne zum legalen, passiven Empfang von SPAT- und DENM-Sicherheitsmeldungen.
 
 > [!IMPORTANT]
 > **Architektonische Modularität (Typ-B-Unantastbarkeit):**
@@ -341,23 +348,31 @@ Die OMM-Transceiver-Wechselkassette ([`cartridge_antenna_bracket_omm.scad`](../.
 #### 4.3.4 Mechatronische Smart Cartridge: Formschlüssige Arretierung & 4-Kanal Aktuator-Führung (Sena SPIDER X Slim & Cardo Packtalk Edge)
 Für moderne Intercom-Kassetten wie das Sena SPIDER X Slim und das Cardo Packtalk Edge löst die Kassettenmechanik die doppelte Kernherausforderung: **Absolute Schwingungsfestigkeit des OEM-Adapters** und **präzise, dauerhafte Ausrichtung von 4 diskreten, unabhängig platzierten Aktuatoren auf die Tastenfelder**.
 
+##### Universelle Aktuatoren-Architektur (`cartridge_universal_actuator_rails.scad`):
+Um auch Headsets mit asymmetrischen, mittigen oder beidseitig gegenüberliegenden Tasten ohne Neukonstruktion mechanisch vollautomatisiert steuern zu können, wurde das universelle Schienen- und Rastersystem konstruiert:
+1. **Top-Face 2D-Langloch-Rasterplatte ($3\,\text{mm}$ Raster):**
+   * Die Deckelplatte besitzt eine 2D-Matrix aus verschiebbaren Langlöchern. Zylindrische Miniatur-Hubmagnete ($\varnothing 6{,}0\,\text{mm}$) können stufenlos exakt über der Taste positioniert und mit einer M2-Kontermutter fixiert werden.
+2. **Unabhängige seitliche Ausleger-Arme (Lateral Brackets links & rechts):**
+   * Bei Headsets mit Tasten auf beiden Seitenwänden (oder mittigen Wippen) greifen zwei separate, voneinander mechanisch entkoppelte Auslegerarme ein. Ein Arm bedient die linke Flanke, der andere die rechte Flanke.
+
 ```
-    MECHATRONISCHE SMART CARTRIDGE – DISKRETE 4-KANAL AKTUATOR-FÜHRUNG
+     MECHATRONISCHE SMART CARTRIDGE – UNIVERSELLE RASTER- & AUSLEGER-FÜHRUNG
 ┌──────────────────────────────────────────────────────────────────────────────────┐
-│ KASSETTEN-OBERDECKEL (PA12-MJF mit modellspezifischen Führungsdomen):            │
+│ KASSETTEN-OBERDECKEL (cartridge_universal_actuator_rails.scad):                  │
 │                                                                                  │
-│   TOP-FLÄCHE (3x Vertikal-Dome):                  SEITENFLANKE (1x 45°-Winkel):  │
-│   [ Aktuator 1 ]   [ Aktuator 2 ]   [ Aktuator 3 ]           [ Aktuator 4 ]      │
-│   (Sena: + /       (Sena: Center/   (Sena: - /               (Sena: Mesh 45° /   │
-│    Cardo: Media)    Cardo: Mobile)   Cardo: Intercom)         Cardo: Wheel-Press)│
-│         │                │                │                         │            │
-│   ┌─────┴─────┐    ┌─────┴─────┐    ┌─────┴─────┐             ┌─────┴─────┐      │
-│   │Feder 0,15N│    │Feder 0,15N│    │Feder 0,15N│             │Feder 0,15N│      │
-│   └─────┬─────┘    └─────┬─────┘    └─────┬─────┘             └─────┬─────┘      │
-│         ▼                ▼                ▼                         ▼            │
-│   ┌───────────┐    ┌───────────┐    ┌───────────┐             ┌───────────┐      │
-│   │Vertikal-  │    │Vertikal-  │    │Vertikal-  │             │45°-Winkel-│      │
-│   │Führung H8 │    │Führung H8 │    │Führung H8 │             │Führung H8 │      │
+│   TOP-RASTER (2D-Langlochplatte):                 SEITLICHE AUSLEGER-ARME:       │
+│   [ Aktuator 1 ]   [ Aktuator 2 ]   [ Aktuator 3 ]    [ Linker Arm ] [ Rechter Arm]│
+│   (Verschiebbar     (Verschiebbar    (Verschiebbar    (Flanke links   (Flanke rechts│
+│    in X- & Y-       in X- & Y-        in X- & Y-       unabhängig)     unabhängig)  │
+│    3mm-Raster)      3mm-Raster)       3mm-Raster)                                   │
+│         │                │                │                 │               │       │
+│   ┌─────┴─────┐    ┌─────┴─────┐    ┌─────┴─────┐     ┌─────┴─────┐   ┌─────┴─────┐ │
+│   │Feder 0,15N│    │Feder 0,15N│    │Feder 0,15N│     │Feder 0,15N│   │Feder 0,15N│ │
+│   └─────┬─────┘    └─────┬─────┘    └─────┬─────┘     └─────┬─────┘   └─────┬─────┘ │
+│         ▼                ▼                ▼                 ▼               ▼       │
+│   ┌───────────┐    ┌───────────┐    ┌───────────┐     ┌───────────┐   ┌───────────┐ │
+│   │Vertikal-  │    │Vertikal-  │    │Vertikal-  │     │Seiten-    │   │Seiten-    │ │
+│   │Führung H8 │    │Führung H8 │    │Führung H8 │     │Führung H8 │   │Führung H8 │ │
 │   └─────┬─────┘    └─────┬─────┘    └─────┬─────┘             └─────┬─────┘      │
 │         │ (TPU)          │ (TPU)          │ (TPU)                   │ (TPU)      │
 │         ▼ (0,4mm)        ▼ (0,4mm)        ▼ (0,4mm)                 ▼ (0,4mm)    │
@@ -658,26 +673,21 @@ Für klassische Touring- und Bagger-Modelle mit 2-Up-Komfortsitzbank oder freiem
 Die Kotflügel-Integration ist in zwei aerodynamisch optimierten Ausführungen verfügbar, die beide die originale $1/4"-20$ Rändelmutter der Soziussitz-Befestigung im Kotflügel nutzen und das M8-Signalkabel unsichtbar nach vorne unter die Sitzbank leiten:
 
 #### Option A: Touring Fender Console (`pod3_touring_fender_console.scad` / RKS & Naked Touring)
-Organische Tropfenform ($R = 6\dots 7\,\text{mm}$), die das Pod 3 formschlüssig aufnimmt und speziell auf den freiliegenden Heckfender der Road King Special (FLHRXS) abgestimmt ist:
+Organische Tropfenform ($R = 6\dots 7\,\text{mm}$), die das Pod 3 formschlüssig aufnimmt und speziell auf den freiliegenden Heckfender der Road King Special (FLHRXS) und Bagger abgestimmt ist:
+
+##### Geometrische Überarbeitung (Feedback-Optimierungen):
+* **Längserstreckung & Wandhöhe:** Die hintere Spitze wurde von $X = +160\,\text{mm}$ auf **$X = +205\,\text{mm}$ gestreckt** und **durchgehend auf die volle Seitenwandhöhe ($Z = 34\,\text{mm}$)** gezogen.
+* **Spaltschluss:** Der zuvor vorhandene Montagespalt zwischen den langen Flankenwänden und der hinteren Spitze wurde vollständig geschlossen. Die Konsole bildet einen monolithischen, nahtlosen Karosseriekörper.
+* **Geschützte 2.4 GHz Antennenkammer:** Die echte externe 2.4 GHz Dipolantenne sitzt formschlüssig in einer strömungsgünstigen, dielektrischen Schutzkammer in der verlängerten Spitze.
+* **Konsolen-Vereinheitlichung (Ein einziger Grundkörper):** Die überarbeitete Fender-Konsole fungiert als **universeller Standard-Grundkörper** für alle Touring-Bikes. Sie kann wahlweise offen (für maximale Kassetten-Zugänglichkeit) oder mit formschlüssigem Deckel gefahren werden. Eine separate, verkürzte Stealth-Variante ist somit obsolet.
 
 ![Pod 3 Touring Fender Console CAD](../images/cad/pod3_touring_fender_console.png)
 
-*Abbildung 8.25: Isolierte 3D-CAD-Ansicht der Touring Fender Console (`pod3_touring_fender_console.scad`) für Road King Special. Organisch fließende Tropfenform mit Heck-Einschuböffnung für Pod 3 und Kassetten-Schnellwechsel.*
+*Abbildung 8.25: Isolierte 3D-CAD-Ansicht der Touring Fender Console (`pod3_touring_fender_console.scad`) für Road King Special. Organisch fließende Tropfenform mit gestreckter Heckspitze ($X = +205\,\text{mm}$), geschlossenen Spalten und Heck-Einschuböffnung für Pod 3.*
 
 ![Pod 3 Touring Fender Console CAD Underside](../images/cad/pod3_touring_fender_console_cad.png)
 
 *Abbildung 8.26: Unterseite der Touring Fender Console CAD: Konkav gewölbter 195-mm-Kotflügel-Sattel, vordere $1/4"-20$-Schraublasche für die Soziussitz-Mutter und vertiefter Kabelkanal zur scheuerfreien Durchführung des M8-Kabels unter die Sitzbank.*
-
-#### Option B: Touring Stealth Console (`pod3_touring_stealth_console.scad` / Classic Bagger & Cruiser)
-Für Street Glide, Electra Glide und Ultra Limited mit 2-Up-Komfortsitzbank. Schmiegt sich formschlüssig an die Hinterkante der Beifahrersitzbank an:
-
-![Pod 3 Touring Stealth Console CAD](../images/cad/pod3_touring_stealth_cad.png)
-
-*Abbildung 8.27: Isolierte 3D-CAD-Ansicht der Touring Stealth Console (`pod3_touring_stealth_console.scad`). Vollständig organisch verrundete Konturen ($R = 6\dots 7\,\text{mm}$) ohne harte Boxkanten. Vordere Montagelasche für die originale $1/4"-20$ Soziussitz-Schraube im Schutzblech, anschmiegende Sitzbankkontur mit M8-Kabelkanal nach vorne unter die Bank, Anbindung der Frontschräge auf halber Einschubhöhe ($Z = 22\,\text{mm}$), offenes zentrales Dock und sanft abfallender Teardrop-Heckbürzel mit integrierter Einklips-Nut für die Heckantenne.*
-
-![Pod 3 Fender Assembly Touring 3D](../images/cad/pod3_fender_assembly_touring_3d.png)
-
-*Abbildung 8.28: Fotorealistische Gesamtheck-Montage an der Classic Touring-Maschine: Nahtlose Anschmiegung an die Beifahrersitzbank, M8-Kabel unsichtbar nach vorne geführt, freiliegendes Pod-Dach für ungestörten GNSS-Empfang, Kassetteneinschub von hinten und entkoppeltes Garmin Varia Radar unter dem Kennzeichen.*
 
 ---
 
@@ -866,10 +876,13 @@ Die Verkabelung der Kofferdeckel-Pods löst das fundamentale Praxiskriterium des
 4. **Adapterfreier Direktanschluss an Port B des Pods:**
    * Das schlanke Koffer-Kabel läuft parallel zum textilen Deckel-Fangband in den Kofferdeckel und wird **direkt in den Slim-Port B der Pod-Basis** eingesteckt.
    * Port A (M8-Stutzen) wird im Koffer mit einer Schutzkappe verschlossen. Im Kofferinneren befinden sich **keinerlei zusätzliche Adapterplatinen oder Lötstellen**.
-5. **2-Stufen-Zugentlastung & Zero-Drill-Bodendichtung ([`010_saddlebag_hole_grommet_split.scad`](../../hardware/cad/scad/02_pod_base/parts/010_saddlebag_hole_grommet_split.scad)):**
-   * Das Kabel tritt zusammen mit der M8-Stützhülse durch das serienmäßige $19\,\text{mm}$-Bodenloch ein.
-   * **Stufe 1 (Kofferboden):** Ein direkt an den Innenflansch der TPU-Dichtung angeformter Zugentlastungsturm klemmt das Kabel per Mini-Kabelbinder fest. Externe MagSafe-Abreißkräfte ($10\dots 15\,\text{N}$) und Stoßbelastungen durch herumrutschendes Gepäck werden zu 100 % in den Kofferboden eingeleitet.
-   * **Stufe 2 (Kofferdeckel):** Im Schnauz des Kofferdeckel-Docks ([`saddlebag_lid_dock.scad`](../../hardware/cad/scad/02_pod_base/saddlebag_lid_dock.scad)) wird das Kabel $15\,\text{mm}$ vor dem Stecker erneut formschlüssig abgefangen.
+5. **2-Stufen-Zugentlastung & Seitliche Durchführung oberhalb des Schwingenlagers ([`010_saddlebag_hole_grommet_split.scad`](../../hardware/cad/scad/02_pod_base/parts/010_saddlebag_hole_grommet_split.scad)):**
+   * **Montageort (Feedback-Entscheidung):** Der Kabelausgang liegt **nicht im Kofferboden**, sondern **seitlich-innen an der Koffer-Vorderwand (oberhalb des Schwingenlagers, zum Fahrzeugrahmen hin gewandt)**.
+   * **Vorteile:**
+     - **100 % Spritzwasser- & Dreckschutz:** Am Kofferboden sammelt sich Regenwasser und Straßengischt vom Hinterrad. Die seitliche Vorderwand liegt im absoluten Wind- und Gischt-Schatten des Rahmens.
+     - **Kein Scheuern bei Bodenkontakt:** Beim Abstellen des Koffers im Hotel oder in der Werkstatt berührt die Durchführung niemals den Boden.
+   * **Stufe 1 (Koffer-Vorderwand):** Die geteilte EPDM/TPU-Dichtung (`010_saddlebag_hole_grommet_split.scad`) mit angeformtem Klemmturm fixiert das Kabel per Mini-Kabelbinder formschlüssig. Externe MagSafe-Abreißkräfte ($10\dots 15\,\text{N}$) werden vollständig in die Kofferwand eingeleitet.
+   * **Stufe 2 (Kofferdeckel):** Im Schnauz des Kofferdeckel-Docks ([`saddlebag_lid_dock.scad`](../../hardware/cad/scad/02_pod_base/saddlebag_lid_dock.scad)) wird das Kabel formschlüssig abgefangen.
    * **Ergebnis an Port B:** Der USB-C-Stecker im Pod ist vollständig mechanisch entkoppelt und unterliegt **0 Newton dynamischer oder statischer Zugkraft**.
 
 #### 6.5.3 HF-Physik: Warum Kofferdeckel statt Kofferboden?
@@ -913,24 +926,38 @@ Das stationäre MagSafe-Rahmendock ([`009_magsafe_frame_dock.scad`](../../hardwa
 
 ---
 
-### 6.6 Entkoppeltes Kennzeichen-Radar-Bracket & Rechtliche Konformität
+### 6.6 Entkoppeltes Kennzeichen-Radar-Bracket & Dual-Radar-Optionen
 
-Auf Cruisern und Baggern wird das Garmin Varia mmWave-Radar von Pod 3 **entkoppelt** und mittig unter dem Kennzeichen montiert:
+Auf Cruisern und Baggern wird das Heckradar von Pod 3 **entkoppelt** und mittig unter dem Kennzeichen an der Kennzeichen-Radarhalterung ([`radar_license_plate_bracket.scad`](../../hardware/cad/scad/02_pod_base/radar_license_plate_bracket.scad)) montiert:
 
 ![Radar License Plate Bracket CAD](../images/cad/radar_license_plate_bracket_cad.png)
 
-*Abbildung 8.32: 3D-CAD-Modell des entkoppelten Kennzeichen-Radarhalters mit M6-Klemmung, M5-Schwenkscharnier und verdecktem rückseitigem M8-Kabelkanal.*
+*Abbildung 8.32: 3D-CAD-Modell des entkoppelten Kennzeichen-Radarhalters mit M6-Klemmung, M5-Schwenkscharnier, bionischer 36-Zahn Hirth-Verzahnung und verdecktem rückseitigem M8/M5-Kabelkanal.*
 
 * **Rechtliche Vorschrift (§ 10 Abs. 6 FZV / ECE R138):**
   Das Kennzeichen muss von oben in einem vertikalen Winkel von **mindestens $+30^\circ$ vollständig und ohne Verdeckung** einsehbar sein.
 * **Vermeidung des Dachüberstand-Problems:**
   Durch die Platzierung des Radars **unter** dem Kennzeichen muss die obere Pod-Konsole nicht weit nach hinten auskragen. Der $+30^\circ$-Sichtbereich auf die Zulassungs- und TÜV-Plaketten bleibt zu $100\,\%$ frei.
 * **Schwingungs- und Vibrationsfestigkeit (Formschluss-Hirth-Gelenk):**
-  Das Radar sitzt direkt an der massiven Grundplatte ohne langen Hebelarm. Die Gabelwangen besitzen eine integrierte formschlüssige 36-Zahn Hirth-Rosette ([`011_gopro_hirth_lock.scad`](../../hardware/cad/scad/02_pod_base/parts/011_gopro_hirth_lock.scad)), die zusammen mit dem diebstahlhemmenden Garmin Varia Dock ([`radar_varia_gopro_lock_dock.scad`](../../hardware/cad/scad/02_pod_base/radar_varia_gopro_lock_dock.scad)) ein unbeabsichtigtes Absacken durch die harten Vibrationen des Milwaukee-Eight 117 cui Motors zuverlässig verhindert.
-* **Diebstahlschutz:**
-  Die Bajonettaufnahme fixiert das Radar mit einer verdeckten M3-Sicherheitsmadenschraube und M5-Sicherheits-Torx-TR Schraube am Hirth-Gelenk gegen Entwendung im Straßenverkehr.
-* **Verdeckte Kabelführung:**
-  Das M8-Signalkabel des Radars verläuft unsichtbar in einem rückseitig eingeformten Schacht hinter dem Kennzeichen nach oben und vereinigt sich hinter der Blinkerbrücke mit dem Heckkabelbaum.
+  Das Radar sitzt direkt an der massiven Grundplatte ohne langen Hebelarm. Die Gabelwangen besitzen eine integrierte formschlüssige 36-Zahn Hirth-Rosette ([`011_gopro_hirth_lock.scad`](../../hardware/cad/scad/02_pod_base/parts/011_gopro_hirth_lock.scad)).
+
+#### Option 1: Legacy Garmin Varia mmWave-Radar (24 GHz)
+* Verwendet das diebstahlhemmende Garmin Varia Dock ([`radar_varia_gopro_lock_dock.scad`](../../hardware/cad/scad/02_pod_base/radar_varia_gopro_lock_dock.scad)) mit Bajonettverschluss und verdeckter M3-Sicherheitsmadenschraube.
+
+#### Option 2: Radar 2.0 – 77 GHz mmWave (Wheeltec MR20) & 24-LED Halo (`radar_mr20_housing.scad`)
+Für maximale Reichweite ($90\,\text{m}$), weite $\pm 60^\circ$ ($120^\circ$) Winkelerfassung und autarke optische Warnung steht das dedizierte Radar 2.0 Gehäuse zur Verfügung:
+1. **Formschlüssiges PA12-MJF Gehäuse:**
+   * Außenmaße: $56{,}0 \times 52{,}0 \times 32{,}0\,\text{mm}$ (Länge x Breite x Tiefe).
+   * Rückseitige Aufnahme: Monolithisch angeformte GoPro/Hirth-Gelenklasche passend zur 36-Zahn Hirth-Rosette des Kennzeichenträgers.
+2. **Glattes dielektrisches Radome-Sichtfenster:**
+   * Vor dem Horn-Array des MR20 und dem 24-LED Neopixel-Ring sitzt ein transparentes, glattes Polycarbonat-/PETG-Sichtfenster.
+   * Absolut ruß-, graphit- und metallfrei zur Gewährleistung von 100 % HF-Transparenz bei 77 GHz.
+3. **Interner Splitter- & Kabelbaum-Hohlraum:**
+   * Der originale Kabelstrang des MR20 und das Signal-/Strom-Splittermodul finden **vollständig im inneren Gehäusehohlraum ($48 \times 44 \times 16\,\text{mm}$)** hinter der PCBA 08 Platz.
+   * Keine unschönen externen Kabelpeitschen oder DC-Hohlstecker außerhalb des Gehäuses!
+4. **Mechanisch entkoppelte Binder Serie 707 M5 Flanschbuchse:**
+   * Am Gehäuseboden ist eine 4-polige Binder Serie 707 M5 Buchse (IP67, $\varnothing 7{,}5\,\text{mm}$) mit O-Ring fest verschraubt.
+   * Elektrische Anbindung an PCBA 08 über ein flexibles 4-adriges JST-SH Kabel. Schläge und Zugkräfte vom Kabelbaum wirken niemals auf die Lötstellen der Platine.
 
 ---
 
@@ -975,6 +1002,24 @@ Hierfür wurde der **Stealth Center Under-Fender Mount** ([`02_pod_base/radar_ce
   - **2x M4/M5 Senkkopfschrauben:** Zentraler Bohrungsabstand von $26\,\text{mm}$ für formschlüssige Verschraubung an vorhandenen Fender-Bohrungen.
 * **Verdeckte M8-Kabelführung:**
   Das M8-Kabel verschwindet sofort nach oben durch einen integrierten $\varnothing 5{,}5\,\text{mm}$ Schacht an die Kotflügelinnenseite und läuft dort geschützt im serienmäßigen Kabelkanal nach vorne zur Zentralbox.
+
+---
+
+### 6.8 Begleitfahrzeug- & Autokolonnen-Kit: Universal Sonnenblenden-Clip (`car_sun_visor_pod3_clip.scad`)
+
+Für den Einsatz in Begleitfahrzeugen (Support-Vans bei Motorradtouren) oder in reinen Autokolonnen (z. B. Sportwagen-Rallyes) wurde der **universelle Sonnenblenden-Clip für Pod 3** ([`car_sun_visor_pod3_clip.scad`](../../hardware/cad/scad/05_accessories/car_sun_visor_pod3_clip.scad)) konstruiert:
+
+1. **Universelle Passform für ALLE Pkw-Klassen (Kombi, SUV, Limousine, Coupé):**
+   * Moderne Fahrzeuge besitzen selten feste Heck-Hutablagen und hinter dem Rückspiegel sitzt meist ein massiver Kasten mit ADAS-Kameras, Notbremsradar und Regensensoren.
+   * Der ergonomische Feder-Klemmbügel greift an der **Beifahrer-Sonnenblende** (Dicke $12\dots 22\,\text{mm}$) an – links oder rechts völlig unbeeinflusst vom mittleren Kamerakasten.
+2. **Optimaler HF-Sichtwinkel (Line of Sight zum Himmel):**
+   * Direkt an der oberen Scheibenkante platziert, besitzt Pod 3 einen ungestörten $180^\circ$-Blickwinkel in den Himmel für u-blox GNSS, 868 MHz LoRa (OMM) und 5.9 GHz V2X.
+3. **Werkzeuglose 5-Minuten-Verkabelung (Zero-Damage):**
+   * Das dünne USB-C Kabel wird mit den Fingerspitzen in die weiche **Dachhimmel-Fuge (Headliner Seam)** über der Windschutzscheibe gedrückt.
+   * Weiterer Verlauf hinter der elastischen Gummidichtung der A-Säule nach unten unter das Handschuhfach zur Zentralbox in der Mittelkonsole.
+   * **Null Werkzeug, null sichtbare Kabel, 100 % spurlos rückrüstbar.**
+4. **Diebstahlschutz durch Unauffälligkeit:**
+   * Von außen wirkt Pod 3 an der Sonnenblende wie eine harmlose Maut-Erfassungsbox (z. B. Telepass/Bip&Go) oder ein Garagentoröffner – keine Attraktivität für Gelegenheitsdiebe.
 
 ---
 
@@ -1047,6 +1092,26 @@ Das **Spiegel-Totwinkel-LED Gehäuse** ([`bsd_mirror_indicator_pod.scad`](../../
   * **100 % Blendfreiheit:** Ein 3,8 mm tiefer Visier-Überhang und die blickdichte Vorderwand schirmen das Licht vollständig nach vorne und zur Seite ab. Kein Blenden des Gegenverkehrs, kein Irritieren anderer Verkehrsteilnehmer – voll TÜV-konform.
   * **Universalklemmung:** Zweiteilige Halbschale für Ø 10 mm (Harley, BMW, KTM) und Ø 12 mm Spiegelarme mit verdeckter Kabelführung zu Port `J9`.
 
+### 8.3 Radar 2.0 mmWave Gehäuse (`radar_mr20_housing.scad`)
+Das **Radar 2.0 Gehäuse** ([`radar_mr20_housing.scad`](../../hardware/cad/scad/05_accessories/radar_mr20_housing.scad)) integriert das 77-GHz-mmWave-Sensormodul Wheeltec MR20, die Frontplatine PCBA 08 (mit 24-LED Neopixel-Halo) sowie den originalen Kabel-Zwischenadapter:
+* **Vollkommen symmetrisches PA12-MJF Gehäuse:** $90{,}0 \times 80{,}0 \times 36{,}0\,\text{mm}$ (Breite x Höhe x Tiefe) mit exakt zentriertem Radarausschnitt $(X=0, Z=0)$, symmetrischer M4 Heckverschraubung ($40\,\text{mm}$ Abstand) und integrierter GoPro/Hirth-Gelenklasche zur Befestigung am Kennzeichenhalter (`radar_license_plate_bracket.scad`).
+* **Glattes PC-Radome:** Transparentes Polycarbonat-Sichtfenster ($85 \times 75 \times 1{,}6\,\text{mm}$) schützt Horn-Array und LEDs wetterfest nach IP67 mit umlaufender O-Ring-Dichtung, ohne das 77-GHz-Signal zu dämpfen.
+* **Großzügiger Kabelbaum- & Adapterraum:** Die hintere Hauptkammer ($78 \times 68 \times 16{,}5\,\text{mm}$) nimmt den originalen Zwischen-Adapter des MR20 mitsamt Kabelbaum-Schleife vollständig und knickfrei auf.
+* **Binder Serie 707 M5 Flanschbuchse:** 4-polig, vibrationsentkoppelt im Gehäuseboden zentriert bei $X=0$ verschraubt, per JST-SH Litze an PCBA 08 angebunden.
+
+### 8.4 Road Glide ST Sharknose: Induktives Durch-die-Verkleidung Cam-Dock (`road_glide_inductive_cam_dock.scad`)
+Das **induktive Cam-Dock** ([`road_glide_inductive_cam_dock.scad`](../../hardware/cad/scad/05_accessories/road_glide_inductive_cam_dock.scad)) löst das Problem der Dauerstromversorgung von Action- und 360°-Kameras (Insta360 X3/X4, GoPro) auf der Nase der Sharknose-Verkleidung **ohne ein einziges Loch zu bohren und ohne sichtbare Außenkabel**:
+1. **Physikalisches Prinzip:** Das ABS-Verkleidungsdeck der Harley ist unmagnetisch und dielektrisch ($2{,}5\dots 3\,\text{mm}$ Wandstärke). Induktive Wechselfelder durchdringen diesen Kunststoff verlustarm.
+2. **Innen-Baugruppe (TX-Cradle):** Eine flache 15W Qi-Senderspule wird von innen direkt unter das ebene Verkleidungsdeck geklebt und an Port 1 (USB-PD) des Front-Knotens angeschlossen.
+3. **Außen-Baugruppe (RX-Cradle mit 3M Dual Lock):**
+   * Die aerodynamische Aufnahmeschale wird außen mit 3M Dual Lock auf die Verkleidungsnase geklickt.
+   * Sie enthält eine integrierte Qi-Empfängerspule mit TI BQ51013B Controller (liefert $5\,\text{V} / 2\,\text{A} = 10\,\text{W}$ Dauerleistung).
+   * Ein ultrakurzes $3\,\text{cm}$ Flachkabel führt direkt in die USB-C Ladebuchse der Kamera.
+4. **Vorteile:**
+   * **100 % Originalzustand:** Absolut bohrungsfrei, keine Lackbeschädigung, 100 % wasserdicht.
+   * **10+ Stunden Daueraufnahme:** Hält den Kamera-Akku auch bei hochauflösender 5.7K-Daueraufnahme dauerhaft auf 100 %.
+   * **Spurloses Abnehmen:** Kamera mit Dock per Dual Lock abziehen – es verbleibt nur ein dezentes Pad auf dem Lack.
+
 ---
 
 ## 9. CAD-Dateistruktur & OpenSCAD-Modulbaukasten (STL-Bibliothek)
@@ -1100,6 +1165,10 @@ Die CAD-Dateistruktur von OpenMotorBridge folgt einer strengen hierarchischen CS
 | **Spiegel-Radar** | BSD Spiegel-Totwinkel-Pod Oberteil (38° Trichter) | `05_accessories/bsd_mirror_upper_pod.stl` | `05_accessories/bsd_mirror_indicator_pod.scad` |
 | **Spiegel-Radar** | BSD Spiegel-Klemmschelle Unterteil (Ø 10 mm) | `05_accessories/bsd_mirror_lower_clamp.stl` | `05_accessories/bsd_mirror_indicator_pod.scad` |
 | **Spiegel-Radar** | BSD Diffusorlinse (Bernstein / transluzent) | `05_accessories/bsd_mirror_lens.stl` | `05_accessories/bsd_mirror_indicator_pod.scad` |
+| **Radar 2.0** | Wheeltec MR20 77GHz Gehäuse mit Binder M5 Flansch & Radome | `05_accessories/radar_mr20_housing.stl` | `05_accessories/radar_mr20_housing.scad` |
+| **Kamera-Dock** | Road Glide ST Sharknose 15W Qi Induktives Cam-Dock (3M Dual Lock) | `05_accessories/road_glide_inductive_cam_dock.stl` | `05_accessories/road_glide_inductive_cam_dock.scad` |
+| **Auto-Zubehör** | Begleitfahrzeug / Auto Universal Sonnenblenden-Clip für Pod 3 | `05_accessories/car_sun_visor_pod3_clip.stl` | `05_accessories/car_sun_visor_pod3_clip.scad` |
+| **Kassette** | Universelle 2D-Langloch-Rasterplatte & seitliche Aktuator-Ausleger | `03_pod_cartridges/cartridge_universal_actuator_rails.stl` | `03_pod_cartridges/cartridge_universal_actuator_rails.scad` |
 
 ### 9.2 Baukasten-Komponenten & Dummies (`components/`-Verzeichnisse)
 

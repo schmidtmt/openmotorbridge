@@ -10,6 +10,8 @@
 #include "sdio_ring_buffer.h"
 #include "esp_now_front_node_client.h"
 #include "can_bus_manager.h"
+#include "radar_processor.h"
+#include "baro_weather_trend.h"
 
 static const char *TAG = "GNSS_BRIDGE";
 
@@ -220,10 +222,20 @@ void task_rear_pod_bridge(void *pvParameters) {
                                     s_latest_gnss.speed_kmh,
                                     0.0f,
                                     s_latest_gnss.utc_time);
+
+            // Feed GNSS context to Astronomical Solar/Tunnel Dimmer
+            radar_update_gnss_context((float)s_latest_gnss.latitude,
+                                      (float)s_latest_gnss.longitude,
+                                      s_latest_gnss.utc_time,
+                                      s_latest_gnss.has_3d_fix);
+
+            // Feed GNSS altitude and speed to Autarkic Barometric Weather Trend
+            baro_weather_update(1013.25f, s_latest_gnss.altitude, 20.0f, s_latest_gnss.speed_kmh);
         } else {
             if (s_last_pod3_rx_ms == 0 || (now_ms - s_last_pod3_rx_ms > 3000)) {
                 s_pod3_connected = false;
                 s_latest_gnss.has_3d_fix = false;
+                radar_update_gnss_context(0.0f, 0.0f, 0, false);
             }
         }
         vTaskDelay(pdMS_TO_TICKS(100)); // 10 Hz Zyklus

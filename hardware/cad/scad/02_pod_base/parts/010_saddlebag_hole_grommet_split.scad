@@ -1,13 +1,17 @@
 // =============================================================================
-// OpenMotorBridge - Satellite Pod: Saddlebag 19 mm Hole Split Sealing Grommet
+// OpenMotorBridge - Satellite Pod: Saddlebag Split Sealing Grommet & Strain Relief
 // =============================================================================
 // File: hardware/cad/scad/02_pod_base/parts/010_saddlebag_hole_grommet_split.scad
 // Description: 2-piece split asymmetric elastomeric sealing grommet (EPDM/TPU
-//              Shore 70A-85A) for the OEM 19.0 mm bottom mounting hole in
-//              Harley-Davidson Touring / CVO ST saddlebag tubs.
+//              Shore 70A-85A) for the saddlebag cable egress in Harley-Davidson
+//              Touring / CVO ST / Road King Special saddlebag tubs.
+//              Primary Mounting Location (Feedback Zeile 1):
+//              - Inboard Lateral Forward Wall (above swingarm pivot, facing the frame).
+//                100% spray-free, protected from road debris and bottom water collection.
+//              - Compatible with OEM 19.0 mm pass-through or dedicated side grommet bore.
 //              Hermetically seals BOTH the OEM M8 steel sleeve (Ø 10.2 mm) AND
 //              the internal slim cable (Ø 2.0 mm) without drilling or pinching.
-//              Compresses under OEM fastener torque for IP67 water/dust seal.
+//              Compresses under fastener torque for IP67 water/dust seal.
 // =============================================================================
 
 $fn = 60;

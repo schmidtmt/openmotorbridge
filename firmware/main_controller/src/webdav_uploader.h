@@ -31,6 +31,16 @@ void webdav_set_config(const WebDAVConfig_t *config);
  */
 esp_err_t webdav_trigger_sync_sequence(void);
 
+/**
+ * @brief Aktualisiert den Internet-Uplink-Status für den Cloud-Sync
+ */
+void webdav_set_uplink_status(bool available);
+
+/**
+ * @brief Prüft, ob ein verifizierter Cloud-Uplink bereitsteht
+ */
+bool webdav_is_uplink_ready(void);
+
 #ifdef __cplusplus
 }
 #endif

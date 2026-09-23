@@ -84,6 +84,14 @@ BOARDS = [
         "pcb": os.path.join(BASE_DIR, "kicad_smart_keyfob/openmotorbridge_smart_keyfob.kicad_pcb"),
         "layers": "F.Cu,B.Cu,F.Paste,B.Paste,F.SilkS,B.SilkS,F.Mask,B.Mask,Edge.Cuts",
         "is_4layer": False
+    },
+    {
+        "name": "08_radar_submcu_pcba",
+        "title": "OpenMotorBridge Radar 2.0 Sub-MCU, 5.9 GHz V2X & Halo PCB",
+        "sch": os.path.join(BASE_DIR, "kicad_radar_submcu/openmotorbridge_radar_submcu.kicad_sch"),
+        "pcb": os.path.join(BASE_DIR, "kicad_radar_submcu/openmotorbridge_radar_submcu.kicad_pcb"),
+        "layers": "F.Cu,B.Cu,In1.Cu,In2.Cu,F.Paste,B.Paste,F.SilkS,B.SilkS,F.Mask,B.Mask,Edge.Cuts",
+        "is_4layer": True
     }
 ]
 
@@ -273,8 +281,12 @@ def package_3d_print_stls():
     # 2. Satellite Pods Package
     pod_zip = os.path.join(stl_dir, "02_satellite_pods_3d_print_mjf.zip")
     with zipfile.ZipFile(pod_zip, 'w', zipfile.ZIP_DEFLATED) as z:
-        for f in ["pod_base_housing.stl"]:
+        for f in ["pod_base_housing.stl", "pod3_touring_fender_console.stl"]:
             p = os.path.join(src_stl_base, "02_pod_base", f)
+            if os.path.exists(p):
+                z.write(p, arcname=f)
+        for f in ["cartridge_antenna_bracket_omm.stl"]:
+            p = os.path.join(src_stl_base, "03_pod_cartridges", f)
             if os.path.exists(p):
                 z.write(p, arcname=f)
     print(f"  ✅ Created Satellite Pods STL Package: {os.path.basename(pod_zip)}")
@@ -286,7 +298,8 @@ def package_3d_print_stls():
             "cartridge_base_sled.stl",
             "cartridge_insert_sena.stl",
             "cartridge_insert_cardo.stl",
-            "cartridge_insert_blindkassette.stl"
+            "cartridge_insert_blindkassette.stl",
+            "cartridge_universal_actuator_rails.stl"
         ]:
             p = os.path.join(src_stl_base, "03_pod_cartridges", f)
             if os.path.exists(p):
@@ -319,6 +332,19 @@ def package_3d_print_stls():
             if os.path.exists(p):
                 z.write(p, arcname=f)
     print(f"  ✅ Created Smart Keyfob STL Package: {os.path.basename(keyfob_zip)}")
+
+    # 6. Symmetrical Accessories, Radar 2.0 & Vehicle Docks Package
+    acc_zip = os.path.join(stl_dir, "06_accessories_and_brackets_3d_print_mjf.zip")
+    with zipfile.ZipFile(acc_zip, 'w', zipfile.ZIP_DEFLATED) as z:
+        for f in [
+            "radar_mr20_housing.stl",
+            "road_glide_inductive_cam_dock.stl",
+            "car_sun_visor_pod3_clip.stl"
+        ]:
+            p = os.path.join(src_stl_base, "05_accessories", f)
+            if os.path.exists(p):
+                z.write(p, arcname=f)
+    print(f"  ✅ Created Accessories & Brackets STL Package: {os.path.basename(acc_zip)}")
 
 if __name__ == "__main__":
     os.makedirs(OUTPUT_BASE, exist_ok=True)

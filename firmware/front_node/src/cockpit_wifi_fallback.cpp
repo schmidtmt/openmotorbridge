@@ -299,3 +299,56 @@ bool cockpit_wifi_fallback_is_enabled(void) {
 uint8_t cockpit_wifi_fallback_get_connected_stations(void) {
     return s_connected_stations;
 }
+
+static bool s_internet_uplink_verified = false;
+static uint32_t s_last_probe_time_ms = 0;
+
+bool cockpit_wifi_has_internet_uplink(void) {
+    if (s_uplink_source == WIFI_UPLINK_OFFLINE) {
+        return false;
+    }
+
+    // Check if client designated as uplink is actually connected
+    bool uplink_client_present = false;
+    for (int i = 0; i < MAX_TRACKED_CLIENTS; i++) {
+        if (s_tracked_clients[i].is_uplink && (s_tracked_clients[i].mac[0] != 0 || s_tracked_clients[i].mac[1] != 0)) {
+            uplink_client_present = true;
+            break;
+        }
+    }
+
+    if (!uplink_client_present) {
+        s_internet_uplink_verified = false;
+        return false;
+    }
+
+    // Periodic connectivity probe evaluation
+    uint32_t now_ms = (uint32_t)(esp_timer_get_time() / 1000ULL);
+    if (now_ms - s_last_probe_time_ms > 60000 || s_last_probe_time_ms == 0) {
+        cockpit_wifi_trigger_connectivity_probe();
+    }
+
+    return s_internet_uplink_verified;
+}
+
+void cockpit_wifi_trigger_connectivity_probe(void) {
+    s_last_probe_time_ms = (uint32_t)(esp_timer_get_time() / 1000ULL);
+
+    if (s_uplink_source == WIFI_UPLINK_OFFLINE) {
+        s_internet_uplink_verified = false;
+        return;
+    }
+
+    bool uplink_client_present = false;
+    for (int i = 0; i < MAX_TRACKED_CLIENTS; i++) {
+        if (s_tracked_clients[i].is_uplink && (s_tracked_clients[i].mac[0] != 0 || s_tracked_clients[i].mac[1] != 0)) {
+            uplink_client_present = true;
+            break;
+        }
+    }
+
+    s_internet_uplink_verified = uplink_client_present;
+    ESP_LOGI(TAG, "Internet Connectivity Probe evaluated: Uplink is %s",
+             s_internet_uplink_verified ? "ONLINE" : "OFFLINE");
+}
+

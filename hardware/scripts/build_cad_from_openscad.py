@@ -119,6 +119,13 @@ STL_TARGETS: List[Tuple] = [
     ("05_accessories/bsd_mirror_indicator_pod.scad", "05_accessories/bsd_mirror_upper_pod.stl", ["-D", 'part="pod"']),
     ("05_accessories/bsd_mirror_indicator_pod.scad", "05_accessories/bsd_mirror_lower_clamp.stl", ["-D", 'part="clamp"']),
     ("05_accessories/bsd_mirror_indicator_pod.scad", "05_accessories/bsd_mirror_lens.stl", ["-D", 'part="lens"']),
+
+    # 13. Radar 2.0, Inductive Qi Dock, Car Visor Clip & Universal Actuators
+    ("05_accessories/radar_mr20_housing.scad", "05_accessories/radar_mr20_housing.stl"),
+    ("05_accessories/road_glide_inductive_cam_dock.scad", "05_accessories/road_glide_inductive_cam_dock.stl"),
+    ("05_accessories/car_sun_visor_pod3_clip.scad", "05_accessories/car_sun_visor_pod3_clip.stl"),
+    ("03_pod_cartridges/cartridge_universal_actuator_rails.scad", "03_pod_cartridges/cartridge_universal_actuator_rails.stl"),
+    ("03_pod_cartridges/parts/04_antenna_bracket_omm.scad", "03_pod_cartridges/cartridge_antenna_bracket_omm.stl"),
 ]
 
 # List of High-Resolution 3D Render Targets

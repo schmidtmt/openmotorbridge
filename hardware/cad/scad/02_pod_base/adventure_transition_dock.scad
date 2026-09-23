@@ -176,15 +176,20 @@ module adventure_transition_dock_base(side = "right") {
             }
         }
 
-        // D1. Direct Inboard Under-Seat Cable Ingress Port (Front Nose Chamber)
+        // D1. Direct Inboard Under-Seat Cable Ingress Port with Rounded 90° Bending Radius (R=10mm)
         // Passes through the inboard wall directly under the rider seat cushion into the dry subframe / battery tray
         translate([-12.0, 0, TD_FLOOR]) {
             hull() {
-                cylinder(r=5.0, h=16.0, $fn=24);
+                cylinder(r=5.5, h=16.0, $fn=24);
                 translate([0, y_dir * (CONSOLE_MAX_W/2.0 + 10.0), 0])
-                    cylinder(r=5.0, h=16.0, $fn=24);
+                    cylinder(r=5.5, h=16.0, $fn=24);
             }
         }
+
+        // D1_Fillet: Smooth 90° lead-in chamfer to eliminate any sharp bending edge
+        translate([-16.0, y_dir * (CONSOLE_MAX_W/2.0 - 6.0), TD_FLOOR + 5.0])
+            rotate([0, 90, 0])
+                cylinder(r=6.0, h=12.0, center=true, $fn=24);
 
         // D2. Inboard M8 PUR Cable 90° Conduit (Passes through tongue under seat to cross-rail)
         translate([12.0, 0, TD_FLOOR]) {
@@ -193,6 +198,13 @@ module adventure_transition_dock_base(side = "right") {
                 translate([0, y_dir * (CONSOLE_MAX_W/2.0 + TONGUE_EXT_Y + 2.0), 0])
                     cylinder(r=4.8, h=15.0, $fn=20);
             }
+        }
+
+        // D3. Integrated Ribbed Strain Relief Clamp Jaw & Dual Zip-Tie Slots (Feedback Zeile 16)
+        // Two cross-slots for 2.8x1.6 mm cable ties anchoring the M8 PUR jacket firmly against vibration
+        for (zt_x = [-18.0, -8.0]) {
+            translate([zt_x, y_dir * (CONSOLE_MAX_W/2.0 - 8.0), TD_FLOOR - 1.0])
+                cube([2.8, 12.0, 10.0], center=true);
         }
 
         // E. 4x M3 Screw Holes in Bosses (Ø 3.2 mm for heat-set or tapping)

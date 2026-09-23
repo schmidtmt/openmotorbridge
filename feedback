@@ -1,34 +1,48 @@
-kapitel 1:
-veraltet:
-│ 1. COCKPIT / LENKER (100 % Drahtlos):                                                       │
-│    • BLE 5.0 Funk-Lenkertaster (CR2032 mit Batterie-Service 0x180F & PTT-Trigger)           │
-│    • PWA Dashboard auf Smartphone / TFT via Web-Bluetooth (WebBLE)  
-kapitel 4;
-1.3 Dreifach-Koaxial-Bypass (Murata MM8030 HF-Umschaltbuchsen) - ist das noch aktuelle
-kapitel 5:
-6. Lenkertaster CR2032-Batterieüberwachung (BLE Service 0x180F) - ist eigenbtlich auch überholt
-kapitel 7:
-PCBA 01: Zentralbox Main Controller (openmotorbridge_central_box)- wie war das wollten wir die optokoppler drin lassen oder eben wg der smart cartige ersetzen?
-auch wenn wir es schon überprüft haben aber einfach nochmal zur sicherheit: trifft die anschlussleiste von PCBA 03: Smart Modular Cartridge bzw. PCBA 04: Rear Pod 3 Transceiver & Coprozessor sauber auf PCBA 02: Satelliten Pod Base Carrier wenn sie in den pods/kassetten montiert sind
-wie werden die aktuatoren an PCBA 03: Smart Modular Cartridge angeschlossen
-wie wird audio in/out an PCBA 03: Smart Modular Cartridge angeschlossen
-PCBA 07: 2-in-1 LoRa Smart-Keyfob müssen wir placement und routing nochmal anpassen das sieht teilweise schon sehr auf kante oder arge dicht aus. mein job und ich geb dann bescheid
-kapitel 8:
-passt die PCBA 03: Smart Modular Cartridge noch sauber in die kassette und kann man die kabel entsprechend verlegen
-Abbildung 8.7: 3D-CAD-Querschnitt (Y-Z Ebene) hier sieht man nur den deckel
-Abbildung 8.11: nur die kassette vorne hat eine anschlussleiste bei den anderen sieht das nach stiften aus und sieht man dort den lock mechanismus
-Abbildung 8.14 sieht man den lock mechanismus und die dummy platine hat keine kontaktleiste sondern stifte
-4.3.4 Mechatronische Smart Cartridge: Formschlüssige Arretierung & 4-Kanal Aktuator-Führung (Sena SPIDER X Slim) haben wir da eine cad zeichnung und wenn ich mit das x slim anschaue ist das so dass 3 schalter auf der oberseite sind und der mesh button eher seitlich aussieht. evtl einzelne aktuatoren und kein verbund?.
-Abbildung 8.15: CAD-Visualisierung auch hier wieder keine anschlussleiste auf der dummy platine und wieder sieht man den lock mechanism,us
-4.3.11 IP67 Blind- / Leerkassette (Dry Box Dummy) hat diese auch einen lock mechanismus
-4.4 Belegung der 6-Pin M8 / Pogo-Schnittstelle & PUR-Kabelbaum-Farbcodierung ist das noch aktuell
-6.2 Referenz-Kit 2: Harley-Davidson Road King Special (FLHRXS / Classic Naked Touring) passt hier wirklich die bildbeschreibung zu dem was man auff den bildern sieht
-6.3 Referenz-Kit 3: Classic Bagger & Cruiser (Touring Stealth Console) wollen wir das evtl mit der version für die rks zusammenlegen und das rks kit generell verwenden. ansonsten sind die bilder akutell?
-6.4 Referenz-Kit 4: Adventure & Touring Enduros haben wir das gehäuse/halterung für die normale gs was sich in die sattelkante optisch integriert als cad. bei der normalen gs muss ja der halter von beiden seiten unter dem sitz befestigt werden. hats ein cad für den gsa halter
-Abbildung 8.29 wirkt irgendwie komisch mit den 2 boxen. ist das so absicht
-6.4.2 Heck-Pod 3 (Transceiver) – Das universelle "Rack-Tail Mount" & Heck-Balkon-Konzept hats dafür auch cad oder nur das ascii art
-6.4.3 Unsichtbarer Magnet-Diebstahlschutz im Fernreise-Einsatz den haben wir doch für alle pods übernommen und müsste entsprechend weiter oben integriert werden
-7. Gehäuse Typ D: 2-in-1 LoRa Smart-Keyfob & Pager sollte man den Integrierter N52 Neodym-Schlüsselblock in den bildern sehen
-kapitel 16:
-2.5 Kategorie E: Kabelbaum, Steckverbinder, Pufferakku & HF-Pigtails -> 90° USB Kassetten-Kabel ist das so? und anschlüsse für aktuatpren und die buchsen am x slim?
-ist das wirklich vollständig und auch bei der auswahl auf unsere empfehlung abgestimmt?
+koffer ausgang seitlich nicht im bode, egal ob st oder rks, sollte aber am grundsätzlichen prinzip ja nichts oder zumindest nicht allzuviel ändern
+
+ein fob für 2 bikes, zb harley und gsa und die verbindet sich dann automatisch zum aktiven bike
+
+dimmen der tod winkel led evtl basierend auf uhrzeit und daten über dämmerung an der aktuellen position oder ob das licht akktiv ist (was aber evtl bei modernen geräten mit autolicht nicht sauber funktioniert) wenn kein sensor für helligkeit verfügbar und evtl gnss verlusst als tunnel-indikator?
+anpassung heckpod pcb damit der temp sensor integriert wird
+
+1.4 Maßstabsgetreuer Längs- & Querschnitt (X-Z Thermik & Y-Z Kabelführung) -> kupferbolzen sollten hier ja dann auch weg oder? sollten wir generell eine zugentlastung vorsehen
+
+Präzisions-Passung: Die Aufnahmeschale bildet das OEM-Gehäuse des SPIDER X Slim  -> haben wir das? und das müsste das dann nicht auf für das dge gelten?
+
+wo ist eigentlich die 2.4 ghz antenne bei der fender console - ist die in der spitze wofür die ja eigentlich zu kurz ist? und wofür ist der spalt zwischen den langen seitenwänden und der hinteren spitze?
+
+sollten wir bei der stealth consolke die spitze nicht doch auf die gleiche höhe auslegen wie die seitenwände oder hatte das einen grund? oder sollen wir auf diese gänzlich verzichten und stattdessen soll man dann halt wenn man es offen will die fender console ohne deckel nehmen?
+
+beim transition dock kommt ja das kabel seitlich rein. bekommen wir das dann auch ohne gewalt so gebogen dass wir es festschrauben können? und brauchts da evtl ne zugentlastung
+
+U2-X Pro gibt es auf der offiziellen ottocast seite nicht bzw der link https://www.ottocast.com/collections/universalios-android/products/u2-x-pro liefert einen 404.ja mit google suchen findet man infos über das modell aber eben nicht bei ottocast selbst. scheinbar gibt es den nicht mehr und wohl auch keinen nachfolger ohne vollständiges android mit vorintsallierten apps. aber ich hab ja nich den play2video ultra der die übersetzung können sollte oder nicht. oder doch vll  CarlinKit 4.0 (CPC200-CP2A) aber da liest man in tests von 1 bis 2 sec verzögerung was für das navi dann ja eigentlich auch schon wieder blöd ist. oder evtl doch eine ai box nehmen und das handy gar nicht als quelle für android auto verwenden. klar die box bräuchte internet-zugriff aber auf android würden wir das ja via proxy in der begleitapp hinbekommen? evtl da dann auf https://onince.com/de/products/carplay-ai-box-2026-upgrade?srsltid=AU7gw4VE8Ix-mo55h-HfzDkHMXIsc44409sRCMmB2BZ9GkZhXtBLY0Er setzen. dann müssten wir eben auch im front node einen puffer-akku einbauen der die ai-box eine weile mit strom versorgen kann und zb wenn die fob eine zeit weg ist, zb mittagspause und nicht der tankstopp, dann fährt das system runter. andererseits kostet der carlinkit 4.0 nur 27 stutz bei digitec und der z4 im offiziellen shop im angebot 149 zzgl zoll. und es wird wohl ein eol android 10 im z4 drin sein was auch unschön ist bzgl security patches. beim carlinkit kann wohl laut reddit die latenz von 2 bis 3 sec auf 300ms drücken via web-config laut reddit. das wäre dann zwar immernoch relativ hoch aber definitv besser wie im sekunden bereich. für die 27 stutz hab ich mal einen zum testen bestellt.
+
+laut beschreibung im stillstand oder bei pausen wettertendenz, verkehrslage etc anzeigen - haben wir das echt. und wenn wir verkehr machen wollen wie wäre dann das OpenTrafficMap projekt. heise hat nen artikel darüber https://www.heise.de/hintergrund/OpenTrafficMap-Live-Verkehrskarte-im-Eigenbau-11406126.html (leider inter paywall) aber wenn ich das aus den kommentaren richtig lese dann verwenden die einen esp c3 für einen empfänger, müsste dann natürlich im idealfall sowohl senden (also wir haben an position x gerade folgendes empfangen) als auch empfangen (umgebungs-tile in geojson) lönnen. senden wird zb https://codeberg.org/opentrafficmap/its-g5-receiver-firmware_txenabled hier beschrieben. ich würde das abei uns aber nicht über reines wifi sehen sondern dann eben über den proxy mit der begleit-app. integration (aber eher nicht deren boards weil mir die eher für den stationären betrieb ausgekegt scheinen und die antenne nicht extern ausgeführt ist) dann möglicherweise in pod 3 via steckleiste/tochterboard und dann separater antenne im gehäuse so wie wir das auch schon für gnss und lora haben?  EchtzeoiP-ush der Daten zusätzlich waze "auto-klick" (normales maps hat ja leider keine möglichkeit sowas einzuspeisen oder doch?). Doch Anzeige/Warnung von Events wie Unfall hinter der nächsten kurve? ampel anzeige wird rot? und waze eben deshalb weil man da noch den schwarm nutzen kann zb für verkehrsmenge so lange die menge an v2x gerade in fahrzeugen noch überschaubar ist und berücksichtigung beim routing bzw live anpassung. und senden via v2x ist ja leider verboten, sonst könnte man da sicher auch selbst einfach warnungen raussenden bei einer vollbremsung oder mototrrad ist umgekippt etc. aber nur zertifizierte geräte und pki.
+
+und wenjn wetter änderung autark via druck-änderung die nicht höhenbasiert ist, man hat ja gps als kontrollwert, und andere dinge wie temp-abfall? oder anbindung einer api aber welche dann damit das möglichst nicht spezifisch nur für ein land funktioniert wie bei meteoswiss etc. und wann zeigt man das dann an. bei laengeren stops oder auch auch an ampeln etc?
+
+wie war das die whim emulation machen wir indem wir ein angeschlossenes headset vorgaukeln reicht da wirklich VoiceOverAudio Feature-Bit 0x04 aktiv oder müssen wir da den mfi machen. https://github.com/shilapi/xcertplay schreibt zb was von Remote MFI oder https://github.com/amineross/showcase mit BAA certificates oder reicht uns der 1k ohm widerstand
+
+fehlt noch was in der firmware oder was ist drin obwohl wir das mittlerweile anders gedacht haben
+
+echte usb-verkabelung vorsehen für begleitfahrzeug oder werkstatt und nicht nur pods mit strom versorgen. idee wäre dann even möglichst von der 26 üin leoste oder vom kabelbaum einen stecker auf die entsprechenden pfosten und auf der anderen seite eben an die pods.den front node wirds im begleitfahrzeug wohl eher nicht brauchen aber pods 1/2/3 könnten sinn machen. und klar schräglagentracking etc macht da natürlich auch keinen sinn und auch an den can würde ich in dem fall nicht gehen. strom würde ich aus dem zigarettenanzünder holen da viele multimedia usb nicht genug strom liefern. pods könnte man mit klett auf dem dashboard oder wenns versteck sein soll an den vordersitzen seitlich eher unten machen. und dann eben in der app noch einen entsprechenden modus integrieren.
+
+Weiter gedacht könnte omb eigentlich auch für alle Autokolonnen interessant sein, da dann eben das Auto als "Helm". omm zu kommunikation und evtl noch klassischer cb funk stichwort midlan-kassette. der front node macht aber im auto vermutlich weniger sinn - ausser als eine art pd-hub. dann brauchts nur einen einfachen anschluss für den zigarettenanzünder oä und man könnte trotzdem zentralbox und qi lader für handy und wireless android auto/carplay adapter betreiben. Integration da dann zentral box -> mittelkonsole und 2 pods (oder doch alle 3?  aber sena/cardo ist ja da eher nicht so sinnvoll) evtl auch sonnenblende vorne und/oder kofferraum? oder würde man evtl noch einen elm327 obd/can adapter per bt anbinden?. der usb port den wir richtung skylineos haben würde dann in den media-ansachluss gehen der auch wired android auto/carplay bietet.
+
+und wäre die konsequenz aus dem usb für pods im auto.dann nicht dass mit nur 2 pods nicht dass die anschlüsse zu den pods eigentlich identisch sind bzw beides können und dann eben abhängig davon was erkannt wird die pins durchgeschaltet werden. und ja trotzdem soll man nicht 3 "normale" kassetten anschliessen können oder 3 pod 3 sondern eben 2+1 oder macht das der kabelbaum
+
+gibts ne möglichkeit an (t-)kreuzungen oder einmündungen die nicht gut einsehbar sind, zb bäume sträucher häuser, querverkehr zu erkennen - klar v2x, aber noch nicht so verbreitet, und sonst? könnte man dann zb auch über die tot-winkel leds anzeigen. evtl sogar gekoppelt mit dem blinker dahingehend dass wenn man rechts abbieht ja nur einne spur relevant ist und bei links ja beide
+
+akku/batterie warnung als push? zb im winter leert sich die batterie und man hat den lader vergessen oder der tut nicht - ist mir vorletzten winter passiert dass der lader nach einer zeit den geist aufgegeben hatte und dann im frühjahr die li-ionen batterie in der bmw tot war, harley tat noch weil die batterie ja auch deutlich grösser ist. die frage ist wie und wohin. klar im heimischen wifi könnte man zb per mqtt wie beim upload von tracks oder gibts was besseres. und wie könnte man das für die fob machen
+
+ah und wir hatten ja mal gesagt platinen gg kondenswasser schützen indem wir sie "lackieren" das ist ja rausgefallen als wir den build vereinfacht haben. macht auch sinn. aber wir hatten das ja nicht grundlos angedacht. kann man das auch direkt so bestellen oder waren wir da uebervorsichtig
+
+und noch nen gedanke zu qi lader wie den quadlock am lenker. hat man das an einem fairing bike wirklich zusätzlich am lenker oder ist das handy eher in der tasche oder im handschuhfach weil als display braucht mans ja bei einem werks-display ja eigentlich nicht. klar bei einer rks oder einem bike ohne fairing oder display macht das total sinn
+
+pod3-platine für temp sensor anschluss muss angepasst werden. die cads auch?
+
+platzierung action cam bzw 360 cam. aktuell für st saugnapfhalter auf dem fairing. sieht eigentlich unschön aus und vorm dran machen lack putzen. liefert aber gute 360 grad videos. hats ne bessere stelle. saubere kabelführung. was bei fahrt ohne cam
+
+beim radar auf ein modernes 77 ghz system statt dem aarmin vario setzen? evtl sowas hier Wheeltec MR20 (https://openelab.de/products/wheeltec-mr20-mmwave-radarmodul-mit?srsltid=AU7gw4VhFIxUiimIK6GUhmGUy19smIFAuYkvFUSS3f3j3R6By_1T1CiB) aber auch andere ähnliche basierend zb auf der ti plattform. wichtig wäre eben nur dass wir sie per uart oä ansteuern können. und ja das hätte keine integrierten warn-leds. diese müsste man dann noch separat zb als seitlich montierten led rahmen ergänzen. dann hätten wir da aber auch die volle kontrolle drüber und könnten exakt steuern wann es in welchem pattern etwas machen soll. vorne wie gehabt leds am spiegel. dann könnten wir bod, auffahrdetektion, spurerkennung, evtl bim überholen etc nach hinten machen. würde so ein system dann natürlich nicht mit roten warn-leds auch nach vorne sinn machen? als fertigsystem für hinten hätte es sowas Chigee SR-1 aber das wird ein geschlossenes system sein. evtl bräuchten wir da dann noch eine klaeine platine die den uart aufspaltet auf radar und led ansteuerung. und wenn wir die wheller nehmen würde ich vorschlagen eine box mit einer kleinen adapter-platine innen drin zu nehmen. diese hat dann als eingang zb einen m8 und spaltet den auf in led-steuerung, radar-steuerung und radarstrom. das originale adapterkabel wäre dann auch in der box. der radar wird dann auf der box befestig und aussen rum (zb doppelring mit WS2812B / Neopixel) oder links/rechts davon dann rote leds. und die box hätte dann eine entsprechende aufnahme für die halterung. oder sollten wir dann sagen wenn eh box dann nacktes modul. ich habe in radar mal eine kleine skizze gemacht wie ich mir das vorstelle wenn wir in die richtung gehen.
+
+könnte man den videofeed der action oder 360 cam anzapfen für irgendwelche erkennungen und als zusätzliche quelle zum radar etc nutzen? aber das wird wohl für unser bisheriges setup zu viel rechenleistung brauchen

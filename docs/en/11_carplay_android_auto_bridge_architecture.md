@@ -418,3 +418,31 @@ If a smartphone or CarPlay protocol handshake freezes, riders can force-reboot t
 | **Helmet Audio** | Requires dongle mic or degrades to mono | **Direct digital connection with Sena/Cardo via I2S** |
 | **Radar Ducking** | No connection to rear radar sensors | **Automated Raised-Cosine Ducking (-18 dB)** |
 | **Summer Heat (>65°C)** | Crashes after 20–40 minutes | **Thermally isolated (30 cm pigtail) & TPS2051B gating up to 85 °C** |
+
+---
+
+## 10. CarlinKit 4.0 Low-Latency Tuning & 100% Read-Only CAN Audio Routing
+
+### 10.1 CarlinKit 4.0 (CPC200-CP2A) Low-Latency Tuning
+The CarlinKit 4.0 adapter (Linux-based, 1.5W, LCSC/COTS ~CHF 27) serves as the primary hardware protocol translator on Port 2 of PCBA 05. Factory default settings enforce a conservative `Media Delay = 1500 ms`, causing noticeable lag on navigation turn prompts.
+Via the OMB PWA (Tab *“Hardware & Hub”*) or direct browser access to the dongle's local web server (`http://192.168.50.2`), optimized low-latency settings are applied:
+
+* **Media Delay:** `300 ms` (drastically reduces audio/navigation lag for crisp GPS directions).
+* **Audio Quality:** `High (48 kHz / 16-bit PCM)` for clear audio fidelity.
+* **Frame Rate:** `60 FPS` for smooth UI scrolling on the 12.3" SkylineOS TFT.
+* **Auto-Connect:** `1 (Enabled)` for immediate headless operation upon KL15 ignition.
+
+### 10.2 100% Read-Only CAN-Bus Architecture (Zero Injection)
+To safeguard manufacturer warranties (Harley-Davidson, BMW, KTM) and eliminate any risk of Bus-Off faults (`U0100`) or diagnostic trouble codes, the CAN transceivers (TCAN334G) on PCBA 01 and PCBA 05 operate **strictly in passive Listen-Only mode**.
+**Zero CAN frames are injected** onto the vehicle bus (no `0x5D0` injection).
+
+### 10.3 Automated Audio Routing via Bluetooth Profile Negotiation (HFP vs. A2DP)
+Unlike crude setups where connecting a headset silences fairing speakers, OpenMotorBridge controls audio routing seamlessly via standard **Bluetooth profile negotiation**:
+
+1. **In “Cruise Mode” (Music played through fairing speakers):**
+   * The Front Node registers with SkylineOS exclusively under the **Bluetooth HFP (Hands-Free Profile)**, actively declining the A2DP audio sink profile.
+   * **SkylineOS Reaction:** SkylineOS detects an active headset $\to$ Apple CarPlay immediately unlocks! Because the headset requests no media audio, SkylineOS automatically routes all media sound (Spotify, podcasts, radio) **directly to the fairing speakers without requiring any manual touchscreen taps**.
+2. **In “Solo Rider Mode” (Audio routed into helmet):**
+   * The Front Node additionally accepts the A2DP Sink profile. SkylineOS streams stereo audio to OMB, which injects it directly into the helmet intercom matrix.
+3. **Summary:** 100% automation, zero touchscreen taps while riding, and zero CAN-bus modification!
+

@@ -25,6 +25,7 @@
 #include "esp_now_front_node_client.h"
 #include "tpms_ble_scanner.h"
 #include "bluetooth_audio_manager.h"
+#include "baro_weather_trend.h"
 
 static const char *TAG = "OMB_MAIN";
 
@@ -278,6 +279,7 @@ extern "C" void app_main(void) {
     ble_handlebar_client_init(on_handlebar_button_event, on_handlebar_battery_event);
     tpms_ble_scanner_init();
     bluetooth_audio_manager_init();
+    baro_weather_init();
 
     set_system_led_state(LED_NORMAL_PULSE_GREEN);
     ESP_LOGI(TAG, "All subsystems initialized. Launching FreeRTOS tasks...");

@@ -37,7 +37,8 @@ module console_slice_yz(x, w_base, w_top, h, spine_w, spine_h, r_b=5.0, r_t=6.0,
     }
 }
 
-// Continuous automotive lofting keyframes from front seat screw to rear ducktail
+// Continuous automotive lofting keyframes from front seat screw to extended rear tip.
+// Rear section maintains full side wall height (~38-43mm) out to X=+205mm, eliminating any gap.
 SLICE_DATA = [
     [-152.0,  34.0,  26.0,   7.5,  12.0, 0.6],  // 0: Seat tongue tip
     [-135.0,  48.0,  40.0,  12.0,  16.0, 1.0],  // 1: Seat transition
@@ -48,11 +49,12 @@ SLICE_DATA = [
     [ -20.0,  93.0,  81.0,  48.0,  28.0, 2.6],  // 6: Pod center-front
     [ +10.0,  93.0,  81.0,  48.0,  28.0, 2.6],  // 7: Pod center-rear
     [ +40.0,  92.0,  80.0,  47.0,  28.0, 2.6],  // 8: Pod rear
-    [ +68.0,  89.0,  77.0,  43.0,  26.0, 2.2],  // 9: Cartridge exit
-    [ +95.0,  80.0,  68.0,  33.0,  22.0, 1.8],  // 10: Tapering aft
-    [+120.0,  66.0,  52.0,  22.0,  18.0, 1.4],  // 11: Ducktail slope
-    [+145.0,  46.0,  34.0,  13.0,  14.0, 0.9],  // 12: Low ducktail
-    [+168.0,  24.0,  18.0,   5.5,  10.0, 0.4]   // 13: Tail tip over fender
+    [ +68.0,  90.0,  78.0,  44.0,  26.0, 2.2],  // 9: Cartridge slide zone (full wall height)
+    [ +95.0,  88.0,  76.0,  43.0,  24.0, 2.0],  // 10: Seamless sidewall alignment (gap closed)
+    [+125.0,  82.0,  70.0,  42.0,  22.0, 1.8],  // 11: Extended antenna enclosure mid-span
+    [+155.0,  72.0,  60.0,  41.0,  18.0, 1.5],  // 12: Extended tip body
+    [+185.0,  56.0,  44.0,  39.0,  14.0, 1.2],  // 13: Aerodynamic tail taper
+    [+205.0,  38.0,  26.0,  36.0,  10.0, 0.8]   // 14: Extended sheltered antenna tip
 ];
 
 module continuous_sculpted_console_hull() {

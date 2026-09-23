@@ -16,6 +16,8 @@ idf_component_register(
         "radar_processor.cpp"
         "tpms_ble_scanner.cpp"
         "bluetooth_audio_manager.cpp"
+        "solar_position.cpp"
+        "baro_weather_trend.cpp"
     INCLUDE_DIRS 
         "."
     REQUIRES 
