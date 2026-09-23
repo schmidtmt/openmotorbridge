@@ -313,7 +313,7 @@
                 <section class="card">
                     <div class="card-header">
                         <span class="card-title">📐 <span data-i18n="dynamics_title">Fahrdynamik & Schräglage</span></span>
-                        <span class="card-badge badge-orange" id="badge-gnss-fix">3D FIX (10 Hz)</span>
+                        <span class="card-badge" id="badge-gnss-fix" style="background: rgba(255,255,255,0.08); color: var(--text-muted);">Kein Fix</span>
                     </div>
 
                     <div class="lean-gauge-container">
@@ -396,15 +396,15 @@
                     <div style="margin-top: 14px; padding: 10px 14px; background: rgba(13, 17, 23, 0.75); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 0.8rem;">
                         <div>
                             <span style="color: var(--text-muted); font-size: 0.72rem; display: block;">📍 GPS-POSITION (WGS84)</span>
-                            <strong id="cockpit-gps-coords" style="font-family: monospace; color: var(--text-primary); font-size: 0.85rem;">47.4640° N, 9.0430° E</strong>
+                            <strong id="cockpit-gps-coords" style="font-family: monospace; color: var(--text-muted); font-size: 0.85rem;">--° N, --° E</strong>
                         </div>
                         <div>
                             <span style="color: var(--text-muted); font-size: 0.72rem; display: block;">🏔️ HÖHE Ü. M.</span>
-                            <strong id="cockpit-gps-alt" style="color: var(--accent-blue); font-size: 0.85rem;">570 m ü. M.</strong>
+                            <strong id="cockpit-gps-alt" style="color: var(--text-muted); font-size: 0.85rem;">-- m ü. M.</strong>
                         </div>
                         <div>
                             <span style="color: var(--text-muted); font-size: 0.72rem; display: block;">🛣️ ETAPPE</span>
-                            <span id="cockpit-gps-route" style="color: var(--accent-orange); font-weight: 700; font-size: 0.85rem;">Wil SG (Start)</span>
+                            <span id="cockpit-gps-route" style="color: var(--text-muted); font-weight: 700; font-size: 0.85rem;">Keine aktive Route</span>
                         </div>
                     </div>
                 </section>
@@ -510,7 +510,7 @@
                 <section class="card" id="card-bike-alarm">
                     <div class="card-header">
                         <span class="card-title">🚨 <span data-i18n="alarm_guard_title">LoRa 868 MHz Alarmanlagen-Pager &amp; Parkplatzwächter</span></span>
-                        <span class="card-badge badge-green" id="badge-alarm-status">SCHARF (SX1262 Pod 3)</span>
+                        <span class="card-badge" id="badge-alarm-status" style="background: rgba(255,255,255,0.08); color: var(--text-muted);">Standby (Warte auf BLE)</span>
                     </div>
                     <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 12px;">
                         Überwacht CAN BCM DWA-Sirene und IMU-Erschütterungen im geparkten Zustand. Bei Manipulation sendet Pod 3 (SX1262 LoRa 868 MHz) sofort einen Pager-Alarm an Fahrer-Handheld &amp; Gruppen-Mesh.
@@ -518,12 +518,12 @@
                     <div class="grid-2">
                         <div class="stat-tile">
                             <span class="stat-label">Wächter-Modus Status</span>
-                            <div class="stat-value" id="val-alarm-guard-state" style="color: var(--accent-green); font-size: 1.25rem;">Aktiviert</div>
+                            <div class="stat-value" id="val-alarm-guard-state" style="color: var(--text-muted); font-size: 1.25rem;">Standby</div>
                             <span class="stat-sub">Autom. Scharfschaltung nach Zündung AUS</span>
                         </div>
                         <div class="stat-tile">
                             <span class="stat-label">LoRa Pager Reichweite</span>
-                            <div class="stat-value" style="font-size: 1.25rem; color: var(--accent-cyan);">~4.5 km</div>
+                            <div class="stat-value" id="val-alarm-pager-range" style="font-size: 1.25rem; color: var(--text-muted);">--</div>
                             <span class="stat-sub">LoRa SF11 / 14 dBm / 868.1 MHz</span>
                         </div>
                     </div>
@@ -543,12 +543,12 @@
                     <div class="card-header">
                         <span class="card-title">📡 <span data-i18n="front_node_title">Universal Front-Knoten</span></span>
                         <div style="display: flex; gap: 6px; align-items: center;">
-                            <span class="card-badge" id="badge-front-rgb-led" style="background: rgba(48,209,88,0.15); color: #30d158; border: 1px solid rgba(48,209,88,0.3); display: flex; align-items: center; gap: 5px;">
-                                <span id="dot-front-rgb" style="width: 8px; height: 8px; border-radius: 50%; background: #30d158; box-shadow: 0 0 6px #30d158;"></span>
-                                <span id="lbl-front-rgb-text">WS2812B GRÜN</span>
+                            <span class="card-badge" id="badge-front-rgb-led" style="background: rgba(255,255,255,0.05); color: var(--text-muted); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 5px;">
+                                <span id="dot-front-rgb" style="width: 8px; height: 8px; border-radius: 50%; background: var(--text-muted); box-shadow: none;"></span>
+                                <span id="lbl-front-rgb-text">WS2812B AUS</span>
                             </span>
-                            <span class="card-badge badge-blue" id="badge-front-node-bind">1:1 GEKOPPELT</span>
-                            <span class="card-badge badge-green" id="badge-front-node-link">ESP-NOW LINK (2.4 GHz)</span>
+                            <span class="card-badge" id="badge-front-node-bind" style="background: rgba(255,255,255,0.08); color: var(--text-muted);">NICHT GEKOPPELT</span>
+                            <span class="card-badge" id="badge-front-node-link" style="background: rgba(255,255,255,0.08); color: var(--text-muted);">OFFLINE</span>
                         </div>
                     </div>
 
@@ -563,9 +563,9 @@
                             <div class="stat-tile" style="padding: 10px 12px; background: rgba(0,0,0,0.25); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
                                 <div style="font-size: 0.72rem; color: var(--text-secondary); display: flex; justify-content: space-between; align-items: center;">
                                     <span>Port 1: Lenker-Phone</span>
-                                    <span class="card-badge badge-green" id="badge-port1-pd" style="font-size: 0.60rem; padding: 2px 5px;">PD 20W</span>
+                                    <span class="card-badge" id="badge-port1-pd" style="font-size: 0.60rem; padding: 2px 5px; background: rgba(255,255,255,0.08); color: var(--text-muted);">--</span>
                                 </div>
-                                <div style="font-size: 1.05rem; font-weight: 700; color: var(--accent-green); margin: 3px 0;" id="lbl-port1-status">9.0 V · 2.2 A</div>
+                                <div style="font-size: 1.05rem; font-weight: 700; color: var(--text-muted); margin: 3px 0;" id="lbl-port1-status">--</div>
                                 <div style="font-size: 0.68rem; color: var(--text-muted);">Southchip SC8102 Fast-Charge</div>
                             </div>
 
@@ -573,9 +573,9 @@
                             <div class="stat-tile" style="padding: 10px 12px; background: rgba(0,0,0,0.25); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
                                 <div style="font-size: 0.72rem; color: var(--text-secondary); display: flex; justify-content: space-between; align-items: center;">
                                     <span>Port 2: CarPlay/AA</span>
-                                    <span class="card-badge badge-green" id="badge-ottocast-status" style="font-size: 0.60rem; padding: 2px 5px;">AKTIV</span>
+                                    <span class="card-badge" id="badge-ottocast-status" style="font-size: 0.60rem; padding: 2px 5px; background: rgba(255,255,255,0.08); color: var(--text-muted);">OFFLINE</span>
                                 </div>
-                                <div style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin: 3px 0;" id="lbl-ottocast-power">5.00 V · 380 mA</div>
+                                <div style="font-size: 1.05rem; font-weight: 700; color: var(--text-muted); margin: 3px 0;" id="lbl-ottocast-power">--</div>
                                 <div style="font-size: 0.68rem; color: var(--text-muted);" id="lbl-ottocast-sub">TI TPS2051B · Fairing Pigtail</div>
                             </div>
 
@@ -610,7 +610,7 @@
                             <!-- 12V Qi-Ladehalterung -->
                             <div style="padding: 8px 10px; background: rgba(255,255,255,0.03); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
                                 <div style="font-size: 0.70rem; color: var(--text-secondary);">🔋 12V Qi-Ladeport (J10)</div>
-                                <div style="font-size: 0.95rem; font-weight: 700; color: var(--accent-green); margin: 2px 0;" id="lbl-qi-status">12.0 V · BEREIT</div>
+                                <div style="font-size: 0.95rem; font-weight: 700; color: var(--text-muted); margin: 2px 0;" id="lbl-qi-status">--</div>
                                 <div style="font-size: 0.65rem; color: var(--text-muted);">0.0 µA Sleep bei Zündung AUS</div>
                             </div>
 
@@ -630,14 +630,14 @@
                             <!-- CAN 120R Auto-Sensing Relais -->
                             <div style="padding: 8px 10px; background: rgba(255,255,255,0.03); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
                                 <div style="font-size: 0.70rem; color: var(--text-secondary);">🔌 CAN-Abschluss (K1)</div>
-                                <div style="font-size: 0.95rem; font-weight: 700; color: var(--accent-blue); margin: 2px 0;" id="lbl-can-term-status">120 Ω AKTIV</div>
+                                <div style="font-size: 0.95rem; font-weight: 700; color: var(--text-muted); margin: 2px 0;" id="lbl-can-term-status">--</div>
                                 <div style="font-size: 0.65rem; color: var(--text-muted);">CPC1017N Auto-Sense Relais</div>
                             </div>
 
                             <!-- Lenker-Multitaster (J3) -->
                             <div style="padding: 8px 10px; background: rgba(255,255,255,0.03); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
                                 <div style="font-size: 0.70rem; color: var(--text-secondary);">🔘 Lenker-Taster (J3)</div>
-                                <div style="font-size: 0.95rem; font-weight: 700; color: var(--accent-green); margin: 2px 0;" id="lbl-handlebar-channels">3 Kanäle bereit</div>
+                                <div style="font-size: 0.95rem; font-weight: 700; color: var(--text-muted); margin: 2px 0;" id="lbl-handlebar-channels">--</div>
                                 <div style="font-size: 0.65rem; color: var(--text-muted);">PTT · Cam Tag · Media</div>
                             </div>
                         </div>
@@ -649,9 +649,9 @@
                         <div class="stat-tile" id="tile-front-ptt" style="padding: 10px 12px; background: rgba(0,0,0,0.25); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); transition: all 0.2s;">
                             <div style="font-size: 0.72rem; color: var(--text-secondary); display: flex; justify-content: space-between; align-items: center;">
                                 <span>⚡ Lenker-PTT</span>
-                                <span class="card-badge badge-blue" id="badge-front-ptt" style="font-size: 0.62rem; padding: 2px 6px;">BEREIT</span>
+                                <span class="card-badge" id="badge-front-ptt" style="font-size: 0.62rem; padding: 2px 6px; background: rgba(255,255,255,0.08); color: var(--text-muted);">--</span>
                             </div>
-                            <div style="font-size: 1.1rem; font-weight: 700; color: var(--accent-blue); margin: 3px 0;" id="lbl-front-ptt-latency">&lt; 1.8 ms Latenz</div>
+                            <div style="font-size: 1.1rem; font-weight: 700; color: var(--text-muted); margin: 3px 0;" id="lbl-front-ptt-latency">--</div>
                             <div style="font-size: 0.7rem; color: var(--text-muted);" id="lbl-front-ptt-sub">GPIO 15 · Opto-Zündung</div>
                         </div>
 
@@ -659,9 +659,9 @@
                         <div class="stat-tile" style="padding: 10px 12px; background: rgba(0,0,0,0.25); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
                             <div style="font-size: 0.72rem; color: var(--text-secondary); display: flex; justify-content: space-between; align-items: center;">
                                 <span>🎙️ Cockpit-Lärm</span>
-                                <span class="card-badge badge-orange" id="badge-front-noise" style="font-size: 0.62rem; padding: 2px 6px;">52 dB(A)</span>
+                                <span class="card-badge" id="badge-front-noise" style="font-size: 0.62rem; padding: 2px 6px; background: rgba(255,255,255,0.08); color: var(--text-muted);">--</span>
                             </div>
-                            <div style="font-size: 1.1rem; font-weight: 700; color: var(--accent-green); margin: 3px 0;" id="lbl-front-agc-boost">+0.0 dB Boost</div>
+                            <div style="font-size: 1.1rem; font-weight: 700; color: var(--text-muted); margin: 3px 0;" id="lbl-front-agc-boost">--</div>
                             <div style="font-size: 0.7rem; color: var(--text-muted);">Knowles SPH0645 MEMS</div>
                         </div>
 
@@ -669,12 +669,12 @@
                         <div class="stat-tile" id="tile-front-cam" style="padding: 10px 12px; background: rgba(0,0,0,0.25); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); transition: all 0.2s;">
                             <div style="font-size: 0.72rem; color: var(--text-secondary); display: flex; justify-content: space-between; align-items: center;">
                                 <span>🎥 Action-Cam BLE</span>
-                                <span class="card-badge badge-blue" id="badge-cam-status" style="font-size: 0.62rem; padding: 2px 6px;">VERBUNDEN</span>
+                                <span class="card-badge" id="badge-cam-status" style="font-size: 0.62rem; padding: 2px 6px; background: rgba(255,255,255,0.08); color: var(--text-muted);">GETRENNT</span>
                             </div>
-                            <div style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin: 3px 0;" id="lbl-cam-name">GoPro Hero 12</div>
+                            <div style="font-size: 1.05rem; font-weight: 700; color: var(--text-muted); margin: 3px 0;" id="lbl-cam-name">Nicht verbunden</div>
                             <div style="font-size: 0.7rem; color: var(--text-muted); display: flex; justify-content: space-between;" id="lbl-cam-telemetry">
-                                <span id="lbl-cam-bat">🔋 88%</span>
-                                <span id="lbl-cam-sd">⏱️ 2h 45m SD</span>
+                                <span id="lbl-cam-bat">🔋 --%</span>
+                                <span id="lbl-cam-sd">⏱️ -- SD</span>
                             </div>
                         </div>
                     </div>
@@ -683,10 +683,10 @@
                     <div style="margin-bottom: 14px; padding: 10px 12px; background: rgba(0,0,0,0.2); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 0.78rem;">
                             <span style="font-weight: 600;">🔊 <span data-i18n="front_noise_vu_label">Fahrtwind-Lärmpegel & Helm-Lautstärkeanpassung (AGC)</span></span>
-                            <span id="lbl-front-noise-val" style="font-weight: 700; color: var(--accent-orange);">52.0 dB(A)</span>
+                            <span id="lbl-front-noise-val" style="font-weight: 700; color: var(--text-muted);">-- dB(A)</span>
                         </div>
                         <div class="progress-bar-container" style="height: 10px; background: rgba(255,255,255,0.06); border-radius: var(--radius-full); overflow: hidden; position: relative;">
-                            <div id="bar-front-noise" style="width: 25%; height: 100%; background: linear-gradient(90deg, #30d158 50%, #ffd60a 75%, #ff453a 100%); transition: width 0.15s ease-out; border-radius: var(--radius-full);"></div>
+                            <div id="bar-front-noise" style="width: 0%; height: 100%; background: linear-gradient(90deg, #30d158 50%, #ffd60a 75%, #ff453a 100%); transition: width 0.15s ease-out; border-radius: var(--radius-full);"></div>
                         </div>
                         <div style="display: flex; justify-content: space-between; margin-top: 4px; font-size: 0.66rem; color: var(--text-muted);">
                             <span>35 dB(A) Standgas</span>
@@ -759,8 +759,8 @@
                     <div class="card-header">
                         <span class="card-title">🛡️ <span data-i18n="rear_radar_title">Heck-Radar & Totwinkel-Assistent (BSD)</span></span>
                         <div style="display: flex; gap: 8px; align-items: center;">
-                            <span class="card-badge badge-green" id="badge-radar-status">FREI (KEIN FAHRZEUG)</span>
-                            <span class="card-badge badge-blue" id="badge-radar-hw">GARMIN VARIA / M8</span>
+                            <span class="card-badge" id="badge-radar-status" style="background: rgba(255,255,255,0.08); color: var(--text-muted);">STANDBY</span>
+                            <span class="card-badge badge-blue" id="badge-radar-hw">GARMIN VARIA / MR20</span>
                         </div>
                     </div>
 
@@ -809,7 +809,7 @@
                         </div>
                         <div class="stat-tile" style="padding: 10px 12px; background: rgba(0,0,0,0.25); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
                             <div style="font-size: 0.72rem; color: var(--text-secondary);">🔊 Helm-Ducking</div>
-                            <div style="font-size: 1.15rem; font-weight: 700; color: var(--accent-orange); margin: 3px 0;" id="lbl-radar-duck-status">-18 dB Bereit</div>
+                            <div style="font-size: 1.15rem; font-weight: 700; color: var(--text-muted); margin: 3px 0;" id="lbl-radar-duck-status">--</div>
                             <div style="font-size: 0.7rem; color: var(--text-muted);">Prio-1 Doppelton-Ping</div>
                         </div>
                     </div>
@@ -839,7 +839,7 @@
                     <div class="card-header">
                         <span class="card-title">🗺️ <span data-i18n="live_map_title">Live GPS-Spur & OpenMotorMesh Gruppen-Radar</span></span>
                         <div style="display: flex; gap: 8px; align-items: center;">
-                            <span class="card-badge badge-green" id="badge-mesh-nodes">OMM Aktiv (3 Bikes)</span>
+                            <span class="card-badge" id="badge-mesh-nodes" style="background: rgba(255,255,255,0.08); color: var(--text-muted);">Standby (Warte auf BLE)</span>
                             <button id="btn-center-map" class="btn-secondary" style="padding: 4px 8px; font-size: 0.75rem;">🎯 Zentrieren</button>
                         </div>
                     </div>
@@ -849,14 +849,14 @@
                         
                         <!-- Radar Overlay Info -->
                         <div style="position: absolute; bottom: 10px; left: 14px; font-size: 0.75rem; background: rgba(13, 17, 23, 0.85); backdrop-filter: blur(10px); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); display: flex; gap: 14px;">
-                            <span>🛰️ <strong>10 Hz Dead-Reckoning:</strong> <span id="lbl-radar-dr" style="color: var(--accent-green);">GNSS 3D FIX (10 Hz)</span></span>
-                            <span>📍 <strong>Position:</strong> <span id="lbl-radar-coords">47.4640° N, 9.0430° E</span></span>
-                            <span>🏔️ <strong>Höhe:</strong> <span id="lbl-radar-alt">570 m ü. M.</span></span>
-                            <span>📶 <strong>LoRa RSSI:</strong> <span id="lbl-radar-rssi" style="color: var(--accent-green);">2.4 GHz Mesh (-62 dBm)</span></span>
-                            <span>🌲 <strong>Umgebung:</strong> <span id="lbl-radar-env" style="color: var(--accent-green);">🛣️ Freie Sicht</span></span>
+                            <span>🛰️ <strong>10 Hz Dead-Reckoning:</strong> <span id="lbl-radar-dr" style="color: var(--text-muted);">Standby</span></span>
+                            <span>📍 <strong>Position:</strong> <span id="lbl-radar-coords" style="color: var(--text-muted);">--° N, --° E</span></span>
+                            <span>🏔️ <strong>Höhe:</strong> <span id="lbl-radar-alt" style="color: var(--text-muted);">-- m ü. M.</span></span>
+                            <span>📶 <strong>LoRa RSSI:</strong> <span id="lbl-radar-rssi" style="color: var(--text-muted);">--</span></span>
+                            <span>🌲 <strong>Umgebung:</strong> <span id="lbl-radar-env" style="color: var(--text-muted);">--</span></span>
                         </div>
 
-                        <div id="mesh-nodes-legend" style="position: absolute; top: 10px; right: 14px; display: flex; gap: 6px;">
+                        <div id="mesh-nodes-legend" style="position: absolute; top: 10px; right: 14px; display: none; gap: 6px;">
                             <span class="card-badge badge-green" style="font-size: 0.7rem;">● Eigener Node (Leader)</span>
                             <span class="card-badge badge-blue" style="font-size: 0.7rem;">● Bike 2 (Sena Apex)</span>
                             <span class="card-badge badge-orange" style="font-size: 0.7rem;">● Bike 3 (Cardo Edge)</span>

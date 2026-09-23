@@ -478,38 +478,38 @@ const state = {
         reserve_b: false
     },
     frontNode: {
-        linked: true,
-        bindingState: 'LINKED', // 'LINKED', 'UNPAIRED', 'ORPHAN'
-        ottocastPower: true,
-        ottocastVbusV: 5.00,
-        ottocastCurrentMa: 380,
-        ottocastState: 'ACTIVE',
+        linked: isDemoModeInitial,
+        bindingState: isDemoModeInitial ? 'LINKED' : 'UNPAIRED', // 'LINKED', 'UNPAIRED', 'ORPHAN'
+        ottocastPower: isDemoModeInitial,
+        ottocastVbusV: isDemoModeInitial ? 5.00 : 0.00,
+        ottocastCurrentMa: isDemoModeInitial ? 380 : 0,
+        ottocastState: isDemoModeInitial ? 'ACTIVE' : 'OFF',
         rebooting: false,
         autoCafeEnabled: true,
         cafeCountdown: 0,
         cafeTimer: null,
-        ambientDba: 52.0,
+        ambientDba: isDemoModeInitial ? 52.0 : null,
         agcBoostDb: 0.0,
         pttPressed: false,
         auxLightMode: 'OFF', // 'OFF', 'ON', 'STROBE'
-        canTermActive: true,
-        qiCharging: true,
-        port1PdActive: true,
-        rgbMode: 'BREATHING_GREEN'
+        canTermActive: isDemoModeInitial,
+        qiCharging: isDemoModeInitial,
+        port1PdActive: isDemoModeInitial,
+        rgbMode: isDemoModeInitial ? 'BREATHING_GREEN' : 'OFF'
     },
     actionCam: {
-        paired: true,
-        connected: true,
+        paired: isDemoModeInitial,
+        connected: isDemoModeInitial,
         recording: false,
         brand: 'GoPro',
-        model: 'GoPro Hero 12 Black',
+        model: isDemoModeInitial ? 'GoPro Hero 12 Black' : 'Nicht gekoppelt',
         profile: 1,
-        batteryPct: 88,
-        sdRemMin: 165,
+        batteryPct: isDemoModeInitial ? 88 : null,
+        sdRemMin: isDemoModeInitial ? 165 : null,
         autoconnect: true,
         fuelFilter: true,
         wasRecordingAtFuelStop: false,
-        mac: 'C4:64:E3:42:19:B1',
+        mac: isDemoModeInitial ? 'C4:64:E3:42:19:B1' : '--:--:--:--:--:--',
         scanning: false,
         discovered: []
     },
@@ -556,7 +556,7 @@ const state = {
         }
     },
     alarm: {
-        armed: true,
+        armed: isDemoModeInitial,
         triggered: false,
         source: 'CAN BCM / DWA Sirene',
         detail: 'Erschütterung > 2.5 g / Neigung',
@@ -2587,6 +2587,30 @@ function resetDisconnectedTelemetryUi() {
     const subSync = document.getElementById('sub-sync');
     if (subSync) subSync.textContent = isDe ? 'Getrennt' : 'Disconnected';
 
+    // Cockpit GPS Position & Route Banner
+    const cpCoords = document.getElementById('cockpit-gps-coords');
+    if (cpCoords) {
+        cpCoords.textContent = '--° N, --° E';
+        cpCoords.style.color = 'var(--text-muted)';
+    }
+    const cpAlt = document.getElementById('cockpit-gps-alt');
+    if (cpAlt) {
+        cpAlt.textContent = '-- m ü. M.';
+        cpAlt.style.color = 'var(--text-muted)';
+    }
+    const cpRoute = document.getElementById('cockpit-gps-route');
+    if (cpRoute) {
+        cpRoute.textContent = isDe ? 'Keine aktive Route' : 'No active route';
+        cpRoute.style.color = 'var(--text-muted)';
+    }
+    const badgeGnss = document.getElementById('badge-gnss-fix');
+    if (badgeGnss) {
+        badgeGnss.className = 'card-badge';
+        badgeGnss.style.background = 'rgba(255,255,255,0.08)';
+        badgeGnss.style.color = 'var(--text-muted)';
+        badgeGnss.textContent = isDe ? 'Kein Fix' : 'No Fix';
+    }
+
     // Voltages & Battery
     if (valVign) {
         valVign.textContent = '-- V';
@@ -2649,54 +2673,142 @@ function resetDisconnectedTelemetryUi() {
     // Radar / Mesh
     const badgeMesh = document.getElementById('badge-mesh-nodes');
     if (badgeMesh) {
-        if (state.isRealHardware) {
-            badgeMesh.className = 'card-badge';
-            badgeMesh.style.background = 'rgba(255,255,255,0.08)';
-            badgeMesh.style.color = 'var(--text-muted)';
-            badgeMesh.textContent = isDe ? 'Standby (Warte auf BLE)' : 'Standby (Waiting for BLE)';
-        } else {
-            badgeMesh.className = 'card-badge badge-green';
-            badgeMesh.style.background = '';
-            badgeMesh.style.color = '';
-            badgeMesh.textContent = isDe ? 'OMM Aktiv (3 Bikes)' : 'OMM Active (3 Bikes)';
-        }
+        badgeMesh.className = 'card-badge';
+        badgeMesh.style.background = 'rgba(255,255,255,0.08)';
+        badgeMesh.style.color = 'var(--text-muted)';
+        badgeMesh.textContent = isDe ? 'Standby (Warte auf BLE)' : 'Standby (Waiting for BLE)';
     }
     const lblCoords = document.getElementById('lbl-radar-coords');
-    if (lblCoords) lblCoords.textContent = state.isRealHardware ? '--° N, --° E' : '47.4640° N, 9.0430° E';
+    if (lblCoords) lblCoords.textContent = '--° N, --° E';
     const lblAlt = document.getElementById('lbl-radar-alt');
-    if (lblAlt) lblAlt.textContent = state.isRealHardware ? '-- m ü. M.' : '570 m ü. M.';
+    if (lblAlt) lblAlt.textContent = '-- m ü. M.';
     const lblRssi = document.getElementById('lbl-radar-rssi');
     if (lblRssi) {
-        if (state.isRealHardware) {
-            lblRssi.textContent = 'Mesh: Standby';
-            lblRssi.style.color = 'var(--text-muted)';
-        } else {
-            lblRssi.textContent = '2.4 GHz Mesh (-62 dBm)';
-            lblRssi.style.color = 'var(--accent-green)';
-        }
+        lblRssi.textContent = '--';
+        lblRssi.style.color = 'var(--text-muted)';
     }
     const lblDr = document.getElementById('lbl-radar-dr');
     if (lblDr) {
-        if (state.isRealHardware) {
-            lblDr.textContent = 'GNSS: Standby';
-            lblDr.style.color = 'var(--text-muted)';
-        } else {
-            lblDr.textContent = 'GNSS 3D FIX (10 Hz)';
-            lblDr.style.color = 'var(--accent-green)';
-        }
+        lblDr.textContent = 'Standby';
+        lblDr.style.color = 'var(--text-muted)';
     }
+    const lblEnv = document.getElementById('lbl-radar-env');
+    if (lblEnv) {
+        lblEnv.textContent = '--';
+        lblEnv.style.color = 'var(--text-muted)';
+    }
+    const meshLegend = document.getElementById('mesh-nodes-legend');
+    if (meshLegend) meshLegend.style.display = 'none';
+
     const hudStatusGps = document.getElementById('hud-status-gps');
     if (hudStatusGps) {
-        hudStatusGps.textContent = state.isRealHardware ? '🛰️ Standby' : '🛰️ GNSS 10Hz';
+        hudStatusGps.textContent = '🛰️ Standby';
     }
 
-    // Reset Rear Radar & Blind-Spot Assistant
+    // Reset Rear Radar & Blind-Spot Assistant & Helm-Ducking
     if (state.radar && state.radar.simCycle) {
         clearInterval(state.radar.simCycle);
         state.radar.simCycle = null;
     }
     if (state.radar) state.radar.targets = [];
     updateRadarUi({ targets: [] });
+
+    // LoRa 868 MHz Alarmanlagen-Pager & Parkplatzwächter Reset
+    updateBikeAlarmUi({ triggered: false });
+
+    // Universal Front-Knoten (PCBA 05) Reset
+    state.frontNode.linked = false;
+    state.frontNode.bindingState = 'UNPAIRED';
+    state.frontNode.ottocastPower = false;
+    state.frontNode.ottocastState = 'OFF';
+    state.frontNode.canTermActive = false;
+    state.frontNode.qiCharging = false;
+    state.frontNode.port1PdActive = false;
+    state.actionCam.connected = false;
+    state.actionCam.paired = false;
+
+    if (badgeFrontRgbLed && dotFrontRgb && lblFrontRgbText) {
+        dotFrontRgb.style.background = 'var(--text-muted)';
+        dotFrontRgb.style.boxShadow = 'none';
+        badgeFrontRgbLed.style.color = 'var(--text-muted)';
+        badgeFrontRgbLed.style.borderColor = 'rgba(255,255,255,0.1)';
+        badgeFrontRgbLed.style.background = 'rgba(255,255,255,0.05)';
+        lblFrontRgbText.textContent = 'WS2812B AUS';
+    }
+    const badgeFrontBind = document.getElementById('badge-front-node-bind');
+    if (badgeFrontBind) {
+        badgeFrontBind.className = 'card-badge';
+        badgeFrontBind.style.background = 'rgba(255,255,255,0.08)';
+        badgeFrontBind.style.color = 'var(--text-muted)';
+        badgeFrontBind.textContent = isDe ? 'NICHT GEKOPPELT' : 'UNPAIRED';
+    }
+    const badgeFrontLink = document.getElementById('badge-front-node-link');
+    if (badgeFrontLink) {
+        badgeFrontLink.className = 'card-badge';
+        badgeFrontLink.style.background = 'rgba(255,255,255,0.08)';
+        badgeFrontLink.style.color = 'var(--text-muted)';
+        badgeFrontLink.textContent = 'OFFLINE';
+    }
+    if (badgePort1Pd) {
+        badgePort1Pd.className = 'card-badge';
+        badgePort1Pd.style.background = 'rgba(255,255,255,0.08)';
+        badgePort1Pd.style.color = 'var(--text-muted)';
+        badgePort1Pd.textContent = '--';
+    }
+    if (lblPort1Status) {
+        lblPort1Status.textContent = '--';
+        lblPort1Status.style.color = 'var(--text-muted)';
+    }
+    if (badgeOttocastStatus) {
+        badgeOttocastStatus.className = 'card-badge';
+        badgeOttocastStatus.style.background = 'rgba(255,255,255,0.08)';
+        badgeOttocastStatus.style.color = 'var(--text-muted)';
+        badgeOttocastStatus.textContent = 'OFFLINE';
+    }
+    if (lblOttocastPower) {
+        lblOttocastPower.textContent = '--';
+        lblOttocastPower.style.color = 'var(--text-muted)';
+    }
+    if (lblQiStatus) {
+        lblQiStatus.textContent = '--';
+        lblQiStatus.style.color = 'var(--text-muted)';
+    }
+    if (lblCanTermStatus) {
+        lblCanTermStatus.textContent = '--';
+        lblCanTermStatus.style.color = 'var(--text-muted)';
+    }
+    if (lblHandlebarChannels) {
+        lblHandlebarChannels.textContent = '--';
+        lblHandlebarChannels.style.color = 'var(--text-muted)';
+    }
+    if (badgeFrontPtt) {
+        badgeFrontPtt.className = 'card-badge';
+        badgeFrontPtt.style.background = 'rgba(255,255,255,0.08)';
+        badgeFrontPtt.style.color = 'var(--text-muted)';
+        badgeFrontPtt.textContent = '--';
+    }
+    if (lblFrontPttLatency) {
+        lblFrontPttLatency.textContent = '--';
+        lblFrontPttLatency.style.color = 'var(--text-muted)';
+    }
+    if (badgeFrontNoise) {
+        badgeFrontNoise.className = 'card-badge';
+        badgeFrontNoise.style.background = 'rgba(255,255,255,0.08)';
+        badgeFrontNoise.style.color = 'var(--text-muted)';
+        badgeFrontNoise.textContent = '--';
+    }
+    if (lblFrontAgcBoost) {
+        lblFrontAgcBoost.textContent = '--';
+        lblFrontAgcBoost.style.color = 'var(--text-muted)';
+    }
+    if (lblFrontNoiseVal) {
+        lblFrontNoiseVal.textContent = '-- dB(A)';
+        lblFrontNoiseVal.style.color = 'var(--text-muted)';
+    }
+    if (barFrontNoise) {
+        barFrontNoise.style.width = '0%';
+    }
+    updateActionCamUi();
 
     // Reset Ride HUD Telemetry
     if (valHudSpeed) valHudSpeed.textContent = '--';
@@ -5410,6 +5522,68 @@ function renderLiveRadarCanvas() {
 
     s_radarCtx.clearRect(0, 0, w, h);
 
+    const isLive = state.isBleConnected || state.isDemoMode || isSimConnected || (typeof s_internalSimInterval !== 'undefined' && s_internalSimInterval !== null);
+    const meshLegend = document.getElementById('mesh-nodes-legend');
+
+    if (!isLive) {
+        if (meshLegend) meshLegend.style.display = 'none';
+
+        // 1. Dimmed Tech Grid Background
+        s_radarCtx.strokeStyle = 'rgba(255, 255, 255, 0.025)';
+        s_radarCtx.lineWidth = 1;
+        for (let x = 0; x < w; x += 40) {
+            s_radarCtx.beginPath();
+            s_radarCtx.moveTo(x, 0);
+            s_radarCtx.lineTo(x, h);
+            s_radarCtx.stroke();
+        }
+        for (let y = 0; y < h; y += 40) {
+            s_radarCtx.beginPath();
+            s_radarCtx.moveTo(0, y);
+            s_radarCtx.lineTo(w, y);
+            s_radarCtx.stroke();
+        }
+
+        // 2. Dimmed Range Rings
+        [
+            { r: 50, label: '250 m' },
+            { r: 100, label: '500 m (Mesh)' },
+            { r: 180, label: '1000 m (LoRa)' }
+        ].forEach((ring) => {
+            s_radarCtx.beginPath();
+            s_radarCtx.arc(cx, cy, ring.r, 0, Math.PI * 2);
+            s_radarCtx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+            s_radarCtx.lineWidth = 1;
+            s_radarCtx.stroke();
+
+            s_radarCtx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+            s_radarCtx.font = '9px monospace';
+            s_radarCtx.textAlign = 'center';
+            s_radarCtx.fillText(ring.label, cx, cy - ring.r - 3);
+        });
+
+        // 3. Center Target (Offline / Standby)
+        s_radarCtx.beginPath();
+        s_radarCtx.arc(cx, cy, 5, 0, Math.PI * 2);
+        s_radarCtx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+        s_radarCtx.fill();
+
+        // 4. Standby Overlay Message
+        s_radarCtx.fillStyle = 'rgba(255, 255, 255, 0.45)';
+        s_radarCtx.font = 'bold 12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+        s_radarCtx.textAlign = 'center';
+        s_radarCtx.fillText(state.lang === 'de' ? '📡 STANDBY • WARTE AUF BLE HARDWARE-VERBINDUNG' : '📡 STANDBY • WAITING FOR BLE HARDWARE', cx, cy + 32);
+
+        s_radarCtx.font = '10px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+        s_radarCtx.fillStyle = 'rgba(255, 255, 255, 0.25)';
+        s_radarCtx.fillText(state.lang === 'de' ? 'Live GPS-Spur & OpenMotorMesh Knoten inaktiv' : 'Live GPS track & OpenMotorMesh nodes inactive', cx, cy + 48);
+
+        requestAnimationFrame(renderLiveRadarCanvas);
+        return;
+    }
+
+    if (meshLegend) meshLegend.style.display = 'flex';
+
     // 1. Tech Grid Background
     s_radarCtx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
     s_radarCtx.lineWidth = 1;
@@ -5676,16 +5850,66 @@ function updateRadarUi(radarState) {
     const lblSpeed = document.getElementById('lbl-radar-rel-speed');
     const lblSpeedStatus = document.getElementById('lbl-radar-speed-status');
     const lblTtc = document.getElementById('lbl-radar-ttc');
+    const lblDuckStatus = document.getElementById('lbl-radar-duck-status');
     const mirrorLeft = document.getElementById('bsd-mirror-left');
     const mirrorRight = document.getElementById('bsd-mirror-right');
     const lblLeftDist = document.getElementById('lbl-bsd-left-dist');
     const lblRightDist = document.getElementById('lbl-bsd-right-dist');
+
+    const isLive = state.isBleConnected || state.isDemoMode || isSimConnected || (typeof s_internalSimInterval !== 'undefined' && s_internalSimInterval !== null);
+
+    if (!isLive) {
+        state.radar.targets = [];
+        if (badgeStatus) {
+            badgeStatus.textContent = 'STANDBY';
+            badgeStatus.className = 'card-badge';
+            badgeStatus.style.background = 'rgba(255,255,255,0.08)';
+            badgeStatus.style.color = 'var(--text-muted)';
+        }
+        if (lblDuckStatus) {
+            lblDuckStatus.textContent = '--';
+            lblDuckStatus.style.color = 'var(--text-muted)';
+        }
+        if (lblDist) lblDist.textContent = '-- m';
+        if (lblSpeed) lblSpeed.textContent = '-- km/h';
+        if (lblSpeedStatus) lblSpeedStatus.textContent = isDe ? 'Keine Annäherung' : 'No approach';
+        if (lblTtc) lblTtc.textContent = '-- s';
+        if (mirrorLeft) {
+            mirrorLeft.className = 'bsd-mirror-indicator';
+            if (lblLeftDist) lblLeftDist.textContent = '--';
+        }
+        if (mirrorRight) {
+            mirrorRight.className = 'bsd-mirror-indicator';
+            if (lblRightDist) lblRightDist.textContent = '--';
+        }
+        // Ride HUD Radar Reset
+        if (valHudRadarDist) valHudRadarDist.textContent = '-- m';
+        if (valHudRadarRelSpeed) valHudRadarRelSpeed.textContent = isDe ? 'Standby' : 'Standby';
+        if (hudRadarStatus) {
+            hudRadarStatus.textContent = 'STANDBY';
+            hudRadarStatus.className = 'card-badge';
+            hudRadarStatus.style.background = 'rgba(255,255,255,0.08)';
+            hudRadarStatus.style.color = 'var(--text-muted)';
+        }
+        if (hudTileRadar) {
+            hudTileRadar.classList.remove('threat-warning', 'threat-critical');
+        }
+        if (hudBsdLeft) hudBsdLeft.classList.remove('active');
+        if (hudBsdRight) hudBsdRight.classList.remove('active');
+        return;
+    }
 
     if (!radarState.targets || radarState.targets.length === 0) {
         state.radar.targets = [];
         if (badgeStatus) {
             badgeStatus.textContent = isDe ? 'FREI (KEIN FAHRZEUG)' : 'CLEAR (NO VEHICLE)';
             badgeStatus.className = 'card-badge badge-green';
+            badgeStatus.style.background = '';
+            badgeStatus.style.color = '';
+        }
+        if (lblDuckStatus) {
+            lblDuckStatus.textContent = '-18 dB Bereit';
+            lblDuckStatus.style.color = 'var(--accent-orange)';
         }
         if (lblDist) lblDist.textContent = '-- m';
         if (lblSpeed) lblSpeed.textContent = '-- km/h';
@@ -5706,6 +5930,8 @@ function updateRadarUi(radarState) {
         if (hudRadarStatus) {
             hudRadarStatus.textContent = isDe ? 'FREI' : 'CLEAR';
             hudRadarStatus.className = 'card-badge badge-green';
+            hudRadarStatus.style.background = '';
+            hudRadarStatus.style.color = '';
         }
         if (hudTileRadar) {
             hudTileRadar.classList.remove('threat-warning', 'threat-critical');
@@ -5713,6 +5939,12 @@ function updateRadarUi(radarState) {
         if (hudBsdLeft) hudBsdLeft.classList.remove('active');
         if (hudBsdRight) hudBsdRight.classList.remove('active');
         return;
+    }
+
+    // Active targets detected
+    if (lblDuckStatus) {
+        lblDuckStatus.textContent = '-18 dB Aktiv';
+        lblDuckStatus.style.color = 'var(--accent-red)';
     }
 
     // Normalize target fields
@@ -5854,13 +6086,13 @@ function renderRearRadarCanvas() {
             s_rearRadarCtx.lineTo(w, y);
             s_rearRadarCtx.stroke();
         }
-        s_rearRadarCtx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+        s_rearRadarCtx.fillStyle = 'rgba(255, 255, 255, 0.35)';
         s_rearRadarCtx.font = 'bold 11px sans-serif';
         s_rearRadarCtx.textAlign = 'center';
-        s_rearRadarCtx.fillText(state.lang === 'de' ? 'HECK-RADAR BEREIT (SIMULATION)' : 'REAR RADAR READY (SIMULATION)', cx, h / 2 - 4);
+        s_rearRadarCtx.fillText(state.lang === 'de' ? '🛡️ HECK-RADAR STANDBY' : '🛡️ REAR RADAR STANDBY', cx, h / 2 - 4);
         s_rearRadarCtx.font = '9px sans-serif';
-        s_rearRadarCtx.fillStyle = 'rgba(255, 255, 255, 0.18)';
-        s_rearRadarCtx.fillText(state.lang === 'de' ? 'Radarbereich aktiv • Totwinkel-Assistent online' : 'Radar sector active • Blind-spot assist online', cx, h / 2 + 12);
+        s_rearRadarCtx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+        s_rearRadarCtx.fillText(state.lang === 'de' ? 'Warte auf BLE-Verbindung (Garmin Varia / MR20 77GHz)' : 'Waiting for BLE connection (Garmin Varia / MR20 77GHz)', cx, h / 2 + 12);
         requestAnimationFrame(renderRearRadarCanvas);
         return;
     }
@@ -6417,6 +6649,35 @@ document.getElementById('btn-ecall-mute-alarm')?.addEventListener('click', () =>
 // ==========================================
 function updateBikeAlarmUi(alarm) {
     if (!bikeAlarmBanner) return;
+    const isDe = state.lang === 'de';
+    const isLive = state.isBleConnected || state.isDemoMode || isSimConnected || (typeof s_internalSimInterval !== 'undefined' && s_internalSimInterval !== null);
+    const valPagerRange = document.getElementById('val-alarm-pager-range');
+
+    if (!isLive) {
+        state.alarm.triggered = false;
+        bikeAlarmBanner.style.display = 'none';
+        if (badgeAlarmStatus) {
+            badgeAlarmStatus.className = 'card-badge';
+            badgeAlarmStatus.textContent = isDe ? 'Standby (Warte auf BLE)' : 'Standby (Waiting for BLE)';
+            badgeAlarmStatus.style.background = 'rgba(255,255,255,0.08)';
+            badgeAlarmStatus.style.color = 'var(--text-muted)';
+        }
+        if (valAlarmGuardState) {
+            valAlarmGuardState.textContent = 'Standby';
+            valAlarmGuardState.style.color = 'var(--text-muted)';
+        }
+        if (valPagerRange) {
+            valPagerRange.textContent = '--';
+            valPagerRange.style.color = 'var(--text-muted)';
+        }
+        return;
+    }
+
+    if (valPagerRange) {
+        valPagerRange.textContent = '~4.5 km';
+        valPagerRange.style.color = 'var(--accent-cyan)';
+    }
+
     if (alarm && alarm.triggered) {
         state.alarm.triggered = true;
         state.alarm.source = alarm.source || 'CAN BCM / DWA Sirene';
@@ -6433,6 +6694,8 @@ function updateBikeAlarmUi(alarm) {
 
         if (badgeAlarmStatus) {
             badgeAlarmStatus.className = 'card-badge badge-red';
+            badgeAlarmStatus.style.background = '';
+            badgeAlarmStatus.style.color = '';
             badgeAlarmStatus.textContent = 'ALARM AKTIV (LoRa SF11 TX)';
         }
         if (valAlarmGuardState) {
@@ -6446,6 +6709,7 @@ function updateBikeAlarmUi(alarm) {
             badgeAlarmStatus.className = state.alarm.armed ? 'card-badge badge-green' : 'card-badge';
             badgeAlarmStatus.textContent = state.alarm.armed ? 'SCHARF (SX1262 Pod 3)' : 'UNSCHARF';
             badgeAlarmStatus.style.background = state.alarm.armed ? '' : 'rgba(255,255,255,0.08)';
+            badgeAlarmStatus.style.color = state.alarm.armed ? '' : 'var(--text-muted)';
         }
         if (valAlarmGuardState) {
             valAlarmGuardState.textContent = state.alarm.armed ? 'Aktiviert' : 'Deaktiviert';
@@ -9172,6 +9436,10 @@ setupDemoSuiteUi();
 setupSystemBuilderUi();
 setupSmokeTestUi();
 setupWebSerialFlasherUi();
+
+if (!state.isDemoMode && !state.isBleConnected) {
+    resetDisconnectedTelemetryUi();
+}
 
 // ==========================================
 // 13. Service Worker Registration (PWA Offline)
