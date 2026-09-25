@@ -211,8 +211,7 @@ Alle Gehäuseteile sind konsequent für das **IKEA-Prinzip** konstruiert: **Kein
   * `magsafe_cockpit_mount_harley.stl` (1 Stk.), `magsafe_frame_dock.stl` (1 Stk.) & `magsafe_clamp_wings.stl` (1 Stk.): MagSafe Rahmendock-Komponenten.
 * **Kit 4: Harley-Davidson CVO ST & Performance Bagger (Road Glide ST):**
   * `saddlebag_lid_dock.stl` (2 Stk.): Kofferdeckel-Montagedocks für Pod 1 & 2 auf den Hartschalenkoffern.
-  * `cvo_st_undercowl_skeleton_dock.stl` (1 Stk.): Aufrechtes bionisches Skeleton-Dock für Pod 3 unter der Forged-Carbon-Hutze (vollständiger Freigang zu Showa-Ausgleichsbehältern & Auspuffhitze).
-  * `cvo_st_telemetry_fin.stl` (1 Stk.): Aerodynamische Haifischflosse / Telemetrie-Finne auf der Hecklasche.
+  * `cvo_st_undercowl_skeleton_dock.stl` (1 Stk.): Aufrechtes bionisches Skeleton-Dock für Pod 3 unter der Forged-Carbon-Hutze (vollständiger Freigang zu Showa-Ausgleichsbehältern & Auspuffhitze). *(Die Forged-Carbon-Hutze bleibt 100% original und schließt plan und wackelfrei mit der werksseitigen Rändelschraube auf dem Fender ab; eine externe Finne auf der Hecklasche entfällt vollständig, Pod 3 wird autark von vorne versorgt)*.
   * `radar_license_plate_bracket.stl` (1 Stk.): Entkoppelter Kennzeichen-Radarhalter *(CVO ST verfügt serienmäßig über das mittige Kennzeichen wie alle Touring-Modelle!)*.
 * **Kit 5: Custom-Bikes, Bobber & Universal:**
   * `radar_center_underfender_mount.stl` (1 Stk.): Zentrische Unter-Kotflügel-Platte für Heck-Radar *(speziell für Custom-Bikes & Umbauten mit seitlichem Kennzeichenhalter!)*.

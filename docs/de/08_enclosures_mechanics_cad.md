@@ -610,7 +610,7 @@ Aufgrund der werkseitigen Showa Inverted-Remote-Reservoir-Stoßdämpfer mit dick
 │ 3. HECK (Unter Forged Carbon Hutze & Kennzeichen):                          │
 │    • Pod 3 aufrecht im Skeleton Dock (cvo_st_undercowl_skeleton_dock.scad)  │
 │      Gegen Fahrbahnschläge nach oben verspannt, 0 Bohrungen, 0 Lackkleber   │
-│    • Externe 2.4 GHz Telemetrie-Finne (cvo_st_telemetry_fin.scad) am Tab    │
+│    • Forged-Carbon-Hutze schließt plan mit OEM-Rändelschraube ab            │
 │    • Radar mittig unter dem Kennzeichen (radar_license_plate_bracket.scad)  │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │ 4. KOFFER (Gruppenfunk-Brücke Sena & Cardo):                                │
@@ -621,17 +621,14 @@ Aufgrund der werkseitigen Showa Inverted-Remote-Reservoir-Stoßdämpfer mit dick
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-#### A. Heck-Integration: Das Under-Cowl Skeleton Dock & Telemetrie-Finne
+#### A. Heck-Integration: Das Under-Cowl Skeleton Dock
 * **Skeleton Dock (`cvo_st_undercowl_skeleton_dock.scad`):** Nimmt das Standard-Pod-3-Gehäuse ($135 \times 70 \times 38{,}5\,\text{mm}$) aufrecht auf. Zwei nach oben gewölbte Federbögen stützen sich an der Innendecke der Carbonhutze ab und verhindern jedes Aufbäumen oder Klappern über Schlaglöchern und Kopfsteinpflaster.
-* **Telemetrie-Finne (`cvo_st_telemetry_fin.scad`):** Sitzt auf der originalen hinteren Schraublasche der Hutze. Sie führt die 2,4-GHz-Mesh-Antenne des Heck-Pod-3-Transceivers nach draußen an die frische Luft und leitet das Koaxialkabel unsichtbar unter der Lasche in die Hutze.
+* **100 % OEM-Bündigkeit (Zero-Drill & Flush-Fit):** Die originale Forged-Carbon-Hutze der CVO ST schließt mit ihrer umlaufenden Dichtlippe vollkommen plan auf dem Heckkotflügel ab und wird mit der werksseitigen Rändelschraube wackelfrei gehalten. Da die Schraublasche flach aufliegt und kein Kabel drunter gequetscht werden darf, verbleiben alle Antennen von Pod 3 intern im dielektrischen Radom der Kassette bzw. strahlen durch die vordere Öffnung ab. Die Zuleitung (geschirmtes M8-Automotive-Kabel) erfolgt unsichtbar von vorne unter dem Fahrersitzpolster.
+* **Außentemperaturmessung:** Erfolgt thermisch entkoppelt von der Stauwärme des Hecks über den $I^2C$-Sensorbus (`J12` Qwiic) des Front-Knotens (PCBA 05) direkt im Kaltlufteinlass der Frontverkleidung.
 
 ![CVO ST Under-Cowl Skeleton Dock CAD](../images/cad/cvo_st_undercowl_skeleton_dock_cad.png)
 
 *Abbildung 8.22: 3D-CAD-Ansicht des Under-Cowl Skeleton Docks (`cvo_st_undercowl_skeleton_dock.scad`). Monolithische Halbschale mit nach oben gewölbten Federbögen zur Abstützung an der Innendecke der Carbonhutze, seitlichen Dämpfungsflügeln und formschlüssigem Einschubschacht für Pod 3.*
-
-![CVO ST Telemetry Fin CAD](../images/cad/cvo_st_telemetry_fin_cad.png)
-
-*Abbildung 8.23: 3D-CAD-Modell der externen 2,4-GHz-Telemetrie-Finne (`cvo_st_telemetry_fin.scad`). Aerodynamisch geformte Finne zur Montage auf der werksseitigen Hecklasche der Forged-Carbon-Hutze mit geschützter Koaxialkabel-Durchführung und Knickschutz.*
 
 ![Pod 3 Fender Assembly ST 3D](../images/cad/pod3_fender_assembly_st_3d.png)
 

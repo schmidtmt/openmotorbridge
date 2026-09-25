@@ -211,8 +211,7 @@ All enclosure parts are designed around the **IKEA Principle**: **Zero heat-set 
   * `magsafe_cockpit_mount_harley.stl` (1 pc), `magsafe_frame_dock.stl` (1 pc) & `magsafe_clamp_wings.stl` (1 pc): MagSafe frame dock components.
 * **Kit 4: Harley-Davidson CVO ST & Performance Bagger (Road Glide ST):**
   * `saddlebag_lid_dock.stl` (2 pcs): Saddlebag lid mounting docks for Pod 1 & 2 on hard saddlebags.
-  * `cvo_st_undercowl_skeleton_dock.stl` (1 pc): Upright bionic skeleton dock for Pod 3 under forged carbon solo seat cowl (clears Showa remote reservoirs & exhaust heat).
-  * `cvo_st_telemetry_fin.stl` (1 pc): Aerodynamic tail fin / telemetry radome on rear tab.
+  * `cvo_st_undercowl_skeleton_dock.stl` (1 pc): Upright bionic skeleton dock for Pod 3 under forged carbon solo seat cowl (clears Showa remote reservoirs & exhaust heat). *(The forged carbon cowl stays 100% factory original, fitting flush and rattle-free with the OEM thumbscrew; external tail fin retired, Pod 3 fully self-contained from the front)*.
   * `radar_license_plate_bracket.stl` (1 pc): Decoupled license plate radar mount *(CVO ST features the stock centered license plate mount identical to all Touring bikes!)*.
 * **Kit 5: Custom Bikes, Bobbers & Universal:**
   * `radar_center_underfender_mount.stl` (1 pc): Centered under-fender plate for radar *(specifically designed for custom builds with side-mounted license plates!)*.

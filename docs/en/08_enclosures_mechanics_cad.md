@@ -567,7 +567,7 @@ Due to factory Showa inverted remote-reservoir shock absorbers with heavy hydrau
 │ 3. REAR (Beneath Forged Carbon Cowl & License Plate):                       │
 │    • Pod 3 vertical in Skeleton Dock (cvo_st_undercowl_skeleton_dock.scad)  │
 │      Braced upward against road shocks, 0 drilling, 0 paint tape            │
-│    • External 2.4 GHz Telemetry Fin (cvo_st_telemetry_fin.scad) on cowl tab │
+│    • Forged carbon cowl seats flush with OEM thumbscrew (zero wires on tail)│
 │    • Radar centered below license plate (radar_license_plate_bracket.scad)  │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │ 4. SADDLEBAGS (Intercom Bridge Sena & Cardo):                               │
@@ -578,17 +578,14 @@ Due to factory Showa inverted remote-reservoir shock absorbers with heavy hydrau
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-#### A. Rear Integration: Under-Cowl Skeleton Dock & Telemetry Fin
+#### A. Rear Integration: Under-Cowl Skeleton Dock
 * **Skeleton Dock (`cvo_st_undercowl_skeleton_dock.scad`):** Accommodates the standard Pod 3 housing ($135 \times 70 \times 38.5\,\text{mm}$) vertically. Two upward-arched leaf springs brace against the inner ceiling of the forged carbon cowl, preventing rattle or pitch motion over potholes.
-* **Telemetry Fin (`cvo_st_telemetry_fin.scad`):** Sleek aerodynamic shark-fin bolted to the OEM tail tab, housing a high-efficiency 2.4 GHz dipole with internal coax pass-through.
+* **100% OEM Flush-Fit (Zero-Drill & Rattle-Free):** The factory CVO ST forged carbon cowl rests completely flush on the rear fender with its perimeter rubber gasket, clamped securely by the OEM knurled thumbscrew. Because the rear tab clamps flat against the fender with zero wire clearance, all Pod 3 antennas remain internal within the dielectric cartridge radome or radiate forward through the front opening. Main wiring enters 100% from the front under the rider seat.
+* **Ambient Air Sensing:** Managed in undisturbed fresh incoming air up front via the Front Node ($I^2C$ Qwiic `J12` daisy-chain) inside the sharknose air scoop, isolated from engine and exhaust heat.
 
 ![Under-Cowl Skeleton Dock CAD](../images/cad/cvo_st_undercowl_skeleton_dock_cad.png)
 
 *Figure 8.22: 3D CAD model of the Under-Cowl Skeleton Dock (`cvo_st_undercowl_skeleton_dock.scad`). Monolithic cradle with arched leaf springs for ceiling bracing, lateral vibration wings, and form-fitting vertical slot for Pod 3.*
-
-![CVO ST Telemetry Fin CAD](../images/cad/cvo_st_telemetry_fin_cad.png)
-
-*Figure 8.23: 3D CAD model of the external 2.4 GHz Telemetry Fin (`cvo_st_telemetry_fin.scad`). Aerodynamic fin mounting onto the factory cowl tab with sealed internal coax conduit and strain relief.*
 
 ![Pod 3 Fender Assembly ST 3D](../images/cad/pod3_fender_assembly_st_3d.png)
 
