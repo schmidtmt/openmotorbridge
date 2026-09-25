@@ -18,6 +18,7 @@
 #include "tpms_ble_scanner.h"
 #include "bluetooth_audio_manager.h"
 #include "radar_processor.h"
+#include "hardware_inventory.h"
 
 static const char *TAG = "BLE_SERVER";
 
@@ -141,6 +142,21 @@ static int gatt_svr_chr_access_omb(uint16_t conn_handle, uint16_t attr_handle,
                 uint16_t mask = (uint16_t)cmd[1] | ((uint16_t)cmd[2] << 8);
                 radar_set_macro_config(mask);
                 ESP_LOGI(TAG, "GATT: Radar 2.0 Macro Config updated & saved to NVS: 0x%04X", mask);
+            }
+        } else if (cmd[0] == 0x41) { // Hardware Inventory Management (Baseline & Loss Acknowledgment)
+            if (len >= 2) {
+                uint8_t sub_cmd = cmd[1];
+                if (sub_cmd == 0x01) { // Adopt current state as new baseline
+                    hw_inventory_adopt_current_as_baseline();
+                    ESP_LOGI(TAG, "GATT: Adopted current hardware state as new baseline");
+                } else if (sub_cmd == 0x02 && len >= 4) { // Confirm removal of specific mask
+                    uint16_t mask = (uint16_t)cmd[2] | ((uint16_t)cmd[3] << 8);
+                    hw_inventory_confirm_removal(mask);
+                    ESP_LOGI(TAG, "GATT: Confirmed removal of hardware mask 0x%04X", mask);
+                } else if (sub_cmd == 0x03) { // Trigger manual re-scan
+                    hw_inventory_scan_and_evaluate();
+                    ESP_LOGI(TAG, "GATT: Re-scan of hardware inventory requested");
+                }
             }
         }
         return 0;

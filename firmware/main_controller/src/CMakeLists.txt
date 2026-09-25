@@ -18,6 +18,7 @@ idf_component_register(
         "bluetooth_audio_manager.cpp"
         "solar_position.cpp"
         "baro_weather_trend.cpp"
+        "hardware_inventory.cpp"
     INCLUDE_DIRS 
         "."
     REQUIRES 

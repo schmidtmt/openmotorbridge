@@ -572,6 +572,12 @@ const state = {
         rear_temp: 26,
         status: 'OK'
     },
+    hardwareTopology: {
+        baselineMask: parseInt(localStorage.getItem('omb_hw_baseline') || '0x0D9D', 16),
+        currentMask: parseInt(localStorage.getItem('omb_hw_baseline') || '0x0D9D', 16),
+        lostMask: 0,
+        hasCriticalLoss: false
+    },
     privacyMute: false,
     essActive: false,
     videoTelemetryBookmarks: []
@@ -797,6 +803,9 @@ function setLanguage(lang) {
     updateFullscreenUi();
     if (typeof renderSystemBuilder === 'function') {
         renderSystemBuilder();
+    }
+    if (state.hardwareTopology && typeof updateHardwareTopologyUi === 'function') {
+        updateHardwareTopologyUi(state.hardwareTopology.baselineMask, state.hardwareTopology.currentMask, state.hardwareTopology.lostMask);
     }
 
     showToast(lang === 'de' ? 'Sprache: Deutsch' : 'Language: English', 'info');
@@ -1283,6 +1292,9 @@ function startInternalSimTrackEngine(isDigitalTwin = true) {
                 front_temp: Math.round(24 + Math.min(12, speed * 0.12)),
                 rear_temp: Math.round(26 + Math.min(14, speed * 0.15))
             },
+            hw_baseline: state.hardwareTopology?.baselineMask || 0x0D9D,
+            hw_current: state.hardwareTopology?.currentMask || 0x0D9D,
+            hw_lost: state.hardwareTopology?.lostMask || 0,
             alarm: state.alarm
         };
 
@@ -1424,7 +1436,10 @@ function handleSimTelemetry(data) {
         sats: data.sats,
         lean_angle: data.lean_angle,
         mode: data.mode,
-        front_node: data.front_node
+        front_node: data.front_node,
+        hw_baseline: data.hw_baseline,
+        hw_current: data.hw_current,
+        hw_lost: data.hw_lost
     });
 
     // 2. GNSS, Tunnel Dead-Reckoning & 1-PPS Sync
@@ -2428,6 +2443,9 @@ function setupDeviceHubUi() {
     // 7. Radar 2.0 Warn-Makros & Pattern Management (NVS-Persistent)
     initRadarMacroConfigUi();
 
+    // 8. Hardware-Topologie & Baseline-Status Supervisor (NVS-Persistent)
+    initHardwareTopologyConfigUi();
+
     // Initialize CAN Sniffer Engine
     setupCanSnifferUi();
 }
@@ -2515,6 +2533,291 @@ function initRadarMacroConfigUi() {
         }
     }
 }
+
+// =========================================================================
+// 8. Hardware-Topologie & Baseline-Status Supervisor (NVS-Persistent)
+// =========================================================================
+const HW_INV_BITS = {
+    POD1:       1 << 0,  // Satelliten-Pod 1 (Intercom A / 1-Wire)
+    POD2:       1 << 1,  // Satelliten-Pod 2 (Intercom B / 1-Wire)
+    POD3:       1 << 2,  // Heck-Pod 3 Backbone (GNSS / LoRa / UART1)
+    FRONT_NODE: 1 << 3,  // Front-Node (Cockpit / ESP-NOW)
+    RADAR:      1 << 4,  // Radar 2.0 Sub-MCU / Garmin Varia (UART2)
+    ACTION_CAM: 1 << 5,  // Action-Cam BLE Remote
+    OBD2:       1 << 6,  // OBD2 / CAN BLE Adapter
+    TPMS_FRONT: 1 << 7,  // TPMS Vorderrad BLE
+    TPMS_REAR:  1 << 8,  // TPMS Hinterrad BLE
+    KEYFOB:     1 << 9,  // Smart-Keyfob LoRa Pager
+    CAN_BUS:    1 << 10, // Fahrzeug-CAN Bus
+    SD_CARD:    1 << 11, // MicroSD-Karte gemountet
+    DS18B20:    1 << 12  // 1-Wire Außentemperaturfühler
+};
+
+const HW_INV_LABELS = {
+    [HW_INV_BITS.POD1]: {
+        nameDe: 'Satelliten-Pod 1 (Intercom A / 1-Wire)',
+        nameEn: 'Satellite Pod 1 (Intercom A / 1-Wire)',
+        hintDe: '1-Wire Steckverbindung oder Bajonettverschluss an Port 1 prüfen.',
+        hintEn: 'Check 1-Wire connector or bayonet lock on Port 1.'
+    },
+    [HW_INV_BITS.POD2]: {
+        nameDe: 'Satelliten-Pod 2 (Intercom B / 1-Wire)',
+        nameEn: 'Satellite Pod 2 (Intercom B / 1-Wire)',
+        hintDe: '1-Wire Steckverbindung oder Bajonettverschluss an Port 2 prüfen.',
+        hintEn: 'Check 1-Wire connector or bayonet lock on Port 2.'
+    },
+    [HW_INV_BITS.POD3]: {
+        nameDe: 'Satelliten-Pod 3 (Heck-Backbone GNSS / LoRa)',
+        nameEn: 'Satellite Pod 3 (Rear Backbone GNSS / LoRa)',
+        hintDe: 'M8-Kabelbaum, UART1-Verbindung und Spannungsversorgung prüfen.',
+        hintEn: 'Check M8 wiring harness, UART1 link and power supply.'
+    },
+    [HW_INV_BITS.FRONT_NODE]: {
+        nameDe: 'Universal Front-Node (Cockpit / ESP-NOW)',
+        nameEn: 'Universal Front Node (Cockpit / ESP-NOW)',
+        hintDe: '2.4 GHz RF-Verbindung und Bordnetz-Speisung des Lenker-Nodes prüfen.',
+        hintEn: 'Check 2.4 GHz RF link and handlebar node power supply.'
+    },
+    [HW_INV_BITS.RADAR]: {
+        nameDe: 'Radar 2.0 Sub-MCU / MR20 (UART2)',
+        nameEn: 'Radar 2.0 Sub-MCU / MR20 (UART2)',
+        hintDe: 'UART2-Verbindung zum Heck-Radar oder Garmin Varia Bus prüfen.',
+        hintEn: 'Check UART2 connection to rear radar or Garmin Varia bus.'
+    },
+    [HW_INV_BITS.ACTION_CAM]: {
+        nameDe: 'Action-Cam BLE Remote (Insta360 / GoPro)',
+        nameEn: 'Action Cam BLE Remote (Insta360 / GoPro)',
+        hintDe: 'Prüfen ob Kamera eingeschaltet und BLE-Pairing aktiv ist.',
+        hintEn: 'Check if camera is powered on and BLE pairing is active.'
+    },
+    [HW_INV_BITS.OBD2]: {
+        nameDe: 'OBD2 / Fahrzeug-CAN BLE Adapter',
+        nameEn: 'OBD2 / Vehicle CAN BLE Adapter',
+        hintDe: 'Sitz des OBD2-Dongles im Diagnoseport prüfen.',
+        hintEn: 'Check seat of OBD2 dongle in diagnostic port.'
+    },
+    [HW_INV_BITS.TPMS_FRONT]: {
+        nameDe: 'TPMS Reifendrucksensor Vorne (BLE)',
+        nameEn: 'TPMS Front Tire Pressure Sensor (BLE)',
+        hintDe: 'Sensorbatterie (CR1632) oder Funkreichweite prüfen.',
+        hintEn: 'Check sensor battery (CR1632) or RF range.'
+    },
+    [HW_INV_BITS.TPMS_REAR]: {
+        nameDe: 'TPMS Reifendrucksensor Hinten (BLE)',
+        nameEn: 'TPMS Rear Tire Pressure Sensor (BLE)',
+        hintDe: 'Sensorbatterie (CR1632) oder Funkreichweite prüfen.',
+        hintEn: 'Check sensor battery (CR1632) or RF range.'
+    },
+    [HW_INV_BITS.KEYFOB]: {
+        nameDe: 'Smart-Keyfob LoRa Pager',
+        nameEn: 'Smart Keyfob LoRa Pager',
+        hintDe: 'Schlüsselanhänger in Funkreichweite bringen oder Akku laden.',
+        hintEn: 'Bring keyfob within RF range or charge battery.'
+    },
+    [HW_INV_BITS.CAN_BUS]: {
+        nameDe: 'Fahrzeug-CAN Bus (Transceiver)',
+        nameEn: 'Vehicle CAN Bus (Transceiver)',
+        hintDe: 'CAN-H / CAN-L Verdrahtung und Abschlusswiderstand (120Ω) prüfen.',
+        hintEn: 'Check CAN-H / CAN-L wiring and termination resistor (120Ω).'
+    },
+    [HW_INV_BITS.SD_CARD]: {
+        nameDe: 'MicroSD Blackbox Storage',
+        nameEn: 'MicroSD Blackbox Storage',
+        hintDe: 'Sitz der MicroSD-Karte im Kartenslot prüfen.',
+        hintEn: 'Check seat of MicroSD card in slot.'
+    },
+    [HW_INV_BITS.DS18B20]: {
+        nameDe: 'Außentemperaturfühler DS18B20 (1-Wire)',
+        nameEn: 'Outside Temperature Sensor DS18B20 (1-Wire)',
+        hintDe: '1-Wire Busleitung zum Temperaturfühler prüfen.',
+        hintEn: 'Check 1-Wire bus line to temperature sensor.'
+    }
+};
+
+function countActiveBits(mask) {
+    let count = 0;
+    let n = mask;
+    while (n > 0) {
+        if (n & 1) count++;
+        n >>= 1;
+    }
+    return count;
+}
+
+function updateHardwareTopologyUi(baselineMask, currentMask, lostMask) {
+    if (!state.hardwareTopology) {
+        state.hardwareTopology = {};
+    }
+    state.hardwareTopology.baselineMask = baselineMask;
+    state.hardwareTopology.currentMask = currentMask;
+    state.hardwareTopology.lostMask = lostMask;
+    state.hardwareTopology.hasCriticalLoss = (lostMask > 0);
+
+    const isDe = state.lang === 'de';
+
+    // 1. Devices Total Badge
+    const badgeTotal = document.getElementById('hub-badge-devices-total');
+    if (badgeTotal) {
+        const count = countActiveBits(currentMask);
+        badgeTotal.textContent = isDe ? `${count} Geräte aktiv` : `${count} Devices Active`;
+        badgeTotal.className = count > 0 ? 'card-badge badge-green' : 'card-badge';
+    }
+
+    // 2. Baseline Synchronisation Badge
+    const badgeBaseline = document.getElementById('hub-badge-baseline-state');
+    if (badgeBaseline) {
+        if (lostMask > 0) {
+            badgeBaseline.className = 'card-badge badge-red';
+            badgeBaseline.textContent = isDe ? '🚨 Baseline-Abweichung (NVS)' : '🚨 Baseline Mismatch (NVS)';
+        } else {
+            badgeBaseline.className = 'card-badge badge-green';
+            badgeBaseline.textContent = isDe ? '💾 Baseline synchron' : '💾 Baseline Synced';
+        }
+    }
+
+    // 3. Loss Alert Banner
+    const banner = document.getElementById('banner-hw-loss-alert');
+    const txtDetails = document.getElementById('txt-hw-loss-details');
+    if (banner) {
+        if (lostMask > 0) {
+            banner.style.display = 'block';
+            if (txtDetails) {
+                let html = '';
+                for (const [bitKey, bitVal] of Object.entries(HW_INV_BITS)) {
+                    if (lostMask & bitVal) {
+                        const info = HW_INV_LABELS[bitVal];
+                        if (info) {
+                            const name = isDe ? info.nameDe : info.nameEn;
+                            const hint = isDe ? info.hintDe : info.hintEn;
+                            html += `<div style="margin-top: 4px;">⚠️ <strong>${name}:</strong> ${hint}</div>`;
+                        }
+                    }
+                }
+                txtDetails.innerHTML = html || (isDe ? '⚠️ Mindestens ein NVS-konfigurierter Hardware-Knoten antwortet nicht!'
+                                                     : '⚠️ At least one NVS-configured hardware node is not responding!');
+            }
+        } else {
+            banner.style.display = 'none';
+        }
+    }
+
+    // 4. Individual Card Highlights in Device Hub
+    const cardPod3 = document.getElementById('card-device-pod3');
+    if (cardPod3) {
+        if (lostMask & HW_INV_BITS.POD3) {
+            cardPod3.style.borderColor = 'var(--accent-red)';
+            cardPod3.style.boxShadow = '0 0 12px rgba(255, 69, 58, 0.35)';
+        } else {
+            cardPod3.style.borderColor = '';
+            cardPod3.style.boxShadow = '';
+        }
+    }
+
+    const cardFront = document.getElementById('card-device-front-node');
+    if (cardFront) {
+        if (lostMask & HW_INV_BITS.FRONT_NODE) {
+            cardFront.style.borderColor = 'var(--accent-red)';
+            cardFront.style.boxShadow = '0 0 12px rgba(255, 69, 58, 0.35)';
+        } else {
+            cardFront.style.borderColor = '';
+            cardFront.style.boxShadow = '';
+        }
+    }
+
+    const cardRadar = document.getElementById('card-device-radar-bsd');
+    if (cardRadar) {
+        if (lostMask & HW_INV_BITS.RADAR) {
+            cardRadar.style.borderColor = 'var(--accent-red)';
+            cardRadar.style.boxShadow = '0 0 12px rgba(255, 69, 58, 0.35)';
+        } else {
+            cardRadar.style.borderColor = '';
+            cardRadar.style.boxShadow = '';
+        }
+    }
+}
+
+function initHardwareTopologyConfigUi() {
+    const savedBaseline = parseInt(localStorage.getItem('omb_hw_baseline') || '0x0D9D', 16);
+    const initialCurrent = state.isDemoMode ? savedBaseline : 0;
+    updateHardwareTopologyUi(savedBaseline, initialCurrent, 0);
+
+    const btnRescan = document.getElementById('btn-hw-rescan');
+    if (btnRescan) {
+        btnRescan.addEventListener('click', () => {
+            const isDe = state.lang === 'de';
+            if (state.isBleConnected) {
+                sendBleControlCommand(new Uint8Array([0x41, 0x03]));
+                showToast(isDe ? '🔄 Hardware-Bus Scan (1-Wire, UART, ESP-NOW) gestartet...'
+                               : '🔄 Hardware bus scan triggered...', 'info', 2000);
+            } else {
+                showToast(isDe ? '🔄 Simulator-Bus Scan durchgeführt (Knoten verifiziert)'
+                               : '🔄 Simulating hardware bus re-scan...', 'info', 2000);
+                updateHardwareTopologyUi(state.hardwareTopology.baselineMask, state.hardwareTopology.baselineMask, 0);
+            }
+        });
+    }
+
+    const btnConfirmRemoval = document.getElementById('btn-hw-confirm-removal');
+    if (btnConfirmRemoval) {
+        btnConfirmRemoval.addEventListener('click', () => {
+            const isDe = state.lang === 'de';
+            const lost = state.hardwareTopology.lostMask;
+            if (state.isBleConnected && lost > 0) {
+                sendBleControlCommand(new Uint8Array([0x41, 0x02, lost & 0xFF, (lost >> 8) & 0xFF]));
+            }
+            const newBaseline = state.hardwareTopology.baselineMask & ~lost;
+            localStorage.setItem('omb_hw_baseline', '0x' + newBaseline.toString(16));
+            updateHardwareTopologyUi(newBaseline, state.hardwareTopology.currentMask, 0);
+            showToast(isDe ? '🗑️ Vermisste Komponente(n) aus NVS-Baseline ausgetragen'
+                           : '🗑️ Missing component(s) removed from NVS baseline', 'success', 3000);
+        });
+    }
+
+    const btnAdoptAll = document.getElementById('btn-hw-adopt-all');
+    if (btnAdoptAll) {
+        btnAdoptAll.addEventListener('click', () => {
+            const isDe = state.lang === 'de';
+            const curr = state.hardwareTopology.currentMask;
+            if (state.isBleConnected) {
+                sendBleControlCommand(new Uint8Array([0x41, 0x01]));
+            }
+            localStorage.setItem('omb_hw_baseline', '0x' + curr.toString(16));
+            updateHardwareTopologyUi(curr, curr, 0);
+            showToast(isDe ? '💾 Aktueller Ist-Zustand als neue NVS-Baseline gesichert'
+                           : '💾 Current hardware state adopted as new NVS baseline', 'success', 3000);
+        });
+    }
+
+    const btnTest = document.getElementById('btn-test-hw-loss');
+    if (btnTest) {
+        btnTest.addEventListener('click', () => {
+            window.ombSimulateHwLoss(0x0004); // Satelliten-Pod 3 (Heck-Backbone)
+        });
+    }
+
+    try {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('simHwLoss')) {
+            const rawVal = urlParams.get('simHwLoss');
+            const mask = rawVal.startsWith('0x') ? parseInt(rawVal, 16) : parseInt(rawVal, 10) || 0x0004;
+            setTimeout(() => {
+                window.ombSimulateHwLoss(mask);
+            }, 300);
+        }
+    } catch (e) {
+        // safe ignore
+    }
+}
+
+// Global helper to simulate or test hardware loss anomalies in browser/console
+window.ombSimulateHwLoss = function(lostMask = 0x0004) {
+    const baseline = state.hardwareTopology?.baselineMask || 0x0D9D;
+    const current = baseline & ~lostMask;
+    updateHardwareTopologyUi(baseline, current, lostMask);
+    const isDe = state.lang === 'de';
+    showToast(isDe ? `🚨 Hardware-Verlust simuliert (Maske 0x${lostMask.toString(16).toUpperCase().padStart(4, '0')})`
+                   : `🚨 Hardware loss simulated (0x${lostMask.toString(16).toUpperCase().padStart(4, '0')})`, 'warning', 3000);
+};
 
 // 4. Live CAN-Bus Trace Sniffer Engine
 function setupCanSnifferUi() {
@@ -3185,19 +3488,37 @@ function resetDisconnectedTelemetryUi() {
 
 function handleBleTelemetry(event) {
     const view = event.target.value;
-    if (view.byteLength >= 16) {
+    if (view.byteLength >= 14) {
         const vign = view.getFloat32(0, true);
         const vbat = view.getFloat32(4, true);
         const pttState = view.getUint8(8);
         const mode = view.getUint8(9);
-        const lean = view.getInt8(10);
+        const port1 = view.byteLength > 10 ? view.getUint8(10) > 0 : false;
+        const port2 = view.byteLength > 11 ? view.getUint8(11) > 0 : false;
+        const pod3 = view.byteLength > 12 ? view.getUint8(12) > 0 : false;
+        const lean = view.byteLength > 13 ? view.getInt8(13) : 0;
+
+        let hwBaseline = undefined;
+        let hwCurrent = undefined;
+        let hwLost = undefined;
+        if (view.byteLength >= 22) {
+            hwBaseline = view.getUint16(16, true);
+            hwCurrent = view.getUint16(18, true);
+            hwLost = view.getUint16(20, true);
+        }
 
         updateTelemetryUi({
             v_ign: vign,
             v_bat: vbat,
             ptt_pressed: pttState > 0,
             mode: mode,
-            lean_angle: lean
+            lean_angle: lean,
+            port1_active: port1,
+            port2_active: port2,
+            pod3_gnss_fix: pod3,
+            hw_baseline: hwBaseline,
+            hw_current: hwCurrent,
+            hw_lost: hwLost
         });
     }
 }
@@ -3444,6 +3765,14 @@ function updateTelemetryUi(data) {
 
         updateCockpitAuxUi();
         updateFrontNodeRgbVisual(state.frontNode.rgbMode);
+    }
+
+    // Hardware Inventory & Topology Supervisor
+    if ((data.hw_baseline !== undefined || data.hw_current !== undefined || data.hw_lost !== undefined) && typeof updateHardwareTopologyUi === 'function') {
+        const base = data.hw_baseline !== undefined ? data.hw_baseline : (state.hardwareTopology?.baselineMask || 0);
+        const curr = data.hw_current !== undefined ? data.hw_current : (state.hardwareTopology?.currentMask || 0);
+        const lost = data.hw_lost !== undefined ? data.hw_lost : (state.hardwareTopology?.lostMask || 0);
+        updateHardwareTopologyUi(base, curr, lost);
     }
 }
 

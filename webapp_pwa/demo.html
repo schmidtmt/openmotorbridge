@@ -1841,9 +1841,38 @@
                             Zentrale 2-geteilte Verwaltung aller persönlichen Geräte (Teil 1) und fest verbauter Motorrad- & Systemknoten (Teil 2).
                         </p>
                     </div>
-                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+                        <span class="card-badge badge-green" id="hub-badge-baseline-state">💾 Baseline synchron</span>
                         <span class="card-badge badge-green" id="hub-badge-devices-total">6 Geräte aktiv</span>
                         <span class="card-badge badge-blue" id="hub-badge-rf-status">RF Mesh & ESP-NOW OK</span>
+                        <button id="btn-test-hw-loss" class="card-badge" style="cursor: pointer; background: rgba(255, 69, 58, 0.15); border: 1px dashed var(--accent-red); color: var(--accent-red); font-size: 0.76rem;" title="Hardware-Verlust von Pod 3 simulieren">🧪 Pod 3 Verlust testen</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hardware-Topologie & Baseline-Status Alert Banner (NVS-Persistent) -->
+            <div id="banner-hw-loss-alert" style="display: none; padding: 14px 16px; background: rgba(255, 69, 58, 0.15); border: 1px solid var(--accent-red); border-radius: var(--radius-md); margin-bottom: 22px;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 260px;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="font-size: 1.3rem;">🚨</span>
+                            <strong style="font-size: 0.95rem; color: var(--accent-red);">Hardware-Verlust / Topologie-Anomalie erkannt!</strong>
+                            <span class="card-badge badge-red">NVS-Baseline Abweichung</span>
+                        </div>
+                        <div id="txt-hw-loss-details" style="font-size: 0.84rem; color: #fff; margin-top: 6px; line-height: 1.4;">
+                            ⚠️ <strong>Satelliten-Pod 3 (Heck-Backbone):</strong> War im vorherigen Zündungszyklus aktiv, antwortet aber aktuell nicht! Bitte M8-Kabelbaum und Steckverbindung prüfen.
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; align-self: center;">
+                        <button id="btn-hw-rescan" class="btn-secondary" style="padding: 7px 12px; font-size: 0.78rem; border-color: var(--accent-cyan); color: var(--accent-cyan);" title="Prüft die Busse (1-Wire, UART, ESP-NOW) erneut">
+                            🔄 Bus erneut scannen
+                        </button>
+                        <button id="btn-hw-confirm-removal" class="btn-secondary" style="padding: 7px 12px; font-size: 0.78rem; border-color: rgba(255, 69, 58, 0.5); color: var(--accent-red);" title="Entfernt die vermisste Komponente aus der NVS-Baseline (z.B. nach geplanter Demontage)">
+                            🗑️ Aus Baseline entfernen
+                        </button>
+                        <button id="btn-hw-adopt-all" class="btn-secondary" style="padding: 7px 12px; font-size: 0.78rem; border-color: var(--accent-green); color: var(--accent-green);" title="Sichert den aktuellen Ist-Zustand aller erkannten Komponenten als verbindliche Baseline im NVS">
+                            ✓ Ist-Zustand als Baseline sichern
+                        </button>
                     </div>
                 </div>
             </div>

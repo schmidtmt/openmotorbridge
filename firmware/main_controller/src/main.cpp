@@ -26,6 +26,7 @@
 #include "tpms_ble_scanner.h"
 #include "bluetooth_audio_manager.h"
 #include "baro_weather_trend.h"
+#include "hardware_inventory.h"
 
 static const char *TAG = "OMB_MAIN";
 
@@ -193,15 +194,20 @@ void task_power_supervisor(void *pvParameters) {
         esp_now_front_node_send_heartbeat();
 
         // Telemetrie an PWA senden
+        HardwareInventoryState_t hw_st = hw_inventory_get_state();
         SystemTelemetry_t telem = {
             .v_ign_volts = s_v_ign,
             .v_bat_volts = s_v_bat,
             .remote_bat_pct = s_handlebar_battery_pct,
             .operation_mode = (uint8_t)audio_get_operation_mode(),
-            .port1_active = true,
-            .port2_active = true,
-            .pod3_gnss_fix = true,
-            .lean_angle_deg = 0.0f
+            .port1_active = (hw_st.current_mask & HW_INV_POD1) != 0,
+            .port2_active = (hw_st.current_mask & HW_INV_POD2) != 0,
+            .pod3_gnss_fix = (hw_st.current_mask & HW_INV_POD3) != 0,
+            .lean_angle_deg = 0,
+            .spare = {0, 0},
+            .hw_baseline_mask = hw_st.baseline_mask,
+            .hw_current_mask = hw_st.current_mask,
+            .hw_lost_mask = hw_st.lost_mask
         };
         ble_server_notify_telemetry(&telem);
 
@@ -264,6 +270,7 @@ extern "C" void app_main(void) {
     check_and_enter_usb_msc_mode();
 
     // 4. Subsysteme initialisieren
+    hw_inventory_init();
     opto_sequencer_init();
     audio_dsp_init();
     cartridge_onewire_init();
@@ -281,7 +288,15 @@ extern "C" void app_main(void) {
     bluetooth_audio_manager_init();
     baro_weather_init();
 
-    set_system_led_state(LED_NORMAL_PULSE_GREEN);
+    // 4b. Hardware-Inventar Scan, Baseline-Vergleich & POST-Diagnose durchführen
+    hw_inventory_scan_and_evaluate();
+    HardwareInventoryState_t init_hw = hw_inventory_get_state();
+    if (init_hw.has_critical_loss) {
+        set_system_led_state(LED_WARNING_ERROR_RED);
+        ESP_LOGW(TAG, "⚠️ System starts with HARDWARE LOSS: Check missing modules!");
+    } else {
+        set_system_led_state(LED_NORMAL_PULSE_GREEN);
+    }
     ESP_LOGI(TAG, "All subsystems initialized. Launching FreeRTOS tasks...");
 
     // 5. FreeRTOS Tasks starten mit strikter Core-Trennung

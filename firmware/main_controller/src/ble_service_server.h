@@ -8,7 +8,7 @@
 extern "C" {
 #endif
 
-typedef struct {
+typedef struct __attribute__((packed)) {
     float v_ign_volts;
     float v_bat_volts;
     uint8_t remote_bat_pct;
@@ -16,7 +16,11 @@ typedef struct {
     bool port1_active;
     bool port2_active;
     bool pod3_gnss_fix;
-    float lean_angle_deg;
+    int8_t lean_angle_deg;
+    uint8_t spare[2];
+    uint16_t hw_baseline_mask;
+    uint16_t hw_current_mask;
+    uint16_t hw_lost_mask;
 } SystemTelemetry_t;
 
 /**
