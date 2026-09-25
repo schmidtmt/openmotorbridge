@@ -24,6 +24,7 @@ include <../00_common/parameters.scad>;
 
 // --- Part Selector for Multi-Part STL Export & Assembly Rendering ---
 part = "assembly"; // "assembly", "tub", "radome", "rear"
+INCLUDE_LOWER_CLEVIS = false; // Default: false (clean housing with Garmin Varia Quarter-Turn Bayonet & M4 inserts; clevis belongs to dock adapter)
 
 // --- Symmetrical Housing Dimensions (Variante 1: Flügel-Rechteck 121 x 71 x 34 mm) ---
 RADAR_HOUSING_W     = 121.0; // Outer transverse width in X (mm)
@@ -164,7 +165,7 @@ module v2x_patch_antenna_cradle() {
 }
 
 // 1. Symmetrical Main Housing Tub (MJF PA12)
-module radar_mr20_main_tub(include_lower_clevis=true) {
+module radar_mr20_main_tub(include_lower_clevis=INCLUDE_LOWER_CLEVIS) {
     difference() {
         union() {
             // Main sculptured outer body (centered in X and Z, depth from Y=0 to -RADAR_HOUSING_D)
