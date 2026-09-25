@@ -1190,22 +1190,53 @@ Das **Radar 2.0 Flügel-Gehäuse** ([`radar_mr20_housing.scad`](../../hardware/c
 
 ### 8.4 Road Glide ST Sharknose: Induktives Durch-die-Verkleidung Cam-Dock (`road_glide_inductive_cam_dock.scad`)
 
-Das **induktive Cam-Dock** ([`road_glide_inductive_cam_dock.scad`](../../hardware/cad/scad/05_accessories/road_glide_inductive_cam_dock.scad)) löst das Problem der Dauerstromversorgung von Action- und 360°-Kameras (Insta360 X3/X4, GoPro) auf der Nase der Sharknose-Verkleidung **ohne ein einziges Loch zu bohren und ohne sichtbare Außenkabel**:
+Das **induktive Cam-Dock** ([`road_glide_inductive_cam_dock.scad`](../../hardware/cad/scad/05_accessories/road_glide_inductive_cam_dock.scad)) löst das Problem der Dauerstromversorgung von Action- und 360°-Kameras (Insta360 X3/X4, GoPro Hero, DJI Osmo Action) auf der Nase der Sharknose-Verkleidung **ohne ein einziges Loch zu bohren und ohne sichtbare Außenkabel**:
 
 ![Road Glide Induktives Cam-Dock](../images/cad/road_glide_inductive_cam_dock_cad.png)
 
 *Abbildung 8.39: 3D-CAD-Gesamtansicht des Durch-die-Verkleidung Induktiv-Docks (`road_glide_inductive_cam_dock_cad.png`). Sichtbar sind die 15W Qi-Transmitter-Wanne (Unterseite, verdeckt im Verkleidungsinneren), das dielektrische ABS-Verkleidungsdeck der Harley Road Glide (mittig dargestellt) sowie das aerodynamische Tropfenform-Außendock mit 3M Dual-Lock-Boden, integriertem TI BQ51013B Qi-Empfänger und 3-Finger-Gelenk für Actioncams.*
 
-1. **Physikalisches Prinzip:** Das ABS-Verkleidungsdeck der Harley ist unmagnetisch und dielektrisch ($2{,}5\dots 3\,\text{mm}$ Wandstärke). Induktive Wechselfelder durchdringen diesen Kunststoff verlustarm.
-2. **Innen-Baugruppe (TX-Cradle):** Eine flache 15W Qi-Senderspule wird von innen direkt unter das ebene Verkleidungsdeck geklebt und an Port 1 (USB-PD) des Front-Knotens angeschlossen.
-3. **Außen-Baugruppe (RX-Cradle mit 3M Dual Lock):**
-   * Die aerodynamische Aufnahmeschale wird außen mit 3M Dual Lock auf die Verkleidungsnase geklickt.
-   * Sie enthält eine integrierte Qi-Empfängerspule mit TI BQ51013B Controller (liefert $5\,\text{V} / 2\,\text{A} = 10\,\text{W}$ Dauerleistung).
-   * Ein ultrakurzes $3\,\text{cm}$ Flachkabel führt direkt in die USB-C Ladebuchse der Kamera.
-4. **Vorteile:**
-   * **100 % Originalzustand:** Absolut bohrungsfrei, keine Lackbeschädigung, 100 % wasserdicht.
-   * **10+ Stunden Daueraufnahme:** Hält den Kamera-Akku auch bei hochauflösender 5.7K-Daueraufnahme dauerhaft auf 100 %.
-   * **Spurloses Abnehmen:** Kamera mit Dock per Dual Lock abziehen – es verbleibt nur ein dezentes Pad auf dem Lack.
+#### 8.4.1 Zweiteilige Systemarchitektur & Schnittstellen zur Action-Cam
+
+```text
+ ┌────────────────────────────────────────────────────────┐
+ │ Action-Cam (Insta360 X3/X4 / GoPro Hero / DJI Action)  │
+ │ [USB-C Ladeport] ◄─────────────────────────────────┐   │
+ └────────┬───────────────────────────────────────────│───┘
+          │ Standard 2-Finger-Lasche                  │
+          ▼                                           │ 30 mm USB-C
+ ┌────────────────────────────────────────────────────│───┐
+ │ ROAD GLIDE INDUKTIV-CAM-DOCK (AUSSEN)              │   │
+ │ • Integriertes 3-Finger-Gelenk (M5-Klemmschraube)  │   │
+ │ • TI BQ51013B Abwärtswandler (5V / 2A) ────────────┘   │
+ │ • Qi-Empfängerspule (RX) mit Ferritschild              │
+ └────────────────────────┬───────────────────────────────┘
+                          │ 3M Dual-Lock SJ3550 Pilzkopfklett
+                          ▼ (sekundenschnell abziehbar)
+ ══════════════════════════════════════════════════════════
+  Harley-Davidson ABS-Verkleidungsdeck (2.8 mm, 100% ohne Bohrung!)
+   ~ ~ ~ Magnetisches Wechselfeld (15W Qi Induktion) ~ ~ ~
+ ══════════════════════════════════════════════════════════
+                          ▲ (3M VHB 5952 Verklebung innen)
+ ┌────────────────────────┴───────────────────────────────┐
+ │ INNEN-CRADLE (Unter der Haube / hinter Scheinwerfer)   │
+ │ • 15W Qi-Senderspule (TX)                              │
+ │ • Anschlusskabel zu Front-Knoten Port 1 (12V PD)       │
+ └────────────────────────────────────────────────────────┘
+```
+
+1. **Mechanische Anbindung an die Kamera:**
+   * **Monolithisches 3-Finger-Gelenk (Universal GoPro-Mount):** Direkt auf der Oberseite des Außendocks sitzt die standardisierte 3-Finger-Aufnahme. Jede gängige Actioncam (GoPro Hero 10–13, DJI Osmo) oder jeder 360°-Kamerarahmen (z. B. Insta360 X3/X4 Haltekäfig) wird direkt mit einer handelsüblichen M5-Rändelschraube aufgesteckt.
+   * **Integrierte M5-Hutmutter-Tasche:** Auf der linken Flanke ist eine formschlüssige Sechskant-Aussparung eingelassen, die eine M5-Mutter unverlierbar hält – die Klemmschraube kann somit einhändig festgezogen werden.
+   * **Optionales 1/4"-20 Stativgewinde:** Alternativ ist im Zentrum eine Bohrung für eine zöllige Messing-Gewindebuchse (1/4"-20 UNC) vorgesehen, um Kameras oder Kugelköpfe direkt aufzuschrauben.
+2. **Elektrische Verbindung (Dauerstrom-Versorgung):**
+   * **Induktive Energiewandlung:** Die im Dockboden eingelassene Qi-Empfängerspule wandelt das durch die $2{,}8\,\text{mm}$ dicke ABS-Verkleidung übertragene Wechselfeld über einen TI BQ51013B Controller in stabile $5\,\text{V} / 2\,\text{A} = 10\,\text{W}$ Gleichspannung um.
+   * **Ultrakurzer USB-C Pigtail ($30\dots 50\,\text{mm}$):** Aus einer schräg nach vorn/oben gerichteten Kabelöffnung des Docks führt ein hochflexibles, kurzes USB-C-Flachbandkabel mit $90^\circ$-Winkelstecker direkt in die Ladebuchse der Kamera.
+   * **Kein Fahrtwind-Flattern:** Da das Kabel nur wenige Zentimeter lang ist und unmittelbar unter dem Kamera-Ladeport austritt, liegt es eng am Gehäuse an – es flattert nicht im Fahrtwind, schlägt nicht gegen den Lack und erzeugt keine Windgeräusche im Mikrofon.
+3. **Praxis-Vorteile auf Tour:**
+   * **100 % Originalzustand:** Absolut bohrungsfrei, null Lackbeschädigung, 100 % wetterfest nach IP67.
+   * **Unendliche Aufnahmezeit:** Hält den Kamera-Akku auch bei rechenintensiver 5.7K/60fps 360°-Daueraufnahme dauerhaft auf 100 % (z. B. als Dashcam im Endlos-Loop).
+   * **Sekundenschnelle Demontage beim Parken:** USB-C-Winkelstecker abziehen, Dock mit einem Handgriff vom 3M Dual-Lock trennen und samt Kamera in der Jackentasche oder dem Koffer verstauen.
 
 ---
 

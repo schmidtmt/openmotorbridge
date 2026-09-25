@@ -988,22 +988,53 @@ The **Radar 2.0 Winged Housing** ([`radar_mr20_housing.scad`](../../hardware/cad
 
 ### 8.4 Road Glide ST Sharknose: Through-Fairing Inductive Cam Dock (`road_glide_inductive_cam_dock.scad`)
 
-The **Through-Fairing Inductive Cam Dock** ([`road_glide_inductive_cam_dock.scad`](../../hardware/cad/scad/05_accessories/road_glide_inductive_cam_dock.scad)) solves the problem of continuous power delivery to action cams (Insta360 X3/X4, GoPro) mounted on Harley Sharknose fairings **with zero drilled holes and zero visible external wiring**:
+The **Through-Fairing Inductive Cam Dock** ([`road_glide_inductive_cam_dock.scad`](../../hardware/cad/scad/05_accessories/road_glide_inductive_cam_dock.scad)) solves the problem of continuous power delivery to action cams (Insta360 X3/X4, GoPro Hero, DJI Osmo Action) mounted on Harley Sharknose fairings **with zero drilled holes and zero visible external wiring**:
 
 ![Road Glide Inductive Cam Dock](../images/cad/road_glide_inductive_cam_dock_cad.png)
 
 *Figure 8.39: 3D CAD system view of the Through-Fairing Inductive Cam Dock (`road_glide_inductive_cam_dock_cad.png`). Visible: 15W Qi transmitter tray (underside, concealed inside inner fairing), dielectric ABS fairing deck (center amber shell), aerodynamic teardrop outer dock with 3M Dual Lock base, integrated TI BQ51013B Qi receiver, and universal 3-prong camera mounting clevis.*
 
-1. **Electromagnetic Principle:** The factory ABS fairing deck is non-magnetic and dielectric ($2.5\dots 3\,\text{mm}$ wall thickness). Alternating magnetic inductive fields pass through with near-zero loss.
-2. **Inner Assembly (TX Cradle):** A slim 15W Qi transmitter coil bonds directly to the inside surface of the outer fairing deck and plugs into Port 1 (USB-PD) of Front Node PCBA 05.
-3. **Outer Assembly (RX Cradle with 3M Dual Lock):**
-   * Snaps securely onto the fairing nose via heavy-duty 3M Dual Lock SJ3550 interlocking tape.
-   * Houses an internal Qi receiver coil backed by a TI BQ51013B rectifier/step-down converter ($5\,\text{V} / 2\,\text{A} = 10\,\text{W}$ continuous output).
-   * Features an ultra-short $3\,\text{cm}$ flexible USB-C pigtail directly connecting to the action cam charging port.
-4. **Benefits:**
-   * **100% Factory Paint Intact:** Absolutely zero holes drilled, zero paint marring, 100% weatherproof.
-   * **10+ Hours Continuous Recording:** Keeps camera batteries at 100% even during high-bitrate 5.7K recording.
-   * **Tool-Free Removal:** Simply unclick the camera dock from the Dual Lock—leaving only a sleek, flat black strip on the fairing.
+#### 8.4.1 Two-Piece Architecture & Action Cam Interfaces
+
+```text
+ ┌────────────────────────────────────────────────────────┐
+ │ Action Cam (Insta360 X3/X4 / GoPro Hero / DJI Action)  │
+ │ [USB-C Charge Port] ◄──────────────────────────────┐   │
+ └────────┬───────────────────────────────────────────│───┘
+          │ Standard 2-Prong Action Cam Base          │
+          ▼                                           │ 30 mm USB-C
+ ┌────────────────────────────────────────────────────│───┐
+ │ ROAD GLIDE INDUCTIVE CAM DOCK (EXTERIOR)           │   │
+ │ • Monolithic 3-prong clevis (M5 clamping bolt)     │   │
+ │ • TI BQ51013B step-down converter (5V / 2A) ───────┘   │
+ │ • Qi receiver coil (RX) with ferrite shield            │
+ └────────────────────────┬───────────────────────────────┘
+                          │ 3M Dual-Lock SJ3550 interlocking tape
+                          ▼ (instant tool-free release)
+ ══════════════════════════════════════════════════════════
+  Harley-Davidson ABS Fairing Deck (2.8 mm, zero drill holes!)
+   ~ ~ ~ Alternating Magnetic Flux (15W Qi Inductive IPT) ~ ~ ~
+ ══════════════════════════════════════════════════════════
+                          ▲ (3M VHB 5952 interior bonding)
+ ┌────────────────────────┴───────────────────────────────┐
+ │ INNER CRADLE (Concealed inside fairing behind headlamp)│
+ │ • 15W Qi transmitter coil (TX)                         │
+ │ • Power lead to Front Node Port 1 (12V PD)             │
+ └────────────────────────────────────────────────────────┘
+```
+
+1. **Mechanical Camera Attachment:**
+   * **Monolithic 3-Prong Clevis (Universal Action Cam / GoPro Standard):** Directly molded atop the teardrop dock tower is the standard 3-prong action-cam hinge. Any common camera (GoPro Hero 10–13, DJI Osmo) or 360° cage (e.g. Insta360 X3/X4 utility frame) locks into place with a standard M5 thumbscrew.
+   * **Captive M5 Acorn Nut Pocket:** A hexagonal recess on the left flank holds an M5 nut firmly in place, allowing one-handed tilt adjustment and locking.
+   * **Optional 1/4"-20 Tripod Bushing:** The center core includes a pilot hole for an optional 1/4"-20 threaded brass insert, allowing cameras or ball heads to screw directly into the base.
+2. **Electrical Continuous Power Interface:**
+   * **Inductive Energy Conversion:** The embedded Qi receiver coil couples magnetically through the $2.8\,\text{mm}$ factory ABS fairing. The internal TI BQ51013B controller rectifies and steps down the power to clean, stable $5\,\text{V} / 2\,\text{A} = 10\,\text{W}$ DC.
+   * **Ultra-Short USB-C Pigtail ($30\dots 50\,\text{mm}$):** An upward-angled exit port routes a thin, flexible USB-C ribbon cable with a 90° right-angle connector directly into the camera's weather door.
+   * **Zero Wind Flutter:** Because the cable spans only $\approx 3\,\text{cm}$ directly beneath the camera port, it hugs the housing snugly—preventing buffeting, slapping against paint, or wind noise in the microphone.
+3. **Field Experience & Benefits on Tour:**
+   * **100% Factory Paint Preserved:** Completely drill-free, zero paint damage, 100% weatherproof (IP67).
+   * **Infinite Recording Time:** Keeps the internal camera battery at 100% even during continuous high-bitrate 5.7K/60fps 360° recording (e.g., functioning as an always-on dashcam).
+   * **Quick Tool-Free Detachment:** Unplug the USB-C right-angle jack, pull the dock firmly upward off the 3M Dual-Lock mushrooms, and pocket the camera and dock in seconds when parked.
 
 ---
 
