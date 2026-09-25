@@ -529,22 +529,76 @@ Die Adventure-Montage ist für die gesamte **BMW GS Modellfamilie** (Boxer und P
 
 ---
 
-### Schritt 5.3: Begleitfahrzeug- & Autokolonnen-Installation (Universal Sonnenblenden-Clip)
+### Schritt 5.3: Begleitfahrzeug- & Autokolonnen-Installation (Universal Sonnenblenden-Clip, Keilaufnahme & Drahtloses BLE-OBD2)
 
-OpenMotorBridge lässt sich in wenigen Minuten spurlos in jedem Begleitfahrzeug (Support-Van für Motorradgruppen) oder in Führungsfahrzeugen von Autokolonnen installieren:
+OpenMotorBridge lässt sich in wenigen Minuten vollkommen spurlos und werkzeugfrei in jedem Begleitfahrzeug (Support-Van / Besenwagen für Motorradgruppen, Rallye-Servicefahrzeug, Wohnmobil) oder in Führungsfahrzeugen von Autokolonnen installieren. Es verwandelt das Fahrzeug in eine mobile Funk- und Leitstelle mit lückenlosem Live-Tracking, Audio-Brücke über die Autolautsprecher und autarker Telemetrie:
 
-1. **Pod 3 an der Beifahrer-Sonnenblende montieren:**
-   * Den Universal-Clip ([`car_sun_visor_pod3_clip.stl`](../../hardware/cad/stl/05_accessories/car_sun_visor_pod3_clip.stl)) auf die Beifahrer-Sonnenblende aufschieben.
-   * Pod 3 in den Clip einklicken.
-   * **Vorteil:** Ungehinderter $180^\circ$-Blick durch die obere Windschutzscheibenkante in den Himmel für u-blox GNSS, 868 MHz LoRa (OMM) und 5.9 GHz V2X. Sitzt seitlich versetzt, völlig unbeeinflusst vom zentralen ADAS-Kamerakasten am Rückspiegel!
-2. **Unsichtbare Werkzeuglose Verkabelung (5 Minuten):**
-   * Das dünne USB-C-Kabel mit den Fingerkuppen in die weiche **Dachhimmel-Fuge (Headliner Seam)** über der Scheibe drücken.
-   * Weiter hinter die weiche Gummidichtung der rechten A-Säule klemmen und unter dem Teppich/Handschuhfach zur Mittelkonsole führen.
-   * **Null Bohren, null Beschädigung, 100 % rückstandslos entfernbar.**
-3. **Zentralbox & Stromversorgung in der Mittelkonsole:**
-   * Zentralbox in der Mittelkonsole oder im Handschuhfach ablegen.
-   * Stromversorgung über den 12V Zigarettenanzünder / Zubehörsteckdose (über Front-Node oder 12V PD Triggerkabel).
-   * **Audio-Integration:** USB-Verbindung von Zentralbox in den USB-Media-Port des Fahrzeugs (Startet kabelgebundenes Apple CarPlay / Android Auto auf dem Auto-Display; Ton der Biker-Gruppe über die Autolautsprecher).
+```text
+       BEGLEITFAHRZEUG / CAR-KIT TOPOLOGIE (SPURLOS & SCHNELL INSTALLIERBAR)
+ ┌──────────────────────────────────────────────────────────────────────────────┐
+ │ Windschutzscheibe / Dachhimmel (Beifahrerseite)                              │
+ │  ┌────────────────────────────────────────────────────────────────────────┐  │
+ │  │ Pod 3 (GNSS + LoRa OMM + V2X) in Sonnenblenden-Clip                    │  │
+ │  │ (car_sun_visor_pod3_clip.stl) ── Freier 180°-Zenitblick                │  │
+ │  └───────────────────────────────┬────────────────────────────────────────┘  │
+ ├──────────────────────────────────┼───────────────────────────────────────────┤
+ │                                  │ (Dünnes USB-C-Kabel in Dachhimmel-Fuge    │
+ │                                  │  und A-Säulen-Dichtung verdeckt verlegt)  │
+ │ Cockpit / Dashboard / Konsole    ▼                                           │
+ │  ┌────────────────────────────────────────────────────────────────────────┐  │
+ │  │ Zentralbox in 15°-Keilaufnahme (car_dashboard_wedge_dock.stl)          │  │
+ │  │  • USB-C Power Delivery (12V/24V Zigarettenanzünder-PD-Adapter)        │  │
+ │  │  • USB-C Media-Link ──> Apple CarPlay / Android Auto (Auto-Lautsprecher)│  │
+ │  │  • Wi-Fi AP ──> iPad / Tablet PWA (Offline-Flottentracking & Radar)    │  │
+ │  └───────────────▲───────────────────────────────▲────────────────────────┘  │
+ │                  │ (M8 Kabel / Dual-Lock)        │ (Autarkes Bluetooth BLE)  │
+ │  ┌───────────────┴────────────────────────┐  ┌───┴────────────────────────┐  │
+ │  │ Pod 1 & 2 (Intercom & CB/PMR-Funk)     │  │ Drahtloser OBD2-BLE-Dongle │  │
+ │  │ (3M Dual-Lock SJ3550 auf Dashboard     │  │ (vGate iCar / ELM327 in    │  │
+ │  │  oder verdeckt an Sitzkonsole / Tunnel)│  │  OBD-Buchse Fahrerfußraum) │  │
+ │  └────────────────────────────────────────┘  └────────────────────────────┘  │
+ └──────────────────────────────────────────────────────────────────────────────┘
+```
+
+#### 1. Pod 3 an der Beifahrer-Sonnenblende montieren (Universal-Clip):
+* Den Universal-Clip ([`car_sun_visor_pod3_clip.stl`](../../hardware/cad/stl/05_accessories/car_sun_visor_pod3_clip.stl) / CAD: [`car_sun_visor_pod3_clip.scad`](../../hardware/cad/scad/05_accessories/car_sun_visor_pod3_clip.scad)) von vorne auf die Beifahrer-Sonnenblende (14–22 mm Klemmbereich) aufschieben. Die $30^\circ$-Einführlippe und die quer verlaufenden Klemmrippen sorgen für vibrationsfesten Halt ohne Druckstellen oder Beschädigung des Sonnenblenden-Stoffs.
+* Pod 3 von vorne in die Aufnahmeschale einrasten (4 abgerundete Kugelschnappnasen arretieren das Gehäuse formschlüssig).
+* **HF- & Sicht-Vorteil:** Ungehinderter $180^\circ$-Blick durch das obere Drittel der Windschutzscheibe in den Zenit für u-blox MAX-M10S (Multi-GNSS), 868 MHz LoRa (SX1262 für OpenMotorMesh) und 5.9 GHz V2X. Sitzt seitlich versetzt, kollisionsfrei und völlig unbeeinflusst vom mittigen ADAS-Kameraspiegelkasten.
+* **Unauffällige Optik:** Von außen durch das getönte Autoglas wirkt Pod 3 wie ein gewöhnlicher Maut-Transponder (Telepass / FasTrak) und weckt keinerlei Begehrlichkeiten.
+
+#### 2. Satelliten-Pods 1 & 2 (Intercom & Funk) – Montage via 3M Dual-Lock™:
+* Pod 1 (z. B. Sena/Cardo Mesh-Bridge) und Pod 2 (z. B. Midland CB/PMR-Funkgerät):
+* **Option A (Armaturenbrett / Dashboard):** Mit selbstklebendem **3M Dual-Lock™ (SJ3550)** flach auf das Armaturenbrett (z. B. Beifahrerseite nahe A-Säule oder Mittelkonsole) kletten. Bietet optimale Funkabstrahlung und schnellen Zugriff auf Kassetten und Tasten.
+* **Option B (Sitzkonsole / Getriebetunnel):** Verdeckte Montage per 3M Dual-Lock an der seitlichen Kunststoffverkleidung der Beifahrersitz-Konsole oder mit Klett-Gegenstück auf dem Teppich des Kardantunnels – von außen zu 100 % unsichtbar.
+* **Vollständige Kassetten- und Sonnenblenden-Modularität:** Da alle Pods (1, 2, 3) dasselbe $135 \times 70 \times 26\,\text{mm}$ Monocoque-Gehäuse teilen, passt jeder Pod formschlüssig in den Sonnenblenden-Clip.
+  - *Multipurpose-Tausch:* Bei einem Ein-Pod-Setup (z. B. Midland CB-Funkpod für eine Autorallye) kann Pod 2 direkt in den Sonnenblenden-Clip geklickt werden, während Pod 3 per Dual-Lock auf das Dashboard wandert. Nach dem Event wandert der Pod werkzeuglos zurück ans Motorrad.
+  - *(Hinweis zur Hutablage: Eine Hutablagenmontage entfällt bewusst – moderne Vans, SUVs und Kombis besitzen meist nur flexible Stoffrollos, und die Karosseriebleche schirmen das Funksignal nach vorne massiv ab).*
+
+#### 3. Zentralbox in der 15°-Keilaufnahme & Stromversorgung:
+* Die Zentralbox in die formschlüssige 15°-Dashboard-Keilaufnahme ([`car_dashboard_wedge_dock.stl`](../../hardware/cad/stl/05_accessories/car_dashboard_wedge_dock.stl) / CAD: [`car_dashboard_wedge_dock.scad`](../../hardware/cad/scad/05_accessories/car_dashboard_wedge_dock.scad)) einsetzen.
+* **Befestigung:** Die Keilaufnahme wird per 3M Dual-Lock oder vibrationsdämpfendem Nano-Gelpad auf dem Armaturenbrett oder der Mittelkonsole fixiert (die 15°-Anwinkelung garantiert blendfreie Ablesbarkeit des OLED-Statusdisplays und der Status-LEDs für Fahrer und Beifahrer).
+* **Stromversorgung:** Über einen handelsüblichen 12V/24V-Zigarettenanzünder-PD-Schnelllader (USB-C Power Delivery Triggerkabel auf 12V DC).
+* **Unsichtbare, werkzeuglose Kabelführung (5 Minuten):**
+  - Das dünne Flachband- bzw. USB-C-Kabel von Pod 3 mit den Fingerkuppen in die weiche **Dachhimmel-Fuge (Headliner Seam)** über der Windschutzscheibe drücken.
+  - Weiter hinter die weiche Gummidichtung der rechten A-Säule klemmen und unter dem Handschuhfach / Fußraumteppich zur Zentralbox in der Mittelkonsole führen.
+  - **Null Bohren, null Beschädigung, 100 % rückstandslos entfernbar (ideal für Leasing- & Mietfahrzeuge).**
+
+#### 4. Drahtloser Bluetooth-OBD2-Telemetrie-Dongle (ELM327 / vGate / OBDLink):
+* Einen handelsüblichen, kompakten Bluetooth-BLE-Diagnoseadapter (z. B. *vGate iCar Pro BLE 4.0*, *OBDLink CX* oder *ELM327 BLE*) direkt in die 16-polige OBD2-Diagnosebuchse des Fahrzeugs unter dem Lenkrad einstecken.
+* **Autonome BLE-Direktkopplung an die Zentralbox:** Die Zentralbox (ESP32-S3 fungiert als BLE-Master) scannt beim Einschalten der Zündung nach dem Dongle und stellt vollautomatisch eine drahtlose Verbindung her.
+* **Null Kabel im Fahrerfußraum:** Keinerlei störende oder gefährliche Kabel im Bereich der Pedale – maximale Fahrsicherheit!
+* **Telemetrie-Polling & LoRa-Mesh-Broadcast:** Die Zentralbox pollt kontinuierlich Standard-OBD2-PIDs (Geschwindigkeit, Drehzahl, Kühlmitteltemperatur, Tankfüllstand, Bordspannung) und broadcastet diese im Hintergrund über das 868-MHz-LoRa-Mesh (OMM). Jedes Gruppenmotorrad kennt somit die Position, Geschwindigkeit und den Status des Begleitfahrzeugs.
+
+#### 5. Audio- & Infotainment-Integration (Apple CarPlay / Android Auto):
+* USB-C-Kabel von der Zentralbox in den USB-Media-Port des Fahrzeugs einstecken.
+* Auf dem Auto-Display startet kabelgebundenes Apple CarPlay / Android Auto.
+* **Gruppenfunk über Autolautsprecher:** Der Funk- und Intercom-Sprachkanal der Motorrad-Gruppe (Sena/Cardo Mesh, Midland CB/PMR) wird glasklar und mit fahrzeugeigener Lautstärkeregelung über die Audio-Lautsprecher des Begleitfahrzeugs wiedergegeben.
+* Die Sprachübertragung vom Begleitfahrzeug zurück zur Motorradgruppe erfolgt über ein Freisprechmikrofon oder Lenkrad-PTT.
+
+#### 6. Tablet-Inbetriebnahme für Offline-Flottentracking (PWA Live-Dashboard):
+* Ein iPad oder Android-Tablet mit Saugnapfhalterung an der Windschutzscheibe oder Konsole befestigen.
+* Über das lokale Wi-Fi der Zentralbox mit der OpenMotorBridge PWA (Progressive Web App) verbinden.
+* **Lückenlose Konvoi-Übersicht:** Das Support-Team sieht in Echtzeit die Positionen aller Gruppenmotorräder auf der Offline-Karte, inklusive Radarwarnungen, Reifendrücken und Notrufen – völlig netzunabhängig und ohne Mobilfunknetz!
 
 ---
 
@@ -574,7 +628,7 @@ Der Universal Front-Knoten (PCBA 05) dient als zentrale Anschlussstelle für das
 └───────────────────────┴─────────┴────────────────────────────────────────────────────────┘
 ```
 
-#### 5.3.1 Lenker-Bedieneinheit: Dual-Input Architektur (OEM CAN-Bus & Dedizierter Hardware-Taster `J3`)
+#### 5.4.1 Lenker-Bedieneinheit: Dual-Input Architektur (OEM CAN-Bus & Dedizierter Hardware-Taster `J3`)
 
 OpenMotorBridge implementiert eine flexible **Dual-Input-Architektur** für die Lenkerbedienung. Beide Signalquellen speisen dieselbe interne Zustandsmaschine im Front-Node und können wahlweise autark oder parallel betrieben werden:
 
@@ -602,7 +656,7 @@ OpenMotorBridge implementiert eine flexible **Dual-Input-Architektur** für die 
   - *(Hinweis: Ein handelsüblicher 2-Pin PTT-Taster passt direkt auf Pin 1 und Pin 2).*
 * **Systemvorteil:** 100 % batteriefrei, keine Verzögerung durch Funk-Latenz (< 1,8 ms Reaktionszeit), hardwareseitig über Schmitt-Trigger entprellt und gegen 12V-Überspannung geschützt.
 
-#### 5.3.2 Totwinkel-Spiegelanzeigen (Radar Blind Spot Detection - BSD) (`J9`)
+#### 5.4.2 Totwinkel-Spiegelanzeigen (Radar Blind Spot Detection - BSD) (`J9`)
 * **Mechanische Montage (Aerodynamisches 2-Schalen Mirror-Pod):**
   - Montage am linken und rechten Spiegelschaft (Ø 10 mm / Ø 12 mm) mittels 2-teiliger Klemmschelle:
     - Oberschale mit 38° Lichttunnel und 3,8 mm Blendschutzvisier: [`bsd_mirror_upper_pod.stl`](../../hardware/cad/stl/05_accessories/bsd_mirror_upper_pod.stl)
@@ -619,7 +673,7 @@ OpenMotorBridge implementiert eine flexible **Dual-Input-Architektur** für die 
     - **Schnelles Warnblitzen (8 Hz, Rot/Bernstein):** Akute Kollisionsgefahr (hohe Differenzgeschwindigkeit oder Blinker in Richtung des herannahenden Fahrzeugs gesetzt).
   - *Automatisches Dimmen:* Über den optionalen Umgebungslichtsensor (`OPT3001` an `J12`) werden die LEDs bei Dunkelheit blendfrei heruntergedimmt.
 
-#### 5.3.3 Stromversorgung für Actioncam (GoPro, Insta360, DJI) (`J8`)
+#### 5.4.3 Stromversorgung für Actioncam (GoPro, Insta360, DJI) (`J8`)
 * **Mechanische Montage:**
   - Actioncam am Lenker, am Windschild-Träger oder am Sturzbügel befestigen.
 * **Elektrischer Anschluss an Port `J8` (JST-PH):**
@@ -628,7 +682,7 @@ OpenMotorBridge implementiert eine flexible **Dual-Input-Architektur** für die 
   - Port `J8` führt **bewusst keine USB-Datenleitungen**. Dadurch wird zuverlässig verhindert, dass die Kamera beim Einschalten der Motorradzündung in den lästigen PC-Massenspeichermodus ("USB verbunden") wechselt oder die Infotainment-Headunit (Boom! Box / Skyline OS) zum Einfrieren bringt.
   - **Automatischer BLE-Shutter-Stop:** Über den integrierten KL15-Pufferkondensator (`C_BUF`) auf der Front-Node Platine bleibt der ESP32-S3 beim Ausschalten der Zündung noch für 1,5 Sekunden aktiv und sendet per Bluetooth LE den "Record Stop"-Befehl an die Kamera – Videodateien werden sauber finalisiert und korrumpieren nicht.
 
-#### 5.3.4 Anschluss Qi-Induktionshalterung (Quad Lock, SP Connect) (`J10` & `J5`)
+#### 5.4.4 Anschluss Qi-Induktionshalterung (Quad Lock, SP Connect) (`J10` & `J5`)
 * **Mechanische Montage:**
   - Quad Lock Handlebar Mount mit wetterfestem Wireless Charging Head oder SP Connect Moto Mount mit Wireless Charging Module.
 * **Elektrischer Anschluss – Zwei flexible Optionen:**

@@ -507,7 +507,80 @@ The adventure mounting suite is standardized across the entire **BMW GS model fa
 
 ---
 
-### Step 5.3: Installation & Wiring of Optional Cockpit & Accessory Components
+### Step 5.3: Support Vehicle & Automotive Convoy Installation (Universal Sun Visor Clip, Wedge Dock & Wireless BLE OBD2)
+
+OpenMotorBridge can be installed completely tool-free and residue-free in any support vehicle (support van, rally sweep vehicle, camper/RV) or automotive convoy lead vehicle within minutes. It transforms the vehicle into a mobile command post with seamless live tracking, car speaker audio routing, and autonomous telemetry:
+
+```text
+       SUPPORT VEHICLE / CAR-KIT TOPOLOGY (RESIDUE-FREE RAPID DEPLOYMENT)
+ ┌──────────────────────────────────────────────────────────────────────────────┐
+ │ Windshield / Roof Headliner (Passenger Side)                                 │
+ │  ┌────────────────────────────────────────────────────────────────────────┐  │
+ │  │ Rear Pod 3 (GNSS + LoRa OMM + V2X) in Sun Visor Clip                   │  │
+ │  │ (car_sun_visor_pod3_clip.stl) ── Unobstructed 180° Zenith View         │  │
+ │  └───────────────────────────────┬────────────────────────────────────────┘  │
+ ├──────────────────────────────────┼───────────────────────────────────────────┤
+ │                                  │ (Slim USB-C cable tucked into headliner   │
+ │                                  │  seam and A-pillar weatherstrip)          │
+ │ Cockpit / Dashboard / Console    ▼                                           │
+ │  ┌────────────────────────────────────────────────────────────────────────┐  │
+ │  │ Central Box in 15° Wedge Dock (car_dashboard_wedge_dock.stl)           │  │
+ │  │  • USB-C Power Delivery (12V/24V cigarette lighter PD adapter)         │  │
+ │  │  • USB-C Media-Link ──> Apple CarPlay / Android Auto (Vehicle Speakers)│  │
+ │  │  • Wi-Fi AP ──> iPad / Tablet PWA (Offline Fleet Tracking & Radar)     │  │
+ │  └───────────────▲───────────────────────────────▲────────────────────────┘  │
+ │                  │ (M8 Cable / Dual-Lock)        │ (Autonomous Bluetooth BLE)│
+ │  ┌───────────────┴────────────────────────┐  ┌───┴────────────────────────┐  │
+ │  │ Pods 1 & 2 (Intercom & CB/PMR Radio)   │  │ Wireless OBD2 BLE Dongle   │  │
+ │  │ (3M Dual-Lock SJ3550 on dashboard      │  │ (vGate iCar / ELM327 in    │  │
+ │  │  or concealed at seat console / carpet)│  │  OBD port under dash)      │  │
+ │  └────────────────────────────────────────┘  └────────────────────────────┘  │
+ └──────────────────────────────────────────────────────────────────────────────┘
+```
+
+#### 1. Pod 3 Passenger Sun Visor Mounting (Universal Clip):
+* Slide the Universal Sun Visor Clip ([`car_sun_visor_pod3_clip.stl`](../../hardware/cad/stl/05_accessories/car_sun_visor_pod3_clip.stl) / CAD: [`car_sun_visor_pod3_clip.scad`](../../hardware/cad/scad/05_accessories/car_sun_visor_pod3_clip.scad)) onto the passenger sun visor (14–22 mm clamping range). The $30^\circ$ flared lead-in lip and transverse non-marring ribs ensure a snug, vibration-proof grip without creasing or damaging fabric or leather upholstery.
+* Snap Pod 3 into the cradle from the front (4 corner spherical snap detents lock the enclosure securely in place).
+* **RF & Optical Advantage:** Unobstructed $180^\circ$ view through the upper windshield into the zenith for u-blox MAX-M10S (Multi-GNSS), 868 MHz LoRa (SX1262 for OpenMotorMesh), and 5.9 GHz V2X. Offset to the passenger side, avoiding any collision or RF shielding from the central ADAS windshield camera housing behind the rearview mirror.
+* **Discreet Aesthetics:** Viewed from outside through tinted automotive glass, Pod 3 looks like a standard highway toll transponder (Telepass / FasTrak / E-Pass), eliminating theft temptation.
+
+#### 2. Satellite Pods 1 & 2 (Intercom & Radio) – 3M Dual-Lock™ Installation:
+* Pod 1 (e.g. Sena/Cardo Mesh Bridge) and Pod 2 (e.g. Midland CB/PMR Radio):
+* **Option A (Dashboard Mounting):** Affix flat to the passenger-side dashboard (near the A-pillar or base of the windshield) using self-adhesive **3M Dual-Lock™ (SJ3550)**. Provides optimal radio line-of-sight and easy access to cartridge buttons.
+* **Option B (Seat Console / Transmission Tunnel):** Conceal with 3M Dual-Lock on the side plastic trim of the passenger seat console or loop-mate directly into the tunnel carpeting—100% invisible from outside the vehicle.
+* **Complete Modular Cartridge & Visor Swapping:** Because all pods (1, 2, 3) share the identical $135 \times 70 \times 26\,\text{mm}$ monocoque enclosure, any pod fits form-fittingly into the sun visor clip.
+  - *Multipurpose Swap:* In a single-pod configuration (e.g., Midland CB radio pod for an automotive rally), Pod 2 can be clicked directly into the sun visor clip, while Pod 3 is affixed to the dashboard via Dual-Lock. After the event, the pod unclips and transfers right back to the motorcycle.
+  - *(Note on Parcel Shelf: Rear parcel shelf mounting is intentionally avoided—modern vans, SUVs, and station wagons lack rigid rear shelves and trunk sheet metal heavily attenuates RF signals).*
+
+#### 3. Central Box 15° Wedge Dock & Power Delivery:
+* Snap the Central Box into the form-fit 15° Dashboard Wedge Dock ([`car_dashboard_wedge_dock.stl`](../../hardware/cad/stl/05_accessories/car_dashboard_wedge_dock.stl) / CAD: [`car_dashboard_wedge_dock.scad`](../../hardware/cad/scad/05_accessories/car_dashboard_wedge_dock.scad)).
+* **Securing the Dock:** Affix the wedge dock to the dashboard or center console using 3M Dual-Lock or a high-tack washable nano-gel pad (the 15° incline guarantees glare-free visibility of the OLED display and status LEDs from both driver and passenger seats).
+* **Power Supply:** Plug into any standard 12V/24V cigarette lighter USB-C PD fast charger (using a 12V USB-PD trigger cable or direct DC cable).
+* **Invisible, Tool-Free Cable Routing (5 Minutes):**
+  - Tuck the slim flat USB-C cable from Pod 3 into the soft **roof headliner seam** above the windshield using your fingertips.
+  - Continue routing behind the soft rubber weatherstripping of the passenger A-pillar, descending behind the glove compartment / floor carpet to the Central Box in the center console.
+  - **Zero drilling, zero trim damage, 100% residue-free removal (ideal for leasing and rental vehicles).**
+
+#### 4. Wireless Bluetooth OBD2 Telemetry Dongle (ELM327 / vGate / OBDLink):
+* Plug a compact Bluetooth BLE OBD2 adapter (e.g., *vGate iCar Pro BLE 4.0*, *OBDLink CX*, or *ELM327 BLE*) directly into the vehicle's standard 16-pin OBD2 diagnostic port located beneath the steering column in the driver footwell.
+* **Autonomous BLE Pairing to Central Box:** The Central Box (ESP32-S3 operating as an autonomous BLE Master) scans for the dongle's UUID/MAC upon ignition-on and establishes a secure link automatically without manual user pairing.
+* **Zero Footwell Cables:** No wires running across pedals or foot controls—completely eliminating safety hazards!
+* **Telemetry Polling & LoRa Mesh Broadcast:** The Central Box cyclically queries standard OBD2 PIDs (speed, RPM, coolant temperature, fuel level %, 12V battery voltage) and broadcasts this telemetry in the background across the 868 MHz LoRa mesh (OMM). Every group motorcycle is continuously updated on the sweep vehicle's position, speed, and health status.
+
+#### 5. Audio & Infotainment Integration (Apple CarPlay / Android Auto):
+* Connect a USB-C data cable from the Central Box to the vehicle's USB media port.
+* Wired Apple CarPlay / Android Auto launches automatically on the vehicle infotainment screen.
+* **Group Audio via Car Sound System:** The entire intercom mesh and two-way radio chatter (Sena/Cardo mesh, Midland CB/PMR) plays back through the vehicle's high-fidelity sound system with factory volume knob control.
+* Two-way transmission from the support vehicle back to riders is handled via vehicle hands-free mic or a Bluetooth PTT button.
+
+#### 6. Tablet Commissioning for Offline Fleet Tracking (PWA Live Dashboard):
+* Mount an iPad or Android tablet to the windshield or dashboard with a suction mount.
+* Connect the tablet to the Central Box's local Wi-Fi access point and launch the OpenMotorBridge PWA (Progressive Web App).
+* **Full Convoy Visibility:** The support crew enjoys real-time radar mapping and convoy tracking of all bikes (distances, tire pressure TPMS alerts, dropouts, SOS emergency beacons)—operating 100% offline without cellular coverage!
+
+---
+
+### Step 5.4: Installation & Wiring of Optional Cockpit & Accessory Components
 
 The Universal Front Node (PCBA 05) serves as the central wiring and communication hub for all cockpit peripherals. The following optional accessories can be integrated as needed via pre-molded plug-and-play wiring:
 
@@ -533,7 +606,7 @@ The Universal Front Node (PCBA 05) serves as the central wiring and communicatio
 └───────────────────────┴─────────┴────────────────────────────────────────────────────────┘
 ```
 
-#### 5.3.1 Handlebar Control Unit: Dual-Input Architecture (OEM CAN-Bus & Dedicated Hardware Switch `J3`)
+#### 5.4.1 Handlebar Control Unit: Dual-Input Architecture (OEM CAN-Bus & Dedicated Hardware Switch `J3`)
 
 OpenMotorBridge implements a versatile **Dual-Input Architecture** for handlebar controls. Both signal paths feed the exact same internal state machine on the Front Node and can be deployed individually or in parallel:
 
@@ -561,7 +634,7 @@ OpenMotorBridge implements a versatile **Dual-Input Architecture** for handlebar
   - *(Note: Standard 2-pin momentary push buttons plug directly onto Pin 1 and Pin 2).*
 * **System Benefit:** 100% battery-free, zero wireless latency (< 1.8 ms response time), hardware Schmitt-trigger debounced, and protected against accidental 12V shorts.
 
-#### 5.3.2 Blind Spot Detection Mirror LED Indicators (`J9`)
+#### 5.4.2 Blind Spot Detection Mirror LED Indicators (`J9`)
 * **Mechanical Mounting (Aerodynamic 2-Shell Mirror Pod):**
   - Clamps onto left and right mirror stems (Ø 10 mm / Ø 12 mm) via a 2-piece clamp assembly:
     - Upper pod with 38° inward light tunnel and 3.8 mm anti-glare visor hood: [`bsd_mirror_upper_pod.stl`](../../hardware/cad/stl/05_accessories/bsd_mirror_upper_pod.stl)
@@ -578,7 +651,7 @@ OpenMotorBridge implements a versatile **Dual-Input Architecture** for handlebar
     - **Rapid 8 Hz Flash (Red/Amber):** Imminent collision hazard (high closing speed or turn signal activated toward overtaking vehicle).
   - *Automated Night Dimming:* Controlled via ambient light sensor (`OPT3001` on `J12`) for glare-free night operation.
 
-#### 5.3.3 Action-Cam Power Supply (GoPro, Insta360, DJI) (`J8`)
+#### 5.4.3 Action-Cam Power Supply (GoPro, Insta360, DJI) (`J8`)
 * **Mechanical Mounting:**
   - Secure camera to handlebar, windshield bar, crash bar, or helmet tether.
 * **Electrical Connection at Port `J8` (JST-PH):**
@@ -587,7 +660,7 @@ OpenMotorBridge implements a versatile **Dual-Input Architecture** for handlebar
   - Port `J8` **deliberately omits USB data lines**. This completely prevents the action camera from defaulting into "USB Mass Storage Mode" upon bike ignition, ensuring uninterrupted video recording and preventing bike head unit lockups.
   - **Automated BLE Shutter Stop:** With onboard polymer buffer capacitor `C_BUF`, the ESP32-S3 stays powered for 1.5 seconds after ignition off to send a clean Bluetooth LE "Record Stop" packet, cleanly finalizing video clips without file corruption.
 
-#### 5.3.4 Qi Wireless Charging Cradle Integration (Quad Lock, SP Connect) (`J10` & `J5`)
+#### 5.4.4 Qi Wireless Charging Cradle Integration (Quad Lock, SP Connect) (`J10` & `J5`)
 * **Mechanical Mounting:**
   - Quad Lock Handlebar / Stem Mount with Weatherproof Wireless Charging Head or SP Connect Moto Mount with Wireless Charging Module.
 * **Electrical Connection – Two Flexible Options:**
