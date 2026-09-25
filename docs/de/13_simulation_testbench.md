@@ -57,7 +57,7 @@ Um das Zusammenspiel von Hardware, Akustik, Fahrdynamik, Thermik, Hochfrequenz-P
   2. **USV-Kaltstart (6.5V Cold Crank):** BQ24075 schaltet in $8{,}5\,\mu\text{s}$ unterbrechungsfrei auf LiPo-Pufferung um.
   3. **Bourns Audio-Übertrager CMRR:** $85{,}0\,\text{dB}$ Gleichtaktunterdrückung gegen $1{,}2\,\text{kHz}$ Lichtmaschinen-Pfeifen $\rightarrow$ Restrauschen am Audio-Codec $< 141\,\mu\text{V}$ (glasklare $67{,}9\,\text{dB}$ Sprach-SNR).
   4. **1-Wire Signalintegrität über 1.5m Kabelbaum:** Flankenanstiegszeit $t_{\text{rise}} = 1{,}74\,\mu\text{s}$ über $167{,}9\,\text{pF}$ Gesamtkapazität ($65{,}3\,\%$ Sicherheitsmarge zur $5{,}0\,\mu\text{s}$-Norm).
-  5. **PTT-zu-LoRa End-to-End Latenz:** Vom Tastendruck am Helm über Optokoppler, Opus-Encoder und UART-Bridge zum LoRa-Sendepuls in nur **$14{,}59\,\text{ms}$** ($< 25\,\text{ms}$ Aviation-Intercom-Norm).
+  5. **PTT-zu-LoRa End-to-End Latenz:** Vom Tastendruck am Lenker über Optokoppler, Opus-Encoder und UART-Bridge zum LoRa-Sendepuls in nur **$14{,}59\,\text{ms}$** ($< 25\,\text{ms}$ Aviation-Intercom-Norm).
   6. **Universal Front Node DCDC & Hub:** LMR36015 Synchrongleichrichter mit $91{,}8\,\%$ Wirkungsgrad ($5{,}3\,\text{mV}$ Ripple), USB2514B High-Speed Augendiagramm mit $88{,}5\,\%$ Augenöffnung ($18{,}5\,\text{ps}$ Skew), Knowles MEMS mit $65{,}4\,\text{dB}$ SNR.
   7. **Front-Node Zero-Latency PTT:** Gesamtlatenz vom Lenkertaster über ESP-NOW bis zur TLP222A Optokoppler-Zündung beträgt nur **$1{,}74\,\text{ms}$** ($< 5{,}0\,\text{ms}$ Anforderung).
   8. **Ottocast Auto-Café VBUS-Abschaltung:** Automatischer $60\,\text{s}$ Countdown nach Zündung AUS zur nahtlosen Übergabe des Smartphone-WLANs an Heim- oder Café-Netze.

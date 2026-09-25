@@ -1,6 +1,6 @@
 # 01 - System Architecture, Universal Satellite Topology & Acoustics
 
-This document specifies the overall system architecture of **OpenMotorBridge v8.0**, the universal 4-point satellite topology, flexible mounting paradigms (helmet vs. vehicle frame docking), RF coexistence, and seamless integration into modern OEM motorcycle infotainment systems.
+This document specifies the overall system architecture of **OpenMotorBridge v8.0**, the universal satellite topology, vehicle-integrated mounting concepts (saddlebag, frame, tail, and fairing docking with 100% wireless helmet comfort), RF coexistence, and seamless integration into modern OEM motorcycle infotainment systems.
 
 ---
 
@@ -11,7 +11,7 @@ Classic motorcycle communication systems are historically fragmented:
 * **RF Overload & De-Sensing:** Operating multiple 2.4 GHz mesh transceivers in close proximity (e.g., on the same helmet or in a single enclosure) results in severe receiver desensitization (*De-Sensing*), intermodulation, and range drops of up to $80\,\%$.
 * **Proprietary Infotainment Lock-in:** Systems like Harley-Davidson Boom! Box GTS / Skyline OS or BMW ConnectedRide require expensive OEM modules (such as the HD WHIM) to unlock Apple CarPlay or Android Auto.
 
-**OpenMotorBridge v8.0** resolves these bottlenecks via a modular, decoupled **4-Point Satellite Topology** with galvanically isolated DSP audio routing:
+**OpenMotorBridge v8.0** resolves these bottlenecks via a modular, decoupled **Satellite Topology** with galvanically isolated DSP audio routing on the motorcycle:
 
 ```
                                      SYSTEM TOPOLOGY OVERVIEW
@@ -34,7 +34,7 @@ Classic motorcycle communication systems are historically fragmented:
 │ • Intercom Bridge A (Sena    │ • Intercom Bridge B (Cardo   │ • 1-Tier Monolithic Sled    │
 │   50S/60S/MeshPort Sled)     │   Packtalk Edge / PMR446)    │ • u-blox MAX-M10S Multi-GNSS│
 │ • Saddlebag, Frame, Rear or  │ • Saddlebag, Frame, Rear or  │ • SX1262 LoRa 868MHz        │
-│   Helmet Mounting            │   Helmet Mounting            │ • DS18B20 Temp Sensor (J6)  │
+│   Crash Bar Mounting         │   Crash Bar Mounting         │ • DS18B20 Temp Sensor (J6)  │
 │                              │                              │ • 2.4 GHz OMM-Mesh (ESP32-C3│
 └──────────────────────────────┴──────────────────────────────┴─────────────────────────────┘
   │                                                                                         │
@@ -168,11 +168,11 @@ The enlarged pod cartridges ($110 \times 54 \times 28\,\text{mm}$ interior cavit
 
 When operating Sena and Cardo mesh units simultaneously, receiver blocking must be reliably prevented:
 
-1. **Physical Separation ($d \ge 45\,\text{cm}$):**
-   * Helmet setup: Rider helmet (front/high) and pillion helmet (rear/high) maintain $50\dots 80\,\text{cm}$ separation.
-   * Frame setup: Pod 1 (left side) and Pod 2 (right side) utilize the motorcycle's steel/aluminum chassis, engine block, and fuel tank as an RF barrier.
+1. **Physical Separation ($d \ge 45\,\text{cm}$ via Lateral Flank Placement):**
+   * **Zero Pods on Helmets:** The heavy universal pods ($110 \times 54 \times 28\,\text{mm}$ cartridges) remain permanently mounted on the vehicle (e.g. left and right saddlebag lids, frame tubes, or crash bars). Rider and pillion helmets remain 100% cable-free and unburdened by bulky pods.
+   * **Physical & Metallic Barrier:** Pod 1 (left vehicle flank / left saddlebag) and Pod 2 (right vehicle flank / right saddlebag) utilize the motorcycle's steel/aluminum chassis, fuel tank, engine block, and rear subframe as a natural metallic RF shield.
 2. **Shielding Attenuation:**
-   * Free-space loss over $50\,\text{cm}$ combined with chassis metal shielding achieves an **RF isolation of $> 35\,\text{dB}$**.
+   * Free-space loss over $> 50\,\text{cm}$ combined with chassis metallic shielding achieves an **RF isolation of $> 35\,\text{dB}$**.
    * Coupling levels at adjacent receivers remain below $-15\,\text{dBm}$, keeping low-noise amplifiers (LNAs) in their linear region and preventing *De-Sensing*.
 3. **Tri-RF Architecture in Rear Pod 3:**
    * Rear Pod 3 integrates 2.4 GHz Mesh, 868 MHz LoRa, and GNSS. The $25 \times 25\,\text{mm}$ patch ground plane and $15 \times 8\,\text{mm}$ antenna keepout restrict mutual RF degradation to $< 0.2\,\text{dB}$.

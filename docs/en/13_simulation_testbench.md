@@ -53,7 +53,7 @@ To exhaustively verify the interaction of hardware, acoustics, vehicle dynamics,
   2. **UPS Cold Crank (6.5V Dip):** BQ24075 engages LiPo backup within $8{,}5\,\mu\text{s}$ without dropping the 5V rail.
   3. **Bourns Audio Transformer CMRR:** $85{,}0\,\text{dB}$ common-mode rejection against alternator whine $\rightarrow$ Residual noise at codec $< 141\,\mu\text{V}$ ($67{,}9\,\text{dB}$ SNR).
   4. **1-Wire Signal Integrity over 1.5m Harness:** Rise time $t_{\text{rise}} = 1{,}74\,\mu\text{s}$ across $167{,}9\,\text{pF}$ total capacitance ($65{,}3\,\%$ margin to $5{,}0\,\mu\text{s}$ spec).
-  5. **PTT-to-LoRa End-to-End Latency:** Total path from helmet key through optocoupler, Opus encoder, and UART bridge takes **$14{,}59\,\text{ms}$** ($< 25\,\text{ms}$ aviation standard).
+  5. **PTT-to-LoRa End-to-End Latency:** Total path from handlebar PTT switch through optocoupler, Opus encoder, and UART bridge takes **$14{,}59\,\text{ms}$** ($< 25\,\text{ms}$ aviation standard).
   6. **Front Node DCDC & Hub:** LMR36015 buck converter delivers $91{,}8\,\%$ efficiency ($5{,}3\,\text{mV}$ ripple); USB2514B achieves $88{,}5\,\%$ eye opening with $18{,}5\,\text{ps}$ skew.
   7. **Front Node Zero-Latency PTT:** Glass-to-glass latency from mechanical handlebar switch over ESP-NOW to TLP222A optocoupler firing is only **$1{,}74\,\text{ms}$**.
 

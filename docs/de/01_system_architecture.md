@@ -1,6 +1,6 @@
 # 01 - Systemarchitektur, Universelle Satelliten-Topologie & Akustik
 
-Dieses Dokument spezifiziert die übergeordnete Gesamtsystem-Architektur der **OpenMotorBridge v8.0**, die universelle 4-Punkte-Satelliten-Topologie, die flexiblen Montageoptionen (Helm- vs. Fahrzeugrahmen-Docking), die HF-Koexistenz sowie die nahtlose Integration in moderne OEM-Motorrad-Infotainmentsysteme.
+Dieses Dokument spezifiziert die übergeordnete Gesamtsystem-Architektur der **OpenMotorBridge v8.0**, die universelle Satelliten-Topologie, die fahrzeugfesten Montagekonzepte (Koffer, Rahmen, Heck, Verkleidung bei 100 % kabellosem Helm-Komfort), die HF-Koexistenz sowie die nahtlose Integration in moderne OEM-Motorrad-Infotainmentsysteme.
 
 ---
 
@@ -11,7 +11,7 @@ Klassische Motorrad-Kommunikationssysteme sind historisch stark fragmentiert:
 * **HF-Übersteuerungen & De-Sensing:** Der gleichzeitige Betrieb mehrerer 2,4-GHz-Mesh-Transceiver an einem einzigen Montagepunkt (z. B. am selben Helm oder in einer gemeinsamen Box) führt zu massiver Empfänger-Desensibilisierung (*De-Sensing*), Intermodulation und Reichweiteneinbrüchen von bis zu $80\,\%$.
 * **Proprietäre Infotainment-Sperren:** Systeme wie Harley-Davidson Boom! Box GTS / Skyline OS oder BMW ConnectedRide verlangen teure, herstellereigene Schnittstellenmodule (z. B. HD WHIM), um Apple CarPlay oder Android Auto freizuschalten.
 
-**OpenMotorBridge v8.0** löst diese Probleme durch eine modular entkoppelte **4-Punkte-Satelliten-Topologie** mit galvanisch getrenntem DSP-Audio-Routing:
+**OpenMotorBridge v8.0** löst diese Probleme durch eine modular entkoppelte **Satelliten-Topologie** mit galvanisch getrenntem DSP-Audio-Routing auf dem Motorrad:
 
 ```
                                   GESAMTSYSTEM-TOPOLOGIE
@@ -34,7 +34,7 @@ Klassische Motorrad-Kommunikationssysteme sind historisch stark fragmentiert:
 │ • Intercom-Brücke A (Sena    │ • Intercom-Brücke B (Cardo   │ • 1-Tier Monolith-Schlitten │
 │   50S/60S/MeshPort-Kassette) │   Packtalk Edge / PMR446)    │ • u-blox MAX-M10S Multi-GNSS│
 │ • Koffer-, Rahmen-, Heck-    │ • Koffer-, Rahmen-, Heck-    │ • SX1262 LoRa 868MHz        │
-│   oder Helm-Montage          │   oder Helm-Montage          │ • DS18B20 Temp-Sensor (J6)  │
+│   oder Sturzbügel-Montage    │   oder Sturzbügel-Montage    │ • DS18B20 Temp-Sensor (J6)  │
 │                              │                              │ • 2.4 GHz OMM-Mesh (ESP32-C3│
 └──────────────────────────────┴──────────────────────────────┴─────────────────────────────┘
   │                                                                                         │
@@ -163,11 +163,11 @@ Die erweiterten Pod-Kassetten ($110 \times 54 \times 28\,\text{mm}$ Innenraum) n
 
 Werden Sena- und Cardo-Mesh-Geräte gleichzeitig betrieben, muss eine gegenseitige Blockade der 2,4-GHz-Empfänger zuverlässig verhindert werden:
 
-1. **Räumliche Distanzierung ($d \ge 45\,\text{cm}$):**
-   * Bei Helm-Montage: Fahrerhelm (vorne/oben) und Soziushelm (hinten/oben) sind im Fahrbetrieb $50\dots 80\,\text{cm}$ voneinander entfernt.
-   * Bei Rahmen-Montage: Pod 1 (linke Fahrzeugflanke) und Pod 2 (rechte Fahrzeugflanke) nutzen den massiven Motorradrahmen, Tank und Heckfender als metallische HF-Abschirmung.
+1. **Räumliche Distanzierung ($d \ge 45\,\text{cm}$ durch Fahrzeug-Flankentrennung):**
+   * **Keine Pod-Montage am Helm:** Die schweren Pods ($110 \times 54 \times 28\,\text{mm}$ Kassetten) verbleiben grundsätzlich fest am Fahrzeug (z. B. linker und rechter Kofferdeckel, Rahmenrohre oder Sturzbügel). Die Helme von Fahrer und Sozius bleiben zu 100 % kabel- und pod-frei.
+   * **Physische & metallische Barriere:** Pod 1 (linke Fahrzeugflanke / linker Koffer) und Pod 2 (rechte Fahrzeugflanke / rechter Koffer) nutzen den massiven Motorradrahmen, den Kraftstofftank, den Motorblock und die Heckstruktur als natürliche metallische HF-Abschirmung.
 2. **Schirmdämpfung:**
-   * Die Freiraumdämpfung über $50\,\text{cm}$ in Kombination mit der metallischen Abschirmung durch den Fahrzeugrahmen erzielt eine **HF-Entkopplung von $> 35\,\text{dB}$**.
+   * Die Freiraumdämpfung über $> 50\,\text{cm}$ in Kombination mit der massiven metallischen Abschirmung durch die Fahrzeugstruktur erzielt eine **HF-Entkopplung von $> 35\,\text{dB}$**.
    * Damit sinkt der Einkopplungspegel des Nachbarsenders unter $-15\,\text{dBm}$, wodurch die Eingangs-LNAs beider Headsets im linearen Bereich arbeiten und kein *De-Sensing* auftritt.
 3. **Tri-RF Architektur im Heck-Pod 3:**
    * Der Heck-Pod 3 vereint 2,4 GHz Mesh, 868 MHz LoRa und GNSS. Durch die $25 \times 25\,\text{mm}$ Groundplane der GNSS-Patchantenne und das $15 \times 8\,\text{mm}$ PCB-Keepout für die 2,4-GHz-Antenne ist eine gegenseitige Beeinflussung auf $< 0{,}2\,\text{dB}$ begrenzt.
