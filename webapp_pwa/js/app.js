@@ -9392,6 +9392,10 @@ function renderGroupBuilder() {
             const addonBadges = [];
             if (bike.addons?.frontNode) addonBadges.push(`<span class="card-badge badge-blue" style="font-size: 0.7rem;">Cockpit Front-Node</span>`);
             if (bike.addons?.rearPod3) addonBadges.push(`<span class="card-badge badge-green" style="font-size: 0.7rem;">Heck-Pod 3 (LoRa/GNSS)</span>`);
+            if (bike.addons?.radar2) addonBadges.push(`<span class="card-badge badge-red" style="font-size: 0.7rem;">Radar 2.0 Sub-MCU</span>`);
+            if (bike.addons?.bsdMirrors) addonBadges.push(`<span class="card-badge badge-yellow" style="font-size: 0.7rem;">BSD Spiegel-LEDs</span>`);
+            if (bike.addons?.actionCamDock) addonBadges.push(`<span class="card-badge badge-purple" style="font-size: 0.7rem;">Actioncam-Dock</span>`);
+            if (bike.addons?.handlebarControls) addonBadges.push(`<span class="card-badge badge-blue" style="font-size: 0.7rem;">Lenkertaster</span>`);
             if (bike.addons?.keyfob) addonBadges.push(`<span class="card-badge badge-orange" style="font-size: 0.7rem;">Smart-Keyfob</span>`);
 
             return `
@@ -9438,7 +9442,8 @@ function renderGroupBuilder() {
         { id: 'kicad_rear_pod3', code: 'PCBA 04', name: isDe ? 'Heck-Pod 3 Transceiver' : 'Rear Pod 3 Transceiver', desc: isDe ? 'RP2040, LoRa, GNSS, Radom' : 'RP2040, LoRa, GNSS' },
         { id: 'kicad_front_node', code: 'PCBA 05', name: isDe ? 'Universal Front-Knoten' : 'Universal Front Node', desc: isDe ? 'ESP32-S3, USB Hub, 20W PD' : 'ESP32-S3, USB Hub, PD' },
         { id: 'kicad_magsafe_dock', code: 'PCBA 06', name: isDe ? 'MagSafe Dock Adapter' : 'MagSafe Dock Adapter', desc: isDe ? '500mA Sicherung, TVS Diode' : '500mA Fuse, TVS Diode' },
-        { id: 'kicad_smart_keyfob', code: 'PCBA 07', name: isDe ? 'Smart-Keyfob Platine' : 'Smart Keyfob', desc: isDe ? 'BLE Tracker, LRA Haptik' : 'BLE Tracker, LRA Haptic' }
+        { id: 'kicad_smart_keyfob', code: 'PCBA 07', name: isDe ? 'Smart-Keyfob Platine' : 'Smart Keyfob', desc: isDe ? 'BLE Tracker, LRA Haptik' : 'BLE Tracker, LRA Haptic' },
+        { id: 'kicad_radar_submcu', code: 'PCBA 08', name: isDe ? 'Radar 2.0 Sub-MCU Platine' : 'Radar 2.0 Sub-MCU Board', desc: isDe ? 'Wheeltec MR20 Radar, 36x Halo RGB LEDs, V2X' : 'Wheeltec MR20 Radar, 36x Halo RGB LEDs, V2X' }
     ];
 
     let activeDesignsCount = 0;
@@ -9492,7 +9497,7 @@ function renderGroupBuilder() {
 
     const pcbaBadge = document.getElementById('group-pcba-badge');
     if (pcbaBadge) {
-        pcbaBadge.textContent = `${activeDesignsCount} ${isDe ? 'aktive Board-Designs / 7' : 'active designs / 7'}`;
+        pcbaBadge.textContent = `${activeDesignsCount} ${isDe ? `aktive Board-Designs / ${masterPcbas.length}` : `active designs / ${masterPcbas.length}`}`;
     }
 
     // 5. Render Consolidated 3D Print Parts
@@ -9694,7 +9699,8 @@ function exportGroupBomCsv() {
         { id: 'kicad_rear_pod3', code: 'PCBA 04', name: 'Heck-Pod 3 Transceiver' },
         { id: 'kicad_front_node', code: 'PCBA 05', name: 'Universal Front-Knoten' },
         { id: 'kicad_magsafe_dock', code: 'PCBA 06', name: 'MagSafe Dock Adapter' },
-        { id: 'kicad_smart_keyfob', code: 'PCBA 07', name: 'Smart-Keyfob Platine' }
+        { id: 'kicad_smart_keyfob', code: 'PCBA 07', name: 'Smart-Keyfob Platine' },
+        { id: 'kicad_radar_submcu', code: 'PCBA 08', name: 'Radar 2.0 Sub-MCU Platine' }
     ];
 
     masterPcbas.forEach(p => {
