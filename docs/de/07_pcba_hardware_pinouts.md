@@ -306,30 +306,37 @@ Die Platine verfügt über 3 automatische Koaxial-Umschaltbuchsen (`Murata MM803
 
 | ESP32-C3 Pin | Netzknoten | Funktion & Peripherie |
 | :--- | :--- | :--- |
-| **GPIO 20 / 21** | `UART0_RX` / `TX` | High-Speed UART-Verbindung zur Zentralbox (460.800 Baud, ROM-SLIP Bootloader) |
-| **GPIO 0 / 1** | `UART1_TX` / `RX` | High-Speed UBX/NMEA Datenverbindung zum u-blox NEO-M9N GNSS-Modul |
-| **GPIO 10** | `TIMEPULSE_1PPS` | Hardware-Capture Timer-Eingang für framegenaue Actioncam-Synchronisation |
-| **GPIO 4** | `SPI_SCK` | SPI Serial Clock zum Semtech SX1262 LoRa-Transceiver |
-| **GPIO 5** | `SPI_MISO` | SPI Master-In Slave-Out vom SX1262 |
-| **GPIO 6** | `SPI_MOSI` | SPI Master-Out Slave-In zum SX1262 |
-| **GPIO 7** | `SPI_NSS` | SPI Chip Select (Active-Low) zum SX1262 |
-| **GPIO 3** | `LORA_BUSY` | SX1262 State-Flag (Hardware-Wartebedingung für SPI-Befehle) |
-| **GPIO 2** | `LORA_DIO1` | SX1262 IRQ (Packet Received / Packet Sent Interrupt) |
-| **GPIO 8** | `I2C_SDA` / `1WIRE` | I2C Data / 1-Wire Datenleitung für externe Antennenfuß-Sensorik (`J6`) |
-| **GPIO 9** | `I2C_SCL` | I2C Clock für hochpräzisen Temperatursensor (TI TMP117) & SHT40 |
+| **GPIO 20 / 21** | `POD3_UART_RX` / `TX` | High-Speed UART-Verbindung zur Zentralbox (460.800 Baud, ROM-SLIP Bootloader) |
+| **GPIO 0 / 1** | `GNSS_RXD` / `TXD` | High-Speed UBX/NMEA Datenverbindung zum u-blox MAX-M10S GNSS-Modul |
+| **GPIO 2** | `GNSS_1PPS` | Hardware-Capture Timer-Eingang für sub-µs Zeitstempel & Actioncam-Synchronisation |
+| **GPIO 3** | `LORA_DIO1` | Semtech SX1262 IRQ (Packet Received / Packet Sent Interrupt) |
+| **GPIO 4** | `LORA_BUSY` | SX1262 State-Flag (Hardware-Wartebedingung für SPI-Befehle) |
+| **GPIO 6** | `LORA_NRST` | SX1262 Hardware-Reset Leitung |
+| **GPIO 7** | `LORA_NSS` | SPI Chip Select (Active-Low) zum SX1262 LoRa-Transceiver |
+| **GPIO 8** | `LORA_SCK` | SPI Serial Clock zum SX1262 |
+| **GPIO 9** | `LORA_MISO` | SPI Master-In Slave-Out vom SX1262 |
+| **GPIO 10** | `LORA_MOSI` | SPI Master-Out Slave-In zum SX1262 |
 | **U.FL Port** | `ESP_RF_ANT` | 2.4 GHz RF-Port für integriertes OMM-Mesh & Wi-Fi Uplink |
 
-### 6.5 Externer Antennenfuß-Sensorport (`J6` / `J_EXT_TEMP`)
+### 6.5 Externer Antennenfuß-Sensorport (`J6` / `DS18B20_EXT_TEMP`)
 
-Zur temperaturstabilen Erfassung der Umgebungstemperatur ohne thermische Verfälschung durch Motorstauwärme unter der Heck-Abdeckung ($45\text{–}55\,^\circ\text{C}$) verfügt PCBA 04 über einen dedizierten 3-Pin JST-SH Micro-Steckverbinder (`J6`), dessen Zuleitung formschlüssig durch den Antennensockel in den Fahrtwindkanal der Telemetrieflosse (`cvo_st_telemetry_fin.stl`) geführt wird:
+Zur temperaturstabilen Erfassung der Außentemperatur ohne thermische Verfälschung durch Motorstauwärme unter der Heck-Abdeckung ($45\text{–}55\,^\circ\text{C}$) verfügt PCBA 04 über einen 3-Pin JST-SH Micro-Steckverbinder (`J6`, SM03B-SRSS-TB, 1.00 mm Raster, horizontal an der Platinen-Hinterkante montiert). Dessen Leitung wird formschlüssig durch die Kabeldurchführung des OMM-Radomfußes (`04_antenna_bracket_omm.scad`) in den laminaren Fahrtwindkanal der Telemetrieflosse (`cvo_st_telemetry_fin.stl`) geführt.
+
+#### Multi-Drop 1-Wire Busarchitektur
+Da sämtliche 11 GPIOs des ESP32-C3 vollständig durch GNSS-UART/1PPS und LoRa-SPI belegt sind, nutzt `J6` die **1-Wire Multi-Drop-Fähigkeit** des Dallas-Bus:
+* Pin 2 von `J6` liegt direkt parallel zum On-Board 1-Wire ID-ROM `U4` (DS2401) auf dem Netz `POD3_1WIRE_ID` (Pin 6 der Zentralbox-Schnittstelle `J1`).
+* Ein lokaler 4,7 kΩ Pull-Up-Widerstand (`R2`, 0603) auf PCBA 04 sorgt für steile Signalflanken auch bei abgesetzter Leitung.
+* Der Zentralbox-Host (ESP32-S3) liest beide Bauteile über dieselbe Leitung anhand ihres 64-Bit ROM-Family-Codes aus:
+  * **Family-Code `0x01`:** DS2401 Heck-Pod Hardware-Identifikation
+  * **Family-Code `0x28`:** Dallas DS18B20 Digital-Temperatursensor ($\pm 0{,}5\,^\circ\text{C}$ Genauigkeit, $-55\dots +125\,^\circ\text{C}$)
 
 | Pin (J6) | Signal | Pegel | Beschreibung |
 | :---: | :--- | :--- | :--- |
-| **Pin 1** | `+3V3_SENS` | $+3{,}3\,\text{V}$ DC geschaltet | Sensor-Stromversorgung (Low-Noise LDO) |
-| **Pin 2** | `EXT_TEMP_DATA` | $3{,}3\,\text{V}$ Open-Drain (4,7 kΩ Pullup) | 1-Wire (Dallas DS18B20) oder I2C SDA (TI TMP117) |
-| **Pin 3** | `GND` | $0\,\text{V}$ | Signalmasse (geschirmt gegen HF) |
+| **Pin 1** | `VCC_3V3` | $+3{,}3\,\text{V}$ DC geschaltet | Sensor-Stromversorgung (Low-Noise LDO) |
+| **Pin 2** | `POD3_1WIRE_ID` | $3{,}3\,\text{V}$ Open-Drain (4,7 kΩ On-Board Pull-up `R2`) | 1-Wire Datenleitung (Multi-Drop zu DS2401 `U4` und Zentralbox `J1:Pin 6`) |
+| **Pin 3** | `GND` | $0\,\text{V}$ | Signal- und Schirmungsmasse |
 
-* **Thermische Isolation:** Sensor sitzt vollständig außerhalb des Rahmens und des Auspuff-Wärmefeldes im direkten laminaren Fahrtwind.
+* **Thermische Entkopplung:** Der wasserdichte Edelstahl-Tauchfühler ($\varnothing 6 \times 30\,\text{mm}$, IP67) sitzt geschützt vor Spritzwasser direkt im dynamischen Fahrtwindstrom.
 * **Keine Lenkkopf-Kabel:** Die Erfassung am Heck bewahrt die vollständige Funkentkopplung des Frontknotens (ESP-NOW).
 
 ---

@@ -306,30 +306,37 @@ The board features 3 automatic coaxial switch connectors (`Murata MM8030-2610`) 
 
 | ESP32-C3 Pin | Net Name | Function & Peripheral Assignment |
 | :--- | :--- | :--- |
-| **GPIO 20 / 21** | `UART0_RX` / `TX` | High-Speed UART link to Central Box (460,800 Baud, ROM-SLIP Bootloader) |
-| **GPIO 0 / 1** | `UART1_TX` / `RX` | High-Speed UBX/NMEA binary link to u-blox NEO-M9N GNSS module |
-| **GPIO 10** | `TIMEPULSE_1PPS` | Hardware capture timer input for frame-accurate action cam synchronization |
-| **GPIO 4** | `SPI_SCK` | SPI Serial Clock to Semtech SX1262 LoRa transceiver |
-| **GPIO 5** | `SPI_MISO` | SPI Master-In Slave-Out from SX1262 |
-| **GPIO 6** | `SPI_MOSI` | SPI Master-Out Slave-In to SX1262 |
-| **GPIO 7** | `SPI_NSS` | SPI Chip Select (Active-Low) to SX1262 |
-| **GPIO 3** | `LORA_BUSY` | SX1262 State Flag (hardware hold condition for SPI commands) |
-| **GPIO 2** | `LORA_DIO1` | SX1262 IRQ (Packet Received / Packet Sent Interrupt) |
-| **GPIO 8** | `I2C_SDA` / `1WIRE` | I2C Data / 1-Wire data link for external antenna fin sensor port (`J6`) |
-| **GPIO 9** | `I2C_SCL` | I2C Clock for high-precision temperature probe (TI TMP117) & SHT40 |
+| **GPIO 20 / 21** | `POD3_UART_RX` / `TX` | High-Speed UART link to Central Box (460,800 Baud, ROM-SLIP Bootloader) |
+| **GPIO 0 / 1** | `GNSS_RXD` / `TXD` | High-Speed UBX/NMEA binary link to u-blox MAX-M10S GNSS module |
+| **GPIO 2** | `GNSS_1PPS` | Hardware capture timer input for sub-µs timestamps & action cam synchronization |
+| **GPIO 3** | `LORA_DIO1` | Semtech SX1262 IRQ (Packet Received / Packet Sent Interrupt) |
+| **GPIO 4** | `LORA_BUSY` | SX1262 State Flag (hardware hold condition for SPI commands) |
+| **GPIO 6** | `LORA_NRST` | SX1262 Hardware Reset line |
+| **GPIO 7** | `LORA_NSS` | SPI Chip Select (Active-Low) to SX1262 LoRa transceiver |
+| **GPIO 8** | `LORA_SCK` | SPI Serial Clock to SX1262 |
+| **GPIO 9** | `LORA_MISO` | SPI Master-In Slave-Out from SX1262 |
+| **GPIO 10** | `LORA_MOSI` | SPI Master-Out Slave-In to SX1262 |
 | **U.FL Port** | `ESP_RF_ANT` | 2.4 GHz RF port for native OMM Mesh & Wi-Fi uplink |
 
-### 6.5 External Antenna Base Sensor Port (`J6` / `J_EXT_TEMP`)
+### 6.5 External Antenna Base Sensor Port (`J6` / `DS18B20_EXT_TEMP`)
 
-To ensure stable ambient air temperature readings unaffected by heat buildup under the tail cowl ($45\text{–}55\,^\circ\text{C}$), PCBA 04 integrates a dedicated 3-pin JST-SH micro header (`J6`). The wiring harness routes directly through the antenna mounting boss into the slipstream duct of the telemetry fin (`cvo_st_telemetry_fin.stl`):
+To ensure stable ambient air temperature readings unaffected by heat buildup under the tail cowl ($45\text{–}55\,^\circ\text{C}$), PCBA 04 integrates a 3-pin JST-SH micro header (`J6`, SM03B-SRSS-TB, 1.00 mm pitch, horizontal mounting at board rear edge). The wiring harness routes directly through the cable grommet of the OMM radome antenna bracket (`04_antenna_bracket_omm.scad`) into the laminar slipstream duct of the telemetry fin (`cvo_st_telemetry_fin.stl`).
+
+#### Multi-Drop 1-Wire Bus Architecture
+Because all 11 GPIOs on the ESP32-C3 are fully allocated to GNSS UART/1PPS and LoRa SPI, `J6` takes advantage of the **1-Wire multi-drop bus capability**:
+* Pin 2 of `J6` connects directly in parallel with on-board 1-Wire ID ROM `U4` (DS2401) on net `POD3_1WIRE_ID` (Pin 6 of Central Box connector `J1`).
+* A local 4.7 kΩ pull-up resistor (`R2`, 0603) on PCBA 04 guarantees steep signal rise times even over external wire runs.
+* The Central Box host (ESP32-S3) reads both devices over the same single wire by matching their 64-bit ROM family codes:
+  * **Family Code `0x01`:** DS2401 Rear Pod hardware identification
+  * **Family Code `0x28`:** Dallas DS18B20 digital temperature probe ($\pm 0.5\,^\circ\text{C}$ accuracy, $-55\dots +125\,^\circ\text{C}$)
 
 | Pin (J6) | Signal | Level | Description |
 | :---: | :--- | :--- | :--- |
-| **Pin 1** | `+3V3_SENS` | $+3.3\,\text{V}$ DC switched | Sensor power supply (low-noise LDO rail) |
-| **Pin 2** | `EXT_TEMP_DATA` | $3.3\,\text{V}$ open-drain (4.7 kΩ pullup) | 1-Wire (Dallas DS18B20) or I2C SDA (TI TMP117) |
-| **Pin 3** | `GND` | $0\,\text{V}$ | Signal ground reference (RF shielded) |
+| **Pin 1** | `VCC_3V3` | $+3.3\,\text{V}$ DC switched | Sensor power supply (low-noise LDO rail) |
+| **Pin 2** | `POD3_1WIRE_ID` | $3.3\,\text{V}$ open-drain (4.7 kΩ on-board pull-up `R2`) | 1-Wire data line (multi-drop with DS2401 `U4` and Central Box `J1:Pin 6`) |
+| **Pin 3** | `GND` | $0\,\text{V}$ | Signal ground reference & shielding |
 
-* **Thermal Isolation:** Sensor probe sits completely outside the frame and exhaust heat plume directly in laminar oncoming airflow.
+* **Thermal Decoupling:** The waterproof stainless steel immersion probe ($\varnothing 6 \times 30\,\text{mm}$, IP67) sits shielded from splash water directly in dynamic oncoming airflow.
 * **No Steering Head Cabling:** Siting ambient sensing at the tail preserves the 100% wireless Front-Node design (ESP-NOW).
 
 ---

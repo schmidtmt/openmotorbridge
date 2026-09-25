@@ -59,13 +59,14 @@ This document serves as the master reference (Single Source of Truth) for the co
 | Designator | Component / MPN | Manufacturer | Package | LCSC / JLCPCB Part # | Function |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **U1** | ESP32-C3-WROOM-02U-N4 | Espressif Systems | SMD-18 (U.FL) | C2934579 | 2.4 GHz OMM Mesh & NMEA/LoRa Coprocessor |
-| **U11** | NEO-M9N-00B / MAX-M10S | u-blox | LCC-24 / LGA-18 | C3006240 | Multi-Constellation GNSS Engine (10 Hz, 1-PPS) |
-| **U12** | SX1262IMLTRT | Semtech | QFN-24 | C190184 | Secondary Fallback 868 MHz LoRa Transceiver (+22 dBm)|
-| **U13** | DS2401Z+ | Maxim / ADI | SOT-23 | C2834570 | 64-Bit 1-Wire Silicon Serial Number ID |
-| **U14** | TPS7A0533PDBVR | Texas Instruments | SOT-23-5 | C505293 | Ultra-Low-Noise 3.3V LDO (200 mA) for GNSS & LoRa |
-| **ANT1** | GP.1575.25.4.A.02 | Taoglas | 25x25x4 mm Patch | C2689100 | Ceramic Patch Antenna for GPS/Galileo/BeiDou |
-| **ANT2** | ANT-868-CW-HWR-SMA | Linx / Taoglas | Helical Antenna| C290111 | 868 MHz Helical Antenna for LoRa Tail Cowl |
-| **J3, J4, J5**| MM8030-2610RJ3 | Murata Electronics | SMD 2.0x2.0 mm | C2834595 | Automatic RF switch sockets for external antennas (2.4G, 868M, GNSS) |
+| **U2** | MAX-M10S-00B | u-blox | LGA-18 | C3006240 | Multi-Constellation GNSS Engine (10 Hz, 1-PPS) |
+| **U3** | SX1262IMLTRT | Semtech | QFN-24 | C190184 | Secondary Fallback 868 MHz LoRa Transceiver (+22 dBm)|
+| **U4** | DS2401Z+ | Maxim / ADI | SOT-23 | C2834570 | 64-Bit 1-Wire Silicon Serial Number ID |
+| **J1** | PinSocket 1x06 P2.54mm | Wurth / JST | Horizontal Socket | C289118 | Rear Pod 3 primary interface to Central Box (5V, GND, UART, 1PPS, 1-Wire) |
+| **J4, J5** | U.FL-R-SMT-1 / MM8030 | Hirose / Murata | SMD RF | C2834595 | RF coaxial sockets for LoRa (868 MHz) and GNSS (1575 MHz) |
+| **J6** | SM03B-SRSS-TB | JST | 3-Pin JST-SH 1.0mm SMD | C136656 | Slipstream ambient temperature port (3V3, 1-Wire, GND) |
+| **R2** | 4.7k 1% 0603 | Yageo / UniOhm | 0603 SMD | C23164 | 1-Wire bus pull-up resistor (POD3_1WIRE_ID) |
+| **Sensor (ext)**| DS18B20 Stainless Probe | Dallas / Maxim | Ø6x30mm IP67 | C2834580 | Waterproof 1-Wire ambient probe mounted in slipstream duct |
 
 ---
 

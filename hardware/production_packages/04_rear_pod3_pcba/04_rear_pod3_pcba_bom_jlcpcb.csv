@@ -9,7 +9,9 @@ F1,PTC_500mA,Resistor_SMD.pretty:R_1206_3216Metric,,1
 J1,6-Pin_OMM_Female_Socket,PinSocket_1x06_P2.54mm_Horizontal,,1
 J4,U.FL_LORA,U.FL_Hirose_U.FL-R-SMT-1_Vertical,,1
 J5,U.FL_GNSS,U.FL_Hirose_U.FL-R-SMT-1_Vertical,,1
+J6,DS18B20_EXT_TEMP,JST_SH_SM03B-SRSS-TB_1x03-1MP_P1.00mm_Horizontal,,1
 R1,1.5k_LED_Resistor,Resistor_SMD.pretty:R_0603_1608Metric,,1
+R2,4.7k,R_0603_1608Metric,,1
 U1,ESP32-C3-WROOM-02U,ESP32-C3-WROOM-02U,,1
 U2,MAX-M10S_GNSS,RF_GPS.pretty:ublox_MAX,,1
 U3,SX1262_LoRa_+22dBm,Package_DFN_QFN.pretty:QFN-24-1EP_4x4mm_P0.5mm_EP2.6x2.6mm,,1
