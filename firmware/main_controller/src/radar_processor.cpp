@@ -12,6 +12,8 @@
 #include "driver/gpio.h"
 #include <string.h>
 #include <math.h>
+#include "nvs_flash.h"
+#include "nvs.h"
 
 static const char *TAG = "RADAR_PROC";
 
@@ -56,6 +58,27 @@ static bool s_ess_enabled = true;
 static float s_ess_threshold_g = -0.60f;
 static uint32_t s_last_audio_alert_ms = 0;
 static uint32_t s_last_submcu_cmd_time_ms = 0;
+static uint16_t s_radar_macro_mask = RADAR_MACRO_DEFAULT_BITMASK;
+
+static void radar_load_macro_config_nvs(void) {
+    nvs_handle_t handle;
+    esp_err_t err = nvs_open("omb_radar", NVS_READWRITE, &handle);
+    if (err == ESP_OK) {
+        uint16_t val = 0;
+        err = nvs_get_u16(handle, "macro_mask", &val);
+        if (err == ESP_OK) {
+            s_radar_macro_mask = val;
+            ESP_LOGI(TAG, "💾 Loaded Radar Macro Config from NVS Flash: 0x%04X", s_radar_macro_mask);
+        } else {
+            nvs_set_u16(handle, "macro_mask", s_radar_macro_mask);
+            nvs_commit(handle);
+            ESP_LOGI(TAG, "💾 Initialized default Radar Macro Config in NVS: 0x%04X", s_radar_macro_mask);
+        }
+        nvs_close(handle);
+    } else {
+        ESP_LOGW(TAG, "Failed to open NVS namespace 'omb_radar' (err=0x%x)", err);
+    }
+}
 
 // Compact structs for Sub-MCU protocol communication
 typedef struct __attribute__((packed)) {
@@ -130,8 +153,25 @@ esp_err_t radar_processor_init(void) {
     ret = uart_driver_install(RADAR_UART_NUM, RADAR_RX_BUF_SIZE * 2, 512, 0, NULL, 0);
     if (ret != ESP_OK) return ret;
 
-    ESP_LOGI(TAG, "Radar UART2 initialized (RX: GPIO%d, TX: GPIO%d, Baud: %d)",
-             RADAR_UART_RX_PIN, RADAR_UART_TX_PIN, RADAR_UART_BAUDRATE);
+    // Load persistent macro config from NVS Flash
+    radar_load_macro_config_nvs();
+
+    // Dispatch initial macro config to Radar 2.0 Sub-MCU via UART2
+    RadarConfigMacrosPacket_t initial_cfg = {
+        .sync1 = OMB_RADAR_SYNC_1,
+        .sync2 = OMB_RADAR_SYNC_2,
+        .version = OMB_RADAR_VER_2,
+        .pkt_type = RADAR_PKT_CMD_CONFIG_MACROS,
+        .enabled_macros = s_radar_macro_mask,
+        .ess_threshold_pct = (uint8_t)(fabsf(s_ess_threshold_g) * 100.0f),
+        .spare = 0,
+        .checksum = 0
+    };
+    initial_cfg.checksum = calc_crc16((const uint8_t *)&initial_cfg, sizeof(initial_cfg) - 2);
+    uart_write_bytes(RADAR_UART_NUM, (const char *)&initial_cfg, sizeof(initial_cfg));
+
+    ESP_LOGI(TAG, "Radar UART2 initialized (RX: GPIO%d, TX: GPIO%d, Baud: %d), macro mask: 0x%04X",
+             RADAR_UART_RX_PIN, RADAR_UART_TX_PIN, RADAR_UART_BAUDRATE, s_radar_macro_mask);
     return ESP_OK;
 }
 
@@ -349,6 +389,40 @@ void radar_set_ess_config(bool enabled, float threshold_g) {
     s_ess_enabled = enabled;
     if (threshold_g < 0.0f) s_ess_threshold_g = threshold_g;
     ESP_LOGI(TAG, "ESS Configuration: Enabled=%d, Threshold=%.2fg", s_ess_enabled, s_ess_threshold_g);
+}
+
+uint16_t radar_get_macro_config(void) {
+    return s_radar_macro_mask;
+}
+
+esp_err_t radar_set_macro_config(uint16_t macro_bitmask) {
+    s_radar_macro_mask = macro_bitmask;
+
+    // 1. Persist to NVS Flash
+    nvs_handle_t handle;
+    if (nvs_open("omb_radar", NVS_READWRITE, &handle) == ESP_OK) {
+        nvs_set_u16(handle, "macro_mask", s_radar_macro_mask);
+        nvs_commit(handle);
+        nvs_close(handle);
+        ESP_LOGI(TAG, "💾 Saved Radar Macro Config to NVS Flash: 0x%04X", s_radar_macro_mask);
+    }
+
+    // 2. Dispatch Opcode 0x40 to Radar 2.0 Sub-MCU via UART2 (Binder M5)
+    RadarConfigMacrosPacket_t pkt = {
+        .sync1 = OMB_RADAR_SYNC_1,
+        .sync2 = OMB_RADAR_SYNC_2,
+        .version = OMB_RADAR_VER_2,
+        .pkt_type = RADAR_PKT_CMD_CONFIG_MACROS,
+        .enabled_macros = s_radar_macro_mask,
+        .ess_threshold_pct = (uint8_t)(fabsf(s_ess_threshold_g) * 100.0f),
+        .spare = 0,
+        .checksum = 0
+    };
+    pkt.checksum = calc_crc16((const uint8_t *)&pkt, sizeof(pkt) - 2);
+    uart_write_bytes(RADAR_UART_NUM, (const char *)&pkt, sizeof(pkt));
+    ESP_LOGI(TAG, "⚡ Dispatched Macro Config Packet (0x40) to Radar 2.0 Sub-MCU: 0x%04X", s_radar_macro_mask);
+
+    return ESP_OK;
 }
 
 void radar_trigger_ess_test(void) {

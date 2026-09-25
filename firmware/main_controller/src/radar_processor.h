@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "esp_err.h"
+#include "radar_mr20_protocol.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -113,6 +114,23 @@ void radar_set_cruise_mode(bool cruise_mode);
  * @brief Triggert den In-System Bootloader auf der Radar 2.0 Sub-MCU
  */
 esp_err_t radar_trigger_submcu_bootloader(void);
+
+/**
+ * @brief Default-Bitmaske für Radar 2.0 Warn-Makros (POST sweep, ESS strobe, Hazard beacon, Theft strobe, Ambient glow)
+ */
+#define RADAR_MACRO_DEFAULT_BITMASK   (RADAR_MACRO_POST_SWEEP_EN | RADAR_MACRO_ESS_STROBE_EN | \
+                                       RADAR_MACRO_HAZARD_BEACON_EN | RADAR_MACRO_THEFT_STROBE_EN | \
+                                       RADAR_MACRO_AMBIENT_GLOW_EN)
+
+/**
+ * @brief Gibt die aktuell konfigurierte Macro-Bitmaske zurück (RadarMacroConfigBits_t)
+ */
+uint16_t radar_get_macro_config(void);
+
+/**
+ * @brief Speichert die Macro-Konfiguration persistent im NVS und sendet sie an die Radar 2.0 Sub-MCU
+ */
+esp_err_t radar_set_macro_config(uint16_t macro_bitmask);
 
 #ifdef __cplusplus
 }

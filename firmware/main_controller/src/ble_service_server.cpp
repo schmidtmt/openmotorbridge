@@ -136,6 +136,12 @@ static int gatt_svr_chr_access_omb(uint16_t conn_handle, uint16_t attr_handle,
         } else if (cmd[0] == 0x2F) { // Safety Lighting: Front Aux Light Mode
             ESP_LOGI(TAG, "GATT: Front Aux Light Mode set to %d", cmd[1]);
             esp_now_front_node_set_aux_light(cmd[1]);
+        } else if (cmd[0] == 0x40) { // Safety Lighting: Radar 2.0 Macro Configuration (Persistent in NVS)
+            if (len >= 3) {
+                uint16_t mask = (uint16_t)cmd[1] | ((uint16_t)cmd[2] << 8);
+                radar_set_macro_config(mask);
+                ESP_LOGI(TAG, "GATT: Radar 2.0 Macro Config updated & saved to NVS: 0x%04X", mask);
+            }
         }
         return 0;
     }

@@ -2303,7 +2303,7 @@
                             <div style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 8px;">
                                 Lastschalter TPS1H100 (bis 4.5A) für LED-Nebelscheinwerfer oder Tagfahrlicht.
                             </div>
-                            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                            <div style="display: flex; gap: 8px;">
                                 <button id="btn-aux-mode-off" class="btn-secondary" style="flex: 1; padding: 6px 10px; font-size: 0.76rem;">
                                     AUS
                                 </button>
@@ -2313,6 +2313,68 @@
                                 <button id="btn-aux-mode-auto" class="btn-secondary active" style="flex: 1.4; padding: 6px 10px; font-size: 0.76rem; border-color: var(--accent-cyan); color: var(--accent-cyan);">
                                     AUTO-STROBE BEI ESS
                                 </button>
+                            </div>
+                        </div>
+
+                        <!-- Radar 2.0 Warn-Makros & Lichtmuster (Konfigurierbar & NVS-Persistent) -->
+                        <div style="padding: 10px 12px; background: rgba(0,0,0,0.25); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); margin-top: 12px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                <strong style="font-size: 0.85rem; color: var(--accent-purple);">🚨 Radar 2.0 Warn-Makros &amp; Lichtmuster</strong>
+                                <span class="card-badge badge-green" id="badge-radar-macros-status">💾 NVS Aktiv</span>
+                            </div>
+                            <div style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 10px;">
+                                Einzelne Lichtmuster auf der 36-LED Matrix dauerhaft konfigurieren (ECE/StVZO-konform &amp; persistent im Flash):
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 0.78rem;">🚀 <strong>Welcome &amp; POST-Sweep:</strong> 2.5s Start-Diagnosematrix auf 36 LEDs</span>
+                                    <label class="switch-custom" style="position: relative; display: inline-block; width: 34px; height: 18px; margin: 0;">
+                                        <input type="checkbox" id="chk-macro-post-sweep" checked style="opacity: 0; width: 0; height: 0;">
+                                        <span class="slider-round" style="position: absolute; cursor: pointer; inset: 0; background-color: var(--accent-green); border-radius: 20px; transition: .25s;"></span>
+                                    </label>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 0.78rem;">🛑 <strong>ESS Brems-Strobe:</strong> 4.5 Hz Vollast-Stroboskop bei Notbremsung (ax &lt; -0.6g)</span>
+                                    <label class="switch-custom" style="position: relative; display: inline-block; width: 34px; height: 18px; margin: 0;">
+                                        <input type="checkbox" id="chk-macro-ess-strobe" checked style="opacity: 0; width: 0; height: 0;">
+                                        <span class="slider-round" style="position: absolute; cursor: pointer; inset: 0; background-color: var(--accent-green); border-radius: 20px; transition: .25s;"></span>
+                                    </label>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 0.78rem;">⚠️ <strong>Pannen-Warnblitz (Hazard):</strong> 1.2 Hz Doppelblitz im Stillstand (Warnblinker)</span>
+                                    <label class="switch-custom" style="position: relative; display: inline-block; width: 34px; height: 18px; margin: 0;">
+                                        <input type="checkbox" id="chk-macro-hazard-beacon" checked style="opacity: 0; width: 0; height: 0;">
+                                        <span class="slider-round" style="position: absolute; cursor: pointer; inset: 0; background-color: var(--accent-green); border-radius: 20px; transition: .25s;"></span>
+                                    </label>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 0.78rem;">🛡️ <strong>Alarmanlagen-Strobe:</strong> 12 Hz High-Intensity Strobe bei Diebstahlalarm</span>
+                                    <label class="switch-custom" style="position: relative; display: inline-block; width: 34px; height: 18px; margin: 0;">
+                                        <input type="checkbox" id="chk-macro-theft-strobe" checked style="opacity: 0; width: 0; height: 0;">
+                                        <span class="slider-round" style="position: absolute; cursor: pointer; inset: 0; background-color: var(--accent-green); border-radius: 20px; transition: .25s;"></span>
+                                    </label>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 0.78rem;">🏍️ <strong>Konvoi-Puls (Follow-Me):</strong> Sanfter Wellenpuls für Gruppenleiter/Sweeper</span>
+                                    <label class="switch-custom" style="position: relative; display: inline-block; width: 34px; height: 18px; margin: 0;">
+                                        <input type="checkbox" id="chk-macro-convoy-marker" style="opacity: 0; width: 0; height: 0;">
+                                        <span class="slider-round" style="position: absolute; cursor: pointer; inset: 0; background-color: var(--accent-green); border-radius: 20px; transition: .25s;"></span>
+                                    </label>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 0.78rem;">↔️ <strong>Drängler-Abstandswarnung:</strong> Warnlauflicht bei extremem Auffahren (&lt; 3m)</span>
+                                    <label class="switch-custom" style="position: relative; display: inline-block; width: 34px; height: 18px; margin: 0;">
+                                        <input type="checkbox" id="chk-macro-tailgating" style="opacity: 0; width: 0; height: 0;">
+                                        <span class="slider-round" style="position: absolute; cursor: pointer; inset: 0; background-color: var(--accent-green); border-radius: 20px; transition: .25s;"></span>
+                                    </label>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 0.78rem;">🌙 <strong>Standby-Rücklicht:</strong> Sanfter Astro-Dämmerungs-Glow (18%-50% PWM)</span>
+                                    <label class="switch-custom" style="position: relative; display: inline-block; width: 34px; height: 18px; margin: 0;">
+                                        <input type="checkbox" id="chk-macro-ambient-glow" checked style="opacity: 0; width: 0; height: 0;">
+                                        <span class="slider-round" style="position: absolute; cursor: pointer; inset: 0; background-color: var(--accent-green); border-radius: 20px; transition: .25s;"></span>
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     </section>

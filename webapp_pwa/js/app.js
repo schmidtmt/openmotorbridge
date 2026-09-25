@@ -766,6 +766,15 @@ const btnUnpairCam = document.getElementById('btn-unpair-cam');
 let bleDevice = null;
 let controlChar = null;
 
+function sendBleControlCommand(payload) {
+    if (controlChar && state.isBleConnected) {
+        return controlChar.writeValue(payload).catch(err => {
+            console.warn('BLE control command failed:', err);
+        });
+    }
+    return Promise.resolve();
+}
+
 // ==========================================
 // 1. Language & i18n Engine
 // ==========================================
@@ -995,7 +1004,9 @@ btnConnect.addEventListener('click', async () => {
         controlChar = await service.getCharacteristic(CONTROL_CHAR_UUID);
 
         state.isBleConnected = true;
+        state.bleServer = server;
         updateBleUiState(true);
+        syncRadarMacrosToBle();
         showToast(isDe ? 'Erfolgreich mit OpenMotorBridge verbunden!' : 'Connected to OpenMotorBridge!', 'success', 3500);
 
         if (state.isDemoMode) toggleDemoMode(false);
@@ -1022,7 +1033,9 @@ btnConnect.addEventListener('click', async () => {
 
 function onBleDisconnected() {
     state.isBleConnected = false;
+    state.bleServer = null;
     updateBleUiState(false);
+    updateRadarMacroSyncBadge(false);
     showToast(state.lang === 'de' ? 'OpenMotorBridge BLE getrennt.' : 'OpenMotorBridge BLE disconnected.', 'warning');
 }
 
@@ -2412,8 +2425,95 @@ function setupDeviceHubUi() {
     if (btnAuxOn) btnAuxOn.addEventListener('click', () => setFrontAuxMode(1));
     if (btnAuxAuto) btnAuxAuto.addEventListener('click', () => setFrontAuxMode(2));
 
+    // 7. Radar 2.0 Warn-Makros & Pattern Management (NVS-Persistent)
+    initRadarMacroConfigUi();
+
     // Initialize CAN Sniffer Engine
     setupCanSnifferUi();
+}
+
+// =========================================================================
+// Radar 2.0 Warn-Makros & Pattern Management (Konfigurierbar & NVS-Persistent)
+// =========================================================================
+const RADAR_MACRO_BITS = {
+    'chk-macro-post-sweep': 1 << 0,   // RADAR_MACRO_POST_SWEEP_EN (0x0001)
+    'chk-macro-ess-strobe': 1 << 1,   // RADAR_MACRO_ESS_STROBE_EN (0x0002)
+    'chk-macro-hazard-beacon': 1 << 2,// RADAR_MACRO_HAZARD_BEACON_EN (0x0004)
+    'chk-macro-theft-strobe': 1 << 3, // RADAR_MACRO_THEFT_STROBE_EN (0x0008)
+    'chk-macro-convoy-marker': 1 << 4,// RADAR_MACRO_CONVOY_MARKER_EN (0x0010)
+    'chk-macro-tailgating': 1 << 5,   // RADAR_MACRO_TAILGATING_EN (0x0020)
+    'chk-macro-ambient-glow': 1 << 6  // RADAR_MACRO_AMBIENT_GLOW_EN (0x0040)
+};
+
+const RADAR_MACRO_DEFAULT_MASK = (1 << 0) | (1 << 1) | (1 << 2) | (1 << 3) | (1 << 6); // 0x004F
+
+function getRadarMacroMaskFromUi() {
+    let mask = 0;
+    for (const [id, bit] of Object.entries(RADAR_MACRO_BITS)) {
+        const el = document.getElementById(id);
+        if (el && el.checked) {
+            mask |= bit;
+        }
+    }
+    return mask;
+}
+
+function setRadarMacroUiFromMask(mask) {
+    for (const [id, bit] of Object.entries(RADAR_MACRO_BITS)) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.checked = (mask & bit) !== 0;
+        }
+    }
+}
+
+function updateRadarMacroSyncBadge(syncedToNvs) {
+    const badge = document.getElementById('badge-radar-macros-status');
+    if (!badge) return;
+    if (syncedToNvs) {
+        badge.textContent = '💾 NVS Aktiv';
+        badge.className = 'card-badge badge-green';
+    } else {
+        badge.textContent = '💾 Lokal Gespeichert';
+        badge.className = 'card-badge badge-blue';
+    }
+}
+
+function syncRadarMacrosToBle() {
+    const savedStr = localStorage.getItem('omb_radar_macro_mask');
+    const mask = savedStr !== null ? parseInt(savedStr, 10) : RADAR_MACRO_DEFAULT_MASK;
+    const threshEl = document.getElementById('select-ess-threshold');
+    const threshPct = threshEl ? Math.abs(parseInt(threshEl.value, 10)) : 60;
+
+    if (state.isBleConnected) {
+        sendBleControlCommand(new Uint8Array([0x40, mask & 0xFF, (mask >> 8) & 0xFF, threshPct]));
+        updateRadarMacroSyncBadge(true);
+    } else {
+        updateRadarMacroSyncBadge(false);
+    }
+}
+
+function initRadarMacroConfigUi() {
+    const savedStr = localStorage.getItem('omb_radar_macro_mask');
+    const mask = savedStr !== null ? parseInt(savedStr, 10) : RADAR_MACRO_DEFAULT_MASK;
+    setRadarMacroUiFromMask(mask);
+    updateRadarMacroSyncBadge(state.isBleConnected);
+
+    for (const [id, bit] of Object.entries(RADAR_MACRO_BITS)) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener('change', () => {
+                const newMask = getRadarMacroMaskFromUi();
+                localStorage.setItem('omb_radar_macro_mask', newMask.toString());
+                syncRadarMacrosToBle();
+
+                const isDe = state.lang === 'de';
+                const actionText = el.checked ? (isDe ? 'aktiviert' : 'enabled') : (isDe ? 'deaktiviert' : 'disabled');
+                showToast(isDe ? `💾 Radar-Makro ${actionText} (Maske 0x${newMask.toString(16).toUpperCase().padStart(4, '0')})`
+                               : `💾 Radar macro ${actionText} (0x${newMask.toString(16).toUpperCase().padStart(4, '0')})`, 'info', 2000);
+            });
+        }
+    }
 }
 
 // 4. Live CAN-Bus Trace Sniffer Engine
