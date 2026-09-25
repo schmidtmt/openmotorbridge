@@ -681,16 +681,35 @@ OpenMotorBridge implements a versatile **Dual-Input Architecture** for handlebar
 
 Once the system is mechanically bolted and electrically connected to the motorcycle:
 
-1. **Ignition Trigger Check (KL15):**
-   * Turn bike ignition on: Central Box and Front Node wake synchronously within $800\,\text{ms}$.
+1. **Ignition Trigger Check (KL15) & Optical POST Diagnostic Matrix:**
+   * Turn bike ignition on: Central Box and Front Node wake synchronously in $< 800\,\text{ms}$.
+   * **Bikes with Radar 2.0 (36-LED Matrix):** For exactly **2.5 seconds**, the 36 LEDs surrounding the rear radar aperture switch into the **18-Pair Hardware POST Diagnostic Matrix** (see [PCBA 08 Section 10.6](../en/07_pcba_hardware_pinouts.md#106-hardware-power-on-self-test-post-36-led-diagnostic-matrix)):
+     - Confirm all relevant LED pairs illuminate **green** (Front Node, CAN-Bus, Pods 1/2/3, GNSS, LoRa, 12V power, 18650 UPS, MicroSD logger, 77-GHz radar transceiver).
+     - If any pair **flashes red**, immediately check the corresponding connector or bus line (e.g. D5/D6 = Pod 1 M8 plug not seated; D3/D4 = CAN-bus polarity inverted).
+     - After 2.5 seconds, the LEDs transition smoothly via a wiping sweep into standard dimmed taillight/radar monitoring mode.
+   * **Cockpit Acknowledgment via Mirror LEDs (`J9`):** Concurrently, the amber BSD mirror LEDs on the handlebar stems illuminate for exactly **1.0 second**—providing instant visual verification from the saddle that the Front Node and mirror wiring are 100% operational.
+   * **Bikes without Radar 2.0 / with Garmin Varia:** Central Box boot is **strictly asynchronous and non-blocking** (< 800 ms). Mirror LEDs acknowledge with the 1.0s amber flash, and the full diagnostic matrix is viewable in the PWA.
+   * **Support Vehicle (Car-Kit 5):** Because support vans do not mount the rear radar unit, the 36-LED matrix is omitted; all 18 subsystems including the wireless BLE OBD2 dongle are verified directly on the tablet PWA dashboard.
    * Display/infotainment (Boom! Box / Skyline OS / TFT) indicates active OpenMotorBridge headset profile and CarPlay/Android Auto icon.
-2. **Blind Spot Radar Verification (Garmin Varia):**
-   * Walk up behind the motorcycle: Amber mirror LEDs (`J9`) illuminate solidly.
-   * Turn on signal indicator: Approaching vehicle triggers rapid 8 Hz flash alert.
-3. **Road Test & Audio Ducking:**
+
+2. **Manual Test Modes & PWA Diagnostics:**
+   * **Handlebar Trigger Test (No Smartphone Required):** While stationary ($v = 0\,\text{km/h}$), **tap the Harley TRIP button or Front Node PTT switch 4 times rapidly**: Activates the 18-pair POST diagnostic matrix on the rear radar for 10 seconds for convenient visual hardware verification.
+   * **PWA Hardware Diagnostics:** In the PWA under *Devices & Diagnostics* $\rightarrow$ *Rear Radar 2.0 & BSD*, tap the test buttons:
+     - `⚡ Mirror LED Flash Test (2s)`: Cycles left and right mirror MOSFET channels.
+     - `⚡ ESS Brake Strobe Test (2.5s)`: Fires the $4.5\,\text{Hz}$ emergency brake strobe on the rear radar wings and front auxiliary lights (`J11`).
+   * **Configurable Warning Macros:** In the PWA under *Lighting & Safety*, individual macros (Welcome Sweep, ESS Strobe, Hazard Beacon, Theft Strobe, Convoy Marker, Tailgating Guard) can be toggled on or off to comply with local vehicle lighting regulations.
+
+3. **Blind Spot Radar & Dynamics Verification (Radar 2.0 / Garmin Varia):**
+   * Walk up behind the motorcycle: Approaching human target triggers the solid amber mirror LEDs (`J9`) and the threat halo on the rear radar wings.
+   * Turn on signal indicator: Approaching target triggers rapid 8 Hz flashing on the corresponding mirror LED.
+   * Threshold verification: Inject a simulated radar target via the PWA (`radar_inject_simulated_target`) to verify amber (closing speed $> 15\,\text{km/h}$) and red (TTC $< 2.5\,\text{s}$) threat thresholds.
+
+4. **Road Test & Audio Ducking:**
    * Start engine and conduct a test ride: SDP31 dynamic pressure sensor and Knowles/Sipeed MEMS microphone adapt audio volume smoothly against road speed.
    * Tap handlebar PTT: Crystal-clear intercom transmission to pillion and mesh riders.
-4. **Ignition Off (Power Grace Period & Anti-Theft Standby):**
+   * Short tap on TRIP button: Action camera triggers recording start (confirmed by high-pitch audio double-tone in helmet).
+
+5. **Ignition Off (Power Grace Period & Anti-Theft Standby):**
    * Turn ignition off: Action cam halts recording cleanly via BLE stop command, UPS initiates graceful power-down.
    * Any unauthorized vehicle movement triggers the onboard 6-axis IMU (BMI270) to broadcast an immediate tamper alarm to your pocket keyfob via LoRa.
 

@@ -644,4 +644,121 @@ To eliminate road vibration shear stress, the Binder M5 707 receptacle is **bolt
 | **`J2`** | JST-SH 1.0mm 4-Pin Horiz. | Pin 1: `+5V_MR20`<br>Pin 2: `MR20_TX`<br>Pin 3: `MR20_RX`<br>Pin 4: `GND` | Direct link to Wheeltec MR20 breakout pigtail inside rear cavity |
 | **`J3`** | U.FL / IPEX Coaxial Receptacle | Center: `RF_5G9_V2X`<br>Shield: `GND` | Micro-coax to external 5.9 GHz ceramic patch antenna in left wing cradle |
 
+### 10.3 Binder Series 707 M5 Pin-Mapping (Chassis Floor at X=0)
+| Binder M5 Pin | Wire Color (PUR) | Signal Name | Description |
+| :---: | :--- | :--- | :--- |
+| **1** | Red (`RD`) | `+5V_DC` | $+5.0\,\text{V}$ power from Central Box (`POD3_VCC` / auxiliary DCDC) |
+| **2** | White (`WH`) | `UART_TX_MACRO` | Sub-MCU transmits target list to Central Box (115,200 baud) |
+| **3** | Yellow (`YE`) | `UART_RX_MACRO` | Central Box transmits macro commands, POST diag & brightness |
+| **4** | Black (`BK`) | `GND` | Common system ground |
+
+### 10.4 ESP32-C5 Pin-Mapping
+| ESP32-C5 Pin | Signal Name | Direction | Function & Peripheral |
+| :--- | :--- | :---: | :--- |
+| **GPIO20 (U0RXD)** | `ZBOX_RX` | Input | UART0 RX: Macro commands, POST diag & in-system firmware push |
+| **GPIO21 (U0TXD)** | `ZBOX_TX` | Output | UART0 TX: Target vectors & subsystem telemetry to Central Box |
+| **GPIO4 (U1RXD)**  | `MR20_RX` | Input | UART1 RX: 20 Hz raw data clusters from Wheeltec MR20 mmWave radar |
+| **GPIO5 (U1TXD)**  | `MR20_TX` | Output | UART1 TX: Configuration commands to Wheeltec MR20 |
+| **GPIO8**          | `WS2812_DATA` | Output | RMT/SPI clocked data stream for 36x WS2812B-2020 LEDs |
+| **GPIO9**          | `BOOT0` | Input | Boot-strap pin (internal 10k pull-up; LOW = UART bootloader flashing) |
+| **CHIP_EN**        | `EN_RST` | Input | Hardware reset with 10k pull-up and 100nF filter capacitor |
+| **RF_5G9**         | `ANT_V2X` | RF In/Out | U.FL receptacle J3: 5.9 GHz ITS-G5 V2X patch antenna |
+
+### 10.5 Bill of Materials (BOM) PCBA 08
+| Ref | Component / Type | Package | Specification & Function | LCSC Part |
+| :--- | :--- | :--- | :--- | :--- |
+| **`U1`** | ESP32-C5 | QFN-32 (5x5mm)| Dual-Band RISC-V SoC @ 240 MHz (2.4/5 GHz Wi-Fi 6, BLE 5.0, 5.9 GHz V2X) | `C5443210` |
+| **`U2`** | TPS7A0533 / ME6211 | SOT-23-5 | LDO 3.3V 500mA, Ultra-Low-Noise, PSRR 65dB | `C505293` |
+| **`Y1`** | 40 MHz Crystal | SMD 2016-4P | 40.000 MHz precision crystal for ESP32-C5 | `C2843560` |
+| **`D1`..`D36`** | WS2812B-2020 | SMD 2020 | 36x Smart addressable RGB LEDs ($2.0 \times 2.0\,\text{mm}$) in halo wings | `C2843530` |
+| **`D37`** | PESD5V0S2BT | SOT-23 | Bidirectional TVS diode array for UART lines | `C2834580` |
+| **`J1`** | JST-SH SM04B-SRSS-TB | 1x04 1.0mm | Horizontal 4-pin SMD connector (to M5 bulkhead receptacle) | `C136657` |
+| **`J2`** | JST-SH SM04B-SRSS-TB | 1x04 1.0mm | Horizontal 4-pin SMD connector (to MR20 breakout adapter) | `C136657` |
+| **`J3`** | U.FL-R-SMT-1 | SMD Micro-Coax | 50 Ohm U.FL receptacle for external 5.9 GHz V2X patch antenna | `C14897` |
+| **`C1`, `C2`** | 10uF 16V X7R | SMD 0805 | Ceramic filter capacitors (5V input, 3.3V output) | `C15850` |
+| **`C3`, `C4`** | 100nF 50V X7R | SMD 0603 | Decoupling capacitors for VDD_3V3 and Reset | `C14663` |
+
+### 10.6 Hardware Power-On Self-Test (POST) 36-LED Diagnostic Matrix
+
+Upon vehicle ignition (KL15), the system enters an optical **POST Diagnostic Mode for 2.5 seconds**. The 36 LEDs surrounding the radar aperture are mapped into **18 functional pairs of 2 LEDs each** ($18 \times 2 = 36$):
+
+```text
+                          TOP BROW: D13 .. D18 (6 LEDs = 3 Pairs)
+                      ┌───────────────────────────────────────────┐
+                      │   [GNSS]       [LoRa Mesh]      [V2X/Wi-Fi]│
+                      └───────────────────────────────────────────┘
+   LEFT WING                                                                 RIGHT WING
+   D1 .. D12 (12 LEDs = 6 Pairs)                                             D19 .. D30 (12 LEDs = 6 Pairs)
+ ┌───────────────────────────┐   ┌─────────────────────────────────────┐   ┌───────────────────────────┐
+ │ D1/D2:   Front Node       │   │                                     │   │ D19/D20: Pod 2 Radio      │
+ │ D3/D4:   CAN-Bus          │   │         WHEELTEC MR20               │   │ D21/D22: Pod 3 Backbone   │
+ │ D5/D6:   Pod 1 Intercom   │   │       77-GHz mmWave Radar           │   │ D23/D24: BSD Mirror R     │
+ │ D7/D8:   BSD Mirror L     │   │                                     │   │ D25/D26: Rear TPMS        │
+ │ D9/D10:  Front TPMS       │   │                                     │   │ D27/D28: Dallas DS18B20   │
+ │ D11/D12: Actioncam BLE    │   │                                     │   │ D29/D30: MicroSD Logger   │
+ └───────────────────────────┘   └─────────────────────────────────────┘   └───────────────────────────┘
+                      ┌───────────────────────────────────────────┐
+                      │   [12V KL15]     [18650 UPS]     [77GHz Radar]│
+                      └───────────────────────────────────────────┘
+                         BOTTOM CHIN: D31 .. D36 (6 LEDs = 3 Pairs)
+```
+
+#### The 2-LED Principle per Function:
+* **LED A (Left / Top): Hardware & Bus Presence:**
+  - **Green:** Subsystem acknowledges on bus (1-Wire ROM-ID, I2C ACK, UART ping, ESP-NOW link OK).
+  - **Amber:** Handshake / bootloader active.
+  - **Blinking Red:** Hardware missing / short circuit / bus timeout.
+  - **Dark:** Component declared as "uninstalled / optional" in bike profile.
+* **LED B (Right / Bottom): Functional State & Data Stream:**
+  - **Green:** Normal operation active (data stream flowing, valid 3D fix, TPMS pressure within spec).
+  - **Amber:** Initializing (e.g. GNSS seeking satellites, road frost condition $T \le +3^\circ\text{C}$).
+  - **Red:** Sensor error / plausibility failure.
+
+#### Mapping of the 18 Motorcycle Subsystems:
+1. **Left Wing (Cockpit, Bus & Left Side):**
+   * **D1 / D2:** Front Node (PCBA 05) ESP-NOW link & cockpit power (KL15 / USB-PD).
+   * **D3 / D4:** Motorcycle CAN-Bus (HD-LAN / K-CAN) transceiver & telemetry stream.
+   * **D5 / D6:** Pod 1 (Left Pannier / Intercom Bridge) M8 bus & cartridge MCU ready.
+   * **D7 / D8:** BSD Mirror Alert Left (Header `J9`) N-MOSFET & driver circuit ready.
+   * **D9 / D10:** Front TPMS (Bluetooth LE Tire Pressure) packet received & pressure in spec.
+   * **D11 / D12:** Actioncam BLE Shutter Link paired & camera ready.
+2. **Right Wing (Radio, Rear & Right Side):**
+   * **D19 / D20:** Pod 2 (Right Pannier / Radio & Aux) M8 bus & cartridge MCU ready.
+   * **D21 / D22:** Pod 3 (Rear Backbone) M8 connection & 6-axis IMU/baro stream active.
+   * **D23 / D24:** BSD Mirror Alert Right (Header `J9`) N-MOSFET & driver circuit ready.
+   * **D25 / D26:** Rear TPMS (Bluetooth LE Tire Pressure) packet received & pressure in spec.
+   * **D27 / D28:** Dallas DS18B20 Road Temperature Sensor (`J6`) 1-Wire responsive & plausible.
+   * **D29 / D30:** MicroSD-Card & Telemetry Blackbox SDIO 4-bit mounted & logging ready.
+3. **Top Brow (Navigation, Mesh & RF):**
+   * **D13 / D14:** u-blox MAX-M10S Multi-GNSS I2C link & 3D fix ($\ge 6$ satellites).
+   * **D15 / D16:** Semtech SX1262 LoRa (OpenMotorMesh 868 MHz) SPI PLL lock & mesh beacon.
+   * **D17 / D18:** 5.9 GHz ITS-G5 / Wi-Fi 6 (V2X) RF transceiver active & PWA hotspot online.
+4. **Bottom Chin (Power & Radar Transceiver):**
+   * **D31 / D32:** Vehicle 12V supply stable ($11.5\dots 14.8\,\text{V}$) & KL15 gate closed.
+   * **D33 / D34:** Internal 18650 UPS battery charge IC `BQ25895` & capacity $> 50\%$.
+   * **D35 / D36:** Wheeltec MR20 77-GHz radar transceiver 20 Hz UART clusters & zero tracking faults.
+
+#### Non-Blocking Architecture (Optional Accessory Safe):
+* **No Radar Installed / Garmin Varia:** If no Radar 2.0 Sub-MCU is detected on UART or `radar_type: "none"` is configured, Central Box boot proceeds **asynchronously in $< 800\,\text{ms}$** with zero blocking delays.
+* **Cockpit Acknowledgment:** The two **BSD mirror LEDs (`J9`) illuminate amber for 1.0 second** upon ignition-on for immediate visual rider verification from the saddle.
+* **Support Vehicle (Kit 5):** Because support vans do not mount the rear radar unit, all diagnostic telemetry is mirrored directly onto the tablet dashboard in the PWA.
+
+---
+
+### 10.7 Configurable Warning Macros & Pattern Management
+
+All visual warning and lighting macros on the Radar 2.0 Sub-MCU are individually **configurable via NVS bitmask flags** (`RadarMacroConfigBits_t`), ensuring compliance with local vehicle lighting regulations (ECE / StVZO) and rider preferences:
+
+| Macro ID | Name & Function | Trigger & Dynamics | Config Flag (JSON / NVS) | Default |
+| :--- | :--- | :--- | :--- | :---: |
+| **`0x01`** | **Welcome & POST Sweep** | 2.5s 18-pair diagnostic matrix $\rightarrow$ sweep wipe into taillight | `post_matrix_enabled` | `true` |
+| **`0x02`** | **ESS Brake Strobe** | $4.5\,\text{Hz}$ full-intensity red strobe on deceleration $a_x < -0.6\,\text{g}$ | `ess_strobe_enabled` | `true` |
+| **`0x03`** | **Hazard Beacon** | $1.2\,\text{Hz}$ amber double-flash (*"Flash-Flash-Pause"*) when stopped with 4-way flashers | `hazard_beacon_enabled` | `true` |
+| **`0x04`** | **Theft Deterrent Strobe** | $12\,\text{Hz}$ disorienting white/red strobe + mirror alert flash on alarm trigger | `theft_strobe_enabled` | `true` |
+| **`0x05`** | **Convoy / Follow-Me Pulse** | Gentle breathing wave glow for lead guide / sweep vehicles | `convoy_marker_enabled` | `false` |
+| **`0x06`** | **Tailgating Guard** | Inward-flowing warning wipe on extreme vehicle tailgating ($d < 3\,\text{m}, v > 50$) | `tailgating_guard_enabled` | `false` |
+| **`0x07`** | **Standby Taillight (Astro-Dim)**| Soft red position glow (18%–50% PWM, auto-dimmed via solar position engine) | `ambient_glow_enabled` | `true` |
+
+* **PWA & Handlebar Activation:** Every macro can be toggled and tested in the PWA under *Lighting & Safety*. While stationary ($v = 0\,\text{km/h}$), tapping the Harley TRIP button or Front Node PTT switch 4 times launches the POST diagnostic matrix for 10 seconds for convenient visual hardware verification.
+
 

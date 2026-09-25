@@ -703,17 +703,35 @@ OpenMotorBridge implementiert eine flexible **Dual-Input-Architektur** für die 
 
 Nachdem das System am Motorrad mechanisch befestigt und elektrisch verkabelt ist:
 
-1. **Zündungs-Check (KL15):**
-   * Motorrad-Zündung einschalten: Die Zentralbox und der Front-Node erwachen synchron innerhalb von $800\,\text{ms}$.
-   * Display / Infotainment (Boom! Box / Skyline OS / TFT) zeigt die OpenMotorBridge Headset-Verbindung und CarPlay/Android Auto Icon.
-2. **Totwinkel-Radar- & Halo-Test (Radar 2.0 Wheeltec MR20 / Garmin Varia):**
-   * Hinter das Motorrad treten: Die bernsteinfarbenen Spiegel-LEDs (`J9`) leuchten auf. Am Wheeltec MR20 Gehäuse aktiviert die Sub-MCU PCBA 08 den dynamischen Annäherungs-Halo auf den 24 Neopixel-LEDs.
+1. **Zündungs-Check (KL15) & Optische POST-Diagnosematrix:**
+   * Motorrad-Zündung einschalten: Die Zentralbox und der Front-Node erwachen synchron innerhalb von $< 800\,\text{ms}$.
+   * **Bikes mit Radar 2.0 (36-LED Matrix):** Für genau **2,5 Sekunden** schalten die 36 LEDs am Heck in die **18-Paar Hardware-POST-Matrix** (siehe [PCBA 08 Kapitel 10.6](../de/07_pcba_hardware_pinouts.md#106-hardware-power-on-self-test-post-36-led-diagnose-matrix)):
+     - Prüfen, ob alle relevanten LED-Paare **grün** leuchten (Front-Node, CAN-Bus, Pod 1/2/3, GNSS, LoRa, 12V Bordnetz, 18650 USV, MicroSD-Logger, 77-GHz Radarkopf).
+     - Sollte ein Paar **rot blinken**, direkt die betroffene Steckverbindung prüfen (z. B. D5/D6 = M8-Stecker von Pod 1 nicht eingerastet; D3/D4 = CAN-Bus Adern vertauscht).
+     - Nach 2,5 Sekunden gehen die LEDs in einen sanften Wisch-Sweep über und blenden auf normales Standlicht ab.
+   * **Cockpit-Quittierung über Spiegel-LEDs (`J9`):** Zeitgleich leuchten die bernsteinfarbenen BSD-LEDs an den Spiegelarmen für genau **1,0 Sekunde** auf – sofortige Sichtprüfung vom Lenker aus, dass der Front-Node und die Spiegel-Verdrahtung 100 % intakt sind.
+   * **Bikes ohne Radar 2.0 / mit Garmin Varia:** Der Boot-Vorgang ist **vollständig asynchron und nicht-blockierend** (< 800 ms). Die Spiegel-LEDs quittieren wie gewohnt mit 1,0 s Amber, und die Diagnose-Matrix ist digital in der PWA abrufbar.
+   * **Begleitfahrzeug (Car-Kit 5):** Da am Auto kein Heckradar montiert ist, entfällt die LED-Matrix am Heck; alle 18 Subsysteme inklusive des drahtlosen BLE-OBD2-Dongles werden übersichtlich auf dem Dashboard des iPads/Tablets in der PWA geprüft.
+   * Display / Infotainment (Boom! Box / Skyline OS / TFT) zeigt die OpenMotorBridge Headset-Verbindung und das CarPlay/Android Auto Icon.
+
+2. **Manuelle Test-Modi & PWA-Diagnose:**
+   * **Test über Lenkertaste (Ohne Smartphone):** Im Stillstand ($v = 0\,\text{km/h}$) **4x schnell die Harley TRIP-Taste** oder den Front-Node PTT-Taster drücken: Aktiviert die 18-Paar POST-Matrix am Heck für 10 Sekunden zur manuellen Sichtprüfung.
+   * **PWA-Diagnose:** Unter *Geräte & Diagnose* $\rightarrow$ *Heck-Radar 2.0 & BSD* die Test-Buttons betätigen:
+     - `⚡ Spiegel-LEDs Testblitz (2s)`: Taktet linken und rechten Spiegel-MOSFET durch.
+     - `⚡ ESS Testblitz (2.5s)`: Zündet das $4{,}5\,\text{Hz}$ Notbrems-Stroboskop am Heck und den Front-Zusatzscheinwerfern (`J11`).
+   * **Konfigurierbare Warnmakros:** Unter *Beleuchtung & Sicherheit* können die einzelnen Makros (Welcome Sweep, ESS Strobe, Hazard Beacon, Theft Strobe, Convoy Marker, Tailgating Guard) nach ECE/StVZO-Bedarf aktiviert oder deaktiviert werden.
+
+3. **Totwinkel-Radar- & Dynamik-Test (Radar 2.0 Wheeltec MR20 / Garmin Varia):**
+   * Hinter das Motorrad treten: Bei Annäherung einer Person leuchten die bernsteinfarbenen Spiegel-LEDs (`J9`) auf und am Heckradar aktiviert sich der Annäherungs-Halo auf den 36 LEDs.
    * Blinker setzen: Bei herantretender Person wechselt die entsprechende Spiegel-LED in schnelles Warnblitzen (8 Hz).
-   * Bremshebel ziehen / Erschütterung: Der Neopixel-Halo triggert das ultrahelle rote Bremslicht-Stroboskop.
-3. **Probefahrt & Audio-Ducking:**
+   * Schwellenwert-Test: Über die PWA ein virtuelles Test-Target einspeisen (`radar_inject_simulated_target`), um die Warnschwellen (Amber bei $> 15\,\text{km/h}$ Annäherung, Rot bei TTC $< 2{,}5\,\text{s}$) zu verifizieren.
+
+4. **Probefahrt & Audio-Ducking:**
    * Motor starten und Probefahrt durchführen: Der SDP31 Staudrucksensor und das Sipeed/Knowles MEMS Fahrtwind-Mikrofon regeln die Lautstärke adaptiv und pegelfest nach.
    * PTT-Taster am Lenker bedienen: Glasklare Funkübertragung zu Mitfahrern und Sozius.
-4. **Zündung aus (KL15 Nachlauf & Diebstahlschutz):**
+   * Kurzer Druck auf TRIP-Taste: Actioncam startet Aufnahme (Bestätigungs-Doppelton im Helm).
+
+5. **Zündung aus (KL15 Nachlauf & Diebstahlschutz):**
    * Zündung ausschalten: Actioncam stoppt sauber per Bluetooth-Shutter, USV puffert System herunter.
    * Bei unbefugter Fahrzeugbewegung im Stand löst der 6-Achs-Beschleunigungssensor (BMI270) sofort Alarm über den LoRa-Pager am Schlüsselbund aus.
 

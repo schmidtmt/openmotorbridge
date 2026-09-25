@@ -21,9 +21,31 @@ extern "C" {
 typedef enum {
     RADAR_PKT_TELEMETRY_TARGETS = 0x10, // Sub-MCU -> Central Box (20 Hz)
     RADAR_PKT_CMD_VEHICLE_STATE = 0x20, // Central Box -> Sub-MCU (Dynamics, Dimming)
-    RADAR_PKT_CMD_MANUAL_TEST   = 0x30, // Central Box -> Sub-MCU (Strobe, Halo test)
+    RADAR_PKT_CMD_POST_DIAG     = 0x25, // Central Box -> Sub-MCU (18-Pair POST Hardware Matrix)
+    RADAR_PKT_CMD_MANUAL_TEST   = 0x30, // Central Box -> Sub-MCU (Strobe, Halo test, Patterns)
+    RADAR_PKT_CMD_CONFIG_MACROS = 0x40, // Central Box -> Sub-MCU (Configurable Macro Pattern Flags)
     RADAR_PKT_CMD_ENTER_BOOTLOAD = 0xF0  // Central Box -> Sub-MCU (Reboot into In-System Flasher)
 } RadarPktType_t;
+
+// Configurable Warning Macro Bitmask (Enables/Disables specific patterns via NVS/Config)
+typedef enum {
+    RADAR_MACRO_POST_SWEEP_EN     = (1 << 0), // Welcome & POST Matrix Sweep on KL15 (Default: ON)
+    RADAR_MACRO_ESS_STROBE_EN     = (1 << 1), // Emergency Stop Signal 4.5 Hz Strobe on ax < -0.6g (Default: ON)
+    RADAR_MACRO_HAZARD_BEACON_EN  = (1 << 2), // Breakdown / Hazard 1.2 Hz Double Flash at v=0 (Default: ON)
+    RADAR_MACRO_THEFT_STROBE_EN   = (1 << 3), // Tamper / Alarm 12 Hz High-Intensity Strobe (Default: ON)
+    RADAR_MACRO_CONVOY_MARKER_EN  = (1 << 4), // Follow-Me / Guide Vehicle Wave Pulse (Default: OFF)
+    RADAR_MACRO_TAILGATING_EN     = (1 << 5), // Inward Inflow Alert on Extreme Tailgating (Default: OFF)
+    RADAR_MACRO_AMBIENT_GLOW_EN   = (1 << 6), // Dusk/Night Standby Taillight (Default: ON)
+} RadarMacroConfigBits_t;
+
+// Diagnostic LED State for 18-Pair POST Matrix
+typedef enum {
+    POST_LED_OFF        = 0x00, // Optional / Component not configured
+    POST_LED_GREEN_OK   = 0x01, // Hardware found & operational
+    POST_LED_AMBER_INIT = 0x02, // Initializing / Searching / Standby
+    POST_LED_RED_FAIL   = 0x03, // Hardware error / Missing / Timeout
+    POST_LED_RED_BLINK  = 0x04  // Critical failure (blinking 4 Hz)
+} PostLedState_t;
 
 typedef enum {
     RADAR_THREAT_LVL_CLEAR = 0,
@@ -67,10 +89,33 @@ typedef struct __attribute__((packed)) {
     uint16_t vehicle_speed_kmh_x10; // Vehicle speed in 0.1 km/h
     int16_t accel_x_mg;        // Longitudinal acceleration in milli-g (negative = braking)
     uint8_t dimming_pwm_pct;   // Astronomical / Tunnel dimming: 18% - 100%
-    uint8_t brake_strobe_req;  // 0=Normal, 1=Brake Solid, 2=ESS Emergency 4.5Hz Strobe
+    uint8_t brake_strobe_req;  // 0=Normal, 1=Brake Solid, 2=ESS Emergency 4.5Hz Strobe, 3=Hazard Beacon, 4=Theft Strobe
     bool cruise_mode_active;   // True if Cruise Mode (influences standby glow)
     uint16_t checksum;
 } RadarCommandPacket_t;
+
+// Hardware POST Diagnostic Matrix Command received from Central Box (Type 0x25)
+typedef struct __attribute__((packed)) {
+    uint8_t sync1;             // 0x5A
+    uint8_t sync2;             // 0xA5
+    uint8_t version;           // 0x02
+    uint8_t pkt_type;          // 0x25
+    uint8_t duration_tenths_s; // Display duration (e.g. 25 = 2.5 seconds, 0 = indefinite/manual mode)
+    uint8_t led_states[36];    // Explicit state for D1..D36 (PostLedState_t)
+    uint16_t checksum;
+} RadarPostDiagPacket_t;
+
+// Macro Configuration Command received from Central Box (Type 0x40)
+typedef struct __attribute__((packed)) {
+    uint8_t sync1;             // 0x5A
+    uint8_t sync2;             // 0xA5
+    uint8_t version;           // 0x02
+    uint8_t pkt_type;          // 0x40
+    uint16_t enabled_macros;   // Bitmask of RadarMacroConfigBits_t
+    uint8_t ess_threshold_pct; // ESS trigger threshold (-0.6g = 60)
+    uint8_t spare;
+    uint16_t checksum;
+} RadarConfigMacrosPacket_t;
 
 // --- Wheeltec MR20 Raw Radar Frame Parsing ---
 // The Wheeltec MR20 77-GHz module outputs binary clusters at 20 Hz (115200 baud default)

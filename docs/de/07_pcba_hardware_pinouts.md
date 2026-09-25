@@ -651,28 +651,113 @@ Gemäß Vorgabe zur Vermeidung von Vibrationsschäden ist die Binder M5 707 Buch
 | **3** | Gelb (`YE`) | `UART_RX_MACRO` | Zentralbox sendet Makrobefehle & Helligkeit an Sub-MCU |
 | **4** | Schwarz (`BK`) | `GND` | Gemeinsame Systemmasse |
 
-### 10.4 ESP32-C3 Pin-Mapping
-| ESP32-C3 Pin | Signalname | Richtung | Funktion & Peripherie |
+### 10.4 ESP32-C5 Pin-Mapping
+| ESP32-C5 Pin | Signalname | Richtung | Funktion & Peripherie |
 | :--- | :--- | :---: | :--- |
-| **GPIO20 (U0RXD)** | `ZBOX_RX` | Eingang | UART0 RX: Makrobefehle & In-System-Firmware-Push von Zentralbox |
-| **GPIO21 (U0TXD)** | `ZBOX_TX` | Ausgang | UART0 TX: Target-Vektoren & Status an Zentralbox |
-| **GPIO0 (U1RXD)**  | `MR20_TX` | Eingang | UART1 RX: 20 Hz Rohdaten-Frames vom Wheeltec MR20 mmWave Radar |
-| **GPIO1 (U1TXD)**  | `MR20_RX` | Ausgang | UART1 TX: Konfigurations-Kommandos an Wheeltec MR20 |
-| **GPIO8**          | `NEOPIXEL_DATA` | Ausgang | RMT-getaktetes Datensignal für die 24x WS2812B-2020 LEDs |
+| **GPIO20 (U0RXD)** | `ZBOX_RX` | Eingang | UART0 RX: Makrobefehle, POST-Diagnose & Firmware-Push von Zentralbox |
+| **GPIO21 (U0TXD)** | `ZBOX_TX` | Ausgang | UART0 TX: Target-Vektoren & Subsystem-Status an Zentralbox |
+| **GPIO4 (U1RXD)**  | `MR20_RX` | Eingang | UART1 RX: 20 Hz Rohdaten-Frames vom Wheeltec MR20 mmWave Radar |
+| **GPIO5 (U1TXD)**  | `MR20_TX` | Ausgang | UART1 TX: Konfigurations-Kommandos an Wheeltec MR20 |
+| **GPIO8**          | `WS2812_DATA` | Ausgang | RMT/SPI-getaktetes Datensignal für die 36x WS2812B-2020 LEDs |
 | **GPIO9**          | `BOOT0` | Eingang | Boot-Strap Pin (interner 10k Pull-Up; LOW = UART Bootloader Flashing) |
 | **CHIP_EN**        | `EN_RST` | Eingang | Hardware-Reset mit 10k Pull-Up und 100nF Entstörkondensator |
+| **RF_5G9**         | `ANT_V2X` | HF-Ein/Ausg. | U.FL Buchse J3: 5.9 GHz ITS-G5 V2X Patch-Antenne |
 
 ### 10.5 Stückliste (BOM) PCBA 08
 | Ref | Bauteil / Typ | Gehäuse | Spezifikation & Funktion | LCSC Part |
 | :--- | :--- | :--- | :--- | :--- |
-| **`U1`** | ESP32-C3FN4 | QFN-32 (5x5mm)| 32-Bit RISC-V SoC @ 160 MHz, 4MB embedded Flash, kein Antennen-Keepout | `C2834571` |
+| **`U1`** | ESP32-C5 | QFN-32 (5x5mm)| Dual-Band RISC-V SoC @ 240 MHz (2.4/5 GHz Wi-Fi 6, BLE 5.0, 5.9 GHz V2X) | `C5443210` |
 | **`U2`** | TPS7A0533 / ME6211 | SOT-23-5 | LDO 3.3V 500mA, Ultra-Low-Noise, PSRR 65dB | `C505293` |
-| **`Y1`** | 40 MHz Crystal | SMD 2016-4P | 40.000 MHz Präzisions-Systemquarz für ESP32-C3 | `C2843560` |
-| **`D1`..`D24`** | WS2812B-2020 | SMD 2020 | 24x Intelligente adressierbare RGB-LEDs ($2{,}0 \times 2{,}0\,\text{mm}$) im Halo | `C2843530` |
-| **`D25`** | PESD5V0S2BT | SOT-23 | Bidirektionales TVS-Dioden-Array für UART-Leitungen | `C2834580` |
+| **`Y1`** | 40 MHz Crystal | SMD 2016-4P | 40.000 MHz Präzisions-Systemquarz für ESP32-C5 | `C2843560` |
+| **`D1`..`D36`** | WS2812B-2020 | SMD 2020 | 36x Intelligente adressierbare RGB-LEDs ($2{,}0 \times 2{,}0\,\text{mm}$) im Halo/Flügel | `C2843530` |
+| **`D37`** | PESD5V0S2BT | SOT-23 | Bidirektionales TVS-Dioden-Array für UART-Leitungen | `C2834580` |
 | **`J1`** | JST-SH SM04B-SRSS-TB | 1x04 1.0mm | Horizontaler 4-Pin SMD-Steckverbinder (zur M5-Flanschbuchse) | `C136657` |
 | **`J2`** | JST-SH SM04B-SRSS-TB | 1x04 1.0mm | Horizontaler 4-Pin SMD-Steckverbinder (zum MR20 Kabel-Adapter) | `C136657` |
+| **`J3`** | U.FL-R-SMT-1 | SMD Micro-Coax | 50 Ohm U.FL Buchse für externe 5.9 GHz V2X Patchantenne | `C14897` |
 | **`C1`, `C2`** | 10uF 16V X7R | SMD 0805 | Keramische Glättungskondensatoren (5V Eingang, 3.3V Ausgang) | `C15850` |
 | **`C3`, `C4`** | 100nF 50V X7R | SMD 0603 | Entkopplungskondensatoren für VDD_3V3 und Reset | `C14663` |
+
+### 10.6 Hardware Power-On Self-Test (POST) 36-LED Diagnose-Matrix
+
+Beim Einschalten der Zündung (KL15) schaltet das System für **2,5 Sekunden** in einen optischen **POST-Diagnose-Modus**. Die 36 LEDs umrahmen das Radom-Fenster und sind in **18 Funktionspaare à 2 LEDs** ($18 \times 2 = 36$) unterteilt:
+
+```text
+                        OBERE LEISTE: D13 .. D18 (6 LEDs = 3 Paare)
+                      ┌───────────────────────────────────────────┐
+                      │   [GNSS]       [LoRa Mesh]      [V2X/Wi-Fi]│
+                      └───────────────────────────────────────────┘
+   LINKER FLÜGEL                                                             RECHTER FLÜGEL
+   D1 .. D12 (12 LEDs = 6 Paare)                                             D19 .. D30 (12 LEDs = 6 Paare)
+ ┌───────────────────────────┐   ┌─────────────────────────────────────┐   ┌───────────────────────────┐
+ │ D1/D2:   Front-Node       │   │                                     │   │ D19/D20: Pod 2 & Funk     │
+ │ D3/D4:   CAN-Bus          │   │         WHEELTEC MR20               │   │ D21/D22: Pod 3 Backbone   │
+ │ D5/D6:   Pod 1 Intercom   │   │       77-GHz mmWave Radar           │   │ D23/D24: BSD Spiegel R    │
+ │ D7/D8:   BSD Spiegel L    │   │                                     │   │ D25/D26: TPMS Hinterrad   │
+ │ D9/D10:  TPMS Vorderrad   │   │                                     │   │ D27/D28: Dallas DS18B20   │
+ │ D11/D12: Actioncam BLE    │   │                                     │   │ D29/D30: MicroSD-Logger   │
+ └───────────────────────────┘   └─────────────────────────────────────┘   └───────────────────────────┘
+                      ┌───────────────────────────────────────────┐
+                      │   [12V KL15]     [18650 USV]     [77GHz Radar]│
+                      └───────────────────────────────────────────┘
+                        UNTERE LEISTE: D31 .. D36 (6 LEDs = 3 Paare)
+```
+
+#### Das 2-LED-Prinzip pro Funktion:
+* **LED A (Links / Oben): Hardware- & Bus-Präsenz:**
+  - **Grün:** Baugruppe antwortet auf Bus (1-Wire ROM-ID, I2C ACK, UART Ping, ESP-NOW Verbindung OK).
+  - **Gelb:** Handshake / Bootloader läuft.
+  - **Rot blinkend:** Hardware fehlt / Kurzschluss / Bus-Timeout.
+  - **Dunkel:** Komponente im Fahrzeugprofil als „nicht verbaut / optional“ deklariert.
+* **LED B (Rechts / Unten): Funktion & Datenstrom:**
+  - **Grün:** Normalbetrieb scharf (Datenstrom aktiv, Valid 3D Fix, Reifendruck im Soll).
+  - **Gelb:** Initialisiert noch (z. B. GNSS sucht Satelliten, Glatteis-Temperatur $T \le +3^\circ\text{C}$).
+  - **Rot:** Funktionsfehler / Plausibilitätsfehler.
+
+#### Zuordnung der 18 Paare (100 % motorradspezifisch):
+1. **Linker Flügel (Cockpit, Bus & Linke Seite):**
+   * **D1 / D2:** Front-Node (PCBA 05) ESP-NOW Link & Cockpit-Speisung (KL15 / USB-PD).
+   * **D3 / D4:** Motorrad-CAN-Bus (HD-LAN / K-CAN) Transceiver & Telemetrie-Stream.
+   * **D5 / D6:** Pod 1 (Linker Koffer / Intercom-Bridge) M8-Bus & Kassetten-MCU bereit.
+   * **D7 / D8:** BSD Spiegel-Warnanzeige Links (Header `J9`) N-MOSFET & Treiber bereit.
+   * **D9 / D10:** TPMS Vorderrad (Bluetooth LE Reifendrucksensor) Signal & Solldruck OK.
+   * **D11 / D12:** Actioncam BLE Shutter Link Kamera verbunden & aufnahmebereit.
+2. **Rechter Flügel (Funk, Heck & Rechte Seite):**
+   * **D19 / D20:** Pod 2 (Rechter Koffer / Funk & Aux) M8-Bus & Kassetten-MCU bereit.
+   * **D21 / D22:** Pod 3 (Heck-Backbone) M8-Verbindung & 6-Achsen IMU/Baro aktiv.
+   * **D23 / D24:** BSD Spiegel-Warnanzeige Rechts (Header `J9`) N-MOSFET & Treiber bereit.
+   * **D25 / D26:** TPMS Hinterrad (Bluetooth LE Reifendrucksensor) Signal & Solldruck OK.
+   * **D27 / D28:** Dallas DS18B20 Fahrbahn-Temperaturfühler (`J6`) 1-Wire antwortet & plausibel.
+   * **D29 / D30:** MicroSD-Card & Telemetrie-Blackbox SDIO 4-Bit gemountet & Log schreibbereit.
+3. **Obere Leiste (Navigation, Funk & Mesh):**
+   * **D13 / D14:** u-blox MAX-M10S Multi-GNSS I2C-Kommunikation & 3D-Fix ($\ge 6$ Satelliten).
+   * **D15 / D16:** Semtech SX1262 LoRa (OpenMotorMesh 868 MHz) SPI-PLL & Mesh-Beacon.
+   * **D17 / D18:** 5.9 GHz ITS-G5 / Wi-Fi 6 (V2X) RF-Block aktiv & PWA-Hotspot online.
+4. **Untere Leiste (Energie & Radarkopf):**
+   * **D31 / D32:** Bordnetz 12V Eingangsspannung stabil ($11{,}5\dots 14{,}8\,\text{V}$) & KL15 aktiv.
+   * **D33 / D34:** Interne 18650 USV-Pufferbatterie Lade-IC `BQ25895` & Ladestand $> 50\,\%$.
+   * **D35 / D36:** Wheeltec MR20 77-GHz Radarkopf 20 Hz UART-Frames & Tracking fehlerfrei.
+
+#### Asynchrones & nicht-blockierendes Verhalten (Modul ist optional):
+* **Kein Radar verbaut / Garmin Varia:** Wird beim Booten kein Radar 2.0 erkannt oder ist `radar_type: "none"` konfiguriert, bootet die Zentralbox **vollständig asynchron in $< 800\,\text{ms}$** ohne Verzögerung durch.
+* **Cockpit-Quittierung:** Zur visuellen Kontrolle leuchten die beiden **BSD Spiegel-LEDs (`J9`) beim Zündungsstart für genau 1,0 Sekunde bernsteinfarben** auf.
+* **Begleitfahrzeug (Kit 5):** Da am Begleitfahrzeug kein Heckradar montiert ist, entfällt die 36-LED-Matrix am Auto; der vollständige Status aller Komponenten wird auf dem Tablet in der PWA dargestellt.
+
+---
+
+### 10.7 Konfigurierbare Warnlicht-Makros & Pattern-Steuerung
+
+Alle visuellen Licht- und Warnmakros auf der Radar 2.0 Sub-MCU sind über NVS-Konfigurationsflags einzeln **aktivierbar und deaktivierbar** (`RadarMacroConfigBits_t`), um ECE/StVZO-Konformität und individuelle Fahrerwünsche abzubilden:
+
+| Makro-ID | Name & Funktion | Trigger & Dynamik | Config-Flag (JSON / NVS) | Default |
+| :--- | :--- | :--- | :--- | :---: |
+| **`0x01`** | **Welcome & POST Sweep** | 2,5s 18-Paar Diagnose-Matrix $\rightarrow$ Wisch-Sweep in Standlicht | `post_matrix_enabled` | `true` |
+| **`0x02`** | **ESS Notbrems-Strobe** | $4{,}5\,\text{Hz}$ Vollast-Stroboskop (Rot) bei $a_x < -0{,}6\,\text{g}$ | `ess_strobe_enabled` | `true` |
+| **`0x03`** | **Pannen- & Warnblitz (Hazard)** | $1{,}2\,\text{Hz}$ Doppelblitz (Bernstein *"Flash-Flash-Pause"*) bei Warnblinker ($v=0$) | `hazard_beacon_enabled` | `true` |
+| **`0x04`** | **Alarmanlagen-Strobe** | $12\,\text{Hz}$ desorientierender Strobe (Rot/Weiß) + Spiegelblitz bei Diebstahlalarm | `theft_strobe_enabled` | `true` |
+| **`0x05`** | **Konvoi- / Follow-Me-Puls** | Sanfter Wellenpuls / Atmender Glow für Gruppen-Guide / Begleitfahrzeug | `convoy_marker_enabled` | `false` |
+| **`0x06`** | **Drängler-Abstandswarnung** | Nach innen gerichtetes Lauflicht bei extremer Unterschreitung ($d < 3\,\text{m}, v > 50$) | `tailgating_guard_enabled` | `false` |
+| **`0x07`** | **Standby-Rücklicht (Astro-Dim)** | Weiches rotes Grundleuchten (18 %–50 % PWM, dynamisch nach Sonnenstand) | `ambient_glow_enabled` | `true` |
+
+* **PWA & Taster-Aktivierung:** Jedes Makro kann in der PWA unter *Beleuchtung & Sicherheit* per Schalter getestet und dauerhaft gespeichert werden. Im Stand ($v = 0\,\text{km/h}$) aktiviert ein 4-fach Klick auf die Harley TRIP-Taste oder den Front-Node PTT-Taster die POST-Diagnosematrix für 10 Sekunden zur manuellen Sichtprüfung.
 
 
