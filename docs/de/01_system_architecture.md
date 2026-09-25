@@ -21,7 +21,7 @@ Klassische Motorrad-Kommunikationssysteme sind historisch stark fragmentiert:
 │    • Smart-Keyfob (PCBA 07): BLE/LoRa Pager (LiPo mit MAX17048 Fuel Gauge & Funk-PTT)       │
 │    • PWA Dashboard auf Smartphone / TFT via Web-Bluetooth (WebBLE)                          │
 ├─────────────────────────────────────────────────────────────────────────────────────────────┤
-│ 2. ZENTRALE STEUERBOX (Unter der Sitzbank, IP67):                                           │
+│ 2. ZENTRALE STEUERBOX (Unter der Sitzbank / im Pkw-Cockpit, IP67):                          │
 │    • ESP32-S3 Dual-Core MCU (240 MHz) • ES8388 Audio-Codec & DSP Audio-Mixer                │
 │    • LM5164-Q1 72V Automotive Step-Down • BQ24075 USV & 2200mAh Flat-LiPo-Pufferakku        │
 │    • 4-Bit High-Speed SDIO MicroSD-Ringspeicher • 2x Bourns 1500 V RMS Audio-Übertrager     │
@@ -33,12 +33,14 @@ Klassische Motorrad-Kommunikationssysteme sind historisch stark fragmentiert:
 │ • Universal Pod-Gehäuse      │ • Universal Pod-Gehäuse      │ • Universal Pod-Gehäuse     │
 │ • Intercom-Brücke A (Sena    │ • Intercom-Brücke B (Cardo   │ • 1-Tier Monolith-Schlitten │
 │   50S/60S/MeshPort-Kassette) │   Packtalk Edge / PMR446)    │ • u-blox MAX-M10S Multi-GNSS│
-│ • Koffer-, Rahmen-, Heck-    │ • Koffer-, Rahmen-, Heck-    │ • SX1262 LoRa 868MHz + ESP32│
-│   oder Helm-Montage          │   oder Helm-Montage          │ • 2.4 GHz OMM-Mesh (ESP32-C3)│
+│ • Koffer-, Rahmen-, Heck-    │ • Koffer-, Rahmen-, Heck-    │ • SX1262 LoRa 868MHz        │
+│   oder Helm-Montage          │   oder Helm-Montage          │ • DS18B20 Temp-Sensor (J6)  │
+│                              │                              │ • 2.4 GHz OMM-Mesh (ESP32-C3│
 └──────────────────────────────┴──────────────────────────────┴─────────────────────────────┘
   │                                                                                         │
-  ├─► 6. BORDNETZ-ANSCHLUSS: AMP Superseal 1.5 4-Pin (KL30 Dauerplus, KL15 Zündung, Masse)   │
-  ├─► 7. HECK-SENSOR-ZWEIG: M8 4-Pin Buchse (Heck-Radar / Totwinkel-Sensor / lokaler OBD2)──┤
+  ├─► 6. BORDNETZ-ANSCHLUSS: AMP Superseal 1.5 4-Pin / 12V Pkw-Lader (KL30, KL15, GND)       │
+  ├─► 7. HECK-RADAR-ZWEIG: M8 4-Pin / Binder M5 4-Pin (Radar 2.0 Sub-MCU PCBA 08 /            │
+  │      Wheeltec MR20 77-GHz mmWave / 36x Halo RGB LEDs / 5.9 GHz V2X oder Garmin Varia)───┤
   │                                                                                         │
   ▼ 2.4 GHz Ultra-Low-Latency Funkverbindung (ESP-NOW < 3ms & BLE 5.0 2M-PHY)               │
 ┌───────────────────────────────────────────────────────────────────────────────────────────┤
@@ -46,9 +48,16 @@ Klassische Motorrad-Kommunikationssysteme sind historisch stark fragmentiert:
 │ • Automotive 4-Port USB 2.0 Hub (Microchip USB2514B) für Boom! Box & CP2AA-Dongle        │
 │ • Geschalteter CarPlay-Port via TI TPS2051B (gesteuerter 2,5s Kaltstart & Hitzeschutz)   │
 │ • Digitales I2S-MEMS Ambient-Mikrofon mit ePTFE-Membran (Edge-RMS-Schallpegelmessung)     │
-│ • Direkter kabelgebundener Lenker-PTT-Tastereintritt (GPIO-Interrupt, 100% batteriefrei)  │
+│ • Direkter kabelgebundener Lenker-PTT-Tastereintritt (Port J3: PTT, Cam-Mark, Siri)       │
+│ • Totwinkel-Spiegel-LEDs (Port J9: N-MOSFET Treiber L+R für bernsteinfarbene 12V LEDs)    │
+│ • Drahtloses Actioncam-Induktionsdock (Port J8: 5V Qi-Ladespule mit Auto-Shutter-Stop)    │
 │ • Integrierter Cockpit-CAN-Transceiver (TCAN334G mit Auto-Sensing 120R) für TFT-Cockpits │
 │ • Einzige fahrzeugseitige Zuleitung: Robuste 2-adrige 12V-Bordnetzspeisung (KL15 / GND)   │
+├───────────────────────────────────────────────────────────────────────────────────────────┤
+│ 9. BEGLEITFAHRZEUG-TOPOLOGIE (Pkw / Support-Van / Rallye-Begleitfahrzeug / Wohnmobil):    │
+│ • Zentralbox mit Armaturenbrett-Keilaufnahme (car_dashboard_wedge_dock.stl) & 12V-Lader   │
+│ • Heck-Pod 3 an Beifahrer-Sonnenblende (car_sun_visor_pod3_clip.stl) via 3m Dachkabel    │
+│ • Live-LoRa-Mesh-Kartenverfolgung aller Gruppen-Motorräder auf Tablet / Smartphone (PWA) │
 └───────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -67,17 +76,18 @@ Klassische Telematik- und Assistenzsysteme neigen zum digitalen Paternalismus: S
 
 ---
 
-## 2. Modulare Systemphilosophie & Montagefreiheit (Die 5 Funktionsknoten)
+## 2. Modulare Systemphilosophie & Montagefreiheit (Die standardisierten Funktionsknoten)
 
-OpenMotorBridge v8.0 definiert die Plattform über **5 standardisierte Funktionsknoten**:
-1. **Zentralbox (Main ECU):** Zentraler Rechenkern (ESP32-S3), 24-Bit Audio-DSP/Codec (ES8388), galvanische Trennübertrager, 72V Automotive Step-Down (LM5164-Q1) und LiPo-USV (BQ24075 mit 2.200 mAh Flachzelle). *(Typischerweise mittig unter der Sitzbank im Batteriefach montiert).*
-2. **Heck-Pod 3 (Backbone & Telemetrie):** Multi-GNSS (u-blox MAX-M10S), 868 MHz LoRa (Semtech SX1262), 2.4 GHz OMM-Mesh-Co-Prozessor (ESP32-C3) und 6-Achs-IMU (BMI270). *(Typischerweise am Heck mit ungestörter Sicht in den Zenit).*
+OpenMotorBridge v8.0 definiert die Plattform über **standardisierte Funktionsknoten**:
+1. **Zentralbox (Main ECU):** Zentraler Rechenkern (ESP32-S3), 24-Bit Audio-DSP/Codec (ES8388), galvanische Trennübertrager, 72V Automotive Step-Down (LM5164-Q1) und LiPo-USV (BQ24075 mit 2.200 mAh Flachzelle). *(Typischerweise mittig unter der Sitzbank im Batteriefach oder im Pkw-Armaturenbrett montiert).*
+2. **Heck-Pod 3 (Backbone, Telemetrie & Temperatur):** Multi-GNSS (u-blox MAX-M10S), 868 MHz LoRa (Semtech SX1262), 2.4 GHz OMM-Mesh-Co-Prozessor (ESP32-C3 RISC-V), 6-Achs-IMU (BMI270) sowie der **wasserdichte Dallas DS18B20 1-Wire Edelstahl-Tauchfühler (Port J6)** zur kontinuierlichen Fahrbahn- und Außentemperaturmessung im Fahrtwindschatten (Glatteiswarnung bei $T \le +3{,}0\,^\circ\text{C}$). *(Typischerweise am Heck mit ungestörter Sicht in den Zenit bzw. an der Pkw-Sonnenblende).*
 3. **Satelliten-Pod 1 (Intercom-Brücke A):** Universal-Wechselschacht für Sena (Mesh 2.0/3.0 / Bluetooth). *(Typischerweise linke Fahrzeugseite).*
 4. **Satelliten-Pod 2 (Intercom-Brücke B):** Universal-Wechselschacht für Cardo (DMC Gen1/Gen2 / Bluetooth) oder analogen Funk (PMR446). *(Typischerweise rechte Fahrzeugseite zur HF-Raumdiversität).*
-5. **Front-Node (Cockpit & Camera Hub):** Autonomer ESP32-S3 Satellit, Automotive USB 2.0 4-Port Hub (USB2514B) für Apple CarPlay/Android Auto CP2AA-Dongle, 20W USB-PD Fast-Charging (Southchip SC8102), geschalteter VBUS mit TPS2051B, digitaler PTT-Tastereingang, TCAN334G CAN-Transceiver und Knowles I2S MEMS-Windgeräuschmikrofon. *(Typischerweise unsichtbar in der Cockpitverkleidung oder Scheinwerfermaske).*
+5. **Front-Node (Cockpit, Camera & Sensor Hub):** Autonomer ESP32-S3 Satellit, Automotive USB 2.0 4-Port Hub (USB2514B) für Apple CarPlay/Android Auto CP2AA-Dongle, 20W USB-PD Fast-Charging (Southchip SC8102), geschalteter VBUS mit TPS2051B, digitaler PTT-Tastereingang (Port J3), BSD Totwinkel-Spiegel-LEDs (Port J9), drahtloses Actioncam-Induktionsdock (Port J8), TCAN334G CAN-Transceiver und Knowles I2S MEMS-Windgeräuschmikrofon. *(Typischerweise unsichtbar in der Cockpitverkleidung oder Scheinwerfermaske).*
+6. **Radar 2.0 Sub-MCU & Halo-Wings (PCBA 08 - Aktives Heck-Sicherheitsmodul):** Wheeltec MR20 77-GHz-mmWave-Radar (bis $90\,\text{m}$ Erfassung, $\pm 60^\circ$ Sichtfeld), ESP32-C5 Dual-Band Sub-MCU, 36x adressierbare Halo-RGB-LEDs (18 links, 18 rechts) für dynamische Totwinkel- und Bremslicht-Stroboskop-Warnung, 5.9 GHz ITS-G5 (V2X) Keramik-Patchantennenkammer und industrieller Binder Serie 707 M5 IP67 Anschluss.
 
 ```
-                     DIE 5 STANDARDISIERTEN FUNKTIONSKNOTEN
+                     DIE STANDARDISIERTEN FUNKTIONSKNOTEN
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │ 1. FRONT-NODE (Cockpit/Nacelle):  Drahtloser USB-, Cam-, PTT- & Audio-Hub   │
 ├─────────────────────────────────────────────────────────────────────────────┤
@@ -85,20 +95,24 @@ OpenMotorBridge v8.0 definiert die Plattform über **5 standardisierte Funktions
 ├──────────────────────────────┬──────────────────────────────┬───────────────┤
 │ 3. POD 1 (Links/Koffer):     │ 4. POD 2 (Rechts/Koffer):    │ 5. HECK-POD 3:│
 │ • Intercom-Brücke A (Sena)   │ • Intercom-Brücke B (Cardo)  │ • GNSS / LoRa │
-│ • 100% Wechselschacht        │ • 100% Wechselschacht        │ • OMM 2.4 GHz │
-└──────────────────────────────┴──────────────────────────────┴───────────────┘
+│ • 100% Wechselschacht        │ • 100% Wechselschacht        │ • DS18B20 Temp│
+├──────────────────────────────┴──────────────────────────────┴───────────────┤
+│ 6. RADAR 2.0 SUB-MCU & HALO-WINGS (PCBA 08 am Heck):                        │
+│ • Wheeltec MR20 77-GHz mmWave Radar • 36x Halo RGB LEDs • 5.9 GHz V2X CAN   │
+└─────────────────────────────────────────────────────────────────────────────┘
 ```
 
 > [!NOTE]
-> **Montagefreiheit – *Your Bike, Your Choice*:**  
-> Wo und wie ihr diese 5 Boxen an eurem Motorrad platziert, ist bewusst **völlig euch überlassen**! OpenMotorBridge stellt die standardisierten Elektronik- und Gehäuse-Dimensionen sowie die Schnittstellen bereit.  
+> **Montagefreiheit – *Your Vehicle, Your Choice*:**  
+> Wo und wie ihr diese Module an eurem Fahrzeug platziert, ist bewusst **völlig euch überlassen**! OpenMotorBridge stellt die standardisierten Elektronik- und Gehäuse-Dimensionen sowie die Schnittstellen bereit.  
 > Für ausgewählte Plattformen liefern wir in **[Kapitel 08 (Mechanik & Gehäuse)](08_enclosures_mechanics_cad.md)** komplett durchentwickelte, 100 % schraub- und klebefreie **Referenz-Montagekits** mit:
-> * **Referenz-Kit 1 (Harley-Davidson CVO Road Glide ST & New Touring):** Pod 3 im Under-Cowl Skeleton Dock unter der Forged-Carbon-Hutze, Pod 1 & 2 geschützt in den Kofferdeckeln (Zero-Drill an Scharnierschrauben, Schnellkupplung), Front-Node am Geweihträger hinter der Sharknose-Außenhaut.
-> * **Referenz-Kit 2 (Harley-Davidson Road King Special / FLHRXS):** Pod 3 in der Touring Fender Console auf dem Kotflügel, Pod 1 & 2 in den Kofferdeckeln, Front-Node unsichtbar in der 7"-Scheinwerfer-Nacelle.
-> * **Referenz-Kit 3 (Classic Bagger & Cruiser – Street Glide / Electra Glide):** Pod 3 in der Touring Stealth Console nahtlos an der Soziusbank, entkoppeltes Radar unter dem Kennzeichen, Pod 1 & 2 in den Kofferdeckeln.
+> * **Referenz-Kit 1 (Harley-Davidson CVO Road Glide ST & New Touring):** Pod 3 im Under-Cowl Skeleton Dock unter der Forged-Carbon-Hutze, Pod 1 & 2 geschützt in den Kofferdeckeln (Zero-Drill an Scharnierschrauben, 19 mm MagSafe Seitendurchführung in Koffer-Innenwand neben Kofferhalter), Front-Node am Geweihträger hinter der Sharknose-Außenhaut, Radar 2.0 am Kennzeichenträger.
+> * **Referenz-Kit 2 (Harley-Davidson Road King Special / FLHRXS):** Pod 3 in der Touring Fender Console auf dem Kotflügel, Pod 1 & 2 in den Kofferdeckeln (MagSafe Seitendurchführung), Front-Node unsichtbar in der 7"-Scheinwerfer-Nacelle.
+> * **Referenz-Kit 3 (Classic Bagger & Cruiser – Street Glide / Electra Glide):** Pod 3 in der Touring Stealth Console nahtlos an der Soziusbank, entkoppeltes Radar 2.0 unter dem Kennzeichen, Pod 1 & 2 in den Kofferdeckeln.
 > * **Referenz-Kit 4 (Adventure & Touring Enduros – BMW GS, KTM Adventure, Africa Twin):** Pod 3 direkt auf Gepäckbrücke / Rohrheck mit integriertem M5-GoPro-Radarausleger, Pod 1 & 2 an Sturzbügeln per Rohrbett mit V-Nut und EPDM-Spannringen, Front-Node an Navigationsstrebe oder im Schnabel.
+> * **Referenz-Kit 5 (Pkw / Support-Van / Rallye-Begleitfahrzeug / Wohnmobil):** Pod 3 im Sonnenblenden-Clip ([`car_sun_visor_pod3_clip.stl`](../../hardware/cad/stl/05_accessories/car_sun_visor_pod3_clip.stl)) an der Beifahrer-Sonnenblende für metallisch ungeschirmte LoRa- und GNSS-Sicht durch die Frontscheibe; 3 m Flachband-USB-C-Kabel verdeckt unter dem Dachhimmel verlegt; Zentralbox auf vibrationsgedämpfter Keilaufnahme ([`car_dashboard_wedge_dock.stl`](../../hardware/cad/stl/05_accessories/car_dashboard_wedge_dock.stl)) auf dem Armaturenbrett mit 12V Zigarettenanzünder-PD-Speisung; PWA-Dashboard auf iPad/Tablet für Live-Tracking aller Gruppen-Bikes ohne Mobilfunk.
 >
-> Ihr könnt diese Referenzen 1:1 nachbauen, für euer eigenes Modell adaptieren oder anhand der offenen CAD-/STEP-Maße völlig eigene Halterungen designen, die perfekt zu eurem Motorrad passen!
+> Ihr könnt diese Referenzen 1:1 nachbauen, für euer eigenes Modell adaptieren oder anhand der offenen CAD-/STEP-Maße völlig eigene Halterungen designen, die perfekt zu eurem Fahrzeug passen!
 
 ### 2.1 Whitepaper-Entwurfsentscheidung: Dezentrale Satelliten-Topologie vs. Monolithische Single-Box
 
@@ -162,15 +176,41 @@ Werden Sena- und Cardo-Mesh-Geräte gleichzeitig betrieben, muss eine gegenseiti
 
 ## 4. Physische Schnittstellen & Signalmatrix
 
-Die Verbindung aller Komponenten erfolgt über den zentralen HD26-Flansch an der Zentralbox:
+### 4.1 Zentralbox HD26-Hauptkabelbaumpeitsche
+Die Verbindung aller Basis-Komponenten erfolgt über den zentralen HD26-Flansch an der Zentralbox:
 
 | Zweig / Kabel | Anschlusstyp | Zielkomponente | Übertragene Signale |
 | :--- | :--- | :--- | :--- |
 | **Peitsche 1 (250 mm)** | M8 6-Pin A-kodiert (Buchse) | **Satelliten-Pod 1** (Intercom-Brücke A: Sena Mesh / Universal) | NF_OUT+, NF_OUT-, OPTO_TRIGGER, 1-WIRE_ID, +5V_VBUS, GND |
 | **Peitsche 2 (250 mm)** | M8 6-Pin A-kodiert (Buchse) | **Satelliten-Pod 2** (Intercom-Brücke B: Cardo DMC / PMR446) | NF_OUT+, NF_OUT-, OPTO_TRIGGER, 1-WIRE_ID, +5V_VBUS, GND |
-| **Peitsche 3 (250 mm)** | M8 6-Pin A-kodiert (Buchse) | **Heck-Pod 3** (OMM & GNSS) | UART_TX, UART_RX, 1-PPS_SYNC, 1-WIRE_ID, +5V_POD3, GND |
-| **Peitsche 4 (250 mm)** | AMP Superseal 1.5 4-Pin | **12V Bordnetz** | KL30 (Dauerplus), KL15 (Zündung), GND (Power), GND (Sense) |
-| **Peitsche 5 (250 mm)** | M8 4-Pin A-kodiert (Buchse) | **Heck-Radar & lokaler OBD2** | RADAR_PWR_12V, RADAR_GND, RADAR_RX (UART/CAN_H), RADAR_TX (UART/CAN_L) |
+| **Peitsche 3 (250 mm)** | M8 6-Pin A-kodiert (Buchse) | **Heck-Pod 3** (OMM, GNSS & DS18B20 Temp) | UART_TX, UART_RX, 1-PPS_SYNC, 1-WIRE_ID/TEMP, +5V_POD3, GND |
+| **Peitsche 4 (250 mm)** | AMP Superseal 1.5 4-Pin | **12V Bordnetz** (Motorrad oder 12V Pkw-Lader) | KL30 (Dauerplus), KL15 (Zündung), GND (Power), GND (Sense) |
+| **Peitsche 5 (250 mm)** | M8 4-Pin / Binder M5 4-Pin | **Radar 2.0 Sub-MCU (PCBA 08)** / Garmin Varia | RADAR_PWR_5V/12V, RADAR_GND, RADAR_RX (UART/CAN_H), RADAR_TX (UART/CAN_L) |
+
+### 4.2 Heck-Pod 3 (PCBA 04) Schnittstellenmatrix
+| Port | Steckverbindertyp | Funktion | Angeschlossene Hardware |
+| :--- | :--- | :--- | :--- |
+| **`J1`** | M8 6-Pin A-kodiert Stecker | Uplink zur Zentralbox | Stromversorgung, High-Speed UART & 1-Wire Bus |
+| **`J2`** | JST-SH 1.0mm 4-Pin | I2C / Erweiterung | Interne Sensoren / IMU BMI270 & BMP390 Barometer |
+| **`J3`** | Murata MM8030 / SMA | HF Mesh 2.4 GHz | Dipol-Antenne / OMM Mesh Transceiver |
+| **`J4`** | Murata MM8030 / SMA | HF LoRa 868 MHz | Dipol-Antenne / SX1262 LoRa Bergpassfunk |
+| **`J5`** | Murata MM8030 / SMA | HF GNSS L1/L5 | Aktive/Passive Patch-Antenne für MAX-M10S |
+| **`J6`** | JST-PH 2.0mm 3-Pin | 1-Wire Außentemperatur | **Dallas DS18B20 Edelstahl-Tauchfühler (IP67)** im Fahrtwindschatten |
+
+### 4.3 Front-Node (PCBA 05) Cockpit-Schnittstellenmatrix
+| Port | Steckverbindertyp | Funktion | Angeschlossene Hardware |
+| :--- | :--- | :--- | :--- |
+| **`J1`** | JST-PH 2.0mm 2-Pin | 12V Zündungsplus | Lokale Speisung (KL15 & Masse) am Steuerkopf / Cartool / Scheinwerfer |
+| **`J2`** | JST-PH 2.0mm 3-Pin | Display-Audio-CAN | Cockpit-CAN-Bus (CAN_H, CAN_L, GND) für Harley Skyline OS / TFT |
+| **`J3`** | JST-PH 2.0mm 4-Pin | Lenker Multi-Button Interface | 3x IP67 Mikrotaster: PTT Intercom, Video-Bookmark, Siri/Voice (< 5 ms) |
+| **`J4`** | Molex Micro-Fit 4-Pin / USB | USB Host Upstream | Verbindung zur Boom! Box GTS / Skyline OS Display-Headunit |
+| **`J5`** | USB-C Buchse IP67 | 20W USB-PD Fast Charging | Lenker-Smartphone (QuadLock / SP Connect) via SC8102 Buck-Boost |
+| **`J6`** | Molex Micro-Fit 4-Pin | Geschalteter CarPlay-Port | Wireless CP2AA-Dongle mit 1-Click TPS2051B Kaltstart-Reset |
+| **`J7`** | USB-C Onboard | Service- & Flash-Port | ESP32-S3 Firmware-Update & WebSerial Diagnose |
+| **`J8`** | JST-PH 2.0mm 2-Pin | Actioncam-Stromversorgung | 5V Qi-Ladespule im Kameradock mit automatischem BLE-Shutter-Stop |
+| **`J9`** | JST-PH 2.0mm 3-Pin | Totwinkel-Spiegel-LEDs | 2x bernsteingelbe 12V LEDs an Spiegelarmen über N-MOSFETs L+R |
+| **`J10`** | JST-PH 2.0mm 2-Pin | Qi Wireless Cradle | 12V geschaltete Speisung für kabellose Ladeschale (null Ruhestrom) |
+| **`J11`** | JST-PH 2.0mm 2-Pin | Front-Zusatzscheinwerfer | Bis zu 4,5A High-Side geschaltetes LED-Licht (Auto-Strobe bei Notbremsung) |
 
 ---
 
@@ -246,6 +286,18 @@ Der Front-Knoten (PCBA 05) dient auf **allen Motorrädern** als universeller Coc
     - Am Radar 2.0 (Wheeltec MR20): Triggert die beiden 18-LED Neopixel-Warnflügel (36 LEDs gesamt) in einen ultrahellen, synchron pulsierenden $4{,}5\,\text{Hz}$ Bremslicht-Stroboskop-Blitz.
     - Am Garmin Varia: Sendet `SET_LIGHT_MODE: STROBE_4HZ`.
   * **Ergebnis:** Höchste Warnwirkung für nachfolgende Fahrzeuge, **völlig ohne Eingriff in die originale Fahrzeug-Bremsleitung**.
+
+#### 5.3.3 Dallas DS18B20 1-Wire Fahrbahn- & Außentemperatur-Sicherheit (Port J6 an Pod 3)
+* **Messort & Entkopplung:**
+  * Der wasserdichte Edelstahl-Tauchfühler (IP67, $\varnothing 6 \times 50\,\text{mm}$) wird über ein 3-poliges JST-PH Kabel an Port `J6` der PCBA 04 im Heck-Pod 3 angeschlossen.
+  * Der Fühler tritt an der Unterseite des Heck-Pods aus und ragt im **Fahrtwind-Schatten** (geschützt vor direkter Sonnenstrahlung und vor aufsteigender Motor-/Auspuffwärme) in den Luftstrom knapp über der Fahrbahn.
+* **1-Wire Busprotokoll & Auflösung:**
+  * Betrieb im echten 3-Leiter-Modus (`+3.3V`, `1-WIRE_DATA`, `GND`) mit 4,7 kΩ Pull-Up auf PCBA 04.
+  * 12-Bit Auflösung ($0{,}0625\,^\circ\text{C}$ Schrittweite, Messintervall 2,0 s).
+* **Glatteis-Frühwarnung (Black Ice Guard):**
+  * Sinkt die gemessene Temperatur auf $T \le +3{,}0\,^\circ\text{C}$ (Gefahr von überfrierender Nässe und Reifglätte auf Brücken und Bergpässen), triggert OMB eine zweistufige Sicherheitsreaktion:
+    1. **Akustischer Warnton:** Ein diskreter, tiefer Doppelton-Ping ($440\,\text{Hz} \rightarrow 330\,\text{Hz}$) wird einmalig ins Headset eingespielt.
+    2. **Visuelles Glatteis-Symbol:** Im PWA Ride HUD und auf dem TFT-Display leuchtet das blaue Eiskristall-Warnsymbol permanent auf, bis die Temperatur wieder dauerhaft über $+4{,}5\,^\circ\text{C}$ ansteigt (Hysterese gegen Flackern).
 
 ### 5.4 LoRa 868 MHz Alarmanlagen-Pager & Parkplatzwächter (Werks-BCM + Autonom)
 * **Das Problem herkömmlicher Alarmanlagen:** Geht an der Passhöhe oder am Hotel die Alarmanlage des Motorrads los, ist der Fahrer oft zu weit entfernt ($> 50\dots 100\,\text{m}$) und hört die Hupe nicht.
@@ -335,3 +387,21 @@ Der Front-Knoten (PCBA 05) dient auf **allen Motorrädern** als universeller Coc
     4. **Parkplatzwächter (Zündung AUS):** Erschütterungen des abgestellten Motorrads werden lautlos an den 2-in-1 LoRa Smart-Keyfob (LRA-Pager) in der Jackentasche des Fahrers gemeldet.
 * **Absolutes Push-Verbot für allgemeine Verkehrs- & Wettertexte während der Fahrt ($v > 0$):**
   * Weder Staumeldungen noch Wettertexte oder CAN-Spritstand-Broadcasts werden während der Fahrt auf das Display gepusht. Die kognitive Last des Fahrers bleibt zu 100 % für die Fahrzeugbeherrschung und die Blickführung frei.
+
+### 5.13 Begleitfahrzeug- & Support-Van-Architektur (Rallye, Besenfahrzeug, Tour-Orga)
+* **Rolle des Begleitfahrzeugs in organisierten Gruppen:**
+  * Bei Alpentouren, geführten Gruppenreisen, Wüstenrallyes oder Fahrsicherheitstrainings fährt häufig ein Begleitfahrzeug (Kastenwagen, Van, Wohnmobil) mit Ersatzteilen, Werkzeug, Reisegepäck und Erste-Hilfe-Ausrüstung im Konvoi oder als Besenfahrzeug hinterher.
+  * Herkömmliche Systeme scheitern im Pkw daran, dass die geschlossene Blechkarosserie als stark dämpfender Faradayscher Käfig wirkt und Motorrad-Intercoms keine Reichweite in ein geschlossenes Fahrzeug besitzen.
+* **OpenMotorBridge Support-Van Kit (Referenz-Kit 5):**
+  * **Heck-Pod 3 als Sonnenblenden-Transceiver:**
+    * Der Heck-Pod 3 (PCBA 04 mit LoRa SX1262 und u-blox MAX-M10S) wird mit dem werkzeuglosen Sonnenblenden-Clip ([`car_sun_visor_pod3_clip.stl`](../../hardware/cad/stl/05_accessories/car_sun_visor_pod3_clip.stl)) an der Beifahrer-Sonnenblende montiert.
+    * **Physikalischer Vorteil:** Die Antennen strahlen ungehindert durch die Glas-Windschutzscheibe nach vorn und zur Seite ab – **100 % frei von metallischer Karosserie-Abschattung**.
+  * **Verdeckte Dachhimmel-Verkabelung:**
+    * Ein 3 m langes, ultraflaches USB-C Flachbandkabel verläuft unsichtbar hinter dem Dachhimmel und der Gummidichtung der A-Säule direkt hinunter zum Armaturenbrett.
+  * **Zentralbox-Docking & 12V-Bordnetz:**
+    * Die Zentralbox ruht auf dem Armaturenbrett in der vibrationsdämpfenden Keilaufnahme ([`car_dashboard_wedge_dock.stl`](../../hardware/cad/stl/05_accessories/car_dashboard_wedge_dock.stl)).
+    * Die Stromversorgung erfolgt werkzeuglos über den mitgelieferten 12V/24V-Zigarettenanzünder-Adapter (30W USB-PD Schnelllader).
+* **Live-Gruppenüberwachung ohne Mobilfunknetz (PWA Fleet Dashboard):**
+  * Auf einem im Pkw montierten iPad oder Android-Tablet läuft das PWA-Dashboard im Offline-Kartenmodus.
+  * Über das 868 MHz LoRa-Mesh empfängt das Begleitfahrzeug im Sekundentakt Telemetriedaten (Position, Geschwindigkeit, SOS-/Sturzalarm, Reifendruck, Außentemperatur) aller Motorräder im Umkreis von bis zu $15\,\text{km}$ – autark, robust und vollkommen unabhängig von Mobilfunkmasten.
+
