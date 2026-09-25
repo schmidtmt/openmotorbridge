@@ -111,7 +111,7 @@ OpenMotorBridge v8.0 defines the platform across **standardized functional nodes
 > * **Reference Kit 2 (Harley-Davidson Road King Special / FLHRXS):** Pod 3 in the Touring Fender Console on the rear fender, Pods 1 & 2 in the saddlebag lids (MagSafe side pass-through), Front Node hidden inside the 7" headlight nacelle.
 > * **Reference Kit 3 (Classic Bagger & Cruiser – Street Glide / Electra Glide):** Pod 3 in the Touring Stealth Console seamless to passenger seat, decoupled Radar 2.0 below the license plate, Pods 1 & 2 in the saddlebag lids.
 > * **Reference Kit 4 (Adventure & Touring Enduros – BMW GS, KTM Adventure, Africa Twin):** Pod 3 directly on luggage rack / tubular subframe with integrated M5 GoPro radar arm, Pods 1 & 2 on crash bars via 120° V-grooves and EPDM tension straps, Front Node on nav crossbar or inside beak.
-> * **Reference Kit 5 (Car / Support-Van / Rally Sweep Vehicle / RV):** Pod 3 in the Sun Visor Clip ([`car_sun_visor_pod3_clip.stl`](../../hardware/cad/stl/05_accessories/car_sun_visor_pod3_clip.stl)) on passenger sun visor for non-shielded LoRa/GNSS through windshield; 3 m flat USB-C cable concealed behind headliner and A-pillar; Central Box on vibration-damped wedge dock ([`car_dashboard_wedge_dock.stl`](../../hardware/cad/stl/05_accessories/car_dashboard_wedge_dock.stl)) on dashboard with 12V cigarette lighter PD adapter; PWA dashboard on iPad/tablet for live tracking of all group bikes without cellular connectivity.
+> * **Reference Kit 5 (Car / Support-Van / Rally Sweep Vehicle / RV):** Pod 3 in the Sun Visor Clip ([`car_sun_visor_pod3_clip.stl`](../../hardware/cad/stl/05_accessories/car_sun_visor_pod3_clip.stl)) on passenger sun visor for non-shielded LoRa/GNSS through windshield; Satellite Pods 1 & 2 via 3M Dual-Lock on dashboard or concealed at seat console (interchangeable with visor clip on cartridge swap); 3 m flat USB-C cable concealed behind headliner and A-pillar; Central Box on vibration-damped wedge dock ([`car_dashboard_wedge_dock.stl`](../../hardware/cad/stl/05_accessories/car_dashboard_wedge_dock.stl)) on dashboard with 12V cigarette lighter PD adapter; autonomous Bluetooth OBD2 telemetry (ELM327 / vGate) coupled directly to Central Box; PWA dashboard on iPad/tablet for live tracking of all group bikes without cellular connectivity.
 >
 > Riders and support crews are encouraged to replicate these kits, adapt them for other vehicle models, or design custom brackets based on our open CAD/STEP dimensional envelopes!
 
@@ -397,11 +397,17 @@ The Front Node (PCBA 05) serves on **all motorcycle types** as the universal coc
   * **Rear Pod 3 as Sun Visor Transceiver:**
     * Rear Pod 3 (PCBA 04 with LoRa SX1262 and u-blox MAX-M10S) clips onto the passenger sun visor using the tool-free snap bracket ([`car_sun_visor_pod3_clip.stl`](../../hardware/cad/stl/05_accessories/car_sun_visor_pod3_clip.stl)).
     * **RF Physics Advantage:** Antennas radiate forward and laterally through the glass automotive windshield — **100% free of metallic chassis attenuation and Faraday shielding**.
+  * **Satellite Pods 1 & 2 for Intercom & Radio (3M Dual-Lock):**
+    * Pod 1 (e.g. Sena Mesh) and Pod 2 (e.g. Cardo DMC or Midland CB/PMR) attach vibration-isolated via 3M Dual-Lock mushroom tape to the dashboard beside the Central Box or concealed along the front seat console.
+    * Because all pods (1, 2, 3) share identical monocoque enclosures ($135 \times 70 \times 26\,\text{mm}$), any pod can also snap into the sun visor clip if needed. Obsolete parcel-shelf mounting is eliminated due to lack of rigid shelves in modern vans/wagons and severe metallic RF shielding inside luggage trunks.
   * **Concealed Roof Headliner Routing:**
     * A 3 m ultra-flat USB-C ribbon cable routes invisibly behind the automotive headliner and down the rubber weatherstrip of the A-pillar to the dashboard.
   * **Central Box Docking & 12V Vehicle Power:**
     * The Central Box rests securely on the dashboard in the vibration-damped wedge dock ([`car_dashboard_wedge_dock.stl`](../../hardware/cad/stl/05_accessories/car_dashboard_wedge_dock.stl)).
     * Power is supplied tool-free via the included 12V/24V cigarette lighter adapter (30W USB-PD fast charger).
+  * **Wireless Automotive Telemetry via Bluetooth OBD2 (ELM327 / vGate):**
+    * The Central Box couples autonomously via Bluetooth 5.0 (BLE) to a compact OBD2 dongle plugged under the steering column.
+    * Vehicle telemetry (speed, RPM, fuel tank level %, engine coolant temp) broadcasts into the 868 MHz LoRa mesh — zero footwell wiring and zero dependency on a smartphone/tablet app.
 * **Real-Time Fleet Telemetry without Cellular Service (PWA Fleet Dashboard):**
   * An iPad or Android tablet mounted in the car runs the OpenMotorBridge PWA dashboard in offline vector map mode.
   * Over the 868 MHz LoRa mesh, the support crew receives second-by-second telemetry updates (GPS coordinate fixes, road speeds, crash/SOS alerts, tire pressures, ambient road temperature) from all group motorcycles over a radius of up to $15\,\text{km}$ — autonomous, robust, and completely independent of cellular network coverage.

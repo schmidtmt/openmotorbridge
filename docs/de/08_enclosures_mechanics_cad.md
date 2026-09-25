@@ -1060,9 +1060,45 @@ Für die Zentralbox (Main Control Box, $110 \times 74 \times 32\,\text{mm}$) im 
 * **Vibrationsgedämpfte, kratzfreie Auflage:**
   * Die Unterseite verfügt über 4 zylindrische Vertiefungen ($\varnothing 12 \times 1{,}5\,\text{mm}$) zur Aufnahme handelsüblicher 3M-Bumpon-Silikonfüße oder 3M-VHB-Klebepads für absolut rutschfesten Stand auf jeder Cockpit-Oberfläche.
 
+#### 6.8.3 Satelliten-Pods 1 & 2: Befestigungskonzept (Dashboard & Sitzkonsole via 3M Dual-Lock)
+
+Während Pod 3 (GNSS, LoRa-Mesh, 5.9 GHz V2X) wegen der Satelliten-Sicht zwingend an die obere Windschutzscheibenkante gehört, dienen die Satelliten-Pods 1 und 2 im Begleitfahrzeug oder in der Autokolonne primär der Funk- und Audio-Kommunikation:
+* **Pod 1:** Intercom-Kassette Gruppe A (z. B. Sena Spider ST1 / 50S Mesh)
+* **Pod 2:** Intercom-Kassette Gruppe B (z. B. Cardo Packtalk Edge DMC) oder Midland CB-/PMR-Funk
+
+Da moderne Pkw, Vans, Kombis und SUVs **keine starren Heck-Hutablagen** mehr besitzen und Funkgeräte im Kofferraum unter massiver Blechdämpfung leiden, wurde das Konzept der Hutablage bereits frühzeitig verworfen. Stattdessen nutzt OpenMotorBridge die **100 % identische Gehäusegeometrie** aller Pods ($135 \times 70 \times 26\,\text{mm}$):
+
+1. **Armaturenbrett / Cockpit (Primärempfehlung via 3M Dual-Lock SJ3550):**
+   * Die Pods werden mit 3M Dual-Lock Pilzkopf-Klett direkt auf dem Armaturenbrett (z. B. im Bereich der Beifahrer-A-Säule oder nahe der Mittelkonsole) fixiert.
+   * **HF-Freisicht durch die Frontscheibe:** Die 2.4-GHz-Mesh- und Bluetooth-Antennen von Sena und Cardo strahlen ungehindert durch das Frontglas nach vorn zu den vorausfahrenden Motorrädern ab (im geschlossenen Blechraum würde das Signal um $20\dots 30\,\text{dB}$ einbrechen).
+   * **Kompakte Verkabelung:** Die Distanz zur Zentralbox beträgt nur wenige Dezimeter.
+2. **Verdeckte Montage an den Vordersitz-Konsolen (Stealth-Option):**
+   * Sollen die Pods im Innenraum völlig unsichtbar sein, werden sie per Klett seitlich unten an den Sitzschienen-Verkleidungen oder an der Teppichwand des Mitteltunnels befestigt.
+   * Ideal bei festen Setups, bei denen keine manuellen Tasten bedient werden müssen (Bedienung erfolgt komplett über PWA-Touchscreen oder Pkw-Lenkradtaste).
+3. **Flexibler Kassetten- & Sonnenblenden-Wechsel bei Multipurpose-Fahrzeugen:**
+   * Jeder Pod (auch Pod 1 oder 2) rastet formschlüssig in den Universal-Sonnenblenden-Clip ([`car_sun_visor_pod3_clip.scad`](../../hardware/cad/scad/05_accessories/car_sun_visor_pod3_clip.scad)) ein.
+   * Bei wechselnden Einsatzszenarien kann der Biker den Pod mit der aktuell wichtigsten Funkkassette (z. B. Midland CB-Funk bei einer Rallye) mit einem Klick an die Sonnenblende hängen und danach wieder auf das Motorrad übernehmen.
+
 ---
 
-#### 6.8.3 Gesamtsystem & Werkzeuglose 5-Minuten-Fahrzeugintegration
+#### 6.8.4 Drahtlose Pkw-Telemetrie: Autarke Bluetooth-OBD2-Kopplung via Zentralbox
+
+Im Pkw oder Support-Van ist ein langes, fest verlegtes CAN-Kabel von der Mittelkonsole quer durch den Fahrerfußraum zur Diagnosebuchse unpraktisch und birgt Stolpergefahren an den Pedalen. OpenMotorBridge löst dies über eine **drahtlose Bluetooth-OBD2-Anbindung**:
+
+1. **Direkte Kopplung mit der Zentralbox (ESP32-S3):**
+   * Die Kopplung erfolgt **nicht** über den Browser des Tablets (WebBLE im Browser bricht ab, wenn der Bildschirm sperrt oder die App in den Hintergrund wechselt), sondern **direkt und autark über den Bluetooth-5.0-Controller der Zentralbox**.
+   * Die Zentralbox fungiert als BLE-Master (SPP-Client) und verbindet sich beim Einschalten der Zündung vollautomatisch mit handelsüblichen COTS-OBD2-Dongles (z. B. *vGate iCar Pro BLE 4.0*, *OBDLink CX* oder Standard *ELM327 BLE*), die unsichtbar in der OBD2-Buchse unter dem Lenkrad stecken.
+2. **Autarkes Polling & LoRa-Mesh-Broadcast:**
+   * Die Zentralbox fragt per AT-Kommandos zyklisch die Standard-PIDs nach ISO 15765-4 ab:
+     * `010D`: Fahrzeuggeschwindigkeit (km/h)
+     * `010C`: Motordrehzahl (RPM)
+     * `012F`: Tankfüllstand (%)
+     * `0105`: Kühlmitteltemperatur (°C)
+   * Diese Daten werden autark in das 868-MHz-LoRa-Mesh (OMM) eingespeist. Die gesamte Motorradgruppe sieht auf ihren Dashboards in Echtzeit Geschwindigkeit, Tankstand und Status des Begleitwagens – selbst wenn im Van gar kein Tablet eingeschaltet ist.
+
+---
+
+#### 6.8.5 Gesamtsystem & Werkzeuglose 5-Minuten-Fahrzeugintegration
 
 Das Zusammenspiel aller Komponenten des Referenz-Kits 5 garantiert einen werkzeuglosen, vollkommen zerstörungsfreien Einbau in jeden Pkw oder Van:
 
@@ -1078,9 +1114,14 @@ Das Zusammenspiel aller Komponenten des Referenz-Kits 5 garantiert einen werkzeu
  ┌────────────────────────────────────────────────────────────────────────┐
  │ Armaturenbrett / Mittelkonsole:                                        │
  │ [car_dashboard_wedge_dock (15°)] ──> [Zentralbox (ESP32-S3)]           │
- │       ▲                                   │                            │
- │       │ 12V/24V PD (30W)                  ├─► USB-C / BLE Offline PWA  │
- │ [Zigarettenanzünder]                      │   (iPad / Android Tablet)  │
+ │       ▲           ▲                       │        ▲                   │
+ │       │ 12V PD    │ M8 / USB-C            │        │ Bluetooth LE      │
+ │ [Zigaretten-      ▼                       │        ▼                   │
+ │  anzünder]   [Pods 1 & 2 per 3M Klett]    │   [OBD2 BLE-Dongle]        │
+ │              (Dashboard / Sitzkonsole)    │   (ELM327 / vGate unter    │
+ │                                           │    dem Lenkrad)            │
+ │                                           ├─► USB-C / BLE Offline PWA  │
+ │                                           │   (iPad / Android Tablet)  │
  │                                           ▼                            │
  │                                      [CarPlay / Android Auto Audio]    │
  └────────────────────────────────────────────────────────────────────────┘

@@ -110,7 +110,7 @@ OpenMotorBridge v8.0 definiert die Plattform über **standardisierte Funktionskn
 > * **Referenz-Kit 2 (Harley-Davidson Road King Special / FLHRXS):** Pod 3 in der Touring Fender Console auf dem Kotflügel, Pod 1 & 2 in den Kofferdeckeln (MagSafe Seitendurchführung), Front-Node unsichtbar in der 7"-Scheinwerfer-Nacelle.
 > * **Referenz-Kit 3 (Classic Bagger & Cruiser – Street Glide / Electra Glide):** Pod 3 in der Touring Stealth Console nahtlos an der Soziusbank, entkoppeltes Radar 2.0 unter dem Kennzeichen, Pod 1 & 2 in den Kofferdeckeln.
 > * **Referenz-Kit 4 (Adventure & Touring Enduros – BMW GS, KTM Adventure, Africa Twin):** Pod 3 direkt auf Gepäckbrücke / Rohrheck mit integriertem M5-GoPro-Radarausleger, Pod 1 & 2 an Sturzbügeln per Rohrbett mit V-Nut und EPDM-Spannringen, Front-Node an Navigationsstrebe oder im Schnabel.
-> * **Referenz-Kit 5 (Pkw / Support-Van / Rallye-Begleitfahrzeug / Wohnmobil):** Pod 3 im Sonnenblenden-Clip ([`car_sun_visor_pod3_clip.stl`](../../hardware/cad/stl/05_accessories/car_sun_visor_pod3_clip.stl)) an der Beifahrer-Sonnenblende für metallisch ungeschirmte LoRa- und GNSS-Sicht durch die Frontscheibe; 3 m Flachband-USB-C-Kabel verdeckt unter dem Dachhimmel verlegt; Zentralbox auf vibrationsgedämpfter Keilaufnahme ([`car_dashboard_wedge_dock.stl`](../../hardware/cad/stl/05_accessories/car_dashboard_wedge_dock.stl)) auf dem Armaturenbrett mit 12V Zigarettenanzünder-PD-Speisung; PWA-Dashboard auf iPad/Tablet für Live-Tracking aller Gruppen-Bikes ohne Mobilfunk.
+> * **Referenz-Kit 5 (Pkw / Support-Van / Rallye-Begleitfahrzeug / Wohnmobil):** Pod 3 im Sonnenblenden-Clip ([`car_sun_visor_pod3_clip.stl`](../../hardware/cad/stl/05_accessories/car_sun_visor_pod3_clip.stl)) an der Beifahrer-Sonnenblende für metallisch ungeschirmte LoRa- und GNSS-Sicht durch die Frontscheibe; Satelliten-Pods 1 & 2 per 3M Dual-Lock Klett auf dem Armaturenbrett oder verdeckt an der Sitzkonsole (bei Kassettenwechsel ebenfalls auf Sonnenblenden-Clip adaptierbar); 3 m Flachband-USB-C-Kabel verdeckt unter dem Dachhimmel verlegt; Zentralbox auf vibrationsgedämpfter Keilaufnahme ([`car_dashboard_wedge_dock.stl`](../../hardware/cad/stl/05_accessories/car_dashboard_wedge_dock.stl)) auf dem Armaturenbrett mit 12V Zigarettenanzünder-PD-Speisung; drahtlose Bluetooth-OBD2-Anbindung (ELM327 / vGate) direkt an die Zentralbox; PWA-Dashboard auf iPad/Tablet für Live-Tracking aller Gruppen-Bikes ohne Mobilfunk.
 >
 > Ihr könnt diese Referenzen 1:1 nachbauen, für euer eigenes Modell adaptieren oder anhand der offenen CAD-/STEP-Maße völlig eigene Halterungen designen, die perfekt zu eurem Fahrzeug passen!
 
@@ -396,11 +396,17 @@ Der Front-Knoten (PCBA 05) dient auf **allen Motorrädern** als universeller Coc
   * **Heck-Pod 3 als Sonnenblenden-Transceiver:**
     * Der Heck-Pod 3 (PCBA 04 mit LoRa SX1262 und u-blox MAX-M10S) wird mit dem werkzeuglosen Sonnenblenden-Clip ([`car_sun_visor_pod3_clip.stl`](../../hardware/cad/stl/05_accessories/car_sun_visor_pod3_clip.stl)) an der Beifahrer-Sonnenblende montiert.
     * **Physikalischer Vorteil:** Die Antennen strahlen ungehindert durch die Glas-Windschutzscheibe nach vorn und zur Seite ab – **100 % frei von metallischer Karosserie-Abschattung**.
+  * **Satelliten-Pods 1 & 2 für Intercom & Funk (3M Dual-Lock):**
+    * Pod 1 (z. B. Sena Mesh) und Pod 2 (z. B. Cardo DMC oder Midland CB-Funk) werden per 3M Dual-Lock Pilzkopfklett vibrationsfest auf dem Armaturenbrett neben der Zentralbox oder verdeckt an der Sitzkonsole befestigt.
+    * Da alle Pods (1, 2, 3) baugleiche Monocoque-Gehäuse ($135 \times 70 \times 26\,\text{mm}$) nutzen, kann jeder Pod bei Bedarf ebenfalls in den Sonnenblenden-Clip geklickt werden. Eine veraltete Hutablagen-Montage entfällt wegen fehlender fester Ablagen in modernen Kombis/Vans und starker Funkdämpfung im Kofferraum.
   * **Verdeckte Dachhimmel-Verkabelung:**
     * Ein 3 m langes, ultraflaches USB-C Flachbandkabel verläuft unsichtbar hinter dem Dachhimmel und der Gummidichtung der A-Säule direkt hinunter zum Armaturenbrett.
   * **Zentralbox-Docking & 12V-Bordnetz:**
     * Die Zentralbox ruht auf dem Armaturenbrett in der vibrationsdämpfenden Keilaufnahme ([`car_dashboard_wedge_dock.stl`](../../hardware/cad/stl/05_accessories/car_dashboard_wedge_dock.stl)).
     * Die Stromversorgung erfolgt werkzeuglos über den mitgelieferten 12V/24V-Zigarettenanzünder-Adapter (30W USB-PD Schnelllader).
+  * **Drahtlose Pkw-Telemetrie via Bluetooth-OBD2 (ELM327 / vGate):**
+    * Die Zentralbox koppelt sich autark via Bluetooth 5.0 (BLE) mit einem kompakten OBD2-Dongle im Fahrerfußraum.
+    * Pkw-Daten (Geschwindigkeit, Drehzahl, Tankfüllstand, Motortemperatur) werden autark ins 868-MHz-LoRa-Mesh übertragen – ohne Kabel im Fußraum und ohne Abhängigkeit von einer App auf dem Smartphone/Tablet.
 * **Live-Gruppenüberwachung ohne Mobilfunknetz (PWA Fleet Dashboard):**
   * Auf einem im Pkw montierten iPad oder Android-Tablet läuft das PWA-Dashboard im Offline-Kartenmodus.
   * Über das 868 MHz LoRa-Mesh empfängt das Begleitfahrzeug im Sekundentakt Telemetriedaten (Position, Geschwindigkeit, SOS-/Sturzalarm, Reifendruck, Außentemperatur) aller Motorräder im Umkreis von bis zu $15\,\text{km}$ – autark, robust und vollkommen unabhängig von Mobilfunkmasten.

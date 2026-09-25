@@ -863,9 +863,45 @@ For securing the Central Control Box ($110 \times 74 \times 32\,\text{mm}$) insi
 * **Vibration-Damped Non-Marring Base:**
   * The flat bottom features 4 circular pockets ($\varnothing 12 \times 1.5\,\text{mm}$) designed for standard 3M Bumpon silicone rubber bumpers or 3M VHB tape, preventing sliding and scuff marks on sensitive dashboard trim.
 
+#### 6.8.3 Satellite Pods 1 & 2: Mounting Strategy (Dashboard & Seat Console via 3M Dual-Lock)
+
+While Pod 3 (GNSS, LoRa mesh, 5.9 GHz V2X) strictly requires a location at the upper windshield margin for skyward line-of-sight, Satellite Pods 1 and 2 in a support van or automotive convoy serve primarily voice and radio communication:
+* **Pod 1:** Intercom Cartridge Group A (e.g. Sena Spider ST1 / 50S Mesh)
+* **Pod 2:** Intercom Cartridge Group B (e.g. Cardo Packtalk Edge DMC) or Midland CB / PMR Radio
+
+Because modern passenger cars, vans, wagons, and SUVs **lack rigid rear parcel shelves** and transceivers stationed inside the luggage trunk suffer massive metallic RF attenuation, parcel shelf mounting was explicitly discarded. Instead, OpenMotorBridge capitalizes on the **100% identical monocoque footprint** shared by all three Pods ($135 \times 70 \times 26\,\text{mm}$):
+
+1. **Dashboard / Cockpit (Primary Recommendation via 3M Dual-Lock SJ3550):**
+   * Pods adhere via 3M Dual-Lock interlocking mushroom tape directly to the dashboard (e.g., near the passenger A-pillar base or flanking the center console).
+   * **RF Line-of-Sight Through Windshield:** The 2.4 GHz mesh and Bluetooth antennas of Sena and Cardo transmit unhindered through the front windshield glass toward the leading motorcycles (inside a steel cabin, signals would degrade by $20\dots 30\,\text{dB}$).
+   * **Short Cable Runs:** Only a few decimeters separation from the Central Box.
+2. **Concealed Front Seat Console Mounting (Stealth Option):**
+   * If pods must remain hidden from view, they hook via Velcro/Dual-Lock to the side carpet of the center console tunnel or lower seat frame rails.
+   * Ideal for permanent fleet setups where manual button access is unneeded (PTT and channel control occur entirely via the PWA touchscreen or vehicle steering wheel buttons).
+3. **Flexible Cartridge & Visor Swapping for Multipurpose Vehicles:**
+   * Any pod (including Pod 1 or Pod 2) snaps form-fittingly into the Universal Sun Visor Clip ([`car_sun_visor_pod3_clip.scad`](../../hardware/cad/scad/05_accessories/car_sun_visor_pod3_clip.scad)).
+   * In multipurpose vehicles, the driver can snap whichever pod holds the primary radio cartridge (e.g. Midland CB radio for a rally) onto the sun visor, and transfer it back to the motorcycle afterward.
+
 ---
 
-#### 6.8.3 Full System Architecture & Zero-Damage 5-Minute Vehicle Integration
+#### 6.8.4 Wireless Automotive Telemetry: Autonomous Bluetooth OBD2 Coupling via Central Box
+
+Routing a long, fixed CAN cable from the center console across the driver footwell to the vehicle diagnostic socket creates safety hazards around the pedals and complicates vehicle swaps. OpenMotorBridge resolves this via **wireless Bluetooth OBD2 telemetry**:
+
+1. **Direct Coupling to Central Box (ESP32-S3):**
+   * Pairing operates **independently of the tablet browser** (browser-based WebBLE drops whenever the tablet locks or apps switch to the background). Instead, the Central Box's hardware Bluetooth 5.0 controller acts as the autonomous BLE Master (SPP Client).
+   * The Central Box automatically connects at ignition ON to standard COTS OBD2 BLE adapters (e.g. *vGate iCar Pro BLE 4.0*, *OBDLink CX*, or standard *ELM327 BLE*) plugged unobtrusively into the vehicle OBD2 socket under the steering column.
+2. **Autonomous PID Polling & LoRa Mesh Broadcast:**
+   * The Central Box cyclically queries standard ISO 15765-4 PIDs:
+     * `010D`: Vehicle Speed (km/h)
+     * `010C`: Engine RPM
+     * `012F`: Fuel Tank Level (%)
+     * `0105`: Engine Coolant Temperature (°C)
+   * Telemetry broadcasts autonomously into the 868 MHz LoRa mesh (OMM). The entire motorcycle group monitors the chase vehicle's fuel level, speed, and status in real time—even if no tablet or smartphone is turned on inside the van.
+
+---
+
+#### 6.8.5 Full System Architecture & Zero-Damage 5-Minute Vehicle Integration
 
 The synchronized design of Reference Kit 5 enables quick, tool-free installation and removal in any rental car, support van, or chase vehicle:
 
@@ -881,9 +917,14 @@ The synchronized design of Reference Kit 5 enables quick, tool-free installation
  ┌────────────────────────────────────────────────────────────────────────┐
  │ Dashboard / Center Console:                                            │
  │ [car_dashboard_wedge_dock (15°)] ──> [Central Box (ESP32-S3)]         │
- │       ▲                                   │                            │
- │       │ 12V/24V PD (30W)                  ├─► USB-C / BLE Offline PWA  │
- │ [Cigarette Lighter]                       │   (iPad / Android Tablet)  │
+ │       ▲           ▲                       │        ▲                   │
+ │       │ 12V PD    │ M8 / USB-C            │        │ Bluetooth LE      │
+ │ [Cigarette        ▼                       │        ▼                   │
+ │  Lighter]    [Pods 1 & 2 via 3M Tape]     │   [OBD2 BLE Dongle]        │
+ │              (Dashboard / Seat Console)   │   (ELM327 / vGate under    │
+ │                                           │    steering wheel)         │
+ │                                           ├─► USB-C / BLE Offline PWA  │
+ │                                           │   (iPad / Android Tablet)  │
  │                                           ▼                            │
  │                                      [CarPlay / Android Auto Audio]    │
  └────────────────────────────────────────────────────────────────────────┘
