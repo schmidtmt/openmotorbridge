@@ -1007,25 +1007,96 @@ Hierfür wurde der **Stealth Center Under-Fender Mount** ([`02_pod_base/radar_ce
 
 ---
 
-### 6.8 Begleitfahrzeug- & Autokolonnen-Kit: Universal Sonnenblenden-Clip (`car_sun_visor_pod3_clip.scad`)
+### 6.8 Begleitfahrzeug-, Support-Van- & Rallye-Kit (Referenz-Kit 5: Car Support Kit)
 
-Für den Einsatz in Begleitfahrzeugen (Support-Vans bei Motorradtouren) oder in reinen Autokolonnen (z. B. Sportwagen-Rallyes) wurde der **universelle Sonnenblenden-Clip für Pod 3** ([`car_sun_visor_pod3_clip.scad`](../../hardware/cad/scad/05_accessories/car_sun_visor_pod3_clip.scad)) konstruiert:
+Für den professionellen Einsatz in Begleitfahrzeugen (Support-Vans bei geführten Motorrad-Touren, Besenfahrzeugen, Orga-Transportern bei Alpentouren) sowie in Pkw-Kolonnen (z. B. Sportwagen-Rallyes) bildet das **Referenz-Kit 5** ein autarkes Gesamtsystem. Es ermöglicht die lückenlose Überwachung aller Teilnehmer-Bikes über das 868-MHz-LoRa-Mesh ohne jede Mobilfunk- oder Cloud-Abhängigkeit.
 
-![Universal Sonnenblenden-Clip für Pod 3](../images/cad/car_sun_visor_pod3_clip_cad.png)
+Mechanisch und fahrzeugintegrativ basiert das Car Support Kit auf zwei speziell entwickelten CAD-Komponenten:
+1. Dem **Universal Sonnenblenden-Clip für Pod 3** ([`car_sun_visor_pod3_clip.scad`](../../hardware/cad/scad/05_accessories/car_sun_visor_pod3_clip.scad) / [`car_sun_visor_pod3_clip.stl`](../../hardware/cad/stl/05_accessories/car_sun_visor_pod3_clip.stl))
+2. Der **Armaturenbrett-Keilaufnahme für die Zentralbox** ([`car_dashboard_wedge_dock.scad`](../../hardware/cad/scad/05_accessories/car_dashboard_wedge_dock.scad) / [`car_dashboard_wedge_dock.stl`](../../hardware/cad/stl/05_accessories/car_dashboard_wedge_dock.stl))
 
-*Abbildung 8.33b: 3D-CAD-Ansicht des Universal Sonnenblenden-Clips für Pod 3 (`car_sun_visor_pod3_clip_cad.png`). Sichtbar sind die ergonomische Federspange (Spannweite 14–22 mm für alle Kfz-Sonnenblenden) mit gerundeter Einführlippe und Anti-Rutsch-Rippen, die passgenaue Pod 3 Aufnahmewanne sowie die verdeckte Aussparung für die werkzeuglose Dachhimmel-Kabelverlegung.*
+---
 
-1. **Universelle Passform für ALLE Pkw-Klassen (Kombi, SUV, Limousine, Coupé):**
-   * Moderne Fahrzeuge besitzen selten feste Heck-Hutablagen und hinter dem Rückspiegel sitzt meist ein massiver Kasten mit ADAS-Kameras, Notbremsradar und Regensensoren.
-   * Der ergonomische Feder-Klemmbügel greift an der **Beifahrer-Sonnenblende** (Dicke $12\dots 22\,\text{mm}$) an – links oder rechts völlig unbeeinflusst vom mittleren Kamerakasten.
-2. **Optimaler HF-Sichtwinkel (Line of Sight zum Himmel):**
-   * Direkt an der oberen Scheibenkante platziert, besitzt Pod 3 einen ungestörten $180^\circ$-Blickwinkel in den Himmel für u-blox GNSS, 868 MHz LoRa (OMM) und 5.9 GHz V2X.
-3. **Werkzeuglose 5-Minuten-Verkabelung (Zero-Damage):**
-   * Das dünne USB-C Kabel wird mit den Fingerspitzen in die weiche **Dachhimmel-Fuge (Headliner Seam)** über der Windschutzscheibe gedrückt.
-   * Weiterer Verlauf hinter der elastischen Gummidichtung der A-Säule nach unten unter das Handschuhfach zur Zentralbox in der Mittelkonsole.
-   * **Null Werkzeug, null sichtbare Kabel, 100 % spurlos rückrüstbar.**
-4. **Diebstahlschutz durch Unauffälligkeit:**
-   * Von außen wirkt Pod 3 an der Sonnenblende wie eine harmlose Maut-Erfassungsbox (z. B. Telepass/Bip&Go) oder ein Garagentoröffner – keine Attraktivität für Gelegenheitsdiebe.
+#### 6.8.1 Universal Sonnenblenden-Clip für Pod 3 (`car_sun_visor_pod3_clip.scad`)
+
+Moderne Automobile (Kombis, SUVs, Limousinen, Kastenwagen) besitzen selten feste Heck-Hutablagen, und die geschlossene Blechkarosserie dämpft Funkwellen wie ein Faradayscher Käfig. Zudem sitzt mittig hinter dem Rückspiegel an der Windschutzscheibe fast ausnahmslos ein massiver Sensor- und Kamerakasten (ADAS für Notbremsassistent, Spurhalteradar, Regensensor), der eine mittige Scheibenmontage verhindert.
+
+Der universelle Sonnenblenden-Clip löst diese Probleme elegant durch eine asymmetrische Klemmung an der **Beifahrer-Sonnenblende**:
+
+![Universal Sonnenblenden-Clip für Pod 3 Dual-Ansicht](../images/cad/car_sun_visor_pod3_clip_cad.png)
+
+*Abbildung 8.33b: 3D-CAD-Ansicht des Universal Sonnenblenden-Clips für Pod 3 (`car_sun_visor_pod3_clip_cad.png`) in synchroner Doppelperspektive. Rechts: Obere Pod 3 Aufnahmewanne mit seitlichen Haltebacken ($139 \times 73\,\text{mm}$), Eck-Kugelrastungen für vibrationsfesten Formschluss und stirnseitigem Kabelauslass. Links: Ansicht der Gehäuseunterseite mit solidem U-Kanal-Verbindungssteg, flexibler Federspange (14,5 mm Ruheschlitz für 14–22 mm Sonnenblendendicke), transversalen Anti-Rutsch-Rippen und 30°-Einführschräge.*
+
+* **Strikte Trennung von Aufnahmewanne und Klemmfeder (100 % freier Bauraum):**
+  * In der finalen Geometrie sitzt die elastische Federspange strikt auf der **Außen-Unterseite** ($Z \le 0$). 
+  * Das obere Aufnahmefach für Pod 3 ist zu $100\,\%$ frei und ungehindert zugänglich. Pod 3 wird flach von oben eingedrückt und rastet an den seitlichen Gehäuselippen formschlüssig ein.
+* **Universelle Passform für alle Kfz-Sonnenblenden ($14\dots 22\,\text{mm}$):**
+  * Der Federbügel aus PETG oder zähem PA12-MJF besitzt eine Tiefe von $58\,\text{mm}$ und eine Breite von $42\,\text{mm}$.
+  * Eine aufgewölbte $30^\circ$-Einführlippe erlaubt das einhändige Aufschieben auf die Blende ohne Kraftaufwand oder Werkzeug.
+  * Drei abgerundete Rippen verhindern zuverlässig ein Verrutschen bei Fahrzeugerschütterungen, ohne das empfindliche Leder oder Textil der Sonnenblende zu beschädigen.
+* **Hemisphärische HF-Freisicht ($180^\circ$ zum Himmel):**
+  * An der oberen Windschutzscheibenkante platziert, strahlen die Antennen von Pod 3 (u-blox MAX-M10S Multi-GNSS, 868 MHz LoRa SX1262 und 5,9 GHz V2X) ungedämpft durch das Glas nach vorne und oben ab.
+  * Keine Reflexionen an metallischen Karosserieblechen oder Dachträgern.
+* **Diebstahlschutz durch Tarnoptik:**
+  * Von außen durch die getönte Frontscheibe betrachtet, wirkt der Clip wie eine unauffällige Maut-Box (Telepass / Bip&Go / Toll Collect) oder ein werkseitiger Garagentor-Transponder.
+
+---
+
+#### 6.8.2 Armaturenbrett-Keilaufnahme für die Zentralbox (`car_dashboard_wedge_dock.scad`)
+
+Für die Zentralbox (Main Control Box, $110 \times 74 \times 32\,\text{mm}$) im Pkw-Innenraum wurde eine formschlüssige, rutschfeste Keilaufnahme konstruiert:
+
+![Dashboard Wedge Dock CAD](../images/cad/car_dashboard_wedge_dock_cad.png)
+
+*Abbildung 8.33c: 3D-CAD-Ansicht der Armaturenbrett-Keilaufnahme für die Zentralbox (`car_dashboard_wedge_dock_cad.png`). Sichtbar sind der ergonomische 15°-Neigungswinkel für blendfreie LED-Ablesbarkeit, die passgenaue Einschubtasche ($111 \times 75\,\text{mm}$), seitliche Finger-Entnahmemulden, die rückseitige Kabeldurchführung für die 12V-Stromversorgung sowie Aussparungen für rutschfeste Silikon-Klebepads an der Unterseite.*
+
+* **Ergonomischer $15^\circ$-Neigungswinkel:**
+  * Auf horizontalen Armaturenbrettern oder in Mittelkonsolen-Ablagen richtet der $15^\circ$-Keil die Status-LEDs und Anschlüsse blendfrei zum Fahrer/Beifahrer aus.
+* **Sekundenschnelle Entnahme (Dual-Finger-Notches):**
+  * Zwei seitliche Griffmulden ($40 \times 12\,\text{mm}$) erlauben das einhändige Greifen und Herausheben der Zentralbox – ideal für den schnellen Wechsel zwischen Motorrad und Begleitfahrzeug.
+* **Verdeckte Kabeldurchführung & Kühlung:**
+  * Die Rückwand besitzt eine $44\,\text{mm}$ breite Kabelaussparung für den 12V-Kfz-Zigarettenanzünder-PD-Adapter und die HD26-Diagnose-Kabelpeitsche.
+  * Zwei kreisförmige Bodenöffnungen ($\varnothing 28\,\text{mm}$) ermöglichen passive Konvektionskühlung des Aluminium-/PETG-Kühlkörpers der Zentralbox.
+* **Vibrationsgedämpfte, kratzfreie Auflage:**
+  * Die Unterseite verfügt über 4 zylindrische Vertiefungen ($\varnothing 12 \times 1{,}5\,\text{mm}$) zur Aufnahme handelsüblicher 3M-Bumpon-Silikonfüße oder 3M-VHB-Klebepads für absolut rutschfesten Stand auf jeder Cockpit-Oberfläche.
+
+---
+
+#### 6.8.3 Gesamtsystem & Werkzeuglose 5-Minuten-Fahrzeugintegration
+
+Das Zusammenspiel aller Komponenten des Referenz-Kits 5 garantiert einen werkzeuglosen, vollkommen zerstörungsfreien Einbau in jeden Pkw oder Van:
+
+```text
+       OPENMOTORBRIDGE REFERENZ-KIT 5 (PKW- & SUPPORT-VAN-TOPOLOGIE)
+ ┌────────────────────────────────────────────────────────────────────────┐
+ │ Windschutzscheibe oben:                                                │
+ │ [Beifahrer-Sonnenblende] ──> [car_sun_visor_pod3_clip] ──> [Pod 3 PCBA]│
+ │                               (100% Freisicht nach vorn/oben)          │
+ └───────────────────────────────────┬────────────────────────────────────┘
+                                     │ Ultraflaches USB-C Flachbandkabel
+                                     ▼ (in Dachhimmel & A-Säule verdeckt)
+ ┌────────────────────────────────────────────────────────────────────────┐
+ │ Armaturenbrett / Mittelkonsole:                                        │
+ │ [car_dashboard_wedge_dock (15°)] ──> [Zentralbox (ESP32-S3)]           │
+ │       ▲                                   │                            │
+ │       │ 12V/24V PD (30W)                  ├─► USB-C / BLE Offline PWA  │
+ │ [Zigarettenanzünder]                      │   (iPad / Android Tablet)  │
+ │                                           ▼                            │
+ │                                      [CarPlay / Android Auto Audio]    │
+ └────────────────────────────────────────────────────────────────────────┘
+```
+
+1. **Unsichtbare Flachband-Kabelverlegung (Zero-Damage):**
+   * Das dünne, 3 m lange USB-C-Flachbandkabel wird mit den Fingerspitzen in die elastische Fuge zwischen Dachhimmel (**Headliner Seam**) und Windschutzscheibe gedrückt.
+   * Der weitere Verlauf erfolgt verdeckt hinter der Gummidichtung der rechten A-Säule und hinter dem Handschuhfach direkt zur Mittelkonsole.
+   * **Ergebnis:** Null sichtbare Kabel, null Bohrlöcher, in unter 3 Minuten spurlos demontierbar (z. B. bei Miet- oder Leasingfahrzeugen).
+2. **Autarke Stromversorgung:**
+   * Die Zentralbox wird über einen kompakten 12V/24V-Kfz-Zigarettenanzünder-Adapter (30W USB-PD Schnelllader) direkt mit Zündungs- oder Dauerplus versorgt.
+3. **Flotten-Live-Tracking ohne Mobilfunk (PWA Fleet Dashboard):**
+   * Auf einem im Begleitfahrzeug montierten Tablet (iPad oder Android) läuft das OpenMotorBridge PWA-Dashboard im Offline-Kartenmodus.
+   * Über das 868-MHz-LoRa-Mesh empfängt das Support-Team Positionsdaten, Geschwindigkeiten, Reifendrücke und Sturz-/SOS-Alarme aller Fahrer im Umkreis von bis zu $15\,\text{km}$.
+4. **Infotainment- & Audio-Integration:**
+   * Durch Anschluss der Zentralbox an die USB-Media-Buchse des Fahrzeugs startet kabelgebundenes Apple CarPlay / Android Auto. Alarmtöne und Funkdurchsagen der Motorradgruppe werden glasklar über das Pkw-Soundsystem ausgegeben.
 
 ---
 

@@ -123,8 +123,8 @@ STL_TARGETS: List[Tuple] = [
     # 13. Radar 2.0, Inductive Qi Dock, Car Visor Clip & Universal Actuators
     ("05_accessories/radar_mr20_housing.scad", "05_accessories/radar_mr20_housing.stl", ["-D", 'part="tub"']),
     ("05_accessories/radar_mr20_housing.scad", "05_accessories/radar_mr20_radome.stl", ["-D", 'part="radome"']),
-    ("05_accessories/road_glide_inductive_cam_dock.scad", "05_accessories/road_glide_inductive_cam_dock.stl"),
-    ("05_accessories/car_sun_visor_pod3_clip.scad", "05_accessories/car_sun_visor_pod3_clip.stl"),
+    ("05_accessories/car_sun_visor_pod3_clip.scad", "05_accessories/car_sun_visor_pod3_clip.stl", ["-D", 'part="single"']),
+    ("05_accessories/car_dashboard_wedge_dock.scad", "05_accessories/car_dashboard_wedge_dock.stl"),
     ("03_pod_cartridges/cartridge_universal_actuator_rails.scad", "03_pod_cartridges/cartridge_universal_actuator_rails.stl"),
     ("03_pod_cartridges/parts/04_antenna_bracket_omm.scad", "03_pod_cartridges/cartridge_antenna_bracket_omm.stl"),
 ]
@@ -359,7 +359,13 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
     (
         "05_accessories/car_sun_visor_pod3_clip.scad",
         os.path.join(CAD_IMG_DIR, "car_sun_visor_pod3_clip_cad.png"),
-        "70,0,10,55,0,315,350",
+        "0,0,0,55,0,320,420",
+        "Tomorrow"
+    ),
+    (
+        "05_accessories/car_dashboard_wedge_dock.scad",
+        os.path.join(CAD_IMG_DIR, "car_dashboard_wedge_dock_cad.png"),
+        "0,0,10,55,0,320,340",
         "Tomorrow"
     ),
     (

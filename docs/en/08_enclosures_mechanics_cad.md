@@ -810,25 +810,96 @@ The radar is strictly centered on the vehicle longitudinal symmetry axis and att
 
 ---
 
-### 6.8 Support Vehicle & Convoy Kit: Universal Sun Visor Clip (`car_sun_visor_pod3_clip.scad`)
+### 6.8 Support Vehicle, Van & Rally Kit (Reference Kit 5: Car Support Kit)
 
-For deployment in support vehicles (support vans on group motorcycle tours) or automotive convoys (e.g. sports car rallies), the **Universal Sun Visor Clip for Pod 3** ([`car_sun_visor_pod3_clip.scad`](../../hardware/cad/scad/05_accessories/car_sun_visor_pod3_clip.scad)) was designed:
+For professional deployment in support vehicles (sweep vans on guided motorcycle tours, breakdown service vehicles, organizer vans on Alpine passes) and automotive convoys (e.g., sports car rallies), **Reference Kit 5** constitutes a fully autonomous fleet management setup. It enables real-time monitoring of all participating motorcycles via the 868 MHz LoRa mesh without requiring cellular reception or cloud services.
 
-![Universal Sun Visor Clip for Pod 3](../images/cad/car_sun_visor_pod3_clip_cad.png)
+Mechanically and ergonomically, the Car Support Kit relies on two custom-engineered CAD components:
+1. The **Universal Sun Visor Clip for Pod 3** ([`car_sun_visor_pod3_clip.scad`](../../hardware/cad/scad/05_accessories/car_sun_visor_pod3_clip.scad) / [`car_sun_visor_pod3_clip.stl`](../../hardware/cad/stl/05_accessories/car_sun_visor_pod3_clip.stl))
+2. The **Dashboard Wedge Dock for Central Control Box** ([`car_dashboard_wedge_dock.scad`](../../hardware/cad/scad/05_accessories/car_dashboard_wedge_dock.scad) / [`car_dashboard_wedge_dock.stl`](../../hardware/cad/stl/05_accessories/car_dashboard_wedge_dock.stl))
 
-*Figure 8.33b: 3D CAD view of the Universal Sun Visor Clip for Pod 3 (`car_sun_visor_pod3_clip_cad.png`). Depicted are the compliant spring clamp jaws (14–22 mm grip range for passenger sun visors across all car brands) with curved lead-in lip and non-marring grip ridges, the form-fitting Pod 3 docking cradle, and the concealed cable channel for tool-free roof headliner routing.*
+---
 
-1. **Universal Fit for All Automobile Classes (Van, SUV, Wagon, Sedan, Coupe):**
-   * Modern cars lack rigid rear parcel shelves, and the central windshield area behind the rearview mirror is congested with massive ADAS camera and rain sensor pods.
-   * The ergonomic spring clamp anchors securely to the **passenger sun visor** (thickness $12\dots 22\,\text{mm}$), totally isolated from central windshield camera enclosures.
-2. **Optimal RF Line-of-Sight to the Sky:**
-   * Stationed at the top edge of the windshield, Pod 3 enjoys an unobstructed $180^\circ$ skyward hemispherical view for u-blox GNSS, 868 MHz LoRa (OMM), and 5.9 GHz V2X.
-3. **Tool-Free 5-Minute Zero-Damage Routing:**
-   * The ultra-thin USB-C cable tucks into the soft **roof headliner seam** above the windshield with fingertip pressure.
-   * Runs down behind the compliant A-pillar rubber gasket into the glovebox area and connects directly to the Central Box in the center console.
-   * **Zero tools, zero visible wires, 100% reversible in minutes.**
-4. **Stealth & Anti-Theft Protection:**
-   * From the outside, Pod 3 on the sun visor resembles a standard electronic toll transponder (Telepass / FasTrak) or garage door opener—offering zero attraction to opportunist thieves.
+#### 6.8.1 Universal Sun Visor Clip for Pod 3 (`car_sun_visor_pod3_clip.scad`)
+
+Modern passenger cars (wagons, SUVs, sedans, vans) rarely feature rigid rear parcel shelves, and their closed metal bodywork attenuates RF signals like a Faraday cage. Furthermore, the central windshield zone behind the rearview mirror is congested with massive ADAS camera and sensor modules (emergency brake radar, lane keep assist, rain sensors), preventing central windshield suction mounting.
+
+The Universal Sun Visor Clip circumvents these obstacles via an asymmetric mount on the **passenger sun visor**:
+
+![Universal Sun Visor Clip for Pod 3 Dual View](../images/cad/car_sun_visor_pod3_clip_cad.png)
+
+*Figure 8.33b: 3D CAD dual-perspective view of the Universal Sun Visor Clip for Pod 3 (`car_sun_visor_pod3_clip_cad.png`). Right: Upper Pod 3 docking cradle ($139 \times 73\,\text{mm}$) with lateral retention walls, corner spherical snap detents for positive vibration-proof retention, and forward cable exit channel. Left: Underside view depicting the solid U-channel bridge, compliant spring clamp tongue (14.5 mm rest gap for 14–22 mm visor thickness), transverse non-marring grip ribs, and 30° flared lead-in lip.*
+
+* **Strict Separation of Docking Cavity and Clamp Tongue (100% Unobstructed Cavity):**
+  * In the corrected geometry, the compliant spring clamp tongue is located strictly on the **exterior underside** ($Z \le 0$).
+  * The upper receiving bed for Pod 3 is 100% open and unobstructed. Pod 3 presses into the cradle from above and locks securely into the lateral retaining lips and snap detents.
+* **Universal Fit for All Automobile Sun Visors ($14\dots 22\,\text{mm}$):**
+  * Printed in ductile PETG or tough PA12-MJF, the clamping tongue provides a $58\,\text{mm}$ reach and $42\,\text{mm}$ width.
+  * A flared $30^\circ$ lead-in lip permits effortless one-handed sliding onto the visor.
+  * Three rounded grip ridges guarantee zero slippage under chassis vibration without damaging delicate leather or fabric upholstery.
+* **Hemispherical Skyward RF View ($180^\circ$ Line-of-Sight):**
+  * Stationed at the upper windshield margin, Pod 3's antennas (u-blox MAX-M10S GNSS, 868 MHz LoRa SX1262, and 5.9 GHz V2X) transmit unobstructed through the windshield glass forward and upward.
+  * No attenuation or reflections from metal roof skins or roof racks.
+* **Stealth Anti-Theft Profile:**
+  * Viewed from outside through tinted automotive glass, Pod 3 on the sun visor resembles a standard toll transponder (Telepass / FasTrak) or factory garage door opener, offering zero temptation to opportunistic thieves.
+
+---
+
+#### 6.8.2 Dashboard Wedge Dock for Central Control Box (`car_dashboard_wedge_dock.scad`)
+
+For securing the Central Control Box ($110 \times 74 \times 32\,\text{mm}$) inside the vehicle cockpit, a form-fitting, vibration-isolated wedge dock was engineered:
+
+![Dashboard Wedge Dock CAD](../images/cad/car_dashboard_wedge_dock_cad.png)
+
+*Figure 8.33c: 3D CAD view of the Dashboard Wedge Dock for the Central Control Box (`car_dashboard_wedge_dock_cad.png`). Depicted are the ergonomic 15° forward tilt angle for glare-free LED visibility, the form-fitting dock pocket ($111 \times 75\,\text{mm}$), dual lateral finger extraction notches, rear passthrough for the 12V automotive power harness, and underside recesses for anti-slip silicone feet.*
+
+* **Ergonomic $15^\circ$ Viewing & Operating Angle:**
+  * When rested on horizontal dashboards or center console trays, the $15^\circ$ forward slope directs status LEDs and connector ports glare-free toward the driver/passenger.
+* **Rapid Tool-Free Extraction (Dual Finger Notches):**
+  * Two lateral finger notches ($40 \times 12\,\text{mm}$) enable instant one-handed insertion and removal of the Central Box—ideal when alternating between motorcycle and support vehicle.
+* **Concealed Harness Routing & Convective Cooling:**
+  * The rear wall features a generous $44\,\text{mm}$ harness cutout accommodating the 12V cigarette lighter PD adapter and HD26 harness whip.
+  * Two underside openings ($\varnothing 28\,\text{mm}$) promote passive convective heat dissipation from the Central Box heatsink.
+* **Vibration-Damped Non-Marring Base:**
+  * The flat bottom features 4 circular pockets ($\varnothing 12 \times 1.5\,\text{mm}$) designed for standard 3M Bumpon silicone rubber bumpers or 3M VHB tape, preventing sliding and scuff marks on sensitive dashboard trim.
+
+---
+
+#### 6.8.3 Full System Architecture & Zero-Damage 5-Minute Vehicle Integration
+
+The synchronized design of Reference Kit 5 enables quick, tool-free installation and removal in any rental car, support van, or chase vehicle:
+
+```text
+         OPENMOTORBRIDGE REFERENCE KIT 5 (CAR & SUPPORT-VAN TOPOLOGY)
+ ┌────────────────────────────────────────────────────────────────────────┐
+ │ Windshield Upper Zone:                                                 │
+ │ [Passenger Sun Visor] ──> [car_sun_visor_pod3_clip] ──> [Pod 3 PCBA]   │
+ │                            (100% Unshielded View Forward & Up)         │
+ └───────────────────────────────────┬────────────────────────────────────┘
+                                     │ Ultra-Thin Flat USB-C Cable
+                                     ▼ (Concealed in Headliner & A-Pillar)
+ ┌────────────────────────────────────────────────────────────────────────┐
+ │ Dashboard / Center Console:                                            │
+ │ [car_dashboard_wedge_dock (15°)] ──> [Central Box (ESP32-S3)]         │
+ │       ▲                                   │                            │
+ │       │ 12V/24V PD (30W)                  ├─► USB-C / BLE Offline PWA  │
+ │ [Cigarette Lighter]                       │   (iPad / Android Tablet)  │
+ │                                           ▼                            │
+ │                                      [CarPlay / Android Auto Audio]    │
+ └────────────────────────────────────────────────────────────────────────┘
+```
+
+1. **Concealed Flat-Ribbon Cable Routing (Zero-Damage):**
+   * The thin 3 m flat USB-C cable tucks into the soft **headliner seam** above the windshield with fingertip pressure.
+   * Runs down behind the soft rubber weatherstripping of the passenger A-pillar into the glovebox space and center console.
+   * **Result:** Zero exposed wiring, zero drill holes, 100% reversible in under 3 minutes (perfect for rental or leased vans).
+2. **Autonomous Power Supply:**
+   * Powered directly via a standard 12V/24V cigarette lighter socket using a compact 30W USB-PD adapter.
+3. **Off-Grid Fleet Live Tracking (PWA Fleet Dashboard):**
+   * An iPad or Android tablet mounted on the passenger dashboard runs the OpenMotorBridge PWA in offline map mode.
+   * Receiving real-time 868 MHz LoRa mesh telemetry, the sweep team tracks motorcycle positions, speeds, tire pressures, and crash/SOS alerts up to $15\,\text{km}$ away without cellular infrastructure.
+4. **Infotainment & Vehicle Audio Integration:**
+   * Connecting the Central Box to the vehicle's USB media port activates wired Apple CarPlay / Android Auto. Group voice intercom and audible safety alerts stream directly through the car's sound system.
 
 ---
 
