@@ -29,10 +29,10 @@ Dieses Dokument spezifiziert die Schutzschaltungen gegen Kfz-Bordnetz-Transiente
   * u-blox SAM-M10Q mit integrierter $15 \times 15\,\text{mm}$ Keramik-Patchantenne, angebunden über Qwiic I2C (`J12`) im kalten Fahrtwind-Staudruckbereich.
   * Koexistenz mit TI TMP117 ($\pm 0{,}1\,^\circ\text{C}$ Temperatur) und OPT3001 Umgebungslichtsensor ohne HF-Einstrahlung auf den GNSS-LNA.
 * **Zentrale ePTFE-Druckausgleichsmembran:** $\varnothing\,7{,}0\,\text{mm}$ Gore/Schreiner Air Vent mittig auf dem Gehäusedach gleicht thermische Druckstöße symmetrisch aus, ohne das HF-Fernfeld zu verzerren.
-* **Geschirmter HD26 SEAL-D Hauptkabelbaum:**
-  * 4 Abzweige (Peitsche 1: Pod 1, Peitsche 2: Pod 2, Peitsche 4: Bordnetz, Peitsche 5: Heckradar).
-  * 19 Pins aktiv belegt; Pins 9–11 unbeschaltet/Reserve.
-  * Schirmung über $360^\circ$-Kontaktierung am metallischen HD26-Gehäuseflansch.
+* **Robuster Deutsch DTM-12 Hauptkabelbaum:**
+  * 4 Abzweige (Peitsche 1: Pod 1 DC-Power +5V/GND, Peitsche 2: Pod 2 DC-Power +5V/GND, Peitsche 4: Bordnetz KL30/KL15/CAN, Peitsche 5: Heckradar DC-Power +12V/GND).
+  * 10 Pins aktiv belegt (Pins 1–10); Pins 11–12 für CAN-Bus.
+  * IP68/IP69K Dichtung über Deutsch DTM-Verriegelung und Raychem DR-25 Schrumpfschlauch.
 
 ---
 
@@ -46,7 +46,7 @@ Dieses Dokument spezifiziert die Schutzschaltungen gegen Kfz-Bordnetz-Transiente
 ### 3.2 Maskierungszonen vor dem Lackierprozess
 Folgende Bauteile und Kontaktflächen dürfen **nicht** beschichtet werden:
 1. MicroSD-Kartenhalter-Kontakte (innenliegende Federzungen auf PCBA 01).
-2. HD26 SEAL-D Flanschpins & M8-Steckverbinder-Kontakte.
+2. Deutsch DTM-12 Header-Pins & vergoldete Federzungen-Kontakte.
 3. J12 Qwiic I2C Buchsenkontakte auf PCBA 05.
 4. USB-Buchsen (USB-A, USB-C) am Front-Knoten.
 5. SMD-Testpunkte (TP_5V, TP_3V3, TP_GND).

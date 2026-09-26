@@ -22,13 +22,12 @@ import math
 import pcbnew
 
 BOARDS = {
-    "Main Board (Central Control Box)": "hardware/kicad_main_box/openmotorbridge_main.kicad_pcb",
-    "Pod Base (Satellite Submersion Carrier)": "hardware/kicad_pod_base/openmotorbridge_pod_base.kicad_pcb",
-    "Pod Cartridge (Universal Intercom Sled)": "hardware/kicad_pod_cartridge/openmotorbridge_pod_cartridge.kicad_pcb",
-    "Rear Pod 3 (Transceiver & Mesh)": "hardware/kicad_rear_pod3/openmotorbridge_rear_pod3.kicad_pcb",
-    "Front Node (Universal Cockpit Hub)": "hardware/kicad_front_node/openmotorbridge_front_node.kicad_pcb",
+    "Main Board (Central Control Box PCBA 01)": "hardware/kicad_main_box/openmotorbridge_main.kicad_pcb",
+    "Pod Cartridge (Universal Intercom Sled PCBA 03)": "hardware/kicad_pod_cartridge/openmotorbridge_pod_cartridge.kicad_pcb",
+    "Front Node (Universal Cockpit Hub PCBA 05)": "hardware/kicad_front_node/openmotorbridge_front_node.kicad_pcb",
     "MagSafe Frame Dock (PCBA 06 Adapter)": "hardware/kicad_magsafe_dock/openmotorbridge_magsafe_dock.kicad_pcb",
-    "Smart-Keyfob & Pager (PCBA 07)": "hardware/kicad_smart_keyfob/openmotorbridge_smart_keyfob.kicad_pcb"
+    "Smart-Keyfob & Pager (PCBA 07)": "hardware/kicad_smart_keyfob/openmotorbridge_smart_keyfob.kicad_pcb",
+    "Radar 2.0 Sub-MCU & Halo (PCBA 08)": "hardware/kicad_radar_submcu/openmotorbridge_radar_submcu.kicad_pcb"
 }
 
 def verify_board(board_name, pcb_path):

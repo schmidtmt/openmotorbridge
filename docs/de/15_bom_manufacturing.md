@@ -1,6 +1,6 @@
-# 15 - Stücklisten (BOM), COTS-Kaufteile & SMT-Fertigungsdaten (Alle 7 PCBAs)
+# 15 - Stücklisten (BOM), COTS-Kaufteile & SMT-Fertigungsdaten (Das bereinigte 6-PCBA-Lineup)
 
-Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die vollständige Bauteilliste (Bill of Materials), die Fertigungsspezifikationen aller 7 Leiterplatten (PCBA 01 bis PCBA 03, PCBA 05 bis PCBA 08 – PCBA 04 ist in v8.0 ersatzlos entfallen) bei JLCPCB / Eurocircuits, alle mechanischen 3D-Druck-Komponenten, die COTS-Einkaufslisten sowie eine detaillierte Kosten- und Bestellkalkulation (Solo-Aufbau vs. Sammelbestellung).
+Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die vollständige Bauteilliste (Bill of Materials), die Fertigungsspezifikationen aller **6 aktiven Leiterplatten (`PCBA 01`, `03`, `05`, `06`, `07`, `08`)** bei JLCPCB / Eurocircuits (`PCBA 02` und `PCBA 04` sind ersatzlos entfallen), alle mechanischen 3D-Druck-Komponenten, die COTS-Einkaufslisten sowie eine detaillierte Kosten- und Bestellkalkulation (Solo-Aufbau vs. Sammelbestellung).
 
 ---
 
@@ -16,47 +16,40 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 | **U6** | TCAN334GDCNR | Texas Instruments | SOT-23-8 | C842340 | 3.3V Automotive CAN-FD Transceiver (±58V Fault) |
 | **U7** | SX1262IMLTRT | Semtech | QFN-24 | C190184 | Onboard 868 MHz LoRa Transceiver (+22 dBm, 24/7 USV-gepuffert) |
 | **U8** | DW3110 | Qorvo | QFN-16 (B.Cu) | C2934600 | IEEE 802.15.4z UWB Transceiver (6.5 GHz Ch. 5 Backbone) |
-| **T1, T2** | LM-NP-1001-B1L | Bourns Inc. | SMD Übertrager | C114402 | 1:1 Audio-Übertrager (1500 V RMS galvanische Trennung) |
-| **OC1, OC2**| TLP222A(F) | Toshiba | SOP-4 | C112444 | Halbleiter-PhotoMOS-Relais für PTT-Tastensimulation |
+| **SW1** | TS-1187A-C-A-B | C&K / Omron | SMD Taster | C318884 | Hardware Pairing- & Reset-Taster (3s Pair, 10s Purge) |
 | **D1** | SMBJ33CA | Littelfuse | DO-214AA (SMB) | C87848 | TVS-Diode (33 V Standoff, 53.3 V max Clamping) |
 | **F1** | MF-MSMF050-2 | Bourns | 1812 SMD | C22668 | Rückstellbare PPTC-Sicherung (500 mA Hold / 1.0 A Trip) |
 | **LED1** | WS2812B-B | Worldsemi | 5050 SMD | C114586 | RGB Status-LED für optische Betriebsmodusanzeige |
-| **J1** | 2x13 Wannenstecker | Standard 2.54 mm | THT Box Header | C2934175 | Interner Pfostenverbinder zur HD26-Flanschbuchse |
+| **J1** | DTM13-12PA Header | TE Connectivity | Automotive 12P | Kundenteil | Automotive Deutsch DTM-12 Schnittstelle (11 Pins aktiv) |
 | **J2** | MicroSD Slot Push-Push | Molex / Korean Hro | SMD Push-Push | C266624 | 4-Bit SDIO Speicherkarte für Tour-Logging |
 | **J_BAT** | Molex Micro-Fit 3.0 2P | Molex | SMD Header | C289110 | Steckverbindung zum 2.200 mAh LiPo Pufferakku |
 | **ANT1** | U.FL-R-SMT-1 | Hirose / Murata | SMD HF | C2834595 | LoRa 868 MHz U.FL Buchse zu Taoglas FXP895 im Deckel |
 | **ANT2** | U.FL-R-SMT-1 | Hirose / Murata | SMD HF (B.Cu) | C2834595 | UWB 6.5 GHz U.FL Buchse zu Taoglas FXUWB10 im Boden |
-| **CN1** | HD26 Buchse IP67 (SEAL-D)| Amphenol LTW | Flansch D-Sub | Kundenteil | Wasserdichte 26-polige Gehäuseschnittstelle (19 Pins aktiv) |
+
+*(Hinweis: Durch den Wechsel auf All-UWB entfallen die früheren Audio-Übertrager T1, T2 und Optokoppler OC1, OC2 ersatzlos).*
 
 ---
 
-## 2. PCBA 02: Satelliten Pod Base Carrier (`openmotorbridge_pod_base`, 2-Layer FR4)
-> **Hinweis zur Stückzahl:** Die Pod-Basis ist zu 100 % symmetrisch und wird **2x pro Motorrad** verbaut (Pod 1 links, Pod 2 rechts).
-
-| Designator | Bauteil / MPN | Hersteller | Gehäuse | LCSC / JLCPCB Part # | Funktion |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **J1** | PinHeader_1x06_P2.54mm_SMD | Harwin / Wurth | SMD Vertikal | C2934176 | 6-Pin Stiftleiste im Schottwand-Schutzkragen |
-| **J2** | M8_6PIN_RECEPTACLE (A-Coded)| Binder / Phoenix | M8 Rundsteckverbinder | C289100 | M8 6-Pin IP67 Buchse zur Zuleitung |
-| **U1** | SP3012-06UTG | Littelfuse | DFN-14 (3.5x1.35mm)| C2834580 | 6-Kanal Ultra-Low-Cap ESD-Schutzarray (< 0.5 pF) |
-| **C1** | 100nF 50V X7R | Samsung / Yageo | 0603 SMD | C14663 | Entkopplungskondensator für 5V Versorgungsspannung |
+## 2. Satelliten Pod-Gehäuse (Entfall von PCBA 02)
+> **Architektur-Hinweis (v8.5 / v9.0):**  
+> Die frühere Pod-Bodenplatine `PCBA 02` ist **vollständig und ersatzlos entfallen**.  
+> Das Pod-Gehäuse (`pod_base_housing.stl`) ist ein monolithisches 3D-Druckteil ohne interne Platine. Die 2-adrige Gleichstrompeitsche (+5V und GND) führt von hinten direkt in das Gehäuse und endet an zwei vergoldeten Federkontakten (Keystone / Mill-Max), die formschlüssig auf die Stirnflächen-Pads von `PCBA 03` greifen.
 
 ---
 
-## 3. PCBA 03: Smart Modular Cartridge Rev 2.0 (`openmotorbridge_pod_cartridge`, 2-Layer FR4)
-> **Hinweis zur Stückzahl:** Wird **2x pro Motorrad** bestückt (Slot 1 für Sena SPIDER X Slim, Slot 2 für Cardo Packtalk Edge oder optional OMM 2.4 GHz Swap Cartridge).
+## 3. PCBA 03: Universal Smart Cartridge Rev 3.0 (`openmotorbridge_pod_cartridge`, 2-Layer FR4 TG150, 2-seitig SMT)
+> **Hinweis zur Stückzahl:** Die Kassette ist universell und wird **2x pro Motorrad** verbaut (Bucht 1 links, Bucht 2 rechts).
 
 | Designator | Bauteil / MPN | Hersteller | Gehäuse | LCSC / JLCPCB Part # | Funktion |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **U1** | CH32V003F4P6 | WCH | TSSOP-20 / QFN-20 | C3011382 | 32-Bit RISC-V MCU (1-Wire ROM-ID Emulation & ISP Makro-Controller) |
-| **Q1, Q2, Q3, Q4** | AO3400A | Alpha & Omega | SOT-23 | C20917 | 30V / 5.7A N-Kanal Power-MOSFETs für 4x Mechatronik-Aktuatoren |
-| **D3, D4, D5, D6** | 1N4148WS | Diodes Inc. / LRC | SOD-323 | C81598 | Freilauf-Schutzdioden für induktive Aktuator-Spulen |
-| **J1** | PinSocket_1x06_P2.54mm_SMD | Harwin / Samtec | SMD Horizontal | C2934177 | Stirnseitige 6-Pin Präzisionsbuchse zur Pod-Base |
-| **J2** | JST-SH 1.0mm 6-Pin Horizontal| JST | SMD Liegend | C136657 | Audio Diff & Direct-DC Kabelpeitsche zum Headset-Inlay |
-| **J_ACT** | JST-SH 1.0mm 8-Pin Horizontal| JST | SMD Liegend | C136659 | Mechatronik-Header für 4 unabhängige Miniatur-Hubmagnete |
-| **F1** | MF-MSMF050-2 (500mA) | Bourns | 1812 SMD | C22668 | Rückstellbare PPTC-Sicherung für Kassettenstromkreis |
-| **D1** | Duo-Status-LED Grün/Blau | Everlight / Xinglight | 0805 SMD | C2834575 | Status-LED: Grün = 1-Wire Active / Config Synced, Blau = Aktuator-Impuls |
-| **D2** | SP3012-06UTG | Littelfuse | DFN-14 | C2834580 | 6-Kanal Ultra-Low-Cap ESD-Schutzmatrix für Audio & Daten |
-| **C1, C2** | 100nF 50V X7R | Samsung | 0603 SMD | C14663 | Entkopplungskondensatoren für VCC und MCU |
+| **U1** | DW3110 | Qorvo | QFN-16 (Top) | C2934600 | IEEE 802.15.4z UWB Transceiver (6.5 GHz Ch. 5 All-UWB Link) |
+| **U2** | CH32V203 / MCU | WCH | QFN-20 (Top) | C2943200 | 32-Bit Host-MCU (SPI zu DW3110, NVS Multi-Vehicle Roaming) |
+| **Q1 – Q4**| AO3400A | Alpha & Omega | SOT-23 (Bottom)| C20917 | 4x N-Kanal MOSFETs ($30\,\text{V} / 5{,}7\,\text{A}$) für Mechatronik |
+| **D1 – D4**| 1N4148WS | Diodes Inc. | SOD-323 (Bottom)| C2128 | 4x Freilaufdioden für Hubmagnete |
+| **F1** | MF-MSMF050-2 | Bourns | 1812 SMD | C22668 | PPTC 500mA Schutzsicherung |
+| **J_ACT** | SM08B-SRSS-TB | JST | 8-Pin 1.0mm SMD | C160404 | Mechatronik-Header für 4 Hubmagnete |
+| **ANT1** | U.FL-R-SMT-1 | Hirose | SMD Micro-Coax | C2834595 | UWB-Antennenport (Taoglas FXUWB10 oder SMD-Patch) |
+| **U3 (DNP)**| ES8311 | Everest Semi | QFN-20 (3x3mm) | C396781 | Optional: Mono Audio-Codec (nur bestückt für Midland PMR446) |
 
 ---
 
@@ -67,7 +60,7 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 > 1. **LoRa 868 MHz (SX1262):** Sitzt nun direkt auf der Zentralbox (`PCBA 01`), gepuffert durch den USV-Akku (24/7 Diebstahl-Sentry).
 > 2. **Multi-GNSS (SAM-M10Q):** Sitzt im kühlen Fahrtwindbereich am Front-Knoten (`PCBA 05`), angebunden über Qwiic I2C (`J12`).
 > 3. **Fahrzeug-Backbone:** Erfolgt drahtlos über Ultra-Wideband (Qorvo DW3110 / 6.5 GHz Ch. 5, $< 0{,}4\,\text{ms}$ Latenz) zwischen Front-Knoten und Zentralbox.
-> 4. **Heck-Radar:** Schließt direkt über Peitsche 5 des HD26-Kabelbaums an die Zentralbox an.
+> 4. **Heck-Radar:** Schließt direkt über Peitsche 5 des Deutsch DTM-12 Kabelbaums an die Zentralbox an (2-Draht 12V DC); Telemetrie läuft 100 % drahtlos via UWB.
 
 ---
 
@@ -149,15 +142,14 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 
 ---
 
-## 9. 1-Click Bestellleitfaden für JLCPCB (Alle 7 Leiterplatten fertig bestückt)
+## 9. 1-Click Bestellleitfaden für JLCPCB (Alle 6 Leiterplatten fertig bestückt)
 
-Alle Fertigungsdaten liegen im Repository unter `hardware/pcba/` als fertige ZIP- und CSV-Pakete vor:
+Alle Fertigungsdaten liegen im Repository unter `hardware/production_packages/` als fertige ZIP- und CSV-Pakete vor:
 
 | Baugruppe / PCBA | Gerber-ZIP Datei | BOM CSV Datei | CPL (Pick & Place) CSV | Lagen | Fertigungs-Hinweis |
 | :--- | :--- | :--- | :--- | :---: | :--- |
 | **PCBA 01: Zentralbox** | `01_main_box_pcba_gerbers_jlcpcb.zip` | `01_main_box_pcba_bom_jlcpcb.csv` | `01_main_box_pcba_cpl_jlcpcb.csv` | **4 Lagen** | ENIG (Gold), 1.6 mm, TG150, SMT beidseitig (DW3110 auf B.Cu) |
-| **PCBA 02: Pod-Basis** | `02_pod_base_pcba_gerbers_jlcpcb.zip` | `02_pod_base_pcba_bom_jlcpcb.csv` | `02_pod_base_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG (Gold), 1.6 mm, SMT Top (2x pro Fahrzeug bestellen) |
-| **PCBA 03: Kassetten-Träger**| `03_pod_cartridge_pcba_gerbers_jlcpcb.zip` | `03_pod_cartridge_pcba_bom_jlcpcb.csv` | `03_pod_cartridge_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG (Gold), 1.2 mm, SMT Top (2x pro Fahrzeug bestellen) |
+| **PCBA 03: Universal-Kassette**| `03_pod_cartridge_pcba_gerbers_jlcpcb.zip` | `03_pod_cartridge_pcba_bom_jlcpcb.csv` | `03_pod_cartridge_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG (Gold), 1.2 mm, SMT beidseitig (2x pro Fahrzeug bestellen) |
 | **PCBA 05: Front-Knoten** | `05_front_node_pcba_gerbers_jlcpcb.zip` | `05_front_node_pcba_bom_jlcpcb.csv` | `05_front_node_pcba_cpl_jlcpcb.csv` | **4 Lagen** | ENIG (Gold), 1.6 mm, TG150, SMT beidseitig (DW3110 auf B.Cu) |
 | **PCBA 06: MagSafe Dock** | `06_magsafe_dock_pcba_gerbers_jlcpcb.zip` | `06_magsafe_dock_pcba_bom_jlcpcb.csv` | `06_magsafe_dock_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG (Gold), 1.6 mm, SMT Top |
 | **PCBA 07: Smart-Keyfob** | `07_smart_keyfob_pcba_gerbers_jlcpcb.zip` | `07_smart_keyfob_pcba_bom_jlcpcb.csv` | `07_smart_keyfob_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG (Gold), 1.0 mm, SMT beidseitig |
@@ -220,14 +212,14 @@ Für den Aufbau müssen **keine Kabelbäume selbst gecrimpt oder gelötet werden
 ```
                        DAS PLUG-AND-PLAY KABELKONZEPT (COTS FERTIGKABEL)
 ┌─────────────────────────┐
-│ HD26 IP67 Fertig-Kabel  │ ──► Fertig umspritzte HD26-Breakout-Kabelpeitsche (Amphenol LTW COTS)
-│ (Zentralbox-Hauptanschl)│ ──► Keine Einzeladern konfektionieren, 100 % wasserdicht vergossen
+│ Deutsch DTM-12 Fertig-  │ ──► Vorkonfektionierter IP68/IP69K Deutsch DTM-12 Hauptkabelbaum
+│ Kabelbaum (Zentralbox)  │ ──► Industriell gefertigt, Raychem DR-25 Schrumpfschlauch
 └─┬───────────────────────┘
-  ├─► Peitsche 1: M8 6-Pin PUR-Kabel (1.0 m / 1.5 m): Fertiges Standard Sensor-/Aktorkabel ──► Pod 1
-  ├─► Peitsche 2: M8 6-Pin PUR-Kabel (1.0 m / 1.5 m): Fertiges Standard Sensor-/Aktorkabel ──► Pod 2
-  ├─► Peitsche 4: AMP Superseal 12V-Kabel (1.0 m): Vorkonfektioniertes Batteriekabel mit Sicherung ──► Bordnetz
-  └─► Peitsche 5: M8 4-Pin Buchse (250 mm): Heck-Radar (Wheeltec MR20 / Garmin Varia: 12V + UART)
-      (Hinweis: Der Front-Node benötigt KEIN Kabel nach hinten – er verbindet sich drahtlos via UWB!)
+  ├─► Peitsche 1: 2-Draht FLRY-B (1.0 m / 1.5 m): Reine DC-Power (+5V / GND) ──► Pod 1 (Bucht 1)
+  ├─► Peitsche 2: 2-Draht FLRY-B (1.0 m / 1.5 m): Reine DC-Power (+5V / GND) ──► Pod 2 (Bucht 2)
+  ├─► Peitsche 4: AMP Superseal / FLRY-B (1.0 m): Bordnetz (KL30, KL15, GND, CAN-H, CAN-L)
+  └─► Peitsche 5: 2-Draht FLRY-B (0.5 m): Heck-Radar PCBA 08 (+12V DC / GND)
+      (Hinweis: Sämtliche Interconnects & Telemetriedaten laufen zu 100 % drahtlos via UWB!)
 ```
 
 ### 11.1 HF-Antennen & Sensoren (COTS)

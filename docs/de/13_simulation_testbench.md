@@ -201,8 +201,7 @@ Der **Digital Twin Simulator** ([`openmotorbridge_digital_twin.py`](../../tools/
  ┌────────────────────────────────────────┐            ┌────────────────────────────────────────┐
  │          MOTORRAD A (LEADER)           │            │          MOTORRAD B (CHASER)           │
  │  • PCBA 01 (ESP32-S3 Main + LoRa/UWB)  │            │  • PCBA 01 (ESP32-S3 Main + LoRa/UWB)  │
- │  • PCBA 02 (Satellite Pod Base 1 & 2)  │            │  • PCBA 02 (Satellite Pod Base 1 & 2)  │
- │  • PCBA 03 (Pods 1/2 Smart Cartridges) │            │  • PCBA 03 (Pods 1/2 Smart Cartridges) │
+ │  • PCBA 03 (Pods 1/2 All-UWB Inlays)   │            │  • PCBA 03 (Pods 1/2 All-UWB Inlays)   │
  │  • PCBA 05 (Universal Front Node)      │            │  • PCBA 05 (Universal Front Node)      │
  └───────────────────┬────────────────────┘            └───────────────────┬────────────────────┘
                      │                                                     │
@@ -227,10 +226,9 @@ Der **Digital Twin Simulator** ([`openmotorbridge_digital_twin.py`](../../tools/
 ```
 
 ### Die Kernkomponenten & Test-Features:
-1. **4 Platinenklassen pro Motorrad:**
+1. **Aktive Platinenklassen pro Motorrad:**
    * **PCBA 01 (Zentralbox):** 15-State ADR-EKF Filterung, Power Supervisor (Bordnetz $14{,}2\,\text{V}$, USV-Pufferung $4{,}14\,\text{V}$), Audio DSP Matrix, Semtech SX1262 LoRa 868 MHz Transceiver & Qorvo DW3110 UWB Backbone.
-   * **PCBA 02 (Pod Base, 2x):** M8-Schnittstelle, SP3012 TVS Schutzarray-Überwachung.
-   * **PCBA 03 (Smart Cartridges, 2x):** CH32V003 RISC-V Mechatronik-Controller, 4x AO3400 N-MOSFETs (`sena_spider`, `cardo_edge`), PTT-Tastenerkennung.
+   * **PCBA 03 (Smart Cartridges, 2x):** All-UWB 2-Layer 2-Sided SMT mit Host-MCU, Qorvo DW3110 Transceiver, 4x AO3400A N-MOSFETs (`sena_spider`, `cardo_edge`). *(PCBA 02 ist ersatzlos entfallen; Pods nutzen direkte DC-Federkontakte).*
    * **PCBA 05 (Universal Front Node):** u-blox SAM-M10Q Multi-GNSS via J12 Qwiic, duale Knowles MEMS Akustikmessung (Fahrtwindrauschen skaliert mit $v^3$), Cockpit-PTT-Taste, DW3110 UWB Backbone.
 2. **Geodätischer Track (`wil_wattwil_ricken.py`):**
    * $11\,682$ Stützpunkte mit realistischer Beschleunigung, Kurvenschräglage ($\theta_{\text{lean}} = \arctan(v \cdot \dot{\psi} / g)$ bis $42^\circ$) und Höhenprofil ($570\dots 795\,\text{m}$ ü. M.).

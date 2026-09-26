@@ -1,9 +1,14 @@
-Comment,Designator,Footprint,LCSC Part Number
-DS2401 Silicon Serial ROM,U1,Package_TO_SOT_SMD:SOT-23,C2834570
-100nF 50V 0603 X7R Ceramic Cap,C1,Capacitor_SMD:C_0603_1608Metric,C14663
-500mA PTC Resettable Fuse 0603,F1,Resistor_SMD:R_0603_1608Metric,C70377
-Green SMD LED 0603 5V Power,D1,LED_SMD:LED_0603_1608Metric,C72041
-1.5k 1% 0603 SMD Resistor,R1,Resistor_SMD:R_0603_1608Metric,C22808
-6-Pin 2.54mm Horizontal Socket Array,J1,Connector_PinSocket_2.54mm:PinSocket_1x06_P2.54mm_Horizontal,C224379
-6-Pin JST-SH Right-Angle Inlay Header,J2,Connector_JST:JST_SH_SM06B-SRSS-TB_1x06-1MP_P1.00mm_Horizontal,C145956
-
+Designator,Comment,Footprint,LCSC Part #,Quantity
+C1,100nF,Capacitor_SMD:C_0603_1608Metric,,1
+C2,10uF,Capacitor_SMD:C_0805_2012Metric,,1
+"D1, D2, D3, D4",1N4148WS,Diode_SMD:D_SOD-323,,4
+F1,MF-MSMF050-2,Fuse:Fuse_1812_4532Metric,,1
+"H1, H2, H3, H4",M2_MountingHole,MountingHole:MountingHole_2.2mm_M2_Pad,,4
+J1,POD_BASE_DOCKING_SOCKET_6P,Connector_PinSocket_2.54mm:PinSocket_1x06_P2.54mm_Horizontal,,1
+J2,INTERCOM_HEADSET_6P,Connector_JST:JST_SH_SM06B-SRSS-TB_1x06-1MP_P1.00mm_Horizontal,,1
+J_ACT,ACTUATORS_8P,Connector_JST:JST_SH_SM08B-SRSS-TB_1x08-1MP_P1.00mm_Horizontal,,1
+"Q1, Q2, Q3, Q4",AO3400A,Package_TO_SOT_SMD:SOT-23,,4
+"R1, R2, R3, R4",100R,Resistor_SMD:R_0603_1608Metric,,4
+"R5, R6, R7, R8",100k,Resistor_SMD:R_0603_1608Metric,,4
+R9,4.7k,Resistor_SMD:R_0603_1608Metric,,1
+U1,CH32V003F4P6,Package_SO:TSSOP-20_4.4x6.5mm_P0.65mm,,1

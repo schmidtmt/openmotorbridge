@@ -79,3 +79,35 @@
   5. **In-System Profil-Flashing (ISP) durch die Zentralbox:** Bei Zuweisung eines Profils in der WebApp (z. B. `sena_spider_x`) überträgt der ESP32-S3 über die Single-Wire Steuerleitung Pin 5 (`TRIGGER_PPS`) per 19.200-Baud UART vollautomatisch die Timing- und Makro-Konfiguration in den EEPROM des Kassetten-MCUs. Der Nutzer benötigt keinerlei Programmiergeräte.
   6. **Autonome Kassetten-Makros:** Komplexe Choreografien (wie Doppelklick Mesh + Pause + 1x Lauter für Kanalwechsel) taktet der Kassetten-Controller autonom auf der Platine.
   7. **Formbündige Fixierung im Kassettenbett:** Das Kassetten-Inlay (PA12-MJF) arretiert das OEM-Headset spielfrei gegen $20\,\text{g}$ Vibration, sodass die gefederten Aktuatorstößel die Gummitasten zentrisch und mit kalibriertem Hub ($1{,}0\dots 1{,}2\,\text{mm}$) treffen.
+
+### ADR-011: All-UWB Wireless Data Backbone, Pure-DC 2-Draht-Kabelbaum, Deutsch DTM-12 & 6-PCBA Clean Architecture (v8.5 / v9.0)
+* **Datum:** 2026-09
+* **Entscheidungen:**
+  1. **100 % drahtloser Daten- und Audiopfad (All-UWB & Bluetooth):**
+     * Sämtliche Interconnects (Cockpit PTT, GNSS, Sensoren, Radar 20 Hz Zielerkennung, Kassetten-Mechatronik und Steuerung) zwischen Zentralbox und allen Satellitenknoten laufen **ausschließlich über Ultra-Wideband (Qorvo DW3110 6.5 GHz Ch. 5, $< 0{,}4\,\text{ms}$ Latenz, AES-128-CCM)**.
+     * Der reale Audiopfad von OEM-Headsets (Sena SPIDER X Slim, Cardo Packtalk Edge) in den Kassetten verbindet sich per Bluetooth mit der Zentralbox (`PCBA 01`). Der ESP32-S3 und ES8388 24-Bit Audio-DSP mischen alle Streams und übertragen den Mix per Bluetooth an die Helme von Fahrer und Sozius.
+     * **Kompletter Entfall von NF-Audiokabeln:** Bourns-Audioübertrager (`T1, T2`) und PhotoMOS-Relais (`OC1, OC2`) auf der Zentralbox entfallen ersatzlos.
+  2. **Bereinigung auf ein 6-Platinen-Lineup (Clean Architecture):**
+     * Der Hardware-Baukasten schrumpft von 8 auf **exakt 6 aktive Platinen**: `PCBA 01` (Zentralbox), `PCBA 03` (Smart Cartridge), `PCBA 05` (Universal Front-Knoten), `PCBA 06` (MagSafe Dock), `PCBA 07` (Smart Keyfob) und `PCBA 08` (Radar 2.0 Sub-MCU).
+     * `PCBA 02` (Pod Base Platine) und `PCBA 04` (Heck-Pod 3) entfallen ersatzlos.
+  3. **Reiner 2-Draht-DC-Power-Kabelbaum:**
+     * Alle Satellitenpeitschen (Pod 1, Pod 2, Radar) sind reine 2-Draht-Gleichstromleitungen (+5V/GND bzw. +12V/GND).
+     * M8- und USB-C-Steckverbinder an den Pods entfallen komplett.
+     * Das Pod-Gehäuse (`pod_base_housing.stl`) wird als monolithisches MJF-3D-Druckteil ohne interne Platine ausgeführt; die 2-Draht-Leitung führt direkt auf zwei vergoldete Federkontakte.
+  4. **Zentraler Bordnetz-Stecker (Deutsch DTM-12):**
+     * Der sperrige 26-polige HD26-Stecker wird durch einen kompakten, hochgradig automotiven **Deutsch DTM-12** Industriestecker (11 aktive Kontakte: KL30, KL15, GND, CAN-FD, 2x Pod 1 5V, 2x Pod 2 5V, 2x Radar 12V, 1x Gehäuseschirm) ersetzt.
+  5. **100 % einheitliches Kassetten-Layout (PCBA 03 Unified DNP Strategy & 2-seitig SMT):**
+     * Ein einziges Leiterplattenlayout für alle Kassettenvarianten (`PCBA 03`, $35 \times 25\,\text{mm}$, 2 Lagen ENIG, 2-seitig SMT).
+     * **Top-Seite:** Qorvo DW3110 UWB Transceiver, UWB Antenne, SPI Host-MCU.
+     * **Bottom-Seite:** 4x AO3400A MOSFETs für Aktuatoren, J_ACT Header, 2-Pin DC-Frontpads und DNP-Codec-Pads.
+     * Kassetten für Sena / Cardo mechatronische Betätigung bestücken 4x AO3400A MOSFETs; der Audio-Codec ES8311 bleibt unbestückt (DNP).
+     * Kassetten für analoge Funkgeräte (Midland PMR446) bestücken den ES8311-Codec zur Digitalisierung des Funksignals und streamen via UWB.
+     * *Optionale Swap-Kassette:* OMM 2.4 GHz ist eine rein optionale Wechselkassette für reinen Open-Source-Meshfunk.
+  6. **Sequential Power-Sequencing für Slot-Erkennung (Keyless-Ride optimiert):**
+     * Gestaffeltes Einschalten der Strompfade: $T = 0\,\text{ms}$ Front-Knoten & Zentralbox (Cockpit sofort aktiv), $T = 200\,\text{ms}$ Bucht 1 (Links), $T = 350\,\text{ms}$ Bucht 2 (Rechts), $T = 500\,\text{ms}$ Radar.
+     * Pod 1 und Pod 2 sind reine symmetrische physische Montagebuchten für Gateways (keine Zuordnung Fahrer/Sozius; Helme sind separat per Bluetooth angebunden).
+     * Ein Vertauschen von Slots oder Einbuchen von Nachbar-Bikes ist physikalisch unmöglich.
+  7. **Key-Reset & Nahtloses Multi-Vehicle Roaming (Auto ↔ Bike):**
+     * Physischer SMD-Taster `SW1` (`SW_PAIR_RESET`) auf `PCBA 01` (3s Pairing-Modus, 10s Key-Purge).
+     * Bis zu 4 Fahrzeug-Netzwerkschlüssel im NVS der Kassette (`PCBA 03`) gespeichert.
+     * Beim Umstecken einer Kassette aus dem Auto in das Motorrad erfolgt eine unkomplizierte „Plug & Confirm“-Übernahme (Bestätigung per App oder PTT-Doppelklick) ohne Datenverlust oder Werksreset.

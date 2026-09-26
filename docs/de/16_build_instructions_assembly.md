@@ -15,37 +15,38 @@ Ein vollständiges OpenMotorBridge-Fahrzeugkit besteht aus folgenden Kern-Baugru
                       │    • Unterwanne + Zwischenboden + Deckel│
                       │    • Hauptplatine PCBA 01 (ESP32-S3)    │
                       │    • Onboard SX1262 LoRa 868 MHz        │
-                      │    • Qorvo DW3110 UWB Transceiver       │
-                      │    • 2.200 mAh LiPo-Pufferakku (USV)    │
-                      └────────────────────┬────────────────────┘
+                                     └────────────────────┬────────────────────┘
                                            │
-                         1x ZENTRALER KABELBAUM (HD26 SEAL-D IP67)
+                          1x ZENTRALER KABELBAUM (DEUTSCH DTM-12 IP67/IP69K)
                                            │
           ┌────────────────────────────────┼────────────────────────────────┐
           │                                │                                │
-          ▼ Peitsche 1                     ▼ Peitsche 2                     ▼ Peitsche 5
+          ▼ Peitsche 1 (2-Draht DC 5V)     ▼ Peitsche 2 (2-Draht DC 5V)     ▼ Peitsche 4 (2-Draht DC 12V)
 ┌──────────────────┐             ┌──────────────────┐             ┌──────────────────┐
-│ 1x POD 1 (LINKS) │             │ 1x POD 2 (RECHTS)│             │ 1x HECK-RADAR    │
+│ 1x BUCHT 1 LINKS │             │ 1x BUCHT 2 RECHTS│             │ 1x HECK-RADAR    │
 │ (Rahmen / Koffer)│             │ (Rahmen / Koffer)│             │ (Optional)       │
-│ • Pod-Gehäuse    │             │ • Pod-Gehäuse    │             │ • Wheeltec MR20  │
-│ • Basis PCBA 02  │             │ • Basis PCBA 02  │             │   oder Garmin    │
-│ • KASSETTE 1     │             │ • KASSETTE 2     │             │   Varia RTL515   │
+│ • Monolithisch   │             │ • Monolithisch   │             │ • Wheeltec MR20  │
+│   (kein PCB 02!) │             │   (kein PCB 02!) │             │   77GHz (PCBA 08)│
+│ • 2 Federkontakte│             │ • 2 Federkontakte│             │ • Telemetrie via │
+│ • KASSETTE 1     │             │ • KASSETTE 2     │             │   UWB (DW3110)   │
 │   (Sena SPIDER   │             │   (Cardo Edge    │             └──────────────────┘
 │    X Slim)       │             │    / Swap OMM)   │
 └──────────────────┘             └──────────────────┘
-                                           ▲
-                                           │ Deterministischer UWB Fahrzeug-Backbone
-                                           │ (Qorvo DW3110 / 6.5 GHz Ch. 5, < 0.4 ms)
-                                           ▼
-                                 ┌──────────────────────────────────┐
-                                 │ 1x UNIVERSAL FRONT-KNOTEN (IP67) │
-                                 │ (Cockpit- & Sensor-Hub, PCBA 05) │
-                                 │ • u-blox SAM-M10Q Multi-GNSS     │
-                                 │ • TI TMP117 & OPT3001 Sensoren   │
-                                 │ • Knowles MEMS Fahrtwind-Sensor  │
-                                 │ • 4-Port USB-Hub & Dual USB-PD   │
-                                 │ • Batteriefreier Lenker-PTT      │
-                                 └──────────────────────────────────┘
+          ▲                                ▲
+          │ UWB Steuer- & Telemetrielink   │ UWB Steuer- & Telemetrielink
+          └────────────────┬───────────────┘
+                           │ Deterministischer All-UWB Fahrzeug-Backbone
+                           │ (Qorvo DW3110 / 6.5 GHz Ch. 5, < 0.4 ms)
+                           ▼
+                 ┌──────────────────────────────────┐
+                 │ 1x UNIVERSAL FRONT-KNOTEN (IP67) │
+                 │ (Cockpit- & Sensor-Hub, PCBA 05) │
+                 │ • u-blox SAM-M10Q Multi-GNSS     │
+                 │ • TI TMP117 & OPT3001 Sensoren   │
+                 │ • Knowles MEMS Fahrtwind-Sensor  │
+                 │ • 4-Port USB-Hub & Dual USB-PD   │
+                 │ • Batteriefreier Lenker-PTT      │
+                 └──────────────────────────────────┘
 ```
 
 ---
@@ -56,16 +57,16 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 
 * [ ] **3D-Druckteile (MJF PA12 schwarz oder FDM ASA/PET-CF):**
   * 1x Main Box (Unterwanne mit UWB-Bodentasche $11 \times 11 \times 0{,}6\,\text{mm}$, Zwischenboden mit LiPo-Wanne, Deckel mit LoRa FXP895 Tasche $110 \times 20 \times 0{,}8\,\text{mm}$)
-  * 2x Pod-Basisgehäuse & 2x Pod-Schottwände (symmetrisch für Pod 1 und Pod 2)
+  * 2x Pod-Basisgehäuse & 2x Pod-Schottwände (symmetrisch für Bucht 1 und Bucht 2, ohne interne Platine)
   * 2x Kassetten-Basisschlitten, Inlays (Sena SPIDER X Slim, Cardo Packtalk Edge, Swap OMM oder Blindkassette) & 2x Rastwippen
   * 1x Front-Knoten (Unterwanne mit UWB-Bodentasche und AMPS-Nut-Pockets, Deckel, TPU-Dichtkämme & USB-C Kappe)
   * 1x Fahrzeugspezifisches Montage-Kit (BMW GS Klemmen & `adventure_rack_radar_mount.stl` / Harley Kofferdeckel-Docks & Kennzeichen-Radarhalter / Support-Car `car_sun_visor_pod_clip.stl`)
-* [ ] **Vollautomatisch bestückte Platinen (von JLCPCB / Eurocircuits):**
-  * 1x PCBA 01 (Zentralbox mit LoRa SX1262 und DW3110 UWB)
-  * 2x PCBA 02 (Pod-Base, symmetrisch für Pod 1 und Pod 2)
-  * 2x PCBA 03 (Smart Modular Cartridge mit CH32V003 und 4x AO3400 N-MOSFETs)
+* [ ] **Vollautomatisch bestückte Platinen (von JLCPCB / Eurocircuits – 6 PCBAs):**
+  * 1x PCBA 01 (Zentralbox mit LoRa SX1262, DW3110 UWB, SW1 Taster und DTM-12 Header)
+  * 2x PCBA 03 (Universal Smart Cartridge Rev 3.0 All-UWB mit DW3110 UWB, MCU und 4x AO3400A MOSFETs, 2-seitig SMT)
   * 1x PCBA 05 (Front-Knoten mit DW3110 UWB)
-  * *(Optional: 1x PCBA 08 Radar 2.0 Sub-MCU, PCBA 06 MagSafe Dock, PCBA 07 Smart-Keyfob)*
+  * *(Optional: 1x PCBA 08 Radar 2.0 Sub-MCU mit DW3110 UWB, PCBA 06 MagSafe Dock, PCBA 07 Smart-Keyfob)*
+  * *(Hinweis: PCBA 02 und PCBA 04 sind ersatzlos entfallen).*
 * [ ] **V4A Edelstahl-Normteile & Federn (IKEA-Prinzip – 100 % lötfrei):**
   * 8x DIN 934 / DIN 985 M3 Edelstahlmuttern (für Gehäuse-Nut-Pockets)
   * 4x DIN 934 M4 Muttern (für AMPS-Nut-Pockets in Front-Node Wanne)
@@ -73,19 +74,19 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
   * 8x M2.5 x 6 mm Platinenschrauben, 4x M2 x 8 mm Senkkopf (Schottwände), 8x M2 x 6 mm (Kassetten)
   * 2x DIN 7 M2 x 8 mm Zylinderstifte (Wippenachsen), 2x DIN 6325 Ø 6 x 8 mm gehärtete Stahlanker
   * 2x Wippen-Rückstellfedern, 4x Auto-Eject Druckfedern, 1x N52 Neodym-Entriegelungsschlüssel
+  * 4x Vergoldete Blattfederkontakte (Keystone / Mill-Max) für Pod 1 & 2 Stromzuführung
 * [ ] **Dichtungen, Pufferakku & Antennen:**
   * Silikon-Rundschnur Ø 1,5 mm Shore 40A ($40\,\text{cm}$ Main Box, $30\,\text{cm}$ Front-Knoten)
   * 2x Silikon-Flanschdichtungen für Pod 1 & 2 Mundlöcher, Gore ePTFE Membranpads
   * **1x 1S LiPo Flat-Pack 2.200 mAh** ($68 \times 39 \times 5{,}0\,\text{mm}$) mit Molex Micro-Fit 3.0 Stecker
-  * **2x Taoglas FXUWB10 UWB Flex-Antennen** mit 20 mm U.FL Kabel
+  * **Taoglas FXUWB10 UWB Flex-Antennen** mit 20 mm U.FL Kabel (Zentralbox, Front-Node, Kassetten)
   * **1x Taoglas FXP895 LoRa 868 MHz Flex-Antenne** mit 50 $\Omega$ U.FL Kabel
   * **1x u-blox SAM-M10Q Multi-GNSS Modul** mit integrierter Patchantenne (Qwiic I2C)
   * **1x TI TMP117 & 1x TI OPT3001 Sensoren** (Qwiic I2C)
 * [ ] **Vorkonfektionierte COTS-Kabel (kein Crimpen nötig):**
-  * 1x HD26 SEAL-D IP67 4-Abzweig Kabelpeitsche (Pod 1, Pod 2, 12V Bordnetz, Peitsche 5 Heckradar)
-  * 2x M8 6-Pin PUR-Kabel (1.0 m / 1.5 m)
-  * 1x M8 4-Pin PUR-Kabel (Peitsche 5 für Radar)
-  * JST-SH Kassetten-Kabelbäume (8-Pin `J_ACT` für Hubmagnete, 6-Pin `J2` für Audio/DC)
+  * 1x Deutsch DTM-12 IP67/IP69K Zentral-Kabelbaum (reine 2-Draht DC-Peitschen für Pod 1, Pod 2, Radar sowie 12V Bordnetz & CAN)
+  * 2-Pin JWPF / Superseal Steckverbinder für Pod- und Radar-Zuleitungen
+  * JST-SH Kassetten-Kabelbäume (8-Pin `J_ACT` für Hubmagnete)
 * [ ] **Werkzeuge:**
   * Innensechskantschlüsselsatz (1.5 / 2.0 / 2.5 / 3.0 mm), Torx TX10 / PH1 Schraubendreher, Gabelschlüssel SW 7 / 8 / 10 mm, Cuttermesser, dielektrisches Silikonfett
 
@@ -110,25 +111,26 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 
 ---
 
-### Schritt 2: Satelliten-Pods 1 & 2 montieren (2x identisch)
-1. **Basisplatine einsetzen:** Die fertig bestückte PCBA 02 in die Führungsnuten des Pod-Basisgehäuses ([`pod_base_housing.stl`](../../hardware/cad/stl/02_pod_base/pod_base_housing.stl)) einschieben. Die M8 6-Pin IP67 Buchse durch die rückseitige Bohrung führen, O-Ring aufschieben und die M8-Mutter mit Gabelschlüssel SW 10 handfest anziehen ($1{,}2\,\text{Nm}$).
-2. **Auto-Eject Schnappfedern einsetzen:** In die beiden rückseitigen Federtaschen der Schottwand ([`03_pod_bulkhead_partition.stl`](../../hardware/cad/stl/02_pod_base/components/03_pod_bulkhead_partition.stl)) je eine V4A Druckfeder ($\varnothing 4{,}5 \times 15\,\text{mm}$) einstecken.
-3. **Schottwand fixieren:** Die Schottwand mit den Federn voran in das Pod-Gehäuse einschieben und mit 2x M2 $\times 8\,\text{mm}$ Senkkopfschrauben von außen bündig verschrauben.
-4. **Prüfung:** Die 6-polige Buchsenleiste `J1` schließt zentriert im Schottwandkragen ab. Wiederholen für Pod 2.
+### Schritt 2: Satelliten-Pods 1 & 2 montieren (2x identisch, ohne interne Platine)
+1. **2-Draht-DC-Zuleitung einführen:** Die 2-adrige Gleichstromleitung (+5V und GND) durch die rückseitige Kabeldurchführung des Pod-Basisgehäuses ([`pod_base_housing.stl`](../../hardware/cad/stl/02_pod_base/pod_base_housing.stl)) führen und abdichten.
+2. **Federkontakte montieren:** Die beiden Leitungsadern mit den vergoldeten Federkontakten (Keystone / Mill-Max) im Schachtboden verbinden.
+3. **Auto-Eject Schnappfedern einsetzen:** In die beiden rückseitigen Federtaschen der Schottwand ([`03_pod_bulkhead_partition.stl`](../../hardware/cad/stl/02_pod_base/components/03_pod_bulkhead_partition.stl)) je eine V4A Druckfeder ($\varnothing 4{,}5 \times 15\,\text{mm}$) einstecken.
+4. **Schottwand fixieren:** Die Schottwand mit den Federn voran in das Pod-Gehäuse einschieben und mit 2x M2 $\times 8\,\text{mm}$ Senkkopfschrauben von außen bündig verschrauben.
+5. **Prüfung:** Die beiden vergoldeten Federkontakte ragen federnd in den Aufnahmeschacht. Keine Buchsen, keine internen Platinen nötig. Wiederholen für Pod 2.
 
 ---
 
 ### Schritt 3: Multi-Protokoll Gateway-Kassetten 1 & 2 montieren
-1. **Platine einsetzen:** Kassettenplatine PCBA 03 Rev 2.0 in den Kassetten-Schlitten ([`cartridge_base_sled.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl)) einklicken.
+1. **Platine einsetzen:** Kassettenplatine PCBA 03 Rev 3.0 (beidseitig bestückt, mit DW3110 UWB) in den Kassetten-Schlitten ([`cartridge_base_sled.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl)) einklicken.
 2. **Gateway-Inlay & Mechatronik montieren:**
-   * **Slot 1 (Sena SPIDER X Slim Inlay):**
+   * **Bucht 1 (Sena SPIDER X Slim Inlay):**
      * 4x Miniatur-Aktuatoren ($\varnothing 6{,}5 \times 12\,\text{mm}$) mit TPU-Kappen in die Führungsbrücke des Inlays ([`cartridge_insert_sena.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_sena.stl)) einlegen.
      * Niederhalteplatte mit 4x M2 $\times 6\,\text{mm}$ Senkkopfschrauben sichern.
      * Vorkonfektioniertes 8-Pin Kabel `J_ACT` auf Header `J_ACT` von PCBA 03 stecken.
-     * Sena SPIDER X Slim einlegen; die direkte Micro-Kabelpeitsche an `J2` von PCBA 03 anstecken (zero pogo pins!).
-   * **Slot 2 (Cardo Packtalk Edge Inlay / Swap OMM):**
+     * Sena SPIDER X Slim einlegen (Audio läuft per Bluetooth direkt zur Zentralbox; zero pogo pins!).
+   * **Bucht 2 (Cardo Packtalk Edge Inlay / Swap OMM / Midland):**
      * 4x Aktuatoren in [`cartridge_insert_cardo.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_cardo.stl) montieren und an `J_ACT` anstecken.
-     * Cardo Packtalk Edge im Air-Mount Bett fixieren und Micro-Kabelpeitsche an `J2` stecken.
+     * Cardo Packtalk Edge im Air-Mount Bett fixieren (Audio läuft per Bluetooth).
 3. **Flanschdichtung:** Silikon-Formdichtung auf den Kassettenkragen aufziehen und dünn mit Silikonfett benetzen.
 
 ---
@@ -209,7 +211,7 @@ Erst wenn alle 4 Checks grün leuchten, die Gehäusedeckel mit den M3-Schrauben 
 ### 5.1 Montage Harley-Davidson Plattform (Touring, CVO ST, Road King)
 * **Zentralbox:** Unter der Fahrersitzbank auf der Rahmenbrücke vor der Batterie auf 4x M4 Silentblöcken verschrauben.
 * **Pod 1 & Pod 2:** Auf den Hartschalenkoffern mittels Kofferdeckel-Docks ([`saddlebag_lid_dock.stl`](../../hardware/cad/stl/02_pod_base/saddlebag_lid_dock.stl)) montieren.
-* **Heck-Radar:** Entkoppelter Kennzeichen-Radarhalter ([`radar_license_plate_bracket.stl`](../../hardware/cad/stl/02_pod_base/radar_license_plate_bracket.stl)) unter dem Kennzeichenrahmen, angeschlossen an Peitsche 5 des HD26-Kabelbaums.
+* **Heck-Radar:** Entkoppelter Kennzeichen-Radarhalter ([`radar_license_plate_bracket.stl`](../../hardware/cad/stl/02_pod_base/radar_license_plate_bracket.stl)) unter dem Kennzeichenrahmen, angeschlossen an Peitsche 5 des Deutsch DTM-12 Kabelbaums.
 * **Front-Knoten:** In der Verkleidung (Batwing / Sharknose) oder Nacelle verschraubt; 12V von Standlicht/Zubehör; CAN-Bus lokal an J2 (oder an Zentralbox unter der Sitzbank).
 
 ### 5.2 Montage Adventure-Plattform (BMW GS / GSA Familie)

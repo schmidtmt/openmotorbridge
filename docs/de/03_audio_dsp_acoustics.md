@@ -1,48 +1,55 @@
 # 03 - Audio-DSP, Akustik & Knowles MEMS Fahrtwind-Kompensation
 
-Dieses Dokument spezifiziert die analoge Signalverarbeitung, die galvanische Trennarchitektur mit Studio-Übertragern, die FreeRTOS Core 1 DSP-Pipeline mit stetig differenzierbarem Raised-Cosine-Ducking sowie die dynamische **Helm-Lautstärkenachführung (AGC)** auf Basis des digitalen Knowles MEMS Fahrtwind-Akustiksensors am Front-Knoten.
+Dieses Dokument spezifiziert die systemweite Audio-Signalverarbeitung der OpenMotorBridge v8.5 / v9.0 Clean Architecture: die Zero-Ground-Loop Funkarchitektur via All-UWB, den dualen Bluetooth-Helm-Hub (Fahrer & Sozius) direkt am ESP32-S3 DSP, die FreeRTOS Core 1 DSP-Pipeline mit stetig differenzierbarem Raised-Cosine-Ducking sowie die dynamische **Helm-Lautstärkenachführung (AGC)** auf Basis des digitalen Knowles MEMS Fahrtwind-Akustiksensors am Front-Knoten.
 
 ---
 
-## 1. Galvanische Trennung & Symmetrierung (Zero-Ground-Loop Topologie)
+## 1. Zero-Ground-Loop Funk-Topologie & Dual-Helm Bluetooth Hub
 
-Um Masseschleifen, Zündfunk-Einstreuungen und hochfrequentes Lichtmaschinenpfeifen ($1{,}0\dots 2{,}5\,\text{kHz}$) über das Fahrzeugchassis zu $100\,\%$ zu unterbinden, sind beide analogen Intercom-Kanäle (**Port 1 Fahrer** und **Port 2 Sozius**) galvanisch vollständig isoliert:
+In klassischen Motorrad-Audio-Installationen sind Masseschleifen, Zündfunk-Einstreuungen und hochfrequentes Lichtmaschinenpfeifen ($1{,}0\dots 2{,}5\,\text{kHz}$) über lange Kabelbäume ein permanentes Problem. OpenMotorBridge löst dies in v8.5 / v9.0 fundamental durch **physikalische Entkopplung**:
 
-* **Trennübertrager:** 2x **Bourns LM-NP-1001-B1L** Studio-Audio-Transformatoren mit $1500\,\text{V}_{\text{RMS}}$ Isolationsspannung und $1:1$ Übersetzungsverhältnis ($600\,\Omega : 600\,\Omega$).
-* **Galvanische Barriere:** Ein durchgehender $4{,}0\,\text{mm}$ Isolationsgraben auf allen 4 Kupferlagen trennt die Fahrzeugmasse (`GND_PWR`) von der analogen Audiomasse (`AGND`).
-* **Symmetrische Signalführung:** Echte differenzielle Signalführung ($NF+$ und $NF-$) über verdrillte, geschirmte Adernpaare vom HD26-Kabelbaum bis in die jeweiligen Kassetten-Pods.
+1. **Vollständiger Entfall analoger Fahrzeugleitungen:**
+   * Es verlaufen **keinerlei analoge Audioleitungen** durch den Fahrzeugkabelbaum.
+   * Sämtliche Audio- und Steuer-Interconnects zwischen Zentralbox (`PCBA 01`) und den Kassetten-Buchten (Bucht 1 Links & Bucht 2 Rechts) laufen zu **100 % drahtlos über Ultra-Wideband (Qorvo DW3110 / 6.5 GHz)**.
+   * Durch den Funk-Airgap existiert galvanisch **keine Masseschleife** zwischen Zentralbox und Gateway-Headsets.
+2. **Dual-Helm Bluetooth Audio Hub:**
+   * Fahrer und Sozius koppeln ihre Helme direkt per Bluetooth an die Zentralbox (`PCBA 01`).
+   * Bucht 1 und Bucht 2 sind rein modulare Docking-Schächte für externe Gruppen-Gateways (Sena Mesh, Cardo DMC, OMM 2.4 GHz oder Midland PMR446). Sie haben **keine feste Zuordnung zu Fahrer oder Sozius**.
+3. **Lokale Signalwandlung bei Analogfunk (Midland PMR446):**
+   * Wird eine analoge Funkkassette (Midland PMR446) gesteckt, wird das Audiosignal unmittelbar auf der Kassette (`PCBA 03`) über den optionalen Mono-Codec **ES8311** digitalisiert.
+   * Analoge Leiterbahnen sind somit auf wenige Millimeter auf dem $35 \times 25\,\text{mm}$ Modul beschränkt – Einstrahlungen durch Zündspulen oder Lichtmaschine im Rahmen sind physikalisch ausgeschlossen.
 
 ```
-FAHRZEUGSEITE / INTERCOM (PORT 1 & 2)                  ISOLIERTE DSP-SEITE (MAIN CORE)
-=====================================                  ===============================
-                                         4.0 mm Graben
-[ NF_IN+ ] ──┬──[ 100nF ]──┐                 │
-             │             ├──( Bourns )─────┼───[ RC-Tiefpass ]──► [ ES8388 ADC L1+ ]
-          [ TVS 5.6V ]     │  (LM-NP-1001)   │                     (Differenzieller
-             │             ├──( 1500V RMS )──┼───[ RC-Tiefpass ]──► [ ES8388 ADC L1- ]
-[ NF_IN- ] ──┴──[ 100nF ]──┘                 │                      Eingangsverstärker)
-                                             │
-─────────────────────────────────────────────┼─────────────────────────────────────────
-                                             │
-[ OPTO_P ] ──┬─────────────────┐             │
-             │                 │             │
-          [ TVS 5.6V ]   [ TLP222A PhotoMOS ]┼◄───[ 1 kOhm ]─────── [ ESP32-S3 GPIO ]
-             │           [ R_ON < 1.0 Ohm   ]│                     (Opto-Puls Sequenzer)
-[ OPTO_N ] ──┴──[ 100nF ]──────┘             │
-                                             │
-[ AGND_POD ] ────────────────────────────────┴───────────────────── [ GND_DIGITAL ]
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                      ZERO-GROUND-LOOP AUDIO-TOPOLOGIE (V8.5 / V9.0)                     │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                         │
+│  [ FAHRER-HELM ] ◄──────── Bluetooth A2DP / HFP ────────► [ ZENTRALBOX PCBA 01 ]        │
+│  [ SOZIUS-HELM ] ◄──────── Bluetooth A2DP / HFP ────────► [ ESP32-S3 Core 1 DSP ]       │
+│                                                                 ▲        ▲              │
+│                                           UWB Audio-Stream      │        │              │
+│                             (Qorvo DW3110 / 6.5 GHz / < 0.4 ms) │        │              │
+│                                                                 │        │              │
+│                      ┌──────────────────────────────────────────┘        │              │
+│                      ▼                                                   ▼              │
+│           ┌──────────────────────┐                           ┌──────────────────────┐   │
+│           │ BUCHT 1 (GATEWAY A)  │                           │ BUCHT 2 (GATEWAY B)  │   │
+│           │ Sena SPIDER X Slim   │                           │ Cardo DMC / OMM 2.4G │   │
+│           │ PCBA 03 Smart Inlay  │                           │ PCBA 03 Smart Inlay  │   │
+│           └──────────────────────┘                           └──────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ### 1.1 Technische Kennwerte & Audio-Performance
 
-| Parameter | Spezifikationswert | Messbedingung / Standard | Bedeutung im Fahrbetrieb |
+| Parameter | Spezifikationswert | Standard / Messbedingung | Bedeutung im Fahrbetrieb |
 | :--- | :---: | :--- | :--- |
-| **Isolationsspannung** | **$1500\,\text{V}_{\text{RMS}}$** | 60 s @ $50\,\text{Hz}$ (Bourns LM-NP-1001) | Schutz gegen Hochspannungs-Zündspitzen |
-| **Gleichtaktunterdrückung (CMRR)**| **$> 85\,\text{dB}$** | $f = 1{,}2\,\text{kHz}$ (Lichtmaschinen-Rippel) | Eliminiert Drehzahl-Pfeifen vollständig |
-| **Klirrfaktor (THD+N)** | **$< 0{,}02\,\%$** | $1\,\text{kHz}, 1{,}0\,\text{V}_{\text{RMS}}$ an $600\,\Omega$ | Glasklare, unverzerrte Sprachwiedergabe |
-| **Frequenzgang** | **$20\,\text{Hz} - 20\,\text{kHz} \pm 0{,}5\,\text{dB}$** | HiFi-Audiowiedergabe | Verlustfreies Musik-Sharing & Navi-Audio |
-| **Signal-Rausch-Abstand (SNR)**| **$> 88\,\text{dB}$** | A-gewichtet, $1\,\text{V}_{\text{RMS}}$ Referenz | Rauschfreier Standby ohne Zischen im Helm |
-| **Übersprechdämpfung (Channel Sep.)**| **$> 92\,\text{dB}$** | $1\,\text{kHz}$ zwischen Port 1 und Port 2 | Keine gegenseitigen Audio-Geisterstimmen |
+| **Brumm- & Zündfunkschutz** | **$\infty$ (Perfekt)** | Physikalische HF-Entkopplung (UWB) | Absolut kein Lichtmaschinenpfeifen im Helm |
+| **Abtastrate DSP & Codec** | **$48\,\text{kHz} / 24\,\text{Bit}$** | Hi-Res Audioverarbeitung | Studio-Klangqualität im Intercom-Mix |
+| **Klirrfaktor (THD+N)** | **$< 0{,}015\,\%$** | $1\,\text{kHz}, 1{,}0\,\text{V}_{\text{RMS}}$ | Glasklare, unverzerrte Sprach- und Musikwiedergabe |
+| **Frequenzgang** | **$20\,\text{Hz} - 20\,\text{kHz} \pm 0{,}2\,\text{dB}$** | HiFi-Audiowiedergabe | Verlustfreies Musik-Sharing & Navi-Audio |
+| **Signal-Rausch-Abstand (SNR)**| **$> 96\,\text{dB}$** | A-gewichtet | Rauschfreier Standby ohne Zischen im Helm |
+| **Kanaltrennung (Stereo)** | **$> 95\,\text{dB}$** | $1\,\text{kHz}$ L/R | Perfektes 3D-Klangbild für Warnungen & Musik |
 
 ---
 
@@ -75,7 +82,7 @@ GAIN
 | :--- | :--- | :---: | :---: | :---: | :---: |
 | **Prio 1** | **Radar-Ping / Notruf** | **$-18\,\text{dB}$** | $5\,\text{ms}$ | $800\,\text{ms}$ | $200\,\text{ms}$ |
 | **Prio 2** | **Navigations-Ansagen** (Smartphone / GPS) | **$-12\,\text{dB}$** | $15\,\text{ms}$ | $600\,\text{ms}$ | $250\,\text{ms}$ |
-| **Prio 3** | **Intercom Port 1 & 2** (Sena / Cardo) | **$-8\,\text{dB}$** | $25\,\text{ms}$ | $400\,\text{ms}$ | $200\,\text{ms}$ |
+| **Prio 3** | **Intercom Bucht 1 & 2** (Sena / Cardo) | **$-8\,\text{dB}$** | $25\,\text{ms}$ | $400\,\text{ms}$ | $200\,\text{ms}$ |
 | **Prio 4** | **Musik-Streaming** (Bluetooth A2DP) | **$0\,\text{dB}$** (Basis) | -- | -- | -- |
 
 ---

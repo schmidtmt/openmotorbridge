@@ -2,7 +2,7 @@
 	(version "E")
 	(design
 		(source "/Users/schmidtm/openMotorBridge/hardware/kicad_main_box/openmotorbridge_main.kicad_sch")
-		(date "2026-08-25T17:25:25")
+		(date "2026-09-26T14:21:27")
 		(tool "Eeschema 10.0.5")
 		(sheet
 			(number "1")
@@ -153,18 +153,18 @@
 			(name "/MCU, Audio Codec & CAN/")
 			(tstamps "/a0000000-0000-0000-0000-000000000003/")
 			(title_block
-				(title "OpenMotorBridge v8.0 - MCU, Audio Codec & CAN-Bus")
+				(title "OpenMotorBridge v8.5 / v9.0 - MCU, Audio Codec, CAN & RF Transceivers")
 				(company "OpenMotorBridge Open Source Hardware")
-				(rev "v8.0")
-				(date "2026-08-24")
+				(rev "v9.0")
+				(date "2026-09-26")
 				(source "mcu_codec_can.kicad_sch")
 				(comment
 					(number "1")
-					(value "ESP32-S3-WROOM-1-N16R8 + ES8388 24-Bit Codec + TCAN334G CAN-FD + BMI270 IMU")
+					(value "ESP32-S3-WROOM-1 + ES8388 Codec + TCAN334G CAN-FD + SX1262 LoRa + DW3110 UWB")
 				)
 				(comment
 					(number "2")
-					(value "Automotive Real-Time DSP Audio & 15-State ADR EKF Navigation Architecture")
+					(value "Automotive Real-Time Audio, Radar 2.0 Interface & Universal Wireless Architecture")
 				)
 				(comment
 					(number "3")
@@ -201,18 +201,18 @@
 			(name "/HD26 Flansch & 2x13 Header/")
 			(tstamps "/a0000000-0000-0000-0000-000000000005/")
 			(title_block
-				(title "OpenMotorBridge v8.0 - HD26 Matrix-Schnittstelle & Bordnetz")
+				(title "OpenMotorBridge v8.5 / v9.0 - Deutsch DTM-12 Power & CAN Interface")
 				(company "OpenMotorBridge Open Source Hardware")
-				(rev "v8.0")
-				(date "2026-08-24")
+				(rev "v9.0")
+				(date "2026-09-26")
 				(source "hd26_interface.kicad_sch")
 				(comment
 					(number "1")
-					(value "HD26 High-Density 26-Pin Industriesteckverbinder fuer alle externen Leitungen")
+					(value "Deutsch DTM 12-Pin Automotive Industriestecker (Pure-DC & CAN)")
 				)
 				(comment
 					(number "2")
-					(value "Port 1 (Fahrer), Port 2 (Sozius), Port 3 (M8 Heck), KL30/KL15, CAN-Bus, Garmin Line-In")
+					(value "KL30, KL15, GND, CAN-FD, 2x Pod 5V Power, Radar 12V Power; 100% UWB Wireless Data")
 				)
 				(comment
 					(number "3")
@@ -550,12 +550,14 @@
 			)
 		)
 		(comp
-			(ref "T1")
-			(value "LM-NP-1001")
-			(footprint "Transformer_SMD:Transformer_Ethernet_HALO_TG111-MSC13")
+			(ref "ANT1")
+			(value "Taoglas_FXP895_868MHz_Lid")
+			(footprint "Connector_Coaxial:U.FL_Hirose_U.FL-R-SMT-1_Vertical")
 			(fields
 				(field
-					(name "Footprint") "Transformer_SMD:Transformer_Ethernet_HALO_TG111-MSC13")
+					(name "LCSC") "C2834595")
+				(field
+					(name "Footprint") "Connector_Coaxial:U.FL_Hirose_U.FL-R-SMT-1_Vertical")
 				(field
 					(name "Datasheet")
 				)
@@ -564,23 +566,27 @@
 				)
 			)
 			(libsource
-				(lib "Device")
-				(part "Transformer_1P_1S")
+				(lib "Connector")
+				(part "U.FL")
 				(description "")
 			)
 			(property
+				(name "LCSC")
+				(value "C2834595")
+			)
+			(property
 				(name "Sheetname")
-				(value "Audio-Frontend & Opto")
+				(value "MCU, Audio Codec & CAN")
 			)
 			(property
 				(name "Sheetfile")
-				(value "audio_frontend_isolated.kicad_sch")
+				(value "mcu_codec_can.kicad_sch")
 			)
 			(sheetpath
-				(names "/Audio-Frontend & Opto/")
-				(tstamps "/a0000000-0000-0000-0000-000000000004/")
+				(names "/MCU, Audio Codec & CAN/")
+				(tstamps "/a0000000-0000-0000-0000-000000000003/")
 			)
-			(tstamps "d0000000-0000-0000-0000-000000000011")
+			(tstamps "c0000000-0000-0000-0000-000000000090")
 			(units
 				(unit
 					(name "A")
@@ -591,23 +597,19 @@
 						(pin
 							(num "2")
 						)
-						(pin
-							(num "3")
-						)
-						(pin
-							(num "4")
-						)
 					)
 				)
 			)
 		)
 		(comp
-			(ref "T2")
-			(value "LM-NP-1001")
-			(footprint "Transformer_SMD:Transformer_Ethernet_HALO_TG111-MSC13")
+			(ref "ANT2")
+			(value "Taoglas_FXUWB10_6.5GHz_Ch5_Floor")
+			(footprint "Connector_Coaxial:U.FL_Hirose_U.FL-R-SMT-1_Vertical")
 			(fields
 				(field
-					(name "Footprint") "Transformer_SMD:Transformer_Ethernet_HALO_TG111-MSC13")
+					(name "LCSC") "C2834595")
+				(field
+					(name "Footprint") "Connector_Coaxial:U.FL_Hirose_U.FL-R-SMT-1_Vertical")
 				(field
 					(name "Datasheet")
 				)
@@ -616,23 +618,27 @@
 				)
 			)
 			(libsource
-				(lib "Device")
-				(part "Transformer_1P_1S")
+				(lib "Connector")
+				(part "U.FL")
 				(description "")
 			)
 			(property
+				(name "LCSC")
+				(value "C2834595")
+			)
+			(property
 				(name "Sheetname")
-				(value "Audio-Frontend & Opto")
+				(value "MCU, Audio Codec & CAN")
 			)
 			(property
 				(name "Sheetfile")
-				(value "audio_frontend_isolated.kicad_sch")
+				(value "mcu_codec_can.kicad_sch")
 			)
 			(sheetpath
-				(names "/Audio-Frontend & Opto/")
-				(tstamps "/a0000000-0000-0000-0000-000000000004/")
+				(names "/MCU, Audio Codec & CAN/")
+				(tstamps "/a0000000-0000-0000-0000-000000000003/")
 			)
-			(tstamps "d0000000-0000-0000-0000-000000000021")
+			(tstamps "c0000000-0000-0000-0000-000000000095")
 			(units
 				(unit
 					(name "A")
@@ -643,23 +649,19 @@
 						(pin
 							(num "2")
 						)
-						(pin
-							(num "3")
-						)
-						(pin
-							(num "4")
-						)
 					)
 				)
 			)
 		)
 		(comp
-			(ref "U7")
-			(value "TLP222A")
-			(footprint "Package_SO:Toshiba_SOIC-4-6_4.4x3.6mm_P1.27mm")
+			(ref "SW1")
+			(value "SW_PAIR_RESET")
+			(footprint "Button_Switch_SMD:SW_Push_SPST_NO_Alps_SKRK")
 			(fields
 				(field
-					(name "Footprint") "Package_SO:Toshiba_SOIC-4-6_4.4x3.6mm_P1.27mm")
+					(name "LCSC") "C318884")
+				(field
+					(name "Footprint") "Button_Switch_SMD:SW_Push_SPST_NO_Alps_SKRK")
 				(field
 					(name "Datasheet")
 				)
@@ -668,23 +670,27 @@
 				)
 			)
 			(libsource
-				(lib "Relay")
-				(part "TLP222A")
+				(lib "Switch")
+				(part "SW_Push")
 				(description "")
 			)
 			(property
+				(name "LCSC")
+				(value "C318884")
+			)
+			(property
 				(name "Sheetname")
-				(value "Audio-Frontend & Opto")
+				(value "MCU, Audio Codec & CAN")
 			)
 			(property
 				(name "Sheetfile")
-				(value "audio_frontend_isolated.kicad_sch")
+				(value "mcu_codec_can.kicad_sch")
 			)
 			(sheetpath
-				(names "/Audio-Frontend & Opto/")
-				(tstamps "/a0000000-0000-0000-0000-000000000004/")
+				(names "/MCU, Audio Codec & CAN/")
+				(tstamps "/a0000000-0000-0000-0000-000000000003/")
 			)
-			(tstamps "d0000000-0000-0000-0000-000000000031")
+			(tstamps "c0000000-0000-0000-0000-000000000099")
 			(units
 				(unit
 					(name "A")
@@ -693,13 +699,7 @@
 							(num "1")
 						)
 						(pin
-							(num "3")
-						)
-						(pin
-							(num "4")
-						)
-						(pin
-							(num "6")
+							(num "2")
 						)
 					)
 				)
@@ -710,6 +710,8 @@
 			(value "ESP32-S3-WROOM-1-N16R8")
 			(footprint "RF_Module:ESP32-S3-WROOM-1")
 			(fields
+				(field
+					(name "LCSC") "C2913200")
 				(field
 					(name "Footprint") "RF_Module:ESP32-S3-WROOM-1")
 				(field
@@ -723,6 +725,10 @@
 				(lib "RF_Module")
 				(part "ESP32-S3-WROOM-1")
 				(description "")
+			)
+			(property
+				(name "LCSC")
+				(value "C2913200")
 			)
 			(property
 				(name "Sheetname")
@@ -789,12 +795,6 @@
 						(pin
 							(num "15")
 						)
-						(pin
-							(num "16")
-						)
-						(pin
-							(num "17")
-						)
 					)
 				)
 			)
@@ -804,6 +804,8 @@
 			(value "ES8388")
 			(footprint "Package_DFN_QFN:QFN-28-1EP_4x4mm_P0.4mm_EP2.4x2.4mm")
 			(fields
+				(field
+					(name "LCSC") "C365736")
 				(field
 					(name "Footprint") "Package_DFN_QFN:QFN-28-1EP_4x4mm_P0.4mm_EP2.4x2.4mm")
 				(field
@@ -817,6 +819,10 @@
 				(lib "Audio")
 				(part "ES8388")
 				(description "")
+			)
+			(property
+				(name "LCSC")
+				(value "C365736")
 			)
 			(property
 				(name "Sheetname")
@@ -884,6 +890,8 @@
 			(footprint "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm")
 			(fields
 				(field
+					(name "LCSC") "C842340")
+				(field
 					(name "Footprint") "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm")
 				(field
 					(name "Datasheet")
@@ -896,6 +904,10 @@
 				(lib "Interface_CAN_LIN")
 				(part "TCAN334G")
 				(description "")
+			)
+			(property
+				(name "LCSC")
+				(value "C842340")
 			)
 			(property
 				(name "Sheetname")
@@ -937,12 +949,14 @@
 			)
 		)
 		(comp
-			(ref "J1")
-			(value "HD26_FEMALE")
-			(footprint "Connector_IDC:IDC-Header_2x13_P2.54mm_Vertical")
+			(ref "U7")
+			(value "SX1262IMLTRT")
+			(footprint "Package_DFN_QFN:QFN-24-1EP_4x4mm_P0.5mm_EP2.8x2.8mm")
 			(fields
 				(field
-					(name "Footprint") "Connector_IDC:IDC-Header_2x13_P2.54mm_Vertical")
+					(name "LCSC") "C190184")
+				(field
+					(name "Footprint") "Package_DFN_QFN:QFN-24-1EP_4x4mm_P0.5mm_EP2.8x2.8mm")
 				(field
 					(name "Datasheet")
 				)
@@ -951,23 +965,27 @@
 				)
 			)
 			(libsource
-				(lib "Connector")
-				(part "HD26_Female")
+				(lib "RF_Transceiver")
+				(part "SX1262")
 				(description "")
 			)
 			(property
+				(name "LCSC")
+				(value "C190184")
+			)
+			(property
 				(name "Sheetname")
-				(value "HD26 Flansch & 2x13 Header")
+				(value "MCU, Audio Codec & CAN")
 			)
 			(property
 				(name "Sheetfile")
-				(value "hd26_interface.kicad_sch")
+				(value "mcu_codec_can.kicad_sch")
 			)
 			(sheetpath
-				(names "/HD26 Flansch & 2x13 Header/")
-				(tstamps "/a0000000-0000-0000-0000-000000000005/")
+				(names "/MCU, Audio Codec & CAN/")
+				(tstamps "/a0000000-0000-0000-0000-000000000003/")
 			)
-			(tstamps "e0000000-0000-0000-0000-000000000020")
+			(tstamps "c0000000-0000-0000-0000-000000000070")
 			(units
 				(unit
 					(name "A")
@@ -988,6 +1006,9 @@
 							(num "5")
 						)
 						(pin
+							(num "10")
+						)
+						(pin
 							(num "6")
 						)
 						(pin
@@ -999,32 +1020,78 @@
 						(pin
 							(num "9")
 						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "U8")
+			(value "DW3110")
+			(footprint "Package_DFN_QFN:QFN-16-1EP_3x3mm_P0.5mm_EP1.7x1.7mm_ThermalVias")
+			(fields
+				(field
+					(name "LCSC") "C2934600")
+				(field
+					(name "Footprint") "Package_DFN_QFN:QFN-16-1EP_3x3mm_P0.5mm_EP1.7x1.7mm_ThermalVias")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "RF_Transceiver")
+				(part "DW3110")
+				(description "")
+			)
+			(property
+				(name "LCSC")
+				(value "C2934600")
+			)
+			(property
+				(name "Sheetname")
+				(value "MCU, Audio Codec & CAN")
+			)
+			(property
+				(name "Sheetfile")
+				(value "mcu_codec_can.kicad_sch")
+			)
+			(sheetpath
+				(names "/MCU, Audio Codec & CAN/")
+				(tstamps "/a0000000-0000-0000-0000-000000000003/")
+			)
+			(tstamps "c0000000-0000-0000-0000-000000000080")
+			(units
+				(unit
+					(name "A")
+					(pins
 						(pin
-							(num "10")
+							(num "1")
 						)
 						(pin
-							(num "11")
+							(num "2")
 						)
 						(pin
-							(num "12")
+							(num "3")
 						)
 						(pin
-							(num "13")
+							(num "4")
 						)
 						(pin
-							(num "14")
+							(num "5")
 						)
 						(pin
-							(num "15")
+							(num "9")
 						)
 						(pin
-							(num "16")
+							(num "6")
 						)
 						(pin
-							(num "17")
+							(num "7")
 						)
 						(pin
-							(num "18")
+							(num "8")
 						)
 					)
 				)
@@ -1051,7 +1118,7 @@
 					(name "Description")
 				)
 				(field
-					(name "LCSC") "C111306")
+					(name "LCSC") "C365736")
 			)
 			(pins
 				(pin
@@ -1123,14 +1190,14 @@
 		)
 		(libpart
 			(lib "Connector")
-			(part "HD26_Female")
+			(part "U.FL")
 			(fields
 				(field
-					(name "Reference") "J1")
+					(name "Reference") "ANT")
 				(field
-					(name "Value") "HD26_FEMALE")
+					(name "Value") "U.FL-R-SMT-1")
 				(field
-					(name "Footprint") "Connector_IDC:IDC-Header_2x13_P2.54mm_Vertical")
+					(name "Footprint") "Connector_Coaxial:U.FL_Hirose_U.FL-R-SMT-1_Vertical")
 				(field
 					(name "Datasheet")
 				)
@@ -1138,97 +1205,17 @@
 					(name "Description")
 				)
 				(field
-					(name "LCSC") "C2932311")
+					(name "LCSC") "C2834595")
 			)
 			(pins
 				(pin
 					(num "1")
-					(name "1_POD1_VCC")
+					(name "RF")
 					(type "passive")
 				)
 				(pin
 					(num "2")
-					(name "2_POD1_GND")
-					(type "passive")
-				)
-				(pin
-					(num "3")
-					(name "3_POD1_NF_P")
-					(type "passive")
-				)
-				(pin
-					(num "4")
-					(name "4_POD1_NF_N")
-					(type "passive")
-				)
-				(pin
-					(num "5")
-					(name "5_POD1_OPTO")
-					(type "passive")
-				)
-				(pin
-					(num "6")
-					(name "6_POD1_1W")
-					(type "passive")
-				)
-				(pin
-					(num "7")
-					(name "7_POD2_VCC")
-					(type "passive")
-				)
-				(pin
-					(num "8")
-					(name "8_POD2_GND")
-					(type "passive")
-				)
-				(pin
-					(num "9")
-					(name "9_POD2_NF_P")
-					(type "passive")
-				)
-				(pin
-					(num "10")
-					(name "10_POD2_NF_N")
-					(type "passive")
-				)
-				(pin
-					(num "11")
-					(name "11_POD2_OPTO")
-					(type "passive")
-				)
-				(pin
-					(num "12")
-					(name "12_POD2_1W")
-					(type "passive")
-				)
-				(pin
-					(num "13")
-					(name "13_POD3_VCC")
-					(type "passive")
-				)
-				(pin
-					(num "14")
-					(name "14_POD3_GND")
-					(type "passive")
-				)
-				(pin
-					(num "15")
-					(name "15_POD3_TX")
-					(type "passive")
-				)
-				(pin
-					(num "16")
-					(name "16_POD3_RX")
-					(type "passive")
-				)
-				(pin
-					(num "17")
-					(name "17_POD3_PPS")
-					(type "passive")
-				)
-				(pin
-					(num "18")
-					(name "18_POD3_1W")
+					(name "GND")
 					(type "passive")
 				)
 			)
@@ -1384,7 +1371,7 @@
 					(name "Description")
 				)
 				(field
-					(name "LCSC") "C386121")
+					(name "LCSC") "C842340")
 			)
 			(pins
 				(pin
@@ -1424,7 +1411,7 @@
 			(part "ESP32-S3-WROOM-1")
 			(fields
 				(field
-					(name "Reference") "U2")
+					(name "Reference") "U")
 				(field
 					(name "Value") "ESP32-S3-WROOM-1-N16R8")
 				(field
@@ -1456,8 +1443,8 @@
 				)
 				(pin
 					(num "4")
-					(name "IO2/1W_P1")
-					(type "bidirectional")
+					(name "IO2/UWB_IRQ")
+					(type "input")
 				)
 				(pin
 					(num "5")
@@ -1471,13 +1458,13 @@
 				)
 				(pin
 					(num "7")
-					(name "IO22/1W_P2")
-					(type "bidirectional")
+					(name "IO22/UWB_CS")
+					(type "output")
 				)
 				(pin
 					(num "8")
-					(name "IO21/GNSS_PPS")
-					(type "input")
+					(name "IO21/LORA_CS")
+					(type "output")
 				)
 				(pin
 					(num "9")
@@ -1515,17 +1502,146 @@
 					(type "output")
 				)
 				(pin
-					(num "16")
-					(name "IO17/POD3_TX")
-					(type "output")
+					(num "18")
+					(name "GND")
+					(type "power_in")
+				)
+			)
+		)
+		(libpart
+			(lib "RF_Transceiver")
+			(part "DW3110")
+			(fields
+				(field
+					(name "Reference") "U8")
+				(field
+					(name "Value") "DW3110")
+				(field
+					(name "Footprint") "Package_DFN_QFN:QFN-16-1EP_3x3mm_P0.5mm_EP1.7x1.7mm_ThermalVias")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+				(field
+					(name "LCSC") "C2934600")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "VDD_3V3")
+					(type "power_in")
 				)
 				(pin
-					(num "17")
-					(name "IO18/POD3_RX")
+					(num "2")
+					(name "SPICLK")
 					(type "input")
 				)
 				(pin
-					(num "18")
+					(num "3")
+					(name "SPIMOSI")
+					(type "input")
+				)
+				(pin
+					(num "4")
+					(name "SPIMISO")
+					(type "output")
+				)
+				(pin
+					(num "5")
+					(name "SPICS")
+					(type "input")
+				)
+				(pin
+					(num "6")
+					(name "WAKEUP/IRQ")
+					(type "output")
+				)
+				(pin
+					(num "7")
+					(name "RSTn")
+					(type "input")
+				)
+				(pin
+					(num "8")
+					(name "RF_IO")
+					(type "bidirectional")
+				)
+				(pin
+					(num "9")
+					(name "GND")
+					(type "power_in")
+				)
+			)
+		)
+		(libpart
+			(lib "RF_Transceiver")
+			(part "SX1262")
+			(fields
+				(field
+					(name "Reference") "U7")
+				(field
+					(name "Value") "SX1262IMLTRT")
+				(field
+					(name "Footprint") "Package_DFN_QFN:QFN-24-1EP_4x4mm_P0.5mm_EP2.8x2.8mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+				(field
+					(name "LCSC") "C190184")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "VBAT_UPS")
+					(type "power_in")
+				)
+				(pin
+					(num "2")
+					(name "SCK")
+					(type "input")
+				)
+				(pin
+					(num "3")
+					(name "MOSI")
+					(type "input")
+				)
+				(pin
+					(num "4")
+					(name "MISO")
+					(type "output")
+				)
+				(pin
+					(num "5")
+					(name "NSS")
+					(type "input")
+				)
+				(pin
+					(num "6")
+					(name "BUSY")
+					(type "output")
+				)
+				(pin
+					(num "7")
+					(name "DIO1")
+					(type "output")
+				)
+				(pin
+					(num "8")
+					(name "NRST")
+					(type "input")
+				)
+				(pin
+					(num "9")
+					(name "RFO")
+					(type "output")
+				)
+				(pin
+					(num "10")
 					(name "GND")
 					(type "power_in")
 				)
@@ -1681,6 +1797,38 @@
 				)
 			)
 		)
+		(libpart
+			(lib "Switch")
+			(part "SW_Push")
+			(fields
+				(field
+					(name "Reference") "SW")
+				(field
+					(name "Value") "SW_Push")
+				(field
+					(name "Footprint") "Button_Switch_SMD:SW_Push_SPST_NO_Alps_SKRK")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+				(field
+					(name "LCSC") "C318884")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
 	)
 	(libraries
 		(library
@@ -1715,65 +1863,14 @@
 			(logical "Relay")
 			(uri "${KICAD10_SYMBOL_DIR}/Relay.kicad_sym")
 		)
+		(library
+			(logical "Switch")
+			(uri "${KICAD10_SYMBOL_DIR}/Switch.kicad_sym")
+		)
 	)
 	(nets
 		(net
-			(code "1")
-			(name "/Audio-Frontend & Opto/AUDIO_IN_P1")
-			(class "Default")
-			(node
-				(ref "T2")
-				(pin "2")
-				(pinfunction "PRI2_2")
-				(pintype "passive")
-			)
-		)
-		(net
-			(code "3")
-			(name "/Audio-Frontend & Opto/AUDIO_OUT_P1")
-			(class "Default")
-			(node
-				(ref "T1")
-				(pin "2")
-				(pinfunction "PRI2_2")
-				(pintype "passive")
-			)
-		)
-		(net
-			(code "5")
-			(name "/Audio-Frontend & Opto/POD1_NF_N")
-			(class "Default")
-			(node
-				(ref "T2")
-				(pin "4")
-				(pinfunction "SEC2_4")
-				(pintype "passive")
-			)
-		)
-		(net
-			(code "6")
-			(name "/Audio-Frontend & Opto/POD1_NF_P")
-			(class "Default")
-			(node
-				(ref "T1")
-				(pin "4")
-				(pinfunction "SEC2_4")
-				(pintype "passive")
-			)
-		)
-		(net
-			(code "7")
-			(name "/Audio-Frontend & Opto/POD1_OPTO")
-			(class "Default")
-			(node
-				(ref "U7")
-				(pin "6")
-				(pinfunction "DRAIN2_6")
-				(pintype "passive")
-			)
-		)
-		(net
-			(code "43")
+			(code "36")
 			(name "/Power & USV/GND_PWR")
 			(class "Default")
 			(node
@@ -1784,7 +1881,7 @@
 			)
 		)
 		(net
-			(code "45")
+			(code "38")
 			(name "/Power & USV/KL30_IN")
 			(class "Default")
 			(node
@@ -1807,7 +1904,7 @@
 			)
 		)
 		(net
-			(code "47")
+			(code "40")
 			(name "/Power & USV/VCC_3V3")
 			(class "Default")
 			(node
@@ -1818,7 +1915,41 @@
 			)
 		)
 		(net
+			(code "49")
+			(name "Net-(ANT1-RF)")
+			(class "Default")
+			(node
+				(ref "ANT1")
+				(pin "1")
+				(pinfunction "RF_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U7")
+				(pin "7")
+				(pinfunction "DIO1_7")
+				(pintype "output")
+			)
+		)
+		(net
 			(code "50")
+			(name "Net-(ANT2-RF)")
+			(class "Default")
+			(node
+				(ref "ANT2")
+				(pin "1")
+				(pinfunction "RF_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U8")
+				(pin "6")
+				(pinfunction "WAKEUP/IRQ_6")
+				(pintype "output")
+			)
+		)
+		(net
+			(code "51")
 			(name "Net-(U2-IO13{slash}I2S_DIN)")
 			(class "Default")
 			(node
@@ -1835,7 +1966,7 @@
 			)
 		)
 		(net
-			(code "51")
+			(code "52")
 			(name "Net-(U2-IO14{slash}I2C_SDA)")
 			(class "Default")
 			(node
@@ -1852,7 +1983,7 @@
 			)
 		)
 		(net
-			(code "52")
+			(code "53")
 			(name "Net-(U2-IO15{slash}I2C_SCL)")
 			(class "Default")
 			(node
@@ -1869,41 +2000,7 @@
 			)
 		)
 		(net
-			(code "53")
-			(name "Net-(U2-IO17{slash}POD3_TX)")
-			(class "Default")
-			(node
-				(ref "U2")
-				(pin "16")
-				(pinfunction "IO17/POD3_TX_16")
-				(pintype "output")
-			)
-			(node
-				(ref "U3")
-				(pin "6")
-				(pinfunction "SDATA_OUT_6")
-				(pintype "output")
-			)
-		)
-		(net
 			(code "54")
-			(name "Net-(U2-IO18{slash}POD3_RX)")
-			(class "Default")
-			(node
-				(ref "U2")
-				(pin "17")
-				(pinfunction "IO18/POD3_RX_17")
-				(pintype "input")
-			)
-			(node
-				(ref "U3")
-				(pin "7")
-				(pinfunction "I2C_SDA_7")
-				(pintype "input")
-			)
-		)
-		(net
-			(code "55")
 			(name "Net-(U9-IN)")
 			(class "Default")
 			(node
@@ -1926,7 +2023,29 @@
 			)
 		)
 		(net
+			(code "55")
+			(name "unconnected-(ANT1-GND-Pad2)")
+			(class "Default")
+			(node
+				(ref "ANT1")
+				(pin "2")
+				(pinfunction "GND_2")
+				(pintype "passive")
+			)
+		)
+		(net
 			(code "56")
+			(name "unconnected-(ANT2-GND-Pad2)")
+			(class "Default")
+			(node
+				(ref "ANT2")
+				(pin "2")
+				(pinfunction "GND_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "57")
 			(name "unconnected-(C1-~-Pad2)")
 			(class "Default")
 			(node
@@ -1937,7 +2056,7 @@
 			)
 		)
 		(net
-			(code "57")
+			(code "58")
 			(name "unconnected-(C2-~-Pad2)")
 			(class "Default")
 			(node
@@ -1948,205 +2067,7 @@
 			)
 		)
 		(net
-			(code "58")
-			(name "unconnected-(J1-1_POD1_VCC-Pad1)")
-			(class "Default")
-			(node
-				(ref "J1")
-				(pin "1")
-				(pinfunction "1_POD1_VCC_1")
-				(pintype "passive")
-			)
-		)
-		(net
 			(code "59")
-			(name "unconnected-(J1-2_POD1_GND-Pad2)")
-			(class "Default")
-			(node
-				(ref "J1")
-				(pin "2")
-				(pinfunction "2_POD1_GND_2")
-				(pintype "passive")
-			)
-		)
-		(net
-			(code "60")
-			(name "unconnected-(J1-3_POD1_NF_P-Pad3)")
-			(class "Default")
-			(node
-				(ref "J1")
-				(pin "3")
-				(pinfunction "3_POD1_NF_P_3")
-				(pintype "passive")
-			)
-		)
-		(net
-			(code "61")
-			(name "unconnected-(J1-4_POD1_NF_N-Pad4)")
-			(class "Default")
-			(node
-				(ref "J1")
-				(pin "4")
-				(pinfunction "4_POD1_NF_N_4")
-				(pintype "passive")
-			)
-		)
-		(net
-			(code "62")
-			(name "unconnected-(J1-5_POD1_OPTO-Pad5)")
-			(class "Default")
-			(node
-				(ref "J1")
-				(pin "5")
-				(pinfunction "5_POD1_OPTO_5")
-				(pintype "passive")
-			)
-		)
-		(net
-			(code "63")
-			(name "unconnected-(J1-6_POD1_1W-Pad6)")
-			(class "Default")
-			(node
-				(ref "J1")
-				(pin "6")
-				(pinfunction "6_POD1_1W_6")
-				(pintype "passive")
-			)
-		)
-		(net
-			(code "64")
-			(name "unconnected-(J1-7_POD2_VCC-Pad7)")
-			(class "Default")
-			(node
-				(ref "J1")
-				(pin "7")
-				(pinfunction "7_POD2_VCC_7")
-				(pintype "passive")
-			)
-		)
-		(net
-			(code "65")
-			(name "unconnected-(J1-8_POD2_GND-Pad8)")
-			(class "Default")
-			(node
-				(ref "J1")
-				(pin "8")
-				(pinfunction "8_POD2_GND_8")
-				(pintype "passive")
-			)
-		)
-		(net
-			(code "66")
-			(name "unconnected-(J1-9_POD2_NF_P-Pad9)")
-			(class "Default")
-			(node
-				(ref "J1")
-				(pin "9")
-				(pinfunction "9_POD2_NF_P_9")
-				(pintype "passive")
-			)
-		)
-		(net
-			(code "67")
-			(name "unconnected-(J1-10_POD2_NF_N-Pad10)")
-			(class "Default")
-			(node
-				(ref "J1")
-				(pin "10")
-				(pinfunction "10_POD2_NF_N_10")
-				(pintype "passive")
-			)
-		)
-		(net
-			(code "68")
-			(name "unconnected-(J1-11_POD2_OPTO-Pad11)")
-			(class "Default")
-			(node
-				(ref "J1")
-				(pin "11")
-				(pinfunction "11_POD2_OPTO_11")
-				(pintype "passive")
-			)
-		)
-		(net
-			(code "69")
-			(name "unconnected-(J1-12_POD2_1W-Pad12)")
-			(class "Default")
-			(node
-				(ref "J1")
-				(pin "12")
-				(pinfunction "12_POD2_1W_12")
-				(pintype "passive")
-			)
-		)
-		(net
-			(code "70")
-			(name "unconnected-(J1-13_POD3_VCC-Pad13)")
-			(class "Default")
-			(node
-				(ref "J1")
-				(pin "13")
-				(pinfunction "13_POD3_VCC_13")
-				(pintype "passive")
-			)
-		)
-		(net
-			(code "71")
-			(name "unconnected-(J1-14_POD3_GND-Pad14)")
-			(class "Default")
-			(node
-				(ref "J1")
-				(pin "14")
-				(pinfunction "14_POD3_GND_14")
-				(pintype "passive")
-			)
-		)
-		(net
-			(code "72")
-			(name "unconnected-(J1-15_POD3_TX-Pad15)")
-			(class "Default")
-			(node
-				(ref "J1")
-				(pin "15")
-				(pinfunction "15_POD3_TX_15")
-				(pintype "passive")
-			)
-		)
-		(net
-			(code "73")
-			(name "unconnected-(J1-16_POD3_RX-Pad16)")
-			(class "Default")
-			(node
-				(ref "J1")
-				(pin "16")
-				(pinfunction "16_POD3_RX_16")
-				(pintype "passive")
-			)
-		)
-		(net
-			(code "74")
-			(name "unconnected-(J1-17_POD3_PPS-Pad17)")
-			(class "Default")
-			(node
-				(ref "J1")
-				(pin "17")
-				(pinfunction "17_POD3_PPS_17")
-				(pintype "passive")
-			)
-		)
-		(net
-			(code "75")
-			(name "unconnected-(J1-18_POD3_1W-Pad18)")
-			(class "Default")
-			(node
-				(ref "J1")
-				(pin "18")
-				(pinfunction "18_POD3_1W_18")
-				(pintype "passive")
-			)
-		)
-		(net
-			(code "76")
 			(name "unconnected-(L1-~-Pad1)")
 			(class "Default")
 			(node
@@ -2157,51 +2078,29 @@
 			)
 		)
 		(net
-			(code "77")
-			(name "unconnected-(T1-PRI1-Pad1)")
+			(code "66")
+			(name "unconnected-(SW1-Pad1)")
 			(class "Default")
 			(node
-				(ref "T1")
+				(ref "SW1")
 				(pin "1")
-				(pinfunction "PRI1_1")
+				(pinfunction "1_1")
 				(pintype "passive")
 			)
 		)
 		(net
-			(code "78")
-			(name "unconnected-(T1-SEC1-Pad3)")
+			(code "67")
+			(name "unconnected-(SW1-Pad2)")
 			(class "Default")
 			(node
-				(ref "T1")
-				(pin "3")
-				(pinfunction "SEC1_3")
+				(ref "SW1")
+				(pin "2")
+				(pinfunction "2_2")
 				(pintype "passive")
 			)
 		)
 		(net
-			(code "79")
-			(name "unconnected-(T2-PRI1-Pad1)")
-			(class "Default")
-			(node
-				(ref "T2")
-				(pin "1")
-				(pinfunction "PRI1_1")
-				(pintype "passive")
-			)
-		)
-		(net
-			(code "80")
-			(name "unconnected-(T2-SEC1-Pad3)")
-			(class "Default")
-			(node
-				(ref "T2")
-				(pin "3")
-				(pinfunction "SEC1_3")
-				(pintype "passive")
-			)
-		)
-		(net
-			(code "81")
+			(code "72")
 			(name "unconnected-(U1-BST-Pad7)")
 			(class "Default")
 			(node
@@ -2212,7 +2111,7 @@
 			)
 		)
 		(net
-			(code "82")
+			(code "73")
 			(name "unconnected-(U1-EN{slash}UVLO-Pad2)")
 			(class "Default")
 			(node
@@ -2223,7 +2122,7 @@
 			)
 		)
 		(net
-			(code "83")
+			(code "74")
 			(name "unconnected-(U1-FB-Pad5)")
 			(class "Default")
 			(node
@@ -2234,7 +2133,7 @@
 			)
 		)
 		(net
-			(code "84")
+			(code "75")
 			(name "unconnected-(U1-GND-Pad4)")
 			(class "Default")
 			(node
@@ -2245,7 +2144,7 @@
 			)
 		)
 		(net
-			(code "85")
+			(code "76")
 			(name "unconnected-(U1-RON-Pad3)")
 			(class "Default")
 			(node
@@ -2256,7 +2155,7 @@
 			)
 		)
 		(net
-			(code "86")
+			(code "77")
 			(name "unconnected-(U1-SW-Pad8)")
 			(class "Default")
 			(node
@@ -2267,7 +2166,7 @@
 			)
 		)
 		(net
-			(code "87")
+			(code "78")
 			(name "unconnected-(U1-VCC-Pad6)")
 			(class "Default")
 			(node
@@ -2278,7 +2177,7 @@
 			)
 		)
 		(net
-			(code "88")
+			(code "79")
 			(name "unconnected-(U2-3V3-Pad1)")
 			(class "Default")
 			(node
@@ -2289,7 +2188,7 @@
 			)
 		)
 		(net
-			(code "89")
+			(code "80")
 			(name "unconnected-(U2-EN-Pad2)")
 			(class "Default")
 			(node
@@ -2300,7 +2199,7 @@
 			)
 		)
 		(net
-			(code "90")
+			(code "81")
 			(name "unconnected-(U2-GND-Pad18)")
 			(class "Default")
 			(node
@@ -2311,7 +2210,7 @@
 			)
 		)
 		(net
-			(code "91")
+			(code "82")
 			(name "unconnected-(U2-IO1{slash}BAT-Pad3)")
 			(class "Default")
 			(node
@@ -2322,18 +2221,18 @@
 			)
 		)
 		(net
-			(code "92")
-			(name "unconnected-(U2-IO2{slash}1W_P1-Pad4)")
+			(code "83")
+			(name "unconnected-(U2-IO2{slash}UWB_IRQ-Pad4)")
 			(class "Default")
 			(node
 				(ref "U2")
 				(pin "4")
-				(pinfunction "IO2/1W_P1_4")
-				(pintype "bidirectional")
+				(pinfunction "IO2/UWB_IRQ_4")
+				(pintype "input")
 			)
 		)
 		(net
-			(code "93")
+			(code "84")
 			(name "unconnected-(U2-IO3{slash}LINE_LVL-Pad5)")
 			(class "Default")
 			(node
@@ -2344,7 +2243,7 @@
 			)
 		)
 		(net
-			(code "94")
+			(code "85")
 			(name "unconnected-(U2-IO4{slash}VIGN-Pad6)")
 			(class "Default")
 			(node
@@ -2355,7 +2254,7 @@
 			)
 		)
 		(net
-			(code "95")
+			(code "86")
 			(name "unconnected-(U2-IO9{slash}I2S_MCLK-Pad9)")
 			(class "Default")
 			(node
@@ -2366,7 +2265,7 @@
 			)
 		)
 		(net
-			(code "96")
+			(code "87")
 			(name "unconnected-(U2-IO10{slash}I2S_BCLK-Pad10)")
 			(class "Default")
 			(node
@@ -2377,7 +2276,7 @@
 			)
 		)
 		(net
-			(code "97")
+			(code "88")
 			(name "unconnected-(U2-IO11{slash}I2S_WS-Pad11)")
 			(class "Default")
 			(node
@@ -2388,7 +2287,7 @@
 			)
 		)
 		(net
-			(code "98")
+			(code "89")
 			(name "unconnected-(U2-IO12{slash}I2S_DOUT-Pad12)")
 			(class "Default")
 			(node
@@ -2399,29 +2298,29 @@
 			)
 		)
 		(net
-			(code "99")
-			(name "unconnected-(U2-IO21{slash}GNSS_PPS-Pad8)")
+			(code "90")
+			(name "unconnected-(U2-IO21{slash}LORA_CS-Pad8)")
 			(class "Default")
 			(node
 				(ref "U2")
 				(pin "8")
-				(pinfunction "IO21/GNSS_PPS_8")
-				(pintype "input")
+				(pinfunction "IO21/LORA_CS_8")
+				(pintype "output")
 			)
 		)
 		(net
-			(code "100")
-			(name "unconnected-(U2-IO22{slash}1W_P2-Pad7)")
+			(code "91")
+			(name "unconnected-(U2-IO22{slash}UWB_CS-Pad7)")
 			(class "Default")
 			(node
 				(ref "U2")
 				(pin "7")
-				(pinfunction "IO22/1W_P2_7")
-				(pintype "bidirectional")
+				(pinfunction "IO22/UWB_CS_7")
+				(pintype "output")
 			)
 		)
 		(net
-			(code "101")
+			(code "92")
 			(name "unconnected-(U3-DVDD_3V3-Pad1)")
 			(class "Default")
 			(node
@@ -2432,7 +2331,7 @@
 			)
 		)
 		(net
-			(code "102")
+			(code "93")
 			(name "unconnected-(U3-GND-Pad13)")
 			(class "Default")
 			(node
@@ -2443,7 +2342,7 @@
 			)
 		)
 		(net
-			(code "103")
+			(code "94")
 			(name "unconnected-(U3-I2C_SCL-Pad8)")
 			(class "Default")
 			(node
@@ -2454,7 +2353,18 @@
 			)
 		)
 		(net
-			(code "104")
+			(code "95")
+			(name "unconnected-(U3-I2C_SDA-Pad7)")
+			(class "Default")
+			(node
+				(ref "U3")
+				(pin "7")
+				(pinfunction "I2C_SDA_7")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "96")
 			(name "unconnected-(U3-LIN1_P1-Pad10)")
 			(class "Default")
 			(node
@@ -2465,7 +2375,7 @@
 			)
 		)
 		(net
-			(code "105")
+			(code "97")
 			(name "unconnected-(U3-LIN2_P2-Pad12)")
 			(class "Default")
 			(node
@@ -2476,7 +2386,7 @@
 			)
 		)
 		(net
-			(code "106")
+			(code "98")
 			(name "unconnected-(U3-LOUT1_P1-Pad9)")
 			(class "Default")
 			(node
@@ -2487,7 +2397,7 @@
 			)
 		)
 		(net
-			(code "107")
+			(code "99")
 			(name "unconnected-(U3-LOUT2_P2-Pad11)")
 			(class "Default")
 			(node
@@ -2498,7 +2408,7 @@
 			)
 		)
 		(net
-			(code "108")
+			(code "100")
 			(name "unconnected-(U3-MCLK-Pad2)")
 			(class "Default")
 			(node
@@ -2509,7 +2419,18 @@
 			)
 		)
 		(net
-			(code "109")
+			(code "101")
+			(name "unconnected-(U3-SDATA_OUT-Pad6)")
+			(class "Default")
+			(node
+				(ref "U3")
+				(pin "6")
+				(pinfunction "SDATA_OUT_6")
+				(pintype "output")
+			)
+		)
+		(net
+			(code "102")
 			(name "unconnected-(U6-CANH-Pad6)")
 			(class "Default")
 			(node
@@ -2520,7 +2441,7 @@
 			)
 		)
 		(net
-			(code "110")
+			(code "103")
 			(name "unconnected-(U6-CANL-Pad5)")
 			(class "Default")
 			(node
@@ -2531,7 +2452,7 @@
 			)
 		)
 		(net
-			(code "111")
+			(code "104")
 			(name "unconnected-(U6-GND-Pad2)")
 			(class "Default")
 			(node
@@ -2542,7 +2463,7 @@
 			)
 		)
 		(net
-			(code "112")
+			(code "105")
 			(name "unconnected-(U6-RXD-Pad4)")
 			(class "Default")
 			(node
@@ -2553,7 +2474,7 @@
 			)
 		)
 		(net
-			(code "113")
+			(code "106")
 			(name "unconnected-(U6-TXD-Pad1)")
 			(class "Default")
 			(node
@@ -2564,7 +2485,7 @@
 			)
 		)
 		(net
-			(code "114")
+			(code "107")
 			(name "unconnected-(U6-VCC-Pad3)")
 			(class "Default")
 			(node
@@ -2575,40 +2496,194 @@
 			)
 		)
 		(net
-			(code "115")
-			(name "unconnected-(U7-ANODE-Pad1)")
+			(code "108")
+			(name "unconnected-(U7-BUSY-Pad6)")
 			(class "Default")
 			(node
 				(ref "U7")
-				(pin "1")
-				(pinfunction "ANODE_1")
-				(pintype "passive")
+				(pin "6")
+				(pinfunction "BUSY_6")
+				(pintype "output")
 			)
 		)
 		(net
-			(code "116")
-			(name "unconnected-(U7-CATHODE-Pad3)")
+			(code "109")
+			(name "unconnected-(U7-GND-Pad10)")
 			(class "Default")
 			(node
 				(ref "U7")
-				(pin "3")
-				(pinfunction "CATHODE_3")
-				(pintype "passive")
+				(pin "10")
+				(pinfunction "GND_10")
+				(pintype "power_in")
 			)
 		)
 		(net
-			(code "117")
-			(name "unconnected-(U7-DRAIN1-Pad4)")
+			(code "110")
+			(name "unconnected-(U7-MISO-Pad4)")
 			(class "Default")
 			(node
 				(ref "U7")
 				(pin "4")
-				(pinfunction "DRAIN1_4")
-				(pintype "passive")
+				(pinfunction "MISO_4")
+				(pintype "output")
+			)
+		)
+		(net
+			(code "111")
+			(name "unconnected-(U7-MOSI-Pad3)")
+			(class "Default")
+			(node
+				(ref "U7")
+				(pin "3")
+				(pinfunction "MOSI_3")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "112")
+			(name "unconnected-(U7-NRST-Pad8)")
+			(class "Default")
+			(node
+				(ref "U7")
+				(pin "8")
+				(pinfunction "NRST_8")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "113")
+			(name "unconnected-(U7-NSS-Pad5)")
+			(class "Default")
+			(node
+				(ref "U7")
+				(pin "5")
+				(pinfunction "NSS_5")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "114")
+			(name "unconnected-(U7-RFO-Pad9)")
+			(class "Default")
+			(node
+				(ref "U7")
+				(pin "9")
+				(pinfunction "RFO_9")
+				(pintype "output")
+			)
+		)
+		(net
+			(code "115")
+			(name "unconnected-(U7-SCK-Pad2)")
+			(class "Default")
+			(node
+				(ref "U7")
+				(pin "2")
+				(pinfunction "SCK_2")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "116")
+			(name "unconnected-(U7-VBAT_UPS-Pad1)")
+			(class "Default")
+			(node
+				(ref "U7")
+				(pin "1")
+				(pinfunction "VBAT_UPS_1")
+				(pintype "power_in")
+			)
+		)
+		(net
+			(code "117")
+			(name "unconnected-(U8-GND-Pad9)")
+			(class "Default")
+			(node
+				(ref "U8")
+				(pin "9")
+				(pinfunction "GND_9")
+				(pintype "power_in")
 			)
 		)
 		(net
 			(code "118")
+			(name "unconnected-(U8-RF_IO-Pad8)")
+			(class "Default")
+			(node
+				(ref "U8")
+				(pin "8")
+				(pinfunction "RF_IO_8")
+				(pintype "bidirectional")
+			)
+		)
+		(net
+			(code "119")
+			(name "unconnected-(U8-RSTn-Pad7)")
+			(class "Default")
+			(node
+				(ref "U8")
+				(pin "7")
+				(pinfunction "RSTn_7")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "120")
+			(name "unconnected-(U8-SPICLK-Pad2)")
+			(class "Default")
+			(node
+				(ref "U8")
+				(pin "2")
+				(pinfunction "SPICLK_2")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "121")
+			(name "unconnected-(U8-SPICS-Pad5)")
+			(class "Default")
+			(node
+				(ref "U8")
+				(pin "5")
+				(pinfunction "SPICS_5")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "122")
+			(name "unconnected-(U8-SPIMISO-Pad4)")
+			(class "Default")
+			(node
+				(ref "U8")
+				(pin "4")
+				(pinfunction "SPIMISO_4")
+				(pintype "output")
+			)
+		)
+		(net
+			(code "123")
+			(name "unconnected-(U8-SPIMOSI-Pad3)")
+			(class "Default")
+			(node
+				(ref "U8")
+				(pin "3")
+				(pinfunction "SPIMOSI_3")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "124")
+			(name "unconnected-(U8-VDD_3V3-Pad1)")
+			(class "Default")
+			(node
+				(ref "U8")
+				(pin "1")
+				(pinfunction "VDD_3V3_1")
+				(pintype "power_in")
+			)
+		)
+		(net
+			(code "125")
 			(name "unconnected-(U9-EN-Pad3)")
 			(class "Default")
 			(node
@@ -2619,7 +2694,7 @@
 			)
 		)
 		(net
-			(code "119")
+			(code "126")
 			(name "unconnected-(U9-GND-Pad2)")
 			(class "Default")
 			(node
@@ -2630,7 +2705,7 @@
 			)
 		)
 		(net
-			(code "120")
+			(code "127")
 			(name "unconnected-(U9-NC-Pad4)")
 			(class "Default")
 			(node

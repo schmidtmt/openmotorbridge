@@ -268,7 +268,7 @@ OpenMotorBridge löst das kritische Problem des Abreißens von Gruppenverbindung
 
 ### 5.2 OMM 2.4 GHz als optionale Wechselkassette (Pod 1 / Pod 2)
 * Bei reinen OpenMotorMesh-Fahrten oder Begleitfahrzeug-Konvois (Modus B) kann anstelle eines Sena/Cardo-Adapters die **OMM 2.4 GHz Kassette** (PCBA 03 Variante mit ESP32-C3 / CH32V003 ID `0x03`) eingesteckt werden.
-* Sie wird über die symmetrische Trägerplatine PCBA 02 mit Strom und Audio versorgt und niemals im selben Pod mit Sena/Cardo ko-lokiert.
+* Sie wird über die 2-Draht DC-Federkontakte im Pod mit +5V Strom versorgt, kommuniziert drahtlos via UWB mit der Zentralbox und wird niemals im selben Pod mit Sena/Cardo ko-lokiert.
 
 ### 5.3 Architekturentscheidung: Warum dezentrales LoRa-Mesh statt Mobilfunk (LTE-M / Cloud)?
 

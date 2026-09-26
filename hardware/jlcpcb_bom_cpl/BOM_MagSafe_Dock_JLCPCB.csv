@@ -1,0 +1,8 @@
+Designator,Comment,Footprint,LCSC Part #,Quantity
+C1,100nF,Capacitor_SMD:C_0603_1608Metric,,1
+D1,ESD5Z5.0,Diode_SMD:D_SOD-323,,1
+F1,500mA_PPTC,Fuse:Fuse_1206_3216Metric,,1
+H1,M2.5_MOUNT_HOLE,MountingHole:MountingHole_2.7mm_M2.5_Pad,,1
+J1,M8_6P_WIRE_PADS,Connector_Wire:SolderWirePad_1x07_SMD_2.0mm,,1
+J2,MAGSAFE_6P_DOCK,Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical_SMD_Pin1Left,,1
+U1,USBLC6-4SC6,Package_TO_SOT_SMD:SOT-23-6,,1

@@ -37,14 +37,7 @@ BOARDS = [
         "layers": "F.Cu,B.Cu,In1.Cu,In2.Cu,F.Paste,B.Paste,F.SilkS,B.SilkS,F.Mask,B.Mask,Edge.Cuts",
         "is_4layer": True
     },
-    {
-        "name": "02_pod_base_pcba",
-        "title": "OpenMotorBridge Pod Base Carrier PCB",
-        "sch": os.path.join(BASE_DIR, "kicad_pod_base/openmotorbridge_pod_base.kicad_sch"),
-        "pcb": os.path.join(BASE_DIR, "kicad_pod_base/openmotorbridge_pod_base.kicad_pcb"),
-        "layers": "F.Cu,B.Cu,F.Paste,B.Paste,F.SilkS,B.SilkS,F.Mask,B.Mask,Edge.Cuts",
-        "is_4layer": False
-    },
+
     {
         "name": "03_pod_cartridge_pcba",
         "title": "OpenMotorBridge Universal Cartridge Carrier PCB",
@@ -52,14 +45,6 @@ BOARDS = [
         "pcb": os.path.join(BASE_DIR, "kicad_pod_cartridge/openmotorbridge_pod_cartridge.kicad_pcb"),
         "layers": "F.Cu,B.Cu,F.Paste,B.Paste,F.SilkS,B.SilkS,F.Mask,B.Mask,Edge.Cuts",
         "is_4layer": False
-    },
-    {
-        "name": "04_rear_pod3_pcba",
-        "title": "OpenMotorBridge Rear Pod 3 Transceiver PCB",
-        "sch": os.path.join(BASE_DIR, "kicad_rear_pod3/openmotorbridge_rear_pod3.kicad_sch"),
-        "pcb": os.path.join(BASE_DIR, "kicad_rear_pod3/openmotorbridge_rear_pod3.kicad_pcb"),
-        "layers": "F.Cu,B.Cu,In1.Cu,In2.Cu,F.Paste,B.Paste,F.SilkS,B.SilkS,F.Mask,B.Mask,Edge.Cuts",
-        "is_4layer": True
     },
     {
         "name": "05_front_node_pcba",
@@ -226,32 +211,18 @@ def export_wiring_harness_package():
     
     rows = [
         ["Wire_ID", "Origin_Connector", "Origin_Pin", "Signal_Name", "Wire_Color", "Wire_Gauge", "Dest_Connector", "Dest_Pin", "Notes"],
-        ["W01", "HD26_MALE", "1", "POD1_VCC", "Red", "AWG22 (0.34mm²)", "M8_6P_FEMALE_POD1", "1", "Pod 1 5V Power"],
-        ["W02", "HD26_MALE", "2", "POD1_GND", "Black", "AWG22 (0.34mm²)", "M8_6P_FEMALE_POD1", "2", "Pod 1 Power GND"],
-        ["W03", "HD26_MALE", "3", "POD1_AUDIO_P", "Blue", "AWG26 (0.14mm²)", "M8_6P_FEMALE_POD1", "3", "Twisted Pair with Pin 4"],
-        ["W04", "HD26_MALE", "4", "POD1_AUDIO_N", "White-Blue", "AWG26 (0.14mm²)", "M8_6P_FEMALE_POD1", "4", "Twisted Pair with Pin 3"],
-        ["W05", "HD26_MALE", "5", "POD1_PTT_TRIGGER", "Yellow", "AWG26 (0.14mm²)", "M8_6P_FEMALE_POD1", "5", "Isolated PhotoMOS Opto Key"],
-        ["W06", "HD26_MALE", "6", "POD1_1WIRE_ID", "Green", "AWG26 (0.14mm²)", "M8_6P_FEMALE_POD1", "6", "DS2401 Silicon Serial ROM"],
-        ["W07", "HD26_MALE", "7", "POD2_VCC", "Red", "AWG22 (0.34mm²)", "M8_6P_FEMALE_POD2", "1", "Pod 2 5V Power"],
-        ["W08", "HD26_MALE", "8", "POD2_GND", "Black", "AWG22 (0.34mm²)", "M8_6P_FEMALE_POD2", "2", "Pod 2 Power GND"],
-        ["W09", "HD26_MALE", "9", "POD2_AUDIO_P", "Orange", "AWG26 (0.14mm²)", "M8_6P_FEMALE_POD2", "3", "Twisted Pair with Pin 10"],
-        ["W10", "HD26_MALE", "10", "POD2_AUDIO_N", "White-Orange", "AWG26 (0.14mm²)", "M8_6P_FEMALE_POD2", "4", "Twisted Pair with Pin 9"],
-        ["W11", "HD26_MALE", "11", "POD2_PTT_TRIGGER", "Brown", "AWG26 (0.14mm²)", "M8_6P_FEMALE_POD2", "5", "Isolated PhotoMOS Opto Key"],
-        ["W12", "HD26_MALE", "12", "POD2_1WIRE_ID", "Grey", "AWG26 (0.14mm²)", "M8_6P_FEMALE_POD2", "6", "DS2401 Silicon Serial ROM"],
-        ["W13", "HD26_MALE", "13", "POD3_VCC", "Red", "AWG22 (0.34mm²)", "M8_6P_FEMALE_POD3", "1", "Pod 3 5V Power (Rear Transceiver)"],
-        ["W14", "HD26_MALE", "14", "POD3_GND", "Black", "AWG22 (0.34mm²)", "M8_6P_FEMALE_POD3", "2", "Pod 3 Power GND"],
-        ["W15", "HD26_MALE", "15", "POD3_UART_TX", "Violet", "AWG26 (0.14mm²)", "M8_6P_FEMALE_POD3", "3", "High-Speed UART (460.8k Baud)"],
-        ["W16", "HD26_MALE", "16", "POD3_UART_RX", "White", "AWG26 (0.14mm²)", "M8_6P_FEMALE_POD3", "4", "High-Speed UART (460.8k Baud)"],
-        ["W17", "HD26_MALE", "17", "POD3_GNSS_PPS", "Pink", "AWG26 (0.14mm²)", "M8_6P_FEMALE_POD3", "5", "1-PPS Hardware Time Sync"],
-        ["W18", "HD26_MALE", "18", "POD3_1WIRE_ID", "Green-Black", "AWG26 (0.14mm²)", "M8_6P_FEMALE_POD3", "6", "DS2401 Silicon Serial ROM"],
-        ["W19", "HD26_MALE", "19", "VBAT_KL30", "Red-White", "AWG20 (0.50mm²)", "SUPERSEAL_4P_POWER", "1", "Permanent 12V Battery Power"],
-        ["W20", "HD26_MALE", "20", "IGNITION_KL15", "Yellow-Red", "AWG22 (0.34mm²)", "SUPERSEAL_4P_POWER", "2", "Switched Ignition 12V"],
-        ["W21", "HD26_MALE", "21", "VEHICLE_GND", "Black-White", "AWG20 (0.50mm²)", "SUPERSEAL_4P_POWER", "3", "Vehicle Ground (KL31)"],
-        ["W22", "HD26_MALE", "22", "CHASSIS_EARTH", "Green-Yellow", "AWG20 (0.50mm²)", "SUPERSEAL_4P_POWER", "4", "Direct Motorcycle Frame Earth"],
-        ["W23", "HD26_MALE", "23", "RADAR_PWR_12V", "Red-Blue", "AWG22 (0.34mm²)", "M8_4P_FEMALE_RADAR", "1", "Switched 12V Radar Power (KL15 protected)"],
-        ["W24", "HD26_MALE", "24", "RADAR_GND", "Black-Blue", "AWG22 (0.34mm²)", "M8_4P_FEMALE_RADAR", "2", "Power & Signal Ground"],
-        ["W25", "HD26_MALE", "25", "RADAR_RX_CAN_H", "Yellow-Black", "AWG24 (0.22mm²)", "M8_4P_FEMALE_RADAR", "3", "Radar Telemetry RX / CAN High (Garmin Varia / 24GHz mmWave / OBD2)"],
-        ["W26", "HD26_MALE", "26", "RADAR_TX_CAN_L", "Green-White", "AWG24 (0.22mm²)", "M8_4P_FEMALE_RADAR", "4", "Radar Telemetry TX / CAN Low (Garmin Varia / 24GHz mmWave / OBD2)"]
+        ["W01", "DEUTSCH_DTM12_MALE", "1", "VBAT_KL30", "Red-White", "AWG20 (0.50mm²)", "SUPERSEAL_4P_POWER", "1", "Permanent 12V Battery Power"],
+        ["W02", "DEUTSCH_DTM12_MALE", "2", "IGNITION_KL15", "Yellow-Red", "AWG22 (0.34mm²)", "SUPERSEAL_4P_POWER", "2", "Switched Ignition 12V"],
+        ["W03", "DEUTSCH_DTM12_MALE", "3", "VEHICLE_GND", "Black-White", "AWG20 (0.50mm²)", "SUPERSEAL_4P_POWER", "3", "Vehicle Main Ground (KL31)"],
+        ["W04", "DEUTSCH_DTM12_MALE", "4", "CAN_H", "Yellow", "AWG24 (0.22mm²)", "SUPERSEAL_4P_POWER", "CAN_H", "CAN High (Twisted Pair with Pin 5)"],
+        ["W05", "DEUTSCH_DTM12_MALE", "5", "CAN_L", "Green", "AWG24 (0.22mm²)", "SUPERSEAL_4P_POWER", "CAN_L", "CAN Low (Twisted Pair with Pin 4)"],
+        ["W06", "DEUTSCH_DTM12_MALE", "6", "POD1_VCC", "Red", "AWG22 (0.34mm²)", "JWPF_2P_POD1", "1", "Pod 1 Switched 5V Power (Port 1 Left)"],
+        ["W07", "DEUTSCH_DTM12_MALE", "7", "POD1_GND", "Black", "AWG22 (0.34mm²)", "JWPF_2P_POD1", "2", "Pod 1 Power Ground Return"],
+        ["W08", "DEUTSCH_DTM12_MALE", "8", "POD2_VCC", "Red", "AWG22 (0.34mm²)", "JWPF_2P_POD2", "1", "Pod 2 Switched 5V Power (Port 2 Right)"],
+        ["W09", "DEUTSCH_DTM12_MALE", "9", "POD2_GND", "Black", "AWG22 (0.34mm²)", "JWPF_2P_POD2", "2", "Pod 2 Power Ground Return"],
+        ["W10", "DEUTSCH_DTM12_MALE", "10", "RADAR_PWR_12V", "Red-Blue", "AWG22 (0.34mm²)", "JWPF_2P_RADAR", "1", "Switched 12V Radar Power (KL15 protected)"],
+        ["W11", "DEUTSCH_DTM12_MALE", "11", "RADAR_GND", "Black-Blue", "AWG22 (0.34mm²)", "JWPF_2P_RADAR", "2", "Radar Power Ground Return"],
+        ["W12", "DEUTSCH_DTM12_MALE", "12", "CHASSIS_EARTH", "Green-Yellow", "AWG20 (0.50mm²)", "SUPERSEAL_4P_POWER", "4", "Direct Motorcycle Frame Earth / Shield"]
     ]
 
     with open(csv_path, 'w', newline='') as f:
@@ -281,12 +252,8 @@ def package_3d_print_stls():
     # 2. Satellite Pods Package
     pod_zip = os.path.join(stl_dir, "02_satellite_pods_3d_print_mjf.zip")
     with zipfile.ZipFile(pod_zip, 'w', zipfile.ZIP_DEFLATED) as z:
-        for f in ["pod_base_housing.stl", "pod3_touring_fender_console.stl"]:
+        for f in ["pod_base_housing.stl"]:
             p = os.path.join(src_stl_base, "02_pod_base", f)
-            if os.path.exists(p):
-                z.write(p, arcname=f)
-        for f in ["cartridge_antenna_bracket_omm.stl"]:
-            p = os.path.join(src_stl_base, "03_pod_cartridges", f)
             if os.path.exists(p):
                 z.write(p, arcname=f)
     print(f"  ✅ Created Satellite Pods STL Package: {os.path.basename(pod_zip)}")
@@ -339,7 +306,8 @@ def package_3d_print_stls():
         for f in [
             "radar_mr20_housing.stl",
             "road_glide_inductive_cam_dock.stl",
-            "car_sun_visor_pod3_clip.stl"
+            "car_sun_visor_pod_clip.stl",
+            "adventure_rack_radar_mount.stl"
         ]:
             p = os.path.join(src_stl_base, "05_accessories", f)
             if os.path.exists(p):

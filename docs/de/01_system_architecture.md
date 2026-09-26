@@ -27,20 +27,21 @@ Klassische Motorrad-Kommunikationssysteme sind historisch stark fragmentiert:
 │    • Semtech SX1262 LoRa (868 MHz) an USV-Schiene • Taoglas FXP895 Antenne in Oberwanne    │
 │    • Qorvo DW3110 UWB Transceiver (6.5 GHz Ch. 5) • Taoglas FXUWB10 Antenne in Unterwanne   │
 │    • LM5164-Q1 72V Step-Down • BQ24075 USV & 2200mAh LiPo-Pufferakku • MicroSD-Blackbox    │
+│    • Hardware Pair/Reset Taster SW1 • Automotive Deutsch DTM-12 Hauptstecker (12-Pin IP67)  │
 └─┬─────────────────────────────────────────────────────────────────────────────────────────┬─┘
   │                                                                                         │
-  ▼ Zentraler HD26 SEAL-D Flanschstecker (4-Wege Y-Kabelbaumpeitsche)                       │
+  ▼ Zentraler Deutsch DTM-12 Industriestecker (Schlanker Pure-DC Kabelbaum)                 │
 ┌───────────────────────────────────────────┬───────────────────────────────────────────────┤
-│ 3. SATELLITEN-POD 1 (M8 6-Pin Links):     │ 4. SATELLITEN-POD 2 (M8 6-Pin Rechts):        │
-│ • Universal-Pod Monocoque-Gehäuse (IP67)  │ • Universal-Pod Monocoque-Gehäuse (IP67)      │
-│ • 100 % symmetrische Basisplatine PCBA 02 │ • 100 % symmetrische Basisplatine PCBA 02     │
-│ • Intercom-Brücke A (Referenz: Sena       │ • Intercom-Brücke B (Referenz: Cardo Packtalk │
-│   SPIDER X Slim • Mesh 3.0, null Pogos)   │   Edge / OMM 2.4 GHz / Midland PMR446)        │
+│ 3. SATELLITEN-POD 1 (2-Draht DC Links):   │ 4. SATELLITEN-POD 2 (2-Draht DC Rechts):      │
+│ • Monolithisches MJF-Gehäuse (ohne PCB!)  │ • Monolithisches MJF-Gehäuse (ohne PCB!)      │
+│ • 2 direkte Federkontakte (+5V & GND)     │ • 2 direkte Federkontakte (+5V & GND)         │
+│ • Universal-Kassette PCBA 03 (Sena        │ • Universal-Kassette PCBA 03 (Cardo Packtalk  │
+│   SPIDER X Slim • Mesh 3.0 / DNP-Layout)  │   Edge / OMM 2.4 GHz / Midland PMR446)        │
 └───────────────────────────────────────────┴───────────────────────────────────────────────┘
   │                                                                                         │
-  ├─► 5. BORDNETZ-ANSCHLUSS: AMP Superseal 1.5 4-Pin / 12V Pkw-Lader (KL30, KL15, GND)       │
-  ├─► 6. HECK-RADAR-ZWEIG: M8 4-Pin / Binder M5 4-Pin (Radar 2.0 Sub-MCU PCBA 08 /            │
-  │      Wheeltec MR20 77-GHz mmWave / 36x Halo RGB LEDs oder Garmin Varia eRTL615/RTL515)──┤
+  ├─► 5. BORDNETZ & CAN: 4-adrige Zuleitung (KL30, KL15, GND, CAN_H, CAN_L)                │
+  ├─► 6. HECK-RADAR-ZWEIG: 2-Draht 12V Power (JWPF 2-Pin: RADAR_PWR_12V, RADAR_GND)         │
+  │      Wheeltec MR20 77-GHz mmWave (PCBA 08) • Telemetrie 100% drahtlos via UWB (DW3110) ┤
   │                                                                                         │
   ▼ Dedizierter UWB-Fahrzeug-Backbone (Qorvo DW3110 • 6.489 GHz Ch. 5 • Latenz < 0.4 ms)    │
 ┌───────────────────────────────────────────────────────────────────────────────────────────┤
@@ -80,9 +81,9 @@ Klassische Telematik- und Assistenzsysteme neigen zum digitalen Paternalismus: S
 OpenMotorBridge v8.0 definiert die Plattform über **standardisierte Funktionsknoten**:
 1. **Zentralbox (Main ECU • PCBA 01):** Zentraler Rechenkern (ESP32-S3), 24-Bit Audio-DSP/Codec (ES8388), galvanische Trennübertrager, 72V Automotive Step-Down (LM5164-Q1) und LiPo-USV (BQ24075 mit 2.200 mAh Flachzelle). Beherbergt den **Semtech SX1262 LoRa-Transceiver (868 MHz)** direkt an der USV-Schiene (mit Taoglas FXP895/TG.19 Antenne in der Oberwanne) sowie den **Qorvo DW3110 UWB-Transceiver (6.5 GHz Ch. 5)** auf der Platinenunterseite (mit Taoglas FXUWB10 Flex-Antenne im Gehäuseboden). *(Typischerweise mittig unter der Sitzbank im Batteriefach oder im Pkw-Cockpit montiert).*
 2. **Satelliten-Pod 1 (Intercom-Brücke A):** Universal-Wechselschacht für Sena (Offizielle Projekt-Referenz: **Sena SPIDER X Slim** mit nativer Micro-Kabelpeitsche, null Pogo-Pins, Mesh 3.0 / Bluetooth 5.3). *(Typischerweise linke Fahrzeugseite).*
-3. **Satelliten-Pod 2 (Intercom-Brücke B):** Universal-Wechselschacht für Cardo (Packtalk Edge / DMC Gen 2), **OMM 2.4 GHz HD-Audio-Wechselkassette** oder analogen Jedermann-Funk (**Midland PMR446**). Nutzt exakt dieselbe, zu 100 % symmetrische Basisplatine `PCBA 02` wie Pod 1! *(Typischerweise rechte Fahrzeugseite zur maximalen HF-Raumdiversität).*
+3. **Satelliten-Pod 2 (Intercom-Brücke B):** Universal-Wechselschacht für Cardo (Packtalk Edge / DMC Gen 2), **OMM 2.4 GHz HD-Audio-Wechselkassette** oder analogen Jedermann-Funk (**Midland PMR446**). Nutzt exakt dasselbe monolithische Pod-Gehäuse mit direkten 2-Draht DC-Federkontakten wie Pod 1 (PCBA 02 ist ersatzlos entfallen)! *(Typischerweise rechte Fahrzeugseite zur maximalen HF-Raumdiversität).*
 4. **Front-Node (Cockpit, Camera & Sensor Hub • PCBA 05):** Autonomer ESP32-S3 Satellit, integriertes **u-blox SAM-M10Q Multi-GNSS** (an Port `J12` Qwiic $I^2C$ mit freier Sicht in den Zenit), **TI TMP117** Präzisions-Außentemperaturfühler und **OPT3001** Umgebungslichtsensor im Kaltluftstrom der Frontverkleidung. Beherbergt den **Qorvo DW3110 UWB-Transceiver** auf der Platinenunterseite (mit Taoglas FXUWB10 Antenne im Gehäuseboden), Automotive USB 2.0 4-Port Hub (USB2514B) für Apple CarPlay/Android Auto CP2AA-Dongle, 20W USB-PD Fast-Charging (Southchip SC8102), geschalteten VBUS via TPS2051B, digitalen PTT-Tastereingang (`J3`), BSD Totwinkel-Spiegel-LEDs (`J9`), drahtloses Actioncam-Induktionsdock (`J8`), TCAN334G CAN-Transceiver und Knowles I2S MEMS-Windgeräuschmikrofon. *(Typischerweise unsichtbar in der Cockpitverkleidung oder Scheinwerfermaske).*
-5. **Radar 2.0 Sub-MCU & Halo-Wings (PCBA 08 am Heck) bzw. Garmin Varia (eRTL615 / RTL515):** Autonomes Heck-Radar an Peitsche 5 des Hauptkabelbaums (M8 4-Pin / Binder M5 4-Pin mit geschalteter 12V-Speisung und UART/CAN-Bus).
+5. **Radar 2.0 Sub-MCU & Halo-Wings (PCBA 08 am Heck):** Autonomes 77-GHz Heck-Radar, versorgt über Peitsche 5 des Deutsch DTM-12 Kabelbaums mit reiner 2-Draht 12V DC-Power; Telemetrie und Kollisionswarnungen werden zu 100 % drahtlos über Ultra-Wideband (Qorvo DW3110) an die Zentralbox übertragen.
 
 ```
                      DIE STANDARDISIERTEN FUNKTIONSKNOTEN
@@ -91,15 +92,15 @@ OpenMotorBridge v8.0 definiert die Plattform über **standardisierte Funktionskn
 │    UWB-Backbone (6.5 GHz), USB-Hub, CP2AA, PTT, Cam-Qi & Wind-MEMS         │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │ 2. ZENTRALBOX (Unter Sitz/Akku):  DSP Audio-Matrix, LoRa 868MHz (SX1262),   │
-│    UWB-Backbone (DW3110), USV-Pufferung, CAN-Bus, 4-Wege HD26 Hauptflansch   │
+│    UWB-Backbone (DW3110), USV-Pufferung, CAN-Bus, Deutsch DTM-12 Hauptflansch│
 ├──────────────────────────────┬──────────────────────────────────────────────┤
 │ 3. POD 1 (Links/Koffer):     │ 4. POD 2 (Rechts/Koffer):                    │
 │ • Intercom-Brücke A (Sena    │ • Intercom-Brücke B (Cardo Packtalk Edge /   │
 │   SPIDER X Slim • Mesh 3.0)  │   OMM 2.4 GHz HD-Audio / Midland PMR446)     │
-│ • 100 % baugleiche PCBA 02   │ • 100 % baugleiche PCBA 02 (Reine Symmetrie!)│
+│ • Monolithisch (kein PCB 02!)│ • Monolithisch (kein PCB 02!)                │
 ├──────────────────────────────┴──────────────────────────────────────────────┤
-│ 5. REINES OPTIONALES HECK-RADAR (An Peitsche 5 M8 4-Pin am Heck):           │
-│ • Wheeltec MR20 77-GHz mmWave (PCBA 08) oder Garmin Varia eRTL615 / RTL515   │
+│ 5. REINES OPTIONALES HECK-RADAR (An 2-Draht 12V Power am Heck):             │
+│ • Wheeltec MR20 77-GHz mmWave (PCBA 08) • Telemetrie 100% drahtlos via UWB  │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -126,7 +127,7 @@ In der frühen Konzeptphase wurde intensiv evaluiert, ob das gesamte System in e
 | Bewertungskriterium | Option A: Monolithische Single-Box | Option B: Reine Lenker/Cockpit-Box | **Option C: OMB Dezentrale Satelliten (Gewählt)** |
 | :--- | :--- | :--- | :--- |
 | **HF-Selbststörung (Desensing)**| **Kritisch:** 2.4 GHz BLE, Wi-Fi, 868 MHz LoRa, GNSS L1/L5 & 72V Buck-Regler auf engstem Raum | **Kritisch:** Starkes Übersprechen auf Cockpit-TFT und Radio-Antenne | **Optimal (> 45 dB Isolation):** GNSS im Cockpit, Intercoms an den Heckflanken (Pod 1 & 2), UWB-Backbone auf 6.5 GHz |
-| **Kabelbaum-Durchmesser** | **Massiv:** 26+ Einzelleitungen müssen quer durch das gesamte Motorrad gezogen werden | **Schlecht:** 18 Leitungen über den schwenkenden Lenkkopf (Kabelbruch-Risiko) | **Ultra-Schlank:** Schlanker 4-Wege HD26-Kabelbaum; Front-Node vollkommen kabellos via UWB angebunden |
+| **Kabelbaum-Durchmesser** | **Massiv:** 26+ Einzelleitungen müssen quer durch das gesamte Motorrad gezogen werden | **Schlecht:** 18 Leitungen über den schwenkenden Lenkkopf (Kabelbruch-Risiko) | **Ultra-Schlank:** Deutsch DTM-12 Kabelbaum mit reinen 2-Draht-DC-Power-Peitschen; Daten 100% drahtlos via UWB |
 | **Thermische Verlustleistung** | **Hot-Spot (> 18 W):** 72V DC/DC + Audio-Endstufen + Akkuladung unter der Sitzbank | **Thermischer Hitzetod (> 85 °C):** Stauwärme direkt hinter der Scheinwerfermaske | **Perfekt verteilt:** Max. 3–4 W pro Gehäuse; passive Wärmeabfuhr ohne Hotspots |
 | **GNSS-Zenitsicht & Radar** | **Verschattet:** Sitzbank und Fahrer-Körper blockieren Satelliten & Heck-Sichtfeld | **Schlecht:** Heck-Radar vom Lenker aus physikalisch unmöglich | **Ideal:** SAM-M10Q hat freie Sicht durch Windschild; Radar hat freie Sicht nach hinten an Peitsche 5 |
 | **Fahrtwind-Abtastung (AGC)** | **Physikalisch unmöglich:** Unter der Sitzbank herrscht kein dynamischer Staudruck | **Möglich:** Windmessung direkt am Lenker | **Exzellent:** Knowles I2S MEMS direkt an der Frontscheibe im Front-Node |
@@ -183,17 +184,17 @@ Werden Sena- und Cardo-Mesh-Geräte gleichzeitig betrieben, muss eine gegenseiti
 
 ## 4. Physische Schnittstellen & Signalmatrix
 
-### 4.1 Zentralbox HD26-Hauptkabelbaumpeitsche (Schlanker 4-Wege-Strang)
-Die Verbindung aller Basis-Komponenten erfolgt über den zentralen, wasserdichten HD26-Flansch an der Zentralbox:
+### 4.1 Zentralbox Deutsch DTM-12 Hauptkabelbaum (Reiner Pure-DC & CAN Strang)
+Die Verbindung aller Basis-Komponenten erfolgt über den zentralen, wasserdichten **Deutsch DTM-12 Industriestecker (IP67/IP69K)** an der Zentralbox:
 
-| Zweig / Kabel | Anschlusstyp | Zielkomponente | Übertragene Signale |
+| Zweig / Kabel | Anschlusstyp | Zielkomponente | Übertragene Signale / Querschnitt |
 | :--- | :--- | :--- | :--- |
-| **Peitsche 1 (250 mm)** | M8 6-Pin A-kodiert (Buchse) | **Satelliten-Pod 1** (Sena SPIDER X Slim • Mesh 3.0) | NF_OUT+, NF_OUT-, OPTO_TRIGGER, 1-WIRE_ID, +5V_VBUS, GND |
-| **Peitsche 2 (250 mm)** | M8 6-Pin A-kodiert (Buchse) | **Satelliten-Pod 2** (Cardo Edge / OMM 2.4 GHz / Midland) | NF_OUT+, NF_OUT-, OPTO_TRIGGER, 1-WIRE_ID, +5V_VBUS, GND |
-| **Peitsche 4 (250 mm)** | AMP Superseal 1.5 4-Pin | **12V Bordnetz** (Motorrad oder 12V Pkw-Lader) | KL30 (Dauerplus), KL15 (Zündung), GND (Power), GND (Sense) |
-| **Peitsche 5 (250 mm)** | M8 4-Pin / Binder M5 4-Pin | **Heck-Radar** (Radar 2.0 Sub-MCU PCBA 08 / Garmin Varia) | RADAR_PWR_12V, RADAR_GND, RADAR_RX (UART/CAN_H), RADAR_TX (UART/CAN_L) |
+| **Peitsche 1 (250 mm)** | JST-JWPF / Superseal 2-Pin | **Satelliten-Pod 1** (Sena SPIDER X Slim • Mesh 3.0) | `POD1_VCC` (+5V Switched, AWG22 0.34²), `POD1_GND` (Masse, AWG22 0.34²) |
+| **Peitsche 2 (250 mm)** | JST-JWPF / Superseal 2-Pin | **Satelliten-Pod 2** (Cardo Edge / OMM 2.4 GHz / Midland) | `POD2_VCC` (+5V Switched, AWG22 0.34²), `POD2_GND` (Masse, AWG22 0.34²) |
+| **Peitsche 4 (250 mm)** | JST-JWPF / Superseal 2-Pin | **Heck-Radar** (Radar 2.0 Sub-MCU PCBA 08) | `RADAR_PWR_12V` (+12V Switched, AWG22 0.34²), `RADAR_GND` (Masse, AWG22 0.34²) |
+| **Peitsche 5 (250 mm)** | AMP Superseal 1.5 4-Pin | **Bordnetz & CAN** (Motorrad oder Pkw) | `KL30_IN` (12V Dauer, AWG20 0.5²), `KL15_IGN` (12V Zündung, AWG22 0.34²), `VEHICLE_GND` (AWG20 0.5²), `CHASSIS_EARTH` (AWG20 0.5²), `CAN_H` / `CAN_L` (AWG24 0.22²) |
 
-*(Hinweis: Die frühere Peitsche 3 zum Heck-Pod 3 entfällt ersatzlos! Der Kabelbaum speckt um 6 Adern ab).*
+*(Hinweis: Durch die All-UWB Funkarchitektur entfällt jegliche Signal- und Audioverdrahtung. Es werden nur noch 2-adrige Gleichstrompeitschen geführt!)*
 
 ### 4.2 Front-Node (PCBA 05) Cockpit-Schnittstellenmatrix
 | Port | Steckverbindertyp | Funktion | Angeschlossene Hardware |
@@ -253,7 +254,7 @@ Der Front-Knoten (PCBA 05) dient auf **allen Motorrädern** als universeller Coc
 * **Display-Warnmeldungen:** Statusmeldungen können direkt im Motorrad-TFT-Display generiert werden.
 
 ### 5.3 Heck-Radar 2.0 & Totwinkel-Assistent (Wheeltec MR20 77 GHz mmWave & Garmin Varia) an dediziertem Heck-Träger
-* **Heck-Montage & Justage (Ohne Pod 3):** Das Heck-Radar wird vollkommen autark und ohne zusätzliches Gehäuse direkt über einen dedizierten, minimalen Halter (z. B. [`adventure_rack_radar_mount.stl`](../../hardware/cad/stl/05_accessories/adventure_rack_radar_mount.stl) unter der Gepäckbrücke oder modellspezifische Adapter) montiert. Die Anbindung erfolgt über Peitsche 5 des HD26-Kabelbaums (Pins 23–26: 12V geschaltet, GND, UART_RX, UART_TX). Eine bionische Hirth-Verzahnung ermöglicht eine verzugsfreie 100% waagerechte Ausrichtung.
+* **Heck-Montage & Justage (Ohne Pod 3):** Das Heck-Radar wird vollkommen autark und ohne zusätzliches Gehäuse direkt über einen dedizierten, minimalen Halter (z. B. [`adventure_rack_radar_mount.stl`](../../hardware/cad/stl/05_accessories/adventure_rack_radar_mount.stl) unter der Gepäckbrücke oder modellspezifische Adapter) montiert. Die Anbindung erfolgt über Peitsche 4 des Deutsch DTM-12 Kabelbaums (Pins 10–11: 12V geschaltet, GND); die 20 Hz Radar-Zieltelemetrie wird 100% drahtlos via UWB (DW3110) an die Zentralbox übertragen. Eine bionische Hirth-Verzahnung ermöglicht eine verzugsfreie 100% waagerechte Ausrichtung.
 * **Dual-Radar-Architektur (Zwei austauschbare Radar-Engines):**
   * **Radar 2.0 (Wheeltec MR20 77 GHz mmWave – Standard):**
     - Integriert in IP67-Flügel-Gehäuse ([`radar_mr20_housing.scad`](../../hardware/cad/scad/05_accessories/radar_mr20_housing.scad)) mit PCBA 08 (ESP32-C5 Dual-Band Sub-MCU).

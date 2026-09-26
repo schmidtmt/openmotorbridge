@@ -215,7 +215,7 @@
 				(justify right)
 			)
 		)
-		(pin "UART_POD3_TX" output
+		(pin "RADAR_TX" output
 			(at 247.65 68.58 0)
 			(uuid "64ba4c87-4bca-4934-8c69-876c21d42c69")
 			(effects
@@ -225,19 +225,9 @@
 				(justify right)
 			)
 		)
-		(pin "UART_POD3_RX" input
+		(pin "RADAR_RX" input
 			(at 247.65 76.2 0)
 			(uuid "e57ec65c-000e-426b-b611-df34dee94ee4")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "GNSS_PPS" input
-			(at 247.65 83.82 0)
-			(uuid "e705699d-13c8-4f4d-aa5d-5f53b7347887")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -316,10 +306,10 @@
 	(sheet
 		(at 38.1 133.35)
 		(size 76.2 63.5)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
+		(exclude_from_sim yes)
+		(in_bom no)
+		(on_board no)
+		(dnp yes)
 		(stroke
 			(width 0.254)
 			(type solid)
@@ -615,7 +605,7 @@
 				(justify left)
 			)
 		)
-		(pin "POD3_VCC" input
+		(pin "RADAR_RX" input
 			(at 285.75 144.78 180)
 			(uuid "22c0732d-8dfb-42cf-95be-580001832342")
 			(effects
@@ -625,7 +615,7 @@
 				(justify left)
 			)
 		)
-		(pin "POD3_GND" input
+		(pin "RADAR_TX" output
 			(at 285.75 152.4 180)
 			(uuid "cdbbea14-0038-4cda-a6ce-7ffddd3eb4a9")
 			(effects
@@ -635,7 +625,7 @@
 				(justify left)
 			)
 		)
-		(pin "POD3_TX" input
+		(pin "RADAR_PWR_12V" output
 			(at 285.75 160.02 180)
 			(uuid "a1d4d0e8-0d6f-406e-aecf-a0a6c082ef5b")
 			(effects
@@ -645,7 +635,7 @@
 				(justify left)
 			)
 		)
-		(pin "POD3_RX" input
+		(pin "RADAR_GND" output
 			(at 285.75 167.64 180)
 			(uuid "71519ebc-415e-44f8-ab00-07bb21b01aa8")
 			(effects
@@ -655,7 +645,7 @@
 				(justify left)
 			)
 		)
-		(pin "POD3_PPS" input
+		(pin "GND_PWR" input
 			(at 285.75 175.26 180)
 			(uuid "ffe2c991-29be-4858-981f-863a6d73f312")
 			(effects
@@ -665,7 +655,7 @@
 				(justify left)
 			)
 		)
-		(pin "POD3_1WIRE" input
+		(pin "ONEWIRE_ID" bidirectional
 			(at 285.75 182.88 180)
 			(uuid "9616a066-81e5-4e9e-aee6-1f02480af250")
 			(effects
