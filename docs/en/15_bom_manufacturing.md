@@ -1,6 +1,6 @@
 # 15 - Bill of Materials (BOM), COTS Sourcing & SMT Manufacturing (All 7 PCBAs)
 
-This document serves as the master reference (Single Source of Truth) for the complete Bill of Materials (BOM), manufacturing specifications for all 7 printed circuit board assemblies (PCBA 01 to PCBA 07) at JLCPCB / Eurocircuits, mechanical 3D printed components, COTS procurement lists, and a comprehensive cost and ordering strategy (Solo builder vs. Community group buy).
+This document serves as the master reference (Single Source of Truth) for the complete Bill of Materials (BOM), manufacturing specifications for all 7 printed circuit board assemblies (PCBA 01 to PCBA 03, PCBA 05 to PCBA 08 – PCBA 04 is retired without replacement in v8.0) at JLCPCB / Eurocircuits, all mechanical 3D printed components, COTS procurement lists, and a comprehensive cost and ordering strategy (Solo builder vs. Community group buy).
 
 ---
 
@@ -14,6 +14,8 @@ This document serves as the master reference (Single Source of Truth) for the co
 | **U4** | BMI270 | Bosch Sensortec | LGA-14 | C2836813 | 6-Axis IMU for Lean Angle & Dynamics |
 | **U5** | ES8388 | Everest Semi | QFN-28 | C365736 | 24-Bit Stereo Audio Codec (I2S ADC/DAC) |
 | **U6** | TCAN334GDCNR | Texas Instruments | SOT-23-8 | C842340 | 3.3V Automotive CAN-FD Transceiver (±58V Fault) |
+| **U7** | SX1262IMLTRT | Semtech | QFN-24 | C190184 | Onboard 868 MHz LoRa Transceiver (+22 dBm, 24/7 UPS-buffered) |
+| **U8** | DW3110 | Qorvo | QFN-16 (B.Cu) | C2934600 | IEEE 802.15.4z UWB Transceiver (6.5 GHz Ch. 5 Backbone) |
 | **T1, T2** | LM-NP-1001-B1L | Bourns Inc. | SMD Transformer| C114402 | 1:1 Audio Transformer (1500 V RMS Galvanic Isolation) |
 | **OC1, OC2**| TLP222A(F) | Toshiba | SOP-4 | C112444 | Solid-State PhotoMOS Relay for PTT Keying |
 | **D1** | SMBJ33CA | Littelfuse | DO-214AA (SMB) | C87848 | TVS Diode (33 V Standoff, 53.3 V max Clamping) |
@@ -22,11 +24,14 @@ This document serves as the master reference (Single Source of Truth) for the co
 | **J1** | 2x13 Box Header | Standard 2.54 mm | THT Box Header | C2934175 | Internal Ribbon Connector to HD26 Flange |
 | **J2** | MicroSD Slot Push-Push | Molex / Korean Hro | SMD Push-Push | C266624 | 4-Bit SDIO Flash Card for Tour Logging |
 | **J_BAT** | Molex Micro-Fit 3.0 2P | Molex | SMD Header | C289110 | Header for 2,200 mAh LiPo Backup Battery |
-| **CN1** | HD26 Receptacle IP67 | Amphenol LTW | Flange D-Sub | Custom Part | Waterproof 26-Pin Enclosure Interface |
+| **ANT1** | U.FL-R-SMT-1 | Hirose / Murata | SMD RF | C2834595 | LoRa 868 MHz U.FL socket to Taoglas FXP895 in lid |
+| **ANT2** | U.FL-R-SMT-1 | Hirose / Murata | SMD RF (B.Cu) | C2834595 | UWB 6.5 GHz U.FL socket to Taoglas FXUWB10 in tub floor |
+| **CN1** | HD26 Receptacle IP67 (SEAL-D)| Amphenol LTW | Flange D-Sub | Custom Part | Waterproof 26-Pin Enclosure Interface (19 active pins) |
 
 ---
 
 ## 2. PCBA 02: Satellite Pod Base Carrier (`openmotorbridge_pod_base`, 2-Layer FR4)
+> **Quantity Note:** The pod base is 100% symmetric and installed **2x per motorcycle** (Pod 1 left, Pod 2 right).
 
 | Designator | Component / MPN | Manufacturer | Package | LCSC / JLCPCB Part # | Function |
 | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -38,6 +43,7 @@ This document serves as the master reference (Single Source of Truth) for the co
 ---
 
 ## 3. PCBA 03: Smart Modular Cartridge Rev 2.0 (`openmotorbridge_pod_cartridge`, 2-Layer FR4)
+> **Quantity Note:** Fitted **2x per motorcycle** (Slot 1 for Sena SPIDER X Slim, Slot 2 for Cardo Packtalk Edge or optional OMM 2.4 GHz Swap Cartridge).
 
 | Designator | Component / MPN | Manufacturer | Package | LCSC / JLCPCB Part # | Function |
 | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -54,19 +60,14 @@ This document serves as the master reference (Single Source of Truth) for the co
 
 ---
 
-## 4. PCBA 04: Rear Pod 3 Transceiver (`openmotorbridge_rear_pod3`, 4-Layer FR4 TG150)
+## 4. Assembly PCBA 04 (Rear Pod 3): Retired Without Replacement (Clean Architecture v8.0)
 
-| Designator | Component / MPN | Manufacturer | Package | LCSC / JLCPCB Part # | Function |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **U1** | ESP32-C3-WROOM-02U-N4 | Espressif Systems | SMD-18 (U.FL) | C2934579 | 2.4 GHz OMM Mesh & NMEA/LoRa Coprocessor |
-| **U2** | MAX-M10S-00B | u-blox | LGA-18 | C3006240 | Multi-Constellation GNSS Engine (10 Hz, 1-PPS) |
-| **U3** | SX1262IMLTRT | Semtech | QFN-24 | C190184 | Secondary Fallback 868 MHz LoRa Transceiver (+22 dBm)|
-| **U4** | DS2401Z+ | Maxim / ADI | SOT-23 | C2834570 | 64-Bit 1-Wire Silicon Serial Number ID |
-| **J1** | PinSocket 1x06 P2.54mm | Wurth / JST | Horizontal Socket | C289118 | Rear Pod 3 primary interface to Central Box (5V, GND, UART, 1PPS, 1-Wire) |
-| **J4, J5** | U.FL-R-SMT-1 / MM8030 | Hirose / Murata | SMD RF | C2834595 | RF coaxial sockets for LoRa (868 MHz) and GNSS (1575 MHz) |
-| **J6** | SM03B-SRSS-TB | JST | 3-Pin JST-SH 1.0mm SMD | C136656 | Slipstream ambient temperature port (3V3, 1-Wire, GND) |
-| **R2** | 4.7k 1% 0603 | Yageo / UniOhm | 0603 SMD | C23164 | 1-Wire bus pull-up resistor (POD3_1WIRE_ID) |
-| **Sensor (ext)**| DS18B20 Stainless Probe | Dallas / Maxim | Ø6x30mm IP67 | C2834580 | Waterproof 1-Wire ambient probe mounted in slipstream duct |
+> [!NOTE]
+> **Architecture Streamlining v8.0:** Circuit board `PCBA 04` and the 3rd satellite enclosure (Rear Pod 3) have been **completely eliminated without replacement**:
+> 1. **LoRa 868 MHz (SX1262):** Sits directly on the Central Box (`PCBA 01`), backed up 24/7 by the UPS battery for continuous anti-theft sentry.
+> 2. **Multi-GNSS (SAM-M10Q):** Sits in the cool ram-air intake zone on Front Node (`PCBA 05`), interfaced via Qwiic I2C (`J12`).
+> 3. **Vehicle Wireless Backbone:** Transmitted via Ultra-Wideband (Qorvo DW3110 / 6.5 GHz Ch. 5, $< 0.4\,\text{ms}$ latency) between Front Node and Central Box.
+> 4. **Rear Radar:** Connects directly to the Central Box via Whip 5 of the HD26 harness.
 
 ---
 
@@ -80,6 +81,7 @@ This document serves as the master reference (Single Source of Truth) for the co
 | **U4** | TPS2051BDBVR | Texas Instruments | SOT-23-5 | `C7818` | High-Side USB VBUS Power Switch (1.05A Clamp) for Port 2 Cold-Reboot Reset |
 | **U5** | SC8102QDER | Southchip | QFN-32 | `C2843510` | Automotive Synchronous Buck with USB-PD 20W (9V/2.2A & QC3.0) for Smartphone Port 1 |
 | **U6** | TCAN334GDCNT | Texas Instruments | SOT-23-8 | `C2843515` | 3.3V CAN Transceiver (5 Mbps CAN-FD capable, with Pin 8 Silent-Listen-Only Mode) |
+| **U7** | DW3110 | Qorvo | QFN-16 (B.Cu) | `C2934600` | IEEE 802.15.4z UWB Transceiver (6.5 GHz Ch. 5 Backbone) |
 | **K1** | CPC1017NTR | IXYS / Littelfuse | SOP-4 | `C26789` | 60V / 100mA 1-Form-A Solid-State Relay for switchable 120R CAN Termination (Auto-Sensing) |
 | **Q1** | DMN63D8LDW-7 | Diodes Incorporated| SOT-363 | `C283890` | Dual N-Channel MOSFET (30V / 260mA) for directional mirror blind-spot LEDs (J9) |
 | **Q2** | TPS1H100BQPWPRQ1 | Texas Instruments | HTSSOP-14 | `C2843520` | Automotive Smart High-Side Power Switch (up to 3.5A / 40W) for 12V Aux Light (J11) |
@@ -98,297 +100,264 @@ This document serves as the master reference (Single Source of Truth) for the co
 | **J7** | USB-C 16-Pin Receptacle IP67| GCT / Korean Hro | SMD Hybrid | `C2765186` | ESP32-S3 Service & Flash Port (Flank) with TPU Sealing Plug |
 | **J8** | JST-PH 2-Pin Header | JST | 2.00mm SMD | `C289115` | Action-Cam 5V Charge-Only Power Port (up to 2.0A) |
 | **J9** | JST-PH 3-Pin Header | JST | 2.00mm SMD | `C289116` | Mirror Blind-Spot Warning LEDs (12V_PROT, BSD_LEFT_N, BSD_RIGHT_N) |
-| **J10** | JST-PH 2-Pin Header | JST | 2.00mm SMD | `C289115` | 12V Qi Wireless Charging (SP Connect / QuadLock Head) |
-| **J11** | JST-PH 2-Pin Header | JST | 2.00mm SMD | `C289115` | 12V Aux Light (Adventure Auxiliary Spotlight / Emergency Brake Strobe) |
-| **J12** | JST-SH 4-Pin Header | JST | 1.00mm SMD | `C289118` | Qwiic / STEMMA QT I2C Sensor Port (3.3V, GND, SDA, SCL) |
+| **J10** | JST-PH 2-Pin Header | JST | 2.00mm SMD | `C289115` | 12V Qi Wireless Charger Power (SP Connect / QuadLock Head) |
+| **J11** | JST-PH 2-Pin Header | JST | 2.00mm SMD | `C289115` | 12V Aux Light (Adventure Driving Lights / Brake Flash Strobe) |
+| **J12** | JST-SH 4-Pin Header | JST | 1.00mm SMD | `C289118` | Qwiic / STEMMA QT I2C Sensor Port (SAM-M10Q GNSS, TMP117, OPT3001) |
+| **ANT1**| U.FL-R-SMT-1 | Hirose / Murata | SMD RF (B.Cu) | `C2834595` | UWB 6.5 GHz U.FL socket to Taoglas FXUWB10 in tub floor |
 
 ---
 
-## 6. PCBA 06: MagSafe Cockpit Frame Qi-Dock Adapter (`openmotorbridge_magsafe_dock`, 2-Layer FR4, 28 x 11.5 mm)
+## 6. PCBA 06: MagSafe Framework Dock Adapter (`openmotorbridge_magsafe_dock`, 2-Layer FR4, 28 x 11.5 mm)
 
 | Ref | Component / Type | Package | Specification & Function | LCSC Part |
 | :--- | :--- | :--- | :--- | :--- |
 | **`F1`** | 0ZCG0050FF2C | SMD 1206 | 500 mA Hold / 1000 mA Trip, 16V PPTC Resettable Fuse | `C207936` |
-| **`D1`** | ESD5Z5.0T1G | SOD-323 | 5.0V Unidirectional TVS Diode (Transient Clamping) | `C2834585` |
-| **`U1`** | USBLC6-4SC6 | SOT-23-6 | 4-Channel Low-Cap ESD Array ($<0.8\,\text{pF}$, $\pm 15\,\text{kV}$ ESD) | `C7519` |
+| **`D1`** | ESD5Z5.0T1G | SOD-323 | 5.0V Unidirectional TVS Diode (Transient Protection) | `C2834585` |
+| **`U1`** | USBLC6-4SC6 | SOT-23-6 | 4-Channel ESD Protection Array ($<0.8\,\text{pF}$, $\pm 15\,\text{kV}$ ESD) | `C7519` |
 | **`C1`** | 100nF 50V X7R | SMD 0603 | Ceramic Decoupling Capacitor on VCC_PROT | `C14663` |
-| **`J1`** | M8 Wire Pads | SMD/THT 1x07 | 7-Pin solder pad array with 0.6 mm vias for M8 cable conductors | Custom |
-| **`J2`** | MagSafe 6P Pads | SMD 1x06 | 6-Pin gold-plated contact pads for MagSafe magnetic pogo coupler | `C224376` |
+| **`J1`** | M8 Wire Pads | SMD/THT 1x07 | 7-Pin Solder Pad Array with 0.6 mm Vias for M8 Harness Conductors | Custom |
+| **`J2`** | MagSafe 6P Pads | SMD 1x06 | 6-Pin Gold-Plated Landing Pads for MagSafe Magnetic Pogo Coupler | `C224376` |
 | **`H1`** | MountingHole_Pad | M2.5 (Ø 2.7 mm) | Hole Ø 2.7 mm, Pad Ø 4.5 mm, tied to System GND | Hardware |
 
 ---
 
-## 7. PCBA 07: 2-in-1 LoRa Smart Keyfob (`openmotorbridge_smart_keyfob`, 2-Layer FR4, 38 x 19 mm)
+## 7. PCBA 07: 2-in-1 LoRa Smart-Keyfob (`openmotorbridge_smart_keyfob`, 2-Layer FR4, 38 x 19 mm)
 
 | Ref | Component / Type | Package | Specification & Function | LCSC Part |
 | :--- | :--- | :--- | :--- | :--- |
 | **`U1`** | nRF52840-QIAA-R | aQFN-73 | 32-Bit ARM Cortex-M4F SoC with Bluetooth 5.4, NFC & Crypto | `C190767` |
 | **`U2`** | SX1262IMLTRT | QFN-24 | Semtech 868 MHz LoRa Transceiver (+22 dBm, TCXO) | `C90039` |
-| **`U3`** | DRV2605LDGSR | VSSOP-10 | TI ERM/LRA Haptic Driver with built-in effect library | `C61633` |
+| **`U3`** | DRV2605LDGSR | VSSOP-10 | TI ERM/LRA Haptic Driver with Integrated Effect Library | `C61633` |
 | **`U4`** | BQ51003YFPR | DSBGA-28 | TI 2.5W Qi Wireless Power Receiver Controller | `C144862` |
-| **`U5`** | BQ25100YFPR | DSBGA-6 | TI Linear LiPo Charger with 50 nA quiescent standby current | `C144857` |
-| **`M1`** | VG1036001D | Coin 10x3.6mm | Vybronics LRA Linear Actuator (235 Hz resonant frequency) | Custom / Distrelec |
-| **`BZ1`**| PKLCS1212E4001 | SMD 12x12mm | Murata SMD Piezo Transducer (85 dB @ 10 cm, 4 kHz) | `C94511` |
+| **`U5`** | BQ25100YFPR | DSBGA-6 | TI Linear LiPo Charge Controller with 50 nA Quiescent Current | `C144857` |
+| **`M1`** | VG1036001D | Coin 10x3.6mm | Vybronics LRA Linear Resonant Actuator (235 Hz Resonant Frequency) | Custom / Distrelec |
+| **`BZ1`**| PKLCS1212E4001 | SMD 12x12mm | Murata SMD Piezo Sounder (85 dB @ 10 cm, 4 kHz) | `C94511` |
 
 ---
 
-## 8. PCBA 08: Radar 2.0 Sub-MCU & 36-LED Warning Wings Carrier (`openmotorbridge_radar_submcu`, 4-Layer FR4 TG150, 115 x 65 mm)
+## 8. PCBA 08: Radar 2.0 Sub-MCU & 36-LED Wing Carrier (`openmotorbridge_radar_submcu`, 4-Layer FR4 TG150, 115 x 65 mm)
 
 | Ref | Component / Type | Package | Specification & Function | LCSC Part |
 | :--- | :--- | :--- | :--- | :--- |
 | **`U1`** | ESP32-C5-WROOM-1-N8 | SMD Module | 32-Bit RISC-V Dual-Band Sub-MCU (2.4 GHz + 5.9 GHz V2X, 4MB Flash) | `C2843550` |
-| **`U2`** | LDO 3.3V 500mA | SOT-23-5 | TI TPS7A0533 / Richtek RT9013 Low-Dropout Voltage Regulator | `C505293` |
+| **`U2`** | LDO 3.3V 500mA | SOT-23-5 | TI TPS7A0533 / Richtek RT9013 LDO Voltage Regulator | `C505293` |
 | **`D1..36`**| WS2812B-2020 | SMD 2020 | 36x Digital RGB LEDs in Dual Warning Wings (18 left, 18 right) | `C2843530` |
-| **`ANT1`** | 5.9 GHz V2X Patch | 20x20x4 mm | Ceramic Patch Antenna for ITS-G5 Car-to-X Hazard Warnings | `C290456` |
-| **`J1`** | JST-SH 1.0mm 4-Pin | SMD Horizontal| Decoupled internal signal harness to Binder M5 housing socket | `C136657` |
-| **`J2`** | JST-SH 1.0mm 4-Pin | SMD Horizontal| UART link to Wheeltec MR20 Transceiver (RX/TX/5V/GND) | `C136657` |
-| **`D_TVS`**| PESD5V0S2BT | SOT-23 | TVS Diode Array for UART & Power Clamping | `C2834580` |
+| **`ANT1`** | 5.9 GHz V2X Patch | 20x20x4 mm | Ceramic Patch Antenna for ITS-G5 Car-to-X Safety Broadcasts | `C290456` |
+| **`J1`** | JST-SH 1.0mm 4-Pin | SMD Right-Angle| Decoupled Internal Signal Whip to Binder M5 Housing Receptacle | `C136657` |
+| **`J2`** | JST-SH 1.0mm 4-Pin | SMD Right-Angle| UART Interface to Wheeltec MR20 Transceiver (RX/TX/5V/GND) | `C136657` |
+| **`D_TVS`**| PESD5V0S2BT | SOT-23 | TVS Diode Array for UART & Power Lines | `C2834580` |
 
 ---
 
-## 9. 1-Click JLCPCB Ordering Guide (All Circuit Boards Pre-Assembled)
+## 9. 1-Click Ordering Guide for JLCPCB (All 7 PCBAs Fully Assembled)
 
-All production files are stored in the repository under `hardware/pcba/` as ready-to-upload ZIP and CSV archives:
+All manufacturing packages reside in the repository under `hardware/pcba/` as complete ZIP and CSV archives:
 
 | Subassembly / PCBA | Gerber ZIP Archive | BOM CSV File | CPL (Pick & Place) CSV | Layers | Manufacturing Notes |
 | :--- | :--- | :--- | :--- | :---: | :--- |
-| **PCBA 01: Central Box** | `01_main_box_pcba_gerbers_jlcpcb.zip` | `01_main_box_pcba_bom_jlcpcb.csv` | `01_main_box_pcba_cpl_jlcpcb.csv` | **4 Layers** | ENIG (Gold), 1.6 mm, TG150, SMT top & bottom |
-| **PCBA 02: Pod Base** | `02_pod_base_pcba_gerbers_jlcpcb.zip` | `02_pod_base_pcba_bom_jlcpcb.csv` | `02_pod_base_pcba_cpl_jlcpcb.csv` | **2 Layers** | ENIG (Gold), 1.6 mm, SMT top |
-| **PCBA 03: Cartridge Carrier**| `03_pod_cartridge_pcba_gerbers_jlcpcb.zip` | `03_pod_cartridge_pcba_bom_jlcpcb.csv` | `03_pod_cartridge_pcba_cpl_jlcpcb.csv` | **2 Layers** | ENIG (Gold), 1.2 mm, SMT top |
-| **PCBA 04: Rear Pod 3** | `04_rear_pod3_pcba_gerbers_jlcpcb.zip` | `04_rear_pod3_pcba_bom_jlcpcb.csv` | `04_rear_pod3_pcba_cpl_jlcpcb.csv` | **4 Layers** | ENIG (Gold), 1.6 mm, TG150, SMT top |
-| **PCBA 05: Front Node** | `05_front_node_pcba_gerbers_jlcpcb.zip` | `05_front_node_pcba_bom_jlcpcb.csv` | `05_front_node_pcba_cpl_jlcpcb.csv` | **4 Layers** | ENIG (Gold), 1.6 mm, TG150, SMT top & bottom |
-| **PCBA 06: MagSafe Dock** | `06_magsafe_dock_pcba_gerbers_jlcpcb.zip` | `06_magsafe_dock_pcba_bom_jlcpcb.csv` | `06_magsafe_dock_pcba_cpl_jlcpcb.csv` | **2 Layers** | ENIG (Gold), 1.6 mm, SMT top |
-| **PCBA 07: Smart Keyfob** | `07_smart_keyfob_pcba_gerbers_jlcpcb.zip` | `07_smart_keyfob_pcba_bom_jlcpcb.csv` | `07_smart_keyfob_pcba_cpl_jlcpcb.csv` | **2 Layers** | ENIG (Gold), 1.0 mm, SMT top & bottom |
-| **PCBA 08: Radar 2.0 Sub-MCU** | `08_radar_submcu_pcba_gerbers_jlcpcb.zip` | `08_radar_submcu_pcba_bom_jlcpcb.csv` | `08_radar_submcu_pcba_cpl_jlcpcb.csv` | **4 Layers** | ENIG (Gold), 1.6 mm, TG150, SMT top |
+| **PCBA 01: Central Box** | `01_main_box_pcba_gerbers_jlcpcb.zip` | `01_main_box_pcba_bom_jlcpcb.csv` | `01_main_box_pcba_cpl_jlcpcb.csv` | **4 Layers** | ENIG (Gold), 1.6 mm, TG150, 2-sided SMT (DW3110 on B.Cu) |
+| **PCBA 02: Pod Base** | `02_pod_base_pcba_gerbers_jlcpcb.zip` | `02_pod_base_pcba_bom_jlcpcb.csv` | `02_pod_base_pcba_cpl_jlcpcb.csv` | **2 Layers** | ENIG (Gold), 1.6 mm, SMT Top (Order 2x per vehicle) |
+| **PCBA 03: Cartridge Carrier**| `03_pod_cartridge_pcba_gerbers_jlcpcb.zip` | `03_pod_cartridge_pcba_bom_jlcpcb.csv` | `03_pod_cartridge_pcba_cpl_jlcpcb.csv` | **2 Layers** | ENIG (Gold), 1.2 mm, SMT Top (Order 2x per vehicle) |
+| **PCBA 05: Front Node** | `05_front_node_pcba_gerbers_jlcpcb.zip` | `05_front_node_pcba_bom_jlcpcb.csv` | `05_front_node_pcba_cpl_jlcpcb.csv` | **4 Layers** | ENIG (Gold), 1.6 mm, TG150, 2-sided SMT (DW3110 on B.Cu) |
+| **PCBA 06: MagSafe Dock** | `06_magsafe_dock_pcba_gerbers_jlcpcb.zip` | `06_magsafe_dock_pcba_bom_jlcpcb.csv` | `06_magsafe_dock_pcba_cpl_jlcpcb.csv` | **2 Layers** | ENIG (Gold), 1.6 mm, SMT Top |
+| **PCBA 07: Smart-Keyfob** | `07_smart_keyfob_pcba_gerbers_jlcpcb.zip` | `07_smart_keyfob_pcba_bom_jlcpcb.csv` | `07_smart_keyfob_pcba_cpl_jlcpcb.csv` | **2 Layers** | ENIG (Gold), 1.0 mm, 2-sided SMT |
+| **PCBA 08: Radar 2.0 Sub-MCU** | `08_radar_submcu_pcba_gerbers_jlcpcb.zip` | `08_radar_submcu_pcba_bom_jlcpcb.csv` | `08_radar_submcu_pcba_cpl_jlcpcb.csv` | **2 Layers** | ENIG (Gold), 1.2 mm, TG150, SMT Top |
 
 ---
 
-## 10. Mechanical & Enclosure BOM (MJF PA12 3D Printing & Hardware)
+## 10. Mechanical & Enclosure BOM (3D Printing MJF PA12 & Hardware)
 
-All enclosure parts are designed around the **IKEA Principle**: **Zero heat-set brass threaded inserts or soldering irons required!** The enclosures integrate captive hexagonal nut pockets (Nut Pockets for standard DIN 934 / DIN 985 stainless nuts) and precision pilot holes for direct plastic thread-forming.
+All enclosure parts are strictly engineered according to the **IKEA Principle**: **Zero heat-set threaded brass inserts required!** Enclosures feature captive hexagonal nut pockets (for DIN 934 / DIN 985 stainless steel nuts) or precise pilot holes for direct self-tapping plastic screws.
 
-### 9.1 Base System (Universal for Every Motorcycle)
-| Assembly | STL Filename | Qty | Material & Process | Function & Description |
+### 10.1 Base System (Universal for Every Motorcycle)
+| Subassembly | STL File Path | Qty | Material & Process | Function & Description |
 | :--- | :--- | :---: | :--- | :--- |
-| **Main Box Lower Tub** | [`main_box_lower_case.stl`](../../hardware/cad/stl/01_main_box/main_box_lower_case.stl) | **1** | MJF PA12 / ASA | Monocoque lower tub with 4x M4 silentblock ears, nut pockets & seal groove |
-| **Main Box Mid Tray** | [`main_box_mid_tray.stl`](../../hardware/cad/stl/01_main_box/main_box_mid_tray.stl) | **1** | MJF PA12 / ASA | Battery tray for 2,200 mAh Flat-LiPo ($68 \times 39 \times 5.0\,\text{mm}$), 11x convection louvers & sealing lip |
-| **Main Box Lid** | [`main_box_lid.stl`](../../hardware/cad/stl/01_main_box/main_box_lid.stl) | **1** | MJF PA12 / ASA | Enclosure lid with Gore ePTFE valve dome & bolt counterbores |
-| **Pod Base Housing** | [`pod_base_housing.stl`](../../hardware/cad/stl/02_pod_base/pod_base_housing.stl) | **3** | MJF PA12 / ASA | Universal chassis housing for Pod 1 (Left), Pod 2 (Right), and Rear Pod 3 |
-| **Pod Bulkhead Partitions**| [`03_pod_bulkhead_partition.stl`](../../hardware/cad/stl/02_pod_base/components/03_pod_bulkhead_partition.stl) | **3** | MJF PA12 / ASA | Bulkhead partition with sealing collar & spring pockets (1 per pod) |
-| **Cartridge Base Sled** | [`cartridge_base_sled.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl) | **3** | MJF PA12 / ASA | Universal sled for Gateway 1 (Pod 1), Gateway 2 (Pod 2), and OMM (Pod 3) |
-| **Cartridge Magnetic Latch**| [`cartridge_magnetic_lock_latch.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_magnetic_lock_latch.stl) | **2** | MJF PA12 / ASA | Magnetic anti-theft locking rocker latches for Cartridge Slots 1 & 2 |
-| **Rear Pod 3 OMM Radome** | [`cartridge_antenna_bracket_omm.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_antenna_bracket_omm.stl) | **1** | MJF PA12 / ASA | Dielectric antenna radome & carrier bridge for PCBA 04 in Rear Pod 3 |
-| **Front Node Lower Tub** | [`front_node_lower_tub.stl`](../../hardware/cad/stl/04_front_node/front_node_lower_tub.stl) | **1** | MJF PA12 / ASA | Cockpit tub with AMPS pattern (DIN 934 M4 pockets), tube cradle & nut pockets |
-| **Front Node Lid** | [`front_node_upper_lid.stl`](../../hardware/cad/stl/04_front_node/front_node_upper_lid.stl) | **1** | MJF PA12 / ASA | Lid with Knowles MEMS acoustic port & perimeter O-ring groove |
-| **Front Node Cable Glands**| [`front_node_cable_glands_tpu.stl`](../../hardware/cad/stl/04_front_node/front_node_cable_glands_tpu.stl) | **1 Pair**| TPU 95A / 85A | Elastomeric sealing combs for front USB & lateral signals |
-| **Front Node USB-C Cap** | [`front_node_usbc_cap_tpu.stl`](../../hardware/cad/stl/04_front_node/front_node_usbc_cap_tpu.stl) | **1** | TPU 95A / 85A | Elastomeric dust cap with retention tether for service port |
+| **Main Box Lower Case** | [`main_box_lower_case.stl`](../../hardware/cad/stl/01_main_box/main_box_lower_case.stl) | **1** | MJF PA12 / ASA | Monocoque tub with UWB bottom pocket ($11 \times 11 \times 0.6\,\text{mm}$), 4x M4 silentblock ears & sealing groove |
+| **Main Box Mid Tray** | [`main_box_mid_tray.stl`](../../hardware/cad/stl/01_main_box/main_box_mid_tray.stl) | **1** | MJF PA12 / ASA | Battery tray for 2,200 mAh flat LiPo ($68 \times 39 \times 5.0\,\text{mm}$), 11x convection vents & tongue-and-groove rib |
+| **Main Box Lid** | [`main_box_lid.stl`](../../hardware/cad/stl/01_main_box/main_box_lid.stl) | **1** | MJF PA12 / ASA | Lid with LoRa FXP895 antenna pocket ($110 \times 20 \times 0.8\,\text{mm}$), Gore ePTFE vent seat & countersinks |
+| **Pod Base Housing** | [`pod_base_housing.stl`](../../hardware/cad/stl/02_pod_base/pod_base_housing.stl) | **2** | MJF PA12 / ASA | Universal bay enclosure for Pod 1 (Left) and Pod 2 (Right) |
+| **Pod Bulkheads** | [`03_pod_bulkhead_partition.stl`](../../hardware/cad/stl/02_pod_base/components/03_pod_bulkhead_partition.stl) | **2** | MJF PA12 / ASA | Bulkhead partition with sealing collar & spring guides (1x per pod) |
+| **Cartridge Base Sled**| [`cartridge_base_sled.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl) | **2** | MJF PA12 / ASA | Universal sled for Gateway 1 (Pod 1) and Gateway 2 (Pod 2) |
+| **Cartridge Latch Lever**| [`cartridge_magnetic_lock_latch.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_magnetic_lock_latch.stl) | **2** | MJF PA12 / ASA | Magnetic anti-theft locking latch levers for Cartridge Slots 1 & 2 |
+| **Front Node Lower Tub** | [`front_node_lower_tub.stl`](../../hardware/cad/stl/04_front_node/front_node_lower_tub.stl) | **1** | MJF PA12 / ASA | Cockpit tub with UWB bottom pocket ($11 \times 11 \times 0.6\,\text{mm}$), AMPS pattern & handlebar tube cradle |
+| **Front Node Upper Lid** | [`front_node_upper_lid.stl`](../../hardware/cad/stl/04_front_node/front_node_upper_lid.stl) | **1** | MJF PA12 / ASA | Lid with Knowles MEMS acoustic inlet port & O-ring sealing channel |
+| **Front Node Cable Glands**| [`front_node_cable_glands_tpu.stl`](../../hardware/cad/stl/04_front_node/front_node_cable_glands_tpu.stl) | **1 Pair**| TPU 95A / 85A | Flexible split sealing comb for front USB and signal wiring |
+| **Front Node USB-C Cap** | [`front_node_usbc_cap_tpu.stl`](../../hardware/cad/stl/04_front_node/front_node_usbc_cap_tpu.stl) | **1** | TPU 95A / 85A | Elastic dust cap with retention tether for service port |
 
-### 9.2 Gateway Cartridge Inlays (Choose 2 Based on Desired Intercoms)
-> **Architecture Principle:** Slot 1 and Slot 2 are **Multi-Protocol Gateway Transceivers**, not isolated driver/passenger headsets! They connect the motorcycle simultaneously to Sena Mesh and Cardo DMC networks. Driver and passenger communicate wirelessly using their standard helmets.
+### 10.2 Gateway Cartridge Inlays (Intercom Selection)
+> **Architecture Note:** Slot 1 and Slot 2 are **Multi-Protocol Gateway Transceivers**, not rider/passenger headsets! They link the motorcycle simultaneously to Sena Mesh and Cardo DMC. Rider and pillion communicate wirelessly with their standard helmet headsets.
 
-| Assembly | STL Filename | Qty | Material | Function & Description |
+| Subassembly | STL File Path | Qty | Material | Function & Description |
 | :--- | :--- | :---: | :--- | :--- |
-| **Gateway Inlay Sena** | [`cartridge_insert_sena.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_sena.stl) | *Opt. (1)* | MJF PA12 / ASA | Form-fitting inlay for Sena SPIDER X Slim / 50S / 60S (Mesh 3.0 Wave) |
-| **Gateway Inlay Cardo** | [`cartridge_insert_cardo.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_cardo.stl) | *Opt. (1)* | MJF PA12 / ASA | Inlay for Cardo Packtalk Edge / Pro (DMC Gen2) with Air-Mount |
-| **Blank Cartridge / Dry Box**| [`cartridge_insert_blindkassette.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_blindkassette.stl) | *Opt. (1)* | MJF PA12 / ASA | Hermetic protective sled for unused slot or waterproof dry storage box |
+| **Gateway Inlay Sena** | [`cartridge_insert_sena.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_sena.stl) | *Opt. (1)* | MJF PA12 / ASA | Form-fitting inlay for Sena SPIDER X Slim (Mesh 3.0 / 2.0, direct micro-cable whip) |
+| **Gateway Inlay Cardo** | [`cartridge_insert_cardo.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_cardo.stl) | *Opt. (1)* | MJF PA12 / ASA | Inlay for Cardo Packtalk Edge / Pro (DMC Gen2) with Air-Mount cradle |
+| **Swap Inlay OMM 2.4 GHz** | [`cartridge_insert_omm.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_omm.stl) | *Opt. (1)* | MJF PA12 / ASA | Inlay for OMM 2.4 GHz Swap Cartridge (ESP32-C3) |
+| **Blank Cartridge / Dry Box** | [`cartridge_insert_blindkassette.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_blindkassette.stl) | *Opt. (1)* | MJF PA12 / ASA | Hermetic protective dummy sled for unused slots or watertight dry box |
 
-### 9.3 Vehicle-Specific Mounting Kits (3D Printed Parts)
-* **Kit 1: BMW R1250 / R1300 GS (Standard / Vario Cases):**
-  * `adventure_transition_dock_base.stl` (2 pcs): Luggage-independent base cradles for the seat waist crease (Ø 28 mm frame tube).
-  * `adventure_transition_dock_lid.stl` (2 pcs): Aerodynamic bodywork cowls with waist crease line & Cardo/Sena bezel cutout.
-  * `adventure_underseat_cross_rail.stl` (1 pc): Rigid under-seat saddle bridge locking left and right docks with integrated M8 cable trough.
-  * `adventure_rack_tail_mount_base.stl` & `adventure_rack_tail_cowl.stl` (1 pc each): Two-piece Rallye Aero-Balcony for Pod 3 behind topcase with 45° Shark-Fin & bionic radar pylon.
-  * `radar_varia_gopro_lock_dock.stl` (1 pc) & `011_gopro_hirth_lock.stl` (1 pc): Radar bayonet dock with 36-tooth Hirth gear lock.
-* **Kit 2: BMW R1250 / R1300 GSA (Adventure with Ø 18 mm Stainless Pannier Rack Cage):**
-  * `adventure_gsa_cage_dock_body.stl` & `adventure_gsa_clamp_cap.stl` (2 pairs): Heavy-duty cage docks ("GSA Cage Dock") for Pod 1 & 2 in the $45\,\text{mm}$ dead space of the pannier rack with $85\,\text{mm}$ dual-saddle baseline, 4x M5 bolting, roost deflection plate & concealed M8 conduit.
-  * *(Minimalist alternative)* `adventure_pannier_rack_clamp_base.stl` & `adventure_pannier_rack_clamp_cap.stl` (4 pairs): Compact half-clamp pairs for exposed open tube struts.
-  * `adventure_rack_tail_mount_base.stl` & `adventure_rack_tail_cowl.stl` (1 pc each): Two-piece Rallye Aero-Balcony behind aluminum topcase with 45° Shark-Fin for dipole antenna.
-  * `radar_varia_gopro_lock_dock.stl` (1 pc) & `011_gopro_hirth_lock.stl` (1 pc): Radar dock with Hirth gear lock.
+### 10.3 Vehicle-Specific Mounting Kits (3D Printed Parts)
+* **Kit 1: BMW R1250 / R1300 GS (Standard / Vario Panniers):**
+  * `adventure_transition_dock_base.stl` (2 pcs): Pannier-independent base cradles for the seat frame crease (Ø 28 mm tube).
+  * `adventure_transition_dock_lid.stl` (2 pcs): Aerodynamic body lids with transition crease & Cardo/Sena cutouts.
+  * `adventure_underseat_cross_rail.stl` (1 pc): Rigid under-seat saddle bridge locking left and right docks with integrated M8 channel.
+  * `adventure_rack_radar_mount.stl` (1 pc): Minimal rear radar mount positioned under the GS luggage bridge for Garmin Varia / Wheeltec MR20 on Whip 5.
+* **Kit 2: BMW R1250 / R1300 GSA (Adventure with Ø 18 mm Stainless Rack):**
+  * `adventure_gsa_cage_dock_body.stl` & `adventure_gsa_clamp_cap.stl` (2 pcs each): Heavy-duty cage docks for Pod 1 & 2 in the 45 mm dead space of the pannier frame with 85 mm dual-saddle clamp, stone-guard wedge & concealed M8 conduit.
+  * `adventure_rack_radar_mount.stl` (1 pc): Minimal rear radar mount under luggage bridge.
 * **Kit 3: Harley-Davidson Touring & Classic Bagger (Street Glide, Road Glide, Road King):**
-  * `saddlebag_lid_dock.stl` (2 pcs): Saddlebag lid mounting docks for Pod 1 & 2 on hard saddlebags.
-  * `pod3_touring_fender_console.stl` (1 pc): Organic rear fender console for Pod 3 *(for non-Tour-Pak baggers; on Ultra Limited / Road Glide Limited with factory King Tour-Pak, the fender console is omitted due to the tubular rack frame in favor of a tube clamp mount on the Tour-Pak frame!)*.
-  * `radar_license_plate_bracket.stl` (1 pc): Decoupled license plate radar mount.
+  * `saddlebag_lid_dock.stl` (2 pcs): Hard saddlebag lid mounting docks for Pod 1 & 2.
+  * `radar_license_plate_bracket.stl` (1 pc): Vibration-isolated license plate radar bracket for Whip 5.
   * `magsafe_cockpit_mount_harley.stl` (1 pc), `magsafe_frame_dock.stl` (1 pc) & `magsafe_clamp_wings.stl` (1 pc): MagSafe frame dock components.
-* **Kit 4: Harley-Davidson CVO ST & Performance Bagger (Road Glide ST):**
-  * `saddlebag_lid_dock.stl` (2 pcs): Saddlebag lid mounting docks for Pod 1 & 2 on hard saddlebags.
-  * `cvo_st_undercowl_skeleton_dock.stl` (1 pc): Upright bionic skeleton dock for Pod 3 under forged carbon solo seat cowl (clears Showa remote reservoirs & exhaust heat). *(The forged carbon cowl stays 100% factory original, fitting flush and rattle-free with the OEM thumbscrew; external tail fin retired, Pod 3 fully self-contained from the front)*.
-  * `radar_license_plate_bracket.stl` (1 pc): Decoupled license plate radar mount *(CVO ST features the stock centered license plate mount identical to all Touring bikes!)*.
-* **Kit 5: Custom Bikes, Bobbers & Universal:**
-  * `radar_center_underfender_mount.stl` (1 pc): Centered under-fender plate for radar *(specifically designed for custom builds with side-mounted license plates!)*.
-  * Standard 120° V-cradle on Pod base housing for frame tubes (Ø 22–32 mm) with EPDM strap rings or M4 silentblocks.
-
-### 9.4 Accessories (Optional)
-| Assembly | STL Filename | Qty | Material | Function & Description |
-| :--- | :--- | :---: | :--- | :--- |
-| **Smart Keyfob Lower Shell**| [`smart_keyfob_lower_shell.stl`](../../hardware/cad/stl/05_accessories/smart_keyfob_lower_shell.stl) | **1** | MJF PA12 / ASA | Tub with LRA dampening cradle & magnet pocket for PCBA 07 |
-| **Smart Keyfob Upper Shell**| [`smart_keyfob_upper_shell.stl`](../../hardware/cad/stl/05_accessories/smart_keyfob_upper_shell.stl) | **1** | MJF PA12 / ASA | Lid with 3 button keypads & optical light pipe port |
-| **Smart Keyfob Bumper** | [`smart_keyfob_tpu_rim.stl`](../../hardware/cad/stl/05_accessories/smart_keyfob_tpu_rim.stl) | **1** | TPU 85A / 95A | Shock-absorbing perimeter rim |
-| **Under-Perch Switch Bracket**| [`under_perch_switch_bracket.stl`](../../hardware/cad/stl/05_accessories/under_perch_switch_bracket.stl) | **1** | MJF PA12-CF / ASA | Zero-footprint switch bracket for M4 Harley perch bolt |
-| **Mirror Stem Adapter Plate** | [`under_perch_mirror_plate.stl`](../../hardware/cad/stl/05_accessories/under_perch_mirror_plate.stl) | **1** | MJF PA12 / Stainless | M8/M10 mounting bracket plate for mirror stem base |
-| **BSD Mirror Upper Pod**      | [`bsd_mirror_upper_pod.stl`](../../hardware/cad/stl/05_accessories/bsd_mirror_upper_pod.stl) | **2** | MJF PA12 / ASA | BSD blind-spot mirror pod upper shell with 38° inward visor hood |
-| **BSD Mirror Lower Clamp**    | [`bsd_mirror_lower_clamp.stl`](../../hardware/cad/stl/05_accessories/bsd_mirror_lower_clamp.stl) | **2** | MJF PA12 / ASA | Mirror stem clamp lower half for Ø 10 mm stems |
-| **BSD Mirror Diffuser Lens**  | [`bsd_mirror_lens.stl`](../../hardware/cad/stl/05_accessories/bsd_mirror_lens.stl) | **2** | PETG / Acrylic | Translucent amber diffuser lens |
-| **MagSafe Frame Dock** | [`magsafe_frame_dock.stl`](../../hardware/cad/stl/02_pod_base/magsafe_frame_dock.stl) | **1** | MJF PA12 / ASA | Cockpit dock chassis with M2.5 & M3 nut pockets for PCBA 06 |
-| **MagSafe Clamp Wings** | [`magsafe_clamp_wings.stl`](../../hardware/cad/stl/02_pod_base/magsafe_clamp_wings.stl) | **1** | MJF PA12 / ASA | Clamp wings for handlebar tube mounting |
-
-### 9.5 OrcaSlicer 3MF Project Plates (Standard vs. Compact Bed Sizes)
-For DIY 3D printing, pre-configured `.3mf` project files for **OrcaSlicer** (fully compatible with Bambu Studio and PrusaSlicer) are available. All plates are pre-configured with **6 perimeters** (for 100% watertightness without resin sealing), 40% gyroid infill, and concealed seam placement in rear radii:
-
-#### Profile A: Standard & Large Print Bed (≥ 220×220 mm up to 300×300 mm)
-*Suitable for: Bambu Lab X1C / P1S / P1P / A1 (256×256 mm), Prusa MK3/MK4 (250×210 mm), Creality K1 / Ender-3, Voron 2.4 / Trident (250–350 mm).*
-| Plate | Project Filename | Material | Included Components |
-| :---: | :--- | :---: | :--- |
-| **Plate 1** | `main_box_standard_plate.3mf` | ASA / PA-CF | Complete Central Box on 1 plate: Lower tub, mid-tray & lid |
-| **Plate 2** | `pods_standard_plate.3mf` | ASA / PA-CF | All 3 Pod housings (Pod 1, 2 & Rear Pod 3) + 3x bulkheads |
-| **Plate 3** | `cartridges_frontnode_standard_plate.3mf`| ASA / PA-CF | 3x base sleds, gateway inlays, latches & Front Node enclosure |
-| **Plate 4** | `glands_tpu_standard_plate.3mf` | TPU 95A | All flexible sealing combs, USB-C dust cap & gasket cords |
-| **Plate 5** | `bike_mounts_standard_plate.3mf` | ASA / PA-CF | Bike-specific kit (BMW tube clamps or Harley docks) |
-
-#### Profile B: Compact Print Bed (180×180 mm)
-*Suitable for: Bambu Lab A1 Mini (180×180×180 mm), Prusa Mini+ (180×180×180 mm).*
-| Plate | Project Filename | Material | Included Components |
-| :---: | :--- | :---: | :--- |
-| **Plate 1** | `main_box_tub_mini_plate.3mf` | ASA / PA-CF | Main Box lower tub (oriented 45° diagonally on bed) |
-| **Plate 2** | `main_box_lid_tray_mini_plate.3mf` | ASA / PA-CF | Main Box mid-tray & upper lid |
-| **Plate 3** | `pod_1_2_mini_plate.3mf` | ASA / PA-CF | Pod 1 & Pod 2 base housings (standing upright) |
-| **Plate 4** | `pod_3_bulkheads_mini_plate.3mf` | ASA / PA-CF | Rear Pod 3 housing & 3x bulkhead partitions |
-| **Plate 5** | `cartridges_mini_plate.3mf` | ASA / PA-CF | 3x cartridge base sleds, inlays & locking latches |
-| **Plate 6** | `front_node_mini_plate.3mf` | ASA / PA-CF | Universal Front Node lower tub & lid |
-| **Plate 7** | `glands_tpu_mini_plate.3mf` | TPU 95A | TPU sealing combs, USB-C cap & gaskets |
-| **Plate 8** | `bike_mounts_mini_plate.3mf` | ASA / PA-CF | Bike-specific docks / clamps |
+* **Kit 4: Support Car / Van Convoy Kit (Car-Kit):**
+  * `car_sun_visor_pod_clip.stl` (2 pcs): Quick-release spring clips for secure, vibration-free mounting of Pod 1 and Pod 2 to the sun visors in chase car or van (driver and passenger side).
+  * Dashboard dock for SAM-M10Q GNSS receiver behind the windshield.
 
 ---
 
-## 10. Pre-Molded COTS Cabling & Battery (No Crimping, No Soldering!)
+## 11. Pre-Assembled COTS Harnesses & RF Antennas (Zero Crimping, Zero Soldering!)
 
-Riders **never need to crimp or solder wiring harnesses**. The system relies 100% on standard commercial off-the-shelf (COTS) molded cables:
+No custom wire harnessing or crimping is required. The system leverages 100% commercially available, industrially molded standard cables (COTS):
 
 ```
-                      THE PLUG-AND-PLAY CABLING ARCHITECTURE (COTS PRE-MOLDED)
+                        PLUG-AND-PLAY HARNESS CONCEPT (COTS PRE-MOLDED)
 ┌─────────────────────────┐
-│ HD26 IP67 Harness Whip  │ ──► Factory pre-molded HD26 breakout harness (Amphenol LTW COTS)
-│ (Central Box Main Port) │ ──► No discrete wire termination, 100% waterproof overmolded
+│ HD26 IP67 Pre-Molded    │ ──► Overmolded HD26 breakout harness whip (Amphenol LTW COTS)
+│ (Central Box Interface) │ ──► 100% watertight molded, zero discrete pin crimping required
 └─┬───────────────────────┘
-  ├─► M8 6-Pin PUR Cable (1.0 m / 1.5 m): Standard sensor/actuator cable ──► Pod 1 (Gateway 1)
-  ├─► M8 6-Pin PUR Cable (1.0 m / 1.5 m): Standard sensor/actuator cable ──► Pod 2 (Gateway 2)
-  ├─► M8 6-Pin PUR Cable (1.5 m / 2.0 m): Standard sensor/actuator cable ──► Pod 3 (Rear Transceiver)
-  ├─► AMP Superseal 12V Cable (1.0 m): Pre-terminated battery wire with blade fuse ──► 12V Bike Supply
-  └─► M8 4-Pin Receptacle (Pigtail 5, 250 mm): Rear Radar (Garmin Varia: 12V + UART) / Rear OBD2/CAN
-      (Note: The Front Node requires NO cable run to the rear – it connects wirelessly via ESP-NOW!)
+  ├─► Whip 1: M8 6-Pin PUR Cable (1.0 m / 1.5 m): Standard pre-molded sensor/actuator cable ──► Pod 1
+  ├─► Whip 2: M8 6-Pin PUR Cable (1.0 m / 1.5 m): Standard pre-molded sensor/actuator cable ──► Pod 2
+  ├─► Whip 4: AMP Superseal 12V Cable (1.0 m): Pre-assembled fused battery harness ──► Vehicle 12V Rail
+  └─► Whip 5: M8 4-Pin Socket (250 mm): Rear Radar (Wheeltec MR20 / Garmin Varia: 12V + UART)
+      (Note: Front Node requires ZERO wiring to the rear – links wirelessly via UWB!)
 ```
 
+### 11.1 RF Antennas & Sensors (COTS)
+1. **UWB 6.5 GHz Flex Antennas (2 pcs):** **Taoglas FXUWB10** ($11 \times 11 \times 0.6\,\text{mm}$) with 20 mm U.FL coaxial lead for Central Box and Front Node lower tub floor recesses.
+2. **LoRa 868 MHz Flex Antenna (1 pc):** **Taoglas FXP895** ($110 \times 20 \times 0.8\,\text{mm}$) with 50 $\Omega$ U.FL feed for Central Box lid pocket.
+3. **Multi-GNSS Module (1 pc):** **u-blox SAM-M10Q** with integrated $15 \times 15\,\text{mm}$ ceramic patch antenna, Qwiic I2C (`J12`) on Front Node inside ram-air duct.
+4. **Environmental Sensors (Front Node J12 Daisy-Chain):**
+   * **TI TMP117:** High-precision temperature sensor ($\pm 0.1\,^\circ\text{C}$) for black ice early warning.
+   * **TI OPT3001:** Ambient light sensor for display and driving light control.
+
 ---
 
-## 11. Hardware & Standard Parts Procurement List (1 Complete System)
+## 12. COTS Hardware & Fastener Procurement List (1 Complete Kit)
 
-| Component | Specification / Type | Supplier / Reference | Quantity | Location & Function |
+| Component | Specification / Type | Sourcing Source | Qty | Location & Purpose |
 | :--- | :--- | :--- | :---: | :--- |
-| **M3 Stainless Screws** | M3 x 40 mm Socket Head V4A (DIN 912) | Standard Hardware | 4 pcs | Central Box Enclosure (threads into Nut-Pockets) |
-| **M3 Screws (Front Node)**| M3 x 20 mm Socket Head V4A (DIN 912) | Standard Hardware | 4 pcs | Front Node Enclosure (threads into Nut-Pockets) |
-| **M3 Stainless Nuts** | DIN 934 / DIN 985 M3 V4A Nuts | Standard Hardware | 8 pcs | Captive in Nut-Pockets (no soldering iron needed!) |
-| **M4 Stainless Nuts (AMPS)**| DIN 934 M4 V4A Nuts | Standard Hardware | 4 pcs | Captive in Nut-Pockets of Front Node base |
-| **M2.5 PCB Screws** | M2.5 x 6 mm Socket Head V4A (DIN 912) | Standard Hardware | 8 pcs | 4x Central Box PCBA, 4x Front Node PCBA |
-| **M2 Bulkhead Screws** | M2 x 8 mm Countersunk V4A (DIN 7991) | Standard Hardware | 6 pcs | Secures 3 Pod bulkheads (2 per pod) |
-| **M2 Cartridge Bracket Screws**| M2 x 6 mm Countersunk V4A (DIN 7991) | Standard Hardware | 8 pcs | Secures actuator retainer plates (4 per gateway) |
-| **M2 Rocker Hinge Pins** | M2 x 8 mm Dowel Pin Stainless (DIN 7) | Standard / Misumi | 2 pcs | Pivot pins for magnetic cartridge latches |
-| **Magnetic Armature Pin** | Ø 6 x 8 mm Hardened Steel Pin (DIN 6325) | Standard / Misumi | 2 pcs | Steel armature in cartridge rocker arm |
-| **Rocker Return Springs** | Stainless V4A ($\varnothing 3.5\,\text{mm}, L_0=10\,\text{mm}$) | Gutekunst / Web | 2 pcs | Return spring for cartridge locking claw |
-| **Ejector Compression Springs**| Stainless V4A ($D=4.5\,\text{mm}, L_0=15\,\text{mm}$) | Gutekunst / Web | 6 pcs | Auto-eject springs in bulkheads (2 per pod) |
-| **N52 Magnetic Key** | N52 Neodym Block ($20 \times 10 \times 5\,\text{mm}$) | Supermagnete / Web | 1 pc | Contactless key for cartridge ejection |
-| **Rubber Silentblocks** | Type A M4 Male/Female ($\varnothing 15 \times 10\,\text{mm}$) | Standard Hardware | 4 pcs | Vibration-isolated frame mount for Central Box |
-| **Silicone Gasket Cord** | Silicone Solid Cord $\varnothing 1.5\,\text{mm}$ Shore 40A (1.0 m) | Standard O-Ring Shop | 1 pc | $40\,\text{cm}$ Central Box groove, $30\,\text{cm}$ Front Node groove |
-| **Cartridge Flange Seals** | Molded Silicone Face Seal Shore 40A ($54 \times 18\,\text{mm}$) | Custom / Silicone | 3 pcs | Front face seal on Pods 1, 2, and 3 |
-| **Backup Battery (LiPo UPS)**| 1S LiPo Flat-Pack 2,200 mAh ($68 \times 39 \times 5.0\,\text{mm}$) with Micro-Fit | EEMB / Enerpower | 1 pc | UPS reserve in Central Box (Type 504068 / 503870) |
-| **Automotive Fuse Holder** | Waterproof inline blade fuse holder + 2A fuse | Hella / MTA | 1 pc | Battery-terminal protection for KL30 |
-| **M8 6-Pin Pre-Molded Cable**| M8 6-Pin A-Coded Male/Female (1.0m / 1.5m PUR) | Binder / Phoenix | 3 pcs | Plug-and-play connection to Pods 1, 2, and 3 |
-| **M8 4-Pin Pre-Molded Cable**| M8 4-Pin A-Coded Male/Female (0.5–1.5m PUR) | Binder / Phoenix | Opt. (1)| Pigtail 5: Rear Radar (Garmin Varia: 12V + UART) / Rear OBD2 (only if using radar) |
-| **Front Node Power Pigtail**| 2-Pin JST-PH Lead with Posi-Tap | COTS Standard | 1 pc | Local cockpit power tap (parking light / nav plug) – *Wireless via ESP-NOW / BLE!* |
-| **J_ACT Actuator Harness** | Pre-crimped 8-Pin JST-SH to 4x 2-Pin leads | Adafruit / SparkFun | 1–2 pcs | Pre-molded wiring for 4 solenoids |
-| **Miniature Actuators** | 5V DC Push/Pull Solenoids ($\varnothing 6.5 \times 12\,\text{mm}$) + TPU tip | Solenoid / Web | 4–8 pcs | 4 pcs per Smart Cartridge (Sena / Cardo) |
-| **J2 Gateway Harness** | Pre-crimped 6-Pin JST-SH to Jack / USB | COTS Standard | 1–2 pcs | Pre-molded harness for headset audio & DC power |
+| **M3 Stainless Screws** | M3 x 40 mm Socket Head A4 / 316 (DIN 912) | Standard Fastener | 4 pcs | Central Box enclosure (engages nut pockets) |
+| **M3 Stainless Screws (Front)**| M3 x 20 mm Socket Head A4 / 316 (DIN 912) | Standard Fastener | 4 pcs | Front Node enclosure (engages nut pockets) |
+| **M3 Stainless Nuts** | DIN 934 / DIN 985 M3 A4 Nuts | Standard Fastener | 8 pcs | Captive in nut pockets (no soldering iron required!) |
+| **M4 Stainless Nuts (AMPS)**| DIN 934 M4 A4 Nuts | Standard Fastener | 4 pcs | Captive in Front Node tub nut pockets |
+| **M2.5 Board Screws** | M2.5 x 6 mm Socket Head A4 (DIN 912) | Standard Fastener | 8 pcs | 4x Central Box PCB, 4x Front Node PCB |
+| **M2 Bulkhead Screws** | M2 x 8 mm Countersunk A4 (DIN 7991) | Standard Fastener | 4 pcs | Securing the 2 pod bulkheads (2x per Pod 1 & 2) |
+| **M2 Sled Retainer Screws** | M2 x 6 mm Countersunk A4 (DIN 7991) | Standard Fastener | 8 pcs | Securing actuator hold-down brackets (4x per gateway) |
+| **M2 Pivot Dowel Pins** | M2 x 8 mm Stainless Dowel Pin (DIN 7) | Standard / Misumi | 2 pcs | Pivot pins for magnetic cartridge latches |
+| **Magnetic Armature** | Ø 6 x 8 mm Hardened Steel Pin (DIN 6325) | Standard / Misumi | 2 pcs | Steel keeper pin in cartridge latch arm |
+| **Latch Return Springs** | Stainless 316 ($\varnothing 3.5\,\text{mm}, L_0=10\,\text{mm}$) | Standard Spring | 2 pcs | Return springs for latch hook |
+| **Ejection Springs** | Stainless 316 ($D=4.5\,\text{mm}, L_0=15\,\text{mm}$) | Standard Spring | 4 pcs | Auto-eject springs inside bulkheads (2x per pod) |
+| **N52 Release Key** | N52 Neodymium Block ($20 \times 10 \times 5\,\text{mm}$) | Magnet Supplier | 1 pc | Magnetic key for manual cartridge release |
+| **Vibration Isolators** | Type A M4 Male/Female ($\varnothing 15 \times 10\,\text{mm}$) | Ganter / Standard | 4 pcs | Shock-isolated Central Box mounting |
+| **Silicone O-Ring Cord** | Silicone Solid Cord $\varnothing 1.5\,\text{mm}$ Shore 40A (1.0 m) | O-Ring Supplier | 1 pc | 40 cm Central Box groove, 30 cm Front Node groove |
+| **Cartridge Gaskets** | Molded Silicone Gasket Shore 40A ($54 \times 18\,\text{mm}$) | Custom Mold | 2 pcs | Front face mouth sealing on Pod 1 and Pod 2 |
+| **UPS Battery Pack** | 1S LiPo Flat Pack 2,200 mAh ($68 \times 39 \times 5.0\,\text{mm}$) with Micro-Fit | EEMB / Enerpower | 1 pc | Central Box UPS buffer (Type 504068 / 503870) |
+| **Automotive Fuse Holder** | Waterproof Blade Fuse Holder + 2A Fuse | Hella / MTA | 1 pc | KL30 battery terminal line protection |
+| **M8 6-Pin Cables (PUR)** | M8 6-Pin A-Coded Male/Female (1.0m / 1.5m) | Binder / Phoenix | 2 pcs | Plug-and-play harness to Pod 1 and Pod 2 |
+| **M8 4-Pin Cable (PUR)** | M8 4-Pin A-Coded Male/Female (0.5–1.5m) | Binder / Phoenix | Opt. (1)| Whip 5: Rear Radar (Wheeltec MR20 / Garmin Varia) |
+| **Front Node 12V Cable** | 2-Pin JST-PH Lead with Posi-Tap | COTS Standard | 1 pc | Local cockpit power connection (parking light/GPS plug) |
+| **J_ACT Actuator Harness** | Pre-crimped 8-Pin JST-SH to 4x 2-Pin Leads | Adafruit / SparkFun | 2 pcs | Pre-assembled harness for 4 solenoids |
+| **Miniature Solenoids** | 5V DC Pull Solenoids ($\varnothing 6.5 \times 12\,\text{mm}$) with TPU Tip | Solenoid Supplier | 8 pcs | 4 pcs per Smart Cartridge (Sena / Cardo) |
+| **J2 Gateway Cable** | Pre-crimped 6-Pin JST-SH to Jack / USB | COTS Standard | 2 pcs | Audio & power harness to headset inlays |
+| **Binder M5 4-Pin Receptacle**| Series 707 M5 4-Pin Panel Mount with D-Flat | Binder | 1 pc | Housing bulkhead socket for Radar 2.0 Sub-MCU |
+| **Wheeltec MR20 77-GHz mmWave**| 77-GHz FMCW Automotive Radar (150 m Range) | Wheeltec | Opt. (1)| Radar 2.0 transceiver module inside rear housing |
+| **PC Radome Window** | Laser-cut Polycarbonate 1.6 mm (RF-transparent)| COTS / Plexiglas | Opt. (1)| Microwave & optical window for MR20 & 24-LED Halo |
+| **3M Dual Lock SJ3550** | Interlocking Adhesive Fastener Strip (VHB) | 3M | 0.5 m | Vibration-resistant, tool-free module mounting |
+| **car_sun_visor_pod_clip** | 3D Printed PA12 Sun Visor Clips | OMB CAD | Opt. (2)| Chase car / van visor mounting kit for Pod 1 & 2 |
 
 ---
 
-## 12. Minimalist Tool List (The True IKEA Principle)
+## 13. Minimalist Tooling List (The True IKEA Principle)
 
-Because **no soldering, no crimping, and no heat-set threaded inserts** are required, the assembly tool list shrinks to the standard tools every motorcyclist carries:
+Because **no soldering, no crimping, and no thermal heat-staking of threaded inserts** is required, the tool kit shrinks to an absolute minimum that every rider carries in their standard toolkit:
 
-| Tool | Size / Specification | Purpose during Assembly |
+| Tool | Size / Specification | Assembly Purpose |
 | :--- | :--- | :--- |
-| **Hex Key Set** | **1.5 mm / 2.0 mm / 2.5 mm / 3.0 mm** | Tightening all enclosures, boards, and clamps |
-| **Torx / Screwdriver** | **TX10 / PH1** | Enclosure lid and anti-theft locking screw |
-| **Wrench / Socket** | **SW 7 mm / SW 8 mm** | Countering M4/M5 nuts on tube clamps |
-| **Scissors / Cutter** | Standard | Sizing silicone gasket cord to length |
-| **Silicone Grease** | Liqui Moly / OKS 1110 (small tube) | Light coating on enclosure gaskets |
+| **Hex Key Set (Allen)** | **1.5 mm / 2.0 mm / 2.5 mm / 3.0 mm** | Tightening all enclosures, circuit boards, and clamps |
+| **Phillips / Torx Driver** | **TX10 / PH1** | Enclosure covers and anti-theft security screws |
+| **Open-End Wrench / Socket**| **7 mm AF / 8 mm AF** | Counter-holding M4/M5 nuts during clamp assembly |
+| **Scissors / Utility Knife**| Standard | Trimming silicone O-ring cord to length |
+| **Silicone Grease** | Liqui Moly / OKS 1110 (small tube) | Lightly lubricating enclosure seals |
 
 > [!TIP]
-> **No soldering iron, no heat gun, no specialized micro-crimping pliers, and no insert melting tips required.** All mechanical and electronic assemblies are exclusively snapped, plugged, and bolted!
+> **No soldering iron, no hot air station, no specialized crimper, and no heat-staking brass insert tool is needed.** All mechanical and electronic modules assemble exclusively with pre-crimped snap connectors and standard fasteners!
 
 ---
 
-## 13. Cost Estimation, Procurement Strategy & Scaling Effects (Solo vs. 2–3 Bikes)
+## 14. Cost Calculation, Ordering Strategy & Economies of Scale (Solo vs. 2–3 Bikes)
 
 > [!IMPORTANT]
-> **Important Cost Disclaimer regarding OEM Adapters & Third-Party Devices:**
-> The calculated hardware costs of **approx. 135 € to 260 €** cover **exclusively the OpenMotorBridge hardware** (assembled PCBAs, 3D printed housings, COTS wiring harnesses, 2,200 mAh backup battery, gaskets, hardware).
-> Any commercial third-party intercoms inserted into the gateway slots (e.g., **Sena SPIDER X Slim**, **Cardo Packtalk Edge**) or radar units (**Garmin Varia RTL515 / eRTL615**) are **third-party user gear** and are NOT included in the DIY hardware price!
+> **Important Note Regarding Commercial Intercoms:**
+> The estimated hardware cost of **approx. 130 € to 250 €** applies **exclusively to the OpenMotorBridge system** (assembled PCBAs, 3D printed parts, COTS harnesses, 2,200 mAh backup battery, gaskets, standard hardware).
+> Any commercial third-party intercoms inserted into the gateway bays (such as **Sena SPIDER X Slim**, **Cardo Packtalk Edge**) or radar devices (**Garmin Varia RTL515 / eRTL615**) are **sourced by the user** and not included in the self-build BOM cost!
 
-### 13.1 Why Do Costs Range Between ~135 € and ~260 €?
-At turnkey PCB manufacturing services like JLCPCB or PCBWay, unit pricing is heavily influenced by **fixed tooling and setup charges** per board design:
-1. **Minimum Order Quantity (MOQ):** Turnkey PCB fabs mandate a minimum batch of **5 boards** per design.
-2. **SMT Setup Overhead:** Each PCBA design incurs a fixed setup fee for solder stencils, feeder loading, and pick-and-place calibration (approx. $15–$25 per board type, totaling approx. $110–$130 across all system boards).
-3. **SMT Assembly Quantity:** JLCPCB allows assembling either 2 boards (the minimum) or all 5 boards in the batch.
-
-### 13.2 Scenario A: Solo Builder (1 Complete System for 1 Motorcycle)
-When an individual builder places an order solely for one bike:
-* JLCPCB delivers 5 boards per design (2 fully assembled plus 3 unpopulated spares).
-* The entire SMT setup fee (approx. 110 €) is absorbed by that single finished motorcycle build.
+### 14.1 Scenario A: Solo Builder (1 Complete System for 1 Motorcycle)
+When an individual builder orders all PCBs alone:
+* JLCPCB supplies 5 boards per design (2 fully assembled plus 3 unpopulated spares).
 * **Cost Breakdown Solo Builder:**
-  * JLCPCB PCBAs (PCBA 01 to 05 assembled incl. shipping & VAT): approx. 140–165 €
-  * 3D Printing (MJF PA12 service bureau or home ASA filament): approx. 35–50 €
-  * COTS molded cables, 2,200 mAh LiPo, V4A fasteners & seals: approx. 35–45 €
-  * **Total Solo System Cost: approx. 210 € to 260 €**
+  * JLCPCB PCBAs (PCBA 01, 02 [2x], 03 [2x], 05 assembled incl. shipping & customs): approx. 135–160 €
+  * 3D Printing (MJF PA12 bureau or own ASA filament): approx. 35–45 €
+  * COTS harnesses, 2,200 mAh LiPo, stainless fasteners & gaskets: approx. 35–45 €
+  * **Total System Cost Solo: approx. 205 € to 250 €**
 
-### 13.3 Scenario B: Community / Group Buy (2 to 3 Motorcycles)
-When 2 to 3 riders team up (or one rider equips a primary and secondary bike):
-* JLCPCB is instructed to **assemble all 5 boards** in each batch.
-* The fixed setup fees (110 €) are distributed across 5 fully functioning board sets.
-* Component unit prices decrease due to volume pricing tiers at LCSC.
-* **Cost Breakdown Per Motorcycle (for a 3-bike group buy):**
-  * JLCPCB PCBAs (pro-rated share per bike): approx. 75–85 €
-  * 3D Printing (per bike): approx. 30–40 €
-  * COTS cables, 2,200 mAh LiPo, fasteners (bulk tier): approx. 30 €
-  * **Total Cost Per Motorcycle: only approx. 135 € to 155 €!**
-
-*(All cost estimates as of 2026, indicative figures including VAT, excluding optional third-party OEM intercom units).*
+### 14.2 Scenario B: Community / Group Order (2 to 3 Motorcycles)
+When 2 to 3 riders order together:
+* All 5 boards are ordered fully populated from JLCPCB.
+* Fixed setup fees distribute across 5 fully operational board sets.
+* **Cost Breakdown per Motorcycle (at 3 bikes):**
+  * JLCPCB PCBAs (share per bike): approx. 70–80 €
+  * 3D Printing (per bike): approx. 30–35 €
+  * COTS harnesses, 2,200 mAh LiPo, fasteners (bulk discount): approx. 30 €
+  * **Total Cost per Motorcycle: only approx. 130 € to 145 €!**
 
 ---
 
-## 14. Component Lifecycle Audit (EOL/NRND) & Second-Source Alternatives
+## 15. Component Lifecycle & SMT Sourcing Audit (EOL / NRND Alternatives)
 
-To ensure long-term reproducibility and smooth automated turnkey assembly at JLCPCB / LCSC, the complete Bill of Materials has been audited for component lifecycles and supply chain resilience:
-
-### 14.1 Critical Lifecycle Notice: MEMS Microphone (Knowles SPH0645LM4H-B is EOL)
-* **Status:** The originally specified Knowles **SPH0645LM4H-B** has been officially discontinued by the manufacturer (**Obsolete / End-of-Life**) and is flagged as not recommended for new designs at major distributors. Additionally, the old SPH0645 utilized non-standard I2S framing (1-bit timing offset).
+### 15.1 Critical Finding: MEMS Microphone (Knowles SPH0645LM4H-B is EOL)
+* **Status:** The originally specified Knowles **SPH0645LM4H-B** is formally declared **Obsolete / End-of-Life**.
 * **Recommended Successor / Primary Part:** **Sipeed / Zilltek MSM261S4030H0R** (LCSC Part: **`C544577`**).
-  * *Advantages:* Fully standard Phillips I2S compliant (zero driver workarounds needed in ESP-IDF DMA engine), abundant mass-production inventory at LCSC/JLCPCB, pin- and footprint-compatible.
-  * *Secondary Alternatives:* **TDK InvenSense ICS-43434 / ICS-43432** or **Knowles SPK0641HT4H-1**.
+  * *Advantages:* 100% standard I2S compliant (no DMA bit-shift workarounds required in ESP-IDF), excellent large-scale stock availability at LCSC, pin and footprint compatible.
 
-### 14.2 JLCPCB Extended Parts & Second-Source Alternatives
+### 15.2 JLCPCB Extended-Parts & Second-Source Alternatives
 
-| Subassembly / Function | Primary Component | JLCPCB / LCSC Part | Status / Availability | Recommended Second-Source / Drop-In Alternative |
+| Subassembly / Function | Primary Component | JLCPCB / LCSC Part | Status / Sourcing | Recommended Second-Source / Drop-In Alternative |
 | :--- | :--- | :--- | :--- | :--- |
-| **Central Box 12V Buck** | TI LM5164-Q1 | `C2843477` | Active (TI), often JLCPCB Extended | **TI LMR36015** (60V 1.5A, `C2843480`) or **XLSEMI XL7005A** (80V, JLCPCB Basic Part!) |
-| **Front Node USB Hub** | Microchip USB2514Bi | `C16251` | Active, Industrial (-40..+85°C) | **Terminus FE1.1s / FE8.1** (JLCPCB Basic Part, cent-cost, massive stock) |
-| **CAN-FD Transceiver (3.3V)** | TI TCAN334GDCNR | `C842340` | Active (TI) | **TI TCAN332G / TCAN337G** or **SITCORE SIT1051T/3** (pin-compatible, massive LCSC stock) |
-| **Audio Transformer (1500V)**| Bourns LM-NP-1001-B1L| `C114402` | Active, often JLCPCB Extended | **Triad Magnetics SP-66** or **Bourns SM-LP-5001** |
-| **Stereo DSP Codec** | Everest Semi ES8388 | `C365736` | Active (Native in ESP-ADF) | **Everest Semi ES8311** (modern low-power variant) or **TI TLV320AIC3104** |
+| **Central Box 12V Buck** | TI LM5164-Q1 | `C2843477` | Active (TI), JLCPCB Extended | **TI LMR36015** (60V 1.5A, `C2843480`) or **XLSEMI XL7005A** (80V) |
+| **Front Node USB Hub** | Microchip USB2514Bi | `C16251` | Active, Industrial (-40..+85°C) | **Terminus FE1.1s / FE8.1** (JLCPCB Basic Part, cents-level price) |
+| **CAN-FD Transceiver (3.3V)** | TI TCAN334GDCNR | `C842340` | Active (TI) | **TI TCAN332G / TCAN337G** or **SITCORE SIT1051T/3** |
+| **Audio Transformer (1500V)**| Bourns LM-NP-1001-B1L| `C114402` | Active, JLCPCB Extended | **Triad Magnetics SP-66** or **Bourns SM-LP-5001** |
+| **Stereo DSP Codec** | Everest Semi ES8388 | `C365736` | Active (Standard in ESP-ADF) | **Everest Semi ES8311** or **TI TLV320AIC3104** |
 
-### 14.3 Future-Proof Core Components (Guaranteed Longevity Through 2034+)
-* **Espressif ESP32-S3-WROOM-1 / 1U:** Espressif guarantees a minimum 10-year longevity roadmap (at least until 2034).
-* **Espressif ESP32-C3-WROOM-02U:** Single-core 32-bit RISC-V SoC with native 2.4 GHz radio (Wi-Fi 4 / BLE 5 / ESP-NOW) and hardware ROM-SLIP bootloader for UART push-flashing (~$1.20). Guaranteed availability through at least 2034.
-* **Semtech SX1262 LoRa:** Current industry benchmark transceiver for 868 MHz (+22 dBm) across OpenMotorMesh / Meshtastic.
-* **Bosch Sensortec BMI270:** Current 6-axis IMU (replaced the obsolete BMI160).
-* **WCH CH32V003F4P6:** 32-bit RISC-V cartridge controller, cent-cost with massive inventory at LCSC.
-* **Nordic nRF52840:** Global market leader for BLE 5.4 and Thread/Zigbee with guaranteed automotive/industrial supply.
+---
 
+## 16. Conformal Coating Manufacturing Guidelines (IPC-CC-830B)
+
+To ensure 100% automotive-grade reliability against vibration, condensation, and road salt, all 7 PCBAs are conformal coated during the assembly process:
+
+### 16.1 Coating Specification
+* **Standard:** Certified to **IPC-CC-830B** and **MIL-I-46058C**.
+* **Type:** **Modified Acrylic Resin (AR)**, e.g., *Peters ELPEGUARD SL 1307 FLZ* (fast curing, UV fluorescent for optical inspection).
+* **Layer Thickness:** $30\,\mu\text{m} \dots 60\,\mu\text{m}$ evenly across top and bottom layers.
+
+### 16.2 Mandatory Masking Zones (Kapton Tape Protection)
+The following areas must **never** be coated:
+1. **Connectors & Sockets:**
+   * USB-C receptacles (`J7` Front Node, service ports)
+   * M8 / M5 connector pins (`J2` Pod Base, Binder M5 Radar)
+   * JST-SH / JST-PH pin headers (`J1..J12` Front Node, `J1..J2` Cartridges)
+   * MicroSD card slot (`J2` Central Box)
+2. **Acoustic Sensors & Venting:**
+   * **MEMS Microphone (`MIC1` MSM261S4030H0R on PCBA 05):** Acoustic inlet port ($\varnothing 0.5\,\text{mm}$) must be sealed with a Kapton dot!
+   * **Equalization Vent (Gore ePTFE Vent):** Must remain free of lacquer.
+3. **RF Antenna Connectors & Test Points:**
+   * U.FL coaxial sockets (`ANT1`, `ANT2`)
+   * Test points for in-circuit programming and oscilloscope probing

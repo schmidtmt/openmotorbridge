@@ -74,24 +74,24 @@ Die OpenMotorBridge fungiert als aktive Audio-Kreuzschiene und Brückengateway z
 Klassische Bluetooth-Fernbedienungen am Lenker leiden unter hohen Latenzen ($80 \dots 250\,\text{ms}$) und Verbindungsaussetzern. OpenMotorBridge löst dieses Problem durch eine hybride PTT-Architektur:
 
 ```
-               LENKER-PTT SIGNALKETTE (GLAS-ZU-GLAS < 1,8 ms)
+               LENKER-PTT SIGNALKETTE (GLAS-ZU-GLAS < 0,4 ms)
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
-│ 1. LENKERTRASTER (Am Front-Knoten verdrahtet):                                         │
+│ 1. LENKERTASTER (Am Front-Knoten verdrahtet):                                          │
 │    • Mechanischer Goldkontakt-Taster am Lenker (IP67, 100% batteriefrei)               │
 │    • Hardware-Schmitt-Trigger-Entprellung (12 µs Latenz)                               │
 │    • GPIO Pegel-Interrupt auf ESP32-S3 Dual-Core Controller                            │
 ├────────────────────────────────────────────────────────────────────────────────────────┤
 │                                        ▼                                               │
-│ 2. ULTRA-LOW-LATENCY FUNKBRÜCKE (ESP-NOW 2.4 GHz):                                     │
-│    • Direktes IEEE 802.11 Vendor-Specific Action Frame (Payload: 8 Bytes)              │
-│    • Keine TCP/IP- oder BLE-Stack-Latenzen                                             │
-│    • Übertragungszeit Front-Knoten -> Zentralbox: 0,90 ms (PDR: 99,8 %)                │
+│ 2. ULTRA-LOW-LATENCY FUNKBRÜCKE (UWB 6.5 GHz Ch. 5 / Qorvo DW3110):                    │
+│    • IEEE 802.15.4z UWB Frame mit 6.8 Mbps PHY (Payload: 8 Bytes, < 180 µs Flugzeit)   │
+│    • 100 % konform mit ETSI EN 302 065-1/3 & EU-Beschluss 2019/785 (Kein Duty-Cycle-Cap)│
+│    • Null Kollision mit 2.4 GHz Bluetooth, Wi-Fi oder Sena/Cardo Mesh (PDR: 99,99 %)   │
 ├────────────────────────────────────────────────────────────────────────────────────────┤
 │                                        ▼                                               │
 │ 3. ZENTRALBOX HARDWARE-TRIGGER:                                                        │
-│    • ESP32-S3 Core 0 ISR erfasst ESP-NOW Frame                                         │
+│    • ESP32-S3 Core 0 ISR erfasst UWB Frame (< 35 µs)                                   │
 │    • Sofortiges Durchschalten des Toshiba TLP222A PhotoMOS Optokopplers (< 45 µs)      │
-│    • Gesamtzeit vom Tastendruck bis zum gezündeten Intercom-PTT: 1,70 ms               │
+│    • Gesamtzeit vom Tastendruck bis zum gezündeten Intercom-PTT: ~0,36 ms              │
 └────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -266,7 +266,7 @@ Jede Kassetten-Trägerplatine (`openmotorbridge_pod_cartridge`) stellt dem Syste
 1. **Strombegrenzte Erkennungsphase:** Beim Einstecken bleibt die Haupt-Speisung (5V MOSFET) gesperrt. Der 1-Wire-Treiber pollt mit strombegrenzter Hilfsspannung ($< 20\,\text{mA}$) und liest die UID aus.
 2. **Automatische Routing-Zuweisung:**
    * **Smart Cartridge UID erkannt:** Zentralbox identifiziert die Kassetten-Klasse (z. B. Sena SPIDER X Slim), initialisiert die serielle Opcode-Kommunikation und mechatronische Tastensteuerung und lädt das entsprechende JSON-Profil.
-   * **Heck-Pod 3 UID erkannt:** Zentralbox schaltet Pins 15/16 auf High-Speed UART (@ 460.800 Baud) und initialisiert den NMEA/LoRa-Parser.
+   * **OMM 2.4 GHz Swap Cartridge erkannt (ID 0x03):** Zentralbox schaltet den Port auf OMM-Mesh-Betrieb (ESP32-C3) und bindet die Einheit als 2.4 GHz Gruppe ein.
    * **Passive Audio-Kassette erkannt:** Pins werden an den Bourns NF-Pfad und ES8388 I2S-DSP geschaltet; das zugehörige Legacy-Profil wird geladen.
    * **Dummy-Kassette oder Open-Pin erkannt:** Slot bleibt dauerhaft stromlos geschaltet (`disabled.json`).
 3. **Soft-Start:** Nach erfolgreicher Validierung schaltet der P-FET die Speisespannung über eine definierte Soft-Start-Rampe ($100-150\,\text{ms}$) ein.
@@ -507,7 +507,7 @@ OpenMotorBridge löst dieses Problem durch eine vollautomatische **Proximity-Mut
   [1. SENSORIK-AUSWERTUNG IN ECHTZEIT]
   ├── Bedingung 1: Fahrzeug steht still (CAN-Geschwindigkeit v = 0.0 km/h)
   └── Bedingung 2: Partner-Motorrad im extremen Nahbereich (< 3.0 m)
-                   Erkannt über 2.4 GHz ESP-NOW Mesh Signalstärke (RSSI > -45 dBm)
+                   Erkannt über UWB Laufzeit-/Signalmessung bzw. OMM 2.4 GHz RSSI (> -45 dBm)
 
   [2. AKUSTISCHER ÜBERGANG (Automatisch)]
   ├── OpenMotorBridge schaltet den Mikrofon-Uplink in das Weitverkehrs-Mesh STUMM

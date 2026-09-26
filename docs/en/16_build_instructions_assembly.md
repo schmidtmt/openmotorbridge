@@ -1,722 +1,249 @@
 # 16 - Build Instructions, Wiring & Vehicle Installation
 
-This document is the comprehensive, hands-on assembly guide for assembling and installing a complete **OpenMotorBridge (v8.0)** hardware system on a motorcycle.
+This document is the complete, hands-on step-by-step assembly manual for building and installing a complete **OpenMotorBridge (v8.0 Clean Architecture)** system on any motorcycle or support vehicle.
 
 ---
 
-## 1. Kit Architecture Overview (What Are We Building?)
+## 1. System Kit Overview (What is being built?)
 
-A complete OpenMotorBridge motorcycle installation comprises:
+A complete OpenMotorBridge vehicle kit consists of the following core assemblies:
 
 ```text
                       ┌─────────────────────────────────────────┐
                       │    1x CENTRAL MAIN BOX (IP67)           │
-                      │    (Under-seat / tail frame)            │
-                      │    • Lower case + mid tray + lid        │
-                      │    • Main PCB (ESP32-S3, Codec, UPS)    │
-                      │    • 2,200 mAh LiPo backup battery      │
+                      │    (Under the seat / in tail section)   │
+                      │    • Lower tub + mid tray + lid         │
+                      │    • Host PCBA 01 (ESP32-S3 Dual-Core)  │
+                      │    • Onboard SX1262 LoRa 868 MHz        │
+                      │    • Qorvo DW3110 UWB Transceiver       │
+                      │    • 2,200 mAh LiPo backup battery (UPS)│
                       └────────────────────┬────────────────────┘
                                            │
-                         1x CENTRAL HARNESS (HD26 IP67)
+                         1x CENTRAL HARNESS (HD26 SEAL-D IP67)
                                            │
-         ┌─────────────────────────────────┼─────────────────────────────────┐
-         │                                 │                                 │
-         ▼                                 ▼                                 ▼
-┌──────────────────┐             ┌──────────────────┐              ┌──────────────────┐
-│ 1x POD 1 (LEFT)  │             │ 1x POD 2 (RIGHT) │              │ 1x POD 3 (TAIL)  │
-│ (Frame / Bar)    │             │ (Frame / Bar)    │              │ (Tail Cowl)      │
-│ • Pod Enclosure  │             │ • Pod Enclosure  │              │ • Pod Enclosure  │
-│ • Baseboard      │             │ • Baseboard      │              │ • Baseboard      │
-│ • GATEWAY SLOT 1 │             │ • GATEWAY SLOT 2 │              │ • CARTRIDGE 3    │
-│   (e.g., Sena)   │             │   (e.g., Cardo)  │              │   (LoRa + GNSS)  │
-└──────────────────┘             └──────────────────┘              └──────────────────┘
-                                           │
-                                           ▼ 2.4 GHz Wireless Link (ESP-NOW < 1.8 ms)
+          ┌────────────────────────────────┼────────────────────────────────┐
+          │                                │                                │
+          ▼ Whip 1                         ▼ Whip 2                         ▼ Whip 5
+┌──────────────────┐             ┌──────────────────┐             ┌──────────────────┐
+│ 1x POD 1 (LEFT)  │             │ 1x POD 2 (RIGHT) │             │ 1x REAR RADAR    │
+│ (Frame / Pannier)│             │ (Frame / Pannier)│             │ (Optional)       │
+│ • Pod enclosure  │             │ • Pod enclosure  │             │ • Wheeltec MR20  │
+│ • Base PCBA 02   │             │ • Base PCBA 02   │             │   or Garmin      │
+│ • CARTRIDGE 1    │             │ • CARTRIDGE 2    │             │   Varia RTL515   │
+│   (Sena SPIDER   │             │   (Cardo Edge    │             └──────────────────┘
+│    X Slim)       │             │    / Swap OMM)   │
+└──────────────────┘             └──────────────────┘
+                                           ▲
+                                           │ Deterministic UWB Vehicle Backbone
+                                           │ (Qorvo DW3110 / 6.5 GHz Ch. 5, < 0.4 ms)
+                                           ▼
                                  ┌──────────────────────────────────┐
                                  │ 1x UNIVERSAL FRONT NODE (IP67)   │
-                                 │ (Cockpit & Sensor Hub)           │
-                                 │ • AMPS / Tube Clamp Mount        │
-                                 │ • CarPlay/AA Dongle Port (USB-A) │
-                                 │ • Smartphone USB-PD Fast Charger │
-                                 │ • Knowles MEMS Acoustic Sensor   │
+                                 │ (Cockpit & Sensor Hub, PCBA 05)  │
+                                 │ • u-blox SAM-M10Q Multi-GNSS     │
+                                 │ • TI TMP117 & OPT3001 Sensors    │
+                                 │ • Knowles MEMS Wind Noise Sensor │
+                                 │ • 4-Port USB Hub & Dual USB-PD   │
                                  │ • Battery-Free Handlebar PTT     │
                                  └──────────────────────────────────┘
 ```
 
-![Automotive Wiring Harness Architecture](../images/cad/wiring_harness_cad.png)
-
-*Figure 16.1b: CAD system architecture of the central OpenMotorBridge v8.0 automotive wiring harness (HD26 Seal-D main flange connector with heavy-duty IP67 overmolded Y-hub branching to 3x M8 Pod pigtails, M8 Aux/CAN-Bus, and fused 12V KL30/KL15 motorcycle battery feed).*
-
 ---
 
-## 2. Pre-Assembly Checklist
+## 2. Pre-Assembly Checklist (Parts & Hardware Verification)
 
-All parts, circuit board production files, and COTS procurement links are cataloged in **[Chapter 15: Bill of Materials & Manufacturing Data](15_bom_manufacturing.md)**. Before beginning assembly, verify that all necessary components are present:
+All discrete components, PCB ordering files, and COTS sourcing lists are documented in **[Chapter 15: Bill of Materials & Manufacturing](15_bom_manufacturing.md)**. Ensure the following items are ready before assembly begins:
 
-* [ ] **3D Printed Components (MJF PA12 Black or FDM ASA/PET-CF):**
-  * 1x Main Box (Lower case, mid-tray with 2,200 mAh LiPo pocket, lid)
-  * 3x Pod base housings & 3x Pod bulkheads
-  * 3x Cartridge base sleds, inlays (e.g., Sena, Cardo, or Blank) & 2x locking latches
-  * 1x Rear Pod 3 OMM radome
-  * 1x Front Node (Lower tub with AMPS nut pockets, lid, TPU cable glands & USB-C cap)
-  * 1x Bike-specific mounting kit (BMW GS clamps / Harley saddlebag lid docks)
-* [ ] **Turnkey Factory-Assembled Circuit Boards (JLCPCB / Eurocircuits):**
-  * 1x PCBA 01 (Central Box), 3x PCBA 02 (Pod Base), 2x PCBA 03 (Cartridge), 1x PCBA 04 (Rear Pod 3), 1x PCBA 05 (Front Node)
-  * *(Optional: PCBA 06 MagSafe Dock, PCBA 07 Smart Keyfob)*
-* [ ] **V4A Stainless Hardware & Springs (IKEA Principle – 100% Solder-Free):**
-  * 8x DIN 934 / DIN 985 M3 stainless nuts (for enclosure nut pockets)
+* [ ] **3D Printed Parts (MJF PA12 Black or FDM ASA/PET-CF):**
+  * 1x Main Box (lower tub with UWB bottom pocket $11 \times 11 \times 0.6\,\text{mm}$, mid tray with LiPo cradle, lid with LoRa FXP895 pocket $110 \times 20 \times 0.8\,\text{mm}$)
+  * 2x Pod base enclosures & 2x pod bulkheads (100% symmetric for Pod 1 and Pod 2)
+  * 2x Cartridge base sleds, inlays (Sena SPIDER X Slim, Cardo Packtalk Edge, Swap OMM, or blank cartridge) & 2x magnetic latches
+  * 1x Front Node (lower tub with UWB bottom pocket and AMPS nut pockets, upper lid, TPU cable glands & USB-C cap)
+  * 1x Vehicle-specific mounting kit (BMW GS clamps & `adventure_rack_radar_mount.stl` / Harley saddlebag docks & license plate bracket / Support-Car `car_sun_visor_pod_clip.stl`)
+* [ ] **Fully Populated PCBAs (from JLCPCB / Eurocircuits):**
+  * 1x PCBA 01 (Central Box with onboard LoRa SX1262 and DW3110 UWB)
+  * 2x PCBA 02 (Pod Base, symmetric for Pod 1 and Pod 2)
+  * 2x PCBA 03 (Smart Modular Cartridge with CH32V003 and 4x AO3400 N-MOSFETs)
+  * 1x PCBA 05 (Front Node with DW3110 UWB)
+  * *(Optional: 1x PCBA 08 Radar 2.0 Sub-MCU, PCBA 06 MagSafe Dock, PCBA 07 Smart-Keyfob)*
+* [ ] **A4 / 316 Stainless Fasteners & Springs (IKEA Principle – 100% Solder-Free):**
+  * 8x DIN 934 / DIN 985 M3 stainless nuts (for captive enclosure nut pockets)
   * 4x DIN 934 M4 nuts (for AMPS nut pockets in Front Node tub)
   * 4x M3 x 40 mm socket head screws (Central Box), 4x M3 x 20 mm screws (Front Node)
-  * 8x M2.5 x 6 mm PCB screws, 6x M2 x 8 mm countersunk (bulkheads), 8x M2 x 6 mm (cartridges)
-  * 2x DIN 7 M2 x 8 mm dowel pins (rocker pivots), 2x DIN 6325 Ø 6 x 8 mm hardened steel pins
-  * 2x Rocker return springs, 6x Auto-eject compression springs, 1x N52 magnetic release key
-* [ ] **Gaskets & Backup Battery:**
-  * Silicone solid cord Ø 1.5 mm Shore 40A ($40\,\text{cm}$ Central Box, $30\,\text{cm}$ Front Node)
-  * 3x Silicone face seals for Pod mouths, Gore ePTFE adhesive membrane discs
-  * **1x 1S LiPo Flat-Pack 2,200 mAh** ($68 \times 39 \times 5.0\,\text{mm}$, Type 504068 / 503870) with Molex Micro-Fit 3.0 connector
-* [ ] **Pre-Molded COTS Wiring Harnesses (No Crimping Required):**
-  * 1x HD26 IP67 harness whip, 3x M8 6-Pin PUR cables (1.0 m / 1.5 m)
-  * 1x 2-Pin JST-PH power lead with Posi-Tap connectors (cockpit 12V switched power & ground)
-  * JST-SH cartridge harnesses (8-Pin `J_ACT` for solenoids, 6-Pin `J2` for audio/DC)
+  * 8x M2.5 x 6 mm board screws, 4x M2 x 8 mm countersunk screws (bulkheads), 8x M2 x 6 mm (cartridges)
+  * 2x DIN 7 M2 x 8 mm dowel pins (latch pivots), 2x DIN 6325 Ø 6 x 8 mm hardened steel keeper pins
+  * 2x Latch return springs, 4x auto-eject compression springs, 1x N52 neodymium release key
+* [ ] **Gaskets, Battery & Antennas:**
+  * Silicone O-ring cord Ø 1.5 mm Shore 40A ($40\,\text{cm}$ Main Box, $30\,\text{cm}$ Front Node)
+  * 2x Molded silicone face gaskets for Pod 1 & 2 mouths, Gore ePTFE vent stickers
+  * **1x 1S LiPo Flat Pack 2,200 mAh** ($68 \times 39 \times 5.0\,\text{mm}$) with Molex Micro-Fit 3.0 connector
+  * **2x Taoglas FXUWB10 UWB Flex Antennas** with 20 mm U.FL leads
+  * **1x Taoglas FXP895 LoRa 868 MHz Flex Antenna** with 50 $\Omega$ U.FL lead
+  * **1x u-blox SAM-M10Q Multi-GNSS Module** with integrated patch antenna (Qwiic I2C)
+  * **1x TI TMP117 & 1x TI OPT3001 Sensors** (Qwiic I2C)
+* [ ] **Pre-Assembled COTS Harnesses (Zero Crimping Required):**
+  * 1x HD26 SEAL-D IP67 4-branch breakout harness (Pod 1, Pod 2, 12V Battery, Whip 5 Rear Radar)
+  * 2x M8 6-Pin PUR cables (1.0 m / 1.5 m)
+  * 1x M8 4-Pin PUR cable (Whip 5 for radar)
+  * JST-SH cartridge wiring harnesses (8-Pin `J_ACT` for solenoids, 6-Pin `J2` for audio/DC)
 * [ ] **Tools:**
-  * Hex key set (1.5 / 2.0 / 2.5 / 3.0 mm), Torx TX10 / PH1 screwdriver, wrench SW 7 / 8 mm, utility cutter, silicone grease
+  * Hex key set (1.5 / 2.0 / 2.5 / 3.0 mm), Torx TX10 / PH1 driver, open-end wrenches 7 / 8 / 10 mm, utility knife, dielectric silicone grease
 
 ---
 
-## 3. Step-by-Step Assembly Instructions
+## 3. Step-by-Step Module Assembly
 
-### Step 1: Central Box (Main Box) Assembly
-1. **Insert Captive Nuts:** Press 4x DIN 934 / DIN 985 M3 stainless nuts from below into the captive hexagonal nut pockets of the lower case ([`main_box_lower_case.stl`](../../hardware/cad/stl/01_main_box/main_box_lower_case.stl)).
-2. **Mount Main Board:** Place the assembled PCBA 01 (`openmotorbridge_central_box`) onto the vibration-damping bosses and secure with 4x M2.5 $\times 6\,\text{mm}$ screws finger-tight.
-3. **Mid Tray & 2,200 mAh LiPo Battery:** Place the mid-tray ([`main_box_mid_tray.stl`](../../hardware/cad/stl/01_main_box/main_box_mid_tray.stl)). Lay the **2,200 mAh Flat-LiPo battery** ($68 \times 39 \times 5.0\,\text{mm}$) into the tray pocket, route the Molex Micro-Fit cable through the partition cutout to `J_BAT`, and secure the battery with an EPDM damper strip.
-4. **Gasket & Lid:** Coat silicone cord (Ø 1.5 mm, $40\,\text{cm}$) lightly with silicone grease and seat in the lid groove. Stick the Gore ePTFE membrane over the vent boss. Position the lid ([`main_box_lid.stl`](../../hardware/cad/stl/01_main_box/main_box_lid.stl)) loosely for now. *(Important Note: Final cross-pattern tightening of the 4x M3 screws and gasket compression occurs only after the successful bench test in Section 4!)*
-
----
-
-### Step 2: Satellite Pods 1, 2, and Rear Pod 3 Assembly
-1. **Insert Baseboard:** Slide the assembled PCBA 02 (`openmotorbridge_pod_base`) into the internal guide rails of the Pod chassis ([`pod_base_housing.stl`](../../hardware/cad/stl/02_pod_base/pod_base_housing.stl)). Guide the M8 6-Pin IP67 connector through the rear port, seat the O-ring, and tighten the M8 nut externally using a 10 mm wrench ($1.2\,\text{Nm}$).
-2. **Install Auto-Eject Springs:** Insert a V4A compression spring ($\varnothing 4.5 \times 15\,\text{mm}$) into each of the two rear spring pockets of the bulkhead ([`03_pod_bulkhead_partition.stl`](../../hardware/cad/stl/02_pod_base/components/03_pod_bulkhead_partition.stl)).
-3. **Secure Bulkhead:** Slide the bulkhead into the chassis until it seats against the internal shoulder stop. Fasten with 2x M2 $\times 8\,\text{mm}$ countersunk screws through the outer shell flush.
-4. **Verification:** The spring-loaded Harwin 6-Pin docking pogo pins must protrude centered and square through the bulkhead window. Repeat for Pod 1, Pod 2, and Pod 3.
-
----
-
-### Step 3: Multi-Protocol Gateway Cartridges 1 & 2 Assembly (e.g., Sena & Cardo)
-> **Architecture Principle:** Slot 1 and Slot 2 are **Multi-Protocol Mesh Gateway Transceivers**, not separate rider/passenger headsets. One module (e.g., Sena SPIDER X Slim in Slot 1) bridges to the Sena Mesh network, while the second module (e.g., Cardo Packtalk Edge in Slot 2) concurrently bridges to the Cardo DMC network. The Central Box digitally routes audio between both wireless domains.
-
-1. **Insert Board:** Snap the PCBA 03 Rev 2.0 cartridge board into the cartridge sled ([`cartridge_base_sled.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl)).
-2. **Mount Gateway Inlay & Mechatronics:**
-   * **Class S (Smart Modular Cartridge with Mechatronics • Sena SPIDER / Cardo Packtalk):**
-     * Insert 4x miniature solenoids ($\varnothing 6.5 \times 12\,\text{mm}$) with TPU tips into the guide frame of the inlay ([`cartridge_insert_sena.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_sena.stl) or [`cartridge_insert_cardo.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_cardo.stl)).
-     * Place the actuator retainer plate and secure with 4x M2 $\times 6\,\text{mm}$ countersunk screws.
-     * Plug pre-crimped 8-pin JST-SH cable `J_ACT` from the solenoids directly to header `J_ACT` on PCBA 03.
-     * Seat the headset into the contoured cavity and secure with the quick-release clamp.
-     * Connect pre-crimped J2 power/audio cable.
-   * **Class D (Hermetic Blank Cartridge):**
-     * Insert blank sled [`cartridge_insert_blindkassette.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_blindkassette.stl) if a slot is temporarily unused or serves as a waterproof dry storage box.
-3. **Flange Gasket:** Stretch the molded silicone face seal over the cartridge collar and lubricate lightly with silicone grease.
-
-> [!TIP]
-> **Pre-Staging Strategy for Planned Second Intercoms (e.g. "Black Friday Upgrade"):**
-> If you are setting up openMotorBridge in spring with only one intercom (e.g. Sena SPIDER X in Slot 1) and plan to acquire a second system later (e.g. Cardo Packtalk Edge on Black Friday), you have two smart options:
-> 1. **Option A (Hermetic Blank Cartridge / Dry Box):** Print [`cartridge_insert_blindkassette.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_blindkassette.stl). Slot 2 serves as a waterproof dry storage compartment (emergency cash, spare fuses, valve cores) until you upgrade. When upgrading, simply remove the 4x M2 screws and swap the top lid for the Cardo insert on the very same universal sled.
-> 2. **Option B (Direct Pre-Installed Target Cartridge without OEM Unit):** Assemble the Cardo cartridge ([`cartridge_insert_cardo.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_cardo.stl)) right away, but omit the internal carrier PCB/cable (or protect the empty AirMount shoe with Cardo's silicone weather cap or a 3D-printed TPU weather plug).
->    * **Firmware Behavior:** With no 1-Wire DS2431 EEPROM present, the openMotorBridge firmware automatically identifies the slot as *“Empty Slot / Blank Cartridge”* and sets the DSP channel to **-96 dB mute**. No hiss, ground hum, or false trigger clicks occur!
->    * **Upgrade Advantage:** Once the intercom arrives, simply snap it into the pre-mounted cradle—zero tools or disassembly required at the motorcycle!
+### Step 1: Central Box Assembly
+1. **Insert Captive Nuts:** Press 4x DIN 934 / DIN 985 M3 stainless nuts into the captive hexagonal pockets from underneath the lower tub ([`main_box_lower_case.stl`](../../hardware/cad/stl/01_main_box/main_box_lower_case.stl)).
+2. **Install Tub Floor UWB Antenna:**
+   * Affix the flexible UWB antenna (Taoglas FXUWB10, $11 \times 11 \times 0.6\,\text{mm}$) into the bottom recess of the lower tub using its adhesive backing.
+   * Route the short 20 mm U.FL micro-coax cable vertically upward.
+3. **Mount Host PCB:**
+   * Place fully assembled PCBA 01 onto the vibration-damping bosses.
+   * Snap the U.FL connector onto receptacle `ANT2` located on the bottom copper layer (`B.Cu`).
+   * Fasten the board with 4x M2.5 $\times 6\,\text{mm}$ screws finger-tight.
+4. **Install Lid LoRa Antenna:**
+   * Adhere the flexible LoRa antenna (Taoglas FXP895, $110 \times 20 \times 0.8\,\text{mm}$) into the lid pocket of [`main_box_lid.stl`](../../hardware/cad/stl/01_main_box/main_box_lid.stl).
+   * Connect the U.FL lead to header `ANT1` on the top surface of PCBA 01.
+5. **Mid Tray & 2,200 mAh LiPo Battery:** Seat the mid tray ([`main_box_mid_tray.stl`](../../hardware/cad/stl/01_main_box/main_box_mid_tray.stl)). Place the **2,200 mAh flat LiPo battery** into the tray, connect the Micro-Fit plug to `J_BAT`, and secure the cell with EPDM foam tape.
+6. **Seal & Temporary Cover:** Lightly lubricate the silicone O-ring cord (Ø 1.5 mm, $40\,\text{cm}$) and seat it into the lid groove. Stick the Gore vent membrane onto the vent boss. Place the lid loosely on top.
 
 ---
 
-### Step 3.1: Magnetic Anti-Theft Rocker Mechanism
-
-```text
-                    MAGNETIC ANTI-THEFT LOCKING & EJECTION KINEMATICS
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│ [State 1: LOCKED]                                                                      │
-│ Compression spring preloads rocker ──► Rocker pivots on M2 pin ──► Sawtooth claw       │
-│ extends 2.5 mm into chassis slot. 90° shear face blocks pull-out 100%!                 │
-├────────────────────────────────────────────────────────────────────────────────────────┤
-│ [State 2: UNLOCK & EJECT]                                                              │
-│ External N52 neodymium key held to chassis mark ──► Pulls Ø 6x8 mm steel armature     │
-│ outwards ──► Sawtooth claw retracts flush ──► 2x V4A springs kick cartridge out 25 mm! │
-└────────────────────────────────────────────────────────────────────────────────────────┘
-```
-
-1. **Press-Fit Armature Pin:** Press the hardened steel pin ($\varnothing 6 \times 8\,\text{mm}$, DIN 6325) flush into the lateral cross-hole of the rocker latch ([`cartridge_magnetic_lock_latch.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_magnetic_lock_latch.stl)).
-2. **Seat Return Spring:** Place the small $\varnothing 3.5 \times 10\,\text{mm}$ spring into the inner pocket of the rocker.
-3. **Mount Rocker in Sled:** Insert the pre-assembled rocker into the slot on the left guide rail of the sled ([`cartridge_base_sled.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl)). Press the $\varnothing 2.0 \times 8\,\text{mm}$ stainless dowel pin (DIN 7) through the pivot bore from above.
-4. **Test Function:**
-   * The sawtooth claw must protrude $2.5\,\text{mm}$ under spring tension.
-   * Applying the N52 magnet to the armature height tilts the rocker by $-4.8^\circ$, retracting the claw completely flush into the sled.
+### Step 2: Assemble Satellite Pods 1 & 2 (2x Identical Units)
+1. **Insert Base PCB:** Slide fully assembled PCBA 02 into the guide tracks of the pod base housing ([`pod_base_housing.stl`](../../hardware/cad/stl/02_pod_base/pod_base_housing.stl)). Push the M8 6-pin IP67 socket through the rear bore, slip on the O-ring, and tighten the M8 jam nut ($1.2\,\text{Nm}$) using a 10 mm wrench.
+2. **Install Auto-Eject Springs:** Insert a stainless compression spring ($\varnothing 4.5 \times 15\,\text{mm}$) into each of the two rear spring cavities of the bulkhead partition ([`03_pod_bulkhead_partition.stl`](../../hardware/cad/stl/02_pod_base/components/03_pod_bulkhead_partition.stl)).
+3. **Secure Bulkhead:** Slide the bulkhead partition into the pod enclosure until seated against the internal stop shoulder. Fasten with 2x M2 $\times 8\,\text{mm}$ countersunk screws through the outer shell.
+4. **Inspection:** The 6-pin socket header `J1` aligns flush inside the bulkhead protective collar. Repeat for Pod 2.
 
 ---
 
-### Step 4: Rear Pod 3 Cartridge & OMM Radome (LoRa, GNSS & RF Bypass)
-1. **Mount Transceiver Board:** Install PCBA 04 (`openmotorbridge_rear_pod3`) into the 3rd base sled ([`cartridge_base_sled.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl)) with M2.5 screws.
-2. **Mount OMM Radome:** Snap the dielectric radome ([`cartridge_antenna_bracket_omm.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_antenna_bracket_omm.stl)) in place.
-3. **Mount SMA Bulkhead Jacks (Bypass for External Antennas):**
-   * Pass the 3x SMA flange jacks through the cartridge front wall and tighten ($0.8\,\text{Nm}$).
-   * Click micro-coax leads onto Murata MM8030 switch jacks (`J3` = 2.4 GHz Mesh, `J4` = 868 MHz LoRa, `J5` = GNSS).
-   * When no external antennas are connected, the internal radome patch and helical antennas operate 100% autonomously.
+### Step 3: Multi-Protocol Gateway Cartridges 1 & 2 Assembly
+1. **Mount PCB:** Snap PCBA 03 Rev 2.0 into the cartridge base sled ([`cartridge_base_sled.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl)).
+2. **Install Gateway Inlay & Solenoids:**
+   * **Slot 1 (Sena SPIDER X Slim Inlay):**
+     * Insert 4x miniature solenoids ($\varnothing 6.5 \times 12\,\text{mm}$) with TPU tips into the actuator bridge of [`cartridge_insert_sena.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_sena.stl).
+     * Fasten retainer plate with 4x M2 $\times 6\,\text{mm}$ countersunk screws.
+     * Connect pre-crimped 8-pin harness `J_ACT` to header `J_ACT` on PCBA 03.
+     * Seat Sena SPIDER X Slim; connect direct micro-cable whip to `J2` on PCBA 03 (zero pogo pins!).
+   * **Slot 2 (Cardo Packtalk Edge Inlay / Swap OMM):**
+     * Mount 4x solenoids into [`cartridge_insert_cardo.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_cardo.stl) and connect to `J_ACT`.
+     * Lock Cardo Packtalk Edge into Air-Mount cradle and attach micro-cable whip to `J2`.
+3. **Mouth Gasket:** Slide molded silicone gasket over the cartridge collar and lightly apply silicone grease.
 
 ---
 
-### Step 5: Universal Front Node (PCBA 05) Assembly (100% Solder-Free)
-1. **Insert Captive Nuts (Nut Pockets):**
-   * Press 4x DIN 934 / DIN 985 M3 stainless nuts from below into the corner hexagonal nut pockets of the lower tub ([`front_node_lower_tub.stl`](../../hardware/cad/stl/04_front_node/front_node_lower_tub.stl)).
-   * Press 4x DIN 934 M4 nuts into the hexagonal pockets of the AMPS hole pattern ($30 \times 38\,\text{mm}$) on the bottom of the tub.
-2. **Affix Acoustic Membrane:** Stick hydrophobic Gore ePTFE membrane disc over the sound port of the digital MEMS acoustic sensor (MSM261S4030H0R / SPH0645).
-3. **Mount Circuit Board:** Fasten turnkey assembled Front Node board PCBA 05 (`openmotorbridge_front_node`) with 4x M2.5 screws finger-tight.
-4. **RF Antenna Installation (ESP32-S3 2.4 GHz):**
-   * Adhere flexible 2.4 GHz FPC dipole antenna (Molex 146153) into the adhesive pocket on the inside of the lid ([`front_node_upper_lid.stl`](../../hardware/cad/stl/04_front_node/front_node_upper_lid.stl)).
-   * Click U.FL connector of the micro-coaxial cable squarely onto the ESP32-S3 module receptacle.
-5. **Connect Pre-Molded COTS Cables (No Crimping!):**
-   * **Front Opening (South Wall for USB):**
-     * Connect short USB-A/C flat ribbon cable to port `J6` (CarPlay / Android Auto Dongle / Ottocast).
-     * Connect 1.0 m USB-C charging cable to port `J5` (glovebox / phone mount for 20W Fast Charging).
-     * Connect USB host cable to `J4` (upstream connection to OEM display / head unit).
-   * **Right Opening (East Wall):** Insert elastomeric dust plug ([`front_node_usbc_cap_tpu.stl`](../../hardware/cad/stl/04_front_node/front_node_usbc_cap_tpu.stl)) into service port `J7`.
-   * **Left Opening (West Wall for Power & Signals):**
-     * Plug pre-crimped JST-PH 2-pin power lead for 12V switched bike supply (KL15 & Ground) into `J1`.
-     * Plug JST-PH 3-pin lead for CAN-bus into `J2` (only required on fairing models with front audio CAN).
-     * Plug pre-crimped JST-PH 2-pin lead from handlebar push-button into `J3` (PTT).
-6. **Insert Sealing Glands & Fasten Lid:**
-   * Apply a thin film of silicone grease to the elastic TPU cable gland blocks ([`front_node_cable_glands_tpu.stl`](../../hardware/cad/stl/04_front_node/front_node_cable_glands_tpu.stl)) and slide into the enclosure slots.
-   * Seat silicone cord (Ø 1.5 mm, $30\,\text{cm}$) into the lid seal groove.
-   * Position the lid loosely for now (the 4x M3 screws will be torqued down permanently after the bench test in Section 4).
+### Step 3.1: Assemble Magnetic Anti-Theft Latch (Lever Mechanism)
+1. **Press Steel Pin:** Press the hardened steel keeper pin ($\varnothing 6 \times 8\,\text{mm}$, DIN 6325) into the transverse hole of the latch lever ([`cartridge_magnetic_lock_latch.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_magnetic_lock_latch.stl)).
+2. **Insert Spring:** Place the small $\varnothing 3.5 \times 10\,\text{mm}$ compression spring into the inward pocket.
+3. **Pivot Mounting:** Slide the assembled latch into the left cheek of the cartridge sled and drive the $\varnothing 2.0 \times 8\,\text{mm}$ stainless dowel pin (DIN 7) through the pivot hole.
+4. **Functional Test:** Latch tooth extends $2.5\,\text{mm}$ outward; holding the N52 neodymium block magnet outside the housing retracts the tooth flush into the sled.
 
 ---
 
-## 4. Bench Test Setup & Dry Run (Workshop / Apartment) via USB Cables BEFORE Bike Installation
+### Step 4: Universal Front Node (PCBA 05) Assembly
+1. **Insert Captive Nuts:** Press 4x M3 nuts into corner pockets and 4x M4 nuts into AMPS base pockets of [`front_node_lower_tub.stl`](../../hardware/cad/stl/04_front_node/front_node_lower_tub.stl).
+2. **Install Tub Floor UWB Antenna:**
+   * Adhere Taoglas FXUWB10 flex antenna into the lower tub floor recess.
+   * Route U.FL lead upward.
+3. **Mount Host PCB:**
+   * Place PCBA 05 onto damping bosses.
+   * Snap UWB coax lead onto U.FL receptacle on `B.Cu`.
+   * Secure board with 4x M2.5 screws.
+4. **Connect Cockpit Sensors (J12 Qwiic):**
+   * Connect u-blox SAM-M10Q Multi-GNSS module (with integrated $15 \times 15\,\text{mm}$ patch antenna) via Qwiic cable to `J12`.
+   * Daisy-chain TI TMP117 temperature sensor and TI OPT3001 light sensor along the Qwiic bus inside the cool ram-air intake zone.
+5. **Acoustic Membrane:** Stick hydrophobic Gore ePTFE membrane over the acoustic port of the digital MEMS microphone (`MIC1`).
+6. **Connect Wiring & Enclosure Closure:**
+   * Plug 12V KL15 & GND to `J1`, CAN-bus to `J2`, handlebar PTT to `J3`, CP2AA dongle to `J6`, fast-charging to `J5`.
+   * Insert TPU sealing combs, place silicone cord in lid groove, and seat lid loosely.
 
-The single most common and costly mistake in motorcycle electronics retrofitting is installing untested modules inside cramped fairings and under fuel tanks, only to discover on the initial shakedown ride that a pin is loose, firmware is unmapped, or an intercom audio loop fails to trigger.
+---
 
-OpenMotorBridge is designed from the ground up so that the **entire multi-node system can be 100% commissioned, flashed, paired, and verified on your desk or workshop bench using standard USB-C cables—entirely without a motorcycle battery, without the vehicle wiring harness, and in indoor comfort**.
+## 4. Benchtop Dry-Run & Testing BEFORE Bike Installation
 
-### 4.1 Why the Bench Dry Run Is Indispensable
-* **Warmth & Convenience:** Troubleshoot comfortably on your desk or workbench rather than kneeling in a cold, dim garage.
-* **Direct Visual Verification with Open Enclosures:** Status LEDs (ESP32-S3 RGB LEDs, ESP32-C3 status, BQ24074 charger indicator) and test points remain directly accessible.
-* **Acoustic & Tactile Solenoid Check:** The mechanical solenoid plungers on the Cartridge board (`PCBA 03`) can be clearly heard and felt ("click-click-click-click") without engine vibration or ambient road noise.
-* **Harness Preservation:** The 26-pin HD26 main bike harness stays clean in its original packaging—it is only routed once all boards and cartridges are verified to work flawlessly.
-* **Minimal Tooling:** 2 to 3 standard consumer USB-C cables (phone charging cords) and a typical multiport USB wall charger, laptop, or power bank ($5\,\text{V} / \ge 2.0\,\text{A}$) are all that is required.
-
-### 4.2 Required Bench Test Equipment
-* [ ] 1x USB wall charger (Multiport $5\,\text{V} / \ge 2.4\,\text{A}$) or laptop / power bank
-* [ ] 2–3x Standard USB-C cables (slim overmold profile for Pod Port B)
-* [ ] 1x Short M8 test pigtail (optional for directly linking Rear Pod 3 to Main Box Port A)
-* [ ] 1x PC/Mac/laptop or smartphone/tablet running Google Chrome or MS Edge (for WebSerial Flasher & WebBLE PWA)
-* [ ] Personal intercom units (e.g., Sena 50S, Cardo Packtalk Edge) and rider helmet
-
-### 4.3 Bench Wiring Diagram (Lab & Apartment Setup)
+The entire system can be fully powered, flashed, and tested on a workbench using standard USB-C cables and a multi-port 5V USB charger:
 
 ```text
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│       OPENMOTORBRIDGE BENCH TEST SETUP & DRY RUN (LAB / DESK SETUP)         │
+│       OPENMOTORBRIDGE BENCHTOP DRY-RUN (LABORATORY WORKBENCH SETUP)         │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
-│   [ 110V/230V USB Wall Charger / Power Bank / Laptop (5V / ≥ 2.4A) ]        │
+│   [ 230V USB Charger / Power Bank / Laptop (5V / ≥ 2.4A) ]                  │
 │       │                      │                      │                       │
 │  USB-C│Cable 1          USB-C│Cable 2          USB-C│Cable 3                │
 │       ▼                      ▼                      ▼                       │
 │  ┌───────────────┐     ┌───────────────┐      ┌───────────────┐             │
 │  │  CENTRAL BOX  │     │  FRONT NODE   │      │ SATELLITE POD │             │
-│  │   (PCBA 01)   │     │   (PCBA 05)   │      │   (PCBA 02)   │             │
-│  │  Port J7 USB-C│     │  Port J5 USB-C│      │ Port B (USB-C)│             │
+│  │   (PCBA 01)   │     │   (PCBA 05)   │      │ (Pod 1 / 2)   │             │
+│  │  Port J7 USB-C│     │  Port J5 USB-C│      │ M8 Adapter    │             │
 │  └───────┬───────┘     └───────┬───────┘      └───────┬───────┘             │
 │          │                     │                      │                     │
-│          │   ESP-NOW Link      │                      │ 1-Wire & Pogo       │
+│          │   UWB Wireless Link │                      │ 1-Wire & Direct-DC  │
 │          │◄───────────────────►│                      ▼                     │
-│          │   (< 1.8 ms Latency)│             ┌───────────────────┐          │
-│          │                     │             │ SMR CARTRIDGE     │          │
+│          │  (6.5 GHz, <0.4 ms) │             ┌───────────────────┐          │
+│          │                     │             │ SMART CARTRIDGE   │          │
 │          │                     │             │ (Sena / Cardo)    │          │
 │          │                     │             └────────┬──────────┘          │
 │          │ WebBLE / WebSerial  │                      │                     │
 │          ▼                     ▼                      ▼                     │
-│    [ SMARTPHONE / LAPTOP WITH PWA ]             [ RIDER HELMET ]            │
+│    [ SMARTPHONE / LAPTOP WITH PWA ]            [ RIDER HELMET ]             │
 │    (Chrome / Edge: Flasher & Dashboard)        (Bluetooth Paired)           │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 4.4 Step-by-Step Bench Cabling & Module Checks
+### 4.1 Guided 4-Point IKEA Smoke Test
+In the PWA (via WebSerial or WebBLE), verify diagnostics:
+1. [x] **Power & UPS (Check 1):** LM5164 buck active (5.04 V), UPS LiPo (2,200 mAh) charging to 4.18 V.
+2. [x] **Cartridges & Solenoids (Check 2):** 1-Wire detection of Slot 1 (Sena) and Slot 2 (Cardo), automated 4-solenoid click test ("Click-Click-Click-Click").
+3. [x] **Front Node & UWB Backbone (Check 3):** UWB link active ($< 0.4\,\text{ms}$ latency), SAM-M10Q 3D fix, TMP117 temperature, Knowles MEMS level & handlebar PTT keying.
+4. [x] **LoRa 868 MHz & Radar (Check 4):** SX1262 LoRa ping-echo and UART telemetry to rear radar on Whip 5.
 
-1. **Powering Central Box (PCBA 01):**
-   * Plug a standard USB-C cable into Port `J7` (behind the knurled waterproof service cap) and connect to your laptop or USB power supply.
-   * The ESP32-S3 boots immediately, the BQ24074 power management IC charges the 2,200 mAh LiPo backup cell, and the blue status LED pulses slowly.
-   * When connected to a computer, the internal USB-JTAG/Serial interface enumerates instantly as a standard COM port / `/dev/ttyACM0`.
-
-2. **Powering Universal Front Node (PCBA 05):**
-   * Plug a second USB-C cable into Port `J5` (20W PD fast charge receptacle).
-   * The Front Node ESP32-S3 boots up and synchronizes automatically with the Central Box via ESP-NOW ($< 1.8\,\text{ms}$ latency, zero manual network configuration required).
-   * The green Sync LED on PCBA 05 glows steadily to confirm the wireless link.
-
-3. **Bench Testing Satellite Pods 1 & 2 (PCBA 02) with Cartridges:**
-   * Plug a USB-C cable into **Port B (USB-C Slim Port)** on the Pod base.
-   * The baseboard receives $+5\,\text{V}$ power; the sprung pogo pin interface `J1` is energized.
-   * Slide in the swap cartridge (Sena 50S, Cardo Packtalk Edge, or Sena SPIDER X) along the guide rails until the latch clicks into place.
-   * The onboard 1-Wire EEPROM (DS2431) transmits cartridge identity and serial number to the Central Box.
-
-4. **Testing Rear Pod 3 (PCBA 04):**
-   * Temporarily connect Rear Pod 3 to Main Box Port A using a short M8 test pigtail.
-   * The ESP32-C3 coprocessor and SX1262 LoRa module report green in the PWA dashboard.
-   * Placed near a window, the u-blox MAX-M10S achieves a full 3D GNSS fix within 25–35 seconds.
-
-### 4.5 Commissioning: WebSerial 1-Click Flasher & Interactive 4-Point Smoke Test
-
-With **WebSerial integration** inside the OpenMotorBridge PWA, commissioning requires **zero installation of Python, PlatformIO, drivers, or terminal utilities**:
-
-#### Method A: WebSerial 1-Click Installer (Recommended)
-1. Connect Central Box via USB-C cable to PC/Mac/laptop.
-2. Open Chrome, Edge, or Opera and load the PWA (or launch locally).
-3. In the *System Builder* tab, click **"Connect USB-C & Flash"**.
-4. Select the detected serial port (e.g., `CP2102N` / `ESP32-S3`).
-5. The PWA flashes bootloader, partition table, firmware (`openmotorbridge_main_v8.12.bin`), and SPIFFS filesystem with live progress reporting.
-
-#### Guided 4-Point IKEA Smoke Test
-Before fastening the lids permanently, start the interactive self-test in the PWA:
-1. [x] **Power & UPS (Check 1):** 5.04V buck rail active, UPS LiPo (2,200 mAh) charging at 4.18V cutoff.
-2. [x] **Cartridges & Actuators (Check 2):** 1-Wire DS2431 cartridge identification (Sena / Cardo), pogo-pin contact, and automated 4-actuator click test (clicks 1 to 4).
-3. [x] **Front Node & Cockpit (Check 3):** I2C ping Sipeed/Knowles MEMS microphone, SDP31 differential pressure sensor (0.02 hPa), and handlebar PTT button.
-4. [x] **Rear Pod 3 (Check 4):** SX1262 LoRa 868 MHz ping-echo and u-blox GNSS 3D fix lock.
-
-#### Method B: Manual PlatformIO Flashing (Power-User Fallback)
-```bash
-# 1. Flash Main Controller via USB-C (ESP32-S3)
-cd openMotorBridge/firmware/main_controller && pio run --target upload && pio run --target uploadfs
-# 2. Flash Rear Co-Processor (ESP32-C3 in Pod 3)
-cd ../rear_coprocessor && pio run --target upload
-# 3. Flash Front Node (ESP32-S3)
-cd ../front_node && pio run --target upload
-```
-
-### 4.6 Cartridge Solenoid Click Test, Intercom & Helmet Pairing in Comfort
-* **Mechanical Solenoid Check:** In the PWA diagnostic menu, trigger the 4 actuators manually or sequentially. The plungers actuate the buttons of the docked Sena/Cardo with an audible, crisp click.
-* **Helmet Pairing:** Pair rider and pillion helmets via Bluetooth to the docked intercoms.
-* **Audio Routing & Ducking:** Stream music from your phone. Tapping the handlebar PTT button (or grounding Pin 1/2 on Front Node `J3`) immediately ducks audio by $-18\,\text{dB}$ and opens the speech bridge with sub-5 ms latency.
-
-### 4.7 Final Enclosure Sealing Before Garage Installation
-Once all 4 checks in the PWA dashboard glow green and wireless audio links are validated:
-1. **Gasket Inspection:** Seat silicone cord (Ø 1.5 mm) into the perimeter lid grooves of Main Box, Front Node, and Pods, lightly lubricating with dielectric silicone grease.
-2. **Torque Screws:** Fasten lids with M3 screws in a cross pattern (threading securely into the captive nuts on the enclosure undersides).
-3. **Seal Unused Ports:** Push elastomeric TPU dust plugs into all open/spare ports.
-4. **Result:** The system is 100% bench-verified, hermetically sealed (IP67), and fully ready for mechanical mounting onto the motorcycle!
+Once all 4 checks indicate green, tighten enclosure lids with M3 screws diagonally.
 
 ---
 
-## 5. Vehicle-Specific Mounting & Motorcycle Wiring
+## 5. Vehicle-Specific Mounting & Wiring on Motorcycle
 
-### Step 5.1: Harley-Davidson Platform Installation (Touring, CVO ST, Limited, Road King & Cruisers with Saddlebags)
+### 5.1 Harley-Davidson Platform (Touring, CVO ST, Road King)
+* **Central Box:** Fasten under rider seat on frame crossmember forward of battery using 4x M4 vibration isolators.
+* **Pod 1 & Pod 2:** Mount to hard saddlebag lids using [`saddlebag_lid_dock.stl`](../../hardware/cad/stl/02_pod_base/saddlebag_lid_dock.stl).
+* **Rear Radar:** Mount via license plate radar bracket ([`radar_license_plate_bracket.stl`](../../hardware/cad/stl/02_pod_base/radar_license_plate_bracket.stl)) connected to Whip 5 of the HD26 harness.
+* **Front Node:** Secure inside fairing (Batwing / Sharknose) or nacelle; 12V from auxiliary plug; CAN connected locally at J2 (or under seat at Central Box).
 
-```text
-                       OPENMOTORBRIDGE HARLEY-DAVIDSON MOUNTING SUITE
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│ 1. COMMON SYSTEM FOUNDATION (IDENTICAL FOR TOURING & SOFTAIL CRUISER PLATFORMS)        │
-│ • Central Box: Mounted under seat on frame crossmember on 4x M4 EPDM silentblocks      │
-│ • Pod 1 & 2: Saddlebag lid docks (saddlebag_lid_dock.stl) on OEM hard bags or          │
-│   Heritage structured cases (also Sport Glide & Low Rider ST clamshells!)              │
-│ • Radar: Decoupled radar mount (radar_license_plate_bracket.stl) underneath stock      │
-│   centered license plate bracket (identical on Touring, Limited, Softails, & CVO ST!)  │
-├────────────────────────────────────────────────────────────────────────────────────────┤
-│ 2. COCKPIT & FRONT NODE INSTALLATION (THREE MODULAR FAIRING OPTIONS)                   │
-│ • Option A (Batwing): Street Glide / Ultra / Electra Glide (2024+ vs. 2014–2023)       │
-│ • Option B (Sharknose): Road Glide / CVO ST / Performance Bagger (2024+ vs. 2015–2023) │
-│ • Option C (Nacelle & Cruiser): Road King (RK/RKS) & Softail Cruisers with Bags        │
-│   (Heritage Classic FLHCS, Low Rider ST FXLRST, Sport Glide FLSB, Fat Boy with Bags):  │
-│   -> No Fairing Headunit: Front Node mounts in headlight nacelle / mini-fairing;       │
-│      CAN-bus connects directly at Central Box under seat/side cover (100% wireless!)   │
-├────────────────────────────────────────────────────────────────────────────────────────┤
-│ 3. MODULAR TAIL POD 3 INSTALLATION (FOUR VEHICLE-SPECIFIC VARIANTS)                    │
-│ • Bagger / Cruiser: Touring fender console (pod3_touring_fender_console.stl) on 1/4"  │
-│ • Limited / Ultra: King Tour-Pak steel frame blocks fender! Pod 3 mounts via tube      │
-│   clamp (adventure_pannier_rack_clamp_base.stl) to Tour-Pak tube rail or rack bridge   │
-│ • CVO ST / Performance: Under-Cowl Skeleton Dock (cvo_st_undercowl_skeleton_dock.stl) │
-│   under Forged-Carbon solo cowl with full clearance from Showa remote canisters        │
-│ • Custom / Bobber: Centered under-fender plate (radar_center_underfender_mount.stl)    │
-└────────────────────────────────────────────────────────────────────────────────────────┘
-```
+### 5.2 Adventure Platform (BMW GS / GSA Family)
+* **Central Box:** Mount inside frame triangle under rider seat on 4x M4 vibration isolators.
+* **Cockpit & Front Node:** Mount to Ø 12 mm GPS bar above TFT display; 12V via factory BMW Cartool plug.
+* **Pod 1 & Pod 2:**
+  * *Option A (Vario Panniers / GS Standard):* Transition docks ([`adventure_transition_dock_base.stl`](../../hardware/cad/stl/02_pod_base/adventure_transition_dock_base.stl)) in seat frame crease (Ø 28 mm tube) coupled with underseat cross-rail ([`adventure_underseat_cross_rail.stl`](../../hardware/cad/stl/02_pod_base/adventure_underseat_cross_rail.stl)).
+  * *Option B (Stainless Pannier Racks / GSA):* Heavy-duty GSA cage docks ([`adventure_gsa_cage_dock_body.stl`](../../hardware/cad/stl/02_pod_base/adventure_gsa_cage_dock_body.stl)) in 45 mm frame dead space.
+* **Rear Radar:** Minimalist bracket ([`adventure_rack_radar_mount.stl`](../../hardware/cad/stl/02_pod_base/adventure_rack_radar_mount.stl)) directly under GS luggage rack for Garmin Varia or Wheeltec MR20 on Whip 5.
 
-#### 5.1.1 Common System Foundation (All Models)
-* **Central Box:** Fasten under the rider seat onto the massive frame crossmember in front of the battery using 4x M4 silentblocks (EPDM Shore 50A). On Softail Cruiser models, the Central Box sits in the cavity beneath the seat or within the side frame triangle. The HD26 harness whip branches rearward left and right to the M8 saddlebag disconnects and directly to the BCM / diagnostic plug.
-* **Pod 1 & Pod 2 (Satellites on Saddlebag Lids):** Fasten saddlebag lid docks ([`saddlebag_lid_dock.stl`](../../hardware/cad/stl/02_pod_base/saddlebag_lid_dock.stl)) using M4 countersunk screws with backing EPDM sealing washers or 3M VHB high-bond tape onto the saddlebags. *(Note: Alongside Street Glide, Road Glide, CVO ST, Road King, and Ultra Limited, Cruisers with saddlebags like Low Rider ST and Sport Glide feature rigid clamshell bags, while the Heritage Classic has structured leather/vinyl bags with flat top lids—all share identical saddlebag lid dock [`saddlebag_lid_dock.stl`](../../hardware/cad/stl/02_pod_base/saddlebag_lid_dock.stl) mounting!)*
-* **Stationary MagSafe Frame Dock & Mechanic-Proof Breakaway Interface:**
-  * **Frame Dock Installation on Motorcycle ([`009_magsafe_frame_dock.scad`](../../hardware/cad/scad/02_pod_base/parts/009_magsafe_frame_dock.scad)):**
-    - Position the upper dock shell ([`009_magsafe_frame_dock.stl`](../../hardware/cad/stl/02_pod_base/components/009_magsafe_frame_dock.stl)) with its integrated Ø 26 mm tube saddle against the subframe tube beneath the seat overhang (fits all Harley Touring & Softail frames with $\varnothing 25.4\dots 28.6\,\text{mm}$).
-    - Place the clamp strap ([`009_magsafe_frame_clamp.stl`](../../hardware/cad/stl/02_pod_base/components/009_magsafe_frame_clamp.stl)) and tighten using 4x M3 screws and DIN 934 nuts in cross pattern ($2.2\,\text{Nm}$).
-    - Drop the pre-soldered harness assembly (M8-PUR feed from Central Box, PCBA 06 protection board with 500mA PPTC fuse & TVS diodes, and 6-pin IP67 MagSafe magnetic pogo puck) stress-free into the lower shell ([`009_magsafe_frame_lid.stl`](../../hardware/cad/stl/02_pod_base/components/009_magsafe_frame_lid.stl)).
-    - Mate upper and lower shells and fasten with the central **M2.5 x 12 mm stainless bolt (DIN 912)** passing through the center hole of PCBA 06 into the captive nut pocket. The assembly is ultra-slim ($16.0\,\text{mm}$ width) and vanishes in the tube shadow.
-  * **Saddlebag Floor Pass-Through & 2-Stage Strain Relief ([`010_saddlebag_hole_grommet_split.scad`](../../hardware/cad/scad/02_pod_base/parts/010_saddlebag_hole_grommet_split.scad)):**
-    - Insert the split TPU grommet into the stock $19\,\text{mm}$ bag floor drain hole.
-    - Route the slim internal bag ribbon cable with mating MagSafe breakaway coupling through and secure to the integral clamping tower with a zip-tie (**Stage 1 Strain Relief:** absorbs all $10\dots 15\,\text{N}$ magnetic breakaway and luggage shock loads).
-    - Route the ribbon cable along the check strap into the lid, capture form-fittingly in the nose of the lid dock (**Stage 2 Strain Relief**), and plug directly into Slim-Port B of the pod.
-    - **Mechanic-Proof Benefit:** Service technicians simply unlatch and remove saddlebags without tools—the MagSafe coupling detaches cleanly with zero damage and self-centers automatically upon reinstallation (*snap*).
-* **Radar:** The license plate radar bracket ([`radar_license_plate_bracket.stl`](../../hardware/cad/stl/02_pod_base/radar_license_plate_bracket.stl)) bolts directly beneath the license plate frame. *(Note: All Touring, CVO ST, and Softail Cruiser models feature standardized centered US/EU license plate mounts).*
-
-#### 4.1.2 Cockpit Fairing & Front Node Installation
-* **Option A: Batwing Fairing (Street Glide / Electra Glide / Ultra):**
-  * **Current Generation (2024+ All-New Street Glide with 12.3" Skyline OS):**
-    1. Remove the **2x Torx T25 screws** on the windshield and lift windscreen out upward (no 3-screw system anymore!).
-    2. Gently pry out the two lateral speaker grilles / trim panels forward from their snap catches using a plastic pry tool.
-    3. Remove the **2x T25 screws** at the upper cowl edge beneath the windshield, and the **2x T25/T27 screws** on the outer flanks (exposed behind the speaker grilles).
-    4. Pull the outer fairing forward off its locating guide pins and disconnect the central multi-pin harness connector.
-  * **Previous Generation (2014–2023 Rushmore / Boom! Box GTS / 6.5GT):**
-    1. Remove the **3x Torx T27 screws** securing the windshield (hold center screw last to prevent windshield from dropping).
-    2. Remove the **4x Torx T27 screws** on the inner fairing: 2x below the instrument cluster, 2x low beside the speaker pods.
-    3. Tilt outer fairing forward, disconnect headlight and turn signal connectors.
-  * **Wiring Inside Batwing Fairing:**
-    * Mount Front Node to handlebar riser or fairing subframe securely using 3M Dual-Lock or AMPS bracket.
-    * **12V Power (`J1`):** Tap the 2-pin JST-PH power lead to the internal 12V P&A accessory connector or parking light circuit.
-    * **CAN-Bus (`J2`):** Plug 3-pin JST-PH cable. On Rushmore (2014–2023), pin into the 4-pole P&A audio CAN socket behind the Boom! Box. On 2024+ models, connect directly to the Skyline OS display harness.
-    * **External Wireless CarPlay / Android Auto Dongle (e.g., Ottocast U2Air Pro / CarlinKit 5.0):**
-      * Port `J4` (USB Host Upstream): Connect to the motorcycle's OEM USB media pigtail leading to Boom! Box / Skyline OS.
-      * Port `J6` (USB Downstream 2): Connect via short USB pigtail to the external wireless dongle secured inside the media compartment. In case of smartphone dropouts or frozen dongles, the OpenMotorBridge firmware triggers a 1-click watchdog hard power-cycle by cutting 5V VBUS for 2.5 seconds via the integrated TI TPS2051B power switch.
-    * **Smartphone Fast-Charging (`J5`):** Route 20W USB-PD cable to the glovebox or handlebar phone cradle.
-    * Reinstall outer fairing and torque screws to $3.8\,\text{Nm}$.
-
-* **Option B: Sharknose Fairing (Road Glide, Road Glide ST, CVO Road Glide ST):**
-  * **Current Generation (2024+ New Road Glide & CVO ST with 12.3" Skyline OS):**
-    1. The LED turn signals are integral in the fairing outer blades—there are **no turn signal brackets** to unbolt from the fork tubes!
-    2. Remove the **4x Torx T25 screws** on the windshield and lift windscreen off.
-    3. Remove **1x T27 screw** inside each of the two inner glove compartments (2x T27 total).
-    4. Remove **2x T25 screws** on the lower mounting tabs near the engine crash bar.
-    5. Lift fairing forward and up off its catching hooks and unplug the central main harness connector.
-  * **Previous Generation (2015–2023 Rushmore Road Glide / ST):**
-    1. Unclip instrument gauge nacelle upward.
-    2. Unbolt turn signals left and right (2x 1/2" hex bolts per side).
-    3. Remove the **4x Torx T27 screws** on the inner fairing (adjacent to speakers / air ducts).
-    4. Unhook Sharknose forward and disconnect harness.
-  * **Wiring:** Identical to Option A (media compartment / riser mounting, `J1` 12V, `J2` CAN-bus, `J4` upstream to display, `J6` Ottocast dongle with TPS2051B watchdog reset, `J5` 20W PD cable).
-
-* **Option C: Headlight Nacelle & Softail Cruisers with Saddlebags (Road King / RKS, Heritage Classic, Low Rider ST, Sport Glide):**
-  * **Conceptual Architectural Equivalence (Cruisers with Saddlebags = Road King Architecture):**
-    - All Harley-Davidson Cruisers with bags (whether Touring Road King FLHR/FLHRXS or Softail models like Heritage Classic FLHC/FLHCS, Sport Glide FLSB, and Low Rider ST FXLRST) share the exact same architecture:
-      - They have **no large infotainment head unit** (Boom! Box GTS or 12.3" Skyline OS) in the cockpit.
-      - They feature **saddlebags** (factory hard bags on RKS, rigid clamshells on Sport Glide and Low Rider ST, structured leather/vinyl cases on Heritage).
-      - Onboard vehicle electronics and the CAN-bus (HD-LAN at 250 or 500 kbps) are readily accessible beneath the seat or behind the left side cover at the BCM (Body Control Module) and diagnostic port.
-  * **CAN-Bus Architecture (Direct Tap at Central Box under Seat / Side Cover):**
-    - Because no front P&A audio CAN-bus exists, the CAN-bus connects **directly to the Central Box under the seat or at the BCM/diagnostic port**.
-      - *Pre-2021 Models:* 6-pin red Deutsch diagnostic socket.
-      - *2021+ Models (Euro 5 / Euro 5+):* 16-pin standardized OBD2 socket.
-      - The Central Box HD26 harness taps CAN directly from the BCM via pins 17 (`CAN_H`) and 18 (`CAN_L`). All telemetry (vehicle speed, engine RPM, engine temperature, turn signals, brake status, clutch switch, gear position) is broadcast.
-      - **100% Wireless Link to Front:** The Front Node requires **ZERO CAN WIRING** at `J2` (port automatically deactivates). It communicates 100% wirelessly with the Central Box via 2.4 GHz ESP-NOW (< 1.8 ms). **Zero wiring needs to be routed through the steering neck or beneath the fuel tank!**
-  * **Cockpit & Fairing Front Node Mounting:**
-    - *Road King / Heritage Classic / Fat Boy:* Loosen pinch screw on 7" headlight trim ring, remove Daymaker. Front Node mounts vibration-isolated inside the aluminum headlight nacelle cavity behind the reflector.
-    - *Low Rider ST / Sport Glide:* Fasten Front Node behind the FXRT / mini-batwing fairing or onto the triple tree clamp / handlebar riser.
-    - **Front Wiring:** Port `J1` (12V KL15 & GND) connects directly to parking light or front accessory harness. Optional handlebar PTT (`J3`), blind-spot LEDs (`J9`), and smartphone Qi power (`J5`/`J10`) connect locally at the Front Node.
-
-#### 4.1.3 Modular Rear Mounting (Pod 3)
-* **Variant 1: Standard Bagger & Softail Cruisers (Street Glide, Road Glide, Road King, Heritage Classic, Low Rider ST, Sport Glide):**
-  - Bolt the flat touring fender console ([`pod3_touring_fender_console.stl`](../../hardware/cad/stl/02_pod_base/pod3_touring_fender_console.stl)) centered onto the rear fender to the stock $1/4"-20$ passenger seat nut. *(Note: Softail and Touring rear fenders utilize the exact same standardized 1/4"-20 seat thread).*
-* **Variant 2: Touring Limited & Ultra (Ultra Limited FLHTK, Road Glide Limited FLTRK, CVO Limited):**
-  - *Important Restriction:* On all models with a factory-installed rigid King Tour-Pak, the massive tubular steel carrier frame bolts directly over the rear fender. The fender console (`pod3_touring_fender_console.stl`) *cannot* be installed due to physical clearance and sliding cartridge access!
-  - *Solution:* Pod 3 is instead bolted directly to the Ø 18 mm tubular frame of the Tour-Pak or underneath the luggage rack using the tube clamp pair ([`adventure_pannier_rack_clamp_base.stl`](../../hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_base.stl) / `cap.stl`).
-* **Variant 3: CVO ST / Performance Bagger:**
-  - Pod 3 is mounted concealed beneath the Forged Carbon solo seat cowl in the upright Bionic Skeleton Dock ([`cvo_st_undercowl_skeleton_dock.stl`](../../hardware/cad/stl/02_pod_base/cvo_st_undercowl_skeleton_dock.stl)) (providing full clearance from the Showa remote reservoir canisters). Main M8 wiring feeds in 100% from the front under the solo seat cushion. The OEM forged carbon cowl remains completely factory original, seating flush and rattle-free with the factory thumbscrew (no external tail fin, zero wires over the fender). Ambient air temperature is sensed up front via the Front Node (`J12` Qwiic) in the fresh airstream.
-* **Variant 4: Custom Bikes & Bobbers with Side-Mounted License Plate:**
-  - On custom conversions with a side-mounted plate, the centered under-fender plate ([`radar_center_underfender_mount.stl`](../../hardware/cad/stl/02_pod_base/radar_center_underfender_mount.stl)) is bolted centered beneath the rear fender arch to ensure an unobstructed 140° radar field of view.
+### 5.3 Support Car / Chase Van Installation (Car-Kit)
+* **Pod 1 & Pod 2:** Attached to driver and passenger sun visors using quick-release clips ([`car_sun_visor_pod_clip.stl`](../../hardware/cad/stl/05_accessories/car_sun_visor_pod_clip.stl)).
+  * Mode A (Chase vehicle for bike group): Pod 1 = Sena SPIDER X Slim, Pod 2 = Cardo Packtalk Edge.
+  * Mode B (Pure car convoy): Pod 1 = OMM 2.4 GHz Swap Cartridge, Pod 2 = Midland PMR446 radio cartridge.
+* **Central Box:** Sits in 15° dashboard wedge dock on center console.
+* **SAM-M10Q GNSS:** Positioned on dashboard behind windshield.
+* **Audio Integration:** USB-C audio link to vehicle headunit for group intercom through vehicle speakers.
+* **Telemetry:** Wireless BLE OBD2 dongle plugged into driver footwell.
 
 ---
 
-### Step 5.2: Adventure & Enduro Platform Installation (BMW GS / GSA Family, KTM, Africa Twin, Universal)
+## 6. Final Sign-Off & Road Test Checklist
 
-The adventure mounting suite is standardized across the entire **BMW GS model family** (Boxer and Parallel-Twin generations) and comparable dual-sport motorcycles:
-
-```text
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                        BMW GS MODEL & PLATFORM COMPATIBILITY                           │
-├───────────────────────────────────┬────────────────────────────────────────────────────┤
-│ Model Line                        │ Specifics & Electrical Ingress Details             │
-├───────────────────────────────────┼────────────────────────────────────────────────────┤
-│ • R 1250 GS / R 1300 GS           │ 6.5" TFT Connectivity, Wonder Wheel, 16-Pin OBD2,  │
-│   F 750 GS / F 850 GS / F 900 GS  │ Cockpit Cartool power, Vario frame docks (Opt. A)  │
-├───────────────────────────────────┼────────────────────────────────────────────────────┤
-│ • R 1250 GSA / R 1300 GSA         │ 6.5" TFT Connectivity, Wonder Wheel, 16-Pin OBD2,  │
-│   F 850 GSA / F 900 GSA           │ Cockpit Cartool power, Ø 18 mm stainless (Opt. B)  │
-├───────────────────────────────────┼────────────────────────────────────────────────────┤
-│ • R 1200 GS LC / GSA LC           │ Wonder Wheel, Cartool present. Diagnostic socket:  │
-│   (K50/K51, 2013–2018)            │ 2013–2016 round 10-pin, 2017+ rectangular 16-pin   │
-├───────────────────────────────────┼────────────────────────────────────────────────────┤
-│ • Classic R 1200 GS / GSA (K25)   │ Analog/LCD dials, Cartool present at headstock.    │
-│   & F 650 / 700 / 800 GS (K70/72) │ Round 10-pin diagnostic plug under seat.           │
-│   (oil-cooled, up to 2012/2018)   │ Control via OMB BLE handlebar remote (no Wonderwh.)│
-│                                   │ GSA tube racks: Identical Ø 18 mm tube diameter!   │
-└───────────────────────────────────┴────────────────────────────────────────────────────┘
-```
-
-```text
-                             OPENMOTORBRIDGE ADVENTURE-KIT MOUNTING SUITE
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│ 1. COMMON SYSTEM FOUNDATION (IDENTICAL FOR ALL ADVENTURE / DUAL-SPORT BIKES)           │
-│ • Central Box: Mounted vibration-damped in rear subframe under rider seat              │
-│ • Cockpit & Front Node: Clamped to Ø 12 mm GPS bar above TFT / windscreen              │
-│   (12V Cartool power, wireless 2.4 GHz link to Central Box, zero steering head wiring) │
-│ • Rear Pod 3: Fastened to luggage bridge via Rack-Tail Mount (adventure_rack_tail_mount)│
-│ • Radar Varia Dock: Mounted to 36-tooth Hirth rosette in 10° increments for level horizon│
-├────────────────────────────────────────────────────────────────────────────────────────┤
-│ 2. MODULAR POD 1 & 2 PANNIER MOUNTING (TWO MODULAR OPTIONS)                            │
-│ • Option A (Vario Panniers / Frame Mount - BMW GS Standard, KTM without tube racks):   │
-│   Transition Dock (adventure_transition_dock.stl) in seat crease (Ø 28 mm frame tube)  │
-│   -> 100% luggage-independent, builds zero additional width beyond bike silhouette     │
-│ • Option B (Stainless Pannier Tube Racks - BMW GSA, Touratech, Hepco&Becker, Alucases):│
-│   GSA Heavy-Duty Cage Dock (adventure_gsa_cage_dock_body.stl + clamp_cap.stl)          │
-│   -> Mounts Pod 1 & 2 in 45 mm dead space behind rack (100% hidden & roost-shielded)   │
-└────────────────────────────────────────────────────────────────────────────────────────┘
-```
-
-#### 4.2.1 Common System Foundation
-* **Central Box:** Install in the frame triangle beneath the rider seat on 4x M4 silentblocks. Route M8 harness leads rearward left and right and toward the tail.
-* **Cockpit & Front Node:**
-  * Remove 4x Torx T25 windshield screws and lift windscreen off.
-  * Unclip upper TFT instrument surround forward (on K25 / F800: remove instrument shroud).
-  * Fasten Front Node via AMPS mount or tube clamp to the Ø 12 mm GPS crossbar or handlebar.
-  * **Power Supply & CAN-Bus Options (2 Ingress Paths):**
-    * **Power Supply:** Connect 2-pin JST-PH power lead at `J1` directly to the factory BMW Cartool accessory connector (SZ plug in cockpit / headstock: Pin 1 GND, Pin 3 switched +12V KL15).
-    * **CAN-Bus Option 1 (Recommended – Plug & Play Under Seat):** Tapped at Central Box via HD26 harness (pins 17 `CAN_H` and 18 `CAN_L`):
-      * *2017+ Models (Euro 4 / Euro 5 / Euro 5+):* Directly into 16-pin OBD2 socket or RDC/DWA module (identical to Hex ezCAN / WunderLINQ).
-      * *Pre-2017 Classic Models (Euro 3, K25 / K72 / early K50):* Via standard COTS 10-pin round to OBD2 adapter cable (ICOM adapter).
-      * Port `J2` on Front Node remains empty and auto-deactivates. Zero wiring tampering in the cockpit!
-    * **CAN-Bus Option 2 (Cockpit Tapping at 12-Pin TFT – TFT Models Only):** The BMW 6.5" TFT display routes K-CAN directly on its rear connector (Pin 2 `CAN_H`, White/Black and Pin 3 `CAN_L`, White/Brown). Riders using a 12-pin PnP Y-cable can connect directly to `J2` on the Front Node. The Front Node streams RPM, speed, and Wonder Wheel wirelessly via ESP-NOW to Central Box.
-* **Pod 3 & Radar (Rallye Aero-Balcony Assembly):**
-  * Bolt the base cradle ([`adventure_rack_tail_mount_base.stl`](../../hardware/cad/stl/02_pod_base/adventure_rack_tail_mount_base.stl)) with 2x M6 screws and tube clamps to the Ø 18 mm luggage bridge or to the M6 mounting holes of the adapter plate.
-  * Route the M8 PUR harness through the underbelly conduit and connect from above onto Port A of Pod 3. Drop Pod 3 into the cradle.
-  * Install the bodywork cowl ([`adventure_rack_tail_cowl.stl`](../../hardware/cad/stl/02_pod_base/adventure_rack_tail_cowl.stl)) (snapping the 2.4 GHz dipole antenna into the integrated Shark-Fin) and secure flush with 4x M3 Torx screws.
-  * Engage the Garmin Varia dock ([`radar_varia_gopro_lock_dock.stl`](../../hardware/cad/stl/02_pod_base/radar_varia_gopro_lock_dock.stl)) into the bionic Hirth rosette on the underside pylon ($10^\circ$ increments for an exact level radar horizon). Secure with M5 x 25 mm screw and locknut ($3.5\,\text{Nm}$). Slide Varia into dock and tighten M3 grub screw as anti-theft lock.
-
-#### 4.2.2 Modular Pannier & Pod 1/2 Mounting
-* **Option A: Vario Panniers & Frame Tube Mount (BMW GS Standard R1200/R1250/R1300, F750/F850/F900, KTM / Enduro without racks):**
-  * Lay the Under-Seat Saddle Bridge ([`adventure_underseat_cross_rail.stl`](../../hardware/cad/stl/02_pod_base/adventure_underseat_cross_rail.stl)) flat onto the frame crossbar beneath the seat and secure using existing OEM bolts (M5/M6).
-  * Align the Transition Dock Base Cradles ([`adventure_transition_dock_base.stl`](../../hardware/cad/stl/02_pod_base/adventure_transition_dock_base.stl)) against the Ø 28 mm subframe tubes in the waist crease and bolt tightly to the saddle bridge using 2x M4 screws per side (rigid anti-rotation U-portal).
-  * **Harness Routing & Top-Access Ingress:**
-    * Route the M8 PUR harness lead from Central Box underneath the seat foam towards the flank.
-    * Push the cable through the inboard oval port (Ø 10 mm) into the front connector/service bay of the Transition Dock base cradle.
-    * With the top cowl removed, plug and hand-tighten the M8 connector onto Port A of the Pod with 100% open-air hand clearance.
-    * Drop the Pod into the cradle (the connector and cable loop rest stress-free inside the 24 mm nose bay).
-  * Install the bodywork cowls ([`adventure_transition_dock_lid.stl`](../../hardware/cad/stl/02_pod_base/adventure_transition_dock_lid.stl)) flush using 4x M3 Torx screws.
-  * **100% Luggage-Independent & Clean Look:** Zero exposed clamps or zip-ties from the outside; the console flows smoothly with the seat's optical waist crease.
-* **Option B: Stainless Tubular Pannier Racks (BMW GSA All Generations incl. K25 & F800 GSA, Touratech, Hepco&Becker, Aluminum Cases):**
-  * Wrap 1.0 mm EPDM strip around the Ø 18 mm pannier rack tube along the inboard face.
-  * Position the **GSA Cage Dock** ([`adventure_gsa_cage_dock_body.stl`](../../hardware/cad/stl/02_pod_base/adventure_gsa_cage_dock_body.stl)) with its dual semi-circular saddles on the tube. Place the clamp cap ([`adventure_gsa_clamp_cap.stl`](../../hardware/cad/stl/02_pod_base/adventure_gsa_clamp_cap.stl)) and tighten 4x M5 x 25 mm V4A socket bolts with DIN 985 locknuts in a criss-cross pattern ($4.5\,\text{Nm}$; 85 mm baseline eliminates all tilt and twist).
-  * Slide Pod 1 or Pod 2 into the armored pod nest. The pod sits 80% recessed within the $45\,\text{mm}$ dead space between rack tube and wheel arch.
-  * Route the M8 PUR cable through the concealed conduit in the tube's shadow directly under the seat into the battery tray.
-  * **Result:** With aluminum panniers mounted, the pod is 100% hidden from exterior view. Wheel-facing $45^\circ$ deflection armor repels flying gravel (roost) and mud.
-  * *(Minimalist Option:)* For cramped installations, the compact 2x M5 half-clamp pairs ([`adventure_pannier_rack_clamp_base.stl`](../../hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_base.stl) / `cap.stl`) remain supported.
-
-#### 4.2.3 Front Node Bike Mounting Options (Universal)
-* **Option 1: AMPS Pattern (30 x 38 mm):** Direct bolt-on to RAM-Mount ball, Garmin cradle, or GPS bar (utilizing the 4x captive M4 nuts).
-* **Option 2: 120° V-Cradle:** Toolless mounting on Ø 22 to Ø 32 mm handlebars / crash bars using EPDM strap rings.
-* **Option 3: M4 Silentblocks:** Vibration-isolated stud mounting inside fairing nose.
-* **Option 4: 3M Dual-Lock Hook-and-Loop:** Concealed mounting inside Harley Batwing / Sharknose inner fairings or headlight nacelle.
-
----
-
-### Step 5.3: Support Vehicle & Automotive Convoy Installation (Universal Sun Visor Clip, Wedge Dock & Wireless BLE OBD2)
-
-OpenMotorBridge can be installed completely tool-free and residue-free in any support vehicle (support van, rally sweep vehicle, camper/RV) or automotive convoy lead vehicle within minutes. It transforms the vehicle into a mobile command post with seamless live tracking, car speaker audio routing, and autonomous telemetry:
-
-```text
-       SUPPORT VEHICLE / CAR-KIT TOPOLOGY (RESIDUE-FREE RAPID DEPLOYMENT)
- ┌──────────────────────────────────────────────────────────────────────────────┐
- │ Windshield / Roof Headliner (Passenger Side)                                 │
- │  ┌────────────────────────────────────────────────────────────────────────┐  │
- │  │ Rear Pod 3 (GNSS + LoRa OMM + V2X) in Sun Visor Clip                   │  │
- │  │ (car_sun_visor_pod3_clip.stl) ── Unobstructed 180° Zenith View         │  │
- │  └───────────────────────────────┬────────────────────────────────────────┘  │
- ├──────────────────────────────────┼───────────────────────────────────────────┤
- │                                  │ (Slim USB-C cable tucked into headliner   │
- │                                  │  seam and A-pillar weatherstrip)          │
- │ Cockpit / Dashboard / Console    ▼                                           │
- │  ┌────────────────────────────────────────────────────────────────────────┐  │
- │  │ Central Box in 15° Wedge Dock (car_dashboard_wedge_dock.stl)           │  │
- │  │  • USB-C Power Delivery (12V/24V cigarette lighter PD adapter)         │  │
- │  │  • USB-C Media-Link ──> Apple CarPlay / Android Auto (Vehicle Speakers)│  │
- │  │  • Wi-Fi AP ──> iPad / Tablet PWA (Offline Fleet Tracking & Radar)     │  │
- │  └───────────────▲───────────────────────────────▲────────────────────────┘  │
- │                  │ (M8 Cable / Dual-Lock)        │ (Autonomous Bluetooth BLE)│
- │  ┌───────────────┴────────────────────────┐  ┌───┴────────────────────────┐  │
- │  │ Pods 1 & 2 (Intercom & CB/PMR Radio)   │  │ Wireless OBD2 BLE Dongle   │  │
- │  │ (3M Dual-Lock SJ3550 on dashboard      │  │ (vGate iCar / ELM327 in    │  │
- │  │  or concealed at seat console / carpet)│  │  OBD port under dash)      │  │
- │  └────────────────────────────────────────┘  └────────────────────────────┘  │
- └──────────────────────────────────────────────────────────────────────────────┘
-```
-
-#### 1. Pod 3 Passenger Sun Visor Mounting (Universal Clip):
-* Slide the Universal Sun Visor Clip ([`car_sun_visor_pod3_clip.stl`](../../hardware/cad/stl/05_accessories/car_sun_visor_pod3_clip.stl) / CAD: [`car_sun_visor_pod3_clip.scad`](../../hardware/cad/scad/05_accessories/car_sun_visor_pod3_clip.scad)) onto the passenger sun visor (14–22 mm clamping range). The $30^\circ$ flared lead-in lip and transverse non-marring ribs ensure a snug, vibration-proof grip without creasing or damaging fabric or leather upholstery.
-* Snap Pod 3 into the cradle from the front (4 corner spherical snap detents lock the enclosure securely in place).
-* **RF & Optical Advantage:** Unobstructed $180^\circ$ view through the upper windshield into the zenith for u-blox MAX-M10S (Multi-GNSS), 868 MHz LoRa (SX1262 for OpenMotorMesh), and 5.9 GHz V2X. Offset to the passenger side, avoiding any collision or RF shielding from the central ADAS windshield camera housing behind the rearview mirror.
-* **Discreet Aesthetics:** Viewed from outside through tinted automotive glass, Pod 3 looks like a standard highway toll transponder (Telepass / FasTrak / E-Pass), eliminating theft temptation.
-
-#### 2. Satellite Pods 1 & 2 (Intercom & Radio) – 3M Dual-Lock™ Installation:
-* Pod 1 (e.g. Sena/Cardo Mesh Bridge) and Pod 2 (e.g. Midland CB/PMR Radio):
-* **Option A (Dashboard Mounting):** Affix flat to the passenger-side dashboard (near the A-pillar or base of the windshield) using self-adhesive **3M Dual-Lock™ (SJ3550)**. Provides optimal radio line-of-sight and easy access to cartridge buttons.
-* **Option B (Seat Console / Transmission Tunnel):** Conceal with 3M Dual-Lock on the side plastic trim of the passenger seat console or loop-mate directly into the tunnel carpeting—100% invisible from outside the vehicle.
-* **Complete Modular Cartridge & Visor Swapping:** Because all pods (1, 2, 3) share the identical $135 \times 70 \times 26\,\text{mm}$ monocoque enclosure, any pod fits form-fittingly into the sun visor clip.
-  - *Multipurpose Swap:* In a single-pod configuration (e.g., Midland CB radio pod for an automotive rally), Pod 2 can be clicked directly into the sun visor clip, while Pod 3 is affixed to the dashboard via Dual-Lock. After the event, the pod unclips and transfers right back to the motorcycle.
-  - *(Note on Parcel Shelf: Rear parcel shelf mounting is intentionally avoided—modern vans, SUVs, and station wagons lack rigid rear shelves and trunk sheet metal heavily attenuates RF signals).*
-
-#### 3. Central Box 15° Wedge Dock & Power Delivery:
-* Snap the Central Box into the form-fit 15° Dashboard Wedge Dock ([`car_dashboard_wedge_dock.stl`](../../hardware/cad/stl/05_accessories/car_dashboard_wedge_dock.stl) / CAD: [`car_dashboard_wedge_dock.scad`](../../hardware/cad/scad/05_accessories/car_dashboard_wedge_dock.scad)).
-* **Securing the Dock:** Affix the wedge dock to the dashboard or center console using 3M Dual-Lock or a high-tack washable nano-gel pad (the 15° incline guarantees glare-free visibility of the OLED display and status LEDs from both driver and passenger seats).
-* **Power Supply:** Plug into any standard 12V/24V cigarette lighter USB-C PD fast charger (using a 12V USB-PD trigger cable or direct DC cable).
-* **Invisible, Tool-Free Cable Routing (5 Minutes):**
-  - Tuck the slim flat USB-C cable from Pod 3 into the soft **roof headliner seam** above the windshield using your fingertips.
-  - Continue routing behind the soft rubber weatherstripping of the passenger A-pillar, descending behind the glove compartment / floor carpet to the Central Box in the center console.
-  - **Zero drilling, zero trim damage, 100% residue-free removal (ideal for leasing and rental vehicles).**
-
-#### 4. Wireless Bluetooth OBD2 Telemetry Dongle (ELM327 / vGate / OBDLink):
-* Plug a compact Bluetooth BLE OBD2 adapter (e.g., *vGate iCar Pro BLE 4.0*, *OBDLink CX*, or *ELM327 BLE*) directly into the vehicle's standard 16-pin OBD2 diagnostic port located beneath the steering column in the driver footwell.
-* **Autonomous BLE Pairing to Central Box:** The Central Box (ESP32-S3 operating as an autonomous BLE Master) scans for the dongle's UUID/MAC upon ignition-on and establishes a secure link automatically without manual user pairing.
-* **Zero Footwell Cables:** No wires running across pedals or foot controls—completely eliminating safety hazards!
-* **Telemetry Polling & LoRa Mesh Broadcast:** The Central Box cyclically queries standard OBD2 PIDs (speed, RPM, coolant temperature, fuel level %, 12V battery voltage) and broadcasts this telemetry in the background across the 868 MHz LoRa mesh (OMM). Every group motorcycle is continuously updated on the sweep vehicle's position, speed, and health status.
-
-#### 5. Audio & Infotainment Integration (Apple CarPlay / Android Auto):
-* Connect a USB-C data cable from the Central Box to the vehicle's USB media port.
-* Wired Apple CarPlay / Android Auto launches automatically on the vehicle infotainment screen.
-* **Group Audio via Car Sound System:** The entire intercom mesh and two-way radio chatter (Sena/Cardo mesh, Midland CB/PMR) plays back through the vehicle's high-fidelity sound system with factory volume knob control.
-* Two-way transmission from the support vehicle back to riders is handled via vehicle hands-free mic or a Bluetooth PTT button.
-
-#### 6. Tablet Commissioning for Offline Fleet Tracking (PWA Live Dashboard):
-* Mount an iPad or Android tablet to the windshield or dashboard with a suction mount.
-* Connect the tablet to the Central Box's local Wi-Fi access point and launch the OpenMotorBridge PWA (Progressive Web App).
-* **Full Convoy Visibility:** The support crew enjoys real-time radar mapping and convoy tracking of all bikes (distances, tire pressure TPMS alerts, dropouts, SOS emergency beacons)—operating 100% offline without cellular coverage!
-
----
-
-### Step 5.4: Installation & Wiring of Optional Cockpit & Accessory Components
-
-The Universal Front Node (PCBA 05) serves as the central wiring and communication hub for all cockpit peripherals. The following optional accessories can be integrated as needed via pre-molded plug-and-play wiring:
-
-```text
-              COCKPIT ACCESSORY WIRING OVERVIEW (FRONT NODE PCBA 05)
-┌───────────────────────┬─────────┬────────────────────────────────────────────────────────┐
-│ Accessory Component   │ Port    │ Connection & Pinout                                    │
-├───────────────────────┼─────────┼────────────────────────────────────────────────────────┤
-│ **Handlebar Control** │ **CAN** │ CAN-ID 0x290 (Harley TRIP) / 0x2A0 (BMW Wonder Wheel)   │
-│ (Cam, PTT & Marker)   │ / **J3**│ or 4-Pin JST-PH Hardware Button (Under-Perch / Clamp)   │
-├───────────────────────┼─────────┼────────────────────────────────────────────────────────┤
-│ **Blind Spot LEDs**   │ **J9**  │ 3-Pin JST-PH (Pin 1: +12V_PROT, Pin 2: BSD Left,       │
-│ (Radar Mirror Alerts) │         │ Pin 3: BSD Right via Low-Side N-MOSFET drivers)        │
-├───────────────────────┼─────────┼────────────────────────────────────────────────────────┤
-│ **Actioncam Power**   │ **J8**  │ 2-Pin/4-Pin JST-PH (+5.0V / 2.0A, Charge-Only without  │
-│ (GoPro/Insta360/DJI)  │         │ USB data lines to prevent head unit lockups)           │
-├───────────────────────┼─────────┼────────────────────────────────────────────────────────┤
-│ **Qi Wireless Mount** │ **J10** │ 2-Pin JST-PH (+12V switched ignition gate, up to 2.0A  │
-│ (Quad Lock / SP Conn.)│ / **J5**│ / 24W) or 20W USB-C PD Fast Charging port J5           │
-├───────────────────────┼─────────┼────────────────────────────────────────────────────────┤
-│ **Auxiliary Lights**  │ **J11** │ 2-Pin JST-PH (+12V High-Side Switch up to 3.5A / 40W,  │
-│ (Emergency Strobe)    │         │ automated 4–5 Hz hazard strobe on hard braking > 0.8g) │
-└───────────────────────┴─────────┴────────────────────────────────────────────────────────┘
-```
-
-#### 5.4.1 Handlebar Control Unit: Dual-Input Architecture (OEM CAN-Bus & Dedicated Hardware Switch `J3`)
-
-OpenMotorBridge implements a versatile **Dual-Input Architecture** for handlebar controls. Both signal paths feed the exact same internal state machine on the Front Node and can be deployed individually or in parallel:
-
-##### Option A: OEM CAN-Bus Thumb Integration (Recommended – 0 mm Handlebar Space)
-* **Mechanical Footprint:** **0 mm** – zero additional clamps on the handlebar tubing. The upper perch clamp of the clutch master cylinder remains completely available for valved exhaust switches (e.g., Dr. Jekill & Mr. Hyde or KessTech).
-* **Rider Ergonomics with 2-Finger Lever Covering:** Index and middle fingers remain continuously covering the clutch lever. The left thumb effortlessly controls all functions via the factory **TRIP button** located on the upper rear housing (Harley-Davidson HD-LAN CAN-ID `0x290`, Bit 20) or the BMW Wonder Wheel / Multicontroller (BMW K-CAN):
-* **"Cam-First" Gesture Control While Riding ($v > 0$):**
-  - **Short Tap ($< 300\,\text{ms}$):** Action-Cam REC Start / Stop. Instantly wakes GoPro (Hero 9–13 via Open GoPro BLE `0xFEA6`), Insta360 (X3/X4 via Smart Remote BLE), or DJI Action from low-power BLE standby. A crisp high-pitch double-beep (*"Ding-Ding"*) or low-tone (*"Dong"*) in the helmet headset immediately confirms recording state without diverting the rider's eyes.
-  - **Press & Hold ($> 300\,\text{ms}$):** Push-to-Talk (PTT) for intercom mesh / radio. The speech channel remains open as long as the button is held down and cleanly closes upon release (classic walkie-talkie principle).
-  - **Double-Click:** Drops a video highlight marker (HiLight tag) directly into the video container and GPX telemetry file for rapid location of apex passes during post-ride editing.
-  - *(Note on ODO / Trip Meter: Short presses at standstill $v = 0$ as well as regular taps during riding continue to cycle OEM Harley trip meters A, B, clock, and range normally. A trip reset on Harley still requires holding the button while stationary).*
-
-##### Option B: Dedicated Tactile Hardware Button (Port `J3` on Front Node)
-* **Application:** For motorcycles lacking handlebar CAN-bus access or riders who prefer a dedicated tactile switch with mechanical snap action.
-* **Mechanical Mounting – Two Non-Interfering Configurations:**
-  1. **Under-Perch / Mirror Stem Bracket (Recommended for Cruisers):**
-     - 3D printed in MJF PA12-CF / ASA: [`under_perch_switch_bracket.stl`](../../hardware/cad/stl/05_accessories/under_perch_switch_bracket.stl) (for M4 housing bolt) or with adapter plate [`under_perch_mirror_plate.stl`](../../hardware/cad/stl/05_accessories/under_perch_mirror_plate.stl) (for M8/M10 mirror stems).
-     - The micro-switch sits approx. 15 mm **below** the turn signal paddle—completely clear of any top-mounted Jekill & Hyde exhaust switches and positioned directly within the thumb's natural downward sweep.
-  2. **Slim Clamp Collar (10 mm):** Mounting an ultra-narrow switch (e.g., Daytona Slimline or motogadget m-switch mini) directly flush against the inner flange of the left grip.
-* **Electrical Connection at Port `J3` (4-Pin JST-PH):**
-  - **Pin 1:** `GND` (Common ground reference)
-  - **Pin 2:** `PTT_INTERCOM` (Closes to ground: triggers instant intercom mesh / radio transmit or executes the gesture state machine on 2-pin switches)
-  - **Pin 3:** `CAM_ACTION` (Closes to ground: dedicated actioncam trigger on 3-button clusters)
-  - **Pin 4:** `MEDIA_VOICE` (Closes to ground: triggers Siri / Google Assistant or skips audio track)
-  - *(Note: Standard 2-pin momentary push buttons plug directly onto Pin 1 and Pin 2).*
-* **System Benefit:** 100% battery-free, zero wireless latency (< 1.8 ms response time), hardware Schmitt-trigger debounced, and protected against accidental 12V shorts.
-
-#### 5.4.2 Blind Spot Detection Mirror LED Indicators (`J9`)
-* **Mechanical Mounting (Aerodynamic 2-Shell Mirror Pod):**
-  - Clamps onto left and right mirror stems (Ø 10 mm / Ø 12 mm) via a 2-piece clamp assembly:
-    - Upper pod with 38° inward light tunnel and 3.8 mm anti-glare visor hood: [`bsd_mirror_upper_pod.stl`](../../hardware/cad/stl/05_accessories/bsd_mirror_upper_pod.stl)
-    - Lower clamp shell with captive M3 nut/insert pockets: [`bsd_mirror_lower_clamp.stl`](../../hardware/cad/stl/05_accessories/bsd_mirror_lower_clamp.stl)
-    - Translucent amber/red diffuser lens: [`bsd_mirror_lens.stl`](../../hardware/cad/stl/05_accessories/bsd_mirror_lens.stl)
-  - **100% StVZO & ECE R50 Compliant:** The opaque front cowl and 3.8 mm visor hood strictly shield oncoming traffic from forward/lateral glare while ensuring high-contrast visibility within the rider's peripheral vision.
-* **Electrical Connection at Port `J9` (3-Pin JST-PH):**
-  - **Pin 1:** `+12V_PROT` (Protected 12V anode supply)
-  - **Pin 2:** `BSD_LEFT_N` (Left mirror cathode, switched via low-side N-MOSFET Ch A)
-  - **Pin 3:** `BSD_RIGHT_N` (Right mirror cathode, switched via low-side N-MOSFET Ch B)
-* **Operational Logic:**
-  - Fed by real-time telemetry from the rear radar (Garmin Varia or OMM Radar):
-    - **Solid Amber Glow:** Vehicle detected in blind spot or adjacent overtaking lane.
-    - **Rapid 8 Hz Flash (Red/Amber):** Imminent collision hazard (high closing speed or turn signal activated toward overtaking vehicle).
-  - *Automated Night Dimming:* Controlled via ambient light sensor (`OPT3001` on `J12`) for glare-free night operation.
-
-#### 5.4.3 Action-Cam Power Supply (GoPro, Insta360, DJI) (`J8`)
-* **Mechanical Mounting:**
-  - Secure camera to handlebar, windshield bar, crash bar, or helmet tether.
-* **Electrical Connection at Port `J8` (JST-PH):**
-  - Clean $+5.0\,\text{V}$ dedicated power (up to $2.0\,\text{A}$) directly from Front Node.
-* **Critical System Advantage (Charge-Only):**
-  - Port `J8` **deliberately omits USB data lines**. This completely prevents the action camera from defaulting into "USB Mass Storage Mode" upon bike ignition, ensuring uninterrupted video recording and preventing bike head unit lockups.
-  - **Automated BLE Shutter Stop:** With onboard polymer buffer capacitor `C_BUF`, the ESP32-S3 stays powered for 1.5 seconds after ignition off to send a clean Bluetooth LE "Record Stop" packet, cleanly finalizing video clips without file corruption.
-
-#### 5.4.4 Qi Wireless Charging Cradle Integration (Quad Lock, SP Connect) (`J10` & `J5`)
-* **Mechanical Mounting:**
-  - Quad Lock Handlebar / Stem Mount with Weatherproof Wireless Charging Head or SP Connect Moto Mount with Wireless Charging Module.
-* **Electrical Connection – Two Flexible Options:**
-  - **Option 1 (Recommended: 12V Hardwire to Port `J10`):**
-    - 2-Pin JST-PH: Pin 1 = `+12V_SW`, Pin 2 = `GND`.
-    - Handles continuous loads up to $2.0\,\text{A}$ ($24\,\text{W}$).
-    - Connects Quad Lock / SP Connect hardwire cables cleanly without flying fuses.
-    - **Zero Parasitic Battery Drain:** Switched completely via Front Node internal power gate—zero drain during bike parking.
-  - **Option 2 (USB-PD Fast-Charging at Port `J5`):**
-    - Connect short USB-C cable from Port `J5` directly into charging head.
-    - Delivers full 20W USB Power Delivery ($9\,\text{V} / 2.2\,\text{A}$, QC 4+) for maximum Qi fast charging under high sun navigation.
-* **"Forgot Phone" Proximity Warning:**
-  - If the ignition is turned off and the rider walks away (BLE proximity lost) while the Qi mount (`J10`) or USB port (`J5`) still senses phone load, OpenMotorBridge triggers an immediate double-beep on the horn or vibrates the LoRa smart keyfob.
-
----
-
-## 6. Final Bike Inspection, Road Test & Sign-Off Checklist
-
-Once the system is mechanically bolted and electrically connected to the motorcycle:
-
-1. **Ignition Trigger Check (KL15) & Optical POST Diagnostic Matrix:**
-   * Turn bike ignition on: Central Box and Front Node wake synchronously in $< 800\,\text{ms}$.
-   * **Bikes with Radar 2.0 (36-LED Matrix):** For exactly **2.5 seconds**, the 36 LEDs surrounding the rear radar aperture switch into the **18-Pair Hardware POST Diagnostic Matrix** (see [PCBA 08 Section 10.6](../en/07_pcba_hardware_pinouts.md#106-hardware-power-on-self-test-post-36-led-diagnostic-matrix)):
-     - Confirm all relevant LED pairs illuminate **green** (Front Node, CAN-Bus, Pods 1/2/3, GNSS, LoRa, 12V power, 18650 UPS, MicroSD logger, 77-GHz radar transceiver).
-     - If any pair **flashes red**, immediately check the corresponding connector or bus line (e.g. D5/D6 = Pod 1 M8 plug not seated; D3/D4 = CAN-bus polarity inverted).
-     - After 2.5 seconds, the LEDs transition smoothly via a wiping sweep into standard dimmed taillight/radar monitoring mode.
-   * **Cockpit Acknowledgment via Mirror LEDs (`J9`):** Concurrently, the amber BSD mirror LEDs on the handlebar stems illuminate for exactly **1.0 second**—providing instant visual verification from the saddle that the Front Node and mirror wiring are 100% operational.
-   * **Bikes without Radar 2.0 / with Garmin Varia:** Central Box boot is **strictly asynchronous and non-blocking** (< 800 ms). Mirror LEDs acknowledge with the 1.0s amber flash, and the full diagnostic matrix is viewable in the PWA.
-   * **Support Vehicle (Car-Kit 5):** Because support vans do not mount the rear radar unit, the 36-LED matrix is omitted; all 18 subsystems including the wireless BLE OBD2 dongle are verified directly on the tablet PWA dashboard.
-   * Display/infotainment (Boom! Box / Skyline OS / TFT) indicates active OpenMotorBridge headset profile and CarPlay/Android Auto icon.
-
-2. **Manual Test Modes & PWA Diagnostics:**
-   * **Handlebar Trigger Test (No Smartphone Required):** While stationary ($v = 0\,\text{km/h}$), **tap the Harley TRIP button or Front Node PTT switch 4 times rapidly**: Activates the 18-pair POST diagnostic matrix on the rear radar for 10 seconds for convenient visual hardware verification.
-   * **PWA Hardware Diagnostics:** In the PWA under *Devices & Diagnostics* $\rightarrow$ *Rear Radar 2.0 & BSD*, tap the test buttons:
-     - `⚡ Mirror LED Flash Test (2s)`: Cycles left and right mirror MOSFET channels.
-     - `⚡ ESS Brake Strobe Test (2.5s)`: Fires the $4.5\,\text{Hz}$ emergency brake strobe on the rear radar wings and front auxiliary lights (`J11`).
-   * **Configurable Warning Macros:** In the PWA under *Lighting & Safety*, individual macros (Welcome Sweep, ESS Strobe, Hazard Beacon, Theft Strobe, Convoy Marker, Tailgating Guard) can be toggled on or off to comply with local vehicle lighting regulations.
-
-3. **Blind Spot Radar & Dynamics Verification (Radar 2.0 / Garmin Varia):**
-   * Walk up behind the motorcycle: Approaching human target triggers the solid amber mirror LEDs (`J9`) and the threat halo on the rear radar wings.
-   * Turn on signal indicator: Approaching target triggers rapid 8 Hz flashing on the corresponding mirror LED.
-   * Threshold verification: Inject a simulated radar target via the PWA (`radar_inject_simulated_target`) to verify amber (closing speed $> 15\,\text{km/h}$) and red (TTC $< 2.5\,\text{s}$) threat thresholds.
-
-4. **Road Test & Audio Ducking:**
-   * Start engine and conduct a test ride: SDP31 dynamic pressure sensor and Knowles/Sipeed MEMS microphone adapt audio volume smoothly against road speed.
-   * Tap handlebar PTT: Crystal-clear intercom transmission to pillion and mesh riders.
-   * Short tap on TRIP button: Action camera triggers recording start (confirmed by high-pitch audio double-tone in helmet).
-
-5. **Ignition Off (Power Grace Period & Anti-Theft Standby):**
-   * Turn ignition off: Action cam halts recording cleanly via BLE stop command, UPS initiates graceful power-down.
-   * Any unauthorized vehicle movement triggers the onboard 6-axis IMU (BMI270) to broadcast an immediate tamper alarm to your pocket keyfob via LoRa.
-
----
-
-## 7. Maintenance & Care
-
-* **Gasket Inspection:** Once per season, lubricate silicone cord on Main Box, Front Node, and cartridges lightly with dielectric silicone grease.
-* **Breather Inspection:** Ensure Gore ePTFE membranes remain clean and clear of mud/debris.
-* **Firmware Updates:** Perform wireless over-the-air updates directly via the WebBLE PWA interface.
+1. **Ignition ON (KL15):**
+   * Central Box and Front Node wake synchronously in $< 800\,\text{ms}$.
+   * UWB wireless backbone locks immediately (green sync LED).
+   * Mirror blind-spot LEDs (`J9`) acknowledge with 1.0 s amber flash.
+2. **Cartridge Keying:**
+   * Press handlebar controls: Solenoids actuate headset buttons reliably.
+3. **Blind-Spot Radar Test:**
+   * Approaching vehicle from rear triggers amber mirror LEDs; signaling for lane change triggers 8 Hz red/amber hazard flash.
+4. **Road Dynamics:**
+   * Knowles MEMS wind sensor smoothly scales helmet volume.
+   * Raised-Cosine Ducking attenuates music by $-18\,\text{dB}$ during incoming radio transmissions.
+5. **Ignition OFF:**
+   * Action cameras stop recording automatically via Bluetooth LE shutter.
+   * Central Box executes graceful shutdown; LoRa 868 MHz theft sentry remains active 24/7 on UPS rail.

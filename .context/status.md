@@ -1,12 +1,13 @@
 # OpenMotorBridge - Current System Context
 
-## Hardware & Architecture (v8.0)
-- **Topology:** 4-Point Satellite (Main Box under seat, Pod 1 Left Sena, Pod 2 Right Cardo, Pod 3 Rear OMM/GNSS)
-- **Connector:** HD26 Flange (IP67) -> Internal 2x13 Ribbon to ESP32-S3 PCB (26 Pins, 0 NC)
+## Hardware & Architecture (v8.0 Clean Architecture)
+- **Topology:** Dual-Pod Satellite + Cockpit Front-Node (Main Box under seat, Pod 1 Left Sena, Pod 2 Right Cardo/Swap, Front-Node Cockpit Hub)
+- **Vehicle Backbone:** Deterministic UWB 6.5 GHz (Qorvo DW3110 / Channel 5 @ 6.489 GHz, ETSI EN 302 065-3, < 0.4 ms latency, zero duty-cycle limit)
+- **Connector:** HD26 SEAL-D Flange (IP67) -> 4-Whip Harness (Whip 1: Pod 1, Whip 2: Pod 2, Whip 4: Power/CAN, Whip 5: Rear Radar; Pins 9–11 unassigned reserve)
 - **Pod Connection:** Symmetrical 6-wire shielded PUR cable (VCC, GND, Audio/UART, Opto/PPS, 1-Wire ID)
-- **Front/Cockpit:** 100% wireless via BLE 5.0 handlebar remote (CR2032 monitored via Service 0x180F)
-- **BOM:** ESP32-S3, ES8388 24-Bit Codec, TCAN334G CAN-FD, LM5164 Buck, BQ24075 UPS with JEITA NTC
-- **Rear Pod 3:** ESP32-C3 Co-Processor, u-blox MAX-M10S 10Hz GNSS, Semtech SX1262 LoRa (+22 dBm PA), DS2401 ID, TPS7A0533 LDO
+- **Front/Cockpit:** Universal Front-Node (PCBA 05) with u-blox SAM-M10Q Multi-GNSS via J12 Qwiic, dual Knowles MEMS mics, hardwired zero-latency PTT, 4-Port USB Hub & Dual 20W USB-PD
+- **BOM:** ESP32-S3, onboard Semtech SX1262 LoRa 868 MHz (UPS-buffered 24/7), Qorvo DW3110 UWB, ES8388 24-Bit Codec, TCAN334G CAN-FD, LM5164 Buck, BQ24075 UPS with JEITA NTC
+- **Retired:** Rear Pod 3 and PCBA 04 retired without replacement (cost and complexity reduced, no antenna holes in pods)
 
 ## Completed Milestones
 - [x] **Documentation v8.0 in German & English:**

@@ -15,10 +15,10 @@ This document specifies the storage and telemetry subsystem of OpenMotorBridge v
 
 ## 2. Sensor Fusion & Automotive Dead Reckoning (ADR Engine)
 
-The telemetry subsystem fuses data from the multi-constellation GNSS receiver (**u-blox MAX-M10S** in Rear Pod 3), the 6-axis IMU (**Bosch BMI270**), and optional motorcycle wheel speed inputs (via CAN-bus or ABS sensor pulse line) in a **15-State Error-State Extended Kalman Filter (ES-EKF)**:
+The telemetry subsystem fuses data from the multi-constellation GNSS receiver (**u-blox SAM-M10Q** with integrated $15 \times 15\,\text{mm}$ patch antenna on the Front Node via `J12` Qwiic), the 6-axis IMU (**Bosch BMI270**) on the Central Box, and optional motorcycle wheel speed inputs (via CAN-bus or ABS sensor pulse line) in a **15-State Error-State Extended Kalman Filter (ES-EKF)**:
 
 ```
-[ u-blox Multi-GNSS (M10S 10 Hz) ] ──(UART 460.8k)──┐
+[ u-blox SAM-M10Q GNSS (10 Hz) ] ──(I2C 400k / UWB)──┐
 [ CAN-Bus Wheel Speed / Velocity ] ───(10-20 Hz)─────┼─► [ 15-State Extended Kalman Filter ] ──► [ MicroSD: tour.gpx ]
 [ Bosch BMI270 Gyro / Accel (I2C) ] ──(50-100 Hz)────┘        (Dead Reckoning Engine)            (With Lean Angle & G-Force)
 ```
@@ -80,19 +80,18 @@ To strictly avoid running cables through the steering stem to the wireless Front
 │ • Reads OEM ambient/intake air temperature from CAN frames (ID 0x2D0 etc.)  │
 │ • 0 extra wires, 0 hardware cost, factory calibrated                        │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ TIER 2: Rear Pod 3 Antenna Fin Probe (Universal / CVO ST / Non-CAN)         │
-│ • Dedicated sensor (DS18B20 1-Wire or TI TMP117 / SHT40 I2C on J6) on PCBA 04 (ESP32-C3) │
-│ • Installation: Antenna base / airstream duct inside the telemetry fin     │
-│   (cvo_st_telemetry_fin.stl) surrounding the external 2.4 GHz antenna       │
+│ TIER 2: Front Node Cold-Air Scoop Sensing (Universal / CVO ST / Non-CAN)    │
+│ • Dedicated sensor (TI TMP117 ±0.1°C & OPT3001 light sensor on J12 Qwiic) on PCBA 05 │
+│ • Installation: Ram-air intake duct inside fairing / headlight scoop         │
 │ • Thermal Isolation: Eliminates false readings from engine heat trapped     │
-│   under the solo seat cowl (45–55 °C)                                        │
-│ • Wireless Steering Head: Front-Node remains 100% wireless (no stem harness)│
+│   around cylinder heads or radiator exhaust                                  │
+│ • Wireless Steering Head: Telemetry streams over UWB (< 0.4 ms)              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ### 3.2 Barometric Altitude Fusion (15-State Kalman Filter)
 
-In addition to GNSS 3D height, a Bosch BMP390 / BMP581 barometric pressure sensor on the Rear Pod measures relative vertical displacement down to $\pm 10\,\text{cm}$. The 15-state Error-State Extended Kalman Filter continuously cross-references barometric delta with u-blox MAX-M10S 3D GNSS fixes during steady cruise to auto-calibrate QNH reference pressure without any manual zeroing required by the rider.
+In addition to GNSS 3D height, a Bosch BMP390 / BMP581 barometric pressure sensor on the Central Box (PCBA 01) measures relative vertical displacement down to $\pm 10\,\text{cm}$. The 15-state Error-State Extended Kalman Filter continuously cross-references barometric delta with u-blox SAM-M10Q 3D GNSS fixes during steady cruise to auto-calibrate QNH reference pressure without any manual zeroing required by the rider.
 
 ### 3.3 Shift Counter State Machine & Radio Link QoS Fallback Tracking
 
@@ -131,9 +130,9 @@ The PWA Tour Inspector features 3 instantaneous pills (`[ 🏍️ Sportlich ]`, 
 
 ### 3.5 GPS Co-Existence & RF De-Sensing Protection (+22 dBm LoRa Bursts)
 
-Operating +22 dBm (160 mW) LoRa transmissions at 868 MHz near a high-gain GNSS receiver risks de-sensing the LNA at 1575.42 MHz. OpenMotorBridge prevents interference through a 3-tier protection design:
-1. **SAW Bandpass Pre-Filter:** A steep surface acoustic wave (SAW) filter placed immediately before the GNSS LNA attenuates 868 MHz by $> 55\,\text{dB}$.
-2. **Geometric Antenna Isolation:** The vertical 868 MHz whip antenna is geometrically isolated and orthogonally oriented relative to the horizontal GNSS ceramic patch antenna inside the fin.
+Operating +22 dBm (160 mW) LoRa transmissions at 868 MHz near a sensitive GNSS receiver requires deliberate RF isolation. OpenMotorBridge resolves this through a robust 3-tier protection architecture:
+1. **Maximum Physical Separation ($> 1.2\,\text{m}$ Distance):** The Semtech SX1262 LoRa transceiver sits on Central Box PCBA 01 under the seat (with Taoglas FXP895 flex antenna in the lid pocket), while the SAM-M10Q GNSS receiver sits at the very front of the fairing/windshield. Free-space path loss between both locations exceeds $> 45\,\text{dB}$.
+2. **Integrated SAW Bandpass Filtering:** The SAM-M10Q module integrates a steep surface acoustic wave (SAW) filter ahead of its internal LNA, providing $> 50\,\text{dB}$ attenuation in the 868 MHz band.
 3. **Inertial EKF Bridging:** The 15-state EKF Dead Reckoning engine uses 50 Hz IMU inertial data to seamlessly bridge any transient SNR dip during packet bursts.
 
 ---

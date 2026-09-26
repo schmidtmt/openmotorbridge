@@ -1,11 +1,11 @@
 # 08 - Mechanische Gehäuse, CAD-Konstruktion & Dichtungssystem (Alle Baugruppen)
 
 Dieses Dokument spezifiziert die mechanische Konstruktion, das Thermomanagement, das IP67/IP69K-Gehäusedesign, die Kinematik des Auto-Eject-Schnellwechselsystems sowie alle CAD- und STL-Modelle aller Gehäuse-Baugruppen der OpenMotorBridge v8.0:
-1. **Zentrale Steuerbox (Typ A):** 3-teiliges Sandwich-Gehäuse mit Zwischenboden, integrierter Akku-Wanne, stirnseitiger Schnittstellenleiste (HD26, USB-C, RGB-LED) und planarem 4-Layer Kupfer-Wärmespreader.
-2. **Modulares Satelliten-Pod- & Wechselsystem (Typ B):** Baugleiches 5-seitiges Monocoque-Schachtgehäuse für alle 3 Satellitenpositionen (Pod 1 & 2 Audio/Intercom, Pod 3 Telemetrie/Backbone) mit modularen Wechselkassetten (OMM-Transceiver, Sena, Cardo, Midland, PMR446, Dry Box), $120^\circ$-V-Nut Rohrbett, Dual-Port M8/USB-C, Poka-Yoke Nut-und-Feder-Führung, federbelastetem Auto-Eject und unsichtbarem Neodym-Magnet-Diebstahlschutz.
-3. **Universal Front-Knoten (Typ C):** Ultrakompakter Cockpit- & Sensor-Hub ($98{,}0 \times 68{,}0 \times 25{,}0\,\text{mm}$) für die vergrößerte $82 \times 50\,\text{mm}$ 4-Lagen PCBA 05 mit **4-in-1 Universal-Befestigungssystem** (AMPS, Rohrbügel-Prisma, Silentblöcke, 3M Dual-Lock), getrennten EPDM-Kabelkämmen für USB (Süd) und Fahrzeugleitungen (Nord), Dual-SW3526 20W USB-PD und Knowles MEMS Akustikkanal.
+1. **Zentrale Steuerbox (Typ A):** 3-teiliges Sandwich-Gehäuse mit Zwischenboden, integrierter Akku-Wanne, stirnseitiger Schnittstellenleiste (HD26, USB-C, RGB-LED), integrierter Deckeltasche für LoRa-868-Flexantenne (FXP895), Unterwannen-Bodenkammer ($11 \times 11 \times 0{,}6\,\text{mm}$) für UWB-Flexantenne (FXUWB10) und planarem 4-Layer Kupfer-Wärmespreader.
+2. **Modulares Satelliten-Pod- & Wechselsystem (Typ B):** Baugleiches 5-seitiges Monocoque-Schachtgehäuse für beide Satelliten-Pods (Pod 1 & 2 Audio/Intercom, 2x symmetrisch) mit modularen Wechselkassetten (Sena SPIDER X Slim, Cardo Packtalk Edge, OMM 2.4 GHz Swap Cartridge, Midland, Dry Box), glatter geschlossener IP67-Außenhaut (ohne störende Antennen-Radomlöcher), $120^\circ$-V-Nut Rohrbett, Dual-Port M8/USB-C, Poka-Yoke Nut-und-Feder-Führung, federbelastetem Auto-Eject und unsichtbarem Neodym-Magnet-Diebstahlschutz.
+3. **Universal Front-Knoten (Typ C):** Ultrakompakter Cockpit- & Sensor-Hub ($98{,}0 \times 68{,}0 \times 25{,}0\,\text{mm}$) für die vergrößerte $82 \times 50\,\text{mm}$ 4-Lagen PCBA 05 mit **4-in-1 Universal-Befestigungssystem** (AMPS, Rohrbügel-Prisma, Silentblöcke, 3M Dual-Lock), integrierter Bodenkammer für UWB-Backbone (FXUWB10), J12 Qwiic Sensor-Hub (u-blox SAM-M10Q GNSS-Patch, TI TMP117 Präzisionsthermometer, TI OPT3001 Lichtsensor) im Fahrtwindeinlass, getrennten EPDM-Kabelkämmen für USB (Süd) und Fahrzeugleitungen (Nord), Dual-SW3526 20W USB-PD und Knowles MEMS Akustikkanal.
 4. **2-in-1 LoRa Smart-Keyfob & Pager (Typ D):** Ultrakompakter Taschenbegleiter ($58{,}0 \times 34{,}0 \times 13{,}0\,\text{mm}$) aus PA12-MJF mit umlaufendem TPU-Kantenschutz, integriertem N52-Neodym-Auswerferschlüssel, $0{,}5\,\text{mm}$ Mu-Metall-Flussschirmung, MagSafe/Qi-Induktionsladeaufnahme, LRA-Haptikmotor und drahtlosem SX1262 LoRa/BLE Alarm-Pager.
-5. **Fahrzeugspezifische Referenz-Montagekits (Zero-Drill):** Vollständig konstruierte, zerstörungsfreie Bolt-On Montagekits für CVO Road Glide ST (Kit 1), Road King Special (Kit 2), Classic Bagger & Cruiser (Kit 3) sowie Adventure & Touring Enduros (BMW GS, KTM Adventure, Africa Twin – Kit 4).
+5. **Fahrzeugspezifische Referenz-Montagekits (Zero-Drill):** Vollständig konstruierte, zerstörungsfreie Bolt-On Montagekits für CVO Road Glide ST (Kit 1), Road King Special (Kit 2), Classic Bagger & Cruiser (Kit 3) sowie Adventure & Touring Enduros (BMW GS, KTM Adventure, Africa Twin – Kit 4 mit minimalem Unterbrücken-Radarträger).
 
 ---
 
@@ -34,11 +34,13 @@ Das Basisgehäuse der Zentralbox ist als modulares, 3-teiliges IP67/IP69K-Sandwi
 │ 1. GEHÄUSEDECKEL (6,0 mm Höhe / 3,0 mm Wandstärke)         │  │
 │    • Gore ePTFE Druckausgleichsmembran (Ø 7,0 mm)          │  │ 38,0 mm
 │    • Umlaufende Nut mit Shore 40A Silikon-Profildichtung   │  │ Gesamt-
-│    • 100% homogener, geschlossener Vollkunststoff-Deckel   │  │ höhe
+│    • Integrierte Antennentasche (110 x 20 x 0,8 mm) für    │  │ höhe
+│      Taoglas FXP895 LoRa 868 MHz Flexantenne               │  │
+│    • 100% homogener, geschlossener Deckel (kabelbündig)    │  │
 ├────────────────────────────────────────────────────────────┤  │
 │ 2. OBERWANNE MIT ZWISCHENBODEN (15,0 mm Höhe)              │  │
 │    • Stirnwand (Alle Anschlüsse & Anzeige):                │  │
-│      - HD26 D-Sub Flansch (Haupt-Kabelbaum)                │  │
+│      - HD26 D-Sub Flansch (4-armiger Haupt-Kabelbaum)      │  │
 │      - Wasserdichter USB-C Service-Port (Alu-Schraubkappe) │  │
 │      - Wasserdichtes RGB-Status-LED-Sichtfenster (Ø 3 mm)  │  │
 │    • Oberes Fach (auf dem Zwischenboden):                  │  │
@@ -50,9 +52,10 @@ Das Basisgehäuse der Zentralbox ist als modulares, 3-teiliges IP67/IP69K-Sandwi
 ├────────────────────────────────────────────────────────────┤  │
 │ 3. UNTERWANNE (17,0 mm Höhe - Geschlossene Monocoque-Wanne)│  │
 │    • 4-Layer Hauptplatine (85 x 55 mm) auf M2.5 Dämpfern   │  │
+│    • Integrierte Antennentasche (11 x 11 x 0,6 mm) im Boden│  │
+│      für Taoglas FXUWB10 Flexantenne (DW3110 UWB Ch. 5)    │  │
 │    • Integrierte M3 Sechskant-Nut-Pockets (IKEA-Prinzip)   │  │
 │    • 4x M4 Silentblock-Befestigungsohren (vibrationsfest)  │  │
-│    • 100% geschlossener PA12-Boden ohne Gehäusedurchbrüche │  │
 └────────────────────────────────────────────────────────────┘  ▼
 ```
 
@@ -235,13 +238,13 @@ Um Wechselkassetten auf allen Motorrädern (von frei zugänglichen Reiseenduro-S
 
 ---
 
-### 4.2 Gehäuse Typ B: Der universelle Satelliten-Pod (Pod 1, 2 und 3)
+### 4.2 Gehäuse Typ B: Der universelle Satelliten-Pod (Pod 1 und 2)
 
-Alle 3 Pod-Positionen nutzen dasselbe 5-seitige Monocoque-Schachtgehäuse im standardisierten Envelope ($135{,}0 \times 70{,}0 \times 38{,}0\,\text{mm}$):
+Beide Satelliten-Pods (Pod 1 und Pod 2) nutzen dasselbe 5-seitige Monocoque-Schachtgehäuse im standardisierten Envelope ($135{,}0 \times 70{,}0 \times 38{,}0\,\text{mm}$):
 
 ![OpenMotorBridge Satelliten-Pod CAD Explosionsdarstellung](../images/cad/openmotorbridge_pod_exploded_view.png)
 
-*Abbildung 8.9: 3D-CAD-Explosionsdarstellung des universellen Satelliten-Pods.*
+*Abbildung 8.9: 3D-CAD-Explosionsdarstellung des universellen Satelliten-Pods mit geschlossener, glatter IP67-Außenhaut.*
 
 ![OpenMotorBridge Satelliten-Pod Röntgenansicht](../images/cad/openmotorbridge_pod_assembly_render_xray.png)
 
@@ -253,14 +256,14 @@ Alle 3 Pod-Positionen nutzen dasselbe 5-seitige Monocoque-Schachtgehäuse im sta
 
 #### 4.2.2 Dual-Port Anschluss-Architektur der Pod-Basis (Entflechtung & Koffer-Integration)
 
-Um sowohl exponierte Outdoor-Einsätze (z. B. Sturzbügel-Montage bei Adventure-Bikes oder Heckradar Pod 3) als auch geschützte Koffer-Innenmontagen ohne selbstgelötete Adapterkabel abzudecken, verfügt die Pod-Bodenplatine ([`openmotorbridge_pod_base.kicad_pcb`](../../hardware/kicad_pod_base/openmotorbridge_pod_base.kicad_pcb)) über eine **Dual-Port-Architektur**:
+Um sowohl exponierte Outdoor-Einsätze (z. B. Sturzbügel-Montage bei Adventure-Bikes) als auch geschützte Koffer-Innenmontagen ohne selbstgelötete Adapterkabel abzudecken, verfügt die Pod-Bodenplatine ([`openmotorbridge_pod_base.kicad_pcb`](../../hardware/kicad_pod_base/openmotorbridge_pod_base.kicad_pcb)) über eine **Dual-Port-Architektur**:
 
 ```
                        POD-BASISPLATINE (DRAUFSICHT / LAYOUT)
  ┌────────────────────────────────────────────────────────────────────────┐
  │                                                                        │
  │   [ PORT A: M8 6-Pin ]                   [ PORT B: USB-C Slim ]        │
- │   (Outdoor / Heckradar)                  (Koffer / Innenmontage)       │
+ │   (Outdoor / Sturzbügel)                 (Koffer / Innenmontage)       │
  │   Robuste Schraubbuchse                  Hinter TPU-Schutzstopfen      │
  │            │                                         │                 │
  │            └───► [ AUTOMATISCHER POWER-MUX / ] ◄─────┘                 │
@@ -298,7 +301,7 @@ Um sowohl exponierte Outdoor-Einsätze (z. B. Sturzbügel-Montage bei Adventure-
 
 ![OpenMotorBridge Modular Cartridge Variants CAD Trio](../images/cad/cartridge_variants_trio.png)
 
-*Abbildung 8.11: Die modularen Wechselkassetten-Varianten im Überblick: OMM Heck-Transceiver (vorne links), Sena 50S/60S Quick-Snap Cradle (vorne rechts), Cardo Magnetic Air Mount (hinten links) und wasserdichte IP67 Blindkassette (hinten rechts).*
+*Abbildung 8.11: Die modularen Wechselkassetten-Varianten im Überblick: OMM 2.4 GHz Swap Cartridge, Sena SPIDER X Slim Quick-Snap Cradle, Cardo Magnetic Air Mount und wasserdichte IP67 Blindkassette.*
 
 #### 4.3.1 Benutzerzentrierte Plug & Play Docking-Architektur (0 Lötaufwand)
 Um Signale vom 90°-abgewinkelten **JST-SH 1.0 mm 6-Pin SMD-Steckverbinder (`J2`)** sowie dem **8-Pin Mechatronik-Header (`J_ACT`)** auf der Kassetten-Trägerplatine (PCBA 03 Rev 2.0) verwechslungs- und knickfrei zu den Kontaktpunkten des jeweiligen Adapters zu führen, besitzt der Kassetten-Schlitten:
@@ -306,37 +309,25 @@ Um Signale vom 90°-abgewinkelten **JST-SH 1.0 mm 6-Pin SMD-Steckverbinder (`J2`
 * **Zwischenboden-Durchführung:** Ein präziser **$10{,}0 \times 3{,}0\,\text{mm}$ Durchbruch mit beidseitig $R=1{,}0\,\text{mm}$ verrundeten Kanten** führt die Kabelstränge von Header `J2` und `J_ACT` auf der unteren Platine nach oben ins Nest.
 * **Standardisierte Pin-Belegung am JST-SH 6P Header (`J2`) für Audio & Direct-DC:**
 
-| Pin | Signal-Name | Funktion am Headset-Adapter | Sena SPIDER X Slim | Sena 50S/60S Pad | Cardo Edge Pad | Midland XT / PMR |
+| Pin | Signal-Name | Funktion am Headset-Adapter | Sena SPIDER X Slim | Cardo Edge Pad | OMM 2.4 GHz Swap | Midland XT / PMR |
 | :---: | :--- | :--- | :--- | :--- | :--- | :--- |
-| **1** | `VCC_DIRECT_DC` | Direct-DC Speisung (3.85V / 5V) | Akkustecker ⑧ (DC In) | Pin 2 (USB-5V) | Pin 2 (5V Charge)| 5V DC In |
-| **2** | `GND` | Gemeinsamer Massebezug | Akkustecker ⑧ (GND) | Pin 1 (GND) | Pin 1 (GND) | Masse / Shield |
-| **3** | `AUDIO_R+` | Audio Diff-Out + (zum Lautsprecher-In) | Lautsprecher ⑩ (Spk +) | Pin 4 (Spk R+) | Pin 3 (Spk +) | Speaker In + |
-| **4** | `AUDIO_R-` | Audio Diff-Out - (Lautsprecher-Rückleiter)| Lautsprecher ⑩ (Spk -) | Pin 5 (Spk R-) | Pin 4 (Spk -) | Speaker In - |
-| **5** | `MIC_IN+` | Audio Diff-In + (vom Mikrofon-Out) | Mikrofon ⑨ (Mic +) | Pin 6 (Mic +) | Pin 5 (Mic +) | Mic Out + |
-| **6** | `RESERVE_IO` | Diagnose / Auxiliary / PTT | N/C | Pin 7 (Mesh-Btn)| N/C (Aux) | PTT Switch |
+| **1** | `VCC_DIRECT_DC` | Direct-DC Speisung (3.85V / 5V) | Akkustecker ⑧ (DC In) | Pin 2 (5V Charge)| 5V DC In | 5V DC In |
+| **2** | `GND` | Gemeinsamer Massebezug | Akkustecker ⑧ (GND) | Pin 1 (GND) | Masse / Shield | Masse / Shield |
+| **3** | `AUDIO_R+` | Audio Diff-Out + (zum Lautsprecher-In) | Lautsprecher ⑩ (Spk +) | Pin 3 (Spk +) | Audio Out + | Speaker In + |
+| **4** | `AUDIO_R-` | Audio Diff-Out - (Lautsprecher-Rückleiter)| Lautsprecher ⑩ (Spk -) | Pin 4 (Spk -) | Audio Out - | Speaker In - |
+| **5** | `MIC_IN+` | Audio Diff-In + (vom Mikrofon-Out) | Mikrofon ⑨ (Mic +) | Pin 5 (Mic +) | Mic In + | Mic Out + |
+| **6** | `RESERVE_IO` | Diagnose / Auxiliary / PTT | N/C | N/C (Aux) | Single-Wire UART | PTT Switch |
 
-#### 4.3.2 OMM-Transceiver-Kassette & Telemetrie-Backbone (Pod 3)
+#### 4.3.2 OMM 2.4 GHz Swap-Kassette (Optionaler Intercom-Ersatz für Pod 1 oder Pod 2)
 
-Die OMM-Transceiver-Wechselkassette ([`cartridge_antenna_bracket_omm.scad`](../../hardware/cad/scad/03_pod_cartridges/parts/04_antenna_bracket_omm.scad) / [`cartridge_omm_transceiver.scad`](../../hardware/cad/scad/03_pod_cartridges/cartridge_omm_transceiver.scad)) bildet das datentechnische Rückgrat des OpenMotorBridge-Mesh-Netzwerks. Sie vereint den OMM-Transceiver, 868 MHz LoRa, 5.9 GHz V2X und Multi-GNSS (`PCBA 04`, ESP32-C3 32-Bit RISC-V Co-Prozessor, SX1262 LoRa, u-blox MAX-M10S mit $25 \times 25\,\text{mm}$ Groundplane und Bosch Sensortec BMI270 6-Achs-IMU) in geschützter Heckposition.
+Die OMM 2.4 GHz Swap-Wechselkassette ([`cartridge_omm_transceiver.scad`](../../hardware/cad/scad/03_pod_cartridges/cartridge_omm_transceiver.scad)) basiert auf einer spezialisierten Variante der `PCBA 03` (mit ESP32-C3 / CH32V003 ID `0x03`). Sie dient als optionaler, flexibler Einschub in **Pod 1 oder Pod 2**, um reine OpenMotorBridge-Gruppenfunk-Netzwerke oder Autokolonnen-Brücken aufzubauen.
 
-##### Mechatronische Neuerungen (Feedback-Optimierungen):
-1. **Sensirion SHT40 Fahrtwind-Führung (Stauwärme-Schutz):**
-   * Unter der Forged-Carbon-Hutze der Road Glide ST entsteht durch Motor- und Auspuffabwärme massive Stauwärme, die interne Temperatursensoren um bis zu $+8\dots 15\,^\circ\text{C}$ verfälschen würde.
-   * `cartridge_antenna_bracket_omm.scad` integriert einen **abgedichteten rückwärtigen Kabelkanal**, durch den der Sensirion SHT40 Präzisionssensor zusammen mit dem Antennenkabel **nach außen in den echten Fahrtwind** (unter den Kennzeichenträger / Heckbalkon) geführt wird.
-2. **5.9 GHz V2X Keramik-Patchantennenaufnahme (OpenTrafficMap):**
-   * Neben LoRa und GNSS besitzt das dielektrische Radom eine formschlüssige $20 \times 20\,\text{mm}$ Schnappaufnahme für eine 5.9 GHz V2X Keramik-Patchantenne zum legalen, passiven Empfang von SPAT- und DENM-Sicherheitsmeldungen.
-
-> [!IMPORTANT]
-> **Architektonische Modularität (Typ-B-Unantastbarkeit):**
-> Auch für den Heck-Transceiver bleibt das universelle Monocoque-Schachtgehäuse (Typ B, $135 \times 70 \times 38{,}0\,\text{mm}$) **zu 100 % baugleich und unverändert**. Der Heck-Pod 3 unterscheidet sich mechanisch nicht von den Intercom-Pods 1 und 2; er wird lediglich durch das Einschieben dieser OMM-Transceiver-Kassette mit integriertem dielektrischem Antennenradom konfiguriert. Die fahrzeugspezifische Adaption an Kotflügel, Gepäckbrücken oder Heckrahmen erfolgt ausschließlich über externe Montagekonsolen (siehe [Kapitel 6](#6-fahrzeugspezifische-referenz-montagekits-zero-drill--bolt-on)).
-
-![Pod 3 Full Assembly Exploded 3D](../images/cad/pod3_full_assembly_exploded_3d.png)
-
-*Abbildung 8.12: CAD-Explosionsdarstellung des Heck-Pods 3 mit Antennen-Radom, Platine und M8-Bajonettsockel.*
-
-![Pod 3 Assembly Cross Section](../images/cad/pod3_assembly_cross_section.png)
-
-*Abbildung 8.13: Längsschnitt durch den Heck-Pod 3 mit koaxial geschirmter Antennenkammer und $25 \times 25\,\text{mm}$ GNSS-Groundplane.*
+> [!NOTE]
+> **Architektur-Vorteil der v8.0 Bereinigung:**  
+> Die OMM-Swap-Kassette wird **niemals** gleichzeitig mit einem kommerziellen Sena- oder Cardo-Intercom im selben Pod betrieben, sondern ersetzt dieses bei Bedarf als autarker Funkknoten.  
+> 1. **Glatte, geschlossene IP67-Monocoque:** Es werden keinerlei externe Antennenradome oder Antennenbohrungen an den Pod-Gehäusen benötigt. Alle HF-Elemente arbeiten mit integrierten PCB-Dipolantennen im Inneren des dielektrischen PA12-Gehäuses.  
+> 2. **Keine Heck-Sensorik mehr:** Multi-GNSS (u-blox SAM-M10Q) und Präzisionstemperatur (TI TMP117) sind vollständig in den Front-Knoten (`PCBA 05`, Port `J12` Qwiic) im laminaren Fahrtwindeinlass umgezogen. LoRa 868 MHz (SX1262) sitzt 24/7 USV-versorgt direkt auf der Zentralbox `PCBA 01`.  
+> 3. **Pod 3 ersatzlos gestrichen:** Es existiert kein dritter Satelliten-Pod am Heck mehr. Das gesamte Motorrad kommt mit exakt **zwei symmetrischen Pod-Basen (`PCBA 02`)** aus.
 
 ---
 
@@ -458,16 +449,17 @@ Die IP67 Blindkassette (`cartridge_blindkassette.scad`) schützt den Pod-Schacht
 
 ### 4.4 Belegung der 6-Pin M8 / Pogo-Schnittstelle & PUR-Kabelbaum-Farbcodierung
 
-| M8 / Pogo-Pin | Leitungsfarbe (PUR-Kabel) | Querschnitt | Signal Pod 1 & 2 (Audio & Intercom) | Signal Pod 3 (Heck-Transceiver) | Schirmung & Verdrillung |
-| :---: | :--- | :---: | :--- | :--- | :--- |
-| **Pin 1** | **Rot (RD)** | $0{,}34\,\text{mm}^2$ (AWG22) | **`VCC`** (5V geschaltete Speisung via MOSFET) | **`VCC`** (5V Versorgung) | Einzelader (Power) |
-| **Pin 2** | **Schwarz (BK)** | $0{,}34\,\text{mm}^2$ (AWG22) | **`GND`** (Dedizierte Power- & Signalmasse) | **`GND`** (Dedizierte Power- & Signalmasse) | Einzelader (Power Ground) |
-| **Pin 3** | **Weiß (WH)** | $0{,}14\,\text{mm}^2$ (AWG26) | **`NF_P`** (Symmetrisches Audio + via Bourns) | **`UART_TX`** (Heck-Co-Prozessor $\rightarrow$ Box) | **Paar 1 verdrillt** (mit Pin 4) |
-| **Pin 4** | **Blau (BU)** | $0{,}14\,\text{mm}^2$ (AWG26) | **`NF_N`** (Symmetrisches Audio - via Bourns) | **`UART_RX`** (Box $\rightarrow$ Heck-Co-Prozessor) | **Paar 1 verdrillt** (mit Pin 3) |
-| **Pin 5** | **Gelb (YE)** | $0{,}14\,\text{mm}^2$ (AWG26) | **`TRIGGER_PPS`** (Single-Wire UART / Opto-Trigger) | **`GNSS_PPS`** (1-PPS Hardware-Zeitnormal) | Einzelader (Steuersignal) |
-| **Pin 6** | **Grün (GN)** | $0{,}14\,\text{mm}^2$ (AWG26) | **`1-WIRE_ID`** (Native Emulation / DS2401 ID) | **`1-WIRE_ID`** (Heck-Kassetten-ID) | Einzelader (1-Wire Bus) |
-| **M8-Gehäuse**| **Kupfergeflecht (BL)**| $> 85\,\%$ Geflecht | **`GND_SHIELD`** (360° Gehäuseschirmung) | **`GND_SHIELD`** (360° Gehäuseschirmung) | Gesamtschirm über M8-Metallkragen |
+Die 6-polige Schnittstelle ist für beide Satelliten-Pods (Pod 1 und Pod 2) zu 100 % identisch und symmetrisch beschaltet:
 
+| M8 / Pogo-Pin | Leitungsfarbe (PUR-Kabel) | Querschnitt | Signal Pod 1 & 2 (Audio & Intercom) | Schirmung & Verdrillung |
+| :---: | :--- | :---: | :--- | :--- |
+| **Pin 1** | **Rot (RD)** | $0{,}34\,\text{mm}^2$ (AWG22) | **`VCC`** (5V geschaltete Speisung via MOSFET) | Einzelader (Power) |
+| **Pin 2** | **Schwarz (BK)** | $0{,}34\,\text{mm}^2$ (AWG22) | **`GND`** (Dedizierte Power- & Signalmasse) | Einzelader (Power Ground) |
+| **Pin 3** | **Weiß (WH)** | $0{,}14\,\text{mm}^2$ (AWG26) | **`NF_P`** (Symmetrisches Audio + via Bourns) | **Paar 1 verdrillt** (mit Pin 4) |
+| **Pin 4** | **Blau (BU)** | $0{,}14\,\text{mm}^2$ (AWG26) | **`NF_N`** (Symmetrisches Audio - via Bourns) | **Paar 1 verdrillt** (mit Pin 3) |
+| **Pin 5** | **Gelb (YE)** | $0{,}14\,\text{mm}^2$ (AWG26) | **`TRIGGER_PPS`** (Single-Wire UART / Opto-Trigger) | Einzelader (Steuersignal) |
+| **Pin 6** | **Grün (GN)** | $0{,}14\,\text{mm}^2$ (AWG26) | **`1-WIRE_ID`** (Native Emulation / DS2401 ID) | Einzelader (1-Wire Bus) |
+| **M8-Gehäuse**| **Kupfergeflecht (BL)**| $> 85\,\%$ Geflecht | **`GND_SHIELD`** (360° Gehäuseschirmung) | Gesamtschirm über M8-Metallkragen |
 
 ---
 
@@ -478,6 +470,8 @@ Das Gehäuse des Front-Knotens wurde speziell für die geschützte Montage in Mo
 - **Außenabmessungen:** Kompakte **$98{,}0 \times 68{,}0 \times 25{,}0\,\text{mm}$** (L x B x H, passend für die $82 \times 50\,\text{mm}$ 4-Lagen PCBA 05).
 - **Material:** HP Multi Jet Fusion (MJF) PA12, schwarz kugelgestrahlt und chemisch geglättet.
 - **Schutzart:** IP67 (tauch- und strahlwasserdicht) mit integrierter Gore-Tex Druckausgleichsmembran (ePTFE Vent) gegen Kondenswasserbildung.
+- **HF-Backbone-Integration (UWB):** Im Gehäuseboden der Unterwanne ist eine vertiefte Antennentasche ($11 \times 11 \times 0{,}6\,\text{mm}$) für die Taoglas FXUWB10 Flexantenne integriert. Das ultrakurze 20 mm U.FL-Kabel führt direkt auf den Qorvo DW3110 Transceiver auf PCBA 05 `B.Cu`. Dies eliminiert 2.4 GHz Störungen im Cockpit vollständig und bietet deterministische Übertragung ($< 0{,}4\,\text{ms}$) zur Zentralbox.
+- **Laminarer Cockpit Sensor-Hub (J12 Qwiic):** Im strömungsgünstigen Kaltlufteinlass des Gehäuses sitzt der Qwiic-Sensor-Hub mit integriertem u-blox SAM-M10Q Multi-GNSS Patch-Modul ($15 \times 15\,\text{mm}$ Groundplane), TI TMP117 Labor-Temperatursensor ($\pm 0{,}1\,^\circ\text{C}$ Glatteis-Wächter) und TI OPT3001 Umgebungslichtsensor.
 
 ![Universal Front Node Closed CAD](../images/cad/front_node_closed_cad.png)
 
@@ -489,7 +483,7 @@ Das Gehäuse des Front-Knotens wurde speziell für die geschützte Montage in Mo
 
 ![Universal Front Node Cutaway 3D](../images/cad/front_node_cutaway_3d.png)
 
-*Abbildung 8.20: Transparente 3D-Schnittansicht des Front-Knotens mit Knowles MEMS Schallkanal und VBUS-Lastschalter.*
+*Abbildung 8.20: Transparente 3D-Schnittansicht des Front-Knotens mit Knowles MEMS Schallkanal, UWB-Antennentasche im Boden und VBUS-Lastschalter.*
 
 ### 5.1 Das 4-in-1 Universal-Befestigungssystem des Front-Knotens
 
@@ -520,17 +514,17 @@ Das Gehäuse des Front-Knotens wurde speziell für die geschützte Montage in Mo
 └────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 5.2 Schnittstellen- & Flankenlayout des Front-Knotens
+### 5.2 Schnittstellen- & Flankenlayout des Front-Knotens (Top-View & Belegungsmatrix)
 
-Die Anordnung der Steckverbinder und Durchführungen an den Gehäuseflanken ist exakt auf das vergrößerte 4-Layer-Platinenlayout der PCBA 05 ($82 \times 50\,\text{mm}$, `openmotorbridge_front_node.kicad_pcb`) und die Cockpit-Kabelführung abgestimmt:
+Die räumliche Anordnung aller Anschlüsse und Kabeldurchführungen an den Gehäuseflanken entspricht exakt dem vergrößerten 4-Layer-Platinenlayout von PCBA 05 ($82 \times 50\,\text{mm}$, [`openmotorbridge_front_node.kicad_pcb`](../../hardware/kicad_front_node/openmotorbridge_front_node.kicad_pcb)) und der Ergonomie im Cockpit:
 
 ```
-                               FRONT-KNOTEN FLANKEN- & SCHNITTSTELLENLAYOUT
+                               FRONT-KNOTEN FLANKEN- & ANSCHLUSSLAYOUT
 ┌─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
 │                                                 HINTERSEITE / NORDKANTE (Y = 68 mm)                                         │
 │                      (6-fach EPDM-Dichtkamm für Bordnetz, Sensorik & Antenne: north_epdm_cable_comb)                         │
 │   U.FL Antenne     J9: Spiegel-BSD     J3: Lenker-PTT     J1: 12V KL15     J10: Qi-Lader     J11: Aux-Licht     J2: CAN-Bus │
-│   (2.4 GHz ESP)    (3-Pin Radar LED)   (4-Pin Taster)     (2-Pin Zündung)  (2-Pin 12V Sw)    (2-Pin Scheinw)    (3-Pin CAN) │
+│   (DW3110 UWB)     (3-Pin Radar LED)   (4-Pin Taster)     (2-Pin Zündung)  (2-Pin 12V Sw)    (2-Pin Scheinw)    (3-Pin CAN) │
 ├──────────────────────────────────────┬─────────────────────────────────────────────────┬────────────────────────────────────┤
 │ LINKE SCHMALSEITE / WEST (X = 0 mm)  │              INNENRAUM (PCBA 05, 82 x 50 mm)    │ RECHTE SCHMALSEITE / OST (X = 98)  │
 │                                      │                                                 │                                    │
@@ -568,20 +562,18 @@ Die Anordnung der Steckverbinder und Durchführungen an den Gehäuseflanken ist 
      - `J10` ($X_{\text{tub}} = 61{,}75\,\text{mm}$): JST-GH 2-Pin 12V geschaltete Speisung für induktive Handy-Ladehalterungen (SP Connect / QuadLock Wireless Charging Head, Ruhestrom 0.0 µA im Standby).
      - `J11` ($X_{\text{tub}} = 68{,}75\,\text{mm}$): JST-GH 2-Pin 12V geschalteter Hilfsausgang für Adventure-Zusatzscheinwerfer oder Notbrems-Stroboskop.
      - `J2` ($X_{\text{tub}} = 75{,}75\,\text{mm}$): JST-GH 3-Pin Automotive CAN-Bus (CAN_H, CAN_L, GND) mit TCAN334G Transceiver `U6` und elektronischem $120\,\Omega$ Bus-Terminierungs-Relais `K1` (`CPC1017N`).
-   - **U.FL 2.4 GHz Antennenauslass:** Koaxialer U.FL Anschluss auf PCBA 05 führt zur externen 2.4 GHz Dipol- oder Patchantenne für störungsfreie ESP-NOW / BLE Funkverbindung zur Zentralbox unter der Sitzbank (vollkommen unbeeinflusst von der Fairing-Elektronik).
+   - **UWB 6.5 GHz Antennenauslass (Unterwanne):** Der Qorvo DW3110 Transceiver sitzt auf der Platinenunterseite von PCBA 05. Über ein ultrakurzes 20 mm U.FL Micro-Koaxialkabel führt die HF-Leitung direkt in eine formschlüssige $11 \times 11 \times 0{,}6\,\text{mm}$ Aussparung im Gehäuseboden zur **Taoglas FXUWB10** Flex-Antenne. Dies garantiert eine störungsfreie UWB-Backbone-Verbindung (< 0.4 ms) zur Zentralbox unter der Sitzbank – ohne Kabel am Deckel und mit ununterbrochener Massefläche auf der Platine.
 3. **Rechte Schmalseite / Ostflanke ($X = 98{,}0\,\text{mm}$):**
    - **Service & Diagnose:** IP67 wasserdichte USB-C Service-Buchse (`J7`, $Y_{\text{tub}} = 24{,}1\,\text{mm}$) mit formschlüssigem TPU-Schutzstopfen (`front_node_usbc_cap_tpu.stl`) zum direkten Flashen, Debuggen und Protokoll-Auslesen ohne Gehäuseöffnung.
-   - **Sensor-Bus:** 4-Pin JST-SH Qwiic / Stemma QT $I^2C$-Erweiterungsport (`J12`, $Y_{\text{tub}} = 34{,}05\,\text{mm}$) für BME280 Umweltsensorik oder Cockpit-IMU.
+   - **Sensor-Bus:** 4-Pin JST-SH Qwiic / Stemma QT $I^2C$-Erweiterungsport (`J12`, $Y_{\text{tub}} = 34{,}05\,\text{mm}$) für SAM-M10Q GNSS-Modul, TMP117 Kaltluft-Sensor und OPT3001 Umgebungslichtsensor im Kaltlufteinlass.
    - **Taster:** Taktile Miniaturtaster `SW1` (Boot) und `SW2` (Reset) für MCU-Wartungsarbeiten.
-   - **Visuelle Statusanzeige:** Polycarbonat-Lichtleiter im Gehäusedeckel für die **WS2812B RGB-Status-LED** (`LED1`, $Y_{\text{tub}} = 40{,}05\,\text{mm}$): Grün = OK / Normalbetrieb, Blau = BLE/ESP-NOW Link aktiv, Gelb = USB-Enumeration / CP2AA Dongle Boot, Rot = CAN-Fehler / Failsafe.
+   - **Visuelle Statusanzeige:** Polycarbonat-Lichtleiter im Gehäusedeckel für die **WS2812B RGB-Status-LED** (`LED1`, $Y_{\text{tub}} = 40{,}05\,\text{mm}$): Grün = OK / Normalbetrieb, Blau = UWB Link aktiv, Gelb = USB-Enumeration / CP2AA Dongle Boot, Rot = CAN-Fehler / Failsafe.
    - **Flanschbefestigung:** M4/M5 Silentblock-Flanschbefestigungslasche in der Flankenmitte ($Y_{\text{tub}} = 34{,}0\,\text{mm}$, $Z = 0\dots 5\,\text{mm}$).
 4. **Linke Schmalseite / Westflanke ($X = 0\,\text{mm}$):**
    - **Monocoque-Schutzwand:** Vollwandiges MJF PA12 Monocoque ohne Gehäusedurchbrüche. Bietet maximalen mechanischen Schutz und Spritzwasserschutz für die direkt dahinter liegende Leistungsschaltung (TVS-Diode `D4`, 12V-Haupt-Buck-Converter `U3` TPS54302 mit Induktivität `L1`, CAN-Transceiver `U6`, Optorelais `K1`, PMOS-Verpolschutz `Q2`).
    - **Flanschbefestigung:** Symmetrische M4/M5 Silentblock-Flanschbefestigungslasche in der Flankenmitte ($Y_{\text{tub}} = 34{,}0\,\text{mm}$, $Z = 0\dots 5\,\text{mm}$).
 5. **Gehäuseunterseite ($Z = 0\,\text{mm}$):**
    - Knowles SPH0645LM4H-B $I^2S$ MEMS-Mikrofon (`MIC1`) mit durchgehendem Schallkanal ($\varnothing\,2{,}5\,\text{mm}$) und wasserdichter, ölabweisender Gore ePTFE-Schutzmembran ($\varnothing\,6{,}0 \times 0{,}8\,\text{mm}$) zur Echtzeit-Windgeräusch- und Staudruckanalyse für dynamische Geschwindigkeits-/Geräusch-Lautstärkeanpassung (Speed-Volume-Control).
-
----
 
 ---
 
@@ -601,38 +593,32 @@ Aufgrund der werkseitigen Showa Inverted-Remote-Reservoir-Stoßdämpfer mit dick
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │ 1. COCKPIT (Vorne, unsichtbar hinter Außenhaut):                            │
 │    • Front-Node (PCBA 05) + Ottocast am Alu-Geweihträger montiert           │
-│    • 12V Zündungsplus direkt vom internen Fairing-Zubehörstecker            │
-│    • Funkverbindung (ESP-NOW) zur Zentralbox -> 0 Kabel über den Lenkkopf   │
+│    • SAM-M10Q GNSS + TMP117 + OPT3001 via J12 Qwiic im Kaltlufteinlass     │
+│    • UWB-Backbone (DW3110 / 6.489 GHz Ch. 5) zur Zentralbox -> 0 Kabel      │
+│      über den Lenkkopf, deterministische Latenz < 0,4 ms                    │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │ 2. MITTE (Unter Sitzbank):                                                  │
-│    • Zentralbox mittig im Batteriefach                                      │
+│    • Zentralbox mittig im Batteriefach (SX1262 LoRa 868 MHz & DW3110 UWB)   │
+│    • USV-Pufferung via 1S LiPo für 24/7 Diebstahl-Sentry                    │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │ 3. HECK (Unter Forged Carbon Hutze & Kennzeichen):                          │
-│    • Pod 3 aufrecht im Skeleton Dock (cvo_st_undercowl_skeleton_dock.scad)  │
-│      Gegen Fahrbahnschläge nach oben verspannt, 0 Bohrungen, 0 Lackkleber   │
-│    • Forged-Carbon-Hutze schließt plan mit OEM-Rändelschraube ab            │
+│    • Forged-Carbon-Hutze schließt plan mit OEM-Rändelschraube ab (100% frei │
+│      von Elektronik/Kabeln – keine Quetschungen an der Rändelschraube!)     │
 │    • Radar mittig unter dem Kennzeichen (radar_license_plate_bracket.scad)  │
+│      gespeist über Peitsche 5 des 4-armigen HD26-Kabelbaums                 │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │ 4. KOFFER (Gruppenfunk-Brücke Sena & Cardo):                                │
-│    • Pod 1 (Sena Mesh) im linken Kofferdeckel                               │
-│    • Pod 2 (Cardo DMC) im rechten Kofferdeckel                              │
+│    • Pod 1 (Sena SPIDER X Slim) im linken Kofferdeckel                      │
+│    • Pod 2 (Cardo Packtalk Edge) im rechten Kofferdeckel                    │
 │    • Montage an originalen Scharnier-/Fangbandschrauben (Zero-Drill)        │
-│    • Kabelführung am Fangband, wetterfeste Schnellkupplung außen am Spalt   │
+│    • Kabelführung am Fangband, MagSafe-Abreißkupplung außen am Spalt        │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-#### A. Heck-Integration: Das Under-Cowl Skeleton Dock
-* **Skeleton Dock (`cvo_st_undercowl_skeleton_dock.scad`):** Nimmt das Standard-Pod-3-Gehäuse ($135 \times 70 \times 38{,}5\,\text{mm}$) aufrecht auf. Zwei nach oben gewölbte Federbögen stützen sich an der Innendecke der Carbonhutze ab und verhindern jedes Aufbäumen oder Klappern über Schlaglöchern und Kopfsteinpflaster.
-* **100 % OEM-Bündigkeit (Zero-Drill & Flush-Fit):** Die originale Forged-Carbon-Hutze der CVO ST schließt mit ihrer umlaufenden Dichtlippe vollkommen plan auf dem Heckkotflügel ab und wird mit der werksseitigen Rändelschraube wackelfrei gehalten. Da die Schraublasche flach aufliegt und kein Kabel drunter gequetscht werden darf, verbleiben alle Antennen von Pod 3 intern im dielektrischen Radom der Kassette bzw. strahlen durch die vordere Öffnung ab. Die Zuleitung (geschirmtes M8-Automotive-Kabel) erfolgt unsichtbar von vorne unter dem Fahrersitzpolster.
-* **Außentemperaturmessung:** Erfolgt thermisch entkoppelt von der Stauwärme des Hecks über den $I^2C$-Sensorbus (`J12` Qwiic) des Front-Knotens (PCBA 05) direkt im Kaltlufteinlass der Frontverkleidung.
-
-![CVO ST Under-Cowl Skeleton Dock CAD](../images/cad/cvo_st_undercowl_skeleton_dock_cad.png)
-
-*Abbildung 8.22: 3D-CAD-Ansicht des Under-Cowl Skeleton Docks (`cvo_st_undercowl_skeleton_dock.scad`). Monolithische Halbschale mit nach oben gewölbten Federbögen zur Abstützung an der Innendecke der Carbonhutze, seitlichen Dämpfungsflügeln und formschlüssigem Einschubschacht für Pod 3.*
-
-![Pod 3 Fender Assembly ST 3D](../images/cad/pod3_fender_assembly_st_3d.png)
-
-*Abbildung 8.24: Fotorealistische Gesamtheck-Montage an der CVO Road Glide ST: Unsichtbare, rüttelfeste Integration von Pod 3 im Skeleton Dock unter der Forged-Carbon-Hutze, strömungsgünstige Telemetrie-Finne auf der Hecklasche und vollständige Freigängigkeit zu den Showa Inverted-Remote-Reservoirs.*
+#### A. Heck-Integration: 100 % OEM-Bündigkeit & Freigängigkeit
+* **Original Forged-Carbon-Hutze bleibt unberührt:** In v8.0 entfällt der Heck-Pod 3 und das interne Skeleton Dock ersatzlos. Die originale Forged-Carbon-Hutze der CVO ST schließt mit ihrer umlaufenden Dichtlippe vollkommen plan auf dem Heckkotflügel ab und wird mit der werksseitigen Rändelschraube wackelfrei gehalten. Da kein Kabel darunter gequetscht werden muss, bleibt der Lack zu 100 % geschützt.
+* **Außentemperatur- & GNSS-Sensorik:** Liegt thermisch vollkommen entkoppelt von Auspuff- und Motorwärme im laminaren Fahrtwindkanal des Front-Knotens (`PCBA 05`, Port `J12` Qwiic) mit dem NIST-Präzisionssensor TI TMP117 ($\pm 0{,}1\,^\circ\text{C}$) und dem u-blox SAM-M10Q Multi-GNSS.
+* **Radar-Montage:** Erfolgt mittig unter dem Kennzeichen über den vibrationsfesten Kennzeichenträger ([`radar_license_plate_bracket.scad`](../../hardware/cad/scad/02_pod_base/radar_license_plate_bracket.scad)), gespeist über Peitsche 5 (Pins 23–26). Vollständige Freigängigkeit zu den Showa Inverted-Remote-Reservoirs garantiert.
 
 #### B. Kofferdeckel-Integration: Pod 1 (Links) & Pod 2 (Rechts)
 * **Top-Lid Montage:** Beide Pods sitzen im vorderen Drittel der Kofferdeckel, verschraubt an den originalen Torx-Punkten der Scharnier- bzw. Fangbandhalterung (siehe [Abschnitt 6.5](#65-universal-kofferdeckel-dock-saddlebag_lid_dockscad)).
@@ -643,7 +629,7 @@ Aufgrund der werkseitigen Showa Inverted-Remote-Reservoir-Stoßdämpfer mit dick
 
 ### 6.2 Referenz-Kit 2: Harley-Davidson Touring, Bagger & Cruiser (Road King Special, Street Glide, Electra Glide)
 
-Für klassische Touring- und Bagger-Modelle mit 2-Up-Komfortsitzbank oder freiem Heckkotflügel bietet OpenMotorBridge eine universelle, formvollendete Kotflügel-Integration:
+Für klassische Touring- und Bagger-Modelle mit 2-Up-Komfortsitzbank oder freiem Heckkotflügel bietet OpenMotorBridge eine cleane, kotflügelfreie Integration:
 
 ```
         HARLEY-DAVIDSON TOURING & BAGGER GESAMTSYSTEM-INTEGRATION
@@ -651,40 +637,24 @@ Für klassische Touring- und Bagger-Modelle mit 2-Up-Komfortsitzbank oder freiem
 │ 1. COCKPIT (Nacelle / Batwing / Sharknose):                                 │
 │    • Front-Node (PCBA 05) im Hohlraum der Headlight-Nacelle oder Verkleidung │
 │    • Speist Garmin Navi / Smartphone-Halterung & Action-Cam am Lenker       │
-│    • PTT-Lenkertaster & Knowles Windgeräusch-Mikrofon                       │
-│    • 100 % drahtlos via ESP-NOW zur Zentralbox -> 0 Kabel am Tank nach hinten│
+│    • SAM-M10Q GNSS + TMP117 Thermometer an J12 Qwiic im Fahrtwind           │
+│    • UWB-Backbone (DW3110) zur Zentralbox -> 0 Kabel am Tank nach hinten    │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │ 2. MITTE (Unter Sitzbank):                                                  │
-│    • Zentralbox mittig im Batteriefach                                      │
+│    • Zentralbox mittig im Batteriefach (SX1262 LoRa & DW3110 UWB)           │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ 3. HECK (Kotflügel-Konsole & Kennzeichen):                                  │
-│    • Pod 3 in der Touring Fender Console oder Touring Stealth Console       │
-│      Formvollendet auf Kotflügel geschraubt an 1/4"-20 Soziussitz-Mutter    │
-│    • Radar mittig unter dem Kennzeichen                                     │
+│ 3. HECK (Kotflügel & Kennzeichen):                                          │
+│    • Heckkotflügel bleibt 100% frei und sauber (Fender Console entfällt)    │
+│    • Radar mittig unter dem Kennzeichen an Peitsche 5 (Pins 23–26)          │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │ 4. KOFFER:                                                                  │
-│    • Pod 1 (Sena) & Pod 2 (Cardo) in den Kofferdeckeln                      │
+│    • Pod 1 (Sena SPIDER X Slim) & Pod 2 (Cardo Edge) in den Kofferdeckeln   │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-Die Kotflügel-Integration ist in zwei aerodynamisch optimierten Ausführungen verfügbar, die beide die originale $1/4"-20$ Rändelmutter der Soziussitz-Befestigung im Kotflügel nutzen und das M8-Signalkabel unsichtbar nach vorne unter die Sitzbank leiten:
-
-#### Option A: Touring Fender Console (`pod3_touring_fender_console.scad` / RKS & Naked Touring)
-Organische Tropfenform ($R = 6\dots 7\,\text{mm}$), die das Pod 3 formschlüssig aufnimmt und speziell auf den freiliegenden Heckfender der Road King Special (FLHRXS) und Bagger abgestimmt ist:
-
-##### Geometrische Überarbeitung (Feedback-Optimierungen):
-* **Längserstreckung & Wandhöhe:** Die hintere Spitze wurde von $X = +160\,\text{mm}$ auf **$X = +205\,\text{mm}$ gestreckt** und **durchgehend auf die volle Seitenwandhöhe ($Z = 34\,\text{mm}$)** gezogen.
-* **Spaltschluss:** Der zuvor vorhandene Montagespalt zwischen den langen Flankenwänden und der hinteren Spitze wurde vollständig geschlossen. Die Konsole bildet einen monolithischen, nahtlosen Karosseriekörper.
-* **Geschützte 2.4 GHz Antennenkammer:** Die echte externe 2.4 GHz Dipolantenne sitzt formschlüssig in einer strömungsgünstigen, dielektrischen Schutzkammer in der verlängerten Spitze.
-* **Konsolen-Vereinheitlichung (Ein einziger Grundkörper):** Die überarbeitete Fender-Konsole fungiert als **universeller Standard-Grundkörper** für alle Touring-Bikes. Sie kann wahlweise offen (für maximale Kassetten-Zugänglichkeit) oder mit formschlüssigem Deckel gefahren werden. Eine separate, verkürzte Stealth-Variante ist somit obsolet.
-
-![Pod 3 Touring Fender Console CAD](../images/cad/pod3_touring_fender_console.png)
-
-*Abbildung 8.25: Isolierte 3D-CAD-Ansicht der Touring Fender Console (`pod3_touring_fender_console.scad`) für Road King Special. Organisch fließende Tropfenform mit gestreckter Heckspitze ($X = +205\,\text{mm}$), geschlossenen Spalten und Heck-Einschuböffnung für Pod 3.*
-
-![Pod 3 Touring Fender Console CAD Underside](../images/cad/pod3_touring_fender_console_cad.png)
-
-*Abbildung 8.26: Unterseite der Touring Fender Console CAD: Konkav gewölbter 195-mm-Kotflügel-Sattel, vordere $1/4"-20$-Schraublasche für die Soziussitz-Mutter und vertiefter Kabelkanal zur scheuerfreien Durchführung des M8-Kabels unter die Sitzbank.*
+> [!NOTE]
+> **Bereinigung Kotflügel-Konsole (Entfall `pod3_touring_fender_console`):**  
+> Durch den Entfall von Pod 3 wird der Heckkotflügel bei Cruisern und Baggern nicht mehr durch eine aufgesetzte Konsole verbaut. Die klassische Custom-Linie des freiliegenden Blechfenders bleibt zu 100 % erhalten. Das Heckradar wird diskret unter dem Kennzeichen montiert.
 
 ---
 
@@ -692,61 +662,46 @@ Organische Tropfenform ($R = 6\dots 7\,\text{mm}$), die das Pod 3 formschlüssig
 
 Für großvolumige Reiseenduros und Offroad-Tourer mit offenem Gitterrohr-Heckrahmen, Rohrgepäckbrücke und optionalem Aluminium-3-Koffersystem (z. B. Touratech Zega Pro/Evo, BMW Adventure oder Wunderlich):
 
-![OpenMotorBridge Adventure-Kit Master Assembly 3D Studio](../images/cad/adventure_kit_master_assembly_3d.png)
-*Abbildung 8.29: Photorealistisches 3D-CAD-Studio des modularen Adventure-Kits (`99_adventure_kit_assembly.scad`). Links: GSA Rohrträger-Klemmschelle im geschützten Rahmendreieck (Pod 1 & Sena). Mitte: Standard-GS Transition Dock in der Sitzbank-Bügelfalte (Pod 2 & Cardo). Rechts: Gepäckbrücken-Ausleger "Heck-Balkon" hinter Alutopcase mit 45°-Astabweiser-Finne für die 2.4 GHz Dipolantenne, Pod 3 Transceiver und Garmin Varia Radar mit 36-Zahn Hirth-Formschluss-Gelenk.*
-
 ```
             ADVENTURE BIKE (BMW GS / KTM / AFRICA TWIN) INTEGRATION
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │ 1. COCKPIT (Windschild / Navigationsstrebe / Schnabel):                     │
 │    • Front-Node (PCBA 05) via AMPS-Bohrbild (30 x 38 mm) an Navigationsstrebe│
 │      oder vibrationsentkoppelt mit M4 Silentblöcken im Schnabel             │
-│    • Direkte Speisung von Garmin Navi / Smartphone & Action Cam am Lenker   │
-│    • Knowles MEMS Mikrofon misst turbulenten Windpegel hinter der Scheibe    │
+│    • SAM-M10Q GNSS + TMP117 Glatteis-Wächter an J12 Qwiic im Kaltlufteinlass │
+│    • UWB-Backbone (DW3110) zur Zentralbox unter der Sitzbank                │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │ 2. MITTE (Unter Fahrersitz / Batteriefach):                                 │
 │    • Zentralbox spritzwassergeschützt im Batteriefach / Werkzeugraum        │
-│    • Abgriff Bordnetz-Dauerplus (Kl. 30), Zündungsplus (Kl. 15) und CAN-Bus │
+│    • SX1262 LoRa 868 MHz für 24/7 Diebstahl-Sentry & Notfall-Ortung        │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │ 3. VORDERER HECKRAHMEN / SEITENBEREICH (Kassetten-Pods 1 & 2):             │
 │    • Variante A (GSA & Heavy Duty): An der Innenseite der Rundrohr-         │
 │      Kofferträger (Ø 18 mm) im geschützten Rahmendreieck ("Überrollkäfig")  │
 │    • Variante B (Standard-GS ohne Koffer): Im "Transition Dock" unter der   │
 │      Sitzbank in der optischen "Bügelfalte" am Fahrer-/Sozius-Übergang       │
-│    • Raumdiversität > 45 cm; 100 % frei von Koffer-Abschattung nach oben/vorn│
+│    • Raumdiversität > 45 cm; 100 % frei von Koffer-Abschattung              │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ 4. HECK (Gepäckbrücken-Ausleger "Heck-Balkon" hinter Alu-Topcase):          │
-│    • Universeller "Rack-Tail Mount" an Gepäckbrücke hinter Topcase-Rückwand │
-│    • Pod 3 horizontal mit freiem 140°-Zenit-Blick (u-blox MAX-M10S GNSS)   │
-│    • Integrierter 2.4 GHz Antennen-Astabweiser (+5 dBi Stabantenne geschützt│
-│      in PA12-CF Gleitrippe mit 45°-Abweiser gegen Ast-Abriss im Unterholz)  │
-│    • Schwenkbarer M5-GoPro-Radarausleger unten für Garmin Varia mmWave      │
-│      (in 90..95 cm Höhe optimal vor Steinschlag/Roost und Wasser geschützt) │
+│ 4. HECK (Minimaler Radarträger unter Gepäckbrücke):                         │
+│    • Minimaler "Adventure Rack Radar Mount" unter der Gepäckbrücke          │
+│    • Schwenkbare GoPro/Hirth-Aufnahme für Wheeltec MR20 oder Garmin Varia   │
+│    • Gespeist über Peitsche 5 (Pins 23–26) des 4-armigen HD26-Kabelbaums    │
 │    • Topcase bleibt in 5 Sekunden per Original-Schnellverschluss abnehmbar  │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
 #### 6.4.1 Kassetten-Pods 1 & 2 (Seitenmodule) – Die zwei Montage-Varianten
 
-Auf Reiseenduros existieren je nach Einsatzzweck und Koffersystem zwei grundverschiedene Fahrzeughecks. OpenMotorBridge bietet dafür zwei perfekt abgestimmte Montagevarianten:
+Auf Reiseenduros existieren je nach Einsatzzweck und Koffersystem zwei grundverschiedene Montagepositionen:
 
 * **Variante A: BMW F850 GSA / R 1200 / R 1250 / R 1300 GS Adventure & Heavy-Duty Rohrträger (Touratech, Givi Outback, Hepco&Becker): Das "GSA Cage Dock"**
   * **Montage:** An den Innenseiten der massiven $\varnothing 18\,\text{mm}$ Edelstahl-Kofferträger im geschützten Rahmendreieck über das hochbelastbare **GSA Cage Dock** ([`adventure_gsa_cage_dock.scad`](../../hardware/cad/scad/02_pod_base/adventure_gsa_cage_dock.scad)).
   * **Design-Philosophie (Expedition Armor + Stealth Niche):**
-    Kombiniert die unzerstörbare Optik professioneller Rallye- & Expeditions-Ausrüstung (analog zu den bekannten Touratech GSA-Werkzeugboxen) mit einer vollständigen Nischen-Integration: Der Pod wandert tief in den ca. $45\,\text{mm}$ breiten, sonst ungenutzten Totraum zwischen Alukoffer-Wand und Heckrahmen/Radkasten.
+    Kombiniert die unzerstörbare Optik professioneller Rallye- & Expeditions-Ausrüstung mit einer vollständigen Nischen-Integration: Der Pod wandert tief in den ca. $45\,\text{mm}$ breiten, sonst ungenutzten Totraum zwischen Alukoffer-Wand und Heckrahmen/Radkasten.
 
 ![OpenMotorBridge GSA Cage Dock Detailansicht](../images/cad/gsa_cage_dock_cad.png)
 
-*Abbildung 8.29-A: CAD-Detailansicht des Heavy-Duty GSA Cage Docks (`adventure_gsa_cage_dock.scad`). Zu sehen sind der tief eingelassene Sena 50S Pod 1 im schützenden PA12-CF-Panzerkäfig, die breite 85 mm Doppel-Rohrsattelbasis für Ø 18 mm Edelstahlrohre mit 4x M5 V4A-Verschraubung und DIN 985 Stoppmuttertaschen, die 45°-Schotter-Abweiserkeile gegen Steinschlag vom Hinterrad sowie die verdeckte M8-Kabelrinne im Rohrschatten.*
-
-  * **Konstruktionsmerkmale & Vorteile:**
-    1. **Doppel-Halbschalen-Klemmung mit 85 mm Stützbasis:** Statt einer einfachen Einzelschelle greift das Cage Dock mit zwei getrennten $\varnothing 18\,\text{mm}$ Rohrsätteln über eine Spannweite von $85\,\text{mm}$ am Trägerrohr an. Dadurch werden Dreh- und Kippmomente durch Hebelkräfte selbst bei extremen Pisten-Vibrationen (> 120 Nm Torsionssteifigkeit) zuverlässig eliminiert.
-    2. **4x M5 V4A-Verschraubung mit verdeckten Sicherungsmuttern:** 4x M5 DIN 912 Zylinderschrauben spannen die Kappe ([`adventure_gsa_clamp_cap.stl`](../../hardware/cad/stl/02_pod_base/adventure_gsa_clamp_cap.stl)) fest an den Korpus. Auf der Rückseite arretieren integrierte Sechskanttaschen DIN 985 Stoppmuttern verliersicher gegen Rütteln.
-    3. **Stealth-Integration im Alukoffer-Totraum (100 % unsichtbar von außen):** Bei eingehängtem Aluminiumkoffer ist der Pod von außen zu 100 % verdeckt. Es existiert keinerlei Kollision mit Verriegelungsmechanismen, Kofferpilzen oder Deckelspannern.
-    4. **Integrierter Steinschlag-Gleitkeil (Roost Protection):** Zur Radseite hin schützt eine $45^\circ$ geneigte, $3{,}5\,\text{mm}$ dicke Panzerfront aus kohlefaserverstärktem Polyamid (PA12-CF) den Pod und die Antenne vor aufgewirbeltem Grobschotter, Schlamm und Spritzwasser.
-    5. **Verdeckter M8-Kabelkanal:** Das M8-Kabel verlässt die Rückseite der Docking-Wanne geschützt im Schatten des Trägerrohrs und führt ohne Schlaufenbildung direkt unter die Sitzbank.
-    6. **HF-Sichtfeld:** Die Antenne strahlt ungehindert durch das offene Rahmendreieck nach vorn-oben zur Fahrerposition ab.
-    7. *(Minimalistische Alternative:)* Für besonders beengte Rohrrahmenverläufe stehen weiterhin die kompakten Halbschellen ([`adventure_pannier_rack_clamp_base.stl`](../../hardware/cad/stl/02_pod_base/adventure_pannier_rack_clamp_base.stl) / `cap.stl`) zur Verfügung.
+*Abbildung 8.29-A: CAD-Detailansicht des Heavy-Duty GSA Cage Docks (`adventure_gsa_cage_dock.scad`). Zu sehen sind der tief eingelassene Sena SPIDER X Slim Pod 1 im schützenden PA12-CF-Panzerkäfig, die breite 85 mm Doppel-Rohrsattelbasis für Ø 18 mm Edelstahlrohre mit 4x M5 V4A-Verschraubung und DIN 985 Stoppmuttertaschen, die 45°-Schotter-Abweiserkeile gegen Steinschlag vom Hinterrad sowie die verdeckte M8-Kabelrinne im Rohrschatten.*
 
 * **Variante B: Standard-BMW GS und nackte Reiseenduros (ohne Rohr-Kofferträger)**
   * **Montage:** Über ein zweiteiliges, aerodynamisch skulpturiertes **Transition Dock** ([`adventure_transition_dock.scad`](../../hardware/cad/scad/02_pod_base/adventure_transition_dock.scad)) in Kombination mit einer verdeckten **Unter-Sitzbank-Sattelbrücke** ([`adventure_underseat_cross_rail.scad`](../../hardware/cad/scad/02_pod_base/adventure_underseat_cross_rail.scad)).
@@ -754,76 +709,26 @@ Auf Reiseenduros existieren je nach Einsatzzweck und Koffersystem zwei grundvers
 
 ![OpenMotorBridge GS Transition Dock & Unter-Sitzbank-Sattelbrücke](../images/cad/adventure_transition_dock_cad.png)
 
-*Abbildung 8.29-B: CAD-Detailansicht des GS Transition Docks mit Unter-Sitzbank-Sattelbrücke. Zu sehen sind das zweitteilige Konsolengehäuse (Unterteil mit Rohrsattel und Oberteil mit formbündigem Karosserie-Deckel entlang der Bügelfalten-Lichtkante), der eingelassene Cardo Packtalk Edge Pod 2 sowie die flache, U-verrippte Sattelbrücke (`adventure_underseat_cross_rail.scad`), die links und rechts unter der Sitzbank durch verbindet, Hebelkräfte als starres U-Portal neutralisiert und das M8-Kabel unsichtbar ins Batteriefach leitet.*
-
-  * **Vorteile & Konstruktionsmerkmale:**
-    1. **100 % Verdrehsicherheit durch Unter-Sitzbank-Sattelbrücke:** Statt ein Gehäuse wackelig an einem einzelnen Rundrohr zu klemmen, verbindet eine flache PA12-CF-Traverse ($7{,}5\,\text{mm}$ flaches U-Profil) die linke und rechte Flanke unter der Sitzbankschale zu einem verwindungssteifen U-Portal.
-    2. **Zero-Drill & 100 % unsichtbare Befestigung von außen:** Keine Schellen, Kabelbinder oder Schraubenköpfe am sichtbaren Rahmenrohr. Die Verschraubung erfolgt an vorhandenen OEM-Befestigungspunkten (Batteriefach / Quersteg) geschützt im Trockenen unter der Sitzbank.
-    3. **Formschlüssige Bügelfalten-Integration & Karosserie-Deckel:** Wie bei der Touring Fender Console bildet das Dock keinen offenen Kasten, sondern eine geschlossene, aerodynamische Rahmenblende. Die Trennfuge liegt exakt in der scharfen Bügelfalten-Lichtkante; der $22^\circ$-Einlaufkeil vorn schließt bündig an den Fahrersitz an (kein Hängenbleiben beim Aufsteigen oder bei Knieschluss).
-    4. **Integrierte Stecker-Servicebucht & verdeckte Unter-Sitzbank-Kabeldurchführung:**
-       * **Hohlraum im 22°-Einlaufkeil:** Vor der Pod-Stirnwand ($X = 0$) befindet sich im vorderen aerodynamischen Keil eine $24 \times 50 \times 26\,\text{mm}$ große, hohle **Stecker- und Service-Bucht**. Hier finden der M8-Industrie-Schraubstecker (oder 90°-Winkelstecker) und eine spannungsfreie Kabelschlaufe vollständig Platz.
-       * **Formschlüssiger Inboard-Kabelkanal:** An der fahrzeuginneren Flanke der Service-Bucht sitzt eine ovale Durchgangsöffnung (Ø 10 mm), die direkt unter dem überhängenden Schaumstoff der Sitzbank ins Innere des Rahmens / Batteriekastens mündet. Alternativ kann das Kabel durch die Unterseiten-Rinne der Sattelbrücke geführt werden.
-       * **Bequeme "Top-Access"-Montage:** Bei abgenommenem Karosserie-Deckel wird das M8-Kabel von innen durchgeschoben und bei voller Bewegungsfreiheit von oben auf Port A des Pods geschraubt. Anschließend wird der Pod einfach in die Wanne gelegt und der Deckel mit 4x M3 Torx verschraubt – **100 % unsichtbar, scheuerfrei und ohne Gefummel im Verborgenen**.
-    5. **100 % unabhängig von Koffersystemen:** Funktioniert auch dann perfekt, wenn das Motorrad komplett "nackt" ohne Träger, mit Vario-Koffern oder mit leichten Soft-Bags / Hufeisen-Taschen gefahren wird.
-    6. **Freie Abstrahlcharakteristik:** Ungestörte $180^\circ$-HF-Sichtachse zur Seite und schräg nach oben zum Fahrer- und Soziushelm.
+*Abbildung 8.29-B: CAD-Detailansicht des GS Transition Docks mit Unter-Sitzbank-Sattelbrücke.*
 
 ---
 
-#### 6.4.2 Heck-Pod 3 (Transceiver) – Das universelle "Rack-Tail Mount" & Rallye-Aero-Balkon-Konzept
+#### 6.4.2 Standalone Heck-Radar – Der minimale "Adventure Rack Radar Mount" (`adventure_rack_radar_mount.scad`)
 
-Wird eine Reiseenduro mit einem Aluminium-Topcase (z. B. Touratech Zega Evo 38L oder BMW Adventure Topcase) bestückt, schirmt das massive $1{,}5\,\text{mm}$ Aluminiumblech Funkwellen nach oben ab (Faraday-Käfig). Das universelle "Rack-Tail Mount" ([`adventure_rack_tail_mount.scad`](../../hardware/cad/scad/02_pod_base/adventure_rack_tail_mount.scad)) löst diesen Konflikt als hochfester **Rallye-Aero-Balkon** im edlen Zwei-Teil-Design, der fest an der Gepäckbrücke verschraubt wird und ca. $68\,\text{mm}$ hinter die senkrechte Rückwand des Topcases kragt:
+Da der Heck-Pod 3 und dessen große Balkonwanne vollständig entfallen sind, benötigt die Reiseenduro am Heck lediglich einen **minimalen, leichten Radarträger**:
 
-![OpenMotorBridge Heck-Pod 3 Rallye-Aero-Balkon CAD-Detailansicht](../images/cad/rack_tail_mount_cad.png)
-
-*Abbildung 8.29-Aero: CAD-Detailansicht des neu gestalteten, zweiteiligen Heck-Balkons (`adventure_rack_tail_mount.scad`). Zu sehen sind die dynamisch ansteigende Keilform, das 15°-Tumblehome mit 45°-Unterzug gegen Steinschlag, der formschlüssige Karosserie-Deckel (`adventure_rack_tail_cowl.stl`) mit integrierter Shark-Finne für die 2.4-GHz-Dipolantenne, das 140°-Zenitfenster für GNSS/LoRa sowie der bionische Tropfen-Ausleger für das Garmin Varia Radar auf der Unterseite.*
-
-![OpenMotorBridge Heck-Pod 3 Rack-Tail Mount & Heck-Balkon Seiten-Schnittansicht](../images/cad/rack_tail_mount_side_cross_section.png)
-
-*Abbildung 8.29a: Technische CAD-Schnittansicht des Heck-Pod 3 Rack-Tail Mounts ("Heck-Balkon") am BMW GS Gepäckträger. Dargestellt sind die Abstützung an den Ø 18 mm Edelstahlrohren, die vollständige Deckelfreigängigkeit des 38L Alu-Topcases, der 65..68 mm Ausleger für ungestörten 140°-Zenit-Empfang (MAX-M10S GNSS / LoRa), der 45°-Astabweiser-Keil mit vertiefter 2.4-GHz-Dipolantenne (+5 dBi) sowie die geschützte Unterseiten-Montage des Garmin Varia Radars in 90..95 cm Höhe über der Fahrbahn.*
-
-![OpenMotorBridge Heck-Pod 3 Rack-Tail Mount Draufsicht](../images/cad/rack_tail_mount_top_view.png)
-
-*Abbildung 8.29b: Technische CAD-Draufsicht des Heck-Balkons (X-Y-Ebene) mit 110-mm-Montageflansch, 2x M6 Langlöchern für Rohrschellen, formbündiger Pod-3-Wanne (136,5 x 71,5 mm), unterer M8-Kabeldurchführung, innenliegendem RG178-Koaxialkanal und 45°-Astabweiser-Finne aus PA12-CF mit Einklipsnut für die 2.4-GHz-Antenne.*
-
-##### Die mechanischen & funktechnischen Kernvorteile:
-1. **100 % Erhalt des Topcase-Schnellverschlusses (5-Sekunden-Klick):**
-   * Der Ausleger stützt sich an den tragenden Edelstahlrohren ($\varnothing 18\,\text{mm}$) der Gepäckbrücke oder den hinteren M6-Verschraubungen der Adapterplatte ab – **nicht am Koffer selbst**.
-   * Das Topcase kann jederzeit sekundenschnell verriegelt und abgenommen werden. Pod 3, Antenne und Radar verbleiben einsatzbereit am Motorrad (Schutz und Tracking auch bei Solofahrten ohne Gepäck).
-2. **Kollisionsfreie Deckelöffnung:**
-   * Da der Ausleger direkt unterhalb der Koffer-Bodenfuge auskragt und die Rückwand des Koffers starr bleibt, lässt sich der Topcase-Deckel uneingeschränkt nach oben oder nach vorne schwenken sowie vollständig aushängen.
-3. **Plattformübergreifende Schnittstelle:**
-   * Identische Geometrie für Standard-GS, GS Adventure, Africa Twin und KTM 1290 Super Adventure.
-4. **Offroad-Schutz der Sensoren (90..95 cm Höhe über Grund) & Dualer Lock-Mechanismus:**
-   * Anders als bei Cruisern liegt das Garmin Varia mmWave-Radar weit außerhalb der Wurfparabel von Grobstollenreifen (Tire Roost).
-   * Bei tiefen Fluss- und Schlammdurchfahrten taucht das Heck nicht ins Wasser ein.
-   * Keine Gefahr des Aufsetzens oder Abreißens an Felskanten bei steilen Bergab-Stufen.
-   * **Dualer Lock-Mechanismus (Neigungssicherung + Diebstahlschutz):**
-     Standardmäßige GoPro-Reibgelenke und Garmin-Vierteldreh-Halterungen sind auf extremen Rüttelstrecken (Wellblech/Waschbrett auf TET-Tracks) oder bei Raststätten-Zwischenstopps unzureichend. OpenMotorBridge implementiert daher ein doppeltes Verriegelungssystem:
-
-![OpenMotorBridge Dualer Radar-Lock: Hirth-Verzahnung & Diebstahlsicheres Dock](../images/cad/radar_hirth_lock_dock_cad.png)
-
-*Abbildung 8.29c: Dualer Radar-Lock mit formschlüssiger 36-Zahn-Hirth-Rosette (10°-Rastung gegen Neigungsabsacken auf Wellblechpisten) und diebstahlsicherem Garmin-Bajonettdock mit verdeckter M3-Sicherheits-Madenschraube (Verhinderung von Entwendung bei Zwischenstopps).*
-
-     - **Schwingungs- & Neigungsschutz (Radiale Hirth-Verzahnung):**
-       Anstelle reiner Reibung besitzen die Gabelwangen und die zentrale GoPro-Zunge eine formschlüssige 36-Zahn-Hirth-Rosette ([`011_gopro_hirth_lock.scad`](../../hardware/cad/scad/02_pod_base/parts/011_gopro_hirth_lock.scad)). Durch Lösen der M5-Sicherheitsschraube um 1–2 Umdrehungen kann die Radar-Neigung in feinen $10^\circ$-Schritten präzise nivelliert werden (Ausgleich von Sozius- und Gepäckzuladung). Nach Festziehen der Schraube ist ein Absacken des Radars selbst bei härtestem Offroad-Pistenrütteln physikalisch unmöglich.
-     - **Garmin Varia Diebstahlschutz-Dock ([`radar_varia_gopro_lock_dock.scad`](../../hardware/cad/scad/02_pod_base/radar_varia_gopro_lock_dock.scad)):**
-       Das Garmin Radar wird mit seinem originalen Quarter-Turn Bajonett um $90^\circ$ in das Dock eingedreht. Eine integrierte Sperrklinke rastet formschlüssig ein. Zusätzlich wird eine verdeckte M3-Sicherheits-Madenschraube (Inbus oder Torx-TR mit Innenstift) tangential hinter die Bajonettflanke gedreht. Das Radar kann ohne Spezialbit nicht mehr entriegelt oder entwendet werden. Die M5-Drehachse wird ebenfalls durch eine Torx-TR-Schraube oder M5-Sicherungsmutter geschützt.
-5. **Astabweiser-Schutz der externen 2.4 GHz Antenne:**
-   * Keine ungeschützte SMA-Stabantenne, die im dichten Unterholz von Zweigen abgeschert wird.
-   * Die Antenne liegt geschützt in einer formschlüssigen Klemmnut hinter einem $45^\circ$-Gleitkeil aus zähem PA12-CF. Äste und Packgurte gleiten rückstandsfrei ab.
-   * Die Koaxialzuleitung (RG178/U.FL) verläuft zu $100\,\%$ verdeckt im Bauteilinneren mit O-Ring-Dichtung.
+* **Direkte Gepäckbrücken-Unterzugsmontage:** Der schlanke Halter ([`adventure_rack_radar_mount.scad`](../../hardware/cad/scad/02_pod_base/adventure_rack_radar_mount.scad)) wird direkt unter die hinteren Querrohre ($\varnothing 18\,\text{mm}$) der GS-Gepäckbrücke geklemmt.
+* **100 % Topcase-Freigängigkeit:** Sitzt vollständig unterhalb der Koffer-Bodenlinie. Das Aluminium-Topcase kann sekundenschnell verriegelt und abgenommen werden, ohne das Radar zu berühren.
+* **Radiale Hirth-Verzahnung & Diebstahlschutz:** Ausgestattet mit der bewährten 36-Zahn-Hirth-Rosette ([`011_gopro_hirth_lock.scad`](../../hardware/cad/scad/02_pod_base/parts/011_gopro_hirth_lock.scad)) gegen vibrationsbedingtes Absacken der Neigung und dem diebstahlsicheren Garmin/Wheeltec-Bajonettdock ([`radar_varia_gopro_lock_dock.scad`](../../hardware/cad/scad/02_pod_base/radar_varia_gopro_lock_dock.scad)).
+* **Kabelverbindung:** Direkt gespeist über Peitsche 5 (Pins 23–26) des 4-armigen HD26-Kabelbaums.
 
 ---
 
 #### 6.4.3 Unsichtbarer Magnet-Diebstahlschutz im Fernreise-Einsatz
 
-Auf frei zugänglichen Reiseenduros und bei Zwischenstopps auf Fernreisen (z. B. auf TET-Pisten, Pässen oder unbewachten Rastplätzen) schützt der in [Abschnitt 4.1](#41-gesamtsystem-kinematik-poka-yoke-auto-eject--unsichtbarer-magnet-diebstahlschutz) als plattformweiter Standard spezifizierte, vollkommen unsichtbare Magnetverschluss die modularen Einschubkassetten (Sena, Cardo, Transceiver) zuverlässig gegen schnellen Gelegenheitsdiebstahl:
-
-* **100 % Schlamm-, Staub- & Eissicherheit:** Da der Mechanismus hermetisch im Inneren des Gehäuses gekapselt ist und ohne Schlüsselloch oder Außenschieber auskommt, ist er absolut resistent gegen eindringenden Offroad-Schlamm, Pistenstaub, Hochdruckreiniger oder Frost auf winterlichen Pässen.
-* **Verdeckte Entriegelung:** Das Entriegeln erfolgt kontaktlos in Sekundenbruchteilen durch Anhalten des N52-Magnetschlüssels an den Zielkreis ($X = 64\,\text{mm}$), woraufhin die V4A-Federn die Kassette formschön um $15\dots 20\,\text{mm}$ auswerfen.
-
-#### 6.4.4 Kontaktlose Kassetten-Entriegelung & Diebstahlschutz
-* Die magnetische Notentriegelung und der stumme Taschenalarm sind hersteller- und fahrzeugunabhängig im universellen [2-in-1 LoRa Smart-Keyfob (Gehäuse Typ D)](#7-gehäuse-typ-d-2-in-1-lora-smart-keyfob--pager-smart_keyfob_pagerscad) realisiert.
+Auf frei zugänglichen Reiseenduros und bei Zwischenstopps auf Fernreisen schützt der hermetisch gekapselte Magnetverschluss die modularen Einschubkassetten (Sena, Cardo, OMM) zuverlässig gegen Gelegenheitsdiebstahl:
+* **100 % Schlamm-, Staub- & Eissicherheit:** Hermetisch ohne Schlüsselloch im Inneren des Pods gekapselt.
+* **Verdeckte Entriegelung:** Kontaktlos in Sekundenbruchteilen über den N52-Magnetschlüssel des Smart-Keyfobs.
 
 ---
 
@@ -843,7 +748,7 @@ Das universelle Kofferdeckel-Dock ([`saddlebag_lid_dock.scad`](../../hardware/ca
 2. **Alternative / Zusätzliche Klebemontage (3M VHB):**
    * Auf der Unterseite sind vier definierte Taschen ($18 \times 12 \times 0{,}8\,\text{mm}$) für 3M VHB Hochleistungs-Acrylatschaum-Klebebänder eingelassen, um eine optionale Montage an glatten Kofferinnenwänden anderer Hersteller (z. B. BMW Vario- oder Alukoffer) zu ermöglichen.
 3. **Halbschalen-Architektur ($H = 26\,\text{mm}$):**
-   * Die $3\,\text{mm}$ dicke PA12-Wanne umschließt das Pod 3-Gehäuse ($135 \times 70 \times 38\,\text{mm}$) formschlüssig bis auf halbe Höhe.
+   * Die $3\,\text{mm}$ dicke PA12-Wanne umschließt das Pod-Gehäuse ($135 \times 70 \times 38\,\text{mm}$) formschlüssig bis auf halbe Höhe.
    * Die modulare Wechselkassette bleibt von hinten voll zugänglich und kann mit Daumen und Zeigefinger in Sekunden entriegelt und gewechselt werden, ohne das Dock zu demontieren.
 4. **Schutz vor Tropfwasser (Overhead Drip Lip):**
    * Über dem Kassetteneingang kragt eine integrierte **Tropfkante ($16 \times 2\,\text{mm}$ mit $30^\circ$-Dachschräge)** aus. Sie leitet Kondenswasser oder herablaufende Regentropfen beim Öffnen des Kofferdeckels zuverlässig seitlich an der Kassetten-Dichtfuge vorbei.
@@ -925,7 +830,7 @@ Das stationäre MagSafe-Rahmendock ([`009_magsafe_frame_dock.scad`](../../hardwa
 
 ### 6.6 Entkoppeltes Kennzeichen-Radar-Bracket & Dual-Radar-Optionen
 
-Auf Cruisern und Baggern wird das Heckradar von Pod 3 **entkoppelt** und mittig unter dem Kennzeichen an der Kennzeichen-Radarhalterung ([`radar_license_plate_bracket.scad`](../../hardware/cad/scad/02_pod_base/radar_license_plate_bracket.scad)) montiert:
+Auf Cruisern und Baggern wird das Heckradar diskret und mittig unter dem Kennzeichen an der Kennzeichen-Radarhalterung ([`radar_license_plate_bracket.scad`](../../hardware/cad/scad/02_pod_base/radar_license_plate_bracket.scad)) montiert:
 
 ![Radar License Plate Bracket CAD](../images/cad/radar_license_plate_bracket_cad.png)
 
@@ -1008,31 +913,43 @@ Hierfür wurde der **Stealth Center Under-Fender Mount** ([`02_pod_base/radar_ce
 
 Für den professionellen Einsatz in Begleitfahrzeugen (Support-Vans bei geführten Motorrad-Touren, Besenfahrzeugen, Orga-Transportern bei Alpentouren) sowie in Pkw-Kolonnen (z. B. Sportwagen-Rallyes) bildet das **Referenz-Kit 5** ein autarkes Gesamtsystem. Es ermöglicht die lückenlose Überwachung aller Teilnehmer-Bikes über das 868-MHz-LoRa-Mesh ohne jede Mobilfunk- oder Cloud-Abhängigkeit.
 
-Mechanisch und fahrzeugintegrativ basiert das Car Support Kit auf zwei speziell entwickelten CAD-Komponenten:
-1. Dem **Universal Sonnenblenden-Clip für Pod 3** ([`car_sun_visor_pod3_clip.scad`](../../hardware/cad/scad/05_accessories/car_sun_visor_pod3_clip.scad) / [`car_sun_visor_pod3_clip.stl`](../../hardware/cad/stl/05_accessories/car_sun_visor_pod3_clip.stl))
+Mechanisch und fahrzeugintegrativ basiert das Car Support Kit auf drei schraub- und bohrungsfreien CAD-Komponenten:
+1. Dem **Universal Sonnenblenden-Clip für Pod 1 & 2 (2x)** ([`car_sun_visor_pod_clip.scad`](../../hardware/cad/scad/05_accessories/car_sun_visor_pod_clip.scad) / [`car_sun_visor_pod_clip.stl`](../../hardware/cad/stl/05_accessories/car_sun_visor_pod_clip.stl))
 2. Der **Armaturenbrett-Keilaufnahme für die Zentralbox** ([`car_dashboard_wedge_dock.scad`](../../hardware/cad/scad/05_accessories/car_dashboard_wedge_dock.scad) / [`car_dashboard_wedge_dock.stl`](../../hardware/cad/stl/05_accessories/car_dashboard_wedge_dock.stl))
+3. Dem **Kompakten Armaturenbrett-GNSS-Dock** für das u-blox SAM-M10Q Multi-GNSS Patch-Modul nahe der Scheibenbasis.
 
 ---
 
-#### 6.8.1 Universal Sonnenblenden-Clip für Pod 3 (`car_sun_visor_pod3_clip.scad`)
+#### 6.8.1 Universal Sonnenblenden-Clip für Pod 1 & Pod 2 (`car_sun_visor_pod_clip.scad`)
 
-Moderne Automobile (Kombis, SUVs, Limousinen, Kastenwagen) besitzen selten feste Heck-Hutablagen, und die geschlossene Blechkarosserie dämpft Funkwellen wie ein Faradayscher Käfig. Zudem sitzt mittig hinter dem Rückspiegel an der Windschutzscheibe fast ausnahmslos ein massiver Sensor- und Kamerakasten (ADAS für Notbremsassistent, Spurhalteradar, Regensensor), der eine mittige Scheibenmontage verhindert.
+Moderne Automobile besitzen selten feste Heck-Hutablagen, und die geschlossene Blechkarosserie dämpft Funkwellen wie ein Faradayscher Käfig. Das Car Support Kit nutzt daher **zwei baugleiche Universal-Clips** an beiden Sonnenblenden:
+* **Fahrer-Sonnenblende:** Nimmt **Pod 1** auf (z. B. Sena SPIDER X Slim oder OMM 2.4 GHz Swap Cartridge).
+* **Beifahrer-Sonnenblende:** Nimmt **Pod 2** auf (z. B. Cardo Packtalk Edge oder Midland PMR446).
 
-Der universelle Sonnenblenden-Clip löst diese Probleme elegant durch eine asymmetrische Klemmung an der **Beifahrer-Sonnenblende**:
+```text
+EINSATZMODI DES CAR-SUPPORT-KITS:
+• Modus A (Begleitwagen für Motorrad-Gruppe):
+  - Fahrer-Sonnenblende: Pod 1 mit Sena SPIDER X Slim (Mesh 3.0 / 2.0 Kanal 1-9)
+  - Beifahrer-Sonnenblende: Pod 2 mit Cardo Packtalk Edge (DMC Gen 2 Gruppe)
+  - Ermöglicht dem Tourguide/Besenfahrer die simultane Sprachverbindung in beide Welten!
+• Modus B (Reine Autokolonne / Rallye):
+  - Fahrer-Sonnenblende: Pod 1 mit OMM 2.4 GHz Swap-Kassette (Kanal-Hopping Mesh)
+  - Beifahrer-Sonnenblende: Pod 2 mit Midland PMR446 (Jedermannfunk / analoger Fallback)
+```
 
-![Universal Sonnenblenden-Clip für Pod 3 Dual-Ansicht](../images/cad/car_sun_visor_pod3_clip_cad.png)
+![Universal Sonnenblenden-Clip für Pods 1 & 2 Dual-Ansicht](../images/cad/car_sun_visor_pod3_clip_cad.png)
 
-*Abbildung 8.33b: 3D-CAD-Ansicht des Universal Sonnenblenden-Clips für Pod 3 (`car_sun_visor_pod3_clip_cad.png`) in synchroner Doppelperspektive. Rechts: Obere Pod 3 Aufnahmewanne mit seitlichen Haltebacken ($139 \times 73\,\text{mm}$), Eck-Kugelrastungen für vibrationsfesten Formschluss und stirnseitigem Kabelauslass. Links: Ansicht der Gehäuseunterseite mit solidem U-Kanal-Verbindungssteg, flexibler Federspange (14,5 mm Ruheschlitz für 14–22 mm Sonnenblendendicke), transversalen Anti-Rutsch-Rippen und 30°-Einführschräge.*
+*Abbildung 8.33b: 3D-CAD-Ansicht des Universal Sonnenblenden-Clips für Pod 1 & 2 (`car_sun_visor_pod_clip.scad`). Rechts: Obere Pod-Aufnahmewanne ($139 \times 73\,\text{mm}$) mit seitlichen Haltebacken, Eck-Kugelrastungen für vibrationsfesten Formschluss und stirnseitigem Kabelauslass. Links: Ansicht der Gehäuseunterseite mit solidem U-Kanal-Verbindungssteg, flexibler Federspange (14,5 mm Ruheschlitz für 14–22 mm Sonnenblendendicke), transversalen Anti-Rutsch-Rippen und 30°-Einführschräge.*
 
 * **Strikte Trennung von Aufnahmewanne und Klemmfeder (100 % freier Bauraum):**
   * In der finalen Geometrie sitzt die elastische Federspange strikt auf der **Außen-Unterseite** ($Z \le 0$). 
-  * Das obere Aufnahmefach für Pod 3 ist zu $100\,\%$ frei und ungehindert zugänglich. Pod 3 wird flach von oben eingedrückt und rastet an den seitlichen Gehäuselippen formschlüssig ein.
+  * Das obere Aufnahmefach für Pod 1 oder Pod 2 ist zu $100\,\%$ frei und ungehindert zugänglich. Der Pod wird flach von oben eingedrückt und rastet an den seitlichen Gehäuselippen formschlüssig ein.
 * **Universelle Passform für alle Kfz-Sonnenblenden ($14\dots 22\,\text{mm}$):**
   * Der Federbügel aus PETG oder zähem PA12-MJF besitzt eine Tiefe von $58\,\text{mm}$ und eine Breite von $42\,\text{mm}$.
   * Eine aufgewölbte $30^\circ$-Einführlippe erlaubt das einhändige Aufschieben auf die Blende ohne Kraftaufwand oder Werkzeug.
   * Drei abgerundete Rippen verhindern zuverlässig ein Verrutschen bei Fahrzeugerschütterungen, ohne das empfindliche Leder oder Textil der Sonnenblende zu beschädigen.
 * **Hemisphärische HF-Freisicht ($180^\circ$ zum Himmel):**
-  * An der oberen Windschutzscheibenkante platziert, strahlen die Antennen von Pod 3 (u-blox MAX-M10S Multi-GNSS, 868 MHz LoRa SX1262 und 5,9 GHz V2X) ungedämpft durch das Glas nach vorne und oben ab.
+  * An der oberen Windschutzscheibenkante platziert, strahlen die Mesh- und Bluetooth-Antennen ungedämpft durch das Glas nach vorne und oben ab.
   * Keine Reflexionen an metallischen Karosserieblechen oder Dachträgern.
 * **Diebstahlschutz durch Tarnoptik:**
   * Von außen durch die getönte Frontscheibe betrachtet, wirkt der Clip wie eine unauffällige Maut-Box (Telepass / Bip&Go / Toll Collect) oder ein werkseitiger Garagentor-Transponder.
@@ -1057,28 +974,9 @@ Für die Zentralbox (Main Control Box, $110 \times 74 \times 32\,\text{mm}$) im 
 * **Vibrationsgedämpfte, kratzfreie Auflage:**
   * Die Unterseite verfügt über 4 zylindrische Vertiefungen ($\varnothing 12 \times 1{,}5\,\text{mm}$) zur Aufnahme handelsüblicher 3M-Bumpon-Silikonfüße oder 3M-VHB-Klebepads für absolut rutschfesten Stand auf jeder Cockpit-Oberfläche.
 
-#### 6.8.3 Satelliten-Pods 1 & 2: Befestigungskonzept (Dashboard & Sitzkonsole via 3M Dual-Lock)
-
-Während Pod 3 (GNSS, LoRa-Mesh, 5.9 GHz V2X) wegen der Satelliten-Sicht zwingend an die obere Windschutzscheibenkante gehört, dienen die Satelliten-Pods 1 und 2 im Begleitfahrzeug oder in der Autokolonne primär der Funk- und Audio-Kommunikation:
-* **Pod 1:** Intercom-Kassette Gruppe A (z. B. Sena Spider ST1 / 50S Mesh)
-* **Pod 2:** Intercom-Kassette Gruppe B (z. B. Cardo Packtalk Edge DMC) oder Midland CB-/PMR-Funk
-
-Da moderne Pkw, Vans, Kombis und SUVs **keine starren Heck-Hutablagen** mehr besitzen und Funkgeräte im Kofferraum unter massiver Blechdämpfung leiden, wurde das Konzept der Hutablage bereits frühzeitig verworfen. Stattdessen nutzt OpenMotorBridge die **100 % identische Gehäusegeometrie** aller Pods ($135 \times 70 \times 26\,\text{mm}$):
-
-1. **Armaturenbrett / Cockpit (Primärempfehlung via 3M Dual-Lock SJ3550):**
-   * Die Pods werden mit 3M Dual-Lock Pilzkopf-Klett direkt auf dem Armaturenbrett (z. B. im Bereich der Beifahrer-A-Säule oder nahe der Mittelkonsole) fixiert.
-   * **HF-Freisicht durch die Frontscheibe:** Die 2.4-GHz-Mesh- und Bluetooth-Antennen von Sena und Cardo strahlen ungehindert durch das Frontglas nach vorn zu den vorausfahrenden Motorrädern ab (im geschlossenen Blechraum würde das Signal um $20\dots 30\,\text{dB}$ einbrechen).
-   * **Kompakte Verkabelung:** Die Distanz zur Zentralbox beträgt nur wenige Dezimeter.
-2. **Verdeckte Montage an den Vordersitz-Konsolen (Stealth-Option):**
-   * Sollen die Pods im Innenraum völlig unsichtbar sein, werden sie per Klett seitlich unten an den Sitzschienen-Verkleidungen oder an der Teppichwand des Mitteltunnels befestigt.
-   * Ideal bei festen Setups, bei denen keine manuellen Tasten bedient werden müssen (Bedienung erfolgt komplett über PWA-Touchscreen oder Pkw-Lenkradtaste).
-3. **Flexibler Kassetten- & Sonnenblenden-Wechsel bei Multipurpose-Fahrzeugen:**
-   * Jeder Pod (auch Pod 1 oder 2) rastet formschlüssig in den Universal-Sonnenblenden-Clip ([`car_sun_visor_pod3_clip.scad`](../../hardware/cad/scad/05_accessories/car_sun_visor_pod3_clip.scad)) ein.
-   * Bei wechselnden Einsatzszenarien kann der Biker den Pod mit der aktuell wichtigsten Funkkassette (z. B. Midland CB-Funk bei einer Rallye) mit einem Klick an die Sonnenblende hängen und danach wieder auf das Motorrad übernehmen.
-
 ---
 
-#### 6.8.4 Drahtlose Pkw-Telemetrie: Autarke Bluetooth-OBD2-Kopplung via Zentralbox
+#### 6.8.3 Drahtlose Pkw-Telemetrie: Autarke Bluetooth-OBD2-Kopplung via Zentralbox
 
 Im Pkw oder Support-Van ist ein langes, fest verlegtes CAN-Kabel von der Mittelkonsole quer durch den Fahrerfußraum zur Diagnosebuchse unpraktisch und birgt Stolpergefahren an den Pedalen. OpenMotorBridge löst dies über eine **drahtlose Bluetooth-OBD2-Anbindung**:
 
@@ -1095,7 +993,7 @@ Im Pkw oder Support-Van ist ein langes, fest verlegtes CAN-Kabel von der Mittelk
 
 ---
 
-#### 6.8.5 Gesamtsystem & Werkzeuglose 5-Minuten-Fahrzeugintegration
+#### 6.8.4 Gesamtsystem & Werkzeuglose 5-Minuten-Fahrzeugintegration
 
 Das Zusammenspiel aller Komponenten des Referenz-Kits 5 garantiert einen werkzeuglosen, vollkommen zerstörungsfreien Einbau in jeden Pkw oder Van:
 
@@ -1103,19 +1001,23 @@ Das Zusammenspiel aller Komponenten des Referenz-Kits 5 garantiert einen werkzeu
        OPENMOTORBRIDGE REFERENZ-KIT 5 (PKW- & SUPPORT-VAN-TOPOLOGIE)
  ┌────────────────────────────────────────────────────────────────────────┐
  │ Windschutzscheibe oben:                                                │
- │ [Beifahrer-Sonnenblende] ──> [car_sun_visor_pod3_clip] ──> [Pod 3 PCBA]│
- │                               (100% Freisicht nach vorn/oben)          │
+ │ [Fahrer-Sonnenblende]     ──> [car_sun_visor_pod_clip] ──> [Pod 1]     │
+ │ (Sena SPIDER X Slim oder OMM 2.4 GHz)                                  │
+ │                                                                        │
+ │ [Beifahrer-Sonnenblende]  ──> [car_sun_visor_pod_clip] ──> [Pod 2]     │
+ │ (Cardo Packtalk Edge oder Midland PMR446)                              │
  └───────────────────────────────────┬────────────────────────────────────┘
                                      │ Ultraflaches USB-C Flachbandkabel
                                      ▼ (in Dachhimmel & A-Säule verdeckt)
  ┌────────────────────────────────────────────────────────────────────────┐
  │ Armaturenbrett / Mittelkonsole:                                        │
- │ [car_dashboard_wedge_dock (15°)] ──> [Zentralbox (ESP32-S3)]           │
+ │ [car_dashboard_wedge_dock (15°)] ──> [Zentralbox (SX1262 LoRa 868)]    │
+ │ [SAM-M10Q GNSS Dashboard Dock]   ──> [Front-Node / GNSS-USB]           │
  │       ▲           ▲                       │        ▲                   │
  │       │ 12V PD    │ M8 / USB-C            │        │ Bluetooth LE      │
  │ [Zigaretten-      ▼                       │        ▼                   │
- │  anzünder]   [Pods 1 & 2 per 3M Klett]    │   [OBD2 BLE-Dongle]        │
- │              (Dashboard / Sitzkonsole)    │   (ELM327 / vGate unter    │
+ │  anzünder]   [Pods 1 & 2 Versorgung]      │   [OBD2 BLE-Dongle]        │
+ │                                           │   (ELM327 / vGate unter    │
  │                                           │    dem Lenkrad)            │
  │                                           ├─► USB-C / BLE Offline PWA  │
  │                                           │   (iPad / Android Tablet)  │
@@ -1292,12 +1194,8 @@ Die CAD-Dateistruktur von OpenMotorBridge folgt einer strengen hierarchischen CS
 | **Zentralbox** | Oberwanne mit Zwischenboden | `01_main_box/main_box_mid_tray.stl` | `01_main_box/01_upper_deck.scad` |
 | **Zentralbox** | Gehäusedeckel mit Gore-Vent | `01_main_box/main_box_lid.stl` | `01_main_box/02_colsure.scad` |
 | **Satelliten-Pod**| 5-seitiges Monocoque-Gehäuse (Tunnel) | `02_pod_base/pod_base_housing.stl` | `02_pod_base/pod_base_housing.scad` |
-| **Satelliten-Pod**| CVO ST Under-Cowl Skeleton Dock | `02_pod_base/cvo_st_undercowl_skeleton_dock.stl` | `02_pod_base/cvo_st_undercowl_skeleton_dock.scad` |
-| **Satelliten-Pod**| CVO ST Telemetrie-Finne (2.4 GHz Mesh) | `02_pod_base/cvo_st_telemetry_fin.stl` | `02_pod_base/cvo_st_telemetry_fin.scad` |
-| **Satelliten-Pod**| Road King Special Touring Fender Console | `02_pod_base/pod3_touring_fender_console.stl` | `02_pod_base/pod3_touring_fender_console.scad` |
 | **Satelliten-Pod**| Touring Kofferdeckel-Halter (Pod 1 & 2) | `02_pod_base/saddlebag_lid_dock.stl` | `02_pod_base/saddlebag_lid_dock.scad` |
-| **Adventure Pod 3**| Rallye-Aero-Balkon Basis-Wanne (Heckbrücken-Ausleger) | `02_pod_base/adventure_rack_tail_mount_base.stl` | `02_pod_base/adventure_rack_tail_mount.scad` |
-| **Adventure Pod 3**| Rallye-Aero-Balkon Karosserie-Deckel (mit Shark-Finne) | `02_pod_base/adventure_rack_tail_cowl.stl` | `02_pod_base/adventure_rack_tail_mount.scad` |
+| **Adventure Radar**| Gepäckbrücken-Radarträger (Wheeltec/Garmin) | `02_pod_base/adventure_rack_radar_mount.stl` | `02_pod_base/adventure_rack_radar_mount.scad` |
 | **Adventure Pods 1/2**| GS Transition Dock Basis-Wanne (Bügelfalten-Unterteil) | `02_pod_base/adventure_transition_dock_base.stl` | `02_pod_base/adventure_transition_dock.scad` |
 | **Adventure Pods 1/2**| GS Transition Dock Karosserie-Deckel (Bügelfalten-Cowl) | `02_pod_base/adventure_transition_dock_lid.stl` | `02_pod_base/adventure_transition_dock.scad` |
 | **Adventure-Kit** | Unter-Sitzbank-Sattelbrücke (Traverse links-rechts) | `02_pod_base/adventure_underseat_cross_rail.stl` | `02_pod_base/adventure_underseat_cross_rail.scad` |
@@ -1313,10 +1211,10 @@ Die CAD-Dateistruktur von OpenMotorBridge folgt einer strengen hierarchischen CS
 | **Radar-Zubehör** | Garmin Varia Quarter-Turn Anti-Theft Lock Dock | `02_pod_base/radar_varia_gopro_lock_dock.stl` | `02_pod_base/radar_varia_gopro_lock_dock.scad` |
 | **Kassette** | Universeller Basisschlitten mit Dichtung | `03_pod_cartridges/cartridge_base_sled.stl` | `03_pod_cartridges/00_base_sled.scad` |
 | **Kassette** | Magnetischer Diebstahlschutz-Rastbolzen (Sägezahn-Mechanik) | `03_pod_cartridges/cartridge_magnetic_lock_latch.stl` | `03_pod_cartridges/parts/05_magnetic_lock_latch.scad` |
-| **Kassette** | Sena 50S/60S Adapterkassette | `03_pod_cartridges/cartridge_insert_sena.stl` | `03_pod_cartridges/parts/01_insert_sena.scad` |
+| **Kassette** | Sena SPIDER X Slim Adapterkassette | `03_pod_cartridges/cartridge_insert_sena.stl` | `03_pod_cartridges/parts/01_insert_sena.scad` |
 | **Kassette** | Cardo Packtalk Edge Adapterkassette | `03_pod_cartridges/cartridge_insert_cardo.stl` | `03_pod_cartridges/parts/02_insert_cardo.scad` |
 | **Kassette** | IP67 Blindkassette (wasserdichte Dry Box)| `03_pod_cartridges/cartridge_insert_blindkassette.stl` | `03_pod_cartridges/parts/03_insert_blindkassette.scad` |
-| **Kassette** | OMM Dipol-Antennenhalterung | `03_pod_cartridges/cartridge_antenna_bracket_omm.stl` | `03_pod_cartridges/parts/04_antenna_bracket_omm.scad` |
+| **Kassette** | OMM 2.4 GHz Swap-Kassette | `03_pod_cartridges/cartridge_omm_transceiver.stl` | `03_pod_cartridges/cartridge_omm_transceiver.scad` |
 | **Front-Knoten** | Unterwanne mit 4-in-1 Boden & Ohren | `04_front_node/front_node_lower_tub.stl` | `04_front_node/00_front_node_tub.scad` |
 | **Front-Knoten** | Gehäusedeckel mit LED & FPC-Tasche | `04_front_node/front_node_upper_lid.stl` | `04_front_node/01_front_node_lid.scad` |
 | **Front-Knoten** | EPDM/TPU Dichtkamm-Paar mit Steg | `04_front_node/front_node_cable_glands_tpu.stl` | `04_front_node/02_front_node_cable_glands.scad` |
@@ -1331,7 +1229,7 @@ Die CAD-Dateistruktur von OpenMotorBridge folgt einer strengen hierarchischen CS
 | **Spiegel-Radar** | BSD Diffusorlinse (Bernstein / transluzent) | `05_accessories/bsd_mirror_lens.stl` | `05_accessories/bsd_mirror_indicator_pod.scad` |
 | **Radar 2.0** | Wheeltec MR20 77GHz Gehäuse mit Binder M5 Flansch & Radome | `05_accessories/radar_mr20_housing.stl` | `05_accessories/radar_mr20_housing.scad` |
 | **Kamera-Dock** | Road Glide ST Sharknose 15W Qi Induktives Cam-Dock (3M Dual Lock) | `05_accessories/road_glide_inductive_cam_dock.stl` | `05_accessories/road_glide_inductive_cam_dock.scad` |
-| **Auto-Zubehör** | Begleitfahrzeug / Auto Universal Sonnenblenden-Clip für Pod 3 | `05_accessories/car_sun_visor_pod3_clip.stl` | `05_accessories/car_sun_visor_pod3_clip.scad` |
+| **Auto-Zubehör** | Begleitfahrzeug / Auto Universal Sonnenblenden-Clip für Pod 1 & 2 | `05_accessories/car_sun_visor_pod_clip.stl` | `05_accessories/car_sun_visor_pod_clip.scad` |
 | **Kassette** | Universelle 2D-Langloch-Rasterplatte & seitliche Aktuator-Ausleger | `03_pod_cartridges/cartridge_universal_actuator_rails.stl` | `03_pod_cartridges/cartridge_universal_actuator_rails.scad` |
 
 ### 9.2 Baukasten-Komponenten & Dummies (`components/`-Verzeichnisse)

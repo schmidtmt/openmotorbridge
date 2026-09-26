@@ -13,20 +13,21 @@ Dieses Dokument bildet die **zentrale, autoritative Hardware-Spezifikation aller
 │ Baugruppe │ Name & Funktion           │ Platinenmaße  │ Lagen   │ Kern-ICs / Bauteile  │
 ├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
 │ **PCBA 01**│ **Zentralbox Main Controller** │ 85 x 55 mm    │ 4 Lagen │ ESP32-S3, LM5164,    │
-│       │ (Unter der Sitzbank, Audio/USV)│ (77x47 mm M3) │ (ENIG)  │ BQ24075, ES8388, IMU │
+│       │ (Unter der Sitzbank, Audio/USV)│ (77x47 mm M3) │ (ENIG)  │ BQ24075, ES8388, IMU,│
+│       │                                │               │         │ SX1262 LoRa, DW3110  │
 ├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
 │ **PCBA 02**│ **Satelliten Pod Base Carrier**│ 36 x 20 mm    │ 2 Lagen │ SP3012 TVS, M8 6-Pin,│
-│       │ (Sockel für Pod 1 & 2)        │ (30 mm M2)    │         │ Kassetten-Aufnahme   │
+│       │ (Symmetrisch für Pod 1 & 2, 2x)│ (30 mm M2)    │         │ Kassetten-Aufnahme   │
 ├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
 │ **PCBA 03**│ **Smart Modular Cartridge**   │ 35 x 25 mm    │ 2 Lagen │ CH32V003 RISC-V MCU, │
-│       │ (Rev 2.0 Mechatronik-Träger)  │ (29x19 mm M2) │         │ 4x MOSFETs, J_ACT 8P │
+│       │ (Rev 2.0 Mechatronik / OMM)   │ (29x19 mm M2) │         │ 4x MOSFETs, J_ACT 8P │
 ├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
-│ **PCBA 04**│ **Rear Pod 3 Transceiver Hub** │ 55 x 48 mm    │ 4 Lagen │ ESP32-C3 Coprozessor,│
-│       │ (Heckbürzel: LoRa & GNSS)     │ (46x19 mm M2) │ (ENIG)  │ SX1262 LoRa, MAX-M10S│
+│ **PCBA 04**│ *(In v8.0 ersatzlos entfallen)*│ --            │ --      │ Heck-Pod 3 entfällt; │
+│       │ (BOM sinkt von 8 auf 7 PCBAs) │               │         │ LoRa/GNSS umverteilt │
 ├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
 │ **PCBA 05**│ **Universal Front-Knoten**    │ 82 x 50 mm    │ 4 Lagen │ ESP32-S3 Xtensa,     │
-│            │ (Cockpit & Sensor Hub)        │               │         │ USB2514B 4-Port Hub, │
-│            │                               │               │         │ USB-PD 20W, Qi/BSD   │
+│            │ (Cockpit, GNSS, Sensoren, UWB)│               │         │ DW3110 UWB, SAM-M10Q,│
+│            │                               │               │         │ USB2514B, TMP117/OPT │
 ├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
 │ **PCBA 06**│ **MagSafe Frame Dock Adapter** │ 28 x 11.5 mm  │ 2 Lagen │ 500mA PPTC Fuse, 5V  │
 │       │ (Rahmendock: M8 auf MagSafe)  │ (Zentral M2.5)│         │ TVS, USBLC6-4SC6 ESD │
@@ -43,7 +44,7 @@ Dieses Dokument bildet die **zentrale, autoritative Hardware-Spezifikation aller
 
 ## 2. Fertigungsstandard & JLCPCB 4-Lagen Stackup (JLC04161H-7628)
 
-Für alle 4-Lagen-Platinen (PCBA 01, PCBA 04, PCBA 05 und PCBA 08) wird der identische, streng impedanzkontrollierte Lagenaufbau verwendet:
+Für alle 4-Lagen-Platinen (PCBA 01, PCBA 05 und PCBA 08) wird der identische, streng impedanzkontrollierte Lagenaufbau verwendet:
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -81,10 +82,10 @@ Für alle 4-Lagen-Platinen (PCBA 01, PCBA 04, PCBA 05 und PCBA 08) wird der iden
 ### 3.1 Technische Platinen-Kenndaten
 * **Abmessungen:** $85{,}0 \times 55{,}0\,\text{mm}$ (Außenkontur mit 4x M2.5 Montagebohrungen, $77{,}0 \times 47{,}0\,\text{mm}$ Lochabstand).
 * **Lagenaufbau:** 4 Lagen FR-4 High-TG150 ($1{,}6\,\text{mm}$ Gesamtdicke, $35\,\mu\text{m}$ Cu auf allen 4 Lagen).
-  * Layer 1 (Top): Bauelemente, HF-Leiterbahnen und differentielle Audiopaare.
+  * Layer 1 (Top): Bauelemente, HF-Leiterbahnen, Semtech SX1262 LoRa 868 MHz Transceiver (mit U.FL zu FXP895 im Gehäusedeckel) und differentielle Audiopaare.
   * Layer 2 (Inner 1): Durchgehende, ununterbrochene GND-Bezugsebene.
   * Layer 3 (Inner 2): Split Power Planes ($+3{,}3\,\text{V}$, $+5{,}0\,\text{V}$, `VBUS`, `VBAT_LIPO`) und Audio-GND.
-  * Layer 4 (Bottom): Sekundäre Signale, Schirmflächen und thermische Vias.
+  * Layer 4 (Bottom): Qorvo DW3110 UWB Transceiver (6.489 GHz Ch. 5) mit U.FL-Abgang in Gehäuseboden-Tasche (Taoglas FXUWB10), Sekundärsignale, Schirmflächen und thermische Vias.
 * **Oberflächenveredelung:** ENIG (Electroless Nickel Immersion Gold, $0{,}05\dots 0{,}1\,\mu\text{m}$ Au über $3\dots 5\,\mu\text{m}$ Ni).
 * **Isolationsbarriere:** $4{,}0\,\text{mm}$ galvanischer Kriech- und Luftabstand unter den Audio-Übertragern `T1` und `T2`.
 
@@ -92,7 +93,7 @@ Für alle 4-Lagen-Platinen (PCBA 01, PCBA 04, PCBA 05 und PCBA 08) wird der iden
 
 ![Automotive Kabelbaum Architektur](../images/cad/wiring_harness_cad.png)
 
-*Abbildung 7.1b: CAD-Architektur des zentralen 26-poligen Automotive-Kabelbaums (HD26 Seal-D auf 5x Modulabgänge mit IP67 Formmuffe).*
+*Abbildung 7.1b: CAD-Architektur des zentralen 26-poligen Automotive-Kabelbaums (HD26 Seal-D auf 4x Modulabgänge mit IP67 Formmuffe; 19 aktive Adern).*
 
 | Pin (HD26/J1) | Signalname | Signalart / Spannungsbereich | Funktion & Schutzbeschaltung |
 | :--- | :--- | :--- | :--- |
@@ -104,9 +105,9 @@ Für alle 4-Lagen-Platinen (PCBA 01, PCBA 04, PCBA 05 und PCBA 08) wird der iden
 | **Pin 6** | `POD2_NF_P` | Audio Line-In ($1{,}0\,\text{V}_{\text{RMS}}$ diff.) | Galvanisch getrennt via Trafo `T2` (Positiv) |
 | **Pin 7** | `POD2_NF_N` | Audio Line-In ($1{,}0\,\text{V}_{\text{RMS}}$ diff.) | Galvanisch getrennt via Trafo `T2` (Negativ) |
 | **Pin 8** | `POD2_OPTO_KEY` | Optokoppler Mute/Keying | PhotoMOS `U8` Open-Collector / Schließer (< 1 ms prellfrei) |
-| **Pin 9** | `POD3_VCC` | $+5{,}0\,\text{V}$ geschaltet (max. 500 mA) | Stromversorgung Heck-Transceiver Pod 3 |
-| **Pin 10** | `POD3_UART_TX` | UART TX ($3{,}3\,\text{V}$, 460.800 Baud) | Datenleitung zu Pod 3 (GNSS/Telemetrie/LoRa) |
-| **Pin 11** | `POD3_UART_RX` | UART RX ($3{,}3\,\text{V}$, 460.800 Baud) | Datenleitung von Pod 3 (GNSS/Telemetrie/LoRa) |
+| **Pin 9** | `NC / RESERVE` | Unbelegt | Ehem. POD3_VCC (Pod 3 ersatzlos entfallen) |
+| **Pin 10** | `NC / RESERVE` | Unbelegt | Ehem. POD3_UART_TX (Pod 3 ersatzlos entfallen) |
+| **Pin 11** | `NC / RESERVE` | Unbelegt | Ehem. POD3_UART_RX (Pod 3 ersatzlos entfallen) |
 | **Pin 12** | `GND_PWR` | Power-Masse ($0\,\text{V}$) | Hauptmasse für Pod-Stromversorgungen |
 | **Pin 13** | `GND_PWR` | Power-Masse ($0\,\text{V}$) | Paralleler Massepfad für minimalen Schleifenwiderstand |
 | **Pin 14** | `KL30_IN` | $+9\,\text{V} \dots +72\,\text{V}$ DC (Dauerplus) | Batterie-Haupteingang (LM5164 Buck, SMBJ33CA TVS-Schutz) |
@@ -118,10 +119,10 @@ Für alle 4-Lagen-Platinen (PCBA 01, PCBA 04, PCBA 05 und PCBA 08) wird der iden
 | **Pin 20** | `GND_SHIELD` | Gehäuse- & Schirmmasse | Direkte Verbindung zum Alugehäuse / Schirmgeflecht |
 | **Pin 21** | `AGND` | Analoge Audiomasse | Ruhige Audiomasse für ES8388 Codec-Referenz |
 | **Pin 22** | `RESERVE_GPIO_A`| GPIO Digital I/O ($3{,}3\,\text{V}$) | Frei programmierbarer GPIO / PWM-Ausgang (ESP32-S3) |
-| **Pin 23** | `RESERVE_GPIO_B`| GPIO Digital I/O ($3{,}3\,\text{V}$) | Frei programmierbarer GPIO / ADC-Eingang (ESP32-S3) |
-| **Pin 24** | `I2S_DOUT` | I2S Data Out ($3{,}3\,\text{V}$) | Digitaler Audio-Stream zu externem DSP/Verstärker |
-| **Pin 25** | `I2S_BCLK` | I2S Bit Clock ($3{,}3\,\text{V}$) | Digitaler I2S Takt |
-| **Pin 26** | `GND_SHIELD` | Gehäuse- & Schirmmasse | Zweiter Schirmkontakt für 360°-Rundumschirmung |
+| **Pin 23** | `RADAR_RX` | UART RX / CAN_H ($3{,}3\,\text{V}$) | Peitsche 5: Radar 2.0 / Garmin Varia Datenempfang |
+| **Pin 24** | `RADAR_TX` | UART TX / CAN_L ($3{,}3\,\text{V}$) | Peitsche 5: Radar 2.0 / Garmin Varia Befehlsschnittstelle |
+| **Pin 25** | `RADAR_PWR_12V`| $+12\,\text{V}$ DC geschaltet (max. 1 A) | Peitsche 5: Stromversorgung Heck-Radar |
+| **Pin 26** | `RADAR_GND` | Power-Masse ($0\,\text{V}$) | Peitsche 5: Masseleitung Heck-Radar |
 
 ### 3.3 Interne Platinen-Steckverbinder & Service-Schnittstellen
 
@@ -150,7 +151,7 @@ Für alle 4-Lagen-Platinen (PCBA 01, PCBA 04, PCBA 05 und PCBA 08) wird der iden
 ### 4.2 Pinbelegung der Dual-Port Eingänge (`J2` / Port A M8 & `J3` / Port B USB-C)
 
 Die Pod-Bodenplatine verfügt über zwei galvanisch gekoppelte Eingangsports mit automatischem Power-Mux:
-* **Port A (`J2`):** Robuste M8-Rundbuchse (A-kodiert, 6-polig, IP67) für exponierte Außenmontage (z. B. Heckradar Pod 3 oder Sturzbügel).
+* **Port A (`J2`):** Robuste M8-Rundbuchse (A-kodiert, 6-polig, IP67) für exponierte Außenmontage (z. B. Sturzbügel, Rahmenrohre oder Gabelbrücke).
 * **Port B (`J3`):** Schlanke 6-Pin USB-C SMD-Buchse für geschützte Koffer-Innenmontage und werkzeuglosen Begleitfahrzeug-Einsatz.
 
 | Pin | Port A (`J2`, M8 6P) | Port B (`J3`, USB-C 6P) | Signalart / Spannungsbereich | Funktion & Schutz |
@@ -264,80 +265,19 @@ Um Geräte mit unterschiedlichen Tastenlayouts (Sena Spider X Slim vs. Cardo Pac
 | **`0x08`** | **Kanal / Macro 2** | Autonom: 2x Mesh ($150\,\text{ms}$) + Pause + 1x Minus | Autonom: 3x Intercom ($150\,\text{ms}$) (DMC Bridge) |
 | **`0x09`** | **Phone / BLE Pairing** | Center-Taste $5000\,\text{ms}$ Haltepuls | Mobile-Taste $5000\,\text{ms}$ Haltepuls |
 
-
 ---
 
-## 6. PCBA 04: Rear Pod 3 Transceiver & Coprozessor (`openmotorbridge_rear_pod3`)
+## 6. PCBA 04: Heck-Pod 3 Transceiver (In v8.0 ersatzlos entfallen / Retired)
 
-![PCBA 04 Rear Pod 3 Transceiver Hub](../images/pcba/pcba04_rear_pod3_3d.png)
-
-*Abbildung 7.4: KiCad 3D-Render der Heck-Pod 3 Transceiverplatine (PCBA 04, 55 x 48 mm, 4 Lagen) mit ESP32-C3-WROOM-02U RISC-V Coprozessor (2.4 GHz OMM-Mesh), Semtech SX1262 LoRa, u-blox Multi-GNSS und U.FL/Murata MM8030 HF-Umschaltports.*
-
-### 6.1 Technische Platinen-Kenndaten
-* **Abmessungen:** $55{,}0 \times 48{,}0\,\text{mm}$ (4 Lagen FR-4 High-TG150, 4x M2 Montagebohrungen im Raster $46{,}0 \times 19{,}0\,\text{mm}$, formbündig im aerodynamischen Heck-Pod 3 Gehäuse montiert).
-* **Lagenaufbau:** 4 Lagen FR-4 High-TG150 ($1{,}6\,\text{mm}$, $35\,\mu\text{m}$ Cu) mit kontrollierter $50\,\Omega$ Impedanz für alle HF-Pfade.
-  * Layer 1 (Top): HF-Transceiver, GNSS-Modul, Murata MM8030 Buchsen, koplanare $50\,\Omega$ Wellenleiter.
-  * Layer 2 (Inner 1): Durchgehende, unsegmentierte HF-Massebezugsebene.
-  * Layer 3 (Inner 2): Split Power ($+3{,}3\,\text{V}_{\text{RF}}$, $+3{,}3\,\text{V}_{\text{DIG}}$, $+5{,}0\,\text{V}$).
-  * Layer 4 (Bottom): ESP32-C3-WROOM-02U Coprozessor (2.4 GHz OMM Mesh), SPI-Flash, Entkopplung und sekundäres Signalrouting.
-
-### 6.2 Pinbelegung der 6-poligen Schnittstelle zur Zentralbox (`J1`)
-
-| Pin (J1) | Signalname | Signalart / Pegel | Funktion & Beschreibung |
-| :---: | :--- | :--- | :--- |
-| **Pin 1** | `1_VCC_5V` | $+5{,}0\,\text{V}$ DC geschaltet (max. 500 mA) | Hauptversorgung von der Zentralbox |
-| **Pin 2** | `2_GND` | Power- & HF-Masse ($0\,\text{V}$) | Massebezug für Logik und Hochfrequenz |
-| **Pin 3** | `3_UART_TX` | UART TX ($3{,}3\,\text{V}$, 460.800 Baud) | High-Speed Telemetrie- und NMEA-Daten zur Zentralbox |
-| **Pin 4** | `4_UART_RX` | UART RX ($3{,}3\,\text{V}$, 460.800 Baud) | Steuerbefehle und LoRa-Payloads von der Zentralbox |
-| **Pin 5** | `5_1PPS` | Digitaler Impuls ($3{,}3\,\text{V}$, active-high) | Sub-Mikrosekunden Zeitcode-Impuls vom NEO-M9N GNSS |
-| **Pin 6** | `6_1WIRE_ID` | 1-Wire Datenbus ($3{,}3\,\text{V}$) | Kassetten- und Pod-Erkennung via DS2401 |
-
-### 6.3 HF-Koaxialports mit Murata MM8030 Umschaltbuchsen
-
-Die Platine verfügt über 3 automatische Koaxial-Umschaltbuchsen (`Murata MM8030-2610`), die beim Einstecken eines Steckers verlustarm auf externe Antennen umschalten ($< 0{,}15\,\text{dB}$ Einfügedämpfung, $> 25\,\text{dB}$ Isolation bis 6 GHz):
-
-| HF-Port | Frequenzband | Interne Standardantenne | Externer Bypass-Pfad (MM8030) |
-| :---: | :--- | :--- | :--- |
-| **`J3`** | $2{,}4\,\text{GHz}$ ISM | Interne Inverted-F PCB-Antenne (IFA, $0\,\text{dBi}$) | Externe $+5\,\text{dBi}$ Stab- oder Haifischflossenantenne |
-| **`J4`** | $868\,\text{MHz}$ LoRa | Interne Wendelspulenantenne ($+1{,}5\,\text{dBi}$) | Externe $\lambda/4$-Monopolantenne für extreme Reichweiten |
-| **`J5`** | $1{,}575\,\text{GHz}$ GNSS | Interne $25 \times 25\,\text{mm}$ Keramik-Patchantenne | Externe Aktiv-Patchantenne mit $+3{,}3\,\text{V}$ Phantomspeisung |
-
-### 6.4 ESP32-C3 RISC-V Coprozessor Pinbelegung & Funktions-Mapping
-
-| ESP32-C3 Pin | Netzknoten | Funktion & Peripherie |
-| :--- | :--- | :--- |
-| **GPIO 20 / 21** | `POD3_UART_RX` / `TX` | High-Speed UART-Verbindung zur Zentralbox (460.800 Baud, ROM-SLIP Bootloader) |
-| **GPIO 0 / 1** | `GNSS_RXD` / `TXD` | High-Speed UBX/NMEA Datenverbindung zum u-blox MAX-M10S GNSS-Modul |
-| **GPIO 2** | `GNSS_1PPS` | Hardware-Capture Timer-Eingang für sub-µs Zeitstempel & Actioncam-Synchronisation |
-| **GPIO 3** | `LORA_DIO1` | Semtech SX1262 IRQ (Packet Received / Packet Sent Interrupt) |
-| **GPIO 4** | `LORA_BUSY` | SX1262 State-Flag (Hardware-Wartebedingung für SPI-Befehle) |
-| **GPIO 6** | `LORA_NRST` | SX1262 Hardware-Reset Leitung |
-| **GPIO 7** | `LORA_NSS` | SPI Chip Select (Active-Low) zum SX1262 LoRa-Transceiver |
-| **GPIO 8** | `LORA_SCK` | SPI Serial Clock zum SX1262 |
-| **GPIO 9** | `LORA_MISO` | SPI Master-In Slave-Out vom SX1262 |
-| **GPIO 10** | `LORA_MOSI` | SPI Master-Out Slave-In zum SX1262 |
-| **U.FL Port** | `ESP_RF_ANT` | 2.4 GHz RF-Port für integriertes OMM-Mesh & Wi-Fi Uplink |
-
-### 6.5 Externer Antennenfuß-Sensorport (`J6` / `DS18B20_EXT_TEMP`)
-
-Zur temperaturstabilen Erfassung der Außentemperatur ohne thermische Verfälschung durch Motorstauwärme unter der Heck-Abdeckung ($45\text{–}55\,^\circ\text{C}$) verfügt PCBA 04 über einen 3-Pin JST-SH Micro-Steckverbinder (`J6`, SM03B-SRSS-TB, 1.00 mm Raster, horizontal an der Platinen-Hinterkante montiert). Dessen Leitung wird formschlüssig durch die Kabeldurchführung des OMM-Radomfußes (`04_antenna_bracket_omm.scad`) in den laminaren Fahrtwindkanal der Telemetrieflosse (`cvo_st_telemetry_fin.stl`) geführt.
-
-#### Multi-Drop 1-Wire Busarchitektur
-Da sämtliche 11 GPIOs des ESP32-C3 vollständig durch GNSS-UART/1PPS und LoRa-SPI belegt sind, nutzt `J6` die **1-Wire Multi-Drop-Fähigkeit** des Dallas-Bus:
-* Pin 2 von `J6` liegt direkt parallel zum On-Board 1-Wire ID-ROM `U4` (DS2401) auf dem Netz `POD3_1WIRE_ID` (Pin 6 der Zentralbox-Schnittstelle `J1`).
-* Ein lokaler 4,7 kΩ Pull-Up-Widerstand (`R2`, 0603) auf PCBA 04 sorgt für steile Signalflanken auch bei abgesetzter Leitung.
-* Der Zentralbox-Host (ESP32-S3) liest beide Bauteile über dieselbe Leitung anhand ihres 64-Bit ROM-Family-Codes aus:
-  * **Family-Code `0x01`:** DS2401 Heck-Pod Hardware-Identifikation
-  * **Family-Code `0x28`:** Dallas DS18B20 Digital-Temperatursensor ($\pm 0{,}5\,^\circ\text{C}$ Genauigkeit, $-55\dots +125\,^\circ\text{C}$)
-
-| Pin (J6) | Signal | Pegel | Beschreibung |
-| :---: | :--- | :--- | :--- |
-| **Pin 1** | `VCC_3V3` | $+3{,}3\,\text{V}$ DC geschaltet | Sensor-Stromversorgung (Low-Noise LDO) |
-| **Pin 2** | `POD3_1WIRE_ID` | $3{,}3\,\text{V}$ Open-Drain (4,7 kΩ On-Board Pull-up `R2`) | 1-Wire Datenleitung (Multi-Drop zu DS2401 `U4` und Zentralbox `J1:Pin 6`) |
-| **Pin 3** | `GND` | $0\,\text{V}$ | Signal- und Schirmungsmasse |
-
-* **Thermische Entkopplung:** Der wasserdichte Edelstahl-Tauchfühler ($\varnothing 6 \times 30\,\text{mm}$, IP67) sitzt geschützt vor Spritzwasser direkt im dynamischen Fahrtwindstrom.
-* **Keine Lenkkopf-Kabel:** Die Erfassung am Heck bewahrt die vollständige Funkentkopplung des Frontknotens (ESP-NOW).
+> [!IMPORTANT]
+> **Architektur-Bereinigung v8.0: Entfall von PCBA 04 & Pod 3**  
+> In OpenMotorBridge v8.0 wurde der Heck-Pod 3 und die zugehörige Platine `PCBA 04` **ersatzlos gestrichen**:
+> 1. **Kein 3. Gehäuse am Heck:** Kein Verklemmen von Leitungen unter Sitzbänken, kein Blockieren von Showa-Dämpferbehältern, keine Heckkotflügel-Konsolen.
+> 2. **Neuverteilung der RF-Subsysteme:**
+>    * **LoRa 868 MHz (Semtech SX1262):** Sitzt direkt auf der Zentralbox `PCBA 01` (versorgt über die USV-Batterieschiene für 24/7 Diebstahl-Sentry) mit Taoglas FXP895 Flexantenne im Gehäusedeckel.
+>    * **Multi-GNSS (u-blox SAM-M10Q):** Sitzt mit integrierter $15 \times 15\,\text{mm}$ Patchantenne im Front-Knoten `PCBA 05` im laminaren Fahrtwind-Einlass (Port `J12` Qwiic).
+>    * **Außentemperatur-Sicherheit:** TI TMP117 ($\pm 0{,}1\,^\circ\text{C}$ Laborpräzision nach NIST) sitzt direkt am Front-Knoten `J12` im Fahrtwindkanal – thermisch vollständig entkoppelt von Motor- und Auspuffabwärme.
+> 3. **System-BOM:** Die Gesamtzahl der Platinen im Projekt sinkt von 8 auf **7 PCBAs**. Die Pod-Basisplatine `PCBA 02` wird pro Motorrad nur noch 2-mal (für Pod 1 und Pod 2) benötigt.
 
 ---
 
@@ -345,7 +285,7 @@ Da sämtliche 11 GPIOs des ESP32-C3 vollständig durch GNSS-UART/1PPS und LoRa-S
 
 ![PCBA 05 Universal Front-Knoten](../images/pcba/pcba05_front_node_3d.png)
 
-*Abbildung 7.5: KiCad 3D-Render des Universal Front-Knotens (PCBA 05, 82 x 50 mm, 4 Lagen) mit ESP32-S3-WROOM-1U (U.FL), Microchip USB2514B 4-Port Hub, Southchip SC8102 USB-PD 20W Fast-Charge, TI TPS2051B Power-Gate, Knowles I2S MEMS Mikrofon, CPC1017N CAN Auto-Sensing Relais, Dual-MOSFET Spiegel-BSD Treibern und WS2812B RGB-Status-LED.*
+*Abbildung 7.5: KiCad 3D-Render des Universal Front-Knotens (PCBA 05, 82 x 50 mm, 4 Lagen) mit ESP32-S3-WROOM-1U (U.FL), Qorvo DW3110 UWB Transceiver (Unterseite), u-blox SAM-M10Q GNSS, Microchip USB2514B 4-Port Hub, Southchip SC8102 USB-PD 20W Fast-Charge, TI TPS2051B Power-Gate, Knowles I2S MEMS Mikrofon, CPC1017N CAN Auto-Sensing Relais, Dual-MOSFET Spiegel-BSD Treibern und WS2812B RGB-Status-LED.*
 
 ### 7.1 Technische Platinen-Kenndaten
 * **Abmessungen:** $82{,}0 \times 50{,}0\,\text{mm}$ (Gehäuseinnenmaß $86 \times 56 \times 24\,\text{mm}$, Gehäuseaußenmaß $98 \times 68 \times 25\,\text{mm}$ mit 4-in-1 Befestigung).
@@ -353,9 +293,9 @@ Da sämtliche 11 GPIOs des ESP32-C3 vollständig durch GNSS-UART/1PPS und LoRa-S
   * Layer 1 (Top): ESP32-S3 Controller, USB2514B Hub, Knowles MEMS, WS2812B RGB, $90\,\Omega$ USB-Differenzpaare.
   * Layer 2 (Inner 1): Durchgehende, niederohmige GND-Masseebene.
   * Layer 3 (Inner 2): Split Power ($+5{,}0\,\text{V}_{\text{MAIN}}$, $+5{,}0\,\text{V}_{\text{DONGLE}}$, $+5{,}0\,\text{V}_{\text{CAM}}$, $+9\dots 12\,\text{V}_{\text{PD}}$, $+12\,\text{V}_{\text{SW}}$, $+3{,}3\,\text{V}$).
-  * Layer 4 (Bottom): LMR36015 / TPS54302 Buck, SC8102 USB-PD Controller, TPS2051B Lastschalter, CPC1017N Relais, DMN63D8 Dual-MOSFET, TVS-Dioden und Filter.
+  * Layer 4 (Bottom): Qorvo DW3110 UWB Transceiver (6.489 GHz Ch. 5) mit U.FL-Abgang in Gehäuseboden-Tasche (Taoglas FXUWB10), LMR36015 Buck, SC8102 USB-PD Controller, TPS2051B Lastschalter, CPC1017N Relais, DMN63D8 Dual-MOSFET, TVS-Dioden und Filter.
 * **KL15-Pufferkondensator (`C_BUF`):** $470\dots 1000\,\mu\text{F}$ 10V Low-ESR Polymer-SMD (Bauform 7343 / D-Case) puffert den ESP32-S3 bei Zündungsaus für $1\dots 2\,\text{s}$ zum sauberen Senden des BLE-Shutter-Stop-Befehls an Action-Cams.
-* **HF-Antennen-Konzept:** ESP32-S3-WROOM-1U mit U.FL-Kabelanschluss; die 2.4 GHz FPC-Dipolantenne wird an der hinteren Gehäuseflanke montiert – gerichtet entlang des Rahmentunnels zur Zentralbox unter der Sitzbank für maximale Reichweite und perfekte Entkopplung von Verkleidungselektronik.
+* **HF-Backbone-Konzept (UWB statt 2.4 GHz):** Qorvo DW3110 UWB Transceiver auf der Platinenunterseite; ultrakurzes 20 mm U.FL-Mikrokoaxkabel führt direkt in die $11 \times 11 \times 0{,}6\,\text{mm}$ Antennentasche im Gehäuseboden mit Taoglas FXUWB10 Flexantenne. Deterministische Latenz $< 0{,}4\,\text{ms}$ zur Zentralbox, 100 % kontinuierlich zulässig nach ETSI EN 302 065-3, null 2.4 GHz Interferenz im Cockpit.
 
 ### 7.2 Fahrzeug- & Peripherie-Schnittstellen (JST-PH Header)
 
@@ -363,11 +303,11 @@ Da sämtliche 11 GPIOs des ESP32-C3 vollständig durch GNSS-UART/1PPS und LoRa-S
 | :--- | :--- | :---: | :--- |
 | **`J1`** | JST-PH / 2-Pin Schraubklemme | 2-Pin | **12V Bordnetz-Eingang:** Pin 1: `KL15_12V_SW` ($+9\dots 36\,\text{V}$ DC Zündungsplus), Pin 2: `GND` (Fahrzeugmasse). Gespeist über LMR36015 Buck-Regler. |
 | **`J2`** | JST-PH ($2{,}00\,\text{mm}$) | 3-Pin | **Cockpit CAN-Bus:** Pin 1: `CAN_H`, Pin 2: `CAN_L`, Pin 3: `GND`. Ausgestattet mit **elektronischem Auto-Sensing $120\,\Omega$ Relais (`CPC1017N`)** (misst beim Booten Bus-Impedanz; schaltet nur zu, wenn $R_{\text{Bus}} > 100\,\Omega$) sowie hardwaremäßigem Listen-Only Mode Pin (`S`). |
-| **`J3`** | JST-PH ($2{,}00\,\text{mm}$) | 4-Pin | **Lenker Multi-Button Schnittstelle:** Pin 1: `GND`, Pin 2: `PTT_INTERCOM` (Sprechfunk-Taste), Pin 3: `CAM_ACTION` (Action-Cam Bookmark/Highlight), Pin 4: `MEDIA_VOICE` (Titel weiter / Siri / Google Assistant). Alle Pins mit Schmitt-Trigger, Pull-Up und 3.3V Zener-/TVS-Überspannungsschutz gegen 12V-Kurzschluss. (Ein Standard 2-Pin Taster passt direkt auf Pin 1+2). |
+| **`J3`** | JST-PH ($2{,}00\,\text{mm}$) | 4-Pin | **Lenker Multi-Button Schnittstelle:** Pin 1: `GND`, Pin 2: `PTT_INTERCOM` (Sprechfunk-Taste, $< 1{,}8\,\text{ms}$), Pin 3: `CAM_ACTION` (Action-Cam Bookmark/Highlight), Pin 4: `MEDIA_VOICE` (Titel weiter / Siri / Google Assistant). Alle Pins mit Schmitt-Trigger, Pull-Up und 3.3V Zener-/TVS-Überspannungsschutz gegen 12V-Kurzschluss. |
 | **`J9`** | JST-PH ($2{,}00\,\text{mm}$) | 3-Pin | **Totwinkel-Spiegel-LEDs (Radar BSD):** Pin 1: `+12V_PROT`, Pin 2: `BSD_LEFT_N` (geschaltet über N-MOSFET Ch A), Pin 3: `BSD_RIGHT_N` (geschaltet über N-MOSFET Ch B). Steuert unauffällige Bernstein/Rot-LEDs an den Spiegelarmen an (links/rechts unabhängig; Dauerlicht bei Fahrzeug im toten Winkel, 8 Hz Warnblitz bei Kollisionsgefahr). |
 | **`J10`** | JST-PH ($2{,}00\,\text{mm}$) | 2-Pin | **12V Qi-Smartphone-Power:** Pin 1: `+12V_SW` (dauerhaft geschaltet über Zündungs-Gate, bis $2{,}0\,\text{A}$ / $24\,\text{W}$ Dauerlast), Pin 2: `GND`. Versorgt SP Connect / QuadLock Qi-Ladeköpfe am Lenker ohne Ruhestromverlust bei Zündung-Aus. |
 | **`J11`** | JST-PH ($2{,}00\,\text{mm}$) | 2-Pin | **Zusatzscheinwerfer / Aux-Light (Adventure):** Pin 1: `+12V_AUX` (geschaltet über Smart High-Side Switch `TPS1H100`, bis $3{,}5\,\text{A}$ / $40\,\text{W}$), Pin 2: `GND`. Für Nebelscheinwerfer oder automatischen 4–5 Hz Stroboskop-Warnblitz bei Notbremsung. Bei Tourern/Cruisern unbestückt/ungenutzt. |
-| **`J12`** | JST-SH ($1{,}00\,\text{mm}$) | 4-Pin | **I2C Sensor-Erweiterungsport (Qwiic / STEMMA QT):** Pin 1: `GND`, Pin 2: `+3V3`, Pin 3: `I2C_SDA`, Pin 4: `I2C_SCL` mit $4{,}7\,\text{k}\Omega$ Pull-ups. Ermöglicht den werkzeuglosen Anschluss von Umgebungslichtsensoren (`OPT3001` für automatische Tag/Nacht-Umschaltung des Displays im Tunnel) oder Höhensensoren. |
+| **`J12`** | SparkFun Qwiic (JST-SH 4P) | 4-Pin | **Cockpit Sensor-Hub & GNSS-Port:** Pin 1: `GND`, Pin 2: `+3V3`, Pin 3: `I2C_SDA`, Pin 4: `I2C_SCL`. Bindet werkzeuglos das **u-blox SAM-M10Q Multi-GNSS Patch-Modul**, den **TI TMP117** NIST-Präzisionstemperatursensor ($\pm 0{,}1\,^\circ\text{C}$ Glatteis-Wächter) und den **TI OPT3001** Umgebungslichtsensor im laminaren Fahrtwind-Einlass an. |
 
 ### 7.3 Automotive USB 2.0 Subsystem & Hub-Architektur (`Microchip USB2514B`)
 
@@ -413,7 +353,7 @@ Der Front-Node nutzt einen Automotive-zertifizierten 4-Port High-Speed Hub (`USB
 ### 7.5 Status- & Diagnose-LED (WS2812B mit Lichtleiter)
 
 Über eine bündig in den Gehäusedeckel eingelassene Polycarbonat-Lichtleiter-Linse zeigt die WS2812B RGB-LED den Betriebszustand direkt am Motorrad an:
-* **Grün pulsierend (1 Hz):** Normalbetrieb, 12V stabil, CAN-Bus aktiv, ESP-NOW synchron zur Zentralbox.
+* **Grün pulsierend (1 Hz):** Normalbetrieb, 12V stabil, CAN-Bus aktiv, UWB synchron zur Zentralbox.
 * **Blau blinkend:** Bluetooth LE Kopplung aktiv (Action-Cam Suche oder PWA-Verbindung).
 * **Gelb leuchtend:** CP2AA CarPlay/Android Auto Dongle bootet gerade an Port 2.
 * **Rot blinkend (4 Hz):** USB-Überstrom oder Kaltstart-Reset (Hard-Reboot des Dongles läuft).
@@ -646,7 +586,7 @@ Gemäß Vorgabe zur Vermeidung von Vibrationsschäden ist die Binder M5 707 Buch
 ### 10.3 Binder Serie 707 M5 Pin-Mapping (Gehäuse-Boden auf X=0)
 | Binder M5 Pin | Drahtfarbe (PUR) | Signalname | Beschreibung |
 | :---: | :--- | :--- | :--- |
-| **1** | Rot (`RD`) | `+5V_DC` | $+5{,}0\,\text{V}$ Versorgung von Zentralbox (`POD3_VCC` / Hilfs-DCDC) |
+| **1** | Rot (`RD`) | `+5V_DC` | $+5{,}0\,\text{V}$ Versorgung von Zentralbox (Peitsche 5 / DCDC) |
 | **2** | Weiß (`WH`) | `UART_TX_MACRO` | Sub-MCU sendet Target-Liste an Zentralbox (115.200 Baud) |
 | **3** | Gelb (`YE`) | `UART_RX_MACRO` | Zentralbox sendet Makrobefehle & Helligkeit an Sub-MCU |
 | **4** | Schwarz (`BK`) | `GND` | Gemeinsame Systemmasse |
@@ -690,7 +630,7 @@ Beim Einschalten der Zündung (KL15) schaltet das System für **2,5 Sekunden** i
    D1 .. D12 (12 LEDs = 6 Paare)                                             D19 .. D30 (12 LEDs = 6 Paare)
  ┌───────────────────────────┐   ┌─────────────────────────────────────┐   ┌───────────────────────────┐
  │ D1/D2:   Front-Node       │   │                                     │   │ D19/D20: Pod 2 & Funk     │
- │ D3/D4:   CAN-Bus          │   │         WHEELTEC MR20               │   │ D21/D22: Pod 3 Backbone   │
+ │ D3/D4:   CAN-Bus          │   │         WHEELTEC MR20               │   │ D21/D22: UWB Backbone     │
  │ D5/D6:   Pod 1 Intercom   │   │       77-GHz mmWave Radar           │   │ D23/D24: BSD Spiegel R    │
  │ D7/D8:   BSD Spiegel L    │   │                                     │   │ D25/D26: TPMS Hinterrad   │
  │ D9/D10:  TPMS Vorderrad   │   │                                     │   │ D27/D28: Dallas DS18B20   │
@@ -704,7 +644,7 @@ Beim Einschalten der Zündung (KL15) schaltet das System für **2,5 Sekunden** i
 
 #### Das 2-LED-Prinzip pro Funktion:
 * **LED A (Links / Oben): Hardware- & Bus-Präsenz:**
-  - **Grün:** Baugruppe antwortet auf Bus (1-Wire ROM-ID, I2C ACK, UART Ping, ESP-NOW Verbindung OK).
+  - **Grün:** Baugruppe antwortet auf Bus (1-Wire ROM-ID, I2C ACK, UART Ping, UWB/BLE Verbindung OK).
   - **Gelb:** Handshake / Bootloader läuft.
   - **Rot blinkend:** Hardware fehlt / Kurzschluss / Bus-Timeout.
   - **Dunkel:** Komponente im Fahrzeugprofil als „nicht verbaut / optional“ deklariert.
@@ -715,7 +655,7 @@ Beim Einschalten der Zündung (KL15) schaltet das System für **2,5 Sekunden** i
 
 #### Zuordnung der 18 Paare (100 % motorradspezifisch):
 1. **Linker Flügel (Cockpit, Bus & Linke Seite):**
-   * **D1 / D2:** Front-Node (PCBA 05) ESP-NOW Link & Cockpit-Speisung (KL15 / USB-PD).
+   * **D1 / D2:** Front-Node (PCBA 05) UWB Link & Cockpit-Speisung (KL15 / USB-PD).
    * **D3 / D4:** Motorrad-CAN-Bus (HD-LAN / K-CAN) Transceiver & Telemetrie-Stream.
    * **D5 / D6:** Pod 1 (Linker Koffer / Intercom-Bridge) M8-Bus & Kassetten-MCU bereit.
    * **D7 / D8:** BSD Spiegel-Warnanzeige Links (Header `J9`) N-MOSFET & Treiber bereit.
@@ -723,13 +663,13 @@ Beim Einschalten der Zündung (KL15) schaltet das System für **2,5 Sekunden** i
    * **D11 / D12:** Actioncam BLE Shutter Link Kamera verbunden & aufnahmebereit.
 2. **Rechter Flügel (Funk, Heck & Rechte Seite):**
    * **D19 / D20:** Pod 2 (Rechter Koffer / Funk & Aux) M8-Bus & Kassetten-MCU bereit.
-   * **D21 / D22:** Pod 3 (Heck-Backbone) M8-Verbindung & 6-Achsen IMU/Baro aktiv.
+   * **D21 / D22:** UWB Backbone (DW3110) 6.5 GHz Link & Range-Measurement aktiv.
    * **D23 / D24:** BSD Spiegel-Warnanzeige Rechts (Header `J9`) N-MOSFET & Treiber bereit.
    * **D25 / D26:** TPMS Hinterrad (Bluetooth LE Reifendrucksensor) Signal & Solldruck OK.
    * **D27 / D28:** Dallas DS18B20 Fahrbahn-Temperaturfühler (`J6`) 1-Wire antwortet & plausibel.
    * **D29 / D30:** MicroSD-Card & Telemetrie-Blackbox SDIO 4-Bit gemountet & Log schreibbereit.
 3. **Obere Leiste (Navigation, Funk & Mesh):**
-   * **D13 / D14:** u-blox MAX-M10S Multi-GNSS I2C-Kommunikation & 3D-Fix ($\ge 6$ Satelliten).
+   * **D13 / D14:** u-blox SAM-M10Q Multi-GNSS I2C-Kommunikation & 3D-Fix ($\ge 6$ Satelliten).
    * **D15 / D16:** Semtech SX1262 LoRa (OpenMotorMesh 868 MHz) SPI-PLL & Mesh-Beacon.
    * **D17 / D18:** 5.9 GHz ITS-G5 / Wi-Fi 6 (V2X) RF-Block aktiv & PWA-Hotspot online.
 4. **Untere Leiste (Energie & Radarkopf):**

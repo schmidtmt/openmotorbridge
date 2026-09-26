@@ -12,21 +12,22 @@ To balance wide audio bandwidth with long-range offroad resilience, OpenMotorBri
 ┌────────────────────────────────────────────────────────────────────────┐
 │                   HYBRID DUAL-PHY RADIO ARCHITECTURE                   │
 ├───────────────────────────────────┬────────────────────────────────────┤
-│ LAYER 1: 2.4 GHz HiFi Audio Mesh  │ LAYER 2: 868 MHz Sub-GHz LoRa Mesh │
+│ LAYER 1: 2.4 GHz Proximity Mesh   │ LAYER 2: 868 MHz LoRa Backbone     │
 ├───────────────────────────────────┼────────────────────────────────────┤
-│ • Frequency: 2.402 - 2.480 GHz    │ • Frequency: 868.1 - 869.5 MHz     │
-│ • Modulation: DSSS / GFSK 2 Mbps  │ • Modulation: LoRa CSS (BW 125/250)│
-│ • Codec: Opus 24k HD Full-Duplex  │ • Codec: Codec2 1200 bps PTT Voice │
-│ • Range: Up to 1.2 km line-of-sight│ • Range: Up to 4.0 km non-LOS / Pass│
-│ • Latency: < 15 ms (convoy-wide)  │ • Function: GPS Radar & Emergency  │
+│ • Frequency: 2.402 - 2.480 GHz    │ • Frequency: 868.0 - 868.6 MHz     │
+│ • Full-Duplex Intercom & OMM Sled │ • Modulation: LoRa CSS (BW 125/250)│
+│ • Codec: Opus 24k / Intercom Mesh │ • Codec: Codec2 1200 bps PTT Voice │
+│ • Range: Up to 1.2 km line-of-sight│ • Range: Up to 15.0 km non-LOS/Pass│
+│ • Dedicated Pod 1 & 2 RF Flanks   │ • Tactical 25-Byte GPS Radar Ping  │
 └───────────────────────────────────┴────────────────────────────────────┘
 ```
 
-### 1.1 RF Antenna Architecture & Coaxial Bypass (Murata MM8030 RF Switch Sockets)
-Rear Pod 3 unifies all three RF subsystems (2.4 GHz OMM Mesh, 868 MHz LoRa, Multi-GNSS) with a hybrid-optimized antenna path:
-* **2.4 GHz OMM Mesh (Default External):** To maximize line-of-sight propagation without shadowing from rider or luggage, the 2.4 GHz transceiver path is standardly routed via internal U.FL cabling to an external IP67 SMA bulkhead jack on the pod housing (for +3 to +5 dBi omnidirectional antennas).
-* **Multi-GNSS & 868 MHz LoRa (Default Internal):** Encased within the dielectric radome are a high-sensitivity $25 \times 25\,\text{mm}$ ceramic patch (u-blox MAX-M10S Multi-GNSS) and an 868 MHz helical/chip antenna.
-* **Coaxial Switch Bypass (Murata MM8030-2610):** For extreme mounting locations (e.g., deep between aluminum panniers or below metal racks), PCBA 04 integrates mechanical RF switch jacks. Inserting a Murata MM126036 switch probe pigtail automatically disconnects the internal radiator with $< 0.15\,\text{dB}$ insertion loss and $> 25\,\text{dB}$ isolation, switching over to an optional external SMA bulkhead jack.
+### 1.1 Universal, Clean RF & Spectrum Architecture
+The system cleanly separates all frequency bands to completely prevent receiver desensitization (De-Sensing):
+* **6.489 GHz (UWB Channel 5):** Vehicle backbone link between Front Node (PCBA 05) and Central Box (PCBA 01) via Qorvo DW3110 ($< 0.4\,\text{ms}$ latency, zero duty-cycle restriction under ETSI EN 302 065-3). Taoglas FXUWB10 flex antennas mounted in dedicated floor pockets ($11 \times 11 \times 0.6\,\text{mm}$) ensure uninterrupted PCB ground planes and tether-free lid opening.
+* **868 MHz LoRa (Central Box PCBA 01):** Integrated directly on the Central Box mainboard and powered by the UPS battery rail for 24/7 theft sentry and emergency group-split fallback. Uses an internal Taoglas FXP895 flex antenna in the enclosure lid.
+* **Multi-GNSS & Cockpit Sensors (Front Node PCBA 05):** u-blox SAM-M10Q (with integrated $15 \times 15\,\text{mm}$ patch antenna), TI TMP117 ($\pm 0.1^\circ\text{C}$ precision temp), and TI OPT3001 ambient light sensor mounted in the cold air scoop via Qwiic port `J12`.
+* **2.4 GHz:** Exclusively reserved for helmet audio links (Pod 1 Sena SPIDER X Slim, Pod 2 Cardo Packtalk Edge) and smartphone BLE. OMM 2.4 GHz operates as an optional swap cartridge in Pod 1 or Pod 2 (never co-located in the same enclosure with Sena/Cardo).
 
 ---
 
@@ -203,35 +204,35 @@ struct __attribute__((packed)) OmmEmergencyAlert_t {
 
 ---
 
-## 5. Rear Pod 3 Transceiver Architecture & UART Protocol
+## 5. Universal Group-Split LoRa Fallback Engine & OMM 2.4 GHz Swap Cartridge
 
-Rear Pod 3 (`PCBA 04`) operates as the central RF gateway and positioning node, powered by an **ESP32-C3** 32-bit RISC-V coprocessor (ESP32-C3-WROOM-02U):
-* **GNSS & Telemetry (`rear_nmea_task`):** Parses UBX/NMEA binary streams from the u-blox MAX-M10S Multi-GNSS at 10 Hz and handles external I2C environmental sensing (SHT40 / TMP117 on J6).
-* **RF & LoRa Engine (`rear_lora_task`):** Controls the native 2.4 GHz OpenMotorMesh / ESP-NOW radio and Semtech SX1262 LoRa transceiver over high-speed SPI (@ 16 MHz), handling CSMA/CA channel access and packet buffering.
+OpenMotorBridge solves the critical problem of convoy separations during alpine rides through an autonomous, multi-tier fallback engine:
 
-### 5.1 Protocol Specification (Rear Pod $\leftrightarrow$ Central Box)
-Communication over the 460,800 Baud physical UART uses framed binary packets with CRC16-CCITT integrity checks:
+### 5.1 Automatic Tiered Failover (Group-Split Rescue Engine)
+1. **Heartbeat Link Supervision:**
+   * The Central Box continuously monitors the connection health of the active intercom mesh (Pod 1 Sena, Pod 2 Cardo, or OMM).
+   * If the RF link to any group member drops for **$> 5.0\,\text{s}$** (e.g. falling behind a mountain pass ridge or engine breakdown), OMB instantly executes Tier 1:
+2. **Tier 1 – Tactical 25-Byte GPS Compact Ping (LoRa 868 MHz):**
+   * Transmits a highly compressed emergency telemetry packet with 25 bytes payload (airtime only **$\approx 15\,\text{ms}$**, 100% compliant with ETSI 1% duty-cycle caps).
+   * Contents: Node ID, precision GNSS coordinates (SAM-M10Q), speed, heading, battery status, and vehicle stop flag.
+3. **Tier 2 – Acoustic Text-to-Speech (TTS) In-Helmet Announcement:**
+   * The Central Box of the remaining convoy members synthesizes a clear voice alert directly into the headsets of the road captain and group:
+     > *„🚨 Alert: Lukas 1.4 km behind, vehicle stopped.“*
+   * Zero-Distraction: The lead rider does not need to pull over or divert attention to an LCD screen.
+4. **Tier 3 – Tactical PTT Voice Burst via Codec2 (1200 bps):**
+   * If the separated rider requires immediate assistance, pressing the handlebar PTT keys a voice burst:
+   * OpenMotorBridge compresses a **3-second voice message** using the ultra-low-bitrate **Codec2 (1200 bps)** speech codec into just **450 bytes**.
+   * Transmission over LoRa 868 MHz takes only **$\approx 120\,\text{ms}$ airtime** — legally compliant, highly resilient, penetrating $1\dots 15\,\text{km}$ through mountainous terrain.
 
-```
-┌──────┬──────┬──────┬──────┬─────────────────┬──────┬──────┐
-│ SYNC │ TYPE │ LEN  │ SEQ  │ PAYLOAD (0..n)  │ CRC16-CCITT  │
-│ 0xAA │ 0x55 │ 1 B  │ 1 B  │ Variable        │ 2 Bytes      │
-└──────┴──────┴──────┴──────┴─────────────────┴──────┴──────┘
-```
+### 5.2 OMM 2.4 GHz as an Optional Swap Cartridge (Pod 1 / Pod 2)
+* For pure OpenMotorMesh group rides or support vehicle convoys (Mode B), riders can insert the **OMM 2.4 GHz Cartridge** (PCBA 03 variant with ESP32-C3 / CH32V003 ID `0x03`) into Pod 1 or Pod 2.
+* Power and audio are supplied through the symmetric PCBA 02 base board. It is never co-located with Sena or Cardo in the same pod.
 
-#### Message Types:
-* **`0x01` - GNSS PVT Telemetry (10 Hz):** Pre-packed binary vector containing latitude, longitude, altitude, speed, heading, PDOP, and satellite lock status.
-* **`0x02` - OMM 2.4 GHz Primary Audio Frame:** Opus 24k/12k frame from proximity mesh.
-* **`0x03` - OMM 868 MHz LoRa Fallback Frame:** Codec2 voice frame or radar telemetry from long-range link.
-* **`0x04` - OMM Tx Request (Dual-PHY):** Transmit request from Central Box to 2.4 GHz mesh or SX1262 LoRa PA.
-* **`0x05` - DLE Status & Link Quality:** Reports SNR, RSSI, active PHY mode, and node capability score.
-* **`0xFE` - Firmware Update Bootloader Command:** The Central Box triggers the ESP32-C3 hardware ROM bootloader via dedicated GPIO reset/boot lines using the SLIP protocol (`omm_flasher.cpp`) for zero-touch in-system flashing.
-
-### 5.2 Architectural Decision: Why Decentralized LoRa Mesh over Cellular (LTE-M / Cloud)?
+### 5.3 Architectural Decision: Why Decentralized LoRa Mesh over Cellular (LTE-M / Cloud)?
 
 Conventional telematics systems rely on cellular modems (LTE-M / NB-IoT) connected to centralized cloud backends. For motorcycle group touring, this paradigm was intentionally rejected:
 
-| Criterion | Centralized Cloud Architecture (LTE-M / NB-IoT) | OpenMotorBridge Decentralized (2.4 GHz Mesh + 868 MHz LoRa) |
+| Criterion | Centralized Cloud Architecture (LTE-M / NB-IoT) | OpenMotorBridge Decentralized (UWB + 868 MHz LoRa) |
 | :--- | :--- | :--- |
 | **Mountain Pass Coverage** | **Frequently 0%** (Dead zones across Alpine passes, gorges, remote trails) | **100% Autonomous** (Direct vehicle-to-vehicle peer-to-peer radio) |
 | **Recurring Cost** | Monthly SIM subscriptions, cloud server fees | **Permanently $0 / 0 €** (License-free ISM band, zero operating expenses) |
@@ -239,16 +240,14 @@ Conventional telematics systems rely on cellular modems (LTE-M / NB-IoT) connect
 | **Emergency Alert Latency** | 400–1500 ms (round-trip through cellular base stations & broker) | **< 35 ms** (Instant direct RF broadcast to nearby transceivers) |
 | **Long-Term Viability** | Bricked if startup server shuts down or API changes | **Indefinite Lifespan** (100% open-source local embedded firmware) |
 
-*(Note: A theoretical cellular expansion study for fleet tracking is preserved in the developer backlog `.context/IDEAS_BACKLOG.md`).*
-
 ---
 
 ## 6. Automotive Dead Reckoning (ADR) & Sensor Fusion
 
-The GNSS subsystem in Rear Pod 3 (**u-blox NEO-M9N / MAX-M10S**) is coupled to the 6-axis IMU (**Bosch BMI270**) and motorcycle wheel speed sensors via a **15-State Error-State Kalman Filter (ES-EKF)**:
+The GNSS subsystem in the Front Node (**u-blox SAM-M10Q** on `J12` in the cold air scoop) is coupled to the 6-axis IMU (**Bosch BMI270**) and motorcycle wheel speed sensors via a **15-State Error-State Kalman Filter (ES-EKF)**:
 
 ```
-[ u-blox GNSS Module (M10S 10 Hz) ] ──(UART 460.8k)──┐
+[ u-blox SAM-M10Q GNSS (10 Hz) ] ──(I2C / UWB)──────┐
 [ CAN-Bus Wheel Speed / Velocity ] ───(10-20 Hz)─────┼─► [ 15-State Extended Kalman Filter ] ──► [ MicroSD: tour.gpx ]
 [ Bosch BMI270 Gyro / Accel (I2C) ] ──(50-100 Hz)────┘        (Dead Reckoning Engine)            (With Lean Angle & G-Force)
 ```

@@ -15,10 +15,10 @@ Dieses Dokument spezifiziert das Telemetrie- und Speicher-Subsystem der OpenMoto
 
 ## 2. Sensor-Fusion & Automotive Dead Reckoning (ADR Engine)
 
-Das Telemetrie-Subsystem führt Daten des Multi-GNSS-Empfängers (**u-blox MAX-M10S** im Heck-Pod 3), der 6-Achsen-IMU (**Bosch BMI270**) und optionaler Raddrehzahlen (über fahrzeugseitigen CAN-Bus oder ABS-Sensorpulse) in einem **15-State Error-State Extended Kalman Filter (ES-EKF)** zusammen:
+Das Telemetrie-Subsystem führt Daten des Multi-GNSS-Empfängers (**u-blox SAM-M10Q** mit integrierter $15 \times 15\,\text{mm}$ Patch-Antenne am Front-Knoten via `J12` Qwiic), der 6-Achsen-IMU (**Bosch BMI270**) auf der Zentralbox und optionaler Raddrehzahlen (über fahrzeugseitigen CAN-Bus oder ABS-Sensorpulse) in einem **15-State Error-State Extended Kalman Filter (ES-EKF)** zusammen:
 
 ```
-[ u-blox Multi-GNSS (M10S 10 Hz) ] ──(UART 460.8k)──┐
+[ u-blox SAM-M10Q GNSS (10 Hz) ] ──(I2C 400k / UWB)──┐
 [ CAN-Bus Raddrehzahl / Speed ] ────(10-20 Hz)───────┼─► [ 15-State Extended Kalman Filter ] ──► [ MicroSD: tour.gpx ]
 [ Bosch BMI270 Gyro / Accel (I2C) ] ─(50-100 Hz)─────┘        (Dead Reckoning Engine)            (Mit Schräglage & G-Force)
 ```
@@ -80,19 +80,17 @@ Um Leitungen durch den Lenkkopf zum kabellosen Frontnode strikt zu vermeiden und
 │ • Nutzt OEM-Ansaugluft-/Außentemperatursensor des Motorrads (CAN-ID 0x2D0)   │
 │ • 0 zusätzliche Kabel, 0 Bauteilekosten, 100 % werkskalibriert               │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ STUFE 2: Heck-Pod 3 Antennenfuß-Sensorik (Universal / CVO ST / Non-CAN)     │
-│ • Sensorik (DS18B20 1-Wire oder TI TMP117 / SHT40 I2C an J6) an PCBA 04 (ESP32-C3) │
-│ • Montage: Im Antennensockel / Fahrtwindkanal der Telemetrieflosse           │
-│   (cvo_st_telemetry_fin.stl) direkt an der externen 2.4 GHz Antenne          │
-│ • Thermische Entkopplung: Verhindert Fehlmessungen durch Motorstauwärme      │
-│   unter der Solositz-Hutze (45–55 °C)                                        │
-│ • Kabelfrei am Lenkkopf: Das 100 % kabellose Frontnode-Prinzip bleibt gewahrt│
+│ STUFE 2: Front-Node Kaltluft-Sensorik (Universal / CVO ST / Non-CAN)        │
+│ • Präzisionssensorik (TI TMP117 ±0.1°C & OPT3001 Lichtsensor an J12 Qwiic)  │
+│ • Montage: Im Fahrtwind-Kaltluftkanal der Verkleidung / Cockpitmaske         │
+│ • Thermische Entkopplung: 100 % frei von Zylinder-, Kühler- & Motorabwärme   │
+│ • Kabelfrei über den Lenkkopf: Telemetrie-Streaming über UWB (< 0.4 ms)      │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ### 3.2 Barometrische Höhenkalibrierung (Kalman-Fusion)
 
-Neben GNSS-Höhenmessungen erfasst der Bosch BMP390 / BMP581 Luftdrucksensor am Heck-Pod barometrische Höhendifferenzen auf $\pm 10\,\text{cm}$ genau. Ein kontinuierlicher Abgleich im 15-State Extended Kalman Filter gegen die u-blox MAX-M10S 3D-Fix-Koordinaten bei stabiler Fahrt kalibriert den QNH-Referenzdruck vollautomatisch – ganz ohne manuelle Höhen-Nullung durch den Fahrer.
+Neben GNSS-Höhenmessungen erfasst der Bosch BMP390 / BMP581 Luftdrucksensor auf der Zentralbox (PCBA 01) barometrische Höhendifferenzen auf $\pm 10\,\text{cm}$ genau. Ein kontinuierlicher Abgleich im 15-State Extended Kalman Filter gegen die u-blox SAM-M10Q 3D-Fix-Koordinaten bei stabiler Fahrt kalibriert den QNH-Referenzdruck vollautomatisch – ganz ohne manuelle Höhen-Nullung durch den Fahrer.
 
 ### 3.3 Schaltvorgang-Zähler (Shift Counter) & Funk-QoS-Tracking
 
@@ -131,10 +129,10 @@ In der WebApp PWA ermöglicht der Tour Inspector über drei Pills (`[ 🏍️ Sp
 
 ### 3.5 GPS-Koexistenz & HF-Entstörung bei LoRa-Sendeimpulsen (+22 dBm)
 
-Bei +22 dBm (160 mW) LoRa-Sendeleistung auf 868 MHz besteht theoretisch das Risiko einer Übersteuerung (De-Sensing) des hochempfindlichen GNSS-Eingangsverstärkers (LNA des u-blox MAX-M10S bei 1575,42 MHz). OpenMotorBridge verhindert Störungen durch ein 3-fach Schutzkonzept:
-1. **SAW-Bandpass-Vorfilter:** Ein steilflankiger Oberflächenwellen-Filter (SAW) vor dem LNA dämpft 868 MHz um $> 55\,\text{dB}$.
-2. **Geometrische Antennen-Isolation:** Die LoRa-Antenne sitzt im Heck-Pod vertikal polarisiert und orthogonal versetzt zur horizontalen GNSS-Keramik-Patchantenne in der CVO-ST-Finne.
-3. **Inertiale EKF-Stützung:** Bei kurzzeitigen HF-Bursts überbrückt das 15-State Kalman-Filter eventuelle SNR-Dips nahtlos über die IMU-Koppelnavigation.
+Bei +22 dBm (160 mW) LoRa-Sendeleistung auf 868 MHz besteht bei unbedachter Antennenplatzierung das Risiko einer Übersteuerung (De-Sensing) hochempfindlicher GNSS-Eingangsverstärker (1575,42 MHz). OpenMotorBridge löst dies durch eine kompromisslose HF-Architektur:
+1. **Räumliche Maximal-Trennung ($> 1{,}2\,\text{m}$ Distanz):** Der Semtech SX1262 LoRa-Transceiver sitzt auf der Zentralbox (PCBA 01) unter der Sitzbank (mit Taoglas FXP895 Antenne in der Deckeltasche), während der SAM-M10Q GNSS-Empfänger ganz vorne in der Cockpitverkleidung arbeitet. Der Freiraumverlust zwischen beiden Funkstellen beträgt $> 45\,\text{dB}$.
+2. **Integrierte Bandpassfilterung:** Das SAM-M10Q Modul besitzt ein integriertes SAW-Vorfilter vor dem internen rauscharmen Verstärker (LNA) mit $> 50\,\text{dB}$ Dämpfung im 868-MHz-Band.
+3. **Inertiale EKF-Stützung:** Bei transienten LoRa-Sende-Bursts überbrückt das 15-State Kalman-Filter eventuelle kurzzeitige SNR-Einbrüche nahtlos über die IMU-Koppelnavigation (Dead Reckoning).
 
 ---
 

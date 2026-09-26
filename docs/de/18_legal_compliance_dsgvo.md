@@ -20,6 +20,7 @@ Um sicherzustellen, dass Weiterentwicklungen (z. B. herstellerspezifische CAN- u
 OpenMotorBridge nutzt ausschließlich standardisierte, weltweit lizenzfreie Frequenzbänder:
 
 * **2,4-GHz-ISM-Band:** Maximal 100 mW EIRP (20 dBm) in der EU (ETSI EN 300 328) bzw. 1000 mW in den USA (FCC Part 15). Das Band ist weltweit harmonisiert und unterliegt bei Einsatz von FHSS/DSSS/LBT **keinem Duty-Cycle-Limit** (erlaubt kontinuierliches Full-Duplex-Audio).
+* **6.0–8.5 GHz Ultra-Wideband (UWB IEEE 802.15.4z / Qorvo DW3110):** Geregelt durch ETSI EN 302 065-1, EN 302 065-3, ECC Decision (06)04 und **EU-Beschluss 2019/785**. Bei einer spektralen Leistungsdichte von maximal **$-41{,}3\,\text{dBm/MHz}$ EIRP** im Frequenzbereich 6.240–6.739 GHz (Kanal 5 @ 6.489 GHz) ist der kontinuierliche Sendebetrieb **ohne Duty-Cycle-Beschränkung** in Fahrzeugen vollständig legal.
 * **868-MHz-SRD-Band (Sub-GHz LoRa):** Geregelt durch ETSI EN 300 220. Aufgrund der gesetzlichen Duty-Cycle-Limits (0,1 % bis 10 %) in Europa ist dieses Band für kontinuierliches Audio-Dauerstreaming ungeeignet (1 % = max. 36 s Sendezeit pro Stunde; 10 % High-Power = max. 360 s Sendezeit pro Stunde). Es wird in OMB gezielt für GPS-Gruppenradar und kurze Push-to-Talk (PTT) Sprachpakete mit Codec2 (1200 bps) genutzt.
 * **446 MHz (PMR446 - Optionale Kassetten):** Maximal 500 mW ERP mit 12,5-kHz-Kanalraster im Halbduplex-Simplex-Betrieb unter Beachtung fester Antennenvorgaben.
 
@@ -27,7 +28,7 @@ OpenMotorBridge nutzt ausschließlich standardisierte, weltweit lizenzfreie Freq
 
 ## 3. Kfz-Typgenehmigung, CE-Konformität & E-Markierung (ECE R10 Rev. 6)
 
-* **CE- & RED-Konformität:** Die Nutzung von vorkonfektionierten, zertifizierten Originalmodulen (z. B. Sena MeshPort Blue, Cardo Packtalk Kassetten) belässt die primäre Funkzulassung beim Originalhersteller.
+* **CE- & RED-Konformität:** Die Nutzung von vorkonfektionierten, zertifizierten Originalmodulen (z. B. Sena SPIDER X Slim, Cardo Packtalk Edge Kassetten) belässt die primäre Funkzulassung beim Originalhersteller.
 * **Eigenbauten & Bausätze:** Der Nachbau und Betrieb von unzertifizierten Sender-Hardwareerweiterungen über den Expansion Port erfolgt auf eigene Verantwortung im Rahmen der jeweiligen nationalen Amateurfunk- bzw. ISM-Bestimmungen.
 * **Kfz-Typgenehmigung & E-Markierung (ECE R10 Rev. 6):** Die Zentralbox und der Front-Knoten greifen über galvanische Trennglieder (Bourns 1500 V RMS Übertrager, Toshiba PhotoMOS-Relais, opto-isolierte PTT) und den CAN-Bus im Listen-Only-Modus vollkommen rückwirkungsfrei auf das Bordnetz zu. Es werden **keine Eingriffe in sicherheitsrelevante Steuergeräte (ECU, ABS, Traktionskontrolle)** vorgenommen.
 

@@ -23,8 +23,8 @@ To support every intercom and radio standard on the market without proprietary l
 │ **C** │ **Midland BTR1 / XT Series**  │ Dovetail Slide / Bare-Board   │ Galvanic Audio,│
 │       │ (Wave Mesh & Analog PMR446)   │ 2-Pin 2.5/3.5mm Double Jack   │ PhotoMOS PTT   │
 ├───────┼───────────────────────────────┼───────────────────────────────┼────────────────┤
-│ **D** │ **OpenMotorMesh Transceiver** │ Direct Pod 3 Integration      │ LoRa 868 MHz,  │
-│       │ (Long-Range LoRa & Multi-GNSS)│ ESP32-C3 Coprocessor + SX1262 │ 10 Hz DGPS     │
+│ **D** │ **OpenMotorMesh 2.4 GHz Sled** │ Universal Pod 1 / 2 Cartridge │ 2.4 GHz Mesh,  │
+│       │ (OpenMotorMesh Protocol)      │ ESP32-C3 / CH32V003 ID 0x03   │ Zero Interf.   │
 ├───────┼───────────────────────────────┼───────────────────────────────┼────────────────┤
 │ **E** │ **Hermetic Dry-Box Blind Pod**│ Closed Front Bezel with       │ Mute (-96 dB), │
 │       │ (Weatherproof Blank Cartridge)│ Internal 80x46x16mm Storage   │ 5V Rail OFF    │
@@ -53,24 +53,24 @@ Each interchangeable cartridge integrates a **Maxim DS2401 64-Bit Silicon Serial
 Classic handlebar Bluetooth remotes suffer from excessive latency ($80 \dots 250\,\text{ms}$) and connection dropouts. OpenMotorBridge resolves this with a hybrid ultra-low-latency trigger pipeline:
 
 ```
-               HANDLEBAR PTT SIGNAL CHAIN (GLASS-TO-GLASS < 1.8 ms)
+               HANDLEBAR PTT SIGNAL CHAIN (GLASS-TO-GLASS < 0.4 ms)
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
-│ 1. HANDLEBAR SWITCH (Wired to Front Node):                                            │
+│ 1. HANDLEBAR SWITCH (Wired to Front Node):                                             │
 │    • Mechanical gold-contact pushbutton on handlebar (IP67, 100% battery-free)         │
 │    • Hardware Schmitt-trigger debouncing (12 µs latency)                               │
 │    • GPIO level interrupt on ESP32-S3 dual-core controller                             │
 ├────────────────────────────────────────────────────────────────────────────────────────┤
 │                                        ▼                                               │
-│ 2. ULTRA-LOW-LATENCY WIRELESS BRIDGE (ESP-NOW 2.4 GHz):                                │
-│    • Direct IEEE 802.11 Vendor-Specific Action Frame (Payload: 8 bytes)                │
-│    • Zero TCP/IP or BLE stack latency overhead                                         │
-│    • Transmission time Front Node -> Central Box: 0.90 ms (PDR: 99.8 %)                │
+│ 2. ULTRA-LOW-LATENCY WIRELESS BRIDGE (UWB 6.5 GHz Ch. 5 / Qorvo DW3110):               │
+│    • IEEE 802.15.4z UWB frame at 6.8 Mbps PHY (Payload: 8 bytes, < 180 µs flight time) │
+│    • 100% compliant with ETSI EN 302 065-1/3 & EU Decision 2019/785 (Zero duty cycle)  │
+│    • Zero interference with 2.4 GHz Bluetooth, Wi-Fi, or Sena/Cardo Mesh (PDR: 99.99%)│
 ├────────────────────────────────────────────────────────────────────────────────────────┤
 │                                        ▼                                               │
 │ 3. CENTRAL BOX HARDWARE TRIGGER:                                                       │
-│    • ESP32-S3 Core 0 ISR decodes ESP-NOW frame (< 45 µs)                               │
+│    • ESP32-S3 Core 0 ISR decodes UWB frame (< 35 µs)                                   │
 │    • Dispatches 1-byte command opcode to Cartridge MCU via Pin 5 (< 100 µs)            │
-│    • Total glass-to-glass latency from switch press to physical keying: 1.70 ms        │
+│    • Total glass-to-glass latency from switch press to physical keying: ~0.36 ms       │
 └────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -257,7 +257,7 @@ Each cartridge carrier PCB (`openmotorbridge_pod_cartridge`) provides a globally
 1. **Current-Limited Interrogation:** Upon cartridge insertion, the 5V high-side switch remains OFF. The 1-Wire driver polls with a current-limited sense voltage ($< 20\,\text{mA}$) to read the UID.
 2. **Dynamic Routing Assignment:**
    * **Smart Cartridge UID detected:** Central Box identifies the cartridge class (e.g. Sena SPIDER X Slim), initializes serial opcode communication and mechatronic key control, and loads the corresponding JSON profile.
-   * **Rear Pod 3 UID detected:** Central Box switches pins 15/16 to high-speed UART (460,800 Baud) and initializes the NMEA/LoRa parser.
+   * **OMM 2.4 GHz Swap Cartridge detected (ID 0x03):** Central Box switches the port to OMM Mesh mode (ESP32-C3) and links the node as an external 2.4 GHz group.
    * **Passive Audio Cartridge detected:** Pins are routed to the Bourns audio path and ES8388 I2S DSP; the matching legacy profile is loaded.
    * **Blank Cartridge or Unassigned UID:** Bay remains unpowered (`disabled.json`).
 3. **Controlled Soft-Start:** Once validated, the P-channel MOSFET energizes the cartridge via a soft-start ramp ($100-150\,\text{ms}$) preventing inrush dips.
@@ -467,7 +467,7 @@ OpenMotorBridge solves this challenge through a fully automated **Proximity Mute
   [1. REAL-TIME SENSOR EVALUATION]
   ├── Condition 1: Motorcycle is stationary (CAN vehicle speed v = 0.0 km/h)
   └── Condition 2: Companion motorcycle in immediate proximity (< 3.0 m)
-                   Detected via 2.4 GHz ESP-NOW mesh signal strength (RSSI > -45 dBm)
+                   Detected via UWB ranging / OMM 2.4 GHz signal strength (RSSI > -45 dBm)
 
   [2. ACOUSTIC TRANSITION (Automatic)]
   ├── OpenMotorBridge MUTES the microphone uplink to the wide-area group mesh

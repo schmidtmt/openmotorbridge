@@ -47,7 +47,7 @@ The Universal Front Node (`PCBA 05`) houses a Knowles SPH0645LM4H digital I2S ME
 │ 4. Direct Form II Biquad A-Weighting Filter (IEC 61672-1 Class 1)     │
 │    • Low-frequency wind rumble (100 Hz) attenuated by -19.1 dB        │
 │ 5. RMS Power Block Calculation (20 ms sliding window)                 │
-│ 6. Fast ESP-NOW Telemetry Broadcast to Central Box at 50 Hz           │
+│ 6. Fast UWB Telemetry Broadcast to Central Box at 50 Hz (< 0.4 ms)    │
 │ 7. Dynamic AGC Helmet Boost: Automatically scales volume +0 to +6 dB   │
 └────────────────────────────────────────────────────────────────────────┘
 ```

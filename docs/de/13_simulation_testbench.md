@@ -37,12 +37,12 @@ Um das Zusammenspiel von Hardware, Akustik, Fahrdynamik, Thermik, Hochfrequenz-P
 │    Ruhestrom-Analyse      │                                   │ 0.59% Entladung / 6 Mon.│
 ├───────────────────────────┼───────────────────────────────────┼─────────────────────────┤
 │ 9. Universal Front Node   │ `front_node_wireless_hub_sim.py`  │ USB2514B Eye, MEMS DSP, │
-│    (PCBA 05)              │                                   │ TPS2051B, ESP-NOW, BLE  │
+│    (PCBA 05)              │                                   │ TPS2051B, UWB, BLE      │
 ├───────────────────────────┼───────────────────────────────────┼─────────────────────────┤
 │ 10. Live Audio DSP Studio │ `tools/audio_testbench/server.py` │ Interaktive Web-Audio   │
 │     & Echtzeit-Simulator  │                                   │ Suite, Mic/PTT/Tacho/EQ │
 ├───────────────────────────┼───────────────────────────────────┼─────────────────────────┤
-│ 11. Multi-Motorrad        │ `openmotorbridge_digital_twin.py` │ 10 PCBs, Wil-Wattwil-   │
+│ 11. Multi-Motorrad        │ `openmotorbridge_digital_twin.py` │ 8 PCBs, Wil-Wattwil-    │
 │     Digital-Twin & HIL    │                                   │ Ricken, Tunnel EKF-DR,  │
 │                           │                                   │ 2.4G/LoRa Handover, PWA │
 └───────────────────────────┴───────────────────────────────────┴─────────────────────────┘
@@ -59,7 +59,7 @@ Um das Zusammenspiel von Hardware, Akustik, Fahrdynamik, Thermik, Hochfrequenz-P
   4. **1-Wire Signalintegrität über 1.5m Kabelbaum:** Flankenanstiegszeit $t_{\text{rise}} = 1{,}74\,\mu\text{s}$ über $167{,}9\,\text{pF}$ Gesamtkapazität ($65{,}3\,\%$ Sicherheitsmarge zur $5{,}0\,\mu\text{s}$-Norm).
   5. **PTT-zu-LoRa End-to-End Latenz:** Vom Tastendruck am Lenker über Optokoppler, Opus-Encoder und UART-Bridge zum LoRa-Sendepuls in nur **$14{,}59\,\text{ms}$** ($< 25\,\text{ms}$ Aviation-Intercom-Norm).
   6. **Universal Front Node DCDC & Hub:** LMR36015 Synchrongleichrichter mit $91{,}8\,\%$ Wirkungsgrad ($5{,}3\,\text{mV}$ Ripple), USB2514B High-Speed Augendiagramm mit $88{,}5\,\%$ Augenöffnung ($18{,}5\,\text{ps}$ Skew), Knowles MEMS mit $65{,}4\,\text{dB}$ SNR.
-  7. **Front-Node Zero-Latency PTT:** Gesamtlatenz vom Lenkertaster über ESP-NOW bis zur TLP222A Optokoppler-Zündung beträgt nur **$1{,}74\,\text{ms}$** ($< 5{,}0\,\text{ms}$ Anforderung).
+  7. **Front-Node Zero-Latency PTT:** Gesamtlatenz vom Lenkertaster über UWB (6.5 GHz) bis zur Aktuator-Zündung beträgt nur **$\approx 0{,}36\,\text{ms}$** ($< 5{,}0\,\text{ms}$ Anforderung).
   8. **Ottocast Auto-Café VBUS-Abschaltung:** Automatischer $60\,\text{s}$ Countdown nach Zündung AUS zur nahtlosen Übergabe des Smartphone-WLANs an Heim- oder Café-Netze.
 
 ---
@@ -68,13 +68,13 @@ Um das Zusammenspiel von Hardware, Akustik, Fahrdynamik, Thermik, Hochfrequenz-P
 
 Führt die reale C++-Firmware-Logik auf einer virtuellen Mehr-Platinen-Hardware aus und deckt 10 Lebenszyklus-Szenarien ab:
 
-* **Szenario 1:** Zündung AN (KL15 = $12{,}60\,\text{V}$) $\rightarrow$ Cold Boot aller Controller (Main Box, Rear Pod, Front Node) $\rightarrow$ Etablierung des ESP-NOW Funklinks.
+* **Szenario 1:** Zündung AN (KL15 = $12{,}60\,\text{V}$) $\rightarrow$ Cold Boot aller Controller (Zentralbox, Front Node) $\rightarrow$ Etablierung des UWB Funk-Backbones.
 * **Szenario 2A (Blindkassette):** Keine 1-Wire ROM-ID $\rightarrow$ Automatisches Profil `"disabled"` (Mute auf $-96\,\text{dB}$ Gain zum Schutz vor Rauschen und offenen Einstreuungen).
-* **Szenario 2B (Hot-Swap):** Einklicken der Sena 60S / Cardo Edge Kassette im laufenden Betrieb $\rightarrow$ 1-Wire Erkennung in $< 2\,\text{s}$ $\rightarrow$ Laden des Profils, Audio-Entsperrung und Gain-Konfiguration.
-* **Szenario 3:** NEO-M9N GNSS 3D-DGPS Fix (22 Satelliten) und 1-PPS Hardware-Zeitsynchronisation.
+* **Szenario 2B (Hot-Swap):** Einklicken der Sena SPIDER X Slim / Cardo Edge Kassette im laufenden Betrieb $\rightarrow$ 1-Wire Erkennung in $< 2\,\text{s}$ $\rightarrow$ Laden des Profils, Audio-Entsperrung und Gain-Konfiguration.
+* **Szenario 3:** SAM-M10Q Multi-GNSS 3D-Fix (22 Satelliten) via J12 Qwiic und Präzisions-Zeitsynchronisation.
 * **Szenario 4 (Dual-PTT & Akustik-Adaption):**
   * PTT-Tastendruck an Kassette $\rightarrow$ Opus 24k Mesh-Broadcast.
-  * PTT-Tastendruck am Front-Node Lenkertaster $\rightarrow$ ESP-NOW Action Frame $\rightarrow$ Optokoppler-Zündung in **$1{,}74\,\text{ms}$**.
+  * PTT-Tastendruck am Front-Node Lenkertaster $\rightarrow$ UWB Frame $\rightarrow$ Aktuator-Zündung in **$\approx 0{,}36\,\text{ms}$**.
   * Knowles SPH0645 MEMS erfasst Geschwindigkeitslärm bei $130\,\text{km/h}$ ($79\,\text{dBA}$) $\rightarrow$ Audio DSP AGC regelt Intercom-Lautstärke dynamisch um $+1{,}0\,\text{dB}$ nach.
 * **Szenario 5:** Motorstart ($6{,}5\,\text{V}$ Spannungseinbruch) $\rightarrow$ USV-Sofortpufferung $\rightarrow$ $0$ Audio-Drops, $0$ Reboots.
 * **Szenario 6 (Kabelabriss & Kurzschluss):** M8-Kabel zum Helm reißt ab $\rightarrow$ Bourns PTC-Sicherung löst in $1{,}2\,\text{ms}$ aus ($< 15\,\text{mA}$ Kurzschlussstrom, $0\,\text{V}$ Einbruch auf Hauptplatine) $\rightarrow$ Anti-Pop Mute schützt Helmlautsprecher vor Krachen $\rightarrow$ Rote Warn-LED.
@@ -173,24 +173,25 @@ Verifiziert alle hochfrequenten, leistungselektronischen und funktechnischen Sub
    * Abtastung: $16\,\text{kHz}$ / 24-Bit über Direct Memory Access (DMA).
    * Biquad Direct Form II Digitalfilter nach IEC 61672-1 Class 1 ($100\,\text{Hz}$ Winddruck-Dämpfung $-19{,}1\,\text{dB}$).
    * $20\,\text{ms}$ RMS-Blockbildung mit kalibrierter $\text{dB(A)}$-Telemetrie an die Zentralbox im $50\,\text{Hz}$ Takt.
-4. **2.4 GHz ESP-NOW Ultra-Low-Latency PTT Budget:**
-   * Hardware-RC Filterung: $15{,}0\,\mu\text{s}$.
-   * Edge-Interrupt & Queue: $8{,}5\,\mu\text{s}$.
-   * 802.11 Over-The-Air Frame ($1\,\text{Mbps}$ DSSS CCK): $772{,}0\,\mu\text{s}$.
-   * Optokoppler-Triggerung: $45{,}0\,\mu\text{s}$.
-   * **Gesamtlatenz (Glass-to-Glass): $0{,}90\,\text{ms}$** (Anforderung $< 5{,}0\,\text{ms}$) bei $99{,}8\,\%$ Packet Delivery Ratio im Nahbereich.
+4. **6.5 GHz UWB Ultra-Low-Latency PTT Budget (< 0.4 ms):**
+   * Hardware-RC Filterung: $12{,}0\,\mu\text{s}$.
+   * GPIO Edge-Interrupt & ISR: $25{,}0\,\mu\text{s}$.
+   * IEEE 802.15.4z UWB Frame (Channel 5 @ 6.489 GHz, BPRF): $180{,}0\,\mu\text{s}$.
+   * Zentralbox DW3110 SPI RX & Opcode-Dispatch: $45{,}0\,\mu\text{s}$.
+   * Kassetten-Aktuator Schaltung (`AO3400` N-MOSFET): $< 100{,}0\,\mu\text{s}$.
+   * **Gesamtlatenz (Glass-to-Glass): $\approx 0{,}36\,\text{ms}$** (Anforderung $< 5{,}0\,\text{ms}$) bei $99{,}9\,\%$ Packet Delivery Ratio im Fahrzeugfenster ($0{,}5\dots 2{,}5\,\text{m}$).
 5. **Dual-Bank OTA Rollback-Schutz:**
    * Fehlersimulation: Spannungsunterbrechung bei $45\,\%$ Flash-Fortschritt in Partition `ota_1`.
    * Bootloader-Integritätsprüfung erkennt unvollständige Signatur und bootet zuverlässig `ota_0` $\rightarrow$ **$0{,}0\,\%$ Brick-Risiko**.
 
 ---
 
-## 11. Multi-Motorrad Digital-Twin & 10-PCB HIL Simulator (`openmotorbridge_digital_twin.py`)
+## 11. Multi-Motorrad Digital-Twin & 8-PCB HIL Simulator (`openmotorbridge_digital_twin.py`)
 
-Der **Digital Twin Simulator** ([`openmotorbridge_digital_twin.py`](../../tools/simulators/openmotorbridge_digital_twin.py)) emuliert einen realitätsgetreuen 2-Fahrzeuge-Verbund (Bike A = Leader, Bike B = Chaser) mit insgesamt **10 physikalisch modellierten Platinen** (5 PCBs pro Motorrad) entlang der geodätischen Referenzstrecke **Wil SG $\rightarrow$ Wattwil (Tunnel) $\rightarrow$ Wattwil-Kreisel $\rightarrow$ Rickenpass**:
+Der **Digital Twin Simulator** ([`openmotorbridge_digital_twin.py`](../../tools/simulators/openmotorbridge_digital_twin.py)) emuliert einen realitätsgetreuen 2-Fahrzeuge-Verbund (Bike A = Leader, Bike B = Chaser) mit insgesamt **8 physikalisch modellierten Platinen** (4 PCB-Klassen pro Motorrad) entlang der geodätischen Referenzstrecke **Wil SG $\rightarrow$ Wattwil (Tunnel) $\rightarrow$ Wattwil-Kreisel $\rightarrow$ Rickenpass**:
 
 ```
-                      DIGITAL TWIN ARCHITEKTUR (10 PLATINEN & 2 BIKES)
+                      DIGITAL TWIN ARCHITEKTUR (8 PLATINEN & 2 BIKES)
 ═══════════════════════════════════════════════════════════════════════════════════════
 
    [ GEODÄTISCHER TRACK: WIL ──► WATTWIL-TUNNEL (2.2km) ──► KREISEL ──► RICKENPASS ]
@@ -199,11 +200,10 @@ Der **Digital Twin Simulator** ([`openmotorbridge_digital_twin.py`](../../tools/
          ▼                                                               ▼
  ┌────────────────────────────────────────┐            ┌────────────────────────────────────────┐
  │          MOTORRAD A (LEADER)           │            │          MOTORRAD B (CHASER)           │
- │  • PCBA 01 (ESP32-S3 Main Controller)  │            │  • PCBA 01 (ESP32-S3 Main Controller)  │
- │  • PCBA 02 (Satellite Pod Base)        │            │  • PCBA 02 (Satellite Pod Base)        │
- │  • PCBA 03 (Pods 1/2 Cartridges)       │            │  • PCBA 03 (Pods 1/2 Cartridges)       │
- │  • PCBA 04 (Rear Pod 3 GNSS/OMM/Radar) │            │  • PCBA 04 (Rear Pod 3 GNSS/OMM/Radar) │
- │  • PCBA 05 (Universal Front Node C3)   │            │  • PCBA 05 (Universal Front Node C3)   │
+ │  • PCBA 01 (ESP32-S3 Main + LoRa/UWB)  │            │  • PCBA 01 (ESP32-S3 Main + LoRa/UWB)  │
+ │  • PCBA 02 (Satellite Pod Base 1 & 2)  │            │  • PCBA 02 (Satellite Pod Base 1 & 2)  │
+ │  • PCBA 03 (Pods 1/2 Smart Cartridges) │            │  • PCBA 03 (Pods 1/2 Smart Cartridges) │
+ │  • PCBA 05 (Universal Front Node)      │            │  • PCBA 05 (Universal Front Node)      │
  └───────────────────┬────────────────────┘            └───────────────────┬────────────────────┘
                      │                                                     │
                      └────────────────► [ RF PROPAGATION ENGINE ] ◄────────┘
@@ -227,12 +227,11 @@ Der **Digital Twin Simulator** ([`openmotorbridge_digital_twin.py`](../../tools/
 ```
 
 ### Die Kernkomponenten & Test-Features:
-1. **5 Platinen pro Motorrad:**
-   * **PCBA 01 (Zentralbox):** 15-State ADR-EKF Filterung, Power Supervisor (Bordnetz $14{,}2\,\text{V}$, USV-Pufferung $4{,}14\,\text{V}$), Audio DSP Matrix.
-   * **PCBA 02 (Pod Base):** M8-Schnittstelle, SP3012 TVS Schutzarray-Überwachung.
-   * **PCBA 03 (Kassetten):** 1-Wire DS2401 Silicon ROM ID Handshake (`sena_60s`, `cardo_edge`), PTT-Tastenerkennung.
-   * **PCBA 04 (Rear Pod 3):** u-blox MAX-M10S GNSS Receiver, 2.4 GHz IEEE 802.15.4 Transceiver, SX1262 LoRa 868 MHz PHY, Garmin Varia Radar-Zieltracker.
-   * **PCBA 05 (Universal Front Node):** Duale Knowles MEMS Akustikmessung (Fahrtwindrauschen skaliert mit $v^3$), Cockpit-PTT-Taste.
+1. **4 Platinenklassen pro Motorrad:**
+   * **PCBA 01 (Zentralbox):** 15-State ADR-EKF Filterung, Power Supervisor (Bordnetz $14{,}2\,\text{V}$, USV-Pufferung $4{,}14\,\text{V}$), Audio DSP Matrix, Semtech SX1262 LoRa 868 MHz Transceiver & Qorvo DW3110 UWB Backbone.
+   * **PCBA 02 (Pod Base, 2x):** M8-Schnittstelle, SP3012 TVS Schutzarray-Überwachung.
+   * **PCBA 03 (Smart Cartridges, 2x):** CH32V003 RISC-V Mechatronik-Controller, 4x AO3400 N-MOSFETs (`sena_spider`, `cardo_edge`), PTT-Tastenerkennung.
+   * **PCBA 05 (Universal Front Node):** u-blox SAM-M10Q Multi-GNSS via J12 Qwiic, duale Knowles MEMS Akustikmessung (Fahrtwindrauschen skaliert mit $v^3$), Cockpit-PTT-Taste, DW3110 UWB Backbone.
 2. **Geodätischer Track (`wil_wattwil_ricken.py`):**
    * $11\,682$ Stützpunkte mit realistischer Beschleunigung, Kurvenschräglage ($\theta_{\text{lean}} = \arctan(v \cdot \dot{\psi} / g)$ bis $42^\circ$) und Höhenprofil ($570\dots 795\,\text{m}$ ü. M.).
 3. **15-State ADR-EKF Tunnelausfall & Koppelnavigation:**

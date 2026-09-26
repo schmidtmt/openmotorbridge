@@ -34,12 +34,12 @@ OpenMotorBridge löst dieses Problem durch eine konsequent modulare **Zwei-Stufe
   • Volle Intercom-Matrix (Sena/Cardo Koffer-Pods), eCall-Notruf & Heck-Radar
 
                                │ Optional erweiterbar via
-                               │ ESP-NOW Funkbrücke (< 0.9 ms Latenz)
+                               │ UWB Funk-Backbone (6.5 GHz Ch. 5, < 0.4 ms Latenz)
                                ▼
 
   [STUFE 2: UNIVERSAL COCKPIT & FRONT HUB (PCBA 05 IM FRONTBEREICH / COCKPIT)]
   • UNIVERSAL-FUNKTIONEN FÜR JEDES MOTORRAD (Naked Bike, Enduro, Tourer, Cruiser):
-    - Drahtgebundener Lenker-PTT (Optokoppler GPIO 0, < 1.8 ms): Nur 30–50 cm Leitung am Lenker!
+    - Drahtgebundener Lenker-PTT (Optokoppler GPIO 0, < 0.4 ms via UWB): Nur 30–50 cm Leitung am Lenker!
       Vollständige Eliminierung von fehleranfälligen Signalkabeln über den schwenkenden Lenkkopf.
     - Knowles I2S MEMS-Fahrtwindmikrofon: Misst Staudruck und Windpegel direkt an der Frontscheibe
       (unter der Sitzbank physikalisch unmöglich) für automatische Helmlautstärke-Nachführung (AGC).
@@ -244,7 +244,7 @@ Niemand wird gezwungen, Apple CarPlay oder Android Auto zu nutzen. Wer das origi
 1. **Funktionsweise:**
    * Der Front-Node meldet sich an der USB-Buchse im Handschuhfach (`J4`) als zertifiziertes Apple MFi- bzw. USB Audio Class Gerät an.
    * Das Smartphone streamt Musik (z. B. Spotify, Apple Music) via Bluetooth direkt an die OpenMotorBridge Zentralbox.
-   * OpenMotorBridge extrahiert die ID3-Metadaten (Titel, Interpret, Album, Spieldauer) und sendet sie per ESP-NOW an den Front-Node, der sie über USB an Skyline OS weiterreicht.
+   * OpenMotorBridge extrahiert die ID3-Metadaten (Titel, Interpret, Album, Spieldauer) und sendet sie per UWB an den Front-Node, der sie über USB an Skyline OS weiterreicht.
 2. **Was sieht der Fahrer auf dem Harley-Display?**
    * Das 12.3" Skyline OS (oder 6.5" Boom! Box) Display öffnet seine native Medienansicht: Vollständiger Track-Titel, Interpret, Albumname und Playback-Fortschrittsbalken im originalen Harley-Look.
 3. **Hybrides Audio-Routing (Zwei wählbare Profile):**
@@ -394,7 +394,7 @@ Sollte künftig eine native OpenMotorBridge Companion-App (reservierte Android A
 
 #### 4. Die Alltags-Praxis für Skyline OS
 * **95 % aller Fahrten:** Fahrer nutzen Apple CarPlay oder Android Auto über den USB-Port `J4` – Navigation, Spotify und Staudaten laufen nativ auf dem Smartphone.
-* **Autarke Alternative (Zero-Subscription):** Für Always-On Diebstahltracking und Alarmierung setzt OpenMotorBridge auf das abonnementfreie, dezentrale 868 MHz LoRa-Mesh (PCBA 04 & PCBA 07 Keyfob) statt auf monatliche Mobilfunk-Gebühren (Details im internen `.context/IDEAS_BACKLOG.md`).
+* **Autarke Alternative (Zero-Subscription):** Für Always-On Diebstahltracking und Alarmierung setzt OpenMotorBridge auf das abonnementfreie, dezentrale 868 MHz LoRa-Mesh (PCBA 01 Onboard SX1262 & PCBA 07 Keyfob) statt auf monatliche Mobilfunk-Gebühren (Details im internen `.context/IDEAS_BACKLOG.md`).
 
 ---
 

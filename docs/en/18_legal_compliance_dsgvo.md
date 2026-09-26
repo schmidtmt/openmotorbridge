@@ -20,6 +20,7 @@ To ensure community contributions (such as OEM-specific CAN and audio adapters f
 OpenMotorBridge operates exclusively within standardized, globally license-free frequency bands:
 
 * **2.4 GHz ISM Band:** Maximum 100 mW EIRP (20 dBm) in the EU (ETSI EN 300 328) and 1000 mW in the US (FCC Part 15). Harmonized worldwide without duty-cycle restrictions when using FHSS/DSSS.
+* **6.0–8.5 GHz Ultra-Wideband (UWB IEEE 802.15.4z / Qorvo DW3110):** Governed by ETSI EN 302 065-1, EN 302 065-3, ECC Decision (06)04, and **EU Decision 2019/785**. At a maximum spectral power density of **$-41.3\,\text{dBm/MHz}$ EIRP** in the 6.240–6.739 GHz range (Channel 5 @ 6.489 GHz), continuous legal transmission in road vehicles is **exempt from duty-cycle caps**.
 * **868 MHz SRD Band (Sub-GHz LoRa):** Governed by ETSI EN 300 220. Restricted by statutory duty cycles (0.1% to 10% in Europe), utilized strictly for GPS radar and brief Push-to-Talk (PTT) voice bursts via Codec2 (1200 bps).
 * **446 MHz (PMR446 - Optional Cartridges):** 500 mW ERP maximum with 12.5 kHz channel spacing in half-duplex simplex operation.
 
@@ -27,7 +28,7 @@ OpenMotorBridge operates exclusively within standardized, globally license-free 
 
 ## 3. Vehicle Type Approval & E-Marking (ECE R10 Rev. 6)
 
-* **Pre-Certified Transceivers:** Integrating off-the-shelf, certified OEM modules (e.g., Sena MeshPort Blue, Cardo Packtalk) preserves primary radio certification with the original manufacturer.
+* **Pre-Certified Transceivers:** Integrating off-the-shelf, certified OEM modules (e.g., Sena SPIDER X Slim, Cardo Packtalk Edge) preserves primary radio certification with the original manufacturer.
 * **Non-Intrusive Listen-Only Interfacing:** The Central Box and Front Node interface with the motorcycle harness solely through galvanic isolators (Bourns 1500 V RMS transformers, Toshiba PhotoMOS relays, optocouplers) and passive CAN listening. **No commands are written to safety-critical ECUs (Engine ECU, ABS, Traction Control)**.
 
 ---

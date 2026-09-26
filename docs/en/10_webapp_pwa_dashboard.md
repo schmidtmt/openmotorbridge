@@ -49,10 +49,10 @@ For riders who prefer installation directly via the Google Play Store, automated
 
 * **Vehicle Dynamics & Lean Angle:** Real-time animated motorcycle attitude indicator (15-state EKF with Bosch BMI270).
 * **Universal Front Node Dashboard Card:**
-  * **Link Status:** Live 2.4 GHz ESP-NOW wireless status badge.
+  * **Link Status:** Live 6.5 GHz UWB wireless status badge (`UWB LINK (6.5 GHz / Ch. 5)` / `OFFLINE`).
   * **Subsystem Tiles:**
     1. **📱 Wireless CarPlay / AA (Ottocast):** Live voltage & current (`5.00 V · 380 mA`), operating status (`ACTIVE`, `REBOOT`, `STANDBY`).
-    2. **⚡ Handlebar PTT (Zero-Latency):** Status indicator (`< 1.8 ms Latency`) with glowing pulse animation when keying (1x = radio, 2x = cam toggle, long = HiLight tag).
+    2. **⚡ Handlebar PTT (Zero-Latency):** Status indicator (`< 0.4 ms Latency`) with glowing pulse animation when keying (1x = radio, 2x = cam toggle, long = HiLight tag).
     3. **🎙️ Cockpit Noise (Knowles MEMS):** Real-time sound pressure level in $\text{dB(A)}$ and dynamic AGC helmet boost (`+0.0 dB` to `+6.0 dB Boost`).
     4. **🎥 Action Cam BLE Bridge (GoPro / Insta360 / DJI):** Camera model (`GoPro Hero 12` / `Insta360 X4`), battery level (%), remaining SD time, pulsing red REC badge.
   * **Wind Noise VU Meter:** Color-coded level bar ($35\,\text{dB(A)}$ idle to $115\,\text{dB(A)}$ highway).
@@ -121,7 +121,7 @@ The Device Manager is organized into two distinct sections:
   * `[Buddy Alarm]`: Forwards theft alerts automatically over the decentralized LoRa group mesh.
 
 #### Part 2: Motorcycle & OpenMotorBridge System Nodes
-* **Universal Front Node (Cockpit Hub • PCBA 05):** ESP-NOW wireless status, Wi-Fi SoftAP fallback toggle, and proximity-rescue beacon.
+* **Universal Front Node (Cockpit Hub • PCBA 05):** UWB backbone (6.5 GHz), Wi-Fi SoftAP fallback toggle, and proximity-rescue beacon.
 * **Rear Radar & Mirror Blind-Spot LEDs (BSD):** Master power switch and mirror indicator controls (Header `J9` via MOSFET `Q1`) with a 2-second diagnostic flash.
 * **Safety Lighting Management:**
   * **ESS Emergency Brake Strobing:** Master toggle for 4.5 Hz hazard flashing (Garmin Varia UART2 & `RESERVE_GPIO_B`), configurable deceleration threshold ($-0.45\,\text{g}$, $-0.60\,\text{g}$, $-0.75\,\text{g}$), and `[Brake Strobe Test]` button.

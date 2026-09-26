@@ -52,13 +52,13 @@ Für Fahrer, die eine Installation über den Google Play Store, automatische Hin
 * **Universal Front-Knoten Card:**
   * Live CarPlay/AA Status (TPS2051B Spannung/Strom).
   * 1-Klick Hard-Reset Button ($2{,}5\,\text{s}$ VBUS Kaltstart).
-  * Lenker-PTT Status (< 1.8 ms Latenzanzeige, Test-Button).
+  * Lenker-PTT Status (< 0.4 ms Latenzanzeige, Test-Button).
   * 4. Metrik-Kachel: Action-Cam BLE Bridge (REC-Toggle, HiLight Marker, Tankpausen-Filter, Pairing-Modal).
   * Live Fahrtwind-Lärmpegel VU-Meter (Knowles MEMS dB(A) & AGC-Boost).
-  * **Status-Badge:** Live 2.4 GHz ESP-NOW Funklink (`ESP-NOW LINK (2.4 GHz)` / `OFFLINE`).
+  * **Status-Badge:** Live 6.5 GHz UWB Funklink (`UWB LINK (6.5 GHz / Ch. 5)` / `OFFLINE`).
   * **4 Subsystem-Kacheln:**
     1. **📱 Wireless CarPlay / AA (Ottocast):** Live-Spannung & Strom (`5.00 V · 380 mA`), Betriebsstatus (`AKTIV`, `REBOOT`, `STANDBY`).
-    2. **⚡ Lenker-PTT (Zero-Latency):** Bereitschaftsstatus und Latenzanzeige (`< 1.8 ms Latenz`) mit leuchtender Pulse-Animation bei Tastendruck (1x = Funk, 2x = Cam Toggle, Lang = HiLight Tag).
+    2. **⚡ Lenker-PTT (Zero-Latency):** Bereitschaftsstatus und Latenzanzeige (`< 0.4 ms Latenz`) mit leuchtender Pulse-Animation bei Tastendruck (1x = Funk, 2x = Cam Toggle, Lang = HiLight Tag).
     3. **🎙️ Cockpit-Lärm (Knowles MEMS):** Live-Schallpegel in $\text{dB(A)}$ und berechnete Lautstärkenachführung (`+0.0 dB` bis `+6.0 dB Boost`).
     4. **🎥 Action-Cam BLE Bridge (GoPro / Insta360 / DJI):** Kamera-Typ (`GoPro Hero 12` / `Insta360 X4`), Akkustand (%), verbleibende SD-Zeit, pulsierender roter REC-Status.
   * **Fahrtwind-Lärm VU-Meter:** Farbkodierter Balken ($35\,\text{dB(A)}$ Standgas bis $115\,\text{dB(A)}$ Höchstgeschwindigkeit).
@@ -128,7 +128,7 @@ Der Geräte-Manager ist in zwei klar voneinander getrennte Bereiche strukturiert
   * `[Buddy-Alarm]`: Checkbox zum automatischen Weiterleiten von Diebstahlalarmen ins Gruppen-Mesh.
 
 #### Teil 2: Motorrad & OpenMotorBridge Systemknoten
-* **Universal Front-Node (Cockpit-Hub • PCBA 05):** ESP-NOW Funklink, Wi-Fi SoftAP Fallback Toggle, Proximity-Rescue Beacon.
+* **Universal Front-Node (Cockpit-Hub • PCBA 05):** UWB Backbone (6.5 GHz), Wi-Fi SoftAP Fallback Toggle, Proximity-Rescue Beacon.
 * **Heck-Radar & Spiegel-Totwinkel-LEDs (BSD):** Master-Schalter für Radar-Power und Spiegel-Totwinkel-LEDs (Header `J9` via MOSFET `Q1`) mit 2-Sekunden-Testblitz.
 * **Sicherheits-Lichtmanagement:**
   * **ESS Notbremsblinken:** Master-Toggle für 4,5 Hz Stroboskop-Warnblinken (Garmin Varia UART2 & `RESERVE_GPIO_B`), konfigurierbare Verzögerungsschwelle ($-0{,}45\,\text{g}$, $-0{,}60\,\text{g}$, $-0{,}75\,\text{g}$) und Button `[Bremsblitz-Test]`.

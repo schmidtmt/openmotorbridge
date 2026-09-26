@@ -34,12 +34,12 @@ OpenMotorBridge resolves these issues through a strictly modular **two-stage arc
   • Full Intercom Matrix (Sena/Cardo pannier pods), eCall crash emergency & rear radar
 
                                 │ Optionally expandable via
-                                │ ESP-NOW wireless link (< 0.9 ms latency)
+                                │ UWB wireless backbone (6.5 GHz Ch. 5, < 0.4 ms latency)
                                 ▼
 
   [STAGE 2: UNIVERSAL COCKPIT & FRONT HUB (PCBA 05 IN FAIRING / COCKPIT AREA)]
   • UNIVERSAL FUNCTIONS FOR ANY MOTORCYCLE (Naked, Enduro, Tourer, Cruiser):
-    - Hardwired Handlebar PTT (Optocoupler GPIO 0, < 1.8 ms): Only 30–50 cm harness along handlebars!
+    - Hardwired Handlebar PTT (Optocoupler GPIO 0, < 0.4 ms via UWB): Only 30–50 cm harness along handlebars!
       Completely eliminates fragile, fatigue-prone signal wiring across the steering head bearing.
     - Knowles I2S MEMS Wind Noise Microphone: Measures dynamic ram-air pressure directly at the windscreen
       (physically impossible under the seat) for automatic helmet volume tracking (AGC).
@@ -238,7 +238,7 @@ No rider is forced to run Apple CarPlay or Android Auto. Those who prefer the cl
 1. **How It Works:**
    * The Front Node enumerates on the glove box USB port (`J4`) as a certified Apple MFi / USB Audio Class peripheral.
    * The smartphone streams audio (Spotify, Apple Music) via Bluetooth directly to the OpenMotorBridge Central Box.
-   * OpenMotorBridge extracts ID3 metadata (title, artist, album, track duration) and forwards it via ESP-NOW to the Front Node, which passes it over USB to Skyline OS.
+   * OpenMotorBridge extracts ID3 metadata (title, artist, album, track duration) and forwards it via UWB to the Front Node, which passes it over USB to Skyline OS.
 2. **What the Rider Sees on the Display:**
    * The 12.3" Skyline OS (or 6.5" Boom! Box) screen opens its native media player: full track title, artist name, album art tags, and progress bar rendered in Harley's factory aesthetic.
 3. **Hybrid Audio Routing (Two Selectable Profiles):**
@@ -385,7 +385,7 @@ If a native OpenMotorBridge companion app is deployed in the future (reserved An
 * **Layer 5 Instead of Layer 3:** Rather than handling raw IP packets (L3, which requires root privileges or VPN adapters), the Front Node terminates TCP connections (Port 80/443) locally and streams opaque TLS byte streams over unprivileged standard sockets (`connect()`) to the companion app.
 * **Zero VPN Slots Consumed:** Because the app opens standard POSIX sockets over the cellular network, Tailscale remains 100% active and undisturbed.
 * **Store-Compliant Background Link:** Leverages `UIBackgroundModes = bluetooth-central` (iOS) or a lean Foreground Service with a persistent sticky notification (Android `bar.f0o.omb`) to keep the uplink active as long as bike ignition is ON.
-* **Zero Cellular Subscription (Zero-Cost Principle):** In alignment with OpenMotorBridge core principles, the system avoids recurring cellular SIM fees by relying on the decentralized 868 MHz LoRa mesh (PCBA 04 & PCBA 07 Keyfob) for off-grid messaging and anti-theft tracking (documented in `.context/IDEAS_BACKLOG.md`).
+* **Zero Cellular Subscription (Zero-Cost Principle):** In alignment with OpenMotorBridge core principles, the system avoids recurring cellular SIM fees by relying on the decentralized 868 MHz LoRa mesh (PCBA 01 Onboard SX1262 & PCBA 07 Keyfob) for off-grid messaging and anti-theft tracking (documented in `.context/IDEAS_BACKLOG.md`).
 
 ---
 

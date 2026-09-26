@@ -160,7 +160,7 @@ Zur automatischen Anpassung der Helm-Lautstärke an turbulente Windgeräusche be
 │ • 65.4 dB SNR, 120 dBA AOP ├─────────────►│   IEC 61672-1 Class 1      │
 │ • Integrierter 24-Bit ADC  │              │ • 50 Hz RMS-Schallpegel dBA│
 └────────────────────────────┘              └─────────────┬──────────────┘
-                                                          │ ESP-NOW (0.9 ms)
+                                                          │ UWB 6.5 GHz (< 0.4 ms)
                                                           ▼
 ┌────────────────────────────┐              ┌────────────────────────────┐
 │ Helm-Lautsprecher          │ I2S TX DMA   │ ESP32-S3 Hauptcontroller   │

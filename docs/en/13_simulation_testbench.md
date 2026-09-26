@@ -37,10 +37,14 @@ To exhaustively verify the interaction of hardware, acoustics, vehicle dynamics,
 │    Quiescent Drain        │                                   │ 0.59% Drain / 6 Months  │
 ├───────────────────────────┼───────────────────────────────────┼─────────────────────────┤
 │ 9. Universal Front Node   │ `front_node_wireless_hub_sim.py`  │ USB2514B Eye, MEMS DSP, │
-│    (PCBA 05)              │                                   │ TPS2051B, ESP-NOW, BLE  │
+│    (PCBA 05)              │                                   │ TPS2051B, UWB, BLE      │
 ├───────────────────────────┼───────────────────────────────────┼─────────────────────────┤
 │ 10. Live Audio DSP Studio │ `tools/audio_testbench/server.py` │ Interactive Web Audio   │
 │     & Real-Time Simulator │                                   │ Suite, Mic/PTT/Speedo/EQ│
+├───────────────────────────┼───────────────────────────────────┼─────────────────────────┤
+│ 11. Multi-Bike            │ `openmotorbridge_digital_twin.py` │ 8 PCBs, Wil-Wattwil-    │
+│     Digital-Twin & HIL    │                                   │ Ricken, Tunnel EKF-DR,  │
+│                           │                                   │ 2.4G/LoRa Handover, PWA │
 └───────────────────────────┴───────────────────────────────────┴─────────────────────────┘
 ```
 
@@ -55,7 +59,7 @@ To exhaustively verify the interaction of hardware, acoustics, vehicle dynamics,
   4. **1-Wire Signal Integrity over 1.5m Harness:** Rise time $t_{\text{rise}} = 1{,}74\,\mu\text{s}$ across $167{,}9\,\text{pF}$ total capacitance ($65{,}3\,\%$ margin to $5{,}0\,\mu\text{s}$ spec).
   5. **PTT-to-LoRa End-to-End Latency:** Total path from handlebar PTT switch through optocoupler, Opus encoder, and UART bridge takes **$14{,}59\,\text{ms}$** ($< 25\,\text{ms}$ aviation standard).
   6. **Front Node DCDC & Hub:** LMR36015 buck converter delivers $91{,}8\,\%$ efficiency ($5{,}3\,\text{mV}$ ripple); USB2514B achieves $88{,}5\,\%$ eye opening with $18{,}5\,\text{ps}$ skew.
-  7. **Front Node Zero-Latency PTT:** Glass-to-glass latency from mechanical handlebar switch over ESP-NOW to TLP222A optocoupler firing is only **$1{,}74\,\text{ms}$**.
+  7. **Front Node Zero-Latency PTT:** Glass-to-glass latency from mechanical handlebar switch over UWB (6.5 GHz) to actuator firing is only **$\approx 0.36\,\text{ms}$** ($< 5.0\,\text{ms}$ requirement).
 
 ---
 
@@ -63,13 +67,13 @@ To exhaustively verify the interaction of hardware, acoustics, vehicle dynamics,
 
 Executes production C++ firmware algorithms against a virtual multi-board testbench across 10 lifecycle scenarios:
 
-* **Scenario 1:** Ignition ON (KL15 = $12{,}60\,\text{V}$) $\rightarrow$ Cold boot of all MCUs $\rightarrow$ ESP-NOW link established.
+* **Scenario 1:** Ignition ON (KL15 = $12.60\,\text{V}$) $\rightarrow$ Cold boot of host MCUs (Central Box, Front Node) $\rightarrow$ UWB wireless backbone established.
 * **Scenario 2A (Blank Pod):** No 1-Wire ID detected $\rightarrow$ Automatic `"disabled"` profile (Mute at $-96\,\text{dB}$ to protect against open inputs).
-* **Scenario 2B (Hot-Swap):** Insertion of Sena 60S / Cardo Edge cartridge on a live system $\rightarrow$ 1-Wire detection in $< 2\,\text{s}$ $\rightarrow$ Immediate profile loading and unmuting.
-* **Scenario 3:** NEO-M9N GNSS 3D-DGPS lock (22 satellites) and 1-PPS hardware time sync.
+* **Scenario 2B (Hot-Swap):** Insertion of Sena SPIDER X Slim / Cardo Edge cartridge on a live system $\rightarrow$ 1-Wire detection in $< 2\,\text{s}$ $\rightarrow$ Immediate profile loading and unmuting.
+* **Scenario 3:** u-blox SAM-M10Q Multi-GNSS 3D fix (22 satellites) via J12 Qwiic and precision time sync.
 * **Scenario 4 (Dual-PTT & Acoustics):**
   * Helmet PTT press $\rightarrow$ Opus 24k Mesh broadcast.
-  * Handlebar PTT press $\rightarrow$ ESP-NOW Action Frame $\rightarrow$ Optocoupler firing in **$1{,}74\,\text{ms}$**.
+  * Handlebar PTT press $\rightarrow$ UWB Action Frame $\rightarrow$ Actuator firing in **$\approx 0.36\,\text{ms}$**.
   * Knowles SPH0645 MEMS captures wind noise at 130 km/h ($79\,\text{dBA}$) $\rightarrow$ Audio DSP AGC boosts volume by $+1{,}0\,\text{dB}$.
 * **Scenario 5:** Engine start ($6{,}5\,\text{V}$ cranking dip) $\rightarrow$ Instant UPS takeover $\rightarrow$ 0 audio dropouts, 0 MCU reboots.
 * **Scenario 6 (Cable Tear & Short):** M8 cable pulled out $\rightarrow$ Bourns PPTC trips in $1{,}2\,\text{ms}$ ($< 15\,\text{mA}$ fault current, zero voltage drop on main PCB) $\rightarrow$ Anti-pop mute protects speakers.
@@ -168,15 +172,78 @@ Simulates and verifies all high-speed, power, and wireless subsystems of the Fro
    * Sampling: $16\,\text{kHz}$ / 24-Bit via DMA.
    * Biquad Direct Form II digital filter compliant with IEC 61672-1 Class 1 ($-19{,}1\,\text{dB}$ attenuation of $100\,\text{Hz}$ wind rumble).
    * $20\,\text{ms}$ RMS integration streaming calibrated $\text{dB(A)}$ telemetry to the Central Box at $50\,\text{Hz}$.
-4. **2.4 GHz ESP-NOW Ultra-Low-Latency PTT Budget:**
-   * Hardware RC filter: $15{,}0\,\mu\text{s}$.
-   * Edge-Interrupt & Queue: $8{,}5\,\mu\text{s}$.
-   * 802.11 Over-the-air frame ($1\,\text{Mbps}$ DSSS CCK): $772{,}0\,\mu\text{s}$.
-   * Optocoupler firing: $45{,}0\,\mu\text{s}$.
-   * **Total Glass-to-Glass Latency: $0{,}90\,\text{ms}$** (far below the $< 5{,}0\,\text{ms}$ target) with $99{,}8\,\%$ PDR.
+4. **6.5 GHz UWB Ultra-Low-Latency PTT Budget (< 0.4 ms):**
+   * Hardware RC filter: $12.0\,\mu\text{s}$.
+   * GPIO Edge-Interrupt & ISR: $25.0\,\mu\text{s}$.
+   * IEEE 802.15.4z UWB Frame (Channel 5 @ 6.489 GHz, BPRF): $180.0\,\mu\text{s}$.
+   * Central Box DW3110 SPI RX & Opcode Dispatch: $45.0\,\mu\text{s}$.
+   * Cartridge Actuator Circuit (`AO3400` N-MOSFET): $< 100.0\,\mu\text{s}$.
+   * **Total Glass-to-Glass Latency: $\approx 0.36\,\text{ms}$** (far below the $< 5.0\,\text{ms}$ target) with $99.9\,\%$ PDR in the vehicle envelope ($0.5\dots 2.5\,\text{m}$).
 5. **Dual-Bank OTA Rollback Failsafe:**
    * Power loss injected at $45\,\%$ flash write progress in partition `ota_1`.
-   * Bootloader detects invalid SHA-256 header and instantly falls back to `ota_0` $\rightarrow$ **$0{,}0\,\%$ brick risk**.
+   * Bootloader detects invalid SHA-256 header and instantly falls back to `ota_0` $\rightarrow$ **$0.0\,\%$ brick risk**.
+
+---
+
+## 11. Multi-Motorcycle Digital Twin & 8-PCB HIL Simulator (`openmotorbridge_digital_twin.py`)
+
+The **Digital Twin Simulator** ([`openmotorbridge_digital_twin.py`](../../tools/simulators/openmotorbridge_digital_twin.py)) emulates a true-to-life 2-vehicle convoy (Bike A = Leader, Bike B = Chaser) with **8 physically modeled PCB modules** (4 PCB classes per motorcycle) along the geodetic reference track **Wil SG $\rightarrow$ Wattwil (Tunnel) $\rightarrow$ Wattwil Roundabout $\rightarrow$ Ricken Pass**:
+
+```
+                      DIGITAL TWIN ARCHITECTURE (8 PCBS & 2 BIKES)
+═══════════════════════════════════════════════════════════════════════════════════════
+
+   [ GEODETIC TRACK: WIL ──► WATTWIL-TUNNEL (2.2km) ──► ROUNDABOUT ──► RICKEN PASS ]
+                                         │
+         ┌───────────────────────────────┴───────────────────────────────┐
+         ▼                                                               ▼
+ ┌────────────────────────────────────────┐            ┌────────────────────────────────────────┐
+ │          MOTORCYCLE A (LEADER)         │            │          MOTORCYCLE B (CHASER)         │
+ │  • PCBA 01 (ESP32-S3 Main + LoRa/UWB)  │            │  • PCBA 01 (ESP32-S3 Main + LoRa/UWB)  │
+ │  • PCBA 02 (Satellite Pod Base 1 & 2)  │            │  • PCBA 02 (Satellite Pod Base 1 & 2)  │
+ │  • PCBA 03 (Pods 1/2 Smart Cartridges) │            │  • PCBA 03 (Pods 1/2 Smart Cartridges) │
+ │  • PCBA 05 (Universal Front Node)      │            │  • PCBA 05 (Universal Front Node)      │
+ └───────────────────┬────────────────────┘            └───────────────────┬────────────────────┘
+                     │                                                     │
+                     └────────────────► [ RF PROPAGATION ENGINE ] ◄────────┘
+                                        • Log-Distance Model (Friis)
+                                        • 38 dB attenuation in tunnel bore
+                                        • 2.4 GHz OMM High-Speed Mesh (<150m)
+                                        • 868 MHz LoRa Fallback (>150m / Tunnel)
+                                        • Dynamic Leader Election (DLE)
+                                                       │
+                                                       ▼
+                                        ┌─────────────────────────────┐
+                                        │ PURE-PYTHON WEBSOCKET SERVER│  (Port 8765)
+                                        └──────────────┬──────────────┘
+                                                       │
+                                                       ▼
+                                        ┌─────────────────────────────┐
+                                        │    OPENMOTORBRIDGE PWA      │  Live Dashboard
+                                        │ (Speedo, Lean, Radar,       │  in Web Browser
+                                        │  EKF-Tunnel-DR, Mesh-Topol.)│
+                                        └─────────────────────────────┘
+```
+
+### Core Components & Test Features:
+1. **4 PCB Classes per Motorcycle:**
+   * **PCBA 01 (Central Box):** 15-State ADR-EKF filtering, Power Supervisor (Vehicle $14.2\,\text{V}$, UPS buffer $4.14\,\text{V}$), Audio DSP Matrix, Semtech SX1262 LoRa 868 MHz transceiver & Qorvo DW3110 UWB backbone.
+   * **PCBA 02 (Pod Base, 2x):** M8 helmet interface, SP3012 TVS protection array monitoring.
+   * **PCBA 03 (Smart Cartridges, 2x):** CH32V003 RISC-V mechatronics controller, 4x AO3400 N-MOSFETs (`sena_spider`, `cardo_edge`), PTT button detection.
+   * **PCBA 05 (Universal Front Node):** u-blox SAM-M10Q Multi-GNSS via J12 Qwiic, dual Knowles MEMS acoustic sensing (wind noise scaling with $v^3$), cockpit PTT button, DW3110 UWB backbone.
+2. **Geodetic Track (`wil_wattwil_ricken.py`):**
+   * 11,682 support points with realistic acceleration, lean angle ($\theta_{\text{lean}} = \arctan(v \cdot \dot{\psi} / g)$ up to $42^\circ$), and elevation profile ($570\dots 795\,\text{m}$ ASL).
+3. **15-State ADR-EKF Tunnel Outage & Dead Reckoning:**
+   * Upon entering the 2.2 km Wattwil Tunnel, GNSS fix drops instantly ($Sats = 0$, $HDOP = 99.9$).
+   * The EKF integrates CAN wheel speed and IMU yaw rate with realistic residual drift.
+   * After 132 seconds of tunnel riding, position drift at the Wattwil roundabout is only **$18.83\,\text{m}$** (Automotive norm $< 30\,\text{m}$ or $< 1.5\,\%$) $\rightarrow$ motorcycle hits roundabout entry with high precision.
+4. **RF Propagation & Dynamic Dual-PHY Handover:**
+   * **Clear Line of Sight ($d < 150\,\text{m}$):** 2.4 GHz High-Speed Mesh ($250\,\text{kbps}$, Opus 24k full-duplex audio, 20 Hz telemetry).
+   * **Tunnel Entry or RF Drop ($RSSI < -88\,\text{dBm}$):** Seamless automatic handover to 868 MHz LoRa (half-duplex PTT, 1 Hz telemetry).
+   * **Regrouping at Ricken Pass:** Hysteresis-controlled return handover to 2.4 GHz mesh ($+4\,\text{dB}$ margin).
+5. **Live PWA Link:**
+   * Pure-Python RFC 6455 WebSocket Server on `ws://localhost:8765`.
+   * In the PWA ([`webapp_pwa/index.html`](../../webapp_pwa/index.html)), clicking **🚀 Digital Twin** activates the live session with 10 Hz telemetry visualization.
 
 ---
 

@@ -21,19 +21,23 @@ This document lists all international automotive, industry, radio frequency, and
 ## 2. Radio, Wave Propagation & Telecommunications Standards
 
 * **RED 2014/53/EU:** *Radio Equipment Directive* (European regulatory framework for CE radio equipment).
+* **IEEE 802.15.4z-2020:** *Enhanced Ultra-Wideband (UWB) Physical Layers (PHYs) and Associated Ranging Techniques* (BPRF mode, Channel 5 @ 6.489 GHz, 499.2 MHz bandwidth).
+* **ETSI EN 302 065-1 v2.1.1 & EN 302 065-3 v2.1.1:** *Short Range Devices (SRD) using Ultra Wide Band technology (UWB); Part 1: Generic UWB applications; Part 3: UWB devices for automotive and road transport vehicles* ($-41.3\,\text{dBm/MHz}$ e.i.r.p. spectral power density, continuous legal transmission without duty cycle capping).
+* **EU Decision 2019/785:** *European Commission Implementing Decision on the harmonisation of radio spectrum for ultra-wideband equipment in the Union*.
 * **ETSI EN 300 328 v2.2.2:** *Wideband transmission systems; Data transmission equipment operating in the 2.4 GHz ISM band* (EIRP limits to 100 mW, FHSS/DSSS spread spectrum).
 * **ETSI EN 300 220-2 v3.2.1:** *Short Range Devices (SRD) operating in the frequency range 25 MHz to 1 000 MHz* (LoRa 868 MHz Sub-GHz band duty cycle limits: 1% / 10%).
-* **ETSI EN 301 489-1 / -3 / -17:** *ElectroMagnetic Compatibility (EMC) standard for radio equipment and services*.
-* **FCC Part 15 Subpart C / B:** *Title 47 CFR Part 15 — Radio Frequency Devices* (US regulatory rules for unlicensed intentional and unintentional radiators).
+* **ETSI EN 301 489-1 / -3 / -17 / -33:** *ElectroMagnetic Compatibility (EMC) standard for radio equipment and services* (Harmonized EMC standards for UWB, short-range devices and wideband systems).
+* **FCC Part 15 Subpart C / B / F:** *Title 47 CFR Part 15 — Radio Frequency Devices; Subpart F: Ultra-Wideband Operation* (US regulatory rules for UWB and unlicensed radiators).
 * **3GPP TS 36.331 / TS 36.213 (Release 14/15 Sidelink C-V2X / ProSe):** *E-UTRA; Physical layer procedures / Radio Resource Control* (Reference for SC-FDMA TDMA slot structure in OpenMotorMesh).
-* **ITU-R P.838 / P.840:** *Specific attenuation model for rain / fog for use in prediction methods* (Atmospheric path loss modeling for 2.4 GHz and 868 MHz).
+* **ITU-R P.838 / P.840:** *Specific attenuation model for rain / fog for use in prediction methods* (Atmospheric path loss modeling for 2.4 GHz, 6.5 GHz, and 868 MHz).
 
 ---
 
 ## 3. Protocol, Bus & Interface Specifications
 
+* **Qorvo Inc.:** *DW3000 / DW3110 Ultra-Wideband Transceiver User Manual & Software API Guide* (SPI 20 MHz, double-buffer RX, two-way ranging).
 * **Bluetooth SIG:** *Battery Service Specification v1.0* (GATT UUID `0x180F`) and *Adopted Bluetooth Core Specification v5.0 / v5.2*.
-* **u-blox AG:** *u-blox M10 SPG 5.10 Interface Description* (Doc UBX-21035062, UBX/NMEA 10 Hz PVT & 1-PPS Timecode).
+* **u-blox AG:** *u-blox SAM-M10Q / M10 SPG 5.10 Interface Description* (Doc UBX-21035062, UBX/NMEA 10 Hz PVT & Qwiic I2C).
 * **Semtech Corporation:** *SX1261/2 Long Range Low Power Sub-GHz Transceiver Datasheet* (DS.SX1261-2.W.APP).
 * **Maxim Integrated / Analog Devices:** *DS2401 Silicon Serial Number 1-Wire ROM Specification* (64-Bit UID).
 * **Philips Semiconductors (NXP):** *I2S Bus Specification* (Inter-IC Sound 48 kHz / 24 Bit Audio DMA).

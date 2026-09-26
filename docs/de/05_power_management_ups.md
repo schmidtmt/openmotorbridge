@@ -100,7 +100,7 @@ Der Universal Front-Knoten verfügt über ein intelligentes Energiemanagement f�
 
 ### 4.1 1-Klick Dongle Kaltstart (Hard Reset via PWA)
 Hängt sich der drahtlose CarPlay-Adapter auf, muss der Fahrer nicht mehr anhalten und den USB-Stecker ziehen:
-* Ein Klick auf den Button **"CarPlay 1-Klick Kaltstart"** im WebApp-Dashboard sendet den Befehl `PKT_TYPE_CMD_POWER_CYCLE` über ESP-NOW an den Front-Knoten.
+* Ein Klick auf den Button **"CarPlay 1-Klick Kaltstart"** im WebApp-Dashboard sendet den Befehl `PKT_TYPE_CMD_POWER_CYCLE` über UWB an den Front-Knoten.
 * Der ESP32-S3 zieht den Enable-Pin des TPS2051B für exakt $2{,}5\,\text{Sekunden}$ auf LOW.
 * Der Dongle wird vollständig spannungsfrei geschaltet ($0{,}00\,\text{V}$) und startet anschließend frisch durch.
 
