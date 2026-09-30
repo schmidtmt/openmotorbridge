@@ -141,7 +141,8 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
      * SPIDER X Slim formschlüssig in das PA12-Nest einlegen. *(Audio wird wahlweise per internem ES8388 Codec digitalisiert oder per Bluetooth direkt gestreamt; zero pogo pins!).*
    * **Bucht 2 (Cardo Packtalk Edge / Pro Inlay - Klasse 4 DMC Gen2):**
      * 6-Pin JST-SH Adapterkabel auf Header `J_AUDIO_PWR` stecken.
-     * 3.5 mm Stereo-Klinkenstecker und rechtwinkligen USB-C Ladestecker an die Cardo Air-Mount Docking-Aufnahme anstecken.
+     * 3.5 mm Stereo-Klinkenstecker (Lautsprecherausgang ins OMB-Audioboard) und Cardo 2-Pin Micro-Stecker mit Rastnase (Mikrofoneingang vom ES8388 DAC) an die Cardo Air-Mount Kabelpeitsche anstecken.
+     * Rechtwinkligen USB-C Ladestecker an den Ladeport des Packtalk Edge anstecken.
      * Cardo Packtalk Edge in das Air-Mount Bett einklicken (Dauerladung während aktivem Mesh-Betrieb voll unterstützt).
    * **Alternative Option: Midland PMR446 Funk-Kassette (Klasse 7 Analogfunk):**
      * 6-Pin JST-SH Adapterkabel auf Doppel-Klinke (2.5 mm Mic / 3.5 mm Spk) und 5V DC-Batteriedummy anstecken; PTT-Tastung erfolgt über den Open-Drain MOSFET `OPTO_PTT`.
