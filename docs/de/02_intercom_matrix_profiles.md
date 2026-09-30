@@ -1,61 +1,61 @@
 # 02 - Intercom-Matrix, PTT-Steuerung & Dynamische Kassetten-Profile
 
-Dieses Dokument spezifiziert die universelle **Intercom-Routing-Matrix**, die latenzfreie **Lenker-PTT-Steuerung** (< 1,8 ms) sowie das klassenorientierte **Hardwareprofil-System** der OpenMotorBridge v8.0 auf Basis der 1-Wire Kassetten-Identifikation (WCH CH32V003 native Emulation oder DS2401 ROM-ID) und der LittleFS-Profil-Engine.
+Dieses Dokument spezifiziert die universelle **Intercom-Routing-Matrix**, die latenzfreie **Lenker-PTT-Steuerung** (< 0,5 ms) sowie das klassenorientierte **Hardwareprofil-System** der OpenMotorBridge v8.5 / v9.0 Clean Architecture auf Basis der All-UWB Kassetten-Identifikation (`UWB_PKT_CARTRIDGE_ANNOUNCE`), gestaffeltem Power-Sequencing und der LittleFS-Profil-Engine.
 
 ---
 
 ## 1. Intercom-Routing-Matrix & Brückenarchitektur
 
-Die OpenMotorBridge fungiert als aktive Audio-Kreuzschiene und Brückengateway zwischen zwei physischen Intercom-Einheiten (Pod 1 und Pod 2), externen Audioquellen (Navi / Boom! Box) und den Bluetooth-Helmen von Fahrer und Sozius:
+Die OpenMotorBridge fungiert als aktive Audio-Kreuzschiene und Brückengateway zwischen zwei physischen Intercom-Einheiten (Bucht 1 und Bucht 2), externen Audioquellen (Navi / Boom! Box) und den Bluetooth-Helmen von Fahrer und Sozius:
 
 ```
-                               INTERCOM ROUTING MATRIX
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                                                                                        │
-│   SATELLITEN-POD 1 (Sena Mesh)           SATELLITEN-POD 2 (Cardo DMC / PMR446)         │
-│   ┌──────────────────────────┐           ┌──────────────────────────┐                  │
-│   │ • Sena SPIDER X / 50S/60S│           │ • Cardo Edge / Pro / Neo │                  │
-│   │ • 1-Wire ID (CH32V003/DS)│           │ • 1-Wire ID (CH32V003/DS)│                  │
-│   │ • 4x Mechatronik / Optos │           │ • 4x Mechatronik / Optos │                  │
-│   └────────────┬─────────────┘           └────────────┬─────────────┘                  │
-│                │ NF_P1_OUT/IN                         │ NF_P2_OUT/IN                   │
-│                ▼                                      ▼                                │
-│   ┌──────────────────────────┐           ┌──────────────────────────┐                  │
-│   │ Bourns LM-NP-1001-B1L    │           │ Bourns LM-NP-1001-B1L    │                  │
-│   │ 1500V RMS Trennübertrager│           │ 1500V RMS Trennübertrager│                  │
-│   └────────────┬─────────────┘           └────────────┬─────────────┘                  │
-│                │ Differenziell                        │ Differenziell                  │
-│                ▼                                      ▼                                │
-│       ┌────────────────────────────────────────────────────────────┐                   │
-│       │        ES8388 24-BIT I2S STEREO AUDIO CODEC & DSP          │                   │
-│       │  • Raised-Cosine Ducking (Prio: Notfall > Navi > Intercom) │                   │
-│       │  • Symmetrischer Intercom-Cross-Mix (P1 <-> P2)            │                   │
-│       │  • Knowles MEMS Fahrtwind-Lautstärkenachführung (AGC)      │                   │
-│       └─────────────────────────────┬──────────────────────────────┘                   │
-│                                     │                                                  │
-│              ┌──────────────────────┴──────────────────────┐                           │
-│              ▼                                             ▼                           │
-│   ┌────────────────────────────┐              ┌────────────────────────────┐           │
-│   │ FAHRER-HELM (Bluetooth)    │              │ SOZIUS-HELM (Bluetooth)    │           │
-│   │ • Sena/Cardo/OEM Headset   │              │ • Sena/Cardo/OEM Headset   │           │
-│   │ • Gemischtes Gesamt-Audio  │              │ • Getrennte Lautstärke     │           │
-│   └────────────────────────────┘              └────────────────────────────┘           │
-└────────────────────────────────────────────────────────────────────────────────────────┘
+                                INTERCOM ROUTING MATRIX (ALL-UWB)
++----------------------------------------------------------------------------------------+
+|                                                                                        |
+|   SATELLITEN-BUCHT 1 (Gateway A * Sena)       SATELLITEN-BUCHT 2 (Gateway B * Cardo/OMM)|
+|   +--------------------------+                +--------------------------+             |
+|   | * Sena SPIDER X / 50S/60S|                | * Cardo Edge / Pro / OMM |             |
+|   | * UWB Transceiver DW3110 |                | * UWB Transceiver DW3110 |             |
+|   | * 4x Mechatronik-MOSFETs |                | * 4x Mechatronik-MOSFETs |             |
+|   +------------+-------------+                +------------+-------------+             |
+|                |                                           |                           |
+|                | 2-Draht DC-Power (+5V / GND) vom DTM-12   |                           |
+|                | Gestaffelt: T=200ms                       | Gestaffelt: T=350ms       |
+|                |                                           |                           |
+|                +-------------+-----------------------------+                           |
+|                              | Drahtlose UWB Audio- & Steuer-Streams                   |
+|                              | (Qorvo DW3110 / 6.489 GHz Ch. 5 / Latenz < 0.4 ms)      |
+|                              v                                                         |
+|       +------------------------------------------------------------+                   |
+|       |        ES8388 24-BIT I2S STEREO AUDIO CODEC & DSP          |                   |
+|       |  * Raised-Cosine Ducking (Prio: Radar > Navi > Intercom)   |                   |
+|       |  * Symmetrischer Intercom-Cross-Mix (Bucht 1 <-> Bucht 2)  |                   |
+|       |  * Knowles MEMS Fahrtwind-Lautstärkenachführung (AGC)      |                   |
+|       +-----------------------------+------------------------------+                   |
+|                                     |                                                  |
+|              +----------------------+----------------------+                           |
+|              v                                             v                           |
+|   +----------------------------+              +----------------------------+           |
+|   | FAHRER-HELM (Bluetooth)    |              | SOZIUS-HELM (Bluetooth)    |           |
+|   | * Sena/Cardo/OEM Headset   |              | * Sena/Cardo/OEM Headset   |           |
+|   | * Gemischtes Gesamt-Audio  |              | * Getrennte Lautstärke     |           |
+|   +----------------------------+              +----------------------------+           |
++----------------------------------------------------------------------------------------+
 ```
 
 ### 1.1 Die 3 Standard-Betriebsmodi
 1. **Modus 0: Standard-Modus (Full Mesh Bridge):**  
-   Port 1 (z. B. Sena Wave 3.0) und Port 2 (z. B. Cardo DMC Gen2) sind gleichzeitig aktiv. Sprache von Sena-Fahrern wird in Millisekunden in das Cardo-Mesh übertragen und umgekehrt. Fahrer und Sozius hören beide Gruppen symmetrisch gemischt.
+   Bucht 1 (z. B. Sena Mesh 3.0) und Bucht 2 (z. B. Cardo DMC Gen2) sind gleichzeitig aktiv. Sprache von Sena-Fahrern wird in Millisekunden in das Cardo-Mesh übertragen und umgekehrt. Fahrer und Sozius hören beide Gruppen symmetrisch gemischt im Helm via Bluetooth.
 2. **Modus 1: Single Rider Mode (Fokus-Modus):**  
-   Port 2 wird softwareseitig stummgeschaltet (`-96 dB`). Der volle DSP- und Routing-Fokus liegt auf dem Primär-Headset (Port 1), Navigationsdurchsagen und Smartphone-A2DP-Musik.
+   Bucht 2 wird softwareseitig stummgeschaltet (`-96 dB`). Der volle DSP- und Routing-Fokus liegt auf dem Primär-Gateway (Bucht 1), Navigationsdurchsagen und Smartphone-A2DP-Musik.
 3. **Modus 2: Cruise Mode (Bordlautsprecher-Ausgabe):**  
    Intercom-Signale werden um $-6\,\text{dB}$ bedämpft und auf die Bordlautsprecher (Harley-Davidson Boom! Box GTS / BMW Soundanlage) geroutet.
 
-### 1.2 Cross-Intercom Bridge (Port 1 ↔ Port 2) mit Anti-Feedback Loopback-Gate
-* **Bidirektionale Kopplung:** Ermöglicht die nahtlose Audio-Brücke zwischen inkompatiblen Herstellern (z. B. Sena Apex Mesh 3.0 auf Port 1 und Cardo DMC Gen2 auf Port 2).
+### 1.2 Cross-Intercom Bridge (Bucht 1 ↔ Bucht 2) mit Anti-Feedback Loopback-Gate
+* **Bidirektionale Kopplung:** Ermöglicht die nahtlose Audio-Brücke zwischen inkompatiblen Herstellern (z. B. Sena Apex Mesh 3.0 in Bucht 1 und Cardo DMC Gen2 in Bucht 2).
 * **Einstellbare Überblend-Dämpfung:** Bleed-Pegel stufenlos von $-18\,\text{dB}$ bis $0\,\text{dB}$ (Standard: $-6\,\text{dB}$) in der WebApp konfigurierbar.
 * **Anti-Feedback Loopback Gate ($-24\,\text{dB}$ Schutzschaltung):**  
-  Sobald auf Port 1 Sprache erkannt wird (VOX aktiv oder PTT gedrückt), dämpft der DSP den Rückkopplungspfad von Port 2 nach Port 1 schlagartig um $-24\,\text{dB}$. Dadurch wird verhindert, dass die aus dem Cardo-Kopfhörer des Sozius austretende Stimme des Fahrers über dessen Mikrofon wieder in das Sena-Mesh zurückgesendet wird (Unterdrückung von Echos und akustischen Pfeifschleifen).
+  Sobald auf Bucht 1 Sprache erkannt wird (VOX aktiv oder PTT gedrückt), dämpft der DSP den Rückkopplungspfad von Bucht 2 nach Bucht 1 schlagartig um $-24\,\text{dB}$. Dadurch wird verhindert, dass die aus dem Cardo-Kopfhörer des Sozius austretende Stimme des Fahrers über dessen Mikrofon wieder in das Sena-Mesh zurückgesendet wird (Unterdrückung von Echos und akustischen Pfeifschleifen).
 
 ### 1.3 Sidetone Eigenstimmen-Rückführung
 * **Natürliche Stimmrückmeldung:** Im geschlossenen, geräuschgedämmten Integralhelm neigen Fahrer bei Autobahngeschwindigkeit zum unbewussten Schreien.
@@ -69,78 +69,82 @@ Die OpenMotorBridge fungiert als aktive Audio-Kreuzschiene und Brückengateway z
 
 ---
 
-## 2. Zero-Latency PTT-Steuerung & Optokoppler-Zündung (< 1,8 ms)
+## 2. Zero-Latency PTT-Steuerung & Mechatronischer UWB-Trigger (< 0,5 ms)
 
-Klassische Bluetooth-Fernbedienungen am Lenker leiden unter hohen Latenzen ($80 \dots 250\,\text{ms}$) und Verbindungsaussetzern. OpenMotorBridge löst dieses Problem durch eine hybride PTT-Architektur:
+Klassische Bluetooth-Fernbedienungen am Lenker leiden unter hohen Latenzen ($80 \dots 250\,\text{ms}$) und Verbindungsaussetzern. OpenMotorBridge löst dieses Problem durch eine deterministische **All-UWB PTT-Signalkette**:
 
 ```
-               LENKER-PTT SIGNALKETTE (GLAS-ZU-GLAS < 0,4 ms)
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│ 1. LENKERTASTER (Am Front-Knoten verdrahtet):                                          │
-│    • Mechanischer Goldkontakt-Taster am Lenker (IP67, 100% batteriefrei)               │
-│    • Hardware-Schmitt-Trigger-Entprellung (12 µs Latenz)                               │
-│    • GPIO Pegel-Interrupt auf ESP32-S3 Dual-Core Controller                            │
-├────────────────────────────────────────────────────────────────────────────────────────┤
-│                                        ▼                                               │
-│ 2. ULTRA-LOW-LATENCY FUNKBRÜCKE (UWB 6.5 GHz Ch. 5 / Qorvo DW3110):                    │
-│    • IEEE 802.15.4z UWB Frame mit 6.8 Mbps PHY (Payload: 8 Bytes, < 180 µs Flugzeit)   │
-│    • 100 % konform mit ETSI EN 302 065-1/3 & EU-Beschluss 2019/785 (Kein Duty-Cycle-Cap)│
-│    • Null Kollision mit 2.4 GHz Bluetooth, Wi-Fi oder Sena/Cardo Mesh (PDR: 99,99 %)   │
-├────────────────────────────────────────────────────────────────────────────────────────┤
-│                                        ▼                                               │
-│ 3. ZENTRALBOX HARDWARE-TRIGGER:                                                        │
-│    • ESP32-S3 Core 0 ISR erfasst UWB Frame (< 35 µs)                                   │
-│    • Sofortiges Durchschalten des Toshiba TLP222A PhotoMOS Optokopplers (< 45 µs)      │
-│    • Gesamtzeit vom Tastendruck bis zum gezündeten Intercom-PTT: ~0,36 ms              │
-└────────────────────────────────────────────────────────────────────────────────────────┘
+               LENKER-PTT SIGNALKETTE (GLAS-ZU-GLAS < 0,54 ms)
++----------------------------------------------------------------------------------------+
+| 1. LENKERTASTER (Am Front-Knoten PCBA 05 verdrahtet):                                  |
+|    * Mechanischer Goldkontakt-Taster am Lenker (IP67, 100% batteriefrei)               |
+|    * Hardware-Schmitt-Trigger-Entprellung (12 µs Latenz)                               |
+|    * GPIO Pegel-Interrupt auf ESP32-S3 Controller am Front-Node                        |
++----------------------------------------------------------------------------------------+
+|                                        v                                               |
+| 2. ULTRA-LOW-LATENCY FUNKBRÜCKE 1: FRONT-NODE -> ZENTRALBOX                            |
+|    * IEEE 802.15.4z UWB Frame UWB_PKT_PTT_EVENT (6.8 Mbps PHY, < 180 µs Flugzeit)     |
+|    * 100 % konform mit ETSI EN 302 065-1/3 & EU-Beschluss 2019/785 (Kein Duty-Cycle-Cap)|
+|    * Null Kollision mit 2.4 GHz Bluetooth, Wi-Fi oder Sena/Cardo Mesh (PDR: 99,99 %)   |
++----------------------------------------------------------------------------------------+
+|                                        v                                               |
+| 3. ZENTRALBOX DISPATCHER & FUNKBRÜCKE 2: ZENTRALBOX -> KASSETTE                        |
+|    * ESP32-S3 Core 0 ISR erfasst PTT-Event (< 35 µs) & generiert Opcode (< 10 µs)      |
+|    * Sendet UWB_PKT_CARTRIDGE_OPCODE drahtlos an Bucht 1 oder Bucht 2 (< 180 µs)       |
++----------------------------------------------------------------------------------------+
+|                                        v                                               |
+| 4. KASSETTEN-AKTUATOR TRIGGER (PCBA 03 Rev 3.0 All-UWB):                               |
+|    * Host-MCU auf PCBA 03 schaltet AO3400A N-MOSFET (< 1 µs)                           |
+|    * Hubmagnet betätigt PTT-/Mesh-Gummitaste des Headsets (< 100 µs)                   |
+|    * Gesamtlatenz vom Lenkertaster bis zum Headset-Tastendruck: ~0,54 ms               |
++----------------------------------------------------------------------------------------+
 ```
 
-### 2.1 Mechatronische Smart Cartridge & 4-Kanal MOSFET-Treiber (PCBA 03 Rev 2.0)
+### 2.1 Mechatronische Smart Cartridge & 4-Kanal MOSFET-Treiber (PCBA 03 Rev 3.0)
 
 Im Gegensatz zur veralteten Methode, elektrische Kontakte im Inneren des Headsets anzuzapfen oder korrosionsanfällige Pogo-Pins zu nutzen, setzt OpenMotorBridge auf die **Smart Modular Cartridge mit 4 unabhängigen mechatronischen Aktuatoren**:
-* **Physikalisch unendliche galvanische Isolation:** Da mechatronische Finger die Original-Gummitasten von außen berührungslos betätigen, existiert keine leitende Verbindung zwischen Motorrad-Bordnetz und Headset. Ein Optokoppler entfällt ersatzlos!
-* **Verlustfreie N-Kanal MOSFETs (`AO3400`):** Vier ultrakompakte Power-MOSFETs ($R_{\text{ON}} < 28\,\text{m}\Omega$) schalten Miniatur-Hubmagnete oder Sub-Micro-Servos blitzschnell und prellfrei mit $< 1\,\mu\text{s}$ Ansprechzeit.
+* **Physikalisch unendliche galvanische Isolation:** Da mechatronische Finger die Original-Gummitasten von außen berührungslos betätigen, existiert keine leitende Verbindung zwischen Motorrad-Bordnetz und Headset. Ein Optokoppler auf der Zentralbox entfällt ersatzlos!
+* **Verlustfreie N-Kanal MOSFETs (`AO3400A`):** Vier ultrakompakte Power-MOSFETs ($R_{\text{ON}} < 28\,\text{m}\Omega$) auf der Platinenunterseite (`B.Cu`) schalten Miniatur-Hubmagnete blitzschnell und prellfrei mit $< 1\,\mu\text{s}$ Ansprechzeit.
 * **100 % Erhalt von Garantie & IPX-Schutz:** Das Headset wird fabrikneu und ungeöffnet in das Kassettenbett eingelegt. Weder Gehäusedichtungen noch Garantiesiegel werden berührt.
 * **Formbündige Arretierung gegen $20\,\text{g}$ Vibration:** Das 3D-gedruckte Kassettenbett (PA12-MJF) umschließt das Intercom mit dämpfenden EPDM-Passungen spielfrei, sodass die Aktuatorstößel die Gummitasten stets zentrisch mit definiertem Hub ($1{,}0\dots 1{,}2\,\text{mm}$) treffen.
 
-### 2.2 Unabhängige 4-Kanal Aktuator-Matrix & In-System Profil-Flashing (ISP)
+### 2.2 Unabhängige 4-Kanal Aktuator-Matrix via UWB Opcodes
 
-Auf der Kassettenplatine steuert der 32-Bit RISC-V Controller (WCH CH32V003) vier getrennte Aktuatoren an, die über den Single-Wire Bus (Pin 5 `TRIGGER_PPS`) von der Zentralbox getriggert werden.
+Auf der Kassettenplatine steuert die Host-MCU vier getrennte Aktuatoren an, die drahtlos über UWB-Opcodes (`UWB_PKT_CARTRIDGE_OPCODE`) von der Zentralbox getriggert werden:
 
 ```
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│        SENA SPIDER X SLIM – SMART CARTRIDGE AKTUATOR-MATRIX (PCBA 03 Rev 2.0)          │
-├──────────────────────┬───────────────────────┬─────────────────┬───────────────────────┤
-│ Funktion / Kommando  │ Aktive Aktuatoren     │ Impuls / Ablauf │ Sena-Reaktion         │
-├──────────────────────┼───────────────────────┼─────────────────┼───────────────────────┤
-│ **`0x01` Power Boot**│ **ACT_CENTER + PLUS** │ **1.000 ms**    │ Kaltstart nach Stand- │
-│                      │                       │                 │ zeit („Hallo“)        │
-├──────────────────────┼───────────────────────┼─────────────────┼───────────────────────┤
-│ **`0x02` Power Off** │ **ACT_CENTER + PLUS** │ **200 ms**      │ Sauberes Ausschalten  │
-├──────────────────────┼───────────────────────┼─────────────────┼───────────────────────┤
-│ **`0x03` Lauter**    │ **ACT_PLUS** (solo)   │ **100 ms**      │ Lautstärke +1         │
-├──────────────────────┼───────────────────────┼─────────────────┼───────────────────────┤
-│ **`0x04` Leiser**    │ **ACT_MINUS** (solo)  │ **100 ms**      │ Lautstärke -1         │
-├──────────────────────┼───────────────────────┼─────────────────┼───────────────────────┤
-│ **`0x05` Mesh Ein/Aus** **ACT_MESH** (solo)  │ **200 ms**      │ Mesh Intercom Toggle  │
-├──────────────────────┼───────────────────────┼─────────────────┼───────────────────────┤
-│ **`0x06` Group Mesh**│ **ACT_MESH** (solo)   │ **3.000 ms**    │ Open ↔ Group Mesh     │
-├──────────────────────┼───────────────────────┼─────────────────┼───────────────────────┤
-│ **`0x07` Kanal +1**  │ **1. ACT_MESH (2x)**  │ **2x 150 ms**   │ Menü „Kanaleinst., #“ │
-│ *(Autonomes Makro)*  │ **2. Pause 200 ms**   │                 │                       │
-│                      │ **3. ACT_PLUS (1x)**  │ **150 ms**      │ Nächster Kanal (1..6) │
-├──────────────────────┼───────────────────────┼─────────────────┼───────────────────────┤
-│ **`0x08` Kanal -1**  │ **1. ACT_MESH (2x)**  │ **2x 150 ms**   │ Menü „Kanaleinst., #“ │
-│ *(Autonomes Makro)*  │ **2. Pause 200 ms**   │                 │                       │
-│                      │ **3. ACT_MINUS (1x)** │ **150 ms**      │ Vorheriger Kanal      │
-└──────────────────────┴───────────────────────┴─────────────────┴───────────────────────┘
++----------------------------------------------------------------------------------------+
+|        SENA SPIDER X SLIM - SMART CARTRIDGE AKTUATOR-MATRIX (PCBA 03 Rev 3.0)          |
++----------------------+-----------------------+-----------------+-----------------------+
+| Funktion / Kommando  | Aktive Aktuatoren     | Impuls / Ablauf | Sena-Reaktion         |
++----------------------+-----------------------+-----------------+-----------------------+
+| **`0x01` Power Boot**| **ACT_CENTER + PLUS** | **1.000 ms**    | Kaltstart nach Stand- |
+|                      |                       |                 | zeit ("Hallo")        |
++----------------------+-----------------------+-----------------+-----------------------+
+| **`0x02` Power Off** | **ACT_CENTER + PLUS** | **200 ms**      | Sauberes Ausschalten  |
++----------------------+-----------------------+-----------------+-----------------------+
+| **`0x03` Lauter**    | **ACT_PLUS** (solo)   | **100 ms**      | Lautstärke +1         |
++----------------------+-----------------------+-----------------+-----------------------+
+| **`0x04` Leiser**    | **ACT_MINUS** (solo)  | **100 ms**      | Lautstärke -1         |
++----------------------+-----------------------+-----------------+-----------------------+
+| **`0x05` Mesh Ein/Aus** **ACT_MESH** (solo)  | **200 ms**      | Mesh Intercom Toggle  |
++----------------------+-----------------------+-----------------+-----------------------+
+| **`0x06` Group Mesh**| **ACT_MESH** (solo)   | **3.000 ms**    | Open ↔ Group Mesh     |
++----------------------+-----------------------+-----------------+-----------------------+
+| **`0x07` Kanal +1**  | **1. ACT_MESH (2x)**  | **2x 150 ms**   | Menü "Kanaleinst., #" |
+| *(Autonomes Makro)*  | **2. Pause 200 ms**   |                 |                       |
+|                      | **3. ACT_PLUS (1x)**  | **150 ms**      | Nächster Kanal (1..6) |
++----------------------+-----------------------+-----------------+-----------------------+
+| **`0x08` Kanal -1**  | **1. ACT_MESH (2x)**  | **2x 150 ms**   | Menü "Kanaleinst., #" |
+| *(Autonomes Makro)*  | **2. Pause 200 ms**   |                 |                       |
+|                      | **3. ACT_MINUS (1x)** | **150 ms**      | Vorheriger Kanal      |
++----------------------+-----------------------+-----------------+-----------------------+
 ```
 
-#### Automatisches In-System Profil-Flashing (ISP) durch die Zentralbox:
-1. **Kein Programmiergerät:** Sobald in der WebApp ein Profil zugewiesen wird (z. B. `sena_spider_x.json`), überträgt die Zentralbox über Pin 5 (`TRIGGER_PPS`) per 19.200-Baud UART die Konfigurationstabellen in den internen EEPROM des Kassetten-Controllers.
-2. **Autonome Makro-Ausführung:** Komplexe Sequenzen (wie Kanal +1 via 2x Mesh, Pause, 1x Plus) taktet der Kassetten-MCU lokal auf der Platine ab. Die Zentralbox sendet lediglich den 1-Byte-Opcode `0x07`.
-3. **Automatischer Kaltstart bei Zündung AN:** Antwortet das Headset nach Zündung EIN nicht binnen 1,5 Sekunden auf BLE (weil es nach Schlechtwetter oder Urlaub $> 3$ Tage im Tiefschlaf war), feuert die Zentralbox autonom Opcode `0x01` ab. Die Aktuatoren `Center` und `(+)` werden 1.000 ms niedergedrückt $\rightarrow$ das Headset bootet ohne jeden Fahrereingriff!
-
+#### Drahtlose Profil-Synchronisation & Autonomes Makro-Timing:
+1. **Drahtlose Konfiguration via UWB:** Beim Pairing oder Profilwechsel überträgt die Zentralbox über `UWB_PKT_CMD_CONFIG` die Aktuator-Parameter in das NVS der Kassetten-MCU.
+2. **Autonome Makro-Ausführung:** Komplexe Sequenzen (wie Kanal +1 via 2x Mesh, Pause, 1x Plus) taktet die Kassetten-MCU lokal auf der Platine ab. Die Zentralbox sendet lediglich den 1-Byte-Opcode `0x07`.
+3. **Automatischer Kaltstart bei Zündung AN:** Antwortet das Headset nach Zündung EIN nicht binnen 1,5 Sekunden auf BLE (weil es nach Standzeit $> 3$ Tage im Tiefschlaf war), feuert die Zentralbox autonom Opcode `0x01` per UWB ab. Die Aktuatoren `Center` und `(+)` werden 1.000 ms synchron niedergedrückt $\rightarrow$ das Headset bootet ohne jeden Fahrereingriff!
 
 ---
 
@@ -149,40 +153,43 @@ Auf der Kassettenplatine steuert der 32-Bit RISC-V Controller (WCH CH32V003) vie
 Alle unterstützten Intercom- und Funkkassetten sind in 8 standardisierte Hardware-Klassen eingeteilt:
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                 KLASSENORIENTIERTE HARDWARE-PROFIL-MATRIX                   │
-├─────────┬───────────────────────────────┬─────────────────┬─────────────────┤
-│ Klasse  │ Gerätefamilien                │ Mesh-Protokoll  │ DLE-Score Bonus │
-├─────────┼───────────────────────────────┼─────────────────┼─────────────────┤
-│ **K1**  │ Sena 60S, Apex, 50S/R/C, SRL3 │ Sena Mesh 3.0/2 │ **+60 Punkte**  │
-│ **K2a** │ Sena SPIDER X Slim            │ Mesh 3.0 & Wave │ **+60 Punkte**  │
-│ **K2b** │ Sena Spider RT1/ST1           │ Mesh 2.0 Basic  │ **+40 Punkte**  │
-│ **K3**  │ Sena Vortex, 20S, 10S, SF, 5S │ Bluetooth 5.1/4 │ **+20 Punkte**  │
-│ **K4**  │ Cardo Edge, Pro, Custom, Neo  │ Cardo DMC Gen2  │ **+60 Punkte**  │
-│ **K5**  │ Cardo Freecom 4x/2x, Spirit HD│ Live Intercom   │ **+40 Punkte**  │
-│ **K6**  │ Cardo Bold, Black, Slim       │ Cardo DMC Gen1  │ **+30 Punkte**  │
-│ **K7**  │ Midland G9 Pro, Baofeng/UHF   │ PMR446 Analog   │ **+10 Punkte**  │
-│ **K8**  │ Midland BTR1, Rush RCF, Wave  │ Midland Wave    │ **+30 Punkte**  │
-│ **K0**  │ Deaktiviert / Leerer Slot     │ Keines          │ **0 Punkte**    │
-└─────────┴───────────────────────────────┴─────────────────┴─────────────────┘
++-----------------------------------------------------------------------------+
+|                 KLASSENORIENTIERTE HARDWARE-PROFIL-MATRIX                   |
++---------+-------------------------------+-----------------+-----------------+
+| Klasse  | Gerätefamilien                | Mesh-Protokoll  | DLE-Score Bonus |
++---------+-------------------------------+-----------------+-----------------+
+| **K1**  | Sena 60S, Apex, 50S/R/C, SRL3 | Sena Mesh 3.0/2 | **+60 Punkte**  |
+| **K2a** | Sena SPIDER X Slim            | Mesh 3.0 & Wave | **+60 Punkte**  |
+| **K2b** | Sena Spider RT1/ST1           | Mesh 2.0 Basic  | **+40 Punkte**  |
+| **K3**  | Sena Vortex, 20S, 10S, SF, 5S | Bluetooth 5.1/4 | **+20 Punkte**  |
+| **K4**  | Cardo Edge, Pro, Custom, Neo  | Cardo DMC Gen2  | **+60 Punkte**  |
+| **K5**  | Cardo Freecom 4x/2x, Spirit HD| Live Intercom   | **+40 Punkte**  |
+| **K6**  | Cardo Bold, Black, Slim       | Cardo DMC Gen1  | **+30 Punkte**  |
+| **K7**  | Midland G9 Pro, Baofeng/UHF   | PMR446 Analog   | **+10 Punkte**  |
+| **K8**  | Midland BTR1, Rush RCF, Wave  | Midland Wave    | **+30 Punkte**  |
+| **K0**  | Deaktiviert / Leerer Slot     | Keines          | **0 Punkte**    |
++---------+-------------------------------+-----------------+-----------------+
 ```
 
 ### 3.1 Detaillierte Geräte-Klassifizierung & Profile im Dateisystem (`/data/profiles/`)
+
+Da OMM 2.4 GHz im v9.6 System als optionale Wechselkassette entkoppelt ist, fungieren die Profil-Punkte als deterministische **Capability-Scores für das dezentrale Link-State Routing**: Besitzen mehrere Bikes im Konvoi dieselben Intercom-Schnittstellen (z. B. führen zwei Bikes sowohl Sena als auch Cardo mit), legt die offline vorberechnete Routing-Matrix anhand des Capability-Scores und der RSSI-Verbindung fest, welcher Node primär als loop-freie Brücke fungiert.
+
 * **Klasse 1: Sena Next-Gen & High-Tier Mesh (`sena_60s.json`, `sena_apex.json`, `sena_50_series.json`):**
   * *Sena 60S:* Wave-Mesh-Intercom, bis zu 64 Teilnehmer, Dual-Chip RF-Hardening, DLE +60 Pkt.
   * *Sena Apex / Apex Plus:* Mesh 3.0 Referenzkassette, 32 Nodes, DLE +60 Pkt.
-  * *Sena 50S, 50R, 50C, SRL3, MeshPort Blue/Red:* Mesh 2.0/3.0, 24–32 Nodes.
+  * *Sena 50S, 50R, 50C, SRL3, MeshPort Blue/Red:* Mesh 2.0/3.0, 24-32 Nodes.
 * **Klasse 2: Sena Spider & Lean Mesh-Only (`sena_spider_x.json`, `sena_spider.json`):**
   * *Sena SPIDER X Slim (K2a - `sena_spider_x.json`):* Das ideale, schlanke Mesh-Modul für OpenMotorBridge. Bietet natives **Mesh 3.0 & 2.0** sowie Wave Intercom mit Bluetooth 5.3 und Sound by BOSE, verzichtet aber vollständig auf den Ballast von Flaggschiff-Helmsystemen (kein Jog-Dial, keine Helmlampen, kein integrierter Akku).
-    * *Integrierte 3-fach Kabelpeitsche ab Werk (Handbuch S. 6):* Die Haupteinheit ($74{,}5 \times 31 \times 16\,\text{mm}$, nur $23{,}2\,\text{g}$) führt alle Schnittstellen über werkseitige Miniatur-Steckverbinder an einer Kabelpeitsche heraus: **Anschluss ⑧ Akkupack** (Direct-DC $3{,}85\,\text{V}$), **Anschluss ⑨ Mikrofon** (Direkteinspeisung vom ES8388 Codec) und **Anschluss ⑩ Lautsprecher** (Audio-Abgriff in den ES8388 ADC).
-    * *Direct-DC & Null Pogo-Pins:* Benötigt kein fehleranfälliges Pogo-Pin-Cradle. Die Stromversorgung wird über die externe 2-Draht-Akkuleitung direkt mit $3{,}85\,\text{V}$ Festspannung von der Trägerplatine im Pod gespeist – **vollkommen ohne Akku-Alterung, ohne Gehäuseöffnung, ohne Lötarbeiten und ohne Garantieverlust!** DLE-Score: **+60 Pkt.** (volle Mesh 3.0 Gleichstellung mit 60S/Apex bei halbem Preis und null Helm-Overhead).
+    * *Integrierte 3-fach Kabelpeitsche ab Werk (Handbuch S. 6):* Die Haupteinheit ($74{,}5 \times 31 \times 16\,\text{mm}$, nur $23{,}2\,\text{g}$) führt alle Schnittstellen über werkseitige Miniatur-Steckverbinder an einer Kabelpeitsche heraus: **Anschluss ⑧ Akkupack** (Direct-DC $3{,}85\,\text{V}$), **Anschluss ⑨ Mikrofon** (Direkteinspeisung vom ES8388 Codec auf PCBA 03) und **Anschluss ⑩ Lautsprecher** (Audio-Abgriff in den ES8388 ADC).
+    * *Direct-DC & Null Pogo-Pins:* Benötigt kein fehleranfälliges Pogo-Pin-Cradle. Die Stromversorgung wird über die externe 2-Draht-Akkuleitung direkt mit $3{,}85\,\text{V}$ Festspannung von der Trägerplatine im Pod gespeist - **vollkommen ohne Akku-Alterung, ohne Gehäuseöffnung, ohne Lötarbeiten und ohne Garantieverlust!** DLE-Score: **+60 Pkt.** (volle Mesh 3.0 Gleichstellung mit 60S/Apex bei halbem Preis und null Helm-Overhead).
   * *Sena Spider RT1 / ST1 (K2b - `sena_spider.json`):* Reine Mesh-2.0-Geräte mit integriertem Akku ohne Bluetooth-Intercom-Overhead, DLE +40 Pkt.
 * **Klasse 3: Sena Bluetooth & 2-Way Intercom (`sena_vortex.json`, `sena_legacy_bt.json`):**
   * *Sena Vortex:* Bluetooth 5.1 2-Wege-Intercom (1:1 bis 1,2 km), Quick-Pair Button-Trigger, DLE +20 Pkt.
   * *Sena 20S EVO, 30K, 10S, 10R, SF4/SF2, 5S, SMH10:* Jog-Dial Pulsmuster für BT-Multi-Hop, DLE +20 Pkt.
 * **Klasse 4: Cardo Dynamic Mesh Communications Gen2 (`cardo_dmc_gen2.json` / `cardo_packtalk_edge.json`):**
-  * *Cardo Packtalk Edge / Pro (K4 - Smart Cartridge Mechatronik):* DMC Gen2 Referenz-Kassette mit Air-Mount-Magnethalterung, USB-C-Dauerladung und autonomer 4-Kanal-Aktuatorsteuerung über den CH32V003 RISC-V Kassetten-Controller. DLE-Score: **+60 Pkt.**
-    * *Kabelpeitsche an `J2`:* Verwendet die werkseitige Kabelpeitsche des OEM-Air-Mount-Cradles (3,5 mm Klinke für Audio-Ausgang an Pin 3/4, 2-Pin Miniatur-Buchse für Mikrofon an Pin 5/2, USB-C 5V Ladeleitung an Pin 1/2). Dauerladung während des aktiven Mesh-Betriebs wird voll unterstützt.
+  * *Cardo Packtalk Edge / Pro (K4 - Smart Cartridge Mechatronik):* DMC Gen2 Referenz-Kassette mit Air-Mount-Magnethalterung, USB-C-Dauerladung ("Charge while Riding") und autonomer 4-Kanal-Aktuatorsteuerung über den Kassetten-Controller. DLE-Score: **+60 Pkt.**
+    * *Kabelpeitsche an `J_AUDIO_PWR`:* Verwendet die werkseitige Kabelpeitsche des OEM-Air-Mount-Cradles (3,5 mm Klinke für Audio-Ausgang an ES8388 ADC, Mikrofon-Buchse an ES8388 DAC, 5V Ladeleitung). Dauerladung während des aktiven Mesh-Betriebs wird voll unterstützt.
     * *4-Aktuator Tasten-Mapping (`J_ACT`):*
       * `ch1`: `ACT_MEDIA` (Front/Top Media-Taste)
       * `ch2`: `ACT_MOBILE` (Mobile/Phone-Taste)
@@ -203,10 +210,10 @@ Alle unterstützten Intercom- und Funkkassetten sind in 8 standardisierte Hardwa
 * **Klasse 6: Cardo Legacy DMC Gen1 (`cardo_dmc_legacy.json`):**
   * *Cardo Packtalk Bold, Black, Slim, Smartpack:* DMC 1.0 mit bis zu 15 Teilnehmern, DLE +30 Pkt.
 * **Klasse 7: Universelle Analog- & PMR446-Funkkassetten (`pmr446_gateway.json`):**
-  * *Midland XT-Serie (XT10/XT30/XT50 Bare-Board) & Integrierte SA818S Transceiver:* Kompakte PMR446-Kassettenmodule (500 mW ERP, 446.0–446.2 MHz, 16 Kanäle, CTCSS/DCS) für analoge Gruppen-Kommunikation.
+  * *Midland XT-Serie (XT10/XT30/XT50 Bare-Board) & Integrierte SA818S Transceiver:* Kompakte PMR446-Kassettenmodule (500 mW ERP, 446.0-446.2 MHz, 16 Kanäle, CTCSS/DCS) für analoge Gruppen-Kommunikation.
   * *Midland G9 Pro / Baofeng / Kenwood 2-Pin K-Type:* Externe Handfunkgeräte über wassergeschützte Doppelklinken-Blende.
-  * *Hardware-PTT:* Unterbrechungsfreie Tastung über PhotoMOS-Relais (Toshiba TLP222A auf Pin 6 `OPTO_PTT`) synchronisiert mit der Lenker-PTT-Taste oder automatischer DSP-Schwellwert-VOX.
-  * *Audio-Entkopplung:* Galvanische Trennung über Studio-Übertrager (Bourns LM-NP-1001) verhindert Masseschleifen und Bordnetz-Pfeifen vollständig.
+  * *Hardware-PTT:* PTT-Tastung über AO3400A N-MOSFET auf PCBA 03, strikt synchronisiert mit der Lenker-PTT-Taste (kein windanfälliges VOX).
+  * *Audio-Entkopplung:* Digitalisierung direkt auf der Kassette über den ES8388 Stereo-Codec. Die galvanische Trennung erfolgt inhärent und vollkommen brummfrei über das drahtlose UWB-Funkbackbone zur Zentralbox.
 * **Klasse 8: Midland Intercom & Wave Serie (`midland_wave.json` / `midland_bt.json`):**
   * *Midland BTR1 Advanced, Rush RCF, BTX2 PRO S, Midland Wave, BT Mini:* Bluetooth 5.0/5.2 Intercom & Wave Mesh mit digitalem Audio-Pass-Through und DLE +30 Pkt.
 
@@ -247,29 +254,49 @@ Jedes Hardwareprofil liegt als eigenständige JSON-Datei im internen Flash-Datei
 
 ---
 
-## 4. 1-Wire Kassetten-Erkennung & 3-Phasen Plug-and-Play
+## 4. All-UWB Kassetten-Erkennung, Gestaffeltes Power-Sequencing & Plug-and-Play
 
-Jede Kassetten-Trägerplatine (`openmotorbridge_pod_cartridge`) stellt dem System eine weltweit eindeutige 64-Bit-UID (`Family-Code 0x01 + 48-Bit Seriennummer + 8-Bit CRC`) über nur eine einzige Datenleitung (Pin 5) bereit:
-* **Smart Modular Cartridge Rev 2.0 (ADR-010):** Der integrierte **WCH CH32V003 RISC-V Mikrocontroller** emuliert das 1-Wire DS2401-Protokoll nativ auf Pin 5 (`1W_UART_ISP`). Ein separater diskreter DS2401-Chip entfällt vollständig; die UID wird deterministisch aus der 64-Bit Factory-Unique-ID des Chips abgeleitet oder via In-System Profile Flashing zugewiesen.
-* **Passive / Legacy Kassetten (Rev 1.0):** Nutzen einen fest verlöteten diskreten **Maxim/Analog Devices DS2401** Silizium-Seriennummern-Chip im SOT-23-Gehäuse.
+Jede Kassetten-Trägerplatine (`PCBA 03 Rev 3.0 All-UWB`) verfügt über einen eigenen Qorvo DW3110 UWB-Transceiver und stellt dem System ihre weltweit eindeutige 64-Bit-Chip-UID sowie ihre Hardware-Klasse drahtlos über Ultra-Wideband bereit. Eine physische 1-Wire-Datenleitung oder ein diskreter DS2401-Chip existieren nicht mehr - sämtliche Interconnects laufen über den UWB-Funk-Airgap:
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│          3-PHASEN PLUG-AND-PLAY ERKENNUNGSSEQUENZ           │
-├─────────────────────────────────────────────────────────────┤
-│ 1. ERKENNUNGSPHASE: 1-Wire ID Abfrage (Strombegrenzt < 20mA)│
-│ 2. VALIDIERUNG: Family-Code & UID Check gegen Profiltabelle │
-│ 3. FREIGABE: Erst bei Match -> 5V MOSFET EIN & Audio/UART On│
-└─────────────────────────────────────────────────────────────┘
++-------------------------------------------------------------+
+|        ALL-UWB PLUG-AND-PLAY & POWER-SEQUENCING ABLAUF      |
++-------------------------------------------------------------+
+| 1. GESTAFFELTE BESTROMUNG (Power-Sequencer via DTM-12):     |
+|    * T=0ms: Zentralbox & Front-Node booten synchron auf KL15|
+|    * T=200ms: Bucht 1 (+5V DC via TPS2051B mit Soft-Start)  |
+|    * T=350ms: Bucht 2 (+5V DC via TPS2051B mit Soft-Start)  |
+|    * T=500ms: Heckradar (+12V DC geschaltet)                |
++-------------------------------------------------------------+
+| 2. UWB HANDSHAKE & KRYPTOGRAPHISCHE BINDUNG:                |
+|    * Kassette sendet UWB_PKT_CARTRIDGE_ANNOUNCE             |
+|    * 64-Bit UID & Hardware-Klasse (0x01 Sena, 0x02 Cardo)   |
+|    * AES-128-GCM Session Key & Ranging-Gating (0.2 - 1.8 m) |
++-------------------------------------------------------------+
+| 3. PROFILAKTIVIERUNG & MECHATRONIK-FREIGABE:                |
+|    * Zentralbox lädt /storage/profiles/<UID>.json           |
+|    * Audio-Routing via DSP & Bluetooth zum Helm freigeschalt|
+|    * UWB Mechatronik-Opcodes (UWB_PKT_CARTRIDGE_OPCODE) ON  |
++-------------------------------------------------------------+
 ```
 
-1. **Strombegrenzte Erkennungsphase:** Beim Einstecken bleibt die Haupt-Speisung (5V MOSFET) gesperrt. Der 1-Wire-Treiber pollt mit strombegrenzter Hilfsspannung ($< 20\,\text{mA}$) und liest die UID aus.
-2. **Automatische Routing-Zuweisung:**
-   * **Smart Cartridge UID erkannt:** Zentralbox identifiziert die Kassetten-Klasse (z. B. Sena SPIDER X Slim), initialisiert die serielle Opcode-Kommunikation und mechatronische Tastensteuerung und lädt das entsprechende JSON-Profil.
-   * **OMM 2.4 GHz Swap Cartridge erkannt (ID 0x03):** Zentralbox schaltet den Port auf OMM-Mesh-Betrieb (ESP32-C3) und bindet die Einheit als 2.4 GHz Gruppe ein.
-   * **Passive Audio-Kassette erkannt:** Pins werden an den Bourns NF-Pfad und ES8388 I2S-DSP geschaltet; das zugehörige Legacy-Profil wird geladen.
-   * **Dummy-Kassette oder Open-Pin erkannt:** Slot bleibt dauerhaft stromlos geschaltet (`disabled.json`).
-3. **Soft-Start:** Nach erfolgreicher Validierung schaltet der P-FET die Speisespannung über eine definierte Soft-Start-Rampe ($100-150\,\text{ms}$) ein.
+### 4.1 Die 3 Phasen der UWB Plug-and-Play Erkennung
+1. **Phase 1: Gestaffelte Bestromung (Power-Sequencing):**  
+   Um Einschaltstromspitzen (Inrush Currents) beim Zündungsstart nach ISO 16750-2 sicher unter dem Schwellenwert der Bordnetzsicherung zu halten, werden die Satelliten-Buchten gestaffelt bestromt:
+   - $T = 0\,\text{ms}$: Zentralbox (`PCBA 01`) und Front-Node (`PCBA 05`) starten synchron bei Zündung EIN (KL15).
+   - $T = 200\,\text{ms}$: Bucht 1 erhält +5V DC über einen softwaregesteuerten High-Side-Schalter (`TPS2051B`) mit definierter $120\,\text{ms}$ Soft-Start-Rampe.
+   - $T = 350\,\text{ms}$: Bucht 2 erhält +5V DC über ihren High-Side-Schalter.
+   - $T = 500\,\text{ms}$: Heckradar erhält geschaltete +12V DC.
+2. **Phase 2: UWB Handshake & Distanz-Gating:**  
+   Sobald die Kassetten-MCU bootet ($< 30\,\text{ms}$), sendet sie ein autorisiertes UWB-Paket (`UWB_PKT_CARTRIDGE_ANNOUNCE`):
+   - Überträgt 64-Bit Hardware-UID, Firmware-Version und Hardware-Klasse (`0x01` Sena, `0x02` Cardo, `0x03` OMM, `0x04` Midland).
+   - Verifiziert den 128-Bit AES-GCM Session Key.
+   - Die Zentralbox misst per Two-Way-Ranging (TWR) die Flugzeit: Liegt die Kassette innerhalb des physischen Fahrzeugfensters ($0{,}2\,\text{m}\dots 1{,}8\,\text{m}$), wird sie freigegeben. Außerhalb liegende Signale werden als Fremdfahrzeuge verworfen.
+   - **Multi-Vehicle Roaming:** Kassetten speichern bis zu 4 autorisierte Motorrad-Keys im NVS, sodass Kassetten ohne erneutes Pairing zwischen eigenen Fahrzeugen gewechselt werden können.
+3. **Phase 3: Automatische Profil-Aktivierung:**  
+   - Die Zentralbox prüft das LittleFS-Flash auf `/storage/profiles/<UID>.json`.
+   - Das passende Herstellerprofil (Gain-Level, Raised-Cosine Ducking-Prioritäten, Mechatronik-Sequenzen) wird im ESP32-S3 Core 1 DSP aktiviert.
+   - Antwortet ein Schacht nicht oder ist leer, bleibt der Port im sicheren `disabled.json` Zustand.
 
 ---
 
@@ -278,45 +305,46 @@ Jede Kassetten-Trägerplatine (`openmotorbridge_pod_cartridge`) stellt dem Syste
 OpenMotorBridge unterstützt alle marktgängigen Intercom-Geräte im Originalzustand ohne Öffnen des Gehäuses:
 
 ```
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                   ÜBERSICHT DER 5 OEM-ADAPTER ANSCHLUSS-KLASSEN                       │
-├───────────────────┬─────────────────────────────┬──────────────────────────────────────┤
-│ Adapter-Klasse    │ Typische Geräte-Vertreter   │ Anschluss- & Schnittstellen-Typ      │
-├───────────────────┼─────────────────────────────┼──────────────────────────────────────┤
-│ **Klasse A:**     │ Sena +Mesh (B2M-01),        │ • Reine 5V-Speisung (90° Micro-USB / │
-│ Drahtlos-Bridge   │ Sena MeshPort Blue / Red,   │   USB-C) über Header J2 (Pin 1 & 2)  │
-│ (Nur-Strom / USB) │ Cardo Packtalk Outdoor Dongle│ • Audio drahtlos via Bluetooth      │
-│                   │                             │ • Externe SMA-Bulkhead Doppelbuchse  │
-│                   │                             │ • Mechanik: OEM-Schlitten & Gummiband│
-├───────────────────┼─────────────────────────────┼──────────────────────────────────────┤
-│ **Klasse B:**     │ Sena 50S, 60S, 30K,         │ • Vollwertig analog (Audio In & Out) │
-│ Pogo-Pin Klemmen  │ Sena 20S EVO, SRL3          │ • 6-adriges Flachband von J2 auf     │
-│ (Federkontakt-Bett│                             │   Pogo-Pin Kontaktleiste im Inlay    │
-│                   │                             │ • TLP222A PTT-Trigger (Pin 6)        │
-│ **Klasse C:**     │ Cardo Packtalk Edge,        │ • Vollwertig analog (Audio In & Out) │
-│ Magnetischer      │ Cardo Packtalk Pro          │ • 5-Pol Federkontaktfeld im Inlay    │
-│ Air-Mount         │ *(Neo/Custom ausgeschlossen)│ • 2x N52 Neodym-Magnete mit Führungs-│
-│                   │                             │   keil für werkzeugloses Andocken    │
-├───────────────────┼─────────────────────────────┼──────────────────────────────────────┤
-│ **Klasse D:**     │ Cardo Packtalk Bold / Black,│ • Vollwertig analog (Audio In & Out) │
-│ Schiebe-Cradle    │ Cardo Freecom 1 / 2 / 4+    │ • Seitliche Schiebekontakte im Inlay │
-│                   │                             │ • Mechanik: Gleitschiene mit Arretier│
-├───────────────────┼─────────────────────────────┼──────────────────────────────────────┤
-│ **Klasse E:**     │ Midland G7 / G9 Pro, G13,   │ • 2-Pin Doppelklinke (2.5mm + 3.5mm) │
-│ Analoger Funk     │ Midland XT30, Baofeng,      │ • Opto-PTT tastet PTT gegen Masse    │
-│ (PMR446 / Kenwood)│ Kenwood TK-Serie            │ • 5V DC/DC Speisung (Batteriedummy)  │
-│                   │                             │ • Feste 446MHz Wendel oder SMA-Front │
-└───────────────────┴─────────────────────────────┴──────────────────────────────────────┘
++----------------------------------------------------------------------------------------+
+|                   ÜBERSICHT DER 5 OEM-ADAPTER ANSCHLUSS-KLASSEN                       |
++-------------------+-----------------------------+--------------------------------------+
+| Adapter-Klasse    | Typische Geräte-Vertreter   | Anschluss- & Schnittstellen-Typ      |
++-------------------+-----------------------------+--------------------------------------+
+| **Klasse A:**     | Sena +Mesh (B2M-01),        | * Reine 5V-Speisung (90° Micro-USB / |
+| Drahtlos-Bridge   | Sena MeshPort Blue / Red,   |   USB-C) über Header J_AUDIO_PWR     |
+| (Nur-Strom / USB) | Cardo Packtalk Outdoor Dongle|   (Pin 1 & 2)                        |
+|                   |                             | * Audio drahtlos via Bluetooth      |
+|                   |                             | * Externe SMA-Bulkhead Doppelbuchse  |
+|                   |                             | * Mechanik: OEM-Schlitten & Gummiband|
++-------------------+-----------------------------+--------------------------------------+
+| **Klasse B:**     | Sena 50S, 60S, 30K,         | * Vollwertig analog (Audio In & Out) |
+| Pogo-Pin Klemmen  | Sena 20S EVO, SRL3          | * Flachband von J_AUDIO_PWR auf      |
+| (Federkontakt-Bett|                             |   Pogo-Pin Kontaktleiste im Inlay    |
+|                   |                             | * AO3400A PTT-Tastung auf PCBA 03    |
+| **Klasse C:**     | Cardo Packtalk Edge,        | * Vollwertig analog (Audio In & Out) |
+| Magnetischer      | Cardo Packtalk Pro          | * 5-Pol Federkontaktfeld im Inlay    |
+| Air-Mount         | *(Neo/Custom ausgeschlossen)| * 2x N52 Neodym-Magnete mit Führungs-|
+|                   |                             |   keil für werkzeugloses Andocken    |
++-------------------+-----------------------------+--------------------------------------+
+| **Klasse D:**     | Cardo Packtalk Bold / Black,| * Vollwertig analog (Audio In & Out) |
+| Schiebe-Cradle    | Cardo Freecom 1 / 2 / 4+    | * Seitliche Schiebekontakte im Inlay |
+|                   |                             | * Mechanik: Gleitschiene mit Arretier|
++-------------------+-----------------------------+--------------------------------------+
+| **Klasse E:**     | Midland G7 / G9 Pro, G13,   | * 2-Pin Doppelklinke (2.5mm + 3.5mm) |
+| Analoger Funk     | Midland XT30, Baofeng,      | * AO3400A tastet PTT gegen Masse     |
+| (PMR446 / Kenwood)| Kenwood TK-Serie            | * 5V DC/DC Speisung (Batteriedummy)  |
+|                   |                             | * Feste 446MHz Wendel oder SMA-Front |
++-------------------+-----------------------------+--------------------------------------+
 ```
 
 > [!IMPORTANT]
-> **Ausschlusskriterium für Cardo Packtalk Neo & Custom („Laden während Betrieb“):**
-> * Das **Cardo Packtalk Neo** besitzt keinen magnetischen Air-Mount, sondern ein fest verkabeltes Klick-Cradle. Entscheidender ist jedoch die elektronische Inkompatibilität: Laut offizieller Cardo-Spezifikation unterstützt das Neo **kein Laden während des Betriebs** (*„Charge while riding: Nein“*). Da OpenMotorBridge prinzipbedingt als fahrzeuggebundenes System permanent über das 12V-Bordnetz (via PCBA 03) gespeist wird, scheidet das Neo aus – das Headset schaltet bei USB-Spannung ab bzw. kann auf ganztägigen Touren nicht unterbrechungsfrei betrieben werden.
+> **Ausschlusskriterium für Cardo Packtalk Neo & Custom ("Laden während Betrieb"):**
+> * Das **Cardo Packtalk Neo** besitzt keinen magnetischen Air-Mount, sondern ein fest verkabeltes Klick-Cradle. Entscheidender ist jedoch die elektronische Inkompatibilität: Laut offizieller Cardo-Spezifikation unterstützt das Neo **kein Laden während des Betriebs** (*"Charge while riding: Nein"*). Da OpenMotorBridge prinzipbedingt als fahrzeuggebundenes System permanent über das 12V-Bordnetz (via PCBA 03) gespeist wird, scheidet das Neo aus - das Headset schaltet bei USB-Spannung ab bzw. kann auf ganztägigen Touren nicht unterbrechungsfrei betrieben werden.
 > * Das **Cardo Packtalk Custom** erfordert zudem kostenpflichtige Monats-/Jahresabonnements zur Freischaltung von Kernfunktionen und widerspricht damit dem abofreien Open-Source-Grundsatz von OpenMotorBridge.
 > * **Empfehlung für Cardo-Mesh:** Ausschließlich **Cardo Packtalk Edge** (oder Packtalk Pro) einsetzen, da diese Modelle vollwertiges Schnellladen während aktiver Mesh-Kommunikation unterstützen.
 
-### 5.1 Detaillierte Pin-Belegung der Kassetten-Schnittstelle (`J2`)
-Der 6-polige **JST-SH 1.0 mm Header (`J2`)** auf der Kassettenplatine führt alle Signale:
+### 5.1 Detaillierte Pin-Belegung der Kassetten-Schnittstelle (`J_AUDIO_PWR`)
+Der 6-polige **JST-SH 1.0 mm Header (`J_AUDIO_PWR`)** auf der Kassettenplatine führt alle Signale:
 
 | Pin | Signal | Klasse A (+Mesh) | Klasse B (Sena 50S) | Klasse C (Cardo Edge)| Klasse E (PMR446) |
 | :---: | :--- | :--- | :--- | :--- | :--- |
@@ -365,17 +393,17 @@ Wird ein Steckplatz nicht belegt, eine Dummy-Leerkassette eingesetzt oder ein Po
 ```
 
 ### 6.1 Schutzwirkungen des `disabled.json` Profils
-1. **Stromlos-Schaltung (`vcc_enabled: false`):** Der zugehörige P-Kanal MOSFET öffnet sofort $\rightarrow 0{,}0\,\text{mA}$ Ruhestrom.
-2. **Vollständige Audio-Stummschaltung:** Ein- und Ausgangs-Gains des ES8388 Codecs werden auf $-96\,\text{dB}$ gesetzt, um jegliches Rauschen oder kapazitives Übersprechen offener Leitungen zu eliminieren.
-3. **Deaktivierung von Schaltsignalen:** Die Toshiba TLP222A Optokoppler bleiben dauerhaft hochohmig geöffnet.
-4. **DLE-Bereinigung:** Der DLE-Score-Beitrag fällt sofort auf 0 Punkte zurück.
+1. **Stromlos-Schaltung (`vcc_enabled: false`):** Die elektronische Sicherung (eFuse) auf PCBA 01 trennt die Bucht sofort ab $\rightarrow 0{,}0\,\text{mA}$ Ruhestrom.
+2. **Vollständige Audio-Stummschaltung:** Ein- und Ausgangs-Gains des ES8388 Codecs werden auf $-96\,\text{dB}$ gesetzt, um jegliches Rauschen oder Einstreuungen zu eliminieren.
+3. **Deaktivierung von Schaltsignalen:** Die AO3400A MOSFETs auf PCBA 03 bleiben gesperrt, um jegliche Tasterbetätigung zu verhindern.
+4. **Capability-Bereinigung:** Der Capability-Score-Beitrag für den Routing-Graphen fällt sofort auf 0 Punkte zurück.
 
 ### 6.2 Zero-Trust Hardware-Quarantäne (Fail-Safe Schutzabschaltung)
-Solange eine neu gesteckte Kassetten-Hardware (DS2401 UID) keinem verifizierten Profil zugewiesen wurde, wird der entsprechende Pod-Steckplatz **strikt wie ein unvollständig oder fehlerhaft gesteckter Slot behandelt**:
-* **5V VCC Power-Gate OFF (0,0 mA):** Der P-Kanal Lastschalter zum OEM-Cradle bleibt gesperrt.
+Solange eine neu gesteckte Kassetten-Hardware (UWB Kassetten-UID) keinem verifizierten Profil zugewiesen wurde, wird der entsprechende Pod-Steckplatz **strikt wie ein unvollständig oder fehlerhaft gesteckter Slot behandelt**:
+* **5V VCC Power-Gate OFF (0,0 mA):** Die eFuse zum OEM-Gerät bleibt gesperrt.
 * **Audio DSP Mute (-96 dB):** Beide Audiokanäle sind stummgeschaltet, um Knacken, Rauschen oder Brummschleifen zu verhindern.
-* **Optokoppler hochohmig:** Keine unkontrollierten Tastimpulse an das Headset.
-* **DLE Gateway-Bonus = 0:** Keine Beeinflussung der Gruppen-Wahl.
+* **Aktuatoren gesperrt:** Keine unkontrollierten Tastimpulse an das Headset.
+* **Routing-Bonus = 0:** Keine Beeinflussung der Gruppen-Wahl.
 * **Freigabe erst nach Bestätigung:** Erst wenn der Nutzer in der WebApp das Profil bestätigt (oder die UID bereits im Flash-Mapping hinterlegt ist), führt der Controller eine kontrollierte Soft-Start-Einschaltsequenz (50 ms Inrush-Limiting) durch und schaltet die Audiopegel frei.
 
 ---
@@ -385,24 +413,27 @@ Solange eine neu gesteckte Kassetten-Hardware (DS2401 UID) keinem verifizierten 
 Beim Einstecken einer neuen Kassetten-Hardware führt die PWA einen automatischen Onboarding-Dialog aus:
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│ 🧩 NEUE KASSETTE ERKANNT!                                   │
-├─────────────────────────────────────────────────────────────┤
-│ Erkannter Steckplatz:   Pod 1 (Rahmen links)                │
-│ 1-Wire Chip-UID:        01:A2:3B:4C:5D:6E:7F:8A             │
-├─────────────────────────────────────────────────────────────┤
-│ Dieser Kassetten-Hardware wurde bisher noch kein Profil     │
-│ zugewiesen. Welches Intercom oder Funkgerät ist verbaut?    │
-│                                                             │
-│ Hardware-Profil:  [ 🔵 Sena 50S / 50R / SRL3 (K1)      ▼ ]  │
-├─────────────────────────────────────────────────────────────┤
-│ [ Später zuweisen ]         [ Profil zuweisen & speichern ] │
-└─────────────────────────────────────────────────────────────┘
++-------------------------------------------------------------+
+| 🧩 NEUE KASSETTE ERKANNT!                                   |
++-------------------------------------------------------------+
+| Erkannter Steckplatz:   Pod 1 (Bucht links)                 |
+| UWB Kassetten-UID:      02:A2:3B:4C:5D:6E:7F:8A             |
++-------------------------------------------------------------+
+| Dieser Kassetten-Hardware wurde bisher noch kein Profil     |
+| zugewiesen. Welches Intercom oder Funkgerät ist verbaut?    |
+|                                                             |
+| Hardware-Profil:  [ 🔵 Sena 50S / 50R / SRL3 (K1)      v ]  |
++-------------------------------------------------------------+
+| [ Später zuweisen ]         [ Profil zuweisen & speichern ] |
+|                                                             |
+| *Bei reinen BT-Adaptern (z.B. Sena Mesh+):                  |
+| [ 🔍 Bluetooth-Gerät koppeln ]                              |
++-------------------------------------------------------------+
 ```
 
-1. **Automatischer Scan:** Der ESP32-S3 pollt alle 2 Sekunden beide 1-Wire-Ports (`task_cartridge_manager`). Erkennt er einen Presence-Pulse mit gültiger CRC8 und Family-Code `0x01` (DS2401), sendet er die 64-Bit UID via BLE an die WebApp.
+1. **Automatischer UWB-Handshake:** Sobald die Bucht über das gestaffelte Power-Sequencing bestromt wird, meldet sich die Kassette über das UWB-Paket `UWB_PKT_CARTRIDGE_ANNOUNCE` mit ihrer 64-Bit Hardware-UID. Die Zentralbox leitet die UID via BLE an die WebApp weiter.
 2. **Dialog-Pop-up:** Die WebApp vergleicht die UID mit der Zuordnungstabelle (`/profiles/mapping.json` / PWA `localStorage`). Ist die UID neu, öffnet sich automatisch das Zuweisungs-Modal (`#uuid-detect-modal`).
-3. **Profil-Auswahl & Speicherung:** Der Fahrer wählt sein Modell aus dem Dropdown.
+3. **Profil-Auswahl & Speicherung:** Der Fahrer wählt sein Modell aus dem Dropdown. Bei drahtlosen Bluetooth-Kassetten (z. B. Sena Mesh+) kann direkt der Scan- und Kopplungsworkflow ausgelöst werden.
 4. **Persistentes Mapping:** Das Mapping `{"<UID>": "<profile_id>"}` wird dauerhaft im ESP32 LittleFS und im Browser gespeichert.
 5. **Wiedererkennung:** Zukünftig wird diese Kassette an jedem beliebigen Steckplatz sofort automatisch parametrisiert.
 
@@ -410,28 +441,28 @@ Beim Einstecken einer neuen Kassetten-Hardware führt die PWA einen automatische
 Wenn ein Hersteller (z. B. Sena beim Sprung von Mesh 2.0 auf Mesh 3.0 oder Cardo bei DMC Gen 2) seine Firmware aktualisiert, passt sich OpenMotorBridge über ein intelligentes **JSON-Merge-Verfahren** an:
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                 JSON PROFIL-MERGE-VERFAHREN                 │
-├──────────────────────────────┬──────────────────────────────┤
-│ 1. Basis-Herstellerprofil    │ 2. Individuelle User-Offsets │
-│    (z.B. sena_apex_v3.json)  │    (Ducking & Audio-Gains)   │
-├──────────────────────────────┴──────────────────────────────┤
-│                             ▼                               │
-│ 3. Gemergtes Live-Profil im LittleFS Flash-Speicher          │
-│    (Aktualisierte Opto-Timings + persönliche Lautstärken)   │
-└─────────────────────────────────────────────────────────────┘
++-------------------------------------------------------------+
+|                 JSON PROFIL-MERGE-VERFAHREN                 |
++------------------------------+------------------------------+
+| 1. Basis-Herstellerprofil    | 2. Individuelle User-Offsets |
+|    (z.B. sena_apex_v3.json)  |    (Ducking & Audio-Gains)   |
++------------------------------+------------------------------+
+|                             v                               |
+| 3. Gemergtes Live-Profil im LittleFS Flash-Speicher          |
+|    (Aktualisierte Mechatronik-Timings + persönliche Gains)  |
++-------------------------------------------------------------+
 ```
 
-* **Phase 1 (Basis-Parameter):** Neue Optokoppler-Pulsdauern (z. B. `ptt_pulse_ms: 180`), geänderte Kanalwechselmuster und DLE-Bonuswerte werden aus dem neuen Hersteller-JSON geladen.
+* **Phase 1 (Basis-Parameter):** Neue Aktuator-Pulsdauern (z. B. `ptt_pulse_ms: 180`), geänderte Kanalwechselmuster und Capability-Scores werden aus dem neuen Hersteller-JSON geladen.
 * **Phase 2 (User-Settings Preservation):** Individuelle Anpassungen des Fahrers (z. B. $+2{,}0\,\text{dB}$ Mikrofonpegel, $-12\,\text{dB}$ Navi-Ducking) bleiben beim Update erhalten und werden über die Basiswerte gemerged.
-* **Phase 3 (Hot-Reload):** Die Zentralbox wendet die gemergten Parameter im laufenden Betrieb ohne Neustart sofort auf den ES8388 Codec und die TLP222A Opto-Puls-Engine an.
+* **Phase 3 (Hot-Reload):** Die Zentralbox wendet die gemergten Parameter im laufenden Betrieb ohne Neustart sofort auf den ES8388 Codec und die Mechatronik-Engine an.
 
 ### 7.2 Hardware-Upgrade & OEM-Adapter-Update (Austausch des Headsets in bestehender Kassette)
 Rüstet der Fahrer nach einiger Zeit sein Intercom auf (z. B. von Sena 20S auf Sena 60S Mesh 3.0 Wave) und behält die Trägerplatine bei:
-1. **Unveränderte Chip-UID:** Die 64-Bit Hardware-UID des DS2401 bleibt identisch.
-2. **Auswahl im Dashboard:** Im Tab **„🧩 Kassetten & DLE“** der WebApp wählt der Fahrer im Dropdown des Slots einfach das neu eingebaute Modell (*„⚡ Sena 60S (Mesh 3.0 Wave)“*).
+1. **Unveränderte Chip-UID:** Die 64-Bit Hardware-UID der Kassetten-MCU bleibt identisch.
+2. **Auswahl im Dashboard:** Im Tab **"🧩 Kassetten & DLE"** der WebApp wählt der Fahrer im Dropdown des Slots einfach das neu eingebaute Modell (*"⚡ Sena 60S (Mesh 3.0 Wave)"*).
 3. **Automatisches Überschreiben:** Die WebApp aktualisiert sofort das Mapping synchron im Browser und im ESP32 LittleFS (`/profiles/mapping.json`).
-4. **Verlässlicher Reload:** Beim nächsten Einstecken oder Booten wird sofort das neue Profil mit den neuen Opto-Timings und dem höheren DLE-Score (+60 Pkt.) geladen.
+4. **Verlässlicher Reload:** Beim nächsten Einstecken oder Booten wird sofort das neue Profil mit den neuen Mechatronik-Timings und dem höheren Capability-Score (+60 Pkt.) geladen.
 5. **Ground-Truth Re-Sync (`🔄 Sync`):** Mit dem Sync-Button kann der Fahrer jederzeit verifizieren, welches Profil der real gesteckten Hardware-UID im Flash zugeordnet ist.
 
 ---
@@ -439,39 +470,39 @@ Rüstet der Fahrer nach einiger Zeit sein Intercom auf (z. B. von Sena 20S auf S
 ## 8. Empfohlene Bestückungs-Szenarien nach Preis und Einsatzzweck
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                 EMPFOHLENE POD-BESTÜCKUNGS-SZENARIEN                        │
-├───────────────────────┬─────────────────────────┬───────────────────────────┤
-│ Setup-Kategorie       │ Pod 1 (Links)           │ Pod 2 (Rechts)            │
-├───────────────────────┼─────────────────────────┼───────────────────────────┤
-│ ⭐ **OMB-Empfehlung** │ **Sena SPIDER X Slim**  │ **Cardo Packtalk Edge**   │
-│   (Preis-Leistungs-   │ (Mesh 3.0 Direct-DC,K2a)│ (DMC Gen2 Air-Mount, K4)  │
-│    Sieger & Referenz) │ (DLE +60 Pkt., ~210 €)  │ (DLE +60 Pkt., ~320 €)    │
-├───────────────────────┼─────────────────────────┼───────────────────────────┤
-│ 💎 **High-End Leader**│ **Sena 60S / Apex**     │ **Cardo Packtalk Edge**   │
-│    (350 – 550 €)      │ (Mesh 3.0 Wave, K1)     │ (DMC Gen2 Air-Mount, K4)  │
-├───────────────────────┼─────────────────────────┼───────────────────────────┤
-│ ⚖️ **Lean & Modern**  │ **Sena SPIDER X Slim**  │ **Cardo Freecom 4x / Bold**│
-│    (180 – 260 €)      │ (Mesh 3.0 Direct-DC,K2a)│ (Live Intercom/DMC, K5/K6)│
-├───────────────────────┼─────────────────────────┼───────────────────────────┤
-│ 💰 **Budget Einstieg**│ **Sena MeshPort Blue**  │ **IP67 Blind-Kassette**   │
-│    (80 – 140 €)       │ (oder Sena 20S/SF, K3)  │ (Slot stromlos / disabled)│
-├───────────────────────┼─────────────────────────┼───────────────────────────┤
-│ 🏔️ **Adventure/Offroad**│ **Sena Apex / 50S**   │ **Midland G9 Pro PMR446** │
-│    (220 – 320 €)      │ (Mesh 3.0, K1)          │ (Analogfunk Gateway, K7)  │
-└───────────────────────┴─────────────────────────┴───────────────────────────┘
++-----------------------------------------------------------------------------+
+|                 EMPFOHLENE POD-BESTÜCKUNGS-SZENARIEN                        |
++-----------------------+-------------------------+---------------------------+
+| Setup-Kategorie       | Pod 1 (Links)           | Pod 2 (Rechts)            |
++-----------------------+-------------------------+---------------------------+
+| ⭐ **OMB-Empfehlung** | **Sena SPIDER X Slim**  | **Cardo Packtalk Edge**   |
+|   (Preis-Leistungs-   | (Mesh 3.0 Direct-DC,K2a)| (DMC Gen2 Air-Mount, K4)  |
+|    Sieger & Referenz) | (DLE +60 Pkt., ~210 €)  | (DLE +60 Pkt., ~320 €)    |
++-----------------------+-------------------------+---------------------------+
+| 💎 **High-End Leader**| **Sena 60S / Apex**     | **Cardo Packtalk Edge**   |
+|    (350 - 550 €)      | (Mesh 3.0 Wave, K1)     | (DMC Gen2 Air-Mount, K4)  |
++-----------------------+-------------------------+---------------------------+
+| ⚖️ **Lean & Modern**  | **Sena SPIDER X Slim**  | **Cardo Freecom 4x / Bold**|
+|    (180 - 260 €)      | (Mesh 3.0 Direct-DC,K2a)| (Live Intercom/DMC, K5/K6)|
++-----------------------+-------------------------+---------------------------+
+| 💰 **Budget Einstieg**| **Sena MeshPort Blue**  | **IP67 Blind-Kassette**   |
+|    (80 - 140 €)       | (oder Sena 20S/SF, K3)  | (Slot stromlos / disabled)|
++-----------------------+-------------------------+---------------------------+
+| 🏔️ **Adventure/Offroad**| **Sena Apex / 50S**   | **Midland G9 Pro PMR446** |
+|    (220 - 320 €)      | (Mesh 3.0, K1)          | (Analogfunk Gateway, K7)  |
++-----------------------+-------------------------+---------------------------+
 ```
 
 ### 8.1 Warum das Sena SPIDER X Slim unsere offizielle Referenz-Empfehlung für Pod 1 ist
 
-Das **Sena SPIDER X Slim** (Klasse 2a – `sena_spider_x.json`) ist die **offizielle Primärempfehlung** des OpenMotorBridge-Projekts für Satelliten-Pod 1. Es vereint alle geforderten Next-Gen-Funkmerkmale mit einer idealen mechanischen und elektrischen Eignung für den Kassettenbetrieb:
+Das **Sena SPIDER X Slim** (Klasse 2a - `sena_spider_x.json`) ist die **offizielle Primärempfehlung** des OpenMotorBridge-Projekts für Satelliten-Pod 1. Es vereint alle geforderten Next-Gen-Funkmerkmale mit einer idealen mechanischen und elektrischen Eignung für den Kassettenbetrieb:
 
 1. **Volle Mesh 3.0 & Wave Parität (Zukunftssicher ohne Kompromisse):**
    * Bietet die identische, modernste Mesh-Architektur wie Senas teure Flaggschiffe (Sena 60S / Apex) mit **Mesh 3.0 & 2.0**, Wave Intercom und Bluetooth 5.3.
-   * Unterstützt bis zu 32 Teilnehmer im Mesh (Multi-Channel Open Mesh Kanäle 1–6) und erhält den **vollen DLE-Score-Bonus von +60 Punkten**.
+   * Unterstützt bis zu 32 Teilnehmer im Mesh (Multi-Channel Open Mesh Kanäle 1-6) und erhält den **vollen DLE-Score-Bonus von +60 Punkten**.
 
 2. **Befreit von nutzlosem Helm-Overhead (Schlankes Transceiver-Design):**
-   * Klassische Flaggschiff-Headsets (wie das 60S oder 50S) sind mit teuren Drehrädern (Jog-Dial), Helmlampen, LCD-Statusschirmchen und fest integrierten Lautsprecher-Kabelsträngen überfrachtet – Komponenten, die im geschlossenen Pod-Gehäuse am Motorrad völlig nutzlos sind, Platz rauben und mechanisch verschleißen können.
+   * Klassische Flaggschiff-Headsets (wie das 60S oder 50S) sind mit teuren Drehrädern (Jog-Dial), Helmlampen, LCD-Statusschirmchen und fest integrierten Lautsprecher-Kabelsträngen überfrachtet - Komponenten, die im geschlossenen Pod-Gehäuse am Motorrad völlig nutzlos sind, Platz rauben und mechanisch verschleißen können.
    * Das SPIDER X Slim ist radikal auf das Wesentliche reduziert: Mit ultrakompakten Abmessungen von $74{,}5 \times 31 \times 16\,\text{mm}$ und einem Federgewicht von nur **$23{,}2\,\text{g}$** passt es ideal in den Kassetten-Einschub.
 
 3. **Direct-DC & Integrierte 3-fach Kabelpeitsche (Kein Pogo-Pin-Cradle nötig!):**
@@ -480,12 +511,12 @@ Das **Sena SPIDER X Slim** (Klasse 2a – `sena_spider_x.json`) ist die **offizi
      * **Anschluss ⑨: Mikrofon-Buchse:** Direkte Einspeisung des analogen Sprachsignals vom ES8388 Audio-Codec / DAC auf der Trägerplatine (keine externe Mikrofon-Kapsel nötig).
      * **Anschluss ⑩: Lautsprecher-Buchsen:** Direkter Audio-Line-Abgriff des ankommenden Mesh-Funkverkehrs in den Line-In / ADC des ES8388 Codecs.
      * *(Zusätzlich: Anschluss ⑦ USB-C an der Stirnseite für optionale Service-/OTA-Wartung).*
-   * **Mechanischer Meilenstein (Null Pogo-Pins):** Es ist **kein klobiges, fehleranfälliges Klemm-Cradle mit Federkontakt-Pogo-Pins** (wie bei Sena 50S/60S oder Cardo Packtalk) erforderlich! Pogo-Pins neigen bei Motorrad-Vibrationen ($> 20\,\text{g}$) und Feuchtigkeit zu Kontaktprellen, Übergangswiderständen und Korrosion. Beim SPIDER X Slim werden alle drei Stecker direkt, formschlüssig und vibrationsfest über einen passiven Adapterkabelstrang auf den 6-poligen JST-SH Header `J2` des OMB-Kassettenträgers (PCBA 03) gesteckt.
+   * **Mechanischer Meilenstein (Null Pogo-Pins):** Es ist **kein klobiges, fehleranfälliges Klemm-Cradle mit Federkontakt-Pogo-Pins** (wie bei Sena 50S/60S oder Cardo Packtalk) erforderlich! Pogo-Pins neigen bei Motorrad-Vibrationen ($> 20\,\text{g}$) und Feuchtigkeit zu Kontaktprellen, Übergangswiderständen und Korrosion. Beim SPIDER X Slim werden alle drei Stecker direkt, formschlüssig und vibrationsfest über einen passiven Adapterkabelstrang auf den 6-poligen JST-SH Header `J_AUDIO_PWR` des OMB-Kassettenträgers (PCBA 03) gesteckt.
    * **100 % Plug & Play, Null Lötarbeiten, voller Garantieerhalt:** Das Originalgehäuse muss nicht geöffnet, mechanisch beschädigt oder umgelötet werden. Das Modul wird einfach aus der Verkaufsverpackung in den 3D-Druck-Schlitten gelegt und angesteckt.
    * **Automatisches Booten & Abschalten:** Das Modul startet stabil mit der Zündung (KL15) und schaltet bei Zündung-AUS sauber ab.
 
 4. **Überragendes Preis-Leistungs-Verhältnis:**
-   * Mit einem Marktpreis von ca. **180 – 240 €** (Straßenpreis) bietet das SPIDER X Slim die exakt gleiche DLE-Netzwerkleistung (+60 Pkt.) wie ein Sena 60S (ca. 450 – 550 €) – bei mehr als 50 % Kostenersparnis!
+   * Mit einem Marktpreis von ca. **180 - 240 €** (Straßenpreis) bietet das SPIDER X Slim die exakt gleiche DLE-Netzwerkleistung (+60 Pkt.) wie ein Sena 60S (ca. 450 - 550 €) - bei mehr als 50 % Kostenersparnis!
 
 ---
 
@@ -494,27 +525,27 @@ Das **Sena SPIDER X Slim** (Klasse 2a – `sena_spider_x.json`) ist die **offizi
 ### Problemstellung im Gruppen-Mesh
 Halten zwei Fahrer einer Motorradgruppe an einer roten Ampel, an einer Mautstation oder am Straßenrand nebeneinander an und klappen ihre Helmvisiere hoch, um sich direkt abzustimmen:
 1. **Akustische Echos & Rückkopplungsschleifen:** Das Mikrofon von Fahrer A erfasst die Stimme von Fahrer B mit einer Latenz von $15\dots 30\,\text{ms}$, wodurch im Helmlautsprecher ein störender Hall-Effekt entsteht.
-2. **Kanalbelastung für die restliche Gruppe:** Die anderen 6–10 Fahrer der Gruppe (die 500 Meter weiter vorne oder hinten fahren) müssen die private Abstimmung zwangsweise mitanhören.
+2. **Kanalbelastung für die restliche Gruppe:** Die anderen 6-10 Fahrer der Gruppe (die 500 Meter weiter vorne oder hinten fahren) müssen die private Abstimmung zwangsweise mitanhören.
 
 ### Intelligente Nahbereichs-Stummschaltung
 OpenMotorBridge löst dieses Problem durch eine vollautomatische **Proximity-Mute-Logik**:
 
 ```
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│               PROXIMITY & STANDSTILL PRIVACY MUTE LOGIK                                │
-└────────────────────────────────────────────────────────────────────────────────────────┘
++----------------------------------------------------------------------------------------+
+|               PROXIMITY & STANDSTILL PRIVACY MUTE LOGIK                                |
++----------------------------------------------------------------------------------------+
 
   [1. SENSORIK-AUSWERTUNG IN ECHTZEIT]
-  ├── Bedingung 1: Fahrzeug steht still (CAN-Geschwindigkeit v = 0.0 km/h)
-  └── Bedingung 2: Partner-Motorrad im extremen Nahbereich (< 3.0 m)
+  +-- Bedingung 1: Fahrzeug steht still (CAN-Geschwindigkeit v = 0.0 km/h)
+  +-- Bedingung 2: Partner-Motorrad im extremen Nahbereich (< 3.0 m)
                    Erkannt über UWB Laufzeit-/Signalmessung bzw. OMM 2.4 GHz RSSI (> -45 dBm)
 
   [2. AKUSTISCHER ÜBERGANG (Automatisch)]
-  ├── OpenMotorBridge schaltet den Mikrofon-Uplink in das Weitverkehrs-Mesh STUMM
-  ├── Diskreter Bestätigungston im Helm (Zweiklang "Lokal-Modus aktiv")
-  └── Fahrer unterhalten sich ganz natürlich durch die offenen Visiere von Angesicht zu Angesicht!
+  +-- OpenMotorBridge schaltet den Mikrofon-Uplink in das Weitverkehrs-Mesh STUMM
+  +-- Diskreter Bestätigungston im Helm (Zweiklang "Lokal-Modus aktiv")
+  +-- Fahrer unterhalten sich ganz natürlich durch die offenen Visiere von Angesicht zu Angesicht!
 
   [3. AUTOMATISCHE REAKTIVIERUNG DES MESH-NETZES]
-  ├── Option A: Das Motorrad fährt wieder an (v > 8.0 km/h)
-  └── Option B: Fahrer tippt kurz den Lenker-PTT an (< 400 ms) ➔ Mesh sofort wieder offen!
+  +-- Option A: Das Motorrad fährt wieder an (v > 8.0 km/h)
+  +-- Option B: Fahrer tippt kurz den Lenker-PTT an (< 400 ms) -> Mesh sofort wieder offen!
 ```

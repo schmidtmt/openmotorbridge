@@ -1,12 +1,10 @@
-# 06 - Telemetrie-Blackbox, SDIO-Ringpuffer & WebDAV-Sync
+# 06 - Telemetrie, Sensorfusion (ADR), Blackbox & WebDAV-Sync
 
-Dieses Dokument spezifiziert das Telemetrie- und Speicher-Subsystem der OpenMotorBridge v8.0: die 4-Bit High-Speed SDIO-Schnittstelle, den DSGVO- und BGH-konformen Ringspeicher mit kryptographischer Signierung, den automatischen TLS-gesicherten WebDAV-Cloud-Upload sowie den sparsamen **USB Mass Storage Class (MSC) Modus** für den werkzeuglosen Datenaustausch am Rechner.
-
----
+Dieses Dokument spezifiziert das Telemetrie-, Navigations- und Speichersystem der OpenMotorBridge v9.6 Clean Architecture: die hochpräzise Koppelnavigation (**Automotive Dead Reckoning - ADR**) mit 15-State Error-State Kalman-Filter (ES-EKF), den fahrzeugübergreifenden **Schwarm-Telemetrie-Austausch über LoRa 868.3 MHz**, die 4-Bit High-Speed SDIO-Schnittstelle, den DSGVO- und BGH-konformen Ringspeicher mit kryptographischer ECDSA-Signierung, den automatischen WebDAV-Upload sowie die framegenaue **1-PPS Actioncam-Synchronisation**.
 
 ## 1. Speicheranbindung & High-Speed SDIO (4-Bit @ 40 MHz)
 
-* **Schnittstelle:** Nativer 4-Bit SDIO-Bus @ 40 MHz direkt angebunden an den ESP32-S3 (GPIOs 40–45).
+* **Schnittstelle:** Nativer 4-Bit SDIO-Bus @ 40 MHz direkt angebunden an den ESP32-S3 (GPIOs 40-45).
 * **Durchsatz:** Kontinuierliche Schreibrate $> 12\,\text{MB/s}$ (unterbrechungsfreies 10 Hz GPX-, IMU-, Schräglagen- und Audio-Telemetrie-Logging).
 * **Dateisystem:** FAT32 mit dynamischer Sektor-Pufferung (Clustergröße 32 kB).
 * **Ausfallsicherheit:** Der integrierte BQ24075 USV-Puffer garantiert selbst bei plötzlichem Bordnetzabriss das saubere Schließen der FAT-Dateitabellen ohne Datenkorruption.
@@ -18,9 +16,9 @@ Dieses Dokument spezifiziert das Telemetrie- und Speicher-Subsystem der OpenMoto
 Das Telemetrie-Subsystem führt Daten des Multi-GNSS-Empfängers (**u-blox SAM-M10Q** mit integrierter $15 \times 15\,\text{mm}$ Patch-Antenne am Front-Knoten via `J12` Qwiic), der 6-Achsen-IMU (**Bosch BMI270**) auf der Zentralbox und optionaler Raddrehzahlen (über fahrzeugseitigen CAN-Bus oder ABS-Sensorpulse) in einem **15-State Error-State Extended Kalman Filter (ES-EKF)** zusammen:
 
 ```
-[ u-blox SAM-M10Q GNSS (10 Hz) ] ──(I2C 400k / UWB)──┐
-[ CAN-Bus Raddrehzahl / Speed ] ────(10-20 Hz)───────┼─► [ 15-State Extended Kalman Filter ] ──► [ MicroSD: tour.gpx ]
-[ Bosch BMI270 Gyro / Accel (I2C) ] ─(50-100 Hz)─────┘        (Dead Reckoning Engine)            (Mit Schräglage & G-Force)
+[ u-blox SAM-M10Q GNSS (10 Hz) ] --(I2C 400k / UWB)--+
+[ CAN-Bus Raddrehzahl / Speed ] ----(10-20 Hz)-------+-> [ 15-State Extended Kalman Filter ] --> [ MicroSD: tour.gpx ]
+[ Bosch BMI270 Gyro / Accel (I2C) ] -(50-100 Hz)-----+        (Dead Reckoning Engine)            (Mit Schräglage & G-Force)
 ```
 
 ### 2.1 Lückenlose Tunnel-Navigation (Inertial Navigation)
@@ -73,24 +71,24 @@ Jeder Wegpunkt im GPX-Datensatz wird mit $10\,\text{Hz}$ um hochpräzise Fahrdyn
 Um Leitungen durch den Lenkkopf zum kabellosen Frontnode strikt zu vermeiden und Fehlmessungen durch Motorwärme auszuschließen, nutzt OpenMotorBridge ein 2-Stufen-Konzept:
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│             2-STUFEN ARCHITEKTUR FÜR UMGEBUNGSTEMPERATUR                    │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ STUFE 1: CAN-Bus Broadcast (BMW R1250/R1300 GS, Harley Pan America / HD-LAN) │
-│ • Nutzt OEM-Ansaugluft-/Außentemperatursensor des Motorrads (CAN-ID 0x2D0)   │
-│ • 0 zusätzliche Kabel, 0 Bauteilekosten, 100 % werkskalibriert               │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ STUFE 2: Front-Node Kaltluft-Sensorik (Universal / CVO ST / Non-CAN)        │
-│ • Präzisionssensorik (TI TMP117 ±0.1°C & OPT3001 Lichtsensor an J12 Qwiic)  │
-│ • Montage: Im Fahrtwind-Kaltluftkanal der Verkleidung / Cockpitmaske         │
-│ • Thermische Entkopplung: 100 % frei von Zylinder-, Kühler- & Motorabwärme   │
-│ • Kabelfrei über den Lenkkopf: Telemetrie-Streaming über UWB (< 0.4 ms)      │
-└─────────────────────────────────────────────────────────────────────────────┘
++-----------------------------------------------------------------------------+
+|             2-STUFEN ARCHITEKTUR FÜR UMGEBUNGSTEMPERATUR                    |
++-----------------------------------------------------------------------------+
+| STUFE 1: CAN-Bus Broadcast (BMW R1250/R1300 GS, Harley Pan America / HD-LAN) |
+| * Nutzt OEM-Ansaugluft-/Außentemperatursensor des Motorrads (CAN-ID 0x2D0)   |
+| * 0 zusätzliche Kabel, 0 Bauteilekosten, 100 % werkskalibriert               |
++-----------------------------------------------------------------------------+
+| STUFE 2: Front-Node Kaltluft-Sensorik (Universal / CVO ST / Non-CAN)        |
+| * Präzisionssensorik (TI TMP117 ±0.1°C & OPT3001 Lichtsensor an J12 Qwiic)  |
+| * Montage: Im Fahrtwind-Kaltluftkanal der Verkleidung / Cockpitmaske         |
+| * Thermische Entkopplung: 100 % frei von Zylinder-, Kühler- & Motorabwärme   |
+| * Kabelfrei über den Lenkkopf: Telemetrie-Streaming über UWB (< 0.4 ms)      |
++-----------------------------------------------------------------------------+
 ```
 
 ### 3.2 Barometrische Höhenkalibrierung (Kalman-Fusion)
 
-Neben GNSS-Höhenmessungen erfasst der Bosch BMP390 / BMP581 Luftdrucksensor auf der Zentralbox (PCBA 01) barometrische Höhendifferenzen auf $\pm 10\,\text{cm}$ genau. Ein kontinuierlicher Abgleich im 15-State Extended Kalman Filter gegen die u-blox SAM-M10Q 3D-Fix-Koordinaten bei stabiler Fahrt kalibriert den QNH-Referenzdruck vollautomatisch – ganz ohne manuelle Höhen-Nullung durch den Fahrer.
+Neben GNSS-Höhenmessungen erfasst der Bosch BMP390 / BMP581 Luftdrucksensor auf der Zentralbox (PCBA 01) barometrische Höhendifferenzen auf $\pm 10\,\text{cm}$ genau. Ein kontinuierlicher Abgleich im 15-State Extended Kalman Filter gegen die u-blox SAM-M10Q 3D-Fix-Koordinaten bei stabiler Fahrt kalibriert den QNH-Referenzdruck vollautomatisch - ganz ohne manuelle Höhen-Nullung durch den Fahrer.
 
 ### 3.3 Schaltvorgang-Zähler (Shift Counter) & Funk-QoS-Tracking
 
@@ -108,21 +106,21 @@ Neben GNSS-Höhenmessungen erfasst der Bosch BMP390 / BMP581 Luftdrucksensor auf
 Statt unübersichtlicher Einstellungsmenüs koppelt OpenMotorBridge die Telemetrie-Auswertung direkt an die drei existierenden Modi aus `🎛️ Audio-Routing & Betriebsmodi`:
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                 TELEMETRIE-SCORECARDS NACH BETRIEBSMODUS                    │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ MODUS 1: Single Rider Mode 🏍️ (Sportlich & Fahrdynamik)                     │
-│ • Schräglagen L/R, Kurvendichte (Kurven/km), Zeitanteil in Schräglage (%)    │
-│ • Shift Counter (Gesamt, Up/Down, Shifts/km), G-Forces, Notbremsungen, RPM  │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ MODUS 0: Standard Mesh Bridge 👥 (Gruppe & Intercom-Verfügbarkeit)          │
-│ • Funk-Verfügbarkeit (% HD-Voice), LoRa-Fallbacks, Cluster-Zustellung        │
-│ • Kolonnen-Tempo (Ø km/h), Gesamtkurven, Bordnetz-Stabilität                 │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ MODUS 2: Cruise Mode 🛣️ (Cruising & Tour-Komfort)                           │
-│ • Netto-/Pausenzeiten, Höhenprofil & Höhenmeter, Außentemperatur-Spanne     │
-│ • Bremsruhe (Sanfte Bremsungen), Reisetempo, Schaltkomfort-Index            │
-└─────────────────────────────────────────────────────────────────────────────┘
++-----------------------------------------------------------------------------+
+|                 TELEMETRIE-SCORECARDS NACH BETRIEBSMODUS                    |
++-----------------------------------------------------------------------------+
+| MODUS 1: Single Rider Mode 🏍️ (Sportlich & Fahrdynamik)                     |
+| * Schräglagen L/R, Kurvendichte (Kurven/km), Zeitanteil in Schräglage (%)    |
+| * Shift Counter (Gesamt, Up/Down, Shifts/km), G-Forces, Notbremsungen, RPM  |
++-----------------------------------------------------------------------------+
+| MODUS 0: Standard Mesh Bridge 👥 (Gruppe & Intercom-Verfügbarkeit)          |
+| * Funk-Verfügbarkeit (% HD-Voice), LoRa-Fallbacks, Cluster-Zustellung        |
+| * Kolonnen-Tempo (Ø km/h), Gesamtkurven, Bordnetz-Stabilität                 |
++-----------------------------------------------------------------------------+
+| MODUS 2: Cruise Mode 🛣️ (Cruising & Tour-Komfort)                           |
+| * Netto-/Pausenzeiten, Höhenprofil & Höhenmeter, Außentemperatur-Spanne     |
+| * Bremsruhe (Sanfte Bremsungen), Reisetempo, Schaltkomfort-Index            |
++-----------------------------------------------------------------------------+
 ```
 
 In der WebApp PWA ermöglicht der Tour Inspector über drei Pills (`[ 🏍️ Sportlich ]`, `[ 👥 Gruppe / Funk ]`, `[ 🛣️ Cruising ]`) jederzeit den sofortigen Wechsel der Scorecard-Perspektive.
@@ -133,6 +131,33 @@ Bei +22 dBm (160 mW) LoRa-Sendeleistung auf 868 MHz besteht bei unbedachter Ante
 1. **Räumliche Maximal-Trennung ($> 1{,}2\,\text{m}$ Distanz):** Der Semtech SX1262 LoRa-Transceiver sitzt auf der Zentralbox (PCBA 01) unter der Sitzbank (mit Taoglas FXP895 Antenne in der Deckeltasche), während der SAM-M10Q GNSS-Empfänger ganz vorne in der Cockpitverkleidung arbeitet. Der Freiraumverlust zwischen beiden Funkstellen beträgt $> 45\,\text{dB}$.
 2. **Integrierte Bandpassfilterung:** Das SAM-M10Q Modul besitzt ein integriertes SAW-Vorfilter vor dem internen rauscharmen Verstärker (LNA) mit $> 50\,\text{dB}$ Dämpfung im 868-MHz-Band.
 3. **Inertiale EKF-Stützung:** Bei transienten LoRa-Sende-Bursts überbrückt das 15-State Kalman-Filter eventuelle kurzzeitige SNR-Einbrüche nahtlos über die IMU-Koppelnavigation (Dead Reckoning).
+
+### 3.6 Fahrzeugübergreifender Telemetrie-Austausch über LoRa 868.3 MHz (Schwarm-Radar)
+
+Zur Erhöhung der Fahrsicherheit in der Gruppe tauschen alle gekoppelten Motorräder ihre fahrdynamischen Daten zyklisch über das verschlüsselte **LoRa-Kanal-2-Netzwerk (868.300 MHz / SF8 / 250 kHz)** aus:
+
+```
++----------------------------------------------------------------------------------------+
+|                   FAHRZEUGÜBERGREIFENDER SCHWARM-TELEMETRIE-AUSTAUSCH                  |
++----------------------------------------------------------------------------------------+
+|                                                                                        |
+| [ BIKE A (Führung) ] --> LoRa 16-Byte Telemetriepaket --> [ BIKE B (Nachfolgend) ]     |
+| * GPS-Pos (WGS84 1e7)    (Airtime ~18 ms @ 868.3 MHz)     * Relativ-Vektor berechnen   |
+| * Speed: 84 km/h                                          * Distanz: 240 m voraus      |
+| * Heading: 142°                                           * Peilung: 12° rechts        |
+| * Lean-Angle: 38°                                         * Anzeige im Live-Radar & AA |
+| * Gefahren-Flag: ABS / Vollbremsung (> -0.7g) ----------> * Akustische Warnung im Helm |
++----------------------------------------------------------------------------------------+
+```
+
+1. **Kompaktes 16-Byte Schwarm-Telemetriepaket:**
+   * Jeder Knoten broadcastet alle 2 bis 5 Sekunden (bei Kurvenfahrt und Bremsmanövern dynamisch auf $2\,\text{Hz}$ beschleunigt) ein ultrakompaktes 16-Byte-Paket mit Breitengrad, Längengrad, Höhe, Geschwindigkeit, Kurs, Schräglage und System-Flags.
+2. **Relativ-Positionsberechnung im lokalen ESP32-S3:**
+   * Aus den empfangenen GPS-Koordinaten berechnet der Kalman-Filter die relativen Vektoren (Entfernung $d$ in Metern und relativer Peilwinkel $\theta$ in Grad) zu allen Gruppenmitgliedern.
+   * Auf dem PWA-Dashboard und im Apple CarPlay / Android Auto Display erscheint ein intuitives **taktisches Gruppenradar**, das die Position jedes Fahrers in Echtzeit visualisiert.
+3. **Proaktive Gefahren- & Kollisionswarnung:**
+   * Registriert die IMU eines vorausfahrenden Bikes eine Notbremsung ($a_{\text{lon}} < -0{,}7\,\text{g}$) oder ein Auslösen des ABS-Reglers, wird sofort das Notfall-Flag im Telemetriepaket gesetzt.
+   * Nachfolgende Motorräder erhalten **in $< 35\,\text{ms}$** eine optische Warnung auf dem Cockpit-Display sowie einen akustischen Doppelton im Helm - lange bevor das Bremslicht hinter einer unübersichtlichen Kurve optisch sichtbar wird!
 
 ---
 
@@ -149,16 +174,16 @@ Bei +22 dBm (160 mW) LoRa-Sendeleistung auf 868 MHz besteht bei unbedachter Ante
 Um den strengen Vorgaben des Bundesgerichtshofs (BGH-Urteil VI ZR 233/17) und der DSGVO bezüglich anlassloser Überwachung im Straßenverkehr zu entsprechen:
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│          BGH-KONFORME ROLLIERENDE SPEICHER-ARCHITEKTUR      │
-├─────────────────────────────────────────────────────────────┤
-│ • Kontinuierliches Ringspeicher-Verzeichnis: /tracks/       │
-│ • Auto-Purge Schwellwert: Freier Speicher < 200 MB          │
-│ • Älteste ungeschützte Segmente werden in 50MB-Blöcken      │
-│   automatisch überschrieben                                 │
-│ • Manueller Highlight-Schutz via Lenkertaster (*.fav.gpx)   │
-│ • Unfall-Sensor-Trigger: Schock > 4G sperrt letzte 15 Min. │
-└─────────────────────────────────────────────────────────────┘
++-------------------------------------------------------------+
+|          BGH-KONFORME ROLLIERENDE SPEICHER-ARCHITEKTUR      |
++-------------------------------------------------------------+
+| * Kontinuierliches Ringspeicher-Verzeichnis: /tracks/       |
+| * Auto-Purge Schwellwert: Freier Speicher < 200 MB          |
+| * Älteste ungeschützte Segmente werden in 50MB-Blöcken      |
+|   automatisch überschrieben                                 |
+| * Manueller Highlight-Schutz via Lenkertaster (*.fav.gpx)   |
+| * Unfall-Sensor-Trigger: Schock > 4G sperrt letzte 15 Min. |
++-------------------------------------------------------------+
 ```
 
 1. **Rollierender Ringspeicher:** Normale Fahrdaten werden in 15-Minuten-Segmenten rollierend überschrieben.
@@ -170,13 +195,13 @@ Um den strengen Vorgaben des Bundesgerichtshofs (BGH-Urteil VI ZR 233/17) und de
 ## 6. Map-Matching & Universeller GPX-Export (Web-App Pipeline)
 
 ```
-[ MicroSD: tour_raw.gpx ] ──(BLE / WebDAV)──► [ Web Dashboard / Smartphone ]
-                                                      │
-                                                      ▼
+[ MicroSD: tour_raw.gpx ] --(BLE / WebDAV)--> [ Web Dashboard / Smartphone ]
+                                                      |
+                                                      v
                                        [ Map-Matching Engine (OSRM / Valhalla) ]
-                                                      │
-                         ┌────────────────────────────┴────────────────────────────┐
-                         ▼                                                         ▼
+                                                      |
+                         +----------------------------+----------------------------+
+                         v                                                         v
            [ Bereinigte Navi-Route (.gpx) ]                           [ Reiner Visual-Track (.gpx) ]
            (20-50 gesetzte Shaping Points für                          (1:1 geglättete Linie für
             Garmin, Kurviger, Calimoto, TomTom)                        Google Maps, Komoot, Relive)
@@ -194,14 +219,14 @@ Um den strengen Vorgaben des Bundesgerichtshofs (BGH-Urteil VI ZR 233/17) und de
 
 ```
 MOTORRAD ROLLT IN DIE GARAGE (ZÜNDUNG AUS)
-┌─────────────────────────────────────────────────────────────┐
-│ 1. KL15 fällt ab -> USV-Nachlauf schaltet ein (Graceful Run)│
-│ 2. ESP32-S3 scannt 60 s nach bekannten Heim-WLAN SSIDs      │
-│ 3. WLAN gefunden -> Verbindung via WPA2/WPA3 Personal/Ent.  │
-│ 4. TLS 1.3 Client verbindet zu Nextcloud / ownCloud / NAS   │
-│ 5. Upload aller neuen *.gpx und Telemetrie-Dateien (1.8 MB/s)│
-│ 6. Abschlussmeldung -> Dateisystem unmount -> Deep Sleep    │
-└─────────────────────────────────────────────────────────────┘
++-------------------------------------------------------------+
+| 1. KL15 fällt ab -> USV-Nachlauf schaltet ein (Graceful Run)|
+| 2. ESP32-S3 scannt 60 s nach bekannten Heim-WLAN SSIDs      |
+| 3. WLAN gefunden -> Verbindung via WPA2/WPA3 Personal/Ent.  |
+| 4. TLS 1.3 Client verbindet zu Nextcloud / ownCloud / NAS   |
+| 5. Upload aller neuen *.gpx und Telemetrie-Dateien (1.8 MB/s)|
+| 6. Abschlussmeldung -> Dateisystem unmount -> Deep Sleep    |
++-------------------------------------------------------------+
 ```
 
 * **Vollautomatisch:** Der Fahrer muss weder sein Smartphone zücken noch Speicherkarten entnehmen. Die Touren des Tages liegen beim Eintreten ins Haus bereits fertig im Nextcloud-Ordner bereit.
@@ -212,7 +237,7 @@ Während Power-User mit eigener Nextcloud oder Synology-NAS direkt deren native 
 
 1. **Vorteile der Cloud-Service-Architektur:**
    * **100 % plattformunabhängig:** Vollkommen identische Funktion für iPhone- (iOS ohne teure App-Store-Entwicklerlizenz) und Android-Fahrer.
-   * **Autark & Smartphone-frei:** Das Motorrad lädt bei Ankunft im Heim-WLAN (oder unterwegs über den Mobilfunk-Proxy) völlig selbstständig hoch – das Smartphone kann ausgeschaltet in der Tasche bleiben.
+   * **Autark & Smartphone-frei:** Das Motorrad lädt bei Ankunft im Heim-WLAN (oder unterwegs über den Mobilfunk-Proxy) völlig selbstständig hoch - das Smartphone kann ausgeschaltet in der Tasche bleiben.
 2. **Warum kein klobiges Rclone?**
    * Rclone ist mit über 100 MB Binary und unzähligen Cloud-Subsystemen für diesen Zweck überdimensioniert.
    * Der WebDAV-Bedarf der Zentralbox beschränkt sich auf den Standard-HTTP-Befehl `PUT /tracks/<dateiname>.gpx` (Dateigröße typisch 200 KB bis 3 MB) mit HTTP Basic Auth.
@@ -243,16 +268,52 @@ Während Power-User mit eigener Nextcloud oder Synology-NAS direkt deren native 
 Wird die Zentralbox über den nativen USB-C-Port an einen PC, Mac oder ein Tablet angeschlossen, während die Fahrzeugzündung (KL15) ausgeschaltet ist, startet der ESP32-S3 im **Minimalen USB MSC Modus**:
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│             MINIMALER USB MASS STORAGE CLASS MODUS          │
-├─────────────────────────────────────────────────────────────┤
-│ • VBUS-Erkennung (5V am nativen USB-C Port)                 │
-│ • Haupt-Relais & Audio-DSP (ES8388) bleiben STROMISOLIERT   │
-│ • Funkmodule (LoRa, Mesh, Bluetooth) bleiben DEAKTIVIERT    │
-│ • Stromaufnahme aus USB-Port: < 80 mA (Keine Belastung Akku)│
-│ • MicroSD-Karte wird als USB-Flash-Laufwerk bereitgestellt  │
-└─────────────────────────────────────────────────────────────┘
++-------------------------------------------------------------+
+|             MINIMALER USB MASS STORAGE CLASS MODUS          |
++-------------------------------------------------------------+
+| * VBUS-Erkennung (5V am nativen USB-C Port)                 |
+| * Haupt-Relais & Audio-DSP (ES8388) bleiben STROMISOLIERT   |
+| * Funkmodule (LoRa, Mesh, Bluetooth) bleiben DEAKTIVIERT    |
+| * Stromaufnahme aus USB-Port: < 80 mA (Keine Belastung Akku)|
+| * MicroSD-Karte wird als USB-Flash-Laufwerk bereitgestellt  |
++-------------------------------------------------------------+
 ```
 
 * **Kein Werkzeug / Kein Kartenauswurf:** Der Rechner bindet die Box direkt als USB-Laufwerk `OPENMOTOR` ein.
 * **Direktzugriff:** Touren aus `/tracks/` können direkt in Google Earth, BaseCamp, GPXSee oder Kurviger geöffnet werden.
+
+---
+
+## 9. Actioncam-Steuerung & 1-PPS Framegenaue Zeitsynchronisation
+
+OpenMotorBridge steuert gekoppelte Actioncams drahtlos über den Front-Knoten (`PCBA 05`) per Bluetooth Low Energy (BLE) und bettet hochpräzise Sensordaten direkt in die Videoaufnahmen ein:
+
+```
++----------------------------------------------------------------------------------------+
+|               FRAMEGENAUE ACTIONCAM-STEUERUNG & SENSORDATEN-EINBETTUNG                 |
++----------------------------------------------------------------------------------------+
+|                                                                                        |
+| [ u-blox SAM-M10Q GNSS ] -- 1-PPS Hardware-Puls (< 15 ns) --> [ ESP32-S3 FRONT-NODE ]  |
+|                                                                        |               |
+|                                            +---------------------------+-------------+ |
+|                                            v                                         v |
+|                                [ BLE REMOTE GATT STEUERUNG ]            [ GPX/GPMF ]   |
+|                                * GoPro Open GoPro BLE API (0xFEA6)      * Lean-Angle   |
+|                                * Insta360 Smart Remote Emulation        * Speed & G    |
+|                                * DJI Osmo Action Remote Protokoll       * Video-Sync   |
++----------------------------------------------------------------------------------------+
+```
+
+1. **1-PPS Hardware-Zeitstempel:**
+   * Das GNSS-Modul liefert an `PIN_GNSS_PPS` einen 1-Hz-Hardware-Impuls mit $< 15\,\text{ns}$ Jitter.
+   * Sämtliche Video-Footage, Beschleunigungsvektoren und Kurvenschräglagen bleiben auch über mehrstündige Touren hinweg **framegenau auf das Einzelbild synchron**.
+2. **Unterstützte Kamera-Protokolle:**
+   * **GoPro (Hero 9 / 10 / 11 / 12 / 13):** Offizielle Open GoPro BLE API (GATT Service `0xFEA6`).
+   * **Insta360 (X3 / X4 / Ace Pro):** Native Emulation der offiziellen Insta360 GPS Smart Remote; Sensordaten werden direkt in den INSV-Videocontainer eingebettet.
+   * **DJI (Osmo Action 3 / 4 / 5 Pro):** DJI BLE Remote Protokoll.
+3. **Lenkertaster-Gesten (Steuerung im IDLE-Zustand):**
+   * **Kurzer Klick ($< 300\,\text{ms}$):** Aufnahme Start / Stopp (weckt die Kamera per BLE aus dem Tiefschlaf; Bestätigungs-Doppelton im Helm).
+   * **Doppelklick ($2\times < 250\,\text{ms}$):** Video-Highlight-Marker (HiLight-Tag im MP4/INSV-Videocontainer und GPX-Wegpunkt setzen).
+   * **Automatischer Apex-Marker:** Erreicht die Schräglage in einer Kurve mehr als $45^\circ$, setzt der ESP32-S3 vollautomatisch einen Highlight-Tag in den Metadaten.
+   * *(Hinweis: Bei eingehendem Telefonat wird der Lenkertaster gemäß [03 - Audio-DSP & Telefonie](file:///Users/schmidtm/openMotorBridge/docs/de/03_audio_dsp_acoustics.md) modal für die Rufannahme isoliert).*
+

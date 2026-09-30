@@ -9,17 +9,17 @@ Dieses Dokument spezifiziert das dynamische Energie- und Schutzmanagement der Op
 Um hohe Wirkungsgrade bei minimaler Eigenerwärmung im geschlossenen IP67-Gehäuse zu erzielen, arbeiten Zentralbox und Front-Knoten mit hochintegrierten synchronen Abwärtswandlern:
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                    DCDC WANDLER-ARCHITEKTUR IM SYSTEM                       │
-├──────────────────────────────────────┬──────────────────────────────────────┤
-│ 1. ZENTRALBOX (PCBA 01): LM5164-Q1   │ 2. FRONT-KNOTEN (PCBA 05): LMR36015  │
-├──────────────────────────────────────┼──────────────────────────────────────┤
-│ • Weitbereichseingang: 6.0 V - 65 V  │ • Eingangsspannung: 4.2 V - 36 V     │
-│ • Ausgang: 5.0 V DC / 1.0 A Dauer    │ • Ausgang: 5.0 V DC / 2.0 A Dauer    │
-│ • Wirkungsgrad: > 88 % bei Volllast  │ • Wirkungsgrad: 91.8 % bei 2.0 A     │
-│ • Transientenschutz bis 100 V        │ • Restwelligkeit: 5.3 mVpp           │
-│ • Versorgt: MCU, Audio, USV, Pod 1-3 │ • Versorgt: ESP32-S3, USB2514B, VBUS │
-└──────────────────────────────────────┴──────────────────────────────────────┘
++-----------------------------------------------------------------------------+
+|                    DCDC WANDLER-ARCHITEKTUR IM SYSTEM                       |
++--------------------------------------+--------------------------------------+
+| 1. ZENTRALBOX (PCBA 01): LM5164-Q1   | 2. FRONT-KNOTEN (PCBA 05): LMR36015  |
++--------------------------------------+--------------------------------------+
+| * Weitbereichseingang: 6.0 V - 65 V  | * Eingangsspannung: 4.2 V - 36 V     |
+| * Ausgang: 5.0 V DC / 1.0 A Dauer    | * Ausgang: 5.0 V DC / 2.0 A Dauer    |
+| * Wirkungsgrad: > 88 % bei Volllast  | * Wirkungsgrad: 91.8 % bei 2.0 A     |
+| * Transientenschutz bis 100 V        | * Restwelligkeit: 5.3 mVpp           |
+| * Versorgt: MCU, Audio, USV, Pod 1 & 2| * Versorgt: ESP32-S3, USB2514B, VBUS |
++--------------------------------------+--------------------------------------+
 ```
 
 ### 1.1 LM5164-Q1 Induktivitäts- & Filter-Dimensionierung
@@ -68,34 +68,42 @@ Wird das Motorrad abgestellt oder trennen Diebe die 12V-Starterbatterie ab, scha
 - **Verpolschutz:** Diodes Inc. DMP6023L P-Kanal MOSFET mit extrem niedrigem Durchlasswiderstand ($R_{\text{DS(on)}} < 25\,\text{m}\Omega$).
 - **Filterung:** Zweistufiger LC-PI-Filter ($10\,\mu\text{H}$ Shielded Automotive Inductor + 2x $10\,\mu\text{F}$ X7R 100V Keramikkondensatoren) am KL30/KL15-Eingang.
 
+### 3.1 DTM-12 2-Draht-DC-Leistungsverteilung & TI TPS25921 eFuse-Schutz
+Sämtliche peripheren Abgänge der Zentralbox (`PCBA 01`) werden über den robusten, vibrationsfesten **Deutsch DTM-12 Industrie-Steckverbinder** geführt. Da Daten- und Audioströme zu 100 % über das drahtlose All-UWB-Backbone übertragen werden, führt der Kabelbaum **ausschließlich reine 12V-Gleichspannung (2-Draht DC)**:
+* **Individuelle eFuse-Absicherung (Texas Instruments TPS25921):**
+  * Jeder der 4 externen DC-Zweige (Bucht 1 Links, Bucht 2 Rechts, Front-Knoten, Radar 2.0 Warnflügel) ist auf `PCBA 01` durch eine eigene **TI TPS25921 eFuse** (elektronische Sicherung) hardware-geschützt.
+  * Einstellbare Strombegrenzung mit Überstromabschaltung in $< 1\,\mu\text{s}$ bei Kurzschluss (z. B. durch Scheuerstellen am Rahmen oder Wassereintritt in offenen Steckern).
+  * Automatischer Thermoschutz ($150\,^\circ\text{C}$ Junction Shutdown) und kontrollierter Sanftanlauf (Soft-Start zur Vermeidung kapazitiver Einschaltstromspitzen).
+  * Status-Rückmeldung jedes Zweigs (`FLT`) an den ESP32-S3 für proaktive Fehlermeldungen in der WebApp.
+
 ---
 
-## 4. Front-Knoten VBUS Lastschalter & Ottocast Power-Management
+## 4. Front-Knoten VBUS Lastschalter & Headless CP/AA Bridge Power-Management
 
-Der Universal Front-Knoten verfügt über ein intelligentes Energiemanagement für externe Wireless CarPlay / Android Auto Dongle (*Ottocast / CarlinKit*):
+Der Universal Front-Knoten verfügt über ein intelligentes Energiemanagement für externe Wireless CarPlay / Android Auto Headless-Dongle:
 
 ```
-                   FRONT-KNOTEN OTTOCAST POWER-GATE
-┌────────────────────────────┐              ┌────────────────────────────┐
-│ 12V Bordnetz (KL15 Zündung)│              │ ESP32-S3 Firmware          │
-│ • Scheinwerfer / Zubehör   │              │ • 1-Click Reboot Listener  │
-└─────────────┬──────────────┘              │ • Auto-Café 60s Countdown  │
-              │                             └─────────────┬──────────────┘
-              ▼                                           │ GPIO 1 (EN)
-┌────────────────────────────┐                            │
-│ TI LMR36015 Buck (5.00V)   │                            ▼
-│ • 91.8 % Wirkungsgrad      ├─────────────►┌────────────────────────────┐
-│ • 5.3 mVpp Restwelligkeit  │              │ TI TPS2051B Load Switch    │
-└────────────────────────────┘              │ • 1.05A Current Clamp      │
-                                            │ • 6.5 µs Fault Trip        │
-                                            │ • 0.42A Soft-Start Inrush  │
-                                            └─────────────┬──────────────┘
-                                                          │ 5.0V VBUS
-                                                          ▼
-                                            ┌────────────────────────────┐
-                                            │ CP2AA CarPlay Adapter      │
-                                            │ • USB-Hub Port 2 (Pigtail) │
-                                            └────────────────────────────┘
+               FRONT-KNOTEN HEADLESS CP/AA POWER-GATE
++----------------------------+              +----------------------------+
+| 12V Bordnetz (KL15 Zündung)|              | ESP32-S3 Firmware          |
+| * Scheinwerfer / Zubehör   |              | * 1-Click Reboot Listener  |
++-------------+--------------+              | * Auto-Café 60s Countdown  |
+              |                             +-------------+--------------+
+              v                                           | GPIO 1 (EN)
++----------------------------+                            |
+| TI LMR36015 Buck (5.00V)   |                            v
+| * 91.8 % Wirkungsgrad      +------------->+----------------------------+
+| * 5.3 mVpp Restwelligkeit  |              | TI TPS2051B Load Switch    |
++----------------------------+              | * 1.05A Current Clamp      |
+                                            | * 6.5 µs Fault Trip        |
+                                            | * 0.42A Soft-Start Inrush  |
+                                            +-------------+--------------+
+                                                          | 5.0V VBUS
+                                                          v
+                                            +----------------------------+
+                                            | Headless CP/AA Adapter     |
+                                            | * USB-Hub Port 2 (Pigtail) |
+                                            +----------------------------+
 ```
 
 ### 4.1 1-Klick Dongle Kaltstart (Hard Reset via PWA)
@@ -128,19 +136,26 @@ Die Bordnetzspannung an KL15 und KL30 wird über hochpräzise Spannungsteiler ($
 | **LiFePO4 (Lithium-Eisenphosphat)** | 13.2 V - 13.3 V | 14.4 V - 14.6 V | 13.0 V | **12.8 V** |
 | **Li-Ion (NMC Starterbatterie)** | 11.1 V - 12.6 V | 12.6 V - 13.0 V | 10.8 V | **10.5 V** |
 
-### 5.2 3-Stufen Abschaltkaskade
+### 5.2 3-Stufen Abschaltkaskade mit 60-Minuten Kaffeepausen-Persistenz
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│          3-STUFIGE POWER-DOWN KASKADE BEI ZÜNDUNG AUS       │
-├─────────────────────────────────────────────────────────────┤
-│ 1. NACHLAUF (0..15 Min): WebDAV-Upload & GPX Flush (45 mA)  │
-│ 2. DEEP SLEEP (15 Min..72 h): Ext-Interrupt KL15 (< 100 µA) │
-│ 3. WINTER-HIBERNATE (> 72 h): ULP-Tiefschlaf (< 16.5 µA)    │
-└─────────────────────────────────────────────────────────────┘
++-------------------------------------------------------------+
+|          3-STUFIGE POWER-DOWN KASKADE BEI ZÜNDUNG AUS       |
++-------------------------------------------------------------+
+| 1. KAFFEEPAUSE (0..60 Min): Mesh-State & Keep-Alive (15 mA) |
+| 2. DEEP SLEEP (60 Min..72 h): Ext-Interrupt KL15 (< 100 µA) |
+| 3. WINTER-HIBERNATE (> 72 h): ULP-Tiefschlaf (< 16.5 µA)    |
++-------------------------------------------------------------+
 ```
 
-* **Stufe 3 - ULP-Hibernate:** Schützt die Starterbatterie über 6 bis 12 Monate Winterpause vor Tiefentladung (Verlust $< 1{,}5\,\%$ der Nennkapazität pro Jahr), selbst wenn kein Erhaltungsladegerät angeschlossen ist.
+* **Stufe 1 - Kaffeepausen-Standby (0..60 Min):**
+  * Bei Zündung AUS (Abfallen von KL15) sichert der ESP32-S3 den aktuellen Gruppen-Mesh-Status, die Link-State-Routingtabellen und symmetrische Verschlüsselungsschlüssel im NVRAM und RTC-Fast-SRAM.
+  * Der Controller verbleibt in einem energiesparenden Standby ($< 15\,\text{mA}$ Ruhestrom), während im Hintergrund der WebDAV-Upload und GPX-Flush abgeschlossen werden.
+  * Schaltet der Fahrer innerhalb von 60 Minuten die Zündung wieder ein, steht die gesamte Gruppenkommunikation in **$< 1{,}5\,\text{s}$** ohne erneute Discovery- oder Aushandlungsphase sofort wieder zur Verfügung.
+* **Stufe 2 - Deep Sleep (60 Min..72 h):**
+  * Überschreitet der Halt 60 Minuten, geht das System in den Tiefschlaf ($< 100\,\mu\text{A}$), aus dem es per Hardware-Interrupt an KL15 in $< 5\,\text{ms}$ aufwacht. Das Find-My-Beaconing läuft im Hintergrund weiter.
+* **Stufe 3 - ULP-Hibernate (> 72 h Stillstand):**
+  * Schützt die Starterbatterie über 6 bis 12 Monate Winterpause vor Tiefentladung ($< 14{,}8\,\mu\text{A}$ Stromaufnahme, Verlust $< 1{,}5\,\%$ der Nennkapazität pro Jahr), selbst wenn kein Erhaltungsladegerät angeschlossen ist.
 
 ---
 
@@ -152,17 +167,17 @@ Das OpenMotorBridge-Ökosystem überwacht dezentrale Peripherie-Knoten kontinuie
 Der im Cockpit montierte Front-Node ist fest über das 12V-Bordnetz versorgt (mit eigenem TI LM5164-Q1 Step-Down). Ein hochohmiger Präzisions-Spannungsteiler speist den internen ADC, um lokale Spannungsabfälle an Lenkerarmaturen und Bordsteckdosen in Echtzeit an die Zentralbox zu melden.
 
 ### 6.2 Smart-Keyfob & Pager (PCBA 07): LiPo Fuel Gauge (BLE Service 0x180F & LoRa)
-Der tragbare Smart-Keyfob wird von einem internen 3,7V LiPo-Akku (350–500 mAh) versorgt, der über USB-C geladen wird. Ein **Maxim MAX17048 I2C Fuel Gauge** misst Ladezustand (SoC in %), Zellspannung und Entladerate präzise ohne Shunt-Widerstand. Der Keyfob sendet diesen Status zyklisch über den standardisierten **Bluetooth SIG Battery Service (`UUID 0x180F`)** sowie im periodischen LoRa-Health-Paket:
+Der tragbare Smart-Keyfob wird von einem internen 3,7V LiPo-Akku (350-500 mAh) versorgt, der über USB-C geladen wird. Ein **Maxim MAX17048 I2C Fuel Gauge** misst Ladezustand (SoC in %), Zellspannung und Entladerate präzise ohne Shunt-Widerstand. Der Keyfob sendet diesen Status zyklisch über den standardisierten **Bluetooth SIG Battery Service (`UUID 0x180F`)** sowie im periodischen LoRa-Health-Paket:
 
 ```
-┌──────────────┬───────────────┬──────────────────────────────────────────────┐
-│ SoC (LiPo)   │ Zellspannung  │ System-Reaktion & Warnstufe                  │
-├──────────────┼───────────────┼──────────────────────────────────────────────┤
-│ **> 20 %**   │ 3.7 V - 4.2 V │ Normalbetrieb (Grüne Anzeige im WebApp Dash) │
-│ **≤ 15 %**   │ ≤ 3.6 V       │ **Gelbe Frühwarnung:** Status-LED Wechsel-   │
-│              │               │ blitz Gelb • Push: "Keyfob per USB-C laden"  │
-│              │               │ • Pager-Display zeigt Low-Bat-Symbol         │
-│ **≤ 5 %**    │ ≤ 3.3 V       │ **Kritischer Alarm:** Rote LED, automatischer│
-│              │               │ ULP-Deep-Sleep zum Schutz vor Tiefentladung  │
-└──────────────┴───────────────┴──────────────────────────────────────────────┘
++--------------+---------------+----------------------------------------------+
+| SoC (LiPo)   | Zellspannung  | System-Reaktion & Warnstufe                  |
++--------------+---------------+----------------------------------------------+
+| **> 20 %**   | 3.7 V - 4.2 V | Normalbetrieb (Grüne Anzeige im WebApp Dash) |
+| **≤ 15 %**   | ≤ 3.6 V       | **Gelbe Frühwarnung:** Status-LED Wechsel-   |
+|              |               | blitz Gelb * Push: "Keyfob per USB-C laden"  |
+|              |               | * Pager-Display zeigt Low-Bat-Symbol         |
+| **≤ 5 %**    | ≤ 3.3 V       | **Kritischer Alarm:** Rote LED, automatischer|
+|              |               | ULP-Deep-Sleep zum Schutz vor Tiefentladung  |
++--------------+---------------+----------------------------------------------+
 ```

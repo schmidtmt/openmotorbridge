@@ -1,5 +1,7 @@
 # 09 - Firmware-Architektur, FreeRTOS Tasks & Rollback-OTA
 
+*Hinweis: Sämtliche CAD- und Blockschaltbilder spiegeln die bereinigte v9.6 All-UWB-Architektur (5-PCB-Lineup, PCBA 01 bis 07) wider.*
+
 Dieses Dokument spezifiziert die systemweite Firmware-Architektur der OpenMotorBridge v8.5 / v9.0 Clean Architecture: die Multi-Core-Aufteilung des ESP32-S3 Hauptcontrollers auf der Zentralbox (`PCBA 01`), des ESP32-S3 Front-Knotens (`PCBA 05`), des deterministischen **All-UWB Backbones (Qorvo DW3110 / 6.489 GHz Ch. 5, Latenz < 0,4 ms)** zu allen Satelliten (Front-Node, Bucht 1, Bucht 2, Heckradar), der **Group Split Fallback Engine**, der LittleFS-Profil-Engine sowie der **Dual-Bank Rollback-OTA-Architektur** gegen Stromausfälle während des Flashvorgangs.
 
 ---
@@ -9,21 +11,21 @@ Dieses Dokument spezifiziert die systemweite Firmware-Architektur der OpenMotorB
 In v8.5 / v9.0 ist das Gesamtsystem auf eine strikte **All-UWB-Stern-/Mesh-Topologie** standardisiert. Sämtliche Daten- und Steuerverbindungen zwischen Zentralbox und externen Knoten erfolgen ausschließlich über Ultra-Wideband (Qorvo DW3110); Kassetten-Buchten und Heckradar erhalten über den Deutsch DTM-12 Kabelbaum ausschließlich reine DC-Stromversorgung:
 
 ```
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                        DIE FIRMWARE-KONTROLLER IM SYSTEMVERBUND                        │
-├──────────────────────────────────────────────────────┬─────────────────────────────────┤
-│ 1. ZENTRALBOX (ESP32-S3 Dual-Core, PCBA 01)          │ 2. FRONT-NODE (ESP32-S3, PCBA 05)│
-├──────────────────────────────────────────────────────┼─────────────────────────────────┤
-│ • Core 0: All-UWB Backbone, SX1262 LoRa 868, BLE,    │ • Core 0: UWB-Backbone, SAM-M10Q│
-│   Power-Sequencing, UWB Cartridge & Radar Dispatch   │   Multi-GNSS, CAN, USB-PD, PTT  │
-│ • Core 1: Echtzeit 48 kHz Audio-DSP, Ducking, AGC    │ • Core 1: Knowles Vector-DSP    │
-├──────────────────────────────────────────────────────┼─────────────────────────────────┤
-│ 3. SMART CARTRIDGES (CH32V003 + DW3110, PCBA 03)     │ 4. HECK-RADAR (RP2040 + DW3110) │
-├──────────────────────────────────────────────────────┼─────────────────────────────────┤
-│ • Bucht 1 (Links) & Bucht 2 (Rechts) All-UWB SMT     │ • Wheeltec MR20 mmWave Radar    │
-│ • Mechatronische 4-Aktuator-Puls-Sequenzierung       │ • 20 Hz Tracking-Vektoren via   │
-│ • 4x N-MOSFET AO3400A direkt auf Platinenunterseite  │   UWB; 12V DC-Power vom DTM-12  │
-└──────────────────────────────────────────────────────┴─────────────────────────────────┘
++----------------------------------------------------------------------------------------+
+|                        DIE FIRMWARE-KONTROLLER IM SYSTEMVERBUND                        |
++------------------------------------------------------+---------------------------------+
+| 1. ZENTRALBOX (ESP32-S3 Dual-Core, PCBA 01)          | 2. FRONT-NODE (ESP32-S3, PCBA 05)|
++------------------------------------------------------+---------------------------------+
+| * Core 0: All-UWB Backbone, SX1262 LoRa 868, BLE,    | * Core 0: UWB-Backbone, SAM-M10Q|
+|   Power-Sequencing, UWB Cartridge & Radar Dispatch   |   Multi-GNSS, CAN, USB-PD, PTT  |
+| * Core 1: Echtzeit 48 kHz Audio-DSP, Ducking, AGC    | * Core 1: Knowles Vector-DSP    |
++------------------------------------------------------+---------------------------------+
+| 3. SMART CARTRIDGES (CH32V003 + DW3110, PCBA 03)     | 4. HECK-RADAR (RP2040 + DW3110) |
++------------------------------------------------------+---------------------------------+
+| * Bucht 1 (Links) & Bucht 2 (Rechts) All-UWB SMT     | * Wheeltec MR20 mmWave Radar    |
+| * Mechatronische 4-Aktuator-Puls-Sequenzierung       | * 20 Hz Tracking-Vektoren via   |
+| * 4x N-MOSFET AO3400A direkt auf Platinenunterseite  |   UWB; 12V DC-Power vom DTM-12  |
++------------------------------------------------------+---------------------------------+
 ```
 
 ### 1.1 Core-Aufteilung des ESP32-S3 Hauptcontrollers der Zentralbox (240 MHz)
@@ -67,29 +69,38 @@ Alle Daten- und Steuerverbindungen im Fahrzeugnetzwerk nutzen IEEE 802.15.4z Ult
 
 ```cpp
 enum UwbBackbonePktType : uint8_t {
-    // Front-Node Telemetrie & Steuerung
-    UWB_PKT_HEARTBEAT          = 0x01,  // Status, Uptime, VBUS-Spannung, Ranging-Distanz
-    UWB_PKT_PTT_EVENT          = 0x02,  // Lenker-PTT gedrückt/losgelassen (< 0.4 ms)
-    UWB_PKT_AUDIO_RMS          = 0x03,  // Knowles MEMS Fahrtwind dB(A) Pegel (50 Hz)
-    UWB_PKT_GNSS_PVT           = 0x04,  // u-blox SAM-M10Q 10 Hz PVT Telemetrieblock
-    UWB_PKT_ENV_SENSORS        = 0x05,  // TI TMP117 (Temp) & TI OPT3001 (Lux)
-    UWB_PKT_CAN_TELEMETRY      = 0x06,  // Cockpit-CAN Telemetriedaten (wenn Front J2 aktiv)
-    UWB_PKT_OTTOCAST_STATUS    = 0x07,  // Status, Strom, Auto-Café Timer
-    
-    // Smart Cartridges (Bucht 1 Links & Bucht 2 Rechts)
-    UWB_PKT_CARTRIDGE_ANNOUNCE = 0x20,  // Handshake: Hardware-Klasse, UID, Status, Roaming-ID
-    UWB_PKT_CARTRIDGE_OPCODE   = 0x21,  // Zentralbox -> Kassette: Mechatronik-Trigger-Opcode
-    UWB_PKT_CARTRIDGE_ACK      = 0x22,  // Kassette -> Zentralbox: Ausführungsquittung
-    
-    // Heck-Radar (PCBA 08)
-    UWB_PKT_RADAR_TARGETS      = 0x30,  // 20 Hz Radar-Objektliste, TTC, Distanz, Azimut
-    UWB_PKT_RADAR_ALERT        = 0x31,  // Prio-1 Kollisionswarnung für Audio-Ducking & LED
-    
-    // System- & Pairing-Befehle
+    // --- Node-Management & System-Heartbeat (Universal für alle Nodes) ---
+    UWB_PKT_NODE_ANNOUNCE      = 0x01,  // Boot-Handshake: Node-Typ (Front, Pod 1/2, Radar), UID, FW-Version
+    UWB_PKT_NODE_HEARTBEAT     = 0x02,  // 1 Hz Heartbeat: Uptime, VBUS-Spannung, Ranging-Distanz, RSSI
+    UWB_PKT_PTT_EVENT          = 0x03,  // Lenker-PTT Edge (< 0.4 ms Latenz): Down, Up, Long, Double, Triple
+
+    // --- Konsolidierte Telemetrie (10 Hz Frame) & Peripherie ---
+    UWB_PKT_FRONT_TELEMETRY    = 0x04,  // Konsolidierter 10 Hz Frame: GNSS PVT + Wind-RMS + TMP117 + Lux + CAN
+    UWB_PKT_WIRELESS_CP_AA_STAT= 0x05,  // COTS CarPlay / Android Auto Bridge Status, Stromaufnahme, Auto-Café Timer
+
+    // --- Steuerbefehle & System-Synchronisation ---
     UWB_PKT_CMD_POWER_CYCLE    = 0x10,  // Zentralbox -> Front-Node: 2.5s Kaltstart
-    UWB_PKT_CMD_CONFIG         = 0x11,  // Zentralbox -> Satelliten: Zündungs-Sync
-    UWB_PKT_PAIRING_REQUEST    = 0x40,  // Pairing-Ablauf nach SW1 Tasterdruck
-    UWB_PKT_PAIRING_CONFIRM    = 0x41   // AES-128 Session-Key Austausch & NVS Speicherung
+    UWB_PKT_CMD_CONFIG         = 0x11,  // Zentralbox -> Satelliten: Zündungs-Sync & Sleep-State
+    UWB_PKT_PAIRING_REQUEST    = 0x12,  // Pairing-Ablauf nach SW1 Tasterdruck (60s Fenster)
+    UWB_PKT_PAIRING_CONFIRM    = 0x13,  // AES-128 Session-Key Austausch & NVS Speicherung
+
+    // --- Kassetten-Steuerung & Smart-Cartridge-Protokoll (Bucht 1 & 2) ---
+    UWB_PKT_CARTRIDGE_ANNOUNCE = 0x20,  // Handshake: Hardware-Klasse, Modell-ID, UID, Status, Roaming-ID
+    UWB_PKT_CARTRIDGE_OPCODE   = 0x21,  // Zentralbox -> Kassette: Mechatronik-Trigger-Opcode (AO3400A Pulsgatter)
+    UWB_PKT_CARTRIDGE_ACK      = 0x22,  // Kassette -> Zentralbox: Ausführungsquittung & Taster-Status
+
+    // --- Digitales UWB Audio-Backbone (Bidirektional, 48 kHz / 16-Bit komprimiert) ---
+    UWB_PKT_AUDIO_STREAM_DOWN  = 0x24,  // Zentralbox -> Pods: Master-Mix an Headsets (Mic + Navigation + TTS)
+    UWB_PKT_AUDIO_STREAM_UP    = 0x25,  // Pods -> Zentralbox: Intercom Spk-Out / Helm-Audio zur Zentralbox
+    UWB_PKT_AUDIO_MEDIA_UP     = 0x26,  // Front-Node -> Zentralbox: Musik / Navigations-Ansagen vom Smartphone
+
+    // --- Radar 2.0 (PCBA 06): Vorfilterung & LED-Makrosteuerung ---
+    UWB_PKT_RADAR_TARGETS      = 0x30,  // 20 Hz voroptimierte Zielliste (TTC, Distanz, Azimut) + URGENT-Flag
+    UWB_PKT_RADAR_LED_CMD      = 0x31,  // Zentralbox -> Radar-ESP: Makro-Befehl (Idle, Warnung, Prio-1 Strobe)
+
+    // --- OTA Firmware-Verteilung über UWB ---
+    UWB_PKT_FW_UPDATE_PUSH     = 0x50,  // Zentralbox -> Nodes: Blockweises Firmware-Update
+    UWB_PKT_FW_UPDATE_DONE     = 0x51   // Nodes -> Zentralbox: Flash-Quittung / Reboot-Ready
 };
 ```
 
@@ -115,23 +126,23 @@ enum UwbBackbonePktType : uint8_t {
 ### 2.3 CAN Dual-Ingress-Architektur & Auto-Sensing / Deaktivierung
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                    CAN DUAL-INGRESS & AUTO-SENSING MATRIX                   │
-├───────────────────────────────────┬─────────────────────────────────────────┤
-│ Szenario 1: Touring Fairing       │ Szenario 2: Naked / Road King / Adv     │
-│ (Street Glide / Road Glide)       │ (Road King Special, BMW R1250/R1300 GS) │
-├───────────────────────────────────┼─────────────────────────────────────────┤
-│ • CAN-Anschluss am FRONT NODE     │ • Kein CAN im Frontscheinwerfer         │
-│   Port J2 (3-Pin JST-GH)          │ • CAN-Anschluss an der ZENTRALBOX       │
-│ • Front Node erkennt Bus-Frames   │   DTM-12 Pins 11/12 am BCM / OBD2       │
-│ • 120R-Relais CPC1017N SCHLIESST  │ • Front Node J2 bleibt UNVERBUNDEN      │
-│ • Telemetrie wird per UWB         │ • Front Node deaktiviert J2 nach 2,5 s: │
-│   (UWB_PKT_CAN_TELEMETRY) zur     │   - 120R-Relais bleibt OFFEN            │
-│   Zentralbox gestreamt            │   - TCAN334G geht in Silent High-Z      │
-│ • Zentralbox schaltet auf         │   - TWAI-Treiber wird gestoppt          │
-│   `CAN_SOURCE_REMOTE_FRONT_NODE`  │ • Zentralbox nutzt lokalen DTM-12 CAN   │
-│                                   │   als `CAN_SOURCE_LOCAL_CENTRAL_BOX`    │
-└───────────────────────────────────┴─────────────────────────────────────────┘
++-----------------------------------------------------------------------------+
+|                    CAN DUAL-INGRESS & AUTO-SENSING MATRIX                   |
++-----------------------------------+-----------------------------------------+
+| Szenario 1: Touring Fairing       | Szenario 2: Naked / Road King / Adv     |
+| (Street Glide / Road Glide)       | (Road King Special, BMW R1250/R1300 GS) |
++-----------------------------------+-----------------------------------------+
+| * CAN-Anschluss am FRONT NODE     | * Kein CAN im Frontscheinwerfer         |
+|   Port J2 (3-Pin JST-GH)          | * CAN-Anschluss an der ZENTRALBOX       |
+| * Front Node erkennt Bus-Frames   |   DTM-12 Pins 11/12 am BCM / OBD2       |
+| * 120R-Relais CPC1017N SCHLIESST  | * Front Node J2 bleibt UNVERBUNDEN      |
+| * Telemetrie wird per UWB         | * Front Node deaktiviert J2 nach 2,5 s: |
+|   (UWB_PKT_CAN_TELEMETRY) zur     |   - 120R-Relais bleibt OFFEN            |
+|   Zentralbox gestreamt            |   - TCAN334G geht in Silent High-Z      |
+| * Zentralbox schaltet auf         |   - TWAI-Treiber wird gestoppt          |
+|   `CAN_SOURCE_REMOTE_FRONT_NODE`  | * Zentralbox nutzt lokalen DTM-12 CAN   |
+|                                   |   als `CAN_SOURCE_LOCAL_CENTRAL_BOX`    |
++-----------------------------------+-----------------------------------------+
 ```
 
 1. **Front-Node Auto-Sensing & Deaktivierung (`cockpit_can_manager.cpp`):**
@@ -165,39 +176,50 @@ Bei Touren in Bergregionen oder dichtem Wald reißen 2.4 GHz Intercom-Verbindung
 
 ```
                GROUP SPLIT FALLBACK ENGINE ZUSTANDSAUTOMAT
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ 1. NORMAL STATUS: LINE-OF-SIGHT VERBUNDEN                                   │
-│    • Bucht 1 (Sena Mesh) & Bucht 2 (Cardo DMC) voll aktiv                   │
-│    • HD-Audio Stream im Helm; LoRa sendet periodische Heartbeats (0.2 Hz)   │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                     ▼ (Verbindungsverlust > 15 s)           │
-│ 2. RESCUE LEVEL 1: OMM 2.4 GHz KANAL-HOPPING MESH                           │
-│    • Falls OMM-Kassette in Bucht 2 gesteckt: Erhöht TX-Power auf +20 dBm    │
-│    • Sucht nach Relais-Knoten benachbarter Gruppenmitglieder                │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                     ▼ (Verbindungsverlust > 45 s)           │
-│ 3. RESCUE LEVEL 2: 868 MHz LoRa MESH (SX1262) TELEMETRIE & TEXT             │
-│    • Reichweite bis zu 15 km (LOS) bzw. 3-5 km im Gebirge                   │
-│    • Überträgt automatisch GPS-Position, Peilung, Entfernung & Distanzpfeil │
-│    • Zeigt "Gruppe voraus: 2,4 km Nord-West" auf CarPlay/PWA-Dashboard      │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                     ▼ (Verbindungsverlust > 120 s)          │
-│ 4. RESCUE LEVEL 3: PMR446 ANALOG-VOICE FALLBACK (OPTIONAL)                  │
-│    • Triggert automatischen Durchsage-Ping auf Midland Funkkassette         │
-│    • Überträgt synthetisierte TTS-Ortsansage auf analogen Jedermannfunk     │
-└─────────────────────────────────────────────────────────────────────────────┘
++-----------------------------------------------------------------------------+
+| 1. NORMAL STATUS: LINE-OF-SIGHT VERBUNDEN                                   |
+|    * Bucht 1 (Sena Mesh) & Bucht 2 (Cardo DMC) voll aktiv                   |
+|    * HD-Audio Stream im Helm; LoRa sendet periodische Heartbeats (0.2 Hz)   |
++-----------------------------------------------------------------------------+
+|                                     v (Verbindungsverlust > 15 s)           |
+| 2. RESCUE LEVEL 1: OMM 2.4 GHz KANAL-HOPPING MESH                           |
+|    * Falls OMM-Kassette in Bucht 2 gesteckt: Erhöht TX-Power auf +20 dBm    |
+|    * Sucht nach Relais-Knoten benachbarter Gruppenmitglieder                |
++-----------------------------------------------------------------------------+
+|                                     v (Verbindungsverlust > 45 s)           |
+| 3. RESCUE LEVEL 2: 868 MHz LoRa MESH (SX1262) TELEMETRIE & TEXT             |
+|    * Reichweite bis zu 15 km (LOS) bzw. 3-5 km im Gebirge                   |
+|    * Überträgt automatisch GPS-Position, Peilung, Entfernung & Distanzpfeil |
+|    * Zeigt "Gruppe voraus: 2,4 km Nord-West" auf CarPlay/PWA-Dashboard      |
++-----------------------------------------------------------------------------+
+|                                     v (Verbindungsverlust > 120 s)          |
+| 4. RESCUE LEVEL 3: PMR446 ANALOG-VOICE FALLBACK (OPTIONAL)                  |
+|    * Triggert automatischen Durchsage-Ping auf Midland Funkkassette         |
+|    * Überträgt synthetisierte TTS-Ortsansage auf analogen Jedermannfunk     |
++-----------------------------------------------------------------------------+
 ```
 
 ---
 
 ## 5. Kassetten-Steuerung: Mechatronische Smart Cartridge (PCBA 03 All-UWB) & Hardware-IDs
 
-### 5.1 Kassetten-Handshake via UWB (`UWB_PKT_CARTRIDGE_ANNOUNCE`)
-Jede Smart Cartridge (PCBA 03) bootet bei Bestromung durch das Power-Sequencing ($T = 200\,\text{ms}$ bzw. $T = 350\,\text{ms}$) und sendet sofort ein UWB-Handshake-Paket an die Zentralbox mit ihrer Hardware-Klasse und UID:
-* **`0x01`**: Sena SPIDER X Slim (Mechatronische 4-Aktuatoren Steuerung)
-* **`0x02`**: Cardo Packtalk Edge (Mechatronische 4-Aktuatoren Steuerung)
-* **`0x03`**: OMM 2.4 GHz Swap Cartridge (ESP32-C3 Digital Transceiver)
-* **`0x04`**: Midland PMR446 / Funk (PTT-Tastung via MOSFET)
+### 5.1 Dynamische Kassetten- & Modell-Erkennung (Hardware-IDs & Profil-Matrix)
+Um nicht nur grobe Herstellerkategorien, sondern die exakten mechanischen Tastenpositionen, Pulsdauern und Klicksequenzen der verschiedenen Modelle herstellerunabhängig abzubilden, nutzt die `PCBA 03` ein zweistufiges Identifikationsverfahren:
+1. **1-Wire / Widerstandskodierung am Adapter:** Jedes Inlay meldet über eine analoge Widerstandskodierung (oder einen 1-Wire DS2401 Silizium-Seriennummernchip an `RESERVE_IO` des Headers `J_AUDIO_PWR`) sein exaktes Gerätemodell.
+2. **Kassetten-Handshake via UWB (`UWB_PKT_CARTRIDGE_ANNOUNCE`):** Beim Booten meldet die Kassette ihre 16-Bit Modell-ID und UID an die Zentralbox.
+
+| Modell-ID | Basis-Klasse | Modellbezeichnung | Mechanisches Inlay | Tastatur & Steuerungs-Charakteristik |
+| :---: | :---: | :--- | :--- | :--- |
+| **`0x0101`** | Klasse A | **Sena SPIDER X Slim** | 3D-Konturbett A | 3 Tasten (Center, Plus, Minus) + Mesh-Button; Puls 150 ms |
+| **`0x0102`** | Klasse A | **Sena +Mesh Adapter** | Slide-Inlay A | 1 Multifunktionstaste; Pairing & Reconnect-Sequenzen |
+| **`0x0201`** | Klasse B | **Cardo Packtalk Edge / Pro**| Air-Mount Inlay B | 3 Tasten + Rollrad (Intercom, Audio, Phone); Magnetkontaktierung |
+| **`0x0202`** | Klasse B | **Cardo Packtalk Bold / Black**| Cradle Inlay B | 3 Tasten + Jog-Dial; DMC Gen 1 Protokoll |
+| **`0x0301`** | Klasse C | **UCS Cardo Freecom UCS** | Universal UCS C | Standardisierte 4-Tasten UCS-Geometrie; Universal-Aktuatorbrücke |
+| **`0x0302`** | Klasse C | **UCS Midland Mesh UCS** | Universal UCS C | Standardisierte UCS-Geometrie; Midland Mesh Klick-Layout |
+| **`0x0303`** | Klasse C | **OMM 2.4 GHz OEM-Kassette**| Universal UCS C | Rein digitaler UWB/2.4 GHz Transceiver; kein mechatronischer Druck |
+| **`0x0401`** | Klasse D | **Midland PMR446 (Alan/G9)**| Funk-Inlay D | PTT-Tastung über Open-Drain MOSFET `OPTO_PTT`; Klinkenpeitsche |
+
+Die Firmware lädt das zugehörige Profil `/storage/profiles/<MODEL_ID>.json` aus dem LittleFS. Damit werden exakt passende Pulsdauern, Entprellzeiten, Tastenkombinationen (z. B. simultaner Druck für Kaltstart) und Menüführung geladen.
 
 ### 5.2 Smart Cartridge Mechatronik-Modus (PCBA 03)
 Die Zentralbox sendet 1-Byte Opcodes drahtlos per UWB-Paket (`UWB_PKT_CARTRIDGE_OPCODE`) an den Host-Controller der Kassette. Dieser schaltet die 4x AO3400A N-MOSFETs auf der Platinenunterseite (`B.Cu`), welche die Taster des eingesetzten Headsets mechatronisch betätigen:
@@ -286,12 +308,55 @@ OpenMotorBridge ist als **losgelöstes, fehlertolerantes Baukastensystem** konzi
 
 | Konfiguration | Verbaute Komponenten | Systemverhalten & Graceful Degradation |
 | :--- | :--- | :--- |
-| **Tier 1: Minimal Core** | Nur Zentralbox<br>*(Kein Front Node)* | • **Audio-Bridge & Intercoms voll aktiv:** Bucht 1 & 2 mischen latenzfrei via UWB.<br>• **LoRa 868 MHz Mesh aktiv:** Direkte USV-gepufferte 24/7 Diebstahl-Sentry & Tracking.<br>• **CAN-Bus aktiv:** Tacho, Drehzahl & BCM-Telemetrie über DTM-12 Pins 11/12.<br>• **IMU aktiv:** Bosch BMI270 liefert Schräglage, Pitch & Erschütterung.<br>• **ADR-EKF:** Läuft im reinen Dead-Reckoning Modus gestützt auf IMU & Raddrehzahl.<br>• **UWB-Treiber:** Wartet passiv im Scan-Modus; AGC bleibt auf Nominalpegel. |
-| **Tier 2: Vollsystem mit Front Node** | Zentralbox + Front Node | • Alle Tier 1 Funktionen + deterministischer UWB-Backbone (< 0,4 ms).<br>• u-blox SAM-M10Q Multi-GNSS mit 10 Hz PVT-Fix & Präzisions-Zeitsynchronisation.<br>• TI TMP117 Glatteis-Wächter ($\pm 0{,}1\,^\circ\text{C}$) & TI OPT3001 Helligkeitssensor.<br>• 4-Port USB-Hub & Dual 20W USB-PD Schnelllader im Cockpit.<br>• Ottocast Watchdog & automatische Zündungstrennung.<br>• Lenker-PTT (< 0,4 ms) und dynamische Fahrtwind-AGC über Knowles MEMS. |
-| **Tier 3: Heckradar-Option** | Zentralbox + Front Node + Radar | • Alle Tier 2 Funktionen + Wheeltec MR20 77 GHz oder Garmin Varia (PCBA 08).<br>• 2-Draht 12V DC-Power vom DTM-12; Telemetrie 100% drahtlos via UWB.<br>• Akustische Warn-Pings im Helm, optische Warn-Flügel & Spiegel-LEDs (Port `J9`).<br>• Automatische Action-Cam Bookmarks bei kritischem Radar TTC (< 2,5 s). |
+| **Tier 1: Minimal Core** | Nur Zentralbox<br>*(Kein Front Node)* | * **Audio-Bridge & Intercoms voll aktiv:** Bucht 1 & 2 mischen latenzfrei via UWB.<br>* **LoRa 868 MHz Mesh aktiv:** Direkte USV-gepufferte 24/7 Diebstahl-Sentry & Tracking.<br>* **CAN-Bus aktiv:** Tacho, Drehzahl & BCM-Telemetrie über DTM-12 Pins 11/12.<br>* **IMU aktiv:** Bosch BMI270 liefert Schräglage, Pitch & Erschütterung.<br>* **ADR-EKF:** Läuft im reinen Dead-Reckoning Modus gestützt auf IMU & Raddrehzahl.<br>* **UWB-Treiber:** Wartet passiv im Scan-Modus; AGC bleibt auf Nominalpegel. |
+| **Tier 2: Vollsystem mit Front Node** | Zentralbox + Front Node | * Alle Tier 1 Funktionen + deterministischer UWB-Backbone (< 0,4 ms).<br>* u-blox SAM-M10Q Multi-GNSS mit 10 Hz PVT-Fix & Präzisions-Zeitsynchronisation.<br>* TI TMP117 Glatteis-Wächter ($\pm 0{,}1\,^\circ\text{C}$) & TI OPT3001 Helligkeitssensor.<br>* 4-Port USB-Hub & Dual 20W USB-PD Schnelllader im Cockpit.<br>* Ottocast Watchdog & automatische Zündungstrennung.<br>* Lenker-PTT (< 0,4 ms) und dynamische Fahrtwind-AGC über Knowles MEMS. |
+| **Tier 3: Heckradar-Option** | Zentralbox + Front Node + Radar | * Alle Tier 2 Funktionen + Wheeltec MR20 77 GHz oder Garmin Varia (PCBA 08).<br>* 2-Draht 12V DC-Power vom DTM-12; Telemetrie 100% drahtlos via UWB.<br>* Akustische Warn-Pings im Helm, optische Warn-Flügel & Spiegel-LEDs (Port `J9`).<br>* Automatische Action-Cam Bookmarks bei kritischem Radar TTC (< 2,5 s). |
 
 ### 8.1 Schutzmechanismen gegen fehlende Daten (Zero-Crash Policy)
 1. **Asynchrone Non-Blocking Schnittstellen:** Die Kommunikation über UWB, LoRa (SPI) und Radar läuft mit FreeRTOS Timeouts (`pdMS_TO_TICKS(50)`). Es existieren **keine blockierenden `while(1)`-Warteschleifen**.
 2. **Dynamische DLE-Fähigkeiten (`omm_get_capabilities_vector`):** Die Zentralbox deklariert nur jene Hardware-Flags im Mesh, die physisch antworten (`gnss_is_connected()`, `is_linked`, `can_bus_is_connected()`).
 3. **Sensor-Fusion Autarkie (`adr_ekf_filter.cpp`):** Fällt GNSS weg (z. B. Tunnel oder Front Node offline), schaltet der EKF verzögerungsfrei auf **Dead Reckoning** um und stützt sich auf IMU und CAN-Raddrehzahl.
 4. **Fehlertoleranter Audiomixer (`audio_dsp_pipeline.cpp`):** Fehlt das Knowles MEMS Mikrofon des Front Nodes, läuft der Brickwall-Limiter und AGC-Level auf festem Rider-Standardwert (Unity Gain `1.0f`).
+
+
+---
+
+## 9. Autonome Gruppen-Lifecycle State Machine, Kaffeepausen-Persistenz & Anruf-Management
+
+### 9.1 Zero-Touch Discovery & Kryptografischer Gruppenstart
+Die Koordination von gemeinsamen Ausfahrten erfordert weder Smartphone-Apps noch manuelle Konfiguration am Lenker:
+1. **UTC-Zeitsynchronisation & LoRa-Beacons:** Beim Einschalten der Zündung synchronisieren alle Zentralboxen ihre RTC auf Nanosekunden-Genauigkeit über das u-blox SAM-M10Q GNSS. Sie senden zyklische Discovery-Beacons auf dem offenen LoRa-Ankündigungskanal.
+2. **Proximity-Clustering:** Boxen, die sich zum selben Zeitpunkt am selben Ort befinden (Abstand $< 40\,	ext{m}$), formieren automatisch eine temporäre Ausfahrtsgruppe.
+3. **AES-256 Session-Key Generierung:** Ein temporärer Master (Box mit niedrigster MAC-Adresse) erzeugt einen kryptografischen 256-Bit Session-Key und verteilt diesen via asymmetrischem Diffie-Hellman Key Exchange über den LoRa-Ankündigungskanal. Alle Nodes wechseln auf den verschlüsselten Arbeitskanal.
+
+### 9.2 Der "Doubt-Timer" bei Kursabweichungen (Prävention vor Fehlalarmen)
+Weicht ein Teilnehmer vom gemeinsamen Routen-Vektor ab (z. B. verpasste Autobahnausfahrt oder Abbiegen an einer Kreuzung), schlägt das System nicht unmittelbar Alarm:
+* **Start des Doubt-Timers ($T_{\text{doubt}} = 15\dots 30\,\text{s}$):** Das System stuft den Fahrer temporär in den Zustand `DOUBT_SPLIT` ein.
+* **Szenario A (Verpasster Abzweig):** Hält der Fahrer nach 10 Sekunden an oder verringert die Geschwindigkeit drastisch, ertönt im Helm die lokale TTS-Ansage: *"Möglicher Kursverlust der Gruppe - bitte Route prüfen"*.
+* **Szenario B (Bewusstes Verlassen):** Fährt der Fahrer mit hoher Geschwindigkeit auf der abweichenden Route kontinuierlich weiter, deklariert die State Machine nach Ablauf von $T_{\text{doubt}}$ das reguläre Verlassen der Gruppe (`GROUP_LEFT`).
+
+### 9.3 Kaffeepausen-Schutz & 30-Minuten Deep-Sleep Persistenz
+Bei Pausen (Tankstelle, Restaurant, Café) muss die Gruppe zusammengehalten werden, ohne die Motorradbatterie zu belasten:
+1. **Stillstands-Cluster ($v = 0\,\text{km/h}$ & Radius $< 30\,\text{m}$):** Reduzieren alle Motorräder die Geschwindigkeit auf null und schalten die Motoren ab, wechselt die State Machine in den Modus `GROUP_PAUSED`.
+2. **USV-Nachlauf & Deep Sleep:** Nach 15 Minuten Inaktivität schaltet die Zentralbox die Peripherie (Pods, Front Node, Radar) ab und versetzt den ESP32-S3 in den stromsparenden Tiefschlaf ($< 150\,\mu\text{A}$ aus der 1S LiPo-USV).
+3. **Persistierung des Gruppen-States in NVS & RTC-RAM:** Vor dem Schlafengehen sichert die Firmware folgende Daten im nichtflüchtigen Speicher:
+   * 256-Bit AES Gruppen-Session-Key
+   * Vollständige Teilnehmer-Liste (Node-UIDs, Rufzeichen, Rollen)
+   * Aktueller Gruppen-Kanal und Mesh-Sequenznummern
+   * Letzte bekannte GNSS-Referenzkoordinate
+4. **Nahtlose Rekonstitution nach 30+ Minuten:** Schalten die Fahrer nach 30 oder 60 Minuten die Zündung wieder ein, lädt die Firmware den Gruppen-Status in $< 50\,\text{ms}$ aus dem NVS. Die Gruppe ist **sofort und ohne erneute Discovery wieder voll einsatzbereit**.
+
+### 9.4 Spontaner Gruppenbeitritt während der Fahrt (Proximity-Flyby & Unterwegs-Treffpunkt)
+Trifft ein Fahrer während der Tour auf die Gruppe (z. B. Aufgabeln an einem vereinbarten Treffpunkt entlang der Route):
+* **Proximity-Flyby Kriterium:** Nähert sich ein OMB-Node auf $< 50\,\text{m}$ und fährt für mindestens $30\,\text{s}$ im gleichen Kursvektor (Geschwindigkeit $\Delta v < 15\,\text{km/h}$, Fahrtrichtung $\Delta \theta < 15^\circ$), sendet der Master ein diskretes Einladungs-Beacon.
+* **One-Click Bestätigung:** Im Helm des Gruppenleiters und des beitretenden Fahrers ertönt: *"Neuer Teilnehmer in Reichweite - Beitreten?"*. Ein einfacher Klick auf die Lenker-PTT bestätigt den Beitritt; der Session-Key wird in $< 200\,\text{ms}$ übertragen.
+* **Unterwegs-Treffpunkt:** Steht der beitretende Fahrer an einer Raststätte oder Kreuzung und schließt sich dem Konvoi an, genügt am Treffpunkt ein Doppelklick auf die PTT-Taste, um den Quick-Join zu initiieren.
+
+### 9.5 Smartphone-Anruf-Erkennung (HFP) & Intelligenter PTT-Schutz
+Geht auf dem gekoppelten Smartphone ein Telefonat ein, erkennt die Zentralbox über das Bluetooth Hands-Free Profile (HFP) den Status `RINGING` bzw. `CALL_ACTIVE`:
+1. **Mikrofon-Mute zur Gruppe:** Das Helm-Mikrofon wird für die Intercom- und Mesh-Kanäle sofort stummgeschaltet. Das private Telefonat wird unter keinen Umständen in die Motorradgruppe übertragen.
+2. **PTT-Lock (Befehlssperre):** Während des Telefonats werden PTT-Tastendrücke am Lenker **vollständig für Sonderfunktionen gesperrt**:
+   * Ein Klick auf PTT wird *nicht* als Start einer Action-Cam, kein HiLight-Tag und kein Durchruf auf Analogfunk/PMR interpretiert.
+   * Der Tastendruck wird transparent an das Helm-Headset weitergeleitet (zum Abheben / Auflegen des Anrufs).
+3. **Prio-1 Sicherheits-Overlay (Radar & SOS):** Selbst während eines intensiven Telefonats bleiben lebenswichtige Radar-Kollisionswarnungen (Prio 1) und Gruppen-Notrufe aktiv. Sie werden mit $-12\,\text{dB}$ geducktem Telefon-Audio klar verständlich in den Helm eingespielt.
+4. **Automatischer Reconnect:** Sobald der Anruf beendet ist (`CALL_TERMINATED`), kehrt der Audio-Router in $< 100\,\text{ms}$ in den normalen gemischten Intercom-Betrieb zurück.

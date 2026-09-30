@@ -5,17 +5,18 @@
 Moderne Motorräder verfügen über digitale Datenbusse (ISO 11898-2 CAN-Bus, CAN-FD oder LIN), über die Motorsteuergerät (ECU), ABS-/Traktionssystem, Cockpit-Instrumente und Lenkerarmaturen miteinander kommunizieren. Für ein herstellerübergreifendes System wie **OpenMotorBridge** existiert jedoch keine einheitliche Schnittstelle:
 
 ```
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│               HERSTELLERSPEZIFISCHE CAN-BUS HETEROGENITÄT IM MOTORRAD                  │
-└────────────────────────────────────────────────────────────────────────────────────────┘
++----------------------------------------------------------------------------------------+
+|               HERSTELLERSPEZIFISCHE CAN-BUS HETEROGENITÄT IM MOTORRAD                  |
++----------------------------------------------------------------------------------------+
 
   Hersteller / Plattform         Baudrate    CAN-ID Format     Besonderheiten
-  ────────────────────────────────────────────────────────────────────────────────────────
+  ----------------------------------------------------------------------------------------
   Harley-Davidson (HD-LAN / CVO) 500 kbps    11-Bit & 29-Bit   Lenker-Joysticks, BCM-Heartbeats, TPMS
   BMW Motorrad (K2x / K5x / K6x) 500 kbps    11-Bit Standard   Wonderwheel-Drehrad, RDC-Druck, Fahrmodi
   KTM / Husqvarna (Bosch CAN)    500 kbps    11-Bit Standard   Schräglagensensorik, MTC, ABS-Status
   Ducati (Bosch / Mitsubishi)    500 kbps    11-Bit Standard   DTC, DQS-Schaltautomat, D-Air Airbag
   Generisch (Euro 4 / Euro 5)    500 kbps    11-Bit (OBD-2)    Standard-PIDs nach ISO 15765-4
+  Support-Van / Begleit-Pkw      500 kbps    11-Bit & 29-Bit   OBD-2 PIDs, Bordnetz-Status, Rallye-Tracking
 ```
 
 ### Die OpenMotorBridge Lösung: Das Kassetten-Prinzip für den CAN-Bus
@@ -46,7 +47,7 @@ Bei der Konzeption der fahrzeugseitigen CAN-Bus-Dekodierung standen drei grundle
    * Entgegen der Annahme, JSON-Parsing sei langsam, wird die JSON-Datei nur **einmalig beim Booten oder Profilwechsel** deserialisiert und in eine flache C-Array-Struktur im internen SRAM überführt (`can_signal_descriptor_t`).
    * Im 500-kbps-Echtzeitbetrieb operiert die Engine mit rein deterministischen Bit-Masken- und Shift-Operationen, die weniger als **$4{,}2\,\mu\text{s}$ pro Frame** auf dem 240-MHz-ESP32-S3 beanspruchen.
 3. **Listen-Only Sicherheit als Hardware-Garantie:**
-   * Das gewählte Profil erzwingt standardmäßig den `listen_only: true` Modus des ESP32-S3 TWAI-Controllers (Two-Wire Automotive Interface). Es werden physisch keinerlei ACK-Bits oder Frames auf den Fahrzeugbus gesendet – ein Eingriff in die Fahrdynamik oder das Triggern von Fehlerspeichereinträgen (DTCs) ist hardwareseitig ausgeschlossen.
+   * Das gewählte Profil erzwingt standardmäßig den `listen_only: true` Modus des ESP32-S3 TWAI-Controllers (Two-Wire Automotive Interface). Es werden physisch keinerlei ACK-Bits oder Frames auf den Fahrzeugbus gesendet - ein Eingriff in die Fahrdynamik oder das Triggern von Fehlerspeichereinträgen (DTCs) ist hardwareseitig ausgeschlossen.
 
 ---
 
@@ -280,6 +281,13 @@ Die Firmware liefert ab Werk vorkonfigurierte Profile für die gängigsten Fahrz
 * **Plattformen:** Alle Motorräder mit standardisiertem roten 6-Pin Euro-5 OBD-Stecker (KTM, Yamaha, Kawasaki, Honda, Triumph, Suzuki).
 * **Funktion:** Fragt standardisierte PIDs zyklisch ab (Drehzahl `0x0C`, Geschwindigkeit `0x0D`, Kühlmitteltemperatur `0x05`, Tankfüllstand `0x2F`).
 
+### 3.4 Begleitfahrzeug-, Rallye- & Support-Van-Profil (`support_van_car_obd2.json`)
+* **Einsatzbereich:** Begleitfahrzeuge bei Ausfahrten, Support-Vans, Werkstattwagen, Tour-Guides oder Rallye-Orga-Pkw (Referenz-Kit 5).
+* **Anbindung & Protokoll:** Standardisierter 16-Pin Pkw-OBD2-Port (ISO 15765-4 CAN 500 kbps / 250 kbps mit 11-Bit oder 29-Bit Identifiern). Alternativ drahtlose Bluetooth-OBD2-Kopplung (ELM327 / OBDLink LX) direkt an den ESP32-S3 der Zentralbox.
+* **Erfasste Telemetriewerte:** Fahrzeuggeschwindigkeit (`0x0D`), Kühlmitteltemperatur (`0x05`), Lichtmaschinen-/Bordnetzspannung (`0x42`), Kraftstoffvorrat (`0x2F`) und Gaspedalstellung.
+* **Energieversorgung:** Speisung über standardisierten 12V-Zigarettenanzünderstecker oder Zündungsplus-Abgriff (KL15) im Fahrerfußraum (verhindert Entladen der Autobatterie).
+* **Funktion im Gruppenverbund:** Der Support-Van fungiert als starker LoRa/UWB-Mobilrouter und "Besenwagen" (Sweep Node). Er empfängt alle Positions- und Split-Meldungen des Motorrad-Konvois in Echtzeit und stellt eine mobile Rettungs- und Funkbrücke bereit.
+
 ---
 
 ## 4. Sicherheits- & Entkopplungs-Architektur (Automotive Safety)
@@ -287,31 +295,31 @@ Die Firmware liefert ab Werk vorkonfigurierte Profile für die gängigsten Fahrz
 Da der CAN-Bus eines Motorrads sicherheitskritische Steuergeräte (ABS-Modulator, Ride-by-Wire Drosselklappe, Traktionskontrolle) verbindet, gilt für OpenMotorBridge das oberste Sicherheitsgebot:
 
 ```
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│               CAN-BUS SICHERHEITS- UND ISOLATIONS-PRINZIPIEN                           │
-└────────────────────────────────────────────────────────────────────────────────────────┘
++----------------------------------------------------------------------------------------+
+|               CAN-BUS SICHERHEITS- UND ISOLATIONS-PRINZIPIEN                           |
++----------------------------------------------------------------------------------------+
 
   1. LISTEN-ONLY MODUS (ISO 11898-2)
-     • Der TI TCAN334G Transceiver schaltet den TX-Treiber standardmäßig stromlos.
-     • OpenMotorBridge erzeugt kein einziges ACK-Bit und kein Error-Frame.
-     • Völlig unsichtbar für die Motorrad-Elektronik; Fehlerspeicher bleibt 100 % sauber.
+     * Der TI TCAN334G Transceiver schaltet den TX-Treiber standardmäßig stromlos.
+     * OpenMotorBridge erzeugt kein einziges ACK-Bit und kein Error-Frame.
+     * Völlig unsichtbar für die Motorrad-Elektronik; Fehlerspeicher bleibt 100 % sauber.
 
   2. AUTOMATIC BUS-OFF RECOVERY
-     • Bei Leitungsstörungen (z. B. Wackelkontakt) trennt der ESP32 TWAI-Controller den Bus
+     * Bei Leitungsstörungen (z. B. Wackelkontakt) trennt der ESP32 TWAI-Controller den Bus
        in < 1 Millisekunde ab und führt erst nach 1.000 ms Ruhezeit einen Kaltstart durch.
 
   3. FAHRZEUG-MASSENTRENNUNG & DUAL-NODE ARCHITEKTUR
-     • Sowohl auf der Zentralbox (PCBA 01) als auch auf dem Front-Knoten (PCBA 05) schützt das
+     * Sowohl auf der Zentralbox (PCBA 01) als auch auf dem Front-Knoten (PCBA 05) schützt das
        gefilterte Masse- und Schutznetzwerk des TI TCAN334G Transceivers gegen fahrzeugweiten
        Masseversatz zwischen Heck und Cockpit.
-     • Das elektronische Solid-State Relais (CPC1017N) garantiert zudem eine automatische
+     * Das elektronische Solid-State Relais (CPC1017N) garantiert zudem eine automatische
        120-Ohm-Abschlussimpedanz-Erkennung und verhindert Bus-Kollaps bei Parallelschaltung.
 
   4. SOURCE-AWARE HANDLEBAR GATING (KOLLISIONSSCHUTZ)
-     • Um zu verhindern, dass Lenkertasten bei Radio- oder MP3-Stick-Wiedergabe versehentlich
+     * Um zu verhindern, dass Lenkertasten bei Radio- oder MP3-Stick-Wiedergabe versehentlich
        parallel das Smartphone-Streaming starten, wertet OMB die aktive Audioquelle
        (z. B. 0x388 `infotainment_source_active`) und den USB2514B Hub-Status (Port 3 Sense) aus.
-     • Events werden nur an das Smartphone durchgereicht, wenn OMB/CarPlay/BT aktiv ist!
+     * Events werden nur an das Smartphone durchgereicht, wenn OMB/CarPlay/BT aktiv ist!
 ```
 
 ---
@@ -321,35 +329,35 @@ Da der CAN-Bus eines Motorrads sicherheitskritische Steuergeräte (ABS-Modulator
 In der OpenMotorBridge PWA (Tab 5 *Hardware & Settings*) erhält der Fahrer ein mächtiges Cockpit-Tool:
 
 ```
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                        CAN-BUS PROFIL-MANAGER & LIVE-MONITOR                           │
-└────────────────────────────────────────────────────────────────────────────────────────┘
++----------------------------------------------------------------------------------------+
+|                        CAN-BUS PROFIL-MANAGER & LIVE-MONITOR                           |
++----------------------------------------------------------------------------------------+
 
-  Fahrzeugprofil: [ 🏍️ Harley-Davidson Touring (2024+ Skyline OS)                     ▼ ]
+  Fahrzeugprofil: [ 🏍️ Harley-Davidson Touring (2024+ Skyline OS)                     v ]
   
   Status: 🟢 VERBUNDEN (500 kbps, Listen-Only, 142 Frames/s)
   [ 🔍 Bus automatisch scannen ]   [ 📥 Profil importieren ]   [ 🔄 Auf Werkseinstellung ]
 
   LIVE-TELEMETRIE AUS DEM MOTORRAD-BUS:
-  ┌─────────────────────────────────┬─────────────────────────────────┬──────────────────┐
-  │ Raddrehzahl:       54.2 km/h    │ Motordrehzahl:      2.420 U/min │ Gang:       4    │
-  │ Reifendruck Vorn:  2.45 bar 🟢  │ Reifendruck Hinten: 2.80 bar 🟢 │ Tank:  14.2 Liter│
-  │ Kühlmitteltemp:    88 °C 🟢     │ Restreichweite:     240 km      │ Blinker:    Aus  │
-  └─────────────────────────────────┴─────────────────────────────────┴──────────────────┘
+  +---------------------------------+---------------------------------+------------------+
+  | Raddrehzahl:       54.2 km/h    | Motordrehzahl:      2.420 U/min | Gang:       4    |
+  | Reifendruck Vorn:  2.45 bar 🟢  | Reifendruck Hinten: 2.80 bar 🟢 | Tank:  14.2 Liter|
+  | Kühlmitteltemp:    88 °C 🟢     | Restreichweite:     240 km      | Blinker:    Aus  |
+  +---------------------------------+---------------------------------+------------------+
 
   INTERAKTIVER LENKERTASTER-TEST:
-  • Joystick Links: [ INAKTIV ]  • Joystick Rechts: [ INAKTIV ]  • Voice-Taste: [ GEDRÜCKT 🟢 ]
+  * Joystick Links: [ INAKTIV ]  * Joystick Rechts: [ INAKTIV ]  * Voice-Taste: [ GEDRÜCKT 🟢 ]
 ```
 
 1. **Auto-Scan & Fingerprinting:**
    * Ein Klick auf `🔍 Bus automatisch scannen` lässt den ESP32 für 500 ms lauschen.
    * Ergleicht empfangene CAN-IDs mit den `characteristic_can_ids` aller im LittleFS gespeicherten Profile ab.
-   * Erkennt er z. B. `0x280` und `0x290`, schlägt er sofort vor: *„Harley-Davidson 2024+ erkannt. Profil aktivieren?“*
+   * Erkennt er z. B. `0x280` und `0x290`, schlägt er sofort vor: *"Harley-Davidson 2024+ erkannt. Profil aktivieren?"*
 2. **Community-Profile & JSON-Import:**
    * Neue Motorradmodelle erfordern **kein Firmware-Update**.
    * Jeder Nutzer kann eine einfache JSON-Datei in die PWA hochladen oder per QR-Code mit Freunden teilen.
 3. **Optischer Lenkertaster-Test:**
-   * Drückt man am Lenker den Joystick oder die Sprechtaste, leuchtet das entsprechende Symbol in der PWA sofort grün auf – perfekte Funktionsprüfung ohne Diagnosegerät!
+   * Drückt man am Lenker den Joystick oder die Sprechtaste, leuchtet das entsprechende Symbol in der PWA sofort grün auf - perfekte Funktionsprüfung ohne Diagnosegerät!
 
 ---
 
@@ -360,24 +368,24 @@ In der OpenMotorBridge PWA (Tab 5 *Hardware & Settings*) erhält der Fahrer ein 
 Ein herausragendes Alleinstellungsmerkmal von OpenMotorBridge ist die **unterbrechungsfreie Tunnelführung (Automotive Dead Reckoning, ADR)** über das 15-Zustands-Extended-Kalman-Filter (`adr_ekf_filter.cpp`):
 
 ```
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│               DYNAMISCHE CAN-SIGNALABFRAGE IM KALMAN-FILTER (ADR-EKF)                  │
-└────────────────────────────────────────────────────────────────────────────────────────┘
++----------------------------------------------------------------------------------------+
+|               DYNAMISCHE CAN-SIGNALABFRAGE IM KALMAN-FILTER (ADR-EKF)                  |
++----------------------------------------------------------------------------------------+
 
   [CAN-PROFIL-MANAGER]
-  • Prüft aktives Profil: can_profile_has_signal("speed_kmh" | "wheel_speed_rear")
-           │
-           ├──► JA (Signal im Profil definiert & empfangen):
-           │    • EKF-Modus: HOHE KONFIDENZ (R_speed = 0.05 m²/s²)
-           │    • Distanzfortschreibung: ds = v_can * dt
-           │    • Drift im 2.500-m-Tunnel: < 1.5 m (Kein Beschleunigungs-Drift!)
-           │    • Schlupferkennung bei BMW (v_rear vs. v_front)
-           │    • Zentripetal-Schräglagenkompensation: theta = atan(v_can * yaw_rate / g)
-           │
-           └──► NEIN (Naked Bike ohne CAN-Bus oder Signal fehlt):
-                • EKF-Modus: AUTOMATISCHER FALLBACK (IMU Dead Reckoning)
-                • Distanzfortschreibung: Doppel-Integration von a_x (IMU)
-                • Barometer-Höhenstützung & Stillstandserkennung (Zero Velocity Update, ZUPT)
+  * Prüft aktives Profil: can_profile_has_signal("speed_kmh" | "wheel_speed_rear")
+           |
+           +--> JA (Signal im Profil definiert & empfangen):
+           |    * EKF-Modus: HOHE KONFIDENZ (R_speed = 0.05 m²/s²)
+           |    * Distanzfortschreibung: ds = v_can * dt
+           |    * Drift im 2.500-m-Tunnel: < 1.5 m (Kein Beschleunigungs-Drift!)
+           |    * Schlupferkennung bei BMW (v_rear vs. v_front)
+           |    * Zentripetal-Schräglagenkompensation: theta = atan(v_can * yaw_rate / g)
+           |
+           +--> NEIN (Naked Bike ohne CAN-Bus oder Signal fehlt):
+                * EKF-Modus: AUTOMATISCHER FALLBACK (IMU Dead Reckoning)
+                * Distanzfortschreibung: Doppel-Integration von a_x (IMU)
+                * Barometer-Höhenstützung & Stillstandserkennung (Zero Velocity Update, ZUPT)
 ```
 
 ### Die Vorteile der dynamischen Parameterabfrage:

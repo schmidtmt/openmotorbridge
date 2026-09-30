@@ -1,0 +1,46 @@
+Zusammenfassung der Architektur-Highlights (Gemischte Intercom- & LoRa/UWB-Backbone-Infrastruktur)
+Loop-freies, dynamisches Bridging zwischen Fremd-Systemen (Sena, Cardo, OMM):
+
+Anstatt blinder Flutung oder statischer Leader-Rollen nutzen wir einen dezentralen, graphbasierten Ansatz (Link-State-Announcements).
+
+Jeder Node kennt die Topologie und schließt potenzielle Schleifen im Voraus logisch aus.
+
+Das "First-Receiver-Wins"-Prinzip und deterministische Routing-Tabellen (mit "Do-Not-Translate"-Flags) verhindern redundante Übersetzungen und Echo-Loops bei Multihop-Verbindungen.
+
+Probabilistische Split-Erkennung (Stochastische Heuristik):
+
+Da OEM-Intercoms (Sena/Cardo) geschlossene "Black Boxes" sind und keinen Einblick in deren interne Mesh-Links oder rohe Audio-Streams (ohne Speaker-ID) erlauben, setzen wir auf eine Wahrscheinlichkeits-Berechnung (Score-Schwellenwert).
+
+Statt starrer GPS-Timer werten wir harte Indikatoren wie Backbone-Signalstärke (RSSI/Packet Loss), dynamische Abstände und IMU-Beschleunigung im Sekundentakt aus.
+
+Überschreitet der berechnete Riss-Score einen Schwellenwert, weiß das System, dass ein Gruppen-Split wahrscheinlich ist.
+
+Strategische Anker-Platzierung (Deployment Best Practice):
+
+In Großgruppen mit überwiegend Fremd-Intercoms können OMB-Systeme nicht flächendeckend an jedem Helm sitzen.
+
+Empfehlung: OMB-Zentralboxen müssen taktisch klug als Anker im Konvoi platziert werden – an der Spitze (Lead), im Schlusslicht (Sweep/Besenwagen) und bei Bedarf als Puffer in der Mitte (Bridge), um das UWB/LoRa-Skelett aufrechtzuerhalten.
+
+Die LoRa-Audio-Einbahnstraßen-Regel (Anti-Loop-Garantie):
+
+Um unendliche Echos und Bandbreiten-Kollamptes über den schmalbandigen Codec2-Fernkanal zu verhindern, ist LoRa strikt reglementiert.
+
+Erlaubt im LoRa-Audio: Nur direkt erzeugte lokale Signale (eigenes Mikrofon via PTT, lokale TTS-Warnungen, Notfall-Sprachbursts).
+
+Streng verboten: Audiosignale, die bereits über den Backbone empfangen oder aus Fremd-Meshes überbrückt wurden, dürfen niemals wieder auf den LoRa-Sender gegeben werden.
+
+---
+
+Der "Doubt-Timer" & Das Gruppen-Ziel (Die verpasste Ausfahrt)Wir müssen dem Algorithmus ein bisschen "gesunden Menschenverstand" einhauchen, indem wir das Verhalten mit dem gemeinsamen Routen-Kontext abgleichen:Der geplante Abzweig vs. Der Ausreißer:Wenn die Gruppe laut Roadbook oder vorausliegendem Streckengraphen gemeinsam links abbiegen muss, und Fahrer A fährt geradeaus weiter, ist das ein glasklarer Split (er hat die Kurve verpasst).Wenn die Gruppe aber geradeaus weiterfährt und Fahrer A biegt in eine Straße ab, die nicht im Routen-Graph der Gruppe liegt, ist die Wahrscheinlichkeit für ein geplantes Verlassen hoch.Der "Doubt-Timer" (Die Bewährungsfrist):Biegt jemand plötzlich in eine andere Richtung ab (Kurswechselsprung), schaltet das System nicht sofort stumm, sondern startet einen kurzen Doubt-Timer (z. B. 15 bis 30 Sekunden).In diesem Zeitfenster bleibt der Split-Score im "Grenzbereich" (Warteposition).Szenario A (Der verpasste Abzweig): Fahrer A merkt nach 10 Sekunden selbst: "Verdammt, falsch!", hält an oder fängt an zu suchen, und der Abstand zur Gruppe wächst weiter, ohne dass er sich der Gruppe "entgegen" bewegt. Der Timer läuft ab $\rightarrow$ Alarm! "Möglicher verpasster Abzweig / Split".Szenario B (Das bewusste Abbiegen): Fahrer A biegt ab und fährt zügig auf seiner neuen Straße weiter, der Abstand vergrößert sich permanent und linear $\rightarrow$ Nach Ablauf des Timers schaltet das System auf "Regulär verlassen" (oder fragt kurz per TTS nach: „Gruppe verlassen?“ mit einem Klick zum Bestätigen). Ergänt um Ansagen vor dem Kreisel in der Art wir nehmen die erste Ausfahrt oder wir fahren geradeaus durch.
+
+----
+
+Zero-Config Lifecycle & Automatische Gruppen-Logik (OpenMotorBridge)Die gesamte Koordination einer Ausfahrt läuft vollautomatisch, ohne Apps, ohne manuelle Konfiguration und ohne externes Kartenmaterial (POIs). Das System nutzt rein den mathematischen und geometrischen Abgleich von GPS-Zeit, GNSS-Positionen, IMU-Vektoren und RF-Link-States.1. Die automatische Gruppenbildung (Zero-Touch Discovery)Der Start-Handshake: Beim Einschalten synchen alle OMB-Boxen ihre exakte UTC-Zeit (GPS) und senden im offenen LoRa-Ankündigungskanal permanente Beacons aus.Proximity-Clustering: Wer zur gleichen Zeit am selben Startpunkt (z. B. Parkplatz) einschaltet, wird vom System automatisch als temporäre Soll-Gruppe erkannt.Krypto-Schnittstelle: Ein temporärer Master wird gewählt, generiert einen verschlüsselten AES-256 Session-Key und verteilt diesen unsichtbar über den Ankündigungskanal. Alle Boxen wechseln nahtlos in den sicheren Gruppenkanal.2. Das Multi-Route-Start-Szenario (Dynamische Sub-Groups)Treffen sich alle am Start, wollen aber unterschiedliche Routen fahren (z. B. Cruiser vs. Pass-Heizer), greift in den ersten Minuten eine Heading-Lernphase.Driften die Fahrtrichtungen (Vektoren) nach dem Losfahren in unterschiedliche Himmelsrichtungen auseinander, teilt sich das System intelligent und schleifenfrei in autonome Sub-Gruppen mit eigenen Arbeitskanälen auf, statt fälschlicherweise Alarm zu schlagen.3. Der Tankstellen- und Pausen-Schutz (Context-Aware State Machine)Der Stillstands-Cluster: Reduzieren alle Nodes ihre Geschwindigkeit auf $0\,\text{km/h}$ und ziehen sich geometrisch auf einen engen Radius zusammen (z. B. $< 30\,\text{m}$), schaltet das System in den GROUP_PAUSED-Modus.Immunität gegen Fehlalarme: Während dieser Rast (egal ob Tankstelle, Ampel oder Feldweg) sind temporäre Bewegungen (z. B. zur Luftdrucksäule) immun gegen Split-Berechnungen. Beim gemeinsamen Wiederanfahren läuft die Session nahtlos weiter.4. Der Schutz vor dem verpassten Abzweig (Doubt-State & Prävention)Präventive Ansagen: Bekannte Routenpunkte werden rechtzeitig per lokaler TTS-Ansage in den Helm gespielt, um Kursfehler zu minimieren.Der Doubt-Timer: Weicht ein einzelner Fahrer unvorhergesehen vom Kurs ab (z. B. verpasste Ausfahrt), bricht das System nicht sofort in Panik aus, sondern hält den Verdacht in einem kurzen Zeitfenster (Doubt-State) vor. Bestätigt sich das Weiterdriften ohne Umkehrversuch, greift der Split-Alarm.5. Das automatische Auschecken (End-of-Trip Dispersion)Steht die Gruppe nach der Tour für längere Zeit auf einem Parkplatz zusammen ($0\,\text{km/h}$, Motoren aus via IMU/Bordspannung), wechselt das System in den PRE_DISPERSE-Zustand.Fahren die Teilnehmer danach einzeln in alle Himmelsrichtungen nach Hause, weiß das System, dass die Ausfahrt offiziell beendet ist. Die Session schließt sich schweigend, und die Boxen kehren fehlerfrei in den Standby zurück.
+
+----
+
+Verteilter Start & Micro-Cluster (Heim-Setup): Starten eng verbundene Fahrer (z. B. Familie/Buddies) nacheinander in derselben Region, verbindet ein zeitlich-räumliches Gleitfenster (Home-Start-Toleranz) sie sofort zu einer festen Micro-Gruppe (FOB-Kanal), sodass man schon auf dem Weg zum Treffpunkt ungestört reden kann.
+
+Macro-Merge am Treffpunkt (Discovery): Treffen verschiedene Micro-Gruppen und Solofahrer am Treffpunkt ein und versammeln sich im Stillstand, erkennt das System das Zusammentreffen. Beim gemeinsamen Losfahren von diesem Startpunkt (mit einem gestaffelten Wiederanfahr-Puffer, der das Auseinanderziehen des Konvois toleriert) generiert ein temporärer Master vollautomatisch einen übergeordneten AES-256 Session-Key für die gesamte Großgruppe.
+
+Automatisches Auschecken (End-of-Trip): Ein langer Stillstand auf einem Parkplatz mit ausgeschalteten Motoren (IMU/Bordspannung) versetzt das System in den PRE_DISPERSE-Zustand. Das anschließende Auseinanderfahren in alle Himmelsrichtungen beendet die Session schweigend. Dabei bleibt die unterliegende Micro-Gruppe (die Familie für den Heimweg) intakt.

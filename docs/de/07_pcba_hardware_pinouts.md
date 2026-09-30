@@ -1,68 +1,77 @@
-# 07 - Hardware-Architektur & Platinen-Pinouts (Das bereinigte 6-PCBA-Lineup)
+# 07 - Hardware-Architektur & Platinen-Pinouts (Das bereinigte 5-PCBA-Lineup)
 
-Dieses Dokument bildet die **zentrale, autoritative Hardware-Spezifikation aller 6 aktiven Platinen-Baugruppen (`PCBA 01`, `03`, `05`, `06`, `07`, `08`)** des OpenMotorBridge Gesamtsystems (v8.5 / v9.0 Clean All-UWB Architecture), einschließlich Lagenaufbau, Impedanzkontrolle, Net-Klassen, Funktionszonen und vollständigen Pinout-Tabellen.
+Dieses Dokument bildet die **zentrale, autoritative Hardware-Spezifikation aller 5 aktiven Platinen-Baugruppen (`PCBA 01`, `03`, `05`, `07`, `08`)** des OpenMotorBridge Gesamtsystems (v9.6 Clean All-UWB Architecture), einschließlich Lagenaufbau, Impedanzkontrolle, Net-Klassen, Funktionszonen und vollständigen Pinout-Tabellen.
 
 ---
 
-## 1. Systemübersicht des 6-Platinen-Lineups
+## 1. Systemübersicht des 5-Platinen-Lineups
+
+Das Hardwaredesign von OpenMotorBridge folgt dem Grundsatz der radikalen Entflechtung: Daten- und Audioströme werden zu 100 % drahtlos über ein synchrones Ultra-Wideband-Backbone (UWB 6.5 GHz) geführt, während der fahrzeuggebundene Kabelbaum auf reine 2-Draht-Gleichspannung (12V DC) und CAN-Bus reduziert ist.
 
 ```
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                   DAS 6-PLATINEN-LINEUP DER OPENMOTORBRIDGE v8.5 / v9.0                │
-├───────┬───────────────────────────────┬───────────────┬─────────┬──────────────────────┤
-│ Baugruppe │ Name & Funktion           │ Platinenmaße  │ Lagen   │ Kern-ICs / Bauteile  │
-├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
-│ **PCBA 01**│ **Zentralbox Main Controller** │ 85 x 55 mm    │ 4 Lagen │ ESP32-S3, LM5164,    │
-│       │ (Unter der Sitzbank, Audio/USV)│ (77x47 mm M3) │ (ENIG)  │ BQ24075, ES8388, IMU,│
-│       │                                │               │         │ SX1262 LoRa, DW3110, │
-│       │                                │               │         │ SW1 Pair-Taste, DTM12│
-├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
-│ **PCBA 02**│ *(In v8.5 ersatzlos entfallen)*│ --            │ --      │ Pod-Gehäuse erhält   │
-│       │ (Kabel führt direkt auf Federn)│               │         │ 2 direkte Federpings │
-├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
-│ **PCBA 03**│ **Universal Smart Cartridge** │ 35 x 25 mm    │ 2 Lagen │ Qorvo DW3110 UWB,    │
-│       │ (Rev 3.0 UWB-Funkschlitten)   │ (29x19 mm M2) │ (ENIG)  │ SPI Host-MCU, 4x MOS,│
-│       │                                │ 2-seitig SMT  │         │ DNP-Option: ES8311   │
-├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
-│ **PCBA 04**│ *(In v8.0 ersatzlos entfallen)*│ --            │ --      │ Heck-Pod 3 gestrichen│
-├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
-│ **PCBA 05**│ **Universal Front-Knoten**    │ 82 x 50 mm    │ 4 Lagen │ ESP32-S3 Xtensa,     │
-│       │ (Cockpit, GNSS, Sensoren, UWB)│ (4x M2.5)     │ (ENIG)  │ DW3110 UWB, SAM-M10Q,│
-│       │                               │               │         │ USB2514B Hub, PD20W  │
-├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
-│ **PCBA 06**│ **MagSafe Frame Dock Adapter** │ 28 x 11.5 mm  │ 2 Lagen │ 2 Pogo-Pins (+5V/GND)│
-│       │ (Rahmendock: M8 auf MagSafe)  │ (Zentral M2.5)│         │ TVS-Schutz, 16V PPTC │
-├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
-│ **PCBA 07**│ **2-in-1 LoRa Smart-Keyfob**  │ 38 x 19 mm    │ 2 Lagen │ nRF52840 SoC, SX1262 │
-│       │ (Silent Pager, N52 Key & Qi)  │ (Tasche M2)   │ (ENIG)  │ DRV2605L LRA, BQ51003│
-├───────┼───────────────────────────────┼───────────────┼─────────┼──────────────────────┤
-│ **PCBA 08**│ **Radar 2.0 Sub-MCU & Wings** │ 115 x 65 mm   │ 2 Lagen │ ESP32, DW3110 UWB,   │
-│       │ (Wheeltec 77GHz & V2X Patch)  │ (Flügel M2.5) │ (ENIG)  │ 36x WS2812B, 2-Pin12V│
-└───────┴───────────────────────────────┴───────────────┴─────────┴──────────────────────┘
++----------------------------------------------------------------------------------------+
+|                   DAS 5-PLATINEN-LINEUP DER OPENMOTORBRIDGE v9.6                       |
++-------+-------------------------------+---------------+---------+----------------------+
+| Baugruppe | Name & Funktion           | Platinenmaße  | Lagen   | Kern-ICs / Bauteile  |
++-------+-------------------------------+---------------+---------+----------------------+
+| **PCBA 01**| **Zentralbox Main Controller** | 85 x 55 mm    | 4 Lagen | ESP32-S3, QCC3084 BT,|
+|       | (Unter der Sitzbank, Audio/USV)| (77x47 mm M3) | (ENIG)  | LM5164, BQ24075,     |
+|       |                                |               |         | ES8388, SX1262 LoRa, |
+|       |                                |               |         | DW3110 UWB, DTM-12   |
++-------+-------------------------------+---------------+---------+----------------------+
+| **PCBA 03**| **Universal Smart Cartridge** | 35 x 25 mm    | 2 Lagen | Qorvo DW3110 UWB,    |
+|       | (Kassettenträger Bucht 1 & 2) | (29x19 mm M2) | (ENIG)  | ESP32-C6, ES8388,    |
+|       |                                | 2-seitig SMT  |         | 4x AO3400A, J_ACT    |
++-------+-------------------------------+---------------+---------+----------------------+
+| **PCBA 05**| **Universal Front-Knoten**    | 82 x 50 mm    | 4 Lagen | ESP32-S3, DW3110 UWB,|
+|       | (Cockpit, GNSS, Sensoren, UWB)| (4x M2.5)     | (ENIG)  | SAM-M10Q, USB2514B,  |
+|       |                               |               |         | SC8102 PD20W, TPS2051|
++-------+-------------------------------+---------------+---------+----------------------+
+| **PCBA 07**| **2-in-1 LoRa Smart-Keyfob**  | 38 x 19 mm    | 2 Lagen | Nordic nRF52840 SoC, |
+|       | (Silent Pager, N52 Key & Qi)  | (Tasche M2)   | (ENIG)  | SX1262 LoRa, DRV2605L|
+|       |                               |               |         | BQ51003 Qi, JST-ACH  |
++-------+-------------------------------+---------------+---------+----------------------+
+| **PCBA 08**| **Radar 2.0 Sub-MCU & Wings** | 115 x 65 mm   | 2 Lagen | ESP32-C5, DW3110 UWB,|
+|       | (Wheeltec 77GHz & V2X Patch)  | (Flügel M2.5) | (ENIG)  | Wheeltec MR20,       |
+|       |                               |               |         | 36x WS2812B, JWPF 12V|
++-------+-------------------------------+---------------+---------+----------------------+
 ```
+
+### 1.1 Gliederung nach Systemkomponenten
+1. **Kern-Baugruppen (Standard-Ausstattung jedes Bikes):**
+   * **`PCBA 01` (Zentralbox Main Controller):** Zentrale Recheneinheit unter der Sitzbank für Energie-Management, USV, DSP-Mischung, Dual-Bluetooth-Headsets, LoRa-Schwarm und UWB-Koordination.
+   * **`PCBA 03` (Universal Smart Cartridge):** Universelle Trägerplatine für Bucht 1 und Bucht 2. Beherbergt wahlweise Sena SPIDER X Slim, Cardo Packtalk Edge, Midland PMR446 oder das OMM 2.4 GHz Intercom Modul.
+   * **`PCBA 05` (Universal Front-Knoten):** Cockpit-Einheit für Multi-GNSS (SAM-M10Q), Kaltluft-Sensorik, Ambient-Mikrofon, USB-Hub und Headless CarPlay/Android Auto Bridge.
+2. **Empfohlene Erweiterungen & Peripherie:**
+   * **`PCBA 07` (2-in-1 LoRa Smart-Keyfob & Silent Pager):** Tragbarer Schlüsselanhänger für 4,5 km Weitbereichs-Alarmierung, N52-Magnetschlüssel und induktive Qi-Ladung.
+   * **`PCBA 08` (Radar 2.0 Sub-MCU & Warnflügel):** Heckmodul mit 77-GHz-mmWave-Sensorik, autonomem Brems- und Kollisionsstrobe sowie 5.9 GHz V2X-Uplink.
+3. **Ersatzlos entfallene Baugruppen (Architektur-Bereinigung v9.6):**
+   * **`PCBA 02` (Pod-Basisplatine):** Ersatzlos gestrichen. Die Zuleitung führt direkt auf zwei vergoldete Federkontakte im Schachtboden.
+   * **`PCBA 04` (Heck-Pod 3):** Ersatzlos gestrichen. Heck-Pod 3 entfällt vollständig; LoRa sitzt auf `PCBA 01`, GNSS auf `PCBA 05`.
+   * **`PCBA 06` (MagSafe Frame Dock Platine):** Ersatzlos gestrichen. Die elektrische Verbindung bei Koffer-Pods erfolgt über einen handelsüblichen industriellen 2-Pin Magnet-Pogo-Steckverbinder (IP68 COTS).
 
 ---
 
 ## 2. Fertigungsstandard & JLCPCB 4-Lagen Stackup (JLC04161H-7628)
 
-Für alle 4-Lagen-Platinen (PCBA 01 und PCBA 05) wird der identische, streng impedanzkontrollierte Lagenaufbau verwendet:
+Für alle 4-Lagen-Platinen (`PCBA 01` und `PCBA 05`) wird der identische, streng impedanzkontrollierte Lagenaufbau verwendet:
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│ Layer 1 (F.Cu - Top): High-Speed Signale, USB-Diff, Bauteile│  (35 µm / 1 oz Cu)
-├─────────────────────────────────────────────────────────────┤
-│ ── Prepreg 7628 (Dielektrikum, Er = 4.4, Dicke 0.2 mm) ──   │
-├─────────────────────────────────────────────────────────────┤
-│ Layer 2 (In1.Cu): Durchgängige Massefläche (GND_PWR / AGND) │  (17.5 µm Standard / opt. 35 µm)
-├─────────────────────────────────────────────────────────────┤
-│ ── FR4 Core (Isolationskern, Dicke 1.0 mm) ──────────────   │
-├─────────────────────────────────────────────────────────────┤
-│ Layer 3 (In2.Cu): Power-Planes (VCC_3V3, VCC_5V Polygone)   │  (17.5 µm Standard / opt. 35 µm)
-├─────────────────────────────────────────────────────────────┤
-│ ── Prepreg 7628 (Dielektrikum, Er = 4.4, Dicke 0.2 mm) ──   │
-├─────────────────────────────────────────────────────────────┤
-│ Layer 4 (B.Cu - Bottom): Sekundär-Routing, DW3110 UWB       │  (35 µm / 1 oz Cu)
-└─────────────────────────────────────────────────────────────┘
++-------------------------------------------------------------+
+| Layer 1 (F.Cu - Top): High-Speed Signale, USB-Diff, Bauteile|  (35 µm / 1 oz Cu)
++-------------------------------------------------------------+
+| -- Prepreg 7628 (Dielektrikum, Er = 4.4, Dicke 0.2 mm) --   |
++-------------------------------------------------------------+
+| Layer 2 (In1.Cu): Durchgängige Massefläche (GND_PWR / AGND) |  (17.5 µm Standard)
++-------------------------------------------------------------+
+| -- FR4 Core (Isolationskern, Dicke 1.0 mm) --------------   |
++-------------------------------------------------------------+
+| Layer 3 (In2.Cu): Power-Planes (VCC_3V3, VCC_5V Polygone)   |  (17.5 µm Standard)
++-------------------------------------------------------------+
+| -- Prepreg 7628 (Dielektrikum, Er = 4.4, Dicke 0.2 mm) --   |
++-------------------------------------------------------------+
+| Layer 4 (B.Cu - Bottom): Sekundär-Routing, DW3110 UWB       |  (35 µm / 1 oz Cu)
++-------------------------------------------------------------+
 ```
 
 ### 2.1 Standardisierte Net-Klassen & Leiterbahn-Geometrien
@@ -78,154 +87,106 @@ Für alle 4-Lagen-Platinen (PCBA 01 und PCBA 05) wird der identische, streng imp
 
 ![PCBA 01 Zentralbox Main Controller](../images/pcba/pcba01_central_box_3d.png)
 
-*Abbildung 7.1: Präzises KiCad 3D-Render der Zentralbox-Hauptplatine (PCBA 01, 85 x 55 mm, 4 Lagen) mit ESP32-S3 WROOM-1, LM5164-Q1 72V Buck, ES8388 DSP-Codec, Semtech SX1262 LoRa, Qorvo DW3110 UWB Transceiver, Hardware-Taster SW1 und automotivem Deutsch DTM-12 Header.*
+*Abbildung 7.1: KiCad 3D-Render der Zentralbox-Hauptplatine (PCBA 01, 85 x 55 mm, 4 Lagen) mit ESP32-S3 WROOM-1, Qualcomm QCC3084 BT 5.4 Audio SoC, LM5164-Q1 72V Buck, BQ24075 USV, ES8388 DSP-Codec, Semtech SX1262 LoRa, Qorvo DW3110 UWB Transceiver und automotiven Deutsch DTM-12 Header.*
 
-### 3.1 Technische Platinen-Kenndaten
+### 3.1 Technische Platinen-Kenndaten & Top/Bottom-Aufteilung
 * **Abmessungen:** $85{,}0 \times 55{,}0\,\text{mm}$ (Außenkontur mit 4x M2.5 Montagebohrungen, $77{,}0 \times 47{,}0\,\text{mm}$ Lochabstand).
-* **Lagenaufbau:** 4 Lagen FR-4 High-TG150 ($1{,}6\,\text{mm}$ Gesamtdicke, $35\,\mu\text{m}$ Cu auf allen 4 Lagen).
-  * Layer 1 (Top): Bauelemente, HF-Leiterbahnen, Semtech SX1262 LoRa 868 MHz Transceiver (mit U.FL zu FXP895 im Gehäusedeckel) und Pairing/Reset-Taster `SW1`.
-  * Layer 2 (Inner 1): Durchgehende, ununterbrochene GND-Bezugsebene.
-  * Layer 3 (Inner 2): Split Power Planes ($+3{,}3\,\text{V}$, $+5{,}0\,\text{V}$, `VBUS`, `VBAT_LIPO`) und Audio-GND.
-  * Layer 4 (Bottom): Qorvo DW3110 UWB Transceiver (6.489 GHz Ch. 5) mit U.FL-Abgang in Gehäuseboden-Tasche (Taoglas FXUWB10), Sekundärsignale, Schirmflächen und thermische Vias.
-* **Oberflächenveredelung:** ENIG (Electroless Nickel Immersion Gold, $0{,}05\dots 0{,}1\,\mu\text{m}$ Au über $3\dots 5\,\mu\text{m}$ Ni).
-* **All-UWB Datenarchitektur:** Da sämtliche Interconnects (Front-Knoten, Pod 1, Pod 2, Radar) 100 % drahtlos über UWB kommunizieren, entfallen die früheren galvanischen Bourns-Trafos und Optokoppler ersatzlos. Die galvanische Trennung erfolgt inhärent durch die Luftschnittstelle.
+* **Lagenaufbau:** 4 Lagen FR-4 High-TG150 ($1{,}6\,\text{mm}$ Gesamtdicke, ENIG-Goldfinish).
+* **Bestückung Top-Layer (F.Cu):**
+  * **Hauptcontroller:** Espressif `ESP32-S3-WROOM-1` (Dual-Core @ 240 MHz, 16 MB Flash, 8 MB Octal-PSRAM) für Systemsteuerung, CAN-Bus, FreeRTOS DSP-Pipeline und PWA-Webserver.
+  * **Dedizierter Helm-Audio-SoC:** **Qualcomm QCC3084** Bluetooth 5.4 Audio-SoC für Dual-A2DP (aptX HD, Low Latency), LE Audio Auracast Broadcast und kristallklare Hands-Free Telefonie (HFP 1.8 mit Wideband Speech).  
+    *(Wichtige Entkopplung: Der interne BLE-Stack des ESP32-S3 dient rein dem WebApp-Dashboard und Sensordaten, während der QCC3084 das Helm-Audio völlig unbeeinflusst von CPU-Spitzen abwickelt).*
+  * **Weitbereichsfunk:** Semtech `SX1262` LoRa Transceiver (+22 dBm PA) mit U.FL-Buchse zur Taoglas FXP895 Antenne in der Gehäusedeckeltasche.
+  * **Audio-Codec:** Everest Semi `ES8388` 24-Bit / 48 kHz Low-Power Stereo-Audio-Codec.
+  * **Bordnetz-Speisung:** Texas Instruments `LM5164-Q1` synchroner 72V-Buck-Converter und TI `BQ24075` Power-Path-Controller mit Ladeschaltung für die interne 2.200-mAh-USV-Zelle.
+  * **eFuse-Schutzschalter:** 3x Texas Instruments `TPS25921` elektronische Sicherungen für die getrennte Absicherung der externen Abgänge (Bucht 1, Bucht 2, Front-Knoten/Radar).
+  * **Bedienelemente & Interface:** Hardware-Taster `SW1` (Pairing / Werkseinstellung) und 12-poliger automotiver Deutsch DTM-12 Buchsenleiste `J1`.
+* **Bestückung Bottom-Layer (B.Cu):**
+  * **UWB-Funkknoten:** Qorvo `DW3110` Ultra-Wideband IEEE 802.15.4z Transceiver (Kanal 5 @ 6.489 GHz) mit ultrakurzer U.FL-Zuleitung zur Taoglas FXUWB10 Antenne in der Gehäusebodentasche.
+  * **Sensoren:** 6-Achs-IMU (ICM-42688P / LIS3DH) zur Wake-on-Motion Diebstahlüberwachung und Bosch BMP390 Barometer.
+  * Durchgehende thermische Massevias zur Wärmeabfuhr des LM5164 und der eFuses.
 
-### 3.2 Pinbelegung des zentralen 12-poligen Deutsch DTM-12 Steckverbinders (`J1`)
-
-![Automotive Kabelbaum Architektur](../images/cad/wiring_harness_cad.png)
-
-*Abbildung 7.1b: CAD-Architektur des zentralen 12-poligen Automotive-Kabelbaums (Deutsch DTM-12 IP67/IP69K; 11 aktive Adern, reine 2-Draht DC-Power-Peitschen und CAN).*
+### 3.2 Pinbelegung des 12-poligen Deutsch DTM-12 Steckverbinders (`J1`)
 
 ```
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│ DEUTSCH DTM-12 PINBELEGUNG (ZENTRALBOX POWER, CAN & DC-PEITSCHEN)                      │
-├─────┬────────────────┬──────────────────────────┬─────────────┬────────────────────────┤
-│ Pin │ Signalname     │ Signalart / Pegel        │ Querschnitt │ Funktion & Schutz      │
-├─────┼────────────────┼──────────────────────────┼─────────────┼────────────────────────┤
-│  1  │ KL30_IN        │ +9V...+72V DC Dauerplus  │ AWG20 0.50² │ Bordnetz Dauerplus     │
-│  2  │ KL15_IGN       │ +9V...+72V DC Zündungspl.│ AWG22 0.34² │ Zündungssignal (KL15)  │
-│  3  │ VEHICLE_GND    │ Power-Masse (0V)         │ AWG20 0.50² │ Zentrale Bordnetzmasse │
-│  4  │ CAN_H          │ CAN-FD High (ISO 11898-2)│ AWG24 0.22² │ Fahrzeug-CAN Bus High  │
-│  5  │ CAN_L          │ CAN-FD Low (ISO 11898-2) │ AWG24 0.22² │ Fahrzeug-CAN Bus Low   │
-│  6  │ POD1_VCC       │ +5,0V geschaltet (0,5A)  │ AWG22 0.34² │ Power Bucht 1 (Links)  │
-│  7  │ POD1_GND       │ Power-Masse (0V)         │ AWG22 0.34² │ Masse Bucht 1 (Links)  │
-│  8  │ POD2_VCC       │ +5,0V geschaltet (0,5A)  │ AWG22 0.34² │ Power Bucht 2 (Rechts) │
-│  9  │ POD2_GND       │ Power-Masse (0V)         │ AWG22 0.34² │ Masse Bucht 2 (Rechts) │
-│ 10  │ RADAR_PWR_12V  │ +12V geschaltet (1,0A)   │ AWG22 0.34² │ Power Heck-Radar       │
-│ 11  │ RADAR_GND      │ Power-Masse (0V)         │ AWG22 0.34² │ Masse Heck-Radar       │
-│ 12  │ CHASSIS_EARTH  │ Schirmmasse              │ AWG20 0.50² │ Gehäuse- & Schirmschutz│
-└─────┴────────────────┴──────────────────────────┴─────────────┴────────────────────────┘
++----------------------------------------------------------------------------------------+
+| DEUTSCH DTM-12 PINBELEGUNG (ZENTRALBOX POWER, CAN & DC-PEITSCHEN)                      |
++-----+----------------+--------------------------+-------------+------------------------+
+| Pin | Signalname     | Signalart / Pegel        | Querschnitt | Funktion & Schutz      |
++-----+----------------+--------------------------+-------------+------------------------+
+|  1  | KL30_IN        | +9V...+72V DC Dauerplus  | AWG20 0.50² | Bordnetz Dauerplus     |
+|  2  | KL15_IGN       | +9V...+72V DC Zündungspl.| AWG22 0.34² | Zündungssignal (KL15)  |
+|  3  | VEHICLE_GND    | Power-Masse (0V)         | AWG20 0.50² | Zentrale Bordnetzmasse |
+|  4  | CAN_H          | CAN-FD High (ISO 11898-2)| AWG24 0.22² | Fahrzeug-CAN Bus High  |
+|  5  | CAN_L          | CAN-FD Low (ISO 11898-2) | AWG24 0.22² | Fahrzeug-CAN Bus Low   |
+|  6  | POD1_VCC       | +12V geschaltet (0,5A)   | AWG22 0.34² | DC-Power Bucht 1 (eFuse|
+|  7  | POD1_GND       | Power-Masse (0V)         | AWG22 0.34² | Masse Bucht 1 (Links)  |
+|  8  | POD2_VCC       | +12V geschaltet (0,5A)   | AWG22 0.34² | DC-Power Bucht 2 (eFuse|
+|  9  | POD2_GND       | Power-Masse (0V)         | AWG22 0.34² | Masse Bucht 2 (Rechts) |
+| 10  | RADAR_PWR_12V  | +12V geschaltet (1,0A)   | AWG22 0.34² | DC-Power Heck-Radar    |
+| 11  | RADAR_GND      | Power-Masse (0V)         | AWG22 0.34² | Masse Heck-Radar       |
+| 12  | CHASSIS_EARTH  | Schirmmasse              | AWG20 0.50² | Gehäuse- & Schirmschutz|
++-----+----------------+--------------------------+-------------+------------------------+
 ```
-
-> **Hinweis zur All-UWB Architektur:** Sämtliche Interconnects (Daten, Trigger, Audio-Frames, Radar-Telemetrie) zwischen Zentralbox und allen Satellitenknoten (Front-Knoten, Pod 1, Pod 2, Radar) laufen ausschließlich drahtlos über Ultra-Wideband (Qorvo DW3110 / 6.489 GHz Ch. 5, $< 0{,}4\,\text{ms}$ Latenz, AES-128-CCM verschlüsselt). Der Kabelbaum führt ausschließlich Gleichstrom (DC) und das Fahrzeug-CAN-Interface.
-
-### 3.3 Interne Platinen-Steckverbinder & Service-Schnittstellen
-
-| Stecker | Typ / Bauform | Polzahl | Funktion & Signalbelegung |
-| :--- | :--- | :---: | :--- |
-| **`J2`** | MicroSD Push-Push | 9-Pin | 4-Bit SDIO High-Speed Bus (`CLK`, `CMD`, `DAT0`-`DAT3`, `CD`, `3V3`, `GND`) für die gerichtsfeste Ringspeicher-Blackbox. |
-| **`J3`** | IDC Wannenstecker ($2{,}54\,\text{mm}$) | 10-Pin | Service-, Programmier- und Debug-Header: Pin 1: `3V3`, Pin 2: `TXD0`, Pin 3: `RXD0`, Pin 4: `GND`, Pin 5: `USB_D-`, Pin 6: `USB_D+`, Pin 7: `EN`, Pin 8: `IO0`, Pin 9: `CAN_H`, Pin 10: `CAN_L`. |
-| **`J_BAT`**| Molex Micro-Fit 3.0 | 2-Pin | USV-Pufferakku: Pin 1: `VBAT_LIPO` ($+3{,}7\dots 4{,}2\,\text{V}$), Pin 2: `GND` (überwacht via BQ24075 TS NTC). |
-| **`J_AUD`**| JST-XH ($2{,}50\,\text{mm}$) | 4-Pin | Optionaler interner Audio-Messport: `LINE_L+`, `LINE_L-`, `LINE_R+`, `LINE_R-`. |
 
 ---
 
-## 4. Satelliten Pod-Gehäuse & Entfall von PCBA 02 (Direkte 2-Draht DC-Federkontaktierung)
+## 4. Satelliten Pod-Gehäuse & Entfall von PCBA 02 (Monolithisches Gehäuse)
 
-> **Architektur-Entscheidung v8.5 / v9.0:**  
-> Die frühere Pod-Basisplatine (`PCBA 02`) ist **vollständig und ersatzlos entfallen**.  
-> Durch die Verlagerung des gesamten Daten- und Steuerverkehrs auf **Ultra-Wideband (Qorvo DW3110 UWB)** benötigt die Satellitenbucht keinerlei Signalleitungen, Datenbusse oder Buchsen (M8 und USB-C entfallen ersatzlos am Gehäuse).
-
-### 4.1 Monolithisches Gehäuse & 2-Pin Direktkontaktierung
-* **Gehäusebauform (`pod_base_housing.stl`):** Monolithisches, robustes 3D-Druck-Bauteil (MJF PA12 / ASA) ohne jegliche interne Elektronikplatine.
-* **2-Draht-DC-Zuleitung:** Die 2-adrige Gleichstrompeitschenleitung von der Zentralbox (AWG22 0.34² geschützt durch PPTC) führt über eine rückseitige IP67-Kabelverschraubung oder Formdichtung direkt in den Gehäuseschacht.
-* **Vergoldete Federkontakte:** Die Zuleitung endet an zwei robusten, vergoldeten Federkontakten (Keystone / Mill-Max Federbleche), die beim Einschieben der Kassette formschlüssig auf die beiden stirnseitigen ENIG-Goldkontaktflächen von `PCBA 03` drücken.
-* **Vorteile:**
-  * Null Kontaktprellen auf Datenleitungen (da Daten zu 100 % drahtlos über UWB übertragen werden).
-  * Höchste Vibrationsfestigkeit ($> 25\,\text{g}$) und extreme Schmutzunempfindlichkeit.
-  * Vollkommene Wasserdichtigkeit ohne anfällige Buchsen am Gehäuseboden.
+Die frühere Pod-Basisplatine (`PCBA 02`) ist in v9.6 **vollständig und ersatzlos entfallen**:
+1. **Monolithischer Gehäusekörper:** Das Pod-Gehäuse (`pod_base_housing.stl`) ist ein 100 % passives 3D-Druck-Präzisionsteil (MJF PA12).
+2. **Direkte 2-Draht DC-Federkontaktierung:** Die 2-adrige DC-Leitung vom Deutsch DTM-12 Stecker führt über eine rückseitige Formdichtung direkt in den Schacht und endet an zwei massiven, vergoldeten Federkontakten (Mill-Max).
+3. **Null Ausfallrisiko:** Keine Schalter, keine aktiven ICs und keine empfindlichen Buchsen im Spritzwasserbereich der Kofferträger.
 
 ---
 
-## 5. PCBA 03: Universal Smart Cartridge (`openmotorbridge_pod_cartridge` Rev 3.0 All-UWB)
-*KiCad-Projektverzeichnis: [`hardware/kicad_pod_cartridge/`](../../hardware/kicad_pod_cartridge)*
+## 5. PCBA 03: Universal Smart Cartridge (`openmotorbridge_pod_cartridge` Rev 3.0)
 
 ![PCBA 03 Universalschlitten Cartridge](../images/pcba/pcba03_pod_cartridge_3d.png)
 
-*Abbildung 7.3: KiCad 3D-Render der Universal Smart Cartridge (PCBA 03 Rev 3.0, 35 x 25 mm, 2 Lagen ENIG, 2-seitig SMT) mit Qorvo DW3110 UWB Transceiver, SPI Host-MCU, 4x AO3400A MOSFETs, 8-Pin Mechatronik-Header J_ACT, stirnseitigen 2-Pin DC-Goldpads und DNP-Pads für ES8311 Codec.*
+*Abbildung 7.3: KiCad 3D-Render der Universal Smart Cartridge (PCBA 03 Rev 3.0, 35 x 25 mm, 2 Lagen ENIG, 2-seitig SMT) mit Qorvo DW3110 UWB Transceiver, ESP32-C6 Host-MCU, ES8388 Stereo-Codec, 4x AO3400A MOSFETs, 8-Pin Mechatronik-Header J_ACT und 6-Pin Audio-Power-Header J_AUDIO_PWR.*
 
-### 5.1 Technische Platinen-Kenndaten & Beidseitige Bestückung
-* **Abmessungen:** $35{,}0 \times 25{,}0\,\text{mm}$ (Kompakter Formfaktor mit 4x M2 Befestigungsbohrungen im Raster $29{,}0 \times 19{,}0\,\text{mm}$, formschlüssig montiert im Kassetten-Schlitten).
-* **Lagenaufbau:** 2 Lagen FR-4 High-TG150 ($1{,}2\,\text{mm}$ Dicke, $35\,\mu\text{m}$ Kupfer beidseitig, ENIG-Goldbeschichtung).
-* **Beidseitige SMT-Bestückung (Top & Bottom):**
-  * **Top-Seite (HF & Steuerung):**
-    * `U1`: Qorvo `DW3110` Ultra-Wideband IEEE 802.15.4z Transceiver (6.489 GHz Kanal 5, BPRF-Modus, Latenz $< 0{,}4\,\text{ms}$, Hardware AES-128-CCM).
-    * `ANT1`: UWB-Antennenanbindung (Taoglas U.FL-Buchse oder ultrakompakte SMD-Keramik-UWB-Patchantenne).
-    * `U2`: Ultrakompakte 32-Bit Host-MCU (SPI-Master zum DW3110 für UWB-Paketverarbeitung, Aktuator-Triggering und Multi-Vehicle NVS-Speicher).
-  * **Bottom-Seite (Mechatronik, Power & Audio):**
-    * `PAD1` & `PAD2`: Stirnseitige vergoldete Kontaktflächen (+5V und GND) zur direkten Kontaktierung der Gehäuse-Federkontakte.
-    * `Q1` – `Q4`: 4x N-Kanal Power-MOSFETs (`AO3400A`, SOT-23, $30\,\text{V} / 5{,}7\,\text{A}$) zur mechatronischen Betätigung der OEM-Headset-Tasten über Miniatur-Hubmagnete.
-    * `D1` – `D4`: 4x Freilaufdioden (`1N4148WS`, SOD-323) für induktive Lasten der Hubmagnete.
-    * `F1`: Selbstrückstellende PPTC 500mA Schutzsicherung.
-    * `J_ACT`: 8-poliger $1{,}0\,\text{mm}$ JST-SH Header zur Anbindung der 4 Hubmagnete.
-    * **100% Unified DNP-Strategie (Codec-Pads):** Footprint für den ultrakompakten Mono-Audio-Codec `ES8311` ($3 \times 3\,\text{mm}$ QFN-20) samt passiver NF-Filter.
-      * *Sena / Cardo / Mesh+ Kassetten:* DNP (Do Not Populate) – unbestückt. Audio läuft rein per Bluetooth direkt zum Helm/Zentralbox.
-      * *Midland PMR446 Funkkassette:* Bestückt – digitalisiert das analoge Funkgerätesignal und streamt es via UWB an den Zentralbox-DSP.
+### 5.1 Technische Platinen-Kenndaten & Funktionale Lagen-Aufteilung
+* **Abmessungen:** $35{,}0 \times 25{,}0\,\text{mm}$ (Raster $29{,}0 \times 19{,}0\,\text{mm}$ mit 4x M2 Befestigungsbohrungen).
+* **Lagenaufbau:** 2 Lagen FR-4 High-TG150 ($1{,}2\,\text{mm}$ Dicke, $35\,\mu\text{m}$ Cu beidseitig, ENIG-Goldfinish).
+* **Bestückung Top-Layer (F.Cu - Mechatronik, Steuerung & Audio):**
+  * `U2`: Espressif `ESP32-C6` RISC-V Host-MCU (verwaltet Kassetten-Profile, UWB-Kommunikation und Aktuator-Timings).
+  * `U3`: Everest Semi `ES8388` 24-Bit / 48 kHz Stereo-Audio-Codec. Wandelt das analoge Mikrofon- und Lautsprechersignal von Sena, Cardo oder Midland direkt auf der Kassette und streamt es digital via UWB.
+  * `Q1` - `Q4`: 4x N-Kanal MOSFETs (`AO3400A`, SOT-23, $30\,\text{V} / 5{,}7\,\text{A}$) samt Freilaufdioden `D1`-`D4`. Platziert unmittelbar neben dem Header `J_ACT` für kürzeste Leiterbahnwege zu den Taster-Aktuatoren.
+  * `J_ACT`: 8-poliger $1{,}0\,\text{mm}$ JST-SH Header zur Ansteuerung der 4 Miniatur-Hubmagnete.
+  * `J_AUDIO_PWR`: 6-poliger $1{,}0\,\text{mm}$ JST-SH Header zur Anbindung des Adapterkabelstrangs an das jeweilige OEM-Headset.
+* **Bestückung Bottom-Layer (B.Cu - HF & Stromaufnahme):**
+  * `U1`: Qorvo `DW3110` Ultra-Wideband Transceiver (6.489 GHz Ch. 5) mit integrierter PCB-Antenne. Strahlungsrichtung zeigt nach unten durch den Kunststoffboden der Kassette für optimale Funkverbindung zur Zentralbox.
+  * `PAD1` & `PAD2`: Stirnseitige, massive vergoldete Kontaktflächen (ENIG) für die 2-Draht DC-Federkontakte des Pods.
+  * `F1`: Selbstrückstellende 500mA PPTC-Sicherung.
 
-### 5.2 Stirnseitige 2-Pin DC-Versorgungskontakte
-| Kontaktpad | Signalname | Richtung | Funktion & Schutz |
+### 5.2 Pinbelegung des Audio-Power-Headers (`J_AUDIO_PWR` / 6-Pin JST-SH 1.0mm)
+| Pin | Signalname | Richtung | Funktion & OEM-Verbindung |
 | :---: | :--- | :---: | :--- |
-| **PAD 1** | `VCC_5V` | Eingang $\leftarrow$ Pod | $+5{,}0\,\text{V}$ DC Speisung über rückstellbare PPTC-Sicherung `F1` (500mA) |
-| **PAD 2** | `GND`    | Power-Masse              | Zentraler Massebezug für Elektronik und Hubmagnete |
+| **1** | `GND` | Power / Masse | Schirm- und Systemmasse |
+| **2** | `VCC_HEADSET` | Power Out (+5V/+3.8V)| Geregelte Betriebsspannung für das Intercom-Modul |
+| **3** | `AUDIO_R+` | Audio In $\leftarrow$ OEM | Line-Out Lautsprecher Rechts vom Headset zum ES8388 ADC |
+| **4** | `AUDIO_R-` | Audio In $\leftarrow$ OEM | Lautsprecher Massebezug |
+| **5** | `MIC_IN+` | Audio Out $\rightarrow$ OEM| Mikrofonsignal vom ES8388 DAC in das Headset |
+| **6** | `OPTO_PTT` | Bidir / Open-Drain | PTT-Tastung gegen Masse (Midland PMR446 / Aux) |
 
-### 5.3 Pinbelegung des mechatronischen 8-poligen Aktuator-Headers (`J_ACT` / $1{,}0\,\text{mm}$ JST-SH)
-Um Geräte mit unterschiedlichen Tastenlayouts (Sena Spider X Slim vs. Cardo Packtalk Edge) flexibel zu steuern, werden **4 diskrete, unabhängig montierbare Miniatur-Aktuatoren** verwendet. Jeder Aktuator besitzt ein eigenes 2-adriges AWG30 Silikonkabel:
-
-| Pin (J_ACT) | Signalname | Ansteuerung | Mapping: Sena SPIDER X Slim | Mapping: Cardo Packtalk Edge |
+### 5.3 Pinbelegung des Aktuator-Headers (`J_ACT` / 8-Pin JST-SH 1.0mm)
+| Pin | Signalname | Ansteuerung | Mapping: Sena SPIDER X Slim | Mapping: Cardo Packtalk Edge |
 | :---: | :--- | :---: | :--- | :--- |
-| **Pin 1 & 2** | `VCC_5V` | Dauer-5V | Gemeinsame $+5\,\text{V}$ Speiseschiene für alle 4 Aktuatoren | Gemeinsame $+5\,\text{V}$ Speiseschiene |
-| **Pin 3** | `ACT1_OUT` | MOSFET `Q1` | **Plus (+)** (Lauter / Menü vor) | **Media Button** (Front/Top) |
-| **Pin 4** | `ACT2_OUT` | MOSFET `Q2` | **Minus (-)** (Leiser / Menü zurück)| **Mobile Button** (Phone/Pairing) |
-| **Pin 5** | `ACT3_OUT` | MOSFET `Q3` | **Center / Phone** (Bestätigen)   | **Intercom Button** (DMC Grouping) |
-| **Pin 6** | `ACT4_OUT` | MOSFET `Q4` | **Mesh Button** (45° seitlich)    | **Control Wheel Center-Press** |
-| **Pin 7 & 8** | `GND` | Power-Masse | Schirm- und Rückstrommasse | Schirm- und Rückstrommasse |
-
-### 5.4 Drahtlose Kassetten-Steuerung & UWB-Opcode-Protokoll
-* **All-UWB Datenlink:** Alle Steuerkommandos (z. B. PTT drücken, Lautstärke, Mesh Ein/Aus) und Telemetriedaten (Kassetten-ID, Akkuspannung, Bestätigungen) werden über das deterministische **UWB-Backbone (6.489 GHz Ch. 5)** zwischen Zentralbox und Kassetten-MCU übertragen.
-* **Keine 2.4 GHz Selbststörung:** Das 2.4-GHz-Band bleibt zu 100 % frei von interner Kassettenkommunikation.
-* **Optionale Swap-Kassette „OMM 2.4 GHz“:**
-  * OpenMotorMesh auf 2.4 GHz ist eine **spezifische optionale Wechselkassette** (eigener Transceiver für reines Open-Source-Mesh ohne Fremdheadsets). Sie ist nicht der Standard-Steuerlink für normale Kassetten!
-
-### 5.5 In-System Profil-Flashing (ISP / IAP via Single-Wire) & Klicksequenzen-Tabelle
-* **Kein Programmiergerät erforderlich:** Sobald in der WebApp ein Profil (z. B. `sena_spider_x.json` oder `cardo_dmc_gen2.json`) zugewiesen wird, sendet der ESP32-S3 über Pin 5 (`TRIGGER_PPS`) ein Konfigurationspaket mit Timing-Werten, Impulsdauern und Makro-Schritten.
-* **Permanente Speicherung:** Der Kassetten-MCU brennt die Tabelle in seinen internen EEPROM. Die Kassette arbeitet danach vollkommen autonom und führt Sequenzen selbstständig aus.
-
-#### Autonome Smart Cartridge Klicksequenzen & Opcode-Tabelle:
-| Opcode | Semantische Funktion | Sequenz: Sena SPIDER X Slim | Sequenz: Cardo Packtalk Edge |
-| :---: | :--- | :--- | :--- |
-| **`0x01`** | **Power Boot / Auto-On** | Simultan Plus + Center ($1000\,\text{ms}$) | Simultan Media + Mobile ($2000\,\text{ms}$) |
-| **`0x02`** | **Power Off** | Simultan Plus + Center ($200\,\text{ms}$) | Simultan Media + Mobile ($2000\,\text{ms}$) |
-| **`0x03`** | **Mute / Primärfunktion**| Einzeltastendruck Plus ($100\,\text{ms}$) | Wheel Center-Press $2000\,\text{ms}$ (DMC Group Mute) |
-| **`0x04`** | **Stop / Sekundärfunktion**| Einzeltastendruck Minus ($100\,\text{ms}$) | Wheel Center-Press $150\,\text{ms}$ Klick (Audio Stop) |
-| **`0x05`** | **Mesh Audio Toggle** | Mesh-Taste $200\,\text{ms}$ Klick (Open Mesh) | Intercom-Taste $200\,\text{ms}$ Klick (DMC Intercom) |
-| **`0x06`** | **Group Pairing Mode** | Mesh-Taste $3000\,\text{ms}$ Haltepuls | Intercom-Taste $5000\,\text{ms}$ Haltepuls (Grouping) |
-| **`0x07`** | **Kanal / Macro 1** | Autonom: 2x Mesh ($150\,\text{ms}$) + Pause + 1x Plus | Autonom: 2x Intercom ($150\,\text{ms}$) (Private Chat) |
-| **`0x08`** | **Kanal / Macro 2** | Autonom: 2x Mesh ($150\,\text{ms}$) + Pause + 1x Minus | Autonom: 3x Intercom ($150\,\text{ms}$) (DMC Bridge) |
-| **`0x09`** | **Phone / BLE Pairing** | Center-Taste $5000\,\text{ms}$ Haltepuls | Mobile-Taste $5000\,\text{ms}$ Haltepuls |
+| **1 & 2** | `VCC_5V` | Dauer-5V | Gemeinsame Versorgungs-Schiene für alle 4 Aktuatoren |
+| **3** | `ACT1_OUT` | MOSFET `Q1` | **Plus (+)** (Lauter / Menü vor) | **Media Button** (Front/Top) |
+| **4** | `ACT2_OUT` | MOSFET `Q2` | **Minus (-)** (Leiser / Menü zurück)| **Mobile Button** (Phone/Pairing) |
+| **5** | `ACT3_OUT` | MOSFET `Q3` | **Center / Phone** (Bestätigen)   | **Intercom Button** (DMC Grouping) |
+| **6** | `ACT4_OUT` | MOSFET `Q4` | **Mesh Button** (45° seitlich)    | **Control Wheel Center-Press** |
+| **7 & 8** | `GND` | Power-Masse | Massebezug für Rückstrom | Massebezug für Rückstrom |
 
 ---
 
-## 6. PCBA 04: Heck-Pod 3 Transceiver (In v8.0 ersatzlos entfallen / Retired)
+## 6. PCBA 04: Heck-Pod 3 (Ersatzlos entfallen)
 
-> [!IMPORTANT]
-> **Architektur-Bereinigung v8.0: Entfall von PCBA 04 & Pod 3**  
-> In OpenMotorBridge v8.0 wurde der Heck-Pod 3 und die zugehörige Platine `PCBA 04` **ersatzlos gestrichen**:
-> 1. **Kein 3. Gehäuse am Heck:** Kein Verklemmen von Leitungen unter Sitzbänken, kein Blockieren von Showa-Dämpferbehältern, keine Heckkotflügel-Konsolen.
-> 2. **Neuverteilung der RF-Subsysteme:**
->    * **LoRa 868 MHz (Semtech SX1262):** Sitzt direkt auf der Zentralbox `PCBA 01` (versorgt über die USV-Batterieschiene für 24/7 Diebstahl-Sentry) mit Taoglas FXP895 Flexantenne im Gehäusedeckel.
->    * **Multi-GNSS (u-blox SAM-M10Q):** Sitzt mit integrierter $15 \times 15\,\text{mm}$ Patchantenne im Front-Knoten `PCBA 05` im laminaren Fahrtwind-Einlass (Port `J12` Qwiic).
->    * **Außentemperatur-Sicherheit:** TI TMP117 ($\pm 0{,}1\,^\circ\text{C}$ Laborpräzision nach NIST) sitzt direkt am Front-Knoten `J12` im Fahrtwindkanal – thermisch vollständig entkoppelt von Motor- und Auspuffabwärme.
-> 3. **System-BOM:** Die Gesamtzahl der Platinen im Projekt sinkt auf **6 aktive PCBAs** (`PCBA 01`, `03`, `05`, `06`, `07`, `08`). Die Pod-Basisplatine `PCBA 02` und die Heckplatine `PCBA 04` sind ersatzlos entfallen; die Pods erhalten direkte 2-Draht DC-Federkontaktierung.
+Die Heckplatine `PCBA 04` und das zugehörige Heckgehäuse Pod 3 sind **vollständig gestrichen**:
+* Der Semtech SX1262 LoRa-Transceiver arbeitet direkt auf der Zentralbox (`PCBA 01`).
+* Das u-blox SAM-M10Q GNSS-Modul arbeitet im Fahrtwindeinlass des Front-Knotens (`PCBA 05`).
 
 ---
 
@@ -233,410 +194,59 @@ Um Geräte mit unterschiedlichen Tastenlayouts (Sena Spider X Slim vs. Cardo Pac
 
 ![PCBA 05 Universal Front-Knoten](../images/pcba/pcba05_front_node_3d.png)
 
-*Abbildung 7.5: KiCad 3D-Render des Universal Front-Knotens (PCBA 05, 82 x 50 mm, 4 Lagen) mit ESP32-S3-WROOM-1U (U.FL), Qorvo DW3110 UWB Transceiver (Unterseite), u-blox SAM-M10Q GNSS, Microchip USB2514B 4-Port Hub, Southchip SC8102 USB-PD 20W Fast-Charge, TI TPS2051B Power-Gate, Knowles I2S MEMS Mikrofon, CPC1017N CAN Auto-Sensing Relais, Dual-MOSFET Spiegel-BSD Treibern und WS2812B RGB-Status-LED.*
+*Abbildung 7.5: KiCad 3D-Render des Universal Front-Knotens (PCBA 05, 82 x 50 mm, 4 Lagen) mit ESP32-S3-WROOM-1U, Qorvo DW3110 UWB Transceiver (Unterseite), u-blox SAM-M10Q GNSS, Microchip USB2514B Hub, Southchip SC8102 USB-PD 20W Fast-Charge, TI TPS2051B Power-Gate, Knowles I2S MEMS Mikrofon und WS2812B RGB-Status-LED.*
 
 ### 7.1 Technische Platinen-Kenndaten
-* **Abmessungen:** $82{,}0 \times 50{,}0\,\text{mm}$ (Gehäuseinnenmaß $86 \times 56 \times 24\,\text{mm}$, Gehäuseaußenmaß $98 \times 68 \times 25\,\text{mm}$ mit 4-in-1 Befestigung).
-* **Lagenaufbau:** 4 Lagen FR-4 High-TG150 ($1{,}6\,\text{mm}$, $35\,\mu\text{m}$ Kupfer).
-  * Layer 1 (Top): ESP32-S3 Controller, USB2514B Hub, Knowles MEMS, WS2812B RGB, $90\,\Omega$ USB-Differenzpaare.
-  * Layer 2 (Inner 1): Durchgehende, niederohmige GND-Masseebene.
-  * Layer 3 (Inner 2): Split Power ($+5{,}0\,\text{V}_{\text{MAIN}}$, $+5{,}0\,\text{V}_{\text{DONGLE}}$, $+5{,}0\,\text{V}_{\text{CAM}}$, $+9\dots 12\,\text{V}_{\text{PD}}$, $+12\,\text{V}_{\text{SW}}$, $+3{,}3\,\text{V}$).
-  * Layer 4 (Bottom): Qorvo DW3110 UWB Transceiver (6.489 GHz Ch. 5) mit U.FL-Abgang in Gehäuseboden-Tasche (Taoglas FXUWB10), LMR36015 Buck, SC8102 USB-PD Controller, TPS2051B Lastschalter, CPC1017N Relais, DMN63D8 Dual-MOSFET, TVS-Dioden und Filter.
-* **KL15-Pufferkondensator (`C_BUF`):** $470\dots 1000\,\mu\text{F}$ 10V Low-ESR Polymer-SMD (Bauform 7343 / D-Case) puffert den ESP32-S3 bei Zündungsaus für $1\dots 2\,\text{s}$ zum sauberen Senden des BLE-Shutter-Stop-Befehls an Action-Cams.
-* **HF-Backbone-Konzept (UWB statt 2.4 GHz):** Qorvo DW3110 UWB Transceiver auf der Platinenunterseite; ultrakurzes 20 mm U.FL-Mikrokoaxkabel führt direkt in die $11 \times 11 \times 0{,}6\,\text{mm}$ Antennentasche im Gehäuseboden mit Taoglas FXUWB10 Flexantenne. Deterministische Latenz $< 0{,}4\,\text{ms}$ zur Zentralbox, 100 % kontinuierlich zulässig nach ETSI EN 302 065-3, null 2.4 GHz Interferenz im Cockpit.
-
-### 7.2 Fahrzeug- & Peripherie-Schnittstellen (JST-PH Header)
-
-| Stecker | Steckertyp | Polzahl | Signalbelegung & Funktion |
-| :--- | :--- | :---: | :--- |
-| **`J1`** | JST-PH / 2-Pin Schraubklemme | 2-Pin | **12V Bordnetz-Eingang:** Pin 1: `KL15_12V_SW` ($+9\dots 36\,\text{V}$ DC Zündungsplus), Pin 2: `GND` (Fahrzeugmasse). Gespeist über LMR36015 Buck-Regler. |
-| **`J2`** | JST-PH ($2{,}00\,\text{mm}$) | 3-Pin | **Cockpit CAN-Bus:** Pin 1: `CAN_H`, Pin 2: `CAN_L`, Pin 3: `GND`. Ausgestattet mit **elektronischem Auto-Sensing $120\,\Omega$ Relais (`CPC1017N`)** (misst beim Booten Bus-Impedanz; schaltet nur zu, wenn $R_{\text{Bus}} > 100\,\Omega$) sowie hardwaremäßigem Listen-Only Mode Pin (`S`). |
-| **`J3`** | JST-PH ($2{,}00\,\text{mm}$) | 4-Pin | **Lenker Multi-Button Schnittstelle:** Pin 1: `GND`, Pin 2: `PTT_INTERCOM` (Sprechfunk-Taste, $< 1{,}8\,\text{ms}$), Pin 3: `CAM_ACTION` (Action-Cam Bookmark/Highlight), Pin 4: `MEDIA_VOICE` (Titel weiter / Siri / Google Assistant). Alle Pins mit Schmitt-Trigger, Pull-Up und 3.3V Zener-/TVS-Überspannungsschutz gegen 12V-Kurzschluss. |
-| **`J9`** | JST-PH ($2{,}00\,\text{mm}$) | 3-Pin | **Totwinkel-Spiegel-LEDs (Radar BSD):** Pin 1: `+12V_PROT`, Pin 2: `BSD_LEFT_N` (geschaltet über N-MOSFET Ch A), Pin 3: `BSD_RIGHT_N` (geschaltet über N-MOSFET Ch B). Steuert unauffällige Bernstein/Rot-LEDs an den Spiegelarmen an (links/rechts unabhängig; Dauerlicht bei Fahrzeug im toten Winkel, 8 Hz Warnblitz bei Kollisionsgefahr). |
-| **`J10`** | JST-PH ($2{,}00\,\text{mm}$) | 2-Pin | **12V Qi-Smartphone-Power:** Pin 1: `+12V_SW` (dauerhaft geschaltet über Zündungs-Gate, bis $2{,}0\,\text{A}$ / $24\,\text{W}$ Dauerlast), Pin 2: `GND`. Versorgt SP Connect / QuadLock Qi-Ladeköpfe am Lenker ohne Ruhestromverlust bei Zündung-Aus. |
-| **`J11`** | JST-PH ($2{,}00\,\text{mm}$) | 2-Pin | **Zusatzscheinwerfer / Aux-Light (Adventure):** Pin 1: `+12V_AUX` (geschaltet über Smart High-Side Switch `TPS1H100`, bis $3{,}5\,\text{A}$ / $40\,\text{W}$), Pin 2: `GND`. Für Nebelscheinwerfer oder automatischen 4–5 Hz Stroboskop-Warnblitz bei Notbremsung. Bei Tourern/Cruisern unbestückt/ungenutzt. |
-| **`J12`** | SparkFun Qwiic (JST-SH 4P) | 4-Pin | **Cockpit Sensor-Hub & GNSS-Port:** Pin 1: `GND`, Pin 2: `+3V3`, Pin 3: `I2C_SDA`, Pin 4: `I2C_SCL`. Bindet werkzeuglos das **u-blox SAM-M10Q Multi-GNSS Patch-Modul**, den **TI TMP117** NIST-Präzisionstemperatursensor ($\pm 0{,}1\,^\circ\text{C}$ Glatteis-Wächter) und den **TI OPT3001** Umgebungslichtsensor im laminaren Fahrtwind-Einlass an. |
-
-### 7.3 Automotive USB 2.0 Subsystem & Hub-Architektur (`Microchip USB2514B`)
-
-Der Front-Node nutzt einen Automotive-zertifizierten 4-Port High-Speed Hub (`USB2514B`), der Engpässe vollständig eliminiert:
-
-| Port | Steckertyp | Funktion & Leistungsdaten |
-| :--- | :--- | :--- |
-| **`J4`** | JST-PH (4-Pin) | **Upstream Host Port:** Führt `USB_UP_VBUS` ($+5{,}0\,\text{V}$), `USB_UP_DM`, `USB_UP_DP`, `GND` zur Verbindung mit dem Motorrad-Infotainment (Harley Skyline OS / Boom! Box GTS USB-Eingang). |
-| **`J5`** | JST-PH (5-Pin) | **Downstream Port 1 (Smartphone am Lenker):** High-Speed USB-Datenleitung kombiniert mit **Automotive USB Power Delivery (USB-PD 20W, 9V/2.2A, QC 4+ & PPS)** über den vollintegrierten `SW3526` Fast-Charge Wandler. Inklusive nativer CC1/CC2-Aushandlung über Pin 4. Lädt Smartphones bei aktiver Navigation in voller Sommersonne zuverlässig schnell. |
-| **`J6`** | JST-PH (4-Pin) | **Downstream Port 2 (Fairing Pigtail zum CP2AA Dongle):** Geschalteter $+5{,}0\,\text{V}$ VBUS über `TI TPS2051B` Lastschalter mit **1-Klick Kaltstart-Funktion** (2,5s Reset) und Auto-Café Timer. Führt über ein geschirmtes $25\dots 30\,\text{cm}$ Kabel zu einem handelsüblichen Wireless-Adapter (Carlinkit / Ottocast), der mit **3M Dual-Lock Klettband** im Verkleidungshohlraum montiert wird (garantiert $> 30\,\text{dB}$ HF-Entkopplung zum ESP32-S3 und werkzeuglosen Tausch). |
-| **`J5_MP3`**| JST-PH (5-Pin) | **Downstream Port 3 (Handschuhfach / Jukebox & Beifahrer-Ladeport):** Führt als USB-Kabel in das originale Handschuhfach. Ausgestattet mit **unabhängigem Automotive USB Power Delivery (USB-PD 20W, 9V/2.2A)** über einen zweiten `SW3526` Wandler. Erlaubt schnelles Beifahrer-Laden oder Smartphone-Laden im Fach bei gleichzeitigem Qi-Laden des Fahrers. Bleibt zu **$100\,\%$ voll kompatibel für lokale USB-Sticks mit MP3/FLAC-Musik** sowie offizielle **Infotainment-Firmware-Updates per USB-Stick** (automatischer Fallback auf sichere $5{,}0\,\text{V}$ VBUS). |
-| **`J6_AUX`**| JST-PH (4-Pin) | **Downstream Port 4 (Cockpit-Zubehör):** High-Speed Datenport für Dashcam-Massenspeicher, externes Zūmo-Navi oder Chigee/Carpuride Cockpit-Displays. |
-| **`J7`** | USB-C 16-Pin Receptacle | **Service- & Flash-Port (rechte Außenflanke):** Nativer ESP32-S3 USB-JTAG / CDC-Serial Port für Firmware-Updates und Kalibrierung (geschützt durch TPU-Dichtstopfen). |
-| **`J8`** | JST-PH (2-Pin / 4-Pin) | **Action-Cam Power-Port (Charge-Only):** Reine $+5{,}0\,\text{V}$ Speisung (bis $2{,}0\,\text{A}$) für GoPro / Insta360 / DJI – bewusst ohne USB-Daten, um Massenspeicher-Lockups an der Headunit zu verhindern. |
-
-### 7.4 ESP32-S3 Controller Pinbelegung & Funktions-Mapping
-
-| ESP32-S3 Pin | Signalname | Richtung | Funktion & Peripherie |
-| :--- | :--- | :---: | :--- |
-| **GPIO 0** | `BOOT_BTN_N` | Eingang | Boot-Modus-Taster (Active-Low) |
-| **GPIO 1** | `OTTOCAST_PWR_EN` | Ausgang | Enable-Steuersignal für den TPS2051B VBUS-Lastschalter (High = Aktiv) |
-| **GPIO 2** | `OTTOCAST_FAULT_N`| Eingang | Überstrom- & Thermoflag vom TPS2051B (Active-Low Interrupt) |
-| **GPIO 3** | `CAN_TERM_EN` | Ausgang | Schaltet das CPC1017N Solid-State-Relais für den 120-Ohm CAN-Abschluss (Auto-Sensing) |
-| **GPIO 4** | `KL15_SENSE` | Eingang | Bordnetz-Zündungsüberwachung über 10:1 Spannungsteiler & Schmitt-Trigger |
-| **GPIO 5** | `CAN_SILENT` | Ausgang | Steuert Pin 8 (S) des CAN-Transceivers für hardwaremäßigen Listen-Only Modus |
-| **GPIO 6** | `MIC_I2S_WS` | Ausgang | I2S Word Select (LRCLK, 48 kHz) für MSM261S4030H0R / SPH0645 Digitalmikrofon |
-| **GPIO 7** | `MIC_I2S_BCLK` | Ausgang | I2S Bit Clock ($3{,}072\,\text{MHz}$) für MSM261S4030H0R / SPH0645 Digitalmikrofon |
-| **GPIO 8** | `MIC_I2S_DATA` | Eingang | I2S Serial Audio Data vom MEMS-Mikrofon (Standard Philips I2S, Fahrtwind-Erfassung) |
-| **GPIO 9** | `I2C_SDA` | Bidir | I2C Datenleitung für Qwiic Sensorport J12 (OPT3001 Lichtsensor) |
-| **GPIO 10** | `I2C_SCL` | Ausgang | I2C Taktleitung für Qwiic Sensorport J12 |
-| **GPIO 11** | `WS2812B_DIN` | Ausgang | Datensignal für die Onboard WS2812B-2020 RGB-Status-LED (Lichtleiter im Deckel) |
-| **GPIO 12** | `BSD_LED_LEFT` | Ausgang | Gate-Steuerung für linken Totwinkel-Spiegel-LED MOSFET (J9) |
-| **GPIO 13** | `BSD_LED_RIGHT` | Ausgang | Gate-Steuerung für rechten Totwinkel-Spiegel-LED MOSFET (J9) |
-| **GPIO 14** | `AUX_LIGHT_EN` | Ausgang | Enable-Steuerung für den TPS1H100 High-Side Switch (J11 Zusatzscheinwerfer / Strobe) |
-| **GPIO 15** | `PTT_IN1_N` | Eingang | Lenkertaster 1: PTT Intercom Sprechfunk (Active-Low Interrupt, Schmitt-Trigger) |
-| **GPIO 16** | `PTT_IN2_N` | Eingang | Lenkertaster 2: Action-Cam Bookmark / Highlight (Active-Low Interrupt) |
-| **GPIO 17** | `PTT_IN3_N` | Eingang | Lenkertaster 3: Media Next / Siri / Voice Assist (Active-Low Interrupt) |
-| **GPIO 18** | `USB_SERV_DM` | Bidir | Nativer USB D- für JTAG / CDC-Flashport (J7) |
-| **GPIO 19** | `USB_SERV_DP` | Bidir | Nativer USB D+ für JTAG / CDC-Flashport (J7) |
-| **GPIO 20** | `TWAI_RX` | Eingang | CAN-Bus Empfangsleitung vom TI TCAN334G Transceiver |
-| **GPIO 21** | `TWAI_TX` | Ausgang | CAN-Bus Sendeleitung zum TI TCAN334G Transceiver |
-
-### 7.5 Status- & Diagnose-LED (WS2812B mit Lichtleiter)
-
-Über eine bündig in den Gehäusedeckel eingelassene Polycarbonat-Lichtleiter-Linse zeigt die WS2812B RGB-LED den Betriebszustand direkt am Motorrad an:
-* **Grün pulsierend (1 Hz):** Normalbetrieb, 12V stabil, CAN-Bus aktiv, UWB synchron zur Zentralbox.
-* **Blau blinkend:** Bluetooth LE Kopplung aktiv (Action-Cam Suche oder PWA-Verbindung).
-* **Gelb leuchtend:** CP2AA CarPlay/Android Auto Dongle bootet gerade an Port 2.
-* **Rot blinkend (4 Hz):** USB-Überstrom oder Kaltstart-Reset (Hard-Reboot des Dongles läuft).
-### 7.6 Geräte-Erkennung & Docking-Logik (Qi J10 vs. Lenker-USB J5 vs. Handschuhfach J5_MP3)
-
-Um im Fahrbetrieb und beim Abstellen des Motorrads zwischen USB-Sticks mit Musik, Standalone-MP3-Playern und ladenden Smartphones zu unterscheiden, nutzt der Front-Knoten eine 3-stufige Erkennungsmatrix:
-
-```
-┌───────────────────────────────────────────────────────────────────────────────────────────────────┐
-│                        GERÄTE-ERKENNUNG AN DEN PORTS (PCBA 05 FRONT-KNOTEN)                       │
-├────────────────────┬──────────────────┬─────────────────┬─────────────────┬───────────────────────┤
-│ Angestecktes Gerät │ USB-Enumeration  │ Ladeleistung    │ BLE-Fahrer-Link │ Systemreaktion        │
-├────────────────────┼──────────────────┼─────────────────┼─────────────────┼───────────────────────┤
-│ **USB-Stick**      │ **Class 0x08**   │ Minimal         │ Nein / Irrelevant│ • Mountet MP3/FLAC    │
-│ (Handschuhfach)    │ (Mass Storage)   │ < 100 mA (0.5W) │                 │ • Kein Fehlalarm!     │
-├────────────────────┼──────────────────┼─────────────────┼─────────────────┼───────────────────────┤
-│ **MP3-Player**     │ **Class 0x08**   │ Gering          │ Nein / Irrelevant│ • Liest Musikdatenbank│
-│ (iPod / Clip)      │ oder MTP         │ 200 - 500 mA    │                 │ • Lädt langsam (5V)   │
-├────────────────────┼──────────────────┼─────────────────┼─────────────────┼───────────────────────┤
-│ **Fahrer-Handy**   │ Gesperrt (Daten  │ **USB-PD 20W**  │ **JA (Aktiv)**  │ • Fahrmodus aktiv     │
-│ (Handschuhfach/J5) │ geblockt)        │ 9V / 1.5 - 2.2A │ Handy meldet    │ • **"Handy vergessen!"│
-│                    │                  │ (> 15 Watt)     │ 'charging=true' │    bei Zündung AUS**  │
-├────────────────────┼──────────────────┼─────────────────┼─────────────────┼───────────────────────┤
-│ **Fahrer-Handy**   │ Keine (Reines Qi)│ **12V Qi-Last** │ **JA (Aktiv)**  │ • Fahrmodus aktiv     │
-│ (am Qi-Dock J10)   │                  │ 10W - 15W Qi    │ Handy meldet    │ • **"Handy vergessen!"│
-│                    │                  │                 │ 'charging=true' │    bei Zündung AUS**  │
-├────────────────────┼──────────────────┼─────────────────┼─────────────────┼───────────────────────┤
-│ **Beifahrer-Handy**│ Gesperrt         │ USB-PD oder Qi  │ **NEIN**        │ • Neutrales Laden     │
-│ (Gast-Gerät)       │                  │ Schnellladung   │ (Kein Handshake)│ • Kein Tacho-Wechsel  │
-└────────────────────┴──────────────────┴─────────────────┴─────────────────┴───────────────────────┘
-```
-
-1. **USB-Stick / Jukebox im Handschuhfach (`J5_MP3`):**
-   * Enumeriert über den `USB2514B` als USB Mass Storage Class (`0x08`). Die Stromaufnahme bleibt minimal ($< 0{,}5\,\text{W}$).
-   * Das Dateisystem wird gemountet und an die Infotainment-Headunit oder den lokalen Audiocodec übergeben.
-   * **Kein Fehlalarm beim Verlassen des Fahrzeugs:** Da das Gerät als permanenter USB-Speicher erkannt wird und kein Smartphone-Ladehandshake vorliegt, wird bei Zündung AUS kein "Handy vergessen"-Alarm ausgelöst.
-2. **Smartphone am Lenker (`J5` / `J10`) oder im Handschuhfach (`J5_MP3`):**
-   * Erkennt der Ladecontroller hohe Ladelast (USB-PD $9\,\text{V}$ oder Qi $12\,\text{V}$) und meldet das gekoppelte Fahrer-Handy über Bluetooth LE gleichzeitig `battery.charging == true`, weiß OMB verlässlich: *Das autorisierte Fahrer-Handy dockt*.
-   * **Flankengetriggerter Wechsel in den Fahrmodus:** Die WebApp wechselt **einmalig bei Ladebeginn (steigende Flanke)** in die Cockpit-Ansicht. Navigiert der Fahrer anschließend manuell in Einstellungen, Medien oder Diagnose, wird diese Auswahl respektiert – das System erzwingt keinen Rücksprung.
-   * **"Handy vergessen"-Warnung:** Schaltet der Fahrer die Zündung ab und entfernt sich vom Motorrad (BLE-Link bricht ab), während Qi oder USB weiterhin Last melden, quittiert das Motorrad dies sofort mit einem Doppel-Hupton bzw. der LoRa-Pager vibriert energisch.
+* **Abmessungen:** $82{,}0 \times 50{,}0\,\text{mm}$ (Gehäuseaußenmaß $98 \times 68 \times 25\,\text{mm}$ mit 4-in-1 Halterung).
+* **Lagenaufbau:** 4 Lagen FR-4 High-TG150 ($1{,}6\,\text{mm}$, ENIG-Goldfinish).
+* **Top-Layer:** ESP32-S3 Controller, USB2514B USB-Hub, u-blox SAM-M10Q Multi-GNSS mit integrierter Patchantenne, Knowles SPH0645LM4H I2S MEMS Akustiksensor, WS2812B-2020 RGB-LED und 5 GHz Wi-Fi Anbindung für Headless CarPlay / Android Auto.
+* **Bottom-Layer:** Qorvo DW3110 UWB Transceiver (6.489 GHz Ch. 5), TI LMR36015 Buck, SC8102 USB-PD 20W Fast-Charger, TI TPS2051B Lastschalter für automatischen Dongle-Kaltstart und Auto-Café-Modus.
 
 ---
 
----
+## 8. PCBA 06: MagSafe Frame Dock (Ersatzlos entfallen)
 
-## 8. PCBA 06: MagSafe Frame Dock Adapter (`openmotorbridge_magsafe_dock`)
-
-![PCBA 06 MagSafe Frame Dock Adapter](../images/pcba/pcba06_magsafe_dock_3d.png)
-
-*Abbildung 7.6: KiCad 3D-Raytracing-Render der MagSafe Rahmendock-Adapterplatine (PCBA 06, 28 x 11,5 mm, 2 Lagen) mit 1206 PPTC-Selbstrückstellender Sicherung (F1, 500 mA), SOD-323 TVS-Diode (D1), SOT-23-6 4-Kanal ESD-Schutzarray (U1, USBLC6-4SC6), 100nF Entkopplung (C1), horizontalem M8-Kabelanschluss (J1), 6-Pin MagSafe-Kontaktpad (J2) sowie zentraler M2.5 Montagebohrung (H1).*
-
-### 8.1 Zweck & Schutzarchitektur bei Koffer-Demontage
-Wird der Koffer bei montiertem Koffer-Pod abgenommen (z. B. zum Waschen oder im Hotel), liegt die fahrzeugseitige MagSafe-Kupplung unter der Sitzbank frei. PCBA 06 schützt die Zentralbox und das Bordnetz vor:
-1. **Kurzschlüssen an freiliegenden Pogo-Pins:** Regenwasser, Gischt, lose Schlüssel oder metallische Werkzeuge lösen die selbstrückstellende **1206 PPTC-Polyfuse `F1`** aus ($I_{\text{hold}} = 500\,\text{mA}$, $I_{\text{trip}} = 1000\,\text{mA}$, $V_{\text{max}} = 16\,\text{V}$). Sobald der Fremdkörper entfernt wird oder die Kontakte abtrocknen, stellt sich die Stromversorgung ohne Sicherungswechsel selbsttätig wieder her.
-2. **Induktiven Spannungsspitzen:** Die **unidirektionale 5V TVS-Diode `D1`** (SOD-323) kappt Schaltspitzen auf der $+5\,\text{V}$ Versorgungsleitung auf $< 7{,}0\,\text{V}$.
-3. **Elektrostatischer Entladung (ESD):** Das **4-Kanal Ultra-Low-Capacitance TVS-Array `U1`** (USBLC6-4SC6 in SOT-23-6, $C_{\text{io}} < 0{,}8\,\text{pF}$) schützt die Audio-Differenzleitungen (`SIG_P`, `SIG_N`), die Optokoppler-Triggerleitung (`TRIGGER_PPS`) und den 1-Wire ID-Bus (`1WIRE_ID`) zuverlässig nach **IEC 61000-4-2 Level 4** ($\pm 15\,\text{kV}$ Luft, $\pm 8\,\text{kV}$ Kontakt).
-
-### 8.2 Technische Platinen-Kenndaten
-* **Abmessungen:** $28{,}0 \times 11{,}5 \times 1{,}6\,\text{mm}$ (FR-4 2 Lagen, $35\,\mu\text{m}$ Cu, ENIG Goldfinish).
-* **Zentrale M2.5 Verschraubung:** Mittige Montagebohrung $\varnothing 2{,}7\,\text{mm}$ (Bohrungszentrum bei $X = 114{,}0\,\text{mm}, Y = 75{,}75\,\text{mm}$) mit beidseitigem $\varnothing 4{,}5\,\text{mm}$ GND-Ringpad und Sperrzone. Die Platine wird durch einen einzelnen zentralen M2.5 Zylinderkopf-Schraubdom vibrationsfest und verzugfrei zwischen den beiden Halbschalen des Rahmendocks verklemmt.
-* **Layout- & Routing-Status:** Alle Bauteil-Footprints, 3D-Körper (M8-Flansch, MagSafe-Kupplung, SMD-Bauteile), Netzverbindungen und Designregeln sind vollständig im KiCad-Projekt definiert und vorbereitet für das manuelle interaktive Routing im KiCad GUI.
-* **Lagenstruktur:**
-  * **Top (F.Cu):** Bauteilplatzierung (F1, D1, U1, C1, J1, J2), Signal- und Power-Leiterbahnen.
-  * **Bottom (B.Cu):** Durchgehende Masseebene (GND) mit thermischer Entlastung und Massevias.
-* **DFM/DRC:** 100 % konform mit dem JLCPCB 2-Lagen Standard-Fertigungsprozess.
-
-### 8.3 Pinbelegung & Schnittstellen-Mapping
-
-| Pin | Signalname | Polarität / Typ | Funktion & Schutzpfad |
-| :---: | :--- | :--- | :--- |
-| **`J1.1`** | `VCC_IN` | $+5{,}0\,\text{V}$ DC In | Rohspannung von M8-Kabelbaum der Zentralbox (gespeist über LM5164 / BQ24075 USV) |
-| **`J1.2`** | `GND` | Power / Signal GND | Zentraler Massebezugspunkt, über Vias niederohmig an B.Cu-Massefläche angebunden |
-| **`J1.3`** | `SIG_P` | Audio Diff + / D+ | Differentielles Audio Positiv (gefiltert über U1 Ch 1, geschützt bis $\pm 15\,\text{kV}$) |
-| **`J1.4`** | `SIG_N` | Audio Diff - / D- | Differentielles Audio Negativ (gefiltert über U1 Ch 2, geschützt bis $\pm 15\,\text{kV}$) |
-| **`J1.5`** | `TRIGGER_PPS`| 3.3V Opto-Trigger | Boot-/Wake-Triggerimpuls vom TLP222A PhotoMOS (gefiltert über U1 Ch 3) |
-| **`J1.6`** | `1WIRE_ID` | Digital 1-Wire Bus| Kassetten-Identifikationsbus für DS2401 Silicon Serial ROM (gefiltert über U1 Ch 4) |
-| **`J1.7`** | `GND_SHIELD`| Kabelschirm | Geflechtschirm des M8-Kabels, direkt auf der Platine mit Systemmasse geerdet |
-| **`J2.1`** | `VCC_PROT` | $+5{,}0\,\text{V}$ DC Out | Gesicherter MagSafe-Ausgang: Nach PPTC-Fuse `F1`, TVS `D1` und 100nF Puffer `C1` |
-| **`J2.2`** | `GND` | Power / Signal GND | MagSafe Massekontakt (geerdet über massive B.Cu Kupferfläche) |
-| **`J2.3`** | `SIG_P` | Audio Diff + | MagSafe Pogo-Pin 3: Differentieller Audioausgang zum Koffer-Pod |
-| **`J2.4`** | `SIG_N` | Audio Diff - | MagSafe Pogo-Pin 4: Differentieller Audioausgang zum Koffer-Pod |
-| **`J2.5`** | `TRIGGER_PPS`| 3.3V Opto-Trigger | MagSafe Pogo-Pin 5: Einschalt- und Boot-Impuls zur Koffer-Pod Kassettenelektronik |
-| **`J2.6`** | `1WIRE_ID` | Digital 1-Wire Bus| MagSafe Pogo-Pin 6: 1-Wire Bus zur Erkennung des eingesteckten OEM-Intercoms |
-
-### 8.4 Stückliste (BOM) PCBA 06
-| Ref | Bauteil / Typ | Gehäuse | Spezifikation & Funktion | LCSC Part |
-| :--- | :--- | :--- | :--- | :--- |
-| **`F1`** | 0ZCG0050FF2C | SMD 1206 | 500 mA Hold / 1000 mA Trip, 16V PPTC Selbstrückstellende Sicherung | `C207936` |
-| **`D1`** | ESD5Z5.0T1G | SOD-323 | 5,0V Unidirektionale TVS-Diode (Transient-Schutz) | `C2834585` |
-| **`U1`** | USBLC6-4SC6 | SOT-23-6 | 4-Kanal ESD-Schutzarray ($<0{,}8\,\text{pF}$, $\pm 15\,\text{kV}$ ESD) | `C7519` |
-| **`C1`** | 100nF 50V X7R | SMD 0603 | Keramischer Entkoppelkondensator auf VCC_PROT | `C14663` |
-| **`J1`** | M8 Wire Pads | SMD/THT 1x07 | 7-poliges Lötpad-Array mit 0,6mm Durchkontaktierung für M8-Kabeladern | Custom |
-| **`J2`** | MagSafe 6P Pads | SMD 1x06 | 6-polige vergoldete Kontaktflächen für MagSafe Magnet-Pogo-Kupplung | `C224376` |
-| **`H1`** | MountingHole_Pad | M2.5 (Ø 2.7 mm) | Bohrung Ø 2.7 mm, Pad Ø 4.5 mm, geerdet an System-GND | Hardware |
+Die separate Platine `PCBA 06` ist in v9.6 **vollständig und ersatzlos entfallen**:
+* Da über die fahrzeugseitige Koffer-Trennstelle ausschließlich 2-Draht DC-Gleichspannung geführt wird, kommt anstelle einer proprietären Leiterplatte ein **industrieller 2-Pin Magnet-Pogo-Steckverbinder (IP68 COTS)** zum Einsatz.
+* Kurzschlussschutz und Überlastbegrenzung erfolgen zentral auf `PCBA 01` durch die jeweiligen **TI TPS25921 eFuses**.
 
 ---
 
 ## 9. PCBA 07: 2-in-1 LoRa Smart-Keyfob (`openmotorbridge_smart_keyfob`)
 
-Die Baugruppe PCBA 07 bildet die elektronische Seele des kompakten Schlüsselanhängers (`smart_keyfob_pager.scad`, $58 \times 34 \times 13\,\text{mm}$) und löst die gravierenden Schwächen herkömmlicher Motorrad-Schlüsseltransponder (schwache CR2032-Knopfzellen, Kälteempfindlichkeit, fehlender Rückkanal):
-
 ![PCBA 07 2-in-1 LoRa Smart-Keyfob](../images/pcba/pcba07_smart_keyfob_3d.png)
 
-*Abbildung 7.7: 3D-Render der ultrakompakten PCBA 07 Trägerplatine ($38{,}0 \times 19{,}0\,\text{mm}$) mit Nordic nRF52840 SoC, Semtech SX1262 LoRa Transceiver, TI DRV2605L Haptik-Treiber, BQ51003 Qi-Ladecontroller und BQ25100 LiPo-Ladeschaltung.*
+*Abbildung 7.7: 3D-Render der ultrakompakten PCBA 07 Trägerplatine (38,0 x 19,0 mm, 2 Lagen) mit Nordic nRF52840 SoC, Semtech SX1262 LoRa Transceiver, TI DRV2605L Haptik-Treiber, BQ51003 Qi-Ladecontroller und 2-Pin JST-ACH Induktions-Spulenanschluss.*
 
-```
-                                PCBA 07 SYSTEMARCHITEKTUR
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                        NORDIC nRF52840 BLUETOOTH LE 5.4 SoC                           │
-│ • ARM Cortex-M4F @ 64 MHz, 1 MB Flash, 256 KB RAM • AES-128 Hardware-Crypto          │
-│ • Verwaltet BLE-Fahrer-Präsenztoken, Pager-Status, Batterieanzeige & Smartphone-Bridge │
-└──────────────┬─────────────────────────┬─────────────────────────┬─────────────────────┘
-               │ SPI                     │ I2C                     │ PWM / GPIO
-               ▼                         ▼                         ▼
-┌───────────────────────────┐ ┌─────────────────────┐ ┌──────────────────────────────────┐
-│ SEMTECH SX1262 LoRa       │ │ TI DRV2605L HAPTIK  │ │ STATUS-ANZEIGE & AKUSTIK         │
-│ • 868 MHz Notrufempfang   │ │ • I2C Haptic Driver │ │ • WS2812B RGB Status-LED         │
-│ • Bis zu 4,5 km Reichweite│ │ • 10x3.6mm LRA Coin │ │ • Murata SMD-Piezosummer (85 dB) │
-│ • Empfängt 0xFE Notruf    │ │   (Vybronics LRA)   │ │ • Diffuse Lichtleiteroptik       │
-└───────────────────────────┘ └─────────────────────┘ └──────────────────────────────────┘
-               ▲
-               │ DC 3.3V Power Rail
-┌──────────────┴─────────────────────────────────────────────────────────────────────────┐
-│                           ENERGIE- & INDUKTIONSLADESYSTEM                              │
-│ • 180–200 mAh 1S LiPo-Pouchzelle (25 x 18 x 3.8 mm) mit Schutzschaltung (PCM)          │
-│ • TI BQ51003 Qi Wireless Power Receiver: Lädt induktiv am PCBA 06 Cockpit-Dock         │
-│ • TI BQ25100 Linearer LiPo-Ladecontroller mit Ruhestrom < 50 nA (Monatelange Standzeit)│
-│ • 2x Vergoldete Pogo-Pads auf der Unterseite für optionale Direktladung                │
-└────────────────────────────────────────────────────────────────────────────────────────┘
-```
-
-### 9.1 Technische Platinen-Kenndaten
-* **Abmessungen:** $38{,}0 \times 19{,}0 \times 1{,}0\,\text{mm}$ (Ultrakompaktes 2-Lagen FR-4, $35\,\mu\text{m}$ Cu, ENIG Goldfinish, Kantenradius $R = 3\,\text{mm}$).
-* **Magnetabschirmung:** Direkt neben der Platine sitzt die Aussparung für den $20 \times 10 \times 5\,\text{mm}$ N52-Neodym-Schlüssel. Ein $0{,}5\,\text{mm}$ Weicheisen-/Mu-Metall-Schirmblech schirmt die Hochfrequenz-Leiterbahnen, den LRA-Aktor und den LiPo-Puffer vollständig gegen magnetische Sättigung ab.
-* **LRA-Haptikmuster:** Der TI DRV2605L erzeugt scharfe, unverwechselbare Vibrationsmuster:
-  * *Vor-Alarm (Erschütterung):* 2 kurze Klicks ($150\,\text{Hz}$).
-  * *Diebstahl / Kassettenhebeln:* Durchdringendes Crescendo-Stakkato (spürbar selbst durch dicke Kordura-Motorradjacken oder auf dem Nachttisch).
-* **Induktives Cockpit-Laden:** Beim Aufstecken des Schlüsselbunds auf das MagSafe-Rahmendock (PCBA 06) am Lenker richtet der rückseitige Neodymring die 28-mm-Empfängerspule zentrisch aus $\rightarrow$ der Keyfob lädt während jeder Fahrt automatisch nach und ist niemals leer.
-
-### 9.2 Schnittstellen & Pin-Mapping des nRF52840
-
-| nRF52840 Pin | Signalname | Richtung | Funktion & Peripherie |
-| :--- | :--- | :---: | :--- |
-| **P0.02** | `AIN0_VBAT` | Eingang | Batteriemessung über hochohmigen 1M/1M Teiler ($< 1\,\mu\text{A}$ Last) |
-| **P0.05** | `LRA_SDA` | Bidir | I2C Data zum TI DRV2605L Haptiktreiber |
-| **P0.06** | `LRA_SCL` | Ausgang | I2C Clock zum TI DRV2605L Haptiktreiber |
-| **P0.08** | `LRA_EN` | Ausgang | Hardware-Enable für DRV2605L (Spart Ruhestrom im Standby) |
-| **P0.12** | `LORA_SCK` | Ausgang | SPI Serial Clock zum SX1262 |
-| **P0.13** | `LORA_MISO` | Eingang | SPI Master-In Slave-Out vom SX1262 |
-| **P0.14** | `LORA_MOSI` | Ausgang | SPI Master-Out Slave-In zum SX1262 |
-| **P0.15** | `LORA_NSS` | Ausgang | SPI Chip Select (Active-Low) zum SX1262 |
-| **P0.16** | `LORA_BUSY` | Eingang | SX1262 Busy-Signal |
-| **P0.17** | `LORA_DIO1` | Eingang | SX1262 IRQ (Empfangenes 0xFE Notrufpaket) |
-| **P0.20** | `PIEZO_PWM` | Ausgang | PWM-Takt (2,7 kHz) für Murata SMD-Piezosummer |
-| **P0.22** | `WS2812_DATA`| Ausgang | Datensignal für RGB-Status-LED (Lichtleiter im Deckel) |
-| **P0.24** | `CHG_STAT` | Eingang | Ladestatus vom BQ25100 (Low = Lädt, High = Voll) |
-| **P0.26** | `QI_DETECT` | Eingang | Digitales Erkennungssignal vom BQ51003 (High = Auf Qi-Dock aufgelegt) |
-
-### 9.3 Stückliste (BOM) PCBA 07
-| Ref | Bauteil / Typ | Gehäuse | Spezifikation & Funktion | LCSC Part |
-| :--- | :--- | :--- | :--- | :--- |
-| **`U1`** | nRF52840-QIAA-R | aQFN-73 | 32-Bit ARM Cortex-M4F SoC mit Bluetooth 5.4, NFC & Crypto | `C190767` |
-| **`U2`** | SX1262IMLTRT | QFN-24 | Semtech 868 MHz LoRa Transceiver (+22 dBm, TCXO) | `C90039` |
-| **`U3`** | DRV2605LDGSR | VSSOP-10 | TI ERM/LRA Haptic Driver mit integrierter Effekt-Bibliothek | `C61633` |
-| **`U4`** | BQ51003YFPR | DSBGA-28 | TI 2.5W Qi Wireless Power Receiver Controller | `C144862` |
-| **`U5`** | BQ25100YFPR | DSBGA-6 | TI Linearer LiPo-Ladecontroller mit 50 nA Ruhestrom | `C144857` |
-| **`M1`** | VG1036001D | Coin 10x3.6mm | Vybronics LRA Linearmotor (235 Hz Resonanzfrequenz) | Custom / Distrelec |
-| **`BZ1`**| PKLCS1212E4001 | SMD 12x12mm | Murata SMD-Piezo-Schallwandler (85 dB @ 10 cm, 4 kHz) | `C94511` |
-| **`D1`** | WS2812B-2020 | SMD 2020 | Intelligente RGB-Status-LED mit integriertem WS2811 IC | `C2843785` |
-| **`BAT`**| LiPo 1S 180-200mAh| Pouch 25x18x3.8| 3.7V 180-200 mAh LiPo mit PCM-Schutzschaltung & 10k NTC | EEMB / Custom |
+### 9.1 Technische Platinen-Kenndaten & Lötfreie Qi-Montage
+* **Abmessungen:** $38{,}0 \times 19{,}0 \times 1{,}0\,\text{mm}$ (2-Lagen FR-4, ENIG-Goldfinish).
+* **Kern-Chips:**
+  * Nordic `nRF52840` SoC (Bluetooth Low Energy 5.4, ARM Cortex-M4F @ 64 MHz, Hardware-Crypto).  
+    *(BLE gewährleistet einen extrem sparsamen Ruhestrom von $< 25\,\mu\text{A}$, sodass die 200-mAh-Zelle monatelang betriebsbereit bleibt).*
+  * Semtech `SX1262` LoRa Transceiver (868.5 MHz Kanal 3, empfängt Alarme bis zu 4,5 km Reichweite).
+  * Texas Instruments `DRV2605L` Haptiktreiber für Vybronics 10x3.6mm LRA Linearmotor.
+  * Texas Instruments `BQ51003` Qi Wireless Power Receiver Controller.
+* **100 % Lötfreie Induktionsspulen-Montage (`J_QI`):**
+  * Die 28-mm-Qi-Empfängerspule wird über einen ultrakompakten **2-poligen JST-ACH SMD-Header (`J_QI`)** vibrationsfest angesteckt.
+  * Beim Zusammenbau sind keinerlei manuelle Lötarbeiten erforderlich.
 
 ---
 
 ## 10. PCBA 08: 77 GHz mmWave Radar Sub-MCU & Warnflügel (`openmotorbridge_radar_submcu`)
 
-Die Baugruppe **PCBA 08** bildet die Trägerplatine und den intelligenten Vorverarbeitungs-Knoten für das **Wheeltec MR20 77-GHz-mmWave-Radar** (integriert in `hardware/cad/scad/05_accessories/radar_mr20_housing.scad`). Sie entlastet die Zentralbox durch lokales 20-Hz-Rohdaten-Parsing, verwaltet das 5.9 GHz V2X Mesh und steuert die integrierte 36-LED-Neopixel-Warnmatrix latenzfrei an:
-
 ![PCBA 08 Radar 2.0 Sub-MCU & Warnflügel 3D](../images/pcba/pcba08_radar_submcu_3d.png)
 
-*Abbildung 7.8: 3D-CAD-Ansicht der gefertigten und gerouteten PCBA 08 (`openmotorbridge_radar_submcu.kicad_pcb`). Zu sehen sind der symmetrische $115 \times 65\,\text{mm}$ Flügel-Platinenkörper mit zentralem $61 \times 51\,\text{mm}$ Radardurchbruch, die 36x WS2812B-2020 LEDs auf den linken und rechten Warnflügeln sowie der rückseitige ESP32-C5 Dual-Band Sub-MCU mit U.FL Buchse zur externen 5.9 GHz V2X-Keramik-Patchantenne.*
+*Abbildung 7.8: 3D-CAD-Ansicht der PCBA 08 mit symmetrischem 115 x 65 mm Flügelkörper, zentralem 61 x 51 mm Radardurchbruch für das Wheeltec MR20 mmWave Radar, 36x WS2812B-2020 LEDs, ESP32-C5 Sub-MCU und integriertem Qorvo DW3110 UWB Transceiver.*
 
-![PCBA 08 Leiterplatten-Layout Top-Ansicht](../images/pcba/pcba08_radar_submcu_top.png)
-
-*Abbildung 7.8b: 2D-Layout-Draufsicht von PCBA 08 mit Bestückungsdruck und Leiterbahnführung (820 Tracks, 95 Vias, 0 DRC-Fehler).*
-
-```
-                                PCBA 08 SYSTEMARCHITEKTUR
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                   ESPRESSIF ESP32-C5 DUAL-BAND RISC-V SoC (240 MHz)                    │
-│ • 20 Hz UART-Treiber für Wheeltec MR20 Rohdaten-Parsing                                │
-│ • 5.9 GHz ITS-G5 (V2X) Mesh & 2.4/5GHz Wi-Fi 6 Telemetrie-Uplink                       │
-│ • Latenzfreie Neopixel-Warnflügel-Steuerung (Bremslicht-Strobe, Kollisions-Warnung)    │
-│ • Makro-Befehlsschnittstelle zur Zentralbox (ESP32-S3) via Binder M5 4-Pin             │
-│ • Remote Bootloader Flasher Support (Firmware-Push über UART direkt von Zentralbox)    │
-└──────────────┬─────────────────────────┬─────────────────────────┬─────────────────────┘
-               │ UART1 (MR20 Raw 115k2)  │ GPIO8 (RMT / NeoPixel)  │ UART0 (Zentralbox Macro)
-               ▼                         ▼                         ▼
-┌───────────────────────────┐ ┌─────────────────────┐ ┌──────────────────────────────────┐
-│ WHEELTEC MR20 (77 GHz)    │ │ 36x WS2812B-2020    │ │ BINDER SERIE 707 M5 (4-Pin IP67) │
-│ • mmWave Horn-Array       │ │ • Bremslicht-Strobe │ │ • Pin 1: +5.0V DC Power In       │
-│ • ±60° (120°) Erfassung   │ │ • Kollisions-Flügel │ │ • Pin 2: UART RX (Makrobefehle)  │
-│ • Bis zu 90 m Reichweite  │ │ • Dämmerungs-Dimmer │ │ • Pin 3: UART TX (Target-Liste)  │
-│ • Sitzt im 61x51mm Window │ │ • 18 links /        │ │ • Pin 4: GND (Power & Signal)    │
-│   hinter PC-Radome-Deckel │ │   18 rechts         │ │   (Entkoppelt via JST-SH Kabel)  │
-└───────────────────────────┘ └─────────────────────┘ └──────────────────────────────────┘
-```
-
-### 10.1 Technische Platinen-Kenndaten & Geometrie
-* **Abmessungen:** $115{,}0 \times 65{,}0 \times 1{,}6\,\text{mm}$ (2 Lagen FR-4 High-TG150, ENIG Goldfinish, JLC2313 Stackup).
-* **Zentraler Ausschnitt:** $61{,}0 \times 51{,}0\,\text{mm}$ rechteckiges Durchgangsfenster mit $R = 2{,}0\,\text{mm}$ Eckradien, exakt zentriert bei $(X=0, Y=0)$. Das Wheeltec MR20 77-GHz Sensormodul taucht bündig durch diesen Ausschnitt ein und strahlt ungehindert durch das transparente Polycarbonat-Sichtfenster des Gehäuses ab.
-* **Symmetrische Warnflügel:** Links und rechts des Radarfensters befinden sich je **$27{,}0\,\text{mm}$ breite Warnflügel** für maximale periphere Sichtbarkeit im Rückspiegel des Fahrers.
-* **Befestigung:** 4x M2.5 Montagebohrungen ($\varnothing 2{,}7\,\text{mm}$) mit $105{,}0 \times 55{,}0\,\text{mm}$ Lochabstand ($X = \pm 52{,}5, Y = \pm 27{,}5\,\text{mm}$), verschraubt in M2.5-Messing-Gewindeeinsätze des Gehäuses.
-* **LED-Matrix (Symmetrische Warnflügel):** 36x SMD WS2812B-2020 adressierbare RGB-LEDs auf der Vorderseite (F.Cu):
-  * **Linker Warnflügel:** 18 LEDs (`D1` bis `D18`) in 3 Spalten à 6 LEDs
-  * **Rechter Warnflügel:** 18 LEDs (`D19` bis `D36`) in 3 Spalten à 6 LEDs
-* **Rückseiten-Komponenten (B.Cu – vollständig außerhalb des Fensters):**
-  * **Rechter Flügel:** ESP32-C5 Dual-Band SoC, 3.3V LDO `U2`, 40 MHz Quarz `Y1` und U.FL Koaxialbuchse `J3`.
-  * **Linker Flügel:** `J1` (JST-SH 4-Pin zu Binder M5) und `J2` (JST-SH 4-Pin zu MR20 Kabel-Adapter).
-* **Spannungsversorgung:** Eingangsspannung $+12\,\text{V}$ DC über 2-Draht-DC-Peitsche (Peitsche 4 am DTM-12: `RADAR_PWR_12V` und `RADAR_GND`, AWG22 0.34²). Lokaler hocheffizienter Automotive Step-Down wandelt auf $+5{,}0\,\text{V}$ für LEDs und MR20; LDO `U2` (3.3V 500mA) versorgt den Sub-MCU und UWB-Block.
-* **All-UWB Telemetrie-Interconnect:**
-  * **Null Kupfer-Datenleitungen:** Sämtliche 20 Hz Radar-Zielvektoren, Warnschwellen und LED-Makros werden **ausschließlich drahtlos über Ultra-Wideband (Qorvo DW3110 / 6.489 GHz Ch. 5, $< 0{,}4\,\text{ms}$ Latenz)** zwischen Radar Sub-MCU und Zentralbox ausgetauscht.
-  * Vollkommen unbeeinflusst von 2.4-GHz-Störungen und 100 % isoliert gegen Bordnetzspitzen.
-
-### 10.2 Schnittstellen, JST-SH Header & 2-Pin DC-Power
-* **`J1` (Power-Eingang):** 2-Pin Steckverbinder (JST-JWPF oder Binder IP67) für $+12\,\text{V}$ geschaltete Zuleitung und Masse (`RADAR_PWR_12V` / `RADAR_GND`).
-* **`J2` (MR20 Radar-Interface):** JST-SH 1.0mm 4-Pin horizontal (`+5V_RADAR`, `MR20_RX`, `MR20_TX`, `GND`) zur internen Anbindung des Wheeltec MR20 mmWave Radarkopfes.
-* **`J3` (UWB Antennen-Port):** U.FL Buchse zur Anbindung der integrierten UWB-Patch-/Flex-Antenne (Taoglas FXUWB10).
-
-### 10.4 ESP32-C5 Pin-Mapping
-| ESP32-C5 Pin | Signalname | Richtung | Funktion & Peripherie |
-| :--- | :--- | :---: | :--- |
-| **GPIO20 (U0RXD)** | `ZBOX_RX` | Eingang | UART0 RX: Makrobefehle, POST-Diagnose & Firmware-Push von Zentralbox |
-| **GPIO21 (U0TXD)** | `ZBOX_TX` | Ausgang | UART0 TX: Target-Vektoren & Subsystem-Status an Zentralbox |
-| **GPIO4 (U1RXD)**  | `MR20_RX` | Eingang | UART1 RX: 20 Hz Rohdaten-Frames vom Wheeltec MR20 mmWave Radar |
-| **GPIO5 (U1TXD)**  | `MR20_TX` | Ausgang | UART1 TX: Konfigurations-Kommandos an Wheeltec MR20 |
-| **GPIO8**          | `WS2812_DATA` | Ausgang | RMT/SPI-getaktetes Datensignal für die 36x WS2812B-2020 LEDs |
-| **GPIO9**          | `BOOT0` | Eingang | Boot-Strap Pin (interner 10k Pull-Up; LOW = UART Bootloader Flashing) |
-| **CHIP_EN**        | `EN_RST` | Eingang | Hardware-Reset mit 10k Pull-Up und 100nF Entstörkondensator |
-| **RF_5G9**         | `ANT_V2X` | HF-Ein/Ausg. | U.FL Buchse J3: 5.9 GHz ITS-G5 V2X Patch-Antenne |
-
-### 10.5 Stückliste (BOM) PCBA 08
-| Ref | Bauteil / Typ | Gehäuse | Spezifikation & Funktion | LCSC Part |
-| :--- | :--- | :--- | :--- | :--- |
-| **`U1`** | ESP32-C5 | QFN-32 (5x5mm)| Dual-Band RISC-V SoC @ 240 MHz (2.4/5 GHz Wi-Fi 6, BLE 5.0, 5.9 GHz V2X) | `C5443210` |
-| **`U2`** | TPS7A0533 / ME6211 | SOT-23-5 | LDO 3.3V 500mA, Ultra-Low-Noise, PSRR 65dB | `C505293` |
-| **`Y1`** | 40 MHz Crystal | SMD 2016-4P | 40.000 MHz Präzisions-Systemquarz für ESP32-C5 | `C2843560` |
-| **`D1`..`D36`** | WS2812B-2020 | SMD 2020 | 36x Intelligente adressierbare RGB-LEDs ($2{,}0 \times 2{,}0\,\text{mm}$) im Halo/Flügel | `C2843530` |
-| **`D37`** | PESD5V0S2BT | SOT-23 | Bidirektionales TVS-Dioden-Array für UART-Leitungen | `C2834580` |
-| **`J1`** | JST-SH SM04B-SRSS-TB | 1x04 1.0mm | Horizontaler 4-Pin SMD-Steckverbinder (zur M5-Flanschbuchse) | `C136657` |
-| **`J2`** | JST-SH SM04B-SRSS-TB | 1x04 1.0mm | Horizontaler 4-Pin SMD-Steckverbinder (zum MR20 Kabel-Adapter) | `C136657` |
-| **`J3`** | U.FL-R-SMT-1 | SMD Micro-Coax | 50 Ohm U.FL Buchse für externe 5.9 GHz V2X Patchantenne | `C14897` |
-| **`C1`, `C2`** | 10uF 16V X7R | SMD 0805 | Keramische Glättungskondensatoren (5V Eingang, 3.3V Ausgang) | `C15850` |
-| **`C3`, `C4`** | 100nF 50V X7R | SMD 0603 | Entkopplungskondensatoren für VDD_3V3 und Reset | `C14663` |
-
-### 10.6 Hardware Power-On Self-Test (POST) 36-LED Diagnose-Matrix
-
-Beim Einschalten der Zündung (KL15) schaltet das System für **2,5 Sekunden** in einen optischen **POST-Diagnose-Modus**. Die 36 LEDs umrahmen das Radom-Fenster und sind in **18 Funktionspaare à 2 LEDs** ($18 \times 2 = 36$) unterteilt:
-
-```text
-                        OBERE LEISTE: D13 .. D18 (6 LEDs = 3 Paare)
-                      ┌───────────────────────────────────────────┐
-                      │   [GNSS]       [LoRa Mesh]      [V2X/Wi-Fi]│
-                      └───────────────────────────────────────────┘
-   LINKER FLÜGEL                                                             RECHTER FLÜGEL
-   D1 .. D12 (12 LEDs = 6 Paare)                                             D19 .. D30 (12 LEDs = 6 Paare)
- ┌───────────────────────────┐   ┌─────────────────────────────────────┐   ┌───────────────────────────┐
- │ D1/D2:   Front-Node       │   │                                     │   │ D19/D20: Pod 2 & Funk     │
- │ D3/D4:   CAN-Bus          │   │         WHEELTEC MR20               │   │ D21/D22: UWB Backbone     │
- │ D5/D6:   Pod 1 Intercom   │   │       77-GHz mmWave Radar           │   │ D23/D24: BSD Spiegel R    │
- │ D7/D8:   BSD Spiegel L    │   │                                     │   │ D25/D26: TPMS Hinterrad   │
- │ D9/D10:  TPMS Vorderrad   │   │                                     │   │ D27/D28: Dallas DS18B20   │
- │ D11/D12: Actioncam BLE    │   │                                     │   │ D29/D30: MicroSD-Logger   │
- └───────────────────────────┘   └─────────────────────────────────────┘   └───────────────────────────┘
-                      ┌───────────────────────────────────────────┐
-                      │   [12V KL15]     [18650 USV]     [77GHz Radar]│
-                      └───────────────────────────────────────────┘
-                        UNTERE LEISTE: D31 .. D36 (6 LEDs = 3 Paare)
-```
-
-#### Das 2-LED-Prinzip pro Funktion:
-* **LED A (Links / Oben): Hardware- & Bus-Präsenz:**
-  - **Grün:** Baugruppe antwortet auf Bus (1-Wire ROM-ID, I2C ACK, UART Ping, UWB/BLE Verbindung OK).
-  - **Gelb:** Handshake / Bootloader läuft.
-  - **Rot blinkend:** Hardware fehlt / Kurzschluss / Bus-Timeout.
-  - **Dunkel:** Komponente im Fahrzeugprofil als „nicht verbaut / optional“ deklariert.
-* **LED B (Rechts / Unten): Funktion & Datenstrom:**
-  - **Grün:** Normalbetrieb scharf (Datenstrom aktiv, Valid 3D Fix, Reifendruck im Soll).
-  - **Gelb:** Initialisiert noch (z. B. GNSS sucht Satelliten, Glatteis-Temperatur $T \le +3^\circ\text{C}$).
-  - **Rot:** Funktionsfehler / Plausibilitätsfehler.
-
-#### Zuordnung der 18 Paare (100 % motorradspezifisch):
-1. **Linker Flügel (Cockpit, Bus & Linke Seite):**
-   * **D1 / D2:** Front-Node (PCBA 05) UWB Link & Cockpit-Speisung (KL15 / USB-PD).
-   * **D3 / D4:** Motorrad-CAN-Bus (HD-LAN / K-CAN) Transceiver & Telemetrie-Stream.
-   * **D5 / D6:** Pod 1 (Bucht Links / Gateway 1) UWB Link & Kassetten-MCU bereit.
-   * **D7 / D8:** BSD Spiegel-Warnanzeige Links (Header `J9`) N-MOSFET & Treiber bereit.
-   * **D9 / D10:** TPMS Vorderrad (Bluetooth LE Reifendrucksensor) Signal & Solldruck OK.
-   * **D11 / D12:** Actioncam BLE Shutter Link Kamera verbunden & aufnahmebereit.
-2. **Rechter Flügel (Funk, Heck & Rechte Seite):**
-   * **D19 / D20:** Pod 2 (Bucht Rechts / Gateway 2) UWB Link & Kassetten-MCU bereit.
-   * **D21 / D22:** UWB Backbone (DW3110) 6.5 GHz Link & Range-Measurement aktiv.
-   * **D23 / D24:** BSD Spiegel-Warnanzeige Rechts (Header `J9`) N-MOSFET & Treiber bereit.
-   * **D25 / D26:** TPMS Hinterrad (Bluetooth LE Reifendrucksensor) Signal & Solldruck OK.
-   * **D27 / D28:** Dallas DS18B20 Fahrbahn-Temperaturfühler (`J6`) 1-Wire antwortet & plausibel.
-   * **D29 / D30:** MicroSD-Card & Telemetrie-Blackbox SDIO 4-Bit gemountet & Log schreibbereit.
-3. **Obere Leiste (Navigation, Funk & Mesh):**
-   * **D13 / D14:** u-blox SAM-M10Q Multi-GNSS I2C-Kommunikation & 3D-Fix ($\ge 6$ Satelliten).
-   * **D15 / D16:** Semtech SX1262 LoRa (OpenMotorMesh 868 MHz) SPI-PLL & Mesh-Beacon.
-   * **D17 / D18:** 5.9 GHz ITS-G5 / Wi-Fi 6 (V2X) RF-Block aktiv & PWA-Hotspot online.
-4. **Untere Leiste (Energie & Radarkopf):**
-   * **D31 / D32:** Bordnetz 12V Eingangsspannung stabil ($11{,}5\dots 14{,}8\,\text{V}$) & KL15 aktiv.
-   * **D33 / D34:** Interne 18650 USV-Pufferbatterie Lade-IC `BQ25895` & Ladestand $> 50\,\%$.
-   * **D35 / D36:** Wheeltec MR20 77-GHz Radarkopf 20 Hz UART-Frames & Tracking fehlerfrei.
-
-#### Asynchrones & nicht-blockierendes Verhalten (Modul ist optional):
-* **Kein Radar verbaut / Garmin Varia:** Wird beim Booten kein Radar 2.0 erkannt oder ist `radar_type: "none"` konfiguriert, bootet die Zentralbox **vollständig asynchron in $< 800\,\text{ms}$** ohne Verzögerung durch.
-* **Cockpit-Quittierung:** Zur visuellen Kontrolle leuchten die beiden **BSD Spiegel-LEDs (`J9`) beim Zündungsstart für genau 1,0 Sekunde bernsteinfarben** auf.
-* **Begleitfahrzeug (Kit 5):** Da am Begleitfahrzeug kein Heckradar montiert ist, entfällt die 36-LED-Matrix am Auto; der vollständige Status aller Komponenten wird auf dem Tablet in der PWA dargestellt.
-
----
-
-### 10.7 Konfigurierbare Warnlicht-Makros & Pattern-Steuerung
-
-Alle visuellen Licht- und Warnmakros auf der Radar 2.0 Sub-MCU sind über NVS-Konfigurationsflags einzeln **aktivierbar und deaktivierbar** (`RadarMacroConfigBits_t`), um ECE/StVZO-Konformität und individuelle Fahrerwünsche abzubilden:
-
-| Makro-ID | Name & Funktion | Trigger & Dynamik | Config-Flag (JSON / NVS) | Default |
-| :--- | :--- | :--- | :--- | :---: |
-| **`0x01`** | **Welcome & POST Sweep** | 2,5s 18-Paar Diagnose-Matrix $\rightarrow$ Wisch-Sweep in Standlicht | `post_matrix_enabled` | `true` |
-| **`0x02`** | **ESS Notbrems-Strobe** | $4{,}5\,\text{Hz}$ Vollast-Stroboskop (Rot) bei $a_x < -0{,}6\,\text{g}$ | `ess_strobe_enabled` | `true` |
-| **`0x03`** | **Pannen- & Warnblitz (Hazard)** | $1{,}2\,\text{Hz}$ Doppelblitz (Bernstein *"Flash-Flash-Pause"*) bei Warnblinker ($v=0$) | `hazard_beacon_enabled` | `true` |
-| **`0x04`** | **Alarmanlagen-Strobe** | $12\,\text{Hz}$ desorientierender Strobe (Rot/Weiß) + Spiegelblitz bei Diebstahlalarm | `theft_strobe_enabled` | `true` |
-| **`0x05`** | **Konvoi- / Follow-Me-Puls** | Sanfter Wellenpuls / Atmender Glow für Gruppen-Guide / Begleitfahrzeug | `convoy_marker_enabled` | `false` |
-| **`0x06`** | **Drängler-Abstandswarnung** | Nach innen gerichtetes Lauflicht bei extremer Unterschreitung ($d < 3\,\text{m}, v > 50$) | `tailgating_guard_enabled` | `false` |
-| **`0x07`** | **Standby-Rücklicht (Astro-Dim)** | Weiches rotes Grundleuchten (18 %–50 % PWM, dynamisch nach Sonnenstand) | `ambient_glow_enabled` | `true` |
-
-* **PWA & Taster-Aktivierung:** Jedes Makro kann in der PWA unter *Beleuchtung & Sicherheit* per Schalter getestet und dauerhaft gespeichert werden. Im Stand ($v = 0\,\text{km/h}$) aktiviert ein 4-fach Klick auf die Harley TRIP-Taste oder den Front-Node PTT-Taster die POST-Diagnosematrix für 10 Sekunden zur manuellen Sichtprüfung.
-
-
+### 10.1 Technische Platinen-Kenndaten & All-UWB Backbone
+* **Abmessungen:** $115{,}0 \times 65{,}0 \times 1{,}6\,\text{mm}$ (2 Lagen FR-4 High-TG150, ENIG-Goldfinish).
+* **Zentraler Radardurchbruch:** $61{,}0 \times 51{,}0\,\text{mm}$ rechteckiges Sichtfenster für das Wheeltec MR20 77-GHz-Sensormodul.
+* **Bestückung:**
+  * Espressif `ESP32-C5` Dual-Band RISC-V SoC (2.4/5 GHz Wi-Fi 6, BLE 5.0, 5.9 GHz V2X-Uplink).
+  * Qorvo `DW3110` Ultra-Wideband Transceiver (`U3`) mit U.FL-Buchse `J4` für eine Taoglas FXUWB10 Flexantenne. Sämtliche Radar-Rohdatenvektoren werden drahtlos über UWB an die Zentralbox gestreamt (**Null Kupfer-Datenleitungen zum Fahrzeug**).
+  * 36x SMD `WS2812B-2020` RGB-LEDs auf den symmetrischen Warnflügeln (18 links / 18 rechts).
+* **Steckverbinder:**
+  * `J1`: Wasserdichter 2-poliger 12V Automotive-Stecker (JST JWPF) für Zuleitung (`RADAR_PWR_12V` / `RADAR_GND`). Der frühere Binder M5 Stecker entfällt ersatzlos.
+  * `J2`: 4-Pin JST-SH Header zum Wheeltec MR20 mmWave Radar (UART1 @ 115.200 Baud).
+* **Autonome Notfall-Strobe-Steuerung:**
+  * Erkennt der lokale ESP32-C5 einen herannahenden Auffahrunfall (Time-to-Collision $\text{TTC} < 1{,}5\,\text{s}$), löst er den hochfrequenten Notfall-Strobe der 36 LEDs **lokal in $< 1\,\text{ms}$** aus - völlig unabhängig vom Funkverkehr zur Zentralbox.

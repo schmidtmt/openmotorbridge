@@ -1,6 +1,10 @@
-# 15 - Stücklisten (BOM), COTS-Kaufteile & SMT-Fertigungsdaten (Das bereinigte 6-PCBA-Lineup)
+# 15 - Stücklisten (BOM), COTS-Kaufteile & SMT-Fertigungsdaten (Das bereinigte PCBA-Lineup v9.6)
 
-Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die vollständige Bauteilliste (Bill of Materials), die Fertigungsspezifikationen aller **6 aktiven Leiterplatten (`PCBA 01`, `03`, `05`, `06`, `07`, `08`)** bei JLCPCB / Eurocircuits (`PCBA 02` und `PCBA 04` sind ersatzlos entfallen), alle mechanischen 3D-Druck-Komponenten, die COTS-Einkaufslisten sowie eine detaillierte Kosten- und Bestellkalkulation (Solo-Aufbau vs. Sammelbestellung).
+Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die vollständige Bauteilliste (Bill of Materials), die Fertigungsspezifikationen aller Leiterplatten (`PCBA 01`, `03`, `05`, `07`, `08` sowie optionales Passiv-Dock `06`) bei JLCPCB / Eurocircuits (`PCBA 02` und `PCBA 04` sind durch die All-UWB-Architektur ersatzlos entfallen), alle mechanischen 3D-Druck-Komponenten (MJF PA12), die COTS-Einkaufslisten sowie eine detaillierte Kosten- und Bestellkalkulation (Solo-Aufbau vs. Sammelbestellung).
+
+> [!NOTE]
+> **v9.6 Stücklisten-Harmonisierung & Konsolidierung:**  
+> Alle Bauteile, LCSC-Teilenummern und Steckverbinder wurden mit den finalen Schaltplänen und Layouts in [Spezifikation 07 (PCBA Hardware & Pinouts)](07_pcba_hardware_pinouts.md) abgeglichen. Die frühere Pod-Bodenplatine `PCBA 02` und das Lenker-Interface `PCBA 04` sind vollständig entfallen. Kassetten (`PCBA 03`) arbeiten 100 % drahtlos über Qorvo DW3110 UWB und werden über direkte 2-Draht-DC-Bodenfederkontakte versorgt. Die mechanischen Kassetten-Inlays unterstützen das standardisierte 4-Klassen-Portfolio inklusive UCS (Universal Communication Solution) und OMM 2.4 GHz.
 
 ---
 
@@ -44,8 +48,8 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **U1** | DW3110 | Qorvo | QFN-16 (Top) | C2934600 | IEEE 802.15.4z UWB Transceiver (6.5 GHz Ch. 5 All-UWB Link) |
 | **U2** | CH32V203 / MCU | WCH | QFN-20 (Top) | C2943200 | 32-Bit Host-MCU (SPI zu DW3110, NVS Multi-Vehicle Roaming) |
-| **Q1 – Q4**| AO3400A | Alpha & Omega | SOT-23 (Bottom)| C20917 | 4x N-Kanal MOSFETs ($30\,\text{V} / 5{,}7\,\text{A}$) für Mechatronik |
-| **D1 – D4**| 1N4148WS | Diodes Inc. | SOD-323 (Bottom)| C2128 | 4x Freilaufdioden für Hubmagnete |
+| **Q1 - Q4**| AO3400A | Alpha & Omega | SOT-23 (Bottom)| C20917 | 4x N-Kanal MOSFETs ($30\,\text{V} / 5{,}7\,\text{A}$) für Mechatronik |
+| **D1 - D4**| 1N4148WS | Diodes Inc. | SOD-323 (Bottom)| C2128 | 4x Freilaufdioden für Hubmagnete |
 | **F1** | MF-MSMF050-2 | Bourns | 1812 SMD | C22668 | PPTC 500mA Schutzsicherung |
 | **J_ACT** | SM08B-SRSS-TB | JST | 8-Pin 1.0mm SMD | C160404 | Mechatronik-Header für 4 Hubmagnete |
 | **ANT1** | U.FL-R-SMT-1 | Hirose | SMD Micro-Coax | C2834595 | UWB-Antennenport (Taoglas FXUWB10 oder SMD-Patch) |
@@ -211,14 +215,14 @@ Für den Aufbau müssen **keine Kabelbäume selbst gecrimpt oder gelötet werden
 
 ```
                        DAS PLUG-AND-PLAY KABELKONZEPT (COTS FERTIGKABEL)
-┌─────────────────────────┐
-│ Deutsch DTM-12 Fertig-  │ ──► Vorkonfektionierter IP68/IP69K Deutsch DTM-12 Hauptkabelbaum
-│ Kabelbaum (Zentralbox)  │ ──► Industriell gefertigt, Raychem DR-25 Schrumpfschlauch
-└─┬───────────────────────┘
-  ├─► Peitsche 1: 2-Draht FLRY-B (1.0 m / 1.5 m): Reine DC-Power (+5V / GND) ──► Pod 1 (Bucht 1)
-  ├─► Peitsche 2: 2-Draht FLRY-B (1.0 m / 1.5 m): Reine DC-Power (+5V / GND) ──► Pod 2 (Bucht 2)
-  ├─► Peitsche 4: AMP Superseal / FLRY-B (1.0 m): Bordnetz (KL30, KL15, GND, CAN-H, CAN-L)
-  └─► Peitsche 5: 2-Draht FLRY-B (0.5 m): Heck-Radar PCBA 08 (+12V DC / GND)
++-------------------------+
+| Deutsch DTM-12 Fertig-  | --> Vorkonfektionierter IP68/IP69K Deutsch DTM-12 Hauptkabelbaum
+| Kabelbaum (Zentralbox)  | --> Industriell gefertigt, Raychem DR-25 Schrumpfschlauch
++-+-----------------------+
+  +-> Peitsche 1: 2-Draht FLRY-B (1.0 m / 1.5 m): Reine DC-Power (+5V / GND) --> Pod 1 (Bucht 1)
+  +-> Peitsche 2: 2-Draht FLRY-B (1.0 m / 1.5 m): Reine DC-Power (+5V / GND) --> Pod 2 (Bucht 2)
+  +-> Peitsche 4: AMP Superseal / FLRY-B (1.0 m): Bordnetz (KL30, KL15, GND, CAN-H, CAN-L)
+  +-> Peitsche 5: 2-Draht FLRY-B (0.5 m): Heck-Radar PCBA 08 (+12V DC / GND)
       (Hinweis: Sämtliche Interconnects & Telemetriedaten laufen zu 100 % drahtlos via UWB!)
 ```
 
@@ -254,8 +258,8 @@ Für den Aufbau müssen **keine Kabelbäume selbst gecrimpt oder gelötet werden
 | **Pufferakku (LiPo USV)** | 1S LiPo Flat-Pack 2.200 mAh ($68 \times 39 \times 5{,}0\,\text{mm}$) mit Molex Micro-Fit | EEMB / Enerpower | 1 Stk. | USV-Pufferung in der Zentralbox (Typ 504068 / 503870) |
 | **KFZ-Sicherungshalter** | Wasserdichter Flachsicherungshalter + 2A Sicherung | Hella / MTA | 1 Stk. | Dauerplus-Absicherung an Batteriepol |
 | **M8 6-Pin Fertigkabel (PUR)**| M8 6-Pin A-Coded Stecker/Buchse (1.0m / 1.5m) | Binder / Phoenix | 2 Stk. | Plug-and-Play Verbindung zu Pod 1 und Pod 2 |
-| **M8 4-Pin Fertigkabel (PUR)**| M8 4-Pin A-Coded Stecker/Buchse (0.5–1.5m) | Binder / Phoenix | Opt. (1)| Peitsche 5: Heck-Radar (Garmin Varia: 12V + UART / Wheeltec MR20) |
-| **Front-Node 12V Anschlusskabel**| 2-Pin JST-PH Litzenkabel mit Posi-Tap | COTS Standard | 1 Stk. | Lokale Cockpit-Stromversorgung (Standlicht/Navistecker) – *Funkbrücke via UWB!* |
+| **M8 4-Pin Fertigkabel (PUR)**| M8 4-Pin A-Coded Stecker/Buchse (0.5-1.5m) | Binder / Phoenix | Opt. (1)| Peitsche 5: Heck-Radar (Garmin Varia: 12V + UART / Wheeltec MR20) |
+| **Front-Node 12V Anschlusskabel**| 2-Pin JST-PH Litzenkabel mit Posi-Tap | COTS Standard | 1 Stk. | Lokale Cockpit-Stromversorgung (Standlicht/Navistecker) - *Funkbrücke via UWB!* |
 | **J_ACT Aktuator-Kabelbaum** | Fertiges 8-Pin JST-SH Kabel auf 4x 2-Pin Litzen | Adafruit / SparkFun | 2 Stk. | Vorkonfektioniertes Fertigkabel für 4 Hubmagnete |
 | **Miniatur-Aktuatoren** | 5V DC Hubmagnete ($\varnothing 6{,}5 \times 12\,\text{mm}$) mit TPU-Spitze | Solenoid / Web | 8 Stk. | 4 Stk. pro Smart Cartridge (Sena / Cardo) |
 | **J2 Gateway-Kabelbaum** | Fertiges 6-Pin JST-SH Kabel auf Klinke / USB | COTS Standard | 2 Stk. | Fertigkabel für Headset-Audio & Dauerstrom |
@@ -284,7 +288,7 @@ Da **weder Löten, noch Crimpen, noch thermisches Einschmelzen von Gewinden** er
 
 ---
 
-## 14. Kostenkalkulation, Bestelltaktik & Skaleneffekt (Solo vs. 2–3 Bikes)
+## 14. Kostenkalkulation, Bestelltaktik & Skaleneffekt (Solo vs. 2-3 Bikes)
 
 > [!IMPORTANT]
 > **Wichtiger Preishinweis zu OEM-Adaptern & Fremdgeräten:**
@@ -295,9 +299,9 @@ Da **weder Löten, noch Crimpen, noch thermisches Einschmelzen von Gewinden** er
 Bestellt ein einzelner Anwender alle Platinen für sich allein:
 * JLCPCB liefert 5 Platinen pro Design (davon 2 voll bestückt und 3 unbestückte Ersatzplatinen).
 * **Kostenaufstellung Solo-Builder:**
-  * JLCPCB PCBAs (PCBA 01, 02 [2x], 03 [2x], 05 bestückt inkl. Versand & Zoll): ca. 135–160 €
-  * 3D-Druck (MJF PA12 Dienstleister oder eigenes ASA-Filament): ca. 35–45 €
-  * COTS-Kabel, 2.200 mAh LiPo, V4A Normteile & Dichtungen: ca. 35–45 €
+  * JLCPCB PCBAs (PCBA 01, 02 [2x], 03 [2x], 05 bestückt inkl. Versand & Zoll): ca. 135-160 €
+  * 3D-Druck (MJF PA12 Dienstleister oder eigenes ASA-Filament): ca. 35-45 €
+  * COTS-Kabel, 2.200 mAh LiPo, V4A Normteile & Dichtungen: ca. 35-45 €
   * **Gesamtkosten Solo-System: ca. 205 € bis 250 €**
 
 ### 14.2 Szenario B: Community- / Gruppenbestellung (2 bis 3 Motorräder)
@@ -305,8 +309,8 @@ Bestellen 2 bis 3 Motorradfahrer gemeinsam:
 * Bei JLCPCB werden direkt **alle 5 Platinen voll bestückt** bestellt.
 * Die fixen Rüstkosten verteilen sich nun auf 5 voll funktionsfähige Platinensätze.
 * **Kostenaufstellung pro Motorrad (bei 3 Bikes):**
-  * JLCPCB PCBAs (Anteil pro Bike): ca. 70–80 €
-  * 3D-Druck (pro Bike): ca. 30–35 €
+  * JLCPCB PCBAs (Anteil pro Bike): ca. 70-80 €
+  * 3D-Druck (pro Bike): ca. 30-35 €
   * COTS-Kabel, 2.200 mAh LiPo, Normteile (Mengenrabatt): ca. 30 €
   * **Gesamtkosten pro Motorrad: nur noch ca. 130 € bis 145 €!**
 

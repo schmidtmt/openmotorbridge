@@ -9,49 +9,54 @@ Dieses Dokument ist die vollständige, praxisorientierte Schritt-für-Schritt-Ba
 Ein vollständiges OpenMotorBridge-Fahrzeugkit besteht aus folgenden Kern-Baugruppen:
 
 ```text
-                      ┌─────────────────────────────────────────┐
-                      │    1x ZENTRALE MAIN BOX (IP67)          │
-                      │    (Unter der Sitzbank / im Heck)       │
-                      │    • Unterwanne + Zwischenboden + Deckel│
-                      │    • Hauptplatine PCBA 01 (ESP32-S3)    │
-                      │    • Onboard SX1262 LoRa 868 MHz        │
-                                     └────────────────────┬────────────────────┘
-                                           │
+                      +-----------------------------------------+
+                      |    1x ZENTRALE MAIN BOX (IP67)          |
+                      |    (Unter der Sitzbank / im Heck)       |
+                      |    * Unterwanne + Zwischenboden + Deckel|
+                      |    * Hauptplatine PCBA 01 (ESP32-S3)    |
+                      |    * Onboard SX1262 LoRa 868 MHz        |
+                                     +--------------------+--------------------+
+                                           |
                           1x ZENTRALER KABELBAUM (DEUTSCH DTM-12 IP67/IP69K)
-                                           │
-          ┌────────────────────────────────┼────────────────────────────────┐
-          │                                │                                │
-          ▼ Peitsche 1 (2-Draht DC 5V)     ▼ Peitsche 2 (2-Draht DC 5V)     ▼ Peitsche 4 (2-Draht DC 12V)
-┌──────────────────┐             ┌──────────────────┐             ┌──────────────────┐
-│ 1x BUCHT 1 LINKS │             │ 1x BUCHT 2 RECHTS│             │ 1x HECK-RADAR    │
-│ (Rahmen / Koffer)│             │ (Rahmen / Koffer)│             │ (Optional)       │
-│ • Monolithisch   │             │ • Monolithisch   │             │ • Wheeltec MR20  │
-│   (kein PCB 02!) │             │   (kein PCB 02!) │             │   77GHz (PCBA 08)│
-│ • 2 Federkontakte│             │ • 2 Federkontakte│             │ • Telemetrie via │
-│ • KASSETTE 1     │             │ • KASSETTE 2     │             │   UWB (DW3110)   │
-│   (Sena SPIDER   │             │   (Cardo Edge    │             └──────────────────┘
-│    X Slim)       │             │    / Swap OMM)   │
-└──────────────────┘             └──────────────────┘
-          ▲                                ▲
-          │ UWB Steuer- & Telemetrielink   │ UWB Steuer- & Telemetrielink
-          └────────────────┬───────────────┘
-                           │ Deterministischer All-UWB Fahrzeug-Backbone
-                           │ (Qorvo DW3110 / 6.5 GHz Ch. 5, < 0.4 ms)
-                           ▼
-                 ┌──────────────────────────────────┐
-                 │ 1x UNIVERSAL FRONT-KNOTEN (IP67) │
-                 │ (Cockpit- & Sensor-Hub, PCBA 05) │
-                 │ • u-blox SAM-M10Q Multi-GNSS     │
-                 │ • TI TMP117 & OPT3001 Sensoren   │
-                 │ • Knowles MEMS Fahrtwind-Sensor  │
-                 │ • 4-Port USB-Hub & Dual USB-PD   │
-                 │ • Batteriefreier Lenker-PTT      │
-                 └──────────────────────────────────┘
+                                           |
+          +--------------------------------+--------------------------------+
+          |                                |                                |
+          v Peitsche 1 (2-Draht DC 5V)     v Peitsche 2 (2-Draht DC 5V)     v Peitsche 4 (2-Draht DC 12V)
++------------------+             +------------------+             +------------------+
+| 1x BUCHT 1 LINKS |             | 1x BUCHT 2 RECHTS|             | 1x HECK-RADAR 2.0|
+| (Rahmen / Koffer)|             | (Rahmen / Koffer)|             | (Kennzeichen/Heck)
+| * Universal-Pod  |             | * Universal-Pod  |             | * Wheeltec MR20  |
+|   (Monocoque PA12|             |   (Monocoque PA12|             |   77GHz (PCBA 08)|
+|    kein PCB 02!) |             |    kein PCB 02!) |             | * 36x Warn-LEDs  |
+| * 2 Federkontakte|             | * 2 Federkontakte|             | * UWB Telemetrie |
+| * KASSETTE 1     |             | * KASSETTE 2     |             |   & LED-Makros   |
+|   (Sena / Cardo /|             |   (Sena / Cardo /|             +--------+---------+
+|    OMM / Midland)|             |    OMM / Midland)|                      |
++--------+---------+             +--------+---------+                      |
+         |                                |                                |
+         | UWB Steuer- & Telemetrielink   | UWB Steuer- & Telemetrielink   | UWB Radar-Link
+         +----------------+---------------+--------------------------------+
+                          | Deterministischer All-UWB Fahrzeug-Backbone
+                          | (Qorvo DW3110 / 6.5 GHz Ch. 5, < 0.4 ms)
+                          v
+                 +----------------------------------+
+                 | 1x UNIVERSAL FRONT-KNOTEN (IP67) |
+                 | (Cockpit- & Sensor-Hub, PCBA 05) |
+                 | * u-blox SAM-M10Q Multi-GNSS     |
+                 | * TI TMP117 & OPT3001 Sensoren   |
+                 | * Knowles MEMS Fahrtwind-Sensor  |
+                 | * 4-Port USB-Hub & Dual USB-PD   |
+                 | * Batteriefreier Lenker-PTT      |
+                 +----------------------------------+
 ```
 
 ---
 
 ## 2. Bereitstellung vor Montagebeginn (Pre-Assembly Checklist)
+
+> [!TIP]
+> **Geprüfte Passungsmaße & Toleranzen:**  
+> Alle 3D-Druckteile (`.scad` / `.stl`) wurden mit definierten Toleranzen ($+0{,}15\,\text{mm}$ für HP MJF PA12 bzw. ASA/PET-CF) konstruiert. Alle M2- und M3-Gewindeeinsätze (Ruthex) sind standardisiert und passen exakt zu den Platinenbohrungen des 5-PCB-Lineups.
 
 Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert in **[Kapitel 15: Stücklisten & SMT-Fertigungsdaten](15_bom_manufacturing.md)** aufgeführt. Vor Montagebeginn sicherstellen, dass folgende Baugruppen bereitliegen:
 
@@ -61,13 +66,13 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
   * 2x Kassetten-Basisschlitten, Inlays (Sena SPIDER X Slim, Cardo Packtalk Edge, Swap OMM oder Blindkassette) & 2x Rastwippen
   * 1x Front-Knoten (Unterwanne mit UWB-Bodentasche und AMPS-Nut-Pockets, Deckel, TPU-Dichtkämme & USB-C Kappe)
   * 1x Fahrzeugspezifisches Montage-Kit (BMW GS Klemmen & `adventure_rack_radar_mount.stl` / Harley Kofferdeckel-Docks & Kennzeichen-Radarhalter / Support-Car `car_sun_visor_pod_clip.stl`)
-* [ ] **Vollautomatisch bestückte Platinen (von JLCPCB / Eurocircuits – 6 PCBAs):**
+* [ ] **Vollautomatisch bestückte Platinen (von JLCPCB / Eurocircuits - 6 PCBAs):**
   * 1x PCBA 01 (Zentralbox mit LoRa SX1262, DW3110 UWB, SW1 Taster und DTM-12 Header)
   * 2x PCBA 03 (Universal Smart Cartridge Rev 3.0 All-UWB mit DW3110 UWB, MCU und 4x AO3400A MOSFETs, 2-seitig SMT)
   * 1x PCBA 05 (Front-Knoten mit DW3110 UWB)
   * *(Optional: 1x PCBA 08 Radar 2.0 Sub-MCU mit DW3110 UWB, PCBA 06 MagSafe Dock, PCBA 07 Smart-Keyfob)*
   * *(Hinweis: PCBA 02 und PCBA 04 sind ersatzlos entfallen).*
-* [ ] **V4A Edelstahl-Normteile & Federn (IKEA-Prinzip – 100 % lötfrei):**
+* [ ] **V4A Edelstahl-Normteile & Federn (IKEA-Prinzip - 100 % lötfrei):**
   * 8x DIN 934 / DIN 985 M3 Edelstahlmuttern (für Gehäuse-Nut-Pockets)
   * 4x DIN 934 M4 Muttern (für AMPS-Nut-Pockets in Front-Node Wanne)
   * 4x M3 x 40 mm Schrauben (Zentralbox), 4x M3 x 20 mm Schrauben (Front-Node)
@@ -128,10 +133,23 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
      * Niederhalteplatte mit 4x M2 $\times 6\,\text{mm}$ Senkkopfschrauben sichern.
      * Vorkonfektioniertes 8-Pin Kabel `J_ACT` auf Header `J_ACT` von PCBA 03 stecken.
      * Sena SPIDER X Slim einlegen (Audio läuft per Bluetooth direkt zur Zentralbox; zero pogo pins!).
-   * **Bucht 2 (Cardo Packtalk Edge Inlay / Swap OMM / Midland):**
+   * **Bucht 2 (Cardo Packtalk Edge / Pro Inlay - Klasse B):**
      * 4x Aktuatoren in [`cartridge_insert_cardo.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_cardo.stl) montieren und an `J_ACT` anstecken.
-     * Cardo Packtalk Edge im Air-Mount Bett fixieren (Audio läuft per Bluetooth).
-3. **Flanschdichtung:** Silikon-Formdichtung auf den Kassettenkragen aufziehen und dünn mit Silikonfett benetzen.
+     * Cardo Packtalk Edge im Air-Mount Bett fixieren. Die Audio- und Stromverkabelung erfolgt über die standardisierte Kabelpeitsche am Header `J_AUDIO_PWR` von PCBA 03:
+       * **3.5 mm Klinkenbuchse:** Lautsprecherausgang (Audio Diff-Out)
+       * **2-poliger JST / 2.5 mm Klinke:** Mikrofoneingang (Audio Diff-In)
+       * **5V Lade- & Dauerstrom:** Speisung über Pin 1/2 von `J_AUDIO_PWR`
+   * **Alternative Option: Midland PMR446 Funk-Kassette (Klasse D):**
+     * Midland Alan/G9 Funkgerät im Inlay Klasse D arretieren.
+     * Doppel-Klinkenstecker (2.5 mm Mic / 3.5 mm Spk) anstecken; PTT-Steuerung erfolgt über den Open-Drain MOSFET `OPTO_PTT` auf `PCBA 03`.
+   * **Alternative Option: OpenMotorMesh (OMM) 2.4 GHz OEM-Kassette (Klasse C UCS):**
+     * Nativ gefertigt im standardisierten **UCS-Formfaktor** (Universal Communication Solution).
+     * Reines Digital-Audio über UWB; kein fehleranfälliges Analog-Routing nötig.
+     * Ausgestattet mit dedizierten Buchsen für Audio-In/Out (2.5 mm Mic, 3.5 mm Stereo-Headphones) sowie stirnseitigem USB-C Port für unterbrechungsfreies Laden im Betrieb (Pass-Through Charging).
+     * Kann mit einem Klick aus dem OMB-Kassettenschlitten entnommen und werkzeuglos direkt in jeden UCS-kompatiblen Motorradhelm eingesetzt werden!
+3. **Integrierte UWB-Antenne & Flanschdichtung:**
+   * Auf `PCBA 03` arbeitet eine verlustarme SMD-Keramikantenne für 6.5 GHz UWB. Die Funkwellen durchdringen das dielektrische PA12-Gehäuse dämpfungsfrei; es sind keine externen Antennenradome erforderlich.
+   * Silikon-Formdichtung auf den Kassettenkragen aufziehen und dünn mit Silikonfett benetzen.
 
 ---
 
@@ -164,44 +182,47 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 
 ## 4. Tisch-Testaufbau & Dry-Run (Werkstatt / Schreibtisch) VOR der Bike-Montage
 
-Das Gesamtsystem lässt sich auf der Werkbank mit Standard-USB-C-Kabeln zu 100 % testen, flashen und koppeln:
+> [!NOTE]
+> **Radikal vereinfachter Prüfaufbau (Zero USB-C an Pods):**  
+> Durch die v9.6 All-UWB Clean Architecture besitzen die Pods keine externen USB-C-Buchsen mehr. Für den Tischaufbau benötigen lediglich der **Front-Knoten (USB-C)** und die **Zentralbox (USB-C oder Labornetzteil an DTM-12 Pins 1/2)** Strom. Die beiden Kassetten werden über die 2-Draht-DC-Federkontakte der Zentralbox mitversorgt. Alle Audio-, Steuer- und Telemetriedaten funken drahtlos über UWB.
+
+Das Gesamtsystem lässt sich auf der Werkbank mit minimalem Verkabelungsaufwand zu 100 % testen, flashen und koppeln:
 
 ```text
-┌─────────────────────────────────────────────────────────────────────────────┐
-│       OPENMOTORBRIDGE TISCH-TESTAUFBAU & DRY-RUN (BENCH-LABOR SETUP)        │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                             │
-│   [ 230V USB-Netzteil / Powerbank / Laptop (5V / ≥ 2.4A) ]                  │
-│       │                      │                      │                       │
-│  USB-C│Kabel 1          USB-C│Kabel 2          USB-C│Kabel 3                │
-│       ▼                      ▼                      ▼                       │
-│  ┌───────────────┐     ┌───────────────┐      ┌───────────────┐             │
-│  │  ZENTRALBOX   │     │  FRONT-NODE   │      │ SATELLIT-POD  │             │
-│  │   (PCBA 01)   │     │   (PCBA 05)   │      │ (Pod 1 / 2)   │             │
-│  │  Port J7 USB-C│     │  Port J5 USB-C│      │ M8 Adapter    │             │
-│  └───────┬───────┘     └───────┬───────┘      └───────┬───────┘             │
-│          │                     │                      │                     │
-│          │   UWB Funk-Backbone │                      │ 1-Wire & Direct-DC  │
-│          │◄───────────────────►│                      ▼                     │
-│          │  (6.5 GHz, <0.4 ms) │             ┌───────────────────┐          │
-│          │                     │             │ SMART KASSETTE    │          │
-│          │                     │             │ (Sena / Cardo)    │          │
-│          │                     │             └────────┬──────────┘          │
-│          │ WebBLE / WebSerial  │                      │                     │
-│          ▼                     ▼                      ▼                     │
-│    [ SMARTPHONE / LAPTOP MIT PWA ]             [ FAHRER-HELM ]              │
-│    (Chrome / Edge: Flasher & Dashboard)        (Bluetooth gekoppelt)        │
-│                                                                             │
-└─────────────────────────────────────────────────────────────────────────────┘
++-----------------------------------------------------------------------------+
+|       OPENMOTORBRIDGE TISCH-TESTAUFBAU & DRY-RUN (BENCH-LABOR SETUP)        |
++-----------------------------------------------------------------------------+
+|                                                                             |
+|   [ 230V USB-Netzteil / Powerbank / Laptop (5V / ≥ 2.4A) ]                  |
+|       |                      |                      |                       |
+|  USB-C|Kabel 1          USB-C|Kabel 2          USB-C|Kabel 3                |
+|       v                      v                      v                       |
+|  +---------------+     +---------------+      +---------------+             |
+|  |  ZENTRALBOX   |     |  FRONT-NODE   |      | SATELLIT-POD  |             |
+|  |   (PCBA 01)   |     |   (PCBA 05)   |      | (Pod 1 / 2)   |             |
+|  |  Port J7 USB-C|     |  Port J5 USB-C|      | M8 Adapter    |             |
+|  +-------+-------+     +-------+-------+      +-------+-------+             |
+|          |                     |                      |                     |
+|          |   UWB Funk-Backbone |                      | 1-Wire & Direct-DC  |
+|          |<------------------->|                      v                     |
+|          |  (6.5 GHz, <0.4 ms) |             +-------------------+          |
+|          |                     |             | SMART KASSETTE    |          |
+|          |                     |             | (Sena / Cardo)    |          |
+|          |                     |             +--------+----------+          |
+|          | WebBLE / WebSerial  |                      |                     |
+|          v                     v                      v                     |
+|    [ SMARTPHONE / LAPTOP MIT PWA ]             [ FAHRER-HELM ]              |
+|    (Chrome / Edge: Flasher & Dashboard)        (Bluetooth gekoppelt)        |
+|                                                                             |
++-----------------------------------------------------------------------------+
 ```
 
 ### 4.1 Der geführte 4-Punkte IKEA Smoke-Test
 In der PWA (über WebSerial oder WebBLE) den Diagnosetest ausführen:
 1. [x] **Bordnetz & USV (Check 1):** LM5164 Buck-Schiene aktiv (5.04 V), USV-LiPo (2.200 mAh) lädt mit 4.18 V.
-2. [x] **Kassetten & Aktuatoren (Check 2):** 1-Wire Erkennung von Slot 1 (Sena) und Slot 2 (Cardo), mechatronischer Klicktest der 4 Aktuatoren ("Klack-Klack-Klack-Klack").
+2. [x] **Kassetten & Aktuatoren (Check 2):** UWB Handshake (`UWB_PKT_CARTRIDGE_ANNOUNCE`), Modell-Erkennung (Sena / Cardo / OMM / Midland) und mechatronischer Klicktest der 4 Aktuatoren ("Klack-Klack-Klack-Klack").
 3. [x] **Front-Knoten & UWB Backbone (Check 3):** UWB-Link aktiv ($< 0{,}4\,\text{ms}$ Latenz), SAM-M10Q 3D-Fix, TMP117 Temperatur, Knowles MEMS Pegel & PTT-Tastendruck.
-4. [x] **LoRa 868 MHz & Radar (Check 4):** SX1262 LoRa Ping-Echo und UART-Kommunikation zum Heckradar auf Peitsche 5.
-
+4. [x] **LoRa 868 MHz & Radar 2.0 (Check 4):** SX1262 LoRa Ping-Echo und drahtloser UWB-Telemetrie-Link zum Heckradar 2.0 (`PCBA 08`) inklusive 36-LED Flügel-Makrotest.
 Erst wenn alle 4 Checks grün leuchten, die Gehäusedeckel mit den M3-Schrauben über Kreuz festziehen.
 
 ---
@@ -226,10 +247,16 @@ Erst wenn alle 4 Checks grün leuchten, die Gehäusedeckel mit den M3-Schrauben 
 * **Pod 1 & Pod 2:** Werden mit je einem Schnellwechsel-Clip ([`car_sun_visor_pod_clip.stl`](../../hardware/cad/stl/05_accessories/car_sun_visor_pod_clip.stl)) an Fahrer- und Beifahrer-Sonnenblende geklemmt.
   * Modus A (Begleitfahrzeug für Bike-Gruppe): Pod 1 = Sena SPIDER X Slim, Pod 2 = Cardo Packtalk Edge.
   * Modus B (Reine Autokolonne): Pod 1 = OMM 2.4 GHz Swap Cartridge, Pod 2 = Midland PMR446 Funkkassette.
+  2-poliges stromkabel versteckt in der türdichtung verlgen und dann zur zentralbox
 * **Zentralbox:** In der 15°-Dashboard-Keilaufnahme auf der Mittelkonsole.
 * **SAM-M10Q GNSS:** Auf dem Armaturenbrett hinter der Windschutzscheibe.
 * **Audio-Integration:** USB-C Audio-Link zum Autoradio für Gruppenfunk über die Fahrzeuglautsprecher.
-* **Telemetrie:** Drahtloser BLE-OBD2 Dongle im Fahrerfußraum.
+* **Telemetrie:** Drahtloser BLE-OBD2 Dongle im Fahrerfußraum (oder direkter 16-Pin OBD-Port).
+* **Energie- & Stromversorgungskonzept im Pkw:**
+  * **Option A (Zigarettenanzünder):** Der Front-Knoten wird in der Mittelkonsole über einen 12V-Zigarettenanzünder-Adapter gespeist. Er versorgt die Zentralbox über einen USB-C-Power-Adapter mit.
+  * **Option B (Fahrerfußraum Zündungsplus):** Feste Verkabelung an Zündungsplus (KL15) im Fahrerfußraum (strikt kein Dauerplus KL30, um ein Entladen der Autobatterie bei Standzeiten auszuschließen).
+  * **Qi-Lader & CarPlay/AA Bridge:** Der Front-Knoten bindet den integrierten Wireless CP/AA Adapter an den Media-USB-Port des Fahrzeugs an und speist ein Qi-Ladedock für das Fahrer-Smartphone.
+* **Gestackte Gehäuse-Option (Stack-Dock):** Für den sauberen Einsatz im Pkw/Van existiert eine modulare Stapelaufnahme (`car_dashboard_wedge_dock.scad`), in der Front-Knoten (unten) und Zentralbox (oben) formschlüssig miteinander verschraubt auf dem Armaturenbrett oder in einer Becherhalter-/Mittelkonsolen-Mulde platziert werden.
 
 ---
 

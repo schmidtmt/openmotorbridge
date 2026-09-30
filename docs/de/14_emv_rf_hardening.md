@@ -20,7 +20,7 @@ Dieses Dokument spezifiziert die Schutzschaltungen gegen Kfz-Bordnetz-Transiente
 * **Deterministischer UWB Fahrzeug-Backbone (Qorvo DW3110 / 6.489 GHz Ch. 5):**
   * Drahtlose Verbindung zwischen Front-Knoten (`PCBA 05`) und Zentralbox (`PCBA 01`).
   * Vollständig konform mit **ETSI EN 302 065-1, EN 302 065-3** und **EU-Beschluss 2019/785** ($-41{,}3\,\text{dBm/MHz}$, kontinuierlicher legaler Sendebetrieb ohne Duty-Cycle-Beschränkung).
-  * Arbeitet im Frequenzbereich 6.240–6.739 GHz (Mittenfrequenz 6.489 GHz) mit 499.2 MHz Bandbreite weitab von 2.4 GHz (WLAN, Bluetooth, Mesh) und 5.8 GHz.
+  * Arbeitet im Frequenzbereich 6.240-6.739 GHz (Mittenfrequenz 6.489 GHz) mit 499.2 MHz Bandbreite weitab von 2.4 GHz (WLAN, Bluetooth, Mesh) und 5.8 GHz.
   * **Antennenintegration:** Taoglas FXUWB10 Flex-Antenne montiert in einer $11 \times 11 \times 0{,}6\,\text{mm}$ Aussparung im Gehäuseboden (Unterwanne) von Zentralbox und Front-Knoten. Verbindung über 20 mm U.FL Mikro-Koax. Die PCB-Oberseite behält eine geschlossene Massefläche (Zero-Keepout), und der Gehäusedeckel kann ohne Kabelzug geöffnet werden.
 * **LoRa 868 MHz (Semtech SX1262) auf der Zentralbox (`PCBA 01`):**
   * Direkt auf der Zentralbox integriert und 24/7 über die USV-Batterieschiene gepuffert für unterbrechungsfreie Diebstahl-Sentry und Gruppen-Telemetrie.
@@ -31,8 +31,22 @@ Dieses Dokument spezifiziert die Schutzschaltungen gegen Kfz-Bordnetz-Transiente
 * **Zentrale ePTFE-Druckausgleichsmembran:** $\varnothing\,7{,}0\,\text{mm}$ Gore/Schreiner Air Vent mittig auf dem Gehäusedach gleicht thermische Druckstöße symmetrisch aus, ohne das HF-Fernfeld zu verzerren.
 * **Robuster Deutsch DTM-12 Hauptkabelbaum:**
   * 4 Abzweige (Peitsche 1: Pod 1 DC-Power +5V/GND, Peitsche 2: Pod 2 DC-Power +5V/GND, Peitsche 4: Bordnetz KL30/KL15/CAN, Peitsche 5: Heckradar DC-Power +12V/GND).
-  * 10 Pins aktiv belegt (Pins 1–10); Pins 11–12 für CAN-Bus.
+  * 10 Pins aktiv belegt (Pins 1-10); Pins 11-12 für CAN-Bus.
   * IP68/IP69K Dichtung über Deutsch DTM-Verriegelung und Raychem DR-25 Schrumpfschlauch.
+
+### 2.1 Multi-Band HF-Frequenzbelegungs- & Koexistenzmatrix
+
+Um Interferenzen zwischen den 7 simultan aktiven Funksystemen der OpenMotorBridge vollständig auszuschließen, sind Frequenzen, Sendeleistungen und Antennenpositionen streng orthogonal ausgelegt:
+
+| Funksystem / Band | Frequenzbereich | Sendeleistung / EIRP | Einbauort & Antennentyp | Koexistenz- & Entkopplungsmaßnahme |
+| :--- | :--- | :---: | :--- | :--- |
+| **868 MHz LoRa (SX1262)** | 863.0 - 870.0 MHz | +14 dBm (25 mW) | Zentralbox / Taoglas FXP895 Flex | Harmonischen-Tiefpass ($f_{\text{cut}} = 1{,}0\,\text{GHz}$); 24/7 USV-Dauerbetrieb |
+| **1.575 GHz GNSS (SAM-M10Q)** | 1559 - 1610 MHz | Nur Empfang (-167 dBm) | Front-Knoten (`PCBA 05`) / 15x15 Keramik-Patch | SAW-Vorfilter im LNA; räumlich maximal entfernt von 868M/2.4G |
+| **2.4 GHz ISM (Sena/Cardo/OMM/BLE)** | 2402 - 2480 MHz | +10 bis +20 dBm | Pod 1 (Links), Pod 2 (Rechts), Cockpit | $> 35\,\text{dB}$ Freiraumdämpfung über Fahrzeugrahmen; AFH & TDMA |
+| **5 GHz Wi-Fi (CarPlay / AA)** | 5180 - 5825 MHz | +14 dBm (25 mW) | Cockpit / Front-Knoten (Integrierter Dongle) | Begrenzt auf Cockpit-Nahfeld; $> 600\,\text{MHz}$ Abstand zu UWB Ch. 5 |
+| **5.9 GHz C-V2X / DSRC (ETSI)** | 5855 - 5925 MHz | +23 dBm (200 mW) | Fahrzeug-Heck / Monopol-Patch | Striktes Bandpassfilter; räumliche Trennung vom 5 GHz Cockpit-WLAN |
+| **6.5 GHz UWB (DW3110 Ch. 5)** | 6240 - 6739 MHz | -41.3 dBm/MHz (< 1 mW) | Zentralbox, Front-Node, Pods, Radar | Ultra-Breitband (499.2 MHz BW); Null Interferenz mit Schmalband |
+| **77 GHz mmWave Radar (MR20)** | 76.0 - 81.0 GHz | +30 dBm EIRP | Kennzeichen- / Heck-Bracket (`PCBA 06`) | Vollkommen entkoppelt; Millimeterwellen-Spektrum ohne HF-Kopplung |
 
 ---
 

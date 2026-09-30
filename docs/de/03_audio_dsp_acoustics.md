@@ -15,29 +15,31 @@ In klassischen Motorrad-Audio-Installationen sind Masseschleifen, Zündfunk-Eins
 2. **Dual-Helm Bluetooth Audio Hub:**
    * Fahrer und Sozius koppeln ihre Helme direkt per Bluetooth an die Zentralbox (`PCBA 01`).
    * Bucht 1 und Bucht 2 sind rein modulare Docking-Schächte für externe Gruppen-Gateways (Sena Mesh, Cardo DMC, OMM 2.4 GHz oder Midland PMR446). Sie haben **keine feste Zuordnung zu Fahrer oder Sozius**.
-3. **Lokale Signalwandlung bei Analogfunk (Midland PMR446):**
-   * Wird eine analoge Funkkassette (Midland PMR446) gesteckt, wird das Audiosignal unmittelbar auf der Kassette (`PCBA 03`) über den optionalen Mono-Codec **ES8311** digitalisiert.
-   * Analoge Leiterbahnen sind somit auf wenige Millimeter auf dem $35 \times 25\,\text{mm}$ Modul beschränkt – Einstrahlungen durch Zündspulen oder Lichtmaschine im Rahmen sind physikalisch ausgeschlossen.
+3. **Lokale Signalwandlung auf der Kassette (PCBA 03):**
+   * Jede aktive Kassette (`PCBA 03`) besitzt einen eigenen **ES8388 24-Bit / 48 kHz Stereo-Audio-Codec** direkt am Intercom-Anschluss (`J_AUDIO_PWR`).
+   * Analoge Signale (Mikrofon-Einspeisung und Lautsprecher-Abgriff bei Sena, Cardo oder Midland PMR446) werden unmittelbar auf dem Kassetten-PCB digitalisiert bzw. gewandelt. Die analogen Leiterbahnen sind auf $< 15\,\text{mm}$ beschränkt.
+   * Der Transport zur Zentralbox (`PCBA 01`) erfolgt volldigital über den Qorvo DW3110 UWB-Transceiver (IEEE 802.15.4z, Latenz $< 0{,}4\,\text{ms}$).
+   * Durch diesen Funk-Airgap und die 2-Draht-DC-Speisung sind Masseschleifen, Lichtmaschinenpfeifen und Zündstörungen physikalisch unmöglich. Veraltete Audio-Übertrager (Bourns-Trafos) und Optokoppler entfallen ersatzlos.
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────────────────┐
-│                      ZERO-GROUND-LOOP AUDIO-TOPOLOGIE (V8.5 / V9.0)                     │
-├─────────────────────────────────────────────────────────────────────────────────────────┤
-│                                                                                         │
-│  [ FAHRER-HELM ] ◄──────── Bluetooth A2DP / HFP ────────► [ ZENTRALBOX PCBA 01 ]        │
-│  [ SOZIUS-HELM ] ◄──────── Bluetooth A2DP / HFP ────────► [ ESP32-S3 Core 1 DSP ]       │
-│                                                                 ▲        ▲              │
-│                                           UWB Audio-Stream      │        │              │
-│                             (Qorvo DW3110 / 6.5 GHz / < 0.4 ms) │        │              │
-│                                                                 │        │              │
-│                      ┌──────────────────────────────────────────┘        │              │
-│                      ▼                                                   ▼              │
-│           ┌──────────────────────┐                           ┌──────────────────────┐   │
-│           │ BUCHT 1 (GATEWAY A)  │                           │ BUCHT 2 (GATEWAY B)  │   │
-│           │ Sena SPIDER X Slim   │                           │ Cardo DMC / OMM 2.4G │   │
-│           │ PCBA 03 Smart Inlay  │                           │ PCBA 03 Smart Inlay  │   │
-│           └──────────────────────┘                           └──────────────────────┘   │
-└─────────────────────────────────────────────────────────────────────────────────────────┘
++-----------------------------------------------------------------------------------------+
+|                      ZERO-GROUND-LOOP AUDIO-TOPOLOGIE (V8.5 / V9.0)                     |
++-----------------------------------------------------------------------------------------+
+|                                                                                         |
+|  [ FAHRER-HELM ] <-------- Bluetooth A2DP / HFP --------> [ ZENTRALBOX PCBA 01 ]        |
+|  [ SOZIUS-HELM ] <-------- Bluetooth A2DP / HFP --------> [ ESP32-S3 Core 1 DSP ]       |
+|                                                                 ^        ^              |
+|                                           UWB Audio-Stream      |        |              |
+|                             (Qorvo DW3110 / 6.5 GHz / < 0.4 ms) |        |              |
+|                                                                 |        |              |
+|                      +------------------------------------------+        |              |
+|                      v                                                   v              |
+|           +----------------------+                           +----------------------+   |
+|           | BUCHT 1 (GATEWAY A)  |                           | BUCHT 2 (GATEWAY B)  |   |
+|           | Sena SPIDER X Slim   |                           | Cardo DMC / OMM 2.4G |   |
+|           | PCBA 03 Smart Inlay  |                           | PCBA 03 Smart Inlay  |   |
+|           +----------------------+                           +----------------------+   |
++-----------------------------------------------------------------------------------------+
 ```
 
 ### 1.1 Technische Kennwerte & Audio-Performance
@@ -67,12 +69,12 @@ $$g_{\text{rel}}(t) = G_{\text{duck}} + (1 - G_{\text{duck}}) \cdot \frac{1}{2} 
 
 ```
 GAIN
-1.0 ┬────────────────────────┐                              ┌────────────────────────
-    │                        │ ◄─── Attack (15 ms)           │ ◄─── Release (250 ms)
-    │                         \                             /
-0.25┼                          \───────────────────────────/
-    │                           ▲                          ▲
-0.0 ┴───────────────────────────┴──────────────────────────┴─────────────────────────► ZEIT
+1.0 +------------------------+                              +------------------------
+    |                        | <--- Attack (15 ms)           | <--- Release (250 ms)
+    |                         \                             /
+0.25+                          \---------------------------/
+    |                           ^                          ^
+0.0 +---------------------------+--------------------------+-------------------------> ZEIT
     [ Normal: Musik 100% ]     [ Navi spricht: Hold 600ms ] [ Zurück zu 100% Musik ]
 ```
 
@@ -81,8 +83,9 @@ GAIN
 | Priorität | Signalquelle | Ducking-Dämpfung | Attack ($T_{\text{att}}$) | Hold ($T_{\text{hold}}$) | Release ($T_{\text{rel}}$) |
 | :--- | :--- | :---: | :---: | :---: | :---: |
 | **Prio 1** | **Radar-Ping / Notruf** | **$-18\,\text{dB}$** | $5\,\text{ms}$ | $800\,\text{ms}$ | $200\,\text{ms}$ |
+| **Prio 1.5** | **Telefonat aktiv / Klingeln** (QCC3084 HFP / CP/AA) | **$-24\,\text{dB}$** (auf Musik/Intercom) | $10\,\text{ms}$ | Permanent | $300\,\text{ms}$ |
 | **Prio 2** | **Navigations-Ansagen** (Smartphone / GPS) | **$-12\,\text{dB}$** | $15\,\text{ms}$ | $600\,\text{ms}$ | $250\,\text{ms}$ |
-| **Prio 3** | **Intercom Bucht 1 & 2** (Sena / Cardo) | **$-8\,\text{dB}$** | $25\,\text{ms}$ | $400\,\text{ms}$ | $200\,\text{ms}$ |
+| **Prio 3** | **Intercom Bucht 1 & 2** (Sena / Cardo / LoRa) | **$-8\,\text{dB}$** | $25\,\text{ms}$ | $400\,\text{ms}$ | $200\,\text{ms}$ |
 | **Prio 4** | **Musik-Streaming** (Bluetooth A2DP) | **$0\,\text{dB}$** (Basis) | -- | -- | -- |
 
 ---
@@ -90,26 +93,26 @@ GAIN
 ## 3. FreeRTOS Core 1 Audio-DMA Pipeline
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────────────────┐
-│                    FREERTOS CORE 1 ECHTZEIT-AUDIO PIPELINE (48 kHz / 24 Bit)            │
-├─────────────────────────────────────────────────────────────────────────────────────────┤
-│                                                                                         │
-│ [ ES8388 I2S RX DMA ] ──► [ Double Buffer (2x 128 Samples @ 2.67 ms) ]                 │
-│                                           │                                             │
-│                                           ▼                                             │
-│ ┌─────────────────────────────────────────────────────────────────────────────────────┐ │
-│ │ 1. FAST PEAK DETECTOR: Erfasst Pegel & VOX-Schwellen auf LIN1/LIN2 in < 1 ms        │ │
-│ ├─────────────────────────────────────────────────────────────────────────────────────┤ │
-│ │ 2. AGC GAIN-STAGE: Wendet Knowles MEMS Fahrtwind-Lautstärkeanhebung an               │ │
-│ ├─────────────────────────────────────────────────────────────────────────────────────┤ │
-│ │ 3. DUCKING MIXER: Berechnet Raised-Cosine Überblendung der aktiven Kanäle           │ │
-│ ├─────────────────────────────────────────────────────────────────────────────────────┤ │
-│ │ 4. LOOKAHEAD BRICKWALL LIMITER: 1 ms Soft-Knee Begrenzer (Verhindert 0 dBFS Clip)   │ │
-│ └─────────────────────────────────────────────────────────────────────────────────────┘ │
-│                                           │                                             │
-│                                           ▼                                             │
-│ [ ES8388 I2S TX DMA ] ◄── [ Double Buffer (2x 128 Samples @ 2.67 ms) ]                 │
-└─────────────────────────────────────────────────────────────────────────────────────────┘
++-----------------------------------------------------------------------------------------+
+|                    FREERTOS CORE 1 ECHTZEIT-AUDIO PIPELINE (48 kHz / 24 Bit)            |
++-----------------------------------------------------------------------------------------+
+|                                                                                         |
+| [ ES8388 I2S RX DMA ] --> [ Double Buffer (2x 128 Samples @ 2.67 ms) ]                 |
+|                                           |                                             |
+|                                           v                                             |
+| +-------------------------------------------------------------------------------------+ |
+| | 1. FAST PEAK DETECTOR: Erfasst Pegel & VOX-Schwellen auf LIN1/LIN2 in < 1 ms        | |
+| +-------------------------------------------------------------------------------------+ |
+| | 2. AGC GAIN-STAGE: Wendet Knowles MEMS Fahrtwind-Lautstärkeanhebung an               | |
+| +-------------------------------------------------------------------------------------+ |
+| | 3. DUCKING MIXER: Berechnet Raised-Cosine Überblendung der aktiven Kanäle           | |
+| +-------------------------------------------------------------------------------------+ |
+| | 4. LOOKAHEAD BRICKWALL LIMITER: 1 ms Soft-Knee Begrenzer (Verhindert 0 dBFS Clip)   | |
+| +-------------------------------------------------------------------------------------+ |
+|                                           |                                             |
+|                                           v                                             |
+| [ ES8388 I2S TX DMA ] <-- [ Double Buffer (2x 128 Samples @ 2.67 ms) ]                 |
++-----------------------------------------------------------------------------------------+
 ```
 
 ### 3.1 ES8388 Low-Level Registerkonfiguration & I2S DMA-Architektur
@@ -161,19 +164,19 @@ Zur automatischen Anpassung der Helm-Lautstärke an turbulente Windgeräusche be
 
 ```
                        AKUSTIK-PFAD (FRONT-KNOTEN -> HELM)
-┌────────────────────────────┐              ┌────────────────────────────┐
-│ Knowles SPH0645 MEMS       │              │ ESP32-S3 Front Controller  │
-│ • Hydrophobe ePTFE-Membran │ I2S DMA Bus  │ • Biquad A-Weighting nach  │
-│ • 65.4 dB SNR, 120 dBA AOP ├─────────────►│   IEC 61672-1 Class 1      │
-│ • Integrierter 24-Bit ADC  │              │ • 50 Hz RMS-Schallpegel dBA│
-└────────────────────────────┘              └─────────────┬──────────────┘
-                                                          │ UWB 6.5 GHz (< 0.4 ms)
-                                                          ▼
-┌────────────────────────────┐              ┌────────────────────────────┐
-│ Helm-Lautsprecher          │ I2S TX DMA   │ ESP32-S3 Hauptcontroller   │
-│ • Gehörschutz-begrenzt     │◄─────────────┤ • Raised-Cosine AGC-Gain   │
-│ • Automatisch laut/leise   │              │ • Schwellwert: 70 dBA      │
-└────────────────────────────┘              └────────────────────────────┘
++----------------------------+              +----------------------------+
+| Knowles SPH0645 MEMS       |              | ESP32-S3 Front Controller  |
+| * Hydrophobe ePTFE-Membran | I2S DMA Bus  | * Biquad A-Weighting nach  |
+| * 65.4 dB SNR, 120 dBA AOP +------------->|   IEC 61672-1 Class 1      |
+| * Integrierter 24-Bit ADC  |              | * 50 Hz RMS-Schallpegel dBA|
++----------------------------+              +-------------+--------------+
+                                                          | UWB 6.5 GHz (< 0.4 ms)
+                                                          v
++----------------------------+              +----------------------------+
+| Helm-Lautsprecher          | I2S TX DMA   | ESP32-S3 Hauptcontroller   |
+| * Gehörschutz-begrenzt     |<-------------+ * Raised-Cosine AGC-Gain   |
+| * Automatisch laut/leise   |              | * Schwellwert: 70 dBA      |
++----------------------------+              +----------------------------+
 ```
 
 ### 4.1 Digitalfilterung: Biquad A-Weighting nach IEC 61672-1
@@ -199,6 +202,44 @@ FAHRWIND-PEGEL          FAHRGESCHWINDIGKEIT    AGC LAUTSTÄRKE-BOOST    AKUSTIK-
 3. **Modus 3 (Group-Mesh Bridge):** Pod 1 (Sena) und Pod 2 (Cardo) sind parallel aktiv. Cross-Mix verbindet beide Gruppen in Echtzeit.
 4. **Modus 4 (Emergency-Override):** LoRa-Notruffunk oder Radar-Kollisionsalarm (TTC < 3.5s) schalten alle anderen Audioquellen sofort auf $-24\,\text{dB}$ stumm und injizieren den Notruf bzw. Alarm-Doppelton mit maximalem Headroom.
 
+### 4.4 Telefonie- & Rufmanagement (Qualcomm QCC3084 HFP & CarPlay / Android Auto)
+
+Die Zentralbox (`PCBA 01`) integriert einen **Qualcomm QCC3084 Bluetooth 5.4 Audio-SoC**, der neben hochauflösendem Dual-A2DP (aptX HD / LE Audio Auracast) das **Hands-Free Profile (HFP 1.8 / mSBC / Wideband Speech)** bereitstellt. Das Telefonie-Routing ist nahtlos in den DSP eingebettet:
+
+```
++----------------------------------------------------------------------------------------+
+|               MODALES TELEFONIE- & PTT-ROUTING (QUALCOMM QCC3084 HFP)                  |
++----------------------------------------------------------------------------------------+
+|                                                                                        |
+| [ SMARTPHONE / CARPLAY ] --> HFP / AA --> [ QCC3084 BT 5.4 ] --> [ ESP32-S3 CORE 1 ]   |
+|                                                                        |               |
+|                                            +---------------------------+-------------+ |
+|                                            v                                         v |
+|                                  [ PRIVAT-MODUS (Default) ]               [ KONFERENZ ]|
+|                                  * Fahrer-Helm exklusiv                   * PWA Toggle |
+|                                  * Sozius/Mesh hören Anruf NICHT          * Einspeisung|
+|                                  * Gruppenfunk geduckt (-24 dB)             in Mesh    |
++----------------------------------------------------------------------------------------+
+```
+
+#### Modale Lenker-PTT-Tastenabfangung (Sicherheitslogik)
+Im Fahrbetrieb steuert der Lenker-PTT-Taster normalerweise die Funk-PTT, Sprachassistenten oder Kameratrigger. Bei eingehenden oder aktiven Telefonaten wird der Tasterzustand in der Firmware **strikt modal überschrieben**:
+1. **Zustand `RINGING` (Eingehender Anruf signalisiert):**
+   * **Einfachklick ($< 300\,\text{ms}$):** Anruf annehmen (`HFP ATA`).
+   * **Doppelklick ($2\times < 250\,\text{ms}$):** Anruf ablehnen (`HFP ATH`).
+   * **Sicherheitsisolation:** In diesem Zustand werden PTT-Klicks **unter keinen Umständen** an Funk-Gateways (LoRa / PMR446) oder Actioncam-Trigger weitergeleitet! Fehlbedienungen sind ausgeschlossen.
+2. **Zustand `CALL_ACTIVE` (Laufendes Gespräch):**
+   * **Langer Tastendruck ($> 1{,}5\,\text{s}$):** Anruf beenden / Auflegen (`HFP ATH`).
+   * **Kurzer Klick während des Gesprächs:** Mikrofon kurzzeitig stummschalten (Mute-Toggle).
+3. **Zustand `IDLE`:** Normale PTT- und Tastenbelegung gemäß Fahrzeugprofil.
+
+#### Akustische Privatsphäre & Konferenzschaltung
+* **Standardmodus (Private Isolation):** Das Telefonat wird ausschließlich auf den Fahrer-Helm geroutet. Das Mikrofon des Fahrers wird während des Telefonats von den Intercom-Kassetten (Sena/Cardo/LoRa) getrennt. Gruppenfunk-Durchsagen werden im Helm des Fahrers auf $-24\,\text{dB}$ abgesenkt, bleiben jedoch leise im Hintergrund wahrnehmbar.
+* **Gruppen-Konferenzbrücke (PWA-Option "Anruf in Gruppe einspeisen"):**
+  * Wird diese Funktion in der WebApp aktiviert, mischt die DSP-Pipeline die Stimme des Anrufers in die Link-State Intercom-Matrix ein.
+  * Sozius und gekoppelte Gruppen-Bikes können das Telefonat mithören und über ihre Mikrofone mitsprechen.
+  * Raised-Cosine Ducking dämpft Hintergrundmusik auf $0\,\%$, während die Echounterdrückung (AEC) akustische Rückkopplungen verhindert.
+
 ---
 
 ## 5. Mehrstufiger Übersteuerungsschutz, Analog-Limiter & Signalerfassung
@@ -218,7 +259,7 @@ Um zu überprüfen, ob ein angebundenes OEM-Headset Schaltbefehle tatsächlich a
 ## 6. Harley-Davidson Boom! Box WHIM-Mikrofon-Impedanz-Emulation
 
 Zur Freischaltung von Apple CarPlay in der Boom! Box GTS Infotainment-Headunit ohne das proprietäre HD-WHIM-Modul ($> 350\,\text{€}$):
-* **Elektrische Impedanz-Emulation:** OpenMotorBridge emuliert über ein präzises Widerstands- und Übertragernetzwerk an den Audio-Schnittstellen die Gleich- und Wechselstrom-Impedanz ($1{,}0 \dots 2{,}2\,\text{k}\Omega$) eines aktiven OEM-Mikrofons.
+* **Elektrische Impedanz-Emulation:** OpenMotorBridge emuliert über ein präzises elektronisches Widerstandsnetzwerk an den Audio-Schnittstellen die Gleich- und Wechselstrom-Impedanz ($1{,}0 \dots 2{,}2\,\text{k}\Omega$) eines aktiven OEM-Mikrofons.
 * **Ergebnis:** Apple CarPlay und Android Auto werden im Fahrzeugdisplay sofort freigeschaltet.
 
 ---
@@ -233,16 +274,16 @@ python3 tools/audio_testbench/server.py
 ```
 
 ```
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│               OPENMOTORBRIDGE LIVE AUDIO DSP STUDIO & ECHTZEIT-SIMULATOR               │
-├───────────────────────────────┬───────────────────────────────┬────────────────────────┤
-│ 1. EINGABEN & FAHRZEUG        │ 2. ECHTZEIT-OSZILLOSKOP & DSP │ 3. OUTPUT & SPEKTRUM   │
-├───────────────────────────────┼───────────────────────────────┼────────────────────────┤
-│ • Reales Mikrofon/Headset     │ • Raised-Cosine Ducking Kurve │ • Stereo FFT Spektrum  │
-│ • Lenker-PTT Taste ([SPACE])  │ • 15ms Attack / 800ms Release │ • Triple VU-Meter      │
-│ • Virtueller Tacho (0-160km/h)│ • AGC Windgeräusch-Gate       │ • Helm-Master-Pegel    │
-│ • Synthwave & MP3 Drag&Drop   │ • 1-Wire Kassetten-Hot-Swap   │ • Latenzzähler (<10ms) │
-└───────────────────────────────┴───────────────────────────────┴────────────────────────┘
++----------------------------------------------------------------------------------------+
+|               OPENMOTORBRIDGE LIVE AUDIO DSP STUDIO & ECHTZEIT-SIMULATOR               |
++-------------------------------+-------------------------------+------------------------+
+| 1. EINGABEN & FAHRZEUG        | 2. ECHTZEIT-OSZILLOSKOP & DSP | 3. OUTPUT & SPEKTRUM   |
++-------------------------------+-------------------------------+------------------------+
+| * Reales Mikrofon/Headset     | * Raised-Cosine Ducking Kurve | * Stereo FFT Spektrum  |
+| * Lenker-PTT Taste ([SPACE])  | * 15ms Attack / 800ms Release | * Triple VU-Meter      |
+| * Virtueller Tacho (0-160km/h)| * AGC Windgeräusch-Gate       | * Helm-Master-Pegel    |
+| * Synthwave & MP3 Drag&Drop   | * UWB Kassetten-Hot-Swap      | * Latenzzähler (<10ms) |
++-------------------------------+-------------------------------+------------------------+
 ```
 
 ### 7.1 Funktionsumfang des Simulators
@@ -253,4 +294,4 @@ python3 tools/audio_testbench/server.py
    * $0\dots 15\,\text{km/h}$ (Ampel/Rangieren): $100\,\%$ Transparenzmodus aktiv.
    * $15\dots 30\,\text{km/h}$: Stetiges Ausblenden über Raised-Cosine Flanke.
    * $> 30\,\text{km/h}$: Windgeräusch-Gate aktiv mit dynamischer Pink-Noise-Beimischung proportional zu $v^2$.
-5. **1-Wire Kassetten-Hot-Swap:** Simuliert die hardware-spezifischen Klangprofile (Sena 60S Preamp/EQ, Cardo Packtalk Pro Kompression, OMM LoRa Telemetrie-Bandpass $300\dots 3400\,\text{Hz}$, Blindkassette $-96\,\text{dB}$).
+5. **UWB Kassetten-Hot-Swap & Profil-Handshake:** Simuliert die hardware-spezifischen Klangprofile (Sena SPIDER X Slim Preamp/EQ, Cardo Packtalk Pro Kompression, OMM LoRa Telemetrie-Bandpass $300\dots 3400\,\text{Hz}$, Blindkassette $-96\,\text{dB}$).

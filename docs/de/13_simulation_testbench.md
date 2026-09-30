@@ -2,50 +2,54 @@
 
 Um das Zusammenspiel von Hardware, Akustik, Fahrdynamik, Thermik, Hochfrequenz-Physik und Netzwerkprotokollen vor dem ersten Fertigungslauf auf Automotive-Niveau lückenlos zu verifizieren, verfügt OpenMotorBridge über eine modulare Python-Simulations-Suite.
 
+> [!NOTE]
+> **v9.6 Clean-Architecture Testbench-Update:**  
+> Durch den Entfall von `PCBA 02` (Pod-Basis) und `PCBA 04` (Lenker-Interface) zugunsten des **drahtlosen All-UWB-Backbones (6.5 GHz / DW3110)** entfallen anfällige Signal-Steckverbinder im Außenbereich vollständig. Die Testbench simuliert das modulare 5-Platinen-System (`PCBA 01`, `PCBA 03`, `PCBA 05`, `PCBA 06`, `PCBA 07`), das deterministische UWB-Timing ($< 0{,}4\,	ext{ms}$), den unterbrechungsfreien automatischen Handover zwischen Nahbereichs-Intercom (Sena Mesh / Cardo DMC / OMM 2.4 GHz) und 868-MHz-Fernbereich-LoRa sowie die NVS-Persistierung des Gruppen-States bei 30-minütigen Kaffeepausen.
+
 ---
 
 ## 1. Übersicht der Simulations-Module
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────────────────┐
-│                       OPENMOTORBRIDGE DIGITALE TESTBENCH SUITE                          │
-├───────────────────────────┬───────────────────────────────────┬─────────────────────────┤
-│ Modul                     │ Datei                             │ Test-Fokus / Standard   │
-├───────────────────────────┼───────────────────────────────────┼─────────────────────────┤
-│ 1. Multi-Board SPICE      │ `openmotorbridge_full_system_     │ 87V Load Dump, 6.5V USV,│
-│    Verbundsimulation      │  sim.py`                          │ 85dB CMRR, Front Node   │
-├───────────────────────────┼───────────────────────────────────┼─────────────────────────┤
-│ 2. Hardware-in-the-Loop   │ `firmware_hil_system_sim.py`      │ 10 Live-Szenarien, PTT, │
-│    Firmware-Simulator     │                                   │ Front Node, DLE Mesh    │
-├───────────────────────────┼───────────────────────────────────┼─────────────────────────┤
-│ 3. 8h-Tagestour Thermik   │ `thermal_day_tour_sim.py`         │ -20°C Frost bis +58°C   │
-│    Multi-Physik           │                                   │ Motor-Wärmestau im Stau │
-├───────────────────────────┼───────────────────────────────────┼─────────────────────────┤
-│ 4. All-Weather Funk- &    │ `rf_rain_propagation_sim.py`      │ ITU-R P.838/P.840 Regen,│
-│    Wellenausbreitung      │                                   │ Nebel, Gischt, Dual-PHY │
-├───────────────────────────┼───────────────────────────────────┼─────────────────────────┤
-│ 5. Kfz-Transienten-       │ `automotive_iso7637_pulses_sim.py`│ ISO 7637-2 Level 4      │
-│    Störfestigkeit         │                                   │ -150V, +50V, +/-220V    │
-├───────────────────────────┼───────────────────────────────────┼─────────────────────────┤
-│ 6. Akustik & Wind-DSP     │ `acoustic_wind_dsp_sim.py`        │ 180 km/h Wind (93dB SPL)│
-│    Sprachverständlichkeit │                                   │ 120Hz HPF, STOI > 0.70  │
-├───────────────────────────┼───────────────────────────────────┼─────────────────────────┤
-│ 7. 20-Fahrer Großgruppen- │ `mesh_group_scaling_sim.py`       │ 1.52 km Konvoi, 100% PDR│
-│    Mesh & Partitioning    │                                   │ DLE Sub-Mesh Split/Merge│
-├───────────────────────────┼───────────────────────────────────┼─────────────────────────┤
-│ 8. 180-Tage Winterpause   │ `battery_winter_standby_sim.py`   │ 16.5 µA ULP-Hibernate,  │
-│    Ruhestrom-Analyse      │                                   │ 0.59% Entladung / 6 Mon.│
-├───────────────────────────┼───────────────────────────────────┼─────────────────────────┤
-│ 9. Universal Front Node   │ `front_node_wireless_hub_sim.py`  │ USB2514B Eye, MEMS DSP, │
-│    (PCBA 05)              │                                   │ TPS2051B, UWB, BLE      │
-├───────────────────────────┼───────────────────────────────────┼─────────────────────────┤
-│ 10. Live Audio DSP Studio │ `tools/audio_testbench/server.py` │ Interaktive Web-Audio   │
-│     & Echtzeit-Simulator  │                                   │ Suite, Mic/PTT/Tacho/EQ │
-├───────────────────────────┼───────────────────────────────────┼─────────────────────────┤
-│ 11. Multi-Motorrad        │ `openmotorbridge_digital_twin.py` │ 8 PCBs, Wil-Wattwil-    │
-│     Digital-Twin & HIL    │                                   │ Ricken, Tunnel EKF-DR,  │
-│                           │                                   │ 2.4G/LoRa Handover, PWA │
-└───────────────────────────┴───────────────────────────────────┴─────────────────────────┘
++-----------------------------------------------------------------------------------------+
+|                       OPENMOTORBRIDGE DIGITALE TESTBENCH SUITE                          |
++---------------------------+-----------------------------------+-------------------------+
+| Modul                     | Datei                             | Test-Fokus / Standard   |
++---------------------------+-----------------------------------+-------------------------+
+| 1. Multi-Board SPICE      | `openmotorbridge_full_system_     | 87V Load Dump, 6.5V USV,|
+|    Verbundsimulation      |  sim.py`                          | 85dB CMRR, Front Node   |
++---------------------------+-----------------------------------+-------------------------+
+| 2. Hardware-in-the-Loop   | `firmware_hil_system_sim.py`      | 10 Live-Szenarien, PTT, |
+|    Firmware-Simulator     |                                   | Front Node, DLE Mesh    |
++---------------------------+-----------------------------------+-------------------------+
+| 3. 8h-Tagestour Thermik   | `thermal_day_tour_sim.py`         | -20°C Frost bis +58°C   |
+|    Multi-Physik           |                                   | Motor-Wärmestau im Stau |
++---------------------------+-----------------------------------+-------------------------+
+| 4. All-Weather Funk- &    | `rf_rain_propagation_sim.py`      | ITU-R P.838/P.840 Regen,|
+|    Wellenausbreitung      |                                   | Nebel, Gischt, Dual-PHY |
++---------------------------+-----------------------------------+-------------------------+
+| 5. Kfz-Transienten-       | `automotive_iso7637_pulses_sim.py`| ISO 7637-2 Level 4      |
+|    Störfestigkeit         |                                   | -150V, +50V, +/-220V    |
++---------------------------+-----------------------------------+-------------------------+
+| 6. Akustik & Wind-DSP     | `acoustic_wind_dsp_sim.py`        | 180 km/h Wind (93dB SPL)|
+|    Sprachverständlichkeit |                                   | 120Hz HPF, STOI > 0.70  |
++---------------------------+-----------------------------------+-------------------------+
+| 7. 20-Fahrer Großgruppen- | `mesh_group_scaling_sim.py`       | 1.52 km Konvoi, 100% PDR|
+|    Mesh & Partitioning    |                                   | DLE Sub-Mesh Split/Merge|
++---------------------------+-----------------------------------+-------------------------+
+| 8. 180-Tage Winterpause   | `battery_winter_standby_sim.py`   | 16.5 µA ULP-Hibernate,  |
+|    Ruhestrom-Analyse      |                                   | 0.59% Entladung / 6 Mon.|
++---------------------------+-----------------------------------+-------------------------+
+| 9. Universal Front Node   | `front_node_wireless_hub_sim.py`  | USB2514B Eye, MEMS DSP, |
+|    (PCBA 05)              |                                   | TPS2051B, UWB, BLE      |
++---------------------------+-----------------------------------+-------------------------+
+| 10. Live Audio DSP Studio | `tools/audio_testbench/server.py` | Interaktive Web-Audio   |
+|     & Echtzeit-Simulator  |                                   | Suite, Mic/PTT/Tacho/EQ |
++---------------------------+-----------------------------------+-------------------------+
+| 11. Multi-Motorrad        | `openmotorbridge_digital_twin.py` | 5 PCBs (v9.6), Wil-Watt-|
+|     Digital-Twin & HIL    |                                   | Ricken, Tunnel EKF-DR,  |
+|                           |                                   | 2.4G/LoRa Handover, PWA |
++---------------------------+-----------------------------------+-------------------------+
 ```
 
 ---
@@ -192,37 +196,37 @@ Der **Digital Twin Simulator** ([`openmotorbridge_digital_twin.py`](../../tools/
 
 ```
                       DIGITAL TWIN ARCHITEKTUR (8 PLATINEN & 2 BIKES)
-═══════════════════════════════════════════════════════════════════════════════════════
+=======================================================================================
 
-   [ GEODÄTISCHER TRACK: WIL ──► WATTWIL-TUNNEL (2.2km) ──► KREISEL ──► RICKENPASS ]
-                                         │
-         ┌───────────────────────────────┴───────────────────────────────┐
-         ▼                                                               ▼
- ┌────────────────────────────────────────┐            ┌────────────────────────────────────────┐
- │          MOTORRAD A (LEADER)           │            │          MOTORRAD B (CHASER)           │
- │  • PCBA 01 (ESP32-S3 Main + LoRa/UWB)  │            │  • PCBA 01 (ESP32-S3 Main + LoRa/UWB)  │
- │  • PCBA 03 (Pods 1/2 All-UWB Inlays)   │            │  • PCBA 03 (Pods 1/2 All-UWB Inlays)   │
- │  • PCBA 05 (Universal Front Node)      │            │  • PCBA 05 (Universal Front Node)      │
- └───────────────────┬────────────────────┘            └───────────────────┬────────────────────┘
-                     │                                                     │
-                     └────────────────► [ RF PROPAGATION ENGINE ] ◄────────┘
-                                        • Log-Distance Modell (Friis)
-                                        • 38 dB Dämpfung in Tunnelröhre
-                                        • 2.4 GHz OMM High-Speed Mesh (<150m)
-                                        • 868 MHz LoRa Fallback (>150m / Tunnel)
-                                        • Dynamic Leader Election (DLE)
-                                                       │
-                                                       ▼
-                                        ┌─────────────────────────────┐
-                                        │ PURE-PYTHON WEBSOCKET SERVER│  (Port 8765)
-                                        └──────────────┬──────────────┘
-                                                       │
-                                                       ▼
-                                        ┌─────────────────────────────┐
-                                        │    OPENMOTORBRIDGE PWA      │  Live Dashboard
-                                        │ (Tacho, Schräglage, Radar,  │  im Webbrowser
-                                        │  EKF-Tunnel-DR, Mesh-Topol.)│
-                                        └─────────────────────────────┘
+   [ GEODÄTISCHER TRACK: WIL --> WATTWIL-TUNNEL (2.2km) --> KREISEL --> RICKENPASS ]
+                                         |
+         +-------------------------------+-------------------------------+
+         v                                                               v
+ +----------------------------------------+            +----------------------------------------+
+ |          MOTORRAD A (LEADER)           |            |          MOTORRAD B (CHASER)           |
+ |  * PCBA 01 (ESP32-S3 Main + LoRa/UWB)  |            |  * PCBA 01 (ESP32-S3 Main + LoRa/UWB)  |
+ |  * PCBA 03 (Pods 1/2 All-UWB Inlays)   |            |  * PCBA 03 (Pods 1/2 All-UWB Inlays)   |
+ |  * PCBA 05 (Universal Front Node)      |            |  * PCBA 05 (Universal Front Node)      |
+ +-------------------+--------------------+            +-------------------+--------------------+
+                     |                                                     |
+                     +----------------> [ RF PROPAGATION ENGINE ] <--------+
+                                        * Log-Distance Modell (Friis)
+                                        * 38 dB Dämpfung in Tunnelröhre
+                                        * 2.4 GHz OMM High-Speed Mesh (<150m)
+                                        * 868 MHz LoRa Fallback (>150m / Tunnel)
+                                        * Dynamic Leader Election (DLE)
+                                                       |
+                                                       v
+                                        +-----------------------------+
+                                        | PURE-PYTHON WEBSOCKET SERVER|  (Port 8765)
+                                        +--------------+--------------+
+                                                       |
+                                                       v
+                                        +-----------------------------+
+                                        |    OPENMOTORBRIDGE PWA      |  Live Dashboard
+                                        | (Tacho, Schräglage, Radar,  |  im Webbrowser
+                                        |  EKF-Tunnel-DR, Mesh-Topol.)|
+                                        +-----------------------------+
 ```
 
 ### Die Kernkomponenten & Test-Features:
