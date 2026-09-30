@@ -323,36 +323,60 @@ OpenMotorBridge ist als **losgelöstes, fehlertolerantes Baukastensystem** konzi
 
 ## 9. Autonome Gruppen-Lifecycle State Machine, Kaffeepausen-Persistenz & Anruf-Management
 
-### 9.1 Zero-Touch Discovery & Kryptografischer Gruppenstart
-Die Koordination von gemeinsamen Ausfahrten erfordert weder Smartphone-Apps noch manuelle Konfiguration am Lenker:
-1. **UTC-Zeitsynchronisation & LoRa-Beacons:** Beim Einschalten der Zündung synchronisieren alle Zentralboxen ihre RTC auf Nanosekunden-Genauigkeit über das u-blox SAM-M10Q GNSS. Sie senden zyklische Discovery-Beacons auf dem offenen LoRa-Ankündigungskanal.
-2. **Proximity-Clustering:** Boxen, die sich zum selben Zeitpunkt am selben Ort befinden (Abstand $< 40\,	ext{m}$), formieren automatisch eine temporäre Ausfahrtsgruppe.
-3. **AES-256 Session-Key Generierung:** Ein temporärer Master (Box mit niedrigster MAC-Adresse) erzeugt einen kryptografischen 256-Bit Session-Key und verteilt diesen via asymmetrischem Diffie-Hellman Key Exchange über den LoRa-Ankündigungskanal. Alle Nodes wechseln auf den verschlüsselten Arbeitskanal.
+### 9.1 Hierarchisches Zero-Touch Discovery: Micro-Cluster (Heim-Setup) & Macro-Merge am Treffpunkt
+Die Koordination von gemeinsamen Ausfahrten erfordert weder Smartphone-Apps noch manuelle Konfiguration am Lenker. Das System arbeitet mit einer hierarchischen Zwei-Ebenen-Architektur:
+1. **Tier 1: Verteilter Start & Autarkes Micro-Cluster (Heim-Setup):**
+   * Starten eng verbundene Fahrer (z. B. Familie, Partner auf zwei Bikes oder enge Freunde) im heimatlichen Nahbereich ($d < 500\,\text{m}$, Zeitfenster $\Delta t < 15\,\text{min}$), schließen sich ihre OMB-Zentralboxen über das Smart-Keyfob-FOB-Kanalprofil **sofort zu einem autarken Micro-Cluster** zusammen.
+   * Auf der Anfahrt zum großen Haupttreffpunkt läuft die Sprachkommunikation und das Routing privat und verzögerungsfrei über diesen Micro-Kanal.
+2. **Tier 2: Macro-Merge am Sammel-Treffpunkt (Stillstands-Erkennung & Discovery):**
+   * Am gemeinsamen Treffpunkt (z. B. Autobahnraststätte, Tankstelle) versammeln sich verschiedene Micro-Cluster und Einzelfahrer im Stillstand ($v = 0\,\text{km/h}$, $d < 40\,\text{m}$).
+   * Die Knoten detektieren die Versammlung und wechseln in den Zustand `PRE_MERGE_DISCOVERY`. Über LoRa Kanal 1 tauschen sie diskrete Discovery-Beacons aus.
 
-### 9.2 Der "Doubt-Timer" bei Kursabweichungen (Prävention vor Fehlalarmen)
+### 9.2 Gestaffelter Wiederanfahr-Puffer (Konvoi-Toleranz) & Multi-Route Sub-Groups
+1. **Gestaffelter Wiederanfahr-Puffer:**
+   * Beim Losfahren einer 10- bis 20-köpfigen Großgruppe rollen die Motorräder nie zeitgleich an, sondern ziehen sich über 60 bis 120 Sekunden auseinander.
+   * Der Algorithmus toleriert dieses gestaffelte Anfahren über einen Beschleunigungs- und Heading-Filter.
+2. **Generierung des Macro-Cluster Session-Keys:**
+   * Sobald die Kolonne in dieselbe Fahrtachse eingeschwenkt ist ($\Delta\text{Heading} < 30^\circ$, $v > 25\,\text{km/h}$ über $90\,\text{s}$), erzeugt ein temporärer Master (niedrigste MAC) einen gemeinsamen **AES-256 Großgruppen-Session-Key** und verteilt diesen verschlüsselt an alle Teilnehmer.
+   * **Dual-Layer Topology:** Die Großgruppe nutzt den Macro-Kanal für Konvoi-Funk, Gefahrenwarnungen und DLE-Mesh-Routing. Das unterliegende Micro-Cluster bleibt als Sub-Layer im Speicher erhalten.
+3. **Multi-Route-Start:**
+   * Treffen sich am Startpunkt mehrere Gruppen mit unterschiedlichen Routen (z. B. Cruiser vs. Pässe-Heizer), überwacht die Firmware in den ersten 3 Minuten die Richtungsvektoren (**Heading-Lernphase**).
+   * Driften die Vektoren auseinander, teilt sich das System vollautomatisch in zwei autonome Sub-Gruppen auf - ohne Fehlalarme.
+
+### 9.3 Der "Doubt-Timer" bei Kursabweichungen (Prävention vor Fehlalarmen)
 Weicht ein Teilnehmer vom gemeinsamen Routen-Vektor ab (z. B. verpasste Autobahnausfahrt oder Abbiegen an einer Kreuzung), schlägt das System nicht unmittelbar Alarm:
 * **Start des Doubt-Timers ($T_{\text{doubt}} = 15\dots 30\,\text{s}$):** Das System stuft den Fahrer temporär in den Zustand `DOUBT_SPLIT` ein.
 * **Szenario A (Verpasster Abzweig):** Hält der Fahrer nach 10 Sekunden an oder verringert die Geschwindigkeit drastisch, ertönt im Helm die lokale TTS-Ansage: *"Möglicher Kursverlust der Gruppe - bitte Route prüfen"*.
 * **Szenario B (Bewusstes Verlassen):** Fährt der Fahrer mit hoher Geschwindigkeit auf der abweichenden Route kontinuierlich weiter, deklariert die State Machine nach Ablauf von $T_{\text{doubt}}$ das reguläre Verlassen der Gruppe (`GROUP_LEFT`).
 
-### 9.3 Kaffeepausen-Schutz & 30-Minuten Deep-Sleep Persistenz
+### 9.4 Kaffeepausen-Schutz & 30-Minuten Deep-Sleep Persistenz
 Bei Pausen (Tankstelle, Restaurant, Café) muss die Gruppe zusammengehalten werden, ohne die Motorradbatterie zu belasten:
 1. **Stillstands-Cluster ($v = 0\,\text{km/h}$ & Radius $< 30\,\text{m}$):** Reduzieren alle Motorräder die Geschwindigkeit auf null und schalten die Motoren ab, wechselt die State Machine in den Modus `GROUP_PAUSED`.
 2. **USV-Nachlauf & Deep Sleep:** Nach 15 Minuten Inaktivität schaltet die Zentralbox die Peripherie (Pods, Front Node, Radar) ab und versetzt den ESP32-S3 in den stromsparenden Tiefschlaf ($< 150\,\mu\text{A}$ aus der 1S LiPo-USV).
 3. **Persistierung des Gruppen-States in NVS & RTC-RAM:** Vor dem Schlafengehen sichert die Firmware folgende Daten im nichtflüchtigen Speicher:
-   * 256-Bit AES Gruppen-Session-Key
+   * 256-Bit AES Gruppen-Session-Key (Macro & Micro)
    * Vollständige Teilnehmer-Liste (Node-UIDs, Rufzeichen, Rollen)
    * Aktueller Gruppen-Kanal und Mesh-Sequenznummern
    * Letzte bekannte GNSS-Referenzkoordinate
 4. **Nahtlose Rekonstitution nach 30+ Minuten:** Schalten die Fahrer nach 30 oder 60 Minuten die Zündung wieder ein, lädt die Firmware den Gruppen-Status in $< 50\,\text{ms}$ aus dem NVS. Die Gruppe ist **sofort und ohne erneute Discovery wieder voll einsatzbereit**.
 
-### 9.4 Spontaner Gruppenbeitritt während der Fahrt (Proximity-Flyby & Unterwegs-Treffpunkt)
+### 9.5 Spontaner Gruppenbeitritt während der Fahrt (Proximity-Flyby & Unterwegs-Treffpunkt)
 Trifft ein Fahrer während der Tour auf die Gruppe (z. B. Aufgabeln an einem vereinbarten Treffpunkt entlang der Route):
 * **Proximity-Flyby Kriterium:** Nähert sich ein OMB-Node auf $< 50\,\text{m}$ und fährt für mindestens $30\,\text{s}$ im gleichen Kursvektor (Geschwindigkeit $\Delta v < 15\,\text{km/h}$, Fahrtrichtung $\Delta \theta < 15^\circ$), sendet der Master ein diskretes Einladungs-Beacon.
 * **One-Click Bestätigung:** Im Helm des Gruppenleiters und des beitretenden Fahrers ertönt: *"Neuer Teilnehmer in Reichweite - Beitreten?"*. Ein einfacher Klick auf die Lenker-PTT bestätigt den Beitritt; der Session-Key wird in $< 200\,\text{ms}$ übertragen.
 * **Unterwegs-Treffpunkt:** Steht der beitretende Fahrer an einer Raststätte oder Kreuzung und schließt sich dem Konvoi an, genügt am Treffpunkt ein Doppelklick auf die PTT-Taste, um den Quick-Join zu initiieren.
 
-### 9.5 Smartphone-Anruf-Erkennung (HFP) & Intelligenter PTT-Schutz
+### 9.6 Gestaffelte End-of-Trip Dispersion & Re-Aktivierung des Micro-Clusters
+Am Ende der Tagestour erfolgt die saubere, lautlose Trennung der Großgruppe bei gleichzeitigem Erhalt des Micro-Clusters:
+1. **End-of-Trip Stillstand (`PRE_DISPERSE`):**
+   * Am finalen Sammelpunkt schalten alle Fahrer die Motoren ab ($v = 0\,\text{km/h}$, KL15 AUS). Nach 5 Minuten Stillstand wechselt die State Machine in den Zustand `PRE_DISPERSE`.
+2. **Schweigendes Macro-Disperse:**
+   * Verabschieden sich die Teilnehmer und fahren in unterschiedliche Himmelsrichtungen auseinander, schließt sich die Macro-Session vollkommen geräuschlos ohne Fehlalarme.
+3. **Automatischer Erhalt des Micro-Clusters für den Heimweg:**
+   * Das unterliegende Micro-Cluster (Familie / Buddies) wird **automatisch wieder als primärer Kommunikationskanal geschaltet**.
+   * Die Gruppe kann den gesamten Heimweg ohne erneutes Pairing oder manuelle Umschaltung miteinander sprechen, bis jeder zu Hause angekommen ist.
+
+### 9.7 Smartphone-Anruf-Erkennung (HFP) & Intelligenter PTT-Schutz
 Geht auf dem gekoppelten Smartphone ein Telefonat ein, erkennt die Zentralbox über das Bluetooth Hands-Free Profile (HFP) den Status `RINGING` bzw. `CALL_ACTIVE`:
 1. **Mikrofon-Mute zur Gruppe:** Das Helm-Mikrofon wird für die Intercom- und Mesh-Kanäle sofort stummgeschaltet. Das private Telefonat wird unter keinen Umständen in die Motorradgruppe übertragen.
 2. **PTT-Lock (Befehlssperre):** Während des Telefonats werden PTT-Tastendrücke am Lenker **vollständig für Sonderfunktionen gesperrt**:

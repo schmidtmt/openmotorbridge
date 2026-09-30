@@ -46,73 +46,99 @@ Zur strikten Entkopplung von Gruppenbildung, taktischem Schwarmdatenaustausch un
 
 ---
 
-## 2. Zero-Touch Gruppen-Lifecycle (Vollautomatische Gruppenbildung)
+## 2. Hierarchischer Zero-Touch Gruppen-Lifecycle: Micro-Cluster, Macro-Merge & Gestaffelte Dispersion
 
-Ein fundamentaler Schwachpunkt bisheriger Motorrad-Funksysteme ist das manuelle Koppeln am Start: Fahrer müssen Knöpfe drücken, Apps synchronisieren oder QR-Codes scannen. OpenMotorBridge führt einen **vollkommen berührungslosen (Zero-Touch) Gruppen-Lifecycle** ein:
+Ein fundamentaler Schwachpunkt bisheriger Motorrad-Funksysteme ist das manuelle Koppeln am Start: Fahrer müssen Knöpfe drücken, Apps synchronisieren oder QR-Codes scannen. OpenMotorBridge führt einen **vollkommen berührungslosen (Zero-Touch), hierarchischen Gruppen-Lifecycle** ein, der reale Ausfahrts-Szenarien vom heimatlichen Start über die Großgruppe bis zum gemeinsamen Heimweg lückenlos abbildet:
 
 ```
 +-----------------------------------------------------------------------------------------+
-|                        ZERO-TOUCH GRUPPENBILDUNGS-AUTOMAT                               |
+|                  HIERARCHISCHER ZERO-TOUCH GRUPPEN-LIFECYCLE                            |
 +-----------------------------------------------------------------------------------------+
 |                                                                                         |
-|  [ 1. PROXIMITY DISCOVERY ]  Distanz < 25 m, Zeitfenster Δt < 60 s, UTC-Zeitsync        |
+|  [ 1. HEIM-SETUP / VERTEILTER START ]   Feste Buddies / Familie starten im Nahbereich   |
+|                                         -> Sofortiges autarkes MICRO-CLUSTER (FOB-Kanal)|
+|                                         (Ungestoerte Fahrt zum grossen Treffpunkt)      |
 |             |                                                                           |
 |             v                                                                           |
-|  [ 2. HEADING FILTER ]       Fahrstart: Kursabweichung ΔHeading < 30°                   |
-|             |                Geschwindigkeit v > 25 km/h für Dauer t > 120 s            |
-|             v                                                                           |
-|  [ 3. KEY EXCHANGE ]         Autonomer ECDH Ephemeral Key-Exchange auf Kanal 1           |
-|             |                Erzeugung des gemeinsamen AES-128 Session-Keys             |
-|             v                                                                           |
-|  [ 4. GROUP ACTIVE ]         Aktives Schwarm-Mesh auf Kanal 2 mit Link-State Bridging   |
+|  [ 2. MACRO-MERGE AM TREFFPUNKT ]       Versammlung mehrerer Micro-Cluster & Solofahrer |
+|                                         Stillstand (v = 0 km/h, Radius < 40 m)          |
+|                                         Gestaffelter Wiederanfahr-Puffer (60-120 s)     |
+|             |                           -> Uebergeordneter MACRO-CLUSTER AES-256 Key    |
+|             v                           (Micro-Cluster bleibt als Sub-Layer intakt!)    |
+|                                                                                         |
+|  [ 3. TOUR / MULTI-ROUTE CHECK ]        Heading-Lernphase: Automatische Aufteilung bei  |
+|                                         unterschiedlichen Zielen (Cruiser vs. Heizer)   |
 |             |                                                                           |
 |       +-----+-------------------------+                                                 |
 |       v                               v                                                 |
-|  [ 5. KAFFEEPAUSE ]          [ 6. IN-FLIGHT JOIN / SPLIT ]                              |
-|  * Zündung AUS (60 min)      * Rolling Merge bei Treffen unterwegs                      |
-|  * Mesh-State im NVRAM       * Intentional Split vs. echter Abriss (Doubt-Timer)        |
+|  [ 4. KAFFEEPAUSE (GROUP_PAUSED) ]   [ 5. IN-FLIGHT FLYBY / DOUBT-TIMER ]               |
+|  * Stillstand & Motor AUS            * Rollender Beitritt unterwegs (< 50 m Vektor)     |
+|  * 30-60 min Deep-Sleep NVRAM        * Zweifel-Frist bei verpasstem Abzweig (15-30 s)   |
+|  * Nahtlose Rekonstitution < 50 ms                                                      |
+|             |                                                                           |
+|             v                                                                           |
+|  [ 6. END-OF-TRIP DISPERSION ]       Abschluss-Parkplatz: PRE_DISPERSE bei Stillstand   |
+|                                      Auseinanderfahren beendet Macro-Session schweigend |
+|             |                                                                           |
+|             v                                                                           |
+|  [ 7. HEIMWEG IM MICRO-CLUSTER ]     Unterliegende Micro-Gruppe (Familie / Buddies)     |
+|                                      bleibt automatisch aktiv fuer den Heimweg!         |
 +-----------------------------------------------------------------------------------------+
 ```
 
-### 2.1 Stufe 1: Raum-Zeitliche Nahbereichs-Erkennung (Proximity Discovery)
-* Treffen sich mehrere OMB-Bikes an einer Tankstelle, einem Parkplatz oder vor der Garage, senden sie auf Kanal 1 (868.100 MHz) ein unverschlüsseltes, kurzes Discovery-Beacon.
-* **Filterkriterien:**
-  1. **Geografischer Radius:** Berechnet aus den u-blox SAM-M10Q GNSS-Koordinaten: $d < 25\,\text{m}$.
-  2. **Zeitfenster:** Gemeinsame Präsenz im Radius über mindestens $\Delta t \ge 60\,\text{Sekunden}$.
-  3. **UTC-Synchronisation:** 1-PPS GNSS-Zeitstempel validieren, dass alle Bikes denselben realen Zeitpunkt teilen (Schutz vor alten GPS-Geisterdaten).
+### 2.1 Stufe 1: Verteilter Start & Autarkes Micro-Cluster (Heim-Setup / Buddy-Gruppe)
+In der Praxis starten eng verbundene Fahrer (z. B. Familie, Partner auf zwei Bikes oder enge Freunde aus demselben Ort) nicht erst am Großgruppen-Treffpunkt, sondern bereits zu Hause:
+* **Zeitlich-räumliches Gleitfenster (Home-Start-Toleranz):** Starten zwei oder mehr OMB-Bikes im heimatlichen Nahbereich ($d < 500\,\text{m}$) innerhalb eines 15-Minuten-Zeitfensters (oder sind über denselben Smart-Keyfob-FOB-Kanal gekoppelt), schließen sie sich **sofort und vollautomatisch zu einem autarken Micro-Cluster** zusammen.
+* **Ungestörte Anfahrt:** Auf der 20- bis 45-minütigen Fahrt zum eigentlichen Haupttreffpunkt läuft die Sprachkommunikation und das Routing über diesen privaten Micro-Kanal - vollkommen ohne manuelle Konfiguration.
 
-### 2.2 Stufe 2: Vektor-Kohärenz & Fahrtrichtungs-Filter (Heading & Velocity)
-Verhindert, dass fremde Motorräder, die zufällig an derselben Ampel oder Tankstelle stehen, ungewollt der Gruppe beitreten:
-* Fahren die Bikes los, überwacht der ESP32-S3 für **$120\,\text{Sekunden}$**:
-  * **Geschwindigkeit:** $v > 25\,\text{km/h}$.
-  * **Fahrtrichtungs-Kohärenz:** Die Differenz der Kompasskurse (GNSS Heading) muss $\Delta\text{Heading} < 30^\circ$ betragen.
-* Erst wenn beide Kriterien 120 Sekunden lang kontinuierlich erfüllt sind, gilt die Gruppe als bestätigt.
+### 2.2 Stufe 2: Macro-Merge am Sammel-Treffpunkt (Stillstands-Erkennung & Wiederanfahr-Puffer)
+Am offiziellen Treffpunkt (z. B. Autobahnraststätte, Tankstelle oder Passfuß) treffen verschiedene Micro-Cluster sowie Solofahrer ein:
+1. **Stillstands-Cluster ($v = 0\,\text{km/h}$ & Radius $< 40\,\text{m}$):** Alle eintreffenden Nodes erkennen die Sammelphase und schalten in den Zustand `PRE_MERGE_DISCOVERY`. Auf Kanal 1 tauschen sie diskrete Discovery-Beacons aus.
+2. **Gestaffelter Wiederanfahr-Puffer (Konvoi-Toleranz):**
+   * Beim Losfahren einer 10- bis 20-köpfigen Gruppe rollen die Motorräder nie exakt zeitgleich an, sondern ziehen sich an Ampeln, Tankstellenausfahrten und Kreuzungen über 60 bis 120 Sekunden auseinander.
+   * Der Algorithmus wertet die Beschleunigung und das Heading mit einem dynamischen Toleranzpuffer aus.
+3. **Generierung des übergeordneten Macro-Cluster AES-256 Keys:**
+   * Sobald die Kolonne in dieselbe Ausfahrtsachse eingeschwenkt ist ($\Delta\text{Heading} < 30^\circ$, $v > 25\,\text{km/h}$ über $90\,\text{s}$), generiert der temporäre Leader (geringste MAC / höchster DLE-Score) einen gemeinsamen **AES-256 Großgruppen-Session-Key** und verteilt diesen verschlüsselt an alle Teilnehmer.
+4. **Zwei-Ebenen-Routing (Dual-Layer Topology):**
+   * **Macro-Layer (Großgruppe):** Standard für Kolonnenfunk, Gruppenwarnungen, Radar-Gefahrenmeldungen und DLE-Mesh-Routing.
+   * **Micro-Layer (Buddy-Subgruppe):** Bleibt im Hintergrund als persistent hinterlegter Direktkanal aktiv (z. B. umschaltbar per Doppel-PTT).
 
-### 2.3 Stufe 3: Dynamischer Schlüssel-Austausch (ECDH Key Exchange)
-* Die bestätigten Bikes führen über Kanal 1 einen ephemeren **Elliptic Curve Diffie-Hellman (ECDH auf Curve25519)** Schlüsselaustausch durch.
-* Es wird ein kryptografisch sicherer **AES-128 Gruppen-Sitzungsschlüssel** generiert.
-* Ab diesem Zeitpunkt schalten alle Nodes auf Kanal 2 (868.300 MHz) um. Abhörsicherheit und Integritätsschutz (AES-128-GCM) sind für die gesamte Tagestour gewährleistet.
+### 2.3 Stufe 3: Multi-Route-Start & Richtungsspezifische Sub-Groups
+Treffen sich am selben beliebten Startpunkt mehrere Gruppen mit unterschiedlichen Zielen (z. B. entspannte Cruiser vs. sportliche Pässe-Fahrer):
+* In den ersten 3 Fahrminuten überwacht die Firmware die Fahrtrichtungsvektoren (**Heading-Lernphase**).
+* Biegt ein Teil der Motorräder nach Norden und der andere nach Süden ab, teilt sich das System **vollautomatisch und schleifenfrei in zwei autonome Sub-Gruppen** mit jeweils eigenen Session-Keys auf. Es wird kein Fehlalarm generiert.
 
-### 2.4 Stufe 4: 60-Minuten Kaffeepausen-Persistenz (Mesh State Keep-Alive)
-* Halten die Fahrer für eine Pause an und schalten die Zündung aus (KL15 AUS), verfällt die Gruppe **nicht**:
-* Der ESP32-S3 sichert den vollständigen Gruppen-State (Node-IDs, AES-Session-Key, Link-State-Topologie) im batteriegepufferten RTC-Fast-SRAM und SPI-Flash NVRAM.
-* Die Zentralbox wechselt in den energiearmen Light Standby ($< 15\,\text{mA}$).
-* **Wiederaufnahme:** Schalten die Fahrer innerhalb von **60 Minuten** die Zündung wieder ein, wird die Gruppe **in $< 1{,}5\,\text{Sekunden}$ ohne erneutes Pairing oder Discovery nahtlos fortgesetzt**.
+### 2.4 Stufe 4: Tankstellen- & Kaffeepausen-Schutz (Context-Aware GROUP_PAUSED & 30-min Deep-Sleep)
+Bei Raststopps während der Tour darf die Gruppe weder zerfallen noch die Starterbatterie belasten:
+* **Stillstands-Erkennung:** Fallen alle Nodes auf $0\,\text{km/h}$ in einem Radius $< 30\,\text{m}$ zusammen, wechselt das System in den Modus `GROUP_PAUSED`.
+* **Immunität gegen Bewegungs-Fehlalarme:** Bewegt sich ein Fahrer kurz zur Luftdrucksäule oder zum Parkstreifen, ignoriert der Split-Algorithmus diese Bewegung vollständig.
+* **30-Minuten NVS/RTC-Persistenz:** Nach 15 Minuten Motorstillstand geht die Zentralbox in den Tiefschlaf ($< 150\,\mu\text{A}$). Der vollständige Gruppenstatus (Session-Key, Node-Table, Rollen) liegt gesichert im RTC-RAM und SPI-Flash.
+* Beim Wiedereinschalten ist das Gesamtsystem in $< 50\,\text{ms}$ ohne erneuten Handshake sofort wieder sprechbereit.
 
-### 2.5 Stufe 5: In-Flight Join & Rolling Merge (Spontaner Beitritt unterwegs)
-Kommt ein Fahrer später hinzu (z. B. Treffpunkt an einer Autobahnauffahrt während der Fahrt):
-* **3-Stufen Vektor-Koinzidenzfilter:**
-  1. Relativer Abstand: $d < 50\,\text{m}$.
-  2. Geschwindigkeitsdifferenz: $\Delta v < 15\,\text{km/h}$.
-  3. Kursdifferenz: $\Delta\text{Heading} < 20^\circ$ über ein Beobachtungsfenster von mindestens **$30\,\text{Sekunden}$**.
-* Nach Erfüllung initiiert der beitretende Node einen Challenge-Response-Handshake auf Kanal 1. Der aktuelle Gruppen-Leader (höchster DLE-Score) übermittelt den verschlüsselten Session-Key für Kanal 2.
+### 2.5 Stufe 5: In-Flight Join & Proximity-Flyby (Unterwegs-Treffpunkt)
+Trifft ein Fahrer erst während der Tour auf den Konvoi (Aufgabeln an einer Raststätte oder Flyby auf der Bundesstraße):
+* **Proximity-Flyby Kriterien:**
+  1. Annäherung auf Distanz $d < 50\,\text{m}$.
+  2. Synchronisierte Geschwindigkeit: $\Delta v < 15\,\text{km/h}$.
+  3. Kursgleiche Fahrt: $\Delta\text{Heading} < 20^\circ$ über ein Beobachtungsfenster von mindestens **$30\,\text{Sekunden}$**.
+* **One-Click Bestätigung:** Nach Erfüllung ertönt beim Leader die Ansage: *"Neuer Fahrer in Reichweite - Beitreten?"*. Ein einfacher Druck auf die Lenker-PTT bestätigt den Beitritt; der Session-Key wird in $< 200\,\text{ms}$ übertragen.
 
-### 2.6 Stufe 6: Geplante Trennung (Dispersion) vs. Notfall-Abriss (Doubt Timer)
-Verlässt ein Fahrer die Gruppe absichtlich (z. B. früheres Abbiegen nach Hause), darf kein Notfallalarm ausgelöst werden:
-* **Absichtliche Trennung (Graceful Dispersion):** Biegt ein Bike an einer Kreuzung ab und weicht der Kurs für $> 20\,\text{s}$ um $> 45^\circ$ von der Kolonnenachse ab, klassifiziert der Algorithmus dies als beabsichtigten Split. Der Node wird lautlos aus der aktiven Mesh-Tabelle ausgetragen.
-* **Echter Abriss (Unbeabsichtigter Verlust):**
-  * Bricht der Heartbeat ab, während das Bike denselben Kurs und dieselbe Straße fuhr (z. B. Sturz, Panne oder Felswand), startet ein **20 bis 30 Sekunden Doubt-Timer** (Zweifel-Timer).
-  * Bleibt die Funkverbindung nach Ablauf des Doubt-Timers abgerissen, aktiviert sich automatisch die LoRa Fallback Engine.
+### 2.6 Stufe 6: Gestaffeltes Auschecken (End-of-Trip Dispersion) & Re-Aktivierung des Micro-Clusters
+Das offizielle Ende einer Ausfahrt verlangt ein sauberes und lautloses Auflösen der Großgruppe, ohne die Teilnehmer für den Heimweg abzuschneiden:
+1. **End-of-Trip Stillstand (`PRE_DISPERSE`):**
+   * Am finalen Sammelpunkt (z. B. Parkplatz am Tour-Ende) schalten alle Fahrer die Motoren ab ($v = 0\,\text{km/h}$, IMU-Ruhe, KL15 AUS). Nach 5 Minuten Stillstand wechselt die State Machine in den Zustand `PRE_DISPERSE`.
+2. **Lautloses Macro-Disperse:**
+   * Verabschieden sich die Teilnehmer und fahren in unterschiedliche Himmelsrichtungen auseinander, erkennt das System die winkelmäßige Auffächerung.
+   * Die **Macro-Session schließt sich vollkommen schweigend**; es werden keine Abreiß- oder Notfallalarme ausgelöst.
+3. **Automatischer Erhalt des Micro-Clusters (Der Heimweg-Vorteil):**
+   * Während die Großgruppe beendet ist, **bleibt das ursprüngliche Micro-Cluster (die Familie / Buddies aus Stufe 1) zu 100 % aktiv und wird automatisch wieder als primärer Kommunikationskanal geschaltet!**
+   * Die Buddies können auf dem gesamten Rückweg nach Hause ungestört miteinander sprechen, bis jeder das heimatliche Ziel erreicht hat - ohne dass jemals ein Knopf gedrückt werden musste.
+
+### 2.7 Stufe 7: Der "Doubt-Timer" bei verpasstem Abzweig vs. Geplante Routen-Trennung
+* Weicht ein Fahrer unerwartet vom Kurs der Kolonne ab (z. B. Autobahnausfahrt verpasst):
+* **Start des Doubt-Timers ($15\dots 30\,\text{Sekunden}$):** Das System stuft den Fahrer temporär in den Zustand `DOUBT_SPLIT` ein.
+* **Szenario A (Verpasster Abzweig):** Hält der Fahrer nach wenigen Sekunden an oder sucht die Anschlussstelle, bleibt der Alarm scharf und meldet: *"Achtung: Möglicher Kursverlust / Split"*.
+* **Szenario B (Geplante Trennung):** Fährt der Fahrer mit hoher Reisegeschwindigkeit zügig auf der neuen Route weiter, deklariert das System nach Ablauf des Timers das reguläre Verlassen (`GRACEFUL_LEAVE`).
 
 ---
 
