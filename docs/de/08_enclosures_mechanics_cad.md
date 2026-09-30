@@ -982,22 +982,28 @@ Das Zusammenspiel aller Komponenten des Referenz-Kits 5 garantiert einen werkzeu
  | [Beifahrer-Sonnenblende]  --> [car_sun_visor_pod_clip] --> [Pod 2]     |
  | (Cardo Packtalk Edge oder Midland PMR446)                              |
  +-----------------------------------+------------------------------------+
-                                     | Ultraflaches USB-C Flachbandkabel
+                                     | Ultraflaches 5V DC Flachbandkabel
                                      v (in Dachhimmel & A-Säule verdeckt)
  +------------------------------------------------------------------------+
  | Armaturenbrett / Mittelkonsole:                                        |
- | [car_dashboard_wedge_dock (15°)] --> [Zentralbox (SX1262 LoRa 868)]    |
- | [SAM-M10Q GNSS Dashboard Dock]   --> [Front-Node / GNSS-USB]           |
- |       ^           ^                       |        ^                   |
- |       | 12V PD    | M8 / USB-C            |        | Bluetooth LE      |
- | [Zigaretten-      v                       |        v                   |
- |  anzünder]   [Pods 1 & 2 Versorgung]      |   [OBD2 BLE-Dongle]        |
- |                                           |   (ELM327 / vGate unter    |
- |                                           |    dem Lenkrad)            |
- |                                           +-> USB-C / BLE Offline PWA  |
- |                                           |   (iPad / Android Tablet)  |
- |                                           v                            |
- |                                      [CarPlay / Android Auto Audio]    |
+ | [car_dashboard_wedge_dock (15°)]                                        |
+ |   +-- Zentralbox (oben, PCBA 01: SX1262 LoRa, BQ USV, CarPlay)         |
+ |   +-- Front-Node (unten, PCBA 05: Dual SW3526 USB-PD, Qwiic GNSS)      |
+ |                                                                        |
+ | 12V Y-ADAPTERKABEL ("Bench & Support-Car Harness"):                    |
+ |   [12V Kfz-Zigarettenanzünder / Zündungsplus KL15]                     |
+ |        |                                                               |
+ |        +---> Abzweig A (12V JST-JWPF 2P) ---> Front-Node Port J1       |
+ |        +---> Abzweig B (12V Deutsch DTM-12) -> Zentralbox Port J1      |
+ |                                                                        |
+ | Zentralbox USB-C Port (100% frei für Infotainment-Bridge):             |
+ |        +---> Standard USB-C Kabel        ---> [CarPlay / Android Auto  |
+ |                                                Media-USB / Head Unit]  |
+ |                                                                        |
+ | Drahtlose Schnittstellen & Telemetrie:                                 |
+ |   [Front-Node GNSS Port J12]             ---> [SAM-M10Q GPS Dashboard] |
+ |   [OBD2 BLE-Dongle unter Lenkrad]        ---> Front-Node Bluetooth LE  |
+ |   [Offline PWA (iPad / Android Tablet)]  ---> LoRa / WebBLE Telemetrie |
  +------------------------------------------------------------------------+
 ```
 
@@ -1005,8 +1011,12 @@ Das Zusammenspiel aller Komponenten des Referenz-Kits 5 garantiert einen werkzeu
    * Das dünne, 3 m lange 2-adrige DC-Flachbandkabel (5V Speisung für die Sonnenblenden-Pods) wird mit den Fingerspitzen in die elastische Fuge zwischen Dachhimmel (**Headliner Seam**) und Windschutzscheibe gedrückt.
    * Der weitere Verlauf erfolgt verdeckt hinter der Gummidichtung der rechten A-Säule und hinter dem Handschuhfach direkt zur Mittelkonsole. Da sämtliche Audio- und Steuerdaten vollständig drahtlos (Bluetooth / LoRa / UWB) übertragen werden, handelt es sich hierbei um reine 5V DC Stromkabel ohne störende Signaladern.
    * **Ergebnis:** Null sichtbare Kabel, null Bohrlöcher, in unter 3 Minuten spurlos demontierbar (z. B. bei Miet- oder Leasingfahrzeugen).
-2. **Autarke Stromversorgung:**
-   * Die Zentralbox wird über einen kompakten 12V/24V-Kfz-Zigarettenanzünder-Adapter (30W USB-PD Schnelllader) direkt mit Zündungs- oder Dauerplus versorgt.
+2. **Autarke Stromversorgung über 12V Y-Adapterkabel:**
+   * Die Stromversorgung von Front-Node und Zentralbox erfolgt parallel über das **12V Werkstatt- & Begleitfahrzeug-Y-Adapterkabel** ("Bench & Support-Car Harness", Spezifikation in `16_build_instructions_assembly.md` Kap. 4.0 und `15_bom_manufacturing.md` Kap. 11.2).
+   * Es wird einfach an den 12V-Zigarettenanzünder (mit 5A Sicherung) oder an Zündungsplus (KL15) im Sicherungskasten/Fußraum angeschlossen:
+     * **Abzweig A (JST-JWPF 2-Pin, 1,5 m):** Versorgt den Front-Node (`PCBA 05` `J1`), dessen interne hocheffiziente Schaltregler 5V VBUS für die Sonnenblenden-Pods sowie Dual 20W USB-PD Ladeleistung bereitstellen.
+     * **Abzweig B (Deutsch DTM-12, 0,5 m):** Versorgt die Zentralbox (`PCBA 01` `J1` Pins 1, 2 und 3). Der interne automotive 72V Buck-Regler (LM5164-Q1) arbeitet im optimalen Wirkungsgradbereich und lädt die 2.200-mAh-USV stabil mit 1,0 A.
+   * **Wesentlicher Systemvorteil:** Der USB-C Port der Zentralbox bleibt hardwareseitig 100 % frei für die kabelgebundene Verbindung zur USB-Media-Buchse des Fahrzeugs (Apple CarPlay / Android Auto Audio- und Display-Mirroring).
 3. **Flotten-Live-Tracking ohne Mobilfunk (PWA Fleet Dashboard):**
    * Auf einem im Begleitfahrzeug montierten Tablet (iPad oder Android) läuft das OpenMotorBridge PWA-Dashboard im Offline-Kartenmodus.
    * Über das 868-MHz-LoRa-Mesh empfängt das Support-Team Positionsdaten, Geschwindigkeiten, Reifendrücke und Sturz-/SOS-Alarme aller Fahrer im Umkreis von bis zu $15\,\text{km}$.

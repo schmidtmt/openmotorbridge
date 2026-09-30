@@ -219,6 +219,8 @@ Alle Gehäuseteile sind konsequent für das **IKEA-Prinzip** konstruiert: **Kein
 
 Für den Aufbau müssen **keine Kabelbäume selbst gecrimpt oder gelötet werden**. Das System verwendet zu 100 % handelsübliche, industriell gefertigte Standard-Kabel (COTS):
 
+### 11.1 Der Hauptkabelbaum am Motorrad (Deutsch DTM-12 COTS-Fertigkabelbaum)
+
 ```
                        DAS PLUG-AND-PLAY KABELKONZEPT (COTS FERTIGKABEL)
 +-------------------------+
@@ -232,7 +234,23 @@ Für den Aufbau müssen **keine Kabelbäume selbst gecrimpt oder gelötet werden
       (Hinweis: Sämtliche Interconnects & Telemetriedaten laufen zu 100 % drahtlos via UWB!)
 ```
 
-### 11.1 HF-Antennen & Sensoren (COTS)
+### 11.2 Das 12V Werkstatt- & Begleitfahrzeug-Y-Adapterkabel ("Bench & Support-Car Harness")
+
+Für Laborprüfungen (Tisch-Inbetriebnahme ohne Motorrad-Kabelbaum) sowie den mobilen Einsatz im Begleitfahrzeug (Support-Van, Mietwagen, Pkw-Rennleitung) wird das universelle **12V-Y-Adapterkabel** eingesetzt. Es versorgt Front-Node und Zentralbox parallel aus einer beliebigen 12V-DC-Quelle.
+
+**Architektur-Vorteil:** Der USB-C Port der Zentralbox bleibt hardwareseitig komplett frei für die kabelgebundene Verbindung zur Infotainment-Head-Unit des Autos (Apple CarPlay / Android Auto Audio- und Display-Mirroring) oder zum Laptop (WebSerial Flashing):
+
+| Komponente / Baugruppe | Spezifikation / Herstellernummer | Bezugsquelle / P/N | Menge | Funktion |
+| :--- | :--- | :--- | :---: | :--- |
+| **12V DC Einspeisestecker** | Kfz-Zigarettenanzünderstecker mit 5A Feinsicherung ($5 \times 20\,\text{mm}$) & LED *oder* 4mm Labor-Bananenstecker | COTS Standard | 1 Stk. | Anschluss an Zigarettenanzünder-Buchse oder Labornetzteil |
+| **Stammkabel** | FLRY-B $2 \times 0{,}75\,\text{mm}^2$ (AWG18), Länge $1{,}0\,\text{m}$ (Rot: +12V, Schwarz: GND) | Fahrzeugleitung | 1 m | Zuleitung bis zum Y-Verteilerpunkt |
+| **Abzweig A (Front-Node)** | JST JWPF 2-Pin Buchse `02R-JWPF-VSLE-S` mit Kontakten `SWPR-001T-P025` | JST / Mouser | 1 Stk. | Pin 1: +12V (Rot, KL15), Pin 2: GND (Schwarz), Leitung $1{,}5\,\text{m}$ ($2 \times 0{,}5\,\text{mm}^2$) |
+| **Abzweig B (Zentralbox)** | Deutsch DTM 12-Pin Buchsengehäuse `DTM-06-12S`, Sperrkeil `WM-12S`, Buchsen `0462-201-20141` | TE Connectivity / Mouser | 1 Stk. | Pin 1: KL30 (+12V), Pin 2: KL15 (+12V gebrückt), Pin 3: GND (Schwarz), Leitung $0{,}5\,\text{m}$ ($2 \times 0{,}75\,\text{mm}^2$) |
+| **Blindstopfen (DTM-12)** | Dichtstopfen Größe 20 `0413-204-2005` (Weiß/Rot) | TE Connectivity | 9 Stk. | IP68-Versiegelung der ungenutzten Kammern 4–12 |
+| **Opt. Abzweig C (Radar)** | JST JWPF 2-Pin Buchse `02R-JWPF-VSLE-S` mit Kontakten `SWPR-001T-P025` | JST / Mouser | Opt. (1)| Pin 1: +12V, Pin 2: GND, Leitung $0{,}5\,\text{m}$ ($2 \times 0{,}35\,\text{mm}^2$) für Radar-Benchtest |
+| **Schrumpfschlauch / Y-Splice**| Raychem ATUM 4:1 mit Innenkleber oder Schrumpfformteil | TE Connectivity | 1 Stk. | Wasserdichte, zugentlastete Kapselung der Y-Verzweigung |
+
+### 11.3 HF-Antennen & Sensoren (COTS)
 1. **UWB 6.5 GHz Flex-Antennen (2 Stk.):** **Taoglas FXUWB10** ($11 \times 11 \times 0{,}6\,\text{mm}$) mit 20 mm U.FL Koaxialkabel für Zentralbox und Front-Knoten Unterwannen-Bucht.
 2. **LoRa 868 MHz Flex-Antenne (1 Stk.):** **Taoglas FXP895** ($110 \times 20 \times 0{,}8\,\text{mm}$) mit 50 $\Omega$ U.FL Speisung für Zentralbox-Deckeltasche.
 3. **Multi-GNSS Modul (1 Stk.):** **u-blox SAM-M10Q** mit integrierter $15 \times 15\,\text{mm}$ Keramik-Patchantenne, Qwiic I2C (`J12`) am Front-Knoten im Fahrtwindkanal.
@@ -266,6 +284,7 @@ Für den Aufbau müssen **keine Kabelbäume selbst gecrimpt oder gelötet werden
 | **Pure-DC 2-Ader Zuleitung (PUR)**| 2x 0.34 mm² (AWG22) mit JST-JWPF 2-Pin / MagSafe Breakaway | COTS Standard | 2 Stk. | Pure-DC 5V Stromversorgung zu Pod 1 und Pod 2 (Audio/Daten 100 % via UWB) |
 | **Radar 12V Zuleitung (PUR)** | 2x 0.5 mm² (AWG20) mit JST-JWPF 2-Pin IP67 Stecker | COTS Standard | Opt. (1)| 12V DC Bordnetzspeisung für Heck-Radar (Datenübertragung 100 % drahtlos via UWB) |
 | **Front-Node 12V Anschlusskabel**| 2-Pin JST-PH Litzenkabel mit Posi-Tap | COTS Standard | 1 Stk. | Lokale Cockpit-Stromversorgung (Standlicht/Navistecker) - *Funkbrücke via UWB!* |
+| **12V Y-Adapterkabel (Bench/Car)**| Zigarettenanzünderstecker -> JST-JWPF 2P + Deutsch DTM-12 | Eigenbau / COTS | 1 Stk. | Prüfstands- & Begleitfahrzeug-Versorgung (Front-Node + Zentralbox), CarPlay frei |
 | **J_ACT Aktuator-Kabelbaum** | Fertiges 8-Pin JST-SH Kabel auf 4x 2-Pin Litzen | Adafruit / SparkFun | 2 Stk. | Vorkonfektioniertes Fertigkabel für 4 Hubmagnete |
 | **Miniatur-Aktuatoren** | 5V DC Hubmagnete ($\varnothing 6{,}5 \times 12\,\text{mm}$) mit TPU-Spitze | Solenoid / Web | 8 Stk. | 4 Stk. pro Smart Cartridge (Sena / Cardo) |
 | **J2 Gateway-Kabelbaum** | Fertiges 6-Pin JST-SH Kabel auf Klinke / USB | COTS Standard | 2 Stk. | Fertigkabel für Headset-Audio & Dauerstrom |

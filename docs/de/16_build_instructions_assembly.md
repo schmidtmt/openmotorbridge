@@ -184,46 +184,76 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 
 > [!NOTE]
 > **Radikal vereinfachter Prüfaufbau (Zero USB-C an Pods):**  
-> Durch die v9.6 All-UWB Clean Architecture besitzen die Pods keine externen USB-C-Buchsen mehr. Für den Tischaufbau benötigen lediglich der **Front-Knoten (USB-C)** und die **Zentralbox (USB-C oder Labornetzteil an DTM-12 Pins 1/2)** Strom. Die beiden Kassetten werden über die 2-Draht-DC-Federkontakte der Zentralbox mitversorgt. Alle Audio-, Steuer- und Telemetriedaten funken drahtlos über UWB.
+> Durch die v9.6 All-UWB Clean Architecture besitzen die Pods keine externen USB-C-Buchsen mehr. Für den Tischaufbau und das Begleitfahrzeug speist ein kompaktes **12V Werkstatt- & Car-Y-Adapterkabel** parallel den **Front-Knoten (`J1` JST-JWPF)** und die **Zentralbox (`J1` DTM-12)**. Dadurch bleibt der USB-C Port der Zentralbox vollkommen frei für CarPlay/Android Auto oder PWA-Diagnose! Die beiden Kassetten werden über die 2-Draht-DC-Federkontakte der Zentralbox mitversorgt. Alle Audio-, Steuer- und Telemetriedaten funken drahtlos über UWB.
 
 Das Gesamtsystem lässt sich auf der Werkbank mit minimalem Verkabelungsaufwand zu 100 % testen, flashen und koppeln:
 
 ```text
-+-----------------------------------------------------------------------------+
-|       OPENMOTORBRIDGE TISCH-TESTAUFBAU & DRY-RUN (BENCH-LABOR SETUP)        |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|   [ 12V DC Labornetzteil / 12V Kfz-PD-Trigger / LiFePO4 Akku ]              |
-|        |                                                                    |
-|        | 12V DC (2-Draht Automotive Zuleitung)                             |
-|        v                                                                    |
-|   +---------------+                                                         |
-|   |  FRONT-NODE   |  (Cockpit Hub PCBA 05)                                  |
-|   |  Port J1 12V  |  Dual SW3526 USB-PD, Qwiic Sensorik, Knowles MEMS       |
-|   +-------+-------+                                                         |
-|           |                                                                 |
-|           | 12V DC Speisung (oder Kfz-Kabelbaum)                            |
-|           v                                                                 |
-|   +---------------+            2-Draht 5V DC           +---------------+    |
-|   |  ZENTRALBOX   |----------------------------------->| SATELLIT-POD  |    |
-|   |   (PCBA 01)   |   (Kofferdeckel Dock / MagSafe)    | (Pod 1 / 2)   |    |
-|   |  LM5164 Buck  |                                    | Pure DC Feder |    |
-|   |  BQ24075 USV  |            2-Draht 12V DC          +-------+-------+    |
-|   |  SX1262 LoRa  |-------------------+                        |            |
-|   +-------+-------+  (JST-JWPF Port)  |                        v            |
-|           |                           |               +-----------------+   |
-|           |                           v               | SMART KASSETTE  |   |
-|           |   UWB Wireless Backbone  +------------+   | (Sena / Cardo)  |   |
-|           |<========================>| HECK-RADAR |   +--------+--------+   |
-|           |   (6.5 GHz, < 0.4 ms)    | (PCBA 08)  |            |            |
-|           |                          | 36x LEDs   |            v            |
-|           | WebBLE / WebSerial       +------------+     [ FAHRER-HELM ]     |
-|           v                                             (BT gekoppelt)      |
-|     [ SMARTPHONE / LAPTOP MIT PWA ]                                         |
-|     (Chrome / Edge: Flasher & Dashboard via USB-C J7 oder WebBLE)           |
-|                                                                             |
-+-----------------------------------------------------------------------------+
++-------------------------------------------------------------------------------------------------+
+|                 OPENMOTORBRIDGE TISCH-TESTAUFBAU & DRY-RUN (BENCH-LABOR SETUP)                  |
++-------------------------------------------------------------------------------------------------+
+|                                                                                                 |
+|   [ 12V DC Labornetzteil / 12V Kfz-Zigarettenanzünder / LiFePO4 Akku ]                          |
+|        |                                                                                        |
+|        | 12V DC Haupt-Zuleitung (FLRY 2x 0.75 mm² / AWG18)                                      |
+|        |                                                                                        |
+|        +--- 12V Y-ADAPTERKABEL ("Bench & Support-Car Harness") -----------------------+         |
+|        |                                                                              |         |
+|        | Abzweig A: 12V DC (JST-JWPF 2P)            Abzweig B: 12V DC (Deutsch DTM-12)|         |
+|        v                                            v                                 |         |
+|   +---------------+                            +---------------+                      |         |
+|   |  FRONT-NODE   |  (Cockpit Hub PCBA 05)     |  ZENTRALBOX   |  (PCBA 01)           |         |
+|   |  Port J1 12V  |  Dual SW3526 USB-PD        |  Port J1 DTM12|  LM5164 Buck, BQ USV |         |
+|   |  Qwiic SAM-M10|  Knowles I2S MEMS          |  LoRa SX1262  |  Qualcomm QCC3084    |         |
+|   +-------+-------+                            +-------+-------+                      |         |
+|           |                                            |                              |         |
+|           |                                            | 2-Draht 5V DC                |         |
+|           |                                            v                              |         |
+|           |                                   +-----------------+                     |         |
+|           |                                   | SATELLITEN-PODS |                     |         |
+|           |                                   | (Pod 1 & Pod 2) |                     |         |
+|           |                                   | Pure DC Federn  |                     |         |
+|           |                                   +--------+--------+                     |         |
+|           |                                            |                              |         |
+|           |                                            v                              |         |
+|           |                                   +-----------------+                     |         |
+|           |                                   | SMART KASSETTEN |                     |         |
+|           |                                   | (Sena / Cardo / |                     |         |
+|           |                                   |  OMM / Midland) |                     |         |
+|           |                                   +--------+--------+                     |         |
+|           |                                            |                              |         |
+|           |          All-UWB Wireless Backbone         |                              |         |
+|           |<==========================================>|                              |         |
+|           |            (6.5 GHz, < 0.4 ms)             |                              |         |
+|           |                                            v                              |         |
+|           |                                   +-----------------+                     |         |
+|           |                                   |   HECK-RADAR    |<--------------------+         |
+|           |<=================================>|    (PCBA 08)    |  Opt. Abzweig C       |
+|           |                                   | 36x Strobe-LEDs |  (12V DC JST-JWPF)    |
+|           |                                   +-----------------+                       |
+|           |                                            |                                |
+|           v WebBLE / WebSerial                         v Bluetooth                      |
+|     [ SMARTPHONE / LAPTOP MIT PWA ]             [ FAHRER-HELM ]                         |
+|     (Dashboard & Flashing via USB-C / WebBLE)   (Dual-A2DP aptX HD)                     |
+|                                                                                         |
++-------------------------------------------------------------------------------------------------+
 ```
+
+### 4.0 Das universelle 12V Werkstatt- & Begleitfahrzeug-Y-Adapterkabel ("Bench & Support-Car Harness")
+
+Um sowohl für den Prüfstandsbetrieb im Labor als auch für Begleitfahrzeuge (Support-Van, Mietwagen, Pkw-Rennleitung) eine absolut saubere, verwechslungsfreie und zerstörungsfreie Stromversorgung zu garantieren, wird das **12V-Y-Adapterkabel** verwendet. Es versorgt Front-Node und Zentralbox parallel aus einer 12V-Gleichspannungsquelle, wodurch der USB-C Port der Zentralbox für Apple CarPlay / Android Auto frei bleibt:
+
+| Abschnitt / Ende | Steckverbinder & Typ | Pinbelegung | Kabelspezifikation | Funktion |
+| :--- | :--- | :--- | :--- | :--- |
+| **Eingang** | **Kfz-Zigarettenanzünderstecker** (mit 5A Glas-Sicherung) *oder* **4mm Labor-Bananenstecker** | Spitze / Rot: `+12V DC`<br>Flanken / Schwarz: `GND` | Stammkabel: $2 \times 0{,}75\,\text{mm}^2$ (AWG18) FLRY / Silikon, Länge $1{,}0\,\text{m}$ | Zentrale 12V DC Einspeisung aus Bordnetz oder Labornetzteil |
+| **Abzweig A**<br>*(Front-Node)* | **JST JWPF 2-Pin Buchse**<br>Gehäuse: `02R-JWPF-VSLE-S`<br>Kontakte: `SWPR-001T-P025` | **Pin 1:** `+12V` (Rot, KL15)<br>**Pin 2:** `GND` (Schwarz) | $2 \times 0{,}5\,\text{mm}^2$ (AWG20), Länge $1{,}5\,\text{m}$ (flexibel bis zur Windschutzscheibe) | Speist den Cockpit-Hub PCBA 05 samt USB-PD Lader und GNSS |
+| **Abzweig B**<br>*(Zentralbox)* | **Deutsch DTM-12 Buchsenstecker**<br>Gehäuse: `DTM-06-12S`<br>Keil: `WM-12S`, Pins: `0462-201-20141` | **Pin 1:** `KL30` (+12V)<br>**Pin 2:** `KL15` (+12V, gebrückt)<br>**Pin 3:** `GND` (Schwarz)<br>Pins 4–12: Blindstopfen `0413-204-2005` | $2 \times 0{,}75\,\text{mm}^2$ (AWG18), Länge $0{,}5\,\text{m}$ | Speist die Zentralbox direkt in den LM5164-Q1 72V Buck & BQ24075 USV |
+| **Abzweig C**<br>*(Opt. Radar)* | **JST JWPF 2-Pin Buchse**<br>Gehäuse: `02R-JWPF-VSLE-S` | **Pin 1:** `+12V` (Rot)<br>**Pin 2:** `GND` (Schwarz) | $2 \times 0{,}35\,\text{mm}^2$ (AWG22), Länge $0{,}5\,\text{m}$ | Für Tisch-Prüfungen des Heckradars PCBA 08 auf der Werkbank |
+
+> [!TIP]
+> **Warum kein USB-C für die Stromversorgung der Zentralbox?**  
+> 1. **CarPlay & Infotainment:** Im Begleitfahrzeug wird der USB-C Port der Zentralbox direkt mit der USB-Media-Buchse des Fahrzeugs verbunden, um kabelgebundenes Apple CarPlay / Android Auto auf das Auto-Display zu spiegeln. Wäre dieser Port durch ein Stromkabel vom Front-Node belegt, entfiele die Head-Unit-Integration!  
+> 2. **Voller USV-Ladestrom:** Über den DTM-12-Eingang arbeitet der interne 72V-Buck-Converter (LM5164-Q1) im optimalen Wirkungsgradbereich und lädt die 2.200-mAh-USV zügig mit vollen $1{,}0\,\text{A}$, während beide Kassetten-Pods stabil mit 5V versorgt werden.
 
 ### 4.1 Der geführte 4-Punkte IKEA Smoke-Test
 In der PWA (über WebSerial oder WebBLE) den Diagnosetest ausführen:
@@ -257,12 +287,13 @@ Erst wenn alle 4 Checks grün leuchten, die Gehäusedeckel mit den M3-Schrauben 
   * 2-poliges 5V DC-Stromkabel verdeckt in der Dachhimmel- und A-Säulen-Gummidichtung zur Mittelkonsole verlegen.
 * **Zentralbox & Front-Knoten (Doppelgehäuse / Stack-Dock):**
   * Für den sauberen Einsatz im Pkw/Van werden Front-Knoten (unten) und Zentralbox (oben) in einem formschlüssigen **Doppelgehäuse (`car_dashboard_wedge_dock.scad`)** gestackt auf der Mittelkonsole oder dem Armaturenbrett platziert.
-  * **Energie- & Stromversorgungskonzept (strikt über Front-Node):**
-    * **Option A (Zigarettenanzünder / 12V Bordsteckdose):** 12V Speisung über 12V-Kfz-Adapter direkt auf Port `J1` des Front-Knotens.
-    * **Option B (Fahrerfußraum Zündungsplus):** Feste 2-Draht-Verkabelung an Klemme 15 (KL15 Zündungsplus + Karosserie-GND) im Sicherungskasten/Fußraum direkt auf Port `J1` des Front-Knotens (strikt kein Dauerplus KL30).
-    * Der Front-Knoten speist die Zentralbox direkt mit und stellt über seine integrierten Dual SW3526 Regler 20W USB-PD Ladeleistung sowie die induktive Qi-Speisung bereit.
+  * **Energie- & Stromversorgungskonzept (über das 12V Y-Adapterkabel, siehe Kap. 4.0):**
+    * **Option A (Zigarettenanzünder / 12V Bordsteckdose):** 12V Speisung über das vorkonfektionierte 12V-Y-Adapterkabel ("Bench & Support-Car Harness"):
+      * **Abzweig A (JST-JWPF 2-Pin):** Speist Port `J1` des Front-Knotens. Dessen interne Buck-Wandler versorgen die Sonnenblenden-Pods mit 5V VBUS sowie Smartphones via Dual 20W USB-PD / Qi.
+      * **Abzweig B (Deutsch DTM-12):** Speist Port `J1` der Zentralbox (Pins 1+2 KL30/KL15, Pin 3 GND). Der interne LM5164-Q1 versorgt Zentralbox und USV mit vollem Ladestrom.
+    * **Option B (Fahrerfußraum Zündungsplus):** Feste 2-Draht-Verkabelung an Klemme 15 (KL15 Zündungsplus + Karosserie-GND) im Sicherungskasten/Fußraum auf den Eingang des Y-Adapterkabels (strikt kein Dauerplus KL30 ohne Ruhestrom-Abschaltung).
 * **SAM-M10Q GNSS:** Auf dem Armaturenbrett hinter der Windschutzscheibe (über Qwiic-Kabel an Front-Node Port `J12`).
-* **Audio- & Infotainment-Integration:** USB-C Audio-Link vom Front-Node zum Autoradio/Media-USB für Gruppenfunk über die Fahrzeuglautsprecher sowie drahtlose CarPlay/Android Auto Bridge.
+* **Audio- & Infotainment-Integration:** Direkte USB-C Datenverbindung von der Zentralbox zur USB-Media-Buchse des Fahrzeugs. Startet kabelgebundenes Apple CarPlay / Android Auto, spiegelt die PWA-Navigation auf das Fahrzeug-Display und gibt Funkdurchsagen über das Pkw-Soundsystem aus.
 * **Telemetrie:** Drahtloser BLE-OBD2 Dongle im Fahrerfußraum (oder direkter 16-Pin OBD-Port).
 
 ---
