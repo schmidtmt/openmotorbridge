@@ -4178,7 +4178,7 @@
 	(footprint "JST_PH_B5B-PH-K_1x05_P2.00mm_Vertical"
 		(layer "F.Cu")
 		(uuid "2cdc8646-cbc0-48e9-88af-0e8793c4968a")
-		(at 129 116 180)
+		(at 128.750 116.000 180.0)
 		(descr "JST PH series connector, B5B-PH-K (http://www.jst-mfg.com/product/pdf/eng/ePH.pdf)")
 		(tags "connector JST PH vertical")
 		(property "Reference" "J5"
@@ -4963,7 +4963,7 @@
 	(footprint "JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical"
 		(layer "F.Cu")
 		(uuid "3a2ab0ff-dcfd-4144-ada7-8da9da35fdad")
-		(at 153.75 73.45)
+		(at 153.750 73.500)
 		(descr "JST PH series connector, B2B-PH-K (http://www.jst-mfg.com/product/pdf/eng/ePH.pdf)")
 		(tags "connector JST PH vertical")
 		(property "Reference" "J10"
@@ -7062,7 +7062,7 @@
 	(footprint "JST_PH_B3B-PH-K_1x03_P2.00mm_Vertical"
 		(layer "F.Cu")
 		(uuid "4fac0dbe-3829-4dc2-a2a2-4c61afe93588")
-		(at 125.5 73.5)
+		(at 125.750 73.500)
 		(descr "JST PH series connector, B3B-PH-K (http://www.jst-mfg.com/product/pdf/eng/ePH.pdf)")
 		(tags "connector JST PH vertical")
 		(property "Reference" "J9"
@@ -9032,7 +9032,7 @@
 	(footprint "JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical"
 		(layer "F.Cu")
 		(uuid "623d3975-23b7-4249-b4a7-58acab9d6986")
-		(at 146.75 73.45)
+		(at 146.750 73.500)
 		(descr "JST PH series connector, B2B-PH-K (http://www.jst-mfg.com/product/pdf/eng/ePH.pdf)")
 		(tags "connector JST PH vertical")
 		(property "Reference" "J1"
@@ -10759,7 +10759,7 @@
 	(footprint "JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical"
 		(layer "F.Cu")
 		(uuid "8def916d-5f10-4ba7-a838-3cb8687afad8")
-		(at 160.75 73.45)
+		(at 160.750 73.500)
 		(descr "JST PH series connector, B2B-PH-K (http://www.jst-mfg.com/product/pdf/eng/ePH.pdf)")
 		(tags "connector JST PH vertical")
 		(property "Reference" "J11"
@@ -13607,7 +13607,7 @@
 	(footprint "JST_PH_B4B-PH-K_1x04_P2.00mm_Vertical"
 		(layer "F.Cu")
 		(uuid "ae51bf47-5d0b-48fe-a150-144188d1f978")
-		(at 140.5 116 180)
+		(at 140.250 116.000 180.0)
 		(descr "JST PH series connector, B4B-PH-K (http://www.jst-mfg.com/product/pdf/eng/ePH.pdf)")
 		(tags "connector JST PH vertical")
 		(property "Reference" "J6"
@@ -15975,7 +15975,7 @@
 	(footprint "USB_C_Receptacle_HRO_TYPE-C-31-M-12"
 		(layer "F.Cu")
 		(uuid "e407c054-673e-40e1-9393-4f2585237d80")
-		(at 177.7 104.93 90)
+		(at 177.700 105.000 90.0)
 		(descr "USB Type-C receptacle for USB 2.0 and PD, http://www.krhro.com/uploads/soft/180320/1-1P320120243.pdf")
 		(tags "usb usb-c 2.0 pd")
 		(property "Reference" "J7"
@@ -16513,7 +16513,7 @@
 	(footprint "JST_PH_B3B-PH-K_1x03_P2.00mm_Vertical"
 		(layer "F.Cu")
 		(uuid "e8375d3f-f78b-48a3-a8c1-f851071b8e81")
-		(at 167.75 73.45)
+		(at 167.750 73.500)
 		(descr "JST PH series connector, B3B-PH-K (http://www.jst-mfg.com/product/pdf/eng/ePH.pdf)")
 		(tags "connector JST PH vertical")
 		(property "Reference" "J2"

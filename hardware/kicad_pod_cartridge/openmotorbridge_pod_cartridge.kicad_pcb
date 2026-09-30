@@ -1051,7 +1051,7 @@
 	(footprint "Connector_JST:JST_SH_SM08B-SRSS-TB_1x08-1MP_P1.00mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "4ef691c3-393f-4d1b-b8b7-c9f7a3c8bfff")
-		(at 131.87 80.2 90)
+		(at 132.000 80.200 90.0)
 		(property "Reference" "J_ACT"
 			(at -3.5 -6.075 90)
 			(layer "F.SilkS")
