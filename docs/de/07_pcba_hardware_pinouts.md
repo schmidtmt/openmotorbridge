@@ -233,6 +233,28 @@ Die Heckplatine `PCBA 04` und das zugehörige Heckgehäuse Pod 3 sind **vollstä
 * **Top-Layer:** ESP32-S3 Controller, USB2514B USB-Hub, u-blox SAM-M10Q Multi-GNSS mit integrierter Patchantenne, Knowles SPH0645LM4H I2S MEMS Akustiksensor, WS2812B-2020 RGB-LED und 5 GHz Wi-Fi Anbindung für Headless CarPlay / Android Auto.
 * **Bottom-Layer:** Qorvo DW3110 UWB Transceiver (6.489 GHz Ch. 5), TI LMR36015 Buck, SC8102 USB-PD 20W Fast-Charger, TI TPS2051B Lastschalter für automatischen Dongle-Kaltstart und Auto-Café-Modus.
 
+### 7.2 Vollständige Pinbelegung der Front-Node Steckverbinder (`J1` bis `J12`)
+
+Alle internen Cockpit-, Lade- und Sensoranschlüsse sind auf vibrationsfeste **JST-PH Steckverbinder (2,0 mm Raster)** sowie **JST-SH / Qwiic (1,0 mm Raster)** geführt. Handelsübliche, vorkonfektionierte COTS-Pigtail-Kabel werden werkzeuglos angesteckt:
+
+| Header | Typ / Raster | Pin | Signalname | Signalpegel / Richtung | Funktion & angeschlossene Cockpit-Peripherie |
+| :--- | :--- | :---: | :--- | :--- | :--- |
+| **`J1`** | **JST-PH 2-Pin**<br>(2.0 mm) | 1<br>2 | `KL15_12V_SW`<br>`GND` | +9V...+16V In<br>Power-Masse | **12V Bordnetzspeisung:** Zündungsplus (Standlicht / Cartool-Stecker / Y-Kabel Abzweig A) |
+| **`J2`** | **JST-PH 3-Pin**<br>(2.0 mm) | 1<br>2<br>3 | `CAN_H`<br>`CAN_L`<br>`GND` | CAN-FD High<br>CAN-FD Low<br>Massebezug | **Fahrzeug-CAN-Bus:** Direkter Abgriff im Cockpit / Diagnosestecker mit TCAN334G & CPC1017N Busabschluss |
+| **`J3`** | **JST-PH 4-Pin**<br>(2.0 mm) | 1<br>2<br>3<br>4 | `GND`<br>`PTT_IN1_N`<br>`PTT_IN2_N`<br>`PTT_IN3_N` | Masse (0V)<br>Digital In (Pull-Up)<br>Digital In (Pull-Up)<br>Digital In (Pull-Up) | **Lenkerarmatur / Multifunktionstaster:**<br>Taste 1: PTT Intercom Funk / Voice<br>Taste 2: Action-Cam Bookmark / Highlight<br>Taste 3: Quick-Action / Navigationsmenü |
+| **`J4`** | **JST-PH 4-Pin**<br>(2.0 mm) | 1<br>2<br>3<br>4 | `USB_UP_VBUS`<br>`USB_UP_DM`<br>`USB_UP_DP`<br>`GND` | +5V VBUS In<br>USB 2.0 D-<br>USB 2.0 D+<br>Masse (0V) | **USB Upstream Host:** Verbindung zum OEM-Motorrad-Infotainment (Harley Boom! Box / Skyline OS) |
+| **`J5`** | **JST-PH 5-Pin**<br>(2.0 mm) | 1<br>2<br>3<br>4<br>5 | `VBUS_PD1_OUT`<br>`USB_DN1_DM`<br>`USB_DN1_DP`<br>`USB_DN1_CC`<br>`GND` | +5V / +9V / +12V Out<br>USB 2.0 D-<br>USB 2.0 D+<br>Configuration Channel<br>Power-Masse | **Smartphone Fast-Charge PD 20W:** Pigtail auf wetterfeste USB-C Buchse am Lenker (SW3526 Regler `U5`, USB-PD 3.0, QC4+) |
+| **`J5_MP3`** | **JST-PH 5-Pin**<br>(2.0 mm) | 1<br>2<br>3<br>4<br>5 | `VBUS_PD3_OUT`<br>`USB_DN3_DM`<br>`USB_DN3_DP`<br>`USB_DN3_CC`<br>`GND` | +5V / +9V / +12V Out<br>USB 2.0 D-<br>USB 2.0 D+<br>Configuration Channel<br>Power-Masse | **Glovebox / Media-Bay PD 20W + MP3:** Pigtail ins Handschuhfach für Musik-USB-Sticks, Powerbanks und Zweithandy (SW3526 `U8`) |
+| **`J6`** | **JST-PH 4-Pin**<br>(2.0 mm) | 1<br>2<br>3<br>4 | `VCC_5V_OTTOCAST`<br>`USB_DN2_DM`<br>`USB_DN2_DP`<br>`GND` | +5V geschaltet (1.5A)<br>USB 2.0 D-<br>USB 2.0 D+<br>Masse (0V) | **CP2AA Wireless Dongle Pigtail:** USB-A Buchsenkabel für Ottocast / Carlinkit Adapter mit automatischem Kaltstart via TPS2051B |
+| **`J6_AUX`** | **JST-PH 4-Pin**<br>(2.0 mm) | 1<br>2<br>3<br>4 | `VCC_5V`<br>`USB_DN4_DM`<br>`USB_DN4_DP`<br>`GND` | +5V Out (1.0A)<br>USB 2.0 D-<br>USB 2.0 D+<br>Masse (0V) | **Cockpit Aux USB:** Freier Port für Dashcam, Chigee AIO-5 Display, Garmin Zūmo oder Reifendruck-Empfänger |
+| **`J7`** | **USB-C SMD**<br>(16-Pin) | All | `USB-C Standard` | USB 2.0 + VBUS | **Wasserdichter Service-Port:** Bündig in der rechten Gehäuseflanke mit TPU-Stopfen (Flashen & WebSerial Diagnose) |
+| **`J8`** | **JST-PH 2-Pin**<br>(2.0 mm) | 1<br>2 | `VCC_5V`<br>`GND` | +5V geschaltet (1.5A)<br>Power-Masse | **Action-Cam Power:** 5V-Speisung für Helm- oder Verkleidungskamera (GoPro / Insta360), schaltet mit Zündung |
+| **`J9`** | **JST-PH 3-Pin**<br>(2.0 mm) | 1<br>2<br>3 | `+12V_PROT`<br>`BSD_LEFT_N`<br>`BSD_RIGHT_N` | +12V Daueranode<br>Kathode Links (Low-Side)<br>Kathode Rechts (Low-Side) | **Spiegel-Warn-LEDs (Totwinkel-Radar):** Y-Kabel zu den Rückspiegel-LEDs, geschaltet via Dual-MOSFET `Q1` |
+| **`J10`** | **JST-PH 2-Pin**<br>(2.0 mm) | 1<br>2 | `+12V_PROT`<br>`GND` | +12V geschaltet (1.5A)<br>Power-Masse | **Qi Wireless Charging Head:** Speist SP Connect / Quad Lock Induktivlader (0.0 µA Ruhestrom bei Zündung AUS) |
+| **`J11`** | **JST-PH 2-Pin**<br>(2.0 mm) | 1<br>2 | `+12V_AUX`<br>`GND` | +12V geschaltet (2.0A)<br>Power-Masse | **Zusatzscheinwerfer / Strobe:** Schaltstufe für Nebelscheinwerfer oder High-Beam Signal |
+| **`J12`** | **JST-SH 4-Pin**<br>(1.0 mm) | 1<br>2<br>3<br>4 | `GND`<br>`VCC_3V3`<br>`I2C_SDA`<br>`I2C_SCL` | Masse (0V)<br>+3.3V Power Out<br>I2C Datenleitung<br>I2C Taktleitung | **Qwiic / STEMMA QT Sensor-Bus:** Steckverbindung zum SAM-M10Q GNSS-Modul sowie TMP117 / OPT3001 Sensoren |
+| **`ANT_UWB`**| **U.FL Hirose** | 1<br>2 | `UWB_RF_CH5`<br>`GND` | 6.5 GHz RF (50 Ohm)<br>Schirmmasse | **UWB Flex-Antenne:** 20 mm U.FL Kabel zur Taoglas FXUWB10 Antenne in der Gehäuseboden-Bucht |
+
 ---
 
 ## 8. PCBA 06: MagSafe Frame Dock (Ersatzlos entfallen)
