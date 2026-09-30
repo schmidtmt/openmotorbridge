@@ -770,7 +770,11 @@ Die Platzierung der Intercom-Pods im Kofferdeckel ($\approx 70\dots 75\,\text{cm
 | **Schließgestänge** | Im Schwenkbereich | $> 15\,\text{cm}$ Abstand zum Gestänge | Die metallische One-Touch Striker Bar reflektiert nur lokal und verursacht bei $\lambda = 12{,}5\,\text{cm}$ keinerlei Abschattung nach vorne/oben. |
 | **HF-Entkopplung** | $< 20\,\text{dB}$ bei benachbarter Montage | **$> 40\,\text{dB}$ Raumdiversität** | Sena (linker Koffer) und Cardo (rechter Koffer) sind $> 60\,\text{cm}$ getrennt; Heckfender und Rahmen dienen als HF-Schirm $\implies$ 0 De-Sensing. |
 
-#### 6.5.4 Stationäres MagSafe-Rahmendock (`009_magsafe_frame_dock.scad`) & Horizontale Clamshell-Architektur
+#### 6.5.4 Stationäres MagSafe-Rahmendock (`009_magsafe_frame_dock.scad`) [Optional / Legacy]
+
+> [!NOTE]
+> **Status / Hinweis zur Systemarchitektur:**
+> Mit der Einführung der **Pure-DC 2-Draht All-UWB-Architektur** und dem **flexiblen Inline-MagSafe-Breakaway-Kabel** ist ein fest am Rahmenrohr verschraubtes Rahmendock für den regulären Betrieb **überflüssig** geworden. Die werkzeuglose Kofferabnahme erfolgt primär über die flexible, direkte MagSafe-Trennstelle im Kabelverlauf (oder wasserdichte 2-Pin Steckverbinder wie JST-JWPF / AMP Superseal). Die nachfolgend dokumentierte CAD-Konstruktion [`009_magsafe_frame_dock.scad`](../../hardware/cad/scad/02_pod_base/parts/009_magsafe_frame_dock.scad) verbleibt als optionale Referenz-Lösung für Sonderinstallationen, bei denen eine starre, fest verbolzte Kupplung am Sitzrahmenrohr explizit bevorzugt wird.
 
 Das stationäre MagSafe-Rahmendock ([`009_magsafe_frame_dock.scad`](../../hardware/cad/scad/02_pod_base/parts/009_magsafe_frame_dock.scad)) wird fahrzeugfest am Rahmenrohr unter dem Sitzüberhang montiert (passend für Harley Touring / Softail / CVO ST Rahmenrohre mit $\varnothing 25{,}4\dots 28{,}6\,\text{mm}$ bzw. $1"\dots 1{,}125"$):
 
@@ -998,8 +1002,8 @@ Das Zusammenspiel aller Komponenten des Referenz-Kits 5 garantiert einen werkzeu
 ```
 
 1. **Unsichtbare Flachband-Kabelverlegung (Zero-Damage):**
-   * Das dünne, 3 m lange USB-C-Flachbandkabel wird mit den Fingerspitzen in die elastische Fuge zwischen Dachhimmel (**Headliner Seam**) und Windschutzscheibe gedrückt.
-   * Der weitere Verlauf erfolgt verdeckt hinter der Gummidichtung der rechten A-Säule und hinter dem Handschuhfach direkt zur Mittelkonsole.
+   * Das dünne, 3 m lange 2-adrige DC-Flachbandkabel (5V Speisung für die Sonnenblenden-Pods) wird mit den Fingerspitzen in die elastische Fuge zwischen Dachhimmel (**Headliner Seam**) und Windschutzscheibe gedrückt.
+   * Der weitere Verlauf erfolgt verdeckt hinter der Gummidichtung der rechten A-Säule und hinter dem Handschuhfach direkt zur Mittelkonsole. Da sämtliche Audio- und Steuerdaten vollständig drahtlos (Bluetooth / LoRa / UWB) übertragen werden, handelt es sich hierbei um reine 5V DC Stromkabel ohne störende Signaladern.
    * **Ergebnis:** Null sichtbare Kabel, null Bohrlöcher, in unter 3 Minuten spurlos demontierbar (z. B. bei Miet- oder Leasingfahrzeugen).
 2. **Autarke Stromversorgung:**
    * Die Zentralbox wird über einen kompakten 12V/24V-Kfz-Zigarettenanzünder-Adapter (30W USB-PD Schnelllader) direkt mit Zündungs- oder Dauerplus versorgt.

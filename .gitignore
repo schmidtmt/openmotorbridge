@@ -17,6 +17,11 @@ _restore_backup_*
 ~*
 *.kicad_sch-bak
 *.kicad_pcb-bak
+*drc_report.json
+*erc_report.json
+*drc.rpt
+*erc.rpt
+*drc.json
 
 # OS & Editor
 .DS_Store

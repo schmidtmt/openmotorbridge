@@ -247,8 +247,7 @@ Das Gesamtsystem orchestriert spezialisierte Tasks über 2 ESP32-S3 Hauptkontrol
 | **`qcc3084_hub_task`**| Central Box (Core 1) | **21** | 4 KB | UART DMA ISR / Queue | FreeRTOS Queue / UART1| QCC3084 Supervisor: aptX HD Dual-A2DP, Auracast & HFP Call Handling. |
 | **`uwb_backbone_task`**| Central Box (Core 0) | **22** | 4 KB | DW3110 IRQ / Event | Direct-to-Task Notify | Verarbeitet Front-Node PTT-Events ($< 0{,}4\,\text{ms}$), GNSS & Windpegel. |
 | **`lora_mesh_task`**  | Central Box (Core 0) | **20** | 4 KB | SX1262 IRQ / Timer  | FreeRTOS Queue        | 868 MHz LoRa Mesh Protokoll, Diebstahl-Sentry & Group Split Rescue. |
-| **`uwb_cart_disp_task`**| Central Box (Core 0) | **18** | 4 KB | Event-Queue         | UWB TX Queue          | Dispatched Mechatronik-Opcodes per UWB an Bucht 1 & Bucht 2. |
-| **`uwb_radar_task`**  | Central Box (Core 0) | **16** | 4 KB | UWB Event Queue     | FreeRTOS Queue        | Empfängt 20 Hz Radar-Ziele per UWB, TTC-Berechnung & Prio-1 Ducking. |
+| **`uwb_radar_task`**  | Central Box (Core 0) | **16** | 4 KB | UWB Event Queue     | FreeRTOS Queue        | Empfängt vorverarbeitete 20 Hz Radar-Zielvektoren & Bedrohungsstufen (lokale TTC-Berechnung & Strobe-Triggerung erfolgt autark in < 1 ms im Radar Sub-MCU); schaltet Prio-1 Audio Ducking & leitet BSD-Warnungen an Front-Knoten. |
 | **`adr_ekf_task`**    | Central Box (Core 0) | **15** | 4 KB | 50 Hz Timer         | I2C / CAN-Puffer      | 15-State Kalman-Filter (SAM-M10Q GNSS + BMI270 IMU + CAN Speed). |
 | **`power_seq_task`**  | Central Box (Core 0) | **14** | 2 KB | Boot-Event / Timer  | GPIO Power-Gates      | Gestaffeltes Power-Sequencing ($T=0, 200, 350, 500\,\text{ms}$). |
 | **`pairing_mgr_task`**| Central Box (Core 0) | **12** | 3 KB | SW1 Edge / Timer    | NVS Key Storage       | Überwacht SW1 (3s Pairing, 10s Purge), Multi-Vehicle Roaming. |

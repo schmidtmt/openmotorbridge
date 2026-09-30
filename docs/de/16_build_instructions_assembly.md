@@ -103,7 +103,7 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 1. **Muttern einlegen:** 4x DIN 934 / DIN 985 M3 Edelstahlmuttern von unten in die Sechskant-Mutternaschen der Unterwanne ([`main_box_lower_case.stl`](../../hardware/cad/stl/01_main_box/main_box_lower_case.stl)) eindrücken.
 2. **UWB-Antenne im Boden installieren:**
    * Die flexible UWB-Antenne (Taoglas FXUWB10, $11 \times 11 \times 0{,}6\,\text{mm}$) in die Bodentasche der Unterwanne einlegen und mit der rückseitigen 3M-Klebeschicht fixieren.
-   * Das 20 mm kurze U.FL Mikro-Koaxialkabel senkrecht nach oben führen.
+   * Das 20 mm kurze U.FL Mikro-Koaxialkabel senkrecht nach oben führen. Da der DW3110 UWB-Transceiver und die Buchse `ANT2` direkt auf der Platinenunterseite (`B.Cu`) liegen, verbindet das Kabel die Antenne unmittelbar und ohne Querung der Leiterplatte.
 3. **Hauptplatine einsetzen:**
    * Fertig bestückte PCBA 01 auf die Dämpferdome setzen.
    * U.FL-Stecker des UWB-Kabels senkrecht auf die Buchse `ANT2` auf der Platinenunterseite (`B.Cu`) aufklicken.
@@ -193,26 +193,34 @@ Das Gesamtsystem lässt sich auf der Werkbank mit minimalem Verkabelungsaufwand 
 |       OPENMOTORBRIDGE TISCH-TESTAUFBAU & DRY-RUN (BENCH-LABOR SETUP)        |
 +-----------------------------------------------------------------------------+
 |                                                                             |
-|   [ 230V USB-Netzteil / Powerbank / Laptop (5V / ≥ 2.4A) ]                  |
-|       |                      |                      |                       |
-|  USB-C|Kabel 1          USB-C|Kabel 2          USB-C|Kabel 3                |
-|       v                      v                      v                       |
-|  +---------------+     +---------------+      +---------------+             |
-|  |  ZENTRALBOX   |     |  FRONT-NODE   |      | SATELLIT-POD  |             |
-|  |   (PCBA 01)   |     |   (PCBA 05)   |      | (Pod 1 / 2)   |             |
-|  |  Port J7 USB-C|     |  Port J5 USB-C|      | M8 Adapter    |             |
-|  +-------+-------+     +-------+-------+      +-------+-------+             |
-|          |                     |                      |                     |
-|          |   UWB Funk-Backbone |                      | 1-Wire & Direct-DC  |
-|          |<------------------->|                      v                     |
-|          |  (6.5 GHz, <0.4 ms) |             +-------------------+          |
-|          |                     |             | SMART KASSETTE    |          |
-|          |                     |             | (Sena / Cardo)    |          |
-|          |                     |             +--------+----------+          |
-|          | WebBLE / WebSerial  |                      |                     |
-|          v                     v                      v                     |
-|    [ SMARTPHONE / LAPTOP MIT PWA ]             [ FAHRER-HELM ]              |
-|    (Chrome / Edge: Flasher & Dashboard)        (Bluetooth gekoppelt)        |
+|   [ 12V DC Labornetzteil / 12V Kfz-PD-Trigger / LiFePO4 Akku ]              |
+|        |                                                                    |
+|        | 12V DC (2-Draht Automotive Zuleitung)                             |
+|        v                                                                    |
+|   +---------------+                                                         |
+|   |  FRONT-NODE   |  (Cockpit Hub PCBA 05)                                  |
+|   |  Port J1 12V  |  Dual SW3526 USB-PD, Qwiic Sensorik, Knowles MEMS       |
+|   +-------+-------+                                                         |
+|           |                                                                 |
+|           | 12V DC Speisung (oder Kfz-Kabelbaum)                            |
+|           v                                                                 |
+|   +---------------+            2-Draht 5V DC           +---------------+    |
+|   |  ZENTRALBOX   |----------------------------------->| SATELLIT-POD  |    |
+|   |   (PCBA 01)   |   (Kofferdeckel Dock / MagSafe)    | (Pod 1 / 2)   |    |
+|   |  LM5164 Buck  |                                    | Pure DC Feder |    |
+|   |  BQ24075 USV  |            2-Draht 12V DC          +-------+-------+    |
+|   |  SX1262 LoRa  |-------------------+                        |            |
+|   +-------+-------+  (JST-JWPF Port)  |                        v            |
+|           |                           |               +-----------------+   |
+|           |                           v               | SMART KASSETTE  |   |
+|           |   UWB Wireless Backbone  +------------+   | (Sena / Cardo)  |   |
+|           |<========================>| HECK-RADAR |   +--------+--------+   |
+|           |   (6.5 GHz, < 0.4 ms)    | (PCBA 08)  |            |            |
+|           |                          | 36x LEDs   |            v            |
+|           | WebBLE / WebSerial       +------------+     [ FAHRER-HELM ]     |
+|           v                                             (BT gekoppelt)      |
+|     [ SMARTPHONE / LAPTOP MIT PWA ]                                         |
+|     (Chrome / Edge: Flasher & Dashboard via USB-C J7 oder WebBLE)           |
 |                                                                             |
 +-----------------------------------------------------------------------------+
 ```
@@ -246,17 +254,16 @@ Erst wenn alle 4 Checks grün leuchten, die Gehäusedeckel mit den M3-Schrauben 
 ### 5.3 Begleitfahrzeug- & Autokolonnen-Installation (Support-Car / Van)
 * **Pod 1 & Pod 2:** Werden mit je einem Schnellwechsel-Clip ([`car_sun_visor_pod_clip.stl`](../../hardware/cad/stl/05_accessories/car_sun_visor_pod_clip.stl)) an Fahrer- und Beifahrer-Sonnenblende geklemmt.
   * Modus A (Begleitfahrzeug für Bike-Gruppe): Pod 1 = Sena SPIDER X Slim, Pod 2 = Cardo Packtalk Edge.
-  * Modus B (Reine Autokolonne): Pod 1 = OMM 2.4 GHz Swap Cartridge, Pod 2 = Midland PMR446 Funkkassette.
-  2-poliges stromkabel versteckt in der türdichtung verlgen und dann zur zentralbox
-* **Zentralbox:** In der 15°-Dashboard-Keilaufnahme auf der Mittelkonsole.
-* **SAM-M10Q GNSS:** Auf dem Armaturenbrett hinter der Windschutzscheibe.
-* **Audio-Integration:** USB-C Audio-Link zum Autoradio für Gruppenfunk über die Fahrzeuglautsprecher.
+  * 2-poliges 5V DC-Stromkabel verdeckt in der Dachhimmel- und A-Säulen-Gummidichtung zur Mittelkonsole verlegen.
+* **Zentralbox & Front-Knoten (Doppelgehäuse / Stack-Dock):**
+  * Für den sauberen Einsatz im Pkw/Van werden Front-Knoten (unten) und Zentralbox (oben) in einem formschlüssigen **Doppelgehäuse (`car_dashboard_wedge_dock.scad`)** gestackt auf der Mittelkonsole oder dem Armaturenbrett platziert.
+  * **Energie- & Stromversorgungskonzept (strikt über Front-Node):**
+    * **Option A (Zigarettenanzünder / 12V Bordsteckdose):** 12V Speisung über 12V-Kfz-Adapter direkt auf Port `J1` des Front-Knotens.
+    * **Option B (Fahrerfußraum Zündungsplus):** Feste 2-Draht-Verkabelung an Klemme 15 (KL15 Zündungsplus + Karosserie-GND) im Sicherungskasten/Fußraum direkt auf Port `J1` des Front-Knotens (strikt kein Dauerplus KL30).
+    * Der Front-Knoten speist die Zentralbox direkt mit und stellt über seine integrierten Dual SW3526 Regler 20W USB-PD Ladeleistung sowie die induktive Qi-Speisung bereit.
+* **SAM-M10Q GNSS:** Auf dem Armaturenbrett hinter der Windschutzscheibe (über Qwiic-Kabel an Front-Node Port `J12`).
+* **Audio- & Infotainment-Integration:** USB-C Audio-Link vom Front-Node zum Autoradio/Media-USB für Gruppenfunk über die Fahrzeuglautsprecher sowie drahtlose CarPlay/Android Auto Bridge.
 * **Telemetrie:** Drahtloser BLE-OBD2 Dongle im Fahrerfußraum (oder direkter 16-Pin OBD-Port).
-* **Energie- & Stromversorgungskonzept im Pkw:**
-  * **Option A (Zigarettenanzünder):** Der Front-Knoten wird in der Mittelkonsole über einen 12V-Zigarettenanzünder-Adapter gespeist. Er versorgt die Zentralbox über einen USB-C-Power-Adapter mit.
-  * **Option B (Fahrerfußraum Zündungsplus):** Feste Verkabelung an Zündungsplus (KL15) im Fahrerfußraum (strikt kein Dauerplus KL30, um ein Entladen der Autobatterie bei Standzeiten auszuschließen).
-  * **Qi-Lader & CarPlay/AA Bridge:** Der Front-Knoten bindet den integrierten Wireless CP/AA Adapter an den Media-USB-Port des Fahrzeugs an und speist ein Qi-Ladedock für das Fahrer-Smartphone.
-* **Gestackte Gehäuse-Option (Stack-Dock):** Für den sauberen Einsatz im Pkw/Van existiert eine modulare Stapelaufnahme (`car_dashboard_wedge_dock.scad`), in der Front-Knoten (unten) und Zentralbox (oben) formschlüssig miteinander verschraubt auf dem Armaturenbrett oder in einer Becherhalter-/Mittelkonsolen-Mulde platziert werden.
 
 ---
 
