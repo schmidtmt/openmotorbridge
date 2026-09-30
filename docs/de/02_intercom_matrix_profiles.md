@@ -27,18 +27,29 @@ Die OpenMotorBridge fungiert als aktive Audio-Kreuzschiene und Brückengateway z
 |                              | (Qorvo DW3110 / 6.489 GHz Ch. 5 / Latenz < 0.4 ms)      |
 |                              v                                                         |
 |       +------------------------------------------------------------+                   |
-|       |        ES8388 24-BIT I2S STEREO AUDIO CODEC & DSP          |                   |
+|       |     ESP32-S3 CORE 1 DSP & ES8388 24-BIT / 48 kHz AUDIO     |                   |
 |       |  * Raised-Cosine Ducking (Prio: Radar > Navi > Intercom)   |                   |
 |       |  * Symmetrischer Intercom-Cross-Mix (Bucht 1 <-> Bucht 2)  |                   |
 |       |  * Knowles MEMS Fahrtwind-Lautstärkenachführung (AGC)      |                   |
 |       +-----------------------------+------------------------------+                   |
+|                                     | Synchroner I2S Digital-Bus (48 kHz / 24-Bit PCM) |
+|                                     v                                                  |
+|       +------------------------------------------------------------+                   |
+|       |        QUALCOMM QCC3084 BLUETOOTH 5.4 AUDIO-SOC (U9)       |                   |
+|       |  * Dual-A2DP Hardware-Encoder (aptX HD & aptX Adaptive)    |                   |
+|       |  * LE Audio Auracast Broadcast Engine                      |                   |
+|       |  * HFP 1.8 Wideband Speech Telefonie & Mikrofon-Uplink     |                   |
+|       |  * Onboard Keramik-Chipantenne (Null Koaxialkabel-Overhead)|                   |
+|       +-----------------------------+------------------------------+                   |
 |                                     |                                                  |
 |              +----------------------+----------------------+                           |
+|              | RF-Stream 1 (aptX HD)                       | RF-Stream 2 (aptX / LC3)  |
 |              v                                             v                           |
 |   +----------------------------+              +----------------------------+           |
 |   | FAHRER-HELM (Bluetooth)    |              | SOZIUS-HELM (Bluetooth)    |           |
 |   | * Sena/Cardo/OEM Headset   |              | * Sena/Cardo/OEM Headset   |           |
-|   | * Gemischtes Gesamt-Audio  |              | * Getrennte Lautstärke     |           |
+|   | * aptX Adaptive (< 20 ms)  |              | * Synchroner Dual-A2DP Mix |           |
+|   | * HFP 1.8 Mikrofon-Uplink  |              | * Getrennte AVRCP-Lautst.  |           |
 |   +----------------------------+              +----------------------------+           |
 +----------------------------------------------------------------------------------------+
 ```
@@ -66,6 +77,25 @@ Die OpenMotorBridge fungiert als aktive Audio-Kreuzschiene und Brückengateway z
 * **Hardwareunabhängiges Ducking:** Funktioniert auch bei analogen Line-In-Navigationsgeräten (z. B. Garmin Zūmo XT2 oder BMW Motorrad Navigator) ohne dedizierte Steuerleitung.
 * **Schwellenwert-Logik:** Überschreitet das eingehende Navigations-Audio $-36\,\text{dBFS}$ für länger als $50\,\text{ms}$, leitet die Ducking-Engine sofort ein weiches Raised-Cosine Ducking ($-12\,\text{dB}$) auf Musik und Intercom ein.
 * **Hold & Release:** Nach Ende der Ansage (Pegel $< -42\,\text{dBFS}$) verbleibt das Ducking für $800\,\text{ms}$ im Hold-Zustand und blendet dann mit $250\,\text{ms}$ sanft auf Vollpegel zurück.
+
+### 1.5 Physische Dual-Helm-Anbindung über Qualcomm QCC3084 & aptX HD / Adaptive
+
+Im Gegensatz zu vereinfachten ESP32-Software-A2DP-Lösungen wird die Bluetooth-Anbindung der Helme bei OpenMotorBridge von einem **dedizierten Qualcomm QCC3084 Bluetooth 5.4 Audio-SoC (`U9` auf PCBA 01)** in echter Hardware ausgeführt:
+
+1. **Vollständige HF- und CPU-Entkopplung:**
+   * Der interne Funkcontroller des ESP32-S3 teilt sich eine einzige 2.4-GHz-HF-Endstufe zwischen Wi-Fi (PWA Webserver, WebDAV Touren-Upload) und Bluetooth Low Energy (PWA-Dashboard, BLE-Sensoren). Würde der ESP32 parallel zwei hochauflösende A2DP-Stereoströme berechnen und senden, käme es bei HF-Störungen oder hoher CPU-Last unweigerlich zu Audio-Aussetzern, Knacksern und Latenzen $> 150\,\text{ms}$.
+   * Durch die Auslagerung auf den Qualcomm QCC3084 läuft das Helm-Audio autark auf einem dedizierten Dual-Core 32-Bit Audioprozessor ($80\,\text{MHz}$) mit integriertem $240\,\text{MHz}$ Kalimba Hardware-Audio-DSP.
+2. **Echtes Dual-A2DP & aptX HD / Adaptive:**
+   * **Fahrer-Helm (Stream 1):** Dynamische Umschaltung zwischen **aptX HD** ($24\,\text{Bit} / 48\,\text{kHz}$, Studio-HiFi für Musik) und **aptX Adaptive Low-Latency Mode** ($< 20\,\text{ms}$ Audio-Latenz für vollkommen natürliche, lippensynchrone Gegensprechkommunikation).
+   * **Sozius-Helm (Stream 2):** Phasenstarr synchronisiertes Zweit-Streaming via A2DP (aptX / LC3). Lautstärke und Klangprofil lassen sich für den Sozius über AVRCP völlig unabhängig vom Fahrer einstellen.
+3. **LE Audio Auracast Broadcast:**
+   * Ermöglicht das Teilen des gesamten Audio-Mixes (Intercom, Musik, Navi) mit beliebig vielen Auracast-fähigen Empfängern im Begleittross ohne Pairings-Limit.
+4. **HFP 1.8 Wideband Speech & Fahrermikrofon-Uplink:**
+   * Der QCC3084 übernimmt das vollständige Bluetooth Hands-Free Profile (HFP 1.8 mit mSBC / aptX Voice, $16\,\text{kHz}$ Wideband Speech).
+   * Das vom Helm-Headset aufgenommene Mikrofonsignal des Fahrers wird vom QCC3084 digital decodiert und über die synchrone Leitung `I2S_DIN` verlustfrei und jitterfrei in die DSP-Pipeline des ESP32-S3 zurückgespeist.
+5. **Onboard Keramik-Chipantenne (Null Koaxialkabel-Overhead):**
+   * Das QCC3084-Modul integriert eine miniaturisierte $2{,}4\,\text{GHz}$ Hochleistungs-Keramik-Chipantenne direkt auf dem Modulträger ($13 \times 18\,\text{mm}$).
+   * Die HF-Abstrahlung erfolgt direkt durch das ABS/PA12-Gehäuse der Zentralbox in Richtung Fahrer-/Sozius-Helm. Es wird **kein 4. Koaxialkabel, kein U.FL-Steckverbinder und kein Montageaufwand im Gehäusedeckel** benötigt!
 
 ---
 

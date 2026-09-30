@@ -1484,6 +1484,221 @@
 			)
 		)
 	)
+	(footprint "RF_Module:Qualcomm_QCC3084_Module"
+		(layer "F.Cu")
+		(uuid "6cd1eb5c-34dd-479d-9a93-a882f95928d5")
+		(at 175 106)
+		(descr "Qualcomm QCC3084 Bluetooth 5.4 Audio SoC Module (Dual-A2DP aptX-HD, LE Audio Auracast, HFP 1.8), 13x18mm with integrated ceramic antenna")
+		(tags "Qualcomm QCC3084 Bluetooth 5.4 aptX HD Audio Module")
+		(property "Reference" "U9"
+			(at 0 -10.2 0)
+			(layer "F.SilkS")
+			(uuid "168b5f79-34ba-4be0-9f4f-35dc3f97aa32")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.12)
+				)
+			)
+		)
+		(property "Value" "QCC3084_BT54_AUDIO"
+			(at 0 10.2 0)
+			(layer "F.Fab")
+			(uuid "f7d3a350-d39e-4aad-9e3c-6851f289f314")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.12)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.qualcomm.com/products/application/audio/qcc3084"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "0f6c70dd-8538-4c1f-9230-326b54dbd0f6")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Qualcomm QCC3084 Dual-A2DP aptX HD / LE Audio Auracast BT 5.4 Module"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "35f034b4-6dc2-4d81-9872-db6a07ad7f94")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C983084"
+			(at 0 0 0)
+			(layer "F.SilkS")
+			(uuid "4aa75dd6-393c-43af-afad-be79644f5c33")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(attr smd)
+		(duplicate_pad_numbers_are_jumpers no)
+		(fp_rect
+			(start -6.5 -9)
+			(end 6.5 9)
+			(stroke
+				(width 0.15)
+				(type solid)
+			)
+			(fill no)
+			(layer "F.SilkS")
+			(uuid "e69dfa8e-1561-4fcd-a5b6-63f7320dd531")
+		)
+		(fp_rect
+			(start 3.5 -8)
+			(end 6 -4.5)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(fill yes)
+			(layer "F.SilkS")
+			(uuid "42277aee-3cf0-4498-85b6-61fd3e80b824")
+		)
+		(fp_rect
+			(start -6.8 -9.3)
+			(end 6.8 9.3)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(fill no)
+			(layer "F.CrtYd")
+			(uuid "828cdd21-48cc-4931-b43e-73c82af26c52")
+		)
+		(fp_text user "CERAMIC_ANT"
+			(at 4.75 -2.5 90)
+			(layer "F.SilkS")
+			(uuid "24947a81-9c86-40e3-907d-8d13759997c9")
+			(effects
+				(font
+					(size 0.6 0.6)
+					(thickness 0.1)
+				)
+			)
+		)
+		(fp_text user "${REFERENCE}"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(uuid "44cc19ef-1896-4551-bf92-a6b9227c574c")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.12)
+				)
+			)
+		)
+		(pad "1" smd rect
+			(at -6.2 -6)
+			(size 1.4 0.8)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(net "VCC_3V3")
+			(uuid "ed1108a1-413d-462a-8b05-b6d239a3dc3e")
+		)
+		(pad "2" smd rect
+			(at -6.2 -4)
+			(size 1.4 0.8)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(net "GND_PWR")
+			(uuid "eb894abb-f5ed-4495-9c51-20c35b7c51f1")
+		)
+		(pad "3" smd rect
+			(at -6.2 -2)
+			(size 1.4 0.8)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(net "I2S_MCLK")
+			(uuid "8d37219d-7a09-4047-a492-26ebbd616310")
+		)
+		(pad "4" smd rect
+			(at -6.2 0)
+			(size 1.4 0.8)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(net "I2S_BCLK")
+			(uuid "5635090a-d897-4377-bb46-40904bd127a4")
+		)
+		(pad "5" smd rect
+			(at -6.2 2)
+			(size 1.4 0.8)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(net "I2S_WS")
+			(uuid "36cafe4b-878a-4173-83d0-704aacc01cbe")
+		)
+		(pad "6" smd rect
+			(at -6.2 4)
+			(size 1.4 0.8)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(net "I2S_DOUT")
+			(uuid "3db6f0bc-c98a-421f-ac18-0c99f4d276e9")
+		)
+		(pad "7" smd rect
+			(at -6.2 6)
+			(size 1.4 0.8)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(net "I2S_DIN")
+			(uuid "a7ab46de-4931-4d44-b9ae-98fad1dde364")
+		)
+		(pad "8" smd rect
+			(at 6.2 6)
+			(size 1.4 0.8)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(net "GND_PWR")
+			(uuid "aafe75f3-abbb-4362-9f39-6a8517a678c2")
+		)
+		(pad "9" smd rect
+			(at 6.2 4)
+			(size 1.4 0.8)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(net "BT_UART_TX")
+			(uuid "9bb2445a-8fb0-4d71-9ef5-f0fc4c8f2e6d")
+		)
+		(pad "10" smd rect
+			(at 6.2 2)
+			(size 1.4 0.8)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(net "BT_UART_RX")
+			(uuid "fecd6899-a286-401e-a279-7888331ff43b")
+		)
+		(pad "11" smd rect
+			(at 6.2 0)
+			(size 1.4 0.8)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(net "BT_EN")
+			(uuid "431530fe-45ca-4909-ae42-f39fb31640c4")
+		)
+		(pad "12" smd rect
+			(at 6.2 -2)
+			(size 1.4 0.8)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(net "GND_PWR")
+			(uuid "4b91cd60-6baa-439f-996e-2b71053984bf")
+		)
+		(embedded_fonts no)
+		(model "${KICAD10_3DMODEL_DIR}/RF_Module.3dshapes/Raytac_MDBT50Q.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1.25 1 1.2)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
+	)
 	(footprint "U.FL_Hirose_U.FL-R-SMT-1_Vertical"
 		(layer "F.Cu")
 		(uuid "817450d6-0040-4857-8d0c-4e7d43bdbf40")

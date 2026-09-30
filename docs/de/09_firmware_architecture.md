@@ -50,9 +50,9 @@ In v8.5 / v9.0 ist das Gesamtsystem auf eine strikte **All-UWB-Stern-/Mesh-Topol
 - **SDIO Logging Task:** 4-Bit High-Speed SD-Karten-Logger mit Ringpuffer und automatischem BGH-Datenschutz-Purge.
 - **ADR-EKF Filter:** 15-State Sensorfusion aus 10 Hz Multi-GNSS-Telemetrie (vom Front-Knoten via UWB) und onboard Bosch BMI270 6-Achs IMU für unterbrechungsfreie Navigation in Tunneln.
 
-#### CORE 1 (Echtzeit Audio-DSP Engine @ Höchste Priorität):
-- **Dual-Helm Bluetooth Audio Hub:** Bindet Fahrer- und Sozius-Helme drahtlos per Bluetooth Audio an.
-- **I2S Audio DMA Receiver & Transmitter:** Latenzarmes Streaming über ES8388 Audio-Codec ($f_s = 48\,\text{kHz}, 24\,\text{Bit}$, Double-Buffer à 128 Samples = $2{,}67\,\text{ms}$).
+#### CORE 1 (Echtzeit Audio-DSP Engine & Qualcomm QCC3084 Hub @ Höchste Priorität):
+- **Qualcomm QCC3084 Dual-Helm Audio Hub (`bluetooth_audio_manager.cpp`):** Steuert den dedizierten QCC3084 BT 5.4 Audio-SoC (`U9` auf PCBA 01) über UART (GAIA/AT) für hardware-beschleunigtes Dual-A2DP (aptX HD / Adaptive) an Fahrer- und Sozius-Helme, LE Audio Auracast und synchronen HFP 1.8 Wideband-Sprachkanal.
+- **I2S Audio DMA Receiver & Transmitter:** Latenzarmes Streaming über ES8388 Audio-Codec und Qualcomm QCC3084 ($f_s = 48\,\text{kHz}, 24\,\text{Bit}$, Double-Buffer à 128 Samples = $2{,}67\,\text{ms}$).
 - **Raised-Cosine Ducking Engine:** Knackfreie, stetig differenzierbare Audio-Absenkung bei Durchsagen oder Radarwarnungen.
 - **Dynamische AGC-Lautstärkeregelung:** Gleitende Anhebung des Helm-Ausgangspegels basierend auf dem Front-Node Fahrtwindpegel.
 - **Lookahead Brickwall-Limiter:** Verhindert digitales Clipping über $0\,\text{dBFS}$.
@@ -244,6 +244,7 @@ Das Gesamtsystem orchestriert spezialisierte Tasks über 2 ESP32-S3 Hauptkontrol
 | Task-Name | MCU / Kern | Prio | Stack | Auslöser / Rate | IPC / Schnittstelle | Aufgabe & Funktion |
 | :--- | :--- | :---: | :---: | :---: | :--- | :--- |
 | **`audio_dsp_task`** | Central Box (Core 1) | **24** | 8 KB | 48 kHz DMA ISR | FreeRTOS StreamBuffer | Latenzfreier I2S Audio-Mix, Raised-Cosine Ducking & AGC. |
+| **`qcc3084_hub_task`**| Central Box (Core 1) | **21** | 4 KB | UART DMA ISR / Queue | FreeRTOS Queue / UART1| QCC3084 Supervisor: aptX HD Dual-A2DP, Auracast & HFP Call Handling. |
 | **`uwb_backbone_task`**| Central Box (Core 0) | **22** | 4 KB | DW3110 IRQ / Event | Direct-to-Task Notify | Verarbeitet Front-Node PTT-Events ($< 0{,}4\,\text{ms}$), GNSS & Windpegel. |
 | **`lora_mesh_task`**  | Central Box (Core 0) | **20** | 4 KB | SX1262 IRQ / Timer  | FreeRTOS Queue        | 868 MHz LoRa Mesh Protokoll, Diebstahl-Sentry & Group Split Rescue. |
 | **`uwb_cart_disp_task`**| Central Box (Core 0) | **18** | 4 KB | Event-Queue         | UWB TX Queue          | Dispatched Mechatronik-Opcodes per UWB an Bucht 1 & Bucht 2. |
@@ -376,12 +377,12 @@ Am Ende der Tagestour erfolgt die saubere, lautlose Trennung der Großgruppe bei
    * Das unterliegende Micro-Cluster (Familie / Buddies) wird **automatisch wieder als primärer Kommunikationskanal geschaltet**.
    * Die Gruppe kann den gesamten Heimweg ohne erneutes Pairing oder manuelle Umschaltung miteinander sprechen, bis jeder zu Hause angekommen ist.
 
-### 9.7 Smartphone-Anruf-Erkennung (HFP) & Intelligenter PTT-Schutz
-Geht auf dem gekoppelten Smartphone ein Telefonat ein, erkennt die Zentralbox über das Bluetooth Hands-Free Profile (HFP) den Status `RINGING` bzw. `CALL_ACTIVE`:
+### 9.7 Smartphone-Anruf-Erkennung (HFP 1.8 via Qualcomm QCC3084) & Intelligenter PTT-Schutz
+Geht auf dem gekoppelten Smartphone ein Telefonat ein, erkennt der **Qualcomm QCC3084 Hardware-Audio-SoC (`U9`)** über das Hands-Free Profile (HFP 1.8) den Status `RINGING` bzw. `CALL_ACTIVE` und meldet ihn per UART (`+HFP_STATUS`) in $< 1\,\text{ms}$ an den ESP32-S3:
 1. **Mikrofon-Mute zur Gruppe:** Das Helm-Mikrofon wird für die Intercom- und Mesh-Kanäle sofort stummgeschaltet. Das private Telefonat wird unter keinen Umständen in die Motorradgruppe übertragen.
 2. **PTT-Lock (Befehlssperre):** Während des Telefonats werden PTT-Tastendrücke am Lenker **vollständig für Sonderfunktionen gesperrt**:
    * Ein Klick auf PTT wird *nicht* als Start einer Action-Cam, kein HiLight-Tag und kein Durchruf auf Analogfunk/PMR interpretiert.
-   * Der Tastendruck wird transparent an das Helm-Headset weitergeleitet (zum Abheben / Auflegen des Anrufs).
+   * Der Tastendruck wird transparent an den QCC3084 weitergeleitet (`AT+ATA` zum Abheben / `AT+ATH` zum Auflegen des Anrufs).
 3. **Prio-1 Sicherheits-Overlay (Radar & SOS):** Selbst während eines intensiven Telefonats bleiben lebenswichtige Radar-Kollisionswarnungen (Prio 1) und Gruppen-Notrufe aktiv. Sie werden mit $-12\,\text{dB}$ geducktem Telefon-Audio klar verständlich in den Helm eingespielt.
 4. **Automatischer Reconnect:** Sobald der Anruf beendet ist (`CALL_TERMINATED`), kehrt der Audio-Router in $< 100\,\text{ms}$ in den normalen gemischten Intercom-Betrieb zurück.
 
