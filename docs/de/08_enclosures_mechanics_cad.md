@@ -890,7 +890,7 @@ Für den professionellen Einsatz in Begleitfahrzeugen (Support-Vans bei geführt
 
 Mechanisch und fahrzeugintegrativ basiert das Car Support Kit auf drei schraub- und bohrungsfreien CAD-Komponenten:
 1. Dem **Universal Sonnenblenden-Clip für Pod 1 & 2 (2x)** ([`car_sun_visor_pod_clip.scad`](../../hardware/cad/scad/05_accessories/car_sun_visor_pod_clip.scad) / [`car_sun_visor_pod_clip.stl`](../../hardware/cad/stl/05_accessories/car_sun_visor_pod_clip.stl))
-2. Der **Armaturenbrett-Keilaufnahme für die Zentralbox** ([`car_dashboard_wedge_dock.scad`](../../hardware/cad/scad/05_accessories/car_dashboard_wedge_dock.scad) / [`car_dashboard_wedge_dock.stl`](../../hardware/cad/stl/05_accessories/car_dashboard_wedge_dock.stl))
+2. Die **Armaturenbrett-Doppelaufnahme (Dual-Stack Dock) für Zentralbox & Front-Knoten** ([`car_dashboard_wedge_dock.scad`](../../hardware/cad/scad/05_accessories/car_dashboard_wedge_dock.scad) / [`car_dashboard_wedge_dock.stl`](../../hardware/cad/stl/05_accessories/car_dashboard_wedge_dock.stl))
 3. Dem **Kompakten Armaturenbrett-GNSS-Dock** für das u-blox SAM-M10Q Multi-GNSS Patch-Modul nahe der Scheibenbasis.
 
 ---
@@ -931,23 +931,26 @@ EINSATZMODI DES CAR-SUPPORT-KITS:
 
 ---
 
-#### 6.8.2 Armaturenbrett-Keilaufnahme für die Zentralbox (`car_dashboard_wedge_dock.scad`)
+#### 6.8.2 Armaturenbrett-Doppelaufnahme (Dual-Stack Dock) für Zentralbox & Front-Knoten (`car_dashboard_wedge_dock.scad`)
 
-Für die Zentralbox (Main Control Box, $110 \times 74 \times 32\,\text{mm}$) im Pkw-Innenraum wurde eine formschlüssige, rutschfeste Keilaufnahme konstruiert:
+Für den sauberen, integrierten Einsatz im Pkw-Innenraum (Begleitfahrzeug / Rallye-Van) wurde eine formschlüssige, vibrationsgedämpfte **Zweistufen-Keilaufnahme (Dual-Stack Dock)** konstruiert, die **Front-Knoten (`PCBA 05`) und Zentralbox (`PCBA 01`)** als kompaktes Desktop-/Cockpit-System auf dem Armaturenbrett oder der Mittelkonsole bündelt:
 
 ![Dashboard Wedge Dock CAD](../images/cad/car_dashboard_wedge_dock_cad.png)
 
-*Abbildung 8.33c: 3D-CAD-Ansicht der Armaturenbrett-Keilaufnahme für die Zentralbox (`car_dashboard_wedge_dock_cad.png`). Sichtbar sind der ergonomische 15°-Neigungswinkel für blendfreie LED-Ablesbarkeit, die passgenaue Einschubtasche ($111 \times 75\,\text{mm}$), seitliche Finger-Entnahmemulden, die rückseitige Kabeldurchführung für die 12V-Stromversorgung sowie Aussparungen für rutschfeste Silikon-Klebepads an der Unterseite.*
+*Abbildung 8.33c: 3D-CAD-Ansicht der Armaturenbrett-Doppelaufnahme für Zentralbox und Front-Knoten (`car_dashboard_wedge_dock_cad.png`). Sichtbar sind das untere waagerechte Einschubfach für den Front-Knoten mit freier GNSS-Sicht zur Windschutzscheibe und seitlichem USB-PD-Zugang, das obere um 15° geneigte Deck für die Zentralbox, seitliche Finger-Entnahmemulden, der innenliegende Kabel-Schacht für das 12V Y-Adapterkabel sowie rutschfeste Silikon-Bumpons an der Unterseite.*
 
-* **Ergonomischer $15^\circ$-Neigungswinkel:**
-  * Auf horizontalen Armaturenbrettern oder in Mittelkonsolen-Ablagen richtet der $15^\circ$-Keil die Status-LEDs und Anschlüsse blendfrei zum Fahrer/Beifahrer aus.
-* **Sekundenschnelle Entnahme (Dual-Finger-Notches):**
-  * Zwei seitliche Griffmulden ($40 \times 12\,\text{mm}$) erlauben das einhändige Greifen und Herausheben der Zentralbox - ideal für den schnellen Wechsel zwischen Motorrad und Begleitfahrzeug.
-* **Verdeckte Kabeldurchführung & Kühlung:**
-  * Die Rückwand besitzt eine $44\,\text{mm}$ breite Kabelaussparung für den 12V-Kfz-Zigarettenanzünder-PD-Adapter und die DTM-12-Diagnose-Kabelpeitsche.
-  * Zwei kreisförmige Bodenöffnungen ($\varnothing 28\,\text{mm}$) ermöglichen passive Konvektionskühlung des Aluminium-/PETG-Kühlkörpers der Zentralbox.
-* **Vibrationsgedämpfte, kratzfreie Auflage:**
-  * Die Unterseite verfügt über 4 zylindrische Vertiefungen ($\varnothing 12 \times 1{,}5\,\text{mm}$) zur Aufnahme handelsüblicher 3M-Bumpon-Silikonfüße oder 3M-VHB-Klebepads für absolut rutschfesten Stand auf jeder Cockpit-Oberfläche.
+* **Zweistufiger Aufbau (Tier 1 & Tier 2):**
+  * **Untere Ebene (Basis-Einschubfach für Front-Knoten `PCBA 05`):**
+    * Waagerechte Tasche ($100 \times 70 \times 26{,}5\,\text{mm}$ Clearance) zur vibrationsfesten Aufnahme des Front-Knoten-Gehäuses.
+    * **Frontale Öffnung:** Weist direkt in Richtung Windschutzscheibe – ermöglicht freie Himmelssicht für das integrierte u-blox SAM-M10Q GNSS-Modul sowie direkten Schalleintritt für das Knowles SPH0645 MEMS-Mikrofon zur Pkw-Kabinenakustik-Kompensation.
+    * **Seitliche USB-PD Aussparungen:** Erlauben das direkte Anstecken von Ladekabeln an die beiden 20W USB-C Ports (`J3` und `J4`).
+  * **Obere Ebene (Tilted Deck für Zentralbox `PCBA 01`):**
+    * Um **$15^\circ$ ergonomisch nach vorn/oben geneigte Einschubwanne** ($111{,}5 \times 75{,}5 \times 18\,\text{mm}$), sodass alle RGB-Status-LEDs und Funk-Diagnoseanzeigen vom Fahrer- und Beifahrersitz aus blendfrei und perfekt im Blickfeld liegen.
+    * Zwei seitliche Griffmulden ($40 \times 12\,\text{mm}$) erlauben das blitzschnelle Herausheben der Zentralbox bei Fahrzeugwechsel.
+* **Interner verdeckter Kabelkanal:**
+  * Ein durchgehender vertikaler Schacht ($22 \times 36\,\text{mm}$) verbindet das untere und obere Fach unsichtbar: Das 12V-Y-Adapterkabel ("Bench & Support-Car Harness") wird im Inneren aufgeteilt – Abzweig A führt verdeckt an den JST-JWPF 2-Pin Port `J1` des Front-Knotens, Abzweig B führt nach oben an den Deutsch DTM-12 Port `J1` der Zentralbox.
+* **Vibrationsgedämpfte, kratzfreie Cockpit-Auflage:**
+  * 4 zylindrische Vertiefungen ($\varnothing 12 \times 1{,}5\,\text{mm}$) an der Unterseite nehmen 3M-Bumpon-Silikonfüße oder 3M-VHB-Klebepads auf, wodurch das Doppelgehäuse selbst bei zügiger Kurvenfahrt oder Offroad-Pisten rutschfest und klapperfrei an Ort und Stelle bleibt.
 
 ---
 
