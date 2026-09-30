@@ -167,6 +167,7 @@ Alle unterstützten Intercom- und Funkkassetten sind in 8 standardisierte Hardwa
 | **K6**  | Cardo Bold, Black, Slim       | Cardo DMC Gen1  | **+30 Punkte**  |
 | **K7**  | Midland G9 Pro, Baofeng/UHF   | PMR446 Analog   | **+10 Punkte**  |
 | **K8**  | Midland BTR1, Rush RCF, Wave  | Midland Wave    | **+30 Punkte**  |
+| **K9**  | OMM 2.4 GHz Universal (UCS)   | OMM TDMA / IPv6 | **+50 Punkte**  |
 | **K0**  | Deaktiviert / Leerer Slot     | Keines          | **0 Punkte**    |
 +---------+-------------------------------+-----------------+-----------------+
 ```
@@ -216,6 +217,22 @@ Da OMM 2.4 GHz im v9.6 System als optionale Wechselkassette entkoppelt ist, fung
   * *Audio-Entkopplung:* Digitalisierung direkt auf der Kassette über den ES8388 Stereo-Codec. Die galvanische Trennung erfolgt inhärent und vollkommen brummfrei über das drahtlose UWB-Funkbackbone zur Zentralbox.
 * **Klasse 8: Midland Intercom & Wave Serie (`midland_wave.json` / `midland_bt.json`):**
   * *Midland BTR1 Advanced, Rush RCF, BTX2 PRO S, Midland Wave, BT Mini:* Bluetooth 5.0/5.2 Intercom & Wave Mesh mit digitalem Audio-Pass-Through und DLE +30 Pkt.
+* **Klasse 9: OpenMotorMesh 2.4 GHz Universal-Modul (UCS) (`omm_2_4ghz.json`):**
+  * *OMM 2.4 GHz Intercom & Autonomes Headset:* Quelloffenes TDMA / IPv6-Multicast Mesh-Modul im Universal Cassette Standard (UCS). Standalone mit 600-mAh-LiPo am Helm nutzbar oder formschlüssig in Bucht 1/2 gedockt. DLE-Score: **+50 Pkt.**
+  * *Bedienelemente & 4-Aktuator Tasten-Mapping (`J_ACT` auf PCBA 03):*
+    * `ch1`: `ACT_POWER` (Power / MFB-Taste)
+    * `ch2`: `ACT_MESH` (Mesh / Intercom-Taste)
+    * `ch3`: `ACT_PLUS` (Lautstärke + / Nächster Kanal)
+    * `ch4`: `ACT_MINUS` (Lautstärke - / Vorheriger Kanal)
+  * *In-System Makros & Klicksequenzen:*
+    * **Power Boot (`0x01`):** 1.000 ms Haltepuls auf `ACT_POWER` (Kaltstart bei Zündung AN).
+    * **Power Off (`0x02`):** 2.000 ms Haltepuls auf `ACT_POWER` (Herunterfahren bei Zündung AUS).
+    * **Mesh Mute Toggle (`0x05`):** 200 ms Klick auf `ACT_MESH` (Mesh Intercom stummschalten / aktivieren).
+    * **Group Mesh / Private Mode (`0x06`):** 3.000 ms Haltepuls auf `ACT_MESH` (Wechsel Open Mesh <-> Private Group).
+    * **Kanal +1 Open Mesh (`0x07`):** Autonomes Makro: `ACT_MESH` (2x 150 ms) -> Pause 200 ms -> `ACT_PLUS` (1x 150 ms).
+    * **Kanal -1 Open Mesh (`0x08`):** Autonomes Makro: `ACT_MESH` (2x 150 ms) -> Pause 200 ms -> `ACT_MINUS` (1x 150 ms).
+    * **Quick-Join (`0x09`):** 3.000 ms Simultan-Haltepuls auf `ACT_POWER` + `ACT_MESH`.
+  * *Zero-Wear Ansteuerung:* Im Pod können die Tasterleitungen alternativ zu den mechanischen Hubmagneten auch rein elektronisch über Open-Drain / Optokoppler auf `J_AUDIO_PWR` angesteuert werden.
 
 ### 3.2 JSON Profil-Schema Spezifikation
 Jedes Hardwareprofil liegt als eigenständige JSON-Datei im internen Flash-Dateisystem (`/data/profiles/*.json`) des ESP32-S3 und definiert alle Pegel-, Routing- und Optokoppler-Timings:

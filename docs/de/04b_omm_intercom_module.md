@@ -4,39 +4,81 @@ Dieses Dokument spezifiziert das **OpenMotorMesh (OMM) 2.4 GHz Intercom-Modul**:
 
 ---
 
-## 1. Modul-Konzept & Universelle Kassetten-Kompatibilität (UCS)
+## 1. Modul-Konzept, UCS-Formfaktor & Trennung der Baugruppen
 
-Das OMM 2.4 GHz Modul wurde als **100 % offene, abofreie und herstellerunabhängige Alternative** zu proprietären Intercom-Systemen (Sena Mesh 3.0 / Cardo DMC Gen2) entwickelt:
+Um Missverständnissen zwischen der Träger-Mechatronik und dem Intercom-Modul vorzubeugen, trennt OpenMotorBridge v9.6 strikt zwischen **zwei physischen Baugruppen**:
 
 ```
 +-----------------------------------------------------------------------------------------+
-|               OMM 2.4 GHz OEM-KASSETTE (UNIVERSAL CASSETTE STANDARD - UCS)              |
+|                  ARCHITEKTUR-TRENNUNG: TRÄGERPLATINE VS. OMM-MODUL                      |
++----------------------------------------------------+------------------------------------+
+| 1. KASSETTEN-TRÄGERPLATINE (PCBA 03 im Pod)        | 2. OMM 2.4 GHz OEM-MODUL (UCS)     |
++----------------------------------------------------+------------------------------------+
+| * Verbleibt dauerhaft im Pod-Schlitten am Bike     | * Entnehmbares Intercom-Modul      |
+| * Qorvo DW3110 UWB Transceiver (6.5 GHz Ch. 5)     | * Espressif ESP32-C6 (2.4 GHz)     |
+| * Fahrzeug-Backbone zur Zentralbox (< 0.4 ms)      | * 2.4 GHz Wi-Fi 6 / 802.15.4 Mesh  |
+| * Everest Semi ES8388 24-Bit / 48 kHz Audio-Codec  | * Integrierter 600-mAh-LiPo-Akku   |
+| * 4x AO3400A MOSFETs + Mechatronik-Stößel (J_ACT)  | * 4x physische IP67-Taster         |
+| * 12V -> 3.8V/5V DC-DC Bordnetz-Speisung           | * USB-C Buchse (Laden & WebUSB)    |
+| * Null 2.4-GHz-Funk (Keine HF-Interferenz am Pod!) | * Null UWB (Funk nur auf 2.4 GHz)  |
++----------------------------------------------------+------------------------------------+
+```
+
+### 1.1 Physische Bedienelemente & Tasten-Layout des UCS-Adapters
+Wird das OMM 2.4 GHz Modul aus dem Pod entnommen und als **autarkes Helm-Headset** (oder am Gürtel / Begleitfahrzeug) betrieben, muss es ohne Smartphone und mit dicken Motorradhandschuhen fehlerfrei bedienbar sein. Das Modul verfügt daher auf der Gehäuseoberseite über **4 taktile, wassergeschützte (IP67) Taster**:
+
+```
++-----------------------------------------------------------------------------------------+
+|                    BEDIENELEMENTE DES OMM 2.4 GHz MODULS (DRAUFSICHT)                   |
 +-----------------------------------------------------------------------------------------+
 |                                                                                         |
-|  [ FORMFAKTOR UCS ]          Standard-Kassette (35 x 25 mm Trägerplatine PCBA 03)       |
-|  * Bucht 1 oder Bucht 2      Symmetrischer Einschub in jede OMB-Gehäusebucht            |
-|  * Standalone-Fähig          Mit Klick-Halterung auch direkt am Helm/Gürtel nutzbar     |
+|      [ BTN 1: POWER / MFB ]               [ BTN 2: MESH / GROUP ]                       |
+|      * 2s Halten : Ein- / Ausschalten     * Klick     : Open Mesh Ein / Stumm           |
+|      * Klick     : Play/Pause / Akku-Ans. * 3s Halten : Open Mesh <-> Private Group     |
+|      * 5s Halten : BT-Pairing (Smartphone)* 5s Halten : Quick-Join / Einladung senden   |
 |                                                                                         |
-|  [ ENERGIE & AKKU-KONZEPT ]  Wechselakku + Unterbrechungsfreies Laden im Betrieb        |
-|  * Im Pod-Betrieb            Dauerbetrieb über 2-Draht DC-Federkontakte (12V -> 3.8V/5V)|
-|  * Standalone-Betrieb        Integrierte LiPo-Flachzelle (600 mAh, ~10 h Laufzeit)      |
-|  * Pass-Through Charging     Laden während aktiver Mesh-Kommunikation ohne Reboots      |
+|      [ BTN 3: VOL+ / KANAL+ ]             [ BTN 4: VOL- / KANAL- ]                      |
+|      * Klick     : Lautstärke +           * Klick     : Lautstärke -                    |
+|      * Doppelkl. : Nächster Kanal (1..6)  * Doppelkl. : Vorheriger Kanal (1..6)         |
 |                                                                                         |
-|  [ HF & DRAHTLOS-BACKBONE ]  Qorvo DW3110 UWB + ESP32-C6 (2.4 GHz Wi-Fi 6 / 802.15.4)  |
-|  * Fahrzeug-Intern           Digitales Audio via UWB an PCBA 01 (< 0.4 ms Latenz)       |
-|  * Gruppen-Mesh              2.4 GHz TDMA / IPv6 Multicast Mesh (bis 32 Fahrer, HD)     |
 +-----------------------------------------------------------------------------------------+
 ```
 
-### 1.1 Mechanische Bauformen & Einsatzszenarien
-1. **Fahrzeugeinsatz im OMB-Pod (Bucht 1 oder Bucht 2):**
-   * Die OMM 2.4 GHz Kassette sitzt formschlüssig im MJF-PA12-Kassettenschlitten.
-   * Die Stromversorgung erfolgt vollständig fahrzeuggebunden über die beiden vergoldeten Federkontakte im Pod-Boden.
-   * Die Audioübertragung zur Zentralbox (`PCBA 01`) läuft über den integrierten DW3110 UWB-Transceiver - völlig frei von Brummschleifen und Leitungsstörungen.
-2. **Autarker Helm- und Standalone-Betrieb:**
-   * Dank des Universal Cassette Standards (UCS) kann das Modul mit einem Handgriff entnommen und in ein kompaktes Helm- oder Lenker-Cradle geklickt werden.
-   * Der integrierte 600-mAh-LiPo-Akku versorgt das Modul unterwegs für über 10 Stunden Dauerfunk.
-   * Über den USB-C-Anschluss an der Stirnseite wird der Akku geladen - auch während der Fahrt (*Pass-Through Charging*).
+### 1.2 Mechatronische Aktuator-Steuerung & Makros im Pod-Betrieb
+Wird das OMM-Modul im Pod auf der Smart Cartridge (`PCBA 03`) eingesetzt, greift das standardisierte Mechatronik-Konzept von OpenMotorBridge:
+* **Deckungsgleiches 4-Punkt Raster:** Die 4 mechanischen Hubmagnete / Stößel auf `PCBA 03` (`ACT_1` bis `ACT_4`) sind exakt über den 4 Tastern des OMM-Moduls platziert.
+* **Makro-Steuerung durch die Kassetten-MCU:** Wenn der Fahrer über das PWA-Dashboard oder die Lenkertasten einen Befehl gibt, triggert die Kassetten-MCU auf `PCBA 03` autonome Klick-Makros:
+
+```
++----------------------+-----------------------+-----------------+-----------------------+
+| Makro-Opcode         | Aktuator-Kombination  | Timing / Pulse  | Funktion am OMM-Modul |
++----------------------+-----------------------+-----------------+-----------------------+
+| **`0x01` Power Boot**| **ACT_1 (Power)**     | **1.000 ms**    | Kaltstart nach Stand- |
+|                      |                       |                 | zeit bei Zündung AN   |
++----------------------+-----------------------+-----------------+-----------------------+
+| **`0x02` Power Off** | **ACT_1 (Power)**     | **2.000 ms**    | Sauberes Ausschalten  |
++----------------------+-----------------------+-----------------+-----------------------+
+| **`0x03` Lauter**    | **ACT_3 (Plus)**      | **100 ms**      | Lautstärke +1         |
++----------------------+-----------------------+-----------------+-----------------------+
+| **`0x04` Leiser**    | **ACT_4 (Minus)**     | **100 ms**      | Lautstärke -1         |
++----------------------+-----------------------+-----------------+-----------------------+
+| **`0x05` Mesh Mute** | **ACT_2 (Mesh)**      | **200 ms**      | Mesh Stumm / Aktiv    |
++----------------------+-----------------------+-----------------+-----------------------+
+| **`0x06` Group Mesh**| **ACT_2 (Mesh)**      | **3.000 ms**    | Open <-> Private Mesh |
++----------------------+-----------------------+-----------------+-----------------------+
+| **`0x07` Kanal +1**  | **1. ACT_2 (Mesh 2x)**| **2x 150 ms**   | Menü "Kanalwahl"      |
+| *(Autonomes Makro)*  | **2. Pause 200 ms**   |                 |                       |
+|                      | **3. ACT_3 (Plus 1x)**| **150 ms**      | Nächster Kanal (1..6) |
++----------------------+-----------------------+-----------------+-----------------------+
+| **`0x08` Kanal -1**  | **1. ACT_2 (Mesh 2x)**| **2x 150 ms**   | Menü "Kanalwahl"      |
+| *(Autonomes Makro)*  | **2. Pause 200 ms**   |                 |                       |
+|                      | **3. ACT_4 (Minus 1x)** **150 ms**     | Vorheriger Kanal      |
++----------------------+-----------------------+-----------------+-----------------------+
+| **`0x09` Quick-Join**| **ACT_1 + ACT_2**     | **3.000 ms**    | Schnellbeitritt Gruppe|
++----------------------+-----------------------+-----------------+-----------------------+
+```
+
+* **Verschleißfreie Elektronik-Option (Zero-Wear):** Über die interne Schnittstelle `J_AUDIO_PWR` können die 4 Tasterleitungen des OMM-Moduls alternativ auch direkt elektrisch (über Open-Drain Schaltausgänge der Kassetten-MCU) geschaltet werden. Die mechanischen Hubmagnete gewährleisten die universelle Kompatibilität mit OEM-Geräten, während die direkte elektronische Tastung bei OMM-Modulen geräuschlos und vollkommen verschleißfrei arbeitet.
 
 ---
 
@@ -266,4 +308,12 @@ Wird die OMM 2.4 GHz Kassette in Bucht 1 oder Bucht 2 gesteckt, bindet der ESP32
 3. **Do-Not-Translate (DNT) Anti-Loop Flag:**
    * Aus dem OMM 2.4 GHz Mesh empfangene Audiosignale erhalten beim Weiterleiten an ein Sena/Cardo-Mesh das `FLAG_DO_NOT_TRANSLATE`, um akustische Rückkopplungsschleifen (Feedback Loops) über Dritte physikalisch unmöglich zu machen.
 4. **PWA Koppel- & Wartungsmodus:**
-   * Über die WebApp kann die OMM-Kassette per Knopfdruck in den Pairing-Modus versetzt, Kanäle gewechselt und Firmware-Updates (OTA über UWB) eingespielt werden.
+   * Über das PWA-Dashboard kann der Fahrer die OMM-Kassette per Knopfdruck in den Pairing-Modus versetzen, Kanäle wechseln und Audio-Pegel anpassen.
+5. **Autarke Firmware-Updates des OMM-Moduls (USB-C & BLE/Wi-Fi OTA):**
+   * **Wichtige Architekturtrennung:** Das OMM 2.4 GHz Intercom-Modul besitzt **keinen eigenen UWB-Transceiver**. Der DW3110 UWB-Chip befindet sich ausschließlich auf der Kassetten-Trägerplatine (`PCBA 03`).
+   * **Update-Pfade des OMM-Moduls (ESP32-C6):**
+     * **Kabelgebunden via USB-C (WebUSB / DFU):** Über die stirnseitige USB-C-Buchse kann das Modul direkt am Smartphone, Tablet oder PC angeschlossen werden. Die PWA flasht die Firmware per WebUSB im Browser in $< 15\,\text{s}$ ohne zusätzliche Software.
+     * **Drahtlos via Bluetooth LE / Wi-Fi (ESP-IDF OTA):** Das Smartphone verbindet sich per BLE oder Wi-Fi direkt mit dem ESP32-C6 des OMM-Moduls. Das Update wird drahtlos über die standardisierte A/B-Partitionierung (`ota_0`/`ota_1`) mit Rollback-Schutz eingespielt – völlig autark, sowohl im Helm-Betrieb als auch im Pod.
+   * **Wartung der Kassetten-Trägerplatine (`PCBA 03`):**
+     * Die fahrzeuggebundene Trägerplatine `PCBA 03` im Pod (deren ESP32-C6 und DW3110) wird im Fahrbetrieb über den internen UWB-Link von der Zentralbox (`PCBA 01`) gewartet und bei Bedarf per UWB-OTA aktualisiert.
+     * Beide Systeme verfügen somit über getrennte, robuste und fehlertolerante Update-Mechanismen.
