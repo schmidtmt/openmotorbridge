@@ -104,7 +104,10 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 
 ---
 
-## 6. PCBA 06: MagSafe Rahmendock-Adapter (`openmotorbridge_magsafe_dock`, 2-Layer FR4, 28 x 11.5 mm)
+## 6. PCBA 06: MagSafe Rahmendock-Adapter (`openmotorbridge_magsafe_dock`, 2-Layer FR4, 28 x 11.5 mm) [Optional / Legacy]
+
+> [!NOTE]
+> **Status:** In der aktuellen **All-UWB v9.6 Architektur** entfällt PCBA 06 im regulären Betrieb, da die Koffer-Trennstelle als reines 2-Draht DC-System ausgeführt wird und direkt über einen industriellen 2-Pin Magnet-Pogo-Steckverbinder (COTS) verbunden wird. Diese BOM dient als Referenz für Legacy-Aufbauten mit starrer Rahmenverschraubung.
 
 | Ref | Bauteil / Typ | Gehäuse | Spezifikation & Funktion | LCSC Part |
 | :--- | :--- | :--- | :--- | :--- |
@@ -132,17 +135,20 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 
 ---
 
-## 8. PCBA 08: Radar 2.0 Sub-MCU & 36-LED Flügel-Träger (`openmotorbridge_radar_submcu`, 4-Lagen FR4 TG150, 115 x 65 mm)
+## 8. PCBA 08: Radar 2.0 Sub-MCU & 36-LED Flügel-Träger (`openmotorbridge_radar_submcu`, 2-Lagen FR4 TG150, 115 x 65 mm)
 
 | Ref | Bauteil / Typ | Gehäuse | Spezifikation & Funktion | LCSC Part |
 | :--- | :--- | :--- | :--- | :--- |
 | **`U1`** | ESP32-C5-WROOM-1-N8 | SMD Modul | 32-Bit RISC-V Dual-Band Sub-MCU (2.4 GHz + 5.9 GHz V2X, 4MB Flash) | `C2843550` |
-| **`U2`** | LDO 3.3V 500mA | SOT-23-5 | TI TPS7A0533 / Richtek RT9013 LDO Spannungsregler | `C505293` |
+| **`U2`** | LDO 3.3V 500mA | SOT-23-5 | TI TLV75533P / Richtek RT9013 LDO Spannungsregler | `C505293` |
+| **`U3`** | Qorvo DW3110 | QFN-16 | Ultra-Wideband (UWB) Transceiver (6.5 GHz Ch. 5, All-UWB Backbone) | `C2934500` |
+| **`Y1_UWB`**| 38.4 MHz Crystal | SMD 2016-4P | Präzisionsquarz für DW3110 UWB Transceiver | `C384351` |
 | **`D1..36`**| WS2812B-2020 | SMD 2020 | 36x Digital RGB-LEDs in Doppel-Warnflügeln (18 links, 18 rechts) | `C2843530` |
-| **`ANT1`** | 5.9 GHz V2X Patch | 20x20x4 mm | Keramik-Patchantenne für ITS-G5 Car-to-X Sicherheitswarnungen | `C290456` |
-| **`J1`** | JST-SH 1.0mm 4-Pin | SMD Liegend | Entkoppelte interne Signalpeitsche zur Binder M5 Gehäuse-Buchse | `C136657` |
+| **`J1`** | JST-JWPF 2-Pin | THT/SMD 2.0mm | Wasserdichter 12V DC Kfz-Bordnetzeingang (`B02B-JWPF-SK-R`) | `C2843555` |
 | **`J2`** | JST-SH 1.0mm 4-Pin | SMD Liegend | UART-Verbindung zum Wheeltec MR20 Transceiver (RX/TX/5V/GND) | `C136657` |
-| **`D_TVS`**| PESD5V0S2BT | SOT-23 | TVS-Dioden-Array für UART & Stromversorgung | `C2834580` |
+| **`J3`** | Hirose U.FL | SMT Vertical | 5.9 GHz V2X HF-Antennenanschluss | `C14894` |
+| **`J4`** | Hirose U.FL | SMT Vertical | 6.5 GHz UWB HF-Antennenanschluss (Taoglas FXUWB10 Flexantenne) | `C14894` |
+| **`SW1..2`**| Alps SKRK SMD | SMD 3.9x2.9mm | Lokale Boot- und Reset-Taster | `C115358` |
 
 ---
 
@@ -155,7 +161,7 @@ Alle Fertigungsdaten liegen im Repository unter `hardware/production_packages/` 
 | **PCBA 01: Zentralbox** | `01_main_box_pcba_gerbers_jlcpcb.zip` | `01_main_box_pcba_bom_jlcpcb.csv` | `01_main_box_pcba_cpl_jlcpcb.csv` | **4 Lagen** | ENIG (Gold), 1.6 mm, TG150, SMT beidseitig (DW3110 auf B.Cu) |
 | **PCBA 03: Universal-Kassette**| `03_pod_cartridge_pcba_gerbers_jlcpcb.zip` | `03_pod_cartridge_pcba_bom_jlcpcb.csv` | `03_pod_cartridge_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG (Gold), 1.2 mm, SMT beidseitig (2x pro Fahrzeug bestellen) |
 | **PCBA 05: Front-Knoten** | `05_front_node_pcba_gerbers_jlcpcb.zip` | `05_front_node_pcba_bom_jlcpcb.csv` | `05_front_node_pcba_cpl_jlcpcb.csv` | **4 Lagen** | ENIG (Gold), 1.6 mm, TG150, SMT beidseitig (DW3110 auf B.Cu) |
-| **PCBA 06: MagSafe Dock** | `06_magsafe_dock_pcba_gerbers_jlcpcb.zip` | `06_magsafe_dock_pcba_bom_jlcpcb.csv` | `06_magsafe_dock_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG (Gold), 1.6 mm, SMT Top |
+| **PCBA 06: MagSafe Dock** | `06_magsafe_dock_pcba_gerbers_jlcpcb.zip` | `06_magsafe_dock_pcba_bom_jlcpcb.csv` | `06_magsafe_dock_pcba_cpl_jlcpcb.csv` | **2 Lagen** | *Optional / Legacy* (bei All-UWB durch COTS 2-Pin Magnetkupplung ersetzt) |
 | **PCBA 07: Smart-Keyfob** | `07_smart_keyfob_pcba_gerbers_jlcpcb.zip` | `07_smart_keyfob_pcba_bom_jlcpcb.csv` | `07_smart_keyfob_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG (Gold), 1.0 mm, SMT beidseitig |
 | **PCBA 08: Radar 2.0 Sub-MCU** | `08_radar_submcu_pcba_gerbers_jlcpcb.zip` | `08_radar_submcu_pcba_bom_jlcpcb.csv` | `08_radar_submcu_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG (Gold), 1.2 mm, TG150, SMT Top |
 
@@ -257,13 +263,13 @@ Für den Aufbau müssen **keine Kabelbäume selbst gecrimpt oder gelötet werden
 | **Kassetten-Flanschdichtungen**| Silikon-Formdichtung Shore 40A ($54 \times 18\,\text{mm}$) | Sonderfertigung | 2 Stk. | Stirnseitige Mundloch-Abdichtung an Pod 1 und Pod 2 |
 | **Pufferakku (LiPo USV)** | 1S LiPo Flat-Pack 2.200 mAh ($68 \times 39 \times 5{,}0\,\text{mm}$) mit Molex Micro-Fit | EEMB / Enerpower | 1 Stk. | USV-Pufferung in der Zentralbox (Typ 504068 / 503870) |
 | **KFZ-Sicherungshalter** | Wasserdichter Flachsicherungshalter + 2A Sicherung | Hella / MTA | 1 Stk. | Dauerplus-Absicherung an Batteriepol |
-| **M8 6-Pin Fertigkabel (PUR)**| M8 6-Pin A-Coded Stecker/Buchse (1.0m / 1.5m) | Binder / Phoenix | 2 Stk. | Plug-and-Play Verbindung zu Pod 1 und Pod 2 |
-| **M8 4-Pin Fertigkabel (PUR)**| M8 4-Pin A-Coded Stecker/Buchse (0.5-1.5m) | Binder / Phoenix | Opt. (1)| Peitsche 5: Heck-Radar (Garmin Varia: 12V + UART / Wheeltec MR20) |
+| **Pure-DC 2-Ader Zuleitung (PUR)**| 2x 0.34 mm² (AWG22) mit JST-JWPF 2-Pin / MagSafe Breakaway | COTS Standard | 2 Stk. | Pure-DC 5V Stromversorgung zu Pod 1 und Pod 2 (Audio/Daten 100 % via UWB) |
+| **Radar 12V Zuleitung (PUR)** | 2x 0.5 mm² (AWG20) mit JST-JWPF 2-Pin IP67 Stecker | COTS Standard | Opt. (1)| 12V DC Bordnetzspeisung für Heck-Radar (Datenübertragung 100 % drahtlos via UWB) |
 | **Front-Node 12V Anschlusskabel**| 2-Pin JST-PH Litzenkabel mit Posi-Tap | COTS Standard | 1 Stk. | Lokale Cockpit-Stromversorgung (Standlicht/Navistecker) - *Funkbrücke via UWB!* |
 | **J_ACT Aktuator-Kabelbaum** | Fertiges 8-Pin JST-SH Kabel auf 4x 2-Pin Litzen | Adafruit / SparkFun | 2 Stk. | Vorkonfektioniertes Fertigkabel für 4 Hubmagnete |
 | **Miniatur-Aktuatoren** | 5V DC Hubmagnete ($\varnothing 6{,}5 \times 12\,\text{mm}$) mit TPU-Spitze | Solenoid / Web | 8 Stk. | 4 Stk. pro Smart Cartridge (Sena / Cardo) |
 | **J2 Gateway-Kabelbaum** | Fertiges 6-Pin JST-SH Kabel auf Klinke / USB | COTS Standard | 2 Stk. | Fertigkabel für Headset-Audio & Dauerstrom |
-| **Binder M5 4-Pin IP67 Buchse**| Serie 707 M5 4-Pol Einbaubuchse mit D-Flat | Binder | 1 Stk. | Gehäuse-Flanschanschluss Radar 2.0 Sub-MCU |
+| **JST-JWPF 2-Pin IP67 Steckverbinder-Set**| 02R-JWPF-VSLE-S & 02T-JWPF-VSLE-S (2-Pol wasserdicht) | JST | 1 Set | Wasserdichte 12V DC Kfz-Zuleitung für Radar 2.0 Sub-MCU |
 | **Wheeltec MR20 77-GHz mmWave**| 77-GHz FMCW Automotive Radar (150m Reichweite)| Wheeltec | Opt. (1)| Radar 2.0 Transceiver-Modul im Heck-Gehäuse |
 | **PC Radom-Sichtfenster** | Laserzuschnitt Polycarbonat 1.6 mm (RF-transparent)| COTS / Plexiglas | Opt. (1)| Mikrowellen- & optisches Fenster für MR20 & 24-LED Halo |
 | **3M Dual Lock SJ3550** | Pilzkopf-Klettband selbstklebend (VHB-Klebstoff) | 3M | 0.5 m | Rüttelfeste, werkzeuglose Dongle- & Sensor-Montage |
@@ -337,7 +343,7 @@ Bestellen 2 bis 3 Motorradfahrer gemeinsam:
 
 ## 16. Fertigungs- & Schutzlackierungs-Richtlinien (Conformal Coating IPC-CC-830B)
 
-Um eine 100%ige Langzeitausfallsicherheit nach Automotive-Standard zu gewährleisten, werden alle 7 PCBAs im Serienbestellprozess schutzlackiert:
+Um eine 100%ige Langzeitausfallsicherheit nach Automotive-Standard zu gewährleisten, werden alle 5 aktiven PCBAs im Serienbestellprozess schutzlackiert:
 
 ### 16.1 Lackspezifikation & Qualifikation
 * **Standard:** Zertifiziert nach **IPC-CC-830B** und **MIL-I-46058C**.
@@ -348,9 +354,9 @@ Um eine 100%ige Langzeitausfallsicherheit nach Automotive-Standard zu gewährlei
 Folgende Bereiche dürfen **unter keinen Umständen** mit Schutzlack benetzt werden:
 1. **Steckverbinder & Kontaktbuchsen:**
    * USB-C Buchsen (`J7` Front-Node, Service-Ports)
-   * M8 / M5 Buchsenkontakte (`J2` Pod-Base, Binder M5 Radar)
-   * JST-SH / JST-PH Buchsenleisten (`J1..J12` Front-Node, `J1..J2` Kassetten)
-   * MicroSD Kartenleser-Slot (`J2` Zentralbox)
+   * Automotive-Steckverbinder & Kontakte (`PAD1`/`PAD2` Kassetten-Pads, JST-JWPF 2-Pin Radar `J1`, Deutsch DTM-12 Zentralbox `J1`)
+   * JST-SH / JST-PH / Qwiic Buchsenleisten (`J1..J12` Front-Node, `J_ACT`/`J2` Kassetten, `J2` Radar-Sensor)
+   * MicroSD Kartenleser-Slot (`J2` Zentralbox auf B.Cu)
 2. **Akustische Sensoren & Ventile:**
    * **MEMS-Mikrofon (`MIC1` MSM261S4030H0R auf PCBA 05):** Schalleintrittsöffnung ($\varnothing 0{,}5\,\text{mm}$) muss zwingend mit Kapton versiegelt werden!
    * **Druckausgleichsmembran (Gore ePTFE Vent):** Darf nicht verkleben.

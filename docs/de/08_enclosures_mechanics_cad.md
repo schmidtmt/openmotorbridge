@@ -1202,7 +1202,7 @@ Die CAD-Dateistruktur von OpenMotorBridge folgt einer strengen hierarchischen CS
 | **Spiegel-Radar** | BSD Spiegel-Totwinkel-Pod Oberteil (38° Trichter) | `05_accessories/bsd_mirror_upper_pod.stl` | `05_accessories/bsd_mirror_indicator_pod.scad` |
 | **Spiegel-Radar** | BSD Spiegel-Klemmschelle Unterteil (Ø 10 mm) | `05_accessories/bsd_mirror_lower_clamp.stl` | `05_accessories/bsd_mirror_indicator_pod.scad` |
 | **Spiegel-Radar** | BSD Diffusorlinse (Bernstein / transluzent) | `05_accessories/bsd_mirror_lens.stl` | `05_accessories/bsd_mirror_indicator_pod.scad` |
-| **Radar 2.0** | Wheeltec MR20 77GHz Gehäuse mit Binder M5 Flansch & Radome | `05_accessories/radar_mr20_housing.stl` | `05_accessories/radar_mr20_housing.scad` |
+| **Radar 2.0** | Wheeltec MR20 77GHz Gehäuse mit JST-JWPF 2-Pin Flansch & Radome | `05_accessories/radar_mr20_housing.stl` | `05_accessories/radar_mr20_housing.scad` |
 | **Kamera-Dock** | Road Glide ST Sharknose 15W Qi Induktives Cam-Dock (3M Dual Lock) | `05_accessories/road_glide_inductive_cam_dock.stl` | `05_accessories/road_glide_inductive_cam_dock.scad` |
 | **Auto-Zubehör** | Begleitfahrzeug / Auto Universal Sonnenblenden-Clip für Pod 1 & 2 | `05_accessories/car_sun_visor_pod_clip.stl` | `05_accessories/car_sun_visor_pod_clip.scad` |
 | **Kassette** | Universelle 2D-Langloch-Rasterplatte & seitliche Aktuator-Ausleger | `03_pod_cartridges/cartridge_universal_actuator_rails.stl` | `03_pod_cartridges/cartridge_universal_actuator_rails.scad` |
