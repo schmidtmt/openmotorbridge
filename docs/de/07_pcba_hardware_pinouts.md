@@ -177,14 +177,14 @@ Die frühere Pod-Basisplatine (`PCBA 02`) ist in v9.6 **vollständig und ersatzl
 ### 5.1 Technische Platinen-Kenndaten & Funktionale Lagen-Aufteilung
 * **Abmessungen:** $35{,}0 \times 25{,}0\,\text{mm}$ (Raster $29{,}0 \times 19{,}0\,\text{mm}$ mit 4x M2 Befestigungsbohrungen).
 * **Lagenaufbau:** 2 Lagen FR-4 High-TG150 ($1{,}2\,\text{mm}$ Dicke, $35\,\mu\text{m}$ Cu beidseitig, ENIG-Goldfinish).
-* **Bestückung Top-Layer (F.Cu - Mechatronik, Steuerung & Audio):**
+* **Bestückung Top-Layer (F.Cu - Mechatronik & Steuerung):**
   * `U2`: Espressif `ESP32-C6` RISC-V Host-MCU (verwaltet Kassetten-Profile, UWB-Kommunikation und Aktuator-Timings).
-  * `U3`: Everest Semi `ES8388` 24-Bit / 48 kHz Stereo-Audio-Codec. Wandelt das analoge Mikrofon- und Lautsprechersignal von Sena, Cardo oder Midland direkt auf der Kassette und streamt es digital via UWB.
   * `Q1` - `Q4`: 4x N-Kanal MOSFETs (`AO3400A`, SOT-23, $30\,\text{V} / 5{,}7\,\text{A}$) samt Freilaufdioden `D1`-`D4`. Platziert unmittelbar neben dem Header `J_ACT` für kürzeste Leiterbahnwege zu den Taster-Aktuatoren.
   * `J_ACT`: 8-poliger $1{,}0\,\text{mm}$ JST-SH Header zur Ansteuerung der 4 Miniatur-Hubmagnete.
   * `J_AUDIO_PWR`: 6-poliger $1{,}0\,\text{mm}$ JST-SH Header zur Anbindung des Adapterkabelstrangs an das jeweilige OEM-Headset.
-* **Bestückung Bottom-Layer (B.Cu - HF & Stromaufnahme):**
+* **Bestückung Bottom-Layer (B.Cu - HF, Audio-Codec & Stromaufnahme):**
   * `U1`: Qorvo `DW3110` Ultra-Wideband Transceiver (6.489 GHz Ch. 5) mit integrierter PCB-Antenne. Strahlungsrichtung zeigt nach unten durch den Kunststoffboden der Kassette für optimale Funkverbindung zur Zentralbox.
+  * `U3`: Everest Semi `ES8388` 24-Bit / 48 kHz Low-Noise Audio-Codec. Bewusst auf der **Unterseite (`B.Cu`)** platziert: Dadurch sind die empfindlichen analogen Mikrofon- und Kopfhörerleitungen durch die interne Kupfer-Massefläche hermetisch von den steilen Schaltflanken der Top-Layer-MOSFETs (`Q1`–`Q4`) und Aktuatorströmen entkoppelt. Wandelt das analoge Mikrofon- und Lautsprechersignal von Sena, Cardo oder Midland direkt auf der Kassette und streamt es jitterfrei digital via I2S/UWB.
   * `PAD1` & `PAD2`: Stirnseitige, massive vergoldete Kontaktflächen (ENIG) für die 2-Draht DC-Federkontakte des Pods.
   * `F1`: Selbstrückstellende 500mA PPTC-Sicherung.
 

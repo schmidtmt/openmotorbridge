@@ -14,95 +14,713 @@
 	)
 	(lib_symbols
 		(symbol "Device:Transformer_1P_1S"
-			(pin passive line (at -7.62 2.54 0) (length 2.54) (name "PRI1" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
-			(pin passive line (at -7.62 -2.54 0) (length 2.54) (name "PRI2" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
-			(pin passive line (at 7.62 2.54 180) (length 2.54) (name "SEC1" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
-			(pin passive line (at 7.62 -2.54 180) (length 2.54) (name "SEC2" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27)))))
-			(property "Reference" "T" (at -5.08 5.08 0) (effects (font (size 1.27 1.27)) (justify left)))
-			(property "Value" "Bourns_LM_NP_1001" (at -5.08 -5.08 0) (effects (font (size 1.27 1.27)) (justify left)))
-			(symbol "Transformer_1P_1S_0_1"
-				(rectangle (start -5.08 3.81) (end 5.08 -3.81) (stroke (width 0.254) (type solid)) (fill (type background)))
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "T"
+				(at -5.08 5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
 			)
+			(property "Value" "Bourns_LM_NP_1001"
+				(at -5.08 -5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "Transformer_1P_1S_0_1"
+				(rectangle
+					(start -5.08 3.81)
+					(end 5.08 -3.81)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type background)
+					)
+				)
+			)
+			(symbol "Transformer_1P_1S_1_1"
+				(pin passive line
+					(at -7.62 2.54 0)
+					(length 2.54)
+					(name "PRI1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -7.62 -2.54 0)
+					(length 2.54)
+					(name "PRI2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 2.54 180)
+					(length 2.54)
+					(name "SEC1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 -2.54 180)
+					(length 2.54)
+					(name "SEC2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
 		)
 		(symbol "Relay:TLP222A"
-			(pin passive line (at -10.16 2.54 0) (length 2.54) (name "ANODE" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
-			(pin passive line (at -10.16 -2.54 0) (length 2.54) (name "CATHODE" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
-			(pin passive line (at 10.16 2.54 180) (length 2.54) (name "DRAIN1" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27)))))
-			(pin passive line (at 10.16 -2.54 180) (length 2.54) (name "DRAIN2" (effects (font (size 1.27 1.27)))) (number "6" (effects (font (size 1.27 1.27)))))
-			(property "Reference" "U" (at -7.62 5.08 0) (effects (font (size 1.27 1.27)) (justify left)))
-			(property "Value" "TLP222A" (at -7.62 -5.08 0) (effects (font (size 1.27 1.27)) (justify left)))
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "U"
+				(at -7.62 5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "TLP222A"
+				(at -7.62 -5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
 			(symbol "TLP222A_0_1"
-				(rectangle (start -7.62 3.81) (end 7.62 -3.81) (stroke (width 0.254) (type solid)) (fill (type background)))
+				(rectangle
+					(start -7.62 3.81)
+					(end 7.62 -3.81)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type background)
+					)
+				)
+			)
+			(symbol "TLP222A_1_1"
+				(pin passive line
+					(at -10.16 2.54 0)
+					(length 2.54)
+					(name "ANODE"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -10.16 -2.54 0)
+					(length 2.54)
+					(name "CATHODE"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 10.16 2.54 180)
+					(length 2.54)
+					(name "DRAIN1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 10.16 -2.54 180)
+					(length 2.54)
+					(name "DRAIN2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+	)
+	(wire
+		(pts
+			(xy 130.16 112.54) (xy 220 110)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "200a6259-87cd-4c79-93cf-910f3d526af4")
+	)
+	(wire
+		(pts
+			(xy 30 50) (xy 112.38 52.54)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "3f05ddd3-ff73-423c-a23c-88bdec668253")
+	)
+	(wire
+		(pts
+			(xy 127.62 52.54) (xy 220 50)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "5378a15c-72ce-49f7-b7f8-b7f8def33bf6")
+	)
+	(wire
+		(pts
+			(xy 30 70) (xy 112.38 72.54)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "5e7cff3e-b457-4dc9-b52f-e4f2be824f87")
+	)
+	(wire
+		(pts
+			(xy 127.62 72.54) (xy 220 65)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "aef90666-3112-4935-a475-4f802bd5b1d2")
+	)
+	(hierarchical_label "AUDIO_OUT_P1"
+		(shape input)
+		(at 30 50 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "d0000000-0000-0000-0000-000000000001")
+	)
+	(hierarchical_label "AUDIO_IN_P1"
+		(shape output)
+		(at 30 70 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "d0000000-0000-0000-0000-000000000002")
+	)
+	(hierarchical_label "AUDIO_OUT_P2"
+		(shape input)
+		(at 30 90 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "d0000000-0000-0000-0000-000000000003")
+	)
+	(hierarchical_label "AUDIO_IN_P2"
+		(shape output)
+		(at 30 110 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "d0000000-0000-0000-0000-000000000004")
+	)
+	(hierarchical_label "POD1_NF_P"
+		(shape output)
+		(at 220 50 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "d0000000-0000-0000-0000-000000000005")
+	)
+	(hierarchical_label "POD1_NF_N"
+		(shape output)
+		(at 220 65 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "d0000000-0000-0000-0000-000000000006")
+	)
+	(hierarchical_label "POD2_NF_P"
+		(shape output)
+		(at 220 80 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "d0000000-0000-0000-0000-000000000007")
+	)
+	(hierarchical_label "POD2_NF_N"
+		(shape output)
+		(at 220 95 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "d0000000-0000-0000-0000-000000000008")
+	)
+	(hierarchical_label "POD1_OPTO"
+		(shape output)
+		(at 220 110 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "d0000000-0000-0000-0000-000000000009")
+	)
+	(hierarchical_label "POD2_OPTO"
+		(shape output)
+		(at 220 125 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "d0000000-0000-0000-0000-000000000010")
+	)
+	(symbol
+		(lib_id "Device:Transformer_1P_1S")
+		(at 120 50 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "d0000000-0000-0000-0000-000000000011")
+		(property "Reference" "T1"
+			(at 120 42 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "LM-NP-1001"
+			(at 120 45 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Transformer_SMD:Transformer_Ethernet_HALO_TG111-MSC13"
+			(at 0 0 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 120 50 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 120 50 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "d0000000-0000-0000-0000-000000000012")
+		)
+		(pin "2"
+			(uuid "d0000000-0000-0000-0000-000000000013")
+		)
+		(pin "3"
+			(uuid "d0000000-0000-0000-0000-000000000014")
+		)
+		(pin "4"
+			(uuid "d0000000-0000-0000-0000-000000000015")
+		)
+		(instances
+			(project "openmotorbridge_main"
+				(path "/a0000000-0000-0000-0000-000000000001/a0000000-0000-0000-0000-000000000004"
+					(reference "T1")
+					(unit 1)
+				)
 			)
 		)
 	)
-
-	(hierarchical_label "AUDIO_OUT_P1" (shape input) (at 30.0 50.0 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "d0000000-0000-0000-0000-000000000001"))
-	(hierarchical_label "AUDIO_IN_P1" (shape output) (at 30.0 70.0 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "d0000000-0000-0000-0000-000000000002"))
-	(hierarchical_label "AUDIO_OUT_P2" (shape input) (at 30.0 90.0 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "d0000000-0000-0000-0000-000000000003"))
-	(hierarchical_label "AUDIO_IN_P2" (shape output) (at 30.0 110.0 180) (effects (font (size 1.27 1.27)) (justify right)) (uuid "d0000000-0000-0000-0000-000000000004"))
-
-	(hierarchical_label "POD1_NF_P" (shape output) (at 220.0 50.0 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "d0000000-0000-0000-0000-000000000005"))
-	(hierarchical_label "POD1_NF_N" (shape output) (at 220.0 65.0 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "d0000000-0000-0000-0000-000000000006"))
-	(hierarchical_label "POD2_NF_P" (shape output) (at 220.0 80.0 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "d0000000-0000-0000-0000-000000000007"))
-	(hierarchical_label "POD2_NF_N" (shape output) (at 220.0 95.0 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "d0000000-0000-0000-0000-000000000008"))
-	(hierarchical_label "POD1_OPTO" (shape output) (at 220.0 110.0 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "d0000000-0000-0000-0000-000000000009"))
-	(hierarchical_label "POD2_OPTO" (shape output) (at 220.0 125.0 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "d0000000-0000-0000-0000-000000000010"))
-
-	(symbol (lib_id "Device:Transformer_1P_1S") (at 120.0 50.0 0) (unit 1)
-		(in_bom yes) (on_board yes) (dnp no)
-		(uuid "d0000000-0000-0000-0000-000000000011")
-		(property "Reference" "T1" (at 120.0 42.0 0) (effects (font (size 1.27 1.27))))
-		(property "Value" "LM-NP-1001" (at 120.0 45.0 0) (effects (font (size 1.27 1.27))))
-		(property "Footprint" "Transformer_SMD:Transformer_Ethernet_HALO_TG111-MSC13" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(pin "1" (uuid "d0000000-0000-0000-0000-000000000012"))
-		(pin "2" (uuid "d0000000-0000-0000-0000-000000000013"))
-		(pin "3" (uuid "d0000000-0000-0000-0000-000000000014"))
-		(pin "4" (uuid "d0000000-0000-0000-0000-000000000015"))
-	)
-
-	(symbol (lib_id "Device:Transformer_1P_1S") (at 120.0 70.0 0) (unit 1)
-		(in_bom yes) (on_board yes) (dnp no)
+	(symbol
+		(lib_id "Device:Transformer_1P_1S")
+		(at 120 70 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(uuid "d0000000-0000-0000-0000-000000000021")
-		(property "Reference" "T2" (at 120.0 62.0 0) (effects (font (size 1.27 1.27))))
-		(property "Value" "LM-NP-1001" (at 120.0 65.0 0) (effects (font (size 1.27 1.27))))
-		(property "Footprint" "Transformer_SMD:Transformer_Ethernet_HALO_TG111-MSC13" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(pin "1" (uuid "d0000000-0000-0000-0000-000000000022"))
-		(pin "2" (uuid "d0000000-0000-0000-0000-000000000023"))
-		(pin "3" (uuid "d0000000-0000-0000-0000-000000000024"))
-		(pin "4" (uuid "d0000000-0000-0000-0000-000000000025"))
+		(property "Reference" "T2"
+			(at 120 62 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "LM-NP-1001"
+			(at 120 65 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Transformer_SMD:Transformer_Ethernet_HALO_TG111-MSC13"
+			(at 0 0 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 120 70 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 120 70 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "d0000000-0000-0000-0000-000000000022")
+		)
+		(pin "2"
+			(uuid "d0000000-0000-0000-0000-000000000023")
+		)
+		(pin "3"
+			(uuid "d0000000-0000-0000-0000-000000000024")
+		)
+		(pin "4"
+			(uuid "d0000000-0000-0000-0000-000000000025")
+		)
+		(instances
+			(project "openmotorbridge_main"
+				(path "/a0000000-0000-0000-0000-000000000001/a0000000-0000-0000-0000-000000000004"
+					(reference "T2")
+					(unit 1)
+				)
+			)
+		)
 	)
-
-	(symbol (lib_id "Relay:TLP222A") (at 120.0 110.0 0) (unit 1)
-		(in_bom yes) (on_board yes) (dnp no)
+	(symbol
+		(lib_id "Relay:TLP222A")
+		(at 120 110 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(uuid "d0000000-0000-0000-0000-000000000031")
-		(property "Reference" "OC1" (at 120.0 102.0 0) (effects (font (size 1.27 1.27))))
-		(property "Value" "TLP222A" (at 120.0 105.0 0) (effects (font (size 1.27 1.27))))
-		(property "Footprint" "Package_SO:Toshiba_SOIC-4-6_4.4x3.6mm_P1.27mm" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(property "LCSC" "C112444" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(pin "1" (uuid "d0000000-0000-0000-0000-000000000032"))
-		(pin "3" (uuid "d0000000-0000-0000-0000-000000000033"))
-		(pin "4" (uuid "d0000000-0000-0000-0000-000000000034"))
-		(pin "6" (uuid "d0000000-0000-0000-0000-000000000035"))
+		(property "Reference" "U7"
+			(at 120 102 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TLP222A"
+			(at 120 105 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Package_SO:Toshiba_SOIC-4-6_4.4x3.6mm_P1.27mm"
+			(at 0 0 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 120 110 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 120 110 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "d0000000-0000-0000-0000-000000000032")
+		)
+		(pin "3"
+			(uuid "d0000000-0000-0000-0000-000000000033")
+		)
+		(pin "4"
+			(uuid "d0000000-0000-0000-0000-000000000034")
+		)
+		(pin "6"
+			(uuid "d0000000-0000-0000-0000-000000000035")
+		)
+		(instances
+			(project "openmotorbridge_main"
+				(path "/a0000000-0000-0000-0000-000000000001/a0000000-0000-0000-0000-000000000004"
+					(reference "U7")
+					(unit 1)
+				)
+			)
+		)
 	)
-
-	(symbol (lib_id "Relay:TLP222A") (at 120.0 130.0 0) (unit 1)
-		(in_bom yes) (on_board yes) (dnp no)
-		(uuid "d0000000-0000-0000-0000-000000000041")
-		(property "Reference" "OC2" (at 120.0 122.0 0) (effects (font (size 1.27 1.27))))
-		(property "Value" "TLP222A" (at 120.0 125.0 0) (effects (font (size 1.27 1.27))))
-		(property "Footprint" "Package_SO:Toshiba_SOIC-4-6_4.4x3.6mm_P1.27mm" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(property "LCSC" "C112444" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(pin "1" (uuid "d0000000-0000-0000-0000-000000000042"))
-		(pin "3" (uuid "d0000000-0000-0000-0000-000000000043"))
-		(pin "4" (uuid "d0000000-0000-0000-0000-000000000044"))
-		(pin "6" (uuid "d0000000-0000-0000-0000-000000000045"))
-	)
-
-	(wire (pts (xy 30.0 50.0) (xy 112.38 52.54)) (stroke (width 0) (type solid)))
-	(wire (pts (xy 127.62 52.54) (xy 220.0 50.0)) (stroke (width 0) (type solid)))
-	(wire (pts (xy 30.0 70.0) (xy 112.38 72.54)) (stroke (width 0) (type solid)))
-	(wire (pts (xy 127.62 72.54) (xy 220.0 65.0)) (stroke (width 0) (type solid)))
-	(wire (pts (xy 130.16 112.54) (xy 220.0 110.0)) (stroke (width 0) (type solid)))
-	(wire (pts (xy 130.16 132.54) (xy 220.0 125.0)) (stroke (width 0) (type solid)))
 )

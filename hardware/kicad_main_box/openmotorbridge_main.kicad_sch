@@ -10,7 +10,7 @@
 		(rev "v8.0")
 		(company "OpenMotorBridge Open Source Hardware")
 		(comment 1 "Universelles 4-Punkte-Satelliten-Gateway (CERN-OHL-S v2)")
-		(comment 2 "Deutsch DTM-12 Automotive Matrix, ES8388 DSP Codec, TCAN334G CAN-FD, Qorvo DW3110 UWB")
+		(comment 2 "HD26 26-Pin Matrix, ES8388 24-Bit Codec, TCAN334G CAN-FD")
 	)
 	(lib_symbols)
 	(sheet
@@ -215,7 +215,7 @@
 				(justify right)
 			)
 		)
-		(pin "RADAR_TX" output
+		(pin "UART_POD3_TX" output
 			(at 247.65 68.58 0)
 			(uuid "64ba4c87-4bca-4934-8c69-876c21d42c69")
 			(effects
@@ -225,9 +225,19 @@
 				(justify right)
 			)
 		)
-		(pin "RADAR_RX" input
+		(pin "UART_POD3_RX" input
 			(at 247.65 76.2 0)
 			(uuid "e57ec65c-000e-426b-b611-df34dee94ee4")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "GNSS_PPS" input
+			(at 247.65 83.82 0)
+			(uuid "e705699d-13c8-4f4d-aa5d-5f53b7347887")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -304,6 +314,151 @@
 		)
 	)
 	(sheet
+		(at 38.1 133.35)
+		(size 76.2 63.5)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(fill
+			(color 22 27 34 0.8)
+		)
+		(uuid "a0000000-0000-0000-0000-000000000004")
+		(property "Sheetname" "Audio-Frontend & Opto"
+			(at 38.1 132.08 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "audio_frontend_isolated.kicad_sch"
+			(at 38.1 198.12 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "AUDIO_OUT_P1" input
+			(at 114.3 142.24 0)
+			(uuid "97cbc396-360a-417b-85ff-11b995642b81")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "AUDIO_IN_P1" output
+			(at 114.3 149.86 0)
+			(uuid "f81d614d-8210-4ce4-9dfb-a192f5a4c80c")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "AUDIO_OUT_P2" input
+			(at 114.3 157.48 0)
+			(uuid "ef5ac97e-23c0-4233-9a7a-01819273bc62")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "AUDIO_IN_P2" output
+			(at 114.3 165.1 0)
+			(uuid "9bae7801-f536-4271-a36b-7b36c35bb6bb")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "POD1_NF_P" output
+			(at 38.1 142.24 180)
+			(uuid "be13d507-e5e5-4e76-a4f2-f05aaab550cd")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "POD1_NF_N" output
+			(at 38.1 149.86 180)
+			(uuid "de6204b1-9de8-4e73-ab68-2b7b839ce5e1")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "POD2_NF_P" output
+			(at 38.1 157.48 180)
+			(uuid "1781bfab-40d3-48a1-a2df-340f2bc45a5e")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "POD2_NF_N" output
+			(at 38.1 165.1 180)
+			(uuid "bddaa3a9-9d0b-455d-b0ba-09cc2d40b522")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "POD1_OPTO" output
+			(at 38.1 172.72 180)
+			(uuid "cf0bbef0-1948-48a9-aed2-06984719cfd4")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "POD2_OPTO" output
+			(at 38.1 180.34 180)
+			(uuid "b50e74ad-a62b-4747-8674-4fc1c3f041cf")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(instances
+			(project "openmotorbridge_main"
+				(path "/a0000000-0000-0000-0000-000000000001"
+					(page "3")
+				)
+			)
+		)
+	)
+	(sheet
 		(at 285.75 44.45)
 		(size 95.25 152.4)
 		(exclude_from_sim no)
@@ -318,7 +473,7 @@
 			(color 22 27 34 0.8)
 		)
 		(uuid "a0000000-0000-0000-0000-000000000005")
-		(property "Sheetname" "Deutsch DTM-12 Power & CAN Interface"
+		(property "Sheetname" "HD26 Flansch & 2x13 Header"
 			(at 285.75 43.18 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -460,7 +615,7 @@
 				(justify left)
 			)
 		)
-		(pin "RADAR_RX" input
+		(pin "POD3_VCC" input
 			(at 285.75 144.78 180)
 			(uuid "22c0732d-8dfb-42cf-95be-580001832342")
 			(effects
@@ -470,7 +625,7 @@
 				(justify left)
 			)
 		)
-		(pin "RADAR_TX" output
+		(pin "POD3_GND" input
 			(at 285.75 152.4 180)
 			(uuid "cdbbea14-0038-4cda-a6ce-7ffddd3eb4a9")
 			(effects
@@ -480,7 +635,7 @@
 				(justify left)
 			)
 		)
-		(pin "RADAR_PWR_12V" output
+		(pin "POD3_TX" input
 			(at 285.75 160.02 180)
 			(uuid "a1d4d0e8-0d6f-406e-aecf-a0a6c082ef5b")
 			(effects
@@ -490,7 +645,7 @@
 				(justify left)
 			)
 		)
-		(pin "RADAR_GND" output
+		(pin "POD3_RX" input
 			(at 285.75 167.64 180)
 			(uuid "71519ebc-415e-44f8-ab00-07bb21b01aa8")
 			(effects
@@ -500,7 +655,7 @@
 				(justify left)
 			)
 		)
-		(pin "GND_PWR" input
+		(pin "POD3_PPS" input
 			(at 285.75 175.26 180)
 			(uuid "ffe2c991-29be-4858-981f-863a6d73f312")
 			(effects
@@ -510,7 +665,7 @@
 				(justify left)
 			)
 		)
-		(pin "ONEWIRE_ID" bidirectional
+		(pin "POD3_1WIRE" input
 			(at 285.75 182.88 180)
 			(uuid "9616a066-81e5-4e9e-aee6-1f02480af250")
 			(effects
