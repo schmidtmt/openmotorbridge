@@ -93,17 +93,20 @@ Für alle 4-Lagen-Platinen (`PCBA 01` und `PCBA 05`) wird der identische, streng
 * **Abmessungen:** $85{,}0 \times 55{,}0\,\text{mm}$ (Außenkontur mit 4x M2.5 Montagebohrungen, $77{,}0 \times 47{,}0\,\text{mm}$ Lochabstand).
 * **Lagenaufbau:** 4 Lagen FR-4 High-TG150 ($1{,}6\,\text{mm}$ Gesamtdicke, ENIG-Goldfinish).
 * **Bestückung Top-Layer (F.Cu):**
-  * **Hauptcontroller:** Espressif `ESP32-S3-WROOM-1` (Dual-Core @ 240 MHz, 16 MB Flash, 8 MB Octal-PSRAM) für Systemsteuerung, CAN-Bus, FreeRTOS DSP-Pipeline und PWA-Webserver.
-  * **Dedizierter Helm-Audio-SoC:** **Qualcomm QCC3084** Bluetooth 5.4 Audio-SoC für Dual-A2DP (aptX HD, Low Latency), LE Audio Auracast Broadcast und kristallklare Hands-Free Telefonie (HFP 1.8 mit Wideband Speech).  
+  * **Hauptcontroller (`U2`):** Espressif `ESP32-S3-WROOM-1U` (Dual-Core @ 240 MHz, 16 MB Flash, 8 MB Octal-PSRAM) für Systemsteuerung, CAN-Bus, FreeRTOS DSP-Pipeline und PWA-Webserver.
+  * **Dedizierter Helm-Audio-SoC (`U9`):** **Qualcomm QCC3084** Bluetooth 5.4 Audio-SoC ($13 \times 18\,\text{mm}$) für Dual-A2DP (aptX HD, Low Latency), LE Audio Auracast Broadcast und kristallklare Hands-Free Telefonie (HFP 1.8 mit Wideband Speech) mit integrierter Keramik-Chipantenne.  
     *(Wichtige Entkopplung: Der interne BLE-Stack des ESP32-S3 dient rein dem WebApp-Dashboard und Sensordaten, während der QCC3084 das Helm-Audio völlig unbeeinflusst von CPU-Spitzen abwickelt).*
-  * **Weitbereichsfunk:** Semtech `SX1262` LoRa Transceiver (+22 dBm PA) mit U.FL-Buchse zur Taoglas FXP895 Antenne in der Gehäusedeckeltasche.
-  * **Audio-Codec:** Everest Semi `ES8388` 24-Bit / 48 kHz Low-Power Stereo-Audio-Codec.
-  * **Bordnetz-Speisung:** Texas Instruments `LM5164-Q1` synchroner 72V-Buck-Converter und TI `BQ24075` Power-Path-Controller mit Ladeschaltung für die interne 2.200-mAh-USV-Zelle.
-  * **eFuse-Schutzschalter:** 3x Texas Instruments `TPS25921` elektronische Sicherungen für die getrennte Absicherung der externen Abgänge (Bucht 1, Bucht 2, Front-Knoten/Radar).
-  * **Bedienelemente & Interface:** Hardware-Taster `SW1` (Pairing / Werkseinstellung) und 12-poliger automotiver Deutsch DTM-12 Buchsenleiste `J1`.
+  * **Weitbereichsfunk (`U10`):** Semtech `SX1262` LoRa Transceiver (+22 dBm PA) mit U.FL-Buchse `ANT1` zur Taoglas FXP895 Antenne in der Gehäusedeckeltasche.
+  * **Bordnetz-Speisung (`U1`):** Texas Instruments `LM5164-Q1` synchroner 72V-Buck-Converter und TI `BQ24075` Power-Path-Controller mit Ladeschaltung für die interne 2.200-mAh-USV-Zelle.
+  * **Status-Anzeige (`D1`):** WS2812B RGB Smart-LED zur optischen Status- und Pairing-Signalisierung.
+  * **Bedienelemente & Interface:** Hardware-Taster `SW1` (Pairing / Werkseinstellung / ESP32 Bootloader) und automotiver Deutsch DTM-12 Shrouded Header `J1` sowie Box-Header `J3` und JST-Header `J4`/`J5`.
 * **Bestückung Bottom-Layer (B.Cu):**
-  * **UWB-Funkknoten:** Qorvo `DW3110` Ultra-Wideband IEEE 802.15.4z Transceiver (Kanal 5 @ 6.489 GHz) mit ultrakurzer U.FL-Zuleitung zur Taoglas FXUWB10 Antenne in der Gehäusebodentasche.
-  * **Sensoren:** 6-Achs-IMU (ICM-42688P / LIS3DH) zur Wake-on-Motion Diebstahlüberwachung und Bosch BMP390 Barometer.
+  * **MicroSD-Kartenslot (`J2`):** Hirose `DM3D-SF` Push-Pull MicroSD-Kartenhalter, montiert an der oberen Platinenkante ($X=146{,}0, Y=79{,}0$, $180^\circ$ gedreht) mit Karteneinschub bündig zur Gehäusekante für werkzeugfreie Zugänglichkeit (0 mm Überlappung, >2.4 mm Sicherheitsabstand zu allen Nachbarbauteilen).
+  * **UWB-Funkknoten (`U8`):** Qorvo `DW3110` Ultra-Wideband IEEE 802.15.4z Transceiver (Kanal 5 @ 6.489 GHz) mit $38{,}4\,\text{MHz}$ Quarz `Y1_UWB` und U.FL-Buchse `ANT2` zur Taoglas FXUWB10 Antenne in der Gehäusebodentasche.
+  * **Audio-Codec (`U3`):** Everest Semi `ES8388` 24-Bit / 48 kHz Low-Power Stereo-Audio-Codec.
+  * **Sensoren (`U5`):** Bosch `BMI270` 6-Achs-IMU (I2C) zur Wake-on-Motion Diebstahlüberwachung und Sturzerkennung.
+  * **CAN-Transceiver (`U6`):** Texas Instruments `TCAN334G` / `TCAN1042V` 5 Mbps CAN-FD Bus-Transceiver.
+  * **Low-Noise LDO (`U11`):** Texas Instruments `TPS7A0533` 3.3V Ultra-Low-Noise LDO für saubere Analog- und Sensor-Spannungsversorgung.
   * Durchgehende thermische Massevias zur Wärmeabfuhr des LM5164 und der eFuses.
 
 ### 3.2 Pinbelegung des 12-poligen Deutsch DTM-12 Steckverbinders (`J1`)
