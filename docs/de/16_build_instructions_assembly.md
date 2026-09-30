@@ -127,27 +127,28 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 
 ### Schritt 3: Multi-Protokoll Gateway-Kassetten 1 & 2 montieren
 1. **Platine einsetzen:** Kassettenplatine PCBA 03 Rev 3.0 (beidseitig bestückt, mit DW3110 UWB) in den Kassetten-Schlitten ([`cartridge_base_sled.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl)) einklicken.
-2. **Gateway-Inlay & Mechatronik montieren:**
-   * **Bucht 1 (Sena SPIDER X Slim Inlay):**
-     * 4x Miniatur-Aktuatoren ($\varnothing 6{,}5 \times 12\,\text{mm}$) mit TPU-Kappen in die Führungsbrücke des Inlays ([`cartridge_insert_sena.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_sena.stl)) einlegen.
-     * Niederhalteplatte mit 4x M2 $\times 6\,\text{mm}$ Senkkopfschrauben sichern.
-     * Vorkonfektioniertes 8-Pin Kabel `J_ACT` auf Header `J_ACT` von PCBA 03 stecken.
-     * Sena SPIDER X Slim einlegen (Audio läuft per Bluetooth direkt zur Zentralbox; zero pogo pins!).
-   * **Bucht 2 (Cardo Packtalk Edge / Pro Inlay - Klasse B):**
-     * 4x Aktuatoren in [`cartridge_insert_cardo.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_cardo.stl) montieren und an `J_ACT` anstecken.
-     * Cardo Packtalk Edge im Air-Mount Bett fixieren. Die Audio- und Stromverkabelung erfolgt über die standardisierte Kabelpeitsche am Header `J_AUDIO_PWR` von PCBA 03:
-       * **3.5 mm Klinkenbuchse:** Lautsprecherausgang (Audio Diff-Out)
-       * **2-poliger JST / 2.5 mm Klinke:** Mikrofoneingang (Audio Diff-In)
-       * **5V Lade- & Dauerstrom:** Speisung über Pin 1/2 von `J_AUDIO_PWR`
-   * **Alternative Option: Midland PMR446 Funk-Kassette (Klasse D):**
-     * Midland Alan/G9 Funkgerät im Inlay Klasse D arretieren.
-     * Doppel-Klinkenstecker (2.5 mm Mic / 3.5 mm Spk) anstecken; PTT-Steuerung erfolgt über den Open-Drain MOSFET `OPTO_PTT` auf `PCBA 03`.
+2. **Mechatronik-Aktuatoren & Niederhalteplatte montieren:**
+   * 4x Miniatur-Hubmagnete ($\varnothing 6{,}5 \times 12\,\text{mm}$) mit dämpfenden TPU-Tastspitzen (`actuator_silicone_tip.stl`) in die vier Passbohrungen der Führungsbrücke des Inlays ([`cartridge_insert_sena.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_sena.stl) bzw. [`cartridge_insert_cardo.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_cardo.stl)) einstecken.
+   * **Aktuator-Verkabelung an `J_ACT` (8-Pin JST-SH 1.0 mm):**
+     * Das vorkonfektionierte 8-Pin Kabel auf den Header `J_ACT` aufstecken.
+     * Die vier verdrillten Adernpaare (AWG30 Silikon) an die vier Hubmagnete führen (Paar 1 = Taste +, Paar 2 = Taste -, Paar 3 = Center/Phone, Paar 4 = Mesh/Pairing).
+   * **Niederhalteplatte verschrauben:** Die PA12-Niederhalteplatte ([`cartridge_retainer_plate.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_retainer_plate.stl)) plan über die Hubmagnete legen und mit **4x M2 $\times 6\,\text{mm}$ Senkkopfschrauben (DIN 7991)** fest anziehen. Die Aktuatoren sitzen nun absolut spielfrei und rüttelfest im Schlitten.
+3. **Gateway-Inlay & OEM-Adapterkabel anschließen (`J_AUDIO_PWR` / `J2` 6-Pin JST-SH):**
+   * **Bucht 1 (Sena SPIDER X Slim Inlay - OMB Referenz K2a):**
+     * 6-Pin JST-SH Adapterkabel auf Header `J_AUDIO_PWR` stecken.
+     * 2-Pin Micro-JST Stecker an die externe Akkuzuleitung des SPIDER X Slim anstecken (liefert permanente 3.85V Direct-DC Speisung ohne Akku im Pod!).
+     * 2.5 mm Klinkenstecker an den Mikrofoneingang und 3.5 mm Klinkenstecker an den Lautsprecherausgang der Sena-Kabelpeitsche anstecken.
+     * SPIDER X Slim formschlüssig in das PA12-Nest einlegen. *(Audio wird wahlweise per internem ES8388 Codec digitalisiert oder per Bluetooth direkt gestreamt; zero pogo pins!).*
+   * **Bucht 2 (Cardo Packtalk Edge / Pro Inlay - Klasse 4 DMC Gen2):**
+     * 6-Pin JST-SH Adapterkabel auf Header `J_AUDIO_PWR` stecken.
+     * 3.5 mm Stereo-Klinkenstecker und rechtwinkligen USB-C Ladestecker an die Cardo Air-Mount Docking-Aufnahme anstecken.
+     * Cardo Packtalk Edge in das Air-Mount Bett einklicken (Dauerladung während aktivem Mesh-Betrieb voll unterstützt).
+   * **Alternative Option: Midland PMR446 Funk-Kassette (Klasse 7 Analogfunk):**
+     * 6-Pin JST-SH Adapterkabel auf Doppel-Klinke (2.5 mm Mic / 3.5 mm Spk) und 5V DC-Batteriedummy anstecken; PTT-Tastung erfolgt über den Open-Drain MOSFET `OPTO_PTT`.
    * **Alternative Option: OpenMotorMesh (OMM) 2.4 GHz OEM-Kassette (Klasse C UCS):**
-     * Nativ gefertigt im standardisierten **UCS-Formfaktor** (Universal Communication Solution).
-     * Reines Digital-Audio über UWB; kein fehleranfälliges Analog-Routing nötig.
-     * Ausgestattet mit dedizierten Buchsen für Audio-In/Out (2.5 mm Mic, 3.5 mm Stereo-Headphones) sowie stirnseitigem USB-C Port für unterbrechungsfreies Laden im Betrieb (Pass-Through Charging).
-     * Kann mit einem Klick aus dem OMB-Kassettenschlitten entnommen und werkzeuglos direkt in jeden UCS-kompatiblen Motorradhelm eingesetzt werden!
-3. **Integrierte UWB-Antenne & Flanschdichtung:**
+     * 6-Pin JST-SH zu 6-Pin JST-SH Flachbandkabel anstecken.
+     * Nativ gefertigt im standardisierten **UCS-Formfaktor** (Universal Communication Solution), reines Digital-Audio über UWB.
+4. **Integrierte UWB-Antenne & Flanschdichtung:**
    * Auf `PCBA 03` arbeitet eine verlustarme SMD-Keramikantenne für 6.5 GHz UWB. Die Funkwellen durchdringen das dielektrische PA12-Gehäuse dämpfungsfrei; es sind keine externen Antennenradome erforderlich.
    * Silikon-Formdichtung auf den Kassettenkragen aufziehen und dünn mit Silikonfett benetzen.
 
@@ -270,6 +271,9 @@ Erst wenn alle 4 Checks grün leuchten, die Gehäusedeckel mit den M3-Schrauben 
 ### 5.1 Montage Harley-Davidson Plattform (Touring, CVO ST, Road King)
 * **Zentralbox:** Unter der Fahrersitzbank auf der Rahmenbrücke vor der Batterie auf 4x M4 Silentblöcken verschrauben.
 * **Pod 1 & Pod 2:** Auf den Hartschalenkoffern mittels Kofferdeckel-Docks ([`saddlebag_lid_dock.stl`](../../hardware/cad/stl/02_pod_base/saddlebag_lid_dock.stl)) montieren.
+* **Koffer-Trennstelle (2-Pin Magnet-Pogo "MagSafe-Ersatz"):**
+  * **Rahmenseitiges Dock:** Das 3D-Druck Rahmendock ([`009_magsafe_frame_dock.stl`](../../hardware/cad/stl/02_pod_base/parts/009_magsafe_frame_dock.stl)) mit Klemmschelle ([`009_magsafe_frame_clamp.stl`](../../hardware/cad/stl/02_pod_base/parts/009_magsafe_frame_clamp.stl)) am Ø 26 mm Rahmenrohr unter dem Sitzüberhang mit 4x M3 $\times 16\,\text{mm}$ Schrauben verschrauben (DIN 934 Nut-Pockets). Die 2-Pin Magnet-Pogo Buchse (HytePro M411) formschlüssig einlegen und an Peitsche 1 bzw. 2 des DTM-12 Kabelbaums anschließen.
+  * **Koffer-Vorderwand & Dichtung:** Ein einzelnes $\varnothing 12\,\text{mm}$ Loch seitlich-innen an der Koffer-Vorderwand oberhalb des Schwingenlagers bohren (im Wind- und Spritzwasserschatten; der **Kofferboden bleibt zu 100 % lochfrei**). Die geteilte EPDM/TPU-Dichtung ([`010_saddlebag_hole_grommet_split.stl`](../../hardware/cad/stl/02_pod_base/parts/010_saddlebag_hole_grommet_split.stl)) einsetzen, das 2-adrige Flachbandkabel der Magnetstecker-Kupplung hindurchführen und am integrierten Klemmturm per Mini-Kabelbinder zugentlasten. Im Kofferinneren das Kabel parallel zum Deckel-Fangband lastfrei zum Kofferdeckel-Dock führen.
 * **Heck-Radar:** Entkoppelter Kennzeichen-Radarhalter ([`radar_license_plate_bracket.stl`](../../hardware/cad/stl/02_pod_base/radar_license_plate_bracket.stl)) unter dem Kennzeichenrahmen, angeschlossen an Peitsche 5 des Deutsch DTM-12 Kabelbaums.
 * **Front-Knoten:** In der Verkleidung (Batwing / Sharknose) oder Nacelle verschraubt; 12V von Standlicht/Zubehör; CAN-Bus lokal an J2 (oder an Zentralbox unter der Sitzbank).
 
@@ -279,6 +283,7 @@ Erst wenn alle 4 Checks grün leuchten, die Gehäusedeckel mit den M3-Schrauben 
 * **Pod 1 & Pod 2:**
   * *Option A (Vario-Koffer / GS Standard):* Transition-Docks ([`adventure_transition_dock_base.stl`](../../hardware/cad/stl/02_pod_base/adventure_transition_dock_base.stl)) in der Sitzbank-Bügelfalte (Ø 28 mm Rahmenrohr) verbunden mit der Sattelbrücke ([`adventure_underseat_cross_rail.stl`](../../hardware/cad/stl/02_pod_base/adventure_underseat_cross_rail.stl)).
   * *Option B (Edelstahl-Rohrkofferträger / GSA):* Heavy-Duty GSA Cage Docks ([`adventure_gsa_cage_dock_body.stl`](../../hardware/cad/stl/02_pod_base/adventure_gsa_cage_dock_body.stl)) im 45 mm Totraum des Trägers.
+  * *Koffer-Abreißtrennung:* Bei abnehmbaren Alukoffern wird die 2-Pin Magnet-Pogo Kupplung als elastischer Inline-Breakaway-Kabelstrang an der Soziusfußrasten-Aufnahme gehaltert.
 * **Heck-Radar:** Minimaler Halter ([`adventure_rack_radar_mount.stl`](../../hardware/cad/stl/02_pod_base/adventure_rack_radar_mount.stl)) direkt unter der GS-Gepäckbrücke für Garmin Varia oder Wheeltec MR20 auf Peitsche 5.
 
 ### 5.3 Begleitfahrzeug- & Autokolonnen-Installation (Support-Car / Van)

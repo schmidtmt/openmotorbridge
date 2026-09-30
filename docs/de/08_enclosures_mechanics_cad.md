@@ -739,24 +739,24 @@ Die Verkabelung der Kofferdeckel-Pods löst das fundamentale Praxiskriterium des
    * **Zündungsgesteuerter Wake-Up & USV-Pufferung:** Die Zentralbox erfasst das Zündungsplus (Klemme 15, z. B. am Harley P&A-Zubehörstecker). Bei Zündung EIN regelt der LM5164-Q1 Step-Down auf saubere $5{,}0\,\text{V}$ herunter und der integrierte **LiPo-USV-Pufferakku (BQ24075)** fängt selbst härteste Startspannungseinbrüche (Cold Crank bis $6{,}5\,\text{V}$) unterbrechungsfrei in $8{,}5\,\mu\text{s}$ ab - die Koffer-Pods und Funkmodule rebooten niemals beim Anlassen des Motors.
    * **Automatisierter OEM-Boot per Optokoppler:** Sobald die Versorgungsspannung steht, triggert die Zentralbox über galvanisch getrennte **Toshiba TLP222A Optokoppler** die Tasten-/Power-Einschaltsequenz der OEM-Headset-Adapter (Sena Mesh / Cardo DMC) in den Kassetten.
    * **Null Akku-Wartung & automatischer Shutdown:** Die Intercom-Module schalten vollautomatisch mit der Fahrzeugzündung ein und aus. Das Risiko, vor der Fahrt das Laden zu vergessen oder mit leerem Headset-Akku dazustehen, ist zu 100 % eliminiert.
-2. **Werkstattsichere 6-Pin MagSafe-Abreißkupplung (IP67):**
+2. **Werkstattsichere 2-Pin Magnet-Pogo Abreißkupplung (IP68 COTS):**
    * In Vertragswerkstätten lösen Mechaniker bei Inspektionen, Reifen- oder Bremsenwechseln die Kofferbefestigungen und heben den Koffer in Sekunden ab, ohne nach nachgerüsteten Kabeln zu suchen. Eine feste Schraub- oder Klickverbindung würde hier unweigerlich abreißen.
-   * Die **6-polige IP67-Magnetkupplung mit N52-Neodym-Magneten und vergoldeten Pogo-Pins** trennt sich bei ca. $10\dots 15\,\text{N}$ axialer Zugkraft **völlig verschleiß- und zerstörungsfrei**.
-   * Beim Wiedereinsetzen des Koffers zieht sich die Kupplung durch die magnetische Polung vollautomatisch zentrierend zusammen (*Klack*) - Zündungsplus und Signale stehen sofort wieder zur Verfügung.
-3. **Zwei-Zonen-Kabelarchitektur:**
-   * **Zone 1 (Außen am Bike):** Vollwertiger Automotive-Standard (M8-PUR-Kabel) von der Central Box zum Rahmenadapter.
-   * **Zone 2 (Im Koffer):** Da der Kofferinnenraum trocken, sauber und witterungsgeschützt ist, kommt ein schlankes, leichtes Consumer-Silikon- oder Flachbandkabel ($< 2\,\text{mm}$ Außendurchmesser) zum Einsatz. Es trägt nicht auf, nimmt kein Koffervolumen weg und beansprucht die Dichtkanten nicht.
-4. **Adapterfreier Direktanschluss an Port B des Pods:**
-   * Das schlanke Koffer-Kabel läuft parallel zum textilen Deckel-Fangband in den Kofferdeckel und wird **direkt in den Slim-Port B der Pod-Basis** eingesteckt.
-   * Port A (M8-Stutzen) wird im Koffer mit einer Schutzkappe verschlossen. Im Kofferinneren befinden sich **keinerlei zusätzliche Adapterplatinen oder Lötstellen**.
+   * Die **2-polige IP68-Magnet-Pogo-Abreißkupplung mit N52-Neodym-Magneten und vergoldeten Federkontakten** (z. B. HytePro M411) trennt sich bei ca. $10\dots 15\,\text{N}$ axialer Zugkraft **völlig verschleiß- und zerstörungsfrei**.
+   * Beim Wiedereinsetzen des Koffers zieht sich die Kupplung durch die magnetische Polung vollautomatisch zentrierend zusammen (*Klack*) – die 5V-Versorgung steht sofort wieder unterbrechungsfrei zur Verfügung.
+3. **Zwei-Zonen-Kabelarchitektur (Reine DC-Speisung):**
+   * **Zone 1 (Außen am Bike):** Robustes 2-Draht Automotive-Kabel ($2 \times 0{,}5\,\text{mm}^2$ PUR / FLRY) von der Zentralbox (Deutsch DTM-12 Peitsche 1 & 2) zum stationären Rahmendock.
+   * **Zone 2 (Im Koffer):** Da der Kofferinnenraum trocken, sauber und witterungsgeschützt ist, kommt ein extrem schlankes, leichtes 2-adriges Flachbandkabel ($< 2\,\text{mm}$ Dicke) zum Einsatz. Es trägt nicht auf, nimmt kein Koffervolumen weg und beansprucht die Dichtkanten nicht.
+4. **Direktanschluss an die Schacht-Federkontakte des Pods:**
+   * Das schlanke Koffer-Kabel läuft parallel zum textilen Deckel-Fangband in den Kofferdeckel und führt über eine formschlüssige Bodendichtung direkt zu den beiden massiven vergoldeten Federkontakten im Schachtboden des Pods.
+   * Im Kofferinneren befinden sich **keinerlei zusätzliche Adapterplatinen, Zwischenstecker oder Lötstellen**.
 5. **2-Stufen-Zugentlastung & Seitliche Durchführung oberhalb des Schwingenlagers ([`010_saddlebag_hole_grommet_split.scad`](../../hardware/cad/scad/02_pod_base/parts/010_saddlebag_hole_grommet_split.scad)):**
    * **Montageort (Feedback-Entscheidung):** Der Kabelausgang liegt **nicht im Kofferboden**, sondern **seitlich-innen an der Koffer-Vorderwand (oberhalb des Schwingenlagers, zum Fahrzeugrahmen hin gewandt)**.
    * **Vorteile:**
      - **100 % Spritzwasser- & Dreckschutz:** Am Kofferboden sammelt sich Regenwasser und Straßengischt vom Hinterrad. Die seitliche Vorderwand liegt im absoluten Wind- und Gischt-Schatten des Rahmens.
      - **Kein Scheuern bei Bodenkontakt:** Beim Abstellen des Koffers im Hotel oder in der Werkstatt berührt die Durchführung niemals den Boden.
-   * **Stufe 1 (Koffer-Vorderwand):** Die geteilte EPDM/TPU-Dichtung (`010_saddlebag_hole_grommet_split.scad`) mit angeformtem Klemmturm fixiert das Kabel per Mini-Kabelbinder formschlüssig. Externe MagSafe-Abreißkräfte ($10\dots 15\,\text{N}$) werden vollständig in die Kofferwand eingeleitet.
+   * **Stufe 1 (Koffer-Vorderwand):** Die geteilte EPDM/TPU-Dichtung (`010_saddlebag_hole_grommet_split.scad`) mit angeformtem Klemmturm fixiert das Kabel per Mini-Kabelbinder formschlüssig in der $\varnothing 12\,\text{mm}$ Wandbohrung. Externe Magnet-Abreißkräfte ($10\dots 15\,\text{N}$) werden vollständig in die Kofferwand eingeleitet. Der **Kofferboden bleibt zu 100 % lochfrei und wasserdicht**.
    * **Stufe 2 (Kofferdeckel):** Im Schnauz des Kofferdeckel-Docks ([`saddlebag_lid_dock.scad`](../../hardware/cad/scad/02_pod_base/saddlebag_lid_dock.scad)) wird das Kabel formschlüssig abgefangen.
-   * **Ergebnis an Port B:** Der USB-C-Stecker im Pod ist vollständig mechanisch entkoppelt und unterliegt **0 Newton dynamischer oder statischer Zugkraft**.
+   * **Ergebnis:** Die interne Verkabelung und die Pod-Kontakte unterliegen **0 Newton dynamischer oder statischer Zugkraft**.
 
 #### 6.5.3 HF-Physik: Warum Kofferdeckel statt Kofferboden?
 

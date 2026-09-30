@@ -279,6 +279,69 @@ Für alle internen Verbindungen innerhalb der Gehäuse (vom Platinen-Header zur 
 | **Zentralbox CarPlay Port**| Zentralbox `J3` | IDC 10-Pin (2.54 mm) | Wasserdichte Panel-Mount USB-C Buchse (IP67) an der Gehäuseflanke | 15 cm | COTS IDC-10 auf USB-C Panel-Mount |
 | **USV LiPo-Akku Anschluss**| Zentralbox `J5` | JST-PH 4-Pin / Molex | Anschlusskabel mit NTC-Sensor des 2.200 mAh LiPo Flat-Packs | 8 cm | Am LiPo-Pouch konfektioniert |
 
+### 11.5 Die Gateway-Adapterkabel für OEM-Intercoms (Header `J_AUDIO_PWR` / `J2`)
+
+Um handelsübliche OEM-Intercom-Module vollkommen zerstörungsfrei und ohne Garantieverlust im Kassetten-Einschub zu betreiben, wird der 6-polige **JST-SH 1.0 mm Header `J_AUDIO_PWR`** auf `PCBA 03` über modellspezifische COTS-Adapterkabelstränge angeschlossen:
+
+| Headset-Modell / Klasse | Adapterkabel-Typ & Anschlüsse | Belegung am 6-Pin JST-SH Header | Länge | Funktion & Besonderheiten |
+| :--- | :--- | :--- | :---: | :--- |
+| **Sena SPIDER X Slim**<br>*(OMB-Referenz K2a)* | **6-Pin JST-SH auf 3-fach Pigtail:**<br>- 2-Pin Micro-JST (Direct-DC)<br>- 2.5 mm Klinkenbuchse (Mic In)<br>- 3.5 mm Klinkenbuchse (Spk Out) | **Pin 1:** `GND`<br>**Pin 2:** `VCC_HEADSET` ($3{,}85\,\text{V}$ Festspannung)<br>**Pin 3:** `AUDIO_R+`<br>**Pin 4:** `AUDIO_R-`<br>**Pin 5:** `MIC_IN+`<br>**Pin 6:** `RESERVE_IO` (N/C) | 8 cm | **Zero Pogo-Pins:** Direkte 3.85V Speisung ab Werk ohne LiPo-Akku im Pod (keine Brandgefahr, kein Verschleiß). Mikrofon und Lautsprecher werden direkt mit dem ES8388 Codec gekoppelt. |
+| **Cardo Packtalk Edge / Pro**<br>*(Klasse 4 DMC Gen2)* | **6-Pin JST-SH auf Klinke + USB-C:**<br>- 3.5 mm Stereo-Klinkenstecker<br>- 2.5 mm Klinkenstecker (Mic)<br>- Rechtwinkliger USB-C Stecker | **Pin 1:** `GND`<br>**Pin 2:** `VCC_5V` (Lade- & Dauerstrom)<br>**Pin 3:** `AUDIO_R+` (Audio Spk+)<br>**Pin 4:** `AUDIO_R-` (Audio Spk-)<br>**Pin 5:** `MIC_IN+` (Mikrofonsignal)<br>**Pin 6:** `RESERVE_IO` (N/C) | 10 cm | Koppelt die werkseitige Air-Mount Magnethalterung. Dauerladung während aktivem Mesh-Betrieb wird voll unterstützt. |
+| **Midland G9 Pro / PMR446**<br>*(Klasse 7 Analogfunk)* | **6-Pin JST-SH auf Midland-Doppelklinke:**<br>- 3.5 mm Lautsprecher-Klinke<br>- 2.5 mm Mikrofon/PTT-Klinke<br>- DC-Batteriedummy | **Pin 1:** `GND`<br>**Pin 2:** `VCC_5V` (Batteriedummy Speisung)<br>**Pin 3:** `AUDIO_R+`<br>**Pin 4:** `AUDIO_R-`<br>**Pin 5:** `MIC_IN+`<br>**Pin 6:** `OPTO_PTT` (PTT gegen GND geschaltet) | 10 cm | Schaltet den analogen Sender tastend via MOSFET `Q4` / Optokoppler durch und speist das Funkgerät aus dem Bordnetz. |
+| **OpenMotorMesh (OMM) 2.4 GHz**<br>*(Klasse C Native UCS)* | **6-Pin JST-SH zu 6-Pin JST-SH:**<br>1-zu-1 Flachbandkabel | **Pin 1:** `GND`<br>**Pin 2:** `VCC_5V`<br>**Pin 3-5:** Digital Audio / I2S<br>**Pin 6:** Config / UART | 5 cm | Rein digitale UWB- & Stromanbindung im standardisierten UCS-Helmformfaktor. |
+
+### 11.6 Der Mechatronik-Aktuatorkabelbaum & mechanische Befestigung (Header `J_ACT`)
+
+Jede Universal Smart Cartridge (`PCBA 03`) steuert bis zu vier mechanische Druck-Aktuatoren ("mechanische Finger") an, die die Tasten des jeweiligen OEM-Headsets betätigen:
+
+1. **Vorkonfektionierter 8-Pin Splitter-Kabelbaum:**
+   * **Stecker:** JST-SH 8-Pin Buchse ($1{,}0\,\text{mm}$ Raster, vergoldete Kontakte).
+   * **Leitung:** 8 hochflexible AWG30 Silikonlitzen (Länge $60\,\text{mm}$), aufgeteilt in vier verdrillte 2-Ader-Paare:
+     * **Paar 1 (Taste + / Menü vor):** Pin 1 (`VCC_5V`) + Pin 3 (`ACT1_OUT`, geschaltet gegen GND via AO3400A MOSFET `Q1`).
+     * **Paar 2 (Taste - / Menü zurück):** Pin 1 (`VCC_5V`) + Pin 4 (`ACT2_OUT`, geschaltet via `Q2`).
+     * **Paar 3 (Taste Center / Phone):** Pin 2 (`VCC_5V`) + Pin 5 (`ACT3_OUT`, geschaltet via `Q3`).
+     * **Paar 4 (Taste Mesh / Pairing):** Pin 2 (`VCC_5V`) + Pin 6 (`ACT4_OUT`, geschaltet via `Q4`).
+2. **Die Miniatur-Hubmagnete:**
+   * 4x 5V DC Miniatur-Solenoide ($\varnothing 6{,}5 \times 12\,\text{mm}$, Hub $1{,}5\dots 2{,}0\,\text{mm}$, Schaltkraft $> 0{,}3\,\text{N}$, Spulenwiderstand ca. $25\,\Omega$, Stromaufnahme kurzzeitig ca. $200\,\text{mA}$ bei $50\,\text{ms}$ Puls).
+   * Auf jedem Magnetstößel sitzt eine elastische, dämpfende **TPU-Tastspitze (`actuator_silicone_tip.stl`)**, die Tastenverschleiß und Knackgeräusche eliminiert.
+3. **Mechanische Niederhalte-Befestigung:**
+   * Die 4 Hubmagnete werden formschlüssig von oben in die Führungsbrücke des Inlays (`cartridge_insert_sena.stl` bzw. `cartridge_insert_cardo.stl`) eingesteckt.
+   * Darüber wird die **Aktuator-Niederhalteplatte (`cartridge_retainer_plate.stl`)** gelegt und mit **4x M2 x 6 mm Senkkopf-Edelstahlschrauben (DIN 7991)** vibrationsfest verschraubt. Kein Kleben, kein Wackeln, jederzeit demontierbar.
+
+### 11.7 Die Koffer-Trennstelle (Industrieller 2-Pin Magnet-Pogo "MagSafe-Ersatz") & Befestigung
+
+Anstelle der früheren proprietären Platine `PCBA 06` wird die werkzeuglose Koffer-Trennstelle als **reines 2-Draht-DC-System (5V / GND)** mit einer industriellen **2-Pin Magnet-Pogo-Abreißkupplung (IP68 COTS)** realisiert:
+
+```
+                  DIE 2-PIN MAGNET-POGO KOFFER-TRENNSTELLE (IP68 COTS)
+  +--------------------+                                    +--------------------+
+  | FAHRZEUGRAHMEN     |                                    | SEITENKOFFER       |
+  | (Unter der Sitzbank|                                    | (Pannier / Vario)  |
+  |  am Rohr Ø 26 mm)  |                                    |                    |
+  | [009_magsafe_      |     Magnetische Abreißtrennung     | [010_saddlebag_    |
+  |  frame_dock.stl]   |     (10 - 15 N axiale Haltekraft)  |  hole_grommet.stl] |
+  |   +--------------+ |             (Klack!)               | +----------------+ |
+  |   | 2-Pin Magnet-| | <================================> | | 2-Pin Magnet-  | |
+  |   | Pogo BUCHSE  | |                                    | | Pogo STECKER   | |
+  |   +-------+------+ |                                    | +-------+--------+ |
+  +-----------|--------+                                    +---------|----------+
+              | 2x 0.5 mm² PUR                                        | 2x 0.34 mm² Flachband
+              v                                                       v (am Deckel-Fangband)
+        [Zentralbox J1]                                       [Kofferdeckel-Dock Pod]
+```
+
+1. **Die Magnetkupplung (COTS):**
+   * Industrieller 2-Pin Magnet-Pogo-Steckverbinder (Typ **HytePro M411 / COTS 2-Pol Magnetanschluss**, IP68 wasserdicht mit vergoldeten Pogo-Pins und N52-Neodym-Ringmagneten).
+   * Elektrische Parameter: Bis zu $2{,}5\,\text{A}$ Dauerstrom bei $12\,\text{V}/5\,\text{V}$ DC; Übergangswiderstand $< 30\,\text{m}\Omega$.
+   * **Mechanische Schutzfunktion ("Mechaniker-Sicherheit"):** Trennt sich bei ca. $10\dots 15\,\text{N}$ axialer Zugkraft völlig verschleiß- und zerstörungsfrei, wenn der Koffer in der Werkstatt oder im Hotel ohne vorheriges Abstecken abgenommen wird. Zieht sich beim Aufsetzen des Koffers selbstzentrierend zusammen.
+2. **Mechanische Befestigung Fahrzeugseite (Rahmen):**
+   * **Option A (Stationäres Rahmendock):** Die Buchse wird formschlüssig in das 3D-Druck Gehäuse [`009_magsafe_frame_dock.scad`](../../hardware/cad/scad/02_pod_base/parts/009_magsafe_frame_dock.scad) eingelegt. Es wird mit der Halbschelle (`009_magsafe_frame_clamp.stl`) am Ø 25.4–28.6 mm Rahmenrohr unter der Sitzbank mit 4x M3 Schrauben (in integrierten DIN 934 Nut-Pockets) fest verschraubt.
+   * **Option B (Flexibler Rahmentunnel-Clip):** Bei Adventure-Bikes ohne freies Rahmenrohr sitzt die Buchse in einem elastischen Clip an der Soziusfußrasten-Aufnahme.
+3. **Mechanische Befestigung Kofferseite (Pannier):**
+   * **Montageort:** Die Koffer-Durchführung sitzt **seitlich-innen an der Koffer-Vorderwand (oberhalb des Schwingenlagers)** im absoluten Wind- und Spritzwasserschatten des Rahmens.
+   * **Bohrung & Dichtung:** Ein einzelnes $\varnothing 12\,\text{mm}$ Loch in der Koffer-Vorderwand nimmt die geteilte EPDM/TPU-Dichtung ([`010_saddlebag_hole_grommet_split.scad`](../../hardware/cad/scad/02_pod_base/parts/010_saddlebag_hole_grommet_split.scad)) auf. Der **Kofferboden bleibt zu 100 % intakt, lochfrei und wasserdicht**.
+   * **Integrierte Stufe-1 Zugentlastung:** Ein an der Dichtung angeformter Klemmturm fixiert das Kabel per Mini-Kabelbinder formschlüssig. Reißt die Magnetkupplung ab, werden die $10\dots 15\,\text{N}$ Zugkraft vollständig in die Kofferwand eingeleitet – kein Zug auf die Kofferinnenverkabelung!
+
 ---
 
 ## 12. Zukaufteile & Normteile-Einkaufsliste (1 Komplettset)
@@ -287,11 +350,12 @@ Für alle internen Verbindungen innerhalb der Gehäuse (vom Platinen-Header zur 
 | :--- | :--- | :--- | :---: | :--- |
 | **M3 Edelstahlschrauben** | M3 x 40 mm Zylinderkopf V4A (DIN 912) | Normteil / Amazon | 4 Stk. | Zentralbox-Gehäuse (greift in Nut-Pockets) |
 | **M3 Edelstahlschrauben (Front)** | M3 x 20 mm Zylinderkopf V4A (DIN 912) | Normteil / Amazon | 4 Stk. | Front-Node Gehäuse (greift in Nut-Pockets) |
-| **M3 Edelstahlmuttern** | DIN 934 / DIN 985 M3 V4A Muttern | Normteil / Amazon | 8 Stk. | Unverlierbar in Nut-Pockets eingelegt (kein Lötkolben nötig!) |
+| **M3 Edelstahlschrauben (Dock)** | M3 x 16 mm Zylinderkopf V4A (DIN 912) | Normteil / Amazon | 4 Stk. | Rahmenklemmschelle `009_magsafe_frame_dock` |
+| **M3 Edelstahlmuttern** | DIN 934 / DIN 985 M3 V4A Muttern | Normteil / Amazon | 12 Stk.| Unverlierbar in Nut-Pockets eingelegt (Zentralbox, Front-Node, Rahmendock) |
 | **M4 Edelstahlmuttern (AMPS)**| DIN 934 M4 V4A Muttern | Normteil / Amazon | 4 Stk. | Unverlierbar in Nut-Pockets der Front-Node Wanne |
 | **M2.5 Platinenschrauben** | M2.5 x 6 mm Zylinderkopf V4A (DIN 912) | Normteil | 8 Stk. | 4x Zentralbox-Platine, 4x Front-Node-Platine |
 | **M2 Schottwandschrauben** | M2 x 8 mm Senkkopf V4A (DIN 7991) | Normteil | 4 Stk. | Fixierung der 2 Pod-Schottwände (2x pro Pod 1 & 2) |
-| **M2 Kassetten-Halteplattenschrauben**| M2 x 6 mm Senkkopf V4A (DIN 7991) | Normteil | 8 Stk. | Fixierung der Aktuator-Niederhalteplatten (4x pro Gateway) |
+| **M2 Kassetten-Halteplattenschrauben**| M2 x 6 mm Senkkopf V4A (DIN 7991) | Normteil | 8 Stk. | Fixierung der Aktuator-Niederhalteplatten (4x pro Gateway-Kassette) |
 | **M2 Schwenkachsen Wippe** | M2 x 8 mm Zylinderstift Edelstahl (DIN 7) | Normteil / Misumi | 2 Stk. | Drehachsen für magnetische Kassetten-Rastwippen |
 | **Magnetanker (Kassette)** | Ø 6 x 8 mm Zylinderstift gehärtet (DIN 6325) | Normteil / Misumi | 2 Stk. | Stahlanker im Hebelarm der Kassetten-Wippe |
 | **Wippen-Rückstellfedern** | Edelstahl V4A ($\varnothing 3{,}5\,\text{mm}, L_0=10\,\text{mm}$) | Gutekunst / Web | 2 Stk. | Rückstellfedern für Kassetten-Rastkralle |
@@ -302,7 +366,8 @@ Für alle internen Verbindungen innerhalb der Gehäuse (vom Platinen-Header zur 
 | **Kassetten-Flanschdichtungen**| Silikon-Formdichtung Shore 40A ($54 \times 18\,\text{mm}$) | Sonderfertigung | 2 Stk. | Stirnseitige Mundloch-Abdichtung an Pod 1 und Pod 2 |
 | **Pufferakku (LiPo USV)** | 1S LiPo Flat-Pack 2.200 mAh ($68 \times 39 \times 5{,}0\,\text{mm}$) mit Molex Micro-Fit | EEMB / Enerpower | 1 Stk. | USV-Pufferung in der Zentralbox (Typ 504068 / 503870) |
 | **KFZ-Sicherungshalter** | Wasserdichter Flachsicherungshalter + 2A Sicherung | Hella / MTA | 1 Stk. | Dauerplus-Absicherung an Batteriepol |
-| **Pure-DC 2-Ader Zuleitung (PUR)**| 2x 0.34 mm² (AWG22) mit JST-JWPF 2-Pin / MagSafe Breakaway | COTS Standard | 2 Stk. | Pure-DC 5V Stromversorgung zu Pod 1 und Pod 2 (Audio/Daten 100 % via UWB) |
+| **2-Pin Magnet-Pogo Kupplung**| IP68 Magnetstecker + Buchse (z. B. HytePro M411) | COTS Standard | 2 Sets | Koffer-Trennstelle (Abreißkraft 10-15 N, wasserdicht) |
+| **Pure-DC 2-Ader Zuleitung (PUR)**| 2x 0.34 mm² (AWG22) mit JST-JWPF 2-Pin / Magnetkupplung | COTS Standard | 2 Stk. | Pure-DC 5V Stromversorgung zu Pod 1 und Pod 2 (Audio/Daten 100 % via UWB) |
 | **Radar 12V Zuleitung (PUR)** | 2x 0.5 mm² (AWG20) mit JST-JWPF 2-Pin IP67 Stecker | COTS Standard | Opt. (1)| 12V DC Bordnetzspeisung für Heck-Radar (Datenübertragung 100 % drahtlos via UWB) |
 | **Front-Node 12V Anschlusskabel**| 2-Pin JST-PH Litzenkabel mit Posi-Tap | COTS Standard | 1 Stk. | Lokale Cockpit-Stromversorgung (Standlicht/Navistecker) - *Funkbrücke via UWB!* |
 | **12V Y-Adapterkabel (Bench/Car)**| Zigarettenanzünderstecker -> JST-JWPF 2P + Deutsch DTM-12 | Eigenbau / COTS | 1 Stk. | Prüfstands- & Begleitfahrzeug-Versorgung (Front-Node + Zentralbox), CarPlay frei |
@@ -312,9 +377,9 @@ Für alle internen Verbindungen innerhalb der Gehäuse (vom Platinen-Header zur 
 | **Qwiic / STEMMA QT Sensorkabel**| 4-Pin JST-SH Buchse zu Buchse (50 mm / 100 mm) | SparkFun / Adafruit | 1 Stk. | Verbindung PCBA 05 `J12` zu SAM-M10Q GNSS |
 | **MR20 Radar-Kabel** | 4-Pin JST-SH Buchse zu Buchse (50 mm) | SparkFun / Adafruit | Opt. (1)| Verbindung PCBA 08 `J2` zu Wheeltec MR20 Radar |
 | **Zentralbox USB-C Pigtail** | IDC 10-Pin auf wasserdichte Panel-Mount USB-C Buchse | COTS Standard | 1 Stk. | CarPlay / Flashing Port an der Zentralbox-Flanke |
-| **J_ACT Aktuator-Kabelbaum** | Fertiges 8-Pin JST-SH Kabel auf 4x 2-Pin Litzen | Adafruit / SparkFun | 2 Stk. | Vorkonfektioniertes Fertigkabel für 4 Hubmagnete |
+| **J_ACT Aktuator-Kabelbaum** | Vorkonfektioniertes 8-Pin JST-SH Kabel auf 4x 2-Pin Litzen | Adafruit / SparkFun | 2 Stk. | 4 verdrillte Paare (AWG30 Silikon, 60 mm) zu den 4 Hubmagneten |
 | **Miniatur-Aktuatoren** | 5V DC Hubmagnete ($\varnothing 6{,}5 \times 12\,\text{mm}$) mit TPU-Spitze | Solenoid / Web | 8 Stk. | 4 Stk. pro Smart Cartridge (Sena / Cardo) |
-| **J2 Gateway-Kabelbaum** | Fertiges 6-Pin JST-SH Kabel auf Klinke / USB | COTS Standard | 2 Stk. | Fertigkabel für Headset-Audio & Dauerstrom |
+| **J2 Gateway OEM-Kabelstrang**| 6-Pin JST-SH Adapterkabel für Sena / Cardo / Midland | COTS Standard | 2 Stk. | Modellspezifisches Fertigkabel für Headset-Audio & Dauerstrom |
 | **JST-JWPF 2-Pin IP67 Steckverbinder-Set**| 02R-JWPF-VSLE-S & 02T-JWPF-VSLE-S (2-Pol wasserdicht) | JST | 1 Set | Wasserdichte 12V DC Kfz-Zuleitung für Radar 2.0 Sub-MCU |
 | **Wheeltec MR20 77-GHz mmWave**| 77-GHz FMCW Automotive Radar (150m Reichweite)| Wheeltec | Opt. (1)| Radar 2.0 Transceiver-Modul im Heck-Gehäuse |
 | **PC Radom-Sichtfenster** | Laserzuschnitt Polycarbonat 1.6 mm (RF-transparent)| COTS / Plexiglas | Opt. (1)| Mikrowellen- & optisches Fenster für MR20 & 24-LED Halo |
