@@ -1111,10 +1111,21 @@ Das **Radar 2.0 Flügel-Gehäuse** ([`radar_mr20_housing.scad`](../../hardware/c
 
 * **Konstruktionsmerkmale & HF-Architektur:**
   * **Symmetrisches Flügel-Rechteck ($121{,}0 \times 71{,}0 \times 34{,}0\,\text{mm}$):** Optimale aerodynamische Schaufelform, die sich harmonisch an Kennzeichenträger und Heckfender anschmiegt.
-  * **Garmin Quarter-Turn Bajonett mit Diebstahlsicherung:** Werkzeugloses Aufsetzen und Verriegeln durch 90°-Drehung. Eine federnde Rastklinke verhindert versehentliches Lösen durch Fahrbahnstöße und erschwert Gelegenheitsdiebstahl.
   * **Integrierte 5.9 GHz V2X Keramik-Patchantennen-Kammerturm:** Auf der linken Gehäuseflanke ist eine Rastkammer für $20 \times 20\,\text{mm}$ oder $25 \times 25\,\text{mm}$ Keramik-Patchantennen monolithisch eingeformt. Dies garantiert maximale Antennenreichweite ohne Gehäusedämpfung und ohne interne PCB-Antennen-Verluste.
   * **Großzügiger Adapter- & Verkabelungsraum ($112 \times 62 \times 17\,\text{mm}$):** Nimmt den originalen MR20-Zwischenadapter und Kabelbaum-Schlaufen knickfrei im Gehäuseinneren auf.
   * **Optisches PC-Radom & IP67-Dichtung:** Glattes, unstrukturiertes Polycarbonat ($116 \times 66 \times 1{,}6\,\text{mm}$) mit umlaufender EPDM-Schnurnut garantiert 0 dB RF-Dämpfung bei 77 GHz und Schlagfestigkeit nach IK08.
+
+* **Die 3 Montagekonzepte im Vergleich (Mechanik & Dauerfestigkeit):**
+  1. **Option A: 2x M4 Messing-Gewindebuchsen ($40\,\text{mm}$ Stichmaß) – ⭐ OMB-Dauerempfehlung:**
+     * **Kein Öffnen des Gehäuses am Fahrzeug:** In der Gehäuserückwand sitzen zwei M4-Messing-Gewindeeinsätze (Ruthex M4x8.1) als **rückseitig zugängliche Sacklöcher**. Das Gehäuse wird auf der Werkbank fertig bestückt, verkabelt und über die 4x M2.5 Frontschrauben mit der Radomscheibe IP67-dicht verschraubt.
+     * **Montage:** Das fertig geschlossene Gehäuse wird an das fahrzeugseitige Halteblech (z. B. Kennzeichenträger `radar_license_plate_bracket.scad` oder Gepäckbrückenhalter) gehalten und **von der Fahrzeugrückseite her mit zwei M4 $\times$ 10 mm Innensechskantschrauben** (DIN 912 mit Federscheibe oder Loctite) festgezogen.
+     * **Vorteil:** Hält extremen Motorrad-Vibrationen ($> 25\,\text{g}$) dauerhaft stand und bietet vollwertigen Diebstahlschutz.
+  2. **Option B: Garmin Quarter-Turn Bajonettverschluss:**
+     * Ermöglicht das werkzeuglose Aufsetzen und Verriegeln durch $90^\circ$-Drehung in Standard-Garmin-Varia-Cradles oder das OMB-Diebstahlschutz-Dock ([`radar_varia_gopro_lock_dock.scad`](../../hardware/cad/scad/02_pod_base/radar_varia_gopro_lock_dock.scad)).
+     * **Stabilitäts- und Vibrationsbewertung:** Das originale Garmin-Bajonett wurde für leichte Fahrrad-Radare (Garmin Varia RTL515, ca. $71\,\text{g}$) konstruiert. Das vollwertige Radar 2.0 System (PA12-Monocoque + MR20 77-GHz-Horn + PCBA 08 mit 36 LEDs + V2X-Patch) wiegt ca. **$180\,\text{g}$**. Auf dem Motorrad (Einzylinder-Vibrationen, Schotterpisten, Schlaglöcher) wirkt ein reines Kunststoff-Bajonett filigran und stößt bei Dauerbelastung an seine Ermüdungsgrenze. Option B ist daher ideal für Schnellwechsel oder bei Verwendung massiver CNC-Aluminium-Garmin-Halter – für die permanente Motorrad-Festmontage ist Option A klar überlegen.
+  3. **Option C: Untere GoPro-kompatible Clevis-Zunge mit 36-Zahn Hirth-Verzahnung:**
+     * An der Unterseite des Gehäuses befindet sich eine monolithische $6{,}0\,\text{mm}$ Zunge mit $\varnothing 5{,}2\,\text{mm}$ Bohrung.
+     * Wird mit einer durchgehenden M5-Stahlschraube in eine GoPro-Gabel geklemmt. Die 36-Zahn Hirth-Verzahnung arretiert den Abstrahlwinkel formschlüssig und verdrehsicher in $10^\circ$-Schritten.
 
 ### 8.4 Road Glide ST Sharknose: Induktives Durch-die-Verkleidung Cam-Dock (`road_glide_inductive_cam_dock.scad`)
 
