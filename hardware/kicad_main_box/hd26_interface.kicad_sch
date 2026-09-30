@@ -28,7 +28,7 @@
 			(pin passive line (at -15.24 -17.78 0) (length 2.54) (name "12_CHASSIS_EARTH" (effects (font (size 1.27 1.27)))) (number "12" (effects (font (size 1.27 1.27)))))
 			(property "Reference" "J1" (at -12.7 20.32 0) (effects (font (size 1.27 1.27)) (justify left)))
 			(property "Value" "DEUTSCH_DTM12_HEADER" (at -12.7 -22.86 0) (effects (font (size 1.27 1.27)) (justify left)))
-			(property "Footprint" "Connector_IDC:IDC-Header_2x13_P2.54mm_Vertical" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+			(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_2x06_P2.54mm_Vertical" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
 			(property "LCSC" "C2934175" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
 			(symbol "Deutsch_DTM12_0_1"
 				(rectangle (start -12.7 17.78) (end 12.7 -20.32) (stroke (width 0.254) (type solid)) (fill (type background)))
@@ -53,7 +53,7 @@
 		(uuid "e0000000-0000-0000-0000-000000000020")
 		(property "Reference" "J1" (at 120.0 75.0 0) (effects (font (size 1.27 1.27))))
 		(property "Value" "DEUTSCH_DTM12_HEADER" (at 120.0 78.0 0) (effects (font (size 1.27 1.27))))
-		(property "Footprint" "Connector_IDC:IDC-Header_2x13_P2.54mm_Vertical" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_2x06_P2.54mm_Vertical" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
 		(property "LCSC" "C2934175" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
 		(pin "1" (uuid "e0000000-0000-0000-0000-000000000021"))
 		(pin "2" (uuid "e0000000-0000-0000-0000-000000000022"))
