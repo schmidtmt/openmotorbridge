@@ -27,7 +27,7 @@ const i18n = {
         tab_hardware: 'Geräte & Hardware',
         tab_builder: 'System Builder',
         builder_title: 'System-Builder & Konfigurator',
-        builder_sub: 'Das OpenMotorBridge IKEA-Prinzip: Wähle dein Motorrad, deine Funkgeräte und Erweiterungen. Du erhältst deine exakt maßgeschneiderte, 100% lötfreie Einkaufsliste (BOM) und Schritt-für-Schritt Montageanleitung – kein Crimpen, kein Lötkolben, kein Einschmelzen von Gewinden!',
+        builder_sub: 'Das OpenMotorBridge IKEA-Prinzip: Wähle dein Motorrad, deine Funkgeräte und Erweiterungen. Du erhältst deine exakt maßgeschneiderte, 100% lötfreie Einkaufsliste (BOM) und Schritt-für-Schritt Montageanleitung - kein Crimpen, kein Lötkolben, kein Einschmelzen von Gewinden!',
         builder_step1_title: '1. Motorrad & Montagekit auswählen',
         builder_step1_desc: 'Passgenaue Halterungen, Schellen und Docks für dein Modell',
         builder_step2_title: '2. Intercom Gateway-Slots konfigurieren',
@@ -47,7 +47,7 @@ const i18n = {
         btn_run_smoke_test: 'Smoke-Test starten',
         btn_test_actuators: 'Aktuatoren testen (Klick 1-4)',
         flasher_title: 'WebSerial 1-Click Firmware Installer',
-        flasher_sub: 'Flashe ESP32-S3 und RP2040 direkt aus dem Browser – kein Terminal, kein Python, keine Treiber!',
+        flasher_sub: 'Flashe ESP32-S3 und RP2040 direkt aus dem Browser - kein Terminal, kein Python, keine Treiber!',
         btn_connect_serial: 'USB-C verbinden & Flashen',
         device_hub_title: 'Geräte- & Verbindungs-Manager (Device Hub)',
         device_hub_sub: 'Zentrale 2-geteilte Verwaltung aller persönlichen Geräte (Teil 1) und fest verbauter Motorrad- & Systemknoten (Teil 2).',
@@ -63,7 +63,7 @@ const i18n = {
         device_tpms_title: 'Reifendruck-Kontrollsystem (TPMS)',
         can_sniffer_title: 'Live CAN-Bus Trace Sniffer',
         audio_headset_banner_title: 'Helm-Audio & Intercom-Kopplung (Qualcomm Inlay Mesh 3.0)',
-        audio_manage_devices_btn: 'Geräte verwalten ➔',
+        audio_manage_devices_btn: 'Geräte verwalten ->',
         btn_cp2aa_reset: 'CP2AA Kaltstart (VBUS Reset)',
         btn_pair_rider_helmet: 'Fahrer-Helm suchen & koppeln',
         btn_pair_pax_helmet: 'Sozius-Helm suchen & koppeln',
@@ -89,7 +89,7 @@ const i18n = {
         vbat_sub: '2.200 mAh Puffer',
         bat_chem_label: 'Starterbatterie-Typ & Schutzschwelle',
         handlebar_label: 'Lenkertaster & PTT (Front-Knoten PCBA 05)',
-        handlebar_sub: 'Direktverkabelung über GPIO 0 Optokoppler • Wartungsfrei',
+        handlebar_sub: 'Direktverkabelung über GPIO 0 Optokoppler * Wartungsfrei',
         status_led_title: 'WS2812B RGB Status-LED (Gehäusedeckel)',
         gpx_modal_title: 'Erweiterter GPX-Export & Navi-Formatierung',
         audio_modes_title: 'Audio-Routing & Betriebsmodi',
@@ -120,7 +120,7 @@ const i18n = {
         uuid_modal_title: 'Neue Kassette erkannt!',
         detected_slot: 'Erkannter Steckplatz:',
         uuid_quarantine_title: 'Hardware-Schutzabschaltung aktiv:',
-        uuid_quarantine_desc: 'Die 5V-Stromversorgung zum OEM-Adapter und alle Audio-Kanäle bleiben strikt stromlos (0,0 mA • Mute), bis du das Hardware-Profil zuweist.',
+        uuid_quarantine_desc: 'Die 5V-Stromversorgung zum OEM-Adapter und alle Audio-Kanäle bleiben strikt stromlos (0,0 mA * Mute), bis du das Hardware-Profil zuweist.',
         uuid_assign_intro: 'Dieser Kassetten-Hardware wurde bisher noch kein Profil zugewiesen. Welches Intercom oder Funkgerät ist in dieser Kassette verbaut?',
         lbl_select_profile: 'Hardware-Profil auswählen:',
         btn_save_mapping: 'Profil zuweisen & speichern',
@@ -130,7 +130,7 @@ const i18n = {
         btn_onboarding_wizard: 'Onboarding-Wizard',
         storage_title: 'MicroSD & BGH-Ringspeicher',
         storage_usage_label: 'Speicherbelegung (4-Bit SDIO FAT32)',
-        storage_purge_sub: '14.5 GB frei • Auto-Purge Schwellwert: 200 MB',
+        storage_purge_sub: '14.5 GB frei * Auto-Purge Schwellwert: 200 MB',
         btn_actioncam_marker: 'Actioncam Marker setzen',
         btn_webdav_sync: 'WebDAV Sofort-Sync',
         webdav_title: 'Heim-WLAN & WebDAV Sync',
@@ -241,7 +241,7 @@ const i18n = {
         tab_hardware: 'Devices & Hardware',
         tab_builder: 'System Builder',
         builder_title: 'System Builder & Configurator',
-        builder_sub: 'The OpenMotorBridge IKEA Principle: Select your motorcycle, intercoms, and expansion modules. Get your tailored, 100% solder-free BOM and step-by-step assembly guide – no crimping, no soldering irons, no melting threaded inserts!',
+        builder_sub: 'The OpenMotorBridge IKEA Principle: Select your motorcycle, intercoms, and expansion modules. Get your tailored, 100% solder-free BOM and step-by-step assembly guide - no crimping, no soldering irons, no melting threaded inserts!',
         builder_step1_title: '1. Select Motorcycle & Mounting Kit',
         builder_step1_desc: 'Precision brackets, clamps, and docks tailored to your bike model',
         builder_step2_title: '2. Configure Intercom Gateway Slots',
@@ -261,7 +261,7 @@ const i18n = {
         btn_run_smoke_test: 'Run Smoke Test',
         btn_test_actuators: 'Test Actuators (Clicks 1-4)',
         flasher_title: 'WebSerial 1-Click Firmware Installer',
-        flasher_sub: 'Flash ESP32-S3 and RP2040 directly from your browser – no terminal, no Python, no drivers!',
+        flasher_sub: 'Flash ESP32-S3 and RP2040 directly from your browser - no terminal, no Python, no drivers!',
         btn_connect_serial: 'Connect USB-C Port & Flash',
         device_hub_title: 'Device & Connection Manager (Device Hub)',
         device_hub_sub: 'Central 2-part management of personal devices (Part 1) and fixed motorcycle & system nodes (Part 2).',
@@ -277,7 +277,7 @@ const i18n = {
         device_tpms_title: 'Tire Pressure Monitoring System (TPMS)',
         can_sniffer_title: 'Live CAN-Bus Trace Sniffer',
         audio_headset_banner_title: 'Helmet Audio & Intercom Link (Qualcomm Inlay Mesh 3.0)',
-        audio_manage_devices_btn: 'Manage Devices ➔',
+        audio_manage_devices_btn: 'Manage Devices ->',
         btn_cp2aa_reset: 'CP2AA Cold Start (VBUS Reset)',
         btn_pair_rider_helmet: 'Search & Pair Rider Helmet',
         btn_pair_pax_helmet: 'Search & Pair Passenger Helmet',
@@ -303,7 +303,7 @@ const i18n = {
         vbat_sub: '2,200 mAh Buffer',
         bat_chem_label: 'Starter Battery Chemistry & Threshold',
         handlebar_label: 'Handlebar Switch & PTT (Front-Node PCBA 05)',
-        handlebar_sub: 'Direct wiring via GPIO 0 optocoupler • Maintenance-free',
+        handlebar_sub: 'Direct wiring via GPIO 0 optocoupler * Maintenance-free',
         status_led_title: 'WS2812B RGB Status LED (Enclosure Lid)',
         gpx_modal_title: 'Extended GPX Export & Navigation Formatting',
         live_map_title: 'Live GPS Trail & OpenMotorMesh Group Radar',
@@ -339,7 +339,7 @@ const i18n = {
         uuid_modal_title: 'New Cartridge Detected!',
         detected_slot: 'Detected Slot:',
         uuid_quarantine_title: 'Hardware Fail-Safe Isolation Active:',
-        uuid_quarantine_desc: '5V power supply to OEM cradle and all audio channels remain strictly disconnected (0.0 mA • Mute) until you assign the hardware profile.',
+        uuid_quarantine_desc: '5V power supply to OEM cradle and all audio channels remain strictly disconnected (0.0 mA * Mute) until you assign the hardware profile.',
         uuid_assign_intro: 'This cartridge hardware has not been mapped to a profile yet. Which intercom or radio is installed in this cartridge?',
         lbl_select_profile: 'Select Hardware Profile:',
         btn_save_mapping: 'Assign & Save Profile',
@@ -349,7 +349,7 @@ const i18n = {
         btn_onboarding_wizard: 'Onboarding Wizard',
         storage_title: 'MicroSD & Privacy Ring Buffer',
         storage_usage_label: 'Storage Usage (4-Bit SDIO FAT32)',
-        storage_purge_sub: '14.5 GB free • Auto-purge threshold: 200 MB',
+        storage_purge_sub: '14.5 GB free * Auto-purge threshold: 200 MB',
         btn_actioncam_marker: 'Set Action Cam Marker',
         btn_webdav_sync: 'WebDAV Instant Sync',
         webdav_title: 'Home Wi-Fi & WebDAV Sync',
@@ -875,7 +875,7 @@ async function toggleFullscreen() {
                 return;
             }
             await requestWakeLock();
-            showToast(isDe ? '⛶ Vollbild aktiv • Display bleibt an (Wake-Lock)' : '⛶ Fullscreen active • Screen kept awake', 'success');
+            showToast(isDe ? '⛶ Vollbild aktiv * Display bleibt an (Wake-Lock)' : '⛶ Fullscreen active * Screen kept awake', 'success');
         } catch (err) {
             console.warn('Fullscreen request failed:', err);
             showToast(isDe ? '💡 Tipp: "Zum Home-Bildschirm" hinzufügen für dauerhaftes Vollbild' : '💡 Tip: Add to Home Screen for fullscreen', 'info');
@@ -980,8 +980,8 @@ btnConnect.addEventListener('click', async () => {
         let msg = '';
         if (isIOS) {
             msg = isDe
-                ? 'Auf iPad & iPhone erzwingt Apple die WebKit-Engine (auch in Chrome & Edge). Daher funktioniert Web Bluetooth nur in speziellen BLE-Browsern wie "Bluefy – Web BLE Browser" (kostenlos im App Store).'
-                : 'On iPad & iPhone, Apple enforces the WebKit engine (even in Chrome & Edge). Therefore Web Bluetooth only works in dedicated BLE browsers like "Bluefy – Web BLE Browser" (free on App Store).';
+                ? 'Auf iPad & iPhone erzwingt Apple die WebKit-Engine (auch in Chrome & Edge). Daher funktioniert Web Bluetooth nur in speziellen BLE-Browsern wie "Bluefy - Web BLE Browser" (kostenlos im App Store).'
+                : 'On iPad & iPhone, Apple enforces the WebKit engine (even in Chrome & Edge). Therefore Web Bluetooth only works in dedicated BLE browsers like "Bluefy - Web BLE Browser" (free on App Store).';
         } else {
             msg = isDe
                 ? 'Web Bluetooth wird von diesem Browser (Safari / Firefox) nicht unterstützt. Bitte nutze auf dem Mac/PC Google Chrome, MS Edge oder Opera (über HTTPS oder localhost).'
@@ -1223,8 +1223,8 @@ function startInternalSimTrackEngine(isDigitalTwin = true) {
             timestamp: s_simTime,
             track_name: s_currentSimTrack,
             track_title: s_currentSimTrack === 'kerenzerberg' 
-                ? "Walenstadt ➔ Kerenzerberg (743m) ➔ Glarus ➔ Schwanden"
-                : "Wil SG ➔ Wattwil Tunnel ➔ Rickenpass",
+                ? "Walenstadt -> Kerenzerberg (743m) -> Glarus -> Schwanden"
+                : "Wil SG -> Wattwil Tunnel -> Rickenpass",
             bike_id: "Bike_A",
             v_ign: 14.2 + Math.sin(s_simTime * 0.4) * 0.15,
             v_bat: 4.14,
@@ -1494,7 +1494,7 @@ function handleSimTelemetry(data) {
                 cpRoute.textContent = 'Schwanden T-Kreuzung (Klausen / Zürich)';
                 cpRoute.style.color = 'var(--accent-green)';
             } else {
-                cpRoute.textContent = data.track_title || 'Walenstadt ➔ Kerenzerberg ➔ Glarus';
+                cpRoute.textContent = data.track_title || 'Walenstadt -> Kerenzerberg -> Glarus';
                 cpRoute.style.color = 'var(--accent-orange)';
             }
         } else {
@@ -1702,7 +1702,7 @@ function updateCanBusUi(canData) {
     const badgeAdr = document.getElementById('can-adr-source-badge');
 
     if (badgeStatus) {
-        badgeStatus.textContent = `🟢 500 kbps (Listen-Only • ${canData.manufacturer || 'Safe'})`;
+        badgeStatus.textContent = `🟢 500 kbps (Listen-Only * ${canData.manufacturer || 'Safe'})`;
     }
     if (badgeFps) {
         badgeFps.textContent = `${canData.fps || 142} Frames/s`;
@@ -1739,7 +1739,7 @@ function updateCanBusUi(canData) {
         valTemp.innerHTML = `${s.engine_temp_c} <span style="font-size: 0.9rem; font-weight: 500;">°C</span>`;
     }
     if (valFuel && s.fuel_remaining_liters !== undefined && s.fuel_range_km !== undefined) {
-        valFuel.innerHTML = `${s.fuel_remaining_liters.toFixed(1)} L <span style="font-size: 0.85rem; font-weight: 500;">• ${s.fuel_range_km} km</span>`;
+        valFuel.innerHTML = `${s.fuel_remaining_liters.toFixed(1)} L <span style="font-size: 0.85rem; font-weight: 500;">* ${s.fuel_range_km} km</span>`;
     }
     if (valTurn && s.turn_indicator !== undefined) {
         if (s.turn_indicator === 'left') {
@@ -2146,7 +2146,7 @@ function setupDeviceHubUi() {
     if (btnFnPing) {
         btnFnPing.addEventListener('click', () => {
             const rtt = (1.2 + Math.random() * 0.5).toFixed(1);
-            showToast(`⚡ Front-Node ESP-NOW Ping: ${rtt} ms RTT • RSSI: -52 dBm • 0 Packet Loss`, 'success', 3000);
+            showToast(`⚡ Front-Node ESP-NOW Ping: ${rtt} ms RTT * RSSI: -52 dBm * 0 Packet Loss`, 'success', 3000);
         });
     }
 
@@ -2188,10 +2188,10 @@ function setupDeviceHubUi() {
                 const rtt = Math.round(performance.now() - startTime);
                 btnProbeUplink.disabled = false;
                 btnProbeUplink.innerHTML = '🔄 <span>Uplink-Probe prüfen</span>';
-                if (valProbe) valProbe.textContent = `HTTP 204 OK (gstatic.com • ${rtt} ms)`;
+                if (valProbe) valProbe.textContent = `HTTP 204 OK (gstatic.com * ${rtt} ms)`;
                 if (badgeGate) { badgeGate.className = 'card-badge badge-green'; badgeGate.textContent = 'HTTP 204 Online'; }
                 if (valSync) valSync.textContent = 'Uplink Aktiv (Live-Upload aktiv)';
-                showToast(state.lang === 'de' ? `✓ Internet-Uplink bestätigt (${rtt} ms RTT) • Cloud Sync aktiv` : `✓ Uplink Verified (${rtt} ms)`, 'success', 3000);
+                showToast(state.lang === 'de' ? `✓ Internet-Uplink bestätigt (${rtt} ms RTT) * Cloud Sync aktiv` : `✓ Uplink Verified (${rtt} ms)`, 'success', 3000);
             } catch (err) {
                 btnProbeUplink.disabled = false;
                 btnProbeUplink.innerHTML = '🔄 <span>Uplink-Probe prüfen</span>';
@@ -2287,7 +2287,7 @@ function setupDeviceHubUi() {
                 const rBar = document.getElementById('val-tpms-rear-bar');
                 if (fBar) fBar.innerHTML = '2.45 <span style="font-size: 0.85rem;">bar</span>';
                 if (rBar) rBar.innerHTML = '2.80 <span style="font-size: 0.85rem;">bar</span>';
-                showToast(state.lang === 'de' ? '✓ TPMS Sensoren erfolgreich angelernt (V: 0x27A5B1 • H: 0x27A5B2)!' : '✓ TPMS Sensors Learned!', 'success', 4000);
+                showToast(state.lang === 'de' ? '✓ TPMS Sensoren erfolgreich angelernt (V: 0x27A5B1 * H: 0x27A5B2)!' : '✓ TPMS Sensors Learned!', 'success', 4000);
             }, 3000);
         });
     }
@@ -2322,7 +2322,7 @@ function setupDeviceHubUi() {
                 btnKeyfobPair.disabled = false;
                 btnKeyfobPair.innerHTML = '🔑 <span data-i18n="btn_keyfob_pair">Pager neu koppeln</span>';
                 if (valCrypto) {
-                    valCrypto.textContent = 'AES-128 GCM (Neuer PSK) • Anti-Replay Seq #1';
+                    valCrypto.textContent = 'AES-128 GCM (Neuer PSK) * Anti-Replay Seq #1';
                 }
                 if (valPres) {
                     valPres.textContent = '🟢 Am Bike erkannt (-54 dBm, < 1m)';
@@ -3279,7 +3279,7 @@ function resetDisconnectedTelemetryUi() {
     s_hudMaxLeanL = 0;
     s_hudMaxLeanR = 0;
     if (hudBikeLeanVisual) hudBikeLeanVisual.style.transform = 'rotate(0deg)';
-    if (valHudPower) valHudPower.textContent = '-- V • -- %';
+    if (valHudPower) valHudPower.textContent = '-- V * -- %';
     if (valHudPttStatus) {
         valHudPttStatus.textContent = isDe ? 'BEREIT (< 1.8ms)' : 'READY (< 1.8ms)';
         valHudPttStatus.style.color = 'var(--accent-green)';
@@ -3619,7 +3619,7 @@ function updateTelemetryUi(data) {
     if (valHudPower && (data.v_ign !== undefined || data.v_bat !== undefined)) {
         const vIgnVal = data.v_ign !== undefined ? `${data.v_ign.toFixed(1)} V` : '-- V';
         const vBatVal = data.v_bat !== undefined ? Math.min(100, Math.max(0, Math.round((data.v_bat - 3.4) / (4.2 - 3.4) * 100))) : 96;
-        valHudPower.textContent = `${vIgnVal} • 🔋 ${vBatVal}%`;
+        valHudPower.textContent = `${vIgnVal} * 🔋 ${vBatVal}%`;
     }
 
     if (hudStatusLink) {
@@ -4476,7 +4476,7 @@ function toggleDemoMode(enable) {
         const pod1Status = document.getElementById('pod1-status');
         if (pod1Status) {
             pod1Status.style.color = 'var(--accent-green)';
-            pod1Status.textContent = 'Power ON • DLE +60 Pkt.';
+            pod1Status.textContent = 'Power ON * DLE +60 Pkt.';
         }
         const pod1Uid = document.getElementById('pod1-uid');
         if (pod1Uid) pod1Uid.textContent = '01:4F:2A:90:12:00:8C';
@@ -4491,7 +4491,7 @@ function toggleDemoMode(enable) {
         const pod2Status = document.getElementById('pod2-status');
         if (pod2Status) {
             pod2Status.style.color = 'var(--accent-green)';
-            pod2Status.textContent = 'Power ON • DLE +40 Pkt.';
+            pod2Status.textContent = 'Power ON * DLE +40 Pkt.';
         }
         const pod2Uid = document.getElementById('pod2-uid');
         if (pod2Uid) pod2Uid.textContent = '01:B2:77:4A:99:00:1E';
@@ -4779,144 +4779,144 @@ selectBatteryType.addEventListener('change', (e) => {
 // ==========================================
 const CARTRIDGE_PROFILES = {
     disabled: {
-        vendor: 'Slot Deaktiviert (0.0 mA • Mute)',
-        vendor_en: 'Slot Disabled (0.0 mA • Mute)',
+        vendor: 'Slot Deaktiviert (0.0 mA * Mute)',
+        vendor_en: 'Slot Disabled (0.0 mA * Mute)',
         badge: 'badge_offline',
         badge_class: 'badge-purple',
-        status: 'Power OFF • Mute (-96 dB)',
-        status_en: 'Power OFF • Mute (-96 dB)',
+        status: 'Power OFF * Mute (-96 dB)',
+        status_en: 'Power OFF * Mute (-96 dB)',
         status_color: 'var(--text-muted)',
         idle_ma: 0,
         dle_bonus: 0
     },
     unmapped_quarantine: {
-        vendor: 'Nicht zugeordnet (0.0 mA • Quarantäne)',
-        vendor_en: 'Unassigned (0.0 mA • Quarantined)',
+        vendor: 'Nicht zugeordnet (0.0 mA * Quarantäne)',
+        vendor_en: 'Unassigned (0.0 mA * Quarantined)',
         badge: 'badge_warning',
         badge_class: 'badge-orange',
-        status: '⚠️ Schutzabschaltung: Stromlos (0.0 mA) • Mute',
-        status_en: '⚠️ Fail-Safe: Power OFF (0.0 mA) • Mute',
+        status: '⚠️ Schutzabschaltung: Stromlos (0.0 mA) * Mute',
+        status_en: '⚠️ Fail-Safe: Power OFF (0.0 mA) * Mute',
         status_color: 'var(--accent-orange)',
         idle_ma: 0,
         dle_bonus: 0
     },
     sena_60s: {
-        vendor: 'Sena Technologies • Mesh 3.0 Wave',
-        vendor_en: 'Sena Technologies • Mesh 3.0 Wave',
+        vendor: 'Sena Technologies * Mesh 3.0 Wave',
+        vendor_en: 'Sena Technologies * Mesh 3.0 Wave',
         badge: 'badge_online',
         badge_class: 'badge-green',
-        status: 'Power ON • DLE +60 Pkt.',
-        status_en: 'Power ON • DLE +60 Pts.',
+        status: 'Power ON * DLE +60 Pkt.',
+        status_en: 'Power ON * DLE +60 Pts.',
         status_color: 'var(--accent-green)',
         idle_ma: 50,
         dle_bonus: 60
     },
     sena_apex: {
-        vendor: 'Sena Technologies • Mesh 3.0',
-        vendor_en: 'Sena Technologies • Mesh 3.0',
+        vendor: 'Sena Technologies * Mesh 3.0',
+        vendor_en: 'Sena Technologies * Mesh 3.0',
         badge: 'badge_online',
         badge_class: 'badge-green',
-        status: 'Power ON • DLE +60 Pkt.',
-        status_en: 'Power ON • DLE +60 Pts.',
+        status: 'Power ON * DLE +60 Pkt.',
+        status_en: 'Power ON * DLE +60 Pts.',
         status_color: 'var(--accent-green)',
         idle_ma: 45,
         dle_bonus: 60
     },
     sena_50_series: {
-        vendor: 'Sena Technologies • Mesh 2.0/3.0',
-        vendor_en: 'Sena Technologies • Mesh 2.0/3.0',
+        vendor: 'Sena Technologies * Mesh 2.0/3.0',
+        vendor_en: 'Sena Technologies * Mesh 2.0/3.0',
         badge: 'badge_online',
         badge_class: 'badge-green',
-        status: 'Power ON • DLE +60 Pkt.',
-        status_en: 'Power ON • DLE +60 Pts.',
+        status: 'Power ON * DLE +60 Pkt.',
+        status_en: 'Power ON * DLE +60 Pts.',
         status_color: 'var(--accent-green)',
         idle_ma: 45,
         dle_bonus: 60
     },
     sena_spider_x: {
-        vendor: 'Sena Technologies • Mesh 3.0 & Wave (Direct-DC)',
-        vendor_en: 'Sena Technologies • Mesh 3.0 & Wave (Direct-DC)',
+        vendor: 'Sena Technologies * Mesh 3.0 & Wave (Direct-DC)',
+        vendor_en: 'Sena Technologies * Mesh 3.0 & Wave (Direct-DC)',
         badge: 'badge_online',
         badge_class: 'badge-green',
-        status: 'Power ON • DLE +60 Pkt.',
-        status_en: 'Power ON • DLE +60 Pts.',
+        status: 'Power ON * DLE +60 Pkt.',
+        status_en: 'Power ON * DLE +60 Pts.',
         status_color: 'var(--accent-green)',
         idle_ma: 35,
         dle_bonus: 60
     },
     sena_spider: {
-        vendor: 'Sena Technologies • Mesh 2.0 (Legacy)',
-        vendor_en: 'Sena Technologies • Mesh 2.0 (Legacy)',
+        vendor: 'Sena Technologies * Mesh 2.0 (Legacy)',
+        vendor_en: 'Sena Technologies * Mesh 2.0 (Legacy)',
         badge: 'badge_online',
         badge_class: 'badge-blue',
-        status: 'Power ON • DLE +40 Pkt.',
-        status_en: 'Power ON • DLE +40 Pts.',
+        status: 'Power ON * DLE +40 Pkt.',
+        status_en: 'Power ON * DLE +40 Pts.',
         status_color: 'var(--accent-blue)',
         idle_ma: 40,
         dle_bonus: 40
     },
     sena_vortex: {
-        vendor: 'Sena Technologies • Bluetooth 5.1 (Vortex)',
-        vendor_en: 'Sena Technologies • Bluetooth 5.1 (Vortex)',
+        vendor: 'Sena Technologies * Bluetooth 5.1 (Vortex)',
+        vendor_en: 'Sena Technologies * Bluetooth 5.1 (Vortex)',
         badge: 'badge_online',
         badge_class: 'badge-green',
-        status: 'Power ON • DLE +20 Pkt.',
-        status_en: 'Power ON • DLE +20 Pts.',
+        status: 'Power ON * DLE +20 Pkt.',
+        status_en: 'Power ON * DLE +20 Pts.',
         status_color: 'var(--accent-orange)',
         idle_ma: 32,
         dle_bonus: 20
     },
     sena_legacy_bt: {
-        vendor: 'Sena Technologies • Bluetooth Intercom',
-        vendor_en: 'Sena Technologies • Bluetooth Intercom',
+        vendor: 'Sena Technologies * Bluetooth Intercom',
+        vendor_en: 'Sena Technologies * Bluetooth Intercom',
         badge: 'badge_online',
         badge_class: 'badge-green',
-        status: 'Power ON • DLE +20 Pkt.',
-        status_en: 'Power ON • DLE +20 Pts.',
+        status: 'Power ON * DLE +20 Pkt.',
+        status_en: 'Power ON * DLE +20 Pts.',
         status_color: 'var(--accent-orange)',
         idle_ma: 35,
         dle_bonus: 20
     },
     cardo_dmc_gen2: {
-        vendor: 'Cardo Systems • DMC Gen2',
-        vendor_en: 'Cardo Systems • DMC Gen2',
+        vendor: 'Cardo Systems * DMC Gen2',
+        vendor_en: 'Cardo Systems * DMC Gen2',
         badge: 'badge_online',
         badge_class: 'badge-green',
-        status: 'Power ON • DLE +60 Pkt.',
-        status_en: 'Power ON • DLE +60 Pts.',
+        status: 'Power ON * DLE +60 Pkt.',
+        status_en: 'Power ON * DLE +60 Pts.',
         status_color: 'var(--accent-green)',
         idle_ma: 45,
         dle_bonus: 60
     },
     cardo_freecom_live: {
-        vendor: 'Cardo Systems • Live Intercom BT5.2',
-        vendor_en: 'Cardo Systems • Live Intercom BT5.2',
+        vendor: 'Cardo Systems * Live Intercom BT5.2',
+        vendor_en: 'Cardo Systems * Live Intercom BT5.2',
         badge: 'badge_online',
         badge_class: 'badge-green',
-        status: 'Power ON • DLE +40 Pkt.',
-        status_en: 'Power ON • DLE +40 Pts.',
+        status: 'Power ON * DLE +40 Pkt.',
+        status_en: 'Power ON * DLE +40 Pts.',
         status_color: 'var(--accent-blue)',
         idle_ma: 38,
         dle_bonus: 40
     },
     cardo_dmc_legacy: {
-        vendor: 'Cardo Systems • DMC Gen1',
-        vendor_en: 'Cardo Systems • DMC Gen1',
+        vendor: 'Cardo Systems * DMC Gen1',
+        vendor_en: 'Cardo Systems * DMC Gen1',
         badge: 'badge_online',
         badge_class: 'badge-green',
-        status: 'Power ON • DLE +30 Pkt.',
-        status_en: 'Power ON • DLE +30 Pts.',
+        status: 'Power ON * DLE +30 Pkt.',
+        status_en: 'Power ON * DLE +30 Pts.',
         status_color: 'var(--accent-orange)',
         idle_ma: 42,
         dle_bonus: 30
     },
     pmr446_gateway: {
-        vendor: 'Alan Electronics • PMR446 Funk',
-        vendor_en: 'Alan Electronics • PMR446 Radio',
+        vendor: 'Alan Electronics * PMR446 Funk',
+        vendor_en: 'Alan Electronics * PMR446 Radio',
         badge: 'badge_online',
         badge_class: 'badge-green',
-        status: 'Power ON • DLE +10 Pkt.',
-        status_en: 'Power ON • DLE +10 Pts.',
+        status: 'Power ON * DLE +10 Pkt.',
+        status_en: 'Power ON * DLE +10 Pts.',
         status_color: 'var(--accent-orange)',
         idle_ma: 60,
         dle_bonus: 10
@@ -5385,7 +5385,7 @@ window.openGpxExportModal = function (filename, datetime, duration, distance, ma
     if (!modal) return;
 
     document.getElementById('modal-gpx-filename').textContent = filename;
-    document.getElementById('modal-gpx-meta').textContent = `${datetime} • ${duration} • ${distance} • Max. ${maxLean}`;
+    document.getElementById('modal-gpx-meta').textContent = `${datetime} * ${duration} * ${distance} * Max. ${maxLean}`;
     modal.classList.add('active');
 };
 
@@ -5602,11 +5602,11 @@ window.switchInspectMode = function (mode) {
 
         setText('inspect-lbl-8', 'Höhenprofil');
         setText('inspect-motor', tour.eleGain);
-        setText('inspect-motor-sub', tour.eleRange || '620 – 2.224 m');
+        setText('inspect-motor-sub', tour.eleRange || '620 - 2.224 m');
 
         const sportSummary = `🏁 OpenMotorBridge [Sportlich]: Tour abgeschlossen (${tour.filename})\n` +
-            `📅 ${tour.datetime.split(' ')[0]} · ${tour.timeRange || '09:15 – 11:20 Uhr'} (Netto: ${tour.nettoDuration || tour.duration})\n` +
-            `📍 ${tour.distance} · ⛰️ ${tour.eleGain} (${tour.eleRange || '620 – 2.224 m'})\n` +
+            `📅 ${tour.datetime.split(' ')[0]} · ${tour.timeRange || '09:15 - 11:20 Uhr'} (Netto: ${tour.nettoDuration || tour.duration})\n` +
+            `📍 ${tour.distance} · ⛰️ ${tour.eleGain} (${tour.eleRange || '620 - 2.224 m'})\n` +
             `🏍️ Schräglage: ${tour.leanLeft || '44.2°'} L / ${tour.leanRight || '42.8°'} R (${tour.timeAtLeanPct || '22.4%'} in Schräglage)\n` +
             `🔄 ${tour.curvesTotal || 186} Kurven (${tour.curvesLeft || 91} L / ${tour.curvesRight || 95} R) · ${tour.cornerDensity || '2.2 Kurven/km'} · ⚙️ ${tour.shiftsTotal || 248} Schaltvorgänge (${tour.shiftsPerKm || '2.9/km'})\n` +
             `⚡ Max: ${tour.topSpeed} km/h (Ø ${tour.avgSpeed || '58.4 km/h'}) · Beschl.: ${tour.maxAccel || '+0.65g'} · Bremsen: ${tour.maxDecel || '-0.82g'} (${tour.hardBrakingCount || 1} Notbremsungen) · RPM max: ${tour.maxRpm || '7.850 U/min'}`;
@@ -5644,11 +5644,11 @@ window.switchInspectMode = function (mode) {
 
         setText('inspect-lbl-8', 'Höhenprofil');
         setText('inspect-motor', tour.eleGain);
-        setText('inspect-motor-sub', `Passhöhe: ${(tour.eleRange || '2.224 m').split('–').pop().trim()}`);
+        setText('inspect-motor-sub', `Passhöhe: ${(tour.eleRange || '2.224 m').split('-').pop().trim()}`);
 
         const groupSummary = `🏁 OpenMotorBridge [Gruppe / Mesh]: Tour abgeschlossen (${tour.filename})\n` +
-            `📅 ${tour.datetime.split(' ')[0]} · ${tour.timeRange || '09:15 – 11:20 Uhr'} (Netto: ${tour.nettoDuration || tour.duration} · Pausen: ${tour.pauseDuration || '23m'})\n` +
-            `📍 ${tour.distance} · ⛰️ ${tour.eleGain} (${tour.eleRange || '620 – 2.224 m'}) · 🌡️ Ø ${tour.tempAvg || '18.8'} °C\n` +
+            `📅 ${tour.datetime.split(' ')[0]} · ${tour.timeRange || '09:15 - 11:20 Uhr'} (Netto: ${tour.nettoDuration || tour.duration} · Pausen: ${tour.pauseDuration || '23m'})\n` +
+            `📍 ${tour.distance} · ⛰️ ${tour.eleGain} (${tour.eleRange || '620 - 2.224 m'}) · 🌡️ Ø ${tour.tempAvg || '18.8'} °C\n` +
             `📡 Funk: ${tour.commHdPct || 98.4}% HD-Voice · ${tour.commLoraFallbacks || 1}x LoRa-Fallback (${tour.commLoraDuration || '45s'}) · 0 Totalabrisse\n` +
             `🔄 ${tour.curvesTotal || 186} Kurven · Kolonnen-Tempo: Ø ${tour.avgSpeed || '58.4 km/h'} · Bordnetz: ${tour.batteryMin || '13.9 V'}`;
         setText('inspect-summary-text', groupSummary);
@@ -5661,10 +5661,10 @@ window.switchInspectMode = function (mode) {
 
         setText('inspect-lbl-2', 'Höhenprofil');
         setText('inspect-ele-gain', tour.eleGain);
-        setText('inspect-ele-range', tour.eleRange || '620 – 2.224 m');
+        setText('inspect-ele-range', tour.eleRange || '620 - 2.224 m');
 
         setText('inspect-lbl-3', 'Außentemperatur');
-        setText('inspect-temp', tour.tempRange || '14.2 – 23.5 °C');
+        setText('inspect-temp', tour.tempRange || '14.2 - 23.5 °C');
         setText('inspect-temp-sub', `Ø ${tour.tempAvg || '18.8'} °C (${tour.tempSource || 'CAN OEM'})`);
 
         setText('inspect-lbl-4', 'Bremskomfort');
@@ -5689,9 +5689,9 @@ window.switchInspectMode = function (mode) {
         setText('inspect-motor-sub', `Bordnetz Min: ${tour.batteryMin || '13.9 V'}`);
 
         const cruiseSummary = `🏁 OpenMotorBridge [Cruising & Tour]: Tour abgeschlossen (${tour.filename})\n` +
-            `📅 ${tour.datetime.split(' ')[0]} · ${tour.timeRange || '09:15 – 11:20 Uhr'} · Netto: ${tour.nettoDuration || tour.duration} (Pausen: ${tour.pauseDuration || '23m'})\n` +
-            `📍 ${tour.distance} · ⛰️ ${tour.eleGain} (${tour.eleRange || '620 – 2.224 m'})\n` +
-            `🌡️ Temp: ${tour.tempRange || '14.2 °C – 23.5 °C'} (Ø ${tour.tempAvg || '18.8'} °C)\n` +
+            `📅 ${tour.datetime.split(' ')[0]} · ${tour.timeRange || '09:15 - 11:20 Uhr'} · Netto: ${tour.nettoDuration || tour.duration} (Pausen: ${tour.pauseDuration || '23m'})\n` +
+            `📍 ${tour.distance} · ⛰️ ${tour.eleGain} (${tour.eleRange || '620 - 2.224 m'})\n` +
+            `🌡️ Temp: ${tour.tempRange || '14.2 °C - 23.5 °C'} (Ø ${tour.tempAvg || '18.8'} °C)\n` +
             `${isSmooth ? '🛋️ Sanfte Bremsungen (0 Schreckbremsungen)' : `Bremsruhe: ${tour.hardBrakingCount} stärkere Bremsungen`} · Schräglagen bis ${tour.maxLean || '44.2°'}\n` +
             `⚡ Reisegeschwindigkeit: Ø ${tour.avgSpeed || '58.4 km/h'} (Max: ${tour.topSpeed} km/h) · Ladespannung: Ø 14.2 V`;
         setText('inspect-summary-text', cruiseSummary);
@@ -5796,7 +5796,7 @@ const s_defaultTours = [
         filename: 'sustenpass_tour.gpx',
         name: 'Sustenpass Kurvenrausch',
         datetime: '2026-08-23 09:15',
-        timeRange: '09:15 – 11:20 Uhr',
+        timeRange: '09:15 - 11:20 Uhr',
         duration: '2h 05m',
         nettoDuration: '1h 42m',
         pauseDuration: '23m',
@@ -5820,8 +5820,8 @@ const s_defaultTours = [
         topSpeed: 118,
         avgSpeed: '58.4 km/h',
         eleGain: '+1.420 hm',
-        eleRange: '620 – 2.224 m',
-        tempRange: '14.2 – 23.5 °C',
+        eleRange: '620 - 2.224 m',
+        tempRange: '14.2 - 23.5 °C',
         tempAvg: '18.8',
         tempSource: 'CAN OEM',
         maxAccel: '+0.65g',
@@ -5836,7 +5836,7 @@ const s_defaultTours = [
         filename: 'gotthard_tremola.fav.gpx',
         name: 'Gotthard Pass Tremola Classic',
         datetime: '2026-08-22 14:30',
-        timeRange: '14:30 – 18:15 Uhr',
+        timeRange: '14:30 - 18:15 Uhr',
         duration: '3h 45m',
         nettoDuration: '3h 15m',
         pauseDuration: '30m',
@@ -5860,8 +5860,8 @@ const s_defaultTours = [
         topSpeed: 134,
         avgSpeed: '64.2 km/h',
         eleGain: '+2.150 hm',
-        eleRange: '450 – 2.106 m',
-        tempRange: '11.8 – 27.4 °C',
+        eleRange: '450 - 2.106 m',
+        tempRange: '11.8 - 27.4 °C',
         tempAvg: '19.4',
         tempSource: 'Heck-Pod Flosse',
         maxAccel: '+0.78g',
@@ -5876,7 +5876,7 @@ const s_defaultTours = [
         filename: 'b500_schwarzwald.gpx',
         name: 'Schwarzwaldhochstraße B500',
         datetime: '2026-08-19 11:00',
-        timeRange: '11:00 – 13:20 Uhr',
+        timeRange: '11:00 - 13:20 Uhr',
         duration: '2h 20m',
         nettoDuration: '2h 05m',
         pauseDuration: '15m',
@@ -5900,8 +5900,8 @@ const s_defaultTours = [
         topSpeed: 112,
         avgSpeed: '61.6 km/h',
         eleGain: '+980 hm',
-        eleRange: '280 – 1.028 m',
-        tempRange: '17.5 – 26.0 °C',
+        eleRange: '280 - 1.028 m',
+        tempRange: '17.5 - 26.0 °C',
         tempAvg: '21.5',
         tempSource: 'CAN OEM',
         maxAccel: '+0.58g',
@@ -6054,7 +6054,7 @@ function renderLiveRadarCanvas() {
         s_radarCtx.fillStyle = 'rgba(255, 255, 255, 0.45)';
         s_radarCtx.font = 'bold 12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
         s_radarCtx.textAlign = 'center';
-        s_radarCtx.fillText(state.lang === 'de' ? '📡 STANDBY • WARTE AUF BLE HARDWARE-VERBINDUNG' : '📡 STANDBY • WAITING FOR BLE HARDWARE', cx, cy + 32);
+        s_radarCtx.fillText(state.lang === 'de' ? '📡 STANDBY * WARTE AUF BLE HARDWARE-VERBINDUNG' : '📡 STANDBY * WAITING FOR BLE HARDWARE', cx, cy + 32);
 
         s_radarCtx.font = '10px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
         s_radarCtx.fillStyle = 'rgba(255, 255, 255, 0.25)';
@@ -6249,7 +6249,7 @@ function renderLiveRadarCanvas() {
         s_radarCtx.fill();
         s_radarCtx.fillStyle = '#ffffff';
         s_radarCtx.font = '10px sans-serif';
-        s_radarCtx.fillText('Bike 2 (Sena • 65m)', b2x + 10, b2y + 3);
+        s_radarCtx.fillText('Bike 2 (Sena * 65m)', b2x + 10, b2y + 3);
 
         // Demo Bike 3 (Cardo Edge)
         const b3x = cx - 75;
@@ -6258,7 +6258,7 @@ function renderLiveRadarCanvas() {
         s_radarCtx.arc(b3x, b3y, 6, 0, Math.PI * 2);
         s_radarCtx.fillStyle = '#ff9f0a';
         s_radarCtx.fill();
-        s_radarCtx.fillText('Bike 3 (Cardo • 110m)', b3x + 10, b3y + 3);
+        s_radarCtx.fillText('Bike 3 (Cardo * 110m)', b3x + 10, b3y + 3);
 
         // Own Center Bike (Leader)
         s_radarCtx.beginPath();
@@ -6801,7 +6801,7 @@ function triggerSimulatedRadarApproach() {
             state.radar.simCycle = null;
             state.radar.targets = [];
             updateRadarUi({ targets: [] });
-            showToast(state.lang === 'de' ? '✓ Fahrzeug hat überholt • Radarbereich wieder frei' : '✓ Vehicle has overtaken • Radar sector clear', 'success');
+            showToast(state.lang === 'de' ? '✓ Fahrzeug hat überholt * Radarbereich wieder frei' : '✓ Vehicle has overtaken * Radar sector clear', 'success');
             return;
         }
 
@@ -6931,7 +6931,7 @@ btnTriggerOmmPush?.addEventListener('click', () => {
             lblOmmPushStatus.textContent = state.lang === 'de' ? `Übertrage 'omm_rear.bin' (${pct}%)...` : `Transferring 'omm_rear.bin' (${pct}%)...`;
         } else if (pct === 100) {
             clearInterval(flashInterval);
-            lblOmmPushStatus.textContent = state.lang === 'de' ? '✓ MD5 Hash verifiziert • Coprozessor neugestartet' : '✓ MD5 Hash verified • Coprocessor rebooted';
+            lblOmmPushStatus.textContent = state.lang === 'de' ? '✓ MD5 Hash verifiziert * Coprozessor neugestartet' : '✓ MD5 Hash verified * Coprocessor rebooted';
             badgeOmmFwState.textContent = 'Synchron (v8.0.4)';
             badgeOmmFwState.className = 'card-badge badge-green';
             btnTriggerOmmPush.disabled = false;
@@ -7033,7 +7033,7 @@ function updateEcallUi(ecall) {
         const elSource = document.getElementById('ecall-banner-source');
         if (elSource) elSource.textContent = state.ecall.sourceBike;
         const elImpact = document.getElementById('ecall-banner-impact');
-        if (elImpact) elImpact.textContent = `Aufprall: ${state.ecall.maxG.toFixed(1)} g • Schräglage 78°`;
+        if (elImpact) elImpact.textContent = `Aufprall: ${state.ecall.maxG.toFixed(1)} g * Schräglage 78°`;
         const elCoords = document.getElementById('ecall-banner-coords');
         if (elCoords) elCoords.textContent = `${state.ecall.lat.toFixed(5)}° N, ${state.ecall.lon.toFixed(5)}° E (Kerenzerberg)`;
         const elDist = document.getElementById('ecall-banner-dist');
@@ -7072,8 +7072,8 @@ document.getElementById('select-sim-track')?.addEventListener('change', (e) => {
     }
 
     const name = s_currentSimTrack === 'kerenzerberg' 
-        ? 'Walenstadt ➔ Kerenzerberg (743m) ➔ Glarus' 
-        : 'Wil SG ➔ Wattwil Tunnel ➔ Rickenpass';
+        ? 'Walenstadt -> Kerenzerberg (743m) -> Glarus' 
+        : 'Wil SG -> Wattwil Tunnel -> Rickenpass';
     showToast(state.lang === 'de' ? `🛣️ Strecke gewechselt: ${name}` : `🛣️ Track switched: ${name}`, 'info', 3000);
 });
 
@@ -7212,7 +7212,7 @@ function resetBikeAlarmState() {
 function triggerTestBikeAlarm() {
     state.alarm.triggered = true;
     state.alarm.source = 'IMU Schock-Sensor (Stufe 2)';
-    state.alarm.detail = 'Erschütterung 3.8 g • Heck-Pod 3 LoRa 868 MHz SF11 Broadcast';
+    state.alarm.detail = 'Erschütterung 3.8 g * Heck-Pod 3 LoRa 868 MHz SF11 Broadcast';
     state.alarm.lat = state.telemetry.lat || 47.4640;
     state.alarm.lon = state.telemetry.lon || 9.0430;
     updateBikeAlarmUi(state.alarm);
@@ -7257,7 +7257,7 @@ function updateTpmsUi(tpms) {
     const hasWarn = frontWarn || rearWarn;
 
     if (valHudTpms) {
-        valHudTpms.textContent = `V: ${vBar} • H: ${hBar} bar`;
+        valHudTpms.textContent = `V: ${vBar} * H: ${hBar} bar`;
         valHudTpms.style.color = hasWarn ? 'var(--accent-red)' : 'var(--text-primary)';
     }
 
@@ -7272,7 +7272,7 @@ function updateTpmsUi(tpms) {
     if (subTpms) {
         const icon = hasWarn ? '⚠️' : '🟢';
         const statusText = hasWarn ? (state.lang === 'de' ? 'DRUCKABFALL WARNUNG' : 'LOW PRESSURE WARNING') : (state.lang === 'de' ? 'Solldruck OK' : 'Pressure OK');
-        subTpms.textContent = `${icon} V: ${vTemp}°C • H: ${hTemp}°C (${statusText})`;
+        subTpms.textContent = `${icon} V: ${vTemp}°C * H: ${hTemp}°C (${statusText})`;
         subTpms.style.color = hasWarn ? 'var(--accent-red)' : 'var(--accent-green)';
     }
     if (badgeTpms) {
@@ -7291,12 +7291,12 @@ function updateTpmsUi(tpms) {
         valHubFBar.innerHTML = `${vBar} <span style="font-size: 0.85rem;">bar</span>`;
         valHubFBar.style.color = frontWarn ? 'var(--accent-red)' : 'var(--text-primary)';
     }
-    if (valHubFTemp) valHubFTemp.textContent = `🌡️ ${vTemp}°C • Soll: 2.4 bar`;
+    if (valHubFTemp) valHubFTemp.textContent = `🌡️ ${vTemp}°C * Soll: 2.4 bar`;
     if (valHubRBar) {
         valHubRBar.innerHTML = `${hBar} <span style="font-size: 0.85rem;">bar</span>`;
         valHubRBar.style.color = rearWarn ? 'var(--accent-red)' : 'var(--text-primary)';
     }
-    if (valHubRTemp) valHubRTemp.textContent = `🌡️ ${hTemp}°C • Soll: 2.8 bar`;
+    if (valHubRTemp) valHubRTemp.textContent = `🌡️ ${hTemp}°C * Soll: 2.8 bar`;
     if (badgeHubTpms) {
         badgeHubTpms.className = hasWarn ? 'card-badge badge-red' : 'card-badge badge-green';
         badgeHubTpms.textContent = hasWarn ? 'Druckwarnung' : 'Solldruck OK';
@@ -7918,7 +7918,7 @@ document.getElementById('btn-validate-map-match')?.addEventListener('click', () 
     const result = matchTrackToSerpentineTerraces(SIM_TRACK_KERENZERBERG_WAYPOINTS);
     const lblResult = document.getElementById('lbl-map-match-result');
     if (lblResult) {
-        lblResult.textContent = `✓ ${result.pointsChecked} Wegpunkte validiert • 0 Terrassen-Sprünge (${(result.confidence * 100).toFixed(1)}% Konfidenz)`;
+        lblResult.textContent = `✓ ${result.pointsChecked} Wegpunkte validiert * 0 Terrassen-Sprünge (${(result.confidence * 100).toFixed(1)}% Konfidenz)`;
         lblResult.style.color = 'var(--accent-green)';
         lblResult.style.fontWeight = '700';
     }
@@ -8586,7 +8586,7 @@ function calculateSingleBikeBom(bikeConfig) {
     // BSD Mirrors
     if (addons.bsdMirrors) {
         parts3D.push({ group: 'BSD-Spiegel', file: 'bsd_mirror_upper_pod.stl', qty: 2, desc: isDe ? 'Spiegelarm-Warnanzeigen (Links & Rechts)' : 'Mirror arm alert pods (Left & Right)' });
-        parts3D.push({ group: 'BSD-Spiegel', file: 'bsd_mirror_lower_clamp.stl', qty: 2, desc: isDe ? 'Spiegelarm-Klemmschellen (Ø 10–14 mm)' : 'Mirror stem clamp bases (Ø 10–14 mm)' });
+        parts3D.push({ group: 'BSD-Spiegel', file: 'bsd_mirror_lower_clamp.stl', qty: 2, desc: isDe ? 'Spiegelarm-Klemmschellen (Ø 10-14 mm)' : 'Mirror stem clamp bases (Ø 10-14 mm)' });
         parts3D.push({ group: 'BSD-Spiegel', file: 'bsd_mirror_lens.stl', qty: 2, desc: isDe ? 'Fresnel-Diffusorlinsen für bernsteinfarbene LEDs' : 'Fresnel diffuser lenses for amber LEDs' });
     }
 
@@ -8887,7 +8887,7 @@ function renderSingleBuilder() {
     }
 
     if (costEl) {
-        costEl.textContent = `~ ${bom.costMin} – ${bom.costMax} €`;
+        costEl.textContent = `~ ${bom.costMin} - ${bom.costMax} €`;
     }
 
     const costDisclaimerEl = document.getElementById('builder-cost-disclaimer');
@@ -9071,7 +9071,7 @@ function renderSingleBuilder() {
                     </ol>
                 ` : `
                     <ol>
-                        <li>${isDe ? 'Blindkassette mit O-Ring in den Schlitten einsetzen – hermetisch regendichte Dry Box für Kleinteile.' : 'Insert blank cartridge with O-ring – hermetic waterproof dry box.'}</li>
+                        <li>${isDe ? 'Blindkassette mit O-Ring in den Schlitten einsetzen - hermetisch regendichte Dry Box für Kleinteile.' : 'Insert blank cartridge with O-ring - hermetic waterproof dry box.'}</li>
                     </ol>
                 `}
             </div>
@@ -9096,7 +9096,7 @@ function renderSingleBuilder() {
                     </ol>
                 ` : `
                     <ol>
-                        <li>${isDe ? 'Blindkassette mit O-Ring einsetzen – schützt Pod 2 vor Schmutz und Feuchtigkeit.' : 'Insert blank cartridge with O-ring – protects Pod 2 from dirt and moisture.'}</li>
+                        <li>${isDe ? 'Blindkassette mit O-Ring einsetzen - schützt Pod 2 vor Schmutz und Feuchtigkeit.' : 'Insert blank cartridge with O-ring - protects Pod 2 from dirt and moisture.'}</li>
                     </ol>
                 `}
             </div>
@@ -9156,15 +9156,15 @@ function renderSingleBuilder() {
                         <li>${isDe ? 'PCBA 05 einlegen und mit 4x M2.5 Schrauben fixieren. Hydrophobe Gore-Membran über MEMS-Mikrofon kleben.' : 'Insert PCBA 05 and secure with 4x M2.5 screws. Adhere Gore membrane over MEMS port.'}</li>
                         <li>${isDe ? '<strong>Standard-Verkabelung:</strong> 12V Zündungsplus (<code>J1</code>), Display-Audio-CAN (<code>J2</code>, nur bei Fairing nötig), OEM-USB Upstream (<code>J4</code>), Wireless CarPlay/AA Dongle (<code>J6</code> mit 1-Click TPS2051B Watchdog-Reset) und 20W PD Ladekabel (<code>J5</code>) anstecken.' : '<strong>Standard Wiring:</strong> Plug in 12V switched power (<code>J1</code>), display audio CAN (<code>J2</code>, fairing only), OEM USB upstream (<code>J4</code>), wireless CarPlay/AA dongle (<code>J6</code> with 1-click TPS2051B watchdog reset), and 20W PD charging cable (<code>J5</code>).'}</li>
                         <li>${isDe ? '<strong>Optionale Cockpit-Zusatzteile nach Bedarf anstecken:</strong><br>' +
-                            '• <em>Lenker-PTT Taster (Port J3):</em> 4-Pin JST-PH Kabel anschließen (Pin 1: GND, Pin 2: PTT Intercom, Pin 3: Actioncam-Bookmark, Pin 4: Siri/Voice). 100% batteriefrei und latenzfrei (< 5 ms).<br>' +
-                            '• <em>Totwinkel-Spiegel-LEDs (Port J9):</em> 3-Pin JST-PH Kabel zu den Bernstein/Rot-LEDs an den Spiegelarmen führen (Pin 1: +12V, Pin 2: BSD Links, Pin 3: BSD Rechts über N-MOSFETs; Dauerlicht bei Überholer, 8 Hz Warnblitz bei Kollisionskurs).<br>' +
-                            '• <em>Actioncam-Strom (Port J8):</em> 2-Pin JST-PH für GoPro/Insta360 (+5V/2A Charge-Only ohne Daten, verhindert Headunit-Lockups; automatischer BLE-Shutter-Stop bei Zündung-Aus).<br>' +
-                            '• <em>Qi-Ladehalterung Quad Lock / SP Connect (Port J10 oder J5):</em> 2-Pin JST-PH an J10 (+12V geschaltet bis 24W ohne Ruhestromverlust bei Standzeit) oder 20W USB-C PD an J5.' :
+                            '* <em>Lenker-PTT Taster (Port J3):</em> 4-Pin JST-PH Kabel anschließen (Pin 1: GND, Pin 2: PTT Intercom, Pin 3: Actioncam-Bookmark, Pin 4: Siri/Voice). 100% batteriefrei und latenzfrei (< 5 ms).<br>' +
+                            '* <em>Totwinkel-Spiegel-LEDs (Port J9):</em> 3-Pin JST-PH Kabel zu den Bernstein/Rot-LEDs an den Spiegelarmen führen (Pin 1: +12V, Pin 2: BSD Links, Pin 3: BSD Rechts über N-MOSFETs; Dauerlicht bei Überholer, 8 Hz Warnblitz bei Kollisionskurs).<br>' +
+                            '* <em>Actioncam-Strom (Port J8):</em> 2-Pin JST-PH für GoPro/Insta360 (+5V/2A Charge-Only ohne Daten, verhindert Headunit-Lockups; automatischer BLE-Shutter-Stop bei Zündung-Aus).<br>' +
+                            '* <em>Qi-Ladehalterung Quad Lock / SP Connect (Port J10 oder J5):</em> 2-Pin JST-PH an J10 (+12V geschaltet bis 24W ohne Ruhestromverlust bei Standzeit) oder 20W USB-C PD an J5.' :
                             '<strong>Optional Cockpit Peripherals (Plug-and-Play as needed):</strong><br>' +
-                            '• <em>Handlebar PTT Button (Port J3):</em> 4-Pin JST-PH cable (Pin 1: GND, Pin 2: PTT Intercom, Pin 3: Actioncam bookmark, Pin 4: Siri/Voice). 100% battery-free and zero-latency (< 5 ms).<br>' +
-                            '• <em>Blind Spot Mirror LEDs (Port J9):</em> 3-Pin JST-PH cable to amber/red LEDs at mirror arms (Pin 1: +12V, Pin 2: BSD Left, Pin 3: BSD Right via N-MOSFETs; steady amber on traffic, 8 Hz flash on collision hazard).<br>' +
-                            '• <em>Actioncam Power (Port J8):</em> 2-Pin JST-PH for GoPro/Insta360 (+5V/2A charge-only without USB data to prevent head unit lockups; automated BLE shutter stop on ignition off).<br>' +
-                            '• <em>Qi Wireless Cradle Quad Lock / SP Connect (Port J10 or J5):</em> 2-Pin JST-PH at J10 (+12V switched up to 24W with zero parasitic drain) or 20W USB-C PD at J5.'}</li>
+                            '* <em>Handlebar PTT Button (Port J3):</em> 4-Pin JST-PH cable (Pin 1: GND, Pin 2: PTT Intercom, Pin 3: Actioncam bookmark, Pin 4: Siri/Voice). 100% battery-free and zero-latency (< 5 ms).<br>' +
+                            '* <em>Blind Spot Mirror LEDs (Port J9):</em> 3-Pin JST-PH cable to amber/red LEDs at mirror arms (Pin 1: +12V, Pin 2: BSD Left, Pin 3: BSD Right via N-MOSFETs; steady amber on traffic, 8 Hz flash on collision hazard).<br>' +
+                            '* <em>Actioncam Power (Port J8):</em> 2-Pin JST-PH for GoPro/Insta360 (+5V/2A charge-only without USB data to prevent head unit lockups; automated BLE shutter stop on ignition off).<br>' +
+                            '* <em>Qi Wireless Cradle Quad Lock / SP Connect (Port J10 or J5):</em> 2-Pin JST-PH at J10 (+12V switched up to 24W with zero parasitic drain) or 20W USB-C PD at J5.'}</li>
                         <li>${isDe ? 'Silikon-Dichtschnur einlegen, TPU-Kämme einschieben und Deckel mit 4x M3x20 mm Schrauben festziehen.' : 'Lay silicone gasket cord, slide TPU combs in, and tighten lid with 4x M3x20 mm screws.'}</li>
                     </ol>
                 </div>
@@ -9182,9 +9182,9 @@ function renderSingleBuilder() {
                 </div>
                 <div class="builder-instructions-body">
                     <ol>
-                        ${active.addons?.bsdMirrors ? `<li>${isDe ? '<strong>BSD Totwinkel-Spiegelanzeigen:</strong> Klemmschellen (<code>bsd_mirror_lower_clamp.stl</code>) an beiden Spiegelarmen (Ø 10–14 mm) anbringen. Gehäuse (<code>bsd_mirror_upper_pod.stl</code>) mit Fresnel-Linsen (<code>bsd_mirror_lens.stl</code>) aufstecken und 3-Pin JST-PH Kabel an Port J9 des Front-Nodes anschließen (Bernstein bei rückwärtigem Verkehr, 8 Hz Warnblitz bei gefährlicher Annäherung).' : '<strong>BSD Blind Spot Mirror Pods:</strong> Clamp bases (<code>bsd_mirror_lower_clamp.stl</code>) to mirror stems (Ø 10–14 mm). Mount upper pods (<code>bsd_mirror_upper_pod.stl</code>) with Fresnel lenses (<code>bsd_mirror_lens.stl</code>) and connect 3-pin JST-PH to Front Node port J9.'}</li>` : ''}
+                        ${active.addons?.bsdMirrors ? `<li>${isDe ? '<strong>BSD Totwinkel-Spiegelanzeigen:</strong> Klemmschellen (<code>bsd_mirror_lower_clamp.stl</code>) an beiden Spiegelarmen (Ø 10-14 mm) anbringen. Gehäuse (<code>bsd_mirror_upper_pod.stl</code>) mit Fresnel-Linsen (<code>bsd_mirror_lens.stl</code>) aufstecken und 3-Pin JST-PH Kabel an Port J9 des Front-Nodes anschließen (Bernstein bei rückwärtigem Verkehr, 8 Hz Warnblitz bei gefährlicher Annäherung).' : '<strong>BSD Blind Spot Mirror Pods:</strong> Clamp bases (<code>bsd_mirror_lower_clamp.stl</code>) to mirror stems (Ø 10-14 mm). Mount upper pods (<code>bsd_mirror_upper_pod.stl</code>) with Fresnel lenses (<code>bsd_mirror_lens.stl</code>) and connect 3-pin JST-PH to Front Node port J9.'}</li>` : ''}
                         ${active.addons?.actionCamDock ? `<li>${isDe ? '<strong>Induktives Actioncam-Dock:</strong> Kameraaufnahme (<code>road_glide_inductive_cam_dock.stl</code>) an der Verkleidung verschrauben. Qi-Sendespule einlegen und 2-Pin JST-PH Kabel an Port J8 des Front-Nodes anstecken (liefert 5V Ladespannung, schaltet bei Zündung-Aus automatisch per BLE-Kommando die Aufnahme ab).' : '<strong>Inductive Actioncam Dock:</strong> Mount dock (<code>road_glide_inductive_cam_dock.stl</code>) to fairing. Insert Qi coil and connect 2-pin JST-PH to Front Node port J8 (5V charging, automated BLE camera stop on ignition off).'}</li>` : ''}
-                        ${active.addons?.handlebarControls ? `<li>${isDe ? '<strong>Lenker-Multitaster:</strong> Under-Perch Konsole (<code>under_perch_switch_bracket.stl</code>) unter die linke Kupplungsarmatur schrauben. 3x IP67 Taster einsetzen und 4-Pin JST-PH Kabel an Port J3 des Front-Nodes stecken (Taste 1: Intercom PTT, Taste 2: Video-Bookmark, Taste 3: Siri/Sprachassistent – latenzfrei < 5 ms).' : '<strong>Handlebar Multi-Switch:</strong> Bolt under-perch bracket (<code>under_perch_switch_bracket.stl</code>) beneath clutch clamp. Fit 3x IP67 switches and connect 4-pin JST-PH to Front Node port J3.'}</li>` : ''}
+                        ${active.addons?.handlebarControls ? `<li>${isDe ? '<strong>Lenker-Multitaster:</strong> Under-Perch Konsole (<code>under_perch_switch_bracket.stl</code>) unter die linke Kupplungsarmatur schrauben. 3x IP67 Taster einsetzen und 4-Pin JST-PH Kabel an Port J3 des Front-Nodes stecken (Taste 1: Intercom PTT, Taste 2: Video-Bookmark, Taste 3: Siri/Sprachassistent - latenzfrei < 5 ms).' : '<strong>Handlebar Multi-Switch:</strong> Bolt under-perch bracket (<code>under_perch_switch_bracket.stl</code>) beneath clutch clamp. Fit 3x IP67 switches and connect 4-pin JST-PH to Front Node port J3.'}</li>` : ''}
                     </ol>
                 </div>
             </div>
@@ -9203,7 +9203,7 @@ function renderSingleBuilder() {
                 <div class="builder-instructions-body">
                     <ol>
                         <li>${isDe ? '<strong>Zentralbox (Gemeinsame Basis):</strong> Unter der Fahrersitzbank im Heckrahmen auf den 4x M4 Silentblöcken schwingungsentkoppelt verschrauben. M8 Kabelpeitschen nach hinten links/rechts und zum Heck führen.' : '<strong>Central Box (Common Base):</strong> Bolt under rider seat in rear frame using 4x M4 silentblocks for vibration isolation. Route M8 cables rearward.'}</li>
-                        <li>${isDe ? '<strong>Pod 1 & 2 (Option A: Vario / Rahmenrohr):</strong> Transition-Docks (<code>adventure_transition_dock.stl</code>) in der Sitzbank-Bügelfalte an das Ø 28 mm Hauptrahmenrohr klemmen (kompatibel mit R 1200 LC / 1250 / 1300 GS sowie F 750 / 850 / 900 GS). Pod-Gehäuse verschrauben. <em>100% kofferunabhängig:</em> Baut nicht breiter als die schlanke Fahrzeug-Silhouette – fahrbar mit Vario-Koffern oder komplett ohne Koffer!' : '<strong>Pods 1 & 2 (Option A: Vario / Frame Tube):</strong> Clamp transition docks (<code>adventure_transition_dock.stl</code>) in seat crease to Ø 28 mm frame tube (compatible with R 1200 LC / 1250 / 1300 GS and F 750 / 850 / 900 GS). <em>100% luggage-independent:</em> Does not build wider than bike silhouette – rideable with Vario cases or completely without luggage!'}</li>
+                        <li>${isDe ? '<strong>Pod 1 & 2 (Option A: Vario / Rahmenrohr):</strong> Transition-Docks (<code>adventure_transition_dock.stl</code>) in der Sitzbank-Bügelfalte an das Ø 28 mm Hauptrahmenrohr klemmen (kompatibel mit R 1200 LC / 1250 / 1300 GS sowie F 750 / 850 / 900 GS). Pod-Gehäuse verschrauben. <em>100% kofferunabhängig:</em> Baut nicht breiter als die schlanke Fahrzeug-Silhouette - fahrbar mit Vario-Koffern oder komplett ohne Koffer!' : '<strong>Pods 1 & 2 (Option A: Vario / Frame Tube):</strong> Clamp transition docks (<code>adventure_transition_dock.stl</code>) in seat crease to Ø 28 mm frame tube (compatible with R 1200 LC / 1250 / 1300 GS and F 750 / 850 / 900 GS). <em>100% luggage-independent:</em> Does not build wider than bike silhouette - rideable with Vario cases or completely without luggage!'}</li>
                         <li>${isDe ? '<strong>Heck-Pod 3 & Radar (Gemeinsame Basis):</strong> Rack-Tail Mount (<code>adventure_rack_tail_mount.stl</code>) an der Gepäckbrücke verschrauben. Hirth-Zahngelenk auf gewünschten Radar-Winkel (+10° bis +15°) einrasten, Varia einklinken und M3 Sicherungsmadenschraube eindrehen.' : '<strong>Rear Pod 3 & Radar (Common Base):</strong> Bolt rack-tail mount (<code>adventure_rack_tail_mount.stl</code>) to luggage rack. Set Hirth gear lock to desired radar angle (+10° to +15°), snap Varia in, and secure with M3 set screw.'}</li>
                         ${active.addons?.frontNode ? `<li>${isDe ? '<strong>Front-Node & Cockpit:</strong> Front-Node mit AMPS-Halter am Ø 12 mm GPS/Navibügel fixieren. Stromversorgung über den 3-Pin Cartool-Stecker (Pin 1 GND, Pin 3 +12V KL15) am Steuerkopf. <em>100% drahtlose Funkbrücke:</em> ESP-NOW (< 1,8 ms) zur Zentralbox (kein Kabel durch den Lenkkopf!). <em>CAN-Bus & Steuerung:</em> Bei 6.5" TFT-Modellen liest der Front-Node das Wonder Wheel via K-CAN (<code>0x2A0</code>); bei Modellen ohne Wonder Wheel erfolgt die Bedienung über die OMB BLE-Fernbedienung oder WebApp.' : '<strong>Front Node & Cockpit:</strong> Mount Front Node using AMPS pattern to Ø 12 mm GPS bar. 12V switched KL15 power via 3-pin Cartool plug at headstock. <em>100% Wireless Link:</em> ESP-NOW (< 1.8 ms) to Central Box (zero wires through steering head!). <em>CAN & Controls:</em> On 6.5" TFT models, Front Node reads Wonder Wheel via K-CAN (<code>0x2A0</code>); on models without Wonder Wheel, control via OMB BLE remote or WebApp.'}</li>` : ''}
                     </ol>
@@ -9238,38 +9238,38 @@ function renderSingleBuilder() {
                     <ol>
                         <li>${isDe ? '<strong>Zentralbox (Gemeinsame Basis):</strong> Unter der Fahrersitzbank auf der massiven Rahmenbrücke vor der Batterie (oder bei Softail-Modellen im Hohlraum unter dem Sitz / Seitendeckel) auf 4x M4 Silentblöcken verschrauben. Die HD26-Kabelpeitsche führt nach hinten zu den Koffern und direkt zum BCM / Diagnosestecker.' : '<strong>Central Box (Common Base):</strong> Mount under rider seat on frame crossmember in front of battery (or inside Softail under-seat cavity / side cover) using 4x M4 silentblocks. HD26 harness whip branches rearward to saddlebags and BCM / diagnostic port.'}</li>
                         <li>${isDe ? '<strong>Pod 1 & 2 & MagSafe Koffer-Seitendurchführung:</strong> Kofferdeckel-Docks (<code>saddlebag_lid_dock.stl</code>) auf den Kofferdeckeln verschrauben (M4 Senkkopf + EPDM-Dichtscheiben) oder per 3M VHB Tape befestigen. <em>(Street/Road Glide, CVO ST, Road King, Limited sowie Cruiser wie Low Rider ST, Sport Glide und Heritage Classic mit Koffern nutzen dieselben Docks!)</em><br>' +
-                            '<strong>Koffer-Trennstelle (MagSafe Seitendurchführung):</strong> Die Koffer sitzen werksseitig an massiven Rahmenhaltern mit Schnellverschluss-Pins. Bohre eine 19 mm Bohrung in die <strong>innere Seitenwand des Koffers direkt neben der werksseitigen Rahmenhalterung (Seitendurchführung – NICHT im Boden!)</strong>. Die geteilte EPDM-Kabeldurchführung (<code>010_saddlebag_hole_grommet_split.stl</code>) mit Zugentlastungsturm einsetzen. Das MagSafe Rahmendock (<code>009_magsafe_frame_dock.stl</code> + <code>009_magsafe_frame_clamp.stl</code>) am Rahmenrohr direkt gegenüber der Koffer-Innenwand montieren. M8 Kabel anschließen. Beim Aufsetzen der Koffer dockt der 5-Pin Magnetkontakt (<code>kicad_magsafe_dock</code>) automatisch an – 100% werkzeugloses Abnehmen der Koffer ohne Kabel abstecken!' :
+                            '<strong>Koffer-Trennstelle (MagSafe Seitendurchführung):</strong> Die Koffer sitzen werksseitig an massiven Rahmenhaltern mit Schnellverschluss-Pins. Bohre eine 19 mm Bohrung in die <strong>innere Seitenwand des Koffers direkt neben der werksseitigen Rahmenhalterung (Seitendurchführung - NICHT im Boden!)</strong>. Die geteilte EPDM-Kabeldurchführung (<code>010_saddlebag_hole_grommet_split.stl</code>) mit Zugentlastungsturm einsetzen. Das MagSafe Rahmendock (<code>009_magsafe_frame_dock.stl</code> + <code>009_magsafe_frame_clamp.stl</code>) am Rahmenrohr direkt gegenüber der Koffer-Innenwand montieren. M8 Kabel anschließen. Beim Aufsetzen der Koffer dockt der 5-Pin Magnetkontakt (<code>kicad_magsafe_dock</code>) automatisch an - 100% werkzeugloses Abnehmen der Koffer ohne Kabel abstecken!' :
                             '<strong>Pods 1 & 2 & MagSafe Saddlebag Side-Wall Pass-Through:</strong> Mount saddlebag lid docks (<code>saddlebag_lid_dock.stl</code>) on bag lids using M4 screws + EPDM washers or 3M VHB tape.<br>' +
-                            '<strong>Saddlebag Breakaway Dock (Side-Wall Pass-Through):</strong> Saddlebags mount to frame brackets with OEM quick-release pins. Drill a 19 mm hole into the <strong>inner side wall of the saddlebag directly adjacent to the OEM frame bracket (Side Pass-Through – NOT bottom!)</strong>. Insert split EPDM grommet (<code>010_saddlebag_hole_grommet_split.stl</code>). Mount MagSafe frame dock (<code>009_magsafe_frame_dock.stl</code> + <code>009_magsafe_frame_clamp.stl</code>) to frame tube opposite the saddlebag inner wall. Connect M8 cables. When dropping saddlebags into place, the 5-pin magnetic contact docks automatically – 100% tool-free saddlebag removal without unplugging cables!'}</li>
+                            '<strong>Saddlebag Breakaway Dock (Side-Wall Pass-Through):</strong> Saddlebags mount to frame brackets with OEM quick-release pins. Drill a 19 mm hole into the <strong>inner side wall of the saddlebag directly adjacent to the OEM frame bracket (Side Pass-Through - NOT bottom!)</strong>. Insert split EPDM grommet (<code>010_saddlebag_hole_grommet_split.stl</code>). Mount MagSafe frame dock (<code>009_magsafe_frame_dock.stl</code> + <code>009_magsafe_frame_clamp.stl</code>) to frame tube opposite the saddlebag inner wall. Connect M8 cables. When dropping saddlebags into place, the 5-pin magnetic contact docks automatically - 100% tool-free saddlebag removal without unplugging cables!'}</li>
                         <li>${isDe ? '<strong>Heck-Pod 3 (Modulare Varianten):</strong><br>' +
-                            '• <em>Bagger & Softail Cruiser (Street/Road Glide, Road King, Heritage Classic, Low Rider ST, Sport Glide):</em> Organische Fender-Konsole (<code>pod3_touring_fender_console.stl</code>) flach auf Kotflügel an der standardisierten 1/4"-20 Sozius-Schraube verschrauben.<br>' +
-                            '• <em>Touring Limited & Ultra (King Tour-Pak):</em> Stahlrohr-Trägerrahmen blockiert den Fender! Pod 3 stattdessen mit Rohrträger-Klemmschellen (<code>adventure_pannier_rack_clamp_base.stl</code> + <code>cap.stl</code>) am Ø 18 mm Tour-Pak Trägerrohr oder unter der Gepäckbrücke montieren.' :
+                            '* <em>Bagger & Softail Cruiser (Street/Road Glide, Road King, Heritage Classic, Low Rider ST, Sport Glide):</em> Organische Fender-Konsole (<code>pod3_touring_fender_console.stl</code>) flach auf Kotflügel an der standardisierten 1/4"-20 Sozius-Schraube verschrauben.<br>' +
+                            '* <em>Touring Limited & Ultra (King Tour-Pak):</em> Stahlrohr-Trägerrahmen blockiert den Fender! Pod 3 stattdessen mit Rohrträger-Klemmschellen (<code>adventure_pannier_rack_clamp_base.stl</code> + <code>cap.stl</code>) am Ø 18 mm Tour-Pak Trägerrohr oder unter der Gepäckbrücke montieren.' :
                             '<strong>Rear Pod 3 (Modular Variants):</strong><br>' +
-                            '• <em>Baggers & Softail Cruisers (Street/Road Glide, Road King, Heritage Classic, Low Rider ST, Sport Glide):</em> Bolt organic fender console (<code>pod3_touring_fender_console.stl</code>) flat on rear fender to standardized 1/4"-20 seat nut.<br>' +
-                            '• <em>Touring Limited & Ultra (King Tour-Pak):</em> Steel Tour-Pak rack blocks fender space! Instead, clamp Pod 3 via tube clamp pair (<code>adventure_pannier_rack_clamp_base.stl</code> + <code>cap.stl</code>) to Ø 18 mm Tour-Pak tube rail or beneath rack bridge.'}</li>
+                            '* <em>Baggers & Softail Cruisers (Street/Road Glide, Road King, Heritage Classic, Low Rider ST, Sport Glide):</em> Bolt organic fender console (<code>pod3_touring_fender_console.stl</code>) flat on rear fender to standardized 1/4"-20 seat nut.<br>' +
+                            '* <em>Touring Limited & Ultra (King Tour-Pak):</em> Steel Tour-Pak rack blocks fender space! Instead, clamp Pod 3 via tube clamp pair (<code>adventure_pannier_rack_clamp_base.stl</code> + <code>cap.stl</code>) to Ø 18 mm Tour-Pak tube rail or beneath rack bridge.'}</li>
                         <li>${isDe ? '<strong>Radar (Gemeinsame Basis):</strong> Entkoppelten Halter (<code>radar_license_plate_bracket.stl</code>) direkt unter dem serienmäßig zentrierten Kennzeichenrahmen verschrauben (Touring & Softail identisch).' : '<strong>Radar (Common Base):</strong> Bolt decoupled radar bracket (<code>radar_license_plate_bracket.stl</code>) directly beneath the factory-centered license plate frame (Touring & Softails identical).'}</li>
                         ${active.addons?.frontNode ? `<li>${isDe ? '<strong>Cockpit & Front-Node (Modulare Fairing-Optionen):</strong><br>' +
-                            '• <em>Option A (Batwing - Street Glide / Ultra):</em><br>' +
+                            '* <em>Option A (Batwing - Street Glide / Ultra):</em><br>' +
                             '  - <strong>2024+ (12.3" Skyline OS):</strong> 2x T25 Schrauben der Scheibe lösen (kein 3-Schrauben-System mehr!), seitliche Lautsprechergitter nach vorn abclipsen, 2x T25 oben und 2x T25/T27 Flankenschrauben herausdrehen, Zentralstecker trennen.<br>' +
-                            '  - <strong>2014–2023 (Rushmore / GTS):</strong> 3x T27 Schrauben der Scheibe lösen (mittlere zuletzt halten), 4x T27 Innenschrauben herausdrehen, Outer Fairing nach vorn klappen.<br>' +
-                            '• <em>Option B (Sharknose - Road Glide / ST):</em><br>' +
+                            '  - <strong>2014-2023 (Rushmore / GTS):</strong> 3x T27 Schrauben der Scheibe lösen (mittlere zuletzt halten), 4x T27 Innenschrauben herausdrehen, Outer Fairing nach vorn klappen.<br>' +
+                            '* <em>Option B (Sharknose - Road Glide / ST):</em><br>' +
                             '  - <strong>2024+ (12.3" Skyline OS):</strong> LED-Blinker sind integral in Blades (keine Blinkertürme mehr an der Gabel!). 4x T25 Scheibenschrauben, je 1x T27 in den beiden Handschuhfächern, 2x T25 an unteren Haltelaschen lösen.<br>' +
-                            '  - <strong>2015–2023 (Rushmore):</strong> Tacho-Abdeckung abclipsen, Blinker (je 2x 1/2" Schrauben) lösen, 4x T27 Innenschrauben herausdrehen.<br>' +
-                            '• <em>Option C (Nacelle & Cruiser mit Saddlebags - Road King / Special, Heritage Classic, Low Rider ST, Sport Glide):</em><br>' +
+                            '  - <strong>2015-2023 (Rushmore):</strong> Tacho-Abdeckung abclipsen, Blinker (je 2x 1/2" Schrauben) lösen, 4x T27 Innenschrauben herausdrehen.<br>' +
+                            '* <em>Option C (Nacelle & Cruiser mit Saddlebags - Road King / Special, Heritage Classic, Low Rider ST, Sport Glide):</em><br>' +
                             '  - <strong>Architektur wie Road King Special:</strong> Cruiser mit Koffern haben kein Radio-Display im Cockpit! Der CAN-Bus wird <strong>direkt an der Zentralbox unter der Sitzbank bzw. am BCM-Diagnosestecker (HD26 Pins 17/18)</strong> abgegriffen.<br>' +
-                            '  - <strong>100% Wireless Front-Node:</strong> Der Front-Node sitzt in der Scheinwerfergondel (Heritage Classic, Road King) oder hinter der Verkleidung / am Riser (Low Rider ST, Sport Glide). Er benötigt <strong>keinerlei CAN-Kabel</strong> an <code>J2</code> und funkt 100% drahtlos via ESP-NOW (< 1,8 ms) zur Zentralbox – null Kabel durch den Lenkkopf!<br>' +
-                            '• <em>Verkabelung & Dongle (Fairing-Modelle):</em> Front-Node am Riser montieren. <code>J1</code> an 12V Zündungsplus, <code>J2</code> an Audio-CAN. Port <code>J4</code> (USB Host Upstream) ans Display-Medienkabel, Port <code>J6</code> an externen Wireless CarPlay/AA Dongle (Ottocast / CarlinKit). Bei Aussetzern schaltet der integrierte TPS2051B Lastschalter per 1-Click Hardreset die VBUS-Spannung für 2,5 s aus und startet den Dongle neu. Port <code>J5</code> führt 20W PD Ladekabel ins Handschuhfach.' :
+                            '  - <strong>100% Wireless Front-Node:</strong> Der Front-Node sitzt in der Scheinwerfergondel (Heritage Classic, Road King) oder hinter der Verkleidung / am Riser (Low Rider ST, Sport Glide). Er benötigt <strong>keinerlei CAN-Kabel</strong> an <code>J2</code> und funkt 100% drahtlos via ESP-NOW (< 1,8 ms) zur Zentralbox - null Kabel durch den Lenkkopf!<br>' +
+                            '* <em>Verkabelung & Dongle (Fairing-Modelle):</em> Front-Node am Riser montieren. <code>J1</code> an 12V Zündungsplus, <code>J2</code> an Audio-CAN. Port <code>J4</code> (USB Host Upstream) ans Display-Medienkabel, Port <code>J6</code> an externen Wireless CarPlay/AA Dongle (Ottocast / CarlinKit). Bei Aussetzern schaltet der integrierte TPS2051B Lastschalter per 1-Click Hardreset die VBUS-Spannung für 2,5 s aus und startet den Dongle neu. Port <code>J5</code> führt 20W PD Ladekabel ins Handschuhfach.' :
                             '<strong>Cockpit & Front Node (Modular Fairing Options):</strong><br>' +
-                            '• <em>Option A (Batwing - Street Glide / Ultra):</em><br>' +
+                            '* <em>Option A (Batwing - Street Glide / Ultra):</em><br>' +
                             '  - <strong>2024+ (12.3" Skyline OS):</strong> Remove 2x T25 windshield screws (no 3-screw system!), unclip speaker grilles forward, remove 2x T25 top and 2x T25/T27 flank screws, unplug central connector.<br>' +
-                            '  - <strong>2014–2023 (Rushmore / GTS):</strong> Remove 3x T27 windshield screws (hold center screw last), remove 4x T27 inner screws, tilt outer fairing forward.<br>' +
-                            '• <em>Option B (Sharknose - Road Glide / ST):</em><br>' +
+                            '  - <strong>2014-2023 (Rushmore / GTS):</strong> Remove 3x T27 windshield screws (hold center screw last), remove 4x T27 inner screws, tilt outer fairing forward.<br>' +
+                            '* <em>Option B (Sharknose - Road Glide / ST):</em><br>' +
                             '  - <strong>2024+ (12.3" Skyline OS):</strong> LED turn signals are integral in blades (no fork turn signals to unbolt!). Remove 4x T25 screen screws, 1x T27 inside each glovebox (2 total), 2x T25 lower tabs.<br>' +
-                            '  - <strong>2015–2023 (Rushmore):</strong> Pop gauge nacelle, unbolt turn signals (2x 1/2" bolts/side), remove 4x T27 inner screws.<br>' +
-                            '• <em>Option C (Nacelle & Cruisers with Saddlebags - Road King / Special, Heritage Classic, Low Rider ST, Sport Glide):</em><br>' +
+                            '  - <strong>2015-2023 (Rushmore):</strong> Pop gauge nacelle, unbolt turn signals (2x 1/2" bolts/side), remove 4x T27 inner screws.<br>' +
+                            '* <em>Option C (Nacelle & Cruisers with Saddlebags - Road King / Special, Heritage Classic, Low Rider ST, Sport Glide):</em><br>' +
                             '  - <strong>Road King Special Architecture:</strong> Cruisers with saddlebags have no front head unit! CAN-bus connects <strong>directly under seat / side cover to Central Box via BCM diagnostic plug (HD26 pins 17/18)</strong>.<br>' +
-                            '  - <strong>100% Wireless Front Node:</strong> Front Node mounts inside headlight nacelle (Heritage Classic, Road King) or behind fairing / at riser (Low Rider ST, Sport Glide). Needs <strong>zero CAN wiring</strong> at <code>J2</code> and communicates 100% wirelessly over ESP-NOW (< 1.8 ms) to Central Box – zero wires through steering neck!<br>' +
-                            '• <em>Wiring & Dongle (Fairing models):</em> Mount Front Node to riser. <code>J1</code> to 12V switched, <code>J2</code> to audio CAN. Port <code>J4</code> (USB Host Upstream) to display media cable, Port <code>J6</code> to external wireless CarPlay/AA dongle (Ottocast / CarlinKit). On dropouts, the integrated TPS2051B power switch executes a 1-click 2.5s hard power cycle to reboot the dongle. Port <code>J5</code> routes 20W PD cable to glovebox.'}</li>` : ''}
+                            '  - <strong>100% Wireless Front Node:</strong> Front Node mounts inside headlight nacelle (Heritage Classic, Road King) or behind fairing / at riser (Low Rider ST, Sport Glide). Needs <strong>zero CAN wiring</strong> at <code>J2</code> and communicates 100% wirelessly over ESP-NOW (< 1.8 ms) to Central Box - zero wires through steering neck!<br>' +
+                            '* <em>Wiring & Dongle (Fairing models):</em> Mount Front Node to riser. <code>J1</code> to 12V switched, <code>J2</code> to audio CAN. Port <code>J4</code> (USB Host Upstream) to display media cable, Port <code>J6</code> to external wireless CarPlay/AA dongle (Ottocast / CarlinKit). On dropouts, the integrated TPS2051B power switch executes a 1-click 2.5s hard power cycle to reboot the dongle. Port <code>J5</code> routes 20W PD cable to glovebox.'}</li>` : ''}
                     </ol>
                 </div>
             </div>
@@ -9284,8 +9284,8 @@ function renderSingleBuilder() {
                 <div class="builder-instructions-body">
                     <ol>
                         <li>${isDe ? '<strong>Zentralbox:</strong> Unter dem Solositz auf der Rahmenbrücke auf 4x Silentblöcken fixieren.' : '<strong>Central Box:</strong> Mount under solo seat on frame crossmember using 4x silentblocks.'}</li>
-                        <li>${isDe ? '<strong>Pod 1 & 2 & MagSafe Koffer-Seitendurchführung:</strong> Kofferdeckel-Docks (<code>saddlebag_lid_dock.stl</code>) auf den CVO ST Koffern montieren. 19 mm Seitendurchführung (<code>010_saddlebag_hole_grommet_split.stl</code>) in die <strong>innere Koffer-Seitenwand direkt neben der Schnellverschluss-Befestigung (Seitendurchführung – kein Bodenloch!)</strong> einsetzen. MagSafe Rahmendock (<code>009_magsafe_frame_dock.stl</code>) am Rahmen verschrauben für automatische Trennung bei Kofferentnahme.' :
-                            '<strong>Pods 1 & 2 & MagSafe Saddlebag Side Pass-Through:</strong> Mount saddlebag lid docks (<code>saddlebag_lid_dock.stl</code>) on CVO ST bags. Install 19 mm split grommet (<code>010_saddlebag_hole_grommet_split.stl</code>) into the <strong>inner saddlebag side wall directly adjacent to the quick-release pin (Side pass-through – NOT on bottom!)</strong>. Mount MagSafe frame dock (<code>009_magsafe_frame_dock.stl</code>) to frame for automatic breakaway when removing bags.'}</li>
+                        <li>${isDe ? '<strong>Pod 1 & 2 & MagSafe Koffer-Seitendurchführung:</strong> Kofferdeckel-Docks (<code>saddlebag_lid_dock.stl</code>) auf den CVO ST Koffern montieren. 19 mm Seitendurchführung (<code>010_saddlebag_hole_grommet_split.stl</code>) in die <strong>innere Koffer-Seitenwand direkt neben der Schnellverschluss-Befestigung (Seitendurchführung - kein Bodenloch!)</strong> einsetzen. MagSafe Rahmendock (<code>009_magsafe_frame_dock.stl</code>) am Rahmen verschrauben für automatische Trennung bei Kofferentnahme.' :
+                            '<strong>Pods 1 & 2 & MagSafe Saddlebag Side Pass-Through:</strong> Mount saddlebag lid docks (<code>saddlebag_lid_dock.stl</code>) on CVO ST bags. Install 19 mm split grommet (<code>010_saddlebag_hole_grommet_split.stl</code>) into the <strong>inner saddlebag side wall directly adjacent to the quick-release pin (Side pass-through - NOT on bottom!)</strong>. Mount MagSafe frame dock (<code>009_magsafe_frame_dock.stl</code>) to frame for automatic breakaway when removing bags.'}</li>
                         <li>${isDe ? '<strong>Heck-Pod 3 (Under-Cowl Skeleton Dock):</strong> Aufrechtes Skeleton Dock (<code>cvo_st_undercowl_skeleton_dock.stl</code>) für Pod 3 unter der Forged-Carbon-Sitzhutze montieren (federbelastet mit vollem Abstand zu den Showa-Ausgleichsbehältern & Auspuffhitze). Die Forged-Carbon-Hutze bleibt 100% original und wird plan und wackelfrei mit der OEM-Rändelschraube auf dem Fender fixiert (keine externe Heckfinne, kein Kabel über den Fender).' : '<strong>Rear Pod 3 (Under-Cowl Skeleton Dock):</strong> Mount upright skeleton dock (<code>cvo_st_undercowl_skeleton_dock.stl</code>) for Pod 3 under forged carbon cowl (spring-preloaded, clearing Showa canisters and exhaust heat). The OEM forged carbon cowl stays 100% factory original, secured flush and rattle-free with the factory thumbscrew (no external fin, zero wires over the fender).'}</li>
                         <li>${isDe ? '<strong>Radar:</strong> Entkoppelter Kennzeichen-Radarhalter (<code>radar_license_plate_bracket.stl</code>) unter dem Kennzeichen verschrauben (CVO ST verfügt serienmäßig über das identische mittige Kennzeichen wie alle Touring-Modelle!).' : '<strong>Radar:</strong> Bolt decoupled license plate radar mount (<code>radar_license_plate_bracket.stl</code>) beneath license plate (CVO ST features the stock centered license plate mount identical to all Touring bikes!).'}</li>
                         ${active.addons?.frontNode ? `<li>${isDe ? '<strong>Front-Node & Sharknose Fairing (2024+ Skyline OS):</strong> Die 4x T25 Scheibenschrauben, 2x T27 in den Handschuhfächern und 2x T25 Haltelaschen unten lösen. Verkleidung nach vorn abnehmen (Blinker sind integral in den Blades!). Front-Node an der Forged-Carbon-Lenkerbrücke verschrauben. <code>J1</code> an 12V Zündungsplus, <code>J2</code> an CAN-Bus, <code>J4</code> an OEM-USB Upstream zum Skyline OS Display, <code>J6</code> an Ottocast Wireless CarPlay/AA Dongle (mit 1-Click TPS2051B Watchdog-Hardreset bei Verbindungsstörung), <code>J5</code> an 20W PD Smartphone-Ladekabel und <code>J12</code> an das Qwiic Daisy-Chain I2C-Kabel (für Außentemperatursensor im Sharknose-Kaltlufteinlass & optionalen OPT3001 Umgebungslichtsensor).' : '<strong>Front Node & Sharknose Fairing (2024+ Skyline OS):</strong> Remove 4x T25 screen screws, 2x T27 inside gloveboxes, and 2x T25 lower tabs. Lift fairing off forward (LED turn signals are integral in blades!). Mount Front Node to forged carbon handlebar clamp. Connect <code>J1</code> to 12V switched, <code>J2</code> to CAN, <code>J4</code> upstream to Skyline OS display, <code>J6</code> to Ottocast wireless CarPlay/AA dongle (with 1-click TPS2051B watchdog hard reset on dropout), <code>J5</code> to 20W PD fast-charging cable, and <code>J12</code> to the Qwiic daisy-chain I2C cable (for ambient temperature sensor in sharknose cold air scoop & optional OPT3001 light sensor).'}</li>` : ''}
@@ -9319,7 +9319,7 @@ function renderSingleBuilder() {
                 <div class="builder-instructions-body">
                     <ol>
                         <li>${isDe ? '<strong>Zentralbox:</strong> Unter der Sitzbank auf 4x M4 Silentblöcken verschrauben.' : '<strong>Central Box:</strong> Mount under seat using 4x M4 silentblocks.'}</li>
-                        <li>${isDe ? '<strong>Pod 1 & 2:</strong> Mit dem 120° V-Nut Rohrbett an Rahmenrohren oder Sturzbügeln (Ø 22–32 mm) anlegen und mit EPDM-Spannbändern werkzeuglos fixieren.' : '<strong>Pods 1 & 2:</strong> Place 120° V-cradle onto frame tubes or crash bars (Ø 22–32 mm) and secure tool-free with EPDM ladder straps.'}</li>
+                        <li>${isDe ? '<strong>Pod 1 & 2:</strong> Mit dem 120° V-Nut Rohrbett an Rahmenrohren oder Sturzbügeln (Ø 22-32 mm) anlegen und mit EPDM-Spannbändern werkzeuglos fixieren.' : '<strong>Pods 1 & 2:</strong> Place 120° V-cradle onto frame tubes or crash bars (Ø 22-32 mm) and secure tool-free with EPDM ladder straps.'}</li>
                         <li>${isDe ? '<strong>Verkabelung:</strong> M8 PUR-Kabel entlang des Kabelbaums mit Kabelbindern verlegen.' : '<strong>Cabling:</strong> Route M8 PUR cables along main harness using cable ties.'}</li>
                     </ol>
                 </div>
@@ -9371,16 +9371,16 @@ function renderGroupBuilder() {
     const perRiderMax = Math.round(groupMax / count);
 
     const totalCostEl = document.getElementById('group-total-cost');
-    if (totalCostEl) totalCostEl.textContent = `~ ${groupMin} – ${groupMax} €`;
+    if (totalCostEl) totalCostEl.textContent = `~ ${groupMin} - ${groupMax} €`;
 
     const perRiderCostEl = document.getElementById('group-per-rider-cost');
     if (perRiderCostEl) {
-        perRiderCostEl.textContent = `~ ${perRiderMin} – ${perRiderMax} € ${isDe ? 'pro Bike' : 'per bike'} (${count} ${count === 1 ? 'Bike' : 'Bikes'})`;
+        perRiderCostEl.textContent = `~ ${perRiderMin} - ${perRiderMax} € ${isDe ? 'pro Bike' : 'per bike'} (${count} ${count === 1 ? 'Bike' : 'Bikes'})`;
     }
 
     const savingsAmtEl = document.getElementById('group-savings-amount');
     if (savingsAmtEl) {
-        savingsAmtEl.textContent = count > 1 ? `~ ${savingsMin} – ${savingsMax} € (${Math.round((savingsMin / sumMin) * 100)} %)` : `~ 0 €`;
+        savingsAmtEl.textContent = count > 1 ? `~ ${savingsMin} - ${savingsMax} € (${Math.round((savingsMin / sumMin) * 100)} %)` : `~ 0 €`;
     }
 
     // 3. Render Fleet Overview Cards
@@ -9401,15 +9401,15 @@ function renderGroupBuilder() {
                 <div class="fleet-bike-card ${isActive ? 'active' : ''}">
                     <div class="fleet-card-header">
                         <div class="fleet-card-rider">🏍️ ${escapeHtml(bike.name)}</div>
-                        <span class="card-badge badge-orange" style="font-size: 0.75rem; font-weight: 700;">~ ${bom.costMin} – ${bom.costMax} €</span>
+                        <span class="card-badge badge-orange" style="font-size: 0.75rem; font-weight: 700;">~ ${bom.costMin} - ${bom.costMax} €</span>
                     </div>
                     <div style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 8px;">
                         <strong style="color: #fff;">${bom.bikeName}</strong>
                     </div>
                     <div style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 8px; line-height: 1.4;">
-                        <div>• <strong>Slot 1:</strong> ${bom.slotNames[bike.slot1] || bike.slot1}</div>
-                        <div>• <strong>Slot 2:</strong> ${bom.slotNames[bike.slot2] || bike.slot2}</div>
-                        <div>• <strong>Fertigung:</strong> ${bike.manufacturing === 'diy' ? 'DIY 3D-Druck' : 'JLCPCB 3D-Druck'}</div>
+                        <div>* <strong>Slot 1:</strong> ${bom.slotNames[bike.slot1] || bike.slot1}</div>
+                        <div>* <strong>Slot 2:</strong> ${bom.slotNames[bike.slot2] || bike.slot2}</div>
+                        <div>* <strong>Fertigung:</strong> ${bike.manufacturing === 'diy' ? 'DIY 3D-Druck' : 'JLCPCB 3D-Druck'}</div>
                     </div>
                     <div style="display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 12px;">
                         ${addonBadges.length > 0 ? addonBadges.join('') : '<span style="font-size: 0.72rem; color: var(--text-secondary); font-style: italic;">Standard Dual-Pod Setup</span>'}
@@ -9476,10 +9476,10 @@ function renderGroupBuilder() {
                         ${isUsed ? `<span class="card-badge badge-blue" style="font-weight: 700; font-size: 0.78rem;">${netQty} Stk.</span>` : `<span style="color: var(--text-secondary);">0</span>`}
                     </td>
                     <td>
-                        ${isUsed ? `<span class="moq-pill">${packs}x 5er-Pack (${moqQty} Stk.)</span>` : '<span style="color: var(--text-secondary); font-size: 0.75rem;">—</span>'}
+                        ${isUsed ? `<span class="moq-pill">${packs}x 5er-Pack (${moqQty} Stk.)</span>` : '<span style="color: var(--text-secondary); font-size: 0.75rem;">--</span>'}
                     </td>
                     <td>
-                        ${isUsed ? (spareQty > 0 ? `<span class="spare-pill">+${spareQty} ${isDe ? 'Reserve' : 'spare'}</span>` : `<span style="color: var(--text-secondary); font-size: 0.75rem;">0 (${isDe ? 'Exakt' : 'Exact'})</span>`) : '<span style="color: var(--text-secondary); font-size: 0.75rem;">—</span>'}
+                        ${isUsed ? (spareQty > 0 ? `<span class="spare-pill">+${spareQty} ${isDe ? 'Reserve' : 'spare'}</span>` : `<span style="color: var(--text-secondary); font-size: 0.75rem;">0 (${isDe ? 'Exakt' : 'Exact'})</span>`) : '<span style="color: var(--text-secondary); font-size: 0.75rem;">--</span>'}
                     </td>
                     <td>
                         ${isUsed ? `
@@ -9956,7 +9956,7 @@ function setupSmokeTestUi() {
         logSmoke(state.lang === 'de' ? 'Check 1: Messe Bordnetz-Eingang & USV-Akkuschiene...' : 'Check 1: Measuring power input & UPS battery rail...', 'info');
         await new Promise(r => setTimeout(r, 550));
         setStepState('power', 'pass', '12.6V OK');
-        logSmoke(state.lang === 'de' ? '✓ Bordnetz: 12.62 V (Idealbereich 11.5–14.8 V).' : '✓ Power Rail: 12.62 V (Nominal range 11.5–14.8 V).', 'ok');
+        logSmoke(state.lang === 'de' ? '✓ Bordnetz: 12.62 V (Idealbereich 11.5-14.8 V).' : '✓ Power Rail: 12.62 V (Nominal range 11.5-14.8 V).', 'ok');
         logSmoke(state.lang === 'de' ? '✓ 5V Buck-Rail: 5.04 V, USV LiPo 2.200 mAh: 4.18 V (98% geladen).' : '✓ 5V Buck Rail: 5.04 V, UPS LiPo 2,200 mAh: 4.18 V (98% charged).', 'ok');
 
         // Check 2: Pod 1 & 2 Cartridges + Actuators

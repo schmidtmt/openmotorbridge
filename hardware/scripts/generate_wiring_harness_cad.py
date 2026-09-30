@@ -92,7 +92,7 @@ def render_wiring_harness(output_path):
     # -------------------------------------------------------------
     # 1. TITLE & HEADER BAR
     # -------------------------------------------------------------
-    ax.text(500, 575, "OPENMOTORBRIDGE — ZENTRALER AUTOMOTIVE-KABELBAUM (HARNESS v8.0)", 
+    ax.text(500, 575, "OPENMOTORBRIDGE -- ZENTRALER AUTOMOTIVE-KABELBAUM (HARNESS v8.0)", 
             color='#38bdf8', fontsize=16, fontweight='bold', ha='center', va='center')
     ax.text(500, 555, "HD26 SEAL-D Hauptflansch zu 5x M8/Kfz-Modulabgängen (IP67/IP69K, DIN 72551 & ISO 6722)", 
             color='#94a3b8', fontsize=11, ha='center', va='center')
@@ -247,7 +247,7 @@ def render_wiring_harness(output_path):
             color='#38bdf8', fontsize=10, fontweight='bold')
     
     col1_text = (
-        "• ABGANG 1 (Pod 1 Links - Sena):\n"
+        "* ABGANG 1 (Pod 1 Links - Sena):\n"
         "  Pin 1: VCC_POD1 (5V Switched)\n"
         "  Pin 2: GND_POD1 (Power Mass)\n"
         "  Pin 3: NF1_P (Audio Pos. Bourns)\n"
@@ -258,7 +258,7 @@ def render_wiring_harness(output_path):
     ax.text(45, 95, col1_text, color='#f59e0b', fontsize=8, va='top', fontfamily='monospace')
     
     col2_text = (
-        "• ABGANG 2 (Pod 2 Rechts - Cardo):\n"
+        "* ABGANG 2 (Pod 2 Rechts - Cardo):\n"
         "  Pin 7: VCC_POD2 (5V Switched)\n"
         "  Pin 8: GND_POD2 (Power Mass)\n"
         "  Pin 9: NF2_P (Audio Pos. Bourns)\n"
@@ -269,7 +269,7 @@ def render_wiring_harness(output_path):
     ax.text(235, 95, col2_text, color='#06b6d4', fontsize=8, va='top', fontfamily='monospace')
 
     col3_text = (
-        "• ABGANG 3 (Pod 3 Heck - GNSS/Mesh):\n"
+        "* ABGANG 3 (Pod 3 Heck - GNSS/Mesh):\n"
         "  Pin 13: VCC_POD3 (5V Dauer-Power)\n"
         "  Pin 14: GND_POD3 (Digital Mass)\n"
         "  Pin 15: UART_TX (Host -> Pod3)\n"
@@ -280,7 +280,7 @@ def render_wiring_harness(output_path):
     ax.text(430, 95, col3_text, color='#a855f7', fontsize=8, va='top', fontfamily='monospace')
 
     col4_text = (
-        "• ABGANG 4 (Bordnetz 12V):\n"
+        "* ABGANG 4 (Bordnetz 12V):\n"
         "  Pin 19: KL30 (Dauerplus 12V)\n"
         "  Pin 20: KL15 (Zündung Sense)\n"
         "  Pin 21: GND_PWR (Batteriemasse)\n"
@@ -291,7 +291,7 @@ def render_wiring_harness(output_path):
     ax.text(625, 95, col4_text, color='#ef4444', fontsize=8, va='top', fontfamily='monospace')
 
     col5_text = (
-        "• ABGANG 5 (CAN & Aux):\n"
+        "* ABGANG 5 (CAN & Aux):\n"
         "  Pin 23: CAN_H (ISO 11898-2)\n"
         "  Pin 24: CAN_L (ISO 11898-2)\n"
         "  Pin 25: EXT_MIC_IN (Analog)\n"

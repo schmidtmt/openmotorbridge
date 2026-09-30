@@ -9,43 +9,43 @@ This document is the complete, hands-on step-by-step assembly manual for buildin
 A complete OpenMotorBridge vehicle kit consists of the following core assemblies:
 
 ```text
-                      ┌─────────────────────────────────────────┐
-                      │    1x CENTRAL MAIN BOX (IP67)           │
-                      │    (Under the seat / in tail section)   │
-                      │    • Lower tub + mid tray + lid         │
-                      │    • Host PCBA 01 (ESP32-S3 Dual-Core)  │
-                      │    • Onboard SX1262 LoRa 868 MHz        │
-                      │    • Qorvo DW3110 UWB Transceiver       │
-                      │    • 2,200 mAh LiPo backup battery (UPS)│
-                      └────────────────────┬────────────────────┘
-                                           │
+                      +-----------------------------------------+
+                      |    1x CENTRAL MAIN BOX (IP67)           |
+                      |    (Under the seat / in tail section)   |
+                      |    * Lower tub + mid tray + lid         |
+                      |    * Host PCBA 01 (ESP32-S3 Dual-Core)  |
+                      |    * Onboard SX1262 LoRa 868 MHz        |
+                      |    * Qorvo DW3110 UWB Transceiver       |
+                      |    * 2,200 mAh LiPo backup battery (UPS)|
+                      +--------------------+--------------------+
+                                           |
                          1x CENTRAL HARNESS (HD26 SEAL-D IP67)
-                                           │
-          ┌────────────────────────────────┼────────────────────────────────┐
-          │                                │                                │
-          ▼ Whip 1                         ▼ Whip 2                         ▼ Whip 5
-┌──────────────────┐             ┌──────────────────┐             ┌──────────────────┐
-│ 1x POD 1 (LEFT)  │             │ 1x POD 2 (RIGHT) │             │ 1x REAR RADAR    │
-│ (Frame / Pannier)│             │ (Frame / Pannier)│             │ (Optional)       │
-│ • Pod enclosure  │             │ • Pod enclosure  │             │ • Wheeltec MR20  │
-│ • Base PCBA 02   │             │ • Base PCBA 02   │             │   or Garmin      │
-│ • CARTRIDGE 1    │             │ • CARTRIDGE 2    │             │   Varia RTL515   │
-│   (Sena SPIDER   │             │   (Cardo Edge    │             └──────────────────┘
-│    X Slim)       │             │    / Swap OMM)   │
-└──────────────────┘             └──────────────────┘
-                                           ▲
-                                           │ Deterministic UWB Vehicle Backbone
-                                           │ (Qorvo DW3110 / 6.5 GHz Ch. 5, < 0.4 ms)
-                                           ▼
-                                 ┌──────────────────────────────────┐
-                                 │ 1x UNIVERSAL FRONT NODE (IP67)   │
-                                 │ (Cockpit & Sensor Hub, PCBA 05)  │
-                                 │ • u-blox SAM-M10Q Multi-GNSS     │
-                                 │ • TI TMP117 & OPT3001 Sensors    │
-                                 │ • Knowles MEMS Wind Noise Sensor │
-                                 │ • 4-Port USB Hub & Dual USB-PD   │
-                                 │ • Battery-Free Handlebar PTT     │
-                                 └──────────────────────────────────┘
+                                           |
+          +--------------------------------+--------------------------------+
+          |                                |                                |
+          v Whip 1                         v Whip 2                         v Whip 5
++------------------+             +------------------+             +------------------+
+| 1x POD 1 (LEFT)  |             | 1x POD 2 (RIGHT) |             | 1x REAR RADAR    |
+| (Frame / Pannier)|             | (Frame / Pannier)|             | (Optional)       |
+| * Pod enclosure  |             | * Pod enclosure  |             | * Wheeltec MR20  |
+| * Base PCBA 02   |             | * Base PCBA 02   |             |   or Garmin      |
+| * CARTRIDGE 1    |             | * CARTRIDGE 2    |             |   Varia RTL515   |
+|   (Sena SPIDER   |             |   (Cardo Edge    |             +------------------+
+|    X Slim)       |             |    / Swap OMM)   |
++------------------+             +------------------+
+                                           ^
+                                           | Deterministic UWB Vehicle Backbone
+                                           | (Qorvo DW3110 / 6.5 GHz Ch. 5, < 0.4 ms)
+                                           v
+                                 +----------------------------------+
+                                 | 1x UNIVERSAL FRONT NODE (IP67)   |
+                                 | (Cockpit & Sensor Hub, PCBA 05)  |
+                                 | * u-blox SAM-M10Q Multi-GNSS     |
+                                 | * TI TMP117 & OPT3001 Sensors    |
+                                 | * Knowles MEMS Wind Noise Sensor |
+                                 | * 4-Port USB Hub & Dual USB-PD   |
+                                 | * Battery-Free Handlebar PTT     |
+                                 +----------------------------------+
 ```
 
 ---
@@ -66,7 +66,7 @@ All discrete components, PCB ordering files, and COTS sourcing lists are documen
   * 2x PCBA 03 (Smart Modular Cartridge with CH32V003 and 4x AO3400 N-MOSFETs)
   * 1x PCBA 05 (Front Node with DW3110 UWB)
   * *(Optional: 1x PCBA 08 Radar 2.0 Sub-MCU, PCBA 06 MagSafe Dock, PCBA 07 Smart-Keyfob)*
-* [ ] **A4 / 316 Stainless Fasteners & Springs (IKEA Principle – 100% Solder-Free):**
+* [ ] **A4 / 316 Stainless Fasteners & Springs (IKEA Principle - 100% Solder-Free):**
   * 8x DIN 934 / DIN 985 M3 stainless nuts (for captive enclosure nut pockets)
   * 4x DIN 934 M4 nuts (for AMPS nut pockets in Front Node tub)
   * 4x M3 x 40 mm socket head screws (Central Box), 4x M3 x 20 mm screws (Front Node)
@@ -165,32 +165,32 @@ All discrete components, PCB ordering files, and COTS sourcing lists are documen
 The entire system can be fully powered, flashed, and tested on a workbench using standard USB-C cables and a multi-port 5V USB charger:
 
 ```text
-┌─────────────────────────────────────────────────────────────────────────────┐
-│       OPENMOTORBRIDGE BENCHTOP DRY-RUN (LABORATORY WORKBENCH SETUP)         │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                             │
-│   [ 230V USB Charger / Power Bank / Laptop (5V / ≥ 2.4A) ]                  │
-│       │                      │                      │                       │
-│  USB-C│Cable 1          USB-C│Cable 2          USB-C│Cable 3                │
-│       ▼                      ▼                      ▼                       │
-│  ┌───────────────┐     ┌───────────────┐      ┌───────────────┐             │
-│  │  CENTRAL BOX  │     │  FRONT NODE   │      │ SATELLITE POD │             │
-│  │   (PCBA 01)   │     │   (PCBA 05)   │      │ (Pod 1 / 2)   │             │
-│  │  Port J7 USB-C│     │  Port J5 USB-C│      │ M8 Adapter    │             │
-│  └───────┬───────┘     └───────┬───────┘      └───────┬───────┘             │
-│          │                     │                      │                     │
-│          │   UWB Wireless Link │                      │ 1-Wire & Direct-DC  │
-│          │◄───────────────────►│                      ▼                     │
-│          │  (6.5 GHz, <0.4 ms) │             ┌───────────────────┐          │
-│          │                     │             │ SMART CARTRIDGE   │          │
-│          │                     │             │ (Sena / Cardo)    │          │
-│          │                     │             └────────┬──────────┘          │
-│          │ WebBLE / WebSerial  │                      │                     │
-│          ▼                     ▼                      ▼                     │
-│    [ SMARTPHONE / LAPTOP WITH PWA ]            [ RIDER HELMET ]             │
-│    (Chrome / Edge: Flasher & Dashboard)        (Bluetooth Paired)           │
-│                                                                             │
-└─────────────────────────────────────────────────────────────────────────────┘
++-----------------------------------------------------------------------------+
+|       OPENMOTORBRIDGE BENCHTOP DRY-RUN (LABORATORY WORKBENCH SETUP)         |
++-----------------------------------------------------------------------------+
+|                                                                             |
+|   [ 230V USB Charger / Power Bank / Laptop (5V / ≥ 2.4A) ]                  |
+|       |                      |                      |                       |
+|  USB-C|Cable 1          USB-C|Cable 2          USB-C|Cable 3                |
+|       v                      v                      v                       |
+|  +---------------+     +---------------+      +---------------+             |
+|  |  CENTRAL BOX  |     |  FRONT NODE   |      | SATELLITE POD |             |
+|  |   (PCBA 01)   |     |   (PCBA 05)   |      | (Pod 1 / 2)   |             |
+|  |  Port J7 USB-C|     |  Port J5 USB-C|      | M8 Adapter    |             |
+|  +-------+-------+     +-------+-------+      +-------+-------+             |
+|          |                     |                      |                     |
+|          |   UWB Wireless Link |                      | 1-Wire & Direct-DC  |
+|          |<------------------->|                      v                     |
+|          |  (6.5 GHz, <0.4 ms) |             +-------------------+          |
+|          |                     |             | SMART CARTRIDGE   |          |
+|          |                     |             | (Sena / Cardo)    |          |
+|          |                     |             +--------+----------+          |
+|          | WebBLE / WebSerial  |                      |                     |
+|          v                     v                      v                     |
+|    [ SMARTPHONE / LAPTOP WITH PWA ]            [ RIDER HELMET ]             |
+|    (Chrome / Edge: Flasher & Dashboard)        (Bluetooth Paired)           |
+|                                                                             |
++-----------------------------------------------------------------------------+
 ```
 
 ### 4.1 Guided 4-Point IKEA Smoke Test

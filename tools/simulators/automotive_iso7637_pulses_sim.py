@@ -98,7 +98,7 @@ def print_iso_report(res: Dict[str, Any]):
     print("-" * 80)
     
     for pulse_name, data in res.items():
-        print(f"\n• {pulse_name}:")
+        print(f"\n* {pulse_name}:")
         for k, v in data.items():
             if k != "status":
                 print(f"    - {k:<30}: {v}")

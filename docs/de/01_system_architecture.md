@@ -74,6 +74,10 @@ Klassische Telematik- und Assistenzsysteme neigen zum digitalen Paternalismus: S
 * **Respekt vor bewährten visuellen Signalen:**
   * Selbst bei einem unvorhergesehenen Funkausfall (z. B. leere Headset-Akkus) bricht eine gut geführte Gruppe nicht zusammen: Der aufmerksame Lead-Fahrer kontrolliert regelmäßig die Rückspiegel. Setzt ein Gruppenmitglied den rechten Blinker oder gibt Lichthupe, reagiert der Tourguide sofort und steuert die nächste Haltemöglichkeit an.
   * Digitale Systeme dürfen diese erprobten menschlichen Routinen niemals durch störende Cockpit-Menüs behindern.
+* **Diskrete Signalisierung statt digitalem Paternalismus (Human-in-the-Loop):**
+  * Das System unterlässt jegliche ungefragte Roboter-Sprachansagen in fremde Gruppen-Meshes (keine automatischen TTS-Durchsagen wie *"Achtung: Konvoi abgerissen!"* in den Sena/Cardo-Kanal).
+  * Stattdessen informiert OpenMotorBridge den Fahrer **diskret und privat** (haptischer Alarm am Smart-Keyfob in der Jackentasche, dezenter Audio-Ping nur im eigenen Helm, optische Warn-LED am Spiegel).
+  * Der menschliche Fahrer behält die volle Souveränität: Er prüft die Situation kurz im Rückspiegel oder auf dem Dashboard und entscheidet selbst, ob und wie er seine Mitfahrer mit eigener, natürlicher Stimme über die Intercom informiert. Das System stärkt die menschliche Führungskompetenz, anstatt sie zu bevormunden.
 
 ---
 

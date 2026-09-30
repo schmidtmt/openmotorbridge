@@ -6,7 +6,7 @@ This document specifies the architecture of the standalone **Progressive Web App
 
 ## 1. Architecture & Offline Capability
 
-The dashboard is a fully self-contained Progressive Web App (PWA) built with standard HTML5, modern vanilla CSS3 (Glassmorphism theme), and modular ES6 JavaScript. The application communicates directly with the ESP32-S3 via the Web Bluetooth API (WebBLE)—completely free of cloud dependencies:
+The dashboard is a fully self-contained Progressive Web App (PWA) built with standard HTML5, modern vanilla CSS3 (Glassmorphism theme), and modular ES6 JavaScript. The application communicates directly with the ESP32-S3 via the Web Bluetooth API (WebBLE)--completely free of cloud dependencies:
 
 - **Local Offline Storage (IndexedDB):** GPX rides can be downloaded via BLE directly from the internal MicroSD card and stored persistently in the browser's `omb_tours_db`.
 - **Service Worker Caching:** Employs a cache-first strategy for smooth offline operation on iOS and Android.
@@ -16,7 +16,7 @@ The dashboard is a fully self-contained Progressive Web App (PWA) built with sta
 | Platform | Recommended Browser | Connection Details |
 | :--- | :--- | :--- |
 | **Android / PC / Mac / Linux** | **Google Chrome, MS Edge, Opera** | **Native:** Direct Web Bluetooth support under HTTPS or `http://localhost`. |
-| **Apple iOS / iPadOS** (iPhone, iPad) | **[Bluefy – Web BLE Browser](https://apps.apple.com/app/bluefy-web-ble-browser/id1492822055)** | **Required:** Apple restricts WebBLE in WebKit/Safari. Bluefy provides a standard-compliant bridge using Apple CoreBluetooth. |
+| **Apple iOS / iPadOS** (iPhone, iPad) | **[Bluefy - Web BLE Browser](https://apps.apple.com/app/bluefy-web-ble-browser/id1492822055)** | **Required:** Apple restricts WebBLE in WebKit/Safari. Bluefy provides a standard-compliant bridge using Apple CoreBluetooth. |
 
 ### 1.2 Native Android Companion App & Google Play Store (TWA / Native Companion)
 For riders who prefer installation directly via the Google Play Store, automated background services, or zero-touch Bluetooth reconnection, the official Android application identity is reserved in the Google Play Console:
@@ -35,12 +35,12 @@ For riders who prefer installation directly via the Google Play Store, automated
 ## 2. Dashboard Navigation & Functional Tabs
 
 ```
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                        OPENMOTORBRIDGE PWA DASHBOARD NAVIGATION                        │
-├─────────────────┬─────────────────┬──────────────────┬────────────────┬────────────────┤
-│ 📊 Cockpit &    │ 🎧 Audio &      │ 🧩 Cartridges &  │ 🗺️ Tours &     │ ⚙️ Hardware &   │
-│    Power        │    Ducking      │    DLE           │    WebDAV      │    Reserve     │
-└─────────────────┴─────────────────┴──────────────────┴────────────────┴────────────────┘
++----------------------------------------------------------------------------------------+
+|                        OPENMOTORBRIDGE PWA DASHBOARD NAVIGATION                        |
++-----------------+-----------------+------------------+----------------+----------------+
+| 📊 Cockpit &    | 🎧 Audio &      | 🧩 Cartridges &  | 🗺️ Tours &     | ⚙️ Hardware &   |
+|    Power        |    Ducking      |    DLE           |    WebDAV      |    Reserve     |
++-----------------+-----------------+------------------+----------------+----------------+
 ```
 
 ### 2.1 Tab 1: Cockpit & Power (`#tab-cockpit`)
@@ -103,7 +103,7 @@ For riders who prefer installation directly via the Google Play Store, automated
 * **GPX Export Engine:** Download rides in 4 optimized formats (Moto-Navi Shaping, Video-Sync, Clean Track, Raw EKF).
 * **WebDAV Configuration:** Server credentials and automatic background sync for Nextcloud/Synology NAS.
 
-### 2.5 Tab 5: Device & Connection Manager (Device Hub • `#tab-hardware`)
+### 2.5 Tab 5: Device & Connection Manager (Device Hub * `#tab-hardware`)
 
 ![PWA Tab 5: Device Hub, Dual-Headset Hub & LoRa Smart-Keyfob](../images/pwa/pwa_tab5_device_hub_keyfob.png)
 
@@ -121,7 +121,7 @@ The Device Manager is organized into two distinct sections:
   * `[Buddy Alarm]`: Forwards theft alerts automatically over the decentralized LoRa group mesh.
 
 #### Part 2: Motorcycle & OpenMotorBridge System Nodes
-* **Universal Front Node (Cockpit Hub • PCBA 05):** UWB backbone (6.5 GHz), Wi-Fi SoftAP fallback toggle, and proximity-rescue beacon.
+* **Universal Front Node (Cockpit Hub * PCBA 05):** UWB backbone (6.5 GHz), Wi-Fi SoftAP fallback toggle, and proximity-rescue beacon.
 * **Rear Radar & Mirror Blind-Spot LEDs (BSD):** Master power switch and mirror indicator controls (Header `J9` via MOSFET `Q1`) with a 2-second diagnostic flash.
 * **Safety Lighting Management:**
   * **ESS Emergency Brake Strobing:** Master toggle for 4.5 Hz hazard flashing (Garmin Varia UART2 & `RESERVE_GPIO_B`), configurable deceleration threshold ($-0.45\,\text{g}$, $-0.60\,\text{g}$, $-0.75\,\text{g}$), and `[Brake Strobe Test]` button.
@@ -169,23 +169,23 @@ A smartphone screen mounted to a motorcycle handlebar (6.1" to 6.7") offers seve
 The integrated export engine transforms raw 10 Hz telemetry logs into 4 specialized destination formats:
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                       OMB GPX EXPORT ENGINE FORMATS                         │
-├───────────────────┬───────────────────────────────┬─────────────────────────┤
-│ Format Profile    │ Target Applications           │ Key Features            │
-├───────────────────┼───────────────────────────────┼─────────────────────────┤
-│ **1. Moto-Navi**  │ Garmin Zūmo XT/XT2, BMW CRN,  │ • Road-Snapping (OSM)   │
-│    **(Shaping)**  │ Kurviger, Calimoto, TomTom    │ • Strategic shaping pts │
-│                   │                               │ • Garmin `<gpxx:>` Ext  │
-├───────────────────┼───────────────────────────────┼─────────────────────────┤
-│ **2. Video-Sync** │ Telemetry Overlay, VIRB Edit, │ • 10 Hz 1-PPS Timecode  │
-│    **(HiFi EKF)** │ Dashware, Insta360, GoPro     │ • Lean angle (degrees)  │
-│                   │                               │ • Video highlight tags  │
-├───────────────────┼───────────────────────────────┼─────────────────────────┤
-│ **3. Clean Track**│ Google Earth, Komoot, Relive, │ • Douglas-Peucker RDP   │
-│    **(Visual)**   │ Strava, Apple/Google Maps     │ • Compact file size     │
-├───────────────────┼───────────────────────────────┼─────────────────────────┤
-│ **4. Raw EKF**    │ Engineering Analysis, MATLAB, │ • Complete IMU & CAN    │
-│    **(Diagnose)** │ RaceChrono                    │   sensor logs unfiltered│
-└───────────────────┴───────────────────────────────┴─────────────────────────┘
++-----------------------------------------------------------------------------+
+|                       OMB GPX EXPORT ENGINE FORMATS                         |
++-------------------+-------------------------------+-------------------------+
+| Format Profile    | Target Applications           | Key Features            |
++-------------------+-------------------------------+-------------------------+
+| **1. Moto-Navi**  | Garmin Zūmo XT/XT2, BMW CRN,  | * Road-Snapping (OSM)   |
+|    **(Shaping)**  | Kurviger, Calimoto, TomTom    | * Strategic shaping pts |
+|                   |                               | * Garmin `<gpxx:>` Ext  |
++-------------------+-------------------------------+-------------------------+
+| **2. Video-Sync** | Telemetry Overlay, VIRB Edit, | * 10 Hz 1-PPS Timecode  |
+|    **(HiFi EKF)** | Dashware, Insta360, GoPro     | * Lean angle (degrees)  |
+|                   |                               | * Video highlight tags  |
++-------------------+-------------------------------+-------------------------+
+| **3. Clean Track**| Google Earth, Komoot, Relive, | * Douglas-Peucker RDP   |
+|    **(Visual)**   | Strava, Apple/Google Maps     | * Compact file size     |
++-------------------+-------------------------------+-------------------------+
+| **4. Raw EKF**    | Engineering Analysis, MATLAB, | * Complete IMU & CAN    |
+|    **(Diagnose)** | RaceChrono                    |   sensor logs unfiltered|
++-------------------+-------------------------------+-------------------------+
 ```

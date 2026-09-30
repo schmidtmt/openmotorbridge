@@ -9,17 +9,17 @@ This document specifies the communication and positioning architecture of OpenMo
 To balance wide audio bandwidth with long-range offroad resilience, OpenMotorBridge combines two complementary radio layers:
 
 ```
-┌────────────────────────────────────────────────────────────────────────┐
-│                   HYBRID DUAL-PHY RADIO ARCHITECTURE                   │
-├───────────────────────────────────┬────────────────────────────────────┤
-│ LAYER 1: 2.4 GHz Proximity Mesh   │ LAYER 2: 868 MHz LoRa Backbone     │
-├───────────────────────────────────┼────────────────────────────────────┤
-│ • Frequency: 2.402 - 2.480 GHz    │ • Frequency: 868.0 - 868.6 MHz     │
-│ • Full-Duplex Intercom & OMM Sled │ • Modulation: LoRa CSS (BW 125/250)│
-│ • Codec: Opus 24k / Intercom Mesh │ • Codec: Codec2 1200 bps PTT Voice │
-│ • Range: Up to 1.2 km line-of-sight│ • Range: Up to 15.0 km non-LOS/Pass│
-│ • Dedicated Pod 1 & 2 RF Flanks   │ • Tactical 25-Byte GPS Radar Ping  │
-└───────────────────────────────────┴────────────────────────────────────┘
++------------------------------------------------------------------------+
+|                   HYBRID DUAL-PHY RADIO ARCHITECTURE                   |
++-----------------------------------+------------------------------------+
+| LAYER 1: 2.4 GHz Proximity Mesh   | LAYER 2: 868 MHz LoRa Backbone     |
++-----------------------------------+------------------------------------+
+| * Frequency: 2.402 - 2.480 GHz    | * Frequency: 868.0 - 868.6 MHz     |
+| * Full-Duplex Intercom & OMM Sled | * Modulation: LoRa CSS (BW 125/250)|
+| * Codec: Opus 24k / Intercom Mesh | * Codec: Codec2 1200 bps PTT Voice |
+| * Range: Up to 1.2 km line-of-sight| * Range: Up to 15.0 km non-LOS/Pass|
+| * Dedicated Pod 1 & 2 RF Flanks   | * Tactical 25-Byte GPS Radar Ping  |
++-----------------------------------+------------------------------------+
 ```
 
 ### 1.1 Universal, Clean RF & Spectrum Architecture
@@ -212,17 +212,17 @@ OpenMotorBridge solves the critical problem of convoy separations during alpine 
 1. **Heartbeat Link Supervision:**
    * The Central Box continuously monitors the connection health of the active intercom mesh (Pod 1 Sena, Pod 2 Cardo, or OMM).
    * If the RF link to any group member drops for **$> 5.0\,\text{s}$** (e.g. falling behind a mountain pass ridge or engine breakdown), OMB instantly executes Tier 1:
-2. **Tier 1 – Tactical 25-Byte GPS Compact Ping (LoRa 868 MHz):**
+2. **Tier 1 - Tactical 25-Byte GPS Compact Ping (LoRa 868 MHz):**
    * Transmits a highly compressed emergency telemetry packet with 25 bytes payload (airtime only **$\approx 15\,\text{ms}$**, 100% compliant with ETSI 1% duty-cycle caps).
    * Contents: Node ID, precision GNSS coordinates (SAM-M10Q), speed, heading, battery status, and vehicle stop flag.
-3. **Tier 2 – Acoustic Text-to-Speech (TTS) In-Helmet Announcement:**
+3. **Tier 2 - Acoustic Text-to-Speech (TTS) In-Helmet Announcement:**
    * The Central Box of the remaining convoy members synthesizes a clear voice alert directly into the headsets of the road captain and group:
-     > *„🚨 Alert: Lukas 1.4 km behind, vehicle stopped.“*
+     > *"🚨 Alert: Lukas 1.4 km behind, vehicle stopped."*
    * Zero-Distraction: The lead rider does not need to pull over or divert attention to an LCD screen.
-4. **Tier 3 – Tactical PTT Voice Burst via Codec2 (1200 bps):**
+4. **Tier 3 - Tactical PTT Voice Burst via Codec2 (1200 bps):**
    * If the separated rider requires immediate assistance, pressing the handlebar PTT keys a voice burst:
    * OpenMotorBridge compresses a **3-second voice message** using the ultra-low-bitrate **Codec2 (1200 bps)** speech codec into just **450 bytes**.
-   * Transmission over LoRa 868 MHz takes only **$\approx 120\,\text{ms}$ airtime** — legally compliant, highly resilient, penetrating $1\dots 15\,\text{km}$ through mountainous terrain.
+   * Transmission over LoRa 868 MHz takes only **$\approx 120\,\text{ms}$ airtime** -- legally compliant, highly resilient, penetrating $1\dots 15\,\text{km}$ through mountainous terrain.
 
 ### 5.2 OMM 2.4 GHz as an Optional Swap Cartridge (Pod 1 / Pod 2)
 * For pure OpenMotorMesh group rides or support vehicle convoys (Mode B), riders can insert the **OMM 2.4 GHz Cartridge** (PCBA 03 variant with ESP32-C3 / CH32V003 ID `0x03`) into Pod 1 or Pod 2.
@@ -237,7 +237,7 @@ Conventional telematics systems rely on cellular modems (LTE-M / NB-IoT) connect
 | **Mountain Pass Coverage** | **Frequently 0%** (Dead zones across Alpine passes, gorges, remote trails) | **100% Autonomous** (Direct vehicle-to-vehicle peer-to-peer radio) |
 | **Recurring Cost** | Monthly SIM subscriptions, cloud server fees | **Permanently $0 / 0 €** (License-free ISM band, zero operating expenses) |
 | **Privacy & GDPR** | Live location profiles logged on remote corporate servers | **100% Sovereign** (Local SD storage, zero external tracking vectors) |
-| **Emergency Alert Latency** | 400–1500 ms (round-trip through cellular base stations & broker) | **< 35 ms** (Instant direct RF broadcast to nearby transceivers) |
+| **Emergency Alert Latency** | 400-1500 ms (round-trip through cellular base stations & broker) | **< 35 ms** (Instant direct RF broadcast to nearby transceivers) |
 | **Long-Term Viability** | Bricked if startup server shuts down or API changes | **Indefinite Lifespan** (100% open-source local embedded firmware) |
 
 ---
@@ -247,9 +247,9 @@ Conventional telematics systems rely on cellular modems (LTE-M / NB-IoT) connect
 The GNSS subsystem in the Front Node (**u-blox SAM-M10Q** on `J12` in the cold air scoop) is coupled to the 6-axis IMU (**Bosch BMI270**) and motorcycle wheel speed sensors via a **15-State Error-State Kalman Filter (ES-EKF)**:
 
 ```
-[ u-blox SAM-M10Q GNSS (10 Hz) ] ──(I2C / UWB)──────┐
-[ CAN-Bus Wheel Speed / Velocity ] ───(10-20 Hz)─────┼─► [ 15-State Extended Kalman Filter ] ──► [ MicroSD: tour.gpx ]
-[ Bosch BMI270 Gyro / Accel (I2C) ] ──(50-100 Hz)────┘        (Dead Reckoning Engine)            (With Lean Angle & G-Force)
+[ u-blox SAM-M10Q GNSS (10 Hz) ] --(I2C / UWB)------+
+[ CAN-Bus Wheel Speed / Velocity ] ---(10-20 Hz)-----+-> [ 15-State Extended Kalman Filter ] --> [ MicroSD: tour.gpx ]
+[ Bosch BMI270 Gyro / Accel (I2C) ] --(50-100 Hz)----+        (Dead Reckoning Engine)            (With Lean Angle & G-Force)
 ```
 
 ### 6.1 Continuous Tunnel and Mountain Gorge Tracking

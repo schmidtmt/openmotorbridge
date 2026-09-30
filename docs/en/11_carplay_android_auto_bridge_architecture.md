@@ -2,17 +2,17 @@
 
 ## 1. System Overview & Problem Statement
 
-Modern motorcycles—especially **Harley-Davidson models equipped with the Boom! Box GTS and the 2024+ Skyline OS**—feature large-format touchscreen displays with smartphone integration capabilities. In practice, however, riders encounter severe proprietary barriers:
+Modern motorcycles--especially **Harley-Davidson models equipped with the Boom! Box GTS and the 2024+ Skyline OS**--feature large-format touchscreen displays with smartphone integration capabilities. In practice, however, riders encounter severe proprietary barriers:
 
 ```
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                        PROPRIETARY OEM INFOTAINMENT BARRIER                           │
-└────────────────────────────────────────────────────────────────────────────────────────┘
++----------------------------------------------------------------------------------------+
+|                        PROPRIETARY OEM INFOTAINMENT BARRIER                           |
++----------------------------------------------------------------------------------------+
   [Rider Smartphone]                                    [Harley Skyline OS / Boom! Box]
-  • Android Auto: Completely blocked or defective    ──► USB port blocks connection
-  • Apple CarPlay: Requires OEM headset handshake    ──► "No headset connected"
+  * Android Auto: Completely blocked or defective    --> USB port blocks connection
+  * Apple CarPlay: Requires OEM headset handshake    --> "No headset connected"
                    (WHIM module costs $450 extra!)        (CarPlay stays greyed out & inactive)
-  • External Dongles: Flap loose in fairing cavity,  ──► Crashes in summer heat (>65°C),
+  * External Dongles: Flap loose in fairing cavity,  --> Crashes in summer heat (>65°C),
                       parasitic drain, no WHIM-byp.      dropped connections, cable clutter
 ```
 
@@ -21,32 +21,32 @@ Modern motorcycles—especially **Harley-Davidson models equipped with the Boom!
 OpenMotorBridge resolves these issues through a strictly modular **two-stage architecture** that scales seamlessly from a minimalist naked bike to a fully equipped touring machine:
 
 ```
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│            OPENMOTORBRIDGE MODULAR TWO-STAGE ARCHITECTURE                              │
-└────────────────────────────────────────────────────────────────────────────────────────┘
++----------------------------------------------------------------------------------------+
+|            OPENMOTORBRIDGE MODULAR TWO-STAGE ARCHITECTURE                              |
++----------------------------------------------------------------------------------------+
 
   [STAGE 1: BASE SYSTEM (PCBA 01 CENTRAL BOX UNDER THE SEAT)]
-  • Operates on ANY motorcycle (Naked Bike, Enduro, Supersport, Classic, Cruiser)
-  • Single-Point-of-Contact: Smartphone, helmet, and external GPS pair EXCLUSIVELY with OMB!
-  • Music streaming, smartphone navigation (Google Maps, Kurviger, Calimoto) & voice calls
-  • External GPS (Garmin Zūmo XT/XT2, TomTom): Receives turn-by-turn audio prompts & live traffic
-  • Central Audio DSP: Raised-Cosine Ducking (-12 dB Navi, -18 dB Radar), wind filter, sidetone
-  • Full Intercom Matrix (Sena/Cardo pannier pods), eCall crash emergency & rear radar
+  * Operates on ANY motorcycle (Naked Bike, Enduro, Supersport, Classic, Cruiser)
+  * Single-Point-of-Contact: Smartphone, helmet, and external GPS pair EXCLUSIVELY with OMB!
+  * Music streaming, smartphone navigation (Google Maps, Kurviger, Calimoto) & voice calls
+  * External GPS (Garmin Zūmo XT/XT2, TomTom): Receives turn-by-turn audio prompts & live traffic
+  * Central Audio DSP: Raised-Cosine Ducking (-12 dB Navi, -18 dB Radar), wind filter, sidetone
+  * Full Intercom Matrix (Sena/Cardo pannier pods), eCall crash emergency & rear radar
 
-                                │ Optionally expandable via
-                                │ UWB wireless backbone (6.5 GHz Ch. 5, < 0.4 ms latency)
-                                ▼
+                                | Optionally expandable via
+                                | UWB wireless backbone (6.5 GHz Ch. 5, < 0.4 ms latency)
+                                v
 
   [STAGE 2: UNIVERSAL COCKPIT & FRONT HUB (PCBA 05 IN FAIRING / COCKPIT AREA)]
-  • UNIVERSAL FUNCTIONS FOR ANY MOTORCYCLE (Naked, Enduro, Tourer, Cruiser):
-    - Hardwired Handlebar PTT (Optocoupler GPIO 0, < 0.4 ms via UWB): Only 30–50 cm harness along handlebars!
+  * UNIVERSAL FUNCTIONS FOR ANY MOTORCYCLE (Naked, Enduro, Tourer, Cruiser):
+    - Hardwired Handlebar PTT (Optocoupler GPIO 0, < 0.4 ms via UWB): Only 30-50 cm harness along handlebars!
       Completely eliminates fragile, fatigue-prone signal wiring across the steering head bearing.
     - Knowles I2S MEMS Wind Noise Microphone: Measures dynamic ram-air pressure directly at the windscreen
       (physically impossible under the seat) for automatic helmet volume tracking (AGC).
     - Cockpit USB Charging Hub: 20W USB-PD Fast Charging on handlebars & dedicated accessory port.
     - Action-Cam BLE Shutter Bridge: Controls GoPro / Insta360 in direct line-of-sight (< 0.5 m).
   
-  • MODULAR INFOTAINMENT & DISPLAY EXTENSION (For bikes with touchscreen & aftermarket TFTs):
+  * MODULAR INFOTAINMENT & DISPLAY EXTENSION (For bikes with touchscreen & aftermarket TFTs):
     - For Harley Skyline OS / Boom! Box GTS, Honda Goldwing, or aftermarket displays (Chigee/Carpuride)
     - Converts wired CarPlay into wireless Apple CarPlay & wireless Android Auto
     - USB Media Proxy for native Harley display (track display & controls without forcing CarPlay)
@@ -60,15 +60,15 @@ OpenMotorBridge resolves these issues through a strictly modular **two-stage arc
 
 During early design phases, an extensive evaluation examined whether a soldered-down Linux System-on-Module (SOM) should be placed directly onto the PCBA 05 board. For fanless continuous duty inside the sealed cavity of a motorcycle front fairing (temperature rating per ISO 16750-2 of **-40 °C to +85 °C**), standard single-board computers (such as Raspberry Pi 4/5) were ruled out immediately due to excessive power dissipation (> 5 W) and thermal throttling.
 
-### System-on-Module (SOM) Evaluation Matrix – All Integrated Linux Approaches Discarded
+### System-on-Module (SOM) Evaluation Matrix - All Integrated Linux Approaches Discarded
 
 | Criterion | Allwinner V3s | Allwinner T113-S3 | NXP i.MX6ULL | Raspberry Pi CM4 | **OpenMotorBridge Hybrid (Option C)** |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **Architecture Status**| *Discarded* | *Discarded* | *Discarded* | *Discarded* | **Selected & Implemented** |
 | **CPU / Controller** | 1x Cortex-A7 @ 1.2 GHz | 2x Cortex-A7 @ 1.2 GHz | 1x Cortex-A7 @ 792 MHz | 4x Cortex-A72 @ 1.5 GHz | **ESP32-S3 Dual-Core @ 240 MHz + COTS Dongle** |
 | **Operating System** | Linux Kernel / Rootfs | Linux Kernel / Rootfs | Linux Kernel / Rootfs | Linux Kernel / Rootfs | **100% Linux-Free (FreeRTOS / Bare-Metal)** |
-| **Cold Boot Time** | 15–20 s | 15–20 s | 18–25 s | > 25 s | **< 300 ms Instant-On (Firmware)** |
-| **RAM (Integrated)** | 64 MB DDR2 SIP | 128 MB DDR3 SIP | External (128–512 MB) | External (1–8 GB) | 512 kB SRAM + 8 MB PSRAM (ESP32-S3) |
+| **Cold Boot Time** | 15-20 s | 15-20 s | 18-25 s | > 25 s | **< 300 ms Instant-On (Firmware)** |
+| **RAM (Integrated)** | 64 MB DDR2 SIP | 128 MB DDR3 SIP | External (128-512 MB) | External (1-8 GB) | 512 kB SRAM + 8 MB PSRAM (ESP32-S3) |
 | **Video Decoding** | 1080p @ 60 H.264 | 1080p @ 60 H.264/H.265 | 720p @ 30 (Software) | 4K @ 60 | In dedicated offboard automotive COTS stick |
 | **Video Encoding (AA)**| No Hardware Enc. | **No Hardware Enc.** | No Hardware Enc. | H.264 HW Encoder | In COTS stick (Dedicated ASIC/DSP) |
 | **Power Consumption** | ~0.8 W | ~1.1 W (Streaming) | ~1.0 W | > 4.5 W | **~0.4 W PCBA 05 (Dongle 0.0 W when idle/radio)**|
@@ -98,7 +98,7 @@ During early design phases, an extensive evaluation examined whether a soldered-
 * **USB Hub:** Microchip USB2514B Automotive USB 2.0 High-Speed 480 Mbps 4-Port Hub.
 * **Port 1 (Handlebar):** High-speed data + 20W Automotive USB-PD Fast Charging (Southchip SC8102, 9V/2.2A & QC 3.0) for phone mounts (QuadLock/SP Connect).
 * **Port 2 (Fairing Pigtail):** Switched VBUS via TI TPS2051B load switch. Connects via a $25\dots 30\,\text{cm}$ shielded harness to the CP2AA dongle attached to the fairing bracket (3M Dual-Lock).
-* **Port 3 (Glove Box):** Dedicated USB feed to the glove box—remains **100% free for MP3/FLAC USB thumb drives and official OEM infotainment software updates**.
+* **Port 3 (Glove Box):** Dedicated USB feed to the glove box--remains **100% free for MP3/FLAC USB thumb drives and official OEM infotainment software updates**.
 * **Port 4 (Cockpit Accessories):** High-speed data for dashcam storage, Chigee display, or Garmin Zūmo navigation.
 * **CAN-Bus Subsystem:** TI TCAN334G with hardware listen-only pin (`S`) and **solid-state auto-sensing $120\,\Omega$ relay (`CPC1017N`)**, which stays open if boot impedance is $< 100\,\Omega$ to prevent bus collapse.
 * **12V Cockpit Channels:** Directional blind-spot mirror warning LEDs (`J9`, Radar BSD), 12V Qi wireless phone power (`J10`), and optional high-side smart switch for auxiliary driving lights (`J11`).
@@ -109,17 +109,17 @@ During early design phases, an extensive evaluation examined whether a soldered-
 ## 3. Architectural Dilemma: Linux Black-Box vs Embedded RTOS vs Modular Dongle
 
 In automotive practice, there is justifiable skepticism against placing an opaque "Linux black-box" inside permanently mounted vehicle nodes:
-- **Drawbacks of Embedded Linux:** 15–25 second boot times, filesystem corruption on abrupt power cuts, continuous maintenance overhead for CVE kernel security patches, and incompatibility risks across major smartphone OS releases.
-- **Why FPGAs Are Unviable:** Apple CarPlay and Android Auto are not mere hardware video pipelines (like HDMI or LVDS), but full OSI Layer 4–7 networking and cryptographic software stacks (WPA3 Wi-Fi Direct, TLS 1.3, Bonjour/mDNS, hundreds of Google Protobuf RPCs). Synthesizing this in VHDL/Verilog is commercially unviable and ultimately requires soft-core processors running an OS.
+- **Drawbacks of Embedded Linux:** 15-25 second boot times, filesystem corruption on abrupt power cuts, continuous maintenance overhead for CVE kernel security patches, and incompatibility risks across major smartphone OS releases.
+- **Why FPGAs Are Unviable:** Apple CarPlay and Android Auto are not mere hardware video pipelines (like HDMI or LVDS), but full OSI Layer 4-7 networking and cryptographic software stacks (WPA3 Wi-Fi Direct, TLS 1.3, Bonjour/mDNS, hundreds of Google Protobuf RPCs). Synthesizing this in VHDL/Verilog is commercially unviable and ultimately requires soft-core processors running an OS.
 
 ### Comparison of the Three Approaches
 
 | Criterion | Option A: Hardwired Linux SOM on PCBA 05 | Option B: Pure MCU / FreeRTOS (ESP32-S3 / Crossover) | Option C: OpenMotorBridge Smart-Managed Dongle (Recommended) |
 | :--- | :--- | :--- | :--- |
 | **Linux Black-Box on PCB?** | **Yes** (Kernel, Rootfs, Maintenance) | **No** (100% Bare-Metal Firmware) | **No** (OMB remains 100% Linux-Free) |
-| **Cold Boot / Startup Time** | 15–20 seconds | **< 300 milliseconds** | **< 300 milliseconds (OMB Instant-On)** |
+| **Cold Boot / Startup Time** | 15-20 seconds | **< 300 milliseconds** | **< 300 milliseconds (OMB Instant-On)** |
 | **iPhone Wireless CarPlay** | Yes | **Yes** (Slim RTSP/CarPlay Bridge Stack) | **Yes** (Native via USB or Crossover MCU) |
-| **Android Auto ➔ CarPlay** | Yes (via NAL Passthrough) | Extremely limited (no H.264 scaling) | **Yes** (Via dedicated offboard COTS stick) |
+| **Android Auto -> CarPlay** | Yes (via NAL Passthrough) | Extremely limited (no H.264 scaling) | **Yes** (Via dedicated offboard COTS stick) |
 | **Maintenance on OS Updates**| Reflash motorcycle hardware | Firmware reflash required | **Simple 2-minute app update on COTS stick** |
 | **RF Coexistence (2.4G vs 5G)**| Critical near-field coupling | Good | **Optimal (> 30 dB isolation via 30 cm pigtail)**|
 | **Glove Box USB Availability**| Free | Free | **100% free for MP3 thumb drives & updates** |
@@ -138,25 +138,25 @@ In automotive practice, there is justifiable skepticism against placing an opaqu
 Normally, 2-in-1 adapters are cumbersome because riders must manually toggle modes or wait for interactive UI prompts. OpenMotorBridge eliminates this friction completely:
 
 ```
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│             OPENMOTORBRIDGE HEADLESS DONGLE MANAGEMENT (PCBA 05)                       │
-└────────────────────────────────────────────────────────────────────────────────────────┘
++----------------------------------------------------------------------------------------+
+|             OPENMOTORBRIDGE HEADLESS DONGLE MANAGEMENT (PCBA 05)                       |
++----------------------------------------------------------------------------------------+
 
   [1. RIDER IDENTIFICATION ON IGNITION ON (< 200 ms via BLE / PWA Profile)]
-  ├──► Case A: Rider phone identified as Android
-  │    • OMB powers up the TPS2051B load switch (5.0 V VBUS)
-  │    • OMB commands the dongle headlessly ──► Direct boot into CP2AA transcoding mode
-  │    • Zero dialog prompts ("iPhone or Android?") on the Harley touchscreen!
-  │    • Harley launches wireless Android Auto seamlessly over the CarPlay video stream.
-  │
-  ├──► Case B: Rider phone identified as iPhone
-  │    • Option 1: Dongle is booted by OMB in pure wireless CarPlay pass-through
-  │      (converts wired Skyline OS CarPlay into wireless CarPlay!).
-  │    • Option 2 (Phone on charge cable): OMB keeps the dongle port DE-ENERGIZED.
-  │
-  └──► Case C: No paired smartphone / Quick local ride / FM Radio operation
-       • OMB keeps the dongle USB port COMPLETELY POWERED OFF (0.0 mA).
-       • No heat dissipation in the fairing, zero RF pollution, zero boot overhead!
+  +--> Case A: Rider phone identified as Android
+  |    * OMB powers up the TPS2051B load switch (5.0 V VBUS)
+  |    * OMB commands the dongle headlessly --> Direct boot into CP2AA transcoding mode
+  |    * Zero dialog prompts ("iPhone or Android?") on the Harley touchscreen!
+  |    * Harley launches wireless Android Auto seamlessly over the CarPlay video stream.
+  |
+  +--> Case B: Rider phone identified as iPhone
+  |    * Option 1: Dongle is booted by OMB in pure wireless CarPlay pass-through
+  |      (converts wired Skyline OS CarPlay into wireless CarPlay!).
+  |    * Option 2 (Phone on charge cable): OMB keeps the dongle port DE-ENERGIZED.
+  |
+  +--> Case C: No paired smartphone / Quick local ride / FM Radio operation
+       * OMB keeps the dongle USB port COMPLETELY POWERED OFF (0.0 mA).
+       * No heat dissipation in the fairing, zero RF pollution, zero boot overhead!
 ```
 
 ---
@@ -166,46 +166,46 @@ Normally, 2-in-1 adapters are cumbersome because riders must manually toggle mod
 Because recent Harley-Davidson motorcycles exclusively support **Apple CarPlay**, Android users are left in the cold. OpenMotorBridge implements universal protocol bridging:
 
 ```
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                        PROTOCOL BRIDGING SEQUENCE DIAGRAM                              │
-└────────────────────────────────────────────────────────────────────────────────────────┘
++----------------------------------------------------------------------------------------+
+|                        PROTOCOL BRIDGING SEQUENCE DIAGRAM                              |
++----------------------------------------------------------------------------------------+
 
   [Android Smartphone]         [PCBA 05 & CP2AA Dongle]        [Harley Skyline OS]
-           │                                   │                                │
-           │ 1. Wireless Android Auto Auth     │                                │
-           ├──────────────────────────────────►│                                │
-           │    (Wi-Fi 5 GHz TLS Handshake)    │                                │
-           │                                   │ 2. Apple MFi USB iAP2 Init     │
-           │                                   ├───────────────────────────────►│
-           │                                   │    (Simulates Apple iPhone)    │
-           │                                   │                                │
-           │                                   │ 3. WHIM Headset Presence Auth  │
-           │                                   ├───────────────────────────────►│
-           │                                   │    "Headset Connected: OK"     │
-           │                                   │◄───────────────────────────────┤
-           │                                   │    Harley activates CarPlay    │
-           │                                   │                                │
-           │ 4. Video Stream (H.264 720p @60)  │                                │
-           ├──────────────────────────────────►│ 5. NAL Repackaging (Zero-Copy) │
-           │                                   ├───────────────────────────────►│
-           │                                   │    CarPlay Video Surface Frame │
-           │                                   │                                │
-           │ 6. Audio Stream (Opus / PCM)      │ 7. I2S Audio Ducking Engine    │
-           ├──────────────────────────────────►│    (-18 dB on Radar Warning)   │
-           │                                   ├───────────────────────────────►│
-           │                                   │    PCM 48 kHz Stereo Output    │
-           │                                   │                                │
-           │                                   │ 8. Handlebar PTT Key Pressed   │
-           │ 9. Google Assistant Invocation    │◄───────────────────────────────┤
-           │◄──────────────────────────────────┤    Injected as HID Key Event   │
+           |                                   |                                |
+           | 1. Wireless Android Auto Auth     |                                |
+           +---------------------------------->|                                |
+           |    (Wi-Fi 5 GHz TLS Handshake)    |                                |
+           |                                   | 2. Apple MFi USB iAP2 Init     |
+           |                                   +------------------------------->|
+           |                                   |    (Simulates Apple iPhone)    |
+           |                                   |                                |
+           |                                   | 3. WHIM Headset Presence Auth  |
+           |                                   +------------------------------->|
+           |                                   |    "Headset Connected: OK"     |
+           |                                   |<-------------------------------+
+           |                                   |    Harley activates CarPlay    |
+           |                                   |                                |
+           | 4. Video Stream (H.264 720p @60)  |                                |
+           +---------------------------------->| 5. NAL Repackaging (Zero-Copy) |
+           |                                   +------------------------------->|
+           |                                   |    CarPlay Video Surface Frame |
+           |                                   |                                |
+           | 6. Audio Stream (Opus / PCM)      | 7. I2S Audio Ducking Engine    |
+           +---------------------------------->|    (-18 dB on Radar Warning)   |
+           |                                   +------------------------------->|
+           |                                   |    PCM 48 kHz Stereo Output    |
+           |                                   |                                |
+           |                                   | 8. Handlebar PTT Key Pressed   |
+           | 9. Google Assistant Invocation    |<-------------------------------+
+           |<----------------------------------+    Injected as HID Key Event   |
 ```
 
 ### Video Pipeline & Latency Optimization
 * **Zero-Copy H.264 NAL Passthrough:** Android Auto emits video frames as standard H.264 Annex-B NAL units. The dedicated bridge ASIC in the COTS adapter does not transcode the underlying video, but packages the NAL units directly into the RTP/AVP container format mandated by Apple CarPlay.
 * **Latency Budget:**
-  * Wi-Fi transmission phone ➔ dongle: **12 ms**
+  * Wi-Fi transmission phone -> dongle: **12 ms**
   * NAL repackaging & socket buffer: **3 ms**
-  * USB High-Speed transfer dongle ➔ Skyline OS: **4 ms**
+  * USB High-Speed transfer dongle -> Skyline OS: **4 ms**
   * Display composition & rendering on bike: **16 ms**
   * **Total Glass-to-Glass Latency: 35 ms** (Silky smooth at 60 fps, zero perceived touch delay).
 
@@ -255,12 +255,12 @@ No rider is forced to run Apple CarPlay or Android Auto. Those who prefer the cl
 Through the Universal Front Node (PCBA 05), the motorcycle's handlebar switches interface directly with smartphone navigation and media functions:
 
 ```
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                        CONTROL MATRIX: HANDLEBAR CONTROLS & ACTIONS                    │
-└────────────────────────────────────────────────────────────────────────────────────────┘
++----------------------------------------------------------------------------------------+
+|                        CONTROL MATRIX: HANDLEBAR CONTROLS & ACTIONS                    |
++----------------------------------------------------------------------------------------+
 
   Handlebar Control                   Signal Path                  Action on Display
-  ─────────────────────────────────────────────────────────────────────────────────────
+  -------------------------------------------------------------------------------------
   Left Joystick Short Press           CAN-Bus / Front Node         Previous Track
   Right Joystick Short Press          CAN-Bus / Front Node         Next Track
   Joystick Center Click / Mute        CAN-Bus / Front Node         Play / Pause Toggle
@@ -277,37 +277,37 @@ Naive CAN sniffing on `0x290` (handlebar joystick) causes severe operational con
 OpenMotorBridge prevents this through **Source-Aware CAN Handlebar Gating**:
 
 ```
-                         ┌──────────────────────────────────────────────┐
-                         │       HARLEY-DAVIDSON CAN-BUS (0x290)        │
-                         │   Handlebar Joystick [NEXT / PREV / CLICK]   │
-                         └──────────────────────┬───────────────────────┘
-                                                │
-                                                ▼
-                                 ┌──────────────────────────────┐
-                                 │   OPENMOTORBRIDGE CAN-GATE   │
-                                 │   (Source verification gate) │
-                                 └──────────────┬───────────────┘
-                                                │
-                  ┌─────────────────────────────┴─────────────────────────────┐
-                  │                                                           │
-                  ▼                                                           ▼
+                         +----------------------------------------------+
+                         |       HARLEY-DAVIDSON CAN-BUS (0x290)        |
+                         |   Handlebar Joystick [NEXT / PREV / CLICK]   |
+                         +----------------------+-----------------------+
+                                                |
+                                                v
+                                 +------------------------------+
+                                 |   OPENMOTORBRIDGE CAN-GATE   |
+                                 |   (Source verification gate) |
+                                 +--------------+---------------+
+                                                |
+                  +-----------------------------+-----------------------------+
+                  |                                                           |
+                  v                                                           v
    [CONDITION 1: Harley Audio Source]                          [CONDITION 2: Front Node USB Hub]
 Infotainment reports on CAN (0x388):                          Microchip USB2514B Port 3 Status:
-• FM/AM Radio Tuner       ➔ BLOCK                             • MP3 Drive plugged & active
-• DAB+ / SiriusXM         ➔ BLOCK                               ➔ BLOCK (Harley is reading drive)
-• Local USB Stick (MP3)   ➔ BLOCK                             • No Drive / Charging Phone Only
-• Bluetooth Audio         ➔ ALLOW                               ➔ ALLOW
-• CarPlay / Android Auto  ➔ ALLOW
-• OMB Virtual USB Proxy   ➔ ALLOW
-                  │                                                           │
-                  └─────────────────────────────┬─────────────────────────────┘
-                                                │
-                                                ▼
-                                 ┌──────────────────────────────┐
-                                 │  Is OMB the active source?   │
-                                 └──────┬────────────────┬──────┘
-                                     NO │                │ YES
-                                        ▼                ▼
+* FM/AM Radio Tuner       -> BLOCK                             * MP3 Drive plugged & active
+* DAB+ / SiriusXM         -> BLOCK                               -> BLOCK (Harley is reading drive)
+* Local USB Stick (MP3)   -> BLOCK                             * No Drive / Charging Phone Only
+* Bluetooth Audio         -> ALLOW                               -> ALLOW
+* CarPlay / Android Auto  -> ALLOW
+* OMB Virtual USB Proxy   -> ALLOW
+                  |                                                           |
+                  +-----------------------------+-----------------------------+
+                                                |
+                                                v
+                                 +------------------------------+
+                                 |  Is OMB the active source?   |
+                                 +------+----------------+------+
+                                     NO |                | YES
+                                        v                v
                                  [DISCARD EVENT]      [DISPATCH AVRCP]
                                  Harley manages       Smartphone skips
                                  own radio/stick      to next track!
@@ -325,42 +325,42 @@ Infotainment reports on CAN (0x388):                          Microchip USB2514B
 Harley-Davidson's factory navigation system (Skyline OS / Boom! Box GTS) relies on map and traffic telemetry from **HERE Technologies / TomTom**. To render real-time traffic jams, construction zones, and dynamic re-routing, the internal navigation engine requires an internet uplink.
 
 ### The Conventional Hurdle
-Normally, Harley expects riders to manually enable their smartphone's *Personal Wi-Fi Hotspot* before every journey. Under iOS, inactive personal hotspots fall asleep after minutes—causing the factory navigation to drop traffic telemetry. Furthermore, the phone overheats in the pocket.
+Normally, Harley expects riders to manually enable their smartphone's *Personal Wi-Fi Hotspot* before every journey. Under iOS, inactive personal hotspots fall asleep after minutes--causing the factory navigation to drop traffic telemetry. Furthermore, the phone overheats in the pocket.
 
 ### The OpenMotorBridge Solution: Intelligent Cockpit Wi-Fi AP Gateway
 
 OpenMotorBridge solves this via the Front Node's dual-mode SoftAP (PCBA 05, ESP32-S3 on Channel 1) with **differentiated no-gateway DHCP routing (RFC 3442)**:
 
 ```
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│             INTELLIGENT COCKPIT WI-FI AP ROUTING GATEWAY (PCBA 05)                     │
-└────────────────────────────────────────────────────────────────────────────────────────┘
++----------------------------------------------------------------------------------------+
+|             INTELLIGENT COCKPIT WI-FI AP ROUTING GATEWAY (PCBA 05)                     |
++----------------------------------------------------------------------------------------+
 
   1. DYNAMIC, PRIVACY-COMPLIANT SSID GENERATION:
-     • Format: "OMB-[Model]-[3-Digit ID]" (e.g. "OMB-Skyline-742" or "OMB-HD-318")
-     • Model Identifier: 100% passively derived from CAN bus fingerprint (zero invasive UDS frames!)
-     • 3-Digit ID: Deterministically derived from silicon eFuse MAC (100–999) ➔ No VIN broadcast!
-     • Customizable: Freely editable in PWA (Tab 5) and stored persistently in NVS flash.
+     * Format: "OMB-[Model]-[3-Digit ID]" (e.g. "OMB-Skyline-742" or "OMB-HD-318")
+     * Model Identifier: 100% passively derived from CAN bus fingerprint (zero invasive UDS frames!)
+     * 3-Digit ID: Deterministically derived from silicon eFuse MAC (100-999) -> No VIN broadcast!
+     * Customizable: Freely editable in PWA (Tab 5) and stored persistently in NVS flash.
 
   2. STATIC IP MAPPING (192.168.4.0/24 & AP Isolation DISABLED):
-     • 192.168.4.1:  Front Node (Gateway & PWA Server)
-     • 192.168.4.10: Rider Smartphone (DHCP Option 3 OMITTED / 0.0.0.0)
-     • 192.168.4.11: Pillion Smartphone (DHCP Option 3 OMITTED / 0.0.0.0)
-     • 192.168.4.20: Harley Skyline OS (DHCP Option 3 DYNAMICALLY points to active uplink)
+     * 192.168.4.1:  Front Node (Gateway & PWA Server)
+     * 192.168.4.10: Rider Smartphone (DHCP Option 3 OMITTED / 0.0.0.0)
+     * 192.168.4.11: Pillion Smartphone (DHCP Option 3 OMITTED / 0.0.0.0)
+     * 192.168.4.20: Harley Skyline OS (DHCP Option 3 DYNAMICALLY points to active uplink)
 
   3. DIFFERENTIATED NO-GATEWAY DHCP (RFC 3442):
-     • Smartphone retains full 4G/5G mobile data connectivity (no "No Internet" drops).
-     • PWA Dashboard operates at high speed and low latency over Wi-Fi.
+     * Smartphone retains full 4G/5G mobile data connectivity (no "No Internet" drops).
+     * PWA Dashboard operates at high speed and low latency over Wi-Fi.
 
   4. DYNAMIC UPLINK ROUTING FOR SKYLINE OS:
-     • In Tab 5, rider selects: [X] Rider Phone   [ ] Pillion Phone   [ ] Offline.
-     • Skyline OS receives the chosen phone's IP as its default gateway (Option 3).
-     • HERE traffic feeds stream transparently through the selected smartphone.
+     * In Tab 5, rider selects: [X] Rider Phone   [ ] Pillion Phone   [ ] Offline.
+     * Skyline OS receives the chosen phone's IP as its default gateway (Option 3).
+     * HERE traffic feeds stream transparently through the selected smartphone.
 
   5. FUNCTIONAL DIVISION: USB vs WI-FI:
-     • USB Port (J4 / USB2514B): Pure automotive media & projection bus (CarPlay/AA, MP3 drives).
+     * USB Port (J4 / USB2514B): Pure automotive media & projection bus (CarPlay/AA, MP3 drives).
        Prevents "Unsupported USB Device" warnings in the restrictive Harley kernel.
-     • Wi-Fi AP: Dedicated IP & telemetry bus using Harley's native, official Wi-Fi menu.
+     * Wi-Fi AP: Dedicated IP & telemetry bus using Harley's native, official Wi-Fi menu.
 ```
 
 ### Turn-by-Turn Voice Prompt Ducking for Factory GPS
@@ -397,7 +397,7 @@ During starter motor engagement, motorcycle battery voltages routinely sag to **
 ### 2. Fairing Thermal Protection & Physical Isolation (Up to +85 °C Ambient)
 Inside a sealed fairing above a hot engine block, temperatures surge during summer stops. OpenMotorBridge protects sensitive electronics through a three-stage thermal architecture:
 * **Minimal Self-Heating on PCBA 05:** The ESP32-S3 draws only ~0.4 W at 240 MHz. Even at 65 °C fairing temperatures, silicon junction temperatures stay far below the 105 °C rating (AEC-Q100 Grade 2).
-* **Physically Isolated CP2AA Dongle:** The dongle is not soldered onto the PCB, but decoupled via the shielded 25–30 cm pigtail cable and mounted using 3M Dual-Lock in a ventilated fairing pocket.
+* **Physically Isolated CP2AA Dongle:** The dongle is not soldered onto the PCB, but decoupled via the shielded 25-30 cm pigtail cable and mounted using 3M Dual-Lock in a ventilated fairing pocket.
 * **Automated TPS2051B Thermal Gating:** Using the onboard temperature sensor (SHTC3 / LM75), firmware actively tracks thermal headroom. If fairing temperatures exceed 75 °C or if no phone is connected, the ESP32-S3 de-energizes the dongle's VBUS via the TI TPS2051B switch (0.0 W dissipation), preventing thermal breakdown.
 
 ### 3. One-Click Hard Reboot via PWA & Handlebar Switch
@@ -417,7 +417,7 @@ If a smartphone or CarPlay protocol handshake freezes, riders can force-reboot t
 | **Android Auto** | Not supported on modern Harley models | **Fully supported via Android-Auto-to-CarPlay Bridge** |
 | **Helmet Audio** | Requires dongle mic or degrades to mono | **Direct digital connection with Sena/Cardo via I2S** |
 | **Radar Ducking** | No connection to rear radar sensors | **Automated Raised-Cosine Ducking (-18 dB)** |
-| **Summer Heat (>65°C)** | Crashes after 20–40 minutes | **Thermally isolated (30 cm pigtail) & TPS2051B gating up to 85 °C** |
+| **Summer Heat (>65°C)** | Crashes after 20-40 minutes | **Thermally isolated (30 cm pigtail) & TPS2051B gating up to 85 °C** |
 
 ---
 
@@ -425,7 +425,7 @@ If a smartphone or CarPlay protocol handshake freezes, riders can force-reboot t
 
 ### 10.1 CarlinKit 4.0 (CPC200-CP2A) Low-Latency Tuning
 The CarlinKit 4.0 adapter (Linux-based, 1.5W, LCSC/COTS ~CHF 27) serves as the primary hardware protocol translator on Port 2 of PCBA 05. Factory default settings enforce a conservative `Media Delay = 1500 ms`, causing noticeable lag on navigation turn prompts.
-Via the OMB PWA (Tab *“Hardware & Hub”*) or direct browser access to the dongle's local web server (`http://192.168.50.2`), optimized low-latency settings are applied:
+Via the OMB PWA (Tab *"Hardware & Hub"*) or direct browser access to the dongle's local web server (`http://192.168.50.2`), optimized low-latency settings are applied:
 
 * **Media Delay:** `300 ms` (drastically reduces audio/navigation lag for crisp GPS directions).
 * **Audio Quality:** `High (48 kHz / 16-bit PCM)` for clear audio fidelity.
@@ -439,10 +439,10 @@ To safeguard manufacturer warranties (Harley-Davidson, BMW, KTM) and eliminate a
 ### 10.3 Automated Audio Routing via Bluetooth Profile Negotiation (HFP vs. A2DP)
 Unlike crude setups where connecting a headset silences fairing speakers, OpenMotorBridge controls audio routing seamlessly via standard **Bluetooth profile negotiation**:
 
-1. **In “Cruise Mode” (Music played through fairing speakers):**
+1. **In "Cruise Mode" (Music played through fairing speakers):**
    * The Front Node registers with SkylineOS exclusively under the **Bluetooth HFP (Hands-Free Profile)**, actively declining the A2DP audio sink profile.
    * **SkylineOS Reaction:** SkylineOS detects an active headset $\to$ Apple CarPlay immediately unlocks! Because the headset requests no media audio, SkylineOS automatically routes all media sound (Spotify, podcasts, radio) **directly to the fairing speakers without requiring any manual touchscreen taps**.
-2. **In “Solo Rider Mode” (Audio routed into helmet):**
+2. **In "Solo Rider Mode" (Audio routed into helmet):**
    * The Front Node additionally accepts the A2DP Sink profile. SkylineOS streams stereo audio to OMB, which injects it directly into the helmet intercom matrix.
 3. **Summary:** 100% automation, zero touchscreen taps while riding, and zero CAN-bus modification!
 

@@ -52,7 +52,7 @@
                     <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
                         <strong style="font-size: 1.05rem; color: #fff; letter-spacing: 0.5px;" data-i18n="ecall_alert_title">NOTRUF AKTIV (eCall LoRa SOS Flood 868 MHz)</strong>
                         <span class="card-badge badge-red" id="ecall-banner-source">Bike 2 (Sena Apex)</span>
-                        <span class="card-badge badge-orange" id="ecall-banner-impact">Aufprall: 7.4 g • Schräglage 78°</span>
+                        <span class="card-badge badge-orange" id="ecall-banner-impact">Aufprall: 7.4 g * Schräglage 78°</span>
                     </div>
                     <div style="font-size: 0.8rem; color: #fca5a5; margin-top: 4px; display: flex; gap: 16px; flex-wrap: wrap;">
                         <span>📍 Unfallort: <strong id="ecall-banner-coords">47.1155° N, 9.1530° E (Obstalden)</strong></span>
@@ -273,14 +273,14 @@
                         <span class="hud-pill-icon">🛞</span>
                         <div class="hud-pill-text">
                             <span class="hud-pill-sub">RDKS / TPMS</span>
-                            <strong id="val-hud-tpms">V: 2.45 • H: 2.80 bar</strong>
+                            <strong id="val-hud-tpms">V: 2.45 * H: 2.80 bar</strong>
                         </div>
                     </div>
                     <div class="hud-pill-item hud-pill-power">
                         <span class="hud-pill-icon">⚡</span>
                         <div class="hud-pill-text">
                             <span class="hud-pill-sub">BORDNETZ / USV</span>
-                            <strong id="val-hud-power">-- V • -- %</strong>
+                            <strong id="val-hud-power">-- V * -- %</strong>
                         </div>
                     </div>
                     <div class="hud-pill-item hud-pill-remote">
@@ -450,7 +450,7 @@
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; flex-wrap: wrap; gap: 8px;">
                             <div>
                                 <div style="font-size: 1.05rem; font-weight: 700; color: var(--accent-blue);" id="val-ptt-status-desc">Zero-Latency PTT (&lt; 1.8 ms Latenz)</div>
-                                <span class="stat-sub" data-i18n="handlebar_sub">Direktverkabelung über GPIO 0 Optokoppler • Wartungsfrei</span>
+                                <span class="stat-sub" data-i18n="handlebar_sub">Direktverkabelung über GPIO 0 Optokoppler * Wartungsfrei</span>
                             </div>
                             <button id="btn-test-ptt-trigger" class="btn-secondary" style="padding: 5px 12px; font-size: 0.75rem;">
                                 ⚡ PTT Klick-Test
@@ -467,17 +467,17 @@
                         <div class="grid-3" style="margin-top: 8px; font-size: 0.75rem;">
                             <div class="stat-tile" style="padding: 8px;">
                                 <strong style="color: var(--accent-yellow);">1. Nachlauf</strong><br>
-                                <span>15 Min • 45 mA</span><br>
+                                <span>15 Min * 45 mA</span><br>
                                 <span class="stat-sub">WebDAV & Flush</span>
                             </div>
                             <div class="stat-tile" style="padding: 8px;">
                                 <strong style="color: var(--accent-blue);">2. Deep Sleep</strong><br>
-                                <span>15m–72h • &lt;100µA</span><br>
+                                <span>15m-72h * &lt;100µA</span><br>
                                 <span class="stat-sub">Sofort-Aufwachen</span>
                             </div>
                             <div class="stat-tile" style="padding: 8px;">
                                 <strong style="color: var(--accent-purple);">3. Hibernate</strong><br>
-                                <span>&gt;72h • &lt;20µA</span><br>
+                                <span>&gt;72h * &lt;20µA</span><br>
                                 <span class="stat-sub">Winterschutz 12M</span>
                             </div>
                         </div>
@@ -884,7 +884,7 @@
                     </div>
                 </div>
                 <button id="btn-audio-to-device-mgr" class="btn-secondary" style="padding: 6px 14px; font-size: 0.82rem; border-color: var(--border-cyan); color: var(--accent-blue);">
-                    ⚙️ <span data-i18n="audio_manage_devices_btn">Geräte verwalten ➔</span>
+                    ⚙️ <span data-i18n="audio_manage_devices_btn">Geräte verwalten -></span>
                 </button>
             </div>
 
@@ -1236,8 +1236,8 @@
                                 </svg>
                             </div>
                             <div style="font-size: 0.72rem; color: var(--text-secondary); margin-top: 6px; display: flex; justify-content: space-between;">
-                                <span>0–15 km/h: 0 dB Transparenz</span>
-                                <span>15–30 km/h: Raised-Cosine Fade</span>
+                                <span>0-15 km/h: 0 dB Transparenz</span>
+                                <span>15-30 km/h: Raised-Cosine Fade</span>
                                 <span>&gt; 30 km/h: Mute (-96 dB)</span>
                             </div>
                         </div>
@@ -1256,7 +1256,7 @@
                             </div>
                         </div>
                         <a href="demo.html" class="btn-secondary" style="text-decoration: none; display: flex; align-items: center; gap: 6px; font-size: 0.8rem; padding: 7px 14px; border-color: rgba(0, 242, 254, 0.4); color: var(--accent-cyan);" title="Zur interaktiven Demo- und Simulationsversion wechseln">
-                            🎮 <span>In Demo-Suite öffnen ➔</span>
+                            🎮 <span>In Demo-Suite öffnen -></span>
                         </a>
                     </div>
                 </section>
@@ -1277,7 +1277,7 @@
                         <div style="margin: 8px 0;">
                             <select id="select-pod1-profile" style="width: 100%; padding: 8px; border-radius: 8px; background: rgba(0,0,0,0.5); color: var(--text-primary); border: 1px solid var(--border-color); font-weight: 600;">
                                 <option value="disabled">🚫 Deaktiviert / Slot AUS (disabled.json)</option>
-                                <option value="sena_spider_x" selected>⭐ Sena Spider X Slim (Mesh 3.0 Direct-DC • OMB-Empfehlung)</option>
+                                <option value="sena_spider_x" selected>⭐ Sena Spider X Slim (Mesh 3.0 Direct-DC * OMB-Empfehlung)</option>
                                 <option value="sena_60s">⚡ Sena 60S (Mesh 3.0 Wave)</option>
                                 <option value="sena_apex">🟢 Sena Apex / Apex Plus (Mesh 3.0)</option>
                                 <option value="sena_50_series">🔵 Sena 50S / 50R / 50C / MeshPort</option>
@@ -1287,7 +1287,7 @@
                                 <option value="pmr446_gateway">📡 Midland G9 Pro / PMR446 Funk</option>
                             </select>
                         </div>
-                        <span class="stat-sub" id="pod1-vendor">Sena Technologies • Mesh 3.0 & Wave (Direct-DC)</span>
+                        <span class="stat-sub" id="pod1-vendor">Sena Technologies * Mesh 3.0 & Wave (Direct-DC)</span>
                     </div>
                     <div class="stat-row">
                         <span class="stat-sub">1-Wire Kassetten-UID:</span>
@@ -1298,7 +1298,7 @@
                     </div>
                     <div class="stat-row">
                         <span class="stat-sub">Status:</span>
-                        <span style="color: var(--accent-green); font-size: 0.85rem;" id="pod1-status">Power ON • DLE +60 Pkt.</span>
+                        <span style="color: var(--accent-green); font-size: 0.85rem;" id="pod1-status">Power ON * DLE +60 Pkt.</span>
                     </div>
                     <div style="display: flex; gap: 8px; margin-top: 14px;">
                         <button class="btn-secondary" id="btn-p1-resync" style="flex: 1;">
@@ -1329,7 +1329,7 @@
                                 <option value="pmr446_gateway">📡 Midland G9 Pro / PMR446 Funk</option>
                             </select>
                         </div>
-                        <span class="stat-sub" id="pod2-vendor">Cardo Systems • DMC Gen2</span>
+                        <span class="stat-sub" id="pod2-vendor">Cardo Systems * DMC Gen2</span>
                     </div>
                     <div class="stat-row">
                         <span class="stat-sub">1-Wire Kassetten-UID:</span>
@@ -1340,7 +1340,7 @@
                     </div>
                     <div class="stat-row">
                         <span class="stat-sub">Status:</span>
-                        <span style="color: var(--accent-green); font-size: 0.85rem;" id="pod2-status">Power ON • DLE +60 Pkt.</span>
+                        <span style="color: var(--accent-green); font-size: 0.85rem;" id="pod2-status">Power ON * DLE +60 Pkt.</span>
                     </div>
                     <div style="display: flex; gap: 8px; margin-top: 14px;">
                         <button class="btn-secondary" id="btn-p2-next" style="flex: 1;">
@@ -1381,7 +1381,7 @@
             <section class="card" style="margin-top: 18px; border: 1px solid var(--border-accent); background: linear-gradient(135deg, rgba(22, 27, 34, 0.95), rgba(13, 17, 23, 0.98));">
                 <div class="card-header">
                     <span class="card-title">🚀 <span data-i18n="update_hub_title">Smart Firmware & OEM Adapter Update-Hub</span></span>
-                    <span class="card-badge badge-blue">SLIP 460.8k • In-System OTA</span>
+                    <span class="card-badge badge-blue">SLIP 460.8k * In-System OTA</span>
                 </div>
 
                 <div class="grid-2" style="gap: 20px;">
@@ -1472,7 +1472,7 @@
                         <div class="progress-bar-container">
                             <div class="progress-bar-fill" id="bar-storage" style="width: 12%;"></div>
                         </div>
-                        <span class="stat-sub" data-i18n="storage_purge_sub">14.5 GB frei • Auto-Purge Schwellwert: 200 MB</span>
+                        <span class="stat-sub" data-i18n="storage_purge_sub">14.5 GB frei * Auto-Purge Schwellwert: 200 MB</span>
                     </div>
 
                     <div class="grid-2" style="margin-top: 16px;">
@@ -1500,7 +1500,7 @@
                 <section class="card">
                     <div class="card-header">
                         <span class="card-title">☁️ <span data-i18n="webdav_title">Heim-WLAN & WebDAV Sync</span></span>
-                        <span class="card-badge badge-blue">WPA2/WPA3 • TLS 1.3</span>
+                        <span class="card-badge badge-blue">WPA2/WPA3 * TLS 1.3</span>
                     </div>
 
                     <!-- Heim-WLAN Zugangsdaten -->
@@ -1515,7 +1515,7 @@
                             </div>
                             <div class="control-group">
                                 <div class="control-label"><span data-i18n="wifi_pass_label">WLAN-Passwort</span></div>
-                                <input type="password" id="input-wifi-pass" class="select-custom" placeholder="WLAN-Schlüssel" value="••••••••••••••••">
+                                <input type="password" id="input-wifi-pass" class="select-custom" placeholder="WLAN-Schlüssel" value="****************">
                             </div>
                         </div>
                     </div>
@@ -1536,7 +1536,7 @@
                         </div>
                         <div class="control-group">
                             <div class="control-label"><span data-i18n="webdav_pass_label">Passwort / App-Token</span></div>
-                            <input type="password" id="input-webdav-pass" class="select-custom" value="••••••••••••">
+                            <input type="password" id="input-webdav-pass" class="select-custom" value="************">
                         </div>
                     </div>
 
@@ -1556,7 +1556,7 @@
                             <span class="status-dot" id="dot-recording" style="background: #6e7681;"></span>
                             <strong style="font-size: 1.05rem;" id="lbl-recording-status">Live Tour-Aufzeichnung (10 Hz EKF)</strong>
                         </div>
-                        <div class="stat-sub" id="lbl-recording-meta">Bereit zur Aufzeichnung • Automatischer BGH-Ringspeicher aktiv</div>
+                        <div class="stat-sub" id="lbl-recording-meta">Bereit zur Aufzeichnung * Automatischer BGH-Ringspeicher aktiv</div>
                     </div>
                     <div style="display: flex; gap: 10px; align-items: center;">
                         <span id="lbl-recording-timer" style="font-family: monospace; font-size: 1.1rem; font-weight: 800; color: var(--accent-orange); display: none;">00:00:00</span>
@@ -1602,7 +1602,7 @@
                     <span class="card-badge badge-green">15-State EKF + LoRa RSSI</span>
                 </div>
                 <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 12px;">
-                    Exportiert die aktuelle hochauflösende Tour (Walenstadt ➔ Kerenzerberg ➔ Glarus ➔ Schwanden) als standardkonformes <strong>GPX 1.1</strong> inklusive Schräglage (<code style="color: var(--accent-orange);">&lt;omb:lean_deg&gt;</code>), Längsbeschleunigung (<code style="color: var(--accent-green);">&lt;omb:accel_g&gt;</code>) und HF-Feldstärke (<code style="color: var(--accent-blue);">&lt;omb:mesh_rssi&gt;</code>).
+                    Exportiert die aktuelle hochauflösende Tour (Walenstadt -> Kerenzerberg -> Glarus -> Schwanden) als standardkonformes <strong>GPX 1.1</strong> inklusive Schräglage (<code style="color: var(--accent-orange);">&lt;omb:lean_deg&gt;</code>), Längsbeschleunigung (<code style="color: var(--accent-green);">&lt;omb:accel_g&gt;</code>) und HF-Feldstärke (<code style="color: var(--accent-blue);">&lt;omb:mesh_rssi&gt;</code>).
                 </div>
                 <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
                     <button id="btn-export-kerenzerberg-gpx" class="btn-primary" style="background: linear-gradient(135deg, var(--accent-orange), #d97706); color: #fff; padding: 8px 16px;">
@@ -1847,12 +1847,12 @@
                             <div class="stat-tile">
                                 <div class="stat-label"><span>Front-Cam (Lenker / Helm)</span><span class="card-badge badge-green">Gekoppelt</span></div>
                                 <div style="font-size: 1.05rem; font-weight: 700; margin: 4px 0;">GoPro Hero 12 Black</div>
-                                <span class="stat-sub">Akku: 78% • 4K60 HDR • Standby BEREIT</span>
+                                <span class="stat-sub">Akku: 78% * 4K60 HDR * Standby BEREIT</span>
                             </div>
                             <div class="stat-tile">
                                 <div class="stat-label"><span>Heck-Cam (Kennzeichenträger)</span><span class="card-badge badge-orange">Standby</span></div>
                                 <div style="font-size: 1.05rem; font-weight: 700; margin: 4px 0;">Insta360 X4 (360° VR)</div>
-                                <span class="stat-sub">Power-Gate Reserve_B: 5V ON • REC bei Kurve &gt; 25°</span>
+                                <span class="stat-sub">Power-Gate Reserve_B: 5V ON * REC bei Kurve &gt; 25°</span>
                             </div>
                         </div>
                         <div style="display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; align-items: center;">
@@ -1885,7 +1885,7 @@
                         </div>
                         <div class="stat-row">
                             <span class="stat-sub">Verschlüsselung / Auth:</span>
-                            <span style="font-weight: 600; color: var(--accent-cyan);" id="val-keyfob-crypto">AES-128 GCM • Anti-Replay Seq #1042</span>
+                            <span style="font-weight: 600; color: var(--accent-cyan);" id="val-keyfob-crypto">AES-128 GCM * Anti-Replay Seq #1042</span>
                         </div>
                         <div class="stat-row">
                             <span class="stat-sub">BLE Nahfeld-Präsenz:</span>
@@ -1893,7 +1893,7 @@
                         </div>
                         <div class="stat-row">
                             <span class="stat-sub">Akku &amp; MagSafe Dock:</span>
-                            <span style="font-weight: 700;" id="val-keyfob-battery">92 % (LiPo Puffer) • Qi Dock Bereit</span>
+                            <span style="font-weight: 700;" id="val-keyfob-battery">92 % (LiPo Puffer) * Qi Dock Bereit</span>
                         </div>
                         <div class="stat-sub" style="font-size: 0.76rem; color: var(--text-muted); margin-top: 6px;">
                             🛡️ <strong>Zero-False-Alarm:</strong> Kassettenentnahme mit anwesendem Keyfob wird als legitim erkannt. Hebelversuche ohne Keyfob lösen stummen LoRa 868 MHz Pager-Alarm aus.
@@ -1928,7 +1928,7 @@
                 </div>
 
                 <div class="grid-2">
-                    <!-- 1. Universal Front-Node (Cockpit-Hub • PCBA 05) -->
+                    <!-- 1. Universal Front-Node (Cockpit-Hub * PCBA 05) -->
                     <section class="card" id="card-device-front-node">
                         <div class="card-header">
                             <div style="display: flex; align-items: center; gap: 8px;">
@@ -1939,11 +1939,11 @@
                         </div>
                         <div class="stat-row">
                             <span class="stat-sub">Hardware & MCU:</span>
-                            <span style="font-weight: 700;">PCBA 05 • ESP32-S3-WROOM-1U</span>
+                            <span style="font-weight: 700;">PCBA 05 * ESP32-S3-WROOM-1U</span>
                         </div>
                         <div class="stat-row">
                             <span class="stat-sub">ESP-NOW Funkbrücke:</span>
-                            <span style="font-weight: 700; color: var(--accent-green);" id="val-fn-espnow-status">Kanal 1 • -52 dBm (&lt; 1.8 ms Latenz)</span>
+                            <span style="font-weight: 700; color: var(--accent-green);" id="val-fn-espnow-status">Kanal 1 * -52 dBm (&lt; 1.8 ms Latenz)</span>
                         </div>
                         <div class="stat-row">
                             <span class="stat-sub">Cockpit Wi-Fi AP:</span>
@@ -2015,11 +2015,11 @@
                         </div>
                         <div class="stat-row">
                             <span class="stat-sub">Latenz (Media Delay):</span>
-                            <span style="font-weight: 700; color: var(--accent-green);" id="val-carlinkit-delay">300 ms (Optimiert • Werks-Reset: 1500 ms)</span>
+                            <span style="font-weight: 700; color: var(--accent-green);" id="val-carlinkit-delay">300 ms (Optimiert * Werks-Reset: 1500 ms)</span>
                         </div>
                         <div class="stat-row">
                             <span class="stat-sub">Audio-Qualität / FPS:</span>
-                            <span style="font-weight: 600;">High (48 kHz / 16-bit PCM) • 60 FPS</span>
+                            <span style="font-weight: 600;">High (48 kHz / 16-bit PCM) * 60 FPS</span>
                         </div>
                         <div class="stat-row">
                             <span class="stat-sub">SkylineOS CAN Modus:</span>
@@ -2046,11 +2046,11 @@
                         </div>
                         <div class="stat-row">
                             <span class="stat-sub">Connectivity Probe:</span>
-                            <span style="font-weight: 700; color: var(--accent-green);" id="val-uplink-probe">HTTP 204 OK (gstatic.com • 42 ms)</span>
+                            <span style="font-weight: 700; color: var(--accent-green);" id="val-uplink-probe">HTTP 204 OK (gstatic.com * 42 ms)</span>
                         </div>
                         <div class="stat-row">
                             <span class="stat-sub">Client OS / DHCP Mode:</span>
-                            <span style="font-weight: 700; color: var(--accent-cyan);" id="val-dhcp-client-mode">Apple iOS (Option 3 Omitted • 5G Aktiv)</span>
+                            <span style="font-weight: 700; color: var(--accent-cyan);" id="val-dhcp-client-mode">Apple iOS (Option 3 Omitted * 5G Aktiv)</span>
                         </div>
                         <div class="stat-row">
                             <span class="stat-sub">Autarker Wettertrend:</span>
@@ -2086,7 +2086,7 @@
                         </div>
                         <div class="stat-row">
                             <span class="stat-sub">24-LED Halo & Spiegel-LEDs:</span>
-                            <span style="font-weight: 700; color: var(--accent-orange);" id="val-bsd-led-state">Halo Bereit • Astro-Dimmung 18%-100%</span>
+                            <span style="font-weight: 700; color: var(--accent-orange);" id="val-bsd-led-state">Halo Bereit * Astro-Dimmung 18%-100%</span>
                         </div>
 
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px;">
@@ -2115,12 +2115,12 @@
                             <div class="stat-tile" id="tile-tpms-front">
                                 <div class="stat-label"><span>Vorderrad</span><span class="card-badge badge-green">OK</span></div>
                                 <div class="stat-value" id="val-tpms-front-bar" style="font-size: 1.4rem;">2.45 <span style="font-size: 0.85rem;">bar</span></div>
-                                <span class="stat-sub" id="val-tpms-front-temp">🌡️ 24°C • Soll: 2.4 bar</span>
+                                <span class="stat-sub" id="val-tpms-front-temp">🌡️ 24°C * Soll: 2.4 bar</span>
                             </div>
                             <div class="stat-tile" id="tile-tpms-rear">
                                 <div class="stat-label"><span>Hinterrad</span><span class="card-badge badge-green">OK</span></div>
                                 <div class="stat-value" id="val-tpms-rear-bar" style="font-size: 1.4rem;">2.80 <span style="font-size: 0.85rem;">bar</span></div>
-                                <span class="stat-sub" id="val-tpms-rear-temp">🌡️ 26°C • Soll: 2.8 bar</span>
+                                <span class="stat-sub" id="val-tpms-rear-temp">🌡️ 26°C * Soll: 2.8 bar</span>
                             </div>
                         </div>
                         <div class="stat-row" style="margin-top: 10px;">
@@ -2149,7 +2149,7 @@
                         </div>
                         <div class="stat-row">
                             <span class="stat-sub">Satelliten & Frequenz:</span>
-                            <span style="font-weight: 700; color: var(--accent-green);">18 Satelliten • 10 Hz Update • 1-PPS Lock</span>
+                            <span style="font-weight: 700; color: var(--accent-green);">18 Satelliten * 10 Hz Update * 1-PPS Lock</span>
                         </div>
                         <div class="stat-row">
                             <span class="stat-sub">868 MHz LoRa Funk:</span>
@@ -2292,7 +2292,7 @@
                 <div class="card-header">
                     <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
                         <span class="card-title">🚗 <span data-i18n="can_profile_title">Fahrzeug-CAN Profil-Manager & Live-Monitor</span></span>
-                        <span class="card-badge badge-green" id="badge-can-status">🟢 500 kbps (Listen-Only • Safe)</span>
+                        <span class="card-badge badge-green" id="badge-can-status">🟢 500 kbps (Listen-Only * Safe)</span>
                         <span class="card-badge badge-blue" id="badge-can-fps">142 Frames/s</span>
                     </div>
                     <div class="card-badge badge-orange" id="can-adr-source-badge">🟢 ADR: CAN Wheel Speed (R=0.02 m²/s²)</div>
@@ -2346,7 +2346,7 @@
                     <div class="stat-tile">
                         <div class="stat-label"><span>Reifendruck V/H</span><span class="card-badge badge-orange" id="can-badge-tpms">CAN-RDKS</span></div>
                         <div class="stat-value" style="font-size: 1.3rem;" id="can-val-tpms">2.45 / 2.80 <span style="font-size: 0.85rem; font-weight: 500;">bar</span></div>
-                        <span class="stat-sub" id="can-sub-tpms">🟢 V: 24°C • H: 26°C (Solldruck OK)</span>
+                        <span class="stat-sub" id="can-sub-tpms">🟢 V: 24°C * H: 26°C (Solldruck OK)</span>
                         <div style="margin-top: 6px; display: flex; gap: 6px; font-size: 0.72rem;">
                             <button id="btn-tpms-source-toggle" class="btn-secondary" style="padding: 2px 6px; font-size: 0.7rem; border-color: rgba(255,255,255,0.2);">
                                 Quelle: <strong id="lbl-tpms-source-mode">CAN / BLE Auto</strong>
@@ -2360,7 +2360,7 @@
                     </div>
                     <div class="stat-tile">
                         <div class="stat-label"><span>Tank & Reichweite</span><span class="card-badge badge-blue">BCM</span></div>
-                        <div class="stat-value" style="font-size: 1.4rem;" id="can-val-fuel">18.5 L <span style="font-size: 0.85rem; font-weight: 500;">• 320 km</span></div>
+                        <div class="stat-value" style="font-size: 1.4rem;" id="can-val-fuel">18.5 L <span style="font-size: 0.85rem; font-weight: 500;">* 320 km</span></div>
                         <span class="stat-sub" id="can-sub-fuel">Verbrauch normal</span>
                     </div>
                     <div class="stat-tile">
@@ -2576,7 +2576,7 @@
                             🛠️ <span data-i18n="builder_title">System-Builder & Konfigurator</span>
                         </h2>
                         <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px; max-width: 820px;" data-i18n="builder_sub">
-                            Das OpenMotorBridge IKEA-Prinzip: Wähle dein Motorrad, deine Funkgeräte und Erweiterungen. Du erhältst deine exakt maßgeschneiderte, 100% lötfreie Einkaufsliste (BOM) und Schritt-für-Schritt Montageanleitung – kein Crimpen, kein Lötkolben, kein Einschmelzen von Gewinden!
+                            Das OpenMotorBridge IKEA-Prinzip: Wähle dein Motorrad, deine Funkgeräte und Erweiterungen. Du erhältst deine exakt maßgeschneiderte, 100% lötfreie Einkaufsliste (BOM) und Schritt-für-Schritt Montageanleitung - kein Crimpen, kein Lötkolben, kein Einschmelzen von Gewinden!
                         </p>
                     </div>
                     <div class="builder-badges-cluster">
@@ -2647,13 +2647,13 @@
                         <div class="builder-option-card" data-type="bike" data-value="universal">
                             <div class="builder-option-icon">🔧</div>
                             <div class="builder-option-title">Universal / Andere Bikes</div>
-                            <div class="builder-option-desc">120° V-Nut Rohrbett mit EPDM-Spannbändern für Sturzbügel (Ø 22–32 mm) oder M4 Silentblöcke.</div>
+                            <div class="builder-option-desc">120° V-Nut Rohrbett mit EPDM-Spannbändern für Sturzbügel (Ø 22-32 mm) oder M4 Silentblöcke.</div>
                             <div class="builder-option-badge">Universal-Kit</div>
                         </div>
                         <div class="builder-option-card" data-type="bike" data-value="car-support">
                             <div class="builder-option-icon">🚐</div>
                             <div class="builder-option-title">Pkw / Support-Van / Rallye-Begleitfahrzeug</div>
-                            <div class="builder-option-desc">Universal Sonnenblenden-Clip (Spannweite 14–22 mm) für Pod 3 + 3m flaches Dachhimmel-Kabel + 12V USB-C Schnelllader. Keine Rahmenmontage!</div>
+                            <div class="builder-option-desc">Universal Sonnenblenden-Clip (Spannweite 14-22 mm) für Pod 3 + 3m flaches Dachhimmel-Kabel + 12V USB-C Schnelllader. Keine Rahmenmontage!</div>
                             <div class="builder-option-badge">Begleitfahrzeug-Kit</div>
                         </div>
                     </div>
@@ -2808,7 +2808,7 @@
                             <div class="builder-option-card selected" data-type="bedsize" data-value="standard">
                                 <div class="builder-option-icon">📏</div>
                                 <div class="builder-option-title">Standard & Groß (≥ 220×220 mm)</div>
-                                <div class="builder-option-desc">Bambu Lab X1/P1/A1 (256²), Prusa MK4 (250×210), Creality K1, Voron (250–350 mm). Nur 4 Druckplatten!</div>
+                                <div class="builder-option-desc">Bambu Lab X1/P1/A1 (256²), Prusa MK4 (250×210), Creality K1, Voron (250-350 mm). Nur 4 Druckplatten!</div>
                                 <div class="builder-option-badge">4 Platten Projekt</div>
                             </div>
                             <div class="builder-option-card" data-type="bedsize" data-value="mini">
@@ -2832,7 +2832,7 @@
                 <div style="display: flex; gap: 14px; align-items: center; flex-wrap: wrap;">
                     <div style="text-align: right;">
                         <div style="font-size: 0.75rem; color: var(--text-secondary);">Geschätzte Gesamtkosten</div>
-                        <div style="font-size: 1.35rem; font-weight: 800; color: var(--accent-orange);" id="builder-estimated-cost">~ 210 – 260 €</div>
+                        <div style="font-size: 1.35rem; font-weight: 800; color: var(--accent-orange);" id="builder-estimated-cost">~ 210 - 260 €</div>
                         <div style="font-size: 0.68rem; color: var(--text-secondary); opacity: 0.85;" id="builder-cost-disclaimer" data-i18n="builder_cost_disclaimer">zzgl. OEM-Intercom-Module</div>
                     </div>
                     <div style="display: flex; gap: 8px;">
@@ -3007,7 +3007,7 @@
                             ⚡ <span data-i18n="flasher_title">WebSerial 1-Click Firmware Installer</span>
                         </div>
                         <div class="flasher-desc" data-i18n="flasher_sub">
-                            Flashe ESP32-S3 und RP2040 direkt aus dem Browser – kein Terminal, kein Python, keine Treiber!
+                            Flashe ESP32-S3 und RP2040 direkt aus dem Browser - kein Terminal, kein Python, keine Treiber!
                         </div>
                     </div>
                     <button id="btn-flasher-connect" class="btn-primary" style="display: flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #1f6feb 0%, #238636 100%);">
@@ -3042,8 +3042,8 @@
                     <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
                         <div style="text-align: right;">
                             <div style="font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 700;">Geschätzte Gruppenkosten</div>
-                            <div id="group-total-cost" style="font-size: 1.5rem; font-weight: 800; color: var(--accent-orange);">~ 210 – 260 €</div>
-                            <div id="group-per-rider-cost" style="font-size: 0.8rem; color: var(--text-secondary);">~ 210 – 260 € pro Bike (1 Bike)</div>
+                            <div id="group-total-cost" style="font-size: 1.5rem; font-weight: 800; color: var(--accent-orange);">~ 210 - 260 €</div>
+                            <div id="group-per-rider-cost" style="font-size: 0.8rem; color: var(--text-secondary);">~ 210 - 260 € pro Bike (1 Bike)</div>
                         </div>
                         <div class="fleet-savings-callout" id="group-savings-callout">
                             🎉 <span>Ersparnis: <strong id="group-savings-amount">~ 0 €</strong> ggü. Einzelbestellung</span>
@@ -3069,7 +3069,7 @@
                         <span class="card-badge badge-green" id="group-pcba-badge">8 Platinentypen</span>
                     </div>
                     <div style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 14px; line-height: 1.45;">
-                        💡 <strong>JLCPCB 5er Mindestmenge:</strong> JLCPCB fertigt standardmäßig minimal 5 Platinen pro Design. Bei einer Sammelbestellung für mehrere Fahrer amortisieren sich die festen SMT-Rüstkosten (~8–15 € pro Board-Typ), und übrig bleibende Platinen dienen als kostenlose Gruppen-Reserve!
+                        💡 <strong>JLCPCB 5er Mindestmenge:</strong> JLCPCB fertigt standardmäßig minimal 5 Platinen pro Design. Bei einer Sammelbestellung für mehrere Fahrer amortisieren sich die festen SMT-Rüstkosten (~8-15 € pro Board-Typ), und übrig bleibende Platinen dienen als kostenlose Gruppen-Reserve!
                     </div>
                     <div style="overflow-x: auto;">
                         <table class="data-table pcba-matrix-table" style="width: 100%; font-size: 0.82rem;" id="builder-group-table-pcba">
@@ -3234,7 +3234,7 @@
             </div>
 
             <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; padding: 10px 12px; margin-bottom: 14px; font-size: 0.85rem; color: #fca5a5;">
-                🔒 <strong data-i18n="uuid_quarantine_title">Hardware-Schutzabschaltung aktiv:</strong> <span data-i18n="uuid_quarantine_desc">Die 5V-Stromversorgung zum OEM-Adapter und alle Audio-Kanäle bleiben strikt stromlos (0,0 mA • Mute), bis du das Hardware-Profil zuweist.</span>
+                🔒 <strong data-i18n="uuid_quarantine_title">Hardware-Schutzabschaltung aktiv:</strong> <span data-i18n="uuid_quarantine_desc">Die 5V-Stromversorgung zum OEM-Adapter und alle Audio-Kanäle bleiben strikt stromlos (0,0 mA * Mute), bis du das Hardware-Profil zuweist.</span>
             </div>
 
             <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 12px;" data-i18n="uuid_assign_intro">
@@ -3244,17 +3244,17 @@
             <div class="input-group" style="margin-bottom: 20px;">
                 <label for="select-uuid-profile" data-i18n="lbl_select_profile" style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; display: block;">Hardware-Profil auswählen:</label>
                 <select id="select-uuid-profile" class="form-control" style="width: 100%; padding: 10px 12px; border-radius: 8px; background: var(--bg-surface-secondary); color: var(--text-primary); border: 1px solid var(--border-color); font-size: 0.95rem;">
-                    <option value="sena_spider_x" selected>⭐ Sena Spider X Slim (Mesh 3.0 Direct-DC • K2a • Empfehlung)</option>
-                    <option value="sena_60s">⚡ Sena 60S (Mesh 3.0 Wave • K1)</option>
-                    <option value="sena_apex">🟢 Sena Apex / Apex Plus (Mesh 3.0 • K1)</option>
-                    <option value="sena_50_series">🔵 Sena 50S / 50R / 50C / SRL3 (Mesh 2.0/3.0 • K1)</option>
-                    <option value="sena_spider">🟣 Sena Spider RT1 / ST1 (Mesh 2.0 • K2b)</option>
-                    <option value="sena_vortex">🌀 Sena Vortex (Bluetooth 5.1 • K3)</option>
-                    <option value="sena_legacy_bt">📻 Sena 20S / 30K / 10S / SF (Bluetooth • K3)</option>
-                    <option value="cardo_dmc_gen2">🟢 Cardo Packtalk Edge / Pro / Custom (DMC Gen2 • K4)</option>
-                    <option value="cardo_freecom_live">🔵 Cardo Freecom 4x / 2x / Spirit HD (Live Intercom • K5)</option>
-                    <option value="cardo_dmc_legacy">🟣 Cardo Packtalk Bold / Black / Slim (DMC Gen1 • K6)</option>
-                    <option value="pmr446_gateway">📡 Midland G9 Pro / Baofeng PMR446 (Analog Gateway • K7)</option>
+                    <option value="sena_spider_x" selected>⭐ Sena Spider X Slim (Mesh 3.0 Direct-DC * K2a * Empfehlung)</option>
+                    <option value="sena_60s">⚡ Sena 60S (Mesh 3.0 Wave * K1)</option>
+                    <option value="sena_apex">🟢 Sena Apex / Apex Plus (Mesh 3.0 * K1)</option>
+                    <option value="sena_50_series">🔵 Sena 50S / 50R / 50C / SRL3 (Mesh 2.0/3.0 * K1)</option>
+                    <option value="sena_spider">🟣 Sena Spider RT1 / ST1 (Mesh 2.0 * K2b)</option>
+                    <option value="sena_vortex">🌀 Sena Vortex (Bluetooth 5.1 * K3)</option>
+                    <option value="sena_legacy_bt">📻 Sena 20S / 30K / 10S / SF (Bluetooth * K3)</option>
+                    <option value="cardo_dmc_gen2">🟢 Cardo Packtalk Edge / Pro / Custom (DMC Gen2 * K4)</option>
+                    <option value="cardo_freecom_live">🔵 Cardo Freecom 4x / 2x / Spirit HD (Live Intercom * K5)</option>
+                    <option value="cardo_dmc_legacy">🟣 Cardo Packtalk Bold / Black / Slim (DMC Gen1 * K6)</option>
+                    <option value="pmr446_gateway">📡 Midland G9 Pro / Baofeng PMR446 (Analog Gateway * K7)</option>
                 </select>
             </div>
 
@@ -3277,7 +3277,7 @@
             <div style="background: var(--bg-surface-elevated); padding: 10px 14px; border-radius: var(--radius-sm); margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem;">
                 <div>
                     <strong id="modal-gpx-filename">tour_20260823.gpx</strong>
-                    <div class="stat-sub" id="modal-gpx-meta">2026-08-23 09:15 • 1h 42m • 84.6 km • Max. 44.2°</div>
+                    <div class="stat-sub" id="modal-gpx-meta">2026-08-23 09:15 * 1h 42m * 84.6 km * Max. 44.2°</div>
                 </div>
                 <span class="card-badge badge-green" id="modal-gpx-badge">10 Hz 1-PPS Sync</span>
             </div>
@@ -3379,12 +3379,12 @@
                 <div class="stat-tile" style="padding: 10px;">
                     <span class="stat-label" id="inspect-lbl-2">Höhenprofil</span>
                     <div class="stat-value" id="inspect-ele-gain" style="font-size: 1.15rem; color: var(--accent-green);">+1.420 hm</div>
-                    <span class="stat-sub" id="inspect-ele-range">620 – 2.224 m</span>
+                    <span class="stat-sub" id="inspect-ele-range">620 - 2.224 m</span>
                 </div>
                 <!-- Tile 3 -->
                 <div class="stat-tile" style="padding: 10px;">
                     <span class="stat-label" id="inspect-lbl-3">Außentemperatur</span>
-                    <div class="stat-value" id="inspect-temp" style="font-size: 1.15rem; color: var(--accent-cyan);">14 – 24 °C</div>
+                    <div class="stat-value" id="inspect-temp" style="font-size: 1.15rem; color: var(--accent-cyan);">14 - 24 °C</div>
                     <span class="stat-sub" id="inspect-temp-sub">Ø 18.8 °C (CAN OEM)</span>
                 </div>
                 <!-- Tile 4 -->
@@ -3552,9 +3552,9 @@
             <div style="padding: 10px 12px; background: rgba(0,0,0,0.2); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); font-size: 0.74rem;">
                 <div style="font-weight: 700; margin-bottom: 4px; color: var(--accent-blue);">📌 Lenker-PTT Multi-Click Steuerung:</div>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; color: var(--text-secondary);">
-                    <div>• <strong>1x kurz (&lt;400ms):</strong> Funk/Intercom PTT (&lt;0.9ms)</div>
-                    <div>• <strong>2x kurz (Doppelklick):</strong> REC Start / Stopp</div>
-                    <div style="grid-column: span 2;">• <strong>1x lang (&gt;800ms):</strong> HiLight Bookmark Marker setzen</div>
+                    <div>* <strong>1x kurz (&lt;400ms):</strong> Funk/Intercom PTT (&lt;0.9ms)</div>
+                    <div>* <strong>2x kurz (Doppelklick):</strong> REC Start / Stopp</div>
+                    <div style="grid-column: span 2;">* <strong>1x lang (&gt;800ms):</strong> HiLight Bookmark Marker setzen</div>
                 </div>
             </div>
         </div>

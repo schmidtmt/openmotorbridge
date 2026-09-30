@@ -1,4 +1,4 @@
-# OpenMotorBridge – Ideenspeicher & Future Concepts Backlog
+# OpenMotorBridge - Ideenspeicher & Future Concepts Backlog
 
 Dieses Dokument dient als kontrollierter Wissensspeicher für Evaluierungen, Vorstudien und optionale Zukunftserweiterungen, die bewusst **nicht** Teil der autarken, dezentralen OpenMotorBridge v8.0 Kernarchitektur sind.
 

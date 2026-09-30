@@ -1,4 +1,4 @@
-# OpenMotorBridge (OMB) – KI-Systemkontext & Architektur-DNA
+# OpenMotorBridge (OMB) - KI-Systemkontext & Architektur-DNA
 
 ## 1. Projekt-Identität & Ziel
 OpenMotorBridge v8.0 ist ein universelles, modulares Kfz-Gateway für Motorräder, das proprietäre Intercom-Netze (Sena Mesh 3.0/2.0, Cardo DMC Gen2/Gen1, PMR446) herstellerübergreifend mit Bord-Infotainment-Systemen (z. B. Harley-Davidson Boom! Box GTS / Skyline OS) und Weitbereichs-LoRa (OpenMotorMesh 868 MHz) latenzfrei und isoliert verbindet.
@@ -12,11 +12,11 @@ OpenMotorBridge v8.0 ist ein universelles, modulares Kfz-Gateway für Motorräde
   - **Cockpit/Front:** 100 % drahtlos über BLE 5.0 (Lenkertaster mit CR2032-Spannungsüberwachung via Service 0x180F) und autarken USB-Hub.
 * **Gehäuseschnittstelle Zentralbox:** HD26 IP67 Flanschbuchse in der Gehäusewand. Intern via 26-poligem Flachbandkabel auf 2x13 Wannenstecker auf der Hauptplatine geführt.
 * **Kabelbaum & Pinbelegung (26 Pins, 0 NC):**
-  - **Pod 1 (Pins 1–6):** VCC, GND, NF_P, NF_N, OPTO, 1WIRE_ID ($1 \times 6$-Ader geschirmt).
-  - **Pod 2 (Pins 7–12):** VCC, GND, NF_P, NF_N, OPTO, 1WIRE_ID ($1 \times 6$-Ader geschirmt).
-  - **Pod 3 (Pins 13–18):** VCC, GND, UART_TX, UART_RX, GNSS_PPS, 1WIRE_ID ($1 \times 6$-Ader geschirmt).
-  - **Bordnetz & Busse (Pins 19–24):** KL30, KL15, GND_PWR, GND_SHIELD, CAN_H, CAN_L.
-  - **Reserve-Schnittstellen (Pins 25–26):** RESERVE_GPIO_A (Input/PTT), RESERVE_GPIO_B (Output/Relais).
+  - **Pod 1 (Pins 1-6):** VCC, GND, NF_P, NF_N, OPTO, 1WIRE_ID ($1 \times 6$-Ader geschirmt).
+  - **Pod 2 (Pins 7-12):** VCC, GND, NF_P, NF_N, OPTO, 1WIRE_ID ($1 \times 6$-Ader geschirmt).
+  - **Pod 3 (Pins 13-18):** VCC, GND, UART_TX, UART_RX, GNSS_PPS, 1WIRE_ID ($1 \times 6$-Ader geschirmt).
+  - **Bordnetz & Busse (Pins 19-24):** KL30, KL15, GND_PWR, GND_SHIELD, CAN_H, CAN_L.
+  - **Reserve-Schnittstellen (Pins 25-26):** RESERVE_GPIO_A (Input/PTT), RESERVE_GPIO_B (Output/Relais).
 * **Kassetten-Erkennung & Steuerung:**
   - Standard-Pogo-Leiste (6 Pins: VCC, GND, 2x Signal/NF, Opto/PPS, 1-Wire ID).
   - Kassetten-Identifikation über integrierte DS2401 Silicon Serial Number an port-spezifischen 1-Wire-Leitungen (sofortige, verwechslungssichere Steckplatzerkennung).

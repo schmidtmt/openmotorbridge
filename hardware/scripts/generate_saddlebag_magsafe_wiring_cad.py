@@ -60,7 +60,7 @@ def generate_saddlebag_wiring_diagram():
     ax.add_patch(header_box)
     ax.text(20, 83.5, "OPENMOTORBRIDGE // KOFFER-VERKABELUNG & MAGSAFE-ABREISS-SCHNITTSTELLE (IP67)",
             color=TEXT_LIGHT, fontsize=13, fontweight='bold', ha='center', va='center', family='sans-serif', zorder=12)
-    ax.text(20, 79.5, "Zone 1: Motorradrahmen (Fest verlegt)  ◄──  Selbstzentrierende Abreißtrennung (~10-15 N)  ──►  Zone 2: Koffer-Innenraum & Deckel-Pod (0 N Zuglast)",
+    ax.text(20, 79.5, "Zone 1: Motorradrahmen (Fest verlegt)  <--  Selbstzentrierende Abreißtrennung (~10-15 N)  -->  Zone 2: Koffer-Innenraum & Deckel-Pod (0 N Zuglast)",
             color=CYAN_HIGHLIGHT, fontsize=9.5, ha='center', va='center', family='sans-serif', zorder=12)
 
     # =========================================================================
@@ -89,9 +89,9 @@ def generate_saddlebag_wiring_diagram():
                                   facecolor='#1e293b', edgecolor=ACCENT_BLUE, linewidth=1.2, zorder=3)
     ax.add_patch(cbox)
     ax.text(-53, 29, "ZENTRALBOX (PCBA 01)", color=TEXT_LIGHT, fontsize=9.5, fontweight='bold', ha='center', zorder=12)
-    ax.text(-53, 24.5, "• KL15 Zündungserkennung (LM5164 DCDC 5V)", color=CYAN_HIGHLIGHT, fontsize=7.4, ha='center', zorder=12)
-    ax.text(-53, 20.5, "• BQ24075 LiPo-USV (6.5V Crank-Puffer)", color='#a5f3fc', fontsize=7.4, ha='center', zorder=12)
-    ax.text(-53, 16.5, "• TLP222A Optokoppler (OEM-Boot / PTT)", color='#93c5fd', fontsize=7.4, ha='center', zorder=12)
+    ax.text(-53, 24.5, "* KL15 Zündungserkennung (LM5164 DCDC 5V)", color=CYAN_HIGHLIGHT, fontsize=7.4, ha='center', zorder=12)
+    ax.text(-53, 20.5, "* BQ24075 LiPo-USV (6.5V Crank-Puffer)", color='#a5f3fc', fontsize=7.4, ha='center', zorder=12)
+    ax.text(-53, 16.5, "* TLP222A Optokoppler (OEM-Boot / PTT)", color='#93c5fd', fontsize=7.4, ha='center', zorder=12)
 
     # M8 PUR Systemkabel von Central Box zum MagSafe Dock
     cable_zone1_x = [-53, -53, -38, -38]
@@ -106,8 +106,8 @@ def generate_saddlebag_wiring_diagram():
     ax.add_patch(dock_box)
     ax.text(-38, -14, "MAGSAFE RAHMEN-DOCK", color=TEXT_LIGHT, fontsize=8.5, fontweight='bold', ha='center', zorder=12)
     ax.text(-38, -18, "009_magsafe_frame_dock.scad", color=CYAN_HIGHLIGHT, fontsize=7.0, ha='center', family='monospace', zorder=12)
-    ax.text(-38, -22, "• Ø 26 mm Rohrsattel-Klemmung", color='#94a3b8', fontsize=7.0, ha='center', zorder=12)
-    ax.text(-38, -26, "• PCBA 06 Schutzplatine (TVS-ESD)", color=GOLD_PAD, fontsize=7.0, ha='center', zorder=12)
+    ax.text(-38, -22, "* Ø 26 mm Rohrsattel-Klemmung", color='#94a3b8', fontsize=7.0, ha='center', zorder=12)
+    ax.text(-38, -26, "* PCBA 06 Schutzplatine (TVS-ESD)", color=GOLD_PAD, fontsize=7.0, ha='center', zorder=12)
 
     # 6-Pin MagSafe Pogo-Pin Buchse (Bike-Side, stationär)
     pogo_base = patches.Rectangle((-24, -24), 6, 10, facecolor='#1e293b', edgecolor='#64748b', linewidth=1.0, zorder=6)
@@ -204,7 +204,7 @@ def generate_saddlebag_wiring_diagram():
                 bbox=dict(boxstyle="round,pad=0.3", facecolor='#431407', edgecolor=WARNING_ORANGE, lw=0.8), zorder=12)
 
     # Kofferboden Intakt Callout (Wasser-/Pfützenschutz)
-    ax.text(68, -40, "KEIN LOCH IM KOFFERBODEN!\n• Koffer kann bedenkenlos auf nassem Asphalt / in Pfützen abgestellt werden\n• Durchführung liegt im geschützten Wind- & Spritzwasserschatten des Rahmens",
+    ax.text(68, -40, "KEIN LOCH IM KOFFERBODEN!\n* Koffer kann bedenkenlos auf nassem Asphalt / in Pfützen abgestellt werden\n* Durchführung liegt im geschützten Wind- & Spritzwasserschatten des Rahmens",
             color='#bbf7d0', fontsize=7.2, ha='center', va='center',
             bbox=dict(boxstyle="round,pad=0.4", facecolor='#064e3b', edgecolor=SUCCESS_GREEN, lw=1.0), zorder=12)
 
@@ -261,7 +261,7 @@ def generate_saddlebag_wiring_diagram():
     ax.annotate("", xy=(130, 54), xytext=(119, 46),
                 arrowprops=dict(arrowstyle="->", color='#38bdf8', lw=1.2), zorder=9)
 
-    ax.text(115, 72, "HF-VORTEIL KOFFERDECKEL:\n• 70..75 cm über Asphalt\n• Ungestörte Fresnel-Zone\n• Liegt weit über Dosen/Getränken\n• Keine Wasser-Resonanzdämpfung!",
+    ax.text(115, 72, "HF-VORTEIL KOFFERDECKEL:\n* 70..75 cm über Asphalt\n* Ungestörte Fresnel-Zone\n* Liegt weit über Dosen/Getränken\n* Keine Wasser-Resonanzdämpfung!",
             color='#93c5fd', fontsize=7.0, ha='left', va='center',
             bbox=dict(boxstyle="round,pad=0.4", facecolor='#082f49', edgecolor='#0284c7', lw=0.8), zorder=12)
 

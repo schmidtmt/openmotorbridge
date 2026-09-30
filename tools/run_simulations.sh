@@ -10,7 +10,7 @@ ROOT_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
 VENV_DIR="${ROOT_DIR}/.venv"
 
 echo "🏍️  OpenMotorBridge Simulation Suite"
-echo "────────────────────────────────────────────────────────────────────────"
+echo "------------------------------------------------------------------------"
 
 # Check if Python virtual environment exists, if not create and install dependencies
 if [ ! -f "${VENV_DIR}/bin/python" ]; then

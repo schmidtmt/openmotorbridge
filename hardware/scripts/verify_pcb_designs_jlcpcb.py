@@ -4,8 +4,8 @@ OpenMotorBridge Automated PCB Design Verification Tool (JLCPCB Guide Compliant)
 --------------------------------------------------------------------------------
 Executes comprehensive ERC, DRC, DFM, Thermal, and Assembly validation across all
 OpenMotorBridge KiCad PCB layouts according to JLCPCB manufacturing standards:
-  • Reference: https://jlcpcb.com/blog/pcb-design-verification-guide
-  • JLCPCB Standard Capabilities:
+  * Reference: https://jlcpcb.com/blog/pcb-design-verification-guide
+  * JLCPCB Standard Capabilities:
       - Min Trace Width / Clearance: 0.127 mm (5.0 mil) / 0.09 mm (advanced)
       - Min Via Drill / Pad: 0.30 mm / 0.60 mm (Annular Ring >= 0.15 mm)
       - Min Copper-to-Edge Clearance: 0.30 mm

@@ -1,4 +1,4 @@
-# OpenMotorBridge (v8.0) – Universal Motorcycle Intercom & Telemetry Bridge
+# OpenMotorBridge (v8.0) - Universal Motorcycle Intercom & Telemetry Bridge
 
 <p align="center">
   <img src="docs/assets/openmotorbridge_logo.svg" alt="OpenMotorBridge Logo" width="220"/>
@@ -26,7 +26,7 @@ The comprehensive technical specification is split into 18 logically organized c
    *The 5 standardized functional nodes, de-sensing philosophy, RF diversity, whitepaper engineering decisions, and cockpit integration.*
 
 2. [**02 - Intercom Matrix, Hardware Profiles & Routing**](docs/en/02_intercom_matrix_profiles.md)  
-   *The 5 OEM adapter classes A–E, LittleFS profile engine, zero-latency PTT (< 1.8 ms), and audio cross-matrix.*
+   *The 5 OEM adapter classes A-E, LittleFS profile engine, zero-latency PTT (< 1.8 ms), and audio cross-matrix.*
 
 3. [**03 - Audio DSP, Acoustics & Knowles MEMS Wind Tracking**](docs/en/03_audio_dsp_acoustics.md)  
    *1500V Bourns isolation, ES8388 Codec, Knowles MEMS acoustic wind sampling, and Raised-Cosine Ducking.*

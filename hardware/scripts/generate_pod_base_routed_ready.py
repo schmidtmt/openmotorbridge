@@ -217,8 +217,8 @@ def generate_pod_base_sexpr():
     out.append('\t(gr_text "OPENMOTORBRIDGE // POD BASE" (at 118 71.5 0) (layer "F.SilkS") (effects (font (size 0.45 0.45) (thickness 0.09))))')
     out.append('\t(gr_text "SP3012 TVS" (at 108 73.5 0) (layer "F.SilkS") (effects (font (size 0.35 0.35) (thickness 0.08))))')
     out.append('\t(gr_text "6-PIN SMD PIN HEADER (J1)" (at 118 88.5 0) (layer "F.SilkS") (effects (font (size 0.38 0.38) (thickness 0.08))))')
-    out.append('\t(gr_text "▲ TOP / OBEN" (at 127 72.0 0) (layer "F.SilkS") (effects (font (size 0.45 0.45) (thickness 0.09))))')
-    out.append('\t(gr_text "▼ POKA-YOKE KEY" (at 127 86.2 0) (layer "F.SilkS") (effects (font (size 0.40 0.40) (thickness 0.08))))')
+    out.append('\t(gr_text "^ TOP / OBEN" (at 127 72.0 0) (layer "F.SilkS") (effects (font (size 0.45 0.45) (thickness 0.09))))')
+    out.append('\t(gr_text "v POKA-YOKE KEY" (at 127 86.2 0) (layer "F.SilkS") (effects (font (size 0.40 0.40) (thickness 0.08))))')
 
     # 7. Routing Tracks & Vias
     tracks = [

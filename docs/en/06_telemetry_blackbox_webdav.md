@@ -6,7 +6,7 @@ This document specifies the storage and telemetry subsystem of OpenMotorBridge v
 
 ## 1. High-Speed SDIO Storage Interface (4-Bit @ 40 MHz)
 
-* **Interface:** Native 4-bit SDIO bus operating at 40 MHz connected to ESP32-S3 (GPIOs 40–45).
+* **Interface:** Native 4-bit SDIO bus operating at 40 MHz connected to ESP32-S3 (GPIOs 40-45).
 * **Throughput:** Continuous write speeds $> 12\,\text{MB/s}$ (enabling uninterrupted 10 Hz GPX, IMU, and audio telemetry logging).
 * **Filesystem:** FAT32 with dynamic sector buffering (32 kB cluster size).
 * **Failsafe:** The integrated BQ24075 UPS buffer guarantees clean unmounting and closing of FAT file allocation tables during abrupt power losses.
@@ -18,9 +18,9 @@ This document specifies the storage and telemetry subsystem of OpenMotorBridge v
 The telemetry subsystem fuses data from the multi-constellation GNSS receiver (**u-blox SAM-M10Q** with integrated $15 \times 15\,\text{mm}$ patch antenna on the Front Node via `J12` Qwiic), the 6-axis IMU (**Bosch BMI270**) on the Central Box, and optional motorcycle wheel speed inputs (via CAN-bus or ABS sensor pulse line) in a **15-State Error-State Extended Kalman Filter (ES-EKF)**:
 
 ```
-[ u-blox SAM-M10Q GNSS (10 Hz) ] ──(I2C 400k / UWB)──┐
-[ CAN-Bus Wheel Speed / Velocity ] ───(10-20 Hz)─────┼─► [ 15-State Extended Kalman Filter ] ──► [ MicroSD: tour.gpx ]
-[ Bosch BMI270 Gyro / Accel (I2C) ] ──(50-100 Hz)────┘        (Dead Reckoning Engine)            (With Lean Angle & G-Force)
+[ u-blox SAM-M10Q GNSS (10 Hz) ] --(I2C 400k / UWB)--+
+[ CAN-Bus Wheel Speed / Velocity ] ---(10-20 Hz)-----+-> [ 15-State Extended Kalman Filter ] --> [ MicroSD: tour.gpx ]
+[ Bosch BMI270 Gyro / Accel (I2C) ] --(50-100 Hz)----+        (Dead Reckoning Engine)            (With Lean Angle & G-Force)
 ```
 
 ### 2.1 Continuous Tunnel and Mountain Gorge Tracking
@@ -73,20 +73,20 @@ Every trackpoint recorded at $10\,\text{Hz}$ is enriched with high-rate motorcyc
 To strictly avoid running cables through the steering stem to the wireless Front-Node while eliminating false readings from engine heat dissipation, OpenMotorBridge implements a 2-tier sensing design:
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│              2-TIER AMBIENT TEMPERATURE SENSING ARCHITECTURE                │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ TIER 1: CAN-Bus Broadcast (BMW R1250/R1300 GS, Harley Pan America / HD-LAN) │
-│ • Reads OEM ambient/intake air temperature from CAN frames (ID 0x2D0 etc.)  │
-│ • 0 extra wires, 0 hardware cost, factory calibrated                        │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ TIER 2: Front Node Cold-Air Scoop Sensing (Universal / CVO ST / Non-CAN)    │
-│ • Dedicated sensor (TI TMP117 ±0.1°C & OPT3001 light sensor on J12 Qwiic) on PCBA 05 │
-│ • Installation: Ram-air intake duct inside fairing / headlight scoop         │
-│ • Thermal Isolation: Eliminates false readings from engine heat trapped     │
-│   around cylinder heads or radiator exhaust                                  │
-│ • Wireless Steering Head: Telemetry streams over UWB (< 0.4 ms)              │
-└─────────────────────────────────────────────────────────────────────────────┘
++-----------------------------------------------------------------------------+
+|              2-TIER AMBIENT TEMPERATURE SENSING ARCHITECTURE                |
++-----------------------------------------------------------------------------+
+| TIER 1: CAN-Bus Broadcast (BMW R1250/R1300 GS, Harley Pan America / HD-LAN) |
+| * Reads OEM ambient/intake air temperature from CAN frames (ID 0x2D0 etc.)  |
+| * 0 extra wires, 0 hardware cost, factory calibrated                        |
++-----------------------------------------------------------------------------+
+| TIER 2: Front Node Cold-Air Scoop Sensing (Universal / CVO ST / Non-CAN)    |
+| * Dedicated sensor (TI TMP117 ±0.1°C & OPT3001 light sensor on J12 Qwiic) on PCBA 05 |
+| * Installation: Ram-air intake duct inside fairing / headlight scoop         |
+| * Thermal Isolation: Eliminates false readings from engine heat trapped     |
+|   around cylinder heads or radiator exhaust                                  |
+| * Wireless Steering Head: Telemetry streams over UWB (< 0.4 ms)              |
++-----------------------------------------------------------------------------+
 ```
 
 ### 3.2 Barometric Altitude Fusion (15-State Kalman Filter)
@@ -109,21 +109,21 @@ In addition to GNSS 3D height, a Bosch BMP390 / BMP581 barometric pressure senso
 Rather than introducing cluttered configuration menus, OpenMotorBridge couples telemetry reporting directly to the 3 active modes from `🎛️ Audio-Routing & Operating Modes`:
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                   TELEMETRY SCORECARDS BY OPERATING MODE                    │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ MODE 1: Single Rider Mode 🏍️ (Sport & Dynamic Telemetry)                    │
-│ • Lean angles L/R, corner density (turns/km), % time at lean (≥20°)          │
-│ • Shift Counter (Total, Up/Down, Shifts/km), G-Forces, Panic Brakes, Max RPM│
-├─────────────────────────────────────────────────────────────────────────────┤
-│ MODE 0: Standard Mesh Bridge 👥 (Group & Intercom QoS)                      │
-│ • Radio availability (% HD-Voice), LoRa fallback count/duration, Drops       │
-│ • Formation pace (Ø km/h), total turns, electrical bus stability            │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ MODE 2: Cruise Mode 🛣️ (Cruising & Touring Comfort)                         │
-│ • Net/pause times, elevation gain/loss, ambient temperature range            │
-│ • Braking smoothness (panic-free braking), cruising pace, shift index        │
-└─────────────────────────────────────────────────────────────────────────────┘
++-----------------------------------------------------------------------------+
+|                   TELEMETRY SCORECARDS BY OPERATING MODE                    |
++-----------------------------------------------------------------------------+
+| MODE 1: Single Rider Mode 🏍️ (Sport & Dynamic Telemetry)                    |
+| * Lean angles L/R, corner density (turns/km), % time at lean (≥20°)          |
+| * Shift Counter (Total, Up/Down, Shifts/km), G-Forces, Panic Brakes, Max RPM|
++-----------------------------------------------------------------------------+
+| MODE 0: Standard Mesh Bridge 👥 (Group & Intercom QoS)                      |
+| * Radio availability (% HD-Voice), LoRa fallback count/duration, Drops       |
+| * Formation pace (Ø km/h), total turns, electrical bus stability            |
++-----------------------------------------------------------------------------+
+| MODE 2: Cruise Mode 🛣️ (Cruising & Touring Comfort)                         |
+| * Net/pause times, elevation gain/loss, ambient temperature range            |
+| * Braking smoothness (panic-free braking), cruising pace, shift index        |
++-----------------------------------------------------------------------------+
 ```
 
 The PWA Tour Inspector features 3 instantaneous pills (`[ 🏍️ Sportlich ]`, `[ 👥 Gruppe / Funk ]`, `[ 🛣️ Cruising ]`) to switch scorecard perspectives on the fly.
@@ -150,15 +150,15 @@ Operating +22 dBm (160 mW) LoRa transmissions at 868 MHz near a sensitive GNSS r
 To comply with European data privacy regulations (GDPR Art. 5 & 25) and German Federal Court of Justice rulings (BGH VI ZR 233/17) regarding unprompted surveillance in road traffic:
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│          GDPR-COMPLIANT ROLLING RINGBUFFER ARCHITECTURE      │
-├─────────────────────────────────────────────────────────────┤
-│ • Continuous rolling buffer directory: /tracks/             │
-│ • Auto-Purge Threshold: Free space < 200 MB                 │
-│ • Oldest unprotected track segments overwritten in 50MB blk │
-│ • Manual highlight protection via handlebar switch (*.fav)  │
-│ • Crash sensor trigger: Impact > 4G locks last 15 min.      │
-└─────────────────────────────────────────────────────────────┘
++-------------------------------------------------------------+
+|          GDPR-COMPLIANT ROLLING RINGBUFFER ARCHITECTURE      |
++-------------------------------------------------------------+
+| * Continuous rolling buffer directory: /tracks/             |
+| * Auto-Purge Threshold: Free space < 200 MB                 |
+| * Oldest unprotected track segments overwritten in 50MB blk |
+| * Manual highlight protection via handlebar switch (*.fav)  |
+| * Crash sensor trigger: Impact > 4G locks last 15 min.      |
++-------------------------------------------------------------+
 ```
 
 1. **Rolling Ringbuffer:** Normal riding data is recorded in 15-minute segments and cyclically overwritten.
@@ -170,13 +170,13 @@ To comply with European data privacy regulations (GDPR Art. 5 & 25) and German F
 ## 6. Map-Matching & Universal GPX Export (Web-App Pipeline)
 
 ```
-[ MicroSD: tour_raw.gpx ] ──(BLE / WebDAV)──► [ Web Dashboard / Smartphone ]
-                                                      │
-                                                      ▼
+[ MicroSD: tour_raw.gpx ] --(BLE / WebDAV)--> [ Web Dashboard / Smartphone ]
+                                                      |
+                                                      v
                                        [ Map-Matching Engine (OSRM / Valhalla) ]
-                                                      │
-                         ┌────────────────────────────┴────────────────────────────┐
-                         ▼                                                         ▼
+                                                      |
+                         +----------------------------+----------------------------+
+                         v                                                         v
            [ Clean Navigation Route (.gpx) ]                          [ Visual Track Overlay (.gpx) ]
            (20-50 placed Shaping Points for                            (1:1 smoothed line for
             Garmin, Kurviger, Calimoto, TomTom)                        Google Maps, Komoot, Relive)
@@ -194,14 +194,14 @@ To comply with European data privacy regulations (GDPR Art. 5 & 25) and German F
 
 ```
 MOTORCYCLE ENTERS GARAGE (IGNITION OFF)
-┌─────────────────────────────────────────────────────────────┐
-│ 1. KL15 drops -> UPS rundown timer initiates (Graceful Run) │
-│ 2. ESP32-S3 scans for configured Home Wi-Fi SSIDs for 60 s  │
-│ 3. Wi-Fi connects via WPA2/WPA3 Personal / Enterprise       │
-│ 4. TLS 1.3 Client connects to Nextcloud / ownCloud / NAS    │
-│ 5. Automated upload of new *.gpx tracks and logs (1.8 MB/s) │
-│ 6. Sync complete confirmation -> Filesystem unmount -> Sleep│
-└─────────────────────────────────────────────────────────────┘
++-------------------------------------------------------------+
+| 1. KL15 drops -> UPS rundown timer initiates (Graceful Run) |
+| 2. ESP32-S3 scans for configured Home Wi-Fi SSIDs for 60 s  |
+| 3. Wi-Fi connects via WPA2/WPA3 Personal / Enterprise       |
+| 4. TLS 1.3 Client connects to Nextcloud / ownCloud / NAS    |
+| 5. Automated upload of new *.gpx tracks and logs (1.8 MB/s) |
+| 6. Sync complete confirmation -> Filesystem unmount -> Sleep|
++-------------------------------------------------------------+
 ```
 
 * **100% Automated:** The rider neither needs to unlock a smartphone nor physically extract microSD cards. The day's rides are already filed in the cloud upon entering the house.
@@ -243,15 +243,15 @@ While power users with a private Nextcloud or Synology NAS point directly to the
 Connecting the Central Box to a PC, Mac, or tablet via USB-C while the motorcycle ignition is OFF activates the **Minimal USB MSC Mode**:
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│             MINIMAL USB MASS STORAGE CLASS MODE             │
-├─────────────────────────────────────────────────────────────┤
-│ • VBUS detection (5V on native USB-C port)                  │
-│ • Main power relays & audio DSP (ES8388) remain UNPOWERED   │
-│ • Wireless modules (LoRa, Mesh, Bluetooth) remain DISABLED  │
-│ • Current draw from USB port: < 80 mA (Zero battery drain)  │
-│ • MicroSD card mounts instantly as standard flash drive     │
-└─────────────────────────────────────────────────────────────┘
++-------------------------------------------------------------+
+|             MINIMAL USB MASS STORAGE CLASS MODE             |
++-------------------------------------------------------------+
+| * VBUS detection (5V on native USB-C port)                  |
+| * Main power relays & audio DSP (ES8388) remain UNPOWERED   |
+| * Wireless modules (LoRa, Mesh, Bluetooth) remain DISABLED  |
+| * Current draw from USB port: < 80 mA (Zero battery drain)  |
+| * MicroSD card mounts instantly as standard flash drive     |
++-------------------------------------------------------------+
 ```
 
 * **No Tools Required:** The MicroSD card stays safely sealed inside the IP67 enclosure. The computer immediately detects the drive `OPENMOTOR`.

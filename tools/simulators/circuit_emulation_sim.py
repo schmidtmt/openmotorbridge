@@ -214,10 +214,10 @@ def run_circuit_emulation() -> bool:
     # 1. Load Dump
     print("  [Circuit 1] Automotive Load Dump Protection (ISO 7637-2 Pulse 5b):")
     ld = simulate_load_dump_protection()
-    print(f"    • Surge Input: 87.0 V Peak (400 ms pulse)")
-    print(f"    • SMBJ33CA Clamped Voltage: {ld['max_clamped_voltage']:.1f} V (Safety Headroom: {ld['headroom_to_lm5164_max_v']:.1f} V below 65V max)")
-    print(f"    • LM5164-Q1 Regulated 5V Rail: {ld['max_5v_rail']:.3f} V (Rock-solid regulation)")
-    print(f"    • TVS Energy Absorbed: {ld['tvs_energy_joules']:.2f} J")
+    print(f"    * Surge Input: 87.0 V Peak (400 ms pulse)")
+    print(f"    * SMBJ33CA Clamped Voltage: {ld['max_clamped_voltage']:.1f} V (Safety Headroom: {ld['headroom_to_lm5164_max_v']:.1f} V below 65V max)")
+    print(f"    * LM5164-Q1 Regulated 5V Rail: {ld['max_5v_rail']:.3f} V (Rock-solid regulation)")
+    print(f"    * TVS Energy Absorbed: {ld['tvs_energy_joules']:.2f} J")
     assert ld["max_clamped_voltage"] < 65.0, "Load dump exceeded LM5164-Q1 maximum rating!"
     assert abs(ld["max_5v_rail"] - 5.00) < 0.05, "5V rail deviated during load dump!"
     print("    ✓ Load dump fully suppressed; electronics 100% protected.")
@@ -225,38 +225,38 @@ def run_circuit_emulation() -> bool:
     # 2. UPS Crank Switchover
     print("\n  [Circuit 2] BQ24075 Power-Path UPS Switchover (Engine Starter Crank):")
     ups = simulate_ups_crank_switchover()
-    print(f"    • V_IGN Dip: 12.6 V --> 6.5 V (350 ms cold crank)")
-    print(f"    • System V_SYS Min: {ups['min_v_sys']:.2f} V (Powered by LiPo)")
-    print(f"    • ESP32-S3 Core 3.3V Rail Min: {ups['min_v_3v3']:.2f} V (Brownout threshold: 2.80 V)")
-    print(f"    • Power-Path Switch Delay: {ups['switchover_us']:.1f} µs")
+    print(f"    * V_IGN Dip: 12.6 V --> 6.5 V (350 ms cold crank)")
+    print(f"    * System V_SYS Min: {ups['min_v_sys']:.2f} V (Powered by LiPo)")
+    print(f"    * ESP32-S3 Core 3.3V Rail Min: {ups['min_v_3v3']:.2f} V (Brownout threshold: 2.80 V)")
+    print(f"    * Power-Path Switch Delay: {ups['switchover_us']:.1f} µs")
     assert ups["min_v_3v3"] >= 3.10, "MCU 3.3V rail dipped below safe operating margin!"
     print("    ✓ Zero-glitch UPS switchover verified; MCU survives starter crank.")
 
     # 3. Audio Transformer CMRR
     print("\n  [Circuit 3] Bourns LM-NP-1001-B1L Audio Isolation Transformer:")
     audio = simulate_audio_transformer_cmrr()
-    print(f"    • Injected Alternator Whine: 2.0 Vpp @ 1.2 kHz + 0.5 Vpp @ 50 Hz")
-    print(f"    • Common-Mode Rejection Ratio (CMRR): {audio['cmrr_db']:.1f} dB (Spec: > 60 dB)")
-    print(f"    • Total Harmonic Distortion (THD+N): {audio['thd_pct']:.3f} % (HiFi Studio Grade)")
+    print(f"    * Injected Alternator Whine: 2.0 Vpp @ 1.2 kHz + 0.5 Vpp @ 50 Hz")
+    print(f"    * Common-Mode Rejection Ratio (CMRR): {audio['cmrr_db']:.1f} dB (Spec: > 60 dB)")
+    print(f"    * Total Harmonic Distortion (THD+N): {audio['thd_pct']:.3f} % (HiFi Studio Grade)")
     assert audio["cmrr_db"] >= 60.0, "Transformer CMRR insufficient for ground-loop rejection!"
     print("    ✓ Alternator whine attenuated by > 60 dB; pure differential audio.")
 
     # 4. 1-Wire Signal Integrity
     print("\n  [Circuit 4] 1-Wire Bus Signal Integrity (1.5m Shielded Pod Harness):")
     ow = simulate_1wire_signal_integrity()
-    print(f"    • 10% to 90% Rise Time: {ow['rise_time_us']:.2f} µs (Spec: < 5.0 µs)")
-    print(f"    • Fall Time: {ow['fall_time_ns']:.1f} ns")
-    print(f"    • Bus Voltage at 60 µs Sampling Slot: {ow['v_high_at_60us']:.2f} V (3.3V Nominal)")
+    print(f"    * 10% to 90% Rise Time: {ow['rise_time_us']:.2f} µs (Spec: < 5.0 µs)")
+    print(f"    * Fall Time: {ow['fall_time_ns']:.1f} ns")
+    print(f"    * Bus Voltage at 60 µs Sampling Slot: {ow['v_high_at_60us']:.2f} V (3.3V Nominal)")
     assert ow["rise_time_us"] < 5.0, "1-Wire rise time too slow due to cable capacitance!"
     print("    ✓ Clean digital transitions; 1-Wire DS2401 communication verified.")
 
     # 5. PhotoMOS Optocoupler
     print("\n  [Circuit 5] Toshiba TLP222A PhotoMOS Optocoupler Pulse Switch:")
     opto = simulate_photomos_opto_switch()
-    print(f"    • Forward Drive Current (I_F): {opto['if_current_ma']:.2f} mA (@ 3.3V GPIO)")
-    print(f"    • Turn-On Delay: {opto['ton_us']:.1f} µs | Turn-Off Delay: {opto['toff_us']:.1f} µs")
-    print(f"    • Contact Resistance (R_ON): {opto['ron_ohms']:.2f} Ω")
-    print(f"    • Off-State Leakage: {opto['leakage_na']:.2f} nA (1500 V RMS Isolation)")
+    print(f"    * Forward Drive Current (I_F): {opto['if_current_ma']:.2f} mA (@ 3.3V GPIO)")
+    print(f"    * Turn-On Delay: {opto['ton_us']:.1f} µs | Turn-Off Delay: {opto['toff_us']:.1f} µs")
+    print(f"    * Contact Resistance (R_ON): {opto['ron_ohms']:.2f} Ω")
+    print(f"    * Off-State Leakage: {opto['leakage_na']:.2f} nA (1500 V RMS Isolation)")
     assert opto["ron_ohms"] < 2.0, "PhotoMOS contact resistance too high!"
     print("    ✓ Optical isolation & button synthesis verified.")
 

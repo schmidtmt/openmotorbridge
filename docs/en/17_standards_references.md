@@ -6,9 +6,9 @@ This document lists all international automotive, industry, radio frequency, and
 
 ## 1. Automotive, EMC, Safety & Enclosure Standards
 
-* **ISO 7637-2:2011:** *Road vehicles — Electrical disturbances from conduction and coupling — Part 2: Electrical transient conduction along supply lines only* (Pulses 1, 2a, 3a/b and load-dump protection up to 100 V).
-* **ISO 16750-2:2012:** *Road vehicles — Environmental conditions and testing for electrical and electronic equipment — Part 2: Electrical loads* (Overvoltage, cold crank, reverse polarity testing).
-* **ISO 16750-3:2012:** *Road vehicles — Environmental conditions and testing for electrical and electronic equipment — Part 3: Mechanical loads* (Broadband random vibration and mechanical shock testing up to 20 g).
+* **ISO 7637-2:2011:** *Road vehicles -- Electrical disturbances from conduction and coupling -- Part 2: Electrical transient conduction along supply lines only* (Pulses 1, 2a, 3a/b and load-dump protection up to 100 V).
+* **ISO 16750-2:2012:** *Road vehicles -- Environmental conditions and testing for electrical and electronic equipment -- Part 2: Electrical loads* (Overvoltage, cold crank, reverse polarity testing).
+* **ISO 16750-3:2012:** *Road vehicles -- Environmental conditions and testing for electrical and electronic equipment -- Part 3: Mechanical loads* (Broadband random vibration and mechanical shock testing up to 20 g).
 * **ECE R10 Rev. 6:** *Uniform provisions concerning the approval of vehicles with regard to electromagnetic compatibility* (Type-approval conformity for aftermarket automotive electronics in listen-only mode).
 * **DIN EN 60529 (VDE 0470-1):2014-09:** *Degrees of protection provided by enclosures (IP Code)* (IP67: Dust-tight and temporary submersion to 1 m; IP69K: High-pressure/steam-jet washdown).
 * **DIN ISO 2768-m:** *General tolerances for linear and angular dimensions* (Manufacturing tolerances for 3D printing and machining).
@@ -27,7 +27,7 @@ This document lists all international automotive, industry, radio frequency, and
 * **ETSI EN 300 328 v2.2.2:** *Wideband transmission systems; Data transmission equipment operating in the 2.4 GHz ISM band* (EIRP limits to 100 mW, FHSS/DSSS spread spectrum).
 * **ETSI EN 300 220-2 v3.2.1:** *Short Range Devices (SRD) operating in the frequency range 25 MHz to 1 000 MHz* (LoRa 868 MHz Sub-GHz band duty cycle limits: 1% / 10%).
 * **ETSI EN 301 489-1 / -3 / -17 / -33:** *ElectroMagnetic Compatibility (EMC) standard for radio equipment and services* (Harmonized EMC standards for UWB, short-range devices and wideband systems).
-* **FCC Part 15 Subpart C / B / F:** *Title 47 CFR Part 15 — Radio Frequency Devices; Subpart F: Ultra-Wideband Operation* (US regulatory rules for UWB and unlicensed radiators).
+* **FCC Part 15 Subpart C / B / F:** *Title 47 CFR Part 15 -- Radio Frequency Devices; Subpart F: Ultra-Wideband Operation* (US regulatory rules for UWB and unlicensed radiators).
 * **3GPP TS 36.331 / TS 36.213 (Release 14/15 Sidelink C-V2X / ProSe):** *E-UTRA; Physical layer procedures / Radio Resource Control* (Reference for SC-FDMA TDMA slot structure in OpenMotorMesh).
 * **ITU-R P.838 / P.840:** *Specific attenuation model for rain / fog for use in prediction methods* (Atmospheric path loss modeling for 2.4 GHz, 6.5 GHz, and 868 MHz).
 
@@ -49,5 +49,5 @@ This document lists all international automotive, industry, radio frequency, and
 
 ## 4. Acoustics & Audio Standards
 
-* **IEC 61672-1:2013:** *Electroacoustics — Sound level meters — Part 1: Specifications* (Class 1 A-Weighting filter curve for Knowles MEMS SPL tracking).
+* **IEC 61672-1:2013:** *Electroacoustics -- Sound level meters -- Part 1: Specifications* (Class 1 A-Weighting filter curve for Knowles MEMS SPL tracking).
 * **ITU-T P.862 / P.863:** *Perceptual evaluation of speech quality (PESQ/POLQA)* (Benchmark for speech intelligibility metrics in wind tunnel testing).

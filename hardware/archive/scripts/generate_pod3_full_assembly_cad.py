@@ -147,16 +147,16 @@ def render_true_90deg_mated_assembly(output_png):
 
     fig.text(0.5, 0.96, "OPENMOTORBRIDGE // REAR POD 3 ECHTER 1:1:1 MASSTAB (90° FÜGUNG)",
              ha='center', va='top', fontsize=16, color='#f8fafc', weight='heavy', family='sans-serif')
-    fig.text(0.5, 0.925, "Kompakte Vertikalbasis (36x20mm)  ◄►  Langgestreckte Horizontalkassette (56x36mm, PCB 50x32mm)",
+    fig.text(0.5, 0.925, "Kompakte Vertikalbasis (36x20mm)  <>  Langgestreckte Horizontalkassette (56x36mm, PCB 50x32mm)",
              ha='center', va='top', fontsize=11, color='#38bdf8', weight='bold', family='sans-serif')
 
     specs = (
         "EXAKTE BAUTEIL-ABMESSUNGEN:\n"
-        "• Stirnwand-Platine: 36.0 x 20.0 x 1.6 mm (Vertikal)\n"
-        "• Sensor-Platine:    50.0 x 32.0 x 1.6 mm (Horizontal)\n"
-        "• Wechselkassette:   56.0 x 36.0 x 14.0 mm (Schlitten)\n"
-        "• Monocoque-Gehäuse: 70.0 x 44.0 x 24.0 mm (Flachprofil)\n"
-        "• M8-Kabelabgang:    Ø 8.0 mm x 12.4 mm (Horizontal -X)"
+        "* Stirnwand-Platine: 36.0 x 20.0 x 1.6 mm (Vertikal)\n"
+        "* Sensor-Platine:    50.0 x 32.0 x 1.6 mm (Horizontal)\n"
+        "* Wechselkassette:   56.0 x 36.0 x 14.0 mm (Schlitten)\n"
+        "* Monocoque-Gehäuse: 70.0 x 44.0 x 24.0 mm (Flachprofil)\n"
+        "* M8-Kabelabgang:    Ø 8.0 mm x 12.4 mm (Horizontal -X)"
     )
     fig.text(0.03, 0.05, specs, fontsize=8.2, color='#94a3b8', family='monospace',
              bbox=dict(boxstyle='square,pad=0.6', facecolor='#090d16', edgecolor='#1e293b', alpha=0.95, lw=1.0))
@@ -238,7 +238,7 @@ def render_true_90deg_exploded_assembly(output_png):
 
     fig.text(0.5, 0.96, "OPENMOTORBRIDGE // REAR POD 3 HORIZONTALE EXPLOSIONSDARSTELLUNG",
              ha='center', va='top', fontsize=16, color='#f8fafc', weight='heavy', family='sans-serif')
-    fig.text(0.5, 0.925, "Maßstabsgetreue 1:1:1 Fügung: Vertikale Stirnwand-Basis (36x20mm)  ◄►  Horizontale Kassette (56x36mm)",
+    fig.text(0.5, 0.925, "Maßstabsgetreue 1:1:1 Fügung: Vertikale Stirnwand-Basis (36x20mm)  <>  Horizontale Kassette (56x36mm)",
              ha='center', va='top', fontsize=11, color='#38bdf8', weight='bold', family='sans-serif')
 
     # STRICT 1:1:1 EUCLIDEAN ASPECT RATIO

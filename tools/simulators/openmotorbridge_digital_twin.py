@@ -591,10 +591,10 @@ class DigitalTwinSimulator:
         print(f"\n{C_BOLD}==================================================================={C_RST}")
         print(f"{C_BOLD}   OpenMotorBridge Digital Twin Simulator (10 PCBs & 2 Bikes)      {C_RST}")
         print(f"{C_BOLD}==================================================================={C_RST}")
-        print(f"  • Route:      {self.track_title}")
-        print(f"  • Track:      {len(self.track)} points ({self.track[-1].time_s / 60.0:.1f} min)")
-        print(f"  • WebSocket:  ws://localhost:{self.port} (Connect OpenMotorBridge PWA)")
-        print(f"  • Mode:       {'Headless Testbench' if self.headless else 'Interactive Live Mode'} (Speed: {self.speed_multiplier}x)")
+        print(f"  * Route:      {self.track_title}")
+        print(f"  * Track:      {len(self.track)} points ({self.track[-1].time_s / 60.0:.1f} min)")
+        print(f"  * WebSocket:  ws://localhost:{self.port} (Connect OpenMotorBridge PWA)")
+        print(f"  * Mode:       {'Headless Testbench' if self.headless else 'Interactive Live Mode'} (Speed: {self.speed_multiplier}x)")
         print(f"-------------------------------------------------------------------\n")
 
         # Chaser delay: 45 steps = 4.5 seconds behind on highway (~60-100m gap)
@@ -861,11 +861,11 @@ class DigitalTwinSimulator:
         handover_str = 'PASS (Switched on attenuation / NLOS)' if self.handover_occurred else ('SKIPPED (Short run < 600s)' if not is_full_run else 'FAIL')
         return_str = 'PASS (Returned to 2.4 GHz Mesh)' if self.return_to_mesh_occurred else 'SKIPPED (Short run)'
 
-        print(f"  • Simulated Time:        {pt_a.time_s:.1f} s")
-        print(f"  • Tunnel Blackout Check:  {tunnel_str}")
-        print(f"  • Max EKF Tunnel Drift:   {self.max_tunnel_drift_m:.2f} m (Automotive Standard: < 30.0 m for 2.2 km tunnel)")
-        print(f"  • LoRa Handover Check:    {handover_str}")
-        print(f"  • Return Handover Check:  {return_str}")
+        print(f"  * Simulated Time:        {pt_a.time_s:.1f} s")
+        print(f"  * Tunnel Blackout Check:  {tunnel_str}")
+        print(f"  * Max EKF Tunnel Drift:   {self.max_tunnel_drift_m:.2f} m (Automotive Standard: < 30.0 m for 2.2 km tunnel)")
+        print(f"  * LoRa Handover Check:    {handover_str}")
+        print(f"  * Return Handover Check:  {return_str}")
         
         # Assertions for automated tests (when test duration covers tunnel section)
         if is_full_run:

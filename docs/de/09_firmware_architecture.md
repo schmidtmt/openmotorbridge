@@ -384,3 +384,49 @@ Geht auf dem gekoppelten Smartphone ein Telefonat ein, erkennt die Zentralbox ü
    * Der Tastendruck wird transparent an das Helm-Headset weitergeleitet (zum Abheben / Auflegen des Anrufs).
 3. **Prio-1 Sicherheits-Overlay (Radar & SOS):** Selbst während eines intensiven Telefonats bleiben lebenswichtige Radar-Kollisionswarnungen (Prio 1) und Gruppen-Notrufe aktiv. Sie werden mit $-12\,\text{dB}$ geducktem Telefon-Audio klar verständlich in den Helm eingespielt.
 4. **Automatischer Reconnect:** Sobald der Anruf beendet ist (`CALL_TERMINATED`), kehrt der Audio-Router in $< 100\,\text{ms}$ in den normalen gemischten Intercom-Betrieb zurück.
+
+### 9.8 Alarm-Dispatch & Zielgruppen-Routing: Diskrete Signalisierung (Human-in-the-Loop)
+
+Aus dem Grundsatz *"Den Lead unterstützen, nicht ersetzen"* ([Kapitel 01](01_system_architecture.md)) und der Realität gemischter Gruppen ([Kapitel 04, Abs. 2.8](04_mesh_lora_navigation.md)) leitet die Firmware ein strikt hierarchisches und diskretes Alarm-Dispatching ab:
+
+```c
+typedef enum {
+    SCOPE_SELF_ONLY   = 0x01, // Nur der eigene Fahrer (Radar-Toter-Winkel, Sensor-Fehler, lokaler Zweifel)
+    SCOPE_MICRO_BUDDY = 0x02, // Eigenes Micro-Cluster (Familie/Freunde aus dem gemeinsamen Start-Cluster)
+    SCOPE_LEAD_SWEEP  = 0x04, // Taktische OMB-Anker (Spitze und Schlusslicht der Gruppe)
+    SCOPE_ALL_MACRO   = 0x08  // Vollständige Großgruppe (nur Prio-1 SOS / Crash-Notruf / Geisterfahrer)
+} AlarmTargetScope;
+
+typedef struct __attribute__((packed)) {
+    uint8_t  pkt_type;        // LORA_PKT_ALARM (0x12)
+    uint32_t origin_node_id;  // UID des auslösenden Nodes
+    uint8_t  alarm_severity;  // 1 = INFO, 2 = WARNING (Split/Doubt), 3 = CRITICAL (SOS/Crash)
+    uint8_t  target_scope;    // Bitmask aus AlarmTargetScope
+    uint16_t reason_code;     // z. B. CONVOY_SPLIT_SUSPECTED, TIRE_PRESSURE_LOSS
+    int32_t  latitude;        // 1e-7 deg
+    int32_t  longitude;       // 1e-7 deg
+    uint16_t crc16;
+} LoRaAlarmPacket;
+```
+
+#### Lokale Aktuator-Kaskade statt Roboter-TTS
+Empfängt ein Node ein `LoRaAlarmPacket` (oder löst lokal einen Alarm aus), greift die lokale Aktuator-Prioritätsmatrix:
+
+```
+[Alarm-Event]
+      |
+      +---> 1. Smart-Keyfob (PCBA 07) : Haptisches Vibrationsmuster (LRA-Motor in der Jackentasche)
+      +---> 2. Lokales Helm-Audio     : Dezenter Zweiklang-Gong (NUR im eigenen Headset via BLE)
+      +---> 3. Spiegel-LEDs (PCBA 05) : Kurzes Doppelblinken am Rückspiegel (peripheres Sichtfeld)
+      +---> 4. PWA Dashboard (BLE/WiFi): Optischer Warnbanner mit Entfernungs- und Richtungsvektor
+      |
+      X (BLOCKIERT): Keine automatische TTS-Injektion in fremde Meshes (Sena Mesh / Cardo DMC)!
+```
+
+#### Fahrer-Souveränität & Handlungsablauf
+1. **Kein Stören des Gruppen-Funks:** Der Gruppen-Sprechkanal (Sena/Cardo) bleibt vollkommen frei von automatisierten Computerstimmen.
+2. **Schnelle Selbstkontrolle:** Der OMB-Fahrer spürt die Vibration am Keyfob, wirft einen kurzen Blick in den Rückspiegel oder auf das Dashboard und erkennt:
+   * *Fall A (Eigener Rückstand):* Der Fahrer sieht, dass er den Anschluss verloren hat -> beschleunigt oder passt die Linie an, ohne dass die Gruppe behelligt werden muss.
+   * *Fall B (Konvoi hinter ihm abgerissen):* Der Fahrer sieht im Rückspiegel oder am HUD, dass das Sweep-Bike oder Nachfolger fehlen -> Er betätigt aktiv die PTT-Taste am Lenker und funkt den Tourguide mit seiner eigenen, natürlichen Stimme an (*"Du, vorn kurz Tempo raus, hinten an der Kehre hängt jemand fest"*).
+3. **Harmonie mit Kapitel 01:** Die Technik liefert verlässliche Sensor- und Telemetriedaten als diskreter Co-Pilot im Hintergrund, lässt aber die Führungskompetenz, soziale Gruppenabstimmung und Entscheidungsgewalt zu 100 % in den Händen der fahrenden Menschen.
+

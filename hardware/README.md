@@ -1,4 +1,4 @@
-# OpenMotorBridge v8.5 / v9.0 – KiCad Hardware-Baukasten (Clean All-UWB Architecture)
+# OpenMotorBridge v8.5 / v9.0 - KiCad Hardware-Baukasten (Clean All-UWB Architecture)
 
 Dieses Verzeichnis enthält die vollständigen **KiCad 10 Schaltplan-, PCB- und Produktionsdateien** für die drahtlose **All-UWB & Pure-DC Architektur** von OpenMotorBridge.
 
@@ -8,7 +8,7 @@ Dieses Verzeichnis enthält die vollständigen **KiCad 10 Schaltplan-, PCB- und 
 
 Durch den konsequenten Einsatz von Ultra-Wideband (Qorvo DW3110 6.5 GHz Ch. 5, $< 0{,}4\,\text{ms}$) und Bluetooth entfällt jegliche Signal- und NF-Audioverdrahtung über den Rahmen. Der Kabelbaum besteht ausschließlich aus robusten **2-Draht-DC-Power-Peitschen** (+5V/GND bzw. +12V/GND). 
 
-Die Pod-Platine (`PCBA 02`) und der Heck-Pod (`PCBA 04`) sind ersatzlos entfallen – der Baukasten besteht aus **exakt 6 aktiven PCBAs**:
+Die Pod-Platine (`PCBA 02`) und der Heck-Pod (`PCBA 04`) sind ersatzlos entfallen - der Baukasten besteht aus **exakt 6 aktiven PCBAs**:
 
 | PCBA | Baugruppe & Funktion | Maße / Lagen | Kern-Komponenten / RF |
 | :--- | :--- | :--- | :--- |

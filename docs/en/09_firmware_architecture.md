@@ -9,15 +9,15 @@ This document specifies the system-wide firmware architecture of OpenMotorBridge
 In v8.0, the system is strictly consolidated to two primary main nodes (Rear Pod 3 and PCBA 04 have been retired without replacement):
 
 ```
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                         THE FIRMWARE CONTROLLERS IN CONCERT                            │
-├──────────────────────────────────────────────────────┬─────────────────────────────────┤
-│ 1. CENTRAL BOX (ESP32-S3 Dual-Core, PCBA 01)          │ 2. FRONT NODE (ESP32-S3, PCBA 05)│
-├──────────────────────────────────────────────────────┼─────────────────────────────────┤
-│ • Core 0: UWB Backbone, SX1262 LoRa 868, BLE, WebDAV  │ • Core 0: UWB Backbone, SAM-M10Q│
-│ • Core 1: Realtime 48 kHz Audio DSP, Ducking, AGC    │   Multi-GNSS, CAN, USB-PD, PTT  │
-│ • Co-MCUs: CH32V003 on PCBA 03 (Smart Cartridges)    │ • Core 1: Knowles Vector-DSP    │
-└──────────────────────────────────────────────────────┴─────────────────────────────────┘
++----------------------------------------------------------------------------------------+
+|                         THE FIRMWARE CONTROLLERS IN CONCERT                            |
++------------------------------------------------------+---------------------------------+
+| 1. CENTRAL BOX (ESP32-S3 Dual-Core, PCBA 01)          | 2. FRONT NODE (ESP32-S3, PCBA 05)|
++------------------------------------------------------+---------------------------------+
+| * Core 0: UWB Backbone, SX1262 LoRa 868, BLE, WebDAV  | * Core 0: UWB Backbone, SAM-M10Q|
+| * Core 1: Realtime 48 kHz Audio DSP, Ducking, AGC    |   Multi-GNSS, CAN, USB-PD, PTT  |
+| * Co-MCUs: CH32V003 on PCBA 03 (Smart Cartridges)    | * Core 1: Knowles Vector-DSP    |
++------------------------------------------------------+---------------------------------+
 ```
 
 ### 1.1 Central Box ESP32-S3 Core Allocation (240 MHz)
@@ -77,23 +77,23 @@ enum UwbBackbonePktType : uint8_t {
 ### 2.3 CAN Dual-Ingress Architecture & Auto-Sensing / Deactivation
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                    CAN DUAL-INGRESS & AUTO-SENSING MATRIX                   │
-├───────────────────────────────────┬─────────────────────────────────────────┤
-│ Scenario 1: Touring Fairing       │ Scenario 2: Naked / Road King / Adv     │
-│ (Street Glide / Road Glide)       │ (Road King Special, BMW R1250/R1300 GS) │
-├───────────────────────────────────┼─────────────────────────────────────────┤
-│ • CAN connector at FRONT NODE     │ • No CAN present in headlight nacelle   │
-│   Port J2 (3-Pin JST-GH)          │ • CAN connector at CENTRAL BOX          │
-│ • Front Node detects bus frames   │   HD26 header pins 17/18 at BCM / OBD2  │
-│ • 120R relay CPC1017N CLOSES      │ • Front Node J2 remains UNCONNECTED     │
-│ • Telemetry streamed via UWB      │ • Front Node deactivates J2 after 2.5s: │
-│   (UWB_PKT_CAN_TELEMETRY) to      │   - 120R relay remains OPEN             │
-│   Central Box                     │   - TCAN334G enters Silent High-Z mode  │
-│ • Central Box switches to         │   - TWAI controller halted (twai_stop)  │
-│   `CAN_SOURCE_REMOTE_FRONT_NODE`  │ • Central Box utilizes local HD26 CAN   │
-│                                   │   as `CAN_SOURCE_LOCAL_CENTRAL_BOX`     │
-└───────────────────────────────────┴─────────────────────────────────────────┘
++-----------------------------------------------------------------------------+
+|                    CAN DUAL-INGRESS & AUTO-SENSING MATRIX                   |
++-----------------------------------+-----------------------------------------+
+| Scenario 1: Touring Fairing       | Scenario 2: Naked / Road King / Adv     |
+| (Street Glide / Road Glide)       | (Road King Special, BMW R1250/R1300 GS) |
++-----------------------------------+-----------------------------------------+
+| * CAN connector at FRONT NODE     | * No CAN present in headlight nacelle   |
+|   Port J2 (3-Pin JST-GH)          | * CAN connector at CENTRAL BOX          |
+| * Front Node detects bus frames   |   HD26 header pins 17/18 at BCM / OBD2  |
+| * 120R relay CPC1017N CLOSES      | * Front Node J2 remains UNCONNECTED     |
+| * Telemetry streamed via UWB      | * Front Node deactivates J2 after 2.5s: |
+|   (UWB_PKT_CAN_TELEMETRY) to      |   - 120R relay remains OPEN             |
+|   Central Box                     |   - TCAN334G enters Silent High-Z mode  |
+| * Central Box switches to         |   - TWAI controller halted (twai_stop)  |
+|   `CAN_SOURCE_REMOTE_FRONT_NODE`  | * Central Box utilizes local HD26 CAN   |
+|                                   |   as `CAN_SOURCE_LOCAL_CENTRAL_BOX`     |
++-----------------------------------+-----------------------------------------+
 ```
 
 1. **Front Node Auto-Sensing & Deactivation (`cockpit_can_manager.cpp`):**
@@ -127,27 +127,27 @@ During tours across mountainous terrain or dense forests, 2.4 GHz intercom conne
 
 ```
                GROUP SPLIT FALLBACK ENGINE STATE MACHINE
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ 1. NORMAL STATUS: LINE-OF-SIGHT CONNECTED                                   │
-│    • Pod 1 (Sena Mesh) & Pod 2 (Cardo DMC) fully active                     │
-│    • HD-Audio stream in helmet; LoRa transmits periodic heartbeats (0.2 Hz) │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                     ▼ (Connection loss > 15 s)              │
-│ 2. RESCUE LEVEL 1: OMM 2.4 GHz CHANNEL-HOPPING MESH                         │
-│    • If OMM cartridge installed: Boosts TX power to +20 dBm                 │
-│    • Searches for relay nodes among adjacent group members                  │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                     ▼ (Connection loss > 45 s)              │
-│ 3. RESCUE LEVEL 2: 868 MHz LoRa MESH (SX1262) TELEMETRY & TEXT              │
-│    • Range up to 15 km (LOS) or 3-5 km in mountains                         │
-│    • Automatically transmits GPS position, bearing, distance & arrow vector │
-│    • Displays "Group ahead: 2.4 km NW" on CarPlay / PWA Dashboard           │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                     ▼ (Connection loss > 120 s)             │
-│ 4. RESCUE LEVEL 3: PMR446 ANALOG VOICE FALLBACK (OPTIONAL)                  │
-│    • Triggers automated voice broadcast ping on Midland radio cartridge     │
-│    • Broadcasts synthesized TTS location announcement over PMR446 channel   │
-└─────────────────────────────────────────────────────────────────────────────┘
++-----------------------------------------------------------------------------+
+| 1. NORMAL STATUS: LINE-OF-SIGHT CONNECTED                                   |
+|    * Pod 1 (Sena Mesh) & Pod 2 (Cardo DMC) fully active                     |
+|    * HD-Audio stream in helmet; LoRa transmits periodic heartbeats (0.2 Hz) |
++-----------------------------------------------------------------------------+
+|                                     v (Connection loss > 15 s)              |
+| 2. RESCUE LEVEL 1: OMM 2.4 GHz CHANNEL-HOPPING MESH                         |
+|    * If OMM cartridge installed: Boosts TX power to +20 dBm                 |
+|    * Searches for relay nodes among adjacent group members                  |
++-----------------------------------------------------------------------------+
+|                                     v (Connection loss > 45 s)              |
+| 3. RESCUE LEVEL 2: 868 MHz LoRa MESH (SX1262) TELEMETRY & TEXT              |
+|    * Range up to 15 km (LOS) or 3-5 km in mountains                         |
+|    * Automatically transmits GPS position, bearing, distance & arrow vector |
+|    * Displays "Group ahead: 2.4 km NW" on CarPlay / PWA Dashboard           |
++-----------------------------------------------------------------------------+
+|                                     v (Connection loss > 120 s)             |
+| 4. RESCUE LEVEL 3: PMR446 ANALOG VOICE FALLBACK (OPTIONAL)                  |
+|    * Triggers automated voice broadcast ping on Midland radio cartridge     |
+|    * Broadcasts synthesized TTS location announcement over PMR446 channel   |
++-----------------------------------------------------------------------------+
 ```
 
 ---
@@ -247,9 +247,9 @@ OpenMotorBridge is designed from the ground up as a **resilient, fault-tolerant 
 
 | Configuration | Installed Hardware | System Behavior & Graceful Degradation |
 | :--- | :--- | :--- |
-| **Tier 1: Minimal Core** | Central Box only<br>*(No Front Node)* | • **Audio Bridge & Intercoms fully operational:** Pod 1 & 2 mix with zero latency.<br>• **LoRa 868 MHz Mesh active:** Direct UPS-buffered 24/7 theft sentry & tracking.<br>• **CAN-Bus active:** Speed, RPM & BCM telemetry via HD26 pins 17/18 under seat.<br>• **IMU active:** Bosch BMI270 provides lean angle, pitch & vibration sensing.<br>• **ADR-EKF:** Operates in pure Dead Reckoning mode supported by IMU & wheel speed.<br>• **UWB driver:** Waits passively in scan mode; AGC operates at nominal gain. |
-| **Tier 2: Full System with Front Node** | Central Box + Front Node | • All Tier 1 features + deterministic UWB backbone (< 0.4 ms).<br>• u-blox SAM-M10Q Multi-GNSS with 10 Hz PVT fix & precision time synchronization.<br>• TI TMP117 black ice warning ($\pm 0.1\,^\circ\text{C}$) & TI OPT3001 ambient light sensor.<br>• 4-Port USB Hub & Dual 20W USB-PD fast charger in cockpit.<br>• Ottocast Watchdog & automatic ignition power-gating.<br>• Handlebar PTT (< 0.4 ms) and dynamic acoustic wind AGC via Knowles MEMS. |
-| **Tier 3: Rear Radar Option** | Central Box + Front Node + Radar | • All Tier 2 features + Wheeltec MR20 77 GHz or Garmin Varia on Whip 5.<br>• Audible warning pings in helmet, visual alert wings & mirror LEDs (Port `J9`).<br>• Automatic action cam bookmarks upon critical radar TTC hazard (< 2.5s). |
+| **Tier 1: Minimal Core** | Central Box only<br>*(No Front Node)* | * **Audio Bridge & Intercoms fully operational:** Pod 1 & 2 mix with zero latency.<br>* **LoRa 868 MHz Mesh active:** Direct UPS-buffered 24/7 theft sentry & tracking.<br>* **CAN-Bus active:** Speed, RPM & BCM telemetry via HD26 pins 17/18 under seat.<br>* **IMU active:** Bosch BMI270 provides lean angle, pitch & vibration sensing.<br>* **ADR-EKF:** Operates in pure Dead Reckoning mode supported by IMU & wheel speed.<br>* **UWB driver:** Waits passively in scan mode; AGC operates at nominal gain. |
+| **Tier 2: Full System with Front Node** | Central Box + Front Node | * All Tier 1 features + deterministic UWB backbone (< 0.4 ms).<br>* u-blox SAM-M10Q Multi-GNSS with 10 Hz PVT fix & precision time synchronization.<br>* TI TMP117 black ice warning ($\pm 0.1\,^\circ\text{C}$) & TI OPT3001 ambient light sensor.<br>* 4-Port USB Hub & Dual 20W USB-PD fast charger in cockpit.<br>* Ottocast Watchdog & automatic ignition power-gating.<br>* Handlebar PTT (< 0.4 ms) and dynamic acoustic wind AGC via Knowles MEMS. |
+| **Tier 3: Rear Radar Option** | Central Box + Front Node + Radar | * All Tier 2 features + Wheeltec MR20 77 GHz or Garmin Varia on Whip 5.<br>* Audible warning pings in helmet, visual alert wings & mirror LEDs (Port `J9`).<br>* Automatic action cam bookmarks upon critical radar TTC hazard (< 2.5s). |
 
 ### 8.1 Zero-Crash Resiliency Mechanisms
 1. **Asynchronous Non-Blocking Interfaces:** Communications via UWB, LoRa (SPI), and Radar (UART2) use FreeRTOS timeouts (`pdMS_TO_TICKS(50)`). There are **zero blocking `while(1)` polling loops** awaiting serial bytes.

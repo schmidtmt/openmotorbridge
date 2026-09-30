@@ -368,7 +368,7 @@ def generate_edge_cuts():
 # Generate Silkscreen Labels
 def generate_silkscreen():
     labels = [
-        ("▲ Pin 1", 101.0, 89.65, 0.60, 0.10, 0),
+        ("^ Pin 1", 101.0, 89.65, 0.60, 0.10, 0),
         ("F1: PTC", 106.75, 87.0, 0.60, 0.10, 0),
         ("D1: 5V", 112.06, 75.5, 0.60, 0.10, 0),
         ("U4: ID", 114.5, 101.0, 0.60, 0.10, 0),

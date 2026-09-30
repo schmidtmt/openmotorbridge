@@ -67,7 +67,7 @@ def build_human_summary(stats: Dict[str, Any], filename: str, mode: Optional[str
             t_start = datetime.fromisoformat(stats["start_time"])
             t_end = datetime.fromisoformat(stats["end_time"])
             date_str = t_start.strftime("%d.%m.%Y")
-            time_span = f"{t_start.strftime('%H:%M')} – {t_end.strftime('%H:%M')} Uhr"
+            time_span = f"{t_start.strftime('%H:%M')} - {t_end.strftime('%H:%M')} Uhr"
         except Exception:
             pass
 
@@ -77,7 +77,7 @@ def build_human_summary(stats: Dict[str, Any], filename: str, mode: Optional[str
     ele_max = stats.get("elevation_max_m")
     ele_str = ""
     if ele_gain is not None and ele_min is not None and ele_max is not None:
-        ele_str = f"⛰️ +{int(ele_gain):,} hm ({int(ele_min)} m – {int(ele_max)} m)".replace(",", ".")
+        ele_str = f"⛰️ +{int(ele_gain):,} hm ({int(ele_min)} m - {int(ele_max)} m)".replace(",", ".")
 
     t_min = stats.get("temp_min_c")
     t_max = stats.get("temp_max_c")
@@ -187,7 +187,7 @@ def build_human_summary(stats: Dict[str, Any], filename: str, mode: Optional[str
 
         if t_avg is not None:
             if t_min is not None and t_max is not None and t_min != t_max:
-                lines.append(f"🌡️ Temp: {t_min:.1f} °C – {t_max:.1f} °C (Ø {t_avg:.1f} °C)")
+                lines.append(f"🌡️ Temp: {t_min:.1f} °C - {t_max:.1f} °C (Ø {t_avg:.1f} °C)")
             else:
                 lines.append(f"🌡️ Temp: Ø {t_avg:.1f} °C")
 
@@ -227,7 +227,7 @@ def build_human_summary(stats: Dict[str, Any], filename: str, mode: Optional[str
     # Temperature
     if t_avg is not None:
         if t_min is not None and t_max is not None and t_min != t_max:
-            lines.append(f"🌡️ Temp: {t_min:.1f} °C – {t_max:.1f} °C (Ø {t_avg:.1f} °C)")
+            lines.append(f"🌡️ Temp: {t_min:.1f} °C - {t_max:.1f} °C (Ø {t_avg:.1f} °C)")
         else:
             lines.append(f"🌡️ Temp: Ø {t_avg:.1f} °C")
 

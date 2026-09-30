@@ -9,17 +9,17 @@ This document specifies the dynamic power and protection management of OpenMotor
 To achieve high efficiency with minimal self-heating inside sealed IP67 enclosures, both the Central Box and Front Node employ highly integrated synchronous step-down converters:
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                    DCDC CONVERTER ARCHITECTURE IN THE SYSTEM                │
-├──────────────────────────────────────┬──────────────────────────────────────┤
-│ 1. CENTRAL BOX (PCBA 01): LM5164-Q1  │ 2. FRONT NODE (PCBA 05): LMR36015    │
-├──────────────────────────────────────┼──────────────────────────────────────┤
-│ • Wide input range: 6.0 V - 65 V     │ • Input voltage: 4.2 V - 36 V        │
-│ • Output: 5.0 V DC / 1.0 A Continuous│ • Output: 5.0 V DC / 2.0 A Continuous│
-│ • Efficiency: > 88 % at full load    │ • Efficiency: 91.8 % at 2.0 A        │
-│ • Transient protection up to 100 V   │ • Output ripple: 5.3 mVpp            │
-│ • Supplies: MCU, Audio, UPS, Pod 1-3 │ • Supplies: ESP32-S3, USB2514B, VBUS │
-└──────────────────────────────────────┴──────────────────────────────────────┘
++-----------------------------------------------------------------------------+
+|                    DCDC CONVERTER ARCHITECTURE IN THE SYSTEM                |
++--------------------------------------+--------------------------------------+
+| 1. CENTRAL BOX (PCBA 01): LM5164-Q1  | 2. FRONT NODE (PCBA 05): LMR36015    |
++--------------------------------------+--------------------------------------+
+| * Wide input range: 6.0 V - 65 V     | * Input voltage: 4.2 V - 36 V        |
+| * Output: 5.0 V DC / 1.0 A Continuous| * Output: 5.0 V DC / 2.0 A Continuous|
+| * Efficiency: > 88 % at full load    | * Efficiency: 91.8 % at 2.0 A        |
+| * Transient protection up to 100 V   | * Output ripple: 5.3 mVpp            |
+| * Supplies: MCU, Audio, UPS, Pod 1-3 | * Supplies: ESP32-S3, USB2514B, VBUS |
++--------------------------------------+--------------------------------------+
 ```
 
 ### 1.1 LM5164-Q1 Inductor & Filter Dimensioning
@@ -76,18 +76,18 @@ The Universal Front Node features intelligent power management for external wire
 
 ```
                    FRONT NODE OTTOCAST POWER-GATE
-┌────────────────────────────┐              ┌────────────────────────────┐
-│ 12V Vehicle Net (KL15 IGN) │              │ ESP32-S3 Firmware          │
-│ • Headlight / Accessory Tap├─────────────►│ • 1-Click Reboot Listener  │
-│ • Reverse-Polarity & TVS   │              │ • Auto-Café 60s Countdown  │
-└────────────────────────────┘              └─────────────┬──────────────┘
-                                                          │ GPIO 1 (PWR_EN)
-                                                          ▼
-┌────────────────────────────┐              ┌────────────────────────────┐
-│ Ottocast CarPlay Dongle    │  5V VBUS     │ TI TPS2051B Load Switch    │
-│ • Port 2 (USB-A, Switched) │◄─────────────┤ • 1.05A Fast Short Clamp   │
-│ • 1-Click Hard Restart     │ (max. 1.05A) │ • 1.2 ms Soft-Start Ramp   │
-└────────────────────────────┘              └────────────────────────────┘
++----------------------------+              +----------------------------+
+| 12V Vehicle Net (KL15 IGN) |              | ESP32-S3 Firmware          |
+| * Headlight / Accessory Tap+------------->| * 1-Click Reboot Listener  |
+| * Reverse-Polarity & TVS   |              | * Auto-Café 60s Countdown  |
++----------------------------+              +-------------+--------------+
+                                                          | GPIO 1 (PWR_EN)
+                                                          v
++----------------------------+              +----------------------------+
+| Ottocast CarPlay Dongle    |  5V VBUS     | TI TPS2051B Load Switch    |
+| * Port 2 (USB-A, Switched) |<-------------+ * 1.05A Fast Short Clamp   |
+| * 1-Click Hard Restart     | (max. 1.05A) | * 1.2 ms Soft-Start Ramp   |
++----------------------------+              +----------------------------+
 ```
 
 ### 4.1 Automated Power Modes
@@ -113,13 +113,13 @@ Vehicle battery voltage at KL15 and KL30 is monitored via precision voltage divi
 ### 5.2 3-Tier Power-Down Cascade
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│          3-TIER POWER-DOWN CASCADE UPON IGNITION OFF        │
-├─────────────────────────────────────────────────────────────┤
-│ 1. RUN-ON (0..15 min): WebDAV Upload & GPX Flush (45 mA)    │
-│ 2. DEEP SLEEP (15 min..72 h): Ext-Interrupt KL15 (< 100 µA) │
-│ 3. WINTER-HIBERNATE (> 72 h): ULP Deep Sleep (< 16.5 µA)    │
-└─────────────────────────────────────────────────────────────┘
++-------------------------------------------------------------+
+|          3-TIER POWER-DOWN CASCADE UPON IGNITION OFF        |
++-------------------------------------------------------------+
+| 1. RUN-ON (0..15 min): WebDAV Upload & GPX Flush (45 mA)    |
+| 2. DEEP SLEEP (15 min..72 h): Ext-Interrupt KL15 (< 100 µA) |
+| 3. WINTER-HIBERNATE (> 72 h): ULP Deep Sleep (< 16.5 µA)    |
++-------------------------------------------------------------+
 ```
 
 * **Tier 3 - ULP Hibernate:** In deep sleep, the system draws only **$14{,}8\,\mu\text{A}$**. Over 180 days of cold winter storage, OpenMotorBridge drains only **$0{,}064\,\text{Ah}$ ($0{,}53\,\%$)** of a typical 12 Ah motorcycle battery, guaranteeing effortless engine start in spring.
@@ -134,17 +134,17 @@ The OpenMotorBridge ecosystem continuously monitors its decentralized peripheral
 Mounted in the cockpit, the Front Node is powered directly from the 12V vehicle electrical system via an onboard TI LM5164-Q1 buck converter. A high-impedance precision divider feeds an ADC input to report handlebar switchgear and cockpit socket voltages to the Central Box in real time.
 
 ### 6.2 Smart Keyfob & Pager (PCBA 07): LiPo Fuel Gauge (BLE Service 0x180F & LoRa)
-The portable Smart Keyfob is powered by an internal 3.7V LiPo cell (350–500 mAh) charged via USB-C. A **Maxim MAX17048 I2C fuel gauge** measures State of Charge (SoC in %), cell voltage, and discharge rate without requiring an external sense resistor. The Keyfob reports its battery status periodically via the standard **Bluetooth SIG Battery Service (`UUID 0x180F`)** and within its periodic LoRa health beacons:
+The portable Smart Keyfob is powered by an internal 3.7V LiPo cell (350-500 mAh) charged via USB-C. A **Maxim MAX17048 I2C fuel gauge** measures State of Charge (SoC in %), cell voltage, and discharge rate without requiring an external sense resistor. The Keyfob reports its battery status periodically via the standard **Bluetooth SIG Battery Service (`UUID 0x180F`)** and within its periodic LoRa health beacons:
 
 ```
-┌──────────────┬───────────────┬──────────────────────────────────────────────┐
-│ SoC (LiPo)   │ Cell Voltage  │ System Reaction & Warning Level              │
-├──────────────┼───────────────┼──────────────────────────────────────────────┤
-│ **> 20 %**   │ 3.7 V - 4.2 V │ Normal Operation (Green indicator in WebApp) │
-│ **≤ 15 %**   │ ≤ 3.6 V       │ **Yellow Early Warning:** Alternating yellow │
-│              │               │ LED blink • Push: "Recharge Keyfob via USB-C"│
-│              │               │ • Pager display shows low-battery icon       │
-│ **≤ 5 %**    │ ≤ 3.3 V       │ **Critical Alarm:** Persistent red warning,  │
-│              │               │ automatic ULP deep sleep to protect cell     │
-└──────────────┴───────────────┴──────────────────────────────────────────────┘
++--------------+---------------+----------------------------------------------+
+| SoC (LiPo)   | Cell Voltage  | System Reaction & Warning Level              |
++--------------+---------------+----------------------------------------------+
+| **> 20 %**   | 3.7 V - 4.2 V | Normal Operation (Green indicator in WebApp) |
+| **≤ 15 %**   | ≤ 3.6 V       | **Yellow Early Warning:** Alternating yellow |
+|              |               | LED blink * Push: "Recharge Keyfob via USB-C"|
+|              |               | * Pager display shows low-battery icon       |
+| **≤ 5 %**    | ≤ 3.3 V       | **Critical Alarm:** Persistent red warning,  |
+|              |               | automatic ULP deep sleep to protect cell     |
++--------------+---------------+----------------------------------------------+
 ```

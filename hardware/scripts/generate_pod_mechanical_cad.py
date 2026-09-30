@@ -13,9 +13,9 @@ M8AP                    ||      (Sena Apex / Cardo DMC / u-blox GNSS + LoRa)
  |P|                    ||
  |T+--------------------+|
  +-+---------------------+
-  ▲ ▲
-  │ └── 6 vergoldete Mill-Max Pogo-Pins (P) an der inneren Stirnwand
-  └──── M8-Stirnwand-Adapterplatine (ADPT) an der linken Gehäusestirnseite
+  ^ ^
+  | +-- 6 vergoldete Mill-Max Pogo-Pins (P) an der inneren Stirnwand
+  +---- M8-Stirnwand-Adapterplatine (ADPT) an der linken Gehäusestirnseite
 
 Physical Dimensions:
 - Pod Outer Enclosure: 68.0 mm (L) x 44.0 mm (W) x 24.0 mm (H) - Ultra-flat aerodynamic profile
@@ -89,7 +89,7 @@ def render_xray_assembly(output_png):
     fig = plt.figure(figsize=(20, 11), dpi=220, facecolor='#080c14')
     ax = fig.add_subplot(111, projection='3d', facecolor='#080c14')
 
-    # Coordinate Setup (mm) — GENERIC MAXIMUM ENVELOPE (Fits 100% Sena 50S/60S, Cardo Edge/Pro, OMM):
+    # Coordinate Setup (mm) -- GENERIC MAXIMUM ENVELOPE (Fits 100% Sena 50S/60S, Cardo Edge/Pro, OMM):
     # Pod Outer Housing: 120.0 mm along X (-60..+60), 64.0 mm along Y (-32..+32), 32.0 mm along Z (-16..+16)
     # Centric Cartridge Bay: 96.0 mm (X = -36 to +60 mm), 56.0 mm (Y = -28 to +28 mm), 24.0 mm (Z = -12 to +12 mm)
     # Wall thickness: Symmetric 3.0 mm top, bottom, left, right
@@ -198,39 +198,39 @@ def render_xray_assembly(output_png):
     # Title header
     fig.text(0.5, 0.95, "OPENMOTORBRIDGE // GENERIC UNIVERSAL POD & OPEN SLED (120 x 64 x 32 mm)", 
              color='#38bdf8', fontsize=17, fontweight='bold', ha='center', fontfamily='sans-serif')
-    fig.text(0.5, 0.915, "3D X-Ray CAD Architektur — 100% Generic Envelope für Sena 50S/60S, Cardo Edge/Pro & OMM Transceiver", 
+    fig.text(0.5, 0.915, "3D X-Ray CAD Architektur -- 100% Generic Envelope für Sena 50S/60S, Cardo Edge/Pro & OMM Transceiver", 
              color='#94a3b8', fontsize=11.5, ha='center', fontfamily='sans-serif')
 
     # Technical Details Overlay
     left_card_text = (
         "UNIVERSAL-POD: 120 x 64 x 32 mm (MAX-ENVELOPE)\n"
-        "──────────────────────────────────────────────────\n"
-        "• M8 6-Pin IP67 Vollmetall-Einbaubuchse (M8 A-Code)\n"
-        "• Pod-Base Platine (48 x 24 mm PCB mit SP3012 TVS)\n"
-        "• Einschraubbare Schottwand (2x M2 Schrauben)\n"
+        "--------------------------------------------------\n"
+        "* M8 6-Pin IP67 Vollmetall-Einbaubuchse (M8 A-Code)\n"
+        "* Pod-Base Platine (48 x 24 mm PCB mit SP3012 TVS)\n"
+        "* Einschraubbare Schottwand (2x M2 Schrauben)\n"
         "  (100% Berührungsschutz & Platinenkapselung)\n"
-        "• 6-Pin Stiftleiste mit PA12-Schutzkragen (Zentrisch)\n"
-        "• Duale Edelstahl-Auswerferfedern (Auto-Eject)\n"
+        "* 6-Pin Stiftleiste mit PA12-Schutzkragen (Zentrisch)\n"
+        "* Duale Edelstahl-Auswerferfedern (Auto-Eject)\n"
         "  (Federt Kassette bei Tastendruck 10mm aus)\n"
-        "• Mittige ePTFE-Druckausgleichsmembran (Ø 7mm)\n"
+        "* Mittige ePTFE-Druckausgleichsmembran (Ø 7mm)\n"
         "  (Atmungsaktiv IP67 auf Gehäuse-Oberseite)\n"
-        "• Asymmetrische Poka-Yoke Führungsstege (1.5 / 2.0mm)"
+        "* Asymmetrische Poka-Yoke Führungsstege (1.5 / 2.0mm)"
     )
     fig.text(0.04, 0.48, left_card_text, color='#e2e8f0', fontsize=9.2, fontfamily='monospace',
              bbox=dict(boxstyle='round,pad=0.8', facecolor='#111827', edgecolor='#38bdf8', alpha=0.92, lw=1.4))
 
     right_card_text = (
         "OFFENER EINSCHUB-SCHLITTEN (OPEN CARRIER SLED)\n"
-        "──────────────────────────────────────────────────\n"
-        "• Lichter Bauraum: 88 x 50 x 23.5 mm (Open Top)\n"
-        "• 100% Kompatibel: Sena 50S/60S, Cardo Edge/Pro,\n"
+        "--------------------------------------------------\n"
+        "* Lichter Bauraum: 88 x 50 x 23.5 mm (Open Top)\n"
+        "* 100% Kompatibel: Sena 50S/60S, Cardo Edge/Pro,\n"
         "  Cardo Bold/Freecom, Midland & OMM-Transceiver\n"
-        "• Flat-Carrier-PCB (60 x 36 mm): DS2401 & JST-SH\n"
-        "• Piston-Einschub: 6-Pin Buchse in Shroud\n\n"
+        "* Flat-Carrier-PCB (60 x 36 mm): DS2401 & JST-SH\n"
+        "* Piston-Einschub: 6-Pin Buchse in Shroud\n\n"
         "IP67-SEITENDICHTUNG & QUICK-RELEASE RASTUNG:\n"
-        "• Umlaufende Shore 40A Silikondichtung (2.0mm)\n"
-        "• Duale seitliche Snap-Fit Schnellverriegelung\n"
-        "• Taktiles 'Klick'-Einrasten & werkzeuglose\n"
+        "* Umlaufende Shore 40A Silikondichtung (2.0mm)\n"
+        "* Duale seitliche Snap-Fit Schnellverriegelung\n"
+        "* Taktiles 'Klick'-Einrasten & werkzeuglose\n"
         "  Schnell-Entriegelung über seitliche Drucktasten"
     )
     fig.text(0.68, 0.48, right_card_text, color='#e2e8f0', fontsize=9.2, fontfamily='monospace',
@@ -342,29 +342,29 @@ def render_exploded_view(output_png):
 
     exploded_legend = (
         "SCHICHT-HIERARCHIE ENTLANG DER EINSCHUBACHSE (X-ACHSE)\n"
-        "─────────────────────────────────────────────────────────────\n"
+        "-------------------------------------------------------------\n"
         "[1] M8 6-PIN IP67 EINBAUBUCHSE & MUTTER (Links)\n"
-        "    • M8 A-Coded Vollmetallbuchse mit Rüttelsicherung\n\n"
+        "    * M8 A-Coded Vollmetallbuchse mit Rüttelsicherung\n\n"
         "[2] POD-BASE PLATINE (48 x 24 mm PCB)\n"
-        "    • Direkt aufgelötete M8-Buchse & SP3012 TVS\n\n"
+        "    * Direkt aufgelötete M8-Buchse & SP3012 TVS\n\n"
         "[3] SCHUTZ-SCHOTTWAND MIT AUTO-EJECT FEDERN (2x M2)\n"
-        "    • PA12-Trennwand (56 x 24 mm) kapselt Platine 100% berührungssicher\n"
-        "    • Integrierter Schutzkragen & 45° Fangtrichter\n"
-        "    • Duale Edelstahl-Federn werfen Kassette 10mm aus\n\n"
+        "    * PA12-Trennwand (56 x 24 mm) kapselt Platine 100% berührungssicher\n"
+        "    * Integrierter Schutzkragen & 45° Fangtrichter\n"
+        "    * Duale Edelstahl-Federn werfen Kassette 10mm aus\n\n"
         "[4] MITTIGE ePTFE-DRUCKAUSGLEICHSMEMBRAN (Ø 7mm)\n"
-        "    • Zentral auf langer Gehäuse-Oberseite (IP67)\n\n"
+        "    * Zentral auf langer Gehäuse-Oberseite (IP67)\n\n"
         "[5] OFFENER EINSCHUB-SCHLITTEN (92 x 54 x 23.5 mm)\n"
-        "    • U-Chassis ohne Deckel (88 x 50 mm Lichter Bauraum)\n\n"
+        "    * U-Chassis ohne Deckel (88 x 50 mm Lichter Bauraum)\n\n"
         "[6] 6-PIN FRONT-BUCHSENLEISTE (ZENTRISCH)\n"
-        "    • Gleitet saugend in Schottwand-Schutzkragen ein\n\n"
+        "    * Gleitet saugend in Schottwand-Schutzkragen ein\n\n"
         "[7] KASSETTEN-TRÄGERPLATINE (60 x 36 mm PCB)\n"
-        "    • Liegt flach am Boden: PTC, LED, DS2401, JST-SH\n\n"
+        "    * Liegt flach am Boden: PTC, LED, DS2401, JST-SH\n\n"
         "[8] SENA / CARDO / OMM MODUL-BAURAUM (80 x 46 mm)\n"
-        "    • Volle lichte Bauhöhe nach oben unbeschränkt\n\n"
+        "    * Volle lichte Bauhöhe nach oben unbeschränkt\n\n"
         "[9] SHORE 40A SILIKON-STIRNFLANSCHDICHTUNG (2.0 mm)\n"
-        "    • Dichtet den Öffnungsflansch zu 100% IP67 ab\n\n"
+        "    * Dichtet den Öffnungsflansch zu 100% IP67 ab\n\n"
         "[10] PA12-ABSCHLUSSBLENDE & SNAP-FIT RASTUNG\n"
-        "    • Duale Rastnasen mit Klick-Verschluss & Tastern"
+        "    * Duale Rastnasen mit Klick-Verschluss & Tastern"
     )
     fig.text(0.04, 0.44, exploded_legend, color='#e2e8f0', fontsize=8.8, fontfamily='monospace',
              bbox=dict(boxstyle='round,pad=0.8', facecolor='#111827', edgecolor='#38bdf8', alpha=0.92, lw=1.4))

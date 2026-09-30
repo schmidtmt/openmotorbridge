@@ -1,4 +1,4 @@
-# OpenMotorBridge – Architecture Decisions Log (ADL)
+# OpenMotorBridge - Architecture Decisions Log (ADL)
 
 ### ADR-001: Wechsel auf 4-Punkte-Satelliten-Topologie
 * **Datum:** 2026-08
@@ -38,12 +38,12 @@
   3. **PCBA 07 (2-in-1 LoRa Smart-Keyfob):** Standardisierung als 7. Baugruppe mit nRF52840, SX1262 LoRa, TI DRV2605L LRA-Haptikmotor, 250 mAh LiPo und TI BQ51003 MagSafe Qi-Ladeempfänger.
   4. **Smart Docking & Ablauf-Agnostische Geräteerkennung:** Trennung zwischen dauerhaften USB-Speichersticks (Class 0x08 / < 0.5W, kein Alarm) und ladenden Fahrer-Smartphones (USB-PD / Qi > 10W mit BLE-Kopplung). Löst bei Zündung AUS und Entfernen des Fahrers (> 3 m) den "Handy am Lenker / Handschuhfach vergessen"-Alarm aus.
   5. **Flankengetriggerter Fahrmodus (User-Override Schutz):** Dashboard-Umschaltung ins Cockpit erfolgt nur einmalig auf der steigenden Flanke bei Ladebeginn. Manuelle Navigation zu anderen Tabs wird respektiert; kein aggressives Zurückspringen.
-  6. **Verzicht auf UWB:** Da OpenMotorBridge kein OEM-Zündschloss ersetzt und der Motorstart am originalen Fahrzeugschlüssel hängt, bietet UWB keinen praktischen Schutz vor Fahrzeug-Entwendung, sondern würde Ruhestrom (30–50 mA) und Bauteilkosten unnötig in die Höhe treiben.
+  6. **Verzicht auf UWB:** Da OpenMotorBridge kein OEM-Zündschloss ersetzt und der Motorstart am originalen Fahrzeugschlüssel hängt, bietet UWB keinen praktischen Schutz vor Fahrzeug-Entwendung, sondern würde Ruhestrom (30-50 mA) und Bauteilkosten unnötig in die Höhe treiben.
 
-### ADR-008: Primat der stabilen Intercom-Sprachverbindung („Den Lead unterstützen, nicht ersetzen“), visuelle Gruppenkultur & Verzicht auf fahrtbegleitende Push-Verkehrsdaten
+### ADR-008: Primat der stabilen Intercom-Sprachverbindung ("Den Lead unterstützen, nicht ersetzen"), visuelle Gruppenkultur & Verzicht auf fahrtbegleitende Push-Verkehrsdaten
 * **Datum:** 2026-09
 * **Entscheidungen:**
-  1. **Leitmotiv „Den Lead unterstützen, nicht ersetzen“:** Der erfahrene Lead-Fahrer (Tourguide) ist der beste und schnellste Sensor für das Kollektiv. Warnungen vor realen Straßenhindernissen (Rollsplitt, Baustellen, Traktoren) erfolgen per 2-Sekunden-Sprachansage über die Intercom mit $< 2\,\text{ms}$ Latenz und null Blickabwendung vom Asphalt.
+  1. **Leitmotiv "Den Lead unterstützen, nicht ersetzen":** Der erfahrene Lead-Fahrer (Tourguide) ist der beste und schnellste Sensor für das Kollektiv. Warnungen vor realen Straßenhindernissen (Rollsplitt, Baustellen, Traktoren) erfolgen per 2-Sekunden-Sprachansage über die Intercom mit $< 2\,\text{ms}$ Latenz und null Blickabwendung vom Asphalt.
   2. **Primat der stabilen, markenübergreifenden Intercom (Sena ↔ Cardo ↔ OMM):** Die Kernaufgabe von OMB ist die garantierte, unterbrechungsfreie Audio-Verbindung zwischen inkompatiblen Headsets, nicht die Bevormundung des Fahrers durch digitale Assistenten.
   3. **Respekt für bewährte visuelle Signale:** Selbst bei akutem Funkausfall bricht die Gruppe nicht zusammen: Der Lead kontrolliert die Rückspiegel; ein gesetzter Blinker rechts oder Lichthupe signalisiert sofort den Haltewunsch. Digitale Systeme dürfen diese erprobten Verhaltensmuster niemals durch Cockpit-Menüs behindern.
   4. **Strikte Anzeigestille während der Fahrt ($v > 0$):** Kein Push-Dienst für allgemeine Verkehrs- oder Staumeldungen auf dem Display. Keine störenden Pop-ups in Schräglage oder bei Bremsmanövern (Vermeidung des unwillkürlichen Sakkaden-Fixierungsreflexes und Blindflugs).
@@ -58,10 +58,10 @@
   3. **Vorteile für Zuverlässigkeit & Sicherheit:** Kein LiPo-Dauerladen im heißen, geschlossenen Pod; keine Akku-Alterung oder Zellblähung; kein Aufhebeln des Gehäuses oder Zerstören von Garantiesiegeln nötig.
   4. **DLE-Scoring:** SPIDER X Slim erhält durch Mesh 3.0 und Wave volle **+60 DLE-Bonuspunkte** (wie K1 Flaggschiffe), während ältere Spider RT1/ST1 als K2b (Mesh 2.0) bei **+40 Punkten** verbleiben.
   5. **Offizielle Kern-Empfehlung für Pod 1:** Aufgrund der Mesh 3.0 Gleichstellung, der nativen Direct-DC-Fähigkeit ohne LiPo-Risiko und des um über 50 % günstigeren Anschaffungspreises gegenüber einem Sena 60S wird das SPIDER X Slim als offizielle Referenz- und Primärempfehlung für Pod 1 in OpenMotorBridge verankert.
-  6. **Integrierte 3-fach Kabelpeitsche & Verzicht auf Pogo-Pin-Cradle:** Gemäß offiziellem Benutzerhandbuch (S. 6) führt das Modul Akku (⑧), Mikrofon (⑨) und Lautsprecher (⑩) auf separaten Miniatur-Steckverbindern an einer Kabelpeitsche heraus. Dadurch entfällt das für Motorradvibrationen ($> 20\,\text{g}$) und Feuchtigkeit anfällige Pogo-Pin-Cradle vollständig. Alle Signale werden über einen einfachen Adapterkabelstrang direkt mit dem 6-poligen JST-SH Header `J2` der Kassetten-Trägerplatine (PCBA 03) verbunden – 100 % zerstörungsfrei und ohne Lötarbeiten.
+  6. **Integrierte 3-fach Kabelpeitsche & Verzicht auf Pogo-Pin-Cradle:** Gemäß offiziellem Benutzerhandbuch (S. 6) führt das Modul Akku (⑧), Mikrofon (⑨) und Lautsprecher (⑩) auf separaten Miniatur-Steckverbindern an einer Kabelpeitsche heraus. Dadurch entfällt das für Motorradvibrationen ($> 20\,\text{g}$) und Feuchtigkeit anfällige Pogo-Pin-Cradle vollständig. Alle Signale werden über einen einfachen Adapterkabelstrang direkt mit dem 6-poligen JST-SH Header `J2` der Kassetten-Trägerplatine (PCBA 03) verbunden - 100 % zerstörungsfrei und ohne Lötarbeiten.
   7. **Präzise Opto-Pulssequenzen & Null-Tastendruck Power-Management (Handbuch v1.0.0):**
-     * **Power ON/OFF (Handbuch S. 17):** Manuell `C` + `+` 1s (Ein) bzw. 1x kurz (Aus). Durch Aktivierung von *„Automatisch ein/aus“* (G-Sensor) schläft das Modul nach 2 min Stillstand ein ($< 1\,\text{mA}$) und wacht bei Motorrad-Bewegung innerhalb von 3 Tagen vollautomatisch auf. An der $3{,}85\,\text{V}$-Festspannungsschiene ist im Fahralltag keinerlei manueller Tastendruck zum Einschalten nötig.
-     * **Kanalwechsel (Handbuch S. 26):** Doppelklick ($2 \times 150\,\text{ms}$ mit $150\,\text{ms}$ Pause) auf die Mesh-Taste aktiviert das Menü *„Kanaleinstellungen“*. Die Speicherung erfolgt nach 10s Inaktivitäts-Timeout automatisch. (Wichtig: Ein 1000-ms-Dauerdruck schaltet das Mikrofon stumm und darf nicht für Kanalwechsel verwendet werden).
+     * **Power ON/OFF (Handbuch S. 17):** Manuell `C` + `+` 1s (Ein) bzw. 1x kurz (Aus). Durch Aktivierung von *"Automatisch ein/aus"* (G-Sensor) schläft das Modul nach 2 min Stillstand ein ($< 1\,\text{mA}$) und wacht bei Motorrad-Bewegung innerhalb von 3 Tagen vollautomatisch auf. An der $3{,}85\,\text{V}$-Festspannungsschiene ist im Fahralltag keinerlei manueller Tastendruck zum Einschalten nötig.
+     * **Kanalwechsel (Handbuch S. 26):** Doppelklick ($2 \times 150\,\text{ms}$ mit $150\,\text{ms}$ Pause) auf die Mesh-Taste aktiviert das Menü *"Kanaleinstellungen"*. Die Speicherung erfolgt nach 10s Inaktivitäts-Timeout automatisch. (Wichtig: Ein 1000-ms-Dauerdruck schaltet das Mikrofon stumm und darf nicht für Kanalwechsel verwendet werden).
      * **Open ↔ Group Mesh Umschaltung (Handbuch S. 29):** Ein 3000-ms-Haltepuls schaltet nahtlos zwischen Open Mesh und Group Mesh um (GATT-Kommando `0x08`, WebApp-Taste `btn-trigger-p1-group`).
 
 ### ADR-010: Smart Modular Cartridge (PCBA 03) mit In-System Profil-Flashing, 4 unabhängigen MOSFET-Aktuatoren & Entfall von Optokoppler und DS2401
@@ -110,4 +110,4 @@
   7. **Key-Reset & Nahtloses Multi-Vehicle Roaming (Auto ↔ Bike):**
      * Physischer SMD-Taster `SW1` (`SW_PAIR_RESET`) auf `PCBA 01` (3s Pairing-Modus, 10s Key-Purge).
      * Bis zu 4 Fahrzeug-Netzwerkschlüssel im NVS der Kassette (`PCBA 03`) gespeichert.
-     * Beim Umstecken einer Kassette aus dem Auto in das Motorrad erfolgt eine unkomplizierte „Plug & Confirm“-Übernahme (Bestätigung per App oder PTT-Doppelklick) ohne Datenverlust oder Werksreset.
+     * Beim Umstecken einer Kassette aus dem Auto in das Motorrad erfolgt eine unkomplizierte "Plug & Confirm"-Übernahme (Bestätigung per App oder PTT-Doppelklick) ohne Datenverlust oder Werksreset.

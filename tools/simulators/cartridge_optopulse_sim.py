@@ -34,7 +34,7 @@ def run_cartridge_optopulse_simulation() -> bool:
             name = data.get("name", "Unknown")
             gain_in = data.get("audio_gain_in_db", 0.0)
             gain_out = data.get("audio_gain_out_db", 0.0)
-            print(f"    • {os.path.basename(p_path):28s} -> {name:32s} | In: {gain_in:+4.1f} dB, Out: {gain_out:+4.1f} dB")
+            print(f"    * {os.path.basename(p_path):28s} -> {name:32s} | In: {gain_in:+4.1f} dB, Out: {gain_out:+4.1f} dB")
 
     # 2. Simulate 1-Wire Hot-Plug Enumeration
     print("\n  Simulating 1-Wire DS2401 Hot-Plug on Pod 1 & Pod 2:")

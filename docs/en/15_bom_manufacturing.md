@@ -1,6 +1,6 @@
 # 15 - Bill of Materials (BOM), COTS Sourcing & SMT Manufacturing (All 7 PCBAs)
 
-This document serves as the master reference (Single Source of Truth) for the complete Bill of Materials (BOM), manufacturing specifications for all 7 printed circuit board assemblies (PCBA 01 to PCBA 03, PCBA 05 to PCBA 08 – PCBA 04 is retired without replacement in v8.0) at JLCPCB / Eurocircuits, all mechanical 3D printed components, COTS procurement lists, and a comprehensive cost and ordering strategy (Solo builder vs. Community group buy).
+This document serves as the master reference (Single Source of Truth) for the complete Bill of Materials (BOM), manufacturing specifications for all 7 printed circuit board assemblies (PCBA 01 to PCBA 03, PCBA 05 to PCBA 08 - PCBA 04 is retired without replacement in v8.0) at JLCPCB / Eurocircuits, all mechanical 3D printed components, COTS procurement lists, and a comprehensive cost and ordering strategy (Solo builder vs. Community group buy).
 
 ---
 
@@ -219,15 +219,15 @@ No custom wire harnessing or crimping is required. The system leverages 100% com
 
 ```
                         PLUG-AND-PLAY HARNESS CONCEPT (COTS PRE-MOLDED)
-┌─────────────────────────┐
-│ HD26 IP67 Pre-Molded    │ ──► Overmolded HD26 breakout harness whip (Amphenol LTW COTS)
-│ (Central Box Interface) │ ──► 100% watertight molded, zero discrete pin crimping required
-└─┬───────────────────────┘
-  ├─► Whip 1: M8 6-Pin PUR Cable (1.0 m / 1.5 m): Standard pre-molded sensor/actuator cable ──► Pod 1
-  ├─► Whip 2: M8 6-Pin PUR Cable (1.0 m / 1.5 m): Standard pre-molded sensor/actuator cable ──► Pod 2
-  ├─► Whip 4: AMP Superseal 12V Cable (1.0 m): Pre-assembled fused battery harness ──► Vehicle 12V Rail
-  └─► Whip 5: M8 4-Pin Socket (250 mm): Rear Radar (Wheeltec MR20 / Garmin Varia: 12V + UART)
-      (Note: Front Node requires ZERO wiring to the rear – links wirelessly via UWB!)
++-------------------------+
+| HD26 IP67 Pre-Molded    | --> Overmolded HD26 breakout harness whip (Amphenol LTW COTS)
+| (Central Box Interface) | --> 100% watertight molded, zero discrete pin crimping required
++-+-----------------------+
+  +-> Whip 1: M8 6-Pin PUR Cable (1.0 m / 1.5 m): Standard pre-molded sensor/actuator cable --> Pod 1
+  +-> Whip 2: M8 6-Pin PUR Cable (1.0 m / 1.5 m): Standard pre-molded sensor/actuator cable --> Pod 2
+  +-> Whip 4: AMP Superseal 12V Cable (1.0 m): Pre-assembled fused battery harness --> Vehicle 12V Rail
+  +-> Whip 5: M8 4-Pin Socket (250 mm): Rear Radar (Wheeltec MR20 / Garmin Varia: 12V + UART)
+      (Note: Front Node requires ZERO wiring to the rear - links wirelessly via UWB!)
 ```
 
 ### 11.1 RF Antennas & Sensors (COTS)
@@ -262,7 +262,7 @@ No custom wire harnessing or crimping is required. The system leverages 100% com
 | **UPS Battery Pack** | 1S LiPo Flat Pack 2,200 mAh ($68 \times 39 \times 5.0\,\text{mm}$) with Micro-Fit | EEMB / Enerpower | 1 pc | Central Box UPS buffer (Type 504068 / 503870) |
 | **Automotive Fuse Holder** | Waterproof Blade Fuse Holder + 2A Fuse | Hella / MTA | 1 pc | KL30 battery terminal line protection |
 | **M8 6-Pin Cables (PUR)** | M8 6-Pin A-Coded Male/Female (1.0m / 1.5m) | Binder / Phoenix | 2 pcs | Plug-and-play harness to Pod 1 and Pod 2 |
-| **M8 4-Pin Cable (PUR)** | M8 4-Pin A-Coded Male/Female (0.5–1.5m) | Binder / Phoenix | Opt. (1)| Whip 5: Rear Radar (Wheeltec MR20 / Garmin Varia) |
+| **M8 4-Pin Cable (PUR)** | M8 4-Pin A-Coded Male/Female (0.5-1.5m) | Binder / Phoenix | Opt. (1)| Whip 5: Rear Radar (Wheeltec MR20 / Garmin Varia) |
 | **Front Node 12V Cable** | 2-Pin JST-PH Lead with Posi-Tap | COTS Standard | 1 pc | Local cockpit power connection (parking light/GPS plug) |
 | **J_ACT Actuator Harness** | Pre-crimped 8-Pin JST-SH to 4x 2-Pin Leads | Adafruit / SparkFun | 2 pcs | Pre-assembled harness for 4 solenoids |
 | **Miniature Solenoids** | 5V DC Pull Solenoids ($\varnothing 6.5 \times 12\,\text{mm}$) with TPU Tip | Solenoid Supplier | 8 pcs | 4 pcs per Smart Cartridge (Sena / Cardo) |
@@ -292,7 +292,7 @@ Because **no soldering, no crimping, and no thermal heat-staking of threaded ins
 
 ---
 
-## 14. Cost Calculation, Ordering Strategy & Economies of Scale (Solo vs. 2–3 Bikes)
+## 14. Cost Calculation, Ordering Strategy & Economies of Scale (Solo vs. 2-3 Bikes)
 
 > [!IMPORTANT]
 > **Important Note Regarding Commercial Intercoms:**
@@ -303,9 +303,9 @@ Because **no soldering, no crimping, and no thermal heat-staking of threaded ins
 When an individual builder orders all PCBs alone:
 * JLCPCB supplies 5 boards per design (2 fully assembled plus 3 unpopulated spares).
 * **Cost Breakdown Solo Builder:**
-  * JLCPCB PCBAs (PCBA 01, 02 [2x], 03 [2x], 05 assembled incl. shipping & customs): approx. 135–160 €
-  * 3D Printing (MJF PA12 bureau or own ASA filament): approx. 35–45 €
-  * COTS harnesses, 2,200 mAh LiPo, stainless fasteners & gaskets: approx. 35–45 €
+  * JLCPCB PCBAs (PCBA 01, 02 [2x], 03 [2x], 05 assembled incl. shipping & customs): approx. 135-160 €
+  * 3D Printing (MJF PA12 bureau or own ASA filament): approx. 35-45 €
+  * COTS harnesses, 2,200 mAh LiPo, stainless fasteners & gaskets: approx. 35-45 €
   * **Total System Cost Solo: approx. 205 € to 250 €**
 
 ### 14.2 Scenario B: Community / Group Order (2 to 3 Motorcycles)
@@ -313,8 +313,8 @@ When 2 to 3 riders order together:
 * All 5 boards are ordered fully populated from JLCPCB.
 * Fixed setup fees distribute across 5 fully operational board sets.
 * **Cost Breakdown per Motorcycle (at 3 bikes):**
-  * JLCPCB PCBAs (share per bike): approx. 70–80 €
-  * 3D Printing (per bike): approx. 30–35 €
+  * JLCPCB PCBAs (share per bike): approx. 70-80 €
+  * 3D Printing (per bike): approx. 30-35 €
   * COTS harnesses, 2,200 mAh LiPo, fasteners (bulk discount): approx. 30 €
   * **Total Cost per Motorcycle: only approx. 130 € to 145 €!**
 

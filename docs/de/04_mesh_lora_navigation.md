@@ -140,6 +140,25 @@ Das offizielle Ende einer Ausfahrt verlangt ein sauberes und lautloses Auflösen
 * **Szenario A (Verpasster Abzweig):** Hält der Fahrer nach wenigen Sekunden an oder sucht die Anschlussstelle, bleibt der Alarm scharf und meldet: *"Achtung: Möglicher Kursverlust / Split"*.
 * **Szenario B (Geplante Trennung):** Fährt der Fahrer mit hoher Reisegeschwindigkeit zügig auf der neuen Route weiter, deklariert das System nach Ablauf des Timers das reguläre Verlassen (`GRACEFUL_LEAVE`).
 
+### 2.8 Assistenz-Grundsatz: Diskrete Signalisierung (Human-in-the-Loop) statt Audio-Paternalismus
+Im Einklang mit dem architektonischen Leitmotiv (*"Den Lead unterstützen, nicht ersetzen"*, siehe [Kapitel 01](01_system_architecture.md)) verzichtet OpenMotorBridge auf bevormundende Eingriffe in die Gruppenkommunikation:
+
+1. **Heterogene Gruppen & Taktische Anker-Platzierung:**
+   * In gemischten Ausfahrten nutzen oft nur 2 bis 3 Motorräder eine OpenMotorBridge (z. B. Lead-Anchor an der Spitze, Mid-Bridge in der Mitte, Sweep-Anchor am Schluss), während die übrigen 10 Teilnehmer reine Fremd-Headsets (Sena oder Cardo) ohne LoRa oder Telemetrie fahren.
+   * Oft ist nicht einmal garantiert, dass der vorderste OMB-Fahrer der eigentliche Tourguide ist (der Guide kann z. B. ein reiner Sena-Fahrer an Position 1 sein).
+2. **Strikter Verzicht auf ungefragte Roboter-Durchsagen:**
+   * Das System unterlässt jegliche automatische Einspeisung synthetisierter TTS-Sprachansagen in das fremde Gruppenmesh. Eine unvermittelt einsetzende Computerstimme (*"Achtung Guide: Konvoi abgerissen!"*) stört die Konzentration, wirkt im fremden Funkkanal peinlich und widerspricht dem Respekt vor menschlicher Führung.
+3. **Diskrete, private Signalisierung:**
+   * Detektiert der stochastische Riss-Score einen Abriss oder liegt ein technisches Problem vor, erfolgt die Benachrichtigung **ausschließlich an die OMB-Fahrer**:
+     * **Haptisch:** Spezifisches Vibrationsmuster am Smart-Keyfob (`PCBA 07`) in der Jackentasche.
+     * **Akustisch (Local Only):** Dezenter Zweiklang-Gong ausschließlich im eigenen Helm - niemals im Gruppen-Mesh.
+     * **Optisch:** Cockpit-HUD in der PWA oder kurzes Doppelblinken der Spiegel-Warn-LEDs.
+4. **Menschliche Souveränität & eigene Stimme:**
+   * Der OMB-Fahrer spürt/sieht das Signal, prüft kurz Rückspiegel oder Cockpit und entscheidet selbst:
+     * *"Betrifft das mich selbst?"* (Bin ich zu weit zurückgefallen?) -> Eigene Fahrweise anpassen.
+     * *"Fehlt jemand hinter mir?"* -> Bei Bedarf drückt der Fahrer kurz PTT und informiert den Guide mit seiner eigenen, natürlichen Stimme über Intercom (*"Du, Klaus, nimm mal kurz raus, hinten an der Ampel sind zwei hängengeblieben"*).
+   * Die Technik dient als diskreter, feinfühliger Co-Pilot, der die menschliche Urteilskraft stärkt, anstatt sie zu ersetzen.
+
 ---
 
 ## 3. Schleifenfreier Link-State Audio Bridging Graph
@@ -174,7 +193,7 @@ Trifft ein Sprachpaket an zwei Bikes gleichzeitig ein, die beide zwischen Sena u
 3. **Ergebnis:** Es übersetzt zu jedem Zeitpunkt exakt ein einziger Knoten. Doppeleinspeisungen und Phasenverzögerungen sind ausgeschlossen.
 
 ### 3.3 Do-Not-Translate (DNT) Header-Flag & Anti-Loop Schutz
-* Wird ein Audiosignal von einem Netzwerk ins andere übersetzt (z. B. Sena $\rightarrow$ Cardo), injiziert der übersetzende Knoten ein digitales Kontroll-Flag (`FLAG_DO_NOT_TRANSLATE`).
+* Wird ein Audiosignal von einem Netzwerk ins andere übersetzt (z. B. Sena -> Cardo), injiziert der übersetzende Knoten ein digitales Kontroll-Flag (`FLAG_DO_NOT_TRANSLATE`).
 * Empfängt ein anderes OMB-Bike im Cardo-Netzwerk dieses Sprachpaket, erkennt die DSP-Pipeline anhand des DNT-Flags sofort, dass dieses Audiosignal ursprünglich aus dem Sena-Netzwerk stammt.
 * **Strikte Sperre:** Eine Rückübersetzung in Richtung Sena wird hardware- und softwareseitig **hart blockiert**. Akustische Rückkopplungsschleifen (Feedback Loops) sind physikalisch unmöglich.
 

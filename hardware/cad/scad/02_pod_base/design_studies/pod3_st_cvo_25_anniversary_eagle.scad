@@ -1,7 +1,7 @@
 // =============================================================================
 // OpenMotorBridge - CVO 25-Jahre Anniversary Eagle Nacelle (Harley-Davidson ST)
 // =============================================================================
-// Design-Linie: 25-Jahre-CVO Jubiläumslackierung (1999–2024 CVO Road Glide ST)
+// Design-Linie: 25-Jahre-CVO Jubiläumslackierung (1999-2024 CVO Road Glide ST)
 // 1. CVO-Farbton: Atlas Silver / Raven Metallic Slate Grey (#475569)
 // 2. Adler-Auge: Stechendes Screamin' Eagle Rot/Orange (#ff3b00) als Lichtleiter-Linse
 // 3. Predatory Beak: Aerodynamischer Hakenschnabel mit Kehl-Kiel (Zero Stirnfläche)

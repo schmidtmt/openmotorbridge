@@ -11,26 +11,26 @@ Optional kann nach jedem Upload ein MQTT-Event an dein Smart Home (**Homesphere*
 ## Architektur & Vorteile
 
 ```
-┌─────────────────────────┐          WebDAV PUT          ┌───────────────────────────┐
-│     OPENMOTORBRIDGE     │ ───────────────────────────► │     omb-gdrive-bridge     │
-│  (ESP32-S3 Zentralbox)  │    (HTTPS mit Basic Auth)    │ (FastAPI Container <30MB) │
-└─────────────────────────┘                              └─────────────┬─────────────┘
-                                                                       │
++-------------------------+          WebDAV PUT          +---------------------------+
+|     OPENMOTORBRIDGE     | ---------------------------> |     omb-gdrive-bridge     |
+|  (ESP32-S3 Zentralbox)  |    (HTTPS mit Basic Auth)    | (FastAPI Container <30MB) |
++-------------------------+                              +-------------+-------------+
+                                                                       |
                                                             Google Drive API v3
                                                           (OAuth2 Refresh-Token)
-                                                                       │
-                                                  ┌────────────────────┴────────────────────┐
-                                                  ▼                                         ▼
-                                     ┌──────────────────────────┐             ┌───────────────────────────┐
-                                     │       GOOGLE DRIVE       │             │   SMART HOME / HOMESPHERE │
-                                     │      /omb/tracks/        │             │      (Optionaler MQTT-    │
-                                     │   • 2026-09-18_tour.gpx  │             │       Event-Push)         │
-                                     └──────────────────────────┘             └───────────────────────────┘
+                                                                       |
+                                                  +--------------------+--------------------+
+                                                  v                                         v
+                                     +--------------------------+             +---------------------------+
+                                     |       GOOGLE DRIVE       |             |   SMART HOME / HOMESPHERE |
+                                     |      /omb/tracks/        |             |      (Optionaler MQTT-    |
+                                     |   * 2026-09-18_tour.gpx  |             |       Event-Push)         |
+                                     +--------------------------+             +---------------------------+
 ```
 
 * **100 % plattformunabhängig:** Funktioniert für iOS-Fahrer (keine teure Apple-Entwicklergebühr von 99 $/Jahr nötig) und Android-Nutzer gleichermaßen.
 * **Autark & ohne Handyzwang:** Sobald das Motorrad in die heimische Garage rollt (oder unterwegs über den Mobilfunk-Proxy), lädt die Box die GPX-Datei direkt hoch.
-* **Kein Rclone-Overkill:** Kein 100-MB-Binary und keine fremden Cloud-Dienste – ein winziger Python-Container mit < 30 MB RAM.
+* **Kein Rclone-Overkill:** Kein 100-MB-Binary und keine fremden Cloud-Dienste - ein winziger Python-Container mit < 30 MB RAM.
 * **Zero-Trust & Datensouveränität:** Du hostest den Container selbst (z. B. auf deinem Server `omb.f0o.bar`, einer Synology-DiskStation, einem Raspberry Pi oder Unraid). Deine Daten und Google-Tokens verlassen niemals deine Hand.
 
 ---
@@ -144,7 +144,7 @@ MQTT_TOPIC=homesphere/omb/track_uploaded
 ```
 
 In Home Assistant kannst du daraufhin eine Benachrichtigung auf deinem Smartphone oder der Apple Watch / WearOS auslösen:
-> *„Motorradtour beendet! 164,2 km gefahren, max. Schräglage 42,8°. Track liegt auf Google Drive bereit.“*
+> *"Motorradtour beendet! 164,2 km gefahren, max. Schräglage 42,8°. Track liegt auf Google Drive bereit."*
 
 ---
 

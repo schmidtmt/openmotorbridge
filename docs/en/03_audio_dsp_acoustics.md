@@ -10,12 +10,12 @@ To eliminate ground loops, alternator hum (1.2 kHz stator whine), and ignition i
 
 ```
 MOTORCYCLE CHASSIS / VEHICLE GROUND                 ISOLATED AUDIO SUBSYSTEM
-┌──────────────────────────────────────┐          ┌───────────────────────────┐
-│ Alternator Whine & Spikes            │          │ Pure, Ground-Free Audio   │
-│ • Ground offset differences up to 3V │  1500V   │ • True Differential In/Out│
-│ • Ignition pulses on battery line    ├─── XFMR ─┤ • 85 dB CMRR Common-Mode  │
-│ • High-frequency inverter noise      │  BARRIER │   Rejection Ratio         │
-└──────────────────────────────────────┘          └───────────────────────────┘
++--------------------------------------+          +---------------------------+
+| Alternator Whine & Spikes            |          | Pure, Ground-Free Audio   |
+| * Ground offset differences up to 3V |  1500V   | * True Differential In/Out|
+| * Ignition pulses on battery line    +--- XFMR -+ * 85 dB CMRR Common-Mode  |
+| * High-frequency inverter noise      |  BARRIER |   Rejection Ratio         |
++--------------------------------------+          +---------------------------+
 ```
 
 * **Audio Isolation Transformers:** Two Bourns LM-NP-1001 transformers provide $1500\,\text{V}_{\text{RMS}}$ dielectric isolation between vehicle ground and sensitive headset audio lines.
@@ -38,18 +38,18 @@ The Everest Semiconductor ES8388 24-bit stereo codec interfaces directly with Co
 The Universal Front Node (`PCBA 05`) houses a Knowles SPH0645LM4H digital I2S MEMS microphone positioned behind an aerodynamic, hydrophobic ePTFE acoustic channel:
 
 ```
-┌────────────────────────────────────────────────────────────────────────┐
-│             KNOWLES SPH0645 DIGITAL MEMS NOISE TRACKING PIPELINE       │
-├────────────────────────────────────────────────────────────────────────┤
-│ 1. Acoustic Input: Ambient Cockpit & Wind Noise (35 to 115 dBA)        │
-│ 2. ePTFE Gore Membrane: 100% Water/Dust Sealed (< 0.5 dB attenuation)  │
-│ 3. 24-Bit I2S DMA Sampling at 16 kHz                                  │
-│ 4. Direct Form II Biquad A-Weighting Filter (IEC 61672-1 Class 1)     │
-│    • Low-frequency wind rumble (100 Hz) attenuated by -19.1 dB        │
-│ 5. RMS Power Block Calculation (20 ms sliding window)                 │
-│ 6. Fast UWB Telemetry Broadcast to Central Box at 50 Hz (< 0.4 ms)    │
-│ 7. Dynamic AGC Helmet Boost: Automatically scales volume +0 to +6 dB   │
-└────────────────────────────────────────────────────────────────────────┘
++------------------------------------------------------------------------+
+|             KNOWLES SPH0645 DIGITAL MEMS NOISE TRACKING PIPELINE       |
++------------------------------------------------------------------------+
+| 1. Acoustic Input: Ambient Cockpit & Wind Noise (35 to 115 dBA)        |
+| 2. ePTFE Gore Membrane: 100% Water/Dust Sealed (< 0.5 dB attenuation)  |
+| 3. 24-Bit I2S DMA Sampling at 16 kHz                                  |
+| 4. Direct Form II Biquad A-Weighting Filter (IEC 61672-1 Class 1)     |
+|    * Low-frequency wind rumble (100 Hz) attenuated by -19.1 dB        |
+| 5. RMS Power Block Calculation (20 ms sliding window)                 |
+| 6. Fast UWB Telemetry Broadcast to Central Box at 50 Hz (< 0.4 ms)    |
+| 7. Dynamic AGC Helmet Boost: Automatically scales volume +0 to +6 dB   |
++------------------------------------------------------------------------+
 ```
 
 ### 3.1 Acoustic Adaptation Formula
@@ -79,14 +79,14 @@ $$g(t) = g_{\min} + \frac{1 - g_{\min}}{2} \left[1 - \cos\left(\frac{\pi \cdot t
 
 ### 4.3 Priority & Ducking Matrix
 ```
-┌─────────┬──────────────────────┬─────────────┬──────────────┬──────────────────────────────┐
-│ Priority│ Audio Source         │ Attenuation │ Attack Time  │ Preemption Behavior          │
-├─────────┼──────────────────────┼─────────────┼──────────────┼──────────────────────────────┤
-│ **Prio 1**│ Collision Alert / SOS│ **0.0 dB**  │ Immediate    │ Mutes all background sources │
-│ **Prio 2**│ Navigation Voice     │ **-12.0 dB**│ 15 ms        │ Ducks Intercom & Music       │
-│ **Prio 3**│ Intercom (P1 & P2)   │ **-15.0 dB**│ 35 ms        │ Ducks A2DP Media / Radio     │
-│ **Prio 4**│ A2DP Music / Radio   │ Baseline    │ 250 ms       │ Background entertainment     │
-└─────────┴──────────────────────┴─────────────┴──────────────┴──────────────────────────────┘
++---------+----------------------+-------------+--------------+------------------------------+
+| Priority| Audio Source         | Attenuation | Attack Time  | Preemption Behavior          |
++---------+----------------------+-------------+--------------+------------------------------+
+| **Prio 1**| Collision Alert / SOS| **0.0 dB**  | Immediate    | Mutes all background sources |
+| **Prio 2**| Navigation Voice     | **-12.0 dB**| 15 ms        | Ducks Intercom & Music       |
+| **Prio 3**| Intercom (P1 & P2)   | **-15.0 dB**| 35 ms        | Ducks A2DP Media / Radio     |
+| **Prio 4**| A2DP Music / Radio   | Baseline    | 250 ms       | Background entertainment     |
++---------+----------------------+-------------+--------------+------------------------------+
 ```
 
 ---
@@ -97,23 +97,23 @@ The audio DSP engine runs on dedicated **Core 1** of the ESP32-S3 host MCU with 
 
 ```
                   FREERTOS CORE 1 REAL-TIME AUDIO PIPELINE
-┌─────────────────────────────────────────────────────────────────────────────────────────┐
-│ [ ES8388 I2S RX DMA ] ──► [ Double Buffer (2x 128 Samples @ 2.67 ms) ]                 │
-│                                           │                                             │
-│                                           ▼                                             │
-│ ┌─────────────────────────────────────────────────────────────────────────────────────┐ │
-│ │ 1. DC-BLOCK & HIGHPASS: 2nd Order Butterworth (fc = 45 Hz)                          │ │
-│ ├─────────────────────────────────────────────────────────────────────────────────────┤ │
-│ │ 2. NOISE GATE & EXPANDER: Spectral Subtraction (-54 dBFS Threshold)                 │ │
-│ ├─────────────────────────────────────────────────────────────────────────────────────┤ │
-│ │ 3. DUCKING MIXER: Computes Raised-Cosine Interpolation across active streams        │ │
-│ ├─────────────────────────────────────────────────────────────────────────────────────┤ │
-│ │ 4. LOOKAHEAD BRICKWALL LIMITER: 1 ms Soft-Knee Limiter (Prevents 0 dBFS clipping)   │ │
-│ └─────────────────────────────────────────────────────────────────────────────────────┘ │
-│                                           │                                             │
-│                                           ▼                                             │
-│ [ ES8388 I2S TX DMA ] ◄── [ Double Buffer (2x 128 Samples @ 2.67 ms) ]                 │
-└─────────────────────────────────────────────────────────────────────────────────────────┘
++-----------------------------------------------------------------------------------------+
+| [ ES8388 I2S RX DMA ] --> [ Double Buffer (2x 128 Samples @ 2.67 ms) ]                 |
+|                                           |                                             |
+|                                           v                                             |
+| +-------------------------------------------------------------------------------------+ |
+| | 1. DC-BLOCK & HIGHPASS: 2nd Order Butterworth (fc = 45 Hz)                          | |
+| +-------------------------------------------------------------------------------------+ |
+| | 2. NOISE GATE & EXPANDER: Spectral Subtraction (-54 dBFS Threshold)                 | |
+| +-------------------------------------------------------------------------------------+ |
+| | 3. DUCKING MIXER: Computes Raised-Cosine Interpolation across active streams        | |
+| +-------------------------------------------------------------------------------------+ |
+| | 4. LOOKAHEAD BRICKWALL LIMITER: 1 ms Soft-Knee Limiter (Prevents 0 dBFS clipping)   | |
+| +-------------------------------------------------------------------------------------+ |
+|                                           |                                             |
+|                                           v                                             |
+| [ ES8388 I2S TX DMA ] <-- [ Double Buffer (2x 128 Samples @ 2.67 ms) ]                 |
++-----------------------------------------------------------------------------------------+
 ```
 
 ### 5.1 ES8388 Low-Level Register Configuration & I2S DMA Architecture
@@ -169,16 +169,16 @@ python3 tools/audio_testbench/server.py
 ```
 
 ```
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│              OPENMOTORBRIDGE LIVE AUDIO DSP STUDIO & REALTIME TESTBENCH                │
-├───────────────────────────────┬───────────────────────────────┬────────────────────────┤
-│ 1. INPUTS & MOTORCYCLE        │ 2. REALTIME OSCILLOSCOPE & DSP│ 3. OUTPUT & SPECTRUM   │
-├───────────────────────────────┼───────────────────────────────┼────────────────────────┤
-│ • Physical Mic/Headset In     │ • Raised-Cosine Ducking Curve │ • Stereo FFT Spectrum  │
-│ • Handlebar PTT ([SPACEBAR])  │ • 15ms Attack / 800ms Release │ • Triple VU-Meters     │
-│ • Virtual Speedo (0-160 km/h) │ • Dynamic Wind Noise Gate     │ • Helmet Master Gain   │
-│ • Synthwave & MP3 Drag & Drop │ • 1-Wire Hot-Swap Profiles    │ • Latency (< 10 ms)    │
-└───────────────────────────────┴───────────────────────────────┴────────────────────────┘
++----------------------------------------------------------------------------------------+
+|              OPENMOTORBRIDGE LIVE AUDIO DSP STUDIO & REALTIME TESTBENCH                |
++-------------------------------+-------------------------------+------------------------+
+| 1. INPUTS & MOTORCYCLE        | 2. REALTIME OSCILLOSCOPE & DSP| 3. OUTPUT & SPECTRUM   |
++-------------------------------+-------------------------------+------------------------+
+| * Physical Mic/Headset In     | * Raised-Cosine Ducking Curve | * Stereo FFT Spectrum  |
+| * Handlebar PTT ([SPACEBAR])  | * 15ms Attack / 800ms Release | * Triple VU-Meters     |
+| * Virtual Speedo (0-160 km/h) | * Dynamic Wind Noise Gate     | * Helmet Master Gain   |
+| * Synthwave & MP3 Drag & Drop | * 1-Wire Hot-Swap Profiles    | * Latency (< 10 ms)    |
++-------------------------------+-------------------------------+------------------------+
 ```
 
 ### 8.1 Testbench Capabilities

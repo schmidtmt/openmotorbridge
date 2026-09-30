@@ -5,7 +5,7 @@ This document specifies the mechanical engineering, thermal dissipation, IP67/IP
 2. **Modular Satellite Pod & Cartridge System (Type B):** Mechanically identical 5-sided monocoque enclosure for both satellite pods (Pods 1 & 2 Audio/Intercom, 2x symmetric) with modular swap cartridges (Sena SPIDER X Slim, Cardo Packtalk Edge, OMM 2.4 GHz Swap Cartridge, Midland, Dry Box), smooth closed IP67 outer shell (zero antenna radome penetrations), $120^\circ$ V-groove pipe saddle, Dual-Port M8/USB-C, Poka-Yoke tongue-and-groove guidance, spring-loaded auto-eject, and invisible neodymium magnetic anti-theft locking.
 3. **Universal Front Node (Type C):** Ultra-compact Cockpit & Sensor Hub ($98.0 \times 68.0 \times 25.0\,\text{mm}$) tailored for the enlarged $82 \times 50\,\text{mm}$ 4-layer PCBA 05, featuring a **4-in-1 universal mounting system** (AMPS, pipe saddle, silentblocks, 3M Dual-Lock), integrated bottom tub pocket for UWB backbone (FXUWB10), J12 Qwiic Sensor Hub (u-blox SAM-M10Q GNSS patch, TI TMP117 precision thermometer, TI OPT3001 light sensor) in laminar airflow scoop, dedicated EPDM cable combs for USB (South) and vehicle wiring (North), Dual SW3526 20W USB-PD, and Knowles MEMS acoustic channel.
 4. **2-in-1 LoRa Smart-Keyfob & Pager (Type D):** Ultra-compact pocket companion ($58.0 \times 34.0 \times 13.0\,\text{mm}$) molded in PA12-MJF with perimeter TPU shock bumper, integrated N52 neodymium ejection key, $0.5\,\text{mm}$ Mu-metal magnetic flux shield, MagSafe/Qi inductive charging receiver, LRA haptic motor, and wireless SX1262 LoRa/BLE alert pager.
-5. **Vehicle-Specific Reference Mounting Kits (Zero-Drill):** Fully engineered, non-destructive bolt-on mounting kits for CVO Road Glide ST (Kit 1), Road King Special (Kit 2), Classic Bagger & Cruiser (Kit 3), and Adventure & Touring Enduros (BMW GS, KTM Adventure, Africa Twin – Kit 4 with minimal under-rack radar bracket).
+5. **Vehicle-Specific Reference Mounting Kits (Zero-Drill):** Fully engineered, non-destructive bolt-on mounting kits for CVO Road Glide ST (Kit 1), Road King Special (Kit 2), Classic Bagger & Cruiser (Kit 3), and Adventure & Touring Enduros (BMW GS, KTM Adventure, Africa Twin - Kit 4 with minimal under-rack radar bracket).
 
 ---
 
@@ -29,28 +29,28 @@ The Central Box enclosure is engineered in **PA12 (HP Multi Jet Fusion)** for ha
 *Figure 8.2: 3D CAD visualization of the Central Control Box (Type A).*
 
 ```
-┌────────────────────────────────────────────────────────────┐  ▲
-│ 1. ENCLOSURE LID (6.0 mm Height / 3.0 mm Wall Thickness)   │  │
-│    • Gore ePTFE pressure equalization vent (Ø 7.0 mm)      │  │ 38.0 mm
-│    • Perimeter groove with Shore 40A silicone cord gasket  │  │ Total
-│    • Integrated antenna pocket (110 x 20 x 0.8 mm) for     │  │ Height
-│      Taoglas FXP895 LoRa 868 MHz flex antenna              │  │
-│    • 100% solid, closed lid (tether-free lid removal)      │  │
-├────────────────────────────────────────────────────────────┤  │
-│ 2. UPPER CASE WITH INTERMEDIATE TRAY (15.0 mm Height)      │  │
-│    • Front Panel: HD26 D-Sub flange (4-branch harness),    │  │
-│      USB-C service port, Status-LED window (Ø 3 mm)        │  │
-│    • Upper Chamber: 1S LiPo battery (68x39x5.0mm, 2,200mAh)│  │
-│    • Intermediate Tray: 11x convection vents & cable slot  │  │
-├────────────────────────────────────────────────────────────┤  │
-│ 3. LOWER CASE (17.0 mm Height - Monocoque Tub)             │  │
-│    • 4-Layer Main PCB (85 x 55 mm) on M2.5 dampers         │  │
-│    • Integrated antenna pocket (11 x 11 x 0.6 mm) in floor │  │
-│      for Taoglas FXUWB10 flex antenna (DW3110 UWB Ch. 5)   │  │
-│    • Captive M3 hex nut pockets (IKEA assembly principle)  │  │
-│    • 4x M4 silentblock mounting ears                       │  │
-│    • 100% solid PA12 floor without through-holes           │  │
-└────────────────────────────────────────────────────────────┘  ▼
++------------------------------------------------------------+  ^
+| 1. ENCLOSURE LID (6.0 mm Height / 3.0 mm Wall Thickness)   |  |
+|    * Gore ePTFE pressure equalization vent (Ø 7.0 mm)      |  | 38.0 mm
+|    * Perimeter groove with Shore 40A silicone cord gasket  |  | Total
+|    * Integrated antenna pocket (110 x 20 x 0.8 mm) for     |  | Height
+|      Taoglas FXP895 LoRa 868 MHz flex antenna              |  |
+|    * 100% solid, closed lid (tether-free lid removal)      |  |
++------------------------------------------------------------+  |
+| 2. UPPER CASE WITH INTERMEDIATE TRAY (15.0 mm Height)      |  |
+|    * Front Panel: HD26 D-Sub flange (4-branch harness),    |  |
+|      USB-C service port, Status-LED window (Ø 3 mm)        |  |
+|    * Upper Chamber: 1S LiPo battery (68x39x5.0mm, 2,200mAh)|  |
+|    * Intermediate Tray: 11x convection vents & cable slot  |  |
++------------------------------------------------------------+  |
+| 3. LOWER CASE (17.0 mm Height - Monocoque Tub)             |  |
+|    * 4-Layer Main PCB (85 x 55 mm) on M2.5 dampers         |  |
+|    * Integrated antenna pocket (11 x 11 x 0.6 mm) in floor |  |
+|      for Taoglas FXUWB10 flex antenna (DW3110 UWB Ch. 5)   |  |
+|    * Captive M3 hex nut pockets (IKEA assembly principle)  |  |
+|    * 4x M4 silentblock mounting ears                       |  |
+|    * 100% solid PA12 floor without through-holes           |  |
++------------------------------------------------------------+  v
 ```
 
 ### 1.2 3D Exploded View & Layer Architecture (1:1:1 CAD Fitting)
@@ -102,13 +102,13 @@ Total heat dissipation during standard riding is only **$\approx 1{,}5\,\text{W}
 
 ```
                       FRONT WALL OF UPPER TRAY
-┌─────────────────────────────────────────────────────────────┐
-│ ┌────────────┐     ┌────────┐      ┌──────────────────────┐ │
-│ │ 1. USB-C   │     │ 2. RGB │      │ 3. HD26 D-Sub Flange │ │
-│ │    Service │     │    LED │      │    (Harness Socket)  │ │
-│ │    Alu Cap │     │    Ø3mm│      │    2x M3 Jackscrews  │ │
-│ └────────────┘     └────────┘      └──────────────────────┘ │
-└─────────────────────────────────────────────────────────────┘
++-------------------------------------------------------------+
+| +------------+     +--------+      +----------------------+ |
+| | 1. USB-C   |     | 2. RGB |      | 3. HD26 D-Sub Flange | |
+| |    Service |     |    LED |      |    (Harness Socket)  | |
+| |    Alu Cap |     |    Ø3mm|      |    2x M3 Jackscrews  | |
+| +------------+     +--------+      +----------------------+ |
++-------------------------------------------------------------+
 ```
 
 1. **HD26 D-Sub Flange:** Amphenol LTW / NorComp SEAL-D with EPDM perimeter gasket ($1{,}5\,\text{mm}$, Shore 60A).
@@ -150,27 +150,27 @@ To effectively protect swap cartridges across all motorcycle types (from freely 
 
 ```
         MAGNETIC ANTI-THEFT LOCK: 2-ARM ROCKER LATCH (KINEMATIC CUTAWAY)
-═════════════════════════════════════════════════════════════════════════════════
+=================================================================================
 
                  POD ENCLOSURE WALL (PA12-MJF, NON-MAGNETIC)
- ─────────────────────────┬───────────────────────┬──────────────────────────────
-  [EXTERNAL NEODYMIUM KEY]│                       │ [HOUSING GUIDE GROOVE]
-  (Target circle at X=64) │                       │  (Retention notch at X=88 mm)
-            ▼             │                       │            ▲
-      ┌───────────┐       │                       │            │ 90° locking flank:
-      │ NEODYMIUM │       │                       │            │ blocks extraction!
-      │ MAGNET N52│       │                       │            │
-      └─────┬─────┘       │                       │            │
- ═══════════╪═════════════╪═══════════════════════╪════════════╪═════════════════
-  CARTRIDGE │             │                       │            │
-            ▼ Pulls       │   M2 PIVOT AXLE       │            ▼
-      ┌───────────┐outward│     (FULCRUM)         │   ┌─────────────────┐
-      │STEEL ANCHOR├──────┴─────────⊙─────────────┴───┤ SAWTOOTH CLAW   │
-      │(Ø 6.2 mm) │   Rear Arm      │     Front Arm   │ (30° in / 90°)| │
-      └─────┬─────┘   (X = 46 mm)   │    (X = 70 mm)  └─────────────────┘
-            ▲                       │                          ▲
-     [V4A SPRING] █ Pushes          │                          │ Swivels inward
-     (Rest pos.)    inward          │                          │ to release!
+ -------------------------+-----------------------+------------------------------
+  [EXTERNAL NEODYMIUM KEY]|                       | [HOUSING GUIDE GROOVE]
+  (Target circle at X=64) |                       |  (Retention notch at X=88 mm)
+            v             |                       |            ^
+      +-----------+       |                       |            | 90° locking flank:
+      | NEODYMIUM |       |                       |            | blocks extraction!
+      | MAGNET N52|       |                       |            |
+      +-----+-----+       |                       |            |
+ ===========╪=============╪=======================╪============╪=================
+  CARTRIDGE |             |                       |            |
+            v Pulls       |   M2 PIVOT AXLE       |            v
+      +-----------+outward|     (FULCRUM)         |   +-----------------+
+      |STEEL ANCHOR+------+---------o-------------+---+ SAWTOOTH CLAW   |
+      |(Ø 6.2 mm) |   Rear Arm      |     Front Arm   | (30° in / 90°)| |
+      +-----+-----+   (X = 46 mm)   |    (X = 70 mm)  +-----------------+
+            ^                       |                          ^
+     [V4A SPRING] # Pushes          |                          | Swivels inward
+     (Rest pos.)    inward          |                          | to release!
 ```
 
 ![OpenMotorBridge Magnetic Anti-Theft Lock 3D CAD Kinematics](../images/cad/magnetic_anti_theft_lock_cad.png)
@@ -236,23 +236,23 @@ To support both exposed outdoor deployments (e.g. crash-bar clamps on adventure 
 
 ```
                          POD BASE PCB (TOP VIEW / LAYOUT)
- ┌────────────────────────────────────────────────────────────────────────┐
- │                                                                        │
- │   [ PORT A: M8 6-Pin ]                   [ PORT B: USB-C Slim ]        │
- │   (Outdoor / Crash Bar)                  (Saddlebag / Interior Mount)  │
- │   Rugged threaded jack                   Sealed behind TPU dust cap    │
- │            │                                         │                 │
- │            └───► [ AUTOMATIC POWER-MUX /     ] ◄─────┘                 │
- │                  [ IDEAL DIODES (LM66100)    ]                         │
- │                                │                                       │
- │                                ▼                                       │
- │                    [ SP3012 ESD Array ]                                │
- │                                │                                       │
- │                                ▼                                       │
- │                    [ J1: Mill-Max 6-Pin Pogo ]                         │
- │                    (Centered for cartridge engagement)                 │
- │                                                                        │
- └────────────────────────────────────────────────────────────────────────┘
+ +------------------------------------------------------------------------+
+ |                                                                        |
+ |   [ PORT A: M8 6-Pin ]                   [ PORT B: USB-C Slim ]        |
+ |   (Outdoor / Crash Bar)                  (Saddlebag / Interior Mount)  |
+ |   Rugged threaded jack                   Sealed behind TPU dust cap    |
+ |            |                                         |                 |
+ |            +---> [ AUTOMATIC POWER-MUX /     ] <-----+                 |
+ |                  [ IDEAL DIODES (LM66100)    ]                         |
+ |                                |                                       |
+ |                                v                                       |
+ |                    [ SP3012 ESD Array ]                                |
+ |                                |                                       |
+ |                                v                                       |
+ |                    [ J1: Mill-Max 6-Pin Pogo ]                         |
+ |                    (Centered for cartridge engagement)                 |
+ |                                                                        |
+ +------------------------------------------------------------------------+
 ```
 
 1. **Mechanical Decoupling of `J1` and `J2`:**
@@ -316,35 +316,35 @@ The OMM 2.4 GHz Swap Cartridge ([`cartridge_omm_transceiver.scad`](../../hardwar
 For modern intercom cartridges such as the Sena SPIDER X Slim and Cardo Packtalk Edge, the cartridge mechanical architecture addresses the dual core challenges: **Absolute vibration resistance for the OEM adapter** and **accurate, permanent alignment of 4 discrete, independently positioned actuators onto the target button fields**.
 
 ```
-    MECHATRONIC SMART CARTRIDGE – DISCRETE 4-CHANNEL ACTUATOR GUIDE
-┌──────────────────────────────────────────────────────────────────────────────────┐
-│ CARTRIDGE TOP COVER (PA12-MJF with model-specific guide domes):                  │
-│                                                                                  │
-│   TOP FACE (3x Vertical Domes):                   SIDE FLANK (1x 45° Angle):     │
-│   [ Actuator 1 ]   [ Actuator 2 ]   [ Actuator 3 ]           [ Actuator 4 ]      │
-│   (Sena: + /       (Sena: Center/   (Sena: - /               (Sena: Mesh 45° /   │
-│    Cardo: Media)    Cardo: Mobile)   Cardo: Intercom)         Cardo: Wheel-Press)│
-│         │                │                │                         │            │
-│   ┌─────┴─────┐    ┌─────┴─────┐    ┌─────┴─────┐             ┌─────┴─────┐      │
-│   │Spring 0.15│    │Spring 0.15│    │Spring 0.15│             │Spring 0.15│      │
-│   └─────┬─────┘    └─────┬─────┘    └─────┬─────┘             └─────┬─────┘      │
-│         ▼                ▼                ▼                         ▼            │
-│   ┌───────────┐    ┌───────────┐    ┌───────────┐             ┌───────────┐      │
-│   │Vertical   │    │Vertical   │    │Vertical   │             │45°-Angle  │      │
-│   │Bushing H8 │    │Bushing H8 │    │Bushing H8 │             │Bushing H8 │      │
-│   └─────┬─────┘    └─────┬─────┘    └─────┬─────┘             └─────┬─────┘      │
-│         │ (TPU)          │ (TPU)          │ (TPU)                   │ (TPU)      │
-│         ▼ (0.4mm)        ▼ (0.4mm)        ▼ (0.4mm)                 ▼ (0.4mm)    │
-├─────────┼────────────────┼────────────────┼─────────────────────────┼────────────┤
-│ OEM INTERCOM HOUSING (In vibration-dampened EPDM contour nest):                  │
-│         ▼                ▼                ▼                         ▼            │
-│   [ Button 1 ]     [ Button 2 ]     [ Button 3 ]              [ Button 4 / Wheel]│
-│                                                                                  │
-│ ┌──────────────────────────────────────────────────────────────────────────────┐ │
-│ │ 3-Point EPDM Damping Liners (60° Shore A, 1.5 mm) resisting 20g shock/vibe  │ │
-│ └──────────────────────────────────────────────────────────────────────────────┘ │
-│ CARTRIDGE BASE SLED WITH MONOCOQUE LOCKING (PA12-MJF Negative Contour)           │
-└──────────────────────────────────────────────────────────────────────────────────┘
+    MECHATRONIC SMART CARTRIDGE - DISCRETE 4-CHANNEL ACTUATOR GUIDE
++----------------------------------------------------------------------------------+
+| CARTRIDGE TOP COVER (PA12-MJF with model-specific guide domes):                  |
+|                                                                                  |
+|   TOP FACE (3x Vertical Domes):                   SIDE FLANK (1x 45° Angle):     |
+|   [ Actuator 1 ]   [ Actuator 2 ]   [ Actuator 3 ]           [ Actuator 4 ]      |
+|   (Sena: + /       (Sena: Center/   (Sena: - /               (Sena: Mesh 45° /   |
+|    Cardo: Media)    Cardo: Mobile)   Cardo: Intercom)         Cardo: Wheel-Press)|
+|         |                |                |                         |            |
+|   +-----+-----+    +-----+-----+    +-----+-----+             +-----+-----+      |
+|   |Spring 0.15|    |Spring 0.15|    |Spring 0.15|             |Spring 0.15|      |
+|   +-----+-----+    +-----+-----+    +-----+-----+             +-----+-----+      |
+|         v                v                v                         v            |
+|   +-----------+    +-----------+    +-----------+             +-----------+      |
+|   |Vertical   |    |Vertical   |    |Vertical   |             |45°-Angle  |      |
+|   |Bushing H8 |    |Bushing H8 |    |Bushing H8 |             |Bushing H8 |      |
+|   +-----+-----+    +-----+-----+    +-----+-----+             +-----+-----+      |
+|         | (TPU)          | (TPU)          | (TPU)                   | (TPU)      |
+|         v (0.4mm)        v (0.4mm)        v (0.4mm)                 v (0.4mm)    |
++---------+----------------+----------------+-------------------------+------------+
+| OEM INTERCOM HOUSING (In vibration-dampened EPDM contour nest):                  |
+|         v                v                v                         v            |
+|   [ Button 1 ]     [ Button 2 ]     [ Button 3 ]              [ Button 4 / Wheel]|
+|                                                                                  |
+| +------------------------------------------------------------------------------+ |
+| | 3-Point EPDM Damping Liners (60° Shore A, 1.5 mm) resisting 20g shock/vibe  | |
+| +------------------------------------------------------------------------------+ |
+| CARTRIDGE BASE SLED WITH MONOCOQUE LOCKING (PA12-MJF Negative Contour)           |
++----------------------------------------------------------------------------------+
 ```
 
 * **1. Discrete, Modular Actuator Architecture:**
@@ -395,7 +395,7 @@ Accommodates the sliding contacts of the original Cardo audio kit plate. The dev
 * **Midland XT Bare-Board Edition:** Directly houses the decased PCB of compact walkie-talkies (XT10/XT30/G5, $\approx 68 \times 42 \times 10\,\text{mm}$).
 
 #### 4.3.9 PMR446 Transceiver & Bare-Board Module (SA818S / RDA1846)
-Fully integrated 500 mW PMR446 analog RF module ($38 \times 20\,\text{mm}$) seated directly on the cartridge carrier PCB—optionally with internal 446 MHz helical antenna or robust SMA front socket.
+Fully integrated 500 mW PMR446 analog RF module ($38 \times 20\,\text{mm}$) seated directly on the cartridge carrier PCB--optionally with internal 446 MHz helical antenna or robust SMA front socket.
 
 #### 4.3.10 Longitudinal Cross-Section Comparison (Sena vs. Cardo)
 ![OpenMotorBridge Sena & Cardo Cartridges Longitudinal Cross Section](../images/cad/sena_cardo_cartridge_cross_section.png)
@@ -459,26 +459,26 @@ The Front Node enclosure was specially engineered for protected installation ins
 *Figure 8.21: Enclosure bottom view of the Front Node showing AMPS hole pattern, $120^\circ$ V-groove tube saddle, EPDM strap anchor tabs, silentblock mounting holes, and 3M Dual-Lock hook-and-loop channels.*
 
 ```
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                   THE 4-IN-1 UNIVERSAL MOUNTING SYSTEM (BOTTOM VIEW)                   │
-├────────────────────────────────────────────────────────────────────────────────────────┤
-│ 1. AMPS HOLE PATTERN (30 x 38 mm):                                                     │
-│    • 4x form-fitting DIN 934 M4 captive hex nut pockets in AMPS layout (100% iron-free)│
-│    • Compatible with all RAM-Mount ball adapters, Garmin brackets & cockpit crossbars  │
-├────────────────────────────────────────────────────────────────────────────────────────┤
-│ 2. TUBE SADDLE PRISM (120° V-Groove):                                                  │
-│    • Integrated channel fitting tube diameters from Ø 22 mm to Ø 32 mm                 │
-│    • 4x anchor tabs for 2x weatherproof EPDM elastic straps (BMW GS / crash bars)      │
-│    • 100% toolless rapid mounting without scratching frame paint                       │
-├────────────────────────────────────────────────────────────────────────────────────────┤
-│ 3. SILENTBLOCK VIBRATION ISOLATION:                                                    │
-│    • Corner holes for M4 silentblocks (Shore 50A EPDM)                                 │
-│    • Isolates high-frequency engine vibrations inside the fairing beak of 1-cyl / V2   │
-├────────────────────────────────────────────────────────────────────────────────────────┤
-│ 4. 3M DUAL-LOCK VELCRO CHANNELS:                                                       │
-│    • 2x recessed 20 mm channels for self-adhesive 3M Dual-Lock mushroom tape           │
-│    • Perfect for flat plastic inner fairing surfaces in Batwing or Sharknose cowls     │
-└────────────────────────────────────────────────────────────────────────────────────────┘
++----------------------------------------------------------------------------------------+
+|                   THE 4-IN-1 UNIVERSAL MOUNTING SYSTEM (BOTTOM VIEW)                   |
++----------------------------------------------------------------------------------------+
+| 1. AMPS HOLE PATTERN (30 x 38 mm):                                                     |
+|    * 4x form-fitting DIN 934 M4 captive hex nut pockets in AMPS layout (100% iron-free)|
+|    * Compatible with all RAM-Mount ball adapters, Garmin brackets & cockpit crossbars  |
++----------------------------------------------------------------------------------------+
+| 2. TUBE SADDLE PRISM (120° V-Groove):                                                  |
+|    * Integrated channel fitting tube diameters from Ø 22 mm to Ø 32 mm                 |
+|    * 4x anchor tabs for 2x weatherproof EPDM elastic straps (BMW GS / crash bars)      |
+|    * 100% toolless rapid mounting without scratching frame paint                       |
++----------------------------------------------------------------------------------------+
+| 3. SILENTBLOCK VIBRATION ISOLATION:                                                    |
+|    * Corner holes for M4 silentblocks (Shore 50A EPDM)                                 |
+|    * Isolates high-frequency engine vibrations inside the fairing beak of 1-cyl / V2   |
++----------------------------------------------------------------------------------------+
+| 4. 3M DUAL-LOCK VELCRO CHANNELS:                                                       |
+|    * 2x recessed 20 mm channels for self-adhesive 3M Dual-Lock mushroom tape           |
+|    * Perfect for flat plastic inner fairing surfaces in Batwing or Sharknose cowls     |
++----------------------------------------------------------------------------------------+
 ```
 
 ### 5.2 Front Node Connector & Flank Layout
@@ -487,37 +487,37 @@ The physical arrangement of connectors and cable entries on the enclosure flanks
 
 ```
                                FRONT NODE FLANK & CONNECTOR LAYOUT
-┌─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│                                                  REAR FACE / NORTH RIM (Y = 68 mm)                                          │
-│                     (6-slot EPDM Cable Comb for Vehicle Harness & Sensors: north_epdm_cable_comb)                           │
-│   U.FL Antenna     J9: Mirror BSD      J3: Handlebar PTT   J1: 12V KL15     J10: Qi Charger   J11: Aux Light     J2: CAN-Bus│
-│   (DW3110 UWB)     (3-Pin Radar LED)   (4-Pin Switch)      (2-Pin Ignition) (2-Pin 12V Sw)    (2-Pin Headlight)  (3-Pin CAN)│
-├──────────────────────────────────────┬─────────────────────────────────────────────────┬────────────────────────────────────┤
-│ LEFT SHORT FLANK / WEST (X = 0 mm)   │              INTERNAL CHAMBER (82 x 50 mm PCB)  │ RIGHT SHORT FLANK / EAST (X = 98)  │
-│                                      │                                                 │                                    │
-│ • Solid MJF PA12 Monocoque Wall      │ • ESP32-S3-WROOM-1-N16R8 Dual-Core MC           │ • J7: Waterproof USB-C Service     │
-│   (Zero penetrations)                │ • USB2514B Automotive 4-Port USB 2.0 Hub        │   Port with TPU sealing cap        │
-│ • Shields internal power stage:      │ • Dual SW3526 Sync-Buck USB-PD (2x 20W)         │ • J12: Qwiic / Stemma QT I2C Port  │
-│   - D4: SMCJ24CA 24V TVS Diode       │ • 2x L2 & L3 shielded power inductors           │ • SW1 (Boot) & SW2 (Reset) Buttons │
-│   - U3 / L1: TPS54302 5V/3A Buck     │ • U3: TPS54302 5V System Buck Converter         │ • LED1: WS2812B RGB Status LED     │
-│   - U6: TCAN334G CAN Transceiver     │ • MIC1: Knowles SPH0645 I2S MEMS Microphone     │   (Polycarbonate Light-Pipe Dome)  │
-│   - K1: CPC1017N CAN Auto-Sensing    │ • K1: CPC1017N 120 Ohm Bus-Termination Relay    │                                    │
-│   - Q2: DMP3017SFG Reverse-Polarity  │ • Q1: DMN63D8LDW Mirror BSD Driver Stage        │ • M4/M5 Silentblock Flange Ear     │
-│ • M4/M5 Silentblock Flange Ear       │ • U4: TPS2051B USB Power Gate for Port 2        │   (Center Y = 34.0 mm, Z = 0..5 mm)│
-│   (Center Y = 34.0 mm, Z = 0..5 mm)  │ • U7: TLV75533P 3.3V Ultra-Low-Noise LDO        │                                    │
-├──────────────────────────────────────┴─────────────────────────────────────────────────┴────────────────────────────────────┤
-│                                                  FRONT FACE / SOUTH RIM (Y = 0 mm)                                          │
-│                         (6-slot EPDM Cable Comb for Cockpit & USB Cables: south_epdm_cable_comb)                            │
-│   J4: USB Host       J5: Phone 20W PD    J6: CP2AA Dongle   J5_MP3: 20W PD + MP3     J6_AUX: Dashcam    J8: Action-Cam 5V   │
-│   (Upstream Skyline) (Downstream 1, 5P)  (Downstream 2, 4P) (Downstream 3, 5P Data)  (Downstream 4, 4P) (2-Pin Switched 5V) │
-└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
++-----------------------------------------------------------------------------------------------------------------------------+
+|                                                  REAR FACE / NORTH RIM (Y = 68 mm)                                          |
+|                     (6-slot EPDM Cable Comb for Vehicle Harness & Sensors: north_epdm_cable_comb)                           |
+|   U.FL Antenna     J9: Mirror BSD      J3: Handlebar PTT   J1: 12V KL15     J10: Qi Charger   J11: Aux Light     J2: CAN-Bus|
+|   (DW3110 UWB)     (3-Pin Radar LED)   (4-Pin Switch)      (2-Pin Ignition) (2-Pin 12V Sw)    (2-Pin Headlight)  (3-Pin CAN)|
++--------------------------------------+-------------------------------------------------+------------------------------------+
+| LEFT SHORT FLANK / WEST (X = 0 mm)   |              INTERNAL CHAMBER (82 x 50 mm PCB)  | RIGHT SHORT FLANK / EAST (X = 98)  |
+|                                      |                                                 |                                    |
+| * Solid MJF PA12 Monocoque Wall      | * ESP32-S3-WROOM-1-N16R8 Dual-Core MC           | * J7: Waterproof USB-C Service     |
+|   (Zero penetrations)                | * USB2514B Automotive 4-Port USB 2.0 Hub        |   Port with TPU sealing cap        |
+| * Shields internal power stage:      | * Dual SW3526 Sync-Buck USB-PD (2x 20W)         | * J12: Qwiic / Stemma QT I2C Port  |
+|   - D4: SMCJ24CA 24V TVS Diode       | * 2x L2 & L3 shielded power inductors           | * SW1 (Boot) & SW2 (Reset) Buttons |
+|   - U3 / L1: TPS54302 5V/3A Buck     | * U3: TPS54302 5V System Buck Converter         | * LED1: WS2812B RGB Status LED     |
+|   - U6: TCAN334G CAN Transceiver     | * MIC1: Knowles SPH0645 I2S MEMS Microphone     |   (Polycarbonate Light-Pipe Dome)  |
+|   - K1: CPC1017N CAN Auto-Sensing    | * K1: CPC1017N 120 Ohm Bus-Termination Relay    |                                    |
+|   - Q2: DMP3017SFG Reverse-Polarity  | * Q1: DMN63D8LDW Mirror BSD Driver Stage        | * M4/M5 Silentblock Flange Ear     |
+| * M4/M5 Silentblock Flange Ear       | * U4: TPS2051B USB Power Gate for Port 2        |   (Center Y = 34.0 mm, Z = 0..5 mm)|
+|   (Center Y = 34.0 mm, Z = 0..5 mm)  | * U7: TLV75533P 3.3V Ultra-Low-Noise LDO        |                                    |
++--------------------------------------+-------------------------------------------------+------------------------------------+
+|                                                  FRONT FACE / SOUTH RIM (Y = 0 mm)                                          |
+|                         (6-slot EPDM Cable Comb for Cockpit & USB Cables: south_epdm_cable_comb)                            |
+|   J4: USB Host       J5: Phone 20W PD    J6: CP2AA Dongle   J5_MP3: 20W PD + MP3     J6_AUX: Dashcam    J8: Action-Cam 5V   |
+|   (Upstream Skyline) (Downstream 1, 5P)  (Downstream 2, 4P) (Downstream 3, 5P Data)  (Downstream 4, 4P) (2-Pin Switched 5V) |
++-----------------------------------------------------------------------------------------------------------------------------+
 ```
 
 1. **Front Face / South Flank ($Y = 0\,\text{mm}$):**
    - **6-Slot EPDM Cable Comb (`south_epdm_cable_comb`):** Directs USB and charging cables vibration-damped and strain-relieved through a 70 mm wide sealing chamber forwards towards the cockpit:
      - `J4` ($X_{\text{tub}} = 23.25\,\text{mm}$): JST-GH 4-Pin Upstream USB 2.0 connection to the motorcycle head unit (Harley Skyline OS / Boom! Box GTS).
      - `J5` ($X_{\text{tub}} = 37.00\,\text{mm}$): JST-GH 5-Pin Downstream Port 1 to handlebar-mounted smartphone with **20W USB-PD Fast Charging (5V/3A, 9V/2.22A, 12V/1.67A)** via synchronous buck controller `U5` (SW3526) and shielded high-current choke `L2`. Supports USB-PD 3.0, QC 3.0/4.0+, AFC, and FCP for uninterrupted rapid charging under navigation loads in blazing summer heat.
-     - `J6` ($X_{\text{tub}} = 48.50\,\text{mm}$): JST-GH 4-Pin Downstream Port 2 with 25–30 cm fairing pigtail to the thermally decoupled CP2AA Wireless CarPlay / Android Auto dongle (Ottocast / Carlinkit, secured via 3M Dual-Lock inside fairing void).
+     - `J6` ($X_{\text{tub}} = 48.50\,\text{mm}$): JST-GH 4-Pin Downstream Port 2 with 25-30 cm fairing pigtail to the thermally decoupled CP2AA Wireless CarPlay / Android Auto dongle (Ottocast / Carlinkit, secured via 3M Dual-Lock inside fairing void).
      - `J5_MP3` ($X_{\text{tub}} = 61.75\,\text{mm}$): JST-GH 5-Pin Downstream Port 3 into glovebox / media bay. **Dual Role:** Full **20W USB-PD Fast Charging** via `U8` (SW3526) and choke `L3` for powerbanks, second phone, or camera batteries PLUS **High-Speed USB 2.0 Data** to the USB2514B hub for local MP3/FLAC music flash drives and official firmware updates.
      - `J6_AUX` ($X_{\text{tub}} = 73.25\,\text{mm}$): JST-GH 4-Pin Downstream Port 4 as an auxiliary cockpit data port for dashcams, Chigee AIO-5 display, Garmin Zūmo, or TPMS receivers.
      - `J8` ($X_{\text{tub}} = 80.75\,\text{mm}$): JST-GH 2-Pin switched 5V/1.5A power output for helmet or fairing action-cam (GoPro / Insta360).
@@ -559,35 +559,35 @@ Due to factory Showa inverted remote-reservoir shock absorbers with heavy hydrau
 
 ```
           CVO ROAD GLIDE ST (2024+) COMPLETE SYSTEM INTEGRATION
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ 1. COCKPIT (Forward, invisible behind outer fairing skin):                  │
-│    • Front Node (PCBA 05) + Ottocast mounted on aluminum fairing bracket   │
-│    • SAM-M10Q GNSS + TMP117 + OPT3001 via J12 Qwiic in cold air scoop       │
-│    • UWB Backbone (DW3110 / 6.489 GHz Ch. 5) to Central Box -> 0 cables     │
-│      across steering stem, deterministic latency < 0.4 ms                   │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ 2. CENTER (Under Rider Seat):                                               │
-│    • Central Box centered in battery well (SX1262 LoRa 868 MHz & DW3110 UWB)│
-│    • UPS buffering via 1S LiPo for 24/7 theft sentry                        │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ 3. REAR (Beneath Forged Carbon Cowl & License Plate):                       │
-│    • Forged carbon cowl seats completely flush with OEM thumbscrew (100%    │
-│      free of electronics/cables – zero pinching at thumbscrew!)             │
-│    • Radar centered below license plate (radar_license_plate_bracket.scad)  │
-│      fed via whip 5 of the 4-branch HD26 harness                            │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ 4. SADDLEBAGS (Intercom Bridge Sena & Cardo):                               │
-│    • Pod 1 (Sena SPIDER X Slim) inside left saddlebag lid                   │
-│    • Pod 2 (Cardo Packtalk Edge) inside right saddlebag lid                 │
-│    • Mounted on OEM hinge / check-strap Torx screws (Zero-Drill)            │
-│    • Cable along check strap, weatherproof MagSafe breakaway connector     │
-└─────────────────────────────────────────────────────────────────────────────┘
++-----------------------------------------------------------------------------+
+| 1. COCKPIT (Forward, invisible behind outer fairing skin):                  |
+|    * Front Node (PCBA 05) + Ottocast mounted on aluminum fairing bracket   |
+|    * SAM-M10Q GNSS + TMP117 + OPT3001 via J12 Qwiic in cold air scoop       |
+|    * UWB Backbone (DW3110 / 6.489 GHz Ch. 5) to Central Box -> 0 cables     |
+|      across steering stem, deterministic latency < 0.4 ms                   |
++-----------------------------------------------------------------------------+
+| 2. CENTER (Under Rider Seat):                                               |
+|    * Central Box centered in battery well (SX1262 LoRa 868 MHz & DW3110 UWB)|
+|    * UPS buffering via 1S LiPo for 24/7 theft sentry                        |
++-----------------------------------------------------------------------------+
+| 3. REAR (Beneath Forged Carbon Cowl & License Plate):                       |
+|    * Forged carbon cowl seats completely flush with OEM thumbscrew (100%    |
+|      free of electronics/cables - zero pinching at thumbscrew!)             |
+|    * Radar centered below license plate (radar_license_plate_bracket.scad)  |
+|      fed via whip 5 of the 4-branch HD26 harness                            |
++-----------------------------------------------------------------------------+
+| 4. SADDLEBAGS (Intercom Bridge Sena & Cardo):                               |
+|    * Pod 1 (Sena SPIDER X Slim) inside left saddlebag lid                   |
+|    * Pod 2 (Cardo Packtalk Edge) inside right saddlebag lid                 |
+|    * Mounted on OEM hinge / check-strap Torx screws (Zero-Drill)            |
+|    * Cable along check strap, weatherproof MagSafe breakaway connector     |
++-----------------------------------------------------------------------------+
 ```
 
 #### A. Rear Integration: 100% OEM Flush-Fit & Clearance
 * **Original Forged Carbon Cowl Remains Untouched:** In v8.0, rear Pod 3 and the internal skeleton dock are deleted without replacement. The factory CVO ST forged carbon cowl rests completely flush on the rear fender with its perimeter rubber gasket, clamped securely by the OEM knurled thumbscrew. Because no wires are pinched beneath it, the factory paint is 100% protected.
 * **Ambient Air & GNSS Sensing:** Thermally decoupled from engine and exhaust heat, positioned inside the undisturbed laminar oncoming airflow scoop of the Front Node (`PCBA 05`, port `J12` Qwiic) featuring the NIST-grade TI TMP117 precision sensor ($\pm 0.1\,^\circ\text{C}$) and the u-blox SAM-M10Q Multi-GNSS.
-* **Radar Mounting:** Centered below the license plate via the vibration-proof bracket ([`radar_license_plate_bracket.scad`](../../hardware/cad/scad/02_pod_base/radar_license_plate_bracket.scad)), powered via whip 5 (Pins 23–26). Uncompromised clearance to Showa inverted remote reservoirs guaranteed.
+* **Radar Mounting:** Centered below the license plate via the vibration-proof bracket ([`radar_license_plate_bracket.scad`](../../hardware/cad/scad/02_pod_base/radar_license_plate_bracket.scad)), powered via whip 5 (Pins 23-26). Uncompromised clearance to Showa inverted remote reservoirs guaranteed.
 
 #### B. Saddlebag Lid Integration: Pod 1 (Left) & Pod 2 (Right)
 * **Top-Lid Mounting:** Both pods sit inside the forward third of the saddlebag lids, bolted to OEM Torx mounting points of the hinge / check-strap bracket (see [Section 6.5](#65-universal-saddlebag-lid-dock-saddlebag_lid_dockscad)).
@@ -602,23 +602,23 @@ For classic touring and bagger models with 2-Up comfort seats or exposed rear fe
 
 ```
         HARLEY-DAVIDSON TOURING & BAGGER COMPLETE SYSTEM INTEGRATION
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ 1. COCKPIT (Nacelle / Batwing / Sharknose):                                 │
-│    • Front Node (PCBA 05) inside headlight nacelle or fairing cavity        │
-│    • Powers Garmin navigator / smartphone dock & action cam on handlebars   │
-│    • SAM-M10Q GNSS + TMP117 thermometer on J12 Qwiic in airflow scoop      │
-│    • UWB Backbone (DW3110) to Central Box -> 0 cables along tank rearward   │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ 2. CENTER (Under Rider Seat):                                               │
-│    • Central Box centered in battery well (SX1262 LoRa & DW3110 UWB)        │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ 3. REAR (Fender & License Plate):                                           │
-│    • Rear fender remains 100% clean and unobstructed (Console deleted)      │
-│    • Radar centered below license plate on whip 5 (Pins 23–26)              │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ 4. SADDLEBAGS:                                                              │
-│    • Pod 1 (Sena SPIDER X Slim) & Pod 2 (Cardo Edge) in saddlebag lids      │
-└─────────────────────────────────────────────────────────────────────────────┘
++-----------------------------------------------------------------------------+
+| 1. COCKPIT (Nacelle / Batwing / Sharknose):                                 |
+|    * Front Node (PCBA 05) inside headlight nacelle or fairing cavity        |
+|    * Powers Garmin navigator / smartphone dock & action cam on handlebars   |
+|    * SAM-M10Q GNSS + TMP117 thermometer on J12 Qwiic in airflow scoop      |
+|    * UWB Backbone (DW3110) to Central Box -> 0 cables along tank rearward   |
++-----------------------------------------------------------------------------+
+| 2. CENTER (Under Rider Seat):                                               |
+|    * Central Box centered in battery well (SX1262 LoRa & DW3110 UWB)        |
++-----------------------------------------------------------------------------+
+| 3. REAR (Fender & License Plate):                                           |
+|    * Rear fender remains 100% clean and unobstructed (Console deleted)      |
+|    * Radar centered below license plate on whip 5 (Pins 23-26)              |
++-----------------------------------------------------------------------------+
+| 4. SADDLEBAGS:                                                              |
+|    * Pod 1 (Sena SPIDER X Slim) & Pod 2 (Cardo Edge) in saddlebag lids      |
++-----------------------------------------------------------------------------+
 ```
 
 > [!NOTE]
@@ -633,33 +633,33 @@ For high-displacement dual-sport and overland adventure bikes featuring open tub
 
 ```
             ADVENTURE BIKE (BMW GS / KTM / AFRICA TWIN) INTEGRATION
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ 1. COCKPIT (Windscreen / Navigation Bar / Beak):                            │
-│    • Front Node (PCBA 05) via AMPS pattern (30 x 38 mm) on navigation bar   │
-│      or vibration-isolated via M4 silentblocks inside the beak              │
-│    • SAM-M10Q GNSS + TMP117 black ice sentry on J12 Qwiic in cold air scoop │
-│    • UWB Backbone (DW3110) to Central Box under the seat                    │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ 2. CENTER (Under Rider Seat / Battery Bay):                                 │
-│    • Central Box splash-proof inside battery bay / tool well                │
-│    • SX1262 LoRa 868 MHz for 24/7 theft sentry & emergency locating         │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ 3. FORWARD SUBFRAME / FLANKS (Cartridge Pods 1 & 2):                        │
-│    • Option A (GSA & Heavy Duty): Inside tubular pannier racks (Ø 18 mm)    │
-│      inside protected subframe triangle ("Roll-Cage")                       │
-│    • Option B (Standard GS without racks): In "Transition Dock" under seat  │
-│      along optical "waist crease" between rider and pillion                 │
-│    • Spatial diversity > 45 cm; 100% free of aluminum pannier shadow        │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ 4. REAR (Minimal Radar Mount Under Luggage Rack):                           │
-│    • Minimal "Adventure Rack Radar Mount" under luggage bridge              │
-│    • Swiveling GoPro/Hirth mount for Wheeltec MR20 or Garmin Varia          │
-│    • Fed via whip 5 (Pins 23–26) of the 4-branch HD26 harness               │
-│    • Topcase remains 100% quick-detachable in 5 seconds via factory latch   │
-└─────────────────────────────────────────────────────────────────────────────┘
++-----------------------------------------------------------------------------+
+| 1. COCKPIT (Windscreen / Navigation Bar / Beak):                            |
+|    * Front Node (PCBA 05) via AMPS pattern (30 x 38 mm) on navigation bar   |
+|      or vibration-isolated via M4 silentblocks inside the beak              |
+|    * SAM-M10Q GNSS + TMP117 black ice sentry on J12 Qwiic in cold air scoop |
+|    * UWB Backbone (DW3110) to Central Box under the seat                    |
++-----------------------------------------------------------------------------+
+| 2. CENTER (Under Rider Seat / Battery Bay):                                 |
+|    * Central Box splash-proof inside battery bay / tool well                |
+|    * SX1262 LoRa 868 MHz for 24/7 theft sentry & emergency locating         |
++-----------------------------------------------------------------------------+
+| 3. FORWARD SUBFRAME / FLANKS (Cartridge Pods 1 & 2):                        |
+|    * Option A (GSA & Heavy Duty): Inside tubular pannier racks (Ø 18 mm)    |
+|      inside protected subframe triangle ("Roll-Cage")                       |
+|    * Option B (Standard GS without racks): In "Transition Dock" under seat  |
+|      along optical "waist crease" between rider and pillion                 |
+|    * Spatial diversity > 45 cm; 100% free of aluminum pannier shadow        |
++-----------------------------------------------------------------------------+
+| 4. REAR (Minimal Radar Mount Under Luggage Rack):                           |
+|    * Minimal "Adventure Rack Radar Mount" under luggage bridge              |
+|    * Swiveling GoPro/Hirth mount for Wheeltec MR20 or Garmin Varia          |
+|    * Fed via whip 5 (Pins 23-26) of the 4-branch HD26 harness               |
+|    * Topcase remains 100% quick-detachable in 5 seconds via factory latch   |
++-----------------------------------------------------------------------------+
 ```
 
-#### 6.4.1 Cartridge Pods 1 & 2 (Lateral Modules) – The Dual Mounting Options
+#### 6.4.1 Cartridge Pods 1 & 2 (Lateral Modules) - The Dual Mounting Options
 
 Depending on luggage configurations, adventure bikes deploy two specialized mounting options:
 
@@ -682,14 +682,14 @@ Depending on luggage configurations, adventure bikes deploy two specialized moun
 
 ---
 
-#### 6.4.2 Standalone Rear Radar – The Minimal "Adventure Rack Radar Mount" (`adventure_rack_radar_mount.scad`)
+#### 6.4.2 Standalone Rear Radar - The Minimal "Adventure Rack Radar Mount" (`adventure_rack_radar_mount.scad`)
 
 Because rear Pod 3 and its large balcony tray have been completely eliminated, adventure bikes require only a **minimal, lightweight radar carrier** at the rear:
 
 * **Direct Under-Bridge Clamping:** The sleek bracket ([`adventure_rack_radar_mount.scad`](../../hardware/cad/scad/02_pod_base/adventure_rack_radar_mount.scad)) clamps directly beneath the rear transverse tubes ($\varnothing 18\,\text{mm}$) of the GS luggage bridge.
 * **100% Topcase Clearance:** Sits entirely below the luggage case baseline. Aluminum topcases lock and unlock in seconds without interfering with the radar.
 * **Radial Hirth Coupling & Anti-Theft Lock:** Equipped with the proven 36-tooth Hirth rosette ([`011_gopro_hirth_lock.scad`](../../hardware/cad/scad/02_pod_base/parts/011_gopro_hirth_lock.scad)) against vibration tilt sag and the theft-deterrent Garmin/Wheeltec bayonet dock ([`radar_varia_gopro_lock_dock.scad`](../../hardware/cad/scad/02_pod_base/radar_varia_gopro_lock_dock.scad)).
-* **Harness Connection:** Powered directly via whip 5 (Pins 23–26) of the 4-branch HD26 wiring harness.
+* **Harness Connection:** Powered directly via whip 5 (Pins 23-26) of the 4-branch HD26 wiring harness.
 
 ---
 
@@ -703,7 +703,7 @@ On exposed adventure bikes and remote expedition tracks (e.g. TET routes, alpine
 
 ### 6.5 Universal Saddlebag Lid Dock (`saddlebag_lid_dock.scad`)
 
-The universal Saddlebag Lid Dock ([`saddlebag_lid_dock.scad`](../../hardware/cad/scad/02_pod_base/saddlebag_lid_dock.scad)) was specifically developed for protected, vibration-proof, and 100% non-destructive interior mounting of satellite Pods 1 (Sena Mesh) and 2 (Cardo DMC) in hard saddlebags (Reference: Harley-Davidson One-Touch hard saddlebags 2014–2024+):
+The universal Saddlebag Lid Dock ([`saddlebag_lid_dock.scad`](../../hardware/cad/scad/02_pod_base/saddlebag_lid_dock.scad)) was specifically developed for protected, vibration-proof, and 100% non-destructive interior mounting of satellite Pods 1 (Sena Mesh) and 2 (Cardo DMC) in hard saddlebags (Reference: Harley-Davidson One-Touch hard saddlebags 2014-2024+):
 
 ![Universal Saddlebag Lid Dock CAD](../images/cad/saddlebag_lid_dock_iso.png)
 
@@ -727,11 +727,11 @@ Wiring the saddlebag lid pods resolves the quintessential operational requiremen
 
 ![OpenMotorBridge Saddlebag Cable Routing & MagSafe Breakaway Interface](../images/cad/saddlebag_magsafe_wiring_cad.png)
 
-*Figure 8.30b: CAD system architecture of the saddlebag cable routing with self-centering MagSafe breakaway interface (IP67). Depicted are the switched 5V power supply from the Central Box (KL15/BQ24075 UPS), the stationary frame dock (`009_magsafe_frame_dock.scad`) with PCBA 06 TVS protection, the non-destructive magnetic breakaway separation (~10–15 N) during bag detachment, the side-wall pass-through on the forward bag wall (above the swingarm pivot) with split TPU grommet (`010_saddlebag_hole_grommet_split.scad`) and Stage 1 clamp tower (leaving the saddlebag floor 100% intact and puddle-proof), the zero-load ribbon cable routing along the check strap, and the Stage 2 strain relief at the lid dock ensuring 0 Newton dynamic load on USB-C Port B.*
+*Figure 8.30b: CAD system architecture of the saddlebag cable routing with self-centering MagSafe breakaway interface (IP67). Depicted are the switched 5V power supply from the Central Box (KL15/BQ24075 UPS), the stationary frame dock (`009_magsafe_frame_dock.scad`) with PCBA 06 TVS protection, the non-destructive magnetic breakaway separation (~10-15 N) during bag detachment, the side-wall pass-through on the forward bag wall (above the swingarm pivot) with split TPU grommet (`010_saddlebag_hole_grommet_split.scad`) and Stage 1 clamp tower (leaving the saddlebag floor 100% intact and puddle-proof), the zero-load ribbon cable routing along the check strap, and the Stage 2 strain relief at the lid dock ensuring 0 Newton dynamic load on USB-C Port B.*
 
 1. **Intelligent Power Delivery & UPS Buffering via Central Box (Ignition KL15 / BQ24075):**
    * Saddlebag pods are not fed unregulated 12V bike power directly, but conditioned 5.0V from the Central Box beneath the seat.
-   * **Ignition-Switched Wake-Up & Cold-Crank Buffering:** The Central Box senses switched 12V (KL15). The onboard LM5164-Q1 regulates clean 5.0V, while the integrated **LiPo UPS (BQ24075)** absorbs severe starter crank dips (down to 6.5V) within $8.5\,\mu\text{s}$—pods and transceivers never reboot during engine start.
+   * **Ignition-Switched Wake-Up & Cold-Crank Buffering:** The Central Box senses switched 12V (KL15). The onboard LM5164-Q1 regulates clean 5.0V, while the integrated **LiPo UPS (BQ24075)** absorbs severe starter crank dips (down to 6.5V) within $8.5\,\mu\text{s}$--pods and transceivers never reboot during engine start.
    * **Automated OEM Headset Boot via Optocouplers:** Toshiba TLP222A solid-state optocouplers trigger the power-on sequences of the Sena/Cardo modules inside the cartridges automatically upon ignition.
 2. **Mechanic-Proof 6-Pin MagSafe Breakaway Coupling (IP67):**
    * During routine service (tires, brakes, belt tensioning), dealership technicians unbolt the saddlebags and lift them off in seconds without checking for aftermarket wiring. A rigid plug would shear or tear immediately.
@@ -741,7 +741,7 @@ Wiring the saddlebag lid pods resolves the quintessential operational requiremen
    * **Zone 1 (External Bike Chassis):** Heavy-duty automotive-grade M8 PUR cable from Central Box to the frame dock.
    * **Zone 2 (Inside Saddlebag):** Ultra-slim, flexible silicone/ribbon wire ($< 2\,\text{mm}$ outer profile) running in the dry interior, taking zero luggage space.
 4. **Adapter-Free Direct Connection to Pod Port B:**
-   * The internal saddlebag cable routes along the textile check strap straight into the **USB-C Slim Port B** of the Pod baseboard. Port A (M8) remains capped inside the bag—zero redundant adapter boards or intermediate solder joints inside the bag.
+   * The internal saddlebag cable routes along the textile check strap straight into the **USB-C Slim Port B** of the Pod baseboard. Port A (M8) remains capped inside the bag--zero redundant adapter boards or intermediate solder joints inside the bag.
 5. **Two-Stage Strain Relief & Zero-Drill Floor Grommet ([`010_saddlebag_hole_grommet_split.scad`](../../hardware/cad/scad/02_pod_base/parts/010_saddlebag_hole_grommet_split.scad)):**
    * **Stage 1 (Floor Grommet):** A clamp tower molded into the split EPDM/TPU grommet anchors the cable at the 19 mm OEM hole, transferring 100% of magnetic breakaway forces ($10\dots 15\,\text{N}$) and luggage shifting shocks directly into the saddlebag floor.
    * **Stage 2 (Lid Dock):** A zip-tie tunnel in the 46 mm snout of the lid dock secures the cable $15\,\text{mm}$ before the plug.
@@ -804,18 +804,18 @@ Modern passenger cars (wagons, SUVs, sedans, vans) rarely feature rigid rear par
 
 ```text
 OPERATING MODES OF THE CAR SUPPORT KIT:
-• Mode A (Sweep / Chase Vehicle for Motorcycle Group):
+* Mode A (Sweep / Chase Vehicle for Motorcycle Group):
   - Driver Sun Visor: Pod 1 with Sena SPIDER X Slim (Mesh 3.0 / 2.0 Channels 1-9)
   - Passenger Sun Visor: Pod 2 with Cardo Packtalk Edge (DMC Gen 2 Group)
   - Grants tour guides and sweep drivers simultaneous voice communications into both intercom worlds!
-• Mode B (Pure Automobile Convoy / Sports Car Rally):
+* Mode B (Pure Automobile Convoy / Sports Car Rally):
   - Driver Sun Visor: Pod 1 with OMM 2.4 GHz Swap Cartridge (Channel-hopping Mesh)
   - Passenger Sun Visor: Pod 2 with Midland PMR446 (Civilian radio / analog fallback)
 ```
 
 ![Universal Sun Visor Clip for Pods 1 & 2 Dual View](../images/cad/car_sun_visor_pod3_clip_cad.png)
 
-*Figure 8.33b: 3D CAD dual-perspective view of the Universal Sun Visor Clip for Pods 1 & 2 (`car_sun_visor_pod_clip.scad`). Right: Upper Pod docking cradle ($139 \times 73\,\text{mm}$) with lateral retention walls, corner spherical snap detents for positive vibration-proof retention, and forward cable exit channel. Left: Underside view depicting the solid U-channel bridge, compliant spring clamp tongue (14.5 mm rest gap for 14–22 mm visor thickness), transverse non-marring grip ribs, and 30° flared lead-in lip.*
+*Figure 8.33b: 3D CAD dual-perspective view of the Universal Sun Visor Clip for Pods 1 & 2 (`car_sun_visor_pod_clip.scad`). Right: Upper Pod docking cradle ($139 \times 73\,\text{mm}$) with lateral retention walls, corner spherical snap detents for positive vibration-proof retention, and forward cable exit channel. Left: Underside view depicting the solid U-channel bridge, compliant spring clamp tongue (14.5 mm rest gap for 14-22 mm visor thickness), transverse non-marring grip ribs, and 30° flared lead-in lip.*
 
 * **Strict Separation of Docking Cavity and Clamp Tongue (100% Unobstructed Cavity):**
   * In the final geometry, the compliant spring clamp tongue is located strictly on the **exterior underside** ($Z \le 0$).
@@ -843,7 +843,7 @@ For securing the Central Control Box ($110 \times 74 \times 32\,\text{mm}$) insi
 * **Ergonomic $15^\circ$ Viewing & Operating Angle:**
   * When rested on horizontal dashboards or center console trays, the $15^\circ$ forward slope directs status LEDs and connector ports glare-free toward the driver/passenger.
 * **Rapid Tool-Free Extraction (Dual Finger Notches):**
-  * Two lateral finger notches ($40 \times 12\,\text{mm}$) enable instant one-handed insertion and removal of the Central Box—ideal when alternating between motorcycle and support vehicle.
+  * Two lateral finger notches ($40 \times 12\,\text{mm}$) enable instant one-handed insertion and removal of the Central Box--ideal when alternating between motorcycle and support vehicle.
 * **Concealed Harness Routing & Convective Cooling:**
   * The rear wall features a generous $44\,\text{mm}$ harness cutout accommodating the 12V cigarette lighter PD adapter and HD26 harness whip.
   * Two underside openings ($\varnothing 28\,\text{mm}$) promote passive convective heat dissipation from the Central Box heatsink.
@@ -865,7 +865,7 @@ Routing a long, fixed CAN cable from the center console across the driver footwe
      * `010C`: Engine RPM
      * `012F`: Fuel Tank Level (%)
      * `0105`: Engine Coolant Temperature (°C)
-   * Telemetry broadcasts autonomously into the 868 MHz LoRa mesh (OMM). The entire motorcycle group monitors the chase vehicle's fuel level, speed, and status in real time—even if no tablet or smartphone is turned on inside the van.
+   * Telemetry broadcasts autonomously into the 868 MHz LoRa mesh (OMM). The entire motorcycle group monitors the chase vehicle's fuel level, speed, and status in real time--even if no tablet or smartphone is turned on inside the van.
 
 ---
 
@@ -875,31 +875,31 @@ The synchronized design of Reference Kit 5 enables quick, tool-free installation
 
 ```text
          OPENMOTORBRIDGE REFERENCE KIT 5 (CAR & SUPPORT-VAN TOPOLOGY)
- ┌────────────────────────────────────────────────────────────────────────┐
- │ Windshield Upper Zone:                                                 │
- │ [Driver Sun Visor]    ──> [car_sun_visor_pod_clip] ──> [Pod 1]         │
- │ (Sena SPIDER X Slim or OMM 2.4 GHz)                                    │
- │                                                                        │
- │ [Passenger Sun Visor] ──> [car_sun_visor_pod_clip] ──> [Pod 2]         │
- │ (Cardo Packtalk Edge or Midland PMR446)                                │
- └───────────────────────────────────┬────────────────────────────────────┘
-                                     │ Ultra-Thin Flat USB-C Cable
-                                     ▼ (Concealed in Headliner & A-Pillar)
- ┌────────────────────────────────────────────────────────────────────────┐
- │ Dashboard / Center Console:                                            │
- │ [car_dashboard_wedge_dock (15°)] ──> [Central Box (SX1262 LoRa 868)]   │
- │ [SAM-M10Q GNSS Dashboard Dock]   ──> [Front Node / GNSS-USB]           │
- │       ▲           ▲                       │        ▲                   │
- │       │ 12V PD    │ M8 / USB-C            │        │ Bluetooth LE      │
- │ [Cigarette        ▼                       │        ▼                   │
- │  Lighter]    [Pods 1 & 2 Power Feed]      │   [OBD2 BLE Dongle]        │
- │                                           │   (ELM327 / vGate under    │
- │                                           │    steering wheel)         │
- │                                           ├─► USB-C / BLE Offline PWA  │
- │                                           │   (iPad / Android Tablet)  │
- │                                           ▼                            │
- │                                      [CarPlay / Android Auto Audio]    │
- └────────────────────────────────────────────────────────────────────────┘
+ +------------------------------------------------------------------------+
+ | Windshield Upper Zone:                                                 |
+ | [Driver Sun Visor]    --> [car_sun_visor_pod_clip] --> [Pod 1]         |
+ | (Sena SPIDER X Slim or OMM 2.4 GHz)                                    |
+ |                                                                        |
+ | [Passenger Sun Visor] --> [car_sun_visor_pod_clip] --> [Pod 2]         |
+ | (Cardo Packtalk Edge or Midland PMR446)                                |
+ +-----------------------------------+------------------------------------+
+                                     | Ultra-Thin Flat USB-C Cable
+                                     v (Concealed in Headliner & A-Pillar)
+ +------------------------------------------------------------------------+
+ | Dashboard / Center Console:                                            |
+ | [car_dashboard_wedge_dock (15°)] --> [Central Box (SX1262 LoRa 868)]   |
+ | [SAM-M10Q GNSS Dashboard Dock]   --> [Front Node / GNSS-USB]           |
+ |       ^           ^                       |        ^                   |
+ |       | 12V PD    | M8 / USB-C            |        | Bluetooth LE      |
+ | [Cigarette        v                       |        v                   |
+ |  Lighter]    [Pods 1 & 2 Power Feed]      |   [OBD2 BLE Dongle]        |
+ |                                           |   (ELM327 / vGate under    |
+ |                                           |    steering wheel)         |
+ |                                           +-> USB-C / BLE Offline PWA  |
+ |                                           |   (iPad / Android Tablet)  |
+ |                                           v                            |
+ |                                      [CarPlay / Android Auto Audio]    |
+ +------------------------------------------------------------------------+
 ```
 
 1. **Concealed Flat-Ribbon Cable Routing (Zero-Damage):**
@@ -926,7 +926,7 @@ The **OpenMotorBridge 2-in-1 Smart-Keyfob** ([`smart_keyfob_pager.scad`](../../h
 
 ![OpenMotorBridge 2-in-1 Smart-Keyfob Exploded 3D CAD Fitting](../images/cad/smart_keyfob_pager_exploded.png)
 
-*Figure 8.35: 3D CAD exploded view of the Smart-Keyfob. From bottom to top: PA12-MJF lower shell with rear MagSafe alignment pocket, 180–200 mAh LiPo pouch cell ($25 \times 18 \times 3.8\,\text{mm}$), PCBA 07 carrier board ($38 \times 19\,\text{mm}$), Semtech SX1262 LoRa transceiver, LRA haptic motor, Mu-metal magnetic flux shield ($0.5\,\text{mm}$), N52 neodymium key block ($20 \times 10 \times 5\,\text{mm}$), and upper shell with optical diffuser aperture for the RGB status LED.*
+*Figure 8.35: 3D CAD exploded view of the Smart-Keyfob. From bottom to top: PA12-MJF lower shell with rear MagSafe alignment pocket, 180-200 mAh LiPo pouch cell ($25 \times 18 \times 3.8\,\text{mm}$), PCBA 07 carrier board ($38 \times 19\,\text{mm}$), Semtech SX1262 LoRa transceiver, LRA haptic motor, Mu-metal magnetic flux shield ($0.5\,\text{mm}$), N52 neodymium key block ($20 \times 10 \times 5\,\text{mm}$), and upper shell with optical diffuser aperture for the RGB status LED.*
 
 ### 7.1 Mechanical Architecture & Enclosure Parameters
 * **Outer Dimensions:** $58.0 \times 34.0 \times 13.0\,\text{mm}$ (Length x Width x Thickness; lower shell $6.5\,\text{mm}$, upper shell $6.5\,\text{mm}$).
@@ -950,9 +950,9 @@ The **OpenMotorBridge 2-in-1 Smart-Keyfob** ([`smart_keyfob_pager.scad`](../../h
 | Criterion | Active Bluetooth / UWB Lock | N52 Permanent Magnet + LoRa Pager (OpenMotorBridge) |
 | :--- | :--- | :--- |
 | **Emergency Release with Dead Battery** | **Impossible** (Cartridge locked inside bike) | **100% Fail-Safe** (Permanent magnet requires zero battery power) |
-| **Standby Current Consumption** | 15–45 mA (UWB drains keyfob cell in weeks) | **< 50 nA Standby** (Months of runtime, recharges on cockpit dock) |
+| **Standby Current Consumption** | 15-45 mA (UWB drains keyfob cell in weeks) | **< 50 nA Standby** (Months of runtime, recharges on cockpit dock) |
 | **Mechanical Reliability** | Miniature electric servo jams from road grime/grit | **Solid N52 Neodymium Block** (Indestructible, zero moving parts in key) |
-| **Tamper Alarm Pager Range** | 10–30 m (BLE fails through hotel/garage walls) | **Up to 4.5 km** (Semtech SX1262 868 MHz penetrates reinforced concrete) |
+| **Tamper Alarm Pager Range** | 10-30 m (BLE fails through hotel/garage walls) | **Up to 4.5 km** (Semtech SX1262 868 MHz penetrates reinforced concrete) |
 | **False-Alarm Mitigation** | Pure shock sensors trigger false alerts | **Zero-False-Alarm:** Presence beacon verifies owner intent |
 
 ---
@@ -1010,40 +1010,40 @@ The **Through-Fairing Inductive Cam Dock** ([`road_glide_inductive_cam_dock.scad
 #### 8.4.1 Two-Piece Architecture & Action Cam Interfaces
 
 ```text
- ┌────────────────────────────────────────────────────────┐
- │ Action Cam (Insta360 X3/X4 / GoPro Hero / DJI Action)  │
- │ [USB-C Charge Port] ◄──────────────────────────────┐   │
- └────────┬───────────────────────────────────────────│───┘
-          │ Standard 2-Prong Action Cam Base          │
-          ▼                                           │ 30 mm USB-C
- ┌────────────────────────────────────────────────────│───┐
- │ ROAD GLIDE INDUCTIVE CAM DOCK (EXTERIOR)           │   │
- │ • Monolithic 3-prong clevis (M5 clamping bolt)     │   │
- │ • TI BQ51013B step-down converter (5V / 2A) ───────┘   │
- │ • Qi receiver coil (RX) with ferrite shield            │
- └────────────────────────┬───────────────────────────────┘
-                          │ 3M Dual-Lock SJ3550 interlocking tape
-                          ▼ (instant tool-free release)
- ══════════════════════════════════════════════════════════
+ +--------------------------------------------------------+
+ | Action Cam (Insta360 X3/X4 / GoPro Hero / DJI Action)  |
+ | [USB-C Charge Port] <------------------------------+   |
+ +--------+-------------------------------------------|---+
+          | Standard 2-Prong Action Cam Base          |
+          v                                           | 30 mm USB-C
+ +----------------------------------------------------|---+
+ | ROAD GLIDE INDUCTIVE CAM DOCK (EXTERIOR)           |   |
+ | * Monolithic 3-prong clevis (M5 clamping bolt)     |   |
+ | * TI BQ51013B step-down converter (5V / 2A) -------+   |
+ | * Qi receiver coil (RX) with ferrite shield            |
+ +------------------------+-------------------------------+
+                          | 3M Dual-Lock SJ3550 interlocking tape
+                          v (instant tool-free release)
+ ==========================================================
   Harley-Davidson ABS Fairing Deck (2.8 mm, zero drill holes!)
    ~ ~ ~ Alternating Magnetic Flux (15W Qi Inductive IPT) ~ ~ ~
- ══════════════════════════════════════════════════════════
-                          ▲ (3M VHB 5952 interior bonding)
- ┌────────────────────────┴───────────────────────────────┐
- │ INNER CRADLE (Concealed inside fairing behind headlamp)│
- │ • 15W Qi transmitter coil (TX)                         │
- │ • Power lead to Front Node Port 1 (12V PD)             │
- └────────────────────────────────────────────────────────┘
+ ==========================================================
+                          ^ (3M VHB 5952 interior bonding)
+ +------------------------+-------------------------------+
+ | INNER CRADLE (Concealed inside fairing behind headlamp)|
+ | * 15W Qi transmitter coil (TX)                         |
+ | * Power lead to Front Node Port 1 (12V PD)             |
+ +--------------------------------------------------------+
 ```
 
 1. **Mechanical Camera Attachment:**
-   * **Monolithic 3-Prong Clevis (Universal Action Cam / GoPro Standard):** Directly molded atop the teardrop dock tower is the standard 3-prong action-cam hinge. Any common camera (GoPro Hero 10–13, DJI Osmo) or 360° cage (e.g. Insta360 X3/X4 utility frame) locks into place with a standard M5 thumbscrew.
+   * **Monolithic 3-Prong Clevis (Universal Action Cam / GoPro Standard):** Directly molded atop the teardrop dock tower is the standard 3-prong action-cam hinge. Any common camera (GoPro Hero 10-13, DJI Osmo) or 360° cage (e.g. Insta360 X3/X4 utility frame) locks into place with a standard M5 thumbscrew.
    * **Captive M5 Acorn Nut Pocket:** A hexagonal recess on the left flank holds an M5 nut firmly in place, allowing one-handed tilt adjustment and locking.
    * **Optional 1/4"-20 Tripod Bushing:** The center core includes a pilot hole for an optional 1/4"-20 threaded brass insert, allowing cameras or ball heads to screw directly into the base.
 2. **Electrical Continuous Power Interface:**
    * **Inductive Energy Conversion:** The embedded Qi receiver coil couples magnetically through the $2.8\,\text{mm}$ factory ABS fairing. The internal TI BQ51013B controller rectifies and steps down the power to clean, stable $5\,\text{V} / 2\,\text{A} = 10\,\text{W}$ DC.
    * **Ultra-Short USB-C Pigtail ($30\dots 50\,\text{mm}$):** An upward-angled exit port routes a thin, flexible USB-C ribbon cable with a 90° right-angle connector directly into the camera's weather door.
-   * **Zero Wind Flutter:** Because the cable spans only $\approx 3\,\text{cm}$ directly beneath the camera port, it hugs the housing snugly—preventing buffeting, slapping against paint, or wind noise in the microphone.
+   * **Zero Wind Flutter:** Because the cable spans only $\approx 3\,\text{cm}$ directly beneath the camera port, it hugs the housing snugly--preventing buffeting, slapping against paint, or wind noise in the microphone.
 3. **Field Experience & Benefits on Tour:**
    * **100% Factory Paint Preserved:** Completely drill-free, zero paint damage, 100% weatherproof (IP67).
    * **Infinite Recording Time:** Keeps the internal camera battery at 100% even during continuous high-bitrate 5.7K/60fps 360° recording (e.g., functioning as an always-on dashcam).

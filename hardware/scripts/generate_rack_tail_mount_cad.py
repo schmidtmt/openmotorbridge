@@ -128,7 +128,7 @@ def generate_side_cross_section():
     ax.plot([72, 88], [-2, 14], color='#e0f2fe', linewidth=1.5, solid_capstyle='round', zorder=7)
     
     # Text placed cleanly to the right of the fin
-    ax.text(100, 14, "45°-ASTABWEISER-KEIL\n• Äste & Gurte gleiten ab\n• +5 dBi 2.4 GHz Dipolantenne\n  (voll geschützt versenkt)",
+    ax.text(100, 14, "45°-ASTABWEISER-KEIL\n* Äste & Gurte gleiten ab\n* +5 dBi 2.4 GHz Dipolantenne\n  (voll geschützt versenkt)",
             color=CYAN_HIGHLIGHT, fontsize=9, weight='bold', va='center', zorder=7)
     ax.annotate('', xy=(88, 14), xytext=(98, 14),
                 arrowprops=dict(arrowstyle="->", color=CYAN_HIGHLIGHT, lw=1.2), zorder=8)
@@ -186,7 +186,7 @@ def generate_side_cross_section():
 
     ax.annotate('', xy=(12, -85), xytext=(12, radar_y),
                 arrowprops=dict(arrowstyle="<->", color=GOLD_PAD, lw=1.5), zorder=8)
-    ax.text(14, -65, "90..95 cm Radar-Höhe:\n• Voll geschützt vor Steinschlag (Tire Roost)\n• Sicher bei tiefen Wasserdurchfahrten",
+    ax.text(14, -65, "90..95 cm Radar-Höhe:\n* Voll geschützt vor Steinschlag (Tire Roost)\n* Sicher bei tiefen Wasserdurchfahrten",
             color=GOLD_PAD, fontsize=9, weight='bold', va='center', zorder=8)
 
     # Titles & Labels
@@ -266,7 +266,7 @@ def generate_top_view():
     ax.plot([82, 96], [-6, 6], color='#e0f2fe', linewidth=2.0, solid_capstyle='round', zorder=7)
     
     # Text positioned cleanly to the right of the fin
-    ax.text(108, 0, "ASTABWEISER-FINNE\n• 2.4 GHz +5 dBi Dipol\n  (eingeclipst in Nut)\n• RG178 Koax intern",
+    ax.text(108, 0, "ASTABWEISER-FINNE\n* 2.4 GHz +5 dBi Dipol\n  (eingeclipst in Nut)\n* RG178 Koax intern",
             color=CYAN_HIGHLIGHT, fontsize=8.5, weight='bold', va='center', zorder=7)
     ax.annotate('', xy=(100, 0), xytext=(107, 0),
                 arrowprops=dict(arrowstyle="->", color=CYAN_HIGHLIGHT, lw=1.2), zorder=8)
@@ -359,10 +359,10 @@ def generate_dual_radar_lock():
 
     # Key Features Bullet Box
     callout_text_a = (
-        "• 36 Präzisionszähne (10° Teilung)\n"
-        "• ±20° Neigungsjustage für exakt horizontalen Radar-Horizont\n"
-        "• 100% formschlüssige Blockierung nach Anziehen (3.5 Nm)\n"
-        "• Absacken durch Wellblech/Roost physikalisch UNMÖGLICH!"
+        "* 36 Präzisionszähne (10° Teilung)\n"
+        "* ±20° Neigungsjustage für exakt horizontalen Radar-Horizont\n"
+        "* 100% formschlüssige Blockierung nach Anziehen (3.5 Nm)\n"
+        "* Absacken durch Wellblech/Roost physikalisch UNMÖGLICH!"
     )
     ax1.text(0, -78, callout_text_a, color='#e2e8f0', fontsize=9.5,
              bbox=dict(boxstyle="round,pad=0.6", facecolor='#0f172a', edgecolor=GOLD_PAD, linewidth=1.2),
@@ -415,10 +415,10 @@ def generate_dual_radar_lock():
 
     # Key Features Bullet Box
     callout_text_b = (
-        "• Kompatibel mit allen Garmin Varia (RTL515 / RCT715 / eRTL615)\n"
-        "• Federbelastete Einrastklinke + tangentiale M3 Madenschraube\n"
-        "• Ohne Spezialbit (Torx-TR) kein Abdrehen oder Entwenden möglich\n"
-        "• M8 Zugentlastung schützt Signalleitung bei Erschütterung"
+        "* Kompatibel mit allen Garmin Varia (RTL515 / RCT715 / eRTL615)\n"
+        "* Federbelastete Einrastklinke + tangentiale M3 Madenschraube\n"
+        "* Ohne Spezialbit (Torx-TR) kein Abdrehen oder Entwenden möglich\n"
+        "* M8 Zugentlastung schützt Signalleitung bei Erschütterung"
     )
     ax2.text(0, -78, callout_text_b, color='#e2e8f0', fontsize=9.5,
              bbox=dict(boxstyle="round,pad=0.6", facecolor='#0f172a', edgecolor=ACCENT_BLUE, linewidth=1.2),

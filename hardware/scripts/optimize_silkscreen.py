@@ -71,8 +71,8 @@ silkscreen_items = [
     make_gr_text("J4: RGB", 195.0, 103.5, size=0.6, thickness=0.11),
     
     # Pin 1 Indicators
-    make_gr_text("▲1", 121.0, 118.5, size=0.65, thickness=0.12),
-    make_gr_text("▲1", 140.5, 118.5, size=0.65, thickness=0.12),
+    make_gr_text("^1", 121.0, 118.5, size=0.65, thickness=0.12),
+    make_gr_text("^1", 140.5, 118.5, size=0.65, thickness=0.12),
     
     # Galvanic Isolation Barrier
     make_gr_line(162.0, 78.0, 162.0, 120.0, width=0.22),

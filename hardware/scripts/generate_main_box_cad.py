@@ -10,8 +10,8 @@ Generates photorealistic 3D CAD visualizations for the 3-Piece Sandwich Enclosur
      - 2.0 mm Silicone Thermal Gap-Pad (Shore 00 35) under LM5164 / ESP32
      - 4-layer Main PCB (85 x 55 x 1.6 mm) on M2.5 vibration isolators
      - 100% Zero-Collision Certified Layout:
-       • Left Flank: ESP32-S3 MCU, Power/UPS, J5 (LiPo 2P), J6 (NTC 2P), J3 (USB-C), J4 (3-Pin LED)
-       • Right Flank: 100% Dedicated Isolated Audio & CAN Domain with J1 (26-Port IDC Header)
+       * Left Flank: ESP32-S3 MCU, Power/UPS, J5 (LiPo 2P), J6 (NTC 2P), J3 (USB-C), J4 (3-Pin LED)
+       * Right Flank: 100% Dedicated Isolated Audio & CAN Domain with J1 (26-Port IDC Header)
          directly beneath Bourns Audio Transformers & TLP222A Optocouplers (zero trace crossings)
   2. Upper Tray with Mid-Baffle (Oberwanne mit Zwischenboden, 15.0 mm):
      - Front panel: Left: USB-C service port & RGB Status LED window | Right: HD26 harness flange

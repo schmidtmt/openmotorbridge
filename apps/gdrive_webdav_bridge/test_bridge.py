@@ -331,7 +331,7 @@ def test_gpx_extended_statistics_parsing():
     # Summary texts in default, sport, group, and cruise modes
     summary = stats.get("summary_text", "")
     assert "Silvretta Pass High Telemetry" in summary or "Tour" in summary
-    assert "15.0 °C – 19.0 °C" in summary
+    assert "15.0 °C - 19.0 °C" in summary
     assert "38.6° L / 44.2° R" in summary
     assert "Beschl.: +0.62g" in summary
     assert "Bremsen: -0.68g" in summary
@@ -389,12 +389,12 @@ def test_build_human_summary_formatting():
     summary = build_human_summary(mock_stats, "Stelvio_Pass.gpx")
 
     assert "Stelvio_Pass.gpx" in summary
-    assert "10:15 – 12:45 Uhr" in summary
+    assert "10:15 - 12:45 Uhr" in summary
     assert "2h 10m" in summary
     assert "142.5 km" in summary
     assert "+2.150 hm" in summary
-    assert "(420 m – 1890 m)" in summary
-    assert "11.5 °C – 24.2 °C (Ø 18.3 °C)" in summary
+    assert "(420 m - 1890 m)" in summary
+    assert "11.5 °C - 24.2 °C (Ø 18.3 °C)" in summary
     assert "118.4 km/h" in summary
     assert "Ø 65.8 km/h" in summary
     assert "Beschl.: +0.74g" in summary
@@ -463,6 +463,6 @@ def test_mode_tailored_summaries():
     assert "Pausen: 15m" in cruise
     assert "Reisegeschwindigkeit: Ø 53.7 km/h" in cruise
     assert "Bremsruhe: 2 stärkere Bremsungen" in cruise
-    assert "Temp: 14.0 °C – 22.0 °C (Ø 17.5 °C)" in cruise
+    assert "Temp: 14.0 °C - 22.0 °C (Ø 17.5 °C)" in cruise
 
 

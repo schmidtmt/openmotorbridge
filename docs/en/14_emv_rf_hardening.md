@@ -20,7 +20,7 @@ This document specifies the protection circuitry against vehicle electrical tran
 * **Deterministic UWB Vehicle Backbone (Qorvo DW3110 / 6.489 GHz Ch. 5):**
   * Wireless backbone linking Front Node (`PCBA 05`) and Central Box (`PCBA 01`).
   * Fully compliant with **ETSI EN 302 065-1, EN 302 065-3**, and **EU Decision 2019/785** ($-41.3\,\text{dBm/MHz}$, continuous legal transmission without duty-cycle capping).
-  * Operates across 6.240–6.739 GHz (center frequency 6.489 GHz) with 499.2 MHz bandwidth, far above 2.4 GHz (Wi-Fi, Bluetooth, Mesh) and 5.8 GHz.
+  * Operates across 6.240-6.739 GHz (center frequency 6.489 GHz) with 499.2 MHz bandwidth, far above 2.4 GHz (Wi-Fi, Bluetooth, Mesh) and 5.8 GHz.
   * **Antenna Integration:** Taoglas FXUWB10 flex antenna mounted inside an $11 \times 11 \times 0.6\,\text{mm}$ recess in the enclosure bottom tub floor of both Central Box and Front Node. Connected via 20 mm U.FL micro-coax. The PCB top layer maintains an unbroken solid ground plane (zero keepout cuts), and the enclosure lid can be serviced without cable strain.
 * **LoRa 868 MHz (Semtech SX1262) on Central Box (`PCBA 01`):**
   * Integrated directly on the Central Box PCB and buffered 24/7 via the UPS battery rail for uninterrupted theft sentry and group telemetry.
@@ -31,7 +31,7 @@ This document specifies the protection circuitry against vehicle electrical tran
 * **Central ePTFE Pressure Equalization Vent:** $\varnothing\,7.0\,\text{mm}$ Gore/Schreiner Air Vent centered on the enclosure roof symmetrically relieves thermal pressure pulses without distorting RF radiation patterns.
 * **Shielded HD26 SEAL-D Main Harness:**
   * 4 branches (Whip 1: Pod 1, Whip 2: Pod 2, Whip 4: Vehicle Power, Whip 5: Rear Radar).
-  * 19 active pins; pins 9–11 unassigned/reserve.
+  * 19 active pins; pins 9-11 unassigned/reserve.
   * Continuous $360^\circ$ shielding bonded to the metal HD26 enclosure flange.
 
 ---

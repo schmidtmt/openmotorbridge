@@ -124,7 +124,7 @@ static void load_profile_class(CartridgeInfo_t *cart, const char *profile_id) {
         cart->channel_next_ms = 0;
     } else if (strcmp(profile_id, "unmapped_quarantine") == 0) {
         strncpy(cart->name, "Unbekannte Kassette (Quarantäne)", sizeof(cart->name) - 1);
-        strncpy(cart->vendor, "Stromlos (0.0 mA • Mute)", sizeof(cart->vendor) - 1);
+        strncpy(cart->vendor, "Stromlos (0.0 mA * Mute)", sizeof(cart->vendor) - 1);
         cart->hardware_tier = 0;
         cart->input_gain_db = -96.0f;
         cart->output_gain_db = -96.0f;
