@@ -4178,7 +4178,7 @@
 	(footprint "JST_PH_B5B-PH-K_1x05_P2.00mm_Vertical"
 		(layer "F.Cu")
 		(uuid "2cdc8646-cbc0-48e9-88af-0e8793c4968a")
-		(at 128.750 116.000 180.0)
+		(at 128.75 116 180)
 		(descr "JST PH series connector, B5B-PH-K (http://www.jst-mfg.com/product/pdf/eng/ePH.pdf)")
 		(tags "connector JST PH vertical")
 		(property "Reference" "J5"
@@ -4963,7 +4963,7 @@
 	(footprint "JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical"
 		(layer "F.Cu")
 		(uuid "3a2ab0ff-dcfd-4144-ada7-8da9da35fdad")
-		(at 153.750 73.500)
+		(at 153.75 73.5)
 		(descr "JST PH series connector, B2B-PH-K (http://www.jst-mfg.com/product/pdf/eng/ePH.pdf)")
 		(tags "connector JST PH vertical")
 		(property "Reference" "J10"
@@ -7062,7 +7062,7 @@
 	(footprint "JST_PH_B3B-PH-K_1x03_P2.00mm_Vertical"
 		(layer "F.Cu")
 		(uuid "4fac0dbe-3829-4dc2-a2a2-4c61afe93588")
-		(at 125.750 73.500)
+		(at 125.75 73.5)
 		(descr "JST PH series connector, B3B-PH-K (http://www.jst-mfg.com/product/pdf/eng/ePH.pdf)")
 		(tags "connector JST PH vertical")
 		(property "Reference" "J9"
@@ -9032,7 +9032,7 @@
 	(footprint "JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical"
 		(layer "F.Cu")
 		(uuid "623d3975-23b7-4249-b4a7-58acab9d6986")
-		(at 146.750 73.500)
+		(at 146.75 73.5)
 		(descr "JST PH series connector, B2B-PH-K (http://www.jst-mfg.com/product/pdf/eng/ePH.pdf)")
 		(tags "connector JST PH vertical")
 		(property "Reference" "J1"
@@ -10759,7 +10759,7 @@
 	(footprint "JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical"
 		(layer "F.Cu")
 		(uuid "8def916d-5f10-4ba7-a838-3cb8687afad8")
-		(at 160.750 73.500)
+		(at 160.75 73.5)
 		(descr "JST PH series connector, B2B-PH-K (http://www.jst-mfg.com/product/pdf/eng/ePH.pdf)")
 		(tags "connector JST PH vertical")
 		(property "Reference" "J11"
@@ -12597,6 +12597,100 @@
 			)
 		)
 	)
+	(footprint "Sensor_Audio:Knowles_SPH0645LM4H"
+		(layer "F.Cu")
+		(uuid "a59c08d5-e59c-4e78-9cfc-4fd8616a496d")
+		(at 175 85)
+		(descr "Knowles SPH0645LM4H I2S MEMS Microphone")
+		(property "Reference" "MK1"
+			(at 0 -2.5 0)
+			(layer "F.SilkS")
+			(uuid "b83b22db-4109-4ea3-a4b8-e2f7d21b73ec")
+			(effects
+				(font
+					(size 0.7 0.7)
+					(thickness 0.12)
+				)
+			)
+		)
+		(property "Value" "SPH0645LM4H"
+			(at 0 2.5 0)
+			(layer "F.Fab")
+			(uuid "2907fcc9-1e5a-4f48-8519-584aa72f8047")
+			(effects
+				(font
+					(size 0.7 0.7)
+					(thickness 0.12)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "9c044da0-f704-4992-b9dd-c8e5b92329a8")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "2e8bfa1b-da32-4f1e-b1d9-64ba311274b3")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(duplicate_pad_numbers_are_jumpers no)
+		(pad "1" smd circle
+			(at -0.8 -0.8)
+			(size 0.5 0.5)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(uuid "8d164514-1753-4de7-9e79-01073775916e")
+		)
+		(pad "2" smd circle
+			(at 0.8 -0.8)
+			(size 0.5 0.5)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(uuid "6622a2bb-9cbe-445c-b875-b9988d91105b")
+		)
+		(pad "3" smd circle
+			(at 0.8 0.8)
+			(size 0.5 0.5)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(uuid "8aadcaec-a1c4-47f0-a321-5454aa0914a6")
+		)
+		(pad "4" smd circle
+			(at -0.8 0.8)
+			(size 0.5 0.5)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(uuid "e29c7998-26d0-44e9-beee-664e3be3963a")
+		)
+		(pad "5" smd circle
+			(at 0 0)
+			(size 0.8 0.8)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(net "GND")
+			(uuid "11985623-4694-4680-942a-2d5de51ea85f")
+		)
+		(embedded_fonts no)
+		(model "${KICAD10_3DMODEL_DIR}/Sensor_Audio.3dshapes/Knowles_SPH0645LM4H-6_3.5x2.65mm.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
+	)
 	(footprint "D_SMB"
 		(layer "F.Cu")
 		(uuid "a74ee9bd-de90-4f0b-9777-a9b29dd1ac4c")
@@ -13607,7 +13701,7 @@
 	(footprint "JST_PH_B4B-PH-K_1x04_P2.00mm_Vertical"
 		(layer "F.Cu")
 		(uuid "ae51bf47-5d0b-48fe-a150-144188d1f978")
-		(at 140.250 116.000 180.0)
+		(at 140.25 116 180)
 		(descr "JST PH series connector, B4B-PH-K (http://www.jst-mfg.com/product/pdf/eng/ePH.pdf)")
 		(tags "connector JST PH vertical")
 		(property "Reference" "J6"
@@ -15235,6 +15329,156 @@
 		)
 		(embedded_fonts no)
 	)
+	(footprint "RF_GPS:ublox_SAM-M10Q"
+		(layer "F.Cu")
+		(uuid "d240b257-30da-4f9d-a106-7cea04e3b22b")
+		(at 125 85)
+		(descr "u-blox SAM-M10Q Standard Precision GNSS Module with Integrated Patch Antenna (15.5x15.5mm)")
+		(property "Reference" "U10"
+			(at 0 -9 0)
+			(layer "F.SilkS")
+			(uuid "75bc78f5-d970-4a71-a870-263e0aea582d")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.12)
+				)
+			)
+		)
+		(property "Value" "u-blox_SAM-M10Q"
+			(at 0 9 0)
+			(layer "F.Fab")
+			(uuid "3f537011-45f2-45e9-851b-62d2e42336f9")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.12)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "ba9d497d-d684-45f2-9956-a8bbbdf2d384")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "96a13d6e-6db9-423a-ba68-c623054a4d9b")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(duplicate_pad_numbers_are_jumpers no)
+		(fp_rect
+			(start -7.75 -7.75)
+			(end 7.75 7.75)
+			(stroke
+				(width 0.15)
+				(type solid)
+			)
+			(fill no)
+			(layer "F.SilkS")
+			(uuid "612d7c2e-c8e7-47c2-80cb-b99be33c9608")
+		)
+		(pad "1" smd roundrect
+			(at -6.75 -5)
+			(size 1.2 0.8)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(roundrect_rratio 0.25)
+			(net "GND")
+			(uuid "156e9b6a-534c-4ce8-bc04-dd2799148901")
+		)
+		(pad "2" smd roundrect
+			(at -6.75 -2.5)
+			(size 1.2 0.8)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(roundrect_rratio 0.25)
+			(net "3V3")
+			(uuid "9bc0a636-46eb-4a8e-9e6b-fbad8facb7e1")
+		)
+		(pad "3" smd roundrect
+			(at -6.75 0)
+			(size 1.2 0.8)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(roundrect_rratio 0.25)
+			(uuid "bb384420-4ca1-4f88-a4df-246967a68737")
+		)
+		(pad "4" smd roundrect
+			(at -6.75 2.5)
+			(size 1.2 0.8)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(roundrect_rratio 0.25)
+			(uuid "560d77f6-5cf5-4efe-9bda-6edf49ec6324")
+		)
+		(pad "5" smd roundrect
+			(at -6.75 5)
+			(size 1.2 0.8)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(roundrect_rratio 0.25)
+			(net "GND")
+			(uuid "e05d1d0a-aa2f-4ce6-a6b1-858c2cc1f58e")
+		)
+		(pad "6" smd roundrect
+			(at 6.75 5)
+			(size 1.2 0.8)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(roundrect_rratio 0.25)
+			(net "GND")
+			(uuid "7c49c2bb-600b-4c94-970d-da1668d13a8e")
+		)
+		(pad "7" smd roundrect
+			(at 6.75 2.5)
+			(size 1.2 0.8)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(roundrect_rratio 0.25)
+			(uuid "5d506fc9-658a-4ea9-b175-cc5805a3f593")
+		)
+		(pad "8" smd roundrect
+			(at 6.75 0)
+			(size 1.2 0.8)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(roundrect_rratio 0.25)
+			(uuid "c022e95b-6a51-424f-9353-4b546ab125a1")
+		)
+		(pad "9" smd roundrect
+			(at 6.75 -2.5)
+			(size 1.2 0.8)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(roundrect_rratio 0.25)
+			(net "3V3")
+			(uuid "635871e9-a4f6-4c95-9b58-e9285155beb9")
+		)
+		(pad "10" smd roundrect
+			(at 6.75 -5)
+			(size 1.2 0.8)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(roundrect_rratio 0.25)
+			(net "GND")
+			(uuid "2cb819a5-7c46-4452-9225-a6054e697e48")
+		)
+		(embedded_fonts no)
+		(model "${KICAD10_3DMODEL_DIR}/RF_Module.3dshapes/Raytac_MDBT50Q.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1.4 0.9 1.8)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
+	)
 	(footprint "L_Sunlord_MWSA0503S"
 		(layer "F.Cu")
 		(uuid "d51c3bc7-3d80-4365-ace8-aa4efce4db9c")
@@ -15975,7 +16219,7 @@
 	(footprint "USB_C_Receptacle_HRO_TYPE-C-31-M-12"
 		(layer "F.Cu")
 		(uuid "e407c054-673e-40e1-9393-4f2585237d80")
-		(at 177.700 105.000 90.0)
+		(at 177.7 105 90)
 		(descr "USB Type-C receptacle for USB 2.0 and PD, http://www.krhro.com/uploads/soft/180320/1-1P320120243.pdf")
 		(tags "usb usb-c 2.0 pd")
 		(property "Reference" "J7"
@@ -16513,7 +16757,7 @@
 	(footprint "JST_PH_B3B-PH-K_1x03_P2.00mm_Vertical"
 		(layer "F.Cu")
 		(uuid "e8375d3f-f78b-48a3-a8c1-f851071b8e81")
-		(at 167.750 73.500)
+		(at 167.75 73.5)
 		(descr "JST PH series connector, B3B-PH-K (http://www.jst-mfg.com/product/pdf/eng/ePH.pdf)")
 		(tags "connector JST PH vertical")
 		(property "Reference" "J2"
@@ -17909,6 +18153,374 @@
 		)
 		(embedded_fonts no)
 		(model "${KICAD10_3DMODEL_DIR}/Capacitor_Tantalum_SMD.3dshapes/CP_EIA-7343-31_Kemet-D.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
+	)
+	(footprint "Package_DFN_QFN:QFN-16-1EP_3x3mm_P0.5mm_EP1.7x1.7mm_ThermalVias"
+		(layer "B.Cu")
+		(uuid "2a43a47a-81f4-404d-b186-c1e7f8a28443")
+		(at 145 95 180)
+		(descr "Qorvo DW3110 Ultra-Wideband Transceiver")
+		(property "Reference" "U9"
+			(at 0 -2.5 0)
+			(layer "B.SilkS")
+			(uuid "73725751-1801-4cc9-a2a5-f8bd51d8ec9d")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.12)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Value" "DW3110"
+			(at 0 2.5 0)
+			(layer "B.Fab")
+			(uuid "930063ca-05b8-48a5-bb34-da9e906295b0")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.12)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 180)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "15b1bc35-0004-46e9-81b7-43c64b89c5db")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 180)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "f8757fcd-8d37-4add-9c5f-20dc3f69ef0a")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(duplicate_pad_numbers_are_jumpers no)
+		(pad "1" smd roundrect
+			(at -1.45 0.75 180)
+			(size 0.6 0.25)
+			(layers "B.Cu" "B.Mask" "B.Paste")
+			(roundrect_rratio 0.25)
+			(uuid "be304802-9a50-4cef-973b-fc1a94b94ada")
+		)
+		(pad "2" smd roundrect
+			(at -1.45 0.25 180)
+			(size 0.6 0.25)
+			(layers "B.Cu" "B.Mask" "B.Paste")
+			(roundrect_rratio 0.25)
+			(uuid "e8076966-e569-4799-a01e-a8869268078f")
+		)
+		(pad "3" smd roundrect
+			(at -1.45 -0.25 180)
+			(size 0.6 0.25)
+			(layers "B.Cu" "B.Mask" "B.Paste")
+			(roundrect_rratio 0.25)
+			(uuid "56c0980e-ccda-4a82-b6b2-8e5b9437824f")
+		)
+		(pad "4" smd roundrect
+			(at -1.45 -0.75 180)
+			(size 0.6 0.25)
+			(layers "B.Cu" "B.Mask" "B.Paste")
+			(roundrect_rratio 0.25)
+			(uuid "5b2d577b-4754-473b-b19a-210aff551208")
+		)
+		(pad "5" smd roundrect
+			(at -0.75 -1.45 180)
+			(size 0.25 0.6)
+			(layers "B.Cu" "B.Mask" "B.Paste")
+			(roundrect_rratio 0.25)
+			(uuid "8bfc9472-8666-4f1e-ace7-54cc770bf611")
+		)
+		(pad "6" smd roundrect
+			(at -0.25 -1.45 180)
+			(size 0.25 0.6)
+			(layers "B.Cu" "B.Mask" "B.Paste")
+			(roundrect_rratio 0.25)
+			(uuid "d9232211-5f22-4883-9268-c42219e27e26")
+		)
+		(pad "7" smd roundrect
+			(at 0.25 -1.45 180)
+			(size 0.25 0.6)
+			(layers "B.Cu" "B.Mask" "B.Paste")
+			(roundrect_rratio 0.25)
+			(uuid "b27add96-734a-411c-8d2a-9f95b2f2076d")
+		)
+		(pad "8" smd roundrect
+			(at 0.75 -1.45 180)
+			(size 0.25 0.6)
+			(layers "B.Cu" "B.Mask" "B.Paste")
+			(roundrect_rratio 0.25)
+			(uuid "577b7447-a853-4549-bc23-10f91a261d88")
+		)
+		(pad "9" smd roundrect
+			(at 1.45 -0.75 180)
+			(size 0.6 0.25)
+			(layers "B.Cu" "B.Mask" "B.Paste")
+			(roundrect_rratio 0.25)
+			(uuid "e1e6c7e9-5e4b-4411-b0eb-648a45a499de")
+		)
+		(pad "10" smd roundrect
+			(at 1.45 -0.25 180)
+			(size 0.6 0.25)
+			(layers "B.Cu" "B.Mask" "B.Paste")
+			(roundrect_rratio 0.25)
+			(uuid "65fdde9d-f6c8-4709-b5aa-8588cf42b4c7")
+		)
+		(pad "11" smd roundrect
+			(at 1.45 0.25 180)
+			(size 0.6 0.25)
+			(layers "B.Cu" "B.Mask" "B.Paste")
+			(roundrect_rratio 0.25)
+			(uuid "1b3473b3-f276-4d7d-88e2-c1d94490a71d")
+		)
+		(pad "12" smd roundrect
+			(at 1.45 0.75 180)
+			(size 0.6 0.25)
+			(layers "B.Cu" "B.Mask" "B.Paste")
+			(roundrect_rratio 0.25)
+			(uuid "931a4640-9872-4e11-a04f-281514a84e93")
+		)
+		(pad "13" smd roundrect
+			(at 0.75 1.45 180)
+			(size 0.25 0.6)
+			(layers "B.Cu" "B.Mask" "B.Paste")
+			(roundrect_rratio 0.25)
+			(uuid "006ee4d8-626d-409f-b445-3d37bde359be")
+		)
+		(pad "14" smd roundrect
+			(at 0.25 1.45 180)
+			(size 0.25 0.6)
+			(layers "B.Cu" "B.Mask" "B.Paste")
+			(roundrect_rratio 0.25)
+			(uuid "20c62c74-5330-4a27-b68e-31fd6f844dbb")
+		)
+		(pad "15" smd roundrect
+			(at -0.25 1.45 180)
+			(size 0.25 0.6)
+			(layers "B.Cu" "B.Mask" "B.Paste")
+			(roundrect_rratio 0.25)
+			(uuid "3574eece-ba9b-4d8c-9dfa-7669b6b698f6")
+		)
+		(pad "16" smd roundrect
+			(at -0.75 1.45 180)
+			(size 0.25 0.6)
+			(layers "B.Cu" "B.Mask" "B.Paste")
+			(roundrect_rratio 0.25)
+			(uuid "98738424-7a59-4c0d-bc0c-c150543f09e1")
+		)
+		(pad "17" smd roundrect
+			(at 0 0 180)
+			(size 1.7 1.7)
+			(layers "B.Cu" "B.Mask" "B.Paste")
+			(roundrect_rratio 0.1)
+			(net "GND")
+			(uuid "81ddc654-6f7c-48ed-8ee2-86b797609b3f")
+		)
+		(embedded_fonts no)
+		(model "${KICAD10_3DMODEL_DIR}/Package_DFN_QFN.3dshapes/QFN-16-1EP_3x3mm_P0.5mm_EP1.7x1.7mm.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
+	)
+	(footprint "Crystal:Crystal_SMD_2016-4Pin_2.0x1.6mm"
+		(layer "B.Cu")
+		(uuid "74b2c8a1-80c2-466b-b87a-39a73f5561eb")
+		(at 151 95 180)
+		(descr "SMD Crystal 38.4MHz 2.0x1.6mm 4-Pin")
+		(property "Reference" "Y_UWB"
+			(at 0 -1.5 0)
+			(layer "B.SilkS")
+			(uuid "5388e817-a48c-4d34-83f8-2e08b9a76d85")
+			(effects
+				(font
+					(size 0.7 0.7)
+					(thickness 0.12)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Value" "38.4MHz"
+			(at 0 1.5 0)
+			(layer "B.Fab")
+			(uuid "d73fd230-817d-400b-bdf6-d8fae74b852c")
+			(effects
+				(font
+					(size 0.7 0.7)
+					(thickness 0.12)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 180)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "f7688618-0469-4507-a94d-861e85ce21f5")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 180)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "43f9be3c-2344-48ec-b5c4-1809c7d86101")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(duplicate_pad_numbers_are_jumpers no)
+		(pad "1" smd roundrect
+			(at -0.65 0.5 180)
+			(size 0.7 0.6)
+			(layers "B.Cu" "B.Mask" "B.Paste")
+			(roundrect_rratio 0.25)
+			(uuid "ee94a1f0-967e-4af1-b435-3defb8125691")
+		)
+		(pad "2" smd roundrect
+			(at 0.65 0.5 180)
+			(size 0.7 0.6)
+			(layers "B.Cu" "B.Mask" "B.Paste")
+			(roundrect_rratio 0.25)
+			(net "GND")
+			(uuid "a699b1d5-53ec-4d13-b505-6023dc84d534")
+		)
+		(pad "3" smd roundrect
+			(at 0.65 -0.5 180)
+			(size 0.7 0.6)
+			(layers "B.Cu" "B.Mask" "B.Paste")
+			(roundrect_rratio 0.25)
+			(uuid "5c8a1632-a36a-43cc-ba73-4115eacc83f2")
+		)
+		(pad "4" smd roundrect
+			(at -0.65 -0.5 180)
+			(size 0.7 0.6)
+			(layers "B.Cu" "B.Mask" "B.Paste")
+			(roundrect_rratio 0.25)
+			(net "GND")
+			(uuid "a7f77b1c-6b70-423f-9b0a-c92a0d39906c")
+		)
+		(embedded_fonts no)
+		(model "${KICAD10_3DMODEL_DIR}/Crystal.3dshapes/Crystal_SMD_2016-4Pin_2.0x1.6mm.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
+	)
+	(footprint "Connector_Coaxial:U.FL_Hirose_U.FL-R-SMT-1_Vertical"
+		(layer "B.Cu")
+		(uuid "ca755569-a6d0-44dc-b967-00b05a4c3c42")
+		(at 137 95 180)
+		(descr "Hirose U.FL Coaxial Connector (Taoglas FXUWB10 Floor Antenna)")
+		(property "Reference" "ANT_UWB"
+			(at 0 -2.5 0)
+			(layer "B.SilkS")
+			(uuid "70143ad6-b154-41fb-a905-931f2febe661")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.12)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Value" "Taoglas_FXUWB10"
+			(at 0 2.5 0)
+			(layer "B.Fab")
+			(uuid "980c9f36-065c-449e-9cea-55a5eab25838")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.12)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 180)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "0885c289-7df6-4d88-942f-954fb53e879f")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 180)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "0ebc3298-30c2-4a7c-9475-a4e038f26e5e")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(duplicate_pad_numbers_are_jumpers no)
+		(pad "1" smd roundrect
+			(at 0 -1.5 180)
+			(size 1 1)
+			(layers "B.Cu" "B.Mask" "B.Paste")
+			(roundrect_rratio 0.25)
+			(uuid "8faa33c4-5388-4c9b-b2d5-db3cf4600f1a")
+		)
+		(pad "2" smd roundrect
+			(at -1.05 0 180)
+			(size 0.8 1.1)
+			(layers "B.Cu" "B.Mask" "B.Paste")
+			(roundrect_rratio 0.25)
+			(net "GND")
+			(uuid "7d76db8a-5457-40b3-90de-3ff664633366")
+		)
+		(pad "2" smd roundrect
+			(at 1.05 0 180)
+			(size 0.8 1.1)
+			(layers "B.Cu" "B.Mask" "B.Paste")
+			(roundrect_rratio 0.25)
+			(net "GND")
+			(uuid "745be32a-3bc3-4cd4-8562-919edf2d5d56")
+		)
+		(embedded_fonts no)
+		(model "${KICAD10_3DMODEL_DIR}/Connector_Coaxial.3dshapes/U.FL_Hirose_U.FL-R-SMT-1_Vertical.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -31728,190 +32340,4 @@
 		(uuid "f2b97c85-b360-4099-8bf0-d0ac54dcfdbe")
 	)
 	(embedded_fonts no)
-	(footprint "Package_DFN_QFN:QFN-16-1EP_3x3mm_P0.5mm_EP1.7x1.7mm_ThermalVias"
-		(layer "B.Cu")
-		(uuid "2a43a47a-81f4-404d-b186-c1e7f8a28443")
-		(at 145 95 180)
-		(descr "Qorvo DW3110 Ultra-Wideband Transceiver")
-		(property "Reference" "U9"
-			(at 0 -2.5 0)
-			(layer "B.SilkS")
-			(uuid "73725751-1801-4cc9-a2a5-f8bd51d8ec9d")
-			(effects
-				(font
-					(size 0.8 0.8)
-					(thickness 0.12)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Value" "DW3110"
-			(at 0 2.5 0)
-			(layer "B.Fab")
-			(uuid "930063ca-05b8-48a5-bb34-da9e906295b0")
-			(effects
-				(font
-					(size 0.8 0.8)
-					(thickness 0.12)
-				)
-				(justify mirror)
-			)
-		)
-		(pad "1" smd roundrect (at -1.45 0.75 180) (size 0.6 0.25) (layers "B.Cu" "B.Mask" "B.Paste") (roundrect_rratio 0.25) (uuid "be304802-9a50-4cef-973b-fc1a94b94ada"))
-		(pad "2" smd roundrect (at -1.45 0.25 180) (size 0.6 0.25) (layers "B.Cu" "B.Mask" "B.Paste") (roundrect_rratio 0.25) (uuid "e8076966-e569-4799-a01e-a8869268078f"))
-		(pad "3" smd roundrect (at -1.45 -0.25 180) (size 0.6 0.25) (layers "B.Cu" "B.Mask" "B.Paste") (roundrect_rratio 0.25) (uuid "56c0980e-ccda-4a82-b6b2-8e5b9437824f"))
-		(pad "4" smd roundrect (at -1.45 -0.75 180) (size 0.6 0.25) (layers "B.Cu" "B.Mask" "B.Paste") (roundrect_rratio 0.25) (uuid "5b2d577b-4754-473b-b19a-210aff551208"))
-		(pad "5" smd roundrect (at -0.75 -1.45 180) (size 0.25 0.6) (layers "B.Cu" "B.Mask" "B.Paste") (roundrect_rratio 0.25) (uuid "8bfc9472-8666-4f1e-ace7-54cc770bf611"))
-		(pad "6" smd roundrect (at -0.25 -1.45 180) (size 0.25 0.6) (layers "B.Cu" "B.Mask" "B.Paste") (roundrect_rratio 0.25) (uuid "d9232211-5f22-4883-9268-c42219e27e26"))
-		(pad "7" smd roundrect (at 0.25 -1.45 180) (size 0.25 0.6) (layers "B.Cu" "B.Mask" "B.Paste") (roundrect_rratio 0.25) (uuid "b27add96-734a-411c-8d2a-9f95b2f2076d"))
-		(pad "8" smd roundrect (at 0.75 -1.45 180) (size 0.25 0.6) (layers "B.Cu" "B.Mask" "B.Paste") (roundrect_rratio 0.25) (uuid "577b7447-a853-4549-bc23-10f91a261d88"))
-		(pad "9" smd roundrect (at 1.45 -0.75 180) (size 0.6 0.25) (layers "B.Cu" "B.Mask" "B.Paste") (roundrect_rratio 0.25) (uuid "e1e6c7e9-5e4b-4411-b0eb-648a45a499de"))
-		(pad "10" smd roundrect (at 1.45 -0.25 180) (size 0.6 0.25) (layers "B.Cu" "B.Mask" "B.Paste") (roundrect_rratio 0.25) (uuid "65fdde9d-f6c8-4709-b5aa-8588cf42b4c7"))
-		(pad "11" smd roundrect (at 1.45 0.25 180) (size 0.6 0.25) (layers "B.Cu" "B.Mask" "B.Paste") (roundrect_rratio 0.25) (uuid "1b3473b3-f276-4d7d-88e2-c1d94490a71d"))
-		(pad "12" smd roundrect (at 1.45 0.75 180) (size 0.6 0.25) (layers "B.Cu" "B.Mask" "B.Paste") (roundrect_rratio 0.25) (uuid "931a4640-9872-4e11-a04f-281514a84e93"))
-		(pad "13" smd roundrect (at 0.75 1.45 180) (size 0.25 0.6) (layers "B.Cu" "B.Mask" "B.Paste") (roundrect_rratio 0.25) (uuid "006ee4d8-626d-409f-b445-3d37bde359be"))
-		(pad "14" smd roundrect (at 0.25 1.45 180) (size 0.25 0.6) (layers "B.Cu" "B.Mask" "B.Paste") (roundrect_rratio 0.25) (uuid "20c62c74-5330-4a27-b68e-31fd6f844dbb"))
-		(pad "15" smd roundrect (at -0.25 1.45 180) (size 0.25 0.6) (layers "B.Cu" "B.Mask" "B.Paste") (roundrect_rratio 0.25) (uuid "3574eece-ba9b-4d8c-9dfa-7669b6b698f6"))
-		(pad "16" smd roundrect (at -0.75 1.45 180) (size 0.25 0.6) (layers "B.Cu" "B.Mask" "B.Paste") (roundrect_rratio 0.25) (uuid "98738424-7a59-4c0d-bc0c-c150543f09e1"))
-		(pad "17" smd roundrect (at 0 0 180) (size 1.7 1.7) (layers "B.Cu" "B.Mask" "B.Paste") (roundrect_rratio 0.1) (net "GND") (uuid "81ddc654-6f7c-48ed-8ee2-86b797609b3f"))
-	)
-	(footprint "Connector_Coaxial:U.FL_Hirose_U.FL-R-SMT-1_Vertical"
-		(layer "B.Cu")
-		(uuid "ca755569-a6d0-44dc-b967-00b05a4c3c42")
-		(at 137 95 180)
-		(descr "Hirose U.FL Coaxial Connector (Taoglas FXUWB10 Floor Antenna)")
-		(property "Reference" "ANT_UWB"
-			(at 0 -2.5 0)
-			(layer "B.SilkS")
-			(uuid "70143ad6-b154-41fb-a905-931f2febe661")
-			(effects
-				(font
-					(size 0.8 0.8)
-					(thickness 0.12)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Value" "Taoglas_FXUWB10"
-			(at 0 2.5 0)
-			(layer "B.Fab")
-			(uuid "980c9f36-065c-449e-9cea-55a5eab25838")
-			(effects
-				(font
-					(size 0.8 0.8)
-					(thickness 0.12)
-				)
-				(justify mirror)
-			)
-		)
-		(pad "1" smd roundrect (at 0 -1.5 180) (size 1.0 1.0) (layers "B.Cu" "B.Mask" "B.Paste") (roundrect_rratio 0.25) (uuid "8faa33c4-5388-4c9b-b2d5-db3cf4600f1a"))
-		(pad "2" smd roundrect (at -1.05 0 180) (size 0.8 1.1) (layers "B.Cu" "B.Mask" "B.Paste") (roundrect_rratio 0.25) (net "GND") (uuid "7d76db8a-5457-40b3-90de-3ff664633366"))
-		(pad "2" smd roundrect (at 1.05 0 180) (size 0.8 1.1) (layers "B.Cu" "B.Mask" "B.Paste") (roundrect_rratio 0.25) (net "GND") (uuid "745be32a-3bc3-4cd4-8562-919edf2d5d56"))
-	)
-	(footprint "Crystal:Crystal_SMD_2016-4Pin_2.0x1.6mm"
-		(layer "B.Cu")
-		(uuid "74b2c8a1-80c2-466b-b87a-39a73f5561eb")
-		(at 151 95 180)
-		(descr "SMD Crystal 38.4MHz 2.0x1.6mm 4-Pin")
-		(property "Reference" "Y_UWB"
-			(at 0 -1.5 0)
-			(layer "B.SilkS")
-			(uuid "5388e817-a48c-4d34-83f8-2e08b9a76d85")
-			(effects
-				(font
-					(size 0.7 0.7)
-					(thickness 0.12)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Value" "38.4MHz"
-			(at 0 1.5 0)
-			(layer "B.Fab")
-			(uuid "d73fd230-817d-400b-bdf6-d8fae74b852c")
-			(effects
-				(font
-					(size 0.7 0.7)
-					(thickness 0.12)
-				)
-				(justify mirror)
-			)
-		)
-		(pad "1" smd roundrect (at -0.65 0.5 180) (size 0.7 0.6) (layers "B.Cu" "B.Mask" "B.Paste") (roundrect_rratio 0.25) (uuid "ee94a1f0-967e-4af1-b435-3defb8125691"))
-		(pad "2" smd roundrect (at 0.65 0.5 180) (size 0.7 0.6) (layers "B.Cu" "B.Mask" "B.Paste") (roundrect_rratio 0.25) (net "GND") (uuid "a699b1d5-53ec-4d13-b505-6023dc84d534"))
-		(pad "3" smd roundrect (at 0.65 -0.5 180) (size 0.7 0.6) (layers "B.Cu" "B.Mask" "B.Paste") (roundrect_rratio 0.25) (uuid "5c8a1632-a36a-43cc-ba73-4115eacc83f2"))
-		(pad "4" smd roundrect (at -0.65 -0.5 180) (size 0.7 0.6) (layers "B.Cu" "B.Mask" "B.Paste") (roundrect_rratio 0.25) (net "GND") (uuid "a7f77b1c-6b70-423f-9b0a-c92a0d39906c"))
-	)
-	(footprint "RF_GPS:ublox_SAM-M10Q"
-		(layer "F.Cu")
-		(uuid "d240b257-30da-4f9d-a106-7cea04e3b22b")
-		(at 125 85 0)
-		(descr "u-blox SAM-M10Q Standard Precision GNSS Module with Integrated Patch Antenna (15.5x15.5mm)")
-		(property "Reference" "U10"
-			(at 0 -9.0 0)
-			(layer "F.SilkS")
-			(uuid "75bc78f5-d970-4a71-a870-263e0aea582d")
-			(effects
-				(font
-					(size 0.8 0.8)
-					(thickness 0.12)
-				)
-			)
-		)
-		(property "Value" "u-blox_SAM-M10Q"
-			(at 0 9.0 0)
-			(layer "F.Fab")
-			(uuid "3f537011-45f2-45e9-851b-62d2e42336f9")
-			(effects
-				(font
-					(size 0.8 0.8)
-					(thickness 0.12)
-				)
-			)
-		)
-		(fp_rect (start -7.75 -7.75) (end 7.75 7.75) (stroke (width 0.15) (type solid)) (fill no) (layer "F.SilkS") (uuid "612d7c2e-c8e7-47c2-80cb-b99be33c9608"))
-		(pad "1" smd roundrect (at -6.75 -5.0) (size 1.2 0.8) (layers "F.Cu" "F.Mask" "F.Paste") (roundrect_rratio 0.25) (net "GND") (uuid "156e9b6a-534c-4ce8-bc04-dd2799148901"))
-		(pad "2" smd roundrect (at -6.75 -2.5) (size 1.2 0.8) (layers "F.Cu" "F.Mask" "F.Paste") (roundrect_rratio 0.25) (net "3V3") (uuid "9bc0a636-46eb-4a8e-9e6b-fbad8facb7e1"))
-		(pad "3" smd roundrect (at -6.75 0.0) (size 1.2 0.8) (layers "F.Cu" "F.Mask" "F.Paste") (roundrect_rratio 0.25) (uuid "bb384420-4ca1-4f88-a4df-246967a68737"))
-		(pad "4" smd roundrect (at -6.75 2.5) (size 1.2 0.8) (layers "F.Cu" "F.Mask" "F.Paste") (roundrect_rratio 0.25) (uuid "560d77f6-5cf5-4efe-9bda-6edf49ec6324"))
-		(pad "5" smd roundrect (at -6.75 5.0) (size 1.2 0.8) (layers "F.Cu" "F.Mask" "F.Paste") (roundrect_rratio 0.25) (net "GND") (uuid "e05d1d0a-aa2f-4ce6-a6b1-858c2cc1f58e"))
-		(pad "6" smd roundrect (at 6.75 5.0) (size 1.2 0.8) (layers "F.Cu" "F.Mask" "F.Paste") (roundrect_rratio 0.25) (net "GND") (uuid "7c49c2bb-600b-4c94-970d-da1668d13a8e"))
-		(pad "7" smd roundrect (at 6.75 2.5) (size 1.2 0.8) (layers "F.Cu" "F.Mask" "F.Paste") (roundrect_rratio 0.25) (uuid "5d506fc9-658a-4ea9-b175-cc5805a3f593"))
-		(pad "8" smd roundrect (at 6.75 0.0) (size 1.2 0.8) (layers "F.Cu" "F.Mask" "F.Paste") (roundrect_rratio 0.25) (uuid "c022e95b-6a51-424f-9353-4b546ab125a1"))
-		(pad "9" smd roundrect (at 6.75 -2.5) (size 1.2 0.8) (layers "F.Cu" "F.Mask" "F.Paste") (roundrect_rratio 0.25) (net "3V3") (uuid "635871e9-a4f6-4c95-9b58-e9285155beb9"))
-		(pad "10" smd roundrect (at 6.75 -5.0) (size 1.2 0.8) (layers "F.Cu" "F.Mask" "F.Paste") (roundrect_rratio 0.25) (net "GND") (uuid "2cb819a5-7c46-4452-9225-a6054e697e48"))
-	)
-	(footprint "Sensor_Audio:Knowles_SPH0645LM4H"
-		(layer "F.Cu")
-		(uuid "a59c08d5-e59c-4e78-9cfc-4fd8616a496d")
-		(at 175 85 0)
-		(descr "Knowles SPH0645LM4H I2S MEMS Microphone")
-		(property "Reference" "MK1"
-			(at 0 -2.5 0)
-			(layer "F.SilkS")
-			(uuid "b83b22db-4109-4ea3-a4b8-e2f7d21b73ec")
-			(effects
-				(font
-					(size 0.7 0.7)
-					(thickness 0.12)
-				)
-			)
-		)
-		(property "Value" "SPH0645LM4H"
-			(at 0 2.5 0)
-			(layer "F.Fab")
-			(uuid "2907fcc9-1e5a-4f48-8519-584aa72f8047")
-			(effects
-				(font
-					(size 0.7 0.7)
-					(thickness 0.12)
-				)
-			)
-		)
-		(pad "1" smd circle (at -0.8 -0.8) (size 0.5 0.5) (layers "F.Cu" "F.Mask" "F.Paste") (uuid "8d164514-1753-4de7-9e79-01073775916e"))
-		(pad "2" smd circle (at 0.8 -0.8) (size 0.5 0.5) (layers "F.Cu" "F.Mask" "F.Paste") (uuid "6622a2bb-9cbe-445c-b875-b9988d91105b"))
-		(pad "3" smd circle (at 0.8 0.8) (size 0.5 0.5) (layers "F.Cu" "F.Mask" "F.Paste") (uuid "8aadcaec-a1c4-47f0-a321-5454aa0914a6"))
-		(pad "4" smd circle (at -0.8 0.8) (size 0.5 0.5) (layers "F.Cu" "F.Mask" "F.Paste") (uuid "e29c7998-26d0-44e9-beee-664e3be3963a"))
-		(pad "5" smd circle (at 0 0) (size 0.8 0.8) (layers "F.Cu" "F.Mask" "F.Paste") (net "GND") (uuid "11985623-4694-4680-942a-2d5de51ea85f"))
-	)
 )
