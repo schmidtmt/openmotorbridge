@@ -78,7 +78,41 @@ Wird das OMM-Modul im Pod auf der Smart Cartridge (`PCBA 03`) eingesetzt, greift
 +----------------------+-----------------------+-----------------+-----------------------+
 ```
 
-* **Verschleißfreie Elektronik-Option (Zero-Wear):** Über die interne Schnittstelle `J_AUDIO_PWR` können die 4 Tasterleitungen des OMM-Moduls alternativ auch direkt elektrisch (über Open-Drain Schaltausgänge der Kassetten-MCU) geschaltet werden. Die mechanischen Hubmagnete gewährleisten die universelle Kompatibilität mit OEM-Geräten, während die direkte elektronische Tastung bei OMM-Modulen geräuschlos und vollkommen verschleißfrei arbeitet.
+* **Verschleißfreie Elektronik-Option (Zero-Wear):** Über die interne Schnittstelle `J_AUDIO_PWR` können die 4 Tasterleitungen des OMM-Moduls alternativ auch direkt digital (über UART-Steuerbefehle oder Open-Drain Schaltausgänge der Kassetten-MCU) geschaltet werden. Die mechanischen Hubmagnete gewährleisten die universelle Kompatibilität mit OEM-Geräten, während die digitale Tastung bei OMM-Modulen geräuschlos und vollkommen verschleißfrei arbeitet.
+
+### 1.3 Elektrische Schnittstellen & UCS-Kabelarchitektur
+
+Der **UCS-Standard (Universal Communication Solution)** nach **ECE 22.06** (initiiert von Cardo, Midland, Uclear) normiert primär die **mechanische Kavität und Außenkontur** des Headset-Gehäuses, definiert jedoch bewusst **keinen einheitlichen elektrischen Steckverbinder**. Um maximale Interoperabilität, Wasserfestigkeit (IP67) und Langlebigkeit zu garantieren, setzt das OMM 2.4 GHz Modul auf eine universelle **USB-C Multi-Funktions-Architektur**:
+
+```
++-----------------------------------------------------------------------------------------+
+|                OMM 2.4 GHz DUAL-USE SCHNITTSTELLEN-ARCHITEKTUR (USB-C)                  |
++-----------------------------------------------------------------------------------------+
+|                                                                                         |
+|  [ OMM 2.4 GHz Modul im UCS-Gehäuse ]                                                   |
+|        |                                                                                |
+|        +---> 1x IP67-versiegelte USB-C Buchse (Geräteseite)                             |
+|                    |                                                                    |
+|                    +--- MODUS A: EINSATZ IM HELM (STANDALONE)                           |
+|                    |    USB-C auf Helm-Kabelpeitsche:                                   |
+|                    |    * Lautsprecher: Standard 3,5 mm Klinkenbuchse (TRS)             |
+|                    |      (Volle Freiheit: 40 mm JBL, Sena HD, In-Ear Gehörschutz)      |
+|                    |    * Mikrofon: Wasserdichter 2-Pin Verriegelungsstecker (JST-JWPF) |
+|                    |      (Kompakt, rüttelfest, für Schwanenhals- oder Klebemikrofon)   |
+|                    |                                                                    |
+|                    +--- MODUS B: EINSATZ IM POD (SMART CARTRIDGE PCBA 03)               |
+|                         USB-C auf 6-Pin JST-SH Adapterkabel (Länge 5 cm, 90° gewinkelt):|
+|                         * Pin 1: GND                                                    |
+|                         * Pin 2: VCC_5V (Dauer-Bordnetzladung)                          |
+|                         * Pin 3..5: Digital Audio (I2S) / Analog Line-In/Out            |
+|                         * Pin 6: UART Telemetrie / Zero-Wear Tastersteuerung            |
+|                                                                                         |
++-----------------------------------------------------------------------------------------+
+```
+
+1. **Standalone-Helmnutzung:** Der Fahrer clipst das OMM-Modul in die UCS-Kavität des Helms und verbindet die Helmpeitsche mit dem USB-C Port. Beliebige Lautsprecher (3,5 mm Klinke) und Mikrofone (2-Pin) können zerstörungsfrei getauscht werden.
+2. **Gateway-Pod-Nutzung:** Im Kassetten-Schlitten wird das Modul über ein kurzes 90°-abgewinkeltes USB-C Kabel direkt mit Header `J_AUDIO_PWR` auf `PCBA 03` gekoppelt. Sämtliche Kommunikation erfolgt rein digital und verschleißfrei.
+3. **Wartung & Updates:** Dieselbe USB-C Buchse dient außerhalb des Fahrzeugs zum Schnellladen und für Firmware-Updates via WebUSB im Browser.
 
 ---
 
