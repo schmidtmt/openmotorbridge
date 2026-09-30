@@ -236,7 +236,15 @@ module radar_mr20_main_tub(include_lower_clevis=INCLUDE_LOWER_CLEVIS) {
                 }
             }
 
-            // 4 Corner Standoff Pillars around M2.5 screws (support PCBA 08 shelf & hold M2.5 inserts)
+            // Internal Reinforcement Bosses around Captive M4 Nut Pockets (100% Soldering-Iron Free)
+            for (dx = [-REAR_M4_PITCH/2, REAR_M4_PITCH/2]) {
+                translate([dx, -RADAR_HOUSING_D + RADAR_WALL_THICK, 0.0]) {
+                    rotate([-90, 0, 0])
+                        cylinder(r=6.2, h=3.6, center=false, $fn=24);
+                }
+            }
+
+            // 4 Corner Standoff Pillars around M2.5 screws (support PCBA 08 shelf & direct thread-forming bores)
             for (sx = [-SCREW_PCD_X, SCREW_PCD_X]) {
                 for (sz = [-SCREW_PCD_Z, SCREW_PCD_Z]) {
                     translate([sx, PCBA_BACK_Y, sz]) {
@@ -287,20 +295,26 @@ module radar_mr20_main_tub(include_lower_clevis=INCLUDE_LOWER_CLEVIS) {
             }
         }
 
-        // 6. Rear M4 Brass Threaded Insert Pockets (Ruthex M4x8.1, Symmetrical at X = ±20 mm, Z = 0)
+        // 6. Rear M4 Captive Hex Nut Pockets (DIN 934 M4, 100% Soldering-Iron Free, Symmetrical at X = ±20 mm, Z = 0)
         for (dx = [-REAR_M4_PITCH/2, REAR_M4_PITCH/2]) {
-            translate([dx, -RADAR_HOUSING_D - 0.5, 0.0]) {
+            // M4 Screw clearance through-bore to the rear (-Y direction)
+            translate([dx, -RADAR_HOUSING_D - 4.0, 0.0]) {
                 rotate([90, 0, 0])
-                    cylinder(r=2.9, h=9.0, center=false, $fn=24); // 5.8 mm bore for M4 heat insert
+                    cylinder(r=M4_SCREW_HOLE_R, h=RADAR_WALL_THICK + 5.0, center=false, $fn=24);
+            }
+            // Form-fitting DIN 934 M4 captive hex nut pocket on inside floor
+            translate([dx, -RADAR_HOUSING_D + RADAR_WALL_THICK + 3.7, 0.0]) {
+                rotate([90, 0, 0])
+                    cylinder(r=NUT_M4_SW / sqrt(3), h=NUT_M4_H + 0.2, center=false, $fn=6);
             }
         }
 
-        // 7. 4x M2.5 Corner Brass Insert Pockets (Ruthex M2.5, Symmetrical at X = ±51.5 mm, Z = ±26.5 mm)
+        // 7. 4x M2.5 Corner Direct Thread-Forming Pilot Holes in PA12 (100% Soldering-Iron Free, Symmetrical at X = ±51.5 mm, Z = ±26.5 mm)
         for (sx = [-SCREW_PCD_X, SCREW_PCD_X]) {
             for (sz = [-SCREW_PCD_Z, SCREW_PCD_Z]) {
                 translate([sx, 1.0, sz]) {
                     rotate([90, 0, 0]) {
-                        cylinder(r=1.8, h=14.0, center=false, $fn=20); // 3.6 mm bore for M2.5 brass heat-set insert
+                        cylinder(r=M2_5_PILOT_HOLE_R, h=14.0, center=false, $fn=24); // Ø 2.1 mm core hole for direct M2.5 screw engagement
                     }
                 }
             }

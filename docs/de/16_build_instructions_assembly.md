@@ -55,8 +55,8 @@ Ein vollständiges OpenMotorBridge-Fahrzeugkit besteht aus folgenden Kern-Baugru
 ## 2. Bereitstellung vor Montagebeginn (Pre-Assembly Checklist)
 
 > [!TIP]
-> **Geprüfte Passungsmaße & Toleranzen:**  
-> Alle 3D-Druckteile (`.scad` / `.stl`) wurden mit definierten Toleranzen ($+0{,}15\,\text{mm}$ für HP MJF PA12 bzw. ASA/PET-CF) konstruiert. Alle M2- und M3-Gewindeeinsätze (Ruthex) sind standardisiert und passen exakt zu den Platinenbohrungen des 5-PCB-Lineups.
+> **Geprüfte Passungsmaße & 100 % lötkolbenfreie Montage (IKEA-Prinzip):**  
+> Alle 3D-Druckteile (`.scad` / `.stl`) wurden mit definierten Toleranzen ($+0{,}15\,\text{mm}$ für HP MJF PA12 bzw. ASA/PET-CF) konstruiert. Auf das fehleranfällige Einschmelzen von Gewindebuchsen (Ruthex) wurde im gesamten System konsequent verzichtet: Alle Verschraubungen nutzen formschlüssige **DIN 934 Sechskant-Mutterntaschen** (einfach von Hand einlegen) oder direkte Kunststoff-Gewindefurchung in Kernlöchern.
 
 Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert in **[Kapitel 15: Stücklisten & SMT-Fertigungsdaten](15_bom_manufacturing.md)** aufgeführt. Vor Montagebeginn sicherstellen, dass folgende Baugruppen bereitliegen:
 
@@ -74,7 +74,7 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
   * *(Hinweis: PCBA 02 und PCBA 04 sind ersatzlos entfallen).*
 * [ ] **V4A Edelstahl-Normteile & Federn (IKEA-Prinzip - 100 % lötfrei):**
   * 8x DIN 934 / DIN 985 M3 Edelstahlmuttern (für Gehäuse-Nut-Pockets)
-  * 4x DIN 934 M4 Muttern (für AMPS-Nut-Pockets in Front-Node Wanne)
+  * 6x DIN 934 M4 Muttern (4x AMPS-Nut-Pockets in Front-Node Wanne, 2x Radar 2.0 Heck-Mutterntaschen)
   * 4x M3 x 40 mm Schrauben (Zentralbox), 4x M3 x 20 mm Schrauben (Front-Node)
   * 8x M2.5 x 6 mm Platinenschrauben, 4x M2 x 8 mm Senkkopf (Schottwände), 8x M2 x 6 mm (Kassetten)
   * 2x DIN 7 M2 x 8 mm Zylinderstifte (Wippenachsen), 2x DIN 6325 Ø 6 x 8 mm gehärtete Stahlanker
