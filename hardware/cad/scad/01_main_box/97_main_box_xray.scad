@@ -3,8 +3,8 @@
 // =============================================================================
 // File: hardware/cad/scad/01_main_box/97_main_box_xray.scad
 // Description: Translucent Ghosted X-Ray inspection assembly of the Central Box
-//              showing the internal Mainboard PCB, Backup Battery, and front
-//              interface ports inside the closed, transparent enclosure.
+//              showing the internal Mainboard PCB (PCBA 01: 85x55 mm), Backup Battery,
+//              and front interface ports inside the closed, transparent enclosure.
 // =============================================================================
 
 include <../00_common/parameters.scad>;
@@ -20,11 +20,11 @@ module main_box_xray_inspection_assembly() {
         translate([0, 0, 0])
             main_box_lower_case();
 
-    // 2. Mainboard PCB Assembly (Opaque Green PCB + Components)
-    translate([7.5, 4.5, 6.0])
+    // 2. Mainboard PCB Assembly (PCBA 01: 85 x 55 mm, 77 x 47 mm mounting pitch)
+    translate([12.5, 9.5, 6.0])
         dummy_main_pcb();
 
-    // 3. Mid Tray Frame & Divider (Translucent Slate Grey, 35% alpha)
+    // 3. Mid Tray Frame & Divider (Translucent Slate Grey, 32% alpha)
     color([0.25, 0.40, 0.60, 0.32])
         translate([0, 0, MAIN_BOX_LOWER_H])
             main_box_mid_tray();
@@ -38,26 +38,37 @@ module main_box_xray_inspection_assembly() {
         translate([0, 0, MAIN_BOX_LOWER_H + MAIN_BOX_MID_H])
             main_box_lid();
 
-    // 6. Front Interface Fittings (HD26 Metal Flange & USB-C Aluminum Cap)
-    // HD26 Metal Flange Body (centered at x=30.0, z=MAIN_BOX_LOWER_H + 10.0)
-    color("silver", 0.95)
-        translate([30.0, -1.0, MAIN_BOX_LOWER_H + 10.0])
-            cube([39.0, 3.5, 9.5], center=true);
+    // 6. Front Interface Hardware Fittings (Z center = MAIN_BOX_LOWER_H + 7.5 mm)
+    z_intf = MAIN_BOX_LOWER_H + 7.5;
 
-    // USB-C Metal Threaded Cap (centered at x=62.5, z=MAIN_BOX_LOWER_H + 9.75)
-    color("silver", 0.95)
-        translate([62.5, -2.5, MAIN_BOX_LOWER_H + 9.75])
+    // A. USB-C Waterproof Anodized Service Cap (at X = 24.0 mm)
+    color([0.15, 0.45, 0.75], 0.9)
+        translate([24.0, -2.5, z_intf])
             rotate([90, 0, 0])
-                cylinder(r=4.5, h=5.0, center=true, $fn=24);
+                cylinder(r=5.5, h=5.0, center=true, $fn=32);
 
-    // RGB LED PMMA Light Windows (3x Ø 2.5 mm at x=77.5, 82.5, 87.5)
-    color("cyan", 0.8) {
-        for (i = [0:2]) {
-            translate([77.5 + i * 5.0, -0.5, MAIN_BOX_LOWER_H + 9.5])
-                rotate([90, 0, 0])
-                    cylinder(r=1.25, h=3.0, center=true, $fn=16);
-        }
-    }
+    // B. WS2812B RGB Status LED Diffuse PMMA Lens (at X = 42.0 mm)
+    color("cyan", 0.9)
+        translate([42.0, -1.0, z_intf])
+            rotate([90, 0, 0])
+                cylinder(r=1.6, h=3.0, center=true, $fn=20);
+
+    // C. SW1 Pair / Reset IP67 Silicone Button (at X = 54.0 mm)
+    color("black", 0.9)
+        translate([54.0, -1.5, z_intf])
+            rotate([90, 0, 0])
+                cylinder(r=3.25, h=3.5, center=true, $fn=24);
+
+    // D. Automotive Deutsch DTM-12 Flanged Receptacle (centered at X = 80.0 mm)
+    color([0.18, 0.20, 0.22], 0.9)
+        translate([80.0, -3.0, z_intf])
+            cube([28.0, 6.0, 14.0], center=true);
+
+    // 7. Rear SMA Antenna Bulkhead Port (Gold-plated, at X = 85.0 mm, Y = MAIN_BOX_OUTER_W)
+    color("gold", 0.9)
+        translate([85.0, MAIN_BOX_OUTER_W + 3.5, z_intf])
+            rotate([-90, 0, 0])
+                cylinder(r=3.2, h=7.0, center=true, $fn=24);
 }
 
 // Render inspection assembly

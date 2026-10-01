@@ -1,7 +1,7 @@
 # 08 - Mechanical Enclosures, CAD Models & Sealing System (All Units)
 
 This document specifies the mechanical engineering, thermal dissipation, IP67/IP69K sealing concepts, kinematics of the quick-change auto-eject system, and all CAD and STL assets of OpenMotorBridge v8.0:
-1. **Central Control Box (Type A):** 3-piece sandwich enclosure with intermediate tray, battery cradle, front interface panel (HD26, USB-C, RGB-LED), integrated lid pocket for Taoglas FXP895 LoRa 868 MHz flex antenna, bottom tub pocket ($11 \times 11 \times 0.6\,\text{mm}$) for Taoglas FXUWB10 UWB flex antenna, and planar 4-layer copper heat spreader.
+1. **Central Control Box (Type A):** 3-piece sandwich enclosure with intermediate tray, battery cradle, front interface panel (Deutsch DTM-12 flange, SW1 button, USB-C, RGB-LED), integrated lid pocket ($85.0 \times 18.0 \times 1.2\,\text{mm}$) for Taoglas FXP895 LoRa 868 MHz flex antenna, bottom tub pocket ($12.0 \times 12.0 \times 0.8\,\text{mm}$) for Taoglas FXUWB10 UWB flex antenna, optional rear SMA bulkhead port, and planar 4-layer copper heat spreader.
 2. **Modular Satellite Pod & Cartridge System (Type B):** Mechanically identical 5-sided monocoque enclosure for both satellite pods (Pods 1 & 2 Audio/Intercom, 2x symmetric) with modular swap cartridges (Sena SPIDER X Slim, Cardo Packtalk Edge, OMM 2.4 GHz Swap Cartridge, Midland, Dry Box), smooth closed IP67 outer shell (zero antenna radome penetrations), $120^\circ$ V-groove pipe saddle, Dual-Port M8/USB-C, Poka-Yoke tongue-and-groove guidance, spring-loaded auto-eject, and invisible neodymium magnetic anti-theft locking.
 3. **Universal Front Node (Type C):** Ultra-compact Cockpit & Sensor Hub ($98.0 \times 68.0 \times 25.0\,\text{mm}$) tailored for the enlarged $82 \times 50\,\text{mm}$ 4-layer PCBA 05, featuring a **4-in-1 universal mounting system** (AMPS, pipe saddle, silentblocks, 3M Dual-Lock), integrated bottom tub pocket for UWB backbone (FXUWB10), J12 Qwiic Sensor Hub (u-blox SAM-M10Q GNSS patch, TI TMP117 precision thermometer, TI OPT3001 light sensor) in laminar airflow scoop, dedicated EPDM cable combs for USB (South) and vehicle wiring (North), Dual SW3526 20W USB-PD, and Knowles MEMS acoustic channel.
 4. **2-in-1 LoRa Smart-Keyfob & Pager (Type D):** Ultra-compact pocket companion ($58.0 \times 34.0 \times 13.0\,\text{mm}$) molded in PA12-MJF with perimeter TPU shock bumper, integrated N52 neodymium ejection key, $0.5\,\text{mm}$ Mu-metal magnetic flux shield, MagSafe/Qi inductive charging receiver, LRA haptic motor, and wireless SX1262 LoRa/BLE alert pager.
@@ -13,14 +13,15 @@ This document specifies the mechanical engineering, thermal dissipation, IP67/IP
 
 The Central Box enclosure is engineered in **PA12 (HP Multi Jet Fusion)** for harsh motorcycle environments (up to 20 g vibration, direct spray, under-seat heat soak):
 
-- **External Dimensions:** $110{,}0 \times 74{,}0 \times 38{,}0\,\text{mm}$ (L x W x H; lower case $17{,}0\,\text{mm}$, upper case $15{,}0\,\text{mm}$, lid $6{,}0\,\text{mm}$).
-- **Mounting:** 4x corner ears on lower case with **hole spacing $128{,}0 \times 56{,}0\,\text{mm}$** for M4 EPDM silentblocks (Shore 50A).
-- **Internal Clearance:** $102{,}0 \times 66{,}0 \times 32{,}0\,\text{mm}$ (optimized for the $85 \times 55\,\text{mm}$ 4-layer main PCB).
+- **External Dimensions:** $110.0 \times 74.0 \times 38.0\,\text{mm}$ (L x W x H; lower case $17.0\,\text{mm}$, upper case $15.0\,\text{mm}$, lid $6.0\,\text{mm}$).
+- **Mounting:** 4x corner ears on lower case with **hole spacing $128.0 \times 56.0\,\text{mm}$** for M4 EPDM silentblocks (Shore 50A).
+- **Internal Clearance:** $105.0 \times 69.0 \times 32.0\,\text{mm}$ (optimized for the $85.0 \times 55.0\,\text{mm}$ 4-layer main PCBA 01 with symmetric margins of $10.0\,\text{mm}$ in X and $7.0\,\text{mm}$ in Y).
 - **Ingress Protection:** IP67 / IP69K (dust-tight, submersible to 1 m, steam-jet resistant).
+- **100% Soldering-Iron Free Assembly:** Direct PA12-molded pilot holes ($\varnothing\,2.1\,\text{mm}$ for M2.5 plastic-forming screws) and form-fitting DIN 934 M3 hex nut pockets eliminate all brass heat-set threaded inserts.
 
 ![OpenMotorBridge Central Box 3D Cutaway CAD](../images/cad/main_box_cutaway_3d.png)
 
-*Figure 8.1: Photorealistic 3D CAD diagonal cutaway render of the Central Control Box. The 3-tier sandwich is exposed: bottom tub with 4-layer PCB (ENIG) on M2.5 standoffs, intermediate tray with 11 convection cooling slots, upper LiPo UPS battery cradle with EPDM strap, HD26 flange, USB-C service port, and lid with Gore ePTFE vent.*
+*Figure 8.1: Photorealistic 3D CAD diagonal cutaway render of the Central Control Box. The 3-tier sandwich is exposed: bottom tub with 4-layer PCB (ENIG) on M2.5 standoffs, intermediate tray with 11 convection cooling slots, upper LiPo UPS battery cradle with EPDM strap, Deutsch DTM-12 automotive flange, SW1 button, USB-C service port, and lid with Gore ePTFE vent.*
 
 ### 1.1 3D CAD Model & 3-Piece Sandwich Architecture
 
@@ -33,23 +34,27 @@ The Central Box enclosure is engineered in **PA12 (HP Multi Jet Fusion)** for ha
 | 1. ENCLOSURE LID (6.0 mm Height / 3.0 mm Wall Thickness)   |  |
 |    * Gore ePTFE pressure equalization vent (Ø 7.0 mm)      |  | 38.0 mm
 |    * Perimeter groove with Shore 40A silicone cord gasket  |  | Total
-|    * Integrated antenna pocket (110 x 20 x 0.8 mm) for     |  | Height
-|      Taoglas FXP895 LoRa 868 MHz flex antenna              |  |
-|    * 100% solid, closed lid (tether-free lid removal)      |  |
+|    * Integrated lid pocket (85 x 18 x 1.2 mm) for          |  | Height
+|      Taoglas FXP895 LoRa 868 MHz flex antenna & U.FL slot  |  |
+|    * 100% closed, solid lid (>1.8 mm wall to exterior)     |  |
 +------------------------------------------------------------+  |
 | 2. UPPER CASE WITH INTERMEDIATE TRAY (15.0 mm Height)      |  |
-|    * Front Panel: HD26 D-Sub flange (4-branch harness),    |  |
-|      USB-C service port, Status-LED window (Ø 3 mm)        |  |
+|    * Front Panel: Deutsch DTM-12 flange (12-pin harness),  |  |
+|      SW1 button (silicone boot), USB-C service port,       |  |
+|      diffuse PMMA light pipe (Ø 3.2 mm) for WS2812B RGB    |  |
+|    * Rear Panel: Optional SMA antenna port (Ø 6.5 mm bore, |  |
+|      Ø 9.5 mm O-ring counterbore)                          |  |
 |    * Upper Chamber: 1S LiPo battery (68x39x5.0mm, 2,200mAh)|  |
 |    * Intermediate Tray: 11x convection vents & cable slot  |  |
 +------------------------------------------------------------+  |
 | 3. LOWER CASE (17.0 mm Height - Monocoque Tub)             |  |
-|    * 4-Layer Main PCB (85 x 55 mm) on M2.5 dampers         |  |
-|    * Integrated antenna pocket (11 x 11 x 0.6 mm) in floor |  |
-|      for Taoglas FXUWB10 flex antenna (DW3110 UWB Ch. 5)   |  |
-|    * Captive M3 hex nut pockets (IKEA assembly principle)  |  |
+|    * 4-Layer Main PCB (85 x 55 mm) on M2.5 standoffs       |  |
+|      (77 x 47 mm hole pitch, Ø 2.1 mm PA12 pilot holes)    |  |
+|    * Integrated antenna pocket (12 x 12 x 0.8 mm) in floor |  |
+|      with U.FL cable groove for Taoglas FXUWB10 UWB Ch. 5  |  |
+|    * Captive DIN 934 M3 hex nut pockets                    |  |
 |    * 4x M4 silentblock mounting ears                       |  |
-|    * 100% solid PA12 floor without through-holes           |  |
+|    * 100% solid PA12 floor without through-holes (>2.2 mm) |  |
 +------------------------------------------------------------+  v
 ```
 
@@ -94,26 +99,43 @@ Total heat dissipation during standard riding is only **$\approx 1{,}5\,\text{W}
   * Pin 2: `GND` (LiPo ground with embedded Murata 10k NTC thermistor for JEITA charging guard)
 * **Pass-Through Slot & Cable Routing:**
   * Generous front cable aperture ($25{,}0 \times 4{,}0\,\text{mm}$ at $Y = 4\dots 8\,\text{mm}$) with radiused edges ($R = 1{,}5\,\text{mm}$) positioned $5{,}0\,\text{mm}$ ahead of the battery cradle.
-  * Routes battery silicone wiring cleanly down to the `J_BAT` header on PCBA 01 alongside the internal 2x13 ribbon cable connecting to the front-panel HD26 flange.
+  * Routes battery silicone wiring cleanly down to the `J_BAT` header on PCBA 01 alongside the wiring connecting to the front-panel Deutsch DTM-12 header `J1`.
 
 ---
 
-## 3. Front Panel Interfaces in the Upper Tray
+## 3. Front Panel Interfaces, Antenna Accommodations & Rear Port
 
 ```
                       FRONT WALL OF UPPER TRAY
 +-------------------------------------------------------------+
-| +------------+     +--------+      +----------------------+ |
-| | 1. USB-C   |     | 2. RGB |      | 3. HD26 D-Sub Flange | |
-| |    Service |     |    LED |      |    (Harness Socket)  | |
-| |    Alu Cap |     |    Ø3mm|      |    2x M3 Jackscrews  | |
-| +------------+     +--------+      +----------------------+ |
+| +------------+  +--------+  +----------+  +---------------+ |
+| | 1. USB-C   |  | 2. RGB |  | 3. SW1   |  | 4. Deutsch    | |
+| |    Service |  |    LED |  |    Pair/ |  |    DTM-12     | |
+| |    Alu Cap |  |  Ø3.2mm|  |    Reset |  |    Flange     | |
+| +------------+  +--------+  +----------+  +---------------+ |
 +-------------------------------------------------------------+
 ```
 
-1. **HD26 D-Sub Flange:** Amphenol LTW / NorComp SEAL-D with EPDM perimeter gasket ($1{,}5\,\text{mm}$, Shore 60A).
-2. **USB-C Service Port:** Waterproof receptacle sealed by a blue anodized aluminum screw cap with captive O-ring.
-3. **RGB Status LED Viewing Window:** Diffuse PMMA light guide ($\varnothing\,3{,}0\,\text{mm}$) with silicone O-ring seal.
+1. **Deutsch DTM-12 Flange (Main Wiring Harness):** Automotive-grade 12-pin flange receptacle (Deutsch DTM13-12PA) with silicone perimeter seal and 2x M3 mounting screws ($28.0\,\text{mm}$ pitch). Connects internally to header `J1` (2x06 Box Header, 2.54 mm pitch) for the 12 primary vehicle conductors (Switched 12V, GND, CAN-H, CAN-L, Pod 1 DC, Pod 2 DC, and Radar Whip 5: 12V_RADAR, GND, UART_RX, UART_TX).
+2. **SW1 Push-Button (`SW_PAIR_RESET`):** IP67 waterproof momentary tactile switch with sealed silicone boot and M7 threaded bushing. Used for 3-second UWB pairing of new swap cartridges and 10-second factory reset / NVS key purge.
+3. **USB-C Service Port:** Circular panel-mount waterproof receptacle sealed by a blue anodized aluminum screw cap with captive EPDM O-ring for firmware flashing, ESP-IDF live telemetry, and emergency diagnostics.
+4. **RGB Status LED Viewing Window:** Diffuse PMMA light pipe ($\varnothing\,3.2\,\text{mm}$) with perimeter O-ring channeling light from the onboard WS2812B RGB LED directly to the front face (Green = normal / mesh OK, Blue = BT audio streaming, Orange = radar warning active, Red = theft tamper alert).
+
+### 3.1 Integrated Antenna Pockets & RF Transparency
+
+OpenMotorBridge implements a dual, fully integrated internal antenna concept eliminating protruding external antennas while maintaining maximum range:
+1. **LoRa 868 MHz Primary Antenna (Taoglas FXP895):**
+   * Form-fitting pocket ($85.0 \times 18.0 \times 1.2\,\text{mm}$) molded into the underside of the lid plate (`020_lid_plate.scad`) with integrated $2.5\,\text{mm}$ U.FL coaxial cable routing groove to `ANT1`.
+   * Radiates horizontally polarized RF upwards through the $1.8\,\text{mm}$ thin, RF-neutral PA12 lid ($\varepsilon_r \approx 2.3\dots 2.7$, $\tan\delta \approx 0.015$), providing up to $15\,\text{km}$ LoRa mesh range.
+2. **LoRa 868 MHz Secondary Option (Rear SMA Bulkhead):**
+   * Borehole ($\varnothing\,6.5\,\text{mm}$) with $\varnothing\,9.5 \times 1.2\,\text{mm}$ O-ring counterbore on the upper tray rear wall accommodating an IP67 SMA bulkhead connector.
+   * Enables optional external whip antenna connection for rally raid applications or fully shielded carbon fiber tail cowls.
+3. **UWB 6.5 GHz Channel 5 Flex Antenna (Taoglas FXUWB10):**
+   * Pocket ($12.0 \times 12.0 \times 0.8\,\text{mm}$) in the lower tub floor (`00_lower_deck.scad`) at $X=66.5\,\text{mm}, Y=37.4\,\text{mm}$ with $2.0\,\text{mm}$ coaxial cable groove.
+   * Positioned directly beneath the DW3110 / `ANT2` U.FL connector on `B.Cu`, keeping coaxial line length under $25\,\text{mm}$ (insertion loss $< 0.15\,\text{dB}$).
+   * Preserves $>2.2\,\text{mm}$ solid, homogeneous PA12 floor thickness underneath for hermetic IP67/IP69K sealing.
+4. **Bluetooth 5.4 / LE Audio (Qualcomm QCC3084):**
+   * Utilizes the onboard ceramic chip antenna with optimized copper keepout on `PCBA 01`, radiating cleanly through the RF-transparent PA12 mid-tray and lid.
 
 ---
 
@@ -574,7 +596,7 @@ Due to factory Showa inverted remote-reservoir shock absorbers with heavy hydrau
 |    * Forged carbon cowl seats completely flush with OEM thumbscrew (100%    |
 |      free of electronics/cables - zero pinching at thumbscrew!)             |
 |    * Radar centered below license plate (radar_license_plate_bracket.scad)  |
-|      fed via whip 5 of the 4-branch HD26 harness                            |
+|      fed via whip 5 of the Deutsch DTM-12 automotive harness (2-wire 12V DC) |
 +-----------------------------------------------------------------------------+
 | 4. SADDLEBAGS (Intercom Bridge Sena & Cardo):                               |
 |    * Pod 1 (Sena SPIDER X Slim) inside left saddlebag lid                   |
@@ -654,7 +676,7 @@ For high-displacement dual-sport and overland adventure bikes featuring open tub
 | 4. REAR (Minimal Radar Mount Under Luggage Rack):                           |
 |    * Minimal "Adventure Rack Radar Mount" under luggage bridge              |
 |    * Swiveling GoPro/Hirth mount for Wheeltec MR20 or Garmin Varia          |
-|    * Fed via whip 5 (Pins 23-26) of the 4-branch HD26 harness               |
+|    * Fed via whip 5 (Pins 9-12) of the Deutsch DTM-12 harness               |
 |    * Topcase remains 100% quick-detachable in 5 seconds via factory latch   |
 +-----------------------------------------------------------------------------+
 ```
@@ -899,7 +921,7 @@ For securing the Central Control Box ($110 \times 74 \times 32\,\text{mm}$) insi
 * **Rapid Tool-Free Extraction (Dual Finger Notches):**
   * Two lateral finger notches ($40 \times 12\,\text{mm}$) enable instant one-handed insertion and removal of the Central Box--ideal when alternating between motorcycle and support vehicle.
 * **Concealed Harness Routing & Convective Cooling:**
-  * The rear wall features a generous $44\,\text{mm}$ harness cutout accommodating the 12V cigarette lighter PD adapter and HD26 harness whip.
+  * The rear wall features a generous $44\,\text{mm}$ harness cutout accommodating the 12V cigarette lighter PD adapter and Deutsch DTM-12 harness whip.
   * Two underside openings ($\varnothing 28\,\text{mm}$) promote passive convective heat dissipation from the Central Box heatsink.
 * **Vibration-Damped Non-Marring Base:**
   * The flat bottom features 4 circular pockets ($\varnothing 12 \times 1.5\,\text{mm}$) designed for standard 3M Bumpon silicone rubber bumpers or 3M VHB tape, preventing sliding and scuff marks on sensitive dashboard trim.

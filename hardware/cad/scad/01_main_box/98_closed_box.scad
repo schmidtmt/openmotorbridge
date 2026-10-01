@@ -3,8 +3,9 @@
 // =============================================================================
 // File: hardware/cad/scad/01_main_box/98_closed_box.scad
 // Description: Fully assembled, sealed IP67 Central Box showing the Unterwanne
-//              with 4x M4 mounting ears, Oberwanne with front interfaces (HD26,
-//              USB-C, RGB LED), 4x M3 corner screws, and Top Lid with Gore vent.
+//              with 4x M4 mounting ears, Oberwanne with modern front interfaces
+//              (Deutsch DTM-12, USB-C, SW1, RGB LED), rear SMA antenna port,
+//              4x M3 corner screws, and Top Lid with Gore breather vent.
 // =============================================================================
 
 include <../00_common/parameters.scad>;
@@ -28,37 +29,62 @@ module main_box_closed_assembly() {
         translate([0, 0, MAIN_BOX_LOWER_H + MAIN_BOX_MID_H])
             main_box_lid();
 
-    // 4. Front Interface Fittings (HD26 Metal Flange & USB-C Aluminum Cap)
-    // HD26 Metal Flange Body (centered at x=30.0, z=MAIN_BOX_LOWER_H + 10.0)
-    color("silver")
-        translate([30.0, -1.0, MAIN_BOX_LOWER_H + 10.0])
-            cube([39.0, 3.5, 9.5], center=true);
+    // 4. Front Interface Hardware Fittings (Z center = MAIN_BOX_LOWER_H + 7.5 mm)
+    z_intf = MAIN_BOX_LOWER_H + 7.5;
 
-    // USB-C Metal Threaded Cap (centered at x=62.5, z=MAIN_BOX_LOWER_H + 9.75)
-    color("silver")
-        translate([62.5, -2.5, MAIN_BOX_LOWER_H + 9.75])
+    // A. USB-C Waterproof Anodized Service Cap (at X = 24.0 mm)
+    color([0.15, 0.45, 0.75])
+        translate([24.0, -2.5, z_intf])
             rotate([90, 0, 0])
-                cylinder(r=4.5, h=5.0, center=true, $fn=24);
+                cylinder(r=5.5, h=5.0, center=true, $fn=32);
 
-    // RGB LED PMMA Light Windows (3x Ø 2.5 mm at x=77.5, 82.5, 87.5)
-    color("cyan", 0.75) {
-        for (i = [0:2]) {
-            translate([77.5 + i * 5.0, -0.5, MAIN_BOX_LOWER_H + 9.5])
+    // B. WS2812B RGB Status LED Diffuse PMMA Lens (at X = 42.0 mm)
+    color("cyan", 0.85)
+        translate([42.0, -1.0, z_intf])
+            rotate([90, 0, 0])
+                cylinder(r=1.6, h=3.0, center=true, $fn=20);
+
+    // C. SW1 Pair / Reset IP67 Silicone Button (at X = 54.0 mm)
+    color("black")
+        translate([54.0, -1.5, z_intf])
+            rotate([90, 0, 0])
+                cylinder(r=3.25, h=3.5, center=true, $fn=24);
+
+    // D. Automotive Deutsch DTM-12 Flanged Receptacle (centered at X = 80.0 mm)
+    color([0.18, 0.20, 0.22]) {
+        translate([80.0, -3.0, z_intf])
+            cube([28.0, 6.0, 14.0], center=true);
+        // 2x M3 Flange screws
+        for (dx = [-18.0, 18.0]) {
+            translate([80.0 + dx, -4.5, z_intf])
                 rotate([90, 0, 0])
-                    cylinder(r=1.25, h=3.0, center=true, $fn=16);
+                    cylinder(r=2.8, h=2.5, center=true, $fn=20);
         }
     }
 
-    // 5. 4x M3 Stainless Steel Corner Screws
+    // 5. Rear SMA Antenna Bulkhead Port (Gold-plated, at X = 85.0 mm, Y = MAIN_BOX_OUTER_W)
+    color("gold") {
+        translate([85.0, MAIN_BOX_OUTER_W + 3.5, z_intf])
+            rotate([-90, 0, 0]) {
+                cylinder(r=3.2, h=7.0, center=true, $fn=24);
+                // Hex nut
+                cylinder(r=4.5, h=2.5, center=true, $fn=6);
+            }
+    }
+
+    // 6. 4x M3 Stainless Steel Corner Screws
     color("silver") {
-        translate([MAIN_BOX_CORNER_POST/2, MAIN_BOX_CORNER_POST/2, MAIN_BOX_LOWER_H + MAIN_BOX_MID_H + MAIN_BOX_LID_H])
-            cylinder(r=2.8, h=2.5, center=false);
-        translate([MAIN_BOX_OUTER_L - MAIN_BOX_CORNER_POST/2, MAIN_BOX_CORNER_POST/2, MAIN_BOX_LOWER_H + MAIN_BOX_MID_H + MAIN_BOX_LID_H])
-            cylinder(r=2.8, h=2.5, center=false);
-        translate([MAIN_BOX_CORNER_POST/2, MAIN_BOX_OUTER_W - MAIN_BOX_CORNER_POST/2, MAIN_BOX_LOWER_H + MAIN_BOX_MID_H + MAIN_BOX_LID_H])
-            cylinder(r=2.8, h=2.5, center=false);
-        translate([MAIN_BOX_OUTER_L - MAIN_BOX_CORNER_POST/2, MAIN_BOX_OUTER_W - MAIN_BOX_CORNER_POST/2, MAIN_BOX_LOWER_H + MAIN_BOX_MID_H + MAIN_BOX_LID_H])
-            cylinder(r=2.8, h=2.5, center=false);
+        corner_offset = MAIN_BOX_CORNER_POST / 2.0;
+        z_top = MAIN_BOX_LOWER_H + MAIN_BOX_MID_H + MAIN_BOX_LID_H;
+        for (pos = [
+            [corner_offset, corner_offset],
+            [MAIN_BOX_OUTER_L - corner_offset, corner_offset],
+            [corner_offset, MAIN_BOX_OUTER_W - corner_offset],
+            [MAIN_BOX_OUTER_L - corner_offset, MAIN_BOX_OUTER_W - corner_offset]
+        ]) {
+            translate([pos[0], pos[1], z_top - 1.0])
+                cylinder(r=2.8, h=2.0, center=false, $fn=24);
+        }
     }
 }
 

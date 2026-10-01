@@ -3,8 +3,8 @@
 // =============================================================================
 // File: hardware/cad/scad/01_main_box/99_overall_box.scad
 // Description: Full 3D assembly of the 3-Tier Central Box sandwich with
-//              inserted Mainboard PCB, LiPo Backup Battery, and Solid Unterwanne.
-//              Supports both exploded view and fully closed assembly preview.
+//              inserted Mainboard PCB (PCBA 01: 85x55 mm), LiPo Backup Battery,
+//              and Solid Unterwanne. Supports exploded view and closed preview.
 // =============================================================================
 
 include <../00_common/parameters.scad>;
@@ -30,8 +30,8 @@ module main_box_full_assembly() {
         translate([0, 0, Z_LOWER_CASE])
             main_box_lower_case();
 
-    // Layer 2: Mainboard PCB Assembly (Green FR4 + Gold Pads + Components)
-    translate([7.5, 4.5, Z_MAIN_PCB])
+    // Layer 2: Mainboard PCB Assembly (PCBA 01: 85 x 55 mm, 77 x 47 mm mounting pitch)
+    translate([12.5, 9.5, Z_MAIN_PCB])
         dummy_main_pcb();
 
     // Layer 3: Mid Tray Frame with Partition Floor & 10x Breathing Slots (Oberwanne)

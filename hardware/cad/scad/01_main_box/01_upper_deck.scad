@@ -3,7 +3,8 @@
 // =============================================================================
 // File: hardware/cad/scad/01_main_box/01_upper_deck.scad
 // Description: Ready-to-print mid tray with partition floor, LiPo battery cradle,
-//              wire routing slot, convective vent slots, front port cutouts,
+//              wire routing slot, convective vent slots, front port cutouts
+//              (Deutsch DTM-12, USB-C, SW1, RGB LED), rear SMA antenna port,
 //              and lower tongue lip / upper sealing groove.
 // =============================================================================
 
@@ -26,7 +27,7 @@ module main_box_mid_tray() {
                 wall=MAIN_BOX_WALL
             );
 
-            // 2. Mid Partition Floor (Akkubett + Lüftungsschlitze)
+            // 2. Mid Partition Floor (Akkubett + 10x Lüftungsschlitze)
             translate([MAIN_BOX_WALL, MAIN_BOX_WALL, 0.0]) {
                 main_box_mid_partition_floor(
                     floor_l=MAIN_BOX_OUTER_L - 2*MAIN_BOX_WALL,
@@ -51,10 +52,17 @@ module main_box_mid_tray() {
             );
         }
 
-        // 5. Front Wall Port Cutouts (HD26, USB-C, Status LEDs)
+        // 5. Front Wall Port Cutouts (Deutsch DTM-12, USB-C, SW1, Status LED)
         main_box_front_cutout_tool(wall_th=MAIN_BOX_WALL);
 
-        // 6. Top Perimeter Sealing Groove (Nut for Lid O-Ring Gasket)
+        // 6. Optional Rear SMA Antenna Port (Ø 6.5 mm with O-Ring pocket for LoRa 868 MHz)
+        main_box_rear_antenna_cutout_tool(
+            length=MAIN_BOX_OUTER_L,
+            width=MAIN_BOX_OUTER_W,
+            wall_th=MAIN_BOX_WALL
+        );
+
+        // 7. Top Perimeter Sealing Groove (Nut for Lid O-Ring Gasket)
         main_box_sealing_groove_tool(
             length=MAIN_BOX_OUTER_L,
             width=MAIN_BOX_OUTER_W,

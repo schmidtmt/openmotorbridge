@@ -14,19 +14,19 @@ This document serves as the master reference (Single Source of Truth) for the co
 | **U4** | BMI270 | Bosch Sensortec | LGA-14 | C2836813 | 6-Axis IMU for Lean Angle & Dynamics |
 | **U5** | ES8388 | Everest Semi | QFN-28 | C365736 | 24-Bit Stereo Audio Codec (I2S ADC/DAC) |
 | **U6** | TCAN334GDCNR | Texas Instruments | SOT-23-8 | C842340 | 3.3V Automotive CAN-FD Transceiver (±58V Fault) |
-| **U7** | SX1262IMLTRT | Semtech | QFN-24 | C190184 | Onboard 868 MHz LoRa Transceiver (+22 dBm, 24/7 UPS-buffered) |
+| **U7** | SX1262IMLTRT | Semtech | QFN-24 | C190184 | Onboard 868 MHz LoRa Transceiver (+22 dBm, 24/7 UPS buffered) |
 | **U8** | DW3110 | Qorvo | QFN-16 (B.Cu) | C2934600 | IEEE 802.15.4z UWB Transceiver (6.5 GHz Ch. 5 Backbone) |
-| **T1, T2** | LM-NP-1001-B1L | Bourns Inc. | SMD Transformer| C114402 | 1:1 Audio Transformer (1500 V RMS Galvanic Isolation) |
-| **OC1, OC2**| TLP222A(F) | Toshiba | SOP-4 | C112444 | Solid-State PhotoMOS Relay for PTT Keying |
+| **SW1** | TS-1187A-C-A-B | C&K / Omron | SMD Push-Button | C318884 | Hardware Pairing & Reset Button (3s Pair, 10s Purge) |
 | **D1** | SMBJ33CA | Littelfuse | DO-214AA (SMB) | C87848 | TVS Diode (33 V Standoff, 53.3 V max Clamping) |
 | **F1** | MF-MSMF050-2 | Bourns | 1812 SMD | C22668 | Resettable PPTC Fuse (500 mA Hold / 1.0 A Trip) |
-| **LED1** | WS2812B-B | Worldsemi | 5050 SMD | C114586 | RGB Status LED for Visual Diagnostics |
-| **J1** | 2x13 Box Header | Standard 2.54 mm | THT Box Header | C2934175 | Internal Ribbon Connector to HD26 Flange |
+| **LED1** | WS2812B-B | Worldsemi | 5050 SMD | C114586 | RGB Status LED for Visual Mode Diagnostics |
+| **J1** | DTM13-12PA Header | TE Connectivity | Automotive 12P | Custom Part | Automotive Deutsch DTM-12 Interface (11 active pins) |
 | **J2** | MicroSD Slot Push-Push | Molex / Korean Hro | SMD Push-Push | C266624 | 4-Bit SDIO Flash Card for Tour Logging |
 | **J_BAT** | Molex Micro-Fit 3.0 2P | Molex | SMD Header | C289110 | Header for 2,200 mAh LiPo Backup Battery |
 | **ANT1** | U.FL-R-SMT-1 | Hirose / Murata | SMD RF | C2834595 | LoRa 868 MHz U.FL socket to Taoglas FXP895 in lid |
 | **ANT2** | U.FL-R-SMT-1 | Hirose / Murata | SMD RF (B.Cu) | C2834595 | UWB 6.5 GHz U.FL socket to Taoglas FXUWB10 in tub floor |
-| **CN1** | HD26 Receptacle IP67 (SEAL-D)| Amphenol LTW | Flange D-Sub | Custom Part | Waterproof 26-Pin Enclosure Interface (19 active pins) |
+
+*(Note: Migration to All-UWB completely eliminates previous audio transformers T1, T2 and optocouplers OC1, OC2).*
 
 ---
 
@@ -67,7 +67,7 @@ This document serves as the master reference (Single Source of Truth) for the co
 > 1. **LoRa 868 MHz (SX1262):** Sits directly on the Central Box (`PCBA 01`), backed up 24/7 by the UPS battery for continuous anti-theft sentry.
 > 2. **Multi-GNSS (SAM-M10Q):** Sits in the cool ram-air intake zone on Front Node (`PCBA 05`), interfaced via Qwiic I2C (`J12`).
 > 3. **Vehicle Wireless Backbone:** Transmitted via Ultra-Wideband (Qorvo DW3110 / 6.5 GHz Ch. 5, $< 0.4\,\text{ms}$ latency) between Front Node and Central Box.
-> 4. **Rear Radar:** Connects directly to the Central Box via Whip 5 of the HD26 harness.
+> 4. **Rear Radar:** Connects directly to the Central Box via Whip 5 of the Deutsch DTM-12 automotive harness.
 
 ---
 
@@ -227,8 +227,8 @@ No custom wire harnessing or crimping is required. The system leverages 100% com
 ```
                         PLUG-AND-PLAY HARNESS CONCEPT (COTS PRE-MOLDED)
 +-------------------------+
-| HD26 IP67 Pre-Molded    | --> Overmolded HD26 breakout harness whip (Amphenol LTW COTS)
-| (Central Box Interface) | --> 100% watertight molded, zero discrete pin crimping required
+| Deutsch DTM-12 IP68     | --> Pre-terminated DTM-12 breakout harness whip (TE Connectivity COTS)
+| (Central Box Interface) | --> 100% watertight automotive seal, zero discrete pin crimping required
 +-+-----------------------+
   +-> Whip 1: M8 6-Pin PUR Cable (1.0 m / 1.5 m): Standard pre-molded sensor/actuator cable --> Pod 1
   +-> Whip 2: M8 6-Pin PUR Cable (1.0 m / 1.5 m): Standard pre-molded sensor/actuator cable --> Pod 2

@@ -3,8 +3,9 @@
 // =============================================================================
 // File: hardware/cad/scad/01_main_box/00_lower_deck.scad
 // Description: Ready-to-print solid monocoque lower case tub with 4x M3 corner
-//              clamping posts, 4x M2.5 PCB standoffs, 4x M4 silentblock mounting
-//              ears, and perimeter sealing groove (100% solid leak-free PA12 floor).
+//              clamping posts, 4x M2.5 PCB standoffs (77 x 47 mm pitch for PCBA 01),
+//              internal UWB antenna floor pocket (Taoglas FXUWB10), 4x M4 silentblock
+//              mounting ears, and perimeter sealing groove (100% solid leak-free floor).
 // =============================================================================
 
 include <../00_common/parameters.scad>;
@@ -35,10 +36,10 @@ module main_box_lower_case() {
                 hole_r=M3_SCREW_HOLE_R
             );
 
-            // 3. 4x M2.5 Mainboard PCB Screw Standoffs
+            // 3. 4x M2.5 Mainboard PCB Screw Standoffs (85 x 55 mm PCBA 01 with 77 x 47 mm pitch)
             main_box_pcb_standoffs(
-                pcb_x_offset=7.5,
-                pcb_y_offset=4.5,
+                pcb_x_offset=12.5,
+                pcb_y_offset=9.5,
                 h=3.5
             );
 
@@ -65,9 +66,17 @@ module main_box_lower_case() {
             h=NUT_M3_H,
             screw_r=M3_SCREW_HOLE_R
         );
+
+        // 7. Internal UWB Antenna Floor Pocket (Taoglas FXUWB10: 12.0 x 12.0 x 0.8 mm)
+        // Positioned directly below Qorvo DW3110 / ANT2 U.FL on PCBA 01 B.Cu (X=66.5, Y=37.4)
+        translate([66.5, 37.4, MAIN_BOX_WALL - 0.4]) {
+            cube([12.0, 12.0, 1.0], center=true);
+            // U.FL Cable Relief Channel leading to ANT2
+            translate([-6.0, 0, 0])
+                cube([8.0, 3.5, 1.0], center=true);
+        }
     }
 }
-
 
 // Render complete lower case
 main_box_lower_case();

@@ -3,7 +3,7 @@
 *(Hinweis: Sämtliche CAD- und 3D-Baugruppenansichten werden im Zuge der finalen Render-Phase aktualisiert).*
 
 Dieses Dokument spezifiziert die mechanische Konstruktion, das Thermomanagement, das IP67/IP69K-Gehäusedesign, die Kinematik des Auto-Eject-Schnellwechselsystems sowie alle CAD- und STL-Modelle aller Gehäuse-Baugruppen der OpenMotorBridge v9.6:
-1. **Zentrale Steuerbox (Typ A):** 3-teiliges Sandwich-Gehäuse mit Zwischenboden, integrierter Akku-Wanne, stirnseitiger Schnittstellenleiste (Deutsch DTM-12 Flansch, Taster SW1, USB-C, RGB-LED), integrierter Deckeltasche für LoRa-868-Flexantenne (FXP895), Unterwannen-Bodenkammer ($11 \times 11 \times 0{,}6\,\text{mm}$) für UWB-Flexantenne (FXUWB10) und planarem 4-Layer Kupfer-Wärmespreader.
+1. **Zentrale Steuerbox (Typ A):** 3-teiliges Sandwich-Gehäuse mit Zwischenboden, integrierter Akku-Wanne, stirnseitiger Schnittstellenleiste (Deutsch DTM-12 Flansch, Taster SW1, USB-C, RGB-LED), integrierter Deckeltasche ($85{,}0 \times 18{,}0 \times 1{,}2\,\text{mm}$) für LoRa-868-Flexantenne (Taoglas FXP895), Unterwannen-Bodenkammer ($12{,}0 \times 12{,}0 \times 0{,}8\,\text{mm}$) für UWB-Flexantenne (Taoglas FXUWB10), optionalem rückseitigen SMA-Antennendurchgang und planarem 4-Layer Kupfer-Wärmespreader.
 2. **Modulares Satelliten-Pod- & Wechselsystem (Typ B):** Baugleiches 5-seitiges Monocoque-Schachtgehäuse für beide Satelliten-Pods (Pod 1 & 2 Audio/Intercom, 2x symmetrisch) mit modularen Wechselkassetten (Sena SPIDER X Slim, Cardo Packtalk Edge, OMM 2.4 GHz Swap Cartridge, Midland, Dry Box), glatter geschlossener IP67-Außenhaut (ohne störende Antennen-Radomlöcher), $120^\circ$-V-Nut Rohrbett, Dual-Port M8/USB-C, Poka-Yoke Nut-und-Feder-Führung, federbelastetem Auto-Eject und unsichtbarem Neodym-Magnet-Diebstahlschutz.
 3. **Universal Front-Knoten (Typ C):** Ultrakompakter Cockpit- & Sensor-Hub ($98{,}0 \times 68{,}0 \times 25{,}0\,\text{mm}$) für die vergrößerte $82 \times 50\,\text{mm}$ 4-Lagen PCBA 05 mit **4-in-1 Universal-Befestigungssystem** (AMPS, Rohrbügel-Prisma, Silentblöcke, 3M Dual-Lock), integrierter Bodenkammer für UWB-Backbone (FXUWB10), J12 Qwiic Sensor-Hub (u-blox SAM-M10Q GNSS-Patch, TI TMP117 Präzisionsthermometer, TI OPT3001 Lichtsensor) im Fahrtwindeinlass, getrennten EPDM-Kabelkämmen für USB (Süd) und Fahrzeugleitungen (Nord), Dual-SW3526 20W USB-PD und Knowles MEMS Akustikkanal.
 4. **2-in-1 LoRa Smart-Keyfob & Pager (Typ D):** Ultrakompakter Taschenbegleiter ($58{,}0 \times 34{,}0 \times 13{,}0\,\text{mm}$) aus PA12-MJF mit umlaufendem TPU-Kantenschutz, integriertem N52-Neodym-Auswerferschlüssel, $0{,}5\,\text{mm}$ Mu-Metall-Flussschirmung, MagSafe/Qi-Induktionsladeaufnahme, LRA-Haptikmotor und drahtlosem SX1262 LoRa/BLE Alarm-Pager.
@@ -17,9 +17,10 @@ Das Basisgehäuse der Zentralbox ist als modulares, 3-teiliges IP67/IP69K-Sandwi
 
 - **Außenabmessungen:** $110{,}0 \times 74{,}0 \times 38{,}0\,\text{mm}$ (L x B x H; Unterwanne $17{,}0\,\text{mm}$, Oberwanne $15{,}0\,\text{mm}$, Deckel $6{,}0\,\text{mm}$).
 - **Befestigung:** 4x integrierte Ecklaschen an der Unterwanne mit **Lochabstand $128{,}0 \times 56{,}0\,\text{mm}$** für schwingungsdämpfende **M4 Silentblöcke (Shore 50A EPDM)** zur Entkopplung hochfrequenter Motorvibrationen.
-- **Lichte Innenmaße:** $102{,}0 \times 66{,}0 \times 32{,}0\,\text{mm}$ (optimiert für die $85{,}0 \times 55{,}0\,\text{mm}$ 4-Layer Hauptplatine).
-- **Material & Fertigung:** PA12 im HP Multi Jet Fusion (MJF) 3D-Druck (min. $3{,}0\,\text{mm}$ Wandstärke), kugelgestrahlt, im Heißbad chemisch geglättet und hydrophob versiegelt.
+- **Lichte Innenmaße:** $105{,}0 \times 69{,}0 \times 32{,}0\,\text{mm}$ (optimiert für die $85{,}0 \times 55{,}0\,\text{mm}$ 4-Layer Hauptplatine PCBA 01 mit symmetrischem Randabstand von $10{,}0\,\text{mm}$ in X und $7{,}0\,\text{mm}$ in Y).
+- **Material & Fertigung:** PA12 im HP Multi Jet Fusion (MJF) 3D-Druck (min. $2{,}5\dots 3{,}0\,\text{mm}$ Wandstärke), kugelgestrahlt, im Heißbad chemisch geglättet und hydrophob versiegelt.
 - **Schutzart:** IP67 / IP69K (strahlwasser- und tauchdicht bis $1\,\text{m}$ Wassertiefe sowie dampfstrahlbeständig).
+- **100% Lötkolben-Freie Montage:** Alle Schraubverbindungen nutzen direkt gedruckte PA12-Kernlöcher ($\varnothing\,2{,}1\,\text{mm}$ für M2.5 Thermoplast-Schrauben) und formschlüssige DIN 934 M3 Sechskantmutter-Taschen. Messing-Gewindeeinsätze sind vollständig eliminiert.
 
 ### 1.1 3D-CAD-Modell & 3-Schichten-Sandwichaufbau
 
@@ -36,15 +37,18 @@ Das Basisgehäuse der Zentralbox ist als modulares, 3-teiliges IP67/IP69K-Sandwi
 | 1. GEHÄUSEDECKEL (6,0 mm Höhe / 3,0 mm Wandstärke)         |  |
 |    * Gore ePTFE Druckausgleichsmembran (Ø 7,0 mm)          |  | 38,0 mm
 |    * Umlaufende Nut mit Shore 40A Silikon-Profildichtung   |  | Gesamt-
-|    * Integrierte Antennentasche (110 x 20 x 0,8 mm) für    |  | höhe
-|      Taoglas FXP895 LoRa 868 MHz Flexantenne               |  |
-|    * 100% homogener, geschlossener Deckel (kabelbündig)    |  |
+|    * Integrierte Deckeltasche (85 x 18 x 1,2 mm) für       |  | höhe
+|      Taoglas FXP895 LoRa 868 MHz Flexantenne & U.FL-Nut   |  |
+|    * 100% geschlossener Deckel (>1,8 mm Wandung zum Äußern)|  |
 +------------------------------------------------------------+  |
 | 2. OBERWANNE MIT ZWISCHENBODEN (15,0 mm Höhe)              |  |
-|    * Stirnwand (Alle Anschlüsse & Anzeige):                |  |
-|      - Deutsch DTM-12 Flansch (Haupt-Kabelbaum) & SW1 Taster|  |
+|    * Vordere Stirnwand (Alle Anschlüsse & Anzeige):        |  |
+|      - Deutsch DTM-12 Flansch (Automotive Haupt-Kabelbaum) |  |
+|      - Taster SW1 (Silikon-Dichtkappe, Pairing & Reset)    |  |
 |      - Wasserdichter USB-C Service-Port (Alu-Schraubkappe) |  |
-|      - Wasserdichtes RGB-Status-LED-Sichtfenster (Ø 3 mm)  |  |
+|      - Diffuser PMMA-Lichtleiter (Ø 3,2 mm) für WS2812B RGB|  |
+|    * Hintere Stirnwand:                                    |  |
+|      - Optionaler SMA-Antennenport (Ø 6,5 mm, Ø 9,5 mm Nut)|  |
 |    * Oberes Fach (auf dem Zwischenboden):                  |  |
 |      - 1S LiPo-Pufferakku (68x39x5.0mm, 2.200 mAh)         |  |
 |      - EPDM-Gummispannband zur vibrationsfesten Fixierung  |  |
@@ -53,11 +57,13 @@ Das Basisgehäuse der Zentralbox ist als modulares, 3-teiliges IP67/IP69K-Sandwi
 |      - 11x Konvektions- & Druckausgleichsschlitze          |  |
 +------------------------------------------------------------+  |
 | 3. UNTERWANNE (17,0 mm Höhe - Geschlossene Monocoque-Wanne)|  |
-|    * 4-Layer Hauptplatine (85 x 55 mm) auf M2.5 Dämpfern   |  |
-|    * Integrierte Antennentasche (11 x 11 x 0,6 mm) im Boden|  |
-|      für Taoglas FXUWB10 Flexantenne (DW3110 UWB Ch. 5)    |  |
-|    * Integrierte M3 Sechskant-Nut-Pockets (IKEA-Prinzip)   |  |
+|    * 4-Layer Hauptplatine (85 x 55 mm) auf M2.5 Standdomen |  |
+|      (77 x 47 mm Lochabstand, Ø 2,1 mm PA12 Kernloch)      |  |
+|    * Integrierte Antennentasche (12 x 12 x 0,8 mm) im Boden|  |
+|      mit U.FL-Kabelführung für Taoglas FXUWB10 UWB Ch. 5   |  |
+|    * Formschlüssige DIN 934 M3 Sechskant-Nut-Pockets       |  |
 |    * 4x M4 Silentblock-Befestigungsohren (vibrationsfest)  |  |
+|    * 100% geschlossener PA12-Wannenboden (>2,2 mm Wandung) |  |
 +------------------------------------------------------------+  v
 ```
 
@@ -125,7 +131,7 @@ Die Gesamtabwärme der Zentralbox liegt im normalen Fahrbetrieb bei lediglich **
 
 ---
 
-## 3. Stirnseitige Anschlüsse & Anzeige in der Oberwanne
+## 3. Stirnseitige Anschlüsse, Antennen-Aufnahmen & Rückwand-Option
 
 ```
                   VORDERE STIRNWAND DER OBERWANNE
@@ -133,15 +139,31 @@ Die Gesamtabwärme der Zentralbox liegt im normalen Fahrbetrieb bei lediglich **
 | +------------+  +--------+  +----------+  +---------------+ |
 | | 1. USB-C   |  | 2. RGB |  | 3. SW1   |  | 4. Deutsch    | |
 | |    Service |  |    LED |  |    Pair/ |  |    DTM-12     | |
-| |    Alukappe|  |    Ø3mm|  |    Reset |  |    Flansch    | |
+| |    Alukappe|  |  Ø3.2mm|  |    Reset |  |    Flansch    | |
 | +------------+  +--------+  +----------+  +---------------+ |
 +-------------------------------------------------------------+
 ```
 
-1. **Deutsch DTM-12 Flansch:** Automotive 12-Pin Flansch mit integrierter Silikondichtung und Bajonett-Verriegelung.
-2. **Taster SW1 (`SW_PAIR_RESET`):** Wasserdichter IP67-Minitaster für 3s UWB-Pairing neuer Kassetten und 10s NVS Key Purge.
-3. **USB-C Service-Port:** Wasserdichte Buchse mit blau eloxierter Aluminium-Schraubkappe und O-Ring.
-4. **RGB-Status-LED Sichtfenster:** Diffuser PMMA-Linsenkörper ($\varnothing\,3{,}0\,\text{mm}$) mit umlaufendem O-Ring.
+1. **Deutsch DTM-12 Flansch (Haupt-Kabelbaum):** Automotive-Flansch (Deutsch DTM13-12PA) mit integrierter Silikondichtung und 2x M3-Verschraubung ($28{,}0\,\text{mm}$ Lochabstand). Verbindet intern über `J1` (2x06 Box-Header, 2,54 mm Raster) die 12 zentralen Fahrzeugadern (12V geschaltet, Masse, CAN-High, CAN-Low, DC-Versorgung Pod 1 & Pod 2, sowie Radar-Peitsche 5: 12V_RADAR, GND, UART_RX, UART_TX).
+2. **Taster SW1 (`SW_PAIR_RESET`):** Wasserdichter IP67-Minitaster mit Silikon-Dichtkappe und M7-Gewindehülse. Dient dem drahtlosen UWB-Pairing neuer Wechselkassetten (3s Betätigung) sowie dem vollständigen Werksreset & NVS Key Purge (10s Betätigung).
+3. **USB-C Service-Port:** Wasserdichte Rundflansch-Buchse mit unverlierbarer blau eloxierter Aluminium-Schraubkappe und EPDM-O-Ring für Firmware-Updates, ESP-IDF Telemetrie und Notfall-Diagnose.
+4. **RGB-Status-LED Sichtfenster:** Diffuser PMMA-Linsenkörper ($\varnothing\,3{,}2\,\text{mm}$) mit umlaufendem O-Ring, der das Licht der onboard WS2812B RGB-LED direkt auf die Frontblende spiegelt (Zustandsanzeige: Grün = Betrieb/Mesh OK, Blau = BT Audio Stream, Orange = Warnung/Radar aktiv, Rot = Sabotage/Alarm).
+
+### 3.1 Integrierte Antennen-Aufnahmen & HF-Transparenz
+
+OpenMotorBridge nutzt ein duales, vollständig gehäuseintegriertes Antennenkonzept ohne störende äußere Antennenstummel bei maximaler Reichweite:
+1. **LoRa 868 MHz Primärantenne (Taoglas FXP895):**
+   * Formschlüssig in die Unterseite des Gehäusedeckels (`020_lid_plate.scad`) eingelassene Antennentasche ($85{,}0 \times 18{,}0 \times 1{,}2\,\text{mm}$) mit integrierter $2{,}5\,\text{mm}$ Kabelführungsnut für das U.FL-Koaxialkabel zu `ANT1`.
+   * Die Antenne strahlt horizontal polarisiert nach oben durch den $1{,}8\,\text{mm}$ dünnen, HF-neutralen PA12-Deckel ($\varepsilon_r \approx 2{,}3\dots 2{,}7$, $\tan\delta \approx 0{,}015$). Dies garantiert eine maximale Rundum-Reichweite von bis zu $15\,\text{km}$ im OMM-Mesh.
+2. **LoRa 868 MHz Sekundäroption (SMA-Bulkhead für Carbon-Bikes & Rallye):**
+   * In der hinteren Stirnwand der Oberwanne ist ein Durchbruch ($\varnothing\,6{,}5\,\text{mm}$) mit einer $\varnothing\,9{,}5 \times 1{,}2\,\text{mm}$ O-Ring-Senkung für eine IP67-SMA-Einbaubuchse vorgesehen.
+   * Ermöglicht das Anschließen externer Whip-Antennen, falls die Zentralbox in voll geschirmten Carbon-Heckbürzeln montiert wird.
+3. **UWB 6.5 GHz Kanal 5 Flexantenne (Taoglas FXUWB10):**
+   * Im Boden der Unterwanne (`00_lower_deck.scad`) exakt bei $X=66{,}5\,\text{mm}, Y=37{,}4\,\text{mm}$ eingelassene Tasche ($12{,}0 \times 12{,}0 \times 0{,}8\,\text{mm}$) mit $2{,}0\,\text{mm}$ Koaxialkabel-Führungsnut.
+   * Liegt unmittelbar senkrecht unter dem DW3110 / `ANT2` U.FL-Connector der Platinen-Unterseite (`B.Cu`), wodurch die HF-Kabellänge auf ultrakurze $25\,\text{mm}$ minimiert wird (Einfügedämpfung $< 0{,}15\,\text{dB}$).
+   * Der Wannenboden bleibt nach unten mit $>2{,}2\,\text{mm}$ PA12-Wandung 100% hermetisch geschlossen und spritzwasserdicht.
+4. **Bluetooth 5.4 / LE Audio (Qualcomm QCC3084):**
+   * Nutzt die onboard 2.4-GHz-Keramik-Chipantenne mit optimiertem Keepout-Bereich auf `PCBA 01`. Die Abstrahlung erfolgt verlustfrei durch die PA12-Wandungen und den Zwischenboden zu den Helm-Headsets und Smartphone-Docks.
 
 ---
 
