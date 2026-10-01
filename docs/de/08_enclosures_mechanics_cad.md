@@ -768,9 +768,9 @@ Auf frei zugänglichen Reiseenduros und bei Zwischenstopps auf Fernreisen schüt
 
 Das universelle Kofferdeckel-Dock ([`saddlebag_lid_dock.scad`](../../hardware/cad/scad/02_pod_base/saddlebag_lid_dock.scad)) wurde speziell für die geschützte, vibrationsfeste und 100 % zerstörungsfreie Innenmontage der Satelliten-Pods 1 (Sena Mesh) und 2 (Cardo DMC) in Motorrad-Seitenkoffern entwickelt (Referenz: Harley-Davidson One-Touch Hartschalenkoffer 2014-2024+):
 
-![Universal Saddlebag Lid Dock CAD](../images/cad/saddlebag_lid_dock_iso.png)
+![Universal Saddlebag Lid Dock CAD](../images/cad/saddlebag_lid_dock_cad.png)
 
-*Abbildung 8.30: 3D-CAD-Visualisierung des Kofferdeckel-Docks (`saddlebag_lid_dock.scad`). Sichtbar sind der inboard gerichtete Torx-Montageflansch für die originalen Scharnierschrauben, die frontale Dual-Port-Kabelschnauze mit Zugentlastung (Port B USB-C Durchgang & Port A M8 Freisparung), die umlaufende Halbschale mit EPDM-Spannbandschlitzen und die obere Tropfkante über dem Kassetteneinschub.*
+*Abbildung 8.30: 3D-CAD-Visualisierung des Kofferdeckel-Docks (`saddlebag_lid_dock.scad`). Sichtbar sind der inboard gerichtete Torx-Montageflansch für die originalen Scharnierschrauben, die frontale Kabelschnauze mit integrierter Zugentlastung für die 2-Draht DC-Spannungsversorgung (M8 / FLRY-B Leitung parallel zum Deckel-Fangband zur MagSafe-Abreißkupplung), die umlaufende Halbschale mit EPDM-Spannbandschlitzen und die obere Tropfkante über dem Kassetteneinschub.*
 
 #### 6.5.1 Zero-Drill-Befestigung & Mechanisches Konzept
 1. **Nutzung originaler Befestigungspunkte (Zero-Drill):**

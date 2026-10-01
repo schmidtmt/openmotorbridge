@@ -253,7 +253,7 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
     (
         "02_pod_base/saddlebag_lid_dock.scad",
         os.path.join(CAD_IMG_DIR, "saddlebag_lid_dock_cad.png"),
-        "0,0,15,55,0,310,280",
+        "70,38,13,55,0,310,320",
         "Tomorrow"
     ),
     (

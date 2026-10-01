@@ -723,9 +723,9 @@ On exposed adventure bikes and remote expedition tracks (e.g. TET routes, alpine
 
 The universal Saddlebag Lid Dock ([`saddlebag_lid_dock.scad`](../../hardware/cad/scad/02_pod_base/saddlebag_lid_dock.scad)) was specifically developed for protected, vibration-proof, and 100% non-destructive interior mounting of satellite Pods 1 (Sena Mesh) and 2 (Cardo DMC) in hard saddlebags (Reference: Harley-Davidson One-Touch hard saddlebags 2014-2024+):
 
-![Universal Saddlebag Lid Dock CAD](../images/cad/saddlebag_lid_dock_iso.png)
+![Universal Saddlebag Lid Dock CAD](../images/cad/saddlebag_lid_dock_cad.png)
 
-*Figure 8.30: 3D CAD visualization of the Saddlebag Lid Dock (`saddlebag_lid_dock.scad`). Visible are the inboard-oriented Torx mounting flange for OEM hinge screws, forward Dual-Port cable snout with strain relief (Port B USB-C pass-through & Port A M8 clearance), perimeter half-shell with EPDM strap slots, and upper drip lip shielding the cartridge entrance.*
+*Figure 8.30: 3D CAD visualization of the Saddlebag Lid Dock (`saddlebag_lid_dock.scad`). Visible are the inboard-oriented Torx mounting flange for OEM hinge screws, forward cable snout with integrated strain relief for the 2-wire DC power supply (M8 / FLRY-B line routed along the check strap to the MagSafe breakaway coupler), perimeter half-shell with EPDM strap slots, and upper drip lip shielding the cartridge entrance.*
 
 #### 6.5.1 Zero-Drill Mounting & Mechanical Design
 1. **OEM Mounting Point Utilization (Zero-Drill):**
