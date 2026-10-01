@@ -54,11 +54,12 @@ module saddlebag_lid_dock() {
                 }
             }
 
-            // 3. Front Dual-Port Cable Strain-Relief Snout (Spans Port A at Y=30 and Port B at Y=46)
-            translate([CRADLE_OUTER_L - 4.0, 15.0, 0]) {
+            // 3. Single-Port Cable Strain-Relief Snout (Dedicated to Port B at Y=46)
+            // Completely encloses the slim 2-wire DC tether cable with solid protective roof
+            translate([CRADLE_OUTER_L - 4.0, 35.0, 0]) {
                 hull() {
-                    cube([4.0, 46.0, 24.0]);
-                    translate([16.0, 3.0, 0]) cube([1.0, 40.0, 20.0]);
+                    cube([4.0, 22.0, 28.5]);
+                    translate([14.0, 2.0, 0]) cube([1.0, 18.0, 26.5]);
                 }
             }
 
@@ -83,10 +84,11 @@ module saddlebag_lid_dock() {
             rounded_box(80.0, DOCK_POD_W - 20.0, DOCK_WALL + 2.0, 4.0);
         }
 
-        // C1. Port A (M8): Collar & Cap Clearance Pocket + Optional M8 Through-Bore
+        // C1. Port A (M8): Internal Blind Clearance Pocket (No external through-hole!)
         // Aligned at Dock Y = DOCK_WALL + 27.0 = 30.0 mm, Z = DOCK_WALL + 19.0 = 22.0 mm
+        // Provides 3.0 mm clearance for the 2.0 mm protruding M8 collar & screw cap on the pod,
+        // while the exterior dock wall remains 100% solid and clean (0 false cables).
         translate([CRADLE_OUTER_L - DOCK_WALL - 0.1, 30.0, 22.0]) {
-            // Front clearance pocket for 16x16 mm M8 square collar & screw cap
             rotate([0, 90, 0])
                 hull() {
                     for (dy = [-6.5, 6.5]) {
@@ -96,21 +98,18 @@ module saddlebag_lid_dock() {
                         }
                     }
                 }
-            // Continuous M8 through-bore for optional M8 pigtail cabling
-            rotate([0, 90, 0])
-                cylinder(r=5.2, h=25.0, center=false, $fn=24);
         }
 
         // C2. Port B (Slim USB-C): Primary Saddlebag Tether Cable Exit Bore & Plug-Well
-        // Aligned at Dock Y = DOCK_WALL + 43.0 = 46.0 mm, Z = DOCK_WALL + 19.0 = 22.0 mm
-        translate([CRADLE_OUTER_L - DOCK_WALL - 0.1, 46.0, 22.0]) {
-            // Cable lead-in and plug relief tunnel
+        // Aligned at Dock Y = DOCK_WALL + 43.0 = 46.0 mm, Z = DOCK_WALL + 18.0 = 21.0 mm
+        // Tunnel is fully enclosed within the snout housing (solid continuous roof)
+        translate([CRADLE_OUTER_L - DOCK_WALL - 0.1, 46.0, 21.0]) {
             rotate([0, 90, 0])
                 hull() {
-                    for (dy = [-3.5, 3.5]) {
-                        for (dz = [-2.5, 2.5]) {
+                    for (dy = [-3.0, 3.0]) {
+                        for (dz = [-1.5, 1.5]) {
                             translate([dz, dy, 0])
-                                cylinder(r=2.5, h=25.0, center=false, $fn=20);
+                                cylinder(r=2.2, h=22.0, center=false, $fn=20);
                         }
                     }
                 }
@@ -140,10 +139,10 @@ module saddlebag_lid_dock() {
             cube([65.0, 24.0, 0.8]);
         }
 
-        // F. Dual Zip-Tie Clamping Tunnel (Secures Port A cable and/or Port B slim tether cable)
-        // Cleanly pierces through both flanks of the 46 mm snout (Y = 15 to 61)
-        translate([CRADLE_OUTER_L + 5.0, 10.0, 3.0]) {
-            cube([4.0, 55.0, 3.5]);
+        // F. Single Zip-Tie Clamping Tunnel for Port B Tether Cable
+        // Cleanly pierces through the flanks of the Port B snout (Y = 32 to 58)
+        translate([CRADLE_OUTER_L + 5.0, 32.0, 3.0]) {
+            cube([3.5, 28.0, 3.2]);
         }
 
         // G. 4x Lateral Relief Pockets for Pod Base Strap Hook Lugs (X=25 and X=110)
