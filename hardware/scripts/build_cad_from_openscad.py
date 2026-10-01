@@ -42,6 +42,7 @@ STL_TARGETS: List[Tuple] = [
     ("03_pod_cartridges/parts/02_insert_cardo.scad", "03_pod_cartridges/cartridge_insert_cardo.stl"),
     ("03_pod_cartridges/parts/03_insert_blindkassette.scad", "03_pod_cartridges/cartridge_insert_blindkassette.stl"),
     ("03_pod_cartridges/parts/04_antenna_bracket_omm.scad", "03_pod_cartridges/cartridge_antenna_bracket_omm.stl"),
+    ("03_pod_cartridges/parts/06_insert_omm_ucs.scad", "03_pod_cartridges/cartridge_insert_omm_ucs.stl"),
     
     # 4. Modular Components (Main Box)
     ("01_main_box/parts/000_lower_base.scad", "01_main_box/components/01_lower_tub_empty.stl"),
@@ -63,7 +64,6 @@ STL_TARGETS: List[Tuple] = [
     # 6. Dummies
     ("00_common/dummies/dummy_main_pcb.scad", "01_main_box/components/dummy_main_pcb.stl"),
     ("00_common/dummies/dummy_lipo_battery.scad", "01_main_box/components/dummy_lipo_battery.stl"),
-    ("00_common/dummies/dummy_omm_transceiver_pcb.scad", "03_pod_cartridges/components/dummy_omm_transceiver_pcb.stl"),
     ("00_common/dummies/dummy_adapter_pcb.scad", "03_pod_cartridges/components/dummy_adapter_pcb.stl"),
     ("00_common/dummies/dummy_m8_connector.scad", "02_pod_base/components/dummy_m8_connector.stl"),
     
@@ -411,7 +411,7 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
     (
         "05_accessories/car_dashboard_wedge_dock.scad",
         os.path.join(CAD_IMG_DIR, "car_dashboard_wedge_dock_cad.png"),
-        "0,0,10,55,0,320,340",
+        "0,0,20,55,0,320,380",
         "Tomorrow"
     ),
     (

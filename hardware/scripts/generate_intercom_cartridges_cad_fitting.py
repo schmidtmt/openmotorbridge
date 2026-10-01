@@ -300,11 +300,11 @@ def render_intercom_cartridges_cross_section(output_png):
 
     # M8 Connector on bottom face
     ax1.add_patch(patches.Rectangle((-52, -22), 8.0, 6.0, facecolor='#d97706', edgecolor='#fbbf24', linewidth=1.0))
-    ax1.text(-48, -19, "M8 6-PIN\nIP67", color='#080c14', fontsize=7, fontweight='bold', ha='center', va='center')
+    ax1.text(-48, -19, "M8 2-PIN\nDC IP67", color='#080c14', fontsize=7, fontweight='bold', ha='center', va='center')
 
     # Vertical Pod-Base PCB (36x20x1.6mm at X=-47.8)
     ax1.add_patch(patches.Rectangle((-47.8, -10), 1.6, 20.0, facecolor='#065f46', edgecolor='#10b981', linewidth=1.2))
-    ax1.text(-47.0, 11.5, "POD-BASE (1.6mm)", color='#10b981', fontsize=8, fontweight='bold', ha='center')
+    ax1.text(-47.0, 11.5, "POD-BASE PCBA 02", color='#10b981', fontsize=8, fontweight='bold', ha='center')
 
     # PA12 Schottwand (2.0mm at X=-46.0) with Shroud & Auto-Eject Springs
     ax1.add_patch(patches.Rectangle((-46.0, -11), 2.0, 22.0, facecolor='#334155', edgecolor='#64748b', linewidth=1.0))
@@ -313,10 +313,10 @@ def render_intercom_cartridges_cross_section(output_png):
     ax1.add_patch(patches.Rectangle((-44.0,  5.5), 6.0, 2.5, facecolor='#cbd5e1', edgecolor='#94a3b8', linewidth=0.8))
     ax1.text(-41.0, 9.0, "AUTO-EJECT FEDERN", color='#94a3b8', fontsize=7, fontweight='bold', ha='center')
 
-    # 6-Pin Socket Interface (J1 <-> J1)
+    # 2-Pin DC Mill-Max Spring Interface & UWB Wireless Backbone
     ax1.add_patch(patches.Rectangle((-42.0, -1.5), 6.0, 3.0, facecolor='#1e293b', edgecolor='#fbbf24', linewidth=1.0))
     ax1.plot([-46, -36], [0, 0], color='#fbbf24', linewidth=2.0)
-    ax1.text(-39.0, 2.5, "J1: 6-PIN MATING (Y=0, Z=0)", color='#fbbf24', fontsize=7.5, fontweight='bold', ha='center')
+    ax1.text(-36.0, 2.5, "2-PIN DC MILL-MAX (PAD1/2) & UWB 6.5 GHz", color='#fbbf24', fontsize=7.0, fontweight='bold', ha='center')
 
     # Universal Base Sled (X = -40 to +52 mm)
     ax1.add_patch(patches.Rectangle((-40, -11.75), 92, 3.0, facecolor='#1e293b', edgecolor='#64748b', linewidth=1.0))
@@ -326,7 +326,7 @@ def render_intercom_cartridges_cross_section(output_png):
 
     # Carrier PCB (openmotorbridge_pod_cartridge: 35 x 25 x 1.6 mm at X = -36 to -1 mm, Z = -8.75 to -7.15)
     ax1.add_patch(patches.Rectangle((-36, -8.75), 35, 1.6, facecolor='#047857', edgecolor='#10b981', linewidth=1.0))
-    ax1.text(-18.5, -10.5, "TRÄGERPLATINE (35x25mm) // DS2401 ID + PTC", color='#10b981', fontsize=8, fontweight='bold', ha='center')
+    ax1.text(-18.5, -10.5, "TRÄGERPLATINE PCBA 03 (35x25mm) // DW3110 UWB + ES8388", color='#10b981', fontsize=7.5, fontweight='bold', ha='center')
 
     # J2 Header (Horizontal JST-SH 6P opening facing +X at X = -5 to -1 mm, Z = -7.15 to -5.35)
     ax1.add_patch(patches.Rectangle((-5.0, -7.15), 4.0, 1.8, facecolor='#f8fafc', edgecolor='#94a3b8', linewidth=1.0))
@@ -387,11 +387,11 @@ def render_intercom_cartridges_cross_section(output_png):
 
     # M8 Connector
     ax2.add_patch(patches.Rectangle((-52, -22), 8.0, 6.0, facecolor='#d97706', edgecolor='#fbbf24', linewidth=1.0))
-    ax2.text(-48, -19, "M8 6-PIN\nIP67", color='#080c14', fontsize=7, fontweight='bold', ha='center', va='center')
+    ax2.text(-48, -19, "M8 2-PIN\nDC IP67", color='#080c14', fontsize=7, fontweight='bold', ha='center', va='center')
 
     # Vertical Pod-Base PCB
     ax2.add_patch(patches.Rectangle((-47.8, -10), 1.6, 20.0, facecolor='#065f46', edgecolor='#10b981', linewidth=1.2))
-    ax2.text(-47.0, 11.5, "POD-BASE (1.6mm)", color='#10b981', fontsize=8, fontweight='bold', ha='center')
+    ax2.text(-47.0, 11.5, "POD-BASE PCBA 02", color='#10b981', fontsize=8, fontweight='bold', ha='center')
 
     # Schottwand & Springs
     ax2.add_patch(patches.Rectangle((-46.0, -11), 2.0, 22.0, facecolor='#334155', edgecolor='#64748b', linewidth=1.0))
@@ -399,10 +399,10 @@ def render_intercom_cartridges_cross_section(output_png):
     ax2.add_patch(patches.Rectangle((-44.0, -8.0), 6.0, 2.5, facecolor='#cbd5e1', edgecolor='#94a3b8', linewidth=0.8))
     ax2.add_patch(patches.Rectangle((-44.0,  5.5), 6.0, 2.5, facecolor='#cbd5e1', edgecolor='#94a3b8', linewidth=0.8))
 
-    # 6-Pin Socket Interface (J1 <-> J1)
+    # 2-Pin DC Mill-Max Spring Interface & UWB Wireless Backbone
     ax2.add_patch(patches.Rectangle((-42.0, -1.5), 6.0, 3.0, facecolor='#1e293b', edgecolor='#fbbf24', linewidth=1.0))
     ax2.plot([-46, -36], [0, 0], color='#fbbf24', linewidth=2.0)
-    ax2.text(-39.0, 2.5, "J1: 6-PIN MATING (Y=0, Z=0)", color='#fbbf24', fontsize=7.5, fontweight='bold', ha='center')
+    ax2.text(-36.0, 2.5, "2-PIN DC MILL-MAX (PAD1/2) & UWB 6.5 GHz", color='#fbbf24', fontsize=7.0, fontweight='bold', ha='center')
 
     # Universal Base Sled (Identical!)
     ax2.add_patch(patches.Rectangle((-40, -11.75), 92, 3.0, facecolor='#1e293b', edgecolor='#64748b', linewidth=1.0))
@@ -412,7 +412,7 @@ def render_intercom_cartridges_cross_section(output_png):
 
     # Carrier PCB
     ax2.add_patch(patches.Rectangle((-36, -8.75), 35, 1.6, facecolor='#047857', edgecolor='#10b981', linewidth=1.0))
-    ax2.text(-18.5, -10.5, "TRÄGERPLATINE (35x25mm) // DS2401 ID + PTC", color='#10b981', fontsize=8, fontweight='bold', ha='center')
+    ax2.text(-18.5, -10.5, "TRÄGERPLATINE PCBA 03 (35x25mm) // DW3110 UWB + ES8388", color='#10b981', fontsize=7.5, fontweight='bold', ha='center')
 
     # J2 Header (Horizontal JST-SH 6P opening facing +X)
     ax2.add_patch(patches.Rectangle((-5.0, -7.15), 4.0, 1.8, facecolor='#f8fafc', edgecolor='#94a3b8', linewidth=1.0))
@@ -459,10 +459,7 @@ def render_intercom_cartridges_cross_section(output_png):
     print(f"✓ Intercom Cartridges Cross-Section Render generated: {output_png}")
 
 if __name__ == '__main__':
-    out_sena = os.path.join(output_dir, "sena_cartridge_assembly_cad.png")
-    out_cardo = os.path.join(output_dir, "cardo_cartridge_assembly_cad.png")
     out_cross = os.path.join(output_dir, "sena_cardo_cartridge_cross_section.png")
-
-    render_sena_cartridge_assembly(out_sena)
-    render_cardo_cartridge_assembly(out_cardo)
+    # Note: sena_cartridge_assembly_cad.png and cardo_cartridge_assembly_cad.png are compiled
+    # directly via OpenSCAD (build_cad_from_openscad.py) for true 3D geometry & textures.
     render_intercom_cartridges_cross_section(out_cross)

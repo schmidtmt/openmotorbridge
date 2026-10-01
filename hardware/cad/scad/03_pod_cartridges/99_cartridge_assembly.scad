@@ -3,14 +3,13 @@
 // =============================================================================
 // File: hardware/cad/scad/03_pod_cartridges/99_cartridge_assembly.scad
 // Description: Multi-cartridge 3D inspection scene comparing the 4 variants:
-//              1. OMM Rear Transceiver Cartridge (with inserted PCB & Patch Antenna)
+//              1. OMM 2.4 GHz UCS Transceiver Cartridge (with PCBA 03 & LiPo)
 //              2. Sena 50S/60S Cartridge (with inserted Adapter PCB)
 //              3. Cardo Packtalk Edge Cartridge (with inserted Adapter PCB)
 //              4. Waterproof Blindkassette (Dry Box Dummy)
 // =============================================================================
 
 include <../00_common/parameters.scad>;
-use <../00_common/dummies/dummy_omm_transceiver_pcb.scad>;
 use <../00_common/dummies/dummy_adapter_pcb.scad>;
 use <cartridge_omm_transceiver.scad>;
 use <cartridge_sena.scad>;
@@ -19,7 +18,7 @@ use <cartridge_blindkassette.scad>;
 
 // Render all 4 cartridge variants side by side for visual design check
 module cartridge_gallery_preview() {
-    // 1. OMM Transceiver Cartridge (Pod 3 Heck, Front Left)
+    // 1. OMM 2.4 GHz UCS Transceiver Cartridge (Front Left)
     translate([0, 0, 0]) {
         cartridge_omm_transceiver_assembly(exploded=false);
     }

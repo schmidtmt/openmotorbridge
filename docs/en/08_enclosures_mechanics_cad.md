@@ -888,23 +888,26 @@ OPERATING MODES OF THE CAR SUPPORT KIT:
 
 ---
 
-#### 6.8.2 Dashboard Wedge Dock for Central Control Box (`car_dashboard_wedge_dock.scad`)
+#### 6.8.2 Dual-Stack Dashboard Wedge Dock for Central Box & Front Node (`car_dashboard_wedge_dock.scad`)
 
-For securing the Central Control Box ($110 \times 74 \times 32\,\text{mm}$) inside the vehicle cockpit, a form-fitting, vibration-isolated wedge dock was engineered:
+For clean, integrated deployment in passenger vehicles (support cars / rally vans), a form-fitting, vibration-isolated **Dual-Stack Wedge Dock** was engineered. It consolidates both the **Front Node (`PCBA 05`) and the Central Box (`PCBA 01`)** into a compact desktop/cockpit console stationed on the dashboard or center console:
 
 ![Dashboard Wedge Dock CAD](../images/cad/car_dashboard_wedge_dock_cad.png)
 
-*Figure 8.33c: 3D CAD view of the Dashboard Wedge Dock for the Central Control Box (`car_dashboard_wedge_dock_cad.png`). Depicted are the ergonomic 15° forward tilt angle for glare-free LED visibility, the form-fitting dock pocket ($111 \times 75\,\text{mm}$), dual lateral finger extraction notches, rear passthrough for the 12V automotive power harness, and underside recesses for anti-slip silicone feet.*
+*Figure 8.33c: 3D CAD view of the Dual-Stack Dashboard Wedge Dock for Central Control Box and Front Node (`car_dashboard_wedge_dock_cad.png`). Depicted are the lower horizontal slide-in bay for the Front Node with unobstructed GNSS view to the windshield and lateral USB-PD window, the upper 15° tilted deck for the Central Control Box, dual lateral finger extraction notches, internal harness routing channel for the 12V Y-adapter harness, and underside recesses for anti-slip silicone feet.*
 
-* **Ergonomic $15^\circ$ Viewing & Operating Angle:**
-  * When rested on horizontal dashboards or center console trays, the $15^\circ$ forward slope directs status LEDs and connector ports glare-free toward the driver/passenger.
-* **Rapid Tool-Free Extraction (Dual Finger Notches):**
-  * Two lateral finger notches ($40 \times 12\,\text{mm}$) enable instant one-handed insertion and removal of the Central Box--ideal when alternating between motorcycle and support vehicle.
-* **Concealed Harness Routing & Convective Cooling:**
-  * The rear wall features a generous $44\,\text{mm}$ harness cutout accommodating the 12V cigarette lighter PD adapter and Deutsch DTM-12 harness whip.
-  * Two underside openings ($\varnothing 28\,\text{mm}$) promote passive convective heat dissipation from the Central Box heatsink.
+* **Two-Tier Architecture (Tier 1 & Tier 2):**
+  * **Lower Tier (Base Slide-in Bay for Front Node `PCBA 05`):**
+    * Horizontal pocket ($100 \times 70 \times 26.5\,\text{mm}$ clearance) providing secure, vibration-damped retention of the Front Node enclosure.
+    * **Windshield Aperture:** Faces directly toward the windshield--ensuring unobstructed sky line-of-sight for the integrated u-blox SAM-M10Q GNSS module and acoustic entry for the Knowles SPH0645 MEMS microphone used in cabin noise compensation.
+    * **Lateral USB-PD Port Window:** Provides effortless access for connecting charging cables to both 20W USB-C ports (`J3` and `J4`).
+  * **Upper Tier (Tilted Deck for Central Box `PCBA 01`):**
+    * Ergonomic **$15^\circ$ forward/upward tilted cradle** ($111.5 \times 75.5 \times 18\,\text{mm}$), aligning all RGB status LEDs and RF diagnostic indicators directly into driver and passenger sightlines without windshield glare.
+    * Dual lateral finger notches ($40 \times 12\,\text{mm}$) enable rapid tool-free extraction of the Central Box when swapping between vehicles.
+* **Internal Concealed Harness Channel:**
+  * A continuous vertical conduit ($22 \times 36\,\text{mm}$) invisibly links the lower and upper bays: The 12V automotive Y-adapter harness ("Bench & Support-Car Harness") splits internally--Branch A routes concealed to the JST-JWPF 2-pin port `J1` of the Front Node, while Branch B routes upward to the Deutsch DTM-12 port `J1` of the Central Box.
 * **Vibration-Damped Non-Marring Base:**
-  * The flat bottom features 4 circular pockets ($\varnothing 12 \times 1.5\,\text{mm}$) designed for standard 3M Bumpon silicone rubber bumpers or 3M VHB tape, preventing sliding and scuff marks on sensitive dashboard trim.
+  * 4 circular pockets ($\varnothing 12 \times 1.5\,\text{mm}$) on the bottom accommodate 3M Bumpon silicone rubber bumpers or 3M VHB adhesive pads, keeping the dual dock firmly in place without rattling or dashboard scuffs even during aggressive driving.
 
 ---
 
@@ -1166,7 +1169,7 @@ The OpenMotorBridge CAD repository follows a strict hierarchical Constructive So
 The `components/` directories host isolated base bodies (prior to CSG difference operations) and inspection parts:
 - **`01_main_box/components/`**: `01_lower_tub_empty.stl`, `02_corner_screws_enclosure.stl`, `03_pcb_standoffs.stl`, `04_mounting_ears.stl`, `05_sealing_groove.stl`, `06_mid_tray_frame.stl`, `07_mid_partition_floor.stl`, `08_lid_plate.stl`, `dummy_main_pcb.stl`, `dummy_lipo_battery.stl`.
 - **`02_pod_base/components/`**: `01_pod_tunnel_base.stl`, `02_pod_rear_m8_gland.stl`, `03_pod_bulkhead_partition.stl`, `04_pod_guide_grooves.stl`, `05_pod_strap_hooks.stl`, `06_fender_curved_saddle.stl`, `07_pod_slide_dock_core.stl`, `011_gopro_hirth_lock.stl` (Radial Hirth lock), `dummy_m8_connector.stl`.
-- **`03_pod_cartridges/components/`**: `dummy_adapter_pcb.stl`, `dummy_omm_transceiver_pcb.stl`.
+- **`03_pod_cartridges/components/`**: `dummy_adapter_pcb.stl`, `cartridge_insert_omm_ucs.stl`.
 - **`04_front_node/components/`**:
   - `01_front_node_base_tub.stl`: Monolithic solid base tub with hollowed inner chamber (CSG base cube).
   - `02_pcb_standoffs.stl`: 4x M2.5 threaded boss standoffs for PCBA05.
