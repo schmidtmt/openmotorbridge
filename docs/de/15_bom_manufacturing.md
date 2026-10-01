@@ -201,15 +201,20 @@ Alle Gehäuseteile sind konsequent für das **IKEA-Prinzip** konstruiert: **Kein
   * `adventure_transition_dock_base.stl` (2 Stk.): Kofferunabhängige Basis-Wannen für die Sitzbank-Bügelfalte (Ø 28 mm Rahmenrohr).
   * `adventure_transition_dock_lid.stl` (2 Stk.): Aerodynamische Karosserie-Deckel mit Bügelfalten-Lichtkante & Cardo/Sena-Ausschnitt.
   * `adventure_underseat_cross_rail.stl` (1 Stk.): Verwindungssteife Unter-Sitzbank-Sattelbrücke zur 100 % verdrehsicheren Verbindung von links und rechts mit integrierter M8-Kabelrinne.
-  * `adventure_rack_radar_mount.stl` (1 Stk.): Minimaler Heckradar-Halter direkt unter der GS-Gepäckbrücke für Garmin Varia / Wheeltec MR20 auf Peitsche 5.
+  * `adventure_rack_radar_mount.stl` & `adventure_rack_radar_clamp_cap.stl` (je 1 Stk.): Minimaler, schottergeschützter Heckradar-Rohrträger unter der Gepäckbrücke (Ø 18 mm Rohr) mit M5-Verschraubung von unten und integriertem Steinschlag-Spoiler.
+  * `radar_swivel_tilt_cradle.stl` (1 Stk.): Schwerlast-Neigegelenk (Actioncam/GoPro-Hirth-Cradle) mit 2x M4-Verschraubung ins Radar 2.0 Gehäuse.
 * **Kit 2: BMW R1250 / R1300 GSA (Adventure mit Ø 18 mm Edelstahl-Alukofferträger):**
   * `adventure_gsa_cage_dock_body.stl` & `adventure_gsa_clamp_cap.stl` (je 2 Stk.): Schwerlast-Käfigdocks ("GSA Cage Dock") für Pod 1 & 2 im $45\,\text{mm}$ Totraum des Trägerrahmens mit $85\,\text{mm}$ Doppel-Rohrsattelbasis, 4x M5 Verschraubung, Steinschlag-Gleitkeil & verdecktem M8-Kanal.
-  * `adventure_rack_radar_mount.stl` (1 Stk.): Minimaler Heckradar-Halter unter der Gepäckbrücke.
+  * `adventure_rack_radar_mount.stl` & `adventure_rack_radar_clamp_cap.stl` (je 1 Stk.): Schottergeschützter Heckradar-Rohrträger unter der Gepäckbrücke.
+  * `radar_swivel_tilt_cradle.stl` (1 Stk.): Schwerlast-Neigegelenk mit 2x M4-Verschraubung.
 * **Kit 3: Harley-Davidson Touring & Classic Bagger (Street Glide, Road Glide, Road King):**
   * `radar_license_plate_bracket.stl` (1 Stk.): Entkoppelter Kennzeichen-Radarhalter für Peitsche 5.
   * `radar_swivel_tilt_cradle.stl` (1 Stk.): Radar 2.0 Schwerlast-Neigegelenk (Actioncam/GoPro-Hirth-Cradle) mit 2x M4-Verschraubung und 36-Zahn Hirth-Verzahnung.
   * `radar_mr20_housing.stl` & `radar_mr20_radome.stl` (1 Stk.): Radar 2.0 PA12 Flügel-Gehäuse mit Spritzwasser-Schutzspoiler und PC-Radom.
   * `magsafe_cockpit_mount_harley.stl` (1 Stk.), `magsafe_frame_dock.stl` (1 Stk.) & `magsafe_clamp_wings.stl` (1 Stk.): MagSafe Rahmendock-Komponenten.
+* **Optionale Bobber & Custom-Kit Teile:**
+  * `radar_center_underfender_mount.stl` (1 Stk.): Stealth Center Under-Fender Mount mit $46\,\text{mm}$ Tiefgang und integriertem $42\,\text{mm}$ Spritzwasser-Schmutzfänger-Spoiler.
+  * `radar_swivel_tilt_cradle.stl` (1 Stk.): Schwerlast-Neigegelenk mit 2x M4-Verschraubung.
 * **Kit 4: Support-Car / Begleitfahrzeug Kolonnen-Kit (Car-Kit):**
   * `car_sun_visor_pod_clip.stl` (2 Stk.): Schnellwechsel-Spannclips zur vibrationsfreien Befestigung von Pod 1 und Pod 2 an den beiden Sonnenblenden im Pkw/Van (Fahrer- und Beifahrerseite).
   * `car_dashboard_wedge_dock.stl` (1 Stk.): Zweistufige Armaturenbrett-Doppelaufnahme (Dual-Stack Dock) zur formschlüssigen, vibrationsgedämpften Aufnahme von Front-Knoten (unten, freie GNSS-Sicht) und Zentralbox (oben, 15° geneigt).
@@ -355,8 +360,10 @@ Anstelle der früheren proprietären Platine `PCBA 06` wird die werkzeuglose Kof
 | **M3 Edelstahlmuttern** | DIN 934 / DIN 985 M3 V4A Muttern | Normteil / Amazon | 12 Stk.| Unverlierbar in Nut-Pockets eingelegt (Zentralbox, Front-Node, Rahmendock) |
 | **M4 Edelstahlmuttern (AMPS & Radar)**| DIN 934 M4 V4A Muttern | Normteil / Amazon | 6 Stk. | 4x Front-Node Wanne (AMPS), 2x Radar 2.0 Gehäuserückwand |
 | **M4 Schrauben (Radar-Cradle)** | M4 x 12 mm Zylinderkopf V4A (DIN 912) | Normteil / Amazon | 2 Stk. | Verschraubung Adapterplatte `radar_swivel_tilt_cradle` an Radar 2.0 Gehäuse |
-| **M5 Hirth-Klemmschraube** | M5 x 25 mm Zylinderkopf V4A (DIN 912) | Normteil / Amazon | 1 Stk. | Horizontale Gelenkachse Radar-Hirth-Gelenk (Kennzeichenträger) |
-| **M5 Edelstahlmutter (Radar)** | DIN 934 M5 V4A Mutter | Normteil / Amazon | 1 Stk. | Unverlierbar in rechter Gabelwange des Kennzeichenträgers |
+| **M5 Hirth-Klemmschraube** | M5 x 25 mm Zylinderkopf V4A (DIN 912) | Normteil / Amazon | 1 Stk. | Horizontale Gelenkachse Radar-Hirth-Gelenk (Kennzeichenträger / Underfender / Adventure-Rack) |
+| **M5 Edelstahlmutter (Radar)** | DIN 934 M5 V4A Mutter | Normteil / Amazon | 1 Stk. | Unverlierbar in rechter Gabelwange des Radarträgers |
+| **M5 Klemmschrauben (Adventure)** | M5 x 25 mm Zylinderkopf V4A (DIN 912) | Normteil / Amazon | 2 Stk. | Rohrklemmschelle `adventure_rack_radar_mount` (von unten montiert) |
+| **M5 Muttern (Adventure-Clamp)** | DIN 934 M5 V4A Muttern | Normteil / Amazon | 2 Stk. | Unverlierbar in oberer Klemmschellen-Kappe `adventure_rack_radar_clamp_cap` |
 | **M8 IP68 Kabelverschraubung** | M8 x 1.25 Messing vernickelt / PA66 IP68 mit EPDM-Dichtung | Skintop / Lapp / Amazon | 1 Stk. | Spritzwasserdichte Gehäuseboden-Durchführung für 2-poliges FLRY-B Kabel |
 | **M2.5 Platinenschrauben** | M2.5 x 6 mm Zylinderkopf V4A (DIN 912) | Normteil | 8 Stk. | 4x Zentralbox-Platine, 4x Front-Node-Platine |
 | **M2 Schottwandschrauben** | M2 x 8 mm Senkkopf V4A (DIN 7991) | Normteil | 4 Stk. | Fixierung der 2 Pod-Schottwände (2x pro Pod 1 & 2) |

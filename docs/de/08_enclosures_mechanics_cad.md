@@ -686,12 +686,34 @@ Auf Reiseenduros existieren je nach Einsatzzweck und Koffersystem zwei grundvers
 
 #### 6.4.2 Standalone Heck-Radar - Der minimale "Adventure Rack Radar Mount" (`adventure_rack_radar_mount.scad`)
 
-Da der Heck-Pod 3 und dessen große Balkonwanne vollständig entfallen sind, benötigt die Reiseenduro am Heck lediglich einen **minimalen, leichten Radarträger**:
+Da der Heck-Pod 3 und dessen große Balkonwanne vollständig entfallen sind, benötigt die Reiseenduro am Heck lediglich einen **minimalen, hochfesten und schottergeschützten Radarträger**:
 
-* **Direkte Gepäckbrücken-Unterzugsmontage:** Der schlanke Halter ([`adventure_rack_radar_mount.scad`](../../hardware/cad/scad/02_pod_base/adventure_rack_radar_mount.scad)) wird direkt unter die hinteren Querrohre ($\varnothing 18\,\text{mm}$) der GS-Gepäckbrücke geklemmt.
-* **100 % Topcase-Freigängigkeit:** Sitzt vollständig unterhalb der Koffer-Bodenlinie. Das Aluminium-Topcase kann sekundenschnell verriegelt und abgenommen werden, ohne das Radar zu berühren.
-* **Radiale Hirth-Verzahnung & Diebstahlschutz:** Ausgestattet mit der bewährten 36-Zahn-Hirth-Rosette ([`011_gopro_hirth_lock.scad`](../../hardware/cad/scad/02_pod_base/parts/011_gopro_hirth_lock.scad)) gegen vibrationsbedingtes Absacken der Neigung und dem diebstahlsicheren Garmin/Wheeltec-Bajonettdock ([`radar_varia_gopro_lock_dock.scad`](../../hardware/cad/scad/02_pod_base/radar_varia_gopro_lock_dock.scad)).
-* **Kabelverbindung:** Direkt gespeist über Peitsche 5 des Deutsch DTM-12 Kabelbaums (2-Draht 12V DC; Telemetrie 100 % drahtlos via UWB).
+![Adventure Rack Radar Mount CAD](../images/cad/adventure_rack_radar_mount_cad.png)
+
+*Abbildung 8.29-B: 3D-CAD-Modell des Adventure Rack Radar Mounts (`adventure_rack_radar_mount.scad`). Sichtbar sind der $\varnothing 18{,}2\,\text{mm}$ Rohrsattel für Standard-Gepäckbrückenrohre, die von unten zugänglichen M5-Verschraubungen, der integrierte $45^\circ$-Offroad-Steinschlag- und Schmutzfänger-Spoiler, die $7{,}0\,\text{mm}$ Clevis-Gabel mit radialer 36-Zahn Hirth-Formschlussverzahnung ($10^\circ$-Rastung) sowie die DIN 934 M5 Sechskantmutter-Tasche.*
+
+![Adventure Rack Radar Mount Assembly CAD](../images/cad/adventure_rack_radar_assembly_cad.png)
+
+*Abbildung 8.29-C: Vollständige 3D-Baugruppe der Adventure-Gepäckbrücken-Radarmontage. Zu sehen sind das $\varnothing 18\,\text{mm}$ Edelstahlrohr der Gepäckbrücke, die obere Klemmschellen-Kappe (`adventure_rack_radar_clamp_cap.stl`), der Unterzugsträger mit Schotterschutz-Keil, die 2x M4 verschraubte Schwerlast-Neigungswiege (`radar_swivel_tilt_cradle.scad`) sowie das hermetisch abgedichtete Radar 2.0 Gehäuse (`radar_mr20_housing.scad`).*
+
+1. **Direkte Gepäckbrücken-Unterzugsmontage ($\varnothing 18{,}0\,\text{mm}$ Rohre):**
+   * Der schlanke Halter ([`adventure_rack_radar_mount.scad`](../../hardware/cad/scad/02_pod_base/adventure_rack_radar_mount.scad)) klemmt direkt an die hinteren Querrohre ($\varnothing 18\,\text{mm}$) der originalen BMW GS/GSA-Gepäckbrücke sowie Zubehörträgern von Touratech, Wunderlich, Hepco&Becker oder Givi.
+   * Zweiteilige Klemmschellen-Architektur: Untere Trägerbasis + obere Klemmschellen-Kappe ([`adventure_rack_radar_clamp_cap.stl`](../../hardware/cad/stl/02_pod_base/adventure_rack_radar_clamp_cap.stl)).
+2. **100 % Lötkolbenfrei & Wartung von unten (Topcase-Baseplate-Kompatibilität):**
+   * Die Verschraubung erfolgt über 2x M5 Zylinderschrauben (DIN 912), die in **versenkte DIN 934 M5 Sechskant-Muttertaschen** in der oberen Kappe greifen (keine anfälligen Messing-Schmelzgewinde).
+   * **Montagefreundlicher Schraubenzugang von unten:** Die Schraubenköpfe sitzen versenkt auf der Unterseite der Trägerbasis. Dadurch kann der Halter gelöst, ausgerichtet oder demontiert werden, **ohne** eine darüber montierte Aluminium-Topcase-Trägerplatte abnehmen zu müssen.
+3. **Optimierte Schwerpunkt-Gelenkhöhe ($Z_{\text{drop}} = 46{,}0\,\text{mm}$):**
+   * Das ca. $180\,\text{g}$ schwere Radar 2.0 Gehäuse ($71\,\text{mm}$ Bauhöhe) benötigt ausreichend Schwenkraum unterhalb der Gepäckbrückenrohre.
+   * Der definierte Tiefgang von $46\,\text{mm}$ stellt einen Schwenkbereich von $\pm 18^\circ$ Neigungswinkel sicher (Nivellierung bei wechselnder Sozius- und Kofferbeladung), ohne dass das Gehäuse an Gepäckbrücke oder Topcase-Boden anstößt.
+4. **Schlagfester $45^\circ$-Offroad-Schotterschutz (Roost & Mud Deflector):**
+   * Bei grobstolligen Enduroreifen (z. B. Continental TKC 80, Michelin Anakee Wild) wird Schotter und Schlamm mit hoher Geschwindigkeit vom Hinterrad nach oben gegen das Heck geschleudert.
+   * Ein massiver, nach vorne gerichteter $45^\circ$-Abweiserkeil (Breite $34\,\text{mm}$) schirmt das Hirth-Gelenk, die Neigungswiege und die unterseitige M8-Kabelverschraubung wirksam gegen Steinschlag und Schlammbeschuss ab.
+5. **Formschlüssiges Hirth-Zahnscheiben-Gelenk & Universelle M4-Schwerlastwiege:**
+   * Die $7{,}0\,\text{mm}$ Clevis-Gabel nimmt die zentrale Actioncam-Zunge der universellen Neigungswiege ([`radar_swivel_tilt_cradle.scad`](../../hardware/cad/scad/02_pod_base/radar_swivel_tilt_cradle.scad)) spielfrei auf.
+   * Zwei beidseitige 36-Zahn Hirth-Rosetten ($10^\circ$-Raster) garantieren absoluten Formschluss – ein vibrationsbedingtes Absacken oder Nachgeben über Wellblechpisten und Schlaglöcher ist physikalisch ausgeschlossen.
+   * Das Radar 2.0 Gehäuse wird über 2x M4 V4A-Schrauben direkt von vorne in die internen DIN 934 M4 Muttern des Gehäuses geklemmt.
+6. **Geschützte Kabelverbindung im Rohrschatten:**
+   * Das M8-Sensorkabel tritt durch einen verdeckten $\varnothing 6{,}0\,\text{mm}$ Führungskanal unmittelbar hinter dem Trägerrohr aus und wird im Rohrschatten entlang des Heckrahmens zur Zentralbox geführt. Direkt gespeist über Peitsche 5 des Deutsch DTM-12 Kabelbaums (2-Draht 12V DC; Telemetrie 100 % drahtlos via UWB).
 
 ---
 
@@ -881,19 +903,32 @@ Hierfür wurde der **Stealth Center Under-Fender Mount** ([`02_pod_base/radar_ce
 
 ![Stealth Center Under-Fender Mount CAD](../images/cad/radar_center_underfender_mount_cad.png)
 
-*Abbildung 8.33: 3D-CAD-Modell des Stealth Center Under-Fender Mounts (`radar_center_underfender_mount.scad`). Sichtbar sind die gewölbte Basisflansch-Sattelplatte ($R = 210\,\text{mm}$) für Schraub- oder 3M-VHB-Klebemontage, die ultrakompakte Clevis-Gabel mit radialer 36-Zahn Hirth-Formschluss-Rastung ($10^\circ$-Ausrichtung) und der verdeckte M8-Kabelschacht zur Kotflügel-Innenseite.*
+*Abbildung 8.33: 3D-CAD-Modell des Stealth Center Under-Fender Mounts (`radar_center_underfender_mount.scad`). Sichtbar sind die gewölbte Basisflansch-Sattelplatte ($R = 210\,\text{mm}$) für Schraub- oder 3M-VHB-Klebemontage, der tiefergesetzte Tragarm ($Z_{\text{drop}} = 46\,\text{mm}$), der nach vorne gerichtete $42\,\text{mm}$ breite Schmutzfänger-Spoiler gegen direktes Hinterrad-Spritzwasser, die Clevis-Gabel mit radialer 36-Zahn Hirth-Formschluss-Rastung ($10^\circ$-Ausrichtung) und der verdeckte M8-Kabelschacht zur Kotflügel-Innenseite.*
 
-* **Nahtlose Stealth-Ästhetik für Custom-Hecks:**
-  Der Halter sitzt direkt mittig unter der Abschlusskante des Heckkotflügels oder an den inneren Fender-Struts. Von hinten ist das Radar im Schatten des Kotflügels kaum wahrnehmbar und wirkt wie eine winzige, edle Designer-Rückleuchte. Der breite Hinterreifen bleibt optisch zu $100\,\%$ frei.
-* **Gefederte Masse & Schwingungsschutz:**
-  Da die Montage am Fender / Rahmen (gefederte Masse) erfolgt, reduzieren sich Fahrbahnschläge von $25\,g$ auf unkritische $2\dots 4\,g$.
-* **Formschluss-Hirth-Gelenk ($10^\circ$-Schritte):**
-  Die Clevis-Gabel nimmt das diebstahlhemmende Garmin Varia Dock ([`radar_varia_gopro_lock_dock.scad`](../../hardware/cad/scad/02_pod_base/radar_varia_gopro_lock_dock.scad)) auf. Die formschlüssige 36-Zahn Hirth-Verzahnung arretiert den Neigungswinkel absolut rutschfest horizontal zur Fahrbahn.
-* **Flexible Montage (Kleben oder Schrauben):**
-  - **3M VHB 5952:** Breite plane Auflagefläche für bohrungsfreie Montage auf makellosen Custom-Lackierungen.
-  - **2x M4/M5 Senkkopfschrauben:** Zentraler Bohrungsabstand von $26\,\text{mm}$ für formschlüssige Verschraubung an vorhandenen Fender-Bohrungen.
-* **Verdeckte M8-Kabelführung:**
-  Das M8-Kabel verschwindet sofort nach oben durch einen integrierten $\varnothing 5{,}5\,\text{mm}$ Schacht an die Kotflügelinnenseite und läuft dort geschützt im serienmäßigen Kabelkanal nach vorne zur Zentralbox.
+![Stealth Center Under-Fender Mount Assembly CAD](../images/cad/radar_underfender_assembly_cad.png)
+
+*Abbildung 8.33-B: 3D-CAD-Baugruppe der Stealth-Underfender-Montage. Sichtbar sind das Heckkotflügel-Segment, der Stealth Under-Fender Mount mit integriertem Spritzwasser-Schmutzfänger-Spoiler, die 2x M4 verschraubte Schwerlast-Neigungswiege (`radar_swivel_tilt_cradle.scad`), die M5-Klemmschraube mit DIN 934 Stoppmuttertasche und das spritzwassergeschützte Radar 2.0 Gehäuse (`radar_mr20_housing.scad`).*
+
+1. **Nahtlose Stealth-Ästhetik für Custom-Hecks:**
+   * Der Halter sitzt direkt mittig unter der Abschlusskante des Heckkotflügels oder an den inneren Fender-Struts. Von hinten ist das Radar im Schatten des Kotflügels kaum wahrnehmbar und wirkt wie eine winzige, edle Designer-Rückleuchte. Der breite Hinterreifen bleibt optisch zu $100\,\%$ frei.
+2. **Gefederte Masse & Schwingungsschutz:**
+   * Da die Montage am Fender / Rahmen (gefederte Masse) erfolgt, reduzieren sich Fahrbahnschläge von $25\,g$ auf unkritische $2\dots 4\,g$.
+3. **Optimierte Schwerpunkt-Gelenkhöhe ($Z_{\text{drop}} = 46{,}0\,\text{mm}$):**
+   * Das $180\,\text{g}$ schwere Radar 2.0 Gehäuse ($71\,\text{mm}$ Bauhöhe) benötigt ausreichend Schwenkraum unter der Kotflügelwölbung.
+   * Durch den auf $46\,\text{mm}$ dimensionierten Tiefgang verbleiben $10{,}5\,\text{mm}$ Resthöhe zur Kotflügelunterseite, was einen Schwenkbereich von $\pm 20^\circ$ für die Fahrbahnausrichtung bei tiefergelegten Bobbern oder wechselnder Dämpfervorspannung ermöglicht.
+4. **Integrierter Schmutzfänger-Spoiler (Roost Deflector Shield):**
+   * Bei Montage direkt im Kotflügel wirbelt der rotierende Hinterreifen Wasser und Schlamm mit hoher Umfangsgeschwindigkeit direkt gegen die Vorderseite des Halters.
+   * Ein monolithisch angeformter, $42\,\text{mm}$ breiter Schutzschild (Schmutzfänger-Spoiler) schirmt das Drehgelenk, die Neigungswiege und die unterseitige M8-Kabelverschraubung zu $100\,\%$ gegen den direkten Reifen-Wasserstrahl ab.
+5. **Formschluss-Hirth-Gelenk & Universelle M4-Neigungswiege (100 % Lötkolbenfrei):**
+   * Die $7{,}0\,\text{mm}$ Clevis-Gabel nimmt die zentrale Actioncam-Zunge der universellen Neigungswiege ([`radar_swivel_tilt_cradle.scad`](../../hardware/cad/scad/02_pod_base/radar_swivel_tilt_cradle.scad)) auf.
+   * Zwei beidseitige 36-Zahn Hirth-Rosetten ($10^\circ$-Raster) garantieren absoluten Formschluss gegen vibrationsbedingtes Absacken der Neigung.
+   * Auf der rechten Clevis-Wange ist eine Sechskant-Muttertasche für eine DIN 934 M5 Mutter integriert; auf der linken Wange sitzt eine Zylindersenkung für den M5 Schraubenkopf.
+   * Das Radar 2.0 Gehäuse wird über 2x M4 Schrauben direkt in die internen DIN 934 M4 Muttern des Gehäuses verschraubt – vollkommen lötkolbenfrei und schlaglochfest.
+6. **Flexible Montage (Kleben oder Schrauben):**
+   * **3M VHB 5952:** Breite plane Auflagefläche für bohrungsfreie Montage auf makellosen Custom-Lackierungen.
+   * **2x M4/M5 Senkkopfschrauben:** Zentraler Bohrungsabstand von $26\,\text{mm}$ für formschlüssige Verschraubung an vorhandenen Fender-Bohrungen.
+7. **Verdeckte M8-Kabelführung:**
+   * Das M8-Kabel verschwindet sofort nach oben durch einen integrierten $\varnothing 6{,}0\,\text{mm}$ Schacht an die Kotflügelinnenseite und läuft dort geschützt im serienmäßigen Kabelkanal nach vorne zur Zentralbox.
 
 ---
 
@@ -1220,8 +1255,8 @@ Die CAD-Dateistruktur von OpenMotorBridge folgt einer strengen hierarchischen CS
 | **Zentralbox** | Oberwanne mit Zwischenboden | `01_main_box/main_box_mid_tray.stl` | `01_main_box/01_upper_deck.scad` |
 | **Zentralbox** | Gehäusedeckel mit Gore-Vent | `01_main_box/main_box_lid.stl` | `01_main_box/02_colsure.scad` |
 | **Satelliten-Pod**| 5-seitiges Monocoque-Gehäuse (Tunnel) | `02_pod_base/pod_base_housing.stl` | `02_pod_base/pod_base_housing.scad` |
-| **Satelliten-Pod**| Touring Kofferdeckel-Halter (Pod 1 & 2) | `02_pod_base/saddlebag_lid_dock.stl` | `02_pod_base/saddlebag_lid_dock.scad` |
-| **Adventure Radar**| Gepäckbrücken-Radarträger (Wheeltec/Garmin) | `02_pod_base/adventure_rack_radar_mount.stl` | `02_pod_base/adventure_rack_radar_mount.scad` |
+| **Adventure Radar**| Gepäckbrücken-Radarträger Basis (Ø 18 mm Rohr) | `02_pod_base/adventure_rack_radar_mount.stl` | `02_pod_base/adventure_rack_radar_mount.scad` |
+| **Adventure Radar**| Gepäckbrücken-Radarträger Klemmschelle Kappe | `02_pod_base/adventure_rack_radar_clamp_cap.stl` | `02_pod_base/adventure_rack_radar_mount.scad` |
 | **Adventure Pods 1/2**| GS Transition Dock Basis-Wanne (Bügelfalten-Unterteil) | `02_pod_base/adventure_transition_dock_base.stl` | `02_pod_base/adventure_transition_dock.scad` |
 | **Adventure Pods 1/2**| GS Transition Dock Karosserie-Deckel (Bügelfalten-Cowl) | `02_pod_base/adventure_transition_dock_lid.stl` | `02_pod_base/adventure_transition_dock.scad` |
 | **Adventure-Kit** | Unter-Sitzbank-Sattelbrücke (Traverse links-rechts) | `02_pod_base/adventure_underseat_cross_rail.stl` | `02_pod_base/adventure_underseat_cross_rail.scad` |

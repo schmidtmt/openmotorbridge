@@ -199,19 +199,24 @@ All enclosure parts are strictly engineered according to the **IKEA Principle**:
   * `adventure_transition_dock_base.stl` (2 pcs): Pannier-independent base cradles for the seat frame crease (Ø 28 mm tube).
   * `adventure_transition_dock_lid.stl` (2 pcs): Aerodynamic body lids with transition crease & Cardo/Sena cutouts.
   * `adventure_underseat_cross_rail.stl` (1 pc): Rigid under-seat saddle bridge locking left and right docks with integrated M8 channel.
-  * `adventure_rack_radar_mount.stl` (1 pc): Minimal rear radar mount positioned under the GS luggage bridge for Garmin Varia / Wheeltec MR20 on Whip 5.
+  * `adventure_rack_radar_mount.stl` & `adventure_rack_radar_clamp_cap.stl` (1 pc each): Minimal, roost-shielded rear radar mount beneath luggage bridge (Ø 18 mm tube) with bottom-accessible M5 bolts and stone-deflector wedge.
+  * `radar_swivel_tilt_cradle.stl` (1 pc): Heavy-duty swivel tilt cradle (Actioncam/GoPro-Hirth) with 2x M4 screws into radar housing.
 * **Kit 2: BMW R1250 / R1300 GSA (Adventure with Ø 18 mm Stainless Rack):**
   * `adventure_gsa_cage_dock_body.stl` & `adventure_gsa_clamp_cap.stl` (2 pcs each): Heavy-duty cage docks for Pod 1 & 2 in the 45 mm dead space of the pannier frame with 85 mm dual-saddle clamp, stone-guard wedge & concealed M8 conduit.
-  * `adventure_rack_radar_mount.stl` (1 pc): Minimal rear radar mount under luggage bridge.
+  * `adventure_rack_radar_mount.stl` & `adventure_rack_radar_clamp_cap.stl` (1 pc each): Roost-shielded rear radar mount under luggage bridge.
+  * `radar_swivel_tilt_cradle.stl` (1 pc): Heavy-duty swivel tilt cradle with 2x M4 screws.
 * **Kit 3: Harley-Davidson Touring & Classic Bagger (Street Glide, Road Glide, Road King):**
   * `saddlebag_lid_dock.stl` (2 pcs): Hard saddlebag lid mounting docks for Pod 1 & 2.
   * `radar_license_plate_bracket.stl` (1 pc): Vibration-isolated license plate radar bracket for Whip 5.
   * `radar_swivel_tilt_cradle.stl` (1 pc): Radar 2.0 heavy-duty center-of-gravity swivel tilt cradle with 2x M4 bolts and 36-tooth radial Hirth rosette.
   * `radar_mr20_housing.stl` & `radar_mr20_radome.stl` (1 pc): Radar 2.0 PA12 wing housing with tire roost deflector and PC radome.
   * `magsafe_cockpit_mount_harley.stl` (1 pc), `magsafe_frame_dock.stl` (1 pc) & `magsafe_clamp_wings.stl` (1 pc): MagSafe frame dock components.
+* **Optional Bobber & Custom Bike Parts:**
+  * `radar_center_underfender_mount.stl` (1 pc): Stealth Center Under-Fender Mount with 46 mm drop and integrated 42 mm tire roost deflector shield.
+  * `radar_swivel_tilt_cradle.stl` (1 pc): Heavy-duty swivel tilt cradle with 2x M4 screws.
 * **Kit 4: Support Car / Van Convoy Kit (Car-Kit):**
   * `car_sun_visor_pod_clip.stl` (2 pcs): Quick-release spring clips for secure, vibration-free mounting of Pod 1 and Pod 2 to the sun visors in chase car or van (driver and passenger side).
-  * Dashboard dock for SAM-M10Q GNSS receiver behind the windshield.
+  * `car_dashboard_wedge_dock.stl` (1 pc): Dual-stack dashboard dock for Front Node (bottom, clear sky GNSS view) and Central Box (top, 15° tilted).
 
 ---
 

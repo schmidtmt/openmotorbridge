@@ -102,6 +102,8 @@ STL_TARGETS: List[Tuple] = [
     ("02_pod_base/adventure_transition_dock.scad", "02_pod_base/adventure_transition_dock_base.stl", ["-D", 'part="base"']),
     ("02_pod_base/adventure_transition_dock.scad", "02_pod_base/adventure_transition_dock_lid.stl", ["-D", 'part="lid"']),
     ("02_pod_base/adventure_underseat_cross_rail.scad", "02_pod_base/adventure_underseat_cross_rail.stl"),
+    ("02_pod_base/adventure_rack_radar_mount.scad", "02_pod_base/adventure_rack_radar_mount.stl", ["-D", 'part="mount"']),
+    ("02_pod_base/adventure_rack_radar_mount.scad", "02_pod_base/adventure_rack_radar_clamp_cap.stl", ["-D", 'part="clamp_cap"']),
     ("02_pod_base/adventure_rack_tail_mount.scad", "02_pod_base/adventure_rack_tail_mount_base.stl", ["-D", 'part="base"']),
     ("02_pod_base/adventure_rack_tail_mount.scad", "02_pod_base/adventure_rack_tail_cowl.stl", ["-D", 'part="cowl"']),
     ("02_pod_base/adventure_rack_tail_mount.scad", "02_pod_base/adventure_rack_tail_mount.stl", ["-D", 'part="base"']),
@@ -262,8 +264,30 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
     (
         "02_pod_base/radar_center_underfender_mount.scad",
         os.path.join(CAD_IMG_DIR, "radar_center_underfender_mount_cad.png"),
-        "0,0,-12,55,0,310,120",
-        "Tomorrow"
+        "0,0,-26,55,0,310,180",
+        "Tomorrow",
+        ["-D", 'part="mount"']
+    ),
+    (
+        "02_pod_base/radar_center_underfender_mount.scad",
+        os.path.join(CAD_IMG_DIR, "radar_underfender_assembly_cad.png"),
+        "0,15,-40,55,0,310,320",
+        "Tomorrow",
+        ["-D", 'part="assembly"']
+    ),
+    (
+        "02_pod_base/adventure_rack_radar_mount.scad",
+        os.path.join(CAD_IMG_DIR, "adventure_rack_radar_mount_cad.png"),
+        "0,0,-26,55,0,310,180",
+        "Tomorrow",
+        ["-D", 'part="mount"']
+    ),
+    (
+        "02_pod_base/adventure_rack_radar_mount.scad",
+        os.path.join(CAD_IMG_DIR, "adventure_rack_radar_assembly_cad.png"),
+        "0,15,-40,55,0,310,320",
+        "Tomorrow",
+        ["-D", 'part="assembly"']
     ),
     (
         "02_pod_base/radar_swivel_tilt_cradle.scad",

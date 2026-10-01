@@ -684,12 +684,34 @@ Depending on luggage configurations, adventure bikes deploy two specialized moun
 
 #### 6.4.2 Standalone Rear Radar - The Minimal "Adventure Rack Radar Mount" (`adventure_rack_radar_mount.scad`)
 
-Because rear Pod 3 and its large balcony tray have been completely eliminated, adventure bikes require only a **minimal, lightweight radar carrier** at the rear:
+Because rear Pod 3 and its large balcony tray have been completely eliminated, adventure bikes require only a **minimal, heavy-duty, roost-shielded radar carrier** at the rear:
 
-* **Direct Under-Bridge Clamping:** The sleek bracket ([`adventure_rack_radar_mount.scad`](../../hardware/cad/scad/02_pod_base/adventure_rack_radar_mount.scad)) clamps directly beneath the rear transverse tubes ($\varnothing 18\,\text{mm}$) of the GS luggage bridge.
-* **100% Topcase Clearance:** Sits entirely below the luggage case baseline. Aluminum topcases lock and unlock in seconds without interfering with the radar.
-* **Radial Hirth Coupling & Anti-Theft Lock:** Equipped with the proven 36-tooth Hirth rosette ([`011_gopro_hirth_lock.scad`](../../hardware/cad/scad/02_pod_base/parts/011_gopro_hirth_lock.scad)) against vibration tilt sag and the theft-deterrent Garmin/Wheeltec bayonet dock ([`radar_varia_gopro_lock_dock.scad`](../../hardware/cad/scad/02_pod_base/radar_varia_gopro_lock_dock.scad)).
-* **Harness Connection:** Powered directly via whip 5 (Pins 23-26) of the 4-branch HD26 wiring harness.
+![Adventure Rack Radar Mount CAD](../images/cad/adventure_rack_radar_mount_cad.png)
+
+*Figure 8.29-B: 3D CAD model of the Adventure Rack Radar Mount (`adventure_rack_radar_mount.scad`). Visible: $\varnothing 18.2\,\text{mm}$ tube saddle for standard luggage rack tubes, bottom-accessible M5 clamping bores, integrated $45^\circ$ offroad stone/roost deflector wedge, $7.0\,\text{mm}$ clevis with dual 36-tooth radial Hirth rosettes ($10^\circ$ positive locking), and DIN 934 M5 hex nut pocket.*
+
+![Adventure Rack Radar Mount Assembly CAD](../images/cad/adventure_rack_radar_assembly_cad.png)
+
+*Figure 8.29-C: Complete 3D CAD assembly of the Adventure luggage bridge radar installation. Shown: $\varnothing 18\,\text{mm}$ stainless luggage rack tube, upper clamp cap (`adventure_rack_radar_clamp_cap.stl`), drop truss base with stone-deflector wedge, bolted 2x M4 heavy-duty swivel tilt cradle (`radar_swivel_tilt_cradle.scad`), and hermetically sealed Radar 2.0 housing (`radar_mr20_housing.scad`).*
+
+1. **Direct Under-Bridge Tube Clamping ($\varnothing 18.0\,\text{mm}$ Tubes):**
+   * The sleek mount ([`adventure_rack_radar_mount.scad`](../../hardware/cad/scad/02_pod_base/adventure_rack_radar_mount.scad)) clamps directly beneath the rear cross-tubes ($\varnothing 18\,\text{mm}$) of OEM BMW GS/GSA luggage bridges as well as Touratech, Wunderlich, Hepco&Becker, and Givi racks.
+   * Two-piece clamp architecture: Lower Base Mount + Upper Clamp Cap ([`adventure_rack_radar_clamp_cap.stl`](../../hardware/cad/stl/02_pod_base/adventure_rack_radar_clamp_cap.stl)).
+2. **100% Soldering-Iron Free & Bottom-Accessible Screws (Topcase-Baseplate Compatible):**
+   * Fastened by 2x M5 socket head cap screws (DIN 912) tightening into **recessed DIN 934 M5 hex nut pockets** in the upper cap (zero heat-set brass inserts).
+   * **Bottom Screw Head Access:** Screw heads are recessed on the underside of the base mount. Riders can adjust or remove the radar bracket from underneath **without** having to unbolt topcase adapter plates.
+3. **Optimized Center-of-Gravity Drop ($Z_{\text{drop}} = 46.0\,\text{mm}$):**
+   * The ~180 g Radar 2.0 housing ($71\,\text{mm}$ height) requires sufficient articulation clearance beneath luggage rack tubes.
+   * The engineered $46\,\text{mm}$ drop provides full $\pm 18^\circ$ pitch adjustment (leveling across varied passenger and luggage loads) without contacting luggage bridge tubes or topcase bottoms.
+4. **Heavy-Duty $45^\circ$ Offroad Stone & Roost Deflector Wedge:**
+   * Knobby adventure tires (e.g., Continental TKC 80, Michelin Anakee Wild) fling gravel and wet slurry backward and upward toward the tail.
+   * A solid forward-facing $45^\circ$ deflector wedge ($34\,\text{mm}$ width) shields the Hirth joint, swivel cradle, bottom M8 cable gland, and wiring against stone impacts.
+5. **Form-Fit Hirth Rosette Joint & Universal M4 Swivel Tilt Cradle:**
+   * The $7.0\,\text{mm}$ clevis mates seamlessly with the central Actioncam tongue of the interchangeable cradle ([`radar_swivel_tilt_cradle.scad`](../../hardware/cad/scad/02_pod_base/radar_swivel_tilt_cradle.scad)).
+   * Dual 36-tooth radial Hirth rosettes ($10^\circ$ steps) provide 100% positive anti-vibration locking over washboard gravel tracks.
+   * The Radar 2.0 housing is clamped with 2x M4 screws directly into its internal DIN 934 M4 captive nuts.
+6. **Concealed Cable Routing in Tube Shadow:**
+   * The M8 sensor cable routes upward through an integrated $\varnothing 6.0\,\text{mm}$ conduit directly behind the rack tube, hidden in the tube shadow along the subframe to the central controller box. Direct 12V DC power from Deutsch DTM-12 harness whip 5; UWB telemetry is 100% wireless.
 
 ---
 
@@ -794,15 +816,26 @@ Mounting in the lid provides a $> 25\,\text{cm}$ elevated ground clearance, line
 
 ![Stealth Center Under-Fender Radar Mount CAD](../images/cad/radar_center_underfender_mount_cad.png)
 
-*Figure 8.33: 3D CAD model of the Stealth Center Under-Fender Mount (`radar_center_underfender_mount.scad`). Visible: curved base flange saddle plate ($R = 210\,\text{mm}$), ultra-compact clevis fork with radial 36-tooth Hirth coupling ($10^\circ$ indexing), and concealed M8 cable pass-through.*
+*Figure 8.33: 3D CAD model of the Stealth Center Under-Fender Mount (`radar_center_underfender_mount.scad`). Visible: curved base flange saddle plate ($R = 210\,\text{mm}$), lower drop neck ($Z_{\text{drop}} = 46\,\text{mm}$), forward-facing $42\,\text{mm}$ roost deflector shield against high-speed rear tire spray, ultra-compact clevis with radial 36-tooth Hirth rosettes ($10^\circ$ indexing), DIN 934 M5 nut pocket, and concealed M8 cable pass-through.*
+
+![Stealth Center Under-Fender Mount Assembly CAD](../images/cad/radar_underfender_assembly_cad.png)
+
+*Figure 8.33-B: 3D CAD assembly view of the Stealth Under-Fender Mount installation. Visible: rear fender sheet segment, underfender mount with integrated roost deflector shield, bolted 2x M4 heavy-duty swivel tilt cradle (`radar_swivel_tilt_cradle.scad`), M5 clamping hardware with DIN 934 captive nut, and weather-sealed Radar 2.0 housing (`radar_mr20_housing.scad`).*
 
 #### 6.7.1 Why Side-Mounted Radar Is Inherently Hazardous (The 3 Critical Flaws)
 1. Asymmetric detection blind spots on the offside.
 2. Severe lean-angle ground dip (multipath reflections and false alarms in left-hand turns).
-3. Extreme vibration amplification on long unsprung bracket arms.
+3. Extreme vibration amplification on long unsprung bracket arms ($25\,g$ shocks).
 
 #### 6.7.2 OpenMotorBridge Architecture: Rigid Centerline Alignment & Stealth Under-Fender Mount
-The radar is strictly centered on the vehicle longitudinal symmetry axis and attached to the sprung chassis.
+The radar is strictly centered on the vehicle longitudinal symmetry axis and attached to the sprung chassis:
+1. **Seamless Stealth Aesthetic:** Tucked directly under the trailing edge of the rear fender, keeping the wide rear tire 100% visible and unencumbered.
+2. **Sprung Mass Vibration Damping:** Reduces road impacts from $25\,g$ down to $2\dots 4\,g$.
+3. **Engineered Drop ($Z_{\text{drop}} = 46.0\,\text{mm}$):** Leaves $10.5\,\text{mm}$ clearance to the fender arch, enabling $\pm 20^\circ$ elevation leveling for lowered bobbers or varied spring preload.
+4. **Integrated Roost Deflector Shield:** A monolithic $42\,\text{mm}$ wide apron deflector protects the pivot joint, cradle, and bottom M8 cable gland against high-velocity tire spray and mud.
+5. **Formschluss Hirth Joint & Universal M4 Cradle (100% Soldering-Iron Free):** Mates with `radar_swivel_tilt_cradle.scad` via dual 36-tooth radial Hirth rosettes ($10^\circ$ indexing), clamping into internal DIN 934 captive nuts inside the radar housing.
+6. **Flexible Installation:** Supports both 3M VHB 5952 adhesive tape (for pristine show-bike fenders) and 2x M4/M5 countersunk screws ($26\,\text{mm}$ pitch).
+7. **Concealed Cable Routing:** Internal $\varnothing 6.0\,\text{mm}$ conduit routes the M8 cable into the fender under-belly channel directly forward to the central box.
 
 ---
 
@@ -1087,7 +1120,8 @@ The OpenMotorBridge CAD repository follows a strict hierarchical Constructive So
 | **Central Box** | Enclosure lid with Gore vent recess | `01_main_box/main_box_lid.stl` | `01_main_box/02_colsure.scad` |
 | **Satellite Pod**| 5-sided monocoque housing (tunnel) | `02_pod_base/pod_base_housing.stl` | `02_pod_base/pod_base_housing.scad` |
 | **Satellite Pod**| Touring Saddlebag Lid Dock (Pods 1 & 2) | `02_pod_base/saddlebag_lid_dock.stl` | `02_pod_base/saddlebag_lid_dock.scad` |
-| **Adventure Radar**| Luggage bridge radar mount (Wheeltec/Garmin) | `02_pod_base/adventure_rack_radar_mount.stl` | `02_pod_base/adventure_rack_radar_mount.scad` |
+| **Adventure Radar**| Luggage bridge radar mount base (Ø 18 mm tube) | `02_pod_base/adventure_rack_radar_mount.stl` | `02_pod_base/adventure_rack_radar_mount.scad` |
+| **Adventure Radar**| Luggage bridge radar clamp cap | `02_pod_base/adventure_rack_radar_clamp_cap.stl` | `02_pod_base/adventure_rack_radar_mount.scad` |
 | **Adventure Pods 1/2**| GS Transition Dock Base Cradle (Waist crease lower tub) | `02_pod_base/adventure_transition_dock_base.stl` | `02_pod_base/adventure_transition_dock.scad` |
 | **Adventure Pods 1/2**| GS Transition Dock Bodywork Cowl (Waist crease top lid) | `02_pod_base/adventure_transition_dock_lid.stl` | `02_pod_base/adventure_transition_dock.scad` |
 | **Adventure-Kit** | Under-seat saddle bridge rail (Left-right cross rail) | `02_pod_base/adventure_underseat_cross_rail.stl` | `02_pod_base/adventure_underseat_cross_rail.scad` |

@@ -211,7 +211,8 @@ Once all 4 checks indicate green, tighten enclosure lids with M3 screws diagonal
 * **Pod 1 & Pod 2:** Mount to hard saddlebag lids using [`saddlebag_lid_dock.stl`](../../hardware/cad/stl/02_pod_base/saddlebag_lid_dock.stl).
 * **Rear Radar (Heavy-Duty Swivel Cradle & Spray Protection):**
   * **Bench Pre-Assembly (100% Soldering-Iron Free):** Bolt the sealed Radar 2.0 housing ([`radar_mr20_housing.stl`](../../hardware/cad/stl/05_accessories/radar_mr20_housing.stl)) with its internal DIN 934 M4 nuts to the adapter plate ([`radar_swivel_tilt_cradle.stl`](../../hardware/cad/stl/02_pod_base/radar_swivel_tilt_cradle.stl)) using two DIN 912 M4 $\times$ 12 mm steel bolts. Solid shear bosses absorb 100% of lateral shock loads.
-  * **Motorcycle Installation:** Clamp the license plate bracket ([`radar_license_plate_bracket.stl`](../../hardware/cad/stl/02_pod_base/radar_license_plate_bracket.stl)) under the lower M6 license plate screws. Slide the cradle Hirth tongue into the clevis fork, align the radar beam horizontally ($\pm 2^\circ$), and clamp securely with a DIN 912 M5 $\times$ 25 mm bolt and DIN 934 M5 nut.
+  * **Option A: License Plate Bracket:** Clamp the license plate bracket ([`radar_license_plate_bracket.stl`](../../hardware/cad/stl/02_pod_base/radar_license_plate_bracket.stl)) under the lower M6 license plate screws. Slide the cradle Hirth tongue into the clevis fork, align the radar beam horizontally ($\pm 2^\circ$), and clamp securely with a DIN 912 M5 $\times$ 25 mm bolt and DIN 934 M5 nut.
+  * **Option B: Under-Fender Mount (Bobbers / Custom Bikes):** Bond or bolt the Stealth Center Under-Fender Mount ([`radar_center_underfender_mount.stl`](../../hardware/cad/stl/02_pod_base/radar_center_underfender_mount.stl)) centrally under the rear fender trailing edge using 3M VHB 5952 tape or 2x M4/M5 countersunk screws. Slide the cradle into the clevis and lock with an M5 bolt. The integrated 42 mm roost deflector shield protects the joint and bottom M8 gland from rear tire spray.
   * **Water Spray Protection (Drip Loop):** Route the 2-wire FLRY-B cable from Whip 5 down the spine conduit and guide it in an upward drip loop through the bottom M8 IP68 cable gland. The monolithic roost deflector on the housing bottom protects the gland from rear tire road spray.
 * **Front Node:** Secure inside fairing (Batwing / Sharknose) or nacelle; 12V from auxiliary plug; CAN connected locally at J2 (or under seat at Central Box).
 
@@ -221,7 +222,11 @@ Once all 4 checks indicate green, tighten enclosure lids with M3 screws diagonal
 * **Pod 1 & Pod 2:**
   * *Option A (Vario Panniers / GS Standard):* Transition docks ([`adventure_transition_dock_base.stl`](../../hardware/cad/stl/02_pod_base/adventure_transition_dock_base.stl)) in seat frame crease (Ø 28 mm tube) coupled with underseat cross-rail ([`adventure_underseat_cross_rail.stl`](../../hardware/cad/stl/02_pod_base/adventure_underseat_cross_rail.stl)).
   * *Option B (Stainless Pannier Racks / GSA):* Heavy-duty GSA cage docks ([`adventure_gsa_cage_dock_body.stl`](../../hardware/cad/stl/02_pod_base/adventure_gsa_cage_dock_body.stl)) in 45 mm frame dead space.
-* **Rear Radar:** Minimalist bracket ([`adventure_rack_radar_mount.stl`](../../hardware/cad/stl/02_pod_base/adventure_rack_radar_mount.stl)) directly under GS luggage rack for Garmin Varia or Wheeltec MR20 on Whip 5.
+* **Rear Radar (Adventure Luggage Rack Mount):**
+  * **Tube Clamp Assembly:** Place the lower base mount ([`adventure_rack_radar_mount.stl`](../../hardware/cad/stl/02_pod_base/adventure_rack_radar_mount.stl)) and upper clamp cap ([`adventure_rack_radar_clamp_cap.stl`](../../hardware/cad/stl/02_pod_base/adventure_rack_radar_clamp_cap.stl)) around the rear Ø 18 mm luggage bridge cross-tube.
+  * Insert 2x DIN 934 M5 nuts into the top cap pockets. Fasten with 2x DIN 912 M5 $\times$ 25 mm bolts from below (bottom screw access allows full adjustment without removing topcase baseplates).
+  * Insert the pre-assembled Radar 2.0 housing with `radar_swivel_tilt_cradle.stl` into the clevis fork, level horizontally, and clamp firmly with a DIN 912 M5 $\times$ 25 mm bolt.
+  * The monolithic $45^\circ$ forward deflector wedge shields the pivot joint and M8 wiring from stones thrown up by knobby offroad tires.
 
 ### 5.3 Support Car / Chase Van Installation (Car-Kit)
 * **Pod 1 & Pod 2:** Attached to driver and passenger sun visors using quick-release clips ([`car_sun_visor_pod_clip.stl`](../../hardware/cad/stl/05_accessories/car_sun_visor_pod_clip.stl)).
