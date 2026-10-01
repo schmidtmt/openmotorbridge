@@ -175,7 +175,7 @@ OpenMotorBridge trennt das mechanische Gehäuse der Satelliten in zwei untrennba
 
 ![OpenMotorBridge Satelliten-Pod & Kassetten 3D Anschnitt CAD](../images/cad/pod_cartridge_cutaway_3d.png)
 
-*Abbildung 8.6: Photorealistischer 3D-CAD-Schräganschnitt des Satelliten-Pods mit eingeschobener Wechselkassette. Gut zu erkennen sind die 120°-V-Nut mit EPDM-Spannringen um das Motorrad-Rahmenrohr, die M8 6-Pin-Buchse, die innere Schottwand mit den beiden komprimierten V4A-Edelstahlfedern, die asymmetrischen Poka-Yoke Gleitschienen mit 8 mm Höhenversatz, der 6-polige Goldkontakt-Eingriff (4,8 mm Wipe-Weg) und die formbündige Dichtung an der Frontblende.*
+*Abbildung 8.6: Photorealistischer 3D-CAD-Schräganschnitt des Satelliten-Pods mit eingeschobener Wechselkassette. Gut zu erkennen sind die 120°-V-Nut mit EPDM-Spannringen um das Motorrad-Rahmenrohr, die monolithisch im 1-Teil-Monocoque integrierte Schottwand mit den beiden V4A-Auswerferfedern, die asymmetrischen Poka-Yoke Gleitschienen mit 8 mm Höhenversatz, die 2 massiven Mill-Max DC-Federkontakte (10 mm Raster) auf die ENIG-Pads von PCBA 03 und die formbündige Dichtung an der Frontblende.*
 
 #### Verdeckte Innenverschraubung & Sabotageschutz des Pod-Gehäuses
 Da die frühere äußere M8-Verschraubung durch das All-UWB-Backbone und die direkte 2-Draht DC-Zuleitung entfallen ist, erfolgt die mechanische Befestigung des Pod-Basisschachts am Motorradrahmen, Sturzbügel oder Kofferhalter über **verdeckte M4/M5-Edelstahlschrauben**:
@@ -216,7 +216,7 @@ Um Wechselkassetten auf allen Motorrädern (von frei zugänglichen Reiseenduro-S
       | NEODYM-   |       |                       |            | blockiert Auszug!
       | MAGNET N52|       |                       |            |
       +-----+-----+       |                       |            |
- ===========+=============+=======================+============+=================
+ =========================+=======================+============+=================
   KASSETTE  |             |                       |            |
             v Zieht nach  |   M2 SCHWENKACHSE     |            v
       +-----------+ außen!|    (DREHPUNKT)        |   +-----------------+
@@ -259,7 +259,7 @@ Um Wechselkassetten auf allen Motorrädern (von frei zugänglichen Reiseenduro-S
 #### 4.1.3 Die 4 kinematischen Bewegungsphasen des Kassetteneinschubs
 1. **Phase 1 - Vorzentrierung ($x = 0\dots 80\,\text{mm}$):** Die asymmetrischen Poka-Yoke Führungsrippen greifen in die Gehäusenuten ein. Das seitliche Spiel wird auf $\pm 0{,}2\,\text{mm}$ begrenzt.
 2. **Phase 2 - Feder-Kompression ($x = 80\dots 86\,\text{mm}$):** Die Stirnseite des Schlittens trifft auf die beiden V4A-Auswerferfedern in der Schottwand und baut die $7{,}2\,\text{N}$ Vorspannkraft auf.
-3. **Phase 3 - Kontakt-Eingriff & Schnapp-Rastung ($x = 86\dots 91\,\text{mm}$):** Die ENIG-Goldpads von `PCBA 03` kontaktieren die vergoldeten Federkontakte. Die $30^\circ$-Einlaufschräge der Sägezahnkralle drückt die Wippe federnd nach innen, bis sie bei $X = 88\,\text{mm}$ in die Gehäusekerbe schnappt.
+3. **Phase 3 - Kontakt-Eingriff & Schnapp-Rastung ($x = 86\dots 91\,\text{mm}$):** Die beiden Mill-Max Federkontakte der monolithischen Schottwand kontaktieren formschlüssig die beiden ENIG-Goldpads `PAD1` (+12V/5V) und `PAD2` (GND) auf `B.Cu` von `PCBA 03`. Die $30^\circ$-Einlaufschräge der Sägezahnkralle drückt die Wippe federnd nach innen, bis sie bei $X = 88\,\text{mm}$ in die Gehäusekerbe schnappt.
 4. **Phase 4 - Formbündige Verriegelung ($x = 91\,\text{mm}$):** Die $90^\circ$-Sperrkante verriegelt formschlüssig. Die umlaufende Silikon-Dichtung wird um $30\,\%$ komprimiert (IP67 Dichtsitz).
 
 ---
@@ -271,11 +271,20 @@ Beide Satelliten-Pods (Pod 1 und Pod 2) nutzen dasselbe 5-seitige Monocoque-Scha
 * **An der Unterseite:** $120^\circ$-V-Nut ($R = 15\,\text{mm}$) schmiegt sich formschlüssig an alle Rohre von $\varnothing 18\dots 35\,\text{mm}$ an ($1"$ Sturzbügel, $7/8"$ Heckrahmen).
 * **4x Einhängenasen:** Blitzschnelle Montage mit 2 UV-beständigen EPDM-Gummiringen bei gleichzeitiger Schwingungsdämpfung.
 
-#### 4.2.2 2-Draht-DC-Kontaktierung der Pod-Basis (Entfall von PCBA 02 & COTS-Magnetdock)
+#### 4.2.2 100% Monolithisches 1-Teil-Schachtgehäuse & 2-Draht-DC-Kontaktierung
 
 In der v9.6 Clean Architecture ist die frühere Pod-Bodenplatine (`PCBA 02`) **vollständig entfallen**:
-* **Direktanschluss ohne interne Elektronik:** Die 2-adrige DC-Zuleitung von der Zentralbox führt über eine rückseitige IP67-Kabelverschraubung oder Formdichtung direkt in den Gehäuseschacht.
-* **Massive Mill-Max Federkontakte:** Die beiden Adern sind direkt mit zwei massiven, vergoldeten Federkontakten verbunden, die im Schachtboden verankert sind. Beim Einschieben der Kassette drücken diese mit $1{,}5\,\text{N}$ Anpresskraft formschlüssig auf die beiden stirnseitigen ENIG-Kontaktflächen von `PCBA 03`.
+* **Entfall der geschraubten Schottwand:**
+  * Da keine Platine mehr im Pod-Gehäuse montiert werden muss, entfällt die früher separat einzuschraubende Schottwand samt 4x M2-Eckschraubdomen und 2x M2-Platinenschrauben ersatzlos.
+  * Das gesamte Gehäuse (`pod_base_housing.scad`) wird als **nahtloses, 100% monolithisches 1-Teil-Monocoque** gedruckt.
+  * Die Quer-Trennwand bei $X = 18{,}0\,\text{mm}$ mit den beiden Führungsaufnahmen für Mill-Max DC-Federkontakte ($10{,}0\,\text{mm}$ Raster) und den zwei integrierten V4A-Auswerferfeder-Domen ist materialhomogen mit dem Tunnel verschmolzen.
+  * **0 Montageschrauben, 0 lose Teile, 100% Verzugsfreiheit und maximale Dichtigkeit.**
+* **Massive Mill-Max Federkontakte:**
+  * Die 2-adrige DC-Zuleitung (12V geschaltet und GND) führt von der hinteren M8-Buchse (oder Kabelverschraubung) direkt in die Rückseite der beiden Kontakthülsen der integrierten Trennwand.
+  * Beim Einschieben der Kassette drücken die gefederten Goldstifte mit $1{,}5\,\text{N}$ Anpresskraft auf `PAD1` und `PAD2` von `PCBA 03`.
+* **Integrierte UWB-Antennenaufnahme in der Kassette:**
+  * Im Boden des Kassetten-Grundschlittens (`00_base_sled.scad`) ist direkt unterhalb des U.FL-Ports von `PCBA 03` eine formschlüssige Tasche ($12{,}0 \times 12{,}0 \times 0{,}8\,\text{mm}$) mit Koaxialkabel-Führung für die **Taoglas FXUWB10 UWB 6.5 GHz Flexantenne** eingelassen.
+  * Die Antenne strahlt verlustfrei durch den Schlittenboden und das dielektrisch neutrale PA12-Pod-Gehäuse ins Freie ab.
 * **Koffer-Trennstelle (COTS Magnet-Pogo-Dock):** Bei abnehmbaren Seitenkoffern wird die Verbindung an der Gepäckträger-Schnittstelle über einen handelsüblichen industriellen **2-Pin Magnet-Pogo-Steckverbinder (IP68 COTS)** realisiert. Fällt der Koffer ab oder wird abgenommen, trennt sich die Magnetkupplung zerstörungsfrei. Die eFuse auf `PCBA 01` schützt die Leitung bei Kurzschluss in $< 1\,\mu\text{s}$.
 * **Vorteile der rein passiven Pod-Basis:**
   1. **Null Kontaktprellen auf Datenleitungen:** Sämtliche Audio- und Steuerströme laufen über das drahtlose All-UWB-Backbone.

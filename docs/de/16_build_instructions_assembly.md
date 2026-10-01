@@ -62,8 +62,8 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 
 * [ ] **3D-Druckteile (MJF PA12 schwarz oder FDM ASA/PET-CF):**
   * 1x Main Box (Unterwanne mit UWB-Bodentasche $11 \times 11 \times 0{,}6\,\text{mm}$, Zwischenboden mit LiPo-Wanne, Deckel mit LoRa FXP895 Tasche $110 \times 20 \times 0{,}8\,\text{mm}$)
-  * 2x Pod-Basisgehäuse & 2x Pod-Schottwände (symmetrisch für Bucht 1 und Bucht 2, ohne interne Platine)
-  * 2x Kassetten-Basisschlitten, Inlays (Sena SPIDER X Slim, Cardo Packtalk Edge, Swap OMM oder Blindkassette) & 2x Rastwippen
+  * 2x Pod-Basisgehäuse (nahtlose 1-Teil-Monocoques mit integrierter monolithischer Schottwand, Mill-Max Federaufnahmen & Federdomen; 0 Schrauben, 0 lose Teile)
+  * 2x Kassetten-Basisschlitten (mit UWB-Antennentasche & Direktfurchdomen), Inlays (Sena SPIDER X Slim, Cardo Packtalk Edge, Swap OMM oder Blindkassette) & 2x Rastwippen
   * 1x Front-Knoten (Unterwanne mit UWB-Bodentasche und AMPS-Nut-Pockets, Deckel, TPU-Dichtkämme & USB-C Kappe)
   * 1x Fahrzeugspezifisches Montage-Kit (BMW GS Klemmen & `adventure_rack_radar_mount.stl` / Harley Kofferdeckel-Docks & Kennzeichen-Radarhalter / Support-Car `car_sun_visor_pod_clip.stl`)
 * [ ] **Vollautomatisch bestückte Platinen (von JLCPCB / Eurocircuits - 6 PCBAs):**
@@ -76,10 +76,10 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
   * 8x DIN 934 / DIN 985 M3 Edelstahlmuttern (für Gehäuse-Nut-Pockets)
   * 6x DIN 934 M4 Muttern (4x AMPS-Nut-Pockets in Front-Node Wanne, 2x Radar 2.0 Heck-Mutterntaschen)
   * 4x M3 x 40 mm Schrauben (Zentralbox), 4x M3 x 20 mm Schrauben (Front-Node)
-  * 8x M2.5 x 6 mm Platinenschrauben, 4x M2 x 8 mm Senkkopf (Schottwände), 8x M2 x 6 mm (Kassetten)
+  * 8x M2.5 x 6 mm Platinenschrauben (Zentralbox & Front-Node), 8x M2 x 6 mm Platinenschrauben (Kassetten PCBA 03; Schottwandschrauben entfallen komplett)
   * 2x DIN 7 M2 x 8 mm Zylinderstifte (Wippenachsen), 2x DIN 6325 Ø 6 x 8 mm gehärtete Stahlanker
   * 2x Wippen-Rückstellfedern, 4x Auto-Eject Druckfedern, 1x N52 Neodym-Entriegelungsschlüssel
-  * 4x Vergoldete Blattfederkontakte (Keystone / Mill-Max) für Pod 1 & 2 Stromzuführung
+  * 4x Vergoldete Mill-Max Hochstrom-Federkontakt-Hülsen für Pod 1 & 2 Stromzuführung
 * [ ] **Dichtungen, Pufferakku & Antennen:**
   * Silikon-Rundschnur Ø 1,5 mm Shore 40A ($40\,\text{cm}$ Main Box, $30\,\text{cm}$ Front-Knoten)
   * 2x Silikon-Flanschdichtungen für Pod 1 & 2 Mundlöcher, Gore ePTFE Membranpads
@@ -116,17 +116,18 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 
 ---
 
-### Schritt 2: Satelliten-Pods 1 & 2 montieren (2x identisch, ohne interne Platine)
-1. **2-Draht-DC-Zuleitung einführen:** Die 2-adrige Gleichstromleitung (+5V und GND) durch die rückseitige Kabeldurchführung des Pod-Basisgehäuses ([`pod_base_housing.stl`](../../hardware/cad/stl/02_pod_base/pod_base_housing.stl)) führen und abdichten.
-2. **Federkontakte montieren:** Die beiden Leitungsadern mit den vergoldeten Federkontakten (Keystone / Mill-Max) im Schachtboden verbinden.
-3. **Auto-Eject Schnappfedern einsetzen:** In die beiden rückseitigen Federtaschen der Schottwand ([`03_pod_bulkhead_partition.stl`](../../hardware/cad/stl/02_pod_base/components/03_pod_bulkhead_partition.stl)) je eine V4A Druckfeder ($\varnothing 4{,}5 \times 15\,\text{mm}$) einstecken.
-4. **Schottwand fixieren:** Die Schottwand mit den Federn voran in das Pod-Gehäuse einschieben und mit 2x M2 $\times 8\,\text{mm}$ Senkkopfschrauben von außen bündig verschrauben.
-5. **Prüfung:** Die beiden vergoldeten Federkontakte ragen federnd in den Aufnahmeschacht. Keine Buchsen, keine internen Platinen nötig. Wiederholen für Pod 2.
+### Schritt 2: Satelliten-Pods 1 & 2 montieren (2x identisch, 100 % schraubenloses Monocoque)
+1. **2-Draht-DC-Zuleitung einführen:** Die 2-adrige Gleichstromleitung (+12V/5V und GND) durch die rückseitige Kabeldurchführung oder M8-Verschraubung des monolithischen Pod-Basisgehäuses ([`pod_base_housing.stl`](../../hardware/cad/stl/02_pod_base/pod_base_housing.stl)) führen.
+2. **Mill-Max Federkontakte einsetzen:** Die beiden vergoldeten Mill-Max Hochstrom-Federkontakt-Hülsen von hinten in die beiden Führungsbohrungen der integrierten Trennwand eindrücken und mit den Zuleitungsadern verbinden/verpressen.
+3. **Auto-Eject Schnappfedern aufstecken:** Von vorne in den Kassetten-Schacht die beiden V4A-Druckfedern ($\varnothing 4{,}5 \times 15\,\text{mm}$) direkt auf die beiden integrierten Führungsdome der monolithischen Trennwand aufschieben.
+4. **Schraubenlose Fertigstellung:** Da die Trennwand 100 % materialhomogen im 1-Teil-Monocoque integriert ist, entfällt jede Montage- und Senkkopfverschraubung (0 Schrauben). Die beiden vergoldeten Federkontakte ragen federnd in den Aufnahmeschacht. Wiederholen für Pod 2.
 
 ---
 
 ### Schritt 3: Multi-Protokoll Gateway-Kassetten 1 & 2 montieren
-1. **Platine einsetzen:** Kassettenplatine PCBA 03 Rev 3.0 (beidseitig bestückt, mit DW3110 UWB) in den Kassetten-Schlitten ([`cartridge_base_sled.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl)) einklicken.
+1. **UWB-Antenne & Platine im Schlitten montieren:**
+   * Die flexible UWB-Antenne (Taoglas FXUWB10, $12 \times 12 \times 0{,}8\,\text{mm}$) in die Bodentasche des Kassetten-Schlittens ([`cartridge_base_sled.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl)) einlegen und das U.FL-Kabel in der Nut verlegen.
+   * Kassettenplatine PCBA 03 Rev 3.0 auf die vier M2-Dome setzen, U.FL-Stecker auf `ANT_UWB` (`B.Cu`) aufklicken und Platine mit 4x M2 $\times 6\,\text{mm}$ Schrauben handfest fixieren. Die beiden vergoldeten Kontaktpads `PAD1` (+12V/5V) und `PAD2` (GND) auf der Platinenunterseite liegen durch das rückseitige Kontaktfenster frei zugänglich für die Mill-Max Stifte der Pod-Trennwand.
 2. **Mechatronik-Aktuatoren & Niederhalteplatte montieren:**
    * 4x Miniatur-Hubmagnete ($\varnothing 6{,}5 \times 12\,\text{mm}$) mit dämpfenden TPU-Tastspitzen (`actuator_silicone_tip.stl`) in die vier Passbohrungen der Führungsbrücke des Inlays ([`cartridge_insert_sena.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_sena.stl) bzw. [`cartridge_insert_cardo.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_cardo.stl)) einstecken.
    * **Aktuator-Verkabelung an `J_ACT` (8-Pin JST-SH 1.0 mm):**

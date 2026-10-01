@@ -31,7 +31,7 @@ module cartridge_cardo_assembly(exploded = false) {
         );
 
     // 2. Carrier PCB (Green FR4 + Gold Pads + Components aligned to front leading edge)
-    translate([1.5, (CARTRIDGE_BASE_W - 22.0)/2.0, z_pcb])
+    translate([1.5, (CARTRIDGE_BASE_W - 25.0)/2.0, z_pcb])
         dummy_adapter_pcb();
 
     // 3. Interchangeable Cardo AirMount Insert (Slate Grey PA12)

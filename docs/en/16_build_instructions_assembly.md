@@ -56,36 +56,36 @@ All discrete components, PCB ordering files, and COTS sourcing lists are documen
 
 * [ ] **3D Printed Parts (MJF PA12 Black or FDM ASA/PET-CF):**
   * 1x Main Box (lower tub with UWB bottom pocket $11 \times 11 \times 0.6\,\text{mm}$, mid tray with LiPo cradle, lid with LoRa FXP895 pocket $110 \times 20 \times 0.8\,\text{mm}$)
-  * 2x Pod base enclosures & 2x pod bulkheads (100% symmetric for Pod 1 and Pod 2)
-  * 2x Cartridge base sleds, inlays (Sena SPIDER X Slim, Cardo Packtalk Edge, Swap OMM, or blank cartridge) & 2x magnetic latches
+  * 2x Pod base enclosures (seamless 1-piece monocoques with integral monolithic bulkhead, Mill-Max contact sleeves & spring guide posts; 0 assembly screws, 0 loose parts)
+  * 2x Cartridge base sleds (with UWB antenna floor pocket & direct self-tapping standoffs), inlays (Sena SPIDER X Slim, Cardo Packtalk Edge, Swap OMM, or blank cartridge) & 2x magnetic latches
   * 1x Front Node (lower tub with UWB bottom pocket and AMPS nut pockets, upper lid, TPU cable glands & USB-C cap)
   * 1x Vehicle-specific mounting kit (BMW GS clamps & `adventure_rack_radar_mount.stl` / Harley saddlebag docks & license plate bracket / Support-Car `car_sun_visor_pod_clip.stl`)
 * [ ] **Fully Populated PCBAs (from JLCPCB / Eurocircuits):**
   * 1x PCBA 01 (Central Box with onboard LoRa SX1262 and DW3110 UWB)
-  * 2x PCBA 02 (Pod Base, symmetric for Pod 1 and Pod 2)
-  * 2x PCBA 03 (Smart Modular Cartridge with CH32V003 and 4x AO3400 N-MOSFETs)
+  * 2x PCBA 03 (Universal Smart Cartridge Rev 3.0 All-UWB with DW3110 UWB, ES8388 / MCU and 4x AO3400 N-MOSFETs, 2-sided SMT)
   * 1x PCBA 05 (Front Node with DW3110 UWB)
   * *(Optional: 1x PCBA 08 Radar 2.0 Sub-MCU, PCBA 06 MagSafe Dock, PCBA 07 Smart-Keyfob)*
+  * *(Note: PCBA 02 and PCBA 04 are completely eliminated).*
 * [ ] **A4 / 316 Stainless Fasteners & Springs (IKEA Principle - 100% Solder-Free):**
   * 8x DIN 934 / DIN 985 M3 stainless nuts (for captive enclosure nut pockets)
   * 4x DIN 934 M4 nuts (for AMPS nut pockets in Front Node tub)
   * 4x M3 x 40 mm socket head screws (Central Box), 4x M3 x 20 mm screws (Front Node)
-  * 8x M2.5 x 6 mm board screws, 4x M2 x 8 mm countersunk screws (bulkheads), 8x M2 x 6 mm (cartridges)
+  * 8x M2.5 x 6 mm board screws (Central Box & Front Node), 8x M2 x 6 mm board screws (Cartridge PCBA 03; bulkhead screws completely eliminated)
   * 2x DIN 7 M2 x 8 mm dowel pins (latch pivots), 2x DIN 6325 Ø 6 x 8 mm hardened steel keeper pins
   * 2x Latch return springs, 4x auto-eject compression springs, 1x N52 neodymium release key
+  * 4x Gold-plated Mill-Max heavy-duty spring contact sleeves for Pod 1 & 2 power feed
 * [ ] **Gaskets, Battery & Antennas:**
   * Silicone O-ring cord Ø 1.5 mm Shore 40A ($40\,\text{cm}$ Main Box, $30\,\text{cm}$ Front Node)
   * 2x Molded silicone face gaskets for Pod 1 & 2 mouths, Gore ePTFE vent stickers
   * **1x 1S LiPo Flat Pack 2,200 mAh** ($68 \times 39 \times 5.0\,\text{mm}$) with Molex Micro-Fit 3.0 connector
-  * **2x Taoglas FXUWB10 UWB Flex Antennas** with 20 mm U.FL leads
+  * **Taoglas FXUWB10 UWB Flex Antennas** with 20 mm U.FL leads (Central Box, Front Node, Cartridges)
   * **1x Taoglas FXP895 LoRa 868 MHz Flex Antenna** with 50 $\Omega$ U.FL lead
   * **1x u-blox SAM-M10Q Multi-GNSS Module** with integrated patch antenna (Qwiic I2C)
   * **1x TI TMP117 & 1x TI OPT3001 Sensors** (Qwiic I2C)
 * [ ] **Pre-Assembled COTS Harnesses (Zero Crimping Required):**
-  * 1x HD26 SEAL-D IP67 4-branch breakout harness (Pod 1, Pod 2, 12V Battery, Whip 5 Rear Radar)
-  * 2x M8 6-Pin PUR cables (1.0 m / 1.5 m)
-  * 1x M8 4-Pin PUR cable (Whip 5 for radar)
-  * JST-SH cartridge wiring harnesses (8-Pin `J_ACT` for solenoids, 6-Pin `J2` for audio/DC)
+  * 1x Deutsch DTM-12 IP67/IP69K central breakout harness (pure 2-wire DC whips for Pod 1, Pod 2, Radar and 12V battery & CAN)
+  * 2-Pin JWPF / Superseal connectors for Pod and Radar power leads
+  * JST-SH cartridge wiring harnesses (8-Pin `J_ACT` for solenoids)
 * [ ] **Tools:**
   * Hex key set (1.5 / 2.0 / 2.5 / 3.0 mm), Torx TX10 / PH1 driver, open-end wrenches 7 / 8 / 10 mm, utility knife, dielectric silicone grease
 
@@ -110,25 +110,27 @@ All discrete components, PCB ordering files, and COTS sourcing lists are documen
 
 ---
 
-### Step 2: Assemble Satellite Pods 1 & 2 (2x Identical Units)
-1. **Insert Base PCB:** Slide fully assembled PCBA 02 into the guide tracks of the pod base housing ([`pod_base_housing.stl`](../../hardware/cad/stl/02_pod_base/pod_base_housing.stl)). Push the M8 6-pin IP67 socket through the rear bore, slip on the O-ring, and tighten the M8 jam nut ($1.2\,\text{Nm}$) using a 10 mm wrench.
-2. **Install Auto-Eject Springs:** Insert a stainless compression spring ($\varnothing 4.5 \times 15\,\text{mm}$) into each of the two rear spring cavities of the bulkhead partition ([`03_pod_bulkhead_partition.stl`](../../hardware/cad/stl/02_pod_base/components/03_pod_bulkhead_partition.stl)).
-3. **Secure Bulkhead:** Slide the bulkhead partition into the pod enclosure until seated against the internal stop shoulder. Fasten with 2x M2 $\times 8\,\text{mm}$ countersunk screws through the outer shell.
-4. **Inspection:** The 6-pin socket header `J1` aligns flush inside the bulkhead protective collar. Repeat for Pod 2.
+### Step 2: Assemble Satellite Pods 1 & 2 (2x Identical 1-Piece Screwless Monocoques)
+1. **Route 2-Wire DC Feed:** Feed the 2-wire DC harness (+12V/5V and GND) through the rear cable gland or M8 port of the monolithic pod base housing ([`pod_base_housing.stl`](../../hardware/cad/stl/02_pod_base/pod_base_housing.stl)).
+2. **Install Mill-Max Spring Contacts:** Press the two gold-plated Mill-Max heavy-duty spring contact sleeves from behind into the two guide bores of the integral monolithic bulkhead wall and connect/crimp with the supply wires.
+3. **Mount Auto-Eject Springs:** From the front opening, slide the two stainless compression springs ($\varnothing 4.5 \times 15\,\text{mm}$) directly onto the two integrated guide posts of the monolithic bulkhead partition.
+4. **Screwless Completion:** Because the transverse bulkhead is 100% integrally molded into the 1-piece monocoque, all assembly and countersunk screws are eliminated (0 screws). The two gold-plated spring pins extend with spring compliance into the cartridge bay. Repeat for Pod 2.
 
 ---
 
 ### Step 3: Multi-Protocol Gateway Cartridges 1 & 2 Assembly
-1. **Mount PCB:** Snap PCBA 03 Rev 2.0 into the cartridge base sled ([`cartridge_base_sled.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl)).
+1. **Mount UWB Antenna & PCB in Sled:**
+   * Place the flexible UWB antenna (Taoglas FXUWB10, $12 \times 12 \times 0.8\,\text{mm}$) into the bottom pocket of the cartridge sled ([`cartridge_base_sled.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl)) and route the U.FL micro-coax cable in the recess channel.
+   * Place PCBA 03 Rev 3.0 onto the four M2 standoffs, snap the U.FL connector onto `ANT_UWB` (`B.Cu`), and secure the board finger-tight with 4x M2 $\times 6\,\text{mm}$ screws. Gold contact pads `PAD1` (+12V/5V) and `PAD2` (GND) on the bottom copper face remain directly accessible through the rear floor cutout for mating with the pod Mill-Max pins.
 2. **Install Gateway Inlay & Solenoids:**
    * **Slot 1 (Sena SPIDER X Slim Inlay):**
      * Insert 4x miniature solenoids ($\varnothing 6.5 \times 12\,\text{mm}$) with TPU tips into the actuator bridge of [`cartridge_insert_sena.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_sena.stl).
      * Fasten retainer plate with 4x M2 $\times 6\,\text{mm}$ countersunk screws.
      * Connect pre-crimped 8-pin harness `J_ACT` to header `J_ACT` on PCBA 03.
-     * Seat Sena SPIDER X Slim; connect direct micro-cable whip to `J2` on PCBA 03 (zero pogo pins!).
+     * Seat Sena SPIDER X Slim; connect direct micro-cable whip to `J_AUDIO_PWR` on PCBA 03 (zero pogo pins!).
    * **Slot 2 (Cardo Packtalk Edge Inlay / Swap OMM):**
      * Mount 4x solenoids into [`cartridge_insert_cardo.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_cardo.stl) and connect to `J_ACT`.
-     * Lock Cardo Packtalk Edge into Air-Mount cradle and attach micro-cable whip to `J2`.
+     * Lock Cardo Packtalk Edge into Air-Mount cradle and attach micro-cable whip to `J_AUDIO_PWR`.
 3. **Mouth Gasket:** Slide molded silicone gasket over the cartridge collar and lightly apply silicone grease.
 
 ---

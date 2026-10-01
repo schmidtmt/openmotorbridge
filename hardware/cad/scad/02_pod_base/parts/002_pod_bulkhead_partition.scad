@@ -1,87 +1,78 @@
 // =============================================================================
-// OpenMotorBridge - Satellite Pod: Bulkhead Partition & 6-Pin Shroud Funnel
+// OpenMotorBridge - Satellite Pod: Monolithic Bulkhead & Contact Interface
 // =============================================================================
 // File: hardware/cad/scad/02_pod_base/parts/002_pod_bulkhead_partition.scad
-// Description: Partition bulkhead with 6-pin shroud funnel, 2x M2 PCB mounting
-//              bosses (H1 at Y=20, H2 at Y=50), 4x perimeter corner screw bosses,
-//              convective ventilation slots, and dual Auto-Eject spring guide posts.
+// Description: 100% Monolithic, screw-free partition wall integrated directly
+//              into the 1-piece pod base housing (zero assembly screws!).
+//              Features:
+//              - 2x Mill-Max heavy-duty DC spring contact sleeves (10.0 mm pitch:
+//                Y = 30.0 mm for +12V/5V and Y = 40.0 mm for GND, matching PAD1 & PAD2
+//                on PCBA 03).
+//              - 2x Auto-Eject spring guide posts (for Ø 4.5 mm V4A springs at
+//                Y = 16.0 mm and Y = 54.0 mm).
+//              - Hermetic internal partition isolating the rear cable chamber
+//                from the front slide chamber.
 // =============================================================================
 
 include <../../00_common/parameters.scad>;
 include <../../00_common/screw_bosses.scad>;
 
 module pod_bulkhead_assembly(bulkhead_x=18.0, wall=3.5) {
-    // 1. Vertical Partition Bulkhead Wall (x = 18.0 mm)
+    z_contacts = wall + 2.5 + 2.5; // Z = 8.5 mm (matches PCBA 03 B.Cu gold pads in sled)
+
+    // 1. Monolithic Vertical Partition Wall (Fused directly into tunnel at x = 18.0 mm)
     translate([bulkhead_x, wall, wall]) {
         difference() {
-            cube(size=[2.0, POD_OUTER_W - 2*wall, POD_OUTER_H - 2*wall], center=false);
+            // Solid transverse bulkhead (2.5 mm thickness)
+            cube(size=[2.5, POD_OUTER_W - 2*wall, POD_OUTER_H - 2*wall], center=false);
 
-            // 6-Pin Interface Center Window (Pass-through for J1 on PCBA 02)
-            translate([-0.5, (POD_OUTER_W - 2*wall)/2.0 - 5.0, (POD_OUTER_H - 2*wall)/2.0 - 3.5])
-                cube(size=[3.0, 10.0, 7.0], center=false);
-
-            // 2x Convective Breathing Slots (Left & Right)
-            translate([-0.5, 6.0, (POD_OUTER_H - 2*wall)/2.0 - 1.0])
-                cube(size=[3.0, 6.0, 2.0], center=false);
-            translate([-0.5, POD_OUTER_W - 2*wall - 12.0, (POD_OUTER_H - 2*wall)/2.0 - 1.0])
-                cube(size=[3.0, 6.0, 2.0], center=false);
-
-            // 2x M2 Screw Through-Holes for PCBA 02 Mounting (H1 at Y=20, H2 at Y=50)
-            translate([-0.5, 20.0 - wall, 19.0 - wall])
+            // 2x Mill-Max Spring Contact Through-Bores (Ø 3.2 mm at Y = 30.0 and Y = 40.0)
+            translate([-0.5, 30.0 - wall, z_contacts - wall])
                 rotate([0, 90, 0])
-                    cylinder(r=M2_SCREW_HOLE_R, h=3.0, center=false, $fn=24);
-            translate([-0.5, 50.0 - wall, 19.0 - wall])
+                    cylinder(r=1.6, h=3.5, center=false, $fn=24);
+
+            translate([-0.5, 40.0 - wall, z_contacts - wall])
                 rotate([0, 90, 0])
-                    cylinder(r=M2_SCREW_HOLE_R, h=3.0, center=false, $fn=24);
+                    cylinder(r=1.6, h=3.5, center=false, $fn=24);
+
+            // 2x Convective Pressure Equalization Vents (Left & Right top corners)
+            translate([-0.5, 5.0, POD_OUTER_H - 2*wall - 5.0])
+                cube(size=[3.5, 4.0, 2.0], center=false);
+            translate([-0.5, POD_OUTER_W - 2*wall - 9.0, POD_OUTER_H - 2*wall - 5.0])
+                cube(size=[3.5, 4.0, 2.0], center=false);
         }
     }
 
-    // 2. 6-Pin Protective Shroud with 45° Lead-in Funnel (facing +X into cartridge chamber)
-    translate([bulkhead_x + 2.0, POD_OUTER_W/2.0 - 6.0, POD_OUTER_H/2.0 - 4.0]) {
-        difference() {
-            cube(size=[4.0, 12.0, 8.0], center=false);
-            translate([-0.1, 1.0, 1.0])
-                cube(size=[4.2, 10.0, 6.0], center=false);
+    // 2. 2x Mill-Max Spring Contact Protective Boss Sleeves (projecting +X into chamber)
+    // Provides solid mechanical guidance and axial retention for the gold contact pins
+    translate([bulkhead_x + 2.5, 30.0, z_contacts]) {
+        rotate([0, 90, 0]) {
+            difference() {
+                cylinder(r=3.0, h=3.0, center=false, $fn=24);
+                translate([0, 0, -0.1])
+                    cylinder(r=1.6, h=3.2, center=false, $fn=24);
+            }
+        }
+    }
+    translate([bulkhead_x + 2.5, 40.0, z_contacts]) {
+        rotate([0, 90, 0]) {
+            difference() {
+                cylinder(r=3.0, h=3.0, center=false, $fn=24);
+                translate([0, 0, -0.1])
+                    cylinder(r=1.6, h=3.2, center=false, $fn=24);
+            }
         }
     }
 
-    // 3. 2x Auto-Eject Spring Retainer Posts (for Ø 4.5 mm V4A Springs at y = 16 and y = 44)
-    translate([bulkhead_x + 2.0, 16.0, POD_OUTER_H/2.0])
+    // 3. 2x Auto-Eject Spring Retainer Posts (for Ø 4.5 mm V4A Springs at Y = 16.0 and Y = 54.0)
+    // Symmetrical ±19.0 mm from pod centerline (Y = 35.0 mm)
+    translate([bulkhead_x + 2.5, 16.0, POD_OUTER_H/2.0])
         rotate([0, 90, 0])
             cylinder(r=1.8, h=6.0, $fn=16);
 
-    translate([bulkhead_x + 2.0, 44.0, POD_OUTER_H/2.0])
+    translate([bulkhead_x + 2.5, POD_OUTER_W - 16.0, POD_OUTER_H/2.0])
         rotate([0, 90, 0])
             cylinder(r=1.8, h=6.0, $fn=16);
-
-    // 4. 2x Planar M2 Mounting Bosses for PCBA 02 (on rear face facing -X towards PCB at X=16.4)
-    //    Guarantees rock-solid planar support preventing PCB wobble!
-    translate([bulkhead_x, 20.0, 19.0])
-        rotate([0, -90, 0])
-            screw_boss(outer_r=2.5, inner_r=M2_SCREW_HOLE_R, h=1.6);
-    translate([bulkhead_x, 50.0, 19.0])
-        rotate([0, -90, 0])
-            screw_boss(outer_r=2.5, inner_r=M2_SCREW_HOLE_R, h=1.6);
-
-    // 5. 4x M2 Screw Standoff Bosses (for Bulkhead Mounting to Tunnel Corners)
-    translate([bulkhead_x, 5.0, wall])
-        rotate([0, 90, 0])
-            screw_boss(outer_r=2.0, inner_r=M2_SCREW_HOLE_R, h=3.0);
-    translate([bulkhead_x, POD_OUTER_W - 5.0, wall])
-        rotate([0, 90, 0])
-            screw_boss(outer_r=2.0, inner_r=M2_SCREW_HOLE_R, h=3.0);
-    translate([bulkhead_x, 5.0, POD_OUTER_H - wall])
-        rotate([0, 90, 0])
-            screw_boss(outer_r=2.0, inner_r=M2_SCREW_HOLE_R, h=3.0);
-    translate([bulkhead_x, POD_OUTER_W - 5.0, POD_OUTER_H - wall])
-        rotate([0, 90, 0])
-            screw_boss(outer_r=2.0, inner_r=M2_SCREW_HOLE_R, h=3.0);
-
-    // 6. Poka-Yoke Anti-Rotation Keying Lug (Codiernase for Stirnwand-Platine)
-    //    Matches 4.0 x 2.5 mm notch at bottom edge of openmotorbridge_pod_base PCB (y = 37.5..40.5 mm).
-    //    Mechanically blocks 180° upside-down installation of the Stirnwand-Adapter PCB!
-    translate([bulkhead_x - 1.8, 37.5, wall])
-        cube(size=[1.8, 3.0, 3.0], center=false);
 }
 
 // Standalone preview

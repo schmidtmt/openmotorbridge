@@ -149,7 +149,7 @@ OpenMotorBridge divides the mechanical enclosure of the satellites into two harm
 
 ![OpenMotorBridge Satellite Pod & Cartridge 3D Cutaway CAD](../images/cad/pod_cartridge_cutaway_3d.png)
 
-*Figure 8.6: Photorealistic 3D CAD diagonal cutaway render of the Satellite Pod with docked Cartridge. Clearly visible: 120° V-groove pipe saddle with EPDM O-rings around frame tube, M8 6-pin connector, internal bulkhead with dual compressed V4A springs, asymmetrical Poka-Yoke rails with 8mm height offset, 6-pin gold contact mating (4.8mm wipe length), and front bezel gasket.*
+*Figure 8.6: Photorealistic 3D CAD diagonal cutaway render of the Satellite Pod with docked Cartridge. Clearly visible: 120° V-groove pipe saddle with EPDM O-rings around frame tube, M8 connector, internal monolithic bulkhead with dual compressed V4A springs, asymmetrical Poka-Yoke rails with 8mm height offset, 2-pin Mill-Max gold contact mating, and front bezel gasket.*
 
 ---
 
@@ -183,7 +183,7 @@ To effectively protect swap cartridges across all motorcycle types (from freely 
       | NEODYMIUM |       |                       |            | blocks extraction!
       | MAGNET N52|       |                       |            |
       +-----+-----+       |                       |            |
- ===========╪=============╪=======================╪============╪=================
+ ============╪=============╪=======================╪============╪=================
   CARTRIDGE |             |                       |            |
             v Pulls       |   M2 PIVOT AXLE       |            v
       +-----------+outward|     (FULCRUM)         |   +-----------------+
@@ -221,18 +221,13 @@ To effectively protect swap cartridges across all motorcycle types (from freely 
 | **Gasket Compression Force** | **$4.5\,\text{N}$** | $30\,\%$ compression of $1.5\,\text{mm}$ silicone seal cord |
 | **Extraction Resistance** | **$> 120\,\text{N}$** | $90^\circ$ positive latch prevents unauthorized extraction |
 | **Release Magnetic Field** | **$B_r \ge 1.2\,\text{T}$ (N52)** | Contactless deflection of the rocker at target circle $X = 64\,\text{mm}$ |
-| **Auto-Eject Throw** | **$15\dots 20\,\text{mm}$** | Clears the $4.8\,\text{mm}$ 6-pin wipe with generous margin |
+| **Auto-Eject Throw** | **$15\dots 20\,\text{mm}$** | Disconnects contact with generous safety margin |
 
 #### 4.1.3 The 4 Kinematic Phases of Cartridge Insertion
 1. **Phase 1 - Pre-Centering ($x = 0\dots 80\,\text{mm}$):** Asymmetrical Poka-Yoke guide ribs engage housing channels. Lateral play is restricted to $\pm 0.2\,\text{mm}$.
 2. **Phase 2 - Spring Compression ($x = 80\dots 86\,\text{mm}$):** Sled face contacts the two stainless steel ejection springs in the bulkhead, building the $7.2\,\text{N}$ preload.
-3. **Phase 3 - 6-Pin Contact Mating & Snap Latch ($x = 86\dots 91\,\text{mm}$):** The 6 gold-plated square pins enter $4.8\,\text{mm}$ deep into the dual-beam female header (Wipe). The $30^\circ$ lead-in ramp deflects the rocker inward until it snaps into the notch at $X = 88\,\text{mm}$.
+3. **Phase 3 - Contact Mating & Snap Latch ($x = 86\dots 91\,\text{mm}$):** The dual Mill-Max heavy-duty spring contacts in the monolithic bulkhead mate positively with gold-plated pads `PAD1` (+12V/5V) and `PAD2` (GND) on `B.Cu` of `PCBA 03`. The $30^\circ$ lead-in ramp deflects the rocker inward until it snaps into the notch at $X = 88\,\text{mm}$.
 4. **Phase 4 - Flush Locking ($x = 91\,\text{mm}$):** The $90^\circ$ locking flank dead-locks positively. The perimeter silicone gasket compresses by $30\,\%$ (IP67 weather seal).
-
-#### 4.1.4 Contact Reliability & Wipe Length
-* **Header Geometry:** $6.5\,\text{mm}$ square pin extension ($0.64 \times 0.64\,\text{mm}$, $0.76\,\mu\text{m}$ hard gold over nickel).
-* **Effective Wipe Length:** **$4.8\,\text{mm}$** engagement inside female socket (exceeds USCAR-2 automotive spec of $\ge 1.5\,\text{mm}$ by a **factor of 3.2**).
-* **Contact Bounce Prevention:** $7.2\,\text{N}$ continuous axial spring preload completely prevents contact micro-chatter under vibrations up to $20\,\text{g}$.
 
 ---
 
@@ -240,58 +235,29 @@ To effectively protect swap cartridges across all motorcycle types (from freely 
 
 Both satellite pod locations use the identical 5-sided monocoque enclosure ($135.0 \times 70.0 \times 38.0\,\text{mm}$):
 
-![OpenMotorBridge Satellite Pod Exploded View](../images/cad/openmotorbridge_pod_exploded_view.png)
-
-*Figure 8.9: 3D CAD exploded view of the universal Satellite Pod with smooth, closed IP67 outer shell.*
-
-![OpenMotorBridge Satellite Pod X-Ray Assembly](../images/cad/openmotorbridge_pod_assembly_render_xray.png)
-
-*Figure 8.10: 3D X-ray view of the closed Satellite Pod showing internal clearances.*
-
 #### 4.2.1 V-Groove Pipe Saddle ($120^\circ$) & EPDM Strap Mounting
 * **Underside Profile:** $120^\circ$-V-saddle ($R = 15\,\text{mm}$) contours snugly to frame tubes from $\varnothing 18\dots 35\,\text{mm}$ ($1"$ crash bars, $7/8"$ subframes).
 * **4x Anchor Lugs:** Fast, scratch-free attachment using 2 UV-resistant EPDM O-rings providing vibration dampening.
 
-#### 4.2.2 Dual-Port Pod Base Architecture (Z-Axis Decoupling & Saddlebag Integration)
+#### 4.2.2 100% Monolithic 1-Piece Tunnel Enclosure & 2-Wire DC Contacting
 
-To support both exposed outdoor deployments (e.g. crash-bar clamps on adventure bikes) and protected saddlebag internal installations without requiring DIY soldered adapter cables, the Pod Base PCB ([`openmotorbridge_pod_base.kicad_pcb`](../../hardware/kicad_pod_base/openmotorbridge_pod_base.kicad_pcb)) incorporates a **Dual-Port Architecture**:
-
-```
-                         POD BASE PCB (TOP VIEW / LAYOUT)
- +------------------------------------------------------------------------+
- |                                                                        |
- |   [ PORT A: M8 6-Pin ]                   [ PORT B: USB-C Slim ]        |
- |   (Outdoor / Crash Bar)                  (Saddlebag / Interior Mount)  |
- |   Rugged threaded jack                   Sealed behind TPU dust cap    |
- |            |                                         |                 |
- |            +---> [ AUTOMATIC POWER-MUX /     ] <-----+                 |
- |                  [ IDEAL DIODES (LM66100)    ]                         |
- |                                |                                       |
- |                                v                                       |
- |                    [ SP3012 ESD Array ]                                |
- |                                |                                       |
- |                                v                                       |
- |                    [ J1: Mill-Max 6-Pin Pogo ]                         |
- |                    (Centered for cartridge engagement)                 |
- |                                                                        |
- +------------------------------------------------------------------------+
-```
-
-1. **Mechanical Decoupling of `J1` and `J2`:**
-   * By placing **Port A (M8, left)** and **Port B (Slim-Port, right)** side-by-side, the central pogo-pin region remains completely unobstructed. Mechanical assembly clearances and stack heights relax significantly.
-2. **100% Preservation of Enclosure & PCB Envelopes (Zero Length Increase):**
-   * The Pod Base PCB strictly maintains its ultra-compact dimensions of **$36.0 \times 20.0\,\text{mm}$**.
-   * The external 5-sided monocoque housing remains locked to its standardized envelope of **$135.0 \times 70.0 \times 38.0\,\text{mm}$**.
-   * **Port A Square Pass-Through Cutout ($11.5 \times 11.5\,\text{mm}$):** The square solder base passes completely through the $3.5\,\text{mm}$ wall, leaving the external M8 brass thread exposed and fully accessible for the cable coupling nut.
-   * **Planar PCB Seating without Wobble (Dual M2 Screws at H1 & H2):** The bulkhead partition at $X = 18.0\,\text{mm}$ features dual precision M2 screw bosses mating directly with board holes **H1 ($Y = 20\,\text{mm}$)** and **H2 ($Y = 50\,\text{mm}$)** at $Z = 19.0\,\text{mm}$, preventing any rocking effect.
-3. **Hardware Arbitration (Priority & Reverse-Current Protection):**
-   * An integrated ideal-diode power multiplexer (LM66100) automatically routes power from the active port while preventing reverse current feeding into the inactive port.
-4. **Axial Alignment & Recessed Plug-Well (Depth Compensation & Mechanical Protection):**
-   * Vertical USB-C receptacle on `B.Cu` recesses into a **$7.0\,\text{mm}$ deep plug-well** ($14.0 \times 8.5\,\text{mm}$) with $45^\circ$ lead-in chamfer.
-   * The solid housing wall absorbs all lateral shear and bending forces from the cable.
-   * When Port B is not in use, the molded TPU cap ([`008_pod_base_usbc_cap_tpu.scad`](../../hardware/cad/scad/02_pod_base/parts/008_pod_base_usbc_cap_tpu.scad)) seals it watertight (IP67).
-5. **Universal Multi-Platform Deployment (Support Vehicles / Cabin / Lab Bench):**
-   * Via Port B, the exact same pod operates with a standard slim USB-C cable in support vehicles or on the test bench.
+In the v9.6 Clean Architecture, the former pod base PCB (`PCBA 02`) has been **completely eliminated**:
+* **Elimination of the Screwed Bulkhead:**
+  * Because no circuit board resides inside the pod housing, the separate screw-in bulkhead partition with its 4x M2 corner screw bosses and 2x M2 PCB mounting bosses is eliminated without replacement.
+  * The entire enclosure (`pod_base_housing.scad`) is printed as a **seamless, 100% monolithic 1-piece monocoque**.
+  * The transverse bulkhead wall at $X = 18.0\,\text{mm}$, featuring the two guide sleeves for Mill-Max DC spring contacts ($10.0\,\text{mm}$ pitch) and the two integrated stainless steel ejection spring guide posts, is fused directly with the tunnel wall.
+  * **0 assembly screws, 0 loose parts, zero warpage, and maximum ingress protection.**
+* **Heavy-Duty Mill-Max Spring Contacts:**
+  * The 2-wire DC harness (+12V switched and GND) runs from the rear M8 connector (or cable gland) directly to the rear of the two contact sleeves in the integrated bulkhead.
+  * When sliding the cartridge in, the spring-loaded gold pins press against `PAD1` and `PAD2` on `B.Cu` of `PCBA 03` with $1.5\,\text{N}$ force.
+* **Integrated UWB Antenna Pocket in Cartridge Sled:**
+  * A contoured pocket ($12.0 \times 12.0 \times 0.8\,\text{mm}$) with coaxial cable routing is recessed into the floor of the cartridge base sled (`00_base_sled.scad`), positioned directly below the U.FL port on `PCBA 03` for the **Taoglas FXUWB10 UWB 6.5 GHz flex antenna**.
+  * The antenna radiates loss-free through the sled floor and dielectric PA12 pod enclosure into free space.
+* **Pannier Quick-Disconnect (COTS Magnetic Pogo Dock):** For removable panniers, connection across the luggage rack interface is implemented via an off-the-shelf industrial **2-Pin Magnetic Pogo Connector (IP68 COTS)**. If a pannier is detached, the magnetic coupling releases non-destructively. The eFuse on `PCBA 01` protects against shorts in $< 1\,\mu\text{s}$.
+* **Benefits of the Fully Passive Pod Base:**
+  1. **Zero Contact Chattering on Data Lines:** All audio and control communication runs over the wireless All-UWB backbone.
+  2. **Maximum Vibration Resistance:** No delicate SMD components or socket headers exposed to wheel spray and engine vibrations.
+  3. **100% Maintenance-Free:** The base enclosure contains zero active electronic parts.r on the test bench.
 
 ---
 

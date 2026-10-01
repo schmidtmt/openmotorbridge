@@ -21,6 +21,8 @@ module cartridge_base_sled(
     magnetic_lock = true,
     show_latch    = false
 ) {
+    y_pcb_c = sled_w / 2.0;
+
     difference() {
         union() {
             // 1. Sled Floor (75.0 x 54.0 x 2.5 mm)
@@ -33,22 +35,16 @@ module cartridge_base_sled(
             translate([0, sled_w - wall, 0])
                 cube(size=[sled_l, wall, sled_h + wall], center=false);
 
-            // 4. 6x M2 Lower PCB Mounting Standoffs:
-            // - X = 4.5 & 33.5 mm for Carrier PCB (Pods 1 & 2)
-            // - X = 4.5 & 50.5 mm for Compact OMM Transceiver PCB (Pod 3, 55x48mm)
-            y_pcb_c = sled_w / 2.0;
+            // 4. 4x M2 PCBA 03 Mounting Standoffs (35.0 x 25.0 mm board with 29.0 x 19.0 mm pitch)
+            // 100% Soldering-Iron Free PA12 self-tapping pilot holes (inner_r=0.825 for M2)
             translate([4.5, y_pcb_c - 9.5, wall])
-                screw_boss(outer_r=2.2, inner_r=M2_SCREW_HOLE_R, h=2.5);
+                screw_boss(outer_r=2.4, inner_r=0.825, h=2.5);
             translate([33.5, y_pcb_c - 9.5, wall])
-                screw_boss(outer_r=2.2, inner_r=M2_SCREW_HOLE_R, h=2.5);
-            translate([50.5, y_pcb_c - 9.5, wall])
-                screw_boss(outer_r=2.2, inner_r=M2_SCREW_HOLE_R, h=2.5);
+                screw_boss(outer_r=2.4, inner_r=0.825, h=2.5);
             translate([4.5, y_pcb_c + 9.5, wall])
-                screw_boss(outer_r=2.2, inner_r=M2_SCREW_HOLE_R, h=2.5);
+                screw_boss(outer_r=2.4, inner_r=0.825, h=2.5);
             translate([33.5, y_pcb_c + 9.5, wall])
-                screw_boss(outer_r=2.2, inner_r=M2_SCREW_HOLE_R, h=2.5);
-            translate([50.5, y_pcb_c + 9.5, wall])
-                screw_boss(outer_r=2.2, inner_r=M2_SCREW_HOLE_R, h=2.5);
+                screw_boss(outer_r=2.4, inner_r=0.825, h=2.5);
 
             // 5. 4x M2 Insert Fastening Corner Posts (h = 5.5 mm, z = wall .. wall + 5.5 mm)
             // Secures interchangeable modular OEM inserts (Sena, Cardo, Blindkassette) at outer perimeter
@@ -230,6 +226,28 @@ module cartridge_base_sled(
             cube(size=[20.0, wall + 3.0, sled_h + 8.0], center=false);
         translate([45.0, sled_w - wall - 1.5, 11.5])
             cube(size=[20.0, wall + 3.0, sled_h + 8.0], center=false);
+
+        // 15. Taoglas FXUWB10 UWB 6.5 GHz Flex Antenna Pocket in Sled Floor (12 x 12 x 0.8 mm)
+        // Positioned directly below ANT_UWB of PCBA 03 (X = 12.5, Y = y_pcb_c - 3.0)
+        translate([12.5 - 6.0, y_pcb_c - 3.0 - 6.0, wall - 0.8])
+            cube([12.0, 12.0, 0.9], center=false);
+        // U.FL coaxial cable routing channel (2.0 mm wide)
+        translate([12.5 - 6.0, y_pcb_c - 3.0 - 1.0, wall - 0.8])
+            cube([12.0, 2.0, 0.9], center=false);
+
+        // 16. Rear DC Contact Access Window for Pod Base Mill-Max Spring Pins
+        // Gives unobstructed physical contact to PAD1 (+12V/5V) and PAD2 (GND) on B.Cu of PCBA 03
+        translate([-0.5, y_pcb_c - 7.5, -0.1])
+            cube([4.0, 15.0, wall + 3.5], center=false);
+
+        // 17. 2x Auto-Eject Spring Retention Counter-Bores (Ø 5.2 mm x 2.5 mm deep)
+        // Sits at Y = 10.0 mm and Y = 48.0 mm (matching guide posts in pod bulkhead)
+        translate([-0.1, 10.0, 15.5])
+            rotate([0, 90, 0])
+                cylinder(r=2.6, h=3.0, center=false, $fn=24);
+        translate([-0.1, 48.0, 15.5])
+            rotate([0, 90, 0])
+                cylinder(r=2.6, h=3.0, center=false, $fn=24);
     }
 
     // 15. Optional Kinematic Anti-Theft Latch Mechanism (Visible in Assembly Previews)
