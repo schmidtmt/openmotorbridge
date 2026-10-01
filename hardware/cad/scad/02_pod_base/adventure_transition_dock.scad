@@ -22,6 +22,7 @@
 // =============================================================================
 
 include <../00_common/parameters.scad>;
+include <../00_common/screw_bosses.scad>;
 
 // --- Parametric Dimensions ---
 TD_POD_L            = 136.0; // Internal pod length clearance (mm)
@@ -207,11 +208,16 @@ module adventure_transition_dock_base(side = "right") {
                 cube([2.8, 12.0, 10.0], center=true);
         }
 
-        // E. 4x M3 Screw Holes in Bosses (Ø 3.2 mm for heat-set or tapping)
+        // E. 4x M3 Screw Holes in Bosses with Captive DIN 934 M3 Hex Nut Pockets (100% Soldering-Iron Free)
         for (bx = [LID_SCREW_X1, LID_SCREW_X2]) {
             for (by = [-LID_SCREW_Y2/2.0 + 2.0, LID_SCREW_Y2/2.0 - 2.0]) {
-                translate([bx, by, CONSOLE_CREASE_Z - 12.0])
-                    cylinder(r=1.8, h=15.0, $fn=16);
+                translate([bx, by, -0.1])
+                    hex_nut_pocket(
+                        sw=NUT_M3_SW,
+                        h=NUT_M3_H + 0.2,
+                        screw_r=M3_SCREW_HOLE_R,
+                        through_h=CONSOLE_CREASE_Z + 2.0
+                    );
             }
         }
 

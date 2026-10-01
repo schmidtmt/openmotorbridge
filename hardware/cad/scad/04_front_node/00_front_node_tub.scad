@@ -40,7 +40,8 @@ module front_node_lower_tub() {
             groove_depth = 1.6
         );
         
-        // 5. 4x M3 Corner Clamping Screw Holes (Pilot holes for direct M3 thread forming in PA12)
+        // 5. 4x M3 Corner Clamping Screw Holes with Captive DIN 934 M3 Hex Nut Pockets
+        // 100% Soldering-Iron Free & Infinite Maintenance Cycles: Steel-in-Steel Clamping (analogous to Central Box)
         corner_offsets = [
             [FRONT_NODE_CORNER_R, FRONT_NODE_CORNER_R],
             [FRONT_NODE_OUTER_L - FRONT_NODE_CORNER_R, FRONT_NODE_CORNER_R],
@@ -48,8 +49,14 @@ module front_node_lower_tub() {
             [FRONT_NODE_OUTER_L - FRONT_NODE_CORNER_R, FRONT_NODE_OUTER_W - FRONT_NODE_CORNER_R]
         ];
         for (co = corner_offsets) {
-            translate([co[0], co[1], FRONT_NODE_TUB_H - 12.0])
-                cylinder(r=M3_PILOT_HOLE_R, h=12.2, center=false);
+            translate([co[0], co[1], -0.1])
+                rotate([0, 0, 15])
+                    hex_nut_pocket(
+                        sw=NUT_M3_SW,
+                        h=NUT_M3_H + 0.2,
+                        screw_r=M3_SCREW_HOLE_R,
+                        through_h=FRONT_NODE_TUB_H + 2.0
+                    );
         }
         
         // 6. South USB Cable Comb Cutout Pocket (Y = 0)

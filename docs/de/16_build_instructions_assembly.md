@@ -165,7 +165,10 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 ---
 
 ### Schritt 4: Universal Front-Knoten (PCBA 05) zusammenbauen
-1. **Vorbereitung:** 4x M4 Edelstahlmuttern (DIN 934) in die formschlüssigen Sechskanttaschen des AMPS-Bohrbilds auf der Gehäuseunterseite der Unterwanne ([`front_node_lower_tub.stl`](../../hardware/cad/stl/04_front_node/front_node_lower_tub.stl)) einlegen (100 % lötkolbenfrei). Die 4x M3 Deckelschrauben schneiden/furchen ihr Gewinde direkt sauber und rüttelfest in die PA12-Kernlöcher der Unterwanne.
+1. **Muttern einlegen (100 % lötkolbenfrei & dauerfest):**
+   * **4x M3 Edelstahlmuttern (DIN 934 / DIN 985)** von unten in die formschlüssigen Sechskanttaschen der 4 Gehäuse-Ecken der Unterwanne ([`front_node_lower_tub.stl`](../../hardware/cad/stl/04_front_node/front_node_lower_tub.stl)) eindrücken (vollkommen analog zur Zentralbox).
+   * **4x M4 Edelstahlmuttern (DIN 934)** in die formschlüssigen Sechskanttaschen des AMPS-Bohrbilds auf der Gehäuseunterseite einlegen.
+   * *Ergebnis:* Reine Stahl-in-Stahl-Verschraubung. Das Gehäuse kann beliebig oft für Kabel-Upgrades oder Wartung geöffnet und mit vollem Anzugsmoment wieder rüttelfest verschraubt werden – kein Ausleiern von Kunststoffgewinden!
 2. **UWB-Antenne im Boden installieren:**
    * Taoglas FXUWB10 Flex-Antenne in die Bodentasche der Unterwanne einkleben.
    * U.FL-Kabel nach oben führen.
