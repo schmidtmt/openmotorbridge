@@ -80,20 +80,20 @@ module adventure_gsa_cage_dock_body() {
             // 1. Main Armored Caddy Box (Rally Faceted)
             gsa_faceted_box(CADDY_TOTAL_L, CADDY_TOTAL_W, CADDY_TOTAL_H, CADDY_CHAMFER);
 
-            // 2. Dual Clamping Bosses extending towards the rack tube (Y <= 0)
+            // 2. Dual Clamping Bosses extending towards the rack tube (Y <= 0) and solidly merging into Caddy Box (Y >= 0)
             for (cx = [CLAMP_X1, CLAMP_X2]) {
                 translate([cx - CLAMP_WIDTH_X/2.0, TUBE_OFFSET_Y - GSA_TUBE_R - 2.0, 2.0]) {
                     hull() {
                         cube([CLAMP_WIDTH_X, 10.0, CADDY_TOTAL_H - 4.0]);
-                        translate([0, GSA_TUBE_R + 8.0, 0])
+                        translate([0, 26.0, 0])
                             cube([CLAMP_WIDTH_X, 2.0, CADDY_TOTAL_H - 4.0]);
                     }
                 }
             }
 
-            // 3. Heavy-Duty Diagonal Reinforcing Ribs between clamps
+            // 3. Heavy-Duty Longitudinal Reinforcing Web between clamps merging into Caddy Box
             translate([CLAMP_X1 + CLAMP_WIDTH_X/2.0, TUBE_OFFSET_Y + 1.0, 4.0])
-                cube([CLAMP_SPAN_X - CLAMP_WIDTH_X, 6.0, CADDY_TOTAL_H - 8.0]);
+                cube([CLAMP_SPAN_X - CLAMP_WIDTH_X, 14.0, CADDY_TOTAL_H - 8.0]);
         }
 
         // --- SUBTRACTIONS ---
@@ -113,12 +113,12 @@ module adventure_gsa_cage_dock_body() {
 
         // Anti-slip internal friction grip ridges
         for (cx = [CLAMP_X1, CLAMP_X2]) {
-            for (dx = [-6.0, 0.0, 6.0]) {
+            for (dx = [-6.0, 6.0]) {
                 translate([cx + dx, TUBE_OFFSET_Y, TUBE_OFFSET_Z])
                     rotate([0, 90, 0])
                         difference() {
                             cylinder(r=GSA_TUBE_R + 0.6, h=1.5, center=true, $fn=36);
-                            cylinder(r=GSA_TUBE_R, h=2.0, center=true, $fn=36);
+                            cylinder(r=GSA_TUBE_R - 0.5, h=3.0, center=true, $fn=36);
                         }
             }
         }
@@ -138,12 +138,25 @@ module adventure_gsa_cage_dock_body() {
             }
         }
 
-        // D. Internal M8 PUR Cable Concealed Routing Channel (Port A to front tube shadow)
-        translate([4.0, GSA_WALL + 20.0, GSA_FLOOR]) {
-            hull() {
-                cube([10.0, 16.0, 12.0]);
-                translate([0, -18.0, 0]) cube([10.0, 16.0, 12.0]);
-            }
+        // D. Internal 2-Wire DC Cable Routing Channel & Mini Zip-Tie Anchor Bridge
+        // Spans 52.0 mm transversely covering Port A (Y=35 mm) and Port B (Y=51 mm) into the tube clamp shadow
+        translate([2.0, GSA_WALL + 16.0, GSA_FLOOR]) {
+            cube([12.0, 52.0, 14.0]);
+        }
+        // Mini zip-tie anchor slot (2.5 x 1.4 mm) in the tube clamp shadow
+        translate([6.0, GSA_WALL + 6.0, GSA_FLOOR + 2.0]) {
+            cube([3.0, 16.0, 2.5]);
+        }
+
+        // G. 4x Lateral Relief Pockets for Pod Base Strap Hook Lugs (X=37 and X=122)
+        // Pod lugs project 3.0 mm laterally. Pockets provide 14.0 x 4.0 x 8.5 mm clearance.
+        for (hx = [37.0, 122.0]) {
+            // Inner wall (facing tube)
+            translate([hx - 7.0, GSA_WALL + 4.0 - 3.8, GSA_FLOOR - 0.1])
+                cube([14.0, 4.0, 8.5]);
+            // Outer wall
+            translate([hx - 7.0, GSA_WALL + 4.0 + GSA_POD_W - 0.2, GSA_FLOOR - 0.1])
+                cube([14.0, 4.0, 8.5]);
         }
 
         // E. Lateral Expedition Style Cutouts (Lightweighting & aesthetics)
@@ -190,7 +203,9 @@ module adventure_gsa_clamp_cap() {
 // -----------------------------------------------------------------------------
 // MASTER MODULE: GSA CAGE DOCK ASSEMBLY
 // -----------------------------------------------------------------------------
-module adventure_gsa_cage_dock(part = "assembly") {
+part = "assembly";
+
+module adventure_gsa_cage_dock(part = part) {
     if (part == "body") {
         adventure_gsa_cage_dock_body();
     } else if (part == "cap") {
@@ -221,4 +236,4 @@ module adventure_gsa_cage_dock(part = "assembly") {
 }
 
 // Standalone render
-adventure_gsa_cage_dock(part = "assembly");
+adventure_gsa_cage_dock(part = part);

@@ -94,6 +94,7 @@ STL_TARGETS: List[Tuple] = [
     ("02_pod_base/parts/009_magsafe_frame_dock.scad", "02_pod_base/components/009_magsafe_frame_dock.stl", ["-D", 'part="body"']),
     ("02_pod_base/parts/009_magsafe_frame_dock.scad", "02_pod_base/components/009_magsafe_frame_lid.stl", ["-D", 'part="lid"']),
     ("02_pod_base/parts/009_magsafe_frame_dock.scad", "02_pod_base/components/009_magsafe_frame_clamp.stl", ["-D", 'part="clamp"']),
+    ("02_pod_base/parts/010_saddlebag_hole_grommet_split.scad", "02_pod_base/components/010_saddlebag_hole_grommet_split.stl", ["-D", 'part="print_plate"']),
 
     # 10. Adventure-Kit (BMW GS / GSA, KTM, Africa Twin)
     ("02_pod_base/adventure_pannier_rack_clamp.scad", "02_pod_base/adventure_pannier_rack_clamp_base.stl", ["-D", 'part="base"']),

@@ -22,18 +22,18 @@ HOLE_R          = HOLE_DIA / 2.0; // 9.5 mm
 WALL_THICKNESS  = 3.5;  // Saddlebag tub floor wall thickness (mm)
 SLEEVE_DIA      = 10.2; // OEM M8 steel spacer sleeve outer diameter (mm)
 SLEEVE_R        = SLEEVE_DIA / 2.0; // 5.1 mm
-CABLE_DIA       = 2.2;  // Slim internal flexible cable outer diameter (mm)
-CABLE_R         = CABLE_DIA / 2.0;  // 1.1 mm
+CABLE_DIA       = 3.6;  // 2-wire DC harness (+5V/GND, FLRY-B / PUR, seals 2.5..4.2 mm)
+CABLE_R         = CABLE_DIA / 2.0;  // 1.8 mm
 COLLAR_DIA      = 24.0; // Upper and lower compression sealing flange diameter (mm)
 TOTAL_H         = WALL_THICKNESS + 4.0; // 7.5 mm total grommet height
 
-// Asymmetric offset: steel sleeve shifted -2.0 mm, cable placed at +5.5 mm
+// Asymmetric offset: steel sleeve shifted -2.0 mm, cable placed at +6.0 mm (leaving >1.1 mm solid elastomeric bridge)
 SLEEVE_OFFSET_Y = -2.0;
-CABLE_OFFSET_Y  = 5.5;
+CABLE_OFFSET_Y  = 6.0;
 
 // Stage-1 Strain Relief Tower parameters (Inside saddlebag tub on Part A)
-TOWER_H         = 9.0;  // Tower height above top flange (mm)
-ZIP_TIE_W       = 2.8;  // Width of mini zip-tie slot (mm)
+TOWER_H         = 10.0; // Tower height above top flange (mm)
+ZIP_TIE_W       = 3.0;  // Width of mini zip-tie slot (mm)
 ZIP_TIE_H       = 1.6;  // Thickness of mini zip-tie slot (mm)
 
 module saddlebag_hole_grommet_full() {
@@ -61,8 +61,8 @@ module saddlebag_hole_grommet_full() {
                 hull() {
                     translate([-4.5, 3.5, 0]) cylinder(r=1.5, h=TOWER_H);
                     translate([4.5, 3.5, 0]) cylinder(r=1.5, h=TOWER_H);
-                    translate([-4.5, 10.0, 0]) cylinder(r=1.5, h=TOWER_H);
-                    translate([4.5, 10.0, 0]) cylinder(r=1.5, h=TOWER_H);
+                    translate([-4.5, 10.5, 0]) cylinder(r=1.5, h=TOWER_H);
+                    translate([4.5, 10.5, 0]) cylinder(r=1.5, h=TOWER_H);
                 }
             }
         }
@@ -76,7 +76,7 @@ module saddlebag_hole_grommet_full() {
         translate([0, SLEEVE_OFFSET_Y, TOTAL_H/2 + TOWER_H/2])
             cylinder(r=8.5, h=TOWER_H + 2.0, center=true, $fn=60);
 
-        // C. Dedicated Sealed Cable Pass-Through Channel (Ø 2.2 mm)
+        // C. Dedicated Sealed Cable Pass-Through Channel (Ø 3.6 mm)
         translate([0, CABLE_OFFSET_Y, 0])
             cylinder(r=CABLE_R, h=TOTAL_H + 2*TOWER_H + 10.0, center=true);
 
@@ -135,5 +135,15 @@ module print_plate_saddlebag_grommet() {
         saddlebag_grommet_part_b();
 }
 
-// Default preview: Assembled grommet with Stage-1 strain relief
-saddlebag_hole_grommet_full();
+// Parametric part selector
+part = "full"; // ["full", "part_a", "part_b", "print_plate"]
+
+if (part == "part_a") {
+    saddlebag_grommet_part_a();
+} else if (part == "part_b") {
+    saddlebag_grommet_part_b();
+} else if (part == "print_plate") {
+    print_plate_saddlebag_grommet();
+} else {
+    saddlebag_hole_grommet_full();
+}

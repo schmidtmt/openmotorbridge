@@ -198,16 +198,18 @@ Alle Gehäuseteile sind konsequent für das **IKEA-Prinzip** konstruiert: **Kein
 
 ### 10.3 Fahrzeugspezifische Montage-Kits (3D-Druckteile)
 * **Kit 1: BMW R1250 / R1300 GS (Standard / Vario-Koffer):**
-  * `adventure_transition_dock_base.stl` (2 Stk.): Kofferunabhängige Basis-Wannen für die Sitzbank-Bügelfalte (Ø 28 mm Rahmenrohr).
+  * `adventure_transition_dock_base.stl` (2 Stk.): Kofferunabhängige Basis-Wannen für die Sitzbank-Bügelfalte (Ø 28 mm Rahmenrohr) mit 4x Spanngurt-Freisparungen und 2-Draht DC-Kabelführung.
   * `adventure_transition_dock_lid.stl` (2 Stk.): Aerodynamische Karosserie-Deckel mit Bügelfalten-Lichtkante & Cardo/Sena-Ausschnitt.
-  * `adventure_underseat_cross_rail.stl` (1 Stk.): Verwindungssteife Unter-Sitzbank-Sattelbrücke zur 100 % verdrehsicheren Verbindung von links und rechts mit integrierter M8-Kabelrinne.
+  * `adventure_underseat_cross_rail.stl` (1 Stk.): Verwindungssteife Unter-Sitzbank-Sattelbrücke zur 100 % verdrehsicheren Verbindung von links und rechts mit integrierter 2-Draht DC-Kabelrinne.
   * `adventure_rack_radar_mount.stl` & `adventure_rack_radar_clamp_cap.stl` (je 1 Stk.): Minimaler, schottergeschützter Heckradar-Rohrträger unter der Gepäckbrücke (Ø 18 mm Rohr) mit M5-Verschraubung von unten und integriertem Steinschlag-Spoiler.
   * `radar_swivel_tilt_cradle.stl` (1 Stk.): Schwerlast-Neigegelenk (Actioncam/GoPro-Hirth-Cradle) mit 2x M4-Verschraubung ins Radar 2.0 Gehäuse.
 * **Kit 2: BMW R1250 / R1300 GSA (Adventure mit Ø 18 mm Edelstahl-Alukofferträger):**
-  * `adventure_gsa_cage_dock_body.stl` & `adventure_gsa_clamp_cap.stl` (je 2 Stk.): Schwerlast-Käfigdocks ("GSA Cage Dock") für Pod 1 & 2 im $45\,\text{mm}$ Totraum des Trägerrahmens mit $85\,\text{mm}$ Doppel-Rohrsattelbasis, 4x M5 Verschraubung, Steinschlag-Gleitkeil & verdecktem M8-Kanal.
+  * `adventure_gsa_cage_dock_body.stl` & `adventure_gsa_clamp_cap.stl` (je 2 Stk.): Schwerlast-Käfigdocks ("GSA Cage Dock") für Pod 1 & 2 im $45\,\text{mm}$ Totraum des Trägerrahmens mit $85\,\text{mm}$ Doppel-Rohrsattelbasis, 4x M5 Verschraubung, 4x Spanngurt-Freisparungen, Steinschlag-Gleitkeil & verdecktem 2-Draht DC-Kanal mit Kabelbinderbrücke im Rohrschatten.
   * `adventure_rack_radar_mount.stl` & `adventure_rack_radar_clamp_cap.stl` (je 1 Stk.): Schottergeschützter Heckradar-Rohrträger unter der Gepäckbrücke.
   * `radar_swivel_tilt_cradle.stl` (1 Stk.): Schwerlast-Neigegelenk mit 2x M4-Verschraubung.
 * **Kit 3: Harley-Davidson Touring & Classic Bagger (Street Glide, Road Glide, Road King):**
+  * `saddlebag_lid_dock.stl` (2 Stk.): Kofferdeckel-Docks mit Scharnier-Torx-Flansch, 4x Spanngurt-Freisparungen & 2-Draht DC-Zugentlastungsschnauze.
+  * `010_saddlebag_hole_grommet_split.stl` (2 Stk.): Geteilte EPDM/TPU-Durchführung für Ø 3,6 mm 2-Draht DC-Kabel in Ø 12 mm Wandbohrung (oberhalb Schwingenlager).
   * `radar_license_plate_bracket.stl` (1 Stk.): Entkoppelter Kennzeichen-Radarhalter für Peitsche 5.
   * `radar_swivel_tilt_cradle.stl` (1 Stk.): Radar 2.0 Schwerlast-Neigegelenk (Actioncam/GoPro-Hirth-Cradle) mit 2x M4-Verschraubung und 36-Zahn Hirth-Verzahnung.
   * `radar_mr20_housing.stl` & `radar_mr20_radome.stl` (1 Stk.): Radar 2.0 PA12 Flügel-Gehäuse mit Spritzwasser-Schutzspoiler und PC-Radom.
@@ -325,7 +327,7 @@ Anstelle der früheren proprietären Platine `PCBA 06` wird die werkzeuglose Kof
   | (Unter der Sitzbank|                                    | (Pannier / Vario)  |
   |  am Rohr Ø 26 mm)  |                                    |                    |
   | [009_magsafe_      |     Magnetische Abreißtrennung     | [010_saddlebag_    |
-  |  frame_dock.stl]   |     (10 - 15 N axiale Haltekraft)  |  hole_grommet.stl] |
+  |  frame_dock.stl]   |     (10 - 15 N axiale Haltekraft)  |  grommet_split.stl]|
   |   +--------------+ |             (Klack!)               | +----------------+ |
   |   | 2-Pin Magnet-| | <================================> | | 2-Pin Magnet-  | |
   |   | Pogo BUCHSE  | |                                    | | Pogo STECKER   | |

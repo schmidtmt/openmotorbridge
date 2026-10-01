@@ -145,6 +145,17 @@ module saddlebag_lid_dock() {
         translate([CRADLE_OUTER_L + 5.0, 10.0, 3.0]) {
             cube([4.0, 55.0, 3.5]);
         }
+
+        // G. 4x Lateral Relief Pockets for Pod Base Strap Hook Lugs (X=25 and X=110)
+        // Pod lugs project 3.0 mm laterally. Pockets provide 14.0 x 4.0 x 8.5 mm clearance.
+        for (hx = [26.0, 111.0]) {
+            // Inboard flank (Y = 0)
+            translate([hx - 7.0, DOCK_WALL - 3.8, DOCK_WALL - 0.1])
+                cube([14.0, 4.0, 8.5]);
+            // Outboard flank (Y = DOCK_WALL + DOCK_POD_W)
+            translate([hx - 7.0, DOCK_WALL + DOCK_POD_W - 0.2, DOCK_WALL - 0.1])
+                cube([14.0, 4.0, 8.5]);
+        }
     }
 }
 

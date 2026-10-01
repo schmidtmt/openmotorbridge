@@ -700,18 +700,26 @@ Auf Reiseenduros existieren je nach Einsatzzweck und Koffersystem zwei grundvers
   * **Montage:** An den Innenseiten der massiven $\varnothing 18\,\text{mm}$ Edelstahl-Kofferträger im geschützten Rahmendreieck über das hochbelastbare **GSA Cage Dock** ([`adventure_gsa_cage_dock.scad`](../../hardware/cad/scad/02_pod_base/adventure_gsa_cage_dock.scad)).
   * **Design-Philosophie (Expedition Armor + Stealth Niche):**
     Kombiniert die unzerstörbare Optik professioneller Rallye- & Expeditions-Ausrüstung mit einer vollständigen Nischen-Integration: Der Pod wandert tief in den ca. $45\,\text{mm}$ breiten, sonst ungenutzten Totraum zwischen Alukoffer-Wand und Heckrahmen/Radkasten.
+  * **4x Spanngurt-Freisparungen für Pod-Außenlaschen:**
+    Das Pod-Grundgehäuse (`pod_base_housing.scad`) besitzt 4x außenliegende Spanngurt-Ösen ($X = 37{,}0\,\text{mm}$ und $X = 122{,}0\,\text{mm}$, Kragweite $3{,}0\,\text{mm}$). Im GSA Cage Dock sind 4x korrespondierende Freisparungstaschen ($14{,}0 \times 4{,}0 \times 8{,}5\,\text{mm}$) in die Seitenwangen eingeformt. Das Gehäuse gleitet saugend und ohne Klemmen formschlüssig bis auf den Dockboden.
+  * **Erweiterter Querkabelkanal & 2-Draht DC-Zugentlastung:**
+    Der rückseitige Kabelkanal überspannt mit $52{,}0\,\text{mm}$ Querspannweite sowohl Port A ($Y = 34{,}5\,\text{mm}$) als auch Port B ($Y = 50{,}5\,\text{mm}$). Eine integrierte Mini-Kabelbinderbrücke ($2{,}5 \times 1{,}2\,\text{mm}$) im geschützten Rohrsattelschatten fängt das 2-adrige Automotive-Versorgungskabel ($2 \times 0{,}5\,\text{mm}^2$, $\varnothing 3{,}6\,\text{mm}$ PUR/FLRY) vibrationsfest ab. Das Kabel wird scheuerfrei im Rohrschatten zur Zentralbox geführt.
 
 ![OpenMotorBridge GSA Cage Dock Detailansicht](../images/cad/gsa_cage_dock_cad.png)
 
-*Abbildung 8.29-A: CAD-Detailansicht des Heavy-Duty GSA Cage Docks (`adventure_gsa_cage_dock.scad`). Zu sehen sind der tief eingelassene Sena SPIDER X Slim Pod 1 im schützenden PA12-CF-Panzerkäfig, die breite 85 mm Doppel-Rohrsattelbasis für Ø 18 mm Edelstahlrohre mit 4x M5 V4A-Verschraubung und DIN 985 Stoppmuttertaschen, die 45°-Schotter-Abweiserkeile gegen Steinschlag vom Hinterrad sowie die verdeckte M8-Kabelrinne im Rohrschatten.*
+*Abbildung 8.29-A: CAD-Detailansicht des Heavy-Duty GSA Cage Docks (`adventure_gsa_cage_dock.scad`). Zu sehen sind der tief eingelassene Sena SPIDER X Slim Pod 1 im schützenden PA12-CF-Panzerkäfig, die 4x Spanngurt-Freisparungstaschen in den Seitenwangen, die breite 85 mm Doppel-Rohrsattelbasis für Ø 18 mm Edelstahlrohre mit 4x M5 V4A-Verschraubung und DIN 985 Stoppmuttertaschen, die 45°-Schotter-Abweiserkeile gegen Steinschlag vom Hinterrad sowie die verdeckte 2-Draht DC-Kabelrinne mit Kabelbinderbrücke im Rohrschatten.*
 
 * **Variante B: Standard-BMW GS und nackte Reiseenduros (ohne Rohr-Kofferträger)**
   * **Montage:** Über ein zweiteiliges, aerodynamisch skulpturiertes **Transition Dock** ([`adventure_transition_dock.scad`](../../hardware/cad/scad/02_pod_base/adventure_transition_dock.scad)) in Kombination mit einer verdeckten **Unter-Sitzbank-Sattelbrücke** ([`adventure_underseat_cross_rail.scad`](../../hardware/cad/scad/02_pod_base/adventure_underseat_cross_rail.scad)).
   * **Positionierung:** Exakt in der optischen "Bügelfalte" am Übergang von der Fahrer- zur Soziussitzbank entlang des $\varnothing 28\,\text{mm}$ Heckrahmenrohrs.
+  * **4x Freisparungen für Pod-Ösen:**
+    Auch die Transition Dock Basis (`adventure_transition_dock_base.stl`) verfügt über 4x laterale Taschen ($X = 25{,}0\,\text{mm}$ und $X = 110{,}0\,\text{mm}$), sodass der Pod bündig in die Karosserie-Wanne eintaucht.
+  * **Integrierte 2-Draht DC-Führung zur Sattelbrücke:**
+    Die vordere Schnauzenkammer nimmt das 2-adrige DC-Kabel formschlüssig auf und leitet es über die rahmenseitige Brückenzunge nahtlos in die Kabelrinne der Unter-Sitzbank-Sattelbrücke (`adventure_underseat_cross_rail.stl`) – unsichtbar unter dem Sitzbankschaum direkt zur Zentralbox verlegt.
 
 ![OpenMotorBridge GS Transition Dock & Unter-Sitzbank-Sattelbrücke](../images/cad/adventure_transition_dock_cad.png)
 
-*Abbildung 8.29-B: CAD-Detailansicht des GS Transition Docks mit Unter-Sitzbank-Sattelbrücke.*
+*Abbildung 8.29-B: CAD-Detailansicht des GS Transition Docks mit Unter-Sitzbank-Sattelbrücke. Erkennbar sind die aerodynamische Bügelfalten-Halbschale mit Freisparungen für die Pod-Spanngurtlaschen, die M5-Rahmenklemmung und die geschützte 2-Draht DC-Kabelüberleitung zur Unter-Sitzbank-Sattelbrücke.*
 
 ---
 
@@ -778,6 +786,10 @@ Das universelle Kofferdeckel-Dock ([`saddlebag_lid_dock.scad`](../../hardware/ca
    * Über dem Kassetteneingang kragt eine integrierte **Tropfkante ($16 \times 2\,\text{mm}$ mit $30^\circ$-Dachschräge)** aus. Sie leitet Kondenswasser oder herablaufende Regentropfen beim Öffnen des Kofferdeckels zuverlässig seitlich an der Kassetten-Dichtfuge vorbei.
 5. **Vibrationsfeste EPDM-Sicherung:**
    * Zwei seitliche Durchbrüche ($25 \times 3\,\text{mm}$) nehmen ein elastisches Spannband auf, das den Pod bei harten Fahrbahnschlägen spielfrei in der Wanne arretiert.
+6. **4x Spanngurt-Freisparungstaschen ($X = 26{,}0\,\text{mm}$ und $X = 111{,}0\,\text{mm}$):**
+   * Das Pod-Grundgehäuse (`pod_base_housing.scad`) besitzt 4x seitlich um $3{,}0\,\text{mm}$ auskragende Spanngurt-Ösen (Gesamtbreite $76\,\text{mm}$ gegenüber nominal $70\,\text{mm}$).
+   * In die Seitenwände des Kofferdeckel-Docks sind 4x korrespondierende Freisparungstaschen ($14{,}0 \times 4{,}0 \times 8{,}5\,\text{mm}$) eingeformt.
+   * Der Pod lässt sich vollkommen plan und ohne Zwangskräfte bis auf den Dockboden einsetzen; die Wannenstruktur bleibt maximal formstabil.
 
 #### 6.5.2 Kabelführung, Zündungsplus & Werkstattsichere MagSafe-Abreißkupplung
 
@@ -807,8 +819,8 @@ Die Verkabelung der Kofferdeckel-Pods löst das fundamentale Praxiskriterium des
    * **Vorteile:**
      - **100 % Spritzwasser- & Dreckschutz:** Am Kofferboden sammelt sich Regenwasser und Straßengischt vom Hinterrad. Die seitliche Vorderwand liegt im absoluten Wind- und Gischt-Schatten des Rahmens.
      - **Kein Scheuern bei Bodenkontakt:** Beim Abstellen des Koffers im Hotel oder in der Werkstatt berührt die Durchführung niemals den Boden.
-   * **Stufe 1 (Koffer-Vorderwand):** Die geteilte EPDM/TPU-Dichtung (`010_saddlebag_hole_grommet_split.scad`) mit angeformtem Klemmturm fixiert das Kabel per Mini-Kabelbinder formschlüssig in der $\varnothing 12\,\text{mm}$ Wandbohrung. Externe Magnet-Abreißkräfte ($10\dots 15\,\text{N}$) werden vollständig in die Kofferwand eingeleitet. Der **Kofferboden bleibt zu 100 % lochfrei und wasserdicht**.
-   * **Stufe 2 (Kofferdeckel):** Im Schnauz des Kofferdeckel-Docks ([`saddlebag_lid_dock.scad`](../../hardware/cad/scad/02_pod_base/saddlebag_lid_dock.scad)) wird das Kabel formschlüssig abgefangen.
+   * **Stufe 1 (Koffer-Vorderwand & Geteilte Dichtung `010_saddlebag_hole_grommet_split.scad`):** Die geteilte EPDM/TPU-Dichtung (`010_saddlebag_hole_grommet_split.scad`) dichtet die $\varnothing 12\,\text{mm}$ Wandbohrung mit umlaufenden Doppellippen zuverlässig ab. Sie ist auf ein $\varnothing 3{,}6\,\text{mm}$ 2-Draht Automotive-Kabel optimiert (Dichtbereich $\varnothing 2{,}5\dots 4{,}2\,\text{mm}$ FLRY-B / PUR). Durch den gezielten Achsversatz des Kabelkanals auf $Y = 6{,}0\,\text{mm}$ bleibt ein massiver elastischer Dichtsteg von $> 1{,}1\,\text{mm}$ zur M8-Stahlhülsen-Verschraubung erhalten. Ein angeformter Klemmturm fixiert das Kabel per Mini-Kabelbinder formschlüssig. Externe Magnet-Abreißkräfte ($10\dots 15\,\text{N}$) werden vollständig in die Kofferwand eingeleitet. Der **Kofferboden bleibt zu 100 % lochfrei und wasserdicht**. Über den OpenSCAD-Selektor `part` können die Hälften einzeln (`"part_a"`, `"part_b"`) oder als fertige Druckplatte (`"print_plate"`) exportiert werden.
+   * **Stufe 2 (Kofferdeckel & 2-Draht DC-Schnauze):** Im Schnauz des Kofferdeckel-Docks ([`saddlebag_lid_dock.scad`](../../hardware/cad/scad/02_pod_base/saddlebag_lid_dock.scad)) sind dedizierte $\varnothing 4{,}4\,\text{mm}$ Klemmkanäle und Kabelbinder-Rillen integriert, die das 2-adrige DC-Kabel vibrationsfest und zugentlastet fixieren.
    * **Ergebnis:** Die interne Verkabelung und die Pod-Kontakte unterliegen **0 Newton dynamischer oder statischer Zugkraft**.
 
 #### 6.5.3 HF-Physik: Warum Kofferdeckel statt Kofferboden?

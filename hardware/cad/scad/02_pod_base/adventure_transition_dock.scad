@@ -220,6 +220,17 @@ module adventure_transition_dock_base(side = "right") {
             translate([sx - 3.0, -CONSOLE_MAX_W, TD_FLOOR - 2.0])
                 cube([6.0, 2 * CONSOLE_MAX_W, 2.5]);
         }
+
+        // G. 4x Lateral Relief Pockets for Pod Base Strap Hook Lugs (X=25 and X=110)
+        // Pod lugs project 3.0 mm laterally. Pockets provide 14.0 x 4.0 x 8.5 mm clearance.
+        for (hx = [25.0, 110.0]) {
+            // Inboard flank (-Y)
+            translate([hx - 7.0, -TD_POD_W/2.0 - 3.8, TD_FLOOR - 0.1])
+                cube([14.0, 4.0, 8.5]);
+            // Outboard flank (+Y)
+            translate([hx - 7.0, TD_POD_W/2.0 - 0.2, TD_FLOOR - 0.1])
+                cube([14.0, 4.0, 8.5]);
+        }
     }
 }
 
@@ -275,7 +286,11 @@ module adventure_transition_dock_lid(variant = "open_intercom") {
 // -----------------------------------------------------------------------------
 // MASTER MODULE: ADVENTURE TRANSITION DOCK ASSEMBLY & STL RENDERER
 // -----------------------------------------------------------------------------
-module adventure_transition_dock(part = "assembly", side = "right", lid_variant = "open_intercom") {
+part = "assembly";
+side = "right";
+lid_variant = "open_intercom";
+
+module adventure_transition_dock(part = part, side = side, lid_variant = lid_variant) {
     if (part == "base") {
         adventure_transition_dock_base(side = side);
     } else if (part == "lid") {
@@ -290,4 +305,4 @@ module adventure_transition_dock(part = "assembly", side = "right", lid_variant 
 }
 
 // Standalone render
-adventure_transition_dock(part = "assembly", side = "right", lid_variant = "open_intercom");
+adventure_transition_dock(part = part, side = side, lid_variant = lid_variant);

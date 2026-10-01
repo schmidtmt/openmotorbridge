@@ -655,18 +655,26 @@ Depending on luggage configurations, adventure bikes deploy two specialized moun
   * **Mounting:** Mounted on the inside of the massive $\varnothing 18\,\text{mm}$ stainless steel pannier rack structure inside the protected frame triangle via the heavy-duty **GSA Cage Dock** ([`adventure_gsa_cage_dock.scad`](../../hardware/cad/scad/02_pod_base/adventure_gsa_cage_dock.scad)).
   * **Design Philosophy (Expedition Armor + Stealth Niche):**
     Blends the indestructible aesthetic of professional rally raid and overland gear with stealth niche packaging: The pod is deeply recessed into the approx. $45\,\text{mm}$ wide dead space between the aluminum pannier case inner wall and the motorcycle subframe/wheel arch.
+  * **4x Strap Hook Clearance Pockets:**
+    The pod base housing (`pod_base_housing.scad`) integrates 4x lateral strap hook lugs ($X = 37.0\,\text{mm}$ and $X = 122.0\,\text{mm}$, protruding $3.0\,\text{mm}$). The GSA Cage Dock features 4x matching clearance pockets ($14.0 \times 4.0 \times 8.5\,\text{mm}$) in its side flank walls, ensuring the pod drops in completely flush and bind-free without stressing the dock structure.
+  * **Expanded Transverse Conduit & 2-Wire DC Strain Relief:**
+    The rear wiring conduit spans $52.0\,\text{mm}$ across both Port A ($Y = 34.5\,\text{mm}$) and Port B ($Y = 50.5\,\text{mm}$). An integrated mini zip-tie tie-down bridge ($2.5 \times 1.2\,\text{mm}$) sheltered inside the tube clamp shadow anchors the 2-wire automotive DC harness ($2 \times 0.5\,\text{mm}^2$, $\varnothing 3.6\,\text{mm}$ PUR/FLRY) vibration-free, routing cleanly along the rack tube to the Central Box.
 
 ![OpenMotorBridge GSA Cage Dock Detailed View](../images/cad/gsa_cage_dock_cad.png)
 
-*Figure 8.29-A: CAD detailed view of the heavy-duty GSA Cage Dock (`adventure_gsa_cage_dock.scad`). Depicted are the deeply recessed Sena SPIDER X Slim Pod 1 nestled within the protective PA12-CF armor cage, the broad 85 mm dual-saddle clamping base for Ø 18 mm stainless steel tubes with 4x M5 V4A socket bolts and DIN 985 locknut retention pockets, the 45° faceted deflection skid plate shielding against gravel roost from the rear wheel, and the concealed M8 cable conduit routed in the tube's aerodynamic shadow.*
+*Figure 8.29-A: CAD detailed view of the heavy-duty GSA Cage Dock (`adventure_gsa_cage_dock.scad`). Depicted are the deeply recessed Sena SPIDER X Slim Pod 1 nestled within the protective PA12-CF armor cage, the 4x strap hook clearance pockets in the flank walls, the broad 85 mm dual-saddle clamping base for Ø 18 mm stainless steel tubes with 4x M5 V4A socket bolts and DIN 985 locknut retention pockets, the 45° faceted deflection skid plate shielding against gravel roost from the rear wheel, and the concealed 2-wire DC cable conduit with zip-tie anchor in the tube's shadow.*
 
 * **Option B: Standard BMW GS & Naked Adventure Bikes (Without Luggage Racks):**
   * **Mounting:** Mounted via a two-piece, aerodynamically sculpted **Transition Dock** ([`adventure_transition_dock.scad`](../../hardware/cad/scad/02_pod_base/adventure_transition_dock.scad)) in combination with a concealed **Under-Seat Saddle Bridge** ([`adventure_underseat_cross_rail.scad`](../../hardware/cad/scad/02_pod_base/adventure_underseat_cross_rail.scad)).
   * **Positioning:** Directly inside the optical waist crease ("Bügelfalte") at the transition between rider and passenger seats along the $\varnothing 28\,\text{mm}$ subframe tube.
+  * **4x Clearance Pockets for Pod Lugs:**
+    The Transition Dock base (`adventure_transition_dock_base.stl`) features 4x lateral relief pockets ($X = 25.0\,\text{mm}$ and $X = 110.0\,\text{mm}$) allowing the pod to nestle flush inside the aerodynamic cradle.
+  * **Integrated 2-Wire DC Channel to Saddle Bridge:**
+    The nose wiring chamber captures the 2-wire DC power cable form-fittingly and routes it through the inboard bridge tongue directly into the under-seat saddle bridge (`adventure_underseat_cross_rail.stl`)--routed invisibly under the seat foam to the Central Box.
 
 ![OpenMotorBridge GS Transition Dock & Under-Seat Saddle Bridge](../images/cad/adventure_transition_dock_cad.png)
 
-*Figure 8.29-B: CAD detailed view of the GS Transition Dock with Under-Seat Saddle Bridge.*
+*Figure 8.29-B: CAD detailed view of the GS Transition Dock with Under-Seat Saddle Bridge. Visible are the aerodynamic body shell with strap hook clearance pockets, M5 subframe clamp, and the shielded 2-wire DC conduit transitioning into the under-seat cross-rail.*
 
 ---
 
@@ -730,6 +738,11 @@ The universal Saddlebag Lid Dock ([`saddlebag_lid_dock.scad`](../../hardware/cad
    * The $3\,\text{mm}$ thick PA12 cradle encloses the Pod housing ($135 \times 70 \times 38\,\text{mm}$) form-fittingly up to half its height.
 4. **Overhead Drip Lip Protection:**
    * An integrated **drip lip ($16 \times 2\,\text{mm}$ with $30^\circ$ roof angle)** deflects condensation or rainwater sideways when opening the lid in rain.
+5. **Vibration-Proof EPDM Retention Strap:**
+   * Two lateral slots ($25 \times 3\,\text{mm}$) accept an elastic retention strap that firmly secures the pod against harsh road impacts.
+6. **4x Strap Hook Clearance Pockets ($X = 26.0\,\text{mm}$ and $X = 111.0\,\text{mm}$):**
+   * The pod base housing (`pod_base_housing.scad`) features 4x exterior strap hook lugs protruding $3.0\,\text{mm}$ laterally (overall width $76\,\text{mm}$ vs. nominal $70\,\text{mm}$).
+   * Four matching pockets ($14.0 \times 4.0 \times 8.5\,\text{mm}$) are molded into the dock walls, enabling full flush seating without wedging or binding.
 
 #### 6.5.2 Cable Routing, Switched Power & Mechanic-Proof MagSafe Breakaway
 
@@ -743,19 +756,20 @@ Wiring the saddlebag lid pods resolves the quintessential operational requiremen
    * Saddlebag pods are not fed unregulated 12V bike power directly, but conditioned 5.0V from the Central Box beneath the seat.
    * **Ignition-Switched Wake-Up & Cold-Crank Buffering:** The Central Box senses switched 12V (KL15). The onboard LM5164-Q1 regulates clean 5.0V, while the integrated **LiPo UPS (BQ24075)** absorbs severe starter crank dips (down to 6.5V) within $8.5\,\mu\text{s}$--pods and transceivers never reboot during engine start.
    * **Automated OEM Headset Boot via Optocouplers:** Toshiba TLP222A solid-state optocouplers trigger the power-on sequences of the Sena/Cardo modules inside the cartridges automatically upon ignition.
-2. **Mechanic-Proof 6-Pin MagSafe Breakaway Coupling (IP67):**
+2. **Mechanic-Proof 2-Pin Magnetic Pogo Breakaway Coupling (IP68 COTS):**
    * During routine service (tires, brakes, belt tensioning), dealership technicians unbolt the saddlebags and lift them off in seconds without checking for aftermarket wiring. A rigid plug would shear or tear immediately.
-   * The **6-pin IP67 magnetic coupling with N52 neodymium magnets and gold-plated pogo pins** releases cleanly at approx. $10\dots 15\,\text{N}$ axial tension with **zero mechanical damage**.
-   * Re-installing the saddlebag pulls the coupling self-centering back together with a magnetic snap (*"Klack"*), instantly restoring power and data links.
-3. **Two-Zone Cable Architecture:**
-   * **Zone 1 (External Bike Chassis):** Heavy-duty automotive-grade M8 PUR cable from Central Box to the frame dock.
-   * **Zone 2 (Inside Saddlebag):** Ultra-slim, flexible silicone/ribbon wire ($< 2\,\text{mm}$ outer profile) running in the dry interior, taking zero luggage space.
-4. **Adapter-Free Direct Connection to Pod Port B:**
-   * The internal saddlebag cable routes along the textile check strap straight into the **USB-C Slim Port B** of the Pod baseboard. Port A (M8) remains capped inside the bag--zero redundant adapter boards or intermediate solder joints inside the bag.
-5. **Two-Stage Strain Relief & Zero-Drill Floor Grommet ([`010_saddlebag_hole_grommet_split.scad`](../../hardware/cad/scad/02_pod_base/parts/010_saddlebag_hole_grommet_split.scad)):**
-   * **Stage 1 (Floor Grommet):** A clamp tower molded into the split EPDM/TPU grommet anchors the cable at the 19 mm OEM hole, transferring 100% of magnetic breakaway forces ($10\dots 15\,\text{N}$) and luggage shifting shocks directly into the saddlebag floor.
-   * **Stage 2 (Lid Dock):** A zip-tie tunnel in the 46 mm snout of the lid dock secures the cable $15\,\text{mm}$ before the plug.
-   * **Result at Port B:** The USB-C connector experiences strictly **0 Newton dynamic or static strain**.
+   * The **2-pin IP68 magnetic coupling with N52 neodymium magnets and gold-plated pogo pins** (e.g. HytePro M411) releases cleanly at approx. $10\dots 15\,\text{N}$ axial tension with **zero mechanical damage**.
+   * Re-installing the saddlebag pulls the coupling self-centering back together with a magnetic snap (*"Klack"*), instantly restoring 5V power.
+3. **Two-Zone Cable Architecture (Pure DC Power):**
+   * **Zone 1 (External Bike Chassis):** Heavy-duty 2-wire automotive cable ($2 \times 0.5\,\text{mm}^2$ PUR / FLRY) from Central Box (Deutsch DTM-12 Whips 1 & 2) to the frame dock.
+   * **Zone 2 (Inside Saddlebag):** Ultra-slim, flexible 2-wire ribbon wire ($< 2\,\text{mm}$ profile) running in the dry interior, taking zero luggage space.
+4. **Direct Connection to Pod Shaft Spring Contacts:**
+   * The internal saddlebag cable routes along the textile check strap straight into the pod base, connecting directly to the gold-plated spring contacts in the cartridge bay floor--zero redundant adapter boards or intermediate solder joints inside the bag.
+5. **Two-Stage Strain Relief & Split Side-Wall Grommet ([`010_saddlebag_hole_grommet_split.scad`](../../hardware/cad/scad/02_pod_base/parts/010_saddlebag_hole_grommet_split.scad)):**
+   * **Mounting Location:** Placed **on the forward bag wall (above the swingarm pivot)** in the aerodynamic and splash-water shadow of the frame. The **saddlebag floor remains 100% intact, hole-free, and watertight**.
+   * **Stage 1 (Side Wall Split Grommet `010_saddlebag_hole_grommet_split.scad`):** The split EPDM/TPU grommet seals the $\varnothing 12\,\text{mm}$ wall bore with circumferential dual sealing lips. Sized for $\varnothing 3.6\,\text{mm}$ 2-wire automotive cable (sealing range $\varnothing 2.5\dots 4.2\,\text{mm}$ FLRY-B / PUR), with cable conduit offset to $Y = 6.0\,\text{mm}$ preserving $> 1.1\,\text{mm}$ solid elastomeric bridge to the M8 steel sleeve bore. A molded clamp tower anchors the cable via mini zip-tie, transferring 100% of magnetic breakaway forces ($10\dots 15\,\text{N}$) into the luggage wall. OpenSCAD parameter `part` supports `"part_a"`, `"part_b"`, or `"print_plate"`.
+   * **Stage 2 (Lid Dock 2-Wire DC Snout):** Dedicated $\varnothing 4.4\,\text{mm}$ clamping channels and zip-tie ribs in the 46 mm snout of [`saddlebag_lid_dock.scad`](../../hardware/cad/scad/02_pod_base/saddlebag_lid_dock.scad) capture the cable vibration-free.
+   * **Result:** Internal wiring and pod contacts experience strictly **0 Newton dynamic or static strain**.
 
 #### 6.5.3 RF Physics: Why Saddlebag Lids Beat Bag Floors
 Mounting in the lid provides a $> 25\,\text{cm}$ elevated ground clearance, line-of-sight radiation through composite bag lids, and complete isolation from road heat.
