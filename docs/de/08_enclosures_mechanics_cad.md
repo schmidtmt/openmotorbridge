@@ -832,9 +832,9 @@ Für maximale Reichweite ($90\,\text{m}$), weite $\pm 60^\circ$ ($120^\circ$) Wi
 3. **Interner Splitter- & Kabelbaum-Hohlraum:**
    * Der originale Kabelstrang des MR20 und das Signal-/Strom-Adaptermodul finden **vollständig im inneren Gehäusehohlraum ($108 \times 58 \times 20\,\text{mm}$)** hinter der PCBA 08 Platz.
    * Keine unschönen externen Kabelpeitschen oder DC-Hohlstecker außerhalb des Gehäuses!
-4. **Mechanisch entkoppelte Binder Serie 707 M5 Flanschbuchse:**
-   * Am Gehäuseboden ist eine 4-polige Binder Serie 707 M5 Buchse (IP67, $\varnothing 5{,}2\,\text{mm}$ mit Verdrehschutz-Fläche) mit O-Ring fest verschraubt.
-   * Elektrische Anbindung an PCBA 08 über ein flexibles 4-adriges JST-SH Kabel. Schläge und Zugkräfte vom Kabelbaum wirken niemals auf die Lötstellen der Platine.
+4. **Wasserdichte 2-polige JST-JWPF Bordnetzanbindung (12V DC):**
+   * Am Gehäuseboden sitzt eine zentrierte M8-IP67-Kabeldurchführung / Dichtmanschette für das 2-adrige FLRY-B Zuleitungskabel von Peitsche 5 des DTM-12-Kabelbaums.
+   * Im Gehäuseinneren wird das Kabel knick- und zugentlastet direkt an den wasserdichten 2-poligen JST-JWPF Header `J1` (`RADAR_PWR_12V` / `RADAR_GND`) auf der Rückseite von `PCBA 08` angesteckt. Sämtliche Telemetrie läuft 100 % drahtlos über UWB – es sind null Kupfer-Datenleitungen nach außen erforderlich!
 5. **Autarke 5.9 GHz V2X-Keramik-Patchantennenkammer:**
    * In der linken Gehäusekammer sitzt eine monolithische Snap-Fit-Aufnahme für eine $20 \times 20\,\text{mm}$ (oder $25 \times 25\,\text{mm}$) Keramik-Patchantenne mit U.FL-Mikrokoaxialkabel-Führung direkt zum ESP32-C5 Sub-MCU.
 
@@ -1107,7 +1107,7 @@ Das **Radar 2.0 Flügel-Gehäuse** ([`radar_mr20_housing.scad`](../../hardware/c
 
 ![Radar 2.0 Garmin-Bajonett & Diebstahlsicherung](../images/cad/radar_mr20_housing_bayonet_cad.png)
 
-*Abbildung 8.38b: 3D-CAD-Rückansicht des Radar 2.0 Gehäuses (`radar_mr20_housing_bayonet_cad.png`). Dargestellt sind der monolithische Garmin Quarter-Turn Bajonett-Zapfen (kompatibel mit `radar_varia_gopro_lock_dock.scad` und allen Standard-Varia-Haltern), die federnde Rastklinken-Diebstahlsicherung, das symmetrische DIN 934 M4-Mutterntaschen-Lochbild ($40\,\text{mm}$ Stichmaß, 100 % lötkolbenfrei) sowie die zentrierte Binder Serie 707 M5 Flanschbuchsenbohrung am Gehäuseboden.*
+*Abbildung 8.38b: 3D-CAD-Rückansicht des Radar 2.0 Gehäuses (`radar_mr20_housing_bayonet_cad.png`). Dargestellt sind der monolithische Garmin Quarter-Turn Bajonett-Zapfen (kompatibel mit `radar_varia_gopro_lock_dock.scad` und allen Standard-Varia-Haltern), die federnde Rastklinken-Diebstahlsicherung, das symmetrische DIN 934 M4-Mutterntaschen-Lochbild ($40\,\text{mm}$ Stichmaß, 100 % lötkolbenfrei) sowie die zentrierte M8-IP67-Kabeldurchführung für den 2-poligen JST-JWPF 12V-Bordnetzanschluss am Gehäuseboden.*
 
 * **Konstruktionsmerkmale & HF-Architektur:**
   * **Symmetrisches Flügel-Rechteck ($121{,}0 \times 71{,}0 \times 34{,}0\,\text{mm}$):** Optimale aerodynamische Schaufelform, die sich harmonisch an Kennzeichenträger und Heckfender anschmiegt.

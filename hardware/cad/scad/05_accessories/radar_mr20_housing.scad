@@ -63,8 +63,7 @@ SEAL_GROOVE_W       = 1.6;   // IP67 elastomeric O-ring cord width (mm)
 SEAL_GROOVE_D       = 1.2;   // O-ring compression depth (mm)
 
 // --- Connector & Mounting ---
-BINDER_M5_BORE_DIA  = 5.2;   // Binder Serie 707 M5 panel cut-out (mm)
-BINDER_M5_FLAT_DIST = 4.75;  // Anti-rotation D-flat distance (mm)
+RADAR_CABLE_GLAND_DIA = 8.2;   // M8 IP67 cable gland / sealing grommet for JST-JWPF 2-wire harness (mm)
 CLEVIS_TONGUE_W     = 6.0;   // Compatible with underfender and GoPro mounts (mm)
 CLEVIS_BORE_DIA     = 5.2;   // M5 clamping bolt clearance (mm)
 REAR_M4_PITCH       = 40.0;  // Symmetrical spacing between rear brass inserts (mm)
@@ -286,13 +285,9 @@ module radar_mr20_main_tub(include_lower_clevis=INCLUDE_LOWER_CLEVIS) {
             cube([MR20_MODULE_W + 0.6, MR20_MODULE_D + 0.5, MR20_MODULE_H + 0.6], center=true);
         }
 
-        // 5. Bottom Binder M5 Bulkhead Connector Bore & Anti-Rotation D-Flat (Centered on X = 0)
+        // 5. Bottom IP67 Cable Gland / Sealing Grommet Bore for JST-JWPF 2-Pin Harness (Centered on X = 0)
         translate([0, -RADAR_HOUSING_D/2, -RADAR_HOUSING_H/2 - 12.0]) {
-            intersection() {
-                cylinder(r=BINDER_M5_BORE_DIA/2, h=22.0, center=false, $fn=32);
-                translate([-BINDER_M5_BORE_DIA/2, -BINDER_M5_FLAT_DIST/2, 0])
-                    cube([BINDER_M5_BORE_DIA, BINDER_M5_FLAT_DIST, 22.0]);
-            }
+            cylinder(r=RADAR_CABLE_GLAND_DIA/2, h=22.0, center=false, $fn=32);
         }
 
         // 6. Rear M4 Captive Hex Nut Pockets (DIN 934 M4, 100% Soldering-Iron Free, Symmetrical at X = ±20 mm, Z = 0)

@@ -35,19 +35,19 @@ module radar_license_plate_bracket() {
             }
 
             // 3. Dual Swivel Hinge Lugs (Protruding forward at bottom, monolithic with spine)
-            // Left lug
-            translate([-7.5, 12.0, -RADAR_DROP_Z])
+            // Left lug (with recessed M5 screw head counterbore)
+            translate([-8.5, 12.0, -RADAR_DROP_Z])
                 rotate([0, 90, 0])
-                    cylinder(r=9.0, h=4.0, center=false, $fn=32);
-            translate([-7.5, 4.0, -RADAR_DROP_Z - 5.0])
-                cube([4.0, 8.0, 14.0], center=false);
+                    cylinder(r=9.0, h=5.0, center=false, $fn=32);
+            translate([-8.5, 4.0, -RADAR_DROP_Z - 5.0])
+                cube([5.0, 8.0, 14.0], center=false);
 
-            // Right lug
+            // Right lug (with recessed DIN 934 M5 captive nut pocket)
             translate([3.5, 12.0, -RADAR_DROP_Z])
                 rotate([0, 90, 0])
-                    cylinder(r=9.0, h=4.0, center=false, $fn=32);
+                    cylinder(r=9.0, h=5.0, center=false, $fn=32);
             translate([3.5, 4.0, -RADAR_DROP_Z - 5.0])
-                cube([4.0, 8.0, 14.0], center=false);
+                cube([5.0, 8.0, 14.0], center=false);
 
             // 4. Stiffening Gussets (Diagonal structural ribs)
             hull() {
@@ -82,12 +82,17 @@ module radar_license_plate_bracket() {
         // C. M5 Swivel Hinge Pin Bore (Horizontal through both prongs)
         translate([0, 12.0, -RADAR_DROP_Z])
             rotate([0, 90, 0])
-                cylinder(r=2.6, h=25.0, center=true, $fn=32);
+                cylinder(r=2.6, h=30.0, center=true, $fn=32);
 
-        // D. M5 Hex Nut Pocket on Right Lug
+        // D. M5 Hex Nut Pocket on Right Lug (DIN 934 M5, 100% Soldering-Iron Free)
         translate([5.5, 12.0, -RADAR_DROP_Z])
             rotate([0, 90, 0])
                 cylinder(r=4.6, h=5.0, center=false, $fn=6);
+
+        // D2. M5 Screw Head Cylindrical Counterbore on Left Lug (Recessed flush fit for DIN 912 / ISO 7380)
+        translate([-5.5, 12.0, -RADAR_DROP_Z])
+            rotate([0, -90, 0])
+                cylinder(r=5.0, h=4.0, center=false, $fn=32);
 
         // E. Form-Fit Radial Hirth Locking Rosettes (Formschluss 10°-Rastung against vibration)
         // Left lug inner face (X = -3.5 mm)
