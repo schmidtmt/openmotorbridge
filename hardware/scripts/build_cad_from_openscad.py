@@ -161,6 +161,12 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
         "Tomorrow"
     ),
     (
+        "02_pod_base/99_pod_base_assembly.scad",
+        os.path.join(CAD_IMG_DIR, "pod_cartridge_cutaway_3d.png"),
+        "170,-70,80,65,35,18,480",
+        "Tomorrow Night"
+    ),
+    (
         "02_pod_base/97_pod_xray_assembly.scad",
         os.path.join(CAD_IMG_DIR, "openmotorbridge_pod_assembly_render_xray.png"),
         "67.5,35,19,55,0,310,380",
