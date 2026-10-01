@@ -413,7 +413,7 @@ Um auch Headsets mit asymmetrischen, mittigen oder beidseitig gegenüberliegende
 Für das Sena +Mesh (oder andere OEM-Adapter mit Antennen- und Ladeanschluss) bietet die Kassetten-Frontblende (`00_base_sled.scad` & `01_insert_sena.scad`):
 * **100 % zerstörungsfreie Nutzung des ungeöffneten OEM-Geräts:** Das Sena +Mesh wird im Originalgehäuse belassen.
 * **Formschlüssiges Schlitten-Inlay:** Bildet exakt die OEM-Rahmenbefestigungsplatte mit 2x Quer-Schiebestegen (Hakenabstand $30\,\text{mm}$) und federnder Rastzunge ab.
-* **Integrierte SMA-Flansch-Bohrung ($\varnothing\,6{,}5\,\text{mm}$):** Mit zylindrischer O-Ring-Dichtsenkung ($\varnothing\,9{,}5 \times 1{,}2\,\text{mm}$) an der Deckelstirnseite für eine IP67 SMA-Flansch-Doppelbuchse (Female-to-Female).
+* **Optional zuschaltbare SMA-Flansch-Bohrung (`has_sma_port = true`, $\varnothing\,6{,}5\,\text{mm}$):** Mit zylindrischer O-Ring-Dichtsenkung ($\varnothing\,9{,}5 \times 1{,}2\,\text{mm}$) an der Deckelstirnseite für eine IP67 SMA-Flansch-Doppelbuchse (Female-to-Female). Im Standard-Grundschlitten (`has_sma_port = false`) ist die Frontstirnseite zu 100 % geschlossen und monolithisch abgedichtet (IP67).
 * **Interner Koax-Kabelkanal:** Ausgesparter Durchbruch im Schlittenboden für die biege- und knickfreie Führung des internen $8\,\text{cm}$ RG-178 Pigtails (mit 90°-SMA-Winkelstecker zum Sena +Mesh).
 * **EPDM-Spannband-Aufnahme:** Einhängehaken für ein elastisches EPDM-Gummiband ($35 \times 10\,\text{mm}$), das den Adapter vibrationsfest im Negativbett sichert.
 * **Elektrische Speisung:** Flaches 90° Micro-USB / USB-C Pigtail von Pin 1 (`GND`) und Pin 2 (`5V_VBUS`) des JST-SH Headers `J2`.

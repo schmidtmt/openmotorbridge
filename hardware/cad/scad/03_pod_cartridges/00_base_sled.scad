@@ -19,7 +19,9 @@ module cartridge_base_sled(
     sled_h        = CARTRIDGE_BASE_H,
     wall          = 2.5,
     magnetic_lock = true,
-    show_latch    = false
+    show_latch    = false,
+    has_sma_port  = false,
+    has_front_vent= false
 ) {
     y_pcb_c = sled_w / 2.0;
 
@@ -166,15 +168,19 @@ module cartridge_base_sled(
                     cube(size=[sled_l - (arm_x_start + 16.0), 1.4, 6.0], center=false);
             }
 
-            // 8. Front ePTFE Gore Vent Boss on Faceplate
-            translate([sled_l + 2.0, sled_w/2.0 + 12.0, sled_h/2.0])
-                rotate([0, 90, 0])
-                    cylinder(r=3.0, h=2.0, center=false);
+            // 8. Optional Front ePTFE Gore Vent Boss on Faceplate
+            if (has_front_vent) {
+                translate([sled_l + 2.0, sled_w/2.0 + 12.0, sled_h/2.0])
+                    rotate([0, 90, 0])
+                        cylinder(r=3.0, h=2.0, center=false);
+            }
 
-            // 9. Front SMA Bulkhead Flange Reinforcement Boss
-            translate([sled_l, sled_w/2.0 - 12.0, sled_h/2.0])
-                rotate([0, 90, 0])
-                    cylinder(r=5.5, h=2.0, center=false);
+            // 9. Optional Front SMA Bulkhead Flange Reinforcement Boss
+            if (has_sma_port) {
+                translate([sled_l, sled_w/2.0 - 12.0, sled_h/2.0])
+                    rotate([0, 90, 0])
+                        cylinder(r=5.5, h=2.0, center=false);
+            }
         }
 
         // 10. Side Wall Clearance Slots / Magnetic Latch Pocket
@@ -200,20 +206,24 @@ module cartridge_base_sled(
                 cube(size=[2.0, wall + 3.0, 12.4], center=false);
         }
 
-        // 11. Front ePTFE Breather Through-Hole (Ø 2.0 mm)
-        translate([sled_l - 3.0, sled_w/2.0 + 12.0, sled_h/2.0])
-            rotate([0, 90, 0])
-                cylinder(r=1.0, h=CARTRIDGE_FACE_L + 6.0, center=false);
+        // 11. Optional Front ePTFE Breather Through-Hole (Ø 2.0 mm)
+        if (has_front_vent) {
+            translate([sled_l - 3.0, sled_w/2.0 + 12.0, sled_h/2.0])
+                rotate([0, 90, 0])
+                    cylinder(r=1.0, h=CARTRIDGE_FACE_L + 6.0, center=false);
+        }
 
-        // 12. Front SMA Bulkhead Flange Bore (Ø 6.5 mm through-hole + O-Ring Recess)
-        translate([sled_l - 3.0, sled_w/2.0 - 12.0, sled_h/2.0])
-            rotate([0, 90, 0])
-                cylinder(r=SMA_BORE_R, h=CARTRIDGE_FACE_L + 6.0, center=false);
+        // 12. Optional Front SMA Bulkhead Flange Bore (Ø 6.5 mm through-hole + O-Ring Recess)
+        if (has_sma_port) {
+            translate([sled_l - 3.0, sled_w/2.0 - 12.0, sled_h/2.0])
+                rotate([0, 90, 0])
+                    cylinder(r=SMA_BORE_R, h=CARTRIDGE_FACE_L + 6.0, center=false);
 
-        // SMA Bulkhead O-Ring Recess (Ø 9.5 mm x 1.2 mm deep on outer face)
-        translate([sled_l + CARTRIDGE_FACE_L - SMA_ORECESS_DEPTH + 0.01, sled_w/2.0 - 12.0, sled_h/2.0])
-            rotate([0, 90, 0])
-                cylinder(r=SMA_ORECESS_R, h=SMA_ORECESS_DEPTH + 0.5, center=false);
+            // SMA Bulkhead O-Ring Recess (Ø 9.5 mm x 1.2 mm deep on outer face)
+            translate([sled_l + CARTRIDGE_FACE_L - SMA_ORECESS_DEPTH + 0.01, sled_w/2.0 - 12.0, sled_h/2.0])
+                rotate([0, 90, 0])
+                    cylinder(r=SMA_ORECESS_R, h=SMA_ORECESS_DEPTH + 0.5, center=false);
+        }
 
         // 13. Floor Convective Breathing Slots (4x 16 x 2.5 mm)
         translate([20.0, 10.0, -0.5]) cube(size=[16.0, 2.5, wall + 1.0], center=false);

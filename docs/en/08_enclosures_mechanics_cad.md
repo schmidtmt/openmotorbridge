@@ -365,7 +365,7 @@ For modern intercom cartridges such as the Sena SPIDER X Slim and Cardo Packtalk
 #### 4.3.5 Sena +Mesh & Universal Slide-Inlay (Class A with External RF Bulkhead)
 * **100% Non-Destructive OEM Integration:** The Sena +Mesh remains unopened in its original housing.
 * **Form-Fitting Sled Inlay:** Replicates the OEM frame mount with 2x sliding tabs (spacing $30\,\text{mm}$) and flexible snap tongue.
-* **Integrated SMA Bulkhead Bore ($\varnothing\,6.5\,\text{mm}$):** With O-ring counterbore ($\varnothing\,9.5 \times 1.2\,\text{mm}$) on front bezel for an IP67 SMA female-female bulkhead adapter.
+* **Optional Configurable SMA Bulkhead Bore (`has_sma_port = true`, $\varnothing\,6.5\,\text{mm}$):** With O-ring counterbore ($\varnothing\,9.5 \times 1.2\,\text{mm}$) on front bezel for an IP67 SMA female-female bulkhead adapter. In the standard base sled (`has_sma_port = false`), the front faceplate is 100% solid, continuous, and weather-sealed (IP67).
 * **Internal Coax Duct:** Cutout in sled floor for kink-free routing of internal $8\,\text{cm}$ RG-178 pigtail (with 90° SMA plug to Sena +Mesh).
 * **EPDM Retention Strap:** Anchor tabs for elastic EPDM band ($35 \times 10\,\text{mm}$) securing the unit vibration-free.
 * **Power Feed:** Flat right-angle Micro-USB / USB-C pigtail from Pin 1 (`GND`) and Pin 2 (`5V_VBUS`) of JST-SH header `J2`.

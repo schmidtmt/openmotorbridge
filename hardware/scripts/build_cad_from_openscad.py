@@ -542,7 +542,7 @@ def render_images():
 
 def fix_permissions_and_attributes():
     print("\n🔓 Setting full permissions and stripping macOS attributes...")
-    for path in [STL_BASE, CAD_IMG_DIR, SCAD_DIR]:
+    for path in [STL_BASE, CAD_IMG_DIR]:
         try:
             subprocess.run(["xattr", "-c", "-r", path], capture_output=True)
             subprocess.run(["chmod", "-R", "777", path], capture_output=True)
