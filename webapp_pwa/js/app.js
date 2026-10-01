@@ -8616,16 +8616,19 @@ function calculateSingleBikeBom(bikeConfig) {
         parts3D.push({ group: 'Bike-Kit (HD)', file: 'saddlebag_lid_dock.stl', qty: 2, desc: isDe ? 'Kofferdeckel-Montagedocks (Pod 1 & 2)' : 'Saddlebag lid docks (Pods 1 & 2)' });
         parts3D.push({ group: 'Bike-Kit (HD)', file: 'pod3_touring_fender_console.stl', qty: 1, desc: isDe ? 'Organische Heckkotflügel-Konsole' : 'Organic rear fender console' });
         parts3D.push({ group: 'Bike-Kit (HD)', file: 'radar_license_plate_bracket.stl', qty: 1, desc: isDe ? 'Entkoppelter Kennzeichen-Radarhalter' : 'Decoupled license plate radar mount' });
+        parts3D.push({ group: 'Bike-Kit (HD)', file: 'radar_swivel_tilt_cradle.stl', qty: 1, desc: isDe ? 'Radar 2.0 Schwerlast-Neigegelenk (Actioncam-Hirth)' : 'Radar 2.0 heavy-duty swivel tilt cradle (Actioncam Hirth)' });
     } else if (bikeModel === 'hd-cvo-st' || bikeModel === 'hd-cVO-st') {
         parts3D.push({ group: 'Bike-Kit (CVO)', file: 'saddlebag_lid_dock.stl', qty: 2, desc: isDe ? 'Kofferdeckel-Montagedocks (Pod 1 & 2)' : 'Saddlebag lid docks (Pods 1 & 2)' });
         parts3D.push({ group: 'Bike-Kit (CVO)', file: 'cvo_st_undercowl_skeleton_dock.stl', qty: 1, desc: isDe ? 'Aufrechtes Federsitz-Dock unter Solo-Hutze' : 'Upright skeleton dock under solo seat cowl' });
         parts3D.push({ group: 'Bike-Kit (CVO)', file: 'radar_license_plate_bracket.stl', qty: 1, desc: isDe ? 'Entkoppelter Kennzeichen-Radarhalter (OEM-Mitte)' : 'Decoupled license plate radar mount (OEM center)' });
+        parts3D.push({ group: 'Bike-Kit (CVO)', file: 'radar_swivel_tilt_cradle.stl', qty: 1, desc: isDe ? 'Radar 2.0 Schwerlast-Neigegelenk (Actioncam-Hirth)' : 'Radar 2.0 heavy-duty swivel tilt cradle (Actioncam Hirth)' });
     } else if (bikeModel === 'car-support') {
         parts3D.push({ group: 'PKW-Kit', file: 'car_sun_visor_pod3_clip.stl', qty: 1, desc: isDe ? 'Sonnenblenden-Halterung für Heck-Pod 3 (LoRa/GNSS)' : 'Sun visor clip mount for Rear Pod 3 (LoRa/GNSS)' });
-        parts3D.push({ group: 'PKW-Kit', file: 'car_dashboard_wedge_dock.stl', qty: 1, desc: isDe ? 'Armaturenbrett-Keilaufnahme für Zentralbox' : 'Dashboard wedge dock for Central Box' });
+        parts3D.push({ group: 'PKW-Kit', file: 'car_dashboard_wedge_dock.stl', qty: 1, desc: isDe ? 'Armaturenbrett-Doppelaufnahme für Front-Knoten & Zentralbox' : 'Dashboard dual-stack dock for Front Node & Central Box' });
     } else {
         parts3D.push({ group: 'Bike-Kit (Universal)', file: 'Integriertes V-Bett', qty: 2, desc: isDe ? '120° V-Nut Rohrsattel an Pod-Gehäusen' : '120° V-cradle on Pod enclosures' });
         parts3D.push({ group: 'Bike-Kit (Universal)', file: 'radar_center_underfender_mount.stl', qty: 1, desc: isDe ? 'Zentrische Underfender-Radarplatte (für seitl. Kennzeichen)' : 'Centered under-fender radar mount (for side-mount plates)' });
+        parts3D.push({ group: 'Bike-Kit (Universal)', file: 'radar_swivel_tilt_cradle.stl', qty: 1, desc: isDe ? 'Radar 2.0 Schwerlast-Neigegelenk (Actioncam-Hirth)' : 'Radar 2.0 heavy-duty swivel tilt cradle (Actioncam Hirth)' });
     }
 
     if (bikeModel === 'hd-touring' || bikeModel === 'hd-cvo-st' || bikeModel === 'hd-cVO-st') {

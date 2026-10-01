@@ -206,8 +206,9 @@ Alle Gehäuseteile sind konsequent für das **IKEA-Prinzip** konstruiert: **Kein
   * `adventure_gsa_cage_dock_body.stl` & `adventure_gsa_clamp_cap.stl` (je 2 Stk.): Schwerlast-Käfigdocks ("GSA Cage Dock") für Pod 1 & 2 im $45\,\text{mm}$ Totraum des Trägerrahmens mit $85\,\text{mm}$ Doppel-Rohrsattelbasis, 4x M5 Verschraubung, Steinschlag-Gleitkeil & verdecktem M8-Kanal.
   * `adventure_rack_radar_mount.stl` (1 Stk.): Minimaler Heckradar-Halter unter der Gepäckbrücke.
 * **Kit 3: Harley-Davidson Touring & Classic Bagger (Street Glide, Road Glide, Road King):**
-  * `saddlebag_lid_dock.stl` (2 Stk.): Kofferdeckel-Montagedocks für Pod 1 & 2 auf den Hartschalenkoffern.
   * `radar_license_plate_bracket.stl` (1 Stk.): Entkoppelter Kennzeichen-Radarhalter für Peitsche 5.
+  * `radar_swivel_tilt_cradle.stl` (1 Stk.): Radar 2.0 Schwerlast-Neigegelenk (Actioncam/GoPro-Hirth-Cradle) mit 2x M4-Verschraubung und 36-Zahn Hirth-Verzahnung.
+  * `radar_mr20_housing.stl` & `radar_mr20_radome.stl` (1 Stk.): Radar 2.0 PA12 Flügel-Gehäuse mit Spritzwasser-Schutzspoiler und PC-Radom.
   * `magsafe_cockpit_mount_harley.stl` (1 Stk.), `magsafe_frame_dock.stl` (1 Stk.) & `magsafe_clamp_wings.stl` (1 Stk.): MagSafe Rahmendock-Komponenten.
 * **Kit 4: Support-Car / Begleitfahrzeug Kolonnen-Kit (Car-Kit):**
   * `car_sun_visor_pod_clip.stl` (2 Stk.): Schnellwechsel-Spannclips zur vibrationsfreien Befestigung von Pod 1 und Pod 2 an den beiden Sonnenblenden im Pkw/Van (Fahrer- und Beifahrerseite).
@@ -352,7 +353,11 @@ Anstelle der früheren proprietären Platine `PCBA 06` wird die werkzeuglose Kof
 | **M3 Edelstahlschrauben (Front)** | M3 x 20 mm Zylinderkopf V4A (DIN 912) | Normteil / Amazon | 4 Stk. | Front-Node Gehäuse (greift in Nut-Pockets) |
 | **M3 Edelstahlschrauben (Dock)** | M3 x 16 mm Zylinderkopf V4A (DIN 912) | Normteil / Amazon | 4 Stk. | Rahmenklemmschelle `009_magsafe_frame_dock` |
 | **M3 Edelstahlmuttern** | DIN 934 / DIN 985 M3 V4A Muttern | Normteil / Amazon | 12 Stk.| Unverlierbar in Nut-Pockets eingelegt (Zentralbox, Front-Node, Rahmendock) |
-| **M4 Edelstahlmuttern (AMPS)**| DIN 934 M4 V4A Muttern | Normteil / Amazon | 4 Stk. | Unverlierbar in Nut-Pockets der Front-Node Wanne |
+| **M4 Edelstahlmuttern (AMPS & Radar)**| DIN 934 M4 V4A Muttern | Normteil / Amazon | 6 Stk. | 4x Front-Node Wanne (AMPS), 2x Radar 2.0 Gehäuserückwand |
+| **M4 Schrauben (Radar-Cradle)** | M4 x 12 mm Zylinderkopf V4A (DIN 912) | Normteil / Amazon | 2 Stk. | Verschraubung Adapterplatte `radar_swivel_tilt_cradle` an Radar 2.0 Gehäuse |
+| **M5 Hirth-Klemmschraube** | M5 x 25 mm Zylinderkopf V4A (DIN 912) | Normteil / Amazon | 1 Stk. | Horizontale Gelenkachse Radar-Hirth-Gelenk (Kennzeichenträger) |
+| **M5 Edelstahlmutter (Radar)** | DIN 934 M5 V4A Mutter | Normteil / Amazon | 1 Stk. | Unverlierbar in rechter Gabelwange des Kennzeichenträgers |
+| **M8 IP68 Kabelverschraubung** | M8 x 1.25 Messing vernickelt / PA66 IP68 mit EPDM-Dichtung | Skintop / Lapp / Amazon | 1 Stk. | Spritzwasserdichte Gehäuseboden-Durchführung für 2-poliges FLRY-B Kabel |
 | **M2.5 Platinenschrauben** | M2.5 x 6 mm Zylinderkopf V4A (DIN 912) | Normteil | 8 Stk. | 4x Zentralbox-Platine, 4x Front-Node-Platine |
 | **M2 Schottwandschrauben** | M2 x 8 mm Senkkopf V4A (DIN 7991) | Normteil | 4 Stk. | Fixierung der 2 Pod-Schottwände (2x pro Pod 1 & 2) |
 | **M2 Kassetten-Halteplattenschrauben**| M2 x 6 mm Senkkopf V4A (DIN 7991) | Normteil | 8 Stk. | Fixierung der Aktuator-Niederhalteplatten (4x pro Gateway-Kassette) |

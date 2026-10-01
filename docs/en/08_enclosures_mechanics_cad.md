@@ -765,7 +765,28 @@ Mounting in the lid provides a $> 25\,\text{cm}$ elevated ground clearance, line
 
 ![Decoupled License Plate Radar Bracket CAD](../images/cad/radar_license_plate_bracket_cad.png)
 
-*Figure 8.32: 3D CAD model of the decoupled license plate radar bracket with M6 clamping, M5 swivel hinge, and concealed rear M8 cable channel.*
+*Figure 8.32: 3D CAD model of the decoupled license plate radar bracket with M6 clamping, M5 swivel hinge, bionic 36-tooth Hirth rosette, and concealed rear M8 cable channel.*
+
+* **Legal Compliance (§ 10 Para. 6 FZV / ECE R138):**
+  The license plate must remain fully visible from above at a vertical angle of at least $+30^\circ$. Suspending the radar directly below the plate preserves $100\%$ visibility of registration seals.
+* **Heavy-Duty Center-of-Gravity Swivel Tilt Cradle (`radar_swivel_tilt_cradle.scad`):**
+  * **Why Rigid Mounting Fails in Practice:** License plate bracket angles vary widely across motorcycle models ($20^\circ$ to $> 45^\circ$). Furthermore, rear suspension compression varies based on rider weight, baggage, and pillion passenger. A 77-GHz radar sensor with $90\,\text{m}$ detection range requires precise horizontal beam alignment ($\pm 2^\circ$). Rigid mounting without pitch tilt adjustment is practically non-viable.
+  * **Bolted Enclosure + Actioncam Swivel Joint:** The $\approx 180\,\text{g}$ Radar 2.0 housing is bolted from behind using two DIN 912 M4 $\times$ 12 mm steel screws directly into internal captive DIN 934 M4 nuts in the rear wall of the housing, clamping into [`radar_swivel_tilt_cradle.scad`](../../hardware/cad/scad/02_pod_base/radar_swivel_tilt_cradle.scad). Solid shear register bosses absorb all dynamic impact loads.
+  * **Positive Form-Fit Locking at Center of Gravity ($Z = 0$):** A 6.0 mm wide GoPro/Actioncam tongue on the cradle features dual 36-tooth radial Hirth rosettes ($10^\circ$ positive indexing) mating into the 7.0 mm clevis fork of the license plate bracket. A single through-bolt (DIN 912 M5 with DIN 934 nut) locks the elevation angle securely against 25g road shocks.
+  * **Road Shock & Pothole Immunity:** Although the cradle adds $\approx 18\,\text{mm}$ of depth, suspending the radar at its center of mass completely prevents fatigue fractures and lost radar boxes.
+* **Rear-Wheel Spray & Water Protection Architecture:**
+  * **Monolithic Roost Deflector Shroud:** An aerodynamic PA12 shroud is molded directly in front of the bottom M8 cable gland on [`radar_mr20_housing.scad`](../../hardware/cad/scad/05_accessories/radar_mr20_housing.scad), deflecting high-velocity water roost and gravel thrown by the rear tire.
+  * **IP68/IP69K EPDM O-Ring Chamber:** An enclosed $\varnothing 11.5 \times 2.2\,\text{mm}$ sealing chamber captures the gland O-ring with 100% radial confinement.
+  * **Internal JST-JWPF 2-Pin Waterproof Connector:** The FLRY-B harness terminates in a submersible silicone-sealed JST-JWPF connector inside the housing.
+  * **Spine Cable Conduit & Drip Loop:** The cable runs down the protected rear channel of the bracket spine and loops upward into the bottom gland, allowing water to drip off safely.
+
+![Radar 2.0 Full Assembly at License Plate Bracket](../images/cad/radar_tilt_mount_assembly_cad.png)
+
+*Figure 8.32b: 3D CAD view of the complete Radar 2.0 assembly (`radar_tilt_mount_assembly_cad.png`). The Radar 2.0 housing is suspended below the license plate bracket via the heavy-duty swivel tilt cradle.*
+
+![Radar 2.0 Heavy-Duty Cradle Rear View](../images/cad/radar_tilt_mount_assembly_rear_cad.png)
+
+*Figure 8.32c: 3D CAD rear isometric view of the swivel tilt cradle (`radar_tilt_mount_assembly_rear_cad.png`), showing the 2x M4 housing bolting, 36-tooth Hirth rosette, and M5 clamping bolt.*
 
 ---
 
@@ -1079,6 +1100,7 @@ The OpenMotorBridge CAD repository follows a strict hierarchical Constructive So
 | **Frame Dock** | MagSafe Frame Dock Lower Shell (PCB Ledge & M2.5 Counterbore) | `02_pod_base/components/009_magsafe_frame_lid.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
 | **Radar Mount** | Decoupled License-Plate Radar Bracket | `02_pod_base/radar_license_plate_bracket.stl` | `02_pod_base/radar_license_plate_bracket.scad` |
 | **Radar Mount** | Stealth Center Under-Fender Radar Mount (Custom / Bobber) | `02_pod_base/radar_center_underfender_mount.stl` | `02_pod_base/radar_center_underfender_mount.scad` |
+| **Radar Swivel**| Radar 2.0 Heavy-Duty Swivel Tilt Cradle (Actioncam/GoPro Hirth) | `02_pod_base/radar_swivel_tilt_cradle.stl` | `02_pod_base/radar_swivel_tilt_cradle.scad` |
 | **Radar Accessories**| Garmin Varia Quarter-Turn Anti-Theft Lock Dock | `02_pod_base/radar_varia_gopro_lock_dock.stl` | `02_pod_base/radar_varia_gopro_lock_dock.scad` |
 | **Cartridge** | Universal base sled with O-ring groove | `03_pod_cartridges/cartridge_base_sled.stl` | `03_pod_cartridges/00_base_sled.scad` |
 | **Cartridge** | Magnetic anti-theft locking latch (Sawtooth mechanics) | `03_pod_cartridges/cartridge_magnetic_lock_latch.stl` | `03_pod_cartridges/parts/05_magnetic_lock_latch.scad` |

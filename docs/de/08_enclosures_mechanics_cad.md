@@ -825,18 +825,31 @@ Auf Cruisern und Baggern wird das Heckradar diskret und mittig unter dem Kennzei
 Für maximale Reichweite ($90\,\text{m}$), weite $\pm 60^\circ$ ($120^\circ$) Winkelerfassung, autarke optische Warnung und 5.9 GHz ITS-G5 (V2X) Car-to-X Vernetzung steht das dedizierte Radar 2.0 Flügel-Gehäuse zur Verfügung:
 1. **Formschlüssiges PA12-MJF Flügel-Gehäuse:**
    * Außenmaße: $121{,}0 \times 71{,}0 \times 34{,}0\,\text{mm}$ (Breite x Höhe x Tiefe).
-   * Rückseitige Aufnahme: Monolithisch angeformter Garmin Quarter-Turn Bajonett-Zapfen (kompatibel mit `radar_varia_gopro_lock_dock.scad` und Standard-Varia-Haltern) sowie untere 6-mm-Hirth-Gelenklasche und symmetrische M4-Gewindebuchsen ($40\,\text{mm}$ Stichmaß).
+   * Rückseitige Aufnahme: Symmetrisches $40\,\text{mm}$ DIN 934 M4-Mutterntaschen-Lochbild (100 % lötkolbenfrei) für das **Schwerlast-Neigegelenk** ([`radar_swivel_tilt_cradle.scad`](../../hardware/cad/scad/02_pod_base/radar_swivel_tilt_cradle.scad)), monolithischer Garmin Quarter-Turn Bajonett-Zapfen (kompatibel mit `radar_varia_gopro_lock_dock.scad` und Standard-Varia-Haltern) sowie untere Hirth-Gelenklasche.
 2. **Glattes dielektrisches Polycarbonat-Radom-Sichtfenster:**
    * Vor dem Horn-Array des MR20, den beiden 18-LED Neopixel-Warnflügeln und der 5.9 GHz V2X-Patchantenne sitzt ein transparentes, planes $116 \times 66 \times 1{,}6\,\text{mm}$ PC-Sichtfenster mit 4x M2.5 Torx-Eckverschraubung.
    * Absolut ruß-, graphit- und metallfrei zur Gewährleistung von 100 % HF-Transparenz bei 77 GHz und 5.9 GHz.
 3. **Interner Splitter- & Kabelbaum-Hohlraum:**
    * Der originale Kabelstrang des MR20 und das Signal-/Strom-Adaptermodul finden **vollständig im inneren Gehäusehohlraum ($108 \times 58 \times 20\,\text{mm}$)** hinter der PCBA 08 Platz.
    * Keine unschönen externen Kabelpeitschen oder DC-Hohlstecker außerhalb des Gehäuses!
-4. **Wasserdichte 2-polige JST-JWPF Bordnetzanbindung (12V DC):**
-   * Am Gehäuseboden sitzt eine zentrierte M8-IP67-Kabeldurchführung / Dichtmanschette für das 2-adrige FLRY-B Zuleitungskabel von Peitsche 5 des DTM-12-Kabelbaums.
-   * Im Gehäuseinneren wird das Kabel knick- und zugentlastet direkt an den wasserdichten 2-poligen JST-JWPF Header `J1` (`RADAR_PWR_12V` / `RADAR_GND`) auf der Rückseite von `PCBA 08` angesteckt. Sämtliche Telemetrie läuft 100 % drahtlos über UWB – es sind null Kupfer-Datenleitungen nach außen erforderlich!
-5. **Autarke 5.9 GHz V2X-Keramik-Patchantennenkammer:**
-   * In der linken Gehäusekammer sitzt eine monolithische Snap-Fit-Aufnahme für eine $20 \times 20\,\text{mm}$ (oder $25 \times 25\,\text{mm}$) Keramik-Patchantenne mit U.FL-Mikrokoaxialkabel-Führung direkt zum ESP32-C5 Sub-MCU.
+4. **Schwerlast-Neigegelenk & Actioncam-Hirth-System (`radar_swivel_tilt_cradle.scad`):**
+   * **Warum eine komplett starre Montage in der Praxis unmöglich ist:** Gesetzliche Kennzeichenwinkel variieren fahrzeugspezifisch zwischen $20^\circ$ und $> 45^\circ$, und das Fahrwerkniveau verändert sich durch Fahrergewicht, Gepäckbeladung und Soziusbetrieb. Ein 77-GHz-Radarsensor benötigt zur Erzielung seiner vollen $90\,\text{m}$-Erfassungsreichweite eine präzise waagerechte Ausrichtung der Hauptabstrahlachse ($\pm 2^\circ$). Eine starre Halterung ohne Nickwinkel-Justage würde bei vielen Motorrädern direkt in den Asphalt oder nutzlos in den Himmel strahlen.
+   * **Die OMB-Lösung (Verschraubte Gehäusebasis + Actioncam-Gelenk):** Das $180\,\text{g}$ schwere Radar 2.0 Gehäuse wird von der Rückseite her über zwei **M4-Stahlschrauben** ($40\,\text{mm}$ Stichmaß) unlösbar mit der Adapterplatte [`radar_swivel_tilt_cradle.scad`](../../hardware/cad/scad/02_pod_base/radar_swivel_tilt_cradle.scad) verschraubt. Zwei zylindrische Passungs-Bosse nehmen 100 % der Scherkräfte auf.
+   * **Formschluss-Arretierung im Schwerpunkt:** Direkt auf Höhe des Massenschwerpunkts ($Z = 0$) ragt eine $6{,}0\,\text{mm}$ Actioncam/GoPro-Zunge mit beidseitiger 36-Zahn Hirth-Verzahnung nach hinten in die $7{,}0\,\text{mm}$ Gabel des Kennzeichenträgers. Eine einzige durchgehende M5-Klemmschraube (DIN 912 mit DIN 934 M5 Mutter) verriegelt den Nickwinkel unlösbar in $10^\circ$-Schritten.
+   * **Sicherheits-Vorteil:** Durch die Adapterplatte baut das System zwar ca. $18\,\text{mm}$ tiefer nach hinten auf, doch im harten Fahrbetrieb (Bodenwellen, Bahnübergänge, Schlaglöcher mit $> 25\,g$) ist ein Abreißen, Ausrasten oder Schwingbruch absolut physikalisch ausgeschlossen!
+5. **Wasser- & Gischt-Dichtigkeit von unten (Schutz gegen Reifenspritzwasser):**
+   * **Monolithische Spritzwasser-Schutzhaube (Roost-Deflector):** Da die Unterseite bei Montage unter dem Fender oder Kennzeichen im direkten Wurfbereich des vom Hinterrad aufgewirbelten Wassers liegt, besitzt das Gehäuse vor der M8-Kabelverschraubung eine angeformte Schutzschürze mit scharfer Abtropfkante. Hochgeschwindigkeits-Gischt und Steinschlag prallen an der Wandung ab und erreichen die Dichtmanschette gar nicht erst.
+   * **IP68/IP69K EPDM-O-Ring-Kammer:** Die M8-Bohrung besitzt eine zylindrische $\varnothing 11{,}5 \times 2{,}2\,\text{mm}$ Dichtkammer, die den EPDM-Dichtring der Kabelverschraubung allseitig umschließt und Verdrängung unter Vibration verhindert.
+   * **JST-JWPF 2-Pin Steckverbinder:** Im Gehäuseinneren ist das 2-adrige FLRY-B Kabel über einen wasserdichten JST-JWPF Stecker redundanz-gesichert.
+   * **Abtropfschlaufe (Drip-Loop):** Das Zuleitungskabel verläuft geschützt im rückseitigen Kanal der Trägerwirbelsäule und wird in einem nach unten hängenden Bogen von unten in die Verschraubung geführt. Oberflächenwasser tropft durch die Schwerkraft vor dem Eintritt ab.
+
+![Radar 2.0 Gesamt-Baugruppe am Kennzeichenträger](../images/cad/radar_tilt_mount_assembly_cad.png)
+
+*Abbildung 8.32b: 3D-CAD-Ansicht der fertigen Radar 2.0 Gesamt-Baugruppe (`radar_tilt_mount_assembly_cad.png`). Das Radar 2.0 Flügel-Gehäuse ist über die Schwerlast-Cradle und das Hirth-Neigegelenk mittig unter dem Kennzeichenträger aufgehängt. Die Hauptabstrahlachse und die optischen 36-LED-Warnflügel sind optimal auf den nachfolgenden Verkehr ausgerichtet, während das Kennzeichen nach oben $100\,\%$ frei bleibt.*
+
+![Radar 2.0 Schwerlast-Neigegelenk Rückansicht](../images/cad/radar_tilt_mount_assembly_rear_cad.png)
+
+*Abbildung 8.32c: 3D-CAD-Rückansicht des Schwerlast-Neigegelenks (`radar_tilt_mount_assembly_rear_cad.png`). Sichtbar sind die unlösbare 2x M4 Gehäuseverschraubung, die bionische 36-Zahn Hirth-Formschluss-Rastung in der Gabel des Trägers sowie die M5-Klemmschraube mit versenktem DIN 934 Schrauben- und Mutternsitz.*
 
 ---
 
@@ -1114,19 +1127,32 @@ Das **Radar 2.0 Flügel-Gehäuse** ([`radar_mr20_housing.scad`](../../hardware/c
   * **Integrierte 5.9 GHz V2X Keramik-Patchantennen-Kammerturm:** Auf der linken Gehäuseflanke ist eine Rastkammer für $20 \times 20\,\text{mm}$ oder $25 \times 25\,\text{mm}$ Keramik-Patchantennen monolithisch eingeformt. Dies garantiert maximale Antennenreichweite ohne Gehäusedämpfung und ohne interne PCB-Antennen-Verluste.
   * **Großzügiger Adapter- & Verkabelungsraum ($112 \times 62 \times 17\,\text{mm}$):** Nimmt den originalen MR20-Zwischenadapter und Kabelbaum-Schlaufen knickfrei im Gehäuseinneren auf.
   * **Optisches PC-Radom & IP67-Dichtung:** Glattes, unstrukturiertes Polycarbonat ($116 \times 66 \times 1{,}6\,\text{mm}$) mit umlaufender EPDM-Schnurnut garantiert 0 dB RF-Dämpfung bei 77 GHz und Schlagfestigkeit nach IK08.
+  * **Integrierter Spritzwasser-Schutzspoiler (Roost-Deflector am Gehäuseboden):** Unmittelbar vor der M8-Kabelverschraubung schützt eine monolithische PA12-Schutzschürze mit scharfer Abtropfkante das Gewinde und die Dichtung gegen direkt von der Reifenkarkasse aufgewirbeltes Schmutzwasser, Rollsplitt und Hochdruck-Gischt.
 
-* **Die 3 Montagekonzepte im Vergleich (Mechanik & Dauerfestigkeit):**
-  1. **Option A: 2x DIN 934 M4 Sechskant-Mutterntaschen ($40\,\text{mm}$ Stichmaß) – ⭐ OMB-Dauerempfehlung (100 % lötkolbenfrei!):**
-     * **Kein Einschmelzen, kein Lötkolben:** Auf der Innenseite der Gehäuserückwand sind zwei formschlüssige Sechskant-Taschen (`NUT_M4_SW = 7.2 mm`, Tiefe $3{,}5\,\text{mm}$) eingeformt. Beim Zusammenbau auf der Werkbank werden einfach zwei handelsübliche **DIN 934 M4 Standardmuttern** von Hand oder mit einer Zange eingelegt. Sie sind vollkommen verdreh- und verliersicher im PA12-Körper gefangen.
-     * **Direktverschraubung der Radomscheibe:** Die 4 Eckschrauben (M2.5) für das Radomfenster greifen direkt in vorgeformte $\varnothing 2{,}1\,\text{mm}$ Kernlöcher im zähen PA12 – auch hier wird kein einziger Gewindeeinsatz eingeschmolzen.
-     * **Montage am Motorrad:** Das fertig geschlossene, versiegelte Gehäuse wird an das Halteblech (Kennzeichenträger `radar_license_plate_bracket.scad` oder Gepäckbrückenhalter) gehalten und **von der Fahrzeugrückseite her mit zwei M4 $\times$ 10 mm Innensechskantschrauben** (DIN 912 mit Federscheibe oder Loctite) direkt in die innenliegenden M4-Muttern festgezogen.
-     * **Vorteil:** Hält extremen Motorrad-Vibrationen ($> 25\,\text{g}$) dauerhaft stand, ist für jeden Heimanwender ohne Lötkolben oder Einschmelzwerkzeug perfekt nachbaubar und bietet vollwertigen Diebstahlschutz.
-  2. **Option B: Garmin Quarter-Turn Bajonettverschluss:**
+![Radar 2.0 Schwerlast-Neigegelenk CAD](../images/cad/radar_swivel_tilt_cradle_cad.png)
+
+*Abbildung 8.38c: 3D-CAD-Ansicht des Schwerlast-Neigegelenks (`radar_swivel_tilt_cradle_cad.png`). Sichtbar sind die massive $58 \times 40 \times 8{,}5\,\text{mm}$ PA12-Adapterplatte mit 2x M4-Schraubensenkungen ($40\,\text{mm}$ Stichmaß), die zentrierte $\varnothing 34\,\text{mm}$ Garmin-Freimachung, die bionische 36-Zahn Hirth-Zunge auf Schwerpunkt-Höhe ($Z = 0$) sowie die integrierte Kabelbinder-Zugentlastung.*
+
+* **Die 3 Montagekonzepte im Vergleich (Mechanik, Justage & Dauerfestigkeit):**
+  1. **Option A: Schwerlast-Neigegelenk (`radar_swivel_tilt_cradle.scad`) mit 2x DIN 934 M4 Schraubverbindung & Actioncam-Hirth-Gelenk – ⭐ OMB-Standard (100 % lötkolbenfrei & schlaglochfest!):**
+     * **Warum eine starre Montage physikalisch versagt:** Motorrad-Kennzeichenhalter weisen konstruktions- und herstellerbedingt stark unterschiedliche Anstellwinkel auf (von legalen $30^\circ$ bis zu extremen $45^\circ$ bei Custom-Hecks). Zudem verändert sich der Nickwinkel der Maschine im Fahrbetrieb drastisch durch Fahrergewicht, Federungsabstimmung, Gepäckzuladung und Soziusbetrieb. Ein 77-GHz-Radarsensor mit $90\,\text{m}$ Reichweite benötigt zwingend eine präzise Horizontalausrichtung der Strahlungskeule ($\pm 2^\circ$). Eine starre Halterung ohne Neigungsverstellung würde bei Bodenwellen oder Beladung den Radarkegel in den Asphalt oder nutzlos in den Himmel lenken.
+     * **Zweiteiliges Actioncam-Prinzip (Gehäuse verschrauben + Gelenkachse arretieren):** Das fertig montierte, abgedichtete Radar 2.0 Gehäuse wird von der Rückseite her über zwei **DIN 912 M4 $\times$ 12 mm Stahlschrauben** ($40\,\text{mm}$ Stichmaß) direkt in die innenliegenden formschlüssigen DIN 934 M4-Muttern der Gehäuserückwand mit der massiven Adapterplatte ([`radar_swivel_tilt_cradle.scad`](../../hardware/cad/scad/02_pod_base/radar_swivel_tilt_cradle.scad)) verschraubt. Formschlüssige Passungs-Bosse nehmen 100 % der dynamischen Scherkräfte auf.
+     * **Formschluss-Arretierung im Schwerpunkt ($Z = 0$):** Auf der Rückseite der Adapterplatte ragt eine $6{,}0\,\text{mm}$ breite Actioncam/GoPro-kompatible Zunge mit beidseitiger 36-Zahn Hirth-Rosette ($10^\circ$-Rastung) direkt in die Gabel des Kennzeichenträgers ([`radar_license_plate_bracket.scad`](../../hardware/cad/scad/02_pod_base/radar_license_plate_bracket.scad)) oder Unterfender-Halters. Eine durchgehende DIN 912 M5-Klemmschraube mit DIN 934 M5 Mutter fixiert den Nickwinkel unlösbar und verdrehsicher.
+     * **Verliersicherheit bei Schlaglöchern:** Die Konstruktion baut durch die Adapterplatte zwar ca. $18\,\text{mm}$ tiefer nach hinten auf. Dafür ist der Massenschwerpunkt des ca. $180\,\text{g}$ schweren Gesamtsystems direkt in der Drehachse aufgehängt – Schwingbrüche an Einzellug-Füßchen oder das Ausrasten von Kunststoff-Bajonetten bei $25\,g$-Schlaglochstößen sind physikalisch ausgeschlossen!
+     * **Kein Einschmelzen, kein Lötkolben:** Sämtliche Gewinde nutzen DIN 934 Muttern oder greifen direkt in PA12-Kernlöcher.
+  2. **Option B: Garmin Quarter-Turn Bajonettverschluss (Schnellwechsel / Leichtbau):**
      * Ermöglicht das werkzeuglose Aufsetzen und Verriegeln durch $90^\circ$-Drehung in Standard-Garmin-Varia-Cradles oder das OMB-Diebstahlschutz-Dock ([`radar_varia_gopro_lock_dock.scad`](../../hardware/cad/scad/02_pod_base/radar_varia_gopro_lock_dock.scad)).
-     * **Stabilitäts- und Vibrationsbewertung:** Das originale Garmin-Bajonett wurde für leichte Fahrrad-Radare (Garmin Varia RTL515, ca. $71\,\text{g}$) konstruiert. Das vollwertige Radar 2.0 System (PA12-Monocoque + MR20 77-GHz-Horn + PCBA 08 mit 36 LEDs + V2X-Patch) wiegt ca. **$180\,\text{g}$**. Auf dem Motorrad (Einzylinder-Vibrationen, Schotterpisten, Schlaglöcher) wirkt ein reines Kunststoff-Bajonett filigran und stößt bei Dauerbelastung an seine Ermüdungsgrenze. Option B ist daher ideal für Schnellwechsel oder bei Verwendung massiver CNC-Aluminium-Garmin-Halter – für die permanente Motorrad-Festmontage ist Option A klar überlegen.
-  3. **Option C: Untere GoPro-kompatible Clevis-Zunge mit 36-Zahn Hirth-Verzahnung:**
-     * An der Unterseite des Gehäuses befindet sich eine monolithische $6{,}0\,\text{mm}$ Zunge mit $\varnothing 5{,}2\,\text{mm}$ Bohrung.
-     * Wird mit einer durchgehenden M5-Stahlschraube in eine GoPro-Gabel geklemmt. Die 36-Zahn Hirth-Verzahnung arretiert den Abstrahlwinkel formschlüssig und verdrehsicher in $10^\circ$-Schritten.
+     * **Stabilitäts- und Vibrationsbewertung:** Das originale Garmin-Bajonett wurde für leichte Fahrrad-Radare (Garmin Varia RTL515, ca. $71\,\text{g}$) konstruiert. Das vollwertige Radar 2.0 System (PA12-Monocoque + MR20 77-GHz-Horn + PCBA 08 mit 36 LEDs + V2X-Patch) wiegt ca. **$180\,\text{g}$**. Auf dem Motorrad (Einzylinder-Vibrationen, Schotterpisten, Schlaglöcher) stößt ein reines Kunststoff-Bajonett an seine Ermüdungsgrenze. Option B ist ideal für Schnellwechsel an Fahrrädern oder CNC-Alu-Haltern; für die permanente Motorrad-Festmontage ist Option A klar überlegen.
+  3. **Option C: Untere Clevis-Zunge (Optional):**
+     * Nur für leichte Einzelsensoren ohne LED-Flügel vorgesehen, da der Hebelarm von $35\,\text{mm}$ unter dem Schwerpunkt bei $180\,\text{g}$ hohe Biegemomente erzeugt.
+
+* **Dichtigkeit & Spritzwasserschutz von unten (Fender- & Reifenspritzbereich):**
+  * **Das Problem:** Bei der Montage unter dem Heckfender oder Kennzeichen befindet sich die Gehäuseunterseite im direkten Abwurfbereich der Reifengischt. Das rotierende Hinterrad schleudert bei Regen Wasser und Straßenschmutz mit hoher Geschwindigkeit wie ein Hochdruckreiniger gegen das Heck.
+  * **Die 4-Stufen-Schutzarchitektur:**
+    1. **Monolithischer Roost-Deflector:** Die an der Unterseite angeformte Schutzschürze fängt die Vorwärtsgischt des Reifens mechanisch ab.
+    2. **IP68/IP69K EPDM-O-Ring-Kammer:** Die M8-Kabelverschraubung drückt ihren O-Ring in eine formschlüssige Kammer ($\varnothing 11{,}5 \times 2{,}2\,\text{mm}$) am Gehäuseboden. Der O-Ring kann unter Dauervibration nicht seitlich ausweichen.
+    3. **JST-JWPF 2-Pin Innenstecker:** Das 2-adrige FLRY-B Kabel führt zu einem vollständig silikongedichteten JST-JWPF Stecker im trockenen Gehäuseinnenraum (doppelte Dichtungsbarriere).
+    4. **Abtropfschlaufe (Drip-Loop) im Träger:** Das Kabel wird verdeckt im Rückseitenkanal des Kennzeichenträgers geführt und tritt in einem Bogen von unten in die Verschraubung ein. Durch die Schwerkraft tropft abfließendes Wasser an der tiefsten Stelle des Bogens auf die Fahrbahn ab, anstatt zur Dichtung zu kriechen.
 
 ### 8.4 Road Glide ST Sharknose: Induktives Durch-die-Verkleidung Cam-Dock (`road_glide_inductive_cam_dock.scad`)
 
@@ -1208,6 +1234,7 @@ Die CAD-Dateistruktur von OpenMotorBridge folgt einer strengen hierarchischen CS
 | **Rahmendock** | MagSafe Rahmen-Dock Gehäuseunterteil (PCB-Ledge & M2.5 Senkung) | `02_pod_base/components/009_magsafe_frame_lid.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
 | **Radarhalter** | Entkoppelte Kennzeichen-Radarhalterung | `02_pod_base/radar_license_plate_bracket.stl` | `02_pod_base/radar_license_plate_bracket.scad` |
 | **Radarhalter** | Stealth Center Under-Fender Radar-Mount (Custom / Bobber) | `02_pod_base/radar_center_underfender_mount.stl` | `02_pod_base/radar_center_underfender_mount.scad` |
+| **Radar-Gelenk** | Radar 2.0 Schwerlast-Neigegelenk (Actioncam/GoPro-Hirth-Cradle) | `02_pod_base/radar_swivel_tilt_cradle.stl` | `02_pod_base/radar_swivel_tilt_cradle.scad` |
 | **Radar-Zubehör** | Garmin Varia Quarter-Turn Anti-Theft Lock Dock | `02_pod_base/radar_varia_gopro_lock_dock.stl` | `02_pod_base/radar_varia_gopro_lock_dock.scad` |
 | **Kassette** | Universeller Basisschlitten mit Dichtung | `03_pod_cartridges/cartridge_base_sled.stl` | `03_pod_cartridges/00_base_sled.scad` |
 | **Kassette** | Magnetischer Diebstahlschutz-Rastbolzen (Sägezahn-Mechanik) | `03_pod_cartridges/cartridge_magnetic_lock_latch.stl` | `03_pod_cartridges/parts/05_magnetic_lock_latch.scad` |

@@ -209,7 +209,10 @@ Once all 4 checks indicate green, tighten enclosure lids with M3 screws diagonal
 ### 5.1 Harley-Davidson Platform (Touring, CVO ST, Road King)
 * **Central Box:** Fasten under rider seat on frame crossmember forward of battery using 4x M4 vibration isolators.
 * **Pod 1 & Pod 2:** Mount to hard saddlebag lids using [`saddlebag_lid_dock.stl`](../../hardware/cad/stl/02_pod_base/saddlebag_lid_dock.stl).
-* **Rear Radar:** Mount via license plate radar bracket ([`radar_license_plate_bracket.stl`](../../hardware/cad/stl/02_pod_base/radar_license_plate_bracket.stl)) connected to Whip 5 of the HD26 harness.
+* **Rear Radar (Heavy-Duty Swivel Cradle & Spray Protection):**
+  * **Bench Pre-Assembly (100% Soldering-Iron Free):** Bolt the sealed Radar 2.0 housing ([`radar_mr20_housing.stl`](../../hardware/cad/stl/05_accessories/radar_mr20_housing.stl)) with its internal DIN 934 M4 nuts to the adapter plate ([`radar_swivel_tilt_cradle.stl`](../../hardware/cad/stl/02_pod_base/radar_swivel_tilt_cradle.stl)) using two DIN 912 M4 $\times$ 12 mm steel bolts. Solid shear bosses absorb 100% of lateral shock loads.
+  * **Motorcycle Installation:** Clamp the license plate bracket ([`radar_license_plate_bracket.stl`](../../hardware/cad/stl/02_pod_base/radar_license_plate_bracket.stl)) under the lower M6 license plate screws. Slide the cradle Hirth tongue into the clevis fork, align the radar beam horizontally ($\pm 2^\circ$), and clamp securely with a DIN 912 M5 $\times$ 25 mm bolt and DIN 934 M5 nut.
+  * **Water Spray Protection (Drip Loop):** Route the 2-wire FLRY-B cable from Whip 5 down the spine conduit and guide it in an upward drip loop through the bottom M8 IP68 cable gland. The monolithic roost deflector on the housing bottom protects the gland from rear tire road spray.
 * **Front Node:** Secure inside fairing (Batwing / Sharknose) or nacelle; 12V from auxiliary plug; CAN connected locally at J2 (or under seat at Central Box).
 
 ### 5.2 Adventure Platform (BMW GS / GSA Family)

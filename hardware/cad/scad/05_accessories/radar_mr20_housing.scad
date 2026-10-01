@@ -188,13 +188,29 @@ module radar_mr20_main_tub(include_lower_clevis=INCLUDE_LOWER_CLEVIS) {
                             rounded_rect_2d(RADAR_HOUSING_W - 3.0, RADAR_HOUSING_H - 3.0, RADAR_CORNER_R - 1.0);
             }
 
-            // Bottom Binder M5 Bulkhead Boss (Centered at X = 0)
+            // Bottom M8 IP68/IP69K Cable Gland Boss (Centered at X = 0)
             translate([0, -RADAR_HOUSING_D/2, -RADAR_HOUSING_H/2 - 5.0]) {
                 hull() {
                     translate([0, 0, 2.5])
                         cube([16.0, 16.0, 5.0], center=true);
                     translate([0, 0, 0])
                         cylinder(r=7.0, h=5.0, center=true, $fn=36);
+                }
+            }
+
+            // Monolithic Rear-Wheel Spray Deflector Shroud (Protects cable gland from high-speed tire spray & road grit)
+            // Shields the gland from the tire-facing rear wall (-Y) and flanks, with lower drip edge
+            translate([0, -RADAR_HOUSING_D/2 - 4.0, -RADAR_HOUSING_H/2 - 5.5]) {
+                difference() {
+                    hull() {
+                        translate([0, 1.5, 4.0])
+                            cube([20.0, 7.0, 3.0], center=true);
+                        translate([0, -1.0, -2.0])
+                            cube([18.0, 3.5, 4.0], center=true);
+                    }
+                    // Inner clearance around M8 gland nut
+                    translate([0, 3.5, -1.0])
+                        cylinder(r=8.0, h=10.0, center=true, $fn=32);
                 }
             }
 
@@ -285,9 +301,13 @@ module radar_mr20_main_tub(include_lower_clevis=INCLUDE_LOWER_CLEVIS) {
             cube([MR20_MODULE_W + 0.6, MR20_MODULE_D + 0.5, MR20_MODULE_H + 0.6], center=true);
         }
 
-        // 5. Bottom IP67 Cable Gland / Sealing Grommet Bore for JST-JWPF 2-Pin Harness (Centered on X = 0)
+        // 5. Bottom IP68/IP69K Cable Gland Bore for JST-JWPF 2-Pin Harness (Centered on X = 0)
         translate([0, -RADAR_HOUSING_D/2, -RADAR_HOUSING_H/2 - 12.0]) {
+            // M8 Cable gland through-bore
             cylinder(r=RADAR_CABLE_GLAND_DIA/2, h=22.0, center=false, $fn=32);
+            // Counterbore for EPDM / NBR sealing O-ring washer (Ø 11.5 mm x 2.2 mm)
+            translate([0, 0, 4.5])
+                cylinder(r=5.75, h=2.5, center=false, $fn=32);
         }
 
         // 6. Rear M4 Captive Hex Nut Pockets (DIN 934 M4, 100% Soldering-Iron Free, Symmetrical at X = ±20 mm, Z = 0)

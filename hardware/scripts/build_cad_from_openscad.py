@@ -86,6 +86,7 @@ STL_TARGETS: List[Tuple] = [
     ("02_pod_base/saddlebag_lid_dock.scad", "02_pod_base/saddlebag_lid_dock.stl"),
     ("02_pod_base/radar_license_plate_bracket.scad", "02_pod_base/radar_license_plate_bracket.stl"),
     ("02_pod_base/radar_center_underfender_mount.scad", "02_pod_base/radar_center_underfender_mount.stl"),
+    ("02_pod_base/radar_swivel_tilt_cradle.scad", "02_pod_base/radar_swivel_tilt_cradle.stl", ["-D", 'part="cradle"']),
     ("02_pod_base/parts/006_fender_curved_saddle.scad", "02_pod_base/components/06_fender_curved_saddle.stl"),
     ("02_pod_base/parts/007_pod_slide_dock_core.scad", "02_pod_base/components/07_pod_slide_dock_core.stl"),
 
@@ -263,6 +264,26 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
         os.path.join(CAD_IMG_DIR, "radar_center_underfender_mount_cad.png"),
         "0,0,-12,55,0,310,120",
         "Tomorrow"
+    ),
+    (
+        "02_pod_base/radar_swivel_tilt_cradle.scad",
+        os.path.join(CAD_IMG_DIR, "radar_swivel_tilt_cradle_cad.png"),
+        "0,-12,0,55,0,310,160",
+        "Tomorrow"
+    ),
+    (
+        "02_pod_base/radar_swivel_tilt_cradle.scad",
+        os.path.join(CAD_IMG_DIR, "radar_tilt_mount_assembly_cad.png"),
+        "0,25,-40,55,0,130,360",
+        "Tomorrow",
+        ["-D", 'part="assembly"']
+    ),
+    (
+        "02_pod_base/radar_swivel_tilt_cradle.scad",
+        os.path.join(CAD_IMG_DIR, "radar_tilt_mount_assembly_rear_cad.png"),
+        "0,10,-40,55,0,310,380",
+        "Tomorrow",
+        ["-D", 'part="assembly"']
     ),
     (
         "02_pod_base/99_pod3_fender_assembly_touring.scad",

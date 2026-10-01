@@ -206,6 +206,8 @@ All enclosure parts are strictly engineered according to the **IKEA Principle**:
 * **Kit 3: Harley-Davidson Touring & Classic Bagger (Street Glide, Road Glide, Road King):**
   * `saddlebag_lid_dock.stl` (2 pcs): Hard saddlebag lid mounting docks for Pod 1 & 2.
   * `radar_license_plate_bracket.stl` (1 pc): Vibration-isolated license plate radar bracket for Whip 5.
+  * `radar_swivel_tilt_cradle.stl` (1 pc): Radar 2.0 heavy-duty center-of-gravity swivel tilt cradle with 2x M4 bolts and 36-tooth radial Hirth rosette.
+  * `radar_mr20_housing.stl` & `radar_mr20_radome.stl` (1 pc): Radar 2.0 PA12 wing housing with tire roost deflector and PC radome.
   * `magsafe_cockpit_mount_harley.stl` (1 pc), `magsafe_frame_dock.stl` (1 pc) & `magsafe_clamp_wings.stl` (1 pc): MagSafe frame dock components.
 * **Kit 4: Support Car / Van Convoy Kit (Car-Kit):**
   * `car_sun_visor_pod_clip.stl` (2 pcs): Quick-release spring clips for secure, vibration-free mounting of Pod 1 and Pod 2 to the sun visors in chase car or van (driver and passenger side).
