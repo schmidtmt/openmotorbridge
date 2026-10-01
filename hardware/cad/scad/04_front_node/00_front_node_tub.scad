@@ -23,6 +23,12 @@ module front_node_lower_tub() {
             
             // 2. Additive 2x M4/M5 Silentblock Flange Mounting Ears (East & West)
             front_node_flange_ears(ear_len = 14.0, ear_w = 14.0, ear_h = 5.0, hole_r = 2.5);
+
+            // 3. Additive Internal UWB Antenna Cradle Boss (Taoglas FXUWB10 at X=45.0, Y=34.0)
+            translate([45.0, 34.0, FRONT_NODE_WALL]) {
+                translate([0, 0, 0.6])
+                    cube([15.0, 15.0, 1.2], center=true);
+            }
         }
         
         // 4. Perimeter Sealing Groove (Nut for Ø 1.5 mm O-ring cord)
@@ -34,7 +40,7 @@ module front_node_lower_tub() {
             groove_depth = 1.6
         );
         
-        // 5. 4x M3 Corner Clamping Screw Holes (core holes for M3 threaded inserts)
+        // 5. 4x M3 Corner Clamping Screw Holes (Pilot holes for direct M3 thread forming in PA12)
         corner_offsets = [
             [FRONT_NODE_CORNER_R, FRONT_NODE_CORNER_R],
             [FRONT_NODE_OUTER_L - FRONT_NODE_CORNER_R, FRONT_NODE_CORNER_R],
@@ -43,7 +49,7 @@ module front_node_lower_tub() {
         ];
         for (co = corner_offsets) {
             translate([co[0], co[1], FRONT_NODE_TUB_H - 12.0])
-                cylinder(r=M3_SCREW_HOLE_R, h=12.2, center=false);
+                cylinder(r=M3_PILOT_HOLE_R, h=12.2, center=false);
         }
         
         // 6. South USB Cable Comb Cutout Pocket (Y = 0)
@@ -63,10 +69,19 @@ module front_node_lower_tub() {
         front_node_amps_cutouts(h_depth = 5.0);
         
         // 11. Crossed Zip-Tie & Hose Clamp Tunnels (floor underside)
-        front_node_ziptie_tunnels(slot_w = 5.5, slot_depth = 2.2);
+        front_node_ziptie_tunnels(slot_w = 5.5, slot_depth = 1.4);
         
         // 12. 3M Dual-Lock Landing Pad Recess (floor underside)
         front_node_dual_lock_recess(pad_l = 50.0, pad_w = 28.0, pad_depth = 0.6);
+
+        // 13. Internal UWB Antenna Floor Pocket (Taoglas FXUWB10: 12.0 x 12.0 x 0.8 mm)
+        // Positioned directly below Qorvo DW3110 / ANT_UWB on PCBA 05 B.Cu (X=45.0, Y=34.0)
+        translate([45.0, 34.0, FRONT_NODE_WALL + 1.2 - 0.4]) {
+            cube([12.0, 12.0, 0.9], center=true);
+            // U.FL Cable Relief Channel leading to ANT_UWB towards North (+Y)
+            translate([0, 5.0, 0])
+                cube([3.5, 6.0, 0.9], center=true);
+        }
     }
     
     // 13. Additive: 4x Internal M2.5 PCB Standoffs (rising from floor)

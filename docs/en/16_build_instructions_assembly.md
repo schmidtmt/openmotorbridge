@@ -144,7 +144,7 @@ All discrete components, PCB ordering files, and COTS sourcing lists are documen
 ---
 
 ### Step 4: Universal Front Node (PCBA 05) Assembly
-1. **Insert Captive Nuts:** Press 4x M3 nuts into corner pockets and 4x M4 nuts into AMPS base pockets of [`front_node_lower_tub.stl`](../../hardware/cad/stl/04_front_node/front_node_lower_tub.stl).
+1. **Preparation:** Press 4x M4 stainless steel nuts (DIN 934) into the form-fit captive hex pockets of the AMPS pattern on the tub underside ([`front_node_lower_tub.stl`](../../hardware/cad/stl/04_front_node/front_node_lower_tub.stl)) (100% soldering-iron free). The 4x M3 lid clamping screws form their own clean, vibration-proof threads directly into the PA12 pilot holes in the lower tub.
 2. **Install Tub Floor UWB Antenna:**
    * Adhere Taoglas FXUWB10 flex antenna into the lower tub floor recess.
    * Route U.FL lead upward.

@@ -12,16 +12,16 @@
 include <../../00_common/parameters.scad>;
 include <../../00_common/screw_bosses.scad>;
 
-CENTER_X = FRONT_NODE_OUTER_L / 2.0; // 42.0 mm
-CENTER_Y = FRONT_NODE_OUTER_W / 2.0; // 30.0 mm
+CENTER_X = FRONT_NODE_OUTER_L / 2.0; // 49.0 mm
+CENTER_Y = FRONT_NODE_OUTER_W / 2.0; // 34.0 mm
 
 // 1. AMPS 4-Hole Captive Hex Nut Pockets (DIN 934 M4, 100% Soldering-Iron Free)
 module front_node_amps_cutouts(h_depth = 3.6) {
     amps_coords = [
-        [CENTER_X - AMPS_SPACING_X / 2.0, CENTER_Y - AMPS_SPACING_Y / 2.0], // [23.0, 15.0]
-        [CENTER_X + AMPS_SPACING_X / 2.0, CENTER_Y - AMPS_SPACING_Y / 2.0], // [61.0, 15.0]
-        [CENTER_X - AMPS_SPACING_X / 2.0, CENTER_Y + AMPS_SPACING_Y / 2.0], // [23.0, 45.0]
-        [CENTER_X + AMPS_SPACING_X / 2.0, CENTER_Y + AMPS_SPACING_Y / 2.0]  // [61.0, 45.0]
+        [CENTER_X - AMPS_SPACING_X / 2.0, CENTER_Y - AMPS_SPACING_Y / 2.0], // [30.0, 19.0]
+        [CENTER_X + AMPS_SPACING_X / 2.0, CENTER_Y - AMPS_SPACING_Y / 2.0], // [68.0, 19.0]
+        [CENTER_X - AMPS_SPACING_X / 2.0, CENTER_Y + AMPS_SPACING_Y / 2.0], // [30.0, 49.0]
+        [CENTER_X + AMPS_SPACING_X / 2.0, CENTER_Y + AMPS_SPACING_Y / 2.0]  // [68.0, 49.0]
     ];
     
     for (pt = amps_coords) {
@@ -31,7 +31,7 @@ module front_node_amps_cutouts(h_depth = 3.6) {
 }
 
 // 2. Crossed Zip-Tie & Hose Clamp Tunnels (Subtractive in floor)
-module front_node_ziptie_tunnels(slot_w = 5.5, slot_depth = 2.2) {
+module front_node_ziptie_tunnels(slot_w = 5.5, slot_depth = 1.4) {
     // A. Longitudinal tunnel along X (centered in Y)
     translate([-1.0, CENTER_Y - slot_w/2.0, -0.1])
         cube(size=[FRONT_NODE_OUTER_L + 2.0, slot_w, slot_depth + 0.1], center=false);
