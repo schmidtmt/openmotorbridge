@@ -19,6 +19,8 @@ idf_component_register(
         "solar_position.cpp"
         "baro_weather_trend.cpp"
         "hardware_inventory.cpp"
+        "uwb_cartridge_dispatcher.cpp"
+        "uwb_radar_parser.cpp"
     INCLUDE_DIRS 
         "."
     REQUIRES 
@@ -32,4 +34,5 @@ idf_component_register(
         fatfs 
         json
         nimble
+        uwb_backbone
 )
