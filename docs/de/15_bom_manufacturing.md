@@ -152,7 +152,37 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 
 ---
 
-## 9. 1-Click Bestellleitfaden für JLCPCB (Alle 6 Leiterplatten fertig bestückt)
+## 8b. PCBA 09: OMM 2.4 GHz Autonomes Intercom-Modul (`openmotorbridge_omm_ucs`, 2-Layer FR4 TG150, 60 x 30 mm)
+
+| Designator | Bauteil / Wert | Hersteller / Typ | Gehäuse / Footprint | JLCPCB Part # | Funktion / Beschreibung |
+| :--- | :--- | :--- | :--- | :---: | :--- |
+| **`U1`** | ESP32-C6-MINI-1 | Espressif | SMD Modul (13.2x16.6mm)| `C5267232` | 32-Bit RISC-V 160MHz Host MCU, Wi-Fi 6, 802.15.4 TDMA, BLE 5.3, 4MB Flash |
+| **`U2`** | BQ24075RGTR | Texas Instruments | QFN-16 (3x3mm) | `C96825` | 1.5A LiPo PMIC mit Dynamic Power Path Management (Zero-Reboot Umschaltung) |
+| **`U3`** | XC6206P332MR | Torex Semi | SOT-23-3 | `C5446` | 3.3V / 250mA Low-Iq LDO Spannungsregler |
+| **`U4`** | ES8311 | Everest Semi | QFN-20 (3x3mm) | `C396781` | 24-Bit / 96kHz Mono Audio Codec mit 100mW HP-Amp & rauscharmem Mic-Preamp |
+| **`ANT1`** | 2450AT45A100 | Johanson Tech | SMD 9.5x2.0mm | `C139744` | 2.4 GHz High-Gain Keramik-Chipantenne (+2.2 dBi) mit Pi-Filter |
+| **`J1`** | TYPE-C-31-M-12 | Korean HRO | SMT/THT IP67 | `C2765186` | Wasserdichte 16-Pin USB-C Buchse (5V Laden, WebUSB DFU, Helm-Audio) |
+| **`BAT1`** | JST-ACH 2-Pin | JST | SMD 1.2mm pitch | `C2902341` | Steckverbindung zum internen 600-mAh-LiPo Pouch-Akku (mit PCM) |
+| **`D1`** | WS2812B-2020 | Worldsemi | SMD 2020 | `C2843785` | RGB-Status-LED (Ladezustand, Mesh-Kanal, Pairing-Indikator) |
+| **`D2`** | USBLC6-2SC6 | STMicroelectronics | SOT-23-6 | `C7519` | High-Speed TVS-Diodenarray für USB D+/D- und VBUS ESD-Schutz |
+| **`SW1..4`** | EVQ-P2 / KMT0 | Panasonic / C&K | SMD 3.5x2.8mm | `C318884` | 4x taktile IP67 Mikrotaster (Power, Mesh, Vol+, Vol-) |
+| **`R_NTC`** | 10k NTC 1% | Murata | 0402 | `C25804` | Akku-Temperaturüberwachung nach JEITA-Norm |
+
+---
+
+## 9. 1-Click Bestellleitfaden für JLCPCB (Alle Leiterplatten fertig bestückt)
+
+Alle Fertigungsdaten liegen im Repository unter `hardware/production_packages/` als fertige ZIP- und CSV-Pakete vor:
+
+| Baugruppe / PCBA | Gerber-ZIP Datei | BOM CSV Datei | CPL (Pick & Place) CSV | Lagen | Fertigungs-Hinweis |
+| :--- | :--- | :--- | :--- | :---: | :--- |
+| **PCBA 01: Zentralbox** | `01_main_box_pcba_gerbers_jlcpcb.zip` | `01_main_box_pcba_bom_jlcpcb.csv` | `01_main_box_pcba_cpl_jlcpcb.csv` | **4 Lagen** | ENIG (Gold), 1.6 mm, TG150, SMT beidseitig (DW3110 auf B.Cu) |
+| **PCBA 03: Universal-Kassette**| `03_pod_cartridge_pcba_gerbers_jlcpcb.zip` | `03_pod_cartridge_pcba_bom_jlcpcb.csv` | `03_pod_cartridge_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG (Gold), 1.2 mm, SMT beidseitig (2x pro Fahrzeug bestellen) |
+| **PCBA 05: Front-Knoten** | `05_front_node_pcba_gerbers_jlcpcb.zip` | `05_front_node_pcba_bom_jlcpcb.csv` | `05_front_node_pcba_cpl_jlcpcb.csv` | **4 Lagen** | ENIG (Gold), 1.6 mm, TG150, SMT beidseitig (DW3110 auf B.Cu) |
+| **PCBA 06: MagSafe Dock** | `06_magsafe_dock_pcba_gerbers_jlcpcb.zip` | `06_magsafe_dock_pcba_bom_jlcpcb.csv` | `06_magsafe_dock_pcba_cpl_jlcpcb.csv` | **2 Lagen** | *Optional / Legacy* (bei All-UWB durch COTS 2-Pin Magnetkupplung ersetzt) |
+| **PCBA 07: Smart-Keyfob** | `07_smart_keyfob_pcba_gerbers_jlcpcb.zip` | `07_smart_keyfob_pcba_bom_jlcpcb.csv` | `07_smart_keyfob_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG (Gold), 1.0 mm, SMT beidseitig |
+| **PCBA 08: Radar 2.0 Sub-MCU** | `08_radar_submcu_pcba_gerbers_jlcpcb.zip` | `08_radar_submcu_pcba_bom_jlcpcb.csv` | `08_radar_submcu_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG (Gold), 1.2 mm, TG150, SMT Top |
+| **PCBA 09: OMM UCS Modul** | `09_omm_ucs_pcba_gerbers_jlcpcb.zip` | `09_omm_ucs_pcba_bom_jlcpcb.csv` | `09_omm_ucs_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG (Gold), 1.0 mm, TG150, SMT beidseitig (ECE 22.06 & Pod) |
 
 Alle Fertigungsdaten liegen im Repository unter `hardware/production_packages/` als fertige ZIP- und CSV-Pakete vor:
 
@@ -169,7 +199,7 @@ Alle Fertigungsdaten liegen im Repository unter `hardware/production_packages/` 
 
 ## 10. Mechanik- & Gehäuse-BOM (3D-Druck MJF PA12 & Normteile)
 
-Alle Gehäuseteile sind konsequent für das **IKEA-Prinzip** konstruiert: **Kein Einschmelzen von Gewindeeinsätzen mit dem Lötkolben erforderlich!** Die Gehäuse verfügen über integrierte Sechskant-Mutternaschen (Nut Pockets für Standard DIN 934 / DIN 985 Edelstahlmuttern) bzw. präzise Kernlöcher für gewindefurchende Kunststoffschrauben.
+Alle Gehäuseteile sind konsequent für das **IKEA-Prinzip** konstruiert: **Kein Einschmelzen von Gewindeeinsätzen mit dem Lötkolben und absolut kein Gewindeschneiden in Kunststoff erforderlich!** Die Gehäuse verfügen ausnahmslos über formschlüssig integrierte Sechskant-Mutterntaschen (Nut Pockets für Standard DIN 934 V4A-Edelstahlmuttern M2, M2.5, M3, M4, M5). Sämtliche Schraubverbindungen sind unendlich oft zerstörungsfrei demontierbar und wieder verschraubbar.
 
 ### 10.1 Basis-System (Universal für jedes Motorrad)
 | Baugruppe | STL-Dateiname | Stück | Material & Fertigung | Funktion & Beschreibung |
@@ -193,7 +223,10 @@ Alle Gehäuseteile sind konsequent für das **IKEA-Prinzip** konstruiert: **Kein
 | :--- | :--- | :---: | :--- | :--- |
 | **Gateway-Inlay Sena** | [`cartridge_insert_sena.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_sena.stl) | *Opt. (1)* | MJF PA12 / ASA | Formschlüssiges Inlay für Sena SPIDER X Slim (Mesh 3.0 / 2.0, Direkt-Micro-Kabelpeitsche) |
 | **Gateway-Inlay Cardo** | [`cartridge_insert_cardo.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_cardo.stl) | *Opt. (1)* | MJF PA12 / ASA | Inlay für Cardo Packtalk Edge / Pro (DMC Gen2) mit Air-Mount |
-| **Swap-Inlay OMM 2.4 GHz** | [`cartridge_insert_omm.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_omm.stl) | *Opt. (1)* | MJF PA12 / ASA | Inlay für OMM 2.4 GHz Swap Cartridge (ESP32-C3) |
+| **Gateway-Inlay OMM UCS**| [`cartridge_insert_omm_ucs.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_omm_ucs.stl) | *Opt. (1..2)*| MJF PA12 / ASA | Formschlüssiges Inlay & Ladebucht für OMM 2.4 GHz UCS Modul im Pod |
+| **OMM UCS Gehäuse-Oberschale**| [`omm_ucs_top_shell.stl`](../../hardware/cad/stl/03_pod_cartridges/omm_ucs_top_shell.stl) | *Opt. (1..2)*| MJF PA12 / ABS | Autonome OMM UCS Oberschale mit 4x DIN 934 M2 Mutterntaschen & Dichtnut |
+| **OMM UCS Gehäuse-Unterschale**| [`omm_ucs_bottom_shell.stl`](../../hardware/cad/stl/03_pod_cartridges/omm_ucs_bottom_shell.stl) | *Opt. (1..2)*| MJF PA12 / ABS | Autonome OMM UCS Unterschale mit ECE 22.06 Schnapprasten & M2 Senkungen |
+| **OMM UCS Silikon-Tastmatte**| [`omm_ucs_silicone_keypad.stl`](../../hardware/cad/stl/03_pod_cartridges/omm_ucs_silicone_keypad.stl) | *Opt. (1..2)*| Shore 50A Silikon| Nahtlose, 100% wasserdichte 4-Tasten-Schaltmatte mit diffusem LED-Dom |
 | **Blindkassette / Dry Box** | [`cartridge_insert_blindkassette.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_blindkassette.stl) | *Opt. (1)* | MJF PA12 / ASA | Hermetischer Schutzschlitten für ungenutzten Slot oder regendichte Dry Box |
 
 ### 10.3 Fahrzeugspezifische Montage-Kits (3D-Druckteile)
@@ -370,6 +403,10 @@ Anstelle der früheren proprietären Platine `PCBA 06` wird die werkzeuglose Kof
 | **M2.5 Platinenschrauben** | M2.5 x 6 mm Zylinderkopf V4A (DIN 912) | Normteil | 8 Stk. | 4x Zentralbox-Platine, 4x Front-Node-Platine |
 | **M2 Kassetten-Platinenschrauben**| M2 x 6 mm Zylinder-/Flachkopf V4A (DIN 7985/912) | Normteil | 8 Stk. | Befestigung von PCBA 03 im Kassetten-Schlitten (4x pro Kassette; Schottwandschrauben entfallen zu 100 %) |
 | **M2 Kassetten-Halteplattenschrauben**| M2 x 6 mm Senkkopf V4A (DIN 7991) | Normteil | 8 Stk. | Fixierung der Aktuator-Niederhalteplatten (4x pro Gateway-Kassette) |
+| **M2 UCS Modul-Schrauben** | M2 x 8 mm Zylinderkopf V4A (DIN 912) | Normteil / Amazon | 4-8 Stk. | Verschraubung OMM UCS Gehäuse (4x pro Modul, greift in DIN 934 M2 Muttern) |
+| **M2 UCS Edelstahlmuttern** | DIN 934 M2 V4A Muttern | Normteil / Amazon | 4-8 Stk. | Formschlüssig in Oberschale des OMM UCS Moduls eingelegt (Captive Nuts) |
+| **OMM LiPo Pouch-Akku** | 1S LiPo 600 mAh ($38 \times 24 \times 4{,}5\,\text{mm}$) mit PCM | EEMB / Web | 1-2 Stk. | Autarker Akku für OMM UCS Intercom-Modul (12-14 h Laufzeit) |
+| **OMM Silikon-Profildichtung** | Silikon-Rundschnur $\varnothing 0{,}8\,\text{mm}$ Shore 40A | O-Ring-Shop | 0.5 m | IP67 Gehäusedichtung für OMM UCS Gehäuse (ca. 22 cm pro Modul) |
 | **M2 Schwenkachsen Wippe** | M2 x 8 mm Zylinderstift Edelstahl (DIN 7) | Normteil / Misumi | 2 Stk. | Drehachsen für magnetische Kassetten-Rastwippen |
 | **Magnetanker (Kassette)** | Ø 6 x 8 mm Zylinderstift gehärtet (DIN 6325) | Normteil / Misumi | 2 Stk. | Stahlanker im Hebelarm der Kassetten-Wippe |
 | **Wippen-Rückstellfedern** | Edelstahl V4A ($\varnothing 3{,}5\,\text{mm}, L_0=10\,\text{mm}$) | Gutekunst / Web | 2 Stk. | Rückstellfedern für Kassetten-Rastkralle |

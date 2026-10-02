@@ -15,12 +15,13 @@ include <../00_common/parameters.scad>;
 include <../00_common/screw_bosses.scad>;
 use <00_base_sled.scad>;
 use <parts/06_insert_omm_ucs.scad>;
+use <parts/omm_ucs_module.scad>;
 use <../00_common/dummies/dummy_adapter_pcb.scad>;
 
 module cartridge_omm_transceiver_assembly(exploded = false) {
     z_pcb    = exploded ? 16.0 : 5.0;
     z_insert = exploded ? 34.0 : 8.0;
-    z_module = exploded ? 46.0 : 12.0;
+    z_module = exploded ? 46.0 : 10.5;
     z_screws = exploded ? 58.0 : 14.0;
 
     // 1. Universal Base Sled (Anthracite PA12 - 100% Identical for All Pods)
@@ -36,36 +37,9 @@ module cartridge_omm_transceiver_assembly(exploded = false) {
         translate([2.5, 2.5, z_insert])
             cartridge_insert_omm_ucs();
 
-    // 4. OMM 2.4 GHz UCS OEM Transceiver Module
-    // A. Module Housing (Charcoal / Dark Grey, 66 x 36 x 8 mm)
-    color([0.18, 0.20, 0.22]) {
-        translate([22.5, (CARTRIDGE_BASE_W - 36.0)/2.0, z_module])
-            cube([66.0, 36.0, 7.5], center=false);
-    }
-
-    // B. Integrated 600 mAh LiPo Flat Cell (Pouch cell inside module bay)
-    color([0.12, 0.35, 0.65]) {
-        translate([25.0, (CARTRIDGE_BASE_W - 24.0)/2.0, z_module + 1.2])
-            cube([36.0, 24.0, 4.5], center=false);
-    }
-
-    // C. 2.4 GHz Ceramic Mesh Antenna (White ceramic)
-    color("whitesmoke") {
-        translate([65.0, CARTRIDGE_BASE_W/2.0 - 4.0, z_module + 3.0])
-            cube([12.0, 8.0, 2.2], center=false);
-    }
-
-    // D. Front USB-C Receptacle (Silver metal facing +X towards faceplate)
-    color("silver") {
-        translate([87.0, (CARTRIDGE_BASE_W - 9.0)/2.0, z_module + 2.0])
-            cube([5.0, 9.0, 3.2], center=false);
-    }
-
-    // E. Status RGB Indicator LED (Subtle Cyan Glow)
-    color("cyan") {
-        translate([50.0, CARTRIDGE_BASE_W/2.0 + 10.0, z_module + 7.6])
-            cylinder(r=1.0, h=0.4, center=false, $fn=16);
-    }
+    // 4. OMM 2.4 GHz UCS Autonomous Transceiver Module Assembly
+    translate([20.0, (CARTRIDGE_BASE_W - 36.0)/2.0, z_module])
+        omm_ucs_module_assembly(exploded = false);
 
     // 5. 4x M2 Stainless Steel Fastening Screws (Corner Posts)
     color("silver") {

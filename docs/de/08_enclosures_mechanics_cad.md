@@ -20,7 +20,7 @@ Das Basisgehäuse der Zentralbox ist als modulares, 3-teiliges IP67/IP69K-Sandwi
 - **Lichte Innenmaße:** $105{,}0 \times 69{,}0 \times 32{,}0\,\text{mm}$ (optimiert für die $85{,}0 \times 55{,}0\,\text{mm}$ 4-Layer Hauptplatine PCBA 01 mit symmetrischem Randabstand von $10{,}0\,\text{mm}$ in X und $7{,}0\,\text{mm}$ in Y).
 - **Material & Fertigung:** PA12 im HP Multi Jet Fusion (MJF) 3D-Druck (min. $2{,}5\dots 3{,}0\,\text{mm}$ Wandstärke), kugelgestrahlt, im Heißbad chemisch geglättet und hydrophob versiegelt.
 - **Schutzart:** IP67 / IP69K (strahlwasser- und tauchdicht bis $1\,\text{m}$ Wassertiefe sowie dampfstrahlbeständig).
-- **100% Lötkolben-Freie Montage:** Alle Schraubverbindungen nutzen direkt gedruckte PA12-Kernlöcher ($\varnothing\,2{,}1\,\text{mm}$ für M2.5 Thermoplast-Schrauben) und formschlüssige DIN 934 M3 Sechskantmutter-Taschen. Messing-Gewindeeinsätze sind vollständig eliminiert.
+- **100% Lötkolben-Freie Montage & Beliebig Oft Verschraubbar:** Alle Schraubverbindungen nutzen ausnahmslos formschlüssig ins PA12 eingedruckte **DIN 934 Sechskantmutter-Taschen** (M2, M2.5, M3, M4, M5). Selbstschneidende Gewinde in Kunststoff sind vollständig eliminiert: Gehäuse können beliebig oft geöffnet und wieder verschraubt werden, ohne dass Gewinde ausleiern oder Gehäuseteile nach einmaliger Demontage unbrauchbar werden. Messing-Gewindeeinsätze sind vollständig eliminiert.
 
 ### 1.1 3D-CAD-Modell & 3-Schichten-Sandwichaufbau
 
@@ -58,7 +58,7 @@ Das Basisgehäuse der Zentralbox ist als modulares, 3-teiliges IP67/IP69K-Sandwi
 +------------------------------------------------------------+  |
 | 3. UNTERWANNE (17,0 mm Höhe - Geschlossene Monocoque-Wanne)|  |
 |    * 4-Layer Hauptplatine (85 x 55 mm) auf M2.5 Standdomen |  |
-|      (77 x 47 mm Lochabstand, Ø 2,1 mm PA12 Kernloch)      |  |
+|      (77 x 47 mm Lochabstand, DIN 934 M2.5 Mutterntaschen) |  |
 |    * Integrierte Antennentasche (12 x 12 x 0,8 mm) im Boden|  |
 |      mit U.FL-Kabelführung für Taoglas FXUWB10 UWB Ch. 5   |  |
 |    * Formschlüssige DIN 934 M3 Sechskant-Nut-Pockets       |  |
@@ -308,19 +308,22 @@ Um Signale vom 90°-abgewinkelten **JST-SH 1.0 mm 6-Pin SMD-Steckverbinder (`J_A
 
 OpenMotorBridge setzt für moderne, herstellerunabhängige Wechselmodule auf die **Universal Communication Solution (UCS)**, welche von führenden Helm- und Intercom-Herstellern (u. a. Cardo, Midland, Shoei, HJC) forciert wird:
 
-1. **UCS-Standard als universeller Formfaktor:**
+1. **UCS-Standard als universeller Formfaktor ($68{,}0 \times 36{,}0 \times 9{,}5\,\text{mm}$):**
    * Durch die Vereinheitlichung der Außenkontur bei UCS-Geräten können unterschiedliche Mesh-Module in denselben standardisierten Halteschlitten eingesetzt werden.
-   * Das **OpenMotorMesh 2.4 GHz Modul** wird nativ im UCS-Formfaktor gefertigt und fungiert als vollwertiger, offener OEM-Transceiver.
+   * Das **OpenMotorMesh 2.4 GHz Modul** wird nativ im UCS-Formfaktor gefertigt und fungiert als vollwertiger, offener OEM-Transceiver (CAD-Modelle: [`omm_ucs_top_shell.scad`](../../hardware/cad/scad/03_pod_cartridges/parts/omm_ucs_module.scad), [`omm_ucs_bottom_shell.scad`](../../hardware/cad/scad/03_pod_cartridges/parts/omm_ucs_module.scad) und [`omm_ucs_silicone_keypad.scad`](../../hardware/cad/scad/03_pod_cartridges/parts/omm_ucs_module.scad)).
+   * **Befestigungskonzept (Captive Nuts Standard):** Die Oberschale besitzt 4 formschlüssige **DIN 934 M2 Sechskantmutter-Taschen**. Die Verschraubung erfolgt von der Unterschale aus mit 4x DIN 912 M2 x 8 mm V4A Edelstahlschrauben. Gewindeschneiden in Kunststoff ist ausgeschlossen – das Modul kann beliebig oft zur Inspektion oder zum Akkutausch geöffnet werden.
+   * **Dichtungskonzept:** 100 % wasserdicht nach IP67 durch eine geschäumte Shore 40A Silikonschnurdichtung in der Gehäusedichtnut und eine einteilige, unterbrechungsfreie Silikon-Tastmatte ohne Öffnungen.
 2. **Akku- & Energie-Autonomie (Pass-Through Charging):**
-   * Das OMM 2.4 GHz Modul verfügt über eine integrierte, werkzeuglos wechselbare 600-mAh-LiPo-Flachzelle ($> 10\,\text{h}$ autarke Laufzeit).
-   * **Laden während des Betriebs:** Das Modul unterstützt unterbrechungsfreies Laden im Fahrbetrieb. Im OMB-Pod erfolgt die Speisung über die 2-Draht DC-Bodenkontakte von `PCBA 03`; im Standalone-Betrieb am Helm über den stirnseitigen USB-C-Anschluss.
+   * Das OMM 2.4 GHz Modul verfügt über eine integrierte, werkzeuglos wechselbare 600-mAh-LiPo-Flachzelle ($> 12\,\text{h}$ autarke Laufzeit).
+   * **Laden während des Betriebs:** Das Modul unterstützt unterbrechungsfreies Laden im Fahrbetrieb. Im OMB-Pod erfolgt die Speisung über die 2-Draht DC-Bodenkontakte von `PCBA 03` via kurzem 90° USB-C Kabel; im Standalone-Betrieb am Helm über den stirnseitigen USB-C-Anschluss.
 3. **Universelle Schnittstellen-Peitsche:**
    * Analog zu modernen Intercom-Standards führt das Modul alle Signale über eine robuste 3-fach Kabelpeitsche heraus:
-     * Mikrofon-Anschluss (2-polig JST / 2.5 mm Klinke)
-     * Stereo-Kopfhörer-Buchse (3.5 mm Klinke)
-     * USB-C Port für Laden und Service
-4. **Multi-Plattform-Einsatz:**
-   * Mit einem Handgriff kann das OMM-Modul aus dem Kassetten-Schlitten entnommen und in jeden beliebigen UCS-kompatiblen Motorradhelm geklickt werden.
+     * Mikrofon-Anschluss (2-polig JST-JWPF wasserdicht)
+     * Stereo-Kopfhörer-Buchse (3.5 mm Klinke für 40 mm JBL/Sena Treiber)
+     * USB-C Port für Laden und WebUSB Service
+4. **Multi-Plattform-Einsatz & ECE 22.06 Helm-Arretierung:**
+   * Mit einem Handgriff kann das OMM-Modul aus dem Kassetten-Schlitten entnommen und dank integrierter Schnapp-Rastnasen werkzeuglos in jeden beliebigen UCS-kompatiblen Motorradhelm geklickt werden.
+   * Details zur Schaltung und Platinenspezifikation siehe [04b_omm_intercom_module.md (Kapitel 2 & 3)](04b_omm_intercom_module.md#2-omm-24-ghz-hardware--platinen-design-pcba-spezifikation).
 
 #### 4.3.3 Das 4-Klassen-Inlay-Portfolio der Universal Smart Cartridge
 
@@ -1238,7 +1241,7 @@ Das **Radar 2.0 Flügel-Gehäuse** ([`radar_mr20_housing.scad`](../../hardware/c
      * **Zweiteiliges Actioncam-Prinzip (Gehäuse verschrauben + Gelenkachse arretieren):** Das fertig montierte, abgedichtete Radar 2.0 Gehäuse wird von der Rückseite her über zwei **DIN 912 M4 $\times$ 12 mm Stahlschrauben** ($40\,\text{mm}$ Stichmaß) direkt in die innenliegenden formschlüssigen DIN 934 M4-Muttern der Gehäuserückwand mit der massiven Adapterplatte ([`radar_swivel_tilt_cradle.scad`](../../hardware/cad/scad/02_pod_base/radar_swivel_tilt_cradle.scad)) verschraubt. Formschlüssige Passungs-Bosse nehmen 100 % der dynamischen Scherkräfte auf.
      * **Formschluss-Arretierung im Schwerpunkt ($Z = 0$):** Auf der Rückseite der Adapterplatte ragt eine $6{,}0\,\text{mm}$ breite Actioncam/GoPro-kompatible Zunge mit beidseitiger 36-Zahn Hirth-Rosette ($10^\circ$-Rastung) direkt in die Gabel des Kennzeichenträgers ([`radar_license_plate_bracket.scad`](../../hardware/cad/scad/02_pod_base/radar_license_plate_bracket.scad)) oder Unterfender-Halters. Eine durchgehende DIN 912 M5-Klemmschraube mit DIN 934 M5 Mutter fixiert den Nickwinkel unlösbar und verdrehsicher.
      * **Verliersicherheit bei Schlaglöchern:** Die Konstruktion baut durch die Adapterplatte zwar ca. $18\,\text{mm}$ tiefer nach hinten auf. Dafür ist der Massenschwerpunkt des ca. $180\,\text{g}$ schweren Gesamtsystems direkt in der Drehachse aufgehängt – Schwingbrüche an Einzellug-Füßchen oder das Ausrasten von Kunststoff-Bajonetten bei $25\,g$-Schlaglochstößen sind physikalisch ausgeschlossen!
-     * **Kein Einschmelzen, kein Lötkolben:** Sämtliche Gewinde nutzen DIN 934 Muttern oder greifen direkt in PA12-Kernlöcher.
+     * **Kein Einschmelzen, kein Lötkolben, kein Kunststoff-Gewindeschneiden:** Sämtliche Gewinde nutzen formschlüssig eingedruckte DIN 934 Sechskantmutter-Taschen (M2, M4, M5). Gehäuse können beliebig oft demontiert und wieder zusammengebaut werden, ohne dass Gewinde verschleißen.
   2. **Option B: Garmin Quarter-Turn Bajonettverschluss (Schnellwechsel / Leichtbau):**
      * Ermöglicht das werkzeuglose Aufsetzen und Verriegeln durch $90^\circ$-Drehung in Standard-Garmin-Varia-Cradles oder das OMB-Diebstahlschutz-Dock ([`radar_varia_gopro_lock_dock.scad`](../../hardware/cad/scad/02_pod_base/radar_varia_gopro_lock_dock.scad)).
      * **Stabilitäts- und Vibrationsbewertung:** Das originale Garmin-Bajonett wurde für leichte Fahrrad-Radare (Garmin Varia RTL515, ca. $71\,\text{g}$) konstruiert. Das vollwertige Radar 2.0 System (PA12-Monocoque + MR20 77-GHz-Horn + PCBA 08 mit 36 LEDs + V2X-Patch) wiegt ca. **$180\,\text{g}$**. Auf dem Motorrad (Einzylinder-Vibrationen, Schotterpisten, Schlaglöcher) stößt ein reines Kunststoff-Bajonett an seine Ermüdungsgrenze. Option B ist ideal für Schnellwechsel an Fahrrädern oder CNC-Alu-Haltern; für die permanente Motorrad-Festmontage ist Option A klar überlegen.

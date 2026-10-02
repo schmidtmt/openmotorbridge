@@ -43,6 +43,9 @@ STL_TARGETS: List[Tuple] = [
     ("03_pod_cartridges/parts/03_insert_blindkassette.scad", "03_pod_cartridges/cartridge_insert_blindkassette.stl"),
     ("03_pod_cartridges/parts/04_antenna_bracket_omm.scad", "03_pod_cartridges/cartridge_antenna_bracket_omm.stl"),
     ("03_pod_cartridges/parts/06_insert_omm_ucs.scad", "03_pod_cartridges/cartridge_insert_omm_ucs.stl"),
+    ("03_pod_cartridges/parts/omm_ucs_top_shell.scad", "03_pod_cartridges/omm_ucs_top_shell.stl"),
+    ("03_pod_cartridges/parts/omm_ucs_bottom_shell.scad", "03_pod_cartridges/omm_ucs_bottom_shell.stl"),
+    ("03_pod_cartridges/parts/omm_ucs_silicone_keypad.scad", "03_pod_cartridges/omm_ucs_silicone_keypad.stl"),
     
     # 4. Modular Components (Main Box)
     ("01_main_box/parts/000_lower_base.scad", "01_main_box/components/01_lower_tub_empty.stl"),
@@ -195,6 +198,12 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
         os.path.join(CAD_IMG_DIR, "dummy_cartridge_cad.png"),
         "58,29,14,55,0,310,280",
         "Solarized"
+    ),
+    (
+        "03_pod_cartridges/parts/omm_ucs_module.scad",
+        os.path.join(CAD_IMG_DIR, "omm_ucs_module_cad.png"),
+        "34,18,5,60,0,320,160",
+        "Tomorrow"
     ),
     (
         "02_pod_base/pod_poka_yoke_cross_section.scad",

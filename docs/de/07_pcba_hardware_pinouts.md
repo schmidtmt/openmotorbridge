@@ -35,6 +35,10 @@ Das Hardwaredesign von OpenMotorBridge folgt dem Grundsatz der radikalen Entflec
 |       | (Wheeltec 77GHz & V2X Patch)  | (Flügel M2.5) | (ENIG)  | Wheeltec MR20,       |
 |       |                               |               |         | 36x WS2812B, JWPF 12V|
 +-------+-------------------------------+---------------+---------+----------------------+
+| **PCBA 09**| **OMM 2.4 GHz UCS Intercom**  | 60 x 30 mm    | 2 Lagen | ESP32-C6 RISC-V,     |
+|       | (ECE 22.06 Autonom & Pod)     | (UCS M2)      | (ENIG)  | TI BQ24075, ES8311,  |
+|       |                               |               |         | 600mAh LiPo, Johanson|
++-------+-------------------------------+---------------+---------+----------------------+
 ```
 
 ### 1.1 Gliederung nach Systemkomponenten
@@ -45,6 +49,7 @@ Das Hardwaredesign von OpenMotorBridge folgt dem Grundsatz der radikalen Entflec
 2. **Empfohlene Erweiterungen & Peripherie:**
    * **`PCBA 07` (2-in-1 LoRa Smart-Keyfob & Silent Pager):** Tragbarer Schlüsselanhänger für 4,5 km Weitbereichs-Alarmierung, N52-Magnetschlüssel und induktive Qi-Ladung.
    * **`PCBA 08` (Radar 2.0 Sub-MCU & Warnflügel):** Heckmodul mit 77-GHz-mmWave-Sensorik, autonomem Brems- und Kollisionsstrobe sowie 5.9 GHz V2X-Uplink.
+   * **`PCBA 09` (OMM 2.4 GHz Autonomes Intercom-Modul):** Quelloffenes, autarkes ECE 22.06 UCS-Intercom-Modul für den Helm und als High-Speed Mesh-Einsatz im Kassetten-Schlitten (`PCBA 03`).
 3. **Ersatzlos entfallene Baugruppen (Architektur-Bereinigung v9.6):**
    * **`PCBA 02` (Pod-Basisplatine):** Ersatzlos gestrichen. Die Zuleitung führt direkt auf zwei vergoldete Federkontakte im Schachtboden.
    * **`PCBA 04` (Heck-Pod 3):** Ersatzlos gestrichen. Heck-Pod 3 entfällt vollständig; LoRa sitzt auf `PCBA 01`, GNSS auf `PCBA 05`.
@@ -303,3 +308,61 @@ Die separate Platine `PCBA 06` ist in v9.6 **vollständig und ersatzlos entfalle
   * `J2`: 4-Pin JST-SH Header zum Wheeltec MR20 mmWave Radar (UART1 @ 115.200 Baud).
 * **Autonome Notfall-Strobe-Steuerung:**
   * Erkennt der lokale ESP32-C5 einen herannahenden Auffahrunfall (Time-to-Collision $\text{TTC} < 1{,}5\,\text{s}$), löst er den hochfrequenten Notfall-Strobe der 36 LEDs **lokal in $< 1\,\text{ms}$** aus - völlig unabhängig vom Funkverkehr zur Zentralbox.
+
+---
+
+## 11. PCBA 09: OMM 2.4 GHz Autonomes Intercom-Modul (`openmotorbridge_omm_ucs`)
+
+Die Platine **`PCBA 09`** ist die universelle Open-Source-Hardware für das OpenMotorMesh (OMM) 2.4 GHz Intercom-System. Sie erfüllt die mechanischen und elektrischen Spezifikationen für den autonomen Betrieb in standardisierten ECE 22.06 UCS-Helmmulden sowie als HF-Einsatz im Kassetten-Schlitten (`PCBA 03`).
+
+### 11.1 Technische Platinen-Kenndaten & Lagenaufbau
+* **Abmessungen:** $60{,}0 \times 30{,}0 \times 1{,}0\,\text{mm}$ ($R = 2{,}5\,\text{mm}$ Kantenradius).
+* **Lagenaufbau:** 2-Lagen FR-4 High-TG150, $1{,}0\,\text{mm}$ Materialstärke, $35\,\mu\text{m}$ Cu (1 oz), ENIG-Goldfinish (Electroless Nickel Immersion Gold).
+* **Befestigung:** 4x M2-Montagelöcher ($\varnothing 2{,}2\,\text{mm}$) mit $52{,}0 \times 22{,}0\,\text{mm}$ Rastermaß für formschlüssige DIN 934 M2 Mutterntaschen im Gehäuse.
+
+### 11.2 Bestückung & Schaltkreis-Architektur
+
+1. **Host-Mikrocontroller (`U1`):**
+   * **Espressif ESP32-C6-MINI-1** (32-Bit RISC-V Single-Core @ 160 MHz, 512 kB SRAM, 4 MB Quad-SPI Flash).
+   * Unterstützt 2.4 GHz Wi-Fi 6 ($802.11\text{ax}$), IEEE 802.15.4 (deterministischer TDMA Mesh-Stack) und Bluetooth 5.3 LE.
+2. **Power-Management & Lade-IC (`U2`):**
+   * **Texas Instruments BQ24075RGTR** (QFN-16 3x3mm) mit Dynamic Power Path Management (DPPM).
+   * Unterbrechungsfreie Umschaltung zwischen USB-C 5V-Speisung (Bordnetz über Kassetten-Schlitten oder Powerbank) und dem internen 600-mAh-LiPo-Akku in $< 10\,\mu\text{s}$ ohne MCU-Reboot.
+   * Einstellbarer Ladestrom ($500\,\text{mA}$), JEITA-konforme Temperaturüberwachung über NTC-Thermistor ($10\,\text{k}\Omega$).
+3. **Audio-Frontend Codec (`U4`):**
+   * **Everest Semi ES8311** (QFN-20 3x3mm): Ultra-Low-Power Mono Audio Codec mit 24-Bit / 96 kHz I2S-Interface.
+   * Integrierter Headphone-Verstärker ($100\,\text{mW}$ @ $16\,\Omega$ / $55\,\text{mW}$ @ $32\,\Omega$) zum direkten Betrieb von 40 mm Helm-Lautsprechern.
+   * Rauscharmer Mikrofon-Vorverstärker ($+0\dots +30\,\text{dB}$ Gain) mit programmierbarer interner `MICBIAS`-Erzeugung ($2{,}0\dots 2{,}8\,\text{V}$) für Schwanenhals- und Klebemikrofone.
+4. **2.4-GHz-Keramik-Chipantenne (`ANT1`):**
+   * **Johanson Technology 2450AT45A100** ($9{,}5 \times 2{,}0 \times 1{,}2\,\text{mm}$, Gain $+2{,}2\,\text{dBi}$) mit $50\,\Omega$ Pi-Anpassfilter und U.FL-Messpunkt an der Platinenkante über einer $8 \times 4\,\text{mm}$ massefreien Keep-Out-Zone.
+5. **Bedienung & Sensorik:**
+   * 4x taktile IP67-Mikrotaster (`SW1` bis `SW4`, C&K KMT0 / Panasonic EVQ-P2) auf `F.Cu`.
+   * 1x RGB Status-LED (`D1`, WS2812B-2020) zur Einkopplung in den Gehäuse-Lichtleiter.
+6. **Schnittstellen & Steckverbinder:**
+   * `J1`: Wasserdichte IP67 USB-C Buchse (16-Pin) mit USBLC6-2SC6 TVS-ESD-Schutzarray.
+   * `BAT1`: 2-polige JST-ACH Micro-Buchse zum 1S LiPo Pouch-Akku (600 mAh mit integriertem DW01A/8205A PCM).
+
+### 11.3 Vollständige GPIO-Pinbelegung (ESP32-C6-MINI-1)
+
+| ESP32-C6 Pin | Netzname | Signal-Typ | Funktion / Hardware-Verbindung |
+| :--- | :--- | :--- | :--- |
+| **`GPIO 0`** | `BTN_PWR` | Digital In (Pullup) | SW1 (Power / MFB, Low-aktiv, Boot-Pin) |
+| **`GPIO 1`** | `BTN_MESH` | Digital In (Pullup) | SW2 (Open/Group Mesh Umschaltung, Low-aktiv) |
+| **`GPIO 2`** | `BTN_VOL_UP` | Digital In (Pullup) | SW3 (Lautstärke +, Kanalwahl +, Low-aktiv) |
+| **`GPIO 3`** | `BTN_VOL_DN` | Digital In (Pullup) | SW4 (Lautstärke -, Kanalwahl -, Low-aktiv) |
+| **`GPIO 4`** | `I2S_MCLK` | Digital Out | ES8311 Master Clock (12.288 MHz) |
+| **`GPIO 5`** | `I2S_BCLK` | Digital Out | ES8311 Bit Clock (1.536 MHz) |
+| **`GPIO 6`** | `I2S_WS` | Digital Out | ES8311 Frame Sync / Word Select (48 kHz) |
+| **`GPIO 7`** | `I2S_SDOUT` | Digital Out | ES8311 DAC Data Out (Lautsprecher) |
+| **`GPIO 8`** | `I2S_SDIN` | Digital In | ES8311 ADC Data In (Mikrofon) |
+| **`GPIO 9`** | `I2C_SCL` | Open-Drain | ES8311 I2C Clock (4.7k Pullup nach 3.3V) |
+| **`GPIO 10`** | `I2C_SDA` | Open-Drain | ES8311 I2C Data (4.7k Pullup nach 3.3V) |
+| **`GPIO 11`** | `WS2812_DATA` | Digital Out | D1 (WS2812B-2020 RGB Statusanzeige) |
+| **`GPIO 12`** | `CHG_STAT1` | Digital In (Pullup) | BQ24075 /STAT Ladezustandsanzeige |
+| **`GPIO 13`** | `PWR_GOOD` | Digital In (Pullup) | BQ24075 /PGOOD Externe 5V-Versorgung aktiv |
+| **`GPIO 14`** | `VBAT_SENSE` | Analog In (ADC1_CH4)| Akku-Spannungsmessung (100k / 100k Teiler) |
+| **`GPIO 15`** | `NTC_SENSE` | Analog In (ADC1_CH5)| NTC-Thermistor Temperaturüberwachung |
+| **`GPIO 16`** | `UART_TX` | Digital Out | Zero-Wear Kassettenbus / Debug-Schnittstelle |
+| **`GPIO 17`** | `UART_RX` | Digital In | Zero-Wear Kassettenbus / Debug-Schnittstelle |
+| **`USB_DP`** | `USB_D_P` | USB 2.0 PHY | USB-C D+ (WebUSB Firmware-Flashing & DFU) |
+| **`USB_DM`** | `USB_D_N` | USB 2.0 PHY | USB-C D- (WebUSB Firmware-Flashing & DFU) |
