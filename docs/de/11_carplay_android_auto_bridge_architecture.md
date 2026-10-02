@@ -232,18 +232,19 @@ Ein zentrales Missverständnis betrifft die Koexistenz von drahtlosem Apple CarP
 
 #### 1. Die physische Wi-Fi-Grenze (Single-Wi-Fi Hardware-Limit)
 * **Kein paralleles Wi-Fi:** Ein Smartphone besitzt nur einen einzigen physischen Wi-Fi-Transceiver. Ist das Smartphone mit dem 5-GHz-WLAN des CarPlay-Dongles verbunden, kann es sich **physikalisch unmöglich gleichzeitig mit einem 2,4-GHz-WLAN des Motorrads (ESP32)** verbinden.
-* **Kein SOCKS5-Proxy:** Auf iOS (und restriktiven Android-Versionen) verbietet das Betriebssystem sandboxed PWAs oder Drittanbieter-Apps strikt, im Hintergrund als transparenter Netzwerk-Router (SOCKS5/NAT) für externe Fahrzeugsysteme zu agieren. Das historische Konzept eines *"ESP32-Proxys für das Werks-Navi"* ist daher technisch und praktisch nicht realisierbar und wird ersatzlos verworfen.
+* **Realer Internet-Uplink über BLE/USB & Android SOCKS5/Stream-Relay:** Der Datenaustausch zwischen Motorrad (ESP32) und Smartphone läuft physisch über **Bluetooth Low Energy (WebBLE / RFCOMM) oder USB-Kabel**. Auf Android stellt die Companion-App (`bar.f0o.omb`) ein völlig legales Layer-5 SOCKS5- / Stream-Relay bereit, das an die Mobilfunk-Schnittstelle (`TRANSPORT_CELLULAR`) gebunden ist. Dies versorgt OMB mit Internet für V2X (OpenTrafficMap Backend, SPaT-Ampelphasen, DENM-Gefahren) und triggert automatische Waze-Gefahrenmeldungen ("Auto-Klick" ohne Hände vom Lenker) – ohne jeden Konflikt mit parallel genutztem Tailscale-VPN (ausführliche Architektur in Abschnitt 7.1.3).
 
 #### 2. Die saubere Lösung: Strikte Trennung über Bluetooth Low Energy (WebBLE)
 1. **Drahtloser CarPlay-/AA-Kanal (5 GHz Wi-Fi):**
    * Das Smartphone nutzt sein Wi-Fi-Interface **exklusiv** für die High-Speed RTSP-Videoübertragung ($60\,\text{fps}$) und die Touch-Steuerung zum COTS-Dongle.
-2. **OpenMotorBridge Telemetrie-Kanal (100 % WebBLE):**
-   * Die Kommunikation zwischen Smartphone (PWA) und der OpenMotorBridge-MCU (ESP32-S3) erfolgt **ausschließlich über Bluetooth Low Energy (Web Bluetooth API)**.
+2. **OpenMotorBridge Telemetrie- & Uplink-Kanal (100 % WebBLE / USB):**
+   * Die Kommunikation zwischen Smartphone (PWA / Companion-App) und der OpenMotorBridge-MCU (ESP32-S3) erfolgt **ausschließlich über Bluetooth Low Energy (Web Bluetooth API) oder USB**.
    * Bluetooth und Wi-Fi arbeiten auf getrennten Funkmodulen und stören sich nicht.
    * Die Telemetrie-Bandbreite (Schräglage, Radar-Status, Kassetten-Modi) beträgt $< 1\,\text{kB/s}$ und belastet BLE minimal.
 3. **Internet & Navigation im Fahrbetrieb:**
    * Bei aktivem CarPlay / Android Auto läuft die Navigation (Google Maps, Apple Maps, Kurviger, Calimoto) nativ auf dem Smartphone über dessen eigene Mobilfunkverbindung (4G/5G).
    * Das interne Werks-Navi des Motorrads wird nicht benötigt und benötigt keine Internetverbindung von OMB.
+   * **V2X- & Schwarm-Uplink für OpenMotorBridge:** Über die Companion-App (`bar.f0o.omb`) erhält OMB via BLE/USB einen Mobilfunk-Uplink für V2X-Datenaustausch (OpenTrafficMap) und Waze-Schwarmmeldungen ("Auto-Klick").
 4. **100 % Offline-First Garantie:**
    * OpenMotorBridge arbeitet für alle Fahr- und Sicherheitsfunktionen (Radar 2.0, UWB-Backbone, Intercom-Mesh Sena/Cardo/OMM, IMU-Crash-Erkennung) **zu 100 % autark und offline**.
 
@@ -408,12 +409,31 @@ Bei der Konzeption von mobilen Datenbrücken für Motorrad-Cockpits treten in de
 * Viele Motorradfahrer betreiben auf dem Smartphone dauerhaft **Tailscale** oder WireGuard (z. B. für die *Homesphere*-App, Home Assistant, Garagentorsteuerung oder private Kameras).
 * Würde OpenMotorBridge einen L3-WireGuard-Tunnel zwischen Front-Node und Smartphone aufbauen, würde das Betriebssystem die bestehende Tailscale-Verbindung sofort trennen.
 
-#### 3. Verworfenes Konzept: SOCKS5/Stream-Relay vs. Reale WebBLE Companion-Architektur
-Historisch wurde evaluiert, ob eine native Companion-App (`bar.f0o.omb`) als Layer-5 SOCKS5-Proxy für externe Motorrad-Navis fungieren könnte. Dieses Konzept wurde **nach gründlicher technischer Analyse verworfen**:
-* **Physische Wi-Fi-Exklusivität:** Während drahtlosem CarPlay/AA ist die Wi-Fi-Schnittstelle des Smartphones mit dem 5-GHz-WLAN des Dongles belegt; eine parallele Wi-Fi-Verbindung zur OMB-Hardware ist physikalisch unmöglich.
-* **Betriebssystem-Restriktionen:** Apple iOS verbietet sandboxed Apps im Hintergrund strikt das Routen von Drittanbieter-Netzwerk-Traffic ohne aktiven Personal Hotspot.
-* **Kein praktischer Nutzen:** Da Fahrer ohnehin Apple CarPlay oder Android Auto nutzen, laufen Navigation (Google Maps, Kurviger etc.) und Live-Verkehr direkt auf dem Smartphone. Das veraltete Offline-Werksnavi des Motorrads benötigt schlichtweg keinen Internet-Proxy.
-* **Fokus der Companion-App:** Die App konzentriert sich rein auf **BLE Auto-Reconnect im Hintergrund**, automatisches GPX-Fahrt-Logging bei Zündung-EIN und direkten Cloud-Upload über die eigene Mobilfunkverbindung des Smartphones.
+#### 3. Der Android Internet-Uplink: Layer-5 SOCKS5/Stream Relay, OpenTrafficMap & Waze "Auto-Klick" (`bar.f0o.omb`)
+Die native OpenMotorBridge Companion-App (reservierte Android Application ID `bar.f0o.omb` im Google Play Store) stellt für Android-Fahrer einen hochgradig mächtigen, **vollständig legalen Internet-Uplink** bereit, der spezifische V2X- und Community-Features freischaltet:
+
+1. **Physischer Datentransport ohne Wi-Fi-Konflikt (BLE / USB):**
+   * Da das 5-GHz-WLAN des Smartphones exklusiv für den drahtlosen Android-Auto-Videostream genutzt wird, sendet OpenMotorBridge (ESP32) seine Datenpakete **ausschließlich über Bluetooth Low Energy (WebBLE / RFCOMM) oder USB-Kabel** an das Android-Smartphone.
+   * Bluetooth und Wi-Fi laufen auf getrennten Funkstacks und arbeiten vollkommen unterbrechungsfrei parallel.
+2. **Layer-5 SOCKS5 / Stream-Relay mit Mobilfunk-Binding (`TRANSPORT_CELLULAR`):**
+   * Auf Android kann die Companion-App ausgehende Sockets explizit an die Mobilfunk-Schnittstelle binden (`ConnectivityManager.bindProcessToNetwork(cellularNetwork)` bzw. `Socket.bind()`).
+   * **Kein VPN-Konflikt mit Tailscale:** Da das Relay rein auf **Anwendungsebene (Layer 5)** als unprivilegierter TCP/UDP-Stream läuft und keinen `VpnService`-Slot belegt, bleibt ein dauerhaft aktives **Tailscale** oder WireGuard (z. B. für Home Assistant / *Homesphere*) zu 100 % ungestört parallel aktiv!
+3. **V2X (ITS-G5 5.9 GHz) Integration & OpenTrafficMap:**
+   * Der autarke 5.9-GHz-V2X-Empfänger auf PCBA 08 (Radar-Flügelgehäuse) empfängt standardisierte Car-to-X-Nachrichten:
+     - **SPaT (Signal Phase and Timing):** Countdown und Umschaltzeiten intelligenter Lichtsignalanlagen (Ampeln).
+     - **DENM (Decentralized Environmental Notification Message):** Akute Gefahrenmeldungen (Geisterfahrer, Stauende hinter Kurve, Glatteis, Einsatzfahrzeug nähert sich).
+     - **CAM (Cooperative Awareness Message):** Position und Geschwindigkeit vernetzter Fahrzeuge.
+   * OpenMotorBridge leitet diese V2X-Pakete über den UWB-Backbone und BLE an die Android Companion-App weiter.
+   * Die App streamt die V2X-Erkenntnisse über Mobilfunk (4G/5G) an das **OpenTrafficMap-Projekt** und lädt umgekehrt lokale Gefahren-Tiles (GeoJSON) nach.
+4. **Waze "Auto-Klick" & Schwarmintelligenz-Automatisierung:**
+   * Waze bietet eine der weltweit stärksten Community-Verkehrsdatenbanken, erfordert für Meldungen (Gefahr auf Fahrbahn, Unfall, Stau) normalerweise jedoch manuelle Touchscreen-Klicks.
+   * Erkennt OpenMotorBridge über V2X (z. B. eine Baustelle, Unfallwarnung oder eine rote Ampelphase) oder über die eigene 6-Achs-IMU (Gefahrenbremsung $> 0{,}6\,\text{g}$, Notbremsblinken aktiv, Sturz):
+     - Sendet OMB ein Trigger-Event an die Android Companion-App.
+     - Die App nutzt auf Android die offizielle **AccessibilityService-API oder Android-Intents**, um die entsprechende Gefahrenmeldung in Waze **vollautomatisch einzuspeisen ("Auto-Klick")**!
+     - Der Fahrer muss während der Fahrt weder die Hände vom Lenker nehmen noch mit Handschuhen auf dem Touchscreen tippen. Die Waze-Community wird in Echtzeit gewarnt, und die Route wird bei Bedarf sofort neu berechnet.
+5. **Plattform-Unterschied: Android vs. iOS:**
+   * Während Apple iOS Hintergrund-Automationen wie automatische UI-Interaktionen in Waze und freies Socket-Routing im Hintergrund rigoros blockiert, ist dieses Setup auf Android **zu 100 % legal, erprobt und uneingeschränkt realisierbar**.
+   * Auf iOS beschränkt sich der Internet-Uplink auf den direkten PWA Cloud-Sync (WebDAV) und Wetter-Abruf über WebBLE.
 
 #### 4. Die Alltags-Praxis für Skyline OS
 * **95 % aller Fahrten:** Fahrer nutzen Apple CarPlay oder Android Auto über den USB-Port `J4` - Navigation, Spotify und Staudaten laufen nativ auf dem Smartphone.

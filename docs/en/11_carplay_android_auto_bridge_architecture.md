@@ -380,12 +380,15 @@ When architecting mobile data bridges for motorcycle cockpits, mobile operating 
 * Many riders continuously run **Tailscale** or WireGuard on their smartphones (e.g. for Home Assistant, garage door automation, or security cameras).
 * If OpenMotorBridge were to establish an L3 WireGuard tunnel between Front Node and phone, the mobile OS would immediately kill the rider's existing Tailscale link.
 
-#### 3. Future Companion App: Layer-5 SOCKS5/Stream Relay (`bar.f0o.omb`)
-If a native OpenMotorBridge companion app is deployed in the future (reserved Android Application ID `bar.f0o.omb` in the Google Play Console), it resolves routing without VPN interference:
-* **Layer 5 Instead of Layer 3:** Rather than handling raw IP packets (L3, which requires root privileges or VPN adapters), the Front Node terminates TCP connections (Port 80/443) locally and streams opaque TLS byte streams over unprivileged standard sockets (`connect()`) to the companion app.
-* **Zero VPN Slots Consumed:** Because the app opens standard POSIX sockets over the cellular network, Tailscale remains 100% active and undisturbed.
-* **Store-Compliant Background Link:** Leverages `UIBackgroundModes = bluetooth-central` (iOS) or a lean Foreground Service with a persistent sticky notification (Android `bar.f0o.omb`) to keep the uplink active as long as bike ignition is ON.
-* **Zero Cellular Subscription (Zero-Cost Principle):** In alignment with OpenMotorBridge core principles, the system avoids recurring cellular SIM fees by relying on the decentralized 868 MHz LoRa mesh (PCBA 01 Onboard SX1262 & PCBA 07 Keyfob) for off-grid messaging and anti-theft tracking (documented in `.context/IDEAS_BACKLOG.md`).
+#### 3. Android Internet Uplink: Layer-5 SOCKS5/Stream Relay, OpenTrafficMap & Waze "Auto-Click" (`bar.f0o.omb`)
+The native OpenMotorBridge companion app (reserved Android Application ID `bar.f0o.omb` in the Google Play Console) resolves routing without VPN interference and provides a fully legal, compliant internet uplink for Android riders:
+* **BLE/USB Physical Link (Zero Wi-Fi Conflict):** Because the phone's 5 GHz Wi-Fi transceiver is exclusively locked to the wireless Android Auto video stream, OMB communicates with the smartphone strictly via **Bluetooth Low Energy (WebBLE / RFCOMM) or USB cable**.
+* **Layer 5 Instead of Layer 3:** Rather than handling raw IP packets (L3, which requires root privileges or VPN adapters), the Front Node terminates TCP connections locally and streams opaque TLS byte streams over unprivileged standard sockets (`connect()`) bound explicitly to the cellular interface (`TRANSPORT_CELLULAR`).
+* **Zero VPN Slots Consumed:** Because the app opens standard POSIX sockets over the cellular network, Tailscale or WireGuard remains 100% active and undisturbed.
+* **V2X (ITS-G5 5.9 GHz) & OpenTrafficMap:** The 5.9 GHz ITS-G5 receiver on PCBA 08 captures SPaT (traffic light signal timing), DENM (hazard warnings), and CAM frames. OMB relays these over UWB and BLE to the Android app, which streams them to the **OpenTrafficMap** project and fetches localized hazard GeoJSON tiles.
+* **Waze "Auto-Click" Automation:** When OMB detects a traffic light phase change (via V2X) or an emergency braking incident (> 0.6 g via 6-axis IMU), it signals the Android Companion App. Using Android's **AccessibilityService API or Intents**, the app automatically injects hazard reports into Waze ("Auto-Click") without taking the rider's hands off the handlebars.
+* **Platform Boundary (Android vs. iOS):** While iOS sandbox rules strictly forbid background cross-app UI automation and socket routing without Personal Hotspot, Android permits background socket binding and accessibility automation with zero hacks.
+* **100% Offline-First Safety:** Core safety systems (77 GHz radar, UWB backbone, intercom mesh, crash detection) remain 100% self-contained on the bike hardware, requiring zero internet in alpine dead zones.
 
 ---
 

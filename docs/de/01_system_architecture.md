@@ -421,25 +421,35 @@ Der Front-Knoten (PCBA 05) dient auf **allen Motorrädern** als universeller Coc
 
 ---
 
-## 6. Konnektivität, WebBLE & Die 100 % Offline-First Garantie
+## 6. Internet-Uplink, V2X-Schwarmdaten & Waze "Auto-Klick" (Android Companion)
 
-### 6.1 Die physikalische Wi-Fi-Grenze: Kein Wi-Fi zwischen Smartphone und OMB bei CarPlay/AA
-Im mobilen Infotainment gilt eine unverrückbare Hardware- und Betriebssystem-Realität:
-* **Single-Wi-Fi-Einschränkung:** Ein Smartphone besitzt nur einen einzigen physischen Wi-Fi-Client-Chip.
-* **CarPlay/AA-Exklusivität:** Ist das Smartphone per 5-GHz-WLAN mit dem Wireless-CarPlay- oder Android-Auto-Dongle verbunden, ist seine WLAN-Schnittstelle vollständig belegt. Das Smartphone kann sich **physikalisch unmöglich gleichzeitig mit einem zweiten 2,4-GHz-WLAN** (z. B. einem SoftAP des ESP32) verbinden.
-* **Kein Router-Proxy auf iOS:** Apple iOS verbietet es sandboxed PWAs oder Drittanbieter-Apps im Hintergrund strikt, als transparenter Netzwerk-Router (SOCKS5/NAT-Gateway) für externe Fahrzeugsysteme zu agieren.
-* **Architektur-Klarstellung:** Der historische Entwurf eines *"Wi-Fi SOCKS5 Internet-Proxys für das Werks-Navi"* ist ersatzlos gestrichen. Niemand benötigt Internet im internen Werks-Navi, da Navigation (Google Maps, Apple Maps, Kurviger, Calimoto) direkt nativ auf dem Smartphone läuft und über CarPlay/Android Auto mit vollen Live-Verkehrsdaten auf den Motorrad-Screen gespiegelt wird.
+OpenMotorBridge besitzt für erweiterte Telematik- und Community-Funktionen einen dedizierten **Internet-Uplink über die Android Companion-App** (`bar.f0o.omb`), während das Gesamtsystem für alle fahr- und sicherheitskritischen Funktionen 100 % autark und offline-fähig bleibt:
 
-### 6.2 Der reale Datenkanal zum Smartphone: 100 % Bluetooth Low Energy (WebBLE)
-Die Kommunikation zwischen der OpenMotorBridge-Hardware (ESP32-S3) und dem Fahrer-Smartphone erfolgt im Fahrbetrieb **ausschließlich über Bluetooth Low Energy (WebBLE)**:
-* **Vollkommen unabhängig von Wi-Fi:** Bluetooth läuft auf einem eigenständigen Funkstack. Es bleibt zu 100 % aktiv und ungestört, während das Smartphone über 5 GHz Wi-Fi den CarPlay-Videostream überträgt.
-* **Null Konfigurationsaufwand:** Der Fahrer öffnet die PWA im mobilen Browser (Chrome / Safari) und koppelt sich per Web Bluetooth API direkt mit dem ESP32-S3.
-* **Schlanke Telemetrie-Bandbreite:** Fahrdaten (Schräglage, EKF-Status, Radar-Warnstatus, Batteriespannungen, Kassetten-Modi) sind extrem kompakte Datenpakete ($< 1\,\text{kB/s}$), die das BLE-GATT-Protokoll latenzfrei und mit minimaler Prozessorlast überträgt.
-* **Direkter Cloud-Sync der PWA:** Wenn der Fahrer Touren via WebDAV oder Nextcloud synchronisieren möchte, geschieht dies direkt aus der PWA über die bestehende Mobilfunkverbindung (4G/5G) des Smartphones – ohne jedes Routing über den ESP32!
+### 6.1 Der physische Übertragungsweg: Warum BLE / USB statt Wi-Fi genutzt wird
+* **Physische Wi-Fi-Exklusivität:** Während des Betriebs von drahtlosem Android Auto oder Apple CarPlay ist die WLAN-Schnittstelle des Smartphones mit dem 5-GHz-WLAN des COTS-Dongles belegt. Das Smartphone kann sich hardwarebedingt nicht gleichzeitig mit einem 2,4-GHz-WLAN des ESP32 verbinden.
+* **Unterbrechungsfreier Datenkanal:** Die Übertragung zwischen OpenMotorBridge (ESP32-S3) und dem Smartphone erfolgt daher **strikt über Bluetooth Low Energy (WebBLE / RFCOMM)** oder über das USB-Kabel am Front-Node. Bluetooth und Wi-Fi laufen auf getrennten Funkstacks völlig störungsfrei parallel.
 
-### 6.3 Die 100 % Offline-First Garantie
-OpenMotorBridge folgt einem kompromisslosen **Safety-First-Prinzip**:
-* **Null Internet-Abhängigkeit:** Sämtliche Sicherheits- und Kommunikationsfunktionen – das 77-GHz-Radar ($< 15\,\text{ms}$ Reaktionszeit), der UWB-Backbone ($< 0{,}4\,\text{ms}$), die Intercom-Mesh-Matrix (Sena/Cardo/OMM), die 6-Achs-IMU-Sturzerkennung, die 868-MHz-LoRa-Bake und das Notbremsblinken – laufen zu **100 % lokal und autark** auf der Motorrad-Hardware.
+### 6.2 Der Android Internet-Uplink: Layer-5 SOCKS5-Relay, OpenTrafficMap & Waze "Auto-Klick"
+Auf Android-Geräten bietet die Companion-App (`bar.f0o.omb`) im Hintergrund mächtige Integrationsmöglichkeiten, die auf iOS durch Apples Sandbox-Richtlinien blockiert werden:
+1. **Layer-5 SOCKS5 / Stream-Relay mit Mobilfunk-Bindung:**
+   * Die Android-App bindet ihre ausgehenden Sockets explizit an die Mobilfunk-Schnittstelle (`NetworkCapabilities.TRANSPORT_CELLULAR`).
+   * **Kein VPN-Konflikt mit Tailscale:** Da das Relay rein auf Anwendungsebene (L5) als unprivilegierter TCP/UDP-Stream arbeitet und **keinen** Android `VpnService`-Slot belegt, bleibt ein parallel genutztes **Tailscale** oder WireGuard (z. B. für Home Assistant / Smart-Home) zu 100 % ungestört aktiv.
+2. **V2X Car-to-X Vernetzung & OpenTrafficMap:**
+   * Der 5.9-GHz-ITS-G5-Empfänger auf PCBA 08 empfängt lokale Car-to-X-Broadcasts:
+     - **SPaT (Signal Phase and Timing):** Umschaltzeiten und Grünphasen vernetzter Lichtsignalanlagen (Ampeln).
+     - **DENM:** Akute Gefahrenmeldungen (Geisterfahrer, Glatteis, Stauende hinter unübersichtlicher Kurve).
+     - **CAM:** Positionen und Geschwindigkeiten benachbarter Fahrzeuge.
+   * OpenMotorBridge überträgt diese Daten über UWB und BLE an die Companion-App, die sie über das Mobilfunknetz (4G/5G) in das **OpenTrafficMap-Projekt** einspeist und lokale Gefahren-Tiles (GeoJSON) lädt.
+3. **Waze "Auto-Klick" & Schwarm-Automatisierung:**
+   * Um die Community-Warnungen von Waze während der Fahrt ohne gefährliche Touchscreen-Bedienung zu nutzen:
+   * Erkennt OMB über V2X ein relevantes Ereignis (Ampel rot, Baustelle, Unfall) oder über die 6-Achs-IMU eine Gefahrensituation (Vollbremsung $> 0{,}6\,\text{g}$, Notbremsstrobe, Sturz):
+     - Sendet OMB ein Trigger-Telegramm an die Android Companion-App.
+     - Die App nutzt den Android **AccessibilityService oder Intents**, um in Waze **vollautomatisch die Gefahrenmeldung abzusetzen ("Auto-Klick")**.
+     - Der Fahrer behält beide Hände am Lenker; die Waze-Community wird in Echtzeit gewarnt und die Route bei Bedarf dynamisch angepasst.
+
+### 6.3 Die 100 % Offline-First Garantie (Safety First)
+Sollte die Mobilfunkverbindung auf Pässen oder in Tälern abreißen:
+* Sämtliche fahr- und sicherheitskritischen Funktionen – das 77-GHz-Radar ($< 15\,\text{ms}$), der UWB-Backbone ($< 0{,}4\,\text{ms}$), die Intercom-Mesh-Matrix (Sena/Cardo/OMM), die IMU-Sturzerkennung und das Notbremsblinken – arbeiten zu **100 % offline und autark** auf der Motorrad-Hardware.
 * Im tiefsten Funkloch auf abgelegenen Pässen funktioniert OpenMotorBridge mit identischer Präzision und Schutzwirkung wie im Stadtzentrum.
 
 ---
