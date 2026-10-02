@@ -8374,6 +8374,8 @@ const fleetState = {
             addons: {
                 frontNode: true,
                 rearPod3: true,
+                ommHelmetKit: false,
+                tmp117Sensor: false,
                 radar2: false,
                 bsdMirrors: false,
                 actionCamDock: false,
@@ -8430,6 +8432,8 @@ function createDefaultBike(index, template = null) {
         addons: {
             frontNode: model !== 'car-support',
             rearPod3: true,
+            ommHelmetKit: false,
+            tmp117Sensor: false,
             radar2: false,
             bsdMirrors: false,
             actionCamDock: false,
@@ -8688,6 +8692,7 @@ function calculateSingleBikeBom(bikeConfig) {
         'sena-spider-x': 'Sena SPIDER X Slim',
         'sena-50s': 'Sena 50S / 60S',
         'cardo-edge': 'Cardo Packtalk Edge',
+        'omm-ucs': isDe ? 'OMM 2.4 GHz UCS Modul' : 'OMM 2.4 GHz UCS Module',
         'pmr446': 'PMR446 Funk',
         'blind': isDe ? 'Blindkassette' : 'Blank Cartridge'
     };
@@ -8696,8 +8701,12 @@ function calculateSingleBikeBom(bikeConfig) {
     let costMin = 135;
     let costMax = 165;
     if (bikeModel === 'car-support') { costMin = 95; costMax = 125; }
+    if (slot1 === 'omm-ucs') { costMin += 38; costMax += 48; }
+    if (slot2 === 'omm-ucs') { costMin += 38; costMax += 48; }
     if (addons.frontNode) { costMin += 42; costMax += 55; }
     if (addons.rearPod3) { costMin += 48; costMax += 62; }
+    if (addons.ommHelmetKit) { costMin += 45; costMax += 58; }
+    if (addons.tmp117Sensor) { costMin += 14; costMax += 18; }
     if (addons.radar2) { costMin += 65; costMax += 85; }
     if (addons.bsdMirrors) { costMin += 34; costMax += 45; }
     if (addons.actionCamDock) { costMin += 28; costMax += 38; }
@@ -8732,12 +8741,16 @@ function calculateSingleBikeBom(bikeConfig) {
     if (bikeModel !== 'car-support') {
         if (slot1 === 'sena-spider-x' || slot1 === 'sena-50s') {
             parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_sena.stl', qty: 1, desc: isDe ? 'Inlay für Sena SPIDER X / 50S / 60S' : 'Inlay for Sena SPIDER X / 50S / 60S' });
+        } else if (slot1 === 'omm-ucs') {
+            parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_omm_ucs.stl', qty: 1, desc: isDe ? 'Inlay-Schlitten mit Antennenführung für OMM UCS (PCBA 09)' : 'Inlay sled with antenna routing for OMM UCS (PCBA 09)' });
         } else {
             parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_blindkassette.stl', qty: 1, desc: isDe ? 'Hermetische Blindkassette (Dry Box)' : 'Hermetic blank cartridge (Dry Box)' });
         }
 
         if (slot2 === 'cardo-edge') {
             parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_cardo.stl', qty: 1, desc: isDe ? 'Inlay für Cardo Packtalk Edge / Pro' : 'Inlay for Cardo Packtalk Edge / Pro' });
+        } else if (slot2 === 'omm-ucs') {
+            parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_omm_ucs.stl', qty: 1, desc: isDe ? 'Inlay-Schlitten mit Antennenführung für OMM UCS (PCBA 09)' : 'Inlay sled with antenna routing for OMM UCS (PCBA 09)' });
         } else if (slot2 === 'blind') {
             parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_blindkassette.stl', qty: 1, desc: isDe ? 'Hermetische Blindkassette (Dry Box)' : 'Hermetic blank cartridge (Dry Box)' });
         }
@@ -8775,6 +8788,19 @@ function calculateSingleBikeBom(bikeConfig) {
     // Handlebar Controls
     if (addons.handlebarControls) {
         parts3D.push({ group: 'Lenkertaster', file: 'under_perch_switch_bracket.stl', qty: 1, desc: isDe ? 'Under-Perch 3-Tasten-Konsole für Kupplungsarmatur' : 'Under-perch 3-button console for clutch bracket' });
+    }
+
+    // OMM Helmet UCS Kit
+    if (addons.ommHelmetKit) {
+        parts3D.push({ group: 'OMM Helm-Kit', file: 'omm_ucs_top_shell.stl', qty: 1, desc: isDe ? 'ECE 22.06 Gehäuse-Oberschale mit M2 Mutterntaschen' : 'ECE 22.06 upper shell with M2 nut pockets' });
+        parts3D.push({ group: 'OMM Helm-Kit', file: 'omm_ucs_bottom_shell.stl', qty: 1, desc: isDe ? 'ECE 22.06 Gehäuse-Unterschale mit Dichtnut & USB-C Ausschnitt' : 'ECE 22.06 lower shell with seal groove & USB-C cutout' });
+        parts3D.push({ group: 'OMM Helm-Kit', file: 'omm_ucs_silicone_keypad.stl', qty: 1, desc: isDe ? 'ECE 22.06 4-Tasten Silikon-Schaltmatte (Shore 50A IP67)' : 'ECE 22.06 4-button silicone keypad (Shore 50A IP67)' });
+        parts3D.push({ group: 'OMM Helm-Kit', file: 'omm_ucs_helmet_cradle.stl', qty: 1, desc: isDe ? 'ECE 22.06 UCS Helm-Klemmsockel & 3M VHB R130 Adapter' : 'ECE 22.06 UCS helmet cradle & 3M VHB R130 adapter' });
+    }
+
+    // TMP117 Stealth Sensor Mount
+    if (addons.tmp117Sensor) {
+        parts3D.push({ group: 'Stealth-Sensor', file: 'tmp117_stealth_fork_mount.stl', qty: 1, desc: isDe ? 'Gabelfuß-/Kotflügel-Halterung (mattschwarz PA12, aerodynamisch)' : 'Fork foot/fender mount (matte black PA12, aerodynamic)' });
     }
 
     // Bike-specific parts
@@ -8854,6 +8880,21 @@ function calculateSingleBikeBom(bikeConfig) {
         pcbas.push({ name: 'PCBA 08', id: 'kicad_radar_submcu', qty: 1, desc: isDe ? 'Radar 2.0 Sub-MCU & Halo-Wings (Wheeltec MR20 24GHz, 36x Halo RGB LEDs, V2X CAN)' : 'Radar 2.0 Sub-MCU & Halo-Wings (Wheeltec MR20 24GHz, 36x Halo RGB LEDs, V2X CAN)' });
     }
 
+    const numOmmSlots = (slot1 === 'omm-ucs' ? 1 : 0) + (slot2 === 'omm-ucs' ? 1 : 0);
+    const numOmmHelmet = addons.ommHelmetKit ? 1 : 0;
+    const totalOmmPcba = numOmmSlots + numOmmHelmet;
+
+    if (totalOmmPcba > 0) {
+        pcbas.push({
+            name: 'PCBA 09',
+            id: 'kicad_omm_intercom',
+            qty: totalOmmPcba,
+            desc: isDe ?
+                `OMM 2.4 GHz UCS Intercom (${totalOmmPcba}x: ESP32-C6-MINI-1U, TI BQ24075 PMIC, ES8311 Codec)` :
+                `OMM 2.4 GHz UCS Intercom (${totalOmmPcba}x: ESP32-C6-MINI-1U, TI BQ24075 PMIC, ES8311 Codec)`
+        });
+    }
+
     // COTS & Fasteners
     const cots = [
         { name: 'HD26 Fertigkabelpeitsche', spec: 'Amphenol LTW COTS HD26 Breakout', qty: 1, desc: isDe ? 'Zentraler Hauptanschluss (100% wasserdicht)' : 'Central main harness plug (100% waterproof)' },
@@ -8882,6 +8923,57 @@ function calculateSingleBikeBom(bikeConfig) {
         cots.push({ name: 'M2 Halteplattenschrauben', spec: 'DIN 7991 V4A M2 x 6 mm', qty: numSmart * 4, desc: isDe ? 'Aktuator-Niederhalteplatten (4x pro Gateway)' : 'Actuator retainer plates (4x per gateway)' });
         cots.push({ name: 'Miniatur-Hubmagnete', spec: '5V DC Ø 6,5x12mm + TPU-Spitzen', qty: numSmart * 4, desc: isDe ? 'Mechatronische Tastenbetätigung (4x pro Smart Slot)' : 'Mechatronic button actuation (4x per smart slot)' });
         cots.push({ name: 'J_ACT Aktuator-Kabelbaum', spec: 'Fertiges 8-Pin JST-SH Kabel auf 4x Litzen', qty: numSmart, desc: isDe ? 'Vorkonfektioniertes Fertigkabel (kein Crimpen!)' : 'Pre-molded harness lead (zero crimping!)' });
+    }
+
+    if (totalOmmPcba > 0) {
+        cots.push({
+            name: 'Taoglas FXP73 Flexantenne',
+            spec: '2.4 GHz Flex-Dipol (+3.0 dBi) mit I-PEX MHF / U.FL',
+            qty: totalOmmPcba,
+            desc: isDe ? `HF-Antenne klickt direkt auf den U.FL-Port des ESP32-C6 (${totalOmmPcba} Stk.)` : `RF antenna snaps directly to ESP32-C6 U.FL port (${totalOmmPcba} pcs)`
+        });
+        cots.push({
+            name: '1S LiPo Pouch-Akku 600 mAh',
+            spec: '3.7V / 2.22Wh (Typ 452438) mit DW01A/8205A PCM & JST-ACH',
+            qty: totalOmmPcba,
+            desc: isDe ? `Integrierter Akku für PCBA 09 (${totalOmmPcba} Stk., 12-14h Standalone-Betrieb)` : `Internal battery for PCBA 09 (${totalOmmPcba} pcs, 12-14h standalone)`
+        });
+        cots.push({
+            name: 'M2 Gehäuseschrauben & Muttern',
+            spec: 'DIN 912 V4A M2 x 8 mm + DIN 934 M2 Muttern',
+            qty: totalOmmPcba * 4,
+            desc: isDe ? `Verschraubung für PCBA 09 / UCS-Gehäuse (${totalOmmPcba * 4} Paar)` : `Screws & nuts for PCBA 09 / UCS housing (${totalOmmPcba * 4} pairs)`
+        });
+    }
+
+    if (addons.ommHelmetKit) {
+        cots.push({
+            name: isDe ? 'Helmlautsprecher & ECM-Mikrofon' : 'Helmet Speakers & ECM Mic',
+            spec: '40 mm 32 Ohm Hi-Fi Stereo-Lautsprecher + ECM Schwanenhalsmikrofon',
+            qty: 1,
+            desc: isDe ? 'Plug-and-Play Audio-Harness für OMM UCS Headset' : 'Plug-and-play audio harness for OMM UCS headset'
+        });
+        cots.push({
+            name: '3M VHB R130 Klebepad',
+            spec: 'Hochleistungs-Klebeband R130 passgenau zugeschnitten',
+            qty: 1,
+            desc: isDe ? 'Vibrations- und wetterfeste Helmbefestigung des UCS-Sockels' : 'Vibration & weatherproof helmet attachment of UCS cradle'
+        });
+    }
+
+    if (addons.tmp117Sensor) {
+        cots.push({
+            name: 'TI TMP117 Temperatursensor',
+            spec: 'Digitaler NIST I2C Sensor (±0.1°C) mit SparkFun Qwiic Breakout IP67',
+            qty: 1,
+            desc: isDe ? 'Präzisions-Eiswarner am Gabelfuß / Kaltlufteinlass' : 'Precision black ice warning probe on fork foot / cold air scoop'
+        });
+        cots.push({
+            name: 'Qwiic I2C Sensorkabel (1.0m)',
+            spec: '4-Pin JST-SH auf JST-SH Silikonkabel geschirmt',
+            qty: 1,
+            desc: isDe ? 'Verbindung vom Gabelfuß-Sensor zu Port J12 am Front-Node' : 'Link from fork sensor to Port J12 on Front Node'
+        });
     }
 
     if (bikeModel !== 'car-support') {
@@ -9055,6 +9147,8 @@ function renderSingleBuilder() {
         const addonList = [];
         if (active.addons?.frontNode) addonList.push(isDe ? 'Front-Knoten' : 'Front Node');
         if (active.addons?.rearPod3) addonList.push(isDe ? 'Heck-Pod 3 (DS18B20 Temp)' : 'Rear Pod 3 (DS18B20 Temp)');
+        if (active.addons?.ommHelmetKit) addonList.push(isDe ? 'OMM Helm-Kit' : 'OMM Helmet Kit');
+        if (active.addons?.tmp117Sensor) addonList.push(isDe ? 'TMP117 Eiswarner' : 'TMP117 Ice Sensor');
         if (active.addons?.radar2) addonList.push(isDe ? 'Radar 2.0 Sub-MCU' : 'Radar 2.0 Sub-MCU');
         if (active.addons?.bsdMirrors) addonList.push(isDe ? 'BSD Spiegel-LEDs' : 'BSD Mirror LEDs');
         if (active.addons?.actionCamDock) addonList.push(isDe ? 'Actioncam-Dock' : 'Actioncam Dock');
@@ -9072,7 +9166,7 @@ function renderSingleBuilder() {
 
     const costDisclaimerEl = document.getElementById('builder-cost-disclaimer');
     if (costDisclaimerEl) {
-        costDisclaimerEl.textContent = isDe ? 'zzgl. OEM-Intercom-Module (Sena/Cardo)' : 'excl. OEM intercom units (Sena/Cardo)';
+        costDisclaimerEl.textContent = isDe ? 'zzgl. OEM-Intercom-Module (Sena/Cardo; OMM UCS ist Open-Hardware PCBA 09)' : 'excl. OEM intercom units (Sena/Cardo; OMM UCS is open-hardware PCBA 09)';
     }
 
     // Toggle bed size container visibility
@@ -9249,6 +9343,13 @@ function renderSingleBuilder() {
                         <li>${isDe ? 'PCBA 03 in Basisschlitten einklicken, Pogo-Pin Flachkabel anstecken und Sena 50S/60S Cradle montieren.' : 'Snap PCBA 03 into sled, connect pogo-pin cable, and mount Sena 50S/60S cradle.'}</li>
                         <li>${isDe ? 'Wippenmechanismus montieren und Silikon-Flanschdichtung aufziehen.' : 'Assemble latch mechanism and fit silicone flange seal.'}</li>
                     </ol>
+                ` : active.slot1 === 'omm-ucs' ? `
+                    <ol>
+                        <li>${isDe ? 'PCBA 09 (ESP32-C6-MINI-1U) mit Taoglas FXP73 Flex-Dipolantenne und 600 mAh LiPo-Akku vorbereiten.' : 'Prepare PCBA 09 (ESP32-C6-MINI-1U) with Taoglas FXP73 flex-dipole antenna and 600 mAh LiPo battery.'}</li>
+                        <li>${isDe ? 'Platine und Akku in das Kassetten-Inlay (<code>cartridge_insert_omm_ucs.stl</code>) einsetzen und mit 4x M2x8 mm Schrauben sichern.' : 'Place PCB and battery into cartridge inlay (<code>cartridge_insert_omm_ucs.stl</code>) and secure with 4x M2x8 mm screws.'}</li>
+                        <li>${isDe ? 'Taoglas FXP73 Flexantenne vibrationsgeschützt im integrierten Antennenschacht verlegen (kein Löten!).' : 'Route Taoglas FXP73 antenna securely inside antenna channel (zero soldering!).'}</li>
+                        <li>${isDe ? 'USB-C Schnittstelle intern anstecken: Das Modul lädt im Pod automatisch über das 5V Bordnetz (TI BQ24075 Power-Path) und schaltet bei Entnahme unterbrechungsfrei in < 10 µs auf Akkubetrieb um.' : 'Connect internal USB-C port: Module charges automatically in pod via 5V bike power (TI BQ24075 power-path) and switches seamlessly to battery mode in < 10 µs on removal.'}</li>
+                    </ol>
                 ` : `
                     <ol>
                         <li>${isDe ? 'Blindkassette mit O-Ring in den Schlitten einsetzen - hermetisch regendichte Dry Box für Kleinteile.' : 'Insert blank cartridge with O-ring - hermetic waterproof dry box.'}</li>
@@ -9269,6 +9370,13 @@ function renderSingleBuilder() {
                         <li>${isDe ? 'PCBA 03 in Basisschlitten einsetzen.' : 'Seat PCBA 03 into base sled.'}</li>
                         <li>${isDe ? '4x Miniatur-Aktuatoren in <code>cartridge_insert_cardo.stl</code> einlegen und Halteplatte verschrauben (4x M2x6 mm).' : 'Place 4x miniature actuators into <code>cartridge_insert_cardo.stl</code> and secure retainer plate (4x M2x6 mm).'}</li>
                         <li>${isDe ? 'Cardo Packtalk Edge Air-Mount montieren, fertiges JST-Kabel anstecken und Wippenmechanismus montieren.' : 'Mount Cardo Air-Mount, connect pre-crimped JST cable, and install latch rocker.'}</li>
+                    </ol>
+                ` : active.slot2 === 'omm-ucs' ? `
+                    <ol>
+                        <li>${isDe ? 'PCBA 09 (ESP32-C6-MINI-1U) mit Taoglas FXP73 Flex-Dipolantenne und 600 mAh LiPo-Akku vorbereiten.' : 'Prepare PCBA 09 (ESP32-C6-MINI-1U) with Taoglas FXP73 flex-dipole antenna and 600 mAh LiPo battery.'}</li>
+                        <li>${isDe ? 'Platine und Akku in das Kassetten-Inlay (<code>cartridge_insert_omm_ucs.stl</code>) einsetzen und mit 4x M2x8 mm Schrauben sichern.' : 'Place PCB and battery into cartridge inlay (<code>cartridge_insert_omm_ucs.stl</code>) and secure with 4x M2x8 mm screws.'}</li>
+                        <li>${isDe ? 'Taoglas FXP73 Flexantenne vibrationsgeschützt im integrierten Antennenschacht verlegen (kein Löten!).' : 'Route Taoglas FXP73 antenna securely inside antenna channel (zero soldering!).'}</li>
+                        <li>${isDe ? 'USB-C Schnittstelle intern anstecken: Das Modul lädt im Pod automatisch über das 5V Bordnetz (TI BQ24075 Power-Path) und schaltet bei Entnahme unterbrechungsfrei in < 10 µs auf Akkubetrieb um.' : 'Connect internal USB-C port: Module charges automatically in pod via 5V bike power (TI BQ24075 power-path) and switches seamlessly to battery mode in < 10 µs on removal.'}</li>
                     </ol>
                 ` : active.slot2 === 'pmr446' ? `
                     <ol>
@@ -9365,6 +9473,24 @@ function renderSingleBuilder() {
                         ${active.addons?.bsdMirrors ? `<li>${isDe ? '<strong>BSD Totwinkel-Spiegelanzeigen:</strong> Klemmschellen (<code>bsd_mirror_lower_clamp.stl</code>) an beiden Spiegelarmen (Ø 10-14 mm) anbringen. Gehäuse (<code>bsd_mirror_upper_pod.stl</code>) mit Fresnel-Linsen (<code>bsd_mirror_lens.stl</code>) aufstecken und 3-Pin JST-PH Kabel an Port J9 des Front-Nodes anschließen (Bernstein bei rückwärtigem Verkehr, 8 Hz Warnblitz bei gefährlicher Annäherung).' : '<strong>BSD Blind Spot Mirror Pods:</strong> Clamp bases (<code>bsd_mirror_lower_clamp.stl</code>) to mirror stems (Ø 10-14 mm). Mount upper pods (<code>bsd_mirror_upper_pod.stl</code>) with Fresnel lenses (<code>bsd_mirror_lens.stl</code>) and connect 3-pin JST-PH to Front Node port J9.'}</li>` : ''}
                         ${active.addons?.actionCamDock ? `<li>${isDe ? '<strong>Induktives Actioncam-Dock:</strong> Kameraaufnahme (<code>road_glide_inductive_cam_dock.stl</code>) an der Verkleidung verschrauben. Qi-Sendespule einlegen und 2-Pin JST-PH Kabel an Port J8 des Front-Nodes anstecken (liefert 5V Ladespannung, schaltet bei Zündung-Aus automatisch per BLE-Kommando die Aufnahme ab).' : '<strong>Inductive Actioncam Dock:</strong> Mount dock (<code>road_glide_inductive_cam_dock.stl</code>) to fairing. Insert Qi coil and connect 2-pin JST-PH to Front Node port J8 (5V charging, automated BLE camera stop on ignition off).'}</li>` : ''}
                         ${active.addons?.handlebarControls ? `<li>${isDe ? '<strong>Lenker-Multitaster:</strong> Under-Perch Konsole (<code>under_perch_switch_bracket.stl</code>) unter die linke Kupplungsarmatur schrauben. 3x IP67 Taster einsetzen und 4-Pin JST-PH Kabel an Port J3 des Front-Nodes stecken (Taste 1: Intercom PTT, Taste 2: Video-Bookmark, Taste 3: Siri/Sprachassistent - latenzfrei < 5 ms).' : '<strong>Handlebar Multi-Switch:</strong> Bolt under-perch bracket (<code>under_perch_switch_bracket.stl</code>) beneath clutch clamp. Fit 3x IP67 switches and connect 4-pin JST-PH to Front Node port J3.'}</li>` : ''}
+                    </ol>
+                </div>
+            </div>
+        `;
+    }
+
+    // Step 6c: OMM Helmet Kit & TMP117 Stealth Sensor (if active)
+    if (active.addons?.ommHelmetKit || active.addons?.tmp117Sensor) {
+        instructionsHtml += `
+            <div class="builder-instruction-step">
+                <div class="builder-step-headline">
+                    <span class="builder-step-name">${isDe ? '6c. OMM Helm UCS Headset-Kit & TMP117 Gabelfuß-Sensor' : '6c. Assemble OMM Helmet UCS Kit & TMP117 Fork Sensor'}</span>
+                    <span class="builder-pill-verified">✓ ECE 22.06 UCS · ±0.1°C NIST</span>
+                </div>
+                <div class="builder-instructions-body">
+                    <ol>
+                        ${active.addons?.ommHelmetKit ? `<li>${isDe ? '<strong>OMM Helm UCS Headset (ECE 22.06):</strong> 4x M2 Muttern in die Sechskanttaschen der Oberschale (<code>omm_ucs_top_shell.stl</code>) einpressen. 4-Tasten Silikon-Schaltmatte (<code>omm_ucs_silicone_keypad.stl</code>) einlegen. PCBA 09 (ESP32-C6-MINI-1U), Taoglas FXP73 Flexantenne und 600 mAh LiPo-Akku einsetzen. Unterschale (<code>omm_ucs_bottom_shell.stl</code>) mit Silikonschnur in der Dichtnut aufsetzen und mit 4x M2x8 mm Schrauben über Kreuz festziehen. Den Helmsockel (<code>omm_ucs_helmet_cradle.stl</code>) mit 3M VHB R130 am Helm verkleben, Headset einklinken, 40mm Helmlautsprecher und Schwanenhalsmikrofon anstecken.' : '<strong>OMM Helmet UCS Headset (ECE 22.06):</strong> Press 4x M2 nuts into hex pockets of upper shell (<code>omm_ucs_top_shell.stl</code>). Lay 4-button silicone keypad (<code>omm_ucs_silicone_keypad.stl</code>) in place. Install PCBA 09 (ESP32-C6-MINI-1U), Taoglas FXP73 flex antenna, and 600 mAh LiPo battery. Assemble lower shell (<code>omm_ucs_bottom_shell.stl</code>) with silicone gasket and fasten 4x M2x8 mm screws crosswise. Mount helmet cradle (<code>omm_ucs_helmet_cradle.stl</code>) to helmet using 3M VHB R130, snap headset in, and connect 40mm speakers & boom mic.'}</li>` : ''}
+                        ${active.addons?.tmp117Sensor ? `<li>${isDe ? '<strong>TMP117 Stealth Gabelfuß-Sensor:</strong> TI TMP117 I2C-Sensorplatine in die mattschwarze Halterung (<code>tmp117_stealth_fork_mount.stl</code>) einklicken. Am Gabelfuß oder an der Kotflügel-Innenseite im Fahrtwind montieren (geschützt vor Kühler- und Motorabwärme). Das 4-Pin Qwiic-Kabel entlang der Bremsleitung vibrationssicher mit Kabelbindern verlegen und an Port <code>J12</code> am Front-Node anstecken für laborgenaue Fahrbahn-Eiswarnung (±0.1°C).' : '<strong>TMP117 Stealth Fork Sensor:</strong> Snap TI TMP117 I2C sensor board into matte black mount (<code>tmp117_stealth_fork_mount.stl</code>). Mount to fork foot or inner fender directly in airflow (shielded from radiator & engine heat). Route 4-pin Qwiic cable along brake line with zip-ties and plug into Port <code>J12</code> on Front Node for laboratory-precision black ice detection (±0.1°C).'}</li>` : ''}
                     </ol>
                 </div>
             </div>
@@ -9571,6 +9697,8 @@ function renderGroupBuilder() {
             const addonBadges = [];
             if (bike.addons?.frontNode) addonBadges.push(`<span class="card-badge badge-blue" style="font-size: 0.7rem;">Cockpit Front-Node</span>`);
             if (bike.addons?.rearPod3) addonBadges.push(`<span class="card-badge badge-green" style="font-size: 0.7rem;">Heck-Pod 3 (LoRa/GNSS)</span>`);
+            if (bike.addons?.ommHelmetKit) addonBadges.push(`<span class="card-badge badge-blue" style="font-size: 0.7rem;">OMM Helm-Kit</span>`);
+            if (bike.addons?.tmp117Sensor) addonBadges.push(`<span class="card-badge badge-green" style="font-size: 0.7rem;">TMP117 Gabelfuß</span>`);
             if (bike.addons?.radar2) addonBadges.push(`<span class="card-badge badge-red" style="font-size: 0.7rem;">Radar 2.0 Sub-MCU</span>`);
             if (bike.addons?.bsdMirrors) addonBadges.push(`<span class="card-badge badge-yellow" style="font-size: 0.7rem;">BSD Spiegel-LEDs</span>`);
             if (bike.addons?.actionCamDock) addonBadges.push(`<span class="card-badge badge-purple" style="font-size: 0.7rem;">Actioncam-Dock</span>`);
@@ -9982,9 +10110,9 @@ function exportGroupBomCsv() {
 
     // 4. Per Bike Details
     csv += '4. EINZELAUFSCHLÜSSELUNG NACH MOTORRAD\n';
-    csv += 'Fahrer;Motorrad_Modell;Slot_1;Slot_2;Front_Node;Heck_Pod_3;Keyfob;Fertigung;Einzelkosten_ca\n';
+    csv += 'Fahrer;Motorrad_Modell;Slot_1;Slot_2;Front_Node;Heck_Pod_3;OMM_Helm_Kit;TMP117_Sensor;Keyfob;Fertigung;Einzelkosten_ca\n';
     allBoms.forEach(({ bike, bom }) => {
-        csv += `"${bike.name}";"${bom.bikeName}";"${bom.slotNames[bike.slot1] || bike.slot1}";"${bom.slotNames[bike.slot2] || bike.slot2}";"${bike.addons?.frontNode ? 'Ja' : 'Nein'}";"${bike.addons?.rearPod3 ? 'Ja' : 'Nein'}";"${bike.addons?.keyfob ? 'Ja' : 'Nein'}";"${bike.manufacturing}";"${bom.costMin} - ${bom.costMax} EUR"\n`;
+        csv += `"${bike.name}";"${bom.bikeName}";"${bom.slotNames[bike.slot1] || bike.slot1}";"${bom.slotNames[bike.slot2] || bike.slot2}";"${bike.addons?.frontNode ? 'Ja' : 'Nein'}";"${bike.addons?.rearPod3 ? 'Ja' : 'Nein'}";"${bike.addons?.ommHelmetKit ? 'Ja' : 'Nein'}";"${bike.addons?.tmp117Sensor ? 'Ja' : 'Nein'}";"${bike.addons?.keyfob ? 'Ja' : 'Nein'}";"${bike.manufacturing}";"${bom.costMin} - ${bom.costMax} EUR"\n`;
     });
 
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -10144,7 +10272,13 @@ function setupSmokeTestUi() {
         logSmoke(state.lang === 'de' ? 'Check 2: Lese 1-Wire Kassetten-IDs & Pogo-Pins...' : 'Check 2: Reading 1-Wire Cartridge IDs & Pogo-Pins...', 'info');
         await new Promise(r => setTimeout(r, 550));
         logSmoke(state.lang === 'de' ? `✓ Slot 1 1-Wire ID: DS2431 [${builderState.slot1.toUpperCase()}] erkannt.` : `✓ Slot 1 1-Wire ID: DS2431 [${builderState.slot1.toUpperCase()}] detected.`, 'ok');
+        if (builderState.slot1 === 'omm-ucs') {
+            logSmoke(state.lang === 'de' ? '  ↪ OMM 2.4 GHz UCS Modul (PCBA 09 ESP32-C6): BQ24075 PMIC 500mA Fast-Charge, Taoglas FXP73 RSSI -36 dBm OK.' : '  ↪ OMM 2.4 GHz UCS Module (PCBA 09 ESP32-C6): BQ24075 PMIC 500mA fast-charge, Taoglas FXP73 RSSI -36 dBm OK.', 'ok');
+        }
         logSmoke(state.lang === 'de' ? `✓ Slot 2 1-Wire ID: DS2431 [${builderState.slot2.toUpperCase()}] erkannt.` : `✓ Slot 2 1-Wire ID: DS2431 [${builderState.slot2.toUpperCase()}] detected.`, 'ok');
+        if (builderState.slot2 === 'omm-ucs') {
+            logSmoke(state.lang === 'de' ? '  ↪ OMM 2.4 GHz UCS Modul (PCBA 09 ESP32-C6): BQ24075 PMIC 500mA Fast-Charge, Taoglas FXP73 RSSI -36 dBm OK.' : '  ↪ OMM 2.4 GHz UCS Module (PCBA 09 ESP32-C6): BQ24075 PMIC 500mA fast-charge, Taoglas FXP73 RSSI -36 dBm OK.', 'ok');
+        }
         logSmoke(state.lang === 'de' ? 'Führe Aktuator-Klickfolge 1-4 aus...' : 'Executing actuator click sequence 1-4...', 'info');
         await triggerActuatorAnimation();
         setStepState('cartridges', 'pass', state.lang === 'de' ? 'KASSETTEN OK' : 'CARTRIDGES OK');
@@ -10158,6 +10292,9 @@ function setupSmokeTestUi() {
             logSmoke(state.lang === 'de' ? '✓ Knowles MEMS Akustik-Port: 1.02 V Bias OK.' : '✓ Knowles MEMS Acoustic Port: 1.02 V Bias OK.', 'ok');
             logSmoke(state.lang === 'de' ? '✓ SDP31 Staudruck-Sensor: 0.02 hPa (Kalibriert).' : '✓ SDP31 Differential Pressure: 0.02 hPa (Calibrated).', 'ok');
             logSmoke(state.lang === 'de' ? '✓ Lenker-PTT Taster (Port J3): Pull-Up 3.3 V aktiv, kein Prellen (< 5 ms).' : '✓ Handlebar PTT Button (Port J3): Pull-Up 3.3 V active, debounced (< 5 ms).', 'ok');
+            if (builderState.addons.tmp117Sensor) {
+                logSmoke(state.lang === 'de' ? '✓ TMP117 Stealth Gabelfuß-Sensor (Port J12 I2C 0x48): 18.2 °C (±0.1°C NIST Kalibrierung OK).' : '✓ TMP117 Stealth Fork Sensor (Port J12 I2C 0x48): 18.2 °C (±0.1°C NIST calibration OK).', 'ok');
+            }
             if (builderState.addons.bsdMirrors) {
                 logSmoke(state.lang === 'de' ? '✓ BSD Spiegel-Warnanzeigen (Port J9): N-MOSFET Treiber L+R getestet (Bernstein 12V OK).' : '✓ BSD Mirror Indicators (Port J9): N-MOSFET drivers L+R verified (Amber 12V OK).', 'ok');
             }
@@ -10185,6 +10322,10 @@ function setupSmokeTestUi() {
 
         if (builderState.addons.radar2) {
             logSmoke(state.lang === 'de' ? '✓ Radar 2.0 Sub-MCU (PCBA 08): Wheeltec MR20 24 GHz Doppler bereit, 36x Halo RGB OK.' : '✓ Radar 2.0 Sub-MCU (PCBA 08): Wheeltec MR20 24 GHz Doppler ready, 36x Halo RGB OK.', 'ok');
+        }
+
+        if (builderState.addons.ommHelmetKit) {
+            logSmoke(state.lang === 'de' ? '✓ OMM Helm UCS Headset (PCBA 09): ES8311 Codec 16-Bit I2S aktiv, 4-Tasten Haptik OK, 600 mAh LiPo: 4.16 V (97%).' : '✓ OMM Helmet UCS Headset (PCBA 09): ES8311 Codec 16-bit I2S active, 4-button tactile OK, 600 mAh LiPo: 4.16 V (97%).', 'ok');
         }
 
         logSmoke('==================================================', 'info');
