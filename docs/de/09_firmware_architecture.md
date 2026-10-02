@@ -20,7 +20,7 @@ In v8.5 / v9.0 ist das Gesamtsystem auf eine strikte **All-UWB-Stern-/Mesh-Topol
 |   Power-Sequencing, UWB Cartridge & Radar Dispatch   |   Multi-GNSS, CAN, USB-PD, PTT  |
 | * Core 1: Echtzeit 48 kHz Audio-DSP, Ducking, AGC    | * Core 1: Knowles Vector-DSP    |
 +------------------------------------------------------+---------------------------------+
-| 3. SMART CARTRIDGES (CH32V003 + DW3110, PCBA 03)     | 4. HECK-RADAR (RP2040 + DW3110) |
+| 3. SMART CARTRIDGES (CH32V003 + DW3110, PCBA 03)     | 4. HECK-RADAR (ESP32-C5 Sub-MCU + DW3110) |
 +------------------------------------------------------+---------------------------------+
 | * Bucht 1 (Links) & Bucht 2 (Rechts) All-UWB SMT     | * Wheeltec MR20 mmWave Radar    |
 | * Mechatronische 4-Aktuator-Puls-Sequenzierung       | * 20 Hz Tracking-Vektoren via   |
@@ -429,4 +429,37 @@ Empfängt ein Node ein `LoRaAlarmPacket` (oder löst lokal einen Alarm aus), gre
    * *Fall A (Eigener Rückstand):* Der Fahrer sieht, dass er den Anschluss verloren hat -> beschleunigt oder passt die Linie an, ohne dass die Gruppe behelligt werden muss.
    * *Fall B (Konvoi hinter ihm abgerissen):* Der Fahrer sieht im Rückspiegel oder am HUD, dass das Sweep-Bike oder Nachfolger fehlen -> Er betätigt aktiv die PTT-Taste am Lenker und funkt den Tourguide mit seiner eigenen, natürlichen Stimme an (*"Du, vorn kurz Tempo raus, hinten an der Kehre hängt jemand fest"*).
 3. **Harmonie mit Kapitel 01:** Die Technik liefert verlässliche Sensor- und Telemetriedaten als diskreter Co-Pilot im Hintergrund, lässt aber die Führungskompetenz, soziale Gruppenabstimmung und Entscheidungsgewalt zu 100 % in den Händen der fahrenden Menschen.
+
+---
+
+## 8. Build- & Flash-Anleitung (Developer Guide)
+
+Für die schrittweise Einrichtung der ESP-IDF Toolchain (v5.2 / v5.3 LTS), das Kompilieren der drei Firmware-Ziele (`main_controller`, `front_node`, `radar_submcu`), das Erstellen der LittleFS-Dateisystem-Images für CAN-Fahrzeugprofile sowie das Flashen und Debuggen via USB-C verweist OpenMotorBridge auf den zentralen Entwickler-Leitfaden:
+
+> [!TIP]
+> Die vollständige Schritt-für-Schritt-Anleitung mit allen CLI-Befehlen und Fehlerbehebungsstrategien ist dokumentiert in:  
+> [`firmware/README.md`](../../firmware/README.md)
+
+### 8.1 Schnellübersicht der Build-Befehle
+
+```bash
+# Umgebung laden
+. $HOME/esp/esp-idf-v5.2/export.sh
+
+# 1. Hauptcontroller (Zentralbox PCBA 01)
+cd firmware/main_controller
+idf.py set-target esp32s3
+idf.py build flash monitor
+
+# 2. Front-Knoten (PCBA 05)
+cd ../front_node
+idf.py set-target esp32s3
+idf.py build flash monitor
+
+# 3. Heck-Radar Sub-MCU (PCBA 08)
+cd ../radar_submcu
+idf.py set-target esp32c6
+idf.py build flash monitor
+```
+
 

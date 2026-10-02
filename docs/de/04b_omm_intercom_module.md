@@ -111,7 +111,7 @@ Der **UCS-Standard (Universal Communication Solution)** nach **ECE 22.06** (init
 ```
 
 1. **Standalone-Helmnutzung:** Der Fahrer clipst das OMM-Modul in die UCS-Kavität des Helms und verbindet die Helmpeitsche mit dem USB-C Port. Beliebige Lautsprecher (3,5 mm Klinke) und Mikrofone (2-Pin) können zerstörungsfrei getauscht werden.
-2. **Gateway-Pod-Nutzung:** Im Kassetten-Schlitten wird das Modul über ein kurzes 90°-abgewinkeltes USB-C Kabel direkt mit Header `J_AUDIO_PWR` auf `PCBA 03` gekoppelt. Sämtliche Kommunikation erfolgt rein digital und verschleißfrei.
+2. **Gateway-Pod-Nutzung (UWB-Audio & Mill-Max DC):** Im Kassetten-Schlitten wird das Modul über ein kurzes 90°-abgewinkeltes USB-C Kabel direkt mit Header `J_AUDIO_PWR` auf `PCBA 03` gekoppelt. Die I2S-Audiodaten und Steuer-Events werden über den bordeigenen Qorvo DW3110 UWB Transceiver (6.5 GHz Ch. 5) mit einer deterministischen Latenz von $< 0{,}4\,\text{ms}$ jitterfrei und vollkommen digital zur Zentralbox (`PCBA 01`) gestreamt. Die Stromversorgung der Trägerplatine `PCBA 03` erfolgt über 2-polige Mill-Max Federkontakte aus Peitsche 1 bzw. Peitsche 2 des Deutsch DTM-12 Kabelbaums (+12V geschaltet / Masse).
 3. **Wartung & Updates:** Dieselbe USB-C Buchse dient außerhalb des Fahrzeugs zum Schnellladen und für Firmware-Updates via WebUSB im Browser.
 
 ---
@@ -351,3 +351,53 @@ Wird die OMM 2.4 GHz Kassette in Bucht 1 oder Bucht 2 gesteckt, bindet der ESP32
    * **Wartung der Kassetten-Trägerplatine (`PCBA 03`):**
      * Die fahrzeuggebundene Trägerplatine `PCBA 03` im Pod (deren ESP32-C6 und DW3110) wird im Fahrbetrieb über den internen UWB-Link von der Zentralbox (`PCBA 01`) gewartet und bei Bedarf per UWB-OTA aktualisiert.
      * Beide Systeme verfügen somit über getrennte, robuste und fehlertolerante Update-Mechanismen.
+
+---
+
+## 9. Begleitfahrzeug-Einsatz & Pkw-Audio-Routing (Kit 5 Kolonnen-Topologie)
+
+In Begleitfahrzeugen (Support-Van, Besenwagen, Tourguide-Pkw, Rallye-Orga) fungiert das OMM 2.4 GHz Modul als Herzstück der Sprachkommunikation zwischen Pkw-Insassen und der Motorradgruppe:
+
+```
++-----------------------------------------------------------------------------------------+
+|                  BEGLEITFAHRZEUG / PKW-INTEGRATION (KIT 5 ARCHITEKTUR)                  |
++-----------------------------------------------------------------------------------------+
+|                                                                                         |
+|  [ FAHRZEUG-INSASSEN ] <--- (Dachmikro / KFZ-Lautsprecher) ---> [ PKW-INFOTAINMENT ]    |
+|                                                                        ^                |
+|                                      BT HFP 1.8 / A2DP oder USB-C      |                |
+|                                                                        v                |
+|                                                           [ ZENTRALBOX PCBA 01 ]        |
+|                                                           (Dashboard Wedge Dock)        |
+|                                                                     ^                   |
+|                                        UWB Ch. 5 (< 0.4 ms)         |                   |
+|                                                                     v                   |
+|  [ AUTARKES OMM-MOBILTEIL ]                               [ KASSETTEN-POD BUCHT 1 ]     |
+|  (Mittelkonsole / Beifahrer)                              (OMM 2.4 GHz UCS-Modul)       |
+|  * PTT am Lenkrad / Schwanenhals                                    |                   |
+|  * 2.4 GHz TDMA Mesh Direktverbindung                               | 2.4 GHz TDMA Mesh |
+|  * Integrierter 600-mAh-Akku                                        | (10 ms Superframe)|
+|             |                                                       |                   |
+|             +==================== KONVOI-MESH ======================+                   |
+|                                     |                                                   |
+|                        v            v            v                                      |
+|                   [ Bike 1 ]   [ Bike 2 ]   [ Bike 3 ]                                  |
++-----------------------------------------------------------------------------------------+
+```
+
+### 9.1 Autarke Pkw-Nutzung & Bedienkonzepte
+1. **OMM-Mobilteil auf der Mittelkonsole:**
+   * Das OMM 2.4 GHz Modul kann mit seinem integrierten 600-mAh-LiPo-Akku völlig autark auf der Mittelkonsole betrieben werden.
+   * **Schwanenhals- oder Handmikrofon:** Über die USB-C-Buchse mit Audio-Adapter wird ein Schwanenhals-Mikrofon für den Beifahrer oder Tour-Guide angeschlossen.
+   * **Drahtlose oder kabelgebundene Lenkrad-PTT:** Ein ergonomischer PTT-Taster an der Lenkradspeiche triggert über BLE oder Schalteingang die Sendeaufforderung (VAD-Override), sodass der Fahrer beide Hände am Lenkrad behält.
+
+### 9.2 Drei flexible Audio-Routing-Pfade im Pkw
+1. **Pfad 1: Pkw-Freisprecheinrichtung via Qualcomm QCC3084 Bluetooth:**
+   * Der QCC3084 SoC auf der Zentralbox meldet sich am Infotainmentsystem des Pkw (BMW iDrive, Audi MMI, Mercedes MBUX, Ford Sync etc.) als Smartphone via Bluetooth Hands-Free Profile (HFP 1.8 mit Breitband mSBC) an.
+   * Eingehende Gruppensprache wird über die KFZ-Lautsprecher wiedergegeben.
+   * Sprache des Fahrers wird über das werkseitige Pkw-Dachmikrofon aufgenommen und verzögerungsfrei ins Mesh eingespeist.
+2. **Pfad 2: Apple CarPlay / Android Auto & USB-Audio:**
+   * Bei Verbindung der Zentralbox mit dem Pkw-USB-Port streamt der ESP32-S3 USB-Audio (UAC 2.0 Class Device) latenzfrei ins Pkw-Soundsystem.
+   * Parallel dazu wird das PWA-Dashboard im Vollbildmodus auf dem Pkw-Display dargestellt.
+3. **Pfad 3: Direkteinspeisung / Analog AUX:**
+   * Über den Klinken-/Line-Out des ES8388 Codecs kann jedes Standard-Pkw-Radio mit 3,5-mm-AUX-Buchse ohne jegliche Latenz angebunden werden.

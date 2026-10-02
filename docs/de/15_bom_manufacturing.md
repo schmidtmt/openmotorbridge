@@ -64,7 +64,7 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 > 1. **LoRa 868 MHz (SX1262):** Sitzt nun direkt auf der Zentralbox (`PCBA 01`), gepuffert durch den USV-Akku (24/7 Diebstahl-Sentry).
 > 2. **Multi-GNSS (SAM-M10Q):** Sitzt im kühlen Fahrtwindbereich am Front-Knoten (`PCBA 05`), angebunden über Qwiic I2C (`J12`).
 > 3. **Fahrzeug-Backbone:** Erfolgt drahtlos über Ultra-Wideband (Qorvo DW3110 / 6.5 GHz Ch. 5, $< 0{,}4\,\text{ms}$ Latenz) zwischen Front-Knoten und Zentralbox.
-> 4. **Heck-Radar:** Schließt direkt über Peitsche 5 des Deutsch DTM-12 Kabelbaums an die Zentralbox an (2-Draht 12V DC); Telemetrie läuft 100 % drahtlos via UWB.
+> 4. **Heck-Radar:** Schließt direkt über Peitsche 3 des Deutsch DTM-12 Kabelbaums an die Zentralbox an (2-Draht 12V DC); Telemetrie läuft 100 % drahtlos via UWB.
 
 ---
 
@@ -210,15 +210,15 @@ Alle Gehäuseteile sind konsequent für das **IKEA-Prinzip** konstruiert: **Kein
 * **Kit 3: Harley-Davidson Touring & Classic Bagger (Street Glide, Road Glide, Road King):**
   * `saddlebag_lid_dock.stl` (2 Stk.): Kofferdeckel-Docks mit Scharnier-Torx-Flansch, 4x Spanngurt-Freisparungen & 2-Draht DC-Zugentlastungsschnauze.
   * `010_saddlebag_hole_grommet_split.stl` (2 Stk.): Geteilte EPDM/TPU-Durchführung für Ø 3,6 mm 2-Draht DC-Kabel in Ø 12 mm Wandbohrung (oberhalb Schwingenlager).
-  * `radar_license_plate_bracket.stl` (1 Stk.): Entkoppelter Kennzeichen-Radarhalter für Peitsche 5.
+  * `radar_license_plate_bracket.stl` (1 Stk.): Entkoppelter Kennzeichen-Radarhalter für Peitsche 3.
   * `radar_swivel_tilt_cradle.stl` (1 Stk.): Radar 2.0 Schwerlast-Neigegelenk (Actioncam/GoPro-Hirth-Cradle) mit 2x M4-Verschraubung und 36-Zahn Hirth-Verzahnung.
   * `radar_mr20_housing.stl` & `radar_mr20_radome.stl` (1 Stk.): Radar 2.0 PA12 Flügel-Gehäuse mit Spritzwasser-Schutzspoiler und PC-Radom.
-  * `magsafe_cockpit_mount_harley.stl` (1 Stk.), `magsafe_frame_dock.stl` (1 Stk.) & `magsafe_clamp_wings.stl` (1 Stk.): MagSafe Rahmendock-Komponenten.
+  * `009_magsafe_frame_dock.stl` (1 Stk.), `009_magsafe_frame_lid.stl` (1 Stk.) & `009_magsafe_frame_clamp.stl` (1 Stk.): MagSafe Rahmendock-Komponenten (optional). Sowie `road_glide_inductive_cam_dock.stl` (1 Stk.): Induktives Cam-Docking für Sharknose-Verkleidungen.
 * **Optionale Bobber & Custom-Kit Teile:**
   * `radar_center_underfender_mount.stl` (1 Stk.): Stealth Center Under-Fender Mount mit $46\,\text{mm}$ Tiefgang und integriertem $42\,\text{mm}$ Spritzwasser-Schmutzfänger-Spoiler.
   * `radar_swivel_tilt_cradle.stl` (1 Stk.): Schwerlast-Neigegelenk mit 2x M4-Verschraubung.
 * **Kit 4: Support-Car / Begleitfahrzeug Kolonnen-Kit (Car-Kit):**
-  * `car_sun_visor_pod_clip.stl` (2 Stk.): Schnellwechsel-Spannclips zur vibrationsfreien Befestigung von Pod 1 und Pod 2 an den beiden Sonnenblenden im Pkw/Van (Fahrer- und Beifahrerseite).
+  * `car_sun_visor_pod3_clip.stl` (2 Stk.): Schnellwechsel-Spannclips zur vibrationsfreien Befestigung von Pod 1 und Pod 2 an den beiden Sonnenblenden im Pkw/Van (Fahrer- und Beifahrerseite).
   * `car_dashboard_wedge_dock.stl` (1 Stk.): Zweistufige Armaturenbrett-Doppelaufnahme (Dual-Stack Dock) zur formschlüssigen, vibrationsgedämpften Aufnahme von Front-Knoten (unten, freie GNSS-Sicht) und Zentralbox (oben, 15° geneigt).
 
 ---
@@ -235,10 +235,10 @@ Für den Aufbau müssen **keine Kabelbäume selbst gecrimpt oder gelötet werden
 | Deutsch DTM-12 Fertig-  | --> Vorkonfektionierter IP68/IP69K Deutsch DTM-12 Hauptkabelbaum
 | Kabelbaum (Zentralbox)  | --> Industriell gefertigt, Raychem DR-25 Schrumpfschlauch
 +-+-----------------------+
-  +-> Peitsche 1: 2-Draht FLRY-B (1.0 m / 1.5 m): Reine DC-Power (+5V / GND) --> Pod 1 (Bucht 1)
-  +-> Peitsche 2: 2-Draht FLRY-B (1.0 m / 1.5 m): Reine DC-Power (+5V / GND) --> Pod 2 (Bucht 2)
-  +-> Peitsche 4: AMP Superseal / FLRY-B (1.0 m): Bordnetz (KL30, KL15, GND, CAN-H, CAN-L)
-  +-> Peitsche 5: 2-Draht FLRY-B (0.5 m): Heck-Radar PCBA 08 (+12V DC / GND)
+  +-> Peitsche 1: 2-Draht FLRY-B (1.0 m / 1.5 m): Reine DC-Power (+12V geschaltet / GND) --> Pod 1 (Bucht 1)
+  +-> Peitsche 2: 2-Draht FLRY-B (1.0 m / 1.5 m): Reine DC-Power (+12V geschaltet / GND) --> Pod 2 (Bucht 2)
+  +-> Peitsche 3: 2-Draht FLRY-B (0.5 m): Heck-Radar PCBA 08 (+12V geschaltet / GND)
+  +-> Peitsche 4: AMP Superseal 1.5 6-Pin / FLRY-B (1.0 m): Bordnetz & CAN (KL30, KL15, GND, CAN-H, CAN-L, CHASSIS_EARTH)
       (Hinweis: Sämtliche Interconnects & Telemetriedaten laufen zu 100 % drahtlos via UWB!)
 ```
 

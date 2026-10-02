@@ -50,6 +50,9 @@ Um das Zusammenspiel von Hardware, Akustik, Fahrdynamik, Thermik, Hochfrequenz-P
 |     Digital-Twin & HIL    |                                   | Ricken, Tunnel EKF-DR,  |
 |                           |                                   | 2.4G/LoRa Handover, PWA |
 +---------------------------+-----------------------------------+-------------------------+
+| 12. HIL/SIL Netzlisten-   | `testbench_netlist_validator.py`  | KiCad .net vs. C++ GPIO,|
+|     & Firmware-Validator  |                                   | SPI-Mock, Task-Latenz   |
++---------------------------+-----------------------------------+-------------------------+
 ```
 
 ---
@@ -272,10 +275,41 @@ python3 tools/audio_testbench/server.py
 
 ---
 
-## 13. Ausführung der Master-Testbench
+## 13. HIL/SIL Netzlisten- & Firmware-Validator (`tools/simulators/testbench_netlist_validator.py`)
 
-Alle 11 numerischen Batch-Testbenches können vollautomatisiert mit einem einzigen Befehl ausgeführt werden:
+Um vor der Platinenbestellung (PCBA 01 bis 08) und vor dem ersten Flashvorgang sicherzustellen, dass die realen KiCad-Schaltpläne und der C++ Firmware-Quellcode zu 100 % deckungsgleich sind, gleicht der **HIL/SIL Netzlisten- & Firmware-Validator** alle Schnittstellen automatisiert ab:
 
 ```bash
+python3 tools/simulators/testbench_netlist_validator.py
+```
+
+### 13.1 Kern-Prüfungen der HIL/SIL Pipeline:
+1. **Automatischer KiCad S-Expression Netlist Parser:**
+   * Liest `hardware/kicad_main_box/openmotorbridge_main.net` ein und verifiziert alle 72 Netze und Schlüsselbausteine:
+     - `U1` (TI LM5164-Q1 100V Buck), `U2` (ESP32-S3 WROOM-1), `U3` (Everest Semi ES8388), `U6` (TI TCAN334G), `U7` (Semtech SX1262), `U8` (Qorvo DW3110), `U9` (Qualcomm QCC3084), `ANT1` (Taoglas FXP895) und `ANT2` (Taoglas FXUWB10).
+2. **Firmware-GPIO-Kollisionsprüfung:**
+   * Parst `firmware/front_node/src/front_node_config.h` sowie die Zentralbox-Treiber.
+   * Prüft alle 22 GPIO-Definitionen auf Mehrfachbelegungen, Floating-Pins und Pin-Multiplexing-Konflikte (0 Kollisionen zulässig).
+3. **SPI-Transceiver Hardware-Mocking (HIL/SIL):**
+   * **Qorvo DW3110 UWB:** SPI2 @ 20 MHz, maximales Latenzbudget $380\,\mu\text{s}$ ($< 0{,}4\,\text{ms}$ Backbone-Kriterium).
+   * **Semtech SX1262 LoRa:** SPI3 @ 10 MHz, maximales Latenzbudget $850\,\mu\text{s}$.
+   * **Everest Semi ES8388:** I2S0 @ 12.288 MHz, DMA-Pufferzeit $2670\,\mu\text{s}$.
+4. **FreeRTOS Task-Profiler & Worst-Case Execution Time (WCET):**
+   * Simuliert die Core-Auslastung unter Last (Gleichzeitiger UWB-Backbone-Stream, Audio-DSP, CAN-FD Empfang und EKF-Dead-Reckoning):
+     - `UWB_Backbone_Task` (Prio 22, Core 0): WCET $185\,\mu\text{s}$ (Budget $400\,\mu\text{s}$, Marge $+215\,\mu\text{s}$).
+     - `Audio_DSP_Task` (Prio 20, Core 1): WCET $1420\,\mu\text{s}$ (Budget $2667\,\mu\text{s}$, Marge $+1247\,\mu\text{s}$).
+     - `CAN_TWAI_Task` (Prio 15, Core 0): WCET $80\,\mu\text{s}$ (Budget $1000\,\mu\text{s}$, Marge $+920\,\mu\text{s}$).
+
+---
+
+## 14. Ausführung der Master-Testbench
+
+Alle numerischen Batch-Testbenches und Validatoren können vollautomatisiert ausgeführt werden:
+
+```bash
+# Gesamte Simulations-Suite ausführen
 python3 tools/run_all_simulations.py
+
+# HIL/SIL Netzlisten- und Firmware-Validator separat starten
+python3 tools/simulators/testbench_netlist_validator.py
 ```

@@ -21,7 +21,7 @@ Ein vollständiges OpenMotorBridge-Fahrzeugkit besteht aus folgenden Kern-Baugru
                                            |
           +--------------------------------+--------------------------------+
           |                                |                                |
-          v Peitsche 1 (2-Draht DC 5V)     v Peitsche 2 (2-Draht DC 5V)     v Peitsche 4 (2-Draht DC 12V)
+          v Peitsche 1 (2-Draht DC 12V)    v Peitsche 2 (2-Draht DC 12V)    v Peitsche 3 (2-Draht DC 12V)
 +------------------+             +------------------+             +------------------+
 | 1x BUCHT 1 LINKS |             | 1x BUCHT 2 RECHTS|             | 1x HECK-RADAR 2.0|
 | (Rahmen / Koffer)|             | (Rahmen / Koffer)|             | (Kennzeichen/Heck)
@@ -89,7 +89,7 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
   * **1x u-blox SAM-M10Q Multi-GNSS Modul** mit integrierter Patchantenne (Qwiic I2C)
   * **1x TI TMP117 & 1x TI OPT3001 Sensoren** (Qwiic I2C)
 * [ ] **Vorkonfektionierte COTS-Kabel (kein Crimpen nötig):**
-  * 1x Deutsch DTM-12 IP67/IP69K Zentral-Kabelbaum (reine 2-Draht DC-Peitschen für Pod 1, Pod 2, Radar sowie 12V Bordnetz & CAN)
+  * 1x Deutsch DTM-12 IP67/IP69K Zentral-Kabelbaum (reine 2-Draht DC-Peitschen 1 bis 3 für Pod 1, Pod 2, Heck-Radar sowie Peitsche 4 für 12V Bordnetz & CAN)
   * 2-Pin JWPF / Superseal Steckverbinder für Pod- und Radar-Zuleitungen
   * JST-SH Kassetten-Kabelbäume (8-Pin `J_ACT` für Hubmagnete)
 * [ ] **Werkzeuge:**
@@ -283,7 +283,7 @@ Erst wenn alle 4 Checks grün leuchten, die Gehäusedeckel mit den M3-Schrauben 
   * **Vormontage auf der Werkbank (100 % lötkolbenfrei):** Das versiegelte Radar 2.0 Gehäuse ([`radar_mr20_housing.stl`](../../hardware/cad/stl/05_accessories/radar_mr20_housing.stl)) mit seinen zwei innenliegenden DIN 934 M4-Muttern wird über zwei DIN 912 M4 $\times$ 12 mm Schrauben fest an die Adapterplatte ([`radar_swivel_tilt_cradle.stl`](../../hardware/cad/stl/02_pod_base/radar_swivel_tilt_cradle.stl)) geschraubt. Die Passungs-Bosse nehmen 100 % der Scherkräfte auf.
   * **Option A: Montage am Kennzeichenträger:** Den Kennzeichenträger ([`radar_license_plate_bracket.stl`](../../hardware/cad/stl/02_pod_base/radar_license_plate_bracket.stl)) unter die unteren M6-Kennzeichenschrauben klemmen. Die Hirth-Zunge der Adapterplatte in die Gabelaufnahme einschieben, Nickwinkel waagerecht zur Fahrbahn justieren und mit einer DIN 912 M5 $\times$ 25 mm Klemmschraube in die versenkte M5-Mutter formschlüssig festziehen.
   * **Option B: Montage am Heckkotflügel (Bobber / Custom-Bike):** Den Stealth Center Under-Fender Mount ([`radar_center_underfender_mount.stl`](../../hardware/cad/stl/02_pod_base/radar_center_underfender_mount.stl)) mittig unter die Kotflügelkante kleben (3M VHB 5952) oder mit 2x M4/M5 Senkkopfschrauben verschrauben. Die Neigungswiege in die Clevis-Gabel einschieben und per M5-Schraube arretieren. Der integrierte $42\,\text{mm}$ Schmutzfänger-Spoiler hält Reifengischt zuverlässig vom Drehgelenk und der M8-Kabelverschraubung ab.
-  * **Spritzwasser-Verkabelung (Abtropfbogen):** Das 2-adrige FLRY-B Kabel von Peitsche 5 im rückseitigen Kanal der Trägerwirbelsäule führen und in einer nach unten hängenden Abtropfschlaufe (Drip-Loop) von unten durch die M8 IP68-Kabelverschraubung führen. Der monolithische Roost-Deflector am Gehäuseboden schirmt die Verschraubung vollständig gegen aufgewirbelte Reifengischt ab.
+  * **Spritzwasser-Verkabelung (Abtropfbogen):** Das 2-adrige FLRY-B Kabel von Peitsche 3 im rückseitigen Kanal der Trägerwirbelsäule führen und in einer nach unten hängenden Abtropfschlaufe (Drip-Loop) von unten durch die M8 IP68-Kabelverschraubung führen. Der monolithische Roost-Deflector am Gehäuseboden schirmt die Verschraubung vollständig gegen aufgewirbelte Reifengischt ab.
 * **Front-Knoten:** In der Verkleidung (Batwing / Sharknose) oder Nacelle verschraubt; 12V von Standlicht/Zubehör; CAN-Bus lokal an J2 (oder an Zentralbox unter der Sitzbank).
 
 ### 5.2 Montage Adventure-Plattform (BMW GS / GSA Familie)

@@ -30,8 +30,8 @@ Dieses Dokument spezifiziert die Schutzschaltungen gegen Kfz-Bordnetz-Transiente
   * Koexistenz mit TI TMP117 ($\pm 0{,}1\,^\circ\text{C}$ Temperatur) und OPT3001 Umgebungslichtsensor ohne HF-Einstrahlung auf den GNSS-LNA.
 * **Zentrale ePTFE-Druckausgleichsmembran:** $\varnothing\,7{,}0\,\text{mm}$ Gore/Schreiner Air Vent mittig auf dem Gehäusedach gleicht thermische Druckstöße symmetrisch aus, ohne das HF-Fernfeld zu verzerren.
 * **Robuster Deutsch DTM-12 Hauptkabelbaum:**
-  * 4 Abzweige (Peitsche 1: Pod 1 DC-Power +5V/GND, Peitsche 2: Pod 2 DC-Power +5V/GND, Peitsche 4: Bordnetz KL30/KL15/CAN, Peitsche 5: Heckradar DC-Power +12V/GND).
-  * 10 Pins aktiv belegt (Pins 1-10); Pins 11-12 für CAN-Bus.
+  * 4 Abzweige (Peitsche 1: Pod 1 DC-Power +12V geschaltet / GND, Peitsche 2: Pod 2 DC-Power +12V geschaltet / GND, Peitsche 3: Heck-Radar DC-Power +12V geschaltet / GND, Peitsche 4: Bordnetz KL30/KL15/CAN).
+  * Alle 12 Pins belegt nach DTM-12 Belegungstabelle (Pins 1–5, 12 für Peitsche 4 / Bordnetz & CAN; Pins 6–7 für Peitsche 1 / Pod 1; Pins 8–9 für Peitsche 2 / Pod 2; Pins 10–11 für Peitsche 3 / Heck-Radar).
   * IP68/IP69K Dichtung über Deutsch DTM-Verriegelung und Raychem DR-25 Schrumpfschlauch.
 
 ### 2.1 Multi-Band HF-Frequenzbelegungs- & Koexistenzmatrix
@@ -46,7 +46,25 @@ Um Interferenzen zwischen den 7 simultan aktiven Funksystemen der OpenMotorBridg
 | **5 GHz Wi-Fi (CarPlay / AA)** | 5180 - 5825 MHz | +14 dBm (25 mW) | Cockpit / Front-Knoten (Integrierter Dongle) | Begrenzt auf Cockpit-Nahfeld; $> 600\,\text{MHz}$ Abstand zu UWB Ch. 5 |
 | **5.9 GHz C-V2X / DSRC (ETSI)** | 5855 - 5925 MHz | +23 dBm (200 mW) | Fahrzeug-Heck / Monopol-Patch | Striktes Bandpassfilter; räumliche Trennung vom 5 GHz Cockpit-WLAN |
 | **6.5 GHz UWB (DW3110 Ch. 5)** | 6240 - 6739 MHz | -41.3 dBm/MHz (< 1 mW) | Zentralbox, Front-Node, Pods, Radar | Ultra-Breitband (499.2 MHz BW); Null Interferenz mit Schmalband |
-| **77 GHz mmWave Radar (MR20)** | 76.0 - 81.0 GHz | +30 dBm EIRP | Kennzeichen- / Heck-Bracket (`PCBA 06`) | Vollkommen entkoppelt; Millimeterwellen-Spektrum ohne HF-Kopplung |
+| **77 GHz mmWave Radar (MR20)** | 76.0 - 81.0 GHz | +30 dBm EIRP | Kennzeichen- / Heck-Bracket (`PCBA 08`) | Vollkommen entkoppelt; Millimeterwellen-Spektrum ohne HF-Kopplung |
+
+### 2.2 Verbindliche Gesamtsystem-Antennenmatrix & Exakte Positionen
+
+Zur Gewährleistung maximaler Link-Budgets und reproduzierbarer EMV-Konformität gilt folgende verbindliche Spezifikation aller Antennen und Montagepositionen im Gesamtsystem:
+
+| Baugruppe | Funktechnik | Frequenz | Antennentyp | Genaue Position & Montage |
+| :--- | :--- | :--- | :--- | :--- |
+| **Zentralbox (`PCBA 01`)** | Semtech SX1262 LoRa | 868 MHz | Taoglas FXP895 Flex | Eingeklebt in Gehäusedeckel (`ANT1`), U.FL |
+| **Zentralbox (`PCBA 01`)** | Qorvo DW3110 UWB | 6.5 GHz (Ch. 5) | Taoglas FXUWB10 Flex | Eigene Antennentasche im Gehäuseboden (`ANT2`), U.FL |
+| **Zentralbox (`PCBA 01`)** | Qualcomm QCC3084 BT | 2.4 GHz | Keramik-Chipantenne | Onboard auf Moduloberseite (`F.Cu`), 0 mm Koax |
+| **Zentralbox (`PCBA 01`)** | ESP32-S3 BLE/WiFi | 2.4 GHz | PCB-Trace-Antenne | Onboard WROOM-1 Modul |
+| **Front-Knoten (`PCBA 05`)** | u-blox SAM-M10Q GNSS | 1.575 / 1.602 GHz | Keramik-Patchantenne | Onboard Moduloberseite mit freier Sicht zum Himmel |
+| **Front-Knoten (`PCBA 05`)** | Qorvo DW3110 UWB | 6.5 GHz (Ch. 5) | Taoglas FXUWB10 Flex | Gehäusebodentasche der Front-Node Wanne, U.FL |
+| **Front-Knoten (`PCBA 05`)** | ESP32-S3 BLE/WiFi | 2.4 / 5 GHz | COTS Stummel / Sharknose | U.FL Buchse am WROOM-1U Modul |
+| **Smart Cartridge (`PCBA 03`)**| Qorvo DW3110 UWB | 6.5 GHz (Ch. 5) | Integrierte PCB-Antenne | Unterseite (`B.Cu`), strahlt nach unten durch Pod-Boden |
+| **Smart Cartridge (`PCBA 03`)**| OMM Intercom Modul | 2.4 GHz TDMA | Keramik-Chipantenne | Stirnseitig auf Trägerplatine |
+| **Heck-Radar (`PCBA 08`)** | Qorvo DW3110 UWB | 6.5 GHz (Ch. 5) | Taoglas FXUWB10 Flex | Gehäusetasche im Flügelfuß, U.FL Buchse |
+| **Heck-Radar (`PCBA 08`)** | Wheeltec MR20 Radar | 77 GHz mmWave | On-Chip Patch-Array | Radom-Linse im Zentrum von PCBA 08 |
 
 ---
 

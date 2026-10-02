@@ -144,7 +144,7 @@ Die Gesamtabwärme der Zentralbox liegt im normalen Fahrbetrieb bei lediglich **
 +-------------------------------------------------------------+
 ```
 
-1. **Deutsch DTM-12 Flansch (Haupt-Kabelbaum):** Automotive-Flansch (Deutsch DTM13-12PA) mit integrierter Silikondichtung und 2x M3-Verschraubung ($28{,}0\,\text{mm}$ Lochabstand). Verbindet intern über `J1` (2x06 Box-Header, 2,54 mm Raster) die 12 zentralen Fahrzeugadern (12V geschaltet, Masse, CAN-High, CAN-Low, DC-Versorgung Pod 1 & Pod 2, sowie Radar-Peitsche 5: 12V_RADAR, GND, UART_RX, UART_TX).
+1. **Deutsch DTM-12 Flansch (Haupt-Kabelbaum):** Automotive-Flansch (Deutsch DTM13-12PA) mit integrierter Silikondichtung und 2x M3-Verschraubung ($28{,}0\,\text{mm}$ Lochabstand). Verbindet intern über `J1` (2x06 Box-Header, 2,54 mm Raster) die 12 zentralen Fahrzeugadern für die Peitschen 1 bis 4: Peitsche 1 (Pod 1: +12V geschaltet, GND), Peitsche 2 (Pod 2: +12V geschaltet, GND), Peitsche 3 (Heck-Radar: +12V geschaltet, GND; Telemetrie 100% drahtlos via UWB) und Peitsche 4 (Bordnetz & CAN: KL30, KL15, GND, CAN-H, CAN-L, CHASSIS_EARTH).
 2. **Taster SW1 (`SW_PAIR_RESET`):** Wasserdichter IP67-Minitaster mit Silikon-Dichtkappe und M7-Gewindehülse. Dient dem drahtlosen UWB-Pairing neuer Wechselkassetten (3s Betätigung) sowie dem vollständigen Werksreset & NVS Key Purge (10s Betätigung).
 3. **USB-C Service-Port:** Wasserdichte Rundflansch-Buchse mit unverlierbarer blau eloxierter Aluminium-Schraubkappe und EPDM-O-Ring für Firmware-Updates, ESP-IDF Telemetrie und Notfall-Diagnose.
 4. **RGB-Status-LED Sichtfenster:** Diffuser PMMA-Linsenkörper ($\varnothing\,3{,}2\,\text{mm}$) mit umlaufendem O-Ring, der das Licht der onboard WS2812B RGB-LED direkt auf die Frontblende spiegelt (Zustandsanzeige: Grün = Betrieb/Mesh OK, Blau = BT Audio Stream, Orange = Warnung/Radar aktiv, Rot = Sabotage/Alarm).
@@ -607,7 +607,7 @@ Aufgrund der werkseitigen Showa Inverted-Remote-Reservoir-Stoßdämpfer mit dick
 |    * Forged-Carbon-Hutze schließt plan mit OEM-Rändelschraube ab (100% frei |
 |      von Elektronik/Kabeln - keine Quetschungen an der Rändelschraube!)     |
 |    * Radar mittig unter dem Kennzeichen (radar_license_plate_bracket.scad)  |
-|      gespeist über Peitsche 5 des Deutsch DTM-12 Kabelbaums (2-Draht 12V DC) |
+|      gespeist über Peitsche 3 des Deutsch DTM-12 Kabelbaums (2-Draht 12V DC) |
 +-----------------------------------------------------------------------------+
 | 4. KOFFER (Gruppenfunk-Brücke Sena & Cardo):                                |
 |    * Pod 1 (Sena SPIDER X Slim) im linken Kofferdeckel                      |
@@ -620,7 +620,7 @@ Aufgrund der werkseitigen Showa Inverted-Remote-Reservoir-Stoßdämpfer mit dick
 #### A. Heck-Integration: 100 % OEM-Bündigkeit & Freigängigkeit
 * **Original Forged-Carbon-Hutze bleibt unberührt:** In v8.0 entfällt der Heck-Pod 3 und das interne Skeleton Dock ersatzlos. Die originale Forged-Carbon-Hutze der CVO ST schließt mit ihrer umlaufenden Dichtlippe vollkommen plan auf dem Heckkotflügel ab und wird mit der werksseitigen Rändelschraube wackelfrei gehalten. Da kein Kabel darunter gequetscht werden muss, bleibt der Lack zu 100 % geschützt.
 * **Außentemperatur- & GNSS-Sensorik:** Liegt thermisch vollkommen entkoppelt von Auspuff- und Motorwärme im laminaren Fahrtwindkanal des Front-Knotens (`PCBA 05`, Port `J12` Qwiic) mit dem NIST-Präzisionssensor TI TMP117 ($\pm 0{,}1\,^\circ\text{C}$) und dem u-blox SAM-M10Q Multi-GNSS.
-* **Radar-Montage:** Erfolgt mittig unter dem Kennzeichen über den vibrationsfesten Kennzeichenträger ([`radar_license_plate_bracket.scad`](../../hardware/cad/scad/02_pod_base/radar_license_plate_bracket.scad)), gespeist über Peitsche 5 (Pins 23-26). Vollständige Freigängigkeit zu den Showa Inverted-Remote-Reservoirs garantiert.
+* **Radar-Montage:** Erfolgt mittig unter dem Kennzeichen über den vibrationsfesten Kennzeichenträger ([`radar_license_plate_bracket.scad`](../../hardware/cad/scad/02_pod_base/radar_license_plate_bracket.scad)), gespeist über Peitsche 3 (Pins 10-11: 12V geschaltet, GND). Vollständige Freigängigkeit zu den Showa Inverted-Remote-Reservoirs garantiert.
 
 #### B. Kofferdeckel-Integration: Pod 1 (Links) & Pod 2 (Rechts)
 * **Top-Lid Montage:** Beide Pods sitzen im vorderen Drittel der Kofferdeckel, verschraubt an den originalen Torx-Punkten der Scharnier- bzw. Fangbandhalterung (siehe [Abschnitt 6.5](#65-universal-kofferdeckel-dock-saddlebag_lid_dockscad)).
@@ -647,7 +647,7 @@ Für klassische Touring- und Bagger-Modelle mit 2-Up-Komfortsitzbank oder freiem
 +-----------------------------------------------------------------------------+
 | 3. HECK (Kotflügel & Kennzeichen):                                          |
 |    * Heckkotflügel bleibt 100% frei und sauber (Fender Console entfällt)    |
-|    * Radar mittig unter dem Kennzeichen an Peitsche 5 (Pins 23-26)          |
+|    * Radar mittig unter dem Kennzeichen an Peitsche 3 (Pins 10-11)          |
 +-----------------------------------------------------------------------------+
 | 4. KOFFER:                                                                  |
 |    * Pod 1 (Sena SPIDER X Slim) & Pod 2 (Cardo Edge) in den Kofferdeckeln   |
@@ -657,6 +657,22 @@ Für klassische Touring- und Bagger-Modelle mit 2-Up-Komfortsitzbank oder freiem
 > [!NOTE]
 > **Bereinigung Kotflügel-Konsole (Entfall `pod3_touring_fender_console`):**  
 > Durch den Entfall von Pod 3 wird der Heckkotflügel bei Cruisern und Baggern nicht mehr durch eine aufgesetzte Konsole verbaut. Die klassische Custom-Linie des freiliegenden Blechfenders bleibt zu 100 % erhalten. Das Heckradar wird diskret unter dem Kennzeichen montiert.
+
+#### 6.2.1 Cockpit-Halterungen: MagSafe-Smartphone & Induktives Cam-Docking
+
+Für Harley-Davidson Touring- & Bagger-Modelle (Road Glide Sharknose, Street Glide Batwing, Road King) stehen zwei zerstörungsfreie, aerodynamische Cockpit-Montagelösungen zur Verfügung:
+
+1. **Cockpit-MagSafe Smartphone- / Navihalterung (`009_magsafe_frame_dock.scad` / Cockpit-Adaption):**
+   * **Montage:** Über die universelle 1-Zoll / 1,25-Zoll Lenkerklemme oder den AMPS-4-Loch-Flansch direkt an den Lenker-Risern oder der inneren Verkleidungsstrebe.
+   * **Schnellverschluss & Qi-Laden:** Der integrierte Neodym-Ring fängt das Smartphone im MagSafe-Gehäuse magnetisch zentriert ab (~15 N Haltekraft).
+   * **Speisung:** Direkt angebunden an USB-PD / 12V Port 1 des Front-Knotens (`PCBA 05`), der im Hohlraum der Verkleidung sitzt. Vollkommen verdeckte Kabelführung ohne fliegende Kabel am Lenker.
+
+2. **Road Glide ST Through-Fairing Induktives Cam-Dock (`road_glide_inductive_cam_dock.scad`):**
+   * **Zero-Drill & Zero-Wire Cam-Power:** Kontinuierliche Stromversorgung für Action-Cams (Insta360 X3/X4, GoPro Hero) auf der Sharknose-Außenhaut, **ohne** ein einziges Loch in die Verkleidung zu bohren.
+   * **Zweiteilige IPT-Architektur (Inductive Power Transfer):**
+     - **Innere TX-Cradle:** Wird mit 3M VHB Klebeband unsichtbar hinter dem Scheinwerfer an die Innenseite des $2{,}8\,\text{mm}$ dicken ABS-Fairing-Decks geklebt und nimmt eine $15\,\text{W}$ Qi-Sendespule auf (gespeist von PCBA 05).
+     - **Äußeres Cam-Dock (`road_glide_inductive_cam_dock.stl`):** Aerodynamische Basis auf der Außenseite (arretiert über 3M Dual Lock SJ3550 Klettverschluss). Beinhaltet eine Qi-Empfängerspule mit TI BQ51013B Gleichrichter (5V/2A), ein $30\,\text{mm}$ kurzes USB-C Pigtail zur Kamera und einen universellen 3-Prong Actioncam-Flansch.
+   * **Ergebnis:** $100\,\%$ Originallack erhalten, $100\,\%$ wetterfest, Kamera läuft auf Fernreisen endlos ohne Akkuwechsel.
 
 ---
 
@@ -687,7 +703,7 @@ Für großvolumige Reiseenduros und Offroad-Tourer mit offenem Gitterrohr-Heckra
 | 4. HECK (Minimaler Radarträger unter Gepäckbrücke):                         |
 |    * Minimaler "Adventure Rack Radar Mount" unter der Gepäckbrücke          |
 |    * Schwenkbare GoPro/Hirth-Aufnahme für Wheeltec MR20 oder Garmin Varia   |
-|    * Gespeist über Peitsche 5 des Deutsch DTM-12 Kabelbaums (2-Draht 12V DC) |
+|    * Gespeist über Peitsche 3 des Deutsch DTM-12 Kabelbaums (2-Draht 12V DC) |
 |    * Topcase bleibt in 5 Sekunden per Original-Schnellverschluss abnehmbar  |
 +-----------------------------------------------------------------------------+
 ```
@@ -712,14 +728,19 @@ Auf Reiseenduros existieren je nach Einsatzzweck und Koffersystem zwei grundvers
 * **Variante B: Standard-BMW GS und nackte Reiseenduros (ohne Rohr-Kofferträger)**
   * **Montage:** Über ein zweiteiliges, aerodynamisch skulpturiertes **Transition Dock** ([`adventure_transition_dock.scad`](../../hardware/cad/scad/02_pod_base/adventure_transition_dock.scad)) in Kombination mit einer verdeckten **Unter-Sitzbank-Sattelbrücke** ([`adventure_underseat_cross_rail.scad`](../../hardware/cad/scad/02_pod_base/adventure_underseat_cross_rail.scad)).
   * **Positionierung:** Exakt in der optischen "Bügelfalte" am Übergang von der Fahrer- zur Soziussitzbank entlang des $\varnothing 28\,\text{mm}$ Heckrahmenrohrs.
-  * **4x Freisparungen für Pod-Ösen:**
-    Auch die Transition Dock Basis (`adventure_transition_dock_base.stl`) verfügt über 4x laterale Taschen ($X = 25{,}0\,\text{mm}$ und $X = 110{,}0\,\text{mm}$), sodass der Pod bündig in die Karosserie-Wanne eintaucht.
+  * **Zweiteilige Shell-Architektur (Basis-Wanne & Bügelfalten-Deckel):**
+    - **Untere Trägerbasis (`adventure_transition_dock_base.stl`):** Nimmt das Standard-Pod-Gehäuse (`pod_base_housing.stl`) formschlüssig auf. 4x laterale Taschen ($X = 25{,}0\,\text{mm}$ und $X = 110{,}0\,\text{mm}$) betten die Spanngurt-Ösen des Pods bündig ein. Die monolithische Inboard-Zunge greift mit 2x M4-Verschraubungen direkt in die Unter-Sitzbank-Sattelbrücke (`adventure_underseat_cross_rail.scad`), wodurch jegliches Verdrehmoment neutralisiert wird (Zero-Torque / Zero-Drill).
+    - **Aerodynamischer Bügelfalten-Deckel (`adventure_transition_dock_lid.stl`):** Schließt die Kontur der GS-Karosserie nahtlos ab. Die Trennfuge zwischen Basis und Deckel liegt unsichtbar exakt auf dem scharfen Scheitel der seitlichen Bügelfalten-Charakterlinie ($Z_{\text{crease}} = 22{,}0\,\text{mm}$). Ein $22^\circ$-Keil an der Stirnseite geht bündig in das Sitzbankpolster über – kein Verhaken mit Motorradhose, Knieschleifern oder Stiefeln beim Aufsteigen.
+    - **Zwei parametrische Deckel-Varianten (`lid_mode`):**
+      1. `"open_intercom"`: Präzise ausgeformte Sicht- und Bedienblende, die die Tasten von Sena SPIDER X Slim oder Cardo Packtalk Edge bündig auf OEM-Niveau einrahmt.
+      2. `"closed_smooth"`: Vollständig geschlossener, fugenloser Aerodynamik-Cowl für den Einsatz mit IP67-Blindkassetten oder autarken OMM-Funkkassetten.
+    - **Verschraubung:** 4x M3 Torx-Zylinderschrauben (DIN 7985 / ISO 7380) sichern den Deckel schwingungsfest von oben in Messing-Gewindeeinsätze der Basiswanne.
   * **Integrierte 2-Draht DC-Führung zur Sattelbrücke:**
     Die vordere Schnauzenkammer nimmt das 2-adrige DC-Kabel formschlüssig auf und leitet es über die rahmenseitige Brückenzunge nahtlos in die Kabelrinne der Unter-Sitzbank-Sattelbrücke (`adventure_underseat_cross_rail.stl`) – unsichtbar unter dem Sitzbankschaum direkt zur Zentralbox verlegt.
 
 ![OpenMotorBridge GS Transition Dock & Unter-Sitzbank-Sattelbrücke](../images/cad/adventure_transition_dock_cad.png)
 
-*Abbildung 8.29-B: CAD-Detailansicht des GS Transition Docks mit Unter-Sitzbank-Sattelbrücke. Erkennbar sind die aerodynamische Bügelfalten-Halbschale mit Freisparungen für die Pod-Spanngurtlaschen, die M5-Rahmenklemmung und die geschützte 2-Draht DC-Kabelüberleitung zur Unter-Sitzbank-Sattelbrücke.*
+*Abbildung 8.29-B: CAD-Detailansicht des GS Transition Docks mit Unter-Sitzbank-Sattelbrücke. Erkennbar sind die aerodynamische Bügelfalten-Halbschale (`adventure_transition_dock_base.stl`), der aufgesetzte Styling-Deckel (`adventure_transition_dock_lid.stl`), die Freisparungen für die Pod-Spanngurtlaschen, die M4-Sattelbrückenanbindung und die geschützte 2-Draht DC-Kabelüberleitung zur Unter-Sitzbank-Sattelbrücke.*
 
 ---
 
@@ -752,7 +773,7 @@ Da der Heck-Pod 3 und dessen große Balkonwanne vollständig entfallen sind, ben
    * Zwei beidseitige 36-Zahn Hirth-Rosetten ($10^\circ$-Raster) garantieren absoluten Formschluss – ein vibrationsbedingtes Absacken oder Nachgeben über Wellblechpisten und Schlaglöcher ist physikalisch ausgeschlossen.
    * Das Radar 2.0 Gehäuse wird über 2x M4 V4A-Schrauben direkt von vorne in die internen DIN 934 M4 Muttern des Gehäuses geklemmt.
 6. **Geschützte Kabelverbindung im Rohrschatten:**
-   * Das M8-Sensorkabel tritt durch einen verdeckten $\varnothing 6{,}0\,\text{mm}$ Führungskanal unmittelbar hinter dem Trägerrohr aus und wird im Rohrschatten entlang des Heckrahmens zur Zentralbox geführt. Direkt gespeist über Peitsche 5 des Deutsch DTM-12 Kabelbaums (2-Draht 12V DC; Telemetrie 100 % drahtlos via UWB).
+   * Das M8-Sensorkabel tritt durch einen verdeckten $\varnothing 6{,}0\,\text{mm}$ Führungskanal unmittelbar hinter dem Trägerrohr aus und wird im Rohrschatten entlang des Heckrahmens zur Zentralbox geführt. Direkt gespeist über Peitsche 3 des Deutsch DTM-12 Kabelbaums (2-Draht 12V DC; Telemetrie 100 % drahtlos via UWB).
 
 ---
 
@@ -1319,7 +1340,8 @@ Die CAD-Dateistruktur von OpenMotorBridge folgt einer strengen hierarchischen CS
 | **Kassette** | Sena SPIDER X Slim Adapterkassette | `03_pod_cartridges/cartridge_insert_sena.stl` | `03_pod_cartridges/parts/01_insert_sena.scad` |
 | **Kassette** | Cardo Packtalk Edge Adapterkassette | `03_pod_cartridges/cartridge_insert_cardo.stl` | `03_pod_cartridges/parts/02_insert_cardo.scad` |
 | **Kassette** | IP67 Blindkassette (wasserdichte Dry Box)| `03_pod_cartridges/cartridge_insert_blindkassette.stl` | `03_pod_cartridges/parts/03_insert_blindkassette.scad` |
-| **Kassette** | OMM 2.4 GHz Swap-Kassette | `03_pod_cartridges/cartridge_omm_transceiver.stl` | `03_pod_cartridges/cartridge_omm_transceiver.scad` |
+| **Kassette** | OMM 2.4 GHz UCS-Inlaykassette | `03_pod_cartridges/cartridge_insert_omm_ucs.stl` | `03_pod_cartridges/cartridge_omm_transceiver.scad` |
+| **Kassette** | OMM 2.4 GHz Antennen-Halterung | `03_pod_cartridges/cartridge_antenna_bracket_omm.stl` | `03_pod_cartridges/parts/04_antenna_bracket_omm.scad` |
 | **Front-Knoten** | Unterwanne mit 4-in-1 Boden & Ohren | `04_front_node/front_node_lower_tub.stl` | `04_front_node/00_front_node_tub.scad` |
 | **Front-Knoten** | Gehäusedeckel mit LED & FPC-Tasche | `04_front_node/front_node_upper_lid.stl` | `04_front_node/01_front_node_lid.scad` |
 | **Front-Knoten** | EPDM/TPU Dichtkamm-Paar mit Steg | `04_front_node/front_node_cable_glands_tpu.stl` | `04_front_node/02_front_node_cable_glands.scad` |
@@ -1334,7 +1356,7 @@ Die CAD-Dateistruktur von OpenMotorBridge folgt einer strengen hierarchischen CS
 | **Spiegel-Radar** | BSD Diffusorlinse (Bernstein / transluzent) | `05_accessories/bsd_mirror_lens.stl` | `05_accessories/bsd_mirror_indicator_pod.scad` |
 | **Radar 2.0** | Wheeltec MR20 77GHz Gehäuse mit JST-JWPF 2-Pin Flansch & Radome | `05_accessories/radar_mr20_housing.stl` | `05_accessories/radar_mr20_housing.scad` |
 | **Kamera-Dock** | Road Glide ST Sharknose 15W Qi Induktives Cam-Dock (3M Dual Lock) | `05_accessories/road_glide_inductive_cam_dock.stl` | `05_accessories/road_glide_inductive_cam_dock.scad` |
-| **Auto-Zubehör** | Begleitfahrzeug / Auto Universal Sonnenblenden-Clip für Pod 1 & 2 | `05_accessories/car_sun_visor_pod_clip.stl` | `05_accessories/car_sun_visor_pod_clip.scad` |
+| **Auto-Zubehör** | Begleitfahrzeug / Auto Universal Sonnenblenden-Clip für Pod 1 & 2 | `05_accessories/car_sun_visor_pod3_clip.stl` | `05_accessories/car_sun_visor_pod3_clip.scad` |
 | **Kassette** | Universelle 2D-Langloch-Rasterplatte & seitliche Aktuator-Ausleger | `03_pod_cartridges/cartridge_universal_actuator_rails.stl` | `03_pod_cartridges/cartridge_universal_actuator_rails.scad` |
 
 ### 9.2 Baukasten-Komponenten & Dummies (`components/`-Verzeichnisse)

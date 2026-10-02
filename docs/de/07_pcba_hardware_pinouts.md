@@ -112,24 +112,24 @@ Für alle 4-Lagen-Platinen (`PCBA 01` und `PCBA 05`) wird der identische, streng
 ### 3.2 Pinbelegung des 12-poligen Deutsch DTM-12 Steckverbinders (`J1`)
 
 ```
-+----------------------------------------------------------------------------------------+
-| DEUTSCH DTM-12 PINBELEGUNG (ZENTRALBOX POWER, CAN & DC-PEITSCHEN)                      |
-+-----+----------------+--------------------------+-------------+------------------------+
-| Pin | Signalname     | Signalart / Pegel        | Querschnitt | Funktion & Schutz      |
-+-----+----------------+--------------------------+-------------+------------------------+
-|  1  | KL30_IN        | +9V...+72V DC Dauerplus  | AWG20 0.50² | Bordnetz Dauerplus     |
-|  2  | KL15_IGN       | +9V...+72V DC Zündungspl.| AWG22 0.34² | Zündungssignal (KL15)  |
-|  3  | VEHICLE_GND    | Power-Masse (0V)         | AWG20 0.50² | Zentrale Bordnetzmasse |
-|  4  | CAN_H          | CAN-FD High (ISO 11898-2)| AWG24 0.22² | Fahrzeug-CAN Bus High  |
-|  5  | CAN_L          | CAN-FD Low (ISO 11898-2) | AWG24 0.22² | Fahrzeug-CAN Bus Low   |
-|  6  | POD1_VCC       | +12V geschaltet (0,5A)   | AWG22 0.34² | DC-Power Bucht 1 (eFuse|
-|  7  | POD1_GND       | Power-Masse (0V)         | AWG22 0.34² | Masse Bucht 1 (Links)  |
-|  8  | POD2_VCC       | +12V geschaltet (0,5A)   | AWG22 0.34² | DC-Power Bucht 2 (eFuse|
-|  9  | POD2_GND       | Power-Masse (0V)         | AWG22 0.34² | Masse Bucht 2 (Rechts) |
-| 10  | RADAR_PWR_12V  | +12V geschaltet (1,0A)   | AWG22 0.34² | DC-Power Heck-Radar    |
-| 11  | RADAR_GND      | Power-Masse (0V)         | AWG22 0.34² | Masse Heck-Radar       |
-| 12  | CHASSIS_EARTH  | Schirmmasse              | AWG20 0.50² | Gehäuse- & Schirmschutz|
-+-----+----------------+--------------------------+-------------+------------------------+
++---------------------------------------------------------------------------------------------------------------+
+| DEUTSCH DTM-12 PINBELEGUNG (ZENTRALBOX POWER, CAN & DC-PEITSCHEN 1 BIS 4)                                     |
++-----+----------------+--------------------------+-------------+---------------------+-------------------------+
+| Pin | Signalname     | Signalart / Pegel        | Querschnitt | Kabelbaum-Zweig     | Funktion & Schutz       |
++-----+----------------+--------------------------+-------------+---------------------+-------------------------+
+|  1  | KL30_IN        | +9V...+72V DC Dauerplus  | AWG20 0.50² | Peitsche 4 (Bordnetz)| Bordnetz Dauerplus     |
+|  2  | KL15_IGN       | +9V...+72V DC Zündungspl.| AWG22 0.34² | Peitsche 4 (Bordnetz)| Zündungssignal (KL15)   |
+|  3  | VEHICLE_GND    | Power-Masse (0V)         | AWG20 0.50² | Peitsche 4 (Bordnetz)| Zentrale Bordnetzmasse  |
+|  4  | CAN_H          | CAN-FD High (ISO 11898-2)| AWG24 0.22² | Peitsche 4 (Bordnetz)| Fahrzeug-CAN Bus High   |
+|  5  | CAN_L          | CAN-FD Low (ISO 11898-2) | AWG24 0.22² | Peitsche 4 (Bordnetz)| Fahrzeug-CAN Bus Low    |
+|  6  | POD1_VCC       | +12V geschaltet (0,5A)   | AWG22 0.34² | Peitsche 1 (Pod 1)  | DC-Power Bucht 1 (eFuse)|
+|  7  | POD1_GND       | Power-Masse (0V)         | AWG22 0.34² | Peitsche 1 (Pod 1)  | Masse Bucht 1 (Links)   |
+|  8  | POD2_VCC       | +12V geschaltet (0,5A)   | AWG22 0.34² | Peitsche 2 (Pod 2)  | DC-Power Bucht 2 (eFuse)|
+|  9  | POD2_GND       | Power-Masse (0V)         | AWG22 0.34² | Peitsche 2 (Pod 2)  | Masse Bucht 2 (Rechts)  |
+| 10  | RADAR_PWR_12V  | +12V geschaltet (1,0A)   | AWG22 0.34² | Peitsche 3 (Radar)  | DC-Power Heck-Radar     |
+| 11  | RADAR_GND      | Power-Masse (0V)         | AWG22 0.34² | Peitsche 3 (Radar)  | Masse Heck-Radar        |
+| 12  | CHASSIS_EARTH  | Schirmmasse              | AWG20 0.50² | Peitsche 4 (Bordnetz)| Gehäuse- & Schirmschutz |
++-----+----------------+--------------------------+-------------+---------------------+-------------------------+
 ```
 
 ### 3.3 Pinbelegung & Systemanbindung: Qualcomm QCC3084 BT 5.4 Audio SoC (`U9`)
