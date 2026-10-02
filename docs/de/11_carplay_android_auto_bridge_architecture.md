@@ -225,27 +225,27 @@ Harley-Davidson unterstützt bei neueren Baujahren nativ ausschließlich **Apple
 > * **Periodischer Reality-Check:** Wir behalten künftige Harley OTA-Updates und Durchbrüche der Tuning-Community im Hinterkopf und führen in regelmäßigen Abständen einen Reality-Check durch.
 > * **Zukunftssicherer Umschaltpfad:** Sollte Harley das Feature offiziell freigeben oder ein stabiler UDS-Weg entstehen, schaltet der Front-Node (PCBA 05) per Firmware-Update automatisch vom CP2AA-Transcoder auf den ressourcenschonenden *Direct Wireless Pass-Through* um (< 2 % CPU-Last, < 15 ms Latenz). Bis dahin bleibt unsere integrierte CP2AA-Bridge die einzige praxiserprobte und thermisch stabile Lösung am Markt.
 
-### 4.2 Netzwerk- & Routing-Architektur: 5 GHz Wi-Fi vs. Mobilfunk-Internet (Multi-Path Coexistence)
+### 4.2 Netzwerk- & Funkarchitektur: Physische Wi-Fi-Exklusivität & WebBLE-Trennung
 
-Ein häufiges Missverständnis bei drahtlosem Apple CarPlay und Android Auto betrifft die Datenwege des Smartphones:
-> *"Wenn mein Smartphone über 5 GHz WLAN mit dem Wireless-Dongle verbunden ist, ist sein WLAN-Adapter belegt. Wie kommt das Smartphone dann ins Internet – und wie kann der OpenMotorBridge PWA-Proxy arbeiten?"*
+Ein zentrales Missverständnis betrifft die Koexistenz von drahtlosem Apple CarPlay / Android Auto und der Fahrzeug-Telemetrie:
+> *"Wenn mein Smartphone über 5 GHz WLAN mit dem Wireless-Dongle verbunden ist, ist sein WLAN-Adapter belegt. Wie kommuniziert dann die OpenMotorBridge mit dem Smartphone?"*
 
-#### 1. Die Funktionsweise im Detail (Dual-Interface Multi-Path Routing)
-1. **Verbindungsaufbau (Handshake via Bluetooth LE):**
-   * Das Smartphone koppelt sich zunächst per Bluetooth LE mit dem Dongle, tauscht Wi-Fi Credentials aus und verbindet sich mit dem 5-GHz-WLAN-Access-Point des Dongles (802.11ac).
-2. **Erkennung eines lokalen Netzwerks ohne WAN-Gateway:**
-   * Nach dem WLAN-Connect führt das mobile Betriebssystem (iOS und Android) einen automatischen Konnektivitäts-Test durch (`captive.apple.com` bzw. `connectivitycheck.gstatic.com`).
-   * Da der lokale COTS-Dongle kein WAN-Gateway ins weltweite Internet bereitstellt, stuft das Smartphone die WLAN-Verbindung korrekt als **reines lokales Peripherie-Netzwerk** ein.
-3. **Multi-Path Routing (Automatisches Halten der Mobilfunkverbindung):**
-   * **iOS (Wi-Fi Assist / CarPlay Multi-Path):** Apple hält die Mobilfunkverbindung (`pdp_ip0`) für sämtliche ausgehende Internet-Verbindungen (Google Maps Satellitenbilder, Spotify-Streaming, Safari, WebSockets) voll aktiv. Nur der RTSP-Videostream und die CarPlay-Steuerpakete laufen über das 5-GHz-WLAN-Interface (`en0`).
-   * **Android (Cellular Data Always Active):** Android bindet die Eigenschaft `NET_CAPABILITY_INTERNET` strikt an das Mobilfunk-Interface (`rmnet_data0`). Alle HTTP/HTTPS-Requests und Hintergrund-Synchronisationen laufen uneingeschränkt über 4G/5G / LTE weiter.
-4. **Funktionsweise des OpenMotorBridge PWA Internet-Proxys:**
-   * Die OMB PWA (im Smartphone-Browser) kommuniziert lokal mit der OpenMotorBridge Zentralbox (über WebBLE oder lokales WebSocket).
-   * Fordert OpenMotorBridge externe Daten an (z. B. Wetterradar über Open-Meteo API, GPX-Cloud-Upload oder Notruf-SMS), sendet die MCU einen JSON-Proxy-Request an die PWA.
-   * Die PWA führt im JavaScript-Kontext ein normales `fetch()` aus.
-   * Das Betriebssystem des Smartphones routet diesen Request automatisch über das aktive **Mobilfunknetz (4G/5G)** ins Internet und liefert das Ergebnis über die lokale Verbindung an die MCU zurück!
-5. **100 % Autark & Offline-First:**
-   * OpenMotorBridge ist zu **100 % offline-fähig**: Sämtliche Fahrassistenz- und Kommunikationsfunktionen (77-GHz-Radar-Kollisionswarner, UWB-Sensor-Backbone, Gruppenfunk Sena/Cardo/OMM, LoRa-Platoon-Baken, Notbremsstrobe) arbeiten ohne jede Internetverbindung mit deterministischen Latenzen von unter $15\,\text{ms}$. Der Internet-Proxy ist rein ein optionaler Komfort-Dienst bei vorhandener Mobilfunkabdeckung.
+#### 1. Die physische Wi-Fi-Grenze (Single-Wi-Fi Hardware-Limit)
+* **Kein paralleles Wi-Fi:** Ein Smartphone besitzt nur einen einzigen physischen Wi-Fi-Transceiver. Ist das Smartphone mit dem 5-GHz-WLAN des CarPlay-Dongles verbunden, kann es sich **physikalisch unmöglich gleichzeitig mit einem 2,4-GHz-WLAN des Motorrads (ESP32)** verbinden.
+* **Kein SOCKS5-Proxy:** Auf iOS (und restriktiven Android-Versionen) verbietet das Betriebssystem sandboxed PWAs oder Drittanbieter-Apps strikt, im Hintergrund als transparenter Netzwerk-Router (SOCKS5/NAT) für externe Fahrzeugsysteme zu agieren. Das historische Konzept eines *"ESP32-Proxys für das Werks-Navi"* ist daher technisch und praktisch nicht realisierbar und wird ersatzlos verworfen.
+
+#### 2. Die saubere Lösung: Strikte Trennung über Bluetooth Low Energy (WebBLE)
+1. **Drahtloser CarPlay-/AA-Kanal (5 GHz Wi-Fi):**
+   * Das Smartphone nutzt sein Wi-Fi-Interface **exklusiv** für die High-Speed RTSP-Videoübertragung ($60\,\text{fps}$) und die Touch-Steuerung zum COTS-Dongle.
+2. **OpenMotorBridge Telemetrie-Kanal (100 % WebBLE):**
+   * Die Kommunikation zwischen Smartphone (PWA) und der OpenMotorBridge-MCU (ESP32-S3) erfolgt **ausschließlich über Bluetooth Low Energy (Web Bluetooth API)**.
+   * Bluetooth und Wi-Fi arbeiten auf getrennten Funkmodulen und stören sich nicht.
+   * Die Telemetrie-Bandbreite (Schräglage, Radar-Status, Kassetten-Modi) beträgt $< 1\,\text{kB/s}$ und belastet BLE minimal.
+3. **Internet & Navigation im Fahrbetrieb:**
+   * Bei aktivem CarPlay / Android Auto läuft die Navigation (Google Maps, Apple Maps, Kurviger, Calimoto) nativ auf dem Smartphone über dessen eigene Mobilfunkverbindung (4G/5G).
+   * Das interne Werks-Navi des Motorrads wird nicht benötigt und benötigt keine Internetverbindung von OMB.
+4. **100 % Offline-First Garantie:**
+   * OpenMotorBridge arbeitet für alle Fahr- und Sicherheitsfunktionen (Radar 2.0, UWB-Backbone, Intercom-Mesh Sena/Cardo/OMM, IMU-Crash-Erkennung) **zu 100 % autark und offline**.
 
 ## 5. WHIM Headset-Bypass & Helmmikrofon-Routing
 
@@ -408,11 +408,12 @@ Bei der Konzeption von mobilen Datenbrücken für Motorrad-Cockpits treten in de
 * Viele Motorradfahrer betreiben auf dem Smartphone dauerhaft **Tailscale** oder WireGuard (z. B. für die *Homesphere*-App, Home Assistant, Garagentorsteuerung oder private Kameras).
 * Würde OpenMotorBridge einen L3-WireGuard-Tunnel zwischen Front-Node und Smartphone aufbauen, würde das Betriebssystem die bestehende Tailscale-Verbindung sofort trennen.
 
-#### 3. Perspektivischer Ausblick: Layer-5 SOCKS5/Stream Relay (Companion-App `bar.f0o.omb`)
-Sollte künftig eine native OpenMotorBridge Companion-App (reservierte Android Application ID `bar.f0o.omb` im Google Play Store) bereitgestellt werden, löst sie das Routing elegant ohne VPN-Konflikte:
-* **Layer 5 statt Layer 3:** Statt roher IP-Pakete (L3, was Raw-Sockets und Root-Rechte erfordern würde) terminiert der Front-Node TCP-Verbindungen (Port 80/443) lokal und leitet die opaken TLS-Byte-Streams über unprivilegierte Standard-Sockets (`connect()`) an die Smartphone-App weiter.
-* **Kein VPN-Slot belegt:** Da die App gewöhnliche POSIX-Sockets über das Mobilfunknetz öffnet, bleibt Tailscale zu 100 % ungestört aktiv.
-* **Offizielle Store-Konformität via BLE / Foreground Service:** Über `UIBackgroundModes = bluetooth-central` (iOS) bzw. einen schlanken Foreground Service mit Sticky Notification (Android `bar.f0o.omb`) bleibt die App legitim im Hintergrund aktiv, solange die Zündung des Motorrads eingeschaltet und die BLE-Verbindung zu OpenMotorBridge aktiv ist (analoge Architektur zu Garmin Smartphone Link und Sena).
+#### 3. Verworfenes Konzept: SOCKS5/Stream-Relay vs. Reale WebBLE Companion-Architektur
+Historisch wurde evaluiert, ob eine native Companion-App (`bar.f0o.omb`) als Layer-5 SOCKS5-Proxy für externe Motorrad-Navis fungieren könnte. Dieses Konzept wurde **nach gründlicher technischer Analyse verworfen**:
+* **Physische Wi-Fi-Exklusivität:** Während drahtlosem CarPlay/AA ist die Wi-Fi-Schnittstelle des Smartphones mit dem 5-GHz-WLAN des Dongles belegt; eine parallele Wi-Fi-Verbindung zur OMB-Hardware ist physikalisch unmöglich.
+* **Betriebssystem-Restriktionen:** Apple iOS verbietet sandboxed Apps im Hintergrund strikt das Routen von Drittanbieter-Netzwerk-Traffic ohne aktiven Personal Hotspot.
+* **Kein praktischer Nutzen:** Da Fahrer ohnehin Apple CarPlay oder Android Auto nutzen, laufen Navigation (Google Maps, Kurviger etc.) und Live-Verkehr direkt auf dem Smartphone. Das veraltete Offline-Werksnavi des Motorrads benötigt schlichtweg keinen Internet-Proxy.
+* **Fokus der Companion-App:** Die App konzentriert sich rein auf **BLE Auto-Reconnect im Hintergrund**, automatisches GPX-Fahrt-Logging bei Zündung-EIN und direkten Cloud-Upload über die eigene Mobilfunkverbindung des Smartphones.
 
 #### 4. Die Alltags-Praxis für Skyline OS
 * **95 % aller Fahrten:** Fahrer nutzen Apple CarPlay oder Android Auto über den USB-Port `J4` - Navigation, Spotify und Staudaten laufen nativ auf dem Smartphone.
