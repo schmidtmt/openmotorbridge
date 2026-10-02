@@ -802,7 +802,16 @@ Das universelle Kofferdeckel-Dock ([`saddlebag_lid_dock.scad`](../../hardware/ca
    * Großzügige Langlöcher ($\varnothing 5{,}6 \times 9{,}0\,\text{mm}$) ermöglichen den Ausgleich von Fertigungstoleranzen der ABS-Koffer.
    * **Keine Bohrungen im Koffer:** Das Motorrad und die Koffer bleiben zu 100 % im unversehrten Originalzustand (Werterhalt & Dichtigkeit garantiert).
 2. **Alternative / Zusätzliche Klebemontage (3M VHB):**
-   * Auf der Unterseite sind vier definierte Taschen ($18 \times 12 \times 0{,}8\,\text{mm}$) für 3M VHB Hochleistungs-Acrylatschaum-Klebebänder eingelassen, um eine optionale Montage an glatten Kofferinnenwänden anderer Hersteller (z. B. BMW Vario- oder Alukoffer) zu ermöglichen.
+   * Auf der Unterseite sind vier definierte Taschen ($18 \times 12 \times 0{,}8\,\text{mm}$) für 3M VHB Hochleistungs-Acrylatschaum-Klebebänder eingelassen, um eine optionale Montage an glatten Kofferinnenwänden von Kunststoff-Koffersystemen (z. B. BMW Vario-Kunststoffkoffer) zu ermöglichen.
+
+> [!CAUTION]
+> **Striktes Montageverbot im Inneren von Aluminium-Koffern (Faradayscher Käfig!):**  
+> * **HF-Physik:** Aluminiumbleche schirmen 2,4-GHz-Funkwellen (Sena Mesh, Cardo DMC, OMM 2.4 GHz, Bluetooth) und 6,5-GHz-UWB mit $> 60\dots 80\,\text{dB}$ Dämpfung fast vollständig ab. Ein Pod im geschlossenen Alukoffer leidet unter einem **vollständigen Funk-Blackout**!
+> * **Gepäck-Abtrennung bei Reiseenduros:** Alukoffer (BMW GS Adventure, Touratech Zega, Givi Trekker Outback) werden im Camp, Hotel oder vor anspruchsvollen Offroad-Etappen regelmäßig komplett vom Fahrzeug abgenommen. Wären Pod 1 und 2 am oder im Koffer montiert, verliert das Motorrad beim Abstellen des Gepäcks seine gesamte Kommunikations- und Intercom-Infrastruktur!
+> * **Die verbindliche Lösung für Reiseenduros:** Bei Aluminium-Koffersystemen werden Pod 1 und 2 **stets fahrzeugfest am Motorrad montiert**:
+>   1. **Variante A (Edelstahl-Rohrkofferträger):** Heavy-Duty GSA Cage Dock ([`adventure_gsa_cage_dock.scad`](../../hardware/cad/scad/02_pod_base/adventure_gsa_cage_dock.scad)) im geschützten $45\,\text{mm}$ Totraum zwischen Kofferinnenwand und Heckrahmen. Der Pod strahlt ungehindert nach oben und vorn ab und verbleibt bei Kofferabnahme sicher am Bike!
+>   2. **Variante B (Nackte Heckrahmen):** Aerodynamisches Transition Dock ([`adventure_transition_dock.scad`](../../hardware/cad/scad/02_pod_base/adventure_transition_dock.scad)) in der Sitzbank-Bügelfalte entlang des Heckrahmenrohrs.
+> * *Kofferdeckel-Docks (`saddlebag_lid_dock.scad`) sind ausschließlich für funkdurchlässige ABS-/Kunststoffkoffer (z. B. Harley-Davidson Touring, BMW Vario-Kunststoffschalen) vorgesehen.*
 3. **Halbschalen-Architektur ($H = 26\,\text{mm}$):**
    * Die $3\,\text{mm}$ dicke PA12-Wanne umschließt das Pod-Gehäuse ($135 \times 70 \times 38\,\text{mm}$) formschlüssig bis auf halbe Höhe.
    * Die modulare Wechselkassette bleibt von hinten voll zugänglich und kann mit Daumen und Zeigefinger in Sekunden entriegelt und gewechselt werden, ohne das Dock zu demontieren.
@@ -859,36 +868,44 @@ Die Platzierung der Intercom-Pods im Kofferdeckel ($\approx 70\dots 75\,\text{cm
 | **Schließgestänge** | Im Schwenkbereich | $> 15\,\text{cm}$ Abstand zum Gestänge | Die metallische One-Touch Striker Bar reflektiert nur lokal und verursacht bei $\lambda = 12{,}5\,\text{cm}$ keinerlei Abschattung nach vorne/oben. |
 | **HF-Entkopplung** | $< 20\,\text{dB}$ bei benachbarter Montage | **$> 40\,\text{dB}$ Raumdiversität** | Sena (linker Koffer) und Cardo (rechter Koffer) sind $> 60\,\text{cm}$ getrennt; Heckfender und Rahmen dienen als HF-Schirm $\implies$ 0 De-Sensing. |
 
-#### 6.5.4 Stationäres MagSafe-Rahmendock (`009_magsafe_frame_dock.scad`) [Optional / Legacy]
+#### 6.5.4 Das COTS 2-Pin Magnet-Rahmendock (`cots_magnetic_frame_dock.scad`) & Befestigungskonzepte
 
-> [!NOTE]
-> **Status / Hinweis zur Systemarchitektur:**
-> Mit der Einführung der **Pure-DC 2-Draht All-UWB-Architektur** und dem **flexiblen Inline-MagSafe-Breakaway-Kabel** ist ein fest am Rahmenrohr verschraubtes Rahmendock für den regulären Betrieb **überflüssig** geworden. Die werkzeuglose Kofferabnahme erfolgt primär über die flexible, direkte MagSafe-Trennstelle im Kabelverlauf (oder wasserdichte 2-Pin Steckverbinder wie JST-JWPF / AMP Superseal). Die nachfolgend dokumentierte CAD-Konstruktion [`009_magsafe_frame_dock.scad`](../../hardware/cad/scad/02_pod_base/parts/009_magsafe_frame_dock.scad) verbleibt als optionale Referenz-Lösung für Sonderinstallationen, bei denen eine starre, fest verbolzte Kupplung am Sitzrahmenrohr explizit bevorzugt wird.
+Mit der Umstellung auf die **reine 2-Draht DC All-UWB-Architektur** und dem Entfall der proprietären Platine `PCBA 06` wird die Koffer-Trennstelle über einen handelsüblichen industriellen **2-Pin Magnet-Pogo-Steckverbinder (IP68 COTS, z. B. HytePro M411)** realisiert.
 
-Das stationäre MagSafe-Rahmendock ([`009_magsafe_frame_dock.scad`](../../hardware/cad/scad/02_pod_base/parts/009_magsafe_frame_dock.scad)) wird fahrzeugfest am Rahmenrohr unter dem Sitzüberhang montiert (passend für Harley Touring / Softail / CVO ST Rahmenrohre mit $\varnothing 25{,}4\dots 28{,}6\,\text{mm}$ bzw. $1"\dots 1{,}125"$):
+> [!IMPORTANT]
+> **Warum das alte Rahmendock (`009_magsafe_frame_dock.scad`) NICHT für COTS-Stecker passt:**
+> * Das historische Gehäuse `009_magsafe_frame_dock.scad` wurde exklusiv um die Platine `PCBA 06` ($28{,}0 \times 11{,}5\,\text{mm}$) herum konstruiert. Es besaß eine zentrale Schraubsäule, die **mitten durch das Bohrloch der Platine** führte, sowie rückseitig eine Aufnahme für M8-Rundstecker und vorderseitig einen 5-Pin Apple-MagSafe-Ausschnitt.
+> * Ein industrieller COTS 2-Pin Magnetstecker besitzt **weder eine Platine noch eine zentrale Schraubenbohrung** und hat völlig andere Außenmaße ($12{,}4 \times 5{,}4\,\text{mm}$ Front bzw. $\varnothing 10\,\text{mm}$). Er kann mechanisch unmöglich in das alte `009_magsafe_frame_dock.scad` eingesetzt werden!
+> * Für COTS-Steckverbinder existieren daher **zwei praxiserprobte Montagekonzepte**:
 
-![MagSafe Frame Dock CAD](../images/cad/magsafe_frame_dock_cad.png)
+---
 
-*Abbildung 8.31: 3D-CAD-Explosionsansicht des MagSafe-Rahmendocks (`009_magsafe_frame_dock.scad`). Sichtbar sind das Obergehäuse mit integrierter Ø 26 mm Rahmensattelwiege und DIN 934 M3 Mutternaschen, die mittige PCBA 06 Schutzplatine, das Untergehäuse mit Halbschalen-Cradles für M8 und MagSafe, der obere Halbschellen-Rohrbügel (`009_magsafe_frame_clamp.stl`) sowie die zentrale M2.5 Zylinderkopf-Klemmschraube.*
+##### Konzept A: Der elastische Inline-Breakaway-Kabelstrang (Standard für Adventure & Touring)
+* **Mechanischer Aufbau:** Der 2-Pin COTS-Magnetstecker und die Buchse sitzen als **fliegende Kabelkupplung (Inline Breakaway)** direkt im Leitungsverlauf zwischen fahrzeugseitiger Peitsche (vom DTM-12 Hauptkabelbaum) und Koffer-Vorderwand.
+* **Zugentlastung & Schutz:** Die Lötstellen an den Pogo-Pins sind mit 2-Komponenten-Polyurethan oder Epoxidharz vergossen und mit doppelwandigem, innenklebendem Schrumpfschlauch (Polyolefin 3:1 mit Heißschmelzkleber) mechanisch armiert.
+* **Fahrzeugführung:** Ein flexibler EPDM-Clip oder Mini-Kabelbinder an der Soziusfußrasten-Aufnahme oder am Heckrahmenrohr hält die fahrzeugseitige Buchse schwingungsfrei im Wind- und Spritzwasserschatten.
+* **Funktion:** Beim Abnehmen des Koffers reißt die Magnetkupplung bei ca. $10\dots 15\,\text{N}$ axialer Zugkraft zerstörungsfrei und werkzeuglos ab – ohne starre Gehäuseschale am Rahmen!
 
-1. **Horizontale Clamshell-Teilung & Zugfreie Drop-In Montage:**
-   * **Horizontale Teilungsebene ($Z = 8{,}5\,\text{mm}$):** Das Gehäuse ist entlang der Stecker- und Platinen-Mittelebene in zwei formschlüssige Halbschalen getrennt:
-     - **Obergehäuse (`009_magsafe_frame_dock.stl`):** Beinhaltet die obere Halbschale für den M8-Kabelkonus und das MagSafe-Kupplungsnest, die $\varnothing 26\,\text{mm}$ Rohrwiege mit M3-Klemmflügeln (mit DIN 934 M3 Sechskant-Nut-Pockets) sowie den oberen massiven Schraubdom mit integrierter DIN 934 M2.5 Sechskant-Nut-Pocket (100 % lötkolbenfrei).
-     - **Untergehäuse (`009_magsafe_frame_lid.stl`):** Beinhaltet die untere Halbschale für M8 und MagSafe, die umlaufende PCB-Auflagekante ($Z = 7{,}7\,\text{mm}$) sowie den unteren Schraubdom mit M2.5 Durchgangsbohrung ($\varnothing 2{,}8\,\text{mm}$) und DIN 912 Innensechskant-Senkung ($\varnothing 5{,}2 \times 2{,}8\,\text{mm}$).
-   * **Stressfreie Montage:** Die vorkonfektionierte und verlötete Baugruppe (M8-Kabel + PCBA 06 + MagSafe-Kupplung) wird von oben spannungsfrei in die untere Halbschale eingelegt. Kein axiales Hineinschieben, kein Biegedruck auf Adern oder Lötpads!
-2. **Schlanke Monocoque-Bauform OHNE seitliche Schraublaschen ($B = 16{,}0\,\text{mm}$):**
-   * Statt auftragender seitlicher Schraubohren, die das Dock unnötig verbreitern würden, wird das Gehäuse über **eine einzige zentrale M2.5 Edelstahlschraube (DIN 912 M2.5x12)** im PCB-Zentrum verklemmt.
-   * Das Gehäuse bleibt mit exakt $16{,}0\,\text{mm}$ Außenbreite extrem filigran und verschwindet optisch nahtlos unter dem Sitzrahmenrohr.
-3. **Zentrale M2.5 Klemmsäule durch PCB-Bohrung:**
-   * Die beiden Halbschalen treffen sich in einem inneren $\varnothing 4{,}4\,\text{mm}$ Dom direkt durch die $\varnothing 2{,}7\,\text{mm}$ Zentralbohrung (`H1`) der PCBA 06.
-   * Der obere Dom ist mit einer $3{,}2\,\text{mm}$ Entformungsschräge massiv in die Gehäusedecke ($Z \le 16\,\text{mm}$) angebunden.
-   * Das Anziehen der Schraube spannt Untergehäuse, PCBA 06 und Obergehäuse vibrationsfest, spielfrei und formschlüssig zusammen.
-4. **Labyrinth-Dichtfalz & IP67-Verguss:**
-   * Entlang der $Z = 8{,}5\,\text{mm}$ Teilungsebene greift eine $0{,}8\,\text{mm}$ umlaufende Feder des Oberteils in eine korrespondierende Nut des Unterteils ein.
-   * Vor dem Fügen eingebrachte elastische Dichtmasse (z. B. neutralvernetzendes Silikon) oder abschließender Verguss dichten den Innenraum zuverlässig gegen Hochdruck-Wasserstrahlen und Straßengischt nach IP67 ab.
-5. **Rahmen-Klemmung & Kabelbinder-Option:**
-   * **Halbschelle:** Der obere Bügel (`009_magsafe_frame_clamp.stl`) fixiert das Dock über 4x M3 Schrauben bombenfest am Rahmenrohr. Vier $0{,}6\,\text{mm}$ Reibungsrippen verhindern jedes Verdrehen.
-   * **Kabelbinder-Slots:** Zwei integrierte $5{,}2 \times 2{,}8\,\text{mm}$ Kanäle ermöglichen zusätzlich oder alternativ die Sicherung mit Schwerlast-Kabelbindern.
+---
+
+##### Konzept B: Das dedizierte COTS-Rahmendock (`cots_magnetic_frame_dock.scad`)
+Für Motorräder (z. B. Harley-Davidson Touring, CVO ST oder Bagger), bei denen eine **dauerhaft feste, formschöne und starre Rahmenmontage** am $\varnothing 25{,}4\dots 28{,}6\,\text{mm}$ ($1"\dots 1{,}125"$) Rahmenrohr unter der Sitzbank gewünscht ist, steht das neu konstruierte **COTS 2-Pin Magnet-Rahmendock** ([`cots_magnetic_frame_dock.scad`](../../hardware/cad/scad/02_pod_base/parts/cots_magnetic_frame_dock.scad)) zur Verfügung:
+
+1. **Formschlüssiges COTS-Nest OHNE Platine:**
+   * Die vordere Kammer ($12{,}8 \times 5{,}8 \times 8{,}5\,\text{mm}$) bettet die COTS 2-Pin Magnet-Pogo Buchse (HytePro M411) spielfrei ein.
+   * **Integrierter Haltekragen (Positive Retaining Shoulder):** Ein hinter dem Steckerkopf liegender, umlaufender Hinterschnitt ($14{,}8 \times 7{,}2 \times 2{,}2\,\text{mm}$) stützt den Flansch des Steckverbinders formschlüssig gegen das Gehäuse ab. Zieht der Mechaniker den Koffer ab, werden die $10\dots 15\,\text{N}$ Abreißkraft direkt in das massive Dockgehäuse eingeleitet – der Stecker kann physikalisch nicht aus dem Dock herausgezogen werden.
+2. **Integrierte Stufe-1 Kabel-Zugentlastung:**
+   * Hinter der Kontaktkammer führt ein $\varnothing 4{,}4\,\text{mm}$ Kabeltunnel das 2-adrige Versorgungskabel ($2 \times 0{,}5\,\text{mm}^2$ PUR/FLRY) nach hinten.
+   * Ein integrierter Querschlitz ($2{,}8 \times 1{,}5\,\text{mm}$) nimmt einen Mini-Kabelbinder auf, der die Kabelummantelung schwingungsfest und vibrationssicher festklemmt.
+3. **Zweiteilige Rohrklemmschelle (100 % lötkolbenfrei mit Captive Nuts):**
+   * **Untere Trägerbasis (`cots_magnetic_frame_dock_body.stl`):** Beherbergt die $\varnothing 26\,\text{mm}$ Rohrsattelkehle, die Steckerkammer und vier **versenkte DIN 934 M3 Sechskant-Muttertaschen** auf der Unterseite.
+   * **Obere Klemmschellen-Kappe (`cots_magnetic_frame_clamp.stl`):** Umgreift das Rahmenrohr von oben und wird mit 4x M3 Zylinderschrauben (DIN 912 M3 $\times$ 16 mm) von oben verschraubt.
+   * Vier innere Reibungsrippen ($0{,}6\,\text{mm}$) verhindern jedes Verdrehen auf dem pulverbeschichteten Rahmenrohr.
+
+---
+
+##### Hinweis zu Legacy-Aufbauten (`009_magsafe_frame_dock.scad` [Legacy])
+Die historische Konstruktion [`009_magsafe_frame_dock.scad`](../../hardware/cad/scad/02_pod_base/parts/009_magsafe_frame_dock.scad) verbleibt ausschließlich als Legacy-Referenz für Bestandsaufbauten, die noch die proprietäre Platine `PCBA 06` mit M8-Schraubstecker und zentraler M2.5 Schraube verwenden. Bei Neuaufbauten ist für Festmontagen zwingend [`cots_magnetic_frame_dock.scad`](../../hardware/cad/scad/02_pod_base/parts/cots_magnetic_frame_dock.scad) einzusetzen!
 
 ---
 

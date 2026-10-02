@@ -93,11 +93,15 @@ STL_TARGETS: List[Tuple] = [
     ("02_pod_base/parts/006_fender_curved_saddle.scad", "02_pod_base/components/06_fender_curved_saddle.stl"),
     ("02_pod_base/parts/007_pod_slide_dock_core.scad", "02_pod_base/components/07_pod_slide_dock_core.stl"),
 
-    # 9. Stationary MagSafe Frame Dock (Under-Seat Breakaway Mount)
+    # 9. Stationary MagSafe Frame Dock (Under-Seat Breakaway Mount) [Legacy PCBA 06]
     ("02_pod_base/parts/009_magsafe_frame_dock.scad", "02_pod_base/components/009_magsafe_frame_dock.stl", ["-D", 'part="body"']),
     ("02_pod_base/parts/009_magsafe_frame_dock.scad", "02_pod_base/components/009_magsafe_frame_lid.stl", ["-D", 'part="lid"']),
     ("02_pod_base/parts/009_magsafe_frame_dock.scad", "02_pod_base/components/009_magsafe_frame_clamp.stl", ["-D", 'part="clamp"']),
     ("02_pod_base/parts/010_saddlebag_hole_grommet_split.scad", "02_pod_base/components/010_saddlebag_hole_grommet_split.stl", ["-D", 'part="print_plate"']),
+
+    # 9b. Stationary COTS 2-Pin Magnetic Frame Dock (Pure-DC COTS Breakaway Mount, No PCB)
+    ("02_pod_base/parts/cots_magnetic_frame_dock.scad", "02_pod_base/components/cots_magnetic_frame_dock_body.stl", ["-D", 'part="body"']),
+    ("02_pod_base/parts/cots_magnetic_frame_dock.scad", "02_pod_base/components/cots_magnetic_frame_clamp.stl", ["-D", 'part="clamp"']),
 
     # 10. Adventure-Kit (BMW GS / GSA, KTM, Africa Twin)
     ("02_pod_base/adventure_pannier_rack_clamp.scad", "02_pod_base/adventure_pannier_rack_clamp_base.stl", ["-D", 'part="base"']),

@@ -246,7 +246,7 @@ Alle Gehäuseteile sind konsequent für das **IKEA-Prinzip** konstruiert: **Kein
   * `radar_license_plate_bracket.stl` (1 Stk.): Entkoppelter Kennzeichen-Radarhalter für Peitsche 3.
   * `radar_swivel_tilt_cradle.stl` (1 Stk.): Radar 2.0 Schwerlast-Neigegelenk (Actioncam/GoPro-Hirth-Cradle) mit 2x M4-Verschraubung und 36-Zahn Hirth-Verzahnung.
   * `radar_mr20_housing.stl` & `radar_mr20_radome.stl` (1 Stk.): Radar 2.0 PA12 Flügel-Gehäuse mit Spritzwasser-Schutzspoiler und PC-Radom.
-  * `009_magsafe_frame_dock.stl` (1 Stk.), `009_magsafe_frame_lid.stl` (1 Stk.) & `009_magsafe_frame_clamp.stl` (1 Stk.): MagSafe Rahmendock-Komponenten (optional). Sowie `road_glide_inductive_cam_dock.stl` (1 Stk.): Induktives Cam-Docking für Sharknose-Verkleidungen.
+  * `cots_magnetic_frame_dock_body.stl` (1 Stk.) & `cots_magnetic_frame_clamp.stl` (1 Stk.): COTS 2-Pin Magnet-Rahmendock für werkzeuglose Kofferabnahme am Ø 26 mm Rahmenrohr (optional; bei reinem Inline-Breakaway-Kabelstrang entfällt das Gehäuse). Sowie `road_glide_inductive_cam_dock.stl` (1 Stk.): Induktives Cam-Docking für Sharknose-Verkleidungen. (Legacy-Referenz: `009_magsafe_frame_dock.stl`).
 * **Optionale Bobber & Custom-Kit Teile:**
   * `radar_center_underfender_mount.stl` (1 Stk.): Stealth Center Under-Fender Mount mit $46\,\text{mm}$ Tiefgang und integriertem $42\,\text{mm}$ Spritzwasser-Schmutzfänger-Spoiler.
   * `radar_swivel_tilt_cradle.stl` (1 Stk.): Schwerlast-Neigegelenk mit 2x M4-Verschraubung.
@@ -359,7 +359,7 @@ Anstelle der früheren proprietären Platine `PCBA 06` wird die werkzeuglose Kof
   | FAHRZEUGRAHMEN     |                                    | SEITENKOFFER       |
   | (Unter der Sitzbank|                                    | (Pannier / Vario)  |
   |  am Rohr Ø 26 mm)  |                                    |                    |
-  | [009_magsafe_      |     Magnetische Abreißtrennung     | [010_saddlebag_    |
+  | [cots_magnetic_    |     Magnetische Abreißtrennung     | [010_saddlebag_    |
   |  frame_dock.stl]   |     (10 - 15 N axiale Haltekraft)  |  grommet_split.stl]|
   |   +--------------+ |             (Klack!)               | +----------------+ |
   |   | 2-Pin Magnet-| | <================================> | | 2-Pin Magnet-  | |
@@ -376,8 +376,8 @@ Anstelle der früheren proprietären Platine `PCBA 06` wird die werkzeuglose Kof
    * Elektrische Parameter: Bis zu $2{,}5\,\text{A}$ Dauerstrom bei $12\,\text{V}/5\,\text{V}$ DC; Übergangswiderstand $< 30\,\text{m}\Omega$.
    * **Mechanische Schutzfunktion ("Mechaniker-Sicherheit"):** Trennt sich bei ca. $10\dots 15\,\text{N}$ axialer Zugkraft völlig verschleiß- und zerstörungsfrei, wenn der Koffer in der Werkstatt oder im Hotel ohne vorheriges Abstecken abgenommen wird. Zieht sich beim Aufsetzen des Koffers selbstzentrierend zusammen.
 2. **Mechanische Befestigung Fahrzeugseite (Rahmen):**
-   * **Option A (Stationäres Rahmendock):** Die Buchse wird formschlüssig in das 3D-Druck Gehäuse [`009_magsafe_frame_dock.scad`](../../hardware/cad/scad/02_pod_base/parts/009_magsafe_frame_dock.scad) eingelegt. Es wird mit der Halbschelle (`009_magsafe_frame_clamp.stl`) am Ø 25.4–28.6 mm Rahmenrohr unter der Sitzbank mit 4x M3 Schrauben (in integrierten DIN 934 Nut-Pockets) fest verschraubt.
-   * **Option B (Flexibler Rahmentunnel-Clip):** Bei Adventure-Bikes ohne freies Rahmenrohr sitzt die Buchse in einem elastischen Clip an der Soziusfußrasten-Aufnahme.
+   * **Option A (Elastischer Inline-Breakaway-Kabelstrang - Standard für Reiseenduros):** Die Magnetkupplung sitzt fliegend im Leitungsverlauf, geschützt durch Harzverguss und doppelwandigen Klebeschrumpfschlauch. Ein elastischer EPDM-Clip oder Kabelbinder am Rahmenrohr / Soziusfußrastenausleger haltert die Buchse vibrationsfrei. Kein starres Rahmendock erforderlich!
+   * **Option B (Stationäres COTS-Rahmendock für Tourer/Harley):** Die COTS-Buchse wird formschlüssig in das 3D-Druck Gehäuse [`cots_magnetic_frame_dock.scad`](../../hardware/cad/scad/02_pod_base/parts/cots_magnetic_frame_dock.scad) eingelegt. Es besitzt einen formschlüssigen Haltekragen gegen axiales Herausziehen, integrierte Zugentlastung und wird mit der Klemmschelle (`cots_magnetic_frame_clamp.stl`) am Ø 25.4–28.6 mm Rahmenrohr mit 4x M3 Schrauben in unverlierbaren DIN 934 Nut-Pockets fest verschraubt (keine Platine, 100 % lötkolbenfrei). *(Hinweis: Das alte `009_magsafe_frame_dock.scad` war für die entfallene PCBA 06 ausgelegt und passt mechanisch nicht für COTS-Steckverbinder).*
 3. **Mechanische Befestigung Kofferseite (Pannier):**
    * **Montageort:** Die Koffer-Durchführung sitzt **seitlich-innen an der Koffer-Vorderwand (oberhalb des Schwingenlagers)** im absoluten Wind- und Spritzwasserschatten des Rahmens.
    * **Bohrung & Dichtung:** Ein einzelnes $\varnothing 12\,\text{mm}$ Loch in der Koffer-Vorderwand nimmt die geteilte EPDM/TPU-Dichtung ([`010_saddlebag_hole_grommet_split.scad`](../../hardware/cad/scad/02_pod_base/parts/010_saddlebag_hole_grommet_split.scad)) auf. Der **Kofferboden bleibt zu 100 % intakt, lochfrei und wasserdicht**.
@@ -391,7 +391,7 @@ Anstelle der früheren proprietären Platine `PCBA 06` wird die werkzeuglose Kof
 | :--- | :--- | :--- | :---: | :--- |
 | **M3 Edelstahlschrauben** | M3 x 40 mm Zylinderkopf V4A (DIN 912) | Normteil / Amazon | 4 Stk. | Zentralbox-Gehäuse (greift in Nut-Pockets) |
 | **M3 Edelstahlschrauben (Front)** | M3 x 20 mm Zylinderkopf V4A (DIN 912) | Normteil / Amazon | 4 Stk. | Front-Node Gehäuse (greift in Nut-Pockets) |
-| **M3 Edelstahlschrauben (Dock)** | M3 x 16 mm Zylinderkopf V4A (DIN 912) | Normteil / Amazon | 4 Stk. | Rahmenklemmschelle `009_magsafe_frame_dock` |
+| **M3 Edelstahlschrauben (Dock)** | M3 x 16 mm Zylinderkopf V4A (DIN 912) | Normteil / Amazon | 4 Stk. | Rahmenklemmschelle `cots_magnetic_frame_dock` |
 | **M3 Edelstahlmuttern** | DIN 934 / DIN 985 M3 V4A Muttern | Normteil / Amazon | 12 Stk.| Unverlierbar in Nut-Pockets eingelegt (Zentralbox, Front-Node, Rahmendock) |
 | **M4 Edelstahlmuttern (AMPS & Radar)**| DIN 934 M4 V4A Muttern | Normteil / Amazon | 6 Stk. | 4x Front-Node Wanne (AMPS), 2x Radar 2.0 Gehäuserückwand |
 | **M4 Schrauben (Radar-Cradle)** | M4 x 12 mm Zylinderkopf V4A (DIN 912) | Normteil / Amazon | 2 Stk. | Verschraubung Adapterplatte `radar_swivel_tilt_cradle` an Radar 2.0 Gehäuse |

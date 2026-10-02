@@ -116,7 +116,7 @@ OpenMotorBridge v8.0 definiert die Plattform über **standardisierte Funktionskn
 > * **Referenz-Kit 1 (Harley-Davidson CVO Road Glide ST & New Touring):** Pod 1 & 2 geschützt in den Kofferdeckeln (Zero-Drill an Scharnierschrauben, 19 mm MagSafe Seitendurchführung in Koffer-Innenwand neben Kofferhalter), Front-Node am Geweihträger hinter der Sharknose-Außenhaut (mit SAM-M10Q GNSS und Kaltluft-Sensoren), Zentralbox im Batteriefach unter dem Sitz, optionales Radar an Peitsche 3 am Kennzeichenträger. *(Heckbürzel bleibt 100 % unberührt - kein Pod 3 unter der Forged-Carbon-Cowl!)*
 > * **Referenz-Kit 2 (Harley-Davidson Road King Special / FLHRXS):** Pod 1 & 2 in den Kofferdeckeln (MagSafe Seitendurchführung), Front-Node unsichtbar in der 7"-Scheinwerfer-Nacelle, Zentralbox unter der Sitzbank. *(Die Touring Fender Console entfällt ersatzlos - der Heckkotflügel an der 1/4"-20 Sitzmutter bleibt 100 % serienmäßig clean!).*
 > * **Referenz-Kit 3 (Classic Bagger & Cruiser - Street Glide / Electra Glide):** Pod 1 & 2 in den Kofferdeckeln, Front-Node in der Batwing-Verkleidung, Zentralbox unter dem Sitz, optionales Radar unter dem Kennzeichen an Peitsche 3.
-> * **Referenz-Kit 4 (Adventure & Touring Enduros - BMW GS, KTM Adventure, Africa Twin):** Pod 1 & 2 an Sturzbügeln per Rohrbett mit V-Nut und EPDM-Spannringen oder an Kofferträgern, Front-Node an der Navigationsstrebe hinter dem Windschild (freie GNSS-Sicht). Am Heckträger sitzt lediglich der schlanke, rein **optionale Radarträger** ([`adventure_rack_radar_mount.stl`](../../hardware/cad/stl/05_accessories/adventure_rack_radar_mount.stl)) an Peitsche 3 - wer kein Radar fährt, montiert am Heck **überhaupt nichts**!
+> * **Referenz-Kit 4 (Adventure & Touring Enduros - BMW GS, KTM Adventure, Africa Twin):** Pod 1 & 2 werden **strikt fahrzeugfest am Motorrad** montiert: Entweder am Rohr-Kofferträger über das geschützte Heavy-Duty GSA Cage Dock ([`adventure_gsa_cage_dock.scad`](../../hardware/cad/scad/02_pod_base/adventure_gsa_cage_dock.scad)) im $45\,\text{mm}$ Totraum zwischen Kofferinnenwand und Rahmen, oder in der Sitzbank-Bügelfalte über das aerodynamische Transition Dock ([`adventure_transition_dock.scad`](../../hardware/cad/scad/02_pod_base/adventure_transition_dock.scad)). *(Strikte HF-Regel: Eine Montage im Inneren von Aluminium-Koffern ist physikalisch verboten, da Aluminium als Faradayscher Käfig 2,4-GHz- und UWB-Signale vollständig blockiert!).* Front-Node an der Navigationsstrebe hinter dem Windschild (freie GNSS-Sicht). Am Heckträger sitzt lediglich der schlanke, rein **optionale Radarträger** ([`adventure_rack_radar_mount.stl`](../../hardware/cad/stl/05_accessories/adventure_rack_radar_mount.stl)) an Peitsche 3 - wer kein Radar fährt, montiert am Heck **überhaupt nichts**!
 > * **Referenz-Kit 5 (Pkw / Support-Van / Rallye-Begleitfahrzeug / Wohnmobil):** 
 >   * **2 Pods an 2 Sonnenblenden:** Fahrer-Sonnenblende = Pod 1, Beifahrer-Sonnenblende = Pod 2.
 >     - *Modus A (Begleitfahrzeug Motorrad-Tour):* Pod 1 Sena SPIDER X Slim, Pod 2 Cardo Packtalk Edge oder Midland PMR446.
@@ -202,22 +202,12 @@ Die Verbindung aller Basis-Komponenten erfolgt über den zentralen, wasserdichte
 
 *(Hinweis: Durch die All-UWB Funkarchitektur entfällt jegliche Signal- und Audioverdrahtung. Es werden nur noch 2-adrige Gleichstrompeitschen geführt!)*
 
-### 4.2 Front-Node (PCBA 05) Cockpit-Schnittstellenmatrix
-| Port | Steckverbindertyp | Funktion | Angeschlossene Hardware |
-| :--- | :--- | :--- | :--- |
-| **`J1`** | JST-PH 2.0mm 2-Pin | 12V Zündungsplus | Lokale Speisung (KL15 & Masse) am Steuerkopf / Cartool / Scheinwerfer |
-| **`J2`** | JST-PH 2.0mm 3-Pin | Display-Audio-CAN | Cockpit-CAN-Bus (CAN_H, CAN_L, GND) für Harley Skyline OS / TFT |
-| **`J3`** | JST-PH 2.0mm 4-Pin | Lenker Multi-Button Interface | 3x IP67 Mikrotaster: PTT Intercom, Video-Bookmark, Siri/Voice (< 5 ms) |
-| **`J4`** | Molex Micro-Fit 4-Pin / USB | USB Host Upstream | Verbindung zur Boom! Box GTS / Skyline OS Display-Headunit |
-| **`J5`** | USB-C Buchse IP67 | 20W USB-PD Fast Charging | Lenker-Smartphone (QuadLock / SP Connect) via SC8102 Buck-Boost |
-| **`J6`** | Molex Micro-Fit 4-Pin | Geschalteter CarPlay-Port | Wireless CP2AA-Dongle mit 1-Click TPS2051B Kaltstart-Reset |
-| **`J7`** | USB-C Onboard | Service- & Flash-Port | ESP32-S3 Firmware-Update & WebSerial Diagnose |
-| **`J8`** | JST-PH 2.0mm 2-Pin | Actioncam-Stromversorgung | 5V Qi-Ladespule im Kameradock mit automatischem BLE-Shutter-Stop |
-| **`J9`** | JST-PH 2.0mm 3-Pin | Totwinkel-Spiegel-LEDs | 2x bernsteingelbe 12V LEDs an Spiegelarmen über N-MOSFETs L+R |
-| **`J10`** | JST-PH 2.0mm 2-Pin | Qi Wireless Cradle | 12V geschaltete Speisung für kabellose Ladeschale (null Ruhestrom) |
-| **`J11`** | JST-PH 2.0mm 2-Pin | Front-Zusatzscheinwerfer | Bis zu 4,5A High-Side geschaltetes LED-Licht (Auto-Strobe bei Notbremsung) |
-| **`J12`** | JST-SH 1.0mm 4-Pin (Qwiic) | $I^2C$ Sensor- & Nav-Bus | **u-blox SAM-M10Q Multi-GNSS** (Zenitblick) + **TI TMP117** (Außentemperatur) & **OPT3001** (Licht) im Kaltluftstrom |
-| **`UWB`** | U.FL Mikro-Koax (Bottom) | 6.5 GHz UWB-Backbone | Qorvo DW3110 Transceiver an **Taoglas FXUWB10 Flex-Antenne im Gehäuseboden** (Latenz < 0.4 ms zur Zentralbox) |
+### 4.2 Universal Front-Node (PCBA 05) Cockpit-Schnittstellen
+Der Front-Node wird im Cockpit autark über eine 2-polige 12V-Leitung an Zündungsplus (KL15) versorgt und bündelt sämtliche Front-Komponenten:
+* **Cockpit & Sensoren:** u-blox SAM-M10Q Multi-GNSS (Zenitsicht an J12), TI TMP117 Außentemperatur & OPT3001 Umgebungslicht im Kaltluftstrom.
+* **Bedienelemente & Anzeigen:** 3-Tasten Lenker-PTT (J3), Totwinkel-Spiegel-LEDs (J9), Actioncam-Ladedock (J8), Zusatzscheinwerfer (J11).
+* **Infotainment & USB:** Automotive 4-Port USB 2.0 Hub (USB2514B) mit 20W USB-PD Lenker-Ladeport (J5), geschaltetem CarPlay-Port (J6 via TPS2051B) und Host-Port zur Headunit (J4).
+* **Detaillierte Pinbelegung & Schaltpläne:** Die vollständige elektrische Pinbelegung aller Steckverbinder (JST-PH, Molex, Qwiic) sowie Leitungsspezifikationen sind autoritativ in **[Kapitel 07: PCBA Hardware, Pinouts & Spezifikationen](07_pcba_hardware_pinouts.md)** dokumentiert.
 
 ---
 
@@ -428,4 +418,55 @@ Der Front-Knoten (PCBA 05) dient auf **allen Motorrädern** als universeller Coc
 * **Live-Gruppenüberwachung ohne Mobilfunknetz (PWA Fleet Dashboard):**
   * Auf einem im Pkw montierten iPad oder Android-Tablet läuft das PWA-Dashboard im Offline-Kartenmodus.
   * Über das 868 MHz LoRa-Mesh empfängt das Begleitfahrzeug im Sekundentakt Telemetriedaten (Position, Geschwindigkeit, SOS-/Sturzalarm, Reifendruck, Außentemperatur) aller Motorräder im Umkreis von bis zu $15\,\text{km}$ - autark, robust und vollkommen unabhängig von Mobilfunkmasten.
+
+---
+
+## 6. Internet-Uplink, Multi-Path Routing & Offline-First Architektur
+
+### 6.1 Die Funktionsweise des Smartphone-Internet-Proxys
+OpenMotorBridge benötigt für den Fahrbetrieb **keine eigene SIM-Karte und kein festes 4G/5G-Modem**. Stattdessen nutzt das System bei Bedarf das Smartphone des Fahrers als transparenten Internet-Proxy (Layer-5 SOCKS5 / HTTP-Relay über die PWA oder Companion-App):
+* **Opportunistischer Datenaustausch:** GPX-Touren-Upload zu Nextcloud/WebDAV, Abruf von Niederschlagsradar (Open-Meteo API), Wettertrend-Sync oder eCall-Notruf-SMS über das Mobilfunknetz.
+* **Lokale Schnittstelle:** Die Kommunikation zwischen OMB und dem Smartphone erfolgt wahlweise über **Bluetooth Low Energy (WebBLE)** oder lokales WebSocket (z. B. wenn das Smartphone im Cockpit per USB/LAN mit dem Headunit-Netzwerk verbunden ist).
+
+### 6.2 Koexistenz mit Wireless CarPlay & Android Auto (5 GHz Wi-Fi)
+Eine fundamentale Fragestellung im mobilen Infotainment lautet:
+> *"Wenn mein Smartphone über 5 GHz WLAN mit dem Wireless-CarPlay-Dongle verbunden ist, ist sein WLAN-Adapter belegt. Wie kommt das Smartphone dann ins Internet – und wie kann der OpenMotorBridge PWA-Proxy arbeiten?"*
+
+Moderne Smartphone-Betriebssysteme (iOS ab iOS 13 und Android ab Android 10) verfügen über ausgereiftes **Dual-Interface Multi-Path Routing**:
+1. **Kein WAN-Gateway auf dem CarPlay-WLAN:** Der COTS-CarPlay-Dongle weist dem Smartphone zwar eine lokale IP-Adresse zu, stellt aber kein Standard-Gateway zum Internet bereit.
+2. **Automatisches Halten der Mobilfunkverbindung:** Das Betriebssystem erkennt bei der Konnektivitätsprüfung das Fehlen von WAN-Zugang und schaltet automatisch in den Multi-Path-Betrieb:
+   * **Lokales 5-GHz-WLAN (`en0` / Wi-Fi):** Überträgt ausschließlich die lokalen Video- und Audio-RTSP-Pakete sowie Touch-Events zwischen Smartphone und Infotainment-Screen.
+   * **Mobilfunknetz (`pdp_ip0` / 4G/5G LTE):** Bleibt für sämtlichen Internetverkehr (`0.0.0.0/0`) voll aktiv. Webseiten, Spotify-Streaming, Google Maps Live-Verkehr und der OMB PWA-Proxy laufen ungestört über 4G/5G.
+3. **Transparentes Relay:** Fordert die Zentralbox Wetterdaten an, setzt die PWA einen gewöhnlichen JavaScript-`fetch()` ab, den das Betriebssystem über Mobilfunk ins Web routet und als JSON an OMB zurückgibt.
+
+### 6.3 Die 100 % Offline-First Garantie
+OpenMotorBridge folgt einem strikten **Safety-First-Prinzip**:
+* **Keine Cloud-Abhängigkeit:** Sämtliche Kernfunktionen – das 77-GHz-Radar, der UWB-Backbone ($< 0{,}4\,\text{ms}$), die Intercom-Mesh-Matrix (Sena/Cardo/OMM), die IMU-Sturzerkennung und das Notbremsblinken – arbeiten zu **100 % offline** und vollkommen autark auf der Motorrad-Hardware.
+* Im tiefsten Funkloch auf abgelegenen Pässen funktioniert OpenMotorBridge mit identischer Präzision und Schutzwirkung wie im 5G-versorgten Stadtzentrum.
+
+---
+
+## 7. Dokumentations-Architektur & Kapitel-Wegweiser (Single Source of Truth)
+
+Zur Vermeidung von Redundanzen und zur Gewährleistung klarer Zuständigkeiten ist die Dokumentation modular gegliedert. Jedes Fachthema besitzt eine verbindliche **Single Source of Truth (SSOT)**:
+
+| Themenbereich | Verbindliches Referenzdokument | Inhalt & Fokus |
+| :--- | :--- | :--- |
+| **Intercom-Profile & Matrix** | **[Kapitel 02](02_intercom_matrix_profiles.md)** | Sena Mesh 2.0/3.0, Cardo DMC Gen1/2, Midland PMR, Pegel- und Audio-Routing |
+| **Akustik, DSP & Ducking** | **[Kapitel 03](03_acoustics_dsp_ducking.md)** | Raised-Cosine Filter, Ducking (-12 dB / -18 dB), Wind-AGC, Latenzbudgets |
+| **OEM-Kassetten (Sena/Cardo)**| **[Kapitel 04](04_cartridge_specs.md)** | Gateway-Kassetten mit Mechatronik (PCBA 03), WCH CH32V003 Aktuatoren |
+| **OMM 2.4 GHz Intercom & UCS** | **[Kapitel 04b](04b_omm_intercom_module.md)** | PCBA 09, ESP32-C6, ECE 22.06 UCS-Gehäuse, 12-14 h LiPo, Helmintegration |
+| **Heck-Radar 2.0 (77 GHz)** | **[Kapitel 05](05_radar_bionic_mounting.md)** | Wheeltec MR20 mmWave, TTC-Bedrohungslogik, 36-LED Warnflügel, V2X-Patch |
+| **Telemetrie & Blackbox** | **[Kapitel 06](06_telemetry_blackbox_webdav.md)** | MicroSD-FAT32 Ringpuffer, 15-State EKF Schräglage, WebDAV / Nextcloud Sync |
+| **PCBA Hardware & Pinouts (SSOT)**| **[Kapitel 07](07_pcba_hardware_pinouts.md)** | **Alle Platinen (PCBA 01 bis 09)**, vollständige Pinbelegungen, Bauteilwerte |
+| **Gehäuse, Mechanik & CAD (SSOT)**| **[Kapitel 08](08_enclosures_mechanics_cad.md)** | **Alle CAD-Modelle**, OpenSCAD Parameter, ECE-Normen, unverlierbare Muttern |
+| **Firmware-Architektur** | **[Kapitel 09](09_firmware_architecture.md)** | FreeRTOS Task-Matrix, UWB Ranging-Protokoll, Ringpuffer & State-Machines |
+| **Firmware Build Guide** | **[Kapitel 10b](10_firmware_build_guide.md)** | ESP-IDF v5.2 Setup, VS Code / CLI Kompilierung, CMake Targets, Flashen |
+| **WebApp PWA Dashboard** | **[Kapitel 10](10_webapp_pwa_dashboard.md)** | Ride HUD, WebBLE Protokoll, Kassetten-Konfiguration, Offline-OSM-Karten |
+| **CarPlay / Android Auto Bridge** | **[Kapitel 11](11_carplay_android_auto_bridge_architecture.md)**| Virtual WHIM, CP2AA Bridge, Multi-Path Wi-Fi/Cellular, Headless Dongle |
+| **Diagnose, Service & Flashen** | **[Kapitel 12](12_diagnostics_service_flashing.md)**| WebSerial Terminal, NVS-Speicherbelegung, Bootloader & Notfallwiederherstellung |
+| **Simulation & Testbench (HIL/SIL)**| **[Kapitel 13](13_simulation_testbench.md)** | Python Netlist Validator, FreeRTOS Timing-Verifikation, Signalintegrität |
+| **EMV & HF-Hardening** | **[Kapitel 14](14_emv_rf_hardening.md)** | CISPR 25 Class 5, 2.4 GHz vs. UWB Koexistenz, ESD-Schutznetzwerke |
+| **BOM, Beschaffung & Fertigung**| **[Kapitel 15](15_bom_manufacturing.md)** | **Vollständige Bauteillisten**, JLCPCB Bestelldaten, Zukaufteile, COTS-Docks |
+| **Bauanleitung & Montage** | **[Kapitel 16](16_build_instructions_assembly.md)** | Schritt-für-Schritt Aufbau, Kabelkonfektionierung, Drehmomente, Inbetriebnahmetests |
 

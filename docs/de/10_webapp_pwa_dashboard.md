@@ -25,10 +25,18 @@ Für Fahrer, die eine Installation über den Google Play Store, automatische Hin
 * **Integrations- & Architekturpfade:**
   1. **Trusted Web Activity (TWA):** Schlankes Android-Package basierend auf Chrome Custom Tabs und Google Digital Asset Links (`.well-known/assetlinks.json`). Ermöglicht 1-Klick-Installation aus dem Google Play Store, native Vollbild-Darstellung ohne Browserleiste und native WebBLE-Unterstützung mit null Wartungs-Overhead zur WebApp.
   2. **Nativer Foreground Service (BLE Auto-Reconnect & Background Sync):** Optionaler nativer Begleitdienst mit Sticky-Notification (*"OpenMotorBridge aktiv"*). Hält die BLE-GATT-Verbindung zur Zentralbox auch dann stabil aufrecht, wenn das Smartphone bei ausgeschaltetem Display in der Jackentasche verbleibt, startet automatisches GPX-Fahrt-Logging bei Zündung EIN und leitet eCall-Notrufe selbst im Hintergrund verzögerungsfrei weiter.
-  3. **Integrierter Internet-Uplink Proxy (Layer-5 SOCKS5 / HTTP-Relay):** Fungiert als transparenter lokaler Uplink-Proxy für den Front-Node (PCBA 05) und das Werks-Navi (z. B. Harley Skyline OS / Boom! Box GTS für HERE-Live-Traffic).
+  3. **Integrierter Internet-Uplink Proxy (Layer-5 SOCKS5 / HTTP-Relay & Dual-Interface Routing):** Fungiert als transparenter lokaler Uplink-Proxy für den Front-Node (PCBA 05) und das Werks-Navi (z. B. Harley Skyline OS / Boom! Box GTS für HERE-Live-Traffic).
+     * **Koexistenz mit Wireless CarPlay / Android Auto (5 GHz Wi-Fi):**
+       * *Häufige Praxisfrage:* *"Wenn mein Smartphone per 5 GHz WLAN mit dem Wireless-CarPlay-Dongle verbunden ist, ist das WLAN doch lokal – funktioniert der Internet-Proxy dann überhaupt?"*
+       * *Antwort: **Ja, zu 100 %!*** Sowohl iOS (Apple) als auch Android (Google) beherrschen **Dual-Interface Multi-Path Routing**:
+         - Beim Verbindungsaufbau zum CarPlay/AA-WLAN stellt das Smartphone fest, dass das lokale Wi-Fi des Dongles **kein Internet-Gateway** (keinen globalen WAN-Zugang) bereitstellt (Captive Portal Check).
+         - Das Smartphone schaltet daraufhin in den intelligenten Multi-Path-Modus: Das **Mobilfunknetz (4G/5G / LTE) bleibt dauerhaft aktiv** und wickelt das gesamte Internet-Routing (`0.0.0.0/0`) ab.
+         - Die 5-GHz-WLAN-Verbindung wird vom Smartphone **ausschließlich für den lokalen CarPlay-/AA-Videostream und die Touch-Events** genutzt.
+         - Die OMB PWA oder Begleit-App kommuniziert lokal mit OpenMotorBridge (über Bluetooth LE oder lokales WebSocket). Sendet OMB eine Web-Anfrage (z. B. Wettertrend, GPX-Upload, eCall-Notruf), führt die PWA einen gewöhnlichen JavaScript-`fetch()` aus, der vom Smartphone-Betriebssystem nahtlos über das **Mobilfunknetz** ins Internet geleitet wird!
      * **Kein VPN-Konflikt:** Arbeitet rein auf Anwendungsebene (L5 POSIX-Sockets) und belegt **keinen** Android `VpnService`-Slot. Dauerhafte VPNs wie **Tailscale** (z. B. für Smart-Home-Zugriff / *Homesphere* / Home Assistant) bleiben uneingeschränkt aktiv.
      * **Kein Hotspot-Zwang:** Der Akku-fressende persönliche WLAN-Hotspot am Smartphone muss nicht manuell aktiviert werden; Datenanfragen der Headunit laufen geräuschlos über die Companion-App via Mobilfunk.
      * **Automatischer Cloud- & WebDAV-Sync:** Telemetriedaten und GPX-Touren können live oder nach Fahrtende direkt über den Proxy in private Clouds oder MQTT-Broker gepusht werden.
+     * **100 % Offline-First:** Sämtliche sicherheitskritischen Motorrad-Funktionen (77-GHz-Radar, UWB-Backbone, Intercom-Mesh Sena/Cardo/OMM, Sturzerkennung, Notbremsblinken) laufen autark auf der Motorrad-Hardware. Das System funktioniert ohne jegliche Funktionseinbußen auch im tiefsten Funkloch der Alpen völlig ohne Internet!
 
 ---
 

@@ -225,6 +225,28 @@ Harley-Davidson unterstützt bei neueren Baujahren nativ ausschließlich **Apple
 > * **Periodischer Reality-Check:** Wir behalten künftige Harley OTA-Updates und Durchbrüche der Tuning-Community im Hinterkopf und führen in regelmäßigen Abständen einen Reality-Check durch.
 > * **Zukunftssicherer Umschaltpfad:** Sollte Harley das Feature offiziell freigeben oder ein stabiler UDS-Weg entstehen, schaltet der Front-Node (PCBA 05) per Firmware-Update automatisch vom CP2AA-Transcoder auf den ressourcenschonenden *Direct Wireless Pass-Through* um (< 2 % CPU-Last, < 15 ms Latenz). Bis dahin bleibt unsere integrierte CP2AA-Bridge die einzige praxiserprobte und thermisch stabile Lösung am Markt.
 
+### 4.2 Netzwerk- & Routing-Architektur: 5 GHz Wi-Fi vs. Mobilfunk-Internet (Multi-Path Coexistence)
+
+Ein häufiges Missverständnis bei drahtlosem Apple CarPlay und Android Auto betrifft die Datenwege des Smartphones:
+> *"Wenn mein Smartphone über 5 GHz WLAN mit dem Wireless-Dongle verbunden ist, ist sein WLAN-Adapter belegt. Wie kommt das Smartphone dann ins Internet – und wie kann der OpenMotorBridge PWA-Proxy arbeiten?"*
+
+#### 1. Die Funktionsweise im Detail (Dual-Interface Multi-Path Routing)
+1. **Verbindungsaufbau (Handshake via Bluetooth LE):**
+   * Das Smartphone koppelt sich zunächst per Bluetooth LE mit dem Dongle, tauscht Wi-Fi Credentials aus und verbindet sich mit dem 5-GHz-WLAN-Access-Point des Dongles (802.11ac).
+2. **Erkennung eines lokalen Netzwerks ohne WAN-Gateway:**
+   * Nach dem WLAN-Connect führt das mobile Betriebssystem (iOS und Android) einen automatischen Konnektivitäts-Test durch (`captive.apple.com` bzw. `connectivitycheck.gstatic.com`).
+   * Da der lokale COTS-Dongle kein WAN-Gateway ins weltweite Internet bereitstellt, stuft das Smartphone die WLAN-Verbindung korrekt als **reines lokales Peripherie-Netzwerk** ein.
+3. **Multi-Path Routing (Automatisches Halten der Mobilfunkverbindung):**
+   * **iOS (Wi-Fi Assist / CarPlay Multi-Path):** Apple hält die Mobilfunkverbindung (`pdp_ip0`) für sämtliche ausgehende Internet-Verbindungen (Google Maps Satellitenbilder, Spotify-Streaming, Safari, WebSockets) voll aktiv. Nur der RTSP-Videostream und die CarPlay-Steuerpakete laufen über das 5-GHz-WLAN-Interface (`en0`).
+   * **Android (Cellular Data Always Active):** Android bindet die Eigenschaft `NET_CAPABILITY_INTERNET` strikt an das Mobilfunk-Interface (`rmnet_data0`). Alle HTTP/HTTPS-Requests und Hintergrund-Synchronisationen laufen uneingeschränkt über 4G/5G / LTE weiter.
+4. **Funktionsweise des OpenMotorBridge PWA Internet-Proxys:**
+   * Die OMB PWA (im Smartphone-Browser) kommuniziert lokal mit der OpenMotorBridge Zentralbox (über WebBLE oder lokales WebSocket).
+   * Fordert OpenMotorBridge externe Daten an (z. B. Wetterradar über Open-Meteo API, GPX-Cloud-Upload oder Notruf-SMS), sendet die MCU einen JSON-Proxy-Request an die PWA.
+   * Die PWA führt im JavaScript-Kontext ein normales `fetch()` aus.
+   * Das Betriebssystem des Smartphones routet diesen Request automatisch über das aktive **Mobilfunknetz (4G/5G)** ins Internet und liefert das Ergebnis über die lokale Verbindung an die MCU zurück!
+5. **100 % Autark & Offline-First:**
+   * OpenMotorBridge ist zu **100 % offline-fähig**: Sämtliche Fahrassistenz- und Kommunikationsfunktionen (77-GHz-Radar-Kollisionswarner, UWB-Sensor-Backbone, Gruppenfunk Sena/Cardo/OMM, LoRa-Platoon-Baken, Notbremsstrobe) arbeiten ohne jede Internetverbindung mit deterministischen Latenzen von unter $15\,\text{ms}$. Der Internet-Proxy ist rein ein optionaler Komfort-Dienst bei vorhandener Mobilfunkabdeckung.
+
 ## 5. WHIM Headset-Bypass & Helmmikrofon-Routing
 
 ### Das Harley WHIM-Problem
