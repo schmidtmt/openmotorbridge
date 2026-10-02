@@ -30,6 +30,17 @@ Bricht der GNSS-Empfang in Tunneln, Unterführungen, dichten Waldgebieten oder e
 ### 2.2 Kompensation von Multipath-Sprüngen (Felswand-Filterung bei Alpenpässen)
 GNSS-Messausreißer (z. B. $40\,\text{m}$-Positionssprünge durch Signalreflexionen an steilen Felswänden in Pässen) werden vom Kalman-Filter automatisch verworfen: Die IMU meldet dem EKF, dass physikalisch keine entsprechende Querbeschleunigung stattgefunden hat, wodurch der Track auf der realen Fahrbahnlinie gehalten wird.
 
+### 2.3 A-GPS Kaltstart-Beschleunigung: u-blox AssistNow Online via Smartphone-Uplink
+Nach mehrtägiger Standzeit oder beim Verlassen einer Tiefgarage/eines Carports benötigt ein autarker GNSS-Empfänger ohne Hilfsdaten typischerweise $28\dots 60+\,\text{Sekunden}$, um die Broadcast-Ephemeriden mit nur $50\,\text{Bit/s}$ aus den schwachen Satellitensignalen zu dekodieren (Time-To-First-Fix / TTFF).
+
+OpenMotorBridge löst diesen Kaltstart-Flaschenhals über den integrierten Smartphone-Uplink:
+1. **AssistNow Online Download:** Beim Einschalten der Zündung (KL15) ruft die Android Companion-App (`bar.f0o.omb`) bzw. PWA über die Mobilfunkverbindung des Fahrers ein kompaktes u-blox AssistNow Online Datenpaket ($\approx 3\dots 8\,\text{kB}$) ab.
+2. **UBX-MGA Injektion über I2C:** Die Daten (Almanach, präzise Ephemeriden für GPS, Galileo, GLONASS und BeiDou, UTC-Zeitbasis und grobe Startkoordinaten) werden über BLE/USB an den Front-Knoten (PCBA 05) übertragen und über den Qwiic I2C-Port `J12` direkt in den u-blox SAM-M10Q eingespeist (`UBX-MGA-INI-TIME_UTC`, `UBX-MGA-INI-POS_LLH`, `UBX-MGA-*`).
+3. **Leistungsdaten:**
+   * **TTFF Kaltstart:** Sinkt von $\sim 30\,\text{s}$ auf **$< 1\dots 1{,}5\,\text{s}$** (Instant-3D-Fix bei Fahrtantritt).
+   * **Erfassungsempfindlichkeit:** Verbessert sich um bis zu **$+15\,\text{dB}$** (Erfassung bis $-158\,\text{dBm}$). Das Modul findet Satelliten selbst unter Carports oder Baumkronen zuverlässig.
+4. **Offline-Resilienz:** Bei fehlender Mobilfunkabdeckung (z. B. Hochalpen) schaltet der SAM-M10Q vollautomatisch auf *AssistNow Autonomous* (on-chip Bahnextrapolation) oder greift bei kurzen Tankstopps auf seine USV-gepufferte RTC-Backup-Domäne zurück (Hot Start: $< 1\,\text{s}$).
+
 ---
 
 ## 3. MotoGP-Style Telemetrie & GPX 2.0 XML-Spezifikation

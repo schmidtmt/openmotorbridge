@@ -431,7 +431,13 @@ Die native OpenMotorBridge Companion-App (reservierte Android Application ID `ba
      - Sendet OMB ein Trigger-Event an die Android Companion-App.
      - Die App nutzt auf Android die offizielle **AccessibilityService-API oder Android-Intents**, um die entsprechende Gefahrenmeldung in Waze **vollautomatisch einzuspeisen ("Auto-Klick")**!
      - Der Fahrer muss während der Fahrt weder die Hände vom Lenker nehmen noch mit Handschuhen auf dem Touchscreen tippen. Die Waze-Community wird in Echtzeit gewarnt, und die Route wird bei Bedarf sofort neu berechnet.
-5. **Plattform-Unterschied: Android vs. iOS:**
+5. **A-GPS Kaltstart-Beschleunigung (u-blox AssistNow Online Injection):**
+   * **GNSS-Kaltstart ohne Uplink:** Nach mehrtägiger Standzeit oder beim Start in der Garage muss der GNSS-Chip die Satellitenbahndaten (Ephemeriden) mit extrem langsamen $50\,\text{Bit/s}$ aus dem Funksignal laden. Dies dauert bei freiem Himmel mindestens $28\dots 36\,\text{s}$, unter Carports oder Bäumen oft $45\dots 90\,\text{s}$ (Time-To-First-Fix / TTFF).
+   * **Instant-Fix via Mobilfunk-Uplink:** Beim Einschalten der Zündung (KL15) lädt die Android-App über die Mobilfunkverbindung das kompakte u-blox **AssistNow Online** Datenpaket ($\approx 3\dots 8\,\text{kB}$) herunter.
+   * **UBX-MGA Injektion in den SAM-M10Q:** Die binären UBX-MGA-Nachrichten (`UBX-MGA-INI-TIME_UTC`, `UBX-MGA-INI-POS_LLH`, Ephemeriden für GPS, Galileo, GLONASS und BeiDou) werden über BLE/USB an den Front-Knoten (PCBA 05) übertragen und über den Qwiic I2C-Port `J12` direkt in den SAM-M10Q eingespeist.
+   * **Ergebnis:** Der TTFF sinkt von $\sim 30\,\text{s}$ auf **$< 1\dots 1{,}5\,\text{s}$** (Instant-3D-Fix) und die Kaltstart-Empfindlichkeit steigt um bis zu **$+15\,\text{dB}$** (Erfassung bis $-158\,\text{dBm}$).
+   * **Offline-Autonomie:** Im tiefsten Funkloch nutzt der SAM-M10Q autark die lokale Bahnextrapolation (*AssistNow Autonomous*) oder greift bei kurzen Stopps auf den LiPo-gepufferten RTC-Speicher zurück (Hot Start: $< 1\,\text{s}$).
+6. **Plattform-Unterschied: Android vs. iOS:**
    * Während Apple iOS Hintergrund-Automationen wie automatische UI-Interaktionen in Waze und freies Socket-Routing im Hintergrund rigoros blockiert, ist dieses Setup auf Android **zu 100 % legal, erprobt und uneingeschränkt realisierbar**.
    * Auf iOS beschränkt sich der Internet-Uplink auf den direkten PWA Cloud-Sync (WebDAV) und Wetter-Abruf über WebBLE.
 

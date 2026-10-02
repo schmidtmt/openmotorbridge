@@ -446,6 +446,12 @@ Auf Android-Geräten bietet die Companion-App (`bar.f0o.omb`) im Hintergrund mä
      - Sendet OMB ein Trigger-Telegramm an die Android Companion-App.
      - Die App nutzt den Android **AccessibilityService oder Intents**, um in Waze **vollautomatisch die Gefahrenmeldung abzusetzen ("Auto-Klick")**.
      - Der Fahrer behält beide Hände am Lenker; die Waze-Community wird in Echtzeit gewarnt und die Route bei Bedarf dynamisch angepasst.
+4. **A-GPS Kaltstart-Beschleunigung (u-blox AssistNow Online):**
+   * **Das Problem beim Kaltstart:** Nach längerer Standzeit oder beim Start in der Garage muss der GNSS-Chip die Satellitenbahnen (Ephemeriden) mit extrem langsamen $50\,\text{Bit/s}$ direkt aus dem Satellitensignal empfangen. Bei freiem Himmel dauert dieser Kaltstart mindestens $28\dots 36\,\text{Sekunden}$, unter Carports, Vordächern oder Bäumen oft $45\dots 90\,\text{Sekunden}$ (Time-To-First-Fix / TTFF).
+   * **Lösung über den Internet-Uplink:** Beim Einschalten der Zündung (KL15) ruft die Companion-App über Mobilfunk ein kompaktes u-blox **AssistNow Online** Datenpaket ($\approx 3\dots 8\,\text{kB}$) ab.
+   * **UBX-MGA Injektion in den SAM-M10Q:** Die App überträgt die Ephemeriden, den präzisen UTC-Zeitstempel und die grobe Position über BLE/USB an den Front-Knoten (PCBA 05), der sie über den Qwiic I2C-Port `J12` direkt in den u-blox SAM-M10Q injiziert.
+   * **Ergebnis:** Der TTFF fällt von $\sim 30\,\text{s}$ auf **$< 1\dots 1{,}5\,\text{Sekunden}$** (Instant-3D-Fix), und die Empfindlichkeit beim Kaltstart verbessert sich um bis zu **$+15\,\text{dB}$** (Erfassung bis $-158\,\text{dBm}$). Das Bike hat bereits vollen Satelliten-Lock, bevor der Fahrer den Helm aufsetzt.
+   * **Offline-Fallback:** Startet das Motorrad im tiefsten Funkloch, schaltet der SAM-M10Q nahtlos auf *AssistNow Autonomous* (on-chip Bahnextrapolation) oder greift bei kurzen Tankpausen ($< 4\,\text{h}$) auf den LiPo-gepufferten RTC-Speicher zurück (Hot Start: $< 1\,\text{s}$).
 
 ### 6.3 Die 100 % Offline-First Garantie (Safety First)
 Sollte die Mobilfunkverbindung auf Pässen oder in Tälern abreißen:
