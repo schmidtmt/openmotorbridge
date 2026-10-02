@@ -31,7 +31,12 @@ esp_err_t gnss_omm_bridge_init(void);
 GnssData_t gnss_bridge_get_latest_data(void);
 
 /**
- * @brief Prüft, ob Heck-Pod 3 über UART1 aktiv antwortet
+ * @brief Aktualisiert die GNSS-Daten direkt aus dem UWB Front-Node Telemetrie-Stream
+ */
+void gnss_bridge_update_from_telemetry(double lat, double lon, float alt, float speed, float heading, uint8_t sats, bool fix);
+
+/**
+ * @brief Prüft, ob ein aktiver GNSS-Fix vorliegt (via UWB Front-Node)
  */
 bool gnss_bridge_is_pod3_connected(void);
 

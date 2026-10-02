@@ -30,6 +30,9 @@
 #include "uwb_vehicle_backbone.h"
 #include "uwb_cartridge_dispatcher.h"
 #include "uwb_radar_parser.h"
+#include "power_sequencer.h"
+#include "pairing_roaming_mgr.h"
+#include "group_split_rescue_engine.h"
 
 static const char *TAG = "OMB_MAIN";
 
@@ -164,15 +167,18 @@ static void on_uwb_ptt_event(const UwbPttEventPkt &pkt, UwbNodeType source) {
 static void on_uwb_front_telemetry(const UwbFrontTelemetryPkt &telem) {
     // 1. Knowles MEMS Fahrtwindpegel -> Dynamische AGC-Lautstärkeregelung im DSP
     float speed_kmh = telem.speed_kph_100 / 100.0f;
+    float heading = telem.heading_deg_100 / 100.0f;
     float noise_gain = (telem.wind_noise_dba > 70) ? (telem.wind_noise_dba - 70) * 0.2f : 0.0f;
     audio_set_ambient_transparency(true, speed_kmh, noise_gain);
 
-    // 2. SAM-M10Q Multi-GNSS Fix -> 15-State EKF Sensorfusion (Dead Reckoning)
+    // 2. SAM-M10Q Multi-GNSS Fix -> 15-State EKF Sensorfusion, OMM Bridge & Group Rescue Engine
     if (telem.gnss_fix_type >= 2) {
         double lat = (double)telem.latitude_1e7 / 1e7;
         double lon = (double)telem.longitude_1e7 / 1e7;
         float alt_m = (float)telem.altitude_mm / 1000.0f;
         adr_ekf_update_gnss(lat, lon, alt_m, 1.2f, true);
+        gnss_bridge_update_from_telemetry(lat, lon, alt_m, speed_kmh, heading, telem.satellites_used, true);
+        group_split_update(speed_kmh, lat, lon, heading);
     }
 }
 
@@ -195,16 +201,16 @@ void task_power_supervisor(void *pvParameters) {
                 ignition_off_timer_sec = 0;
                 set_system_led_state(LED_NORMAL_PULSE_GREEN);
                 sdio_track_start_new();
-                // Kassetten per UWB booten
-                uwb_cartridge_power_on_all();
+                // Gestaffeltes Power-Sequencing starten (T=0 Core, T=200ms Bucht 1, T=350ms Bucht 2, T=500ms Radar)
+                power_sequencer_trigger_boot();
             } else {
                 // Zündung AUS: 15-Minuten Graceful Rundown einleiten
                 ESP_LOGI(TAG, "Initiating Graceful Shutdown sequence (Tier 1 Rundown)...");
                 set_system_led_state(LED_UPS_BATTERY_YELLOW);
                 sdio_track_finalize();
                 webdav_trigger_sync_sequence();
-                // Kassetten per UWB sauber herunterfahren
-                uwb_cartridge_power_off_all();
+                // Gestaffelte DC-Abschaltung & UWB Shutdown
+                power_sequencer_trigger_shutdown();
             }
 
             // Front Node Zündungs-Sync (ESP-NOW & UWB)
@@ -291,15 +297,14 @@ extern "C" void app_main(void) {
     }
     ESP_ERROR_CHECK(ret);
 
-    // 2. Hardware Power-Gates & GPIOs
+    // 2. Hardware Power-Gates & GPIOs (Gestaffeltes Power-Sequencing)
+    power_sequencer_init();
+
     gpio_config_t io_conf = {};
     io_conf.intr_type = GPIO_INTR_DISABLE;
     io_conf.mode = GPIO_MODE_OUTPUT;
-    io_conf.pin_bit_mask = (1ULL << PIN_PORT1_VCC_EN) | (1ULL << PIN_PORT2_VCC_EN) | (1ULL << PIN_STATUS_LED);
+    io_conf.pin_bit_mask = (1ULL << PIN_STATUS_LED);
     gpio_config(&io_conf);
-
-    gpio_set_level(PIN_PORT1_VCC_EN, 1);
-    gpio_set_level(PIN_PORT2_VCC_EN, 1);
     gpio_set_level(PIN_STATUS_LED, 1);
 
     init_adc();
@@ -316,6 +321,8 @@ extern "C" void app_main(void) {
     sdio_storage_init();
     webdav_uploader_init();
     gnss_omm_bridge_init();
+    pairing_roaming_mgr_init();
+    group_split_rescue_engine_init();
     omm_flasher_init();
     can_bus_manager_init();
     radar_processor_init();

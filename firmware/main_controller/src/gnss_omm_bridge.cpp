@@ -1,9 +1,9 @@
 #include "gnss_omm_bridge.h"
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-#include "driver/uart.h"
 #include "esp_log.h"
 #include "esp_mac.h"
 #include "esp_timer.h"
@@ -12,12 +12,9 @@
 #include "can_bus_manager.h"
 #include "radar_processor.h"
 #include "baro_weather_trend.h"
+#include "uwb_vehicle_backbone.h"
 
 static const char *TAG = "GNSS_BRIDGE";
-
-#define UART_NUM_POD3   UART_NUM_1
-#define PIN_POD3_TX     GPIO_NUM_18 // Main Controller TX -> Pod 3 RX
-#define PIN_POD3_RX     GPIO_NUM_17 // Main Controller RX <- Pod 3 TX
 
 static bool s_pod3_connected = false;
 static uint32_t s_last_pod3_rx_ms = 0;
@@ -35,25 +32,40 @@ static GnssData_t s_latest_gnss = {
 };
 
 esp_err_t gnss_omm_bridge_init(void) {
-    ESP_LOGI(TAG, "Initializing High-Speed UART1 (460.800 Baud) to Rear Pod 3 (SX1262 LoRa / MAX-M10S)...");
+    ESP_LOGI(TAG, "Initializing GNSS & OMM Bridge Engine (v9.6 Clean UWB Telemetry Architecture)...");
+    s_latest_gnss.has_3d_fix = false;
+    s_pod3_connected = false;
+    return ESP_OK;
+}
 
-    const uart_config_t uart_config = {
-        .baud_rate = 460800,
-        .data_bits = UART_DATA_8_BITS,
-        .parity = UART_PARITY_DISABLE,
-        .stop_bits = UART_STOP_BITS_1,
-        .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
-        .source_clk = UART_SCLK_DEFAULT,
-    };
+void gnss_bridge_update_from_telemetry(double lat, double lon, float alt, float speed, float heading, uint8_t sats, bool fix) {
+    uint32_t now_ms = (uint32_t)(esp_timer_get_time() / 1000ULL);
+    s_last_pod3_rx_ms = now_ms;
+    s_pod3_connected = fix;
 
-    esp_err_t ret = uart_param_config(UART_NUM_POD3, &uart_config);
-    if (ret != ESP_OK) return ret;
+    s_latest_gnss.latitude = lat;
+    s_latest_gnss.longitude = lon;
+    s_latest_gnss.altitude = alt;
+    s_latest_gnss.speed_kmh = speed;
+    s_latest_gnss.heading_deg = heading;
+    s_latest_gnss.satellites_visible = sats;
+    s_latest_gnss.has_3d_fix = fix;
 
-    ret = uart_set_pin(UART_NUM_POD3, PIN_POD3_TX, PIN_POD3_RX, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE);
-    if (ret != ESP_OK) return ret;
+    time_t now_sec = time(NULL);
+    struct tm timeinfo;
+    gmtime_r(&now_sec, &timeinfo);
+    strftime(s_latest_gnss.utc_time, sizeof(s_latest_gnss.utc_time), "%Y-%m-%dT%H:%M:%SZ", &timeinfo);
 
-    ret = uart_driver_install(UART_NUM_POD3, 2048, 0, 0, NULL, 0);
-    return ret;
+    if (fix) {
+        // SDIO Blackbox GPX Track Logging
+        sdio_track_append_point(lat, lon, alt, speed, 0.0f, s_latest_gnss.utc_time);
+
+        // Feed GNSS context to Astronomical Solar/Tunnel Dimmer
+        radar_update_gnss_context((float)lat, (float)lon, s_latest_gnss.utc_time, true);
+
+        // Feed GNSS altitude and speed to Autarkic Barometric Weather Trend
+        baro_weather_update(1013.25f, alt, 20.0f, speed);
+    }
 }
 
 GnssData_t gnss_bridge_get_latest_data(void) {
@@ -66,24 +78,22 @@ bool gnss_bridge_is_pod3_connected(void) {
 }
 
 esp_err_t gnss_bridge_send_omm_packet(const uint8_t *payload, size_t length) {
-    int written = uart_write_bytes(UART_NUM_POD3, payload, length);
-    return (written == (int)length) ? ESP_OK : ESP_FAIL;
+    // Sendet OMM-Frame über den All-UWB Backbone
+    return UwbVehicleBackbone::instance().send_packet(UWB_NODE_BROADCAST, UWB_PKT_NODE_ANNOUNCE, payload, length);
 }
 
 uint8_t omm_get_capabilities_vector(void) {
     uint8_t caps = FEAT_USV_BAT_BUFFER;
     caps |= FEAT_DUAL_MESH_BRIDGE; // Sena + Cardo (Hauptplatine Zentralbox)
+    caps |= FEAT_LORA_HIGH_POWER;  // SX1262 LoRa direkt auf PCBA 01
 
-    // Pod 3 Hardware (LoRa 868MHz + MAX-M10S GNSS)
-    if (gnss_bridge_is_pod3_connected()) {
-        caps |= FEAT_LORA_HIGH_POWER;
-        if (s_latest_gnss.has_3d_fix) {
-            caps |= FEAT_GNSS_1PPS_LOCK;
-        }
+    if (s_latest_gnss.has_3d_fix) {
+        caps |= FEAT_GNSS_1PPS_LOCK;
     }
 
-    // Front Node Hardware (Knowles MEMS Fahrtwind-Mikrofon)
-    if (esp_now_front_node_get_status().is_linked) {
+    // Front Node Hardware (Knowles MEMS Fahrtwind-Mikrofon via UWB)
+    if (UwbVehicleBackbone::instance().is_peer_online(UWB_NODE_FRONT_NODE) ||
+        esp_now_front_node_get_status().is_linked) {
         caps |= FEAT_ENV_MIC_ACTIVE;
     }
 
@@ -201,43 +211,4 @@ esp_err_t omm_broadcast_bike_alarm(uint8_t alarm_source, float lat, float lon) {
     alarm_pkt.crc8_checksum = sum;
 
     return gnss_bridge_send_omm_packet((const uint8_t *)&alarm_pkt, sizeof(alarm_pkt));
-}
-
-void task_rear_pod_bridge(void *pvParameters) {
-    ESP_LOGI(TAG, "Rear Pod Bridge Task running on Core 0.");
-
-    uint8_t buffer[256];
-    while (true) {
-        int len = uart_read_bytes(UART_NUM_POD3, buffer, sizeof(buffer) - 1, pdMS_TO_TICKS(100));
-        uint32_t now_ms = (uint32_t)(esp_timer_get_time() / 1000ULL);
-        if (len > 0) {
-            buffer[len] = '\0';
-            s_last_pod3_rx_ms = now_ms;
-            s_pod3_connected = true;
-            s_latest_gnss.has_3d_fix = true;
-            // NMEA / UBX Frame Parsing Simulation
-            sdio_track_append_point(s_latest_gnss.latitude,
-                                    s_latest_gnss.longitude,
-                                    s_latest_gnss.altitude,
-                                    s_latest_gnss.speed_kmh,
-                                    0.0f,
-                                    s_latest_gnss.utc_time);
-
-            // Feed GNSS context to Astronomical Solar/Tunnel Dimmer
-            radar_update_gnss_context((float)s_latest_gnss.latitude,
-                                      (float)s_latest_gnss.longitude,
-                                      s_latest_gnss.utc_time,
-                                      s_latest_gnss.has_3d_fix);
-
-            // Feed GNSS altitude and speed to Autarkic Barometric Weather Trend
-            baro_weather_update(1013.25f, s_latest_gnss.altitude, 20.0f, s_latest_gnss.speed_kmh);
-        } else {
-            if (s_last_pod3_rx_ms == 0 || (now_ms - s_last_pod3_rx_ms > 3000)) {
-                s_pod3_connected = false;
-                s_latest_gnss.has_3d_fix = false;
-                radar_update_gnss_context(0.0f, 0.0f, 0, false);
-            }
-        }
-        vTaskDelay(pdMS_TO_TICKS(100)); // 10 Hz Zyklus
-    }
 }

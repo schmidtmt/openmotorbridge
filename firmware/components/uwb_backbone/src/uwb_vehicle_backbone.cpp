@@ -305,14 +305,41 @@ void UwbVehicleBackbone::process_received_frame(const uint8_t *frame_data, size_
             }
             break;
 
+        case UWB_PKT_PAIRING_REQUEST:
+            if (payload_len >= sizeof(UwbPairingRequestPkt) && m_pair_req_cb) {
+                const UwbPairingRequestPkt *req = (const UwbPairingRequestPkt *)payload;
+                m_pair_req_cb(*req, (UwbNodeType)hdr->source_node);
+            }
+            break;
+
+        case UWB_PKT_PAIRING_CONFIRM:
+            if (payload_len >= sizeof(UwbPairingConfirmPkt) && m_pair_cnf_cb) {
+                const UwbPairingConfirmPkt *cnf = (const UwbPairingConfirmPkt *)payload;
+                m_pair_cnf_cb(*cnf, (UwbNodeType)hdr->source_node);
+            }
+            break;
+
         default:
             break;
+    }
+
+    if (m_generic_cb) {
+        m_generic_cb((UwbBackbonePktType)hdr->pkt_type, payload, payload_len, (UwbNodeType)hdr->source_node);
     }
 }
 
 // -----------------------------------------------------------------------------
 // Sende-Methoden
 // -----------------------------------------------------------------------------
+esp_err_t UwbVehicleBackbone::send_bsd_trigger(bool left_active, uint8_t left_lvl, bool right_active, uint8_t right_lvl) {
+    uint8_t payload[4] = {
+        (uint8_t)(left_active ? 1 : 0),
+        left_lvl,
+        (uint8_t)(right_active ? 1 : 0),
+        right_lvl
+    };
+    return send_packet(UWB_NODE_FRONT_NODE, UWB_PKT_BSD_TRIGGER, payload, sizeof(payload));
+}
 esp_err_t UwbVehicleBackbone::send_packet(UwbNodeType target, UwbBackbonePktType type, const void *payload, size_t len) {
     if (len > UWB_BACKBONE_MAX_PAYLOAD || !m_driver) {
         return ESP_ERR_INVALID_ARG;

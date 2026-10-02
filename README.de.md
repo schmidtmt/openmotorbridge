@@ -82,9 +82,10 @@ Die modulare technische Gesamtspezifikation gliedert sich in 18 thematisch struk
 
 * **`docs/de/`**: Sämtliche technische Spezifikationen und Designdokumente auf Deutsch.
 * **`docs/en/`**: Vollständige technische Spezifikationen auf Englisch.
-* **`firmware/main_controller/`**: ESP-IDF / C++ Quellcode für die zentrale Steuerbox (ESP32-S3).
-* **`firmware/front_node/`**: ESP-IDF / C++ Quellcode für den Universal Front-Knoten (ESP32-S3).
-* **`firmware/rear_coprocessor/`**: ESP-IDF / C++ Quellcode für den Heck-Pod 3 Co-Prozessor (ESP32-C3).
+* **`firmware/main_controller/`**: ESP-IDF / C++ Quellcode für die zentrale Steuerbox (ESP32-S3, PCBA 01).
+* **`firmware/front_node/`**: ESP-IDF / C++ Quellcode für den Universal Front-Knoten (ESP32-S3, PCBA 05).
+* **`firmware/smart_cartridge/`**: ESP-IDF / C++ Quellcode für Smart Cartridges Bucht 1 & 2 (ESP32-C6, PCBA 03).
+* **`firmware/radar_submcu/`**: ESP-IDF / C++ Quellcode für Heck-Radar 2.0 Sub-MCU & Wings (ESP32-C5/C6, PCBA 08).
 * **`webapp_pwa/`**: Offlinefähiges WebBLE Dashboard (HTML5, Vanilla JS, CSS3, Service Worker, i18n).
 * **`hardware/`**: KiCad Schaltpläne, Gerber-Dateien und 3D-Modelle für das Gehäuse.
 * **`tools/audio_testbench/`**: **Interaktives Live Audio DSP Studio & Echtzeit-Simulator** (`python3 tools/audio_testbench/server.py` $\rightarrow$ Web-Audio Testbench mit Live-Mic, Space-PTT, Tacho & Ducking).

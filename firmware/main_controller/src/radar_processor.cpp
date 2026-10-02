@@ -2,6 +2,7 @@
 #include "audio_dsp_pipeline.h"
 #include "can_bus_manager.h"
 #include "esp_now_front_node_client.h"
+#include "uwb_vehicle_backbone.h"
 #include "solar_position.h"
 #include "esp_log.h"
 #include "esp_timer.h"
@@ -234,6 +235,8 @@ void radar_inject_simulated_target(float distance_m, float rel_speed_kmh, int8_t
 
     uint8_t left_lvl = (s_radar_state.blind_spot_left) ? ((t->threat == RADAR_THREAT_RED) ? 2 : 1) : 0;
     uint8_t right_lvl = (s_radar_state.blind_spot_right) ? ((t->threat == RADAR_THREAT_RED) ? 2 : 1) : 0;
+    UwbVehicleBackbone::instance().send_bsd_trigger(s_radar_state.blind_spot_left, left_lvl,
+                                                    s_radar_state.blind_spot_right, right_lvl);
     esp_now_front_node_send_bsd_warning(s_radar_state.blind_spot_left, left_lvl,
                                         s_radar_state.blind_spot_right, right_lvl);
 
@@ -289,6 +292,8 @@ static void parse_submcu_packet(const uint8_t *data, size_t len) {
                     // Forward to Front-Node Mirror LEDs
                     uint8_t left_lvl = (s_radar_state.blind_spot_left) ? ((s_radar_state.max_threat == RADAR_THREAT_RED) ? 2 : 1) : 0;
                     uint8_t right_lvl = (s_radar_state.blind_spot_right) ? ((s_radar_state.max_threat == RADAR_THREAT_RED) ? 2 : 1) : 0;
+                    UwbVehicleBackbone::instance().send_bsd_trigger(s_radar_state.blind_spot_left, left_lvl,
+                                                                    s_radar_state.blind_spot_right, right_lvl);
                     esp_now_front_node_send_bsd_warning(s_radar_state.blind_spot_left, left_lvl,
                                                         s_radar_state.blind_spot_right, right_lvl);
 
@@ -539,6 +544,7 @@ void task_radar_processor(void *pvParameters) {
                 s_radar_state.highest_rel_speed_kmh = 0.0f;
                 s_radar_state.blind_spot_left = false;
                 s_radar_state.blind_spot_right = false;
+                UwbVehicleBackbone::instance().send_bsd_trigger(false, 0, false, 0);
                 esp_now_front_node_send_bsd_warning(false, 0, false, 0);
             }
             xSemaphoreGive(s_radar_mutex);

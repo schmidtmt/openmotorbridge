@@ -21,6 +21,9 @@ idf_component_register(
         "hardware_inventory.cpp"
         "uwb_cartridge_dispatcher.cpp"
         "uwb_radar_parser.cpp"
+        "power_sequencer.cpp"
+        "pairing_roaming_mgr.cpp"
+        "group_split_rescue_engine.cpp"
     INCLUDE_DIRS 
         "."
     REQUIRES 

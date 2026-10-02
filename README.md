@@ -82,9 +82,10 @@ The comprehensive technical specification is split into 18 logically organized c
 
 * **`docs/de/`**: Complete technical specifications in German.
 * **`docs/en/`**: Complete technical specifications in English.
-* **`firmware/main_controller/`**: ESP-IDF / C++ source code for the central main box (ESP32-S3).
-* **`firmware/front_node/`**: ESP-IDF / C++ source code for the Universal Front Node (ESP32-S3).
-* **`firmware/rear_coprocessor/`**: ESP-IDF / C++ source code for the Rear Pod 3 co-processor (ESP32-C3).
+* **`firmware/main_controller/`**: ESP-IDF / C++ source code for the central main box (ESP32-S3, PCBA 01).
+* **`firmware/front_node/`**: ESP-IDF / C++ source code for the Universal Front Node (ESP32-S3, PCBA 05).
+* **`firmware/smart_cartridge/`**: ESP-IDF / C++ source code for Smart Cartridges Bay 1 & 2 (ESP32-C6, PCBA 03).
+* **`firmware/radar_submcu/`**: ESP-IDF / C++ source code for Heck-Radar 2.0 Sub-MCU & Wings (ESP32-C5/C6, PCBA 08).
 * **`webapp_pwa/`**: Zero-cloud offline WebBLE dashboard (HTML5, Vanilla JS, CSS3, Service Worker, i18n).
 * **`hardware/`**: KiCad schematics, Gerber files, and 3D enclosure CAD models.
 * **`tools/audio_testbench/`**: **Interactive Live Audio DSP Studio & Real-Time Testbench** (`python3 tools/audio_testbench/server.py` $\rightarrow$ Web Audio testbench with live mic, Spacebar PTT, speedometer & ducking).

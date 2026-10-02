@@ -22,6 +22,10 @@ Das OpenMotorBridge-Gesamtsystem verteilt die Aufgaben auf drei dedizierte Mikro
 |                   | N16R8   | Cockpit / Verkleidung | 8 MB OPI RAM| * Knowles I2S Wind-AGC        |
 |                   |         |                       | 16 MB Flash | * USB-PD / Ottocast Steuerung |
 +-------------------+---------+-----------------------+-------------+-------------------------------+
+| `smart_cartridge` | ESP32-C6| Smart Cartridge (03)  | 160 MHz     | * 4x AO3400A Mechatronik Gate |
+|                   | RISC-V  | Bucht 1 & Bucht 2     | 512 KB SRAM | * ES8388 I2S Codec Streaming  |
+|                   |         |                       | 4 MB Flash  | * All-UWB Backbone Node       |
++-------------------+---------+-----------------------+-------------+-------------------------------+
 | `radar_submcu`    | ESP32-C5| Heck-Radar (PCBA 08)  | 160 MHz     | * Wheeltec MR20 mmWave Parser |
 |                   | / C6    | Kennzeichenträger     | 512 KB SRAM | * 36x Halo RGB LED Animation  |
 |                   |         |                       | 4 MB Flash  | * UWB Ziel-Telemetrie Stream  |
@@ -107,7 +111,22 @@ Das erzeugt:
 * `build/partition_table/partition-table.bin`
 * `build/openmotorbridge_front_node.bin`
 
-### 3.3 Target 3: Radar Sub-MCU (`radar_submcu`)
+### 3.3 Target 3: Smart Cartridge (`smart_cartridge`)
+
+```bash
+cd ../smart_cartridge
+
+# Ziel-Architektur festlegen (ESP32-C6 RISC-V)
+idf.py set-target esp32c6
+
+# Kompilieren
+idf.py build
+```
+
+Das erzeugt:
+* `build/openmotorbridge_smart_cartridge.bin`
+
+### 3.4 Target 4: Radar Sub-MCU (`radar_submcu`)
 
 ```bash
 cd ../radar_submcu

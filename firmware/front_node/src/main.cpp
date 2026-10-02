@@ -407,6 +407,9 @@ extern "C" void app_main(void) {
                               (cmd.right_bsd_state == 1) ? BSD_LEVEL_SOLID_AMBER : BSD_LEVEL_OFF;
         CockpitSwitchesManager::instance().set_bsd_warning(l_act, l_lvl, r_act, r_lvl);
     });
+    UwbVehicleBackbone::instance().set_generic_packet_callback([](UwbBackbonePktType type, const uint8_t *payload, size_t len, UwbNodeType source) {
+        handle_remote_command((uint8_t)type, payload, len);
+    });
     UwbVehicleBackbone::instance().start_task(22, 0);
 
     // 6. Spawn Real-Time FreeRTOS Tasks

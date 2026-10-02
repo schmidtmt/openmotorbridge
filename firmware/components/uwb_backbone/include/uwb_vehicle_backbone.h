@@ -43,6 +43,7 @@ public:
     esp_err_t send_heartbeat(uint16_t vbus_mv = 5000, int16_t temp_c_10 = 250);
     esp_err_t send_pairing_request(uint64_t nonce, uint32_t vin_hash, uint16_t timeout_sec = 60);
     esp_err_t send_pairing_confirm(UwbNodeType target_node, uint64_t nonce, const uint8_t *session_key, uint8_t slot);
+    esp_err_t send_bsd_trigger(bool left_active, uint8_t left_lvl, bool right_active, uint8_t right_lvl);
 
     /**
      * @brief Universelles Senden eines beliebigen UWB-Pakets
@@ -60,6 +61,9 @@ public:
     void set_radar_targets_callback(std::function<void(const UwbRadarTargetsPkt&)> cb) { m_radar_cb = cb; }
     void set_radar_led_callback(std::function<void(const UwbRadarLedCmdPkt&)> cb) { m_radar_led_cb = cb; }
     void set_heartbeat_callback(std::function<void(UwbNodeType node, const UwbNodeHeartbeatPkt&)> cb) { m_heartbeat_cb = cb; }
+    void set_pairing_request_callback(std::function<void(const UwbPairingRequestPkt&, UwbNodeType source)> cb) { m_pair_req_cb = cb; }
+    void set_pairing_confirm_callback(std::function<void(const UwbPairingConfirmPkt&, UwbNodeType source)> cb) { m_pair_cnf_cb = cb; }
+    void set_generic_packet_callback(std::function<void(UwbBackbonePktType type, const uint8_t *payload, size_t len, UwbNodeType source)> cb) { m_generic_cb = cb; }
 
     // -------------------------------------------------------------------------
     // Link-Status & Two-Way Ranging Gating
@@ -112,4 +116,7 @@ private:
     std::function<void(const UwbRadarTargetsPkt&)> m_radar_cb;
     std::function<void(const UwbRadarLedCmdPkt&)> m_radar_led_cb;
     std::function<void(UwbNodeType node, const UwbNodeHeartbeatPkt&)> m_heartbeat_cb;
+    std::function<void(const UwbPairingRequestPkt&, UwbNodeType source)> m_pair_req_cb;
+    std::function<void(const UwbPairingConfirmPkt&, UwbNodeType source)> m_pair_cnf_cb;
+    std::function<void(UwbBackbonePktType type, const uint8_t *payload, size_t len, UwbNodeType source)> m_generic_cb;
 };
