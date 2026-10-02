@@ -71,6 +71,7 @@ enum FrontNodePacketType : uint8_t {
     PKT_TYPE_CMD_CAN_TERM    = 0x15,   // Central Box -> Front Node: Set CAN Termination Relay state
     PKT_TYPE_CMD_WIFI_CONFIG = 0x16,   // Central Box / PWA -> Front Node: Set SSID, WPA2 Pass, Uplink
     PKT_TYPE_WIFI_STATUS     = 0x17,   // Front Node -> Central Box / PWA: Live AP status & client table
+    PKT_TYPE_AGPS_INJECT     = 0x18,   // Central Box / Companion App -> Front Node: u-blox UBX-MGA packet
     PKT_TYPE_OTA_BEGIN       = 0x20,
     PKT_TYPE_OTA_CHUNK       = 0x21,
     PKT_TYPE_OTA_FINISH      = 0x22

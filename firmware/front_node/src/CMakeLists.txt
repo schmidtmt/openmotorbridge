@@ -12,6 +12,7 @@ idf_component_register(
         "ota_service_manager.cpp"
         "cockpit_wifi_fallback.cpp"
         "usb_ethernet_tethering.cpp"
+        "front_sensor_hub.cpp"
     INCLUDE_DIRS
         "."
     REQUIRES

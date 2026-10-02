@@ -1,0 +1,15 @@
+idf_component_register(
+    SRCS
+        "main.cpp"
+        "cartridge_mechatronics.cpp"
+        "cartridge_audio_codec.cpp"
+    INCLUDE_DIRS
+        "."
+    REQUIRES
+        esp_timer
+        driver
+        nvs_flash
+        app_update
+        mbedtls
+        uwb_backbone
+)

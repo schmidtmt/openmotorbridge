@@ -18,6 +18,7 @@
 #include "cockpit_wifi_fallback.h"
 #include "usb_ethernet_tethering.h"
 #include "uwb_vehicle_backbone.h"
+#include "front_sensor_hub.h"
 
 static const char* TAG = "FRONT_NODE_MAIN";
 
@@ -131,6 +132,13 @@ static void handle_remote_command(uint8_t cmd_type, const uint8_t* payload, size
             OtaServiceManager::instance().finalize_and_reboot();
             break;
 
+        case PKT_TYPE_AGPS_INJECT:
+            if (len > 0) {
+                ESP_LOGI(TAG, "Command: Injecting AssistNow A-GPS UBX-MGA packet (%zu bytes)...", len);
+                FrontSensorHub::instance().inject_assistnow_mga(payload, len);
+            }
+            break;
+
         default:
             ESP_LOGD(TAG, "Unknown command type: 0x%02X (len=%zu)", cmd_type, len);
             break;
@@ -234,10 +242,9 @@ static void audio_dsp_task(void* pvParameters) {
         if (++telem_decimator >= 5) { // 5 * 20 ms = 100 ms = 10 Hz
             telem_decimator = 0;
             UwbFrontTelemetryPkt telem = {};
+            FrontSensorHub::instance().populate_telemetry(telem);
             telem.wind_noise_dba = dba;
-            telem.ambient_temp_c_100 = 2150; // TI TMP117: 21.50 C
-            telem.ambient_lux = 1200;        // TI OPT3001
-            telem.status_flags = 0x01;       // KL15 active
+            telem.status_flags = 0x01; // KL15 active
             UwbVehicleBackbone::instance().send_front_telemetry(telem);
         }
 
@@ -261,16 +268,19 @@ static void supervisor_task(void* pvParameters) {
     uint32_t heartbeat_counter = 0;
 
     while (1) {
-        // 0. Advance ESP-NOW Bridge State Machine (Heartbeat timeout & Orphan supervision)
+        // 0. Poll Qwiic Sensor Hub (SAM-M10Q GNSS, TMP117 Temp, OPT3001 Lux)
+        FrontSensorHub::instance().update();
+
+        // 1. Advance ESP-NOW Bridge State Machine (Heartbeat timeout & Orphan supervision)
         bridge.update();
 
-        // 1. Advance Ottocast State Machine (Overcurrent & Auto-Café timers)
+        // 2. Advance Ottocast State Machine (Overcurrent & Auto-Café timers)
         ottocast.update();
 
-        // 2. Advance Action-Cam BLE Manager (Autoconnect, Scan timer, Telemetry)
+        // 3. Advance Action-Cam BLE Manager (Autoconnect, Scan timer, Telemetry)
         cam.update();
 
-        // 3. Advance Cockpit Switches (BSD 8 Hz & Aux Light 4.5 Hz Strobes)
+        // 4. Advance Cockpit Switches (BSD 8 Hz & Aux Light 4.5 Hz Strobes)
         switches.update(100);
 
         // 4. Poll & Advance Cockpit CAN Auto-Sensing / Telemetry
@@ -371,6 +381,7 @@ extern "C" void app_main(void) {
     OttocastPowerManager::instance().init();
     KnowlesMemsDsp::instance().init();
     CockpitCanManager::instance().init(250); // Default 250 kbps for Harley / BMW cockpit CAN
+    FrontSensorHub::instance().init();      // Qwiic J12: SAM-M10Q GNSS, TMP117, OPT3001
 
     // 3. Initialize Action Cam BLE Bridge
     FrontCamBleManager& cam = FrontCamBleManager::instance();

@@ -113,7 +113,25 @@ def validate_system():
     else:
         print("    [OK] Zero GPIO Pin Collisions detected across entire front node definition.")
 
-    # 3. SPI Transceiver Mock Verification
+    # 3. Parse Firmware GPIO definitions (Smart Cartridge PCBA 03 ESP32-C6)
+    cartridge_cfg_file = os.path.join(repo_root, "firmware/smart_cartridge/src/cartridge_config.h")
+    if os.path.exists(cartridge_cfg_file):
+        print(f"\n[*] Loading Smart Cartridge Firmware Pinout: {os.path.relpath(cartridge_cfg_file, repo_root)}")
+        cart_gpios = parse_firmware_gpios(cartridge_cfg_file)
+        print(f"    -> Extracted {len(cart_gpios)} hardware GPIO pin assignments.")
+        for name, pin in sorted(cart_gpios.items(), key=lambda x: x[1]):
+            print(f"    - GPIO {pin:2d} -> {name}")
+        cart_counts = {}
+        for name, pin in cart_gpios.items():
+            cart_counts.setdefault(pin, []).append(name)
+        cart_collisions = {p: names for p, names in cart_counts.items() if len(names) > 1}
+        if cart_collisions:
+            print(f"    [ERROR] Cartridge GPIO Pin Collision detected: {cart_collisions}")
+            return False
+        else:
+            print("    [OK] Zero GPIO Pin Collisions detected across Smart Cartridge definition.")
+
+    # 4. SPI Transceiver Mock Verification
     print("\n[*] Validating SPI Transceiver Mock Engines (HIL/SIL):")
     transceivers = {
         "Qorvo DW3110 UWB": {"bus": "SPI2", "clock": "20 MHz", "latency_budget_us": 380, "status": "VERIFIED"},
