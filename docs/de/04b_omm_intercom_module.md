@@ -120,6 +120,8 @@ Der **UCS-Standard (Universal Communication Solution)** nach **ECE 22.06** (init
 
 Das Herzstück des Systems bildet die **OMM 2.4 GHz Autonome Intercom-Platine** (`openmotorbridge_omm_ucs`, interne System-ID: **`PCBA 09`**). Sie ist als eigenständige, hochintegrierte 2-Layer-Baugruppe konzipiert, die sowohl autark im Helm als auch als HF-Kern im Kassetten-Schlitten arbeitet.
 
+![PCBA 09 OMM 2.4 GHz Intercom & UCS Modul](../images/pcba/pcba09_omm_intercom_3d.png)
+
 ```mermaid
 flowchart TD
     subgraph Power["Power & Battery Management (TI BQ24075)"]
@@ -131,8 +133,8 @@ flowchart TD
     end
 
     subgraph MCU["Host MCU & RF Core"]
-        C6["Espressif ESP32-C6-MINI-1\n(160 MHz RISC-V, 4 MB Flash)\n* 2.4 GHz Wi-Fi 6 (802.11ax)\n* 802.15.4 TDMA Mesh Radio\n* Bluetooth 5.3 LE"]
-        ANT["Johanson 2450AT\nKeramik-Chipantenne\n(+2.2 dBi, 50-Ohm Pi-Netz)"] <-->|2.4 GHz RF| C6
+        C6["Espressif ESP32-C6-MINI-1U\n(160 MHz RISC-V, 4 MB Flash)\n* 2.4 GHz Wi-Fi 6 (802.11ax)\n* 802.15.4 TDMA Mesh Radio\n* Bluetooth 5.3 LE\n* U.FL Goldbuchse"]
+        ANT["Taoglas FXP73\n2.4 GHz Flex-Dipol (+3.0 dBi)\n(Direkt an U1 U.FL-Port)"] <-->|2.4 GHz RF| C6
         RGB["WS2812B-2020\nRGB Status-LED"] <--|GPIO 11| C6
         KEYS["4x IP67 Mikrotaster\n(Power, Mesh, Vol+, Vol-)"] -->|GPIO 0..3| C6
     end
@@ -163,7 +165,7 @@ flowchart TD
 ### 2.2 Kernkomponenten & Schaltkreise
 
 1. **Host-Mikrocontroller (`U1`):**
-   * **Espressif ESP32-C6-MINI-1** (32-Bit RISC-V Single-Core @ $160\,\text{MHz}$, $512\,\text{kB}$ SRAM, $4\,\text{MB}$ Quad-SPI Flash).
+   * **Espressif ESP32-C6-MINI-1U** (32-Bit RISC-V Single-Core @ $160\,\text{MHz}$, $512\,\text{kB}$ SRAM, $4\,\text{MB}$ Quad-SPI Flash, integrierte U.FL-Goldbuchse).
    * **Drei integrierte 2.4-GHz-Funkstandards:** Wi-Fi 6 ($802.11\text{ax}$ mit Target Wake Time für minimale Stromaufnahme), IEEE 802.15.4 (Basis für das deterministische OMM TDMA-Mesh) und Bluetooth 5.3 LE (für Smartphone-Kopplung, PWA-Dashboard und Audio-Hands-Free).
 2. **Power Management & Dynamic Power Path (`U2`):**
    * **Texas Instruments BQ24075RGTR** (QFN-16 $3 \times 3\,\text{mm}$) mit integriertem Power-Path Management.
@@ -180,39 +182,34 @@ flowchart TD
    * **Integrierter Kopfhörerverstärker:** Liefert $100\,\text{mW}$ @ $16\,\Omega$ bzw. $55\,\text{mW}$ @ $32\,\Omega$ mit THD+N $< 0{,}03\,\%$ direkt an 40 mm Helmlautsprecher ohne nachgeschalteten Analog-Amp.
    * **Mikrofon-Frontend:** Rauscharmer Vorverstärker mit einstellbarem Gain ($+0\dots +30\,\text{dB}$ in 3-dB-Schritten), interner programmierbarer `MICBIAS`-Spannung ($2{,}0\dots 2{,}8\,\text{V}$) und integriertem Rauschfilter.
 5. **HF-Antennensystem (`ANT1`):**
-   * **Johanson Technology 2450AT45A100** ($9{,}5 \times 2{,}0 \times 1{,}2\,\text{mm}$ Keramik-Chip, Spitzen-Gain $+2{,}2\,\text{dBi}$).
-   * An der vorderen Platinenkante über einer metallfreien Sperrfläche ($8{,}0 \times 4{,}0\,\text{mm}$ Keep-Out Zone) angeordnet.
-   * Ein $50\,\Omega$ Pi-Filter (2x 0402 Shunt-Kondensatoren, 1x Serien-Induktivität) kompensiert die dielektrische Verstimmung durch das umgebende PA12-Gehäuse und die Helmschale.
+   * **Taoglas FXP73 Flex-Dipol** ($+3{,}0\,\text{dBi}$, I-PEX MHF / U.FL): Abgesetzte 2.4 GHz Flexantenne, die direkt auf die integrierte U.FL-Buchse des `ESP32-C6-MINI-1U` gesteckt wird.
+   * Keine verlustbehaftete Keramik- oder Leiterbahnantenne auf der Platine. Eliminiert die massive HF-Abschattung durch Helmschalen und Kopfschatten; Freifeld-Reichweite bis zu 250 m.
 
-### 2.3 ESP32-C6 Pinout & GPIO-Zuweisung
+### 2.3 ESP32-C6-MINI-1U Pinout & GPIO-Zuweisung
 
 ```
-+-----------------------------------------------------------------------------------------+
-|                  PCBA 09: ESP32-C6-MINI-1 PINOUT & HARDWARE-SCHNITTSTELLEN              |
-+-------------+---------------+---------------+-------------------------------------------+
-| ESP32-C6 Pin| Signal-Name   | Typ           | Funktion / Angeschlossenes Peripherieteil |
-+-------------+---------------+---------------+-------------------------------------------+
-| **GPIO 0**  | `BTN_PWR`     | Digital In    | SW1 (Power / MFB, Low-aktiv, Boot-Pin)    |
-| **GPIO 1**  | `BTN_MESH`    | Digital In    | SW2 (Mesh / Group Toggle, Low-aktiv)      |
-| **GPIO 2**  | `BTN_VOL_UP`  | Digital In    | SW3 (Lautstärke +, Low-aktiv)             |
-| **GPIO 3**  | `BTN_VOL_DN`  | Digital In    | SW4 (Lautstärke -, Low-aktiv)             |
-| **GPIO 4**  | `I2S_MCLK`    | Digital Out   | ES8311 Master Clock (12.288 MHz)          |
-| **GPIO 5**  | `I2S_BCLK`    | Digital Out   | ES8311 Bit Clock (1.536 MHz)              |
-| **GPIO 6**  | `I2S_WS`      | Digital Out   | ES8311 Word Select / Frame Sync (48 kHz)  |
-| **GPIO 7**  | `I2S_SDOUT`   | Digital Out   | ES8311 DAC Audio Stream (Lautsprecher)    |
-| **GPIO 8**  | `I2S_SDIN`    | Digital In    | ES8311 ADC Audio Stream (Mikrofon)        |
-| **GPIO 9**  | `I2C_SCL`     | Open-Drain    | ES8311 Register Control SCL (4.7k Pullup) |
-| **GPIO 10** | `I2C_SDA`     | Open-Drain    | ES8311 Register Control SDA (4.7k Pullup) |
-| **GPIO 11** | `WS2812_DATA` | Digital Out   | D1 (WS2812B-2020 RGB Status-LED)          |
-| **GPIO 12** | `CHG_STAT1`   | Digital In    | BQ24075 /STAT Ladeanzeige (Pullup)        |
-| **GPIO 13** | `PWR_GOOD`    | Digital In    | BQ24075 /PGOOD VBUS-Erkennung             |
-| **GPIO 14** | `VBAT_SENSE`  | Analog In     | Akku-Spannungsteiler (100k / 100k zu GND) |
-| **GPIO 15** | `NTC_SENSE`   | Analog In     | Akku-Temperaturüberwachung (JEITA)        |
-| **GPIO 16** | `UART_TX`     | Digital Out   | Serieller Bus / Zero-Wear Pod-Kopplung    |
-| **GPIO 17** | `UART_RX`     | Digital In    | Serieller Bus / Zero-Wear Pod-Kopplung    |
-| **USB_DP**  | `USB_D_P`     | USB 2.0 PHY   | USB-C D+ (WebUSB Firmware-Flashing & DFU) |
-| **USB_DM**  | `USB_D_N`     | USB 2.0 PHY   | USB-C D- (WebUSB Firmware-Flashing & DFU) |
-+-------------+---------------+---------------+-------------------------------------------+
++--------------------------------------------------------------------------------------------------------+
+|                      PCBA 09: ESP32-C6-MINI-1U PINOUT & HARDWARE-SCHNITTSTELLEN                        |
++-----------+---------------+---------------+---------------+--------------------------------------------+
+| Modul-Pad | ESP32-C6 Pin  | Signal-Name   | Typ           | Funktion / Angeschlossenes Peripherieteil  |
++-----------+---------------+---------------+---------------+--------------------------------------------+
+| Pad 8     | **GPIO 2**    | `BTN_PWR`     | Digital In    | SW1 (Power / MFB, Low-aktiv, Boot-Pin)     |
+| Pad 9     | **GPIO 3**    | `BTN_MESH`    | Digital In    | SW2 (Mesh / Group Toggle, Low-aktiv)       |
+| Pad 4     | **GPIO 4**    | `BTN_VOL_UP`  | Digital In    | SW3 (Lautstärke +, Low-aktiv)              |
+| Pad 5     | **GPIO 5**    | `BTN_VOL_DOWN`| Digital In    | SW4 (Lautstärke -, Low-aktiv)              |
+| Pad 6     | **GPIO 6**    | `WS2812_DATA` | Digital Out   | D1 (WS2812B-2020 RGB Status-LED)           |
+| Pad 7     | **GPIO 7**    | `CHG_STAT`    | Digital In    | BQ24075 /STAT Ladeanzeige (Pullup)         |
+| Pad 10    | **GPIO 8**    | `I2C_SDA`     | Open-Drain    | ES8311 Register Control SDA (4.7k Pullup)  |
+| Pad 11    | **GPIO 9**    | `I2C_SCL`     | Open-Drain    | ES8311 Register Control SCL (4.7k Pullup)  |
+| Pad 14    | **GPIO 12**   | `USB_DN`      | USB 2.0 PHY   | USB-C D- (WebUSB DFU & Flashing via D2)    |
+| Pad 15    | **GPIO 13**   | `USB_DP`      | USB 2.0 PHY   | USB-C D+ (WebUSB DFU & Flashing via D2)    |
+| Pad 21    | **GPIO 19**   | `I2S_MCLK`    | Digital Out   | ES8311 Master Clock (12.288 MHz)           |
+| Pad 22    | **GPIO 20**   | `I2S_BCLK`    | Digital Out   | ES8311 Bit Clock (1.536 MHz)               |
+| Pad 23    | **GPIO 21**   | `I2S_WS`      | Digital Out   | ES8311 Word Select / Frame Sync (48 kHz)   |
+| Pad 24    | **GPIO 22**   | `I2S_DOUT`    | Digital Out   | ES8311 DAC Audio Stream (Lautsprecher)     |
+| Pad 25    | **GPIO 23**   | `I2S_DIN`     | Digital In    | ES8311 ADC Audio Stream (Mikrofon)         |
+| U.FL      | **RF 2.4G**   | `RF_ANT`      | 50 Ohm Koax   | Taoglas FXP73 Flex-Dipol (+3.0 dBi Antenne)|
++-----------+---------------+---------------+---------------+--------------------------------------------+
 ```
 
 ### 2.4 Energiebudget & Betriebsmodi

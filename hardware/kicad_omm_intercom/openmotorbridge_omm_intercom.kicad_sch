@@ -1,0 +1,46 @@
+(kicad_sch
+	(version 20240108)
+	(generator "openmotorbridge_gen")
+	(generator_version "10.0")
+	(uuid "f0000000-0000-0000-0000-000000000090")
+	(paper "A3")
+	(title_block
+		(title "OpenMotorBridge OMM 2.4 GHz Intercom & UCS Modul (PCBA 09)")
+		(date "2026-10-02")
+		(rev "v1.1-ucs")
+		(company "OpenMotorBridge Open Source Hardware")
+		(comment 1 "ESP32-C6-MINI-1U (Direct On-Module U.FL), BQ24075 PMIC, ES8311 Codec, USB-C IP67")
+	)
+
+	(global_label "VBUS_5V" (shape input) (at 30.0 30.0 180) (effects (font (size 1.27 1.27)) (justify right)))
+	(global_label "VBAT" (shape bidirectional) (at 30.0 35.0 180) (effects (font (size 1.27 1.27)) (justify right)))
+	(global_label "SYS_PWR" (shape output) (at 80.0 30.0 0) (effects (font (size 1.27 1.27)) (justify left)))
+	(global_label "VCC_3V3" (shape output) (at 80.0 35.0 0) (effects (font (size 1.27 1.27)) (justify left)))
+	(global_label "GND" (shape passive) (at 30.0 40.0 180) (effects (font (size 1.27 1.27)) (justify right)))
+
+	(global_label "USB_DP" (shape bidirectional) (at 30.0 50.0 180) (effects (font (size 1.27 1.27)) (justify right)))
+	(global_label "USB_DN" (shape bidirectional) (at 30.0 55.0 180) (effects (font (size 1.27 1.27)) (justify right)))
+	(global_label "USB_CC1" (shape passive) (at 30.0 60.0 180) (effects (font (size 1.27 1.27)) (justify right)))
+	(global_label "USB_CC2" (shape passive) (at 30.0 65.0 180) (effects (font (size 1.27 1.27)) (justify right)))
+
+	(global_label "CHG_STAT" (shape input) (at 80.0 50.0 0) (effects (font (size 1.27 1.27)) (justify left)))
+
+	(global_label "I2S_MCLK" (shape output) (at 140.0 30.0 0) (effects (font (size 1.27 1.27)) (justify left)))
+	(global_label "I2S_BCLK" (shape output) (at 140.0 35.0 0) (effects (font (size 1.27 1.27)) (justify left)))
+	(global_label "I2S_WS" (shape output) (at 140.0 40.0 0) (effects (font (size 1.27 1.27)) (justify left)))
+	(global_label "I2S_DOUT" (shape output) (at 140.0 45.0 0) (effects (font (size 1.27 1.27)) (justify left)))
+	(global_label "I2S_DIN" (shape input) (at 140.0 50.0 180) (effects (font (size 1.27 1.27)) (justify right)))
+	(global_label "I2C_SDA" (shape bidirectional) (at 140.0 55.0 0) (effects (font (size 1.27 1.27)) (justify left)))
+	(global_label "I2C_SCL" (shape output) (at 140.0 60.0 0) (effects (font (size 1.27 1.27)) (justify left)))
+
+	(global_label "BTN_PWR" (shape input) (at 200.0 30.0 180) (effects (font (size 1.27 1.27)) (justify right)))
+	(global_label "BTN_MESH" (shape input) (at 200.0 35.0 180) (effects (font (size 1.27 1.27)) (justify right)))
+	(global_label "BTN_VOL_UP" (shape input) (at 200.0 40.0 180) (effects (font (size 1.27 1.27)) (justify right)))
+	(global_label "BTN_VOL_DOWN" (shape input) (at 200.0 45.0 180) (effects (font (size 1.27 1.27)) (justify right)))
+	(global_label "WS2812_DATA" (shape output) (at 200.0 50.0 0) (effects (font (size 1.27 1.27)) (justify left)))
+
+	(global_label "MIC_IN_P" (shape input) (at 200.0 60.0 180) (effects (font (size 1.27 1.27)) (justify right)))
+	(global_label "MIC_IN_N" (shape input) (at 200.0 65.0 180) (effects (font (size 1.27 1.27)) (justify right)))
+	(global_label "HP_OUT_P" (shape output) (at 200.0 70.0 0) (effects (font (size 1.27 1.27)) (justify left)))
+	(global_label "HP_OUT_N" (shape output) (at 200.0 75.0 0) (effects (font (size 1.27 1.27)) (justify left)))
+)

@@ -1,0 +1,19 @@
+idf_component_register(
+    SRCS
+        "main.cpp"
+        "es8311_codec.cpp"
+        "power_supervisor.cpp"
+        "omm_transceiver.cpp"
+        "keypad_indicator.cpp"
+    INCLUDE_DIRS
+        "."
+    REQUIRES
+        openmotormesh
+        esp_wifi
+        nvs_flash
+        driver
+        esp_adc
+        esp_pm
+        freertos
+        log
+)

@@ -495,7 +495,19 @@ const state = {
         canTermActive: isDemoModeInitial,
         qiCharging: isDemoModeInitial,
         port1PdActive: isDemoModeInitial,
-        rgbMode: isDemoModeInitial ? 'BREATHING_GREEN' : 'OFF'
+        rgbMode: isDemoModeInitial ? 'BREATHING_GREEN' : 'OFF',
+        sensors: {
+            gnssFix: isDemoModeInitial ? '3D DGPS FIX' : 'NO FIX',
+            gnssSats: isDemoModeInitial ? 24 : 0,
+            agpsSeeded: false,
+            ambientTemp: isDemoModeInitial ? 18.5 : null,
+            iceWarning: false,
+            ambientLux: isDemoModeInitial ? 12500 : null,
+            optMode: isDemoModeInitial ? 'TAG-MODUS' : 'AUTO'
+        },
+        sw1PairingActive: false,
+        sw1Countdown: 0,
+        sw1Timer: null
     },
     actionCam: {
         paired: isDemoModeInitial,
@@ -737,6 +749,18 @@ const lblCanTermStatus = document.getElementById('lbl-can-term-status');
 const lblHandlebarChannels = document.getElementById('lbl-handlebar-channels');
 const hudPillAux = document.getElementById('hud-pill-aux');
 const valHudAuxLight = document.getElementById('val-hud-aux-light');
+
+// Cockpit Multi-Sensor Hub DOM Elements (PCBA 05 / Port J12 Qwiic)
+const badgeGnssFixType = document.getElementById('badge-gnss-fix-type');
+const lblGnssSats = document.getElementById('lbl-gnss-sats');
+const btnInjectAgps = document.getElementById('btn-inject-agps');
+const badgeTmp117Status = document.getElementById('badge-tmp117-status');
+const lblAmbientTemp = document.getElementById('lbl-ambient-temp');
+const lblTmp117Sub = document.getElementById('lbl-tmp117-sub');
+const badgeOpt3001Mode = document.getElementById('badge-opt3001-mode');
+const lblAmbientLux = document.getElementById('lbl-ambient-lux');
+const badgeSw1Countdown = document.getElementById('badge-sw1-countdown');
+const btnTriggerSw1Pair = document.getElementById('btn-trigger-sw1-pair');
 
 // Action Cam BLE Bridge DOM Elements
 const tileFrontCam = document.getElementById('tile-front-cam');
@@ -3767,6 +3791,46 @@ function updateTelemetryUi(data) {
         updateFrontNodeRgbVisual(state.frontNode.rgbMode);
     }
 
+    // Cockpit Multi-Sensor Hub (Port J12 Qwiic): u-blox SAM-M10Q, TI TMP117, TI OPT3001
+    if (data.sensors || (data.ambient_temp !== undefined || data.ambient_lux !== undefined || data.gnss_sats !== undefined || data.sats !== undefined)) {
+        const s = data.sensors || {};
+        const temp = s.ambient_temp !== undefined ? s.ambient_temp : data.ambient_temp;
+        const lux = s.ambient_lux !== undefined ? s.ambient_lux : data.ambient_lux;
+        const sats = s.gnss_sats !== undefined ? s.gnss_sats : (data.gnss_sats !== undefined ? data.gnss_sats : data.sats);
+        const fixType = s.gnss_fix_type || (data.gps_fixed ? '3D DGPS FIX' : undefined);
+
+        if (temp !== undefined && temp !== null) {
+            if (state.frontNode && state.frontNode.sensors) state.frontNode.sensors.ambientTemp = temp;
+            if (lblAmbientTemp) lblAmbientTemp.textContent = `${temp.toFixed(1)} °C`;
+            if (badgeTmp117Status) {
+                if (temp <= 3.0) {
+                    badgeTmp117Status.className = 'card-badge badge-blue';
+                    badgeTmp117Status.textContent = 'EISWARNUNG (< 3.0°C)';
+                } else {
+                    badgeTmp117Status.className = 'card-badge badge-green';
+                    badgeTmp117Status.textContent = 'NORMAL';
+                }
+            }
+        }
+
+        if (lux !== undefined && lux !== null) {
+            if (state.frontNode && state.frontNode.sensors) state.frontNode.sensors.ambientLux = lux;
+            if (lblAmbientLux) lblAmbientLux.textContent = `${Math.round(lux).toLocaleString()} Lux`;
+            if (badgeOpt3001Mode) {
+                badgeOpt3001Mode.className = lux < 200 ? 'card-badge badge-orange' : 'card-badge badge-blue';
+                badgeOpt3001Mode.textContent = lux < 200 ? 'TUNNEL / NACHT' : 'TAG-MODUS';
+            }
+        }
+
+        if (sats !== undefined && sats !== null) {
+            if (state.frontNode && state.frontNode.sensors) state.frontNode.sensors.gnssSats = sats;
+            if (lblGnssSats) lblGnssSats.textContent = `${sats} Satelliten`;
+        }
+        if (fixType && badgeGnssFixType) {
+            badgeGnssFixType.textContent = fixType;
+        }
+    }
+
     // Hardware Inventory & Topology Supervisor
     if ((data.hw_baseline !== undefined || data.hw_current !== undefined || data.hw_lost !== undefined) && typeof updateHardwareTopologyUi === 'function') {
         const base = data.hw_baseline !== undefined ? data.hw_baseline : (state.hardwareTopology?.baselineMask || 0);
@@ -4247,6 +4311,78 @@ if (btnUnpairFrontNode) {
     });
 }
 
+// Cockpit Multi-Sensor Hub: AssistNow A-GPS Seed
+if (btnInjectAgps) {
+    btnInjectAgps.addEventListener('click', () => {
+        showToast(state.lang === 'de' ? '🛰️ u-blox AssistNow Online A-GPS Seed erfolgreich injiziert (Ephemeriden + Almanach)! TTFF: 1.8 s (Warmstart)' : '🛰️ u-blox AssistNow Online A-GPS seed injected! TTFF: 1.8s (Warmstart)', 'success');
+        if (state.frontNode && state.frontNode.sensors) {
+            state.frontNode.sensors.agpsSeeded = true;
+            state.frontNode.sensors.gnssSats = Math.min((state.frontNode.sensors.gnssSats || 24) + 8, 32);
+            state.frontNode.sensors.gnssFix = '3D DGPS FIX (1.1m)';
+        }
+        if (badgeGnssFixType) {
+            badgeGnssFixType.className = 'card-badge badge-green';
+            badgeGnssFixType.textContent = '3D DGPS FIX (1.1m)';
+        }
+        if (lblGnssSats) {
+            lblGnssSats.textContent = `${state.frontNode?.sensors?.gnssSats || 32} Satelliten (A-GPS)`;
+        }
+        if (controlChar) {
+            controlChar.writeValue(new Uint8Array([0x1A, 0x01])).catch(console.error);
+        }
+        if (simWs && simWs.readyState === WebSocket.OPEN) {
+            simWs.send(JSON.stringify({ action: 'inject_agps', source: 'pwa' }));
+        }
+    });
+}
+
+// SW1 60s Pairing Countdown Window
+if (btnTriggerSw1Pair) {
+    btnTriggerSw1Pair.addEventListener('click', () => {
+        if (state.frontNode.sw1Timer) {
+            clearInterval(state.frontNode.sw1Timer);
+            state.frontNode.sw1Timer = null;
+        }
+        state.frontNode.sw1PairingActive = true;
+        state.frontNode.sw1Countdown = 60;
+        if (badgeSw1Countdown) {
+            badgeSw1Countdown.style.display = 'inline-block';
+            badgeSw1Countdown.className = 'card-badge badge-blue';
+            badgeSw1Countdown.textContent = 'SW1 PAIR: 60s';
+        }
+        if (dotFrontRgb && lblFrontRgbText) {
+            lblFrontRgbText.textContent = 'WS2812B BLAU (PAIR)';
+            dotFrontRgb.style.background = '#0a84ff';
+            dotFrontRgb.style.boxShadow = '0 0 8px #0a84ff';
+        }
+        showToast(state.lang === 'de' ? '🔘 SW1 Koppel-Fenster aktiviert! 60s Zeitfenster für neuen Front-Knoten (Taste SW1 gedrückt halten).' : '🔘 SW1 pairing window open! 60s window for new Front Node (hold SW1 button).', 'info');
+        if (controlChar) {
+            controlChar.writeValue(new Uint8Array([0x18, 0x3C])).catch(console.error);
+        }
+        if (simWs && simWs.readyState === WebSocket.OPEN) {
+            simWs.send(JSON.stringify({ action: 'trigger_sw1_pair', duration_s: 60 }));
+        }
+
+        state.frontNode.sw1Timer = setInterval(() => {
+            state.frontNode.sw1Countdown--;
+            if (state.frontNode.sw1Countdown > 0) {
+                if (badgeSw1Countdown) badgeSw1Countdown.textContent = `SW1 PAIR: ${state.frontNode.sw1Countdown}s`;
+            } else {
+                clearInterval(state.frontNode.sw1Timer);
+                state.frontNode.sw1Timer = null;
+                state.frontNode.sw1PairingActive = false;
+                if (badgeSw1Countdown) badgeSw1Countdown.style.display = 'none';
+                if (dotFrontRgb && lblFrontRgbText) {
+                    lblFrontRgbText.textContent = 'WS2812B GRÜN';
+                    dotFrontRgb.style.background = '#30d158';
+                    dotFrontRgb.style.boxShadow = '0 0 6px #30d158';
+                }
+                showToast(state.lang === 'de' ? '⏱️ SW1 Koppel-Fenster abgelaufen.' : '⏱️ SW1 pairing window expired.', 'warning');
+            }
+        }, 1000);
+    });
+}
+
 // Handlebar PTT Multi-Click Simulator
 if (btnTestHandlebarPtt) {
     let pttPressStart = 0;
@@ -4445,6 +4581,23 @@ function toggleDemoMode(enable) {
         if (lblRssi) {
             lblRssi.textContent = '-78 dBm';
             lblRssi.style.color = 'var(--accent-orange)';
+        }
+
+        // Activate Cockpit Multi-Sensor Hub (Port J12) in Demo
+        if (lblAmbientTemp) lblAmbientTemp.textContent = '18.5 °C';
+        if (badgeTmp117Status) {
+            badgeTmp117Status.className = 'card-badge badge-green';
+            badgeTmp117Status.textContent = 'NORMAL';
+        }
+        if (lblAmbientLux) lblAmbientLux.textContent = '12,500 Lux';
+        if (badgeOpt3001Mode) {
+            badgeOpt3001Mode.className = 'card-badge badge-blue';
+            badgeOpt3001Mode.textContent = 'TAG-MODUS';
+        }
+        if (lblGnssSats) lblGnssSats.textContent = '24 Satelliten';
+        if (badgeGnssFixType) {
+            badgeGnssFixType.className = 'card-badge badge-green';
+            badgeGnssFixType.textContent = '3D DGPS FIX';
         }
 
         // Activate Audio Tab in Demo
@@ -4737,6 +4890,30 @@ document.getElementById('btn-trigger-p2-vol-up')?.addEventListener('click', asyn
 document.getElementById('btn-trigger-p2-vol-down')?.addEventListener('click', async () => {
     showToast(state.lang === 'de' ? '🔉 Port 2: Leiser (-) Impuls (100ms)' : '🔉 Port 2: Volume Down (-) Pulse (100ms)', 'info');
     if (controlChar) await controlChar.writeValue(new Uint8Array([0x09, 0x02, 0x04]));
+});
+
+// Universal UWB Mechatronic Opcodes (0x01..0x08)
+const uwbOpcodes = [
+    { id: 'btn-opcode-01', code: 0x01, name: 'STANDBY', toastDe: '💤 UWB Opcode 0x01: Cartridge Standby gesendet', toastEn: '💤 UWB Opcode 0x01: Cartridge Standby dispatched' },
+    { id: 'btn-opcode-02', code: 0x02, name: 'PTT ON', toastDe: '⚡ UWB Opcode 0x02: Cartridge PTT ON gesendet', toastEn: '⚡ UWB Opcode 0x02: Cartridge PTT ON dispatched' },
+    { id: 'btn-opcode-03', code: 0x03, name: 'PTT OFF', toastDe: '🔘 UWB Opcode 0x03: Cartridge PTT OFF gesendet', toastEn: '🔘 UWB Opcode 0x03: Cartridge PTT OFF dispatched' },
+    { id: 'btn-opcode-04', code: 0x04, name: 'MUTE', toastDe: '🔇 UWB Opcode 0x04: Cartridge Audio MUTE gesendet', toastEn: '🔇 UWB Opcode 0x04: Cartridge Audio MUTE dispatched' },
+    { id: 'btn-opcode-05', code: 0x05, name: 'UNMUTE', toastDe: '🔊 UWB Opcode 0x05: Cartridge Audio UNMUTE gesendet', toastEn: '🔊 UWB Opcode 0x05: Cartridge Audio UNMUTE dispatched' },
+    { id: 'btn-opcode-06', code: 0x06, name: 'AMBIENT', toastDe: '👂 UWB Opcode 0x06: Cartridge Ambient Pass-Through gesendet', toastEn: '👂 UWB Opcode 0x06: Cartridge Ambient Pass-Through dispatched' },
+    { id: 'btn-opcode-07', code: 0x07, name: 'BEACON', toastDe: '🚨 UWB Opcode 0x07: Cartridge Emergency Rescue Beacon gesendet', toastEn: '🚨 UWB Opcode 0x07: Cartridge Emergency Rescue Beacon dispatched' },
+    { id: 'btn-opcode-08', code: 0x08, name: 'EJECT', toastDe: '⏏️ UWB Opcode 0x08: Cartridge Release / Eject gesendet', toastEn: '⏏️ UWB Opcode 0x08: Cartridge Release / Eject dispatched' }
+];
+
+uwbOpcodes.forEach(op => {
+    document.getElementById(op.id)?.addEventListener('click', async () => {
+        showToast(state.lang === 'de' ? op.toastDe : op.toastEn, op.code === 0x07 ? 'warning' : 'info');
+        if (controlChar) {
+            await controlChar.writeValue(new Uint8Array([0x09, 0x03, op.code])).catch(console.error);
+        }
+        if (simWs && simWs.readyState === WebSocket.OPEN) {
+            simWs.send(JSON.stringify({ action: 'cartridge_uwb_opcode', opcode: op.code, name: op.name }));
+        }
+    });
 });
 
 document.getElementById('btn-p1-resync')?.addEventListener('click', () => {

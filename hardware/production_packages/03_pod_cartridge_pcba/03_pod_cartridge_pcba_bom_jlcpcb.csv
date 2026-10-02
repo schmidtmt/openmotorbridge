@@ -1,14 +1,18 @@
 Designator,Comment,Footprint,LCSC Part #,Quantity
+ANT_UWB,Taoglas_FXUWB10,Connector_Coaxial:U.FL_Hirose_U.FL-R-SMT-1_Vertical,,1
 C1,100nF,Capacitor_SMD:C_0603_1608Metric,,1
 C2,10uF,Capacitor_SMD:C_0805_2012Metric,,1
 "D1, D2, D3, D4",1N4148WS,Diode_SMD:D_SOD-323,,4
 F1,MF-MSMF050-2,Fuse:Fuse_1812_4532Metric,,1
-"H1, H2, H3, H4",M2_MountingHole,MountingHole:MountingHole_2.2mm_M2_Pad,,4
-J1,POD_BASE_DOCKING_SOCKET_6P,Connector_PinSocket_2.54mm:PinSocket_1x06_P2.54mm_Horizontal,,1
 J2,INTERCOM_HEADSET_6P,Connector_JST:JST_SH_SM06B-SRSS-TB_1x06-1MP_P1.00mm_Horizontal,,1
 J_ACT,ACTUATORS_8P,Connector_JST:JST_SH_SM08B-SRSS-TB_1x08-1MP_P1.00mm_Horizontal,,1
+PAD1,+5V_IN,TestPoint:TestPoint_Pad_D3.0mm_OD3.5mm,,1
+PAD2,GND,TestPoint:TestPoint_Pad_D3.0mm_OD3.5mm,,1
 "Q1, Q2, Q3, Q4",AO3400A,Package_TO_SOT_SMD:SOT-23,,4
 "R1, R2, R3, R4",100R,Resistor_SMD:R_0603_1608Metric,,4
 "R5, R6, R7, R8",100k,Resistor_SMD:R_0603_1608Metric,,4
 R9,4.7k,Resistor_SMD:R_0603_1608Metric,,1
 U1,CH32V003F4P6,Package_SO:TSSOP-20_4.4x6.5mm_P0.65mm,,1
+U3,ES8388_Codec,Package_DFN_QFN:QFN-28-1EP_4x4mm_P0.4mm_EP2.4x2.4mm,,1
+U_UWB,DW3110,Package_DFN_QFN:QFN-16-1EP_3x3mm_P0.5mm_EP1.7x1.7mm_ThermalVias,,1
+Y_UWB,38.4MHz,Crystal:Crystal_SMD_2016-4Pin_2.0x1.6mm,,1

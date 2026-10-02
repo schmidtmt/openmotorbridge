@@ -627,13 +627,14 @@
                 <section class="card" id="card-front-node">
                     <div class="card-header">
                         <span class="card-title">📡 <span data-i18n="front_node_title">Universal Front-Knoten</span></span>
-                        <div style="display: flex; gap: 6px; align-items: center;">
+                        <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
                             <span class="card-badge" id="badge-front-rgb-led" style="background: rgba(48,209,88,0.15); color: #30d158; border: 1px solid rgba(48,209,88,0.3); display: flex; align-items: center; gap: 5px;">
                                 <span id="dot-front-rgb" style="width: 8px; height: 8px; border-radius: 50%; background: #30d158; box-shadow: 0 0 6px #30d158;"></span>
                                 <span id="lbl-front-rgb-text">WS2812B GRÜN</span>
                             </span>
-                            <span class="card-badge badge-blue" id="badge-front-node-bind">1:1 GEKOPPELT</span>
-                            <span class="card-badge badge-green" id="badge-front-node-link">ESP-NOW LINK (2.4 GHz)</span>
+                            <span class="card-badge badge-blue" id="badge-front-node-bind">1:1 UWB PAIR</span>
+                            <span class="card-badge badge-green" id="badge-front-node-link">UWB LINK (&lt; 0.4 ms)</span>
+                            <span class="card-badge" id="badge-sw1-countdown" style="background: rgba(10, 132, 255, 0.15); color: var(--accent-blue); border: 1px solid rgba(10, 132, 255, 0.3); display: none;">SW1 PAIR: 60s</span>
                         </div>
                     </div>
 
@@ -682,6 +683,48 @@
                                 </div>
                                 <div style="font-size: 1.05rem; font-weight: 700; color: var(--text-secondary); margin: 3px 0;">Standby</div>
                                 <div style="font-size: 0.68rem; color: var(--text-muted);">Dashcam / Display Zubehör</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cockpit Multi-Sensor Hub (Port J12 Qwiic): u-blox SAM-M10Q, TI TMP117, TI OPT3001 -->
+                    <div style="margin: 10px 0 14px 0; padding: 10px 12px; background: rgba(0,0,0,0.2); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                        <div style="font-size: 0.78rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+                            <span>🛰️ Cockpit Sensor-Hub (Port J12 Qwiic / I²C 400 kHz)</span>
+                            <span class="card-badge badge-green" style="font-size: 0.62rem;">10 Hz PVT Stream</span>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px;">
+                            <!-- Sensor 1: u-blox SAM-M10Q Multi-GNSS -->
+                            <div class="stat-tile" style="padding: 10px 12px; background: rgba(0,0,0,0.25); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                                <div style="font-size: 0.72rem; color: var(--text-secondary); display: flex; justify-content: space-between; align-items: center;">
+                                    <span>u-blox SAM-M10Q</span>
+                                    <span class="card-badge badge-green" id="badge-gnss-fix-type" style="font-size: 0.60rem; padding: 2px 5px;">3D DGPS FIX</span>
+                                </div>
+                                <div style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin: 3px 0;" id="lbl-gnss-sats">24 Satelliten</div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+                                    <span style="font-size: 0.68rem; color: var(--text-muted);">10 Hz PVT · 1.45m</span>
+                                    <button id="btn-inject-agps" class="btn-secondary" style="font-size: 0.65rem; padding: 2px 6px; border-color: rgba(10, 132, 255, 0.4); color: var(--accent-blue);">⚡ A-GPS Seed</button>
+                                </div>
+                            </div>
+
+                            <!-- Sensor 2: TI TMP117 High-Precision Temperature -->
+                            <div class="stat-tile" style="padding: 10px 12px; background: rgba(0,0,0,0.25); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                                <div style="font-size: 0.72rem; color: var(--text-secondary); display: flex; justify-content: space-between; align-items: center;">
+                                    <span>TI TMP117 Kaltluft</span>
+                                    <span class="card-badge badge-green" id="badge-tmp117-status" style="font-size: 0.60rem; padding: 2px 5px;">NORMAL</span>
+                                </div>
+                                <div style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin: 3px 0;" id="lbl-ambient-temp">18.5 °C</div>
+                                <div style="font-size: 0.68rem; color: var(--text-muted);" id="lbl-tmp117-sub">±0.1°C · Front-Fender Lippe</div>
+                            </div>
+
+                            <!-- Sensor 3: TI OPT3001 Ambient Light -->
+                            <div class="stat-tile" style="padding: 10px 12px; background: rgba(0,0,0,0.25); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                                <div style="font-size: 0.72rem; color: var(--text-secondary); display: flex; justify-content: space-between; align-items: center;">
+                                    <span>TI OPT3001 Licht</span>
+                                    <span class="card-badge badge-blue" id="badge-opt3001-mode" style="font-size: 0.60rem; padding: 2px 5px;">TAG-MODUS</span>
+                                </div>
+                                <div style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin: 3px 0;" id="lbl-ambient-lux">12,500 Lux</div>
+                                <div style="font-size: 0.68rem; color: var(--text-muted);">Cockpit / CAN-Bus Sync</div>
                             </div>
                         </div>
                     </div>
@@ -819,6 +862,9 @@
                             </button>
                             <button id="btn-unpair-front-node" class="btn-secondary" style="display: flex; align-items: center; gap: 6px; font-size: 0.8rem; padding: 7px 12px; border-color: rgba(255, 69, 58, 0.3); color: var(--accent-red);">
                                 <span>⛓️‍💥</span> <span data-i18n="btn_unpair_front_node">Trennen</span>
+                            </button>
+                            <button id="btn-trigger-sw1-pair" class="btn-secondary" style="display: flex; align-items: center; gap: 6px; font-size: 0.8rem; padding: 7px 12px; border-color: rgba(10, 132, 255, 0.4); color: var(--accent-blue);">
+                                <span>🔘</span> <span>SW1 60s Koppel-Fenster</span>
                             </button>
                             <button id="btn-test-handlebar-ptt" class="btn-secondary" style="font-size: 0.8rem; padding: 7px 12px;">
                                 <span>🔘</span> <span data-i18n="btn_test_ptt">Lenker-PTT Testen</span>
@@ -1050,7 +1096,19 @@
                     <div style="margin-top: 18px; padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); border-radius: 8px;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                             <span style="font-size: 0.85rem; font-weight: 600; color: var(--accent-blue);">🦾 Smart Cartridge Aktuatoren (PCBA 03)</span>
-                            <span class="badge badge-success" style="font-size: 0.7rem;">CH32V003 Synced</span>
+                            <span class="badge badge-success" style="font-size: 0.7rem;">DW3110 UWB Synced</span>
+                        </div>
+                        <!-- Universal UWB Mechatronic Opcodes (0x01..0x08) -->
+                        <div style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">📡 Universal UWB Mechatronic Opcodes (0x01..0x08):</div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 6px; margin-bottom: 12px;">
+                            <button id="btn-opcode-01" class="btn-secondary" style="font-size: 0.72rem; padding: 6px 4px;">0x01 STANDBY</button>
+                            <button id="btn-opcode-02" class="btn-secondary" style="font-size: 0.72rem; padding: 6px 4px; color: var(--accent-orange); border-color: rgba(255, 159, 10, 0.4);">⚡ 0x02 PTT ON</button>
+                            <button id="btn-opcode-03" class="btn-secondary" style="font-size: 0.72rem; padding: 6px 4px;">0x03 PTT OFF</button>
+                            <button id="btn-opcode-04" class="btn-secondary" style="font-size: 0.72rem; padding: 6px 4px; color: var(--accent-red); border-color: rgba(255, 69, 58, 0.3);">🔇 0x04 MUTE</button>
+                            <button id="btn-opcode-05" class="btn-secondary" style="font-size: 0.72rem; padding: 6px 4px; color: var(--accent-green); border-color: rgba(50, 215, 75, 0.4);">🔊 0x05 UNMUTE</button>
+                            <button id="btn-opcode-06" class="btn-secondary" style="font-size: 0.72rem; padding: 6px 4px; color: var(--accent-blue); border-color: rgba(10, 132, 255, 0.4);">👂 0x06 AMBIENT</button>
+                            <button id="btn-opcode-07" class="btn-secondary" style="font-size: 0.72rem; padding: 6px 4px; color: #ff3b30; border-color: #ff3b30;">🚨 0x07 BEACON</button>
+                            <button id="btn-opcode-08" class="btn-secondary" style="font-size: 0.72rem; padding: 6px 4px;">⏏️ 0x08 EJECT</button>
                         </div>
                         <!-- Pod 1 Aktuatoren (Links) -->
                         <div style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">1️⃣ Pod 1 (Sena SPIDER X Slim):</div>

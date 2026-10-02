@@ -315,6 +315,8 @@ Die separate Platine `PCBA 06` ist in v9.6 **vollständig und ersatzlos entfalle
 
 Die Platine **`PCBA 09`** ist die universelle Open-Source-Hardware für das OpenMotorMesh (OMM) 2.4 GHz Intercom-System. Sie erfüllt die mechanischen und elektrischen Spezifikationen für den autonomen Betrieb in standardisierten ECE 22.06 UCS-Helmmulden sowie als HF-Einsatz im Kassetten-Schlitten (`PCBA 03`).
 
+![PCBA 09 OMM 2.4 GHz Intercom & UCS Modul](../images/pcba/pcba09_omm_intercom_3d.png)
+
 ### 11.1 Technische Platinen-Kenndaten & Lagenaufbau
 * **Abmessungen:** $60{,}0 \times 30{,}0 \times 1{,}0\,\text{mm}$ ($R = 2{,}5\,\text{mm}$ Kantenradius).
 * **Lagenaufbau:** 2-Lagen FR-4 High-TG150, $1{,}0\,\text{mm}$ Materialstärke, $35\,\mu\text{m}$ Cu (1 oz), ENIG-Goldfinish (Electroless Nickel Immersion Gold).
@@ -323,7 +325,7 @@ Die Platine **`PCBA 09`** ist die universelle Open-Source-Hardware für das Open
 ### 11.2 Bestückung & Schaltkreis-Architektur
 
 1. **Host-Mikrocontroller (`U1`):**
-   * **Espressif ESP32-C6-MINI-1** (32-Bit RISC-V Single-Core @ 160 MHz, 512 kB SRAM, 4 MB Quad-SPI Flash).
+   * **Espressif ESP32-C6-MINI-1U** (32-Bit RISC-V Single-Core @ 160 MHz, 512 kB SRAM, 4 MB Quad-SPI Flash, integrierte U.FL-Goldbuchse).
    * Unterstützt 2.4 GHz Wi-Fi 6 ($802.11\text{ax}$), IEEE 802.15.4 (deterministischer TDMA Mesh-Stack) und Bluetooth 5.3 LE.
 2. **Power-Management & Lade-IC (`U2`):**
    * **Texas Instruments BQ24075RGTR** (QFN-16 3x3mm) mit Dynamic Power Path Management (DPPM).
@@ -333,36 +335,33 @@ Die Platine **`PCBA 09`** ist die universelle Open-Source-Hardware für das Open
    * **Everest Semi ES8311** (QFN-20 3x3mm): Ultra-Low-Power Mono Audio Codec mit 24-Bit / 96 kHz I2S-Interface.
    * Integrierter Headphone-Verstärker ($100\,\text{mW}$ @ $16\,\Omega$ / $55\,\text{mW}$ @ $32\,\Omega$) zum direkten Betrieb von 40 mm Helm-Lautsprechern.
    * Rauscharmer Mikrofon-Vorverstärker ($+0\dots +30\,\text{dB}$ Gain) mit programmierbarer interner `MICBIAS`-Erzeugung ($2{,}0\dots 2{,}8\,\text{V}$) für Schwanenhals- und Klebemikrofone.
-4. **2.4-GHz-Keramik-Chipantenne (`ANT1`):**
-   * **Johanson Technology 2450AT45A100** ($9{,}5 \times 2{,}0 \times 1{,}2\,\text{mm}$, Gain $+2{,}2\,\text{dBi}$) mit $50\,\Omega$ Pi-Anpassfilter und U.FL-Messpunkt an der Platinenkante über einer $8 \times 4\,\text{mm}$ massefreien Keep-Out-Zone.
+4. **2.4-GHz-HF-Antennensystem (`ANT1`):**
+   * **Taoglas FXP73 Flex-Dipol** ($+3{,}0\,\text{dBi}$, I-PEX MHF / U.FL): Abgesetzte, extrem flexible Helm-Antenne, die direkt auf die integrierte U.FL-Buchse des `ESP32-C6-MINI-1U` gesteckt wird.
+   * Keine unzuverlässige Keramik-Chip- oder PCB-Trace-Antenne auf der Platine (eliminiert die massive HF-Dämpfung durch Helmschalen und Kopfschatten; Reichweite bis zu 250 m im Freifeld).
 5. **Bedienung & Sensorik:**
    * 4x taktile IP67-Mikrotaster (`SW1` bis `SW4`, C&K KMT0 / Panasonic EVQ-P2) auf `F.Cu`.
    * 1x RGB Status-LED (`D1`, WS2812B-2020) zur Einkopplung in den Gehäuse-Lichtleiter.
 6. **Schnittstellen & Steckverbinder:**
-   * `J1`: Wasserdichte IP67 USB-C Buchse (16-Pin) mit USBLC6-2SC6 TVS-ESD-Schutzarray.
+   * `J1`: Wasserdichte IP67 USB-C Buchse (16-Pin) bündig an der Platinenkante mit USBLC6-2SC6 TVS-ESD-Schutzarray.
    * `BAT1`: 2-polige JST-ACH Micro-Buchse zum 1S LiPo Pouch-Akku (600 mAh mit integriertem DW01A/8205A PCM).
 
-### 11.3 Vollständige GPIO-Pinbelegung (ESP32-C6-MINI-1)
+### 11.3 Vollständige GPIO-Pinbelegung (ESP32-C6-MINI-1U)
 
-| ESP32-C6 Pin | Netzname | Signal-Typ | Funktion / Hardware-Verbindung |
-| :--- | :--- | :--- | :--- |
-| **`GPIO 0`** | `BTN_PWR` | Digital In (Pullup) | SW1 (Power / MFB, Low-aktiv, Boot-Pin) |
-| **`GPIO 1`** | `BTN_MESH` | Digital In (Pullup) | SW2 (Open/Group Mesh Umschaltung, Low-aktiv) |
-| **`GPIO 2`** | `BTN_VOL_UP` | Digital In (Pullup) | SW3 (Lautstärke +, Kanalwahl +, Low-aktiv) |
-| **`GPIO 3`** | `BTN_VOL_DN` | Digital In (Pullup) | SW4 (Lautstärke -, Kanalwahl -, Low-aktiv) |
-| **`GPIO 4`** | `I2S_MCLK` | Digital Out | ES8311 Master Clock (12.288 MHz) |
-| **`GPIO 5`** | `I2S_BCLK` | Digital Out | ES8311 Bit Clock (1.536 MHz) |
-| **`GPIO 6`** | `I2S_WS` | Digital Out | ES8311 Frame Sync / Word Select (48 kHz) |
-| **`GPIO 7`** | `I2S_SDOUT` | Digital Out | ES8311 DAC Data Out (Lautsprecher) |
-| **`GPIO 8`** | `I2S_SDIN` | Digital In | ES8311 ADC Data In (Mikrofon) |
-| **`GPIO 9`** | `I2C_SCL` | Open-Drain | ES8311 I2C Clock (4.7k Pullup nach 3.3V) |
-| **`GPIO 10`** | `I2C_SDA` | Open-Drain | ES8311 I2C Data (4.7k Pullup nach 3.3V) |
-| **`GPIO 11`** | `WS2812_DATA` | Digital Out | D1 (WS2812B-2020 RGB Statusanzeige) |
-| **`GPIO 12`** | `CHG_STAT1` | Digital In (Pullup) | BQ24075 /STAT Ladezustandsanzeige |
-| **`GPIO 13`** | `PWR_GOOD` | Digital In (Pullup) | BQ24075 /PGOOD Externe 5V-Versorgung aktiv |
-| **`GPIO 14`** | `VBAT_SENSE` | Analog In (ADC1_CH4)| Akku-Spannungsmessung (100k / 100k Teiler) |
-| **`GPIO 15`** | `NTC_SENSE` | Analog In (ADC1_CH5)| NTC-Thermistor Temperaturüberwachung |
-| **`GPIO 16`** | `UART_TX` | Digital Out | Zero-Wear Kassettenbus / Debug-Schnittstelle |
-| **`GPIO 17`** | `UART_RX` | Digital In | Zero-Wear Kassettenbus / Debug-Schnittstelle |
-| **`USB_DP`** | `USB_D_P` | USB 2.0 PHY | USB-C D+ (WebUSB Firmware-Flashing & DFU) |
-| **`USB_DM`** | `USB_D_N` | USB 2.0 PHY | USB-C D- (WebUSB Firmware-Flashing & DFU) |
+| Modul-Pad | ESP32-C6 GPIO | Netzname | Signal-Typ | Funktion / Hardware-Verbindung |
+| :---: | :---: | :--- | :--- | :--- |
+| **Pad 8** | **`GPIO 2`** | `BTN_PWR` | Digital In (Pullup) | SW1 (Power / MFB Taster, Low-aktiv, Boot-Pin) |
+| **Pad 9** | **`GPIO 3`** | `BTN_MESH` | Digital In (Pullup) | SW2 (Mesh / Group Umschaltung, Low-aktiv) |
+| **Pad 4** | **`GPIO 4`** | `BTN_VOL_UP` | Digital In (Pullup) | SW3 (Lautstärke +, Kanalwahl +, Low-aktiv) |
+| **Pad 5** | **`GPIO 5`** | `BTN_VOL_DOWN` | Digital In (Pullup) | SW4 (Lautstärke -, Kanalwahl -, Low-aktiv) |
+| **Pad 6** | **`GPIO 6`** | `WS2812_DATA` | Digital Out | D1 (WS2812B-2020 RGB Statusanzeige & Lichtleiter) |
+| **Pad 7** | **`GPIO 7`** | `CHG_STAT` | Digital In (Pullup) | BQ24075 /STAT Ladezustandsanzeige (Low-aktiv) |
+| **Pad 10** | **`GPIO 8`** | `I2C_SDA` | Open-Drain | ES8311 Register Control SDA (4.7k Pullup) |
+| **Pad 11** | **`GPIO 9`** | `I2C_SCL` | Open-Drain | ES8311 Register Control SCL (4.7k Pullup) |
+| **Pad 14** | **`GPIO 12`** | `USB_DN` | USB 2.0 PHY | USB-C D- (WebUSB Firmware-Flashing & DFU via D2) |
+| **Pad 15** | **`GPIO 13`** | `USB_DP` | USB 2.0 PHY | USB-C D+ (WebUSB Firmware-Flashing & DFU via D2) |
+| **Pad 21** | **`GPIO 19`** | `I2S_MCLK` | Digital Out | ES8311 Master Clock (12.288 MHz) |
+| **Pad 22** | **`GPIO 20`** | `I2S_BCLK` | Digital Out | ES8311 Bit Clock (1.536 MHz) |
+| **Pad 23** | **`GPIO 21`** | `I2S_WS` | Digital Out | ES8311 Frame Sync / Word Select (48 kHz) |
+| **Pad 24** | **`GPIO 22`** | `I2S_DOUT` | Digital Out | ES8311 DAC Data Out (Lautsprecher) |
+| **Pad 25** | **`GPIO 23`** | `I2S_DIN` | Digital In | ES8311 ADC Data In (Mikrofon) |
+| **U.FL** | **RF 2.4G** | `RF_ANT` | 50 Ohm Koaxial | Taoglas FXP73 Flex-Dipol (+3.0 dBi Antenne) |

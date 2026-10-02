@@ -156,11 +156,11 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 
 | Designator | Bauteil / Wert | Hersteller / Typ | Gehäuse / Footprint | JLCPCB Part # | Funktion / Beschreibung |
 | :--- | :--- | :--- | :--- | :---: | :--- |
-| **`U1`** | ESP32-C6-MINI-1 | Espressif | SMD Modul (13.2x16.6mm)| `C5267232` | 32-Bit RISC-V 160MHz Host MCU, Wi-Fi 6, 802.15.4 TDMA, BLE 5.3, 4MB Flash |
+| **`U1`** | ESP32-C6-MINI-1U | Espressif | SMD Modul (13.2x16.6mm) mit U.FL | `C5267233` | 32-Bit RISC-V 160MHz Host MCU, Wi-Fi 6, 802.15.4 TDMA, BLE 5.3, 4MB Flash, U.FL HF-Port |
 | **`U2`** | BQ24075RGTR | Texas Instruments | QFN-16 (3x3mm) | `C96825` | 1.5A LiPo PMIC mit Dynamic Power Path Management (Zero-Reboot Umschaltung) |
 | **`U3`** | XC6206P332MR | Torex Semi | SOT-23-3 | `C5446` | 3.3V / 250mA Low-Iq LDO Spannungsregler |
 | **`U4`** | ES8311 | Everest Semi | QFN-20 (3x3mm) | `C396781` | 24-Bit / 96kHz Mono Audio Codec mit 100mW HP-Amp & rauscharmem Mic-Preamp |
-| **`ANT1`** | 2450AT45A100 | Johanson Tech | SMD 9.5x2.0mm | `C139744` | 2.4 GHz High-Gain Keramik-Chipantenne (+2.2 dBi) mit Pi-Filter |
+| **`ANT1`** | Taoglas FXP73 | I-PEX MHF / U.FL | 2.4 GHz Flex-Dipol (+3.0 dBi) | `C14894` | Abgesetzte Helm-Flexantenne, klickt direkt auf den board-eigenen U.FL-Port von `U1` (Reichweite bis 250m) |
 | **`J1`** | TYPE-C-31-M-12 | Korean HRO | SMT/THT IP67 | `C2765186` | Wasserdichte 16-Pin USB-C Buchse (5V Laden, WebUSB DFU, Helm-Audio) |
 | **`BAT1`** | JST-ACH 2-Pin | JST | SMD 1.2mm pitch | `C2902341` | Steckverbindung zum internen 600-mAh-LiPo Pouch-Akku (mit PCM) |
 | **`D1`** | WS2812B-2020 | Worldsemi | SMD 2020 | `C2843785` | RGB-Status-LED (Ladezustand, Mesh-Kanal, Pairing-Indikator) |

@@ -131,7 +131,30 @@ def validate_system():
         else:
             print("    [OK] Zero GPIO Pin Collisions detected across Smart Cartridge definition.")
 
-    # 4. SPI Transceiver Mock Verification
+    # 4. Parse Firmware GPIO definitions (OMM Intercom Module PCBA 09 ESP32-C6)
+    omm_cfg_file = os.path.join(repo_root, "firmware/omm_module/src/omm_module_config.h")
+    if os.path.exists(omm_cfg_file):
+        print(f"\n[*] Loading OMM Intercom Firmware Pinout: {os.path.relpath(omm_cfg_file, repo_root)}")
+        omm_gpios = {}
+        with open(omm_cfg_file, 'r', encoding='utf-8') as f:
+            for line in f:
+                match = re.match(r'#define\s+(OMM_PIN_[A-Z0-9_]+)\s+GPIO_NUM_(\d+)', line.strip())
+                if match:
+                    omm_gpios[match.group(1)] = int(match.group(2))
+        print(f"    -> Extracted {len(omm_gpios)} hardware GPIO pin assignments.")
+        for name, pin in sorted(omm_gpios.items(), key=lambda x: x[1]):
+            print(f"    - GPIO {pin:2d} -> {name}")
+        omm_counts = {}
+        for name, pin in omm_gpios.items():
+            omm_counts.setdefault(pin, []).append(name)
+        omm_collisions = {p: names for p, names in omm_counts.items() if len(names) > 1}
+        if omm_collisions:
+            print(f"    [ERROR] OMM Intercom GPIO Pin Collision detected: {omm_collisions}")
+            return False
+        else:
+            print("    [OK] Zero GPIO Pin Collisions detected across OMM Intercom definition.")
+
+    # 5. SPI Transceiver Mock Verification
     print("\n[*] Validating SPI Transceiver Mock Engines (HIL/SIL):")
     transceivers = {
         "Qorvo DW3110 UWB": {"bus": "SPI2", "clock": "20 MHz", "latency_budget_us": 380, "status": "VERIFIED"},

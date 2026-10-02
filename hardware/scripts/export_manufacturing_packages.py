@@ -77,6 +77,14 @@ BOARDS = [
         "pcb": os.path.join(BASE_DIR, "kicad_radar_submcu/openmotorbridge_radar_submcu.kicad_pcb"),
         "layers": "F.Cu,B.Cu,In1.Cu,In2.Cu,F.Paste,B.Paste,F.SilkS,B.SilkS,F.Mask,B.Mask,Edge.Cuts",
         "is_4layer": True
+    },
+    {
+        "name": "09_omm_ucs_pcba",
+        "title": "OpenMotorBridge OMM 2.4 GHz Intercom & UCS Modul PCB",
+        "sch": os.path.join(BASE_DIR, "kicad_omm_intercom/openmotorbridge_omm_intercom.kicad_sch"),
+        "pcb": os.path.join(BASE_DIR, "kicad_omm_intercom/openmotorbridge_omm_intercom.kicad_pcb"),
+        "layers": "F.Cu,B.Cu,F.Paste,B.Paste,F.SilkS,B.SilkS,F.Mask,B.Mask,Edge.Cuts",
+        "is_4layer": False
     }
 ]
 
@@ -115,7 +123,30 @@ def export_jlcpcb_bom(pcb_file, sch_file, output_csv):
         val = val_m.group(1) if val_m else ""
         lcsc = lcsc_m.group(1) if lcsc_m else ""
 
-        if ref and not ref.startswith("#") and not ref.startswith("G***"):
+        if not lcsc:
+            known_lcsc = {
+                "ESP32-C6-MINI-1U": "C5267233",
+                "BQ24075RGTR": "C96825",
+                "XC6206P332MR": "C5446",
+                "ES8311_Codec": "C396781",
+                "ES8311": "C396781",
+                "TYPE-C-31-M-12_IP67": "C2765186",
+                "JST_2P_LiPo_600mAh": "C2902341",
+                "WS2812B-2020": "C2843785",
+                "USBLC6-2SC6": "C7519",
+                "5.1k_CC1": "C23186",
+                "5.1k_CC2": "C23186",
+                "Power_MFB": "C318884",
+                "Mesh_Group": "C318884",
+                "Vol_Plus": "C318884",
+                "Vol_Minus": "C318884",
+            }
+            if val in known_lcsc:
+                lcsc = known_lcsc[val]
+            elif ref in known_lcsc:
+                lcsc = known_lcsc[ref]
+
+        if ref and not ref.startswith("#") and not ref.startswith("G***") and not (ref.startswith("H") and "MountingHole" in val):
             components.append({
                 "Designator": ref,
                 "Comment": val,
