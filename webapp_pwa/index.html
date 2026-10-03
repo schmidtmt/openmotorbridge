@@ -1410,16 +1410,16 @@
                     </div>
                 </section>
 
-                <!-- Pod 3 Card & DLE Score -->
+                <!-- Zentralbox LoRa Mesh Gateway & DLE Score -->
                 <section class="card">
                     <div class="card-header">
-                        <span class="card-title">3️⃣ <span data-i18n="pod3_title">Pod 3 (Heckbürzel)</span></span>
+                        <span class="card-title">📡 <span data-i18n="pod3_title">Zentralbox &amp; LoRa Mesh (PCBA 01)</span></span>
                         <span class="card-badge" id="pod3-badge" style="background: rgba(255,255,255,0.08); color: var(--text-muted);">Offline</span>
                     </div>
                     <div class="stat-tile" style="margin-bottom: 12px;">
-                        <span class="stat-label">Dual-PHY OpenMotorMesh & GNSS</span>
+                        <span class="stat-label">Dual-PHY OpenMotorMesh &amp; Telemetrie</span>
                         <div style="font-size: 1.05rem; font-weight: 700; margin: 6px 0;">2.4 GHz Mesh + SX1262 LoRa</div>
-                        <span class="stat-sub">RP2040 Dual-Core Coprozessor + MAX-M10S @ 460.8k</span>
+                        <span class="stat-sub">Integriert auf PCBA 01 (Central Box) * Keine Heck-Leiterplatte</span>
                     </div>
                     <div class="stat-row">
                         <span class="stat-sub" data-i18n="dle_score_label">DLE Gateway Score:</span>
@@ -1446,11 +1446,11 @@
                     <!-- Sub-Card 1: OpenMotorBridge & OMM Unified Flash Push -->
                     <div style="background: var(--bg-surface-elevated); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                            <strong style="font-size: 0.95rem; color: var(--accent-orange);">📡 OMM Heck-Pod 3 In-System Flasher</strong>
+                            <strong style="font-size: 0.95rem; color: var(--accent-orange);">📡 OMM UCS Intercom (PCBA 09) In-System Flasher</strong>
                             <span class="card-badge" id="badge-omm-fw-state" style="background: rgba(255,255,255,0.08); color: var(--text-muted);">Offline</span>
                         </div>
                         <p class="stat-sub" style="font-size: 0.78rem; margin-bottom: 12px;">
-                            Pusht neue OMM-Firmware ('omm_rear.bin') transparent über den 460.800 Baud High-Speed UART der 6-Pin Kontaktleiste ohne Zerlegen des Motorrads.
+                            Pusht neue OMM-Firmware ('omm_ucs.bin') transparent über den 460.800 Baud High-Speed UART der Kassetten-Pogo-Pins ohne Zerlegen des Helms.
                         </p>
 
                         <!-- Progress Bar -->
@@ -2192,30 +2192,30 @@
                         </div>
                     </section>
 
-                    <!-- 4. Heck-Pod 3 & Sensoren -->
+                    <!-- 4. LoRa 868 MHz Mesh & GNSS Telemetrie -->
                     <section class="card" id="card-device-pod3">
                         <div class="card-header">
                             <div style="display: flex; align-items: center; gap: 8px;">
                                 <span style="font-size: 1.2rem;">🛰️</span>
-                                <span class="card-title">Heck-Pod 3 (GNSS & LoRa Mesh)</span>
+                                <span class="card-title">LoRa 868 MHz &amp; GNSS Telemetrie</span>
                             </div>
                             <span class="card-badge badge-green">3D DGPS Fix</span>
                         </div>
                         <div class="stat-row">
-                            <span class="stat-sub">Multi-GNSS Empfänger:</span>
-                            <span style="font-weight: 700;">u-blox MAX-M10S (GPS/Galileo/GLONASS)</span>
+                            <span class="stat-sub">LoRa Kolonnen-Mesh:</span>
+                            <span style="font-weight: 700; color: var(--accent-cyan);">Semtech SX1262 (integriert auf PCBA 01 Central Box)</span>
                         </div>
                         <div class="stat-row">
-                            <span class="stat-sub">Satelliten & Frequenz:</span>
+                            <span class="stat-sub">Multi-GNSS Empfänger:</span>
+                            <span style="font-weight: 700;">u-blox SAM-M10Q (Front-Node Cockpit Port J12)</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-sub">Satelliten &amp; Frequenz:</span>
                             <span style="font-weight: 700; color: var(--accent-green);">18 Satelliten * 10 Hz Update * 1-PPS Lock</span>
                         </div>
                         <div class="stat-row">
-                            <span class="stat-sub">868 MHz LoRa Funk:</span>
-                            <span style="font-weight: 700; color: var(--accent-cyan);">Semtech SX1262 (OMM Kolonnen-Mesh)</span>
-                        </div>
-                        <div class="stat-row">
                             <span class="stat-sub">6-Achs IMU Dynamik:</span>
-                            <span style="font-weight: 700;">Bosch BMI088 (Schräglage & EKF Dead-Reckoning)</span>
+                            <span style="font-weight: 700;">Bosch BMI088 (Front-Node Cockpit)</span>
                         </div>
                     </section>
 
@@ -2804,12 +2804,6 @@
                             <div class="builder-option-desc">Cockpit-Hub mit Qi/QuadLock (J10), Totwinkel-Spiegel-LEDs (J9), Actioncam-Strom (J8), CarPlay Dongle-Port (J6) und Lenker-PTT (J3).</div>
                             <div class="builder-option-badge">Empfohlen</div>
                         </div>
-                        <div class="builder-option-card selected" data-type="addon" data-value="rearPod3">
-                            <div class="builder-option-icon">🛰️</div>
-                            <div class="builder-option-title">Heck-Pod 3 (LoRa, GNSS & DS18B20 Temp)</div>
-                            <div class="builder-option-desc">ESP32-C3 Coprozessor, 868 MHz Semtech LoRa, 10Hz MAX-M10S Multi-GNSS und wasserdichter Dallas DS18B20 1-Wire Fahrtwind-Außentemperatursensor (J6).</div>
-                            <div class="builder-option-badge">Empfohlen</div>
-                        </div>
                         <div class="builder-option-card" data-type="addon" data-value="ommHelmetKit">
                             <div class="builder-option-icon">🪖</div>
                             <div class="builder-option-title">OMM Helm UCS Headset-Kit</div>
@@ -2825,7 +2819,7 @@
                         <div class="builder-option-card" data-type="addon" data-value="radar2">
                             <div class="builder-option-icon">📡</div>
                             <div class="builder-option-title">Radar 2.0 Sub-MCU & Halo-Wings</div>
-                            <div class="builder-option-desc">PCBA 08 (ESP32-C5 Dual-Band), Wheeltec MR20 24-GHz-Radar (50m Erfassung), 36x Halo-RGB LEDs, 5.9 GHz V2X & dielektrisches MJF-Radom.</div>
+                            <div class="builder-option-desc">PCBA 08 (ESP32-C5 Dual-Band), Wheeltec MR20 77-GHz-mmWave-Radar (90m Erfassung), 36x Halo-RGB LEDs & Qorvo DW3110 UWB Backbone.</div>
                             <div class="builder-option-badge">Aktiv-Sicherheit</div>
                         </div>
                         <div class="builder-option-card" data-type="addon" data-value="bsdMirrors">
@@ -2907,7 +2901,7 @@
                 <div>
                     <div style="font-size: 0.82rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em;">Deine Systemkonfiguration</div>
                     <div style="font-size: 1.25rem; font-weight: 800; color: #fff; font-family: var(--font-heading);" id="builder-summary-title">BMW R1250/R1300 GS · Dual-Mesh Bridge</div>
-                    <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px;" id="builder-summary-sub">Sena SPIDER X Slim (Slot 1) + Cardo Packtalk Edge (Slot 2) + Front-Node + Heck-Pod 3</div>
+                    <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px;" id="builder-summary-sub">Sena SPIDER X Slim (Slot 1) + Cardo Packtalk Edge (Slot 2) + Front-Node</div>
                 </div>
                 <div style="display: flex; gap: 14px; align-items: center; flex-wrap: wrap;">
                     <div style="text-align: right;">
@@ -3063,14 +3057,14 @@
                         <div class="smoke-step-detail" id="smoke-detail-front">Lenker-PTT, Knowles MEMS Akustik, Staudruck & 20W USB-PD.</div>
                     </div>
 
-                    <!-- Step 4: Rear Pod 3 -->
+                    <!-- Step 4: Rear Radar & Telemetry -->
                     <div class="smoke-step" id="smoke-step-rear">
                         <div class="smoke-step-head">
                             <span class="smoke-step-num">Check 4</span>
                             <span class="smoke-status-pill" id="smoke-status-rear">BEREIT</span>
                         </div>
-                        <div class="smoke-step-title">📡 Heck-Pod 3 (LoRa/GNSS)</div>
-                        <div class="smoke-step-detail" id="smoke-detail-rear">SX1262 LoRa 868 MHz Ping, u-blox GNSS 3D-Fix und Varia-Radar.</div>
+                        <div class="smoke-step-title">🚨 Radar 2.0 &amp; Heck-Telemetrie</div>
+                        <div class="smoke-step-detail" id="smoke-detail-rear">Wheeltec 77 GHz mmWave Radar, 36x Halo RGB LEDs &amp; UWB Backbone.</div>
                     </div>
                 </div>
 

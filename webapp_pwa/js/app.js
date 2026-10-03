@@ -110,7 +110,7 @@ const i18n = {
         btn_p1_next: 'Port 1 Channel Next (1s)',
         pod1_title: 'Pod 1 (Rahmen links)',
         pod2_title: 'Pod 2 (Rahmen rechts)',
-        pod3_title: 'Pod 3 (Heckbürzel)',
+        pod3_title: 'Zentralbox & LoRa Mesh (PCBA 01)',
         inserted_cartridge: 'Gesteckte Kassette',
         bt_classic_off: 'BT Classic AUS',
         mesh_only_on: 'Mesh-Only Aktiv',
@@ -329,7 +329,7 @@ const i18n = {
         btn_p1_next: 'Port 1 Channel Next (1s)',
         pod1_title: 'Pod 1 (Left Frame)',
         pod2_title: 'Pod 2 (Right Frame)',
-        pod3_title: 'Pod 3 (Rear Fender)',
+        pod3_title: 'Central Box & LoRa Mesh (PCBA 01)',
         inserted_cartridge: 'Plugged Cartridge',
         bt_classic_off: 'BT Classic OFF',
         mesh_only_on: 'Mesh-Only Active',
@@ -2564,7 +2564,8 @@ function initRadarMacroConfigUi() {
 const HW_INV_BITS = {
     POD1:       1 << 0,  // Satelliten-Pod 1 (Intercom A / 1-Wire)
     POD2:       1 << 1,  // Satelliten-Pod 2 (Intercom B / 1-Wire)
-    POD3:       1 << 2,  // Heck-Pod 3 Backbone (GNSS / LoRa / UART1)
+    LORA_MESH:  1 << 2,  // LoRa 868 MHz Kolonnen-Mesh (PCBA 01 Central Box)
+    POD3:       1 << 2,  // Backward-compatibility alias
     FRONT_NODE: 1 << 3,  // Front-Node (Cockpit / ESP-NOW)
     RADAR:      1 << 4,  // Radar 2.0 Sub-MCU / Garmin Varia (UART2)
     ACTION_CAM: 1 << 5,  // Action-Cam BLE Remote
@@ -2590,11 +2591,11 @@ const HW_INV_LABELS = {
         hintDe: '1-Wire Steckverbindung oder Bajonettverschluss an Port 2 prüfen.',
         hintEn: 'Check 1-Wire connector or bayonet lock on Port 2.'
     },
-    [HW_INV_BITS.POD3]: {
-        nameDe: 'Satelliten-Pod 3 (Heck-Backbone GNSS / LoRa)',
-        nameEn: 'Satellite Pod 3 (Rear Backbone GNSS / LoRa)',
-        hintDe: 'M8-Kabelbaum, UART1-Verbindung und Spannungsversorgung prüfen.',
-        hintEn: 'Check M8 wiring harness, UART1 link and power supply.'
+    [HW_INV_BITS.LORA_MESH]: {
+        nameDe: 'LoRa 868 MHz Kolonnen-Mesh (PCBA 01 Central Box)',
+        nameEn: 'LoRa 868 MHz Convoy Mesh (PCBA 01 Central Box)',
+        hintDe: 'LoRa Antenne und SPI-Bus des SX1262 auf PCBA 01 prüfen.',
+        hintEn: 'Check LoRa antenna and SX1262 SPI bus on PCBA 01.'
     },
     [HW_INV_BITS.FRONT_NODE]: {
         nameDe: 'Universal Front-Node (Cockpit / ESP-NOW)',
@@ -6040,7 +6041,7 @@ const s_defaultTours = [
         eleRange: '450 - 2.106 m',
         tempRange: '11.8 - 27.4 °C',
         tempAvg: '19.4',
-        tempSource: 'Heck-Pod Flosse',
+        tempSource: 'TMP117 Gabelfuß (Port J12)',
         maxAccel: '+0.78g',
         maxDecel: '-0.91g',
         maxRpm: '8.400 U/min',
@@ -7105,14 +7106,14 @@ btnTriggerOmmPush?.addEventListener('click', () => {
         if (pct < 40) {
             lblOmmPushStatus.textContent = state.lang === 'de' ? 'Flash-Sektoren löschen & SLIP Chunks streamen...' : 'Erasing flash & streaming SLIP chunks...';
         } else if (pct < 90) {
-            lblOmmPushStatus.textContent = state.lang === 'de' ? `Übertrage 'omm_rear.bin' (${pct}%)...` : `Transferring 'omm_rear.bin' (${pct}%)...`;
+            lblOmmPushStatus.textContent = state.lang === 'de' ? `Übertrage 'omm_ucs.bin' (${pct}%)...` : `Transferring 'omm_ucs.bin' (${pct}%)...`;
         } else if (pct === 100) {
             clearInterval(flashInterval);
             lblOmmPushStatus.textContent = state.lang === 'de' ? '✓ MD5 Hash verifiziert * Coprozessor neugestartet' : '✓ MD5 Hash verified * Coprocessor rebooted';
             badgeOmmFwState.textContent = 'Synchron (v8.0.4)';
             badgeOmmFwState.className = 'card-badge badge-green';
             btnTriggerOmmPush.disabled = false;
-            showToast(state.lang === 'de' ? '✓ OMM Heck-Pod Firmware erfolgreich via UART aktualisiert!' : '✓ OMM Rear Pod firmware successfully updated via UART!', 'success');
+            showToast(state.lang === 'de' ? '✓ OMM UCS Intercom Firmware erfolgreich via UART aktualisiert!' : '✓ OMM UCS Intercom firmware successfully updated via UART!', 'success');
         }
     }, 250);
 });
@@ -7389,7 +7390,7 @@ function resetBikeAlarmState() {
 function triggerTestBikeAlarm() {
     state.alarm.triggered = true;
     state.alarm.source = 'IMU Schock-Sensor (Stufe 2)';
-    state.alarm.detail = 'Erschütterung 3.8 g * Heck-Pod 3 LoRa 868 MHz SF11 Broadcast';
+    state.alarm.detail = 'Erschütterung 3.8 g * PCBA 01 LoRa 868 MHz SF11 Broadcast';
     state.alarm.lat = state.telemetry.lat || 47.4640;
     state.alarm.lon = state.telemetry.lon || 9.0430;
     updateBikeAlarmUi(state.alarm);
@@ -8373,7 +8374,6 @@ const fleetState = {
             slot2: 'cardo-edge',
             addons: {
                 frontNode: true,
-                rearPod3: true,
                 ommHelmetKit: false,
                 tmp117Sensor: false,
                 radar2: false,
@@ -8431,7 +8431,6 @@ function createDefaultBike(index, template = null) {
         slot2: index % 3 === 0 ? 'cardo-edge' : 'pmr446',
         addons: {
             frontNode: model !== 'car-support',
-            rearPod3: true,
             ommHelmetKit: false,
             tmp117Sensor: false,
             radar2: false,
@@ -8704,7 +8703,6 @@ function calculateSingleBikeBom(bikeConfig) {
     if (slot1 === 'omm-ucs') { costMin += 38; costMax += 48; }
     if (slot2 === 'omm-ucs') { costMin += 38; costMax += 48; }
     if (addons.frontNode) { costMin += 42; costMax += 55; }
-    if (addons.rearPod3) { costMin += 48; costMax += 62; }
     if (addons.ommHelmetKit) { costMin += 45; costMax += 58; }
     if (addons.tmp117Sensor) { costMin += 14; costMax += 18; }
     if (addons.radar2) { costMin += 65; costMax += 85; }
@@ -8714,7 +8712,7 @@ function calculateSingleBikeBom(bikeConfig) {
     if (addons.keyfob) { costMin += 22; costMax += 30; }
     if (mfg === 'diy') { costMin -= 25; costMax -= 35; }
 
-    const numPods = bikeModel === 'car-support' ? (addons.rearPod3 ? 1 : 0) : (addons.rearPod3 ? 3 : 2);
+    const numPods = bikeModel === 'car-support' ? 0 : 2;
     const numSmart = (slot1 === 'sena-spider-x' ? 1 : 0) + (slot2 === 'cardo-edge' ? 1 : 0);
 
     // 3D Parts
@@ -8754,10 +8752,6 @@ function calculateSingleBikeBom(bikeConfig) {
         } else if (slot2 === 'blind') {
             parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_blindkassette.stl', qty: 1, desc: isDe ? 'Hermetische Blindkassette (Dry Box)' : 'Hermetic blank cartridge (Dry Box)' });
         }
-    }
-
-    if (addons.rearPod3) {
-        parts3D.push({ group: 'Heck-Pod 3', file: 'cartridge_antenna_bracket_omm.stl', qty: 1, desc: isDe ? 'Dielektrisches Antennenradom für PCBA 04' : 'Dielectric antenna radome for PCBA 04' });
     }
 
     if (addons.frontNode) {
@@ -8806,32 +8800,39 @@ function calculateSingleBikeBom(bikeConfig) {
     // Bike-specific parts
     if (bikeModel === 'bmw-gs') {
         parts3D.push({ group: 'Bike-Kit (GS)', file: 'adventure_transition_dock.stl', qty: 2, desc: isDe ? 'Sitzbank-Bügelfalte Transition-Docks (Ø 28 mm)' : 'Seat crease transition docks (Ø 28 mm)' });
-        parts3D.push({ group: 'Bike-Kit (GS)', file: 'adventure_rack_tail_mount.stl', qty: 1, desc: isDe ? 'Gepäckbrücken-Ausleger für Heck-Pod' : 'Luggage rack cantilever for rear pod' });
-        parts3D.push({ group: 'Bike-Kit (GS)', file: 'radar_varia_gopro_lock_dock.stl', qty: 1, desc: isDe ? 'Garmin Varia Quarter-Turn Dock' : 'Garmin Varia quarter-turn dock' });
-        parts3D.push({ group: 'Bike-Kit (GS)', file: '011_gopro_hirth_lock.stl', qty: 1, desc: isDe ? '36-Zahn Hirth-Formschluss-Gelenk' : '36-tooth Hirth gear lock' });
+        if (addons.radar2) {
+            parts3D.push({ group: 'Bike-Kit (GS)', file: 'adventure_rack_tail_mount.stl', qty: 1, desc: isDe ? 'Gepäckbrücken-Ausleger für Radar 2.0 / Varia' : 'Luggage rack cantilever for Radar 2.0 / Varia' });
+            parts3D.push({ group: 'Bike-Kit (GS)', file: 'radar_varia_gopro_lock_dock.stl', qty: 1, desc: isDe ? 'Garmin Varia Quarter-Turn Dock' : 'Garmin Varia quarter-turn dock' });
+            parts3D.push({ group: 'Bike-Kit (GS)', file: '011_gopro_hirth_lock.stl', qty: 1, desc: isDe ? '36-Zahn Hirth-Formschluss-Gelenk' : '36-tooth Hirth gear lock' });
+        }
     } else if (bikeModel === 'bmw-gsa') {
         parts3D.push({ group: 'Bike-Kit (GSA)', file: 'adventure_pannier_rack_clamp_base.stl', qty: 4, desc: isDe ? 'Ø 18 mm Rohrträger-Klemmschellen-Unterteile' : 'Ø 18 mm pannier rack clamp bases' });
         parts3D.push({ group: 'Bike-Kit (GSA)', file: 'adventure_pannier_rack_clamp_cap.stl', qty: 4, desc: isDe ? 'Ø 18 mm Rohrträger-Klemmschellen-Kappen' : 'Ø 18 mm pannier rack clamp caps' });
-        parts3D.push({ group: 'Bike-Kit (GSA)', file: 'adventure_rack_tail_mount.stl', qty: 1, desc: isDe ? 'Heck-Balkon hinter Alutopcase mit 45°-Finne' : 'Tail Balcony behind topcase with 45° fin' });
-        parts3D.push({ group: 'Bike-Kit (GSA)', file: 'radar_varia_gopro_lock_dock.stl', qty: 1, desc: isDe ? 'Garmin Varia Quarter-Turn Dock' : 'Garmin Varia quarter-turn dock' });
-        parts3D.push({ group: 'Bike-Kit (GSA)', file: '011_gopro_hirth_lock.stl', qty: 1, desc: isDe ? '36-Zahn Hirth-Formschluss-Gelenk' : '36-tooth Hirth gear lock' });
+        if (addons.radar2) {
+            parts3D.push({ group: 'Bike-Kit (GSA)', file: 'adventure_rack_tail_mount.stl', qty: 1, desc: isDe ? 'Heck-Balkon hinter Alutopcase mit 45°-Finne für Radar' : 'Tail Balcony behind topcase with 45° fin for Radar' });
+            parts3D.push({ group: 'Bike-Kit (GSA)', file: 'radar_varia_gopro_lock_dock.stl', qty: 1, desc: isDe ? 'Garmin Varia Quarter-Turn Dock' : 'Garmin Varia quarter-turn dock' });
+            parts3D.push({ group: 'Bike-Kit (GSA)', file: '011_gopro_hirth_lock.stl', qty: 1, desc: isDe ? '36-Zahn Hirth-Formschluss-Gelenk' : '36-tooth Hirth gear lock' });
+        }
     } else if (bikeModel === 'hd-touring') {
         parts3D.push({ group: 'Bike-Kit (HD)', file: 'saddlebag_lid_dock.stl', qty: 2, desc: isDe ? 'Kofferdeckel-Montagedocks (Pod 1 & 2)' : 'Saddlebag lid docks (Pods 1 & 2)' });
-        parts3D.push({ group: 'Bike-Kit (HD)', file: 'pod3_touring_fender_console.stl', qty: 1, desc: isDe ? 'Organische Heckkotflügel-Konsole' : 'Organic rear fender console' });
-        parts3D.push({ group: 'Bike-Kit (HD)', file: 'radar_license_plate_bracket.stl', qty: 1, desc: isDe ? 'Entkoppelter Kennzeichen-Radarhalter' : 'Decoupled license plate radar mount' });
-        parts3D.push({ group: 'Bike-Kit (HD)', file: 'radar_swivel_tilt_cradle.stl', qty: 1, desc: isDe ? 'Radar 2.0 Schwerlast-Neigegelenk (Actioncam-Hirth)' : 'Radar 2.0 heavy-duty swivel tilt cradle (Actioncam Hirth)' });
+        if (addons.radar2) {
+            parts3D.push({ group: 'Bike-Kit (HD)', file: 'radar_license_plate_bracket.stl', qty: 1, desc: isDe ? 'Entkoppelter Kennzeichen-Radarhalter' : 'Decoupled license plate radar mount' });
+            parts3D.push({ group: 'Bike-Kit (HD)', file: 'radar_swivel_tilt_cradle.stl', qty: 1, desc: isDe ? 'Radar 2.0 Schwerlast-Neigegelenk (Actioncam-Hirth)' : 'Radar 2.0 heavy-duty swivel tilt cradle (Actioncam Hirth)' });
+        }
     } else if (bikeModel === 'hd-cvo-st' || bikeModel === 'hd-cVO-st') {
         parts3D.push({ group: 'Bike-Kit (CVO)', file: 'saddlebag_lid_dock.stl', qty: 2, desc: isDe ? 'Kofferdeckel-Montagedocks (Pod 1 & 2)' : 'Saddlebag lid docks (Pods 1 & 2)' });
-        parts3D.push({ group: 'Bike-Kit (CVO)', file: 'cvo_st_undercowl_skeleton_dock.stl', qty: 1, desc: isDe ? 'Aufrechtes Federsitz-Dock unter Solo-Hutze' : 'Upright skeleton dock under solo seat cowl' });
-        parts3D.push({ group: 'Bike-Kit (CVO)', file: 'radar_license_plate_bracket.stl', qty: 1, desc: isDe ? 'Entkoppelter Kennzeichen-Radarhalter (OEM-Mitte)' : 'Decoupled license plate radar mount (OEM center)' });
-        parts3D.push({ group: 'Bike-Kit (CVO)', file: 'radar_swivel_tilt_cradle.stl', qty: 1, desc: isDe ? 'Radar 2.0 Schwerlast-Neigegelenk (Actioncam-Hirth)' : 'Radar 2.0 heavy-duty swivel tilt cradle (Actioncam Hirth)' });
+        if (addons.radar2) {
+            parts3D.push({ group: 'Bike-Kit (CVO)', file: 'radar_license_plate_bracket.stl', qty: 1, desc: isDe ? 'Entkoppelter Kennzeichen-Radarhalter (OEM-Mitte)' : 'Decoupled license plate radar mount (OEM center)' });
+            parts3D.push({ group: 'Bike-Kit (CVO)', file: 'radar_swivel_tilt_cradle.stl', qty: 1, desc: isDe ? 'Radar 2.0 Schwerlast-Neigegelenk (Actioncam-Hirth)' : 'Radar 2.0 heavy-duty swivel tilt cradle (Actioncam Hirth)' });
+        }
     } else if (bikeModel === 'car-support') {
-        parts3D.push({ group: 'PKW-Kit', file: 'car_sun_visor_pod3_clip.stl', qty: 1, desc: isDe ? 'Sonnenblenden-Halterung für Heck-Pod 3 (LoRa/GNSS)' : 'Sun visor clip mount for Rear Pod 3 (LoRa/GNSS)' });
         parts3D.push({ group: 'PKW-Kit', file: 'car_dashboard_wedge_dock.stl', qty: 1, desc: isDe ? 'Armaturenbrett-Doppelaufnahme für Front-Knoten & Zentralbox' : 'Dashboard dual-stack dock for Front Node & Central Box' });
     } else {
         parts3D.push({ group: 'Bike-Kit (Universal)', file: 'Integriertes V-Bett', qty: 2, desc: isDe ? '120° V-Nut Rohrsattel an Pod-Gehäusen' : '120° V-cradle on Pod enclosures' });
-        parts3D.push({ group: 'Bike-Kit (Universal)', file: 'radar_center_underfender_mount.stl', qty: 1, desc: isDe ? 'Zentrische Underfender-Radarplatte (für seitl. Kennzeichen)' : 'Centered under-fender radar mount (for side-mount plates)' });
-        parts3D.push({ group: 'Bike-Kit (Universal)', file: 'radar_swivel_tilt_cradle.stl', qty: 1, desc: isDe ? 'Radar 2.0 Schwerlast-Neigegelenk (Actioncam-Hirth)' : 'Radar 2.0 heavy-duty swivel tilt cradle (Actioncam Hirth)' });
+        if (addons.radar2) {
+            parts3D.push({ group: 'Bike-Kit (Universal)', file: 'radar_center_underfender_mount.stl', qty: 1, desc: isDe ? 'Zentrische Underfender-Radarplatte (für seitl. Kennzeichen)' : 'Centered under-fender radar mount (for side-mount plates)' });
+            parts3D.push({ group: 'Bike-Kit (Universal)', file: 'radar_swivel_tilt_cradle.stl', qty: 1, desc: isDe ? 'Radar 2.0 Schwerlast-Neigegelenk (Actioncam-Hirth)' : 'Radar 2.0 heavy-duty swivel tilt cradle (Actioncam Hirth)' });
+        }
     }
 
     if (bikeModel === 'hd-touring' || bikeModel === 'hd-cvo-st' || bikeModel === 'hd-cVO-st') {
@@ -8849,27 +8850,15 @@ function calculateSingleBikeBom(bikeConfig) {
 
     // PCBAs
     const pcbas = [
-        { name: 'PCBA 01', id: 'kicad_main_box', qty: 1, desc: isDe ? 'Zentralbox Hauptplatine (ESP32-S3, Codec, USV)' : 'Central box main controller (ESP32-S3, Codec, UPS)' }
+        { name: 'PCBA 01', id: 'kicad_main_box', qty: 1, desc: isDe ? 'Zentralbox Hauptplatine (ESP32-S3, Codec, USV, SX1262 LoRa)' : 'Central box main controller (ESP32-S3, Codec, UPS, SX1262 LoRa)' }
     ];
-
-    if (numPods > 0) {
-        pcbas.push({ name: 'PCBA 02', id: 'kicad_pod_base', qty: numPods, desc: isDe ? `Pod-Basisplatine mit Harwin-Docking (${numPods} Stk.)` : `Pod baseboard with Harwin docking (${numPods} pcs)` });
-    }
 
     if (numSmart > 0 && bikeModel !== 'car-support') {
         pcbas.push({ name: 'PCBA 03', id: 'kicad_cartridge', qty: numSmart, desc: isDe ? `Smart Modular Kassettenplatine (${numSmart} Stk.)` : `Smart modular cartridge board (${numSmart} pcs)` });
     }
 
-    if (addons.rearPod3) {
-        pcbas.push({ name: 'PCBA 04', id: 'kicad_rear_pod3', qty: 1, desc: isDe ? 'Heck-Pod 3 Transceiver (ESP32-C3 RISC-V, LoRa SX1262, u-blox MAX-M10S, DS18B20)' : 'Rear Pod 3 transceiver (ESP32-C3 RISC-V, LoRa SX1262, u-blox MAX-M10S, DS18B20)' });
-    }
-
     if (addons.frontNode) {
-        pcbas.push({ name: 'PCBA 05', id: 'kicad_front_node', qty: 1, desc: isDe ? 'Universal Front-Knoten (ESP32-S3, USB-Hub, PD)' : 'Universal Front Node (ESP32-S3, USB Hub, PD)' });
-    }
-
-    if (bikeModel === 'hd-touring' || bikeModel === 'hd-cvo-st' || bikeModel === 'hd-cVO-st') {
-        pcbas.push({ name: 'PCBA 06', id: 'kicad_magsafe_dock', qty: 2, desc: isDe ? 'MagSafe Koffer-Trennstellenadapter (5-Pin Pogo, TVS, 2A PPTC)' : 'MagSafe saddlebag breakaway adapter (5-pin pogo, TVS, 2A PPTC)' });
+        pcbas.push({ name: 'PCBA 05', id: 'kicad_front_node', qty: 1, desc: isDe ? 'Universal Front-Knoten (ESP32-S3, USB-Hub, SAM-M10Q GNSS, PD)' : 'Universal Front Node (ESP32-S3, USB Hub, SAM-M10Q GNSS, PD)' });
     }
 
     if (addons.keyfob) {
@@ -8877,7 +8866,7 @@ function calculateSingleBikeBom(bikeConfig) {
     }
 
     if (addons.radar2) {
-        pcbas.push({ name: 'PCBA 08', id: 'kicad_radar_submcu', qty: 1, desc: isDe ? 'Radar 2.0 Sub-MCU & Halo-Wings (Wheeltec MR20 24GHz, 36x Halo RGB LEDs, V2X CAN)' : 'Radar 2.0 Sub-MCU & Halo-Wings (Wheeltec MR20 24GHz, 36x Halo RGB LEDs, V2X CAN)' });
+        pcbas.push({ name: 'PCBA 08', id: 'kicad_radar_submcu', qty: 1, desc: isDe ? 'Radar 2.0 Sub-MCU & Halo-Wings (Wheeltec MR20 77-GHz, 36x Halo RGB LEDs, UWB)' : 'Radar 2.0 Sub-MCU & Halo-Wings (Wheeltec MR20 77-GHz, 36x Halo RGB LEDs, UWB)' });
     }
 
     const numOmmSlots = (slot1 === 'omm-ucs' ? 1 : 0) + (slot2 === 'omm-ucs' ? 1 : 0);
@@ -8988,13 +8977,9 @@ function calculateSingleBikeBom(bikeConfig) {
     cots.push({ name: 'Silikon-Dichtschnur', spec: 'Rundschnur Ø 1,5 mm Shore 40A', qty: '1.0 m', desc: isDe ? 'Nut-Dichtung Main Box & Front-Node' : 'Groove gasket for Main Box & Front Node' });
     cots.push({ name: 'M4 Silentblöcke / Gummipuffer', spec: 'Typ A M4 Außen/Innen Ø 15 x 10 mm', qty: 4, desc: isDe ? 'Schwingungsentkoppelte Zentralbox-Montage' : 'Vibration-isolated main box mounting' });
 
-    if (addons.rearPod3) {
-        cots.push({ name: isDe ? 'DS18B20 Temperatursensor' : 'DS18B20 Temperature Sensor', spec: 'Dallas DS18B20 Edelstahl-Tauchhülse IP67 (1m Kabel, 3-Pin JST-PH für J6)', qty: 1, desc: isDe ? 'Präzise Aussentemperatur-Erfassung am Heck-Pod 3 (Eiswarnung)' : 'Precise ambient temperature probe at Rear Pod 3 (Black ice warning)' });
-    }
-
     if (addons.radar2) {
-        cots.push({ name: 'Wheeltec MR20 Radar-Sensor', spec: '24 GHz FMCW Millimeterwellen-Radar (MR20 OEM)', qty: 1, desc: isDe ? 'Blind Spot Detection & Kollisionswarnung bis 50 m' : 'Blind spot detection & collision warning up to 50 m' });
-        cots.push({ name: 'Binder M5 PUR Sensorkabel', spec: 'M5 4-Pol A-kodiert PUR-Leitung (0.5m)', qty: 1, desc: isDe ? 'Industrielle wasserdichte Radar-Verbindung' : 'Industrial waterproof radar connection' });
+        cots.push({ name: 'Wheeltec MR20 Radar-Sensor', spec: '77 GHz mmWave Millimeterwellen-Radar (MR20 OEM)', qty: 1, desc: isDe ? 'Blind Spot Detection & Kollisionswarnung bis 90 m' : 'Blind spot detection & collision warning up to 90 m' });
+        cots.push({ name: 'JST-JWPF 2-Pin Leitung', spec: 'JST 02R-JWPF-VSLE-S wasserdicht IP67 (0.5m FLRY-B 0.35²)', qty: 1, desc: isDe ? 'Wasserdichte 12V DC-Bordnetzspeisung für Heck-Radar PCBA 08' : 'Waterproof 12V DC power feed for rear radar PCBA 08' });
     }
 
     if (addons.bsdMirrors) {
@@ -9146,7 +9131,6 @@ function renderSingleBuilder() {
     if (subEl) {
         const addonList = [];
         if (active.addons?.frontNode) addonList.push(isDe ? 'Front-Knoten' : 'Front Node');
-        if (active.addons?.rearPod3) addonList.push(isDe ? 'Heck-Pod 3 (DS18B20 Temp)' : 'Rear Pod 3 (DS18B20 Temp)');
         if (active.addons?.ommHelmetKit) addonList.push(isDe ? 'OMM Helm-Kit' : 'OMM Helmet Kit');
         if (active.addons?.tmp117Sensor) addonList.push(isDe ? 'TMP117 Eiswarner' : 'TMP117 Ice Sensor');
         if (active.addons?.radar2) addonList.push(isDe ? 'Radar 2.0 Sub-MCU' : 'Radar 2.0 Sub-MCU');
@@ -9194,7 +9178,7 @@ function renderSingleBuilder() {
                 { plate: 'Platte 1 (180²)', file: 'main_box_tub_mini_plate.3mf', mat: 'ASA / PA-CF', desc: isDe ? 'Main Box Unterwanne (diagonal 45° im Bauraum platziert)' : 'Main Box lower tub (angled 45° across bed)' },
                 { plate: 'Platte 2 (180²)', file: 'main_box_lid_tray_mini_plate.3mf', mat: 'ASA / PA-CF', desc: isDe ? 'Main Box Zwischenboden & Gehäusedeckel' : 'Main Box mid-tray & upper lid' },
                 { plate: 'Platte 3 (180²)', file: 'pod_1_2_mini_plate.3mf', mat: 'ASA / PA-CF', desc: isDe ? 'Pod 1 & Pod 2 Basisgehäuse (aufrecht)' : 'Pod 1 & Pod 2 base housings (vertical)' },
-                { plate: 'Platte 4 (180²)', file: 'pod_3_bulkheads_mini_plate.3mf', mat: 'ASA / PA-CF', desc: isDe ? `Heck-Pod 3 Gehäuse & ${bom.numPods}x Schottwände` : `Rear Pod 3 housing & ${bom.numPods}x bulkheads` },
+                { plate: 'Platte 4 (180²)', file: 'pod_bulkheads_mini_plate.3mf', mat: 'ASA / PA-CF', desc: isDe ? `Gehäuse-Schottwände & Auswerfer für ${bom.numPods}x Satelliten-Pods` : `Housing bulkheads & ejectors for ${bom.numPods}x Satellite Pods` },
                 { plate: 'Platte 5 (180²)', file: 'cartridges_mini_plate.3mf', mat: 'ASA / PA-CF', desc: isDe ? 'Kassetten-Basisschlitten, Gateway-Inlays & Riegel' : 'Cartridge sleds, gateway inlays & latches' },
                 { plate: 'Platte 6 (180²)', file: 'front_node_mini_plate.3mf', mat: 'ASA / PA-CF', desc: isDe ? 'Universal Front-Knoten Unterwanne & Deckel' : 'Universal Front Node lower tub & lid' },
                 { plate: 'Platte 7 (180²)', file: 'glands_tpu_mini_plate.3mf', mat: 'TPU 95A', desc: isDe ? 'Elastische Dichtkämme, USB-C Kappe & O-Ringe' : 'Sealing combs, USB-C dust cap & O-rings' },
@@ -9305,18 +9289,18 @@ function renderSingleBuilder() {
         <!-- Step 2 -->
         <div class="builder-instruction-step">
             <div class="builder-step-headline">
-                <span class="builder-step-name">2. ${isDe ? `Satelliten-Pods vorbereiten (${bom.numPods} Pod-Gehäuse)` : `Prepare Satellite Pods (${bom.numPods} Pods)`}</span>
+                <span class="builder-step-name">2. ${isDe ? 'Satelliten-Pods vorbereiten (2 Pod-Gehäuse: Pod 1 & Pod 2)' : 'Prepare Satellite Pods (2 Pods: Pod 1 & Pod 2)'}</span>
                 <span class="builder-pill-verified">✓ COTS Plug & Play</span>
             </div>
             <div class="builder-parts-tag-list">
                 <span class="builder-part-tag">pod_base_housing.stl</span>
-                <span class="builder-part-tag">PCBA 02 (kicad_pod_base)</span>
+                <span class="builder-part-tag">2-Draht DC-Federkontakte</span>
                 <span class="builder-part-tag">03_pod_bulkhead_partition.stl</span>
                 <span class="builder-part-tag">${bom.numPods * 2}x Auswerffedern</span>
             </div>
             <div class="builder-instructions-body">
                 <ol>
-                    <li>${isDe ? '<strong>Basisplatine einschieben:</strong> Schiebe die PCBA 02 in die Führungsnuten des Gehäuses, stecke die M8-Buchse durch die Rückwand und ziehe die Mutter mit SW 10 handfest an.' : '<strong>Insert baseboard:</strong> Slide PCBA 02 into guide grooves, pass M8 socket through rear hole, and tighten nut with 10mm wrench.'}</li>
+                    <li>${isDe ? '<strong>Federkontakte einsetzen:</strong> Drücke die vergoldeten 2-Draht DC-Federkontakte in den Schachtboden ein (PCBA 02 ist ersatzlos entfallen; die Zuleitung erfolgt direkt über den wetterfesten 2-poligen Anschluss).' : '<strong>Insert spring contacts:</strong> Press gold-plated 2-wire DC spring contacts into bay base (PCBA 02 eliminated; direct weather-sealed 2-wire feed).'}</li>
                     <li>${isDe ? '<strong>Auswerffedern einstecken:</strong> Stecke je 2 Druckfedern in die rückseitigen Federtaschen der Schottwand.' : '<strong>Insert ejector springs:</strong> Place 2 compression springs into rear pockets of bulkhead.'}</li>
                     <li>${isDe ? '<strong>Schottwand sichern:</strong> Schottwand mit den Federn voran einschieben und mit 2x M2x8 mm Senkkopfschrauben bündig verschrauben.' : '<strong>Secure bulkhead:</strong> Push bulkhead forward and secure with 2x M2x8 mm countersunk screws.'}</li>
                 </ol>
@@ -9391,39 +9375,19 @@ function renderSingleBuilder() {
         </div>
     `;
 
-    // Step 5: Heck-Pod 3 (if active)
-    if (active.addons?.rearPod3) {
-        instructionsHtml += `
-            <div class="builder-instruction-step">
-                <div class="builder-step-headline">
-                    <span class="builder-step-name">5. ${isDe ? 'Heck-Pod 3 Transceiver (ESP32-C3 RISC-V), DS18B20 & OMM-Radom montieren' : 'Assemble Rear Pod 3 Transceiver (ESP32-C3 RISC-V), DS18B20 & OMM Radome'}</span>
-                    <span class="builder-pill-verified">✓ LoRa + GNSS + 1-Wire Temp</span>
-                </div>
-                <div class="builder-instructions-body">
-                    <ol>
-                        <li>${isDe ? 'PCBA 04 (ESP32-C3 RISC-V) in den 3. Basisschlitten einsetzen und mit 4x M2.5 Schrauben fixieren.' : 'Place PCBA 04 (ESP32-C3 RISC-V) into 3rd base sled and secure with 4x M2.5 screws.'}</li>
-                        <li>${isDe ? '<strong>DS18B20 Aussentemperatur-Sensor (Port J6):</strong> Die wasserdichte Edelstahl-Tauchhülse über das 3-Pin JST-PH Kabel an Port J6 anstecken. Den Fühler an der Gehäuseunterseite im Fahrtwind-Schatten (geschützt vor direkter Sonnen- und Motorabwärme) nach aussen führen für exakte Fahrbahn-/Aussentemperatur & Glatteiswarnung.' : '<strong>DS18B20 Ambient Temp Sensor (Port J6):</strong> Plug the waterproof stainless probe via 3-pin JST-PH cable into Port J6. Route probe outside at the bottom in the slipstream shadow for ambient temperature & black ice warnings.'}</li>
-                        <li>${isDe ? 'Dielektrisches OMM-Radom (<code>cartridge_antenna_bracket_omm.stl</code>) aufklicken.' : 'Snap dielectric OMM radome (<code>cartridge_antenna_bracket_omm.stl</code>) into place.'}</li>
-                        <li>${isDe ? 'Optional: Externe SMA-Pigtails auf Murata MM8030 Buchsen aufklicken (J3 Mesh, J4 LoRa, J5 GNSS) für externe Antennen.' : 'Optional: Snap external SMA pigtails onto Murata MM8030 switches (J3 Mesh, J4 LoRa, J5 GNSS) for external antennas.'}</li>
-                    </ol>
-                </div>
-            </div>
-        `;
-    }
-
-    // Step 5b: Radar 2.0 Sub-MCU & Halo-Wings (if active)
+    // Step 5: Radar 2.0 Sub-MCU & Halo-Wings (if active)
     if (active.addons?.radar2) {
         instructionsHtml += `
             <div class="builder-instruction-step">
                 <div class="builder-step-headline">
-                    <span class="builder-step-name">${isDe ? '5b. Radar 2.0 Sub-MCU & Halo-Wings montieren' : '5b. Assemble Radar 2.0 Sub-MCU & Halo-Wings'}</span>
-                    <span class="builder-pill-verified">✓ 24 GHz FMCW + 36x Halo RGB</span>
+                    <span class="builder-step-name">5. ${isDe ? 'Radar 2.0 Sub-MCU & Halo-Wings montieren' : 'Assemble Radar 2.0 Sub-MCU & Halo-Wings'}</span>
+                    <span class="builder-pill-verified">✓ 77 GHz mmWave + 36x Halo RGB</span>
                 </div>
                 <div class="builder-instructions-body">
                     <ol>
-                        <li>${isDe ? 'PCBA 08 (Radar Sub-MCU) in das PA12-Gehäuse (<code>radar_mr20_housing.stl</code>) einsetzen und den Wheeltec MR20 24 GHz Millimeterwellen-Sensor bündig im Gehäuseflansch zentrieren.' : 'Seat PCBA 08 (Radar Sub-MCU) into PA12 enclosure (<code>radar_mr20_housing.stl</code>) and center Wheeltec MR20 24 GHz millimeter-wave sensor flush in housing flange.'}</li>
+                        <li>${isDe ? 'PCBA 08 (Radar Sub-MCU) in das PA12-Gehäuse (<code>radar_mr20_housing.stl</code>) einsetzen und den Wheeltec MR20 77-GHz-Millimeterwellen-Sensor bündig im Gehäuseflansch zentrieren.' : 'Seat PCBA 08 (Radar Sub-MCU) into PA12 enclosure (<code>radar_mr20_housing.stl</code>) and center Wheeltec MR20 77-GHz millimeter-wave sensor flush in housing flange.'}</li>
                         <li>${isDe ? 'Das HF-transparente Radom (<code>radar_mr20_radome.stl</code>) mit den integrierten Lichtleiter-Flügeln für die 36 Halo-RGB-LEDs aufsetzen und mit 4x M2.5 V4A Schrauben vibrationssicher verschrauben.' : 'Fit RF-transparent radome (<code>radar_mr20_radome.stl</code>) with integrated light-pipe wings for 36 Halo RGB LEDs and secure with 4x M2.5 V4A screws.'}</li>
-                        <li>${isDe ? 'Das industrielle Binder M5 PUR-Sensorkabel anschließen und zum Heck-Kabelbaum führen.' : 'Connect industrial Binder M5 PUR sensor cable and route along rear harness.'}</li>
+                        <li>${isDe ? 'Die 2-Draht JST-JWPF Leitung (+12V geschaltet / GND) anstecken; Telemetrie und V2X-Daten übertragen zu 100% drahtlos über den integrierten Qorvo DW3110 UWB Backbone zur Zentralbox.' : 'Connect 2-wire JST-JWPF lead (+12V switched / GND); telemetry and V2X data transmit 100% wirelessly over integrated Qorvo DW3110 UWB backbone to Central Box.'}</li>
                     </ol>
                 </div>
             </div>
@@ -9510,7 +9474,7 @@ function renderSingleBuilder() {
                     <ol>
                         <li>${isDe ? '<strong>Zentralbox (Gemeinsame Basis):</strong> Unter der Fahrersitzbank im Heckrahmen auf den 4x M4 Silentblöcken schwingungsentkoppelt verschrauben. M8 Kabelpeitschen nach hinten links/rechts und zum Heck führen.' : '<strong>Central Box (Common Base):</strong> Bolt under rider seat in rear frame using 4x M4 silentblocks for vibration isolation. Route M8 cables rearward.'}</li>
                         <li>${isDe ? '<strong>Pod 1 & 2 (Option A: Vario / Rahmenrohr):</strong> Transition-Docks (<code>adventure_transition_dock.stl</code>) in der Sitzbank-Bügelfalte an das Ø 28 mm Hauptrahmenrohr klemmen (kompatibel mit R 1200 LC / 1250 / 1300 GS sowie F 750 / 850 / 900 GS). Pod-Gehäuse verschrauben. <em>100% kofferunabhängig:</em> Baut nicht breiter als die schlanke Fahrzeug-Silhouette - fahrbar mit Vario-Koffern oder komplett ohne Koffer!' : '<strong>Pods 1 & 2 (Option A: Vario / Frame Tube):</strong> Clamp transition docks (<code>adventure_transition_dock.stl</code>) in seat crease to Ø 28 mm frame tube (compatible with R 1200 LC / 1250 / 1300 GS and F 750 / 850 / 900 GS). <em>100% luggage-independent:</em> Does not build wider than bike silhouette - rideable with Vario cases or completely without luggage!'}</li>
-                        <li>${isDe ? '<strong>Heck-Pod 3 & Radar (Gemeinsame Basis):</strong> Rack-Tail Mount (<code>adventure_rack_tail_mount.stl</code>) an der Gepäckbrücke verschrauben. Hirth-Zahngelenk auf gewünschten Radar-Winkel (+10° bis +15°) einrasten, Varia einklinken und M3 Sicherungsmadenschraube eindrehen.' : '<strong>Rear Pod 3 & Radar (Common Base):</strong> Bolt rack-tail mount (<code>adventure_rack_tail_mount.stl</code>) to luggage rack. Set Hirth gear lock to desired radar angle (+10° to +15°), snap Varia in, and secure with M3 set screw.'}</li>
+                        <li>${isDe ? '<strong>Heck & Radar 2.0 (Clean Architecture):</strong> Da der Heck-Pod 3 ersatzlos entfallen ist, bleibt das Heck ohne Radar 100% sauber und unberührt. Bei gewähltem Radar 2.0 wird der minimale Rack-Tail Mount (<code>adventure_rack_tail_mount.stl</code>) an der Gepäckbrücke verschraubt und das Hirth-Zahngelenk auf +10° bis +15° arretiert.' : '<strong>Tail & Radar 2.0 (Clean Architecture):</strong> As Rear Pod 3 is completely eliminated, the tail remains 100% stock without radar. When Radar 2.0 is selected, bolt the minimal rack-tail mount (<code>adventure_rack_tail_mount.stl</code>) to luggage rack with Hirth gear lock set to +10° to +15°.'}</li>
                         ${active.addons?.frontNode ? `<li>${isDe ? '<strong>Front-Node & Cockpit:</strong> Front-Node mit AMPS-Halter am Ø 12 mm GPS/Navibügel fixieren. Stromversorgung über den 3-Pin Cartool-Stecker (Pin 1 GND, Pin 3 +12V KL15) am Steuerkopf. <em>100% drahtlose Funkbrücke:</em> ESP-NOW (< 1,8 ms) zur Zentralbox (kein Kabel durch den Lenkkopf!). <em>CAN-Bus & Steuerung:</em> Bei 6.5" TFT-Modellen liest der Front-Node das Wonder Wheel via K-CAN (<code>0x2A0</code>); bei Modellen ohne Wonder Wheel erfolgt die Bedienung über die OMB BLE-Fernbedienung oder WebApp.' : '<strong>Front Node & Cockpit:</strong> Mount Front Node using AMPS pattern to Ø 12 mm GPS bar. 12V switched KL15 power via 3-pin Cartool plug at headstock. <em>100% Wireless Link:</em> ESP-NOW (< 1.8 ms) to Central Box (zero wires through steering head!). <em>CAN & Controls:</em> On 6.5" TFT models, Front Node reads Wonder Wheel via K-CAN (<code>0x2A0</code>); on models without Wonder Wheel, control via OMB BLE remote or WebApp.'}</li>` : ''}
                     </ol>
                 </div>
@@ -9527,7 +9491,7 @@ function renderSingleBuilder() {
                     <ol>
                         <li>${isDe ? '<strong>Zentralbox (Gemeinsame Basis):</strong> Unter der Fahrersitzbank im Heckrahmen auf 4x M4 Silentblöcken montieren.' : '<strong>Central Box (Common Base):</strong> Bolt under rider seat on 4x M4 silentblocks.'}</li>
                         <li>${isDe ? '<strong>Pod 1 & 2 (Option B: Edelstahl-Rohrkofferträger Ø 18 mm):</strong> 1,0 mm EPDM-Schutzstreifen um das Rohr wickeln. Klemmschellen (<code>adventure_pannier_rack_clamp_base.stl</code> + <code>cap.stl</code>) mit M5x30 mm V4A Schrauben und Stoppmuttern über Kreuz mit 4,5 Nm anziehen. <em>100% einheitlich:</em> Passt universell an alle originalen Adventure-Edelstahl-Rohrträger (R 1200 GSA LC, R 1250 GSA, R 1300 GSA, F 850 GSA, F 900 GSA sowie klassische luftgekühlte R 1200 GSA K25 ab 2006 und F 800 GS/GSA K72/K75)!' : '<strong>Pods 1 & 2 (Option B: Stainless Pannier Racks Ø 18 mm):</strong> Wrap 1.0 mm EPDM strip around tube. Clamp bases and caps with M5x30 mm bolts and Nyloc nuts (4.5 Nm). <em>100% uniform:</em> Fits universally on all OEM Adventure stainless racks (R 1200 GSA LC, R 1250 GSA, R 1300 GSA, F 850 GSA, F 900 GSA and classic air-cooled R 1200 GSA K25 from 2006 + F 800 GS/GSA K72/K75)!'}</li>
-                        <li>${isDe ? '<strong>Heck-Balkon hinter Alutopcase & Radar:</strong> Ausleger (<code>adventure_rack_tail_mount.stl</code>) an der Gepäckbrücke verschrauben (ragt 65 mm hinter das Topcase für freie 360° Sicht). Dipolantenne an der 45°-Astabweiser-Finne ausrichten. Radar im Hirth-Dock mit M3 Madenschraube sichern.' : '<strong>Tail Balcony behind Topcase & Radar:</strong> Bolt cantilever (<code>adventure_rack_tail_mount.stl</code>) to rear rack (extends 65 mm behind topcase for 360° clear RF line of sight). Align dipole antenna along 45° fin. Lock radar in Hirth dock with M3 grub screw.'}</li>
+                        <li>${isDe ? '<strong>Heck-Montage & Radar 2.0:</strong> Bei gewähltem Radar 2.0 wird der Ausleger (<code>adventure_rack_tail_mount.stl</code>) an der Gepäckbrücke verschraubt (ragt 65 mm hinter das Topcase für freie 360° Sicht). Ohne Radar bleibt das Heck 100% unberührt.' : '<strong>Rear Mount & Radar 2.0:</strong> When Radar 2.0 is selected, bolt cantilever (<code>adventure_rack_tail_mount.stl</code>) to rear rack (extends 65 mm behind topcase for 360° clear RF line of sight). Without radar, the tail remains 100% stock.'}</li>
                         ${active.addons?.frontNode ? `<li>${isDe ? '<strong>Front-Node, Cartool-Strom & CAN-Bus:</strong> Front-Node am Ø 12 mm GPS-Bügel montieren und am 3-Pin Cartool-Stecker mit 12V Zündungsplus versorgen (100% drahtloser ESP-NOW Link). <em>CAN-Bus Integration:</em> Bei TFT-Modellen K-CAN direkt am TFT; bei klassischen Modellen (K25 / K72 mit 10-Pin Rundstecker) CAN-Bus unter der Sitzbank per Rund-zu-OBD2 Adapter an Zentralbox HD26 (Pins 17/18) abgreifen. Bedienung bei Modellen ohne Wonder Wheel über OMB BLE-Lenkerfernbedienung (CR2032).' : '<strong>Front Node, Cartool Power & CAN Bus:</strong> Mount Front Node on Ø 12 mm GPS bar and connect to 3-pin Cartool plug for 12V switched power (100% wireless ESP-NOW link). <em>CAN Bus Integration:</em> On TFT models, K-CAN at TFT; on classic models (K25 / K72 with 10-pin round plug), tap CAN bus under seat via 10-pin round-to-OBD2 adapter to Central Box HD26 (pins 17/18). Handlebar control on bikes without Wonder Wheel via OMB BLE remote (CR2032).'}</li>` : ''}
                     </ol>
                 </div>
@@ -9547,13 +9511,7 @@ function renderSingleBuilder() {
                             '<strong>Koffer-Trennstelle (MagSafe Seitendurchführung):</strong> Die Koffer sitzen werksseitig an massiven Rahmenhaltern mit Schnellverschluss-Pins. Bohre eine 19 mm Bohrung in die <strong>innere Seitenwand des Koffers direkt neben der werksseitigen Rahmenhalterung (Seitendurchführung - NICHT im Boden!)</strong>. Die geteilte EPDM-Kabeldurchführung (<code>010_saddlebag_hole_grommet_split.stl</code>) mit Zugentlastungsturm einsetzen. Das MagSafe Rahmendock (<code>009_magsafe_frame_dock.stl</code> + <code>009_magsafe_frame_clamp.stl</code>) am Rahmenrohr direkt gegenüber der Koffer-Innenwand montieren. M8 Kabel anschließen. Beim Aufsetzen der Koffer dockt der 5-Pin Magnetkontakt (<code>kicad_magsafe_dock</code>) automatisch an - 100% werkzeugloses Abnehmen der Koffer ohne Kabel abstecken!' :
                             '<strong>Pods 1 & 2 & MagSafe Saddlebag Side-Wall Pass-Through:</strong> Mount saddlebag lid docks (<code>saddlebag_lid_dock.stl</code>) on bag lids using M4 screws + EPDM washers or 3M VHB tape.<br>' +
                             '<strong>Saddlebag Breakaway Dock (Side-Wall Pass-Through):</strong> Saddlebags mount to frame brackets with OEM quick-release pins. Drill a 19 mm hole into the <strong>inner side wall of the saddlebag directly adjacent to the OEM frame bracket (Side Pass-Through - NOT bottom!)</strong>. Insert split EPDM grommet (<code>010_saddlebag_hole_grommet_split.stl</code>). Mount MagSafe frame dock (<code>009_magsafe_frame_dock.stl</code> + <code>009_magsafe_frame_clamp.stl</code>) to frame tube opposite the saddlebag inner wall. Connect M8 cables. When dropping saddlebags into place, the 5-pin magnetic contact docks automatically - 100% tool-free saddlebag removal without unplugging cables!'}</li>
-                        <li>${isDe ? '<strong>Heck-Pod 3 (Modulare Varianten):</strong><br>' +
-                            '* <em>Bagger & Softail Cruiser (Street/Road Glide, Road King, Heritage Classic, Low Rider ST, Sport Glide):</em> Organische Fender-Konsole (<code>pod3_touring_fender_console.stl</code>) flach auf Kotflügel an der standardisierten 1/4"-20 Sozius-Schraube verschrauben.<br>' +
-                            '* <em>Touring Limited & Ultra (King Tour-Pak):</em> Stahlrohr-Trägerrahmen blockiert den Fender! Pod 3 stattdessen mit Rohrträger-Klemmschellen (<code>adventure_pannier_rack_clamp_base.stl</code> + <code>cap.stl</code>) am Ø 18 mm Tour-Pak Trägerrohr oder unter der Gepäckbrücke montieren.' :
-                            '<strong>Rear Pod 3 (Modular Variants):</strong><br>' +
-                            '* <em>Baggers & Softail Cruisers (Street/Road Glide, Road King, Heritage Classic, Low Rider ST, Sport Glide):</em> Bolt organic fender console (<code>pod3_touring_fender_console.stl</code>) flat on rear fender to standardized 1/4"-20 seat nut.<br>' +
-                            '* <em>Touring Limited & Ultra (King Tour-Pak):</em> Steel Tour-Pak rack blocks fender space! Instead, clamp Pod 3 via tube clamp pair (<code>adventure_pannier_rack_clamp_base.stl</code> + <code>cap.stl</code>) to Ø 18 mm Tour-Pak tube rail or beneath rack bridge.'}</li>
-                        <li>${isDe ? '<strong>Radar (Gemeinsame Basis):</strong> Entkoppelten Halter (<code>radar_license_plate_bracket.stl</code>) direkt unter dem serienmäßig zentrierten Kennzeichenrahmen verschrauben (Touring & Softail identisch).' : '<strong>Radar (Common Base):</strong> Bolt decoupled radar bracket (<code>radar_license_plate_bracket.stl</code>) directly beneath the factory-centered license plate frame (Touring & Softails identical).'}</li>
+                        <li>${isDe ? '<strong>Heckbereich & Radar 2.0:</strong> Der Heck-Pod 3 ist ersatzlos entfallen; Kotflügel und Bagger-Linie bleiben 100% werksoriginal. Bei gewähltem Radar 2.0 wird der entkoppelte Halter (<code>radar_license_plate_bracket.stl</code>) direkt unter dem serienmäßig zentrierten Kennzeichenrahmen verschraubt.' : '<strong>Rear Section & Radar 2.0:</strong> Rear Pod 3 is completely eliminated; fender and bagger lines remain 100% factory original. When Radar 2.0 is selected, bolt decoupled radar bracket (<code>radar_license_plate_bracket.stl</code>) directly beneath the factory-centered license plate frame.'}</li>
                         ${active.addons?.frontNode ? `<li>${isDe ? '<strong>Cockpit & Front-Node (Modulare Fairing-Optionen):</strong><br>' +
                             '* <em>Option A (Batwing - Street Glide / Ultra):</em><br>' +
                             '  - <strong>2024+ (12.3" Skyline OS):</strong> 2x T25 Schrauben der Scheibe lösen (kein 3-Schrauben-System mehr!), seitliche Lautsprechergitter nach vorn abclipsen, 2x T25 oben und 2x T25/T27 Flankenschrauben herausdrehen, Zentralstecker trennen.<br>' +
@@ -9592,8 +9550,7 @@ function renderSingleBuilder() {
                         <li>${isDe ? '<strong>Zentralbox:</strong> Unter dem Solositz auf der Rahmenbrücke auf 4x Silentblöcken fixieren.' : '<strong>Central Box:</strong> Mount under solo seat on frame crossmember using 4x silentblocks.'}</li>
                         <li>${isDe ? '<strong>Pod 1 & 2 & MagSafe Koffer-Seitendurchführung:</strong> Kofferdeckel-Docks (<code>saddlebag_lid_dock.stl</code>) auf den CVO ST Koffern montieren. 19 mm Seitendurchführung (<code>010_saddlebag_hole_grommet_split.stl</code>) in die <strong>innere Koffer-Seitenwand direkt neben der Schnellverschluss-Befestigung (Seitendurchführung - kein Bodenloch!)</strong> einsetzen. MagSafe Rahmendock (<code>009_magsafe_frame_dock.stl</code>) am Rahmen verschrauben für automatische Trennung bei Kofferentnahme.' :
                             '<strong>Pods 1 & 2 & MagSafe Saddlebag Side Pass-Through:</strong> Mount saddlebag lid docks (<code>saddlebag_lid_dock.stl</code>) on CVO ST bags. Install 19 mm split grommet (<code>010_saddlebag_hole_grommet_split.stl</code>) into the <strong>inner saddlebag side wall directly adjacent to the quick-release pin (Side pass-through - NOT on bottom!)</strong>. Mount MagSafe frame dock (<code>009_magsafe_frame_dock.stl</code>) to frame for automatic breakaway when removing bags.'}</li>
-                        <li>${isDe ? '<strong>Heck-Pod 3 (Under-Cowl Skeleton Dock):</strong> Aufrechtes Skeleton Dock (<code>cvo_st_undercowl_skeleton_dock.stl</code>) für Pod 3 unter der Forged-Carbon-Sitzhutze montieren (federbelastet mit vollem Abstand zu den Showa-Ausgleichsbehältern & Auspuffhitze). Die Forged-Carbon-Hutze bleibt 100% original und wird plan und wackelfrei mit der OEM-Rändelschraube auf dem Fender fixiert (keine externe Heckfinne, kein Kabel über den Fender).' : '<strong>Rear Pod 3 (Under-Cowl Skeleton Dock):</strong> Mount upright skeleton dock (<code>cvo_st_undercowl_skeleton_dock.stl</code>) for Pod 3 under forged carbon cowl (spring-preloaded, clearing Showa canisters and exhaust heat). The OEM forged carbon cowl stays 100% factory original, secured flush and rattle-free with the factory thumbscrew (no external fin, zero wires over the fender).'}</li>
-                        <li>${isDe ? '<strong>Radar:</strong> Entkoppelter Kennzeichen-Radarhalter (<code>radar_license_plate_bracket.stl</code>) unter dem Kennzeichen verschrauben (CVO ST verfügt serienmäßig über das identische mittige Kennzeichen wie alle Touring-Modelle!).' : '<strong>Radar:</strong> Bolt decoupled license plate radar mount (<code>radar_license_plate_bracket.stl</code>) beneath license plate (CVO ST features the stock centered license plate mount identical to all Touring bikes!).'}</li>
+                        <li>${isDe ? '<strong>Heckbereich & Solo-Sitzhutze (Clean Architecture):</strong> Da Heck-Pod 3 und internes Skeleton-Dock ersatzlos entfallen sind, bleibt die originale Forged-Carbon-Sitzhutze der CVO ST zu 100% werksoriginal mit unbeschädigtem Lack und schließt plan mit der OEM-Rändelschraube auf dem Kotflügel ab. Optionales Radar 2.0 wird entkoppelt unter dem Kennzeichenträger (<code>radar_license_plate_bracket.stl</code>) montiert.' : '<strong>Rear Section & Solo Cowl (Clean Architecture):</strong> Since Rear Pod 3 and internal skeleton docks are completely eliminated, the original CVO ST forged carbon cowl remains 100% factory original with protected paint, secured flush with the factory thumbscrew. Optional Radar 2.0 mounts decoupled beneath the license plate (<code>radar_license_plate_bracket.stl</code>).'}</li>
                         ${active.addons?.frontNode ? `<li>${isDe ? '<strong>Front-Node & Sharknose Fairing (2024+ Skyline OS):</strong> Die 4x T25 Scheibenschrauben, 2x T27 in den Handschuhfächern und 2x T25 Haltelaschen unten lösen. Verkleidung nach vorn abnehmen (Blinker sind integral in den Blades!). Front-Node an der Forged-Carbon-Lenkerbrücke verschrauben. <code>J1</code> an 12V Zündungsplus, <code>J2</code> an CAN-Bus, <code>J4</code> an OEM-USB Upstream zum Skyline OS Display, <code>J6</code> an Ottocast Wireless CarPlay/AA Dongle (mit 1-Click TPS2051B Watchdog-Hardreset bei Verbindungsstörung), <code>J5</code> an 20W PD Smartphone-Ladekabel und <code>J12</code> an das Qwiic Daisy-Chain I2C-Kabel (für Außentemperatursensor im Sharknose-Kaltlufteinlass & optionalen OPT3001 Umgebungslichtsensor).' : '<strong>Front Node & Sharknose Fairing (2024+ Skyline OS):</strong> Remove 4x T25 screen screws, 2x T27 inside gloveboxes, and 2x T25 lower tabs. Lift fairing off forward (LED turn signals are integral in blades!). Mount Front Node to forged carbon handlebar clamp. Connect <code>J1</code> to 12V switched, <code>J2</code> to CAN, <code>J4</code> upstream to Skyline OS display, <code>J6</code> to Ottocast wireless CarPlay/AA dongle (with 1-click TPS2051B watchdog hard reset on dropout), <code>J5</code> to 20W PD fast-charging cable, and <code>J12</code> to the Qwiic daisy-chain I2C cable (for ambient temperature sensor in sharknose cold air scoop & optional OPT3001 light sensor).'}</li>` : ''}
                     </ol>
                 </div>
@@ -9609,7 +9566,7 @@ function renderSingleBuilder() {
                 <div class="builder-instructions-body">
                     <ol>
                         <li>${isDe ? '<strong>Zentralbox-Platzierung:</strong> Zentralbox mit der Keilaufnahme (<code>car_dashboard_wedge_dock.stl</code>) auf dem Armaturenbrett oder unter der Mittelkonsole platzieren. 12V Zigarettenanzünder-Adapter anschließen.' : '<strong>Central Box Placement:</strong> Place Central Box using wedge dock (<code>car_dashboard_wedge_dock.stl</code>) on dashboard or under center console. Plug in 12V cigarette lighter adapter.'}</li>
-                        <li>${isDe ? '<strong>Heck-Pod 3 (LoRa Mesh & GNSS Tracker):</strong> Pod 3 in den Sonnenblenden-Clip (<code>car_sun_visor_pod3_clip.stl</code>) einklicken und an der Beifahrer-Sonnenblende befestigen (gewährleistet optimale LoRa- und Satelliten-Sichtverbindung durch die Windschutzscheibe).' : '<strong>Rear Pod 3 (LoRa Mesh & GNSS Tracker):</strong> Snap Pod 3 into sun visor clip (<code>car_sun_visor_pod3_clip.stl</code>) and attach to passenger sun visor (ensures optimal LoRa and satellite line of sight through windshield).'}</li>
+                        <li>${isDe ? '<strong>LoRa Mesh & Telemetrie (PCBA 01):</strong> Central Box auf dem Armaturenbrett fixieren. Die integrierte SX1262 LoRa-Antenne funkt mit +22 dBm direkt durch die Windschutzscheibe (kein externer Heck-Pod nötig).' : '<strong>LoRa Mesh & Telemetry (PCBA 01):</strong> Place Central Box on dashboard. The integrated SX1262 LoRa transceiver transmits with +22 dBm directly through windshield (no external rear pod required).'}</li>
                         <li>${isDe ? '<strong>Flachband-Kabelführung:</strong> Das 3 m Flachband-USB-C-Kabel unsichtbar unter dem Dachhimmel und der A-Säulen-Dichtung von der Zentralbox zur Sonnenblende verlegen.' : '<strong>Flat Cable Routing:</strong> Route the 3m flat USB-C cable concealed beneath the roofliner and A-pillar weatherstrip from Central Box to sun visor.'}</li>
                     </ol>
                 </div>
@@ -9696,10 +9653,9 @@ function renderGroupBuilder() {
             const isActive = index === fleetState.activeBikeIndex;
             const addonBadges = [];
             if (bike.addons?.frontNode) addonBadges.push(`<span class="card-badge badge-blue" style="font-size: 0.7rem;">Cockpit Front-Node</span>`);
-            if (bike.addons?.rearPod3) addonBadges.push(`<span class="card-badge badge-green" style="font-size: 0.7rem;">Heck-Pod 3 (LoRa/GNSS)</span>`);
             if (bike.addons?.ommHelmetKit) addonBadges.push(`<span class="card-badge badge-blue" style="font-size: 0.7rem;">OMM Helm-Kit</span>`);
             if (bike.addons?.tmp117Sensor) addonBadges.push(`<span class="card-badge badge-green" style="font-size: 0.7rem;">TMP117 Gabelfuß</span>`);
-            if (bike.addons?.radar2) addonBadges.push(`<span class="card-badge badge-red" style="font-size: 0.7rem;">Radar 2.0 Sub-MCU</span>`);
+            if (bike.addons?.radar2) addonBadges.push(`<span class="card-badge badge-red" style="font-size: 0.7rem;">Radar 2.0 (77 GHz)</span>`);
             if (bike.addons?.bsdMirrors) addonBadges.push(`<span class="card-badge badge-yellow" style="font-size: 0.7rem;">BSD Spiegel-LEDs</span>`);
             if (bike.addons?.actionCamDock) addonBadges.push(`<span class="card-badge badge-purple" style="font-size: 0.7rem;">Actioncam-Dock</span>`);
             if (bike.addons?.handlebarControls) addonBadges.push(`<span class="card-badge badge-blue" style="font-size: 0.7rem;">Lenkertaster</span>`);
@@ -9743,14 +9699,12 @@ function renderGroupBuilder() {
     // 4. Render Consolidated JLCPCB PCBA & SMT Matrix
     const tbodyPcba = document.getElementById('builder-group-tbody-pcba');
     const masterPcbas = [
-        { id: 'kicad_main_box', code: 'PCBA 01', name: isDe ? 'Zentralbox Hauptplatine' : 'Central Main Box', desc: isDe ? 'ESP32-S3, Codec, USV-Ladung' : 'ESP32-S3, Codec, UPS' },
-        { id: 'kicad_pod_base', code: 'PCBA 02', name: isDe ? 'Pod-Basisplatine' : 'Pod Baseboard', desc: isDe ? 'Harwin Docking, M8 Buchse' : 'Harwin Docking, M8 socket' },
+        { id: 'kicad_main_box', code: 'PCBA 01', name: isDe ? 'Zentralbox Hauptplatine' : 'Central Main Box', desc: isDe ? 'ESP32-S3, Codec, USV, LoRa SX1262' : 'ESP32-S3, Codec, UPS, LoRa SX1262' },
         { id: 'kicad_cartridge', code: 'PCBA 03', name: isDe ? 'Smart Kassettenplatine' : 'Smart Modular Cartridge', desc: isDe ? 'Aktuatoren, Pogo-Pins, JST' : 'Actuators, Pogo pins, JST' },
-        { id: 'kicad_rear_pod3', code: 'PCBA 04', name: isDe ? 'Heck-Pod 3 Transceiver' : 'Rear Pod 3 Transceiver', desc: isDe ? 'RP2040, LoRa, GNSS, Radom' : 'RP2040, LoRa, GNSS' },
-        { id: 'kicad_front_node', code: 'PCBA 05', name: isDe ? 'Universal Front-Knoten' : 'Universal Front Node', desc: isDe ? 'ESP32-S3, USB Hub, 20W PD' : 'ESP32-S3, USB Hub, PD' },
-        { id: 'kicad_magsafe_dock', code: 'PCBA 06', name: isDe ? 'MagSafe Dock Adapter' : 'MagSafe Dock Adapter', desc: isDe ? '500mA Sicherung, TVS Diode' : '500mA Fuse, TVS Diode' },
+        { id: 'kicad_front_node', code: 'PCBA 05', name: isDe ? 'Universal Front-Knoten' : 'Universal Front Node', desc: isDe ? 'ESP32-S3, USB Hub, SAM-M10Q GNSS, 20W PD' : 'ESP32-S3, USB Hub, SAM-M10Q GNSS, PD' },
         { id: 'kicad_smart_keyfob', code: 'PCBA 07', name: isDe ? 'Smart-Keyfob Platine' : 'Smart Keyfob', desc: isDe ? 'BLE Tracker, LRA Haptik' : 'BLE Tracker, LRA Haptic' },
-        { id: 'kicad_radar_submcu', code: 'PCBA 08', name: isDe ? 'Radar 2.0 Sub-MCU Platine' : 'Radar 2.0 Sub-MCU Board', desc: isDe ? 'Wheeltec MR20 Radar, 36x Halo RGB LEDs, V2X' : 'Wheeltec MR20 Radar, 36x Halo RGB LEDs, V2X' }
+        { id: 'kicad_radar_submcu', code: 'PCBA 08', name: isDe ? 'Radar 2.0 Sub-MCU Platine' : 'Radar 2.0 Sub-MCU Board', desc: isDe ? 'Wheeltec 77 GHz mmWave, 36x Halo RGB LEDs, UWB' : 'Wheeltec 77 GHz mmWave, 36x Halo RGB LEDs, UWB' },
+        { id: 'kicad_omm_intercom', code: 'PCBA 09', name: isDe ? 'OMM UCS Intercom Platine' : 'OMM UCS Intercom Board', desc: isDe ? 'ESP32-C6, BQ24075 PMIC, ES8311 Codec' : 'ESP32-C6, BQ24075 PMIC, ES8311 Codec' }
     ];
 
     let activeDesignsCount = 0;
@@ -10001,13 +9955,11 @@ function exportGroupBomCsv() {
 
     const masterPcbas = [
         { id: 'kicad_main_box', code: 'PCBA 01', name: 'Zentralbox Hauptplatine' },
-        { id: 'kicad_pod_base', code: 'PCBA 02', name: 'Pod-Basisplatine' },
         { id: 'kicad_cartridge', code: 'PCBA 03', name: 'Smart Kassettenplatine' },
-        { id: 'kicad_rear_pod3', code: 'PCBA 04', name: 'Heck-Pod 3 Transceiver' },
         { id: 'kicad_front_node', code: 'PCBA 05', name: 'Universal Front-Knoten' },
-        { id: 'kicad_magsafe_dock', code: 'PCBA 06', name: 'MagSafe Dock Adapter' },
         { id: 'kicad_smart_keyfob', code: 'PCBA 07', name: 'Smart-Keyfob Platine' },
-        { id: 'kicad_radar_submcu', code: 'PCBA 08', name: 'Radar 2.0 Sub-MCU Platine' }
+        { id: 'kicad_radar_submcu', code: 'PCBA 08', name: 'Radar 2.0 Sub-MCU Platine' },
+        { id: 'kicad_omm_intercom', code: 'PCBA 09', name: 'OMM UCS Intercom Platine' }
     ];
 
     masterPcbas.forEach(p => {
@@ -10110,9 +10062,9 @@ function exportGroupBomCsv() {
 
     // 4. Per Bike Details
     csv += '4. EINZELAUFSCHLÜSSELUNG NACH MOTORRAD\n';
-    csv += 'Fahrer;Motorrad_Modell;Slot_1;Slot_2;Front_Node;Heck_Pod_3;OMM_Helm_Kit;TMP117_Sensor;Keyfob;Fertigung;Einzelkosten_ca\n';
+    csv += 'Fahrer;Motorrad_Modell;Slot_1;Slot_2;Front_Node;Radar_2_0;OMM_Helm_Kit;TMP117_Sensor;Keyfob;Fertigung;Einzelkosten_ca\n';
     allBoms.forEach(({ bike, bom }) => {
-        csv += `"${bike.name}";"${bom.bikeName}";"${bom.slotNames[bike.slot1] || bike.slot1}";"${bom.slotNames[bike.slot2] || bike.slot2}";"${bike.addons?.frontNode ? 'Ja' : 'Nein'}";"${bike.addons?.rearPod3 ? 'Ja' : 'Nein'}";"${bike.addons?.ommHelmetKit ? 'Ja' : 'Nein'}";"${bike.addons?.tmp117Sensor ? 'Ja' : 'Nein'}";"${bike.addons?.keyfob ? 'Ja' : 'Nein'}";"${bike.manufacturing}";"${bom.costMin} - ${bom.costMax} EUR"\n`;
+        csv += `"${bike.name}";"${bom.bikeName}";"${bom.slotNames[bike.slot1] || bike.slot1}";"${bom.slotNames[bike.slot2] || bike.slot2}";"${bike.addons?.frontNode ? 'Ja' : 'Nein'}";"${bike.addons?.radar2 ? 'Ja' : 'Nein'}";"${bike.addons?.ommHelmetKit ? 'Ja' : 'Nein'}";"${bike.addons?.tmp117Sensor ? 'Ja' : 'Nein'}";"${bike.addons?.keyfob ? 'Ja' : 'Nein'}";"${bike.manufacturing}";"${bom.costMin} - ${bom.costMax} EUR"\n`;
     });
 
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -10259,13 +10211,14 @@ function setupSmokeTestUi() {
         logSmoke('==================================================', 'info');
         logSmoke(state.lang === 'de' ? '▶️ STARTE AUTOMATISCHEN 4-PUNKTE IKEA-SMOKE-TEST...' : '▶️ STARTING AUTOMATED 4-POINT IKEA SMOKE TEST...', 'info');
 
-        // Check 1: Power & Bus
+        // Check 1: Power, Central Box & SX1262 LoRa
         setStepState('power', 'testing', state.lang === 'de' ? 'PRÜFE...' : 'TESTING...');
-        logSmoke(state.lang === 'de' ? 'Check 1: Messe Bordnetz-Eingang & USV-Akkuschiene...' : 'Check 1: Measuring power input & UPS battery rail...', 'info');
+        logSmoke(state.lang === 'de' ? 'Check 1: Messe Bordnetz-Eingang, USV & SX1262 LoRa...' : 'Check 1: Measuring power input, UPS & SX1262 LoRa...', 'info');
         await new Promise(r => setTimeout(r, 550));
         setStepState('power', 'pass', '12.6V OK');
         logSmoke(state.lang === 'de' ? '✓ Bordnetz: 12.62 V (Idealbereich 11.5-14.8 V).' : '✓ Power Rail: 12.62 V (Nominal range 11.5-14.8 V).', 'ok');
         logSmoke(state.lang === 'de' ? '✓ 5V Buck-Rail: 5.04 V, USV LiPo 2.200 mAh: 4.18 V (98% geladen).' : '✓ 5V Buck Rail: 5.04 V, UPS LiPo 2,200 mAh: 4.18 V (98% charged).', 'ok');
+        logSmoke(state.lang === 'de' ? '✓ Zentralbox (PCBA 01): SX1262 LoRa 868 MHz Transceiver bereit (RSSI -42 dBm Ping OK).' : '✓ Central Box (PCBA 01): SX1262 LoRa 868 MHz transceiver ready (RSSI -42 dBm Ping OK).', 'ok');
 
         // Check 2: Pod 1 & 2 Cartridges + Actuators
         setStepState('cartridges', 'testing', state.lang === 'de' ? 'PRÜFE...' : 'TESTING...');
@@ -10291,6 +10244,7 @@ function setupSmokeTestUi() {
             setStepState('front', 'pass', state.lang === 'de' ? 'COCKPIT OK' : 'COCKPIT OK');
             logSmoke(state.lang === 'de' ? '✓ Knowles MEMS Akustik-Port: 1.02 V Bias OK.' : '✓ Knowles MEMS Acoustic Port: 1.02 V Bias OK.', 'ok');
             logSmoke(state.lang === 'de' ? '✓ SDP31 Staudruck-Sensor: 0.02 hPa (Kalibriert).' : '✓ SDP31 Differential Pressure: 0.02 hPa (Calibrated).', 'ok');
+            logSmoke(state.lang === 'de' ? '✓ u-blox SAM-M10Q GNSS (Port J12): 14 Satelliten gelockt (3D Fix, HDOP 0.8).' : '✓ u-blox SAM-M10Q GNSS (Port J12): 14 satellites locked (3D Fix, HDOP 0.8).', 'ok');
             logSmoke(state.lang === 'de' ? '✓ Lenker-PTT Taster (Port J3): Pull-Up 3.3 V aktiv, kein Prellen (< 5 ms).' : '✓ Handlebar PTT Button (Port J3): Pull-Up 3.3 V active, debounced (< 5 ms).', 'ok');
             if (builderState.addons.tmp117Sensor) {
                 logSmoke(state.lang === 'de' ? '✓ TMP117 Stealth Gabelfuß-Sensor (Port J12 I2C 0x48): 18.2 °C (±0.1°C NIST Kalibrierung OK).' : '✓ TMP117 Stealth Fork Sensor (Port J12 I2C 0x48): 18.2 °C (±0.1°C NIST calibration OK).', 'ok');
@@ -10306,22 +10260,17 @@ function setupSmokeTestUi() {
             logSmoke(state.lang === 'de' ? 'ℹ Front-Knoten nicht in Konfiguration (Übersprungen).' : 'ℹ Front Node not in config (Skipped).', 'info');
         }
 
-        // Check 4: Rear Pod 3 & Radar
+        // Check 4: Radar 2.0 & Tail Telemetry
         setStepState('rear', 'testing', state.lang === 'de' ? 'PRÜFE...' : 'TESTING...');
-        logSmoke(state.lang === 'de' ? 'Check 4: Pinge SX1262 LoRa, u-blox GNSS, DS18B20 & Radar...' : 'Check 4: Pinging SX1262 LoRa, u-blox GNSS, DS18B20 & Radar...', 'info');
+        logSmoke(state.lang === 'de' ? 'Check 4: Prüfe Radar 2.0, UWB-Backbone & Heckbereich...' : 'Check 4: Checking Radar 2.0, UWB backbone & tail section...', 'info');
         await new Promise(r => setTimeout(r, 600));
-        if (builderState.addons.rearPod3) {
-            setStepState('rear', 'pass', state.lang === 'de' ? 'LORA/GNSS OK' : 'LORA/GNSS OK');
-            logSmoke(state.lang === 'de' ? '✓ SX1262 LoRa 868 MHz Transceiver: RSSI -44 dBm Ping OK.' : '✓ SX1262 LoRa 868 MHz Transceiver: RSSI -44 dBm Ping OK.', 'ok');
-            logSmoke(state.lang === 'de' ? '✓ u-blox MAX-M10S GNSS: 14 Satelliten gelockt (3D Fix, HDOP 0.8).' : '✓ u-blox MAX-M10S GNSS: 14 satellites locked (3D Fix, HDOP 0.8).', 'ok');
-            logSmoke(state.lang === 'de' ? '✓ DS18B20 1-Wire Aussentemperatur (Port J6): 19.4 °C (Plausibel, kein Eisrisiko).' : '✓ DS18B20 1-Wire Ambient Temp (Port J6): 19.4 °C (Valid, zero ice hazard).', 'ok');
-        } else {
-            setStepState('rear', 'pass', state.lang === 'de' ? 'DEAKTIVIERT' : 'DISABLED');
-            logSmoke(state.lang === 'de' ? 'ℹ Heck-Pod 3 nicht in Konfiguration (Übersprungen).' : 'ℹ Rear Pod 3 not in config (Skipped).', 'info');
-        }
-
         if (builderState.addons.radar2) {
-            logSmoke(state.lang === 'de' ? '✓ Radar 2.0 Sub-MCU (PCBA 08): Wheeltec MR20 24 GHz Doppler bereit, 36x Halo RGB OK.' : '✓ Radar 2.0 Sub-MCU (PCBA 08): Wheeltec MR20 24 GHz Doppler ready, 36x Halo RGB OK.', 'ok');
+            setStepState('rear', 'pass', state.lang === 'de' ? 'RADAR 2.0 OK' : 'RADAR 2.0 OK');
+            logSmoke(state.lang === 'de' ? '✓ Radar 2.0 Sub-MCU (PCBA 08): Wheeltec MR20 77-GHz mmWave Doppler bereit, 36x Halo RGB OK.' : '✓ Radar 2.0 Sub-MCU (PCBA 08): Wheeltec MR20 77-GHz mmWave Doppler ready, 36x Halo RGB OK.', 'ok');
+            logSmoke(state.lang === 'de' ? '✓ Qorvo DW3110 UWB Backbone Link: Drahtlose 850 kbps Telemetrie zur Zentralbox synchron (Latenz < 1.2 ms).' : '✓ Qorvo DW3110 UWB Backbone Link: Wireless 850 kbps telemetry to Central Box synced (latency < 1.2 ms).', 'ok');
+        } else {
+            setStepState('rear', 'pass', state.lang === 'de' ? 'CLEAN HECK' : 'CLEAN TAIL');
+            logSmoke(state.lang === 'de' ? 'ℹ Radar 2.0 nicht in Konfiguration (Heck bleibt 100% sauber und werksoriginal).' : 'ℹ Radar 2.0 not in config (Tail remains 100% clean and factory original).', 'info');
         }
 
         if (builderState.addons.ommHelmetKit) {
