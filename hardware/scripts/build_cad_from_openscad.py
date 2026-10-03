@@ -76,11 +76,14 @@ STL_TARGETS: List[Tuple] = [
     ("04_front_node/02_front_node_cable_glands.scad", "04_front_node/front_node_cable_glands_tpu.stl"),
     ("04_front_node/03_front_node_usbc_plug.scad", "04_front_node/front_node_usbc_cap_tpu.stl"),
 
-    # 7b. Modular Components (Front Node)
+    # 7b. Modular Components & Mounts (Front Node)
     ("04_front_node/parts/000_front_node_base_tub.scad", "04_front_node/components/01_front_node_base_tub.stl"),
     ("04_front_node/parts/001_pcb_standoffs.scad", "04_front_node/components/02_pcb_standoffs.stl"),
     ("04_front_node/parts/004_mounting_system.scad", "04_front_node/components/03_mounting_ears.stl"),
     ("04_front_node/parts/006_dummy_front_node_pcb.scad", "04_front_node/components/dummy_front_node_pcb.stl"),
+    ("04_front_node/front_node_fairing_tube_clamp.scad", "04_front_node/front_node_fairing_tube_clamp_base.stl", ["-D", 'part="base"']),
+    ("04_front_node/front_node_fairing_tube_clamp.scad", "04_front_node/front_node_fairing_tube_clamp_cap.stl", ["-D", 'part="cap"']),
+    ("04_front_node/front_node_fairing_tube_clamp.scad", "04_front_node/front_node_fairing_tube_clamp.stl", ["-D", 'part="plate"']),
 
     # 8. Pod 3 Touring & ST Bagger Consoles, Docks & Radar Mount
     ("02_pod_base/pod3_touring_fender_console.scad", "02_pod_base/pod3_touring_fender_console.stl"),

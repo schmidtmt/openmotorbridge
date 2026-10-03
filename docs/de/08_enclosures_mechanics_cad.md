@@ -519,6 +519,26 @@ Das Gehäuse des Front-Knotens wurde speziell für die geschützte Montage in Mo
 +----------------------------------------------------------------------------------------+
 ```
 
+#### 5.1.1 Montage an runden Metallstangen unterm Fairing (Verkleidungsgeweih Ø 12–22 mm)
+
+![Universal Front Node Fairing Tube Clamp](../images/cad/front_node_fairing_tube_clamp_assembly.png)
+
+*Abbildung 8.21b: Die modulare 2-teilige Verkleidungs-Rohrschelle (`front_node_fairing_tube_clamp.stl`) mit 120° V-Prisma, EPDM-Dämpfungseinlage und AMPS-Verschraubung an einer Ø 16 mm Verkleidungsstrebe.*
+
+Viele Touren- und Adventure-Motorräder besitzen unter der Verkleidung ("unterm Fairing") stabile, runde Tragrohre und Metallstreben des sogenannten **Verkleidungsgeweihs** bzw. Cockpitrahmens:
+* **Harley-Davidson Road Glide (Sharknose FLTRX / CVO ST):** Das innere Verkleidungsgeweih besteht aus massiven runden Stahlrohren mit **Ø 16 mm (5/8") bis Ø 19 mm (3/4")**.
+* **Harley-Davidson Street Glide / Electra Glide (Batwing FLHX):** Runde Verkleidungs-Haltestreben hinter den Lautsprecher- und Scheinwerferbuchten (**Ø 16–19 mm**).
+* **BMW R 1200 / 1250 / 1300 GS & GSA:** Serienmäßiger runder Edelstahl- / Aluminiumbügel (**Ø 12 mm**) direkt hinter/über dem TFT-Display und unter dem Windschild.
+* **Adventure & Rally Bikes (Yamaha Ténéré 700, KTM Adventure, Ducati DesertX, Africa Twin):** Runde Navigations- und Verkleidungsstreben (**Ø 12 mm, Ø 16 mm oder Ø 22 mm**).
+
+**Vorteile der Montage an den runden Metallstangen unterm Fairing:**
+1. **100 % unsichtbarer Stealth-Einbau:** Der Lenker, die Riser und die Sichtflächen des Cockpits bleiben vollkommen frei von Zusatzkästchen und Kabelwirrwarr.
+2. **Kürzeste Signal- & USB-Wege:** Der Front-Knoten sitzt wenige Zentimeter neben dem OEM-USB-Kabelbaum, dem Display-CAN und dem drahtlosen CarPlay/AA Dongle (Ottocast).
+3. **Maximaler Witterungsschutz:** Vollständig geschützt vor Regen, Fahrtwind, Insektenschlag und UV-Strahlung.
+4. **Zwei Montage-Optionen:**
+   * **Option A (2-teilige Verkleidungs-Rohrschelle `front_node_fairing_tube_clamp.stl`):** Das Basisteil wird mit 4x M4 Senkkopfschrauben von unten in die unverlierbaren AMPS-Muttern der Front-Node Unterwanne geschraubt (wahlweise 0° längs oder 90° quer zum Gehäuse). Die Klemmschelle (`front_node_fairing_tube_clamp_cap.stl`) wird mit 2x M5x25 mm Edelstahlschrauben und DIN 985 Stoppmuttern über das Verkleidungsrohr gespannt. Eine 1,2 mm EPDM-Gummieinlage schützt den Lack und eliminiert Vibrationen.
+   * **Option B (Werkzeuglose 90°-Kreuztunnel):** Die in der Unterwanne integrierten 5,5 mm Führungstunnel erlauben das direkte Verzurren an beliebigen Rohrstangen mittels UV-fester Hochleistungs-Kabelbinder oder Edelstahl-Schlauchschellen mit EPDM-Zwischenlage.
+
 ### 5.2 Schnittstellen- & Flankenlayout des Front-Knotens (Top-View & Belegungsmatrix)
 
 Die räumliche Anordnung aller Anschlüsse und Kabeldurchführungen an den Gehäuseflanken entspricht exakt dem vergrößerten 4-Layer-Platinenlayout von PCBA 05 ($82 \times 50\,\text{mm}$, [`openmotorbridge_front_node.kicad_pcb`](../../hardware/kicad_front_node/openmotorbridge_front_node.kicad_pcb)) und der Ergonomie im Cockpit:
@@ -1366,6 +1386,7 @@ Die CAD-Dateistruktur von OpenMotorBridge folgt einer strengen hierarchischen CS
 | **Front-Knoten** | Gehäusedeckel mit LED & FPC-Tasche | `04_front_node/front_node_upper_lid.stl` | `04_front_node/01_front_node_lid.scad` |
 | **Front-Knoten** | EPDM/TPU Dichtkamm-Paar mit Steg | `04_front_node/front_node_cable_glands_tpu.stl` | `04_front_node/02_front_node_cable_glands.scad` |
 | **Front-Knoten** | TPU USB-C Staubschutzstopfen | `04_front_node/front_node_usbc_cap_tpu.stl` | `04_front_node/03_front_node_usbc_plug.scad` |
+| **Front-Knoten** | Verkleidungs-Rohrschelle (Ø 12–22 mm, AMPS) | `04_front_node/front_node_fairing_tube_clamp.stl` | `04_front_node/front_node_fairing_tube_clamp.scad` |
 | **Smart-Keyfob** | PA12-MJF Unterschale mit MagSafe-Tasche | `05_accessories/smart_keyfob_lower_shell.stl` | `05_accessories/smart_keyfob_pager.scad` |
 | **Smart-Keyfob** | PA12-MJF Oberschale mit Diffusor-Bohrung | `05_accessories/smart_keyfob_upper_shell.stl` | `05_accessories/smart_keyfob_pager.scad` |
 | **Smart-Keyfob** | TPU Stoßdämpfer-Kantenband (Orange) | `05_accessories/smart_keyfob_tpu_rim.stl` | `05_accessories/smart_keyfob_pager.scad` |
