@@ -42,7 +42,7 @@ In v8.5 / v9.0 ist das Gesamtsystem auf eine strikte **All-UWB-Stern-/Mesh-Topol
   - Überwacht Taster `SW1` (`SW_PAIR_RESET`) auf PCBA 01: 3 Sekunden Halten versetzt das System in den UWB-Pairing-Modus für neue Kassetten; 10 Sekunden Halten löscht alle NVS-Schlüssel (Hard-Purge).
   - Unterstützt Multi-Vehicle Roaming: Kassetten können bis zu 4 autorisierte Fahrzeug-Schlüssel im lokalen Flash/NVS speichern.
   - Alternativ: Pairing-Reset über PWA-Companion App (BLE) oder Halten der Lenker-PTT für 5 s beim Einschalten der Zündung.
-- **UWB Radar Telemetrie Parser (`uwb_radar_parser.cpp`):** Empfängt 20 Hz Radar-Objektvektoren (TTC, Distanz, Relativgeschwindigkeit) von PCBA 08 via UWB (`UWB_PKT_RADAR_TARGETS`), berechnet Kollisionsrisiken und triggert bei Bedarf Audio-Ducking (Prio 1) und Spiegel-LEDs.
+- **UWB Radar Telemetrie Parser & Dispatcher (`uwb_radar_parser.cpp`):** Empfängt die auf der Radarplatine (PCBA 08) vorverarbeiteten 20 Hz Radar-Zielvektoren (vorberechnete TTC, Bedrohungsstufe CLEAR/AMBER/RED, Distanz, Relativgeschwindigkeit) via UWB (`UWB_PKT_RADAR_TARGETS`), gleicht sie mit der Fahrzeugdynamik (IMU/CAN) ab und orchestriert fahrzeugweite Schutzmaßnahmen: triggert Prio-1 Audio-Ducking (-18 dB) auf Core 1, leitet Spiegel-LED-Strobe per UWB an den Front-Knoten (PCBA 05) und streamt Telemetrie an das BLE/CarPlay-Dashboard.
 - **LoRa 868 MHz Mesh Engine (`lora_mesh_engine.cpp`):** Direkte SPI-Anbindung an den onboard Semtech SX1262 Transceiver auf PCBA 01 (24/7 USV-gepuffert für Diebstahl-Sentry und Gruppen-Telemetrie).
 - **BLE GATT Server (`ble_service_server.cpp`):** Web-Bluetooth Anbindung für das PWA-Dashboard (`0x180D`, `0x180A`, `0xFFE0`).
 - **Group Split Fallback Engine (`group_split_rescue_engine.cpp`):** Automatische Zustandsmaschine zur Überbrückung von Funkschatten zwischen Sena Mesh, Cardo DMC, OMM 2.4 GHz und LoRa 868 MHz Notfall-Beacon.
@@ -94,7 +94,7 @@ enum UwbBackbonePktType : uint8_t {
     UWB_PKT_AUDIO_STREAM_UP    = 0x25,  // Pods -> Zentralbox: Intercom Spk-Out / Helm-Audio zur Zentralbox
     UWB_PKT_AUDIO_MEDIA_UP     = 0x26,  // Front-Node -> Zentralbox: Musik / Navigations-Ansagen vom Smartphone
 
-    // --- Radar 2.0 (PCBA 06): Vorfilterung & LED-Makrosteuerung ---
+    // --- Radar 2.0 (PCBA 08): Vorfilterung & LED-Makrosteuerung ---
     UWB_PKT_RADAR_TARGETS      = 0x30,  // 20 Hz voroptimierte Zielliste (TTC, Distanz, Azimut) + URGENT-Flag
     UWB_PKT_RADAR_LED_CMD      = 0x31,  // Zentralbox -> Radar-ESP: Makro-Befehl (Idle, Warnung, Prio-1 Strobe)
 
