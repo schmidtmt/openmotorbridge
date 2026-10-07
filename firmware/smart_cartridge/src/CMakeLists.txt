@@ -3,6 +3,7 @@ idf_component_register(
         "main.cpp"
         "cartridge_mechatronics.cpp"
         "cartridge_audio_codec.cpp"
+        "cartridge_ble_client.cpp"
     INCLUDE_DIRS
         "."
     REQUIRES

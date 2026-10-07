@@ -63,14 +63,14 @@ static void send_cartridge_announce() {
 }
 
 #include "cartridge_ble_profile.h"
-
-// Tracking state: BLE connection to docked intercom
-static bool s_ble_intercom_connected = false;
+#include "cartridge_ble_client.h"
 
 // Active BLE Profile Configuration (synchronized with active profile)
 static CartridgeBleConfig_t s_active_ble_config = {
     .supported = true,
     .flavor = BLE_FLAVOR_SENA_RC_GATT,
+    .device_prefix = "SPIDER",
+    .service_uuid = 0xFFE0,
     .fallback_to_mechatronics_on_disconnect = true,
     .can_power_boot = false, // Always false (cold-boot requires physical mechatronics)
     .can_power_off = true,
@@ -88,31 +88,26 @@ static esp_err_t execute_smart_command(uint8_t opcode, uint16_t duration_ms) {
     // (Headset BT chip is completely dead / unpowered when shut down)
     if (opcode == CARTRIDGE_OPCODE_POWER_BOOT) {
         ESP_LOGI(TAG, "⚡ Power Boot (0x01) -> Enforcing physical Mechatronic actuator pulse.");
-        return CartridgeMechatronics::instance().execute_opcode(opcode, duration_ms);
+        esp_err_t err = CartridgeMechatronics::instance().execute_opcode(opcode, duration_ms);
+        // After booting the headset, trigger BLE auto-connect to establish digital link
+        CartridgeBleClient::instance().trigger_connect();
+        return err;
     }
 
-    // 2. If the active profile has NO BLE support (e.g. PMR446 or analog radio)
-    if (!s_active_ble_config.supported || s_active_ble_config.flavor == BLE_FLAVOR_NONE) {
-        ESP_LOGD(TAG, "🔧 Profile has no BLE support (flavor=NONE) -> Executing Mechatronics directly for Opcode 0x%02X.", opcode);
-        return CartridgeMechatronics::instance().execute_opcode(opcode, duration_ms);
+    // 2. Primary Path: Use digital BLE GATT command if available and connected
+    if (CartridgeBleClient::instance().is_connected()) {
+        esp_err_t ble_err = CartridgeBleClient::instance().send_command(opcode);
+        if (ble_err == ESP_OK) {
+            ESP_LOGI(TAG, "✓ Opcode 0x%02X executed via BLE (< 5 ms, 0 mechanical wear).", opcode);
+            return ESP_OK;
+        }
+        ESP_LOGW(TAG, "⚠️ BLE command TX returned error (0x%X) -> Falling back to physical click sequence!", ble_err);
     }
 
-    // 3. Runtime Commands (Volume +/-, Mesh Toggle, Channel Next/Prev)
-    // Primary path: Digital BLE GATT command (Zero wear, zero solenoid delay)
-    if (s_ble_intercom_connected) {
-        const char *flavor_name = get_ble_flavor_name(s_active_ble_config.flavor);
-        ESP_LOGI(TAG, "📡 Runtime Opcode 0x%02X -> Dispatched via BLE [%s] (< 5 ms, 0 wear).", opcode, flavor_name);
-        return ESP_OK;
-    }
-
-    // 4. Mechatronic Fallback: If BLE is disconnected, lost, or protocol changed
-    if (s_active_ble_config.fallback_to_mechatronics_on_disconnect) {
-        ESP_LOGW(TAG, "⚠️ BLE disconnected -> Executing physical Mechatronic fallback for Opcode 0x%02X.", opcode);
-        return CartridgeMechatronics::instance().execute_opcode(opcode, duration_ms);
-    }
-
-    ESP_LOGE(TAG, "❌ Opcode 0x%02X dropped: BLE disconnected and fallback disabled.", opcode);
-    return ESP_ERR_INVALID_STATE;
+    // 3. Mechatronic Fallback Path:
+    // If BLE is not supported (e.g. PMR446), disconnected, or transmission failed -> execute physical click sequence!
+    ESP_LOGI(TAG, "🔧 Executing physical Mechatronic click sequence for Opcode 0x%02X.", opcode);
+    return CartridgeMechatronics::instance().execute_opcode(opcode, duration_ms);
 }
 
 // -----------------------------------------------------------------------------
@@ -192,7 +187,10 @@ static void cartridge_supervisor_task(void* pvParameters) {
         // 1. Advance mechatronics pulse state machine
         CartridgeMechatronics::instance().update();
 
-        // 2. Periodic UWB Heartbeat & Status (every 500 ms)
+        // 2. BLE Central connection supervision & reconnect
+        CartridgeBleClient::instance().update();
+
+        // 3. Periodic UWB Heartbeat & Status (every 500 ms)
         heartbeat_counter++;
         if (heartbeat_counter >= 25) { // 25 * 20 ms = 500 ms
             heartbeat_counter = 0;
@@ -222,7 +220,11 @@ extern "C" void app_main(void) {
     // 3. Initialize Audio Codec (ES8388)
     CartridgeAudioCodec::instance().init();
 
-    // 4. Initialize All-UWB Backbone (DW3110)
+    // 4. Initialize BLE Client Subsystem & apply initial profile config
+    CartridgeBleClient::instance().init();
+    CartridgeBleClient::instance().configure(s_active_ble_config);
+
+    // 5. Initialize All-UWB Backbone (DW3110)
     dw3110_config_t dw_cfg = {
         .spi_host = SPI2_HOST,
         .pin_sck  = PIN_UWB_SCK,

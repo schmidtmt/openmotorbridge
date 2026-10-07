@@ -21,6 +21,8 @@ typedef enum : uint8_t {
 typedef struct {
     bool                supported;
     BleControlFlavor_t  flavor;
+    char                device_prefix[16]; // e.g. "SPIDER", "SENA", "PT-EDGE", "OMM-UCS"
+    uint16_t            service_uuid;      // e.g. 0xFFE0, 0xFE59, 0x00MB
     bool                fallback_to_mechatronics_on_disconnect;
     // Capabilities
     bool                can_power_boot;    // Always false! Cold boot requires physical unpowered mechatronic press
