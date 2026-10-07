@@ -1,0 +1,20 @@
+idf_component_register(
+    SRCS
+        "main.cpp"
+        "sa818_dmr_driver.cpp"
+        "es8388_codec.cpp"
+        "keypad_indicator.cpp"
+        "omm446_ble_service.cpp"
+        "power_supervisor.cpp"
+    INCLUDE_DIRS
+        "."
+    REQUIRES
+        nvs_flash
+        driver
+        esp_adc
+        esp_pm
+        freertos
+        log
+        bt
+        esp_timer
+)

@@ -30,6 +30,14 @@ Das OpenMotorBridge-Gesamtsystem verteilt die Aufgaben auf drei dedizierte Mikro
 |                   | / C6    | Kennzeichenträger     | 512 KB SRAM | * 36x Halo RGB LED Animation  |
 |                   |         |                       | 4 MB Flash  | * UWB Ziel-Telemetrie Stream  |
 +-------------------+---------+-----------------------+-------------+-------------------------------+
+| `omm_module`      | ESP32-C6| OMM 2.4 GHz (PCBA 09) | 160 MHz     | * ESP-NOW Mesh Intercom       |
+|                   | RISC-V  | Helm / UCS Cartridge  | 512 KB SRAM | * Opus / ES8388 48 kHz Audio  |
+|                   |         |                       | 4 MB Flash  | * BLE CarPlay & Keypad State  |
++-------------------+---------+-----------------------+-------------+-------------------------------+
+| `omm446_module`   | ESP32-C6| OMM 446 MHz (PCBA 10) | 160 MHz     | * NiceRF SA818-DMR UART/DSP   |
+|                   | RISC-V  | PMR446 / DMR Tier I/II| 512 KB SRAM | * ES8388 16 kHz Voice Stream  |
+|                   |         | Helm / UCS Cartridge  | 4 MB Flash  | * 0.2W/0.5W ERP & CTCSS Engine|
++-------------------+---------+-----------------------+-------------+-------------------------------+
 ```
 
 ---
@@ -140,6 +148,36 @@ idf.py build
 
 Das erzeugt:
 * `build/openmotorbridge_radar2_submcu.bin`
+
+### 3.5 Target 5: OMM 2.4 GHz Intercom-Modul (`omm_module`)
+
+```bash
+cd ../omm_module
+
+# Ziel-Architektur festlegen (ESP32-C6 RISC-V)
+idf.py set-target esp32c6
+
+# Kompilieren
+idf.py build
+```
+
+Das erzeugt:
+* `build/openmotorbridge_omm_module.bin`
+
+### 3.6 Target 6: OMM 446 MHz PMR/DMR Transceiver (`omm446_module`)
+
+```bash
+cd ../omm446_module
+
+# Ziel-Architektur festlegen (ESP32-C6 RISC-V)
+idf.py set-target esp32c6
+
+# Kompilieren
+idf.py build
+```
+
+Das erzeugt:
+* `build/openmotorbridge_omm446_module.bin`
 
 ---
 
