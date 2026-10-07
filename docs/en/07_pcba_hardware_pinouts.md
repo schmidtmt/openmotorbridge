@@ -39,7 +39,7 @@ OpenMotorBridge hardware follows the principle of radical signal decoupling: Dat
 |       | (ECE 22.06 Standalone & Pod)  | (UCS M2)      | (ENIG)  | TI BQ24075, ES8388,  |
 |       |                               |               |         | 600mAh LiPo, FXP73   |
 +-------+-------------------------------+---------------+---------+----------------------+
-| **PCBA 10**| **OMM 446 MHz UCS Intercom**  | 60 x 30 mm    | 2 Layer | NiceRF SA818-DMR,    |
+| **PCBA 10**| **OMM 446 MHz UCS Intercom**  | 60 x 30 mm    | 4 Layer | NiceRF SA818-DMR,    |
 |       | (DMR Tier I & Analog PMR446)  | (UCS M2)      | (ENIG)  | ESP32-C6, BQ24075,   |
 |       |                               |               |         | ES8388, Helical Ant. |
 +-------+-------------------------------+---------------+---------+----------------------+

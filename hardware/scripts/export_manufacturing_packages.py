@@ -85,6 +85,14 @@ BOARDS = [
         "pcb": os.path.join(BASE_DIR, "kicad_omm_intercom/openmotorbridge_omm_intercom.kicad_pcb"),
         "layers": "F.Cu,B.Cu,F.Paste,B.Paste,F.SilkS,B.SilkS,F.Mask,B.Mask,Edge.Cuts",
         "is_4layer": False
+    },
+    {
+        "name": "10_omm446_ucs_pcba",
+        "title": "OpenMotorBridge OMM 446 MHz PMR/DMR Transceiver Modul PCB",
+        "sch": os.path.join(BASE_DIR, "kicad_omm446_intercom/openmotorbridge_omm446_intercom.kicad_sch"),
+        "pcb": os.path.join(BASE_DIR, "kicad_omm446_intercom/openmotorbridge_omm446_intercom.kicad_pcb"),
+        "layers": "F.Cu,B.Cu,In1.Cu,In2.Cu,F.Paste,B.Paste,F.SilkS,B.SilkS,F.Mask,B.Mask,Edge.Cuts",
+        "is_4layer": True
     }
 ]
 
@@ -142,6 +150,16 @@ def export_jlcpcb_bom(pcb_file, sch_file, output_csv):
                 "Mesh_Group": "C318884",
                 "Vol_Plus": "C318884",
                 "Vol_Minus": "C318884",
+                "SA818-DMR": "C2839211",
+                "NiceRF_SA818-DMR": "C2839211",
+                "ME6211C33M5G": "C82942",
+                "J_AUDIO_PWR": "C160404",
+                "BM08B-SRSS-TB": "C160404",
+                "U.FL-R-SMT-1": "C14899",
+                "BTN_PTT": "C318884",
+                "BTN_MODE": "C318884",
+                "BTN_CH_UP": "C318884",
+                "BTN_CH_DOWN": "C318884",
             }
             if val in known_lcsc:
                 lcsc = known_lcsc[val]
