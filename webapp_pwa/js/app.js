@@ -5098,6 +5098,28 @@ const CARTRIDGE_PROFILES = {
         status_color: 'var(--accent-orange)',
         idle_ma: 60,
         dle_bonus: 10
+    },
+    omm_ucs: {
+        vendor: 'OpenMotorMesh * 2.4 GHz Mesh & BLE 5.3 LE Audio LC3 (PCBA 09)',
+        vendor_en: 'OpenMotorMesh * 2.4 GHz Mesh & BLE 5.3 LE Audio LC3 (PCBA 09)',
+        badge: 'badge_online',
+        badge_class: 'badge-purple',
+        status: 'Power ON * Full-Duplex Stereo LC3 * DLE +80 Pkt.',
+        status_en: 'Power ON * Full-Duplex Stereo LC3 * DLE +80 Pts.',
+        status_color: 'var(--accent-purple)',
+        idle_ma: 28,
+        dle_bonus: 80
+    },
+    omm_pmr446: {
+        vendor: 'OpenMotorMesh * 446 MHz PMR/DMR Digital (PCBA 10)',
+        vendor_en: 'OpenMotorMesh * 446 MHz PMR/DMR Digital (PCBA 10)',
+        badge: 'badge_online',
+        badge_class: 'badge-blue',
+        status: 'Power ON * DMR Tier I/II * DLE +40 Pkt.',
+        status_en: 'Power ON * DMR Tier I/II * DLE +40 Pts.',
+        status_color: 'var(--accent-blue)',
+        idle_ma: 35,
+        dle_bonus: 40
     }
 };
 

@@ -138,6 +138,27 @@ The digital 2.4 GHz mesh node is driven by `openmotorbridge_omm_ucs` (**`PCBA 09
 * **Battery (`BAT1`):** 600 mAh LiPo ($3.7\,\text{V}$, $2.22\,\text{Wh}$) delivering 12–14 hours of continuous full-duplex operation.
 * **TDMA Protocol Stack:** 10 ms Superframe cycle with collision-free audio slots for up to 6 concurrent full-duplex speakers, 802.11s L2 duplicate filtering, 6LoWPAN/IPv6 multicast, and Opus HD voice streaming ($< 18\,\text{ms}$ overall latency).
 
+### 3.2 Bluetooth 5.3 LE Audio (LC3 Codec) & BLE GATT Remote Control
+
+Beyond its 2.4 GHz IEEE 802.15.4 mesh engine, the ESP32-C6 features a complete Bluetooth 5.3 subsystem that handles two vital functions:
+
+1. **Digital BLE GATT Control (Primary Path vs. Mechatronic Fallback):**
+   * The module exposes the native **OpenMotorMesh GATT Service** (`0x00MB`). Handlebar controls, Central Box, or Smart Cartridge issue runtime commands with sub-$5\,\text{ms}$ latency:
+     - `PTT_CONTROL` (Char `0x0001`): Push-to-Talk and VOX triggering.
+     - `MESH_MODE` (Char `0x0002`): Open Convoy vs. Private Group switching.
+     - `CHANNEL_SELECT` (Char `0x0003`): Mesh channels 1 through 16.
+     - `VOLUME_LEVEL` (Char `0x0004`): Master playback volume 0 to 100%.
+     - `TELEMETRY` (Char `0x0005`): Live state reporting (battery %, VBUS mV, charging bit, RSSI).
+   * **Mechatronics as Boot & Fallback Only:** The 4 physical button actuators on `PCBA 03` are strictly reserved for unpowered cold boots (**Power ON / Power OFF**) or as emergency fallbacks if BLE disconnects. During standard operation, 100% of controls are wear-free digital BLE commands!
+
+2. **Bi-directional Full-Duplex Stereo via LE Audio (LC3 Codec):**
+   * Conventional Bluetooth HFP (Hands-Free Profile) degrades voice into narrow 8/16-kHz mono telephone audio when the mic is active.
+   * OpenMotorMesh utilizes the modern **Bluetooth 5.3 LE Audio Standard (BAP / LC3 Codec)** with **true bi-directional stereo**:
+     - **Downlink (Helmet Playback):** Full 48 kHz stereo HiFi (CarPlay/Android Auto media, navigation, and spatially rendered mesh voices).
+     - **Uplink (Rider Voice to Bike):** High-resolution 32/48 kHz LC3 wideband speech without tinny artifacts.
+     - **Latency:** Sub-$20\dots 25\,\text{ms}$ (lip-sync grade and imperceptible in full-duplex convoy conversations).
+   * In autonomous helmet mode, this ensures a completely wireless, lossless stereo link to the vehicle Central Box.
+
 ---
 
 # PART C: OMM 446 MHz Analog & Digital PMR/DMR Module (`PCBA 10`)

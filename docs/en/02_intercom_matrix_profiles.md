@@ -295,6 +295,20 @@ Every cartridge carrier board (`PCBA 03 Rev 3.0 All-UWB`) incorporates an onboar
 +-------------------------------------------------------------+
 ```
 
+### 4.1 Control Hierarchy: Digital BLE Primary Path vs. Mechatronic Fallback
+
+To maximize component lifespan and eliminate mechanical wear, OpenMotorBridge enforces a strict two-tier control hierarchy:
+
+1. **Digital BLE GATT Primary Path (Zero-Wear):**
+   * Once the intercom device is powered on and connected via Bluetooth Low Energy, all **runtime commands** (Mesh activation, group toggles, volume +/-, channel selection, mic mute) are dispatched **strictly digitally via BLE GATT**.
+   * Latency: **$< 5\,\text{ms}$** (compared to $100\dots 300\,\text{ms}$ mechanical actuator travel).
+   * For `PCBA 09` (OMM 2.4 GHz), the native service `0x00MB` manages all parameters directly. For Sena and Cardo, the cartridge BLE client commands the corresponding vendor GATT characteristics.
+
+2. **Physical Mechatronics (Plungers / MOSFETs) for Cold-Boot & Fallback Only:**
+   * **Power ON (Cold-Boot):** Essential because when an intercom is powered off, its Bluetooth radio is completely unpowered. Only a physical mechatronic press (e.g., Center + Plus for $1.0\,\text{s}$ on Sena Spider X Slim) can boot the unit.
+   * **Power OFF (Shutdown):** Reliable mechatronic power-down upon vehicle ignition cut (KL15).
+   * **Failsafe Fallback:** If the BLE link drops or a vendor changes their proprietary BLE handshake via firmware update, the cartridge firmware immediately falls back to the physical 4x AO3400A MOSFET actuator gates.
+
 ---
 
 ## 5. Cartridge Interface Pinout (`J_AUDIO_PWR` / 8-Pin JST-SH 1.0mm)

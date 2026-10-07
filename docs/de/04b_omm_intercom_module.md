@@ -173,6 +173,27 @@ flowchart TD
 * **Layer 3 (6LoWPAN / IPv6 Multicast):** Komprimiert 40-Byte IPv6 Header auf 2–4 Bytes. Vollständig kollisionsfreies Multicast ohne TCP Head-of-Line Blocking.
 * **Layer 4 (Opus over RTP):** 24 kHz Breitband HD mit adaptivem Jitter-Puffer ($20\dots 50\,\text{ms}$) und Packet Loss Concealment (PLC). Systemlatenz: **$< 18\,\text{ms}$**.
 
+### 3.2 Bluetooth 5.3 LE Audio mit LC3 & BLE GATT Remote Control
+
+Neben dem 2.4-GHz-Mesh-Transceiver verfügt der ESP32-C6 über ein vollwertiges Bluetooth 5.3 Subsystem, das zwei wesentliche Systemfunktionen übernimmt:
+
+1. **Digitale BLE GATT Fernsteuerung (Primärpfad vs. Mechatronik-Fallback):**
+   * Das Modul exponiert den herstellereigenen **OpenMotorMesh GATT Service** (`0x00MB`), über den Lenkertaster, Zentralbox oder Smart Cartridge sämtliche Laufzeitbefehle digital und latenzfrei ($< 5\,\text{ms}$) steuern:
+     - `PTT_CONTROL` (Char `0x0001`): Tasten- und Freisprech-Trigger.
+     - `MESH_MODE` (Char `0x0002`): Umschaltung zwischen Offenem Konvoi und Privater Gruppe.
+     - `CHANNEL_SELECT` (Char `0x0003`): Kanalwahl 1 bis 16.
+     - `VOLUME_LEVEL` (Char `0x0004`): Lautstärke 0 bis 100 %.
+     - `TELEMETRY` (Char `0x0005`): Live-Meldung von Akkuladestand, VBUS-Spannung, Ladezustand und Signalstärke (RSSI).
+   * **Mechatronik nur noch als Kaltstart & Fallback:** Die physischen Tasten-Aktuatoren auf `PCBA 03` greifen ausschließlich beim stromlosen Kaltstart (**Power ON / Power OFF**) oder als Rückfallebene, falls BLE getrennt ist. Im Normalbetrieb erfolgt 100 % der Bedienung verschleißfrei über BLE!
+
+2. **Bi-direktionales Stereo-Audio über LE Audio (LC3-Codec):**
+   * Klassisches Bluetooth HFP (Hands-Free Profile) leidet unter dem drastischen Qualitätsabfall auf 8- oder 16-kHz-Monosound, sobald das Mikrofon aktiviert wird.
+   * OpenMotorMesh nutzt stattdessen den modernen **Bluetooth 5.3 LE Audio Standard (BAP / LC3 Codec)** mit **echtem Stereo in beide Richtungen**:
+     - **Downlink (Helm-Wiedergabe):** Vollwertiges 48 kHz HiFi-Stereo (CarPlay/Android Auto Musik, Navigation und räumlich positionierte Gruppenstimmen).
+     - **Uplink (Fahrersprache zum Bike):** Hochauflösende 32/48 kHz LC3-Breitbandübertragung des Mikrofonsignals ohne Blechdosen-Klang.
+     - **Latenz:** Sub-$20\dots 25\,\text{ms}$ (lippensynchron und im Mesh-Gespräch unmerkbar).
+   * Dies ermöglicht im autarken Helmeinsatz eine absolut drahtlose, verlustfreie Stereo-Kopplung an die Zentralbox des Motorrads.
+
 ---
 
 # TEIL C: OMM 446 MHz Analog & Digital PMR/DMR Modul (`PCBA 10`)

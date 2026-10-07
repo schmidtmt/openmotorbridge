@@ -6,6 +6,7 @@
 #include "esp_system.h"
 #include "omm_module_config.h"
 #include "es8388_codec.h"
+#include "omm_ble_service.h"
 #include "power_supervisor.h"
 #include "omm_transceiver.h"
 #include "keypad_indicator.h"
@@ -91,6 +92,7 @@ static void supervision_task(void *pvParameters) {
         }
 
         // 2. Poll Battery Status every 500 ms
+        // 2. Poll Battery Status every 500 ms and notify BLE Central
         static int cycle = 0;
         if (++cycle >= 25) {
             cycle = 0;
@@ -99,6 +101,16 @@ static void supervision_task(void *pvParameters) {
             if (pwr.battery_pct < 15 && !pwr.is_charging) {
                 indicator_set_mode(LED_MODE_WARN_YELLOW);
             }
+
+            OmmBleTelemetry_t telem = {
+                .battery_pct = pwr.battery_pct,
+                .is_charging = static_cast<uint8_t>(pwr.is_charging ? 1 : 0),
+                .vbus_mv = pwr.vbus_mv,
+                .vbat_mv = pwr.vbat_mv,
+                .mesh_rssi_dbm = -65,
+                .connected_peers = 1
+            };
+            omm_ble_notify_telemetry(&telem);
         }
 
         vTaskDelay(pdMS_TO_TICKS(20));
@@ -118,11 +130,32 @@ extern "C" void app_main(void) {
     ESP_ERROR_CHECK(es8388_codec_init());
     ESP_ERROR_CHECK(omm_transceiver_init(on_mesh_audio_received));
 
+    // 2. Initialize BLE 5.3 GATT Server (Remote Control & LE Audio LC3 profile)
+    ESP_ERROR_CHECK(omm_ble_service_init([](uint16_t char_uuid, const uint8_t *data, size_t len) {
+        if (!data || len == 0) return;
+        switch (char_uuid) {
+            case OMM_CHAR_UUID_PTT:
+                omm_transceiver_set_ptt(data[0] != 0);
+                indicator_set_mode(omm_transceiver_is_ptt() ? LED_MODE_TX_BLUE : LED_MODE_STANDBY_GREEN);
+                break;
+            case OMM_CHAR_UUID_MESH_MODE:
+                omm_transceiver_set_mesh_mode(data[0] != 0 ? OMM_MESH_PRIVATE_GROUP : OMM_MESH_OPEN_GROUP);
+                indicator_set_mode(data[0] != 0 ? LED_MODE_GROUP_PURPLE : LED_MODE_STANDBY_GREEN);
+                break;
+            case OMM_CHAR_UUID_VOLUME:
+                s_current_volume = data[0] > 100 ? 100 : data[0];
+                es8388_set_volume(s_current_volume);
+                break;
+            default:
+                break;
+        }
+    }));
+
     // Set initial volume & mic gain
     es8388_set_volume(s_current_volume);
     es8388_set_mic_gain(18); // +18 dB for helmet boom mic
 
-    // 2. Spawn FreeRTOS Tasks
+    // 3. Spawn FreeRTOS Tasks
     xTaskCreate(audio_processing_task, "audio_task", 4096, NULL, 10, NULL);
     xTaskCreate(supervision_task, "supervision_task", 3072, NULL, 3, NULL);
 

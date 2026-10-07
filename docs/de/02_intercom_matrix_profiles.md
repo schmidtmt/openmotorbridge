@@ -382,6 +382,20 @@ Jede Kassetten-Trägerplatine (`PCBA 03 Rev 3.0 All-UWB`) verfügt über einen e
    - Das passende Herstellerprofil (Gain-Level, Raised-Cosine Ducking-Prioritäten, Mechatronik-Sequenzen) wird im ESP32-S3 Core 1 DSP aktiviert.
    - Antwortet ein Schacht nicht oder ist leer, bleibt der Port im sicheren `disabled.json` Zustand.
 
+### 4.2 Steuerungs-Hierarchie: Digitaler BLE-Primärpfad vs. Mechatronik-Fallback
+
+Zur Maximierung der Lebensdauer und Minimierung mechanischen Verschleißes folgt OpenMotorBridge einer strikten zweistufigen Steuerungs-Hierarchie:
+
+1. **Digitaler BLE GATT Primärpfad (Zero-Wear):**
+   * Sobald das Intercom-Gerät hochgefahren und über Bluetooth Low Energy verbunden ist, werden sämtliche **Laufzeit-Befehle** (Mesh-Aktivierung, Gruppenwechsel, Lautstärke +/-, Kanalauswahl, Mikrofonstummschaltung) **ausschließlich digital via BLE GATT** abgesetzt.
+   * Latenz: **$< 5\,\text{ms}$** (im Vergleich zu $100\dots 300\,\text{ms}$ mechanischer Hubzeit).
+   * Bei `PCBA 09` (OMM 2.4 GHz) steuert der herstellereigene Service `0x00MB` alle Parameter nativ. Bei Sena/Cardo übernimmt der Kassetten-BLE-Client die entsprechenden GATT-Charakteristiken.
+
+2. **Physische Mechatronik (Stößel / MOSFETs) nur für Kaltstart & Fallback:**
+   * **Power ON (Kaltstart):** Unverzichtbar, da im ausgeschalteten Zustand des Headsets dessen Bluetooth-Chip stromlos ist. Nur ein physischer mechatronischer Tastendruck (z. B. Center + Plus für $1{,}0\,\text{s}$ beim Sena Spider X Slim) kann das Gerät booten.
+   * **Power OFF (Herunterfahren):** Zuverlässiges mechatronisches Ausschalten bei Zündung AUS (KL15).
+   * **Ausfallsicherheits-Fallback:** Verliert die BLE-Verbindung den Sync oder ändert ein Hersteller sein proprietäres BLE-Protokoll, schaltet die Kassetten-Firmware automatisch auf die physischen 4x AO3400A MOSFET-Stößel zurück.
+
 ---
 
 ## 5. Systematik der OEM-Adapter-Anbindung: Klassen & Verkabelung

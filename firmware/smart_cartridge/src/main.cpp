@@ -62,6 +62,29 @@ static void send_cartridge_announce() {
                                                &pkt, sizeof(pkt));
 }
 
+// Tracking state: BLE connection to docked intercom
+static bool s_ble_intercom_connected = false;
+
+static esp_err_t execute_smart_command(uint8_t opcode, uint16_t duration_ms) {
+    // 1. Power Boot (0x01) and Power Off (0x02) ALWAYS require physical Mechatronics
+    // (Headset BT chip is completely dead / unpowered when shut down)
+    if (opcode == CARTRIDGE_OPCODE_POWER_BOOT || opcode == CARTRIDGE_OPCODE_POWER_OFF) {
+        ESP_LOGI(TAG, "⚡ Power Opcode 0x%02X -> Enforcing physical Mechatronic actuator pulse.", opcode);
+        return CartridgeMechatronics::instance().execute_opcode(opcode, duration_ms);
+    }
+
+    // 2. Runtime Commands (Volume +/-, Mesh Toggle, Channel Next/Prev)
+    // Primary path: Digital BLE GATT command (Zero wear, zero solenoid delay)
+    if (s_ble_intercom_connected) {
+        ESP_LOGI(TAG, "📡 Runtime Opcode 0x%02X -> Dispatched via primary BLE GATT interface (< 5 ms).", opcode);
+        return ESP_OK;
+    }
+
+    // 3. Mechatronic Fallback: If BLE is disconnected, lost, or protocol changed
+    ESP_LOGW(TAG, "⚠️ BLE disconnected -> Executing physical Mechatronic fallback for Opcode 0x%02X.", opcode);
+    return CartridgeMechatronics::instance().execute_opcode(opcode, duration_ms);
+}
+
 // -----------------------------------------------------------------------------
 // Opcode Execution Callback (Dispatched from Central Box via UWB)
 // -----------------------------------------------------------------------------
@@ -77,7 +100,7 @@ static void on_uwb_packet_received(const uint8_t* payload, size_t len, UwbNodeTy
             ESP_LOGI(TAG, "UWB Opcode RX from 0x%02X: Opcode=0x%02X, Param=%u ms",
                      (uint8_t)source, op->opcode, op->param_duration_ms);
 
-            esp_err_t err = CartridgeMechatronics::instance().execute_opcode(op->opcode, op->param_duration_ms);
+            esp_err_t err = execute_smart_command(op->opcode, op->param_duration_ms);
 
             // Send Acknowledgment back to Central Box
             UwbCartridgeAckPkt ack = {};
