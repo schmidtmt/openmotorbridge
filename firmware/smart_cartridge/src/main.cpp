@@ -89,6 +89,41 @@ static void on_uwb_packet_received(const uint8_t* payload, size_t len, UwbNodeTy
             UwbVehicleBackbone::instance().send_packet(UWB_NODE_CENTRAL_BOX, UWB_PKT_CARTRIDGE_ACK,
                                                        &ack, sizeof(ack));
         }
+    } else if (hdr->packet_type == UWB_PKT_AUDIO_STREAM_DOWN) {
+        if (len >= sizeof(UwbBackboneHeader) + sizeof(UwbAudioStreamDownPkt)) {
+            const UwbAudioStreamDownPkt* down = reinterpret_cast<const UwbAudioStreamDownPkt*>(
+                payload + sizeof(UwbBackboneHeader));
+
+            // 1. Sub-Kanal 2: Zero-Latency Voice (< 1 ms via ES8388 DAC direct to Intercom Mic Pin)
+            CartridgeAudioCodec::instance().write_voice_mic(down->sub_voice, UWB_AUDIO_DOWN_VOICE_SAMPLES);
+
+            // 2. Sub-Kanal 0 & 1: Stereo Media to Bluetooth A2DP Source buffer (for native Mesh Music Sharing)
+            CartridgeAudioCodec::instance().push_music_samples(down->sub_music_l, down->sub_music_r, UWB_AUDIO_DOWN_MUSIC_SAMPLES);
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+// Real-Time Audio Upstream Task (Intercom Headset Out -> UWB Central Box)
+// -----------------------------------------------------------------------------
+static void cartridge_audio_upstream_task(void* pvParameters) {
+    ESP_LOGI(TAG, "Cartridge Audio Upstream Task started (100 Hz)");
+    int16_t rx_buf[UWB_AUDIO_UP_SAMPLES];
+    uint16_t up_seq = 0;
+
+    while (1) {
+        size_t samples_read = CartridgeAudioCodec::instance().read_audio_frames(rx_buf, UWB_AUDIO_UP_SAMPLES);
+        if (samples_read > 0) {
+            UwbAudioStreamUpPkt up_pkt = {};
+            up_pkt.frame_seq = ++up_seq;
+            up_pkt.status_flags = 0x01; // Headset stream active
+            up_pkt.sample_count = static_cast<uint8_t>(samples_read > UWB_AUDIO_UP_SAMPLES ? UWB_AUDIO_UP_SAMPLES : samples_read);
+            memcpy(up_pkt.samples, rx_buf, up_pkt.sample_count * sizeof(int16_t));
+
+            UwbVehicleBackbone::instance().send_packet(UWB_NODE_CENTRAL_BOX, UWB_PKT_AUDIO_STREAM_UP,
+                                                       &up_pkt, sizeof(up_pkt));
+        }
+        vTaskDelay(pdMS_TO_TICKS(10));
     }
 }
 
@@ -154,8 +189,9 @@ extern "C" void app_main(void) {
     // 5. Send initial Announce frame to Central Box
     send_cartridge_announce();
 
-    // 6. Spawn Supervisor Task
+    // 6. Spawn Supervisor Task & Real-Time Audio Upstream Task
     xTaskCreate(cartridge_supervisor_task, "cartridge_sup", 3072, NULL, 5, NULL);
+    xTaskCreate(cartridge_audio_upstream_task, "cartridge_audio_up", 4096, NULL, 10, NULL);
 
     ESP_LOGI(TAG, "Smart Cartridge operational in %s.",
              s_local_bay_node == UWB_NODE_CARTRIDGE_BAY1 ? "BAY 1 (Links)" : "BAY 2 (Rechts)");

@@ -46,14 +46,15 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 
 | Designator | Bauteil / MPN | Hersteller | Gehäuse | LCSC / JLCPCB Part # | Funktion |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **U1** | DW3110 | Qorvo | QFN-16 (Top) | C2934600 | IEEE 802.15.4z UWB Transceiver (6.5 GHz Ch. 5 All-UWB Link) |
-| **U2** | CH32V203 / MCU | WCH | QFN-20 (Top) | C2943200 | 32-Bit Host-MCU (SPI zu DW3110, NVS Multi-Vehicle Roaming) |
-| **Q1 - Q4**| AO3400A | Alpha & Omega | SOT-23 (Bottom)| C20917 | 4x N-Kanal MOSFETs ($30\,\text{V} / 5{,}7\,\text{A}$) für Mechatronik |
-| **D1 - D4**| 1N4148WS | Diodes Inc. | SOD-323 (Bottom)| C2128 | 4x Freilaufdioden für Hubmagnete |
+| **U1** | DW3110 | Qorvo | QFN-16 (Bottom) | C2934600 | IEEE 802.15.4z UWB Transceiver (6.5 GHz Ch. 5 All-UWB Link) |
+| **U2** | ESP32-C6-MINI-1U | Espressif | SMD Modul (Top) | C5267233 | 32-Bit RISC-V Host-MCU (verwaltet Kassetten-Profile, UWB & Mechatronik) |
+| **U3** | ES8388 | Everest Semi | QFN-28 (Bottom) | C2845349 | 24-Bit / 48 kHz Stereo Audio Codec (getrennte L/R ADC & DAC Kanäle) |
+| **Q1 - Q4**| AO3400A | Alpha & Omega | SOT-23 (Top) | C20917 | 4x N-Kanal MOSFETs ($30\,\text{V} / 5{,}7\,\text{A}$) für Mechatronik-Aktuatoren |
+| **D1 - D4**| 1N4148WS | Diodes Inc. | SOD-323 (Top) | C2128 | 4x Freilaufdioden für Miniatur-Hubmagnete |
 | **F1** | MF-MSMF050-2 | Bourns | 1812 SMD | C22668 | PPTC 500mA Schutzsicherung |
-| **J_ACT** | SM08B-SRSS-TB | JST | 8-Pin 1.0mm SMD | C160404 | Mechatronik-Header für 4 Hubmagnete |
-| **ANT1** | U.FL-R-SMT-1 | Hirose | SMD Micro-Coax | C2834595 | UWB-Antennenport (Taoglas FXUWB10 oder SMD-Patch) |
-| **U3 (DNP)**| ES8311 | Everest Semi | QFN-20 (3x3mm) | C396781 | Optional: Mono Audio-Codec (nur bestückt für Midland PMR446) |
+| **J_ACT** | SM08B-SRSS-TB | JST | 8-Pin 1.0mm SMD | C160404 | Mechatronik-Header für 4 Hubmagnete (Top) |
+| **J_AUDIO_PWR**| SM08B-SRSS-TB | JST | 8-Pin 1.0mm SMD | C160404 | Audio- & Power-Header (Top, getrennte PGND / AGND Sternmassen) |
+| **ANT1** | U.FL-R-SMT-1 | Hirose | SMD Micro-Coax | C14894 | UWB-Antennenport (Taoglas FXUWB10 oder SMD-Patch) |
 
 ---
 
@@ -157,9 +158,9 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 | Designator | Bauteil / Wert | Hersteller / Typ | Gehäuse / Footprint | JLCPCB Part # | Funktion / Beschreibung |
 | :--- | :--- | :--- | :--- | :---: | :--- |
 | **`U1`** | ESP32-C6-MINI-1U | Espressif | SMD Modul (13.2x16.6mm) mit U.FL | `C5267233` | 32-Bit RISC-V 160MHz Host MCU, Wi-Fi 6, 802.15.4 TDMA, BLE 5.3, 4MB Flash, U.FL HF-Port |
-| **`U2`** | BQ24075RGTR | Texas Instruments | QFN-16 (3x3mm) | `C96825` | 1.5A LiPo PMIC mit Dynamic Power Path Management (Zero-Reboot Umschaltung) |
+| **`U2`** | BQ24075RGTR | Texas Instruments | QFN-16 (3x3mm) | `C96825` | 1.5A LiPo PMIC mit Dynamic Power Path Management (Zero-Reboot Umschaltung & USV) |
 | **`U3`** | XC6206P332MR | Torex Semi | SOT-23-3 | `C5446` | 3.3V / 250mA Low-Iq LDO Spannungsregler |
-| **`U4`** | ES8311 | Everest Semi | QFN-20 (3x3mm) | `C396781` | 24-Bit / 96kHz Mono Audio Codec mit 100mW HP-Amp & rauscharmem Mic-Preamp |
+| **`U4`** | ES8388 | Everest Semi | QFN-28 (4x4mm) | `C2845349` | 24-Bit / 96kHz Stereo Audio Codec mit getrenntem L/R Kopfhörertreiber & Differenz-Mic-Preamp |
 | **`ANT1`** | Taoglas FXP73 | I-PEX MHF / U.FL | 2.4 GHz Flex-Dipol (+3.0 dBi) | `C14894` | Abgesetzte Helm-Flexantenne, klickt direkt auf den board-eigenen U.FL-Port von `U1` (Reichweite bis 250m) |
 | **`J1`** | TYPE-C-31-M-12 | Korean HRO | SMT/THT IP67 | `C2765186` | Wasserdichte 16-Pin USB-C Buchse (5V Laden, WebUSB DFU, Helm-Audio) |
 | **`BAT1`** | JST-ACH 2-Pin | JST | SMD 1.2mm pitch | `C2902341` | Steckverbindung zum internen 600-mAh-LiPo Pouch-Akku (mit PCM) |
@@ -167,6 +168,23 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 | **`D2`** | USBLC6-2SC6 | STMicroelectronics | SOT-23-6 | `C7519` | High-Speed TVS-Diodenarray für USB D+/D- und VBUS ESD-Schutz |
 | **`SW1..4`** | EVQ-P2 / KMT0 | Panasonic / C&K | SMD 3.5x2.8mm | `C318884` | 4x taktile IP67 Mikrotaster (Power, Mesh, Vol+, Vol-) |
 | **`R_NTC`** | 10k NTC 1% | Murata | 0402 | `C25804` | Akku-Temperaturüberwachung nach JEITA-Norm |
+
+---
+
+## 8c. PCBA 10: OMM 446 Analog & Digital PMR446 Intercom-Modul (`openmotorbridge_omm446_ucs`, 4-Layer FR4 TG150, 60 x 30 mm)
+
+| Designator | Bauteil / Wert | Hersteller / Typ | Gehäuse / Footprint | JLCPCB Part # | Funktion / Beschreibung |
+| :--- | :--- | :--- | :--- | :---: | :--- |
+| **`U1`** | ESP32-C6-MINI-1U | Espressif | SMD Modul (13.2x16.6mm) mit U.FL | `C5267233` | 32-Bit RISC-V Host MCU, BLE 5.3 Smartphone-Setup, WebUSB DFU, AT-Command Control |
+| **`U2`** | BQ24075RGTR | Texas Instruments | QFN-16 (3x3mm) | `C96825` | 1.5A LiPo PMIC mit DPPM (Laden im Betrieb via USB-C, Akku dient als USV) |
+| **`U3`** | SA818-DMR | NiceRF | SMD Modul (16x38mm) | `C2839211` | 446 MHz Analog & DMR Tier I Transceiver Modul (0.2W Helm / 0.5W Bike) |
+| **`U4`** | ES8388 | Everest Semi | QFN-28 (4x4mm) | `C2845349` | 24-Bit Stereo Audio Codec für Funk-Audio Ein-/Ausgabe und Helm-Lautsprecher |
+| **`ANT1`** | 446 MHz Wendel | Custom Helix | $\lambda/4$ Wendel ($32\,\text{mm}$) | COTS | Im Gehäusedeckel vergossene Helix oder U.FL Pigtail für Bike-Fahrzeugantenne |
+| **`J1`** | TYPE-C-31-M-12 | Korean HRO | SMT/THT IP67 | `C2765186` | Wasserdichte 16-Pin USB-C Buchse (5V Speisung, Laden, DFU) |
+| **`BAT1`** | JST-ACH 2-Pin | JST | SMD 1.2mm pitch | `C2902341` | Steckverbindung zum internen 600-mAh-LiPo Pouch-Akku (mit PCM) |
+| **`D1`** | WS2812B-2020 | Worldsemi | SMD 2020 | `C2843785` | RGB-Status-LED (RX Grün, TX Rot, DMR Blau, Chg Gelb) |
+| **`D2`** | USBLC6-2SC6 | STMicroelectronics | SOT-23-6 | `C7519` | High-Speed TVS-Diodenarray für USB D+/D- und VBUS ESD-Schutz |
+| **`SW1..4`** | EVQ-P2 / KMT0 | Panasonic / C&K | SMD 3.5x2.8mm | `C318884` | 4x taktile IP67 Mikrotaster (PTT, Mode, Ch+, Ch-) |
 
 ---
 
@@ -181,8 +199,9 @@ Alle Fertigungsdaten liegen im Repository unter `hardware/production_packages/` 
 | **PCBA 05: Front-Knoten** | `05_front_node_pcba_gerbers_jlcpcb.zip` | `05_front_node_pcba_bom_jlcpcb.csv` | `05_front_node_pcba_cpl_jlcpcb.csv` | **4 Lagen** | ENIG (Gold), 1.6 mm, TG150, SMT beidseitig (DW3110 auf B.Cu) |
 | **PCBA 06: MagSafe Dock** | `06_magsafe_dock_pcba_gerbers_jlcpcb.zip` | `06_magsafe_dock_pcba_bom_jlcpcb.csv` | `06_magsafe_dock_pcba_cpl_jlcpcb.csv` | **2 Lagen** | *Optional / Legacy* (bei All-UWB durch COTS 2-Pin Magnetkupplung ersetzt) |
 | **PCBA 07: Smart-Keyfob** | `07_smart_keyfob_pcba_gerbers_jlcpcb.zip` | `07_smart_keyfob_pcba_bom_jlcpcb.csv` | `07_smart_keyfob_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG (Gold), 1.0 mm, SMT beidseitig |
-| **PCBA 08: Radar 2.0 Sub-MCU** | `08_radar_submcu_pcba_gerbers_jlcpcb.zip` | `08_radar_submcu_pcba_bom_jlcpcb.csv` | `08_radar_submcu_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG (Gold), 1.2 mm, TG150, SMT Top |
+| **PCBA 08: Radar 2.0 Sub-MCU** | `08_radar_submcu_pcba_gerbers_jlcpcb.zip` | `08_radar_submcu_pcba_bom_jlcpcb.csv` | `08_radar_submcu_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG (Gold), 1.2 mm, TG150, SMT Top (2x U.FL, 90° Stiftleiste) |
 | **PCBA 09: OMM UCS Modul** | `09_omm_ucs_pcba_gerbers_jlcpcb.zip` | `09_omm_ucs_pcba_bom_jlcpcb.csv` | `09_omm_ucs_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG (Gold), 1.0 mm, TG150, SMT beidseitig (ECE 22.06 & Pod) |
+| **PCBA 10: OMM 446 UCS** | `10_omm446_ucs_pcba_gerbers_jlcpcb.zip` | `10_omm446_ucs_pcba_bom_jlcpcb.csv` | `10_omm446_ucs_pcba_cpl_jlcpcb.csv` | **4 Lagen** | ENIG (Gold), 1.0 mm, TG150, SMT beidseitig (ECE 22.06 & Pod) |
 
 Alle Fertigungsdaten liegen im Repository unter `hardware/production_packages/` als fertige ZIP- und CSV-Pakete vor:
 
@@ -321,16 +340,16 @@ Für alle internen Verbindungen innerhalb der Gehäuse (vom Platinen-Header zur 
 | **Zentralbox CarPlay Port**| Zentralbox `J3` | IDC 10-Pin (2.54 mm) | Wasserdichte Panel-Mount USB-C Buchse (IP67) an der Gehäuseflanke | 15 cm | COTS IDC-10 auf USB-C Panel-Mount |
 | **USV LiPo-Akku Anschluss**| Zentralbox `J5` | JST-PH 4-Pin / Molex | Anschlusskabel mit NTC-Sensor des 2.200 mAh LiPo Flat-Packs | 8 cm | Am LiPo-Pouch konfektioniert |
 
-### 11.5 Die Gateway-Adapterkabel für OEM-Intercoms (Header `J_AUDIO_PWR` / `J2`)
+### 11.5 Die Gateway-Adapterkabel für OEM-Intercoms (Header `J_AUDIO_PWR` / 8-Pin JST-SH)
 
-Um handelsübliche OEM-Intercom-Module vollkommen zerstörungsfrei und ohne Garantieverlust im Kassetten-Einschub zu betreiben, wird der 6-polige **JST-SH 1.0 mm Header `J_AUDIO_PWR`** auf `PCBA 03` über modellspezifische COTS-Adapterkabelstränge angeschlossen:
+Um handelsübliche OEM-Intercom-Module vollkommen zerstörungsfrei und ohne Garantieverlust im Kassetten-Einschub zu betreiben, wird der 8-polige **JST-SH 1.0 mm Header `J_AUDIO_PWR`** auf `PCBA 03` über modellspezifische COTS-Adapterkabelstränge angeschlossen. Durch die strikte Trennung von Leistungsmasse (`PGND`) und Audio-Massen (`AGND_SPK`, `AGND_MIC`) wird das Übersprechen von Lade- und Sendeströmen vollständig eliminiert:
 
-| Headset-Modell / Klasse | Adapterkabel-Typ & Anschlüsse | Belegung am 6-Pin JST-SH Header | Länge | Funktion & Besonderheiten |
+| Headset-Modell / Klasse | Adapterkabel-Typ & Anschlüsse | Belegung am 8-Pin JST-SH Header | Länge | Funktion & Besonderheiten |
 | :--- | :--- | :--- | :---: | :--- |
-| **Sena SPIDER X Slim**<br>*(OMB-Referenz K2a)* | **6-Pin JST-SH auf 3-fach Pigtail:**<br>- 2-Pin Micro-JST (Direct-DC)<br>- 2.5 mm Klinkenbuchse (Mic In)<br>- 3.5 mm Klinkenbuchse (Spk Out) | **Pin 1:** `GND`<br>**Pin 2:** `VCC_HEADSET` ($3{,}85\,\text{V}$ Festspannung)<br>**Pin 3:** `AUDIO_R+`<br>**Pin 4:** `AUDIO_R-`<br>**Pin 5:** `MIC_IN+`<br>**Pin 6:** `RESERVE_IO` (N/C) | 8 cm | **Zero Pogo-Pins:** Direkte 3.85V Speisung ab Werk ohne LiPo-Akku im Pod (keine Brandgefahr, kein Verschleiß). Mikrofon und Lautsprecher werden direkt mit dem ES8388 Codec gekoppelt. |
-| **Cardo Packtalk Edge / Pro**<br>*(Klasse 4 DMC Gen2)* | **6-Pin JST-SH auf Klinke, Micro-2Pin & USB-C:**<br>- 3.5 mm Stereo-Klinkenstecker (Spk Out)<br>- Cardo 2-Pin Micro-Stecker mit Rastnase (Mic In)<br>- Rechtwinkliger USB-C Stecker (5V Ladeport) | **Pin 1:** `GND`<br>**Pin 2:** `VCC_5V` (Lade- & Dauerstrom)<br>**Pin 3:** `AUDIO_R+` (Audio Spk+)<br>**Pin 4:** `AUDIO_R-` (Audio Spk-)<br>**Pin 5:** `MIC_IN+` (Mikrofonsignal)<br>**Pin 6:** `RESERVE_IO` (N/C) | 10 cm | Koppelt die werkseitige Air-Mount Halterung. Lautsprecherausgang über 3.5 mm Klinke, Mikrofoneingang über Cardo-spezifischen 2-Pin Micro-Stecker mit Rastnase (z. B. Pigtail aus Original-Kabelmikrofon), Dauerladung während aktivem Mesh-Betrieb über USB-C. |
-| **Midland G9 Pro / PMR446**<br>*(Klasse 7 Analogfunk)* | **6-Pin JST-SH auf Midland-Doppelklinke:**<br>- 3.5 mm Lautsprecher-Klinke<br>- 2.5 mm Mikrofon/PTT-Klinke<br>- DC-Batteriedummy | **Pin 1:** `GND`<br>**Pin 2:** `VCC_5V` (Batteriedummy Speisung)<br>**Pin 3:** `AUDIO_R+`<br>**Pin 4:** `AUDIO_R-`<br>**Pin 5:** `MIC_IN+`<br>**Pin 6:** `OPTO_PTT` (PTT gegen GND geschaltet) | 10 cm | Schaltet den analogen Sender tastend via MOSFET `Q4` / Optokoppler durch und speist das Funkgerät aus dem Bordnetz. |
-| **OpenMotorMesh (OMM) 2.4 GHz**<br>*(Klasse C Native UCS)* | **6-Pin JST-SH auf USB-C (90° abgewinkelt):**<br>- 6-Pin JST-SH 1.0mm Buchse<br>- Rechtwinkliger USB-C Stecker | **Pin 1:** `GND`<br>**Pin 2:** `VCC_5V`<br>**Pin 3-5:** Digital Audio / I2S<br>**Pin 6:** Config / UART | 5 cm | Verbindet PCBA 03 direkt mit dem IP67 USB-C Port des OMM-Moduls. Vollverschleißfreie digitale Speisung & Steuerung. Im Helmbetrieb wird derselbe USB-C Port für das Helm-Pigtail (3.5 mm Spk + 2-Pin Mic) genutzt. |
+| **Sena SPIDER X Slim**<br>*(OMB-Referenz K2a)* | **8-Pin JST-SH auf 3-fach Pigtail:**<br>- 2-Pin Micro-JST (Direct-DC)<br>- 2.5 mm Klinkenbuchse (Mic In)<br>- 3.5 mm Stereo-Klinkenbuchse (Spk Out) | **Pin 1:** `PGND` (Power Return)<br>**Pin 2:** `VCC_HEADSET` ($3{,}85\,\text{V}$ Festspannung)<br>**Pin 3:** `AGND_SPK` (Audio Ground Sleeve)<br>**Pin 4:** `AUDIO_L_IN` (Spk L)<br>**Pin 5:** `AUDIO_R_IN` (Spk R)<br>**Pin 6:** `AGND_MIC` (Mic Ground Return)<br>**Pin 7:** `MIC_OUT`<br>**Pin 8:** `RESERVE_IO` (N/C) | 8 cm | **Zero Pogo-Pins & Kein Strombrummen:** Direkte 3.85V Speisung ab Werk ohne LiPo-Akku im Pod. Laststrom fließt isoliert über Pin 1 (`PGND`). Audiosignale bleiben über die stromlosen Pins 3 und 6 zu 100 % frei von Mesh-TDMA-Knattern. |
+| **Cardo Packtalk Edge / Pro**<br>*(Klasse 4 DMC Gen2)* | **8-Pin JST-SH auf Klinke, Micro-2Pin & USB-C:**<br>- 3.5 mm Stereo-Klinkenstecker (Spk Out L/R)<br>- Cardo 2-Pin Micro-Stecker mit Rastnase (Mic In)<br>- Rechtwinkliger USB-C Stecker (5V Ladeport) | **Pin 1:** `PGND` (Lade-Masserückstrom)<br>**Pin 2:** `VCC_5V` (Lade- & Dauerstrom)<br>**Pin 3:** `AGND_SPK` (Audio Ground Sleeve)<br>**Pin 4:** `AUDIO_L_IN` (Spk L)<br>**Pin 5:** `AUDIO_R_IN` (Spk R)<br>**Pin 6:** `AGND_MIC` (Mic Ground Return)<br>**Pin 7:** `MIC_OUT` (Mikrofonsignal)<br>**Pin 8:** `RESERVE_IO` (N/C) | 10 cm | Koppelt die werkseitige Air-Mount Halterung. Der $500\,\text{mA}$ Ladestrom fließt über Pin 1 ab, während Audio über Pins 3/4/5 und 6/7 völlig entkoppelt bleibt – absolut kein Laderauschen im Helm! |
+| **Midland G9 Pro / PMR446**<br>*(Klasse 7 Analogfunk)* | **8-Pin JST-SH auf Midland-Doppelklinke:**<br>- 3.5 mm Lautsprecher-Klinke (Mono)<br>- 2.5 mm Mikrofon/PTT-Klinke<br>- DC-Batteriedummy | **Pin 1:** `PGND`<br>**Pin 2:** `VCC_5V` (Batteriedummy Speisung)<br>**Pin 3:** `AGND_SPK`<br>**Pin 4:** `AUDIO_L_IN` (Spk Mono)<br>**Pin 5:** `AUDIO_R_IN` (gebrückt mit Pin 4)<br>**Pin 6:** `AGND_MIC`<br>**Pin 7:** `MIC_OUT`<br>**Pin 8:** `PTT_IO` (PTT gegen GND geschaltet) | 10 cm | Schaltet den analogen Sender tastend via MOSFET `Q4` durch. Bis zu $600\,\text{mA}$ Sendepeakstrom fließen über `PGND` ab, ohne das empfindliche Mikrofon- oder Lautsprechersignal zu modulieren. |
+| **OpenMotorMesh (OMM) 2.4 GHz / 446**<br>*(Klasse C/D Native UCS)* | **8-Pin JST-SH auf USB-C (90° abgewinkelt):**<br>- 8-Pin JST-SH 1.0mm Buchse<br>- Rechtwinkliger USB-C Stecker | **Pin 1:** `PGND`<br>**Pin 2:** `VCC_5V`<br>**Pin 3:** `AGND_SPK`<br>**Pin 4:** `AUDIO_L_IN` (Stereo L)<br>**Pin 5:** `AUDIO_R_IN` (Stereo R)<br>**Pin 6:** `AGND_MIC`<br>**Pin 7:** `MIC_OUT`<br>**Pin 8:** `PTT_IO` / Config | 5 cm | Verbindet PCBA 03 direkt mit dem IP67 USB-C Port des OMM-Moduls. Vollverschleißfreie Speisung & Stereo-Audio-Interface mit vollständiger galvanischer Trennung von Lade- und Audiomasse. |
 
 ### 11.6 Der Mechatronik-Aktuatorkabelbaum & mechanische Befestigung (Header `J_ACT`)
 
@@ -431,7 +450,7 @@ Anstelle der früheren proprietären Platine `PCBA 06` wird die werkzeuglose Kof
 | **Zentralbox USB-C Pigtail** | IDC 10-Pin auf wasserdichte Panel-Mount USB-C Buchse | COTS Standard | 1 Stk. | CarPlay / Flashing Port an der Zentralbox-Flanke |
 | **J_ACT Aktuator-Kabelbaum** | Vorkonfektioniertes 8-Pin JST-SH Kabel auf 4x 2-Pin Litzen | Adafruit / SparkFun | 2 Stk. | 4 verdrillte Paare (AWG30 Silikon, 60 mm) zu den 4 Hubmagneten |
 | **Miniatur-Aktuatoren** | 5V DC Hubmagnete ($\varnothing 6{,}5 \times 12\,\text{mm}$) mit TPU-Spitze | Solenoid / Web | 8 Stk. | 4 Stk. pro Smart Cartridge (Sena / Cardo) |
-| **J2 Gateway OEM-Kabelstrang**| 6-Pin JST-SH Adapterkabel für Sena / Cardo / Midland | COTS Standard | 2 Stk. | Modellspezifisches Fertigkabel für Headset-Audio & Dauerstrom |
+| **J_AUDIO_PWR Gateway-Kabelstrang**| 8-Pin JST-SH Adapterkabel für Sena / Cardo / Midland / OMM | COTS Standard | 2 Stk. | Modellspezifisches Fertigkabel für Headset-Audio & Dauerstrom (Kelvin-Grounding) |
 | **JST-JWPF 2-Pin IP67 Steckverbinder-Set**| 02R-JWPF-VSLE-S & 02T-JWPF-VSLE-S (2-Pol wasserdicht) | JST | 1 Set | Wasserdichte 12V DC Kfz-Zuleitung für Radar 2.0 Sub-MCU |
 | **Wheeltec MR20 77-GHz mmWave**| 77-GHz FMCW Automotive Radar (150m Reichweite)| Wheeltec | Opt. (1)| Radar 2.0 Transceiver-Modul im Heck-Gehäuse |
 | **PC Radom-Sichtfenster** | Laserzuschnitt Polycarbonat 1.6 mm (RF-transparent)| COTS / Plexiglas | Opt. (1)| Mikrowellen- & optisches Fenster für MR20 & 24-LED Halo |
@@ -468,7 +487,7 @@ Da **weder Löten, noch Crimpen, noch thermisches Einschmelzen von Gewinden** er
 Bestellt ein einzelner Anwender alle Platinen für sich allein:
 * JLCPCB liefert 5 Platinen pro Design (davon 2 voll bestückt und 3 unbestückte Ersatzplatinen).
 * **Kostenaufstellung Solo-Builder:**
-  * JLCPCB PCBAs (PCBA 01, 02 [2x], 03 [2x], 05 bestückt inkl. Versand & Zoll): ca. 135-160 €
+  * JLCPCB PCBAs (PCBA 01, 03 [2x], 05 bestückt inkl. Versand & Zoll): ca. 135-160 €
   * 3D-Druck (MJF PA12 Dienstleister oder eigenes ASA-Filament): ca. 35-45 €
   * COTS-Kabel, 2.200 mAh LiPo, V4A Normteile & Dichtungen: ca. 35-45 €
   * **Gesamtkosten Solo-System: ca. 205 € bis 250 €**
@@ -482,6 +501,23 @@ Bestellen 2 bis 3 Motorradfahrer gemeinsam:
   * 3D-Druck (pro Bike): ca. 30-35 €
   * COTS-Kabel, 2.200 mAh LiPo, Normteile (Mengenrabatt): ca. 30 €
   * **Gesamtkosten pro Motorrad: nur noch ca. 130 € bis 145 €!**
+
+### 14.3 Smart-Procurement-Guide & Taktik für COTS-Intercoms (Prime-Day-Fallen, Mechatronik & Generationenwechsel)
+
+Wer für Bucht 1 oder Bucht 2 kommerzielle Fremd-Intercoms zukaufen möchte, sollte folgende markt- und ingenieurstechnische Grundsätze beachten:
+
+1. **Marktdynamik & "Prime-Day-Fallen" bei COTS-Intercoms:**
+   * **Sena Spider Serie (Spider ST1 / RT1 / Spider X):** Liegt regulär oft bei ca. 190–210 €. Zu großen Aktionstagen (wie dem Prime Day) wird der Preis von Händlern häufig künstlich auf 260–270 € angehoben, sodass trotz suggeriertem Rabatt faktisch ein empfindlicher Preisaufschlag anfällt.
+   * **Cardo Packtalk Edge:** Wird vor Verkaufsaktionen gerne im UVP-Bereich künstlich verteuert, um pünktlich zur Aktion wieder exakt auf das vorherige reguläre Straßenniveau von ca. 260 € herabgesetzt zu werden.
+   * **Empfehlung:** Historische Preistracker (z. B. Keepa, CamelCamelCamel) nutzen. Der günstigste Kaufzeitpunkt für Motorrad-Kommunikation liegt verlässlich in der Nebensaison (November bis Februar) oder über zertifizierte Warehouse-Rückläufer.
+2. **Die "Helmwechsel-Falle" & Generationen-Obsoleszenz (Schuberth C4 $\rightarrow$ C5 $\rightarrow$ C6):**
+   * **Der historische Fehlerteufel:** Beim Schuberth C4 mit integriertem Sena SC1 (reines Bluetooth) benötigten Fahrer für moderne Mesh-Gruppen zwingend einen externen Sena `+Mesh`-Adapter (Zusatzkosten ca. 130 €). Beim Umstieg auf den Schuberth C5 mit SC2 (Mesh 2.0 nativ) wurde der mühsam erworbene Adapter schlagartig überflüssig. Bei einem erneuten Generationswechsel (z. B. Sena 60-Serie mit Mesh 3.0 / Wave) wiederholt sich dieser teure Zwang zum Neukauf proprietärer 400–600 € teurer Helmeinheiten.
+   * **Die OpenMotorBridge-Lösung:** Der teure Fahrer-Helm bleibt über Jahre hinweg unangetastet und wird rein per Standard-Bluetooth mit der Zentralbox gekoppelt. Dadurch entfällt der Kauf redundanter OEM-Intercoms vollständig. Ändert sich die Mesh-Generation der Fahrgruppe, wird am Motorrad lediglich das günstige Kassettenmodul ausgetauscht oder über OMM 2.4G / OMM 446 gefunkt.
+3. **Mechatronik-Vorteil: Dedizierte Tasten vs. Jog-Dials ("Gift für die Mechatronik"):**
+   * Runde Dreh-/Drück-Räder (Jog-Dials, wie bei Sena 50S, 20S, 30K oder dem neuen Sena 60S) besitzen undefiniertes mechanisches Spiel, weiche Druckpunkte ohne harten Anschlag und erfordern rotatorische Momentübertragung. Für mechatronische Aktuatoren (Linear-Solenoids oder Mikrotaster-Aufsätze zum automatisierten Power ON/OFF) sind Jog-Dials mechatronisches Gift.
+   * **Verbindliche Kaufempfehlung:** Für Kassetten-Einsätze strikt Geräte mit **dedizierten, klar definierten Drucktasten** wählen:
+     * Bei Sena: **Sena 60X** (statt 60S), **Sena Spider RT1** oder **Sena Spider X Slim** (flaches Tastenfeld mit knackigem Druckpunkt).
+     * Bei Cardo: **Cardo Packtalk Edge / Neo** (ausgeprägte 3-Tasten-Ergonomie mit orthogonalem Betätigungsweg).
 
 ---
 

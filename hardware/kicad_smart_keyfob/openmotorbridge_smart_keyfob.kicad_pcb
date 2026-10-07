@@ -5782,7 +5782,7 @@
 		(descr "https://www.cui.com/product/resource/cpt-9019s-smt.pdf")
 		(tags "buzzer piezo")
 		(property "Reference" "LS1"
-			(at 0 -5.5 0)
+			(at -6 -4.25 0)
 			(layer "F.SilkS")
 			(uuid "a7998a97-b9b8-493e-aef6-51a7ea04b51a")
 			(effects

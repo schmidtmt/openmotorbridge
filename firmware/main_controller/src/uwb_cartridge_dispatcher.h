@@ -51,6 +51,15 @@ esp_err_t uwb_cartridge_toggle_mesh(UwbNodeType bay);
  */
 CartridgeBayState_t uwb_cartridge_get_bay_state(UwbNodeType bay);
 
+/**
+ * @brief Sendet synchronen Multi-Substream Audio Downlink (Voice + Stereo Music) an Ziel-Bucht
+ */
+esp_err_t uwb_cartridge_send_audio_downlink(UwbNodeType target_bay,
+                                            const int16_t *voice_samples, size_t voice_count,
+                                            const int16_t *music_l, const int16_t *music_r, size_t music_count,
+                                            bool ducking_active, bool voice_active, bool radar_alert);
+
+
 #ifdef __cplusplus
 }
 #endif

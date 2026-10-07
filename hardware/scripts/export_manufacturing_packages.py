@@ -128,6 +128,8 @@ def export_jlcpcb_bom(pcb_file, sch_file, output_csv):
                 "ESP32-C6-MINI-1U": "C5267233",
                 "BQ24075RGTR": "C96825",
                 "XC6206P332MR": "C5446",
+                "ES8388": "C365736",
+                "ES8388_Codec": "C365736",
                 "ES8311_Codec": "C396781",
                 "ES8311": "C396781",
                 "TYPE-C-31-M-12_IP67": "C2765186",

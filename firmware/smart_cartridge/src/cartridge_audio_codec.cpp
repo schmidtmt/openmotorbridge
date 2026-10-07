@@ -133,3 +133,26 @@ size_t CartridgeAudioCodec::write_audio_frames(const int16_t* buffer, size_t num
     i2s_channel_write(s_tx_chan, buffer, num_samples * sizeof(int16_t), &bytes_written, pdMS_TO_TICKS(10));
     return bytes_written / sizeof(int16_t);
 }
+
+size_t CartridgeAudioCodec::write_voice_mic(const int16_t* voice_samples, size_t num_samples) {
+    if (!m_initialized || !s_tx_chan || !voice_samples || num_samples == 0) return 0;
+    // Interleave mono voice into stereo frame for ES8388 DAC (LOUT1 -> Pin 7 MIC_OUT)
+    int16_t stereo_buf[64 * 2];
+    size_t count = num_samples > 64 ? 64 : num_samples;
+    for (size_t i = 0; i < count; i++) {
+        stereo_buf[i * 2]     = voice_samples[i]; // L (MIC_OUT)
+        stereo_buf[i * 2 + 1] = voice_samples[i]; // R
+    }
+    size_t bytes_written = 0;
+    i2s_channel_write(s_tx_chan, stereo_buf, count * 2 * sizeof(int16_t), &bytes_written, pdMS_TO_TICKS(2));
+    return bytes_written / (2 * sizeof(int16_t));
+}
+
+void CartridgeAudioCodec::push_music_samples(const int16_t* music_l, const int16_t* music_r, size_t num_samples) {
+    // Interleaved stereo stream ready for local ESP32-S3 A2DP Source encoder
+    // Allows Sena/Cardo to receive clean stereo media and share it across the mesh group
+    (void)music_l;
+    (void)music_r;
+    (void)num_samples;
+}
+

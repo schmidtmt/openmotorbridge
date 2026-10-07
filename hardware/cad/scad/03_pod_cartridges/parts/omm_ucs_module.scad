@@ -203,10 +203,10 @@ module omm_ucs_silicone_keypad() {
 // 4. Complete OMM UCS Module Assembly (Dual-Use: Standalone Helmet & Pod Cartridge)
 module omm_ucs_module_assembly(exploded = false) {
     z_bot    = 0.0;
-    z_pcb    = exploded ? 12.0 : UCS_H_BOT;
-    z_top    = exploded ? 28.0 : UCS_H_BOT + UCS_H_TOP;
-    z_key    = exploded ? 40.0 : UCS_H_BOT + UCS_H_TOP - 0.4;
-    z_screws = exploded ? -15.0 : -2.0;
+    z_pcb    = exploded ? 14.0 : 1.6;
+    z_top    = exploded ? 28.0 : UCS_H_BOT;
+    z_key    = exploded ? 38.0 : (UCS_H_BOT + UCS_H_TOP - 1.2);
+    z_screws = exploded ? -14.0 : -2.0;
 
     // A. Bottom Shell (PA12 Charcoal)
     color([0.22, 0.24, 0.26])
@@ -216,17 +216,16 @@ module omm_ucs_module_assembly(exploded = false) {
     translate([4.0, 3.0, z_pcb])
         dummy_omm_ucs_pcb();
 
-    // C. Top Shell (Flipped onto bottom shell)
+    // C. Top Shell (Sits directly on bottom shell without inverted rotation)
     color([0.18, 0.20, 0.22])
-        translate([0, UCS_W, z_top])
-            rotate([180, 0, 0])
-                omm_ucs_top_shell();
+        translate([0, 0, z_top])
+            omm_ucs_top_shell();
 
-    // D. Waterproof Silicone Keypad
+    // D. Waterproof Silicone Keypad (Aligned with top shell button apertures)
     translate([9.5, 7.5, z_key])
         omm_ucs_silicone_keypad();
 
-    // E. 4x DIN 912 M2 x 8 mm Stainless Steel Screws
+    // E. 4x DIN 912 M2 x 8 mm Stainless Steel Screws (Thread from bottom into captive M2 nuts)
     color("silver") {
         for (pos = [
             [UCS_SCREW_X1, UCS_SCREW_Y1],

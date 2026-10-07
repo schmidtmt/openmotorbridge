@@ -52,10 +52,10 @@ module dummy_omm_ucs_pcb() {
             cube(size=[3.0, 3.0, 0.9], center=false);
     }
 
-    // 4. Everest Semi ES8311 Audio Codec (QFN-20 3x3mm)
+    // 4. Everest Semi ES8388 Stereo Audio Codec (QFN-28 4x4mm)
     color("black") {
-        translate([38.0, 14.0, pcb_h])
-            cube(size=[3.0, 3.0, 0.9], center=false);
+        translate([37.5, 13.5, pcb_h])
+            cube(size=[4.0, 4.0, 0.9], center=false);
     }
 
     // 5. Johanson 2450AT Ceramic Chip Antenna (+X Edge, Keepout zone)

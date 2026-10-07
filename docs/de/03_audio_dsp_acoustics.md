@@ -53,6 +53,25 @@ In klassischen Motorrad-Audio-Installationen sind Masseschleifen, Zündfunk-Eins
 | **Signal-Rausch-Abstand (SNR)**| **$> 96\,\text{dB}$** | A-gewichtet | Rauschfreier Standby ohne Zischen im Helm |
 | **Kanaltrennung (Stereo)** | **$> 95\,\text{dB}$** | $1\,\text{kHz}$ L/R | Perfektes 3D-Klangbild für Warnungen & Musik |
 
+### 1.2 UWB Mehrkanal-Audio-Routing & Sub-Channel Streaming (Central DSP Single Source of Truth)
+
+Die Zentralbox (`PCBA 01`) agiert als unumstößliche **Single Source of Truth** für sämtliche Audioströme im Gesamtsystem. Um Latenzen und Protokollbrüche zwischen Bordnetz, Helm und externen Mesh-Gateways zu eliminieren, ist der drahtlose UWB-Verbund in getrennte Subkanäle unterteilt:
+
+1. **Upstream-Kanal (Gateway-Pod $\rightarrow$ Zentralbox):**
+   * **Stereo-Summensignal vom Headphone-Abgriff:** Da das Audiosignal am 3,5-mm-Klinkenausgang des Fremd-Intercoms (Sena, Cardo, Midland) abgegriffen wird, erhält die Kassette das fertige, vom Headset gemixte Gruppensignal. Der lokale **ES8388 Stereo-ADC** tastet dieses Signal zweikanalig (Stereo L/R) mit $48\,\text{kHz} / 24\,\text{Bit}$ ab.
+   * **Kanalbelegung im UWB-Stream:** Der UWB-Upstream überträgt **exakt die beiden Audiokanäle (Stereo L und R)** an den ESP32-S3 Core 1 DSP der Zentralbox (Latenz $< 0{,}4\,\text{ms}$).
+     * Bei Stereo-Quellen (Cardo DMC / Sena Mesh mit Music-Sharing oder 3D-Voice) bleibt die volle Stereotrennung bis in die Helme erhalten.
+     * Bei Mono-Quellen (PMR446 Funk) sorgt die Brückung im Adapterkabel für sauberes Dual-Mono ohne Phasenauslöschungen.
+   * Der Zentralbox-DSP übernimmt das Stereosignal als separate Quelle, unterzieht es der Prioritäts- und Raised-Cosine-Ducking-Matrix und verteilt es an die per Bluetooth (A2DP / LE Audio LC3) angebundenen Helme von Fahrer und Sozius.
+2. **Downstream-Kanal (Zentralbox $\rightarrow$ Gateway-Pod):**
+   * **Voice Sub-Channel (Mono, Ultra-Low-Latency $< 1\,\text{ms}$):**
+     * Das vom Fahrer-Helm (oder Kabelmikrofon) erfasste Sprachsignal wird im Zentral-DSP entrauscht, mit höchster Priorität in ein UWB-Echtzeitpaket verpackt und an den jeweiligen Kassetten-Schlitten gesendet.
+     * Auf `PCBA 03` wandelt der ES8388 DAC das Signal unmittelbar in ein analoges Differenzsignal und speist es direkt in den Mikrofoneingang des Sena/Cardo-Geräts ein.
+     * **Vorteil:** Die Gesamtlatenz vom Helm-Mikrofon bis in das externe Mesh-Gateway beträgt $< 1{,}0\,\text{ms}$. Dadurch entstehen keinerlei Sprechverzögerungen, Echo-Effekte oder Phasenkammfilterungen im Gruppen-Intercom.
+   * **Music Sub-Channel (Stereo L/R A2DP / LE Audio):**
+     * Soll Musik vom Smartphone oder Navigationssystem in das externe Mesh-Netzwerk übertragen werden (natives Mesh Music Sharing bei Sena/Cardo), wird dieser Stream separat über A2DP-Quellprofile oder hochauflösende UWB-Stereo-Frames übertragen.
+     * Der Sprachkanal behält dabei stets absolute Priorität und verdrängt die Musikübertragung unterbrechungsfrei über den Raised-Cosine-Ducking-Algorithmus.
+
 ---
 
 ## 2. Mathematische Raised-Cosine-Ducking-Synthese

@@ -268,30 +268,36 @@ In the v9.6 Clean Architecture, the former pod base PCB (`PCBA 02`) has been **c
 *Figure 8.11: The modular cartridge variants (OMM 2.4 GHz Swap Cartridge, Sena SPIDER X Slim, Cardo Packtalk Edge, IP67 Dry Box).*
 
 #### 4.3.1 User-Centric Plug & Play Docking Architecture (Zero Solder)
-To route signals from the right-angled **JST-SH 1.0 mm 6-pin SMD header (`J2`)** on the cartridge carrier PCB to adapter contact points without crimp or bend fatigue:
+To route signals from the right-angled **JST-SH 1.0 mm 8-pin SMD header (`J_AUDIO_PWR`)** and the **8-pin mechatronics header (`J_ACT`)** on the cartridge carrier PCB (`PCBA 03` Rev 3.0) to adapter contact points without crimp or bend fatigue:
 * **Under-Bed Cable Channel:** A recessed channel ($8.0 \times 1.5\,\text{mm}$) runs directly beneath the contoured cradle cavity.
-* **Tray Pass-Through Slot:** A precision opening ($10.0 \times 3.0\,\text{mm}$ with $R = 1.0\,\text{mm}$ radiused edges) guides the flexible flat ribbon cable from header `J2` upward into the nest.
-* **Standardized Pinout on JST-SH 6P Header (`J2`) for Audio & Direct-DC:**
+* **Tray Pass-Through Slot:** A precision opening ($10.0 \times 3.0\,\text{mm}$ with $R = 1.0\,\text{mm}$ radiused edges) guides the flexible pre-assembled harness from headers `J_AUDIO_PWR` and `J_ACT` upward into the nest.
+* **Standardized Pinout on JST-SH 8P Header (`J_AUDIO_PWR`) with Kelvin Grounding:**
 
-| Pin | Signal Name | Adapter Function | Sena SPIDER X Slim | Cardo Edge Pad | OMM 2.4 GHz Swap | Midland XT / PMR |
+| Pin | Signal Name | Adapter Function | Sena SPIDER X Slim | Cardo Packtalk Edge | OMM 2.4/446 UCS | Midland PMR446 |
 | :---: | :--- | :--- | :--- | :--- | :--- | :--- |
-| **1** | `VCC_DIRECT_DC` | Direct-DC Power (3.85V / 5V) | Battery Plug ⑧ (DC In) | Pin 2 (5V Charge)| 5V DC In | 5V DC In |
-| **2** | `GND` | Common Ground Reference | Battery Plug ⑧ (GND) | Pin 1 (GND) | Ground / Shield | Ground / Shield |
-| **3** | `AUDIO_R+` | Audio Diff-Out + (to speaker input) | Speaker ⑩ (Spk +) | Pin 3 (Spk +) | Audio Out + | Speaker In + |
-| **4** | `AUDIO_R-` | Audio Diff-Out - (speaker return) | Speaker ⑩ (Spk -) | Pin 4 (Spk -) | Audio Out - | Speaker In - |
-| **5** | `MIC_IN+` | Audio Diff-In + (from microphone out) | Microphone ⑨ (Mic +) | Pin 5 (Mic +) | Mic In + | Mic Out + |
-| **6** | `RESERVE_IO` | Diagnostics / Auxiliary / PTT | N/C | N/C (Aux) | Single-Wire UART | PTT Switch |
+| **1** | `PGND` | Power Ground (DC Return) | Direct-DC Plug ⑧ (GND) | USB-C Ground (Pin A1/B12)| USB-C Ground Return | Battery Dummy GND |
+| **2** | `VCC_HEADSET` | Regulated DC Power | Direct-DC Plug ⑧ (+3.85V)| USB-C +5V VBUS Charge | USB-C +5V Power-Path | Battery Dummy +5V |
+| **3** | `AGND_SPK` | Speaker Audio Ground ($I=0$)| 3.5mm Spk Sleeve ($I=0$) | 3.5mm Spk Sleeve ($I=0$) | Clean Audio GND ($I=0$)| 3.5mm Spk Sleeve ($I=0$) |
+| **4** | `AUDIO_L_IN` | Speaker Left Channel ($\leftarrow$) | 3.5mm Jack Tip (Spk L) | 3.5mm Jack Tip (Spk L) | Line-In L ($\leftarrow$) | 3.5mm Jack Mono Tip |
+| **5** | `AUDIO_R_IN` | Speaker Right Channel ($\leftarrow$)| 3.5mm Jack Ring (Spk R) | 3.5mm Jack Ring (Spk R) | Line-In R ($\leftarrow$) | 3.5mm Jack Bridged |
+| **6** | `AGND_MIC` | Mic Audio Ground ($I=0$) | 2.5mm Mic Sleeve ($I=0$) | Cardo 2-Pin Mic- ($I=0$) | Clean Mic GND ($I=0$) | 2.5mm Mic Sleeve ($I=0$) |
+| **7** | `MIC_OUT` | Voice Injection ($\rightarrow$) | 2.5mm Mic Tip (Voice In) | Cardo 2-Pin Mic+ (Voice) | Mic Signal ($\rightarrow$) | 2.5mm Mic Tip (Voice) |
+| **8** | `PTT_IO` | Digital Control / PTT | N/C (Mechatronics active)| N/C (Mechatronics active)| Config IO / Digital PTT| PTT Keying to GND (Q4)|
+
+> [!IMPORTANT]
+> **Complete Elimination of Ground Loop Noise (Common-Impedance Coupling):**
+> By separating the high-current DC power return (`PGND`, Pin 1) from the dedicated, zero-current audio grounds (`AGND_SPK`, Pin 3 and `AGND_MIC`, Pin 6), the electrical resistance of the cable harness causes zero ground bounce across the audio references ($I = 0 \implies \Delta V = 0\,\text{mV}$). High-amplitude charging ripple and Mesh TDMA radio bursts are completely isolated from the microvolt-level microphone circuit.
 
 #### 4.3.2 OMM 2.4 GHz Swap Cartridge (Optional Intercom Alternative for Pod 1 or Pod 2)
 
-The OMM 2.4 GHz Swap Cartridge ([`cartridge_omm_transceiver.scad`](../../hardware/cad/scad/03_pod_cartridges/cartridge_omm_transceiver.scad)) is based on a specialized variant of `PCBA 03` (with ESP32-C3 / CH32V003 ID `0x03`). It serves as an optional, hot-swappable drop-in for **Pod 1 or Pod 2**, allowing users to establish pure open-mesh convoy audio networks without commercial intercom bloat.
+The OMM 2.4 GHz Swap Cartridge ([`cartridge_omm_transceiver.scad`](../../hardware/cad/scad/03_pod_cartridges/cartridge_omm_transceiver.scad)) is based on a specialized variant of `PCBA 03` (with ESP32-C6 / CH32V003 ID `0x03`). It serves as an optional, hot-swappable drop-in for **Pod 1 or Pod 2**, allowing users to establish pure open-mesh convoy audio networks without commercial intercom bloat.
 
 > [!NOTE]
-> **Architectural Advantages of the v8.0 Cleanup:**  
+> **Architectural Advantages of the Clean Architecture Cleanup:**  
 > The OMM Swap Cartridge is **never** co-located with Sena or Cardo in the same pod enclosure, but acts as a dedicated alternative module.  
 > 1. **Smooth, Continuous IP67 Shell:** Eliminates external antenna radome appendages and penetrations. All RF transmission utilizes internal planar PCB inverted-F antennas radiating efficiently through the dielectric PA12 shell.  
 > 2. **No Tail-Mounted Sensor Cluster:** Multi-GNSS (u-blox SAM-M10Q) and precision ambient temperature (TI TMP117) are consolidated inside the Front Node (`PCBA 05`, port `J12` Qwiic) in the oncoming laminar airflow scoop. LoRa 868 MHz (SX1262) resides 24/7 UPS-buffered directly on Central Box `PCBA 01`.  
-> 3. **Pod 3 Completely Retired:** The third satellite enclosure at the tail is eliminated without replacement. The entire motorcycle requires exactly **two symmetrical Pod Base carriers (`PCBA 02`)**.
+> 3. **Pod 3 and PCBA 02 Completely Retired:** The third satellite enclosure at the tail and the former pod base carrier (`PCBA 02`) are eliminated without replacement. The pod housing is a monolithic PA12 injection/MJF part with direct 2-wire spring contacts.
 
 ---
 

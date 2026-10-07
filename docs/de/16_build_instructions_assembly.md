@@ -134,22 +134,22 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
      * Das vorkonfektionierte 8-Pin Kabel auf den Header `J_ACT` aufstecken.
      * Die vier verdrillten Adernpaare (AWG30 Silikon) an die vier Hubmagnete führen (Paar 1 = Taste +, Paar 2 = Taste -, Paar 3 = Center/Phone, Paar 4 = Mesh/Pairing).
    * **Niederhalteplatte verschrauben:** Die PA12-Niederhalteplatte ([`cartridge_retainer_plate.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_retainer_plate.stl)) plan über die Hubmagnete legen und mit **4x M2 $\times 6\,\text{mm}$ Senkkopfschrauben (DIN 7991)** fest anziehen. Die Aktuatoren sitzen nun absolut spielfrei und rüttelfest im Schlitten.
-3. **Gateway-Inlay & OEM-Adapterkabel anschließen (`J_AUDIO_PWR` / `J2` 6-Pin JST-SH):**
+3. **Gateway-Inlay & OEM-Adapterkabel anschließen (`J_AUDIO_PWR` / 8-Pin JST-SH):**
    * **Bucht 1 (Sena SPIDER X Slim Inlay - OMB Referenz K2a):**
-     * 6-Pin JST-SH Adapterkabel auf Header `J_AUDIO_PWR` stecken.
+     * Vorkonfektioniertes 8-Pin JST-SH Adapterkabel auf Header `J_AUDIO_PWR` stecken (Pin 1: `PGND`, Pin 2: `VCC`, Pin 3: `AGND_SPK`, Pin 4/5: Stereo Spk In, Pin 6: `AGND_MIC`, Pin 7: Mic Out).
      * 2-Pin Micro-JST Stecker an die externe Akkuzuleitung des SPIDER X Slim anstecken (liefert permanente 3.85V Direct-DC Speisung ohne Akku im Pod!).
      * 2.5 mm Klinkenstecker an den Mikrofoneingang und 3.5 mm Klinkenstecker an den Lautsprecherausgang der Sena-Kabelpeitsche anstecken.
-     * SPIDER X Slim formschlüssig in das PA12-Nest einlegen. *(Audio wird wahlweise per internem ES8388 Codec digitalisiert oder per Bluetooth direkt gestreamt; zero pogo pins!).*
-   * **Bucht 2 (Cardo Packtalk Edge / Pro Inlay - Klasse 4 DMC Gen2):**
-     * 6-Pin JST-SH Adapterkabel auf Header `J_AUDIO_PWR` stecken.
+     * SPIDER X Slim formschlüssig in das PA12-Nest einlegen. *(Zero Pogo-Pins, Laststrom fließt isoliert über `PGND`, Audio über stromlose `AGND`-Pins 3 und 6 zu 100 % brummfrei).*
+   * **Bucht 2 (Cardo Packtalk Edge / Pro Inlay - Klasse 1d DMC Gen2):**
+     * 8-Pin JST-SH Adapterkabel auf Header `J_AUDIO_PWR` stecken.
      * 3.5 mm Stereo-Klinkenstecker (Lautsprecherausgang ins OMB-Audioboard) und Cardo 2-Pin Micro-Stecker mit Rastnase (Mikrofoneingang vom ES8388 DAC) an die Cardo Air-Mount Kabelpeitsche anstecken.
      * Rechtwinkligen USB-C Ladestecker an den Ladeport des Packtalk Edge anstecken.
-     * Cardo Packtalk Edge in das Air-Mount Bett einklicken (Dauerladung während aktivem Mesh-Betrieb voll unterstützt).
-   * **Alternative Option: Midland PMR446 Funk-Kassette (Klasse 7 Analogfunk):**
-     * 6-Pin JST-SH Adapterkabel auf Doppel-Klinke (2.5 mm Mic / 3.5 mm Spk) und 5V DC-Batteriedummy anstecken; PTT-Tastung erfolgt über den Open-Drain MOSFET `OPTO_PTT`.
-   * **Alternative Option: OpenMotorMesh (OMM) 2.4 GHz OEM-Kassette (Klasse C UCS):**
-     * 6-Pin JST-SH zu 6-Pin JST-SH Flachbandkabel anstecken.
-     * Nativ gefertigt im standardisierten **UCS-Formfaktor** (Universal Communication Solution), reines Digital-Audio über UWB.
+     * Cardo Packtalk Edge in das Air-Mount Bett einklicken (Dauerladung während aktivem Mesh-Betrieb voll unterstützt; Laderückstrom fließt getrennt über `PGND` ab).
+   * **Alternative Option: Midland PMR446 Funk-Kassette (Klasse 3a Analogfunk):**
+     * 8-Pin JST-SH Adapterkabel auf Doppel-Klinke (2.5 mm Mic / 3.5 mm Spk) und 5V DC-Batteriedummy anstecken; PTT-Tastung erfolgt über Pin 8 (`PTT_IO` via MOSFET `Q4`).
+   * **Alternative Option: OpenMotorMesh (OMM) 2.4 GHz / 446 Funk-Kassette (Klasse 4 / 3b UCS):**
+     * 8-Pin JST-SH zu 90° USB-C Adapterkabel anstecken.
+     * Nativ gefertigt im standardisierten **UCS-Formfaktor** (Universal Communication Solution), reines Digital-Audio über UWB mit getrennten Kelvin-Massen.
 4. **Integrierte UWB-Antenne & Flanschdichtung:**
    * Auf `PCBA 03` arbeitet eine verlustarme SMD-Keramikantenne für 6.5 GHz UWB. Die Funkwellen durchdringen das dielektrische PA12-Gehäuse dämpfungsfrei; es sind keine externen Antennenradome erforderlich.
    * Silikon-Formdichtung auf den Kassettenkragen aufziehen und dünn mit Silikonfett benetzen.

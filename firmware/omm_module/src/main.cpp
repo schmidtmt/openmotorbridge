@@ -5,7 +5,7 @@
 #include "esp_log.h"
 #include "esp_system.h"
 #include "omm_module_config.h"
-#include "es8311_codec.h"
+#include "es8388_codec.h"
 #include "power_supervisor.h"
 #include "omm_transceiver.h"
 #include "keypad_indicator.h"
@@ -18,7 +18,7 @@ static uint8_t s_current_volume = 80; // 80% default volume
 static void on_mesh_audio_received(const int16_t *audio_data, size_t samples, uint8_t sender_id) {
     indicator_set_mode(LED_MODE_RX_CYAN);
     size_t written = 0;
-    es8311_write_audio(audio_data, samples, &written);
+    es8388_write_audio(audio_data, samples, &written);
 }
 
 // Task 1: Real-Time Audio Capture & Broadcast Task (Core 0, Priority 10)
@@ -30,7 +30,7 @@ static void audio_processing_task(void *pvParameters) {
 
     while (1) {
         size_t samples_read = 0;
-        esp_err_t ret = es8311_read_audio(mic_buf, OMM_AUDIO_FRAME_SAMPLES, &samples_read);
+        esp_err_t ret = es8388_read_audio(mic_buf, OMM_AUDIO_FRAME_SAMPLES, &samples_read);
         if (ret == ESP_OK && samples_read > 0) {
             // Check if PTT is active
             if (omm_transceiver_is_ptt()) {
@@ -74,14 +74,14 @@ static void supervision_task(void *pvParameters) {
             case KEY_EVENT_VOL_UP:
                 if (s_current_volume <= 90) s_current_volume += 10;
                 else s_current_volume = 100;
-                es8311_set_volume(s_current_volume);
+                es8388_set_volume(s_current_volume);
                 ESP_LOGI(TAG, "Volume UP: %d%%", s_current_volume);
                 break;
 
             case KEY_EVENT_VOL_DOWN:
                 if (s_current_volume >= 10) s_current_volume -= 10;
                 else s_current_volume = 0;
-                es8311_set_volume(s_current_volume);
+                es8388_set_volume(s_current_volume);
                 ESP_LOGI(TAG, "Volume DOWN: %d%%", s_current_volume);
                 break;
 
@@ -115,12 +115,12 @@ extern "C" void app_main(void) {
     // 1. Initialize Subsystems
     ESP_ERROR_CHECK(power_supervisor_init());
     ESP_ERROR_CHECK(keypad_indicator_init());
-    ESP_ERROR_CHECK(es8311_codec_init());
+    ESP_ERROR_CHECK(es8388_codec_init());
     ESP_ERROR_CHECK(omm_transceiver_init(on_mesh_audio_received));
 
     // Set initial volume & mic gain
-    es8311_set_volume(s_current_volume);
-    es8311_set_mic_gain(18); // +18 dB for helmet boom mic
+    es8388_set_volume(s_current_volume);
+    es8388_set_mic_gain(18); // +18 dB for helmet boom mic
 
     // 2. Spawn FreeRTOS Tasks
     xTaskCreate(audio_processing_task, "audio_task", 4096, NULL, 10, NULL);

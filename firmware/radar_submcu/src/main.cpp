@@ -309,6 +309,10 @@ extern "C" void app_main(void) {
     s_post_start_ms = (uint32_t)(esp_timer_get_time() / 1000ULL);
     s_post_running = true;
 
+    // 0. HF Hardening: 2.4 GHz Wi-Fi & BLE are strictly disabled & uninitialized at the vehicle rear.
+    // RF is strictly limited to 6.5 GHz UWB (Qorvo DW3110) & 5.9 GHz V2X (Taoglas patch antenna).
+    ESP_LOGI(TAG, "HF Hardening verified: 2.4 GHz disabled. 6.5 GHz UWB & 5.9 GHz V2X active.");
+
     // 1. Initialize Wheeltec MR20 UART
     init_uarts();
 

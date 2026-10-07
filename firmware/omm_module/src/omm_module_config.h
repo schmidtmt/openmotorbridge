@@ -8,16 +8,16 @@
 #define OMM_HW_REV_MINOR       0
 #define OMM_FW_VERSION_STRING  "v1.0.0-release"
 
-// 1. I2S Audio Bus (Everest Semi ES8311 Codec)
+// 1. I2S Audio Bus (Everest Semi ES8388 Stereo Codec)
 #define OMM_PIN_I2S_MCLK       GPIO_NUM_19
 #define OMM_PIN_I2S_BCLK       GPIO_NUM_20
 #define OMM_PIN_I2S_WS         GPIO_NUM_21
-#define OMM_PIN_I2S_DOUT       GPIO_NUM_22 // ESP32 -> ES8311 DAC (Headphone)
-#define OMM_PIN_I2S_DIN        GPIO_NUM_23 // ES8311 ADC -> ESP32 (Microphone)
+#define OMM_PIN_I2S_DOUT       GPIO_NUM_22 // ESP32 -> ES8388 DAC (Stereo Headphone L/R)
+#define OMM_PIN_I2S_DIN        GPIO_NUM_23 // ES8388 ADC -> ESP32 (Microphone)
 
 #define OMM_AUDIO_SAMPLE_RATE  48000
 #define OMM_AUDIO_BITS         16
-#define OMM_AUDIO_CHANNELS     1           // Mono intercom voice
+#define OMM_AUDIO_CHANNELS     2           // Stereo Headphone Out
 #define OMM_AUDIO_FRAME_MS     10          // 10 ms TDMA frame size (480 samples)
 #define OMM_AUDIO_FRAME_SAMPLES (OMM_AUDIO_SAMPLE_RATE * OMM_AUDIO_FRAME_MS / 1000)
 
@@ -26,7 +26,8 @@
 #define OMM_PIN_I2C_SCL        GPIO_NUM_9
 #define OMM_I2C_PORT           I2C_NUM_0
 #define OMM_I2C_FREQ_HZ        400000
-#define ES8311_I2C_ADDR        0x18
+#define ES8388_I2C_ADDR        0x10        // AD0 = 0 (GND) -> 0x10
+#define ES8311_I2C_ADDR        0x18        // Legacy fallback
 
 // 3. Tactile Pushbuttons (Low Active, Internal Pull-Up)
 #define OMM_PIN_SW_POWER       GPIO_NUM_2  // SW1: Power / MFB

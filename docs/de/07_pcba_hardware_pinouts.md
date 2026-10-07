@@ -32,24 +32,29 @@ Das Hardwaredesign von OpenMotorBridge folgt dem Grundsatz der radikalen Entflec
 |       |                               |               |         | BQ51003 Qi, JST-ACH  |
 +-------+-------------------------------+---------------+---------+----------------------+
 | **PCBA 08**| **Radar 2.0 Sub-MCU & Wings** | 115 x 65 mm   | 2 Lagen | ESP32-C5, DW3110 UWB,|
-|       | (Wheeltec 77GHz & V2X Patch)  | (Flügel M2.5) | (ENIG)  | Wheeltec MR20,       |
-|       |                               |               |         | 36x WS2812B, JWPF 12V|
+|       | (Wheeltec 77GHz & V2X Patch)  | (Flügel M2.5) | (ENIG)  | Wheeltec MR20 (AoP),  |
+|       |                               |               |         | 36x WS2812B, JWPF 12V |
 +-------+-------------------------------+---------------+---------+----------------------+
 | **PCBA 09**| **OMM 2.4 GHz UCS Intercom**  | 60 x 30 mm    | 2 Lagen | ESP32-C6 RISC-V,     |
-|       | (ECE 22.06 Autonom & Pod)     | (UCS M2)      | (ENIG)  | TI BQ24075, ES8311,  |
-|       |                               |               |         | 600mAh LiPo, Johanson|
+|       | (ECE 22.06 Autonom & Pod)     | (UCS M2)      | (ENIG)  | TI BQ24075, ES8388,  |
+|       |                               |               |         | 600mAh LiPo, FXP73   |
++-------+-------------------------------+---------------+---------+----------------------+
+| **PCBA 10**| **OMM 446 MHz UCS Intercom**  | 60 x 30 mm    | 2 Lagen | NiceRF SA818-DMR,    |
+|       | (DMR Tier I & Analog PMR446)  | (UCS M2)      | (ENIG)  | ESP32-C6, BQ24075,   |
+|       |                               |               |         | ES8388, Helix-Antenne|
 +-------+-------------------------------+---------------+---------+----------------------+
 ```
 
 ### 1.1 Gliederung nach Systemkomponenten
 1. **Kern-Baugruppen (Standard-Ausstattung jedes Bikes):**
    * **`PCBA 01` (Zentralbox Main Controller):** Zentrale Recheneinheit unter der Sitzbank für Energie-Management, USV, DSP-Mischung, Dual-Bluetooth-Headsets, LoRa-Schwarm und UWB-Koordination.
-   * **`PCBA 03` (Universal Smart Cartridge):** Universelle Trägerplatine für Bucht 1 und Bucht 2. Beherbergt wahlweise Sena SPIDER X Slim, Cardo Packtalk Edge, Midland PMR446 oder das OMM 2.4 GHz Intercom Modul.
+   * **`PCBA 03` (Universal Smart Cartridge):** Universelle Trägerplatine für Bucht 1 und Bucht 2. Beherbergt wahlweise Sena SPIDER X Slim, Cardo Packtalk Edge, das OMM 2.4 GHz Modul (`PCBA 09`) oder das OMM 446 MHz Funkmodul (`PCBA 10`).
    * **`PCBA 05` (Universal Front-Knoten):** Cockpit-Einheit für Multi-GNSS (SAM-M10Q), Kaltluft-Sensorik, Ambient-Mikrofon, USB-Hub und Headless CarPlay/Android Auto Bridge.
 2. **Empfohlene Erweiterungen & Peripherie:**
    * **`PCBA 07` (2-in-1 LoRa Smart-Keyfob & Silent Pager):** Tragbarer Schlüsselanhänger für 4,5 km Weitbereichs-Alarmierung, N52-Magnetschlüssel und induktive Qi-Ladung.
-   * **`PCBA 08` (Radar 2.0 Sub-MCU & Warnflügel):** Heckmodul mit 77-GHz-mmWave-Sensorik, autonomem Brems- und Kollisionsstrobe sowie 5.9 GHz V2X-Uplink.
+   * **`PCBA 08` (Radar 2.0 Sub-MCU & Warnflügel):** Heckmodul mit 77-GHz-mmWave-Sensorik (AoP), autonomem Brems- und Kollisionsstrobe sowie 5.9 GHz V2X-Uplink.
    * **`PCBA 09` (OMM 2.4 GHz Autonomes Intercom-Modul):** Quelloffenes, autarkes ECE 22.06 UCS-Intercom-Modul für den Helm und als High-Speed Mesh-Einsatz im Kassetten-Schlitten (`PCBA 03`).
+   * **`PCBA 10` (OMM 446 MHz Autonomes Funkmodul):** Quelloffenes ECE 22.06 UCS-Funkmodul (Dual-Mode: Analog PMR446 + Digital DMR Tier I), voll kompatibel zu Midland G-Serie und D-10, mit Power-Path USV-Laden und 0.2W/0.5W Umschaltung.
 3. **Ersatzlos entfallene Baugruppen (Architektur-Bereinigung v9.6):**
    * **`PCBA 02` (Pod-Basisplatine):** Ersatzlos gestrichen. Die Zuleitung führt direkt auf zwei vergoldete Federkontakte im Schachtboden.
    * **`PCBA 04` (Heck-Pod 3):** Ersatzlos gestrichen. Heck-Pod 3 entfällt vollständig; LoRa sitzt auf `PCBA 01`, GNSS auf `PCBA 05`.
@@ -180,7 +185,7 @@ Die frühere Pod-Basisplatine (`PCBA 02`) ist in v9.6 **vollständig und ersatzl
 
 ![PCBA 03 Universalschlitten Cartridge](../images/pcba/pcba03_pod_cartridge_3d.png)
 
-*Abbildung 7.3: KiCad 3D-Render der Universal Smart Cartridge (PCBA 03 Rev 3.0, 35 x 25 mm, 2 Lagen ENIG, 2-seitig SMT) mit Qorvo DW3110 UWB Transceiver, ESP32-C6 Host-MCU, ES8388 Stereo-Codec, 4x AO3400A MOSFETs, 8-Pin Mechatronik-Header J_ACT und 6-Pin Audio-Power-Header J_AUDIO_PWR.*
+*Abbildung 7.3: KiCad 3D-Render der Universal Smart Cartridge (PCBA 03 Rev 3.0, 35 x 25 mm, 2 Lagen ENIG, 2-seitig SMT) mit Qorvo DW3110 UWB Transceiver, ESP32-C6 Host-MCU, ES8388 Stereo-Codec, 4x AO3400A MOSFETs, 8-Pin Mechatronik-Header J_ACT und 8-Pin Audio-Power-Header J_AUDIO_PWR.*
 
 ### 5.1 Technische Platinen-Kenndaten & Funktionale Lagen-Aufteilung
 * **Abmessungen:** $35{,}0 \times 25{,}0\,\text{mm}$ (Raster $29{,}0 \times 19{,}0\,\text{mm}$ mit 4x M2 Befestigungsbohrungen).
@@ -189,22 +194,34 @@ Die frühere Pod-Basisplatine (`PCBA 02`) ist in v9.6 **vollständig und ersatzl
   * `U2`: Espressif `ESP32-C6` RISC-V Host-MCU (verwaltet Kassetten-Profile, UWB-Kommunikation und Aktuator-Timings).
   * `Q1` - `Q4`: 4x N-Kanal MOSFETs (`AO3400A`, SOT-23, $30\,\text{V} / 5{,}7\,\text{A}$) samt Freilaufdioden `D1`-`D4`. Platziert unmittelbar neben dem Header `J_ACT` für kürzeste Leiterbahnwege zu den Taster-Aktuatoren.
   * `J_ACT`: 8-poliger $1{,}0\,\text{mm}$ JST-SH Header zur Ansteuerung der 4 Miniatur-Hubmagnete.
-  * `J_AUDIO_PWR`: 6-poliger $1{,}0\,\text{mm}$ JST-SH Header zur Anbindung des Adapterkabelstrangs an das jeweilige OEM-Headset.
+  * `J_AUDIO_PWR`: **8-poliger $1{,}0\,\text{mm}$ JST-SH Header** (baugleich zu `J_ACT`) zur galvanisch getrennten Stern-Masseanbindung des Adapterkabelstrangs an das jeweilige OEM-Headset.
 * **Bestückung Bottom-Layer (B.Cu - HF, Audio-Codec & Stromaufnahme):**
   * `U1`: Qorvo `DW3110` Ultra-Wideband Transceiver (6.489 GHz Ch. 5) mit integrierter PCB-Antenne. Strahlungsrichtung zeigt nach unten durch den Kunststoffboden der Kassette für optimale Funkverbindung zur Zentralbox.
   * `U3`: Everest Semi `ES8388` 24-Bit / 48 kHz Low-Noise Audio-Codec. Bewusst auf der **Unterseite (`B.Cu`)** platziert: Dadurch sind die empfindlichen analogen Mikrofon- und Kopfhörerleitungen durch die interne Kupfer-Massefläche hermetisch von den steilen Schaltflanken der Top-Layer-MOSFETs (`Q1`–`Q4`) und Aktuatorströmen entkoppelt. Wandelt das analoge Mikrofon- und Lautsprechersignal von Sena, Cardo oder Midland direkt auf der Kassette und streamt es jitterfrei digital via I2S/UWB.
   * `PAD1` & `PAD2`: Stirnseitige, massive vergoldete Kontaktflächen (ENIG) für die 2-Draht DC-Federkontakte des Pods.
   * `F1`: Selbstrückstellende 500mA PPTC-Sicherung.
 
-### 5.2 Pinbelegung des Audio-Power-Headers (`J_AUDIO_PWR` / 6-Pin JST-SH 1.0mm)
+### 5.2 Pinbelegung des Audio-Power-Headers (`J_AUDIO_PWR` / 8-Pin JST-SH 1.0mm)
+
+Um das gefürchtete **Übersprechen von Lade- und Sendeströmen in das Audiosignal (Common-Impedance Coupling)** physikalisch auszuschließen, ist der Header `J_AUDIO_PWR` als **8-Pin JST-SH** mit strikter Trennung von Leistungs- und Audio-Massen ausgelegt:
+
 | Pin | Signalname | Richtung | Funktion & OEM-Verbindung |
 | :---: | :--- | :---: | :--- |
-| **1** | `GND` | Power / Masse | Schirm- und Systemmasse |
-| **2** | `VCC_HEADSET` | Power Out (+5V/+3.8V)| Geregelte Betriebsspannung für das Intercom-Modul |
-| **3** | `AUDIO_R+` | Audio In $\leftarrow$ OEM | Line-Out Lautsprecher Rechts vom Headset zum ES8388 ADC |
-| **4** | `AUDIO_R-` | Audio In $\leftarrow$ OEM | Lautsprecher Massebezug |
-| **5** | `MIC_IN+` | Audio Out $\rightarrow$ OEM| Mikrofonsignal vom ES8388 DAC in das Headset |
-| **6** | `OPTO_PTT` | Bidir / Open-Drain | PTT-Tastung gegen Masse (Midland PMR446 / Aux) |
+| **1** | **`PGND`** | Power Return | **Leistungs-Masse:** Führt den gesamten Rückstrom des Laders / DC-DC-Wandlers ($0{,}2\dots 0{,}6\,\text{A}$) |
+| **2** | **`VCC_HEADSET`** | Power Out (+5V / +3.85V) | Geregelte Betriebsspannung für das Intercom-Modul (Lade- oder Dauerstrom) |
+| **3** | **`AGND_SPK`** | Audio-Massebezug | **Saubere Kopfhörermasse:** Führt zum 3,5-mm-Klinkenhülsen-Kontakt (Sleeve) – **stromlos ($I = 0\,\text{mA}$)!** |
+| **4** | **`AUDIO_L_IN`** | Audio In $\leftarrow$ OEM | Line-Out Lautsprecher Links vom Headset zum ES8388 ADC (Kanal 1) |
+| **5** | **`AUDIO_R_IN`** | Audio In $\leftarrow$ OEM | Line-Out Lautsprecher Rechts vom Headset zum ES8388 ADC (Kanal 2) |
+| **6** | **`AGND_MIC`** | Audio-Massebezug | **Saubere Mikrofonmasse:** Eigener Rückleiter für den Mikrofoneingang – **stromlos ($I = 0\,\text{mA}$)!** |
+| **7** | **`MIC_OUT`** | Audio Out $\rightarrow$ OEM | Mikrofonsignal vom ES8388 DAC in das Headset ($< 1\,\text{ms}$ Latenz) |
+| **8** | **`PTT_IO`** | Bidir / Open-Drain | PTT-Tastung gegen Masse (Midland PMR446) oder DMR/Mode-Select |
+
+> [!IMPORTANT]
+> **Warum 8 Pins die Strombrumm-Problematik („Lade- & Mesh-Surren“) zu 100 % lösen:**
+> 1. **Das Problem geteilter Massen:** Zieht ein Headset z. B. $300\,\text{mA}$ Lade- oder HF-Sendestrom über eine gemeinsame Masseleitung mit $80\,\text{m}\Omega$ Gesamtwiderstand (Steckkontakt + Litze), schwankt das Massepotential um $\Delta V = 300\,\text{mA} \times 0{,}08\,\Omega = 24\,\text{mV}$. Da Mikrofon-Signale typisch nur $5\dots 15\,\text{mV}$ betragen, würde der Mikrofoneingang des Headsets dieses $24\,\text{mV}$ Spannungsbrummen (Mesh-TDMA-Knattern, Schaltregler-Pfeifen) um $+30\,\text{dB}$ vorverstärken!
+> 2. **Die OpenMotorBridge-Lösung (Kelvin-Grounding):** Durch die getrennten Pins `AGND_SPK` (Pin 3) und `AGND_MIC` (Pin 6) fließt **kein einziger Milliampere Betriebsstrom** ($I_{\text{Audio}} = 0\,\text{A}$). Der ohmsche Spannungsabfall ist physikalisch **exakt $\Delta V = 0\,\text{mV}$**. Der hohe Laststrom fließt isoliert über Pin 1 (`PGND`) direkt zum DC-DC-Filter auf `PCBA 03` ab.
+> 3. **BOM-Vorteil:** Durch den Wechsel auf 8 Pins nutzt `J_AUDIO_PWR` exakt dieselbe LCSC-Teilenummer (`JST_SH_SM08B-SRSS-TB`) wie der Mechatronik-Header `J_ACT`. Das spart einen Feeder-Slot bei JLCPCB und eliminiert Bestückungsfehler.
+
 
 ### 5.3 Pinbelegung des Aktuator-Headers (`J_ACT` / 8-Pin JST-SH 1.0mm)
 | Pin | Signalname | Ansteuerung | Mapping: Sena SPIDER X Slim | Mapping: Cardo Packtalk Edge |
@@ -299,13 +316,16 @@ Die separate Platine `PCBA 06` ist in v9.6 **vollständig und ersatzlos entfalle
 ### 10.1 Technische Platinen-Kenndaten & All-UWB Backbone
 * **Abmessungen:** $115{,}0 \times 65{,}0 \times 1{,}6\,\text{mm}$ (2 Lagen FR-4 High-TG150, ENIG-Goldfinish).
 * **Zentraler Radardurchbruch:** $61{,}0 \times 51{,}0\,\text{mm}$ rechteckiges Sichtfenster für das Wheeltec MR20 77-GHz-Sensormodul.
-* **Bestückung:**
-  * Espressif `ESP32-C5` Dual-Band RISC-V SoC (2.4/5 GHz Wi-Fi 6, BLE 5.0, 5.9 GHz V2X-Uplink).
-  * Qorvo `DW3110` Ultra-Wideband Transceiver (`U3`) mit U.FL-Buchse `J4` für eine Taoglas FXUWB10 Flexantenne. Sämtliche Radar-Rohdatenvektoren werden drahtlos über UWB an die Zentralbox gestreamt (**Null Kupfer-Datenleitungen zum Fahrzeug**).
+* **Bestückung & HF-Architektur (Strikt 2x U.FL, kein 2.4 GHz am Heck):**
+  * Espressif `ESP32-C5` Dual-Band RISC-V SoC: Dient als Sub-MCU und 5.9 GHz V2X-Uplink (C-V2X / ITS-G5 802.11p) über dedizierte U.FL-Buchse `U.FL_5G9_V2X` an Taoglas FXP524 Flexantenne.
+  * **WICHTIGER HF-GRUNDSATZ:** Das 2.4-GHz-HF-Frontend des ESP32-C5 (Wi-Fi/BLE) ist am Heck **strikt deaktiviert bzw. unbeschaltet**. Am Heck existiert **keine 2.4 GHz Antenne**, um HF-Kollisionen und Intermodulationsprodukte mit OMM 2.4 GHz und Cardo/Sena-Pods am Bike vollständig zu eliminieren.
+  * Qorvo `DW3110` Ultra-Wideband Transceiver (`U3`) mit U.FL-Buchse `J4` für eine Taoglas FXUWB10 Flexantenne (6.5 GHz UWB Kanal 5/9). Sämtliche Radar-Rohdatenvektoren werden drahtlos über UWB an die Zentralbox gestreamt (**Null Kupfer-Datenleitungen zum Fahrzeug**).
+  * **HF-Gesamtübersicht PCBA 08:** Genau **2x U.FL HF-Buchsen** (`J4` für 6.5 GHz UWB, `U.FL_5G9_V2X` für 5.9 GHz V2X). Das Wheeltec MR20 77-GHz-Radar verfügt über integrierte Antenna-on-Package (AoP) Patch-Antennen auf der Sensor-Frontseite und benötigt keine externen HF-Koaxialleitungen.
   * 36x SMD `WS2812B-2020` RGB-LEDs auf den symmetrischen Warnflügeln (18 links / 18 rechts).
-* **Steckverbinder:**
+* **Steckverbinder & Wartung:**
   * `J1`: Wasserdichter 2-poliger 12V Automotive-Stecker (JST JWPF) für Zuleitung (`RADAR_PWR_12V` / `RADAR_GND`). Der frühere Binder M5 Stecker entfällt ersatzlos.
   * `J2`: 4-Pin JST-SH Header zum Wheeltec MR20 mmWave Radar (UART1 @ 115.200 Baud).
+  * `J3`: **90° gewinkelte 4-Pin Stiftleiste (`3V3`, `TX`, `RX`, `GND`)** bündig an der seitlichen Gehäusekante für bequemes Flashen und Firmware-Debugging des ESP32-C5 ohne Ausbau der Platine.
 * **Autonome Notfall-Strobe-Steuerung:**
   * Erkennt der lokale ESP32-C5 einen herannahenden Auffahrunfall (Time-to-Collision $\text{TTC} < 1{,}5\,\text{s}$), löst er den hochfrequenten Notfall-Strobe der 36 LEDs **lokal in $< 1\,\text{ms}$** aus - völlig unabhängig vom Funkverkehr zur Zentralbox.
 
@@ -326,15 +346,15 @@ Die Platine **`PCBA 09`** ist die universelle Open-Source-Hardware für das Open
 
 1. **Host-Mikrocontroller (`U1`):**
    * **Espressif ESP32-C6-MINI-1U** (32-Bit RISC-V Single-Core @ 160 MHz, 512 kB SRAM, 4 MB Quad-SPI Flash, integrierte U.FL-Goldbuchse).
-   * Unterstützt 2.4 GHz Wi-Fi 6 ($802.11\text{ax}$), IEEE 802.15.4 (deterministischer TDMA Mesh-Stack) und Bluetooth 5.3 LE.
+   * Unterstützt 2.4 GHz Wi-Fi 6 ($802.11\text{ax}$), IEEE 802.15.4 (deterministischer TDMA Mesh-Stack) und Bluetooth 5.3 LE / LE Audio LC3.
 2. **Power-Management & Lade-IC (`U2`):**
    * **Texas Instruments BQ24075RGTR** (QFN-16 3x3mm) mit Dynamic Power Path Management (DPPM).
-   * Unterbrechungsfreie Umschaltung zwischen USB-C 5V-Speisung (Bordnetz über Kassetten-Schlitten oder Powerbank) und dem internen 600-mAh-LiPo-Akku in $< 10\,\mu\text{s}$ ohne MCU-Reboot.
+   * Unterbrechungsfreie Umschaltung zwischen USB-C 5V-Speisung (Bordnetz über Kassetten-Schlitten oder Powerbank) und dem internen 600-mAh-LiPo-Akku in $< 10\,\mu\text{s}$ ohne MCU-Reboot. Der interne Akku dient im Kassettenbetrieb als unterbrechungsfreie Stromversorgung (USV).
    * Einstellbarer Ladestrom ($500\,\text{mA}$), JEITA-konforme Temperaturüberwachung über NTC-Thermistor ($10\,\text{k}\Omega$).
-3. **Audio-Frontend Codec (`U4`):**
-   * **Everest Semi ES8311** (QFN-20 3x3mm): Ultra-Low-Power Mono Audio Codec mit 24-Bit / 96 kHz I2S-Interface.
-   * Integrierter Headphone-Verstärker ($100\,\text{mW}$ @ $16\,\Omega$ / $55\,\text{mW}$ @ $32\,\Omega$) zum direkten Betrieb von 40 mm Helm-Lautsprechern.
-   * Rauscharmer Mikrofon-Vorverstärker ($+0\dots +30\,\text{dB}$ Gain) mit programmierbarer interner `MICBIAS`-Erzeugung ($2{,}0\dots 2{,}8\,\text{V}$) für Schwanenhals- und Klebemikrofone.
+3. **Audio-Frontend Stereo Codec (`U4`):**
+   * **Everest Semi ES8388** (QFN-28 4x4mm): Ultra-Low-Power Stereo Audio Codec mit 24-Bit / 96 kHz I2S-Interface.
+   * Getrennte linke und rechte Kopfhörer-Treiber ($2\times 45\,\text{mW}$ @ $16\,\Omega$ / $25\,\text{mW}$ @ $32\,\Omega$) für echten Stereo-Klang (A2DP-Musik, räumliche Navigationshinweise, LE Audio).
+   * Rauscharmer Differenz-Mikrofon-Vorverstärker ($+0\dots +30\,\text{dB}$ Gain) mit programmierbarer interner `MICBIAS`-Erzeugung ($2{,}0\dots 2{,}8\,\text{V}$) für Schwanenhals- und Klebemikrofone.
 4. **2.4-GHz-HF-Antennensystem (`ANT1`):**
    * **Taoglas FXP73 Flex-Dipol** ($+3{,}0\,\text{dBi}$, I-PEX MHF / U.FL): Abgesetzte, extrem flexible Helm-Antenne, die direkt auf die integrierte U.FL-Buchse des `ESP32-C6-MINI-1U` gesteckt wird.
    * Keine unzuverlässige Keramik-Chip- oder PCB-Trace-Antenne auf der Platine (eliminiert die massive HF-Dämpfung durch Helmschalen und Kopfschatten; Reichweite bis zu 250 m im Freifeld).
@@ -355,13 +375,98 @@ Die Platine **`PCBA 09`** ist die universelle Open-Source-Hardware für das Open
 | **Pad 5** | **`GPIO 5`** | `BTN_VOL_DOWN` | Digital In (Pullup) | SW4 (Lautstärke -, Kanalwahl -, Low-aktiv) |
 | **Pad 6** | **`GPIO 6`** | `WS2812_DATA` | Digital Out | D1 (WS2812B-2020 RGB Statusanzeige & Lichtleiter) |
 | **Pad 7** | **`GPIO 7`** | `CHG_STAT` | Digital In (Pullup) | BQ24075 /STAT Ladezustandsanzeige (Low-aktiv) |
-| **Pad 10** | **`GPIO 8`** | `I2C_SDA` | Open-Drain | ES8311 Register Control SDA (4.7k Pullup) |
-| **Pad 11** | **`GPIO 9`** | `I2C_SCL` | Open-Drain | ES8311 Register Control SCL (4.7k Pullup) |
+| **Pad 10** | **`GPIO 8`** | `I2C_SDA` | Open-Drain | ES8388 Register Control SDA (4.7k Pullup) |
+| **Pad 11** | **`GPIO 9`** | `I2C_SCL` | Open-Drain | ES8388 Register Control SCL (4.7k Pullup) |
+| **Pad 3** | **`GPIO 2 / PTT`**| `PTT_IO` | Digital In (Pullup) | Hardware-PTT-Eingang von J1 Pin B5 / Lenkertaster |
+| **Pad 21** | **`GPIO 19`** | `I2S_MCLK` | Digital Out | ES8388 Master Clock (12.288 MHz) |
+| **Pad 22** | **`GPIO 20`** | `I2S_BCLK` | Digital Out | ES8388 Bit Clock (1.536 MHz) |
+| **Pad 23** | **`GPIO 21`** | `I2S_WS` | Digital Out | ES8388 Frame Sync / Word Select (48 kHz) |
+| **Pad 24** | **`GPIO 22`** | `I2S_DOUT` | Digital Out | ES8388 DAC Data Out (Stereo-Lautsprecher L/R) |
+| **Pad 25** | **`GPIO 23`** | `I2S_DIN` | Digital In | ES8388 ADC Data In (Mikrofon) |
+| **U.FL** | **RF 2.4G** | `RF_ANT` | 50 Ohm Koaxial | Taoglas FXP73 Flex-Dipol (+3.0 dBi Antenne) |
+
+### 11.4 Belegung des 16-Pin Multi-Use USB-C Steckverbinders (`J1`)
+
+Der stirnseitige USB-C Port `J1` (`TYPE-C-31-M-12_IP67`) ist gemäß Kapitel 4b Abschnitt 2.2 als universelle Multi-Use-Schnittstelle beschaltet (analog zum bewährten Prinzip des Sena SPIDER X Slim). Er vereint **Stromversorgung**, **Flashen/Wartung** und **analoge Stereo-Audioübertragung** auf einer einzigen, wasserdichten Buchse:
+
+| USB-C Pins | Netzname | Signal-Typ | Funktion / Adapter-Verbindung |
+| :---: | :--- | :--- | :--- |
+| **A1, B12, A12, B1, SH** | `GND` / `PGND` | Power Ground | Pin 1 Kassetten-Header `J_AUDIO_PWR` & Schirmung: Führt Lade- & Betriebs-Rückstrom |
+| **A4, B9, A9, B4** | `VBUS_5V` | Power In (+5V) | Pin 2 Kassetten-Header & USB-Ladekabel: 5V Speisung & BQ24075 USV-Akkuladung |
+| **A6, B6 (`DP1`, `DP2`)** | `USB_DP` | USB 2.0 PHY | ESP32-C6 GPIO 13 (via TVS `D2`): **Nativer USB D+ für WebUSB / DFU Firmware-Flashing** |
+| **A7, B7 (`DN1`, `DN2`)** | `USB_DN` | USB 2.0 PHY | ESP32-C6 GPIO 12 (via TVS `D2`): **Nativer USB D- für WebUSB / DFU Firmware-Flashing** |
+| **A5 (`CC1`)** | `HP_OUT_L` | Audio Out | Pin 4 Kassetten-Header / Tip 3.5mm: Stereo Audio Links vom ES8388 `LOUT1` |
+| **B5 (`CC2`)** | `HP_OUT_R` | Audio Out | Pin 5 Kassetten-Header / Ring 3.5mm: Stereo Audio Rechts vom ES8388 `ROUT1` |
+| **A8 (`SBU1`)** | `MIC_IN+` | Audio In | Pin 7 Kassetten-Header / 2-Pin Mic: Fahrer-Mikrofonsignal zum ES8388 `MIC1P` |
+| **B8 (`SBU2`)** | `AGND_SPK` | Analog Ground | Pin 3 & 6 Kassetten-Header / Sleeve 3.5mm: Stromloser Audio-Massebezug ($I = 0\,\text{mA}$) |
+
+---
+
+## 12. PCBA 10: OMM 446 Analog & Digital PMR446 Intercom-Modul (`openmotorbridge_omm446_ucs`)
+
+Die Platine **`PCBA 10`** ist das universelle Open-Source-Hardwaremodul für den lizenzfreien Jedermannfunk im 446-MHz-Band. Es löst das Dilemma unhandlicher Handfunkgeräte (Midland G9 Pro etc. passen physisch in keine $100 \times 50 \times 30\,\text{mm}$ Kassette) und teurer, unwirtschaftlicher Teardowns (z. B. Midland D-10 DMR) vollständig:
+* **Formfaktor-Gleichheit:** Exakt identische Außenmaße ($60{,}0 \times 30{,}0 \times 1{,}0\,\text{mm}$) und Montagepunkte wie das 2.4-GHz-Modul `PCBA 09`.
+* **Universal-Einsatz:** Passt mechanisch und elektrisch sowohl in standardisierte ECE 22.06 UCS-Helmmulden als auch in den Kassetten-Schlitten (`PCBA 03`) am Motorrad.
+* **Dual-Mode HF-Funk:** Vollwertiges Analog-FM (16 PMR446 Kanäle, CTCSS/DCS) und Digital-DMR Tier I (16 digitale Kanäle, TDMA 4FSK, glasklare Sprache ohne Rauschen).
+
+![PCBA 10 OMM 446 PMR446 Intercom Modul](../images/pcba/pcba10_omm446_intercom_3d.png)
+
+### 12.1 Technische Platinen-Kenndaten & Lagenaufbau
+* **Abmessungen:** $60{,}0 \times 30{,}0 \times 1{,}0\,\text{mm}$ ($R = 2{,}5\,\text{mm}$ Kantenradius).
+* **Lagenaufbau:** 4-Lagen FR-4 High-TG150, $1{,}0\,\text{mm}$ Materialstärke, $35\,\mu\text{m}$ Cu (Außenlagen) / $17{,}5\,\mu\text{m}$ Cu (Innenlagen für GND-Shielding und Power-Planes), ENIG-Goldfinish.
+* **Befestigung:** 4x M2-Montagelöcher ($\varnothing 2{,}2\,\text{mm}$) mit $52{,}0 \times 22{,}0\,\text{mm}$ Rastermaß für formschlüssige DIN 934 M2 Mutterntaschen im 3D-Druck-Gehäuse.
+
+### 12.2 Bestückung & Schaltkreis-Architektur
+
+1. **Dual-Mode Funktransceiver-Modul (`U3`):**
+   * **NiceRF SA818-DMR** (Ultrakompaktes $446\,\text{MHz}$ Transceiver-Modul mit integriertem DSP, CMX7141 Baseband und PA):
+     * **Analog PMR446:** 16 Kanäle ($446{,}00625\dots 446{,}19375\,\text{MHz}$), $12{,}5\,\text{kHz}$ Kanalraster, 38 CTCSS-Subtöne und 83 DCS-Digitalcodes.
+     * **Digital DMR Tier I:** ETSI TS 102 361-1 konform, 2-Slot TDMA 4FSK Modulation, Color Code 1–16, Direktmodus (DMO) ohne Repeater.
+   * **Dual-Power Umschaltung (Software- & Hardware-gesteuert):**
+     * **0,2 W ERP (Helm-Modus / SAR-Safe):** Aktiv bei Standalone-Betrieb in der Helmmulde. Minimiert HF-Absorption am Kopf und thermische Verlustleistung (Reichweite ca. 1,5–2,5 km).
+     * **0,5 W ERP (Bike-Modus / High-Power):** Aktiv bei Erkennung des Kassetten-Schlittens via I2C/GPIO. Schöpft das gesetzliche PMR446-Limit voll aus (Reichweite ca. 3–6 km im Freifeld).
+2. **Host-Mikrocontroller & Steuer-MCU (`U1`):**
+   * **Espressif ESP32-C6-MINI-1U** (32-Bit RISC-V Single-Core @ 160 MHz):
+     * Steuert das SA818-DMR per High-Speed UART über AT-Kommandos (Frequenz, CTCSS, DMR Color Code, Squelch, RF Power).
+     * Stellt Bluetooth 5.3 LE zur Verfügung für drahtlose Konfiguration via Smartphone-App und WebBluetooth.
+     * Unterstützt WebUSB DFU Flashing über den USB-C Port.
+3. **Power-Management mit unterbrechungsfreier USV (`U2`):**
+   * **Texas Instruments BQ24075RGTR** mit Dynamic Power Path Management (DPPM).
+   * Ermöglicht das **Laden während des Betriebs** über USB-C (5V Bordnetz / Powerbank) bei gleichzeitig stabiler 3.3V- und PA-Speisung.
+   * Fällt die externe 5V-Versorgung ab (z. B. Zündung aus oder Kassettenwechsel), übernimmt der interne 600-mAh-LiPo-Akku unterbrechungsfrei in $< 10\,\mu\text{s}$ als USV (Pufferzeit ca. 6–8 Stunden reiner Funkempfang).
+4. **Audio-Frontend Stereo Codec (`U4`):**
+   * **Everest Semi ES8388**: Verarbeitet das Audio-Signal des SA818-DMR analog und digital.
+   * Stereo Headphone-Verstärker für Helm-Lautsprecher.
+   * Differenzieller Mikrofon-Eingang mit zuschaltbarem Windgeräuschfilter und integriertem Noise-Gate.
+5. **Antennensystem (Kompakte Wendel-Helix & externer Koax):**
+   * **Interne Helix (`ANT_INT`):** Im Gehäusedeckel integrierte, präzise auf 446 MHz abgestimmte Kupfer-Wendelantenne ($\lambda/4$ verkürzt, Länge ca. $32\,\text{mm}$), vibrationsfest im 3D-Druck-Labyrinth vergossen.
+   * **Externe U.FL-Option (`J_RF`):** Bei Montage im Kassetten-Schlitten kann über einen U.FL-Steckplatz eine externe Fahrzeugantenne am Heck oder Lenker angeschlossen werden.
+6. **Bedienelemente & Sensorik:**
+   * 4x taktile Mikrotaster: PTT (Push-to-Talk / MFB), Ch+, Ch-, Mode (Analog/DMR Toggle).
+   * 1x WS2812B-2020 RGB Status-LED (Grün = RX aktiv, Rot = TX PTT aktiv, Blau = DMR Sync, Gelb = Laden).
+
+### 12.3 Vollständige GPIO-Pinbelegung (ESP32-C6 zu SA818-DMR & Peripherie)
+
+| Modul-Pad | ESP32-C6 GPIO | Netzname | Signal-Typ | Funktion / Hardware-Verbindung |
+| :---: | :---: | :--- | :--- | :--- |
+| **Pad 8** | **`GPIO 2`** | `BTN_PTT` | Digital In (Pullup) | Taster SW1: Push-To-Talk (Low-aktiv, Boot-Pin) |
+| **Pad 9** | **`GPIO 3`** | `BTN_MODE` | Digital In (Pullup) | Taster SW2: Analog FM / Digital DMR Toggle |
+| **Pad 4** | **`GPIO 4`** | `BTN_CH_UP` | Digital In (Pullup) | Taster SW3: Kanalwahl Aufwärts (CH 1–16) |
+| **Pad 5** | **`GPIO 5`** | `BTN_CH_DOWN` | Digital In (Pullup) | Taster SW4: Kanalwahl Abwärts (CH 16–1) |
+| **Pad 6** | **`GPIO 6`** | `WS2812_DATA` | Digital Out | D1 (WS2812B RGB Statusanzeige RX/TX/DMR) |
+| **Pad 7** | **`GPIO 7`** | `CHG_STAT` | Digital In (Pullup) | BQ24075 /STAT Ladezustand (Low-aktiv) |
+| **Pad 10** | **`GPIO 8`** | `I2C_SDA` | Open-Drain | ES8388 Register SDA (4.7k Pullup) |
+| **Pad 11** | **`GPIO 9`** | `I2C_SCL` | Open-Drain | ES8388 Register SCL (4.7k Pullup) |
 | **Pad 14** | **`GPIO 12`** | `USB_DN` | USB 2.0 PHY | USB-C D- (WebUSB Firmware-Flashing & DFU via D2) |
 | **Pad 15** | **`GPIO 13`** | `USB_DP` | USB 2.0 PHY | USB-C D+ (WebUSB Firmware-Flashing & DFU via D2) |
-| **Pad 21** | **`GPIO 19`** | `I2S_MCLK` | Digital Out | ES8311 Master Clock (12.288 MHz) |
-| **Pad 22** | **`GPIO 20`** | `I2S_BCLK` | Digital Out | ES8311 Bit Clock (1.536 MHz) |
-| **Pad 23** | **`GPIO 21`** | `I2S_WS` | Digital Out | ES8311 Frame Sync / Word Select (48 kHz) |
-| **Pad 24** | **`GPIO 22`** | `I2S_DOUT` | Digital Out | ES8311 DAC Data Out (Lautsprecher) |
-| **Pad 25** | **`GPIO 23`** | `I2S_DIN` | Digital In | ES8311 ADC Data In (Mikrofon) |
-| **U.FL** | **RF 2.4G** | `RF_ANT` | 50 Ohm Koaxial | Taoglas FXP73 Flex-Dipol (+3.0 dBi Antenne) |
+| **Pad 16** | **`GPIO 14`** | `SA818_TXD` | Digital Out (UART) | ESP32 TX -> SA818-DMR RXD (AT-Steuerbefehle @ 9600 Bd) |
+| **Pad 17** | **`GPIO 15`** | `SA818_RXD` | Digital In (UART) | ESP32 RX <- SA818-DMR TXD (Status & Telemetrie) |
+| **Pad 18** | **`GPIO 16`** | `SA818_PTT` | Digital Out | SA818 PTT Steuerung (Low = Sendebetrieb aktiv) |
+| **Pad 19** | **`GPIO 17`** | `SA818_SQL` | Digital In | SA818 Squelch-Ausgang (Low = Träger erkannt / Empfang) |
+| **Pad 20** | **`GPIO 18`** | `SA818_PWR_HL` | Digital Out | SA818 RF Power Select: Low = 0.2W (Helm), High = 0.5W (Bike) |
+| **Pad 21** | **`GPIO 19`** | `I2S_MCLK` | Digital Out | ES8388 Master Clock (12.288 MHz) |
+| **Pad 22** | **`GPIO 20`** | `I2S_BCLK` | Digital Out | ES8388 Bit Clock (1.536 MHz) |
+| **Pad 23** | **`GPIO 21`** | `I2S_WS` | Digital Out | ES8388 Frame Sync (48 kHz) |
+| **Pad 24** | **`GPIO 22`** | `I2S_DOUT` | Digital Out | ES8388 DAC Out (Lautsprecher / Audio zu Zentralbox) |
+| **Pad 25** | **`GPIO 23`** | `I2S_DIN` | Digital In | ES8388 ADC In (Mikrofon von Helm / Central DSP) |
+| **U.FL** | **RF 446M** | `RF_ANT` | 50 Ohm Koaxial | U.FL Buchse zur internen Wendelantenne oder Fahrzeug-Pigtail |

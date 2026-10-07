@@ -8880,8 +8880,8 @@ function calculateSingleBikeBom(bikeConfig) {
             id: 'kicad_omm_intercom',
             qty: totalOmmPcba,
             desc: isDe ?
-                `OMM 2.4 GHz UCS Intercom (${totalOmmPcba}x: ESP32-C6-MINI-1U, TI BQ24075 PMIC, ES8311 Codec)` :
-                `OMM 2.4 GHz UCS Intercom (${totalOmmPcba}x: ESP32-C6-MINI-1U, TI BQ24075 PMIC, ES8311 Codec)`
+                `OMM 2.4 GHz UCS Intercom (${totalOmmPcba}x: ESP32-C6-MINI-1U, TI BQ24075 PMIC, ES8388 Stereo Codec)` :
+                `OMM 2.4 GHz UCS Intercom (${totalOmmPcba}x: ESP32-C6-MINI-1U, TI BQ24075 PMIC, ES8388 Stereo Codec)`
         });
     }
 
@@ -9708,7 +9708,7 @@ function renderGroupBuilder() {
         { id: 'kicad_front_node', code: 'PCBA 05', name: isDe ? 'Universal Front-Knoten' : 'Universal Front Node', desc: isDe ? 'ESP32-S3, USB Hub, SAM-M10Q GNSS, 20W PD' : 'ESP32-S3, USB Hub, SAM-M10Q GNSS, PD' },
         { id: 'kicad_smart_keyfob', code: 'PCBA 07', name: isDe ? 'Smart-Keyfob Platine' : 'Smart Keyfob', desc: isDe ? 'BLE Tracker, LRA Haptik' : 'BLE Tracker, LRA Haptic' },
         { id: 'kicad_radar_submcu', code: 'PCBA 08', name: isDe ? 'Radar 2.0 Sub-MCU Platine' : 'Radar 2.0 Sub-MCU Board', desc: isDe ? 'Wheeltec 77 GHz mmWave, 36x Halo RGB LEDs, UWB' : 'Wheeltec 77 GHz mmWave, 36x Halo RGB LEDs, UWB' },
-        { id: 'kicad_omm_intercom', code: 'PCBA 09', name: isDe ? 'OMM UCS Intercom Platine' : 'OMM UCS Intercom Board', desc: isDe ? 'ESP32-C6, BQ24075 PMIC, ES8311 Codec' : 'ESP32-C6, BQ24075 PMIC, ES8311 Codec' }
+        { id: 'kicad_omm_intercom', code: 'PCBA 09', name: isDe ? 'OMM UCS Intercom Platine' : 'OMM UCS Intercom Board', desc: isDe ? 'ESP32-C6, BQ24075 PMIC, ES8388 Stereo Codec' : 'ESP32-C6, BQ24075 PMIC, ES8388 Stereo Codec' }
     ];
 
     let activeDesignsCount = 0;
@@ -10278,7 +10278,7 @@ function setupSmokeTestUi() {
         }
 
         if (builderState.addons.ommHelmetKit) {
-            logSmoke(state.lang === 'de' ? '✓ OMM Helm UCS Headset (PCBA 09): ES8311 Codec 16-Bit I2S aktiv, 4-Tasten Haptik OK, 600 mAh LiPo: 4.16 V (97%).' : '✓ OMM Helmet UCS Headset (PCBA 09): ES8311 Codec 16-bit I2S active, 4-button tactile OK, 600 mAh LiPo: 4.16 V (97%).', 'ok');
+            logSmoke(state.lang === 'de' ? '✓ OMM Helm UCS Headset (PCBA 09): ES8388 Stereo Codec I2S aktiv, 4-Tasten Haptik OK, 600 mAh LiPo: 4.16 V (97%).' : '✓ OMM Helmet UCS Headset (PCBA 09): ES8388 Stereo Codec I2S active, 4-button tactile OK, 600 mAh LiPo: 4.16 V (97%).', 'ok');
         }
 
         logSmoke('==================================================', 'info');

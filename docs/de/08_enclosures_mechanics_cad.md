@@ -300,7 +300,7 @@ In der v9.6 Clean Architecture ist die frühere Pod-Bodenplatine (`PCBA 02`) **v
 *Abbildung 8.11: Die modularen Wechselkassetten-Varianten im Überblick: OMM 2.4 GHz UCS Cartridge, Sena SPIDER X Slim Quick-Snap Cradle, Cardo Magnetic Air Mount und wasserdichte IP67 Blindkassette.*
 
 #### 4.3.1 Benutzerzentrierte Plug & Play Docking-Architektur (0 Lötaufwand)
-Um Signale vom 90°-abgewinkelten **JST-SH 1.0 mm 6-Pin SMD-Steckverbinder (`J_AUDIO_PWR`)** sowie dem **8-Pin Mechatronik-Header (`J_ACT`)** auf der Kassetten-Trägerplatine (`PCBA 03` Rev 3.0) verwechslungs- und knickfrei zu den Kontaktpunkten des jeweiligen Adapters zu führen, besitzt der Kassetten-Schlitten:
+Um Signale vom 90°-abgewinkelten **JST-SH 1.0 mm 8-Pin SMD-Steckverbinder (`J_AUDIO_PWR`)** sowie dem **8-Pin Mechatronik-Header (`J_ACT`)** auf der Kassetten-Trägerplatine (`PCBA 03` Rev 3.0) verwechslungs- und knickfrei zu den Kontaktpunkten des jeweiligen Adapters zu führen, besitzt der Kassetten-Schlitten:
 * **Geschützten Unterflur-Kabelkanal:** Im Boden des PA12-Schlittens ist eine **$1{,}5\,\text{mm}$ tiefe und $8{,}0\,\text{mm}$ breite Kabelführung** direkt unterhalb des Konturbetts integriert.
 * **Zwischenboden-Durchführung:** Ein präziser **$10{,}0 \times 3{,}0\,\text{mm}$ Durchbruch mit beidseitig $R=1{,}0\,\text{mm}$ verrundeten Kanten** führt die Kabelstränge von Header `J_AUDIO_PWR` und `J_ACT` auf der unteren Platine nach oben ins Nest.
 

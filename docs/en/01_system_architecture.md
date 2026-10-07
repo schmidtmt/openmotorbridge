@@ -450,3 +450,30 @@ The Front Node (PCBA 05) serves on **all motorcycle types** as the universal coc
   * An iPad or Android tablet mounted in the car runs the OpenMotorBridge PWA dashboard in offline vector map mode.
   * Over the 868 MHz LoRa mesh, the support crew receives second-by-second telemetry updates (GPS coordinate fixes, road speeds, crash/SOS alerts, tire pressures, ambient road temperature) from all group motorcycles over a radius of up to $15\,\text{km}$ -- autonomous, robust, and completely independent of cellular network coverage.
 
+---
+
+## 13. Documentation Roadmap & Single Source of Truth (SSOT) Architecture
+
+To eliminate redundancy and enforce strict ownership of topics, the OpenMotorBridge documentation is structured modularly. Every technical domain possesses an authoritative **Single Source of Truth (SSOT)**:
+
+| Technical Domain | Authoritative Reference Document | Scope & Core Focus |
+| :--- | :--- | :--- |
+| **Intercom Profiles & Matrix** | **[Chapter 02](02_intercom_matrix_profiles.md)** | Sena Mesh 2.0/3.0, Cardo DMC Gen1/2, Midland PMR, Audio Routing & Levels |
+| **Acoustics, DSP & Ducking** | **[Chapter 03](03_audio_dsp_acoustics.md)** | Raised-Cosine Filters, Ducking (-12 dB / -18 dB), Wind-AGC, Latency Budgets |
+| **Mesh, LoRa & Navigation** | **[Chapter 04](04_mesh_lora_navigation.md)** | SX1262 LoRa Mesh, Dynamic Routing, Emergency SOS, Cluster Merging |
+| **OMM Intercom Modules (2.4G & 446M)** | **[Chapter 04b](04b_omm_intercom_module.md)** | PCBA 09 (2.4 GHz HD-Mesh) & PCBA 10 (446 MHz PMR/DMR), ECE 22.06 UCS |
+| **Power Management & UPS** | **[Chapter 05](05_power_management_ups.md)** | LM5164 Step-Down, BQ24075 UPS, Dual-Battery Cold Boot, JEITA Thermal |
+| **Telemetry & Blackbox** | **[Chapter 06](06_telemetry_blackbox_webdav.md)** | MicroSD-FAT32 Ring Buffer, 15-State EKF Lean Angle, WebDAV / Cloud Sync |
+| **PCBA Hardware & Pinouts (SSOT)**| **[Chapter 07](07_pcba_hardware_pinouts.md)** | **All Boards (PCBA 01 through 10)**, Complete Pinouts, Component Specs |
+| **Enclosures, Mechanics & CAD (SSOT)**| **[Chapter 08](08_enclosures_mechanics_cad.md)** | **All CAD Models**, OpenSCAD Parameters, ECE Standards, Captive Hex Nuts |
+| **Firmware Architecture** | **[Chapter 09](09_firmware_architecture.md)** | FreeRTOS Task Matrix, UWB Ranging Protocol, Ring Buffers & State Machines |
+| **WebApp PWA Dashboard** | **[Chapter 10](10_webapp_pwa_dashboard.md)** | Ride HUD, WebBLE Protocol, Cartridge Config, Offline OSM Vector Maps |
+| **CarPlay / Android Auto Bridge** | **[Chapter 11](11_carplay_android_auto_bridge_architecture.md)**| Virtual WHIM, CP2AA Bridge, Multi-Path Wi-Fi/Cellular, Headless Dongle |
+| **CAN Bus Vehicle Profiles** | **[Chapter 12](12_can_bus_vehicle_profiles.md)** | BMW, KTM, Ducati, Harley CAN Matrices, LIN/K-Line Interfaces |
+| **Simulation & Testbench (HIL/SIL)**| **[Chapter 13](13_simulation_testbench.md)** | Python Netlist Validator, FreeRTOS Timing Verification, Signal Integrity |
+| **EMC & RF Hardening** | **[Chapter 14](14_emv_rf_hardening.md)** | CISPR 25 Class 5, 8-Band RF Matrix, ESD Protection, Coexistence |
+| **BOM, Procurement & Manufacturing**| **[Chapter 15](15_bom_manufacturing.md)** | **Complete Bill of Materials**, JLCPCB SMT Data, COTS Docks, Harnesses |
+| **Assembly Instructions** | **[Chapter 16](16_build_instructions_assembly.md)** | Step-by-Step Build Guide, Harness Fabrication, Torques, Commissioning |
+| **Standards & References** | **[Chapter 17](17_standards_references.md)** | ECE 22.06, DIN/ISO Standards, IEEE 802.11, Bluetooth SIG, USB-IF Specs |
+| **Legal Compliance & Privacy** | **[Chapter 18](18_legal_compliance_dsgvo.md)** | RED 2014/53/EU, FCC Part 15, CE Marking, GDPR Telemetry Compliance |
+

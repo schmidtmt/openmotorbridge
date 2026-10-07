@@ -1,4 +1,5 @@
 #include "audio_dsp_pipeline.h"
+#include "uwb_cartridge_dispatcher.h"
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
@@ -538,6 +539,26 @@ void task_audio_dsp(void *pvParameters) {
 
         // 3. DMA Schreiboperation zum Audio-Ausgang
         i2s_channel_write(tx_chan, tx_buffer, bytes_read, &bytes_written, pdMS_TO_TICKS(10));
+
+        // 4. Synchroner Mehrkanal-Downlink via UWB an Smart Cartridge (PCBA 03)
+        // Sub-Kanal 2: Entrauschtes Voice-Signal (< 1 ms an Intercom-Mic-Pin)
+        // Sub-Kanal 0 & 1: Stereo Media-Signal für Bluetooth A2DP Group Sharing
+        int16_t voice_sub[UWB_AUDIO_DOWN_VOICE_SAMPLES];
+        int16_t music_l_sub[UWB_AUDIO_DOWN_MUSIC_SAMPLES];
+        int16_t music_r_sub[UWB_AUDIO_DOWN_MUSIC_SAMPLES];
+
+        for (int v = 0; v < UWB_AUDIO_DOWN_VOICE_SAMPLES; v++) {
+            voice_sub[v] = s_privacy_mute_active ? 0 : (int16_t)(s_sidetone_gain * rx_buffer[v * 2]);
+        }
+        for (int m = 0; m < UWB_AUDIO_DOWN_MUSIC_SAMPLES; m++) {
+            music_l_sub[m] = (int16_t)(rx_buffer[m * 2] * s_ducking_factor);
+            music_r_sub[m] = (int16_t)(rx_buffer[m * 2 + 1] * s_ducking_factor);
+        }
+
+        uwb_cartridge_send_audio_downlink(UWB_NODE_BROADCAST,
+                                          voice_sub, UWB_AUDIO_DOWN_VOICE_SAMPLES,
+                                          music_l_sub, music_r_sub, UWB_AUDIO_DOWN_MUSIC_SAMPLES,
+                                          s_ducking_factor < 0.5f, s_vox_active, s_radar_alert_active);
     }
 }
 

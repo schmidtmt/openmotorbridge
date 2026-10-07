@@ -57,7 +57,7 @@ All discrete components, PCB ordering files, and COTS sourcing lists are documen
 * [ ] **3D Printed Parts (MJF PA12 Black or FDM ASA/PET-CF):**
   * 1x Main Box (lower tub with UWB bottom pocket $11 \times 11 \times 0.6\,\text{mm}$, mid tray with LiPo cradle, lid with LoRa FXP895 pocket $110 \times 20 \times 0.8\,\text{mm}$)
   * 2x Pod base enclosures (seamless 1-piece monocoques with integral monolithic bulkhead, Mill-Max contact sleeves & spring guide posts; 0 assembly screws, 0 loose parts)
-  * 2x Cartridge base sleds (with UWB antenna floor pocket & direct self-tapping standoffs), inlays (Sena SPIDER X Slim, Cardo Packtalk Edge, Swap OMM, or blank cartridge) & 2x magnetic latches
+  * 2x Cartridge base sleds (with UWB antenna floor pocket & DIN 934 M2 captive nut standoffs), inlays (Sena SPIDER X Slim, Cardo Packtalk Edge, Swap OMM, or blank cartridge) & 2x magnetic latches
   * 1x Front Node (lower tub with UWB bottom pocket and AMPS nut pockets, upper lid, TPU cable glands & USB-C cap)
   * 1x Vehicle-specific mounting kit (BMW GS clamps & `adventure_rack_radar_mount.stl` / Harley saddlebag docks & license plate bracket / Support-Car `car_sun_visor_pod_clip.stl`)
 * [ ] **Fully Populated PCBAs (from JLCPCB / Eurocircuits):**

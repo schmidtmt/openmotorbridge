@@ -190,6 +190,45 @@ typedef struct __attribute__((packed)) {
 } UwbCartridgeAckPkt;
 
 // -----------------------------------------------------------------------------
+// 4b. Digitales UWB Audio-Backbone (Mehrkanal-Substream Downlink & Uplink)
+// -----------------------------------------------------------------------------
+#define UWB_AUDIO_DOWN_VOICE_SAMPLES  24   // 24x int16_t mono = 48 Bytes (0.5 ms @ 48 kHz)
+#define UWB_AUDIO_DOWN_MUSIC_SAMPLES  18   // 18x stereo pairs = 72 Bytes (0.375 ms @ 48 kHz)
+
+#define UWB_AUDIO_FLAG_DUCKING_ACTIVE (1 << 0) // Central Box DSP ducking active (-18 dB on music)
+#define UWB_AUDIO_FLAG_VOICE_ACTIVE   (1 << 1) // Voice Activity Detected (VAD) on rider mic
+#define UWB_AUDIO_FLAG_RADAR_ALERT    (1 << 2) // Priority-1 Radar audible warning active
+
+typedef struct __attribute__((packed)) {
+    uint16_t frame_seq;       // Monotonically increasing audio frame sequence counter
+    uint8_t  flags;           // UWB_AUDIO_FLAG_*
+    uint8_t  voice_gain_db;   // Master voice preamp gain set by Central Box DSP
+    uint8_t  music_gain_db;   // Master music gain (with ducking already factored in)
+    // Sub-Kanal 2: Voice (Zentral entrauschtes Fahrer-Mikrofonsignal für Sena/Cardo Mic-Pin < 1 ms)
+    int16_t  sub_voice[UWB_AUDIO_DOWN_VOICE_SAMPLES]; // 48 Bytes
+    // Sub-Kanal 0 & 1: Music L/R (Stereo Media für Bluetooth A2DP Group Sharing)
+    int16_t  sub_music_l[UWB_AUDIO_DOWN_MUSIC_SAMPLES]; // 36 Bytes
+    int16_t  sub_music_r[UWB_AUDIO_DOWN_MUSIC_SAMPLES]; // 36 Bytes
+} UwbAudioStreamDownPkt;
+
+#define UWB_AUDIO_UP_SAMPLES 48 // 48x int16_t mono = 96 Bytes (1 ms @ 48 kHz)
+typedef struct __attribute__((packed)) {
+    uint16_t frame_seq;
+    uint8_t  status_flags;    // Bit 0: Intercom active, Bit 1: Headset speaking
+    uint8_t  sample_count;    // Actual samples (up to UWB_AUDIO_UP_SAMPLES)
+    int16_t  samples[UWB_AUDIO_UP_SAMPLES]; // Intercom Spk-Out / Mesh Voice return to Central Box
+} UwbAudioStreamUpPkt;
+
+#define UWB_AUDIO_MEDIA_SAMPLES 28 // 28 stereo pairs = 56 samples = 112 Bytes
+typedef struct __attribute__((packed)) {
+    uint16_t frame_seq;
+    uint8_t  source_id;       // 0x01 = CP/AA Phone, 0x02 = Front Aux
+    uint8_t  sample_pairs;    // Number of L/R pairs
+    int16_t  media_l[UWB_AUDIO_MEDIA_SAMPLES];
+    int16_t  media_r[UWB_AUDIO_MEDIA_SAMPLES];
+} UwbAudioMediaUpPkt;
+
+// -----------------------------------------------------------------------------
 // 5. Radar 2.0 Telemetry & LED Macro Commands (PCBA 08)
 // -----------------------------------------------------------------------------
 #define UWB_RADAR_MAX_TARGETS 8

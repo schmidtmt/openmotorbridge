@@ -469,10 +469,10 @@ Zur Vermeidung von Redundanzen und zur Gewährleistung klarer Zuständigkeiten i
 | **Intercom-Profile & Matrix** | **[Kapitel 02](02_intercom_matrix_profiles.md)** | Sena Mesh 2.0/3.0, Cardo DMC Gen1/2, Midland PMR, Pegel- und Audio-Routing |
 | **Akustik, DSP & Ducking** | **[Kapitel 03](03_acoustics_dsp_ducking.md)** | Raised-Cosine Filter, Ducking (-12 dB / -18 dB), Wind-AGC, Latenzbudgets |
 | **OEM-Kassetten (Sena/Cardo)**| **[Kapitel 04](04_cartridge_specs.md)** | Gateway-Kassetten mit Mechatronik (PCBA 03), WCH CH32V003 Aktuatoren |
-| **OMM 2.4 GHz Intercom & UCS** | **[Kapitel 04b](04b_omm_intercom_module.md)** | PCBA 09, ESP32-C6, ECE 22.06 UCS-Gehäuse, 12-14 h LiPo, Helmintegration |
+| **OMM Intercom-Module (2.4G & 446M)** | **[Kapitel 04b](04b_omm_intercom_module.md)** | PCBA 09 (2.4 GHz HD-Mesh) & PCBA 10 (446 MHz PMR/DMR), ECE 22.06 UCS |
 | **Heck-Radar 2.0 (77 GHz)** | **[Kapitel 05](05_radar_bionic_mounting.md)** | Wheeltec MR20 mmWave, TTC-Bedrohungslogik, 36-LED Warnflügel, V2X-Patch |
 | **Telemetrie & Blackbox** | **[Kapitel 06](06_telemetry_blackbox_webdav.md)** | MicroSD-FAT32 Ringpuffer, 15-State EKF Schräglage, WebDAV / Nextcloud Sync |
-| **PCBA Hardware & Pinouts (SSOT)**| **[Kapitel 07](07_pcba_hardware_pinouts.md)** | **Alle Platinen (PCBA 01 bis 09)**, vollständige Pinbelegungen, Bauteilwerte |
+| **PCBA Hardware & Pinouts (SSOT)**| **[Kapitel 07](07_pcba_hardware_pinouts.md)** | **Alle Platinen (PCBA 01 bis 10)**, vollständige Pinbelegungen, Bauteilwerte |
 | **Gehäuse, Mechanik & CAD (SSOT)**| **[Kapitel 08](08_enclosures_mechanics_cad.md)** | **Alle CAD-Modelle**, OpenSCAD Parameter, ECE-Normen, unverlierbare Muttern |
 | **Firmware-Architektur** | **[Kapitel 09](09_firmware_architecture.md)** | FreeRTOS Task-Matrix, UWB Ranging-Protokoll, Ringpuffer & State-Machines |
 | **Firmware Build Guide** | **[Kapitel 10b](10_firmware_build_guide.md)** | ESP-IDF v5.2 Setup, VS Code / CLI Kompilierung, CMake Targets, Flashen |

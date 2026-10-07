@@ -1,6 +1,7 @@
 idf_component_register(
     SRCS
         "main.cpp"
+        "es8388_codec.cpp"
         "es8311_codec.cpp"
         "power_supervisor.cpp"
         "omm_transceiver.cpp"

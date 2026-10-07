@@ -12,12 +12,15 @@ static uint8_t s_token_counter = 1;
 static const char* resolve_model_name(uint16_t model_id) {
     switch (model_id) {
         case 0x0101: return "Sena SPIDER X Slim";
-        case 0x0102: return "Sena +Mesh Adapter";
+        case 0x0102: return "Sena 60S/R/X Mesh 3.0";
+        case 0x0103: return "Sena MeshON (Mesh 3.0)";
+        case 0x0104: return "Sena +Mesh Adapter";
         case 0x0201: return "Cardo Packtalk Edge/Pro";
         case 0x0202: return "Cardo Packtalk Bold/Black";
         case 0x0301: return "Cardo Freecom UCS";
         case 0x0302: return "Midland Mesh UCS";
-        case 0x0303: return "OMM 2.4 GHz OEM Transceiver";
+        case 0x0303: return "OMM 2.4 GHz Intercom";
+        case 0x0304: return "OMM 446 PMR/DMR Modul";
         case 0x0401: return "Midland PMR446 (Alan/G9)";
         default:     return "Universal Modular Cartridge";
     }
@@ -125,3 +128,31 @@ CartridgeBayState_t uwb_cartridge_get_bay_state(UwbNodeType bay) {
     int idx = (bay == UWB_NODE_CARTRIDGE_BAY1) ? 0 : 1;
     return s_bays[idx];
 }
+
+esp_err_t uwb_cartridge_send_audio_downlink(UwbNodeType target_bay,
+                                            const int16_t *voice_samples, size_t voice_count,
+                                            const int16_t *music_l, const int16_t *music_r, size_t music_count,
+                                            bool ducking_active, bool voice_active, bool radar_alert) {
+    UwbAudioStreamDownPkt pkt = {};
+    static uint16_t s_down_seq = 0;
+    pkt.frame_seq = ++s_down_seq;
+    if (ducking_active) pkt.flags |= UWB_AUDIO_FLAG_DUCKING_ACTIVE;
+    if (voice_active)   pkt.flags |= UWB_AUDIO_FLAG_VOICE_ACTIVE;
+    if (radar_alert)    pkt.flags |= UWB_AUDIO_FLAG_RADAR_ALERT;
+
+    size_t vc = (voice_count > UWB_AUDIO_DOWN_VOICE_SAMPLES) ? UWB_AUDIO_DOWN_VOICE_SAMPLES : voice_count;
+    if (voice_samples && vc > 0) {
+        memcpy(pkt.sub_voice, voice_samples, vc * sizeof(int16_t));
+    }
+
+    size_t mc = (music_count > UWB_AUDIO_DOWN_MUSIC_SAMPLES) ? UWB_AUDIO_DOWN_MUSIC_SAMPLES : music_count;
+    if (music_l && mc > 0) {
+        memcpy(pkt.sub_music_l, music_l, mc * sizeof(int16_t));
+    }
+    if (music_r && mc > 0) {
+        memcpy(pkt.sub_music_r, music_r, mc * sizeof(int16_t));
+    }
+
+    return UwbVehicleBackbone::instance().send_packet(target_bay, UWB_PKT_AUDIO_STREAM_DOWN, &pkt, sizeof(pkt));
+}
+

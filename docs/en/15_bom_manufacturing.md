@@ -48,7 +48,7 @@ This document serves as the master reference (Single Source of Truth) for the co
 | **D1 - D4** | 1N4148WS | Diodes Inc. | SOD-323 (B.Cu)| C2128 | 4x Flyback Suppression Diodes for Solenoid Coils |
 | **F1** | MF-MSMF050-2 | Bourns | 1812 SMD | C22668 | Resettable PPTC Fuse for 5V Cartridge Rail |
 | **J_ACT** | SM08B-SRSS-TB | JST | 8-Pin 1.0mm SMD | C160404 | Mechatronics Header for 4 Miniature Solenoids |
-| **J_AUDIO_PWR**| SM06B-SRSS-TB | JST | 6-Pin 1.0mm SMD | C136657 | Right-Angle Audio Diff & Direct-DC Cable Whip to Headset Inlay |
+| **J_AUDIO_PWR**| SM08B-SRSS-TB | JST | 8-Pin 1.0mm SMD | C160404 | Audio & Power Header (Top, Isolated PGND / AGND Kelvin Grounds) |
 | **ANT_UWB** | U.FL-R-SMT-1 | Hirose / Murata | SMD RF (B.Cu) | C2834595 | UWB Antenna Port to Taoglas FXUWB10 in Sled Floor Pocket |
 | **PAD1, PAD2**| Mill-Max Contact Pads | Mill-Max / PCB | Gold Pad (B.Cu)| ENIG Surface | Rear DC Power Contact Pads (+12V/5V and GND) |
 
@@ -129,39 +129,74 @@ This document serves as the master reference (Single Source of Truth) for the co
 
 ---
 
-## 8. PCBA 08: Radar 2.0 Sub-MCU & 36-LED Wing Carrier (`openmotorbridge_radar_submcu`, 4-Layer FR4 TG150, 115 x 65 mm)
+## 8. PCBA 08: Radar 2.0 Sub-MCU & 36-LED Wing Carrier (`openmotorbridge_radar_submcu`, 2-Layer FR4 TG150, 115 x 65 mm)
 
 | Ref | Component / Type | Package | Specification & Function | LCSC Part |
 | :--- | :--- | :--- | :--- | :--- |
-| **`U1`** | ESP32-C5-WROOM-1-N8 | SMD Module | 32-Bit RISC-V Dual-Band Sub-MCU (2.4 GHz + 5.9 GHz V2X, 4MB Flash) | `C2843550` |
+| **`U1`** | ESP32-C5-WROOM-1-N8 | SMD Module | 32-Bit RISC-V Sub-MCU & 5.9 GHz V2X Uplink (2.4 GHz strictly disabled at rear) | `C2843550` |
 | **`U2`** | LDO 3.3V 500mA | SOT-23-5 | TI TPS7A0533 / Richtek RT9013 LDO Voltage Regulator | `C505293` |
-| **`D1..36`**| WS2812B-2020 | SMD 2020 | 36x Digital RGB LEDs in Dual Warning Wings (18 left, 18 right) | `C2843530` |
-| **`ANT1`** | 5.9 GHz V2X Patch | 20x20x4 mm | Ceramic Patch Antenna for ITS-G5 Car-to-X Safety Broadcasts | `C290456` |
-| **`J1`** | JST-SH 1.0mm 4-Pin | SMD Right-Angle| Decoupled Internal Signal Whip to Binder M5 Housing Receptacle | `C136657` |
-| **`J2`** | JST-SH 1.0mm 4-Pin | SMD Right-Angle| UART Interface to Wheeltec MR20 Transceiver (RX/TX/5V/GND) | `C136657` |
-| **`D_TVS`**| PESD5V0S2BT | SOT-23 | TVS Diode Array for UART & Power Lines | `C2834580` |
+| **`U3`** | DW3110 | QFN-24 (4x4mm) | Qorvo Ultra-Wideband Transceiver (6.5 GHz Ch. 5/9, All-UWB backbone) | `C2834570` |
+| **`D1..36`**| WS2812B-2020 | SMD 2020 | 36x Digital RGB LEDs in Dual Warning Wings (18 left, 18 right, autonomous strobe) | `C2843530` |
+| **`J1`** | JST-JWPF 2-Pin | Automotive IP67 | 12V Power Supply Input (`RADAR_PWR_12V` / `RADAR_GND`) | `C2834590` |
+| **`J2`** | JST-SH 1.0mm 4-Pin | SMD Right-Angle| UART Interface to Wheeltec MR20 mmWave Radar (AoP patch array on front) | `C136657` |
+| **`J3`** | 4-Pin 2.54mm Header| 90° Right-Angle | Flashing & Debug Header (`3V3`, `TX`, `RX`, `GND`) at housing edge | `C12437` |
+| **`J4`** | Hirose U.FL | SMT Vertical | 6.5 GHz UWB Antenna Port to Taoglas FXUWB10 Flex Antenna | `C14894` |
+| **`U.FL_5G9`**| Hirose U.FL | SMT Vertical | 5.9 GHz V2X Antenna Port to Taoglas FXP524 Flex Antenna | `C14894` |
 
 ---
 
-## 9. 1-Click Ordering Guide for JLCPCB (All 7 PCBAs Fully Assembled)
+## 8b. PCBA 09: OMM 2.4 GHz Autonomous Intercom Module (`openmotorbridge_omm_ucs`, 2-Layer FR4 TG150, 60 x 30 mm)
 
-All manufacturing packages reside in the repository under `hardware/pcba/` as complete ZIP and CSV archives:
+| Ref | Component / Type | Package | Specification & Function | LCSC Part |
+| :--- | :--- | :--- | :--- | :--- |
+| **`U1`** | ESP32-C6-MINI-1U | SMD Module w/ U.FL| 32-Bit RISC-V 160MHz Host MCU, Wi-Fi 6, 802.15.4 TDMA, BLE 5.3, 4MB Flash | `C5267233` |
+| **`U2`** | BQ24075RGTR | QFN-16 (3x3mm) | 1.5A LiPo PMIC with Dynamic Power Path Management (DPPM UPS operation) | `C96825` |
+| **`U3`** | XC6206P332MR | SOT-23-3 | 3.3V / 250mA Low-Iq LDO Voltage Regulator | `C5446` |
+| **`U4`** | ES8388 | QFN-28 (4x4mm) | 24-Bit / 96kHz Stereo Audio Codec with separate L/R HP amps & differential mic preamp | `C2845349` |
+| **`ANT1`** | Taoglas FXP73 | I-PEX MHF / U.FL | 2.4 GHz Flex Dipole (+3.0 dBi) remote helmet antenna | `C14894` |
+| **`J1`** | TYPE-C-31-M-12 | SMT/THT IP67 | Waterproof 16-Pin USB-C Receptacle (5V charging, WebUSB DFU, audio) | `C2765186` |
+| **`BAT1`** | JST-ACH 2-Pin | SMD 1.2mm pitch | Connection to internal 600-mAh LiPo pouch cell (with PCM) | `C2902341` |
+| **`D1`** | WS2812B-2020 | SMD 2020 | RGB Status LED (Charge, Mesh channel, pairing indicator) | `C2843785` |
+| **`SW1..4`** | EVQ-P2 / KMT0 | SMD 3.5x2.8mm | 4x Tactile IP67 micro-switches (Power, Mesh, Vol+, Vol-) | `C318884` |
+
+---
+
+## 8c. PCBA 10: OMM 446 Analog & Digital PMR446 Module (`openmotorbridge_omm446_ucs`, 4-Layer FR4 TG150, 60 x 30 mm)
+
+| Ref | Component / Type | Package | Specification & Function | LCSC Part |
+| :--- | :--- | :--- | :--- | :--- |
+| **`U1`** | ESP32-C6-MINI-1U | SMD Module w/ U.FL| 32-Bit RISC-V Host MCU, BLE 5.3 Setup, WebUSB DFU, AT-Command Engine | `C5267233` |
+| **`U2`** | BQ24075RGTR | QFN-16 (3x3mm) | 1.5A LiPo PMIC with DPPM (In-operation USB charging, internal battery as UPS) | `C96825` |
+| **`U3`** | SA818-DMR | SMD Module | 446 MHz Analog FM & Digital DMR Tier I Transceiver (0.2W Helmet / 0.5W Bike) | `C2839211` |
+| **`U4`** | ES8388 | QFN-28 (4x4mm) | 24-Bit Stereo Audio Codec for radio audio processing & helmet speakers | `C2845349` |
+| **`ANT1`** | 446 MHz Helical | Custom Helix | $\lambda/4$ shortened helical antenna ($32\,\text{mm}$) molded into lid or U.FL pigtail | COTS |
+| **`J1`** | TYPE-C-31-M-12 | SMT/THT IP67 | Waterproof 16-Pin USB-C Receptacle (5V DC power, charging, WebUSB) | `C2765186` |
+| **`BAT1`** | JST-ACH 2-Pin | SMD 1.2mm pitch | Connection to internal 600-mAh LiPo pouch cell (with PCM) | `C2902341` |
+| **`D1`** | WS2812B-2020 | SMD 2020 | RGB Status LED (RX Green, TX Red, DMR Blue, Charging Yellow) | `C2843785` |
+| **`SW1..4`** | EVQ-P2 / KMT0 | SMD 3.5x2.8mm | 4x Tactile IP67 micro-switches (PTT, Mode, Ch+, Ch-) | `C318884` |
+
+---
+
+## 9. 1-Click Ordering Guide for JLCPCB (All PCBAs Fully Assembled)
+
+All manufacturing packages reside in the repository under `hardware/production_packages/` as complete ZIP and CSV archives:
 
 | Subassembly / PCBA | Gerber ZIP Archive | BOM CSV File | CPL (Pick & Place) CSV | Layers | Manufacturing Notes |
 | :--- | :--- | :--- | :--- | :---: | :--- |
 | **PCBA 01: Central Box** | `01_main_box_pcba_gerbers_jlcpcb.zip` | `01_main_box_pcba_bom_jlcpcb.csv` | `01_main_box_pcba_cpl_jlcpcb.csv` | **4 Layers** | ENIG (Gold), 1.6 mm, TG150, 2-sided SMT (DW3110 on B.Cu) |
-| **PCBA 02: Pod Base** | `02_pod_base_pcba_gerbers_jlcpcb.zip` | `02_pod_base_pcba_bom_jlcpcb.csv` | `02_pod_base_pcba_cpl_jlcpcb.csv` | **2 Layers** | ENIG (Gold), 1.6 mm, SMT Top (Order 2x per vehicle) |
-| **PCBA 03: Cartridge Carrier**| `03_pod_cartridge_pcba_gerbers_jlcpcb.zip` | `03_pod_cartridge_pcba_bom_jlcpcb.csv` | `03_pod_cartridge_pcba_cpl_jlcpcb.csv` | **2 Layers** | ENIG (Gold), 1.2 mm, SMT Top (Order 2x per vehicle) |
+| **PCBA 03: Cartridge Carrier**| `03_pod_cartridge_pcba_gerbers_jlcpcb.zip` | `03_pod_cartridge_pcba_bom_jlcpcb.csv` | `03_pod_cartridge_pcba_cpl_jlcpcb.csv` | **2 Layers** | ENIG (Gold), 1.2 mm, 2-sided SMT (Order 2x per vehicle) |
 | **PCBA 05: Front Node** | `05_front_node_pcba_gerbers_jlcpcb.zip` | `05_front_node_pcba_bom_jlcpcb.csv` | `05_front_node_pcba_cpl_jlcpcb.csv` | **4 Layers** | ENIG (Gold), 1.6 mm, TG150, 2-sided SMT (DW3110 on B.Cu) |
-| **PCBA 06: MagSafe Dock** | `06_magsafe_dock_pcba_gerbers_jlcpcb.zip` | `06_magsafe_dock_pcba_bom_jlcpcb.csv` | `06_magsafe_dock_pcba_cpl_jlcpcb.csv` | **2 Layers** | ENIG (Gold), 1.6 mm, SMT Top |
+| **PCBA 06: MagSafe Dock** | `06_magsafe_dock_pcba_gerbers_jlcpcb.zip` | `06_magsafe_dock_pcba_bom_jlcpcb.csv` | `06_magsafe_dock_pcba_cpl_jlcpcb.csv` | **2 Layers** | *Optional / Legacy* (replaced by COTS 2-Pin magnetic connector) |
 | **PCBA 07: Smart-Keyfob** | `07_smart_keyfob_pcba_gerbers_jlcpcb.zip` | `07_smart_keyfob_pcba_bom_jlcpcb.csv` | `07_smart_keyfob_pcba_cpl_jlcpcb.csv` | **2 Layers** | ENIG (Gold), 1.0 mm, 2-sided SMT |
-| **PCBA 08: Radar 2.0 Sub-MCU** | `08_radar_submcu_pcba_gerbers_jlcpcb.zip` | `08_radar_submcu_pcba_bom_jlcpcb.csv` | `08_radar_submcu_pcba_cpl_jlcpcb.csv` | **2 Layers** | ENIG (Gold), 1.2 mm, TG150, SMT Top |
+| **PCBA 08: Radar 2.0 Sub-MCU** | `08_radar_submcu_pcba_gerbers_jlcpcb.zip` | `08_radar_submcu_pcba_bom_jlcpcb.csv` | `08_radar_submcu_pcba_cpl_jlcpcb.csv` | **2 Layers** | ENIG (Gold), 1.2 mm, TG150, SMT Top (2x U.FL, 90° pin header) |
+| **PCBA 09: OMM UCS Module** | `09_omm_ucs_pcba_gerbers_jlcpcb.zip` | `09_omm_ucs_pcba_bom_jlcpcb.csv` | `09_omm_ucs_pcba_cpl_jlcpcb.csv` | **2 Layers** | ENIG (Gold), 1.0 mm, TG150, 2-sided SMT (ECE 22.06 & Pod) |
+| **PCBA 10: OMM 446 UCS** | `10_omm446_ucs_pcba_gerbers_jlcpcb.zip` | `10_omm446_ucs_pcba_bom_jlcpcb.csv` | `10_omm446_ucs_pcba_cpl_jlcpcb.csv` | **4 Layers** | ENIG (Gold), 1.0 mm, TG150, 2-sided SMT (ECE 22.06 & Pod) |
 
 ---
 
 ## 10. Mechanical & Enclosure BOM (3D Printing MJF PA12 & Hardware)
 
-All enclosure parts are strictly engineered according to the **IKEA Principle**: **Zero heat-set threaded brass inserts required!** Enclosures feature captive hexagonal nut pockets (for DIN 934 / DIN 985 stainless steel nuts) or precise pilot holes for direct self-tapping plastic screws.
+All enclosure parts are strictly engineered according to the **IKEA Principle**: **Zero heat-set threaded brass inserts and zero self-tapping screws!** All enclosures exclusively feature form-fit captive hexagonal nut pockets for standard metric stainless steel nuts (DIN 934 / DIN 985), ensuring unlimited reassembly cycles without stripping threads.
 
 ### 10.1 Base System (Universal for Every Motorcycle)
 | Subassembly | STL File Path | Qty | Material & Process | Function & Description |
@@ -219,26 +254,59 @@ All enclosure parts are strictly engineered according to the **IKEA Principle**:
 
 No custom wire harnessing or crimping is required. The system leverages 100% commercially available, industrially molded standard cables (COTS):
 
+### 11.1 Main Motorcycle Wiring Harness (Deutsch DTM-12 COTS Finished Harness)
+
 ```
-                        PLUG-AND-PLAY HARNESS CONCEPT (COTS PRE-MOLDED)
+                       PLUG-AND-PLAY HARNESS CONCEPT (COTS PRE-MOLDED)
 +-------------------------+
 | Deutsch DTM-12 IP68     | --> Pre-terminated DTM-12 breakout harness whip (TE Connectivity COTS)
-| (Central Box Interface) | --> 100% watertight automotive seal, zero discrete pin crimping required
+| (Central Box Interface) | --> 100% watertight automotive seal, Raychem DR-25 heatshrink jacket
 +-+-----------------------+
-  +-> Whip 1: M8 6-Pin PUR Cable (1.0 m / 1.5 m): Standard pre-molded sensor/actuator cable --> Pod 1
-  +-> Whip 2: M8 6-Pin PUR Cable (1.0 m / 1.5 m): Standard pre-molded sensor/actuator cable --> Pod 2
-  +-> Whip 4: AMP Superseal 12V Cable (1.0 m): Pre-assembled fused battery harness --> Vehicle 12V Rail
-  +-> Whip 5: M8 4-Pin Socket (250 mm): Rear Radar (Wheeltec MR20 / Garmin Varia: 12V + UART)
-      (Note: Front Node requires ZERO wiring to the rear - links wirelessly via UWB!)
+  +-> Whip 1: 2-Wire FLRY-B (1.0 m / 1.5 m): Pure DC Power (+12V switched / GND) --> Pod 1 (Bay 1)
+  +-> Whip 2: 2-Wire FLRY-B (1.0 m / 1.5 m): Pure DC Power (+12V switched / GND) --> Pod 2 (Bay 2)
+  +-> Whip 3: 2-Wire FLRY-B (0.5 m): Rear Radar PCBA 08 (+12V switched / GND via JST-JWPF)
+  +-> Whip 4: AMP Superseal 1.5 6-Pin / FLRY-B (1.0 m): Vehicle Rail & CAN (KL30, KL15, GND, CAN-H, CAN-L, CHASSIS_EARTH)
+      (Note: All interconnects, audio channels, and telemetry streams communicate 100% wirelessly over UWB!)
 ```
 
-### 11.1 RF Antennas & Sensors (COTS)
+### 11.2 The 12V Workshop & Chase Vehicle Y-Adapter Harness ("Bench & Support-Car Harness")
+
+For bench testing without a bike harness, or mobile operation in chase vans, the universal 12V Y-adapter harness powers both Front Node and Central Box in parallel from any 12V DC auxiliary cigarette outlet or bench power supply. The USB-C ports remain completely free for CarPlay wired bridge testing or WebSerial firmware development.
+
+### 11.3 RF Antennas & Sensors (COTS)
 1. **UWB 6.5 GHz Flex Antennas (2 pcs):** **Taoglas FXUWB10** ($11 \times 11 \times 0.6\,\text{mm}$) with 20 mm U.FL coaxial lead for Central Box and Front Node lower tub floor recesses.
 2. **LoRa 868 MHz Flex Antenna (1 pc):** **Taoglas FXP895** ($110 \times 20 \times 0.8\,\text{mm}$) with 50 $\Omega$ U.FL feed for Central Box lid pocket.
 3. **Multi-GNSS Module (1 pc):** **u-blox SAM-M10Q** with integrated $15 \times 15\,\text{mm}$ ceramic patch antenna, Qwiic I2C (`J12`) on Front Node inside ram-air duct.
 4. **Environmental Sensors (Front Node J12 Daisy-Chain):**
    * **TI TMP117:** High-precision temperature sensor ($\pm 0.1\,^\circ\text{C}$) for black ice early warning.
    * **TI OPT3001:** Ambient light sensor for display and driving light control.
+
+### 11.4 Internal COTS Cable Set & Pigtails for Front Node & Periphery
+
+All internal housing connections utilize pre-crimped COTS pigtails:
+* **J5 / J5_MP3:** JST-PH 5-Pin to Panel-Mount USB-C (IP67) for cockpit fast charging (20W PD).
+* **J6:** JST-PH 4-Pin to USB-A receptacle for CP2AA wireless dongles (Ottocast / Carlinkit).
+* **J1..J3:** JST-PH 2P/3P/4P pigtails for Cockpit 12V, CAN-Bus, and handlebar PTT switches.
+* **J9..J11:** JST-PH pigtails for Mirror BSD warning LEDs, Qi pad 12V, and aux lighting relay.
+* **J12:** JST-SH 4-Pin SparkFun Qwiic / STEMMA QT cable to SAM-M10Q and TMP117.
+
+### 11.5 Gateway Adapter Cables for OEM Intercoms (Header `J_AUDIO_PWR` / 8-Pin JST-SH)
+
+To operate commercial OEM intercom modules completely non-destructively and without voiding factory warranties, the 8-pin **JST-SH 1.0 mm Header `J_AUDIO_PWR`** on `PCBA 03` connects to model-specific COTS adapter cable harnesses. Complete physical separation of high-current power return (`PGND`) and audio references (`AGND_SPK`, `AGND_MIC`) eliminates all ground-loop charging and Mesh TDMA buzzing:
+
+| Headset Model / Class | Adapter Cable Type & Connectors | 8-Pin JST-SH Header Pinout | Length | Function & Key Features |
+| :--- | :--- | :--- | :---: | :--- |
+| **Sena SPIDER X Slim**<br>*(OMB Reference K2a)* | **8-Pin JST-SH to 3-Way Pigtail:**<br>- 2-Pin Micro-JST (Direct-DC)<br>- 2.5 mm Jack (Mic In)<br>- 3.5 mm Stereo Jack (Spk Out) | **Pin 1:** `PGND` (Power Return)<br>**Pin 2:** `VCC_HEADSET` ($3.85\,\text{V}$ regulated DC)<br>**Pin 3:** `AGND_SPK` (Audio Ground Sleeve)<br>**Pin 4:** `AUDIO_L_IN` (Spk L)<br>**Pin 5:** `AUDIO_R_IN` (Spk R)<br>**Pin 6:** `AGND_MIC` (Mic Ground Return)<br>**Pin 7:** `MIC_OUT`<br>**Pin 8:** `RESERVE_IO` (N/C) | 8 cm | **Zero Pogo-Pins & Zero Hum:** Direct 3.85V battery-free supply. High DC return current flows solely across Pin 1 (`PGND`). Audio lines stay 100% hum-free over zero-current pins 3 and 6! |
+| **Cardo Packtalk Edge / Pro**<br>*(Class 1d DMC Gen2)* | **8-Pin JST-SH to 3.5mm, Micro-2Pin & USB-C:**<br>- 3.5 mm Stereo Jack (Spk Out L/R)<br>- Cardo 2-Pin Micro Plug (Mic In)<br>- Right-Angle USB-C (5V Charge Port) | **Pin 1:** `PGND` (Charge Return)<br>**Pin 2:** `VCC_5V` (Charge & Run Power)<br>**Pin 3:** `AGND_SPK` (Audio Ground Sleeve)<br>**Pin 4:** `AUDIO_L_IN` (Spk L)<br>**Pin 5:** `AUDIO_R_IN` (Spk R)<br>**Pin 6:** `AGND_MIC` (Mic Ground Return)<br>**Pin 7:** `MIC_OUT` (Voice Signal)<br>**Pin 8:** `RESERVE_IO` (N/C) | 10 cm | Connects factory Air-Mount cradle. 500mA charging current returns across Pin 1; audio grounds remain pristine -- zero charging whine in helmet! |
+| **Midland G9 Pro / PMR446**<br>*(Class 3a Analog Radio)* | **8-Pin JST-SH to Midland Dual Jack:**<br>- 3.5 mm Speaker Jack (Mono)<br>- 2.5 mm Mic/PTT Jack<br>- DC Battery Dummy | **Pin 1:** `PGND`<br>**Pin 2:** `VCC_5V` (Battery Dummy)<br>**Pin 3:** `AGND_SPK`<br>**Pin 4:** `AUDIO_L_IN` (Spk Mono)<br>**Pin 5:** `AUDIO_R_IN` (Bridged to 4)<br>**Pin 6:** `AGND_MIC`<br>**Pin 7:** `MIC_OUT`<br>**Pin 8:** `PTT_IO` (PTT Keyed to GND) | 10 cm | Keys analog transmitter via MOSFET `Q4`. 600mA Tx peak return flows via `PGND` without modulating mic audio. |
+| **OpenMotorMesh (OMM) 2.4 GHz / 446**<br>*(Class 4 / 3b Native UCS)* | **8-Pin JST-SH to USB-C (90° Angled):**<br>- 8-Pin JST-SH 1.0mm Socket<br>- Right-Angle USB-C Plug | **Pin 1:** `PGND`<br>**Pin 2:** `VCC_5V`<br>**Pin 3:** `AGND_SPK`<br>**Pin 4:** `AUDIO_L_IN` (Stereo L)<br>**Pin 5:** `AUDIO_R_IN` (Stereo R)<br>**Pin 6:** `AGND_MIC`<br>**Pin 7:** `MIC_OUT`<br>**Pin 8:** `PTT_IO` / Config | 5 cm | Connects PCBA 03 directly to the IP67 USB-C port of the OMM module. Completely zero-wear digital/analog interface with isolated Kelvin grounds. |
+
+### 11.6 Mechatronic Actuator Harness & Mechanical Retention (Header `J_ACT`)
+
+Each Universal Smart Cartridge (`PCBA 03`) drives up to four linear solenoids ("mechanical fingers") to actuate OEM headset buttons:
+1. **Pre-crimped 8-Pin Splitter Harness:** 8 AWG30 silicone wires (60 mm) split into 4 twisted pairs connected to MOSFET outputs `ACT1_OUT` through `ACT4_OUT`.
+2. **Miniature Solenoids:** 4x 5V DC miniature pull solenoids ($\varnothing 6.5 \times 12\,\text{mm}$) with soft damping TPU tips (`actuator_silicone_tip.stl`).
+3. **Rigid Retainer Plate:** Retained by PA12 plate (`cartridge_retainer_plate.stl`) and 4x M2 x 6 mm countersunk screws (DIN 7991).
 
 ---
 
@@ -263,13 +331,11 @@ No custom wire harnessing or crimping is required. The system leverages 100% com
 | **Cartridge Gaskets** | Molded Silicone Gasket Shore 40A ($54 \times 18\,\text{mm}$) | Custom Mold | 2 pcs | Front face mouth sealing on Pod 1 and Pod 2 |
 | **UPS Battery Pack** | 1S LiPo Flat Pack 2,200 mAh ($68 \times 39 \times 5.0\,\text{mm}$) with Micro-Fit | EEMB / Enerpower | 1 pc | Central Box UPS buffer (Type 504068 / 503870) |
 | **Automotive Fuse Holder** | Waterproof Blade Fuse Holder + 2A Fuse | Hella / MTA | 1 pc | KL30 battery terminal line protection |
-| **M8 6-Pin Cables (PUR)** | M8 6-Pin A-Coded Male/Female (1.0m / 1.5m) | Binder / Phoenix | 2 pcs | Plug-and-play harness to Pod 1 and Pod 2 |
-| **M8 4-Pin Cable (PUR)** | M8 4-Pin A-Coded Male/Female (0.5-1.5m) | Binder / Phoenix | Opt. (1)| Whip 5: Rear Radar (Wheeltec MR20 / Garmin Varia) |
+| **DTM-12 Breakout Harness** | Deutsch DTM 12-Pin Pre-terminated IP68 Harness | TE Connectivity | 1 pc | Automotive master harness from Central Box |
 | **Front Node 12V Cable** | 2-Pin JST-PH Lead with Posi-Tap | COTS Standard | 1 pc | Local cockpit power connection (parking light/GPS plug) |
-| **J_ACT Actuator Harness** | Pre-crimped 8-Pin JST-SH to 4x 2-Pin Leads | Adafruit / SparkFun | 2 pcs | Pre-assembled harness for 4 solenoids |
+| **J_ACT Actuator Harness** | Pre-crimped 8-Pin JST-SH to 4x 2-Pin Leads | Adafruit / SparkFun | 2 pcs | Pre-assembled harness for 4 solenoids (C160404) |
 | **Miniature Solenoids** | 5V DC Pull Solenoids ($\varnothing 6.5 \times 12\,\text{mm}$) with TPU Tip | Solenoid Supplier | 8 pcs | 4 pcs per Smart Cartridge (Sena / Cardo) |
-| **J2 Gateway Cable** | Pre-crimped 6-Pin JST-SH to Jack / USB | COTS Standard | 2 pcs | Audio & power harness to headset inlays |
-| **Binder M5 4-Pin Receptacle**| Series 707 M5 4-Pin Panel Mount with D-Flat | Binder | 1 pc | Housing bulkhead socket for Radar 2.0 Sub-MCU |
+| **J_AUDIO_PWR Gateway Cable**| Pre-crimped 8-Pin JST-SH to Jack / Direct-DC / USB | COTS Standard | 2 pcs | Audio & power harness to headset inlays (Kelvin Grounded) |
 | **Wheeltec MR20 77-GHz mmWave**| 77-GHz FMCW Automotive Radar (150 m Range) | Wheeltec | Opt. (1)| Radar 2.0 transceiver module inside rear housing |
 | **PC Radome Window** | Laser-cut Polycarbonate 1.6 mm (RF-transparent)| COTS / Plexiglas | Opt. (1)| Microwave & optical window for MR20 & 24-LED Halo |
 | **3M Dual Lock SJ3550** | Interlocking Adhesive Fastener Strip (VHB) | 3M | 0.5 m | Vibration-resistant, tool-free module mounting |
@@ -305,7 +371,7 @@ Because **no soldering, no crimping, and no thermal heat-staking of threaded ins
 When an individual builder orders all PCBs alone:
 * JLCPCB supplies 5 boards per design (2 fully assembled plus 3 unpopulated spares).
 * **Cost Breakdown Solo Builder:**
-  * JLCPCB PCBAs (PCBA 01, 02 [2x], 03 [2x], 05 assembled incl. shipping & customs): approx. 135-160 €
+  * JLCPCB PCBAs (PCBA 01, 03 [2x], 05 assembled incl. shipping & customs): approx. 135-160 €
   * 3D Printing (MJF PA12 bureau or own ASA filament): approx. 35-45 €
   * COTS harnesses, 2,200 mAh LiPo, stainless fasteners & gaskets: approx. 35-45 €
   * **Total System Cost Solo: approx. 205 € to 250 €**
@@ -319,6 +385,23 @@ When 2 to 3 riders order together:
   * 3D Printing (per bike): approx. 30-35 €
   * COTS harnesses, 2,200 mAh LiPo, fasteners (bulk discount): approx. 30 €
   * **Total Cost per Motorcycle: only approx. 130 € to 145 €!**
+
+### 14.3 Smart Procurement Guide & Strategy for Commercial Intercoms (Prime Day Traps, Mechatronics & Helmet Generations)
+
+Builders intending to purchase commercial third-party intercoms for Bay 1 or Bay 2 should observe these market and engineering principles:
+
+1. **Market Dynamics & "Prime Day Traps" with COTS Intercoms:**
+   * **Sena Spider Series (Spider ST1 / RT1 / Spider X):** Regularly retails around 190–210 €. During major sales events (such as Amazon Prime Day), retailers frequently inflate list prices artificially to 260–270 €, resulting in higher out-of-pocket costs despite deceptive discount tags.
+   * **Cardo Packtalk Edge:** Frequently experiences artificial price increases up to MSRP right before sales promotions, only to be reduced back to its normal street price of ~260 € on the day of the sale.
+   * **Recommendation:** Use historical price-tracking tools (Keepa, CamelCamelCamel). The most reliable purchasing window for motorcycle communication hardware is the off-season (November to February) or certified warehouse refurbished units.
+2. **The "Helmet Generation Trap" & Planned Obsolescence (Schuberth C4 $\rightarrow$ C5 $\rightarrow$ C6):**
+   * **Historical Compatibility Churn:** Riders with a Schuberth C4 and built-in Sena SC1 (Bluetooth-only) were forced to buy an expensive external Sena `+Mesh` adapter (~130 €) to join modern mesh rides. Upgrading to the Schuberth C5 with SC2 (Mesh 2.0 native) immediately rendered that adapter useless. As Sena introduces the 60-series (Mesh 3.0 / Wave), riders face another 400–600 € helmet-specific hardware cycle.
+   * **The OpenMotorBridge Solution:** The rider's expensive helmet remains untouched for years, connected strictly via standard Bluetooth to the Central Box. There is zero redundant purchase of proprietary helmet units. When the group's mesh technology advances, only the bike-mounted cartridge module is swapped or upgraded via open OMM 2.4G / OMM 446.
+3. **Mechatronic Advantage: Dedicated Pushbuttons vs. Jog Dials ("Poison for Mechatronics"):**
+   * Rotary jog dials (such as on the Sena 50S, 20S, 30K, or new 60S) introduce mechanical rotational backlash, soft stops without tactile feedback, and require complex angular torque actuators. For mechatronic solenoids or micro-plungers (handling automated Power ON/OFF), jog dials are poison for mechatronic reliability.
+   * **Strict Procurement Recommendation:** For cartridge bay installation, strictly select units with **dedicated, tactile pushbuttons**:
+     * In the Sena ecosystem: **Sena 60X** (modular/integrated buttons, avoiding the 60S dial), **Sena Spider RT1**, or **Sena Spider X Slim** (crisp snap domes, flat profile).
+     * In the Cardo ecosystem: **Cardo Packtalk Edge / Neo** (pronounced 3-button ergonomics with linear orthogonal actuation).
 
 ---
 

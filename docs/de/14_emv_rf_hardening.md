@@ -36,15 +36,16 @@ Dieses Dokument spezifiziert die Schutzschaltungen gegen Kfz-Bordnetz-Transiente
 
 ### 2.1 Multi-Band HF-Frequenzbelegungs- & Koexistenzmatrix
 
-Um Interferenzen zwischen den 7 simultan aktiven Funksystemen der OpenMotorBridge vollständig auszuschließen, sind Frequenzen, Sendeleistungen und Antennenpositionen streng orthogonal ausgelegt:
+Um Interferenzen zwischen den nunmehr 8 simultan aktiven Funksystemen der OpenMotorBridge vollständig auszuschließen, sind Frequenzen, Sendeleistungen und Antennenpositionen streng orthogonal ausgelegt:
 
 | Funksystem / Band | Frequenzbereich | Sendeleistung / EIRP | Einbauort & Antennentyp | Koexistenz- & Entkopplungsmaßnahme |
 | :--- | :--- | :---: | :--- | :--- |
+| **446 MHz PMR (SA818-DMR / OMM 446)** | 446.0 - 446.2 MHz | +23 dBm (200 mW Helm) / +27 dBm (500 mW Bike) | Pod 1/2 (`PCBA 10`) / Helm UCS | Schmalband ($12{,}5\,\text{kHz}$); $> 400\,\text{MHz}$ Abstand zu LoRa; Tiefpassfilter |
 | **868 MHz LoRa (SX1262)** | 863.0 - 870.0 MHz | +14 dBm (25 mW) | Zentralbox / Taoglas FXP895 Flex | Harmonischen-Tiefpass ($f_{\text{cut}} = 1{,}0\,\text{GHz}$); 24/7 USV-Dauerbetrieb |
 | **1.575 GHz GNSS (SAM-M10Q)** | 1559 - 1610 MHz | Nur Empfang (-167 dBm) | Front-Knoten (`PCBA 05`) / 15x15 Keramik-Patch | SAW-Vorfilter im LNA; räumlich maximal entfernt von 868M/2.4G |
 | **2.4 GHz ISM (Sena/Cardo/OMM/BLE)** | 2402 - 2480 MHz | +10 bis +20 dBm | Pod 1 (Links), Pod 2 (Rechts), Cockpit | $> 35\,\text{dB}$ Freiraumdämpfung über Fahrzeugrahmen; AFH & TDMA |
 | **5 GHz Wi-Fi (CarPlay / AA)** | 5180 - 5825 MHz | +14 dBm (25 mW) | Cockpit / Front-Knoten (Integrierter Dongle) | Begrenzt auf Cockpit-Nahfeld; $> 600\,\text{MHz}$ Abstand zu UWB Ch. 5 |
-| **5.9 GHz C-V2X / DSRC (ETSI)** | 5855 - 5925 MHz | +23 dBm (200 mW) | Fahrzeug-Heck / Monopol-Patch | Striktes Bandpassfilter; räumliche Trennung vom 5 GHz Cockpit-WLAN |
+| **5.9 GHz C-V2X / DSRC (ETSI)** | 5855 - 5925 MHz | +23 dBm (200 mW) | Fahrzeug-Heck (`PCBA 08`) / Taoglas FXP524 | Striktes Bandpassfilter; 2.4 GHz am Heck deaktiviert |
 | **6.5 GHz UWB (DW3110 Ch. 5)** | 6240 - 6739 MHz | -41.3 dBm/MHz (< 1 mW) | Zentralbox, Front-Node, Pods, Radar | Ultra-Breitband (499.2 MHz BW); Null Interferenz mit Schmalband |
 | **77 GHz mmWave Radar (MR20)** | 76.0 - 81.0 GHz | +30 dBm EIRP | Kennzeichen- / Heck-Bracket (`PCBA 08`) | Vollkommen entkoppelt; Millimeterwellen-Spektrum ohne HF-Kopplung |
 
@@ -62,9 +63,11 @@ Zur Gewährleistung maximaler Link-Budgets und reproduzierbarer EMV-Konformität
 | **Front-Knoten (`PCBA 05`)** | Qorvo DW3110 UWB | 6.5 GHz (Ch. 5) | Taoglas FXUWB10 Flex | Gehäusebodentasche der Front-Node Wanne, U.FL |
 | **Front-Knoten (`PCBA 05`)** | ESP32-S3 BLE/WiFi | 2.4 / 5 GHz | COTS Stummel / Sharknose | U.FL Buchse am WROOM-1U Modul |
 | **Smart Cartridge (`PCBA 03`)**| Qorvo DW3110 UWB | 6.5 GHz (Ch. 5) | Integrierte PCB-Antenne | Unterseite (`B.Cu`), strahlt nach unten durch Pod-Boden |
-| **Smart Cartridge (`PCBA 03`)**| OMM Intercom Modul | 2.4 GHz TDMA | Keramik-Chipantenne | Stirnseitig auf Trägerplatine |
-| **Heck-Radar (`PCBA 08`)** | Qorvo DW3110 UWB | 6.5 GHz (Ch. 5) | Taoglas FXUWB10 Flex | Gehäusetasche im Flügelfuß, U.FL Buchse |
-| **Heck-Radar (`PCBA 08`)** | Wheeltec MR20 Radar | 77 GHz mmWave | On-Chip Patch-Array | Radom-Linse im Zentrum von PCBA 08 |
+| **OMM 2.4G UCS (`PCBA 09`)** | ESP32-C6 TDMA Mesh | 2.4 GHz ISM | Taoglas FXP73 Flex-Dipol | Abgesetzte Helmschalen-Antenne, U.FL Buchse (+3 dBi) |
+| **OMM 446 UCS (`PCBA 10`)** | NiceRF SA818-DMR | 446 MHz PMR | Abgestimmte Wendel-Helix | Vergossen im Deckellabyrinth ($32\,\text{mm}$), opt. U.FL Bike-Pigtail |
+| **Heck-Radar (`PCBA 08`)** | Qorvo DW3110 UWB | 6.5 GHz (Ch. 5) | Taoglas FXUWB10 Flex | Gehäusetasche im Flügelfuß, U.FL Buchse `J4` |
+| **Heck-Radar (`PCBA 08`)** | ESP32-C5 V2X / ITS-G5 | 5.9 GHz (C-V2X) | Taoglas FXP524 Flex | U.FL Buchse `U.FL_5G9_V2X` (2.4G am Heck strikt deaktiviert) |
+| **Heck-Radar (`PCBA 08`)** | Wheeltec MR20 Radar | 77 GHz mmWave | On-Chip Patch-Array (AoP)| Radom-Linse im Zentrum von PCBA 08 (keine HF-Koaxleitung) |
 
 ---
 
