@@ -302,39 +302,85 @@ Da Kassetten im v9.6 System als modulare Wechselkassetten konzipiert sind, fungi
   * *Zero-Wear Ansteuerung:* Im Pod können die Tasterleitungen alternativ zu den mechanischen Hubmagneten auch rein elektronisch über Open-Drain / Optokoppler auf `J_AUDIO_PWR` angesteuert werden.
 
 ### 3.2 JSON Profil-Schema Spezifikation
-Jedes Hardwareprofil liegt als eigenständige JSON-Datei im internen Flash-Dateisystem (`/data/profiles/*.json`) des ESP32-S3 und definiert alle Pegel-, Routing- und Optokoppler-Timings:
+Jedes Hardwareprofil liegt als eigenständige JSON-Datei im internen Flash-Dateisystem (`/data/profiles/*.json`) des ESP32-S3 und definiert alle Pegel-, Routing-, Mechatronik- und BLE-Steuerungs-Parameter:
 
 ```json
 {
-  "id": "sena_60s",
-  "name": "Sena 60S Wave Mesh 3.0",
+  "id": "sena_spider_x",
+  "name": "Sena Spider X Slim (Smart Cartridge 4-Actuator)",
   "vendor": "Sena Technologies",
   "hardware_tier": 1,
   "vcc_enabled": true,
-  "vcc_current_limit_ma": 850,
-  "soft_start_ms": 120,
-  "input_gain_db": 0.0,
-  "output_gain_db": -2.5,
-  "ducking_attenuation_db": -12.0,
-  "ducking_attack_ms": 35,
-  "ducking_release_ms": 650,
-  "noise_gate_threshold_db": -54,
-  "control_mode": "pogo_pulse",
-  "opto_trigger_duration_ms": 120,
-  "opto_trigger_hold_ms": 1500,
-  "mesh_capabilities": {
-    "protocol": "Sena Wave Mesh 3.0",
-    "max_group_nodes": 64,
-    "dle_bonus_score": 60
+  "direct_dc_supported": true,
+  "direct_dc_voltage_v": 3.85,
+  "soft_start_ms": 80,
+  "input_gain_db": 1.5,
+  "output_gain_db": 0.0,
+  "noise_gate_threshold_db": -44,
+  "control_mode": "smart_cartridge_mechatronic",
+  "smart_cartridge": {
+    "controller_type": "CH32V003_RISCV",
+    "onewire_emulation": true,
+    "protocol": "single_wire_uart_19200",
+    "num_actuators": 4,
+    "command_table": {
+      "0x01": { "name": "POWER_BOOT", "actuators": [1, 3], "duration_ms": 1000 },
+      "0x02": { "name": "POWER_OFF", "actuators": [1, 3], "duration_ms": 200 },
+      "0x03": { "name": "VOL_PLUS", "actuators": [1], "duration_ms": 100 },
+      "0x04": { "name": "VOL_MINUS", "actuators": [2], "duration_ms": 100 },
+      "0x05": { "name": "MESH_TOGGLE", "actuators": [4], "duration_ms": 200 },
+      "0x06": { "name": "GROUP_MESH_TOGGLE", "actuators": [4], "duration_ms": 3000 }
+    }
   },
-  "audio_routing": {
-    "intercom_bridge": true,
-    "rider_headset": true,
-    "pillion_headset": true,
-    "boombox_lineout": false
+  "ble_control": {
+    "supported": true,
+    "flavor": "sena_rc_gatt",
+    "service_uuid": "0xFFE0",
+    "device_name_prefix": "SPIDER-X",
+    "capabilities": {
+      "power_boot": false,
+      "power_off": true,
+      "mesh_toggle": true,
+      "group_toggle": true,
+      "volume_control": true,
+      "channel_select": true,
+      "mic_mute": true,
+      "telemetry": true,
+      "le_audio_lc3": false
+    },
+    "command_mapping": {
+      "0x03": { "name": "VOL_PLUS", "ble_cmd": "0xAA550301" },
+      "0x04": { "name": "VOL_MINUS", "ble_cmd": "0xAA550302" },
+      "0x05": { "name": "MESH_TOGGLE", "ble_cmd": "0xAA550501" },
+      "0x06": { "name": "GROUP_MESH_TOGGLE", "ble_cmd": "0xAA550601" }
+    },
+    "fallback_to_mechatronics_on_disconnect": true
+  },
+  "mesh_capabilities": {
+    "protocol": "Sena_Mesh_3.0_Wave",
+    "generation": 3,
+    "max_nodes": 32,
+    "open_mesh": true,
+    "preconfig_channels": 6,
+    "dle_bonus_score": 60
   }
 }
 ```
+
+#### Die 5 BLE-Geschmacksrichtungen (`flavor`) im Profil-Schema:
+1. **`omm_native` (`0x00MB`):**  
+   Nativer OpenMotorMesh BLE 5.3 GATT Server (für `omm_ucs.json` / `PCBA 09` und Gateway-Pods). Bietet granulare 16-Bit Charakteristiken (`0x0001` PTT, `0x0002` Mesh-Modus, `0x0003` Kanal, `0x0004` Lautstärke, `0x0005` Telemetrie, `0x0006` LE Audio LC3 Konfiguration). Volles Bi-direktionales Stereo mit $< 25\,\text{ms}$ Latenz.
+2. **`sena_rc_gatt` (`0xFFE0`):**  
+   Sena Remote Control GATT Protokoll (kompatibel mit Sena RC3, RC4, Handlebar Remote). Steuert Mesh On/Off, Gruppenmesh, Lautstärke und Kanalwechsel ohne physische Stößelbewegungen.
+3. **`cardo_ble_v2` (`0xFE59`):**  
+   Cardo Connect / Packtalk Edge/Pro Remote BLE API. Unterstützt DMC Mute/Unmute, Lautstärke-Inkremente und Gruppen-Reconnects.
+4. **`hid_consumer_control` (`0x0C`):**  
+   Standard Bluetooth Human Interface Device Consumer Control für Legacy-Headsets und Midland BTR1 (Lautstärke, Wiedergabe/Pause).
+5. **`none`:**  
+   Keine BLE-Schnittstelle vorhanden (reine Analogfunkgeräte wie Midland G9 Pro PMR446, `omm_pmr446.json` oder deaktivierte Kassetten). Sämtliche Befehle werden direkt über PTT-Schaltung oder Mechatronik-Stößel ausgeführt.
+
+> [!NOTE]
+> **Architektur-Grundsatz:** Im `ble_control`-Objekt ist `power_boot` prinzipbedingt **immer `false`**, da unbestromte Intercom-Geräte im Deep-Sleep/Aus-Zustand kein Bluetooth empfangen können. Das Einschalten erfolgt ausnahmslos über den initialen mechanischen Kaltstart-Impuls der Hubmagnete (`0x01`). Während der gesamten Fahrt wird anschließend zu 100 % verschleißfrei digital per BLE gesteuert. Verliert die Verbindung den Sync, greift sofort `fallback_to_mechatronics_on_disconnect`.
 
 ---
 

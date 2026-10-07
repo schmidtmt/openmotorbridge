@@ -271,6 +271,87 @@ All supported intercom and two-way radio cartridges are categorized into clearly
 * Open-source TDMA / IPv6 multicast mesh module based on the **ESP32-C6 (`PCBA 09`)**.
 * Native Bluetooth 5.3 LE Audio (LC3 Codec) with $< 30\,\text{ms}$ latency. DLE Score: **+55 pts.**
 
+### 3.2 JSON Profile Schema Specification
+Each hardware profile is stored as an independent JSON file in the ESP32-S3 internal LittleFS flash filesystem (`/data/profiles/*.json`), defining audio gain levels, ducking curves, mechatronic pulse mappings, and BLE remote control parameters:
+
+```json
+{
+  "id": "sena_spider_x",
+  "name": "Sena Spider X Slim (Smart Cartridge 4-Actuator)",
+  "vendor": "Sena Technologies",
+  "hardware_tier": 1,
+  "vcc_enabled": true,
+  "direct_dc_supported": true,
+  "direct_dc_voltage_v": 3.85,
+  "soft_start_ms": 80,
+  "input_gain_db": 1.5,
+  "output_gain_db": 0.0,
+  "noise_gate_threshold_db": -44,
+  "control_mode": "smart_cartridge_mechatronic",
+  "smart_cartridge": {
+    "controller_type": "CH32V003_RISCV",
+    "onewire_emulation": true,
+    "protocol": "single_wire_uart_19200",
+    "num_actuators": 4,
+    "command_table": {
+      "0x01": { "name": "POWER_BOOT", "actuators": [1, 3], "duration_ms": 1000 },
+      "0x02": { "name": "POWER_OFF", "actuators": [1, 3], "duration_ms": 200 },
+      "0x03": { "name": "VOL_PLUS", "actuators": [1], "duration_ms": 100 },
+      "0x04": { "name": "VOL_MINUS", "actuators": [2], "duration_ms": 100 },
+      "0x05": { "name": "MESH_TOGGLE", "actuators": [4], "duration_ms": 200 },
+      "0x06": { "name": "GROUP_MESH_TOGGLE", "actuators": [4], "duration_ms": 3000 }
+    }
+  },
+  "ble_control": {
+    "supported": true,
+    "flavor": "sena_rc_gatt",
+    "service_uuid": "0xFFE0",
+    "device_name_prefix": "SPIDER-X",
+    "capabilities": {
+      "power_boot": false,
+      "power_off": true,
+      "mesh_toggle": true,
+      "group_toggle": true,
+      "volume_control": true,
+      "channel_select": true,
+      "mic_mute": true,
+      "telemetry": true,
+      "le_audio_lc3": false
+    },
+    "command_mapping": {
+      "0x03": { "name": "VOL_PLUS", "ble_cmd": "0xAA550301" },
+      "0x04": { "name": "VOL_MINUS", "ble_cmd": "0xAA550302" },
+      "0x05": { "name": "MESH_TOGGLE", "ble_cmd": "0xAA550501" },
+      "0x06": { "name": "GROUP_MESH_TOGGLE", "ble_cmd": "0xAA550601" }
+    },
+    "fallback_to_mechatronics_on_disconnect": true
+  },
+  "mesh_capabilities": {
+    "protocol": "Sena_Mesh_3.0_Wave",
+    "generation": 3,
+    "max_nodes": 32,
+    "open_mesh": true,
+    "preconfig_channels": 6,
+    "dle_bonus_score": 60
+  }
+}
+```
+
+#### The 5 BLE Flavors (`flavor`) in the Profile Schema:
+1. **`omm_native` (`0x00MB`):**  
+   Native OpenMotorMesh BLE 5.3 GATT Server (for `omm_ucs.json` / `PCBA 09` and Gateway Pods). Provides discrete 16-bit characteristics (`0x0001` PTT, `0x0002` Mesh Mode, `0x0003` Channel, `0x0004` Volume, `0x0005` Telemetry, `0x0006` LE Audio LC3 Configuration). Full bi-directional stereo with $< 25\,\text{ms}$ latency.
+2. **`sena_rc_gatt` (`0xFFE0`):**  
+   Sena Remote Control GATT protocol (compatible with Sena RC3, RC4, Handlebar Remote). Commands Mesh On/Off, Group Mesh, Volume, and Channel changes without physical actuator movements.
+3. **`cardo_ble_v2` (`0xFE59`):**  
+   Cardo Connect / Packtalk Edge/Pro Remote BLE API. Supports DMC Mute/Unmute, volume increments, and group reconnects.
+4. **`hid_consumer_control` (`0x0C`):**  
+   Standard Bluetooth Human Interface Device Consumer Control for legacy headsets and Midland BTR1 (Volume, Play/Pause).
+5. **`none`:**  
+   No BLE interface available (pure analog radios like Midland G9 Pro PMR446, `omm_pmr446.json`, or disabled cartridges). All commands are dispatched directly via hardware PTT lines or mechatronic actuators.
+
+> [!NOTE]
+> **Architectural Rule:** In the `ble_control` object, `power_boot` is by principle **always `false`**, because unpowered intercom devices in cold-off state cannot receive Bluetooth packets. Powering on is handled exclusively via the initial physical mechatronic plunger pulse (`0x01`). Once booted, runtime operation is 100% wear-free digital BLE. If the BLE link drops or desynchronizes, `fallback_to_mechatronics_on_disconnect` immediately engages.
+
 ---
 
 ## 4. All-UWB Cartridge Recognition, Staggered Power Sequencing & Plug-and-Play

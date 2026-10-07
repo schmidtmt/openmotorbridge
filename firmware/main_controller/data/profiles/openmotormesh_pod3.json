@@ -12,6 +12,33 @@
     "toggle_mesh_ms": 0,
     "channel_next_ms": 0,
     "ptt_hold": false,
+    "ble_control": {
+        "supported": true,
+        "flavor": "omm_native",
+        "service_uuid": "0x00MB",
+        "device_name_prefix": "OMM-GATEWAY",
+        "characteristics": {
+            "ptt_trigger": "0x0001",
+            "mesh_mode": "0x0002",
+            "channel": "0x0003",
+            "volume": "0x0004",
+            "telemetry": "0x0005",
+            "le_audio_cfg": "0x0006"
+        },
+        "capabilities": {
+            "power_boot": false,
+            "power_off": true,
+            "mesh_toggle": true,
+            "group_toggle": true,
+            "volume_control": true,
+            "channel_select": true,
+            "mic_mute": true,
+            "telemetry": true,
+            "le_audio_lc3": true,
+            "bi_directional_stereo": true
+        },
+        "fallback_to_mechatronics_on_disconnect": false
+    },
     "mesh_capabilities": {
         "protocol": "OpenMotorMesh_DualPHY",
         "generation": 2,

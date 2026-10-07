@@ -12,6 +12,24 @@
     "toggle_mesh_ms": 250,
     "channel_next_ms": 1000,
     "ptt_hold": false,
+    "ble_control": {
+        "supported": true,
+        "flavor": "sena_rc_gatt",
+        "service_uuid": "0xFFE0",
+        "device_name_prefix": "SENA-60S",
+        "capabilities": {
+            "power_boot": false,
+            "power_off": true,
+            "mesh_toggle": true,
+            "group_toggle": true,
+            "volume_control": true,
+            "channel_select": true,
+            "mic_mute": true,
+            "telemetry": true,
+            "le_audio_lc3": false
+        },
+        "fallback_to_mechatronics_on_disconnect": true
+    },
     "mesh_capabilities": {
         "protocol": "Sena_Mesh_3.0_Wave",
         "generation": 3,

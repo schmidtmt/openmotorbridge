@@ -4964,6 +4964,8 @@ const CARTRIDGE_PROFILES = {
         status: 'Power OFF * Mute (-96 dB)',
         status_en: 'Power OFF * Mute (-96 dB)',
         status_color: 'var(--text-muted)',
+        ble_flavor: 'Kein Funk (Slot AUS)',
+        ble_flavor_en: 'No Radio (Slot OFF)',
         idle_ma: 0,
         dle_bonus: 0
     },
@@ -4975,6 +4977,8 @@ const CARTRIDGE_PROFILES = {
         status: '⚠️ Schutzabschaltung: Stromlos (0.0 mA) * Mute',
         status_en: '⚠️ Fail-Safe: Power OFF (0.0 mA) * Mute',
         status_color: 'var(--accent-orange)',
+        ble_flavor: 'Kein BLE (Quarantäne)',
+        ble_flavor_en: 'No BLE (Quarantined)',
         idle_ma: 0,
         dle_bonus: 0
     },
@@ -4986,6 +4990,8 @@ const CARTRIDGE_PROFILES = {
         status: 'Power ON * DLE +60 Pkt.',
         status_en: 'Power ON * DLE +60 Pts.',
         status_color: 'var(--accent-green)',
+        ble_flavor: 'Sena RC GATT (0xFFE0)',
+        ble_flavor_en: 'Sena RC GATT (0xFFE0)',
         idle_ma: 50,
         dle_bonus: 60
     },
@@ -4997,6 +5003,8 @@ const CARTRIDGE_PROFILES = {
         status: 'Power ON * DLE +60 Pkt.',
         status_en: 'Power ON * DLE +60 Pts.',
         status_color: 'var(--accent-green)',
+        ble_flavor: 'Sena RC GATT (0xFFE0)',
+        ble_flavor_en: 'Sena RC GATT (0xFFE0)',
         idle_ma: 45,
         dle_bonus: 60
     },
@@ -5008,6 +5016,8 @@ const CARTRIDGE_PROFILES = {
         status: 'Power ON * DLE +60 Pkt.',
         status_en: 'Power ON * DLE +60 Pts.',
         status_color: 'var(--accent-green)',
+        ble_flavor: 'Sena RC GATT (0xFFE0)',
+        ble_flavor_en: 'Sena RC GATT (0xFFE0)',
         idle_ma: 45,
         dle_bonus: 60
     },
@@ -5019,6 +5029,8 @@ const CARTRIDGE_PROFILES = {
         status: 'Power ON * DLE +60 Pkt.',
         status_en: 'Power ON * DLE +60 Pts.',
         status_color: 'var(--accent-green)',
+        ble_flavor: 'Sena RC GATT (0xFFE0)',
+        ble_flavor_en: 'Sena RC GATT (0xFFE0)',
         idle_ma: 35,
         dle_bonus: 60
     },
@@ -5030,6 +5042,8 @@ const CARTRIDGE_PROFILES = {
         status: 'Power ON * DLE +40 Pkt.',
         status_en: 'Power ON * DLE +40 Pts.',
         status_color: 'var(--accent-blue)',
+        ble_flavor: 'Sena RC GATT (0xFFE0)',
+        ble_flavor_en: 'Sena RC GATT (0xFFE0)',
         idle_ma: 40,
         dle_bonus: 40
     },
@@ -5041,6 +5055,8 @@ const CARTRIDGE_PROFILES = {
         status: 'Power ON * DLE +20 Pkt.',
         status_en: 'Power ON * DLE +20 Pts.',
         status_color: 'var(--accent-orange)',
+        ble_flavor: 'Sena RC GATT (0xFFE0)',
+        ble_flavor_en: 'Sena RC GATT (0xFFE0)',
         idle_ma: 32,
         dle_bonus: 20
     },
@@ -5052,6 +5068,8 @@ const CARTRIDGE_PROFILES = {
         status: 'Power ON * DLE +20 Pkt.',
         status_en: 'Power ON * DLE +20 Pts.',
         status_color: 'var(--accent-orange)',
+        ble_flavor: 'HID Consumer Control (0x0C)',
+        ble_flavor_en: 'HID Consumer Control (0x0C)',
         idle_ma: 35,
         dle_bonus: 20
     },
@@ -5063,6 +5081,8 @@ const CARTRIDGE_PROFILES = {
         status: 'Power ON * DLE +60 Pkt.',
         status_en: 'Power ON * DLE +60 Pts.',
         status_color: 'var(--accent-green)',
+        ble_flavor: 'Cardo BLE v2 (0xFE59)',
+        ble_flavor_en: 'Cardo BLE v2 (0xFE59)',
         idle_ma: 45,
         dle_bonus: 60
     },
@@ -5074,6 +5094,8 @@ const CARTRIDGE_PROFILES = {
         status: 'Power ON * DLE +40 Pkt.',
         status_en: 'Power ON * DLE +40 Pts.',
         status_color: 'var(--accent-blue)',
+        ble_flavor: 'Cardo BLE v2 (0xFE59)',
+        ble_flavor_en: 'Cardo BLE v2 (0xFE59)',
         idle_ma: 38,
         dle_bonus: 40
     },
@@ -5085,6 +5107,8 @@ const CARTRIDGE_PROFILES = {
         status: 'Power ON * DLE +30 Pkt.',
         status_en: 'Power ON * DLE +30 Pts.',
         status_color: 'var(--accent-orange)',
+        ble_flavor: 'Cardo BLE v2 (0xFE59)',
+        ble_flavor_en: 'Cardo BLE v2 (0xFE59)',
         idle_ma: 42,
         dle_bonus: 30
     },
@@ -5096,6 +5120,8 @@ const CARTRIDGE_PROFILES = {
         status: 'Power ON * DLE +10 Pkt.',
         status_en: 'Power ON * DLE +10 Pts.',
         status_color: 'var(--accent-orange)',
+        ble_flavor: 'Kein BLE (Nur Mechatronik)',
+        ble_flavor_en: 'No BLE (Mechatronics-only)',
         idle_ma: 60,
         dle_bonus: 10
     },
@@ -5107,6 +5133,8 @@ const CARTRIDGE_PROFILES = {
         status: 'Power ON * Full-Duplex Stereo LC3 * DLE +80 Pkt.',
         status_en: 'Power ON * Full-Duplex Stereo LC3 * DLE +80 Pts.',
         status_color: 'var(--accent-purple)',
+        ble_flavor: 'OMM Native (0x00MB) * LC3 Stereo',
+        ble_flavor_en: 'OMM Native (0x00MB) * LC3 Stereo',
         idle_ma: 28,
         dle_bonus: 80
     },
@@ -5118,6 +5146,8 @@ const CARTRIDGE_PROFILES = {
         status: 'Power ON * DMR Tier I/II * DLE +40 Pkt.',
         status_en: 'Power ON * DMR Tier I/II * DLE +40 Pts.',
         status_color: 'var(--accent-blue)',
+        ble_flavor: 'Kein BLE (Nur Mechatronik)',
+        ble_flavor_en: 'No BLE (Mechatronics-only)',
         idle_ma: 35,
         dle_bonus: 40
     }
@@ -5129,11 +5159,15 @@ function updatePodDisplay(podNum, profileKey) {
     const badgeEl = document.getElementById(`pod${podNum}-badge`);
     const vendorEl = document.getElementById(`pod${podNum}-vendor`);
     const statusEl = document.getElementById(`pod${podNum}-status`);
+    const bleEl = document.getElementById(`pod${podNum}-ble-flavor`);
     
     if (vendorEl) vendorEl.textContent = isDe ? prof.vendor : prof.vendor_en;
     if (statusEl) {
         statusEl.textContent = isDe ? prof.status : prof.status_en;
         statusEl.style.color = prof.status_color;
+    }
+    if (bleEl) {
+        bleEl.textContent = `📡 ${isDe ? prof.ble_flavor : prof.ble_flavor_en}`;
     }
     if (badgeEl) {
         if (profileKey === 'disabled') {

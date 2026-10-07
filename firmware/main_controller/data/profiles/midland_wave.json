@@ -12,6 +12,23 @@
     "toggle_mesh_ms": 250,
     "channel_next_ms": 800,
     "ptt_hold": false,
+    "ble_control": {
+        "supported": true,
+        "flavor": "hid_consumer_control",
+        "device_name_prefix": "MIDLAND-WAVE",
+        "capabilities": {
+            "power_boot": false,
+            "power_off": true,
+            "mesh_toggle": true,
+            "group_toggle": false,
+            "volume_control": true,
+            "channel_select": false,
+            "mic_mute": true,
+            "telemetry": false,
+            "le_audio_lc3": false
+        },
+        "fallback_to_mechatronics_on_disconnect": true
+    },
     "mesh_capabilities": {
         "protocol": "Midland_Wave_Mesh",
         "generation": 2,

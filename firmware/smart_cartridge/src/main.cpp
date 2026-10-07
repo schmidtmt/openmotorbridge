@@ -62,27 +62,57 @@ static void send_cartridge_announce() {
                                                &pkt, sizeof(pkt));
 }
 
+#include "cartridge_ble_profile.h"
+
 // Tracking state: BLE connection to docked intercom
 static bool s_ble_intercom_connected = false;
 
+// Active BLE Profile Configuration (synchronized with active profile)
+static CartridgeBleConfig_t s_active_ble_config = {
+    .supported = true,
+    .flavor = BLE_FLAVOR_SENA_RC_GATT,
+    .fallback_to_mechatronics_on_disconnect = true,
+    .can_power_boot = false, // Always false (cold-boot requires physical mechatronics)
+    .can_power_off = true,
+    .can_mesh_toggle = true,
+    .can_group_toggle = true,
+    .can_volume = true,
+    .can_channel_select = true,
+    .can_mic_mute = true,
+    .can_telemetry = true,
+    .can_le_audio_lc3 = false
+};
+
 static esp_err_t execute_smart_command(uint8_t opcode, uint16_t duration_ms) {
-    // 1. Power Boot (0x01) and Power Off (0x02) ALWAYS require physical Mechatronics
+    // 1. Power Boot (0x01) ALWAYS requires physical Mechatronics
     // (Headset BT chip is completely dead / unpowered when shut down)
-    if (opcode == CARTRIDGE_OPCODE_POWER_BOOT || opcode == CARTRIDGE_OPCODE_POWER_OFF) {
-        ESP_LOGI(TAG, "⚡ Power Opcode 0x%02X -> Enforcing physical Mechatronic actuator pulse.", opcode);
+    if (opcode == CARTRIDGE_OPCODE_POWER_BOOT) {
+        ESP_LOGI(TAG, "⚡ Power Boot (0x01) -> Enforcing physical Mechatronic actuator pulse.");
         return CartridgeMechatronics::instance().execute_opcode(opcode, duration_ms);
     }
 
-    // 2. Runtime Commands (Volume +/-, Mesh Toggle, Channel Next/Prev)
+    // 2. If the active profile has NO BLE support (e.g. PMR446 or analog radio)
+    if (!s_active_ble_config.supported || s_active_ble_config.flavor == BLE_FLAVOR_NONE) {
+        ESP_LOGD(TAG, "🔧 Profile has no BLE support (flavor=NONE) -> Executing Mechatronics directly for Opcode 0x%02X.", opcode);
+        return CartridgeMechatronics::instance().execute_opcode(opcode, duration_ms);
+    }
+
+    // 3. Runtime Commands (Volume +/-, Mesh Toggle, Channel Next/Prev)
     // Primary path: Digital BLE GATT command (Zero wear, zero solenoid delay)
     if (s_ble_intercom_connected) {
-        ESP_LOGI(TAG, "📡 Runtime Opcode 0x%02X -> Dispatched via primary BLE GATT interface (< 5 ms).", opcode);
+        const char *flavor_name = get_ble_flavor_name(s_active_ble_config.flavor);
+        ESP_LOGI(TAG, "📡 Runtime Opcode 0x%02X -> Dispatched via BLE [%s] (< 5 ms, 0 wear).", opcode, flavor_name);
         return ESP_OK;
     }
 
-    // 3. Mechatronic Fallback: If BLE is disconnected, lost, or protocol changed
-    ESP_LOGW(TAG, "⚠️ BLE disconnected -> Executing physical Mechatronic fallback for Opcode 0x%02X.", opcode);
-    return CartridgeMechatronics::instance().execute_opcode(opcode, duration_ms);
+    // 4. Mechatronic Fallback: If BLE is disconnected, lost, or protocol changed
+    if (s_active_ble_config.fallback_to_mechatronics_on_disconnect) {
+        ESP_LOGW(TAG, "⚠️ BLE disconnected -> Executing physical Mechatronic fallback for Opcode 0x%02X.", opcode);
+        return CartridgeMechatronics::instance().execute_opcode(opcode, duration_ms);
+    }
+
+    ESP_LOGE(TAG, "❌ Opcode 0x%02X dropped: BLE disconnected and fallback disabled.", opcode);
+    return ESP_ERR_INVALID_STATE;
 }
 
 // -----------------------------------------------------------------------------

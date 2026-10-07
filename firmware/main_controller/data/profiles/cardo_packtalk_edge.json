@@ -83,6 +83,30 @@
             }
         }
     },
+    "ble_control": {
+        "supported": true,
+        "flavor": "cardo_ble_v2",
+        "service_uuid": "0xFE59",
+        "device_name_prefix": "PT-EDGE",
+        "capabilities": {
+            "power_boot": false,
+            "power_off": true,
+            "mesh_toggle": true,
+            "group_toggle": true,
+            "volume_control": true,
+            "channel_select": true,
+            "mic_mute": true,
+            "telemetry": true,
+            "le_audio_lc3": false
+        },
+        "command_mapping": {
+            "0x03": { "name": "VOL_PLUS", "ble_cmd": "CARDO_CMD_VOL_UP" },
+            "0x04": { "name": "VOL_MINUS", "ble_cmd": "CARDO_CMD_VOL_DOWN" },
+            "0x05": { "name": "DMC_INTERCOM_TOGGLE", "ble_cmd": "CARDO_CMD_DMC_TOGGLE" },
+            "0x07": { "name": "DMC_PRIVATE_CHAT", "ble_cmd": "CARDO_CMD_PRIVATE_CHAT" }
+        },
+        "fallback_to_mechatronics_on_disconnect": true
+    },
     "power_management": {
         "auto_wake_motion_sensor": true,
         "deep_sleep_timeout_min": 2,

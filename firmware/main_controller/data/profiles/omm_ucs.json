@@ -1,15 +1,15 @@
 {
-    "id": "sena_spider_x",
-    "name": "Sena Spider X Slim (Smart Cartridge 4-Actuator)",
-    "vendor": "Sena Technologies",
+    "id": "omm_ucs",
+    "name": "OpenMotorMesh UCS 2.4 GHz Intercom (PCBA 09)",
+    "vendor": "OpenMotorBridge Open Source Hardware",
     "hardware_tier": 1,
     "vcc_enabled": true,
-    "direct_dc_supported": true,
-    "direct_dc_voltage_v": 3.85,
-    "soft_start_ms": 80,
-    "input_gain_db": 1.5,
+    "usb_charging_supported": true,
+    "usb_charging_voltage_v": 5.0,
+    "soft_start_ms": 100,
+    "input_gain_db": 0.0,
     "output_gain_db": 0.0,
-    "noise_gate_threshold_db": -44,
+    "noise_gate_threshold_db": -50,
     "control_mode": "smart_cartridge_mechatronic",
     "smart_cartridge": {
         "controller_type": "CH32V003_RISCV",
@@ -51,9 +51,17 @@
     },
     "ble_control": {
         "supported": true,
-        "flavor": "sena_rc_gatt",
-        "service_uuid": "0xFFE0",
-        "device_name_prefix": "SPIDER-X",
+        "flavor": "omm_native",
+        "service_uuid": "0x00MB",
+        "device_name_prefix": "OMM-UCS",
+        "characteristics": {
+            "ptt_trigger": "0x0001",
+            "mesh_mode": "0x0002",
+            "channel": "0x0003",
+            "volume": "0x0004",
+            "telemetry": "0x0005",
+            "le_audio_cfg": "0x0006"
+        },
         "capabilities": {
             "power_boot": false,
             "power_off": true,
@@ -63,40 +71,32 @@
             "channel_select": true,
             "mic_mute": true,
             "telemetry": true,
-            "le_audio_lc3": false
+            "le_audio_lc3": true,
+            "bi_directional_stereo": true
         },
         "command_mapping": {
-            "0x03": { "name": "VOL_PLUS", "ble_cmd": "0xAA550301" },
-            "0x04": { "name": "VOL_MINUS", "ble_cmd": "0xAA550302" },
-            "0x05": { "name": "MESH_TOGGLE", "ble_cmd": "0xAA550501" },
-            "0x06": { "name": "GROUP_MESH_TOGGLE", "ble_cmd": "0xAA550601" },
-            "0x07": { "name": "CHANNEL_NEXT", "ble_cmd": "0xAA550701" },
-            "0x08": { "name": "CHANNEL_PREV", "ble_cmd": "0xAA550702" }
+            "0x03": { "name": "VOL_PLUS", "ble_char": "0x0004", "ble_val": "step_up" },
+            "0x04": { "name": "VOL_MINUS", "ble_char": "0x0004", "ble_val": "step_down" },
+            "0x05": { "name": "MESH_TOGGLE", "ble_char": "0x0002", "ble_val": "toggle" },
+            "0x06": { "name": "GROUP_MESH_TOGGLE", "ble_char": "0x0002", "ble_val": "private_group" },
+            "0x07": { "name": "CHANNEL_NEXT", "ble_char": "0x0003", "ble_val": "next" },
+            "0x08": { "name": "CHANNEL_PREV", "ble_char": "0x0003", "ble_val": "prev" }
         },
         "fallback_to_mechatronics_on_disconnect": true
     },
-    "power_management": {
-        "auto_wake_motion_sensor": true,
-        "deep_sleep_timeout_min": 2,
-        "motion_reactivation_window_days": 3,
-        "auto_boot_solenoid_enabled": true,
-        "auto_boot_timeout_sec": 2
-    },
-    "ptt_hold": false,
     "mesh_capabilities": {
-        "protocol": "Sena_Mesh_3.0_Wave",
-        "generation": 3,
-        "max_nodes": 32,
+        "protocol": "OpenMotorMesh_802_15_4_TDMA",
+        "generation": 1,
+        "max_nodes": 64,
         "open_mesh": true,
-        "preconfig_channels": 6,
-        "wave_intercom": true,
-        "dle_bonus_score": 60
+        "preconfig_channels": 16,
+        "dle_bonus_score": 80
     },
     "rf_hardening": {
         "disable_bluetooth_classic": true,
         "clear_phone_gps_pairings": true,
-        "enforce_mesh_only_mode": true,
-        "disable_audio_multitasking": true,
-        "expected_idle_current_ma": 35
+        "enforce_mesh_only_mode": false,
+        "disable_audio_multitasking": false,
+        "expected_idle_current_ma": 28
     }
 }

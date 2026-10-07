@@ -1,0 +1,36 @@
+{
+    "id": "omm_pmr446",
+    "name": "OpenMotorMesh PMR/DMR 446 MHz Module (PCBA 10)",
+    "vendor": "OpenMotorBridge Open Source Hardware",
+    "hardware_tier": 1,
+    "vcc_enabled": true,
+    "usb_charging_supported": false,
+    "soft_start_ms": 100,
+    "input_gain_db": 0.0,
+    "output_gain_db": 0.0,
+    "noise_gate_threshold_db": -46,
+    "control_mode": "level_hold",
+    "toggle_mesh_ms": 0,
+    "channel_next_ms": 500,
+    "ptt_hold": true,
+    "ble_control": {
+        "supported": false,
+        "flavor": "none",
+        "reason": "Pure RF transceiver without Bluetooth; controlled via hardware PTT and channel sequencer"
+    },
+    "mesh_capabilities": {
+        "protocol": "DMR_Tier_I_II_Analog_PMR",
+        "generation": 1,
+        "max_nodes": 128,
+        "open_mesh": true,
+        "preconfig_channels": 16,
+        "dle_bonus_score": 40
+    },
+    "rf_hardening": {
+        "disable_bluetooth_classic": true,
+        "clear_phone_gps_pairings": true,
+        "enforce_mesh_only_mode": true,
+        "disable_audio_multitasking": true,
+        "expected_idle_current_ma": 35
+    }
+}
