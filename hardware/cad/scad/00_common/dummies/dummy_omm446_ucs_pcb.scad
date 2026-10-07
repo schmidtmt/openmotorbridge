@@ -108,11 +108,6 @@ module dummy_omm446_ucs_pcb() {
             cube(size=[3.0, 3.0, 0.9], center=false);
     }
 
-    // 11. 8-Pin Kelvin Docking Header J2 (Bottom Face, BM08B-SRSS-TB 9.5 x 4.2 x 2.9 mm)
-    color("ghostwhite") {
-        translate([18.0, 3.0, -2.9])
-            cube(size=[9.5, 4.2, 2.9], center=false);
-    }
 
     // 12. 2-Pin Battery Header BAT1 (Bottom Face, BM02B-SRSS-TB 3.5 x 4.2 x 2.9 mm)
     color("ghostwhite") {
