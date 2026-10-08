@@ -7423,7 +7423,7 @@ function updateBikeAlarmUi(alarm) {
         bikeAlarmBanner.style.display = 'none';
         if (badgeAlarmStatus) {
             badgeAlarmStatus.className = state.alarm.armed ? 'card-badge badge-green' : 'card-badge';
-            badgeAlarmStatus.textContent = state.alarm.armed ? 'SCHARF (SX1262 Pod 3)' : 'UNSCHARF';
+            badgeAlarmStatus.textContent = state.alarm.armed ? 'SCHARF (SX1262 USV)' : 'UNSCHARF';
             badgeAlarmStatus.style.background = state.alarm.armed ? '' : 'rgba(255,255,255,0.08)';
             badgeAlarmStatus.style.color = state.alarm.armed ? '' : 'var(--text-muted)';
         }
@@ -9160,10 +9160,9 @@ function calculateSingleBikeBom(bikeConfig) {
     }
 
     if (bikeModel === 'hd-touring' || bikeModel === 'hd-cvo-st' || bikeModel === 'hd-cVO-st') {
-        parts3D.push({ group: 'Koffer-Docking', file: '009_magsafe_frame_dock.stl', qty: 2, desc: isDe ? 'MagSafe Rahmendock mit Federkontakt-Führung' : 'MagSafe frame dock with spring contact guide' });
-        parts3D.push({ group: 'Koffer-Docking', file: '009_magsafe_frame_clamp.stl', qty: 2, desc: isDe ? 'Rahmenrohr-Gegenklemme für Satteltaschen-Dock' : 'Frame tube backing clamp for saddlebag dock' });
-        parts3D.push({ group: 'Koffer-Docking', file: '009_magsafe_frame_lid.stl', qty: 2, desc: isDe ? 'MagSafe Gehäusedeckel mit IP67 Dichtnut' : 'MagSafe housing lid with IP67 seal groove' });
-        parts3D.push({ group: 'Koffer-Docking', file: '010_saddlebag_hole_grommet_split.stl', qty: 2, desc: isDe ? 'Geteilte 19 mm Koffer-Seitendurchführung (Innenwand neben Werksbefestigung)' : 'Split 19 mm saddlebag side-wall pass-through (inner wall beside OEM mount)' });
+        parts3D.push({ group: 'Koffer-Docking', file: 'cots_magnetic_frame_dock_body.stl', qty: 2, desc: isDe ? 'COTS Magnet-Rahmendock für Ø 26 mm Rahmenrohr' : 'COTS magnetic frame dock for Ø 26 mm frame tube' });
+        parts3D.push({ group: 'Koffer-Docking', file: 'cots_magnetic_frame_clamp.stl', qty: 2, desc: isDe ? 'Rahmenrohr-Klemmschelle für Magnetdock' : 'Frame tube clamp for magnetic dock' });
+        parts3D.push({ group: 'Koffer-Docking', file: '010_saddlebag_hole_grommet_split.stl', qty: 2, desc: isDe ? 'Geteilte 12 mm Koffer-Seitendurchführung (Innenwand neben Werksbefestigung)' : 'Split 12 mm saddlebag side-wall pass-through (inner wall beside OEM mount)' });
     }
 
     if (addons.keyfob) {
@@ -9276,11 +9275,23 @@ function calculateSingleBikeBom(bikeConfig) {
         });
         cots.push({ name: isDe ? 'KFZ-Sicherungshalter' : 'Automotive Fuse Holder', spec: 'Wasserdichter Halter + 2A Sicherung', qty: 1, desc: isDe ? 'Dauerplus-Absicherung an Batteriepol' : 'Direct battery terminal protection (KL30)' });
         if (numPods > 0) {
-            cots.push({ name: isDe ? 'M8 6-Pin PUR Fertigkabel' : 'M8 6-Pin PUR Molded Cable', spec: 'A-kodiert Stecker/Buchse (1.0m / 1.5m)', qty: numPods, desc: isDe ? `Plug-and-Play Verbindung zu den Pods (${numPods} Stk.)` : `Plug-and-play connection to pods (${numPods} pcs)` });
+            cots.push({ name: isDe ? 'Pure-DC 2-Ader Zuleitung (PUR)' : 'Pure-DC 2-Wire Cable (PUR)', spec: '2x 0.34 mm² (AWG22) mit JST-JWPF 2-Pin IP67', qty: numPods, desc: isDe ? `Reine DC-Stromversorgung zu Pod 1 & 2 (${numPods} Stk., Audio/Daten 100% via UWB)` : `Pure DC power feed to pods 1 & 2 (${numPods} pcs, audio/data 100% via UWB)` });
         }
     }
 
     if (addons.frontNode) {
+        cots.push({
+            name: 'u-blox SAM-M10Q Multi-GNSS Modul',
+            spec: '15x15 mm Keramik-Patchantenne, Qwiic I2C (GPS/GLONASS/Galileo/BeiDou)',
+            qty: 1,
+            desc: isDe ? 'Cockpit-Satellitenortung an Port J12 mit freier Sicht zum Zenit' : 'Cockpit satellite navigation on port J12 with clear zenith view'
+        });
+        cots.push({
+            name: 'Qwiic / STEMMA QT Sensorkabel',
+            spec: '4-Pin JST-SH Buchse zu Buchse (100 mm Silikonlitze)',
+            qty: 1,
+            desc: isDe ? 'Verbindung von Port J12 am Front-Node zum SAM-M10Q GNSS-Modul' : 'Link from Front Node port J12 to SAM-M10Q GNSS module'
+        });
         cots.push({ name: isDe ? 'Front-Node 12V Anschlusskabel' : 'Front Node 12V Power Pigtail', spec: '2-Pin JST-PH mit Posi-Tap', qty: 1, desc: isDe ? 'Lokale 12V-Cockpit-Versorgung (Drahtlos via ESP-NOW / BLE)' : 'Local 12V cockpit tap (Wireless via ESP-NOW / BLE)' });
         cots.push({ name: 'M3 Front-Schrauben', spec: 'DIN 912 V4A M3 x 20 mm', qty: 4, desc: isDe ? 'Front-Node Gehäusedeckel' : 'Front Node enclosure lid' });
         cots.push({ name: 'M4 Edelstahlmuttern', spec: 'DIN 934 M4 V4A', qty: 4, desc: isDe ? 'AMPS-Befestigungstaschen am Gehäuseboden' : 'AMPS mounting pockets in tub floor' });
@@ -9407,6 +9418,36 @@ function calculateSingleBikeBom(bikeConfig) {
 
     if (addons.radar2) {
         cots.push({ name: 'Wheeltec MR20 Radar-Sensor', spec: '77 GHz mmWave Millimeterwellen-Radar (MR20 OEM)', qty: 1, desc: isDe ? 'Blind Spot Detection & Kollisionswarnung bis 90 m' : 'Blind spot detection & collision warning up to 90 m' });
+        cots.push({
+            name: 'Taoglas FXP524 V2X Flexantenne',
+            spec: '5.9 GHz Flex-Patch (+3.5 dBi) mit U.FL Buchse (50 mm)',
+            qty: 1,
+            desc: isDe ? 'Car-to-X / ITS-G5 Funk-Uplink für ESP32-C5 Sub-MCU an Buchse U.FL_5G9_V2X auf PCBA 08' : 'Car-to-X / ITS-G5 RF uplink for ESP32-C5 sub-MCU at socket U.FL_5G9_V2X on PCBA 08'
+        });
+        cots.push({
+            name: 'MR20 Radar-Verbindungskabel',
+            spec: '4-Pin JST-SH Buchse zu Buchse (50 mm)',
+            qty: 1,
+            desc: isDe ? 'UART-Telemetrie & Speisung von PCBA 08 Port J2 zum Wheeltec MR20 Sensor' : 'UART telemetry & power from PCBA 08 port J2 to Wheeltec MR20 sensor'
+        });
+        cots.push({
+            name: 'PC Radom-Sichtfenster',
+            spec: 'Laserzuschnitt Polycarbonat 1.6 mm RF-transparent',
+            qty: 1,
+            desc: isDe ? 'Mikrowellen- und optisches Schutzfenster für Radar & 36-LED Halo-Wings' : 'Microwave & optical protective window for radar & 36-LED halo wings'
+        });
+        cots.push({
+            name: 'M4 Schrauben (Radar-Cradle)',
+            spec: '2x DIN 912 V4A M4 x 12 mm',
+            qty: 2,
+            desc: isDe ? 'Verschraubung Neigegelenk an Gehäuserückwand' : 'Fastening swivel cradle to rear housing'
+        });
+        cots.push({
+            name: 'M5 Hirth-Klemmschraube & Mutter',
+            spec: 'DIN 912 V4A M5 x 25 mm + DIN 934 M5 Mutter',
+            qty: 1,
+            desc: isDe ? 'Horizontale Gelenkachse für 36-Zahn Hirth-Neigungsverstellung' : 'Horizontal pivot axle for 36-tooth Hirth angle adjustment'
+        });
         cots.push({ name: 'JST-JWPF 2-Pin Leitung', spec: 'JST 02R-JWPF-VSLE-S wasserdicht IP67 (0.5m FLRY-B 0.35²)', qty: 1, desc: isDe ? 'Wasserdichte 12V DC-Bordnetzspeisung für Heck-Radar PCBA 08' : 'Waterproof 12V DC power feed for rear radar PCBA 08' });
     }
 
@@ -9423,7 +9464,7 @@ function calculateSingleBikeBom(bikeConfig) {
     }
 
     if (bikeModel === 'hd-touring' || bikeModel === 'hd-cvo-st' || bikeModel === 'hd-cVO-st') {
-        cots.push({ name: isDe ? 'MagSafe 5-Pin Steckverbinder' : 'MagSafe 5-Pin Breakaway Connector', spec: 'Magnetischer 5-Pin Pogo-Kontakt IP67', qty: 2, desc: isDe ? 'Automatische Trennkupplung bei Koffer-Demontage' : 'Magnetic breakaway disconnect for saddlebag removal' });
+        cots.push({ name: isDe ? '2-Pin Magnet-Pogo Kupplung' : '2-Pin Magnetic Pogo Breakaway Set', spec: 'IP68 COTS (z. B. HytePro M411, 2-polig magnetisch)', qty: 2, desc: isDe ? 'Automatische Abreißkupplung bei Koffer-Demontage (Abreißkraft 10-15 N)' : 'Automatic breakaway disconnect for saddlebag removal (10-15 N retention)' });
         cots.push({ name: isDe ? 'EPDM Dichtringe Kofferwand' : 'EPDM Saddlebag Side-Wall Washers', spec: 'Ø 19 mm EPDM-Dichtscheiben Shore 60A', qty: 4, desc: isDe ? 'Hermetische Abdichtung der Koffer-Seitendurchführung neben Kofferhalter' : 'Hermetic seal for saddlebag side-wall pass-through beside mount' });
     }
 
@@ -9437,6 +9478,18 @@ function calculateSingleBikeBom(bikeConfig) {
             spec: '1S 3.7V 150 mAh Pouch-Zelle mit PCM (Typ 401230)',
             qty: 1,
             desc: isDe ? 'Ultraflacher Akku für Smart-Keyfob (kabellos ladbar via Qi)' : 'Ultra-thin battery for Smart Keyfob (Qi wireless rechargeable)'
+        });
+        cots.push({
+            name: isDe ? 'Qi Induktions-Empfängerspule (28 mm)' : 'Qi Induction Receiver Coil (28 mm)',
+            spec: '28 mm Qi-Receiver-Coil mit 2-Pin JST-ACH Steckverbinder',
+            qty: 1,
+            desc: isDe ? 'Lötfreie Induktionslade-Spule für Smart-Keyfob an Port J_QI' : 'Solderless induction charging coil for Smart Keyfob on port J_QI'
+        });
+        cots.push({
+            name: isDe ? 'N52 Neodym-Schlüssel (20 x 10 x 5 mm)' : 'N52 Neodymium Key (20 x 10 x 5 mm)',
+            spec: 'N52 Neodym-Magnetblock (20 x 10 x 5 mm)',
+            qty: 1,
+            desc: isDe ? 'Formschlüssig in Keyfob integrierter Kassetten-Auswurfmagnet' : 'Cartridge ejection magnet integrated into Keyfob shell'
         });
         cots.push({
             name: isDe ? 'M2 Keyfob-Schrauben' : 'M2 Keyfob Screws',
@@ -9930,7 +9983,7 @@ function renderSingleBuilder() {
                 </div>
                 <div class="builder-instructions-body">
                     <ol>
-                        <li>${isDe ? '<strong>Zentralbox (Gemeinsame Basis):</strong> Unter der Fahrersitzbank im Heckrahmen auf den 4x M4 Silentblöcken schwingungsentkoppelt verschrauben. M8 Kabelpeitschen nach hinten links/rechts und zum Heck führen.' : '<strong>Central Box (Common Base):</strong> Bolt under rider seat in rear frame using 4x M4 silentblocks for vibration isolation. Route M8 cables rearward.'}</li>
+                        <li>${isDe ? '<strong>Zentralbox (Gemeinsame Basis):</strong> Unter der Fahrersitzbank im Heckrahmen auf den 4x M4 Silentblöcken schwingungsentkoppelt verschrauben. Deutsch DTM-12 DC-Peitschen nach hinten links/rechts zu den Pods und zum Heck führen.' : '<strong>Central Box (Common Base):</strong> Bolt under rider seat in rear frame using 4x M4 silentblocks for vibration isolation. Route Deutsch DTM-12 DC leads rearward to pods and tail.'}</li>
                         <li>${isDe ? '<strong>Pod 1 & 2 (Option A: Vario / Rahmenrohr):</strong> Transition-Docks (<code>adventure_transition_dock.stl</code>) in der Sitzbank-Bügelfalte an das Ø 28 mm Hauptrahmenrohr klemmen (kompatibel mit R 1200 LC / 1250 / 1300 GS sowie F 750 / 850 / 900 GS). Pod-Gehäuse verschrauben. <em>100% kofferunabhängig:</em> Baut nicht breiter als die schlanke Fahrzeug-Silhouette - fahrbar mit Vario-Koffern oder komplett ohne Koffer!' : '<strong>Pods 1 & 2 (Option A: Vario / Frame Tube):</strong> Clamp transition docks (<code>adventure_transition_dock.stl</code>) in seat crease to Ø 28 mm frame tube (compatible with R 1200 LC / 1250 / 1300 GS and F 750 / 850 / 900 GS). <em>100% luggage-independent:</em> Does not build wider than bike silhouette - rideable with Vario cases or completely without luggage!'}</li>
                         <li>${isDe ? '<strong>Heck & Radar 2.0 (Clean Architecture):</strong> Da der Heck-Pod 3 ersatzlos entfallen ist, bleibt das Heck ohne Radar 100% sauber und unberührt. Bei gewähltem Radar 2.0 wird der minimale Rack-Tail Mount (<code>adventure_rack_tail_mount.stl</code>) an der Gepäckbrücke verschraubt und das Hirth-Zahngelenk auf +10° bis +15° arretiert.' : '<strong>Tail & Radar 2.0 (Clean Architecture):</strong> As Rear Pod 3 is completely eliminated, the tail remains 100% stock without radar. When Radar 2.0 is selected, bolt the minimal rack-tail mount (<code>adventure_rack_tail_mount.stl</code>) to luggage rack with Hirth gear lock set to +10° to +15°.'}</li>
                         ${active.addons?.frontNode ? `<li>${isDe ? '<strong>Front-Node & Cockpit:</strong> Front-Node mit AMPS-Halter am Ø 12 mm GPS/Navibügel fixieren. Stromversorgung über den 3-Pin Cartool-Stecker (Pin 1 GND, Pin 3 +12V KL15) am Steuerkopf. <em>100% drahtlose Funkbrücke:</em> ESP-NOW (< 1,8 ms) zur Zentralbox (kein Kabel durch den Lenkkopf!). <em>CAN-Bus & Steuerung:</em> Bei 6.5" TFT-Modellen liest der Front-Node das Wonder Wheel via K-CAN (<code>0x2A0</code>); bei Modellen ohne Wonder Wheel erfolgt die Bedienung über die OMB BLE-Fernbedienung oder WebApp.' : '<strong>Front Node & Cockpit:</strong> Mount Front Node using AMPS pattern to Ø 12 mm GPS bar. 12V switched KL15 power via 3-pin Cartool plug at headstock. <em>100% Wireless Link:</em> ESP-NOW (< 1.8 ms) to Central Box (zero wires through steering head!). <em>CAN & Controls:</em> On 6.5" TFT models, Front Node reads Wonder Wheel via K-CAN (<code>0x2A0</code>); on models without Wonder Wheel, control via OMB BLE remote or WebApp.'}</li>` : ''}
@@ -9960,15 +10013,15 @@ function renderSingleBuilder() {
             <div class="builder-instruction-step">
                 <div class="builder-step-headline">
                     <span class="builder-step-name">7. ${isDe ? 'Montage an deiner Harley-Davidson Touring & Cruiser Plattform (Street/Road Glide, Road King, Heritage Classic, Low Rider ST)' : 'Installation on your Harley-Davidson Touring & Cruiser Platform (Street/Road Glide, Road King, Heritage Classic, Low Rider ST)'}</span>
-                    <span class="builder-pill-verified">✓ Seitendurchführung & MagSafe Dock</span>
+                    <span class="builder-pill-verified">✓ Seitendurchführung & COTS Magnet-Dock</span>
                 </div>
                 <div class="builder-instructions-body">
                     <ol>
                         <li>${isDe ? '<strong>Zentralbox (Gemeinsame Basis):</strong> Unter der Fahrersitzbank auf der massiven Rahmenbrücke vor der Batterie (oder bei Softail-Modellen im Hohlraum unter dem Sitz / Seitendeckel) auf 4x M4 Silentblöcken verschrauben. Der Deutsch DTM-12 Kabelbaum führt nach hinten zu den Koffern und direkt zum BCM / Diagnosestecker.' : '<strong>Central Box (Common Base):</strong> Mount under rider seat on frame crossmember in front of battery (or inside Softail under-seat cavity / side cover) using 4x M4 silentblocks. Deutsch DTM-12 harness whip branches rearward to saddlebags and BCM / diagnostic port.'}</li>
-                        <li>${isDe ? '<strong>Pod 1 & 2 & MagSafe Koffer-Seitendurchführung:</strong> Kofferdeckel-Docks (<code>saddlebag_lid_dock.stl</code>) auf den Kofferdeckeln verschrauben (M4 Senkkopf + EPDM-Dichtscheiben) oder per 3M VHB Tape befestigen. <em>(Street/Road Glide, CVO ST, Road King, Limited sowie Cruiser wie Low Rider ST, Sport Glide und Heritage Classic mit Koffern nutzen dieselben Docks!)</em><br>' +
-                            '<strong>Koffer-Trennstelle (MagSafe Seitendurchführung):</strong> Die Koffer sitzen werksseitig an massiven Rahmenhaltern mit Schnellverschluss-Pins. Bohre eine 19 mm Bohrung in die <strong>innere Seitenwand des Koffers direkt neben der werksseitigen Rahmenhalterung (Seitendurchführung - NICHT im Boden!)</strong>. Die geteilte EPDM-Kabeldurchführung (<code>010_saddlebag_hole_grommet_split.stl</code>) mit Zugentlastungsturm einsetzen. Das MagSafe Rahmendock (<code>009_magsafe_frame_dock.stl</code> + <code>009_magsafe_frame_clamp.stl</code>) am Rahmenrohr direkt gegenüber der Koffer-Innenwand montieren. M8 Kabel anschließen. Beim Aufsetzen der Koffer dockt der 5-Pin Magnetkontakt (<code>kicad_magsafe_dock</code>) automatisch an - 100% werkzeugloses Abnehmen der Koffer ohne Kabel abstecken!' :
-                            '<strong>Pods 1 & 2 & MagSafe Saddlebag Side-Wall Pass-Through:</strong> Mount saddlebag lid docks (<code>saddlebag_lid_dock.stl</code>) on bag lids using M4 screws + EPDM washers or 3M VHB tape.<br>' +
-                            '<strong>Saddlebag Breakaway Dock (Side-Wall Pass-Through):</strong> Saddlebags mount to frame brackets with OEM quick-release pins. Drill a 19 mm hole into the <strong>inner side wall of the saddlebag directly adjacent to the OEM frame bracket (Side Pass-Through - NOT bottom!)</strong>. Insert split EPDM grommet (<code>010_saddlebag_hole_grommet_split.stl</code>). Mount MagSafe frame dock (<code>009_magsafe_frame_dock.stl</code> + <code>009_magsafe_frame_clamp.stl</code>) to frame tube opposite the saddlebag inner wall. Connect M8 cables. When dropping saddlebags into place, the 5-pin magnetic contact docks automatically - 100% tool-free saddlebag removal without unplugging cables!'}</li>
+                        <li>${isDe ? '<strong>Pod 1 & 2 & COTS Magnet-Pogo Koffer-Seitendurchführung:</strong> Kofferdeckel-Docks (<code>saddlebag_lid_dock.stl</code>) auf den Kofferdeckeln verschrauben (M4 Senkkopf + EPDM-Dichtscheiben) oder per 3M VHB Tape befestigen. <em>(Street/Road Glide, CVO ST, Road King, Limited sowie Cruiser wie Low Rider ST, Sport Glide und Heritage Classic mit Koffern nutzen dieselben Docks!)</em><br>' +
+                            '<strong>Koffer-Trennstelle (Magnet-Pogo Seitendurchführung):</strong> Die Koffer sitzen werksseitig an massiven Rahmenhaltern mit Schnellverschluss-Pins. Bohre eine 12 mm Bohrung in die <strong>innere Seitenwand des Koffers direkt neben der werksseitigen Rahmenhalterung (Seitendurchführung - NICHT im Boden!)</strong>. Die geteilte EPDM-Kabeldurchführung (<code>010_saddlebag_hole_grommet_split.stl</code>) mit Zugentlastungsturm einsetzen. Das COTS Magnet-Rahmendock (<code>cots_magnetic_frame_dock_body.stl</code> + <code>cots_magnetic_frame_clamp.stl</code>) am Rahmenrohr direkt gegenüber der Koffer-Innenwand montieren und 2-Draht DC-Zuleitung anschließen. Beim Aufsetzen der Koffer dockt der 2-Pin Magnetkontakt (HytePro M411) automatisch mit 10-15 N Haltekraft an - 100% werkzeugloses Abnehmen der Koffer ohne Kabel abstecken!' :
+                            '<strong>Pods 1 & 2 & COTS Magnetic Pogo Side-Wall Pass-Through:</strong> Mount saddlebag lid docks (<code>saddlebag_lid_dock.stl</code>) on bag lids using M4 screws + EPDM washers or 3M VHB tape.<br>' +
+                            '<strong>Saddlebag Breakaway Dock (Side-Wall Pass-Through):</strong> Saddlebags mount to frame brackets with OEM quick-release pins. Drill a 12 mm hole into the <strong>inner side wall of the saddlebag directly adjacent to the OEM frame bracket (Side Pass-Through - NOT bottom!)</strong>. Insert split EPDM grommet (<code>010_saddlebag_hole_grommet_split.stl</code>). Mount COTS magnetic frame dock (<code>cots_magnetic_frame_dock_body.stl</code> + <code>cots_magnetic_frame_clamp.stl</code>) to frame tube opposite the saddlebag inner wall and connect 2-wire DC lead. When dropping saddlebags into place, the 2-pin magnetic contact (HytePro M411) docks automatically with 10-15 N retention - 100% tool-free saddlebag removal without unplugging cables!'}</li>
                         <li>${isDe ? '<strong>Heckbereich & Radar 2.0:</strong> Der Heck-Pod 3 ist ersatzlos entfallen; Kotflügel und Bagger-Linie bleiben 100% werksoriginal. Bei gewähltem Radar 2.0 wird der entkoppelte Halter (<code>radar_license_plate_bracket.stl</code>) direkt unter dem serienmäßig zentrierten Kennzeichenrahmen verschraubt.' : '<strong>Rear Section & Radar 2.0:</strong> Rear Pod 3 is completely eliminated; fender and bagger lines remain 100% factory original. When Radar 2.0 is selected, bolt decoupled radar bracket (<code>radar_license_plate_bracket.stl</code>) directly beneath the factory-centered license plate frame.'}</li>
                         ${active.addons?.frontNode ? `<li>${isDe ? '<strong>Cockpit & Front-Node (Modulare Fairing-Optionen):</strong><br>' +
                             '* <em>Option A (Batwing - Street Glide / Ultra):</em><br>' +
@@ -10006,8 +10059,8 @@ function renderSingleBuilder() {
                 <div class="builder-instructions-body">
                     <ol>
                         <li>${isDe ? '<strong>Zentralbox:</strong> Unter dem Solositz auf der Rahmenbrücke auf 4x Silentblöcken fixieren.' : '<strong>Central Box:</strong> Mount under solo seat on frame crossmember using 4x silentblocks.'}</li>
-                        <li>${isDe ? '<strong>Pod 1 & 2 & MagSafe Koffer-Seitendurchführung:</strong> Kofferdeckel-Docks (<code>saddlebag_lid_dock.stl</code>) auf den CVO ST Koffern montieren. 19 mm Seitendurchführung (<code>010_saddlebag_hole_grommet_split.stl</code>) in die <strong>innere Koffer-Seitenwand direkt neben der Schnellverschluss-Befestigung (Seitendurchführung - kein Bodenloch!)</strong> einsetzen. MagSafe Rahmendock (<code>009_magsafe_frame_dock.stl</code>) am Rahmen verschrauben für automatische Trennung bei Kofferentnahme.' :
-                            '<strong>Pods 1 & 2 & MagSafe Saddlebag Side Pass-Through:</strong> Mount saddlebag lid docks (<code>saddlebag_lid_dock.stl</code>) on CVO ST bags. Install 19 mm split grommet (<code>010_saddlebag_hole_grommet_split.stl</code>) into the <strong>inner saddlebag side wall directly adjacent to the quick-release pin (Side pass-through - NOT on bottom!)</strong>. Mount MagSafe frame dock (<code>009_magsafe_frame_dock.stl</code>) to frame for automatic breakaway when removing bags.'}</li>
+                        <li>${isDe ? '<strong>Pod 1 & 2 & COTS Magnet-Pogo Koffer-Seitendurchführung:</strong> Kofferdeckel-Docks (<code>saddlebag_lid_dock.stl</code>) auf den CVO ST Koffern montieren. 12 mm Seitendurchführung (<code>010_saddlebag_hole_grommet_split.stl</code>) in die <strong>innere Koffer-Seitenwand direkt neben der Schnellverschluss-Befestigung (Seitendurchführung - kein Bodenloch!)</strong> einsetzen. COTS Magnet-Rahmendock (<code>cots_magnetic_frame_dock_body.stl</code>) am Rahmenrohr verschrauben für automatische Abreißtrennung bei Kofferentnahme.' :
+                            '<strong>Pods 1 & 2 & COTS Magnetic Pogo Saddlebag Side Pass-Through:</strong> Mount saddlebag lid docks (<code>saddlebag_lid_dock.stl</code>) on CVO ST bags. Install 12 mm split grommet (<code>010_saddlebag_hole_grommet_split.stl</code>) into the <strong>inner saddlebag side wall directly adjacent to the quick-release pin (Side pass-through - NOT on bottom!)</strong>. Mount COTS magnetic frame dock (<code>cots_magnetic_frame_dock_body.stl</code>) to frame tube for automatic breakaway when removing bags.'}</li>
                         <li>${isDe ? '<strong>Heckbereich & Solo-Sitzhutze (Clean Architecture):</strong> Da Heck-Pod 3 und internes Skeleton-Dock ersatzlos entfallen sind, bleibt die originale Forged-Carbon-Sitzhutze der CVO ST zu 100% werksoriginal mit unbeschädigtem Lack und schließt plan mit der OEM-Rändelschraube auf dem Kotflügel ab. Optionales Radar 2.0 wird entkoppelt unter dem Kennzeichenträger (<code>radar_license_plate_bracket.stl</code>) montiert.' : '<strong>Rear Section & Solo Cowl (Clean Architecture):</strong> Since Rear Pod 3 and internal skeleton docks are completely eliminated, the original CVO ST forged carbon cowl remains 100% factory original with protected paint, secured flush with the factory thumbscrew. Optional Radar 2.0 mounts decoupled beneath the license plate (<code>radar_license_plate_bracket.stl</code>).'}</li>
                         ${active.addons?.frontNode ? `<li>${isDe ? '<strong>Front-Node & Sharknose Fairing (2024+ Skyline OS):</strong> Die 4x T25 Scheibenschrauben, 2x T27 in den Handschuhfächern und 2x T25 Haltelaschen unten lösen. Verkleidung nach vorn abnehmen (Blinker sind integral in den Blades!). Front-Node verdeckt unterm Fairing direkt an den runden Metallstangen des Verkleidungsgeweihs (Ø 16-19 mm Fairing Stays) mit der Verkleidungs-Rohrschelle (<code>front_node_fairing_tube_clamp.stl</code>) oder an der Forged-Carbon-Lenkerbrücke montieren (100% sauberer Stealth-Einbau). <code>J1</code> an 12V Zündungsplus, <code>J2</code> an CAN-Bus, <code>J4</code> an OEM-USB Upstream zum Skyline OS Display, <code>J6</code> an Ottocast Wireless CarPlay/AA Dongle (mit 1-Click TPS2051B Watchdog-Hardreset bei Verbindungsstörung), <code>J5</code> an 20W PD Smartphone-Ladekabel und <code>J12</code> an das Qwiic Daisy-Chain I2C-Kabel (für Außentemperatursensor im Sharknose-Kaltlufteinlass & optionalen OPT3001 Umgebungslichtsensor).' : '<strong>Front Node & Sharknose Fairing (2024+ Skyline OS):</strong> Remove 4x T25 screen screws, 2x T27 inside gloveboxes, and 2x T25 lower tabs. Lift fairing off forward (LED turn signals are integral in blades!). Mount Front Node concealed under fairing directly to the round metal fairing stay tubes (Ø 16-19 mm Fairing Stays) using fairing tube clamp (<code>front_node_fairing_tube_clamp.stl</code>) or to forged carbon handlebar clamp (100% clean stealth fit). Connect <code>J1</code> to 12V switched, <code>J2</code> to CAN, <code>J4</code> upstream to Skyline OS display, <code>J6</code> to Ottocast wireless CarPlay/AA dongle (with 1-click TPS2051B watchdog hard reset on dropout), <code>J5</code> to 20W PD fast-charging cable, and <code>J12</code> to the Qwiic daisy-chain I2C cable (for ambient temperature sensor in sharknose cold air scoop & optional OPT3001 light sensor).'}</li>` : ''}
                     </ol>
@@ -10042,7 +10095,7 @@ function renderSingleBuilder() {
                     <ol>
                         <li>${isDe ? '<strong>Zentralbox:</strong> Unter der Sitzbank auf 4x M4 Silentblöcken verschrauben.' : '<strong>Central Box:</strong> Mount under seat using 4x M4 silentblocks.'}</li>
                         <li>${isDe ? '<strong>Pod 1 & 2:</strong> Mit dem 120° V-Nut Rohrbett an Rahmenrohren oder Sturzbügeln (Ø 22-32 mm) anlegen und mit EPDM-Spannbändern werkzeuglos fixieren.' : '<strong>Pods 1 & 2:</strong> Place 120° V-cradle onto frame tubes or crash bars (Ø 22-32 mm) and secure tool-free with EPDM ladder straps.'}</li>
-                        <li>${isDe ? '<strong>Verkabelung:</strong> M8 PUR-Kabel entlang des Kabelbaums mit Kabelbindern verlegen.' : '<strong>Cabling:</strong> Route M8 PUR cables along main harness using cable ties.'}</li>
+                        <li>${isDe ? '<strong>Verkabelung:</strong> DC-Zuleitungen entlang des Kabelbaums mit Kabelbindern verlegen.' : '<strong>Cabling:</strong> Route DC power leads along main harness using cable ties.'}</li>
                         ${active.addons?.frontNode ? `<li>${isDe ? '<strong>Front-Node & Cockpit:</strong> An den runden Metallstangen unterm Fairing bzw. an Cockpit- / GPS-Streben (Ø 12–22 mm) mit der Verkleidungs-Rohrschelle (<code>front_node_fairing_tube_clamp.stl</code>) oder per AMPS-Verschraubung fixieren.' : '<strong>Front Node & Cockpit:</strong> Mount to round metal fairing stays or cockpit / GPS tubes (Ø 12–22 mm) using fairing tube clamp (<code>front_node_fairing_tube_clamp.stl</code>) or AMPS pattern.'}</li>` : ''}
                     </ol>
                 </div>
@@ -10060,7 +10113,7 @@ function renderSingleBuilder() {
             </div>
             <div class="builder-instructions-body">
                 <ol>
-                    <li>${isDe ? 'Alle fertigen M8 PUR-Kabel an die Pods und den Front-Knoten anstecken und Überwurfmuttern handfest anziehen.' : 'Plug all pre-molded M8 PUR cables into pods and Front Node, tightening locking rings finger-tight.'}</li>
+                    <li>${isDe ? 'Wasserdichte 2-Pin JST-JWPF Zuleitungen an die Pods anstecken; Front-Node verbindet sich zu 100% drahtlos via UWB mit der Zentralbox.' : 'Plug waterproof 2-pin JST-JWPF leads into pods; Front Node connects 100% wirelessly via UWB to Central Box.'}</li>
                     <li>${isDe ? 'Deutsch DTM-12 Hauptstecker an der Zentralbox verriegeln.' : 'Lock Deutsch DTM-12 main plug at Central Box.'}</li>
                     <li>${isDe ? 'Bordnetzkabel (rot mit 2A Sicherung an Batterie-Dauerplus, schwarz an Masse) anschließen.' : 'Connect power harness (red with 2A fuse to battery +, black to ground).'}</li>
                     <li>${isDe ? 'Zündung EINschalten: Status-LEDs an Box und Front-Knoten leuchten grün. PWA öffnen, unten den Smoke-Test durchführen und Kassetten einschieben!' : 'Switch ignition ON: Status LEDs illuminate green. Open PWA, run Smoke Test below, and slide cartridges in!'}</li>
@@ -10317,8 +10370,8 @@ function renderGroupBuilder() {
                 bulkTip = '5m Spule Ø 1.5mm (reicht für bis zu 5 Bikes)';
             } else if (c.name.includes('Hubmagnete')) {
                 bulkTip = `${Math.ceil(c.totalQty / 4) * 4}er Los (4x pro Smart-Kassette)`;
-            } else if (c.name.includes('PUR')) {
-                bulkTip = `${c.totalQty}x Fertigkabel M8`;
+            } else if (c.name.includes('PUR') || c.name.includes('Zuleitung')) {
+                bulkTip = `${c.totalQty}x DC-Zuleitung (PUR)`;
             } else if (c.name.includes('LiPo')) {
                 bulkTip = `${c.totalQty}x 1S 3.7V 2200mAh Micro-Fit`;
             }
