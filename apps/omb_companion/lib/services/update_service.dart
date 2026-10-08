@@ -48,7 +48,9 @@ class UpdateService extends ChangeNotifier {
   Future<void> _initVersion() async {
     try {
       final info = await PackageInfo.fromPlatform();
-      _currentVersion = info.version;
+      _currentVersion = info.buildNumber.isNotEmpty
+          ? '${info.version}+${info.buildNumber}'
+          : info.version;
       notifyListeners();
     } catch (_) {}
   }
@@ -140,9 +142,12 @@ class UpdateService extends ChangeNotifier {
       final remoteVer = (data['version'] as String? ?? '').replaceFirst('v', '');
       final apkUrl = data['url'] as String? ?? '';
       final notes = data['notes'] as String? ?? '';
+      final resolvedUrl = apkUrl.startsWith('http://') || apkUrl.startsWith('https://')
+          ? apkUrl
+          : Uri.parse(serverUrl).resolve(apkUrl).toString();
       return UpdateInfo(
         version: remoteVer,
-        downloadUrl: apkUrl,
+        downloadUrl: resolvedUrl,
         releaseNotes: notes,
         isNewer: _isVersionNewer(remoteVer, _currentVersion),
       );
@@ -225,14 +230,19 @@ class UpdateService extends ChangeNotifier {
   bool _isVersionNewer(String remote, String current) {
     if (remote.isEmpty) return false;
     try {
-      final rParts = remote.split('.').map((e) => int.tryParse(e) ?? 0).toList();
-      final cParts = current.split('.').map((e) => int.tryParse(e) ?? 0).toList();
+      final rClean = remote.split('+').first;
+      final cClean = current.split('+').first;
+      final rParts = rClean.split('.').map((e) => int.tryParse(e) ?? 0).toList();
+      final cParts = cClean.split('.').map((e) => int.tryParse(e) ?? 0).toList();
       for (var i = 0; i < 3; i++) {
         final r = i < rParts.length ? rParts[i] : 0;
         final c = i < cParts.length ? cParts[i] : 0;
         if (r > c) return true;
         if (r < c) return false;
       }
+      final rBuild = remote.contains('+') ? int.tryParse(remote.split('+').last) ?? 0 : 0;
+      final cBuild = current.contains('+') ? int.tryParse(current.split('+').last) ?? 0 : 0;
+      if (rBuild > cBuild) return true;
       return false;
     } catch (_) {
       return remote != current;

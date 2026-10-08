@@ -38,12 +38,37 @@ cd apps/omb_companion
 flutter run
 ```
 
-### Release APK für den lokalen Server bauen
+### Automatisiertes Build- & Deployment-Skript (Homesphere-Pattern)
+
+Vor jedem Build wird automatisch die Versionsnummer und der Build-Code in `pubspec.yaml` erhöht, das Release-APK gebaut, die Metadaten (`version.json`, `apps.json`) generiert und auf alle konfigurierten Ziele (lokales Staging, Google Drive, Homeserver/Pi) verteilt:
+
 ```bash
-flutter build apk --release
-# Die fertige APK liegt unter:
-# build/app/outputs/flutter-apk/app-release.apk
+# Aus dem Repository-Root:
+./tools/build_and_deploy_companion.sh
+
+# Oder aus apps/omb_companion/:
+./scripts/build_and_deploy.sh
 ```
+
+#### Nützliche CLI-Optionen:
+* `--no-bump` – Behält die aktuelle Version bei ohne sie zu erhöhen.
+* `--patch` – Erhöht explizit den SemVer-Patch (z. B. `1.0.1` ➔ `1.0.2`).
+* `--minor` – Erhöht die Minor-Version (z. B. `1.0.x` ➔ `1.1.0`).
+* `--major` – Erhöht die Major-Version (z. B. `1.x.x` ➔ `2.0.0`).
+* `--ios` – Kompiliert zusätzlich auf macOS die iOS-App und schnürt eine unsignierte IPA für SideStore / AltStore.
+* `--remote` – Erzwingt den SCP-Upload auf den lokalen Server / Raspberry Pi (`homesphere.f0o.bar`).
+* `--tag` – Erstellt automatisch ein signiertes Git-Release-Tag `vX.Y.Z-B` und pusht es zu GitHub.
+
+#### Bereitstellungs-Ziele (Automatisch erkannt):
+1. **Lokales Staging (`apps/omb_companion/dist/`):**
+   * `openmotorbridge-release.apk` & `openmotorbridge-X.Y.Z-B.apk`
+   * `version.json` (für In-App OTA Self-Update)
+   * `apps.json` (für SideStore / AltStore)
+   * `logo.jpg`
+2. **Google Drive Sync:**
+   * Wird automatisch in `/Meine Ablage/OpenMotorBridge/app/` abgelegt, sofern Google Drive auf dem Mac eingebunden ist.
+3. **Lokaler Homeserver / Raspberry Pi:**
+   * Übertragung per `scp` auf `homesphere.f0o.bar` nach `/home/schmidtm/homesphere/api-service/data/static/` für sofortige Verfügbarkeit im lokalen Netzwerk.
 
 ### Eigene Update-Konfiguration (`version.json` auf deinem lokalen Server)
 ```json
