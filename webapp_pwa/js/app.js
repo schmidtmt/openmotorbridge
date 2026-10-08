@@ -8625,7 +8625,28 @@ function setupSystemBuilderUi() {
             card.addEventListener('click', () => {
                 container.querySelectorAll('.builder-option-card').forEach(c => c.classList.remove('selected'));
                 card.classList.add('selected');
-                builderState[stateProp] = card.getAttribute('data-value');
+                const val = card.getAttribute('data-value');
+                builderState[stateProp] = val;
+
+                // Automatically update default name when bike model is changed
+                if (stateProp === 'bike') {
+                    const isDe = state.lang === 'de';
+                    const modelNames = {
+                        'bmw-gs': 'BMW GS',
+                        'hd-touring': 'Harley Touring',
+                        'universal': 'Universal Naked',
+                        'bmw-gsa': 'BMW GSA',
+                        'hd-cvo-st': 'Harley CVO ST',
+                        'car-support': isDe ? 'Support-Van / Pkw' : 'Support Van / Car'
+                    };
+                    const activeIdx = fleetState.activeBikeIndex;
+                    const curName = builderState.name || '';
+                    if (!curName || /^(Fahrer|Rider)\s+\d+/i.test(curName)) {
+                        const riderNum = activeIdx + 1;
+                        builderState.name = isDe ? `Fahrer ${riderNum} (${modelNames[val] || 'Bike'})` : `Rider ${riderNum} (${modelNames[val] || 'Bike'})`;
+                    }
+                }
+
                 renderSystemBuilder();
             });
         });
@@ -8775,7 +8796,14 @@ function calculateSingleBikeBom(bikeConfig) {
     if (mfg === 'diy') { costMin -= 25; costMax -= 35; }
 
     const numPods = bikeModel === 'car-support' ? 0 : 2;
-    const numSmart = (slot1 === 'sena-spider-x' ? 1 : 0) + (slot2 === 'cardo-edge' ? 1 : 0);
+    // Carrier PCBAs in Pods (every active pod needs PCBA 03, blind cartridges do not)
+    const numCartridgePcba = bikeModel === 'car-support' ? 0 :
+        (slot1 !== 'blind' ? 1 : 0) + (slot2 !== 'blind' ? 1 : 0);
+    // Mechatronic slots that need physical solenoids (miniature pushers for OEM buttons)
+    const numMechatronic = bikeModel === 'car-support' ? 0 :
+        ((slot1 === 'sena-spider-x' || slot1 === 'sena-50s') ? 1 : 0) +
+        ((slot2 === 'cardo-edge' || slot2 === 'pmr446') ? 1 : 0);
+    const numSmart = numCartridgePcba;
 
     // 3D Parts
     const parts3D = [
@@ -8930,8 +8958,15 @@ function calculateSingleBikeBom(bikeConfig) {
         { name: 'PCBA 01', id: 'kicad_main_box', qty: 1, desc: isDe ? 'Zentralbox Hauptplatine (ESP32-S3, Codec, USV, SX1262 LoRa)' : 'Central box main controller (ESP32-S3, Codec, UPS, SX1262 LoRa)' }
     ];
 
-    if (numSmart > 0 && bikeModel !== 'car-support') {
-        pcbas.push({ name: 'PCBA 03', id: 'kicad_cartridge', qty: numSmart, desc: isDe ? `Smart Modular Kassettenplatine (${numSmart} Stk.)` : `Smart modular cartridge board (${numSmart} pcs)` });
+    if (numCartridgePcba > 0 && bikeModel !== 'car-support') {
+        pcbas.push({
+            name: 'PCBA 03',
+            id: 'kicad_cartridge',
+            qty: numCartridgePcba,
+            desc: isDe ?
+                `Smart Kassetten-Trägerplatine (${numCartridgePcba}x: Qorvo DW3110 UWB, ES8388 Codec, DC-DC Speisung)` :
+                `Smart cartridge carrier board (${numCartridgePcba}x: Qorvo DW3110 UWB, ES8388 Codec, DC-DC power)`
+        });
     }
 
     if (addons.frontNode) {
@@ -9001,10 +9036,23 @@ function calculateSingleBikeBom(bikeConfig) {
         cots.push({ name: 'M5 Klemmschrauben & EPDM-Streifen', spec: '2x DIN 912 M5 x 25 mm + Stopmuttern + EPDM', qty: 1, desc: isDe ? 'Befestigung an runden Verkleidungsrohren (Ø 12-22 mm)' : 'Mounting to round fairing tubes (Ø 12-22 mm)' });
     }
 
-    if (numSmart > 0 && bikeModel !== 'car-support') {
-        cots.push({ name: 'M2 Halteplattenschrauben', spec: 'DIN 7991 V4A M2 x 6 mm', qty: numSmart * 4, desc: isDe ? 'Aktuator-Niederhalteplatten (4x pro Gateway)' : 'Actuator retainer plates (4x per gateway)' });
-        cots.push({ name: 'Miniatur-Hubmagnete', spec: '5V DC Ø 6,5x12mm + TPU-Spitzen', qty: numSmart * 4, desc: isDe ? 'Mechatronische Tastenbetätigung (4x pro Smart Slot)' : 'Mechatronic button actuation (4x per smart slot)' });
-        cots.push({ name: 'J_ACT Aktuator-Kabelbaum', spec: 'Fertiges 8-Pin JST-SH Kabel auf 4x Litzen', qty: numSmart, desc: isDe ? 'Vorkonfektioniertes Fertigkabel (kein Crimpen!)' : 'Pre-molded harness lead (zero crimping!)' });
+    if (numMechatronic > 0 && bikeModel !== 'car-support') {
+        cots.push({ name: 'M2 Halteplattenschrauben', spec: 'DIN 7991 V4A M2 x 6 mm', qty: numMechatronic * 4, desc: isDe ? 'Aktuator-Niederhalteplatten (4x pro Gateway)' : 'Actuator retainer plates (4x per gateway)' });
+        cots.push({ name: 'Miniatur-Hubmagnete', spec: '5V DC Ø 6,5x12mm + TPU-Spitzen', qty: numMechatronic * 4, desc: isDe ? 'Mechatronische Tastenbetätigung (4x pro Smart Slot)' : 'Mechatronic button actuation (4x per smart slot)' });
+        cots.push({ name: 'J_ACT Aktuator-Kabelbaum', spec: 'Fertiges 8-Pin JST-SH Kabel auf 4x Litzen', qty: numMechatronic, desc: isDe ? 'Vorkonfektioniertes Fertigkabel (kein Crimpen!)' : 'Pre-molded harness lead (zero crimping!)' });
+    }
+
+    const numOmmPods = (slot1 === 'omm-ucs' ? 1 : 0) + (slot2 === 'omm-ucs' ? 1 : 0) +
+                       (slot1 === 'omm446' ? 1 : 0) + (slot2 === 'omm446' ? 1 : 0);
+    if (numOmmPods > 0 && bikeModel !== 'car-support') {
+        cots.push({
+            name: 'J_AUDIO_PWR Adapterkabel',
+            spec: '8-Pin JST-SH 1.0mm auf 90° USB-C (5 cm, Kelvin-Grounds)',
+            qty: numOmmPods,
+            desc: isDe ?
+                'Verbindung PCBA 03 Trägerplatine zu OMM USB-C Port im Pod' :
+                'Connection PCBA 03 carrier board to OMM USB-C port in pod'
+        });
     }
 
     if (totalOmmPcba > 0) {
