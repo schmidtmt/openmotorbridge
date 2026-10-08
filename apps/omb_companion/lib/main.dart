@@ -86,15 +86,17 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         elevation: 0,
         title: Row(
           children: [
-            Container(
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                color: const Color(0xFF00F2FE).withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(8),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.asset(
+                'assets/images/logo.jpg',
+                width: 32,
+                height: 32,
+                fit: BoxFit.cover,
+                errorBuilder: (_, _, _) => const Icon(Icons.two_wheeler, color: Color(0xFF00F2FE), size: 24),
               ),
-              child: const Icon(Icons.two_wheeler, color: Color(0xFF00F2FE), size: 20),
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: 12),
             const Text(
               'OpenMotorBridge',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, letterSpacing: 0.5),
@@ -621,13 +623,15 @@ class _UpdateScreenState extends State<UpdateScreen> {
                   padding: const EdgeInsets.all(16),
                   child: Row(
                     children: [
-                      Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF00F2FE).withValues(alpha: 0.15),
-                          borderRadius: BorderRadius.circular(12),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.asset(
+                          'assets/images/logo.jpg',
+                          width: 48,
+                          height: 48,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, _, _) => const Icon(Icons.install_mobile, color: Color(0xFF00F2FE), size: 32),
                         ),
-                        child: const Icon(Icons.install_mobile, color: Color(0xFF00F2FE), size: 28),
                       ),
                       const SizedBox(width: 16),
                       Column(
