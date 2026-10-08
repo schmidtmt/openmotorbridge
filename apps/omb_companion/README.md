@@ -28,6 +28,17 @@ Offizielle plattformübergreifende Begleit-App für das OpenMotorBridge Motorrad
 * Speist die Binärframes via BLE in den SAM-M10Q GNSS-Chip auf Front-Node PCBA 05 ein.
 * **Ergebnis:** Kaltstart-TTFF sinkt von ~30 s auf unter **1.5 Sekunden** (Instant-3D-Fix)!
 
+### 5. Nativer Smart Firmware & Node-OTA Hub
+* **Keine WebBLE-Abbrüche:** Im Gegensatz zur PWA kein Verbindungsabriss bei gesperrtem Bildschirm oder Ruhezustand (Foreground-Service mit WakeLock).
+* **Multi-Node Unterstützung:**
+  * **Central Controller (ESP32-S3):** `openmotorbridge_central.bin`
+  * **OMM UCS Intercom (PCBA 09 / ESP32-C3):** High-Speed UART Push (460.800 Baud SLIP)
+  * **Front-Node Cockpit (PCBA 05):** ESP-NOW & Ottocast Flasher
+  * **Radar Sub-MCU (PCBA 02):** 77 GHz Transceiver-Coprozessor
+* **Offline-Caching für die Garage:** Binärdateien können vorab im heimischen WLAN auf das Smartphone geladen werden – das Motorrad kann draußen in der Tiefgarage völlig offline geflasht werden.
+* **Eigene Test-Firmware:** Beliebige `.bin`-Dateien können direkt über den nativen Dateimanager ausgewählt und geflasht werden.
+* **Live-Diagnoselog:** Scrollbare Terminalkonsole mit detailliertem Übertragungsprotokoll und Fehlerüberwachung.
+
 ---
 
 ## 🛠️ Entwicklung & Build

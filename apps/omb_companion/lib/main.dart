@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'services/assistnow_service.dart';
 import 'services/ble_bridge_service.dart';
+import 'services/firmware_service.dart';
 import 'services/proxy_service.dart';
 import 'services/update_service.dart';
 
@@ -55,6 +56,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   final ProxyService _proxyService = ProxyService();
   final BleBridgeService _bleService = BleBridgeService();
   final AssistNowService _assistNowService = AssistNowService();
+  final FirmwareService _firmwareService = FirmwareService();
 
   @override
   void initState() {
@@ -69,6 +71,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   void dispose() {
     _proxyService.dispose();
     _bleService.dispose();
+    _firmwareService.dispose();
     super.dispose();
   }
 
@@ -77,6 +80,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     final screens = [
       CockpitScreen(ble: _bleService, assistNow: _assistNowService, proxy: _proxyService),
       ProxyScreen(proxy: _proxyService),
+      FirmwareScreen(firmware: _firmwareService, ble: _bleService),
       UpdateScreen(updater: _updateService),
     ];
 
@@ -159,6 +163,11 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
             icon: Icon(Icons.cell_tower),
             selectedIcon: Icon(Icons.cell_tower, color: Color(0xFF00F2FE)),
             label: 'Mobilfunk-Proxy',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.memory),
+            selectedIcon: Icon(Icons.memory, color: Color(0xFF00F2FE)),
+            label: 'Firmware-OTA',
           ),
           NavigationDestination(
             icon: Icon(Icons.system_update_alt),
@@ -264,9 +273,44 @@ class CockpitScreen extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 16),
+              if (ble.hwLostMask != 0) ...[
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.redAccent.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.redAccent),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.warning, color: Colors.redAccent, size: 24),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Hardware-Verlust / Anomalie erkannt!',
+                              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.redAccent, fontSize: 13),
+                            ),
+                            Text(
+                              'NVS-Baseline Abweichung (Maske: 0x${ble.hwLostMask.toRadixString(16).toUpperCase()}). Ein Modul antwortet nicht.',
+                              style: const TextStyle(fontSize: 11, color: Colors.white70),
+                            ),
+                          ],
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () => ble.sendControlCommand([0x41, 0x03]),
+                        child: const Text('Re-Scan', style: TextStyle(color: Color(0xFF00F2FE), fontSize: 11)),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+              ],
 
-              // Live Telemetry Grid
+              // Live Telemetry Grid (6 Metrics)
               GridView.count(
                 crossAxisCount: 2,
                 shrinkWrap: true,
@@ -276,18 +320,18 @@ class CockpitScreen extends StatelessWidget {
                 childAspectRatio: 1.4,
                 children: [
                   _metricTile(
-                    title: 'Bordnetz / Batterie',
+                    title: 'Bordnetz (KL30)',
                     value: '${ble.batteryVoltage.toStringAsFixed(1)} V',
                     icon: Icons.battery_charging_full,
                     color: ble.batteryVoltage > 12.2 ? const Color(0xFF00E676) : Colors.orangeAccent,
-                    subtext: ble.ignitionOn ? 'Zündung EIN (KL15)' : 'Standby',
+                    subtext: ble.ignitionOn ? 'KL15: ${ble.ignitionVoltage.toStringAsFixed(1)} V' : 'Standby (Zdg AUS)',
                   ),
                   _metricTile(
                     title: 'Schräglage (IMU)',
                     value: '${ble.leanAngle.abs().toStringAsFixed(1)}°',
                     icon: Icons.screen_rotation,
                     color: const Color(0xFF00F2FE),
-                    subtext: ble.leanAngle < 0 ? 'Linksneigung' : 'Rechtsneigung',
+                    subtext: ble.leanAngle == 0 ? 'Aufrecht' : (ble.leanAngle < 0 ? 'Linksneigung' : 'Rechtsneigung'),
                   ),
                   _metricTile(
                     title: 'Radar 2.0 (77 GHz)',
@@ -299,6 +343,20 @@ class CockpitScreen extends StatelessWidget {
                         ? const Color(0xFF00E676)
                         : (ble.radarAlertLevel == 1 ? Colors.orangeAccent : Colors.redAccent),
                     subtext: 'Heck-Transceiver',
+                  ),
+                  _metricTile(
+                    title: 'GNSS Fix (SAM-M10Q)',
+                    value: ble.gnss3dFix ? '3D FIX' : 'SUCHE...',
+                    icon: Icons.satellite_alt,
+                    color: ble.gnss3dFix ? const Color(0xFF00E676) : Colors.orangeAccent,
+                    subtext: 'Front-Node PCBA 05',
+                  ),
+                  _metricTile(
+                    title: 'Keyfob / Remote',
+                    value: '${ble.remoteBatPct} %',
+                    icon: Icons.vpn_key,
+                    color: ble.remoteBatPct > 20 ? const Color(0xFF00E676) : Colors.orangeAccent,
+                    subtext: 'Smart-Beacon NVS',
                   ),
                   _metricTile(
                     title: 'Mobilfunk-Proxy',
@@ -756,6 +814,537 @@ class _UpdateScreenState extends State<UpdateScreen> {
                       ),
                     ],
                   ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 4. Firmware & OTA Hub Screen (ESP32-S3, OMM Intercom, Front-Node)
+// ---------------------------------------------------------------------------
+class FirmwareScreen extends StatefulWidget {
+  final FirmwareService firmware;
+  final BleBridgeService ble;
+
+  const FirmwareScreen({
+    super.key,
+    required this.firmware,
+    required this.ble,
+  });
+
+  @override
+  State<FirmwareScreen> createState() => _FirmwareScreenState();
+}
+
+class _FirmwareScreenState extends State<FirmwareScreen> {
+  final TextEditingController _serverUrlCtrl = TextEditingController();
+  final ScrollController _logScrollCtrl = ScrollController();
+  bool _isOfflineCached = false;
+  int _cachedSizeBytes = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadServerUrl();
+    _checkCacheStatus();
+  }
+
+  Future<void> _loadServerUrl() async {
+    final url = await widget.firmware.getFirmwareServerUrl();
+    _serverUrlCtrl.text = url;
+  }
+
+  Future<void> _checkCacheStatus() async {
+    final cached = await widget.firmware.isFirmwareCached(widget.firmware.selectedTarget);
+    final size = await widget.firmware.getCachedFileSize(widget.firmware.selectedTarget);
+    if (mounted) {
+      setState(() {
+        _isOfflineCached = cached;
+        _cachedSizeBytes = size;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _serverUrlCtrl.dispose();
+    _logScrollCtrl.dispose();
+    super.dispose();
+  }
+
+  void _scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_logScrollCtrl.hasClients) {
+        _logScrollCtrl.animateTo(
+          _logScrollCtrl.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListenableBuilder(
+      listenable: Listenable.merge([widget.firmware, widget.ble]),
+      builder: (context, _) {
+        _scrollToBottom();
+        final fw = widget.firmware;
+        final ble = widget.ble;
+        final target = fw.selectedTarget;
+        final isFlashing = fw.isFlashing;
+
+        return SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Header Banner
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF00F2FE).withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Icon(Icons.memory, color: Color(0xFF00F2FE), size: 28),
+                      ),
+                      const SizedBox(width: 14),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Smart Firmware & OTA Hub',
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              'Direktes High-Speed Flashen via Bluetooth Low Energy ohne Browser-Timeouts.',
+                              style: TextStyle(color: Colors.white.withValues(alpha: 0.65), fontSize: 11),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              // BLE Warning Banner if disconnected
+              if (!ble.isConnected) ...[
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.orangeAccent.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.orangeAccent.withValues(alpha: 0.4)),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.bluetooth_searching, color: Colors.orangeAccent, size: 20),
+                      const SizedBox(width: 10),
+                      const Expanded(
+                        child: Text(
+                          'Motorrad nicht über BLE verbunden. Bitte zuerst im Tab "Cockpit" mit der Central Box verbinden.',
+                          style: TextStyle(fontSize: 11, color: Colors.white70),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+              ],
+
+              // 1. Target Selector
+              const Text('1. Zielknoten auswählen', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+              const SizedBox(height: 8),
+              ...FirmwareTarget.values.map((t) {
+                final isSelected = t == target;
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(12),
+                    onTap: isFlashing
+                        ? null
+                        : () {
+                            fw.selectTarget(t);
+                            _checkCacheStatus();
+                          },
+                    child: Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? const Color(0xFF00F2FE).withValues(alpha: 0.12)
+                            : const Color(0xFF131B2E).withValues(alpha: 0.6),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: isSelected ? const Color(0xFF00F2FE) : Colors.white12,
+                          width: isSelected ? 1.5 : 1.0,
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            t == FirmwareTarget.ommIntercom
+                                ? Icons.headset_mic
+                                : (t == FirmwareTarget.frontNode
+                                    ? Icons.speed
+                                    : (t == FirmwareTarget.radarSubMcu ? Icons.radar : Icons.memory)),
+                            color: isSelected ? const Color(0xFF00F2FE) : Colors.grey,
+                            size: 24,
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      t.title,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 13,
+                                        color: isSelected ? Colors.white : Colors.white70,
+                                      ),
+                                    ),
+                                    Text(
+                                      t.defaultVersion,
+                                      style: TextStyle(
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.bold,
+                                        color: isSelected ? const Color(0xFF00E676) : Colors.grey,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 2),
+                                Text(
+                                  t.subtitle,
+                                  style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.5)),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              }),
+
+              const SizedBox(height: 16),
+
+              // 2. Binary Source & Offline Caching Card
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('2. Firmware-Binärdatei & Offline-Cache', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                      const SizedBox(height: 8),
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.04),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              fw.customBinaryFile != null
+                                  ? Icons.insert_drive_file
+                                  : (_isOfflineCached ? Icons.check_circle : Icons.cloud_download),
+                              color: fw.customBinaryFile != null
+                                  ? const Color(0xFFFF6B00)
+                                  : (_isOfflineCached ? const Color(0xFF00E676) : Colors.grey),
+                              size: 20,
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    fw.customBinaryFile != null
+                                        ? 'Manuelle Datei: ${fw.customBinaryFile!.path.split('/').last}'
+                                        : (_isOfflineCached
+                                            ? 'Offline im App-Speicher bereit (${(_cachedSizeBytes / 1024).toStringAsFixed(1)} kB)'
+                                            : 'Nicht im Offline-Speicher (Server-Download erforderlich)'),
+                                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    fw.customBinaryFile != null
+                                        ? fw.customBinaryFile!.path
+                                        : 'Datei: ${target.filename}',
+                                    style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.5)),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            if (fw.customBinaryFile != null)
+                              IconButton(
+                                icon: const Icon(Icons.close, size: 16, color: Colors.redAccent),
+                                onPressed: () {
+                                  fw.clearCustomBinary();
+                                  _checkCacheStatus();
+                                },
+                              ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF00E676).withValues(alpha: 0.15),
+                                foregroundColor: const Color(0xFF00E676),
+                                padding: const EdgeInsets.symmetric(vertical: 10),
+                              ),
+                              onPressed: (isFlashing || fw.isDownloading)
+                                  ? null
+                                  : () async {
+                                      final ok = await fw.downloadForOfflineUse(target);
+                                      if (ok) _checkCacheStatus();
+                                    },
+                              icon: fw.isDownloading
+                                  ? const SizedBox(width: 14, height: 14, child: CircularProgressIndicator(strokeWidth: 2))
+                                  : const Icon(Icons.download_for_offline, size: 18),
+                              label: const Text('Offline cachen (Garage)', style: TextStyle(fontSize: 11)),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF00F2FE).withValues(alpha: 0.15),
+                                foregroundColor: const Color(0xFF00F2FE),
+                                padding: const EdgeInsets.symmetric(vertical: 10),
+                              ),
+                              onPressed: isFlashing
+                                  ? null
+                                  : () async {
+                                      await fw.pickCustomBinary();
+                                      _checkCacheStatus();
+                                    },
+                              icon: const Icon(Icons.folder_open, size: 18),
+                              label: const Text('Eigene .bin wählen', style: TextStyle(fontSize: 11)),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              // 3. Flash Execution Card
+              Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  side: BorderSide(
+                    color: isFlashing ? const Color(0xFF00F2FE) : Colors.white12,
+                    width: isFlashing ? 1.5 : 1.0,
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text('3. Flash- & OTA-Transfer', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                            decoration: BoxDecoration(
+                              color: (isFlashing ? const Color(0xFF00F2FE) : (fw.status == OtaStatus.success ? const Color(0xFF00E676) : Colors.grey)).withValues(alpha: 0.2),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
+                              fw.status.name.toUpperCase(),
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                color: isFlashing ? const Color(0xFF00F2FE) : (fw.status == OtaStatus.success ? const Color(0xFF00E676) : Colors.grey),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        fw.statusMessage,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: fw.status == OtaStatus.failed ? Colors.redAccent : Colors.white70,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      if (isFlashing || fw.progress > 0) ...[
+                        LinearProgressIndicator(
+                          value: fw.progress > 0 ? fw.progress : null,
+                          backgroundColor: Colors.white12,
+                          color: const Color(0xFF00F2FE),
+                          minHeight: 8,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              '${(fw.progress * 100).toStringAsFixed(0)} % abgeschlossen',
+                              style: const TextStyle(fontSize: 11, color: Colors.grey),
+                            ),
+                            if (fw.speedText.isNotEmpty)
+                              Text(
+                                fw.speedText,
+                                style: const TextStyle(fontSize: 11, color: Color(0xFF00E676), fontWeight: FontWeight.bold),
+                              ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                      ],
+                      ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: ble.isConnected
+                              ? const Color(0xFF00F2FE)
+                              : Colors.grey.withValues(alpha: 0.3),
+                          foregroundColor: Colors.black,
+                          minimumSize: const Size.fromHeight(46),
+                        ),
+                        onPressed: (!ble.isConnected || isFlashing)
+                            ? null
+                            : () => fw.startFlash(ble: ble),
+                        icon: isFlashing
+                            ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.black))
+                            : const Icon(Icons.flash_on),
+                        label: Text(
+                          isFlashing
+                              ? 'Flashe ${target.filename}...'
+                              : '⚡ Firmware auf Motorrad flashen (OTA)',
+                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              // 4. Live Diagnostic Log Console
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Row(
+                            children: [
+                              Icon(Icons.terminal, size: 16, color: Color(0xFF00F2FE)),
+                              SizedBox(width: 8),
+                              Text('OTA Live-Diagnoselog', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                            ],
+                          ),
+                          TextButton(
+                            onPressed: () => fw.clearLogs(),
+                            child: const Text('Leeren', style: TextStyle(fontSize: 11, color: Colors.grey)),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 6),
+                      Container(
+                        height: 140,
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF080C14),
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.white10),
+                        ),
+                        child: fw.logEntries.isEmpty
+                            ? const Text('Keine Protokolle vorhanden.', style: TextStyle(color: Colors.grey, fontSize: 11))
+                            : ListView.builder(
+                                controller: _logScrollCtrl,
+                                itemCount: fw.logEntries.length,
+                                itemBuilder: (context, i) {
+                                  final line = fw.logEntries[i];
+                                  final isErr = line.contains('FEHLER') || line.contains('Abbruch');
+                                  final isOk = line.contains('✓') || line.contains('🎉');
+                                  return Padding(
+                                    padding: const EdgeInsets.only(bottom: 2),
+                                    child: Text(
+                                      line,
+                                      style: TextStyle(
+                                        fontFamily: 'monospace',
+                                        fontSize: 10,
+                                        color: isErr
+                                            ? Colors.redAccent
+                                            : (isOk ? const Color(0xFF00E676) : Colors.white70),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              // 5. Server URL Configuration Tile
+              Card(
+                child: ExpansionTile(
+                  title: const Text('Update-Server Einstellungen', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                  leading: const Icon(Icons.settings, size: 20, color: Colors.grey),
+                  childrenPadding: const EdgeInsets.all(16),
+                  children: [
+                    TextField(
+                      controller: _serverUrlCtrl,
+                      decoration: InputDecoration(
+                        labelText: 'Firmware Server Basis-URL',
+                        prefixIcon: const Icon(Icons.dns, size: 20),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                        isDense: true,
+                      ),
+                      onSubmitted: (val) => fw.setFirmwareServerUrl(val),
+                    ),
+                    const SizedBox(height: 10),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(minimumSize: const Size.fromHeight(38)),
+                      onPressed: () => fw.setFirmwareServerUrl(_serverUrlCtrl.text),
+                      child: const Text('URL speichern', style: TextStyle(fontSize: 12)),
+                    ),
+                  ],
                 ),
               ),
             ],
