@@ -9012,11 +9012,11 @@ function calculateSingleBikeBom(bikeConfig) {
     if (addons.keyfob) { costMin += 22; costMax += 30; }
     if (mfg === 'diy') { costMin -= 25; costMax -= 35; }
 
-    const numPods = bikeModel === 'car-support' ? 0 : 2;
+    const numPods = bikeModel === 'car-support' ? (totalCartridges > 0 ? 2 : 0) : 2;
     // Carrier PCBAs: Each active cartridge built needs 1x PCBA 03 (Qorvo UWB, Codec, DC-DC)
-    const numCartridgePcba = bikeModel === 'car-support' ? 0 : totalActiveCartridges;
+    const numCartridgePcba = totalActiveCartridges;
     // Mechatronic slots that need physical solenoids (miniature pushers for OEM buttons)
-    const numMechatronic = bikeModel === 'car-support' ? 0 : (numSenaSpider + numSena50s + numCardo + numPmr);
+    const numMechatronic = numSenaSpider + numSena50s + numCardo + numPmr;
     const numSmart = numCartridgePcba;
 
     // 3D Parts
@@ -9034,7 +9034,7 @@ function calculateSingleBikeBom(bikeConfig) {
             { group: 'Cartridge', file: 'cartridge_base_sled.stl', qty: sledCount, desc: isDe ? `Universalschlitten (${sledCount} Stk. für Pods & Wechselkassetten)` : `Universal sled chassis (${sledCount} pcs for pods & swap cartridges)` }
         );
     }
-    if (bikeModel !== 'car-support') {
+    if (totalCartridges > 0) {
         const latchCount = Math.max(2, totalCartridges);
         parts3D.push(
             { group: 'Cartridge', file: 'cartridge_magnetic_lock_latch.stl', qty: latchCount, desc: isDe ? `Magnetische Diebstahlschutz-Rastwippen (${latchCount} Stk.)` : `Magnetic anti-theft locking rocker latches (${latchCount} pcs)` }
@@ -9042,7 +9042,7 @@ function calculateSingleBikeBom(bikeConfig) {
     }
 
     // Inlays
-    if (bikeModel !== 'car-support') {
+    if (totalCartridges > 0) {
         const totalSena = numSenaSpider + numSena50s;
         if (totalSena > 0) {
             parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_sena.stl', qty: totalSena, desc: isDe ? `Inlay für Sena SPIDER X / 50S / 60S (${totalSena} Stk.)` : `Inlay for Sena SPIDER X / 50S / 60S (${totalSena} pcs)` });
@@ -9172,7 +9172,7 @@ function calculateSingleBikeBom(bikeConfig) {
         { name: 'PCBA 01', id: 'kicad_main_box', qty: 1, desc: isDe ? 'Zentralbox Hauptplatine (ESP32-S3, Codec, USV, SX1262 LoRa)' : 'Central box main controller (ESP32-S3, Codec, UPS, SX1262 LoRa)' }
     ];
 
-    if (numCartridgePcba > 0 && bikeModel !== 'car-support') {
+    if (numCartridgePcba > 0) {
         pcbas.push({
             name: 'PCBA 03',
             id: 'kicad_cartridge',
@@ -9246,14 +9246,14 @@ function calculateSingleBikeBom(bikeConfig) {
         cots.push({ name: 'M5 Klemmschrauben & EPDM-Streifen', spec: '2x DIN 912 M5 x 25 mm + Stopmuttern + EPDM', qty: 1, desc: isDe ? 'Befestigung an runden Verkleidungsrohren (Ø 12-22 mm)' : 'Mounting to round fairing tubes (Ø 12-22 mm)' });
     }
 
-    if (numMechatronic > 0 && bikeModel !== 'car-support') {
+    if (numMechatronic > 0) {
         cots.push({ name: 'M2 Halteplattenschrauben', spec: 'DIN 7991 V4A M2 x 6 mm', qty: numMechatronic * 4, desc: isDe ? 'Aktuator-Niederhalteplatten (4x pro Gateway)' : 'Actuator retainer plates (4x per gateway)' });
         cots.push({ name: 'Miniatur-Hubmagnete', spec: '5V DC Ø 6,5x12mm + TPU-Spitzen', qty: numMechatronic * 4, desc: isDe ? 'Mechatronische Tastenbetätigung (4x pro Smart Slot)' : 'Mechatronic button actuation (4x per smart slot)' });
         cots.push({ name: 'J_ACT Aktuator-Kabelbaum', spec: 'Fertiges 8-Pin JST-SH Kabel auf 4x Litzen', qty: numMechatronic, desc: isDe ? 'Vorkonfektioniertes Fertigkabel (kein Crimpen!)' : 'Pre-molded harness lead (zero crimping!)' });
     }
 
     const numOmmPods = numOmmUcs + numOmm446;
-    if (numOmmPods > 0 && bikeModel !== 'car-support') {
+    if (numOmmPods > 0) {
         cots.push({
             name: 'J_AUDIO_PWR Adapterkabel',
             spec: '8-Pin JST-SH 1.0mm auf 90° USB-C (5 cm, Kelvin-Grounds)',
@@ -9351,7 +9351,7 @@ function calculateSingleBikeBom(bikeConfig) {
         });
     }
 
-    if (bikeModel !== 'car-support') {
+    if (totalCartridges > 0) {
         const latchCount = Math.max(2, totalCartridges);
         cots.push({ name: 'M2 Schwenkachsen Wippe', spec: 'Zylinderstift DIN 7 M2 x 8 mm', qty: latchCount, desc: isDe ? `Drehachsen für Kassetten-Rastwippen (${latchCount} Stk.)` : `Pivot pins for cartridge locking rockers (${latchCount} pcs)` });
         cots.push({ name: 'Stahlanker (Kassette)', spec: 'Gehärteter Stift DIN 6325 Ø 6 x 8 mm', qty: latchCount, desc: isDe ? `Magnetanker im Hebelarm der Kassetten-Wippe (${latchCount} Stk.)` : `Steel armature in cartridge rocker arm (${latchCount} pcs)` });
