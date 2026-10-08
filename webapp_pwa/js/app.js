@@ -9000,6 +9000,8 @@ function calculateSingleBikeBom(bikeConfig) {
     const extraCartridges = Math.max(0, totalActiveCartridges - 2);
     costMin += extraCartridges * 18;
     costMax += extraCartridges * 24;
+    costMin += numBlind * 6;
+    costMax += numBlind * 9;
 
     if (addons.frontNode) { costMin += 42; costMax += 55; }
     if (addons.ommHelmetKit) { costMin += 45; costMax += 58; }
