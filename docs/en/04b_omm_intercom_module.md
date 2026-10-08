@@ -36,15 +36,18 @@ To prevent architectural confusion between motorcycle carrier mechatronics and i
 
 | Specification | OMM 2.4 GHz HD-Mesh (`PCBA 09`) | OMM 446 MHz PMR/DMR Radio Module (`PCBA 10`) |
 | :--- | :--- | :--- |
-| **Primary RF Technology** | 2.4 GHz Wi-Fi 6 / 802.15.4 TDMA Mesh | 446 MHz Narrowband Radio ($12.5\,\text{kHz}$ spacing) |
-| **RF Transceiver** | Espressif ESP32-C6-MINI-1U | NiceRF SA818-DMR (CMX7141 Baseband DSP + PA) |
+| **Architecture** | **Dual-Engine ("OMB Lite")** | **Dual-Engine ("OMB Lite")** |
+| **Mesh / Radio Engine** | Espressif ESP32-C6-MINI-1U (Wi-Fi 6 / ESP-NOW) | NiceRF SA818-DMR (CMX7141 Baseband DSP + PA) |
+| **Bluetooth Co-Processor** | **ESP32-PICO-V3-02** (Dual-Core 240 MHz, 8 MB Flash, 2 MB PSRAM) | **ESP32-PICO-V3-02** (Dual-Core 240 MHz, 8 MB Flash, 2 MB PSRAM) |
+| **Bluetooth Standards** | **BT Classic (BR/EDR)**: HFP 1.7 mSBC, OMI, A2DP + **BLE 5.3** | **BT Classic (BR/EDR)**: HFP 1.7 mSBC, OMI, A2DP + **BLE 5.3** |
+| **Bridge Capability** | **Cardo DMC-Bridge, Sena Mesh-Bridge, Universal Intercom** | **Cardo DMC-Bridge, Sena Mesh-Bridge, Universal Intercom** |
 | **Operating Modes** | TDMA Slotted Mesh (Open / Private) | **Dual-Mode:** Analog FM (PMR446) + Digital (DMR Tier I) |
 | **Channels / Subtones** | 6 Multicast Channels + AES-128 Private Groups | 16x PMR446 (38 CTCSS / 83 DCS) + 16x DMR (Color 1-16) |
 | **RF Power Output** | $+20\,\text{dBm}$ ($100\,\text{mW}$ EIRP) | **Dual-Power:** $0.2\,\text{W}$ (Helmet) / $0.5\,\text{W}$ (Bike) |
-| **Interoperability** | Autonomous OMM Ecosystem / Open Source | **100% compatible with Midland G7/G9 Pro & Midland D-10** |
+| **Interoperability** | Autonomous OMM Ecosystem + Sena/Cardo Bridge | **100% compatible with Midland G7/G9 Pro & Midland D-10** |
 | **Voice Quality** | Opus HD ($24\,\text{kHz}$ Wideband, $< 18\,\text{ms}$) | Analog FM ($300\dots 3000\,\text{Hz}$) / DMR AMBE+2 ($2450\,\text{bps}$) |
-| **Antenna System** | Taoglas FXP73 Flex Dipole (+3.0 dBi) | Potted $\lambda/4$ Helix ($32\,\text{mm}$) / U.FL Bike Coax |
-| **PCB Dimensions** | $60.0 \times 30.0 \times 1.0\,\text{mm}$ (2-Layer FR4) | $60.0 \times 30.0 \times 1.0\,\text{mm}$ (4-Layer FR4 TG150) |
+| **Antenna System** | U.FL Dipole (C6 Mesh) + 2.45 GHz Chip Antenna (PICO BT) | $\lambda/4$ Helix / U.FL (DMR) + 2.45 GHz Chip Antenna (PICO BT) |
+| **PCB Dimensions** | $60.0 \times 30.0 \times 1.0\,\text{mm}$ (2/4-Layer FR4) | $60.0 \times 30.0 \times 1.0\,\text{mm}$ (4-Layer FR4 TG150) |
 | **Enclosure** | ECE 22.06 UCS ($68 \times 36 \times 9.5\,\text{mm}$) | ECE 22.06 UCS ($68 \times 36 \times 9.5\,\text{mm}$) |
 
 ---
@@ -151,13 +154,70 @@ Beyond its 2.4 GHz IEEE 802.15.4 mesh engine, the ESP32-C6 features a complete B
      - `TELEMETRY` (Char `0x0005`): Live state reporting (battery %, VBUS mV, charging bit, RSSI).
    * **Mechatronics as Boot & Fallback Only:** The 4 physical button actuators on `PCBA 03` are strictly reserved for unpowered cold boots (**Power ON / Power OFF**) or as emergency fallbacks if BLE disconnects. During standard operation, 100% of controls are wear-free digital BLE commands!
 
-2. **Bi-directional Full-Duplex Stereo via LE Audio (LC3 Codec):**
-   * Conventional Bluetooth HFP (Hands-Free Profile) degrades voice into narrow 8/16-kHz mono telephone audio when the mic is active.
-   * OpenMotorMesh utilizes the modern **Bluetooth 5.3 LE Audio Standard (BAP / LC3 Codec)** with **true bi-directional stereo**:
-     - **Downlink (Helmet Playback):** Full 48 kHz stereo HiFi (CarPlay/Android Auto media, navigation, and spatially rendered mesh voices).
-     - **Uplink (Rider Voice to Bike):** High-resolution 32/48 kHz LC3 wideband speech without tinny artifacts.
-     - **Latency:** Sub-$20\dots 25\,\text{ms}$ (lip-sync grade and imperceptible in full-duplex convoy conversations).
-   * In autonomous helmet mode, this ensures a completely wireless, lossless stereo link to the vehicle Central Box.
+### 3.2 The Dual-Engine Architecture: Eliminating Shared Radio Contention ("OMB Lite")
+
+> [!IMPORTANT]
+> **The Single-Chip "Shared Radio" Bottleneck:**
+> The ESP32-C6 possesses only **one physical 2.4 GHz RF transceiver (LNA/PA/mixer)**, which must time-slice between Wi-Fi 6 (ESP-NOW Mesh) and Bluetooth Low Energy (BLE 5.3). Furthermore, the ESP32-C6 hardware **does not support Bluetooth Classic (BR/EDR)**.
+> 
+> When a single chip handles both real-time voice mesh (Opus frames every 10–20 ms) and BLE (companion phone PWA, telemetry, scanning), the internal coexistence arbiter forces antenna time-slicing. In real-world mesh networks, this produces **micro-jitter, buffer under-runs, and audio clicks/dropouts**.
+
+To eliminate this bottleneck completely, OpenMotorBridge v9.6 implements an uncompromising **Dual-Engine Architecture** across both modules (`PCBA 09` and `PCBA 10`):
+
+```
++---------------------------------------------------------------------------------------------------+
+|                        DUAL-ENGINE ARCHITECTURE: OMM 2.4 GHz & OMM 446 ("OMB LITE")                |
++----------------------------------------------------+----------------------------------------------+
+| 1. HOST / MESH ENGINE: ESP32-C6-MINI-1U            | 2. BLUETOOTH CO-PROCESSOR: ESP32-PICO-V3-02  |
++----------------------------------------------------+----------------------------------------------+
+| * 100% dedicated Wi-Fi 6 / ESP-NOW Mesh (PCBA 09)  | * Dual-Core 240 MHz Xtensa LX6 MCU           |
+| * Or DMR Tier I / PMR446 Controller (PCBA 10)      | * Integrated: 8 MB SPI Flash + 2 MB PSRAM    |
+| * Bluetooth in C6 firmware COMPLETELY disabled     | * Bluetooth Classic (BR/EDR) + BLE 4.2 / 5.x |
+|   (`CONFIG_BT_ENABLED=0`)                          | * Universal Intercom (HFP 1.7 mSBC HD Voice) |
+| * Transceiver permanently locked to mesh channel   | * Cardo DMC-Bluetooth Bridge & Sena Bridge   |
+| * Zero radio contention, zero CoEx time-slicing    | * A2DP HiFi Stereo Streaming (Music/Nav)     |
+| * Guaranteed voice audio latency < 15 ms           | * Smartphone PWA Companion App (BLE GATT)    |
+| * External U.FL dipole antenna (Taoglas Flex)      | * Dedicated 2.45 GHz ceramic chip antenna    |
++----------------------------------------------------+----------------------------------------------+
+                         |                                          |
+                         +------------ High-Speed UART (3 Mbps) ----+
+                         |             (Hardware Flow Control)      |
+                         v                                          v
+                   +------------------------------------------------------+
+                   | Everest Semi ES8388 HiFi Stereo Audio Codec (U4)     |
+                   | * Hardware & Digital Audio Mixing                    |
+                   | * Full-Duplex Stereo Headset & Mic Preamp            |
+                   +------------------------------------------------------+
+```
+
+### 3.3 Simultaneous Dual-Radio Operation & Cross-Over Bridge (Cardo DMC / Sena)
+
+Because the ESP32-C6 and ESP32-PICO-V3-02 utilize **two completely separate physical RF frontends and antennas**, the system achieves true **Dual-Radio Full-Duplex operation**:
+
+1. **Simultaneous Conversation Without Switching:**
+   * The rider communicates continuously in the OpenMotorMesh group (2.4 GHz ESP-NOW or 446 MHz DMR).
+   * **Simultaneously**, the Bluetooth Universal Intercom link to an external headset (e.g., Sena or non-mesh Cardo) remains active. Both audio streams are mixed distortion-free in the codec/DSP.
+
+2. **OpenMotorBridge as a Universal Mesh Gateway:**
+   * **Cardo DMC-Bluetooth Bridge Integration:** A Cardo Packtalk rider taps *"DMC-Bluetooth Bridge"* in the Cardo Connect app. The OMB Lite module pairs via Bluetooth with that Packtalk. The audio stream of the entire Cardo DMC mesh is routed live into OpenMotorMesh—and the OMM mesh back into Cardo!
+   * **Sena Mesh Intercom Bridge:** The exact same principle connects Sena Mesh groups via a bridged Bluetooth connection into OpenMotorMesh.
+   * **Native OMM Bridge for Guest Riders:** Any rider with a standard Bluetooth headset is paired to the helmet module via Bluetooth Classic Universal Intercom and broadcast to all OMM mesh participants.
+
+3. **Autonomous "OMB Lite" for Travel & Rental Bikes (e.g., USA Tour):**
+   * The helmet module requires **no motorcycle and no Central Box** to operate.
+   * With its integrated 600 mAh LiPo battery, BQ24075 PMIC, ES8388 codec, and dual RF stages, the helmet module functions as a standalone, pocket-sized high-end intercom for rental bikes, bicycles, or cars.
+
+### 3.4 Inter-MCU Pinout (ESP32-C6 <-> ESP32-PICO-V3-02)
+
+| Signal | ESP32-C6 (`U1`) | ESP32-PICO-V3-02 (`U5/U6`) | Function |
+| :--- | :--- | :--- | :--- |
+| `BT_UART_TX` | GPIO 16 (Pad 18) | IO1 / U0TXD (Pad 41) | Serial telemetry & audio data stream (PICO -> C6) |
+| `BT_UART_RX` | GPIO 17 (Pad 19) | IO3 / U0RXD (Pad 40) | Serial telemetry & audio data stream (C6 -> PICO) |
+| `BT_UART_RTS` | GPIO 15 (Pad 17) | IO15 / MTDO (Pad 21) | Hardware Flow Control RTS |
+| `BT_UART_CTS` | GPIO 14 (Pad 16) | IO13 / MTCK (Pad 20) | Hardware Flow Control CTS |
+| `BT_RESET` | GPIO 18 (Pad 20) | EN / CHIP_PU (Pad 9) | Hardware reset & co-processor wakeup |
+| `BT_BOOT` | GPIO 2 (Pad 8) | IO0 (Pad 23) | Boot-strap for WebUSB DFU in-circuit flashing |
+| `BT_ANT` | – | LNA_IN (Pad 2) | $50\,\Omega$ RF feed to Johanson 2450AT18 chip antenna |
 
 ---
 

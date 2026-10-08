@@ -112,6 +112,11 @@ Unlike compromised software-emulated A2DP stacks, OpenMotorBridge offloads helme
    * The rider uses a budget standard helmet or ECE 22.06 UCS unit with OMM 2.4.
    * Both bike bays are populated (Sena + Cardo).
    * *Benefit:* Changing helmets anytime is 100% cost-free and brand-independent.
+3. **Profile C: "Autonomous OMB Lite" (Dual-Engine UCS Helmet & Standalone Intercom):**
+   * The rider utilizes the autonomous **OMM UCS module (`PCBA 09` or `PCBA 10`)** directly in the helmet or jacket pocket.
+   * **Dual-Engine:** The `ESP32-C6` handles pure OMM Mesh (Wi-Fi 6) or DMR radio, while the `ESP32-PICO-V3-02` simultaneously delivers Bluetooth Classic (Universal Intercom, A2DP, OMI) and BLE.
+   * **Fully Autonomous (USA Rental Tours, Buggies, Bicycles):** Functions completely without a vehicle Central Box thanks to its onboard LiPo battery and PMIC.
+   * **Universal Gateway:** Connects into external Cardo groups via **Cardo DMC-Bluetooth Bridge** or integrates non-mesh guest riders into OpenMotorMesh.
 
 #### Massive Battery Savings: Standard Bluetooth on Helmet:
 * Operating an active Mesh transceiver on the helmet (Sena Mesh or Cardo DMC) draws **$80\dots 130\,\text{mA}$**, depleting the 1,000 mAh helmet battery within **7 to 9 hours** (often before the tour ends!).

@@ -112,6 +112,11 @@ Im Gegensatz zu vereinfachten ESP32-Software-A2DP-Lösungen wird die Bluetooth-A
    * Der Fahrer setzt auf einen günstigen Standardhelm (oder ECE 22.06 UCS mit OMM 2.4).
    * Beide Kassettenbuchten am Bike sind bestückt (Sena + Cardo).
    * *Vorteil:* Helmwechsel ist jederzeit kostenlos und ohne Markenbindung möglich.
+3. **Profil C: „Autarkes OMB Lite“ (Dual-Engine UCS-Helm & Standalone Intercom):**
+   * Der Fahrer nutzt das autarke **OMM UCS-Modul (`PCBA 09` oder `PCBA 10`)** direkt im Helm oder in der Tasche.
+   * **Dual-Engine:** Der `ESP32-C6` wickelt das reine OMM-Mesh (Wi-Fi 6) oder DMR-Funk ab, während der `ESP32-PICO-V3-02` parallel Bluetooth Classic (Universal Intercom, A2DP, OMI) und BLE bereitstellt.
+   * **Voll autark (USA-Leihmotorrad, Buggy, Fahrrad):** Funktioniert ohne Bike-Hauptbox mit integriertem LiPo-Akku.
+   * **Universal Gateway:** Klinkt sich per **Cardo DMC-Bluetooth Bridge** in fremde Cardo-Gruppen ein oder holt Fremdfahrer ins OMM-Mesh.
 
 #### Massiver Akku-Vorteil durch reine Bluetooth-Nutzung am Helm:
 * Ein aktiver Mesh-Transceiver am Helm (Sena Mesh oder Cardo DMC) zieht permanent **$80\dots 130\,\text{mA}$** und leert den 1000-mAh-Helmakku nach **7 bis 9 Stunden** (oft schon vor Tourende!).

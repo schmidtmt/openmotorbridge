@@ -47,3 +47,12 @@
 #define OMM_MESH_DEFAULT_CHAN  1           // 2412 MHz (Channel 1)
 #define OMM_MESH_MAX_PEERS     16          // Maximum convoy nodes
 #define OMM_MESH_PTT_TIMEOUT_MS 30000      // 30 s max continuous transmit (stuck-mic watchdog)
+
+// 7. Bluetooth Co-Processor Link (ESP32-PICO-V3-02 Dual-Engine)
+#define OMM_PIN_BT_UART_TX     GPIO_NUM_16 // C6 TX -> PICO RX
+#define OMM_PIN_BT_UART_RX     GPIO_NUM_17 // C6 RX -> PICO TX
+#define OMM_PIN_BT_UART_RTS    GPIO_NUM_15 // C6 RTS -> PICO CTS
+#define OMM_PIN_BT_UART_CTS    GPIO_NUM_14 // C6 CTS -> PICO RTS
+#define OMM_PIN_BT_RESET       GPIO_NUM_18 // Co-processor reset / wakeup
+#define OMM_PIN_BT_BOOT        GPIO_NUM_2  // Co-processor download mode trigger
+#define OMM_BT_UART_BAUD       3000000     // 3 Mbps high-speed serial link

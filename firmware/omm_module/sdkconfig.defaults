@@ -28,3 +28,7 @@ CONFIG_ESP32_WIFI_AMPDU_RX_ENABLED=y
 # Power Management / Dynamic Frequency Scaling
 CONFIG_PM_ENABLE=y
 CONFIG_PM_DFS_INIT_AUTO=y
+
+# Dedicated Pure Mesh RF Engine: Disable Bluetooth on C6 to eliminate CoEx time-slicing
+CONFIG_BT_ENABLED=n
+
