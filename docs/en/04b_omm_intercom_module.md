@@ -135,6 +135,13 @@ The mechanical enclosures for both OMM modules are 100% identical and precisely 
 ## 3. OMM 2.4 GHz Hardware & Protocol Architecture (`PCBA 09`)
 
 The digital 2.4 GHz mesh node is driven by `openmotorbridge_omm_ucs` (**`PCBA 09`**):
+
+![PCBA 09 OMM 2.4 GHz Intercom & UCS Module Top 3D](../images/pcba/pcba09_omm_intercom_3d.png)
+*Figure 4.1a: PCBA 09 Top 3D -- ESP32-C6-MINI-1U Wi-Fi 6 Mesh Host, ES8388 Audio Codec, BQ24075 PMIC, and IP67 USB-C Port.*
+
+![PCBA 09 OMM 2.4 GHz Intercom & UCS Module Bottom 3D (Dual-Engine)](../images/pcba/pcba09_omm_intercom_bottom_3d.png)
+*Figure 4.1b: PCBA 09 Bottom 3D (Dual-Engine OMB Lite) -- Dedicated ESP32-PICO-V3-02 Bluetooth Classic/BLE Co-Processor (U5) and Johanson 2450AT Chip Antenna (ANT1) for CoEx-free RF separation.*
+
 * **Microcontroller (`U1`):** Espressif ESP32-C6-MINI-1U (RISC-V @ 160 MHz, Wi-Fi 6 / 802.15.4 / BLE 5.3).
 * **Audio Codec (`U4`):** Everest Semi ES8388 (24-bit 96 kHz stereo codec with $2 \times 45\,\text{mW}$ headphone amp).
 * **Power Management (`U2`):** Texas Instruments BQ24075 dynamic power-path manager ($500\,\text{mA}$ charging, zero-reboot battery switchover in $< 10\,\mu\text{s}$).
@@ -242,7 +249,11 @@ The **OMM 446 MHz Intercom Module (`PCBA 10`)** eliminates the dilemma of bulky 
 +----------------------------------------------------+------------------------------------+
 ```
 
-![PCBA 10 OMM 446 PMR446 Intercom Module](../images/pcba/pcba10_omm446_intercom_3d.png)
+![PCBA 10 OMM 446 PMR446 Intercom Module Top 3D](../images/pcba/pcba10_omm446_intercom_3d.png)
+*Figure 4.2a: PCBA 10 Top 3D -- ESP32-C6 Host MCU, ES8388 Audio Codec, IP67 USB-C, and 4-Layer RF Shield Stackup.*
+
+![PCBA 10 OMM 446 PMR446 Intercom Module Bottom 3D](../images/pcba/pcba10_omm446_intercom_bottom_3d.png)
+*Figure 4.2b: PCBA 10 Bottom 3D (NiceRF SA818 & Dual-Engine) -- NiceRF SA818-DMR Transceiver (U3), ESP32-PICO-V3-02 Bluetooth Co-Processor (U6), and Johanson 2450AT Chip Antenna (ANT1).*
 
 ### 4.1 PCB Specifications & Stackup (`PCBA 10`)
 * **PCB Identifier:** `openmotorbridge_omm446_ucs` (**`PCBA 10`**).

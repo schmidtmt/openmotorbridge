@@ -96,9 +96,11 @@ All 4-layer boards (PCBA 01, PCBA 05, and PCBA 08) utilize an identical controll
 
 ## 3. PCBA 01: Central Box Main Controller (`openmotorbridge_central_box`)
 
-![PCBA 01 Central Box Main Controller](../images/pcba/pcba01_central_box_3d.png)
+![PCBA 01 Central Box Main Controller Top 3D](../images/pcba/pcba01_central_box_3d.png)
+*Figure 7.1a: PCBA 01 Top 3D -- ESP32-S3 WROOM-1U Main MCU, Qualcomm QCC3084 BT 5.4 Audio SoC, LM5164-Q1 72V Buck, Semtech SX1262 LoRa, and Automotive Deutsch DTM-12 Header.*
 
-*Figure 7.1: Precise KiCad 3D raytracing render of the Central Box main board (PCBA 01, 85 x 55 mm, 4 layers) with ESP32-S3 WROOM-1, LM5164-Q1 72V Buck, Bourns 1500V audio transformers, shrouded box headers, and gold ENIG pads.*
+![PCBA 01 Central Box Main Controller Bottom 3D](../images/pcba/pcba01_central_box_bottom_3d.png)
+*Figure 7.1b: PCBA 01 Bottom 3D -- Hirose DM3D MicroSD Push-Pull Slot, Qorvo DW3110 UWB Transceiver, Everest Semi ES8388 Codec, Bosch BMI270 6-Axis IMU, and TCAN334G CAN-FD Transceiver.*
 
 ### 3.1 Board Specifications & Stackup
 * **Dimensions:** $85{,}0 \times 55{,}0\,\text{mm}$ (Outer contour with 4x M2.5 mounting holes, $77{,}0 \times 47{,}0\,\text{mm}$ grid spacing).
@@ -167,9 +169,11 @@ The former pod base board (`PCBA 02`) has been **completely retired without repl
 
 ## 5. PCBA 03: Universal Smart Cartridge (`openmotorbridge_pod_cartridge` Rev 3.0)
 
-![PCBA 03 Universal Smart Cartridge](../images/pcba/pcba03_pod_cartridge_3d.png)
+![PCBA 03 Universal Smart Cartridge Top 3D](../images/pcba/pcba03_pod_cartridge_3d.png)
+*Figure 7.3a: PCBA 03 Top 3D -- ESP32-C6 Host MCU, 4x AO3400A MOSFETs, and J_ACT Mechatronics Header.*
 
-*Figure 7.3: KiCad 3D render of the Universal Smart Cartridge (PCBA 03 Rev 3.0, 35 x 25 mm, 2 Layers ENIG, 2-Sided SMT) with Qorvo DW3110 UWB Transceiver, ESP32-C6 Host MCU, ES8388 Stereo Codec, 4x AO3400A MOSFETs, 8-Pin Mechatronics Header J_ACT, and 8-Pin Audio-Power Header J_AUDIO_PWR.*
+![PCBA 03 Universal Smart Cartridge Bottom 3D](../images/pcba/pcba03_pod_cartridge_bottom_3d.png)
+*Figure 7.3b: PCBA 03 Bottom 3D -- Qorvo DW3110 UWB Transceiver, Everest Semi ES8388 Stereo Codec, and J_AUDIO_PWR Header.*
 
 ### 5.1 Board Specifications & Layer Partitioning
 * **Dimensions:** $35.0 \times 25.0\,\text{mm}$ (grid $29.0 \times 19.0\,\text{mm}$ with 4x M2 mounting holes).
@@ -259,9 +263,11 @@ To control devices with different button layouts (Sena Spider X Slim vs. Cardo P
 
 ## 7. PCBA 05: Universal Front Node (`openmotorbridge_front_node`)
 
-![PCBA 05 Universal Front Node](../images/pcba/pcba05_front_node_3d.png)
+![PCBA 05 Universal Front Node Top 3D](../images/pcba/pcba05_front_node_3d.png)
+*Figure 7.5a: PCBA 05 Top 3D -- ESP32-S3-WROOM-1U, u-blox SAM-M10Q GNSS, Microchip USB2514B Hub, and Southchip SC8102 USB-PD 20W Fast-Charge.*
 
-*Figure 7.5: KiCad 3D render of the Universal Front Node (PCBA 05, 82 x 50 mm, 4 layers) with ESP32-S3-WROOM-1U (U.FL), Qorvo DW3110 UWB Transceiver (bottom), u-blox SAM-M10Q GNSS, Microchip USB2514B 4-Port hub, Southchip SC8102 USB-PD 20W Fast-Charge, TI TPS2051B power gate, Knowles I2S MEMS microphone, CPC1017N CAN auto-sensing relay, dual-MOSFET mirror BSD drivers, and WS2812B RGB status LED.*
+![PCBA 05 Universal Front Node Bottom 3D](../images/pcba/pcba05_front_node_bottom_3d.png)
+*Figure 7.5b: PCBA 05 Bottom 3D -- Qorvo DW3110 UWB Transceiver and U.FL RF Coaxial Receptacle.*
 
 ### 7.1 Board Specifications & Features
 * **Dimensions:** $82{,}0 \times 50{,}0\,\text{mm}$ (Fits $86 \times 56 \times 24\,\text{mm}$ internal cavity, $98 \times 68 \times 25\,\text{mm}$ outer enclosure with 4-in-1 mounting).
@@ -598,6 +604,12 @@ The **PCBA 08** assembly serves as the carrier board and intelligent pre-process
 
 The **`PCBA 09`** board is the universal open-source hardware for the OpenMotorMesh (OMM) 2.4 GHz intercom system. It meets all mechanical and electrical specifications for autonomous operation in standardized ECE 22.06 UCS helmet cavities as well as inside the cartridge sled (`PCBA 03`) on the motorcycle.
 
+![PCBA 09 OMM 2.4 GHz Intercom & UCS Module Top 3D](../images/pcba/pcba09_omm_intercom_3d.png)
+*Figure 7.9a: PCBA 09 Top 3D -- ESP32-C6-MINI-1U Wi-Fi 6 Mesh Host, ES8388 Audio Codec, BQ24075 PMIC, and IP67 USB-C Port.*
+
+![PCBA 09 OMM 2.4 GHz Intercom & UCS Module Bottom 3D (Dual-Engine)](../images/pcba/pcba09_omm_intercom_bottom_3d.png)
+*Figure 7.9b: PCBA 09 Bottom 3D (Dual-Engine OMB Lite) -- Dedicated ESP32-PICO-V3-02 Bluetooth Classic/BLE Co-Processor (U5) and Johanson 2450AT Chip Antenna (ANT1) for CoEx-free RF separation.*
+
 ### 11.1 Technical Board Specifications
 * **Dimensions:** $60.0 \times 30.0 \times 1.0\,\text{mm}$ ($R = 2.5\,\text{mm}$ corner radii).
 * **Layer Stackup:** 2-layer FR-4 High-TG150, $1.0\,\text{mm}$ board thickness, $35\,\mu\text{m}$ copper (1 oz), ENIG gold finish.
@@ -650,6 +662,12 @@ The front-facing USB-C port `J1` (`TYPE-C-31-M-12_IP67`) is wired as a universal
 ## 12. PCBA 10: OMM 446 Analog & Digital PMR446 Intercom Module (`openmotorbridge_omm446_ucs`)
 
 The **`PCBA 10`** board solves the dilemma of bulky handheld two-way radios (which do not fit into $100 \times 50 \times 30\,\text{mm}$ motorcycle cartridges) and expensive, uneconomical teardowns:
+
+![PCBA 10 OMM 446 PMR446 Intercom Module Top 3D](../images/pcba/pcba10_omm446_intercom_3d.png)
+*Figure 7.10a: PCBA 10 Top 3D -- ESP32-C6 Host MCU, ES8388 Audio Codec, IP67 USB-C, and 4-Layer RF Shield Stackup.*
+
+![PCBA 10 OMM 446 PMR446 Intercom Module Bottom 3D](../images/pcba/pcba10_omm446_intercom_bottom_3d.png)
+*Figure 7.10b: PCBA 10 Bottom 3D (NiceRF SA818 & Dual-Engine) -- NiceRF SA818-DMR Transceiver (U3), ESP32-PICO-V3-02 Bluetooth Co-Processor (U6), and Johanson 2450AT Chip Antenna (ANT1).*
 * **Form-Factor Parity:** Exactly identical dimensions ($60.0 \times 30.0 \times 1.0\,\text{mm}$) and mounting points as `PCBA 09`.
 * **Universal Application:** Operates autonomously in ECE 22.06 UCS helmet slots or docked into the cartridge sled (`PCBA 03`) on the motorcycle.
 * **Dual-Mode RF:** Analog FM (16 PMR446 channels, CTCSS/DCS) and Digital DMR Tier I (16 digital channels, TDMA 4FSK).

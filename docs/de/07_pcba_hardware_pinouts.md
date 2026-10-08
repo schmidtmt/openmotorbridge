@@ -95,9 +95,11 @@ Für alle 4-Lagen-Platinen (`PCBA 01` und `PCBA 05`) wird der identische, streng
 
 ## 3. PCBA 01: Zentralbox Main Controller (`openmotorbridge_central_box`)
 
-![PCBA 01 Zentralbox Main Controller](../images/pcba/pcba01_central_box_3d.png)
+![PCBA 01 Zentralbox Main Controller Top 3D](../images/pcba/pcba01_central_box_3d.png)
+*Abbildung 7.1a: KiCad 3D-Render der Zentralbox-Hauptplatine Top (PCBA 01, 85 x 55 mm, 4 Lagen) mit ESP32-S3 WROOM-1, Qualcomm QCC3084 BT 5.4 Audio SoC, LM5164-Q1 72V Buck, BQ24075 USV, ES8388 DSP-Codec, Semtech SX1262 LoRa und Deutsch DTM-12 Header.*
 
-*Abbildung 7.1: KiCad 3D-Render der Zentralbox-Hauptplatine (PCBA 01, 85 x 55 mm, 4 Lagen) mit ESP32-S3 WROOM-1, Qualcomm QCC3084 BT 5.4 Audio SoC, LM5164-Q1 72V Buck, BQ24075 USV, ES8388 DSP-Codec, Semtech SX1262 LoRa, Qorvo DW3110 UWB Transceiver und automotiven Deutsch DTM-12 Header.*
+![PCBA 01 Zentralbox Main Controller Bottom 3D](../images/pcba/pcba01_central_box_bottom_3d.png)
+*Abbildung 7.1b: KiCad 3D-Render der Zentralbox-Hauptplatine Bottom mit DM3D MicroSD-Push-Pull-Slot, Qorvo DW3110 UWB Transceiver, BMI270 6-Achs-IMU und TCAN334G CAN-Transceiver.*
 
 ### 3.1 Technische Platinen-Kenndaten & Top/Bottom-Aufteilung
 * **Abmessungen:** $85{,}0 \times 55{,}0\,\text{mm}$ (Außenkontur mit 4x M2.5 Montagebohrungen, $77{,}0 \times 47{,}0\,\text{mm}$ Lochabstand).
@@ -183,9 +185,11 @@ Die frühere Pod-Basisplatine (`PCBA 02`) ist in v9.6 **vollständig und ersatzl
 
 ## 5. PCBA 03: Universal Smart Cartridge (`openmotorbridge_pod_cartridge` Rev 3.0)
 
-![PCBA 03 Universalschlitten Cartridge](../images/pcba/pcba03_pod_cartridge_3d.png)
+![PCBA 03 Universalschlitten Cartridge Top 3D](../images/pcba/pcba03_pod_cartridge_3d.png)
+*Abbildung 7.3a: KiCad 3D-Render der Universal Smart Cartridge Top (PCBA 03 Rev 3.0, 35 x 25 mm) mit ESP32-C6 Host-MCU, 4x AO3400A MOSFETs und J_ACT Mechatronik-Header.*
 
-*Abbildung 7.3: KiCad 3D-Render der Universal Smart Cartridge (PCBA 03 Rev 3.0, 35 x 25 mm, 2 Lagen ENIG, 2-seitig SMT) mit Qorvo DW3110 UWB Transceiver, ESP32-C6 Host-MCU, ES8388 Stereo-Codec, 4x AO3400A MOSFETs, 8-Pin Mechatronik-Header J_ACT und 8-Pin Audio-Power-Header J_AUDIO_PWR.*
+![PCBA 03 Universalschlitten Cartridge Bottom 3D](../images/pcba/pcba03_pod_cartridge_bottom_3d.png)
+*Abbildung 7.3b: KiCad 3D-Render der Universal Smart Cartridge Bottom mit Qorvo DW3110 UWB Transceiver, ES8388 Stereo-Codec und Audio-Power-Header J_AUDIO_PWR.*
 
 ### 5.1 Technische Platinen-Kenndaten & Funktionale Lagen-Aufteilung
 * **Abmessungen:** $35{,}0 \times 25{,}0\,\text{mm}$ (Raster $29{,}0 \times 19{,}0\,\text{mm}$ mit 4x M2 Befestigungsbohrungen).
@@ -245,9 +249,11 @@ Die Heckplatine `PCBA 04` und das zugehörige Heckgehäuse Pod 3 sind **vollstä
 
 ## 7. PCBA 05: Universal Front-Knoten (`openmotorbridge_front_node`)
 
-![PCBA 05 Universal Front-Knoten](../images/pcba/pcba05_front_node_3d.png)
+![PCBA 05 Universal Front-Knoten Top 3D](../images/pcba/pcba05_front_node_3d.png)
+*Abbildung 7.5a: KiCad 3D-Render des Universal Front-Knotens Top (PCBA 05, 82 x 50 mm) mit ESP32-S3-WROOM-1U, u-blox SAM-M10Q GNSS, Microchip USB2514B Hub und Southchip SC8102 USB-PD 20W Fast-Charge.*
 
-*Abbildung 7.5: KiCad 3D-Render des Universal Front-Knotens (PCBA 05, 82 x 50 mm, 4 Lagen) mit ESP32-S3-WROOM-1U, Qorvo DW3110 UWB Transceiver (Unterseite), u-blox SAM-M10Q GNSS, Microchip USB2514B Hub, Southchip SC8102 USB-PD 20W Fast-Charge, TI TPS2051B Power-Gate, Knowles I2S MEMS Mikrofon und WS2812B RGB-Status-LED.*
+![PCBA 05 Universal Front-Knoten Bottom 3D](../images/pcba/pcba05_front_node_bottom_3d.png)
+*Abbildung 7.5b: KiCad 3D-Render des Universal Front-Knotens Bottom mit Qorvo DW3110 UWB Transceiver und U.FL-HF-Verbindung.*
 
 ### 7.1 Technische Platinen-Kenndaten
 * **Abmessungen:** $82{,}0 \times 50{,}0\,\text{mm}$ (Gehäuseaußenmaß $98 \times 68 \times 25\,\text{mm}$ mit 4-in-1 Halterung).
@@ -335,7 +341,11 @@ Die separate Platine `PCBA 06` ist in v9.6 **vollständig und ersatzlos entfalle
 
 Die Platine **`PCBA 09`** ist die universelle Open-Source-Hardware für das OpenMotorMesh (OMM) 2.4 GHz Intercom-System. Sie erfüllt die mechanischen und elektrischen Spezifikationen für den autonomen Betrieb in standardisierten ECE 22.06 UCS-Helmmulden sowie als HF-Einsatz im Kassetten-Schlitten (`PCBA 03`).
 
-![PCBA 09 OMM 2.4 GHz Intercom & UCS Modul](../images/pcba/pcba09_omm_intercom_3d.png)
+![PCBA 09 OMM 2.4 GHz Intercom & UCS Modul Top 3D](../images/pcba/pcba09_omm_intercom_3d.png)
+*Abbildung 7.9a: PCBA 09 Top 3D – ESP32-C6-MINI-1U Wi-Fi 6 Mesh Host, ES8388 Audio-Codec, BQ24075 PMIC und IP67 USB-C Port.*
+
+![PCBA 09 OMM 2.4 GHz Intercom & UCS Modul Bottom 3D (Dual-Engine)](../images/pcba/pcba09_omm_intercom_bottom_3d.png)
+*Abbildung 7.9b: PCBA 09 Bottom 3D (Dual-Engine OMB Lite) – Dedizierter ESP32-PICO-V3-02 Bluetooth Classic/BLE Co-Prozessor (U5) und Johanson 2450AT Chipantenne (ANT1) zur CoEx-freien Funkentkopplung.*
 
 ### 11.1 Technische Platinen-Kenndaten & Lagenaufbau
 * **Abmessungen:** $60{,}0 \times 30{,}0 \times 1{,}0\,\text{mm}$ ($R = 2{,}5\,\text{mm}$ Kantenradius).
@@ -409,7 +419,11 @@ Die Platine **`PCBA 10`** ist das universelle Open-Source-Hardwaremodul für den
 * **Universal-Einsatz:** Passt mechanisch und elektrisch sowohl in standardisierte ECE 22.06 UCS-Helmmulden als auch in den Kassetten-Schlitten (`PCBA 03`) am Motorrad.
 * **Dual-Mode HF-Funk:** Vollwertiges Analog-FM (16 PMR446 Kanäle, CTCSS/DCS) und Digital-DMR Tier I (16 digitale Kanäle, TDMA 4FSK, glasklare Sprache ohne Rauschen).
 
-![PCBA 10 OMM 446 PMR446 Intercom Modul](../images/pcba/pcba10_omm446_intercom_3d.png)
+![PCBA 10 OMM 446 PMR446 Intercom Modul Top 3D](../images/pcba/pcba10_omm446_intercom_3d.png)
+*Abbildung 7.10a: PCBA 10 Top 3D – ESP32-C6 Host MCU, ES8388 Audio-Codec, IP67 USB-C und 4-Lagen HF-Masseführung.*
+
+![PCBA 10 OMM 446 PMR446 Intercom Modul Bottom 3D](../images/pcba/pcba10_omm446_intercom_bottom_3d.png)
+*Abbildung 7.10b: PCBA 10 Bottom 3D (NiceRF SA818 & Dual-Engine) – NiceRF SA818-DMR Transceiver (U3), ESP32-PICO-V3-02 Bluetooth Co-Prozessor (U6) und Johanson 2450AT Chipantenne (ANT1).*
 
 ### 12.1 Technische Platinen-Kenndaten & Lagenaufbau
 * **Abmessungen:** $60{,}0 \times 30{,}0 \times 1{,}0\,\text{mm}$ ($R = 2{,}5\,\text{mm}$ Kantenradius).

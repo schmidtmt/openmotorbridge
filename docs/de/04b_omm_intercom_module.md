@@ -138,9 +138,11 @@ Der UCS-Standard nach ECE 22.06 normiert die mechanische Kavität, lässt den el
 
 ## 3. OMM 2.4 GHz Hardware- & Platinen-Design (`PCBA 09`)
 
-Das Herzstück des digitalen 2.4-GHz-Netzwerks bildet die Platine `openmotorbridge_omm_ucs` (**`PCBA 09`**):
+![PCBA 09 OMM 2.4 GHz Intercom & UCS Modul Top 3D](../images/pcba/pcba09_omm_intercom_3d.png)
+*Abbildung 4.1a: PCBA 09 Top 3D – ESP32-C6-MINI-1U Wi-Fi 6 Mesh Host, ES8388 Audio-Codec, BQ24075 PMIC und IP67 USB-C Port.*
 
-![PCBA 09 OMM 2.4 GHz Intercom & UCS Modul](../images/pcba/pcba09_omm_intercom_3d.png)
+![PCBA 09 OMM 2.4 GHz Intercom & UCS Modul Bottom 3D (Dual-Engine)](../images/pcba/pcba09_omm_intercom_bottom_3d.png)
+*Abbildung 4.1b: PCBA 09 Bottom 3D (Dual-Engine OMB Lite) – Dedizierter ESP32-PICO-V3-02 Bluetooth Classic/BLE Co-Prozessor (U5) und Johanson 2450AT Chipantenne (ANT1) zur CoEx-freien Funkentkopplung.*
 
 ```mermaid
 flowchart TD
@@ -266,7 +268,11 @@ Das **OMM 446 MHz Intercom-Modul (`PCBA 10`)** schließt die gravierende Lücke 
 +----------------------------------------------------+------------------------------------+
 ```
 
-![PCBA 10 OMM 446 PMR446 Intercom Modul](../images/pcba/pcba10_omm446_intercom_3d.png)
+![PCBA 10 OMM 446 PMR446 Intercom Modul Top 3D](../images/pcba/pcba10_omm446_intercom_3d.png)
+*Abbildung 4.2a: PCBA 10 Top 3D – ESP32-C6 Host MCU, ES8388 Audio-Codec, IP67 USB-C und 4-Lagen HF-Masseführung.*
+
+![PCBA 10 OMM 446 PMR446 Intercom Modul Bottom 3D](../images/pcba/pcba10_omm446_intercom_bottom_3d.png)
+*Abbildung 4.2b: PCBA 10 Bottom 3D (NiceRF SA818 & Dual-Engine) – NiceRF SA818-DMR Transceiver (U3), ESP32-PICO-V3-02 Bluetooth Co-Prozessor (U6) und Johanson 2450AT Chipantenne (ANT1).*
 
 ### 4.1 Technische Platinen-Kenndaten & Lagenaufbau (`PCBA 10`)
 * **Platinen-ID:** `openmotorbridge_omm446_ucs` (**`PCBA 10`**).
