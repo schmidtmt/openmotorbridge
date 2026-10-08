@@ -2852,80 +2852,100 @@
                     </div>
                 </div>
 
-                <!-- Step 2: Gateway Slots -->
+                <!-- Step 2: Gateway Slots & Kassetten-Pool -->
                 <div class="builder-step-card">
                     <div class="builder-step-header">
                         <span class="builder-step-num">2</span>
                         <div>
-                            <div class="builder-step-title" data-i18n="builder_step2_title">Intercom Gateway-Slots konfigurieren</div>
-                            <div class="builder-step-desc" data-i18n="builder_step2_desc">Multi-Protokoll Bridge: Verbindet beide Funknetze simultan für alle Fahrer</div>
+                            <div class="builder-step-title" data-i18n="builder_step2_title">Intercom-Kassetten &amp; Wechsel-Pool konfigurieren</div>
+                            <div class="builder-step-desc" data-i18n="builder_step2_desc">Wähle beliebig viele Kassetten für dein Bike: 2 Pods sind am Rahmen montiert – zusätzliche Kassetten kannst du als Wechsel-Inlays modular mitnehmen!</div>
                         </div>
                     </div>
 
-                    <!-- Slot 1 -->
-                    <div style="margin-bottom: 14px;">
-                        <label class="control-label" style="margin-bottom: 6px;">
-                            <span>Pod 1 (Gateway Slot 1 Links):</span>
-                        </label>
-                        <div class="builder-grid" id="builder-slot1-grid">
-                            <div class="builder-option-card selected" data-type="slot1" data-value="sena-spider-x">
-                                <div class="builder-option-title">Sena SPIDER X Slim</div>
-                                <div class="builder-option-desc">Mesh 3.0 / Wave. Inlay mit 4 Miniatur-Hubmagneten für mechatronische Steuerung.</div>
-                                <div class="builder-option-badge">Smart Cartridge</div>
-                            </div>
-                            <div class="builder-option-card" data-type="slot1" data-value="omm-ucs">
-                                <div class="builder-option-title">OMM 2.4 GHz Dual-Engine Modul</div>
-                                <div class="builder-option-desc">PCBA 09: ESP32-C6 Wi-Fi 6 Mesh + dedizierter ESP32-PICO BT Classic/BLE Co-Prozessor (OMB Lite), ES8388 Codec, LiPo USV &amp; 4 Taster.</div>
-                                <div class="builder-option-badge">Dual-Engine Mesh</div>
-                            </div>
-                            <div class="builder-option-card" data-type="slot1" data-value="omm446">
-                                <div class="builder-option-title">OMM 446 MHz PMR/DMR Modul</div>
-                                <div class="builder-option-desc">PCBA 10: NiceRF SA818-DMR (Analog FM + Digital DMR Tier I), ESP32-PICO BT Classic Audio-Bridge, ESP32-C6 Host, 0.2W/0.5W ERP &amp; LiPo USV.</div>
-                                <div class="builder-option-badge">DMR &amp; PMR446 Funk</div>
-                            </div>
-                            <div class="builder-option-card" data-type="slot1" data-value="sena-50s">
-                                <div class="builder-option-title">Sena 50S / 60S</div>
-                                <div class="builder-option-desc">Pogo-Pin Docking für kabelgebundene Audioübertragung.</div>
-                                <div class="builder-option-badge">Pogo Cartridge</div>
-                            </div>
-                            <div class="builder-option-card" data-type="slot1" data-value="blind">
-                                <div class="builder-option-title">Blindkassette</div>
-                                <div class="builder-option-desc">Hermetisch dichte Dry Box mit O-Ring für ungenutzten Slot.</div>
-                                <div class="builder-option-badge">Dry Box</div>
-                            </div>
+                    <!-- Status Banner -->
+                    <div id="builder-cartridges-status-banner" style="background: rgba(255, 159, 10, 0.08); border: 1px solid rgba(255, 159, 10, 0.3); border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; font-size: 0.85rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+                        <div>
+                            <span id="builder-pods-badge" class="builder-pill-verified" style="background: rgba(255, 159, 10, 0.2); color: var(--accent-orange); margin-right: 6px;">2 Pods am Bike</span>
+                            <span id="builder-cartridges-status-text">2 Kassetten gewählt (Pod 1 &amp; Pod 2 belegt)</span>
                         </div>
+                        <span id="builder-cartridges-swap-badge" style="font-size: 0.78rem; color: var(--text-secondary); font-style: italic;">Wechseln unterwegs in &lt; 5 Sekunden</span>
                     </div>
 
-                    <!-- Slot 2 -->
-                    <div>
-                        <label class="control-label" style="margin-bottom: 6px;">
-                            <span>Pod 2 (Gateway Slot 2 Rechts):</span>
-                        </label>
-                        <div class="builder-grid" id="builder-slot2-grid">
-                            <div class="builder-option-card selected" data-type="slot2" data-value="cardo-edge">
-                                <div class="builder-option-title">Cardo Packtalk Edge</div>
-                                <div class="builder-option-desc">DMC Gen2. Inlay mit 4 Miniatur-Aktuatoren für 3 Tasten + Air-Mount.</div>
-                                <div class="builder-option-badge">Smart Cartridge</div>
+                    <div class="builder-grid" id="builder-cartridges-grid">
+                        <div class="builder-option-card selected" data-type="cartridge" data-value="sena-spider-x">
+                            <div class="builder-option-title">Sena SPIDER X Slim</div>
+                            <div class="builder-option-desc">Mesh 3.0 / Wave. Inlay mit 4 Miniatur-Hubmagneten für mechatronische Tastensteuerung.</div>
+                            <div class="builder-option-badge">Mechatronik (Smart Inlay)</div>
+                            <div class="builder-qty-controls">
+                                <button class="btn-qty-minus" type="button" data-key="sena-spider-x" title="Weniger">−</button>
+                                <span class="builder-qty-count" data-key="sena-spider-x">1</span>
+                                <button class="btn-qty-plus" type="button" data-key="sena-spider-x" title="Mehr">+</button>
                             </div>
-                            <div class="builder-option-card" data-type="slot2" data-value="omm-ucs">
-                                <div class="builder-option-title">OMM 2.4 GHz Dual-Engine Modul</div>
-                                <div class="builder-option-desc">PCBA 09: ESP32-C6 Wi-Fi 6 Mesh + dedizierter ESP32-PICO BT Classic/BLE Co-Prozessor (OMB Lite), ES8388 Codec, LiPo USV &amp; 4 Taster.</div>
-                                <div class="builder-option-badge">Dual-Engine Mesh</div>
+                        </div>
+
+                        <div class="builder-option-card selected" data-type="cartridge" data-value="cardo-edge">
+                            <div class="builder-option-title">Cardo Packtalk Edge / Pro</div>
+                            <div class="builder-option-desc">DMC Gen2. Inlay mit 4 Miniatur-Aktuatoren für 3 Tasten + Air-Mount Halterung.</div>
+                            <div class="builder-option-badge">Mechatronik (Smart Inlay)</div>
+                            <div class="builder-qty-controls">
+                                <button class="btn-qty-minus" type="button" data-key="cardo-edge" title="Weniger">−</button>
+                                <span class="builder-qty-count" data-key="cardo-edge">1</span>
+                                <button class="btn-qty-plus" type="button" data-key="cardo-edge" title="Mehr">+</button>
                             </div>
-                            <div class="builder-option-card" data-type="slot2" data-value="omm446">
-                                <div class="builder-option-title">OMM 446 MHz PMR/DMR Modul</div>
-                                <div class="builder-option-desc">PCBA 10: NiceRF SA818-DMR (Analog FM + Digital DMR Tier I), ESP32-PICO BT Classic Audio-Bridge, ESP32-C6 Host, 0.2W/0.5W ERP &amp; LiPo USV.</div>
-                                <div class="builder-option-badge">DMR &amp; PMR446 Funk</div>
+                        </div>
+
+                        <div class="builder-option-card" data-type="cartridge" data-value="omm-ucs">
+                            <div class="builder-option-title">OMM 2.4 GHz Dual-Engine Modul</div>
+                            <div class="builder-option-desc"><strong>Inkl. PCBA 09 Platine &amp; Inlay:</strong> ESP32-C6 Wi-Fi 6 Mesh + dedizierter ESP32-PICO BT Classic/BLE Co-Prozessor (OMB Lite), ES8388 Codec, LiPo USV &amp; 4 Taster.</div>
+                            <div class="builder-option-badge">Inkl. PCBA 09 Modul</div>
+                            <div class="builder-qty-controls">
+                                <button class="btn-qty-minus" type="button" data-key="omm-ucs" title="Weniger">−</button>
+                                <span class="builder-qty-count" data-key="omm-ucs">0</span>
+                                <button class="btn-qty-plus" type="button" data-key="omm-ucs" title="Mehr">+</button>
                             </div>
-                            <div class="builder-option-card" data-type="slot2" data-value="pmr446">
-                                <div class="builder-option-title">PMR446 Funk / COTS</div>
-                                <div class="builder-option-desc">Standard Funkgerät oder analoge Audioquelle via J2 Klinkenkabel.</div>
-                                <div class="builder-option-badge">Analog Funk</div>
+                        </div>
+
+                        <div class="builder-option-card" data-type="cartridge" data-value="omm446">
+                            <div class="builder-option-title">OMM 446 MHz PMR/DMR Modul</div>
+                            <div class="builder-option-desc"><strong>Inkl. PCBA 10 Platine &amp; Inlay:</strong> NiceRF SA818-DMR (Analog FM + Digital DMR), ESP32-PICO BT Audio-Bridge, ESP32-C6 Host, 0.5W Bike ERP &amp; LiPo USV.</div>
+                            <div class="builder-option-badge">Inkl. PCBA 10 Modul</div>
+                            <div class="builder-qty-controls">
+                                <button class="btn-qty-minus" type="button" data-key="omm446" title="Weniger">−</button>
+                                <span class="builder-qty-count" data-key="omm446">0</span>
+                                <button class="btn-qty-plus" type="button" data-key="omm446" title="Mehr">+</button>
                             </div>
-                            <div class="builder-option-card" data-type="slot2" data-value="blind">
-                                <div class="builder-option-title">Blindkassette</div>
-                                <div class="builder-option-desc">Hermetisch dichte Dry Box mit O-Ring für ungenutzten Slot.</div>
-                                <div class="builder-option-badge">Dry Box</div>
+                        </div>
+
+                        <div class="builder-option-card" data-type="cartridge" data-value="sena-50s">
+                            <div class="builder-option-title">Sena 50S / 60S</div>
+                            <div class="builder-option-desc">Pogo-Pin Docking für kabelgebundene Audioübertragung &amp; Steuerung.</div>
+                            <div class="builder-option-badge">Pogo Cartridge</div>
+                            <div class="builder-qty-controls">
+                                <button class="btn-qty-minus" type="button" data-key="sena-50s" title="Weniger">−</button>
+                                <span class="builder-qty-count" data-key="sena-50s">0</span>
+                                <button class="btn-qty-plus" type="button" data-key="sena-50s" title="Mehr">+</button>
+                            </div>
+                        </div>
+
+                        <div class="builder-option-card" data-type="cartridge" data-value="pmr446">
+                            <div class="builder-option-title">PMR446 Funk / COTS (Analog)</div>
+                            <div class="builder-option-desc">Standard Funkgerät oder analoge Audioquelle via J2 Klinkenkabel im Universalschlitten.</div>
+                            <div class="builder-option-badge">Analog Funk</div>
+                            <div class="builder-qty-controls">
+                                <button class="btn-qty-minus" type="button" data-key="pmr446" title="Weniger">−</button>
+                                <span class="builder-qty-count" data-key="pmr446">0</span>
+                                <button class="btn-qty-plus" type="button" data-key="pmr446" title="Mehr">+</button>
+                            </div>
+                        </div>
+
+                        <div class="builder-option-card" data-type="cartridge" data-value="blind">
+                            <div class="builder-option-title">Blindkassette (Dry Box)</div>
+                            <div class="builder-option-desc">Hermetisch dichte Dry Box mit O-Ring für ungenutzten Pod (wasserdichtes Schlüsselfach).</div>
+                            <div class="builder-option-badge">Dry Box (Passiv)</div>
+                            <div class="builder-qty-controls">
+                                <button class="btn-qty-minus" type="button" data-key="blind" title="Weniger">−</button>
+                                <span class="builder-qty-count" data-key="blind">0</span>
+                                <button class="btn-qty-plus" type="button" data-key="blind" title="Mehr">+</button>
                             </div>
                         </div>
                     </div>

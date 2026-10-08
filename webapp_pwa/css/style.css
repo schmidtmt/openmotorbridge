@@ -2060,6 +2060,48 @@ body.ride-hud-active .tab-btn {
     color: #fff;
 }
 
+.builder-qty-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.btn-qty-minus, .btn-qty-plus {
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    border: 1px solid var(--border-subtle);
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+    user-select: none;
+}
+
+.btn-qty-minus:hover, .btn-qty-plus:hover {
+    border-color: var(--accent-orange);
+    color: var(--accent-orange);
+    background: rgba(255, 159, 10, 0.15);
+}
+
+.builder-qty-count {
+    font-size: 0.92rem;
+    font-weight: 800;
+    min-width: 22px;
+    text-align: center;
+    color: #fff;
+    font-family: var(--font-mono, monospace);
+}
+
 /* Live BOM & Instruction Styles */
 .builder-summary-bar {
     display: flex;

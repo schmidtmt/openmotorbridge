@@ -8428,6 +8428,15 @@ const fleetState = {
             bike: 'bmw-gs',
             slot1: 'sena-spider-x',
             slot2: 'cardo-edge',
+            cartridges: {
+                'sena-spider-x': 1,
+                'cardo-edge': 1,
+                'omm-ucs': 0,
+                'omm446': 0,
+                'sena-50s': 0,
+                'pmr446': 0,
+                'blind': 0
+            },
             addons: {
                 frontNode: true,
                 ommHelmetKit: false,
@@ -8461,6 +8470,67 @@ const builderState = new Proxy({}, {
     }
 });
 
+function getBikeCartridges(bike) {
+    if (!bike) return {};
+    if (!bike.cartridges || typeof bike.cartridges !== 'object') {
+        bike.cartridges = {
+            'sena-spider-x': 0,
+            'cardo-edge': 0,
+            'omm-ucs': 0,
+            'omm446': 0,
+            'sena-50s': 0,
+            'pmr446': 0,
+            'blind': 0
+        };
+        if (bike.slot1 && bike.cartridges.hasOwnProperty(bike.slot1)) {
+            bike.cartridges[bike.slot1] = (bike.cartridges[bike.slot1] || 0) + 1;
+        }
+        if (bike.slot2 && bike.cartridges.hasOwnProperty(bike.slot2)) {
+            bike.cartridges[bike.slot2] = (bike.cartridges[bike.slot2] || 0) + 1;
+        }
+    }
+    return bike.cartridges;
+}
+
+function syncCartridgesAndLegacySlots(bike) {
+    if (!bike) return;
+    const carts = getBikeCartridges(bike);
+    const activeList = [];
+    const order = ['sena-spider-x', 'cardo-edge', 'omm-ucs', 'omm446', 'sena-50s', 'pmr446', 'blind'];
+    for (const key of order) {
+        const qty = carts[key] || 0;
+        for (let i = 0; i < qty; i++) {
+            activeList.push(key);
+        }
+    }
+    bike.slot1 = activeList[0] || 'blind';
+    bike.slot2 = activeList[1] || activeList[0] || 'blind';
+}
+
+function formatCartridgeSummary(bike, bom) {
+    const isDe = state.lang === 'de';
+    const carts = getBikeCartridges(bike);
+    const parts = [];
+    const shortNames = {
+        'sena-spider-x': 'Sena SPIDER X',
+        'sena-50s': 'Sena 50S',
+        'cardo-edge': 'Cardo Edge',
+        'omm-ucs': 'OMM 2.4 (PCBA 09)',
+        'omm446': 'OMM 446 (PCBA 10)',
+        'pmr446': 'PMR446 Funk',
+        'blind': isDe ? 'Blindkassette' : 'Blank'
+    };
+    for (const [key, qty] of Object.entries(carts)) {
+        if (qty > 0) {
+            parts.push(`${qty}x ${shortNames[key] || key}`);
+        }
+    }
+    if (parts.length === 0) {
+        return isDe ? 'Keine Kassetten' : 'No cartridges';
+    }
+    return parts.join(' + ');
+}
+
 function createDefaultBike(index, template = null) {
     if (template) {
         const clone = JSON.parse(JSON.stringify(template));
@@ -8480,12 +8550,28 @@ function createDefaultBike(index, template = null) {
         'hd-cvo-st': 'Harley CVO ST',
         'car-support': isDe ? 'Support-Van / Pkw' : 'Support Van / Car'
     };
+    const s1 = index % 2 === 0 ? 'sena-spider-x' : 'sena-50s';
+    const s2 = index % 3 === 0 ? 'cardo-edge' : 'pmr446';
+    const carts = {
+        'sena-spider-x': 0,
+        'cardo-edge': 0,
+        'omm-ucs': 0,
+        'omm446': 0,
+        'sena-50s': 0,
+        'pmr446': 0,
+        'blind': 0
+    };
+    if (model !== 'car-support') {
+        carts[s1] = (carts[s1] || 0) + 1;
+        carts[s2] = (carts[s2] || 0) + 1;
+    }
     return {
         id: 'bike_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
         name: `${riderName} (${modelNames[model] || 'Bike'})`,
         bike: model,
-        slot1: index % 2 === 0 ? 'sena-spider-x' : 'sena-50s',
-        slot2: index % 3 === 0 ? 'cardo-edge' : 'pmr446',
+        slot1: s1,
+        slot2: s2,
+        cartridges: carts,
         addons: {
             frontNode: model !== 'car-support',
             ommHelmetKit: false,
@@ -8570,6 +8656,8 @@ function setViewMode(mode) {
 function syncFormToActiveBike() {
     const active = fleetState.bikes[fleetState.activeBikeIndex];
     if (!active) return;
+    const carts = getBikeCartridges(active);
+    syncCartridgesAndLegacySlots(active);
 
     const syncGroup = (containerId, value) => {
         const container = document.getElementById(containerId);
@@ -8588,6 +8676,60 @@ function syncFormToActiveBike() {
     syncGroup('builder-slot2-grid', active.slot2);
     syncGroup('builder-mfg-grid', active.manufacturing);
     syncGroup('builder-bedsize-grid', active.bedSize);
+
+    // Sync unified modular cartridges grid
+    const cartGrid = document.getElementById('builder-cartridges-grid');
+    if (cartGrid) {
+        let totalCount = 0;
+        cartGrid.querySelectorAll('.builder-option-card').forEach(card => {
+            const key = card.getAttribute('data-value');
+            const count = carts[key] || 0;
+            totalCount += count;
+            if (count > 0) {
+                card.classList.add('selected');
+            } else {
+                card.classList.remove('selected');
+            }
+            const countEl = card.querySelector(`.builder-qty-count[data-key="${key}"]`);
+            if (countEl) {
+                countEl.textContent = count;
+            }
+        });
+
+        // Update status banner
+        const statusText = document.getElementById('builder-cartridges-status-text');
+        const statusIcon = document.getElementById('builder-cartridges-status-icon');
+        const isDe = state.lang === 'de';
+        if (statusText) {
+            if (active.bike === 'car-support') {
+                if (statusIcon) statusIcon.textContent = '🚐';
+                statusText.innerHTML = isDe ?
+                    `<strong>Begleitfahrzeug Setup:</strong> Keine Pod-Aufnahmen am Fahrzeug montiert. ${totalCount > 0 ? `${totalCount} Modul(e) für Standalone / USB-Betrieb gewählt.` : 'Kabellose Funkübertragung über Dashboard-Knoten.'}` :
+                    `<strong>Support Vehicle Setup:</strong> No pod mounts installed on vehicle. ${totalCount > 0 ? `${totalCount} module(s) chosen for standalone/USB use.` : 'Wireless audio via dashboard node.'}`;
+            } else if (totalCount === 0) {
+                if (statusIcon) statusIcon.textContent = '⚠️';
+                statusText.innerHTML = isDe ?
+                    `<strong>Keine Kassetten gewählt:</strong> Wähle mindestens 1 bis 2 Kassetten für die beiden Pods an deinem Motorrad.` :
+                    `<strong>No cartridges selected:</strong> Select at least 1-2 cartridges for the two pods on your motorcycle.`;
+            } else if (totalCount === 1) {
+                if (statusIcon) statusIcon.textContent = 'ℹ️';
+                statusText.innerHTML = isDe ?
+                    `<strong>1 Kassette gewählt:</strong> Pod 1 bestückt. Pod 2 bleibt frei (oder mit Blindkassette als regendichte Dry Box verschließen).` :
+                    `<strong>1 cartridge selected:</strong> Pod 1 equipped. Pod 2 remains free (or seal with blank cartridge as rainproof dry box).`;
+            } else if (totalCount === 2) {
+                if (statusIcon) statusIcon.textContent = '✓';
+                statusText.innerHTML = isDe ?
+                    `<strong>2 Steckplätze (Pods) am Bike:</strong> 2 Kassetten gewählt. Beide Pods sind optimal bestückt.` :
+                    `<strong>2 Pod bays on bike:</strong> 2 cartridges selected. Both pods fully equipped.`;
+            } else {
+                if (statusIcon) statusIcon.textContent = '🔀';
+                const swaps = totalCount - 2;
+                statusText.innerHTML = isDe ?
+                    `<strong>${totalCount} Kassetten konfiguriert:</strong> 2 aktiv in den Pods am Motorrad + <strong>${swaps} Wechselkassette${swaps > 1 ? 'n' : ''}</strong> (z.B. im Tankrucksack für flexible Touren und andere Helm-Gruppen).` :
+                    `<strong>${totalCount} cartridges configured:</strong> 2 active in bike pods + <strong>${swaps} hot-swap cartridge${swaps > 1 ? 's' : ''}</strong> (e.g. in tank bag for quick swapping between tour groups).`;
+            }
+        }
+    }
 
     const addonsGrid = document.getElementById('builder-addons-grid');
     if (addonsGrid) {
@@ -8610,6 +8752,7 @@ function syncFormToActiveBike() {
 function setupSystemBuilderUi() {
     // 1. Setup click listeners on all option cards
     const gridBikes = document.getElementById('builder-bikes-grid');
+    const gridCartridges = document.getElementById('builder-cartridges-grid');
     const gridSlot1 = document.getElementById('builder-slot1-grid');
     const gridSlot2 = document.getElementById('builder-slot2-grid');
     const gridAddons = document.getElementById('builder-addons-grid');
@@ -8653,10 +8796,63 @@ function setupSystemBuilderUi() {
     }
 
     setupRadioGroup(gridBikes, 'bike');
-    setupRadioGroup(gridSlot1, 'slot1');
-    setupRadioGroup(gridSlot2, 'slot2');
+    if (gridSlot1) setupRadioGroup(gridSlot1, 'slot1');
+    if (gridSlot2) setupRadioGroup(gridSlot2, 'slot2');
     setupRadioGroup(gridMfg, 'manufacturing');
     setupRadioGroup(gridBedSize, 'bedSize');
+
+    // Cartridge Pool quantity and card interaction
+    if (gridCartridges) {
+        // Quantity Plus (+)
+        gridCartridges.querySelectorAll('.btn-qty-plus').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const key = btn.getAttribute('data-key');
+                const active = fleetState.bikes[fleetState.activeBikeIndex];
+                if (!active) return;
+                const carts = getBikeCartridges(active);
+                carts[key] = (carts[key] || 0) + 1;
+                if (carts[key] > 4) carts[key] = 4;
+                syncCartridgesAndLegacySlots(active);
+                syncFormToActiveBike();
+                renderSystemBuilder();
+            });
+        });
+
+        // Quantity Minus (-)
+        gridCartridges.querySelectorAll('.btn-qty-minus').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const key = btn.getAttribute('data-key');
+                const active = fleetState.bikes[fleetState.activeBikeIndex];
+                if (!active) return;
+                const carts = getBikeCartridges(active);
+                carts[key] = Math.max(0, (carts[key] || 0) - 1);
+                syncCartridgesAndLegacySlots(active);
+                syncFormToActiveBike();
+                renderSystemBuilder();
+            });
+        });
+
+        // Card Click (Toggle 0 or 1, or increment)
+        gridCartridges.querySelectorAll('.builder-option-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                if (e.target.closest('.builder-qty-controls')) return;
+                const key = card.getAttribute('data-value');
+                const active = fleetState.bikes[fleetState.activeBikeIndex];
+                if (!active) return;
+                const carts = getBikeCartridges(active);
+                if ((carts[key] || 0) > 0) {
+                    carts[key] = 0;
+                } else {
+                    carts[key] = 1;
+                }
+                syncCartridgesAndLegacySlots(active);
+                syncFormToActiveBike();
+                renderSystemBuilder();
+            });
+        });
+    }
 
     // Multi-choice for addons
     if (gridAddons) {
@@ -8752,10 +8948,23 @@ function calculateSingleBikeBom(bikeConfig) {
     const cfg = bikeConfig || fleetState.bikes[fleetState.activeBikeIndex] || fleetState.bikes[0];
     const addons = cfg.addons || {};
     const bikeModel = cfg.bike || 'bmw-gs';
+    const carts = getBikeCartridges(cfg);
+    syncCartridgesAndLegacySlots(cfg);
     const slot1 = cfg.slot1 || 'sena-spider-x';
     const slot2 = cfg.slot2 || 'cardo-edge';
     const mfg = cfg.manufacturing || 'jlcpcb';
     const bedSize = cfg.bedSize || 'standard';
+
+    const numSenaSpider = carts['sena-spider-x'] || 0;
+    const numSena50s = carts['sena-50s'] || 0;
+    const numCardo = carts['cardo-edge'] || 0;
+    const numOmmUcs = carts['omm-ucs'] || 0;
+    const numOmm446 = carts['omm446'] || 0;
+    const numPmr = carts['pmr446'] || 0;
+    const numBlind = carts['blind'] || 0;
+
+    const totalActiveCartridges = numSenaSpider + numSena50s + numCardo + numOmmUcs + numOmm446 + numPmr;
+    const totalCartridges = totalActiveCartridges + numBlind;
 
     const bikeNames = {
         'bmw-gs': isDe ? 'BMW GS Familie (R 1200 LC / 1250 / 1300 · F 750 / 850 / 900 · Vario)' : 'BMW GS Family (R 1200 LC / 1250 / 1300 · F 750 / 850 / 900 · Vario)',
@@ -8780,10 +8989,18 @@ function calculateSingleBikeBom(bikeConfig) {
     let costMin = 135;
     let costMax = 165;
     if (bikeModel === 'car-support') { costMin = 95; costMax = 125; }
-    if (slot1 === 'omm-ucs') { costMin += 38; costMax += 48; }
-    if (slot2 === 'omm-ucs') { costMin += 38; costMax += 48; }
-    if (slot1 === 'omm446') { costMin += 45; costMax += 58; }
-    if (slot2 === 'omm446') { costMin += 45; costMax += 58; }
+
+    // OMM modular electronics inclusion (PCBA 09 / PCBA 10)
+    costMin += numOmmUcs * 38;
+    costMax += numOmmUcs * 48;
+    costMin += numOmm446 * 45;
+    costMax += numOmm446 * 58;
+
+    // Extra swap cartridges beyond standard 2 pods (PCBA 03 + 3D sled + latch hardware)
+    const extraCartridges = Math.max(0, totalActiveCartridges - 2);
+    costMin += extraCartridges * 18;
+    costMax += extraCartridges * 24;
+
     if (addons.frontNode) { costMin += 42; costMax += 55; }
     if (addons.ommHelmetKit) { costMin += 45; costMax += 58; }
     if (addons.omm446HelmetKit) { costMin += 52; costMax += 68; }
@@ -8796,13 +9013,10 @@ function calculateSingleBikeBom(bikeConfig) {
     if (mfg === 'diy') { costMin -= 25; costMax -= 35; }
 
     const numPods = bikeModel === 'car-support' ? 0 : 2;
-    // Carrier PCBAs in Pods (every active pod needs PCBA 03, blind cartridges do not)
-    const numCartridgePcba = bikeModel === 'car-support' ? 0 :
-        (slot1 !== 'blind' ? 1 : 0) + (slot2 !== 'blind' ? 1 : 0);
+    // Carrier PCBAs: Each active cartridge built needs 1x PCBA 03 (Qorvo UWB, Codec, DC-DC)
+    const numCartridgePcba = bikeModel === 'car-support' ? 0 : totalActiveCartridges;
     // Mechatronic slots that need physical solenoids (miniature pushers for OEM buttons)
-    const numMechatronic = bikeModel === 'car-support' ? 0 :
-        ((slot1 === 'sena-spider-x' || slot1 === 'sena-50s') ? 1 : 0) +
-        ((slot2 === 'cardo-edge' || slot2 === 'pmr446') ? 1 : 0);
+    const numMechatronic = bikeModel === 'car-support' ? 0 : (numSenaSpider + numSena50s + numCardo + numPmr);
     const numSmart = numCartridgePcba;
 
     // 3D Parts
@@ -8813,40 +9027,40 @@ function calculateSingleBikeBom(bikeConfig) {
     ];
 
     if (numPods > 0) {
+        const sledCount = Math.max(numPods, totalCartridges);
         parts3D.push(
-            { group: 'Pod Base', file: 'pod_base_housing.stl', qty: numPods, desc: isDe ? `Satelliten-Gehäuse (1x pro Pod: ${numPods} Stk.)` : `Satellite bay enclosure (1 per pod: ${numPods} pcs)` },
+            { group: 'Pod Base', file: 'pod_base_housing.stl', qty: numPods, desc: isDe ? `Satelliten-Gehäuse am Rahmen (${numPods} Stk.)` : `Satellite bay enclosure on frame (${numPods} pcs)` },
             { group: 'Pod Base', file: '03_pod_bulkhead_partition.stl', qty: numPods, desc: isDe ? `Schottwand mit Auswerffedern (${numPods} Stk.)` : `Bulkhead partition with ejector springs (${numPods} pcs)` },
-            { group: 'Cartridge', file: 'cartridge_base_sled.stl', qty: numPods, desc: isDe ? `Universalschlitten (${numPods} Stk.)` : `Universal sled chassis (${numPods} pcs)` }
+            { group: 'Cartridge', file: 'cartridge_base_sled.stl', qty: sledCount, desc: isDe ? `Universalschlitten (${sledCount} Stk. für Pods & Wechselkassetten)` : `Universal sled chassis (${sledCount} pcs for pods & swap cartridges)` }
         );
     }
     if (bikeModel !== 'car-support') {
+        const latchCount = Math.max(2, totalCartridges);
         parts3D.push(
-            { group: 'Cartridge', file: 'cartridge_magnetic_lock_latch.stl', qty: 2, desc: isDe ? 'Magnetische Diebstahlschutz-Rastwippen (2 Stk.)' : 'Magnetic anti-theft locking rocker latches (2 pcs)' }
+            { group: 'Cartridge', file: 'cartridge_magnetic_lock_latch.stl', qty: latchCount, desc: isDe ? `Magnetische Diebstahlschutz-Rastwippen (${latchCount} Stk.)` : `Magnetic anti-theft locking rocker latches (${latchCount} pcs)` }
         );
     }
 
     // Inlays
     if (bikeModel !== 'car-support') {
-        if (slot1 === 'sena-spider-x' || slot1 === 'sena-50s') {
-            parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_sena.stl', qty: 1, desc: isDe ? 'Inlay für Sena SPIDER X / 50S / 60S' : 'Inlay for Sena SPIDER X / 50S / 60S' });
-        } else if (slot1 === 'omm-ucs') {
-            parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_omm_ucs.stl', qty: 1, desc: isDe ? 'Inlay-Schlitten mit Antennenführung für OMM 2.4 GHz (PCBA 09)' : 'Inlay sled with antenna routing for OMM 2.4 GHz (PCBA 09)' });
-        } else if (slot1 === 'omm446') {
-            parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_omm446_ucs.stl', qty: 1, desc: isDe ? 'Inlay-Schlitten für OMM 446 (PCBA 10) mit Wendelantennen-Schacht & U.FL Durchführung' : 'Inlay sled for OMM 446 (PCBA 10) with helical antenna cavity & U.FL port' });
-        } else {
-            parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_blindkassette.stl', qty: 1, desc: isDe ? 'Hermetische Blindkassette (Dry Box)' : 'Hermetic blank cartridge (Dry Box)' });
+        const totalSena = numSenaSpider + numSena50s;
+        if (totalSena > 0) {
+            parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_sena.stl', qty: totalSena, desc: isDe ? `Inlay für Sena SPIDER X / 50S / 60S (${totalSena} Stk.)` : `Inlay for Sena SPIDER X / 50S / 60S (${totalSena} pcs)` });
         }
-
-        if (slot2 === 'cardo-edge') {
-            parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_cardo.stl', qty: 1, desc: isDe ? 'Inlay für Cardo Packtalk Edge / Pro' : 'Inlay for Cardo Packtalk Edge / Pro' });
-        } else if (slot2 === 'omm-ucs') {
-            parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_omm_ucs.stl', qty: 1, desc: isDe ? 'Inlay-Schlitten mit Antennenführung für OMM 2.4 GHz (PCBA 09)' : 'Inlay sled with antenna routing for OMM 2.4 GHz (PCBA 09)' });
-        } else if (slot2 === 'omm446') {
-            parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_omm446_ucs.stl', qty: 1, desc: isDe ? 'Inlay-Schlitten für OMM 446 (PCBA 10) mit Wendelantennen-Schacht & U.FL Durchführung' : 'Inlay sled for OMM 446 (PCBA 10) with helical antenna cavity & U.FL port' });
-        } else if (slot2 === 'pmr446') {
-            parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_pmr.stl', qty: 1, desc: isDe ? 'Universelles COTS Funkgeräte-Inlay mit Kabeldurchführung' : 'Universal COTS radio inlay with cable pass-through' });
-        } else if (slot2 === 'blind') {
-            parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_blindkassette.stl', qty: 1, desc: isDe ? 'Hermetische Blindkassette (Dry Box)' : 'Hermetic blank cartridge (Dry Box)' });
+        if (numCardo > 0) {
+            parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_cardo.stl', qty: numCardo, desc: isDe ? `Inlay für Cardo Packtalk Edge / Pro (${numCardo} Stk.)` : `Inlay for Cardo Packtalk Edge / Pro (${numCardo} pcs)` });
+        }
+        if (numOmmUcs > 0) {
+            parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_omm_ucs.stl', qty: numOmmUcs, desc: isDe ? `Inlay-Schlitten mit Antennenführung für OMM 2.4 GHz PCBA 09 (${numOmmUcs} Stk.)` : `Inlay sled with antenna routing for OMM 2.4 GHz PCBA 09 (${numOmmUcs} pcs)` });
+        }
+        if (numOmm446 > 0) {
+            parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_omm446_ucs.stl', qty: numOmm446, desc: isDe ? `Inlay-Schlitten für OMM 446 PCBA 10 mit Wendelantennen-Schacht & U.FL Durchführung (${numOmm446} Stk.)` : `Inlay sled for OMM 446 PCBA 10 with helical antenna cavity & U.FL port (${numOmm446} pcs)` });
+        }
+        if (numPmr > 0) {
+            parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_pmr.stl', qty: numPmr, desc: isDe ? `Universelles COTS Funkgeräte-Inlay mit Kabeldurchführung (${numPmr} Stk.)` : `Universal COTS radio inlay with cable pass-through (${numPmr} pcs)` });
+        }
+        if (numBlind > 0) {
+            parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_blindkassette.stl', qty: numBlind, desc: isDe ? `Hermetische Blindkassette / Dry Box (${numBlind} Stk.)` : `Hermetic blank cartridge / Dry Box (${numBlind} pcs)` });
         }
     }
 
@@ -8981,9 +9195,7 @@ function calculateSingleBikeBom(bikeConfig) {
         pcbas.push({ name: 'PCBA 08', id: 'kicad_radar_submcu', qty: 1, desc: isDe ? 'Radar 2.0 Sub-MCU & Halo-Wings (Wheeltec MR20 77-GHz, 36x Halo RGB LEDs, UWB)' : 'Radar 2.0 Sub-MCU & Halo-Wings (Wheeltec MR20 77-GHz, 36x Halo RGB LEDs, UWB)' });
     }
 
-    const numOmmSlots = (slot1 === 'omm-ucs' ? 1 : 0) + (slot2 === 'omm-ucs' ? 1 : 0);
-    const numOmmHelmet = addons.ommHelmetKit ? 1 : 0;
-    const totalOmmPcba = numOmmSlots + numOmmHelmet;
+    const totalOmmPcba = numOmmUcs + (addons.ommHelmetKit ? 1 : 0);
 
     if (totalOmmPcba > 0) {
         pcbas.push({
@@ -8996,9 +9208,7 @@ function calculateSingleBikeBom(bikeConfig) {
         });
     }
 
-    const numOmm446Slots = (slot1 === 'omm446' ? 1 : 0) + (slot2 === 'omm446' ? 1 : 0);
-    const numOmm446Helmet = addons.omm446HelmetKit ? 1 : 0;
-    const totalOmm446Pcba = numOmm446Slots + numOmm446Helmet;
+    const totalOmm446Pcba = numOmm446 + (addons.omm446HelmetKit ? 1 : 0);
 
     if (totalOmm446Pcba > 0) {
         pcbas.push({
@@ -9042,16 +9252,15 @@ function calculateSingleBikeBom(bikeConfig) {
         cots.push({ name: 'J_ACT Aktuator-Kabelbaum', spec: 'Fertiges 8-Pin JST-SH Kabel auf 4x Litzen', qty: numMechatronic, desc: isDe ? 'Vorkonfektioniertes Fertigkabel (kein Crimpen!)' : 'Pre-molded harness lead (zero crimping!)' });
     }
 
-    const numOmmPods = (slot1 === 'omm-ucs' ? 1 : 0) + (slot2 === 'omm-ucs' ? 1 : 0) +
-                       (slot1 === 'omm446' ? 1 : 0) + (slot2 === 'omm446' ? 1 : 0);
+    const numOmmPods = numOmmUcs + numOmm446;
     if (numOmmPods > 0 && bikeModel !== 'car-support') {
         cots.push({
             name: 'J_AUDIO_PWR Adapterkabel',
             spec: '8-Pin JST-SH 1.0mm auf 90° USB-C (5 cm, Kelvin-Grounds)',
             qty: numOmmPods,
             desc: isDe ?
-                'Verbindung PCBA 03 Trägerplatine zu OMM USB-C Port im Pod' :
-                'Connection PCBA 03 carrier board to OMM USB-C port in pod'
+                `Verbindung PCBA 03 Trägerplatine zu OMM USB-C Port im Pod (${numOmmPods} Stk.)` :
+                `Connection PCBA 03 carrier board to OMM USB-C port in pod (${numOmmPods} pcs)`
         });
     }
 
@@ -9143,12 +9352,13 @@ function calculateSingleBikeBom(bikeConfig) {
     }
 
     if (bikeModel !== 'car-support') {
-        cots.push({ name: 'M2 Schwenkachsen Wippe', spec: 'Zylinderstift DIN 7 M2 x 8 mm', qty: 2, desc: isDe ? 'Drehachsen für Kassetten-Rastwippen' : 'Pivot pins for cartridge locking rockers' });
-        cots.push({ name: 'Stahlanker (Kassette)', spec: 'Gehärteter Stift DIN 6325 Ø 6 x 8 mm', qty: 2, desc: isDe ? 'Magnetanker im Hebelarm der Kassetten-Wippe' : 'Steel armature in cartridge rocker arm' });
-        cots.push({ name: 'Wippen-Rückstellfedern', spec: 'Edelstahl V4A Ø 3,5 mm, L0=10 mm', qty: 2, desc: isDe ? 'Rückstellfedern für Kassetten-Rastkralle' : 'Return springs for cartridge locking claw' });
+        const latchCount = Math.max(2, totalCartridges);
+        cots.push({ name: 'M2 Schwenkachsen Wippe', spec: 'Zylinderstift DIN 7 M2 x 8 mm', qty: latchCount, desc: isDe ? `Drehachsen für Kassetten-Rastwippen (${latchCount} Stk.)` : `Pivot pins for cartridge locking rockers (${latchCount} pcs)` });
+        cots.push({ name: 'Stahlanker (Kassette)', spec: 'Gehärteter Stift DIN 6325 Ø 6 x 8 mm', qty: latchCount, desc: isDe ? `Magnetanker im Hebelarm der Kassetten-Wippe (${latchCount} Stk.)` : `Steel armature in cartridge rocker arm (${latchCount} pcs)` });
+        cots.push({ name: 'Wippen-Rückstellfedern', spec: 'Edelstahl V4A Ø 3,5 mm, L0=10 mm', qty: latchCount, desc: isDe ? `Rückstellfedern für Kassetten-Rastkralle (${latchCount} Stk.)` : `Return springs for cartridge locking claw (${latchCount} pcs)` });
         cots.push({ name: 'Auswerfer-Druckfedern', spec: 'Edelstahl V4A D=4,5 mm, L0=15 mm', qty: numPods * 2, desc: isDe ? `Auto-Eject Federn in Schottwänden (2x pro Pod: ${numPods * 2} Stk.)` : `Auto-eject springs in bulkheads (2 per pod: ${numPods * 2} pcs)` });
         cots.push({ name: 'N52 Entriegelungsschlüssel', spec: 'Neodym-Block 20 x 10 x 5 mm', qty: 1, desc: isDe ? 'Berührungsloser Magnetschlüssel für Auswurf' : 'Contactless magnetic key for ejection' });
-        cots.push({ name: 'Kassetten-Flanschdichtungen', spec: 'Silikon-Formdichtung 54 x 18 mm', qty: numPods, desc: isDe ? `Stirnseitige Mundloch-Dichtungen (${numPods} Stk.)` : `Mouth opening seals (${numPods} pcs)` });
+        cots.push({ name: 'Kassetten-Flanschdichtungen', spec: 'Silikon-Formdichtung 54 x 18 mm', qty: Math.max(numPods, totalCartridges), desc: isDe ? `Stirnseitige Mundloch-Dichtungen (${Math.max(numPods, totalCartridges)} Stk.)` : `Mouth opening seals (${Math.max(numPods, totalCartridges)} pcs)` });
     }
 
     cots.push({ name: 'Silikon-Dichtschnur', spec: 'Rundschnur Ø 1,5 mm Shore 40A', qty: '1.0 m', desc: isDe ? 'Nut-Dichtung Main Box & Front-Node' : 'Groove gasket for Main Box & Front Node' });
@@ -9317,9 +9527,10 @@ function renderSingleBuilder() {
         if (active.addons?.handlebarControls) addonList.push(isDe ? 'Lenkertaster' : 'Handlebar Buttons');
         if (active.addons?.keyfob) addonList.push('Smart-Keyfob');
         const addonTxt = addonList.length > 0 ? ` + ${addonList.join(' + ')}` : '';
+        const cartSummary = formatCartridgeSummary(active, bom);
         subEl.textContent = active.bike === 'car-support' ?
             (isDe ? `Begleitfahrzeug Setup${addonTxt}` : `Support Vehicle Setup${addonTxt}`) :
-            `${bom.slotNames[active.slot1]} (Slot 1) + ${bom.slotNames[active.slot2]} (Slot 2)${addonTxt}`;
+            `${cartSummary}${addonTxt}`;
     }
 
     if (costEl) {
@@ -9485,86 +9696,83 @@ function renderSingleBuilder() {
             </div>
         </div>
 
-        <!-- Step 3: Gateway 1 -->
-        <div class="builder-instruction-step">
-            <div class="builder-step-headline">
-                <span class="builder-step-name">3. ${isDe ? `Gateway-Kassette 1: ${bom.slotNames[active.slot1]}` : `Gateway Cartridge 1: ${bom.slotNames[active.slot1]}`}</span>
-                <span class="builder-pill-verified">✓ 100% Crimpfrei</span>
-            </div>
-            <div class="builder-instructions-body">
-                ${active.slot1 === 'sena-spider-x' ? `
+        <!-- Step 3+: Gateway-Kassetten (Modular) -->
+        ${(() => {
+            const carts = getBikeCartridges(active);
+            const chosenKeys = Object.keys(carts).filter(k => carts[k] > 0);
+            if (chosenKeys.length === 0) chosenKeys.push('blind');
+            let stepNum = 3;
+            return chosenKeys.map((cartKey) => {
+                const stepIdx = stepNum++;
+                const qty = carts[cartKey] || 1;
+                const qtySuffix = qty > 1 ? ` (${qty}x)` : '';
+                const title = isDe ?
+                    `Gateway-Kassette: ${bom.slotNames[cartKey] || cartKey}${qtySuffix}` :
+                    `Gateway Cartridge: ${bom.slotNames[cartKey] || cartKey}${qtySuffix}`;
+
+                let bodyHtml = '';
+                if (cartKey === 'sena-spider-x') {
+                    bodyHtml = `
                     <ol>
                         <li>${isDe ? 'PCBA 03 in den Basisschlitten einklicken.' : 'Snap PCBA 03 into base sled.'}</li>
                         <li>${isDe ? '4x Miniatur-Hubmagnete mit TPU-Spitzen in die Führungsbrücke von <code>cartridge_insert_sena.stl</code> einlegen und mit Halteplatte verschrauben (4x M2x6 mm).' : 'Place 4x miniature solenoids with TPU tips into guide bridge of <code>cartridge_insert_sena.stl</code> and secure with retainer plate (4x M2x6 mm).'}</li>
                         <li>${isDe ? 'Fertiges 8-Pin JST-SH Kabel <code>J_ACT</code> an PCBA 03 stecken (kein Crimpen!).' : 'Plug pre-crimped 8-pin JST-SH cable <code>J_ACT</code> into PCBA 03 (zero crimping!).'}</li>
                         <li>${isDe ? 'Sena SPIDER X Slim einlegen, mit Schnellspann-Niederhalter arretieren und Stromkabel anstecken.' : 'Insert Sena SPIDER X Slim, lock with clamp, and connect power cable.'}</li>
                         <li>${isDe ? 'Stahlanker und Rückstellfeder in die Wippe (<code>cartridge_magnetic_lock_latch.stl</code>) einsetzen und mit M2 Stift im Schlitten lagern.' : 'Insert steel pin and spring into latch rocker (<code>cartridge_magnetic_lock_latch.stl</code>) and pin with M2 dowel into sled.'}</li>
-                    </ol>
-                ` : active.slot1 === 'sena-50s' ? `
+                    </ol>`;
+                } else if (cartKey === 'sena-50s') {
+                    bodyHtml = `
                     <ol>
                         <li>${isDe ? 'PCBA 03 in Basisschlitten einklicken, Pogo-Pin Flachkabel anstecken und Sena 50S/60S Cradle montieren.' : 'Snap PCBA 03 into sled, connect pogo-pin cable, and mount Sena 50S/60S cradle.'}</li>
                         <li>${isDe ? 'Wippenmechanismus montieren und Silikon-Flanschdichtung aufziehen.' : 'Assemble latch mechanism and fit silicone flange seal.'}</li>
-                    </ol>
-                ` : active.slot1 === 'omm-ucs' ? `
-                    <ol>
-                        <li>${isDe ? 'PCBA 09 (Dual-Engine: ESP32-C6 Host + ESP32-PICO BT Classic Co-Prozessor) mit Taoglas FXP73 Flex-Dipolantenne und 600 mAh LiPo-Akku vorbereiten.' : 'Prepare PCBA 09 (Dual-Engine: ESP32-C6 host + ESP32-PICO BT Classic co-processor) with Taoglas FXP73 flex-dipole antenna and 600 mAh LiPo battery.'}</li>
-                        <li>${isDe ? 'Platine und Akku in das Kassetten-Inlay (<code>cartridge_insert_omm_ucs.stl</code>) einsetzen und mit 4x M2x8 mm Schrauben sichern.' : 'Place PCB and battery into cartridge inlay (<code>cartridge_insert_omm_ucs.stl</code>) and secure with 4x M2x8 mm screws.'}</li>
-                        <li>${isDe ? 'Taoglas FXP73 Flexantenne vibrationsgeschützt im integrierten Antennenschacht verlegen (kein Löten!).' : 'Route Taoglas FXP73 antenna securely inside antenna channel (zero soldering!).'}</li>
-                        <li>${isDe ? 'USB-C Schnittstelle intern anstecken: Das Modul lädt im Pod automatisch über das 5V Bordnetz (TI BQ24075 Power-Path) und schaltet bei Entnahme unterbrechungsfrei in < 10 µs auf Akkubetrieb um. Dual-Engine ermöglicht simultane Wi-Fi 6 Mesh &amp; Bluetooth Classic Verbindung!' : 'Connect internal USB-C port: Module charges automatically in pod via 5V bike power (TI BQ24075 power-path) and switches seamlessly to battery mode in < 10 µs on removal. Dual-Engine architecture enables simultaneous Wi-Fi 6 mesh &amp; Bluetooth Classic connection!'}</li>
-                    </ol>
-                ` : active.slot1 === 'omm446' ? `
-                    <ol>
-                        <li>${isDe ? 'PCBA 10 (NiceRF SA818-DMR Transceiver &amp; ESP32-C6 Host + ESP32-PICO BT Bridge) mit 446 MHz Wendelantenne und 600 mAh LiPo-Akku vorbereiten.' : 'Prepare PCBA 10 (NiceRF SA818-DMR transceiver &amp; ESP32-C6 host + ESP32-PICO BT bridge) with 446 MHz helical antenna and 600 mAh LiPo battery.'}</li>
-                        <li>${isDe ? 'Platine und Akku in das Kassetten-Inlay (<code>cartridge_insert_omm446_ucs.stl</code>) einsetzen und mit 4x M2x8 mm Schrauben sichern.' : 'Place PCB and battery into cartridge inlay (<code>cartridge_insert_omm446_ucs.stl</code>) and secure with 4x M2x8 mm screws.'}</li>
-                        <li>${isDe ? '446 MHz λ/4 Wendelantenne im Antennenschacht verlegen oder U.FL Koaxialkabel zur Kassetten-Stirnseite führen.' : 'Route 446 MHz λ/4 helical antenna inside antenna channel or run U.FL coax cable to cartridge faceplate.'}</li>
-                        <li>${isDe ? 'USB-C Schnittstelle intern anstecken: Lädt im Pod automatisch über 5V Bordnetz (TI BQ24075) mit nahtloser USV. Digitale DMR Tier I &amp; Analog FM Steuerung via ESP32-C6 AT-Kommandos; Bluetooth Bridge bindet Helme und Smartphones drahtlos an!' : 'Connect internal USB-C port: Charges in pod automatically via 5V bike power (TI BQ24075) with seamless UPS. Digital DMR Tier I &amp; Analog FM control via ESP32-C6 AT commands; Bluetooth bridge links helmets &amp; phones wirelessly!'}</li>
-                    </ol>
-                ` : `
-                    <ol>
-                        <li>${isDe ? 'Blindkassette mit O-Ring in den Schlitten einsetzen - hermetisch regendichte Dry Box für Kleinteile.' : 'Insert blank cartridge with O-ring - hermetic waterproof dry box.'}</li>
-                    </ol>
-                `}
-            </div>
-        </div>
-
-        <!-- Step 4: Gateway 2 -->
-        <div class="builder-instruction-step">
-            <div class="builder-step-headline">
-                <span class="builder-step-name">4. ${isDe ? `Gateway-Kassette 2: ${bom.slotNames[active.slot2]}` : `Gateway Cartridge 2: ${bom.slotNames[active.slot2]}`}</span>
-                <span class="builder-pill-verified">✓ 100% Crimpfrei</span>
-            </div>
-            <div class="builder-instructions-body">
-                ${active.slot2 === 'cardo-edge' ? `
+                    </ol>`;
+                } else if (cartKey === 'cardo-edge') {
+                    bodyHtml = `
                     <ol>
                         <li>${isDe ? 'PCBA 03 in Basisschlitten einsetzen.' : 'Seat PCBA 03 into base sled.'}</li>
                         <li>${isDe ? '4x Miniatur-Aktuatoren in <code>cartridge_insert_cardo.stl</code> einlegen und Halteplatte verschrauben (4x M2x6 mm).' : 'Place 4x miniature actuators into <code>cartridge_insert_cardo.stl</code> and secure retainer plate (4x M2x6 mm).'}</li>
                         <li>${isDe ? 'Cardo Packtalk Edge Air-Mount montieren, fertiges JST-Kabel anstecken und Wippenmechanismus montieren.' : 'Mount Cardo Air-Mount, connect pre-crimped JST cable, and install latch rocker.'}</li>
-                    </ol>
-                ` : active.slot2 === 'omm-ucs' ? `
+                    </ol>`;
+                } else if (cartKey === 'omm-ucs') {
+                    bodyHtml = `
                     <ol>
                         <li>${isDe ? 'PCBA 09 (Dual-Engine: ESP32-C6 Host + ESP32-PICO BT Classic Co-Prozessor) mit Taoglas FXP73 Flex-Dipolantenne und 600 mAh LiPo-Akku vorbereiten.' : 'Prepare PCBA 09 (Dual-Engine: ESP32-C6 host + ESP32-PICO BT Classic co-processor) with Taoglas FXP73 flex-dipole antenna and 600 mAh LiPo battery.'}</li>
                         <li>${isDe ? 'Platine und Akku in das Kassetten-Inlay (<code>cartridge_insert_omm_ucs.stl</code>) einsetzen und mit 4x M2x8 mm Schrauben sichern.' : 'Place PCB and battery into cartridge inlay (<code>cartridge_insert_omm_ucs.stl</code>) and secure with 4x M2x8 mm screws.'}</li>
                         <li>${isDe ? 'Taoglas FXP73 Flexantenne vibrationsgeschützt im integrierten Antennenschacht verlegen (kein Löten!).' : 'Route Taoglas FXP73 antenna securely inside antenna channel (zero soldering!).'}</li>
                         <li>${isDe ? 'USB-C Schnittstelle intern anstecken: Das Modul lädt im Pod automatisch über das 5V Bordnetz (TI BQ24075 Power-Path) und schaltet bei Entnahme unterbrechungsfrei in < 10 µs auf Akkubetrieb um. Dual-Engine ermöglicht simultane Wi-Fi 6 Mesh &amp; Bluetooth Classic Verbindung!' : 'Connect internal USB-C port: Module charges automatically in pod via 5V bike power (TI BQ24075 power-path) and switches seamlessly to battery mode in < 10 µs on removal. Dual-Engine architecture enables simultaneous Wi-Fi 6 mesh &amp; Bluetooth Classic connection!'}</li>
-                    </ol>
-                ` : active.slot2 === 'omm446' ? `
+                    </ol>`;
+                } else if (cartKey === 'omm446') {
+                    bodyHtml = `
                     <ol>
                         <li>${isDe ? 'PCBA 10 (NiceRF SA818-DMR Transceiver &amp; ESP32-C6 Host + ESP32-PICO BT Bridge) mit 446 MHz Wendelantenne und 600 mAh LiPo-Akku vorbereiten.' : 'Prepare PCBA 10 (NiceRF SA818-DMR transceiver &amp; ESP32-C6 host + ESP32-PICO BT bridge) with 446 MHz helical antenna and 600 mAh LiPo battery.'}</li>
                         <li>${isDe ? 'Platine und Akku in das Kassetten-Inlay (<code>cartridge_insert_omm446_ucs.stl</code>) einsetzen und mit 4x M2x8 mm Schrauben sichern.' : 'Place PCB and battery into cartridge inlay (<code>cartridge_insert_omm446_ucs.stl</code>) and secure with 4x M2x8 mm screws.'}</li>
                         <li>${isDe ? '446 MHz λ/4 Wendelantenne im Antennenschacht verlegen oder U.FL Koaxialkabel zur Kassetten-Stirnseite führen.' : 'Route 446 MHz λ/4 helical antenna inside antenna channel or run U.FL coax cable to cartridge faceplate.'}</li>
                         <li>${isDe ? 'USB-C Schnittstelle intern anstecken: Lädt im Pod automatisch über 5V Bordnetz (TI BQ24075) mit nahtloser USV. Digitale DMR Tier I &amp; Analog FM Steuerung via ESP32-C6 AT-Kommandos; Bluetooth Bridge bindet Helme und Smartphones drahtlos an!' : 'Connect internal USB-C port: Charges in pod automatically via 5V bike power (TI BQ24075) with seamless UPS. Digital DMR Tier I &amp; Analog FM control via ESP32-C6 AT commands; Bluetooth bridge links helmets &amp; phones wirelessly!'}</li>
-                    </ol>
-                ` : active.slot2 === 'pmr446' ? `
+                    </ol>`;
+                } else if (cartKey === 'pmr446') {
+                    bodyHtml = `
                     <ol>
                         <li>${isDe ? 'PMR446 Funkgerät in den Schlitten einlegen und Klinkenkabel an Header J2 anstecken.' : 'Place PMR446 radio into sled and plug audio jack into J2.'}</li>
-                    </ol>
-                ` : `
+                    </ol>`;
+                } else {
+                    bodyHtml = `
                     <ol>
-                        <li>${isDe ? 'Blindkassette mit O-Ring einsetzen - schützt Pod 2 vor Schmutz und Feuchtigkeit.' : 'Insert blank cartridge with O-ring - protects Pod 2 from dirt and moisture.'}</li>
-                    </ol>
-                `}
-            </div>
-        </div>
+                        <li>${isDe ? 'Blindkassette mit O-Ring in den Schlitten einsetzen - hermetisch regendichte Dry Box für Kleinteile.' : 'Insert blank cartridge with O-ring - hermetic waterproof dry box.'}</li>
+                    </ol>`;
+                }
+
+                return `
+                <div class="builder-instruction-step">
+                    <div class="builder-step-headline">
+                        <span class="builder-step-name">${stepIdx}. ${title}</span>
+                        <span class="builder-pill-verified">✓ 100% Crimpfrei</span>
+                    </div>
+                    <div class="builder-instructions-body">
+                        ${bodyHtml}
+                    </div>
+                </div>`;
+            }).join('');
+        })()}
     `;
 
     // Step 5: Radar 2.0 Sub-MCU & Halo-Wings (if active)
@@ -9867,8 +10075,7 @@ function renderGroupBuilder() {
                         <strong style="color: #fff;">${bom.bikeName}</strong>
                     </div>
                     <div style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 8px; line-height: 1.4;">
-                        <div>* <strong>Slot 1:</strong> ${bom.slotNames[bike.slot1] || bike.slot1}</div>
-                        <div>* <strong>Slot 2:</strong> ${bom.slotNames[bike.slot2] || bike.slot2}</div>
+                        <div>* <strong>Kassetten:</strong> ${formatCartridgeSummary(bike, bom)}</div>
                         <div>* <strong>Fertigung:</strong> ${bike.manufacturing === 'diy' ? 'DIY 3D-Druck' : 'JLCPCB 3D-Druck'}</div>
                     </div>
                     <div style="display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 12px;">
@@ -10260,9 +10467,9 @@ function exportGroupBomCsv() {
 
     // 4. Per Bike Details
     csv += '4. EINZELAUFSCHLÜSSELUNG NACH MOTORRAD\n';
-    csv += 'Fahrer;Motorrad_Modell;Slot_1;Slot_2;Front_Node;Radar_2_0;OMM24_Helm_Kit;OMM446_Helm_Kit;TMP117_Sensor;Keyfob;Fertigung;Einzelkosten_ca\n';
+    csv += 'Fahrer;Motorrad_Modell;Kassetten;Front_Node;Radar_2_0;OMM24_Helm_Kit;OMM446_Helm_Kit;TMP117_Sensor;Keyfob;Fertigung;Einzelkosten_ca\n';
     allBoms.forEach(({ bike, bom }) => {
-        csv += `"${bike.name}";"${bom.bikeName}";"${bom.slotNames[bike.slot1] || bike.slot1}";"${bom.slotNames[bike.slot2] || bike.slot2}";"${bike.addons?.frontNode ? 'Ja' : 'Nein'}";"${bike.addons?.radar2 ? 'Ja' : 'Nein'}";"${bike.addons?.ommHelmetKit ? 'Ja' : 'Nein'}";"${bike.addons?.omm446HelmetKit ? 'Ja' : 'Nein'}";"${bike.addons?.tmp117Sensor ? 'Ja' : 'Nein'}";"${bike.addons?.keyfob ? 'Ja' : 'Nein'}";"${bike.manufacturing}";"${bom.costMin} - ${bom.costMax} EUR"\n`;
+        csv += `"${bike.name}";"${bom.bikeName}";"${formatCartridgeSummary(bike, bom)}";"${bike.addons?.frontNode ? 'Ja' : 'Nein'}";"${bike.addons?.radar2 ? 'Ja' : 'Nein'}";"${bike.addons?.ommHelmetKit ? 'Ja' : 'Nein'}";"${bike.addons?.omm446HelmetKit ? 'Ja' : 'Nein'}";"${bike.addons?.tmp117Sensor ? 'Ja' : 'Nein'}";"${bike.addons?.keyfob ? 'Ja' : 'Nein'}";"${bike.manufacturing}";"${bom.costMin} - ${bom.costMax} EUR"\n`;
     });
 
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
