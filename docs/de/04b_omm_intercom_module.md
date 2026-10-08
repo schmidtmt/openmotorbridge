@@ -138,8 +138,8 @@ Der UCS-Standard nach ECE 22.06 normiert die mechanische Kavität, lässt den el
 
 ## 3. OMM 2.4 GHz Hardware- & Platinen-Design (`PCBA 09`)
 
-![PCBA 09 OMM 2.4 GHz Intercom & UCS Modul Top 3D](../images/pcba/pcba09_omm_intercom_3d.png)
-*Abbildung 4.1a: PCBA 09 Top 3D – ESP32-C6-MINI-1U Wi-Fi 6 Mesh Host, ES8388 Audio-Codec, BQ24075 PMIC und IP67 USB-C Port.*
+![PCBA 09 OMM 2.4 GHz Intercom & UCS Modul Top 3D](../images/pcba/pcba09_omm_intercom_top_3d.png)
+*Abbildung 4.1a: PCBA 09 Top 3D (Aktuelles Routing & Placement) – ESP32-C6 Host-MCU (U1), ES8388 Audio-Codec (U4), BQ24075 PMIC (U2), ME6211 3.3V LDO (U3), IP67 USB-C (J1) und 4-Tasten-Reihe.*
 
 ![PCBA 09 OMM 2.4 GHz Intercom & UCS Modul Bottom 3D (Dual-Engine)](../images/pcba/pcba09_omm_intercom_bottom_3d.png)
 *Abbildung 4.1b: PCBA 09 Bottom 3D (Dual-Engine OMB Lite) – Dedizierter ESP32-PICO-V3-02 Bluetooth Classic/BLE Co-Prozessor (U5) und Johanson 2450AT Chipantenne (ANT1) zur CoEx-freien Funkentkopplung.*
@@ -268,8 +268,8 @@ Das **OMM 446 MHz Intercom-Modul (`PCBA 10`)** schließt die gravierende Lücke 
 +----------------------------------------------------+------------------------------------+
 ```
 
-![PCBA 10 OMM 446 PMR446 Intercom Modul Top 3D](../images/pcba/pcba10_omm446_intercom_3d.png)
-*Abbildung 4.2a: PCBA 10 Top 3D – ESP32-C6 Host MCU, ES8388 Audio-Codec, IP67 USB-C und 4-Lagen HF-Masseführung.*
+![PCBA 10 OMM 446 PMR446 Intercom Modul Top 3D](../images/pcba/pcba10_omm446_intercom_top_3d.png)
+*Abbildung 4.2a: PCBA 10 Top 3D (Aktuelles Routing & Placement) – ESP32-C6 Host-MCU (U1), ES8388 Audio-Codec (U4), BQ24075 PMIC (U2), ME6211 3.3V LDO (U5), IP67 USB-C (J1) und 4-Tasten-Reihe.*
 
 ![PCBA 10 OMM 446 PMR446 Intercom Modul Bottom 3D](../images/pcba/pcba10_omm446_intercom_bottom_3d.png)
 *Abbildung 4.2b: PCBA 10 Bottom 3D (NiceRF SA818 & Dual-Engine) – NiceRF SA818-DMR Transceiver (U3), ESP32-PICO-V3-02 Bluetooth Co-Prozessor (U6) und Johanson 2450AT Chipantenne (ANT1).*
@@ -278,10 +278,10 @@ Das **OMM 446 MHz Intercom-Modul (`PCBA 10`)** schließt die gravierende Lücke 
 * **Platinen-ID:** `openmotorbridge_omm446_ucs` (**`PCBA 10`**).
 * **Abmessungen:** $60{,}0 \times 30{,}0 \times 1{,}0\,\text{mm}$ ($R = 2{,}5\,\text{mm}$ Eckenverrundung) – exakt deckungsgleich zu `PCBA 09`.
 * **Lagenaufbau:** 4-Lagen FR4 TG150 ($1{,}0\,\text{mm}$ Materialstärke):
-  - Top Layer ($35\,\mu\text{m}$ Cu): Signalleitungen, ES8388 Audio-Frontend, ESP32-C6 Microcontroller.
+  - Top Layer ($35\,\mu\text{m}$ Cu): ESP32-C6 Host-MCU (`U1`), ES8388 Stereo Audio-Codec (`U4`), TI BQ24075 PMIC (`U2`), ME6211C33 LDO (`U5`), 4x Taster (`SW1`–`SW4`), IP67 USB-C (`J1`), WS2812B RGB (`D1`), LiPo-Anschluss (`BAT1`), Helical-Federkontakt (`PAD_ANT`).
   - Inner Layer 1 ($17{,}5\,\mu\text{m}$ Cu): Durchgehende, ununterbrochene Massefläche (`AGND` & `GND` Shielding unter dem SA818-DMR Transceiver).
-  - Inner Layer 2 ($17{,}5\,\mu\text{m}$ Cu): Niederohmige Stromversorgungs-Planes ($3{,}3\,\text{V}$, $4{,}4\,\text{V}$ PA-Versorgung).
-  - Bottom Layer ($35\,\mu\text{m}$ Cu): NiceRF SA818-DMR SMD-Modul, BQ24075 Lade-IC, U.FL Koaxialbuchse.
+  - Inner Layer 2 ($17{,}5\,\mu\text{m}$ Cu): Niederohmige Stromversorgungs-Planes ($3{,}3\,\text{V}$ System, $4{,}4\,\text{V}$ PA-Versorgung).
+  - Bottom Layer ($35\,\mu\text{m}$ Cu): NiceRF SA818-DMR SMD-Modul (`U3`), ESP32-PICO-V3-02 Bluetooth Co-Prozessor (`U6`), Johanson 2450AT Chipantenne (`ANT1`), U.FL Koaxialbuchse (`J_RF`).
 * **Oberflächenfinish:** ENIG (Electroless Nickel Immersion Gold) für maximale Korrosionsbeständigkeit gegen Schweiß und Kondenswasser.
 
 ---
