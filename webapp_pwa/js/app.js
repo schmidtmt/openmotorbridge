@@ -9148,6 +9148,9 @@ function calculateSingleBikeBom(bikeConfig) {
         }
     } else if (bikeModel === 'car-support') {
         parts3D.push({ group: 'PKW-Kit', file: 'car_dashboard_wedge_dock.stl', qty: 1, desc: isDe ? 'Armaturenbrett-Doppelaufnahme für Front-Knoten & Zentralbox' : 'Dashboard dual-stack dock for Front Node & Central Box' });
+        if (numPods > 0) {
+            parts3D.push({ group: 'PKW-Kit', file: 'car_sun_visor_pod_clip.stl', qty: numPods, desc: isDe ? `Universal Sonnenblenden-Clips für Kassetten-Pods (${numPods} Stk.)` : `Universal sun visor clips for cartridge pods (${numPods} pcs)` });
+        }
     } else {
         parts3D.push({ group: 'Bike-Kit (Universal)', file: 'Integriertes V-Bett', qty: 2, desc: isDe ? '120° V-Nut Rohrsattel an Pod-Gehäusen' : '120° V-cradle on Pod enclosures' });
         if (addons.radar2) {
@@ -9232,8 +9235,26 @@ function calculateSingleBikeBom(bikeConfig) {
     ];
 
     if (bikeModel === 'car-support') {
-        cots.push({ name: isDe ? '12V KFZ USB-C Schnelllader' : '12V Cigarette Lighter USB-C Charger', spec: '12V/24V Zigarettenanzünder auf USB-C PD (30W)', qty: 1, desc: isDe ? 'Bordnetz-Stromversorgung im Begleitfahrzeug' : 'Vehicle 12V power supply in support car' });
-        cots.push({ name: isDe ? 'Flachband-Dachhimmel USB-C Kabel' : 'Flat Roofliner USB-C Cable', spec: '3.0 m ultraflaches Flachbandkabel USB-C', qty: 1, desc: isDe ? 'Verdeckte Verlegung entlang A-Säule/Dachhimmel zur Sonnenblende' : 'Concealed routing along A-pillar/roofliner to sun visor' });
+        cots.push({
+            name: isDe ? '12V Y-Adapterkabel (Support-Car Harness)' : '12V Y-Adapter Cable (Support-Car Harness)',
+            spec: '12V Kfz-Zigarettenanzünder (5A) auf JST-JWPF 2P + Deutsch DTM-12',
+            qty: 1,
+            desc: isDe ? 'Parallele 12V Speisung für Front-Node & Zentralbox (USB-C bleibt 100% frei für CarPlay!)' : 'Parallel 12V supply for Front Node & Central Box (USB-C stays 100% free for CarPlay!)'
+        });
+        cots.push({
+            name: isDe ? 'USB-C CarPlay / Infotainment-Kabel' : 'USB-C CarPlay / Infotainment Cable',
+            spec: 'USB-C auf USB-A/C Datenkabel (1.0 m)',
+            qty: 1,
+            desc: isDe ? 'Kabelgebundene Head-Unit Audio- & Display-Bridge (Apple CarPlay / Android Auto)' : 'Wired head unit audio & display bridge (Apple CarPlay / Android Auto)'
+        });
+        if (numPods > 0) {
+            cots.push({
+                name: isDe ? 'Sonnenblenden DC-Zuleitung' : 'Sun Visor DC Power Lead',
+                spec: '2-Pin FLRY 2x0.35² (1.5 m)',
+                qty: numPods,
+                desc: isDe ? `5V DC-Speisung vom Front-Node zu den Kassetten-Pods (${numPods} Stk.)` : `5V DC power feed from Front Node to visor pods (${numPods} pcs)`
+            });
+        }
     } else {
         cots.push({ name: 'KFZ-Sicherungshalter', spec: 'Wasserdichter Halter + 2A Sicherung', qty: 1, desc: isDe ? 'Dauerplus-Absicherung an Batteriepol' : 'Direct battery terminal protection (KL30)' });
         if (numPods > 0) {
@@ -9965,13 +9986,14 @@ function renderSingleBuilder() {
             <div class="builder-instruction-step">
                 <div class="builder-step-headline">
                     <span class="builder-step-name">7. ${isDe ? 'Montage im Begleitfahrzeug / PKW / Van' : 'Installation in Support Vehicle / Car / Van'}</span>
-                    <span class="builder-pill-verified">✓ Plug & Play Sonnenblenden-Dock</span>
+                    <span class="builder-pill-verified">✓ 15° Dashboard-Stack &amp; CarPlay</span>
                 </div>
                 <div class="builder-instructions-body">
                     <ol>
-                        <li>${isDe ? '<strong>Zentralbox-Platzierung:</strong> Zentralbox mit der Keilaufnahme (<code>car_dashboard_wedge_dock.stl</code>) auf dem Armaturenbrett oder unter der Mittelkonsole platzieren. 12V Zigarettenanzünder-Adapter anschließen.' : '<strong>Central Box Placement:</strong> Place Central Box using wedge dock (<code>car_dashboard_wedge_dock.stl</code>) on dashboard or under center console. Plug in 12V cigarette lighter adapter.'}</li>
-                        <li>${isDe ? '<strong>LoRa Mesh & Telemetrie (PCBA 01):</strong> Central Box auf dem Armaturenbrett fixieren. Die integrierte SX1262 LoRa-Antenne funkt mit +22 dBm direkt durch die Windschutzscheibe (kein externer Heck-Pod nötig).' : '<strong>LoRa Mesh & Telemetry (PCBA 01):</strong> Place Central Box on dashboard. The integrated SX1262 LoRa transceiver transmits with +22 dBm directly through windshield (no external rear pod required).'}</li>
-                        <li>${isDe ? '<strong>Flachband-Kabelführung:</strong> Das 3 m Flachband-USB-C-Kabel unsichtbar unter dem Dachhimmel und der A-Säulen-Dichtung von der Zentralbox zur Sonnenblende verlegen.' : '<strong>Flat Cable Routing:</strong> Route the 3m flat USB-C cable concealed beneath the roofliner and A-pillar weatherstrip from Central Box to sun visor.'}</li>
+                        <li>${isDe ? '<strong>Armaturenbrett 15° Keildock:</strong> Front-Node (unten) und Zentralbox (oben im 15°-Winkel) in das Doppelgehäuse (<code>car_dashboard_wedge_dock.stl</code>) einschieben und auf der Mittelkonsole oder dem Armaturenbrett platzieren (rutschfest dank 4x Silikonfüßen).' : '<strong>Dashboard 15° Wedge Dock:</strong> Slide Front Node (lower tier) and Central Box (upper tier at 15°) into the dual-stack dock (<code>car_dashboard_wedge_dock.stl</code>) and position on center console or dashboard (anti-slip silicone feet).'}</li>
+                        <li>${isDe ? '<strong>12V Y-Adapterkabel anschließen:</strong> Den 12V Zigarettenanzünder-Stecker (mit 5A Feinsicherung) einstecken. Abzweig A (JST-JWPF 2-Pin) speist den Front-Node (Port J1), Abzweig B (Deutsch DTM-12) speist die Zentralbox (Port J1).' : '<strong>Connect 12V Y-Harness:</strong> Plug the 12V cigarette lighter plug (5A fused) into 12V socket. Branch A (JST-JWPF 2-pin) powers Front Node (port J1), Branch B (Deutsch DTM-12) powers Central Box (port J1).'}</li>
+                        <li>${isDe ? '<strong>Apple CarPlay / Android Auto Infotainment-Bridge:</strong> Standard USB-C Kabel von der Zentralbox zur USB-Media-Buchse des Autos führen. Funkdurchsagen und Warnungen ertönen glasklar über die Autolautsprecher, während das PWA-Dashboard auf dem Fahrzeugbildschirm gespiegelt wird.' : '<strong>Apple CarPlay / Android Auto Infotainment Bridge:</strong> Route standard USB-C cable from Central Box to car USB media port. Radio communications and alerts play through car speakers while PWA dashboard mirrors to vehicle display.'}</li>
+                        ${numPods > 0 ? `<li>${isDe ? `<strong>Kassetten-Pods an Sonnenblende (${numPods} Stk.):</strong> Satellitengehäuse mit den Universal-Clips (<code>car_sun_visor_pod_clip.stl</code>) werkzeuglos an Fahrer- und Beifahrer-Sonnenblende klemmen und 5V DC-Kabel vom Front-Node anstecken.` : `<strong>Cartridge Pods on Sun Visors (${numPods} pcs):</strong> Snap satellite pods with universal clips (<code>car_sun_visor_pod_clip.stl</code>) onto driver and passenger sun visors and connect 5V DC leads from Front Node.`}</li>` : ''}
                     </ol>
                 </div>
             </div>
