@@ -153,7 +153,7 @@ const i18n = {
         th_actions: 'Aktionen',
         status_uploaded: 'Hochgeladen',
         status_favorite: '★ Favorit',
-        reserve_title: 'Reserve-Schnittstellen (HD26 Pins 25 & 26)',
+        reserve_title: 'Reserve-Schnittstellen (GPIO Aux / Pins 11 & 12)',
         reserve_a_high: 'Pegel: HIGH (3.3V)',
         reserve_a_sub: 'Verwendung: Externer Lenker-PTT / Alarmanlagen-Sensor',
         reserve_b_active: 'Ausgang: AKTIV (5V ON)',
@@ -372,7 +372,7 @@ const i18n = {
         th_actions: 'Actions',
         status_uploaded: 'Uploaded',
         status_favorite: '★ Favorite',
-        reserve_title: 'Reserve Interfaces (HD26 Pins 25 & 26)',
+        reserve_title: 'Reserve Interfaces (GPIO Aux / Pins 11 & 12)',
         reserve_a_high: 'Level: HIGH (3.3V)',
         reserve_a_sub: 'Usage: External Handlebar PTT / Alarm Sensor',
         reserve_b_active: 'Output: ACTIVE (5V ON)',
@@ -9228,11 +9228,23 @@ function calculateSingleBikeBom(bikeConfig) {
 
     // COTS & Fasteners
     const cots = [
-        { name: 'HD26 Fertigkabelpeitsche', spec: 'Amphenol LTW COTS HD26 Breakout', qty: 1, desc: isDe ? 'Zentraler Hauptanschluss (100% wasserdicht)' : 'Central main harness plug (100% waterproof)' },
         { name: 'Pufferakku (LiPo USV)', spec: '1S 3.7V 2.200 mAh Flat-Pack (Typ 504068) mit Micro-Fit', qty: 1, desc: isDe ? 'Notstrom-Pufferung in der Zentralbox' : 'Seamless UPS reserve inside main box' },
+        { name: 'Taoglas FXP895 LoRa Flexantenne', spec: '868 MHz Flex-Dipol (+2.0 dBi) mit U.FL Buchse (100 mm)', qty: 1, desc: isDe ? 'Weitbereichs-Kolonnenfunk für SX1262 LoRa in der Deckeltasche der Zentralbox' : 'Long-range convoy mesh for SX1262 LoRa in central box lid cavity' },
+        { name: 'Gore ePTFE Druckausgleichs-Ventil', spec: 'Ø 12 mm selbstklebendes ePTFE Membran-Patch IP68', qty: 1, desc: isDe ? 'Druckausgleich & Kondenswasserschutz im Deckel der Zentralbox' : 'Pressure equalization & moisture vent in central box lid' },
         { name: 'M3 Gehäuseschrauben', spec: 'DIN 912 V4A M3 x 40 mm', qty: 4, desc: isDe ? 'Zentralbox Gehäuse (greift in Nut-Pockets)' : 'Main box enclosure (threads into nut pockets)' },
         { name: 'M3 Edelstahlmuttern', spec: 'DIN 934 / 985 M3 V4A', qty: addons.frontNode ? 8 : 4, desc: isDe ? 'Unverlierbar in Nut-Pockets eingelegt (kein Lötkolben!)' : 'Captive in nut pockets (no soldering iron needed!)' }
     ];
+
+    // UWB 6.5 GHz Backbone Antennen (Taoglas FXUWB10)
+    const numUwbAntennas = 1 + (addons.frontNode ? 1 : 0) + (addons.radar2 ? 1 : 0);
+    cots.push({
+        name: 'Taoglas FXUWB10 UWB Flexantenne',
+        spec: '6.5 GHz Ch. 5 Flex-Patch mit 20 mm U.FL Koaxialkabel',
+        qty: numUwbAntennas,
+        desc: isDe ?
+            `Drahtloses UWB 6.5 GHz Backbone (${numUwbAntennas} Stk.: 1x Zentralbox${addons.frontNode ? ' + 1x Front-Node' : ''}${addons.radar2 ? ' + 1x Radar 2.0' : ''})` :
+            `Wireless UWB 6.5 GHz backbone (${numUwbAntennas} pcs: 1x Central Box${addons.frontNode ? ' + 1x Front Node' : ''}${addons.radar2 ? ' + 1x Radar 2.0' : ''})`
+    });
 
     if (bikeModel === 'car-support') {
         cots.push({
@@ -9256,9 +9268,15 @@ function calculateSingleBikeBom(bikeConfig) {
             });
         }
     } else {
-        cots.push({ name: 'KFZ-Sicherungshalter', spec: 'Wasserdichter Halter + 2A Sicherung', qty: 1, desc: isDe ? 'Dauerplus-Absicherung an Batteriepol' : 'Direct battery terminal protection (KL30)' });
+        cots.push({
+            name: isDe ? 'Deutsch DTM-12 Hauptkabelbaum' : 'Deutsch DTM-12 Main Harness',
+            spec: 'IP68/IP69K Deutsch DTM-12 COTS Fertigkabelbaum mit Raychem DR-25',
+            qty: 1,
+            desc: isDe ? 'Zentraler Hauptanschluss für Bordnetz, CAN-Bus & DC-Peitschen zu den Pods' : 'Central main harness for bike power, CAN bus & DC leads to pods'
+        });
+        cots.push({ name: isDe ? 'KFZ-Sicherungshalter' : 'Automotive Fuse Holder', spec: 'Wasserdichter Halter + 2A Sicherung', qty: 1, desc: isDe ? 'Dauerplus-Absicherung an Batteriepol' : 'Direct battery terminal protection (KL30)' });
         if (numPods > 0) {
-            cots.push({ name: 'M8 6-Pin PUR Fertigkabel', spec: 'A-kodiert Stecker/Buchse (1.0m / 1.5m)', qty: numPods, desc: isDe ? `Plug-and-Play Verbindung zu den Pods (${numPods} Stk.)` : `Plug-and-play connection to pods (${numPods} pcs)` });
+            cots.push({ name: isDe ? 'M8 6-Pin PUR Fertigkabel' : 'M8 6-Pin PUR Molded Cable', spec: 'A-kodiert Stecker/Buchse (1.0m / 1.5m)', qty: numPods, desc: isDe ? `Plug-and-Play Verbindung zu den Pods (${numPods} Stk.)` : `Plug-and-play connection to pods (${numPods} pcs)` });
         }
     }
 
@@ -9411,6 +9429,21 @@ function calculateSingleBikeBom(bikeConfig) {
 
     if (bikeModel === 'bmw-gsa') {
         cots.push({ name: 'M5 Schellen-Schrauben', spec: 'DIN 912 V4A M5 x 30 mm + Stoppmuttern', qty: 8, desc: isDe ? 'Verschraubung der 4 Rohrschellen am Kofferträger' : 'Fastening 4 tube clamps to pannier rack' });
+    }
+
+    if (addons.keyfob) {
+        cots.push({
+            name: isDe ? 'Keyfob LiPo-Akku (150 mAh)' : 'Keyfob LiPo Battery (150 mAh)',
+            spec: '1S 3.7V 150 mAh Pouch-Zelle mit PCM (Typ 401230)',
+            qty: 1,
+            desc: isDe ? 'Ultraflacher Akku für Smart-Keyfob (kabellos ladbar via Qi)' : 'Ultra-thin battery for Smart Keyfob (Qi wireless rechargeable)'
+        });
+        cots.push({
+            name: isDe ? 'M2 Keyfob-Schrauben' : 'M2 Keyfob Screws',
+            spec: '4x DIN 7991 V4A M2 x 6 mm Senkkopf',
+            qty: 4,
+            desc: isDe ? 'Verschraubung der Keyfob-Gehäuseschalen' : 'Keyfob enclosure shell screws'
+        });
     }
 
     return {
@@ -9917,7 +9950,7 @@ function renderSingleBuilder() {
                         <li>${isDe ? '<strong>Zentralbox (Gemeinsame Basis):</strong> Unter der Fahrersitzbank im Heckrahmen auf 4x M4 Silentblöcken montieren.' : '<strong>Central Box (Common Base):</strong> Bolt under rider seat on 4x M4 silentblocks.'}</li>
                         <li>${isDe ? '<strong>Pod 1 & 2 (Option B: Edelstahl-Rohrkofferträger Ø 18 mm):</strong> 1,0 mm EPDM-Schutzstreifen um das Rohr wickeln. Klemmschellen (<code>adventure_pannier_rack_clamp_base.stl</code> + <code>cap.stl</code>) mit M5x30 mm V4A Schrauben und Stoppmuttern über Kreuz mit 4,5 Nm anziehen. <em>100% einheitlich:</em> Passt universell an alle originalen Adventure-Edelstahl-Rohrträger (R 1200 GSA LC, R 1250 GSA, R 1300 GSA, F 850 GSA, F 900 GSA sowie klassische luftgekühlte R 1200 GSA K25 ab 2006 und F 800 GS/GSA K72/K75)!' : '<strong>Pods 1 & 2 (Option B: Stainless Pannier Racks Ø 18 mm):</strong> Wrap 1.0 mm EPDM strip around tube. Clamp bases and caps with M5x30 mm bolts and Nyloc nuts (4.5 Nm). <em>100% uniform:</em> Fits universally on all OEM Adventure stainless racks (R 1200 GSA LC, R 1250 GSA, R 1300 GSA, F 850 GSA, F 900 GSA and classic air-cooled R 1200 GSA K25 from 2006 + F 800 GS/GSA K72/K75)!'}</li>
                         <li>${isDe ? '<strong>Heck-Montage & Radar 2.0:</strong> Bei gewähltem Radar 2.0 wird der Ausleger (<code>adventure_rack_tail_mount.stl</code>) an der Gepäckbrücke verschraubt (ragt 65 mm hinter das Topcase für freie 360° Sicht). Ohne Radar bleibt das Heck 100% unberührt.' : '<strong>Rear Mount & Radar 2.0:</strong> When Radar 2.0 is selected, bolt cantilever (<code>adventure_rack_tail_mount.stl</code>) to rear rack (extends 65 mm behind topcase for 360° clear RF line of sight). Without radar, the tail remains 100% stock.'}</li>
-                        ${active.addons?.frontNode ? `<li>${isDe ? '<strong>Front-Node, Cartool-Strom & CAN-Bus:</strong> Front-Node am Ø 12 mm GPS-Bügel montieren und am 3-Pin Cartool-Stecker mit 12V Zündungsplus versorgen (100% drahtloser ESP-NOW Link). <em>CAN-Bus Integration:</em> Bei TFT-Modellen K-CAN direkt am TFT; bei klassischen Modellen (K25 / K72 mit 10-Pin Rundstecker) CAN-Bus unter der Sitzbank per Rund-zu-OBD2 Adapter an Zentralbox HD26 (Pins 17/18) abgreifen. Bedienung bei Modellen ohne Wonder Wheel über OMB BLE-Lenkerfernbedienung (CR2032).' : '<strong>Front Node, Cartool Power & CAN Bus:</strong> Mount Front Node on Ø 12 mm GPS bar and connect to 3-pin Cartool plug for 12V switched power (100% wireless ESP-NOW link). <em>CAN Bus Integration:</em> On TFT models, K-CAN at TFT; on classic models (K25 / K72 with 10-pin round plug), tap CAN bus under seat via 10-pin round-to-OBD2 adapter to Central Box HD26 (pins 17/18). Handlebar control on bikes without Wonder Wheel via OMB BLE remote (CR2032).'}</li>` : ''}
+                        ${active.addons?.frontNode ? `<li>${isDe ? '<strong>Front-Node, Cartool-Strom & CAN-Bus:</strong> Front-Node am Ø 12 mm GPS-Bügel montieren und am 3-Pin Cartool-Stecker mit 12V Zündungsplus versorgen (100% drahtloser ESP-NOW Link). <em>CAN-Bus Integration:</em> Bei TFT-Modellen K-CAN direkt am TFT; bei klassischen Modellen (K25 / K72 mit 10-Pin Rundstecker) CAN-Bus unter der Sitzbank per Rund-zu-OBD2 Adapter an Zentralbox DTM-12 (Pins 4/5 CAN-H & CAN-L) abgreifen. Bedienung bei Modellen ohne Wonder Wheel über OMB BLE-Lenkerfernbedienung (CR2032).' : '<strong>Front Node, Cartool Power & CAN Bus:</strong> Mount Front Node on Ø 12 mm GPS bar and connect to 3-pin Cartool plug for 12V switched power (100% wireless ESP-NOW link). <em>CAN Bus Integration:</em> On TFT models, K-CAN at TFT; on classic models (K25 / K72 with 10-pin round plug), tap CAN bus under seat via 10-pin round-to-OBD2 adapter to Central Box DTM-12 (pins 4/5 CAN-H & CAN-L). Handlebar control on bikes without Wonder Wheel via OMB BLE remote (CR2032).'}</li>` : ''}
                     </ol>
                 </div>
             </div>
@@ -9931,7 +9964,7 @@ function renderSingleBuilder() {
                 </div>
                 <div class="builder-instructions-body">
                     <ol>
-                        <li>${isDe ? '<strong>Zentralbox (Gemeinsame Basis):</strong> Unter der Fahrersitzbank auf der massiven Rahmenbrücke vor der Batterie (oder bei Softail-Modellen im Hohlraum unter dem Sitz / Seitendeckel) auf 4x M4 Silentblöcken verschrauben. Die HD26-Kabelpeitsche führt nach hinten zu den Koffern und direkt zum BCM / Diagnosestecker.' : '<strong>Central Box (Common Base):</strong> Mount under rider seat on frame crossmember in front of battery (or inside Softail under-seat cavity / side cover) using 4x M4 silentblocks. HD26 harness whip branches rearward to saddlebags and BCM / diagnostic port.'}</li>
+                        <li>${isDe ? '<strong>Zentralbox (Gemeinsame Basis):</strong> Unter der Fahrersitzbank auf der massiven Rahmenbrücke vor der Batterie (oder bei Softail-Modellen im Hohlraum unter dem Sitz / Seitendeckel) auf 4x M4 Silentblöcken verschrauben. Der Deutsch DTM-12 Kabelbaum führt nach hinten zu den Koffern und direkt zum BCM / Diagnosestecker.' : '<strong>Central Box (Common Base):</strong> Mount under rider seat on frame crossmember in front of battery (or inside Softail under-seat cavity / side cover) using 4x M4 silentblocks. Deutsch DTM-12 harness whip branches rearward to saddlebags and BCM / diagnostic port.'}</li>
                         <li>${isDe ? '<strong>Pod 1 & 2 & MagSafe Koffer-Seitendurchführung:</strong> Kofferdeckel-Docks (<code>saddlebag_lid_dock.stl</code>) auf den Kofferdeckeln verschrauben (M4 Senkkopf + EPDM-Dichtscheiben) oder per 3M VHB Tape befestigen. <em>(Street/Road Glide, CVO ST, Road King, Limited sowie Cruiser wie Low Rider ST, Sport Glide und Heritage Classic mit Koffern nutzen dieselben Docks!)</em><br>' +
                             '<strong>Koffer-Trennstelle (MagSafe Seitendurchführung):</strong> Die Koffer sitzen werksseitig an massiven Rahmenhaltern mit Schnellverschluss-Pins. Bohre eine 19 mm Bohrung in die <strong>innere Seitenwand des Koffers direkt neben der werksseitigen Rahmenhalterung (Seitendurchführung - NICHT im Boden!)</strong>. Die geteilte EPDM-Kabeldurchführung (<code>010_saddlebag_hole_grommet_split.stl</code>) mit Zugentlastungsturm einsetzen. Das MagSafe Rahmendock (<code>009_magsafe_frame_dock.stl</code> + <code>009_magsafe_frame_clamp.stl</code>) am Rahmenrohr direkt gegenüber der Koffer-Innenwand montieren. M8 Kabel anschließen. Beim Aufsetzen der Koffer dockt der 5-Pin Magnetkontakt (<code>kicad_magsafe_dock</code>) automatisch an - 100% werkzeugloses Abnehmen der Koffer ohne Kabel abstecken!' :
                             '<strong>Pods 1 & 2 & MagSafe Saddlebag Side-Wall Pass-Through:</strong> Mount saddlebag lid docks (<code>saddlebag_lid_dock.stl</code>) on bag lids using M4 screws + EPDM washers or 3M VHB tape.<br>' +
@@ -9945,7 +9978,7 @@ function renderSingleBuilder() {
                             '  - <strong>2024+ (12.3" Skyline OS):</strong> LED-Blinker sind integral in Blades (keine Blinkertürme mehr an der Gabel!). 4x T25 Scheibenschrauben, je 1x T27 in den beiden Handschuhfächern, 2x T25 an unteren Haltelaschen lösen.<br>' +
                             '  - <strong>2015-2023 (Rushmore):</strong> Tacho-Abdeckung abclipsen, Blinker (je 2x 1/2" Schrauben) lösen, 4x T27 Innenschrauben herausdrehen.<br>' +
                             '* <em>Option C (Nacelle & Cruiser mit Saddlebags - Road King / Special, Heritage Classic, Low Rider ST, Sport Glide):</em><br>' +
-                            '  - <strong>Architektur wie Road King Special:</strong> Cruiser mit Koffern haben kein Radio-Display im Cockpit! Der CAN-Bus wird <strong>direkt an der Zentralbox unter der Sitzbank bzw. am BCM-Diagnosestecker (HD26 Pins 17/18)</strong> abgegriffen.<br>' +
+                            '  - <strong>Architektur wie Road King Special:</strong> Cruiser mit Koffern haben kein Radio-Display im Cockpit! Der CAN-Bus wird <strong>direkt an der Zentralbox unter der Sitzbank bzw. am BCM-Diagnosestecker (DTM-12 Pins 4/5 CAN-H &amp; CAN-L)</strong> abgegriffen.<br>' +
                             '  - <strong>100% Wireless Front-Node:</strong> Der Front-Node sitzt in der Scheinwerfergondel (Heritage Classic, Road King) oder hinter der Verkleidung / am Riser (Low Rider ST, Sport Glide). Er benötigt <strong>keinerlei CAN-Kabel</strong> an <code>J2</code> und funkt 100% drahtlos via ESP-NOW (< 1,8 ms) zur Zentralbox - null Kabel durch den Lenkkopf!<br>' +
                             '* <em>Montage & Verkabelung (Fairing-Modelle):</em> Der Front-Node wird vibrationsentkoppelt direkt <strong>unterm Fairing an den runden Metallstangen des Verkleidungsgeweihs (Ø 16-19 mm Fairing Support Tubes)</strong> mit der Verkleidungs-Rohrschelle (<code>front_node_fairing_tube_clamp.stl</code>) oder an den runden Riser-Querstreben montiert (100% unsichtbarer Stealth-Einbau, Lenker bleibt völlig frei!). <code>J1</code> an 12V Zündungsplus, <code>J2</code> an Audio-CAN. Port <code>J4</code> (USB Host Upstream) ans Display-Medienkabel, Port <code>J6</code> an externen Wireless CarPlay/AA Dongle (Ottocast / CarlinKit). Bei Aussetzern schaltet der integrierte TPS2051B Lastschalter per 1-Click Hardreset die VBUS-Spannung für 2,5 s aus und startet den Dongle neu. Port <code>J5</code> führt 20W PD Ladekabel ins Handschuhfach.' :
                             '<strong>Cockpit & Front Node (Modular Fairing Options):</strong><br>' +
@@ -9956,7 +9989,7 @@ function renderSingleBuilder() {
                             '  - <strong>2024+ (12.3" Skyline OS):</strong> LED turn signals are integral in blades (no fork turn signals to unbolt!). Remove 4x T25 screen screws, 1x T27 inside each glovebox (2 total), 2x T25 lower tabs.<br>' +
                             '  - <strong>2015-2023 (Rushmore):</strong> Pop gauge nacelle, unbolt turn signals (2x 1/2" bolts/side), remove 4x T27 inner screws.<br>' +
                             '* <em>Option C (Nacelle & Cruisers with Saddlebags - Road King / Special, Heritage Classic, Low Rider ST, Sport Glide):</em><br>' +
-                            '  - <strong>Road King Special Architecture:</strong> Cruisers with saddlebags have no front head unit! CAN-bus connects <strong>directly under seat / side cover to Central Box via BCM diagnostic plug (HD26 pins 17/18)</strong>.<br>' +
+                            '  - <strong>Road King Special Architecture:</strong> Cruisers with saddlebags have no front head unit! CAN-bus connects <strong>directly under seat / side cover to Central Box via BCM diagnostic plug (DTM-12 pins 4/5 CAN-H &amp; CAN-L)</strong>.<br>' +
                             '  - <strong>100% Wireless Front Node:</strong> Front Node mounts inside headlight nacelle (Heritage Classic, Road King) or behind fairing / at riser (Low Rider ST, Sport Glide). Needs <strong>zero CAN wiring</strong> at <code>J2</code> and communicates 100% wirelessly over ESP-NOW (< 1.8 ms) to Central Box - zero wires through steering neck!<br>' +
                             '* <em>Mounting & Wiring (Fairing models):</em> Mount Front Node vibration-isolated directly <strong>under the fairing to the round metal fairing support tubes (Ø 16-19 mm Fairing Stays)</strong> using fairing tube clamp (<code>front_node_fairing_tube_clamp.stl</code>) or to round riser crossbars (100% invisible stealth fit, bars remain clean!). <code>J1</code> to 12V switched, <code>J2</code> to audio CAN. Port <code>J4</code> (USB Host Upstream) to display media cable, Port <code>J6</code> to external wireless CarPlay/AA dongle (Ottocast / CarlinKit). On dropouts, the integrated TPS2051B power switch executes a 1-click 2.5s hard power cycle to reboot the dongle. Port <code>J5</code> routes 20W PD cable to glovebox.'}</li>` : ''}
                     </ol>
@@ -10028,7 +10061,7 @@ function renderSingleBuilder() {
             <div class="builder-instructions-body">
                 <ol>
                     <li>${isDe ? 'Alle fertigen M8 PUR-Kabel an die Pods und den Front-Knoten anstecken und Überwurfmuttern handfest anziehen.' : 'Plug all pre-molded M8 PUR cables into pods and Front Node, tightening locking rings finger-tight.'}</li>
-                    <li>${isDe ? 'HD26 Hauptstecker an der Zentralbox verriegeln.' : 'Lock HD26 main plug at Central Box.'}</li>
+                    <li>${isDe ? 'Deutsch DTM-12 Hauptstecker an der Zentralbox verriegeln.' : 'Lock Deutsch DTM-12 main plug at Central Box.'}</li>
                     <li>${isDe ? 'Bordnetzkabel (rot mit 2A Sicherung an Batterie-Dauerplus, schwarz an Masse) anschließen.' : 'Connect power harness (red with 2A fuse to battery +, black to ground).'}</li>
                     <li>${isDe ? 'Zündung EINschalten: Status-LEDs an Box und Front-Knoten leuchten grün. PWA öffnen, unten den Smoke-Test durchführen und Kassetten einschieben!' : 'Switch ignition ON: Status LEDs illuminate green. Open PWA, run Smoke Test below, and slide cartridges in!'}</li>
                 </ol>

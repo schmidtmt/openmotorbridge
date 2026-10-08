@@ -54,5 +54,5 @@
 #define OMM_PIN_BT_UART_RTS    GPIO_NUM_15 // C6 RTS -> PICO CTS
 #define OMM_PIN_BT_UART_CTS    GPIO_NUM_14 // C6 CTS -> PICO RTS
 #define OMM_PIN_BT_RESET       GPIO_NUM_18 // Co-processor reset / wakeup
-#define OMM_PIN_BT_BOOT        GPIO_NUM_2  // Co-processor download mode trigger
+#define OMM_PIN_BT_BOOT        GPIO_NUM_1  // Co-processor download mode trigger
 #define OMM_BT_UART_BAUD       3000000     // 3 Mbps high-speed serial link
