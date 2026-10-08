@@ -1336,8 +1336,8 @@
                             <select id="select-pod1-profile" style="width: 100%; padding: 8px; border-radius: 8px; background: rgba(0,0,0,0.5); color: var(--text-primary); border: 1px solid var(--border-color); font-weight: 600;">
                                 <option value="disabled">🚫 Deaktiviert / Slot AUS (disabled.json)</option>
                                 <option value="sena_spider_x" selected>⭐ Sena Spider X Slim (Mesh 3.0 Direct-DC * OMB-Empfehlung)</option>
-                                <option value="omm_ucs">🚀 OpenMotorMesh 2.4 GHz (PCBA 09 * BLE 5.3 LC3 Stereo)</option>
-                                <option value="omm_pmr446">📡 OpenMotorMesh PMR/DMR 446 MHz (PCBA 10)</option>
+                                <option value="omm_ucs">🚀 OpenMotorMesh 2.4 GHz (PCBA 09 * Dual-Engine Mesh &amp; BT Bridge)</option>
+                                <option value="omm_pmr446">📡 OpenMotorMesh 446 MHz PMR/DMR (PCBA 10 * Dual-Engine &amp; SA818)</option>
                                 <option value="sena_60s">⚡ Sena 60S (Mesh 3.0 Wave)</option>
                                 <option value="sena_apex">🟢 Sena Apex / Apex Plus (Mesh 3.0)</option>
                                 <option value="sena_50_series">🔵 Sena 50S / 50R / 50C / MeshPort</option>
@@ -1386,8 +1386,8 @@
                             <select id="select-pod2-profile" style="width: 100%; padding: 8px; border-radius: 8px; background: rgba(0,0,0,0.5); color: var(--text-primary); border: 1px solid var(--border-color); font-weight: 600;">
                                 <option value="disabled">🚫 Deaktiviert / Slot AUS (disabled.json)</option>
                                 <option value="cardo_dmc_gen2" selected>🟢 Cardo Packtalk Pro / Edge (DMC Gen2)</option>
-                                <option value="omm_ucs">🚀 OpenMotorMesh 2.4 GHz (PCBA 09 * BLE 5.3 LC3 Stereo)</option>
-                                <option value="omm_pmr446">📡 OpenMotorMesh PMR/DMR 446 MHz (PCBA 10)</option>
+                                <option value="omm_ucs">🚀 OpenMotorMesh 2.4 GHz (PCBA 09 * Dual-Engine Mesh &amp; BT Bridge)</option>
+                                <option value="omm_pmr446">📡 OpenMotorMesh 446 MHz PMR/DMR (PCBA 10 * Dual-Engine &amp; SA818)</option>
                                 <option value="cardo_freecom_live">🔵 Cardo Freecom 4x / 2x / Spirit (Live)</option>
                                 <option value="cardo_dmc_legacy">🟣 Cardo Packtalk Bold / Black (DMC Gen1)</option>
                                 <option value="sena_apex">⚡ Sena Apex / Apex Plus (Mesh 3.0)</option>
@@ -2751,9 +2751,14 @@
                                 <div class="builder-option-badge">Smart Cartridge</div>
                             </div>
                             <div class="builder-option-card" data-type="slot1" data-value="omm-ucs">
-                                <div class="builder-option-title">OMM 2.4 GHz UCS Modul</div>
-                                <div class="builder-option-desc">PCBA 09 (ESP32-C6-MINI-1U). ECE 22.06 UCS-Modul mit LiPo &amp; Taoglas Flexantenne im Kassetten-Schlitten.</div>
-                                <div class="builder-option-badge">Open Source Mesh</div>
+                                <div class="builder-option-title">OMM 2.4 GHz Dual-Engine Modul</div>
+                                <div class="builder-option-desc">PCBA 09: ESP32-C6 Wi-Fi 6 Mesh + dedizierter ESP32-PICO BT Classic/BLE Co-Prozessor (OMB Lite), ES8388 Codec, LiPo USV &amp; 4 Taster.</div>
+                                <div class="builder-option-badge">Dual-Engine Mesh</div>
+                            </div>
+                            <div class="builder-option-card" data-type="slot1" data-value="omm446">
+                                <div class="builder-option-title">OMM 446 MHz PMR/DMR Modul</div>
+                                <div class="builder-option-desc">PCBA 10: NiceRF SA818-DMR (Analog FM + Digital DMR Tier I), ESP32-PICO BT Classic Audio-Bridge, ESP32-C6 Host, 0.2W/0.5W ERP &amp; LiPo USV.</div>
+                                <div class="builder-option-badge">DMR &amp; PMR446 Funk</div>
                             </div>
                             <div class="builder-option-card" data-type="slot1" data-value="sena-50s">
                                 <div class="builder-option-title">Sena 50S / 60S</div>
@@ -2780,9 +2785,14 @@
                                 <div class="builder-option-badge">Smart Cartridge</div>
                             </div>
                             <div class="builder-option-card" data-type="slot2" data-value="omm-ucs">
-                                <div class="builder-option-title">OMM 2.4 GHz UCS Modul</div>
-                                <div class="builder-option-desc">PCBA 09 (ESP32-C6-MINI-1U). ECE 22.06 UCS-Modul mit LiPo &amp; Taoglas Flexantenne im Kassetten-Schlitten.</div>
-                                <div class="builder-option-badge">Open Source Mesh</div>
+                                <div class="builder-option-title">OMM 2.4 GHz Dual-Engine Modul</div>
+                                <div class="builder-option-desc">PCBA 09: ESP32-C6 Wi-Fi 6 Mesh + dedizierter ESP32-PICO BT Classic/BLE Co-Prozessor (OMB Lite), ES8388 Codec, LiPo USV &amp; 4 Taster.</div>
+                                <div class="builder-option-badge">Dual-Engine Mesh</div>
+                            </div>
+                            <div class="builder-option-card" data-type="slot2" data-value="omm446">
+                                <div class="builder-option-title">OMM 446 MHz PMR/DMR Modul</div>
+                                <div class="builder-option-desc">PCBA 10: NiceRF SA818-DMR (Analog FM + Digital DMR Tier I), ESP32-PICO BT Classic Audio-Bridge, ESP32-C6 Host, 0.2W/0.5W ERP &amp; LiPo USV.</div>
+                                <div class="builder-option-badge">DMR &amp; PMR446 Funk</div>
                             </div>
                             <div class="builder-option-card" data-type="slot2" data-value="pmr446">
                                 <div class="builder-option-title">PMR446 Funk / COTS</div>
@@ -2818,9 +2828,15 @@
                         </div>
                         <div class="builder-option-card" data-type="addon" data-value="ommHelmetKit">
                             <div class="builder-option-icon">🪖</div>
-                            <div class="builder-option-title">OMM Helm UCS Headset-Kit</div>
-                            <div class="builder-option-desc">PCBA 09 im ECE 22.06 Gehäuse, 600 mAh LiPo, Taoglas FXP73 Flexantenne, 40mm Helmlautsprecher, ECM-Mikrofon &amp; Helmhalterung mit 3M VHB R130.</div>
-                            <div class="builder-option-badge">ECE 22.06 UCS</div>
+                            <div class="builder-option-title">OMM 2.4 GHz Helm UCS-Kit</div>
+                            <div class="builder-option-desc">PCBA 09 Dual-Engine im ECE 22.06 Gehäuse, 600 mAh LiPo, Taoglas FXP73 Flexantenne, 40mm Helmlautsprecher, ECM-Mikrofon &amp; Helmhalterung mit 3M VHB R130.</div>
+                            <div class="builder-option-badge">ECE 22.06 Mesh</div>
+                        </div>
+                        <div class="builder-option-card" data-type="addon" data-value="omm446HelmetKit">
+                            <div class="builder-option-icon">📻</div>
+                            <div class="builder-option-title">OMM 446 MHz Helm UCS-Kit</div>
+                            <div class="builder-option-desc">PCBA 10 Dual-Engine im ECE 22.06 Gehäuse, NiceRF SA818-DMR (0.2W ERP SAR-safe), λ/4 Wendelantenne im Deckel, ESP32-PICO BT-Bridge, 600 mAh LiPo &amp; Headset.</div>
+                            <div class="builder-option-badge">ECE 22.06 PMR/DMR</div>
                         </div>
                         <div class="builder-option-card" data-type="addon" data-value="tmp117Sensor">
                             <div class="builder-option-icon">🌡️</div>
@@ -3331,8 +3347,8 @@
                 <label for="select-uuid-profile" data-i18n="lbl_select_profile" style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; display: block;">Hardware-Profil auswählen:</label>
                 <select id="select-uuid-profile" class="form-control" style="width: 100%; padding: 10px 12px; border-radius: 8px; background: var(--bg-surface-secondary); color: var(--text-primary); border: 1px solid var(--border-color); font-size: 0.95rem;">
                     <option value="sena_spider_x" selected>⭐ Sena Spider X Slim (Mesh 3.0 Direct-DC * K2a * Empfehlung)</option>
-                    <option value="omm_ucs">🚀 OpenMotorMesh 2.4 GHz (PCBA 09 * BLE 5.3 LC3 Stereo)</option>
-                    <option value="omm_pmr446">📡 OpenMotorMesh PMR/DMR 446 MHz (PCBA 10 * DMR Tier I/II)</option>
+                    <option value="omm_ucs">🚀 OpenMotorMesh 2.4 GHz (PCBA 09 * Dual-Engine Mesh &amp; BT Bridge)</option>
+                    <option value="omm_pmr446">📡 OpenMotorMesh 446 MHz PMR/DMR (PCBA 10 * Dual-Engine &amp; SA818)</option>
                     <option value="sena_60s">⚡ Sena 60S (Mesh 3.0 Wave * K1)</option>
                     <option value="sena_apex">🟢 Sena Apex / Apex Plus (Mesh 3.0 * K1)</option>
                     <option value="sena_50_series">🔵 Sena 50S / 50R / 50C / SRL3 (Mesh 2.0/3.0 * K1)</option>

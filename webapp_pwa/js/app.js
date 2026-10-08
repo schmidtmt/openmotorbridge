@@ -5126,30 +5126,30 @@ const CARTRIDGE_PROFILES = {
         dle_bonus: 10
     },
     omm_ucs: {
-        vendor: 'OpenMotorMesh * 2.4 GHz Mesh & BLE 5.3 LE Audio LC3 (PCBA 09)',
-        vendor_en: 'OpenMotorMesh * 2.4 GHz Mesh & BLE 5.3 LE Audio LC3 (PCBA 09)',
+        vendor: 'OpenMotorMesh * 2.4 GHz Dual-Engine Mesh & BT Bridge (PCBA 09)',
+        vendor_en: 'OpenMotorMesh * 2.4 GHz Dual-Engine Mesh & BT Bridge (PCBA 09)',
         badge: 'badge_online',
         badge_class: 'badge-purple',
-        status: 'Power ON * Full-Duplex Stereo LC3 * DLE +80 Pkt.',
-        status_en: 'Power ON * Full-Duplex Stereo LC3 * DLE +80 Pts.',
+        status: 'Power ON * Dual-Engine (Wi-Fi 6 Mesh + BT Classic/BLE) * DLE +80 Pkt.',
+        status_en: 'Power ON * Dual-Engine (Wi-Fi 6 Mesh + BT Classic/BLE) * DLE +80 Pts.',
         status_color: 'var(--accent-purple)',
-        ble_flavor: 'OMM Native (0x00MB) * LC3 Stereo',
-        ble_flavor_en: 'OMM Native (0x00MB) * LC3 Stereo',
+        ble_flavor: 'Dual-Engine: ESP32-C6 + ESP32-PICO BT Classic',
+        ble_flavor_en: 'Dual-Engine: ESP32-C6 + ESP32-PICO BT Classic',
         idle_ma: 28,
         dle_bonus: 80
     },
     omm_pmr446: {
-        vendor: 'OpenMotorMesh * 446 MHz PMR/DMR Digital (PCBA 10)',
-        vendor_en: 'OpenMotorMesh * 446 MHz PMR/DMR Digital (PCBA 10)',
+        vendor: 'OpenMotorMesh * 446 MHz PMR/DMR Dual-Mode & BT Bridge (PCBA 10)',
+        vendor_en: 'OpenMotorMesh * 446 MHz PMR/DMR Dual-Mode & BT Bridge (PCBA 10)',
         badge: 'badge_online',
         badge_class: 'badge-blue',
-        status: 'Power ON * DMR Tier I/II * DLE +40 Pkt.',
-        status_en: 'Power ON * DMR Tier I/II * DLE +40 Pts.',
+        status: 'Power ON * NiceRF SA818-DMR + BT Classic Bridge * DLE +60 Pkt.',
+        status_en: 'Power ON * NiceRF SA818-DMR + BT Classic Bridge * DLE +60 Pts.',
         status_color: 'var(--accent-blue)',
-        ble_flavor: 'Kein BLE (Nur Mechatronik)',
-        ble_flavor_en: 'No BLE (Mechatronics-only)',
+        ble_flavor: 'Dual-Engine: SA818-DMR + ESP32-PICO BT Classic',
+        ble_flavor_en: 'Dual-Engine: SA818-DMR + ESP32-PICO BT Classic',
         idle_ma: 35,
-        dle_bonus: 40
+        dle_bonus: 60
     }
 };
 
@@ -8431,6 +8431,7 @@ const fleetState = {
             addons: {
                 frontNode: true,
                 ommHelmetKit: false,
+                omm446HelmetKit: false,
                 tmp117Sensor: false,
                 radar2: false,
                 bsdMirrors: false,
@@ -8488,6 +8489,7 @@ function createDefaultBike(index, template = null) {
         addons: {
             frontNode: model !== 'car-support',
             ommHelmetKit: false,
+            omm446HelmetKit: false,
             tmp117Sensor: false,
             radar2: false,
             bsdMirrors: false,
@@ -8747,8 +8749,9 @@ function calculateSingleBikeBom(bikeConfig) {
         'sena-spider-x': 'Sena SPIDER X Slim',
         'sena-50s': 'Sena 50S / 60S',
         'cardo-edge': 'Cardo Packtalk Edge',
-        'omm-ucs': isDe ? 'OMM 2.4 GHz UCS Modul' : 'OMM 2.4 GHz UCS Module',
-        'pmr446': 'PMR446 Funk',
+        'omm-ucs': isDe ? 'OMM 2.4 GHz Dual-Engine Modul (PCBA 09)' : 'OMM 2.4 GHz Dual-Engine Module (PCBA 09)',
+        'omm446': isDe ? 'OMM 446 MHz PMR/DMR Modul (PCBA 10)' : 'OMM 446 MHz PMR/DMR Module (PCBA 10)',
+        'pmr446': isDe ? 'PMR446 Funk / COTS (Analog)' : 'PMR446 Radio / COTS (Analog)',
         'blind': isDe ? 'Blindkassette' : 'Blank Cartridge'
     };
 
@@ -8758,8 +8761,11 @@ function calculateSingleBikeBom(bikeConfig) {
     if (bikeModel === 'car-support') { costMin = 95; costMax = 125; }
     if (slot1 === 'omm-ucs') { costMin += 38; costMax += 48; }
     if (slot2 === 'omm-ucs') { costMin += 38; costMax += 48; }
+    if (slot1 === 'omm446') { costMin += 45; costMax += 58; }
+    if (slot2 === 'omm446') { costMin += 45; costMax += 58; }
     if (addons.frontNode) { costMin += 42; costMax += 55; }
     if (addons.ommHelmetKit) { costMin += 45; costMax += 58; }
+    if (addons.omm446HelmetKit) { costMin += 52; costMax += 68; }
     if (addons.tmp117Sensor) { costMin += 14; costMax += 18; }
     if (addons.radar2) { costMin += 65; costMax += 85; }
     if (addons.bsdMirrors) { costMin += 34; costMax += 45; }
@@ -8796,7 +8802,9 @@ function calculateSingleBikeBom(bikeConfig) {
         if (slot1 === 'sena-spider-x' || slot1 === 'sena-50s') {
             parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_sena.stl', qty: 1, desc: isDe ? 'Inlay für Sena SPIDER X / 50S / 60S' : 'Inlay for Sena SPIDER X / 50S / 60S' });
         } else if (slot1 === 'omm-ucs') {
-            parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_omm_ucs.stl', qty: 1, desc: isDe ? 'Inlay-Schlitten mit Antennenführung für OMM UCS (PCBA 09)' : 'Inlay sled with antenna routing for OMM UCS (PCBA 09)' });
+            parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_omm_ucs.stl', qty: 1, desc: isDe ? 'Inlay-Schlitten mit Antennenführung für OMM 2.4 GHz (PCBA 09)' : 'Inlay sled with antenna routing for OMM 2.4 GHz (PCBA 09)' });
+        } else if (slot1 === 'omm446') {
+            parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_omm446_ucs.stl', qty: 1, desc: isDe ? 'Inlay-Schlitten für OMM 446 (PCBA 10) mit Wendelantennen-Schacht & U.FL Durchführung' : 'Inlay sled for OMM 446 (PCBA 10) with helical antenna cavity & U.FL port' });
         } else {
             parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_blindkassette.stl', qty: 1, desc: isDe ? 'Hermetische Blindkassette (Dry Box)' : 'Hermetic blank cartridge (Dry Box)' });
         }
@@ -8804,7 +8812,11 @@ function calculateSingleBikeBom(bikeConfig) {
         if (slot2 === 'cardo-edge') {
             parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_cardo.stl', qty: 1, desc: isDe ? 'Inlay für Cardo Packtalk Edge / Pro' : 'Inlay for Cardo Packtalk Edge / Pro' });
         } else if (slot2 === 'omm-ucs') {
-            parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_omm_ucs.stl', qty: 1, desc: isDe ? 'Inlay-Schlitten mit Antennenführung für OMM UCS (PCBA 09)' : 'Inlay sled with antenna routing for OMM UCS (PCBA 09)' });
+            parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_omm_ucs.stl', qty: 1, desc: isDe ? 'Inlay-Schlitten mit Antennenführung für OMM 2.4 GHz (PCBA 09)' : 'Inlay sled with antenna routing for OMM 2.4 GHz (PCBA 09)' });
+        } else if (slot2 === 'omm446') {
+            parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_omm446_ucs.stl', qty: 1, desc: isDe ? 'Inlay-Schlitten für OMM 446 (PCBA 10) mit Wendelantennen-Schacht & U.FL Durchführung' : 'Inlay sled for OMM 446 (PCBA 10) with helical antenna cavity & U.FL port' });
+        } else if (slot2 === 'pmr446') {
+            parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_pmr.stl', qty: 1, desc: isDe ? 'Universelles COTS Funkgeräte-Inlay mit Kabeldurchführung' : 'Universal COTS radio inlay with cable pass-through' });
         } else if (slot2 === 'blind') {
             parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_blindkassette.stl', qty: 1, desc: isDe ? 'Hermetische Blindkassette (Dry Box)' : 'Hermetic blank cartridge (Dry Box)' });
         }
@@ -8843,10 +8855,18 @@ function calculateSingleBikeBom(bikeConfig) {
 
     // OMM Helmet UCS Kit
     if (addons.ommHelmetKit) {
-        parts3D.push({ group: 'OMM Helm-Kit', file: 'omm_ucs_top_shell.stl', qty: 1, desc: isDe ? 'ECE 22.06 Gehäuse-Oberschale mit M2 Mutterntaschen' : 'ECE 22.06 upper shell with M2 nut pockets' });
-        parts3D.push({ group: 'OMM Helm-Kit', file: 'omm_ucs_bottom_shell.stl', qty: 1, desc: isDe ? 'ECE 22.06 Gehäuse-Unterschale mit Dichtnut & USB-C Ausschnitt' : 'ECE 22.06 lower shell with seal groove & USB-C cutout' });
-        parts3D.push({ group: 'OMM Helm-Kit', file: 'omm_ucs_silicone_keypad.stl', qty: 1, desc: isDe ? 'ECE 22.06 4-Tasten Silikon-Schaltmatte (Shore 50A IP67)' : 'ECE 22.06 4-button silicone keypad (Shore 50A IP67)' });
-        parts3D.push({ group: 'OMM Helm-Kit', file: 'omm_ucs_helmet_cradle.stl', qty: 1, desc: isDe ? 'ECE 22.06 UCS Helm-Klemmsockel & 3M VHB R130 Adapter' : 'ECE 22.06 UCS helmet cradle & 3M VHB R130 adapter' });
+        parts3D.push({ group: 'OMM 2.4 Helm-Kit', file: 'omm_ucs_top_shell.stl', qty: 1, desc: isDe ? 'ECE 22.06 Gehäuse-Oberschale mit M2 Mutterntaschen' : 'ECE 22.06 upper shell with M2 nut pockets' });
+        parts3D.push({ group: 'OMM 2.4 Helm-Kit', file: 'omm_ucs_bottom_shell.stl', qty: 1, desc: isDe ? 'ECE 22.06 Gehäuse-Unterschale mit Dichtnut & USB-C Ausschnitt' : 'ECE 22.06 lower shell with seal groove & USB-C cutout' });
+        parts3D.push({ group: 'OMM 2.4 Helm-Kit', file: 'omm_ucs_silicone_keypad.stl', qty: 1, desc: isDe ? 'ECE 22.06 4-Tasten Silikon-Schaltmatte (Shore 50A IP67)' : 'ECE 22.06 4-button silicone keypad (Shore 50A IP67)' });
+        parts3D.push({ group: 'OMM 2.4 Helm-Kit', file: 'omm_ucs_helmet_cradle.stl', qty: 1, desc: isDe ? 'ECE 22.06 UCS Helm-Klemmsockel & 3M VHB R130 Adapter' : 'ECE 22.06 UCS helmet cradle & 3M VHB R130 adapter' });
+    }
+
+    // OMM 446 MHz Helmet UCS Kit
+    if (addons.omm446HelmetKit) {
+        parts3D.push({ group: 'OMM 446 Helm-Kit', file: 'omm446_ucs_top_shell.stl', qty: 1, desc: isDe ? 'ECE 22.06 Gehäuse-Oberschale mit λ/4 Wendelantennen-Labyrinth' : 'ECE 22.06 upper shell with λ/4 helical antenna labyrinth' });
+        parts3D.push({ group: 'OMM 446 Helm-Kit', file: 'omm_ucs_bottom_shell.stl', qty: 1, desc: isDe ? 'ECE 22.06 Gehäuse-Unterschale mit Dichtnut & USB-C Ausschnitt' : 'ECE 22.06 lower shell with seal groove & USB-C cutout' });
+        parts3D.push({ group: 'OMM 446 Helm-Kit', file: 'omm_ucs_silicone_keypad.stl', qty: 1, desc: isDe ? 'ECE 22.06 4-Tasten Silikon-Schaltmatte (Shore 50A IP67)' : 'ECE 22.06 4-button silicone keypad (Shore 50A IP67)' });
+        parts3D.push({ group: 'OMM 446 Helm-Kit', file: 'omm_ucs_helmet_cradle.stl', qty: 1, desc: isDe ? 'ECE 22.06 UCS Helm-Klemmsockel & 3M VHB R130 Adapter' : 'ECE 22.06 UCS helmet cradle & 3M VHB R130 adapter' });
     }
 
     // TMP117 Stealth Sensor Mount
@@ -8936,8 +8956,23 @@ function calculateSingleBikeBom(bikeConfig) {
             id: 'kicad_omm_intercom',
             qty: totalOmmPcba,
             desc: isDe ?
-                `OMM 2.4 GHz UCS Intercom (${totalOmmPcba}x: ESP32-C6-MINI-1U, TI BQ24075 PMIC, ES8388 Stereo Codec)` :
-                `OMM 2.4 GHz UCS Intercom (${totalOmmPcba}x: ESP32-C6-MINI-1U, TI BQ24075 PMIC, ES8388 Stereo Codec)`
+                `OMM 2.4 GHz UCS Intercom (${totalOmmPcba}x: Dual-Engine ESP32-C6 + ESP32-PICO BT Classic, ES8388 Codec, BQ24075 PMIC)` :
+                `OMM 2.4 GHz UCS Intercom (${totalOmmPcba}x: Dual-Engine ESP32-C6 + ESP32-PICO BT Classic, ES8388 Codec, BQ24075 PMIC)`
+        });
+    }
+
+    const numOmm446Slots = (slot1 === 'omm446' ? 1 : 0) + (slot2 === 'omm446' ? 1 : 0);
+    const numOmm446Helmet = addons.omm446HelmetKit ? 1 : 0;
+    const totalOmm446Pcba = numOmm446Slots + numOmm446Helmet;
+
+    if (totalOmm446Pcba > 0) {
+        pcbas.push({
+            name: 'PCBA 10',
+            id: 'kicad_omm446_intercom',
+            qty: totalOmm446Pcba,
+            desc: isDe ?
+                `OMM 446 MHz PMR/DMR Transceiver (${totalOmm446Pcba}x: NiceRF SA818-DMR, ESP32-C6 Host, ESP32-PICO BT Bridge, ES8388 Codec, BQ24075 PMIC)` :
+                `OMM 446 MHz PMR/DMR Transceiver (${totalOmm446Pcba}x: NiceRF SA818-DMR, ESP32-C6 Host, ESP32-PICO BT Bridge, ES8388 Codec, BQ24075 PMIC)`
         });
     }
 
@@ -8980,7 +9015,7 @@ function calculateSingleBikeBom(bikeConfig) {
             desc: isDe ? `HF-Antenne klickt direkt auf den U.FL-Port des ESP32-C6 (${totalOmmPcba} Stk.)` : `RF antenna snaps directly to ESP32-C6 U.FL port (${totalOmmPcba} pcs)`
         });
         cots.push({
-            name: '1S LiPo Pouch-Akku 600 mAh',
+            name: '1S LiPo Pouch-Akku 600 mAh (PCBA 09)',
             spec: '3.7V / 2.22Wh (Typ 452438) mit DW01A/8205A PCM & JST-ACH',
             qty: totalOmmPcba,
             desc: isDe ? `Integrierter Akku für PCBA 09 (${totalOmmPcba} Stk., 12-14h Standalone-Betrieb)` : `Internal battery for PCBA 09 (${totalOmmPcba} pcs, 12-14h standalone)`
@@ -8993,15 +9028,51 @@ function calculateSingleBikeBom(bikeConfig) {
         });
     }
 
-    if (addons.ommHelmetKit) {
+    if (totalOmm446Pcba > 0) {
         cots.push({
-            name: isDe ? 'Helmlautsprecher & ECM-Mikrofon' : 'Helmet Speakers & ECM Mic',
-            spec: '40 mm 32 Ohm Hi-Fi Stereo-Lautsprecher + ECM Schwanenhalsmikrofon',
-            qty: 1,
-            desc: isDe ? 'Plug-and-Play Audio-Harness für OMM UCS Headset' : 'Plug-and-play audio harness for OMM UCS headset'
+            name: '446 MHz λ/4 Wendelantenne / U.FL',
+            spec: '446 MHz Federwendel (32 mm) oder U.FL auf SMA Pigtail',
+            qty: totalOmm446Pcba,
+            desc: isDe ? `Antenne für SA818-DMR Transceiver auf PCBA 10 (${totalOmm446Pcba} Stk.)` : `Antenna for SA818-DMR transceiver on PCBA 10 (${totalOmm446Pcba} pcs)`
         });
         cots.push({
-            name: '3M VHB R130 Klebepad',
+            name: '1S LiPo Pouch-Akku 600 mAh (PCBA 10)',
+            spec: '3.7V / 2.22Wh (Typ 452438) mit DW01A/8205A PCM & JST-ACH',
+            qty: totalOmm446Pcba,
+            desc: isDe ? `Integrierter Akku für PCBA 10 (${totalOmm446Pcba} Stk., 12-14h Standalone-Betrieb)` : `Internal battery for PCBA 10 (${totalOmm446Pcba} pcs, 12-14h standalone)`
+        });
+        cots.push({
+            name: 'M2 Gehäuseschrauben & Muttern (PCBA 10)',
+            spec: 'DIN 912 V4A M2 x 8 mm + DIN 934 M2 Muttern',
+            qty: totalOmm446Pcba * 4,
+            desc: isDe ? `Verschraubung für PCBA 10 / Schlitten (${totalOmm446Pcba * 4} Paar)` : `Screws & nuts for PCBA 10 / sled (${totalOmm446Pcba * 4} pairs)`
+        });
+    }
+
+    if (addons.ommHelmetKit) {
+        cots.push({
+            name: isDe ? 'Helmlautsprecher & ECM-Mikrofon (2.4 GHz Kit)' : 'Helmet Speakers & ECM Mic (2.4 GHz Kit)',
+            spec: '40 mm 32 Ohm Hi-Fi Stereo-Lautsprecher + ECM Schwanenhalsmikrofon',
+            qty: 1,
+            desc: isDe ? 'Plug-and-Play Audio-Harness für OMM 2.4 UCS Headset' : 'Plug-and-play audio harness for OMM 2.4 UCS headset'
+        });
+        cots.push({
+            name: '3M VHB R130 Klebepad (2.4 GHz Kit)',
+            spec: 'Hochleistungs-Klebeband R130 passgenau zugeschnitten',
+            qty: 1,
+            desc: isDe ? 'Vibrations- und wetterfeste Helmbefestigung des UCS-Sockels' : 'Vibration & weatherproof helmet attachment of UCS cradle'
+        });
+    }
+
+    if (addons.omm446HelmetKit) {
+        cots.push({
+            name: isDe ? 'Helmlautsprecher & ECM-Mikrofon (446 MHz Kit)' : 'Helmet Speakers & ECM Mic (446 MHz Kit)',
+            spec: '40 mm 32 Ohm Hi-Fi Stereo-Lautsprecher + ECM Schwanenhalsmikrofon',
+            qty: 1,
+            desc: isDe ? 'Plug-and-Play Audio-Harness für OMM 446 Headset' : 'Plug-and-play audio harness for OMM 446 headset'
+        });
+        cots.push({
+            name: '3M VHB R130 Klebepad (446 MHz Kit)',
             spec: 'Hochleistungs-Klebeband R130 passgenau zugeschnitten',
             qty: 1,
             desc: isDe ? 'Vibrations- und wetterfeste Helmbefestigung des UCS-Sockels' : 'Vibration & weatherproof helmet attachment of UCS cradle'
@@ -9189,7 +9260,8 @@ function renderSingleBuilder() {
     if (subEl) {
         const addonList = [];
         if (active.addons?.frontNode) addonList.push(isDe ? 'Front-Knoten' : 'Front Node');
-        if (active.addons?.ommHelmetKit) addonList.push(isDe ? 'OMM Helm-Kit' : 'OMM Helmet Kit');
+        if (active.addons?.ommHelmetKit) addonList.push(isDe ? 'OMM 2.4 Helm-Kit' : 'OMM 2.4 Helmet Kit');
+        if (active.addons?.omm446HelmetKit) addonList.push(isDe ? 'OMM 446 Helm-Kit' : 'OMM 446 Helmet Kit');
         if (active.addons?.tmp117Sensor) addonList.push(isDe ? 'TMP117 Eiswarner' : 'TMP117 Ice Sensor');
         if (active.addons?.radar2) addonList.push(isDe ? 'Radar 2.0 Sub-MCU' : 'Radar 2.0 Sub-MCU');
         if (active.addons?.bsdMirrors) addonList.push(isDe ? 'BSD Spiegel-LEDs' : 'BSD Mirror LEDs');
@@ -9208,7 +9280,7 @@ function renderSingleBuilder() {
 
     const costDisclaimerEl = document.getElementById('builder-cost-disclaimer');
     if (costDisclaimerEl) {
-        costDisclaimerEl.textContent = isDe ? 'zzgl. OEM-Intercom-Module (Sena/Cardo; OMM UCS ist Open-Hardware PCBA 09)' : 'excl. OEM intercom units (Sena/Cardo; OMM UCS is open-hardware PCBA 09)';
+        costDisclaimerEl.textContent = isDe ? 'zzgl. OEM-Intercom-Module (Sena/Cardo; OMM UCS ist Open-Hardware PCBA 09 / PCBA 10)' : 'excl. OEM intercom units (Sena/Cardo; OMM UCS is open-hardware PCBA 09 / PCBA 10)';
     }
 
     // Toggle bed size container visibility
@@ -9387,10 +9459,17 @@ function renderSingleBuilder() {
                     </ol>
                 ` : active.slot1 === 'omm-ucs' ? `
                     <ol>
-                        <li>${isDe ? 'PCBA 09 (ESP32-C6-MINI-1U) mit Taoglas FXP73 Flex-Dipolantenne und 600 mAh LiPo-Akku vorbereiten.' : 'Prepare PCBA 09 (ESP32-C6-MINI-1U) with Taoglas FXP73 flex-dipole antenna and 600 mAh LiPo battery.'}</li>
+                        <li>${isDe ? 'PCBA 09 (Dual-Engine: ESP32-C6 Host + ESP32-PICO BT Classic Co-Prozessor) mit Taoglas FXP73 Flex-Dipolantenne und 600 mAh LiPo-Akku vorbereiten.' : 'Prepare PCBA 09 (Dual-Engine: ESP32-C6 host + ESP32-PICO BT Classic co-processor) with Taoglas FXP73 flex-dipole antenna and 600 mAh LiPo battery.'}</li>
                         <li>${isDe ? 'Platine und Akku in das Kassetten-Inlay (<code>cartridge_insert_omm_ucs.stl</code>) einsetzen und mit 4x M2x8 mm Schrauben sichern.' : 'Place PCB and battery into cartridge inlay (<code>cartridge_insert_omm_ucs.stl</code>) and secure with 4x M2x8 mm screws.'}</li>
                         <li>${isDe ? 'Taoglas FXP73 Flexantenne vibrationsgeschützt im integrierten Antennenschacht verlegen (kein Löten!).' : 'Route Taoglas FXP73 antenna securely inside antenna channel (zero soldering!).'}</li>
-                        <li>${isDe ? 'USB-C Schnittstelle intern anstecken: Das Modul lädt im Pod automatisch über das 5V Bordnetz (TI BQ24075 Power-Path) und schaltet bei Entnahme unterbrechungsfrei in < 10 µs auf Akkubetrieb um.' : 'Connect internal USB-C port: Module charges automatically in pod via 5V bike power (TI BQ24075 power-path) and switches seamlessly to battery mode in < 10 µs on removal.'}</li>
+                        <li>${isDe ? 'USB-C Schnittstelle intern anstecken: Das Modul lädt im Pod automatisch über das 5V Bordnetz (TI BQ24075 Power-Path) und schaltet bei Entnahme unterbrechungsfrei in < 10 µs auf Akkubetrieb um. Dual-Engine ermöglicht simultane Wi-Fi 6 Mesh &amp; Bluetooth Classic Verbindung!' : 'Connect internal USB-C port: Module charges automatically in pod via 5V bike power (TI BQ24075 power-path) and switches seamlessly to battery mode in < 10 µs on removal. Dual-Engine architecture enables simultaneous Wi-Fi 6 mesh &amp; Bluetooth Classic connection!'}</li>
+                    </ol>
+                ` : active.slot1 === 'omm446' ? `
+                    <ol>
+                        <li>${isDe ? 'PCBA 10 (NiceRF SA818-DMR Transceiver &amp; ESP32-C6 Host + ESP32-PICO BT Bridge) mit 446 MHz Wendelantenne und 600 mAh LiPo-Akku vorbereiten.' : 'Prepare PCBA 10 (NiceRF SA818-DMR transceiver &amp; ESP32-C6 host + ESP32-PICO BT bridge) with 446 MHz helical antenna and 600 mAh LiPo battery.'}</li>
+                        <li>${isDe ? 'Platine und Akku in das Kassetten-Inlay (<code>cartridge_insert_omm446_ucs.stl</code>) einsetzen und mit 4x M2x8 mm Schrauben sichern.' : 'Place PCB and battery into cartridge inlay (<code>cartridge_insert_omm446_ucs.stl</code>) and secure with 4x M2x8 mm screws.'}</li>
+                        <li>${isDe ? '446 MHz λ/4 Wendelantenne im Antennenschacht verlegen oder U.FL Koaxialkabel zur Kassetten-Stirnseite führen.' : 'Route 446 MHz λ/4 helical antenna inside antenna channel or run U.FL coax cable to cartridge faceplate.'}</li>
+                        <li>${isDe ? 'USB-C Schnittstelle intern anstecken: Lädt im Pod automatisch über 5V Bordnetz (TI BQ24075) mit nahtloser USV. Digitale DMR Tier I &amp; Analog FM Steuerung via ESP32-C6 AT-Kommandos; Bluetooth Bridge bindet Helme und Smartphones drahtlos an!' : 'Connect internal USB-C port: Charges in pod automatically via 5V bike power (TI BQ24075) with seamless UPS. Digital DMR Tier I &amp; Analog FM control via ESP32-C6 AT commands; Bluetooth bridge links helmets &amp; phones wirelessly!'}</li>
                     </ol>
                 ` : `
                     <ol>
@@ -9415,10 +9494,17 @@ function renderSingleBuilder() {
                     </ol>
                 ` : active.slot2 === 'omm-ucs' ? `
                     <ol>
-                        <li>${isDe ? 'PCBA 09 (ESP32-C6-MINI-1U) mit Taoglas FXP73 Flex-Dipolantenne und 600 mAh LiPo-Akku vorbereiten.' : 'Prepare PCBA 09 (ESP32-C6-MINI-1U) with Taoglas FXP73 flex-dipole antenna and 600 mAh LiPo battery.'}</li>
+                        <li>${isDe ? 'PCBA 09 (Dual-Engine: ESP32-C6 Host + ESP32-PICO BT Classic Co-Prozessor) mit Taoglas FXP73 Flex-Dipolantenne und 600 mAh LiPo-Akku vorbereiten.' : 'Prepare PCBA 09 (Dual-Engine: ESP32-C6 host + ESP32-PICO BT Classic co-processor) with Taoglas FXP73 flex-dipole antenna and 600 mAh LiPo battery.'}</li>
                         <li>${isDe ? 'Platine und Akku in das Kassetten-Inlay (<code>cartridge_insert_omm_ucs.stl</code>) einsetzen und mit 4x M2x8 mm Schrauben sichern.' : 'Place PCB and battery into cartridge inlay (<code>cartridge_insert_omm_ucs.stl</code>) and secure with 4x M2x8 mm screws.'}</li>
                         <li>${isDe ? 'Taoglas FXP73 Flexantenne vibrationsgeschützt im integrierten Antennenschacht verlegen (kein Löten!).' : 'Route Taoglas FXP73 antenna securely inside antenna channel (zero soldering!).'}</li>
-                        <li>${isDe ? 'USB-C Schnittstelle intern anstecken: Das Modul lädt im Pod automatisch über das 5V Bordnetz (TI BQ24075 Power-Path) und schaltet bei Entnahme unterbrechungsfrei in < 10 µs auf Akkubetrieb um.' : 'Connect internal USB-C port: Module charges automatically in pod via 5V bike power (TI BQ24075 power-path) and switches seamlessly to battery mode in < 10 µs on removal.'}</li>
+                        <li>${isDe ? 'USB-C Schnittstelle intern anstecken: Das Modul lädt im Pod automatisch über das 5V Bordnetz (TI BQ24075 Power-Path) und schaltet bei Entnahme unterbrechungsfrei in < 10 µs auf Akkubetrieb um. Dual-Engine ermöglicht simultane Wi-Fi 6 Mesh &amp; Bluetooth Classic Verbindung!' : 'Connect internal USB-C port: Module charges automatically in pod via 5V bike power (TI BQ24075 power-path) and switches seamlessly to battery mode in < 10 µs on removal. Dual-Engine architecture enables simultaneous Wi-Fi 6 mesh &amp; Bluetooth Classic connection!'}</li>
+                    </ol>
+                ` : active.slot2 === 'omm446' ? `
+                    <ol>
+                        <li>${isDe ? 'PCBA 10 (NiceRF SA818-DMR Transceiver &amp; ESP32-C6 Host + ESP32-PICO BT Bridge) mit 446 MHz Wendelantenne und 600 mAh LiPo-Akku vorbereiten.' : 'Prepare PCBA 10 (NiceRF SA818-DMR transceiver &amp; ESP32-C6 host + ESP32-PICO BT bridge) with 446 MHz helical antenna and 600 mAh LiPo battery.'}</li>
+                        <li>${isDe ? 'Platine und Akku in das Kassetten-Inlay (<code>cartridge_insert_omm446_ucs.stl</code>) einsetzen und mit 4x M2x8 mm Schrauben sichern.' : 'Place PCB and battery into cartridge inlay (<code>cartridge_insert_omm446_ucs.stl</code>) and secure with 4x M2x8 mm screws.'}</li>
+                        <li>${isDe ? '446 MHz λ/4 Wendelantenne im Antennenschacht verlegen oder U.FL Koaxialkabel zur Kassetten-Stirnseite führen.' : 'Route 446 MHz λ/4 helical antenna inside antenna channel or run U.FL coax cable to cartridge faceplate.'}</li>
+                        <li>${isDe ? 'USB-C Schnittstelle intern anstecken: Lädt im Pod automatisch über 5V Bordnetz (TI BQ24075) mit nahtloser USV. Digitale DMR Tier I &amp; Analog FM Steuerung via ESP32-C6 AT-Kommandos; Bluetooth Bridge bindet Helme und Smartphones drahtlos an!' : 'Connect internal USB-C port: Charges in pod automatically via 5V bike power (TI BQ24075) with seamless UPS. Digital DMR Tier I &amp; Analog FM control via ESP32-C6 AT commands; Bluetooth bridge links helmets &amp; phones wirelessly!'}</li>
                     </ol>
                 ` : active.slot2 === 'pmr446' ? `
                     <ol>
@@ -9502,17 +9588,18 @@ function renderSingleBuilder() {
         `;
     }
 
-    // Step 6c: OMM Helmet Kit & TMP117 Stealth Sensor (if active)
-    if (active.addons?.ommHelmetKit || active.addons?.tmp117Sensor) {
+    // Step 6c: OMM Helmet Kits & TMP117 Stealth Sensor (if active)
+    if (active.addons?.ommHelmetKit || active.addons?.omm446HelmetKit || active.addons?.tmp117Sensor) {
         instructionsHtml += `
             <div class="builder-instruction-step">
                 <div class="builder-step-headline">
-                    <span class="builder-step-name">${isDe ? '6c. OMM Helm UCS Headset-Kit & TMP117 Gabelfuß-Sensor' : '6c. Assemble OMM Helmet UCS Kit & TMP117 Fork Sensor'}</span>
+                    <span class="builder-step-name">${isDe ? '6c. OMM Helm UCS Headset-Kits & TMP117 Gabelfuß-Sensor' : '6c. Assemble OMM Helmet UCS Kits & TMP117 Fork Sensor'}</span>
                     <span class="builder-pill-verified">✓ ECE 22.06 UCS · ±0.1°C NIST</span>
                 </div>
                 <div class="builder-instructions-body">
                     <ol>
-                        ${active.addons?.ommHelmetKit ? `<li>${isDe ? '<strong>OMM Helm UCS Headset (ECE 22.06):</strong> 4x M2 Muttern in die Sechskanttaschen der Oberschale (<code>omm_ucs_top_shell.stl</code>) einpressen. 4-Tasten Silikon-Schaltmatte (<code>omm_ucs_silicone_keypad.stl</code>) einlegen. PCBA 09 (ESP32-C6-MINI-1U), Taoglas FXP73 Flexantenne und 600 mAh LiPo-Akku einsetzen. Unterschale (<code>omm_ucs_bottom_shell.stl</code>) mit Silikonschnur in der Dichtnut aufsetzen und mit 4x M2x8 mm Schrauben über Kreuz festziehen. Den Helmsockel (<code>omm_ucs_helmet_cradle.stl</code>) mit 3M VHB R130 am Helm verkleben, Headset einklinken, 40mm Helmlautsprecher und Schwanenhalsmikrofon anstecken.' : '<strong>OMM Helmet UCS Headset (ECE 22.06):</strong> Press 4x M2 nuts into hex pockets of upper shell (<code>omm_ucs_top_shell.stl</code>). Lay 4-button silicone keypad (<code>omm_ucs_silicone_keypad.stl</code>) in place. Install PCBA 09 (ESP32-C6-MINI-1U), Taoglas FXP73 flex antenna, and 600 mAh LiPo battery. Assemble lower shell (<code>omm_ucs_bottom_shell.stl</code>) with silicone gasket and fasten 4x M2x8 mm screws crosswise. Mount helmet cradle (<code>omm_ucs_helmet_cradle.stl</code>) to helmet using 3M VHB R130, snap headset in, and connect 40mm speakers & boom mic.'}</li>` : ''}
+                        ${active.addons?.ommHelmetKit ? `<li>${isDe ? '<strong>OMM 2.4 GHz Helm UCS Headset (ECE 22.06):</strong> 4x M2 Muttern in die Sechskanttaschen der Oberschale (<code>omm_ucs_top_shell.stl</code>) einpressen. 4-Tasten Silikon-Schaltmatte (<code>omm_ucs_silicone_keypad.stl</code>) einlegen. PCBA 09 (ESP32-C6 + ESP32-PICO Dual-Engine), Taoglas FXP73 Flexantenne und 600 mAh LiPo-Akku einsetzen. Unterschale (<code>omm_ucs_bottom_shell.stl</code>) mit Silikonschnur in der Dichtnut aufsetzen und mit 4x M2x8 mm Schrauben über Kreuz festziehen. Den Helmsockel (<code>omm_ucs_helmet_cradle.stl</code>) mit 3M VHB R130 am Helm verkleben, Headset einklinken, 40mm Helmlautsprecher und Schwanenhalsmikrofon anstecken.' : '<strong>OMM 2.4 GHz Helmet UCS Headset (ECE 22.06):</strong> Press 4x M2 nuts into hex pockets of upper shell (<code>omm_ucs_top_shell.stl</code>). Lay 4-button silicone keypad (<code>omm_ucs_silicone_keypad.stl</code>) in place. Install PCBA 09 (ESP32-C6 + ESP32-PICO Dual-Engine), Taoglas FXP73 flex antenna, and 600 mAh LiPo battery. Assemble lower shell (<code>omm_ucs_bottom_shell.stl</code>) with silicone gasket and fasten 4x M2x8 mm screws crosswise. Mount helmet cradle (<code>omm_ucs_helmet_cradle.stl</code>) to helmet using 3M VHB R130, snap headset in, and connect 40mm speakers & boom mic.'}</li>` : ''}
+                        ${active.addons?.omm446HelmetKit ? `<li>${isDe ? '<strong>OMM 446 MHz Helm UCS Headset (ECE 22.06):</strong> 4x M2 Muttern in die Sechskanttaschen der Oberschale (<code>omm446_ucs_top_shell.stl</code>) einpressen. 4-Tasten Silikon-Schaltmatte (<code>omm446_ucs_silicone_keypad.stl</code>) einlegen. PCBA 10 (NiceRF SA818-DMR + ESP32-C6 + ESP32-PICO Dual-Engine), 446 MHz Wendelantenne (U.FL) und 600 mAh LiPo-Akku einbauen. Unterschale (<code>omm446_ucs_bottom_shell.stl</code>) mit Silikonschnur in der Dichtnut aufsetzen und mit 4x M2x8 mm Schrauben über Kreuz festziehen. Helmsockel (<code>omm446_ucs_helmet_cradle.stl</code>) mit 3M VHB am Helm verkleben, Lautsprecher & Schwanenhalsmikrofon anstecken (SAR-konform 0.2W ERP).' : '<strong>OMM 446 MHz Helmet UCS Headset (ECE 22.06):</strong> Press 4x M2 nuts into hex pockets of upper shell (<code>omm446_ucs_top_shell.stl</code>). Lay 4-button silicone keypad (<code>omm446_ucs_silicone_keypad.stl</code>). Install PCBA 10 (NiceRF SA818-DMR + ESP32-C6 + ESP32-PICO Dual-Engine), 446 MHz helical coil antenna (U.FL), and 600 mAh LiPo battery. Assemble lower shell (<code>omm446_ucs_bottom_shell.stl</code>) with silicone seal and fasten 4x M2x8 mm screws crosswise. Mount cradle (<code>omm446_ucs_helmet_cradle.stl</code>) to helmet with 3M VHB, connect speakers & boom mic (SAR-compliant 0.2W ERP).'}</li>` : ''}
                         ${active.addons?.tmp117Sensor ? `<li>${isDe ? '<strong>TMP117 Stealth Gabelfuß-Sensor:</strong> TI TMP117 I2C-Sensorplatine in die mattschwarze Halterung (<code>tmp117_stealth_fork_mount.stl</code>) einklicken. Am Gabelfuß oder an der Kotflügel-Innenseite im Fahrtwind montieren (geschützt vor Kühler- und Motorabwärme). Das 4-Pin Qwiic-Kabel entlang der Bremsleitung vibrationssicher mit Kabelbindern verlegen und an Port <code>J12</code> am Front-Node anstecken für laborgenaue Fahrbahn-Eiswarnung (±0.1°C).' : '<strong>TMP117 Stealth Fork Sensor:</strong> Snap TI TMP117 I2C sensor board into matte black mount (<code>tmp117_stealth_fork_mount.stl</code>). Mount to fork foot or inner fender directly in airflow (shielded from radiator & engine heat). Route 4-pin Qwiic cable along brake line with zip-ties and plug into Port <code>J12</code> on Front Node for laboratory-precision black ice detection (±0.1°C).'}</li>` : ''}
                     </ol>
                 </div>
@@ -9713,7 +9800,8 @@ function renderGroupBuilder() {
             const isActive = index === fleetState.activeBikeIndex;
             const addonBadges = [];
             if (bike.addons?.frontNode) addonBadges.push(`<span class="card-badge badge-blue" style="font-size: 0.7rem;">Cockpit Front-Node</span>`);
-            if (bike.addons?.ommHelmetKit) addonBadges.push(`<span class="card-badge badge-blue" style="font-size: 0.7rem;">OMM Helm-Kit</span>`);
+            if (bike.addons?.ommHelmetKit) addonBadges.push(`<span class="card-badge badge-blue" style="font-size: 0.7rem;">OMM 2.4 Helm-Kit</span>`);
+            if (bike.addons?.omm446HelmetKit) addonBadges.push(`<span class="card-badge badge-purple" style="font-size: 0.7rem;">OMM 446 Helm-Kit</span>`);
             if (bike.addons?.tmp117Sensor) addonBadges.push(`<span class="card-badge badge-green" style="font-size: 0.7rem;">TMP117 Gabelfuß</span>`);
             if (bike.addons?.radar2) addonBadges.push(`<span class="card-badge badge-red" style="font-size: 0.7rem;">Radar 2.0 (77 GHz)</span>`);
             if (bike.addons?.bsdMirrors) addonBadges.push(`<span class="card-badge badge-yellow" style="font-size: 0.7rem;">BSD Spiegel-LEDs</span>`);
@@ -9764,7 +9852,8 @@ function renderGroupBuilder() {
         { id: 'kicad_front_node', code: 'PCBA 05', name: isDe ? 'Universal Front-Knoten' : 'Universal Front Node', desc: isDe ? 'ESP32-S3, USB Hub, SAM-M10Q GNSS, 20W PD' : 'ESP32-S3, USB Hub, SAM-M10Q GNSS, PD' },
         { id: 'kicad_smart_keyfob', code: 'PCBA 07', name: isDe ? 'Smart-Keyfob Platine' : 'Smart Keyfob', desc: isDe ? 'BLE Tracker, LRA Haptik' : 'BLE Tracker, LRA Haptic' },
         { id: 'kicad_radar_submcu', code: 'PCBA 08', name: isDe ? 'Radar 2.0 Sub-MCU Platine' : 'Radar 2.0 Sub-MCU Board', desc: isDe ? 'Wheeltec 77 GHz mmWave, 36x Halo RGB LEDs, UWB' : 'Wheeltec 77 GHz mmWave, 36x Halo RGB LEDs, UWB' },
-        { id: 'kicad_omm_intercom', code: 'PCBA 09', name: isDe ? 'OMM UCS Intercom Platine' : 'OMM UCS Intercom Board', desc: isDe ? 'ESP32-C6, BQ24075 PMIC, ES8388 Stereo Codec' : 'ESP32-C6, BQ24075 PMIC, ES8388 Stereo Codec' }
+        { id: 'kicad_omm_intercom', code: 'PCBA 09', name: isDe ? 'OMM 2.4 GHz UCS Intercom' : 'OMM 2.4 GHz UCS Intercom', desc: isDe ? 'Dual-Engine: ESP32-C6 + ESP32-PICO BT Classic, BQ24075 PMIC, ES8388 Codec' : 'Dual-Engine: ESP32-C6 + ESP32-PICO BT Classic, BQ24075 PMIC, ES8388 Codec' },
+        { id: 'kicad_omm446_intercom', code: 'PCBA 10', name: isDe ? 'OMM 446 MHz PMR/DMR Intercom' : 'OMM 446 MHz PMR/DMR Intercom', desc: isDe ? 'Dual-Engine: NiceRF SA818-DMR, ESP32-C6 Host, ESP32-PICO BT, ES8388 Codec' : 'Dual-Engine: NiceRF SA818-DMR, ESP32-C6 Host, ESP32-PICO BT, ES8388 Codec' }
     ];
 
     let activeDesignsCount = 0;
@@ -10019,7 +10108,8 @@ function exportGroupBomCsv() {
         { id: 'kicad_front_node', code: 'PCBA 05', name: 'Universal Front-Knoten' },
         { id: 'kicad_smart_keyfob', code: 'PCBA 07', name: 'Smart-Keyfob Platine' },
         { id: 'kicad_radar_submcu', code: 'PCBA 08', name: 'Radar 2.0 Sub-MCU Platine' },
-        { id: 'kicad_omm_intercom', code: 'PCBA 09', name: 'OMM UCS Intercom Platine' }
+        { id: 'kicad_omm_intercom', code: 'PCBA 09', name: 'OMM 2.4 GHz UCS Intercom Platine (Dual-Engine)' },
+        { id: 'kicad_omm446_intercom', code: 'PCBA 10', name: 'OMM 446 MHz PMR/DMR Intercom Platine (Dual-Engine)' }
     ];
 
     masterPcbas.forEach(p => {
@@ -10122,9 +10212,9 @@ function exportGroupBomCsv() {
 
     // 4. Per Bike Details
     csv += '4. EINZELAUFSCHLÜSSELUNG NACH MOTORRAD\n';
-    csv += 'Fahrer;Motorrad_Modell;Slot_1;Slot_2;Front_Node;Radar_2_0;OMM_Helm_Kit;TMP117_Sensor;Keyfob;Fertigung;Einzelkosten_ca\n';
+    csv += 'Fahrer;Motorrad_Modell;Slot_1;Slot_2;Front_Node;Radar_2_0;OMM24_Helm_Kit;OMM446_Helm_Kit;TMP117_Sensor;Keyfob;Fertigung;Einzelkosten_ca\n';
     allBoms.forEach(({ bike, bom }) => {
-        csv += `"${bike.name}";"${bom.bikeName}";"${bom.slotNames[bike.slot1] || bike.slot1}";"${bom.slotNames[bike.slot2] || bike.slot2}";"${bike.addons?.frontNode ? 'Ja' : 'Nein'}";"${bike.addons?.radar2 ? 'Ja' : 'Nein'}";"${bike.addons?.ommHelmetKit ? 'Ja' : 'Nein'}";"${bike.addons?.tmp117Sensor ? 'Ja' : 'Nein'}";"${bike.addons?.keyfob ? 'Ja' : 'Nein'}";"${bike.manufacturing}";"${bom.costMin} - ${bom.costMax} EUR"\n`;
+        csv += `"${bike.name}";"${bom.bikeName}";"${bom.slotNames[bike.slot1] || bike.slot1}";"${bom.slotNames[bike.slot2] || bike.slot2}";"${bike.addons?.frontNode ? 'Ja' : 'Nein'}";"${bike.addons?.radar2 ? 'Ja' : 'Nein'}";"${bike.addons?.ommHelmetKit ? 'Ja' : 'Nein'}";"${bike.addons?.omm446HelmetKit ? 'Ja' : 'Nein'}";"${bike.addons?.tmp117Sensor ? 'Ja' : 'Nein'}";"${bike.addons?.keyfob ? 'Ja' : 'Nein'}";"${bike.manufacturing}";"${bom.costMin} - ${bom.costMax} EUR"\n`;
     });
 
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -10286,11 +10376,15 @@ function setupSmokeTestUi() {
         await new Promise(r => setTimeout(r, 550));
         logSmoke(state.lang === 'de' ? `✓ Slot 1 1-Wire ID: DS2431 [${builderState.slot1.toUpperCase()}] erkannt.` : `✓ Slot 1 1-Wire ID: DS2431 [${builderState.slot1.toUpperCase()}] detected.`, 'ok');
         if (builderState.slot1 === 'omm-ucs') {
-            logSmoke(state.lang === 'de' ? '  ↪ OMM 2.4 GHz UCS Modul (PCBA 09 ESP32-C6): BQ24075 PMIC 500mA Fast-Charge, Taoglas FXP73 RSSI -36 dBm OK.' : '  ↪ OMM 2.4 GHz UCS Module (PCBA 09 ESP32-C6): BQ24075 PMIC 500mA fast-charge, Taoglas FXP73 RSSI -36 dBm OK.', 'ok');
+            logSmoke(state.lang === 'de' ? '  ↪ OMM 2.4 GHz Dual-Engine Modul (PCBA 09 ESP32-C6 + ESP32-PICO BT): BQ24075 PMIC 500mA Fast-Charge, Taoglas FXP73 RSSI -36 dBm OK.' : '  ↪ OMM 2.4 GHz Dual-Engine Module (PCBA 09 ESP32-C6 + ESP32-PICO BT): BQ24075 PMIC 500mA fast-charge, Taoglas FXP73 RSSI -36 dBm OK.', 'ok');
+        } else if (builderState.slot1 === 'omm446') {
+            logSmoke(state.lang === 'de' ? '  ↪ OMM 446 MHz PMR/DMR Modul (PCBA 10 NiceRF SA818 + ESP32-C6 + ESP32-PICO BT): 0.5W RF OK, CTCSS/DCS aktiv, ES8388 Audio OK.' : '  ↪ OMM 446 MHz PMR/DMR Module (PCBA 10 NiceRF SA818 + ESP32-C6 + ESP32-PICO BT): 0.5W RF OK, CTCSS/DCS active, ES8388 audio OK.', 'ok');
         }
         logSmoke(state.lang === 'de' ? `✓ Slot 2 1-Wire ID: DS2431 [${builderState.slot2.toUpperCase()}] erkannt.` : `✓ Slot 2 1-Wire ID: DS2431 [${builderState.slot2.toUpperCase()}] detected.`, 'ok');
         if (builderState.slot2 === 'omm-ucs') {
-            logSmoke(state.lang === 'de' ? '  ↪ OMM 2.4 GHz UCS Modul (PCBA 09 ESP32-C6): BQ24075 PMIC 500mA Fast-Charge, Taoglas FXP73 RSSI -36 dBm OK.' : '  ↪ OMM 2.4 GHz UCS Module (PCBA 09 ESP32-C6): BQ24075 PMIC 500mA fast-charge, Taoglas FXP73 RSSI -36 dBm OK.', 'ok');
+            logSmoke(state.lang === 'de' ? '  ↪ OMM 2.4 GHz Dual-Engine Modul (PCBA 09 ESP32-C6 + ESP32-PICO BT): BQ24075 PMIC 500mA Fast-Charge, Taoglas FXP73 RSSI -36 dBm OK.' : '  ↪ OMM 2.4 GHz Dual-Engine Module (PCBA 09 ESP32-C6 + ESP32-PICO BT): BQ24075 PMIC 500mA fast-charge, Taoglas FXP73 RSSI -36 dBm OK.', 'ok');
+        } else if (builderState.slot2 === 'omm446') {
+            logSmoke(state.lang === 'de' ? '  ↪ OMM 446 MHz PMR/DMR Modul (PCBA 10 NiceRF SA818 + ESP32-C6 + ESP32-PICO BT): 0.5W RF OK, CTCSS/DCS aktiv, ES8388 Audio OK.' : '  ↪ OMM 446 MHz PMR/DMR Module (PCBA 10 NiceRF SA818 + ESP32-C6 + ESP32-PICO BT): 0.5W RF OK, CTCSS/DCS active, ES8388 audio OK.', 'ok');
         }
         logSmoke(state.lang === 'de' ? 'Führe Aktuator-Klickfolge 1-4 aus...' : 'Executing actuator click sequence 1-4...', 'info');
         await triggerActuatorAnimation();
@@ -10334,7 +10428,10 @@ function setupSmokeTestUi() {
         }
 
         if (builderState.addons.ommHelmetKit) {
-            logSmoke(state.lang === 'de' ? '✓ OMM Helm UCS Headset (PCBA 09): ES8388 Stereo Codec I2S aktiv, 4-Tasten Haptik OK, 600 mAh LiPo: 4.16 V (97%).' : '✓ OMM Helmet UCS Headset (PCBA 09): ES8388 Stereo Codec I2S active, 4-button tactile OK, 600 mAh LiPo: 4.16 V (97%).', 'ok');
+            logSmoke(state.lang === 'de' ? '✓ OMM 2.4 GHz Helm UCS Headset (PCBA 09 Dual-Engine): ESP32-C6 + ESP32-PICO BT, ES8388 Stereo Codec I2S aktiv, 4-Tasten Haptik OK, 600 mAh LiPo: 4.16 V (97%).' : '✓ OMM 2.4 GHz Helmet UCS Headset (PCBA 09 Dual-Engine): ESP32-C6 + ESP32-PICO BT, ES8388 Stereo Codec I2S active, 4-button tactile OK, 600 mAh LiPo: 4.16 V (97%).', 'ok');
+        }
+        if (builderState.addons.omm446HelmetKit) {
+            logSmoke(state.lang === 'de' ? '✓ OMM 446 MHz Helm UCS Headset (PCBA 10 Dual-Engine): NiceRF SA818-DMR 0.2W SAR-Safe, Helical-Antenne SWR 1.15, 600 mAh LiPo: 4.15 V (96%).' : '✓ OMM 446 MHz Helmet UCS Headset (PCBA 10 Dual-Engine): NiceRF SA818-DMR 0.2W SAR-safe, helical antenna SWR 1.15, 600 mAh LiPo: 4.15 V (96%).', 'ok');
         }
 
         logSmoke('==================================================', 'info');

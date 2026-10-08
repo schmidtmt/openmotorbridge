@@ -14,9 +14,11 @@
     "channel_next_ms": 500,
     "ptt_hold": true,
     "ble_control": {
-        "supported": false,
-        "flavor": "none",
-        "reason": "Pure RF transceiver without Bluetooth; controlled via hardware PTT and channel sequencer"
+        "supported": true,
+        "flavor": "dual_engine_esp32_pico",
+        "service_uuid": "0x00MB",
+        "device_name_prefix": "OMM-PMR446",
+        "reason": "Dual-Engine: ESP32-PICO-V3-02 Bluetooth Classic/BLE co-processor bridges audio and PTT control to SA818-DMR"
     },
     "mesh_capabilities": {
         "protocol": "DMR_Tier_I_II_Analog_PMR",
@@ -24,12 +26,12 @@
         "max_nodes": 128,
         "open_mesh": true,
         "preconfig_channels": 16,
-        "dle_bonus_score": 40
+        "dle_bonus_score": 60
     },
     "rf_hardening": {
-        "disable_bluetooth_classic": true,
+        "disable_bluetooth_classic": false,
         "clear_phone_gps_pairings": true,
-        "enforce_mesh_only_mode": true,
+        "enforce_mesh_only_mode": false,
         "disable_audio_multitasking": true,
         "expected_idle_current_ma": 35
     }
