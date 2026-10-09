@@ -393,27 +393,35 @@ For modern intercom cartridges such as the Sena SPIDER X Slim and Cardo Packtalk
 * **EPDM Retention Strap:** Anchor tabs for elastic EPDM band ($35 \times 10\,\text{mm}$) securing the unit vibration-free.
 * **Power Feed:** Flat right-angle Micro-USB / USB-C pigtail from Pin 1 (`GND`) and Pin 2 (`5V_VBUS`) of JST-SH header `J2`.
 
-#### 4.3.6 Cardo Packtalk Edge / Pro Magnetic Air Mount
+#### 4.3.6 Schuberth SC2 Upcycling Integration in Universal Base Sled (Bay 1)
+The retired **Schuberth SC2** (Sena OEM Mesh 3.0 system from Schuberth C5 / E2 / S3 helmets) is ideally suited for low-cost, permanent bike installation in Bay 1:
+* **Main Unit Dimensions & Cavity:** The SC2 main unit measures only $75 \times 40 \times 12\,\text{mm}$. It fits neatly inside the universal base sled (`00_base_sled.scad`, interior envelope $110 \times 53 \times 16\,\text{mm}$).
+* **$35\,\text{mm}$ Functional Clearance:** The remaining longitudinal space ahead of the unit accommodates the miniature step-down buck converter (MP2315, converting bike 5V $\rightarrow 3.75\,\text{V}$ constant DC in place of the desoldered battery), the $10\,\text{k}\Omega$ NTC dummy thermistor resistor, audio isolation transformers, and silicone strain reliefs.
+* **Zero Mechatronic Actuators Needed (Zero-Wear):** Because the SC2 is operated 100% wirelessly using the standalone Schuberth Bluetooth Low Energy (BLE) handlebar remote (mounted directly to the handlebar), mechanical solenoids and plunger guide bridges are completely omitted.
+* **External Coax Antenna Feed:** The internal micro-coaxial antenna leads of the SC2 (which feed the helmet antennas) are adapted via a short, flexible RG-178 pigtail directly to the optional front SMA bulkhead jack of the base sled (`has_sma_port = true`). A high-gain vehicle antenna on the bike rear luggage rack connects here.
+* **Weatherproof Enclosure:** Once seated, the cartridge is sealed dust- and splash-proof using the solid blank top lid ([`03_insert_blindkassette.scad`](../../hardware/cad/scad/03_pod_cartridges/parts/03_insert_blindkassette.scad)) and 4x M2 countersunk screws.
+
+#### 4.3.7 Cardo Packtalk Edge / Pro Magnetic Air Mount
 ![OpenMotorBridge Cardo Packtalk Edge Cartridge Assembly 3D CAD Fitting](../images/cad/cardo_cartridge_assembly_cad.png)
 
 *Figure 8.15: 3D CAD visualization of the Cardo Packtalk Edge swap cartridge with N52 neodymium magnetic seat and 5 sprung contact pads.*
 
-#### 4.3.7 Cardo Packtalk Bold / Black Edition
+#### 4.3.8 Cardo Packtalk Bold / Black Edition
 Accommodates the sliding contacts of the original Cardo audio kit plate. The device slides down the guide rails and clicks positively into place.
 
-#### 4.3.8 Midland BT Mini / BTR1 Advanced & XT30 Slide
+#### 4.3.9 Midland BT Mini / BTR1 Advanced & XT30 Slide
 * **Midland Intercom Edition (BTR1 / Rush / BT Mini):** Form-fitting nest for Midland Bluetooth and Wave Mesh intercoms ($70\dots 85\,\text{mm}$ width).
 * **Midland XT Bare-Board Edition:** Directly houses the decased PCB of compact walkie-talkies (XT10/XT30/G5, $\approx 68 \times 42 \times 10\,\text{mm}$).
 
-#### 4.3.9 PMR446 Transceiver & Bare-Board Module (SA818S / RDA1846)
+#### 4.3.10 PMR446 Transceiver & Bare-Board Module (SA818S / RDA1846)
 Fully integrated 500 mW PMR446 analog RF module ($38 \times 20\,\text{mm}$) seated directly on the cartridge carrier PCB--optionally with internal 446 MHz helical antenna or robust SMA front socket.
 
-#### 4.3.10 Longitudinal Cross-Section Comparison (Sena vs. Cardo)
+#### 4.3.11 Longitudinal Cross-Section Comparison (Sena vs. Cardo)
 ![OpenMotorBridge Sena & Cardo Cartridges Longitudinal Cross Section](../images/cad/sena_cardo_cartridge_cross_section.png)
 
 *Figure 8.16: 2D longitudinal cross section (X-Z plane) through Sena 50S (top) and Cardo Packtalk Edge (bottom) cartridges docked inside the pod.*
 
-#### 4.3.11 IP67 Blank Cartridge (Dry Box Dummy)
+#### 4.3.12 IP67 Blank Cartridge (Dry Box Dummy)
 ![OpenMotorBridge IP67 Blindkassette 3D CAD Render](../images/cad/dummy_cartridge_cad.png)
 
 *Figure 8.17: Identically contoured IP67 blank cartridge providing an integrated $80 \times 46 \times 16\,\text{mm}$ emergency dry compartment.*

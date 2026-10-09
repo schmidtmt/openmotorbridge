@@ -438,27 +438,35 @@ Für das Sena +Mesh (oder andere OEM-Adapter mit Antennen- und Ladeanschluss) bi
 * **EPDM-Spannband-Aufnahme:** Einhängehaken für ein elastisches EPDM-Gummiband ($35 \times 10\,\text{mm}$), das den Adapter vibrationsfest im Negativbett sichert.
 * **Elektrische Speisung:** Flaches 90° Micro-USB / USB-C Pigtail von Pin 1 (`GND`) und Pin 2 (`5V_VBUS`) des JST-SH Headers `J2`.
 
-#### 4.3.6 Cardo Packtalk Edge / Pro Magnetic Air Mount
+#### 4.3.6 Schuberth SC2 Upcycling-Einbau im Universal-Grundschlitten (Bucht 1)
+Das ausgemusterte **Schuberth SC2** (Sena OEM Mesh 3.0 System aus Schuberth C5 / E2 / S3 Helmen) eignet sich ideal für den kostengünstigen Festeinbau in Bucht 1:
+* **Haupteinheit-Abmessungen & Bauraum:** Die SC2 Main-Unit misst lediglich $75 \times 40 \times 12\,\text{mm}$. Sie passt formschlüssig in den Innenraum des universellen Basisschlittens (`00_base_sled.scad`, lichter Bauraum $110 \times 53 \times 16\,\text{mm}$).
+* **$35\,\text{mm}$ Funktions-Freiraum:** Der verbleibende Längsbauraum vor der Haupteinheit nimmt den Miniatur-Step-Down-Wandler (MP2315, 5V Bordnetz $\rightarrow 3{,}75\,\text{V}$ Festspannung anstelle des ausgelöteten Akkus), den $10\,\text{k}\Omega$-NTC-Dummy-Widerstand sowie die Audio-Übertrager und Zugentlastungen auf.
+* **Keine Mechatronik-Stößel erforderlich (Zero-Wear):** Da das SC2 vollständig drahtlos über die autarke Schuberth Bluetooth Low Energy (BLE) Lenkerfernbedienung gesteuert wird (die direkt am Lenker montiert wird), entfallen jegliche mechanischen Hubmagnete oder Stößelbrücken.
+* **Externe Koax-Antennenanbindung:** Die internen Micro-Koaxialkabel des SC2 (die im Helm die Helmantennen speisen) werden über ein kurzes flexibles RG-178 Pigtail direkt an die optionale frontale SMA-Flanschbuchse des Basisschlittens (`has_sma_port = true`) geführt. Daran wird die externe Hochgewinn-Fahrzeugantenne am Heckträger angeschlossen.
+* **Wetterfeste Kassettenabdeckung:** Nach dem Einlegen wird die Kassette mit dem flachen Blinddeckel ([`03_insert_blindkassette.scad`](../../hardware/cad/scad/03_pod_cartridges/parts/03_insert_blindkassette.scad)) und 4x M2-Senkkopfschrauben staub- und strahlwasserdicht verschlossen.
+
+#### 4.3.7 Cardo Packtalk Edge / Pro Magnetic Air Mount
 ![OpenMotorBridge Cardo Packtalk Edge Cartridge Assembly 3D CAD Fitting](../images/cad/cardo_cartridge_assembly_cad.png)
 
 *Abbildung 8.15: CAD-Visualisierung der Cardo Packtalk Edge Wechselkassette mit N52-Neodym-Magnetsitz und 5 gefederten Kontaktpads.*
 
-#### 4.3.7 Cardo Packtalk Bold / Black Edition
+#### 4.3.8 Cardo Packtalk Bold / Black Edition
 Nutzt die formschlüssigen Schiebe-Gegenkontakte der originalen Cardo-Audiokit-Basisplatte. Das Gerät wird von oben in die mechanische Führung geschoben und federnd arretiert.
 
-#### 4.3.8 Midland BT Mini / BTR1 Advanced & XT30 Slide
+#### 4.3.9 Midland BT Mini / BTR1 Advanced & XT30 Slide
 * **Midland Intercom Edition (BTR1 / Rush / BT Mini):** Kontur-Aufnahme für Midland Bluetooth- und Wave-Mesh-Intercoms ($70\dots 85\,\text{mm}$ Baubreite).
 * **Midland XT Bare-Board Edition:** Nimmt die entkernte Platine eines kompakten Handfunkgeräts (XT10/XT30/G5, $\approx 68 \times 42 \times 10\,\text{mm}$) direkt auf.
 
-#### 4.3.9 PMR446 Transceiver & Bare-Board Modul (SA818S / RDA1846)
+#### 4.3.10 PMR446 Transceiver & Bare-Board Modul (SA818S / RDA1846)
 Vollständig integriertes 500 mW PMR446-Analogfunkmodul ($38 \times 20\,\text{mm}$) direkt auf der Kassetten-Trägerplatine - wahlweise mit interner 446-MHz-Helix oder robuster SMA-Frontbuchse für große Distanzen.
 
-#### 4.3.10 Längsschnitt-Vergleich Sena & Cardo
+#### 4.3.11 Längsschnitt-Vergleich Sena & Cardo
 ![OpenMotorBridge Sena & Cardo Cartridges Longitudinal Cross Section](../images/cad/sena_cardo_cartridge_cross_section.png)
 
 *Abbildung 8.16: 2D-Längsschnitt (X-Z Ebene) durch die Sena 50S (oben) und Cardo Packtalk Edge (unten) Kassetten im geschlossenen Pod.*
 
-#### 4.3.11 IP67 Blind- / Leerkassette (Dry Box Dummy)
+#### 4.3.12 IP67 Blind- / Leerkassette (Dry Box Dummy)
 ![OpenMotorBridge IP67 Blindkassette 3D CAD Render](../images/cad/dummy_cartridge_cad.png)
 
 *Abbildung 8.17: Formidentische IP67 Blindkassette mit integriertem $80 \times 46 \times 16\,\text{mm}$ Notfall-Trockenstaufach.*

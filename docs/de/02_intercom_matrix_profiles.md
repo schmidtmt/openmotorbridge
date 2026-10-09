@@ -221,10 +221,11 @@ Alle unterstützten Intercom- und Funkkassetten sind in klar voneinander abgegre
 | Klasse   | Gerätefamilien                      | Funk-Protokoll        | DLE-Score Bonus|
 +----------+-------------------------------------+-----------------------+----------------+
 | **K1a**  | Sena 60S, 60R, 60X, Spider X Slim,  | Sena Mesh 3.0 & Wave  | **+60 Punkte** |
-|          | Sena MeshON (Adapter, 800 m)        | (Next-Gen Dual Mesh)  |                |
+|          | Schuberth SC2 (mit Firmware Mesh 3),| (Next-Gen Dual Mesh)  |                |
+|          | Sena MeshON (Adapter, 800 m)        |                       |                |
 +----------+-------------------------------------+-----------------------+----------------+
 | **K1b**  | Sena 50S, 50R, 50C, Spider ST1/RT1, | Sena Mesh 2.0         | **+40 Punkte** |
-|          | Sena +Mesh Adapter, SRL-Mesh, SC2   | (Vorgänger-Standard)  |                |
+|          | Sena +Mesh Adapter, SRL-Mesh        | (Vorgänger-Standard)  |                |
 +----------+-------------------------------------+-----------------------+----------------+
 | **K1c**  | Sena 30K, +Mesh 1.0 (Legacy / EOL)  | Sena Mesh 1.0         | **+20 Punkte** |
 +----------+-------------------------------------+-----------------------+----------------+
@@ -252,18 +253,20 @@ Alle unterstützten Intercom- und Funkkassetten sind in klar voneinander abgegre
 
 Da Kassetten im v9.6 System als modulare Wechselkassetten konzipiert sind, fungieren die Profil-Punkte als deterministische **Capability-Scores für das dezentrale Link-State Routing**: Führen mehrere Bikes im Konvoi unterschiedliche Schnittstellen mit, legt die Routing-Matrix fest, welcher Node primär als loop-freie Brücke fungiert.
 
-#### Klasse 1a: Sena Mesh 3.0 & Wave (`sena_60_series.json`, `sena_spider_x.json`, `sena_meshon.json`):
+#### Klasse 1a: Sena Mesh 3.0 & Wave (`sena_60_series.json`, `sena_spider_x.json`, `sena_meshon.json`, `schuberth_sc2.json`):
 * **Sena 60er Serie (60S, 60R, 60X):** Next-Gen Flaggschiff mit Mesh 3.0 und Wave-Zellfunk-Fallback. Während das 60S ein voluminöses Drehrad besitzt, ist das **Sena 60X** als flaches, modulares System konstruiert.
 * **Sena SPIDER X Slim (`sena_spider_x.json` - Top-Empfehlung für die Kassetten-Bucht):**
   * *100 % akkulos ab Werk:* Wird über die werksseitige 2-Draht-Akkuleitung direkt mit $3{,}85\,\text{V}$ Festspannung von PCBA 03 versorgt. Keine Brandgefahr, kein Aufblähen von LiPos im heißen Pod, keine Alterung.
   * *Volle Mesh 3.0 & Wave Parität:* Volle Reichweite bis $2{,}0\,\text{km}$ bei extrem schlanken Abmessungen ($74{,}5 \times 31 \times 16\,\text{mm}$, $23{,}2\,\text{g}$).
   * *Mechatronik-Vorteil:* Verfügt über **klar definierte, flache Einzeltaster** (Center, Plus, Minus, Mesh) – ideal für mechanische Stößel im Kassettenbett (im Gegensatz zu runden, undefinierten Drehrädern). DLE-Score: **+60 Pkt.**
+* **Schuberth SC2 (mit Firmware Mesh 3.0 Update):**
+  * Premium-Sena-Mesh-Plattform. Durch das offizielle Schuberth/Sena Firmware-Update (via *SCHUBERTH Bluetooth Device Manager*) erhält das SC2 vollen **Mesh 3.0 Support** inklusive umschaltbarem Mesh 2.0 Kompatibilitätsmodus. DLE-Score: **+60 Pkt.**
 * **Sena MeshON (`sena_meshon.json`):**
   * Ultrakompakter, leichter ($22{,}5\,\text{g}$) Mesh 3.0 Adapter (mit Mesh 2.0 Fallback).
   * *Einschränkung:* Antennenreichweite ist mit ca. $800\,\text{m}$ etwa halb so groß wie bei vollwertigen Geräten, besitzt einen internen LiPo-Akku. DLE-Score: **+45 Pkt.**
 
 #### Klasse 1b: Sena Mesh 2.0 (`sena_50_series.json`, `sena_spider.json`):
-* *Sena 50S, 50R, 50C, SRL-Mesh, Schuberth SC2:* Etablierter Mesh-2.0-Standard (24–32 Nodes). Kompatibilität zu Mesh 3.0 erfordert Umschaltung in den Legacy-Modus.
+* *Sena 50S, 50R, 50C, SRL-Mesh:* Etablierter Mesh-2.0-Standard (24–32 Nodes). Kompatibilität zu Mesh 3.0 erfordert Umschaltung in den Legacy-Modus.
 * *Sena Spider ST1 vs. Spider RT1:*
   * *Spider ST1:* Nutzt ein großes Jog-Dial (Drehrad). **Achtung für Mechatronik:** Drehräder sind für lineare Hubmagnet-Stößel mechanisch extrem ungünstig und fehleranfällig!
   * *Spider RT1:* Nutzt 3 ergonomische Taster. Mechanisch deutlich zuverlässiger zu betätigen. DLE-Score: **+40 Pkt.**
@@ -300,13 +303,67 @@ Da Kassetten im v9.6 System als modulare Wechselkassetten konzipiert sind, fungi
 #### Klasse 4: OpenMotorMesh 2.4 GHz Universal-Modul (UCS) (`omm_2_4ghz.json`):
 * Quelloffenes TDMA / IPv6-Multicast Mesh-Modul auf Basis des **ESP32-C6 (`PCBA 09`)**.
 * Nativer Bluetooth 5.3 LE Audio (LC3-Codec) Support (< 30 ms Latenz) für drahtlose Helmkopplung oder formschlüssig in Bucht 1/2 gedockt. DLE-Score: **+55 Pkt.**
-    * **Group Mesh / Private Mode (`0x06`):** 3.000 ms Haltepuls auf `ACT_MESH` (Wechsel Open Mesh <-> Private Group).
-    * **Kanal +1 Open Mesh (`0x07`):** Autonomes Makro: `ACT_MESH` (2x 150 ms) -> Pause 200 ms -> `ACT_PLUS` (1x 150 ms).
-    * **Kanal -1 Open Mesh (`0x08`):** Autonomes Makro: `ACT_MESH` (2x 150 ms) -> Pause 200 ms -> `ACT_MINUS` (1x 150 ms).
-    * **Quick-Join (`0x09`):** 3.000 ms Simultan-Haltepuls auf `ACT_POWER` + `ACT_MESH`.
-  * *Zero-Wear Ansteuerung:* Im Pod können die Tasterleitungen alternativ zu den mechanischen Hubmagneten auch rein elektronisch über Open-Drain / Optokoppler auf `J_AUDIO_PWR` angesteuert werden.
 
-### 3.2 JSON Profil-Schema Spezifikation
+---
+
+### 3.2 Praxis-Leitfaden: Upcycling des Schuberth SC2 als autonomes Sena Mesh 3.0 Bike-Gateway (Bucht 1)
+
+> [!TIP]
+> **Nachhaltiges Gateway-Recycling für Schuberth-Fahrer:**
+> Motorradhelme (wie der Schuberth C5, E2 oder S3) erreichen nach 5 bis 7 Jahren ihre sicherheitsrelevante Altersgrenze (Materialermüdung des EPS-Dämpfungskerns) und werden ausgemustert. Das darin verbaute **Schuberth SC2 Intercom** ist jedoch ein vollwertiges Sena-System der Spitzenklasse und erhält per offiziellem Firmware-Update über den *SCHUBERTH Bluetooth Device Manager* vollen **Sena Mesh 3.0 Support**.
+> 
+> Anstatt für Bucht 1 ein neues Sena-Gerät (wie das Spider X Slim für ca. 260 €) zu kaufen, lässt sich das vorhandene SC2 mit minimalem Aufwand als **100 % wartungsfreies, autarkes Sena-Mesh-Gateway** im OMB-Satelliten-Pod weiterbetreiben.
+
+#### Die 3 Systemvorteile des SC2 im Motorrad-Festeinbau:
+1. **Drahtlose Cockpit-Fernbedienung (BLE):**  
+   Was am Helm oft als lästig empfunden wird (die separate Fernbedienung mit Knopfzelle), ist am Motorrad ein riesiger Vorteil: Das SC2-Bedienteil kommuniziert über Bluetooth Low Energy (BLE). Es kann per Klettverschluss oder Halteclip direkt an die linke Lenkerarmatur oder ins Cockpit gesetzt werden. **Es muss kein einziges Steuerkabel vom Lenker zum Koffer/Pod verlegt werden!** Ein Tastendruck am Lenker steuert das SC2 im Koffer drahtlos.
+2. **Exzellente Antennen-Reichweite via externer Bike-Koax-Antenne:**  
+   Das SC2 führt die Antennenleitungen als Micro-Koaxialkabel aus dem Hauptgehäuse heraus (um mit den werkseitigen Schuberth-Helmantennen verbunden zu werden). Im OMB-Pod werden diese Leitungen über SMA-Kupplungen direkt auf eine **externe Fahrzeugantenne am Fahrzeugheck** adaptiert. Das Signal strahlt frei ab (keine Dämpfung durch Fahrerkörper oder Helm-Styropor) – die Reichweite übertrifft den Helmbetrieb deutlich.
+3. **Null Anschaffungskosten:**  
+   Volle Sena Mesh 3.0 und 2.0 Kompatibilität bei 0 € Neuinvestition.
+
+#### Der "Battery-Eliminator" Umbau (Dauerstrom ohne Ladeabschaltung):
+Schuberth/Sena schaltet das SC2 aus Überhitzungs-Schutzgründen im Helm automatisch ab, sobald an der USB-C-Buchse 5V Ladespannung anliegen ("Shutdown on Charge"). Für den dauerhaften Bordnetzbetrieb im Pod wird das Modul daher wie folgt modifiziert:
+
+```
++-----------------------------------------------------------------------------------------+
+|                  SCHUBERTH SC2 "BATTERY ELIMINATOR" DAUERSTROM-SCHALTUNG                |
++-----------------------------------------------------------------------------------------+
+|                                                                                         |
+|  [ OMB Pod Bordnetz: PCBA 03 ]                                                          |
+|        |                                                                                |
+|        +---> VCC_5V (Pin 2)  -------> [ Miniatur Step-Down DC-DC / LDO ]               |
+|        |                                 (z. B. MP2315 oder TPS62840)                   |
+|        |                                          |                                     |
+|        |                                          v +3,75 V DC Festspannung             |
+|        |                                          |                                     |
+|        |                              +-----------+-----------+                         |
+|        |                              |                       |                         |
+|        |                              v                       v                         |
+|        |                          [ BAT+ ]                 [ NTC ]                      |
+|        |                              |                       |                         |
+|        |                              | SC2-Platine           +--- [ 10 kOhm NTC ]      |
+|        |                              | (Akku ausgelötet)     |    (Simuliert 22 °C)    |
+|        |                              v                       v                         |
+|        +---> PGND (Pin 1)  ---------> [ BAT- / GND ] <--------+                         |
+|                                                                                         |
+|  => SC2 "sieht" dauerhaft vollen 3,7V-Akku; USB-C bleibt unbeschaltet (Ladesperre inaktiv)|
++-----------------------------------------------------------------------------------------+
+```
+
+1. **Akku entnehmen:** Gehäuse öffnen und den gealterten 1S LiPo-Pouch-Akku an den Lötpads ablöten. Im Gehäuse entsteht dadurch ein geräumiger Hohlraum.
+2. **3,75V Festspannung einspeisen:** Anstelle des Akkus wird eine stabilisierte $3{,}75\dots 3{,}85\,\text{V}$ Spannung (erzeugt aus den 5V von `PCBA 03` durch einen ultrakompakten Buck-Converter) an die Pads `BAT+` und `BAT-` gelötet.
+3. **10-k$\Omega$-NTC-Dummy (Wichtig!):** Fast alle Sena-Boards überwachen den Akku-Temperatursensor. Damit die Firmware nicht wegen "Sensorfehler / -40 °C" den Boot verweigert, wird ein Standard-**$10\,\text{k}\Omega$-Widerstand** zwischen das NTC-Pad und Masse (`GND`) gelötet. Die Elektronik liest dauerhaft ideale 22 °C.
+4. **Vibrationsfeste Zugentlastung:** Hochflexible AWG24/26 Silikonlitzen verwenden, eine kleine S-Schlaufe im leeren Akkufach legen und die Lötstellen mit neutral-vernetzendem Elektronik-Silikon (oder B-7000) verguss-sichern.
+
+#### Mechanischer Einbau in den Kassetten-Schlitten:
+* Die Abmessungen der SC2 Main Unit ($75 \times 40 \times 12\,\text{mm}$) passen **perfekt in den Standard-Grundschlitten (`00_base_sled.scad`)** von Bucht 1 ($110 \times 53 \times 16\,\text{mm}$).
+* Die verbleibenden $35\,\text{mm}$ freier Bauraum im Schlitten nehmen den Step-Down-Regler, die Zugentlastung und die Audio-Übertrager auf.
+* Als Abdeckung kann entweder die **Blindkassette (`03_insert_blindkassette.scad`)** als glatter, wetterfester Deckel verwendet werden (vollständig clean & unsichtbar) oder ein individuelles 3D-Druck-Inlay (`cartridge_insert_sc2.scad`).
+
+---
+
+### 3.3 JSON Profil-Schema Spezifikation
 Jedes Hardwareprofil liegt als eigenständige JSON-Datei im internen Flash-Dateisystem (`/data/profiles/*.json`) des ESP32-S3 und definiert alle Pegel-, Routing-, Mechatronik- und BLE-Steuerungs-Parameter:
 
 ```json

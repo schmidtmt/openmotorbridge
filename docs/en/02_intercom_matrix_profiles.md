@@ -240,18 +240,21 @@ All supported intercom and two-way radio cartridges are categorized into clearly
 
 ### 3.1 Detailed Device Classification & Filesystem Profiles (`/data/profiles/`)
 
-#### Class 1a: Sena Mesh 3.0 & Wave (`sena_60_series.json`, `sena_spider_x.json`, `sena_meshon.json`):
+#### Class 1a: Sena Mesh 3.0 & Wave (`sena_60_series.json`, `sena_spider_x.json`, `sena_meshon.json`, `schuberth_sc2.json`):
 * **Sena 60 Series (60S, 60R, 60X):** Next-Gen flagships featuring Mesh 3.0 and Wave cellular fallback. While the 60S relies on a bulky jog dial, the **Sena 60X** is designed as a modular, flat pushbutton system.
 * **Sena SPIDER X Slim (`sena_spider_x.json` - Top Reference Recommendation):**
   * *100% Battery-Free from Factory:* Powered directly via 2-wire battery leads at $3.85\,\text{V}$ regulated DC from PCBA 03. Zero fire hazard, zero LiPo swelling in hot pods, zero battery degradation.
   * *Full Mesh 3.0 & Wave Parity:* Full $2.0\,\text{km}$ range in an ultra-compact package ($74.5 \times 31 \times 16\,\text{mm}$, $23.2\,\text{g}$).
   * *Mechatronic Advantage:* Flat, clearly defined discrete buttons (Center, Plus, Minus, Mesh) -- ideal for linear plungers. DLE Score: **+60 pts.**
+* **Schuberth SC2 (with Firmware Mesh 3.0):**
+  * *Autonomous Bike Gateway Upcycling (0 €):* Sena OEM hardware inside Schuberth helmets. Upgradable via *SCHUBERTH Bluetooth Device Manager* to full **Sena Mesh 3.0** (with fallback to Mesh 2.0).
+  * Ideal for bike pod installation: separate wireless BLE remote control (zero wires to handlebar), external micro-coaxial antenna leads (connectable to high-gain bike antenna), and fits directly into Base Sled Bay 1 with Battery-Eliminator mod. DLE Score: **+60 pts.**
 * **Sena MeshON (`sena_meshon.json`):**
   * Ultra-lightweight ($22.5\,\text{g}$) Mesh 3.0 adapter (with Mesh 2.0 fallback).
   * *Limitation:* Range is approx. $800\,\text{m}$ (half that of full units) and contains an internal battery. DLE Score: **+45 pts.**
 
 #### Class 1b: Sena Mesh 2.0 (`sena_50_series.json`, `sena_spider.json`):
-* *Sena 50S, 50R, 50C, SRL-Mesh, Schuberth SC2:* Standard Mesh 2.0 (24–32 nodes).
+* *Sena 50S, 50R, 50C, SRL-Mesh:* Standard Mesh 2.0 (24–32 nodes). Compatibility with Mesh 3.0 requires switching to legacy mode.
 * *Sena Spider ST1 vs. Spider RT1:*
   * *Spider ST1:* Utilizes a large rotary jog dial (mechatronic hazard).
   * *Spider RT1:* Utilizes 3 ergonomic pushbuttons (far more reliable for linear actuation). DLE Score: **+40 pts.**
@@ -276,7 +279,66 @@ All supported intercom and two-way radio cartridges are categorized into clearly
 * Open-source TDMA / IPv6 multicast mesh module based on the **ESP32-C6 (`PCBA 09`)**.
 * Native Bluetooth 5.3 LE Audio (LC3 Codec) with $< 30\,\text{ms}$ latency. DLE Score: **+55 pts.**
 
-### 3.2 JSON Profile Schema Specification
+---
+
+### 3.2 Practical Guide: Upcycling the Schuberth SC2 as an Autonomous Sena Mesh 3.0 Bike Gateway (Bay 1)
+
+> [!TIP]
+> **Sustainable Gateway Upcycling for Schuberth Riders:**
+> Motorcycle helmets (such as the Schuberth C5, E2, or S3) reach their safety-mandated retirement age after 5 to 7 years (material fatigue of the interior EPS impact liner) and must be replaced. However, the integrated **Schuberth SC2 intercom** is a premium Sena OEM system and receives full **Sena Mesh 3.0 support** via official firmware update in the *SCHUBERTH Bluetooth Device Manager*.
+> 
+> Instead of spending ~€260 on a new Sena Spider X Slim for Bay 1, an existing SC2 can be upcycled into a **100% maintenance-free, autonomous Sena Mesh gateway** inside the OMB satellite pod with minimal effort.
+
+#### The 3 Core Advantages of the SC2 in a Motorcycle-Mounted Pod:
+1. **Wireless Cockpit Remote Control (BLE):**  
+   What riders often consider a drawback on the helmet (a separate remote control with a CR2016 coin cell) becomes an enormous advantage on the bike: The SC2 remote communicates via Bluetooth Low Energy (BLE). It can be mounted directly on the left handlebar cluster or dashboard using Velcro or a clamp. **Zero control wires are needed between handlebar and luggage pod!** Pushing buttons at the handlebar controls the SC2 in the pod completely wirelessly.
+2. **Superior Antenna Range via External Coaxial Bike Antenna:**  
+   The SC2 routes its antenna signals outside its main enclosure using micro-coaxial cables (to interface with the factory helmet antennas). In the OMB pod, these cables adapt via standard SMA connectors to an **external bike antenna on the motorcycle rear rack**. The radio signal propagates in free air without attenuation from the rider's body or helmet EPS liner, noticeably outperforming standard helmet-mounted range.
+3. **Zero Acquisition Cost:**  
+   Full Sena Mesh 3.0 and Mesh 2.0 compatibility at €0 new hardware expense.
+
+#### The "Battery Eliminator" Modification (Continuous Bike Power without Shutdown):
+To prevent overheating inside helmets, Sena/Schuberth firmware automatically powers down the SC2 as soon as 5V is detected on the USB-C port ("Shutdown on Charge"). For continuous pod operation powered from motorcycle 12V/5V, the unit is modified as follows:
+
+```
++-----------------------------------------------------------------------------------------+
+|                  SCHUBERTH SC2 "BATTERY ELIMINATOR" CONTINUOUS POWER CIRCUIT            |
++-----------------------------------------------------------------------------------------+
+|                                                                                         |
+|  [ OMB Pod 5V Rail: PCBA 03 ]                                                           |
+|        |                                                                                |
+|        +---> VCC_5V (Pin 2)  -------> [ Miniature Step-Down DC-DC / LDO ]               |
+|        |                                 (e.g., MP2315 or TPS62840)                     |
+|        |                                          |                                     |
+|        |                                          v +3.75 V DC Constant                 |
+|        |                                          |                                     |
+|        |                              +-----------+-----------+                         |
+|        |                              |                       |                         |
+|        |                              v                       v                         |
+|        |                          [ BAT+ ]                 [ NTC ]                      |
+|        |                              |                       |                         |
+|        |                              | SC2 Main PCB          +--- [ 10 kOhm NTC ]      |
+|        |                              | (Battery desoldered)  |    (Simulates 22 °C)    |
+|        |                              v                       v                         |
+|        +---> PGND (Pin 1)  ---------> [ BAT- / GND ] <--------+                         |
+|                                                                                         |
+|  => SC2 continuously sees a healthy 3.7V cell; USB-C remains disconnected (no shutdown)|
++-----------------------------------------------------------------------------------------+
+```
+
+1. **Remove Old Cell:** Open the SC2 main enclosure and desolder the aging 1S LiPo pouch battery from the pads. This creates ample cavity space inside the shell.
+2. **Inject 3.75V Constant DC:** In place of the battery, connect a stabilized $3.75\dots 3.85\,\text{V}$ rail (stepped down from PCBA 03 5V via a miniature buck converter or LDO) to `BAT+` and `BAT-`.
+3. **10 k$\Omega$ NTC Dummy Resistor (Crucial):** Sena power management checks the battery temperature thermistor. To prevent the firmware from aborting boot due to a missing sensor (-40°C error), solder a standard **$10\,\text{k}\Omega$ resistor** between the NTC pad and `GND`. The MCU will continuously read an ideal 22°C ambient temperature.
+4. **Strain Relief & Vibration Protection:** Use highly flexible AWG24/26 silicone wires, form a small S-loop in the cavity, and secure solder points with neutral-curing silicone or B-7000 adhesive.
+
+#### Mechanical Installation in Universal Base Sled:
+* The dimensions of the SC2 main unit ($75 \times 40 \times 12\,\text{mm}$) fit **comfortably inside the universal base sled (`00_base_sled.scad`)** of Bay 1 ($110 \times 53 \times 16\,\text{mm}$).
+* The remaining $35\,\text{mm}$ of longitudinal space houses the DC-DC buck converter, strain reliefs, and isolation transformers.
+* The assembly is enclosed using either the solid **Dummy Plug Cover (`03_insert_blindkassette.scad`)** for a clean, waterproof seal, or a custom 3D printed top bracket.
+
+---
+
+### 3.3 JSON Profile Schema Specification
 Each hardware profile is stored as an independent JSON file in the ESP32-S3 internal LittleFS flash filesystem (`/data/profiles/*.json`), defining audio gain levels, ducking curves, mechatronic pulse mappings, and BLE remote control parameters:
 
 ```json

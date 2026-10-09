@@ -137,6 +137,10 @@ All discrete components, PCB ordering files, and COTS sourcing lists are documen
      * Fasten retainer plate with 4x M2 $\times 6\,\text{mm}$ countersunk screws.
      * Connect pre-crimped 8-pin harness `J_ACT` to header `J_ACT` on PCBA 03.
      * Seat Sena SPIDER X Slim; connect direct micro-cable whip to `J_AUDIO_PWR` on PCBA 03 (zero pogo pins!).
+   * **Alternative Option: Schuberth SC2 Upcycling Cartridge (Class 1a Sena Mesh 3.0 / €0 Budget Option):**
+     * *SC2 Preparation (Battery Eliminator):* Open the retired SC2 casing, desolder the LiPo pouch cell. Configure a miniature buck converter (e.g. MP2315) from `VCC` (5V from `J_AUDIO_PWR` Pin 2) to $3.75\dots 3.85\,\text{V}$ and solder to `BAT+` / `BAT-`. Solder a $10\,\text{k}\Omega$ resistor between NTC pad and `GND` (simulating 22°C cell temperature against boot error). Pot and strain-relieve wires with silicone or B-7000.
+     * *Audio & Antenna Adaptation:* Connect 8-pin JST-SH harness to SC2 speaker and microphone wires (keeping `AGND` grounds isolated!). Adapt internal micro-coax leads via short RG-178 pigtail to the front SMA bulkhead port of the cartridge.
+     * *Mounting in Base Sled:* Place SC2 main unit ($75 \times 40 \times 12\,\text{mm}$) and step-down converter inside the base sled. Zero mechatronic actuators required (control is 100% wireless via Schuberth BLE handlebar remote!). Fasten solid blind cover (`03_insert_blindkassette.scad`) with 4x M2 screws for a weatherproof seal.
    * **Slot 2 (Cardo Packtalk Edge Inlay / Swap OMM):**
      * Mount 4x solenoids into [`cartridge_insert_cardo.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_cardo.stl) and connect to `J_ACT`.
      * Lock Cardo Packtalk Edge into Air-Mount cradle and attach micro-cable whip to `J_AUDIO_PWR`.
