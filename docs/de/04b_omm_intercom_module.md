@@ -92,30 +92,41 @@ Das Gehäuse beider OMM-Module ist absolut identisch aufgebaut und erfüllt exak
 > 
 > Beide OMM-Gehäuse nutzen daher **ausnahmslos formschlüssige DIN 934 M2 Sechskantmutter-Taschen** in der Oberschale. Das Modul kann über die 4x M2-Edelstahlschrauben **beliebig oft zerstörungsfrei geöffnet und wieder verschraubt werden** (z. B. für Akkutausch nach Jahren, Reinigung oder Hardware-Upgrades).
 
-### 2.2 Multi-Use Schnittstellen-Architektur (USB-C)
+### 2.2 Schnittstellen-Architektur: Trennung von Helm-Audio (`J_HELMET`) und USB-C (`J1`)
 
-Der UCS-Standard nach ECE 22.06 normiert die mechanische Kavität, lässt den elektrischen Steckverbinder jedoch bewusst frei. OpenMotorBridge setzt auf einen universellen, IP67-versiegelten **Multi-Use USB-C Port an der Stirnseite** (`J1`):
+Der UCS-Standard nach ECE 22.06 normiert die mechanische Kavität, lässt den elektrischen Steckverbinder jedoch bewusst frei. Um Ladebrummen, Windgeräusche und Kabelgewirr im Fahrtwind vollständig auszuschließen, setzt OpenMotorBridge auf eine **strikte Trennung von zwei Schnittstellen**:
+
+1. **`J_HELMET` (Gehäuseboden / B.Cu):** Interner 6-Pin JST-SH Header für Lautsprecher, Mikrofon und PTT direkt durch den Gehäuseboden ins Helminnere.
+2. **`J1` (Gerätestirnseite):** Universelle IP67-versiegelte 16-Pin USB-C Buchse – bleibt am Helm 100 % frei für unterbrechungsfreies Laden während der Fahrt und WebUSB-Updates.
 
 ```
 +-----------------------------------------------------------------------------------------+
-|                  OMM MULTI-USE SCHNITTSTELLEN-ARCHITEKTUR (USB-C J1)                    |
+|             OMM DUAL-SCHNITTSTELLEN-ARCHITEKTUR (J_HELMET & USB-C J1)                  |
 +-----------------------------------------------------------------------------------------+
 |                                                                                         |
 |  [ OMM UCS-Modul: PCBA 09 oder PCBA 10 ]                                                |
 |        |                                                                                |
-|        +---> 1x IP67-versiegelte 16-Pin USB-C Buchse (Gerätestirnseite J1)              |
+|        +---> 1x Interner 6-Pin JST-SH Header (J_HELMET, Gehäuseboden / B.Cu)            |
+|        |           |                                                                    |
+|        |           +--- STANDALONE-BETRIEB IM HELM (AUDIO & PTT):                       |
+|        |                Direkt durch den Gehäuseboden (7 x 9 mm Schlitz) ins Helminnere:|
+|        |                * Pin 1: HP_OUT_L (Lautsprecher Links, ES8388 LOUT1)            |
+|        |                * Pin 2: HP_OUT_R (Lautsprecher Rechts, ES8388 ROUT1)           |
+|        |                * Pin 3: AGND_SPK (Stromlose Audiomasse, I = 0 mA)              |
+|        |                * Pin 4: MIC_IN+ (Elektret/MEMS-Mikrofonsignal, ES8388 MIC1P)   |
+|        |                * Pin 5: AGND_MIC (Stromlose Mikrofonmasse, I = 0 mA)           |
+|        |                * Pin 6: BTN_PTT (Hardware-PTT-Tastung gegen Masse)             |
+|        |                => Null Kabel im Fahrtwind, kein Ladebrummen (reine 0V DC Audio)|
+|        |                                                                                |
+|        +---> 1x IP67-versiegelte 16-Pin USB-C Buchse (J1, Gerätestirnseite)             |
 |                    |                                                                    |
-|                    +--- MODUS A: EINSATZ IM HELM (STANDALONE)                           |
-|                    |    USB-C auf Helm-Kabelpeitsche:                                   |
-|                    |    * Lautsprecher: Standard 3,5 mm Klinkenbuchse (Stereo TRS)      |
-|                    |      - Tip (CC1): Audio Links (ES8388 LOUT1)                       |
-|                    |      - Ring (CC2): Audio Rechts (ES8388 ROUT1)                     |
-|                    |      - Sleeve (SBU2): Stromlose Audiomasse (AGND_SPK, I = 0 mA)    |
-|                    |    * Mikrofon: Wasserdichter 2-Pin Verriegelungsstecker (JST-JWPF) |
-|                    |      - Pin 1 (SBU1): MIC_IN+ (ES8388 MIC1P)                        |
-|                    |      - Pin 2 (SBU2): Stromlose Mikrofonmasse (AGND_SPK, I = 0 mA)  |
+|                    +--- MODUS 1: LADEN UNTERWEGS WÄHREND DER FAHRT                      |
+|                    |    Bleibt am Helm frei zugänglich (mit Silikon-Dichtkappe):        |
+|                    |    * Powerbank in Jackentasche oder 20W-Ladeport am Front-Node     |
+|                    |    * Simultanbetrieb: Laden + Funken/Musik ohne Unterbrechung      |
+|                    |      dank TI BQ24075 Dynamic Power-Path Management!                |
 |                    |                                                                    |
-|                    +--- MODUS B: EINSATZ IM POD (SMART CARTRIDGE PCBA 03)               |
+|                    +--- MODUS 2: EINSATZ IM POD (SMART CARTRIDGE PCBA 03)               |
 |                    |    USB-C auf 8-Pin JST-SH Adapterkabel (Länge 5 cm, 90° gewinkelt):|
 |                    |    * Pin 1: PGND (Leistungs-Rückstrom, bis 600 mA Sendepeak)       |
 |                    |    * Pin 2: VCC_5V (Bordnetz-Speisung & BQ24075 USV-Ladung)        |
@@ -124,10 +135,10 @@ Der UCS-Standard nach ECE 22.06 normiert die mechanische Kavität, lässt den el
 |                    |    * Pin 7: MIC_OUT (Fahrer-Sprachsignal ins Modul < 1 ms, SBU1)   |
 |                    |    * Pin 8: PTT_IO (Hardware-PTT-Tastung gegen Masse)              |
 |                    |                                                                    |
-|                    +--- MODUS C: FLASHING, DFU & SERVICE (WARTUNG)                      |
+|                    +--- MODUS 3: FLASHING, DFU & SERVICE (WARTUNG)                      |
 |                         Standard USB-C Datenkabel am PC / Web-Browser (WebUSB):         |
-|                         * VBUS (A4/B4/A9/B9) & GND (A1/B1/A12/B12): 5V Versorgung/Laden|
-|                         * D+ (A6/B6) & D- (A7/B7): ESP32-C6 Nativer USB PHY (GPIO 13/12)|
+|                         * VBUS & GND: 5V Versorgung und Akkuladung                      |
+|                         * D+ & D-: ESP32-C6 Nativer USB PHY (GPIO 13/12)                |
 |                           Vollwertiges WebUSB/DFU-Flashing, Logging & Firmware-Updates! |
 +-----------------------------------------------------------------------------------------+
 ```

@@ -90,28 +90,41 @@ The mechanical enclosures for both OMM modules are 100% identical and precisely 
 > 
 > Both OMM enclosures exclusively use **form-fitting DIN 934 M2 captive hex nut pockets** inside the top shell. The module can be disassembled and reassembled infinitely without thread degradation (ideal for battery replacements or hardware servicing).
 
-### 2.2 Multi-Use USB-C Interface Architecture
+### 2.2 Interface Architecture: Clean Separation of Helmet Audio (`J_HELMET`) and USB-C (`J1`)
+
+The ECE 22.06 UCS standard specifies the mechanical envelope, while intentionally leaving the electrical connector open. To completely eliminate charging hum, aerodynamic wind flutter, and external cable clutter, OpenMotorBridge implements a **strict separation of two dedicated interfaces**:
+
+1. **`J_HELMET` (Bottom Shell / B.Cu):** Internal 6-pin JST-SH header delivering speaker, microphone, and PTT lines directly through the housing floor into the helmet interior.
+2. **`J1` (Front Face):** Universal IP67-sealed 16-pin USB-C receptacle – remains 100% unoccupied on the helmet for uninterrupted on-the-go charging and WebUSB maintenance.
 
 ```
 +-----------------------------------------------------------------------------------------+
-|                  OMM MULTI-USE USB-C INTERFACE ARCHITECTURE (J1)                        |
+|             OMM DUAL-INTERFACE ARCHITECTURE (J_HELMET & USB-C J1)                       |
 +-----------------------------------------------------------------------------------------+
 |                                                                                         |
 |  [ OMM UCS Module: PCBA 09 or PCBA 10 ]                                                 |
 |        |                                                                                |
-|        +---> 1x IP67-Sealed 16-Pin USB-C Port (Device Front J1)                         |
+|        +---> 1x Internal 6-Pin JST-SH Header (J_HELMET, Bottom Shell / B.Cu)            |
+|        |           |                                                                    |
+|        |           +--- STANDALONE HELMET OPERATION (AUDIO & PTT):                      |
+|        |                Directly through housing floor (7 x 9 mm slot) into interior:   |
+|        |                * Pin 1: HP_OUT_L (Speaker Left, ES8388 LOUT1)                  |
+|        |                * Pin 2: HP_OUT_R (Speaker Right, ES8388 ROUT1)                 |
+|        |                * Pin 3: AGND_SPK (Zero-current audio ground, I = 0 mA)         |
+|        |                * Pin 4: MIC_IN+ (Electret/MEMS mic signal, ES8388 MIC1P)       |
+|        |                * Pin 5: AGND_MIC (Zero-current microphone ground, I = 0 mA)    |
+|        |                * Pin 6: BTN_PTT (Hardware PTT keying to GND)                   |
+|        |                => Zero cables in wind buffet, zero hum (pure 0V DC audio)      |
+|        |                                                                                |
+|        +---> 1x IP67-Sealed 16-Pin USB-C Receptacle (J1, Device Front)                  |
 |                    |                                                                    |
-|                    +--- MODE A: HELMET STANDALONE OPERATION                             |
-|                    |    USB-C to Helmet Pigtail Cable:                                  |
-|                    |    * Speakers: Standard 3.5 mm TRS Audio Jack                      |
-|                    |      - Tip (CC1): Audio Left (ES8388 LOUT1)                        |
-|                    |      - Ring (CC2): Audio Right (ES8388 ROUT1)                      |
-|                    |      - Sleeve (SBU2): Zero-current audio ground (AGND_SPK, I=0 mA) |
-|                    |    * Microphone: Waterproof 2-Pin Locking Connector (JST-JWPF)     |
-|                    |      - Pin 1 (SBU1): MIC_IN+ (ES8388 MIC1P)                        |
-|                    |      - Pin 2 (SBU2): Zero-current mic ground (AGND_SPK, I=0 mA)    |
+|                    +--- MODE 1: ON-THE-FLY CHARGING WHILE RIDING                        |
+|                    |    Remains fully accessible on helmet (with silicone cap):         |
+|                    |    * Powerbank in jacket pocket or 20W port on Front-Node          |
+|                    |    * Simultaneous operation: Charge + mesh intercom / music        |
+|                    |      thanks to TI BQ24075 Dynamic Power-Path Management!           |
 |                    |                                                                    |
-|                    +--- MODE B: BIKE POD OPERATION (SMART CARTRIDGE PCBA 03)            |
+|                    +--- MODE 2: BIKE POD OPERATION (SMART CARTRIDGE PCBA 03)            |
 |                    |    USB-C to 8-Pin JST-SH Adapter Cable (5 cm length, 90° angle):   |
 |                    |    * Pin 1: PGND (High-current return, up to 600 mA RF burst)      |
 |                    |    * Pin 2: VCC_5V (Vehicle DC power & BQ24075 UPS charging)       |
@@ -120,10 +133,10 @@ The mechanical enclosures for both OMM modules are 100% identical and precisely 
 |                    |    * Pin 7: MIC_OUT (Rider voice signal into module < 1 ms, SBU1)  |
 |                    |    * Pin 8: PTT_IO (Hardware PTT keying to GND / UART Config)      |
 |                    |                                                                    |
-|                    +--- MODE C: FLASHING, DFU & MAINTENANCE (SERVICE)                   |
+|                    +--- MODE 3: FLASHING, DFU & MAINTENANCE (SERVICE)                   |
 |                         Standard USB-C Data Cable to PC / Web Browser (WebUSB):         |
-|                         * VBUS (A4/B4/A9/B9) & GND (A1/B1/A12/B12): 5V Power / Charging|
-|                         * D+ (A6/B6) & D- (A7/B7): ESP32-C6 Native USB PHY (GPIO 13/12)|
+|                         * VBUS & GND: 5V Power and battery charging                     |
+|                         * D+ & D-: ESP32-C6 Native USB PHY (GPIO 13/12)                 |
 |                           Full WebUSB / DFU firmware flashing, logging & debug updates! |
 +-----------------------------------------------------------------------------------------+
 ```
