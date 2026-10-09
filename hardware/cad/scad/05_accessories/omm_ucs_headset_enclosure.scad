@@ -65,10 +65,22 @@ module omm_ucs_helmet_cradle() {
             cube([68.4, 36.4, CRADLE_H + 2.0], center=false);
         }
 
-        // Cable Strain-Relief Duct for Helmet Audio Loom (Ø 4.5 mm canal)
-        translate([-1.0, CRADLE_W / 2.0, 2.5])
-            rotate([0, 90, 0])
-                cylinder(r=2.25, h=CRADLE_L + 2.0, $fn=24);
+        // Front USB-C Access Port Cutout (-X Face: allows on-the-fly charging cable & DFU)
+        translate([-0.5, (CRADLE_W - 14.0) / 2.0, 1.8])
+            cube([4.0, 14.0, CRADLE_H + 2.0], center=false);
+
+        // Rear RF Port & SMA Antenna Collar Cutout (+X Face: allows 38 mm stubby antenna)
+        translate([CRADLE_L - 3.5, (CRADLE_W - 12.0) / 2.0, 1.8])
+            cube([4.0, 12.0, CRADLE_H + 2.0], center=false);
+
+        // Bottom Pass-Through Opening for J_HELMET Audio Loom (Aligns with module J_HELMET slot at X = 55..64 mm)
+        // Module offset in cradle is (CRADLE_L - 68.0)/2 = 3.0 mm -> X_cradle = 58.0 .. 67.0 mm
+        translate([58.0, (CRADLE_W - 10.0) / 2.0, -0.5])
+            cube([9.0, 10.0, 3.5], center=false);
+
+        // Cable Strain-Relief Duct for Helmet Audio Loom (canal leading downwards under helmet rim)
+        translate([58.0, -1.0, 1.0])
+            cube([9.0, CRADLE_W / 2.0 + 1.0, 3.0], center=false);
 
         // 2x M2.5 Fastening Screw Holes for Helmet Rim Clamp
         translate([12.0, CRADLE_W / 2.0, -0.5])

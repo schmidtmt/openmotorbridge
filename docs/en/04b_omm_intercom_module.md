@@ -369,9 +369,8 @@ Both the **OpenMotorMesh 2.4 GHz Module (PCBA 09)** and the **OMM 446 MHz PMR/DM
 To eliminate buffeting wind noise, snag hazards, and charger ground-loop hum, the interfaces are strictly segregated:
 
 1. **Internal Helmet Audio & PTT Port (`J_HELMET`, 6-Pin JST-SH on `B.Cu`):**
-   - Located on the bottom surface of the PCB in the rear chamber opposite the USB-C port ($X=126.6, Y=99.75\,\text{mm}$ in KiCad, corresponding to $X_{\text{mod}} = 60.6\,\text{mm}$).
-   - This placement keeps the connector and harness completely clear behind the central LiPo battery recess ($X = 14\dots 54\,\text{mm}$), preventing wire pinching or mechanical interference.
-   - Helmet speakers and microphone cables pass directly through the bottom shell slot ($7.0 \times 9.0\,\text{mm}$) into the helmet lining – **zero cables are exposed to aerodynamic wind**.
+   - Located on the bottom surface of the PCB in the rear chamber opposite the USB-C port ($X=126.5, Y=99.75\,\text{mm}$ in KiCad, corresponding to $X_{\text{mod}} = 60.5\,\text{mm}$).
+   - With the 180°-rotated orientation (receptacle socket facing inward / $-X$), the connector opens into the free space behind the battery recess: the harness plug inserts freely, and the wires exit smoothly in a gentle bend through the bottom shell slot ($9.0 \times 9.0\,\text{mm}$ at $X = 55\dots 64\,\text{mm}$) into the helmet lining – **zero cables are exposed to aerodynamic wind**.
    - **Zero 5V DC Power:** Carries only passive headset signals (`HP_OUT_L`, `HP_OUT_R`, `AGND_SPK`, `MIC_IN+`, `AGND_MIC`, `BTN_PTT`) – completely free of charger noise or DC-DC ripple.
 
 2. **External USB-C Port (`J1` with TPU Sealing Cap):**

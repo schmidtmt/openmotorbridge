@@ -626,7 +626,7 @@ The **`PCBA 09`** board is the universal open-source hardware for the OpenMotorM
 5. **User Interface:** 4x tactile IP67 micro-switches (`SW1` to `SW4`, C&K KMT0 / Alps SKRK) and 1x WS2812B-2020 RGB status LED.
 6. **Interfaces & Connectors:**
    * `J1`: Waterproof IP67 USB-C receptacle (16-Pin) for on-the-go charging (powerbank/bike), WebUSB DFU flashing, and pod docking.
-   * `J_HELMET`: 6-Pin JST-SH 1.0mm SMD horizontal header (`SM06B-SRSS-TB`) on `B.Cu` ($X=126.625, Y=99.75\,\text{mm}$ in KiCad, $X_{\text{mod}} = 60.6\,\text{mm}$) opposite USB-C behind battery cradle. Delivers pure, hum-free audio to helmet interior.
+   * `J_HELMET`: 6-Pin JST-SH 1.0mm SMD horizontal header (`SM06B-SRSS-TB`) on `B.Cu` ($X=126.5, Y=99.75\,\text{mm}$ in KiCad, $X_{\text{mod}} = 60.5\,\text{mm}$, socket opening facing inward / $-X$) opposite USB-C behind battery cradle. Delivers pure, hum-free audio to helmet interior.
    * `BAT1`: 2-Pin JST-SH micro receptacle (`BM02B-SRSS-TB`) to 1S LiPo pouch cell (600 mAh with PCM).
 
 ### 11.3 Complete GPIO Pinout (ESP32-C6-MINI-1U)
@@ -703,7 +703,7 @@ The **`PCBA 10`** board solves the dilemma of bulky handheld two-way radios (whi
   * **Bluetooth Co-Processor (`U6`):** Dedicated `ESP32-PICO-V3-02` with Johanson 2450AT ceramic chip antenna (`ANT1`).
 * **Interfaces & Connectors:**
   * `J1`: Waterproof IP67 USB-C receptacle (16-Pin) for charging and WebUSB DFU.
-  * `J_HELMET`: 6-Pin JST-SH 1.0mm SMD horizontal header (`SM06B-SRSS-TB`) on `B.Cu` ($X=126.625, Y=99.75\,\text{mm}$ in KiCad) -- 100% pinout-compatible with PCBA 09.
+  * `J_HELMET`: 6-Pin JST-SH 1.0mm SMD horizontal header (`SM06B-SRSS-TB`) on `B.Cu` ($X=126.5, Y=99.75\,\text{mm}$ in KiCad, socket opening facing inward / $-X$) -- 100% pinout-compatible with PCBA 09.
   * `BAT1`: 2-Pin JST-SH micro receptacle (`BM02B-SRSS-TB`) to 1S LiPo pouch cell.
 
 ### 12.3 Complete GPIO Pinout (ESP32-C6 to SA818-DMR & Periphery)

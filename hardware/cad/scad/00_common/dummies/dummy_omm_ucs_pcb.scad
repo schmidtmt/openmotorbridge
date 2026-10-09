@@ -95,10 +95,15 @@ module dummy_omm_ucs_pcb() {
     }
 
     // 10. J_HELMET: Internal 6-Pin Passive Helmet Audio & PTT Header (Bottom Face, SM06B-SRSS-TB)
-    // Sits in rear chamber opposite USB-C (X = 56.625 mm, Y = 14.75 mm) facing through bottom shell slot into helmet
+    // Sits in rear chamber opposite USB-C (X = 56.50 mm, Y = 14.75 mm) with socket opening facing inwards (-X)
     color("ivory") {
-        translate([56.625 - 4.25/2.0, 14.75 - 7.5/2.0, -2.8])
-            cube(size=[4.25, 7.5, 2.8], center=false);
+        difference() {
+            translate([56.50 - 4.25/2.0, 14.75 - 7.5/2.0, -2.8])
+                cube(size=[4.25, 7.5, 2.8], center=false);
+            // Inward-facing mating receptacle socket (-X face)
+            translate([56.50 - 4.25/2.0 - 0.1, 14.75 - 6.5/2.0, -2.5])
+                cube(size=[2.5, 6.5, 2.2], center=false);
+        }
     }
 }
 

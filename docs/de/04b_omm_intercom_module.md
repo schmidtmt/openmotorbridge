@@ -388,9 +388,8 @@ Sowohl das **OpenMotorMesh 2.4 GHz Modul (PCBA 09)** als auch das **OMM 446 MHz 
 Zur Vermeidung von Windgeräuschen, Kabelgewirr und Brummstörungen sind die Anschlüsse strikt getrennt:
 
 1. **Interner Helm-Audio & PTT-Port (`J_HELMET`, 6-Pin JST-SH auf `B.Cu`):**
-   * Auf der dem Helmschacht zugewandten Platinenunterseite sitzt der 6-Pin Header `J_HELMET` gegenüber dem USB-C Port im hinteren Gehäuseabteil ($X=126{,}6, Y=99{,}75\,\text{mm}$ in KiCad bzw. $X_{\text{mod}} = 60{,}6\,\text{mm}$).
-   * Durch diese Platzierung liegt der Anschluss vollständig frei hinter dem zentralen Akkufach ($X = 14\dots 54\,\text{mm}$) – Akku und Kabel behindern sich nicht gegenseitig.
-   * Das Headset-Kabel wird durch einen passgenauen Durchbruch ($7{,}0 \times 9{,}0\,\text{mm}$) im Gehäuseboden direkt ins Helminnere geführt – **kein einziges Kabel flattert außen im Fahrtwind**.
+   * Auf der dem Helmschacht zugewandten Platinenunterseite sitzt der 6-Pin Header `J_HELMET` gegenüber dem USB-C Port im hinteren Gehäuseabteil ($X=126{,}5, Y=99{,}75\,\text{mm}$ in KiCad bzw. $X_{\text{mod}} = 60{,}5\,\text{mm}$).
+   * Durch die 180°-gedrehte Ausrichtung (Stecköffnung nach innen / $-X$) zeigt die Buchse in den freien Raum hinter dem Akkufach: Der Stecker lässt sich ungehindert einschieben, und die Drähte laufen in einem sanften Bogen knickfrei durch den Bodendurchbruch ($9{,}0 \times 9{,}0\,\text{mm}$ bei $X = 55\dots 64\,\text{mm}$) direkt ins Helminnere – **kein einziges Kabel flattert außen im Fahrtwind**.
    * **Kein 5V-Gleichstrom:** Der Anschluss führt ausschließlich passive Audiosignale (`HP_OUT_L`, `HP_OUT_R`, `AGND_SPK`, `MIC_IN+`, `AGND_MIC`, `BTN_PTT`) – vollkommen frei von Ladebrummen oder Schaltreglerstörungen.
 
 2. **Externer USB-C Port (`J1` mit TPU-Kappe):**

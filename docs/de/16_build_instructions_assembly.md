@@ -192,8 +192,8 @@ Die beiden autarken Module (**PCBA 09: OMM 2.4 GHz HD-Mesh** und **PCBA 10: OMM 
    * Den 2-Pin JST-Stecker des Akkus an `BAT1` anstecken.
    * Platine mit der Bestückungsseite nach oben in die Gehäuseführung einsetzen, sodass der USB-C Port `J1` exakt in der frontalen Dichtungsmanschette sitzt.
 4. **Helm-Audio- & PTT-Kabelbaum anschließen (`J_HELMET`):**
-   * Den 6-Pin JST-SH Stecker des Helm-Audio-Kabelbaums von unten in den Header `J_HELMET` auf `B.Cu` ($X=126{,}6, Y=99{,}75\,\text{mm}$ in KiCad bzw. $X_{\text{mod}} = 60{,}6\,\text{mm}$) einstecken.
-   * Das hochflexible AWG30/32 Silikonkabel durch den rückseitigen Bodendurchbruch ($7{,}0 \times 9{,}0\,\text{mm}$) der Unterschale lastfrei nach unten herausführen.
+   * Den 6-Pin JST-SH Stecker des Helm-Audio-Kabelbaums in den Header `J_HELMET` auf `B.Cu` ($X=126{,}5, Y=99{,}75\,\text{mm}$ in KiCad bzw. $X_{\text{mod}} = 60{,}5\,\text{mm}$, Buchsenöffnung zeigt nach innen) einstecken.
+   * Das hochflexible AWG30/32 Silikonkabel in sanftem Bogen durch den rückseitigen Bodendurchbruch ($9{,}0 \times 9{,}0\,\text{mm}$ bei $X = 55\dots 64\,\text{mm}$) der Unterschale lastfrei nach unten herausführen.
 5. **Gehäuse verschrauben (100 % lötkolbenfrei):**
    * Oberschale aufsetzen, umlaufende Dichtungsnaht kontrollieren.
    * 4x M2 $\times 8\,\text{mm}$ Zylinderkopfschrauben (DIN 912) von der Unterseite durch die Senkungen in die eingelegten DIN 934 M2 Muttern handfest über Kreuz anziehen.

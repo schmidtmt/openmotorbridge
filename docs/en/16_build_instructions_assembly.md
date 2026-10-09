@@ -171,8 +171,8 @@ Both standalone modules (**PCBA 09: OMM 2.4 GHz HD-Mesh** and **PCBA 10: OMM 446
    * Plug the 2-pin JST lead into `BAT1`.
    * Seat the PCB component-side up into the guide bosses, ensuring the USB-C port `J1` seats cleanly into its frontal gasket flange.
 4. **Connect Helmet Audio & PTT Harness (`J_HELMET`):**
-   * Plug the 6-pin JST-SH connector of the helmet audio harness from underneath into header `J_HELMET` on `B.Cu` ($X=126.6, Y=99.75\,\text{mm}$ in KiCad, $X_{\text{mod}} = 60.6\,\text{mm}$).
-   * Route the flexible AWG30/32 silicone lead downward through the rear bottom slot ($7.0 \times 9.0\,\text{mm}$) of the lower shell.
+   * Plug the 6-pin JST-SH connector of the helmet audio harness into header `J_HELMET` on `B.Cu` ($X=126.5, Y=99.75\,\text{mm}$ in KiCad, $X_{\text{mod}} = 60.5\,\text{mm}$, receptacle socket facing inward).
+   * Route the flexible AWG30/32 silicone lead in a gentle bend downward through the rear bottom slot ($9.0 \times 9.0\,\text{mm}$ at $X = 55\dots 64\,\text{mm}$) of the lower shell.
 5. **Fasten Enclosure (100% Soldering-Iron Free):**
    * Seat the upper shell, verifying seamless perimeter gasket alignment.
    * Fasten 4x DIN 912 M2 $\times 8\,\text{mm}$ stainless socket head screws from underneath through the countersunk holes into the captive DIN 934 M2 nuts in a crosswise pattern.

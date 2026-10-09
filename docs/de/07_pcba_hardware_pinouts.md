@@ -374,7 +374,7 @@ Die Platine **`PCBA 09`** ist die universelle Open-Source-Hardware für das Open
    * 1x RGB Status-LED (`D1`, WS2812B-2020) zur Einkopplung in den Gehäuse-Lichtleiter.
 6. **Schnittstellen & Steckverbinder:**
    * `J1`: Wasserdichte IP67 USB-C Buchse (16-Pin) bündig an der Stirnkante mit USBLC6-2SC6 TVS-ESD-Schutzarray (Laden unterwegs via Powerbank/Front-Node, WebUSB DFU Flashing, Kassetten-Einschubkontakt).
-   * `J_HELMET`: 6-Pin JST-SH 1.0mm SMD Horizontal-Header (`SM06B-SRSS-TB`) auf `B.Cu` ($X=126{,}625, Y=99{,}75\,\text{mm}$ in KiCad bzw. $X_{\text{mod}} = 60{,}6\,\text{mm}$) im hinteren Gehäuseabteil gegenüber USB-C. Führt reines, brummfreies Audio ins Helminnere.
+   * `J_HELMET`: 6-Pin JST-SH 1.0mm SMD Horizontal-Header (`SM06B-SRSS-TB`) auf `B.Cu` ($X=126{,}5, Y=99{,}75\,\text{mm}$ in KiCad bzw. $X_{\text{mod}} = 60{,}5\,\text{mm}$, Stecköffnung nach innen / $-X$) im hinteren Gehäuseabteil gegenüber USB-C. Führt reines, brummfreies Audio ins Helminnere.
    * `BAT1`: 2-polige JST-SH Micro-Buchse (`BM02B-SRSS-TB`) zum 1S LiPo Pouch-Akku (600 mAh mit integriertem PCM).
 
 ### 11.3 Vollständige GPIO-Pinbelegung (ESP32-C6-MINI-1U)
@@ -477,7 +477,7 @@ Die Platine **`PCBA 10`** ist das universelle Open-Source-Hardwaremodul für den
    * 4x taktile Mikrotaster (`SW1` bis `SW4`): PTT (Push-to-Talk / MFB), Mode (Analog/DMR Toggle), Ch+, Ch-.
    * 1x WS2812B-2020 RGB Status-LED (`D1`, RX Grün, TX Rot, DMR Blau, Chg Gelb).
    * `J1`: Wasserdichte IP67 USB-C Buchse (16-Pin) für 5V Laden, WebUSB DFU und Kassetten-Einschub.
-   * `J_HELMET`: 6-Pin JST-SH 1.0mm SMD Horizontal-Header (`SM06B-SRSS-TB`) auf `B.Cu` ($X=126{,}625, Y=99{,}75\,\text{mm}$ in KiCad) – identische Belegung und Platzierung wie PCBA 09.
+   * `J_HELMET`: 6-Pin JST-SH 1.0mm SMD Horizontal-Header (`SM06B-SRSS-TB`) auf `B.Cu` ($X=126{,}5, Y=99{,}75\,\text{mm}$ in KiCad, Stecköffnung nach innen / $-X$) – identische Belegung und Platzierung wie PCBA 09.
    * `BAT1`: 2-polige JST-SH Micro-Buchse (`BM02B-SRSS-TB`) zum 1S LiPo Pouch-Akku (600 mAh mit integriertem PCM).
 
 ### 12.3 Vollständige GPIO-Pinbelegung (ESP32-C6 zu SA818-DMR & Peripherie)

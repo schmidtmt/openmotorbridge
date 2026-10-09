@@ -68,8 +68,8 @@ def update_pcba(pcb_rel_path, is_pcba09=True):
     j_helmet.SetReference("J_HELMET")
     j_helmet.SetValue("HELMET_AUDIO_6P")
     j_helmet.SetLayer(pcbnew.B_Cu)  # Bottom side (facing helmet interior)
-    j_helmet.SetPosition(pcbnew.VECTOR2I(to_nm(76.5), to_nm(104.0)))
-    j_helmet.SetOrientation(pcbnew.EDA_ANGLE(180, pcbnew.DEGREES_T))
+    j_helmet.SetPosition(pcbnew.VECTOR2I(to_nm(126.5), to_nm(99.75)))
+    j_helmet.SetOrientation(pcbnew.EDA_ANGLE(90, pcbnew.DEGREES_T))
 
     # Wire pads:
     pin_mapping = {
