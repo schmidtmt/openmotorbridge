@@ -444,6 +444,11 @@ Für den Standalone-Einsatz der beiden Intercom-Module (**PCBA 09: OMM 2.4 GHz H
      - SMA-Stecker (SMA-Male), Gesamtlänge ca. **$45\dots 50\,\text{mm}$**, Durchmesser $\varnothing 10\,\text{mm}$, Gewicht ca. $9\,\text{g}$.
      - Schwingungsgedämpfte Wendel-Helix im elastischen Gummigehäuse mit Knickschutz. Bietet $1{,}5\dots 2{,}5\,\text{km}$ Reichweite bei voller Helm-Ergonomie.
 
+5. **Optionale Festeinbau-Erweiterung im Kassetten-Pod (5V COTS Bi-Directional Booster / LNA):**
+   * **Einsatzzweck:** Für dauerhafte Festeinbauten der OMM-Module im geschlossenen Pod (`has_sma_port = false`), um ohne störende Außenantennen die Reichweite durch Kofferdeckel und Fahrzeugabschattung voll zu kompensieren.
+   * **Spezifikation:** Ultrakompaktes 5V Bi-Directional RF Booster-Modul ($25 \times 15\,\text{mm}$) mit integriertem Low-Noise Amplifier (+12 dB RX-Gain, NF < 2.5 dB) und automatischem T/R-Switch.
+   * **100 % Modulare Trennung:** Wird formschlüssig in die hintere Kammer des Kassetten-Inlays (`cartridge_insert_omm_ucs.scad`) eingelegt und über 5V von `PCBA 03` gespeist. Die universelle Trägerplatine `PCBA 03` bleibt dadurch für Sena- und Cardo-Kassetten völlig identisch und unbelastet.
+
 ---
 
 ## 12. Zukaufteile & Normteile-Einkaufsliste (1 Komplettset)

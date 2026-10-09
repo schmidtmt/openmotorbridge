@@ -329,24 +329,26 @@ The SA818-DMR module provides a dedicated power-select pin `HL` (`SA818_PWR_HL`,
 | **Helmet Mode (Standalone)** | **`LOW` (0 V)** | **$0.2\,\text{W}$ ($200\,\text{mW}$)** | **$1.5\dots 2.5\,\text{km}$** | **SAR-Safe:** Minimal head absorption; protects 600 mAh battery (8–10 h runtime). |
 | **Bike Mode (Cartridge in Pod)**| **`HIGH` ($3.3\,\text{V}$)** | **$0.5\,\text{W}$ ($500\,\text{mW}$)** | **$3.0\dots 6.0\,\text{km}$** | **Maximum Legal PMR446 Power:** Powered via 5V bike DC rail; maximum range across open country. |
 
-### 6.2 Unified Antenna Architecture: Compact Stubby Antenna vs. External Bike Coax
+### 6.2 Unified Antenna Architecture: Helmet Stubby Antenna vs. Sealed Pod Cartridge & Fixed-Mount Booster
 
-Both the **OpenMotorMesh 2.4 GHz Module (PCBA 09)** and the **OMM 446 MHz PMR/DMR Module (PCBA 10)** share a **100% identical enclosure and RF antenna architecture**:
+Both the **OpenMotorMesh 2.4 GHz Module (PCBA 09)** and the **OMM 446 MHz PMR/DMR Module (PCBA 10)** share a well-engineered, two-tier RF antenna and power architecture:
 
-1. **Helmet Standalone Mode (Compact Stubby Antenna – Project Default):**
-   - **RF Flank Port:** An RF coaxial pass-through port (U.FL-to-coax) exits the $+X$ short flank of the UCS enclosure through the $5 \times 4\,\text{mm}$ opening.
-   - **Ergonomic Project Default (COTS Rubber-Duck Stubby, $35\dots 45\,\text{mm}$):** As the proven factory default for helmet operation, openMotorBridge specifies the exact same compact rubber-duck helical stubby antenna already successfully deployed across the ecosystem (e.g. Front Node). Measuring only ~38 mm, it delivers excellent omnidirectional coverage while remaining virtually flush against the helmet outline without disrupting helmet aerodynamics.
-   - **User Freedom vs. Riding Ergonomics (20 cm whip supported, but strongly discouraged on helmets):**
-     - Because the port uses a standardized coaxial connector (e.g., SMA/RP-SMA), riders have complete technical freedom to attach a full-size $1/4\,\lambda$ whip antenna ($17\dots 20\,\text{cm}$) if absolute peak RF gain while stationary or during low-speed staging is desired.
-     - **Clear Recommendation Against 20 cm on Helmets:** For actual road riding, we explicitly advise against long whip antennas mounted on the head: At highway speeds, long antennas cause severe aerodynamic flutter, acoustic buffeting inside the helmet, high mechanical lever fatigue on the connector, and significant snag hazards on low-hanging branches (enduro) or visor and jacket collars.
+1. **Helmet Standalone Mode (Compact Stubby Antenna – ECE 22.06 Default):**
+   - **RF Flank Port:** An IP67 waterproof SMA bulkhead connector with EPDM O-ring exits the $+X$ short flank of the UCS enclosure through the $5 \times 4\,\text{mm}$ D-cut opening.
+   - **Ergonomic Project Default (COTS Rubber-Duck Stubby):** For helmet use, the ultra-compact stubby antenna threads directly onto the SMA jack ($38\,\text{mm}$ Rubber-Duck for 2.4 GHz or $48\,\text{mm}$ Helical for 446 MHz). It delivers excellent omnidirectional coverage while remaining aerodynamic and free of flutter or wind whistle.
    - **Alternative (Invisible Helmet Inlay):** For riders wanting zero external protrusions, a micro-coax lead (1.13 mm) routes under the helmet lining to a flexible FPC dipole antenna adhesively bonded between the outer shell and the EPS foam core.
    - **Bluetooth / BLE Local Link:** The secondary RF SoC (`ESP32-PICO-V3-02`) retains its dedicated onboard ceramic chip antenna (`ANT1`), providing reliable short-range connectivity ($1\dots 3\,\text{m}$) to smartphones or cockpit displays.
 
-2. **Pod Cartridge Mode (External Vehicle Antenna):**
-   - **PCBA 09 (2.4 GHz):** Connects directly to the factory-integrated U.FL receptacle on the `ESP32-C6-MINI-1U` module (`U1`), omitting any redundant secondary socket on the PCB.
-   - **PCBA 10 (446 MHz):** Employs the dedicated onboard `J_RF` U.FL receptacle on `B.Cu`, fed via the NiceRF SA818-DMR bandpass filter.
-   - In the Cartridge base sled (`00_base_sled.scad`, with `has_sma_port = true`), a short 50 mm RG-178 coaxial pigtail connects the respective U.FL port to a waterproof SMA bulkhead connector on the cartridge front faceplate.
-   - **Performance Advantage:** High-gain antennas mounted at the motorcycle tail (license plate holder / luggage rack) or front fairing eliminate human body RF shadowing entirely!
+2. **Pod Cartridge Mode (Hermetic IP67 Sealed Cartridge & Fixed-Mount Booster):**
+   - **Clean Architecture without Exterior Penetrations (`has_sma_port = false`):** The retirement of the former Pod 3 was specifically executed to give all cartridges (Sena, Cardo, OMM, Blank) a 100% unified, smooth monocoque enclosure without external radome appendages or sealing penetrations. On Adventure bikes (GS/GSA), this completely eliminates snag hazards on branches and luggage straps off-road; on Touring bikes (Harley), the saddlebag lid remains 100% hole-free and watertight.
+   - **Internal RF Radiation through PA12:** The antenna sits protected inside the internal longitudinal channel of the sled (2.4 GHz FPC flex antenna like Taoglas FXP73 or 446 MHz helix) and radiates loss-free ($< 0.3\,\text{dB}$ attenuation) through the 1.8 mm dielectric PA12 lid and composite saddlebag lid.
+   - **Intelligent Software Dual-Power Switching (Automated Mode Detection):**
+     - **In Helmet (Standalone):** Powered by the 600 mAh LiPo battery. RF power is regulated to be SAR-safe and energy-efficient (PCBA 09: $+10\dots +12\,\text{dBm}$, PCBA 10: 0.2 W ERP via `SA818_PWR_HL` = LOW), yielding 12–14 h runtime.
+     - **Docked in Pod (Fixed Mount):** Detects 5V vehicle power (TI BQ24075) and automatically ramps up to maximum legal vehicle limits: PCBA 09 delivers full $+20\,\text{dBm}$ (100 mW EIRP), PCBA 10 delivers full 0.5 W ERP (`SA818_PWR_HL` = HIGH).
+   - **Optional Modular COTS 5V Booster / LNA for Fixed Installation:**
+     - For permanent vehicle installations (e.g., convoy base station or support van), the cartridge cradle inlay (`cartridge_insert_omm_ucs.scad`) provides a dedicated mounting bed in its spacious rear chamber ($48 \times 53\,\text{mm}$) for an ultra-compact $25 \times 15\,\text{mm}$ 5V COTS bi-directional booster module.
+     - **Receive LNA (+12 to +15 dB Gain):** The integrated Low-Noise Amplifier pulls weak signals out of the noise floor, effortlessly overcoming any rider body or luggage lid shadowing – matching the performance of an external antenna without a single external hole!
+     - **100% Modular Decoupling:** The cartridge carrier PCB (`PCBA 03`) remains completely universal across all cartridges (Sena/Cardo are not burdened with unused RF silicon). The booster is plugged in purely as an optional modular accessory inside the OMM cartridge sled.
 
 ### 6.3 Clean Interface Separation: Helmet Audio (`J_HELMET`) vs. External USB-C (`J1`)
 

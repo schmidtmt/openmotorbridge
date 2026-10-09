@@ -350,24 +350,26 @@ Das SA818-DMR Modul verfügt über einen dedizierten Umschaltpin `HL` (`SA818_PW
 
 * **Autonome Modus-Erkennung:** Wird das Modul in den Kassetten-Schlitten (`PCBA 03`) gesteckt, erkennt der ESP32-C6 die Docking-Signale über Header `J_AUDIO_PWR` (Pin 8) und schaltet die Sendeleistung automatisch von 0,2 W auf 0,5 W um. Außerhalb des Pods fällt das Modul sicherheitshalber in den 0,2-W-Helm-Modus zurück.
 
-### 6.2 Antennen-Architektur: Kompakte Stummelantenne vs. Externe Fahrzeugantenne
+### 6.2 Antennen-Architektur: Helm-Stummelantenne vs. geschlossene Pod-Kassette & Festeinbau-Booster
 
-Sowohl das **OpenMotorMesh 2.4 GHz Modul (PCBA 09)** als auch das **OMM 446 MHz PMR/DMR Modul (PCBA 10)** nutzen eine **100 % identische Gehäuse- und Antennenarchitektur**:
+Sowohl das **OpenMotorMesh 2.4 GHz Modul (PCBA 09)** als auch das **OMM 446 MHz PMR/DMR Modul (PCBA 10)** nutzen eine durchdachte, zweistufige Antennen- und Leistungsarchitektur:
 
-1. **Standalone-Helmeinsatz (Kompakte Stummelantenne – Projekt-Default):**
-   * **Stummelantenne am HF-Auslass:** An der $+X$-Schmalseite des UCS-Gehäuses tritt über die $5 \times 4\,\text{mm}$ Aussparung ein HF-Koaxialanschluss (U.FL-zu-Koax) aus.
-   * **Ergonomischer Standard (COTS Rubber-Duck Stubby, $35\dots 45\,\text{mm}$):** Als Standard und Default für den Helmbetrieb setzen wir dieselben kompakten Gummi-Stummelantennen ein, wie sie openMotorBridge bereits an den anderen Funkknoten (z. B. Front-Knoten) bewährt verwendet. Mit nur rund $38\,\text{mm}$ Länge und flexibler Wendel-Helix bietet sie eine sehr gute Rundumabstrahlung, ohne am Helm ins Auge zu fallen oder die Helmlinie zu stören.
-   * **Wahlfreiheit vs. Fahr-Ergonomie (20 cm Peitsche am Helm möglich, aber nicht empfohlen):**
-     - Da ein genormter Koaxial-Port (z. B. SMA/RP-SMA) verwendet wird, hat jeder Fahrer die Freiheit, für Spezialanwendungen oder maximale Reichweite im Stand auch eine $20\,\text{cm}$ lange $\lambda/4$-Monopolantenne aufzuschrauben – mechanisch und elektrisch ist das voll kompatibel.
-     - **Klare Empfehlung dagegen:** Für den echten Fahrbetrieb raten wir von einer $20\,\text{cm}$ Antenne am Helm jedoch klar ab: Bei Landstraßen- und Autobahntempo führt eine lange Peitsche zu heftigem Flattern, erzeugt laute Windgeräusche (Helmbüffeln), belastet die Buchse mechanisch durch Hebelkräfte und birgt ein ständiges Hängenbleib-Risiko an Ästen (Offroad/Enduro) oder Jackenkragen.
+1. **Standalone-Helmeinsatz (Kompakte Stummelantenne – ECE 22.06 Default):**
+   * **Stummelantenne am HF-Auslass:** An der $+X$-Schmalseite des UCS-Gehäuses tritt über die $5 \times 4\,\text{mm}$ D-Cut-Aussparung die wasserdichte IP67 SMA-Einbaubuchse mit EPDM-O-Ring aus.
+   * **Ergonomischer Standard (COTS Rubber-Duck Stubby):** Am Helm wird direkt die ultrakompakte Stummelantenne aufgeschraubt ($38\,\text{mm}$ Rubber-Duck für 2.4 GHz bzw. $48\,\text{mm}$ Helical für 446 MHz). Sie bietet hervorragende Rundumabstrahlung und bleibt flatter- und pfeiffrei im Fahrtwind.
    * **Alternative (Unsichtbares FPC-Inlay):** Wer am Helm überhaupt keine sichtbare Antenne wünscht, kann ein kurzes Micro-Koaxkabel (1.13 mm) unter das Helmfutter zu einer flexiblen FPC-Streifenantenne führen, die unsichtbar zwischen Außenschale und EPS-Dämpfungskern verklebt ist.
    * **Bluetooth/BLE Nahfeld:** Der zweite Funkchip (`ESP32-PICO-V3-02`) behält seine Onboard-Keramik-Chipantenne (`ANT1`), da er nur die Nahfeld-Kopplung ($1\dots 3\,\text{m}$) zum Smartphone im Tankrucksack oder Display bedient.
 
-2. **Kassetten-Betrieb im Motorrad-Pod (Externe Fahrzeugantenne):**
-   * **PCBA 09 (2.4 GHz):** Nutzt direkt die werkseitig integrierte U.FL-Goldbuchse auf dem `ESP32-C6-MINI-1U` Modul (`U1`) – auf eine redundante Zweitbuchse auf der Leiterplatte wird verzichtet.
-   * **PCBA 10 (446 MHz):** Besitzt die dedizierte U.FL-Buchse `J_RF` auf der Platinenunterseite (`B.Cu`), gespeist über das Bandpassfilter des NiceRF SA818-DMR.
-   * Im Kassetten-Schlitten (`00_base_sled.scad`, mit `has_sma_port = true`) führt ein kurzes 50 mm RG-178 Koaxial-Pigtail von der jeweiligen U.FL-Buchse zur wasserdichten SMA-Bulkhead-Buchse an der Front-Abschlussplatte der Kassette.
-   * **Reichweiten-Vorteil:** Über ein Koaxialkabel kann eine Hochleistungsantenne am Fahrzeugheck (Kennzeichenträger / Gepäckbrücke) oder an der Verkleidung angeschlossen werden. Die massive Abschattung durch den Körper des Fahrers entfällt vollständig!
+2. **Kassetten-Betrieb im Motorrad-Pod (Geschlossene IP67-Kassette & Festeinbau-Booster):**
+   * **Clean Architecture ohne Außenlöcher (`has_sma_port = false`):** Die Auflösung des früheren Pod 3 erfolgte gezielt, um alle Kassetten (Sena, Cardo, OMM, Blindkassette) mit einem 100 % einheitlichen, glatten Monocoque-Schachtgehäuse ohne störende Radome oder Außenantennen-Durchbrüche zu versehen. Bei den Adventure-Bikes (GS/GSA) entfallen dadurch Hängerisiken an Ästen und Packgurten im Gelände; bei Touring-Bikes (Harley) bleibt der Kofferdeckel absolut lochfrei und dicht.
+   * **Interne Antennenabstrahlung durch PA12:** Die Antenne liegt geschützt im Längsschacht des Schlittens (2.4 GHz FPC-Flexantenne wie Taoglas FXP73 bzw. 446-MHz-Helix) und strahlt verlustfrei ($< 0{,}3\,\text{dB}$ Dämpfung) durch den $1{,}8\,\text{mm}$ dielektrischen PA12-Deckel und den Kofferdeckel ab.
+   * **Intelligente Software-Leistungsumschaltung (Automatischer Dual-Power Modus):**
+     - **Im Helm (Standalone):** Das Modul läuft auf 600-mAh-LiPo-Akku. Die Sendeleistung wird SAR-safe und energiesparend geregelt (PCBA 09: $+10\dots +12\,\text{dBm}$, PCBA 10: 0.2 W ERP via `SA818_PWR_HL` = LOW), Laufzeit $12\dots 14\,\text{h}$.
+     - **Im Pod (Festeinbau):** Das Modul erkennt die 5V-Bordnetzspeisung (TI BQ24075) und schaltet automatisch auf die maximalen gesetzlichen Bike-Grenzwerte hoch: PCBA 09 liefert volle $+20\,\text{dBm}$ (100 mW EIRP), PCBA 10 volle 0.5 W ERP (`SA818_PWR_HL` = HIGH).
+   * **Optionaler modularer COTS 5V-Booster / LNA für Festeinbau:**
+     - Für dauerhafte Festeinbauten (z. B. als Hochleistungs-Relay/Base-Station der Gruppe oder im Support-Van) bietet das Kassetten-Inlay (`cartridge_insert_omm_ucs.scad`) in der geräumigen hinteren Kammer ($48 \times 53\,\text{mm}$) Platz für ein ultrakompaktes $25 \times 15\,\text{mm}$ 5V COTS Bi-Directional Booster-Modul.
+     - **Empfangs-LNA (+12 bis +15 dB Gain):** Der integrierte Low-Noise Amplifier fischt schwache Signale aus dem Rauschen und gleicht eventuelle Abschattungen durch Fahrerkörper oder Kofferdeckel spielend aus – Reichweite wie bei einer Außenantenne, aber ohne jedes Außenloch!
+     - **100 % Modulare Trennung:** Die Kassetten-Trägerplatine (`PCBA 03`) bleibt vollständig universell für alle Kassetten (Sena/Cardo werden nicht mit ungenutzten HF-Bauteilen belastet). Der Booster wird nur bei echtem OMM-Festeinbau als modulares Zubehör im Schlitten eingesteckt.
 
 ### 6.3 Schnittstellen-Trennung: Helm-Audio (`J_HELMET`) vs. Externes Laden & WebUSB (`J1`)
 

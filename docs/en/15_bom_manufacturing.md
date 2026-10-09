@@ -366,6 +366,11 @@ For standalone helmet operation of both intercom modules (**PCBA 09: OMM 2.4 GHz
      - SMA-Male connector, length approx. **$45\dots 50\,\text{mm}$**, diameter $\varnothing 10\,\text{mm}$, weight approx. $9\,\text{g}$.
      - Shortened helical coil inside flexible shock-damping rubber jacket. Delivers $1.5\dots 2.5\,\text{km}$ range with full rider ergonomics.
 
+5. **Optional Fixed-Installation Upgrade in Cartridge Pod (5V COTS Bi-Directional Booster / LNA):**
+   * **Purpose:** For permanent fixed installations of OMM modules in sealed cartridges (`has_sma_port = false`), compensating for luggage lid and rider body shadowing without external holes or appendages.
+   * **Specification:** Ultra-compact 5V bi-directional RF booster module ($25 \times 15\,\text{mm}$) featuring an integrated Low-Noise Amplifier (+12 dB RX gain, NF < 2.5 dB) and automatic T/R power detection.
+   * **100% Modular Decoupling:** Seats form-fittingly in the rear cradle bay of `cartridge_insert_omm_ucs.scad` and draws 5V from `PCBA 03`. The universal carrier board `PCBA 03` remains completely untouched and identical across Sena and Cardo cartridges.
+
 ---
 
 ## 12. COTS Hardware & Fastener Procurement List (1 Complete Kit)
