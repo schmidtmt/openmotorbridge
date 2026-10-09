@@ -19,12 +19,14 @@ Usage:
 """
 
 import os
+import sys
 import subprocess
 import shutil
 import zipfile
 import csv
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+REPO_ROOT = os.path.dirname(BASE_DIR)
 OUTPUT_BASE = os.path.join(BASE_DIR, "production_packages")
 KICAD_CLI = "/Applications/KiCad/KiCad.app/Contents/MacOS/kicad-cli"
 
@@ -317,7 +319,9 @@ def package_3d_print_stls():
             "cartridge_insert_sena.stl",
             "cartridge_insert_cardo.stl",
             "cartridge_insert_blindkassette.stl",
-            "cartridge_universal_actuator_rails.stl"
+            "cartridge_universal_actuator_rails.stl",
+            "cartridge_insert_omm_ucs.stl",
+            "cartridge_antenna_bracket_omm.stl"
         ]:
             p = os.path.join(src_stl_base, "03_pod_cartridges", f)
             if os.path.exists(p):
@@ -365,12 +369,62 @@ def package_3d_print_stls():
                 z.write(p, arcname=f)
     print(f"  ✅ Created Accessories & Brackets STL Package: {os.path.basename(acc_zip)}")
 
-if __name__ == "__main__":
-    os.makedirs(OUTPUT_BASE, exist_ok=True)
-    export_pcb_packages()
-    export_wiring_harness_package()
-    package_3d_print_stls()
+    # 7. OMM UCS Modules Enclosure Package (PCBA 09 & PCBA 10)
+    omm_zip = os.path.join(stl_dir, "07_omm_ucs_modules_3d_print_mjf.zip")
+    with zipfile.ZipFile(omm_zip, 'w', zipfile.ZIP_DEFLATED) as z:
+        for f in [
+            "omm_ucs_top_shell.stl",
+            "omm_ucs_bottom_shell.stl",
+            "omm_ucs_silicone_keypad.stl",
+            "cartridge_insert_omm_ucs.stl",
+            "cartridge_antenna_bracket_omm.stl"
+        ]:
+            p = os.path.join(src_stl_base, "03_pod_cartridges", f)
+            if os.path.exists(p):
+                z.write(p, arcname=f)
+    print(f"  ✅ Created OMM UCS Modules STL Package: {os.path.basename(omm_zip)}")
+
+def build_cad_assets():
+    """
+    Executes OpenSCAD CAD compilation script to build all STLs and 3D CAD renders.
+    """
     print("\n" + "=" * 75)
-    print(f"🎉 ALL MANUFACTURING PACKAGES SUCCESSFULLY CREATED IN:")
-    print(f"   {OUTPUT_BASE}")
+    print("📐 COMPILING OPENSCAD 3D CAD ASSETS & RENDERS")
     print("=" * 75)
+    script_path = os.path.join(BASE_DIR, "scripts/build_cad_from_openscad.py")
+    subprocess.check_call([sys.executable, script_path])
+
+def render_pcba_assets():
+    """
+    Executes KiCad 3D Raytracing & PCBA Views renderer and syncs to docs.
+    """
+    print("\n" + "=" * 75)
+    print("🎨 RENDERING HIGH-RES 3D KiCad PCBAs & SYNCING TO DOCS")
+    print("=" * 75)
+    script_path = os.path.join(REPO_ROOT, "tools/render_all_pcbas.py")
+    subprocess.check_call([sys.executable, script_path])
+
+if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser(description="OpenMotorBridge Master Manufacturing & Production Package Exporter")
+    parser.add_argument("--build-cad", action="store_true", help="Compile OpenSCAD models to STLs and renders")
+    parser.add_argument("--render-pcba", action="store_true", help="Render KiCad 3D PCBA views and sync to docs")
+    parser.add_argument("--with-renders", action="store_true", help="Compile CAD models, render CAD and render all PCBAs")
+    parser.add_argument("--only-renders", action="store_true", help="Only run CAD and PCBA render generation without packaging")
+    args = parser.parse_args()
+
+    if args.with_renders or args.only_renders or args.build_cad:
+        build_cad_assets()
+
+    if args.with_renders or args.only_renders or args.render_pcba:
+        render_pcba_assets()
+
+    if not args.only_renders:
+        os.makedirs(OUTPUT_BASE, exist_ok=True)
+        export_pcb_packages()
+        export_wiring_harness_package()
+        package_3d_print_stls()
+        print("\n" + "=" * 75)
+        print(f"🎉 ALL MANUFACTURING PACKAGES SUCCESSFULLY CREATED IN:")
+        print(f"   {OUTPUT_BASE}")
+        print("=" * 75)

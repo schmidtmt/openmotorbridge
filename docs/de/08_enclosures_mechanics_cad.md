@@ -311,8 +311,24 @@ OpenMotorBridge setzt für moderne, herstellerunabhängige Wechselmodule auf die
 1. **UCS-Standard als universeller Formfaktor ($68{,}0 \times 36{,}0 \times 9{,}5\,\text{mm}$):**
    * Durch die Vereinheitlichung der Außenkontur bei UCS-Geräten können unterschiedliche Mesh-Module in denselben standardisierten Halteschlitten eingesetzt werden.
    * Das **OpenMotorMesh 2.4 GHz Modul** wird nativ im UCS-Formfaktor gefertigt und fungiert als vollwertiger, offener OEM-Transceiver (CAD-Modelle: [`omm_ucs_top_shell.scad`](../../hardware/cad/scad/03_pod_cartridges/parts/omm_ucs_module.scad), [`omm_ucs_bottom_shell.scad`](../../hardware/cad/scad/03_pod_cartridges/parts/omm_ucs_module.scad) und [`omm_ucs_silicone_keypad.scad`](../../hardware/cad/scad/03_pod_cartridges/parts/omm_ucs_module.scad)).
+
+![OMM UCS Intercom Modul CAD](../images/cad/omm_ucs_module_cad.png)
+
+*Abbildung 8.11b: 3D-CAD-Ansicht des universellen OMM UCS-Moduls (`omm_ucs_module.scad`) mit monolithischer Shore 50A Silikon-Tastmatte, frontaler wasserdichter USB-C Schnittstelle, rückseitigem RF-Koaxialauslass und ECE 22.06 Schnapprastnasen.*
+
+| PCBA 09 (OMM 2.4 GHz HD-Mesh) | PCBA 10 (OMM 446 MHz PMR/DMR) |
+| :---: | :---: |
+| ![PCBA 09 Top 3D](../images/pcba/pcba09_omm_intercom_3d.png) | ![PCBA 10 Top 3D](../images/pcba/pcba10_omm446_intercom_3d.png) |
+| *PCBA 09: Dual-Engine ESP32-C6 + PICO-V3-02* | *PCBA 10: Dual-Engine NiceRF SA818-DMR + PICO-V3-02* |
+
    * **Befestigungskonzept (Captive Nuts Standard):** Die Oberschale besitzt 4 formschlüssige **DIN 934 M2 Sechskantmutter-Taschen**. Die Verschraubung erfolgt von der Unterschale aus mit 4x DIN 912 M2 x 8 mm V4A Edelstahlschrauben. Gewindeschneiden in Kunststoff ist ausgeschlossen – das Modul kann beliebig oft zur Inspektion oder zum Akkutausch geöffnet werden.
    * **Dichtungskonzept:** 100 % wasserdicht nach IP67 durch eine geschäumte Shore 40A Silikonschnurdichtung in der Gehäusedichtnut und eine einteilige, unterbrechungsfreie Silikon-Tastmatte ohne Öffnungen.
+   * **Exakte Ausrichtung aller Gehäuseöffnungen & Schnittstellen (100%ige Deckungsgleichheit mit PCBA 09 & PCBA 10):**
+     - **Stirnseitige USB-C Buchse (`J1`):** Formschlüssiger Tunneldurchbruch an der Frontkante ($X = 0\,\text{mm}$, zentriert bei $Y = 18{,}00\,\text{mm}$, lichte Weite $9{,}5 \times 4{,}2\,\text{mm}$) mit TPU-Dichtstopfen für Helm- und Standalone-Laden/WebUSB.
+     - **4x Taster-Aperturen (`SW1`–`SW4`):** Konzentrische $\varnothing\,5{,}0\,\text{mm}$ Plungerdurchbrüche in der Oberschale bei $X = 17{,}0, 29{,}0, 41{,}0, 53{,}0\,\text{mm}$ (Raster $12{,}0\,\text{mm}$) und $Y = 25{,}00\,\text{mm}$ – exakt zentriert über den taktilen Kurzhubtastern Alps SKRK auf den Platinen.
+     - **RGB-Status-LED Lichtleiter (`D1`):** $\varnothing\,2{,}6\,\text{mm}$ Lichtleiter-Dom bei $X = 35{,}00\,\text{mm}$ (exakt mittig zwischen Taste 2 und 3) und $Y = 29{,}22\,\text{mm}$ – sitzt direkt über der WS2812B-2020 LED.
+     - **Rückseitiger HF-Koaxialauslass (`J_RF`):** Bei PCBA 10 (PMR/DMR 446 MHz) sitzt die U.FL-Buchse bei $X = 60{,}03\,\text{mm}, Y = 18{,}25\,\text{mm}$ (`B.Cu`). An der rückwärtigen Schmalseite ($X = 68{,}0\,\text{mm}$, $Y = 18{,}0\,\text{mm}$) führt eine halbschalenförmige Aussparung ($5{,}0 \times 4{,}0\,\text{mm}$) das RG-178 Koaxial-Pigtail zur externen Fahrzeug-SMA-Antenne knickfrei heraus.
+     - **4x M2 Gehäuseverschraubung (`H1`–`H4`):** Bohrungskoordinaten bei $X = 8{,}0, 60{,}0\,\text{mm}$ und $Y = 7{,}0, 29{,}0\,\text{mm}$ – fluchtet 1:1 mit den M2-Befestigungsbohrungen der Platinen.
 2. **Akku- & Energie-Autonomie (Pass-Through Charging):**
    * Das OMM 2.4 GHz Modul verfügt über eine integrierte, werkzeuglos wechselbare 600-mAh-LiPo-Flachzelle ($> 12\,\text{h}$ autarke Laufzeit).
    * **Laden während des Betriebs:** Das Modul unterstützt unterbrechungsfreies Laden im Fahrbetrieb. Im OMB-Pod erfolgt die Speisung über die 2-Draht DC-Bodenkontakte von `PCBA 03` via kurzem 90° USB-C Kabel; im Standalone-Betrieb am Helm über den stirnseitigen USB-C-Anschluss.
@@ -543,6 +559,10 @@ Viele Touren- und Adventure-Motorräder besitzen unter der Verkleidung ("unterm 
 
 Die räumliche Anordnung aller Anschlüsse und Kabeldurchführungen an den Gehäuseflanken entspricht exakt dem vergrößerten 4-Layer-Platinenlayout von PCBA 05 ($82 \times 50\,\text{mm}$, [`openmotorbridge_front_node.kicad_pcb`](../../hardware/kicad_front_node/openmotorbridge_front_node.kicad_pcb)) und der Ergonomie im Cockpit:
 
+![PCBA 05 Universal Front-Knoten Top 3D](../images/pcba/pcba05_front_node_3d.png)
+
+*Abbildung 8.21c: PCBA 05 Universal Front-Knoten (82 x 50 mm) in fotorealistischer 3D-Ansicht mit Knowles MEMS Mikrofon MK1 auf (172.00, 82.25 mm), Dual SW3526 20W USB-PD Ladecontroller und allen Flankenanschlüssen.*
+
 ```
                                FRONT-KNOTEN FLANKEN- & ANSCHLUSSLAYOUT
 +-----------------------------------------------------------------------------------------------------------------------------+
@@ -558,7 +578,7 @@ Die räumliche Anordnung aller Anschlüsse und Kabeldurchführungen an den Gehä
 | * Schirmt interne Leistungsschaltung:| * Dual SW3526 Synchron-Buck USB-PD (2x 20W)     | * J12: Qwiic / Stemma QT I2C Port  |
 |   - D4: SMCJ24CA 24V TVS-Diode       | * 2x L2 & L3 geschirmte Speicherdrosseln        | * SW1 (Boot) & SW2 (Reset) Taster  |
 |   - U3 / L1: TPS54302 5V/3A Buck     | * U3: TPS54302 5V System-Buck-Converter         | * LED1: WS2812B RGB-Status-LED     |
-|   - U6: TCAN334G CAN-Transceiver     | * MIC1: Knowles SPH0645 I2S MEMS-Mikrofon       |   (Polycarbonat-Lichtleiter-Dom)   |
+|   - U6: TCAN334G CAN-Transceiver     | * MK1: Knowles SPH0645 I2S MEMS-Mikrofon        |   (Polycarbonat-Lichtleiter-Dom)   |
 |   - K1: CPC1017N CAN Auto-Sensing    | * K1: CPC1017N 120 Ohm Bus-Terminierungs-Relais |                                    |
 |   - Q2: DMP3017SFG Verpolschutz      | * Q1: DMN63D8LDW Spiegel-BSD Treiber-Stufe      | * M4/M5 Silentblock-Flanschohr     |
 | * M4/M5 Silentblock-Flanschohr       | * U4: TPS2051B USB-Power-Gate für Port 2        |   (Mitte Y = 34.0 mm, Z = 0..5 mm) |
@@ -598,7 +618,7 @@ Die räumliche Anordnung aller Anschlüsse und Kabeldurchführungen an den Gehä
    - **Monocoque-Schutzwand:** Vollwandiges MJF PA12 Monocoque ohne Gehäusedurchbrüche. Bietet maximalen mechanischen Schutz und Spritzwasserschutz für die direkt dahinter liegende Leistungsschaltung (TVS-Diode `D4`, 12V-Haupt-Buck-Converter `U3` TPS54302 mit Induktivität `L1`, CAN-Transceiver `U6`, Optorelais `K1`, PMOS-Verpolschutz `Q2`).
    - **Flanschbefestigung:** Symmetrische M4/M5 Silentblock-Flanschbefestigungslasche in der Flankenmitte ($Y_{\text{tub}} = 34{,}0\,\text{mm}$, $Z = 0\dots 5\,\text{mm}$).
 5. **Gehäuseunterseite ($Z = 0\,\text{mm}$):**
-   - Knowles SPH0645LM4H-B $I^2S$ MEMS-Mikrofon (`MIC1`) mit durchgehendem Schallkanal ($\varnothing\,2{,}5\,\text{mm}$) und wasserdichter, ölabweisender Gore ePTFE-Schutzmembran ($\varnothing\,6{,}0 \times 0{,}8\,\text{mm}$) zur Echtzeit-Windgeräusch- und Staudruckanalyse für dynamische Geschwindigkeits-/Geräusch-Lautstärkeanpassung (Speed-Volume-Control).
+   - Knowles SPH0645LM4H-B $I^2S$ MEMS-Mikrofon (`MK1`, Gehäusewanne $X_{\text{tub}} = 80{,}0\,\text{mm}, Y_{\text{tub}} = 46{,}75\,\text{mm}$, KiCad-Boardkoordinaten $172{,}00, 82{,}25\,\text{mm}$) mit durchgehendem Schallkanal ($\varnothing\,2{,}5\,\text{mm}$) und wasserdichter, ölabweisender Gore ePTFE-Schutzmembran ($\varnothing\,6{,}0 \times 0{,}8\,\text{mm}$) zur Echtzeit-Windgeräusch- und Staudruckanalyse für dynamische Geschwindigkeits-/Geräusch-Lautstärkeanpassung (Speed-Volume-Control). Durch die Verschiebung auf $(172{,}00, 82{,}25\,\text{mm})$ ist eine berührungsfreie 3D-Freigängigkeit zum $7{,}3 \times 4{,}3 \times 3{,}1\,\text{mm}$ Tantal-Pufferkondensator `C_BUF` und Taster `SW1` gewährleistet. Der Schallkanal liegt mit $> 5{,}0\,\text{mm}$ Randabstand kollisionsfrei neben den AMPS-Mutterntaschen und außerhalb des 3M Dual-Lock Klettbereichs; Pad 5 der Platine besitzt eine durchkontaktierte $\varnothing\,0{,}6\,\text{mm}$ Akustik-Bohrung nach `B.Cu`.
 
 ---
 

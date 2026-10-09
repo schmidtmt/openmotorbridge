@@ -12671,10 +12671,11 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(uuid "e29c7998-26d0-44e9-beee-664e3be3963a")
 		)
-		(pad "5" smd circle
+		(pad "5" thru_hole circle
 			(at 0 0)
-			(size 0.8 0.8)
-			(layers "F.Cu" "F.Mask" "F.Paste")
+			(size 0.9 0.9)
+			(drill 0.6)
+			(layers "*.Cu" "*.Mask")
 			(net "GND")
 			(uuid "11985623-4694-4680-942a-2d5de51ea85f")
 		)

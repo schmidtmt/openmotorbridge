@@ -70,21 +70,21 @@ module dummy_omm_ucs_pcb() {
             cube(size=[7.5, 9.0, 3.2], center=false);
     }
 
-    // 7. 4x Tactile IP67 Micro-Switches (Top Face)
+    // 7. 4x Tactile IP67 Micro-Switches (Top Face, KiCad SW1..SW4: X=13, 25, 37, 49, Y=22.0 mm)
     color("darkslategray") {
         // SW1: Power / MFB
-        translate([10.0, 22.0, pcb_h]) cube(size=[3.5, 2.8, 1.2], center=true);
+        translate([13.0, 22.0, pcb_h]) cube(size=[3.5, 2.8, 1.2], center=true);
         // SW2: Mesh / Group
-        translate([22.0, 22.0, pcb_h]) cube(size=[3.5, 2.8, 1.2], center=true);
+        translate([25.0, 22.0, pcb_h]) cube(size=[3.5, 2.8, 1.2], center=true);
         // SW3: Vol+
-        translate([34.0, 22.0, pcb_h]) cube(size=[3.5, 2.8, 1.2], center=true);
+        translate([37.0, 22.0, pcb_h]) cube(size=[3.5, 2.8, 1.2], center=true);
         // SW4: Vol-
-        translate([46.0, 22.0, pcb_h]) cube(size=[3.5, 2.8, 1.2], center=true);
+        translate([49.0, 22.0, pcb_h]) cube(size=[3.5, 2.8, 1.2], center=true);
     }
 
-    // 8. WS2812B-2020 RGB Status-LED
+    // 8. WS2812B-2020 RGB Status-LED (KiCad D1: X=30.98, Y=26.22 mm)
     color("cyan") {
-        translate([16.0, 22.0, pcb_h])
+        translate([30.98, 26.22, pcb_h])
             cube(size=[2.0, 2.0, 0.7], center=true);
     }
 

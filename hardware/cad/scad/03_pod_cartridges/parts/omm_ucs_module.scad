@@ -64,18 +64,22 @@ module omm_ucs_top_shell() {
         }
 
         // Keypad Top Recess & Button Pass-Through Apertures (Z = UCS_H_TOP - 1.5 .. UCS_H_TOP + 0.2)
-        translate([9.0, 7.0, UCS_H_TOP - 1.2]) {
-            cube(size=[50.0, 22.0, 1.5], center=false);
+        translate([9.0, 6.0, UCS_H_TOP - 1.2]) {
+            cube(size=[50.0, 24.5, 1.5], center=false);
         }
 
         // 4x Button Stem Holes (Ø 5.0 mm for tactile button plungers)
-        translate([17.0, 26.0, UCS_H_TOP - 2.5]) cylinder(r=2.5, h=3.0, $fn=24);
-        translate([29.0, 26.0, UCS_H_TOP - 2.5]) cylinder(r=2.5, h=3.0, $fn=24);
-        translate([41.0, 26.0, UCS_H_TOP - 2.5]) cylinder(r=2.5, h=3.0, $fn=24);
-        translate([53.0, 26.0, UCS_H_TOP - 2.5]) cylinder(r=2.5, h=3.0, $fn=24);
+        // KiCad SW1..SW4: X=83, 95, 107, 119 -> X_rel = 13, 25, 37, 49 -> X_mod = 17, 29, 41, 53 mm
+        // KiCad Y=107.0 -> Y_rel = 22.0 -> Y_mod = 3.0 + 22.0 = 25.0 mm
+        translate([17.0, 25.0, UCS_H_TOP - 2.5]) cylinder(r=2.5, h=3.0, $fn=24);
+        translate([29.0, 25.0, UCS_H_TOP - 2.5]) cylinder(r=2.5, h=3.0, $fn=24);
+        translate([41.0, 25.0, UCS_H_TOP - 2.5]) cylinder(r=2.5, h=3.0, $fn=24);
+        translate([53.0, 25.0, UCS_H_TOP - 2.5]) cylinder(r=2.5, h=3.0, $fn=24);
 
         // RGB LED Diffuser Hole (Ø 2.5 mm)
-        translate([23.0, 26.0, UCS_H_TOP - 2.5]) cylinder(r=1.3, h=3.0, $fn=20);
+        // KiCad D1 (WS2812B): X=100.98 -> X_mod = 34.98 mm (centered between SW2 and SW3)
+        // KiCad Y=111.22 -> Y_mod = 3.0 + (111.22 - 85.0) = 29.22 mm
+        translate([35.0, 29.22, UCS_H_TOP - 2.5]) cylinder(r=1.3, h=3.0, $fn=20);
 
         // Perimeter Sealing Groove (1.0 mm wide x 1.2 mm deep for Shore 40A silicone bead)
         translate([0, 0, -0.1]) {
@@ -104,6 +108,10 @@ module omm_ucs_top_shell() {
         // Front USB-C Port Tunnel Half-Cutout (-X Edge)
         translate([-0.5, (UCS_W - 9.5)/2.0, -0.1])
             cube(size=[4.0, 9.5, 2.0], center=false);
+
+        // Rear RF Coax Port Half-Cutout (+X Edge) for PCBA 10 U.FL J_RF
+        translate([UCS_L - 3.5, (UCS_W - 5.0)/2.0, -0.1])
+            cube(size=[4.0, 5.0, 1.8], center=false);
     }
 }
 
@@ -177,6 +185,10 @@ module omm_ucs_bottom_shell() {
         // Front USB-C Port Tunnel Half-Cutout (-X Edge)
         translate([-0.5, (UCS_W - 9.5)/2.0, UCS_H_BOT - 2.0])
             cube(size=[4.0, 9.5, 2.2], center=false);
+
+        // Rear RF Coax Port Half-Cutout (+X Edge) for PCBA 10 U.FL J_RF
+        translate([UCS_L - 3.5, (UCS_W - 5.0)/2.0, UCS_H_BOT - 2.0])
+            cube(size=[4.0, 5.0, 2.2], center=false);
     }
 }
 
@@ -184,18 +196,19 @@ module omm_ucs_bottom_shell() {
 module omm_ucs_silicone_keypad() {
     color([0.15, 0.15, 0.16]) {
         // Base Mat Plate (0.8 mm thick)
-        cube(size=[49.0, 21.0, 0.8], center=false);
+        cube(size=[49.0, 23.5, 0.8], center=false);
 
-        // 4 Raised Tactile Key Domes
-        translate([7.0, 19.0, 0.8]) cylinder(r=3.2, h=1.6, $fn=30);  // Power
-        translate([19.0, 19.0, 0.8]) cylinder(r=3.2, h=1.6, $fn=30); // Mesh
-        translate([31.0, 19.0, 0.8]) cylinder(r=3.2, h=1.6, $fn=30); // Vol+
-        translate([43.0, 19.0, 0.8]) cylinder(r=3.2, h=1.6, $fn=30); // Vol-
+        // 4 Raised Tactile Key Domes (aligned with SW1..SW4 at X_mod = 17, 29, 41, 53 mm; keypad base X=9.5 -> rel_X = 7.5, 19.5, 31.5, 43.5 mm)
+        // Y_mod = 25.0 mm; keypad base Y=6.5 -> rel_Y = 18.5 mm
+        translate([7.5, 18.5, 0.8]) cylinder(r=3.2, h=1.6, $fn=30);  // Power / PTT (SW1)
+        translate([19.5, 18.5, 0.8]) cylinder(r=3.2, h=1.6, $fn=30); // Mesh / Mode (SW2)
+        translate([31.5, 18.5, 0.8]) cylinder(r=3.2, h=1.6, $fn=30); // Vol+ / Ch+ (SW3)
+        translate([43.5, 18.5, 0.8]) cylinder(r=3.2, h=1.6, $fn=30); // Vol- / Ch- (SW4)
     }
 
-    // Translucent Silicone RGB-LED Light-Pipe Dom
+    // Translucent Silicone RGB-LED Light-Pipe Dome (aligned with D1 at X_mod = 35.0, Y_mod = 29.22 mm; keypad rel = 25.5, 22.72 mm)
     color("cyan", 0.7) {
-        translate([13.0, 19.0, 0.8])
+        translate([25.5, 22.72, 0.8])
             cylinder(r=1.2, h=1.5, $fn=20);
     }
 }
@@ -222,7 +235,7 @@ module omm_ucs_module_assembly(exploded = false) {
             omm_ucs_top_shell();
 
     // D. Waterproof Silicone Keypad (Aligned with top shell button apertures)
-    translate([9.5, 7.5, z_key])
+    translate([9.5, 6.5, z_key])
         omm_ucs_silicone_keypad();
 
     // E. 4x DIN 912 M2 x 8 mm Stainless Steel Screws (Thread from bottom into captive M2 nuts)

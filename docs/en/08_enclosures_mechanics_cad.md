@@ -292,6 +292,22 @@ To route signals from the right-angled **JST-SH 1.0 mm 8-pin SMD header (`J_AUDI
 
 The OMM 2.4 GHz Swap Cartridge ([`cartridge_omm_transceiver.scad`](../../hardware/cad/scad/03_pod_cartridges/cartridge_omm_transceiver.scad)) is based on a specialized variant of `PCBA 03` (with ESP32-C6 / CH32V003 ID `0x03`). It serves as an optional, hot-swappable drop-in for **Pod 1 or Pod 2**, allowing users to establish pure open-mesh convoy audio networks without commercial intercom bloat.
 
+![OMM UCS Intercom Modul CAD](../images/cad/omm_ucs_module_cad.png)
+
+*Figure 8.11b: 3D CAD visualization of the universal ECE 22.06 UCS Intercom Module (`omm_ucs_module.scad`) with silicone keypad, front waterproof USB-C interface, rear RF coaxial pass-through, and ECE 22.06 snap-fit retention claws.*
+
+| PCBA 09 (OMM 2.4 GHz HD-Mesh) | PCBA 10 (OMM 446 MHz PMR/DMR) |
+| :---: | :---: |
+| ![PCBA 09 Top 3D](../images/pcba/pcba09_omm_intercom_3d.png) | ![PCBA 10 Top 3D](../images/pcba/pcba10_omm446_intercom_3d.png) |
+| *PCBA 09: Dual-Engine ESP32-C6 + PICO-V3-02* | *PCBA 10: Dual-Engine NiceRF SA818-DMR + PICO-V3-02* |
+
+##### Exact Interface Openings Alignment (100% Coincident with PCBA 09 & PCBA 10):
+- **Front USB-C Port (`J1`):** Form-fitting tunnel aperture at front edge ($X = 0\,\text{mm}$, centered at $Y = 18.00\,\text{mm}$, clear opening $9.5 \times 4.2\,\text{mm}$) with TPU sealing cap for standalone helmet charging and WebUSB firmware flashing.
+- **4x Tactile Button Apertures (`SW1`–`SW4`):** Concentric $\varnothing\,5.0\,\text{mm}$ plunger apertures in top shell at $X = 17.0, 29.0, 41.0, 53.0\,\text{mm}$ ($12.0\,\text{mm}$ pitch) and $Y = 25.00\,\text{mm}$—exactly centered over the Alps SKRK tactile switches on both PCBA 09 and PCBA 10.
+- **RGB Status LED Light-Pipe (`D1`):** $\varnothing\,2.6\,\text{mm}$ diffuser dome at $X = 35.00\,\text{mm}$ (exactly midway between Button 2 and 3) and $Y = 29.22\,\text{mm}$—sits directly above the WS2812B-2020 LED.
+- **Rear RF Coaxial Cable Port (`J_RF`):** On PCBA 10 (PMR/DMR 446 MHz), the U.FL receptacle sits at $X = 60.03\,\text{mm}, Y = 18.25\,\text{mm}$ (`B.Cu`). At the rear short flank ($X = 68.0\,\text{mm}, Y = 18.0\,\text{mm}$), a split half-shell cutout ($5.0 \times 4.0\,\text{mm}$) allows the low-loss RG-178 coaxial pigtail to exit cleanly toward the external vehicle SMA antenna.
+- **4x M2 Fastening Screw Bosses (`H1`–`H4`):** Centers at $X = 8.0, 60.0\,\text{mm}$ and $Y = 7.0, 29.0\,\text{mm}$—1:1 coincident with the M2 mounting holes on the PCBs.
+
 > [!NOTE]
 > **Architectural Advantages of the Clean Architecture Cleanup:**  
 > The OMM Swap Cartridge is **never** co-located with Sena or Cardo in the same pod enclosure, but acts as a dedicated alternative module.  
@@ -479,6 +495,10 @@ The Front Node enclosure was specially engineered for protected installation ins
 
 The physical arrangement of connectors and cable entries on the enclosure flanks aligns with the enlarged 4-layer PCBA 05 PCB design ($82 \times 50\,\text{mm}$, `openmotorbridge_front_node.kicad_pcb`) and cockpit cable routing ergonomics:
 
+![PCBA 05 Universal Front Node Top 3D](../images/pcba/pcba05_front_node_3d.png)
+
+*Figure 8.21c: PCBA 05 Universal Front Node (82 x 50 mm) photorealistic 3D render showing Knowles MEMS microphone MK1 at (172.00, 82.25 mm), Dual SW3526 20W USB-PD controllers, and all peripheral headers.*
+
 ```
                                FRONT NODE FLANK & CONNECTOR LAYOUT
 +-----------------------------------------------------------------------------------------------------------------------------+
@@ -494,7 +514,7 @@ The physical arrangement of connectors and cable entries on the enclosure flanks
 | * Shields internal power stage:      | * Dual SW3526 Sync-Buck USB-PD (2x 20W)         | * J12: Qwiic / Stemma QT I2C Port  |
 |   - D4: SMCJ24CA 24V TVS Diode       | * 2x L2 & L3 shielded power inductors           | * SW1 (Boot) & SW2 (Reset) Buttons |
 |   - U3 / L1: TPS54302 5V/3A Buck     | * U3: TPS54302 5V System Buck Converter         | * LED1: WS2812B RGB Status LED     |
-|   - U6: TCAN334G CAN Transceiver     | * MIC1: Knowles SPH0645 I2S MEMS Microphone     |   (Polycarbonate Light-Pipe Dome)  |
+|   - U6: TCAN334G CAN Transceiver     | * MK1: Knowles SPH0645 I2S MEMS Microphone      |   (Polycarbonate Light-Pipe Dome)  |
 |   - K1: CPC1017N CAN Auto-Sensing    | * K1: CPC1017N 120 Ohm Bus-Termination Relay    |                                    |
 |   - Q2: DMP3017SFG Reverse-Polarity  | * Q1: DMN63D8LDW Mirror BSD Driver Stage        | * M4/M5 Silentblock Flange Ear     |
 | * M4/M5 Silentblock Flange Ear       | * U4: TPS2051B USB Power Gate for Port 2        |   (Center Y = 34.0 mm, Z = 0..5 mm)|
@@ -534,7 +554,7 @@ The physical arrangement of connectors and cable entries on the enclosure flanks
    - **Monocoque Shielding Wall:** Solid MJF PA12 wall without any penetrations. Provides maximum mechanical protection and splash resistance for the directly adjacent internal power stage (TVS diode `D4`, 12V main buck converter `U3` TPS54302 with inductor `L1`, CAN transceiver `U6`, opto-relay `K1`, PMOS reverse-polarity `Q2`).
    - **Flange Mount:** Symmetrical M4/M5 silentblock flange mounting ear at flank center ($Y_{\text{tub}} = 34.0\,\text{mm}$, $Z = 0\dots 5\,\text{mm}$).
 5. **Bottom Face ($Z = 0\,\text{mm}$):**
-   - Knowles SPH0645LM4H-B $I^2S$ MEMS microphone (`MIC1`) with continuous acoustic duct ($\varnothing\,2.5\,\text{mm}$) and waterproof, oleophobic Gore ePTFE protective membrane ($\varnothing\,6.0 \times 0.8\,\text{mm}$) for real-time wind noise and dynamic air pressure analysis (speed-dependent volume control).
+   - Knowles SPH0645LM4H-B $I^2S$ MEMS microphone (`MK1`, lower tub $X_{\text{tub}} = 80.0\,\text{mm}, Y_{\text{tub}} = 46.75\,\text{mm}$, KiCad board coordinates $172.00, 82.25\,\text{mm}$) with continuous acoustic duct ($\varnothing\,2.5\,\text{mm}$) and waterproof, oleophobic Gore ePTFE protective membrane ($\varnothing\,6.0 \times 0.8\,\text{mm}$) for real-time wind noise and dynamic air pressure analysis (speed-dependent volume control). The shift to $(172.00, 82.25\,\text{mm})$ guarantees full non-contact 3D clearance against the $7.3 \times 4.3 \times 3.1\,\text{mm}$ tantalum buffer capacitor `C_BUF` and switch `SW1`. The acoustic canal maintains $> 5.0\,\text{mm}$ edge clearance from AMPS nut pockets and clears the 3M Dual-Lock landing pad; Pad 5 on the PCB features a plated $\varnothing\,0.6\,\text{mm}$ acoustic drill to `B.Cu`.
 
 ---
 

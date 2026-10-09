@@ -80,9 +80,9 @@ module dummy_omm446_ucs_pcb() {
         translate([49.0, 22.0, pcb_h]) cube(size=[3.5, 2.8, 1.2], center=true);
     }
 
-    // 7. WS2812B-2020 RGB Status-LED
+    // 7. WS2812B-2020 RGB Status-LED (KiCad D1: X=30.98, Y=26.22 mm)
     color("cyan") {
-        translate([31.0, 22.0, pcb_h])
+        translate([30.98, 26.22, pcb_h])
             cube(size=[2.0, 2.0, 0.7], center=true);
     }
 

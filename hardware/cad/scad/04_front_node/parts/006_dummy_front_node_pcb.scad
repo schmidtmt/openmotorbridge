@@ -29,8 +29,8 @@ module dummy_front_node_pcb() {
             translate([3.50, FRONT_NODE_PCB_W - 3.50, -0.1]) cylinder(r=1.35, h=FRONT_NODE_PCB_H + 0.2, $fn=24);
             translate([FRONT_NODE_PCB_L - 3.50, FRONT_NODE_PCB_W - 3.50, -0.1]) cylinder(r=1.35, h=FRONT_NODE_PCB_H + 0.2, $fn=24);
             
-            // Knowles MEMS Acoustic sound port hole (Ø 0.5 mm) at (43.00, 28.96)
-            translate([43.00, 28.96, -0.1]) cylinder(r=0.25, h=FRONT_NODE_PCB_H + 0.2, $fn=16);
+            // Knowles MEMS Acoustic sound port hole (Ø 0.5 mm) at (72.00, 37.75)
+            translate([72.00, 37.75, -0.1]) cylinder(r=0.25, h=FRONT_NODE_PCB_H + 0.2, $fn=16);
         }
     }
 
@@ -124,9 +124,9 @@ module dummy_front_node_pcb() {
         translate([31.38 - 3.5, 33.75 - 3.5, FRONT_NODE_PCB_H]) cube(size=[7.0, 7.0, 3.0], center=false); // L1 (5V System Buck)
     }
 
-    // 9. Knowles SPH0645 Digital I2S MEMS Microphone at (43.00, 28.96)
+    // 9. Knowles SPH0645 Digital I2S MEMS Microphone at (72.00, 37.75)
     color("goldenrod") {
-        translate([43.00 - 1.75, 28.96 - 1.32, FRONT_NODE_PCB_H])
+        translate([72.00 - 1.75, 37.75 - 1.32, FRONT_NODE_PCB_H])
             cube(size=[3.5, 2.65, 1.0], center=false);
     }
 
