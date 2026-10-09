@@ -7,7 +7,7 @@
 	(title_block
 		(title "OpenMotorBridge v8.0 - MCU, Audio Codec & CAN-Bus")
 		(date "2026-08-24")
-		(rev "v8.0")
+		(rev "v9.6")
 		(company "OpenMotorBridge Open Source Hardware")
 		(comment 1 "ESP32-S3-WROOM-1-N16R8 + ES8388 24-Bit Codec + TCAN334G CAN-FD + BMI270 IMU")
 		(comment 2 "Automotive Real-Time DSP Audio & 15-State ADR EKF Navigation Architecture")
@@ -1446,105 +1446,6 @@
 			(justify left)
 		)
 		(uuid "c0000000-0000-0000-0000-000000000005")
-	)
-	(hierarchical_label "UART_POD3_TX"
-		(shape output)
-		(at 250 60 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "c0000000-0000-0000-0000-000000000006")
-	)
-	(hierarchical_label "UART_POD3_RX"
-		(shape input)
-		(at 250 70 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "c0000000-0000-0000-0000-000000000007")
-	)
-	(hierarchical_label "GNSS_PPS"
-		(shape input)
-		(at 250 80 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "c0000000-0000-0000-0000-000000000008")
-	)
-	(hierarchical_label "POD1_1WIRE"
-		(shape bidirectional)
-		(at 250 90 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "c0000000-0000-0000-0000-000000000009")
-	)
-	(hierarchical_label "POD2_1WIRE"
-		(shape bidirectional)
-		(at 250 100 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "c0000000-0000-0000-0000-000000000010")
-	)
-	(hierarchical_label "AUDIO_OUT_P1"
-		(shape output)
-		(at 30 130 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "c0000000-0000-0000-0000-000000000011")
-	)
-	(hierarchical_label "AUDIO_IN_P1"
-		(shape input)
-		(at 30 140 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "c0000000-0000-0000-0000-000000000012")
-	)
-	(hierarchical_label "AUDIO_OUT_P2"
-		(shape output)
-		(at 30 150 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "c0000000-0000-0000-0000-000000000013")
-	)
-	(hierarchical_label "AUDIO_IN_P2"
-		(shape input)
-		(at 30 160 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "c0000000-0000-0000-0000-000000000014")
 	)
 	(symbol
 		(lib_id "RF_Module:ESP32-S3-WROOM-1")

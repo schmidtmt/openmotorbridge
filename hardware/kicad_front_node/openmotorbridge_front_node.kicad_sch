@@ -62,4 +62,12 @@
 	(global_label "KL15_SENSE" (shape input) (at 210.0 90.0 180) (effects (font (size 1.27 1.27)) (justify right)))
 	(global_label "TWAI_TX" (shape output) (at 210.0 100.0 0) (effects (font (size 1.27 1.27)) (justify left)))
 	(global_label "TWAI_RX" (shape input) (at 210.0 105.0 180) (effects (font (size 1.27 1.27)) (justify right)))
+
+	(global_label "UWB_SCK" (shape output) (at 210.0 115.0 0) (effects (font (size 1.27 1.27)) (justify left)))
+	(global_label "UWB_MOSI" (shape output) (at 210.0 120.0 0) (effects (font (size 1.27 1.27)) (justify left)))
+	(global_label "UWB_MISO" (shape input) (at 210.0 125.0 180) (effects (font (size 1.27 1.27)) (justify right)))
+	(global_label "UWB_CS" (shape output) (at 210.0 130.0 0) (effects (font (size 1.27 1.27)) (justify left)))
+	(global_label "UWB_IRQ" (shape input) (at 210.0 135.0 180) (effects (font (size 1.27 1.27)) (justify right)))
+	(global_label "UWB_RST" (shape output) (at 210.0 140.0 0) (effects (font (size 1.27 1.27)) (justify left)))
+	(global_label "UWB_RF" (shape passive) (at 210.0 145.0 0) (effects (font (size 1.27 1.27)) (justify left)))
 )

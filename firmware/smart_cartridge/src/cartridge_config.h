@@ -8,8 +8,8 @@
 // =============================================================================
 
 // --- 1. Mechatronics Actuator Outputs (4x AO3400A N-MOSFETs, Active HIGH) ---
-#define PIN_ACT1_PLUS           GPIO_NUM_0   // ACT 1: Plus (+) / Lauter / Next Track
-#define PIN_ACT2_MINUS          GPIO_NUM_1   // ACT 2: Minus (-) / Leiser / Prev Track
+#define PIN_ACT1_PLUS           GPIO_NUM_16  // ACT 1: Plus (+) / Lauter / Next Track
+#define PIN_ACT2_MINUS          GPIO_NUM_17  // ACT 2: Minus (-) / Leiser / Prev Track
 #define PIN_ACT3_CENTER         GPIO_NUM_2   // ACT 3: Center / Phone / Confirm
 #define PIN_ACT4_MESH           GPIO_NUM_3   // ACT 4: Mesh Button (Sena / Cardo / OMM)
 

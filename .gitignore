@@ -34,7 +34,8 @@ __pycache__/
 *.pyc
 *.pyo
 
-# Local Simulation
+# Local Simulation & Scratch
 sim/
 sim
+scratch/
 

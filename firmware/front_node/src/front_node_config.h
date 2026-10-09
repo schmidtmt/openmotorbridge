@@ -25,8 +25,8 @@
 #define PIN_PTT_IN1_N           GPIO_NUM_15  // Handlebar Button 1: Intercom PTT (Active Low)
 #define PIN_PTT_IN2_N           GPIO_NUM_16  // Handlebar Button 2: Action-Cam Bookmark / Highlight (Active Low)
 #define PIN_PTT_IN3_N           GPIO_NUM_17  // Handlebar Button 3: Media Next / Siri / Voice (Active Low)
-#define PIN_USB_DM              GPIO_NUM_18  // Native USB D- (Service / Flash Port J7)
-#define PIN_USB_DP              GPIO_NUM_19  // Native USB D+ (Service / Flash Port J7)
+#define PIN_USB_DM              GPIO_NUM_19  // Native USB D- (Service / Flash Port J7)
+#define PIN_USB_DP              GPIO_NUM_20  // Native USB D+ (Service / Flash Port J7)
 #define PIN_CAN_TX              GPIO_NUM_21  // TCAN334G TWAI / CAN Transmitter
 #define PIN_CAN_RX              GPIO_NUM_47  // TCAN334G TWAI / CAN Receiver
 
