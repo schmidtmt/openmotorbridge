@@ -138,7 +138,27 @@ Der Geräte-Manager ist in zwei klar voneinander getrennte Bereiche strukturiert
 * **Reifendruck-Kontrollsystem (TPMS):** Live-Druck/Temperatur aus BLE GAP Ventilkappen (FOBO / Deelife) & Anlernassistent.
 * **Fahrzeug-CAN Profil-Manager & Live Hex Sniffer:** Community-Profil-Auswahl (Harley, BMW, KTM, Ducati, OBD2) und interaktiver Sniffer mit ID-Filterung und CSV-Export.
 
-### 2.6 Smart Docking & Einmalig flankengetriggerter Fahrmodus (User-Override Schutz)
+### 2.6 Tab 6: System-Builder & Flotten-Kalkulator (`#tab-builder`)
+
+Der System-Builder ist das zentrale Werkzeug für Nachbauer, Schrauber und Tour-Organisatoren zur exakten Kalkulation von Einzel- und Sammelbestellungen:
+
+* **Zwei Betriebsmodi:**
+  * **Einzel-Konfiguration:** Interaktive Auswahl des Motorradmodells (Harley CVO ST / Touring, BMW GS / GSA, Universal, Begleit-Van), der beiden Kassetten-Slots sowie aller Cockpit- und Sicherheitsmodule.
+  * **Sammelbestellung & Flottenrabatt (3er-Fahrgruppe):** Konsolidiert die Anforderungen von bis zu drei unterschiedlichen Motorrädern und nutzt die industriellen Mindestbestellmengen (MOQ 5 bei JLCPCB) optimal aus.
+* **100 % Single Source of Truth (SSOT):**
+  * Sämtliche Berechnungen greifen direkt auf den dynamischen Datenkatalog [`bom_catalog.js`](../../webapp_pwa/js/bom_catalog.js) zurück, der automatisiert aus [`data/bom_assemblies.json`](../../data/bom_assemblies.json) und [`data/bom_parts.json`](../../data/bom_parts.json) generiert wird.
+* **BYOD-Transparenz (Bring Your Own Device):**
+  * Kommerzielle Fremd-Intercoms (Cardo Packtalk Edge, Sena SPIDER X Slim) sind transparent als BYOD deklariert. Die Kalkulation umfasst die Open-Hardware Trägerplatine (`PCBA 03`), das 3D-Druck-Inlay, die 4 Miniatur-Aktuatoren und das fahrzeugspezifische Adapterkabel – nicht aber das Funkgerät selbst.
+* **Konsolidierte JLCPCB Platinen-Matrix (PCBA):**
+  * Erkennt automatisch alle **7 aktiven Board-Designs** (`PCBA 01`, `03`, `05`, `07`, `08`, `09`, `10`), berechnet den 5er-Nutzen-Rüstkostenvorteil und weist den Flottenrabatt (~19 % Ersparnis gegenüber 3 Einzeleinkäufen) aus.
+* **Industrielle Gebinde- & Reserve-Optimierung:**
+  * Normteile werden nicht als unbezahlbare Einzelposten berechnet, sondern auf marktübliche 50er- und 100er-Verpackungen gerundet (`Math.ceil(Bedarf / Packungsgröße)`).
+  * Die Tabelle weist überschüssige Teile explizit als Werkstatt-Reserve aus (z. B. `2x 50er Pack [100 Stk. · +13 Reserve]`).
+  * Meterware (Silikon-Dichtschnur $\varnothing 1{,}5\,\text{mm}$) wird auf ganze laufende Meter kaufmännisch aufgerundet.
+* **3D-Druck Fertigungs-Rollup:**
+  * Aufschlüsselung nach Baugruppen in Gramm (PETG/ASA) für den Heimdrucker bzw. SLS-PA12 Richtpreise für den externen Druckdienstleister.
+
+### 2.7 Smart Docking & Einmalig flankengetriggerter Fahrmodus (User-Override Schutz)
 
 Wird das Fahrer-Smartphone am Cockpit-Dock (Qi `J10`) oder per USB-Kabel am Lenker (`J5`) bzw. im Handschuhfach (`J5_MP3`) eingesteckt, schaltet die WebApp das Dashboard intelligent um:
 
@@ -155,11 +175,11 @@ Wird das Fahrer-Smartphone am Cockpit-Dock (Qi `J10`) oder per USB-Kabel am Lenk
   * Erkennt die Zentralbox beim Abstellen des Motors `KL15 == 0` (Zündung AUS) und meldet der Qi- oder USB-Port weiterhin ein aufliegendes/ladendes Gerät, während die BLE-Signalstärke des Fahrers schwindet ($d > 3\,\text{m}$), schlägt das System Alarm:
   * Zwei kurze Huptöne am Motorrad (*Doppel-Chirp*) und ein hämmerndes LRA-Vibrationsmuster auf dem Smart-Keyfob warnen den Fahrer sofort, bevor er sich vom Motorrad entfernt.
 
-### 2.7 Architektonische Trennung: Echte Hardware (`index.html`) vs. Simulations-Suite (`demo.html`)
+### 2.8 Architektonische Trennung: Echte Hardware (`index.html`) vs. Simulations-Suite (`demo.html`)
 * **`index.html` (Produktions-Cockpit):** Reine Instrumentenanzeige für den echten Motorradbetrieb (`window.OMB_MODE = 'hardware'`). Vollständig bereinigt von Simulationsbuttons und Teststrecken; alle Kacheln zeigen im unverbundenen Zustand sauber `Standby` / `--`.
 * **`demo.html` (Interaktive Simulations-Suite):** Dedizierte Präsentations- und HIL-Testbench (`window.OMB_MODE = 'demo'`) mit Sticky-Banner, Streckenauswahl (Wil SG $\rightarrow$ Rickenpass, Kerenzerberg), eCall-Crashtest und ausklappbarem **Live-Injektionspanel** (Echtzeit-Schieberegler für Tempo, Schräglage, Heckradar-Distanz, TPMS und Notbremsung).
 
-### 2.8 Kognitive Cockpit-Ruhe & Strikte Anzeigestille während der Fahrt (v > 0)
+### 2.9 Kognitive Cockpit-Ruhe & Strikte Anzeigestille während der Fahrt (v > 0)
 
 Ein Smartphone-Display am Motorradlenker (6,1" bis 6,7") hat im Vergleich zu 10,25"-Automotive-Displays eine sehr begrenzte Fläche. Jedes unbedachte Aufploppen eines Banners löst im peripheren Sichtfeld (*Augenwinkel*) einen unwillkürlichen Fixierungsreflex (*Sakkade*) aus. Bei Schräglage im Kurvenscheitelpunkt oder beim Anbremsen führt dies zu gefährlichem Blindflug und Zielfixierung (*Target Fixation*).
 

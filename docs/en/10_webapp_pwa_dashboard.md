@@ -126,9 +126,29 @@ The Device Manager is organized into two distinct sections:
 * **Safety Lighting Management:**
   * **ESS Emergency Brake Strobing:** Master toggle for 4.5 Hz hazard flashing (Garmin Varia UART2 & `RESERVE_GPIO_B`), configurable deceleration threshold ($-0.45\,\text{g}$, $-0.60\,\text{g}$, $-0.75\,\text{g}$), and `[Brake Strobe Test]` button.
   * **Auxiliary Driving Lights (J11 on Front Node via TPS1H100):** Modes `[OFF]`, `[ALWAYS-ON]`, and `[AUTO-STROBE ON ESS]`.
-* **Tire Pressure Monitoring System (TPMS):** Real-time pressure and temperature telemetry from BLE valve caps (FOBO / Deelife) with an interactive learning wizard.
 * **Vehicle CAN Profile Manager & Hex Sniffer:** Community vehicle profile selector (Harley, BMW, KTM, Ducati, OBD2) and interactive live sniffer with ID filtering and CSV export.
-### 2.6 Smart Docking & Single-Edge Ride Mode Transition (User Override Protection)
+
+### 2.6 Tab 6: System Builder & Fleet Cost Calculator (`#tab-builder`)
+
+The System Builder is the comprehensive configurator and budgeting hub for self-builders, tinkerers, and tour organizers:
+
+* **Two Dynamic Operating Modes:**
+  * **Single-Bike Configurator:** Interactive selection of bike platform (Harley CVO ST / Touring, BMW GS / GSA, Universal, Support Van), cartridge slot assignments, and all cockpit and safety options.
+  * **Group Builder & Bulk Purchasing (3-Bike Fleet):** Aggregates hardware requirements for a typical riding squad (e.g. Harley Lead, BMW GS Wingman, Support Van) to leverage industrial Minimum Order Quantities (MOQ 5 at JLCPCB).
+* **100 % Single Source of Truth (SSOT):**
+  * All calculations derive directly from the dynamic catalog [`bom_catalog.js`](../../webapp_pwa/js/bom_catalog.js), generated automatically from [`data/bom_assemblies.json`](../../data/bom_assemblies.json) and [`data/bom_parts.json`](../../data/bom_parts.json) -- zero hardcoded pricing duplicates.
+* **Transparent BYOD (Bring Your Own Device) Clarification:**
+  * Commercial third-party intercoms (Cardo Packtalk Edge, Sena SPIDER X Slim) are clearly badged as BYOD. The calculated BOM includes the open-hardware cartridge sled (`PCBA 03`), 3D printed inlay, 4 miniature solenoids, and bike-specific harness -- but excludes the commercial radio itself.
+* **Consolidated JLCPCB PCBA Matrix:**
+  * Automatically detects all **7 active board designs** (`PCBA 01`, `03`, `05`, `07`, `08`, `09`, `10`), models SMT setup amortization across 5-board batches, and reports group savings (~19 % discount over separate single-bike procurement).
+* **Industrial Packaging & Spare Parts Optimization:**
+  * Fasteners and hardware are calculated in realistic retail pack sizes (50-pack / 100-pack bags via `Math.ceil(required / pack_size)`).
+  * The BOM table explicitly highlights spare count (e.g. `2x 50-Pack [100 pcs · +13 Spares]`).
+  * Continuous goods (Silicone cord $\varnothing 1.5\,\text{mm}$) round up to full running meters (`Math.ceil(meters)`).
+* **3D Printing Slicing & SLS Roll-Up:**
+  * Slicing estimates in grams (PETG/ASA) for home 3D printers, plus commercial SLS PA12 cost metrics for industrial printing bureaus.
+
+### 2.7 Smart Docking & Single-Edge Ride Mode Transition (User Override Protection)
 
 When the rider's smartphone is plugged in or mounted to the cockpit dock (Qi `J10`, Handlebar USB `J5`, or Glove Box `J5_MP3`), the WebApp intelligently transitions the dashboard:
 
@@ -143,11 +163,11 @@ When the rider's smartphone is plugged in or mounted to the cockpit dock (Qi `J1
   * If the Central Box detects `KL15 == 0` (Ignition OFF) while the Qi dock or USB port still senses a seated device, and the rider's BLE signal fades ($d > 3\,\text{m}$), the system alerts immediately:
   * Two rapid horn chirps on the motorcycle and a vigorous LRA tactile vibration pattern on the Smart-Keyfob notify the rider before walking away.
 
-### 2.7 Architectural Division: Hardware Cockpit (`index.html`) vs Simulation Suite (`demo.html`)
+### 2.8 Architectural Division: Hardware Cockpit (`index.html`) vs Simulation Suite (`demo.html`)
 * **`index.html` (Production Cockpit):** Clean instrument dashboard for actual motorcycle rides (`window.OMB_MODE = 'hardware'`). Fully stripped of simulation controls; all telemetry widgets cleanly display `Standby` / `--` when disconnected.
 * **`demo.html` (Interactive Simulation Suite):** Dedicated presentation and HIL testbench (`window.OMB_MODE = 'demo'`) with sticky banner, alpine route selector (Wil SG $\rightarrow$ Ricken Pass, Kerenzerberg), eCall crash simulation, and expandable **live injection panel** (real-time sliders for speed, lean angle, radar blips, TPMS, and emergency braking).
 
-### 2.8 Cognitive Cockpit Decluttering & Strict Riding Display Silence (v > 0)
+### 2.9 Cognitive Cockpit Decluttering & Strict Riding Display Silence (v > 0)
 
 A smartphone screen mounted to a motorcycle handlebar (6.1" to 6.7") offers severely constrained screen real estate compared to a 10.25" automotive cluster. An inadvertent banner popup in the rider's peripheral vision immediately triggers an involuntary glance reflex (*saccade*). At high lean angles in a curve's apex or under hard braking, this causes hazardous blind flight and target fixation.
 

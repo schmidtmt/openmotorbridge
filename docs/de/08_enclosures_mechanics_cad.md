@@ -579,7 +579,7 @@ Die räumliche Anordnung aller Anschlüsse und Kabeldurchführungen an den Gehä
 | * Schirmt interne Leistungsschaltung:| * Dual SW3526 Synchron-Buck USB-PD (2x 20W)     | * J12: Qwiic / Stemma QT I2C Port  |
 |   - D4: SMCJ24CA 24V TVS-Diode       | * 2x L2 & L3 geschirmte Speicherdrosseln        | * SW1 (Boot) & SW2 (Reset) Taster  |
 |   - U3 / L1: TPS54302 5V/3A Buck     | * U3: TPS54302 5V System-Buck-Converter         | * LED1: WS2812B RGB-Status-LED     |
-|   - U6: TCAN334G CAN-Transceiver     | * MK1: Knowles SPH0645 I2S MEMS-Mikrofon        |   (Polycarbonat-Lichtleiter-Dom)   |
+|   - U6: TCAN334G CAN-Transceiver     | * MK1: MSM261S4030 / SPH0645 I2S MEMS-Mikrofon  |   (Polycarbonat-Lichtleiter-Dom)   |
 |   - K1: CPC1017N CAN Auto-Sensing    | * K1: CPC1017N 120 Ohm Bus-Terminierungs-Relais |                                    |
 |   - Q2: DMP3017SFG Verpolschutz      | * Q1: DMN63D8LDW Spiegel-BSD Treiber-Stufe      | * M4/M5 Silentblock-Flanschohr     |
 | * M4/M5 Silentblock-Flanschohr       | * U4: TPS2051B USB-Power-Gate für Port 2        |   (Mitte Y = 34.0 mm, Z = 0..5 mm) |
@@ -619,7 +619,7 @@ Die räumliche Anordnung aller Anschlüsse und Kabeldurchführungen an den Gehä
    - **Monocoque-Schutzwand:** Vollwandiges MJF PA12 Monocoque ohne Gehäusedurchbrüche. Bietet maximalen mechanischen Schutz und Spritzwasserschutz für die direkt dahinter liegende Leistungsschaltung (TVS-Diode `D4`, 12V-Haupt-Buck-Converter `U3` TPS54302 mit Induktivität `L1`, CAN-Transceiver `U6`, Optorelais `K1`, PMOS-Verpolschutz `Q2`).
    - **Flanschbefestigung:** Symmetrische M4/M5 Silentblock-Flanschbefestigungslasche in der Flankenmitte ($Y_{\text{tub}} = 34{,}0\,\text{mm}$, $Z = 0\dots 5\,\text{mm}$).
 5. **Gehäuseunterseite ($Z = 0\,\text{mm}$):**
-   - Knowles SPH0645LM4H-B $I^2S$ MEMS-Mikrofon (`MK1`, Gehäusewanne $X_{\text{tub}} = 80{,}0\,\text{mm}, Y_{\text{tub}} = 46{,}75\,\text{mm}$, KiCad-Boardkoordinaten $172{,}00, 82{,}25\,\text{mm}$) mit durchgehendem Schallkanal ($\varnothing\,2{,}5\,\text{mm}$) und wasserdichter, ölabweisender Gore ePTFE-Schutzmembran ($\varnothing\,6{,}0 \times 0{,}8\,\text{mm}$) zur Echtzeit-Windgeräusch- und Staudruckanalyse für dynamische Geschwindigkeits-/Geräusch-Lautstärkeanpassung (Speed-Volume-Control). Durch die Verschiebung auf $(172{,}00, 82{,}25\,\text{mm})$ ist eine berührungsfreie 3D-Freigängigkeit zum $7{,}3 \times 4{,}3 \times 3{,}1\,\text{mm}$ Tantal-Pufferkondensator `C_BUF` und Taster `SW1` gewährleistet. Der Schallkanal liegt mit $> 5{,}0\,\text{mm}$ Randabstand kollisionsfrei neben den AMPS-Mutterntaschen und außerhalb des 3M Dual-Lock Klettbereichs; Pad 5 der Platine besitzt eine durchkontaktierte $\varnothing\,0{,}6\,\text{mm}$ Akustik-Bohrung nach `B.Cu`.
+   - Sipeed / Zilltek MSM261S4030H0R (kompatibel zu Knowles SPH0645LM4H-B) $I^2S$ MEMS-Mikrofon (`MK1`, Gehäusewanne $X_{\text{tub}} = 80{,}0\,\text{mm}, Y_{\text{tub}} = 46{,}75\,\text{mm}$, KiCad-Boardkoordinaten $172{,}00, 82{,}25\,\text{mm}$) mit durchgehendem Schallkanal ($\varnothing\,2{,}5\,\text{mm}$) und wasserdichter, ölabweisender Gore ePTFE-Schutzmembran ($\varnothing\,6{,}0 \times 0{,}8\,\text{mm}$) zur Echtzeit-Windgeräusch- und Staudruckanalyse für dynamische Geschwindigkeits-/Geräusch-Lautstärkeanpassung (Speed-Volume-Control). Durch die Verschiebung auf $(172{,}00, 82{,}25\,\text{mm})$ ist eine berührungsfreie 3D-Freigängigkeit zum $7{,}3 \times 4{,}3 \times 3{,}1\,\text{mm}$ Tantal-Pufferkondensator `C_BUF` und Taster `SW1` gewährleistet. Der Schallkanal liegt mit $> 5{,}0\,\text{mm}$ Randabstand kollisionsfrei neben den AMPS-Mutterntaschen und außerhalb des 3M Dual-Lock Klettbereichs; Pad 5 der Platine besitzt eine durchkontaktierte $\varnothing\,0{,}6\,\text{mm}$ Akustik-Bohrung nach `B.Cu`.
 
 ---
 
@@ -1115,7 +1115,7 @@ Für den sauberen, integrierten Einsatz im Pkw-Innenraum (Begleitfahrzeug / Rall
 * **Zweistufiger Aufbau (Tier 1 & Tier 2):**
   * **Untere Ebene (Basis-Einschubfach für Front-Knoten `PCBA 05`):**
     * Waagerechte Tasche ($100 \times 70 \times 26{,}5\,\text{mm}$ Clearance) zur vibrationsfesten Aufnahme des Front-Knoten-Gehäuses.
-    * **Frontale Öffnung:** Weist direkt in Richtung Windschutzscheibe – ermöglicht freie Himmelssicht für das integrierte u-blox SAM-M10Q GNSS-Modul sowie direkten Schalleintritt für das Knowles SPH0645 MEMS-Mikrofon zur Pkw-Kabinenakustik-Kompensation.
+    * **Frontale Öffnung:** Weist direkt in Richtung Windschutzscheibe – ermöglicht freie Himmelssicht für das integrierte u-blox SAM-M10Q GNSS-Modul sowie direkten Schalleintritt für das MSM261S4030 / SPH0645 MEMS-Mikrofon zur Pkw-Kabinenakustik-Kompensation.
     * **Seitliche USB-PD Aussparungen:** Erlauben das direkte Anstecken von Ladekabeln an die beiden 20W USB-C Ports (`J3` und `J4`).
   * **Obere Ebene (Tilted Deck für Zentralbox `PCBA 01`):**
     * Um **$15^\circ$ ergonomisch nach vorn/oben geneigte Einschubwanne** ($111{,}5 \times 75{,}5 \times 18\,\text{mm}$), sodass alle RGB-Status-LEDs und Funk-Diagnoseanzeigen vom Fahrer- und Beifahrersitz aus blendfrei und perfekt im Blickfeld liegen.

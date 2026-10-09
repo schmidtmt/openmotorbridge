@@ -248,11 +248,58 @@ OpenMotorBridge is designed from the ground up as a **resilient, fault-tolerant 
 | Configuration | Installed Hardware | System Behavior & Graceful Degradation |
 | :--- | :--- | :--- |
 | **Tier 1: Minimal Core** | Central Box only<br>*(No Front Node)* | * **Audio Bridge & Intercoms fully operational:** Pod 1 & 2 mix with zero latency.<br>* **LoRa 868 MHz Mesh active:** Direct UPS-buffered 24/7 theft sentry & tracking.<br>* **CAN-Bus active:** Speed, RPM & BCM telemetry via HD26 pins 17/18 under seat.<br>* **IMU active:** Bosch BMI270 provides lean angle, pitch & vibration sensing.<br>* **ADR-EKF:** Operates in pure Dead Reckoning mode supported by IMU & wheel speed.<br>* **UWB driver:** Waits passively in scan mode; AGC operates at nominal gain. |
-| **Tier 2: Full System with Front Node** | Central Box + Front Node | * All Tier 1 features + deterministic UWB backbone (< 0.4 ms).<br>* u-blox SAM-M10Q Multi-GNSS with 10 Hz PVT fix & precision time synchronization.<br>* TI TMP117 black ice warning ($\pm 0.1\,^\circ\text{C}$) & TI OPT3001 ambient light sensor.<br>* 4-Port USB Hub & Dual 20W USB-PD fast charger in cockpit.<br>* Ottocast Watchdog & automatic ignition power-gating.<br>* Handlebar PTT (< 0.4 ms) and dynamic acoustic wind AGC via Knowles MEMS. |
+| **Tier 2: Full System with Front Node** | Central Box + Front Node | * All Tier 1 features + deterministic UWB backbone (< 0.4 ms).<br>* u-blox SAM-M10Q Multi-GNSS with 10 Hz PVT fix & precision time synchronization.<br>* TI TMP117 black ice warning ($\pm 0.1\,^\circ\text{C}$) & TI OPT3001 ambient light sensor.<br>* 4-Port USB Hub & Dual 20W USB-PD fast charger in cockpit.<br>* Ottocast Watchdog & automatic ignition power-gating.<br>* Handlebar PTT (< 0.4 ms) and dynamic acoustic wind AGC via MSM261S4030 / SPH0645 I2S MEMS. |
 | **Tier 3: Rear Radar Option** | Central Box + Front Node + Radar | * All Tier 2 features + Wheeltec MR20 77 GHz or Garmin Varia on Whip 5.<br>* Audible warning pings in helmet, visual alert wings & mirror LEDs (Port `J9`).<br>* Automatic action cam bookmarks upon critical radar TTC hazard (< 2.5s). |
 
 ### 8.1 Zero-Crash Resiliency Mechanisms
 1. **Asynchronous Non-Blocking Interfaces:** Communications via UWB, LoRa (SPI), and Radar (UART2) use FreeRTOS timeouts (`pdMS_TO_TICKS(50)`). There are **zero blocking `while(1)` polling loops** awaiting serial bytes.
 2. **Dynamic DLE Capabilities (`omm_get_capabilities_vector`):** Central Box advertises only those hardware flags to the mesh that physically acknowledge presence (`gnss_is_connected()`, `is_linked`, `can_bus_is_connected()`).
 3. **Sensor-Fusion Autarky (`adr_ekf_filter.cpp`):** If GNSS is absent (e.g. tunnel or Front Node offline), the EKF immediately falls back to **Dead Reckoning** supported by IMU and CAN wheel speed.
-4. **Fault-Tolerant Audio Mixer (`audio_dsp_pipeline.cpp`):** If the Front Node Knowles MEMS microphone is absent, the brickwall limiter and AGC level run at a fixed nominal baseline (Unity Gain `1.0f`).
+4. **Fault-Tolerant Audio Mixer (`audio_dsp_pipeline.cpp`):** If the Front Node I2S MEMS microphone is absent, the brickwall limiter and AGC level run at a fixed nominal baseline (Unity Gain `1.0f`).
+
+---
+
+## 9. Build & Flashing Guide (Developer Guide)
+
+For complete toolchain setup (ESP-IDF v5.2 / v5.3 LTS), compiling all 6 firmware targets (`main_controller`, `front_node`, `smart_cartridge`, `radar_submcu`, `omm_module`, `omm446_module`), and flashing via USB-C, refer to the authoritative guide:
+
+> [!TIP]
+> The complete step-by-step developer documentation with troubleshooting instructions is in:  
+> [`firmware/README.md`](../../firmware/README.md)
+
+### 9.1 Build Commands Quick Reference
+
+```bash
+# Load environment
+. $HOME/esp/esp-idf-v5.2/export.sh
+
+# 1. Main Controller (Central Box PCBA 01)
+cd firmware/main_controller
+idf.py set-target esp32s3
+idf.py build flash monitor
+
+# 2. Front Node (PCBA 05)
+cd ../front_node
+idf.py set-target esp32s3
+idf.py build flash monitor
+
+# 3. Smart Cartridge Carrier (PCBA 03)
+cd ../smart_cartridge
+idf.py set-target esp32c6
+idf.py build flash monitor
+
+# 4. Rear Radar Sub-MCU (PCBA 08)
+cd ../radar_submcu
+idf.py set-target esp32c6
+idf.py build flash monitor
+
+# 5. OMM 2.4 GHz UCS Radio Module (PCBA 09)
+cd ../omm_module
+idf.py set-target esp32c6
+idf.py build flash monitor
+
+# 6. OMM 446 MHz PMR/DMR Radio Module (PCBA 10)
+cd ../omm446_module
+idf.py set-target esp32c6
+idf.py build flash monitor
+```

@@ -1,6 +1,6 @@
-# 03 - Audio DSP, Acoustics & Knowles MEMS Wind Tracking
+# 03 - Audio DSP, Acoustics & I2S MEMS Wind Tracking (MSM261S4030 / SPH0645)
 
-This document specifies the audio architecture of OpenMotorBridge v8.0: the 1500 V RMS galvanically isolated transformer frontend, the Everest Semi ES8388 24-Bit / 48 kHz DSP audio engine, the **Knowles SPH0645 digital MEMS wind noise tracking**, IEC 61672-1 Class 1 Biquad A-weighting, and the click-free Raised-Cosine Ducking algorithm.
+This document specifies the audio architecture of OpenMotorBridge v8.5 / v9.0 Clean Architecture: the 1500 V RMS galvanically isolated transformer frontend, the Everest Semi ES8388 24-Bit / 48 kHz DSP audio engine, the **Sipeed/Zilltek MSM261S4030H0R / Knowles SPH0645 digital MEMS wind noise tracking**, IEC 61672-1 Class 1 Biquad A-weighting, and the click-free Raised-Cosine Ducking algorithm.
 
 ---
 
@@ -33,13 +33,13 @@ The Everest Semiconductor ES8388 24-bit stereo codec interfaces directly with Co
 
 ---
 
-## 3. Knowles SPH0645 Digital MEMS Acoustic Tracking
+## 3. Digital I2S MEMS Acoustic Tracking (MSM261S4030H0R / SPH0645)
 
-The Universal Front Node (`PCBA 05`) houses a Knowles SPH0645LM4H digital I2S MEMS microphone positioned behind an aerodynamic, hydrophobic ePTFE acoustic channel:
+The Universal Front Node (`PCBA 05`) houses a Sipeed / Zilltek MSM261S4030H0R digital I2S MEMS microphone (drop-in replacement for the EOL Knowles SPH0645LM4H) positioned behind an aerodynamic, hydrophobic ePTFE acoustic channel:
 
 ```
 +------------------------------------------------------------------------+
-|             KNOWLES SPH0645 DIGITAL MEMS NOISE TRACKING PIPELINE       |
+|          I2S MEMS (MSM261S4030 / SPH0645) NOISE TRACKING PIPELINE      |
 +------------------------------------------------------------------------+
 | 1. Acoustic Input: Ambient Cockpit & Wind Noise (35 to 115 dBA)        |
 | 2. ePTFE Gore Membrane: 100% Water/Dust Sealed (< 0.5 dB attenuation)  |

@@ -1,6 +1,6 @@
-# 03 - Audio-DSP, Akustik & Knowles MEMS Fahrtwind-Kompensation
+# 03 - Audio-DSP, Akustik & I2S MEMS Fahrtwind-Kompensation (MSM261S4030 / SPH0645)
 
-Dieses Dokument spezifiziert die systemweite Audio-Signalverarbeitung der OpenMotorBridge v8.5 / v9.0 Clean Architecture: die Zero-Ground-Loop Funkarchitektur via All-UWB, den dualen Bluetooth-Helm-Hub (Fahrer & Sozius) direkt am ESP32-S3 DSP, die FreeRTOS Core 1 DSP-Pipeline mit stetig differenzierbarem Raised-Cosine-Ducking sowie die dynamische **Helm-Lautstärkenachführung (AGC)** auf Basis des digitalen Knowles MEMS Fahrtwind-Akustiksensors am Front-Knoten.
+Dieses Dokument spezifiziert die systemweite Audio-Signalverarbeitung der OpenMotorBridge v8.5 / v9.0 Clean Architecture: die Zero-Ground-Loop Funkarchitektur via All-UWB, den dualen Bluetooth-Helm-Hub (Fahrer & Sozius) direkt am ESP32-S3 DSP, die FreeRTOS Core 1 DSP-Pipeline mit stetig differenzierbarem Raised-Cosine-Ducking sowie die dynamische **Helm-Lautstärkenachführung (AGC)** auf Basis des digitalen I2S MEMS Fahrtwind-Akustiksensors am Front-Knoten (Sipeed/Zilltek MSM261S4030H0R mit Knowles SPH0645 als Legacy-Referenz).
 
 ---
 
@@ -177,17 +177,18 @@ Statische Schwellenwerte versagen auf dem Motorrad: Bei Stadtfahrt öffnet die V
 
 ---
 
-## 4. Digitaler Knowles MEMS Akustiksensor & AGC Fahrtwind-Kompensation
+## 4. Digitaler I2S MEMS Akustiksensor (MSM261S4030H0R / SPH0645) & AGC Fahrtwind-Kompensation
 
-Zur automatischen Anpassung der Helm-Lautstärke an turbulente Windgeräusche bei steigender Fahrgeschwindigkeit sitzt auf dem Front-Knoten ein digitales I2S-MEMS-Mikrofon (**Knowles SPH0645LM4H**):
+Zur automatischen Anpassung der Helm-Lautstärke an turbulente Windgeräusche bei steigender Fahrgeschwindigkeit sitzt auf dem Front-Knoten ein digitales I2S-MEMS-Mikrofon (**Sipeed / Zilltek MSM261S4030H0R**, LCSC `C544577`; drop-in kompatibel zum abgekündigten Knowles SPH0645LM4H):
 
 ```
                        AKUSTIK-PFAD (FRONT-KNOTEN -> HELM)
 +----------------------------+              +----------------------------+
-| Knowles SPH0645 MEMS       |              | ESP32-S3 Front Controller  |
-| * Hydrophobe ePTFE-Membran | I2S DMA Bus  | * Biquad A-Weighting nach  |
-| * 65.4 dB SNR, 120 dBA AOP +------------->|   IEC 61672-1 Class 1      |
-| * Integrierter 24-Bit ADC  |              | * 50 Hz RMS-Schallpegel dBA|
+| I2S MEMS Mikrofon          |              | ESP32-S3 Front Controller  |
+| * MSM261S4030 / SPH0645    | I2S DMA Bus  | * Biquad A-Weighting nach  |
+| * Hydrophobe ePTFE-Membran |+------------>|   IEC 61672-1 Class 1      |
+| * 65.4 dB SNR, 120 dBA AOP |              | * 50 Hz RMS-Schallpegel dBA|
+| * Integrierter 24-Bit ADC  |              |                            |
 +----------------------------+              +-------------+--------------+
                                                           | UWB 6.5 GHz (< 0.4 ms)
                                                           v

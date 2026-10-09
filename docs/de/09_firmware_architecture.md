@@ -256,7 +256,7 @@ Das Gesamtsystem orchestriert spezialisierte Tasks über 2 ESP32-S3 Hauptkontrol
 | **`webdav_sync_task`**| Central Box (Core 0) | **3**  | 8 KB | Nachlauf (Graceful) | LwIP TLS 1.3          | Automatischer GPX-Upload im Heim-WLAN bei Zündung AUS. |
 | **`front_ptt_task`**  | Front Node (Core 0)  | **24** | 2 KB | GPIO Edge ISR       | UWB TX Queue          | Sendet Lenker-PTT via UWB in $< 0{,}2\,\text{ms}$; Cam Toggle; HiLight Tag. |
 | **`front_gnss_task`** | Front Node (Core 0)  | **20** | 4 KB | 10 Hz I2C DMA       | J12 Qwiic / UWB TX    | u-blox SAM-M10Q UBX-NAV-PVT Parsing, TMP117 Temp & OPT3001 Lux. |
-| **`front_mems_task`** | Front Node (Core 1)  | **18** | 4 KB | 48 kHz DMA          | Vector-DSP Filter     | Knowles SPH0645 Digitalmikrofon A-Weighting & RMS-Pegel via Xtensa DSP. |
+| **`front_mems_task`** | Front Node (Core 1)  | **18** | 4 KB | 48 kHz DMA          | Vector-DSP Filter     | MSM261S4030 / SPH0645 Digitalmikrofon A-Weighting & RMS-Pegel via Xtensa DSP. |
 | **`front_can_task`**  | Front Node (Core 0)  | **16** | 4 KB | TWAI Interrupt      | CAN Message Queue     | Liest Cockpit-CAN (falls J2 verbunden), Auto-Terminierung CPC1017N. |
 | **`front_pwr_task`**  | Front Node (Core 0)  | **10** | 2 KB | 10 Hz Timer         | GPIO Lastschalter     | SW3526 USB-PD Überwachung, TPS2051B Kaltstart (2,5s), Auto-Off. |
 
@@ -434,7 +434,7 @@ Empfängt ein Node ein `LoRaAlarmPacket` (oder löst lokal einen Alarm aus), gre
 
 ## 8. Build- & Flash-Anleitung (Developer Guide)
 
-Für die schrittweise Einrichtung der ESP-IDF Toolchain (v5.2 / v5.3 LTS), das Kompilieren der drei Firmware-Ziele (`main_controller`, `front_node`, `radar_submcu`), das Erstellen der LittleFS-Dateisystem-Images für CAN-Fahrzeugprofile sowie das Flashen und Debuggen via USB-C verweist OpenMotorBridge auf den zentralen Entwickler-Leitfaden:
+Für die schrittweise Einrichtung der ESP-IDF Toolchain (v5.2 / v5.3 LTS), das Kompilieren der sechs Firmware-Ziele (`main_controller`, `front_node`, `smart_cartridge`, `radar_submcu`, `omm_module`, `omm446_module`), das Erstellen der LittleFS-Dateisystem-Images für Kassetten- und Fahrzeugprofile sowie das Flashen und Debuggen via USB-C verweist OpenMotorBridge auf den zentralen Entwickler-Leitfaden:
 
 > [!TIP]
 > Die vollständige Schritt-für-Schritt-Anleitung mit allen CLI-Befehlen und Fehlerbehebungsstrategien ist dokumentiert in:  
@@ -456,8 +456,23 @@ cd ../front_node
 idf.py set-target esp32s3
 idf.py build flash monitor
 
-# 3. Heck-Radar Sub-MCU (PCBA 08)
+# 3. Smart Cartridge Trägerplatine (PCBA 03)
+cd ../smart_cartridge
+idf.py set-target esp32c6
+idf.py build flash monitor
+
+# 4. Heck-Radar Sub-MCU (PCBA 08)
 cd ../radar_submcu
+idf.py set-target esp32c6
+idf.py build flash monitor
+
+# 5. OMM 2.4 GHz UCS Funkmodul (PCBA 09)
+cd ../omm_module
+idf.py set-target esp32c6
+idf.py build flash monitor
+
+# 6. OMM 446 MHz PMR/DMR Funkmodul (PCBA 10)
+cd ../omm446_module
 idf.py set-target esp32c6
 idf.py build flash monitor
 ```

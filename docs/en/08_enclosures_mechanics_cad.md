@@ -515,7 +515,7 @@ The physical arrangement of connectors and cable entries on the enclosure flanks
 | * Shields internal power stage:      | * Dual SW3526 Sync-Buck USB-PD (2x 20W)         | * J12: Qwiic / Stemma QT I2C Port  |
 |   - D4: SMCJ24CA 24V TVS Diode       | * 2x L2 & L3 shielded power inductors           | * SW1 (Boot) & SW2 (Reset) Buttons |
 |   - U3 / L1: TPS54302 5V/3A Buck     | * U3: TPS54302 5V System Buck Converter         | * LED1: WS2812B RGB Status LED     |
-|   - U6: TCAN334G CAN Transceiver     | * MK1: Knowles SPH0645 I2S MEMS Microphone      |   (Polycarbonate Light-Pipe Dome)  |
+|   - U6: TCAN334G CAN Transceiver     | * MK1: MSM261S4030 / SPH0645 I2S MEMS Micro     |   (Polycarbonate Light-Pipe Dome)  |
 |   - K1: CPC1017N CAN Auto-Sensing    | * K1: CPC1017N 120 Ohm Bus-Termination Relay    |                                    |
 |   - Q2: DMP3017SFG Reverse-Polarity  | * Q1: DMN63D8LDW Mirror BSD Driver Stage        | * M4/M5 Silentblock Flange Ear     |
 | * M4/M5 Silentblock Flange Ear       | * U4: TPS2051B USB Power Gate for Port 2        |   (Center Y = 34.0 mm, Z = 0..5 mm)|
@@ -555,7 +555,7 @@ The physical arrangement of connectors and cable entries on the enclosure flanks
    - **Monocoque Shielding Wall:** Solid MJF PA12 wall without any penetrations. Provides maximum mechanical protection and splash resistance for the directly adjacent internal power stage (TVS diode `D4`, 12V main buck converter `U3` TPS54302 with inductor `L1`, CAN transceiver `U6`, opto-relay `K1`, PMOS reverse-polarity `Q2`).
    - **Flange Mount:** Symmetrical M4/M5 silentblock flange mounting ear at flank center ($Y_{\text{tub}} = 34.0\,\text{mm}$, $Z = 0\dots 5\,\text{mm}$).
 5. **Bottom Face ($Z = 0\,\text{mm}$):**
-   - Knowles SPH0645LM4H-B $I^2S$ MEMS microphone (`MK1`, lower tub $X_{\text{tub}} = 80.0\,\text{mm}, Y_{\text{tub}} = 46.75\,\text{mm}$, KiCad board coordinates $172.00, 82.25\,\text{mm}$) with continuous acoustic duct ($\varnothing\,2.5\,\text{mm}$) and waterproof, oleophobic Gore ePTFE protective membrane ($\varnothing\,6.0 \times 0.8\,\text{mm}$) for real-time wind noise and dynamic air pressure analysis (speed-dependent volume control). The shift to $(172.00, 82.25\,\text{mm})$ guarantees full non-contact 3D clearance against the $7.3 \times 4.3 \times 3.1\,\text{mm}$ tantalum buffer capacitor `C_BUF` and switch `SW1`. The acoustic canal maintains $> 5.0\,\text{mm}$ edge clearance from AMPS nut pockets and clears the 3M Dual-Lock landing pad; Pad 5 on the PCB features a plated $\varnothing\,0.6\,\text{mm}$ acoustic drill to `B.Cu`.
+   - Sipeed / Zilltek MSM261S4030H0R (compatible drop-in for EOL Knowles SPH0645LM4H-B) $I^2S$ MEMS microphone (`MK1`, lower tub $X_{\text{tub}} = 80.0\,\text{mm}, Y_{\text{tub}} = 46.75\,\text{mm}$, KiCad board coordinates $172.00, 82.25\,\text{mm}$) with continuous acoustic duct ($\varnothing\,2.5\,\text{mm}$) and waterproof, oleophobic Gore ePTFE protective membrane ($\varnothing\,6.0 \times 0.8\,\text{mm}$) for real-time wind noise and dynamic air pressure analysis (speed-dependent volume control). The shift to $(172.00, 82.25\,\text{mm})$ guarantees full non-contact 3D clearance against the $7.3 \times 4.3 \times 3.1\,\text{mm}$ tantalum buffer capacitor `C_BUF` and switch `SW1`. The acoustic canal maintains $> 5.0\,\text{mm}$ edge clearance from AMPS nut pockets and clears the 3M Dual-Lock landing pad; Pad 5 on the PCB features a plated $\varnothing\,0.6\,\text{mm}$ acoustic drill to `B.Cu`.
 
 ---
 
@@ -926,7 +926,7 @@ For clean, integrated deployment in passenger vehicles (support cars / rally van
 * **Two-Tier Architecture (Tier 1 & Tier 2):**
   * **Lower Tier (Base Slide-in Bay for Front Node `PCBA 05`):**
     * Horizontal pocket ($100 \times 70 \times 26.5\,\text{mm}$ clearance) providing secure, vibration-damped retention of the Front Node enclosure.
-    * **Windshield Aperture:** Faces directly toward the windshield--ensuring unobstructed sky line-of-sight for the integrated u-blox SAM-M10Q GNSS module and acoustic entry for the Knowles SPH0645 MEMS microphone used in cabin noise compensation.
+    * **Windshield Aperture:** Faces directly toward the windshield--ensuring unobstructed sky line-of-sight for the integrated u-blox SAM-M10Q GNSS module and acoustic entry for the MSM261S4030 / SPH0645 MEMS microphone used in cabin noise compensation.
     * **Lateral USB-PD Port Window:** Provides effortless access for connecting charging cables to both 20W USB-C ports (`J3` and `J4`).
   * **Upper Tier (Tilted Deck for Central Box `PCBA 01`):**
     * Ergonomic **$15^\circ$ forward/upward tilted cradle** ($111.5 \times 75.5 \times 18\,\text{mm}$), aligning all RGB status LEDs and RF diagnostic indicators directly into driver and passenger sightlines without windshield glare.
