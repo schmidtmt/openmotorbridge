@@ -24,9 +24,9 @@ module cartridge_omm_transceiver_assembly(exploded = false) {
     z_module = exploded ? 46.0 : 10.5;
     z_screws = exploded ? 58.0 : 14.0;
 
-    // 1. Universal Base Sled (Anthracite PA12 - 100% Identical for All Pods)
+    // 1. Universal Base Sled (Anthracite PA12 with Front SMA Bulkhead for Bike Antenna)
     color("darkslategray", 0.92)
-        cartridge_base_sled(show_latch = true);
+        cartridge_base_sled(show_latch = true, has_sma_port = true);
 
     // 2. Carrier PCB PCBA 03 (35 x 25 mm with 2-pin Mill-Max DC Pads & DW3110 UWB)
     translate([1.5, (CARTRIDGE_BASE_W - 25.0)/2.0, z_pcb])

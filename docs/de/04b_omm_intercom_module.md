@@ -350,15 +350,38 @@ Das SA818-DMR Modul verfügt über einen dedizierten Umschaltpin `HL` (`SA818_PW
 
 * **Autonome Modus-Erkennung:** Wird das Modul in den Kassetten-Schlitten (`PCBA 03`) gesteckt, erkennt der ESP32-C6 die Docking-Signale über Header `J_AUDIO_PWR` (Pin 8) und schaltet die Sendeleistung automatisch von 0,2 W auf 0,5 W um. Außerhalb des Pods fällt das Modul sicherheitshalber in den 0,2-W-Helm-Modus zurück.
 
-### 6.2 Antennen-Architektur: Interne Deckel-Helix vs. Externe Fahrzeugantenne
-1. **Standalone-Helmeinsatz (Interne Wendel-Helix):**
-   * Im Gehäusedeckel der Oberschale befindet sich eine präzise auf $446\,\text{MHz}$ resonanzabgestimmte Kupfer-Wendelantenne ($\lambda/4$ verkürzt, $32\,\text{mm}$ Länge, $\varnothing 5\,\text{mm}$).
-   * Die Wendel ist im 3D-Druck-Labyrinth rüttelfest und wasserdicht mit Polyurethan-Gießharz vergossen.
-   * Ein federnder Goldkontakt verbindet die Antenne beim Verschrauben der Gehäusehälften direkt mit dem Antennenpad von `PCBA 10`.
+### 6.2 Antennen-Architektur: Kompakte Stummelantenne vs. Externe Fahrzeugantenne
+
+Sowohl das **OpenMotorMesh 2.4 GHz Modul (PCBA 09)** als auch das **OMM 446 MHz PMR/DMR Modul (PCBA 10)** nutzen eine **100 % identische Gehäuse- und Antennenarchitektur**:
+
+1. **Standalone-Helmeinsatz (Kompakte Stummelantenne – Projekt-Default):**
+   * **Stummelantenne am HF-Auslass:** An der $+X$-Schmalseite des UCS-Gehäuses tritt über die $5 \times 4\,\text{mm}$ Aussparung ein HF-Koaxialanschluss (U.FL-zu-Koax) aus.
+   * **Ergonomischer Standard (COTS Rubber-Duck Stubby, $35\dots 45\,\text{mm}$):** Als Standard und Default für den Helmbetrieb setzen wir dieselben kompakten Gummi-Stummelantennen ein, wie sie openMotorBridge bereits an den anderen Funkknoten (z. B. Front-Knoten) bewährt verwendet. Mit nur rund $38\,\text{mm}$ Länge und flexibler Wendel-Helix bietet sie eine sehr gute Rundumabstrahlung, ohne am Helm ins Auge zu fallen oder die Helmlinie zu stören.
+   * **Wahlfreiheit vs. Fahr-Ergonomie (20 cm Peitsche am Helm möglich, aber nicht empfohlen):**
+     - Da ein genormter Koaxial-Port (z. B. SMA/RP-SMA) verwendet wird, hat jeder Fahrer die Freiheit, für Spezialanwendungen oder maximale Reichweite im Stand auch eine $20\,\text{cm}$ lange $\lambda/4$-Monopolantenne aufzuschrauben – mechanisch und elektrisch ist das voll kompatibel.
+     - **Klare Empfehlung dagegen:** Für den echten Fahrbetrieb raten wir von einer $20\,\text{cm}$ Antenne am Helm jedoch klar ab: Bei Landstraßen- und Autobahntempo führt eine lange Peitsche zu heftigem Flattern, erzeugt laute Windgeräusche (Helmbüffeln), belastet die Buchse mechanisch durch Hebelkräfte und birgt ein ständiges Hängenbleib-Risiko an Ästen (Offroad/Enduro) oder Jackenkragen.
+   * **Alternative (Unsichtbares FPC-Inlay):** Wer am Helm überhaupt keine sichtbare Antenne wünscht, kann ein kurzes Micro-Koaxkabel (1.13 mm) unter das Helmfutter zu einer flexiblen FPC-Streifenantenne führen, die unsichtbar zwischen Außenschale und EPS-Dämpfungskern verklebt ist.
+   * **Bluetooth/BLE Nahfeld:** Der zweite Funkchip (`ESP32-PICO-V3-02`) behält seine Onboard-Keramik-Chipantenne (`ANT1`), da er nur die Nahfeld-Kopplung ($1\dots 3\,\text{m}$) zum Smartphone im Tankrucksack oder Display bedient.
+
 2. **Kassetten-Betrieb im Motorrad-Pod (Externe Fahrzeugantenne):**
-   * Auf `PCBA 10` ist eine **U.FL-Goldbuchse (`J_RF`)** bestückt.
-   * Im Pod wird ein kurzes, verlustarmes RG-178 Koaxial-Pigtail von der U.FL-Buchse zu einer wasserdichten SMA-Buchse an der Gehäuseaußenseite geführt.
-   * **Reichweiten-Vorteil:** Die Antenne kann am Fahrzeugheck (z. B. am Kennzeichenträger oder Kofferhalter) montiert werden. Dadurch wird die massive Abschattung durch den Körper des Fahrers vollständig eliminiert!
+   * Auf beiden Platinen (`PCBA 09` und `PCBA 10`) ist eine **U.FL-Goldbuchse (`J_RF`)** an identischer Koordinate $(126{,}025, 100{,}25)\,\text{mm}$ auf der Platinenunterseite (`B.Cu`) bestückt.
+   * Im Kassetten-Schlitten (`00_base_sled.scad`, mit `has_sma_port = true`) führt ein 50 mm kurzes RG-178 Koaxial-Pigtail von `J_RF` zu einer wasserdichten SMA-Bulkhead-Buchse an der Front-Abschlussplatte der Kassette.
+   * **Reichweiten-Vorteil:** Über ein Koaxialkabel kann eine Hochleistungsantenne am Fahrzeugheck (Kennzeichenträger / Gepäckbrücke) oder an der Verkleidung angeschlossen werden. Die massive Abschattung durch den Körper des Fahrers entfällt vollständig!
+
+### 6.3 Schnittstellen-Trennung: Helm-Audio (`J_HELMET`) vs. Externes Laden & WebUSB (`J1`)
+
+Zur Vermeidung von Windgeräuschen, Kabelgewirr und Brummstörungen sind die Anschlüsse strikt getrennt:
+
+1. **Interner Helm-Audio & PTT-Port (`J_HELMET`, 6-Pin JST-SH auf `B.Cu`):**
+   * Auf der dem Helmschacht zugewandten Platinenunterseite sitzt der 6-Pin Header `J_HELMET` ($X=76{,}5, Y=104{,}0\,\text{mm}$).
+   * Das Kabel von Helmlautsprechern und Mikrofon wird durch die Gehäuseunterseite direkt ins Helminnere geführt – **kein einziges Kabel flattert außen im Fahrtwind**.
+   * **Kein 5V-Gleichstrom:** Der Anschluss führt ausschließlich passive Audiosignale (`HP_OUT_L`, `HP_OUT_R`, `AGND_SPK`, `MIC_IN+`, `AGND_MIC`, `BTN_PTT`) – vollkommen frei von Ladebrummen oder Schaltreglerstörungen.
+
+2. **Externer USB-C Port (`J1` mit TPU-Kappe):**
+   * Bleibt an der Gehäusefront unverändert frei zugänglich.
+   * **Laden unterwegs:** Erlaubt das Einstecken einer Powerbank in der Jackentasche oder eines Ladekabels vom Front-Knoten (20W USB-PD), ohne das Helm-Headset abstecken zu müssen.
+   * **Duale Update-Wege:** Ermöglicht kabelgebundenes Flashen & Telemetrie via WebUSB sowie drahtloses Firmware-Update via BLE-OTA.
+   * **Im Motorrad-Pod:** Wird der USB-C Port beim Einschieben in den Schlitten kontaktiert, um Dauerstrom vom 5V-Bordnetz und optional Audio/PTT zu übertragen.
 
 ---
 

@@ -126,6 +126,13 @@ module dummy_omm446_ucs_pcb() {
         translate([11.0, (pcb_w - 24.0)/2.0, -7.8])
             cube(size=[38.0, 24.0, 4.5], center=false);
     }
+
+    // 15. J_HELMET: Internal 6-Pin Passive Helmet Audio & PTT Header (Bottom Face, SM06B-SRSS-TB)
+    // Sits in forward chamber (X = 6.5 mm, Y = 19.0 mm) facing through bottom shell slot into helmet
+    color("ivory") {
+        translate([6.5, 15.0, -2.8])
+            cube(size=[7.5, 4.25, 2.8], center=false);
+    }
 }
 
 // Standalone Render Preview

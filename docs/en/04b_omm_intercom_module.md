@@ -329,15 +329,38 @@ The SA818-DMR module provides a dedicated power-select pin `HL` (`SA818_PWR_HL`,
 | **Helmet Mode (Standalone)** | **`LOW` (0 V)** | **$0.2\,\text{W}$ ($200\,\text{mW}$)** | **$1.5\dots 2.5\,\text{km}$** | **SAR-Safe:** Minimal head absorption; protects 600 mAh battery (8–10 h runtime). |
 | **Bike Mode (Cartridge in Pod)**| **`HIGH` ($3.3\,\text{V}$)** | **$0.5\,\text{W}$ ($500\,\text{mW}$)** | **$3.0\dots 6.0\,\text{km}$** | **Maximum Legal PMR446 Power:** Powered via 5V bike DC rail; maximum range across open country. |
 
-### 6.2 Antenna System: Integrated Helmet Helix vs. External Bike Coax
-1. **Helmet Standalone Mode (Internal Helix):**
-   - Tuned copper helical antenna ($\lambda/4$ shortened, $32\,\text{mm}$ length, $\varnothing 5\,\text{mm}$) molded into the top shell labyrinth.
-   - Potted in shock-resistant polyurethane resin.
-   - Gold compression contact mates directly with `PCBA 10` upon enclosure assembly.
+### 6.2 Unified Antenna Architecture: Compact Stubby Antenna vs. External Bike Coax
+
+Both the **OpenMotorMesh 2.4 GHz Module (PCBA 09)** and the **OMM 446 MHz PMR/DMR Module (PCBA 10)** share a **100% identical enclosure and RF antenna architecture**:
+
+1. **Helmet Standalone Mode (Compact Stubby Antenna – Project Default):**
+   - **RF Flank Port:** An RF coaxial pass-through port (U.FL-to-coax) exits the $+X$ short flank of the UCS enclosure through the $5 \times 4\,\text{mm}$ opening.
+   - **Ergonomic Project Default (COTS Rubber-Duck Stubby, $35\dots 45\,\text{mm}$):** As the proven factory default for helmet operation, openMotorBridge specifies the exact same compact rubber-duck helical stubby antenna already successfully deployed across the ecosystem (e.g. Front Node). Measuring only ~38 mm, it delivers excellent omnidirectional coverage while remaining virtually flush against the helmet outline without disrupting helmet aerodynamics.
+   - **User Freedom vs. Riding Ergonomics (20 cm whip supported, but strongly discouraged on helmets):**
+     - Because the port uses a standardized coaxial connector (e.g., SMA/RP-SMA), riders have complete technical freedom to attach a full-size $1/4\,\lambda$ whip antenna ($17\dots 20\,\text{cm}$) if absolute peak RF gain while stationary or during low-speed staging is desired.
+     - **Clear Recommendation Against 20 cm on Helmets:** For actual road riding, we explicitly advise against long whip antennas mounted on the head: At highway speeds, long antennas cause severe aerodynamic flutter, acoustic buffeting inside the helmet, high mechanical lever fatigue on the connector, and significant snag hazards on low-hanging branches (enduro) or visor and jacket collars.
+   - **Alternative (Invisible Helmet Inlay):** For riders wanting zero external protrusions, a micro-coax lead (1.13 mm) routes under the helmet lining to a flexible FPC dipole antenna adhesively bonded between the outer shell and the EPS foam core.
+   - **Bluetooth / BLE Local Link:** The secondary RF SoC (`ESP32-PICO-V3-02`) retains its dedicated onboard ceramic chip antenna (`ANT1`), providing reliable short-range connectivity ($1\dots 3\,\text{m}$) to smartphones or cockpit displays.
+
 2. **Pod Cartridge Mode (External Vehicle Antenna):**
-   - `PCBA 10` features an onboard **U.FL coaxial receptacle (`J_RF`)**.
-   - An RG-178 coaxial pigtail routes to a waterproof SMA chassis connector on the pod.
-   - **Performance Advantage:** Antennas mounted at the bike tail or handlebars eliminate human body RF shadowing entirely.
+   - Both boards (`PCBA 09` and `PCBA 10`) feature an onboard **U.FL coaxial receptacle (`J_RF`)** located at the identical coordinate $(126.025, 100.25)\,\text{mm}$ on `B.Cu`.
+   - In the Cartridge base sled (`00_base_sled.scad`, with `has_sma_port = true`), a short 50 mm RG-178 coaxial pigtail connects `J_RF` to a waterproof SMA bulkhead connector on the cartridge front faceplate.
+   - **Performance Advantage:** High-gain antennas mounted at the motorcycle tail (license plate holder / luggage rack) or front fairing eliminate human body RF shadowing entirely!
+
+### 6.3 Clean Interface Separation: Helmet Audio (`J_HELMET`) vs. External USB-C (`J1`)
+
+To eliminate buffeting wind noise, snag hazards, and charger ground-loop hum, the interfaces are strictly segregated:
+
+1. **Internal Helmet Audio & PTT Port (`J_HELMET`, 6-Pin JST-SH on `B.Cu`):**
+   - Located on the bottom surface of the PCB facing into the helmet cradle ($X=76.5, Y=104.0\,\text{mm}$).
+   - Helmet speakers and microphone cables pass directly through the bottom shell slot into the helmet lining – **zero cables are exposed to aerodynamic wind**.
+   - **Zero 5V DC Power:** Carries only passive headset signals (`HP_OUT_L`, `HP_OUT_R`, `AGND_SPK`, `MIC_IN+`, `AGND_MIC`, `BTN_PTT`) – completely free of charger noise or DC-DC ripple.
+
+2. **External USB-C Port (`J1` with TPU Sealing Cap):**
+   - Remains directly accessible on the front flank of the module.
+   - **On-the-Go Charging:** Allows plugging in a power bank in a jacket pocket or a 20W USB-PD cable from the Front Node without disconnecting the helmet headset.
+   - **Dual Firmware Update Paths:** Supports wired DFU flashing & telemetry via WebUSB as well as wireless OTA updates over BLE.
+   - **In Pod Cartridge:** USB-C provides 5V vehicle power and optional audio/PTT via USB Audio Accessory Mode, or power via USB-C with audio routed wirelessly over BLE.
 
 ---
 

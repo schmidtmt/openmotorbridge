@@ -189,6 +189,11 @@ module omm_ucs_bottom_shell() {
         // Rear RF Coax Port Half-Cutout (+X Edge) for PCBA 10 U.FL J_RF
         translate([UCS_L - 3.5, (UCS_W - 5.0)/2.0, UCS_H_BOT - 2.0])
             cube(size=[4.0, 5.0, 2.2], center=false);
+
+        // Bottom Helmet Audio Harness Pass-Through Slot (for 6-Pin J_HELMET)
+        // Positioned at X = 7.5 .. 14.5 mm, Y centered, cuts through floor into helmet interior
+        translate([7.5, (UCS_W - 9.0)/2.0, -0.1])
+            cube(size=[7.0, 9.0, UCS_WALL + 0.2], center=false);
     }
 }
 
@@ -214,7 +219,7 @@ module omm_ucs_silicone_keypad() {
 }
 
 // 4. Complete OMM UCS Module Assembly (Dual-Use: Standalone Helmet & Pod Cartridge)
-module omm_ucs_module_assembly(exploded = false) {
+module omm_ucs_module_assembly(exploded = false, show_antenna = true) {
     z_bot    = 0.0;
     z_pcb    = exploded ? 14.0 : 1.6;
     z_top    = exploded ? 28.0 : UCS_H_BOT;
@@ -248,6 +253,24 @@ module omm_ucs_module_assembly(exploded = false) {
         ]) {
             translate([pos[0], pos[1], z_screws])
                 cylinder(r=1.0, h=8.0, $fn=20);
+        }
+    }
+
+    // F. Default Compact Helmet Rubber-Duck Stubby Antenna (38 mm length at +X RF Port)
+    if (show_antenna) {
+        color([0.15, 0.16, 0.18]) {
+            translate([UCS_L + (exploded ? 12.0 : 0.5), UCS_W/2.0, UCS_H_BOT]) {
+                rotate([0, 90, 0]) {
+                    // Brass knurled RF connector collar
+                    color("gold") cylinder(r=3.0, h=3.0, $fn=24);
+                    // Flexible vulcanized rubber sheath
+                    translate([0, 0, 3.0])
+                        cylinder(r1=3.4, r2=2.2, h=32.0, $fn=24);
+                    // Rounded protective tip
+                    translate([0, 0, 35.0])
+                        sphere(r=2.2, $fn=20);
+                }
+            }
         }
     }
 }
