@@ -1,6 +1,6 @@
-# 07 - Hardware-Architektur & Platinen-Pinouts (Das bereinigte 5-PCBA-Lineup)
+# 07 - Hardware-Architektur & Platinen-Pinouts (Das bereinigte 7-PCBA-Lineup)
 
-Dieses Dokument bildet die **zentrale, autoritative Hardware-Spezifikation aller 5 aktiven Platinen-Baugruppen (`PCBA 01`, `03`, `05`, `07`, `08`)** des OpenMotorBridge Gesamtsystems (v9.6 Clean All-UWB Architecture), einschließlich Lagenaufbau, Impedanzkontrolle, Net-Klassen, Funktionszonen und vollständigen Pinout-Tabellen.
+Dieses Dokument bildet die **zentrale, autoritative Hardware-Spezifikation aller 7 aktiven Platinen-Baugruppen (`PCBA 01`, `03`, `05`, `07`, `08`, `09`, `10`)** des OpenMotorBridge Gesamtsystems (v9.6 Clean All-UWB Architecture), einschließlich Lagenaufbau, Impedanzkontrolle, Net-Klassen, Funktionszonen und vollständigen Pinout-Tabellen.
 
 ---
 
@@ -10,7 +10,7 @@ Das Hardwaredesign von OpenMotorBridge folgt dem Grundsatz der radikalen Entflec
 
 ```
 +----------------------------------------------------------------------------------------+
-|                   DAS 5-PLATINEN-LINEUP DER OPENMOTORBRIDGE v9.6                       |
+|                   DAS 7-PLATINEN-LINEUP DER OPENMOTORBRIDGE v9.6                       |
 +-------+-------------------------------+---------------+---------+----------------------+
 | Baugruppe | Name & Funktion           | Platinenmaße  | Lagen   | Kern-ICs / Bauteile  |
 +-------+-------------------------------+---------------+---------+----------------------+
