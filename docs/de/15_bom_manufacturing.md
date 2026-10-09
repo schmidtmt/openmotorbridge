@@ -453,59 +453,62 @@ Für den Standalone-Einsatz der beiden Intercom-Module (**PCBA 09: OMM 2.4 GHz H
 
 ## 12. Zukaufteile & Normteile-Einkaufsliste (1 Komplettset)
 
-| Bauteil | Spezifikation / Typ | Bezugsquelle | Menge | Montageort & Funktion |
+<!-- AUTOGEN_BOM_TABLE_START -->
+
+| Bauteil | Spezifikation / Typ | Bezugsquelle | Menge (Ref-Set) | Montageort & Funktion |
 | :--- | :--- | :--- | :---: | :--- |
-| **M3 Edelstahlschrauben** | M3 x 40 mm Zylinderkopf V4A (DIN 912) | Normteil / Amazon | 4 Stk. | Zentralbox-Gehäuse (greift in Nut-Pockets) |
-| **M3 Edelstahlschrauben (Front)** | M3 x 20 mm Zylinderkopf V4A (DIN 912) | Normteil / Amazon | 4 Stk. | Front-Node Gehäuse (greift in Nut-Pockets) |
-| **M3 Edelstahlschrauben (Dock)** | M3 x 16 mm Zylinderkopf V4A (DIN 912) | Normteil / Amazon | 4 Stk. | Rahmenklemmschelle `cots_magnetic_frame_dock` |
-| **M3 Edelstahlmuttern** | DIN 934 / DIN 985 M3 V4A Muttern | Normteil / Amazon | 12 Stk.| Unverlierbar in Nut-Pockets eingelegt (Zentralbox, Front-Node, Rahmendock) |
-| **M4 Edelstahlmuttern (AMPS & Radar)**| DIN 934 M4 V4A Muttern | Normteil / Amazon | 6 Stk. | 4x Front-Node Wanne (AMPS), 2x Radar 2.0 Gehäuserückwand |
-| **M4 Schrauben (Radar-Cradle)** | M4 x 12 mm Zylinderkopf V4A (DIN 912) | Normteil / Amazon | 2 Stk. | Verschraubung Adapterplatte `radar_swivel_tilt_cradle` an Radar 2.0 Gehäuse |
-| **M5 Hirth-Klemmschraube** | M5 x 25 mm Zylinderkopf V4A (DIN 912) | Normteil / Amazon | 1 Stk. | Horizontale Gelenkachse Radar-Hirth-Gelenk (Kennzeichenträger / Underfender / Adventure-Rack) |
-| **M5 Edelstahlmutter (Radar)** | DIN 934 M5 V4A Mutter | Normteil / Amazon | 1 Stk. | Unverlierbar in rechter Gabelwange des Radarträgers |
-| **M5 Klemmschrauben (Adventure)** | M5 x 25 mm Zylinderkopf V4A (DIN 912) | Normteil / Amazon | 2 Stk. | Rohrklemmschelle `adventure_rack_radar_mount` (von unten montiert) |
-| **M5 Muttern (Adventure-Clamp)** | DIN 934 M5 V4A Muttern | Normteil / Amazon | 2 Stk. | Unverlierbar in oberer Klemmschellen-Kappe `adventure_rack_radar_clamp_cap` |
-| **M8 IP68 Kabelverschraubung** | M8 x 1.25 Messing vernickelt / PA66 IP68 mit EPDM-Dichtung | Skintop / Lapp / Amazon | 1 Stk. | Spritzwasserdichte Gehäuseboden-Durchführung für 2-poliges FLRY-B Kabel |
-| **M2.5 Platinenschrauben** | M2.5 x 6 mm Zylinderkopf V4A (DIN 912) | Normteil | 8 Stk. | 4x Zentralbox-Platine, 4x Front-Node-Platine |
-| **M2 Kassetten-Platinenschrauben**| M2 x 6 mm Zylinder-/Flachkopf V4A (DIN 7985/912) | Normteil | 8 Stk. | Befestigung von PCBA 03 im Kassetten-Schlitten (4x pro Kassette; Schottwandschrauben entfallen zu 100 %) |
-| **M2 Kassetten-Halteplattenschrauben**| M2 x 6 mm Senkkopf V4A (DIN 7991) | Normteil | 8 Stk. | Fixierung der Aktuator-Niederhalteplatten (4x pro Gateway-Kassette) |
-| **M2 UCS Modul-Schrauben** | M2 x 8 mm Zylinderkopf V4A (DIN 912) | Normteil / Amazon | 4-8 Stk. | Verschraubung OMM UCS Gehäuse (4x pro Modul, greift in DIN 934 M2 Muttern) |
-| **M2 UCS Edelstahlmuttern** | DIN 934 M2 V4A Muttern | Normteil / Amazon | 4-8 Stk. | Formschlüssig in Oberschale des OMM UCS Moduls eingelegt (Captive Nuts) |
-| **OMM LiPo Pouch-Akku** | 1S LiPo 600 mAh ($38 \times 24 \times 4{,}5\,\text{mm}$) mit PCM | EEMB / Web | 1-2 Stk. | Autarker Akku für OMM UCS Intercom-Modul (12-14 h Laufzeit) |
-| **OMM Silikon-Profildichtung** | Silikon-Rundschnur $\varnothing 0{,}8\,\text{mm}$ Shore 40A | O-Ring-Shop | 0.5 m | IP67 Gehäusedichtung für OMM UCS Gehäuse (ca. 22 cm pro Modul) |
-| **OMM Helm-Audio & PTT Kabel**| 6-Pin JST-SH 1.0mm Buchse auf Klinke 3.5mm + Mic + PTT | COTS Standard | 1-2 Stk. | Reines Audio-Headsetkabel für Helminnenraum (0V DC, störungsfrei, 12-15 cm) |
-| **HF-Koaxpigtail U.FL auf SMA**| RG-178 / 1.13mm (50 mm) mit IP67 SMA-Bulkhead & O-Ring | COTS Standard | 1-2 Stk. | Verbindung von U.FL Buchse zur Gehäusedurchführung der OMM UCS Module |
-| **OMM 2.4 GHz Stummelantenne** | 2.4 GHz Stubby Gummiantenne ($38\,\text{mm}$, SMA-Male) | COTS Standard | 1 Stk. | Kompakte Wendelantenne für OMM 2.4G Helmmontage (Zero Windbüffeln) |
-| **OMM 446 MHz Stummelantenne** | 446 MHz PMR/DMR Stubby Antenne ($48\,\text{mm}$, SMA-Male) | COTS Standard | 1 Stk. | Kompakte Wendelantenne für OMM 446 Helmmontage (1.5-2.5 km Reichweite) |
-| **M2 Schwenkachsen Wippe** | M2 x 8 mm Zylinderstift Edelstahl (DIN 7) | Normteil / Misumi | 2 Stk. | Drehachsen für magnetische Kassetten-Rastwippen |
-| **Magnetanker (Kassette)** | Ø 6 x 8 mm Zylinderstift gehärtet (DIN 6325) | Normteil / Misumi | 2 Stk. | Stahlanker im Hebelarm der Kassetten-Wippe |
-| **Wippen-Rückstellfedern** | Edelstahl V4A ($\varnothing 3{,}5\,\text{mm}, L_0=10\,\text{mm}$) | Gutekunst / Web | 2 Stk. | Rückstellfedern für Kassetten-Rastkralle |
-| **Auswerfer-Druckfedern** | Edelstahl V4A ($D=4{,}5\,\text{mm}, L_0=15\,\text{mm}$) | Gutekunst / Web | 4 Stk. | Auto-Eject Federn in den Schottwänden (2x pro Pod) |
-| **N52 Entriegelungsschlüssel**| N52 Neodym-Block ($20 \times 10 \times 5\,\text{mm}$) | Supermagnete / Web | 1 Stk. | Magnetschlüssel für Kassettenauswurf |
-| **Silentblöcke / Gummipuffer**| Typ A M4 Außen/Innen ($\varnothing 15 \times 10\,\text{mm}$) | Ganter / Normteil | 4 Stk. | Schwingungsentkoppelte Zentralbox-Montage |
-| **Silikon-Dichtschnur** | Silikon-Rundschnur $\varnothing 1{,}5\,\text{mm}$ Shore 40A (1.0 m) | O-Ring-Shop | 1 Stk. | $40\,\text{cm}$ Zentralbox-Nut, $30\,\text{cm}$ Front-Node Nut |
-| **Kassetten-Flanschdichtungen**| Silikon-Formdichtung Shore 40A ($54 \times 18\,\text{mm}$) | Sonderfertigung | 2 Stk. | Stirnseitige Mundloch-Abdichtung an Pod 1 und Pod 2 |
-| **Pufferakku (LiPo USV)** | 1S LiPo Flat-Pack 2.200 mAh ($68 \times 39 \times 5{,}0\,\text{mm}$) mit Molex Micro-Fit | EEMB / Enerpower | 1 Stk. | USV-Pufferung in der Zentralbox (Typ 504068 / 503870) |
-| **KFZ-Sicherungshalter** | Wasserdichter Flachsicherungshalter + 2A Sicherung | Hella / MTA | 1 Stk. | Dauerplus-Absicherung an Batteriepol |
-| **2-Pin Magnet-Pogo Kupplung**| IP68 Magnetstecker + Buchse (z. B. HytePro M411) | COTS Standard | 2 Sets | Koffer-Trennstelle (Abreißkraft 10-15 N, wasserdicht) |
-| **Pure-DC 2-Ader Zuleitung (PUR)**| 2x 0.34 mm² (AWG22) mit JST-JWPF 2-Pin / Magnetkupplung | COTS Standard | 2 Stk. | Pure-DC 5V Stromversorgung zu Pod 1 und Pod 2 (Audio/Daten 100 % via UWB) |
-| **Radar 12V Zuleitung (PUR)** | 2x 0.5 mm² (AWG20) mit JST-JWPF 2-Pin IP67 Stecker | COTS Standard | Opt. (1)| 12V DC Bordnetzspeisung für Heck-Radar (Datenübertragung 100 % drahtlos via UWB) |
-| **Front-Node 12V Anschlusskabel**| 2-Pin JST-PH Litzenkabel mit Posi-Tap | COTS Standard | 1 Stk. | Lokale Cockpit-Stromversorgung (Standlicht/Navistecker) - *Funkbrücke via UWB!* |
-| **12V Y-Adapterkabel (Bench/Car)**| Zigarettenanzünderstecker -> JST-JWPF 2P + Deutsch DTM-12 | Eigenbau / COTS | 1 Stk. | Prüfstands- & Begleitfahrzeug-Versorgung (Front-Node + Zentralbox), CarPlay frei |
-| **USB-C Panel-Mount Pigtails**| JST-PH 5-Pin auf wasserdichte USB-C Buchse (IP67) | Amazon / COTS | 2 Stk. | Phone Fast-Charge (Lenker) & Glovebox (Tankrucksack) |
-| **USB-A Buchsen Pigtails** | JST-PH 4-Pin auf Standard USB-A Buchse (15-20 cm) | Amazon / COTS | 2 Stk. | CP2AA Wireless CarPlay Dongle & Cockpit Aux Port |
-| **JST-PH Pigtail Sortiments-Set**| 2-Pin, 3-Pin, 4-Pin JST-PH mit vormontierten Litzen | Amazon / COTS | 1 Set (10 Stk.) | CAN-Bus, Lenkertaster, Spiegel-LEDs, Qi-Lader, Action-Cam |
-| **Qwiic / STEMMA QT Sensorkabel**| 4-Pin JST-SH Buchse zu Buchse (50 mm / 100 mm) | SparkFun / Adafruit | 1 Stk. | Verbindung PCBA 05 `J12` zu SAM-M10Q GNSS |
-| **MR20 Radar-Kabel** | 4-Pin JST-SH Buchse zu Buchse (50 mm) | SparkFun / Adafruit | Opt. (1)| Verbindung PCBA 08 `J2` zu Wheeltec MR20 Radar |
-| **Zentralbox USB-C Pigtail** | IDC 10-Pin auf wasserdichte Panel-Mount USB-C Buchse | COTS Standard | 1 Stk. | CarPlay / Flashing Port an der Zentralbox-Flanke |
-| **J_ACT Aktuator-Kabelbaum** | Vorkonfektioniertes 8-Pin JST-SH Kabel auf 4x 2-Pin Litzen | Adafruit / SparkFun | 2 Stk. | 4 verdrillte Paare (AWG30 Silikon, 60 mm) zu den 4 Hubmagneten |
-| **Miniatur-Aktuatoren** | 5V DC Hubmagnete ($\varnothing 6{,}5 \times 12\,\text{mm}$) mit TPU-Spitze | Solenoid / Web | 8 Stk. | 4 Stk. pro Smart Cartridge (Sena / Cardo) |
-| **J_AUDIO_PWR Gateway-Kabelstrang**| 8-Pin JST-SH Adapterkabel für Sena / Cardo / Midland / OMM | COTS Standard | 2 Stk. | Modellspezifisches Fertigkabel für Headset-Audio & Dauerstrom (Kelvin-Grounding) |
-| **JST-JWPF 2-Pin IP67 Steckverbinder-Set**| 02R-JWPF-VSLE-S & 02T-JWPF-VSLE-S (2-Pol wasserdicht) | JST | 1 Set | Wasserdichte 12V DC Kfz-Zuleitung für Radar 2.0 Sub-MCU |
-| **Wheeltec MR20 77-GHz mmWave**| 77-GHz FMCW Automotive Radar (150m Reichweite)| Wheeltec | Opt. (1)| Radar 2.0 Transceiver-Modul im Heck-Gehäuse |
-| **PC Radom-Sichtfenster** | Laserzuschnitt Polycarbonat 1.6 mm (RF-transparent)| COTS / Plexiglas | Opt. (1)| Mikrowellen- & optisches Fenster für MR20 & 24-LED Halo |
-| **3M Dual Lock SJ3550** | Pilzkopf-Klettband selbstklebend (VHB-Klebstoff) | 3M | 0.5 m | Rüttelfeste, werkzeuglose Dongle- & Sensor-Montage |
-| **car_sun_visor_pod_clip** | 3D-Druck PA12 Federspangen für Sonnenblende | OMB CAD | Opt. (2)| Begleitfahrzeug / Van Montagekit für Pod 1 & 2 |
+| **3M Dual Lock SJ3550 Klettband** | Pilzkopf-Klettband selbstklebend (VHB-Kleber) | 3M / Amazon | 0.5 m | Rüttelfeste, werkzeuglose Dongle- und Sensor-Montage im Cockpit & Koffer |
+| **3M VHB R130 Klebepad** | 3M VHB R130 Hochleistungs-Klebepad passgenau | 3M / COTS | 1 Stk. | Vibrations- und wetterfeste ECE 22.06 Helmbefestigung des OMM UCS Klemmsockels |
+| **Auswerfer-Druckfeder (Schottwand)** | Edelstahl V4A D = 4.5 mm, L0 = 15 mm | Gutekunst / Web | 4 Stk. | Auto-Eject Federn in der Schottwand (2x pro Pod, schiebt Kassette 25 mm heraus) |
+| **M2 Edelstahlmutter (Captive UCS)** | DIN 934 M2 V4A | Normteil / Amazon | 8 Stk. | Formschlüssig in Oberschale des OMM UCS Moduls eingelegt (4x pro Modul) |
+| **M2 Halteplattenschraube (Senkkopf)** | DIN 7991 V4A M2 x 6 mm | Normteil / Amazon | 8 Stk. | Fixierung der Aktuator-Niederhalteplatten (4x pro Gateway-Kassette) |
+| **M2 Kassetten-Platinenschraube** | DIN 7985 / DIN 912 V4A M2 x 6 mm | Normteil / Amazon | 8 Stk. | Befestigung von PCBA 03 im Kassetten-Schlitten (4x pro Kassette; Schottwandschrauben entfallen) |
+| **M2 Schwenkachse Wippe** | DIN 7 V4A Zylinderstift M2 x 8 mm | Normteil / Misumi | 2 Stk. | Präzisions-Drehachse für magnetische Kassetten-Rastwippe im Schlitten |
+| **M2 UCS Modul-Schraube** | DIN 912 V4A M2 x 8 mm | Normteil / Amazon | 8 Stk. | Verschraubung OMM UCS Gehäuseschalen (4x pro Modul, greift in M2 Muttern) |
+| **M2.5 Platinenschraube** | DIN 912 V4A M2.5 x 6 mm | Normteil / Amazon | 8 Stk. | Befestigung der Hauptplatinen (4x Zentralbox PCBA 01, 4x Front-Node PCBA 05) |
+| **M3 Edelstahlmutter (Captive)** | DIN 934 / DIN 985 M3 V4A | Normteil / Amazon | 8 Stk. | Unverlierbar in Nut-Pockets eingelegt (Zentralbox, Front-Node, Rahmendock – kein Lötkolben nötig!) |
+| **M3 Front-Schraube (Front-Node)** | DIN 912 V4A M3 x 20 mm | Normteil / Amazon | 4 Stk. | Front-Node Gehäusedeckel-Verschraubung in Nut-Pockets |
+| **M3 Gehäuseschraube (Main Box)** | DIN 912 V4A M3 x 40 mm | Normteil / Amazon | 4 Stk. | Zentralbox-Gehäuseverschraubung (greift von oben in Nut-Pockets der Bodenwanne) |
+| **M4 Edelstahlmutter (AMPS & Radar)** | DIN 934 M4 V4A | Normteil / Amazon | 6 Stk. | 4x Front-Node Wanne (AMPS-Taschen), 2x Radar 2.0 Gehäuserückwand |
+| **M4 Schraube (Radar-Cradle)** | DIN 912 V4A M4 x 12 mm | Normteil / Amazon | 2 Stk. | Verschraubung Adapterplatte radar_swivel_tilt_cradle an Radar 2.0 Gehäuse |
+| **M4 Silentblöcke / Gummipuffer** | Typ A M4 Außen/Innen Ø 15 x 10 mm | Ganter / Normteil | 4 Stk. | Schwingungsentkoppelte 4-Punkt Zentralbox-Montage am Motorradrahmen (dämpft 10-100 Hz) |
+| **M5 Klemmschraube (Hirth & Rohrschellen)** | DIN 912 V4A M5 x 25 mm | Normteil / Amazon | 3 Stk. | Horizontale Achse für Hirth-Formschlussgelenke & Rohrträger-Klemmschellen (Ø 12-22 mm) |
+| **M5 Stopmutter / Edelstahlmutter** | DIN 985 / DIN 934 M5 V4A | Normteil / Amazon | 3 Stk. | Formschlüssig in Gelenkwangen und Rohrschellenkappen eingelassen |
+| **Magnetanker Stahlstift (Kassette)** | DIN 6325 gehärteter Passstift Ø 6 x 8 mm | Normteil / Misumi | 2 Stk. | Ferromagnetischer Stahlanker im Hebelarm der Kassetten-Wippe (reagiert auf N52 Magnetschlüssel) |
+| **N52 Entriegelungsschlüssel** | N52 Neodym-Block 20 x 10 x 5 mm (vernickelt) | Supermagnete / Web | 1 Stk. | Berührungsloser Magnetschlüssel zum diebstahlsicheren Auswurf der Kassetten am Pod |
+| **Wippen-Rückstellfeder** | Edelstahl V4A Ø 3.5 mm, L0 = 10 mm | Gutekunst / Web | 2 Stk. | Hält die Verriegelungskralle der Kassettenwippe mit 2.5 N Vorspannung geschlossen |
+| **Gore ePTFE Druckausgleichs-Ventil** | Ø 12 mm selbstklebendes ePTFE Membran-Patch IP68 | Gore / COTS | 1 Stk. | Druckausgleich & Kondenswasserschutz in der Deckeltasche der Zentralbox |
+| **Kassetten-Flanschdichtung (Mundloch)** | Silikon-Formdichtung Shore 40A (54 x 18 mm) | Sonderfertigung / Silikon | 2 Stk. | Stirnseitige Mundloch-Abdichtung an Pod 1 und Pod 2 gegen Spritzwasser und Gischt |
+| **OMM Silikon-Profildichtung Ø 0.8 mm** | Silikon-Rundschnur Ø 0.8 mm Shore 40A | O-Ring-Shop / Web | 0.4 m | Ultra-elastische Gehäusedichtung für OMM UCS Gehäuse (ca. 22 cm pro Modul, IP67) |
+| **Silikon-Dichtschnur Ø 1.5 mm** | Silikon-Rundschnur Ø 1.5 mm Shore 40A | O-Ring-Shop / Amazon | 0.7 m | Endlos-Dichtschnur für Gehäusenut der Zentralbox (40 cm) & Front-Node (30 cm) für IP67 |
+| **1S LiPo Pouch-Akku 600 mAh (OMM)** | 3.7V / 2.22Wh (Typ 452438) mit PCM & JST-ACH | EEMB / Web | 2 Stk. | Integrierter Akku für OMM UCS Module (12-14 h Standalone-Betrieb am Helm) |
+| **5V DC Miniatur-Hubmagnet** | Ø 6.5 x 12 mm, Hub 1.5-2.0 mm, mit TPU-Dämpfungsspitze | Solenoid / Web | 8 Stk. | Mechatronische Tastenbetätigung für Sena & Cardo Tasten (4x pro Smart Slot) |
+| **Helmlautsprecher & ECM-Mikrofon Kit** | 40 mm 32 Ohm Hi-Fi Stereo-Lautsprecher + ECM Schwanenhalsmikrofon | COTS Audio / Web | 1 Set | Plug-and-Play Audio-Peripherie für OMM UCS Headset am Helm |
+| **Polycarbonat Radom-Sichtfenster** | Laserzuschnitt Polycarbonat 1.6 mm (RF-transparent) | COTS / Plexiglas | 1 Stk. | Mikrowellen- & optisches Fenster für MR20 Radar & 24-LED Halo |
+| **Pufferakku (LiPo USV 2.200 mAh)** | 1S 3.7V 2.200 mAh Flat-Pack (Typ 504068) Molex Micro-Fit | EEMB / Enerpower | 1 Stk. | Notstrom-Pufferung in der Zentralbox bei Zündungsaus & Motorstart |
+| **Wheeltec MR20 77-GHz mmWave Radar** | 77-GHz FMCW Automotive Radar (150 m Reichweite) | Wheeltec / DE-Distributor | 1 Stk. | Automotive Millimeterwellen-Radar für Totwinkelerkennung & Kollisionswarnung |
+| **u-blox SAM-M10Q Multi-GNSS Modul** | 15x15 mm Keramik-Patchantenne, Qwiic I2C | SparkFun / u-blox | 1 Stk. | Cockpit-Satellitenortung an Port J12 mit freier Sicht zum Zenit |
+| **OMM 2.4 GHz Stummelantenne** | 2.4 GHz Rubber-Duck (38 mm, SMA-Male, +2.5 dBi omni) | COTS Standard | 1 Stk. | Kompakte Helmmontage-Antenne für PCBA 09 (völlig flatter- & pfeiffrei) |
+| **Taoglas FXP524 V2X Flexantenne** | 5.9 GHz Flex-Patch (+3.5 dBi) mit U.FL Buchse (50 mm) | Taoglas / Mouser | 1 Stk. | Car-to-X / ITS-G5 Funk-Uplink für ESP32-C5 Sub-MCU auf PCBA 08 |
+| **Taoglas FXP895 LoRa Flexantenne** | 868 MHz Flex-Dipol (+2.0 dBi) U.FL (100 mm) | Taoglas / Mouser | 1 Stk. | Weitbereichs-Kolonnenfunk für SX1262 LoRa in der Deckeltasche der Zentralbox |
+| **Taoglas FXUWB10 UWB Flexantenne** | 6.5 GHz Ch. 5 Flex-Patch mit 20 mm U.FL Koaxialkabel | Taoglas / Mouser | 3 Stk. | Drahtloses UWB 6.5 GHz Backbone (Zentralbox, Front-Node, Radar) |
+| **Deutsch DTM-12 Hauptkabelbaum** | IP68/IP69K Deutsch DTM-12 COTS Fertigkabelbaum mit Raychem DR-25 | COTS / Deutsch | 1 Stk. | Zentraler Hauptanschluss für Bordnetz, CAN-Bus & DC-Zuleitungen zu den Pods |
+| **Front-Node 12V Anschlusskabel** | 2-Pin JST-PH Litzenkabel mit Posi-Tap Abzweigverbindern | COTS Standard | 1 Stk. | Lokale 12V-Cockpit-Versorgung (Standlicht/Navistecker) |
+| **JST-PH Pigtail Sortiments-Set** | 2-Pin, 3-Pin, 4-Pin JST-PH mit vormontierten Litzen | Amazon / COTS | 1 Set | CAN-Bus, Lenkertaster, Spiegel-LEDs, Qi-Lader & Actioncam |
+| **J_ACT Aktuator-Kabelbaum** | Vorkonfektioniertes 8-Pin JST-SH Kabel auf 4x 2-Pin Litzenpaare (AWG30 Silikon, 60 mm) | Adafruit / SparkFun | 2 Stk. | 4 verdrillte Paare von PCBA 03 zu den 4 Hubmagneten (kein Crimpen nötig!) |
+| **J_AUDIO_PWR Kabel Cardo Packtalk** | 8-Pin JST-SH auf 3.5mm Spk, Micro-2Pin Mic & 90° USB-C 5V (10 cm) | COTS Standard | 1 Stk. | Koppelt Cardo Air-Mount Halterung mit 5V Lade- & Audiostrom ohne Brummstörungen |
+| **J_AUDIO_PWR Kabel Sena SPIDER X** | 8-Pin JST-SH auf 3-fach Pigtail (Direct-DC, 2.5mm Mic, 3.5mm Spk, 8 cm) | COTS Standard | 1 Stk. | Direct-DC Speisung (3.85V) & Stereo-Audio mit Kelvin-Grounding (null Pogo-Pins) |
+| **KFZ-Sicherungshalter & 2A Sicherung** | Wasserdichter Halter + 2A Mini-Flachsicherung | Hella / MTA | 1 Stk. | Dauerplus-Absicherung an Batteriepol (Klemme 30) |
+| **OMM Helm-Audio & PTT-Kabelbaum (J_HELMET)** | 6-Pin JST-SH 1.0mm auf 3.5mm Stereo-Klinke + 2-Pin Mic + PTT (0V DC, 12-15 cm) | COTS Standard | 1 Stk. | Brummfreier Kopfhörer- & Mikrofonkabelbaum für Helm-Innenseite (reine 0V DC Signale) |
+| **Pure-DC 2-Ader Zuleitung (PUR)** | 2x 0.34 mm² (AWG22) mit JST-JWPF 2-Pin IP67 Stecker | COTS Standard | 2 Stk. | Reine DC-Stromversorgung zu Pod 1 & 2 (Audio/Daten 100% via UWB) |
+| **Qwiic Sensorkabel (100 mm)** | 4-Pin JST-SH Buchse zu Buchse (100 mm Silikonlitze) | SparkFun / Adafruit | 1 Stk. | Verbindung Port J12 am Front-Node zum SAM-M10Q GNSS-Modul |
+| **RF Micro-Koaxial-Pigtail (U.FL zu SMA IP67)** | 50 mm low-loss RG-178 / 1.13mm mit IP67 EPDM O-Ring & V4A-Mutter | COTS Standard | 2 Stk. | Wasserdichte Gehäuse-Durchführung für Antenne der OMM UCS Module |
+| **Radar 12V Zuleitung (PUR)** | 2x 0.5 mm² (AWG20) mit JST-JWPF 2-Pin IP67 Stecker | COTS Standard | 1 Stk. | 12V DC Bordnetzspeisung für Heck-Radar (Funkbrücke 100% via UWB) |
+| **USB-A Buchsen Pigtail** | JST-PH 4-Pin auf Standard USB-A Buchse (15-20 cm) | Amazon / COTS | 1 Stk. | CP2AA Wireless CarPlay Dongle & Cockpit Aux Port |
+| **USB-C Panel-Mount Pigtail (Front-Node)** | JST-PH 5-Pin auf wasserdichte Panel-Mount USB-C Buchse (IP67) | Amazon / COTS | 1 Stk. | Telefon Fast-Charge (Lenker) & Glovebox Ladeanschluss |
+| **Zentralbox USB-C Flashing Pigtail** | IDC 10-Pin auf wasserdichte Panel-Mount USB-C Buchse IP67 | COTS Standard | 1 Stk. | CarPlay / Flashing Port an der Flanke der Zentralbox |
+
+<!-- AUTOGEN_BOM_TABLE_END -->
 
 ---
 

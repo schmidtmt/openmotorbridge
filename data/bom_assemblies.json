@@ -1,0 +1,595 @@
+{
+  "_meta": {
+    "version": "1.0.0",
+    "description": "OpenMotorBridge Component / Assembly Recipes (SSOT)",
+    "generated_at": "2026-10-09"
+  },
+  "assemblies": {
+    "assembly_main_box": {
+      "id": "assembly_main_box",
+      "category": "core",
+      "name": {
+        "de": "Zentralbox Baugruppe (Main Box)",
+        "en": "Central Box Assembly (Main Box)"
+      },
+      "desc": {
+        "de": "Wasserdichte IP67 Zentraleinheit unter der Sitzbank mit ESP32-S3, Codec, USV und LoRa",
+        "en": "Waterproof IP67 under-seat central brain with ESP32-S3, Codec, UPS, and LoRa"
+      },
+      "parts": [
+        { "part_id": "part3d_main_box_lower_case", "qty": 1 },
+        { "part_id": "part3d_main_box_mid_tray", "qty": 1 },
+        { "part_id": "part3d_main_box_lid", "qty": 1 },
+        { "part_id": "pcba_01", "qty": 1 },
+        { "part_id": "fastener_din912_m3_40", "qty": 4 },
+        { "part_id": "fastener_din934_m3", "qty": 4 },
+        { "part_id": "fastener_din912_m25_6", "qty": 4 },
+        { "part_id": "fastener_silentblock_m4", "qty": 4 },
+        { "part_id": "seal_silicone_cord_15", "qty": 0.4 },
+        { "part_id": "seal_vent_gore_eptfe", "qty": 1 },
+        { "part_id": "cots_battery_usv_lipo", "qty": 1 },
+        { "part_id": "antenna_fxp895_lora", "qty": 1 },
+        { "part_id": "antenna_fxuwb10_uwb", "qty": 1 },
+        { "part_id": "cable_dtm12_main_harness", "qty": 1 },
+        { "part_id": "cable_fuse_holder_kfz", "qty": 1 },
+        { "part_id": "cable_usbc_panel_mount_mainbox", "qty": 1 }
+      ]
+    },
+    "assembly_front_node": {
+      "id": "assembly_front_node",
+      "category": "addon",
+      "name": {
+        "de": "Universal Front-Knoten Baugruppe",
+        "en": "Universal Front Node Assembly"
+      },
+      "desc": {
+        "de": "Cockpit-Knoten für Telefon-Fast-Charge, CarPlay, GNSS, MEMS-Mikrofon & Display-Bridge",
+        "en": "Cockpit node for phone fast-charge, CarPlay, GNSS, MEMS mic & display bridge"
+      },
+      "parts": [
+        { "part_id": "part3d_front_node_lower_tub", "qty": 1 },
+        { "part_id": "part3d_front_node_upper_lid", "qty": 1 },
+        { "part_id": "part3d_front_node_cable_glands_tpu", "qty": 1 },
+        { "part_id": "part3d_front_node_usbc_cap_tpu", "qty": 1 },
+        { "part_id": "part3d_front_node_fairing_clamp", "qty": 1 },
+        { "part_id": "pcba_05", "qty": 1 },
+        { "part_id": "fastener_din912_m3_20", "qty": 4 },
+        { "part_id": "fastener_din934_m3", "qty": 4 },
+        { "part_id": "fastener_din934_m4", "qty": 4 },
+        { "part_id": "fastener_din912_m25_6", "qty": 4 },
+        { "part_id": "fastener_din912_m5_25", "qty": 2 },
+        { "part_id": "fastener_din934_m5", "qty": 2 },
+        { "part_id": "seal_silicone_cord_15", "qty": 0.3 },
+        { "part_id": "cots_module_sam_m10q", "qty": 1 },
+        { "part_id": "cable_qwiic_100mm", "qty": 1 },
+        { "part_id": "cable_front_node_12v", "qty": 1 },
+        { "part_id": "antenna_fxuwb10_uwb", "qty": 1 },
+        { "part_id": "cable_usbc_panel_mount_front", "qty": 1 },
+        { "part_id": "cable_usba_panel_mount_front", "qty": 1 }
+      ]
+    },
+    "assembly_pod_base": {
+      "id": "assembly_pod_base",
+      "category": "core",
+      "name": {
+        "de": "Satelliten-Pod Schachtbasis",
+        "en": "Satellite Pod Bay Base"
+      },
+      "desc": {
+        "de": "Hermetisches Schachtgehäuse am Motorradrahmen / Kofferdeckel inklusive Auswerffedern",
+        "en": "Hermetic bay enclosure on bike frame / pannier lid including auto-eject springs"
+      },
+      "parts": [
+        { "part_id": "part3d_pod_base_housing", "qty": 1 },
+        { "part_id": "part3d_pod_bulkhead_partition", "qty": 1 },
+        { "part_id": "fastener_spring_ejector_bulkhead", "qty": 2 },
+        { "part_id": "seal_mouth_gasket_cartridge", "qty": 1 },
+        { "part_id": "cable_pure_dc_jwpf", "qty": 1 }
+      ]
+    },
+    "assembly_cartridge_carrier": {
+      "id": "assembly_cartridge_carrier",
+      "category": "cartridge",
+      "name": {
+        "de": "Universal Smart Cartridge Trägerschlitten",
+        "en": "Universal Smart Cartridge Carrier Sled"
+      },
+      "desc": {
+        "de": "Basis-Schlittenchassis mit PCBA 03 Trägerplatine & diebstahlsicherer Rastmechanik",
+        "en": "Base sled chassis with PCBA 03 carrier board & anti-theft locking latch"
+      },
+      "parts": [
+        { "part_id": "part3d_cartridge_base_sled", "qty": 1 },
+        { "part_id": "part3d_cartridge_latch", "qty": 1 },
+        { "part_id": "fastener_pin_din7_m2_8", "qty": 1 },
+        { "part_id": "fastener_pin_din6325_6_8", "qty": 1 },
+        { "part_id": "fastener_spring_latch_return", "qty": 1 },
+        { "part_id": "pcba_03", "qty": 1 },
+        { "part_id": "fastener_din7985_m2_6", "qty": 4 }
+      ]
+    },
+    "assembly_inlay_sena_spider": {
+      "id": "assembly_inlay_sena_spider",
+      "category": "inlay",
+      "name": {
+        "de": "Gateway Inlay: Sena SPIDER X Slim",
+        "en": "Gateway Inlay: Sena SPIDER X Slim"
+      },
+      "desc": {
+        "de": "Inlay-Aufnahmebett für Sena SPIDER X Slim mit 4 Hubmagneten & Kelvin-Ground Audio/DC-Kabel",
+        "en": "Inlay mounting bed for Sena SPIDER X Slim with 4 solenoids & Kelvin-grounded audio/DC cable"
+      },
+      "parts": [
+        { "part_id": "part3d_cartridge_insert_sena", "qty": 1 },
+        { "part_id": "part3d_cartridge_retainer_plate", "qty": 1 },
+        { "part_id": "fastener_din7991_m2_6", "qty": 4 },
+        { "part_id": "cots_actuator_solenoid_5v", "qty": 4 },
+        { "part_id": "cable_j_act_solenoid_harness", "qty": 1 },
+        { "part_id": "cable_j_audio_pwr_sena_spider", "qty": 1 }
+      ]
+    },
+    "assembly_inlay_sena_50s": {
+      "id": "assembly_inlay_sena_50s",
+      "category": "inlay",
+      "name": {
+        "de": "Gateway Inlay: Sena 50S / 60S",
+        "en": "Gateway Inlay: Sena 50S / 60S"
+      },
+      "desc": {
+        "de": "Inlay-Aufnahmebett für Sena 50S / 60S mit 4 Hubmagneten & Kelvin-Ground Audio/DC-Kabel",
+        "en": "Inlay mounting bed for Sena 50S / 60S with 4 solenoids & Kelvin-grounded audio/DC cable"
+      },
+      "parts": [
+        { "part_id": "part3d_cartridge_insert_sena", "qty": 1 },
+        { "part_id": "part3d_cartridge_retainer_plate", "qty": 1 },
+        { "part_id": "fastener_din7991_m2_6", "qty": 4 },
+        { "part_id": "cots_actuator_solenoid_5v", "qty": 4 },
+        { "part_id": "cable_j_act_solenoid_harness", "qty": 1 },
+        { "part_id": "cable_j_audio_pwr_sena_spider", "qty": 1 }
+      ]
+    },
+    "assembly_inlay_cardo_edge": {
+      "id": "assembly_inlay_cardo_edge",
+      "category": "inlay",
+      "name": {
+        "de": "Gateway Inlay: Cardo Packtalk Edge / Pro",
+        "en": "Gateway Inlay: Cardo Packtalk Edge / Pro"
+      },
+      "desc": {
+        "de": "Inlay-Aufnahmebett für Cardo Packtalk Edge / Pro mit Air-Mount Docking, 4 Hubmagneten & Kabel",
+        "en": "Inlay mounting bed for Cardo Packtalk Edge / Pro with Air-Mount docking, 4 solenoids & harness"
+      },
+      "parts": [
+        { "part_id": "part3d_cartridge_insert_cardo", "qty": 1 },
+        { "part_id": "part3d_cartridge_retainer_plate", "qty": 1 },
+        { "part_id": "fastener_din7991_m2_6", "qty": 4 },
+        { "part_id": "cots_actuator_solenoid_5v", "qty": 4 },
+        { "part_id": "cable_j_act_solenoid_harness", "qty": 1 },
+        { "part_id": "cable_j_audio_pwr_cardo_edge", "qty": 1 }
+      ]
+    },
+    "assembly_inlay_omm_ucs": {
+      "id": "assembly_inlay_omm_ucs",
+      "category": "inlay",
+      "name": {
+        "de": "Gateway Inlay: OMM 2.4 GHz UCS (PCBA 09)",
+        "en": "Gateway Inlay: OMM 2.4 GHz UCS (PCBA 09)"
+      },
+      "desc": {
+        "de": "Inlay-Schlitten für OMM 2.4G Modul mit Antennenführung, J_AUDIO_PWR Kabel & Booster-Bett",
+        "en": "Inlay sled for OMM 2.4G module with antenna routing, J_AUDIO_PWR cable & booster bay"
+      },
+      "parts": [
+        { "part_id": "part3d_cartridge_insert_omm_ucs", "qty": 1 },
+        { "part_id": "cable_j_audio_pwr_omm", "qty": 1 },
+        { "part_id": "antenna_taoglas_fxp73_24g", "qty": 1 }
+      ]
+    },
+    "assembly_inlay_omm446_ucs": {
+      "id": "assembly_inlay_omm446_ucs",
+      "category": "inlay",
+      "name": {
+        "de": "Gateway Inlay: OMM 446 MHz UCS (PCBA 10)",
+        "en": "Gateway Inlay: OMM 446 MHz UCS (PCBA 10)"
+      },
+      "desc": {
+        "de": "Inlay-Schlitten für OMM 446 Modul mit Wendelantennen-Kanal, J_AUDIO_PWR Kabel & Booster-Bett",
+        "en": "Inlay sled for OMM 446 module with helical antenna channel, J_AUDIO_PWR cable & booster bay"
+      },
+      "parts": [
+        { "part_id": "part3d_cartridge_insert_omm446_ucs", "qty": 1 },
+        { "part_id": "cable_j_audio_pwr_omm", "qty": 1 }
+      ]
+    },
+    "assembly_inlay_pmr446": {
+      "id": "assembly_inlay_pmr446",
+      "category": "inlay",
+      "name": {
+        "de": "Gateway Inlay: Universal PMR446 Funk",
+        "en": "Gateway Inlay: Universal PMR446 Radio"
+      },
+      "desc": {
+        "de": "Universelles COTS Funkgeräte-Inlay mit Doppelklinken-Führung & PTT-Steuerung",
+        "en": "Universal COTS radio inlay with dual-jack routing & PTT control"
+      },
+      "parts": [
+        { "part_id": "part3d_cartridge_insert_pmr", "qty": 1 },
+        { "part_id": "cable_j_audio_pwr_midland_pmr", "qty": 1 }
+      ]
+    },
+    "assembly_inlay_blind": {
+      "id": "assembly_inlay_blind",
+      "category": "inlay",
+      "name": {
+        "de": "Blindkassette / Dry Box",
+        "en": "Blank Cartridge / Dry Box"
+      },
+      "desc": {
+        "de": "Hermetische Blindkassette zum Schutz freier Schächte oder als wasserdichtes Staufach",
+        "en": "Hermetic blank cartridge protecting unused bays or acting as waterproof stash"
+      },
+      "parts": [
+        { "part_id": "part3d_cartridge_insert_blind", "qty": 1 }
+      ]
+    },
+    "assembly_omm_ucs_module_24g": {
+      "id": "assembly_omm_ucs_module_24g",
+      "category": "omm_module",
+      "name": {
+        "de": "OMM 2.4 GHz UCS Intercom-Modul",
+        "en": "OMM 2.4 GHz UCS Intercom Module"
+      },
+      "desc": {
+        "de": "Autarkes ECE 22.06 Intercom-Modul mit PCBA 09, LiPo 600mAh, Tastmatte, Dichtung & SMA-Bulkhead",
+        "en": "Autonomous ECE 22.06 intercom module with PCBA 09, LiPo 600mAh, keypad, seal & SMA bulkhead"
+      },
+      "parts": [
+        { "part_id": "pcba_09", "qty": 1 },
+        { "part_id": "cots_battery_omm_lipo_600", "qty": 1 },
+        { "part_id": "part3d_omm_ucs_top_shell", "qty": 1 },
+        { "part_id": "part3d_omm_ucs_bottom_shell", "qty": 1 },
+        { "part_id": "part3d_omm_ucs_silicone_keypad", "qty": 1 },
+        { "part_id": "fastener_din912_m2_8", "qty": 4 },
+        { "part_id": "fastener_din934_m2", "qty": 4 },
+        { "part_id": "seal_silicone_cord_08", "qty": 0.22 },
+        { "part_id": "cable_rf_coax_pigtail_50mm", "qty": 1 }
+      ]
+    },
+    "assembly_omm_ucs_module_446m": {
+      "id": "assembly_omm_ucs_module_446m",
+      "category": "omm_module",
+      "name": {
+        "de": "OMM 446 MHz PMR/DMR Modul",
+        "en": "OMM 446 MHz PMR/DMR Module"
+      },
+      "desc": {
+        "de": "Autarkes ECE 22.06 Funkmodul mit PCBA 10, LiPo 600mAh, Tastmatte, Dichtung & SMA-Bulkhead",
+        "en": "Autonomous ECE 22.06 radio module with PCBA 10, LiPo 600mAh, keypad, seal & SMA bulkhead"
+      },
+      "parts": [
+        { "part_id": "pcba_10", "qty": 1 },
+        { "part_id": "cots_battery_omm_lipo_600", "qty": 1 },
+        { "part_id": "part3d_omm_ucs_top_shell", "qty": 1 },
+        { "part_id": "part3d_omm_ucs_bottom_shell", "qty": 1 },
+        { "part_id": "part3d_omm_ucs_silicone_keypad", "qty": 1 },
+        { "part_id": "fastener_din912_m2_8", "qty": 4 },
+        { "part_id": "fastener_din934_m2", "qty": 4 },
+        { "part_id": "seal_silicone_cord_08", "qty": 0.22 },
+        { "part_id": "cable_rf_coax_pigtail_50mm", "qty": 1 }
+      ]
+    },
+    "assembly_omm_helmet_kit_24g": {
+      "id": "assembly_omm_helmet_kit_24g",
+      "category": "omm_helmet",
+      "name": {
+        "de": "OMM 2.4 GHz Helm-Installationskit",
+        "en": "OMM 2.4 GHz Helmet Installation Kit"
+      },
+      "desc": {
+        "de": "ECE 22.06 UCS Helmklemmsockel, 3M VHB Klebepad, J_HELMET Kabel, Hi-Fi Lautsprecher & 38 mm Stummelantenne",
+        "en": "ECE 22.06 UCS helmet cradle, 3M VHB pad, J_HELMET harness, Hi-Fi speakers & 38 mm stubby antenna"
+      },
+      "parts": [
+        { "part_id": "part3d_omm_ucs_helmet_cradle", "qty": 1 },
+        { "part_id": "fastener_tape_3m_vhb_r130", "qty": 1 },
+        { "part_id": "cable_omm_helmet_audio_j_helmet", "qty": 1 },
+        { "part_id": "cots_speakers_and_mic_kit", "qty": 1 },
+        { "part_id": "antenna_omm_stubby_24g", "qty": 1 }
+      ]
+    },
+    "assembly_omm_helmet_kit_446m": {
+      "id": "assembly_omm_helmet_kit_446m",
+      "category": "omm_helmet",
+      "name": {
+        "de": "OMM 446 MHz Helm-Installationskit",
+        "en": "OMM 446 MHz Helmet Installation Kit"
+      },
+      "desc": {
+        "de": "ECE 22.06 UCS Helmklemmsockel, 3M VHB Klebepad, J_HELMET Kabel, Hi-Fi Lautsprecher & 48 mm Helical-Antenne",
+        "en": "ECE 22.06 UCS helmet cradle, 3M VHB pad, J_HELMET harness, Hi-Fi speakers & 48 mm helical antenna"
+      },
+      "parts": [
+        { "part_id": "part3d_omm_ucs_helmet_cradle", "qty": 1 },
+        { "part_id": "fastener_tape_3m_vhb_r130", "qty": 1 },
+        { "part_id": "cable_omm_helmet_audio_j_helmet", "qty": 1 },
+        { "part_id": "cots_speakers_and_mic_kit", "qty": 1 },
+        { "part_id": "antenna_omm_stubby_446m", "qty": 1 }
+      ]
+    },
+    "assembly_radar2": {
+      "id": "assembly_radar2",
+      "category": "addon",
+      "name": {
+        "de": "Radar 2.0 Heck-Kollisionswarner",
+        "en": "Radar 2.0 Rear Collision Warning"
+      },
+      "desc": {
+        "de": "Wheeltec MR20 77-GHz Radar mit PCBA 08 Sub-MCU, 36x Halo RGB LEDs, V2X, UWB & Hirth-Gelenk",
+        "en": "Wheeltec MR20 77-GHz radar with PCBA 08 sub-MCU, 36x Halo RGB LEDs, V2X, UWB & Hirth joint"
+      },
+      "parts": [
+        { "part_id": "pcba_08", "qty": 1 },
+        { "part_id": "cots_radar_mr20", "qty": 1 },
+        { "part_id": "part3d_radar_mr20_housing", "qty": 1 },
+        { "part_id": "part3d_radar_mr20_radome", "qty": 1 },
+        { "part_id": "part3d_radar_swivel_cradle", "qty": 1 },
+        { "part_id": "cots_pc_radome_window", "qty": 1 },
+        { "part_id": "antenna_fxp524_v2x", "qty": 1 },
+        { "part_id": "antenna_fxuwb10_uwb", "qty": 1 },
+        { "part_id": "fastener_din912_m4_12", "qty": 2 },
+        { "part_id": "fastener_din934_m4", "qty": 2 },
+        { "part_id": "fastener_din912_m5_25", "qty": 1 },
+        { "part_id": "fastener_din934_m5", "qty": 1 },
+        { "part_id": "cable_radar_dc_jwpf", "qty": 1 }
+      ]
+    },
+    "assembly_bsd_mirrors": {
+      "id": "assembly_bsd_mirrors",
+      "category": "addon",
+      "name": {
+        "de": "BSD Spiegelarm-Warnanzeigen (Paar)",
+        "en": "BSD Mirror Arm Alert Indicators (Pair)"
+      },
+      "desc": {
+        "de": "Spiegelarm-Kapseln mit Fresnel-Linsen für bernsteinfarbene Totwinkel-Warnanzeigen",
+        "en": "Mirror stem pods with Fresnel lenses for amber blind spot warning alerts"
+      },
+      "parts": [
+        { "part_id": "part3d_bsd_mirror_upper_pod", "qty": 2 },
+        { "part_id": "part3d_bsd_mirror_lower_clamp", "qty": 2 },
+        { "part_id": "part3d_bsd_mirror_lens", "qty": 2 }
+      ]
+    },
+    "assembly_actioncam_dock": {
+      "id": "assembly_actioncam_dock",
+      "category": "addon",
+      "name": {
+        "de": "Actioncam Induktivdock",
+        "en": "Actioncam Inductive Dock"
+      },
+      "desc": {
+        "de": "Induktives Schnellwechsel-Kameradock für Verkleidungsmontage",
+        "en": "Inductive quick-release camera dock for fairing mounting"
+      },
+      "parts": [
+        { "part_id": "part3d_actioncam_dock", "qty": 1 }
+      ]
+    },
+    "assembly_handlebar_controls": {
+      "id": "assembly_handlebar_controls",
+      "category": "addon",
+      "name": {
+        "de": "Under-Perch Lenkerkonsole",
+        "en": "Under-Perch Handlebar Console"
+      },
+      "desc": {
+        "de": "Ergonomische 3-Tasten-Konsole unter der Kupplungsarmatur",
+        "en": "Ergonomic 3-button console under clutch bracket"
+      },
+      "parts": [
+        { "part_id": "part3d_under_perch_switch", "qty": 1 }
+      ]
+    },
+    "assembly_keyfob": {
+      "id": "assembly_keyfob",
+      "category": "addon",
+      "name": {
+        "de": "Smart-Keyfob Baugruppe",
+        "en": "Smart Keyfob Assembly"
+      },
+      "desc": {
+        "de": "Drahtloser Schlüsselanhänger mit PCBA 07, LRA-Haptik und TPU-Bumper",
+        "en": "Wireless keyfob with PCBA 07, LRA haptic and TPU protective bumper"
+      },
+      "parts": [
+        { "part_id": "pcba_07", "qty": 1 },
+        { "part_id": "part3d_smart_keyfob_lower", "qty": 1 },
+        { "part_id": "part3d_smart_keyfob_upper", "qty": 1 },
+        { "part_id": "part3d_smart_keyfob_tpu_rim", "qty": 1 }
+      ]
+    },
+    "assembly_tmp117_sensor": {
+      "id": "assembly_tmp117_sensor",
+      "category": "addon",
+      "name": {
+        "de": "TI TMP117 Stealth-Gabelfußsensor",
+        "en": "TI TMP117 Stealth Fork Sensor"
+      },
+      "desc": {
+        "de": "NIST-Präzisions-Eiswarner mit geschirmtem 1.0 m Silikonkabel & aerodynamischem Halter",
+        "en": "NIST precision black ice warning probe with shielded 1.0 m silicone cable & aerodynamic mount"
+      },
+      "parts": [
+        { "part_id": "cots_sensor_tmp117", "qty": 1 },
+        { "part_id": "part3d_tmp117_stealth_mount", "qty": 1 },
+        { "part_id": "cable_qwiic_1000mm", "qty": 1 }
+      ]
+    },
+    "assembly_bike_bmw_gs": {
+      "id": "assembly_bike_bmw_gs",
+      "category": "bike_kit",
+      "name": {
+        "de": "Montagekit: BMW GS Familie",
+        "en": "Mount Kit: BMW GS Family"
+      },
+      "desc": {
+        "de": "Sitzbank-Bügelfalte Transition-Docks (Ø 28 mm, Vario-kompatibel)",
+        "en": "Seat crease transition docks (Ø 28 mm, Vario-case compatible)"
+      },
+      "parts": [
+        { "part_id": "part3d_gs_transition_dock", "qty": 2 }
+      ]
+    },
+    "assembly_bike_bmw_gs_radar": {
+      "id": "assembly_bike_bmw_gs_radar",
+      "category": "bike_kit",
+      "name": {
+        "de": "Radar Montagekit: BMW GS",
+        "en": "Radar Mount Kit: BMW GS"
+      },
+      "desc": {
+        "de": "Gepäckbrücken-Ausleger hinter Topcase, Garmin Varia Dock & Hirth-Gelenk",
+        "en": "Luggage rack cantilever behind topcase, Garmin Varia dock & Hirth gear joint"
+      },
+      "parts": [
+        { "part_id": "part3d_gs_adventure_rack_tail", "qty": 1 },
+        { "part_id": "part3d_gs_radar_varia_dock", "qty": 1 },
+        { "part_id": "part3d_gs_gopro_hirth_lock", "qty": 1 }
+      ]
+    },
+    "assembly_bike_bmw_gsa": {
+      "id": "assembly_bike_bmw_gsa",
+      "category": "bike_kit",
+      "name": {
+        "de": "Montagekit: BMW GSA Adventure",
+        "en": "Mount Kit: BMW GSA Adventure"
+      },
+      "desc": {
+        "de": "Ø 18 mm Edelstahl-Rohrträger-Klemmschellen (4 Paar) mit M5 Schrauben",
+        "en": "Ø 18 mm stainless pannier rack clamps (4 pairs) with M5 bolts"
+      },
+      "parts": [
+        { "part_id": "part3d_gsa_pannier_clamp_base", "qty": 4 },
+        { "part_id": "part3d_gsa_pannier_clamp_cap", "qty": 4 },
+        { "part_id": "fastener_din912_m5_25", "qty": 4 },
+        { "part_id": "fastener_din934_m5", "qty": 4 }
+      ]
+    },
+    "assembly_bike_hd_touring": {
+      "id": "assembly_bike_hd_touring",
+      "category": "bike_kit",
+      "name": {
+        "de": "Montagekit: Harley-Davidson Touring & CVO ST",
+        "en": "Mount Kit: Harley-Davidson Touring & CVO ST"
+      },
+      "desc": {
+        "de": "Kofferdeckel-Docks, Rahmenrohr-Magnetdocks (Ø 26 mm), 2-Pin Magnet-Pogo Trennstelle & Koffer-Tüllenset",
+        "en": "Saddlebag lid docks, frame tube magnetic docks (Ø 26 mm), 2-pin breakaway coupler & grommet kit"
+      },
+      "parts": [
+        { "part_id": "part3d_hd_saddlebag_lid_dock", "qty": 2 },
+        { "part_id": "part3d_hd_frame_dock_body", "qty": 2 },
+        { "part_id": "part3d_hd_frame_clamp", "qty": 2 },
+        { "part_id": "part3d_hd_grommet_split", "qty": 2 },
+        { "part_id": "cots_pogo_magnetic_2pin", "qty": 2 },
+        { "part_id": "fastener_din912_m3_16", "qty": 4 },
+        { "part_id": "fastener_din934_m3", "qty": 4 }
+      ]
+    },
+    "assembly_bike_hd_radar": {
+      "id": "assembly_bike_hd_radar",
+      "category": "bike_kit",
+      "name": {
+        "de": "Radar Montagekit: Harley Kennzeichenträger",
+        "en": "Radar Mount Kit: Harley License Plate"
+      },
+      "desc": {
+        "de": "Entkoppelter Kennzeichen-Radarhalter für zentrische Heckmontage",
+        "en": "Decoupled license plate radar mount for centered rear installation"
+      },
+      "parts": [
+        { "part_id": "part3d_hd_radar_license_bracket", "qty": 1 }
+      ]
+    },
+    "assembly_bike_car_support": {
+      "id": "assembly_bike_car_support",
+      "category": "bike_kit",
+      "name": {
+        "de": "Montagekit: Support-Fahrzeug / PKW / Van",
+        "en": "Mount Kit: Support Vehicle / Car / Van"
+      },
+      "desc": {
+        "de": "Armaturenbrett-Doppelaufnahme für Front-Node & Zentralbox mit 12V Y-Kabel & CarPlay-Kabel",
+        "en": "Dashboard dual-stack dock for Front Node & Central Box with 12V Y-cable & CarPlay cable"
+      },
+      "parts": [
+        { "part_id": "part3d_car_dashboard_dock", "qty": 1 },
+        { "part_id": "cable_support_car_12v_y", "qty": 1 },
+        { "part_id": "cable_usbc_carplay_data", "qty": 1 }
+      ]
+    },
+    "assembly_bike_car_support_pods": {
+      "id": "assembly_bike_car_support_pods",
+      "category": "bike_kit",
+      "name": {
+        "de": "PKW Sonnenblenden Pod-Kit",
+        "en": "Car Sun Visor Pod Kit"
+      },
+      "desc": {
+        "de": "2x Universal Sonnenblenden-Clips mit 1.5 m DC-Zuleitungen",
+        "en": "2x universal sun visor clips with 1.5 m DC power feeds"
+      },
+      "parts": [
+        { "part_id": "part3d_car_sun_visor_clip", "qty": 2 },
+        { "part_id": "cable_support_car_visor_dc", "qty": 2 }
+      ]
+    },
+    "assembly_bike_universal_radar": {
+      "id": "assembly_bike_universal_radar",
+      "category": "bike_kit",
+      "name": {
+        "de": "Radar Montagekit: Universal Underfender",
+        "en": "Radar Mount Kit: Universal Underfender"
+      },
+      "desc": {
+        "de": "Zentrische Underfender-Radarplatte (für seitliche Kennzeichen)",
+        "en": "Centered under-fender radar mount (for side-mount plates)"
+      },
+      "parts": [
+        { "part_id": "part3d_universal_radar_underfender", "qty": 1 }
+      ]
+    },
+    "assembly_booster_omm_pod": {
+      "id": "assembly_booster_omm_pod",
+      "category": "booster",
+      "name": {
+        "de": "Festeinbau 5V RF Booster / LNA Upgrade",
+        "en": "Fixed-Mount 5V RF Booster / LNA Upgrade"
+      },
+      "desc": {
+        "de": "5V Bi-Directional RF Booster-Modul (+12 dB RX Gain), gespeist über Pin 1/2 von J_AUDIO_PWR",
+        "en": "5V bi-directional RF booster module (+12 dB RX gain), powered via pin 1/2 of J_AUDIO_PWR"
+      },
+      "parts": [
+        { "part_id": "cots_omm_booster_5v", "qty": 1 }
+      ]
+    },
+    "assembly_general_accessories": {
+      "id": "assembly_general_accessories",
+      "category": "general",
+      "name": {
+        "de": "Allgemeines Zubehör & Montagematerial",
+        "en": "General Accessories & Mounting Material"
+      },
+      "desc": {
+        "de": "N52 Magnetschlüssel, 3M Dual-Lock Klettband & JST-PH Pigtail Sortiments-Set",
+        "en": "N52 magnetic key, 3M Dual-Lock fastener & JST-PH pigtail assortment set"
+      },
+      "parts": [
+        { "part_id": "tool_n52_key", "qty": 1 },
+        { "part_id": "fastener_tape_3m_duallock_sj3550", "qty": 0.5 },
+        { "part_id": "cable_jst_ph_assortment", "qty": 1 }
+      ]
+    }
+  }
+}

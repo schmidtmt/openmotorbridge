@@ -8950,10 +8950,7 @@ function calculateSingleBikeBom(bikeConfig) {
     const bikeModel = cfg.bike || 'bmw-gs';
     const carts = getBikeCartridges(cfg);
     syncCartridgesAndLegacySlots(cfg);
-    const slot1 = cfg.slot1 || 'sena-spider-x';
-    const slot2 = cfg.slot2 || 'cardo-edge';
     const mfg = cfg.manufacturing || 'jlcpcb';
-    const bedSize = cfg.bedSize || 'standard';
 
     const numSenaSpider = carts['sena-spider-x'] || 0;
     const numSena50s = carts['sena-50s'] || 0;
@@ -8985,543 +8982,89 @@ function calculateSingleBikeBom(bikeConfig) {
         'blind': isDe ? 'Blindkassette' : 'Blank Cartridge'
     };
 
-    // Cost estimation
-    let costMin = 135;
-    let costMax = 165;
-    if (bikeModel === 'car-support') { costMin = 95; costMax = 125; }
-
-    // OMM modular electronics inclusion (PCBA 09 / PCBA 10)
-    costMin += numOmmUcs * 38;
-    costMax += numOmmUcs * 48;
-    costMin += numOmm446 * 45;
-    costMax += numOmm446 * 58;
-
-    // Extra swap cartridges beyond standard 2 pods (PCBA 03 + 3D sled + latch hardware)
-    const extraCartridges = Math.max(0, totalActiveCartridges - 2);
-    costMin += extraCartridges * 18;
-    costMax += extraCartridges * 24;
-    costMin += numBlind * 6;
-    costMax += numBlind * 9;
-
-    if (addons.frontNode) { costMin += 42; costMax += 55; }
-    if (addons.ommHelmetKit) { costMin += 45; costMax += 58; }
-    if (addons.omm446HelmetKit) { costMin += 52; costMax += 68; }
-    if (addons.tmp117Sensor) { costMin += 14; costMax += 18; }
-    if (addons.radar2) { costMin += 65; costMax += 85; }
-    if (addons.bsdMirrors) { costMin += 34; costMax += 45; }
-    if (addons.actionCamDock) { costMin += 28; costMax += 38; }
-    if (addons.handlebarControls) { costMin += 24; costMax += 32; }
-    if (addons.keyfob) { costMin += 22; costMax += 30; }
-    if (mfg === 'diy') { costMin -= 25; costMax -= 35; }
-
     const numPods = bikeModel === 'car-support' ? (totalCartridges > 0 ? 2 : 0) : 2;
-    // Carrier PCBAs: Each active cartridge built needs 1x PCBA 03 (Qorvo UWB, Codec, DC-DC)
     const numCartridgePcba = totalActiveCartridges;
-    // Mechatronic slots that need physical solenoids (miniature pushers for OEM buttons)
-    const numMechatronic = numSenaSpider + numSena50s + numCardo + numPmr;
     const numSmart = numCartridgePcba;
 
-    // 3D Parts
-    const parts3D = [
-        { group: 'Main Box', file: 'main_box_lower_case.stl', qty: 1, desc: isDe ? 'Unterwanne mit Nut-Pockets & Dichtnut' : 'Lower tub with nut pockets & seal groove' },
-        { group: 'Main Box', file: 'main_box_mid_tray.stl', qty: 1, desc: isDe ? 'Zwischenboden & Akkuwanne' : 'Mid tray & battery cradle' },
-        { group: 'Main Box', file: 'main_box_lid.stl', qty: 1, desc: isDe ? 'Deckel mit Gore ePTFE-Ventilaufnahme' : 'Lid with Gore ePTFE vent boss' }
-    ];
+    // Build active assemblies dictionary for SSOT BOM calculation
+    const activeAssemblies = {};
 
+    // 1. Central Main Box
+    activeAssemblies['assembly_main_box'] = 1;
+
+    // 2. Satellite Pods & Cartridge Sleds
     if (numPods > 0) {
-        const sledCount = Math.max(numPods, totalCartridges);
-        parts3D.push(
-            { group: 'Pod Base', file: 'pod_base_housing.stl', qty: numPods, desc: isDe ? `Satelliten-Gehäuse am Rahmen (${numPods} Stk.)` : `Satellite bay enclosure on frame (${numPods} pcs)` },
-            { group: 'Pod Base', file: '03_pod_bulkhead_partition.stl', qty: numPods, desc: isDe ? `Schottwand mit Auswerffedern (${numPods} Stk.)` : `Bulkhead partition with ejector springs (${numPods} pcs)` },
-            { group: 'Cartridge', file: 'cartridge_base_sled.stl', qty: sledCount, desc: isDe ? `Universalschlitten (${sledCount} Stk. für Pods & Wechselkassetten)` : `Universal sled chassis (${sledCount} pcs for pods & swap cartridges)` }
-        );
+        activeAssemblies['assembly_pod_base'] = numPods;
     }
-    if (totalCartridges > 0) {
-        const latchCount = Math.max(2, totalCartridges);
-        parts3D.push(
-            { group: 'Cartridge', file: 'cartridge_magnetic_lock_latch.stl', qty: latchCount, desc: isDe ? `Magnetische Diebstahlschutz-Rastwippen (${latchCount} Stk.)` : `Magnetic anti-theft locking rocker latches (${latchCount} pcs)` }
-        );
+    // Only ACTIVE cartridges get the smart cartridge carrier (with PCBA 03, latch, pins, springs)!
+    // Blind cartridges are purely 3D printed blanks (assembly_inlay_blind) without electronics.
+    if (totalActiveCartridges > 0) {
+        activeAssemblies['assembly_cartridge_carrier'] = totalActiveCartridges;
     }
 
-    // Inlays
-    if (totalCartridges > 0) {
-        const totalSena = numSenaSpider + numSena50s;
-        if (totalSena > 0) {
-            parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_sena.stl', qty: totalSena, desc: isDe ? `Inlay für Sena SPIDER X / 50S / 60S (${totalSena} Stk.)` : `Inlay for Sena SPIDER X / 50S / 60S (${totalSena} pcs)` });
-        }
-        if (numCardo > 0) {
-            parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_cardo.stl', qty: numCardo, desc: isDe ? `Inlay für Cardo Packtalk Edge / Pro (${numCardo} Stk.)` : `Inlay for Cardo Packtalk Edge / Pro (${numCardo} pcs)` });
-        }
-        if (numOmmUcs > 0) {
-            parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_omm_ucs.stl', qty: numOmmUcs, desc: isDe ? `Inlay-Schlitten mit Antennenführung für OMM 2.4 GHz PCBA 09 (${numOmmUcs} Stk.)` : `Inlay sled with antenna routing for OMM 2.4 GHz PCBA 09 (${numOmmUcs} pcs)` });
-        }
-        if (numOmm446 > 0) {
-            parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_omm446_ucs.stl', qty: numOmm446, desc: isDe ? `Inlay-Schlitten für OMM 446 PCBA 10 mit Wendelantennen-Schacht & U.FL Durchführung (${numOmm446} Stk.)` : `Inlay sled for OMM 446 PCBA 10 with helical antenna cavity & U.FL port (${numOmm446} pcs)` });
-        }
-        if (numPmr > 0) {
-            parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_pmr.stl', qty: numPmr, desc: isDe ? `Universelles COTS Funkgeräte-Inlay mit Kabeldurchführung (${numPmr} Stk.)` : `Universal COTS radio inlay with cable pass-through (${numPmr} pcs)` });
-        }
-        if (numBlind > 0) {
-            parts3D.push({ group: 'Gateway Inlay', file: 'cartridge_insert_blindkassette.stl', qty: numBlind, desc: isDe ? `Hermetische Blindkassette / Dry Box (${numBlind} Stk.)` : `Hermetic blank cartridge / Dry Box (${numBlind} pcs)` });
-        }
+    // 3. Gateway Inlays
+    if (numSenaSpider > 0) activeAssemblies['assembly_inlay_sena_spider'] = numSenaSpider;
+    if (numSena50s > 0) activeAssemblies['assembly_inlay_sena_50s'] = numSena50s;
+    if (numCardo > 0) activeAssemblies['assembly_inlay_cardo_edge'] = numCardo;
+    if (numOmmUcs > 0) activeAssemblies['assembly_inlay_omm_ucs'] = numOmmUcs;
+    if (numOmm446 > 0) activeAssemblies['assembly_inlay_omm446_ucs'] = numOmm446;
+    if (numPmr > 0) activeAssemblies['assembly_inlay_pmr446'] = numPmr;
+    if (numBlind > 0) activeAssemblies['assembly_inlay_blind'] = numBlind;
+
+    // OMM Electronics Modules (PCBA 09 & PCBA 10)
+    const totalOmmUcsModules = numOmmUcs + (addons.ommHelmetKit ? 1 : 0);
+    if (totalOmmUcsModules > 0) {
+        activeAssemblies['assembly_omm_ucs_module_24g'] = totalOmmUcsModules;
     }
 
-    if (addons.frontNode) {
-        parts3D.push({ group: 'Front-Node', file: 'front_node_lower_tub.stl', qty: 1, desc: isDe ? 'Cockpit-Wanne mit AMPS & Nut-Pockets' : 'Cockpit tub with AMPS & nut pockets' });
-        parts3D.push({ group: 'Front-Node', file: 'front_node_upper_lid.stl', qty: 1, desc: isDe ? 'Deckel mit Knowles MEMS Schalleintritt' : 'Lid with Knowles MEMS acoustic port' });
-        parts3D.push({ group: 'Front-Node', file: 'front_node_cable_glands_tpu.stl', qty: '1 Paar', desc: isDe ? 'Elastische Dichtkämme (TPU)' : 'Elastomeric sealing combs (TPU)' });
-        parts3D.push({ group: 'Front-Node', file: 'front_node_usbc_cap_tpu.stl', qty: 1, desc: isDe ? 'Elastische USB-C Staubkappe (TPU)' : 'Elastomeric USB-C dust cap (TPU)' });
-        parts3D.push({ group: 'Front-Node', file: 'front_node_fairing_tube_clamp.stl', qty: 1, desc: isDe ? 'Universal Verkleidungs-Rohrschelle (Ø 12-22 mm, AMPS)' : 'Universal Fairing Tube Clamp (Ø 12-22 mm, AMPS)' });
+    const totalOmm446Modules = numOmm446 + (addons.omm446HelmetKit ? 1 : 0);
+    if (totalOmm446Modules > 0) {
+        activeAssemblies['assembly_omm_ucs_module_446m'] = totalOmm446Modules;
     }
 
-    // Radar 2.0
-    if (addons.radar2) {
-        parts3D.push({ group: 'Radar 2.0', file: 'radar_mr20_housing.stl', qty: 1, desc: isDe ? 'PA12-SLS Radargehäuse mit M5-Verschraubung' : 'PA12-SLS radar enclosure with M5 thread' });
-        parts3D.push({ group: 'Radar 2.0', file: 'radar_mr20_radome.stl', qty: 1, desc: isDe ? 'HF-transparentes Radom mit Halo-LED-Diffusor' : 'RF-transparent radome with Halo LED diffuser' });
-    }
+    // 4. Cockpit & Addon Modules
+    if (addons.frontNode) activeAssemblies['assembly_front_node'] = 1;
+    if (addons.radar2) activeAssemblies['assembly_radar2'] = 1;
+    if (addons.bsdMirrors) activeAssemblies['assembly_bsd_mirrors'] = 1;
+    if (addons.actionCamDock) activeAssemblies['assembly_actioncam_dock'] = 1;
+    if (addons.handlebarControls) activeAssemblies['assembly_handlebar_controls'] = 1;
+    if (addons.keyfob) activeAssemblies['assembly_keyfob'] = 1;
+    if (addons.tmp117Sensor) activeAssemblies['assembly_tmp117_sensor'] = 1;
+    if (addons.ommHelmetKit) activeAssemblies['assembly_omm_helmet_kit_24g'] = 1;
+    if (addons.omm446HelmetKit) activeAssemblies['assembly_omm_helmet_kit_446m'] = 1;
 
-    // BSD Mirrors
-    if (addons.bsdMirrors) {
-        parts3D.push({ group: 'BSD-Spiegel', file: 'bsd_mirror_upper_pod.stl', qty: 2, desc: isDe ? 'Spiegelarm-Warnanzeigen (Links & Rechts)' : 'Mirror arm alert pods (Left & Right)' });
-        parts3D.push({ group: 'BSD-Spiegel', file: 'bsd_mirror_lower_clamp.stl', qty: 2, desc: isDe ? 'Spiegelarm-Klemmschellen (Ø 10-14 mm)' : 'Mirror stem clamp bases (Ø 10-14 mm)' });
-        parts3D.push({ group: 'BSD-Spiegel', file: 'bsd_mirror_lens.stl', qty: 2, desc: isDe ? 'Fresnel-Diffusorlinsen für bernsteinfarbene LEDs' : 'Fresnel diffuser lenses for amber LEDs' });
-    }
-
-    // Actioncam Inductive Dock
-    if (addons.actionCamDock) {
-        parts3D.push({ group: 'Actioncam-Dock', file: 'road_glide_inductive_cam_dock.stl', qty: 1, desc: isDe ? 'Induktives Schnellwechsel-Kameradock' : 'Inductive quick-release camera dock' });
-    }
-
-    // Handlebar Controls
-    if (addons.handlebarControls) {
-        parts3D.push({ group: 'Lenkertaster', file: 'under_perch_switch_bracket.stl', qty: 1, desc: isDe ? 'Under-Perch 3-Tasten-Konsole für Kupplungsarmatur' : 'Under-perch 3-button console for clutch bracket' });
-    }
-
-    // OMM Helmet UCS Kit
-    if (addons.ommHelmetKit) {
-        parts3D.push({ group: 'OMM 2.4 Helm-Kit', file: 'omm_ucs_top_shell.stl', qty: 1, desc: isDe ? 'ECE 22.06 Gehäuse-Oberschale mit M2 Mutterntaschen' : 'ECE 22.06 upper shell with M2 nut pockets' });
-        parts3D.push({ group: 'OMM 2.4 Helm-Kit', file: 'omm_ucs_bottom_shell.stl', qty: 1, desc: isDe ? 'ECE 22.06 Gehäuse-Unterschale mit Dichtnut & USB-C Ausschnitt' : 'ECE 22.06 lower shell with seal groove & USB-C cutout' });
-        parts3D.push({ group: 'OMM 2.4 Helm-Kit', file: 'omm_ucs_silicone_keypad.stl', qty: 1, desc: isDe ? 'ECE 22.06 4-Tasten Silikon-Schaltmatte (Shore 50A IP67)' : 'ECE 22.06 4-button silicone keypad (Shore 50A IP67)' });
-        parts3D.push({ group: 'OMM 2.4 Helm-Kit', file: 'omm_ucs_helmet_cradle.stl', qty: 1, desc: isDe ? 'ECE 22.06 UCS Helm-Klemmsockel & 3M VHB R130 Adapter' : 'ECE 22.06 UCS helmet cradle & 3M VHB R130 adapter' });
-    }
-
-    // OMM 446 MHz Helmet UCS Kit
-    if (addons.omm446HelmetKit) {
-        parts3D.push({ group: 'OMM 446 Helm-Kit', file: 'omm_ucs_top_shell.stl', qty: 1, desc: isDe ? 'ECE 22.06 Gehäuse-Oberschale mit M2 Mutterntaschen' : 'ECE 22.06 upper shell with M2 nut pockets' });
-        parts3D.push({ group: 'OMM 446 Helm-Kit', file: 'omm_ucs_bottom_shell.stl', qty: 1, desc: isDe ? 'ECE 22.06 Gehäuse-Unterschale mit Dichtnut & USB-C Ausschnitt' : 'ECE 22.06 lower shell with seal groove & USB-C cutout' });
-        parts3D.push({ group: 'OMM 446 Helm-Kit', file: 'omm_ucs_silicone_keypad.stl', qty: 1, desc: isDe ? 'ECE 22.06 4-Tasten Silikon-Schaltmatte (Shore 50A IP67)' : 'ECE 22.06 4-button silicone keypad (Shore 50A IP67)' });
-        parts3D.push({ group: 'OMM 446 Helm-Kit', file: 'omm_ucs_helmet_cradle.stl', qty: 1, desc: isDe ? 'ECE 22.06 UCS Helm-Klemmsockel & 3M VHB R130 Adapter' : 'ECE 22.06 UCS helmet cradle & 3M VHB R130 adapter' });
-    }
-
-    // TMP117 Stealth Sensor Mount
-    if (addons.tmp117Sensor) {
-        parts3D.push({ group: 'Stealth-Sensor', file: 'tmp117_stealth_fork_mount.stl', qty: 1, desc: isDe ? 'Gabelfuß-/Kotflügel-Halterung (mattschwarz PA12, aerodynamisch)' : 'Fork foot/fender mount (matte black PA12, aerodynamic)' });
-    }
-
-    // Bike-specific parts
+    // 5. Bike-Specific Mounting Kits
     if (bikeModel === 'bmw-gs') {
-        parts3D.push({ group: 'Bike-Kit (GS)', file: 'adventure_transition_dock.stl', qty: 2, desc: isDe ? 'Sitzbank-Bügelfalte Transition-Docks (Ø 28 mm)' : 'Seat crease transition docks (Ø 28 mm)' });
-        if (addons.radar2) {
-            parts3D.push({ group: 'Bike-Kit (GS)', file: 'adventure_rack_tail_mount.stl', qty: 1, desc: isDe ? 'Gepäckbrücken-Ausleger für Radar 2.0 / Varia' : 'Luggage rack cantilever for Radar 2.0 / Varia' });
-            parts3D.push({ group: 'Bike-Kit (GS)', file: 'radar_varia_gopro_lock_dock.stl', qty: 1, desc: isDe ? 'Garmin Varia Quarter-Turn Dock' : 'Garmin Varia quarter-turn dock' });
-            parts3D.push({ group: 'Bike-Kit (GS)', file: '011_gopro_hirth_lock.stl', qty: 1, desc: isDe ? '36-Zahn Hirth-Formschluss-Gelenk' : '36-tooth Hirth gear lock' });
-        }
+        activeAssemblies['assembly_bike_bmw_gs'] = 1;
+        if (addons.radar2) activeAssemblies['assembly_bike_bmw_gs_radar'] = 1;
     } else if (bikeModel === 'bmw-gsa') {
-        parts3D.push({ group: 'Bike-Kit (GSA)', file: 'adventure_pannier_rack_clamp_base.stl', qty: 4, desc: isDe ? 'Ø 18 mm Rohrträger-Klemmschellen-Unterteile' : 'Ø 18 mm pannier rack clamp bases' });
-        parts3D.push({ group: 'Bike-Kit (GSA)', file: 'adventure_pannier_rack_clamp_cap.stl', qty: 4, desc: isDe ? 'Ø 18 mm Rohrträger-Klemmschellen-Kappen' : 'Ø 18 mm pannier rack clamp caps' });
-        if (addons.radar2) {
-            parts3D.push({ group: 'Bike-Kit (GSA)', file: 'adventure_rack_tail_mount.stl', qty: 1, desc: isDe ? 'Heck-Balkon hinter Alutopcase mit 45°-Finne für Radar' : 'Tail Balcony behind topcase with 45° fin for Radar' });
-            parts3D.push({ group: 'Bike-Kit (GSA)', file: 'radar_varia_gopro_lock_dock.stl', qty: 1, desc: isDe ? 'Garmin Varia Quarter-Turn Dock' : 'Garmin Varia quarter-turn dock' });
-            parts3D.push({ group: 'Bike-Kit (GSA)', file: '011_gopro_hirth_lock.stl', qty: 1, desc: isDe ? '36-Zahn Hirth-Formschluss-Gelenk' : '36-tooth Hirth gear lock' });
-        }
-    } else if (bikeModel === 'hd-touring') {
-        parts3D.push({ group: 'Bike-Kit (HD)', file: 'saddlebag_lid_dock.stl', qty: 2, desc: isDe ? 'Kofferdeckel-Montagedocks (Pod 1 & 2)' : 'Saddlebag lid docks (Pods 1 & 2)' });
-        if (addons.radar2) {
-            parts3D.push({ group: 'Bike-Kit (HD)', file: 'radar_license_plate_bracket.stl', qty: 1, desc: isDe ? 'Entkoppelter Kennzeichen-Radarhalter' : 'Decoupled license plate radar mount' });
-            parts3D.push({ group: 'Bike-Kit (HD)', file: 'radar_swivel_tilt_cradle.stl', qty: 1, desc: isDe ? 'Radar 2.0 Schwerlast-Neigegelenk (Actioncam-Hirth)' : 'Radar 2.0 heavy-duty swivel tilt cradle (Actioncam Hirth)' });
-        }
-    } else if (bikeModel === 'hd-cvo-st' || bikeModel === 'hd-cVO-st') {
-        parts3D.push({ group: 'Bike-Kit (CVO)', file: 'saddlebag_lid_dock.stl', qty: 2, desc: isDe ? 'Kofferdeckel-Montagedocks (Pod 1 & 2)' : 'Saddlebag lid docks (Pods 1 & 2)' });
-        if (addons.radar2) {
-            parts3D.push({ group: 'Bike-Kit (CVO)', file: 'radar_license_plate_bracket.stl', qty: 1, desc: isDe ? 'Entkoppelter Kennzeichen-Radarhalter (OEM-Mitte)' : 'Decoupled license plate radar mount (OEM center)' });
-            parts3D.push({ group: 'Bike-Kit (CVO)', file: 'radar_swivel_tilt_cradle.stl', qty: 1, desc: isDe ? 'Radar 2.0 Schwerlast-Neigegelenk (Actioncam-Hirth)' : 'Radar 2.0 heavy-duty swivel tilt cradle (Actioncam Hirth)' });
-        }
+        activeAssemblies['assembly_bike_bmw_gsa'] = 1;
+        if (addons.radar2) activeAssemblies['assembly_bike_bmw_gs_radar'] = 1;
+    } else if (bikeModel === 'hd-touring' || bikeModel === 'hd-cvo-st' || bikeModel === 'hd-cVO-st') {
+        activeAssemblies['assembly_bike_hd_touring'] = 1;
+        if (addons.radar2) activeAssemblies['assembly_bike_hd_radar'] = 1;
     } else if (bikeModel === 'car-support') {
-        parts3D.push({ group: 'PKW-Kit', file: 'car_dashboard_wedge_dock.stl', qty: 1, desc: isDe ? 'Armaturenbrett-Doppelaufnahme für Front-Knoten & Zentralbox' : 'Dashboard dual-stack dock for Front Node & Central Box' });
-        if (numPods > 0) {
-            parts3D.push({ group: 'PKW-Kit', file: 'car_sun_visor_pod_clip.stl', qty: numPods, desc: isDe ? `Universal Sonnenblenden-Clips für Kassetten-Pods (${numPods} Stk.)` : `Universal sun visor clips for cartridge pods (${numPods} pcs)` });
-        }
+        activeAssemblies['assembly_bike_car_support'] = 1;
+        if (numPods > 0) activeAssemblies['assembly_bike_car_support_pods'] = 1;
     } else {
-        parts3D.push({ group: 'Bike-Kit (Universal)', file: 'Integriertes V-Bett', qty: 2, desc: isDe ? '120° V-Nut Rohrsattel an Pod-Gehäusen' : '120° V-cradle on Pod enclosures' });
-        if (addons.radar2) {
-            parts3D.push({ group: 'Bike-Kit (Universal)', file: 'radar_center_underfender_mount.stl', qty: 1, desc: isDe ? 'Zentrische Underfender-Radarplatte (für seitl. Kennzeichen)' : 'Centered under-fender radar mount (for side-mount plates)' });
-            parts3D.push({ group: 'Bike-Kit (Universal)', file: 'radar_swivel_tilt_cradle.stl', qty: 1, desc: isDe ? 'Radar 2.0 Schwerlast-Neigegelenk (Actioncam-Hirth)' : 'Radar 2.0 heavy-duty swivel tilt cradle (Actioncam Hirth)' });
-        }
+        if (addons.radar2) activeAssemblies['assembly_bike_universal_radar'] = 1;
     }
 
-    if (bikeModel === 'hd-touring' || bikeModel === 'hd-cvo-st' || bikeModel === 'hd-cVO-st') {
-        parts3D.push({ group: 'Koffer-Docking', file: 'cots_magnetic_frame_dock_body.stl', qty: 2, desc: isDe ? 'COTS Magnet-Rahmendock für Ø 26 mm Rahmenrohr' : 'COTS magnetic frame dock for Ø 26 mm frame tube' });
-        parts3D.push({ group: 'Koffer-Docking', file: 'cots_magnetic_frame_clamp.stl', qty: 2, desc: isDe ? 'Rahmenrohr-Klemmschelle für Magnetdock' : 'Frame tube clamp for magnetic dock' });
-        parts3D.push({ group: 'Koffer-Docking', file: '010_saddlebag_hole_grommet_split.stl', qty: 2, desc: isDe ? 'Geteilte 12 mm Koffer-Seitendurchführung (Innenwand neben Werksbefestigung)' : 'Split 12 mm saddlebag side-wall pass-through (inner wall beside OEM mount)' });
-    }
+    // Roll up parts from SSOT database
+    const partQuantities = typeof rollUpBomParts === 'function' ? rollUpBomParts(activeAssemblies) : {};
+    const categorized = typeof categorizeRolledUpBom === 'function' ?
+        categorizeRolledUpBom(partQuantities, isDe ? 'de' : 'en') :
+        { parts3D: [], pcbas: [], cots: [], fasteners: [], seals: [], cables: [], antennas: [], totalCostMin: 120, totalCostMax: 160 };
 
-    if (addons.keyfob) {
-        parts3D.push({ group: 'Zubehör', file: 'smart_keyfob_lower_shell.stl', qty: 1, desc: isDe ? 'Keyfob Wanne mit LRA-Dämpfungsbett' : 'Keyfob tub with LRA damping bed' });
-        parts3D.push({ group: 'Zubehör', file: 'smart_keyfob_upper_shell.stl', qty: 1, desc: isDe ? 'Keyfob Deckel mit 3 Tastenfeldern' : 'Keyfob lid with 3 button keypads' });
-        parts3D.push({ group: 'Zubehör', file: 'smart_keyfob_tpu_rim.stl', qty: 1, desc: isDe ? 'Keyfob Elastischer Bumper (TPU)' : 'Keyfob elastomeric bumper (TPU)' });
-    }
+    // Cost estimation calculation
+    // DIY discount: If printing locally instead of ordering PA12-SLS, save ~60% on 3D print costs
+    const printCostMin = categorized.parts3D.reduce((acc, p) => acc + (p.costMin || 0), 0);
+    const printCostMax = categorized.parts3D.reduce((acc, p) => acc + (p.costMax || 0), 0);
+    const diySavingsMin = mfg === 'diy' ? printCostMin * 0.6 : 0;
+    const diySavingsMax = mfg === 'diy' ? printCostMax * 0.6 : 0;
 
-    // PCBAs
-    const pcbas = [
-        { name: 'PCBA 01', id: 'kicad_main_box', qty: 1, desc: isDe ? 'Zentralbox Hauptplatine (ESP32-S3, Codec, USV, SX1262 LoRa)' : 'Central box main controller (ESP32-S3, Codec, UPS, SX1262 LoRa)' }
-    ];
-
-    if (numCartridgePcba > 0) {
-        pcbas.push({
-            name: 'PCBA 03',
-            id: 'kicad_cartridge',
-            qty: numCartridgePcba,
-            desc: isDe ?
-                `Smart Kassetten-Trägerplatine (${numCartridgePcba}x: Qorvo DW3110 UWB, ES8388 Codec, DC-DC Speisung)` :
-                `Smart cartridge carrier board (${numCartridgePcba}x: Qorvo DW3110 UWB, ES8388 Codec, DC-DC power)`
-        });
-    }
-
-    if (addons.frontNode) {
-        pcbas.push({ name: 'PCBA 05', id: 'kicad_front_node', qty: 1, desc: isDe ? 'Universal Front-Knoten (ESP32-S3, USB-Hub, SAM-M10Q GNSS, PD)' : 'Universal Front Node (ESP32-S3, USB Hub, SAM-M10Q GNSS, PD)' });
-    }
-
-    if (addons.keyfob) {
-        pcbas.push({ name: 'PCBA 07', id: 'kicad_smart_keyfob', qty: 1, desc: isDe ? 'Smart-Keyfob (BLE Tracker, LRA Haptik)' : 'Smart keyfob (BLE tracker, LRA haptic)' });
-    }
-
-    if (addons.radar2) {
-        pcbas.push({ name: 'PCBA 08', id: 'kicad_radar_submcu', qty: 1, desc: isDe ? 'Radar 2.0 Sub-MCU & Halo-Wings (Wheeltec MR20 77-GHz, 36x Halo RGB LEDs, UWB)' : 'Radar 2.0 Sub-MCU & Halo-Wings (Wheeltec MR20 77-GHz, 36x Halo RGB LEDs, UWB)' });
-    }
-
-    const totalOmmPcba = numOmmUcs + (addons.ommHelmetKit ? 1 : 0);
-
-    if (totalOmmPcba > 0) {
-        pcbas.push({
-            name: 'PCBA 09',
-            id: 'kicad_omm_intercom',
-            qty: totalOmmPcba,
-            desc: isDe ?
-                `OMM 2.4 GHz UCS Intercom (${totalOmmPcba}x: Dual-Engine ESP32-C6 + ESP32-PICO BT Classic, ES8388 Codec, BQ24075 PMIC)` :
-                `OMM 2.4 GHz UCS Intercom (${totalOmmPcba}x: Dual-Engine ESP32-C6 + ESP32-PICO BT Classic, ES8388 Codec, BQ24075 PMIC)`
-        });
-    }
-
-    const totalOmm446Pcba = numOmm446 + (addons.omm446HelmetKit ? 1 : 0);
-
-    if (totalOmm446Pcba > 0) {
-        pcbas.push({
-            name: 'PCBA 10',
-            id: 'kicad_omm446_intercom',
-            qty: totalOmm446Pcba,
-            desc: isDe ?
-                `OMM 446 MHz PMR/DMR Transceiver (${totalOmm446Pcba}x: NiceRF SA818-DMR, ESP32-C6 Host, ESP32-PICO BT Bridge, ES8388 Codec, BQ24075 PMIC)` :
-                `OMM 446 MHz PMR/DMR Transceiver (${totalOmm446Pcba}x: NiceRF SA818-DMR, ESP32-C6 Host, ESP32-PICO BT Bridge, ES8388 Codec, BQ24075 PMIC)`
-        });
-    }
-
-    // COTS & Fasteners
-    const cots = [
-        { name: 'Pufferakku (LiPo USV)', spec: '1S 3.7V 2.200 mAh Flat-Pack (Typ 504068) mit Micro-Fit', qty: 1, desc: isDe ? 'Notstrom-Pufferung in der Zentralbox' : 'Seamless UPS reserve inside main box' },
-        { name: 'Taoglas FXP895 LoRa Flexantenne', spec: '868 MHz Flex-Dipol (+2.0 dBi) mit U.FL Buchse (100 mm)', qty: 1, desc: isDe ? 'Weitbereichs-Kolonnenfunk für SX1262 LoRa in der Deckeltasche der Zentralbox' : 'Long-range convoy mesh for SX1262 LoRa in central box lid cavity' },
-        { name: 'Gore ePTFE Druckausgleichs-Ventil', spec: 'Ø 12 mm selbstklebendes ePTFE Membran-Patch IP68', qty: 1, desc: isDe ? 'Druckausgleich & Kondenswasserschutz im Deckel der Zentralbox' : 'Pressure equalization & moisture vent in central box lid' },
-        { name: 'M3 Gehäuseschrauben', spec: 'DIN 912 V4A M3 x 40 mm', qty: 4, desc: isDe ? 'Zentralbox Gehäuse (greift in Nut-Pockets)' : 'Main box enclosure (threads into nut pockets)' },
-        { name: 'M3 Edelstahlmuttern', spec: 'DIN 934 / 985 M3 V4A', qty: addons.frontNode ? 8 : 4, desc: isDe ? 'Unverlierbar in Nut-Pockets eingelegt (kein Lötkolben!)' : 'Captive in nut pockets (no soldering iron needed!)' }
-    ];
-
-    // UWB 6.5 GHz Backbone Antennen (Taoglas FXUWB10)
-    const numUwbAntennas = 1 + (addons.frontNode ? 1 : 0) + (addons.radar2 ? 1 : 0);
-    cots.push({
-        name: 'Taoglas FXUWB10 UWB Flexantenne',
-        spec: '6.5 GHz Ch. 5 Flex-Patch mit 20 mm U.FL Koaxialkabel',
-        qty: numUwbAntennas,
-        desc: isDe ?
-            `Drahtloses UWB 6.5 GHz Backbone (${numUwbAntennas} Stk.: 1x Zentralbox${addons.frontNode ? ' + 1x Front-Node' : ''}${addons.radar2 ? ' + 1x Radar 2.0' : ''})` :
-            `Wireless UWB 6.5 GHz backbone (${numUwbAntennas} pcs: 1x Central Box${addons.frontNode ? ' + 1x Front Node' : ''}${addons.radar2 ? ' + 1x Radar 2.0' : ''})`
-    });
-
-    if (bikeModel === 'car-support') {
-        cots.push({
-            name: isDe ? '12V Y-Adapterkabel (Support-Car Harness)' : '12V Y-Adapter Cable (Support-Car Harness)',
-            spec: '12V Kfz-Zigarettenanzünder (5A) auf JST-JWPF 2P + Deutsch DTM-12',
-            qty: 1,
-            desc: isDe ? 'Parallele 12V Speisung für Front-Node & Zentralbox (USB-C bleibt 100% frei für CarPlay!)' : 'Parallel 12V supply for Front Node & Central Box (USB-C stays 100% free for CarPlay!)'
-        });
-        cots.push({
-            name: isDe ? 'USB-C CarPlay / Infotainment-Kabel' : 'USB-C CarPlay / Infotainment Cable',
-            spec: 'USB-C auf USB-A/C Datenkabel (1.0 m)',
-            qty: 1,
-            desc: isDe ? 'Kabelgebundene Head-Unit Audio- & Display-Bridge (Apple CarPlay / Android Auto)' : 'Wired head unit audio & display bridge (Apple CarPlay / Android Auto)'
-        });
-        if (numPods > 0) {
-            cots.push({
-                name: isDe ? 'Sonnenblenden DC-Zuleitung' : 'Sun Visor DC Power Lead',
-                spec: '2-Pin FLRY 2x0.35² (1.5 m)',
-                qty: numPods,
-                desc: isDe ? `5V DC-Speisung vom Front-Node zu den Kassetten-Pods (${numPods} Stk.)` : `5V DC power feed from Front Node to visor pods (${numPods} pcs)`
-            });
-        }
-    } else {
-        cots.push({
-            name: isDe ? 'Deutsch DTM-12 Hauptkabelbaum' : 'Deutsch DTM-12 Main Harness',
-            spec: 'IP68/IP69K Deutsch DTM-12 COTS Fertigkabelbaum mit Raychem DR-25',
-            qty: 1,
-            desc: isDe ? 'Zentraler Hauptanschluss für Bordnetz, CAN-Bus & DC-Peitschen zu den Pods' : 'Central main harness for bike power, CAN bus & DC leads to pods'
-        });
-        cots.push({ name: isDe ? 'KFZ-Sicherungshalter' : 'Automotive Fuse Holder', spec: 'Wasserdichter Halter + 2A Sicherung', qty: 1, desc: isDe ? 'Dauerplus-Absicherung an Batteriepol' : 'Direct battery terminal protection (KL30)' });
-        if (numPods > 0) {
-            cots.push({ name: isDe ? 'Pure-DC 2-Ader Zuleitung (PUR)' : 'Pure-DC 2-Wire Cable (PUR)', spec: '2x 0.34 mm² (AWG22) mit JST-JWPF 2-Pin IP67', qty: numPods, desc: isDe ? `Reine DC-Stromversorgung zu Pod 1 & 2 (${numPods} Stk., Audio/Daten 100% via UWB)` : `Pure DC power feed to pods 1 & 2 (${numPods} pcs, audio/data 100% via UWB)` });
-        }
-    }
-
-    if (addons.frontNode) {
-        cots.push({
-            name: 'u-blox SAM-M10Q Multi-GNSS Modul',
-            spec: '15x15 mm Keramik-Patchantenne, Qwiic I2C (GPS/GLONASS/Galileo/BeiDou)',
-            qty: 1,
-            desc: isDe ? 'Cockpit-Satellitenortung an Port J12 mit freier Sicht zum Zenit' : 'Cockpit satellite navigation on port J12 with clear zenith view'
-        });
-        cots.push({
-            name: 'Qwiic / STEMMA QT Sensorkabel',
-            spec: '4-Pin JST-SH Buchse zu Buchse (100 mm Silikonlitze)',
-            qty: 1,
-            desc: isDe ? 'Verbindung von Port J12 am Front-Node zum SAM-M10Q GNSS-Modul' : 'Link from Front Node port J12 to SAM-M10Q GNSS module'
-        });
-        cots.push({ name: isDe ? 'Front-Node 12V Anschlusskabel' : 'Front Node 12V Power Pigtail', spec: '2-Pin JST-PH mit Posi-Tap', qty: 1, desc: isDe ? 'Lokale 12V-Cockpit-Versorgung (Drahtlos via ESP-NOW / BLE)' : 'Local 12V cockpit tap (Wireless via ESP-NOW / BLE)' });
-        cots.push({ name: 'M3 Front-Schrauben', spec: 'DIN 912 V4A M3 x 20 mm', qty: 4, desc: isDe ? 'Front-Node Gehäusedeckel' : 'Front Node enclosure lid' });
-        cots.push({ name: 'M4 Edelstahlmuttern', spec: 'DIN 934 M4 V4A', qty: 4, desc: isDe ? 'AMPS-Befestigungstaschen am Gehäuseboden' : 'AMPS mounting pockets in tub floor' });
-        cots.push({ name: 'M5 Klemmschrauben & EPDM-Streifen', spec: '2x DIN 912 M5 x 25 mm + Stopmuttern + EPDM', qty: 1, desc: isDe ? 'Befestigung an runden Verkleidungsrohren (Ø 12-22 mm)' : 'Mounting to round fairing tubes (Ø 12-22 mm)' });
-    }
-
-    if (numMechatronic > 0) {
-        cots.push({ name: 'M2 Halteplattenschrauben', spec: 'DIN 7991 V4A M2 x 6 mm', qty: numMechatronic * 4, desc: isDe ? 'Aktuator-Niederhalteplatten (4x pro Gateway)' : 'Actuator retainer plates (4x per gateway)' });
-        cots.push({ name: 'Miniatur-Hubmagnete', spec: '5V DC Ø 6,5x12mm + TPU-Spitzen', qty: numMechatronic * 4, desc: isDe ? 'Mechatronische Tastenbetätigung (4x pro Smart Slot)' : 'Mechatronic button actuation (4x per smart slot)' });
-        cots.push({ name: 'J_ACT Aktuator-Kabelbaum', spec: 'Fertiges 8-Pin JST-SH Kabel auf 4x Litzen', qty: numMechatronic, desc: isDe ? 'Vorkonfektioniertes Fertigkabel (kein Crimpen!)' : 'Pre-molded harness lead (zero crimping!)' });
-    }
-
-    const numOmmPods = numOmmUcs + numOmm446;
-    if (numOmmPods > 0) {
-        cots.push({
-            name: 'J_AUDIO_PWR Adapterkabel',
-            spec: '8-Pin JST-SH 1.0mm auf 90° USB-C (5 cm, Kelvin-Grounds)',
-            qty: numOmmPods,
-            desc: isDe ?
-                `Verbindung PCBA 03 Trägerplatine zu OMM USB-C Port im Pod (${numOmmPods} Stk.)` :
-                `Connection PCBA 03 carrier board to OMM USB-C port in pod (${numOmmPods} pcs)`
-        });
-    }
-
-    if (totalOmmPcba > 0) {
-        cots.push({
-            name: isDe ? 'RF Micro-Koaxial-Pigtail (U.FL zu SMA)' : 'RF Micro-Coax Pigtail (U.FL to SMA)',
-            spec: '50 mm low-loss RG-178 / 1.13mm mit IP67 EPDM O-Ring & V4A-Mutter',
-            qty: totalOmmPcba,
-            desc: isDe ? `Koaxial-Pigtail zur wasserdichten Gehäuse-Durchführung für PCBA 09 (${totalOmmPcba} Stk.)` : `Coax pigtail to waterproof enclosure bulkhead for PCBA 09 (${totalOmmPcba} pcs)`
-        });
-        cots.push({
-            name: isDe ? 'OMM 2.4 GHz Stummelantenne' : 'OMM 2.4 GHz Stubby Antenna',
-            spec: '2.4 GHz Rubber-Duck (38 mm, SMA-Male, +2.5 dBi omni)',
-            qty: totalOmmPcba,
-            desc: isDe ? `Kompakte Helmmontage-Antenne für PCBA 09 (flatter- & pfeiffrei, ${totalOmmPcba} Stk.)` : `Compact helmet stubby antenna for PCBA 09 (zero buffeting, ${totalOmmPcba} pcs)`
-        });
-        cots.push({
-            name: '1S LiPo Pouch-Akku 600 mAh (PCBA 09)',
-            spec: '3.7V / 2.22Wh (Typ 452438) mit DW01A/8205A PCM & JST-ACH',
-            qty: totalOmmPcba,
-            desc: isDe ? `Integrierter Akku für PCBA 09 (${totalOmmPcba} Stk., 12-14h Standalone-Betrieb)` : `Internal battery for PCBA 09 (${totalOmmPcba} pcs, 12-14h standalone)`
-        });
-        cots.push({
-            name: 'M2 Gehäuseschrauben & Muttern',
-            spec: 'DIN 912 V4A M2 x 8 mm + DIN 934 M2 Muttern',
-            qty: totalOmmPcba * 4,
-            desc: isDe ? `Verschraubung für PCBA 09 / UCS-Gehäuse (${totalOmmPcba * 4} Paar)` : `Screws & nuts for PCBA 09 / UCS housing (${totalOmmPcba * 4} pairs)`
-        });
-    }
-
-    if (totalOmm446Pcba > 0) {
-        cots.push({
-            name: isDe ? 'RF Micro-Koaxial-Pigtail 446M (U.FL zu SMA)' : 'RF Micro-Coax Pigtail 446M (U.FL to SMA)',
-            spec: '50 mm low-loss RG-178 / 1.13mm mit IP67 EPDM O-Ring & V4A-Mutter',
-            qty: totalOmm446Pcba,
-            desc: isDe ? `Koaxial-Pigtail von J_RF zur wasserdichten Gehäuse-Durchführung für PCBA 10 (${totalOmm446Pcba} Stk.)` : `Coax pigtail from J_RF to waterproof bulkhead for PCBA 10 (${totalOmm446Pcba} pcs)`
-        });
-        cots.push({
-            name: isDe ? 'OMM 446 MHz Stummelantenne' : 'OMM 446 MHz Stubby Antenna',
-            spec: '446 MHz Helical-Stummelantenne (48 mm, SMA-Male, PMR/DMR)',
-            qty: totalOmm446Pcba,
-            desc: isDe ? `Kompakte gewickelte Wendelantenne für PCBA 10 (1.5-2.5 km Reichweite, ${totalOmm446Pcba} Stk.)` : `Compact helical stubby antenna for PCBA 10 (1.5-2.5 km range, ${totalOmm446Pcba} pcs)`
-        });
-        cots.push({
-            name: '1S LiPo Pouch-Akku 600 mAh (PCBA 10)',
-            spec: '3.7V / 2.22Wh (Typ 452438) mit DW01A/8205A PCM & JST-ACH',
-            qty: totalOmm446Pcba,
-            desc: isDe ? `Integrierter Akku für PCBA 10 (${totalOmm446Pcba} Stk., 12-14h Standalone-Betrieb)` : `Internal battery for PCBA 10 (${totalOmm446Pcba} pcs, 12-14h standalone)`
-        });
-        cots.push({
-            name: 'M2 Gehäuseschrauben & Muttern (PCBA 10)',
-            spec: 'DIN 912 V4A M2 x 8 mm + DIN 934 M2 Muttern',
-            qty: totalOmm446Pcba * 4,
-            desc: isDe ? `Verschraubung für PCBA 10 / Schlitten (${totalOmm446Pcba * 4} Paar)` : `Screws & nuts for PCBA 10 / sled (${totalOmm446Pcba * 4} pairs)`
-        });
-    }
-
-    if (addons.ommHelmetKit) {
-        cots.push({
-            name: isDe ? 'OMM Helm-Audio & PTT-Kabelbaum (J_HELMET)' : 'OMM Helmet Audio & PTT Harness (J_HELMET)',
-            spec: '6-Pin JST-SH 1.0mm auf 3.5mm Stereo-Klinke + 2-Pin Mic + PTT (0V DC, 12-15 cm)',
-            qty: 1,
-            desc: isDe ? 'Brummfreier Kopfhörer- & Mikrofonkabelbaum für Helm-Innenseite (reine 0V DC Signale)' : 'Hum-free headset & mic harness for helmet interior (pure 0V DC signals)'
-        });
-        cots.push({
-            name: isDe ? 'Helmlautsprecher & ECM-Mikrofon (2.4 GHz Kit)' : 'Helmet Speakers & ECM Mic (2.4 GHz Kit)',
-            spec: '40 mm 32 Ohm Hi-Fi Stereo-Lautsprecher + ECM Schwanenhalsmikrofon',
-            qty: 1,
-            desc: isDe ? 'Plug-and-Play Audio-Peripherie für OMM 2.4 UCS Headset' : 'Plug-and-play audio peripherals for OMM 2.4 UCS headset'
-        });
-        cots.push({
-            name: '3M VHB R130 Klebepad (2.4 GHz Kit)',
-            spec: 'Hochleistungs-Klebeband R130 passgenau zugeschnitten',
-            qty: 1,
-            desc: isDe ? 'Vibrations- und wetterfeste Helmbefestigung des UCS-Sockels' : 'Vibration & weatherproof helmet attachment of UCS cradle'
-        });
-    }
-
-    if (addons.omm446HelmetKit) {
-        cots.push({
-            name: isDe ? 'OMM Helm-Audio & PTT-Kabelbaum (J_HELMET)' : 'OMM Helmet Audio & PTT Harness (J_HELMET)',
-            spec: '6-Pin JST-SH 1.0mm auf 3.5mm Stereo-Klinke + 2-Pin Mic + PTT (0V DC, 12-15 cm)',
-            qty: 1,
-            desc: isDe ? 'Brummfreier Kopfhörer- & Mikrofonkabelbaum für Helm-Innenseite (reine 0V DC Signale)' : 'Hum-free headset & mic harness for helmet interior (pure 0V DC signals)'
-        });
-        cots.push({
-            name: isDe ? 'Helmlautsprecher & ECM-Mikrofon (446 MHz Kit)' : 'Helmet Speakers & ECM Mic (446 MHz Kit)',
-            spec: '40 mm 32 Ohm Hi-Fi Stereo-Lautsprecher + ECM Schwanenhalsmikrofon',
-            qty: 1,
-            desc: isDe ? 'Plug-and-Play Audio-Peripherie für OMM 446 Headset' : 'Plug-and-play audio peripherals for OMM 446 headset'
-        });
-        cots.push({
-            name: '3M VHB R130 Klebepad (446 MHz Kit)',
-            spec: 'Hochleistungs-Klebeband R130 passgenau zugeschnitten',
-            qty: 1,
-            desc: isDe ? 'Vibrations- und wetterfeste Helmbefestigung des UCS-Sockels' : 'Vibration & weatherproof helmet attachment of UCS cradle'
-        });
-    }
-
-    if (addons.tmp117Sensor) {
-        cots.push({
-            name: 'TI TMP117 Temperatursensor',
-            spec: 'Digitaler NIST I2C Sensor (±0.1°C) mit SparkFun Qwiic Breakout IP67',
-            qty: 1,
-            desc: isDe ? 'Präzisions-Eiswarner am Gabelfuß / Kaltlufteinlass' : 'Precision black ice warning probe on fork foot / cold air scoop'
-        });
-        cots.push({
-            name: 'Qwiic I2C Sensorkabel (1.0m)',
-            spec: '4-Pin JST-SH auf JST-SH Silikonkabel geschirmt',
-            qty: 1,
-            desc: isDe ? 'Verbindung vom Gabelfuß-Sensor zu Port J12 am Front-Node' : 'Link from fork sensor to Port J12 on Front Node'
-        });
-    }
-
-    if (totalCartridges > 0) {
-        const latchCount = Math.max(2, totalCartridges);
-        cots.push({ name: 'M2 Schwenkachsen Wippe', spec: 'Zylinderstift DIN 7 M2 x 8 mm', qty: latchCount, desc: isDe ? `Drehachsen für Kassetten-Rastwippen (${latchCount} Stk.)` : `Pivot pins for cartridge locking rockers (${latchCount} pcs)` });
-        cots.push({ name: 'Stahlanker (Kassette)', spec: 'Gehärteter Stift DIN 6325 Ø 6 x 8 mm', qty: latchCount, desc: isDe ? `Magnetanker im Hebelarm der Kassetten-Wippe (${latchCount} Stk.)` : `Steel armature in cartridge rocker arm (${latchCount} pcs)` });
-        cots.push({ name: 'Wippen-Rückstellfedern', spec: 'Edelstahl V4A Ø 3,5 mm, L0=10 mm', qty: latchCount, desc: isDe ? `Rückstellfedern für Kassetten-Rastkralle (${latchCount} Stk.)` : `Return springs for cartridge locking claw (${latchCount} pcs)` });
-        cots.push({ name: 'Auswerfer-Druckfedern', spec: 'Edelstahl V4A D=4,5 mm, L0=15 mm', qty: numPods * 2, desc: isDe ? `Auto-Eject Federn in Schottwänden (2x pro Pod: ${numPods * 2} Stk.)` : `Auto-eject springs in bulkheads (2 per pod: ${numPods * 2} pcs)` });
-        cots.push({ name: 'N52 Entriegelungsschlüssel', spec: 'Neodym-Block 20 x 10 x 5 mm', qty: 1, desc: isDe ? 'Berührungsloser Magnetschlüssel für Auswurf' : 'Contactless magnetic key for ejection' });
-        cots.push({ name: 'Kassetten-Flanschdichtungen', spec: 'Silikon-Formdichtung 54 x 18 mm', qty: Math.max(numPods, totalCartridges), desc: isDe ? `Stirnseitige Mundloch-Dichtungen (${Math.max(numPods, totalCartridges)} Stk.)` : `Mouth opening seals (${Math.max(numPods, totalCartridges)} pcs)` });
-    }
-
-    cots.push({ name: 'Silikon-Dichtschnur', spec: 'Rundschnur Ø 1,5 mm Shore 40A', qty: '1.0 m', desc: isDe ? 'Nut-Dichtung Main Box & Front-Node' : 'Groove gasket for Main Box & Front Node' });
-    cots.push({ name: 'M4 Silentblöcke / Gummipuffer', spec: 'Typ A M4 Außen/Innen Ø 15 x 10 mm', qty: 4, desc: isDe ? 'Schwingungsentkoppelte Zentralbox-Montage' : 'Vibration-isolated main box mounting' });
-
-    if (addons.radar2) {
-        cots.push({ name: 'Wheeltec MR20 Radar-Sensor', spec: '77 GHz mmWave Millimeterwellen-Radar (MR20 OEM)', qty: 1, desc: isDe ? 'Blind Spot Detection & Kollisionswarnung bis 90 m' : 'Blind spot detection & collision warning up to 90 m' });
-        cots.push({
-            name: 'Taoglas FXP524 V2X Flexantenne',
-            spec: '5.9 GHz Flex-Patch (+3.5 dBi) mit U.FL Buchse (50 mm)',
-            qty: 1,
-            desc: isDe ? 'Car-to-X / ITS-G5 Funk-Uplink für ESP32-C5 Sub-MCU an Buchse U.FL_5G9_V2X auf PCBA 08' : 'Car-to-X / ITS-G5 RF uplink for ESP32-C5 sub-MCU at socket U.FL_5G9_V2X on PCBA 08'
-        });
-        cots.push({
-            name: 'MR20 Radar-Verbindungskabel',
-            spec: '4-Pin JST-SH Buchse zu Buchse (50 mm)',
-            qty: 1,
-            desc: isDe ? 'UART-Telemetrie & Speisung von PCBA 08 Port J2 zum Wheeltec MR20 Sensor' : 'UART telemetry & power from PCBA 08 port J2 to Wheeltec MR20 sensor'
-        });
-        cots.push({
-            name: 'PC Radom-Sichtfenster',
-            spec: 'Laserzuschnitt Polycarbonat 1.6 mm RF-transparent',
-            qty: 1,
-            desc: isDe ? 'Mikrowellen- und optisches Schutzfenster für Radar & 36-LED Halo-Wings' : 'Microwave & optical protective window for radar & 36-LED halo wings'
-        });
-        cots.push({
-            name: 'M4 Schrauben (Radar-Cradle)',
-            spec: '2x DIN 912 V4A M4 x 12 mm',
-            qty: 2,
-            desc: isDe ? 'Verschraubung Neigegelenk an Gehäuserückwand' : 'Fastening swivel cradle to rear housing'
-        });
-        cots.push({
-            name: 'M5 Hirth-Klemmschraube & Mutter',
-            spec: 'DIN 912 V4A M5 x 25 mm + DIN 934 M5 Mutter',
-            qty: 1,
-            desc: isDe ? 'Horizontale Gelenkachse für 36-Zahn Hirth-Neigungsverstellung' : 'Horizontal pivot axle for 36-tooth Hirth angle adjustment'
-        });
-        cots.push({ name: 'JST-JWPF 2-Pin Leitung', spec: 'JST 02R-JWPF-VSLE-S wasserdicht IP67 (0.5m FLRY-B 0.35²)', qty: 1, desc: isDe ? 'Wasserdichte 12V DC-Bordnetzspeisung für Heck-Radar PCBA 08' : 'Waterproof 12V DC power feed for rear radar PCBA 08' });
-    }
-
-    if (addons.bsdMirrors) {
-        cots.push({ name: isDe ? 'BSD Spiegel-LEDs' : 'BSD Mirror LEDs', spec: '2x 12V High-Brightness Amber LEDs + 3-Pin JST-PH Kabel', qty: 1, desc: isDe ? 'Optische Totwinkel-Warnanzeigen für Port J9 am Front-Node' : 'Optical blind spot warning indicators for Front Node port J9' });
-    }
-
-    if (addons.actionCamDock) {
-        cots.push({ name: isDe ? 'Qi Induktions-Ladespule' : 'Qi Wireless Charging Coil', spec: '5V Qi Transmitter-Modul + 2-Pin JST-PH Kabel', qty: 1, desc: isDe ? 'Kabellose Stromübertragung für Actioncam-Dock an Port J8' : 'Wireless power transfer for actioncam dock on port J8' });
-    }
-
-    if (addons.handlebarControls) {
-        cots.push({ name: isDe ? 'Lenker-Tastatur Schalter' : 'Handlebar Switches', spec: '3x IP67 Mikrotaster (PTT, Cam-Mark, Siri) + 4-Pin JST-PH', qty: 1, desc: isDe ? 'Wasserdichte Lenkerbedienung für Port J3 am Front-Node' : 'Waterproof handlebar switches for Front Node port J3' });
-    }
-
-    if (bikeModel === 'hd-touring' || bikeModel === 'hd-cvo-st' || bikeModel === 'hd-cVO-st') {
-        cots.push({ name: isDe ? '2-Pin Magnet-Pogo Kupplung' : '2-Pin Magnetic Pogo Breakaway Set', spec: 'IP68 COTS (z. B. HytePro M411, 2-polig magnetisch)', qty: 2, desc: isDe ? 'Automatische Abreißkupplung bei Koffer-Demontage (Abreißkraft 10-15 N)' : 'Automatic breakaway disconnect for saddlebag removal (10-15 N retention)' });
-        cots.push({ name: isDe ? 'EPDM Dichtringe Kofferwand' : 'EPDM Saddlebag Side-Wall Washers', spec: 'Ø 12 mm EPDM-Dichtscheiben Shore 60A', qty: 2, desc: isDe ? 'Hermetische Abdichtung / Lackschutz der 12 mm Koffer-Seitendurchführung (1x pro Koffer)' : 'Hermetic seal / paint protection for 12 mm saddlebag side-wall pass-through (1x per bag)' });
-    }
-
-    if (bikeModel === 'bmw-gsa') {
-        cots.push({ name: 'M5 Schellen-Schrauben', spec: 'DIN 912 V4A M5 x 30 mm + Stoppmuttern', qty: 8, desc: isDe ? 'Verschraubung der 4 Rohrschellen am Kofferträger' : 'Fastening 4 tube clamps to pannier rack' });
-    }
-
-    if (addons.keyfob) {
-        cots.push({
-            name: isDe ? 'Keyfob LiPo-Akku (150 mAh)' : 'Keyfob LiPo Battery (150 mAh)',
-            spec: '1S 3.7V 150 mAh Pouch-Zelle mit PCM (Typ 401230)',
-            qty: 1,
-            desc: isDe ? 'Ultraflacher Akku für Smart-Keyfob (kabellos ladbar via Qi)' : 'Ultra-thin battery for Smart Keyfob (Qi wireless rechargeable)'
-        });
-        cots.push({
-            name: isDe ? 'Qi Induktions-Empfängerspule (28 mm)' : 'Qi Induction Receiver Coil (28 mm)',
-            spec: '28 mm Qi-Receiver-Coil mit 2-Pin JST-ACH Steckverbinder',
-            qty: 1,
-            desc: isDe ? 'Lötfreie Induktionslade-Spule für Smart-Keyfob an Port J_QI' : 'Solderless induction charging coil for Smart Keyfob on port J_QI'
-        });
-        cots.push({
-            name: isDe ? 'N52 Neodym-Schlüssel (20 x 10 x 5 mm)' : 'N52 Neodymium Key (20 x 10 x 5 mm)',
-            spec: 'N52 Neodym-Magnetblock (20 x 10 x 5 mm)',
-            qty: 1,
-            desc: isDe ? 'Formschlüssig in Keyfob integrierter Kassetten-Auswurfmagnet' : 'Cartridge ejection magnet integrated into Keyfob shell'
-        });
-        cots.push({
-            name: isDe ? 'M2 Keyfob-Schrauben' : 'M2 Keyfob Screws',
-            spec: '4x DIN 7991 V4A M2 x 6 mm Senkkopf',
-            qty: 4,
-            desc: isDe ? 'Verschraubung der Keyfob-Gehäuseschalen' : 'Keyfob enclosure shell screws'
-        });
-    }
+    const costMin = Math.round(categorized.totalCostMin - diySavingsMin);
+    const costMax = Math.round(categorized.totalCostMax - diySavingsMax);
 
     return {
         bikeName: bikeNames[bikeModel] || bikeModel,
@@ -9530,9 +9073,15 @@ function calculateSingleBikeBom(bikeConfig) {
         costMax,
         numPods,
         numSmart,
-        parts3D,
-        pcbas,
-        cots
+        parts3D: categorized.parts3D,
+        pcbas: categorized.pcbas,
+        cots: categorized.cots,
+        fasteners: categorized.fasteners,
+        seals: categorized.seals,
+        cables: categorized.cables,
+        antennas: categorized.antennas,
+        activeAssemblies,
+        partQuantities
     };
 }
 
@@ -9770,14 +9319,22 @@ function renderSingleBuilder() {
 
     const tbodyCots = document.getElementById('builder-tbody-cots');
     if (tbodyCots) {
-        tbodyCots.innerHTML = bom.cots.map(p => `
+        tbodyCots.innerHTML = bom.cots.map(p => {
+            const rawQty = typeof p.qty === 'number' ? (Math.round(p.qty * 1000) / 1000) : p.qty;
+            const displayQty = (typeof rawQty === 'number' && rawQty % 1 !== 0) ? rawQty.toFixed(1) : rawQty;
+            const unitSuffix = p.unit && p.unit !== 'Stk.' ? ` ${p.unit}` : '';
+            return `
             <tr>
                 <td><strong>${p.name}</strong></td>
-                <td><span style="color: var(--text-secondary); font-size: 0.78rem;">${p.spec}</span></td>
-                <td><span class="card-badge badge-orange" style="font-size: 0.72rem;">${p.qty}</span></td>
+                <td>
+                    <div style="font-weight: 600; font-size: 0.78rem;">${p.spec}</div>
+                    ${p.source ? `<div style="color: var(--accent-blue); font-size: 0.72rem; margin-top: 2px;">🛒 ${p.source}</div>` : ''}
+                </td>
+                <td><span class="card-badge badge-orange" style="font-size: 0.72rem;">${displayQty}${unitSuffix}</span></td>
                 <td>${p.desc}</td>
             </tr>
-        `).join('');
+        `;
+        }).join('');
     }
 
     // 5. Generate Tailored Step-by-Step Instructions (IKEA-Style)
@@ -10163,10 +9720,10 @@ function renderGroupBuilder() {
     // 2. Budget & Savings Calculation
     const sumMin = allBoms.reduce((acc, item) => acc + item.bom.costMin, 0);
     const sumMax = allBoms.reduce((acc, item) => acc + item.bom.costMax, 0);
-    const savingsMin = (count - 1) * 65;
-    const savingsMax = (count - 1) * 95;
-    const groupMin = Math.max(sumMin - savingsMin, Math.round(sumMin * 0.72));
-    const groupMax = Math.max(sumMax - savingsMax, Math.round(sumMax * 0.75));
+    const savingsMin = (count - 1) * 35;
+    const savingsMax = (count - 1) * 60;
+    const groupMin = Math.max(sumMin - savingsMin, Math.round(sumMin * 0.82));
+    const groupMax = Math.max(sumMax - savingsMax, Math.round(sumMax * 0.85));
     const perRiderMin = Math.round(groupMin / count);
     const perRiderMax = Math.round(groupMax / count);
 
@@ -10361,15 +9918,19 @@ function renderGroupBuilder() {
                 cotsMap[key] = {
                     name: c.name,
                     spec: c.spec,
+                    source: c.source || '',
                     desc: c.desc,
                     totalQty: 0,
-                    unit: 'Stk.',
+                    unit: c.unit || 'Stk.',
+                    pkgQty: c.pkgQty || (c.name.includes('Schrauben') ? 50 : (c.name.includes('Muttern') ? 100 : 1)),
+                    pkgName: c.pkgName || '',
                     bikes: {}
                 };
             }
             let q = 1;
             if (typeof c.qty === 'number') {
                 q = c.qty;
+                if (c.unit) cotsMap[key].unit = c.unit;
             } else if (typeof c.qty === 'string') {
                 const m = c.qty.match(/([\d.]+)\s*([a-zA-Z]+)?/);
                 if (m) {
@@ -10385,26 +9946,33 @@ function renderGroupBuilder() {
     const cotsList = Object.values(cotsMap);
     if (tbodyCots) {
         tbodyCots.innerHTML = cotsList.map(c => {
-            let bulkTip = `${c.totalQty} ${c.unit}`;
-            if (c.name.includes('Schrauben') || c.name.includes('Muttern')) {
-                bulkTip = c.totalQty > 20 ? '100er Großpackung (AliExpress/Amazon)' : '50er Packung';
-            } else if (c.name.includes('feder')) {
-                bulkTip = `${Math.ceil(c.totalQty / 10) * 10}er Sortiment`;
-            } else if (c.name.includes('Silikon')) {
-                bulkTip = '5m Spule Ø 1.5mm (reicht für bis zu 5 Bikes)';
-            } else if (c.name.includes('Hubmagnete')) {
-                bulkTip = `${Math.ceil(c.totalQty / 4) * 4}er Los (4x pro Smart-Kassette)`;
-            } else if (c.name.includes('PUR') || c.name.includes('Zuleitung')) {
-                bulkTip = `${c.totalQty}x DC-Zuleitung (PUR)`;
-            } else if (c.name.includes('LiPo')) {
-                bulkTip = `${c.totalQty}x 1S 3.7V 2200mAh Micro-Fit`;
+            const pkgQty = c.pkgQty || (c.name.includes('Schrauben') ? 50 : (c.name.includes('Muttern') ? 100 : 1));
+            const rawQty = Math.round(c.totalQty * 1000) / 1000;
+            const displayQty = (rawQty % 1 === 0) ? rawQty : rawQty.toFixed(1);
+            let bulkTip = `${displayQty} ${c.unit}`;
+
+            if (c.unit === 'm') {
+                const buyMeters = Math.ceil(rawQty);
+                const spareMeters = Math.round((buyMeters - rawQty) * 100) / 100;
+                bulkTip = `${buyMeters} m Meterware (${displayQty} m Netto${spareMeters > 0 ? ` · +${spareMeters} m Reserve` : ''})`;
+            } else if (pkgQty > 1) {
+                const neededPacks = Math.ceil(rawQty / pkgQty);
+                const packTotal = neededPacks * pkgQty;
+                const spare = packTotal - rawQty;
+                const pName = c.pkgName || `${pkgQty}er Pack`;
+                bulkTip = `${neededPacks}x ${pName} (${packTotal} ${c.unit}${spare > 0 ? ` · +${spare} Reserve` : ''})`;
+            } else if (c.pkgName) {
+                bulkTip = `${displayQty} ${c.unit} (${c.pkgName})`;
             }
 
             return `
                 <tr>
                     <td><strong>${c.name}</strong></td>
-                    <td><span style="color: var(--text-secondary); font-size: 0.78rem;">${c.spec}</span></td>
-                    <td><span class="card-badge badge-blue" style="font-weight: 700; font-size: 0.78rem;">${c.totalQty} ${c.unit}</span></td>
+                    <td>
+                        <div style="font-weight: 600; font-size: 0.78rem;">${c.spec}</div>
+                        ${c.source ? `<div style="color: var(--accent-blue); font-size: 0.72rem; margin-top: 2px;">🛒 ${c.source}</div>` : ''}
+                    </td>
+                    <td><span class="card-badge badge-blue" style="font-weight: 700; font-size: 0.78rem;">${displayQty} ${c.unit}</span></td>
                     <td><span class="bulk-pack-tag">📦 ${bulkTip}</span></td>
                     <td style="font-size: 0.78rem; color: var(--text-secondary);">${c.desc}</td>
                 </tr>

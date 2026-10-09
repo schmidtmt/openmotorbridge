@@ -321,8 +321,6 @@ Each Universal Smart Cartridge (`PCBA 03`) drives up to four linear solenoids ("
 
 ---
 
-## 12. COTS Hardware & Fastener Procurement List (1 Complete Kit)
-
 ### 11.7 Pannier Disconnect (Industrial 2-Pin Magnetic Pogo "MagSafe Replacement")
 
 Instead of the former proprietary `PCBA 06` board, the tool-free pannier breakaway connection is engineered as a **pure 2-wire DC system (5V / GND)** with an industrial **2-Pin Magnetic Pogo Breakaway Coupler (IP68 COTS)**:
@@ -375,52 +373,62 @@ For standalone helmet operation of both intercom modules (**PCBA 09: OMM 2.4 GHz
 
 ## 12. COTS Hardware & Fastener Procurement List (1 Complete Kit)
 
-| Component | Specification / Type | Sourcing Source | Qty | Location & Purpose |
+<!-- AUTOGEN_BOM_TABLE_START -->
+
+| Component | Specification / Type | Sourcing Source | Qty (Ref-Set) | Location & Purpose |
 | :--- | :--- | :--- | :---: | :--- |
-| **M3 Stainless Screws** | M3 x 40 mm Socket Head A4 / 316 (DIN 912) | Standard Fastener | 4 pcs | Central Box enclosure (engages nut pockets) |
-| **M3 Stainless Screws (Front)**| M3 x 20 mm Socket Head A4 / 316 (DIN 912) | Standard Fastener | 4 pcs | Front Node enclosure (engages nut pockets) |
-| **M3 Stainless Screws (Dock)** | M3 x 16 mm Socket Head A4 / 316 (DIN 912) | Standard Fastener | 4 pcs | Frame clamp `cots_magnetic_frame_dock` |
-| **M3 Stainless Nuts** | DIN 934 / DIN 985 M3 A4 Nuts | Standard Fastener | 12 pcs| Captive in nut pockets (Central Box, Front Node, Frame Dock) |
-| **M4 Stainless Nuts (AMPS & Radar)**| DIN 934 M4 A4 Nuts | Standard Fastener | 6 pcs | 4x Front Node tub (AMPS), 2x Radar 2.0 rear housing |
-| **M4 Screws (Radar Cradle)** | M4 x 12 mm Socket Head A4 (DIN 912) | Standard Fastener | 2 pcs | Securing cradle `radar_swivel_tilt_cradle` to Radar 2.0 housing |
-| **M5 Hirth Pivot Bolt** | M5 x 25 mm Socket Head A4 (DIN 912) | Standard Fastener | 1 pc | Horizontal pivot bolt for radar Hirth joint |
-| **M5 Stainless Nut (Radar)** | DIN 934 M5 A4 Nut | Standard Fastener | 1 pc | Captive in right fork of radar mount |
-| **M5 Clamp Screws (Adventure)** | M5 x 25 mm Socket Head A4 (DIN 912) | Standard Fastener | 2 pcs | Clamp cap `adventure_rack_radar_mount` (bottom access) |
-| **M5 Nuts (Adventure Clamp)** | DIN 934 M5 A4 Nuts | Standard Fastener | 2 pcs | Captive in clamp cap `adventure_rack_radar_clamp_cap` |
-| **M8 IP68 Cable Gland** | M8 x 1.25 Nickel-plated brass / PA66 with EPDM seal | Skintop / Lapp | 1 pc | Watertight bottom entry gland for 2-wire FLRY-B cable |
-| **M2.5 Board Screws** | M2.5 x 6 mm Socket Head A4 (DIN 912) | Standard Fastener | 8 pcs | 4x Central Box PCB, 4x Front Node PCB |
-| **M2 Cartridge Board Screws** | M2 x 6 mm Pan/Socket Head A4 (DIN 7985/912) | Standard Fastener | 8 pcs | Securing PCBA 03 to cartridge sled (4x per sled; bulkhead screws completely eliminated) |
-| **M2 Sled Retainer Screws** | M2 x 6 mm Countersunk A4 (DIN 7991) | Standard Fastener | 8 pcs | Securing actuator hold-down brackets (4x per gateway) |
-| **M2 UCS Enclosure Screws** | M2 x 8 mm Socket Head A4 (DIN 912) | Standard Fastener | 4-8 pcs| OMM UCS module enclosure (engages captive M2 nuts) |
-| **M2 UCS Stainless Nuts** | DIN 934 M2 A4 Nuts | Standard Fastener | 4-8 pcs| Captive in upper shell of OMM UCS module |
-| **OMM LiPo Pouch Battery** | 1S LiPo 600 mAh ($38 \times 24 \times 4.5\,\text{mm}$) with PCM | EEMB / Web | 1-2 pcs| Internal battery for OMM UCS module (12-14 h runtime) |
-| **OMM Silicone Gasket** | Silicone solid cord $\varnothing 0.8\,\text{mm}$ Shore 40A | O-Ring Supplier | 0.5 m | IP67 perimeter seal for OMM UCS module |
-| **OMM Helmet Audio & PTT Harness**| 6-Pin JST-SH 1.0mm Socket to 3.5mm Jack + Mic + PTT | COTS Standard | 1-2 pcs| Pure audio headset harness for helmet interior (0V DC, 12-15 cm) |
-| **RF Coax Pigtail U.FL to SMA**| RG-178 / 1.13mm (50 mm) with IP67 SMA Bulkhead & O-Ring | COTS Standard | 1-2 pcs| Connection from U.FL port to enclosure feedthrough on OMM UCS |
-| **OMM 2.4 GHz Stubby Antenna** | 2.4 GHz Stubby Rubber Antenna (38 mm, SMA-Male) | COTS Standard | 1 pc | Compact helical antenna for OMM 2.4G helmet use (zero buffeting) |
-| **OMM 446 MHz Stubby Antenna** | 446 MHz PMR/DMR Stubby Antenna (48 mm, SMA-Male) | COTS Standard | 1 pc | Compact helical antenna for OMM 446 helmet use (1.5-2.5 km range) |
-| **M2 Pivot Dowel Pins** | M2 x 8 mm Stainless Dowel Pin (DIN 7) | Standard / Misumi | 2 pcs | Pivot pins for magnetic cartridge latches |
-| **Magnetic Armature** | Ø 6 x 8 mm Hardened Steel Pin (DIN 6325) | Standard / Misumi | 2 pcs | Steel keeper pin in cartridge latch arm |
-| **Latch Return Springs** | Stainless 316 ($\varnothing 3.5\,\text{mm}, L_0=10\,\text{mm}$) | Standard Spring | 2 pcs | Return springs for latch hook |
-| **Ejection Springs** | Stainless 316 ($D=4.5\,\text{mm}, L_0=15\,\text{mm}$) | Standard Spring | 4 pcs | Auto-eject springs inside bulkheads (2x per pod) |
-| **N52 Release Key** | N52 Neodymium Block ($20 \times 10 \times 5\,\text{mm}$) | Magnet Supplier | 1 pc | Magnetic key for manual cartridge release |
-| **Vibration Isolators** | Type A M4 Male/Female ($\varnothing 15 \times 10\,\text{mm}$) | Ganter / Standard | 4 pcs | Shock-isolated Central Box mounting |
-| **Silicone O-Ring Cord** | Silicone Solid Cord $\varnothing 1.5\,\text{mm}$ Shore 40A (1.0 m) | O-Ring Supplier | 1 pc | 40 cm Central Box groove, 30 cm Front Node groove |
-| **Cartridge Gaskets** | Molded Silicone Gasket Shore 40A ($54 \times 18\,\text{mm}$) | Custom Mold | 2 pcs | Front face mouth sealing on Pod 1 and Pod 2 |
-| **UPS Battery Pack** | 1S LiPo Flat Pack 2,200 mAh ($68 \times 39 \times 5.0\,\text{mm}$) with Micro-Fit | EEMB / Enerpower | 1 pc | Central Box UPS buffer (Type 504068 / 503870) |
-| **Automotive Fuse Holder** | Waterproof Blade Fuse Holder + 2A Fuse | Hella / MTA | 1 pc | KL30 battery terminal line protection |
-| **2-Pin Magnetic Breakaway**| IP68 Magnetic Plug + Socket (e.g., HytePro M411) | COTS Standard | 2 sets | Pannier breakaway connection (10-15 N pull force) |
-| **Pure DC 2-Wire Cable (PUR)**| 2x 0.34 mm² (AWG22) with JST-JWPF 2-Pin / Magnetic Pogo | COTS Standard | 2 pcs | Pure 5V DC power to Pod 1 and Pod 2 (data 100% via UWB) |
-| **Radar 12V Cable (PUR)** | 2x 0.5 mm² (AWG20) with JST-JWPF 2-Pin IP67 Plug | COTS Standard | Opt. (1)| 12V DC feed to rear radar (data 100% via UWB) |
-| **DTM-12 Breakout Harness** | Deutsch DTM 12-Pin Pre-terminated IP68 Harness | TE Connectivity | 1 pc | Automotive master harness from Central Box |
-| **Front Node 12V Cable** | 2-Pin JST-PH Lead with Posi-Tap | COTS Standard | 1 pc | Local cockpit power connection (parking light/GPS plug) |
-| **J_ACT Actuator Harness** | Pre-crimped 8-Pin JST-SH to 4x 2-Pin Leads | Adafruit / SparkFun | 2 pcs | Pre-assembled harness for 4 solenoids (C160404) |
-| **Miniature Solenoids** | 5V DC Pull Solenoids ($\varnothing 6.5 \times 12\,\text{mm}$) with TPU Tip | Solenoid Supplier | 8 pcs | 4 pcs per Smart Cartridge (Sena / Cardo) |
-| **J_AUDIO_PWR Gateway Cable**| Pre-crimped 8-Pin JST-SH to Jack / Direct-DC / USB | COTS Standard | 2 pcs | Audio & power harness to headset inlays (Kelvin Grounded) |
-| **Wheeltec MR20 77-GHz mmWave**| 77-GHz FMCW Automotive Radar (150 m Range) | Wheeltec | Opt. (1)| Radar 2.0 transceiver module inside rear housing |
-| **PC Radome Window** | Laser-cut Polycarbonate 1.6 mm (RF-transparent)| COTS / Plexiglas | Opt. (1)| Microwave & optical window for MR20 & 24-LED Halo |
-| **3M Dual Lock SJ3550** | Interlocking Adhesive Fastener Strip (VHB) | 3M | 0.5 m | Vibration-resistant, tool-free module mounting |
-| **car_sun_visor_pod_clip** | 3D Printed PA12 Sun Visor Clips | OMB CAD | Opt. (2)| Chase car / van visor mounting kit for Pod 1 & 2 |
+| **3M Dual Lock SJ3550 Fastener** | Pilzkopf-Klettband selbstklebend (VHB-Kleber) | 3M / Amazon | 0.5 m | Rattle-free tool-less mounting of dongles and sensors in cockpit and luggage |
+| **3M VHB R130 Adhesive Pad** | 3M VHB R130 Hochleistungs-Klebepad passgenau | 3M / COTS | 1 pcs | Vibration-proof & weatherproof ECE 22.06 helmet mounting for OMM UCS cradle |
+| **Ejector Spring (Bulkhead)** | Edelstahl V4A D = 4.5 mm, L0 = 15 mm | Gutekunst / Web | 4 pcs | Auto-eject springs inside pod bulkhead (2x per pod, ejects cartridge 25 mm upon unlock) |
+| **M2 Stainless Nut (Captive UCS)** | DIN 934 M2 V4A | Normteil / Amazon | 8 pcs | Captive nuts in upper shell pockets of OMM UCS module (4x per module) |
+| **M2 Retainer Plate Screw (Countersunk)** | DIN 7991 V4A M2 x 6 mm | Normteil / Amazon | 8 pcs | Retaining actuator clamping bridge plates (4x per gateway cartridge) |
+| **M2 Cartridge PCB Screw** | DIN 7985 / DIN 912 V4A M2 x 6 mm | Normteil / Amazon | 8 pcs | Securing PCBA 03 in cartridge sled (4x per cartridge; bulkhead screws eliminated) |
+| **M2 Rocker Pivot Pin** | DIN 7 V4A Zylinderstift M2 x 8 mm | Normteil / Misumi | 2 pcs | Precision pivot axle for magnetic cartridge locking rocker inside sled |
+| **M2 UCS Module Screw** | DIN 912 V4A M2 x 8 mm | Normteil / Amazon | 8 pcs | Fastening OMM UCS housing shells (4x per module, threads into M2 captive nuts) |
+| **M2.5 PCB Mounting Screw** | DIN 912 V4A M2.5 x 6 mm | Normteil / Amazon | 8 pcs | Fastening main controller boards (4x Central Box PCBA 01, 4x Front Node PCBA 05) |
+| **M3 Stainless Nut (Captive)** | DIN 934 / DIN 985 M3 V4A | Normteil / Amazon | 8 pcs | Captive in nut pockets (Central Box, Front Node, frame dock – zero heat-set inserts!) |
+| **M3 Front Screw (Front Node)** | DIN 912 V4A M3 x 20 mm | Normteil / Amazon | 4 pcs | Front Node enclosure lid fastener into captive nut pockets |
+| **M3 Enclosure Screw (Main Box)** | DIN 912 V4A M3 x 40 mm | Normteil / Amazon | 4 pcs | Central box enclosure fastener (threads from top into bottom tub nut pockets) |
+| **M4 Stainless Nut (AMPS & Radar)** | DIN 934 M4 V4A | Normteil / Amazon | 6 pcs | 4x Front Node tub (AMPS pockets), 2x Radar 2.0 rear housing |
+| **M4 Screw (Radar Cradle)** | DIN 912 V4A M4 x 12 mm | Normteil / Amazon | 2 pcs | Securing adapter bracket radar_swivel_tilt_cradle to Radar 2.0 housing |
+| **M4 Anti-Vibration Silentblocks** | Typ A M4 Außen/Innen Ø 15 x 10 mm | Ganter / Normteil | 4 pcs | Vibration-decoupled 4-point mounting of Central Box on bike frame (damps 10-100 Hz) |
+| **M5 Clamp Screw (Hirth & Tube Clamps)** | DIN 912 V4A M5 x 25 mm | Normteil / Amazon | 3 pcs | Horizontal axis bolt for Hirth gear lock joints & round tube clamps (Ø 12-22 mm) |
+| **M5 Lock Nut / Stainless Nut** | DIN 985 / DIN 934 M5 V4A | Normteil / Amazon | 3 pcs | Captive lock nuts in radar forks and tube clamp caps |
+| **Steel Armature Pin (Cartridge)** | DIN 6325 gehärteter Passstift Ø 6 x 8 mm | Normteil / Misumi | 2 pcs | Ferromagnetic steel armature inside rocker lever (actuated by N52 magnetic key) |
+| **N52 Magnetic Release Key** | N52 Neodym-Block 20 x 10 x 5 mm (vernickelt) | Supermagnete / Web | 1 pcs | Contactless magnetic key for anti-theft ejection of pods from motorcycle bays |
+| **Rocker Return Spring** | Edelstahl V4A Ø 3.5 mm, L0 = 10 mm | Gutekunst / Web | 2 pcs | Keeps cartridge locking claw securely engaged with 2.5 N preload |
+| **Gore ePTFE Pressure Vent** | Ø 12 mm selbstklebendes ePTFE Membran-Patch IP68 | Gore / COTS | 1 pcs | Pressure equalization & condensation prevention in Central Box lid pocket |
+| **Cartridge Flange Mouth Gasket** | Silikon-Formdichtung Shore 40A (54 x 18 mm) | Sonderfertigung / Silikon | 2 pcs | Front mouth-opening seal on Pod 1 and Pod 2 against road spray and rain |
+| **OMM Silicone Gasket Cord Ø 0.8 mm** | Silikon-Rundschnur Ø 0.8 mm Shore 40A | O-Ring-Shop / Web | 0.4 m | Ultra-flexible housing seal for OMM UCS enclosure (approx. 22 cm per module, IP67) |
+| **Silicone Sealing Cord Ø 1.5 mm** | Silikon-Rundschnur Ø 1.5 mm Shore 40A | O-Ring-Shop / Amazon | 0.7 m | Continuous sealing cord for Central Box (40 cm) & Front Node (30 cm) groove for IP67 |
+| **1S LiPo Pouch Battery 600 mAh (OMM)** | 3.7V / 2.22Wh (Typ 452438) mit PCM & JST-ACH | EEMB / Web | 2 pcs | Internal battery for OMM UCS modules (12-14 h standalone helmet runtime) |
+| **5V DC Miniature Solenoid** | Ø 6.5 x 12 mm, Hub 1.5-2.0 mm, mit TPU-Dämpfungsspitze | Solenoid / Web | 8 pcs | Mechatronic pushers actuating Sena & Cardo buttons (4x per smart slot) |
+| **Helmet Speakers & ECM Mic Kit** | 40 mm 32 Ohm Hi-Fi Stereo-Lautsprecher + ECM Schwanenhalsmikrofon | COTS Audio / Web | 1 Set | Plug-and-play audio peripherals for OMM UCS headset inside helmet |
+| **Polycarbonate Radome Window** | Laserzuschnitt Polycarbonat 1.6 mm (RF-transparent) | COTS / Plexiglas | 1 pcs | Microwave & optical window for MR20 radar & 24-LED Halo |
+| **Buffer Battery (LiPo UPS 2,200 mAh)** | 1S 3.7V 2.200 mAh Flat-Pack (Typ 504068) Molex Micro-Fit | EEMB / Enerpower | 1 pcs | Seamless UPS reserve in Central Box during engine cranking & ignition off |
+| **Wheeltec MR20 77-GHz mmWave Radar** | 77-GHz FMCW Automotive Radar (150 m Reichweite) | Wheeltec / DE-Distributor | 1 pcs | Automotive mmWave radar for blind spot detection & forward/rear collision alert |
+| **u-blox SAM-M10Q Multi-GNSS Module** | 15x15 mm Keramik-Patchantenne, Qwiic I2C | SparkFun / u-blox | 1 pcs | Cockpit satellite navigation on port J12 with clear zenith view |
+| **OMM 2.4 GHz Stubby Antenna** | 2.4 GHz Rubber-Duck (38 mm, SMA-Male, +2.5 dBi omni) | COTS Standard | 1 pcs | Compact helmet stubby antenna for PCBA 09 (zero buffeting or wind noise) |
+| **Taoglas FXP524 V2X Flex Antenna** | 5.9 GHz Flex-Patch (+3.5 dBi) mit U.FL Buchse (50 mm) | Taoglas / Mouser | 1 pcs | Car-to-X / ITS-G5 RF uplink for ESP32-C5 sub-MCU on PCBA 08 |
+| **Taoglas FXP895 LoRa Flex Antenna** | 868 MHz Flex-Dipol (+2.0 dBi) U.FL (100 mm) | Taoglas / Mouser | 1 pcs | Long-range convoy mesh for SX1262 LoRa in Central Box lid cavity |
+| **Taoglas FXUWB10 UWB Flex Antenna** | 6.5 GHz Ch. 5 Flex-Patch mit 20 mm U.FL Koaxialkabel | Taoglas / Mouser | 3 pcs | Wireless UWB 6.5 GHz backbone (Central Box, Front Node, Radar) |
+| **Deutsch DTM-12 Main Harness** | IP68/IP69K Deutsch DTM-12 COTS Fertigkabelbaum mit Raychem DR-25 | COTS / Deutsch | 1 pcs | Central main harness for bike power, CAN bus & DC leads to pods |
+| **Front Node 12V Power Cable** | 2-Pin JST-PH Litzenkabel mit Posi-Tap Abzweigverbindern | COTS Standard | 1 pcs | Local 12V cockpit tap (parking light / GPS auxiliary plug) |
+| **JST-PH Pigtail Assortment Set** | 2-Pin, 3-Pin, 4-Pin JST-PH mit vormontierten Litzen | Amazon / COTS | 1 Set | CAN bus, handlebar buttons, mirror LEDs, Qi charger & action cam |
+| **J_ACT Actuator Harness** | Vorkonfektioniertes 8-Pin JST-SH Kabel auf 4x 2-Pin Litzenpaare (AWG30 Silikon, 60 mm) | Adafruit / SparkFun | 2 pcs | 4 twisted pairs from PCBA 03 to the 4 solenoids (zero crimping!) |
+| **J_AUDIO_PWR Cable Cardo Packtalk** | 8-Pin JST-SH auf 3.5mm Spk, Micro-2Pin Mic & 90° USB-C 5V (10 cm) | COTS Standard | 1 pcs | Couples Cardo Air-Mount cradle with 5V charge & pristine audio without ground loop |
+| **J_AUDIO_PWR Cable Sena SPIDER X** | 8-Pin JST-SH auf 3-fach Pigtail (Direct-DC, 2.5mm Mic, 3.5mm Spk, 8 cm) | COTS Standard | 1 pcs | Direct-DC power (3.85V) & stereo audio with Kelvin grounding (zero pogo-pins) |
+| **Automotive Fuse Holder & 2A Fuse** | Wasserdichter Halter + 2A Mini-Flachsicherung | Hella / MTA | 1 pcs | Direct battery terminal protection (KL30) |
+| **OMM Helmet Audio & PTT Harness (J_HELMET)** | 6-Pin JST-SH 1.0mm auf 3.5mm Stereo-Klinke + 2-Pin Mic + PTT (0V DC, 12-15 cm) | COTS Standard | 1 pcs | Hum-free headset & mic harness for helmet interior (pure 0V DC signals) |
+| **Pure-DC 2-Wire Cable (PUR)** | 2x 0.34 mm² (AWG22) mit JST-JWPF 2-Pin IP67 Stecker | COTS Standard | 2 pcs | Pure DC power feed to Pod 1 & 2 (audio/data 100% via UWB) |
+| **Qwiic Sensor Cable (100 mm)** | 4-Pin JST-SH Buchse zu Buchse (100 mm Silikonlitze) | SparkFun / Adafruit | 1 pcs | Link from Front Node port J12 to SAM-M10Q GNSS module |
+| **RF Micro-Coax Pigtail (U.FL to SMA IP67)** | 50 mm low-loss RG-178 / 1.13mm mit IP67 EPDM O-Ring & V4A-Mutter | COTS Standard | 2 pcs | Watertight enclosure bulkhead feed-through for OMM UCS antenna |
+| **Radar 12V Power Cable (PUR)** | 2x 0.5 mm² (AWG20) mit JST-JWPF 2-Pin IP67 Stecker | COTS Standard | 1 pcs | 12V DC power feed for rear radar (data link 100% wireless via UWB) |
+| **USB-A Socket Pigtail** | JST-PH 4-Pin auf Standard USB-A Buchse (15-20 cm) | Amazon / COTS | 1 pcs | CP2AA wireless CarPlay dongle & cockpit aux port |
+| **USB-C Panel-Mount Pigtail (Front Node)** | JST-PH 5-Pin auf wasserdichte Panel-Mount USB-C Buchse (IP67) | Amazon / COTS | 1 pcs | Phone fast-charge (handlebar) & glovebox charging port |
+| **Central Box USB-C Flashing Pigtail** | IDC 10-Pin auf wasserdichte Panel-Mount USB-C Buchse IP67 | COTS Standard | 1 pcs | CarPlay / firmware flashing port on Central Box flank |
+
+<!-- AUTOGEN_BOM_TABLE_END -->
 
 ---
 
