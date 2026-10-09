@@ -191,8 +191,8 @@ module omm_ucs_bottom_shell() {
             cube(size=[4.0, 5.0, 2.2], center=false);
 
         // Bottom Helmet Audio Harness Pass-Through Slot (for 6-Pin J_HELMET)
-        // Positioned at X = 7.5 .. 14.5 mm, Y centered, cuts through floor into helmet interior
-        translate([7.5, (UCS_W - 9.0)/2.0, -0.1])
+        // Positioned at X = 57.0 .. 64.0 mm (opposite USB-C), Y centered, cuts through floor into helmet interior
+        translate([57.0, (UCS_W - 9.0)/2.0, -0.1])
             cube(size=[7.0, 9.0, UCS_WALL + 0.2], center=false);
     }
 }

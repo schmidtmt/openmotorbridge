@@ -95,17 +95,10 @@ module dummy_omm_ucs_pcb() {
     }
 
     // 10. J_HELMET: Internal 6-Pin Passive Helmet Audio & PTT Header (Bottom Face, SM06B-SRSS-TB)
-    // Sits in forward chamber (X = 6.5 mm, Y = 19.0 mm) facing through bottom shell slot into helmet
+    // Sits in rear chamber opposite USB-C (X = 56.625 mm, Y = 14.75 mm) facing through bottom shell slot into helmet
     color("ivory") {
-        translate([6.5, 15.0, -2.8])
-            cube(size=[7.5, 4.25, 2.8], center=false);
-    }
-
-    // 11. J_RF: U.FL Coaxial RF Receptacle (Bottom Face, KiCad Pos: X=56.025, Y=15.25 mm)
-    // Matches PCBA 10 for 100% identical external antenna pass-through
-    color("gold") {
-        translate([56.025, 15.25, -1.25])
-            cube(size=[3.0, 3.0, 1.25], center=true);
+        translate([56.625 - 4.25/2.0, 14.75 - 7.5/2.0, -2.8])
+            cube(size=[4.25, 7.5, 2.8], center=false);
     }
 }
 

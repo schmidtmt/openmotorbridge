@@ -343,8 +343,9 @@ Both the **OpenMotorMesh 2.4 GHz Module (PCBA 09)** and the **OMM 446 MHz PMR/DM
    - **Bluetooth / BLE Local Link:** The secondary RF SoC (`ESP32-PICO-V3-02`) retains its dedicated onboard ceramic chip antenna (`ANT1`), providing reliable short-range connectivity ($1\dots 3\,\text{m}$) to smartphones or cockpit displays.
 
 2. **Pod Cartridge Mode (External Vehicle Antenna):**
-   - Both boards (`PCBA 09` and `PCBA 10`) feature an onboard **U.FL coaxial receptacle (`J_RF`)** located at the identical coordinate $(126.025, 100.25)\,\text{mm}$ on `B.Cu`.
-   - In the Cartridge base sled (`00_base_sled.scad`, with `has_sma_port = true`), a short 50 mm RG-178 coaxial pigtail connects `J_RF` to a waterproof SMA bulkhead connector on the cartridge front faceplate.
+   - **PCBA 09 (2.4 GHz):** Connects directly to the factory-integrated U.FL receptacle on the `ESP32-C6-MINI-1U` module (`U1`), omitting any redundant secondary socket on the PCB.
+   - **PCBA 10 (446 MHz):** Employs the dedicated onboard `J_RF` U.FL receptacle on `B.Cu`, fed via the NiceRF SA818-DMR bandpass filter.
+   - In the Cartridge base sled (`00_base_sled.scad`, with `has_sma_port = true`), a short 50 mm RG-178 coaxial pigtail connects the respective U.FL port to a waterproof SMA bulkhead connector on the cartridge front faceplate.
    - **Performance Advantage:** High-gain antennas mounted at the motorcycle tail (license plate holder / luggage rack) or front fairing eliminate human body RF shadowing entirely!
 
 ### 6.3 Clean Interface Separation: Helmet Audio (`J_HELMET`) vs. External USB-C (`J1`)
@@ -352,8 +353,9 @@ Both the **OpenMotorMesh 2.4 GHz Module (PCBA 09)** and the **OMM 446 MHz PMR/DM
 To eliminate buffeting wind noise, snag hazards, and charger ground-loop hum, the interfaces are strictly segregated:
 
 1. **Internal Helmet Audio & PTT Port (`J_HELMET`, 6-Pin JST-SH on `B.Cu`):**
-   - Located on the bottom surface of the PCB facing into the helmet cradle ($X=76.5, Y=104.0\,\text{mm}$).
-   - Helmet speakers and microphone cables pass directly through the bottom shell slot into the helmet lining – **zero cables are exposed to aerodynamic wind**.
+   - Located on the bottom surface of the PCB in the rear chamber opposite the USB-C port ($X=126.6, Y=99.75\,\text{mm}$ in KiCad, corresponding to $X_{\text{mod}} = 60.6\,\text{mm}$).
+   - This placement keeps the connector and harness completely clear behind the central LiPo battery recess ($X = 14\dots 54\,\text{mm}$), preventing wire pinching or mechanical interference.
+   - Helmet speakers and microphone cables pass directly through the bottom shell slot ($7.0 \times 9.0\,\text{mm}$) into the helmet lining – **zero cables are exposed to aerodynamic wind**.
    - **Zero 5V DC Power:** Carries only passive headset signals (`HP_OUT_L`, `HP_OUT_R`, `AGND_SPK`, `MIC_IN+`, `AGND_MIC`, `BTN_PTT`) – completely free of charger noise or DC-DC ripple.
 
 2. **External USB-C Port (`J1` with TPU Sealing Cap):**

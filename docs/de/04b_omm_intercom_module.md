@@ -364,8 +364,9 @@ Sowohl das **OpenMotorMesh 2.4 GHz Modul (PCBA 09)** als auch das **OMM 446 MHz 
    * **Bluetooth/BLE Nahfeld:** Der zweite Funkchip (`ESP32-PICO-V3-02`) behält seine Onboard-Keramik-Chipantenne (`ANT1`), da er nur die Nahfeld-Kopplung ($1\dots 3\,\text{m}$) zum Smartphone im Tankrucksack oder Display bedient.
 
 2. **Kassetten-Betrieb im Motorrad-Pod (Externe Fahrzeugantenne):**
-   * Auf beiden Platinen (`PCBA 09` und `PCBA 10`) ist eine **U.FL-Goldbuchse (`J_RF`)** an identischer Koordinate $(126{,}025, 100{,}25)\,\text{mm}$ auf der Platinenunterseite (`B.Cu`) bestückt.
-   * Im Kassetten-Schlitten (`00_base_sled.scad`, mit `has_sma_port = true`) führt ein 50 mm kurzes RG-178 Koaxial-Pigtail von `J_RF` zu einer wasserdichten SMA-Bulkhead-Buchse an der Front-Abschlussplatte der Kassette.
+   * **PCBA 09 (2.4 GHz):** Nutzt direkt die werkseitig integrierte U.FL-Goldbuchse auf dem `ESP32-C6-MINI-1U` Modul (`U1`) – auf eine redundante Zweitbuchse auf der Leiterplatte wird verzichtet.
+   * **PCBA 10 (446 MHz):** Besitzt die dedizierte U.FL-Buchse `J_RF` auf der Platinenunterseite (`B.Cu`), gespeist über das Bandpassfilter des NiceRF SA818-DMR.
+   * Im Kassetten-Schlitten (`00_base_sled.scad`, mit `has_sma_port = true`) führt ein kurzes 50 mm RG-178 Koaxial-Pigtail von der jeweiligen U.FL-Buchse zur wasserdichten SMA-Bulkhead-Buchse an der Front-Abschlussplatte der Kassette.
    * **Reichweiten-Vorteil:** Über ein Koaxialkabel kann eine Hochleistungsantenne am Fahrzeugheck (Kennzeichenträger / Gepäckbrücke) oder an der Verkleidung angeschlossen werden. Die massive Abschattung durch den Körper des Fahrers entfällt vollständig!
 
 ### 6.3 Schnittstellen-Trennung: Helm-Audio (`J_HELMET`) vs. Externes Laden & WebUSB (`J1`)
@@ -373,8 +374,9 @@ Sowohl das **OpenMotorMesh 2.4 GHz Modul (PCBA 09)** als auch das **OMM 446 MHz 
 Zur Vermeidung von Windgeräuschen, Kabelgewirr und Brummstörungen sind die Anschlüsse strikt getrennt:
 
 1. **Interner Helm-Audio & PTT-Port (`J_HELMET`, 6-Pin JST-SH auf `B.Cu`):**
-   * Auf der dem Helmschacht zugewandten Platinenunterseite sitzt der 6-Pin Header `J_HELMET` ($X=76{,}5, Y=104{,}0\,\text{mm}$).
-   * Das Kabel von Helmlautsprechern und Mikrofon wird durch die Gehäuseunterseite direkt ins Helminnere geführt – **kein einziges Kabel flattert außen im Fahrtwind**.
+   * Auf der dem Helmschacht zugewandten Platinenunterseite sitzt der 6-Pin Header `J_HELMET` gegenüber dem USB-C Port im hinteren Gehäuseabteil ($X=126{,}6, Y=99{,}75\,\text{mm}$ in KiCad bzw. $X_{\text{mod}} = 60{,}6\,\text{mm}$).
+   * Durch diese Platzierung liegt der Anschluss vollständig frei hinter dem zentralen Akkufach ($X = 14\dots 54\,\text{mm}$) – Akku und Kabel behindern sich nicht gegenseitig.
+   * Das Headset-Kabel wird durch einen passgenauen Durchbruch ($7{,}0 \times 9{,}0\,\text{mm}$) im Gehäuseboden direkt ins Helminnere geführt – **kein einziges Kabel flattert außen im Fahrtwind**.
    * **Kein 5V-Gleichstrom:** Der Anschluss führt ausschließlich passive Audiosignale (`HP_OUT_L`, `HP_OUT_R`, `AGND_SPK`, `MIC_IN+`, `AGND_MIC`, `BTN_PTT`) – vollkommen frei von Ladebrummen oder Schaltreglerstörungen.
 
 2. **Externer USB-C Port (`J1` mit TPU-Kappe):**

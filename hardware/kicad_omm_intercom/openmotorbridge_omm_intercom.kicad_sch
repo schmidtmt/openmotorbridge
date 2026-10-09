@@ -494,16 +494,5 @@
 		(pin "5" (uuid "c0000000-0000-0000-0000-0000000001C5"))
 		(pin "6" (uuid "c0000000-0000-0000-0000-0000000001C6"))
 	)
-
-	(symbol (lib_id "Connector:U.FL-R-SMT") (at 200.0 180.0 0) (unit 1)
-		(in_bom yes) (on_board yes) (dnp no)
-		(uuid "c0000000-0000-0000-0000-0000000001A0")
-		(property "Reference" "J_RF" (at 200.0 165.0 0) (effects (font (size 1.27 1.27))))
-		(property "Value" "U.FL-R-SMT-1" (at 200.0 168.0 0) (effects (font (size 1.27 1.27))))
-		(property "Footprint" "Connector_Coaxial:U.FL_Hirose_U.FL-R-SMT-1_Vertical" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
-		(property "LCSC" "C14899" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
-		(pin "1" (uuid "c0000000-0000-0000-0000-0000000001A1"))
-		(pin "2" (uuid "c0000000-0000-0000-0000-0000000001A2"))
-		(pin "3" (uuid "c0000000-0000-0000-0000-0000000001A3"))
-	)
 )
+
