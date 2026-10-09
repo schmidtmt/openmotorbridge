@@ -349,6 +349,7 @@ Both the **OpenMotorMesh 2.4 GHz Module (PCBA 09)** and the **OMM 446 MHz PMR/DM
      - For permanent vehicle installations (e.g., convoy base station or support van), the cartridge cradle inlay (`cartridge_insert_omm_ucs.scad`) provides a dedicated mounting bed in its spacious rear chamber ($48 \times 53\,\text{mm}$) for an ultra-compact $25 \times 15\,\text{mm}$ 5V COTS bi-directional booster module.
      - **Receive LNA (+12 to +15 dB Gain):** The integrated Low-Noise Amplifier pulls weak signals out of the noise floor, effortlessly overcoming any rider body or luggage lid shadowing – matching the performance of an external antenna without a single external hole!
      - **100% Modular Decoupling:** The cartridge carrier PCB (`PCBA 03`) remains completely universal across all cartridges (Sena/Cardo are not burdened with unused RF silicon). The booster is plugged in purely as an optional modular accessory inside the OMM cartridge sled.
+     - **Power Supply via Y-Branch on 8-Pin Header `J_AUDIO_PWR`:** The 5V DC supply for the booster ($< 100\,\text{mA}$) is provided directly via a 2-wire branch from **Pin 1 (`PGND`)** and **Pin 2 (`VCC_5V`)** of the standard cartridge gateway cable. Because the booster return current flows strictly through `PGND` while audio grounds `AGND_SPK` (Pin 3) and `AGND_MIC` (Pin 6) remain zero-current ($I = 0\,\text{mA}$), Kelvin grounding is preserved 100% – zero RF buzz or common-impedance coupling in the helmet audio!
 
 ### 6.3 Clean Interface Separation: Helmet Audio (`J_HELMET`) vs. External USB-C (`J1`)
 
