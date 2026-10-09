@@ -86,6 +86,7 @@ BOARDS = [
         "dest_dir": os.path.join(BASE_DIR, "hardware/kicad_omm_intercom"),
         "outputs": [
             ("pcba09_omm_intercom_3d.png", ["--side", "top", "--rotate", "-45,0,45", "--quality", "high"]),
+            ("pcba09_omm_intercom_top_3d.png", ["--side", "top", "--rotate", "-45,0,45", "--quality", "high"]),
             ("pcba09_omm_intercom_top.png", ["--side", "top", "--quality", "high"]),
             ("pcba09_omm_intercom_bottom_3d.png", ["--side", "bottom", "--rotate", "45,0,-45", "--quality", "high"]),
             ("pcba09_omm_intercom_bottom.png", ["--side", "bottom", "--quality", "high"]),
@@ -98,6 +99,7 @@ BOARDS = [
         "dest_dir": os.path.join(BASE_DIR, "hardware/kicad_omm446_intercom"),
         "outputs": [
             ("pcba10_omm446_intercom_3d.png", ["--side", "top", "--rotate", "-45,0,45", "--quality", "high"]),
+            ("pcba10_omm446_intercom_top_3d.png", ["--side", "top", "--rotate", "-45,0,45", "--quality", "high"]),
             ("pcba10_omm446_intercom_top.png", ["--side", "top", "--quality", "high"]),
             ("pcba10_omm446_intercom_bottom_3d.png", ["--side", "bottom", "--rotate", "45,0,-45", "--quality", "high"]),
             ("pcba10_omm446_intercom_bottom.png", ["--side", "bottom", "--quality", "high"]),

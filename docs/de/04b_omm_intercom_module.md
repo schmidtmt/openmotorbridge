@@ -281,7 +281,7 @@ Das **OMM 446 MHz Intercom-Modul (`PCBA 10`)** schließt die gravierende Lücke 
   - Top Layer ($35\,\mu\text{m}$ Cu): ESP32-C6 Host-MCU (`U1`), ES8388 Stereo Audio-Codec (`U4`), TI BQ24075 PMIC (`U2`), ME6211C33 LDO (`U5`), 4x Taster (`SW1`–`SW4`), IP67 USB-C (`J1`), WS2812B RGB (`D1`), LiPo-Anschluss (`BAT1`), Helical-Federkontakt (`PAD_ANT`).
   - Inner Layer 1 ($17{,}5\,\mu\text{m}$ Cu): Durchgehende, ununterbrochene Massefläche (`AGND` & `GND` Shielding unter dem SA818-DMR Transceiver).
   - Inner Layer 2 ($17{,}5\,\mu\text{m}$ Cu): Niederohmige Stromversorgungs-Planes ($3{,}3\,\text{V}$ System, $4{,}4\,\text{V}$ PA-Versorgung).
-  - Bottom Layer ($35\,\mu\text{m}$ Cu): NiceRF SA818-DMR SMD-Modul (`U3`), ESP32-PICO-V3-02 Bluetooth Co-Prozessor (`U6`), Johanson 2450AT Chipantenne (`ANT1`), U.FL Koaxialbuchse (`J_RF`).
+  - Bottom Layer ($35\,\mu\text{m}$ Cu): NiceRF SA818-DMR SMD-Modul (`U3`), ESP32-PICO-V3-02 Bluetooth Co-Prozessor (`U6`), Johanson 2450AT Chipantenne (`ANT1`), U.FL Koaxialbuchse (`J_RF`), 6-Pin Helm-Audio & PTT Header (`J_HELMET`).
 * **Oberflächenfinish:** ENIG (Electroless Nickel Immersion Gold) für maximale Korrosionsbeständigkeit gegen Schweiß und Kondenswasser.
 
 ---

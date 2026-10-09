@@ -86,9 +86,9 @@ module dummy_omm446_ucs_pcb() {
             cube(size=[2.0, 2.0, 0.7], center=true);
     }
 
-    // 8. Spring Compression Contact Pad for Helical Antenna (+X Edge, Top Face)
+    // 8. Spring Compression Contact Pad for Helical Antenna (X=40.5, Y=2.0 mm, Top Face)
     color("gold") {
-        translate([pcb_l - 4.0, pcb_w/2.0 - 2.0, pcb_h])
+        translate([40.5, 2.0, pcb_h])
             cylinder(r=1.5, h=0.2, $fn=24);
     }
 
@@ -102,22 +102,21 @@ module dummy_omm446_ucs_pcb() {
             cube(size=[38.0, 16.0, 3.2], center=false);
     }
 
-    // 10. TI BQ24075 PMIC (Bottom Face, QFN-16 3x3mm)
+    // 10. TI BQ24075 PMIC (Top Face, matched to PCBA 09: X=47.25, Y=7.98 mm)
     color("black") {
-        translate([52.0, 9.0, -0.9])
+        translate([47.25, 7.98, pcb_h])
             cube(size=[3.0, 3.0, 0.9], center=false);
     }
 
-
-    // 12. 2-Pin Battery Header BAT1 (Bottom Face, BM02B-SRSS-TB 3.5 x 4.2 x 2.9 mm)
+    // 12. 2-Pin Battery Header BAT1 (Top Face, matched to PCBA 09: X=50.45, Y=2.95 mm)
     color("ghostwhite") {
-        translate([8.0, 6.0, -2.9])
+        translate([50.45, 2.95, pcb_h])
             cube(size=[3.5, 4.2, 2.9], center=false);
     }
 
-    // 13. U.FL Coaxial RF Receptacle J_RF (Bottom Face, 3.0 x 3.0 x 1.25 mm)
+    // 13. U.FL Coaxial RF Receptacle J_RF (Bottom Face, X=40.525, Y=2.0 mm)
     color("gold") {
-        translate([52.5, 15.0, -1.25])
+        translate([40.525, 2.0, -1.25])
             cube(size=[3.0, 3.0, 1.25], center=false);
     }
 
@@ -128,10 +127,10 @@ module dummy_omm446_ucs_pcb() {
     }
 
     // 15. J_HELMET: Internal 6-Pin Passive Helmet Audio & PTT Header (Bottom Face, SM06B-SRSS-TB)
-    // Sits in forward chamber (X = 6.5 mm, Y = 19.0 mm) facing through bottom shell slot into helmet
+    // Sits in rear chamber opposite USB-C (X = 56.625 mm, Y = 14.75 mm) matching PCBA 09
     color("ivory") {
-        translate([6.5, 15.0, -2.8])
-            cube(size=[7.5, 4.25, 2.8], center=false);
+        translate([56.625 - 4.25/2.0, 14.75 - 7.5/2.0, -2.8])
+            cube(size=[4.25, 7.5, 2.8], center=false);
     }
 }
 
