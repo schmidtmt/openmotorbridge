@@ -438,12 +438,18 @@ Für das Sena +Mesh (oder andere OEM-Adapter mit Antennen- und Ladeanschluss) bi
 * **EPDM-Spannband-Aufnahme:** Einhängehaken für ein elastisches EPDM-Gummiband ($35 \times 10\,\text{mm}$), das den Adapter vibrationsfest im Negativbett sichert.
 * **Elektrische Speisung:** Flaches 90° Micro-USB / USB-C Pigtail von Pin 1 (`GND`) und Pin 2 (`5V_VBUS`) des JST-SH Headers `J2`.
 
-#### 4.3.6 Schuberth SC2 Upcycling-Einbau im Universal-Grundschlitten (Bucht 1)
-Das ausgemusterte **Schuberth SC2** (Sena OEM Mesh 3.0 System aus Schuberth C5 / E2 / S3 Helmen) eignet sich ideal für den kostengünstigen Festeinbau in Bucht 1:
-* **Haupteinheit-Abmessungen & Bauraum:** Die SC2 Main-Unit misst lediglich $75 \times 40 \times 12\,\text{mm}$. Sie passt formschlüssig in den Innenraum des universellen Basisschlittens (`00_base_sled.scad`, lichter Bauraum $110 \times 53 \times 16\,\text{mm}$).
-* **$35\,\text{mm}$ Funktions-Freiraum:** Der verbleibende Längsbauraum vor der Haupteinheit nimmt den Miniatur-Step-Down-Wandler (MP2315, 5V Bordnetz $\rightarrow 3{,}75\,\text{V}$ Festspannung anstelle des ausgelöteten Akkus), den $10\,\text{k}\Omega$-NTC-Dummy-Widerstand sowie die Audio-Übertrager und Zugentlastungen auf.
-* **Keine Mechatronik-Stößel erforderlich (Zero-Wear):** Da das SC2 vollständig drahtlos über die autarke Schuberth Bluetooth Low Energy (BLE) Lenkerfernbedienung gesteuert wird (die direkt am Lenker montiert wird), entfallen jegliche mechanischen Hubmagnete oder Stößelbrücken.
-* **Externe Koax-Antennenanbindung:** Die internen Micro-Koaxialkabel des SC2 (die im Helm die Helmantennen speisen) werden über ein kurzes flexibles RG-178 Pigtail direkt an die optionale frontale SMA-Flanschbuchse des Basisschlittens (`has_sma_port = true`) geführt. Daran wird die externe Hochgewinn-Fahrzeugantenne am Heckträger angeschlossen.
+#### 4.3.6 Universelles OEM-Upcycling im Grundschlitten (Schuberth SC2, Shoei SRL-Mesh/SRL3, HJC Smart 50B)
+Ausgemusterte OEM-Intercoms ausgetauschter Helme (Schuberth C5 mit SC2, Shoei Neotec 2/3 mit SRL2/SRL-Mesh/SRL3, HJC RPHA mit Smart HJC 50B) eignen sich ideal für den kostengünstigen Festeinbau in Bucht 1 als autarke Sena Mesh 3.0 / 2.0 Gateways:
+* **Haupteinheit-Abmessungen & Bauraum:** 
+  * Das **Schuberth SC2** misst lediglich $75 \times 40 \times 12\,\text{mm}$ als monolithischer Block.
+  * Beim **Shoei SRL-Mesh / SRL3** wird das flache Nacken-Elektronikmodul ($65 \times 35 \times 10\,\text{mm}$) zusammen mit der kompakten 3-Tasten-Flanke flach im Schlittenbett platziert.
+  * Das **Smart HJC 50B** Einschubmodul ($68 \times 38 \times 11\,\text{mm}$) passt ebenfalls unmittelbar in das Nest.
+  * Alle Systeme fügen sich mühelos in den lichten Innenraum des universellen Basisschlittens (`00_base_sled.scad`, $110 \times 53 \times 16\,\text{mm}$) ein.
+* **$30\dots 35\,\text{mm}$ Funktions-Freiraum:** Der verbleibende Längsbauraum vor den Modulen nimmt den Miniatur-Step-Down-Wandler (MP2315, 5V Bordnetz $\rightarrow 3{,}75\,\text{V}$ Festspannung anstelle des ausgelöteten Akkus), den $10\,\text{k}\Omega$-NTC-Dummy-Widerstand sowie die Audio-Übertrager und Zugentlastungen auf.
+* **Bedienelemente & Ansteuerung:**
+  * *Schuberth SC2:* Steuerung erfolgt 100 % drahtlos über die werkseitige Schuberth Bluetooth Low Energy (BLE) Lenkerfernbedienung (Zero-Wear, keine Kabel zum Lenker).
+  * *Shoei SRL & HJC 50B:* Unterstützen entweder die drahtlose **Sena RC3 / RC4 Lenkerfernbedienung** (BLE) oder werden bei geöffneter Kassette über 4 mechatronische Tauchanker auf der Tastenleiste getaktet.
+* **Externe Koax-Antennenanbindung:** Die internen Micro-Koaxialkabel (U.FL / IPEX oder koaxiale Helmpigtails) werden über ein kurzes flexibles RG-178 Pigtail direkt an die frontale SMA-Flanschbuchse des Basisschlittens (`has_sma_port = true`) geführt. Daran wird die externe Hochgewinn-Fahrzeugantenne am Heckträger angeschlossen (freies Abstrahlen ohne Helm-Dämpfung).
 * **Wetterfeste Kassettenabdeckung:** Nach dem Einlegen wird die Kassette mit dem flachen Blinddeckel ([`03_insert_blindkassette.scad`](../../hardware/cad/scad/03_pod_cartridges/parts/03_insert_blindkassette.scad)) und 4x M2-Senkkopfschrauben staub- und strahlwasserdicht verschlossen.
 
 #### 4.3.7 Cardo Packtalk Edge / Pro Magnetic Air Mount

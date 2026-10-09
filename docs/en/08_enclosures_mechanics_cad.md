@@ -393,12 +393,18 @@ For modern intercom cartridges such as the Sena SPIDER X Slim and Cardo Packtalk
 * **EPDM Retention Strap:** Anchor tabs for elastic EPDM band ($35 \times 10\,\text{mm}$) securing the unit vibration-free.
 * **Power Feed:** Flat right-angle Micro-USB / USB-C pigtail from Pin 1 (`GND`) and Pin 2 (`5V_VBUS`) of JST-SH header `J2`.
 
-#### 4.3.6 Schuberth SC2 Upcycling Integration in Universal Base Sled (Bay 1)
-The retired **Schuberth SC2** (Sena OEM Mesh 3.0 system from Schuberth C5 / E2 / S3 helmets) is ideally suited for low-cost, permanent bike installation in Bay 1:
-* **Main Unit Dimensions & Cavity:** The SC2 main unit measures only $75 \times 40 \times 12\,\text{mm}$. It fits neatly inside the universal base sled (`00_base_sled.scad`, interior envelope $110 \times 53 \times 16\,\text{mm}$).
-* **$35\,\text{mm}$ Functional Clearance:** The remaining longitudinal space ahead of the unit accommodates the miniature step-down buck converter (MP2315, converting bike 5V $\rightarrow 3.75\,\text{V}$ constant DC in place of the desoldered battery), the $10\,\text{k}\Omega$ NTC dummy thermistor resistor, audio isolation transformers, and silicone strain reliefs.
-* **Zero Mechatronic Actuators Needed (Zero-Wear):** Because the SC2 is operated 100% wirelessly using the standalone Schuberth Bluetooth Low Energy (BLE) handlebar remote (mounted directly to the handlebar), mechanical solenoids and plunger guide bridges are completely omitted.
-* **External Coax Antenna Feed:** The internal micro-coaxial antenna leads of the SC2 (which feed the helmet antennas) are adapted via a short, flexible RG-178 pigtail directly to the optional front SMA bulkhead jack of the base sled (`has_sma_port = true`). A high-gain vehicle antenna on the bike rear luggage rack connects here.
+#### 4.3.6 Universal OEM Intercom Upcycling in Universal Base Sled (Schuberth SC2, Shoei SRL Series, HJC Smart 50B)
+Retired OEM intercoms from replaced helmets (Schuberth C5 with SC2, Shoei Neotec 2/3 with SRL2/SRL-Mesh/SRL3, HJC RPHA with Smart HJC 50B) are ideally suited for low-cost, permanent bike installation in Bay 1 as autonomous Sena Mesh 3.0 / 2.0 gateways:
+* **Main Unit Dimensions & Cavity:** 
+  * The **Schuberth SC2** measures $75 \times 40 \times 12\,\text{mm}$ as a single block.
+  * For **Shoei SRL-Mesh / SRL3**, the flat neck electronics module ($65 \times 35 \times 10\,\text{mm}$) is placed flat alongside the compact 3-button wing inside the sled bed.
+  * The **Smart HJC 50B** slot-in module ($68 \times 38 \times 11\,\text{mm}$) fits directly into the cradle as well.
+  * All systems seat comfortably inside the clear interior envelope of the universal base sled (`00_base_sled.scad`, $110 \times 53 \times 16\,\text{mm}$).
+* **$30\dots 35\,\text{mm}$ Functional Clearance:** The remaining longitudinal space ahead of the units accommodates the miniature step-down buck converter (MP2315, converting bike 5V $\rightarrow 3.75\,\text{V}$ constant DC in place of the desoldered battery), the $10\,\text{k}\Omega$ NTC dummy thermistor resistor, audio isolation transformers, and silicone strain reliefs.
+* **Controls & Actuation:**
+  * *Schuberth SC2:* Operated 100% wirelessly using the factory Schuberth Bluetooth Low Energy (BLE) handlebar remote (zero-wear, zero wires to handlebar).
+  * *Shoei SRL & HJC 50B:* Support either the wireless **Sena RC3 / RC4 handlebar remote** (BLE) or automated button pulsing via 4 mechatronic solenoids on `PCBA 03`.
+* **External Coax Antenna Feed:** The internal micro-coaxial antenna leads (U.FL / IPEX or coax pigtails) are adapted via a short, flexible RG-178 pigtail directly to the optional front SMA bulkhead jack of the base sled (`has_sma_port = true`). A high-gain vehicle antenna on the bike rear luggage rack connects here (line-of-sight radiation without helmet attenuation).
 * **Weatherproof Enclosure:** Once seated, the cartridge is sealed dust- and splash-proof using the solid blank top lid ([`03_insert_blindkassette.scad`](../../hardware/cad/scad/03_pod_cartridges/parts/03_insert_blindkassette.scad)) and 4x M2 countersunk screws.
 
 #### 4.3.7 Cardo Packtalk Edge / Pro Magnetic Air Mount
