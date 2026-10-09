@@ -547,7 +547,8 @@ flowchart LR
 | **Reichweite** | ca. $800\dots 1200\,\text{m}$ pro Hop | ca. $400\dots 800\,\text{m}$ (Mesh-Relay) | **$1{,}5\dots 6{,}0\,\text{km}$ (Schmalband)** |
 | **Fremdgeräte** | Streng auf eigene Marke beschränkt | Nur OMM-Knoten & ESP32-C6 | **Alle PMR446- & DMR-Handfunkgeräte!** |
 | **Audio-Qualität** | Breitband HD ($16\dots 24\,\text{kHz}$) | **Opus HD ($24\,\text{kHz}$, $< 18\,\text{ms}$)** | Analog Telefonie ($3\,\text{kHz}$) / DMR AMBE+2 |
-| **Steckverbinder** | Proprietäre Klemmleiste / Pogo-Pins | IP67 USB-C Port | IP67 USB-C Port |
+| **Steckverbinder & Audio** | Proprietäre Klemmleiste / Pogo-Pins | **IP67 USB-C (Laden/DFU/Pod) + 6-Pin JST-SH J_HELMET (Helm Audio/PTT, 0V DC) + SMA Koax-Port** | **IP67 USB-C (Laden/DFU/Pod) + 6-Pin JST-SH J_HELMET (Helm Audio/PTT, 0V DC) + SMA Koax-Port** |
+| **Antennen-Optionen** | Proprietäre Klemmleiste / Stummel | **38 mm Stubby (Helm, Default) / Externe Bike-Antenne (Pod)** | **48 mm Stubby (Helm, Default) / Externe Bike-Antenne (Pod)** |
 | **Gehäuseform** | Markenindividuell, inkompatibel | **ECE 22.06 UCS ($68 \times 36 \times 9{,}5\,\text{mm}$)** | **ECE 22.06 UCS ($68 \times 36 \times 9{,}5\,\text{mm}$)** |
 | **Befestigung** | Verklebt / Schnapphaken | **4x formschlüssige DIN 934 M2 Muttern**| **4x formschlüssige DIN 934 M2 Muttern** |
 | **Wartbarkeit** | Nach Garantieende Elektroschrott | **100% reparierbar, austauschbare LiPo**| **100% reparierbar, austauschbare LiPo** |

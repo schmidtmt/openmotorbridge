@@ -495,7 +495,8 @@ flowchart LR
 | **Range** | $800\dots 1200\,\text{m}$ per hop | $400\dots 800\,\text{m}$ (Mesh-Relay) | **$1.5\dots 6.0\,\text{km}$ (Narrowband)** |
 | **Third-Party Devices** | Strictly brand-locked | OMM nodes & ESP32-C6 devices | **All PMR446 & DMR handhelds!** |
 | **Audio Quality** | Wideband HD ($16\dots 24\,\text{kHz}$) | **Opus HD ($24\,\text{kHz}$, $< 18\,\text{ms}$)** | Analog voice ($3\,\text{kHz}$) / DMR AMBE+2 |
-| **Connector** | Proprietary terminal pins | IP67 USB-C Port | IP67 USB-C Port |
+| **Connectors & Audio** | Proprietary terminal pins / cradle | **IP67 USB-C (Charge/DFU/Pod) + 6-Pin JST-SH J_HELMET (Helmet Audio/PTT, 0V DC) + SMA Coax** | **IP67 USB-C (Charge/DFU/Pod) + 6-Pin JST-SH J_HELMET (Helmet Audio/PTT, 0V DC) + SMA Coax** |
+| **Antenna Options** | Internal fixed antenna | **38 mm Stubby (Helmet, Default) / External Bike Antenna (Pod)** | **48 mm Stubby (Helmet, Default) / External Bike Antenna (Pod)** |
 | **Form Factor** | Brand-specific, incompatible | **ECE 22.06 UCS ($68 \times 36 \times 9.5\,\text{mm}$)** | **ECE 22.06 UCS ($68 \times 36 \times 9.5\,\text{mm}$)** |
 | **Fasteners** | Glued or plastic clip tabs | **4x DIN 934 M2 captive hex nuts** | **4x DIN 934 M2 captive hex nuts** |
 | **Serviceability** | E-waste upon battery degradation | **100% repairable, swappable LiPo** | **100% repairable, swappable LiPo** |

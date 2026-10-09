@@ -147,32 +147,44 @@ This document serves as the master reference (Single Source of Truth) for the co
 
 ## 8b. PCBA 09: OMM 2.4 GHz Autonomous Intercom Module (`openmotorbridge_omm_ucs`, 2-Layer FR4 TG150, 60 x 30 mm)
 
+## 8b. PCBA 09: OMM 2.4 GHz Autonomous Intercom Module (`openmotorbridge_omm_ucs`, 2-Layer FR4 TG150, 60 x 30 mm)
+
 | Ref | Component / Type | Package | Specification & Function | LCSC Part |
-| :--- | :--- | :--- | :--- | :--- |
-| **`U1`** | ESP32-C6-MINI-1U | SMD Module w/ U.FL| 32-Bit RISC-V 160MHz Host MCU, Wi-Fi 6, 802.15.4 TDMA, BLE 5.3, 4MB Flash | `C5267233` |
-| **`U2`** | BQ24075RGTR | QFN-16 (3x3mm) | 1.5A LiPo PMIC with Dynamic Power Path Management (DPPM UPS operation) | `C96825` |
+| :--- | :--- | :--- | :--- | :---: |
+| **`U1`** | ESP32-C6-MINI-1U | SMD Module w/ U.FL| 32-Bit RISC-V 160MHz Host MCU, Wi-Fi 6, 802.15.4 TDMA, BLE 5.3, 4MB Flash, integrated U.FL port for coax pigtail / stubby antenna | `C5267233` |
+| **`U2`** | BQ24075RGTR | QFN-16 (3x3mm) | 1.5A LiPo PMIC with Dynamic Power Path Management (Zero-reboot UPS operation) | `C96825` |
 | **`U3`** | XC6206P332MR | SOT-23-3 | 3.3V / 250mA Low-Iq LDO Voltage Regulator | `C5446` |
-| **`U4`** | ES8388 | QFN-28 (4x4mm) | 24-Bit / 96kHz Stereo Audio Codec with separate L/R HP amps & differential mic preamp | `C2845349` |
-| **`ANT1`** | Taoglas FXP73 | I-PEX MHF / U.FL | 2.4 GHz Flex Dipole (+3.0 dBi) remote helmet antenna | `C14894` |
-| **`J1`** | TYPE-C-31-M-12 | SMT/THT IP67 | Waterproof 16-Pin USB-C Receptacle (5V charging, WebUSB DFU, audio) | `C2765186` |
-| **`BAT1`** | JST-ACH 2-Pin | SMD 1.2mm pitch | Connection to internal 600-mAh LiPo pouch cell (with PCM) | `C2902341` |
+| **`U4`** | ES8388 | QFN-28 (4x4mm) | 24-Bit / 96kHz Stereo Audio Codec with separate L/R HP amps & differential mic preamp | `C365736` |
+| **`U5`** | ESP32-PICO-V3-02 | QFN-48 (7x7mm) | Bluetooth Classic / BLE Co-Processor (Dual-Engine OMB Lite: HFP HD Voice, A2DP, Cross-Bridge, BLE GATT) | `C2686884` |
+| **`ANT1`** | 2450AT18x100 | SMD 3216 (1.2x3.2mm) | 2.45 GHz Ceramic Chip Antenna for ESP32-PICO-V3-02 Bluetooth Co-Processor (Phone / Display link) | `C2909988` |
+| **`J1`** | TYPE-C-31-M-12 | SMT/THT IP67 | Waterproof 16-Pin USB-C Receptacle (5V charging on the go via powerbank/bike, WebUSB DFU, cartridge dock) | `C2765186` |
+| **`J_HELMET`**| SM06B-SRSS-TB | 6-Pin JST-SH 1.0mm Horiz.| Internal Helmet Audio & PTT port on B.Cu (HP_OUT_L, HP_OUT_R, AGND_SPK, MIC_IN+, AGND_MIC, BTN_PTT; 0V DC) | `C136657` |
+| **`BAT1`** | BM02B-SRSS-TB | SMD 1.0mm pitch | Connection to internal 600-mAh LiPo pouch cell (with PCM) | `C2902341` |
 | **`D1`** | WS2812B-2020 | SMD 2020 | RGB Status LED (Charge, Mesh channel, pairing indicator) | `C2843785` |
+| **`D2`** | USBLC6-2SC6 | SOT-23-6 | High-speed TVS diode array for USB D+/D- and VBUS ESD protection | `C7519` |
 | **`SW1..4`** | EVQ-P2 / KMT0 | SMD 3.5x2.8mm | 4x Tactile IP67 micro-switches (Power, Mesh, Vol+, Vol-) | `C318884` |
+| **`R_NTC`** | 10k NTC 1% | 0402 | Battery temperature monitoring according to JEITA standard | `C25804` |
 
 ---
 
 ## 8c. PCBA 10: OMM 446 Analog & Digital PMR446 Module (`openmotorbridge_omm446_ucs`, 4-Layer FR4 TG150, 60 x 30 mm)
 
 | Ref | Component / Type | Package | Specification & Function | LCSC Part |
-| :--- | :--- | :--- | :--- | :--- |
-| **`U1`** | ESP32-C6-MINI-1U | SMD Module w/ U.FL| 32-Bit RISC-V Host MCU, BLE 5.3 Setup, WebUSB DFU, AT-Command Engine | `C5267233` |
+| :--- | :--- | :--- | :--- | :---: |
+| **`U1`** | ESP32-C6-MINI-1U | SMD Module w/ U.FL| 32-Bit RISC-V Host MCU, BLE 5.3 Setup, WebUSB DFU, AT-Command Engine for SA818-DMR | `C5267233` |
 | **`U2`** | BQ24075RGTR | QFN-16 (3x3mm) | 1.5A LiPo PMIC with DPPM (In-operation USB charging, internal battery as UPS) | `C96825` |
-| **`U3`** | SA818-DMR | SMD Module | 446 MHz Analog FM & Digital DMR Tier I Transceiver (0.2W Helmet / 0.5W Bike) | `C2839211` |
-| **`U4`** | ES8388 | QFN-28 (4x4mm) | 24-Bit Stereo Audio Codec for radio audio processing & helmet speakers | `C2845349` |
-| **`ANT1`** | 446 MHz Helical | Custom Helix | $\lambda/4$ shortened helical antenna ($32\,\text{mm}$) molded into lid or U.FL pigtail | COTS |
-| **`J1`** | TYPE-C-31-M-12 | SMT/THT IP67 | Waterproof 16-Pin USB-C Receptacle (5V DC power, charging, WebUSB) | `C2765186` |
-| **`BAT1`** | JST-ACH 2-Pin | SMD 1.2mm pitch | Connection to internal 600-mAh LiPo pouch cell (with PCM) | `C2902341` |
+| **`U3`** | SA818-DMR | SMD Module (16x38mm)| 446 MHz Analog FM & Digital DMR Tier I Transceiver (0.2W Helmet / 0.5W Bike) | `C2839211` |
+| **`U4`** | ES8388 | QFN-28 (4x4mm) | 24-Bit Stereo Audio Codec for radio audio processing & helmet speakers | `C365736` |
+| **`U5`** | ME6211C33M5G | SOT-23-5 | 3.3V / 500mA High-Speed Low-Dropout Voltage Regulator | `C82942` |
+| **`U6`** | ESP32-PICO-V3-02 | QFN-48 (7x7mm) | Bluetooth Classic / BLE Co-Processor (Dual-Engine OMB Lite: HFP HD Voice, A2DP, Cross-Bridge, BLE GATT) | `C2686884` |
+| **`ANT1`** | 2450AT18x100 | SMD 3216 (1.2x3.2mm) | 2.45 GHz Ceramic Chip Antenna for ESP32-PICO-V3-02 Bluetooth Co-Processor | `C2909988` |
+| **`J1`** | TYPE-C-31-M-12 | SMT/THT IP67 | Waterproof 16-Pin USB-C Receptacle (5V DC power, charging on the go, WebUSB DFU, cartridge dock) | `C2765186` |
+| **`J_HELMET`**| SM06B-SRSS-TB | 6-Pin JST-SH 1.0mm Horiz.| Internal Helmet Audio & PTT port on B.Cu (HP_OUT_L, HP_OUT_R, AGND_SPK, MIC_IN+, AGND_MIC, BTN_PTT; 0V DC) | `C136657` |
+| **`J_RF`** | U.FL-R-SMT-1 | SMD U.FL Socket (B.Cu)| 50 Ohm U.FL RF connector for coax pigtail to waterproof SMA bulkhead or bike antenna | `C14899` |
+| **`PAD_ANT`**| SMD Testpad D3.0mm| Copper Pad (F.Cu) | Alternate RF solder connection for internal helical antenna | - |
+| **`BAT1`** | BM02B-SRSS-TB | SMD 1.0mm pitch | Connection to internal 600-mAh LiPo pouch cell (with PCM) | `C2902341` |
 | **`D1`** | WS2812B-2020 | SMD 2020 | RGB Status LED (RX Green, TX Red, DMR Blue, Charging Yellow) | `C2843785` |
+| **`D2`** | USBLC6-2SC6 | SOT-23-6 | High-speed TVS diode array for USB D+/D- and VBUS ESD protection | `C7519` |
 | **`SW1..4`** | EVQ-P2 / KMT0 | SMD 3.5x2.8mm | 4x Tactile IP67 micro-switches (PTT, Mode, Ch+, Ch-) | `C318884` |
 
 ---
@@ -312,15 +324,76 @@ Each Universal Smart Cartridge (`PCBA 03`) drives up to four linear solenoids ("
 
 ## 12. COTS Hardware & Fastener Procurement List (1 Complete Kit)
 
+### 11.7 Pannier Disconnect (Industrial 2-Pin Magnetic Pogo "MagSafe Replacement")
+
+Instead of the former proprietary `PCBA 06` board, the tool-free pannier breakaway connection is engineered as a **pure 2-wire DC system (5V / GND)** with an industrial **2-Pin Magnetic Pogo Breakaway Coupler (IP68 COTS)**:
+* Industrial 2-Pin magnetic pogo connector (HytePro M411, IP68 rated, gold-plated contacts, N52 neodymium magnets).
+* Rated up to $2.5\,\text{A}$ continuous DC current at $12\,\text{V}/5\,\text{V}$; contact resistance $< 30\,\text{m}\Omega$.
+* **Breakaway Safety:** Separates non-destructively at $10\dots 15\,\text{N}$ axial pull force when the pannier is removed without manual uncoupling.
+* **Sealing:** Single $\varnothing 12\,\text{mm}$ bore in the forward pannier wall accepts split EPDM/TPU grommet ([`010_saddlebag_hole_grommet_split.scad`](../../hardware/cad/scad/02_pod_base/parts/010_saddlebag_hole_grommet_split.scad)). The pannier floor remains 100% intact and watertight.
+
+### 11.8 OMM UCS Helmet Accessories: Audio Harness, RF Coaxial Pigtails & Stubby Antennas
+
+For standalone helmet operation of both intercom modules (**PCBA 09: OMM 2.4 GHz HD-Mesh** and **PCBA 10: OMM 446 PMR/DMR**) in standard ECE 22.06 UCS slots, commercially available COTS accessories provide plug-and-play assembly:
+
+1. **OMM UCS Helmet Audio & PTT Harness (`J_HELMET` Pigtail):**
+   * **PCB Side:** 6-Pin JST-SH female connector ($1.0\,\text{mm}$ pitch, gold-plated crimp contacts, positive snap-lock to header `J_HELMET` on `B.Cu`).
+   * **Wire Harness:** High-flex AWG30/32 silicone wires (halogen-free, flexible routing beneath helmet cheek pads, length $120\dots 150\,\text{mm}$).
+   * **Helmet Interfacing:**
+     - **Speakers:** $3.5\,\text{mm}$ inline gold-plated stereo jack for 40 mm helmet speakers (JBL, Sena HD) carrying Pin 1 (`HP_OUT_L`), Pin 2 (`HP_OUT_R`), and Pin 3 (`AGND_SPK`).
+     - **Microphone:** 2-Pin Micro-JST / Molex PicoBlade socket for boom or adhesive ECM microphone carrying Pin 4 (`MIC_IN+`) and Pin 5 (`AGND_MIC`).
+     - **PTT Switch:** 2-conductor lead to weather-sealed velcro/finger PTT button carrying Pin 6 (`BTN_PTT`) keyed to GND.
+   * **Zero Charging Whine / Hum:** The harness carries **0 V DC power**. Ground-loop hum and switching noise from charging regulators are physically impossible!
+   * **Grommet Routing:** Exits smoothly through the $7.0 \times 9.0\,\text{mm}$ floor cutout in the lower shell directly into helmet liner recesses.
+
+2. **RF Micro-Coaxial Pigtail (U.FL to SMA Bulkhead):**
+   * **Coax Cable:** 50 $\Omega$ low-loss micro-coax (RG-178 with FEP jacket or $\varnothing 1.13\,\text{mm}$ silver-plated, length $45\dots 50\,\text{mm}$, shielding $> 60\,\text{dB}$, insertion loss $< 0.15\,\text{dB}$).
+   * **PCB Side:** IPEX MHF1 / U.FL female snap connector (clicks onto `U1` on PCBA 09 or `J_RF` on PCBA 10).
+   * **Enclosure Side:** SMA-Female Bulkhead jack (1/4"-36 UNS thread with D-cut flat anti-twist profile).
+
+3. **IP67 Antenna Feedthrough (Bulkhead with O-Ring):**
+   * **Seal:** UV- and ozone-resistant EPDM / Silicone O-ring (Shore 60A, $\varnothing 6.0 \times 1.0\,\text{mm}$).
+   * **Fastening:** A4 / 316 stainless steel hex nut with internal star lockwasher for vibration-proof retention.
+   * **Fitment:** Seats inside the $5.0 \times 4.0\,\text{mm}$ cutout at the $+X$ flank of the OMM UCS enclosure ([`omm_ucs_bottom_shell.scad`](../../hardware/cad/scad/03_pod_cartridges/parts/omm_ucs_module.scad)) to maintain IP67 water and dust sealing.
+
+4. **Compact Helmet Stubby Antennas (COTS Stubby Antennas):**
+   * **Stubby Antenna 1 (OMM 2.4 GHz HD-Mesh, PCBA 09):**
+     - 2.4 GHz ISM band stubby antenna ($2400\dots 2500\,\text{MHz}$), $+2.0\dots +2.5\,\text{dBi}$ omnidirectional gain.
+     - SMA-Male connector, overall length only **$35\dots 40\,\text{mm}$**, diameter $\varnothing 8\,\text{mm}$, weight approx. $6\,\text{g}$.
+     - Rubber-duck flexible TPU jacket prevents helmet buffeting, wind whistle, and lever forces at highway speeds.
+   * **Stubby Antenna 2 (OMM 446 MHz PMR/DMR, PCBA 10):**
+     - 446 MHz PMR446 / DMR Tier I stubby antenna ($430\dots 470\,\text{MHz}$, resonant at $446.1\,\text{MHz}$), approx. $0\dots +1.5\,\text{dBi}$ gain.
+     - SMA-Male connector, length approx. **$45\dots 50\,\text{mm}$**, diameter $\varnothing 10\,\text{mm}$, weight approx. $9\,\text{g}$.
+     - Shortened helical coil inside flexible shock-damping rubber jacket. Delivers $1.5\dots 2.5\,\text{km}$ range with full rider ergonomics.
+
+---
+
+## 12. COTS Hardware & Fastener Procurement List (1 Complete Kit)
+
 | Component | Specification / Type | Sourcing Source | Qty | Location & Purpose |
 | :--- | :--- | :--- | :---: | :--- |
 | **M3 Stainless Screws** | M3 x 40 mm Socket Head A4 / 316 (DIN 912) | Standard Fastener | 4 pcs | Central Box enclosure (engages nut pockets) |
 | **M3 Stainless Screws (Front)**| M3 x 20 mm Socket Head A4 / 316 (DIN 912) | Standard Fastener | 4 pcs | Front Node enclosure (engages nut pockets) |
-| **M3 Stainless Nuts** | DIN 934 / DIN 985 M3 A4 Nuts | Standard Fastener | 8 pcs | Captive in nut pockets (no soldering iron required!) |
-| **M4 Stainless Nuts (AMPS)**| DIN 934 M4 A4 Nuts | Standard Fastener | 4 pcs | Captive in Front Node tub nut pockets |
+| **M3 Stainless Screws (Dock)** | M3 x 16 mm Socket Head A4 / 316 (DIN 912) | Standard Fastener | 4 pcs | Frame clamp `cots_magnetic_frame_dock` |
+| **M3 Stainless Nuts** | DIN 934 / DIN 985 M3 A4 Nuts | Standard Fastener | 12 pcs| Captive in nut pockets (Central Box, Front Node, Frame Dock) |
+| **M4 Stainless Nuts (AMPS & Radar)**| DIN 934 M4 A4 Nuts | Standard Fastener | 6 pcs | 4x Front Node tub (AMPS), 2x Radar 2.0 rear housing |
+| **M4 Screws (Radar Cradle)** | M4 x 12 mm Socket Head A4 (DIN 912) | Standard Fastener | 2 pcs | Securing cradle `radar_swivel_tilt_cradle` to Radar 2.0 housing |
+| **M5 Hirth Pivot Bolt** | M5 x 25 mm Socket Head A4 (DIN 912) | Standard Fastener | 1 pc | Horizontal pivot bolt for radar Hirth joint |
+| **M5 Stainless Nut (Radar)** | DIN 934 M5 A4 Nut | Standard Fastener | 1 pc | Captive in right fork of radar mount |
+| **M5 Clamp Screws (Adventure)** | M5 x 25 mm Socket Head A4 (DIN 912) | Standard Fastener | 2 pcs | Clamp cap `adventure_rack_radar_mount` (bottom access) |
+| **M5 Nuts (Adventure Clamp)** | DIN 934 M5 A4 Nuts | Standard Fastener | 2 pcs | Captive in clamp cap `adventure_rack_radar_clamp_cap` |
+| **M8 IP68 Cable Gland** | M8 x 1.25 Nickel-plated brass / PA66 with EPDM seal | Skintop / Lapp | 1 pc | Watertight bottom entry gland for 2-wire FLRY-B cable |
 | **M2.5 Board Screws** | M2.5 x 6 mm Socket Head A4 (DIN 912) | Standard Fastener | 8 pcs | 4x Central Box PCB, 4x Front Node PCB |
 | **M2 Cartridge Board Screws** | M2 x 6 mm Pan/Socket Head A4 (DIN 7985/912) | Standard Fastener | 8 pcs | Securing PCBA 03 to cartridge sled (4x per sled; bulkhead screws completely eliminated) |
 | **M2 Sled Retainer Screws** | M2 x 6 mm Countersunk A4 (DIN 7991) | Standard Fastener | 8 pcs | Securing actuator hold-down brackets (4x per gateway) |
+| **M2 UCS Enclosure Screws** | M2 x 8 mm Socket Head A4 (DIN 912) | Standard Fastener | 4-8 pcs| OMM UCS module enclosure (engages captive M2 nuts) |
+| **M2 UCS Stainless Nuts** | DIN 934 M2 A4 Nuts | Standard Fastener | 4-8 pcs| Captive in upper shell of OMM UCS module |
+| **OMM LiPo Pouch Battery** | 1S LiPo 600 mAh ($38 \times 24 \times 4.5\,\text{mm}$) with PCM | EEMB / Web | 1-2 pcs| Internal battery for OMM UCS module (12-14 h runtime) |
+| **OMM Silicone Gasket** | Silicone solid cord $\varnothing 0.8\,\text{mm}$ Shore 40A | O-Ring Supplier | 0.5 m | IP67 perimeter seal for OMM UCS module |
+| **OMM Helmet Audio & PTT Harness**| 6-Pin JST-SH 1.0mm Socket to 3.5mm Jack + Mic + PTT | COTS Standard | 1-2 pcs| Pure audio headset harness for helmet interior (0V DC, 12-15 cm) |
+| **RF Coax Pigtail U.FL to SMA**| RG-178 / 1.13mm (50 mm) with IP67 SMA Bulkhead & O-Ring | COTS Standard | 1-2 pcs| Connection from U.FL port to enclosure feedthrough on OMM UCS |
+| **OMM 2.4 GHz Stubby Antenna** | 2.4 GHz Stubby Rubber Antenna (38 mm, SMA-Male) | COTS Standard | 1 pc | Compact helical antenna for OMM 2.4G helmet use (zero buffeting) |
+| **OMM 446 MHz Stubby Antenna** | 446 MHz PMR/DMR Stubby Antenna (48 mm, SMA-Male) | COTS Standard | 1 pc | Compact helical antenna for OMM 446 helmet use (1.5-2.5 km range) |
 | **M2 Pivot Dowel Pins** | M2 x 8 mm Stainless Dowel Pin (DIN 7) | Standard / Misumi | 2 pcs | Pivot pins for magnetic cartridge latches |
 | **Magnetic Armature** | Ø 6 x 8 mm Hardened Steel Pin (DIN 6325) | Standard / Misumi | 2 pcs | Steel keeper pin in cartridge latch arm |
 | **Latch Return Springs** | Stainless 316 ($\varnothing 3.5\,\text{mm}, L_0=10\,\text{mm}$) | Standard Spring | 2 pcs | Return springs for latch hook |
@@ -331,6 +404,9 @@ Each Universal Smart Cartridge (`PCBA 03`) drives up to four linear solenoids ("
 | **Cartridge Gaskets** | Molded Silicone Gasket Shore 40A ($54 \times 18\,\text{mm}$) | Custom Mold | 2 pcs | Front face mouth sealing on Pod 1 and Pod 2 |
 | **UPS Battery Pack** | 1S LiPo Flat Pack 2,200 mAh ($68 \times 39 \times 5.0\,\text{mm}$) with Micro-Fit | EEMB / Enerpower | 1 pc | Central Box UPS buffer (Type 504068 / 503870) |
 | **Automotive Fuse Holder** | Waterproof Blade Fuse Holder + 2A Fuse | Hella / MTA | 1 pc | KL30 battery terminal line protection |
+| **2-Pin Magnetic Breakaway**| IP68 Magnetic Plug + Socket (e.g., HytePro M411) | COTS Standard | 2 sets | Pannier breakaway connection (10-15 N pull force) |
+| **Pure DC 2-Wire Cable (PUR)**| 2x 0.34 mm² (AWG22) with JST-JWPF 2-Pin / Magnetic Pogo | COTS Standard | 2 pcs | Pure 5V DC power to Pod 1 and Pod 2 (data 100% via UWB) |
+| **Radar 12V Cable (PUR)** | 2x 0.5 mm² (AWG20) with JST-JWPF 2-Pin IP67 Plug | COTS Standard | Opt. (1)| 12V DC feed to rear radar (data 100% via UWB) |
 | **DTM-12 Breakout Harness** | Deutsch DTM 12-Pin Pre-terminated IP68 Harness | TE Connectivity | 1 pc | Automotive master harness from Central Box |
 | **Front Node 12V Cable** | 2-Pin JST-PH Lead with Posi-Tap | COTS Standard | 1 pc | Local cockpit power connection (parking light/GPS plug) |
 | **J_ACT Actuator Harness** | Pre-crimped 8-Pin JST-SH to 4x 2-Pin Leads | Adafruit / SparkFun | 2 pcs | Pre-assembled harness for 4 solenoids (C160404) |

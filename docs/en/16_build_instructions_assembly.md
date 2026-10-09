@@ -60,32 +60,41 @@ All discrete components, PCB ordering files, and COTS sourcing lists are documen
   * 2x Cartridge base sleds (with UWB antenna floor pocket & DIN 934 M2 captive nut standoffs), inlays (Sena SPIDER X Slim, Cardo Packtalk Edge, Swap OMM, or blank cartridge) & 2x magnetic latches
   * 1x Front Node (lower tub with UWB bottom pocket and AMPS nut pockets, upper lid, TPU cable glands & USB-C cap)
   * 1x Vehicle-specific mounting kit (BMW GS clamps & `adventure_rack_radar_mount.stl` / Harley saddlebag docks & license plate bracket / Support-Car `car_sun_visor_pod_clip.stl`)
-* [ ] **Fully Populated PCBAs (from JLCPCB / Eurocircuits):**
+  * *(Optional for helmet operation / OMM):* 1-2x OMM UCS upper shells ([`omm_ucs_top_shell.stl`](../../hardware/cad/stl/03_pod_cartridges/omm_ucs_top_shell.stl)), lower shells ([`omm_ucs_bottom_shell.stl`](../../hardware/cad/stl/03_pod_cartridges/omm_ucs_bottom_shell.stl)) & silicone keypads ([`omm_ucs_silicone_keypad.stl`](../../hardware/cad/stl/03_pod_cartridges/omm_ucs_silicone_keypad.stl))
+* [ ] **Fully Populated PCBAs (from JLCPCB / Eurocircuits - up to 8 PCBAs):**
   * 1x PCBA 01 (Central Box with onboard LoRa SX1262 and DW3110 UWB)
   * 2x PCBA 03 (Universal Smart Cartridge Rev 3.0 All-UWB with DW3110 UWB, ES8388 / MCU and 4x AO3400 N-MOSFETs, 2-sided SMT)
   * 1x PCBA 05 (Front Node with DW3110 UWB)
   * *(Optional: 1x PCBA 08 Radar 2.0 Sub-MCU, PCBA 06 MagSafe Dock, PCBA 07 Smart-Keyfob)*
+  * *(Optional for Helmet / OpenMotorMesh):* 1x **PCBA 09 (OMM 2.4 GHz HD-Mesh)** and/or 1x **PCBA 10 (OMM 446 PMR/DMR Radio)**
   * *(Note: PCBA 02 and PCBA 04 are completely eliminated).*
 * [ ] **A4 / 316 Stainless Fasteners & Springs (IKEA Principle - 100% Solder-Free):**
   * 8x DIN 934 / DIN 985 M3 stainless nuts (for captive enclosure nut pockets)
-  * 4x DIN 934 M4 nuts (for AMPS nut pockets in Front Node tub)
+  * 6x DIN 934 M4 nuts (4x AMPS nut pockets in Front Node tub, 2x Radar 2.0 rear housing)
   * 4x M3 x 40 mm socket head screws (Central Box), 4x M3 x 20 mm screws (Front Node)
   * 8x M2.5 x 6 mm board screws (Central Box & Front Node), 8x M2 x 6 mm board screws (Cartridge PCBA 03; bulkhead screws completely eliminated)
+  * 4-8x DIN 934 M2 nuts & 4-8x DIN 912 M2 x 8 mm socket head screws (for OMM UCS enclosure fastening)
   * 2x DIN 7 M2 x 8 mm dowel pins (latch pivots), 2x DIN 6325 Ø 6 x 8 mm hardened steel keeper pins
   * 2x Latch return springs, 4x auto-eject compression springs, 1x N52 neodymium release key
   * 4x Gold-plated Mill-Max heavy-duty spring contact sleeves for Pod 1 & 2 power feed
 * [ ] **Gaskets, Battery & Antennas:**
   * Silicone O-ring cord Ø 1.5 mm Shore 40A ($40\,\text{cm}$ Main Box, $30\,\text{cm}$ Front Node)
+  * Silicone O-ring cord Ø 0.8 mm Shore 40A ($25\,\text{cm}$ per OMM UCS module)
   * 2x Molded silicone face gaskets for Pod 1 & 2 mouths, Gore ePTFE vent stickers
-  * **1x 1S LiPo Flat Pack 2,200 mAh** ($68 \times 39 \times 5.0\,\text{mm}$) with Molex Micro-Fit 3.0 connector
+  * **1x 1S LiPo Flat Pack 2,200 mAh** ($68 \times 39 \times 5.0\,\text{mm}$) with Molex Micro-Fit 3.0 connector (Central Box UPS)
+  * **1-2x 1S LiPo Pouch Battery 600 mAh** ($38 \times 24 \times 4.5\,\text{mm}$) with JST 2-Pin connector (OMM UCS modules)
   * **Taoglas FXUWB10 UWB Flex Antennas** with 20 mm U.FL leads (Central Box, Front Node, Cartridges)
   * **1x Taoglas FXP895 LoRa 868 MHz Flex Antenna** with 50 $\Omega$ U.FL lead
   * **1x u-blox SAM-M10Q Multi-GNSS Module** with integrated patch antenna (Qwiic I2C)
   * **1x TI TMP117 & 1x TI OPT3001 Sensors** (Qwiic I2C)
+  * **1-2x RF Micro-Coaxial Pigtails U.FL to SMA-Bulkhead** (RG-178 / 1.13mm, 50 mm) with IP67 EPDM O-ring and M6 stainless nut
+  * **1x OMM 2.4 GHz Stubby Antenna** (SMA-Male, 38 mm Rubber-Duck helix)
+  * **1x OMM 446 MHz Stubby Antenna** (SMA-Male, 48 mm Helical stubby)
 * [ ] **Pre-Assembled COTS Harnesses (Zero Crimping Required):**
   * 1x Deutsch DTM-12 IP67/IP69K central breakout harness (pure 2-wire DC whips for Pod 1, Pod 2, Radar and 12V battery & CAN)
   * 2-Pin JWPF / Superseal connectors for Pod and Radar power leads
   * JST-SH cartridge wiring harnesses (8-Pin `J_ACT` for solenoids)
+  * 1-2x OMM Helmet Audio & PTT Harnesses (6-Pin JST-SH 1.0mm socket to 3.5mm jack + mic + PTT, AWG30/32 silicone, $12\dots 15\,\text{cm}$)
 * [ ] **Tools:**
   * Hex key set (1.5 / 2.0 / 2.5 / 3.0 mm), Torx TX10 / PH1 driver, open-end wrenches 7 / 8 / 10 mm, utility knife, dielectric silicone grease
 
@@ -140,6 +149,43 @@ All discrete components, PCB ordering files, and COTS sourcing lists are documen
 2. **Insert Spring:** Place the small $\varnothing 3.5 \times 10\,\text{mm}$ compression spring into the inward pocket.
 3. **Pivot Mounting:** Slide the assembled latch into the left cheek of the cartridge sled and drive the $\varnothing 2.0 \times 8\,\text{mm}$ stainless dowel pin (DIN 7) through the pivot hole.
 4. **Functional Test:** Latch tooth extends $2.5\,\text{mm}$ outward; holding the N52 neodymium block magnet outside the housing retracts the tooth flush into the sled.
+
+---
+
+### Step 3.2: Assemble OMM UCS Intercom Modules (PCBA 09 & PCBA 10) & Prepare for Helmet Installation
+
+Both standalone modules (**PCBA 09: OMM 2.4 GHz HD-Mesh** and **PCBA 10: OMM 446 PMR/DMR**) share an identical ECE 22.06 UCS enclosure ($68 \times 36 \times 9.5\,\text{mm}$) and assemble as follows:
+
+1. **Insert Captive Nuts & Keypad Gasket:**
+   * Press 4x DIN 934 M2 stainless nuts from inside into the captive nut pockets of the upper shell ([`omm_ucs_top_shell.stl`](../../hardware/cad/stl/03_pod_cartridges/omm_ucs_top_shell.stl)).
+   * Seat the Shore 50A silicone keypad ([`omm_ucs_silicone_keypad.stl`](../../hardware/cad/stl/03_pod_cartridges/omm_ucs_silicone_keypad.stl)) into the upper shell recess (key plungers protrude through the 4 aperture holes, diffuse LED dome aligns with `D1`).
+   * Lightly lubricate silicone O-ring cord ($\varnothing 0.8\,\text{mm}$, approx. $22\,\text{cm}$) with silicone grease and press it into the perimeter sealing channel of the upper shell.
+2. **Install RF Coax Pigtail & Watertight SMA Bulkhead:**
+   * Connect the 50 mm low-loss micro-coax pigtail (U.FL to SMA bulkhead) to the board:
+     * On `PCBA 09`: Snap U.FL connector vertically onto the integrated U.FL receptacle on the `ESP32-C6-MINI-1U` (`U1`).
+     * On `PCBA 10`: Snap U.FL connector onto receptacle `J_RF` on the bottom copper side (`B.Cu`).
+   * Slide the EPDM/Silicone O-ring ($\varnothing 6.0 \times 1.0\,\text{mm}$) over the SMA bulkhead threads.
+   * Seat the SMA jack with its D-cut anti-twist flat into the $5.0 \times 4.0\,\text{mm}$ slot on the $+X$ flank of the lower shell ([`omm_ucs_bottom_shell.stl`](../../hardware/cad/stl/03_pod_cartridges/omm_ucs_bottom_shell.stl)) and tighten the A4 stainless hex nut and star lockwasher from the outside to achieve an IP67 seal.
+3. **Install Battery & PCB:**
+   * Place the 600 mAh LiPo pouch battery into the central battery cradle ($X = 14\dots 54\,\text{mm}$) of the lower shell.
+   * Plug the 2-pin JST lead into `BAT1`.
+   * Seat the PCB component-side up into the guide bosses, ensuring the USB-C port `J1` seats cleanly into its frontal gasket flange.
+4. **Connect Helmet Audio & PTT Harness (`J_HELMET`):**
+   * Plug the 6-pin JST-SH connector of the helmet audio harness from underneath into header `J_HELMET` on `B.Cu` ($X=126.6, Y=99.75\,\text{mm}$ in KiCad, $X_{\text{mod}} = 60.6\,\text{mm}$).
+   * Route the flexible AWG30/32 silicone lead downward through the rear bottom slot ($7.0 \times 9.0\,\text{mm}$) of the lower shell.
+5. **Fasten Enclosure (100% Soldering-Iron Free):**
+   * Seat the upper shell, verifying seamless perimeter gasket alignment.
+   * Fasten 4x DIN 912 M2 $\times 8\,\text{mm}$ stainless socket head screws from underneath through the countersunk holes into the captive DIN 934 M2 nuts in a crosswise pattern.
+6. **Thread On Stubby Antenna:**
+   * For OMM 2.4 GHz (`PCBA 09`): Screw on the compact 38 mm 2.4 GHz Rubber-Duck stubby antenna onto the SMA jack.
+   * For OMM 446 (`PCBA 10`): Screw on the compact 48 mm 446 MHz helical stubby antenna onto the SMA jack.
+7. **Helmet Installation (ECE 22.06 UCS Slot):**
+   * Slide the assembled module into the helmet manufacturer's UCS recess (e.g., HJC, Shoei, Schuberth) until it locks in place.
+   * Route the audio harness exiting from the underside directly into cheek pad cutouts:
+     - Connect 3.5 mm stereo jack to helmet speakers.
+     - Connect 2-pin micro jack to boom or adhesive microphone.
+     - Route PTT line to chin bar or finger button.
+   * The frontal USB-C port remains fully accessible on the outside of the helmet for powerbank charging on the go or WebUSB DFU updates.
 
 ---
 

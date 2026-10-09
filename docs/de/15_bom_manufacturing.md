@@ -157,13 +157,15 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 
 | Designator | Bauteil / Wert | Hersteller / Typ | Gehäuse / Footprint | JLCPCB Part # | Funktion / Beschreibung |
 | :--- | :--- | :--- | :--- | :---: | :--- |
-| **`U1`** | ESP32-C6-MINI-1U | Espressif | SMD Modul (13.2x16.6mm) mit U.FL | `C5267233` | 32-Bit RISC-V 160MHz Host MCU, Wi-Fi 6, 802.15.4 TDMA, BLE 5.3, 4MB Flash, U.FL HF-Port |
+| **`U1`** | ESP32-C6-MINI-1U | Espressif | SMD Modul (13.2x16.6mm) mit U.FL | `C5267233` | 32-Bit RISC-V 160MHz Host MCU, Wi-Fi 6, 802.15.4 TDMA, BLE 5.3, 4MB Flash, integrierter U.FL HF-Port für Koax-Pigtail / Stummelantenne |
 | **`U2`** | BQ24075RGTR | Texas Instruments | QFN-16 (3x3mm) | `C96825` | 1.5A LiPo PMIC mit Dynamic Power Path Management (Zero-Reboot Umschaltung & USV) |
 | **`U3`** | XC6206P332MR | Torex Semi | SOT-23-3 | `C5446` | 3.3V / 250mA Low-Iq LDO Spannungsregler |
-| **`U4`** | ES8388 | Everest Semi | QFN-28 (4x4mm) | `C2845349` | 24-Bit / 96kHz Stereo Audio Codec mit getrenntem L/R Kopfhörertreiber & Differenz-Mic-Preamp |
-| **`ANT1`** | Taoglas FXP73 | I-PEX MHF / U.FL | 2.4 GHz Flex-Dipol (+3.0 dBi) | `C14894` | Abgesetzte Helm-Flexantenne, klickt direkt auf den board-eigenen U.FL-Port von `U1` (Reichweite bis 250m) |
-| **`J1`** | TYPE-C-31-M-12 | Korean HRO | SMT/THT IP67 | `C2765186` | Wasserdichte 16-Pin USB-C Buchse (5V Laden, WebUSB DFU, Helm-Audio) |
-| **`BAT1`** | JST-ACH 2-Pin | JST | SMD 1.2mm pitch | `C2902341` | Steckverbindung zum internen 600-mAh-LiPo Pouch-Akku (mit PCM) |
+| **`U4`** | ES8388 | Everest Semi | QFN-28 (4x4mm) | `C365736` | 24-Bit / 96kHz Stereo Audio Codec mit getrenntem L/R Kopfhörertreiber & Differenz-Mic-Preamp |
+| **`U5`** | ESP32-PICO-V3-02 | Espressif | QFN-48 (7x7mm) | `C2686884` | Bluetooth Classic / BLE Co-Prozessor (Dual-Engine OMB Lite: HFP HD Voice, A2DP, Cardo/Sena Cross-Bridge, BLE GATT) |
+| **`ANT1`** | 2450AT18x100 | Johanson Tech | SMD 3216 (1.2x3.2mm) | `C2909988` | 2.45 GHz Keramik-Chipantenne für ESP32-PICO-V3-02 Bluetooth Co-Prozessor (Nahfeld-Kopplung Smartphone/Display) |
+| **`J1`** | TYPE-C-31-M-12 | Korean HRO | SMT/THT IP67 | `C2765186` | Wasserdichte 16-Pin USB-C Buchse (5V Unterwegs-Laden via Powerbank/Front-Node, WebUSB DFU Flashing, Kassetten-Einschubkontakt) |
+| **`J_HELMET`**| SM06B-SRSS-TB | JST | 6-Pin JST-SH 1.0mm SMD Horiz. | `C136657` | Interner Helm-Audio & PTT-Port auf B.Cu (HP_OUT_L, HP_OUT_R, AGND_SPK, MIC_IN+, AGND_MIC, BTN_PTT; 0V DC) |
+| **`BAT1`** | BM02B-SRSS-TB | JST | SMD 1.0mm pitch | `C2902341` | Steckverbindung zum internen 600-mAh-LiPo Pouch-Akku (mit PCM) |
 | **`D1`** | WS2812B-2020 | Worldsemi | SMD 2020 | `C2843785` | RGB-Status-LED (Ladezustand, Mesh-Kanal, Pairing-Indikator) |
 | **`D2`** | USBLC6-2SC6 | STMicroelectronics | SOT-23-6 | `C7519` | High-Speed TVS-Diodenarray für USB D+/D- und VBUS ESD-Schutz |
 | **`SW1..4`** | EVQ-P2 / KMT0 | Panasonic / C&K | SMD 3.5x2.8mm | `C318884` | 4x taktile IP67 Mikrotaster (Power, Mesh, Vol+, Vol-) |
@@ -175,13 +177,18 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 
 | Designator | Bauteil / Wert | Hersteller / Typ | Gehäuse / Footprint | JLCPCB Part # | Funktion / Beschreibung |
 | :--- | :--- | :--- | :--- | :---: | :--- |
-| **`U1`** | ESP32-C6-MINI-1U | Espressif | SMD Modul (13.2x16.6mm) mit U.FL | `C5267233` | 32-Bit RISC-V Host MCU, BLE 5.3 Smartphone-Setup, WebUSB DFU, AT-Command Control |
+| **`U1`** | ESP32-C6-MINI-1U | Espressif | SMD Modul (13.2x16.6mm) mit U.FL | `C5267233` | 32-Bit RISC-V Host MCU, BLE 5.3 Smartphone-Setup, WebUSB DFU, AT-Command Control für SA818-DMR |
 | **`U2`** | BQ24075RGTR | Texas Instruments | QFN-16 (3x3mm) | `C96825` | 1.5A LiPo PMIC mit DPPM (Laden im Betrieb via USB-C, Akku dient als USV) |
-| **`U3`** | SA818-DMR | NiceRF | SMD Modul (16x38mm) | `C2839211` | 446 MHz Analog & DMR Tier I Transceiver Modul (0.2W Helm / 0.5W Bike) |
-| **`U4`** | ES8388 | Everest Semi | QFN-28 (4x4mm) | `C2845349` | 24-Bit Stereo Audio Codec für Funk-Audio Ein-/Ausgabe und Helm-Lautsprecher |
-| **`ANT1`** | 446 MHz Wendel | Custom Helix | $\lambda/4$ Wendel ($32\,\text{mm}$) | COTS | Im Gehäusedeckel vergossene Helix oder U.FL Pigtail für Bike-Fahrzeugantenne |
-| **`J1`** | TYPE-C-31-M-12 | Korean HRO | SMT/THT IP67 | `C2765186` | Wasserdichte 16-Pin USB-C Buchse (5V Speisung, Laden, DFU) |
-| **`BAT1`** | JST-ACH 2-Pin | JST | SMD 1.2mm pitch | `C2902341` | Steckverbindung zum internen 600-mAh-LiPo Pouch-Akku (mit PCM) |
+| **`U3`** | SA818-DMR | NiceRF | SMD Modul (16x38mm) | `C2839211` | 446 MHz Analog FM & Digital DMR Tier I Transceiver Modul (0.2W Helm / 0.5W Bike) |
+| **`U4`** | ES8388 | Everest Semi | QFN-28 (4x4mm) | `C365736` | 24-Bit Stereo Audio Codec für Funk-Audio Ein-/Ausgabe und Helm-Lautsprecher |
+| **`U5`** | ME6211C33M5G | MicrOne | SOT-23-5 | `C82942` | 3.3V / 500mA High-Speed Low-Dropout Spannungsregler |
+| **`U6`** | ESP32-PICO-V3-02 | Espressif | QFN-48 (7x7mm) | `C2686884` | Bluetooth Classic / BLE Co-Prozessor (Dual-Engine OMB Lite: HFP HD Voice, A2DP, Cardo/Sena Cross-Bridge, BLE GATT) |
+| **`ANT1`** | 2450AT18x100 | Johanson Tech | SMD 3216 (1.2x3.2mm) | `C2909988` | 2.45 GHz Keramik-Chipantenne für ESP32-PICO-V3-02 Bluetooth Co-Prozessor |
+| **`J1`** | TYPE-C-31-M-12 | Korean HRO | SMT/THT IP67 | `C2765186` | Wasserdichte 16-Pin USB-C Buchse (5V Unterwegs-Laden, WebUSB DFU, Kassetten-Einschubkontakt) |
+| **`J_HELMET`**| SM06B-SRSS-TB | JST | 6-Pin JST-SH 1.0mm SMD Horiz. | `C136657` | Interner Helm-Audio & PTT-Port auf B.Cu (HP_OUT_L, HP_OUT_R, AGND_SPK, MIC_IN+, AGND_MIC, BTN_PTT; 0V DC) |
+| **`J_RF`** | U.FL-R-SMT-1 | Hirose | SMD U.FL Buchse (B.Cu) | `C14899` | 50 Ohm U.FL Buchse für Koax-Pigtail zur wasserdichten SMA-Durchführung oder Bike-Außenantenne |
+| **`PAD_ANT`**| SMD Testpad D3.0mm| Custom | Kupfer-Pad (F.Cu) | - | Alternativer HF-Lötanschluss für interne Wendelantenne oder Direktverbindung |
+| **`BAT1`** | BM02B-SRSS-TB | JST | SMD 1.0mm pitch | `C2902341` | Steckverbindung zum internen 600-mAh-LiPo Pouch-Akku (mit PCM) |
 | **`D1`** | WS2812B-2020 | Worldsemi | SMD 2020 | `C2843785` | RGB-Status-LED (RX Grün, TX Rot, DMR Blau, Chg Gelb) |
 | **`D2`** | USBLC6-2SC6 | STMicroelectronics | SOT-23-6 | `C7519` | High-Speed TVS-Diodenarray für USB D+/D- und VBUS ESD-Schutz |
 | **`SW1..4`** | EVQ-P2 / KMT0 | Panasonic / C&K | SMD 3.5x2.8mm | `C318884` | 4x taktile IP67 Mikrotaster (PTT, Mode, Ch+, Ch-) |
@@ -403,6 +410,40 @@ Anstelle der früheren proprietären Platine `PCBA 06` wird die werkzeuglose Kof
    * **Bohrung & Dichtung:** Ein einzelnes $\varnothing 12\,\text{mm}$ Loch in der Koffer-Vorderwand nimmt die geteilte EPDM/TPU-Dichtung ([`010_saddlebag_hole_grommet_split.scad`](../../hardware/cad/scad/02_pod_base/parts/010_saddlebag_hole_grommet_split.scad)) auf. Der **Kofferboden bleibt zu 100 % intakt, lochfrei und wasserdicht**.
    * **Integrierte Stufe-1 Zugentlastung:** Ein an der Dichtung angeformter Klemmturm fixiert das Kabel per Mini-Kabelbinder formschlüssig. Reißt die Magnetkupplung ab, werden die $10\dots 15\,\text{N}$ Zugkraft vollständig in die Kofferwand eingeleitet – kein Zug auf die Kofferinnenverkabelung!
 
+### 11.8 OMM UCS Helm-Zubehör: Audio-Kabelbaum, HF-Koaxialpigtail & Stummelantennen
+
+Für den Standalone-Einsatz der beiden Intercom-Module (**PCBA 09: OMM 2.4 GHz HD-Mesh** und **PCBA 10: OMM 446 PMR/DMR**) am Fahrer- oder Soziushelm (ECE 22.06 UCS-Schacht) kommen industriell vorkonfektionierte COTS-Zubehörteile zum Einsatz:
+
+1. **OMM UCS Helm-Audio- & PTT-Kabelbaum (`J_HELMET` Pigtail):**
+   * **Stecker platinenseitig:** 6-Pin JST-SH Buchse ($1{,}0\,\text{mm}$ Raster, vergoldete Crimpkontakte, formschlüssig rastend auf Header `J_HELMET` auf `B.Cu`).
+   * **Kabel:** Hochflexible AWG30/32 Silikonlitzen (halogenfrei, geschmeidig im Helmfutter verlegbar, Länge $120\dots 150\,\text{mm}$).
+   * **Verbindung zum Helm:**
+     - **Lautsprecher:** $3{,}5\,\text{mm}$ Stereo-Klinkenbuchse (Inline, vergoldet) für Standard-Helmlautsprecher (40 mm JBL, Sena HD, Cardo Sound by JBL) – führt Pin 1 (`HP_OUT_L`), Pin 2 (`HP_OUT_R`) und Pin 3 (`AGND_SPK`).
+     - **Mikrofon:** 2-Pin Micro-JST / Molex PicoBlade Buchse mit Verriegelung für Schwanenhals- oder Klebemikrofon (ECM) – führt Pin 4 (`MIC_IN+`) und Pin 5 (`AGND_MIC`).
+     - **PTT-Taster:** 2-polige Zuleitung zu wetterfestem Klett- oder Fingertaster am Helmfutter / Kinnteil – führt Pin 6 (`BTN_PTT`) gegen Masse.
+   * **Absolute Brummfreiheit:** Der Kabelstrang führt **0 V DC Ladespannung**. Störungen durch Ladeschaltregler oder Masse-Brummschleifen sind physikalisch ausgeschlossen!
+   * **Gehäusedurchführung:** Tritt bündig durch den $7{,}0 \times 9{,}0\,\text{mm}$ Bodenschlitz der Gehäuseunterschale direkt in das Helminnere ein – 0 flatternde Kabel im Fahrtwind.
+
+2. **HF-Mikro-Koaxialpigtail (U.FL auf SMA-Bulkhead):**
+   * **HF-Kabel:** 50 $\Omega$ Micro-Koaxialleitung (Typ RG-178 mit FEP-Mantel oder $\varnothing 1{,}13\,\text{mm}$ Low-Loss versilbert, Länge $45\dots 50\,\text{mm}$, Schirmdämpfung $> 60\,\text{dB}$, Einfügedämpfung $< 0{,}15\,\text{dB}$).
+   * **Platinenseite:** IPEX MHF1 / U.FL Buchse (Goldkontakte, klickt direkt auf den U.FL-Port des `ESP32-C6-MINI-1U` auf PCBA 09 bzw. `J_RF` auf PCBA 10).
+   * **Gehäuseseite:** SMA-Einbaubuchse (SMA-Female Bulkhead, 1/4"-36 UNS Außengewinde mit Verdrehschutz-Abflachung / D-Cut).
+
+3. **IP67 Antennen-Durchführung (Bulkhead mit O-Ring):**
+   * **Dichtung:** UV- und ozonbeständiger EPDM- / Silikon-O-Ring (Shore 60A, $\varnothing 6{,}0 \times 1{,}0\,\text{mm}$).
+   * **Verschraubung:** V4A Edelstahl-Mutter (1/4" / M6 flach) mit integrierter Fächerscheibe / Zahnscheibe zur rüttelfesten Arretierung.
+   * **Passung:** Sitzt passgenau in der $5{,}0 \times 4{,}0\,\text{mm}$ Stirnaussparung an der $+X$-Schmalseite des OMM-UCS-Gehäuses ([`omm_ucs_bottom_shell.scad`](../../hardware/cad/scad/03_pod_cartridges/parts/omm_ucs_module.scad)) und dichtet die Gehäusedurchführung nach Schutzart IP67 hermetisch ab.
+
+4. **Die beiden kompakten Stummelantennen für Helmmontage (COTS Stubby Antennas):**
+   * **Stummelantenne 1 (OMM 2.4 GHz HD-Mesh, PCBA 09):**
+     - 2.4 GHz ISM-Band Stubby Antenne ($2400\dots 2500\,\text{MHz}$), Gewinn $+2{,}0\dots +2{,}5\,\text{dBi}$, Rundstrahl-Dipol / Wendel.
+     - SMA-Stecker (SMA-Male, Messing vergoldet/schwarz), Gesamtlänge nur **$35\dots 40\,\text{mm}$**, Durchmesser $\varnothing 8\,\text{mm}$, Gewicht ca. $6\,\text{g}$.
+     - Gummierter, extrem robuster und flexibler TPU-Körper (Rubber-Duck). Verhindert Windflatter-Geräusche (Helmbüffeln) und Hebelbelastungen am Helm zuverlässig.
+   * **Stummelantenne 2 (OMM 446 MHz PMR/DMR, PCBA 10):**
+     - 446 MHz PMR446 / DMR Tier I Stubby Antenne ($430\dots 470\,\text{MHz}$, resonant abgestimmt auf $446{,}1\,\text{MHz}$), Gewinn ca. $0\dots +1{,}5\,\text{dBi}$.
+     - SMA-Stecker (SMA-Male), Gesamtlänge ca. **$45\dots 50\,\text{mm}$**, Durchmesser $\varnothing 10\,\text{mm}$, Gewicht ca. $9\,\text{g}$.
+     - Schwingungsgedämpfte Wendel-Helix im elastischen Gummigehäuse mit Knickschutz. Bietet $1{,}5\dots 2{,}5\,\text{km}$ Reichweite bei voller Helm-Ergonomie.
+
 ---
 
 ## 12. Zukaufteile & Normteile-Einkaufsliste (1 Komplettset)
@@ -427,6 +468,10 @@ Anstelle der früheren proprietären Platine `PCBA 06` wird die werkzeuglose Kof
 | **M2 UCS Edelstahlmuttern** | DIN 934 M2 V4A Muttern | Normteil / Amazon | 4-8 Stk. | Formschlüssig in Oberschale des OMM UCS Moduls eingelegt (Captive Nuts) |
 | **OMM LiPo Pouch-Akku** | 1S LiPo 600 mAh ($38 \times 24 \times 4{,}5\,\text{mm}$) mit PCM | EEMB / Web | 1-2 Stk. | Autarker Akku für OMM UCS Intercom-Modul (12-14 h Laufzeit) |
 | **OMM Silikon-Profildichtung** | Silikon-Rundschnur $\varnothing 0{,}8\,\text{mm}$ Shore 40A | O-Ring-Shop | 0.5 m | IP67 Gehäusedichtung für OMM UCS Gehäuse (ca. 22 cm pro Modul) |
+| **OMM Helm-Audio & PTT Kabel**| 6-Pin JST-SH 1.0mm Buchse auf Klinke 3.5mm + Mic + PTT | COTS Standard | 1-2 Stk. | Reines Audio-Headsetkabel für Helminnenraum (0V DC, störungsfrei, 12-15 cm) |
+| **HF-Koaxpigtail U.FL auf SMA**| RG-178 / 1.13mm (50 mm) mit IP67 SMA-Bulkhead & O-Ring | COTS Standard | 1-2 Stk. | Verbindung von U.FL Buchse zur Gehäusedurchführung der OMM UCS Module |
+| **OMM 2.4 GHz Stummelantenne** | 2.4 GHz Stubby Gummiantenne ($38\,\text{mm}$, SMA-Male) | COTS Standard | 1 Stk. | Kompakte Wendelantenne für OMM 2.4G Helmmontage (Zero Windbüffeln) |
+| **OMM 446 MHz Stummelantenne** | 446 MHz PMR/DMR Stubby Antenne ($48\,\text{mm}$, SMA-Male) | COTS Standard | 1 Stk. | Kompakte Wendelantenne für OMM 446 Helmmontage (1.5-2.5 km Reichweite) |
 | **M2 Schwenkachsen Wippe** | M2 x 8 mm Zylinderstift Edelstahl (DIN 7) | Normteil / Misumi | 2 Stk. | Drehachsen für magnetische Kassetten-Rastwippen |
 | **Magnetanker (Kassette)** | Ø 6 x 8 mm Zylinderstift gehärtet (DIN 6325) | Normteil / Misumi | 2 Stk. | Stahlanker im Hebelarm der Kassetten-Wippe |
 | **Wippen-Rückstellfedern** | Edelstahl V4A ($\varnothing 3{,}5\,\text{mm}, L_0=10\,\text{mm}$) | Gutekunst / Web | 2 Stk. | Rückstellfedern für Kassetten-Rastkralle |

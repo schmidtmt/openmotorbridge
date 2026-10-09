@@ -365,15 +365,17 @@ Die Platine **`PCBA 09`** ist die universelle Open-Source-Hardware für das Open
    * **Everest Semi ES8388** (QFN-28 4x4mm): Ultra-Low-Power Stereo Audio Codec mit 24-Bit / 96 kHz I2S-Interface.
    * Getrennte linke und rechte Kopfhörer-Treiber ($2\times 45\,\text{mW}$ @ $16\,\Omega$ / $25\,\text{mW}$ @ $32\,\Omega$) für echten Stereo-Klang (A2DP-Musik, räumliche Navigationshinweise, LE Audio).
    * Rauscharmer Differenz-Mikrofon-Vorverstärker ($+0\dots +30\,\text{dB}$ Gain) mit programmierbarer interner `MICBIAS`-Erzeugung ($2{,}0\dots 2{,}8\,\text{V}$) für Schwanenhals- und Klebemikrofone.
-4. **2.4-GHz-HF-Antennensystem (`ANT1`):**
-   * **Taoglas FXP73 Flex-Dipol** ($+3{,}0\,\text{dBi}$, I-PEX MHF / U.FL): Abgesetzte, extrem flexible Helm-Antenne, die direkt auf die integrierte U.FL-Buchse des `ESP32-C6-MINI-1U` gesteckt wird.
-   * Keine unzuverlässige Keramik-Chip- oder PCB-Trace-Antenne auf der Platine (eliminiert die massive HF-Dämpfung durch Helmschalen und Kopfschatten; Reichweite bis zu 250 m im Freifeld).
+4. **2.4-GHz-HF-Antennensystem & Dual-Engine:**
+   * **Host MCU (`U1`):** Nutzt direkt den werkseitig integrierten U.FL-Goldport auf dem `ESP32-C6-MINI-1U` Modul. Über ein kurzes $50\,\text{mm}$ RG-178/1.13mm Mikro-Koaxialpigtail wird das Signal zur wasserdichten IP67 SMA-Bulkhead-Durchführung an der Gehäusestirnseite geführt. (Die frühere redundante Zweitbuchse auf der Leiterplatte wurde ersatzlos gelöscht).
+   * **Helm-Default:** Im Helmbetrieb wird direkt die ultrakompakte $38\,\text{mm}$ kurze 2.4 GHz Rubber-Duck Stummelantenne aufgeschraubt (Rundstrahl-Helix, $+2{,}0\dots +2{,}5\,\text{dBi}$, null Helmbüffeln). Im Kassetten-Betrieb am Motorrad verbindet ein Koaxialkabel die SMA-Buchse mit einer fahrzeugfesten Außenantenne.
+   * **Bluetooth Co-Prozessor (`U5`):** Der `ESP32-PICO-V3-02` arbeitet auf eine eigene Johanson 2450AT Keramik-Chipantenne (`ANT1`, SMD 3216) für Nahfeld-Kopplungen zum Smartphone oder Cockpit-Display.
 5. **Bedienung & Sensorik:**
-   * 4x taktile IP67-Mikrotaster (`SW1` bis `SW4`, C&K KMT0 / Panasonic EVQ-P2) auf `F.Cu`.
+   * 4x taktile IP67-Mikrotaster (`SW1` bis `SW4`, C&K KMT0 / Alps SKRK) auf `F.Cu`.
    * 1x RGB Status-LED (`D1`, WS2812B-2020) zur Einkopplung in den Gehäuse-Lichtleiter.
 6. **Schnittstellen & Steckverbinder:**
-   * `J1`: Wasserdichte IP67 USB-C Buchse (16-Pin) bündig an der Platinenkante mit USBLC6-2SC6 TVS-ESD-Schutzarray.
-   * `BAT1`: 2-polige JST-ACH Micro-Buchse zum 1S LiPo Pouch-Akku (600 mAh mit integriertem DW01A/8205A PCM).
+   * `J1`: Wasserdichte IP67 USB-C Buchse (16-Pin) bündig an der Stirnkante mit USBLC6-2SC6 TVS-ESD-Schutzarray (Laden unterwegs via Powerbank/Front-Node, WebUSB DFU Flashing, Kassetten-Einschubkontakt).
+   * `J_HELMET`: 6-Pin JST-SH 1.0mm SMD Horizontal-Header (`SM06B-SRSS-TB`) auf `B.Cu` ($X=126{,}625, Y=99{,}75\,\text{mm}$ in KiCad bzw. $X_{\text{mod}} = 60{,}6\,\text{mm}$) im hinteren Gehäuseabteil gegenüber USB-C. Führt reines, brummfreies Audio ins Helminnere.
+   * `BAT1`: 2-polige JST-SH Micro-Buchse (`BM02B-SRSS-TB`) zum 1S LiPo Pouch-Akku (600 mAh mit integriertem PCM).
 
 ### 11.3 Vollständige GPIO-Pinbelegung (ESP32-C6-MINI-1U)
 
@@ -387,17 +389,17 @@ Die Platine **`PCBA 09`** ist die universelle Open-Source-Hardware für das Open
 | **Pad 7** | **`GPIO 7`** | `CHG_STAT` | Digital In (Pullup) | BQ24075 /STAT Ladezustandsanzeige (Low-aktiv) |
 | **Pad 10** | **`GPIO 8`** | `I2C_SDA` | Open-Drain | ES8388 Register Control SDA (4.7k Pullup) |
 | **Pad 11** | **`GPIO 9`** | `I2C_SCL` | Open-Drain | ES8388 Register Control SCL (4.7k Pullup) |
-| **Pad 3** | **`GPIO 2 / PTT`**| `PTT_IO` | Digital In (Pullup) | Hardware-PTT-Eingang von J1 Pin B5 / Lenkertaster |
+| **Pad 3** | **`GPIO 2 / PTT`**| `PTT_IO` | Digital In (Pullup) | Hardware-PTT-Eingang von J_HELMET Pin 6 / Lenkertaster |
 | **Pad 21** | **`GPIO 19`** | `I2S_MCLK` | Digital Out | ES8388 Master Clock (12.288 MHz) |
 | **Pad 22** | **`GPIO 20`** | `I2S_BCLK` | Digital Out | ES8388 Bit Clock (1.536 MHz) |
 | **Pad 23** | **`GPIO 21`** | `I2S_WS` | Digital Out | ES8388 Frame Sync / Word Select (48 kHz) |
 | **Pad 24** | **`GPIO 22`** | `I2S_DOUT` | Digital Out | ES8388 DAC Data Out (Stereo-Lautsprecher L/R) |
 | **Pad 25** | **`GPIO 23`** | `I2S_DIN` | Digital In | ES8388 ADC Data In (Mikrofon) |
-| **U.FL** | **RF 2.4G** | `RF_ANT` | 50 Ohm Koaxial | Taoglas FXP73 Flex-Dipol (+3.0 dBi Antenne) |
+| **U.FL** | **RF 2.4G** | `RF_ANT` | 50 Ohm Koaxial | ESP32-C6 integrierte U.FL-Buchse -> Koax-Pigtail -> SMA-Durchführung |
 
 ### 11.4 Belegung des 16-Pin Multi-Use USB-C Steckverbinders (`J1`)
 
-Der stirnseitige USB-C Port `J1` (`TYPE-C-31-M-12_IP67`) ist gemäß Kapitel 4b Abschnitt 2.2 als universelle Multi-Use-Schnittstelle beschaltet (analog zum bewährten Prinzip des Sena SPIDER X Slim). Er vereint **Stromversorgung**, **Flashen/Wartung** und **analoge Stereo-Audioübertragung** auf einer einzigen, wasserdichten Buchse:
+Der stirnseitige USB-C Port `J1` (`TYPE-C-31-M-12_IP67`) dient als universelle Schnittstelle für **Laden**, **WebUSB/DFU-Flashing** und den **Kassetten-Einschubkontakt**:
 
 | USB-C Pins | Netzname | Signal-Typ | Funktion / Adapter-Verbindung |
 | :---: | :--- | :--- | :--- |
@@ -405,10 +407,23 @@ Der stirnseitige USB-C Port `J1` (`TYPE-C-31-M-12_IP67`) ist gemäß Kapitel 4b 
 | **A4, B9, A9, B4** | `VBUS_5V` | Power In (+5V) | Pin 2 Kassetten-Header & USB-Ladekabel: 5V Speisung & BQ24075 USV-Akkuladung |
 | **A6, B6 (`DP1`, `DP2`)** | `USB_DP` | USB 2.0 PHY | ESP32-C6 GPIO 13 (via TVS `D2`): **Nativer USB D+ für WebUSB / DFU Firmware-Flashing** |
 | **A7, B7 (`DN1`, `DN2`)** | `USB_DN` | USB 2.0 PHY | ESP32-C6 GPIO 12 (via TVS `D2`): **Nativer USB D- für WebUSB / DFU Firmware-Flashing** |
-| **A5 (`CC1`)** | `HP_OUT_L` | Audio Out | Pin 4 Kassetten-Header / Tip 3.5mm: Stereo Audio Links vom ES8388 `LOUT1` |
-| **B5 (`CC2`)** | `HP_OUT_R` | Audio Out | Pin 5 Kassetten-Header / Ring 3.5mm: Stereo Audio Rechts vom ES8388 `ROUT1` |
-| **A8 (`SBU1`)** | `MIC_IN+` | Audio In | Pin 7 Kassetten-Header / 2-Pin Mic: Fahrer-Mikrofonsignal zum ES8388 `MIC1P` |
-| **B8 (`SBU2`)** | `AGND_SPK` | Analog Ground | Pin 3 & 6 Kassetten-Header / Sleeve 3.5mm: Stromloser Audio-Massebezug ($I = 0\,\text{mA}$) |
+| **A5 (`CC1`)** | `HP_OUT_L` | Audio Out | Pin 4 Kassetten-Header: Stereo Audio Links vom ES8388 `LOUT1` im Kassetten-Betrieb |
+| **B5 (`CC2`)** | `HP_OUT_R` | Audio Out | Pin 5 Kassetten-Header: Stereo Audio Rechts vom ES8388 `ROUT1` im Kassetten-Betrieb |
+| **A8 (`SBU1`)** | `MIC_IN+` | Audio In | Pin 7 Kassetten-Header: Mikrofonsignal zum ES8388 `MIC1P` im Kassetten-Betrieb |
+| **B8 (`SBU2`)** | `AGND_SPK` | Analog Ground | Pin 3 & 6 Kassetten-Header: Stromloser Audio-Massebezug ($I = 0\,\text{mA}$) |
+
+### 11.5 Belegung des 6-Pin Internen Helm-Audio & PTT Steckverbinders (`J_HELMET`)
+
+Der auf der Platinenunterseite (`B.Cu`) platzierte 6-polige Header `J_HELMET` (JST-SH 1.0 mm, LCSC `C136657`) führt alle analogen Audio- und Steuersignale für den Helmeinsatz heraus. Durch die strikte Trennung von 5V Ladespannung (verbleibt ausschließlich auf USB-C `J1`) ist die Verbindung zu 100 % brumm- und störungsfrei:
+
+| Pin # | Netzname | Signal-Typ | Ziel / Helm-Headset Peripherie | Elektrische Spezifikation |
+| :---: | :--- | :--- | :--- | :--- |
+| **1** | `HP_OUT_L` | Audio Out | Linker Helmlautsprecher (Tip 3.5mm Klinke) | ES8388 `LOUT1`, $45\,\text{mW}$ @ $16\,\Omega$, AC-gekoppelt |
+| **2** | `HP_OUT_R` | Audio Out | Rechter Helmlautsprecher (Ring 3.5mm Klinke) | ES8388 `ROUT1`, $45\,\text{mW}$ @ $16\,\Omega$, AC-gekoppelt |
+| **3** | `AGND_SPK` | Audio Ground | Lautsprecher-Masse (Sleeve 3.5mm Klinke) | Stromlose Analogmasse ($I = 0\,\text{mA}$), kein Ladestrom |
+| **4** | `MIC_IN+` | Audio In | Mikrofon-Kapsel (2-Pin Micro-JST Pin 1) | ES8388 `MIC1P` mit programmierbarem `MICBIAS` (2.2V) |
+| **5** | `AGND_MIC` | Mic Ground | Mikrofon-Rückleitung (2-Pin Micro-JST Pin 2) | Getrennte, rauscharme Vorverstärker-Masse |
+| **6** | `BTN_PTT` | Digital In | Helm-PTT-Taster / Kinn-Klicker | ESP32-C6 GPIO 2, interner $45\,\text{k}\Omega$ Pullup, schaltet gegen GND |
 
 ---
 
@@ -452,18 +467,24 @@ Die Platine **`PCBA 10`** ist das universelle Open-Source-Hardwaremodul für den
    * **Everest Semi ES8388**: Verarbeitet das Audio-Signal des SA818-DMR analog und digital.
    * Stereo Headphone-Verstärker für Helm-Lautsprecher.
    * Differenzieller Mikrofon-Eingang mit zuschaltbarem Windgeräuschfilter und integriertem Noise-Gate.
-5. **Antennensystem (Kompakte Wendel-Helix & externer Koax):**
-   * **Interne Helix (`ANT_INT`):** Im Gehäusedeckel integrierte, präzise auf 446 MHz abgestimmte Kupfer-Wendelantenne ($\lambda/4$ verkürzt, Länge ca. $32\,\text{mm}$), vibrationsfest im 3D-Druck-Labyrinth vergossen.
-   * **Externe U.FL-Option (`J_RF`):** Bei Montage im Kassetten-Schlitten kann über einen U.FL-Steckplatz eine externe Fahrzeugantenne am Heck oder Lenker angeschlossen werden.
-6. **Bedienelemente & Sensorik:**
-   * 4x taktile Mikrotaster: PTT (Push-to-Talk / MFB), Ch+, Ch-, Mode (Analog/DMR Toggle).
-   * 1x WS2812B-2020 RGB Status-LED (Grün = RX aktiv, Rot = TX PTT aktiv, Blau = DMR Sync, Gelb = Laden).
+5. **Antennensystem (Kompakte Wendel-Stummelantenne & externer Koax):**
+   * **Dual-Engine HF-Entkopplung:**
+     - **PMR/DMR HF-Pfad:** Der HF-Ausgang des NiceRF SA818-DMR speist über ein Tiefpass-/Bandpassfilter die U.FL-Buchse `J_RF` (`B.Cu`) sowie das parallele Lötpad `PAD_ANT` (`F.Cu`) am oberen Platinenrand ($X = 110{,}5, Y = 87{,}0\,\text{mm}$).
+     - Ein kurzes $50\,\text{mm}$ Mikro-Koaxialpigtail (RG-178 / 1.13mm) führt von `J_RF` zur wasserdichten SMA-Bulkhead-Buchse (IP67 mit EPDM O-Ring) an der Gehäusestirnseite.
+     - **Helm-Default:** Im Helmbetrieb wird die $48\,\text{mm}$ kurze 446 MHz Wendel-Stummelantenne aufgeschraubt (ca. $0\dots +1{,}5\,\text{dBi}$, $1{,}5\dots 2{,}5\,\text{km}$ Reichweite). Im Kassettenbetrieb im Pod führt ein Koaxialkabel zur Außenantenne am Motorrad ($3\dots 6\,\text{km}$).
+     - **Bluetooth Co-Prozessor (`U6`):** Der `ESP32-PICO-V3-02` arbeitet auf seine eigene Johanson 2450AT Keramik-Chipantenne (`ANT1`) für Nahfeld-Kopplungen.
+6. **Bedienelemente & Steckverbinder:**
+   * 4x taktile Mikrotaster (`SW1` bis `SW4`): PTT (Push-to-Talk / MFB), Mode (Analog/DMR Toggle), Ch+, Ch-.
+   * 1x WS2812B-2020 RGB Status-LED (`D1`, RX Grün, TX Rot, DMR Blau, Chg Gelb).
+   * `J1`: Wasserdichte IP67 USB-C Buchse (16-Pin) für 5V Laden, WebUSB DFU und Kassetten-Einschub.
+   * `J_HELMET`: 6-Pin JST-SH 1.0mm SMD Horizontal-Header (`SM06B-SRSS-TB`) auf `B.Cu` ($X=126{,}625, Y=99{,}75\,\text{mm}$ in KiCad) – identische Belegung und Platzierung wie PCBA 09.
+   * `BAT1`: 2-polige JST-SH Micro-Buchse (`BM02B-SRSS-TB`) zum 1S LiPo Pouch-Akku (600 mAh mit integriertem PCM).
 
 ### 12.3 Vollständige GPIO-Pinbelegung (ESP32-C6 zu SA818-DMR & Peripherie)
 
 | Modul-Pad | ESP32-C6 GPIO | Netzname | Signal-Typ | Funktion / Hardware-Verbindung |
 | :---: | :---: | :--- | :--- | :--- |
-| **Pad 8** | **`GPIO 2`** | `BTN_PTT` | Digital In (Pullup) | Taster SW1: Push-To-Talk (Low-aktiv, Boot-Pin) |
+| **Pad 8** | **`GPIO 2`** | `BTN_PTT` | Digital In (Pullup) | Taster SW1: Push-To-Talk / MFB (Low-aktiv, Boot-Pin) |
 | **Pad 9** | **`GPIO 3`** | `BTN_MODE` | Digital In (Pullup) | Taster SW2: Analog FM / Digital DMR Toggle |
 | **Pad 4** | **`GPIO 4`** | `BTN_CH_UP` | Digital In (Pullup) | Taster SW3: Kanalwahl Aufwärts (CH 1–16) |
 | **Pad 5** | **`GPIO 5`** | `BTN_CH_DOWN` | Digital In (Pullup) | Taster SW4: Kanalwahl Abwärts (CH 16–1) |
@@ -483,4 +504,21 @@ Die Platine **`PCBA 10`** ist das universelle Open-Source-Hardwaremodul für den
 | **Pad 23** | **`GPIO 21`** | `I2S_WS` | Digital Out | ES8388 Frame Sync (48 kHz) |
 | **Pad 24** | **`GPIO 22`** | `I2S_DOUT` | Digital Out | ES8388 DAC Out (Lautsprecher / Audio zu Zentralbox) |
 | **Pad 25** | **`GPIO 23`** | `I2S_DIN` | Digital In | ES8388 ADC In (Mikrofon von Helm / Central DSP) |
-| **U.FL** | **RF 446M** | `RF_ANT` | 50 Ohm Koaxial | U.FL Buchse zur internen Wendelantenne oder Fahrzeug-Pigtail |
+| **J_RF** | **RF 446M** | `RF_ANT` | 50 Ohm Koaxial | U.FL Buchse (`B.Cu`) -> Koax-Pigtail -> IP67 SMA-Durchführung |
+
+### 12.4 Belegung des 16-Pin Multi-Use USB-C Steckverbinders (`J1`)
+
+Identisch beschaltet wie bei PCBA 09: Dient als universelle Schnittstelle für **Laden (5V Bordnetz / Powerbank)**, **WebUSB/DFU-Flashing** und den **Kassetten-Einschubkontakt** im Smart Cartridge (`PCBA 03`).
+
+### 12.5 Belegung des 6-Pin Internen Helm-Audio & PTT Steckverbinders (`J_HELMET`)
+
+Der Header `J_HELMET` auf `B.Cu` ist **100 % anschlusskompatibel zu PCBA 09**:
+
+| Pin # | Netzname | Signal-Typ | Ziel / Helm-Headset Peripherie | Elektrische Spezifikation |
+| :---: | :--- | :--- | :--- | :--- |
+| **1** | `HP_OUT_L` | Audio Out | Linker Helmlautsprecher (Tip 3.5mm Klinke) | ES8388 `LOUT1`, $45\,\text{mW}$ @ $16\,\Omega$, AC-gekoppelt |
+| **2** | `HP_OUT_R` | Audio Out | Rechter Helmlautsprecher (Ring 3.5mm Klinke) | ES8388 `ROUT1`, $45\,\text{mW}$ @ $16\,\Omega$, AC-gekoppelt |
+| **3** | `AGND_SPK` | Audio Ground | Lautsprecher-Masse (Sleeve 3.5mm Klinke) | Stromlose Analogmasse ($I = 0\,\text{mA}$), kein Ladestrom |
+| **4** | `MIC_IN+` | Audio In | Mikrofon-Kapsel (2-Pin Micro-JST Pin 1) | ES8388 `MIC1P` mit programmierbarem `MICBIAS` (2.2V) |
+| **5** | `AGND_MIC` | Mic Ground | Mikrofon-Rückleitung (2-Pin Micro-JST Pin 2) | Getrennte, rauscharme Vorverstärker-Masse |
+| **6** | `BTN_PTT` | Digital In | Helm-PTT-Taster / Kinn-Klicker | ESP32-C6 GPIO 2, interner $45\,\text{k}\Omega$ Pullup, schaltet gegen GND |

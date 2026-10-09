@@ -66,32 +66,41 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
   * 2x Kassetten-Basisschlitten (mit UWB-Antennentasche & M2 Mutterntaschen), Inlays (Sena SPIDER X Slim, Cardo Packtalk Edge, Swap OMM oder Blindkassette) & 2x Rastwippen
   * 1x Front-Knoten (Unterwanne mit UWB-Bodentasche und AMPS-Nut-Pockets, Deckel, TPU-Dichtkämme & USB-C Kappe)
   * 1x Fahrzeugspezifisches Montage-Kit (BMW GS Klemmen & `adventure_rack_radar_mount.stl` / Harley Kofferdeckel-Docks & Kennzeichen-Radarhalter / Support-Car `car_sun_visor_pod_clip.stl`)
-* [ ] **Vollautomatisch bestückte Platinen (von JLCPCB / Eurocircuits - 6 PCBAs):**
+  * *(Optional für Helmeinsatz / OMM):* 1-2x OMM UCS Gehäuse-Oberschalen ([`omm_ucs_top_shell.stl`](../../hardware/cad/stl/03_pod_cartridges/omm_ucs_top_shell.stl)), Unterschalen ([`omm_ucs_bottom_shell.stl`](../../hardware/cad/stl/03_pod_cartridges/omm_ucs_bottom_shell.stl)) & Silikon-Tastmatten ([`omm_ucs_silicone_keypad.stl`](../../hardware/cad/stl/03_pod_cartridges/omm_ucs_silicone_keypad.stl))
+* [ ] **Vollautomatisch bestückte Platinen (von JLCPCB / Eurocircuits - bis zu 8 PCBAs):**
   * 1x PCBA 01 (Zentralbox mit LoRa SX1262, DW3110 UWB, SW1 Taster und DTM-12 Header)
   * 2x PCBA 03 (Universal Smart Cartridge Rev 3.0 All-UWB mit DW3110 UWB, MCU und 4x AO3400A MOSFETs, 2-seitig SMT)
   * 1x PCBA 05 (Front-Knoten mit DW3110 UWB)
   * *(Optional: 1x PCBA 08 Radar 2.0 Sub-MCU mit DW3110 UWB, PCBA 06 MagSafe Dock, PCBA 07 Smart-Keyfob)*
+  * *(Optional für Helm / OpenMotorMesh):* 1x **PCBA 09 (OMM 2.4 GHz HD-Mesh)** und/oder 1x **PCBA 10 (OMM 446 PMR/DMR Funk)**
   * *(Hinweis: PCBA 02 und PCBA 04 sind ersatzlos entfallen).*
 * [ ] **V4A Edelstahl-Normteile & Federn (IKEA-Prinzip - 100 % lötfrei):**
   * 8x DIN 934 / DIN 985 M3 Edelstahlmuttern (für Gehäuse-Nut-Pockets)
   * 6x DIN 934 M4 Muttern (4x AMPS-Nut-Pockets in Front-Node Wanne, 2x Radar 2.0 Heck-Mutterntaschen)
   * 4x M3 x 40 mm Schrauben (Zentralbox), 4x M3 x 20 mm Schrauben (Front-Node)
   * 8x M2.5 x 6 mm Platinenschrauben (Zentralbox & Front-Node), 8x M2 x 6 mm Platinenschrauben (Kassetten PCBA 03; Schottwandschrauben entfallen komplett)
+  * 4-8x DIN 934 M2 Muttern & 4-8x DIN 912 M2 x 8 mm Schrauben (für OMM UCS Modul-Verschraubung)
   * 2x DIN 7 M2 x 8 mm Zylinderstifte (Wippenachsen), 2x DIN 6325 Ø 6 x 8 mm gehärtete Stahlanker
   * 2x Wippen-Rückstellfedern, 4x Auto-Eject Druckfedern, 1x N52 Neodym-Entriegelungsschlüssel
   * 4x Vergoldete Mill-Max Hochstrom-Federkontakt-Hülsen für Pod 1 & 2 Stromzuführung
 * [ ] **Dichtungen, Pufferakku & Antennen:**
   * Silikon-Rundschnur Ø 1,5 mm Shore 40A ($40\,\text{cm}$ Main Box, $30\,\text{cm}$ Front-Knoten)
+  * Silikon-Rundschnur Ø 0,8 mm Shore 40A ($25\,\text{cm}$ pro OMM UCS Modul)
   * 2x Silikon-Flanschdichtungen für Pod 1 & 2 Mundlöcher, Gore ePTFE Membranpads
-  * **1x 1S LiPo Flat-Pack 2.200 mAh** ($68 \times 39 \times 5{,}0\,\text{mm}$) mit Molex Micro-Fit 3.0 Stecker
+  * **1x 1S LiPo Flat-Pack 2.200 mAh** ($68 \times 39 \times 5{,}0\,\text{mm}$) mit Molex Micro-Fit 3.0 Stecker (Zentralbox USV)
+  * **1-2x 1S LiPo Pouch-Akkus 600 mAh** ($38 \times 24 \times 4{,}5\,\text{mm}$) mit JST 2-Pin Stecker (OMM UCS Module)
   * **Taoglas FXUWB10 UWB Flex-Antennen** mit 20 mm U.FL Kabel (Zentralbox, Front-Node, Kassetten)
   * **1x Taoglas FXP895 LoRa 868 MHz Flex-Antenne** mit 50 $\Omega$ U.FL Kabel
   * **1x u-blox SAM-M10Q Multi-GNSS Modul** mit integrierter Patchantenne (Qwiic I2C)
   * **1x TI TMP117 & 1x TI OPT3001 Sensoren** (Qwiic I2C)
+  * **1-2x HF-Koaxialpigtails U.FL auf SMA-Bulkhead** (RG-178 / 1.13mm, 50 mm) mit IP67 EPDM O-Ring und M6 V4A Mutter
+  * **1x OMM 2.4 GHz Stummelantenne** (SMA-Male, $38\,\text{mm}$ Rubber-Duck Helix)
+  * **1x OMM 446 MHz Stummelantenne** (SMA-Male, $48\,\text{mm}$ Helical Stubby)
 * [ ] **Vorkonfektionierte COTS-Kabel (kein Crimpen nötig):**
   * 1x Deutsch DTM-12 IP67/IP69K Zentral-Kabelbaum (reine 2-Draht DC-Peitschen 1 bis 3 für Pod 1, Pod 2, Heck-Radar sowie Peitsche 4 für 12V Bordnetz & CAN)
   * 2-Pin JWPF / Superseal Steckverbinder für Pod- und Radar-Zuleitungen
   * JST-SH Kassetten-Kabelbäume (8-Pin `J_ACT` für Hubmagnete)
+  * 1-2x OMM Helm-Audio & PTT-Kabelbäume (6-Pin JST-SH 1.0mm Buchse auf 3.5mm Klinke + Mic + PTT, AWG30/32 Silikon, $12\dots 15\,\text{cm}$)
 * [ ] **Werkzeuge:**
   * Innensechskantschlüsselsatz (1.5 / 2.0 / 2.5 / 3.0 mm), Torx TX10 / PH1 Schraubendreher, Gabelschlüssel SW 7 / 8 / 10 mm, Cuttermesser, dielektrisches Silikonfett
 
@@ -161,6 +170,43 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 2. **Rückstellfeder einsetzen:** Die kleine $\varnothing 3{,}5 \times 10\,\text{mm}$ Druckfeder in die innenseitige Federtasche stecken.
 3. **Wippe im Schlitten montieren:** Vormontierte Wippe in die linke Führungswange des Kassetten-Schlittens einsetzen und mit dem $\varnothing 2{,}0 \times 8\,\text{mm}$ Edelstahl-Zylinderstift (DIN 7) lagern.
 4. **Funktionsprüfung:** Sägezahn ragt $2{,}5\,\text{mm}$ heraus; bei Annäherung des N52 Neodym-Magneten schwenkt die Wippe bündig ein.
+
+---
+
+### Schritt 3.2: OMM UCS Intercom-Module (PCBA 09 & PCBA 10) zusammenbauen & für Helmmontage vorbereiten
+
+Die beiden autarken Module (**PCBA 09: OMM 2.4 GHz HD-Mesh** und **PCBA 10: OMM 446 PMR/DMR**) teilen sich ein 100 % identisches ECE 22.06 UCS-Gehäuse ($68 \times 36 \times 9{,}5\,\text{mm}$) und werden nach folgendem Ablauf montiert:
+
+1. **Muttern & Dichtungen in OMM-Gehäuse einlegen:**
+   * 4x DIN 934 M2 Edelstahlmuttern von innen in die formschlüssigen Mutterntaschen der Oberschale ([`omm_ucs_top_shell.stl`](../../hardware/cad/stl/03_pod_cartridges/omm_ucs_top_shell.stl)) eindrücken.
+   * Shore 50A Silikon-Tastmatte ([`omm_ucs_silicone_keypad.stl`](../../hardware/cad/stl/03_pod_cartridges/omm_ucs_silicone_keypad.stl)) formschlüssig in die Oberschale einpassen (Tastenknöpfe ragen durch die 4 Bohrungen, diffuser LED-Dom sitzt über der Aussparung für `D1`).
+   * Silikon-Rundschnur ($\varnothing 0{,}8\,\text{mm}$, ca. $22\,\text{cm}$) dünn mit Silikonfett benetzen und in die umlaufende Dichtnut der Oberschale einlegen.
+2. **HF-Koaxialpigtail & wasserdichte SMA-Durchführung montieren:**
+   * Das $50\,\text{mm}$ kurze HF-Koaxialkabel (U.FL auf SMA-Bulkhead) an der Platine anschließen:
+     * Bei `PCBA 09`: U.FL-Stecker senkrecht auf die integrierte U.FL-Buchse des `ESP32-C6-MINI-1U` (`U1`) aufklicken.
+     * Bei `PCBA 10`: U.FL-Stecker auf die Buchse `J_RF` auf der Platinenunterseite (`B.Cu`) aufklicken.
+   * Den EPDM/Silikon O-Ring ($\varnothing 6{,}0 \times 1{,}0\,\text{mm}$) auf das Gewinde der SMA-Bulkhead-Buchse schieben.
+   * Die Buchse mit der D-Cut Abflachung in die $5{,}0 \times 4{,}0\,\text{mm}$ stirnseitige Aussparung an der $+X$-Flanke der Unterschale ([`omm_ucs_bottom_shell.stl`](../../hardware/cad/stl/03_pod_cartridges/omm_ucs_bottom_shell.stl)) einsetzen und von außen mit der V4A Edelstahlmutter und Fächerscheibe festziehen (IP67 Dichtsitz).
+3. **Akku & Platinenmontage:**
+   * Den 600 mAh LiPo Pouch-Akku in die zentrale Akkutasche ($X = 14\dots 54\,\text{mm}$) der Unterschale einlegen.
+   * Den 2-Pin JST-Stecker des Akkus an `BAT1` anstecken.
+   * Platine mit der Bestückungsseite nach oben in die Gehäuseführung einsetzen, sodass der USB-C Port `J1` exakt in der frontalen Dichtungsmanschette sitzt.
+4. **Helm-Audio- & PTT-Kabelbaum anschließen (`J_HELMET`):**
+   * Den 6-Pin JST-SH Stecker des Helm-Audio-Kabelbaums von unten in den Header `J_HELMET` auf `B.Cu` ($X=126{,}6, Y=99{,}75\,\text{mm}$ in KiCad bzw. $X_{\text{mod}} = 60{,}6\,\text{mm}$) einstecken.
+   * Das hochflexible AWG30/32 Silikonkabel durch den rückseitigen Bodendurchbruch ($7{,}0 \times 9{,}0\,\text{mm}$) der Unterschale lastfrei nach unten herausführen.
+5. **Gehäuse verschrauben (100 % lötkolbenfrei):**
+   * Oberschale aufsetzen, umlaufende Dichtungsnaht kontrollieren.
+   * 4x M2 $\times 8\,\text{mm}$ Zylinderkopfschrauben (DIN 912) von der Unterseite durch die Senkungen in die eingelegten DIN 934 M2 Muttern handfest über Kreuz anziehen.
+6. **Stummelantenne aufschrauben:**
+   * Für OMM 2.4 GHz (`PCBA 09`): Die $38\,\text{mm}$ kurze 2.4 GHz Rubber-Duck Stummelantenne auf die SMA-Buchse schrauben.
+   * Für OMM 446 (`PCBA 10`): Die $48\,\text{mm}$ kurze 446 MHz Wendel-Stummelantenne auf die SMA-Buchse schrauben.
+7. **Helmmontage (ECE 22.06 UCS-Schacht):**
+   * Das fertige Modul in die herstellerseitige UCS-Helmmulde (z. B. HJC, Shoei, Schuberth) einschieben und formschlüssig einrasten.
+   * Das aus dem Gehäuseboden austretende Audiokabel direkt und unsichtbar unter das Wangenpolster verlegen:
+     - 3.5 mm Klinkenbuchse mit den Helmlautsprechern koppeln.
+     - 2-Pin Mikrofonbuchse mit dem Schwanenhals- oder Klebemikrofon verbinden.
+     - PTT-Leitung zum gewünschten Taster am Kinnteil oder Finger führen.
+   * Der stirnseitige USB-C Port bleibt außen am Helm für Unterwegs-Laden per Powerbank oder WebUSB-Flashing zugänglich.
 
 ---
 
