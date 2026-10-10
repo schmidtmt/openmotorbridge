@@ -12231,7 +12231,7 @@
 			(uuid "434f5b1d-9a37-4052-ab64-8d3bfd8cb4c1")
 		)
 		(embedded_fonts no)
-		(model "${KICAD8_3DMODEL_DIR}/RF_Module.3dshapes/ESP32-S3-WROOM-1.step"
+		(model "${KICAD8_3DMODEL_DIR}/RF_Module.3dshapes/ESP32-WROOM-32U.step"
 			(offset
 				(xyz 0 0 0)
 			)
