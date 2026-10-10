@@ -6858,7 +6858,7 @@
 			(uuid "ecfed508-3b58-4439-9736-a6dd6501abc7")
 		)
 		(embedded_fonts no)
-		(model "${KICAD8_3DMODEL_DIR}/Package_DFN_QFN.3dshapes/TQFN-48-1EP_7x7mm_P0.5mm_EP5.1x5.1mm.step"
+		(model "${KIPRJMOD}/NiceRF_SA818-DMR.wrl"
 			(offset
 				(xyz 0 0 0)
 			)
