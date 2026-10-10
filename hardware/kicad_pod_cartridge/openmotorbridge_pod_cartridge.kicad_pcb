@@ -636,7 +636,7 @@
 			)
 		)
 		(property "Value" "ACTUATORS_8P"
-			(at 0 4.5 90)
+			(at 0 1 90)
 			(layer "F.Fab")
 			(uuid "fdda800d-2283-453a-b8bb-d429ed670e4a")
 			(effects
@@ -772,7 +772,7 @@
 			(at -5.95 9.3 0)
 			(unlocked yes)
 			(layer "F.SilkS")
-			(uuid "39e24819-702c-4d58-978b-befb62f014f6")
+			(uuid "15743d34-5e76-47d5-b2a4-b535878d4710")
 			(effects
 				(font
 					(size 1 1)
@@ -784,7 +784,7 @@
 			(at 0 1 0)
 			(unlocked yes)
 			(layer "F.Fab")
-			(uuid "1d8b5852-2a70-4306-b43f-91280b0de594")
+			(uuid "18e8eccd-4505-41cf-873e-0b574cc0e478")
 			(effects
 				(font
 					(size 1 1)
@@ -797,7 +797,7 @@
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "2e6421d1-52b7-485a-ad17-449f90229108")
+			(uuid "106ac1b6-ab47-4966-9b20-8b83aad70ae3")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -810,7 +810,7 @@
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "e325cd1b-5a9c-42f5-9fba-e9e857ca90b4")
+			(uuid "d38dd76f-3e7c-4b37-9e7a-2d27436bb940")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4693,7 +4693,7 @@
 		)
 	)
 	(gr_text "SMART MODULAR CARTRIDGE Trägerplatine (B.Cu)"
-		(at 117.5 72.3 0)
+		(at 114.75 76.75 0)
 		(layer "B.SilkS")
 		(uuid "56733704-b8a8-4c00-8e49-4b3b91de827f")
 		(effects
@@ -4705,7 +4705,7 @@
 		)
 	)
 	(gr_text "OPENMOTORBRIDGE v8.2"
-		(at 117.5 70.8 0)
+		(at 117.75 74.75 0)
 		(layer "B.SilkS")
 		(uuid "3d5b842e-2d8a-4b27-8374-ff956547b080")
 		(effects
