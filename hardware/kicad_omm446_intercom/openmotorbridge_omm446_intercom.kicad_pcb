@@ -433,7 +433,7 @@
 			(uuid "e2a1a75a-510f-40e7-8579-6d76ac3f8e4c")
 		)
 		(embedded_fonts no)
-		(model "kicad-embed://SW_Push_SPST_NO_Alps_SKRK.step"
+		(model "${KICAD8_3DMODEL_DIR}/Button_Switch_SMD.3dshapes/SW_Push_SPST_NO_Alps_SKRK.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -1272,7 +1272,7 @@
 			(uuid "58a3b313-db68-43c9-9bbf-1abe1a0bf189")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/RF_Module.3dshapes/ESP32-C3-WROOM-02U.step"
+		(model "${KICAD8_3DMODEL_DIR}/RF_Module.3dshapes/ESP32-C3-WROOM-02U.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -1541,7 +1541,7 @@
 			(uuid "0d127eca-383c-4a25-94cc-f449cde8cb3d")
 		)
 		(embedded_fonts no)
-		(model "kicad-embed://LED_0805_2012Metric.step"
+		(model "${KICAD8_3DMODEL_DIR}/LED_SMD.3dshapes/LED_0805_2012Metric.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -1788,7 +1788,7 @@
 			(uuid "b938925c-5a6e-4895-a779-d5016d436178")
 		)
 		(embedded_fonts no)
-		(model "kicad-embed://SW_Push_SPST_NO_Alps_SKRK.step"
+		(model "${KICAD8_3DMODEL_DIR}/Button_Switch_SMD.3dshapes/SW_Push_SPST_NO_Alps_SKRK.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -2035,7 +2035,7 @@
 			(uuid "4f7c75fe-c373-4b39-a649-9ba8a906761b")
 		)
 		(embedded_fonts no)
-		(model "kicad-embed://SW_Push_SPST_NO_Alps_SKRK.step"
+		(model "${KICAD8_3DMODEL_DIR}/Button_Switch_SMD.3dshapes/SW_Push_SPST_NO_Alps_SKRK.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -2705,7 +2705,7 @@
 			(uuid "8ca4a646-576d-4c70-8347-ac5008d181dc")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Package_DFN_QFN.3dshapes/QFN-16-1EP_3x3mm_P0.5mm_EP1.8x1.8mm.step"
+		(model "${KICAD8_3DMODEL_DIR}/Package_DFN_QFN.3dshapes/QFN-16-1EP_3x3mm_P0.5mm_EP1.8x1.8mm.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -3061,7 +3061,7 @@
 			(uuid "b89ccfb0-2759-423d-9380-d025c1fa8053")
 		)
 		(embedded_fonts no)
-		(model "kicad-embed://SW_Push_SPST_NO_Alps_SKRK.step"
+		(model "${KICAD8_3DMODEL_DIR}/Button_Switch_SMD.3dshapes/SW_Push_SPST_NO_Alps_SKRK.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -3510,7 +3510,7 @@
 			(uuid "d30f37ec-5ab0-42dd-82be-a04d29cffc68")
 		)
 		(embedded_fonts no)
-		(model "kicad-embed://SOT-23-6.step"
+		(model "${KICAD8_3DMODEL_DIR}/Package_TO_SOT_SMD.3dshapes/SOT-23-6.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -4160,7 +4160,7 @@
 			(uuid "0b316ec1-b838-48a5-bc4b-c3b462eed8ae")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Package_DFN_QFN.3dshapes/QFN-28-1EP_4x4mm_P0.4mm_EP2.4x2.4mm.step"
+		(model "${KICAD8_3DMODEL_DIR}/Package_DFN_QFN.3dshapes/QFN-28-1EP_4x4mm_P0.4mm_EP2.4x2.4mm.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -4552,7 +4552,7 @@
 			(uuid "e4a7d8eb-7b46-4768-9e89-358f1320d76c")
 		)
 		(embedded_fonts no)
-		(model "kicad-embed://USB_C_Receptacle_GCT_USB4105-xx-A_16P_TopMnt_Horizontal.step"
+		(model "${KICAD8_3DMODEL_DIR}/Connector_USB.3dshapes/USB_C_Receptacle_GCT_USB4105-xx-A_16P_TopMnt_Horizontal.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -4918,7 +4918,7 @@
 			(uuid "a6c02106-0e44-440d-bb0a-9c447a5708dd")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Package_TO_SOT_SMD.3dshapes/SOT-23.step"
+		(model "${KICAD8_3DMODEL_DIR}/Package_TO_SOT_SMD.3dshapes/SOT-23.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -5340,7 +5340,7 @@
 			(uuid "874b64c2-4f62-45e4-8939-e1b04309164c")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Connector_JST.3dshapes/JST_SH_BM02B-SRSS-TB_1x02-1MP_P1.00mm_Vertical.step"
+		(model "${KICAD8_3DMODEL_DIR}/Connector_JST.3dshapes/JST_SH_BM02B-SRSS-TB_1x02-1MP_P1.00mm_Vertical.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -5772,7 +5772,7 @@
 			(uuid "73d9781e-9a0f-4434-81e4-383228a1cb76")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Connector_JST.3dshapes/JST_SH_SM06B-SRSS-TB_1x06-1MP_P1.00mm_Horizontal.step"
+		(model "${KICAD8_3DMODEL_DIR}/Connector_JST.3dshapes/JST_SH_SM06B-SRSS-TB_1x06-1MP_P1.00mm_Horizontal.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -6635,6 +6635,17 @@
 			(uuid "be342d06-ed56-4e35-b695-18c0976327e7")
 		)
 		(embedded_fonts no)
+		(model "${KICAD8_3DMODEL_DIR}/Package_DFN_QFN.3dshapes/TQFN-48-1EP_7x7mm_P0.5mm_EP5.1x5.1mm.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "NiceRF_SA818-DMR_SMD_38x16mm"
 		(layer "B.Cu")
@@ -6847,12 +6858,12 @@
 			(uuid "ecfed508-3b58-4439-9736-a6dd6501abc7")
 		)
 		(embedded_fonts no)
-		(model "kicad-embed://NiceRF_SA818-DMR.wrl"
+		(model "${KICAD8_3DMODEL_DIR}/Package_DFN_QFN.3dshapes/TQFN-48-1EP_7x7mm_P0.5mm_EP5.1x5.1mm.step"
 			(offset
 				(xyz 0 0 0)
 			)
 			(scale
-				(xyz 0.3937 0.3937 0.3937)
+				(xyz 1 1 1)
 			)
 			(rotate
 				(xyz 0 0 0)
@@ -6935,7 +6946,7 @@
 			(uuid "75e84ccc-49b4-4ace-a8b8-c0da5c9cca02")
 		)
 		(embedded_fonts no)
-		(model "kicad-embed://U.FL_Hirose_U.FL-R-SMT-1_Vertical.step"
+		(model "${KICAD8_3DMODEL_DIR}/Connector_Coaxial.3dshapes/U.FL_Hirose_U.FL-R-SMT-1_Vertical.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -7159,6 +7170,17 @@
 			(uuid "d6ed2998-56ed-4278-968e-5ef4c10795d8")
 		)
 		(embedded_fonts no)
+		(model "${KICAD8_3DMODEL_DIR}/RF_Antenna.3dshapes/Johanson_2450AT18x100.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(gr_line
 		(start 70 87.5)
