@@ -85,13 +85,13 @@ enum UwbBackbonePktType : uint8_t {
 +-----------------------------------+-----------------------------------------+
 | * CAN connector at FRONT NODE     | * No CAN present in headlight nacelle   |
 |   Port J2 (3-Pin JST-GH)          | * CAN connector at CENTRAL BOX          |
-| * Front Node detects bus frames   |   HD26 header pins 17/18 at BCM / OBD2  |
+| * Front Node detects bus frames   |   DTM-12 header pins 4/5 at BCM / OBD2  |
 | * 120R relay CPC1017N CLOSES      | * Front Node J2 remains UNCONNECTED     |
 | * Telemetry streamed via UWB      | * Front Node deactivates J2 after 2.5s: |
 |   (UWB_PKT_CAN_TELEMETRY) to      |   - 120R relay remains OPEN             |
 |   Central Box                     |   - TCAN334G enters Silent High-Z mode  |
 | * Central Box switches to         |   - TWAI controller halted (twai_stop)  |
-|   `CAN_SOURCE_REMOTE_FRONT_NODE`  | * Central Box utilizes local HD26 CAN   |
+|   `CAN_SOURCE_REMOTE_FRONT_NODE`  | * Central Box utilizes local DTM-12 CAN |
 |                                   |   as `CAN_SOURCE_LOCAL_CENTRAL_BOX`     |
 +-----------------------------------+-----------------------------------------+
 ```
@@ -102,8 +102,8 @@ enum UwbBackbonePktType : uint8_t {
    - **Bus Detected:** State transitions to `CAN_STATE_CONNECTED`, the Solid-State OptoMOS relay `CPC1017N` closes the local $120\,\Omega$ termination resistor, the transceiver switches to normal mode (`PIN_CAN_SILENT = 0`), and streams received frames over UWB to the Central Box.
    - **No Bus Detected (e.g., Road King / BMW GS):** State transitions to `CAN_STATE_DEACTIVATED`. The relay remains open, `PIN_CAN_SILENT` is pulled HIGH (standby/high-Z), and the TWAI controller is halted (`twai_stop()`). This guarantees 0 bus-off errors, 0 spurious interrupts, and negligible quiescent current.
 2. **Central Box Source Arbitration (`can_bus_manager.cpp`):**
-   - When local CAN frames are received on HD26 pins 17/18, `CAN_SOURCE_LOCAL_CENTRAL_BOX` is active.
-   - If the local HD26 CAN port remains unconnected, the manager seamlessly switches to `CAN_SOURCE_REMOTE_FRONT_NODE`.
+   - When local CAN frames are received on DTM-12 pins 4/5, `CAN_SOURCE_LOCAL_CENTRAL_BOX` is active.
+   - If the local DTM-12 CAN port remains unconnected, the manager seamlessly switches to `CAN_SOURCE_REMOTE_FRONT_NODE`.
 
 ---
 
@@ -247,7 +247,7 @@ OpenMotorBridge is designed from the ground up as a **resilient, fault-tolerant 
 
 | Configuration | Installed Hardware | System Behavior & Graceful Degradation |
 | :--- | :--- | :--- |
-| **Tier 1: Minimal Core** | Central Box only<br>*(No Front Node)* | * **Audio Bridge & Intercoms fully operational:** Pod 1 & 2 mix with zero latency.<br>* **LoRa 868 MHz Mesh active:** Direct UPS-buffered 24/7 theft sentry & tracking.<br>* **CAN-Bus active:** Speed, RPM & BCM telemetry via HD26 pins 17/18 under seat.<br>* **IMU active:** Bosch BMI270 provides lean angle, pitch & vibration sensing.<br>* **ADR-EKF:** Operates in pure Dead Reckoning mode supported by IMU & wheel speed.<br>* **UWB driver:** Waits passively in scan mode; AGC operates at nominal gain. |
+| **Tier 1: Minimal Core** | Central Box only<br>*(No Front Node)* | * **Audio Bridge & Intercoms fully operational:** Pod 1 & 2 mix with zero latency.<br>* **LoRa 868 MHz Mesh active:** Direct UPS-buffered 24/7 theft sentry & tracking.<br>* **CAN-Bus active:** Speed, RPM & BCM telemetry via DTM-12 pins 4/5 under seat.<br>* **IMU active:** Bosch BMI270 provides lean angle, pitch & vibration sensing.<br>* **ADR-EKF:** Operates in pure Dead Reckoning mode supported by IMU & wheel speed.<br>* **UWB driver:** Waits passively in scan mode; AGC operates at nominal gain. |
 | **Tier 2: Full System with Front Node** | Central Box + Front Node | * All Tier 1 features + deterministic UWB backbone (< 0.4 ms).<br>* u-blox SAM-M10Q Multi-GNSS with 10 Hz PVT fix & precision time synchronization.<br>* TI TMP117 black ice warning ($\pm 0.1\,^\circ\text{C}$) & TI OPT3001 ambient light sensor.<br>* 4-Port USB Hub & Dual 20W USB-PD fast charger in cockpit.<br>* Ottocast Watchdog & automatic ignition power-gating.<br>* Handlebar PTT (< 0.4 ms) and dynamic acoustic wind AGC via MSM261S4030 / SPH0645 I2S MEMS. |
 | **Tier 3: Rear Radar Option** | Central Box + Front Node + Radar | * All Tier 2 features + Wheeltec MR20 77 GHz or Garmin Varia on Whip 5.<br>* Audible warning pings in helmet, visual alert wings & mirror LEDs (Port `J9`).<br>* Automatic action cam bookmarks upon critical radar TTC hazard (< 2.5s). |
 

@@ -23,21 +23,26 @@ Classic motorcycle communication systems are historically fragmented:
 |    * PWA Dashboard on Smartphone / TFT display via Web Bluetooth (WebBLE)                   |
 +---------------------------------------------------------------------------------------------+
 | 2. CENTRAL CONTROL BOX (Under-Seat / in Vehicle Cockpit, IP67 Sealed):                      |
-|    * ESP32-S3 Dual-Core MCU (240 MHz) * ES8388 Audio Codec & DSP Audio Mixer               |
-|    * Semtech SX1262 LoRa 868 MHz Transceiver (Directly on PCBA 01 with FXP895 Lid Antenna)  |
-|    * LM5164-Q1 72V Automotive Step-Down * BQ24075 UPS & 2200mAh Flat LiPo Backup Battery    |
-|    * 4-Bit High-Speed SDIO MicroSD Ringbuffer * 2x Bourns 1500 V RMS Audio Isolation Xfmrs  |
+|    * ESP32-S3 Dual-Core MCU (240 MHz) * Qualcomm QCC3084 BT 5.4 Audio SoC                   |
+|    * Semtech SX1262 LoRa (868 MHz) on UPS rail * Taoglas FXP895 flex antenna in lid        |
+|    * Qorvo DW3110 UWB Transceiver (6.5 GHz Ch. 5) * Taoglas FXUWB10 antenna in bottom tub  |
+|    * LM5164-Q1 72V Step-Down * BQ24075 UPS & 2200mAh LiPo Backup Battery * MicroSD Blackbox |
+|    * Hardware Pair/Reset Button SW1 * Automotive Deutsch DTM-12 Main Connector (12-Pin IP67)|
 +-+-----------------------------------------------------------------------------------------+-+
   |                                                                                         |
-  v Central HD26 Flanged Connector (4-Branch Sealed Harness Pigtails)                       |
-+------------------------------+------------------------------+-----------------------------+
-| 3. SATELLITE POD 1 (M8 6P):  | 4. SATELLITE POD 2 (M8 6P):  | 5. REAR RADAR BRANCH (4P):  |
-| * Universal Pod Enclosure    | * Universal Pod Enclosure    | * Standalone Aero Mount     |
-| * Intercom Bridge A (Sena    | * Intercom Bridge B (Cardo   |   under luggage bridge /    |
-|   SPIDER X Slim Reference /  |   Packtalk Edge DMC Gen 2 /  |   on license plate carrier  |
-|   OMM 2.4 GHz Swap Cartridge)|   Midland PMR446 Cartridge)  | * Radar 2.0 Sub-MCU PCBA 08 |
-| * Saddlebag, Frame, Rear or  | * Saddlebag, Frame, Rear or  |   (77 GHz MR20 mmWave) or   |
-|   Crash Bar Mounting         |   Crash Bar Mounting         |   Garmin Varia (UART/CAN)   |
+  v Central Deutsch DTM-12 Industrial Connector (Streamlined Pure-DC Harness)               |
++-------------------------------------------+-----------------------------------------------+
+| 3. SATELLITE POD 1 (2-Wire DC Left):      | 4. SATELLITE POD 2 (2-Wire DC Right):         |
+| * Monolithic MJF Enclosure (zero PCB!)    | * Monolithic MJF Enclosure (zero PCB!)        |
+| * 2 direct gold spring pins (+5V & GND)   | * 2 direct gold spring pins (+5V & GND)       |
+| * Universal bay for any cartridge         | * Universal bay for any cartridge             |
+|   (Sena Slim, Cardo Edge, Midland PMR,    |   (Sena Slim, Cardo Edge, Midland PMR,        |
+|    OMM 2.4 GHz, Generic - dual same OK!)  |    OMM 2.4 GHz, Generic - dual same OK!)      |
++-------------------------------------------+-----------------------------------------------+
+  |                                                                                         |
+  +-> 5. VEHICLE POWER & CAN: 4-conductor lead (KL30, KL15, GND, CAN_H, CAN_L)              |
+  +-> 6. REAR RADAR BRANCH: 2-Wire 12V Power (JWPF 2-Pin: RADAR_PWR_12V, RADAR_GND)         |
+  |      Wheeltec MR20 77-GHz mmWave (PCBA 08) * Telemetry 100% wireless via UWB (DW3110)   +
 +------------------------------+------------------------------+-----------------------------+
   |                                                                                         |
   +-> 6. VEHICLE POWER: AMP Superseal 1.5 4-Pin / 12V Car Charger (KL30, KL15, GND)         |
@@ -86,7 +91,7 @@ OpenMotorBridge v8.0 defines the platform across **standardized functional nodes
 2. **Satellite Pod 1 (Intercom Bridge A):** Universal monocoque pod enclosure for Sena (Reference: **Sena SPIDER X Slim** with direct micro-cable whip, Mesh 3.0/2.0, zero pogo pins, no flagship bloat) or OMM 2.4 GHz Swap Cartridge. Base carrier PCBA 02 is 100% symmetric. *(Typically on the left vehicle flank or driver sun visor).*
 3. **Satellite Pod 2 (Intercom Bridge B):** Universal monocoque pod enclosure for Cardo (Reference: **Cardo Packtalk Edge** DMC Gen 2) or Midland PMR446 Cartridge. Base carrier PCBA 02 is 100% symmetric. *(Typically on the right vehicle flank for RF spatial diversity or passenger sun visor).*
 4. **Front Node (Cockpit, Camera & Sensor Hub):** Autonomous ESP32-S3 satellite, Qorvo DW3110 UWB transceiver (6.489 GHz Ch. 5, $< 0.4\,\text{ms}$ latency to Central Box), u-blox SAM-M10Q Multi-GNSS patch module and TI TMP117 precision temperature sensor on I2C port `J12` in the cold air scoop, automotive USB 2.0 4-port hub (USB2514B) for Apple CarPlay / Android Auto CP2AA dongle, fast-charging handlebar smartphone port (Southchip SC8102 20W USB-PD), switched VBUS via TPS2051B, digital PTT button input (Port J3), BSD blind-spot mirror LEDs (Port J9), wireless actioncam induction dock (Port J8), and Knowles I2S MEMS ambient wind noise microphone. *(Typically hidden behind fairings or inside the headlight nacelle).*
-5. **Radar 2.0 Sub-MCU & Halo-Wings (PCBA 08 - Active Rear Safety Module):** Wheeltec MR20 77-GHz mmWave radar (up to $90\,\text{m}$ detection range, $\pm 60^\circ$ FoV), ESP32-C5 Dual-Band Sub-MCU, 36x addressable Halo RGB LEDs (18 left, 18 right) for dynamic blind-spot and emergency brake strobe warning, 5.9 GHz ITS-G5 (V2X) ceramic patch antenna cradle, and industrial Binder Series 707 M5 IP67 connector. Mounted on dedicated standalone bracket (e.g. `adventure_rack_radar_mount.stl`) connected via HD26 Peitsche 5.
+5. **Radar 2.0 Sub-MCU & Halo-Wings (PCBA 08 - Active Rear Safety Module):** Wheeltec MR20 77-GHz mmWave radar (up to $90\,\text{m}$ detection range, $\pm 60^\circ$ FoV), ESP32-C5 Dual-Band Sub-MCU, 36x addressable Halo RGB LEDs (18 left, 18 right) for dynamic blind-spot and emergency brake strobe warning, 5.9 GHz ITS-G5 (V2X) ceramic patch antenna cradle, and waterproof JST-JWPF 2-pin connector. Mounted on dedicated standalone bracket (e.g. `adventure_rack_radar_mount.stl`) connected via Deutsch DTM-12 Whip 3 (12V switched DC; telemetry 100% wireless via UWB).
 
 ```
                      THE STANDARDIZED FUNCTIONAL NODES
@@ -100,8 +105,8 @@ OpenMotorBridge v8.0 defines the platform across **standardized functional nodes
 |   OMM 2.4 GHz Swap Cartridge)               |   Packtalk Edge / Midland)    |
 | * 100% Quick-Swap Cartridge                 | * 100% Quick-Swap Cartridge   |
 +---------------------------------------------+-------------------------------+
-| 5. RADAR 2.0 / VARIA (Standalone Mount via HD26 Peitsche 5 at Rear):        |
-| * Wheeltec MR20 77-GHz mmWave Radar * 36x Halo RGB LEDs * 5.9 GHz V2X CAN   |
+| 5. RADAR 2.0 / VARIA (Standalone Mount via DTM-12 Whip 3 at Rear):          |
+| * Wheeltec MR20 77-GHz mmWave Radar * 36x Halo RGB LEDs * UWB / 5.9GHz V2X  |
 +-----------------------------------------------------------------------------+
 ```
 
@@ -212,24 +217,25 @@ When operating multiple wireless transceivers simultaneously, RF congestion and 
 
 ## 4. Physical Interfaces & Signal Matrix
 
-### 4.1 Central HD26 Harness Pigtail Matrix (Central Box Main Connector)
-All main system signals converge at the central HD26 SEAL-D flanged connector:
+### 4.1 Central Deutsch DTM-12 Harness Pigtail Matrix (Central Box Main Connector)
+All main system signals converge at the central Deutsch DTM-12 automotive connector (`J1`):
 
 | Branch / Cable | Connector Type | Target Device | Transferred Signals / Conductors |
 | :--- | :--- | :--- | :--- |
-| **Pigtail 1 (250 mm)** | M8 6-Pin A-Coded (Female) | **Satellite Pod 1** (Intercom Bridge A: Sena SPIDER X Slim / OMM Cartridge) | NF_OUT+, NF_OUT-, OPTO_TRIGGER, 1-WIRE_ID, +5V_VBUS, GND |
-| **Pigtail 2 (250 mm)** | M8 6-Pin A-Coded (Female) | **Satellite Pod 2** (Intercom Bridge B: Cardo Packtalk Edge / Midland) | NF_OUT+, NF_OUT-, OPTO_TRIGGER, 1-WIRE_ID, +5V_VBUS, GND |
-| **Pigtail 4 (250 mm)** | AMP Superseal 1.5 4-Pin / 12V Car | **Vehicle Power Supply** (Motorcycle or Car 12V Cigarette Lighter) | KL30 (Batt+), KL15 (Ign+), GND (Power), GND (Sense) |
-| **Pigtail 5 (250 mm)** | M8 4-Pin A-Coded / Binder M5 4P | **Rear Radar Branch** (Wheeltec MR20 77 GHz mmWave / Garmin Varia) | RADAR_PWR_12V, RADAR_GND, RADAR_RX (UART/CAN_H), RADAR_TX (UART/CAN_L) |
+| **Pigtail 1 (250 mm)** | 2-Pin Flying Lead / Pogo | **Satellite Pod 1** (Universal Bay 1: Sena / Cardo / OMM Cartridge) | POD1_VCC (+12V switched), POD1_GND (0V) |
+| **Pigtail 2 (250 mm)** | 2-Pin Flying Lead / Pogo | **Satellite Pod 2** (Universal Bay 2: Sena / Cardo / OMM Cartridge) | POD2_VCC (+12V switched), POD2_GND (0V) |
+| **Pigtail 3 (250 mm)** | JST-JWPF 2-Pin IP67 | **Rear Radar Branch** (Wheeltec MR20 77 GHz mmWave / PCBA 08) | RADAR_PWR_12V (+12V switched), RADAR_GND (0V) |
+| **Pigtail 4 (250 mm)** | AMP Superseal 1.5 / Car | **Vehicle Power & CAN** (Motorcycle Battery & CAN-FD Bus) | KL30_IN (Batt+), KL15_IGN (Ign+), VEHICLE_GND, CAN_H, CAN_L, CHASSIS_EARTH |
 
-*(Note: Former Pigtail 3 for Rear Pod 3 is completely eliminated! Total active conductors across the HD26 connector drop to 19 pins; pins 9-11 remain unassigned/reserve).*
+*(Note: Data and audio streams are 100% wireless over synchronous 6.5 GHz UWB and Dual-Bluetooth QCC3084. No analog audio or mechatronic lines exist in the vehicle harness).*
 
 ### 4.2 Central Box (PCBA 01) RF & Sensor Interface Architecture
 | Subsystem | Component | Location / Interface | Function |
 | :--- | :--- | :--- | :--- |
 | **LoRa 868 MHz** | Semtech SX1262 | Onboard PCBA 01 (SPI) | Long-range tactical telemetry & 24/7 theft sentry (FXP895 antenna in enclosure lid) |
 | **UWB Backbone** | Qorvo DW3110 | Bottom side PCBA 01 (SPI) | 6.489 GHz Ch. 5 link to Front Node (FXUWB10 flex antenna in bottom tub pocket) |
-| **CAN-Bus** | TI TCAN334G | Onboard PCBA 01 (HD26 pins 17/18) | Vehicle CAN telemetry & listen-only monitoring |
+| **CAN-Bus** | TI TCAN334G | Onboard PCBA 01 (DTM-12 pins 4/5) | Vehicle CAN telemetry & listen-only monitoring |
+| **Dual-Bluetooth** | Qualcomm QCC3084 | Top side PCBA 01 (I2S/UART) | Dedicated dual-helmet A2DP/HFP audio gateway |
 | **IMU** | Bosch BMI270 | Onboard PCBA 01 (I2C) | 6-DOF lean angle, acceleration, crash & tilt detection |
 | **Barometer** | Bosch BMP390 | Onboard PCBA 01 (I2C) | Barometric weather trend & absolute pressure elevation |
 
@@ -290,7 +296,7 @@ The Front Node (PCBA 05) serves on **all motorcycle types** as the universal coc
 * **TFT Display Notifications:** System alerts can be rendered directly on the motorcycle TFT dashboard.
 
 ### 5.3 Rear Radar 2.0 & Blind-Spot Assistant (Wheeltec MR20 77 GHz mmWave & Garmin Varia) on Dedicated Standalone Mount
-* **Rear Mounting & Leveling (Zero Pod 3):** The rear radar module mounts completely autonomously without requiring an extra satellite enclosure, seated on a minimal dedicated bracket (e.g. [`adventure_rack_radar_mount.stl`](../../hardware/cad/stl/05_accessories/adventure_rack_radar_mount.stl) under the luggage bridge or model-specific plate adapters). Connection is routed via Peitsche 5 of the HD26 harness (Pins 23-26: 12V switched, GND, UART_RX, UART_TX). A bionic 36-tooth Hirth coupling ensures distortion-free, 100% horizontal leveling.
+* **Rear Mounting & Leveling (Zero Pod 3):** The rear radar module mounts completely autonomously without requiring an extra satellite enclosure, seated on a minimal dedicated bracket (e.g. [`adventure_rack_radar_mount.stl`](../../hardware/cad/stl/05_accessories/adventure_rack_radar_mount.stl) under the luggage bridge or model-specific plate adapters). Connection is routed via Whip 3 of the Deutsch DTM-12 harness (Pins 10-11: 12V switched, GND via JST-JWPF 2-Pin; telemetry streams 100% wirelessly via Qorvo DW3110 UWB). A bionic 36-tooth Hirth coupling ensures distortion-free, 100% horizontal leveling.
 * **Dual-Radar Architecture (Two Interchangeable Radar Engines):**
   * **Radar 2.0 (Wheeltec MR20 77 GHz mmWave - Standard):**
     - Integrated in an IP67 winged monocoque housing ([`radar_mr20_housing.scad`](../../hardware/cad/scad/05_accessories/radar_mr20_housing.scad)) with PCBA 08 (ESP32-C5 Dual-Band Sub-MCU).

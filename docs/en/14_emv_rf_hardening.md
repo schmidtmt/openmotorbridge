@@ -29,10 +29,9 @@ This document specifies the protection circuitry against vehicle electrical tran
   * u-blox SAM-M10Q with integrated $15 \times 15\,\text{mm}$ ceramic patch antenna, interfaced via Qwiic I2C (`J12`) in the cold ram-air intake zone.
   * Coexistence with TI TMP117 ($\pm 0.1\,^\circ\text{C}$ temperature) and OPT3001 ambient light sensor without RF desensing of the GNSS LNA.
 * **Central ePTFE Pressure Equalization Vent:** $\varnothing\,7.0\,\text{mm}$ Gore/Schreiner Air Vent centered on the enclosure roof symmetrically relieves thermal pressure pulses without distorting RF radiation patterns.
-* **Shielded HD26 SEAL-D Main Harness:**
-  * 4 branches (Whip 1: Pod 1, Whip 2: Pod 2, Whip 4: Vehicle Power, Whip 5: Rear Radar).
-  * 19 active pins; pins 9-11 unassigned/reserve.
-  * Continuous $360^\circ$ shielding bonded to the metal HD26 enclosure flange.
+* **Robust Deutsch DTM-12 Main Harness:**
+  * All 12 pins assigned per DTM-12 pinout table (Pins 1–5, 12 for Branch 4 / Vehicle & CAN; Pins 6–7 for Branch 1 / Pod 1; Pins 8–9 for Branch 2 / Pod 2; Pins 10–11 for Branch 3 / Rear Radar).
+  * Continuous IP68/IP69K sealing with Raychem DR-25 heatshrink and molded boots.
 
 ---
 
@@ -46,7 +45,7 @@ This document specifies the protection circuitry against vehicle electrical tran
 ### 3.2 Masking Zones Prior to Coating
 The following components and contact surfaces must **not** be coated:
 1. MicroSD card slot internal spring contacts (PCBA 01).
-2. HD26 SEAL-D flange pins & M8 connector pin headers.
+2. Deutsch DTM-12 header pins & gold-plated spring contacts.
 3. J12 Qwiic I2C socket contacts on PCBA 05.
 4. USB ports (USB-A, USB-C) on Front Node.
 5. SMD test points (TP_5V, TP_3V3, TP_GND).

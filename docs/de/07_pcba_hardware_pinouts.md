@@ -283,6 +283,49 @@ Alle internen Cockpit-, Lade- und Sensoranschlüsse sind auf vibrationsfeste **J
 | **`J12`** | **JST-SH 4-Pin**<br>(1.0 mm) | 1<br>2<br>3<br>4 | `GND`<br>`VCC_3V3`<br>`I2C_SDA`<br>`I2C_SCL` | Masse (0V)<br>+3.3V Power Out<br>I2C Datenleitung<br>I2C Taktleitung | **Qwiic / STEMMA QT Sensor-Bus:** Steckverbindung zum SAM-M10Q GNSS-Modul sowie TMP117 / OPT3001 Sensoren |
 | **`ANT_UWB`**| **U.FL Hirose** | 1<br>2 | `UWB_RF_CH5`<br>`GND` | 6.5 GHz RF (50 Ohm)<br>Schirmmasse | **UWB Flex-Antenne:** 20 mm U.FL Kabel zur Taoglas FXUWB10 Antenne in der Gehäuseboden-Bucht |
 
+### 7.3 Vollständige ESP32-S3 Controller Pinbelegung (PCBA 05 `U1`)
+
+| Modul-Pad | Signalname | Signal-Typ | Funktion / Angeschlossene Peripherie |
+| :---: | :--- | :---: | :--- |
+| **Pad 1** | `GND` | Power | System-Masse |
+| **Pad 2** | `VCC_3V3` | Power | +3.3V Hauptversorgung (LMR36015 / TPS7A05) |
+| **Pad 3** | `ESP_EN` | Digital In | Hardware-Reset (10k Pull-Up, 100nF Entkoppelung) |
+| **Pad 5** | `CAN_SILENT` | Digital Out | Hardware Listen-Only Pin für TI TCAN334G CAN-Transceiver |
+| **Pad 6** | `MIC_I2S_WS` | Digital Out | I2S Word Select (LRCLK 48 kHz) für Knowles SPH0645LM4H Mikrofon (`MK1`) |
+| **Pad 7** | `MIC_I2S_BCLK` | Digital Out | I2S Bit Clock (3.072 MHz) für Knowles SPH0645LM4H Mikrofon (`MK1`) |
+| **Pad 8** | `PTT_IN1_N` | Digital In | Lenkertaster 1: PTT Intercom Funk / Voice (Active-Low) |
+| **Pad 9** | `PTT_IN2_N` | Digital In | Lenkertaster 2: Action-Cam Bookmark / Highlight (Active-Low) |
+| **Pad 10** | `PTT_IN3_N` | Digital In | Lenkertaster 3: Quick-Action / Navigationsmenü (Active-Low) |
+| **Pad 12** | `MIC_I2S_DATA` | Digital In | I2S Seriendaten vom Knowles SPH0645LM4H MEMS-Mikrofon (`MK1`) |
+| **Pad 13** | `USB_SERV_DM` | USB D- | Nativer USB-JTAG / CDC Service-Port (`J7`) |
+| **Pad 14** | `USB_SERV_DP` | USB D+ | Nativer USB-JTAG / CDC Service-Port (`J7`) |
+| **Pad 15** | `CAN_TERM_EN` | Digital Out | Steuersignal für CPC1017N Solid-State Relais (120 Ohm CAN-Busabschluss) |
+| **Pad 17** | `I2C_SDA` | Open-Drain | I2C Datenleitung für Qwiic-Port `J12` (SAM-M10Q GNSS, TMP117, OPT3001) |
+| **Pad 18** | `I2C_SCL` | Open-Drain | I2C Taktleitung für Qwiic-Port `J12` |
+| **Pad 19** | `WS2812B_DIN` | Digital Out | Datenleitung für SMD WS2812B-2020 RGB Status-LED (`D4`) |
+| **Pad 20** | `BSD_LED_LEFT` | Digital Out | Gate-Ansteuerung für Totwinkel-Spiegel-LED Links (`J9`, MOSFET `Q1`) |
+| **Pad 21** | `BSD_LED_RIGHT`| Digital Out | Gate-Ansteuerung für Totwinkel-Spiegel-LED Rechts (`J9`, MOSFET `Q1`) |
+| **Pad 22** | `AUX_LIGHT_EN` | Digital Out | Freigabesteuerung für TI TPS1H100 Smart High-Side Switch (`Q2` / `J11`) |
+| **Pad 23** | `TWAI_TX` | Digital Out | CAN-Bus Sendedaten an TCAN334G Transceiver |
+| **Pad 27** | `ESP_BOOT` | Digital In | Boot-Taster `SW1` (GPIO 0, Active-Low) |
+| **Pad 30** | `UWB_SCK` | Digital Out | SPI Serial Clock zu Qorvo DW3110 UWB Transceiver (`U9`) |
+| **Pad 31** | `UWB_MOSI` | Digital Out | SPI Master-Out Slave-In zu Qorvo DW3110 UWB Transceiver (`U9`) |
+| **Pad 32** | `UWB_MISO` | Digital In | SPI Master-In Slave-Out von Qorvo DW3110 UWB Transceiver (`U9`) |
+| **Pad 33** | `UWB_CS` | Digital Out | SPI Chip-Select (Active-Low) zu Qorvo DW3110 UWB Transceiver (`U9`) |
+| **Pad 34** | `UWB_IRQ` | Digital In | Interrupt-Request von Qorvo DW3110 UWB Transceiver (`U9`) |
+| **Pad 35** | `UWB_RST` | Digital Out | Hardware-Reset zu Qorvo DW3110 UWB Transceiver (`U9`) |
+| **Pad 36** | `TWAI_RX` | Digital In | CAN-Bus Empfangsdaten von TCAN334G Transceiver |
+| **Pad 38** | `OTTOCAST_FAULT_N`| Digital In | Überstrom- & Thermofehler-Meldung von TPS2051B (Active-Low) |
+| **Pad 39** | `OTTOCAST_PWR_EN` | Digital Out | VBUS-Schaltfreigabe für CP2AA Dongle via TPS2051B Lastschalter |
+| **Pads 40-41**| `GND` | Power | Thermische Massepads (Thermal Vias zu In1.Cu) |
+
+### 7.4 Digitales I2S-MEMS-Mikrofon `MK1` & Akustik-Bohrung
+
+Das fahrtwindgeschützte digitale Mikrofon `MK1` (Knowles `SPH0645LM4H` im LGA-5-Gehäuse) ist bei $X = 172{,}00\,\text{mm}, Y = 82{,}25\,\text{mm}$ auf `F.Cu` platziert:
+* **Akustik-Einlass:** Das Schallloch liegt auf Pad 5 und führt über eine durchkontaktierte $\varnothing 0{,}8\,\text{mm}$ Platinenbohrung direkt in den geschützten Kaltluftkanal des Frontgehäuses.
+* **3D-Freigang:** Durch die Verschiebung von der Altposition `MIC1` zu `MK1` ist ein lichter Abstand von $> 3{,}5\,\text{mm}$ zum Pufferkondensator `C_BUF` und Boot-Taster `SW1` dauerhaft garantiert.
+* **Signalintegrität:** Die I2S-Takt- und Datenleitungen (`MIC_I2S_BCLK`, `MIC_I2S_WS`, `MIC_I2S_DATA`) sind direkt auf Layer 1 mit flankierender Masseführung ohne Vias an den ESP32-S3 angebunden.
+
 ---
 
 ## 8. PCBA 06: MagSafe Frame Dock (Ersatzlos entfallen)
@@ -311,6 +354,32 @@ Die separate Platine `PCBA 06` ist in v9.6 **vollständig und ersatzlos entfalle
   * Die 28-mm-Qi-Empfängerspule wird über einen ultrakompakten **2-poligen JST-ACH SMD-Header (`J_QI`)** vibrationsfest angesteckt.
   * Beim Zusammenbau sind keinerlei manuelle Lötarbeiten erforderlich.
 
+### 9.2 Vollständige Pinbelegung des Nordic nRF52840 SoC (PCBA 07 `U1`)
+
+| SoC-Pad | Signalname | Signal-Typ | Funktion / Hardware-Verbindung |
+| :---: | :--- | :---: | :--- |
+| **A8** | `BLE_ANT_50R` | RF 2.4G | 50 Ohm Leitung zur Johanson 2450AT Keramik-Chipantenne (`ANT1`) |
+| **A12 / A14** | `XTAL1` / `XTAL2` | Analog | 32.000 MHz HF-Präzisionsquarz |
+| **F23 / H23** | `RTC1` / `RTC2` | Analog | 32.768 kHz Uhrenquarz (Sleep-Timer & Real-Time Clock) |
+| **H2 / AC24** | `SWDCLK` / `SWDIO` | Digital In/Out | 4-Pin SWD Programmier-Header `J_SWD` |
+| **B1** | `VCC_3V3` | Power | +3.3V Systemspannung (BQ25100 / LDO) |
+| **B9, B11, EP** | `GND` | Power | System- und HF-Masse |
+| **C1** | `LORA_SCK` | Digital Out | SPI Serial Clock zu Semtech SX1262 (`U2`) |
+| **R1** | `LORA_NSS` | Digital Out | SPI Chip-Select (Active-Low) zu SX1262 (`U2`) |
+| **T2** | `LORA_MOSI` | Digital Out | SPI Master-Out Slave-In zu SX1262 (`U2`) |
+| **U1** | `LORA_MISO` | Digital In | SPI Master-In Slave-Out von SX1262 (`U2`) |
+| **W1** | `LORA_BUSY` | Digital In | Busy-Statusleitung von SX1262 (`U2`) |
+| **D2** | `LORA_DIO1` | Digital In | IRQ-Leitung von SX1262 (Empfang 0xFE Alarmpaket) |
+| **Y2** | `LORA_RESET` | Digital Out | Hardware-Reset zu SX1262 (`U2`) |
+| **F2** | `BUZZER_PWM` | Digital Out | PWM-Ansteuerung (2.7 kHz / 4.0 kHz) für Murata SMD Piezo-Buzzer (`BZ1`) |
+| **G1** | `BTN_ARM_N` | Digital In | Scharfschalt-Taster `SW1` (Arm/Disarm, Active-Low) |
+| **J1** | `BTN_SOS_N` | Digital In | Notfall-Paniktaster `SW2` (SOS/Alarm, Active-Low) |
+| **K2** | `CHG_STAT` | Digital In | Ladezustandsanzeige von TI BQ25100 (Low = Lädt, High = Voll) |
+| **L1** | `LED_DATA` | Digital Out | Datenleitung für WS2812B-2020 RGB Status-LED (`D1`) |
+| **M2** | `DRV_EN` | Digital Out | Hardware-Enable für TI DRV2605L Haptiktreiber (`U3`) |
+| **N1** | `I2C_SDA` | Open-Drain | I2C Datenleitung zu DRV2605L Haptiktreiber (`U3`) |
+| **P2** | `I2C_SCL` | Open-Drain | I2C Taktleitung zu DRV2605L Haptiktreiber (`U3`) |
+
 ---
 
 ## 10. PCBA 08: 77 GHz mmWave Radar Sub-MCU & Warnflügel (`openmotorbridge_radar_submcu`)
@@ -334,6 +403,29 @@ Die separate Platine `PCBA 06` ist in v9.6 **vollständig und ersatzlos entfalle
   * `J3`: **90° gewinkelte 4-Pin Stiftleiste (`3V3`, `TX`, `RX`, `GND`)** bündig an der seitlichen Gehäusekante für bequemes Flashen und Firmware-Debugging des ESP32-C5 ohne Ausbau der Platine.
 * **Autonome Notfall-Strobe-Steuerung:**
   * Erkennt der lokale ESP32-C5 einen herannahenden Auffahrunfall (Time-to-Collision $\text{TTC} < 1{,}5\,\text{s}$), löst er den hochfrequenten Notfall-Strobe der 36 LEDs **lokal in $< 1\,\text{ms}$** aus - völlig unabhängig vom Funkverkehr zur Zentralbox.
+
+### 10.2 ESP32-C5 & DW3110 UWB Pinbelegung (PCBA 08 `U1` & `U3`)
+
+| Modul-Pad | Signalname | Signal-Typ | Funktion / Hardware-Verbindung |
+| :---: | :--- | :---: | :--- |
+| **U1.1** | `GND` | Power | System-Masse |
+| **U1.2** | `VCC_3V3` | Power | +3.3V geregelte Spannung von LDO `U2` (TPS7A05) |
+| **U1.4** | `MR20_TX` | Digital Out | UART1 TX zu Wheeltec MR20 mmWave Radar (`J2.3`) |
+| **U1.5** | `MR20_RX` | Digital In | UART1 RX von Wheeltec MR20 mmWave Radar (`J2.2`) |
+| **U1.6** | `UWB_RST` | Digital Out | Hardware-Reset zu Qorvo DW3110 UWB Transceiver (`U3.12`) |
+| **U1.7** | `ESP_EN` | Digital In | Hardware-Reset mit 10k Pull-Up und 100nF Filterkondensator |
+| **U1.8** | `WS2812_DATA` | Digital Out | RMT/SPI-Datenstrom für alle 36x WS2812B-2020 RGB-LEDs (`D1`–`D36`) |
+| **U1.10** | `UWB_SCK` | Digital Out | SPI Serial Clock zu Qorvo DW3110 UWB Transceiver (`U3.7`) |
+| **U1.11** | `UWB_MOSI` | Digital Out | SPI Master-Out zu Qorvo DW3110 UWB Transceiver (`U3.9`) |
+| **U1.12** | `UWB_MISO` | Digital In | SPI Master-In von Qorvo DW3110 UWB Transceiver (`U3.8`) |
+| **U1.13** | `ESP_IO9_BOOT`| Digital In | Boot-Strap Pin (GPIO 9, Low = UART Bootloader Flashen) |
+| **U1.14** | `UWB_CS` | Digital Out | SPI Chip-Select (Active-Low) zu DW3110 (`U3.10`) |
+| **U1.15** | `UWB_IRQ` | Digital In | Interrupt-Request von DW3110 Transceiver (`U3.13`) |
+| **U1.16** | `CENTRAL_TX` | Digital Out | UART0 TX zur seitlichen 90° Programmierleiste `J3.2` |
+| **U1.17** | `CENTRAL_RX` | Digital In | UART0 RX von der seitlichen 90° Programmierleiste `J3.3` |
+| **U1.18, 19** | `GND` | Power | Thermische Massepads |
+| **U3.4 / 5** | `UWB_XTAL1/2`| Analog | 38.4 MHz HF-Quarz `Y1_UWB` für DW3110 |
+| **U3.15** | `UWB_RF` | RF 6.5G | 50 Ohm UWB HF-Pfad zu U.FL-Buchse `J4` (Kanal 5/9) |
 
 ---
 
@@ -374,8 +466,8 @@ Die Platine **`PCBA 09`** ist die universelle Open-Source-Hardware für das Open
    * 1x RGB Status-LED (`D1`, WS2812B-2020) zur Einkopplung in den Gehäuse-Lichtleiter.
 6. **Schnittstellen & Steckverbinder:**
    * `J1`: Wasserdichte IP67 USB-C Buchse (16-Pin) bündig an der Stirnkante mit USBLC6-2SC6 TVS-ESD-Schutzarray (Laden unterwegs via Powerbank/Front-Node, WebUSB DFU Flashing, Kassetten-Einschubkontakt).
-   * `J_HELMET`: 6-Pin JST-SH 1.0mm SMD Horizontal-Header (`SM06B-SRSS-TB`) auf `B.Cu` ($X=126{,}5, Y=99{,}75\,\text{mm}$ in KiCad bzw. $X_{\text{mod}} = 60{,}5\,\text{mm}$, Stecköffnung nach innen / $-X$) im hinteren Gehäuseabteil gegenüber USB-C. Führt reines, brummfreies Audio ins Helminnere.
-   * `BAT1`: 2-polige JST-SH Micro-Buchse (`BM02B-SRSS-TB`) zum 1S LiPo Pouch-Akku (600 mAh mit integriertem PCM).
+   * `J_HELMET`: 6-Pin JST-SH 1.0mm SMD Vertikal-Header (`BM06B-SRSS-TB`) auf `B.Cu` ($X=127{,}05, Y=99{,}70\,\text{mm}$ in KiCad, vertikaler Steckanschluss für zugentlastete Kabelführung direkt in die Helmmulde) im hinteren Gehäuseabteil gegenüber USB-C. Führt reines, brummfreies Audio ins Helminnere.
+   * `BAT1`: 2-polige JST-SH Micro-Buchse (`BM02B-SRSS-TB` Vertikal) auf `B.Cu` ($X=79{,}40, Y=112{,}00\,\text{mm}$) zum 1S LiPo Pouch-Akku (600 mAh mit integriertem PCM).
 
 ### 11.3 Vollständige GPIO-Pinbelegung (ESP32-C6-MINI-1U)
 
@@ -477,8 +569,8 @@ Die Platine **`PCBA 10`** ist das universelle Open-Source-Hardwaremodul für den
    * 4x taktile Mikrotaster (`SW1` bis `SW4`): PTT (Push-to-Talk / MFB), Mode (Analog/DMR Toggle), Ch+, Ch-.
    * 1x WS2812B-2020 RGB Status-LED (`D1`, RX Grün, TX Rot, DMR Blau, Chg Gelb).
    * `J1`: Wasserdichte IP67 USB-C Buchse (16-Pin) für 5V Laden, WebUSB DFU und Kassetten-Einschub.
-   * `J_HELMET`: 6-Pin JST-SH 1.0mm SMD Horizontal-Header (`SM06B-SRSS-TB`) auf `B.Cu` ($X=126{,}5, Y=99{,}75\,\text{mm}$ in KiCad, Stecköffnung nach innen / $-X$) – identische Belegung und Platzierung wie PCBA 09.
-   * `BAT1`: 2-polige JST-SH Micro-Buchse (`BM02B-SRSS-TB`) zum 1S LiPo Pouch-Akku (600 mAh mit integriertem PCM).
+   * `J_HELMET`: 6-Pin JST-SH 1.0mm SMD Vertikal-Header (`BM06B-SRSS-TB`) auf `B.Cu` ($X=127{,}05, Y=99{,}70\,\text{mm}$ in KiCad, vertikaler Steckanschluss für zugentlastete Kabelführung direkt in die Helmmulde) – identische Belegung und Platzierung wie PCBA 09.
+   * `BAT1`: 2-polige JST-SH Micro-Buchse (`BM02B-SRSS-TB` Vertikal) auf `B.Cu` ($X=79{,}40, Y=112{,}00\,\text{mm}$) zum 1S LiPo Pouch-Akku (600 mAh mit integriertem PCM).
 
 ### 12.3 Vollständige GPIO-Pinbelegung (ESP32-C6 zu SA818-DMR & Peripherie)
 

@@ -19,7 +19,7 @@ A complete OpenMotorBridge vehicle kit consists of the following core assemblies
                       |    * 2,200 mAh LiPo backup battery (UPS)|
                       +--------------------+--------------------+
                                            |
-                         1x CENTRAL HARNESS (HD26 SEAL-D IP67)
+                         1x CENTRAL HARNESS (DEUTSCH DTM-12 IP67/IP69K)
                                            |
           +--------------------------------+--------------------------------+
           |                                |                                |
