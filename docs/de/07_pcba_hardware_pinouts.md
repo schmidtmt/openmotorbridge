@@ -19,9 +19,9 @@ Das Hardwaredesign von OpenMotorBridge folgt dem Grundsatz der radikalen Entflec
 |       |                                |               |         | ES8388, SX1262 LoRa, |
 |       |                                |               |         | DW3110 UWB, DTM-12   |
 +-------+-------------------------------+---------------+---------+----------------------+
-| **PCBA 03**| **Universal Smart Cartridge** | 35 x 25 mm    | 2 Lagen | Qorvo DW3110 UWB,    |
+| **PCBA 03**| **Universal Smart Cartridge** | 35 x 25 mm    | 4 Lagen | Qorvo DW3110 UWB,    |
 |       | (Kassettenträger Bucht 1 & 2) | (29x19 mm M2) | (ENIG)  | ESP32-C6, ES8388,    |
-|       |                                | 2-seitig SMT  |         | 4x AO3400A, J_ACT    |
+|       |                                | 2-seitig SMT  |         | TS5A3159, 4x AO3400A |
 +-------+-------------------------------+---------------+---------+----------------------+
 | **PCBA 05**| **Universal Front-Knoten**    | 82 x 50 mm    | 4 Lagen | ESP32-S3, DW3110 UWB,|
 |       | (Cockpit, GNSS, Sensoren, UWB)| (4x M2.5)     | (ENIG)  | SAM-M10Q, USB2514B,  |
@@ -192,39 +192,48 @@ Die frühere Pod-Basisplatine (`PCBA 02`) ist in v9.6 **vollständig und ersatzl
 *Abbildung 7.3b: KiCad 3D-Render der Universal Smart Cartridge Bottom mit Qorvo DW3110 UWB Transceiver, ES8388 Stereo-Codec und Audio-Power-Header J_AUDIO_PWR.*
 
 ### 5.1 Technische Platinen-Kenndaten & Funktionale Lagen-Aufteilung
-* **Abmessungen:** $35{,}0 \times 25{,}0\,\text{mm}$ (Raster $29{,}0 \times 19{,}0\,\text{mm}$ mit 4x M2 Befestigungsbohrungen).
-* **Lagenaufbau:** 2 Lagen FR-4 High-TG150 ($1{,}2\,\text{mm}$ Dicke, $35\,\mu\text{m}$ Cu beidseitig, ENIG-Goldfinish).
-* **Bestückung Top-Layer (F.Cu - Mechatronik & Steuerung):**
-  * `U2`: Espressif `ESP32-C6` RISC-V Host-MCU (verwaltet Kassetten-Profile, UWB-Kommunikation und Aktuator-Timings).
-  * `Q1` - `Q4`: 4x N-Kanal MOSFETs (`AO3400A`, SOT-23, $30\,\text{V} / 5{,}7\,\text{A}$) samt Freilaufdioden `D1`-`D4`. Platziert unmittelbar neben dem Header `J_ACT` für kürzeste Leiterbahnwege zu den Taster-Aktuatoren.
-  * `J_ACT`: 8-poliger $1{,}0\,\text{mm}$ JST-SH Header zur Ansteuerung der 4 Miniatur-Hubmagnete.
-  * `J_AUDIO_PWR`: **8-poliger $1{,}0\,\text{mm}$ JST-SH Header** (baugleich zu `J_ACT`) zur galvanisch getrennten Stern-Masseanbindung des Adapterkabelstrangs an das jeweilige OEM-Headset.
-* **Bestückung Bottom-Layer (B.Cu - HF, Audio-Codec & Stromaufnahme):**
-  * `U1`: Qorvo `DW3110` Ultra-Wideband Transceiver (6.489 GHz Ch. 5) mit integrierter PCB-Antenne. Strahlungsrichtung zeigt nach unten durch den Kunststoffboden der Kassette für optimale Funkverbindung zur Zentralbox.
-  * `U3`: Everest Semi `ES8388` 24-Bit / 48 kHz Low-Noise Audio-Codec. Bewusst auf der **Unterseite (`B.Cu`)** platziert: Dadurch sind die empfindlichen analogen Mikrofon- und Kopfhörerleitungen durch die interne Kupfer-Massefläche hermetisch von den steilen Schaltflanken der Top-Layer-MOSFETs (`Q1`–`Q4`) und Aktuatorströmen entkoppelt. Wandelt das analoge Mikrofon- und Lautsprechersignal von Sena, Cardo oder Midland direkt auf der Kassette und streamt es jitterfrei digital via I2S/UWB.
-  * `PAD1` & `PAD2`: Stirnseitige, massive vergoldete Kontaktflächen (ENIG) für die 2-Draht DC-Federkontakte des Pods.
-  * `F1`: Selbstrückstellende 500mA PPTC-Sicherung.
+* **Abmessungen:** $35{,}0 \times 25{,}0\,\text{mm}$ (Raster $29{,}0 \times 19{,}0\,\text{mm}$ mit 4x M2 Befestigungsbohrungen H1..H4).
+* **Lagenaufbau:** 4 Lagen FR-4 High-TG150 (JLC04161H, $1{,}2\,\text{mm}$ Dicke, durchgehende GND-Plane L2 und Power-Plane L3, ENIG-Goldfinish).
+* **Bestückung Top-Layer (F.Cu - Mechatronik, Host-MCU & Steuerung):**
+  * `U1`: Espressif `ESP32-C6-MINI-1U` RISC-V Host-MCU (verwaltet Kassetten-Profile, UWB-Backbone, I2S-Codec-Steuerung, USB-Audio und Aktuator-Timings).
+  * `Q1` - `Q4`: 4x N-Kanal MOSFETs (`AO3400A`, SOT-23, $30\,\text{V} / 5{,}7\,\text{A}$) samt Freilaufdioden `D1`-`D4` (`1N4148WS`, SOD-323). Platziert unmittelbar neben Header `J_ACT` für kürzeste Leiterbahnwege zu den Taster-Aktuatoren.
+  * `R1` - `R4`: $100\,\Omega$ Gate-Serienwiderstände (0603).
+  * `R5` - `R8`: $100\,\text{k}\Omega$ Gate-Pulldowns (0603) für definierten Ruhezustand.
+  * `R9`: $10\,\text{k}\Omega$ Pull-up-Widerstand (0603) an `VCC_3V3` für das Kassetten-Erkennungssignal `OMM_DETECT`.
+  * `J_ACT`: 8-poliger $1{,}0\,\text{mm}$ JST-SH Header (`SM08B-SRSS-TB` mit SMD-Schirmlaschen `MP` an GND) zur Ansteuerung der 4 Miniatur-Hubmagnete.
+  * `J_AUDIO_PWR`: 8-poliger $1{,}0\,\text{mm}$ JST-SH Header (baugleich zu `J_ACT`, Schirmlaschen `MP` an GND) zur sternpunktförmigen Kelvin-Audio- und Power-Anbindung des jeweiligen OEM-Headsets bzw. OMM-Moduls.
+  * `J_PROG`: 4-poliger $1{,}27\,\text{mm}$ SMD-Stiftleisten-Header (`PinHeader_1x04_P1.27mm_Vertical_SMD_Pin1Left`) für Flashen und Firmware-Recovery (`VCC_3V3`, `USB_DP`, `GND`, `PTT_USB_N`).
+* **Bestückung Bottom-Layer (B.Cu - HF, Audio-Codec, Hardware-Umschaltung & Stromaufnahme):**
+  * `U_UWB`: Qorvo `DW3110` Ultra-Wideband Transceiver (6.489 GHz Ch. 5, QFN-16-1EP) mit externer U.FL-Koaxialbuchse `ANT_UWB` (`Taoglas FXUWB10`) und hochpräzisem $38{,}4\,\text{MHz}$ Quarz `Y_UWB`. Strahlungsrichtung zeigt nach unten durch den dielektrischen Kunststoffboden der Kassette für optimale Funkverbindung zur Zentralbox.
+  * `U3`: Everest Semi `ES8388` 24-Bit / 48 kHz Low-Noise Audio-Codec (QFN-28-1EP). Bewusst auf der **Unterseite (`B.Cu`)** platziert: Dadurch sind die empfindlichen analogen Audioleitungen durch die interne Kupfer-Massefläche hermetisch von den steilen Schaltflanken der Top-Layer-MOSFETs (`Q1`–`Q4`) und Aktuatorströmen entkoppelt. Wandelt das analoge Mikrofon- und Lautsprechersignal von Sena, Cardo oder Midland direkt auf der Kassette und streamt es jitterfrei digital via I2S/UWB.
+  * `U4`: Texas Instruments `TS5A3159DBVR` Single-Pole Double-Throw (SPDT) Analog/Digital-Audio-Umschalter ($0{,}5\,\Omega$ Durchgangswiderstand, SOT-23-6). Ermöglicht die automatische, hardware-gesteuerte Umschaltung zwischen analogem Headset-Audio und digitalem OMM-USB-Audio.
+  * `PAD1` & `PAD2`: Stirnseitige, massive $\varnothing 3{,}0\,\text{mm}$ vergoldete Kontaktflächen (`TestPoint_Pad_D3.0mm_OD3.5mm`, ENIG) für die 2-Draht DC-Federkontakte des Pod-Schlittens (`PAD1: +5V_IN`, `PAD2: GND`).
+  * `F1`: Selbstrückstellende 500mA PPTC-Sicherung (Bourns `MF-MSMF050-2`, 1812 SMD) vor `VCC_5V_PROT`.
+  * `C1`, `C2`: Keramische Stützkondensatoren ($100\,\text{nF}$ 0603 / $10\,\mu\text{F}$ 0805) an `VCC_3V3`.
+  * `H1` - `H4`: 4x M2-Montagebohrungen mit durchkontaktiertem Pad (`MountingHole_2.2mm_M2_Pad`) an Systemmasse (`GND`).
 
-### 5.2 Pinbelegung des Audio-Power-Headers (`J_AUDIO_PWR` / 8-Pin JST-SH 1.0mm)
+### 5.2 Pinbelegung des Audio-Power-Headers (`J_AUDIO_PWR` / 8-Pin JST-SH 1.0mm) & Dual-Mode Umschaltung
 
-Um das gefürchtete **Übersprechen von Lade- und Sendeströmen in das Audiosignal (Common-Impedance Coupling)** physikalisch auszuschließen, ist der Header `J_AUDIO_PWR` als **8-Pin JST-SH** mit strikter Trennung von Leistungs- und Audio-Massen ausgelegt:
+Um sowohl **analoge OEM-Headsets (Sena, Cardo, Midland)** störungsfrei mit Kelvin-Massen anzubinden als auch **native OMM-Module (PCBA 09 / PCBA 10)** verlustfrei digital über denselben Steckverbinder zu betreiben, ist `J_AUDIO_PWR` als **Dual-Mode-Schnittstelle** mit automatischer Hardware-Umschaltung über `U4` (`TS5A3159DBVR`) ausgeführt:
 
-| Pin | Signalname | Richtung | Funktion & OEM-Verbindung |
-| :---: | :--- | :---: | :--- |
-| **1** | **`PGND`** | Power Return | **Leistungs-Masse:** Führt den gesamten Rückstrom des Laders / DC-DC-Wandlers ($0{,}2\dots 0{,}6\,\text{A}$) |
-| **2** | **`VCC_HEADSET`** | Power Out (+5V / +3.85V) | Geregelte Betriebsspannung für das Intercom-Modul (Lade- oder Dauerstrom) |
-| **3** | **`AGND_SPK`** | Audio-Massebezug | **Saubere Kopfhörermasse:** Führt zum 3,5-mm-Klinkenhülsen-Kontakt (Sleeve) – **stromlos ($I = 0\,\text{mA}$)!** |
-| **4** | **`AUDIO_L_IN`** | Audio In $\leftarrow$ OEM | Line-Out Lautsprecher Links vom Headset zum ES8388 ADC (Kanal 1) |
-| **5** | **`AUDIO_R_IN`** | Audio In $\leftarrow$ OEM | Line-Out Lautsprecher Rechts vom Headset zum ES8388 ADC (Kanal 2) |
-| **6** | **`AGND_MIC`** | Audio-Massebezug | **Saubere Mikrofonmasse:** Eigener Rückleiter für den Mikrofoneingang – **stromlos ($I = 0\,\text{mA}$)!** |
-| **7** | **`MIC_OUT`** | Audio Out $\rightarrow$ OEM | Mikrofonsignal vom ES8388 DAC in das Headset ($< 1\,\text{ms}$ Latenz) |
-| **8** | **`PTT_IO`** | Bidir / Open-Drain | PTT-Tastung gegen Masse (Midland PMR446) oder DMR/Mode-Select |
+| Pin | Signalname | Richtung | Funktion: Analog-Intercom (Sena / Cardo / Midland) | Funktion: Digital-OMM (PCBA 09 / PCBA 10) |
+| :---: | :--- | :---: | :--- | :--- |
+| **1** | **`PGND` / `GND`** | Power Return | **Leistungs-Masse:** Rückstrom Lader / DC-DC ($0{,}2\dots 0{,}6\,\text{A}$) | **Leistungs-Masse:** Rückstrom Lader & HF-Endstufe ($0{,}2\dots 0{,}6\,\text{A}$) |
+| **2** | **`VCC_5V_PROT`** | Power Out | Geregelte, abgesicherte +5V Speisung für Headset-Akku/Lader | Geregelte, abgesicherte +5V Speisung für OMM BQ24075 PMIC |
+| **3** | **`AGND_AUDIO_IN`** | Audio GND | **Saubere Kopfhörermasse:** 3.5mm Sleeve – **stromlos ($I = 0\,\text{mA}$)!** | Isolierte NF-Masse / Shield-Referenz (stromlos!) |
+| **4** | **`AUDIO_IN_L`** | Audio In $\leftarrow$ | Line-Out Lautsprecher Links vom Headset zum ES8388 ADC | Optionale analoge Monitor-Leitung Links |
+| **5** | **`AUDIO_IN_R`** | Audio In $\leftarrow$ | Line-Out Lautsprecher Rechts vom Headset zum ES8388 ADC | Optionale analoge Monitor-Leitung Rechts |
+| **6** | **`OMM_DETECT`** | Control In $\leftarrow$ | **Offen / LOW (über interne Beschaltung):** Modus Analog Intercom | **HIGH (aktiv vom OMM getrieben):** Schaltet `U4` auf Digital-USB |
+| **7** | **`AUDIO_IO_P`** | Dual-Mode I/O | **Analog `VOICE_OUT` (via U4 NC):** Sprache vom ES8388 DAC $\rightarrow$ OEM Mic | **Digital `USB_DP` (via U4 NO):** Nativer digitaler USB-Audio-Datenstrom D+ |
+| **8** | **`PTT_USB_N`** | Dual-Mode I/O | **PTT_IO:** Push-to-Talk Tastung gegen Masse (Midland PMR446) | **Digital `USB_DN`:** Nativer digitaler USB-Audio-Datenstrom D- |
+| **MP** | **`GND`** | Schirmung | Beidseitige SMD-Montagelaschen des JST-SH Steckers auf GND-Plane | Beidseitige SMD-Montagelaschen des JST-SH Steckers auf GND-Plane |
 
 > [!IMPORTANT]
-> **Warum 8 Pins die Strombrumm-Problematik („Lade- & Mesh-Surren“) zu 100 % lösen:**
-> 1. **Das Problem geteilter Massen:** Zieht ein Headset z. B. $300\,\text{mA}$ Lade- oder HF-Sendestrom über eine gemeinsame Masseleitung mit $80\,\text{m}\Omega$ Gesamtwiderstand (Steckkontakt + Litze), schwankt das Massepotential um $\Delta V = 300\,\text{mA} \times 0{,}08\,\Omega = 24\,\text{mV}$. Da Mikrofon-Signale typisch nur $5\dots 15\,\text{mV}$ betragen, würde der Mikrofoneingang des Headsets dieses $24\,\text{mV}$ Spannungsbrummen (Mesh-TDMA-Knattern, Schaltregler-Pfeifen) um $+30\,\text{dB}$ vorverstärken!
-> 2. **Die OpenMotorBridge-Lösung (Kelvin-Grounding):** Durch die getrennten Pins `AGND_SPK` (Pin 3) und `AGND_MIC` (Pin 6) fließt **kein einziger Milliampere Betriebsstrom** ($I_{\text{Audio}} = 0\,\text{A}$). Der ohmsche Spannungsabfall ist physikalisch **exakt $\Delta V = 0\,\text{mV}$**. Der hohe Laststrom fließt isoliert über Pin 1 (`PGND`) direkt zum DC-DC-Filter auf `PCBA 03` ab.
-> 3. **BOM-Vorteil:** Durch den Wechsel auf 8 Pins nutzt `J_AUDIO_PWR` exakt dieselbe LCSC-Teilenummer (`JST_SH_SM08B-SRSS-TB`) wie der Mechatronik-Header `J_ACT`. Das spart einen Feeder-Slot bei JLCPCB und eliminiert Bestückungsfehler.
+> **Funktionsweise der automatischen Audio-Umschaltung via `U4` (`TS5A3159DBVR`):**
+> 1. **Kassette mit Analog-Intercom (Sena SPIDER X Slim / Cardo Packtalk Edge / Midland):**  
+>    Der Adapterkabelstrang lässt Pin 6 (`OMM_DETECT`) unbeschaltet oder zieht ihn auf GND. Der Umschalter `U4` verbleibt in Ruhestellung (**NC**): Pin 7 (`AUDIO_IO_P`) ist direkt mit dem Analogausgang `VOICE_OUT` des ES8388 Audio-Codecs verbunden. Die Sprachübertragung erfolgt vollkommen latenzfrei ($< 0{,}4\,\text{ms}$) analog in das Mikrofon des Headsets.
+> 2. **Kassette mit nativem OMM-Modul (`PCBA 09` Mesh / `PCBA 10` 446 PMR/DMR):**  
+>    Das eingeschobene OMM-Modul legt Pin 6 (`OMM_DETECT`) auf High (3.3V). Der SPDT-Schalter `U4` schaltet in $< 35\,\text{ns}$ auf Arbeitskontakt (**NO**): Pin 7 wird von der analogen Audioleitung getrennt und direkt mit der nativen USB-Leitung `USB_DP` der ESP32-C6 Host-MCU verbunden. Zusammen mit Pin 8 (`PTT_USB_N` als `USB_DN`) entsteht ein vollwertiger, störungsfreier digitaler USB-2.0-Audiokanal direkt zwischen Intercom-Engine und OMB-Gateway. Mechatronik-Stößel und doppelte D/A-Wandlungen entfallen vollständig!
 
 
 ### 5.3 Pinbelegung des Aktuator-Headers (`J_ACT` / 8-Pin JST-SH 1.0mm)

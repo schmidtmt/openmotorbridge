@@ -129,11 +129,12 @@ Der UCS-Standard nach ECE 22.06 normiert die mechanische Kavität, lässt den el
 |                    +--- MODUS 2: EINSATZ IM POD (SMART CARTRIDGE PCBA 03)               |
 |                    |    USB-C auf 8-Pin JST-SH Adapterkabel (Länge 5 cm, 90° gewinkelt):|
 |                    |    * Pin 1: PGND (Leistungs-Rückstrom, bis 600 mA Sendepeak)       |
-|                    |    * Pin 2: VCC_5V (Bordnetz-Speisung & BQ24075 USV-Ladung)        |
-|                    |    * Pin 3 & 6: AGND_SPK (Audio-Massebezug, stromlos I = 0 mA)     |
-|                    |    * Pin 4 & 5: Stereo Audio Line-In Links / Rechts (CC1 & CC2)    |
-|                    |    * Pin 7: MIC_OUT (Fahrer-Sprachsignal ins Modul < 1 ms, SBU1)   |
-|                    |    * Pin 8: PTT_IO (Hardware-PTT-Tastung gegen Masse)              |
+|                    |    * Pin 2: VCC_5V_PROT (5V Speisung & BQ24075 USV-Ladung via F1) |
+|                    |    * Pin 3: AGND_AUDIO_IN (Audio-Massebezug, stromlos I = 0 mA)    |
+|                    |    * Pin 4 & 5: AUDIO_IN_L / AUDIO_IN_R (Optionale Monitor-Linien) |
+|                    |    * Pin 6: OMM_DETECT (Docking HIGH -> schaltet U4 auf USB-Audio) |
+|                    |    * Pin 7: AUDIO_IO_P -> USB_DP (Nativer digitaler USB-Audio D+)  |
+|                    |    * Pin 8: PTT_USB_N -> USB_DN (Nativer digitaler USB-Audio D-)  |
 |                    |                                                                    |
 |                    +--- MODUS 3: FLASHING, DFU & SERVICE (WARTUNG)                      |
 |                         Standard USB-C Datenkabel am PC / Web-Browser (WebUSB):         |
@@ -359,7 +360,7 @@ Das SA818-DMR Modul verfügt über einen dedizierten Umschaltpin `HL` (`SA818_PW
 | **Helm-Modus (Standalone)** | **`LOW` (0 V)** | **$0{,}2\,\text{W}$ ($200\,\text{mW}$)** | **$1{,}5\dots 2{,}5\,\text{km}$** | **SAR-Safe:** Minimale HF-Absorption am Kopf; schont den 600-mAh-LiPo-Akku (Laufzeit 8–10 h). |
 | **Bike-Modus (Kassette im Pod)** | **`HIGH` ($3{,}3\,\text{V}$)** | **$0{,}5\,\text{W}$ ($500\,\text{mW}$)** | **$3{,}0\dots 6{,}0\,\text{km}$** | **Maximales PMR446-Gesetzeslimit:** Speisung über 5V-Bordnetz; maximale Reichweite bei Überlandfahrten. |
 
-* **Autonome Modus-Erkennung:** Wird das Modul in den Kassetten-Schlitten (`PCBA 03`) gesteckt, erkennt der ESP32-C6 die Docking-Signale über Header `J_AUDIO_PWR` (Pin 8) und schaltet die Sendeleistung automatisch von 0,2 W auf 0,5 W um. Außerhalb des Pods fällt das Modul sicherheitshalber in den 0,2-W-Helm-Modus zurück.
+* **Autonome Modus-Erkennung:** Wird das Modul in den Kassetten-Schlitten (`PCBA 03`) gesteckt, erkennt der ESP32-C6 die 5V-Bordnetzspeisung an Pin 2 (`VCC_5V_PROT`) und treibt Pin 6 (`OMM_DETECT`) aktiv auf HIGH ($3{,}3\,\text{V}$). Dies schaltet den SPDT-Umschalter `U4` (`TS5A3159DBVR`) auf `PCBA 03` in $< 35\,\text{ns}$ auf den verlustfreien digitalen USB-Audiopfad (`USB_DP` / `USB_DN`) und veranlasst das OMM-Modul zugleich, die Sendeleistung via `SA818_PWR_HL` automatisch von 0,2 W auf 0,5 W hochzuregeln. Außerhalb des Pods fällt das Modul sicherheitshalber in den 0,2-W-Helm-Modus zurück.
 
 ### 6.2 Antennen-Architektur: Helm-Stummelantenne vs. geschlossene Pod-Kassette & Festeinbau-Booster
 
@@ -381,7 +382,7 @@ Sowohl das **OpenMotorMesh 2.4 GHz Modul (PCBA 09)** als auch das **OMM 446 MHz 
      - Für dauerhafte Festeinbauten (z. B. als Hochleistungs-Relay/Base-Station der Gruppe oder im Support-Van) bietet das Kassetten-Inlay (`cartridge_insert_omm_ucs.scad`) in der geräumigen hinteren Kammer ($48 \times 53\,\text{mm}$) Platz für ein ultrakompaktes $25 \times 15\,\text{mm}$ 5V COTS Bi-Directional Booster-Modul.
      - **Empfangs-LNA (+12 bis +15 dB Gain):** Der integrierte Low-Noise Amplifier fischt schwache Signale aus dem Rauschen und gleicht eventuelle Abschattungen durch Fahrerkörper oder Kofferdeckel spielend aus – Reichweite wie bei einer Außenantenne, aber ohne jedes Außenloch!
      - **100 % Modulare Trennung:** Die Kassetten-Trägerplatine (`PCBA 03`) bleibt vollständig universell für alle Kassetten (Sena/Cardo werden nicht mit ungenutzten HF-Bauteilen belastet). Der Booster wird nur bei echtem OMM-Festeinbau als modulares Zubehör im Schlitten eingesteckt.
-     - **Stromversorgung via Y-Abzweig am 8-Pin Header `J_AUDIO_PWR`:** Die 5V-Versorgung des Boosters ($< 100\,\text{mA}$) erfolgt direkt über einen 2-poligen Abzweig von **Pin 1 (`PGND`)** und **Pin 2 (`VCC_5V`)** des ohnehin vorhandenen Kassetten-Adapterkabels. Da der Booster-Strom isoliert über `PGND` abfließt und die Audio-Massen `AGND_SPK` (Pin 3) und `AGND_MIC` (Pin 6) stromlos bleiben, bleibt das Kelvin-Grounding zu 100 % erhalten – absolut null Common-Impedance-Einkopplung oder HF-Brummen im Helmaudio!
+     - **Stromversorgung via Y-Abzweig am 8-Pin Header `J_AUDIO_PWR`:** Die 5V-Versorgung des Boosters ($< 100\,\text{mA}$) erfolgt direkt über einen 2-poligen Abzweig von **Pin 1 (`PGND`)** und **Pin 2 (`VCC_5V_PROT`)** des Kassetten-Adapterkabels. Da der Booster-Strom isoliert über `PGND` abfließt und die Audio-Masse `AGND_AUDIO_IN` (Pin 3) stromlos bleibt ($I = 0\,\text{mA}$), bleibt das Kelvin-Grounding zu 100 % erhalten – absolut null Common-Impedance-Einkopplung oder HF-Brummen im Helmaudio!
 
 ### 6.3 Schnittstellen-Trennung: Helm-Audio (`J_HELMET`) vs. Externes Laden & WebUSB (`J1`)
 
@@ -431,31 +432,38 @@ Zur Vermeidung von Windgeräuschen, Kabelgewirr und Brummstörungen sind die Ans
 
 ## 8. Audio-Frontend, PTT-Steuerung & 8-Pin Kelvin Grounding
 
-### 8.1 Das Brummschleifen-Problem bei Schmalband-Funktransceivern
+### 8.1 Das Brummschleifen-Problem, Kelvin Grounding & Dual-Mode Audio-Umschaltung
 Sendet das SA818-DMR Modul mit $0{,}5\,\text{W}$ ERP im 446-MHz-Band, zieht die HF-Endstufe Stromspitzen von bis zu **$600\,\text{mA}$** aus dem 5V-Bordnetz.
 * Würde dieser Rückstrom über eine gemeinsame Masse mit dem Audiosignal fließen, erzeugt der Spannungsabfall ($I \times R_{\text{GND}} \approx 600\,\text{mA} \times 0{,}08\,\Omega = 48\,\text{mV}$) ein verheerendes Knattern und Brummen im empfindlichen Mikrofonpfad ($5\dots 15\,\text{mV}$ Nutzsignal).
-* **Die Lösung: 8-Pin Kelvin Grounding auf Header `J_AUDIO_PWR`:**
+* **Die Lösung: 8-Pin Kelvin Grounding & Dual-Mode Hardware-Umschaltung auf Header `J_AUDIO_PWR`:**
   - `Pin 1: PGND` führt die $600\,\text{mA}$ Leistungsrückströme direkt zum Schaltregler auf `PCBA 03` ab.
-  - `Pin 3: AGND_SPK` und `Pin 6: AGND_MIC` sind **vollkommen stromlos** ($I = 0\,\text{mA}$). Es gibt keinen Spannungsabfall ($\Delta V = 0\,\text{mV}$) – das Audiosignal bleibt absolut brumm- und störungsfrei!
+  - `Pin 2: VCC_5V_PROT` speist das Modul über die selbstrückstellende 500mA Polyfuse `F1`.
+  - `Pin 3: AGND_AUDIO_IN` ist als Audio-Referenzmasse **vollkommen stromlos** ($I = 0\,\text{mA}$). Es gibt keinen Spannungsabfall ($\Delta V = 0\,\text{mV}$) – das Audiosignal bleibt absolut brumm- und störungsfrei!
+  - `Pin 6: OMM_DETECT` wird vom eingeschobenen OMM-Modul aktiv auf HIGH ($3{,}3\,\text{V}$) getrieben. Dies schaltet den SPDT-Schalter `U4` (`TS5A3159DBVR`) auf `PCBA 03` blitzschnell ($< 35\,\text{ns}$) von Ruhestellung (NC: Analog `VOICE_OUT`) auf Arbeitskontakt (NO: Digital `USB_DP`).
+  - `Pin 7: AUDIO_IO_P` fungiert im OMM-Betrieb als nativer USB D+ Datenstrom (`USB_DP`), während Pin 8 (`PTT_USB_N`) als nativer USB D- Datenstrom (`USB_DN`) arbeitet. Dadurch wird der Audiostream volldigital, verlustfrei und ohne doppelte D/A-Wandlung direkt zwischen den beiden ESP32-C6 MCUs übertragen!
 
 ```
 +---------------------------------------------------------------------------------------------------+
-|               8-PIN KELVIN GROUNDING BEI PCBA 10 SENDEBETRIEB (SA818-DMR TX BURST)                |
+|               8-PIN KELVIN GROUNDING & DUAL-MODE AUDIO-ROUTING (J_AUDIO_PWR AUF PCBA 03)          |
 +---------------------------------------------------------------------------------------------------+
 |                                                                                                   |
 |  [ PCBA 10 OMM 446 MODUL ]                                          [ SMART CARTRIDGE PCBA 03 ]   |
 |                                                                                                   |
 |  SA818 HF-Endstufe (600 mA Peak) --(Pin 1: PGND)-----------------> LM5164 DC-DC Rückstrommasse    |
-|  5V USV-Ladung & PA-Versorgung <---(Pin 2: VCC_5V)---------------- 5V Bordnetz-Speisung (1.5 A)   |
+|  5V USV-Ladung & PA-Versorgung <---(Pin 2: VCC_5V_PROT)----------- 5V Speisung via F1 Polyfuse    |
 |                                                                                                   |
-|  ES8388 Lautsprecher-DAC Masse ----(Pin 3: AGND_SPK, I = 0 mA)----> Analoge Audio-Masse (ES8388)  |
-|  ES8388 Audio-Ausgang Links -------(Pin 4: AUDIO_L_IN)------------> ES8388 Codec Line-In Links    |
-|  ES8388 Audio-Ausgang Rechts ------(Pin 5: AUDIO_R_IN)------------> ES8388 Codec Line-In Rechts   |
+|  Audio-Schirmung / Referenz -------(Pin 3: AGND_AUDIO_IN, I=0mA)-> Stromlose Audio-Masse (ES8388) |
+|  Audio Line-Out Links (Option) ----(Pin 4: AUDIO_IN_L)-----------> ES8388 Codec Line-In Links    |
+|  Audio Line-Out Rechts (Option) ---(Pin 5: AUDIO_IN_R)-----------> ES8388 Codec Line-In Rechts   |
 |                                                                                                   |
-|  ES8388 Mikrofon-ADC Masse --------(Pin 6: AGND_MIC, I = 0 mA)----> Rauscharme Mikrofon-Masse     |
-|  Mikrofon-Signal vom Helm/DSP -----(Pin 7: MIC_OUT)---------------> Differenzieller Preamp       |
+|  OMM Docking-Signal (HIGH 3.3V) ---(Pin 6: OMM_DETECT)-----------> TS5A3159 Control-In & ESP32-C6 |
+|                                                                     (Schaltet U4: NC -> NO)       |
 |                                                                                                   |
-|  SA818 PTT Schalteingang ---------(Pin 8: PTT_IO)----------------- Q4 Open-Drain PTT-MOSFET      |
+|  Nativer USB 2.0 D+ (Full-Speed) --(Pin 7: AUDIO_IO_P)-----------> U4 Pin NO -> ESP32-C6 USB_DP  |
+|                                                                     (Bei Analog-OEM: U4 NC -> Mic)|
+|                                                                                                   |
+|  Nativer USB 2.0 D- (Full-Speed) --(Pin 8: PTT_USB_N)------------> ESP32-C6 USB_DN               |
+|                                                                     (Bei Analog-OEM: Q4 PTT_IO)   |
 |                                                                                                   |
 +---------------------------------------------------------------------------------------------------+
 ```

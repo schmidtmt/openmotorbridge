@@ -3,307 +3,454 @@
 tools/sync_cartridge_sch.py
 ===========================
 Synchronizes PCBA 03 (Universal Smart Cartridge) Schematic:
-- Maps all symbols with exact pin coordinates.
-- Implements symmetrical naming: AUDIO_IN_L, AUDIO_IN_R, VOICE_OUT, OMM_DETECT, ACT_1..4, AGND_AUDIO_IN.
-- Adds U4 (TS5A3159DBVR SPDT Analog/Digital Switch in SOT-23-6) for clean hardware switching between
-  Analog Voice (Sena/Cardo) and Digital USB Audio (OMM).
-- Adds R9 (10k pullup on OMM_DETECT to VCC_3V3).
-- Connects PWR_FLAGs to power rails for 0-error KiCad ERC.
+- 100% exact parity with openmotorbridge_pod_cartridge.kicad_pcb.
+- Exact components (35 total):
+  * U1: ESP32-C6-MINI-1U (65 pads, exact GPIO mappings)
+  * U3: ES8388_Codec (QFN-28-1EP, 29 pads)
+  * U4: TS5A3159DBVR SPDT Analog/Digital Switch (SOT-23-6, 6 pads)
+  * U_UWB: DW3110 UWB Transceiver (QFN-16-1EP, 17 pads)
+  * Y_UWB: 38.4MHz Crystal (4 pads: XTAL1, GND, XTAL2, GND)
+  * ANT_UWB: U.FL Receptacle (2 pads: UWB_RF, GND)
+  * J_ACT: 8P Actuators + MP Shield (9 pads: 2x 5V, 4x ACT, 2x GND, MP)
+  * J_AUDIO_PWR: 8P Kelvin Audio/Power + MP Shield (9 pads: GND, 5V, AGND, 2x AUDIO_IN, OMM_DET, AUDIO_IO_P, PTT_USB_N, MP)
+  * J_PROG: 4P Programming Header (4 pads: 3V3, USB_DP, GND, PTT_USB_N)
+  * PAD1, PAD2: Docking Spring Pads (D3.0mm: +5V_IN, GND)
+  * H1..H4: M2 Mounting Holes with Pads (GND)
+  * F1: 1812 Polyfuse (MF-MSMF050-2: +5V_IN -> VCC_5V_PROT)
+  * D1..D4: SOD-323 Freewheeling Diodes (1N4148WS)
+  * Q1..Q4: SOT-23 MOSFETs (AO3400A: Gate, Source=GND, Drain=ACT)
+  * R1..R4: 0603 100R Gate Resistors
+  * R5..R8: 0603 100k Gate Pulldowns
+  * R9: 0603 10k OMM_DETECT Pull-up
+  * C1, C2: 0603 100nF / 0805 10uF Decoupling Caps
 """
 
 import os
-import re
+import sys
 import uuid
-import subprocess
 import json
+import subprocess
 
 SCH_PATH = "hardware/kicad_pod_cartridge/openmotorbridge_pod_cartridge.kicad_sch"
-KICAD_CLI = "/Applications/KiCad/KiCad.app/Contents/MacOS/kicad-cli"
+PCB_PATH = "hardware/kicad_pod_cartridge/openmotorbridge_pod_cartridge.kicad_pcb"
 
 def u():
     return str(uuid.uuid4())
 
-def main():
-    with open(SCH_PATH, "r") as f:
-        text = f.read()
+def generate_schematic():
+    with open('/tmp/pcba03_pcb_exact.json') as f:
+        comps = json.load(f)
 
-    # 1. Clean out any previous added lines
-    text = re.sub(r'\t\(global_label\s+\"POD_[^\n]+\n', '', text)
-    j_prog_idx = text.find('"J_PROG"')
-    end_sym_idx = text.find('\n\t)', j_prog_idx) + 3
-    clean_base = text[:end_sym_idx]
+    sch = []
+    sch.append('(kicad_sch')
+    sch.append('\t(version 20260306)')
+    sch.append('\t(generator "eeschema")')
+    sch.append('\t(generator_version "10.0")')
+    sch.append(f'\t(uuid "{u()}")')
+    sch.append('\t(paper "A3")')
+    sch.append('\t(title_block')
+    sch.append('\t\t(title "OpenMotorBridge PCBA 03 - Universal Smart Modular Cartridge Rev 3.0")')
+    sch.append('\t\t(date "2026-10-15")')
+    sch.append('\t\t(rev "v3.0")')
+    sch.append('\t\t(company "OpenMotorBridge Open Source Hardware")')
+    sch.append('\t\t(comment 1 "ESP32-C6-MINI-1U Host MCU + Everest Semi ES8388 I2S Codec + Qorvo DW3110 UWB")')
+    sch.append('\t\t(comment 2 "TS5A3159 SPDT Audio/USB Switch + 4x AO3400A Actuator MOSFETs + 8P Kelvin Docking")')
+    sch.append('\t)')
 
-    # Ensure lib_symbols has TS5A3159_SPDT and PWR_FLAG
-    if 'Switch:TS5A3159_SPDT' not in clean_base:
-        ts5a_sym = '''\t\t(symbol "Switch:TS5A3159_SPDT"
-\t\t\t(property "Reference" "U" (at -7.62 7.62 0) (effects (font (size 1.27 1.27)) (justify left)))
-\t\t\t(property "Value" "TS5A3159DBVR" (at -7.62 -7.62 0) (effects (font (size 1.27 1.27)) (justify left)))
-\t\t\t(property "Footprint" "Package_TO_SOT_SMD:SOT-23-6" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
-\t\t\t(property "LCSC" "C12933" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
-\t\t\t(pin passive line (at -10.16 2.54 0) (length 2.54) (name "NO" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
-\t\t\t(pin passive line (at 10.16 2.54 180) (length 2.54) (name "COM" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
-\t\t\t(pin input line (at -10.16 -2.54 0) (length 2.54) (name "IN" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
-\t\t\t(pin power_in line (at 0 7.62 270) (length 2.54) (name "VCC" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27)))))
-\t\t\t(pin power_in line (at 0 -7.62 90) (length 2.54) (name "GND" (effects (font (size 1.27 1.27)))) (number "5" (effects (font (size 1.27 1.27)))))
-\t\t\t(pin passive line (at -10.16 0 0) (length 2.54) (name "NC" (effects (font (size 1.27 1.27)))) (number "6" (effects (font (size 1.27 1.27)))))
-\t\t)
-'''
-        insert_pt = clean_base.find('(symbol "Device:C_Small"')
-        clean_base = clean_base[:insert_pt] + ts5a_sym + clean_base[insert_pt:]
+    # --- LIB SYMBOLS ---
+    sch.append('\t(lib_symbols')
 
-    if 'power:PWR_FLAG' not in clean_base:
-        pwr_sym = '''\t\t(symbol "power:PWR_FLAG"
+    # power:PWR_FLAG
+    sch.append('''\t\t(symbol "power:PWR_FLAG"
 \t\t\t(property "Reference" "#FLG" (at 0 1.905 0) (effects (font (size 1.27 1.27)) hide))
 \t\t\t(property "Value" "PWR_FLAG" (at 0 3.81 0) (effects (font (size 1.27 1.27))))
 \t\t\t(property "Footprint" "" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
 \t\t\t(pin power_out line (at 0 0 90) (length 0) (name "pwr" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
-\t\t)
-'''
-        insert_pt = clean_base.find('(symbol "Device:C_Small"')
-        clean_base = clean_base[:insert_pt] + pwr_sym + clean_base[insert_pt:]
+\t\t)''')
 
-    # Parse lib_symbols
-    lib_part = clean_base[clean_base.find('(lib_symbols'):clean_base.find('(symbol (lib_id')]
-    sym_defs = {}
-    for m in re.finditer(r'\(symbol\s+\"([^\"]+)\"(.*?)(?=\(symbol\s+\"|\Z)', lib_part, re.DOTALL):
-        name = m.group(1)
-        body = m.group(2)
-        pins = re.findall(r'\(pin\s+(\w+)\s+(\w+)\s+\(at\s+([-\d\.]+)\s+([-\d\.]+)\s+([-\d\.]+)\).*?\(name\s+\"([^\"]+)\".*?\(number\s+\"([^\"]+)\"', body, re.DOTALL)
-        if pins:
-            sym_defs[name] = {pnum: (float(px), float(py), float(prot), pname) for ptype, pstyle, px, py, prot, pname, pnum in pins}
+    # MountingHole
+    sch.append('''\t\t(symbol "Mechanical:MountingHole_Pad"
+\t\t\t(property "Reference" "H" (at 0 2.54 0) (effects (font (size 1.27 1.27))))
+\t\t\t(property "Value" "MountingHole_Pad" (at 0 -2.54 0) (effects (font (size 1.27 1.27))))
+\t\t\t(property "Footprint" "MountingHole:MountingHole_2.2mm_M2_Pad" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+\t\t\t(pin passive line (at -5.08 0 0) (length 2.54) (name "1" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
+\t\t)''')
 
-    if 'ES8388_0_1' in sym_defs:
-        sym_defs['Audio:ES8388'] = sym_defs['ES8388_0_1']
+    # Conn_01x01 (PAD1, PAD2)
+    sch.append('''\t\t(symbol "Connector:Conn_01x01"
+\t\t\t(property "Reference" "PAD" (at 0 2.54 0) (effects (font (size 1.27 1.27))))
+\t\t\t(property "Value" "Conn_01x01" (at 0 -2.54 0) (effects (font (size 1.27 1.27))))
+\t\t\t(property "Footprint" "TestPoint:TestPoint_Pad_D3.0mm_OD3.5mm" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+\t\t\t(pin passive line (at -5.08 0 0) (length 2.54) (name "1" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
+\t\t)''')
 
-    # Symbol instances
-    sym_positions = {}
-    for m in re.finditer(r'\(symbol\s+\(lib_id\s+\"([^\"]+)\"\)\s+\(at\s+([-\d\.]+)\s+([-\d\.]+)\s+([-\d\.]+)\).*?\(property\s+\"Reference\"\s+\"([^\"]+)\"', clean_base, re.DOTALL):
-        lib_id, x, y, rot, ref = m.groups()
-        sym_positions[ref] = (lib_id, float(x), float(y), float(rot))
+    # U.FL (ANT_UWB)
+    sch.append('''\t\t(symbol "Connector_Coaxial:U.FL"
+\t\t\t(property "Reference" "ANT" (at 0 2.54 0) (effects (font (size 1.27 1.27))))
+\t\t\t(property "Value" "U.FL" (at 0 -2.54 0) (effects (font (size 1.27 1.27))))
+\t\t\t(property "Footprint" "Connector_Coaxial:U.FL_Hirose_U.FL-R-SMT-1_Vertical" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+\t\t\t(pin passive line (at -5.08 0 0) (length 2.54) (name "RF" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
+\t\t\t(pin passive line (at 5.08 0 180) (length 2.54) (name "GND" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
+\t\t)''')
 
-    # Add U4 and R9 positions
-    sym_positions['U4'] = ('Switch:TS5A3159_SPDT', 90.0, 130.0, 0.0)
-    sym_positions['R9'] = ('Device:R_Small', 100.0, 130.0, 0.0)
+    # Crystal 4Pin
+    sch.append('''\t\t(symbol "Device:Crystal_4Pin"
+\t\t\t(property "Reference" "Y" (at 0 5.08 0) (effects (font (size 1.27 1.27))))
+\t\t\t(property "Value" "Crystal_4Pin" (at 0 -5.08 0) (effects (font (size 1.27 1.27))))
+\t\t\t(property "Footprint" "Crystal:Crystal_SMD_2016-4Pin_2.0x1.6mm" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+\t\t\t(pin passive line (at -5.08 2.54 0) (length 2.54) (name "1" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
+\t\t\t(pin passive line (at -5.08 -2.54 0) (length 2.54) (name "2" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
+\t\t\t(pin passive line (at 5.08 2.54 180) (length 2.54) (name "3" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
+\t\t\t(pin passive line (at 5.08 -2.54 180) (length 2.54) (name "4" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27)))))
+\t\t)''')
 
-    def get_pin_pos(ref, pnum):
-        lib_id, sx, sy, srot = sym_positions[ref]
-        px, py, prot, pname = sym_defs[lib_id][str(pnum)]
-        return (round(sx + px, 2), round(sy - py, 2))
+    # DW3110 QFN-16-1EP
+    dw_pins = []
+    dw_pin_names = {
+        "1": "GND", "2": "XTAL1", "3": "XTAL2", "4": "GND", "5": "GND", "6": "GND",
+        "7": "SCK", "8": "MISO", "9": "MOSI", "10": "CS", "11": "GND", "12": "RSTn",
+        "13": "IRQ", "14": "VDD3V3", "15": "RF", "16": "GND", "17": "EP"
+    }
+    for i in range(1, 18):
+        s_i = str(i)
+        name = dw_pin_names.get(s_i, f"P{i}")
+        y_pos = 20.32 - (i - 1) * 2.54
+        dw_pins.append(f'\t\t\t(pin passive line (at -10.16 {y_pos:.2f} 0) (length 2.54) (name "{name}" (effects (font (size 1.27 1.27)))) (number "{s_i}" (effects (font (size 1.27 1.27)))))')
 
-    pin_nets = {
-        # Power & decoupling
-        ('PAD1', '1'): '+5V_IN',
-        ('PAD2', '1'): 'GND',
-        ('F1', '1'): '+5V_IN',
-        ('F1', '2'): 'VCC_5V_PROT',
-        ('C1', '1'): 'VCC_3V3',
-        ('C1', '2'): 'GND',
-        ('C2', '1'): 'VCC_3V3',
-        ('C2', '2'): 'GND',
+    dw_pins_str = '\n'.join(dw_pins)
+    sch.append(f'''\t\t(symbol "RF_Module:DW3110"
+\t\t\t(property "Reference" "U" (at 0 25.4 0) (effects (font (size 1.27 1.27))))
+\t\t\t(property "Value" "DW3110" (at 0 -25.4 0) (effects (font (size 1.27 1.27))))
+\t\t\t(property "Footprint" "Package_DFN_QFN:QFN-16-1EP_3x3mm_P0.5mm_EP1.7x1.7mm_ThermalVias" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+{dw_pins_str}
+\t\t)''')
 
-        # U1 (ESP32-C6-MINI-1U)
-        ('U1', '1'): 'GND',
-        ('U1', '2'): 'VCC_3V3',
-        ('U1', '3'): 'VCC_3V3',
-        ('U1', '4'): 'UWB_SCK',
-        ('U1', '5'): 'UWB_MOSI',
-        ('U1', '6'): 'UWB_MISO',
-        ('U1', '7'): 'UWB_CS',
-        ('U1', '8'): 'ACT3_GATE',
-        ('U1', '9'): 'ACT4_GATE',
-        ('U1', '10'): 'UWB_IRQ',
-        ('U1', '11'): 'UWB_RST',
-        ('U1', '14'): 'PTT_USB_N',
-        ('U1', '15'): 'USB_DP',
-        ('U1', '16'): 'OMM_DETECT',
-        ('U1', '17'): 'I2C_SCL',
-        ('U1', '18'): 'ACT1_GATE',
-        ('U1', '19'): 'ACT2_GATE',
-        ('U1', '20'): 'I2S_MCLK',
-        ('U1', '21'): 'I2S_BCLK',
-        ('U1', '22'): 'I2S_WS',
-        ('U1', '23'): 'I2S_DOUT',
-        ('U1', '24'): 'I2S_DIN',
-        ('U1', '25'): 'I2C_SDA',
-        ('U1', '26'): 'GND',
-        ('U1', '27'): 'GND',
+    # ES8388 QFN-28-1EP
+    es_pins = []
+    es_pin_names = {
+        "1": "MCLK", "2": "BCLK", "3": "WS", "4": "DIN", "5": "DOUT", "6": "DVDD",
+        "7": "DGND", "8": "LIN", "9": "RIN", "10": "AGND", "11": "AVDD", "12": "LOUT",
+        "13": "ROUT", "14": "AGND", "15": "AGND", "16": "AGND", "17": "PVDD", "18": "PGND",
+        "19": "SDA", "20": "SCL", "21": "DVDD", "22": "DGND", "23": "DGND", "24": "DGND",
+        "25": "DGND", "26": "DGND", "27": "PVDD", "28": "PGND", "29": "EP"
+    }
+    for i in range(1, 30):
+        s_i = str(i)
+        name = es_pin_names.get(s_i, f"P{i}")
+        y_pos = 35.56 - (i - 1) * 2.54
+        es_pins.append(f'\t\t\t(pin passive line (at -10.16 {y_pos:.2f} 0) (length 2.54) (name "{name}" (effects (font (size 1.27 1.27)))) (number "{s_i}" (effects (font (size 1.27 1.27)))))')
 
-        # U_UWB (DW3110)
-        ('U_UWB', '1'): 'VCC_3V3',
-        ('U_UWB', '7'): 'UWB_SCK',
-        ('U_UWB', '8'): 'UWB_MISO',
-        ('U_UWB', '9'): 'UWB_MOSI',
-        ('U_UWB', '10'): 'UWB_CS',
-        ('U_UWB', '12'): 'UWB_RST',
-        ('U_UWB', '13'): 'UWB_IRQ',
-        ('U_UWB', '16'): 'GND',
+    es_pins_str = '\n'.join(es_pins)
+    sch.append(f'''\t\t(symbol "Audio:ES8388_Codec"
+\t\t\t(property "Reference" "U" (at 0 40.64 0) (effects (font (size 1.27 1.27))))
+\t\t\t(property "Value" "ES8388_Codec" (at 0 -40.64 0) (effects (font (size 1.27 1.27))))
+\t\t\t(property "Footprint" "Package_DFN_QFN:QFN-28-1EP_4x4mm_P0.4mm_EP2.4x2.4mm" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+{es_pins_str}
+\t\t)''')
 
-        # U3 (ES8388)
-        ('U3', '1'): 'VCC_3V3',
-        ('U3', '2'): 'I2S_MCLK',
-        ('U3', '3'): 'I2S_BCLK',
-        ('U3', '4'): 'I2S_WS',
-        ('U3', '5'): 'I2S_DIN',
-        ('U3', '6'): 'I2S_DOUT',
-        ('U3', '7'): 'I2C_SDA',
-        ('U3', '8'): 'I2C_SCL',
-        ('U3', '9'): 'AUDIO_IN_L',
-        ('U3', '10'): 'AUDIO_IN_R',
-        ('U3', '11'): 'VOICE_OUT',
-        ('U3', '12'): 'AGND_AUDIO_IN',
-        ('U3', '13'): 'GND',
+    # ESP32-C6-MINI-1U (65 pads)
+    c6_pins = []
+    c6_pin_names = {
+        "1": "GND", "2": "3V3", "3": "EN", "4": "IO4", "5": "IO5", "6": "IO6", "7": "IO7",
+        "8": "IO2", "9": "IO3", "10": "IO8", "11": "IO9", "12": "GND", "13": "GND",
+        "14": "IO12", "15": "IO13", "16": "IO14", "17": "IO15", "18": "IO16", "19": "IO17",
+        "20": "IO18", "21": "IO19", "22": "IO20", "23": "IO21", "24": "IO22", "25": "IO23"
+    }
+    for i in range(1, 66):
+        s_i = str(i)
+        name = c6_pin_names.get(s_i, "GND")
+        y_pos = 81.28 - (i - 1) * 2.54
+        c6_pins.append(f'\t\t\t(pin passive line (at -10.16 {y_pos:.2f} 0) (length 2.54) (name "{name}" (effects (font (size 1.27 1.27)))) (number "{s_i}" (effects (font (size 1.27 1.27)))))')
 
-        # U4 (TS5A3159 SPDT Switch)
-        ('U4', '1'): 'USB_DP',
-        ('U4', '2'): 'AUDIO_IO_P',
-        ('U4', '3'): 'OMM_DETECT',
-        ('U4', '4'): 'VCC_3V3',
-        ('U4', '5'): 'GND',
-        ('U4', '6'): 'VOICE_OUT',
+    c6_pins_str = '\n'.join(c6_pins)
+    sch.append(f'''\t\t(symbol "MCU:ESP32-C6-MINI-1U"
+\t\t\t(property "Reference" "U" (at 0 86.36 0) (effects (font (size 1.27 1.27))))
+\t\t\t(property "Value" "ESP32-C6-MINI-1U" (at 0 -86.36 0) (effects (font (size 1.27 1.27))))
+\t\t\t(property "Footprint" "RF_Module:ESP32-S2-MINI-1U" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+{c6_pins_str}
+\t\t)''')
 
-        # R9 (OMM_DETECT pullup)
-        ('R9', '1'): 'VCC_3V3',
-        ('R9', '2'): 'OMM_DETECT',
+    # Connector_JST 8P + MP
+    sch.append('''\t\t(symbol "Connector_JST:JST_SH_SM08B_Shielded"
+\t\t\t(property "Reference" "J" (at 0 12.7 0) (effects (font (size 1.27 1.27))))
+\t\t\t(property "Value" "Conn_01x08_Shielded" (at 0 -12.7 0) (effects (font (size 1.27 1.27))))
+\t\t\t(property "Footprint" "Connector_JST:JST_SH_SM08B-SRSS-TB_1x08-1MP_P1.00mm_Horizontal" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+\t\t\t(pin passive line (at -5.08 8.89 0) (length 2.54) (name "1" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
+\t\t\t(pin passive line (at -5.08 6.35 0) (length 2.54) (name "2" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
+\t\t\t(pin passive line (at -5.08 3.81 0) (length 2.54) (name "3" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
+\t\t\t(pin passive line (at -5.08 1.27 0) (length 2.54) (name "4" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27)))))
+\t\t\t(pin passive line (at -5.08 -1.27 0) (length 2.54) (name "5" (effects (font (size 1.27 1.27)))) (number "5" (effects (font (size 1.27 1.27)))))
+\t\t\t(pin passive line (at -5.08 -3.81 0) (length 2.54) (name "6" (effects (font (size 1.27 1.27)))) (number "6" (effects (font (size 1.27 1.27)))))
+\t\t\t(pin passive line (at -5.08 -6.35 0) (length 2.54) (name "7" (effects (font (size 1.27 1.27)))) (number "7" (effects (font (size 1.27 1.27)))))
+\t\t\t(pin passive line (at -5.08 -8.89 0) (length 2.54) (name "8" (effects (font (size 1.27 1.27)))) (number "8" (effects (font (size 1.27 1.27)))))
+\t\t\t(pin passive line (at 5.08 0 180) (length 2.54) (name "MP" (effects (font (size 1.27 1.27)))) (number "MP" (effects (font (size 1.27 1.27)))))
+\t\t)''')
 
-        # J_AUDIO_PWR
-        ('J_AUDIO_PWR', '1'): 'GND',
-        ('J_AUDIO_PWR', '2'): 'VCC_5V_PROT',
-        ('J_AUDIO_PWR', '3'): 'AGND_AUDIO_IN',
-        ('J_AUDIO_PWR', '4'): 'AUDIO_IN_L',
-        ('J_AUDIO_PWR', '5'): 'AUDIO_IN_R',
-        ('J_AUDIO_PWR', '6'): 'OMM_DETECT',
-        ('J_AUDIO_PWR', '7'): 'AUDIO_IO_P',
-        ('J_AUDIO_PWR', '8'): 'PTT_USB_N',
+    # Connector_PinHeader 4P
+    sch.append('''\t\t(symbol "Connector_PinHeader:PinHeader_1x04"
+\t\t\t(property "Reference" "J" (at 0 6.35 0) (effects (font (size 1.27 1.27))))
+\t\t\t(property "Value" "PinHeader_1x04" (at 0 -6.35 0) (effects (font (size 1.27 1.27))))
+\t\t\t(property "Footprint" "Connector_PinHeader_1.27mm:PinHeader_1x04_P1.27mm_Vertical_SMD_Pin1Left" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+\t\t\t(pin passive line (at -5.08 3.81 0) (length 2.54) (name "1" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
+\t\t\t(pin passive line (at -5.08 1.27 0) (length 2.54) (name "2" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
+\t\t\t(pin passive line (at -5.08 -1.27 0) (length 2.54) (name "3" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
+\t\t\t(pin passive line (at -5.08 -3.81 0) (length 2.54) (name "4" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27)))))
+\t\t)''')
 
-        # J_ACT
-        ('J_ACT', '1'): 'VCC_5V_PROT',
-        ('J_ACT', '2'): 'ACT_1',
-        ('J_ACT', '3'): 'VCC_5V_PROT',
-        ('J_ACT', '4'): 'ACT_2',
-        ('J_ACT', '5'): 'VCC_5V_PROT',
-        ('J_ACT', '6'): 'ACT_3',
-        ('J_ACT', '7'): 'VCC_5V_PROT',
-        ('J_ACT', '8'): 'ACT_4',
+    # Switch:TS5A3159_SPDT
+    sch.append('''\t\t(symbol "Switch:TS5A3159_SPDT"
+\t\t\t(property "Reference" "U" (at 0 7.62 0) (effects (font (size 1.27 1.27))))
+\t\t\t(property "Value" "TS5A3159DBVR" (at 0 -7.62 0) (effects (font (size 1.27 1.27))))
+\t\t\t(property "Footprint" "Package_TO_SOT_SMD:SOT-23-6" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+\t\t\t(pin passive line (at -5.08 2.54 0) (length 2.54) (name "NO" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
+\t\t\t(pin passive line (at 5.08 2.54 180) (length 2.54) (name "COM" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
+\t\t\t(pin passive line (at -5.08 -2.54 0) (length 2.54) (name "IN" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
+\t\t\t(pin passive line (at 0 5.08 270) (length 2.54) (name "VCC" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27)))))
+\t\t\t(pin passive line (at 0 -5.08 90) (length 2.54) (name "GND" (effects (font (size 1.27 1.27)))) (number "5" (effects (font (size 1.27 1.27)))))
+\t\t\t(pin passive line (at -5.08 0 0) (length 2.54) (name "NC" (effects (font (size 1.27 1.27)))) (number "6" (effects (font (size 1.27 1.27)))))
+\t\t)''')
 
-        # J_PROG
-        ('J_PROG', '1'): 'VCC_3V3',
-        ('J_PROG', '2'): 'USB_DP',
-        ('J_PROG', '3'): 'PTT_USB_N',
-        ('J_PROG', '4'): 'GND',
+    # Transistor_FET:AO3400A
+    sch.append('''\t\t(symbol "Transistor_FET:AO3400A"
+\t\t\t(property "Reference" "Q" (at 0 5.08 0) (effects (font (size 1.27 1.27))))
+\t\t\t(property "Value" "AO3400A" (at 0 -5.08 0) (effects (font (size 1.27 1.27))))
+\t\t\t(property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+\t\t\t(pin passive line (at -5.08 0 0) (length 2.54) (name "G" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
+\t\t\t(pin passive line (at 2.54 -5.08 90) (length 2.54) (name "S" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
+\t\t\t(pin passive line (at 2.54 5.08 270) (length 2.54) (name "D" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
+\t\t)''')
 
-        # Actuators
-        ('R1', '1'): 'ACT1_GATE',
-        ('R5', '2'): 'GND',
-        ('Q1', '2'): 'GND',
-        ('Q1', '3'): 'ACT_1',
-        ('D1', '1'): 'ACT_1',
-        ('D1', '2'): 'VCC_5V_PROT',
+    # Device:R_Small
+    sch.append('''\t\t(symbol "Device:R_Small"
+\t\t\t(property "Reference" "R" (at 0 2.54 0) (effects (font (size 1.27 1.27))))
+\t\t\t(property "Value" "R_Small" (at 0 -2.54 0) (effects (font (size 1.27 1.27))))
+\t\t\t(property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+\t\t\t(pin passive line (at 0 2.54 270) (length 2.54) (name "~" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
+\t\t\t(pin passive line (at 0 -2.54 90) (length 2.54) (name "~" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
+\t\t)''')
 
-        ('R2', '1'): 'ACT2_GATE',
-        ('R6', '2'): 'GND',
-        ('Q2', '2'): 'GND',
-        ('Q2', '3'): 'ACT_2',
-        ('D2', '1'): 'ACT_2',
-        ('D2', '2'): 'VCC_5V_PROT',
+    # Device:C_Small
+    sch.append('''\t\t(symbol "Device:C_Small"
+\t\t\t(property "Reference" "C" (at 0 2.54 0) (effects (font (size 1.27 1.27))))
+\t\t\t(property "Value" "C_Small" (at 0 -2.54 0) (effects (font (size 1.27 1.27))))
+\t\t\t(property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+\t\t\t(pin passive line (at 0 2.54 270) (length 2.54) (name "~" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
+\t\t\t(pin passive line (at 0 -2.54 90) (length 2.54) (name "~" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
+\t\t)''')
 
-        ('R3', '1'): 'ACT3_GATE',
-        ('R7', '2'): 'GND',
-        ('Q3', '2'): 'GND',
-        ('Q3', '3'): 'ACT_3',
-        ('D3', '1'): 'ACT_3',
-        ('D3', '2'): 'VCC_5V_PROT',
+    # Device:Polyfuse_Small
+    sch.append('''\t\t(symbol "Device:Polyfuse_Small"
+\t\t\t(property "Reference" "F" (at 0 2.54 0) (effects (font (size 1.27 1.27))))
+\t\t\t(property "Value" "Polyfuse_Small" (at 0 -2.54 0) (effects (font (size 1.27 1.27))))
+\t\t\t(property "Footprint" "Fuse:Fuse_1812_4532Metric" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+\t\t\t(pin passive line (at -5.08 0 0) (length 2.54) (name "~" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
+\t\t\t(pin passive line (at 5.08 0 180) (length 2.54) (name "~" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
+\t\t)''')
 
-        ('R4', '1'): 'ACT4_GATE',
-        ('R8', '2'): 'GND',
-        ('Q4', '2'): 'GND',
-        ('Q4', '3'): 'ACT_4',
-        ('D4', '1'): 'ACT_4',
-        ('D4', '2'): 'VCC_5V_PROT',
+    # Diode:1N4148WS
+    sch.append('''\t\t(symbol "Diode:1N4148WS"
+\t\t\t(property "Reference" "D" (at 0 2.54 0) (effects (font (size 1.27 1.27))))
+\t\t\t(property "Value" "1N4148WS" (at 0 -2.54 0) (effects (font (size 1.27 1.27))))
+\t\t\t(property "Footprint" "Diode_SMD:D_SOD-323" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+\t\t\t(pin passive line (at -5.08 0 0) (length 2.54) (name "A" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
+\t\t\t(pin passive line (at 5.08 0 180) (length 2.54) (name "K" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
+\t\t)''')
+
+    sch.append('\t)') # end lib_symbols
+
+    # --- INSTANCES & WIRING ---
+    sym_map = {
+        'ANT_UWB': 'Connector_Coaxial:U.FL',
+        'C1': 'Device:C_Small',
+        'C2': 'Device:C_Small',
+        'D1': 'Diode:1N4148WS',
+        'D2': 'Diode:1N4148WS',
+        'D3': 'Diode:1N4148WS',
+        'D4': 'Diode:1N4148WS',
+        'F1': 'Device:Polyfuse_Small',
+        'H1': 'Mechanical:MountingHole_Pad',
+        'H2': 'Mechanical:MountingHole_Pad',
+        'H3': 'Mechanical:MountingHole_Pad',
+        'H4': 'Mechanical:MountingHole_Pad',
+        'J_ACT': 'Connector_JST:JST_SH_SM08B_Shielded',
+        'J_AUDIO_PWR': 'Connector_JST:JST_SH_SM08B_Shielded',
+        'J_PROG': 'Connector_PinHeader:PinHeader_1x04',
+        'PAD1': 'Connector:Conn_01x01',
+        'PAD2': 'Connector:Conn_01x01',
+        'Q1': 'Transistor_FET:AO3400A',
+        'Q2': 'Transistor_FET:AO3400A',
+        'Q3': 'Transistor_FET:AO3400A',
+        'Q4': 'Transistor_FET:AO3400A',
+        'R1': 'Device:R_Small',
+        'R2': 'Device:R_Small',
+        'R3': 'Device:R_Small',
+        'R4': 'Device:R_Small',
+        'R5': 'Device:R_Small',
+        'R6': 'Device:R_Small',
+        'R7': 'Device:R_Small',
+        'R8': 'Device:R_Small',
+        'R9': 'Device:R_Small',
+        'U1': 'MCU:ESP32-C6-MINI-1U',
+        'U3': 'Audio:ES8388_Codec',
+        'U4': 'Switch:TS5A3159_SPDT',
+        'U_UWB': 'RF_Module:DW3110',
+        'Y_UWB': 'Device:Crystal_4Pin'
     }
 
-    wires = [
-        (get_pin_pos('R1', '2'), get_pin_pos('Q1', '1')),
-        (get_pin_pos('R5', '1'), get_pin_pos('Q1', '1')),
-        (get_pin_pos('R2', '2'), get_pin_pos('Q2', '1')),
-        (get_pin_pos('R6', '1'), get_pin_pos('Q2', '1')),
-        (get_pin_pos('R3', '2'), get_pin_pos('Q3', '1')),
-        (get_pin_pos('R7', '1'), get_pin_pos('Q3', '1')),
-        (get_pin_pos('R4', '2'), get_pin_pos('Q4', '1')),
-        (get_pin_pos('R8', '1'), get_pin_pos('Q4', '1')),
-        (get_pin_pos('U_UWB', '2'), get_pin_pos('Y_UWB', '1')),
-        (get_pin_pos('U_UWB', '3'), get_pin_pos('Y_UWB', '3')),
-        (get_pin_pos('U_UWB', '15'), get_pin_pos('ANT_UWB', '1')),
-    ]
+    # Layout coordinate mapping for readability
+    positions = {
+        'PAD1': (40.0, 40.0),
+        'PAD2': (40.0, 55.0),
+        'F1': (65.0, 40.0),
+        'C1': (85.0, 40.0),
+        'C2': (105.0, 40.0),
+        'H1': (40.0, 70.0),
+        'H2': (55.0, 70.0),
+        'H3': (70.0, 70.0),
+        'H4': (85.0, 70.0),
 
-    elem_lines = []
-    for (ref, pnum), net in pin_nets.items():
-        pos = get_pin_pos(ref, pnum)
-        rot = 180 if pos[0] >= 110 else 0
-        just = 'right' if rot == 180 else 'left'
-        elem_lines.append(f'\t(global_label "{net}" (shape passive) (at {pos[0]:.2f} {pos[1]:.2f} {rot}) (effects (font (size 1.27 1.27)) (justify {just})))\n')
+        'J_PROG': (40.0, 100.0),
+        'J_ACT': (75.0, 100.0),
+        'J_AUDIO_PWR': (110.0, 100.0),
 
-    for (p1, p2) in wires:
-        elem_lines.append(f'\t(wire (pts (xy {p1[0]:.2f} {p1[1]:.2f}) (xy {p2[0]:.2f} {p2[1]:.2f})) (stroke (width 0) (type default)))\n')
+        'U4': (145.0, 100.0),
+        'R9': (165.0, 100.0),
 
-    p_y2 = get_pin_pos('Y_UWB', '2')
-    p_y4 = get_pin_pos('Y_UWB', '4')
-    elem_lines.append(f'\t(global_label "GND" (shape passive) (at {p_y2[0]:.2f} {p_y2[1]:.2f} 180) (effects (font (size 1.27 1.27)) (justify right)))\n')
-    elem_lines.append(f'\t(global_label "GND" (shape passive) (at {p_y4[0]:.2f} {p_y4[1]:.2f} 180) (effects (font (size 1.27 1.27)) (justify right)))\n')
+        'D1': (40.0, 140.0),
+        'D2': (65.0, 140.0),
+        'D3': (90.0, 140.0),
+        'D4': (115.0, 140.0),
 
-    # Add U4 and R9 symbol instances
-    u_u4 = u()
-    u_r9 = u()
-    added_symbols = f'''
-\t(symbol (lib_id "Switch:TS5A3159_SPDT") (at 90.0 130.0 0) (unit 1)
-\t\t(in_bom yes) (on_board yes) (dnp no)
-\t\t(uuid "{u_u4}")
-\t\t(property "Reference" "U4" (at 90.0 122.0 0) (effects (font (size 1.27 1.27))))
-\t\t(property "Value" "TS5A3159DBVR" (at 90.0 125.0 0) (effects (font (size 1.27 1.27))))
-\t\t(property "Footprint" "Package_TO_SOT_SMD:SOT-23-6" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
-\t\t(property "LCSC" "C12933" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
-\t\t(pin "1" (uuid "{u()}"))
-\t\t(pin "2" (uuid "{u()}"))
-\t\t(pin "3" (uuid "{u()}"))
-\t\t(pin "4" (uuid "{u()}"))
-\t\t(pin "5" (uuid "{u()}"))
-\t\t(pin "6" (uuid "{u()}"))
-\t)
+        'Q1': (40.0, 160.0),
+        'Q2': (65.0, 160.0),
+        'Q3': (90.0, 160.0),
+        'Q4': (115.0, 160.0),
 
-\t(symbol (lib_id "Device:R_Small") (at 100.0 130.0 0) (unit 1)
-\t\t(in_bom yes) (on_board yes) (dnp no)
-\t\t(uuid "{u_r9}")
-\t\t(property "Reference" "R9" (at 100.0 122.0 0) (effects (font (size 1.27 1.27))))
-\t\t(property "Value" "10k" (at 100.0 125.0 0) (effects (font (size 1.27 1.27))))
-\t\t(property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
-\t\t(property "LCSC" "C25804" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
-\t\t(pin "1" (uuid "{u()}"))
-\t\t(pin "2" (uuid "{u()}"))
-\t)
+        'R1': (40.0, 180.0),
+        'R2': (65.0, 180.0),
+        'R3': (90.0, 180.0),
+        'R4': (115.0, 180.0),
 
-\t(symbol (lib_id "power:PWR_FLAG") (at 45.0 40.0 0) (unit 1)
+        'R5': (40.0, 195.0),
+        'R6': (65.0, 195.0),
+        'R7': (90.0, 195.0),
+        'R8': (115.0, 195.0),
+
+        'Y_UWB': (145.0, 140.0),
+        'ANT_UWB': (165.0, 140.0),
+        'U_UWB': (155.0, 180.0),
+
+        'U3': (210.0, 100.0),
+        'U1': (280.0, 120.0),
+    }
+
+    # Pin offsets for symbol instances
+    # (relative to instance at x, y)
+    def get_pin_offset(sym_type, pnum):
+        if sym_type == 'power:PWR_FLAG':
+            return (0.0, 0.0)
+        elif sym_type in ('Mechanical:MountingHole_Pad', 'Connector:Conn_01x01'):
+            return (-5.08, 0.0)
+        elif sym_type == 'Connector_Coaxial:U.FL':
+            return (-5.08, 0.0) if pnum == '1' else (5.08, 0.0)
+        elif sym_type == 'Device:Crystal_4Pin':
+            return {'1': (-5.08, -2.54), '2': (-5.08, 2.54), '3': (5.08, -2.54), '4': (5.08, 2.54)}[pnum]
+        elif sym_type == 'Device:Polyfuse_Small':
+            return (-5.08, 0.0) if pnum == '1' else (5.08, 0.0)
+        elif sym_type == 'Diode:1N4148WS':
+            return (-5.08, 0.0) if pnum == '1' else (5.08, 0.0)
+        elif sym_type in ('Device:R_Small', 'Device:C_Small'):
+            return (0.0, -2.54) if pnum == '1' else (0.0, 2.54)
+        elif sym_type == 'Transistor_FET:AO3400A':
+            return {'1': (-5.08, 0.0), '2': (2.54, 5.08), '3': (2.54, -5.08)}[pnum]
+        elif sym_type == 'Switch:TS5A3159_SPDT':
+            return {'1': (-5.08, -2.54), '2': (5.08, -2.54), '3': (-5.08, 2.54), '4': (0.0, -5.08), '5': (0.0, 5.08), '6': (-5.08, 0.0)}[pnum]
+        elif sym_type == 'Connector_PinHeader:PinHeader_1x04':
+            return {'1': (-5.08, -3.81), '2': (-5.08, -1.27), '3': (-5.08, 1.27), '4': (-5.08, 3.81)}[pnum]
+        elif sym_type == 'Connector_JST:JST_SH_SM08B_Shielded':
+            y_offsets = {'1': -8.89, '2': -6.35, '3': -3.81, '4': -1.27, '5': 1.27, '6': 3.81, '7': 6.35, '8': 8.89}
+            if pnum in y_offsets:
+                return (-5.08, y_offsets[pnum])
+            return (5.08, 0.0) # MP
+        elif sym_type == 'RF_Module:DW3110':
+            i = int(pnum)
+            return (-10.16, -(20.32 - (i - 1) * 2.54))
+        elif sym_type == 'Audio:ES8388_Codec':
+            i = int(pnum)
+            return (-10.16, -(35.56 - (i - 1) * 2.54))
+        elif sym_type == 'MCU:ESP32-C6-MINI-1U':
+            i = int(pnum)
+            return (-10.16, -(81.28 - (i - 1) * 2.54))
+        return (-5.08, 0.0)
+
+    # Place each symbol instance and its global labels
+    labels = []
+    for ref in sorted(comps.keys()):
+        c = comps[ref]
+        sym_type = sym_map[ref]
+        pos = positions.get(ref, (50.0, 50.0))
+        val = c['value']
+        fpid = c['fpid']
+
+        sch.append(f'\t(symbol (lib_id "{sym_type}") (at {pos[0]:.2f} {pos[1]:.2f} 0) (unit 1)')
+        sch.append('\t\t(in_bom yes) (on_board yes) (dnp no)')
+        sch.append(f'\t\t(uuid "{u()}")')
+        sch.append(f'\t\t(property "Reference" "{ref}" (at {pos[0]:.2f} {pos[1]-6.0:.2f} 0) (effects (font (size 1.27 1.27))))')
+        sch.append(f'\t\t(property "Value" "{val}" (at {pos[0]:.2f} {pos[1]-3.5:.2f} 0) (effects (font (size 1.27 1.27))))')
+        sch.append(f'\t\t(property "Footprint" "{fpid}" (at {pos[0]:.2f} {pos[1]:.2f} 0) (effects (font (size 1.27 1.27)) hide))')
+
+        for pnum in sorted(c['pads'].keys(), key=lambda x: int(x) if x.isdigit() else 999):
+            sch.append(f'\t\t(pin "{pnum}" (uuid "{u()}"))')
+            net = c['pads'][pnum]
+            if net:
+                offset = get_pin_offset(sym_type, pnum)
+                pin_x = pos[0] + offset[0]
+                pin_y = pos[1] + offset[1]
+                rot = 180 if offset[0] < 0 else 0
+                just = 'right' if rot == 180 else 'left'
+                labels.append(f'\t(global_label "{net}" (shape passive) (at {pin_x:.2f} {pin_y:.2f} {rot}) (effects (font (size 1.27 1.27)) (justify {just})))\n')
+
+        sch.append('\t)')
+
+    # Add PWR_FLAGS
+    sch.append(f'''\t(symbol (lib_id "power:PWR_FLAG") (at 30.0 30.0 0) (unit 1)
 \t\t(in_bom yes) (on_board yes) (dnp no)
 \t\t(uuid "{u()}")
-\t\t(property "Reference" "#FLG1" (at 45.0 38.0 0) (effects (font (size 1.27 1.27)) hide))
-\t\t(property "Value" "PWR_FLAG" (at 45.0 42.0 0) (effects (font (size 1.27 1.27))))
+\t\t(property "Reference" "#FLG1" (at 30.0 28.0 0) (effects (font (size 1.27 1.27)) hide))
+\t\t(property "Value" "PWR_FLAG" (at 30.0 32.0 0) (effects (font (size 1.27 1.27))))
+\t\t(property "Footprint" "" (at 30.0 30.0 0) (effects (font (size 1.27 1.27)) hide))
 \t\t(pin "1" (uuid "{u()}"))
-\t)
-\t(global_label "VCC_3V3" (shape passive) (at 45.0 40.0 180) (effects (font (size 1.27 1.27)) (justify right)))
+\t)''')
+    labels.append('\t(global_label "VCC_3V3" (shape passive) (at 30.0 30.0 180) (effects (font (size 1.27 1.27)) (justify right)))\n')
 
-\t(symbol (lib_id "power:PWR_FLAG") (at 45.0 45.0 0) (unit 1)
+    sch.append(f'''\t(symbol (lib_id "power:PWR_FLAG") (at 30.0 35.0 0) (unit 1)
 \t\t(in_bom yes) (on_board yes) (dnp no)
 \t\t(uuid "{u()}")
-\t\t(property "Reference" "#FLG2" (at 45.0 43.0 0) (effects (font (size 1.27 1.27)) hide))
-\t\t(property "Value" "PWR_FLAG" (at 45.0 47.0 0) (effects (font (size 1.27 1.27))))
+\t\t(property "Reference" "#FLG2" (at 30.0 33.0 0) (effects (font (size 1.27 1.27)) hide))
+\t\t(property "Value" "PWR_FLAG" (at 30.0 37.0 0) (effects (font (size 1.27 1.27))))
+\t\t(property "Footprint" "" (at 30.0 35.0 0) (effects (font (size 1.27 1.27)) hide))
 \t\t(pin "1" (uuid "{u()}"))
-\t)
-\t(global_label "GND" (shape passive) (at 45.0 45.0 180) (effects (font (size 1.27 1.27)) (justify right)))
-'''
+\t)''')
+    labels.append('\t(global_label "GND" (shape passive) (at 30.0 35.0 180) (effects (font (size 1.27 1.27)) (justify right)))\n')
 
-    final_sch = clean_base + added_symbols + ''.join(elem_lines) + '\n)\n'
-    with open(SCH_PATH, "w") as f:
-        f.write(final_sch)
+    sch.append(f'''\t(symbol (lib_id "power:PWR_FLAG") (at 30.0 40.0 0) (unit 1)
+\t\t(in_bom yes) (on_board yes) (dnp no)
+\t\t(uuid "{u()}")
+\t\t(property "Reference" "#FLG3" (at 30.0 38.0 0) (effects (font (size 1.27 1.27)) hide))
+\t\t(property "Value" "PWR_FLAG" (at 30.0 42.0 0) (effects (font (size 1.27 1.27))))
+\t\t(property "Footprint" "" (at 30.0 40.0 0) (effects (font (size 1.27 1.27)) hide))
+\t\t(pin "1" (uuid "{u()}"))
+\t)''')
+    labels.append('\t(global_label "VCC_5V_PROT" (shape passive) (at 30.0 40.0 180) (effects (font (size 1.27 1.27)) (justify right)))\n')
 
-    print("✓ Successfully synchronized PCBA 03 schematic with U4 (TS5A3159), R9, and PWR_FLAGs.")
+    # Append all labels
+    sch.extend(labels)
+    sch.append(')\n')
 
-if __name__ == "__main__":
-    main()
+    content = '\n'.join(sch)
+    with open(SCH_PATH, 'w') as f:
+        f.write(content)
+    print(f'Successfully wrote {SCH_PATH} with {len(comps)} components.')
+
+if __name__ == '__main__':
+    generate_schematic()
