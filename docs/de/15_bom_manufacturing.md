@@ -133,6 +133,11 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 | **`U5`** | BQ25100YFPR | DSBGA-6 | TI Linearer LiPo-Ladecontroller mit 50 nA Ruhestrom | `C144857` |
 | **`M1`** | VG1036001D | Coin 10x3.6mm | Vybronics LRA Linearmotor (235 Hz Resonanzfrequenz) | Custom / Distrelec |
 | **`BZ1`**| PKLCS1212E4001 | SMD 12x12mm | Murata SMD-Piezo-Schallwandler (85 dB @ 10 cm, 4 kHz) | `C94511` |
+| **`J_SWD`**| 1x04 1.27mm PinHeader | SMD 1.27mm Vert. | SWD-Programmierstecker (3V3/SWDIO/SWDCLK/GND; für Prototypen bestücken!) | `C2883733` |
+| **`SW1..2`**| Alps SKRK / EVQ-P2 | SMD 3.9x2.9mm | 2x Taktile IP67 Mikrotaster (Alarm/Arm, Aux/Licht) | `C115358` |
+| **`D1`** | WS2812B-2020 | SMD 2020 | RGB-Status-LED unter PMMA-Lichtleiter | `C2843785` |
+| **`J_QI`**| 2-Pad Solder Area | SMD 0805 Pads | Lötpads für 24 mm Qi-Empfängerspule (AC1, AC2) | On-Board |
+| **`P_BAT`**| 2-Pad Solder Area | SMD 0805 Pads | Lötpads für 180–200 mAh LiPo Pouch-Zelle (VBAT+, GND-) | On-Board |
 
 ---
 

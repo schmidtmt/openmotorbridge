@@ -1276,15 +1276,22 @@ Wie hält die Leiterplatte im Gehäuse, ohne dass Schrauben das dichte HF-Layout
    - **Ebene 3 ($Z = 1{,}9\dots 5{,}0\,\text{mm}$):** Auf der geschirmten Ferritfolie ruht die rechteckige **LiPo-Pouch-Zelle** ($25 \times 18 \times 3{,}8\,\text{mm}$) in ihrer $26 \times 18\,\text{mm}$ Führungswanne.
    - **Ebene 4 ($Z = 5{,}0\dots 6{,}0\,\text{mm}$):** Auf der Stützschulter liegt die Leiterplatte `PCBA 07` ($38 \times 19 \times 1{,}0\,\text{mm}$). Die Spulen-Anschlussdrähte steigen links nach oben und sind an den SMD-Pads `J_QI` (`QI_AC1` / `QI_AC2`) direkt am TI BQ51003 Receiver verlötet.
 
-#### 7.1.4 4-Pin SWD-Programmierstecker (`J_SWD`) Bauhöhe & Serienfertigung (DNP)
-Im 3D-CAD-Modell der Platine (`pcba07_smart_keyfob_3d.png`) fällt der 4-polige Pfostenstecker `J_SWD` ($X = 108{,}75\,\text{mm}, Y = 85{,}4\,\text{mm}$) optisch auf, da er höher wirkt als die Alps-Taster:
-* **Hintergrund:** Der Footprint `PinHeader_1x04_P1.27mm_Vertical_SMD` besitzt im Standard-KiCad-STEP-Modell $4{,}5\,\text{mm}$ lange vertikale Stifte. Bei einer lichten Innenhöhe von $4{,}2\,\text{mm}$ zwischen Platine und Oberschalendecke würde eine bestückte Standard-Stiftleiste mit dem Gehäusedeckel kollidieren.
-* **Serienfertigungs-Konzept (DNP – Do Not Populate):**
-  `J_SWD` ist ein reines **Fertigungs- und Prüfadapter-Interface** zum initialen Flashen des Bootloaders und der Firmware des Nordic nRF52840. In der Serienproduktion wird hier **keine Stiftleiste bestückt**! Die vergoldeten SMD-Pads ($0{,}035\,\text{mm}$ Aufbauhöhe) werden in der Fertigungslinie über einen Nadelbett-Prüfadapter (Pogo-Pins / Tag-Connect TC2030) kontaktiert.
-* **Kabeldom / Freisparungstasche für Prototypen:**
-  In der Oberschale ist an der Decke über `J_SWD` ($X = 11{,}2\dots 16{,}2\,\text{mm}, Y = 16{,}0\dots 23{,}0\,\text{mm}$) eine zusätzliche $1{,}2\,\text{mm}$ tiefe Freisparung eingefräst. Dadurch stehen an dieser Stelle $5{,}4\,\text{mm}$ lichte Höhe zur Verfügung, sodass im Labor selbst Ultra-Low-Profile-Buchsenleisten (z. B. Samtec CLP / FLE, Bauhöhe $2{,}2\,\text{mm}$) oder gekürzte Stifte berührungsfrei Platz finden.
-* **Firmware-Updates im Betrieb:**
-  Erfolgen nach Gehäuseschluss zu 100 % drahtlos über **BLE OTA DFU (Device Firmware Update)** via OpenMotorBridge Smartphone-PWA oder über den gesicherten LoRa-Bootloader.
+#### 7.1.4 4-Pin SWD-Programmierstecker (`J_SWD`): Prototypen-Flashen & Großserien-Option
+Im 3D-CAD-Modell der Platine (`pcba07_smart_keyfob_3d.png`) ist der 4-polige Pfostenstecker `J_SWD` ($X = 108{,}75\,\text{mm}, Y = 85{,}4\,\text{mm}$) platziert (Pin 1: `VCC_3V3`, Pin 2: `SWDIO`, Pin 3: `SWDCLK`, Pin 4: `GND`).
+
+* **Empfehlung für Prototypen-Bestellungen (z. B. 5 Testplatinen bei JLCPCB / Eurocircuits):**
+  * **Voll bestücken lassen:** Für die Entwicklung und Kleinserien-Prototypen wird die standardisierte 4-polige $1{,}27\,\text{mm}$ SMD-Stiftleiste ([`PinHeader_1x04_P1.27mm_Vertical_SMD_Pin1Left`](../../hardware/kicad_smart_keyfob/openmotorbridge_smart_keyfob.kicad_pcb)) **ganz normal mitbestückt** (`dnp no` in KiCad).
+  * **Passt dank Gehäuse-Freisparung vollständig ins Gehäuse:** In der Oberschale ([`smart_keyfob_pager.scad`](../../hardware/cad/scad/05_accessories/smart_keyfob_pager.scad)) ist an der Innendecke direkt über `J_SWD` ($X = 11{,}2\dots 16{,}2\,\text{mm}, Y = 16{,}0\dots 23{,}0\,\text{mm}$) eine $1{,}2\,\text{mm}$ tiefe Freisparungstasche eingelassen. Dadurch stehen **$5{,}4\,\text{mm}$ lichte Gesamthöhe** über der Platine zur Verfügung. Eine Standard-1.27mm-Stiftleiste (Stiftlänge typ. $3{,}0\dots 4{,}0\,\text{mm}$) findet dort berührungsfrei Platz.
+  * **Flashen auf der Werkbank:** Ein handelsüblicher SWD-Programmer (J-Link, ST-Link V2/V3, CMSIS-DAP oder ESP-Prog) wird einfach über ein 4-poliges $1{,}27\,\text{mm}$-Adapterkabel (oder Buchsenleiste) direkt aufgesteckt.
+
+* **Alternative bei unbestückten Pads (z. B. für Großserie / DNP):**
+  * Werden Platinen ohne Stiftleiste gefertigt (um Bauteilkosten zu sparen oder eine absolut plane Platinenoberfläche zu behalten), stehen auf der Platine vier vergoldete SMD-Pads ($1{,}5 \times 0{,}65\,\text{mm}$) im $1{,}27\,\text{mm}$-Raster zur Verfügung.
+  * **Flashen via Pogo-Pin Klemme:** Die Pads werden mit einem handelsüblichen **1.27 mm 4-Pin Pogo-Pin Hand-Prüfadapter** (Federkontakt-Klemme mit 4 Nadelspitzen für ca. 5–8 € auf Amazon/AliExpress) für die 5 Sekunden des Bootloader-Flashens von Hand kontaktiert.
+  * **Flashen via fliegende Litzen:** Alternativ können für die Laborinbetriebnahme temporär vier dünne Kupferlackdrähte oder Litzen an die Pads gelötet und nach dem Flashen wieder abgelötet werden.
+
+* **Drahtlose Updates nach dem ersten Flashen (BLE OTA DFU):**
+  * Der SWD-Port wird **nur ein einziges Mal** benötigt, um den Bootloader (Nordic Open DFU / Adafruit nRF52) und die Initial-Firmware auf den nRF52840 zu flashen.
+  * Alle nachfolgenden Firmware-Updates erfolgen im Alltag zu 100 % drahtlos über **Bluetooth Low Energy OTA DFU** via Smartphone-PWA oder über den gesicherten LoRa-Kanal. Das Gehäuse muss danach nie wieder geöffnet werden.
 
 #### 7.1.5 Akku-Kabelführung & Quetschschutz (P_BAT Routing & Anti-Pinch Kabelbucht)
 Ein kritischer Aspekt bei ultrakompakten Schlüsseltranspondern ist die Führung der Akkuleitungen:
