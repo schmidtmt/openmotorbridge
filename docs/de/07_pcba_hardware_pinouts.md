@@ -56,7 +56,7 @@ Das Hardwaredesign von OpenMotorBridge folgt dem Grundsatz der radikalen Entflec
    * **`PCBA 09` (OMM 2.4 GHz Autonomes Intercom-Modul):** Quelloffenes, autarkes ECE 22.06 UCS-Intercom-Modul für den Helm und als High-Speed Mesh-Einsatz im Kassetten-Schlitten (`PCBA 03`).
    * **`PCBA 10` (OMM 446 MHz Autonomes Funkmodul):** Quelloffenes ECE 22.06 UCS-Funkmodul (Dual-Mode: Analog PMR446 + Digital DMR Tier I), voll kompatibel zu Midland G-Serie und D-10, mit Power-Path USV-Laden und 0.2W/0.5W Umschaltung.
 3. **Ersatzlos entfallene Baugruppen (Architektur-Bereinigung v9.6):**
-   * **`PCBA 02` (Pod-Basisplatine):** Ersatzlos gestrichen. Die Zuleitung führt direkt auf zwei vergoldete Federkontakte im Schachtboden.
+   * **`PCBA 02` (Pod-Basisplatine):** Ersatzlos gestrichen. Die Zuleitung führt direkt auf zwei vergoldete Mill-Max Hochstrom-Federkontakte in der integrierten Schottwand des monolithischen Pod-Gehäuses.
    * **`PCBA 04` (Heck-Pod 3):** Ersatzlos gestrichen. Heck-Pod 3 entfällt vollständig; LoRa sitzt auf `PCBA 01`, GNSS auf `PCBA 05`.
    * **`PCBA 06` (MagSafe Frame Dock Platine):** Ersatzlos gestrichen. Die elektrische Verbindung bei Koffer-Pods erfolgt über einen handelsüblichen industriellen 2-Pin Magnet-Pogo-Steckverbinder (IP68 COTS).
 

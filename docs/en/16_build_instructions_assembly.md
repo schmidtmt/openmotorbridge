@@ -120,17 +120,41 @@ All discrete components, PCB ordering files, and COTS sourcing lists are documen
 ---
 
 ### Step 2: Assemble Satellite Pods 1 & 2 (2x Identical 1-Piece Screwless Monocoques)
-1. **Route 2-Wire DC Feed:** Feed the 2-wire DC harness (+12V/5V and GND) through the rear cable gland or M8 port of the monolithic pod base housing ([`pod_base_housing.stl`](../../hardware/cad/stl/02_pod_base/pod_base_housing.stl)).
-2. **Install Mill-Max Spring Contacts:** Press the two gold-plated Mill-Max heavy-duty spring contact sleeves from behind into the two guide bores of the integral monolithic bulkhead wall and connect/crimp with the supply wires.
-3. **Mount Auto-Eject Springs:** From the front opening, slide the two stainless compression springs ($\varnothing 4.5 \times 15\,\text{mm}$) directly onto the two integrated guide posts of the monolithic bulkhead partition.
-4. **Screwless Completion:** Because the transverse bulkhead is 100% integrally molded into the 1-piece monocoque, all assembly and countersunk screws are eliminated (0 screws). The two gold-plated spring pins extend with spring compliance into the cartridge bay. Repeat for Pod 2.
+1. **Route 2-Wire DC Feed from Main Harness:**
+   * Power originates directly from the central box (`PCBA 01`). Two pre-crimped 2-wire DC whips (Whip 1 for left Pod 1, Whip 2 for right Pod 2) branch off the main Deutsch DTM-12 connector:
+     * **Wire 1 (Red):** Switched $+5\,\text{V}$ (or VCC, protected via 500mA PPTC on `PCBA 01`), AWG22 ($0.34\,\text{mm}^2$) silicone.
+     * **Wire 2 (Black):** Common system ground `GND`, AWG22 ($0.34\,\text{mm}^2$) silicone.
+   * Feed the 2-wire lead through the rear M8 cable gland/port (Port A) of the monolithic pod base housing ([`pod_base_housing.stl`](../../hardware/cad/stl/02_pod_base/pod_base_housing.stl)) into the rear chamber behind the transverse monolithic bulkhead partition ($X = 18.0\,\text{mm}$).
+2. **Install Mill-Max Heavy-Duty Spring Contacts:**
+   * Press two gold-plated Mill-Max heavy-duty spring contact sleeves (pogo-pins, e.g. Mill-Max 0906-series / Keystone 8680, $\varnothing 3.2\,\text{mm}$ barrel, $1.5\,\text{N}$ preload, 4 A continuous) from behind into the two guide bores of the integral bulkhead wall ($Y = 30.0\,\text{mm}$ for $+5\,\text{V}$ and $Y = 40.0\,\text{mm}$ for `GND`, $10.0\,\text{mm}$ pin pitch, contact elevation $Z = 8.5\,\text{mm}$).
+   * Solder the stripped lead wires directly into the rear solder cups of the two Mill-Max sleeves (Red to Pin 1 at $Y=30.0$, Black to Pin 2 at $Y=40.0$) and insulate with heat-shrink.
+   * The compliant gold contact tips now project horizontally in the $+X$ direction $3.0\,\text{mm}$ out of the protective bulkhead boss sleeves into the cartridge slide chamber.
+3. **Mount Auto-Eject Springs:**
+   * From the front opening, slide the two stainless compression springs ($\varnothing 4.5 \times 15\,\text{mm}$, $1.2\,\text{N/mm}$ spring rate) directly onto the two integrated guide posts of the monolithic bulkhead partition (at $Y = 16.0\,\text{mm}$ and $Y = 54.0\,\text{mm}$).
+4. **Screwless Completion:**
+   * Because the transverse bulkhead is 100% integrally molded into the 1-piece monocoque (`PCBA 02` is completely retired), all assembly and countersunk screws are eliminated (0 screws). The two gold-plated spring pins extend with spring compliance into the cartridge bay. Repeat for Pod 2.
 
 ---
 
 ### Step 3: Multi-Protocol Gateway Cartridges 1 & 2 Assembly
-1. **Mount UWB Antenna & PCB in Sled:**
-   * Place the flexible UWB antenna (Taoglas FXUWB10, $12 \times 12 \times 0.8\,\text{mm}$) into the bottom pocket of the cartridge sled ([`cartridge_base_sled.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl)) and route the U.FL micro-coax cable in the recess channel.
-   * Place PCBA 03 Rev 3.0 onto the four M2 standoffs, snap the U.FL connector onto `ANT_UWB` (`B.Cu`), and secure the board finger-tight with 4x M2 $\times 6\,\text{mm}$ screws. Gold contact pads `PAD1` (+12V/5V) and `PAD2` (GND) on the bottom copper face remain directly accessible through the rear floor cutout for mating with the pod Mill-Max pins.
+1. **Power Delivery & UWB Antenna Concept (100% Cable- & Plug-Free to Pod):**
+   * **Cable-Free Direct Mating:** The cartridges require no loose wire whip and no external plug to the pod enclosure. Power is transferred purely electromechanically via two dedicated gold contact pads:
+     * On the bottom copper face (`B.Cu`) of `PCBA 03`, two heavy-duty ENIG gold pads are located at the rear edge ($X = 101.5\,\text{mm}$ in KiCad, matching $X = 3.0\,\text{mm}$ in the sled):
+       * **`PAD1`** ($2.5 \times 3.5\,\text{mm}$ SMD roundrect, $Y = 75.0\,\text{mm}$ in KiCad): $+5\,\text{V}$ power input
+       * **`PAD2`** ($2.5 \times 3.5\,\text{mm}$ SMD roundrect, $Y = 85.0\,\text{mm}$ in KiCad): `GND` return
+       * *Pitch:* Exactly $10.0\,\text{mm}$ spacing, precisely matching the Mill-Max pin spacing in the pod bulkhead.
+     * In the floor of the cartridge base sled ([`cartridge_base_sled.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl)), an open rectangular contact window ($15.0 \times 4.0\,\text{mm}$) is molded into the rear face. This aperture leaves `PAD1` and `PAD2` unobstructed toward the rear.
+     * When the cartridge is fully inserted, the two Mill-Max spring pins in the pod bulkhead pass through this window and compress firmly against `PAD1` and `PAD2` with $1.5\,\text{N}$ spring preload.
+   * **UWB Antenna Interface (Hirose U.FL Receptacle & Taoglas FXUWB10 Flex Antenna):**
+     * `PCBA 03` does **not** use a ceramic chip antenna. Instead, a **Hirose U.FL coaxial receptacle** (`ANT_UWB`, U.FL-R-SMT-1) is mounted on the bottom copper face (`B.Cu`) directly beside the Qorvo DW3110 transceiver IC.
+     * The dedicated antenna is a flexible wideband flat antenna: **Taoglas FXUWB10** ($12.0 \times 12.0 \times 0.8\,\text{mm}$, 6.5 GHz Channel 5).
+     * Place the antenna into the form-fitting recess pocket ($12.0 \times 12.0 \times 0.9\,\text{mm}$) in the floor of the cartridge base sled and secure with its 3M adhesive backing.
+     * Route the short $20\dots 30\,\text{mm}$ U.FL micro-coax cable in the sled floor routing channel and snap vertically onto receptacle `ANT_UWB` on `B.Cu` of `PCBA 03`.
+2. **Mount PCBA 03 in Sled:**
+   * Place `PCBA 03 Rev 3.0` onto the four M2 standoffs in the rear section of the sled with top side facing up (`F.Cu`: ESP32-C6, MOSFETs, `J_ACT`, `J_AUDIO_PWR`).
+   * Snap U.FL antenna lead onto `ANT_UWB` before fastening the board.
+   * Fasten board finger-tight with 4x M2 $\times 6\,\text{mm}$ screws.
+   * *Visual Inspection:* Verify through the rear $15 \times 4\,\text{mm}$ window that `PAD1` (+5V) and `PAD2` (GND) are cleanly aligned and exposed.
 2. **Install Gateway Inlay & Solenoids:**
    * **Slot 1 (Sena SPIDER X Slim Inlay):**
      * Insert 4x miniature solenoids ($\varnothing 6.5 \times 12\,\text{mm}$) with TPU tips into the actuator bridge of [`cartridge_insert_sena.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_sena.stl).

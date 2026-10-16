@@ -126,24 +126,49 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 ---
 
 ### Schritt 2: Satelliten-Pods 1 & 2 montieren (2x identisch, 100 % schraubenloses Monocoque)
-1. **2-Draht-DC-Zuleitung einführen:** Die 2-adrige Gleichstromleitung (+12V/5V und GND) durch die rückseitige Kabeldurchführung oder M8-Verschraubung des monolithischen Pod-Basisgehäuses ([`pod_base_housing.stl`](../../hardware/cad/stl/02_pod_base/pod_base_housing.stl)) führen.
-2. **Mill-Max Federkontakte einsetzen:** Die beiden vergoldeten Mill-Max Hochstrom-Federkontakt-Hülsen von hinten in die beiden Führungsbohrungen der integrierten Trennwand eindrücken und mit den Zuleitungsadern verbinden/verpressen.
-3. **Auto-Eject Schnappfedern aufstecken:** Von vorne in den Kassetten-Schacht die beiden V4A-Druckfedern ($\varnothing 4{,}5 \times 15\,\text{mm}$) direkt auf die beiden integrierten Führungsdome der monolithischen Trennwand aufschieben.
-4. **Schraubenlose Fertigstellung:** Da die Trennwand 100 % materialhomogen im 1-Teil-Monocoque integriert ist, entfällt jede Montage- und Senkkopfverschraubung (0 Schrauben). Die beiden vergoldeten Federkontakte ragen federnd in den Aufnahmeschacht. Wiederholen für Pod 2.
+1. **2-Draht-DC-Zuleitung vom Zentralbaum einführen:**
+   * Die Stromversorgung der Pods stammt direkt aus der Zentralbox (`PCBA 01`). Vom Deutsch DTM-12 Zentralstecker führen zwei vorkonfektionierte 2-Draht-Gleichstrompeitschen (Peitsche 1 für Pod 1 links, Peitsche 2 für Pod 2 rechts) entlang des Rahmens.
+   * Adernbelegung:
+     * **Ader 1 (Rot):** Geschaltete Speisung $+5\,\text{V}$ (bzw. VCC, auf `PCBA 01` abgesichert über PolySwitch PPTC 500mA), Querschnitt $0{,}34\,\text{mm}^2$ (AWG22 Silikon).
+     * **Ader 2 (Schwarz):** Gemeinsame System-Masse `GND`, Querschnitt $0{,}34\,\text{mm}^2$ (AWG22 Silikon).
+   * Die Leitung durch die rückseitige M8-Kabeldurchführung / Verschraubung (Port A) des monolithischen Pod-Basisgehäuses ([`pod_base_housing.stl`](../../hardware/cad/stl/02_pod_base/pod_base_housing.stl)) in die hintere Kammer hinter der integrierten Quer-Schottwand ($X = 18{,}0\,\text{mm}$) einführen.
+2. **Mill-Max Hochstrom-Federkontakte einsetzen & verlöten:**
+   * 2x vergoldete Mill-Max Hochstrom-Federkontakt-Hülsen (Pogo-Pins, z. B. Mill-Max Serie 0906 / Keystone 8680, $\varnothing 3{,}2\,\text{mm}$ Schaft, $1{,}5\,\text{N}$ Kontaktkraft, bis 4 A Dauerstrom) von hinten in die beiden Führungsbohrungen der integrierten Schottwand einpressen ($Y = 30{,}0\,\text{mm}$ für $+5\,\text{V}$ und $Y = 40{,}0\,\text{mm}$ für `GND`, $10{,}0\,\text{mm}$ Stiftraster, Kontakthöhe $Z = 8{,}5\,\text{mm}$).
+   * Die abisolierten Enden der Zuleitungsadern direkt in die rückseitigen Löttaschen der beiden Mill-Max Hülsen einlöten (Rot an Pin 1 bei $Y=30{,}0$, Schwarz an Pin 2 bei $Y=40{,}0$) und mit Schrumpfschlauch isolieren.
+   * Die federnden Goldkontaktstifte ragen nun exakt $3{,}0\,\text{mm}$ weit in horizontaler $+X$-Richtung aus den Schutzhülsen der Schottwand in den Kassetten-Aufnahmeschacht hinein.
+3. **Auto-Eject Schnappfedern aufstecken:**
+   * Von vorne in den Kassetten-Schacht die beiden V4A-Edelstahl-Druckfedern ($\varnothing 4{,}5 \times 15\,\text{mm}$, Federrate $1{,}2\,\text{N/mm}$) direkt auf die beiden monolithischen Führungsdome der Schottwand (bei $Y = 16{,}0\,\text{mm}$ und $Y = 54{,}0\,\text{mm}$) aufschieben.
+4. **Schraubenlose Fertigstellung des Pods:**
+   * Da das Pod-Gehäuse ein nahtloses 1-Teil-Monocoque ist (`PCBA 02` ist ersatzlos entfallen), sind im Pod keinerlei Platinen, Schrauben oder interne Steckverbinder erforderlich (0 Schrauben). Die beiden federnden Goldkontakte und die beiden Auswerferfedern warten im Schacht auf das Einschieben der Kassette. Wiederholen für Pod 2.
 
 ---
 
 ### Schritt 3: Multi-Protokoll Gateway-Kassetten 1 & 2 montieren
-1. **UWB-Antenne & Platine im Schlitten montieren:**
-   * Die flexible UWB-Antenne (Taoglas FXUWB10, $12 \times 12 \times 0{,}8\,\text{mm}$) in die Bodentasche des Kassetten-Schlittens ([`cartridge_base_sled.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl)) einlegen und das U.FL-Kabel in der Nut verlegen.
-   * Kassettenplatine PCBA 03 Rev 3.0 auf die vier M2-Dome setzen, U.FL-Stecker auf `ANT_UWB` (`B.Cu`) aufklicken und Platine mit 4x M2 $\times 6\,\text{mm}$ Schrauben handfest fixieren. Die beiden vergoldeten Kontaktpads `PAD1` (+12V/5V) und `PAD2` (GND) auf der Platinenunterseite liegen durch das rückseitige Kontaktfenster frei zugänglich für die Mill-Max Stifte der Pod-Trennwand.
-2. **Mechatronik-Aktuatoren & Niederhalteplatte montieren:**
+1. **Stromversorgungs- & UWB-Antennen-Konzept verstehen (100 % kabel- und steckerfrei zum Pod):**
+   * **Stromzuführung via Direktkontakt (Kein Kabel zum Gehäuse!):** Die Kassetten benötigen keine lose Kabelpeitsche und keinen Stecker zum Pod-Gehäuse. Die Stromversorgung erfolgt beim Einschieben rein elektromechanisch über zwei vergoldete Kontaktflächen:
+     * Auf der Platinenunterseite (`B.Cu`) von `PCBA 03` sind an der hinteren Kante ($X = 101{,}5\,\text{mm}$ in KiCad bzw. $X = 3{,}0\,\text{mm}$ im Schlitten) zwei massive ENIG-Goldpads integriert:
+       * **`PAD1`** ($2{,}5 \times 3{,}5\,\text{mm}$ SMD-Roundrect, $Y = 75{,}0\,\text{mm}$ in KiCad): $+5\,\text{V}$ Stromeingang
+       * **`PAD2`** ($2{,}5 \times 3{,}5\,\text{mm}$ SMD-Roundrect, $Y = 85{,}0\,\text{mm}$ in KiCad): `GND` Rückleitung
+       * *Rastermaß:* Exakt $10{,}0\,\text{mm}$ Abstand, identisch zum Stiftraster der Mill-Max Federkontakte in der Pod-Schottwand.
+     * Im Boden des Kassetten-Grundschlittens ([`cartridge_base_sled.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl)) ist an der hinteren Stirnseite ein offenes Kontaktfenster ($15{,}0 \times 4{,}0\,\text{mm}$) ausgespart. Durch diesen Durchbruch liegen `PAD1` und `PAD2` auf der Platinenunterseite nach hinten frei zugänglich.
+     * Beim vollständigen Einschieben der Kassette tauchen die beiden gefederten Mill-Max Kontaktstifte der Pod-Schottwand durch das Kontaktfenster und drücken mit $1{,}5\,\text{N}$ Federkraft dauerhaft vibrations- und rüttelsicher auf `PAD1` und `PAD2`.
+   * **UWB-Antennenanbindung (Hirose U.FL-Buchse & Taoglas FXUWB10 Flexantenne):**
+     * Auf `PCBA 03` arbeitet **keine** Keramik-Chipantenne, sondern eine **Hirose U.FL-Koaxialbuchse** (`ANT_UWB`, Hirose U.FL-R-SMT-1) auf der Platinenunterseite (`B.Cu`) unmittelbar am Qorvo DW3110 Transceiver.
+     * Als dedizierte UWB-Antenne kommt die flexible Breitband-Flachantenne **Taoglas FXUWB10** ($12{,}0 \times 12{,}0 \times 0{,}8\,\text{mm}$, 6.5 GHz Channel 5) zum Einsatz.
+     * Die Antenne wird passgenau in die vertiefte Tasche ($12{,}0 \times 12{,}0 \times 0{,}9\,\text{mm}$) im Boden des Kassetten-Schlittens eingelegt und mit dem rückseitigen 3M-Klebepad fixiert.
+     * Das ultrakurze $20\dots 30\,\text{mm}$ U.FL-Mikrokoaxialkabel wird im integrierten Führungskanal des Schlittenbodens verlegt und senkrecht auf die U.FL-Buchse `ANT_UWB` auf der Unterseite der `PCBA 03` aufgeklickt.
+2. **Platinenmontage PCBA 03 im Schlitten:**
+   * Kassettenplatine `PCBA 03 Rev 3.0` mit der Oberseite (`F.Cu`: ESP32-C6, MOSFETs, Header `J_ACT`, `J_AUDIO_PWR`) nach oben auf die vier M2-Schraubdome im hinteren Bereich des Schlittens setzen.
+   * Zuvor das U.FL-Kabel der UWB-Bodenantenne auf `ANT_UWB` aufklicken.
+   * Platine mit 4x M2 $\times 6\,\text{mm}$ Schrauben handfest fixieren.
+   * *Sichtprüfung:* Von der Rückseite des Schlittens durch das $15 \times 4\,\text{mm}$ Kontaktfenster blicken. Die beiden Goldpads `PAD1` (+5V) und `PAD2` (GND) müssen plan und mittig im Freistellungsbereich sichtbar sein.
+3. **Mechatronik-Aktuatoren & Niederhalteplatte montieren:**
    * 4x Miniatur-Hubmagnete ($\varnothing 6{,}5 \times 12\,\text{mm}$) mit dämpfenden TPU-Tastspitzen (`actuator_silicone_tip.stl`) in die vier Passbohrungen der Führungsbrücke des Inlays ([`cartridge_insert_sena.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_sena.stl) bzw. [`cartridge_insert_cardo.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_cardo.stl)) einstecken.
    * **Aktuator-Verkabelung an `J_ACT` (8-Pin JST-SH 1.0 mm):**
      * Das vorkonfektionierte 8-Pin Kabel auf den Header `J_ACT` aufstecken.
      * Die vier verdrillten Adernpaare (AWG30 Silikon) an die vier Hubmagnete führen (Paar 1 = Taste +, Paar 2 = Taste -, Paar 3 = Center/Phone, Paar 4 = Mesh/Pairing).
    * **Niederhalteplatte verschrauben:** Die PA12-Niederhalteplatte ([`cartridge_retainer_plate.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_retainer_plate.stl)) plan über die Hubmagnete legen und mit **4x M2 $\times 6\,\text{mm}$ Senkkopfschrauben (DIN 7991)** fest anziehen. Die Aktuatoren sitzen nun absolut spielfrei und rüttelfest im Schlitten.
-3. **Gateway-Inlay & OEM-Adapterkabel anschließen (`J_AUDIO_PWR` / 8-Pin JST-SH):**
+4. **Gateway-Inlay & OEM-Adapterkabel anschließen (`J_AUDIO_PWR` / 8-Pin JST-SH):**
    * **Bucht 1 (Sena SPIDER X Slim Inlay - OMB Referenz K2a):**
      * Vorkonfektioniertes 8-Pin JST-SH Adapterkabel auf Header `J_AUDIO_PWR` stecken (Pin 1: `PGND`, Pin 2: `VCC_5V_PROT`, Pin 3: `AGND_AUDIO_IN`, Pin 4/5: Stereo Spk In, Pin 6: `OMM_DETECT` gebrückt auf GND, Pin 7: Mic Out `VOICE_OUT`).
      * 2-Pin Micro-JST Stecker an die externe Akkuzuleitung des SPIDER X Slim anstecken (liefert permanente 3.85V Direct-DC Speisung via MP2315 Step-Down ohne Akku im Pod!).
@@ -163,9 +188,9 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
    * **Alternative Option: OpenMotorMesh (OMM) 2.4 GHz / 446 Funk-Kassette (Klasse 4 / 3b UCS):**
      * 8-Pin JST-SH zu 90° USB-C Adapterkabel (4-polig: VBUS, GND, D+, D-) anstecken. Pin 6 (`OMM_DETECT`) bleibt unbeschaltet (N/C), wodurch `R9` den Hardware-Umschalter `U4` auf `PCBA 03` automatisch auf digitalen USB-Audio-Betrieb schaltet!
      * Nativ gefertigt im standardisierten **UCS-Formfaktor** (Universal Communication Solution), reines verlustfreies Digital-Audio über USB ohne zusätzliche D/A-Wandler.
-4. **Integrierte UWB-Antenne & Flanschdichtung:**
-   * Auf `PCBA 03` arbeitet eine verlustarme SMD-Keramikantenne für 6.5 GHz UWB. Die Funkwellen durchdringen das dielektrische PA12-Gehäuse dämpfungsfrei; es sind keine externen Antennenradome erforderlich.
-   * Silikon-Formdichtung auf den Kassettenkragen aufziehen und dünn mit Silikonfett benetzen.
+5. **Flanschdichtung aufziehen & Kassettenabschluss:**
+   * Shore 40A Silikon-Formdichtung auf den Kassettenkragen aufziehen und dünn mit dielektrischem Silikonfett benetzen.
+   * Die Dichtung dichtet beim vollständigen Verrasten im Pod das Einschubmaul umlaufend gegen Spritzwasser (IP67) ab. Die UWB-Funkwellen durchdringen das dielektrische PA12-Gehäuse völlig dämpfungsfrei; es sind keine externen Radome oder Öffnungen nötig.
 
 ---
 

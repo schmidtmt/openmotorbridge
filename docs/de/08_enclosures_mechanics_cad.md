@@ -502,7 +502,7 @@ Durch die Umstellung auf das **All-UWB Datenbackbone (Qorvo DW3110)** und Blueto
 | **Ader 2** | **Schwarz (BK)** | $0{,}34\,\text{mm}^2$ (AWG22) | **`GND`** (Gemeinsame Power-Masse) | Direkte Rückleitung zur Zentralbox |
 
 * **Steckverbinder:** Kompakter, rüttelfester 2-Pin Automotive-Stecker (JST-JWPF oder AMP Superseal 1.5 2-Pin, IP67).
-* **Gehäusekontakt:** Die Adern enden direkt an zwei vergoldeten Blattfederkontakten (Keystone / Mill-Max) im Schachtboden, die beim Einschieben formschlüssig auf die beiden stirnseitigen ENIG-Pads der Kassettenplatine (`PCBA 03`) drücken.
+* **Gehäusekontakt:** Die Adern enden direkt an zwei massiven, vergoldeten Hochstrom-Federkontakt-Hülsen (Mill-Max Pogo-Pins) in der integrierten Quer-Schottwand ($X = 18{,}0\,\text{mm}$), die beim Einschieben durch das offene rückseitige Bodenfenster des Kassetten-Grundschlittens formschlüssig und vibrationssicher auf die beiden ENIG-Goldflächen `PAD1` (+5V) und `PAD2` (GND) auf der Unterseite (`B.Cu`) der Kassettenplatine (`PCBA 03`) drücken.
 * **Daten & Audio:** Zu 100 % drahtlos über UWB (DW3110 / 6.489 GHz Ch. 5) und Bluetooth. M8- und USB-C-Buchsen am Pod entfallen ersatzlos.
 
 ---
