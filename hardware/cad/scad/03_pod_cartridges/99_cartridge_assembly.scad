@@ -35,9 +35,9 @@ module cartridge_gallery_preview() {
         cartridge_cardo_assembly(exploded = false);
     }
 
-    // 4. Waterproof Blindkassette IP67 Dry Box (Y = 240 mm)
+    // 4. Waterproof Blindkassette IP67 Dry Box (Y = 240 mm, shown open/exploded to reveal deep storage tub)
     translate([0, 3 * spacing_y, 0]) {
-        cartridge_blindkassette_assembly(exploded = false);
+        cartridge_blindkassette_assembly(exploded = true);
     }
 }
 

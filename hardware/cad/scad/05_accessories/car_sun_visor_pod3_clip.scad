@@ -23,9 +23,9 @@ VISOR_CLAMP_DEPTH   = 58.0;  // Clamping reach over visor body (mm)
 VISOR_CLAMP_WIDTH   = 42.0;  // Clamp tongue width in Y (mm)
 CLAMP_SPRING_THICK  = 3.2;   // Spring leaf thickness (PETG / PA12 flexible spring)
 
-// --- Pod 3 Docking Cradle Dimensions ---
-CRADLE_L            = POD_OUTER_L + 4.0;  // 139.0 mm
-CRADLE_W            = POD_OUTER_W + 3.0;  // 73.0 mm
+// --- Pod 1 & 2 Docking Cradle Dimensions (Universal 150mm Envelope) ---
+CRADLE_L            = POD_OUTER_L + 4.0;  // 154.0 mm (clears 150mm enlarged pod)
+CRADLE_W            = POD_OUTER_W + 3.0;  // 73.0 mm (clears 70mm pod width)
 CRADLE_WALL         = 2.8;                // Sidewall thickness (mm)
 CRADLE_LIP_H        = 14.0;               // Side retention lip height (mm)
 
