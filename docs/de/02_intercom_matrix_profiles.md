@@ -379,7 +379,7 @@ Da Kassetten im v9.6 System als modulare Wechselkassetten konzipiert sind, fungi
 | **Smart HJC 21B / 20B**| HJC Helme (ECE 22.06) | Sena Bluetooth | Nur Bluetooth 5.1 | Feste Antenne | Kostengünstiges Zweit-Gateway für Telefonie und GPS-Audio. |
 
 #### Mechanischer Einbau in den Universal-Grundschlitten (`00_base_sled.scad`):
-* Der lichte Innenraum des Basisschlittens ($110 \times 53 \times 16\,\text{mm}$) bietet mehr als genug Volumen für alle genannten OEM-Hauptplatinen (die selten größer als $75 \times 40 \times 12\,\text{mm}$ sind).
+* Der lichte Innenraum des Basisschlittens ($124 \times 53 \times 28\,\text{mm}$ bei $130 \times 58 \times 28\,\text{mm}$ Außenmaß) bietet mehr als genug Volumen für alle genannten OEM-Hauptplatinen (die selten größer als $75 \times 40 \times 12\,\text{mm}$ sind).
 * Die verbleibenden $35\,\text{mm}$ freier Längsbauraum nehmen den Step-Down-Regler, die NTC-Beschaltung, Audio-Übertrager und die Silikon-Kabelabfänge auf.
 * Verschlossen wird das System mit der soliden **Blindkassette ([`03_insert_blindkassette.scad`](../../hardware/cad/scad/03_pod_cartridges/parts/03_insert_blindkassette.scad))** und 4x M2-Senkkopfschrauben – zu 100 % wetterfest und unsichtbar (oder wahlweise mit einem individuellen 3D-Druck-Inlay mit Tastendurchbrüchen).
 

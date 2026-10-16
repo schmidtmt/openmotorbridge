@@ -19,7 +19,7 @@ include <../../00_common/parameters.scad>;
 include <../../00_common/screw_bosses.scad>;
 
 module cartridge_insert_sena(
-    insert_l = 110.0,
+    insert_l = CARTRIDGE_BASE_L - 6.0, // 124.0 mm for CARTRIDGE_BASE_L = 130.0
     insert_w = 53.0,
     deck_th  = 2.5,
     cradle_h = 10.0
@@ -132,11 +132,11 @@ module cartridge_insert_sena(
         // 9. 4x Screwdriver Vertical Access Clearances (Eckfreistellungen)
         translate([3.5, 3.5, deck_th - 0.1])
             cylinder(r=3.8, h=cradle_h + 1.0, center=false);
-        translate([insert_l - 4.5, 3.5, deck_th - 0.1])
+        translate([insert_l - 3.5, 3.5, deck_th - 0.1])
             cylinder(r=3.8, h=cradle_h + 1.0, center=false);
         translate([3.5, insert_w - 3.5, deck_th - 0.1])
             cylinder(r=3.8, h=cradle_h + 1.0, center=false);
-        translate([insert_l - 4.5, insert_w - 3.5, deck_th - 0.1])
+        translate([insert_l - 3.5, insert_w - 3.5, deck_th - 0.1])
             cylinder(r=3.8, h=cradle_h + 1.0, center=false);
 
         // 10. 4x M2 Countersunk Mounting Screw Holes (DIN 7991 M2)
@@ -145,9 +145,9 @@ module cartridge_insert_sena(
         translate([3.5, 3.5, deck_th - 1.2])
             cylinder(r1=M2_SCREW_HOLE_R, r2=2.3, h=1.3, center=false);
 
-        translate([insert_l - 4.5, 3.5, -0.5])
+        translate([insert_l - 3.5, 3.5, -0.5])
             cylinder(r=M2_SCREW_HOLE_R, h=deck_th + 1.0, center=false);
-        translate([insert_l - 4.5, 3.5, deck_th - 1.2])
+        translate([insert_l - 3.5, 3.5, deck_th - 1.2])
             cylinder(r1=M2_SCREW_HOLE_R, r2=2.3, h=1.3, center=false);
 
         translate([3.5, insert_w - 3.5, -0.5])
@@ -155,9 +155,9 @@ module cartridge_insert_sena(
         translate([3.5, insert_w - 3.5, deck_th - 1.2])
             cylinder(r1=M2_SCREW_HOLE_R, r2=2.3, h=1.3, center=false);
 
-        translate([insert_l - 4.5, insert_w - 3.5, -0.5])
+        translate([insert_l - 3.5, insert_w - 3.5, -0.5])
             cylinder(r=M2_SCREW_HOLE_R, h=deck_th + 1.0, center=false);
-        translate([insert_l - 4.5, insert_w - 3.5, deck_th - 1.2])
+        translate([insert_l - 3.5, insert_w - 3.5, deck_th - 1.2])
             cylinder(r1=M2_SCREW_HOLE_R, r2=2.3, h=1.3, center=false);
     }
 }

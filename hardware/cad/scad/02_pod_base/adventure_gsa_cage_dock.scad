@@ -25,22 +25,22 @@ include <../00_common/parameters.scad>;
 // --- Parametric Dimensions ---
 GSA_TUBE_DIA        = 18.2;  // Ø 18 mm stainless steel rack tube bore (mm)
 GSA_TUBE_R          = GSA_TUBE_DIA / 2.0;
-GSA_POD_L           = 136.0; // Internal pod length clearance (mm)
-GSA_POD_W           = 71.0;  // Internal pod width clearance (mm)
-GSA_POD_H           = 38.5;  // Internal pod height clearance (mm)
+GSA_POD_L           = POD_OUTER_L + 1.0; // Internal pod length clearance (151.0 mm)
+GSA_POD_W           = POD_OUTER_W + 1.0; // Internal pod width clearance (71.0 mm)
+GSA_POD_H           = POD_OUTER_H + 0.5; // Internal pod height clearance (38.5 mm)
 GSA_WALL            = 3.5;   // Armored structural wall thickness (mm)
 GSA_FLOOR           = 4.0;   // Armored bottom skid plate thickness (mm)
 
 // Outer Caddy Envelope
-CADDY_TOTAL_L       = 162.0; // Total exoskeleton length (mm)
+CADDY_TOTAL_L       = GSA_POD_L + 25.0; // Total exoskeleton length (176.0 mm)
 CADDY_TOTAL_W       = 82.0;  // Total width (nested pod + walls, mm)
 CADDY_TOTAL_H       = 44.0;  // Total height (mm)
 CADDY_CHAMFER       = 6.0;   // Faceted rally chamfer (mm)
 
 // Dual Clamping Stations (Spaced along tube at X1 and X2)
-CLAMP_SPAN_X        = 85.0;  // Center-to-center distance between clamps (mm)
+CLAMP_SPAN_X        = 95.0;  // Center-to-center distance between clamps (mm, widened for 176mm caddy)
 CLAMP_X1            = 28.0;  // First clamp center position (mm)
-CLAMP_X2            = CLAMP_X1 + CLAMP_SPAN_X; // Second clamp center (113 mm)
+CLAMP_X2            = CLAMP_X1 + CLAMP_SPAN_X; // Second clamp center (123 mm)
 CLAMP_WIDTH_X       = 24.0;  // Width of each individual clamp block (mm)
 CLAMP_BOLT_DIST_Z   = 32.0;  // Distance between upper & lower M5 clamping bolts (mm)
 CLAMP_BOLT_R        = 2.8;   // M5 clearance hole (Ø 5.6 mm)
@@ -148,9 +148,9 @@ module adventure_gsa_cage_dock_body() {
             cube([3.0, 16.0, 2.5]);
         }
 
-        // G. 4x Lateral Relief Pockets for Pod Base Strap Hook Lugs (X=37 and X=122)
+        // G. 4x Lateral Relief Pockets for Pod Base Strap Hook Lugs (X=37 and X=POD_OUTER_L-13)
         // Pod lugs project 3.0 mm laterally. Pockets provide 14.0 x 4.0 x 8.5 mm clearance.
-        for (hx = [37.0, 122.0]) {
+        for (hx = [12.0 + 25.0, 12.0 + (POD_OUTER_L - 25.0)]) {
             // Inner wall (facing tube)
             translate([hx - 7.0, GSA_WALL + 4.0 - 3.8, GSA_FLOOR - 0.1])
                 cube([14.0, 4.0, 8.5]);
@@ -160,13 +160,13 @@ module adventure_gsa_cage_dock_body() {
         }
 
         // E. Lateral Expedition Style Cutouts (Lightweighting & aesthetics)
-        for (gx = [CLAMP_X1 + 18.0, CLAMP_X1 + 42.0]) {
+        for (gx = [CLAMP_X1 + 18.0, CLAMP_X1 + CLAMP_SPAN_X - 18.0]) {
             translate([gx, CADDY_TOTAL_W - 4.0, 10.0])
                 cube([16.0, 6.0, CADDY_TOTAL_H - 20.0]);
         }
 
         // F. Drain / Weep Holes on Bottom Skid Plate
-        for (dx = [35.0, 80.0, 125.0]) {
+        for (dx = [35.0, CADDY_TOTAL_L/2.0, CADDY_TOTAL_L - 35.0]) {
             translate([dx, CADDY_TOTAL_W/2.0, -1.0])
                 cylinder(r=2.5, h=GSA_FLOOR + 2.0, $fn=16);
         }

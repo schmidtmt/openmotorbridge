@@ -14,9 +14,9 @@
 include <../00_common/parameters.scad>;
 
 FENDER_R_TRANS = 140.0;
-POD_L          = 136.0;
-POD_W          = 71.0;
-POD_H          = 38.5;
+POD_L          = POD_OUTER_L + 1.0; // 151.0 mm
+POD_W          = POD_OUTER_W + 1.0; // 71.0 mm
+POD_H          = POD_OUTER_H + 0.5; // 38.5 mm
 
 // High-fidelity 2D cross-section slice in Y-Z plane
 module console_slice_2d(w_base, w_top, h, spine_w, spine_h, r_b=5.0, r_t=6.0) {
@@ -106,7 +106,7 @@ module pod3_internal_slide_tunnel() {
         cube([28.0, 38.0, 22.0], center=false);
 
     // 4. Strap Hook Reliefs inside chamber
-    hook_x = [-POD_L/2.0 + 25.0, -POD_L/2.0 + 110.0];
+    hook_x = [-POD_L/2.0 + 25.0, -POD_L/2.0 + (POD_OUTER_L - 25.0)];
     for (hx = hook_x) {
         translate([hx - 7.0, -POD_W/2.0 - 1.0, 5.0]) cube([14.0, 2.5, 10.0]);
         translate([hx - 7.0,  POD_W/2.0 - 1.5, 5.0]) cube([14.0, 2.5, 10.0]);

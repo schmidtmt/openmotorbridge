@@ -19,12 +19,12 @@ MAIN_BOX_WALL         = 2.5;   // Nominal wall thickness (mm)
 MAIN_BOX_CORNER_POST  = 7.0;   // Corner clamping screw post size (mm, for M3 hex nut pockets)
 
 // --- 3. Satellite Pod Dimensions (Universal Enlarged Envelope) ---
-POD_OUTER_L           = 135.0; // Outer length in X (mm)
+POD_OUTER_L           = 150.0; // Outer length in X (mm, standardized for serial PCBA 03 + Cardo/Sena/OMM)
 POD_OUTER_W           = 70.0;  // Outer width in Y (mm)
 POD_OUTER_H           = 38.0;  // Outer height in Z (mm)
 POD_WALL              = 3.5;   // Nominal wall thickness (mm)
 POD_BULKHEAD_X        = 18.0;  // Partition bulkhead position in X (mm)
-POD_CHAMBER_L         = 117.0; // Sliding chamber length in X (mm)
+POD_CHAMBER_L         = 132.0; // Sliding chamber length in X (mm, clears 130mm sled + 2mm margin)
 POD_CHAMBER_W         = 63.0;  // Sliding chamber width in Y (mm)
 POD_CHAMBER_H         = 31.0;  // Sliding chamber height in Z (mm)
 
@@ -39,7 +39,7 @@ CARTRIDGE_TONGUE_PROT = 1.4;   // Cartridge tongue protrusion in Y (mm, 0.1mm cl
 CARTRIDGE_CHAMFER_L   = 4.0;   // 30° lead-in chamfer nose length (mm)
 
 // --- 5. Cartridge Dimensions (Enlarged Universal Sled) ---
-CARTRIDGE_BASE_L      = 116.0; // Sled length in X (mm)
+CARTRIDGE_BASE_L      = 130.0; // Sled length in X (mm, accommodates PCBA 03 + OEM Cardo Air-Mount/Sena/OMM serial layout)
 CARTRIDGE_BASE_W      = 58.0;  // Sled width in Y (mm)
 CARTRIDGE_BASE_H      = 28.0;  // Sled height in Z (mm)
 CARTRIDGE_FACE_L      = 4.0;   // Front faceplate thickness in X (mm)
@@ -52,9 +52,9 @@ SMA_ORECESS_R         = 4.75;  // Ø 9.5 mm recess for waterproof silicone O-rin
 SMA_ORECESS_DEPTH     = 1.2;   // 1.2 mm deep O-ring compression pocket
 
 // --- 5b. Magnetic Anti-Theft Lock System ---
-LATCH_PIVOT_X         = 58.0;  // Center pivot position along sled X (mm)
-LATCH_MAGNET_X        = 46.0;  // Ferromagnetic anchor position along sled X (mm)
-LATCH_TOOTH_X         = 70.0;  // Locking sawtooth pawl position along sled X (mm)
+LATCH_PIVOT_X         = 65.0;  // Center pivot position along sled X (mm, centered on 130mm sled)
+LATCH_MAGNET_X        = 53.0;  // Ferromagnetic anchor position along sled X (mm)
+LATCH_TOOTH_X         = 77.0;  // Locking sawtooth pawl position along sled X (mm)
 LATCH_ARM_H           = 6.0;   // Rocker lever height in Z (mm)
 LATCH_ARM_THICK       = 2.6;   // Rocker beam thickness in Y (mm)
 LATCH_MAGNET_PIN_DIA  = 6.2;   // Bore for Ø 6.0 mm steel dowel pin (mm)

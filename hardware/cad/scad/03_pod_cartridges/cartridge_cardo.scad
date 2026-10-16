@@ -53,16 +53,16 @@ module cartridge_cardo_assembly(exploded = false) {
 
     // 5. Dual N52 Neodymium AirMount Permanent Magnets (Ø 8.0 x 3.0 mm, Glanzvernickelt)
     color("silver") {
-        translate([29.5, 29.0, z_insert + 2.8])
+        translate([37.5, 29.0, z_insert + 2.8])
             cylinder(r=4.0, h=3.0, center=false, $fn=32);
-        translate([89.5, 29.0, z_insert + 2.8])
+        translate([97.5, 29.0, z_insert + 2.8])
             cylinder(r=4.0, h=3.0, center=false, $fn=32);
     }
 
     // 6. 5-Pin Gold-Plated Spring Pogo Contact Array (Ø 1.5 mm, vergoldet)
     color("gold") {
         for (i = [-2:2]) {
-            translate([60.5 + i * 2.54, 29.0, z_insert + 2.0]) {
+            translate([67.5 + i * 2.54, 29.0, z_insert + 2.0]) {
                 cylinder(r=0.9, h=3.5, center=false, $fn=16);
                 translate([0, 0, 3.5])
                     sphere(r=0.9, $fn=16);

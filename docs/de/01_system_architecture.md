@@ -159,7 +159,7 @@ Für Naked Bikes, Enduros und klassische Rahmenrohre verfügen die Universal-Pod
 * Die Helme von Fahrer und Sozius bleiben zu $100\,\%$ leicht, aerodynamisch original und frei von Kabeln. Die Audio-Ein- und Ausgabe erfolgt vollkommen drahtlos über die integrierte Bluetooth-Schnittstelle der Zentralbox.
 
 ### 2.4 Universelle OEM-Adapter-Kompatibilität (Off-the-Shelf)
-Die erweiterten Pod-Kassetten ($110 \times 54 \times 28\,\text{mm}$ Innenraum) nehmen alle handelsüblichen OEM-Geräte im ungeöffneten Originalzustand auf:
+Die erweiterten Pod-Kassetten ($130 \times 58 \times 28\,\text{mm}$ Basisschlitten mit $124 \times 53 \times 28\,\text{mm}$ Innenraum im $150 \times 70 \times 38\,\text{mm}$ Pod) nehmen alle handelsüblichen OEM-Geräte im ungeöffneten Originalzustand auf:
 * **Klasse S (Smart Modular Cartridge mit Mechatronik * OMB-Referenz):** z. B. Sena SPIDER X Slim (Primärempfehlung), Sena 60S, Cardo Edge - 100 % ungeöffnetes Originalgerät im PA12-MJF Konturbett mit 3-Punkt EPDM-Dämpfung gegen $20\,\text{g}$ Vibration, 4 unabhängige mechatronische Aktuatoren auf PCBA 03 Rev 2.0 (WCH CH32V003 RISC-V Controller, In-System Flashing via Pin 5 UART), direkte $3{,}85\,\text{V}$ DC-Speisung ab Werk, null Pogo-Pins, null Löten, 100 % Erhalt von Werksgarantie & IPX-Schutz.
 * **Klasse A (Drahtlos-Bridges & USB-Speisung):** z. B. Sena +Mesh (B2M-01), Sena MeshPort Blue/Red - versorgt über flaches 90° Micro-USB/USB-C Kabel, drahtlose Audioübertragung zum Helm, externe SMA-Bulkhead-Doppelbuchse mit Schutzkappe an der Frontblende.
 * **Klasse B (Pogo-Pin Federkontakt-Cradles):** z. B. Sena 50S/60S/30K/20S EVO - vollwertiges analoges Audio (ES8388 Codec auf PCBA 03) und PTT-Tastung via AO3400A MOSFETs.
@@ -175,7 +175,7 @@ Die erweiterten Pod-Kassetten ($110 \times 54 \times 28\,\text{mm}$ Innenraum) n
 Werden Sena- und Cardo-Mesh-Geräte gleichzeitig betrieben, muss eine gegenseitige Blockade der 2,4-GHz-Empfänger zuverlässig verhindert werden:
 
 1. **Räumliche Distanzierung ($d \ge 45\,\text{cm}$ durch Fahrzeug-Flankentrennung):**
-   * **Keine Pod-Montage am Helm:** Die schweren Pods ($110 \times 54 \times 28\,\text{mm}$ Kassetten) verbleiben grundsätzlich fest am Fahrzeug (z. B. linker und rechter Kofferdeckel, Rahmenrohre oder Sturzbügel). Die Helme von Fahrer und Sozius bleiben zu 100 % kabel- und pod-frei.
+   * **Keine Pod-Montage am Helm:** Die wetterfesten Pods ($150 \times 70 \times 38\,\text{mm}$ mit $130 \times 58 \times 28\,\text{mm}$ Kassetten) verbleiben grundsätzlich fest am Fahrzeug (z. B. linker und rechter Kofferdeckel, Rahmenrohre oder Sturzbügel). Die Helme von Fahrer und Sozius bleiben zu 100 % kabel- und pod-frei.
    * **Physische & metallische Barriere:** Pod 1 (linke Fahrzeugflanke / linker Koffer) und Pod 2 (rechte Fahrzeugflanke / rechter Koffer) nutzen den massiven Motorradrahmen, den Kraftstofftank, den Motorblock und die Heckstruktur als natürliche metallische HF-Abschirmung.
 2. **Schirmdämpfung:**
    * Die Freiraumdämpfung über $> 50\,\text{cm}$ in Kombination mit der massiven metallischen Abschirmung durch die Fahrzeugstruktur erzielt eine **HF-Entkopplung von $> 35\,\text{dB}$**.

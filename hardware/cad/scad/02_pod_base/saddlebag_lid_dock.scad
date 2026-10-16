@@ -12,9 +12,9 @@
 include <../00_common/parameters.scad>;
 
 // --- Parametric Dimensions ---
-DOCK_POD_L          = 136.0; // Clearance for 135 mm Pod
-DOCK_POD_W          = 71.0;  // Clearance for 70 mm Pod
-DOCK_POD_H          = 39.0;  // Clearance for 38 mm Pod
+DOCK_POD_L          = POD_OUTER_L + 1.0; // Clearance for 150 mm Pod (151.0 mm)
+DOCK_POD_W          = POD_OUTER_W + 1.0; // Clearance for 70 mm Pod (71.0 mm)
+DOCK_POD_H          = POD_OUTER_H + 1.0; // Clearance for 38 mm Pod (39.0 mm)
 DOCK_WALL           = 3.0;   // Solid MJF PA12 wall thickness
 DOCK_CORNER_R       = 4.0;   // Outer verrundung
 
@@ -81,7 +81,7 @@ module saddlebag_lid_dock() {
 
         // B. Cartridge Ejection Window & Viewing Window (Floor cutouts)
         translate([18.0, DOCK_WALL + 10.0, -1.0]) {
-            rounded_box(80.0, DOCK_POD_W - 20.0, DOCK_WALL + 2.0, 4.0);
+            rounded_box(DOCK_POD_L - 46.0, DOCK_POD_W - 20.0, DOCK_WALL + 2.0, 4.0);
         }
 
         // C1. Port A (M8): Internal Blind Clearance Pocket (No external through-hole!)
@@ -145,9 +145,9 @@ module saddlebag_lid_dock() {
             cube([3.5, 28.0, 3.2]);
         }
 
-        // G. 4x Lateral Relief Pockets for Pod Base Strap Hook Lugs (X=25 and X=110)
+        // G. 4x Lateral Relief Pockets for Pod Base Strap Hook Lugs (X=25 and X=POD_OUTER_L-25)
         // Pod lugs project 3.0 mm laterally. Pockets provide 14.0 x 4.0 x 8.5 mm clearance.
-        for (hx = [26.0, 111.0]) {
+        for (hx = [26.0, POD_OUTER_L - 24.0]) {
             // Inboard flank (Y = 0)
             translate([hx - 7.0, DOCK_WALL - 3.8, DOCK_WALL - 0.1])
                 cube([14.0, 4.0, 8.5]);

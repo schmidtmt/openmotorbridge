@@ -354,7 +354,7 @@ All supported intercom and two-way radio cartridges are categorized into clearly
 | **Smart HJC 21B / 20B**| HJC Helmets (ECE 22.06) | Sena Bluetooth | Bluetooth 5.1 Only | Fixed antenna | Low-cost secondary gateway for telephony and navigation audio. |
 
 #### Mechanical Installation in Universal Base Sled (`00_base_sled.scad`):
-* The internal cavity of the base sled ($110 \times 53 \times 16\,\text{mm}$) provides generous room for all aforementioned OEM mainboards (rarely exceeding $75 \times 40 \times 12\,\text{mm}$).
+* The internal cavity of the base sled ($124 \times 53 \times 28\,\text{mm}$ with $130 \times 58 \times 28\,\text{mm}$ outer dimensions) provides generous room for all aforementioned OEM mainboards (rarely exceeding $75 \times 40 \times 12\,\text{mm}$).
 * The remaining $35\,\text{mm}$ of longitudinal space houses the step-down buck converter, NTC resistor, audio isolation transformers, and silicone strain reliefs.
 * The unit is sealed using the solid **Dummy Plug Cover ([`03_insert_blindkassette.scad`](../../hardware/cad/scad/03_pod_cartridges/parts/03_insert_blindkassette.scad))** with 4x M2 countersunk screws—100% waterproof and clean (or an optional 3D printed cover with button apertures).
 

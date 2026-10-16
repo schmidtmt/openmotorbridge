@@ -144,8 +144,8 @@ OpenMotorBridge implements a dual, fully integrated internal antenna concept eli
 ## 4. Enclosure System Type B: Universal Satellite Pod & Modular Cartridges
 
 OpenMotorBridge divides the mechanical enclosure of the satellites into two harmonized, interdependent system components:
-1. **Type B (Pod Base Chassis):** A 100% mechanically identical 5-sided monocoque housing ($135.0 \times 70.0 \times 38.0\,\text{mm}$) permanently installed on the motorcycle (on frame tubes, inside saddlebag lids, or on the rear cowl).
-2. **Type C (Modular Swap Cartridge):** A universal 2-piece base sled ($116.0 \times 58.0 \times 28.0\,\text{mm}$) that accommodates system-specific OEM intercoms (Sena 50S/60S, Cardo Packtalk Edge, Midland, PMR446) or a waterproof dry box, sliding into the pod without tools.
+1. **Type B (Pod Base Chassis):** A 100% mechanically identical 5-sided monocoque housing ($150.0 \times 70.0 \times 38.0\,\text{mm}$) permanently installed on the motorcycle (on frame tubes, inside saddlebag lids, or on the rear cowl).
+2. **Type C (Modular Swap Cartridge):** A universal 2-piece base sled ($130.0 \times 58.0 \times 28.0\,\text{mm}$ with $124.0 \times 53.0 \times 28.0\,\text{mm}$ clear interior cavity for serial packaging of PCBA 03 and OEM intercom/booster) that accommodates system-specific OEM intercoms (Sena 50S/60S, Cardo Packtalk Edge, Midland, PMR446) or a waterproof dry box, sliding into the pod without tools.
 
 ![OpenMotorBridge Satellite Pod & Cartridge 3D Cutaway CAD](../images/cad/pod_cartridge_cutaway_3d.png)
 
@@ -177,7 +177,7 @@ To effectively protect swap cartridges across all motorcycle types (from freely 
                  POD ENCLOSURE WALL (PA12-MJF, NON-MAGNETIC)
  -------------------------+-----------------------+------------------------------
   [EXTERNAL NEODYMIUM KEY]|                       | [HOUSING GUIDE GROOVE]
-  (Target circle at X=64) |                       |  (Retention notch at X=88 mm)
+  (Target circle at X=71) |                       |  (Retention notch at X=95 mm)
             v             |                       |            ^
       +-----------+       |                       |            | 90° locking flank:
       | NEODYMIUM |       |                       |            | blocks extraction!
@@ -189,7 +189,7 @@ To effectively protect swap cartridges across all motorcycle types (from freely 
       +-----------+outward|     (FULCRUM)         |   +-----------------+
       |STEEL ANCHOR+------+---------o-------------+---+ SAWTOOTH CLAW   |
       |(Ø 6.2 mm) |   Rear Arm      |     Front Arm   | (30° in / 90°)| |
-      +-----+-----+   (X = 46 mm)   |    (X = 70 mm)  +-----------------+
+      +-----+-----+   (X = 53 mm)   |    (X = 77 mm)  +-----------------+
             ^                       |                          ^
      [V4A SPRING] # Pushes          |                          | Swivels inward
      (Rest pos.)    inward          |                          | to release!
@@ -197,16 +197,16 @@ To effectively protect swap cartridges across all motorcycle types (from freely 
 
 ![OpenMotorBridge Magnetic Anti-Theft Lock 3D CAD Kinematics](../images/cad/magnetic_anti_theft_lock_cad.png)
 
-*Figure 8.8: Kinematic 3D cutaway view of the magnetic cartridge anti-theft lock (`98_magnetic_anti_theft_inspection.scad`). Visible: transparent pod housing, sled with 1st-class rocker arm (green), 90° sawtooth claw in housing notch ($X = 88\,\text{mm}$), $\varnothing\,6.2 \times 8\,\text{mm}$ steel anchor with V4A return spring ($X = 46\,\text{mm}$), M2 stainless pivot pin ($X = 58\,\text{mm}$), and bulkhead V4A ejection springs.*
+*Figure 8.8: Kinematic 3D cutaway view of the magnetic cartridge anti-theft lock (`98_magnetic_anti_theft_inspection.scad`). Visible: transparent pod housing, sled with 1st-class rocker arm (green), 90° sawtooth claw in housing notch ($X = 95\,\text{mm}$), $\varnothing\,6.2 \times 8\,\text{mm}$ steel anchor with V4A return spring ($X = 53\,\text{mm}$), M2 stainless pivot pin ($X = 65\,\text{mm}$), and bulkhead V4A ejection springs.*
 
 1. **Flush, Tamper-Proof Cartridge Front:**
    * External squeeze buttons are completely eliminated. The front bezel of the cartridge sits entirely flush and gapless against the pod housing. Manual prying with fingers or screwdrivers is impossible without destroying the enclosure.
 2. **Kinetic 2-Arm Rocker Latch (`parts/05_magnetic_lock_latch.scad`):**
-   * Operates as a class 1 lever around a rust-free M2 pivot axle at $X = 58\,\text{mm}$.
-   * **Front Arm ($X = 70\,\text{mm}$):** Carries the $90^\circ$ sawtooth retention claw with a $30^\circ$ lead-in ramp. Upon insertion, it slides smoothly over the rail and snaps positively into the housing notch at $X = 88\,\text{mm}$.
-   * **Rear Arm ($X = 46\,\text{mm}$):** Houses the press-fit ferromagnetic steel anchor ($\varnothing\,6.2 \times 8\,\text{mm}$). A V4A compression spring braces against the inner sled wall, keeping the locking claw permanently engaged in the rest state.
+   * Operates as a class 1 lever around a rust-free M2 pivot axle at $X = 65\,\text{mm}$ on the cartridge base sled.
+   * **Front Arm ($X = 77\,\text{mm}$):** Carries the $90^\circ$ sawtooth retention claw with a $30^\circ$ lead-in ramp. Upon insertion, it slides smoothly over the rail and snaps positively into the housing notch at $X = 95\,\text{mm}$ ($18\,\text{mm}$ bulkhead offset $+ 77\,\text{mm}$).
+   * **Rear Arm ($X = 53\,\text{mm}$):** Houses the press-fit ferromagnetic steel anchor ($\varnothing\,6.2 \times 8\,\text{mm}$). A V4A compression spring braces against the inner sled wall, keeping the locking claw permanently engaged in the rest state.
 3. **Contactless Neodymium Release & Tactile Target Circle:**
-   * On the left outer wall of `pod_base_housing.scad` at $X = 64\,\text{mm}$, a subtle tactile target circle ($\varnothing\,18\,\text{mm} \times 0.6\,\text{mm}$) is molded.
+   * On the left outer wall of `pod_base_housing.scad` at $X = 71\,\text{mm}$ ($18\,\text{mm} + 53\,\text{mm}$), a subtle tactile target circle ($\varnothing\,18\,\text{mm} \times 0.6\,\text{mm}$) is molded.
    * When the rider approaches the [Smart Keyfob](../../hardware/cad/scad/05_accessories/smart_keyfob_pager.scad) (or an N52 magnet key) to this circle, the magnetic field pulls the internal steel anchor outward. The rocker swivels around the M2 pin, retracts the locking claw into the sled, and releases the latch.
 4. **Automatic Spring Ejection (Auto-Eject):**
    * Simultaneously, the dual V4A compression springs in the bulkhead push the cartridge forward by a controlled **$15\dots 20\,\text{mm}$**, allowing easy single-handed removal.
@@ -220,20 +220,20 @@ To effectively protect swap cartridges across all motorcycle types (from freely 
 | **Axial Retention Force** | **$7.2\,\text{N}$** | Maintains constant seal compression against 20 g vibration |
 | **Gasket Compression Force** | **$4.5\,\text{N}$** | $30\,\%$ compression of $1.5\,\text{mm}$ silicone seal cord |
 | **Extraction Resistance** | **$> 120\,\text{N}$** | $90^\circ$ positive latch prevents unauthorized extraction |
-| **Release Magnetic Field** | **$B_r \ge 1.2\,\text{T}$ (N52)** | Contactless deflection of the rocker at target circle $X = 64\,\text{mm}$ |
+| **Release Magnetic Field** | **$B_r \ge 1.2\,\text{T}$ (N52)** | Contactless deflection of the rocker at target circle $X = 71\,\text{mm}$ |
 | **Auto-Eject Throw** | **$15\dots 20\,\text{mm}$** | Disconnects contact with generous safety margin |
 
 #### 4.1.3 The 4 Kinematic Phases of Cartridge Insertion
 1. **Phase 1 - Pre-Centering ($x = 0\dots 80\,\text{mm}$):** Asymmetrical Poka-Yoke guide ribs engage housing channels. Lateral play is restricted to $\pm 0.2\,\text{mm}$.
-2. **Phase 2 - Spring Compression ($x = 80\dots 86\,\text{mm}$):** Sled face contacts the two stainless steel ejection springs in the bulkhead, building the $7.2\,\text{N}$ preload.
-3. **Phase 3 - Contact Mating & Snap Latch ($x = 86\dots 91\,\text{mm}$):** The dual Mill-Max heavy-duty spring contacts in the monolithic bulkhead mate positively with gold-plated pads `PAD1` (+12V/5V) and `PAD2` (GND) on `B.Cu` of `PCBA 03`. The $30^\circ$ lead-in ramp deflects the rocker inward until it snaps into the notch at $X = 88\,\text{mm}$.
-4. **Phase 4 - Flush Locking ($x = 91\,\text{mm}$):** The $90^\circ$ locking flank dead-locks positively. The perimeter silicone gasket compresses by $30\,\%$ (IP67 weather seal).
+2. **Phase 2 - Spring Compression ($x = 80\dots 90\,\text{mm}$):** Sled face contacts the two stainless steel ejection springs in the bulkhead, building the $7.2\,\text{N}$ preload.
+3. **Phase 3 - Contact Mating & Snap Latch ($x = 90\dots 95\,\text{mm}$):** The dual Mill-Max heavy-duty spring contacts in the monolithic bulkhead mate positively with gold-plated pads `PAD1` (+12V/5V) and `PAD2` (GND) on `B.Cu` of `PCBA 03`. The $30^\circ$ lead-in ramp deflects the rocker inward until it snaps into the notch at $X = 95\,\text{mm}$.
+4. **Phase 4 - Flush Locking ($x = 95\dots 98\,\text{mm}$):** The $90^\circ$ locking flank dead-locks positively. The perimeter silicone gasket compresses by $30\,\%$ (IP67 weather seal).
 
 ---
 
 ### 4.2 Enclosure Type B: Universal Satellite Pod Housing (Pods 1 and 2)
 
-Both satellite pod locations use the identical 5-sided monocoque enclosure ($135.0 \times 70.0 \times 38.0\,\text{mm}$):
+Both satellite pod locations use the identical 5-sided monocoque enclosure ($150.0 \times 70.0 \times 38.0\,\text{mm}$ with $132.0 \times 63.0 \times 31.0\,\text{mm}$ internal chamber):
 
 #### 4.2.1 V-Groove Pipe Saddle ($120^\circ$) & EPDM Strap Mounting
 * **Underside Profile:** $120^\circ$-V-saddle ($R = 15\,\text{mm}$) contours snugly to frame tubes from $\varnothing 18\dots 35\,\text{mm}$ ($1"$ crash bars, $7/8"$ subframes).
@@ -362,7 +362,7 @@ For modern intercom cartridges such as the Sena SPIDER X Slim and Cardo Packtalk
   * Instead of a rigid single-block actuator comb, OpenMotorBridge utilizes **4 miniaturized discrete actuators** (solenoids with return springs and elastomeric TPU tips), each wired via its own flexible 2-wire AWG30 silicone cable to the 8-pin `J_ACT` header on PCBA 03.
   * This allows the cartridge top cover inlay to be custom-tailored for any intercom geometry:
     * **Sena SPIDER X Slim:** 3 actuators arranged vertically in the top face guide row (Plus, Center, Minus) and 1 actuator mounted in a $45^\circ$-angled guide tower on the side flank to actuate the triangular Mesh button.
-    * **Cardo Packtalk Edge:** 3 actuators for the primary buttons (Media, Mobile, Intercom) and 1 actuator driving the axial center push switch of the Control Wheel (Center-Press). Mechanically rolling the wheel while riding is rendered unnecessary, as system master volume and gain are adjusted digitally via the ES8388 DSP in the Central Box.
+    * **Cardo Packtalk Edge:** PCBA 03 retains all 4 independent actuator MOSFET channels (`ACT1`–`ACT4` via AO3400A on the 8-pin `J_ACT` header) on hardware. For the Cardo Packtalk Edge, **2 mechatronic actuators** fitted with custom angled rectangular feet are installed to actuate the slanted, narrow physical keys for Power On/Off cold start. All remaining operational parameters (such as channel selection and Open Mesh groups) are managed programmatically via BLE directly by the OpenMotorBridge firmware—eliminating reliance on inaudible voice prompts or blind LEDs inside the closed pod—while audio gain is governed digitally by the Central Box DSP.
   * **Mechanical Retention via Clamping Plate:** The actuators slide from the interior into the monolithic guide towers and are securely seated against their shoulder by a shared PA12-CF retainer plate fastened with 4x M2 countersunk screws and backed by a $1.0\,\text{mm}$ EPDM vibration pad. Loosening or misalignment under 20g road vibration is physically prevented.
   * **Anti-Pinch Cable Routing:** Recessed $1.8 \times 2.0\,\text{mm}$ cable channels with integral retaining snap clips line the inner wall of the sled. The ultra-flexible AWG30 silicone leads of the 8-pin Y-harness route safely and pinch-free from `J_ACT` to the 4 actuators.
 
@@ -399,7 +399,7 @@ Retired OEM intercoms from replaced helmets (Schuberth C5 with SC2, Shoei Neotec
   * The **Schuberth SC2** measures $75 \times 40 \times 12\,\text{mm}$ as a single block.
   * For **Shoei SRL-Mesh / SRL3**, the flat neck electronics module ($65 \times 35 \times 10\,\text{mm}$) is placed flat alongside the compact 3-button wing inside the sled bed.
   * The **Smart HJC 50B** slot-in module ($68 \times 38 \times 11\,\text{mm}$) fits directly into the cradle as well.
-  * All systems seat comfortably inside the clear interior envelope of the universal base sled (`00_base_sled.scad`, $110 \times 53 \times 16\,\text{mm}$).
+  * All systems seat comfortably inside the clear interior envelope of the universal base sled (`00_base_sled.scad`, $124 \times 53 \times 28\,\text{mm}$).
 * **$30\dots 35\,\text{mm}$ Functional Clearance:** The remaining longitudinal space ahead of the units accommodates the miniature step-down buck converter (MP2315, converting bike 5V $\rightarrow 3.75\,\text{V}$ constant DC in place of the desoldered battery), the $10\,\text{k}\Omega$ NTC dummy thermistor resistor, audio isolation transformers, and silicone strain reliefs.
 * **Controls & Actuation:**
   * *Schuberth SC2:* Operated 100% wirelessly using the factory Schuberth Bluetooth Low Energy (BLE) handlebar remote (zero-wear, zero wires to handlebar).
@@ -697,19 +697,19 @@ Depending on luggage configurations, adventure bikes deploy two specialized moun
   * **Design Philosophy (Expedition Armor + Stealth Niche):**
     Blends the indestructible aesthetic of professional rally raid and overland gear with stealth niche packaging: The pod is deeply recessed into the approx. $45\,\text{mm}$ wide dead space between the aluminum pannier case inner wall and the motorcycle subframe/wheel arch.
   * **4x Strap Hook Clearance Pockets:**
-    The pod base housing (`pod_base_housing.scad`) integrates 4x lateral strap hook lugs ($X = 37.0\,\text{mm}$ and $X = 122.0\,\text{mm}$, protruding $3.0\,\text{mm}$). The GSA Cage Dock features 4x matching clearance pockets ($14.0 \times 4.0 \times 8.5\,\text{mm}$) in its side flank walls, ensuring the pod drops in completely flush and bind-free without stressing the dock structure.
+    The pod base housing (`pod_base_housing.scad`) integrates 4x lateral strap hook lugs ($X = 25.0\,\text{mm}$ and $X = 125.0\,\text{mm}$, protruding $3.0\,\text{mm}$). The $176.0\,\text{mm}$ long GSA Cage Dock (`CADDY_TOTAL_L`) features 4x matching clearance pockets ($14.0 \times 4.0 \times 8.5\,\text{mm}$) at $X = 37.0\,\text{mm}$ and $X = 137.0\,\text{mm}$ in its side flank walls, ensuring the pod drops in completely flush and bind-free without stressing the dock structure.
   * **Expanded Transverse Conduit & 2-Wire DC Strain Relief:**
     The rear wiring conduit spans $52.0\,\text{mm}$ across both Port A ($Y = 34.5\,\text{mm}$) and Port B ($Y = 50.5\,\text{mm}$). An integrated mini zip-tie tie-down bridge ($2.5 \times 1.2\,\text{mm}$) sheltered inside the tube clamp shadow anchors the 2-wire automotive DC harness ($2 \times 0.5\,\text{mm}^2$, $\varnothing 3.6\,\text{mm}$ PUR/FLRY) vibration-free, routing cleanly along the rack tube to the Central Box.
 
 ![OpenMotorBridge GSA Cage Dock Detailed View](../images/cad/gsa_cage_dock_cad.png)
 
-*Figure 8.29-A: CAD detailed view of the heavy-duty GSA Cage Dock (`adventure_gsa_cage_dock.scad`). Depicted are the deeply recessed Sena SPIDER X Slim Pod 1 nestled within the protective PA12-CF armor cage, the 4x strap hook clearance pockets in the flank walls, the broad 85 mm dual-saddle clamping base for Ø 18 mm stainless steel tubes with 4x M5 V4A socket bolts and DIN 985 locknut retention pockets, the 45° faceted deflection skid plate shielding against gravel roost from the rear wheel, and the concealed 2-wire DC cable conduit with zip-tie anchor in the tube's shadow.*
+*Figure 8.29-A: CAD detailed view of the heavy-duty GSA Cage Dock (`adventure_gsa_cage_dock.scad`). Depicted are the deeply recessed Sena SPIDER X Slim Pod 1 nestled within the protective PA12-CF armor cage, the 4x strap hook clearance pockets in the flank walls, the broad 95 mm dual-saddle clamping base for Ø 18 mm stainless steel tubes with 4x M5 V4A socket bolts and DIN 985 locknut retention pockets, the 45° faceted deflection skid plate shielding against gravel roost from the rear wheel, and the concealed 2-wire DC cable conduit with zip-tie anchor in the tube's shadow.*
 
 * **Option B: Standard BMW GS & Naked Adventure Bikes (Without Luggage Racks):**
   * **Mounting:** Mounted via a two-piece, aerodynamically sculpted **Transition Dock** ([`adventure_transition_dock.scad`](../../hardware/cad/scad/02_pod_base/adventure_transition_dock.scad)) in combination with a concealed **Under-Seat Saddle Bridge** ([`adventure_underseat_cross_rail.scad`](../../hardware/cad/scad/02_pod_base/adventure_underseat_cross_rail.scad)).
   * **Positioning:** Directly inside the optical waist crease ("Bügelfalte") at the transition between rider and passenger seats along the $\varnothing 28\,\text{mm}$ subframe tube.
   * **4x Clearance Pockets for Pod Lugs:**
-    The Transition Dock base (`adventure_transition_dock_base.stl`) features 4x lateral relief pockets ($X = 25.0\,\text{mm}$ and $X = 110.0\,\text{mm}$) allowing the pod to nestle flush inside the aerodynamic cradle.
+    The Transition Dock base (`adventure_transition_dock_base.stl`) features 4x lateral relief pockets ($X = 25.0\,\text{mm}$ and $X = 125.0\,\text{mm}$) allowing the $150\,\text{mm}$ pod to nestle flush inside the $151\,\text{mm}$ aerodynamic cradle ($207.0\,\text{mm}$ total console length).
   * **Integrated 2-Wire DC Channel to Saddle Bridge:**
     The nose wiring chamber captures the 2-wire DC power cable form-fittingly and routes it through the inboard bridge tongue directly into the under-seat saddle bridge (`adventure_underseat_cross_rail.stl`)--routed invisibly under the seat foam to the Central Box.
 
@@ -776,12 +776,12 @@ The universal Saddlebag Lid Dock ([`saddlebag_lid_dock.scad`](../../hardware/cad
 2. **Alternative / Additional Adhesive Mounting (3M VHB):**
    * Underside features four defined pockets ($18 \times 12 \times 0.8\,\text{mm}$) for 3M VHB acrylic foam tape.
 3. **Half-Shell Architecture ($H = 26\,\text{mm}$):**
-   * The $3\,\text{mm}$ thick PA12 cradle encloses the Pod housing ($135 \times 70 \times 38\,\text{mm}$) form-fittingly up to half its height.
+   * The $3\,\text{mm}$ thick PA12 cradle ($151.0 \times 71.0\,\text{mm}$ interior cavity, $154.0\,\text{mm}$ cradle outer length, $174.0\,\text{mm}$ total length incl. flange and snout) encloses the Pod housing ($150 \times 70 \times 38\,\text{mm}$) form-fittingly up to half its height. It provides expansive clearance inside Harley-Davidson Touring saddlebag lids (> 450 mm available length).
 4. **Overhead Drip Lip Protection:**
    * An integrated **drip lip ($16 \times 2\,\text{mm}$ with $30^\circ$ roof angle)** deflects condensation or rainwater sideways when opening the lid in rain.
 5. **Vibration-Proof EPDM Retention Strap:**
    * Two lateral slots ($25 \times 3\,\text{mm}$) accept an elastic retention strap that firmly secures the pod against harsh road impacts.
-6. **4x Strap Hook Clearance Pockets ($X = 26.0\,\text{mm}$ and $X = 111.0\,\text{mm}$):**
+6. **4x Strap Hook Clearance Pockets ($X = 26.0\,\text{mm}$ and $X = 126.0\,\text{mm}$):**
    * The pod base housing (`pod_base_housing.scad`) features 4x exterior strap hook lugs protruding $3.0\,\text{mm}$ laterally (overall width $76\,\text{mm}$ vs. nominal $70\,\text{mm}$).
    * Four matching pockets ($14.0 \times 4.0 \times 8.5\,\text{mm}$) are molded into the dock walls, enabling full flush seating without wedging or binding.
 
@@ -1178,6 +1178,7 @@ The OpenMotorBridge CAD repository follows a strict hierarchical Constructive So
 | **Frame Dock** | MagSafe Frame Dock Upper Shell (Tube Saddle, Wings & M2.5 Nut-Pocket) | `02_pod_base/components/009_magsafe_frame_dock.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
 | **Frame Dock** | MagSafe Tube Clamp Strap (Ø 26 mm) | `02_pod_base/components/009_magsafe_frame_clamp.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
 | **Frame Dock** | MagSafe Frame Dock Lower Shell (PCB Ledge & M2.5 Counterbore) | `02_pod_base/components/009_magsafe_frame_lid.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
+| **Saddlebag Lid Dock** | Harley One-Touch Saddlebag Lid Dock Half-Shell | `02_pod_base/saddlebag_lid_dock.stl` | `02_pod_base/saddlebag_lid_dock.scad` |
 | **Radar Mount** | Decoupled License-Plate Radar Bracket | `02_pod_base/radar_license_plate_bracket.stl` | `02_pod_base/radar_license_plate_bracket.scad` |
 | **Radar Mount** | Stealth Center Under-Fender Radar Mount (Custom / Bobber) | `02_pod_base/radar_center_underfender_mount.stl` | `02_pod_base/radar_center_underfender_mount.scad` |
 | **Radar Swivel**| Radar 2.0 Heavy-Duty Swivel Tilt Cradle (Actioncam/GoPro Hirth) | `02_pod_base/radar_swivel_tilt_cradle.stl` | `02_pod_base/radar_swivel_tilt_cradle.scad` |

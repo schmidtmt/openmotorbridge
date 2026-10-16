@@ -19,7 +19,7 @@ include <../../00_common/parameters.scad>;
 include <../../00_common/screw_bosses.scad>;
 
 module cartridge_insert_omm_ucs(
-    insert_l = 110.0,
+    insert_l = CARTRIDGE_BASE_L - 6.0, // 124.0 mm for CARTRIDGE_BASE_L = 130.0
     insert_w = 53.0,
     deck_th  = 2.5,
     cradle_h = 10.0
@@ -34,13 +34,17 @@ module cartridge_insert_omm_ucs(
                 difference() {
                     cube(size=[insert_l - 4.0, insert_w - 3.0, cradle_h], center=false);
 
-                    // A. Universal UCS Module Recessed Contour Bed
-                    translate([18.0, (insert_w - 3.0 - 40.0)/2.0, 2.0])
+                    // A. Universal UCS Module Recessed Contour Bed (68 x 38 mm module)
+                    translate([14.0, (insert_w - 3.0 - 40.0)/2.0, 2.0])
                         cube(size=[70.0, 40.0, cradle_h + 0.1], center=false);
 
-                    // B. Front USB-C Cable Channel & Port Tunnel
-                    translate([insert_l - 24.0, (insert_w - 3.0 - 14.0)/2.0, 2.5])
-                        cube(size=[24.0, 14.0, cradle_h + 0.1], center=false);
+                    // B. Optional 5V COTS Bi-Directional RF Booster Pocket (25 x 15 mm module)
+                    translate([insert_l - 34.0, (insert_w - 3.0 - 18.0)/2.0, 2.0])
+                        cube(size=[27.0, 18.0, cradle_h + 0.1], center=false);
+
+                    // C. Coaxial Cable & USB-C Interconnect Channels
+                    translate([84.0, (insert_w - 3.0 - 14.0)/2.0, 2.5])
+                        cube(size=[insert_l - 88.0, 14.0, cradle_h + 0.1], center=false);
                 }
             }
 
@@ -55,17 +59,17 @@ module cartridge_insert_omm_ucs(
 
         // 4. True Through-Deck Contact & Wiring Pass-Through (Cuts through Grundplatte)
         // Pass-through to PCBA 03 J_AUDIO_PWR / J_ACT headers below
-        translate([26.0, insert_w/2.0 - 10.0, -1.0])
+        translate([20.0, insert_w/2.0 - 10.0, -1.0])
             cube(size=[14.0, 20.0, deck_th + cradle_h + 2.0], center=false);
 
         // 5. 4x Sled M2 Corner Fastening Screws Clearances (Ø 4.5 mm counterbore & tool access)
         translate([3.5, 3.5, -0.5])
             cylinder(r=2.2, h=deck_th + cradle_h + 1.0, center=false, $fn=24);
-        translate([insert_l - 9.5, 3.5, -0.5])
+        translate([insert_l - 3.5, 3.5, -0.5])
             cylinder(r=2.2, h=deck_th + cradle_h + 1.0, center=false, $fn=24);
-        translate([3.5, insert_w - 8.5, -0.5])
+        translate([3.5, insert_w - 3.5, -0.5])
             cylinder(r=2.2, h=deck_th + cradle_h + 1.0, center=false, $fn=24);
-        translate([insert_l - 9.5, insert_w - 8.5, -0.5])
+        translate([insert_l - 3.5, insert_w - 3.5, -0.5])
             cylinder(r=2.2, h=deck_th + cradle_h + 1.0, center=false, $fn=24);
 
         // 6. 4x Convective Airflow & Breathing Slots

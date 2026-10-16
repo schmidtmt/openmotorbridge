@@ -15,7 +15,7 @@ include <../../00_common/parameters.scad>;
 include <../../00_common/screw_bosses.scad>;
 
 module cartridge_insert_cardo(
-    insert_l = 110.0,
+    insert_l = CARTRIDGE_BASE_L - 6.0, // 124.0 mm for CARTRIDGE_BASE_L = 130.0
     insert_w = 53.0,
     deck_th  = 2.5,
     cradle_h = 10.0
@@ -35,9 +35,9 @@ module cartridge_insert_cardo(
                         cube(size=[insert_l - 8.0, insert_w - 7.0, cradle_h + 0.1], center=false);
 
                     // B. Dual N52 Neodymium Magnet Pockets (Ø 8.2 mm x 2.5 mm depth)
-                    translate([25.0, (insert_w - 3.0)/2.0, 0.5])
+                    translate([35.0, (insert_w - 3.0)/2.0, 0.5])
                         cylinder(r=4.1, h=cradle_h, center=false);
-                    translate([85.0, (insert_w - 3.0)/2.0, 0.5])
+                    translate([95.0, (insert_w - 3.0)/2.0, 0.5])
                         cylinder(r=4.1, h=cradle_h, center=false);
                 }
             }
@@ -56,10 +56,9 @@ module cartridge_insert_cardo(
         translate([50.0, insert_w/2.0 - 6.0, -1.0])
             cube(size=[16.0, 12.0, deck_th + cradle_h + 2.0], center=false);
 
-        // B. Underfloor Wiring Pass-Through Channel to Carrier PCB J2
+        // B. Underfloor Wiring Pass-Through Channel to Carrier PCB J_AUDIO_PWR
         translate([20.0, insert_w/2.0 - 8.0, -1.0])
             cube(size=[18.0, 16.0, deck_th + cradle_h + 2.0], center=false);
-
 
         // 6. 2x Outward-Facing EPDM Rubber Strap Undercut Hook Slots
         // Left Hook Undercut Slot
@@ -72,11 +71,11 @@ module cartridge_insert_cardo(
         // 7. 4x Screwdriver Vertical Access Clearances (Eckfreistellungen)
         translate([3.5, 3.5, deck_th - 0.1])
             cylinder(r=3.8, h=cradle_h + 1.0, center=false);
-        translate([insert_l - 4.5, 3.5, deck_th - 0.1])
+        translate([insert_l - 3.5, 3.5, deck_th - 0.1])
             cylinder(r=3.8, h=cradle_h + 1.0, center=false);
         translate([3.5, insert_w - 3.5, deck_th - 0.1])
             cylinder(r=3.8, h=cradle_h + 1.0, center=false);
-        translate([insert_l - 4.5, insert_w - 3.5, deck_th - 0.1])
+        translate([insert_l - 3.5, insert_w - 3.5, deck_th - 0.1])
             cylinder(r=3.8, h=cradle_h + 1.0, center=false);
 
         // 8. 4x M2 Countersunk Mounting Screw Holes (DIN 7991 M2)
@@ -85,9 +84,9 @@ module cartridge_insert_cardo(
         translate([3.5, 3.5, deck_th - 1.2])
             cylinder(r1=M2_SCREW_HOLE_R, r2=2.3, h=1.3, center=false);
 
-        translate([insert_l - 4.5, 3.5, -0.5])
+        translate([insert_l - 3.5, 3.5, -0.5])
             cylinder(r=M2_SCREW_HOLE_R, h=deck_th + 1.0, center=false);
-        translate([insert_l - 4.5, 3.5, deck_th - 1.2])
+        translate([insert_l - 3.5, 3.5, deck_th - 1.2])
             cylinder(r1=M2_SCREW_HOLE_R, r2=2.3, h=1.3, center=false);
 
         translate([3.5, insert_w - 3.5, -0.5])
@@ -95,9 +94,9 @@ module cartridge_insert_cardo(
         translate([3.5, insert_w - 3.5, deck_th - 1.2])
             cylinder(r1=M2_SCREW_HOLE_R, r2=2.3, h=1.3, center=false);
 
-        translate([insert_l - 4.5, insert_w - 3.5, -0.5])
+        translate([insert_l - 3.5, insert_w - 3.5, -0.5])
             cylinder(r=M2_SCREW_HOLE_R, h=deck_th + 1.0, center=false);
-        translate([insert_l - 4.5, insert_w - 3.5, deck_th - 1.2])
+        translate([insert_l - 3.5, insert_w - 3.5, deck_th - 1.2])
             cylinder(r1=M2_SCREW_HOLE_R, r2=2.3, h=1.3, center=false);
     }
 }

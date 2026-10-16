@@ -25,16 +25,16 @@ include <../00_common/parameters.scad>;
 include <../00_common/screw_bosses.scad>;
 
 // --- Parametric Dimensions ---
-TD_POD_L            = 136.0; // Internal pod length clearance (mm)
-TD_POD_W            = 71.0;  // Internal pod width clearance (mm)
-TD_POD_H            = 38.5;  // Pod height (mm)
+TD_POD_L            = POD_OUTER_L + 1.0; // Internal pod length clearance (151.0 mm)
+TD_POD_W            = POD_OUTER_W + 1.0; // Internal pod width clearance (71.0 mm)
+TD_POD_H            = POD_OUTER_H + 0.5; // Pod height (38.5 mm)
 TD_WALL             = 3.2;   // Wall thickness (mm)
 TD_FLOOR            = 3.5;   // Base floor thickness (mm)
 
 // Outer Console Envelope
-CONSOLE_TOTAL_L     = 192.0; // Stretched aerodynamic length (mm)
 CONSOLE_NOSE_L      = 32.0;  // Front leading wedge extension (mm)
 CONSOLE_TAIL_L      = 24.0;  // Rear tapering aero tail extension (mm)
+CONSOLE_TOTAL_L     = TD_POD_L + CONSOLE_NOSE_L + CONSOLE_TAIL_L; // Stretched aerodynamic length (207.0 mm)
 CONSOLE_MAX_W       = 84.0;  // Outer maximum width at waist (mm)
 CONSOLE_CREASE_Z    = 22.0;  // Height of lateral Bügelfalte character line (mm)
 CONSOLE_TOTAL_H     = 42.0;  // Total height with lid (mm)
@@ -227,9 +227,9 @@ module adventure_transition_dock_base(side = "right") {
                 cube([6.0, 2 * CONSOLE_MAX_W, 2.5]);
         }
 
-        // G. 4x Lateral Relief Pockets for Pod Base Strap Hook Lugs (X=25 and X=110)
+        // G. 4x Lateral Relief Pockets for Pod Base Strap Hook Lugs (X=25 and X=POD_OUTER_L-25)
         // Pod lugs project 3.0 mm laterally. Pockets provide 14.0 x 4.0 x 8.5 mm clearance.
-        for (hx = [25.0, 110.0]) {
+        for (hx = [25.0, POD_OUTER_L - 25.0]) {
             // Inboard flank (-Y)
             translate([hx - 7.0, -TD_POD_W/2.0 - 3.8, TD_FLOOR - 0.1])
                 cube([14.0, 4.0, 8.5]);
