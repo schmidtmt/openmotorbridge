@@ -1311,6 +1311,24 @@ Motorrad-Schlüsseltransponder sind stundenlangen Starkregenfahrten in durchnäs
 4. **Hydrophobe ePTFE-Akustikmembran (Gore-Tex IP67):** Hinter den Buzzer-Schalllöchern klebt innen eine mikroporöse ePTFE-Membran (Gore GAW112), die Schallwellen des Signalgebers ungehindert austreten lässt, flüssiges Wasser und Staubpartikel jedoch vollständig sperrt.
 5. **Vollständig hermetische Schlüsselring-Öse:** Null Dichtungsrisiko am Schlüsselbund durch die monolithische PA12-Schottwand.
 
+#### 7.1.8 Qi-Induktionsladen & Magnetische Wechselwirkungen (EMV, Wirbelströme & MagSafe-Physik)
+Bei der Kombination von ultrastarken Permanentmagneten ($B_r \approx 1{,}48\,\text{T}$) mit hochfrequentem induktivem Laden ($110\dots 205\,\text{kHz}$) treten komplexe elektromagnetische und thermische Wechselwirkungen auf, die durch die Gehäuse- und Materialarchitektur gelöst sind:
+
+1. **Koppelabstand zum Ladepad ($d \approx 2{,}0\dots 2{,}2\,\text{mm}$):**
+   * Das Gesamgehäuse ist zwar $12{,}0\,\text{mm}$ dick, der Keyfob wird jedoch mit seiner **Rückseite (Unterseite)** flach auf das Ladepad / Cockpit-Dock aufgelegt (selbstzentrierend durch den MagSafe-Ring).
+   * Die $1{,}0\,\text{mm}$ dünne PA12-MJF Bodenwand trennt die Sendespule des Docks von der internen Qi-Empfängerspule. Der gesamte magnetische Koppelabstand liegt bei lediglich ca. $2{,}0\,\text{mm}$. Gemäß Qi-Spezifikation (zulässig bis $5{,}0\,\text{mm}$) liegt das System im **optimalen Koppelbereich** ($k \approx 0{,}8$) mit hohem Wirkungsgrad ($> 75\,\%$) und geringer Erwärmung.
+
+2. **Einfluss der Permanentmagnete auf das Qi-Wechselfeld (Vermeidung von Ferritsättigung):**
+   * *Gefahr:* Wenn ein starkes statisches Gleichfeld ($B_{DC}$) das rückseitige Ferritschild der Qi-Spule durchdringt, gerät das Ferrit in die **magnetische Sättigung** ($B_{sat} \approx 0{,}3\dots 0{,}45\,\text{T}$). Dadurch bricht seine Permeabilität ein ($\mu_r \rightarrow 1$), die Spuleninduktivität fällt ab, die Schirmwirkung kollabiert und Wirbelströme erhitzen den LiPo-Akku.
+   * *Lösung beim MagSafe-Ring (Qi2 MPP Prinzip):* Der MagSafe-Zentrierring ist kein Vollmagnet unter der Spule, sondern ein **radial außerhalb liegender Kreisring** ($\varnothing 28\,\text{mm}$ außen, $\varnothing 22\,\text{mm}$ innen). Er besteht aus multipolaren Ringsegmenten mit rückseitigem Weicheisen-Rückschlussring (Flux Keeper). Im Spulenzentrum, wo Spule und Ferrit liegen, ist das Gleichfeld nahezu ausgelöscht ($B_{DC} < 15\,\text{mT} \ll B_{sat}$).
+   * *Lösung beim seitlichen N52-Auswerferschlüssel:* Der große Schlüsselblock ($20 \times 10 \times 5\,\text{mm}$) sitzt in $> 10\,\text{mm}$ Distanz an der Längswand und ist durch ein **$0{,}5\,\text{mm}$ Mu-Metall- / Weicheisenblech** abgeschirmt. Dessen statischer Fluss tritt ausschließlich nach außen aus und erreicht die Qi-Kavität nicht.
+
+3. **Einfluss des Qi-Wechselfeldes auf die Permanentmagnete (Wirbelstrom- & Hitzeschutz):**
+   * *Gefahr:* Sinter-NdFeB ist ein **elektrisch leitfähiges Metall** ($\rho \approx 1{,}5 \times 10^{-6}\,\Omega\cdot\text{m}$). Ein HF-Wechselfeld induziert Wirbelströme, die den Magneten induktiv erhitzen. Standard-Neodym verliert ab $80^\circ\text{C}$ irreversibel an Magnetkraft (thermische Entmagnetisierung).
+   * *Lösung:* Das Wechselfeld der Sendespule wird durch deren eigenen Ferritkern streng nach oben in die $\varnothing 24\,\text{mm}$ Empfängerspule gebündelt und trifft nicht auf die Magnetringe. 
+   * *Hochtemperatur-Güte N52SH:* Für den Auswerferschlüssel wird die Automobil-Güte **N52SH (Super High Temp)** eingesetzt. Sie ist bis **$150^\circ\text{C}$** temperaturfest, sodass selbst bei starker Sonneneinstrahlung auf dem Tank oder warmer Schnellladung kein Remanenzverlust auftritt.
+   * *Dynamische Entmagnetisierung ausgeschlossen:* Die Koerzitivfeldstärke von N52SH liegt bei $H_{cJ} > 1600\,\text{kA/m}$ (über $2{,}0\,\text{Tesla}$ Gegenfeld erforderlich). Das Qi-Wechselfeld erreicht maximal $5\dots 15\,\text{mT}$ – es ist somit um den Faktor $> 100$ zu schwach, um die Elementarmagnete des Neodyms zu beeinflussen.
+
 ### 7.2 Architekturentscheidung: Warum N52-Permanentmagnet + LoRa + MagSafe statt UWB / aktiver Servos?
 
 | Kriterium | Aktive Bluetooth / UWB Verriegelung | N52-Permanentmagnet + LoRa Pager (OpenMotorBridge) |
