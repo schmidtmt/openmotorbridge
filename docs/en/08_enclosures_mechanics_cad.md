@@ -267,10 +267,14 @@ In the v9.6 Clean Architecture, the former pod base PCB (`PCBA 02`) has been **c
 
 *Figure 8.11: The modular cartridge variants (OMM 2.4 GHz Swap Cartridge, Sena SPIDER X Slim, Cardo Packtalk Edge, IP67 Dry Box).*
 
-#### 4.3.1 User-Centric Plug & Play Docking Architecture (Zero Solder)
-To route signals from the right-angled **JST-SH 1.0 mm 8-pin SMD header (`J_AUDIO_PWR`)** and the **8-pin mechatronics header (`J_ACT`)** on the cartridge carrier PCB (`PCBA 03` Rev 3.0) to adapter contact points without crimp or bend fatigue:
-* **Under-Bed Cable Channel:** A recessed channel ($8.0 \times 1.5\,\text{mm}$) runs directly beneath the contoured cradle cavity.
-* **Tray Pass-Through Slot:** A precision opening ($10.0 \times 3.0\,\text{mm}$ with $R = 1.0\,\text{mm}$ radiused edges) guides the flexible pre-assembled harness from headers `J_AUDIO_PWR` and `J_ACT` upward into the nest.
+#### 4.3.1 User-Centric Serial Docking Architecture (Inline Layout & Zero Solder)
+To maximize internal volume and maintain an ultra-low profile without vertical sandwich stacking, the cartridge sled (`00_base_sled.scad`, $130.0 \times 58.0 \times 28.0\,\text{mm}$) utilizes a **strict serial inline layout (components arranged front-to-back on sled floor level $Z = 2.5\,\text{mm}$)**:
+* **Front Section ($X = 1.5\dots 36.5\,\text{mm}$):** Carrier PCB `PCBA 03` Rev 3.0 ($35.0 \times 25.0\,\text{mm}$) with ESP32-S2 MCU, ES8388 audio codec, 4-channel actuator driver (`J_ACT`), and audio/power header (`J_AUDIO_PWR`).
+* **Rear Section ($X = 40.0\dots 126.0\,\text{mm}$):** Direct floor mounting for the genuine OEM intercom cradle, fastened directly onto the sled floor.
+* **Genuine OEM Cradle Integration (Zero Custom Pogo-Pin Fabrication):**
+  * **Cardo Packtalk Edge:** Employs the genuine **Cardo OEM Air-Mount Cradle** with factory neodymium magnets, gold pogo contacts, and spring latch. The original Cardo cable harness ($3.5\,\text{mm}$ audio + 2-pin mic) connects directly forward into `J_AUDIO_PWR` on `PCBA 03`. Custom pogo pin assemblies and glued magnets are 100% eliminated.
+  * **Sena SPIDER X Slim:** Employs the genuine **Sena OEM Quick-Snap Cradle**. The 3-wire factory harness connects directly forward into `J_AUDIO_PWR`.
+  * **OpenMotorMesh (OMM 2.4 GHz UCS):** UCS module ($54 \times 34 \times 11\,\text{mm}$) situated centrally, followed by a dedicated 5V COTS RF Booster heatsink ($25 \times 15 \times 6\,\text{mm}$) in the rear bay. 100% digital USB Audio (UAC) via right-angled USB-C ribbon to `PCBA 03`.
 * **Standardized Pinout on JST-SH 8P Header (`J_AUDIO_PWR`) with Kelvin Grounding:**
 
 | Pin | Signal Name | Adapter Function | Sena SPIDER X Slim | Cardo Packtalk Edge | OMM 2.4/446 UCS | Midland PMR446 |
@@ -318,10 +322,10 @@ The OMM 2.4 GHz Swap Cartridge ([`cartridge_omm_transceiver.scad`](../../hardwar
 
 ---
 
-#### 4.3.3 Sena 50S / 60S Cradle
-![OpenMotorBridge Sena 50S Cartridge Assembly 3D CAD Fitting](../images/cad/sena_cartridge_assembly_cad.png)
+#### 4.3.3 Sena SPIDER X Slim Serial Cartridge
+![OpenMotorBridge Sena SPIDER X Slim Cartridge Assembly 3D CAD Fitting](../images/cad/sena_cartridge_assembly_cad.png)
 
-*Figure 8.14: 3D CAD visualization of the Sena 50S/60S swap cartridge with sprung 7-pin pogo pin interface.*
+*Figure 8.14: 3D CAD visualization of the Sena SPIDER X Slim serial cartridge with genuine OEM Quick-Snap cradle.*
 
 #### 4.3.4 Mechatronic Smart Cartridge: Form-Fit Retention & 4-Channel Actuator Guide (Sena SPIDER X Slim & Cardo Packtalk Edge)
 For modern intercom cartridges such as the Sena SPIDER X Slim and Cardo Packtalk Edge, the cartridge mechanical architecture addresses the dual core challenges: **Absolute vibration resistance for the OEM adapter** and **accurate, permanent alignment of 4 discrete, independently positioned actuators onto the target button fields**.

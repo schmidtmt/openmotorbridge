@@ -1,26 +1,27 @@
 // =============================================================================
-// OpenMotorBridge - Satellite Pod: Sena 50S/60S Modular Cartridge Assembly
+// OpenMotorBridge - Satellite Pod: Sena SPIDER X Slim Serial Cartridge Assembly
 // =============================================================================
 // File: hardware/cad/scad/03_pod_cartridges/cartridge_sena.scad
-// Description: Full 2-piece assembly preview showing:
-//              1. Universal Base Sled (cartridge_base_sled)
-//              2. Carrier PCB Assembly (dummy_adapter_pcb) in lower chamber
-//              3. Interchangeable Sena Insert (cartridge_insert_sena)
-//              4. 4x M2 Stainless Steel Countersunk Screws
+// Description: True serial ("hintereinander") cartridge architecture:
+//              - Front Section: PCBA 03 Smart Cartridge Controller (MCU, Power, Audio)
+//              - Rear Section: Original Sena OEM Quick-Snap Cradle + SPIDER X Slim
+//              - Direct OEM Cable Peitsche: 3-wire harness (power, mic, speaker)
+//                plugs directly into J_AUDIO_PWR on PCBA 03 (zero custom pogo-pins)
+//              - Ultra-compact: 22.0 mm total height (massive vertical margin)
 // =============================================================================
 
 include <../00_common/parameters.scad>;
 include <../00_common/screw_bosses.scad>;
 use <00_base_sled.scad>;
-use <parts/01_insert_sena.scad>;
 use <../00_common/dummies/dummy_adapter_pcb.scad>;
+use <../00_common/dummies/dummy_intercom_units.scad>;
 
 module cartridge_sena_assembly(exploded = false) {
-    z_pcb    = exploded ? 16.0 : 5.0;
-    z_insert = exploded ? 34.0 : 8.0;
-    z_screws = exploded ? 46.0 : 10.0;
+    z_pcb    = exploded ? 18.0 : 5.0;
+    z_cradle = exploded ? 18.0 : 2.5;
+    z_device = exploded ? 36.0 : 4.5;
 
-    // 1. Universal Base Sled (Anthracite PA12) with visible magnetic lock latch
+    // 1. Universal Base Sled (Anthracite PA12) with magnetic anti-theft latch
     color("darkslategray", 0.92)
         cartridge_base_sled(
             sled_l     = CARTRIDGE_BASE_L,
@@ -30,25 +31,25 @@ module cartridge_sena_assembly(exploded = false) {
             show_latch = true
         );
 
-    // 2. Carrier PCB (Green FR4 + Gold Pads + Components aligned to front leading edge)
+    // 2. PCBA 03 Smart Cartridge Controller (Front Section: X = 1.5 .. 36.5 mm)
     translate([1.5, (CARTRIDGE_BASE_W - 25.0)/2.0, z_pcb])
         dummy_adapter_pcb();
 
-    // 3. Interchangeable Sena Insert (Slate Grey PA12)
-    color("slategray", 0.95)
-        translate([2.5, 2.5, z_insert])
-            cartridge_insert_sena();
+    // 3. Original OEM Sena Quick-Snap Cradle (Rear Section: X = 44.0 .. 120.0 mm)
+    // Sits directly on sled floor (Z = 2.5 mm) - NO sandwich intermediate deck!
+    translate([44.0, (CARTRIDGE_BASE_W - 33.0)/2.0, z_cradle])
+        dummy_sena_oem_cradle();
 
-    // 4. 4x M2 Stainless Steel Fastening Screws
+    // 4. Genuine Sena SPIDER X Slim OEM Unit clicked into original OEM cradle
+    translate([45.0, (CARTRIDGE_BASE_W - 31.0)/2.0, z_device])
+        dummy_sena_spider_x_slim();
+
+    // 5. 2x M2 Stainless Steel Screws securing OEM Cradle to Sled Floor
     color("silver") {
-        translate([6.0, 6.0, z_screws])
-            cylinder(r=1.8, h=2.0, center=false);
-        translate([CARTRIDGE_BASE_L - 7.0, 6.0, z_screws])
-            cylinder(r=1.8, h=2.0, center=false);
-        translate([6.0, CARTRIDGE_BASE_W - 6.0, z_screws])
-            cylinder(r=1.8, h=2.0, center=false);
-        translate([CARTRIDGE_BASE_L - 7.0, CARTRIDGE_BASE_W - 6.0, z_screws])
-            cylinder(r=1.8, h=2.0, center=false);
+        translate([56.0, CARTRIDGE_BASE_W/2.0, z_cradle + 1.2])
+            cylinder(r=1.1, h=3.0, center=false, $fn=16);
+        translate([108.0, CARTRIDGE_BASE_W/2.0, z_cradle + 1.2])
+            cylinder(r=1.1, h=3.0, center=false, $fn=16);
     }
 }
 

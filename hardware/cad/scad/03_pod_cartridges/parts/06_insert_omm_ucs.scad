@@ -34,17 +34,19 @@ module cartridge_insert_omm_ucs(
                 difference() {
                     cube(size=[insert_l - 4.0, insert_w - 3.0, cradle_h], center=false);
 
-                    // A. Universal UCS Module Recessed Contour Bed (68 x 38 mm module)
-                    translate([14.0, (insert_w - 3.0 - 40.0)/2.0, 2.0])
-                        cube(size=[70.0, 40.0, cradle_h + 0.1], center=false);
+                    // A. Universal UCS Module Recessed Contour Bed (68 x 38 mm module placed serially behind PCBA 03)
+                    translate([35.0, (insert_w - 3.0 - 40.0)/2.0, 2.0])
+                        cube(size=[63.0, 40.0, cradle_h + 0.1], center=false);
 
-                    // B. Optional 5V COTS Bi-Directional RF Booster Pocket (25 x 15 mm module)
-                    translate([insert_l - 34.0, (insert_w - 3.0 - 18.0)/2.0, 2.0])
-                        cube(size=[27.0, 18.0, cradle_h + 0.1], center=false);
+                    // B. Dedicated 5V COTS Bi-Directional RF Booster Pocket (25 x 15 mm module at rear)
+                    translate([99.0, (insert_w - 3.0 - 17.0)/2.0, 2.0])
+                        cube(size=[24.0, 17.0, cradle_h + 0.1], center=false);
 
                     // C. Coaxial Cable & USB-C Interconnect Channels
-                    translate([84.0, (insert_w - 3.0 - 14.0)/2.0, 2.5])
-                        cube(size=[insert_l - 88.0, 14.0, cradle_h + 0.1], center=false);
+                    translate([2.0, (insert_w - 3.0 - 14.0)/2.0, 2.5])
+                        cube(size=[34.0, 14.0, cradle_h + 0.1], center=false);
+                    translate([96.0, (insert_w - 3.0 - 6.0)/2.0, 2.5])
+                        cube(size=[6.0, 6.0, cradle_h + 0.1], center=false);
                 }
             }
 

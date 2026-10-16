@@ -1,26 +1,26 @@
 // =============================================================================
-// OpenMotorBridge - Satellite Pod: Cardo Packtalk Edge Modular Cartridge Assembly
+// OpenMotorBridge - Satellite Pod: Cardo Packtalk Edge Serial Cartridge Assembly
 // =============================================================================
 // File: hardware/cad/scad/03_pod_cartridges/cartridge_cardo.scad
-// Description: Full 2-piece assembly preview showing:
-//              1. Universal Base Sled (cartridge_base_sled)
-//              2. Carrier PCB Assembly (dummy_adapter_pcb) in lower chamber
-//              3. Interchangeable Cardo Insert (cartridge_insert_cardo)
-//              4. 4x M2 Stainless Steel Countersunk Screws
+// Description: True serial ("hintereinander") cartridge architecture:
+//              - Front Section: PCBA 03 Smart Cartridge Controller (MCU, Power, Actuators)
+//              - Rear Section: Original Cardo OEM Air-Mount Cradle + Packtalk Edge Unit
+//              - Mechatronics: 2 solenoids with angled rectangular feet for Power On/Off
+//              - Zero Custom Pogo-Pins: Uses 100% genuine Cardo factory harness to PCBA 03
 // =============================================================================
 
 include <../00_common/parameters.scad>;
 include <../00_common/screw_bosses.scad>;
 use <00_base_sled.scad>;
-use <parts/02_insert_cardo.scad>;
 use <../00_common/dummies/dummy_adapter_pcb.scad>;
+use <../00_common/dummies/dummy_intercom_units.scad>;
 
 module cartridge_cardo_assembly(exploded = false) {
-    z_pcb    = exploded ? 16.0 : 5.0;
-    z_insert = exploded ? 34.0 : 8.0;
-    z_screws = exploded ? 46.0 : 10.0;
+    z_pcb    = exploded ? 20.0 : 5.0;
+    z_cradle = exploded ? 20.0 : 2.5;
+    z_device = exploded ? 42.0 : 7.0;
 
-    // 1. Universal Base Sled (Anthracite PA12) with visible magnetic lock latch
+    // 1. Universal Base Sled (Anthracite PA12) with magnetic anti-theft latch
     color("darkslategray", 0.92)
         cartridge_base_sled(
             sled_l     = CARTRIDGE_BASE_L,
@@ -30,44 +30,26 @@ module cartridge_cardo_assembly(exploded = false) {
             show_latch = true
         );
 
-    // 2. Carrier PCB (Green FR4 + Gold Pads + Components aligned to front leading edge)
+    // 2. PCBA 03 Smart Cartridge Controller (Front Section: X = 1.5 .. 36.5 mm)
     translate([1.5, (CARTRIDGE_BASE_W - 25.0)/2.0, z_pcb])
         dummy_adapter_pcb();
 
-    // 3. Interchangeable Cardo AirMount Insert (Slate Grey PA12)
-    color("slategray", 0.95)
-        translate([2.5, 2.5, z_insert])
-            cartridge_insert_cardo();
+    // 3. Original OEM Cardo Air-Mount Cradle (Rear Section: X = 40.0 .. 124.0 mm)
+    // Sits directly on sled floor (Z = 2.5 mm) - NO sandwich intermediate deck!
+    translate([40.0, (CARTRIDGE_BASE_W - 46.0)/2.0, z_cradle])
+        dummy_cardo_oem_airmount_cradle();
 
-    // 4. 4x M2 Stainless Steel Fastening Screws
+    // 4. Genuine Cardo Packtalk Edge OEM Unit clicked onto the OEM Air-Mount Cradle
+    // Features 2 mechatronic solenoids with angled rectangular feet for Power On/Off
+    translate([40.0, (CARTRIDGE_BASE_W - 46.0)/2.0, z_device])
+        dummy_cardo_packtalk_edge(with_actuators = true);
+
+    // 5. 2x M2.5 Stainless Steel Screws securing OEM Cradle to Sled Floor
     color("silver") {
-        translate([6.0, 6.0, z_screws])
-            cylinder(r=1.8, h=2.0, center=false);
-        translate([CARTRIDGE_BASE_L - 7.0, 6.0, z_screws])
-            cylinder(r=1.8, h=2.0, center=false);
-        translate([6.0, CARTRIDGE_BASE_W - 6.0, z_screws])
-            cylinder(r=1.8, h=2.0, center=false);
-        translate([CARTRIDGE_BASE_L - 7.0, CARTRIDGE_BASE_W - 6.0, z_screws])
-            cylinder(r=1.8, h=2.0, center=false);
-    }
-
-    // 5. Dual N52 Neodymium AirMount Permanent Magnets (Ø 8.0 x 3.0 mm, Glanzvernickelt)
-    color("silver") {
-        translate([37.5, 29.0, z_insert + 2.8])
-            cylinder(r=4.0, h=3.0, center=false, $fn=32);
-        translate([97.5, 29.0, z_insert + 2.8])
-            cylinder(r=4.0, h=3.0, center=false, $fn=32);
-    }
-
-    // 6. 5-Pin Gold-Plated Spring Pogo Contact Array (Ø 1.5 mm, vergoldet)
-    color("gold") {
-        for (i = [-2:2]) {
-            translate([67.5 + i * 2.54, 29.0, z_insert + 2.0]) {
-                cylinder(r=0.9, h=3.5, center=false, $fn=16);
-                translate([0, 0, 3.5])
-                    sphere(r=0.9, $fn=16);
-            }
-        }
+        translate([55.0, CARTRIDGE_BASE_W/2.0, z_cradle + 1.5])
+            cylinder(r=1.3, h=4.0, center=false, $fn=16);
+        translate([102.0, CARTRIDGE_BASE_W/2.0, z_cradle + 1.5])
+            cylinder(r=1.3, h=4.0, center=false, $fn=16);
     }
 }
 

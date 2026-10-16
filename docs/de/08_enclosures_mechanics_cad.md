@@ -299,10 +299,15 @@ In der v9.6 Clean Architecture ist die frühere Pod-Bodenplatine (`PCBA 02`) **v
 
 *Abbildung 8.11: Die modularen Wechselkassetten-Varianten im Überblick: OMM 2.4 GHz UCS Cartridge, Sena SPIDER X Slim Quick-Snap Cradle, Cardo Magnetic Air Mount und wasserdichte IP67 Blindkassette.*
 
-#### 4.3.1 Benutzerzentrierte Plug & Play Docking-Architektur (0 Lötaufwand)
-Um Signale vom 90°-abgewinkelten **JST-SH 1.0 mm 8-Pin SMD-Steckverbinder (`J_AUDIO_PWR`)** sowie dem **8-Pin Mechatronik-Header (`J_ACT`)** auf der Kassetten-Trägerplatine (`PCBA 03` Rev 3.0) verwechslungs- und knickfrei zu den Kontaktpunkten des jeweiligen Adapters zu führen, besitzt der Kassetten-Schlitten:
-* **Geschützten Unterflur-Kabelkanal:** Im Boden des PA12-Schlittens ist eine **$1{,}5\,\text{mm}$ tiefe und $8{,}0\,\text{mm}$ breite Kabelführung** direkt unterhalb des Konturbetts integriert.
-* **Zwischenboden-Durchführung:** Ein präziser **$10{,}0 \times 3{,}0\,\text{mm}$ Durchbruch mit beidseitig $R=1{,}0\,\text{mm}$ verrundeten Kanten** führt die Kabelstränge von Header `J_AUDIO_PWR` und `J_ACT` auf der unteren Platine nach oben ins Nest.
+#### 4.3.1 Benutzerzentrierte Serielle Docking-Architektur (Hintereinander-Layout & 0 Lötaufwand)
+Um Bauraum und Bauhöhe optimal auszunutzen und vertikale Sandwich-Doppelstöckigkeit zu vermeiden, ist der Kassetten-Schlitten (`00_base_sled.scad`, $130{,}0 \times 58{,}0 \times 28{,}0\,\text{mm}$) in einer **strengen seriellen Längsanordnung (hintereinander auf Schlittenbodenebene $Z=2{,}5\,\text{mm}$)** aufgebaut:
+* **Vordere Sektion ($X = 1{,}5\dots 36{,}5\,\text{mm}$):** Trägerplatine `PCBA 03` Rev 3.0 ($35{,}0 \times 25{,}0\,\text{mm}$) mit MCU (ESP32-S2), ES8388 Audio-Codec, 4-Kanal Aktuatortreiber (`J_ACT`) und Audio/Power-Header (`J_AUDIO_PWR`).
+* **Hintere Sektion ($X = 40{,}0\dots 126{,}0\,\text{mm}$):** Aufnahme für das jeweilige Intercom-Modul bzw. dessen originale OEM-Halterung, direkt verschraubt auf dem Schlittenboden.
+* **Einsatz der originalen OEM-Halterungen (Null Spezialfertigung, 100 % Zuverlässigkeit):**
+  * **Cardo Packtalk Edge:** Nutzt die originale **Cardo OEM Air-Mount Halterung** mit werksseitigen Neodym-Magneten, Gold-Federkontakten und Auslösehebel. Die werksseitige Cardo-Kabelpeitsche ($3{,}5\,\text{mm}$ Audio + 2-Pin Mic) führt direkt nach vorn in `J_AUDIO_PWR` auf `PCBA 03`. Selbstbau-Pogo-Pins oder Einkleben von Magneten entfallen vollständig.
+  * **Sena SPIDER X Slim:** Nutzt das originale **Sena OEM Quick-Snap Cradle**. Die 3-adrige Original-Kabelpeitsche führt direkt nach vorn in `J_AUDIO_PWR`.
+  * **OpenMotorMesh (OMM 2.4 GHz UCS):** UCS-Modul ($54 \times 34 \times 11\,\text{mm}$) in der Mitte und dedizierter 5V COTS RF-Booster-Kühlkörper ($25 \times 15 \times 6\,\text{mm}$) im Heckbereich. Vollständig digitale USB-Audioübertragung (UAC) via 90° USB-C Flachbandkabel zu `PCBA 03`.
+* **Kabelübergabe & Zugentlastung:** Auf Bodenebene fluchten die Kabelauslässe der OEM-Cradles direkt mit den Steckverbindern auf `PCBA 03`. Kein vertikaler Durchbruch durch einen Zwischenboden nötig.
 
 #### 4.3.2 UCS-Standard (Universal Communication Solution) & OMM 2.4 GHz OEM-Kassette
 
@@ -327,7 +332,7 @@ OpenMotorBridge setzt für moderne, herstellerunabhängige Wechselmodule auf die
      - **Stirnseitige USB-C Buchse (`J1`):** Formschlüssiger Tunneldurchbruch an der Frontkante ($X = 0\,\text{mm}$, zentriert bei $Y = 18{,}00\,\text{mm}$, lichte Weite $9{,}5 \times 4{,}2\,\text{mm}$) mit TPU-Dichtstopfen für Helm- und Standalone-Laden/WebUSB.
      - **4x Taster-Aperturen (`SW1`–`SW4`):** Konzentrische $\varnothing\,5{,}0\,\text{mm}$ Plungerdurchbrüche in der Oberschale bei $X = 17{,}0, 29{,}0, 41{,}0, 53{,}0\,\text{mm}$ (Raster $12{,}0\,\text{mm}$) und $Y = 25{,}00\,\text{mm}$ – exakt zentriert über den taktilen Kurzhubtastern Alps SKRK auf den Platinen.
      - **RGB-Status-LED Lichtleiter (`D1`):** $\varnothing\,2{,}6\,\text{mm}$ Lichtleiter-Dom bei $X = 35{,}00\,\text{mm}$ (exakt mittig zwischen Taste 2 und 3) und $Y = 29{,}22\,\text{mm}$ – sitzt direkt über der WS2812B-2020 LED.
-     - **Rückseitiger HF-Koaxialauslass & SMA-Durchführung:** Bei `PCBA 09` geht das 50 mm Micro-Koaxial-Pigtail direkt vom U.FL-Port des ESP32-C6-MINI-1U aus, bei `PCBA 10` von der U.FL-Buchse `J_RF` (`B.Cu`). An der Schmalseite $+X$ ($X = 68{,}0\,\text{mm}$, $Y = 18{,}0\,\text{mm}$) sitzt in einer formschlüssigen D-Cut Aussparung ($5{,}0 \times 4{,}0\,\text{mm}$) eine wasserdichte IP67 SMA-Einbaubuchse mit EPDM/Silikon-O-Ring ($\varnothing 6{,}0 \times 1{,}0\,\text{mm}$) und V4A-Sechskant-Kontermutter. Im Helmeinsatz wird direkt eine ultrakompakte Stummelantenne verschraubt ($38\,\text{mm}$ Rubber-Duck für PCBA 09 bzw. $48\,\text{mm}$ Helical für PCBA 10 – völlig flatter- und pfeiffrei); im Pod-Betrieb bleibt die Kassette zu 100 % geschlossen und dicht (`has_sma_port = false`), während die Antenne intern verlustfrei durch das $1{,}8\,\text{mm}$ PA12-Gehäuse abstrahlt. Im seriellen Kassetten-Inlay ([`06_insert_omm_ucs.scad`](../../hardware/cad/scad/03_pod_cartridges/parts/06_insert_omm_ucs.scad)) ist hierfür eine passgenaue $25 \times 15\,\text{mm}$ Einbautasche für einen optionalen 5V COTS Bi-Directional RF Booster integriert, der via Y-Kabel direkt mit 5V von PCBA 03 versorgt wird. Die OMM-Audioübertragung erfolgt zu 100 % volldigital über USB Audio (UAC) direkt zur Zentralbox – analoge Audioleitungen und Wandlungsverluste entfallen vollständig.
+     - **Rückseitiger HF-Koaxialauslass & SMA-Durchführung:** Bei `PCBA 09` geht das 50 mm Micro-Koaxial-Pigtail direkt vom U.FL-Port des ESP32-C6-MINI-1U aus, bei `PCBA 10` von der U.FL-Buchse `J_RF` (`B.Cu`). An der Schmalseite $+X$ ($X = 68{,}0\,\text{mm}$, $Y = 18{,}0\,\text{mm}$) sitzt in einer formschlüssigen D-Cut Aussparung ($5{,}0 \times 4{,}0\,\text{mm}$) eine wasserdichte IP67 SMA-Einbaubuchse mit EPDM/Silikon-O-Ring ($\varnothing 6{,}0 \times 1{,}0\,\text{mm}$) und V4A-Sechskant-Kontermutter. Im Helmeinsatz wird direkt eine ultrakompakte Stummelantenne verschraubt ($38\,\text{mm}$ Rubber-Duck für PCBA 09 bzw. $48\,\text{mm}$ Helical für PCBA 10 – völlig flatter- und pfeiffrei); im Pod-Betrieb bleibt die Kassette zu 100 % geschlossen und dicht (`has_sma_port = false`), während die Antenne intern verlustfrei durch das $1{,}8\,\text{mm}$ PA12-Gehäuse abstrahlt. Im seriellen Kassetten-Inlay ist hierfür im Heckbereich eine passgenaue $25 \times 15\,\text{mm}$ Einbautasche für einen optionalen 5V COTS Bi-Directional RF Booster integriert, der via Y-Kabel direkt mit 5V von PCBA 03 versorgt wird. Die OMM-Audioübertragung erfolgt zu 100 % volldigital über USB Audio (UAC) direkt zur Zentralbox – analoge Audioleitungen und Wandlungsverluste entfallen vollständig.
      - **Interner Helm-Audio & PTT-Auslass (`J_HELMET`):** Auf der Schachtseite der Gehäuseunterschale führt ein verdeckter Durchbruch ($9{,}0 \times 9{,}0\,\text{mm}$) bei $X = 55{,}0\dots 64{,}0\,\text{mm}$ (im hinteren Abteil gegenüber vom USB-C-Port, hinter dem zentralen Akkufach) direkt in den Helminnenraum zum 180° nach innen ausgerichteten 6-Pin JST-SH Header (`HP_OUT_L`, `HP_OUT_R`, `AGND_SPK`, `MIC_IN+`, `AGND_MIC`, `BTN_PTT` – ohne 5V DC). Außen am Helm ist kein einziges Kabel sichtbar, und der stirnseitige USB-C Port bleibt frei für Ladekabel (Powerbank/Frontnode) und WebUSB.
      - **4x M2 Gehäuseverschraubung (`H1`–`H4`):** Bohrungskoordinaten bei $X = 8{,}0, 60{,}0\,\text{mm}$ und $Y = 7{,}0, 29{,}0\,\text{mm}$ – fluchtet 1:1 mit den M2-Befestigungsbohrungen der Platinen.
 2. **Akku- & Energie-Autonomie (Pass-Through Charging):**
@@ -342,20 +347,23 @@ OpenMotorBridge setzt für moderne, herstellerunabhängige Wechselmodule auf die
    * Mit einem Handgriff kann das OMM-Modul aus dem Kassetten-Schlitten entnommen und dank integrierter Schnapp-Rastnasen werkzeuglos in jeden beliebigen UCS-kompatiblen Motorradhelm geklickt werden.
    * Details zur Schaltung und Platinenspezifikation siehe [04b_omm_intercom_module.md (Kapitel 2 & 3)](04b_omm_intercom_module.md#2-omm-24-ghz-hardware--platinen-design-pcba-spezifikation).
 
-#### 4.3.3 Das 4-Klassen-Inlay-Portfolio der Universal Smart Cartridge
+#### 4.3.3 Das 4-Klassen-Kassettenportfolio der Universal Smart Cartridge
 
-Um mechanische Passgenauigkeit bei maximaler Flexibilität zu gewährleisten, existieren 4 präzise gefertigte 3D-Druck-Inlays (MJF PA12) für den Grundschlitten:
+Um mechanische Passgenauigkeit bei maximaler Flexibilität zu gewährleisten, existieren 4 präzise gefertigte Varianten für den universalen 130 mm Grundschlitten:
 
-1. **Inlay Klasse A (Sena SPIDER X Slim):**
-   * Schlankes Konturbett ($74{,}5 \times 31 \times 16\,\text{mm}$) mit formschlüssiger Vibrationsdämpfung.
-   * Direkter Anschluss der 3-fach Kabelpeitsche auf den Header `J_AUDIO_PWR` von `PCBA 03`. Vollkommen frei von fehleranfälligen Pogo-Pins.
-2. **Inlay Klasse B (Cardo Packtalk Edge / Pro):**
-   * Integriertes 5-poliges Federkontaktfeld (Air-Mount Pads) und zwei eingelassene N52-Neodym-Magnete zur magnetischen Selbstzentrierung.
-3. **Inlay Klasse C (UCS Universal-Inlay):**
-   * Standardisiertes Einbaunest für alle Module nach dem UCS-Standard (Cardo Freecom UCS, Midland Mesh UCS sowie die native OMM 2.4 GHz OEM-Kassette).
-   * Identische Tasterpositionen erlauben die Verwendung einer standardisierten Aktuator-Brücke.
-4. **Inlay Klasse D (Midland PMR446 Analog-Funk):**
-   * Aufnahme für Midland Alan/G9 Funkmodule mit Klinken-Peitsche für Lautsprecher, Mikrofon und PTT-Tastung über den Open-Drain MOSFET `OPTO_PTT`.
+1. **Variante 1: Sena SPIDER X Slim (serielle OEM-Cradle-Integration):**
+   * Verwendet die originale Sena OEM Quick-Snap Halterung, direkt auf dem Schlittenboden verschraubt.
+   * Direkter Anschluss der originalen 3-fach Kabelpeitsche auf den Header `J_AUDIO_PWR` von `PCBA 03`. Vollkommen frei von fehleranfälligen Pogo-Pins.
+   * Ultraflache Bauhöhe: Nur $22{,}0\,\text{mm}$ Gesamthöhe (enorme vertikale Reserve im Pod).
+2. **Variante 2: Cardo Packtalk Edge / Pro (serielle OEM-AirMount-Integration):**
+   * Verwendet die originale Cardo OEM Air-Mount Halterung mit werkseitigen Neodym-Magneten und Gold-Pogo-Pins.
+   * Direkte Verbindung der Cardo-Kabelpeitsche ($3{,}5\,\text{mm}$ Audio + 2-Pin Mic) nach vorn auf `J_AUDIO_PWR`.
+   * Mechatronischer Kaltstart: 2 Hubmagnete mit abgewinkelten Rechteck-Füßen (orange TPU-Dämpfer) über den beiden Power-Tasten.
+3. **Variante 3: OMM 2.4 GHz UCS Transceiver (Autonome Mesh-Engine):**
+   * Seriell angeordnetes UCS-Modul ($54 \times 34 \times 11\,\text{mm}$) mit 5V COTS RF-Booster im Heckbereich.
+   * 100 % digitale USB-Audioübertragung (UAC) und Telemetrie direkt zu `PCBA 03`.
+4. **Variante 4: Wasserdichte Blindkassette (IP67 Dry Box):**
+   * Vollständiger Innenraum als wasserdichtes Staufach für Notschlüssel, Papiere oder Ersatzsicherungen mit umlaufender Silikondichtung und planem Schraubdeckel.
 
 ---
 

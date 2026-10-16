@@ -1,12 +1,12 @@
 // =============================================================================
-// OpenMotorBridge - Satellite Pod: Cartridge Assembly & Comparison Matrix
+// OpenMotorBridge - Satellite Pod: Cartridge Assembly & Comparison Gallery
 // =============================================================================
 // File: hardware/cad/scad/03_pod_cartridges/99_cartridge_assembly.scad
-// Description: Multi-cartridge 3D inspection scene comparing the 4 variants:
-//              1. OMM 2.4 GHz UCS Transceiver Cartridge (with PCBA 03 & LiPo)
-//              2. Sena 50S/60S Cartridge (with inserted Adapter PCB)
-//              3. Cardo Packtalk Edge Cartridge (with inserted Adapter PCB)
-//              4. Waterproof Blindkassette (Dry Box Dummy)
+// Description: Multi-cartridge 3D inspection gallery comparing all 4 variants side-by-side:
+//              1. OMM 2.4 GHz UCS Transceiver Cartridge (with PCBA 03 & COTS RF Booster)
+//              2. Sena SPIDER X Slim Cartridge (with original OEM Quick-Snap Cradle)
+//              3. Cardo Packtalk Edge Cartridge (with original OEM Air-Mount Cradle & 2 Actuators)
+//              4. Waterproof IP67 Blindkassette (Dry Box Dummy Cartridge)
 // =============================================================================
 
 include <../00_common/parameters.scad>;
@@ -16,26 +16,28 @@ use <cartridge_sena.scad>;
 use <cartridge_cardo.scad>;
 use <cartridge_blindkassette.scad>;
 
-// Render all 4 cartridge variants side by side for visual design check
+// Render all 4 cartridge variants parallel side-by-side for 100% unobstructed visual inspection
 module cartridge_gallery_preview() {
-    // 1. OMM 2.4 GHz UCS Transceiver Cartridge (Front Left)
-    translate([0, 0, 0]) {
-        cartridge_omm_transceiver_assembly(exploded=false);
+    spacing_y = 80.0;
+
+    // 1. OMM 2.4 GHz UCS Transceiver Cartridge with 5V RF Booster (Y = 0 mm)
+    translate([0, 0 * spacing_y, 0]) {
+        cartridge_omm_transceiver_assembly(exploded = false);
     }
 
-    // 2. Sena 50S/60S & +Mesh Slide-Mount Cartridge (Front Right)
-    translate([0, 90.0, 0]) {
-        cartridge_sena_assembly(exploded=false);
+    // 2. Sena SPIDER X Slim in Original OEM Quick-Snap Cradle (Y = 80 mm)
+    translate([0, 1 * spacing_y, 0]) {
+        cartridge_sena_assembly(exploded = false);
     }
 
-    // 3. Cardo Packtalk Edge Cartridge (Rear Left)
-    translate([140.0, 0, 0]) {
-        cartridge_cardo_assembly(exploded=false);
+    // 3. Cardo Packtalk Edge in Original OEM Air-Mount Cradle + 2 Actuators (Y = 160 mm)
+    translate([0, 2 * spacing_y, 0]) {
+        cartridge_cardo_assembly(exploded = false);
     }
 
-    // 4. Waterproof Blindkassette (Rear Right)
-    translate([140.0, 90.0, 0]) {
-        cartridge_blindkassette_assembly(exploded=false);
+    // 4. Waterproof Blindkassette IP67 Dry Box (Y = 240 mm)
+    translate([0, 3 * spacing_y, 0]) {
+        cartridge_blindkassette_assembly(exploded = false);
     }
 }
 

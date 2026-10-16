@@ -185,25 +185,25 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
     (
         "03_pod_cartridges/99_cartridge_assembly.scad",
         os.path.join(CAD_IMG_DIR, "cartridge_variants_trio.png"),
-        "100,65,15,55,0,310,500",
+        "65,145,18,55,0,315,560",
         "Tomorrow"
     ),
     (
         "03_pod_cartridges/cartridge_sena.scad",
         os.path.join(CAD_IMG_DIR, "sena_cartridge_assembly_cad.png"),
-        "58,29,14,55,0,310,280",
+        "65,29,16,55,0,310,310",
         "Solarized"
     ),
     (
         "03_pod_cartridges/cartridge_cardo.scad",
         os.path.join(CAD_IMG_DIR, "cardo_cartridge_assembly_cad.png"),
-        "58,29,14,55,0,310,280",
+        "65,29,20,55,0,310,310",
         "Solarized"
     ),
     (
         "03_pod_cartridges/cartridge_blindkassette.scad",
         os.path.join(CAD_IMG_DIR, "dummy_cartridge_cad.png"),
-        "58,29,14,55,0,310,280",
+        "65,29,14,55,0,310,310",
         "Solarized"
     ),
     (
