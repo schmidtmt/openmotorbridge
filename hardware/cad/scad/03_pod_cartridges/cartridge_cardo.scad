@@ -17,8 +17,8 @@ use <../00_common/dummies/dummy_intercom_units.scad>;
 
 module cartridge_cardo_assembly(exploded = false) {
     z_pcb    = exploded ? 20.0 : 5.0;
-    z_cradle = exploded ? 20.0 : 2.5;
-    z_device = exploded ? 42.0 : 7.0;
+    z_cradle = exploded ? 15.0 : 2.5;
+    z_device = exploded ? 32.0 : 4.5;
 
     // 1. Universal Base Sled (Anthracite PA12) with magnetic anti-theft latch
     color("darkslategray", 0.92)

@@ -209,8 +209,9 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
     (
         "03_pod_cartridges/parts/omm_ucs_module.scad",
         os.path.join(CAD_IMG_DIR, "omm_ucs_module_cad.png"),
-        "34,18,5,60,0,320,160",
-        "Tomorrow"
+        "34,18,5,55,0,320,180",
+        "Tomorrow",
+        ["--projection=o"]
     ),
     (
         "02_pod_base/pod_poka_yoke_cross_section.scad",
@@ -275,8 +276,9 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
     (
         "02_pod_base/saddlebag_lid_dock.scad",
         os.path.join(CAD_IMG_DIR, "saddlebag_lid_dock_cad.png"),
-        "70,38,13,55,0,310,320",
-        "Tomorrow"
+        "75,30,18,55,0,310,360",
+        "Tomorrow",
+        ["-D", 'part="assembly"', "--projection=o"]
     ),
     (
         "02_pod_base/radar_license_plate_bracket.scad",

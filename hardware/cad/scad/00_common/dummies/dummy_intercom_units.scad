@@ -16,8 +16,8 @@
 module dummy_cardo_packtalk_edge(with_actuators = true) {
     body_l = 84.0;
     body_w = 46.0;
-    body_h_front = 14.0;
-    body_h_rear  = 23.0;
+    body_h_front = 11.5;
+    body_h_rear  = 17.5;
     y_center     = body_w / 2.0;
 
     // A. Main Aerodynamic Wedge Body with Sculpted Central Concave Depression (Vertiefung)
@@ -33,20 +33,20 @@ module dummy_cardo_packtalk_edge(with_actuators = true) {
             }
             // Ergonomic Central Concave Depression (Vertiefung / Air-Mount waist scoop at X = 42 mm)
             // Carves out a smooth concave saddle dip between front and rear button ridges
-            translate([42.0, y_center - 4.0, body_h_rear + 7.5])
+            translate([42.0, y_center - 4.0, body_h_rear + 6.0])
                 rotate([0, 90, 0])
-                    cylinder(r=16.0, h=34.0, center=true, $fn=48);
+                    cylinder(r=15.0, h=34.0, center=true, $fn=48);
         }
     }
 
-    // B. Rear Control Roller Wheel
+    // B. Rear Control Roller Wheel (recessed into rear flank)
     color([0.25, 0.26, 0.28]) {
-        translate([body_l - 6.0, y_center, body_h_rear * 0.65]) {
+        translate([body_l - 6.0, y_center, body_h_rear * 0.7]) {
             rotate([0, 90, 0]) {
-                cylinder(r=10.0, h=7.0, center=true, $fn=32);
+                cylinder(r=7.5, h=6.5, center=true, $fn=32);
                 // Silver center hub
                 color([0.8, 0.8, 0.85])
-                    cylinder(r=4.5, h=7.4, center=true, $fn=24);
+                    cylinder(r=3.5, h=6.8, center=true, $fn=24);
             }
         }
     }
@@ -56,68 +56,69 @@ module dummy_cardo_packtalk_edge(with_actuators = true) {
     color([0.12, 0.12, 0.14]) {
         translate([22.0, y_center - 6.0, body_h_front - 0.5])
             rotate([0, -8, 0])
-                cube([12.0, 10.0, 2.2], center=true);
+                cube([11.0, 8.5, 1.8], center=true);
         // Button 2: Center (Phone Key - recessed flush in the bottom of the depression)
-        translate([42.0, y_center - 6.0, 9.8])
-            cube([11.0, 9.0, 1.8], center=true);
+        translate([42.0, y_center - 6.0, 8.2])
+            cube([10.0, 8.0, 1.5], center=true);
         // Button 3: Rear Ridge (DMC Intercom / Power Key)
-        translate([63.0, y_center - 6.0, body_h_rear - 3.2])
-            rotate([0, 10, 0])
-                cube([12.0, 10.0, 2.2], center=true);
+        translate([63.0, y_center - 6.0, body_h_rear - 2.5])
+            rotate([0, 8, 0])
+                cube([11.0, 8.5, 1.8], center=true);
     }
 
     // D. Outer Flank Status LED Bar (Cyan glow)
     color([0.0, 0.85, 1.0, 0.9]) {
         translate([28.0, body_w - 0.5, body_h_front * 0.55])
-            cube([32.0, 1.2, 2.2]);
+            cube([32.0, 1.2, 2.0]);
     }
 
     // E. Silver "cardo" Branding Badge
     color([0.85, 0.85, 0.9]) {
         translate([32.0, 0.8, body_h_front * 0.5])
-            cube([22.0, 0.6, 3.5]);
+            cube([22.0, 0.6, 3.0]);
     }
 
-    // F. 2 MECHATRONIC ACTUATORS WITH RECTANGULAR ANGLED FEET
-    // Twin independent cantilever towers over Front & Rear Power keys (leaving the center depression open!)
+    // F. 2 MECHATRONIC LOW-PROFILE ACTUATORS WITH RECTANGULAR ANGLED FEET
+    // Twin independent cantilever micro-solenoids strictly nested inside the cartridge envelope (Z <= 21 mm local)
     if (with_actuators) {
-        // Solenoid 1: Over Front Button (Media / Power) at X = 22.0 mm
-        // Solenoid 2: Over Rear Button (Intercom / Power) at X = 63.0 mm
-        for (cfg = [[22.0, body_h_front + 12.0, body_h_front - 0.5, -8],
-                    [63.0, body_h_rear + 9.0,  body_h_rear - 3.2,   10]]) {
-            ax     = cfg[0];
-            z_coil = cfg[1];
-            z_btn  = cfg[2];
-            rot_y  = cfg[3];
+        // Solenoid 1: Over Front Button (Media / Power) at X = 22.0 mm (Z_top = 19.5 mm)
+        // Solenoid 2: Over Rear Button (Intercom / Power) at X = 63.0 mm (Z_top = 21.5 mm)
+        for (cfg = [[22.0, 14.5, body_h_front - 0.5, -8, 5.0],
+                    [63.0, 16.5, body_h_rear - 2.5,   8, 5.0]]) {
+            ax       = cfg[0];
+            z_coil   = cfg[1];
+            z_btn    = cfg[2];
+            rot_y    = cfg[3];
+            coil_len = cfg[4];
 
             // Slender Cantilever Support Post (Anthracite PA12)
             color("darkslategray", 0.9) {
-                translate([ax - 4.0, y_center - 15.0, 0])
-                    cube([8.0, 3.0, z_coil]);
-                translate([ax - 4.0, y_center - 15.0, z_coil - 3.0])
-                    cube([8.0, 12.0, 3.0]);
+                translate([ax - 3.5, y_center - 13.0, 0])
+                    cube([7.0, 2.5, z_coil + coil_len]);
+                translate([ax - 3.5, y_center - 13.0, z_coil + coil_len - 2.0])
+                    cube([7.0, 10.0, 2.0]);
             }
 
-            // Solenoid Coil Housing (Silver / Metallic)
+            // Compact Micro-Solenoid Coil Housing (Silver / Metallic)
             color("silver")
                 translate([ax, y_center - 6.0, z_coil])
-                    cylinder(r=3.0, h=9.0, center=false, $fn=24);
+                    cylinder(r=2.5, h=coil_len, center=false, $fn=24);
 
             // Stainless Steel Helical Coil Spring
             color("gold")
-                translate([ax, y_center - 6.0, z_coil - 5.0])
-                    cylinder(r=2.2, h=5.0, center=false, $fn=16);
+                translate([ax, y_center - 6.0, z_coil - 2.5])
+                    cylinder(r=1.8, h=2.5, center=false, $fn=16);
 
             // Plunger Shaft
             color("silver")
-                translate([ax, y_center - 6.0, z_btn + 1.5])
-                    cylinder(r=1.2, h=z_coil - z_btn + 2.0, center=false, $fn=16);
+                translate([ax, y_center - 6.0, z_btn + 1.0])
+                    cylinder(r=1.0, h=z_coil - z_btn + 2.0, center=false, $fn=16);
 
             // RECTANGULAR ANGLED FOOT (matching slanted narrow OEM keys)
             color([0.95, 0.5, 0.1]) { // High-vis amber TPU tip
-                translate([ax, y_center - 6.0, z_btn + 1.2])
+                translate([ax, y_center - 6.0, z_btn + 0.8])
                     rotate([0, rot_y, 0])
-                        cube([9.0, 5.5, 2.4], center=true);
+                        cube([8.0, 4.5, 1.8], center=true);
             }
         }
     }

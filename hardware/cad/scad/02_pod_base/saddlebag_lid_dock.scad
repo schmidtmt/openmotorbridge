@@ -158,5 +158,29 @@ module saddlebag_lid_dock() {
     }
 }
 
-// Render monolithic module
-saddlebag_lid_dock();
+// -----------------------------------------------------------------------------
+// Assembly Preview: Dock with Seated Universal Pod 1/2
+// -----------------------------------------------------------------------------
+use <pod_base_housing.scad>;
+
+module saddlebag_lid_dock_assembly() {
+    // 1. Cradle Body
+    color([0.20, 0.22, 0.25])
+        saddlebag_lid_dock();
+
+    // 2. Translucent Universal Pod 1 / 2 seated inside cradle
+    // Shows exact 1:1 match and explains the lateral Harley Torx mounting flange
+    translate([0, DOCK_WALL + 0.5, DOCK_WALL + 0.5]) {
+        color([0.15, 0.55, 0.85, 0.45])
+            pod_base_housing();
+    }
+}
+
+// Default part: "cradle" for standalone STL manufacturing; "assembly" for 3D docs render
+part = "cradle";
+
+if (part == "assembly") {
+    saddlebag_lid_dock_assembly();
+} else {
+    saddlebag_lid_dock();
+}

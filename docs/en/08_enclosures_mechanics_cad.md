@@ -770,7 +770,7 @@ The universal Saddlebag Lid Dock ([`saddlebag_lid_dock.scad`](../../hardware/cad
 
 ![Universal Saddlebag Lid Dock CAD](../images/cad/saddlebag_lid_dock_cad.png)
 
-*Figure 8.30: 3D CAD visualization of the Saddlebag Lid Dock (`saddlebag_lid_dock.scad`). Visible are the inboard-oriented Torx mounting flange for OEM hinge screws, forward cable snout with integrated strain relief for the 2-wire DC power supply (M8 / FLRY-B line routed along the check strap to the MagSafe breakaway coupler), perimeter half-shell with EPDM strap slots, and upper drip lip shielding the cartridge entrance.*
+*Figure 8.30: 3D CAD visualization of the Saddlebag Lid Dock (`saddlebag_lid_dock.scad`) with seated translucent satellite pod (1:1 fit in $151 \times 71\,\text{mm}$ cradle cavity). Visible are the inboard-oriented $22\,\text{mm}$ wide Torx mounting flange for OEM Harley hinge screws ($52\,\text{mm}$ hole pitch), forward cable snout with integrated strain relief for the 2-wire DC power supply (M8 / FLRY-B line routed along the check strap to the MagSafe breakaway coupler), perimeter half-shell with EPDM strap slots, and upper drip lip shielding the cartridge entrance.*
 
 #### 6.5.1 Zero-Drill Mounting & Mechanical Design
 1. **OEM Mounting Point Utilization (Zero-Drill):**

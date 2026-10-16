@@ -362,8 +362,8 @@ Um mechanische Passgenauigkeit bei maximaler Flexibilität zu gewährleisten, ex
 3. **Variante 3: OMM 2.4 GHz UCS Transceiver (Autonome Mesh-Engine):**
    * Seriell angeordnetes UCS-Modul ($54 \times 34 \times 11\,\text{mm}$) mit 5V COTS RF-Booster im Heckbereich.
    * 100 % digitale USB-Audioübertragung (UAC) und Telemetrie direkt zu `PCBA 03`.
-4. **Variante 4: Wasserdichte Blindkassette (IP67 Dry Box):**
-   * Vollständiger Innenraum als wasserdichtes Staufach für Notschlüssel, Papiere oder Ersatzsicherungen mit umlaufender Silikondichtung und planem Schraubdeckel.
+4. **Variante 4: Leerkassette / Staufach-Kassette (Organizer am Kassettenboden):**
+   * Vollständiger Innenraum als Staufach für Notschlüssel, Papiere oder Ersatzsicherungen mit passgenauem Einlegeboden direkt auf dem Schlittenboden (`am Boden` verschraubt mit 4x M2-Senkkopfschrauben). Beim Einschieben in den Pod-Schacht wird die Kassette durch das umlaufende Pod-Gehäuse und die frontale Dichtlippe zu 100 % IP67-dicht umschlossen.
 
 ---
 
@@ -857,7 +857,7 @@ Das universelle Kofferdeckel-Dock ([`saddlebag_lid_dock.scad`](../../hardware/ca
 
 ![Universal Saddlebag Lid Dock CAD](../images/cad/saddlebag_lid_dock_cad.png)
 
-*Abbildung 8.30: 3D-CAD-Visualisierung des Kofferdeckel-Docks (`saddlebag_lid_dock.scad`). Sichtbar sind der inboard gerichtete Torx-Montageflansch für die originalen Scharnierschrauben, die frontale Kabelschnauze mit integrierter Zugentlastung für die 2-Draht DC-Spannungsversorgung (M8 / FLRY-B Leitung parallel zum Deckel-Fangband zur MagSafe-Abreißkupplung), die umlaufende Halbschale mit EPDM-Spannbandschlitzen und die obere Tropfkante über dem Kassetteneinschub.*
+*Abbildung 8.30: 3D-CAD-Visualisierung des Kofferdeckel-Docks (`saddlebag_lid_dock.scad`) mit eingesetztem transluzentem Satelliten-Pod (1:1 Passung im $151 \times 71\,\text{mm}$ Innenbett). Sichtbar sind der inboard gerichtete $22\,\text{mm}$ breite Torx-Montageflansch für die originalen Harley-Scharnierschrauben (Lochabstand $52\,\text{mm}$), die frontale Kabelschnauze mit integrierter Zugentlastung für die 2-Draht DC-Spannungsversorgung (M8 / FLRY-B Leitung parallel zum Deckel-Fangband zur MagSafe-Abreißkupplung), die umlaufende Halbschale mit EPDM-Spannbandschlitzen und die obere Tropfkante über dem Kassetteneinschub.*
 
 #### 6.5.1 Zero-Drill-Befestigung & Mechanisches Konzept
 1. **Nutzung originaler Befestigungspunkte (Zero-Drill):**
