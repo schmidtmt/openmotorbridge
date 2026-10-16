@@ -145,24 +145,24 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
    * **Niederhalteplatte verschrauben:** Die PA12-Niederhalteplatte ([`cartridge_retainer_plate.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_retainer_plate.stl)) plan über die Hubmagnete legen und mit **4x M2 $\times 6\,\text{mm}$ Senkkopfschrauben (DIN 7991)** fest anziehen. Die Aktuatoren sitzen nun absolut spielfrei und rüttelfest im Schlitten.
 3. **Gateway-Inlay & OEM-Adapterkabel anschließen (`J_AUDIO_PWR` / 8-Pin JST-SH):**
    * **Bucht 1 (Sena SPIDER X Slim Inlay - OMB Referenz K2a):**
-     * Vorkonfektioniertes 8-Pin JST-SH Adapterkabel auf Header `J_AUDIO_PWR` stecken (Pin 1: `PGND`, Pin 2: `VCC`, Pin 3: `AGND_SPK`, Pin 4/5: Stereo Spk In, Pin 6: `AGND_MIC`, Pin 7: Mic Out).
-     * 2-Pin Micro-JST Stecker an die externe Akkuzuleitung des SPIDER X Slim anstecken (liefert permanente 3.85V Direct-DC Speisung ohne Akku im Pod!).
+     * Vorkonfektioniertes 8-Pin JST-SH Adapterkabel auf Header `J_AUDIO_PWR` stecken (Pin 1: `PGND`, Pin 2: `VCC_5V_PROT`, Pin 3: `AGND_AUDIO_IN`, Pin 4/5: Stereo Spk In, Pin 6: `OMM_DETECT` gebrückt auf GND, Pin 7: Mic Out `VOICE_OUT`).
+     * 2-Pin Micro-JST Stecker an die externe Akkuzuleitung des SPIDER X Slim anstecken (liefert permanente 3.85V Direct-DC Speisung via MP2315 Step-Down ohne Akku im Pod!).
      * 2.5 mm Klinkenstecker an den Mikrofoneingang und 3.5 mm Klinkenstecker an den Lautsprecherausgang der Sena-Kabelpeitsche anstecken.
-     * SPIDER X Slim formschlüssig in das PA12-Nest einlegen. *(Zero Pogo-Pins, Laststrom fließt isoliert über `PGND`, Audio über stromlose `AGND`-Pins 3 und 6 zu 100 % brummfrei).*
+     * SPIDER X Slim formschlüssig in das PA12-Nest einlegen. *(Zero Pogo-Pins, Laststrom fließt isoliert über `PGND`, Audio über stromlose `AGND_AUDIO_IN`-Masse Pin 3 zu 100 % brummfrei).*
    * **Alternative Option: Universelle OEM-Upcycling-Kassette (Schuberth SC2, Shoei SRL-Mesh/SRL3, HJC Smart 50B - 0 € Budget-Option):**
      * *Vorbereitung (Battery Eliminator):* Gehäuse des ausgemusterten OEM-Intercoms (SC2, Shoei SRL oder Smart HJC) öffnen, LiPo-Pouch-Akku ablöten. Miniatur Step-Down-Wandler (z. B. MP2315) von `VCC` (5V von `J_AUDIO_PWR` Pin 2) auf $3{,}75\dots 3{,}85\,\text{V}$ einstellen und an `BAT+` / `BAT-` anlöten. Einen $10\,\text{k}\Omega$-Widerstand zwischen NTC-Pad und Masse (`GND`) anlöten (simuliert 22 °C Akkutemperatur gegen Sensor-Fehler). Litzen zugentlastet mit Silikon/B-7000 vergießen.
      * *Audio- & Antennen-Adaption:* 8-Pin JST-SH Kabelpeitsche mit den OEM-Lautsprecher- und Mikrofonleitungen verbinden (`AGND`-Massen getrennt!). Internes U.FL/Micro-Koaxialkabel auf ein kurzes RG-178 Pigtail zur SMA-Flanschbuchse der Kassettenstirnseite adaptieren.
      * *Montage im Schlitten:* Hauptmodul ($75 \times 40 \times 12\,\text{mm}$ oder flaches Nackenmodul) und Step-Down-Regler im Basisschlitten platzieren. Steuerung drahtlos über BLE-Lenkerfernbedienung (SC2 Remote oder Sena RC4) oder mechatronisch. Mit Blindkassettendeckel (`03_insert_blindkassette.scad`) und 4x M2-Schrauben wetterfest verschließen.
    * **Bucht 2 (Cardo Packtalk Edge / Pro Inlay - Klasse 1d DMC Gen2):**
-     * 8-Pin JST-SH Adapterkabel auf Header `J_AUDIO_PWR` stecken.
-     * 3.5 mm Stereo-Klinkenstecker (Lautsprecherausgang ins OMB-Audioboard) und Cardo 2-Pin Micro-Stecker mit Rastnase (Mikrofoneingang vom ES8388 DAC) an die Cardo Air-Mount Kabelpeitsche anstecken.
+     * 8-Pin JST-SH Adapterkabel auf Header `J_AUDIO_PWR` stecken (Pin 6 `OMM_DETECT` intern mit GND gebrückt $\rightarrow$ `U4` NC analog, Pin 7 `VOICE_OUT` an Mic In, Pin 4/5 Stereo Spk an Line-In ADC, Pin 1/2 an USB-C 5V Ladeport).
+     * 3.5 mm Stereo-Klinkenstecker (Lautsprecherausgang ins OMB-Audioboard) und Cardo 2-Pin Micro-Stecker mit Rastnase (Mikrofoneingang vom ES8388 DAC) an die Cardo Air-Mount Kabelpeitsche bzw. das Direkt-Kontaktfeld anstecken.
      * Rechtwinkligen USB-C Ladestecker an den Ladeport des Packtalk Edge anstecken.
      * Cardo Packtalk Edge in das Air-Mount Bett einklicken (Dauerladung während aktivem Mesh-Betrieb voll unterstützt; Laderückstrom fließt getrennt über `PGND` ab).
    * **Alternative Option: Midland PMR446 Funk-Kassette (Klasse 3a Analogfunk):**
      * 8-Pin JST-SH Adapterkabel auf Doppel-Klinke (2.5 mm Mic / 3.5 mm Spk) und 5V DC-Batteriedummy anstecken; PTT-Tastung erfolgt über Pin 8 (`PTT_IO` via MOSFET `Q4`).
    * **Alternative Option: OpenMotorMesh (OMM) 2.4 GHz / 446 Funk-Kassette (Klasse 4 / 3b UCS):**
-     * 8-Pin JST-SH zu 90° USB-C Adapterkabel anstecken.
-     * Nativ gefertigt im standardisierten **UCS-Formfaktor** (Universal Communication Solution), reines Digital-Audio über UWB mit getrennten Kelvin-Massen.
+     * 8-Pin JST-SH zu 90° USB-C Adapterkabel (4-polig: VBUS, GND, D+, D-) anstecken. Pin 6 (`OMM_DETECT`) bleibt unbeschaltet (N/C), wodurch `R9` den Hardware-Umschalter `U4` auf `PCBA 03` automatisch auf digitalen USB-Audio-Betrieb schaltet!
+     * Nativ gefertigt im standardisierten **UCS-Formfaktor** (Universal Communication Solution), reines verlustfreies Digital-Audio über USB ohne zusätzliche D/A-Wandler.
 4. **Integrierte UWB-Antenne & Flanschdichtung:**
    * Auf `PCBA 03` arbeitet eine verlustarme SMD-Keramikantenne für 6.5 GHz UWB. Die Funkwellen durchdringen das dielektrische PA12-Gehäuse dämpfungsfrei; es sind keine externen Antennenradome erforderlich.
    * Silikon-Formdichtung auf den Kassettenkragen aufziehen und dünn mit Silikonfett benetzen.

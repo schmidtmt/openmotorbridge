@@ -214,26 +214,26 @@ Die frühere Pod-Basisplatine (`PCBA 02`) ist in v9.6 **vollständig und ersatzl
 
 ### 5.2 Pinbelegung des Audio-Power-Headers (`J_AUDIO_PWR` / 8-Pin JST-SH 1.0mm) & Dual-Mode Umschaltung
 
-Um sowohl **analoge OEM-Headsets (Sena, Cardo, Midland)** störungsfrei mit Kelvin-Massen anzubinden als auch **native OMM-Module (PCBA 09 / PCBA 10)** verlustfrei digital über denselben Steckverbinder zu betreiben, ist `J_AUDIO_PWR` als **Dual-Mode-Schnittstelle** mit automatischer Hardware-Umschaltung über `U4` (`TS5A3159DBVR`) ausgeführt:
+Um sowohl **analoge OEM-Headsets (Sena, Cardo, Midland)** störungsfrei mit Kelvin-Massen anzubinden als auch **native OMM-Module (PCBA 09 / PCBA 10)** verlustfrei digital über denselben Steckverbinder zu betreiben, ist `J_AUDIO_PWR` als **Dual-Mode-Schnittstelle** mit automatischer Hardware-Umschaltung über `U4` (`TS5A3159DBVR`) und Pull-Up-Widerstand `R9` ($10\,\text{k}\Omega$ an `VCC_3V3`) ausgeführt:
 
 | Pin | Signalname | Richtung | Funktion: Analog-Intercom (Sena / Cardo / Midland) | Funktion: Digital-OMM (PCBA 09 / PCBA 10) |
 | :---: | :--- | :---: | :--- | :--- |
 | **1** | **`PGND` / `GND`** | Power Return | **Leistungs-Masse:** Rückstrom Lader / DC-DC ($0{,}2\dots 0{,}6\,\text{A}$) | **Leistungs-Masse:** Rückstrom Lader & HF-Endstufe ($0{,}2\dots 0{,}6\,\text{A}$) |
 | **2** | **`VCC_5V_PROT`** | Power Out | Geregelte, abgesicherte +5V Speisung für Headset-Akku/Lader | Geregelte, abgesicherte +5V Speisung für OMM BQ24075 PMIC |
-| **3** | **`AGND_AUDIO_IN`** | Audio GND | **Saubere Kopfhörermasse:** 3.5mm Sleeve – **stromlos ($I = 0\,\text{mA}$)!** | Isolierte NF-Masse / Shield-Referenz (stromlos!) |
-| **4** | **`AUDIO_IN_L`** | Audio In $\leftarrow$ | Line-Out Lautsprecher Links vom Headset zum ES8388 ADC | Optionale analoge Monitor-Leitung Links |
-| **5** | **`AUDIO_IN_R`** | Audio In $\leftarrow$ | Line-Out Lautsprecher Rechts vom Headset zum ES8388 ADC | Optionale analoge Monitor-Leitung Rechts |
-| **6** | **`OMM_DETECT`** | Control In $\leftarrow$ | **Offen / LOW (über interne Beschaltung):** Modus Analog Intercom | **HIGH (aktiv vom OMM getrieben):** Schaltet `U4` auf Digital-USB |
+| **3** | **`AGND_AUDIO_IN`** | Audio GND | **Saubere Kopfhörermasse:** 3.5mm Sleeve – **stromlos ($I = 0\,\text{mA}$)!** | Nicht belegt (N/C) oder Koax-Schirmung (stromlos!) |
+| **4** | **`AUDIO_IN_L`** | Audio In $\leftarrow$ | Line-Out Lautsprecher Links vom Headset zum ES8388 ADC | Nicht belegt (N/C) |
+| **5** | **`AUDIO_IN_R`** | Audio In $\leftarrow$ | Line-Out Lautsprecher Rechts vom Headset zum ES8388 ADC | Nicht belegt (N/C) |
+| **6** | **`OMM_DETECT`** | Control In $\leftarrow$ | **GND-Brücke im Kabelbaum (0V):** Hält `U4` in Ruhestellung (NC) | **Offen / N/C:** `R9` zieht auf HIGH ($3{,}3\,\text{V}$) $\rightarrow$ schaltet `U4` auf Digital-USB (NO) |
 | **7** | **`AUDIO_IO_P`** | Dual-Mode I/O | **Analog `VOICE_OUT` (via U4 NC):** Sprache vom ES8388 DAC $\rightarrow$ OEM Mic | **Digital `USB_DP` (via U4 NO):** Nativer digitaler USB-Audio-Datenstrom D+ |
-| **8** | **`PTT_USB_N`** | Dual-Mode I/O | **PTT_IO:** Push-to-Talk Tastung gegen Masse (Midland PMR446) | **Digital `USB_DN`:** Nativer digitaler USB-Audio-Datenstrom D- |
+| **8** | **`PTT_USB_N`** | Dual-Mode I/O | **PTT_IO:** Push-to-Talk Tastung gegen Masse (Midland PMR446 / N/C) | **Digital `USB_DN`:** Nativer digitaler USB-Audio-Datenstrom D- |
 | **MP** | **`GND`** | Schirmung | Beidseitige SMD-Montagelaschen des JST-SH Steckers auf GND-Plane | Beidseitige SMD-Montagelaschen des JST-SH Steckers auf GND-Plane |
 
 > [!IMPORTANT]
 > **Funktionsweise der automatischen Audio-Umschaltung via `U4` (`TS5A3159DBVR`):**
 > 1. **Kassette mit Analog-Intercom (Sena SPIDER X Slim / Cardo Packtalk Edge / Midland):**  
->    Der Adapterkabelstrang lässt Pin 6 (`OMM_DETECT`) unbeschaltet oder zieht ihn auf GND. Der Umschalter `U4` verbleibt in Ruhestellung (**NC**): Pin 7 (`AUDIO_IO_P`) ist direkt mit dem Analogausgang `VOICE_OUT` des ES8388 Audio-Codecs verbunden. Die Sprachübertragung erfolgt vollkommen latenzfrei ($< 0{,}4\,\text{ms}$) analog in das Mikrofon des Headsets.
+>    Der Adapterkabelstrang überbrückt Pin 6 (`OMM_DETECT`) intern mit Masse (GND Pin 1 oder Pin 3). Der Umschalter `U4` verbleibt in Ruhestellung (**NC**): Pin 7 (`AUDIO_IO_P`) ist direkt mit dem Analogausgang `VOICE_OUT` des ES8388 Audio-Codecs verbunden. Die Sprachübertragung erfolgt vollkommen latenzfrei ($< 0{,}4\,\text{ms}$) analog in das Mikrofon des Headsets.
 > 2. **Kassette mit nativem OMM-Modul (`PCBA 09` Mesh / `PCBA 10` 446 PMR/DMR):**  
->    Das eingeschobene OMM-Modul legt Pin 6 (`OMM_DETECT`) auf High (3.3V). Der SPDT-Schalter `U4` schaltet in $< 35\,\text{ns}$ auf Arbeitskontakt (**NO**): Pin 7 wird von der analogen Audioleitung getrennt und direkt mit der nativen USB-Leitung `USB_DP` der ESP32-C6 Host-MCU verbunden. Zusammen mit Pin 8 (`PTT_USB_N` als `USB_DN`) entsteht ein vollwertiger, störungsfreier digitaler USB-2.0-Audiokanal direkt zwischen Intercom-Engine und OMB-Gateway. Mechatronik-Stößel und doppelte D/A-Wandlungen entfallen vollständig!
+>    Das 4-polige USB-C-Kabel (VBUS, GND, D+, D-) lässt Pin 6 (`OMM_DETECT`) unbeschaltet (**N/C**). Der $10\,\text{k}\Omega$-Pull-up-Widerstand `R9` auf `PCBA 03` zieht den Steuereingang IN von `U4` automatisch auf HIGH ($3{,}3\,\text{V}$). Der SPDT-Schalter `U4` schaltet in $< 35\,\text{ns}$ auf Arbeitskontakt (**NO**): Pin 7 wird von der analogen Audioleitung getrennt und direkt mit der nativen USB-Leitung `USB_DP` der ESP32-C6 Host-MCU verbunden. Zusammen mit Pin 8 (`PTT_USB_N` als `USB_DN`) entsteht ein vollwertiger, verlustfreier digitaler USB-2.0-Audiokanal direkt zwischen Intercom-Engine und OMB-Gateway. Mechatronik-Stößel, Wandlerverluste und analoge Brummschleifen entfallen vollständig!
 
 
 ### 5.3 Pinbelegung des Aktuator-Headers (`J_ACT` / 8-Pin JST-SH 1.0mm)
@@ -500,18 +500,21 @@ Die Platine **`PCBA 09`** ist die universelle Open-Source-Hardware für das Open
 
 ### 11.4 Belegung des 16-Pin Multi-Use USB-C Steckverbinders (`J1`)
 
-Der stirnseitige USB-C Port `J1` (`TYPE-C-31-M-12_IP67`) dient als universelle Schnittstelle für **Laden**, **WebUSB/DFU-Flashing** und den **Kassetten-Einschubkontakt**:
+Der stirnseitige USB-C Port `J1` (`TYPE-C-31-M-12_IP67`) dient als universelle Schnittstelle für **Laden (5V Bordnetz / Powerbank)**, **WebUSB/DFU-Flashing** und die **digitale USB-Audio-Anbindung** im Kassetten-Schlitten (`PCBA 03`):
 
-| USB-C Pins | Netzname | Signal-Typ | Funktion / Adapter-Verbindung |
+| USB-C Pins | Netzname | Signal-Typ | Funktion & Kassetten-Verbindung (`J_AUDIO_PWR`) |
 | :---: | :--- | :--- | :--- |
 | **A1, B12, A12, B1, SH** | `GND` / `PGND` | Power Ground | Pin 1 Kassetten-Header `J_AUDIO_PWR` & Schirmung: Führt Lade- & Betriebs-Rückstrom |
-| **A4, B9, A9, B4** | `VBUS_5V` | Power In (+5V) | Pin 2 Kassetten-Header & USB-Ladekabel: 5V Speisung & BQ24075 USV-Akkuladung |
-| **A6, B6 (`DP1`, `DP2`)** | `USB_DP` | USB 2.0 PHY | ESP32-C6 GPIO 13 (via TVS `D2`): **Nativer USB D+ für WebUSB / DFU Firmware-Flashing** |
-| **A7, B7 (`DN1`, `DN2`)** | `USB_DN` | USB 2.0 PHY | ESP32-C6 GPIO 12 (via TVS `D2`): **Nativer USB D- für WebUSB / DFU Firmware-Flashing** |
-| **A5 (`CC1`)** | `HP_OUT_L` | Audio Out | Pin 4 Kassetten-Header: Stereo Audio Links vom ES8388 `LOUT1` im Kassetten-Betrieb |
-| **B5 (`CC2`)** | `HP_OUT_R` | Audio Out | Pin 5 Kassetten-Header: Stereo Audio Rechts vom ES8388 `ROUT1` im Kassetten-Betrieb |
-| **A8 (`SBU1`)** | `MIC_IN+` | Audio In | Pin 7 Kassetten-Header: Mikrofonsignal zum ES8388 `MIC1P` im Kassetten-Betrieb |
-| **B8 (`SBU2`)** | `AGND_SPK` | Analog Ground | Pin 3 & 6 Kassetten-Header: Stromloser Audio-Massebezug ($I = 0\,\text{mA}$) |
+| **A4, B9, A9, B4** | `VBUS_5V` | Power In (+5V) | Pin 2 Kassetten-Header `VCC_5V_PROT` & USB-Ladekabel: 5V Speisung & BQ24075 USV-Ladung |
+| **A6, B6 (`DP1`, `DP2`)** | `USB_DP` | USB 2.0 PHY | Pin 7 Kassetten-Header `AUDIO_IO_P` $\rightarrow$ ESP32-C6 GPIO 13 (via TVS `D2`): **Digital-Audio USB D+ & WebUSB** |
+| **A7, B7 (`DN1`, `DN2`)** | `USB_DN` | USB 2.0 PHY | Pin 8 Kassetten-Header `PTT_USB_N` $\rightarrow$ ESP32-C6 GPIO 12 (via TVS `D2`): **Digital-Audio USB D- & WebUSB** |
+| **A5 (`CC1`)** | `CC1` | USB-C UFP | $5{,}1\,\text{k}\Omega$ Pull-Down nach GND (UFP Sink-Erkennung für Standard 5V Speisung) |
+| **B5 (`CC2`)** | `CC2` | USB-C UFP | $5{,}1\,\text{k}\Omega$ Pull-Down nach GND (UFP Sink-Erkennung für Standard 5V Speisung) |
+| **A8, B8 (`SBU1`, `SBU2`)** | `NC` | Nicht belegt | Frei / Nicht beschaltet (Analogaudio verbleibt 100 % auf `J_HELMET` auf B.Cu) |
+
+> [!NOTE]
+> **Digitales USB-Audio statt analoger Wandlung:**
+> Im Kassettenbetrieb am Bike wird das Audiosignal zwischen der Host-MCU auf `PCBA 03` und dem OMM-Modul (`PCBA 09`) rein digital als USB-Audiostream (UAC / ESP-USB-Serial) über `USB_DP` und `USB_DN` übertragen. Es finden im Kassetten-Einschub keinerlei verlustbehaftete D/A- oder A/D-Wandlungen statt; Common-Impedance-Brummschleifen sind physikalisch ausgeschlossen. Analoges Audio für Helmlautsprecher und Mikrofon wird ausschließlich über den separaten Header `J_HELMET` (Platinenunterseite) geführt.
 
 ### 11.5 Belegung des 6-Pin Internen Helm-Audio & PTT Steckverbinders (`J_HELMET`)
 

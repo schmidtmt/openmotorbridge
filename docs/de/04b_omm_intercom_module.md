@@ -128,13 +128,13 @@ Der UCS-Standard nach ECE 22.06 normiert die mechanische Kavität, lässt den el
 |                    |                                                                    |
 |                    +--- MODUS 2: EINSATZ IM POD (SMART CARTRIDGE PCBA 03)               |
 |                    |    USB-C auf 8-Pin JST-SH Adapterkabel (Länge 5 cm, 90° gewinkelt):|
-|                    |    * Pin 1: PGND (Leistungs-Rückstrom, bis 600 mA Sendepeak)       |
-|                    |    * Pin 2: VCC_5V_PROT (5V Speisung & BQ24075 USV-Ladung via F1) |
-|                    |    * Pin 3: AGND_AUDIO_IN (Audio-Massebezug, stromlos I = 0 mA)    |
-|                    |    * Pin 4 & 5: AUDIO_IN_L / AUDIO_IN_R (Optionale Monitor-Linien) |
-|                    |    * Pin 6: OMM_DETECT (Docking HIGH -> schaltet U4 auf USB-Audio) |
-|                    |    * Pin 7: AUDIO_IO_P -> USB_DP (Nativer digitaler USB-Audio D+)  |
-|                    |    * Pin 8: PTT_USB_N -> USB_DN (Nativer digitaler USB-Audio D-)  |
+|                    |    * Pin 1: PGND (USB-C GND Rückstrom, bis 600 mA Sendepeak)        |
+|                    |    * Pin 2: VCC_5V_PROT (USB-C VBUS Speisung & BQ24075 USV-Ladung)  |
+|                    |    * Pin 3..5: Nicht belegt (N/C, Analogaudio im Bike entfällt)    |
+|                    |    * Pin 6: OMM_DETECT (Offen/NC -> 10k R9 zieht HIGH -> U4 NO)     |
+|                    |    * Pin 7: AUDIO_IO_P -> USB-C D+ (Nativer digitaler USB-Audio D+) |
+|                    |    * Pin 8: PTT_USB_N -> USB-C D- (Nativer digitaler USB-Audio D-)  |
+|                    |    => Reiner digitaler USB-Audiostream, null D/A-Wandlungsverluste!|
 |                    |                                                                    |
 |                    +--- MODUS 3: FLASHING, DFU & SERVICE (WARTUNG)                      |
 |                         Standard USB-C Datenkabel am PC / Web-Browser (WebUSB):         |
@@ -439,7 +439,7 @@ Sendet das SA818-DMR Modul mit $0{,}5\,\text{W}$ ERP im 446-MHz-Band, zieht die 
   - `Pin 1: PGND` führt die $600\,\text{mA}$ Leistungsrückströme direkt zum Schaltregler auf `PCBA 03` ab.
   - `Pin 2: VCC_5V_PROT` speist das Modul über die selbstrückstellende 500mA Polyfuse `F1`.
   - `Pin 3: AGND_AUDIO_IN` ist als Audio-Referenzmasse **vollkommen stromlos** ($I = 0\,\text{mA}$). Es gibt keinen Spannungsabfall ($\Delta V = 0\,\text{mV}$) – das Audiosignal bleibt absolut brumm- und störungsfrei!
-  - `Pin 6: OMM_DETECT` wird vom eingeschobenen OMM-Modul aktiv auf HIGH ($3{,}3\,\text{V}$) getrieben. Dies schaltet den SPDT-Schalter `U4` (`TS5A3159DBVR`) auf `PCBA 03` blitzschnell ($< 35\,\text{ns}$) von Ruhestellung (NC: Analog `VOICE_OUT`) auf Arbeitskontakt (NO: Digital `USB_DP`).
+  - `Pin 6: OMM_DETECT` bleibt beim 4-poligen USB-C-Anschluss unbeschaltet (**Offen / N/C**). Der $10\,\text{k}\Omega$ Pull-up-Widerstand `R9` auf `PCBA 03` zieht den Steuereingang von `U4` automatisch auf HIGH ($3{,}3\,\text{V}$). Dies schaltet den SPDT-Schalter `U4` (`TS5A3159DBVR`) blitzschnell ($< 35\,\text{ns}$) von Ruhestellung (NC: Analog `VOICE_OUT`) auf Arbeitskontakt (NO: Digital `USB_DP`). (Bei Analog-Kabelbäumen für Sena/Cardo wird Pin 6 im Stecker mit GND gebrückt, um `U4` auf NC zu verriegeln).
   - `Pin 7: AUDIO_IO_P` fungiert im OMM-Betrieb als nativer USB D+ Datenstrom (`USB_DP`), während Pin 8 (`PTT_USB_N`) als nativer USB D- Datenstrom (`USB_DN`) arbeitet. Dadurch wird der Audiostream volldigital, verlustfrei und ohne doppelte D/A-Wandlung direkt zwischen den beiden ESP32-C6 MCUs übertragen!
 
 ```
@@ -447,17 +447,18 @@ Sendet das SA818-DMR Modul mit $0{,}5\,\text{W}$ ERP im 446-MHz-Band, zieht die 
 |               8-PIN KELVIN GROUNDING & DUAL-MODE AUDIO-ROUTING (J_AUDIO_PWR AUF PCBA 03)          |
 +---------------------------------------------------------------------------------------------------+
 |                                                                                                   |
-|  [ PCBA 10 OMM 446 MODUL ]                                          [ SMART CARTRIDGE PCBA 03 ]   |
+|  [ PCBA 09 / 10 OMM MODUL ]                                         [ SMART CARTRIDGE PCBA 03 ]   |
 |                                                                                                   |
-|  SA818 HF-Endstufe (600 mA Peak) --(Pin 1: PGND)-----------------> LM5164 DC-DC Rückstrommasse    |
-|  5V USV-Ladung & PA-Versorgung <---(Pin 2: VCC_5V_PROT)----------- 5V Speisung via F1 Polyfuse    |
+|  USB-C GND (Rückstrom bis 600 mA) --(Pin 1: PGND)-----------------> LM5164 DC-DC Rückstrommasse    |
+|  5V USV-Ladung & Speisung <---------(Pin 2: VCC_5V_PROT)----------- 5V Speisung via F1 Polyfuse    |
 |                                                                                                   |
-|  Audio-Schirmung / Referenz -------(Pin 3: AGND_AUDIO_IN, I=0mA)-> Stromlose Audio-Masse (ES8388) |
-|  Audio Line-Out Links (Option) ----(Pin 4: AUDIO_IN_L)-----------> ES8388 Codec Line-In Links    |
-|  Audio Line-Out Rechts (Option) ---(Pin 5: AUDIO_IN_R)-----------> ES8388 Codec Line-In Rechts   |
+|  (Nicht belegt / N/C) --------------(Pin 3: AGND_AUDIO_IN)--------> Stromlose Audio-Masse (ES8388) |
+|  (Nicht belegt / N/C) --------------(Pin 4: AUDIO_IN_L)-----------> ES8388 Codec Line-In Links    |
+|  (Nicht belegt / N/C) --------------(Pin 5: AUDIO_IN_R)-----------> ES8388 Codec Line-In Rechts   |
 |                                                                                                   |
-|  OMM Docking-Signal (HIGH 3.3V) ---(Pin 6: OMM_DETECT)-----------> TS5A3159 Control-In & ESP32-C6 |
+|  Offen / NC (10k R9 zieht HIGH 3.3V)(Pin 6: OMM_DETECT)-----------> TS5A3159 Control-In & ESP32-C6 |
 |                                                                     (Schaltet U4: NC -> NO)       |
+|                                                                     (Bei Analog-OEM: Brücke an GND|
 |                                                                                                   |
 |  Nativer USB 2.0 D+ (Full-Speed) --(Pin 7: AUDIO_IO_P)-----------> U4 Pin NO -> ESP32-C6 USB_DP  |
 |                                                                     (Bei Analog-OEM: U4 NC -> Mic)|
