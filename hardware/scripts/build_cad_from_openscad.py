@@ -126,6 +126,7 @@ STL_TARGETS: List[Tuple] = [
     ("05_accessories/smart_keyfob_pager.scad", "05_accessories/smart_keyfob_lower_shell.stl", ["-D", 'part="lower"']),
     ("05_accessories/smart_keyfob_pager.scad", "05_accessories/smart_keyfob_upper_shell.stl", ["-D", 'part="upper"']),
     ("05_accessories/smart_keyfob_pager.scad", "05_accessories/smart_keyfob_tpu_rim.stl", ["-D", 'part="rim"']),
+    ("05_accessories/smart_keyfob_pager.scad", "05_accessories/smart_keyfob_silicone_keypad.stl", ["-D", 'part="keypad"']),
 
     # 12. Cockpit Accessories (Under-Perch Switch Bracket & BSD Mirror Indicator Pod)
     ("05_accessories/under_perch_switch_bracket.scad", "05_accessories/under_perch_switch_bracket.stl", ["-D", 'part="bracket"']),
@@ -397,8 +398,9 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
     (
         "05_accessories/smart_keyfob_pager.scad",
         os.path.join(CAD_IMG_DIR, "smart_keyfob_pager_exploded.png"),
-        "29,17,16,50,0,50,185",
-        "Tomorrow"
+        "29,17,20,50,0,50,225",
+        "Tomorrow",
+        ["-D", 'part="exploded"']
     ),
     (
         "05_accessories/under_perch_switch_bracket.scad",

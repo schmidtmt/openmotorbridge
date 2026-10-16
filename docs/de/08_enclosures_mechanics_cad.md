@@ -1235,13 +1235,12 @@ Der **OpenMotorBridge 2-in-1 Smart-Keyfob** ([`smart_keyfob_pager.scad`](../../h
 
 *Abbildung 8.35: 3D-CAD-Explosionsdarstellung des Smart-Keyfobs. Von unten nach oben: PA12-MJF Unterschale mit rückseitiger MagSafe-Zentrierringtasche, 180-200 mAh LiPo-Pouch-Zelle ($25 \times 18 \times 3{,}8\,\text{mm}$), PCBA 07 Trägerplatine ($38 \times 19\,\text{mm}$), Semtech SX1262 LoRa Transceiver, LRA-Haptikmotor, Mu-Metall-Flussleitblech ($0{,}5\,\text{mm}$), N52-Neodym-Schlüsselblock ($20 \times 10 \times 5\,\text{mm}$) und Oberschale mit Diffusor-Bohrung für die RGB-Statusanzeige.*
 
-### 7.1 Mechanischer Aufbau & Gehäuseparameter
+### 7.1 Mechanischer Aufbau, Taster-Ergonomie & IP67-Dichtungsarchitektur
 * **Außenabmessungen:** $58{,}0 \times 34{,}0 \times 13{,}0\,\text{mm}$ (Länge x Breite x Dicke; Unterschale $6{,}5\,\text{mm}$, Oberschale $6{,}5\,\text{mm}$).
 * **Materialien & Fertigung:** Hochfestes PA12 im HP Multi Jet Fusion (MJF) Verfahren, kugelgestrahlt, chemisch geglättet und hydrophob versiegelt.
 * **Stoßabsorbierender TPU-Kantenschutz:** Umlaufender $0{,}8\,\text{mm}$ TPU-95A Schutzrahmen (Orange `#ff9f0a`) mit Freisparung für die seitliche Magnetkontaktfläche. Schützt Gehäuse und Elektronik zuverlässig bei Stürzen auf Asphalt aus bis zu $2\,\text{m}$ Höhe.
-* **316L Edelstahl-Öse:** Massive Schlüsselloch-Durchführung ($\varnothing 4{,}5\,\text{mm}$ innen, $3{,}5\,\text{mm}$ Wandstärke) für Standard-Motorrad-Schlüsselringe und Karabiner.
 * **Integrierter N52 Neodym-Schlüsselblock ($20 \times 10 \times 5\,\text{mm}$):**
-  * Auf der schmalen Längsseite formschlüssig eingepresst mit korrosionsfester Ni-Cu-Ni Dreifachbeschichtung (silbern-metallisch glänzend, in den CAD-Renderings deutlich sichtbar) und mit einem taktilen Nordpol-Ausrichtungssteg versehen.
+  * Auf der schmalen Längsseite formschlüssig eingepresst mit korrosionsfester Ni-Cu-Ni Dreifachbeschichtung und mit einem taktilen Nordpol-Ausrichtungssteg versehen.
   * Tritt der Keyfob an den $X = 64\,\text{mm}$ Zielkreis des Pod-Gehäuses heran, zieht das konzentrierte B-Feld ($B_r \approx 1{,}48\,\text{T}$) den innenliegenden Stahlanker an und entriegelt die Auswerferfedern.
 * **0,5 mm Weicheisen- / Mu-Metall-Abschirmblech (Flux Shield):**
   * Direkt hinter dem N52-Magneten platziert. Schirmt die interne Elektronik (SX1262 LoRa-Transceiver, Nordic BLE-SoC, 180 mAh LiPo-Pouch-Akku) hermetisch gegen magnetische Sättigung ab und lenkt den magnetischen Fluss zu 100 % nach außen auf die Gehäusewand.
@@ -1249,8 +1248,42 @@ Der **OpenMotorBridge 2-in-1 Smart-Keyfob** ([`smart_keyfob_pager.scad`](../../h
   * Ein $\varnothing 10 \times 3{,}6\,\text{mm}$ Linear Resonant Actuator (LRA) warnt den Fahrer bei Erschütterung, unbefugtem Aufbocken oder Kassettenhebeln lautlos über haptische Vibrationsmuster in der Jackentasche.
 * **MagSafe / Qi Induktiv-Ladeaufnahme:**
   * Auf der Rückseite ist ein magnetischer Ausrichtungsring ($\varnothing 28\,\text{mm}$ außen, $\varnothing 22\,\text{mm}$ innen) integriert. Der Keyfob rastet während der Fahrt auf dem Cockpit-Dock (PCBA 06) magnetisch ein und wird induktiv nachgeladen.
-* **Zero-False-Alarm & Präsenz-Token:**
-  * Durch den Nahfeld-BLE-Beacon des Keyfobs erkennt OpenMotorBridge, dass der rechtmäßige Besitzer die Kassette entnimmt. Ein Diebstahlalarm wird nur ausgelöst, wenn ein Hebelversuch am Kassettenverschluss ohne anwesenden Keyfob registriert wird.
+
+#### 7.1.1 Taster-Ergonomie & Fixierte Platinenposition (Unten-Rechts-Cluster)
+Auf der Trägerplatine `PCBA 07` ([`openmotorbridge_smart_keyfob.kicad_pcb`](../../hardware/kicad_smart_keyfob/openmotorbridge_smart_keyfob.kicad_pcb)) sitzen zwei SMD-Kurzhubtaster der Bauform Alps SKRK ($3{,}9 \times 2{,}9 \times 1{,}5\,\text{mm}$):
+* `SW1` (`BTN_ARM`): Platziert bei $X = 125{,}5\,\text{mm}, Y = 86{,}75\,\text{mm}$ (Gehäusekoordinate $X \approx 30{,}5\,\text{mm}, Y \approx 9{,}5\,\text{mm}$).
+* `SW2` (`BTN_SOS`): Platziert bei $X = 134{,}0\,\text{mm}, Y = 86{,}75\,\text{mm}$ (Gehäusekoordinate $X \approx 39{,}0\,\text{mm}, Y \approx 9{,}5\,\text{mm}$).
+
+Beide Schalter befinden sich zwingend in der **unteren rechten Ecke der Platine** (nur $2{,}25\,\text{mm}$ von der Platinenkante entfernt). Sie können auf dem PCB aus Platz- und Routing-Gründen (HF-Masseflächen für die 868-MHz- und BLE-Chipantennen im linken Platinenbereich, Flucht-Routing des Nordic nRF52840 und Akkupads) nicht verschoben werden. 
+
+Das Gehäuse integriert hierfür ein formschlüssiges **2-Tasten-Bedienfeld auf der Gehäuseoberseite**:
+1. **Taste 1 (`ARM / MUTE` – `SW1`):** Erhabene, ergonomisch geriffelte Tastenkappe mit Schloss-Symbolik zur blinden Bedienung mit Motorradhandschuhen (Scharf-/Unscharfschalten, Quittierung und Stummschaltung von Alarmen, Freigabe der Kassettenentnahme).
+2. **Taste 2 (`SOS / PAIR` – `SW2`):** Leicht vertiefte Schutzkappe mit fühlbarem Tastpunkt. Verhindert versehentliche Hosentaschen-Auslösungen (Firmware erfordert 3 Sekunden Dauerdruck für Notruf-Broadcast oder BLE-Pairing).
+3. **Integrierte Betätigungsstößel (Plungers):** An der Unterseite der Tasten ragen zylindrische Stößel ($h = 3{,}7\,\text{mm}$) durch Passungsbohrungen der Oberschale direkt auf die Druckpunkte der Alps-SKRK-Schalter.
+
+#### 7.1.2 Reale LED-Position & Akustikaustritt (D1 & LS1)
+* **Status-RGB-LED (`D1` WS2812B-2020):** Sitzt auf der Platine bei $X = 135{,}9\,\text{mm}, Y = 82{,}3\,\text{mm}$ (Gehäusekoordinate $X \approx 40{,}9\,\text{mm}, Y \approx 15{,}5\,\text{mm}$) – also ebenfalls **unten rechts**, direkt neben `SW2`! Anstelle einer offenen Bohrung setzt die Oberschale hier einen eingepressten transparenten **PMMA-Lichtleiter (Lichtleitstab mit Bund)** ein, der das Licht der SMD-LED verlustfrei und spritzwasserdicht an die Gehäuseoberfläche leitet.
+* **Piezo-Signalgeber (`LS1` CUI CPT-9019S):** Sitzt bei $X = 131{,}25\,\text{mm}, Y = 75{,}25\,\text{mm}$ (Gehäusekoordinate $X \approx 36{,}25\,\text{mm}, Y \approx 20{,}5\,\text{mm}$). Drei $0{,}8\,\text{mm}$ Mikrobohrungen in der Oberschale liegen exakt zentriert über dem Resonanzkörper.
+
+#### 7.1.3 Schraubenlose PCB-Klemmung & Akku-Kammertrennung
+Wie hält die Leiterplatte im Gehäuse, ohne dass Schrauben das dichte HF-Layout schwächen?
+1. **Umlaufende Stütz-Schultern (PCB Resting Ledges):** An den Innenwänden der Unterschale läuft auf Höhe $Z = 5{,}0\,\text{mm}$ ein formschlüssiger Absatz um, auf dem der Platinenrand spielfrei aufliegt.
+2. **Eck-Zentrierpins (Locator Dowels):** Zwei diagonale Führungsdorne ($\varnothing 1{,}2\,\text{mm}$, Höhe $1{,}2\,\text{mm}$) an den Innenkanten der Unterschale greifen formschlüssig in die $R = 1{,}5\,\text{mm}$ Ecken der Platine und arretieren sie in X- und Y-Richtung gegen jedes Verrutschen.
+3. **Niederhalterippen in der Oberschale:** Monolithisch angeformte Klemmrippen in der Oberschale drücken beim Fügen elastisch auf die bauteilfreien Ränder der Leiterplatte und spannen diese klapperfrei und vibrationsfest ein.
+4. **Separate LiPo-Wanne:** Unterhalb der Platine ($Z = 1{,}2\dots 5{,}0\,\text{mm}$) ist eine passgenaue Vertiefung für die $25 \times 18 \times 3{,}8\,\text{mm}$ LiPo-Zelle und die Qi-Ladespule eingelassen. Ein $0{,}5\,\text{mm}$ Zellkissen (EVA-Schaumpad) isoliert die Akkuzelle mechanisch gegen Lötstellen auf der PCB-Unterseite.
+
+#### 7.1.4 Vollwandige Schottwand-Isolation der Schlüsselring-Öse
+* **Keine Kollision mit der Elektronik:** Der Elektronik-Innenraum endet strikt bei $X = 44{,}5\,\text{mm}$. Die Trägerplatine schließt bei $X = 43{,}0\,\text{mm}$ ab.
+* **Massive Heck-Schottwand:** Der Gehäuseabschnitt von $X = 44{,}5\,\text{mm}$ bis $X = 58{,}0\,\text{mm}$ ist ein **vollmassiver PA12-MJF Block**. Die Schlüsselring-Bohrung ($\varnothing 4{,}5\,\text{mm}$) bei $X = 52{,}5\,\text{mm}$ durchdringt ausschließlich diesen Vollmaterial-Bereich.
+* **Eingepresste 316L Edelstahl-Hülse:** Eine massive Edelstahlbuchse ($\varnothing 8{,}5\,\text{mm}$ außen, $\varnothing 4{,}5\,\text{mm}$ innen, $13{,}0\,\text{mm}$ Länge) schützt das Kunststoffauge gegen Durchscheuern durch Metall-Schlüsselringe. Ein Durchtritt von Schlüsselringen oder Wasser in den Elektronikraum ist physikalisch zu 100 % ausgeschlossen.
+
+#### 7.1.5 IP67-Wasserdichtigkeitsarchitektur
+Motorrad-Schlüsseltransponder sind stundenlangen Starkregenfahrten in durchnässten Kombijacken, Gischt beim Motorradwaschen und Pfützenstürzen ausgesetzt. OpenMotorBridge setzt ein 5-Stufen-Dichtungskonzept nach **IP67** (Staubdicht + 30 Minuten Untertauchen bis 1 m Wassertiefe) um:
+1. **Nut-und-Feder-Labyrinthdichtung:** Die Unterschale besitzt an der Gehäusetrennfuge ($Z = 6{,}5\,\text{mm}$) einen umlaufenden, $0{,}8\,\text{mm}$ breiten und $0{,}9\,\text{mm}$ hohen Dichtsteg (Feder), der formschlüssig in eine korrespondierende Nut der Oberschale mit EPDM-/Silikon-Dichtschnur oder Ultraschall-Schweißnaht (Energy Director) greift.
+2. **Elastomere Silikon-/TPU-Tastmatte:** Das Tastenfeld wird durch eine durchgehende, $0{,}8\,\text{mm}$ dicke elastomere Silikonmembran mit umlaufender Dichtlippe gegen die Gehäusewanne abgedichtet.
+3. **Transparenter PMMA-Lichtleiter mit Presspassung:** Die LED-Öffnung wird durch einen eingepressten Acrylglas-Zylinder mit Haltebund hermetisch verschlossen.
+4. **Hydrophobe ePTFE-Akustikmembran (Gore-Tex IP67):** Hinter den Buzzer-Schalllöchern klebt innen eine mikroporöse ePTFE-Membran (Gore GAW112), die Schallwellen des Signalgebers ungehindert austreten lässt, flüssiges Wasser und Staubpartikel jedoch vollständig sperrt.
+5. **Vollständig hermetische Schlüsselring-Öse:** Null Dichtungsrisiko am Schlüsselbund durch die monolithische PA12-Schottwand.
 
 ### 7.2 Architekturentscheidung: Warum N52-Permanentmagnet + LoRa + MagSafe statt UWB / aktiver Servos?
 
@@ -1432,8 +1465,9 @@ Die CAD-Dateistruktur von OpenMotorBridge folgt einer strengen hierarchischen CS
 | **Front-Knoten** | TPU USB-C Staubschutzstopfen | `04_front_node/front_node_usbc_cap_tpu.stl` | `04_front_node/03_front_node_usbc_plug.scad` |
 | **Front-Knoten** | Verkleidungs-Rohrschelle (Ø 12–22 mm, AMPS) | `04_front_node/front_node_fairing_tube_clamp.stl` | `04_front_node/front_node_fairing_tube_clamp.scad` |
 | **Smart-Keyfob** | PA12-MJF Unterschale mit MagSafe-Tasche | `05_accessories/smart_keyfob_lower_shell.stl` | `05_accessories/smart_keyfob_pager.scad` |
-| **Smart-Keyfob** | PA12-MJF Oberschale mit Diffusor-Bohrung | `05_accessories/smart_keyfob_upper_shell.stl` | `05_accessories/smart_keyfob_pager.scad` |
+| **Smart-Keyfob** | PA12-MJF Oberschale mit Tastenbett & Diffusor-Bohrung | `05_accessories/smart_keyfob_upper_shell.stl` | `05_accessories/smart_keyfob_pager.scad` |
 | **Smart-Keyfob** | TPU Stoßdämpfer-Kantenband (Orange) | `05_accessories/smart_keyfob_tpu_rim.stl` | `05_accessories/smart_keyfob_pager.scad` |
+| **Smart-Keyfob** | Silikon-Dicht-Tastmatte (Dual-Keypad, Orange) | `05_accessories/smart_keyfob_silicone_keypad.stl` | `05_accessories/smart_keyfob_pager.scad` |
 | **Tasterhalter** | Under-Perch Tasterhalter für M4 Harley-Armatur | `05_accessories/under_perch_switch_bracket.stl` | `05_accessories/under_perch_switch_bracket.scad` |
 | **Tasterhalter** | Spiegelschaft-Adapterplatte für M8/M10 | `05_accessories/under_perch_mirror_plate.stl` | `05_accessories/under_perch_switch_bracket.scad` |
 | **Spiegel-Radar** | BSD Spiegel-Totwinkel-Pod Oberteil (38° Trichter) | `05_accessories/bsd_mirror_upper_pod.stl` | `05_accessories/bsd_mirror_indicator_pod.scad` |
