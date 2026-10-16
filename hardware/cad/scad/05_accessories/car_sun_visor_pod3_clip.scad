@@ -19,9 +19,9 @@ include <../00_common/parameters.scad>;
 // --- Parametric Visor Clamp Dimensions ---
 VISOR_THICK_NOM     = 18.0;  // Nominal sun visor thickness (mm)
 VISOR_CLAMP_GAP     = 14.5;  // Inner clamping gap at rest for firm friction grip (mm)
-VISOR_CLAMP_DEPTH   = 58.0;  // Clamping reach over visor body (mm)
-VISOR_CLAMP_WIDTH   = 42.0;  // Clamp tongue width in Y (mm)
-CLAMP_SPRING_THICK  = 3.2;   // Spring leaf thickness (PETG / PA12 flexible spring)
+VISOR_CLAMP_DEPTH   = 46.0;  // Standard automotive clamping reach (mm)
+VISOR_CLAMP_WIDTH   = 22.0;  // Slender, authentic automotive clip tongue width in Y (mm)
+CLAMP_SPRING_THICK  = 2.2;   // Compliant spring leaf thickness (PA12 / PETG flexure)
 
 // --- Pod 1 & 2 Docking Cradle Dimensions (Universal 150mm Envelope) ---
 CRADLE_L            = POD_OUTER_L + 4.0;  // 154.0 mm (clears 150mm enlarged pod)
@@ -38,21 +38,21 @@ module sun_visor_spring_tongue() {
             translate([0, -VISOR_CLAMP_WIDTH/2.0, 0])
                 cube([8.0, VISOR_CLAMP_WIDTH, CLAMP_SPRING_THICK], center=false);
             // Extended clamping arm
-            translate([VISOR_CLAMP_DEPTH - 12.0, -VISOR_CLAMP_WIDTH/2.0, 0])
-                cube([10.0, VISOR_CLAMP_WIDTH, CLAMP_SPRING_THICK], center=false);
+            translate([VISOR_CLAMP_DEPTH - 10.0, -VISOR_CLAMP_WIDTH/2.0, 0])
+                cube([8.0, VISOR_CLAMP_WIDTH, CLAMP_SPRING_THICK], center=false);
         }
 
         // Upturned/flared lead-in lip for easy one-handed push onto visor
-        translate([VISOR_CLAMP_DEPTH - 5.0, -VISOR_CLAMP_WIDTH/2.0, 0]) {
+        translate([VISOR_CLAMP_DEPTH - 4.0, -VISOR_CLAMP_WIDTH/2.0, 0]) {
             rotate([0, 30, 0])
-                cube([15.0, VISOR_CLAMP_WIDTH, CLAMP_SPRING_THICK], center=false);
+                cube([12.0, VISOR_CLAMP_WIDTH, CLAMP_SPRING_THICK], center=false);
         }
 
         // Non-marring soft grip friction ribs (3x transverse rounded ridges)
-        for (rx = [15.0, 28.0, 42.0]) {
-            translate([rx, -VISOR_CLAMP_WIDTH/2.0 + 2.0, CLAMP_SPRING_THICK])
+        for (rx = [12.0, 24.0, 36.0]) {
+            translate([rx, -VISOR_CLAMP_WIDTH/2.0 + 1.5, CLAMP_SPRING_THICK])
                 rotate([0, 90, 0])
-                    cylinder(r=1.2, h=VISOR_CLAMP_WIDTH - 4.0, center=false, $fn=16);
+                    cylinder(r=1.0, h=VISOR_CLAMP_WIDTH - 3.0, center=false, $fn=16);
         }
     }
 }
@@ -110,19 +110,19 @@ module car_sun_visor_pod3_clip() {
 
     // 2. Robust Underside Spine & Visor Clamp Bridge (in -Z: 0 .. -18 mm)
     // The spine drops down from the bottom of the cradle floor to the spring tongue
-    translate([-25.0, -VISOR_CLAMP_WIDTH/2.0, -(VISOR_CLAMP_GAP + CLAMP_SPRING_THICK)]) {
+    translate([-VISOR_CLAMP_DEPTH/2.0, -VISOR_CLAMP_WIDTH/2.0, -(VISOR_CLAMP_GAP + CLAMP_SPRING_THICK)]) {
         difference() {
             // Solid U-channel bridge
-            cube([12.0, VISOR_CLAMP_WIDTH, VISOR_CLAMP_GAP + CLAMP_SPRING_THICK + 0.1], center=false);
+            cube([10.0, VISOR_CLAMP_WIDTH, VISOR_CLAMP_GAP + CLAMP_SPRING_THICK + 0.1], center=false);
             // Generous inner fillet relief
-            translate([12.0, -1.0, VISOR_CLAMP_GAP + CLAMP_SPRING_THICK])
+            translate([10.0, -1.0, VISOR_CLAMP_GAP + CLAMP_SPRING_THICK])
                 rotate([0, 45, 0])
-                    cube([8.0, VISOR_CLAMP_WIDTH + 2.0, 8.0], center=false);
+                    cube([7.0, VISOR_CLAMP_WIDTH + 2.0, 7.0], center=false);
         }
     }
 
     // 3. Compliant Visor Spring Tongue (in -Z, runs parallel to cradle bottom)
-    translate([-25.0, 0, 0])
+    translate([-VISOR_CLAMP_DEPTH/2.0, 0, 0])
         sun_visor_spring_tongue();
 }
 

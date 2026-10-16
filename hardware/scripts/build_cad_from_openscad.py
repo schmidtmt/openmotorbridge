@@ -429,8 +429,9 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
     (
         "05_accessories/car_sun_visor_pod3_clip.scad",
         os.path.join(CAD_IMG_DIR, "car_sun_visor_pod3_clip_cad.png"),
-        "0,0,0,55,0,320,420",
-        "Tomorrow"
+        "0,0,0,55,0,320,400",
+        "Tomorrow",
+        ["--projection=o"]
     ),
     (
         "05_accessories/car_dashboard_wedge_dock.scad",
