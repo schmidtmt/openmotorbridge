@@ -272,7 +272,7 @@ The **OMM 446 MHz Intercom Module (`PCBA 10`)** eliminates the dilemma of bulky 
 * **PCB Identifier:** `openmotorbridge_omm446_ucs` (**`PCBA 10`**).
 * **Dimensions:** $60.0 \times 30.0 \times 1.0\,\text{mm}$ ($R = 2.5\,\text{mm}$ corner radius) -- identical to `PCBA 09`.
 * **Stackup:** 4-Layer FR4 TG150 ($1.0\,\text{mm}$ core thickness):
-  - Top Layer ($35\,\mu\text{m}$ Cu): ESP32-C6 Host MCU (`U1`), ES8388 Stereo Audio Codec (`U4`), TI BQ24075 PMIC (`U2`), ME6211C33 LDO (`U5`), 4x Tactical Switches (`SW1`--`SW4`), IP67 USB-C (`J1`), WS2812B RGB (`D1`), LiPo Header (`BAT1`), Helical Contact (`PAD_ANT`).
+  - Top Layer ($35\,\mu\text{m}$ Cu): ESP32-C6 Host MCU (`U1`), ES8388 Stereo Audio Codec (`U4`), TI BQ24075 PMIC (`U2`), ME6211C33 LDO (`U5`), 4x Tactical Switches (`SW1`--`SW4`), IP67 USB-C (`J1`), WS2812B RGB (`D1`), LiPo Header (`BAT1`).
   - Inner Layer 1 ($17.5\,\mu\text{m}$ Cu): Solid ground shield plane (`AGND` & `GND` shielding beneath the SA818 transceiver).
   - Inner Layer 2 ($17.5\,\mu\text{m}$ Cu): Low-impedance power planes ($3.3\,\text{V}$ system, $4.4\,\text{V}$ PA supply).
   - Bottom Layer ($35\,\mu\text{m}$ Cu): NiceRF SA818-DMR module (`U3`), ESP32-PICO-V3-02 Bluetooth Co-Processor (`U6`), Johanson 2450AT Chip Antenna (`ANT1`), U.FL coaxial receptacle (`J_RF`), 6-Pin Helmet Audio & PTT Header (`J_HELMET`).

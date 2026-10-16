@@ -359,9 +359,10 @@ Die separate Platine `PCBA 06` ist in v9.6 **vollständig und ersatzlos entfalle
   * Semtech `SX1262` LoRa Transceiver (868.5 MHz Kanal 3, empfängt Alarme bis zu 4,5 km Reichweite).
   * Texas Instruments `DRV2605L` Haptiktreiber für Vybronics 10x3.6mm LRA Linearmotor.
   * Texas Instruments `BQ51003` Qi Wireless Power Receiver Controller.
-* **100 % Lötfreie Induktionsspulen-Montage (`J_QI`):**
-  * Die 28-mm-Qi-Empfängerspule wird über einen ultrakompakten **2-poligen JST-ACH SMD-Header (`J_QI`)** vibrationsfest angesteckt.
-  * Beim Zusammenbau sind keinerlei manuelle Lötarbeiten erforderlich.
+* **100 % Lötfreie Induktionsspulen- & Akku-Montage (`J_QI` & `J_BAT`):**
+  * Die 24–28 mm Qi-Empfängerspule wird über einen ultrakompakten **2-poligen JST-ACH SMD-Header (`J_QI`)** vibrationsfest angesteckt.
+  * Der 180–200 mAh LiPo-Pouch-Akku (mit integrierter PCM-Schutzschaltung) wird über einen baugleichen **2-poligen JST-ACH SMD-Header (`J_BAT`)** angesteckt (1,2 mm Raster, nur 1,4 mm Bauhöhe).
+  * Beim Zusammenbau des Smart-Keyfobs sind somit keinerlei manuelle Lötarbeiten erforderlich (100 % lötfreies IKEA-Montageprinzip).
 
 ### 9.2 Vollständige Pinbelegung des Nordic nRF52840 SoC (PCBA 07 `U1`)
 
@@ -573,7 +574,7 @@ Die Platine **`PCBA 10`** ist das universelle Open-Source-Hardwaremodul für den
    * Differenzieller Mikrofon-Eingang mit zuschaltbarem Windgeräuschfilter und integriertem Noise-Gate.
 5. **Antennensystem (Kompakte Wendel-Stummelantenne & externer Koax):**
    * **Dual-Engine HF-Entkopplung:**
-     - **PMR/DMR HF-Pfad:** Der HF-Ausgang des NiceRF SA818-DMR speist über ein Tiefpass-/Bandpassfilter die U.FL-Buchse `J_RF` (`B.Cu`) sowie das parallele Lötpad `PAD_ANT` (`F.Cu`) am oberen Platinenrand ($X = 110{,}5, Y = 87{,}0\,\text{mm}$).
+     - **PMR/DMR HF-Pfad:** Der HF-Ausgang des NiceRF SA818-DMR speist über ein Tiefpass-/Bandpassfilter die U.FL-Buchse `J_RF` (`B.Cu`, $X = 110{,}5, Y = 87{,}0\,\text{mm}$). Ein paralleles Lötpad entfällt zugunsten des 100 % lötfreien Stecksystems.
      - Ein kurzes $50\,\text{mm}$ Mikro-Koaxialpigtail (RG-178 / 1.13mm) führt von `J_RF` zur wasserdichten SMA-Bulkhead-Buchse (IP67 mit EPDM O-Ring) an der Gehäusestirnseite.
      - **Helm-Default:** Im Helmbetrieb wird die $48\,\text{mm}$ kurze 446 MHz Wendel-Stummelantenne aufgeschraubt (ca. $0\dots +1{,}5\,\text{dBi}$, $1{,}5\dots 2{,}5\,\text{km}$ Reichweite). Im Kassettenbetrieb im Pod führt ein Koaxialkabel zur Außenantenne am Motorrad ($3\dots 6\,\text{km}$).
      - **Bluetooth Co-Prozessor (`U6`):** Der `ESP32-PICO-V3-02` arbeitet auf seine eigene Johanson 2450AT Keramik-Chipantenne (`ANT1`) für Nahfeld-Kopplungen.

@@ -459,12 +459,15 @@ The PCBA 07 assembly constitutes the electronics core inside the pocket keyfob e
 * **LRA Haptic Signatures:** The TI DRV2605L generates distinct, crisp tactile patterns:
   * *Pre-Alarm (Minor Shock):* 2 short clicks ($150\,\text{Hz}$).
   * *Theft / Cartridge Tamper:* Piercing crescendo staccato (readily felt through heavy leather motorcycle jackets or on a nightstand).
-* **Inductive Cockpit Charging:** Snapping the keyfob onto the cockpit MagSafe frame dock (PCBA 06) centers the 28-mm receiver coil $\rightarrow$ the keyfob recharges automatically during every ride.
+* **100% Solderless Assembly (`J_QI` & `J_BAT`):**
+  * The 24–28 mm Qi inductive receiver coil plugs into an ultra-low-profile **2-pin JST-ACH SMD header (`J_QI`)** (1.2 mm pitch, only 1.4 mm height).
+  * The 180–200 mAh LiPo pouch battery (with integrated PCM) plugs directly into an identical **2-pin JST-ACH SMD header (`J_BAT`)** (1.2 mm pitch, 1.4 mm height).
+  * No manual soldering is required during keyfob assembly, strictly adhering to the 100% solderless IKEA assembly principle.
 
 ### 9.2 Complete Interface & Pin-Mapping of Nordic nRF52840 SoC (PCBA 07 `U1`)
 
 | SoC Pad | Signal Name | Signal Type | Function & Peripheral Assignment |
-| :---: | :--- | :---: | :--- |
+| :---: | :--- | :--- | :--- |
 | **A8** | `BLE_ANT_50R` | RF 2.4G | 50 Ohm trace to Johanson 2450AT ceramic chip antenna (`ANT1`) |
 | **A12 / A14** | `XTAL1` / `XTAL2` | Analog | 32.000 MHz precision RF crystal |
 | **F23 / H23** | `RTC1` / `RTC2` | Analog | 32.768 kHz watch crystal (deep sleep timer & RTC) |
@@ -497,8 +500,11 @@ The PCBA 07 assembly constitutes the electronics core inside the pocket keyfob e
 | **`U5`** | BQ25100YFPR | DSBGA-6 | TI Linear LiPo Charger with 50 nA quiescent current | `C144857` |
 | **`M1`** | VG1036001D | Coin 10x3.6mm | Vybronics LRA Linear Resonant Actuator (235 Hz resonance) | Custom / Distrelec |
 | **`BZ1`**| PKLCS1212E4001 | SMD 12x12mm | Murata SMD Piezo Transducer (85 dB @ 10 cm, 4 kHz) | `C94511` |
-| **`D1`** | WS2812B-2020 | SMD 2020 | Intelligent RGB Status LED with integrated WS2811 IC | `C2843785` |
-| **`BAT`**| LiPo 1S 180-200mAh| Pouch 25x18x3.8| 3.7V 180-200 mAh LiPo with PCM protection circuit & 10k NTC | EEMB / Custom |
+| **`J_SWD`**| 1x04 1.27mm PinHeader | SMD 1.27mm Vert. | SWD programming header (3V3/SWDIO/SWDCLK/GND; populate for prototypes) | `C2883733` |
+| **`SW1..2`**| Alps SKRK / EVQ-P2 | SMD 3.9x2.9mm | 2x Tactile IP67 micro push-buttons (Arm/Disarm, SOS/Aux) | `C115358` |
+| **`D1`** | WS2812B-2020 | SMD 2020 | Intelligent RGB Status LED under PMMA lightpipe | `C2843785` |
+| **`J_QI`**| BM02B-ACHSS-GAN-ETF | JST-ACH 2-Pin SMD (1.2mm) | 100% solderless plug connection for 24 mm Qi receiver coil (1.4 mm profile) | `C2843552` |
+| **`J_BAT`**| BM02B-ACHSS-GAN-ETF | JST-ACH 2-Pin SMD (1.2mm) | 100% solderless plug connection for 180–200 mAh LiPo pouch battery with PCM | `C2843552` |
 
 ---
 
@@ -701,7 +707,7 @@ The **`PCBA 10`** board solves the dilemma of bulky handheld two-way radios (whi
   * **0.5 W ERP (Bike Mode / High-Power):** Full legal PMR446 maximum in cartridge sled (3–6 km range).
 * **Power Management with UPS:** TI BQ24075 with DPPM enables charging while operating via USB-C; internal 600-mAh LiPo serves as seamless UPS.
 * **Antenna System (Helical Stubby & External Coax):**
-  * **PMR/DMR RF Path:** NiceRF SA818-DMR feeds via low-pass filter to `J_RF` (U.FL on `B.Cu`) and `PAD_ANT` (copper pad on `F.Cu`) at $(110.5, 87.0)\,\text{mm}$.
+  * **PMR/DMR RF Path:** NiceRF SA818-DMR feeds via low-pass filter to `J_RF` (U.FL on `B.Cu` at $(110.5, 87.0)\,\text{mm}$). A parallel solder pad is omitted in favor of the 100% solderless plug architecture.
   * A 50 mm micro-coax pigtail routes to the watertight SMA bulkhead jack with EPDM O-ring.
   * **Helmet Default:** 48 mm helical stubby antenna ($430\dots 470\,\text{MHz}$, SMA-Male, $1.5\dots 2.5\,\text{km}$ range). In pod mode, external bike coax antenna ($3\dots 6\,\text{km}$).
   * **Bluetooth Co-Processor (`U6`):** Dedicated `ESP32-PICO-V3-02` with Johanson 2450AT ceramic chip antenna (`ANT1`).

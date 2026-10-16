@@ -110,6 +110,7 @@ def generate_cots_markdown_table(parts_data, assemblies_data, lang="de"):
         "assembly_omm_ucs_module_446m": 1,
         "assembly_omm_helmet_kit_24g": 1,
         "assembly_radar2": 1,
+        "assembly_keyfob": 1,
         "assembly_general_accessories": 1
     }
 

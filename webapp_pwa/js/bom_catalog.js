@@ -423,6 +423,26 @@ const BOM_PARTS = {
     "pkg_qty": 50,
     "pkg_name": "50er Pack Schrauben V4A (Amazon / Normteil)"
   },
+  "fastener_keyring_eyelet_v4a": {
+    "type": "fastener",
+    "name": {
+      "de": "Edelstahl-Hülse Schlüsselring (Keyfob)",
+      "en": "Stainless Steel Lanyard Bushing (Keyfob)"
+    },
+    "spec": "316L V4A Ø 8.5 x 4.5 mm, L = 13 mm",
+    "source": "Normteil / Misumi",
+    "unit": "Stk.",
+    "cost_eur": [
+      0.4,
+      0.8
+    ],
+    "desc": {
+      "de": "Eingepresste Edelstahl-Schutzhülse im Vollmaterial-Block der Keyfob-Öse",
+      "en": "Press-fit stainless bushing inside solid block of keyfob lanyard eyelet"
+    },
+    "pkg_qty": 1,
+    "pkg_name": "Edelstahl-Buchse DIN 316L"
+  },
   "seal_silicone_cord_15": {
     "type": "seal",
     "name": {
@@ -1787,6 +1807,46 @@ const BOM_PARTS = {
     },
     "pkg_qty": 2,
     "pkg_name": "2er Pack LiPo Pouch (EEMB)"
+  },
+  "cots_battery_keyfob_lipo_200": {
+    "type": "cots_electronic",
+    "name": {
+      "de": "1S LiPo Pouch-Akku 180-200 mAh (Keyfob)",
+      "en": "1S LiPo Pouch Battery 180-200 mAh (Keyfob)"
+    },
+    "spec": "3.7V / 0.74Wh (Typ 402030, 25x18x3.8 mm) mit PCM & JST-ACH 2-Pin",
+    "source": "EEMB / Web",
+    "unit": "Stk.",
+    "cost_eur": [
+      2.5,
+      4.0
+    ],
+    "desc": {
+      "de": "Flacher LiPo-Pouch für Smart-Keyfob (100 % lötfrei mit JST-ACH 2P Stecker)",
+      "en": "Flat LiPo pouch for Smart Keyfob (100% solderless with JST-ACH 2P plug)"
+    },
+    "pkg_qty": 1,
+    "pkg_name": "1S LiPo Pouch (EEMB)"
+  },
+  "cots_qi_coil_24mm": {
+    "type": "cots_electronic",
+    "name": {
+      "de": "Qi Induktions-Empfängerspule Ø 24 mm",
+      "en": "Qi Inductive Receiver Coil Ø 24 mm"
+    },
+    "spec": "Ø 24 x 0.3 mm Flachspule mit Ferritfolie (0.3 mm) & JST-ACH 2-Pin",
+    "source": "Sunlord / Web",
+    "unit": "Stk.",
+    "cost_eur": [
+      1.2,
+      2.2
+    ],
+    "desc": {
+      "de": "Ultra-flache Qi-Empfängerspule für Smart-Keyfob (100 % lötfrei angesteckt)",
+      "en": "Ultra-thin Qi receiver coil for Smart Keyfob (100% solderless plug connection)"
+    },
+    "pkg_qty": 1,
+    "pkg_name": "Qi Empfängerspule (Sunlord / AliExpress)"
   },
   "cots_module_sam_m10q": {
     "type": "cots_electronic",
@@ -3267,6 +3327,22 @@ const BOM_ASSEMBLIES = {
     "parts": [
       {
         "part_id": "pcba_07",
+        "qty": 1
+      },
+      {
+        "part_id": "cots_battery_keyfob_lipo_200",
+        "qty": 1
+      },
+      {
+        "part_id": "cots_qi_coil_24mm",
+        "qty": 1
+      },
+      {
+        "part_id": "tool_n52_key",
+        "qty": 1
+      },
+      {
+        "part_id": "fastener_keyring_eyelet_v4a",
         "qty": 1
       },
       {

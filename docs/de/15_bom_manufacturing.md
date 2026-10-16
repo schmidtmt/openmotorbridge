@@ -136,8 +136,8 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 | **`J_SWD`**| 1x04 1.27mm PinHeader | SMD 1.27mm Vert. | SWD-Programmierstecker (3V3/SWDIO/SWDCLK/GND; für Prototypen bestücken!) | `C2883733` |
 | **`SW1..2`**| Alps SKRK / EVQ-P2 | SMD 3.9x2.9mm | 2x Taktile IP67 Mikrotaster (Alarm/Arm, Aux/Licht) | `C115358` |
 | **`D1`** | WS2812B-2020 | SMD 2020 | RGB-Status-LED unter PMMA-Lichtleiter | `C2843785` |
-| **`J_QI`**| 2-Pad Solder Area | SMD 0805 Pads | Lötpads für 24 mm Qi-Empfängerspule (AC1, AC2) | On-Board |
-| **`P_BAT`**| 2-Pad Solder Area | SMD 0805 Pads | Lötpads für 180–200 mAh LiPo Pouch-Zelle (VBAT+, GND-) | On-Board |
+| **`J_QI`**| BM02B-ACHSS-GAN-ETF | JST-ACH 2-Pin SMD (1.2mm) | 100 % lötfreie Steckverbindung für 24 mm Qi-Empfängerspule (1,4 mm Bauhöhe) | `C2843552` |
+| **`J_BAT`**| BM02B-ACHSS-GAN-ETF | JST-ACH 2-Pin SMD (1.2mm) | 100 % lötfreie Steckverbindung für 180–200 mAh LiPo Pouch-Akku mit PCM | `C2843552` |
 
 ---
 
@@ -192,7 +192,6 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 | **`J1`** | TYPE-C-31-M-12 | Korean HRO | SMT/THT IP67 | `C2765186` | Wasserdichte 16-Pin USB-C Buchse (5V Unterwegs-Laden, WebUSB DFU, Kassetten-Einschubkontakt) |
 | **`J_HELMET`**| SM06B-SRSS-TB | JST | 6-Pin JST-SH 1.0mm SMD Horiz. | `C136657` | Interner Helm-Audio & PTT-Port auf B.Cu (HP_OUT_L, HP_OUT_R, AGND_SPK, MIC_IN+, AGND_MIC, BTN_PTT; 0V DC) |
 | **`J_RF`** | U.FL-R-SMT-1 | Hirose | SMD U.FL Buchse (B.Cu) | `C14899` | 50 Ohm U.FL Buchse für Koax-Pigtail zur wasserdichten SMA-Durchführung oder Bike-Außenantenne |
-| **`PAD_ANT`**| SMD Testpad D3.0mm| Custom | Kupfer-Pad (F.Cu) | - | Alternativer HF-Lötanschluss für interne Wendelantenne oder Direktverbindung |
 | **`BAT1`** | BM02B-SRSS-TB | JST | SMD 1.0mm pitch | `C2902341` | Steckverbindung zum internen 600-mAh-LiPo Pouch-Akku (mit PCM) |
 | **`D1`** | WS2812B-2020 | Worldsemi | SMD 2020 | `C2843785` | RGB-Status-LED (RX Grün, TX Rot, DMR Blau, Chg Gelb) |
 | **`D2`** | USBLC6-2SC6 | STMicroelectronics | SOT-23-6 | `C7519` | High-Speed TVS-Diodenarray für USB D+/D- und VBUS ESD-Schutz |
@@ -465,6 +464,7 @@ Für den Standalone-Einsatz der beiden Intercom-Module (**PCBA 09: OMM 2.4 GHz H
 | **3M Dual Lock SJ3550 Klettband** | Pilzkopf-Klettband selbstklebend (VHB-Kleber) | 3M / Amazon | 0.5 m | Rüttelfeste, werkzeuglose Dongle- und Sensor-Montage im Cockpit & Koffer |
 | **3M VHB R130 Klebepad** | 3M VHB R130 Hochleistungs-Klebepad passgenau | 3M / COTS | 1 Stk. | Vibrations- und wetterfeste ECE 22.06 Helmbefestigung des OMM UCS Klemmsockels |
 | **Auswerfer-Druckfeder (Schottwand)** | Edelstahl V4A D = 4.5 mm, L0 = 15 mm | Gutekunst / Web | 4 Stk. | Auto-Eject Federn in der Schottwand (2x pro Pod, schiebt Kassette 25 mm heraus) |
+| **Edelstahl-Hülse Schlüsselring (Keyfob)** | 316L V4A Ø 8.5 x 4.5 mm, L = 13 mm | Normteil / Misumi | 1 Stk. | Eingepresste Edelstahl-Schutzhülse im Vollmaterial-Block der Keyfob-Öse |
 | **M2 Edelstahlmutter (Captive UCS)** | DIN 934 M2 V4A | Normteil / Amazon | 8 Stk. | Formschlüssig in Oberschale des OMM UCS Moduls eingelegt (4x pro Modul) |
 | **M2 Halteplattenschraube (Senkkopf)** | DIN 7991 V4A M2 x 6 mm | Normteil / Amazon | 8 Stk. | Fixierung der Aktuator-Niederhalteplatten (4x pro Gateway-Kassette) |
 | **M2 Kassetten-Platinenschraube** | DIN 7985 / DIN 912 V4A M2 x 6 mm | Normteil / Amazon | 8 Stk. | Befestigung von PCBA 03 im Kassetten-Schlitten (4x pro Kassette; Schottwandschrauben entfallen) |
@@ -480,17 +480,19 @@ Für den Standalone-Einsatz der beiden Intercom-Module (**PCBA 09: OMM 2.4 GHz H
 | **M5 Klemmschraube (Hirth & Rohrschellen)** | DIN 912 V4A M5 x 25 mm | Normteil / Amazon | 3 Stk. | Horizontale Achse für Hirth-Formschlussgelenke & Rohrträger-Klemmschellen (Ø 12-22 mm) |
 | **M5 Stopmutter / Edelstahlmutter** | DIN 985 / DIN 934 M5 V4A | Normteil / Amazon | 3 Stk. | Formschlüssig in Gelenkwangen und Rohrschellenkappen eingelassen |
 | **Magnetanker Stahlstift (Kassette)** | DIN 6325 gehärteter Passstift Ø 6 x 8 mm | Normteil / Misumi | 2 Stk. | Ferromagnetischer Stahlanker im Hebelarm der Kassetten-Wippe (reagiert auf N52 Magnetschlüssel) |
-| **N52 Entriegelungsschlüssel** | N52 Neodym-Block 20 x 10 x 5 mm (vernickelt) | Supermagnete / Web | 1 Stk. | Berührungsloser Magnetschlüssel zum diebstahlsicheren Auswurf der Kassetten am Pod |
+| **N52 Entriegelungsschlüssel** | N52 Neodym-Block 20 x 10 x 5 mm (vernickelt) | Supermagnete / Web | 2 Stk. | Berührungsloser Magnetschlüssel zum diebstahlsicheren Auswurf der Kassetten am Pod |
 | **Wippen-Rückstellfeder** | Edelstahl V4A Ø 3.5 mm, L0 = 10 mm | Gutekunst / Web | 2 Stk. | Hält die Verriegelungskralle der Kassettenwippe mit 2.5 N Vorspannung geschlossen |
 | **Gore ePTFE Druckausgleichs-Ventil** | Ø 12 mm selbstklebendes ePTFE Membran-Patch IP68 | Gore / COTS | 1 Stk. | Druckausgleich & Kondenswasserschutz in der Deckeltasche der Zentralbox |
 | **Kassetten-Flanschdichtung (Mundloch)** | Silikon-Formdichtung Shore 40A (54 x 18 mm) | Sonderfertigung / Silikon | 2 Stk. | Stirnseitige Mundloch-Abdichtung an Pod 1 und Pod 2 gegen Spritzwasser und Gischt |
 | **OMM Silikon-Profildichtung Ø 0.8 mm** | Silikon-Rundschnur Ø 0.8 mm Shore 40A | O-Ring-Shop / Web | 0.4 m | Ultra-elastische Gehäusedichtung für OMM UCS Gehäuse (ca. 22 cm pro Modul, IP67) |
 | **Silikon-Dichtschnur Ø 1.5 mm** | Silikon-Rundschnur Ø 1.5 mm Shore 40A | O-Ring-Shop / Amazon | 0.7 m | Endlos-Dichtschnur für Gehäusenut der Zentralbox (40 cm) & Front-Node (30 cm) für IP67 |
+| **1S LiPo Pouch-Akku 180-200 mAh (Keyfob)** | 3.7V / 0.74Wh (Typ 402030, 25x18x3.8 mm) mit PCM & JST-ACH 2-Pin | EEMB / Web | 1 Stk. | Flacher LiPo-Pouch für Smart-Keyfob (100 % lötfrei mit JST-ACH 2P Stecker) |
 | **1S LiPo Pouch-Akku 600 mAh (OMM)** | 3.7V / 2.22Wh (Typ 452438) mit PCM & JST-ACH | EEMB / Web | 2 Stk. | Integrierter Akku für OMM UCS Module (12-14 h Standalone-Betrieb am Helm) |
 | **5V DC Miniatur-Hubmagnet** | Ø 6.5 x 12 mm, Hub 1.5-2.0 mm, mit TPU-Dämpfungsspitze | Solenoid / Web | 8 Stk. | Mechatronische Tastenbetätigung für Sena & Cardo Tasten (4x pro Smart Slot) |
 | **Helmlautsprecher & ECM-Mikrofon Kit** | 40 mm 32 Ohm Hi-Fi Stereo-Lautsprecher + ECM Schwanenhalsmikrofon | COTS Audio / Web | 1 Set | Plug-and-Play Audio-Peripherie für OMM UCS Headset am Helm |
 | **Polycarbonat Radom-Sichtfenster** | Laserzuschnitt Polycarbonat 1.6 mm (RF-transparent) | COTS / Plexiglas | 1 Stk. | Mikrowellen- & optisches Fenster für MR20 Radar & 24-LED Halo |
 | **Pufferakku (LiPo USV 2.200 mAh)** | 1S 3.7V 2.200 mAh Flat-Pack (Typ 504068) Molex Micro-Fit | EEMB / Enerpower | 1 Stk. | Notstrom-Pufferung in der Zentralbox bei Zündungsaus & Motorstart |
+| **Qi Induktions-Empfängerspule Ø 24 mm** | Ø 24 x 0.3 mm Flachspule mit Ferritfolie (0.3 mm) & JST-ACH 2-Pin | Sunlord / Web | 1 Stk. | Ultra-flache Qi-Empfängerspule für Smart-Keyfob (100 % lötfrei angesteckt) |
 | **Wheeltec MR20 77-GHz mmWave Radar** | 77-GHz FMCW Automotive Radar (150 m Reichweite) | Wheeltec / DE-Distributor | 1 Stk. | Automotive Millimeterwellen-Radar für Totwinkelerkennung & Kollisionswarnung |
 | **u-blox SAM-M10Q Multi-GNSS Modul** | 15x15 mm Keramik-Patchantenne, Qwiic I2C | SparkFun / u-blox | 1 Stk. | Cockpit-Satellitenortung an Port J12 mit freier Sicht zum Zenit |
 | **OMM 2.4 GHz Stummelantenne** | 2.4 GHz Rubber-Duck (38 mm, SMA-Male, +2.5 dBi omni) | COTS Standard | 1 Stk. | Kompakte Helmmontage-Antenne für PCBA 09 (völlig flatter- & pfeiffrei) |
