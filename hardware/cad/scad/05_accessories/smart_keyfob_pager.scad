@@ -73,6 +73,10 @@ LED_Y = PCB_Y + 11.5; // 15.5 mm
 BUZZER_X = PCB_X + 31.25; // 36.25 mm
 BUZZER_Y = PCB_Y + 16.5;  // 20.5 mm
 
+// P_BAT Battery Solder Pads (KiCad 132.34, 81.0 on F.Cu)
+P_BAT_X = PCB_X + 32.34; // 37.34 mm
+P_BAT_Y = PCB_Y + 11.0;  // 15.0 mm
+
 // Helper: Rounded Box
 module rounded_box(l, w, h, r) {
     translate([r, r, 0])
@@ -82,61 +86,66 @@ module rounded_box(l, w, h, r) {
         }
 }
 
-// 1. Lower Housing Shell (Matte Anthracite PA12-MJF with PCB shelves & battery pocket)
+// 1. Lower Housing Shell (Matte Anthracite PA12-MJF with PCB shelves, battery pocket & anti-pinch cable trench)
 module fob_lower_shell() {
-    difference() {
-        union() {
-            // Outer Main Body
-            rounded_box(FOB_L, FOB_W, FOB_H / 2.0, CORNER_R);
+    union() {
+        difference() {
+            union() {
+                // Outer Main Body
+                rounded_box(FOB_L, FOB_W, FOB_H / 2.0, CORNER_R);
 
-            // Tongue Seal Lip (Labyrinthdichtung: 0.8 mm high along parting line)
-            translate([FOB_WALL - 0.4, FOB_WALL - 0.4, FOB_H / 2.0])
-                difference() {
-                    rounded_box(FOB_L - 2*(FOB_WALL - 0.4), FOB_W - 2*(FOB_WALL - 0.4), 0.9, CORNER_R - 1.2);
-                    translate([0.8, 0.8, -0.1])
-                        rounded_box(FOB_L - 2*(FOB_WALL + 0.4), FOB_W - 2*(FOB_WALL + 0.4), 1.2, CORNER_R - 2.0);
-                }
-
-            // PCB Corner Locator Dowels (Ø 1.2 mm, Z=5.0 to 6.2 mm)
-            for (dx = [PCB_X + 1.5, PCB_X + PCB_L - 1.5]) {
-                for (dy = [PCB_Y + 1.5, PCB_Y + PCB_W - 1.5]) {
-                    translate([dx, dy, PCB_Z])
-                        cylinder(r=0.65, h=1.2, $fn=16);
-                }
+                // Tongue Seal Lip (Labyrinthdichtung: 0.8 mm high along parting line)
+                translate([FOB_WALL - 0.4, FOB_WALL - 0.4, FOB_H / 2.0])
+                    difference() {
+                        rounded_box(FOB_L - 2*(FOB_WALL - 0.4), FOB_W - 2*(FOB_WALL - 0.4), 0.9, CORNER_R - 1.2);
+                        translate([0.8, 0.8, -0.1])
+                            rounded_box(FOB_L - 2*(FOB_WALL + 0.4), FOB_W - 2*(FOB_WALL + 0.4), 1.2, CORNER_R - 2.0);
+                    }
             }
+
+            // Lower Battery Compartment Recess (for 25x18x3.8 mm LiPo pouch cell at bottom)
+            translate([PCB_X + 1.5, PCB_Y + 0.5, 1.2])
+                cube([26.0, 18.0, 4.0]);
+
+            // Form-Fitting Stepped PCB Well (Cut down to Z=5.0 mm with 0.2 mm perimeter clearance)
+            // Leaves precision resting ledge at Z = 5.0 mm on all 4 sides!
+            translate([PCB_X - 0.2, PCB_Y - 0.2, PCB_Z])
+                cube([PCB_L + 0.4, PCB_W + 0.4, FOB_H / 2.0 + 0.1]);
+
+            // Dedicated Anti-Pinch Battery Cable Routing Trench (Kabelbucht / Freisparung)
+            // Generous 7.0 mm wide, 1.8 mm deep recess below PCB level (Z=3.2 to 6.2 mm)
+            // Extends from battery terminal (X=31) past the PCB right edge (X=43) to tail bulkhead (X=44.5)
+            // Prevents any pinching or crushing of AWG 28/30 silicone battery wires between PCB & shell!
+            translate([PCB_X + 26.0, P_BAT_Y - 3.5, 3.2])
+                cube([CAV_X_END - (PCB_X + 26.0), 7.0, 3.2]);
+
+            // Magnet Key Compartment & Shield Slot (Recessed on lateral long side)
+            translate([FOB_L / 2.0 - MAG_L / 2.0 - 4.0, FOB_W - MAG_W - 0.6, FOB_WALL])
+                cube([MAG_L + 0.4, MAG_W + 0.8, MAG_H + 0.4]);
+
+            // MagSafe Magnetic Alignment Pocket on Bottom Exterior
+            translate([FOB_L / 2.0 - 4.0, FOB_W / 2.0, -0.1])
+                difference() {
+                    cylinder(r=MAGSAFE_OD / 2.0, h=MAGSAFE_DEPTH + 0.1, $fn=48);
+                    cylinder(r=MAGSAFE_ID / 2.0, h=MAGSAFE_DEPTH + 0.2, $fn=48);
+                }
+
+            // Keyring Bushing Bore in Solid Bulkhead at Tail (Hermetically isolated from cavity!)
+            translate([EYELET_X, EYELET_Y, -0.5])
+                cylinder(r=EYELET_OD / 2.0 + 0.05, h=FOB_H + 1.0, $fn=36);
         }
 
-        // Internal Main Cavity (Strictly stops at CAV_X_END = 44.5 mm!)
-        translate([CAV_X_START, FOB_WALL, FOB_WALL])
-            rounded_box(CAV_L, CAV_W, FOB_H / 2.0 + 1.0, 3.0);
-
-        // Lower Battery Compartment Recess (for 25x18x3.8 mm LiPo pouch cell at bottom)
-        translate([PCB_X + 2.0, PCB_Y + 0.5, 1.2])
-            cube([26.0, 18.0, 3.8]);
-
-        // PCB Resting Shelf (Umlaufende Auflageschulter bei Z = 5.0 mm)
-        // Everything above Z = 5.0 mm is cleared for PCB fit
-        translate([PCB_X - 0.3, PCB_Y - 0.3, PCB_Z])
-            cube([PCB_L + 0.6, PCB_W + 0.6, FOB_H / 2.0]);
-
-        // MagSafe Magnetic Alignment Pocket on Bottom Exterior
-        translate([FOB_L / 2.0 - 4.0, FOB_W / 2.0, -0.1])
-            difference() {
-                cylinder(r=MAGSAFE_OD / 2.0, h=MAGSAFE_DEPTH + 0.1, $fn=48);
-                cylinder(r=MAGSAFE_ID / 2.0, h=MAGSAFE_DEPTH + 0.2, $fn=48);
+        // PCB Corner Alignment Stops (R=0.55 mm, rising from Z=5.0 to 6.0 mm at outer corners)
+        for (dx = [PCB_X + 1.2, PCB_X + PCB_L - 1.2]) {
+            for (dy = [PCB_Y + 1.2, PCB_Y + PCB_W - 1.2]) {
+                translate([dx, dy, PCB_Z])
+                    cylinder(r=0.55, h=1.0, $fn=16);
             }
-
-        // Magnet Key Lateral Pocket (Recessed on lateral long side, X-centered)
-        translate([FOB_L / 2.0 - MAG_L / 2.0 - 4.0, FOB_W - MAG_W + 0.1, FOB_WALL])
-            cube([MAG_L + 0.4, MAG_W, MAG_H + 0.4]);
-
-        // Keyring Bushing Bore in Solid Bulkhead at Tail (Hermetically isolated from cavity!)
-        translate([EYELET_X, EYELET_Y, -0.5])
-            cylinder(r=EYELET_OD / 2.0 + 0.05, h=FOB_H + 1.0, $fn=36);
+        }
     }
 }
 
-// 2. Upper Housing Shell (With Dual Button Apertures, LED Light Guide & Acoustic Vent)
+// 2. Upper Housing Shell (With Dual Button Apertures, LED Light Guide, Acoustic Vent & Clamping Ribs)
 module fob_upper_shell() {
     difference() {
         // Outer Main Body
@@ -158,7 +167,7 @@ module fob_upper_shell() {
         translate([SW1_X - 4.5, SW1_Y - 4.0, FOB_H / 2.0 - 1.8])
             rounded_box(SW2_X - SW1_X + 9.0, 8.0, 2.0, 2.0);
 
-        // Button 1 Aperture (SW1: ARM / MUTE / UNLOCK - Ø 5.0 mm or 5.5 x 5.5 mm)
+        // Button 1 Aperture (SW1: ARM / MUTE / UNLOCK - Ø 5.0 mm)
         translate([SW1_X, SW1_Y, -0.5])
             cylinder(r=2.5, h=FOB_H, $fn=24);
 
@@ -188,8 +197,14 @@ module fob_upper_shell() {
     }
 
     // Internal PCB Clamping Ribs (Press down on component-free margins of PCB at Z = 5.0 mm)
+    // Rib 1: Along lower edge (Y = PCB_Y + 0.2 mm, X = 6.0 to 30.0 mm)
     translate([PCB_X + 1.0, PCB_Y + 0.2, 0])
-        cube([PCB_L - 2.0, 0.8, FOB_H / 2.0 - FOB_WALL]);
+        cube([24.0, 0.8, FOB_H / 2.0 - FOB_WALL]);
+
+    // Rib 2: Along upper edge (Y = PCB_Y + PCB_W - 1.0 mm, X = 6.0 to 30.0 mm)
+    // Keeps area X > 30.0 mm completely open for P_BAT wiring loop & buzzer acoustics!
+    translate([PCB_X + 1.0, PCB_Y + PCB_W - 1.0, 0])
+        cube([24.0, 0.8, FOB_H / 2.0 - FOB_WALL]);
 }
 
 // 3. Dual Tactile Silicone / TPU Sealing Membrane with Plungers (IP67 Sealed Keypad)
@@ -338,6 +353,11 @@ module internal_pcba(include_battery = true) {
         translate([PCB_X + 23.5, PCB_Y + 4.5, PCB_T])
             cylinder(r=4.0, h=2.5, $fn=24);
 
+    // P_BAT SMD Solder Pads (0805 metric, KiCad 132.34, 81.0 on F.Cu)
+    color("gold")
+        translate([P_BAT_X - 1.0, P_BAT_Y - 0.7, PCB_T])
+            cube([2.0, 1.4, 0.1]);
+
     if (include_battery) {
         // 180 mAh LiPo Pouch Cell (25 x 18 x 3.8 mm, beneath PCB)
         color("#334155")
@@ -348,6 +368,36 @@ module internal_pcba(include_battery = true) {
         color("#b45309", 0.8)
             translate([FOB_L / 2.0 - 4.0, FOB_W / 2.0, -4.0])
                 cylinder(r=11.5, h=0.3, $fn=48);
+
+        // Anti-Pinch Flexible Battery Wiring (AWG 28 Silicone: Red VBAT+, Black GND-)
+        // Routes from lower battery bay through cable trench, around PCB edge to P_BAT pads
+        // Red Wire (VBAT+)
+        color("crimson") {
+            translate([PCB_X + 25.0, P_BAT_Y - 0.7, -1.8])
+                rotate([0, 90, 0])
+                    cylinder(r=0.45, h=13.5, $fn=16);
+            translate([PCB_X + 38.5, P_BAT_Y - 0.7, -1.8])
+                cylinder(r=0.45, h=3.6, $fn=16);
+            translate([P_BAT_X, P_BAT_Y - 0.7, 1.8])
+                rotate([0, 90, 0])
+                    cylinder(r=0.45, h=PCB_X + 38.5 - P_BAT_X, $fn=16);
+            translate([P_BAT_X, P_BAT_Y - 0.7, PCB_T])
+                cylinder(r=0.45, h=0.8, $fn=16);
+        }
+
+        // Black Wire (GND-)
+        color("#1e293b") {
+            translate([PCB_X + 25.0, P_BAT_Y + 0.7, -1.8])
+                rotate([0, 90, 0])
+                    cylinder(r=0.45, h=13.5, $fn=16);
+            translate([PCB_X + 38.5, P_BAT_Y + 0.7, -1.8])
+                cylinder(r=0.45, h=3.6, $fn=16);
+            translate([P_BAT_X, P_BAT_Y + 0.7, 1.8])
+                rotate([0, 90, 0])
+                    cylinder(r=0.45, h=PCB_X + 38.5 - P_BAT_X, $fn=16);
+            translate([P_BAT_X, P_BAT_Y + 0.7, PCB_T])
+                cylinder(r=0.45, h=0.8, $fn=16);
+        }
     }
 }
 

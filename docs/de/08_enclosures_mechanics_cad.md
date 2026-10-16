@@ -1240,7 +1240,7 @@ Der **OpenMotorBridge 2-in-1 Smart-Keyfob** ([`smart_keyfob_pager.scad`](../../h
 * **Materialien & Fertigung:** Hochfestes PA12 im HP Multi Jet Fusion (MJF) Verfahren, kugelgestrahlt, chemisch geglättet und hydrophob versiegelt.
 * **Stoßabsorbierender TPU-Kantenschutz:** Umlaufender $0{,}8\,\text{mm}$ TPU-95A Schutzrahmen (Orange `#ff9f0a`) mit Freisparung für die seitliche Magnetkontaktfläche. Schützt Gehäuse und Elektronik zuverlässig bei Stürzen auf Asphalt aus bis zu $2\,\text{m}$ Höhe.
 * **Integrierter N52 Neodym-Schlüsselblock ($20 \times 10 \times 5\,\text{mm}$):**
-  * Auf der schmalen Längsseite formschlüssig eingepresst mit korrosionsfester Ni-Cu-Ni Dreifachbeschichtung und mit einem taktilen Nordpol-Ausrichtungssteg versehen.
+  * Auf der schmalen Längsseite formschlüssig eingepresst mit korrosionsfester Ni-Cu-Ni Dreifachbeschichtung (silbern-metallisch glänzend, in den CAD-Renderings deutlich sichtbar) und mit einem taktilen Nordpol-Ausrichtungssteg versehen.
   * Tritt der Keyfob an den $X = 64\,\text{mm}$ Zielkreis des Pod-Gehäuses heran, zieht das konzentrierte B-Feld ($B_r \approx 1{,}48\,\text{T}$) den innenliegenden Stahlanker an und entriegelt die Auswerferfedern.
 * **0,5 mm Weicheisen- / Mu-Metall-Abschirmblech (Flux Shield):**
   * Direkt hinter dem N52-Magneten platziert. Schirmt die interne Elektronik (SX1262 LoRa-Transceiver, Nordic BLE-SoC, 180 mAh LiPo-Pouch-Akku) hermetisch gegen magnetische Sättigung ab und lenkt den magnetischen Fluss zu 100 % nach außen auf die Gehäusewand.
@@ -1268,16 +1268,28 @@ Das Gehäuse integriert hierfür ein formschlüssiges **2-Tasten-Bedienfeld auf 
 #### 7.1.3 Schraubenlose PCB-Klemmung & Akku-Kammertrennung
 Wie hält die Leiterplatte im Gehäuse, ohne dass Schrauben das dichte HF-Layout schwächen?
 1. **Umlaufende Stütz-Schultern (PCB Resting Ledges):** An den Innenwänden der Unterschale läuft auf Höhe $Z = 5{,}0\,\text{mm}$ ein formschlüssiger Absatz um, auf dem der Platinenrand spielfrei aufliegt.
-2. **Eck-Zentrierpins (Locator Dowels):** Zwei diagonale Führungsdorne ($\varnothing 1{,}2\,\text{mm}$, Höhe $1{,}2\,\text{mm}$) an den Innenkanten der Unterschale greifen formschlüssig in die $R = 1{,}5\,\text{mm}$ Ecken der Platine und arretieren sie in X- und Y-Richtung gegen jedes Verrutschen.
-3. **Niederhalterippen in der Oberschale:** Monolithisch angeformte Klemmrippen in der Oberschale drücken beim Fügen elastisch auf die bauteilfreien Ränder der Leiterplatte und spannen diese klapperfrei und vibrationsfest ein.
+2. **Eck-Zentrierstege (Corner Alignment Stops):** Vier Führungsstege ($R = 0{,}55\,\text{mm}$, Höhe $1{,}0\,\text{mm}$) an den Außenecken der Stützschulter fassen die $R = 1{,}5\,\text{mm}$ Außenradien der Leiterplatte formschlüssig ein und arretieren sie in X- und Y-Richtung gegen jedes Verrutschen, ohne dass Löcher in der Platine nötig sind.
+3. **Niederhalterippen in der Oberschale:** Monolithisch angeformte Klemmrippen an den Seitenwangen der Oberschale ($X = 6{,}0\dots 30{,}0\,\text{mm}$) drücken beim Fügen elastisch auf die bauteilfreien Längsränder der Leiterplatte und spannen diese klapperfrei und vibrationsfest ein.
 4. **Separate LiPo-Wanne:** Unterhalb der Platine ($Z = 1{,}2\dots 5{,}0\,\text{mm}$) ist eine passgenaue Vertiefung für die $25 \times 18 \times 3{,}8\,\text{mm}$ LiPo-Zelle und die Qi-Ladespule eingelassen. Ein $0{,}5\,\text{mm}$ Zellkissen (EVA-Schaumpad) isoliert die Akkuzelle mechanisch gegen Lötstellen auf der PCB-Unterseite.
 
-#### 7.1.4 Vollwandige Schottwand-Isolation der Schlüsselring-Öse
+#### 7.1.4 Akku-Kabelführung & Quetschschutz (P_BAT Routing & Anti-Pinch Kabelbucht)
+Ein kritischer Aspekt bei ultrakompakten Schlüsseltranspondern ist die Führung der Akkuleitungen:
+* **Herausforderung:** Der LiPo-Akku (180–200 mAh, $25 \times 18 \times 3{,}8\,\text{mm}$) liegt in der Unterschale **unterhalb** der Platine ($Z = 1{,}2\dots 5{,}0\,\text{mm}$). Die Anschluss-Lötpads `P_BAT` (SMD-0805, Pin 1: `VBAT`, Pin 2: `GND`) befinden sich jedoch auf der **Oberseite (`F.Cu`)** der Platine bei KiCad $X = 132{,}34\,\text{mm}, Y = 81{,}0\,\text{mm}$ (Gehäusekoordinaten $X \approx 37{,}34\,\text{mm}, Y \approx 15{,}0\,\text{mm}, Z = 6{,}0\,\text{mm}$). Da die Platine durchgehend geschlossen ist (keine Ausfräsung, um HF-Masse und Schirmung nicht zu schwächen), müssen die Leitungen um die Platinenkante herumgeführt werden.
+* **Formschlüssige Anti-Pinch Kabelbucht (Cable Routing Trench):**
+  In die Unterschale ist am rechten Platinenende ($X = 31{,}0\dots 44{,}5\,\text{mm}$, $Y = 11{,}5\dots 18{,}5\,\text{mm}$, Breite $7{,}0\,\text{mm}$) ein tiefergelegter Kanal ($Z = 3{,}2\dots 5{,}0\,\text{mm}$, Tiefe $1{,}8\,\text{mm}$ unter Platinenniveau) eingeformt.
+* **Spannungsfreier Bogen um die Stirnkante ($X = 43{,}0\,\text{mm}$):**
+  Die hochflexiblen AWG 28 / AWG 30 Silikonadern ($\varnothing 0{,}95\,\text{mm}$, Rot `VBAT+`, Schwarz `GND-`) treten am Akkukopf bei $X \approx 31{,}0\,\text{mm}$ aus, laufen unter der unbestückten Unterseite der Platine im Kanal nach rechts, steigen im $1{,}5\,\text{mm}$ breiten Freiraum vor der massiven Heck-Schottwand ($X = 43{,}0\dots 44{,}5\,\text{mm}$) auf $Z = 6{,}8\,\text{mm}$ an und biegen in einer sanften Schleife ohne Knickung zurück auf die Pads `P_BAT` ($X = 37{,}34\,\text{mm}$).
+* **Kabeldom & Null-Klemmkraft in der Oberschale:**
+  Die Oberschale hält über diesem gesamten Kabelbereich ($X > 30{,}0\,\text{mm}$, $Y = 11{,}0\dots 19{,}0\,\text{mm}$) ihre volle Kavitätenhöhe ($Z = 6{,}0\dots 8{,}5\,\text{mm}$, lichte Höhe $> 2{,}5\,\text{mm}$ über PCB). Die Klemmrippen der Oberschale enden strikt bei $X = 30{,}0\,\text{mm}$. Beim Zusammenfügen und Verschweißen/Verschrauben des Gehäuses wirkt daher **keinerlei Quetsch- oder Klemmkraft** auf die Leitungen.
+* **Vibrations-Scheuerschutz:**
+  Die Kanten der Kabelbucht sind mit Radien $R \ge 1{,}2\,\text{mm}$ verrundet. Über die Stirnkante der FR4-Platine wird im Bereich des Kabeldurchtritts ein $0{,}05\,\text{mm}$ dünnes Polyimid-Isolierband (Kapton-Tape) geklebt, das ein Durchscheuern der Silikonisolierung bei extremen Motorrad-Vibrationen dauerhaft verhindert.
+
+#### 7.1.5 Vollwandige Schottwand-Isolation der Schlüsselring-Öse
 * **Keine Kollision mit der Elektronik:** Der Elektronik-Innenraum endet strikt bei $X = 44{,}5\,\text{mm}$. Die Trägerplatine schließt bei $X = 43{,}0\,\text{mm}$ ab.
 * **Massive Heck-Schottwand:** Der Gehäuseabschnitt von $X = 44{,}5\,\text{mm}$ bis $X = 58{,}0\,\text{mm}$ ist ein **vollmassiver PA12-MJF Block**. Die Schlüsselring-Bohrung ($\varnothing 4{,}5\,\text{mm}$) bei $X = 52{,}5\,\text{mm}$ durchdringt ausschließlich diesen Vollmaterial-Bereich.
 * **Eingepresste 316L Edelstahl-Hülse:** Eine massive Edelstahlbuchse ($\varnothing 8{,}5\,\text{mm}$ außen, $\varnothing 4{,}5\,\text{mm}$ innen, $13{,}0\,\text{mm}$ Länge) schützt das Kunststoffauge gegen Durchscheuern durch Metall-Schlüsselringe. Ein Durchtritt von Schlüsselringen oder Wasser in den Elektronikraum ist physikalisch zu 100 % ausgeschlossen.
 
-#### 7.1.5 IP67-Wasserdichtigkeitsarchitektur
+#### 7.1.6 IP67-Wasserdichtigkeitsarchitektur
 Motorrad-Schlüsseltransponder sind stundenlangen Starkregenfahrten in durchnässten Kombijacken, Gischt beim Motorradwaschen und Pfützenstürzen ausgesetzt. OpenMotorBridge setzt ein 5-Stufen-Dichtungskonzept nach **IP67** (Staubdicht + 30 Minuten Untertauchen bis 1 m Wassertiefe) um:
 1. **Nut-und-Feder-Labyrinthdichtung:** Die Unterschale besitzt an der Gehäusetrennfuge ($Z = 6{,}5\,\text{mm}$) einen umlaufenden, $0{,}8\,\text{mm}$ breiten und $0{,}9\,\text{mm}$ hohen Dichtsteg (Feder), der formschlüssig in eine korrespondierende Nut der Oberschale mit EPDM-/Silikon-Dichtschnur oder Ultraschall-Schweißnaht (Energy Director) greift.
 2. **Elastomere Silikon-/TPU-Tastmatte:** Das Tastenfeld wird durch eine durchgehende, $0{,}8\,\text{mm}$ dicke elastomere Silikonmembran mit umlaufender Dichtlippe gegen die Gehäusewanne abgedichtet.
