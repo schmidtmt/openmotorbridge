@@ -77,6 +77,14 @@ BUZZER_Y = PCB_Y + 16.5;  // 20.5 mm
 P_BAT_X = PCB_X + 32.34; // 37.34 mm
 P_BAT_Y = PCB_Y + 11.0;  // 15.0 mm
 
+// J_SWD Programming / Test Pads (KiCad 108.75, 85.405 on F.Cu)
+SWD_X = PCB_X + 8.75; // 13.75 mm
+SWD_Y = PCB_Y + 15.4; // 19.4 mm
+
+// J_QI Wireless Charging Coil Solder Pads (KiCad 105.5, 77.84 on F.Cu)
+QI_PAD_X = PCB_X + 5.5;  // 10.5 mm
+QI_PAD_Y = PCB_Y + 7.84; // 11.84 mm
+
 // Helper: Rounded Box
 module rounded_box(l, w, h, r) {
     translate([r, r, 0])
@@ -86,7 +94,7 @@ module rounded_box(l, w, h, r) {
         }
 }
 
-// 1. Lower Housing Shell (Matte Anthracite PA12-MJF with PCB shelves, battery pocket & anti-pinch cable trench)
+// 1. Lower Housing Shell (Matte Anthracite PA12-MJF with PCB shelves, battery pocket, Qi bed & anti-pinch cable trench)
 module fob_lower_shell() {
     union() {
         difference() {
@@ -102,6 +110,11 @@ module fob_lower_shell() {
                             rounded_box(FOB_L - 2*(FOB_WALL + 0.4), FOB_W - 2*(FOB_WALL + 0.4), 1.2, CORNER_R - 2.0);
                     }
             }
+
+            // Qi Wireless Receiver Coil Bed (Ø 24.5 mm circular recess, depth 0.6 mm at floor Z=1.0 to 1.7 mm)
+            // Co-axial with MagSafe ring on bottom exterior: center at X = FOB_L / 2.0 - 4.0 = 25.0 mm, Y = FOB_W / 2.0 = 17.0 mm
+            translate([FOB_L / 2.0 - 4.0, FOB_W / 2.0, 1.0])
+                cylinder(r=12.25, h=0.7, $fn=48);
 
             // Lower Battery Compartment Recess (for 25x18x3.8 mm LiPo pouch cell at bottom)
             translate([PCB_X + 1.5, PCB_Y + 0.5, 1.2])
@@ -194,6 +207,10 @@ module fob_upper_shell() {
         // Keyring Bushing Bore in Solid Bulkhead at Tail
         translate([EYELET_X, EYELET_Y, -0.5])
             cylinder(r=EYELET_OD / 2.0 + 0.05, h=FOB_H + 1.0, $fn=36);
+
+        // Internal SWD Programming Header Relief Pocket (Extra 1.2 mm vertical headroom over J_SWD pads)
+        translate([SWD_X - 2.5, SWD_Y - 3.5, FOB_H / 2.0 - FOB_WALL])
+            rounded_box(5.0, 7.0, 1.2, 1.0);
     }
 
     // Internal PCB Clamping Ribs (Press down on component-free margins of PCB at Z = 5.0 mm)
@@ -308,6 +325,22 @@ module internal_pcba(include_battery = true) {
         translate([PCB_X + 15.0, PCB_Y + 3.0, PCB_T])
             cube([7.0, 7.0, 0.9]);
 
+    // TI BQ51003 Qi Wireless Power Receiver IC (DSBGA-28, KiCad 105.5, 74.5)
+    color("#1e293b")
+        translate([PCB_X + 5.5, PCB_Y + 4.5, PCB_T])
+            cube([1.9, 3.0, 0.6]);
+
+    // J_QI Wireless Charging Coil Solder Pads (KiCad 105.5, 77.84 on F.Cu)
+    color("gold")
+        translate([QI_PAD_X - 0.5, QI_PAD_Y - 0.8, PCB_T])
+            cube([1.0, 1.6, 0.1]);
+
+    // J_SWD 4-Pin SWD Programming & Test Pads (KiCad 108.75, 85.405 on F.Cu)
+    // Production state: DNP (Do Not Populate) - bare gold Pogo-Pin test pads (0.1 mm)
+    color("gold")
+        translate([SWD_X - 1.2, SWD_Y - 2.0, PCB_T])
+            cube([2.4, 4.0, 0.1]);
+
     // DRV2605L Haptic Driver (MSOP-10, KiCad 120.0, 73.6)
     color("#334155")
         translate([PCB_X + 19.0, PCB_Y + 12.5, PCB_T])
@@ -364,10 +397,24 @@ module internal_pcba(include_battery = true) {
             translate([PCB_X + 2.0, PCB_Y + 0.5, -3.8])
                 cube([25.0, 18.0, 3.8]);
 
-        // Qi Wireless Charging Receiver Coil (Ø 24 mm ultra-thin copper coil)
-        color("#b45309", 0.8)
+        // Qi Wireless Charging Receiver Coil (Ø 24 mm ultra-thin copper flat coil)
+        // Seated on lower shell floor below battery
+        color("#b45309", 0.9)
             translate([FOB_L / 2.0 - 4.0, FOB_W / 2.0, -4.0])
                 cylinder(r=11.5, h=0.3, $fn=48);
+
+        // Ferrite Shielding Foil (0.3 mm sheet on top of Qi coil, magnetic barrier for LiPo & PCB)
+        color("#1e293b", 0.85)
+            translate([FOB_L / 2.0 - 4.0, FOB_W / 2.0, -3.7])
+                cylinder(r=11.8, h=0.3, $fn=48);
+
+        // Qi Coil Connection Leads (2x enameled copper leads from coil up to J_QI pads)
+        color("#b45309") {
+            translate([QI_PAD_X, QI_PAD_Y - 0.4, -3.7])
+                cylinder(r=0.25, h=3.7 + PCB_T, $fn=16);
+            translate([QI_PAD_X, QI_PAD_Y + 0.4, -3.7])
+                cylinder(r=0.25, h=3.7 + PCB_T, $fn=16);
+        }
 
         // Anti-Pinch Flexible Battery Wiring (AWG 28 Silicone: Red VBAT+, Black GND-)
         // Routes from lower battery bay through cable trench, around PCB edge to P_BAT pads
