@@ -633,28 +633,6 @@
       "pkg_qty": 1,
       "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
     },
-    "part3d_pod_bulkhead_partition": {
-      "type": "part_3d",
-      "name": {
-        "de": "Pod Schottwand mit Federaufnahme",
-        "en": "Pod Bulkhead Partition"
-      },
-      "spec": "PA12-SLS (Integrierte Führungstaschen)",
-      "source": "3D-Druck (PA12-SLS)",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.9,
-        1.8
-      ],
-      "desc": {
-        "de": "Schottwand mit Auswerffedern und Kabeldurchführung",
-        "en": "Bulkhead partition with ejector springs and cable pass-through"
-      },
-      "file": "03_pod_bulkhead_partition.stl",
-      "group": "Pod Base",
-      "pkg_qty": 1,
-      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
-    },
     "part3d_cartridge_base_sled": {
       "type": "part_3d",
       "name": {
@@ -1293,6 +1271,28 @@
       "pkg_qty": 1,
       "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
     },
+    "part3d_smart_keyfob_silicone_keypad": {
+      "type": "part_3d",
+      "name": {
+        "de": "Smart-Keyfob Silikon-Tastmatte",
+        "en": "Smart Keyfob Silicone Keypad"
+      },
+      "spec": "Silikon Shore 40A / TPU (2 Tasten & LED-Prisma)",
+      "source": "3D-Druck (TPU / Silikonguss)",
+      "unit": "Stk.",
+      "cost_eur": [
+        0.5,
+        1.1
+      ],
+      "desc": {
+        "de": "Wasserdichte 2-Tasten-Silikonmatte für Smart-Keyfob (SW1 Alarm & SW2 Pairing)",
+        "en": "Waterproof 2-button silicone keypad for smart keyfob (SW1 alarm & SW2 pairing)"
+      },
+      "file": "smart_keyfob_silicone_keypad.stl",
+      "group": "Smart-Keyfob",
+      "pkg_qty": 1,
+      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
+    },
     "part3d_tmp117_stealth_mount": {
       "type": "part_3d",
       "name": {
@@ -1629,7 +1629,7 @@
         "de": "PCBA 01: Zentralbox Controller",
         "en": "PCBA 01: Central Box Controller"
       },
-      "spec": "ESP32-S3, ES8388 Codec, USV, SX1262 LoRa, DTM-12",
+      "spec": "ESP32-S3, QCC3084 BT, ES8388, DW3110 UWB, SX1262 LoRa, USV, DTM-12",
       "source": "JLCPCB / SMT",
       "unit": "Stk.",
       "cost_eur": [
@@ -1637,8 +1637,8 @@
         19.5
       ],
       "desc": {
-        "de": "Zentralbox Hauptplatine unter der Sitzbank mit 24-Bit Audio & LoRa Mesh",
-        "en": "Central box main controller under seat with 24-bit audio & LoRa mesh"
+        "de": "Zentralbox Hauptplatine unter der Sitzbank mit 24-Bit Audio, 6.5 GHz UWB & LoRa Mesh",
+        "en": "Central box main controller under seat with 24-bit audio, 6.5 GHz UWB & LoRa mesh"
       },
       "id_kicad": "kicad_main_box",
       "pkg_qty": 5,
@@ -1650,7 +1650,7 @@
         "de": "PCBA 03: Universal Smart Cartridge",
         "en": "PCBA 03: Universal Smart Cartridge"
       },
-      "spec": "Qorvo DW3110 UWB, ES8388 Codec, DC-DC Speisung",
+      "spec": "ESP32-C6, Qorvo DW3110 UWB, ES8388 Codec, TS5A3159, 4x AO3400A",
       "source": "JLCPCB / SMT",
       "unit": "Stk.",
       "cost_eur": [
@@ -1658,8 +1658,8 @@
         10.5
       ],
       "desc": {
-        "de": "Universelle Kassetten-Trägerplatine mit 6.5 GHz UWB & Kelvin-Grounding Audio",
-        "en": "Universal cartridge carrier board with 6.5 GHz UWB & Kelvin-grounded audio"
+        "de": "Universelle Kassetten-Trägerplatine mit 6.5 GHz UWB, ESP32-C6 & Kelvin-Grounding Audio",
+        "en": "Universal cartridge carrier board with 6.5 GHz UWB, ESP32-C6 & Kelvin-grounded audio"
       },
       "id_kicad": "kicad_cartridge",
       "pkg_qty": 5,
@@ -1671,7 +1671,7 @@
         "de": "PCBA 05: Universal Front-Knoten",
         "en": "PCBA 05: Universal Front Node"
       },
-      "spec": "ESP32-S3, USB-Hub, SAM-M10Q GNSS, USB-PD 20W",
+      "spec": "ESP32-S3, DW3110 UWB, SAM-M10Q GNSS, USB2514B Hub, SC8102 PD20W",
       "source": "JLCPCB / SMT",
       "unit": "Stk.",
       "cost_eur": [
@@ -1679,8 +1679,8 @@
         15.5
       ],
       "desc": {
-        "de": "Cockpit-Knoten für Telefon-Fast-Charge, CarPlay, GNSS & Display",
-        "en": "Cockpit node for phone fast-charge, CarPlay, GNSS & display"
+        "de": "Cockpit-Knoten für Telefon-Fast-Charge, CarPlay, GNSS, UWB-Backbone & Display",
+        "en": "Cockpit node for phone fast-charge, CarPlay, GNSS, UWB backbone & display"
       },
       "id_kicad": "kicad_front_node",
       "pkg_qty": 5,
@@ -1692,7 +1692,7 @@
         "de": "PCBA 07: Smart-Keyfob",
         "en": "PCBA 07: Smart Keyfob"
       },
-      "spec": "BLE Tracker, TI DRV2605L, LRA Haptik-Treiber",
+      "spec": "Nordic nRF52840, SX1262 LoRa, DRV2605L LRA, BQ51003 Qi, JST-ACH",
       "source": "JLCPCB / SMT",
       "unit": "Stk.",
       "cost_eur": [
@@ -1700,8 +1700,8 @@
         6.5
       ],
       "desc": {
-        "de": "Drahtloser Schlüsselanhänger mit haptischem Feedback für Alarme",
-        "en": "Wireless keyfob with haptic feedback for blind spot & navigation alerts"
+        "de": "2-in-1 LoRa Smart-Keyfob & Silent Pager mit haptischem Feedback, Qi-Ladung & N52-Key",
+        "en": "2-in-1 LoRa smart keyfob & silent pager with haptic feedback, Qi charging & N52 key"
       },
       "id_kicad": "kicad_smart_keyfob",
       "pkg_qty": 5,
@@ -2010,6 +2010,26 @@
       "pkg_qty": 1,
       "pkg_name": "COTS Einzelteil"
     },
+    "cots_pogo_pin_millmax": {
+      "type": "cots_electronic",
+      "name": {
+        "de": "Mill-Max Hochstrom-Federkontakt (Pogo-Pin)",
+        "en": "Mill-Max Heavy-Duty Spring Contact (Pogo-Pin)"
+      },
+      "spec": "Mill-Max 0906-Serie / Keystone 8680 (Ø 3.2 mm, 1.5 N, 4A, vergoldet)",
+      "source": "Mill-Max / Mouser / Keystone",
+      "unit": "Stk.",
+      "cost_eur": [
+        0.8,
+        1.6
+      ],
+      "desc": {
+        "de": "Massiver vergoldeter Federkontakt in Pod-Schottwand zur Speisung der Kassetten-Pads",
+        "en": "Heavy-duty gold-plated spring contact pin in pod bulkhead for cartridge pad power feed"
+      },
+      "pkg_qty": 10,
+      "pkg_name": "10er Pack Federkontaktstifte (Mill-Max / Mouser)"
+    },
     "antenna_fxp895_lora": {
       "type": "antenna",
       "name": {
@@ -2044,8 +2064,8 @@
         4.0
       ],
       "desc": {
-        "de": "Drahtloses UWB 6.5 GHz Backbone (Zentralbox, Front-Node, Radar)",
-        "en": "Wireless UWB 6.5 GHz backbone (Central Box, Front Node, Radar)"
+        "de": "Drahtloses UWB 6.5 GHz Backbone (Zentralbox, Front-Node, Kassetten, Radar)",
+        "en": "Wireless UWB 6.5 GHz backbone (Central Box, Front Node, Cartridges, Radar)"
       },
       "pkg_qty": 1,
       "pkg_name": "Taoglas COTS Antenne (Mouser)"

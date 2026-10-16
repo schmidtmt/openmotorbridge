@@ -81,7 +81,7 @@
       },
       "parts": [
         { "part_id": "part3d_pod_base_housing", "qty": 1 },
-        { "part_id": "part3d_pod_bulkhead_partition", "qty": 1 },
+        { "part_id": "cots_pogo_pin_millmax", "qty": 2 },
         { "part_id": "fastener_spring_ejector_bulkhead", "qty": 2 },
         { "part_id": "seal_mouth_gasket_cartridge", "qty": 1 },
         { "part_id": "cable_pure_dc_jwpf", "qty": 1 }
@@ -105,7 +105,8 @@
         { "part_id": "fastener_pin_din6325_6_8", "qty": 1 },
         { "part_id": "fastener_spring_latch_return", "qty": 1 },
         { "part_id": "pcba_03", "qty": 1 },
-        { "part_id": "fastener_din7985_m2_6", "qty": 4 }
+        { "part_id": "fastener_din7985_m2_6", "qty": 4 },
+        { "part_id": "antenna_fxuwb10_uwb", "qty": 1 }
       ]
     },
     "assembly_inlay_sena_spider": {
@@ -229,7 +230,13 @@
         "en": "Hermetic blank cartridge protecting unused bays or acting as waterproof stash"
       },
       "parts": [
-        { "part_id": "part3d_cartridge_insert_blind", "qty": 1 }
+        { "part_id": "part3d_cartridge_base_sled", "qty": 1 },
+        { "part_id": "part3d_cartridge_latch", "qty": 1 },
+        { "part_id": "fastener_pin_din7_m2_8", "qty": 1 },
+        { "part_id": "fastener_pin_din6325_6_8", "qty": 1 },
+        { "part_id": "fastener_spring_latch_return", "qty": 1 },
+        { "part_id": "part3d_cartridge_insert_blind", "qty": 1 },
+        { "part_id": "fastener_din7991_m2_6", "qty": 4 }
       ]
     },
     "assembly_omm_ucs_module_24g": {
@@ -409,7 +416,8 @@
         { "part_id": "fastener_keyring_eyelet_v4a", "qty": 1 },
         { "part_id": "part3d_smart_keyfob_lower", "qty": 1 },
         { "part_id": "part3d_smart_keyfob_upper", "qty": 1 },
-        { "part_id": "part3d_smart_keyfob_tpu_rim", "qty": 1 }
+        { "part_id": "part3d_smart_keyfob_tpu_rim", "qty": 1 },
+        { "part_id": "part3d_smart_keyfob_silicone_keypad", "qty": 1 }
       ]
     },
     "assembly_tmp117_sensor": {

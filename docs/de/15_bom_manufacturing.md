@@ -490,6 +490,7 @@ Für den Standalone-Einsatz der beiden Intercom-Module (**PCBA 09: OMM 2.4 GHz H
 | **1S LiPo Pouch-Akku 600 mAh (OMM)** | 3.7V / 2.22Wh (Typ 452438) mit PCM & JST-ACH | EEMB / Web | 2 Stk. | Integrierter Akku für OMM UCS Module (12-14 h Standalone-Betrieb am Helm) |
 | **5V DC Miniatur-Hubmagnet** | Ø 6.5 x 12 mm, Hub 1.5-2.0 mm, mit TPU-Dämpfungsspitze | Solenoid / Web | 8 Stk. | Mechatronische Tastenbetätigung für Sena & Cardo Tasten (4x pro Smart Slot) |
 | **Helmlautsprecher & ECM-Mikrofon Kit** | 40 mm 32 Ohm Hi-Fi Stereo-Lautsprecher + ECM Schwanenhalsmikrofon | COTS Audio / Web | 1 Set | Plug-and-Play Audio-Peripherie für OMM UCS Headset am Helm |
+| **Mill-Max Hochstrom-Federkontakt (Pogo-Pin)** | Mill-Max 0906-Serie / Keystone 8680 (Ø 3.2 mm, 1.5 N, 4A, vergoldet) | Mill-Max / Mouser / Keystone | 4 Stk. | Massiver vergoldeter Federkontakt in Pod-Schottwand zur Speisung der Kassetten-Pads |
 | **Polycarbonat Radom-Sichtfenster** | Laserzuschnitt Polycarbonat 1.6 mm (RF-transparent) | COTS / Plexiglas | 1 Stk. | Mikrowellen- & optisches Fenster für MR20 Radar & 24-LED Halo |
 | **Pufferakku (LiPo USV 2.200 mAh)** | 1S 3.7V 2.200 mAh Flat-Pack (Typ 504068) Molex Micro-Fit | EEMB / Enerpower | 1 Stk. | Notstrom-Pufferung in der Zentralbox bei Zündungsaus & Motorstart |
 | **Qi Induktions-Empfängerspule Ø 24 mm** | Ø 24 x 0.3 mm Flachspule mit Ferritfolie (0.3 mm) & JST-ACH 2-Pin | Sunlord / Web | 1 Stk. | Ultra-flache Qi-Empfängerspule für Smart-Keyfob (100 % lötfrei angesteckt) |
@@ -498,7 +499,7 @@ Für den Standalone-Einsatz der beiden Intercom-Module (**PCBA 09: OMM 2.4 GHz H
 | **OMM 2.4 GHz Stummelantenne** | 2.4 GHz Rubber-Duck (38 mm, SMA-Male, +2.5 dBi omni) | COTS Standard | 1 Stk. | Kompakte Helmmontage-Antenne für PCBA 09 (völlig flatter- & pfeiffrei) |
 | **Taoglas FXP524 V2X Flexantenne** | 5.9 GHz Flex-Patch (+3.5 dBi) mit U.FL Buchse (50 mm) | Taoglas / Mouser | 1 Stk. | Car-to-X / ITS-G5 Funk-Uplink für ESP32-C5 Sub-MCU auf PCBA 08 |
 | **Taoglas FXP895 LoRa Flexantenne** | 868 MHz Flex-Dipol (+2.0 dBi) U.FL (100 mm) | Taoglas / Mouser | 1 Stk. | Weitbereichs-Kolonnenfunk für SX1262 LoRa in der Deckeltasche der Zentralbox |
-| **Taoglas FXUWB10 UWB Flexantenne** | 6.5 GHz Ch. 5 Flex-Patch mit 20 mm U.FL Koaxialkabel | Taoglas / Mouser | 3 Stk. | Drahtloses UWB 6.5 GHz Backbone (Zentralbox, Front-Node, Radar) |
+| **Taoglas FXUWB10 UWB Flexantenne** | 6.5 GHz Ch. 5 Flex-Patch mit 20 mm U.FL Koaxialkabel | Taoglas / Mouser | 5 Stk. | Drahtloses UWB 6.5 GHz Backbone (Zentralbox, Front-Node, Kassetten, Radar) |
 | **Deutsch DTM-12 Hauptkabelbaum** | IP68/IP69K Deutsch DTM-12 COTS Fertigkabelbaum mit Raychem DR-25 | COTS / Deutsch | 1 Stk. | Zentraler Hauptanschluss für Bordnetz, CAN-Bus & DC-Zuleitungen zu den Pods |
 | **Front-Node 12V Anschlusskabel** | 2-Pin JST-PH Litzenkabel mit Posi-Tap Abzweigverbindern | COTS Standard | 1 Stk. | Lokale 12V-Cockpit-Versorgung (Standlicht/Navistecker) |
 | **JST-PH Pigtail Sortiments-Set** | 2-Pin, 3-Pin, 4-Pin JST-PH mit vormontierten Litzen | Amazon / COTS | 1 Set | CAN-Bus, Lenkertaster, Spiegel-LEDs, Qi-Lader & Actioncam |

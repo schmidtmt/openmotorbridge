@@ -410,6 +410,7 @@ For standalone helmet operation of both intercom modules (**PCBA 09: OMM 2.4 GHz
 | **1S LiPo Pouch Battery 600 mAh (OMM)** | 3.7V / 2.22Wh (Typ 452438) mit PCM & JST-ACH | EEMB / Web | 2 pcs | Internal battery for OMM UCS modules (12-14 h standalone helmet runtime) |
 | **5V DC Miniature Solenoid** | Ø 6.5 x 12 mm, Hub 1.5-2.0 mm, mit TPU-Dämpfungsspitze | Solenoid / Web | 8 pcs | Mechatronic pushers actuating Sena & Cardo buttons (4x per smart slot) |
 | **Helmet Speakers & ECM Mic Kit** | 40 mm 32 Ohm Hi-Fi Stereo-Lautsprecher + ECM Schwanenhalsmikrofon | COTS Audio / Web | 1 Set | Plug-and-play audio peripherals for OMM UCS headset inside helmet |
+| **Mill-Max Heavy-Duty Spring Contact (Pogo-Pin)** | Mill-Max 0906-Serie / Keystone 8680 (Ø 3.2 mm, 1.5 N, 4A, vergoldet) | Mill-Max / Mouser / Keystone | 4 pcs | Heavy-duty gold-plated spring contact pin in pod bulkhead for cartridge pad power feed |
 | **Polycarbonate Radome Window** | Laserzuschnitt Polycarbonat 1.6 mm (RF-transparent) | COTS / Plexiglas | 1 pcs | Microwave & optical window for MR20 radar & 24-LED Halo |
 | **Buffer Battery (LiPo UPS 2,200 mAh)** | 1S 3.7V 2.200 mAh Flat-Pack (Typ 504068) Molex Micro-Fit | EEMB / Enerpower | 1 pcs | Seamless UPS reserve in Central Box during engine cranking & ignition off |
 | **Qi Inductive Receiver Coil Ø 24 mm** | Ø 24 x 0.3 mm Flachspule mit Ferritfolie (0.3 mm) & JST-ACH 2-Pin | Sunlord / Web | 1 pcs | Ultra-thin Qi receiver coil for Smart Keyfob (100% solderless plug connection) |
@@ -418,7 +419,7 @@ For standalone helmet operation of both intercom modules (**PCBA 09: OMM 2.4 GHz
 | **OMM 2.4 GHz Stubby Antenna** | 2.4 GHz Rubber-Duck (38 mm, SMA-Male, +2.5 dBi omni) | COTS Standard | 1 pcs | Compact helmet stubby antenna for PCBA 09 (zero buffeting or wind noise) |
 | **Taoglas FXP524 V2X Flex Antenna** | 5.9 GHz Flex-Patch (+3.5 dBi) mit U.FL Buchse (50 mm) | Taoglas / Mouser | 1 pcs | Car-to-X / ITS-G5 RF uplink for ESP32-C5 sub-MCU on PCBA 08 |
 | **Taoglas FXP895 LoRa Flex Antenna** | 868 MHz Flex-Dipol (+2.0 dBi) U.FL (100 mm) | Taoglas / Mouser | 1 pcs | Long-range convoy mesh for SX1262 LoRa in Central Box lid cavity |
-| **Taoglas FXUWB10 UWB Flex Antenna** | 6.5 GHz Ch. 5 Flex-Patch mit 20 mm U.FL Koaxialkabel | Taoglas / Mouser | 3 pcs | Wireless UWB 6.5 GHz backbone (Central Box, Front Node, Radar) |
+| **Taoglas FXUWB10 UWB Flex Antenna** | 6.5 GHz Ch. 5 Flex-Patch mit 20 mm U.FL Koaxialkabel | Taoglas / Mouser | 5 pcs | Wireless UWB 6.5 GHz backbone (Central Box, Front Node, Cartridges, Radar) |
 | **Deutsch DTM-12 Main Harness** | IP68/IP69K Deutsch DTM-12 COTS Fertigkabelbaum mit Raychem DR-25 | COTS / Deutsch | 1 pcs | Central main harness for bike power, CAN bus & DC leads to pods |
 | **Front Node 12V Power Cable** | 2-Pin JST-PH Litzenkabel mit Posi-Tap Abzweigverbindern | COTS Standard | 1 pcs | Local 12V cockpit tap (parking light / GPS auxiliary plug) |
 | **JST-PH Pigtail Assortment Set** | 2-Pin, 3-Pin, 4-Pin JST-PH mit vormontierten Litzen | Amazon / COTS | 1 Set | CAN bus, handlebar buttons, mirror LEDs, Qi charger & action cam |
