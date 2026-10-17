@@ -37,7 +37,7 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 ## 2. Satelliten Pod-Gehäuse (Entfall von PCBA 02)
 > **Architektur-Hinweis (v8.5 / v9.0):**  
 > Die frühere Pod-Bodenplatine `PCBA 02` ist **vollständig und ersatzlos entfallen**.  
-> Das Pod-Gehäuse (`pod_base_housing.stl`) ist ein monolithisches 3D-Druckteil ohne interne Platine. Die 2-adrige Gleichstrompeitsche (+5V und GND) führt von hinten direkt in das Gehäuse und endet an zwei vergoldeten Federkontakten (Keystone / Mill-Max), die formschlüssig auf die Stirnflächen-Pads von `PCBA 03` greifen.
+> Das Pod-Gehäuse (`pod_base_housing.stl`) ist ein monolithisches 3D-Druckteil ohne interne Platine. Die 2-adrige Gleichstrompeitsche (+5V und GND) wird über einen wasserdichten IP67 2-Pin Automotive Blade-Direktstecker (`CON_POD_DC`) von außen durch die Gehäuserückwand eingesteckt und mit einem Edelstahl-U-Clip verriegelt. Die beiden massiven Klingen kontaktieren beim Einschieben direkt die werkseitig auf `PCBA 03` bestückte Dual-Beam Schlitzbuchse `J_DC_IN` (100 % lötfrei, absolut prell- und vibrationsfest).
 
 ---
 
@@ -52,6 +52,7 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 | **Q1 - Q4**| AO3400A | Alpha & Omega | SOT-23 (Top) | C20917 | 4x N-Kanal MOSFETs ($30\,\text{V} / 5{,}7\,\text{A}$) für Mechatronik-Aktuatoren |
 | **D1 - D4**| 1N4148WS | Diodes Inc. | SOD-323 (Top) | C2128 | 4x Freilaufdioden für Miniatur-Hubmagnete |
 | **F1** | MF-MSMF050-2 | Bourns | 1812 SMD | C22668 | PPTC 500mA Schutzsicherung |
+| **J_DC_IN** | 2-Pin Blade Socket | Automotive / COTS | 2-Pin SMD Horizontal (10.0mm Raster) | C2843553 | 2-Pin Dual-Beam Hochstrom-Schlitzbuchse für rüttelfesten DC-Stromeingang (5A) |
 | **J_ACT** | SM08B-SRSS-TB | JST | 8-Pin 1.0mm SMD | C160404 | Mechatronik-Header für 4 Hubmagnete (Top) |
 | **J_AUDIO_PWR**| SM08B-SRSS-TB | JST | 8-Pin 1.0mm SMD | C160404 | Audio- & Power-Header (Top, getrennte PGND / AGND Sternmassen) |
 | **ANT1** | U.FL-R-SMT-1 | Hirose | SMD Micro-Coax | C14894 | UWB-Antennenport (Taoglas FXUWB10 oder SMD-Patch) |
@@ -490,7 +491,7 @@ Für den Standalone-Einsatz der beiden Intercom-Module (**PCBA 09: OMM 2.4 GHz H
 | **1S LiPo Pouch-Akku 600 mAh (OMM)** | 3.7V / 2.22Wh (Typ 452438) mit PCM & JST-ACH | EEMB / Web | 2 Stk. | Integrierter Akku für OMM UCS Module (12-14 h Standalone-Betrieb am Helm) |
 | **5V DC Miniatur-Hubmagnet** | Ø 6.5 x 12 mm, Hub 1.5-2.0 mm, mit TPU-Dämpfungsspitze | Solenoid / Web | 8 Stk. | Mechatronische Tastenbetätigung für Sena & Cardo Tasten (4x pro Smart Slot) |
 | **Helmlautsprecher & ECM-Mikrofon Kit** | 40 mm 32 Ohm Hi-Fi Stereo-Lautsprecher + ECM Schwanenhalsmikrofon | COTS Audio / Web | 1 Set | Plug-and-Play Audio-Peripherie für OMM UCS Headset am Helm |
-| **Mill-Max Hochstrom-Federkontakt (Pogo-Pin)** | Mill-Max 0906-Serie / Keystone 8680 (Ø 3.2 mm, 1.5 N, 4A, vergoldet) | Mill-Max / Mouser / Keystone | 4 Stk. | Massiver vergoldeter Federkontakt in Pod-Schottwand zur Speisung der Kassetten-Pads |
+| **IP67 DC-Direktstecker (CON_POD_DC)** | 2-Pin Automotive Blade mit axialem NBR70 O-Ring & Edelstahl-U-Clip | COTS Automotive / Web | 2 Stk. | Werkzeuglos verriegelnder IP67-Direktstecker für Pod 1 & 2 Stromzuführung (100 % lötfrei) |
 | **Polycarbonat Radom-Sichtfenster** | Laserzuschnitt Polycarbonat 1.6 mm (RF-transparent) | COTS / Plexiglas | 1 Stk. | Mikrowellen- & optisches Fenster für MR20 Radar & 24-LED Halo |
 | **Pufferakku (LiPo USV 2.200 mAh)** | 1S 3.7V 2.200 mAh Flat-Pack (Typ 504068) Molex Micro-Fit | EEMB / Enerpower | 1 Stk. | Notstrom-Pufferung in der Zentralbox bei Zündungsaus & Motorstart |
 | **Qi Induktions-Empfängerspule Ø 24 mm** | Ø 24 x 0.3 mm Flachspule mit Ferritfolie (0.3 mm) & JST-ACH 2-Pin | Sunlord / Web | 1 Stk. | Ultra-flache Qi-Empfängerspule für Smart-Keyfob (100 % lötfrei angesteckt) |
@@ -615,7 +616,7 @@ Um eine 100%ige Langzeitausfallsicherheit nach Automotive-Standard zu gewährlei
 Folgende Bereiche dürfen **unter keinen Umständen** mit Schutzlack benetzt werden:
 1. **Steckverbinder & Kontaktbuchsen:**
    * USB-C Buchsen (`J7` Front-Node, Service-Ports)
-   * Automotive-Steckverbinder & Kontakte (`PAD1`/`PAD2` Kassetten-Pads, JST-JWPF 2-Pin Radar `J1`, Deutsch DTM-12 Zentralbox `J1`)
+   * Automotive-Steckverbinder & Kontakte (`J_DC_IN` Kassetten-Schlitzbuchse, JST-JWPF 2-Pin Radar `J1`, Deutsch DTM-12 Zentralbox `J1`)
    * JST-SH / JST-PH / Qwiic Buchsenleisten (`J1..J12` Front-Node, `J_ACT`/`J2` Kassetten, `J2` Radar-Sensor)
    * MicroSD Kartenleser-Slot (`J2` Zentralbox auf B.Cu)
 2. **Akustische Sensoren & Ventile:**

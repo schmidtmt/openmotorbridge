@@ -584,9 +584,18 @@ def main():
     print("=" * 80)
     sys.stdout.flush()
     
-    clean_old_stls()
-    compile_stls()
-    render_images()
+    do_stls = True
+    do_renders = True
+    if "--renders-only" in sys.argv:
+        do_stls = False
+    elif "--stls-only" in sys.argv:
+        do_renders = False
+        
+    if do_stls:
+        clean_old_stls()
+        compile_stls()
+    if do_renders:
+        render_images()
     fix_permissions_and_attributes()
     
     print("\n" + "=" * 80)

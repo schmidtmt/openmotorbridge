@@ -245,10 +245,10 @@ module cartridge_base_sled(
         translate([12.5 - 6.0, y_pcb_c - 3.0 - 1.0, wall - 0.8])
             cube([12.0, 2.0, 0.9], center=false);
 
-        // 16. Rear DC Contact Access Window for Pod Base Mill-Max Spring Pins
-        // Gives unobstructed physical contact to PAD1 (+12V/5V) and PAD2 (GND) on B.Cu of PCBA 03
-        translate([-0.5, y_pcb_c - 7.5, -0.1])
-            cube([4.0, 15.0, wall + 3.5], center=false);
+        // 16. Rear DC Contact Access Window for Pod Base Direct Blade Plug (CON_POD_DC)
+        // Gives unobstructed physical entry for blade contacts into J_DC_IN dual-beam slot socket on PCBA 03
+        translate([-0.5, y_pcb_c - 9.0, -0.1])
+            cube([5.0, 18.0, wall + 4.0], center=false);
 
         // 17. 2x Auto-Eject Spring Retention Counter-Bores (Ø 5.2 mm x 2.5 mm deep)
         // Sits at Y = 10.0 mm and Y = 48.0 mm (matching guide posts in pod bulkhead)

@@ -25,11 +25,12 @@
 			(property "Footprint" "MountingHole:MountingHole_2.2mm_M2_Pad" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
 			(pin passive line (at -5.08 0 0) (length 2.54) (name "1" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
 		)
-		(symbol "Connector:Conn_01x01"
-			(property "Reference" "PAD" (at 0 2.54 0) (effects (font (size 1.27 1.27))))
-			(property "Value" "Conn_01x01" (at 0 -2.54 0) (effects (font (size 1.27 1.27))))
-			(property "Footprint" "TestPoint:TestPoint_Pad_D3.0mm_OD3.5mm" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
-			(pin passive line (at -5.08 0 0) (length 2.54) (name "1" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
+		(symbol "Connector:Blade_Slot_Socket_1x02"
+			(property "Reference" "J" (at 0 5.08 0) (effects (font (size 1.27 1.27))))
+			(property "Value" "Blade_Slot_Socket_1x02" (at 0 -5.08 0) (effects (font (size 1.27 1.27))))
+			(property "Footprint" "Connector:Blade_Slot_Socket_1x02_P10.0mm_Horizontal_SMD" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+			(pin passive line (at -5.08 2.54 0) (length 2.54) (name "1" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
+			(pin passive line (at -5.08 -2.54 0) (length 2.54) (name "2" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
 		)
 		(symbol "Connector_Coaxial:U.FL"
 			(property "Reference" "ANT" (at 0 2.54 0) (effects (font (size 1.27 1.27))))
@@ -313,6 +314,7 @@
 		(property "Reference" "F1" (at 65.00 34.00 0) (effects (font (size 1.27 1.27))))
 		(property "Value" "MF-MSMF050-2" (at 65.00 36.50 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "Fuse:Fuse_1812_4532Metric" (at 65.00 40.00 0) (effects (font (size 1.27 1.27)) hide))
+		(property "Spec" "IT 1.0 A" (at 65.00 42.00 0) (effects (font (size 1.27 1.27)) hide))
 		(pin "1" (uuid "e35e593c-183b-4b81-8415-cb6e8412d203"))
 		(pin "2" (uuid "90634b93-fabc-4803-87a9-3991aa05d623"))
 	)
@@ -391,21 +393,16 @@
 		(pin "3" (uuid "569ddf0f-8202-4925-81b8-0dc8529ed283"))
 		(pin "4" (uuid "dda866c6-4693-4388-9d2d-483af9f6d877"))
 	)
-	(symbol (lib_id "Connector:Conn_01x01") (at 40.00 40.00 0) (unit 1)
+	(symbol (lib_id "Connector:Blade_Slot_Socket_1x02") (at 40.00 45.00 0) (unit 1)
 		(in_bom yes) (on_board yes) (dnp no)
 		(uuid "dc9510b7-ce28-4b39-b870-115679b4bbff")
-		(property "Reference" "PAD1" (at 40.00 34.00 0) (effects (font (size 1.27 1.27))))
-		(property "Value" "+5V_IN" (at 40.00 36.50 0) (effects (font (size 1.27 1.27))))
-		(property "Footprint" "TestPoint:TestPoint_Pad_D3.0mm_OD3.5mm" (at 40.00 40.00 0) (effects (font (size 1.27 1.27)) hide))
+		(property "Reference" "J_DC_IN" (at 40.00 37.00 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "CON_POD_DC_IN" (at 40.00 39.50 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "Connector:Blade_Slot_Socket_1x02_P10.0mm_Horizontal_SMD" (at 40.00 45.00 0) (effects (font (size 1.27 1.27)) hide))
+		(property "Datasheet" "https://openmotorbridge.org/hw/cots_pod_dc_blade_plug" (at 40.00 45.00 0) (effects (font (size 1.27 1.27)) hide))
+		(property "Description" "2-Pin Automotive Dual-Beam Blade Slot Socket (10.0mm Pitch, 5A, Mates with CON_POD_DC)" (at 40.00 45.00 0) (effects (font (size 1.27 1.27)) hide))
 		(pin "1" (uuid "1842e948-4a3b-406e-b3a5-cf3873654a8e"))
-	)
-	(symbol (lib_id "Connector:Conn_01x01") (at 40.00 55.00 0) (unit 1)
-		(in_bom yes) (on_board yes) (dnp no)
-		(uuid "13511a06-c2f9-4d16-b67d-44c014566aaa")
-		(property "Reference" "PAD2" (at 40.00 49.00 0) (effects (font (size 1.27 1.27))))
-		(property "Value" "GND" (at 40.00 51.50 0) (effects (font (size 1.27 1.27))))
-		(property "Footprint" "TestPoint:TestPoint_Pad_D3.0mm_OD3.5mm" (at 40.00 55.00 0) (effects (font (size 1.27 1.27)) hide))
-		(pin "1" (uuid "a06795bf-9c29-4a38-858d-3577078cf39a"))
+		(pin "2" (uuid "a06795bf-9c29-4a38-858d-3577078cf39a"))
 	)
 	(symbol (lib_id "Transistor_FET:AO3400A") (at 40.00 160.00 0) (unit 1)
 		(in_bom yes) (on_board yes) (dnp no)
@@ -770,7 +767,7 @@
 
 	(global_label "VCC_5V_PROT" (shape passive) (at 104.92 93.65 180) (effects (font (size 1.27 1.27)) (justify right)))
 
-	(global_label "AGND_AUDIO_IN" (shape passive) (at 104.92 96.19 180) (effects (font (size 1.27 1.27)) (justify right)))
+	(global_label "GND" (shape passive) (at 104.92 96.19 180) (effects (font (size 1.27 1.27)) (justify right)))
 
 	(global_label "AUDIO_IN_L" (shape passive) (at 104.92 98.73 180) (effects (font (size 1.27 1.27)) (justify right)))
 
@@ -792,9 +789,9 @@
 
 	(global_label "PTT_USB_N" (shape passive) (at 34.92 103.81 180) (effects (font (size 1.27 1.27)) (justify right)))
 
-	(global_label "+5V_IN" (shape passive) (at 34.92 40.00 180) (effects (font (size 1.27 1.27)) (justify right)))
+	(global_label "+5V_IN" (shape passive) (at 34.92 42.46 180) (effects (font (size 1.27 1.27)) (justify right)))
 
-	(global_label "GND" (shape passive) (at 34.92 55.00 180) (effects (font (size 1.27 1.27)) (justify right)))
+	(global_label "GND" (shape passive) (at 34.92 47.54 180) (effects (font (size 1.27 1.27)) (justify right)))
 
 	(global_label "Q1_GATE" (shape passive) (at 34.92 160.00 180) (effects (font (size 1.27 1.27)) (justify right)))
 

@@ -6,7 +6,7 @@
 //              matching hardware/kicad_pod_cartridge/openmotorbridge_pod_cartridge.kicad_pcb.
 //              Dimensions: 35.0 x 25.0 x 1.6 mm with 2.0 mm chamfered corners.
 //              Features:
-//              - Bottom (B.Cu): PAD1 & PAD2 gold contact pads for Mill-Max spring pins,
+//              - Bottom (B.Cu): J_DC_IN 2-Pin SMT horizontal dual-beam slot socket for CON_POD_DC blade plug,
 //                U.FL coaxial socket ANT_UWB, DW3110 UWB Transceiver (QFN-16),
 //                ES8388 Audio Codec (QFN-28), 4x MOSFETs (SOT-23), Fuse 1812.
 //              - Top (F.Cu): ESP32-S2-MINI-1U MCU Module (with RF shield),
@@ -105,14 +105,29 @@ module dummy_adapter_pcb() {
     // 3. BOTTOM LAYER (B.Cu) - Contact Pads, Codec, UWB, Fuse & MOSFETs
     // =========================================================================
 
-    // PAD1 & PAD2: Mill-Max DC Spring Contact Pads (Gold ENIG, Ø 3.0 mm)
+    // J_DC_IN: 2-Pin Automotive Horizontal Dual-Beam Blade Slot Socket (10.0 mm pitch)
+    // SMT mounted on B.Cu, mates with CON_POD_DC blades projecting from pod bulkhead
+    // Pin 1 (+5V/12V Power In) at Y = 7.50, Pin 2 (GND Return) at Y = 17.50
+    // Ultra-Low-Profile Design: Height = 2.1 mm (Clearance to 2.5 mm sled standoffs = 0.4 mm)
+    color([0.15, 0.15, 0.15]) {
+        // Socket Low-Profile Body (3.6 x 13.6 x 2.1 mm)
+        translate([0.5, 12.5 - 6.8, -2.1])
+            difference() {
+                cube([3.6, 13.6, 2.1], center=false);
+                // Slot 1 (for Pin 1 Blade: 2.8 x 0.8 mm at Y = 7.50)
+                translate([-0.1, 7.50 - (12.5 - 6.8) - 1.6, 1.05 - 0.5])
+                    cube([4.0, 3.2, 1.0], center=false);
+                // Slot 2 (for Pin 2 Blade: 2.8 x 0.8 mm at Y = 17.50)
+                translate([-0.1, 17.50 - (12.5 - 6.8) - 1.6, 1.05 - 0.5])
+                    cube([4.0, 3.2, 1.0], center=false);
+            }
+    }
+    // Gold Dual-Beam Spring Contacts inside the slots
     color("gold") {
-        // PAD1: +5V / +12V Power In at (1.50, 7.50)
-        translate([1.50, 7.50, -0.02])
-            cylinder(r=1.5, h=0.04, center=true, $fn=24);
-        // PAD2: GND Return at (1.50, 17.50)
-        translate([1.50, 17.50, -0.02])
-            cylinder(r=1.5, h=0.04, center=true, $fn=24);
+        translate([2.0, 7.50, -1.05])
+            cube([1.8, 2.8, 0.5], center=true);
+        translate([2.0, 17.50, -1.05])
+            cube([1.8, 2.8, 0.5], center=true);
     }
 
     // ANT_UWB: Hirose U.FL SMT Socket (Silver / Gold center, facing -Z at 22.50, 2.20)

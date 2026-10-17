@@ -569,12 +569,12 @@ def update_pcba03(apply=False):
     # 1. Replace J1 (POD_BASE_DOCKING_SOCKET_6P) with PAD1 and PAD2
     m = re.search(r'\(footprint \"[^\"]*PinSocket_1x06[^\"]*\".*?\(property \"Reference\" \"J1\".*?\n\t\)', content, re.DOTALL)
     if m:
-        print("[PCBA 03] Found legacy 6-pin docking socket J1 -> Target: PAD1 (+5V) and PAD2 (GND) spring contact pads")
+        print("[PCBA 03] Found legacy 6-pin docking socket J1 -> Target: J_DC_IN (PAD1 +5V and PAD2 GND blade socket contacts)")
         spring_pads = f"""	(footprint "TestPoint:TestPoint_Pad_D3.0mm_OD3.5mm"
 		(layer "B.Cu")
 		(uuid "{generate_uuid()}")
 		(at 101.5 75.0 0)
-		(descr "Mill-Max DC Spring Contact Pad 1 (+5V Power In)")
+		(descr "Automotive Blade Slot Socket J_DC_IN Pin 1 (+5V Power In)")
 		(property "Reference" "PAD1"
 			(at 0 -2.5 0)
 			(layer "B.SilkS")
@@ -605,7 +605,7 @@ def update_pcba03(apply=False):
 		(layer "B.Cu")
 		(uuid "{generate_uuid()}")
 		(at 101.5 85.0 0)
-		(descr "Mill-Max DC Spring Contact Pad 2 (GND Return)")
+		(descr "Automotive Blade Slot Socket J_DC_IN Pin 2 (GND Return)")
 		(property "Reference" "PAD2"
 			(at 0 -2.5 0)
 			(layer "B.SilkS")

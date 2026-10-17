@@ -62,14 +62,14 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 
 * [ ] **3D-Druckteile (MJF PA12 schwarz oder FDM ASA/PET-CF):**
   * 1x Main Box (Unterwanne mit UWB-Bodentasche $11 \times 11 \times 0{,}6\,\text{mm}$, Zwischenboden mit LiPo-Wanne, Deckel mit LoRa FXP895 Tasche $110 \times 20 \times 0{,}8\,\text{mm}$)
-  * 2x Pod-Basisgehäuse (nahtlose 1-Teil-Monocoques mit integrierter monolithischer Schottwand, Mill-Max Federaufnahmen & Federdomen; 0 Schrauben, 0 lose Teile)
+  * 2x Pod-Basisgehäuse (nahtlose 1-Teil-Monocoques mit integrierter monolithischer Schottwand, Schachtaufnahme für IP67-Direktstecker & Federdomen; 0 Schrauben, 0 lose Teile)
   * 2x Kassetten-Basisschlitten (mit UWB-Antennentasche & M2 Mutterntaschen), Inlays (Sena SPIDER X Slim, Cardo Packtalk Edge, Swap OMM oder Blindkassette) & 2x Rastwippen
   * 1x Front-Knoten (Unterwanne mit UWB-Bodentasche und AMPS-Nut-Pockets, Deckel, TPU-Dichtkämme & USB-C Kappe)
   * 1x Fahrzeugspezifisches Montage-Kit (BMW GS Klemmen & `adventure_rack_radar_mount.stl` / Harley Kofferdeckel-Docks & Kennzeichen-Radarhalter / Support-Car `car_sun_visor_pod_clip.stl`)
   * *(Optional für Helmeinsatz / OMM):* 1-2x OMM UCS Gehäuse-Oberschalen ([`omm_ucs_top_shell.stl`](../../hardware/cad/stl/03_pod_cartridges/omm_ucs_top_shell.stl)), Unterschalen ([`omm_ucs_bottom_shell.stl`](../../hardware/cad/stl/03_pod_cartridges/omm_ucs_bottom_shell.stl)) & Silikon-Tastmatten ([`omm_ucs_silicone_keypad.stl`](../../hardware/cad/stl/03_pod_cartridges/omm_ucs_silicone_keypad.stl))
 * [ ] **Vollautomatisch bestückte Platinen (von JLCPCB / Eurocircuits - das 7-PCBA Lineup):**
   * 1x PCBA 01 (Zentralbox mit LoRa SX1262, DW3110 UWB, SW1 Taster und DTM-12 Header)
-  * 2x PCBA 03 (Universal Smart Cartridge Rev 3.0 All-UWB mit DW3110 UWB, MCU und 4x AO3400A MOSFETs, 2-seitig SMT)
+  * 2x PCBA 03 (Universal Smart Cartridge Rev 3.0 All-UWB mit DW3110 UWB, MCU, 4x AO3400A MOSFETs und SMT-Schlitzbuchse `J_DC_IN`, 2-seitig SMT)
   * 1x PCBA 05 (Front-Knoten mit DW3110 UWB)
   * *(Optional: 1x PCBA 08 Radar 2.0 Sub-MCU mit DW3110 UWB, 1x PCBA 07 Smart-Keyfob)*
   * *(Optional für Helm / OpenMotorMesh):* 1x **PCBA 09 (OMM 2.4 GHz HD-Mesh)** und/oder 1x **PCBA 10 (OMM 446 PMR/DMR Funk)**
@@ -82,12 +82,13 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
   * 4-8x DIN 934 M2 Muttern & 4-8x DIN 912 M2 x 8 mm Schrauben (für OMM UCS Modul-Verschraubung)
   * 2x DIN 7 M2 x 8 mm Zylinderstifte (Wippenachsen), 2x DIN 6325 Ø 6 x 8 mm gehärtete Stahlanker
   * 2x Wippen-Rückstellfedern, 4x Auto-Eject Druckfedern, 1x N52 Neodym-Entriegelungsschlüssel
-  * 4x Vergoldete Mill-Max Hochstrom-Federkontakt-Hülsen für Pod 1 & 2 Stromzuführung
+  * 2x Vorkonfektionierte IP67 Gleichstrom-Direktstecker (2-Pin Automotive Blade mit axialem O-Ring und U-Sicherungsclip) für Pod 1 & 2 Stromzuführung
 * [ ] **Dichtungen, Pufferakku & Antennen:**
   * Silikon-Rundschnur Ø 1,5 mm Shore 40A ($40\,\text{cm}$ Main Box, $30\,\text{cm}$ Front-Knoten)
   * Silikon-Rundschnur Ø 0,8 mm Shore 40A ($25\,\text{cm}$ pro OMM UCS Modul)
   * 2x Silikon-Flanschdichtungen für Pod 1 & 2 Mundlöcher, Gore ePTFE Membranpads
   * **1x 1S LiPo Flat-Pack 2.200 mAh** ($68 \times 39 \times 5{,}0\,\text{mm}$) mit Molex Micro-Fit 3.0 Stecker (Zentralbox USV)
+  * 2x O-Ringe NBR70 ($\varnothing 12 \times 1{,}5\,\text{mm}$) für die IP67-Direktstecker an Pod 1 & 2
   * **1-2x 1S LiPo Pouch-Akkus 600 mAh** ($38 \times 24 \times 4{,}5\,\text{mm}$) mit JST 2-Pin Stecker (OMM UCS Module)
   * **Taoglas FXUWB10 UWB Flex-Antennen** mit 20 mm U.FL Kabel (Zentralbox, Front-Node, Kassetten)
   * **1x Taoglas FXP895 LoRa 868 MHz Flex-Antenne** mit 50 $\Omega$ U.FL Kabel
@@ -126,42 +127,42 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 ---
 
 ### Schritt 2: Satelliten-Pods 1 & 2 montieren (2x identisch, 100 % schraubenloses Monocoque)
-1. **2-Draht-DC-Zuleitung vom Zentralbaum einführen:**
+1. **2-Draht-DC-Zuleitung vom Zentralbaum bereitstellen:**
    * Die Stromversorgung der Pods stammt direkt aus der Zentralbox (`PCBA 01`). Vom Deutsch DTM-12 Zentralstecker führen zwei vorkonfektionierte 2-Draht-Gleichstrompeitschen (Peitsche 1 für Pod 1 links, Peitsche 2 für Pod 2 rechts) entlang des Rahmens.
    * Adernbelegung:
      * **Ader 1 (Rot):** Geschaltete Speisung $+5\,\text{V}$ (bzw. VCC, auf `PCBA 01` abgesichert über PolySwitch PPTC 500mA), Querschnitt $0{,}34\,\text{mm}^2$ (AWG22 Silikon).
      * **Ader 2 (Schwarz):** Gemeinsame System-Masse `GND`, Querschnitt $0{,}34\,\text{mm}^2$ (AWG22 Silikon).
-   * Die Leitung durch die rückseitige M8-Kabeldurchführung / Verschraubung (Port A) des monolithischen Pod-Basisgehäuses ([`pod_base_housing.stl`](../../hardware/cad/stl/02_pod_base/pod_base_housing.stl)) in die hintere Kammer hinter der integrierten Quer-Schottwand ($X = 18{,}0\,\text{mm}$) einführen.
-2. **Mill-Max Hochstrom-Federkontakte einsetzen & verlöten:**
-   * 2x vergoldete Mill-Max Hochstrom-Federkontakt-Hülsen (Pogo-Pins, z. B. Mill-Max Serie 0906 / Keystone 8680, $\varnothing 3{,}2\,\text{mm}$ Schaft, $1{,}5\,\text{N}$ Kontaktkraft, bis 4 A Dauerstrom) von hinten in die beiden Führungsbohrungen der integrierten Schottwand einpressen ($Y = 30{,}0\,\text{mm}$ für $+5\,\text{V}$ und $Y = 40{,}0\,\text{mm}$ für `GND`, $10{,}0\,\text{mm}$ Stiftraster, Kontakthöhe $Z = 8{,}5\,\text{mm}$).
-   * Die abisolierten Enden der Zuleitungsadern direkt in die rückseitigen Löttaschen der beiden Mill-Max Hülsen einlöten (Rot an Pin 1 bei $Y=30{,}0$, Schwarz an Pin 2 bei $Y=40{,}0$) und mit Schrumpfschlauch isolieren.
-   * Die federnden Goldkontaktstifte ragen nun exakt $3{,}0\,\text{mm}$ weit in horizontaler $+X$-Richtung aus den Schutzhülsen der Schottwand in den Kassetten-Aufnahmeschacht hinein.
+2. **IP67 Gleichstrom-Direktstecker werkzeug- & lötfrei montieren (IKEA-Prinzip):**
+   * Die beiden Adern enden am vorkonfektionierten, wasserdichten **2-Pin Automotive Blade-Direktstecker (`CON_POD_DC`)**.
+   * Den axialen NBR70 O-Ring ($\varnothing 12 \times 1{,}5\,\text{mm}$) auf den Steckerbund aufziehen.
+   * Den Stecker von außen durch die formschlüssige Aufnahme der Gehäuserückwand einschieben. Die beiden massiven, vergoldeten Kontaktklingen ($2{,}8 \times 0{,}8\,\text{mm}$, $10{,}0\,\text{mm}$ Raster) ragen nun $6{,}0\,\text{mm}$ weit in horizontaler $+X$-Richtung durch die Schottwand in den Kassetten-Aufnahmeschacht.
+   * Den Edelstahl-U-Sicherungsclip seitlich in die Verriegelungsnut des Gehäuses einschieben, bis er mit einem satten Klick einrastet. Der Stecker ist damit **100 % formschlüssig verriegelt, vibrationsfest gesichert und dichtet die Gehäuserückwand hermetisch nach IP67 ab** – komplett ohne Lötkolben und ohne Werkzeug!
 3. **Auto-Eject Schnappfedern aufstecken:**
    * Von vorne in den Kassetten-Schacht die beiden V4A-Edelstahl-Druckfedern ($\varnothing 4{,}5 \times 15\,\text{mm}$, Federrate $1{,}2\,\text{N/mm}$) direkt auf die beiden monolithischen Führungsdome der Schottwand (bei $Y = 16{,}0\,\text{mm}$ und $Y = 54{,}0\,\text{mm}$) aufschieben.
 4. **Schraubenlose Fertigstellung des Pods:**
-   * Da das Pod-Gehäuse ein nahtloses 1-Teil-Monocoque ist (`PCBA 02` ist ersatzlos entfallen), sind im Pod keinerlei Platinen, Schrauben oder interne Steckverbinder erforderlich (0 Schrauben). Die beiden federnden Goldkontakte und die beiden Auswerferfedern warten im Schacht auf das Einschieben der Kassette. Wiederholen für Pod 2.
+   * Da das Pod-Gehäuse ein nahtloses 1-Teil-Monocoque ist (`PCBA 02` ist ersatzlos entfallen), sind im Pod keinerlei interne Platinen, Schrauben oder lose Kabelverbindungen erforderlich (0 Schrauben). Die beiden federnd kontaktierenden Messerklingen und die beiden Auswerferfedern warten im Schacht auf das Einschieben der Kassette. Wiederholen für Pod 2.
+   * *(Hinweis zum Leerbetrieb):* Wird ein Pod temporär ohne Aktiv-Kassette gefahren, schützt die standardmäßige Blindkassette (`03_insert_blindkassette.scad`) oder eine elastische TPU-Gummikappe die Schachtöffnung. Die eFuse auf `PCBA 01` schaltet den Port im Leerbetrieb automatisch zu 100 % stromlos ($0{,}0\,\text{V}$).
 
 ---
 
 ### Schritt 3: Multi-Protokoll Gateway-Kassetten 1 & 2 montieren
 1. **Stromversorgungs- & UWB-Antennen-Konzept verstehen (100 % kabel- und steckerfrei zum Pod):**
-   * **Stromzuführung via Direktkontakt (Kein Kabel zum Gehäuse!):** Die Kassetten benötigen keine lose Kabelpeitsche und keinen Stecker zum Pod-Gehäuse. Die Stromversorgung erfolgt beim Einschieben rein elektromechanisch über zwei vergoldete Kontaktflächen:
-     * Auf der Platinenunterseite (`B.Cu`) von `PCBA 03` sind an der hinteren Kante ($X = 101{,}5\,\text{mm}$ in KiCad bzw. $X = 3{,}0\,\text{mm}$ im Schlitten) zwei massive ENIG-Goldpads integriert:
-       * **`PAD1`** ($2{,}5 \times 3{,}5\,\text{mm}$ SMD-Roundrect, $Y = 75{,}0\,\text{mm}$ in KiCad): $+5\,\text{V}$ Stromeingang
-       * **`PAD2`** ($2{,}5 \times 3{,}5\,\text{mm}$ SMD-Roundrect, $Y = 85{,}0\,\text{mm}$ in KiCad): `GND` Rückleitung
-       * *Rastermaß:* Exakt $10{,}0\,\text{mm}$ Abstand, identisch zum Stiftraster der Mill-Max Federkontakte in der Pod-Schottwand.
-     * Im Boden des Kassetten-Grundschlittens ([`cartridge_base_sled.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl)) ist an der hinteren Stirnseite ein offenes Kontaktfenster ($15{,}0 \times 4{,}0\,\text{mm}$) ausgespart. Durch diesen Durchbruch liegen `PAD1` und `PAD2` auf der Platinenunterseite nach hinten frei zugänglich.
-     * Beim vollständigen Einschieben der Kassette tauchen die beiden gefederten Mill-Max Kontaktstifte der Pod-Schottwand durch das Kontaktfenster und drücken mit $1{,}5\,\text{N}$ Federkraft dauerhaft vibrations- und rüttelsicher auf `PAD1` und `PAD2`.
+   * **Stromzuführung via Dual-Beam Schlitzbuchse (Kein Kabel zum Gehäuse!):** Die Kassetten benötigen keine lose Kabelpeitsche und kein Gehäusekabel. Die Stromversorgung erfolgt beim Einschieben rein elektromechanisch über eine werkseitig auf `PCBA 03` bestückte Hochstrom-Schlitzbuchse:
+     * Am hinteren Platinenrand von `PCBA 03` ist eine liegende, vergoldete **2-Pin Dual-Beam Schlitzbuchse (`J_DC_IN`)** per SMT aufgelötet (Pin 1: $+5\,\text{V}$, Pin 2: `GND`, $10{,}0\,\text{mm}$ Raster, bis 5 A Dauerstrom).
+     * Die gefederten Buchsenkontakte liegen geschützt tief im isolierenden Hochtemperatur-Kunststoffkörper der Buchse. Dadurch ist die mobile Kassette beim Transport in Jackentasche oder Rucksack absolut **berührungssicher (IP2X) und kurzschlussfest gegen Schlüssel oder Münzen**.
+     * Im Boden des Kassetten-Grundschlittens ([`cartridge_base_sled.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl)) ist an der hinteren Stirnseite das offene Kontaktfenster ($15{,}0 \times 6{,}0\,\text{mm}$) ausgespart.
+     * Beim vollständigen Einschieben der Kassette tauchen die beiden massiven Klingen des Pod-Direktsteckers formschlüssig in die Schlitzbuchse `J_DC_IN` ein. Die gegenüberliegenden Federarme spannen die Klingen mit hoher Normalkraft beidseitig ein (**selbstreinigender Wischkontakt**). 
+     * **Absolut rüttelfest:** Im Gegensatz zu stirnseitigen Pogo-Pins gleitet die Zunge bei Fahrbahnstößen und axialen Vibrationen prellfrei im Schlitz. **Zero Kontaktprellen (Micro-Bouncing), keine Reibkorrosion.**
    * **UWB-Antennenanbindung (Hirose U.FL-Buchse & Taoglas FXUWB10 Flexantenne):**
      * Auf `PCBA 03` arbeitet **keine** Keramik-Chipantenne, sondern eine **Hirose U.FL-Koaxialbuchse** (`ANT_UWB`, Hirose U.FL-R-SMT-1) auf der Platinenunterseite (`B.Cu`) unmittelbar am Qorvo DW3110 Transceiver.
      * Als dedizierte UWB-Antenne kommt die flexible Breitband-Flachantenne **Taoglas FXUWB10** ($12{,}0 \times 12{,}0 \times 0{,}8\,\text{mm}$, 6.5 GHz Channel 5) zum Einsatz.
      * Die Antenne wird passgenau in die vertiefte Tasche ($12{,}0 \times 12{,}0 \times 0{,}9\,\text{mm}$) im Boden des Kassetten-Schlittens eingelegt und mit dem rückseitigen 3M-Klebepad fixiert.
      * Das ultrakurze $20\dots 30\,\text{mm}$ U.FL-Mikrokoaxialkabel wird im integrierten Führungskanal des Schlittenbodens verlegt und senkrecht auf die U.FL-Buchse `ANT_UWB` auf der Unterseite der `PCBA 03` aufgeklickt.
 2. **Platinenmontage PCBA 03 im Schlitten:**
-   * Kassettenplatine `PCBA 03 Rev 3.0` mit der Oberseite (`F.Cu`: ESP32-C6, MOSFETs, Header `J_ACT`, `J_AUDIO_PWR`) nach oben auf die vier M2-Schraubdome im hinteren Bereich des Schlittens setzen.
+   * Kassettenplatine `PCBA 03 Rev 3.0` mit der Oberseite (`F.Cu`: ESP32-C6, MOSFETs, Header `J_ACT`, `J_AUDIO_PWR`, Buchse `J_DC_IN`) nach oben auf die vier M2-Schraubdome im hinteren Bereich des Schlittens setzen.
    * Zuvor das U.FL-Kabel der UWB-Bodenantenne auf `ANT_UWB` aufklicken.
    * Platine mit 4x M2 $\times 6\,\text{mm}$ Schrauben handfest fixieren.
-   * *Sichtprüfung:* Von der Rückseite des Schlittens durch das $15 \times 4\,\text{mm}$ Kontaktfenster blicken. Die beiden Goldpads `PAD1` (+5V) und `PAD2` (GND) müssen plan und mittig im Freistellungsbereich sichtbar sein.
+   * *Sichtprüfung:* Von der Rückseite des Schlittens durch das Kontaktfenster blicken. Die beiden Trichtereinführungen der Schlitzbuchse `J_DC_IN` müssen frei und zentriert zugänglich sein.
 3. **Mechatronik-Aktuatoren & Niederhalteplatte montieren:**
    * 4x Miniatur-Hubmagnete ($\varnothing 6{,}5 \times 12\,\text{mm}$) mit dämpfenden TPU-Tastspitzen (`actuator_silicone_tip.stl`) in die vier Passbohrungen der Führungsbrücke des Inlays ([`cartridge_insert_sena.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_sena.stl) bzw. [`cartridge_insert_cardo.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_cardo.stl)) einstecken.
    * **Aktuator-Verkabelung an `J_ACT` (8-Pin JST-SH 1.0 mm):**

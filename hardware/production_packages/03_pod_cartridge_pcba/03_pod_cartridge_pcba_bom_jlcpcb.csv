@@ -7,8 +7,7 @@ F1,MF-MSMF050-2,Fuse:Fuse_1812_4532Metric,,1
 J_ACT,ACTUATORS_8P,Connector_JST:JST_SH_SM08B-SRSS-TB_1x08-1MP_P1.00mm_Horizontal,,1
 J_AUDIO_PWR,AUDIO_PWR_8P,JST_SH_SM08B-SRSS-TB_1x08-1MP_P1.00mm_Horizontal,C160404,1
 J_PROG,SWD_PROG_4P,PinHeader_1x04_P1.27mm_Vertical_SMD_Pin1Left,,1
-PAD1,+5V_IN,TestPoint:TestPoint_Pad_D3.0mm_OD3.5mm,,1
-PAD2,GND,TestPoint:TestPoint_Pad_D3.0mm_OD3.5mm,,1
+J_DC_IN,Blade_Slot_Socket_2P,Connector:Blade_Slot_Socket_1x02_P10.0mm_Horizontal_SMD,C2934176,1
 "Q1, Q2, Q3, Q4",AO3400A,Package_TO_SOT_SMD:SOT-23,,4
 "R1, R2, R3, R4",100R,Resistor_SMD:R_0603_1608Metric,,4
 "R5, R6, R7, R8",100k,Resistor_SMD:R_0603_1608Metric,,4

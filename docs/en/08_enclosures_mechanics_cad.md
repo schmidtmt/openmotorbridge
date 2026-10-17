@@ -2,7 +2,7 @@
 
 This document specifies the mechanical engineering, thermal dissipation, IP67/IP69K sealing concepts, kinematics of the quick-change auto-eject system, and all CAD and STL assets of OpenMotorBridge v8.0:
 1. **Central Control Box (Type A):** 3-piece sandwich enclosure with intermediate tray, battery cradle, front interface panel (Deutsch DTM-12 flange, SW1 button, USB-C, RGB-LED), integrated lid pocket ($85.0 \times 18.0 \times 1.2\,\text{mm}$) for Taoglas FXP895 LoRa 868 MHz flex antenna, bottom tub pocket ($12.0 \times 12.0 \times 0.8\,\text{mm}$) for Taoglas FXUWB10 UWB flex antenna, optional rear SMA bulkhead port, and planar 4-layer copper heat spreader.
-2. **Modular Satellite Pod & Cartridge System (Type B):** Mechanically identical 5-sided monocoque enclosure for both satellite pods (Pods 1 & 2 Audio/Intercom, 2x symmetric) with modular swap cartridges (Sena SPIDER X Slim, Cardo Packtalk Edge, OMM 2.4 GHz Swap Cartridge, Midland, Dry Box), smooth closed IP67 outer shell (zero antenna radome penetrations), $120^\circ$ V-groove pipe saddle, waterproof 2-wire DC cable gland / internal Mill-Max spring contacts, Poka-Yoke tongue-and-groove guidance, spring-loaded auto-eject, and invisible neodymium magnetic anti-theft locking.
+2. **Modular Satellite Pod & Cartridge System (Type B):** Mechanically identical 5-sided monocoque enclosure for both satellite pods (Pods 1 & 2 Audio/Intercom, 2x symmetric) with modular swap cartridges (Sena SPIDER X Slim, Cardo Packtalk Edge, OMM 2.4 GHz Swap Cartridge, Midland, Dry Box), smooth closed IP67 outer shell (zero antenna radome penetrations), $120^\circ$ V-groove pipe saddle, waterproof 2-wire DC connection via tool-free locking IP67 blade plug (`CON_POD_DC`), vibration-proof SMT dual-beam slot socket mating (`J_DC_IN`), Poka-Yoke tongue-and-groove guidance, spring-loaded auto-eject, and invisible neodymium magnetic anti-theft locking.
 3. **Universal Front Node (Type C):** Ultra-compact Cockpit & Sensor Hub ($98.0 \times 68.0 \times 25.0\,\text{mm}$) tailored for the enlarged $82 \times 50\,\text{mm}$ 4-layer PCBA 05, featuring a **4-in-1 universal mounting system** (AMPS, pipe saddle, silentblocks, 3M Dual-Lock), integrated bottom tub pocket for UWB backbone (FXUWB10), J12 Qwiic Sensor Hub (u-blox SAM-M10Q GNSS patch, TI TMP117 precision thermometer, TI OPT3001 light sensor) in laminar airflow scoop, dedicated EPDM cable combs for USB (South) and vehicle wiring (North), Dual SW3526 20W USB-PD, and Knowles MEMS acoustic channel.
 4. **2-in-1 LoRa Smart-Keyfob & Pager (Type D):** Ultra-compact pocket companion ($58.0 \times 34.0 \times 13.0\,\text{mm}$) molded in PA12-MJF with perimeter TPU shock bumper, integrated N52 neodymium ejection key, $0.5\,\text{mm}$ Mu-metal magnetic flux shield, MagSafe/Qi inductive charging receiver, LRA haptic motor, and wireless SX1262 LoRa/BLE alert pager.
 5. **Vehicle-Specific Reference Mounting Kits (Zero-Drill):** Fully engineered, non-destructive bolt-on mounting kits for CVO Road Glide ST (Kit 1), Road King Special (Kit 2), Classic Bagger & Cruiser (Kit 3), and Adventure & Touring Enduros (BMW GS, KTM Adventure, Africa Twin - Kit 4 with minimal under-rack radar bracket).
@@ -149,7 +149,7 @@ OpenMotorBridge divides the mechanical enclosure of the satellites into two harm
 
 ![OpenMotorBridge Satellite Pod & Cartridge 3D Cutaway CAD](../images/cad/pod_cartridge_cutaway_3d.png)
 
-*Figure 8.6: Photorealistic 3D CAD diagonal cutaway render of the Satellite Pod with docked Cartridge. Clearly visible: 120° V-groove pipe saddle with EPDM O-rings around frame tube, M8 connector, internal monolithic bulkhead with dual compressed V4A springs, asymmetrical Poka-Yoke rails with 8mm height offset, 2-pin Mill-Max gold contact mating, and front bezel gasket.*
+*Figure 8.6: Photorealistic 3D CAD diagonal cutaway render of the Satellite Pod with docked Cartridge. Clearly visible: 120° V-groove pipe saddle with EPDM O-rings around frame tube, M8 connector, internal monolithic bulkhead with dual compressed V4A springs, asymmetrical Poka-Yoke rails with 8mm height offset, 2-pin direct blade-to-slot socket contact mating (`CON_POD_DC` / `J_DC_IN`), and front bezel gasket.*
 
 ---
 
@@ -226,7 +226,7 @@ To effectively protect swap cartridges across all motorcycle types (from freely 
 #### 4.1.3 The 4 Kinematic Phases of Cartridge Insertion
 1. **Phase 1 - Pre-Centering ($x = 0\dots 80\,\text{mm}$):** Asymmetrical Poka-Yoke guide ribs engage housing channels. Lateral play is restricted to $\pm 0.2\,\text{mm}$.
 2. **Phase 2 - Spring Compression ($x = 80\dots 90\,\text{mm}$):** Sled face contacts the two stainless steel ejection springs in the bulkhead, building the $7.2\,\text{N}$ preload.
-3. **Phase 3 - Contact Mating & Snap Latch ($x = 90\dots 95\,\text{mm}$):** The dual Mill-Max heavy-duty spring contacts in the monolithic bulkhead mate positively with gold-plated pads `PAD1` (+12V/5V) and `PAD2` (GND) on `B.Cu` of `PCBA 03`. The $30^\circ$ lead-in ramp deflects the rocker inward until it snaps into the notch at $X = 95\,\text{mm}$.
+3. **Phase 3 - Contact Mating & Snap Latch ($x = 90\dots 95\,\text{mm}$):** The two gold-plated blade contacts ($2.8 \times 0.8\,\text{mm}$, $10.0\,\text{mm}$ pitch) of the rear IP67 direct plug (`CON_POD_DC`) penetrate $6.0\,\text{mm}$ through the bulkhead aperture into the SMT dual-beam slot socket `J_DC_IN` on `PCBA 03`. Self-cleaning wiping contact action removes surface oxidation with zero micro-bouncing under $20\text{g}$ shock. Simultaneously, the $30^\circ$ lead-in ramp deflects the rocker inward until it snaps positively into the locking notch at $X = 95\,\text{mm}$.
 4. **Phase 4 - Flush Locking ($x = 95\dots 98\,\text{mm}$):** The $90^\circ$ locking flank dead-locks positively. The perimeter silicone gasket compresses by $30\,\%$ (IP67 weather seal).
 
 ---
@@ -245,11 +245,13 @@ In the v9.6 Clean Architecture, the former pod base PCB (`PCBA 02`) has been **c
 * **Elimination of the Screwed Bulkhead:**
   * Because no circuit board resides inside the pod housing, the separate screw-in bulkhead partition with its 4x M2 corner screw bosses and 2x M2 PCB mounting bosses is eliminated without replacement.
   * The entire enclosure (`pod_base_housing.scad`) is printed as a **seamless, 100% monolithic 1-piece monocoque**.
-  * The transverse bulkhead wall at $X = 18.0\,\text{mm}$, featuring the two guide sleeves for Mill-Max DC spring contacts ($10.0\,\text{mm}$ pitch) and the two integrated stainless steel ejection spring guide posts, is fused directly with the tunnel wall.
-  * **0 assembly screws, 0 loose parts, zero warpage, and maximum ingress protection.**
-* **Heavy-Duty Mill-Max Spring Contacts:**
-  * The 2-wire DC harness (+12V switched and GND) runs from the rear M8 connector (or cable gland) directly to the rear of the two contact sleeves in the integrated bulkhead.
-  * When sliding the cartridge in, the spring-loaded gold pins press against `PAD1` and `PAD2` on `B.Cu` of `PCBA 03` with $1.5\,\text{N}$ force.
+  * The transverse bulkhead wall at $X = 18.0\,\text{mm}$, featuring the form-fitting aperture for the IP67 direct blade plug (`CON_POD_DC`, $10.0\,\text{mm}$ blade pitch) and the two integrated stainless steel ejection spring guide posts, is fused directly with the tunnel wall.
+  * **0 assembly screws, 0 loose parts, 100% warp-free, and maximum ingress protection.**
+* **Vibration-Proof IP67 Direct Plug & Dual-Beam Wiping Contacts:**
+  * The 2-wire DC harness (+12V/5V switched and GND) terminates on the pre-assembled 2-pin automotive blade direct plug (`CON_POD_DC`).
+  * The plug inserts from the exterior with an axial NBR70 O-ring into the housing rear wall and locks positively without tools via a stainless steel U-retaining clip (100% solder-free, IP67).
+  * When sliding the cartridge in, the two gold-plated $2.8 \times 0.8\,\text{mm}$ blades slide into the factory SMT-assembled dual-beam slot socket `J_DC_IN` on `PCBA 03`.
+  * Opposing spring contact beams clamp the blades from both sides: completely immune to axial motorcycle vibrations and road shock (zero bouncing, zero fretting corrosion).
 * **Integrated UWB Antenna Pocket in Cartridge Sled:**
   * A contoured pocket ($12.0 \times 12.0 \times 0.8\,\text{mm}$) with coaxial cable routing is recessed into the floor of the cartridge base sled (`00_base_sled.scad`), positioned directly below the U.FL port on `PCBA 03` for the **Taoglas FXUWB10 UWB 6.5 GHz flex antenna**.
   * The antenna radiates loss-free through the sled floor and dielectric PA12 pod enclosure into free space.
@@ -430,7 +432,7 @@ Fully integrated 500 mW PMR446 analog RF module ($38 \times 20\,\text{mm}$) seat
 For classic or bulky handheld two-way radios (e.g. full-size Midland G7/G9 Pro, Kenwood TH-D series, Motorola or Baofeng radios) that cannot physically fit into the compact internal volume of the standard cartridge due to their enclosure dimensions, high-capacity battery packs, or fixed antennas, the system provides a highly modular **Tethered Breakout Option**:
 
 * **Hermetic Front Cable Gland:** The standard cartridges for Sena, Cardo, OMM, and the blank dry box remain 100% solid and IP67-sealed on their front face. For the tethered variant, the front $\varnothing 6.5\,\text{mm}$ bulkhead bore of the base sled (`has_sma_port = true`) is utilized with an off-the-shelf M8 or PG7 cable gland or an EPDM strain-relief grommet.
-* **Intelligent Cartridge Electronics ([PCBA 03](07_pcba_hardware_pinouts.md#5-pcba-03-universal-smart-cartridge-openmotorbridge_universal_cartridge)):** Inside the sled, [PCBA 03](07_pcba_hardware_pinouts.md#5-pcba-03-universal-smart-cartridge-openmotorbridge_universal_cartridge) operates as usual, powered via the pod's Mill-Max heavy-duty spring contacts and communicating with the bike and helmet mesh via the synchronous 6.5 GHz UWB backbone using its bottom Taoglas FXUWB10 patch antenna.
+* **Intelligent Cartridge Electronics ([PCBA 03](07_pcba_hardware_pinouts.md#5-pcba-03-universal-smart-cartridge-openmotorbridge_universal_cartridge)):** Inside the sled, [PCBA 03](07_pcba_hardware_pinouts.md#5-pcba-03-universal-smart-cartridge-openmotorbridge_universal_cartridge) operates as usual, powered via the pod's IP67 blade direct plug (`CON_POD_DC`) into `J_DC_IN` and communicating with the bike and helmet mesh via the synchronous 6.5 GHz UWB backbone using its bottom Taoglas FXUWB10 patch antenna.
 * **Complete Signal & PTT Interfacing (`J_AUDIO_PWR`):** A multi-conductor shielded coiled umbilical cable routes from `J_AUDIO_PWR` (8-pin JST-SH) through the sealed front gland to the external radio:
   - **Microphone & Speaker:** Bidirectional 24-bit / 48 kHz audio through the ES8388 DSP codec with an isolated signal ground (`AGND_AUDIO_IN`) ensuring 100% hum- and ground-loop-free operation.
   - **Hardware PTT:** Radio keying controlled via the open-drain MOSFET `Q4` (`PTT_IO` Pin 8), triggered instantly by the wireless OMB handlebar switches or helmet hotkeys.
@@ -449,7 +451,7 @@ For classic or bulky handheld two-way radios (e.g. full-size Midland G7/G9 Pro, 
 
 The IP67 Blank Cartridge (`cartridge_blindkassette.scad`) reliably protects the pod slot whenever no intercom is docked:
 * **Identical Latching & Ejection Kinematics:** The blank cartridge integrates the exact same standardized 2-arm magnetic latch (`parts/05_magnetic_lock_latch.scad`), Poka-Yoke guide rails, and spring pockets for the V4A ejection springs. It engages with the same positive click and ejects contactlessly upon approaching the N52 magnetic key.
-* **Hermetic Contact Protection (EPDM Dummy Seal):** On the rear face, an integrated molded EPDM sealing block seals the two gold contact pins inside the housing against water, road salt, and dirt intrusion.
+* **Hermetic Contact Protection (EPDM Dummy Seal):** On the rear face, an integrated molded EPDM sealing block seals the two blade contacts inside the housing against water, road salt, and dirt intrusion (in unpopulated bays without a cartridge, power is additionally de-energized to 0.0V by `PCBA 01`'s eFuse).
 * **Emergency Dry Compartment:** The internal $80 \times 46 \times 16\,\text{mm}$ cavity functions as a sealed dry box for vehicle registration papers, cash, spare keys, or emergency O-rings.
 
 ---
@@ -463,8 +465,8 @@ With the transition to the **All-UWB data backbone (Qorvo DW3110)** and Bluetoot
 | **Conductor 1** | **Red (RD)** | $0.34\,\text{mm}^2$ (AWG22) | **`VCC_5V`** (+5V switched power) | Protected via 500mA PPTC on Central Box |
 | **Conductor 2** | **Black (BK)** | $0.34\,\text{mm}^2$ (AWG22) | **`GND`** (Common power ground) | Direct return path to Central Box |
 
-* **Connector:** Compact, vibration-proof 2-pin automotive plug (JST-JWPF or AMP Superseal 1.5 2-Pin, IP67).
-* **Housing Mating:** The leads terminate directly on two heavy-duty gold-plated spring pins (Mill-Max pogo pins) in the integral transverse bulkhead ($X = 18.0\,\text{mm}$), compressing positively onto the ENIG gold pads `PAD1` (+5V) and `PAD2` (GND) on the bottom (`B.Cu`) of `PCBA 03`.
+* **Connector:** Pre-assembled IP67 2-pin automotive blade direct plug (`CON_POD_DC`) with axial NBR70 O-ring and stainless steel U-clip.
+* **Housing Mating:** The conductors terminate directly on the two solid gold-plated blade contacts of the plug in the integral transverse bulkhead ($X = 18.0\,\text{mm}$), which slide smoothly into the factory SMT-assembled dual-beam slot socket `J_DC_IN` on the cartridge board (`PCBA 03`) during insertion (100% solder-free, completely immune to vibration and micro-bouncing).
 * **Data & Audio:** 100% wireless via UWB (DW3110 / 6.489 GHz Ch. 5) and Bluetooth. Heavy M8 and USB-C bulkhead sockets on the pod are eliminated.
 
 ---

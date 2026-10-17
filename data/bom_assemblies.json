@@ -81,7 +81,7 @@
       },
       "parts": [
         { "part_id": "part3d_pod_base_housing", "qty": 1 },
-        { "part_id": "cots_pogo_pin_millmax", "qty": 2 },
+        { "part_id": "cots_pod_dc_blade_plug", "qty": 1 },
         { "part_id": "fastener_spring_ejector_bulkhead", "qty": 2 },
         { "part_id": "seal_mouth_gasket_cartridge", "qty": 1 },
         { "part_id": "cable_pure_dc_jwpf", "qty": 1 }

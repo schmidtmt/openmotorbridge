@@ -56,14 +56,14 @@ All discrete components, PCB ordering files, and COTS sourcing lists are documen
 
 * [ ] **3D Printed Parts (MJF PA12 Black or FDM ASA/PET-CF):**
   * 1x Main Box (lower tub with UWB bottom pocket $11 \times 11 \times 0.6\,\text{mm}$, mid tray with LiPo cradle, lid with LoRa FXP895 pocket $110 \times 20 \times 0.8\,\text{mm}$)
-  * 2x Pod base enclosures (seamless 1-piece monocoques with integral monolithic bulkhead, Mill-Max contact sleeves & spring guide posts; 0 assembly screws, 0 loose parts)
+  * 2x Pod base enclosures (seamless 1-piece monocoques with integral monolithic bulkhead, mounting pocket for IP67 direct blade plug & spring guide posts; 0 assembly screws, 0 loose parts)
   * 2x Cartridge base sleds (with UWB antenna floor pocket & DIN 934 M2 captive nut standoffs), inlays (Sena SPIDER X Slim, Cardo Packtalk Edge, Swap OMM, or blank cartridge) & 2x magnetic latches
   * 1x Front Node (lower tub with UWB bottom pocket and AMPS nut pockets, upper lid, TPU cable glands & USB-C cap)
   * 1x Vehicle-specific mounting kit (BMW GS clamps & `adventure_rack_radar_mount.stl` / Harley saddlebag docks & license plate bracket / Support-Car `car_sun_visor_pod_clip.stl`)
   * *(Optional for helmet operation / OMM):* 1-2x OMM UCS upper shells ([`omm_ucs_top_shell.stl`](../../hardware/cad/stl/03_pod_cartridges/omm_ucs_top_shell.stl)), lower shells ([`omm_ucs_bottom_shell.stl`](../../hardware/cad/stl/03_pod_cartridges/omm_ucs_bottom_shell.stl)) & silicone keypads ([`omm_ucs_silicone_keypad.stl`](../../hardware/cad/stl/03_pod_cartridges/omm_ucs_silicone_keypad.stl))
 * [ ] **Fully Populated PCBAs (from JLCPCB / Eurocircuits - the 7-PCBA lineup):**
   * 1x PCBA 01 (Central Box with onboard LoRa SX1262 and DW3110 UWB)
-  * 2x PCBA 03 (Universal Smart Cartridge Rev 3.0 All-UWB with DW3110 UWB, ES8388 / MCU and 4x AO3400 N-MOSFETs, 2-sided SMT)
+  * 2x PCBA 03 (Universal Smart Cartridge Rev 3.0 All-UWB with DW3110 UWB, ES8388 / MCU, 4x AO3400 N-MOSFETs and SMT dual-beam slot socket `J_DC_IN`, 2-sided SMT)
   * 1x PCBA 05 (Front Node with DW3110 UWB)
   * *(Optional: 1x PCBA 08 Radar 2.0 Sub-MCU, 1x PCBA 07 Smart-Keyfob)*
   * *(Optional for Helmet / OpenMotorMesh):* 1x **PCBA 09 (OMM 2.4 GHz HD-Mesh)** and/or 1x **PCBA 10 (OMM 446 PMR/DMR Radio)**
@@ -76,12 +76,13 @@ All discrete components, PCB ordering files, and COTS sourcing lists are documen
   * 4-8x DIN 934 M2 nuts & 4-8x DIN 912 M2 x 8 mm socket head screws (for OMM UCS enclosure fastening)
   * 2x DIN 7 M2 x 8 mm dowel pins (latch pivots), 2x DIN 6325 Ø 6 x 8 mm hardened steel keeper pins
   * 2x Latch return springs, 4x auto-eject compression springs, 1x N52 neodymium release key
-  * 4x Gold-plated Mill-Max heavy-duty spring contact sleeves for Pod 1 & 2 power feed
+  * 2x Pre-assembled IP67 DC direct blade plugs (2-pin automotive blade with axial O-ring & U-clip) for Pod 1 & 2 power feed
 * [ ] **Gaskets, Battery & Antennas:**
   * Silicone O-ring cord Ø 1.5 mm Shore 40A ($40\,\text{cm}$ Main Box, $30\,\text{cm}$ Front Node)
   * Silicone O-ring cord Ø 0.8 mm Shore 40A ($25\,\text{cm}$ per OMM UCS module)
   * 2x Molded silicone face gaskets for Pod 1 & 2 mouths, Gore ePTFE vent stickers
-  * **1x 1S LiPo Flat Pack 2,200 mAh** ($68 \times 39 \times 5.0\,\text{mm}$) with Molex Micro-Fit 3.0 connector (Central Box UPS)
+  * 2x NBR70 O-rings ($\varnothing 12 \times 1.5\,\text{mm}$) for Pod 1 & 2 IP67 direct blade plugs
+  * **1x 1S LiPo Flat Pack 2,200 mAh** ($68 \times 39 \times 5.0\,\text{mm}$) with Molex Micro-Fit 3.0 connector (Central Box UPS)PS)
   * **1-2x 1S LiPo Pouch Battery 600 mAh** ($38 \times 24 \times 4.5\,\text{mm}$) with JST 2-Pin connector (OMM UCS modules)
   * **Taoglas FXUWB10 UWB Flex Antennas** with 20 mm U.FL leads (Central Box, Front Node, Cartridges)
   * **1x Taoglas FXP895 LoRa 868 MHz Flex Antenna** with 50 $\Omega$ U.FL lead
@@ -120,41 +121,41 @@ All discrete components, PCB ordering files, and COTS sourcing lists are documen
 ---
 
 ### Step 2: Assemble Satellite Pods 1 & 2 (2x Identical 1-Piece Screwless Monocoques)
-1. **Route 2-Wire DC Feed from Main Harness:**
+1. **Provide 2-Wire DC Feed from Main Harness:**
    * Power originates directly from the central box (`PCBA 01`). Two pre-crimped 2-wire DC whips (Whip 1 for left Pod 1, Whip 2 for right Pod 2) branch off the main Deutsch DTM-12 connector:
      * **Wire 1 (Red):** Switched $+5\,\text{V}$ (or VCC, protected via 500mA PPTC on `PCBA 01`), AWG22 ($0.34\,\text{mm}^2$) silicone.
      * **Wire 2 (Black):** Common system ground `GND`, AWG22 ($0.34\,\text{mm}^2$) silicone.
-   * Feed the 2-wire lead through the rear M8 cable gland/port (Port A) of the monolithic pod base housing ([`pod_base_housing.stl`](../../hardware/cad/stl/02_pod_base/pod_base_housing.stl)) into the rear chamber behind the transverse monolithic bulkhead partition ($X = 18.0\,\text{mm}$).
-2. **Install Mill-Max Heavy-Duty Spring Contacts:**
-   * Press two gold-plated Mill-Max heavy-duty spring contact sleeves (pogo-pins, e.g. Mill-Max 0906-series / Keystone 8680, $\varnothing 3.2\,\text{mm}$ barrel, $1.5\,\text{N}$ preload, 4 A continuous) from behind into the two guide bores of the integral bulkhead wall ($Y = 30.0\,\text{mm}$ for $+5\,\text{V}$ and $Y = 40.0\,\text{mm}$ for `GND`, $10.0\,\text{mm}$ pin pitch, contact elevation $Z = 8.5\,\text{mm}$).
-   * Solder the stripped lead wires directly into the rear solder cups of the two Mill-Max sleeves (Red to Pin 1 at $Y=30.0$, Black to Pin 2 at $Y=40.0$) and insulate with heat-shrink.
-   * The compliant gold contact tips now project horizontally in the $+X$ direction $3.0\,\text{mm}$ out of the protective bulkhead boss sleeves into the cartridge slide chamber.
+2. **Mount IP67 Direct DC Blade Plug Tool- & Solder-Free (IKEA Principle):**
+   * The 2-wire leads terminate at the pre-assembled, waterproof **2-Pin Automotive Blade Direct Plug (`CON_POD_DC`)**.
+   * Slide the axial NBR70 O-ring ($\varnothing 12 \times 1.5\,\text{mm}$) onto the plug shoulder collar.
+   * Push the plug from the exterior into the form-fitting aperture in the enclosure rear bulkhead wall. The two heavy-duty gold-plated contact blades ($2.8 \times 0.8\,\text{mm}$, $10.0\,\text{mm}$ pitch) project $6.0\,\text{mm}$ in horizontal $+X$ direction into the cartridge docking chamber.
+   * Slide the stainless steel U-retaining clip sideways into the locking groove until it clicks into position. The plug is **100% positively retained, vibration-proof, and seals the rear wall hermetically to IP67** — completely solder-free and tool-free!
 3. **Mount Auto-Eject Springs:**
    * From the front opening, slide the two stainless compression springs ($\varnothing 4.5 \times 15\,\text{mm}$, $1.2\,\text{N/mm}$ spring rate) directly onto the two integrated guide posts of the monolithic bulkhead partition (at $Y = 16.0\,\text{mm}$ and $Y = 54.0\,\text{mm}$).
 4. **Screwless Completion:**
-   * Because the transverse bulkhead is 100% integrally molded into the 1-piece monocoque (`PCBA 02` is completely retired), all assembly and countersunk screws are eliminated (0 screws). The two gold-plated spring pins extend with spring compliance into the cartridge bay. Repeat for Pod 2.
+   * Because the transverse bulkhead is 100% integrally molded into the 1-piece monocoque (`PCBA 02` is completely retired), no internal PCBs, screws, or loose wire harnesses are required inside the pod (0 screws). The two blade contacts and dual ejection springs await cartridge docking. Repeat for Pod 2.
+   * *(Note on Unpopulated Bays):* When riding without an active cartridge, the pod bay is sealed by the standard blank storage cartridge (`03_insert_blindkassette.scad`) or an elastic TPU dust cap. The electronic eFuse on `PCBA 01` keeps unpopulated ports 100% unpowered ($0.0\,\text{V}$).
 
 ---
 
 ### Step 3: Multi-Protocol Gateway Cartridges 1 & 2 Assembly
 1. **Power Delivery & UWB Antenna Concept (100% Cable- & Plug-Free to Pod):**
-   * **Cable-Free Direct Mating:** The cartridges require no loose wire whip and no external plug to the pod enclosure. Power is transferred purely electromechanically via two dedicated gold contact pads:
-     * On the bottom copper face (`B.Cu`) of `PCBA 03`, two heavy-duty ENIG gold pads are located at the rear edge ($X = 101.5\,\text{mm}$ in KiCad, matching $X = 3.0\,\text{mm}$ in the sled):
-       * **`PAD1`** ($2.5 \times 3.5\,\text{mm}$ SMD roundrect, $Y = 75.0\,\text{mm}$ in KiCad): $+5\,\text{V}$ power input
-       * **`PAD2`** ($2.5 \times 3.5\,\text{mm}$ SMD roundrect, $Y = 85.0\,\text{mm}$ in KiCad): `GND` return
-       * *Pitch:* Exactly $10.0\,\text{mm}$ spacing, precisely matching the Mill-Max pin spacing in the pod bulkhead.
-     * In the floor of the cartridge base sled ([`cartridge_base_sled.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl)), an open rectangular contact window ($15.0 \times 4.0\,\text{mm}$) is molded into the rear face. This aperture leaves `PAD1` and `PAD2` unobstructed toward the rear.
-     * When the cartridge is fully inserted, the two Mill-Max spring pins in the pod bulkhead pass through this window and compress firmly against `PAD1` and `PAD2` with $1.5\,\text{N}$ spring preload.
+   * **Power Delivery via SMT Dual-Beam Slot Socket (Zero Cables to Housing!):** The cartridges require no loose wire whip and no external plug to the pod enclosure. Power is transferred purely electromechanically via a factory-assembled high-current dual-beam blade slot socket:
+     * Mounted horizontally at the rear edge of `PCBA 03` is a factory SMT-assembled **2-Pin Dual-Beam Slot Socket (`J_DC_IN`)** (Pin 1: $+5\,\text{V}$, Pin 2: `GND`, $10.0\,\text{mm}$ pitch, rated for 5 A continuous).
+     * The internal spring contact beams are deeply recessed within the high-temperature insulating polymer body. This makes the portable cartridge completely **finger-safe (IP2X) and immune to short circuits against keys or coins** when carried in jacket pockets or luggage.
+     * In the floor of the cartridge base sled ([`cartridge_base_sled.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_base_sled.stl)), an open rectangular contact window ($15.0 \times 6.0\,\text{mm}$) is molded into the rear face.
+     * When sliding the cartridge fully into the pod, the two solid blade contacts of the pod direct plug mate positively into slot socket `J_DC_IN`. Opposing spring beams clamp the blades firmly from both sides (**self-cleaning wiping contact**).
+     * **100% Vibration-Proof:** Unlike blunt butt-contact pogo pins, axial vehicle shocks and engine vibrations merely slide the blade deeper or shallower inside the slot without breaking electrical continuity. **Zero contact bounce (micro-bouncing), zero fretting corrosion.**
    * **UWB Antenna Interface (Hirose U.FL Receptacle & Taoglas FXUWB10 Flex Antenna):**
      * `PCBA 03` does **not** use a ceramic chip antenna. Instead, a **Hirose U.FL coaxial receptacle** (`ANT_UWB`, U.FL-R-SMT-1) is mounted on the bottom copper face (`B.Cu`) directly beside the Qorvo DW3110 transceiver IC.
      * The dedicated antenna is a flexible wideband flat antenna: **Taoglas FXUWB10** ($12.0 \times 12.0 \times 0.8\,\text{mm}$, 6.5 GHz Channel 5).
      * Place the antenna into the form-fitting recess pocket ($12.0 \times 12.0 \times 0.9\,\text{mm}$) in the floor of the cartridge base sled and secure with its 3M adhesive backing.
      * Route the short $20\dots 30\,\text{mm}$ U.FL micro-coax cable in the sled floor routing channel and snap vertically onto receptacle `ANT_UWB` on `B.Cu` of `PCBA 03`.
 2. **Mount PCBA 03 in Sled:**
-   * Place `PCBA 03 Rev 3.0` onto the four M2 standoffs in the rear section of the sled with top side facing up (`F.Cu`: ESP32-C6, MOSFETs, `J_ACT`, `J_AUDIO_PWR`).
+   * Place `PCBA 03 Rev 3.0` onto the four M2 standoffs in the rear section of the sled with top side facing up (`F.Cu`: ESP32-C6, MOSFETs, `J_ACT`, `J_AUDIO_PWR`, socket `J_DC_IN`).
    * Snap U.FL antenna lead onto `ANT_UWB` before fastening the board.
    * Fasten board finger-tight with 4x M2 $\times 6\,\text{mm}$ screws.
-   * *Visual Inspection:* Verify through the rear $15 \times 4\,\text{mm}$ window that `PAD1` (+5V) and `PAD2` (GND) are cleanly aligned and exposed.
+   * *Visual Inspection:* Verify through the rear contact window that the lead-in funnels of socket `J_DC_IN` are cleanly centered and unobstructed.
 2. **Install Gateway Inlay & Solenoids:**
    * **Slot 1 (Sena SPIDER X Slim Inlay):**
      * Insert 4x miniature solenoids ($\varnothing 6.5 \times 12\,\text{mm}$) with TPU tips into the actuator bridge of [`cartridge_insert_sena.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_sena.stl).

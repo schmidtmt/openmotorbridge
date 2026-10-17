@@ -313,10 +313,10 @@ def render_intercom_cartridges_cross_section(output_png):
     ax1.add_patch(patches.Rectangle((-44.0,  5.5), 6.0, 2.5, facecolor='#cbd5e1', edgecolor='#94a3b8', linewidth=0.8))
     ax1.text(-41.0, 9.0, "AUTO-EJECT FEDERN", color='#94a3b8', fontsize=7, fontweight='bold', ha='center')
 
-    # 2-Pin DC Mill-Max Spring Interface & UWB Wireless Backbone
+    # 2-Pin DC Blade Direct Interface (CON_POD_DC / J_DC_IN) & UWB Wireless Backbone
     ax1.add_patch(patches.Rectangle((-42.0, -1.5), 6.0, 3.0, facecolor='#1e293b', edgecolor='#fbbf24', linewidth=1.0))
     ax1.plot([-46, -36], [0, 0], color='#fbbf24', linewidth=2.0)
-    ax1.text(-36.0, 2.5, "2-PIN DC MILL-MAX (PAD1/2) & UWB 6.5 GHz", color='#fbbf24', fontsize=7.0, fontweight='bold', ha='center')
+    ax1.text(-36.0, 2.5, "2-PIN DC BLADE (CON_POD_DC / J_DC_IN) & UWB 6.5 GHz", color='#fbbf24', fontsize=7.0, fontweight='bold', ha='center')
 
     # Universal Base Sled (X = -40 to +52 mm)
     ax1.add_patch(patches.Rectangle((-40, -11.75), 92, 3.0, facecolor='#1e293b', edgecolor='#64748b', linewidth=1.0))
@@ -399,10 +399,10 @@ def render_intercom_cartridges_cross_section(output_png):
     ax2.add_patch(patches.Rectangle((-44.0, -8.0), 6.0, 2.5, facecolor='#cbd5e1', edgecolor='#94a3b8', linewidth=0.8))
     ax2.add_patch(patches.Rectangle((-44.0,  5.5), 6.0, 2.5, facecolor='#cbd5e1', edgecolor='#94a3b8', linewidth=0.8))
 
-    # 2-Pin DC Mill-Max Spring Interface & UWB Wireless Backbone
+    # 2-Pin DC Blade Direct Interface (CON_POD_DC / J_DC_IN) & UWB Wireless Backbone
     ax2.add_patch(patches.Rectangle((-42.0, -1.5), 6.0, 3.0, facecolor='#1e293b', edgecolor='#fbbf24', linewidth=1.0))
     ax2.plot([-46, -36], [0, 0], color='#fbbf24', linewidth=2.0)
-    ax2.text(-36.0, 2.5, "2-PIN DC MILL-MAX (PAD1/2) & UWB 6.5 GHz", color='#fbbf24', fontsize=7.0, fontweight='bold', ha='center')
+    ax2.text(-36.0, 2.5, "2-PIN DC BLADE (CON_POD_DC / J_DC_IN) & UWB 6.5 GHz", color='#fbbf24', fontsize=7.0, fontweight='bold', ha='center')
 
     # Universal Base Sled (Identical!)
     ax2.add_patch(patches.Rectangle((-40, -11.75), 92, 3.0, facecolor='#1e293b', edgecolor='#64748b', linewidth=1.0))

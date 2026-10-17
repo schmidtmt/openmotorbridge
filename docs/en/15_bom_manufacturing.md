@@ -33,7 +33,7 @@ This document serves as the master reference (Single Source of Truth) for the co
 ## 2. Satellite Pod Enclosure (Elimination of PCBA 02)
 > **Architecture Note (v8.5 / v9.0 Clean Architecture):**  
 > The previous pod base carrier PCB `PCBA 02` has been **completely eliminated without replacement**.  
-> The pod enclosure (`pod_base_housing.stl`) is a seamless, monolithic 1-piece 3D printed monocoque with zero internal active electronics. The 2-wire DC harness (+12V/5V and GND) feeds directly through the rear gland/M8 port and terminates at two gold-plated Mill-Max heavy-duty spring contact sleeves, mating directly with the rear gold pads `PAD1` and `PAD2` on `B.Cu` of `PCBA 03`.
+> The pod enclosure (`pod_base_housing.stl`) is a seamless, monolithic 1-piece 3D printed monocoque with zero internal active electronics. The 2-wire DC harness (+12V/5V and GND) mates via an IP67-rated 2-pin automotive blade direct plug (`CON_POD_DC`) inserted from the exterior through the rear wall and locked with a stainless steel U-clip. The two heavy-duty contact blades mate positively with the factory SMT-assembled dual-beam slot socket `J_DC_IN` on `PCBA 03` (100% solderless, vibration-proof, and bounce-free).
 
 ---
 
@@ -47,10 +47,10 @@ This document serves as the master reference (Single Source of Truth) for the co
 | **Q1 - Q4** | AO3400A | Alpha & Omega | SOT-23 (B.Cu) | C20917 | 4x N-Channel Power MOSFETs ($30\,\text{V} / 5.7\,\text{A}$) for Solenoid Actuators |
 | **D1 - D4** | 1N4148WS | Diodes Inc. | SOD-323 (B.Cu)| C2128 | 4x Flyback Suppression Diodes for Solenoid Coils |
 | **F1** | MF-MSMF050-2 | Bourns | 1812 SMD | C22668 | Resettable PPTC Fuse for 5V Cartridge Rail |
+| **J_DC_IN** | 2-Pin Blade Socket | Automotive / COTS | 2-Pin SMD Horizontal (10.0mm Pitch) | C2843553 | 2-Pin Dual-Beam Blade Slot Socket for Vibration-Proof DC Input (5A) |
 | **J_ACT** | SM08B-SRSS-TB | JST | 8-Pin 1.0mm SMD | C160404 | Mechatronics Header for 4 Miniature Solenoids |
 | **J_AUDIO_PWR**| SM08B-SRSS-TB | JST | 8-Pin 1.0mm SMD | C160404 | Audio & Power Header (Top, Isolated PGND / AGND Kelvin Grounds) |
 | **ANT_UWB** | U.FL-R-SMT-1 | Hirose / Murata | SMD RF (B.Cu) | C2834595 | UWB Antenna Port to Taoglas FXUWB10 in Sled Floor Pocket |
-| **PAD1, PAD2**| Mill-Max Contact Pads | Mill-Max / PCB | Gold Pad (B.Cu)| ENIG Surface | Rear DC Power Contact Pads (+12V/5V and GND) |
 
 ---
 
@@ -410,7 +410,7 @@ For standalone helmet operation of both intercom modules (**PCBA 09: OMM 2.4 GHz
 | **1S LiPo Pouch Battery 600 mAh (OMM)** | 3.7V / 2.22Wh (Typ 452438) mit PCM & JST-ACH | EEMB / Web | 2 pcs | Internal battery for OMM UCS modules (12-14 h standalone helmet runtime) |
 | **5V DC Miniature Solenoid** | Ø 6.5 x 12 mm, Hub 1.5-2.0 mm, mit TPU-Dämpfungsspitze | Solenoid / Web | 8 pcs | Mechatronic pushers actuating Sena & Cardo buttons (4x per smart slot) |
 | **Helmet Speakers & ECM Mic Kit** | 40 mm 32 Ohm Hi-Fi Stereo-Lautsprecher + ECM Schwanenhalsmikrofon | COTS Audio / Web | 1 Set | Plug-and-play audio peripherals for OMM UCS headset inside helmet |
-| **Mill-Max Heavy-Duty Spring Contact (Pogo-Pin)** | Mill-Max 0906-Serie / Keystone 8680 (Ø 3.2 mm, 1.5 N, 4A, vergoldet) | Mill-Max / Mouser / Keystone | 4 pcs | Heavy-duty gold-plated spring contact pin in pod bulkhead for cartridge pad power feed |
+| **IP67 DC Direct Plug (CON_POD_DC)** | 2-Pin Automotive Blade mit axialem NBR70 O-Ring & Edelstahl-U-Clip | COTS Automotive / Web | 2 pcs | Tool-free locking IP67 direct blade plug for Pod 1 & 2 power feed (100% solder-free) |
 | **Polycarbonate Radome Window** | Laserzuschnitt Polycarbonat 1.6 mm (RF-transparent) | COTS / Plexiglas | 1 pcs | Microwave & optical window for MR20 radar & 24-LED Halo |
 | **Buffer Battery (LiPo UPS 2,200 mAh)** | 1S 3.7V 2.200 mAh Flat-Pack (Typ 504068) Molex Micro-Fit | EEMB / Enerpower | 1 pcs | Seamless UPS reserve in Central Box during engine cranking & ignition off |
 | **Qi Inductive Receiver Coil Ø 24 mm** | Ø 24 x 0.3 mm Flachspule mit Ferritfolie (0.3 mm) & JST-ACH 2-Pin | Sunlord / Web | 1 pcs | Ultra-thin Qi receiver coil for Smart Keyfob (100% solderless plug connection) |

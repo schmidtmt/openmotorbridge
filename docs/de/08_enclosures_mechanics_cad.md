@@ -4,7 +4,7 @@
 
 Dieses Dokument spezifiziert die mechanische Konstruktion, das Thermomanagement, das IP67/IP69K-Gehäusedesign, die Kinematik des Auto-Eject-Schnellwechselsystems sowie alle CAD- und STL-Modelle aller Gehäuse-Baugruppen der OpenMotorBridge v9.6:
 1. **Zentrale Steuerbox (Typ A):** 3-teiliges Sandwich-Gehäuse mit Zwischenboden, integrierter Akku-Wanne, stirnseitiger Schnittstellenleiste (Deutsch DTM-12 Flansch, Taster SW1, USB-C, RGB-LED), integrierter Deckeltasche ($85{,}0 \times 18{,}0 \times 1{,}2\,\text{mm}$) für LoRa-868-Flexantenne (Taoglas FXP895), Unterwannen-Bodenkammer ($12{,}0 \times 12{,}0 \times 0{,}8\,\text{mm}$) für UWB-Flexantenne (Taoglas FXUWB10), optionalem rückseitigen SMA-Antennendurchgang und planarem 4-Layer Kupfer-Wärmespreader.
-2. **Modulares Satelliten-Pod- & Wechselsystem (Typ B):** Baugleiches 5-seitiges Monocoque-Schachtgehäuse für beide Satelliten-Pods (Pod 1 & 2 Audio/Intercom, 2x symmetrisch) mit modularen Wechselkassetten (Sena SPIDER X Slim, Cardo Packtalk Edge, OMM 2.4 GHz Swap Cartridge, Midland, Dry Box), glatter geschlossener IP67-Außenhaut (ohne störende Antennen-Radomlöcher), $120^\circ$-V-Nut Rohrbett, wasserdichter 2-Draht DC-Kabeleinführung / internen Mill-Max Federkontakten, Poka-Yoke Nut-und-Feder-Führung, federbelastetem Auto-Eject und unsichtbarem Neodym-Magnet-Diebstahlschutz.
+2. **Modulares Satelliten-Pod- & Wechselsystem (Typ B):** Baugleiches 5-seitiges Monocoque-Schachtgehäuse für beide Satelliten-Pods (Pod 1 & 2 Audio/Intercom, 2x symmetrisch) mit modularen Wechselkassetten (Sena SPIDER X Slim, Cardo Packtalk Edge, OMM 2.4 GHz Swap Cartridge, Midland, Dry Box), glatter geschlossener IP67-Außenhaut (ohne störende Antennen-Radomlöcher), $120^\circ$-V-Nut Rohrbett, wasserdichtem IP67 Gleichstrom-Direktstecker mit vibrationsfester Dual-Beam Schlitzbuchsen-Kontaktierung, Poka-Yoke Nut-und-Feder-Führung, federbelastetem Auto-Eject und unsichtbarem Neodym-Magnet-Diebstahlschutz.
 3. **Universal Front-Knoten (Typ C):** Ultrakompakter Cockpit- & Sensor-Hub ($98{,}0 \times 68{,}0 \times 25{,}0\,\text{mm}$) für die vergrößerte $82 \times 50\,\text{mm}$ 4-Lagen PCBA 05 mit **4-in-1 Universal-Befestigungssystem** (AMPS, Rohrbügel-Prisma, Silentblöcke, 3M Dual-Lock), integrierter Bodenkammer für UWB-Backbone (FXUWB10), J12 Qwiic Sensor-Hub (u-blox SAM-M10Q GNSS-Patch, TI TMP117 Präzisionsthermometer, TI OPT3001 Lichtsensor) im Fahrtwindeinlass, getrennten EPDM-Kabelkämmen für USB (Süd) und Fahrzeugleitungen (Nord), Dual-SW3526 20W USB-PD und Knowles MEMS Akustikkanal.
 4. **2-in-1 LoRa Smart-Keyfob & Pager (Typ D):** Ultrakompakter Taschenbegleiter ($58{,}0 \times 34{,}0 \times 13{,}0\,\text{mm}$) aus PA12-MJF mit umlaufendem TPU-Kantenschutz, integriertem N52-Neodym-Auswerferschlüssel, $0{,}5\,\text{mm}$ Mu-Metall-Flussschirmung, MagSafe/Qi-Induktionsladeaufnahme, LRA-Haptikmotor und drahtlosem SX1262 LoRa/BLE Alarm-Pager.
 5. **Fahrzeugspezifische Referenz-Montagekits (Zero-Drill):** Vollständig konstruierte, zerstörungsfreie Bolt-On Montagekits für CVO Road Glide ST (Kit 1), Road King Special (Kit 2), Classic Bagger & Cruiser (Kit 3) sowie Adventure & Touring Enduros (BMW GS, KTM Adventure, Africa Twin - Kit 4 mit minimalem Unterbrücken-Radarträger).
@@ -175,7 +175,7 @@ OpenMotorBridge trennt das mechanische Gehäuse der Satelliten in zwei untrennba
 
 ![OpenMotorBridge Satelliten-Pod & Kassetten 3D Anschnitt CAD](../images/cad/pod_cartridge_cutaway_3d.png)
 
-*Abbildung 8.6: Photorealistischer 3D-CAD-Schräganschnitt des Satelliten-Pods mit eingeschobener Wechselkassette. Gut zu erkennen sind die 120°-V-Nut mit EPDM-Spannringen um das Motorrad-Rahmenrohr, die monolithisch im 1-Teil-Monocoque integrierte Schottwand mit den beiden V4A-Auswerferfedern, die asymmetrischen Poka-Yoke Gleitschienen mit 8 mm Höhenversatz, die 2 massiven Mill-Max DC-Federkontakte (10 mm Raster) auf die ENIG-Pads von PCBA 03 und die formbündige Dichtung an der Frontblende.*
+*Abbildung 8.6: Photorealistischer 3D-CAD-Schräganschnitt des Satelliten-Pods mit eingeschobener Wechselkassette. Gut zu erkennen sind die 120°-V-Nut mit EPDM-Spannringen um das Motorrad-Rahmenrohr, die monolithisch im 1-Teil-Monocoque integrierte Schottwand mit den beiden V4A-Auswerferfedern, die asymmetrischen Poka-Yoke Gleitschienen mit 8 mm Höhenversatz, die formschlüssige Klingen-Kontaktierung des IP67-Direktsteckers in die Dual-Beam Schlitzbuchse J_DC_IN von PCBA 03 und die formbündige Dichtung an der Frontblende.*
 
 #### Verdeckte Innenverschraubung & Sabotageschutz des Pod-Gehäuses
 Da die frühere äußere M8-Verschraubung durch das All-UWB-Backbone und die direkte 2-Draht DC-Zuleitung entfallen ist, erfolgt die mechanische Befestigung des Pod-Basisschachts am Motorradrahmen, Sturzbügel oder Kofferhalter über **verdeckte M4/M5-Edelstahlschrauben**:
@@ -259,7 +259,7 @@ Um Wechselkassetten auf allen Motorrädern (von frei zugänglichen Reiseenduro-S
 #### 4.1.3 Die 4 kinematischen Bewegungsphasen des Kassetteneinschubs
 1. **Phase 1 - Vorzentrierung ($x = 0\dots 80\,\text{mm}$):** Die asymmetrischen Poka-Yoke Führungsrippen greifen in die Gehäusenuten ein. Das seitliche Spiel wird auf $\pm 0{,}2\,\text{mm}$ begrenzt.
 2. **Phase 2 - Feder-Kompression ($x = 80\dots 90\,\text{mm}$):** Die Stirnseite des Schlittens trifft auf die beiden V4A-Auswerferfedern in der Schottwand und baut die $7{,}2\,\text{N}$ Vorspannkraft auf.
-3. **Phase 3 - Kontakt-Eingriff & Schnapp-Rastung ($x = 90\dots 95\,\text{mm}$):** Die beiden Mill-Max Federkontakte der monolithischen Schottwand kontaktieren formschlüssig die beiden ENIG-Goldpads `PAD1` (+12V/5V) und `PAD2` (GND) auf `B.Cu` von `PCBA 03`. Die $30^\circ$-Einlaufschräge der Sägezahnkralle drückt die Wippe federnd nach innen, bis sie bei $X = 95\,\text{mm}$ in die Gehäusekerbe schnappt.
+3. **Phase 3 - Kontakt-Eingriff & Schnapp-Rastung ($x = 90\dots 95\,\text{mm}$):** Die beiden vergoldeten Messerklingen des IP67-Direktsteckers gleiten formschlüssig in die Dual-Beam Schlitzbuchse `J_DC_IN` auf `PCBA 03` (selbstreinigender Wischkontakt, 0 % Kontaktprellen bei Vibrationen). Die $30^\circ$-Einlaufschräge der Sägezahnkralle drückt die Wippe federnd nach innen, bis sie bei $X = 95\,\text{mm}$ in die Gehäusekerbe schnappt.
 4. **Phase 4 - Formbündige Verriegelung ($x = 95\dots 98\,\text{mm}$):** Die $90^\circ$-Sperrkante verriegelt formschlüssig. Die umlaufende Silikon-Dichtung wird um $30\,\%$ komprimiert (IP67 Dichtsitz).
 
 ---
@@ -277,11 +277,13 @@ In der v9.6 Clean Architecture ist die frühere Pod-Bodenplatine (`PCBA 02`) **v
 * **Entfall der geschraubten Schottwand:**
   * Da keine Platine mehr im Pod-Gehäuse montiert werden muss, entfällt die früher separat einzuschraubende Schottwand samt 4x M2-Eckschraubdomen und 2x M2-Platinenschrauben ersatzlos.
   * Das gesamte Gehäuse (`pod_base_housing.scad`) wird als **nahtloses, 100% monolithisches 1-Teil-Monocoque** gedruckt.
-  * Die Quer-Trennwand bei $X = 18{,}0\,\text{mm}$ mit den beiden Führungsaufnahmen für Mill-Max DC-Federkontakte ($10{,}0\,\text{mm}$ Raster) und den zwei integrierten V4A-Auswerferfeder-Domen ist materialhomogen mit dem Tunnel verschmolzen.
+  * Die Quer-Trennwand bei $X = 18{,}0\,\text{mm}$ mit der formschlüssigen Aufnahme für den IP67-Direktstecker (`CON_POD_DC`, $10{,}0\,\text{mm}$ Klingenraster) und den zwei integrierten V4A-Auswerferfeder-Domen ist materialhomogen mit dem Tunnel verschmolzen.
   * **0 Montageschrauben, 0 lose Teile, 100% Verzugsfreiheit und maximale Dichtigkeit.**
-* **Massive Mill-Max Federkontakte:**
-  * Die 2-adrige DC-Zuleitung (12V geschaltet und GND) führt von der hinteren M8-Buchse (oder Kabelverschraubung) direkt in die Rückseite der beiden Kontakthülsen der integrierten Trennwand.
-  * Beim Einschieben der Kassette drücken die gefederten Goldstifte mit $1{,}5\,\text{N}$ Anpresskraft auf `PAD1` und `PAD2` von `PCBA 03`.
+* **Vibrationsfester IP67-Direktstecker & Dual-Beam Wischkontakte:**
+  * Die 2-adrige DC-Zuleitung (12V/5V geschaltet und GND) endet am vorkonfektionierten 2-Pin Automotive Blade-Direktstecker (`CON_POD_DC`).
+  * Der Stecker wird von außen mit einem axialen NBR70 O-Ring in die Gehäuserückwand gesteckt und mit einem Edelstahl-U-Clip werkzeuglos formschlüssig verriegelt (100 % lötfrei, IP67).
+  * Beim Einschieben der Kassette gleiten die beiden vergoldeten $2{,}8 \times 0{,}8\,\text{mm}$ Klingen in die werkseitig SMT-bestückte Dual-Beam Schlitzbuchse `J_DC_IN` auf `PCBA 03`. 
+  * Gegenüberliegende Federarme klemmen die Klingen beidseitig ein: Absolut immun gegen axiale Motorvibrationen und Fahrbahnstöße (kein Prellen, kein Fretting).
 * **Integrierte UWB-Antennenaufnahme in der Kassette:**
   * Im Boden des Kassetten-Grundschlittens (`00_base_sled.scad`) ist direkt unterhalb des U.FL-Ports von `PCBA 03` eine formschlüssige Tasche ($12{,}0 \times 12{,}0 \times 0{,}8\,\text{mm}$) mit Koaxialkabel-Führung für die **Taoglas FXUWB10 UWB 6.5 GHz Flexantenne** eingelassen.
   * Die Antenne strahlt verlustfrei durch den Schlittenboden und das dielektrisch neutrale PA12-Pod-Gehäuse ins Freie ab.
@@ -479,7 +481,7 @@ Vollständig integriertes 500 mW PMR446-Analogfunkmodul ($38 \times 20\,\text{mm
 Für klassische oder voluminöse Handfunkgeräte (z. B. ausgewachsene Midland G7/G9 Pro, Kenwood TH-D-Serie, Motorola oder Baofeng), die aufgrund ihrer Gehäuseabmessungen, großen Akkupacks oder festen Wendelantennen nicht in den kompakten Innenraum der Standard-Kassette passen, bietet das System eine hochgradig modulare **Tethered Breakout-Option**:
 
 * **Hermetische Front-Kabeldurchführung:** Die Standard-Kassetten für Sena, Cardo, OMM und Blindbox bleiben wie gewohnt stirnseitig zu 100 % geschlossen und IP67-dicht. Für die Tethered-Variante wird die stirnseitige $\varnothing 6{,}5\,\text{mm}$ Durchgangsbohrung des Basisschlittens (`has_sma_port = true`) reaktiviert und mit einer handelsüblichen M8- bzw. PG7-Kabelverschraubung oder einer EPDM-Knickschutztülle abgedichtet.
-* **Intelligente Kassettenelektronik ([PCBA 03](07_pcba_hardware_pinouts.md#5-pcba-03-universal-smart-cartridge-openmotorbridge_universal_cartridge)):** Im Inneren des Schlittens sitzt weiterhin [PCBA 03](07_pcba_hardware_pinouts.md#5-pcba-03-universal-smart-cartridge-openmotorbridge_universal_cartridge), versorgt über die pod-internen Mill-Max Federkontakte und angebunden an das synchrone UWB-Backbone (6.5 GHz) über die interne Taoglas FXUWB10 Bodenantenne.
+* **Intelligente Kassettenelektronik ([PCBA 03](07_pcba_hardware_pinouts.md#5-pcba-03-universal-smart-cartridge-openmotorbridge_universal_cartridge)):** Im Inneren des Schlittens sitzt weiterhin [PCBA 03](07_pcba_hardware_pinouts.md#5-pcba-03-universal-smart-cartridge-openmotorbridge_universal_cartridge), versorgt über den pod-internen IP67-Direktstecker in die Buchse `J_DC_IN` und angebunden an das synchrone UWB-Backbone (6.5 GHz) über die interne Taoglas FXUWB10 Bodenantenne.
 * **Vollständige Signal- & PTT-Adaption (`J_AUDIO_PWR`):** Ein mehradriges, geschirmtes Spiralkabel (Umbilical Cable) führt durch die Dichtverschraubung von `J_AUDIO_PWR` (8-Pin JST-SH) nach außen zur externen Funke:
   - **Mikrofon & Lautsprecher:** Bidirektionales 24-Bit / 48 kHz Audio über den ES8388 DSP-Codec mit galvanisch getrennter Signalmasse (`AGND_AUDIO_IN`) für absolut brummfreien Betrieb.
   - **Hardware-PTT:** Steuerung der Sendetaste über den integrierten Open-Drain MOSFET `Q4` (`PTT_IO` Pin 8) – ausgelöst durch den drahtlosen OMB-Lenkertaster am Kupplungsgriff oder Helm-Hotkeys.
@@ -498,7 +500,7 @@ Für klassische oder voluminöse Handfunkgeräte (z. B. ausgewachsene Midland G7
 
 Die IP67 Blindkassette (`cartridge_blindkassette.scad`) schützt den Pod-Schacht zuverlässig, wenn kein Intercom montiert ist:
 * **Identischer Verriegelungs- & Auswurfmechanismus:** Auch die Blindkassette verfügt über die standardisierte 2-Arm-Magnetwippe (`parts/05_magnetic_lock_latch.scad`), Poka-Yoke-Führungsschienen und Federtaschen für die V4A-Auswerferfedern. Sie verriegelt mit demselben satten Klick und wird kontaktlos über den N52-Magnetschlüssel ausgeworfen.
-* **Hermetischer Kontaktschutz (EPDM-Dichtblock):** An der Rückseite dichtet ein integrierter EPDM-Formblock die beiden vergoldeten Federkontakte im Gehäuseschacht absolut wasser- und staubdicht ab.
+* **Hermetischer Kontaktschutz (EPDM-Dichtblock):** An der Rückseite dichtet ein integrierter EPDM-Formblock die beiden Klingen des IP67-Direktsteckers im Gehäuseschacht absolut wasser- und staubdicht ab.
 * **Notfall-Trockenstaufach:** Der $80 \times 46 \times 16\,\text{mm}$ große Innenraum dient als wasserdichte Mini-Dry-Box für Fahrzeugschein, Bargeld, Notfallschlüssel oder Ersatz-O-Ringe.
 
 ---
@@ -512,8 +514,8 @@ Durch die Umstellung auf das **All-UWB Datenbackbone (Qorvo DW3110)** und Blueto
 | **Ader 1** | **Rot (RD)** | $0{,}34\,\text{mm}^2$ (AWG22) | **`VCC_5V`** (+5V geschaltete Speisung) | Geschützt via PPTC 500mA auf Zentralbox |
 | **Ader 2** | **Schwarz (BK)** | $0{,}34\,\text{mm}^2$ (AWG22) | **`GND`** (Gemeinsame Power-Masse) | Direkte Rückleitung zur Zentralbox |
 
-* **Steckverbinder:** Kompakter, rüttelfester 2-Pin Automotive-Stecker (JST-JWPF oder AMP Superseal 1.5 2-Pin, IP67).
-* **Gehäusekontakt:** Die Adern enden direkt an zwei massiven, vergoldeten Hochstrom-Federkontakt-Hülsen (Mill-Max Pogo-Pins) in der integrierten Quer-Schottwand ($X = 18{,}0\,\text{mm}$), die beim Einschieben durch das offene rückseitige Bodenfenster des Kassetten-Grundschlittens formschlüssig und vibrationssicher auf die beiden ENIG-Goldflächen `PAD1` (+5V) und `PAD2` (GND) auf der Unterseite (`B.Cu`) der Kassettenplatine (`PCBA 03`) drücken.
+* **Steckverbinder:** Vorkonfektionierter IP67 2-Pin Automotive Blade-Direktstecker (`CON_POD_DC`) mit NBR70 O-Ring und Edelstahl-U-Clip.
+* **Gehäusekontakt:** Die Adern enden direkt an den zwei massiven, vergoldeten Messerklingen des Steckers in der integrierten Quer-Schottwand ($X = 18{,}0\,\text{mm}$), die beim Einschieben formschlüssig in die werkseitig bestückte Dual-Beam Schlitzbuchse `J_DC_IN` auf der Kassettenplatine (`PCBA 03`) gleiten (100 % lötfrei, absolut prell- und vibrationsfest).
 * **Daten & Audio:** Zu 100 % drahtlos über UWB (DW3110 / 6.489 GHz Ch. 5) und Bluetooth. M8- und USB-C-Buchsen am Pod entfallen ersatzlos.
 
 ---

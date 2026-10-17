@@ -14,7 +14,7 @@ Synchronizes PCBA 03 (Universal Smart Cartridge) Schematic:
   * J_ACT: 8P Actuators + MP Shield (9 pads: 2x 5V, 4x ACT, 2x GND, MP)
   * J_AUDIO_PWR: 8P Kelvin Audio/Power + MP Shield (9 pads: GND, 5V, AGND, 2x AUDIO_IN, OMM_DET, AUDIO_IO_P, PTT_USB_N, MP)
   * J_PROG: 4P Programming Header (4 pads: 3V3, USB_DP, GND, PTT_USB_N)
-  * PAD1, PAD2: Docking Spring Pads (D3.0mm: +5V_IN, GND)
+  * J_DC_IN: Automotive Horizontal Blade Slot Socket (10.0mm Pitch, 2 pads: +5V_IN, GND)
   * H1..H4: M2 Mounting Holes with Pads (GND)
   * F1: 1812 Polyfuse (MF-MSMF050-2: +5V_IN -> VCC_5V_PROT)
   * D1..D4: SOD-323 Freewheeling Diodes (1N4148WS)
@@ -76,12 +76,13 @@ def generate_schematic():
 \t\t\t(pin passive line (at -5.08 0 0) (length 2.54) (name "1" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
 \t\t)''')
 
-    # Conn_01x01 (PAD1, PAD2)
-    sch.append('''\t\t(symbol "Connector:Conn_01x01"
-\t\t\t(property "Reference" "PAD" (at 0 2.54 0) (effects (font (size 1.27 1.27))))
-\t\t\t(property "Value" "Conn_01x01" (at 0 -2.54 0) (effects (font (size 1.27 1.27))))
-\t\t\t(property "Footprint" "TestPoint:TestPoint_Pad_D3.0mm_OD3.5mm" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
-\t\t\t(pin passive line (at -5.08 0 0) (length 2.54) (name "1" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
+    # Blade Slot Socket (J_DC_IN)
+    sch.append('''\t\t(symbol "Connector:Blade_Slot_Socket_1x02"
+\t\t\t(property "Reference" "J" (at 0 5.08 0) (effects (font (size 1.27 1.27))))
+\t\t\t(property "Value" "Blade_Slot_Socket_1x02" (at 0 -5.08 0) (effects (font (size 1.27 1.27))))
+\t\t\t(property "Footprint" "Connector:Blade_Slot_Socket_1x02_P10.0mm_Horizontal_SMD" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+\t\t\t(pin passive line (at -5.08 2.54 0) (length 2.54) (name "1" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
+\t\t\t(pin passive line (at -5.08 -2.54 0) (length 2.54) (name "2" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
 \t\t)''')
 
     # U.FL (ANT_UWB)
@@ -275,8 +276,7 @@ def generate_schematic():
         'J_ACT': 'Connector_JST:JST_SH_SM08B_Shielded',
         'J_AUDIO_PWR': 'Connector_JST:JST_SH_SM08B_Shielded',
         'J_PROG': 'Connector_PinHeader:PinHeader_1x04',
-        'PAD1': 'Connector:Conn_01x01',
-        'PAD2': 'Connector:Conn_01x01',
+        'J_DC_IN': 'Connector:Blade_Slot_Socket_1x02',
         'Q1': 'Transistor_FET:AO3400A',
         'Q2': 'Transistor_FET:AO3400A',
         'Q3': 'Transistor_FET:AO3400A',
@@ -299,8 +299,7 @@ def generate_schematic():
 
     # Layout coordinate mapping for readability
     positions = {
-        'PAD1': (40.0, 40.0),
-        'PAD2': (40.0, 55.0),
+        'J_DC_IN': (40.0, 45.0),
         'F1': (65.0, 40.0),
         'C1': (85.0, 40.0),
         'C2': (105.0, 40.0),
@@ -351,6 +350,8 @@ def generate_schematic():
             return (0.0, 0.0)
         elif sym_type in ('Mechanical:MountingHole_Pad', 'Connector:Conn_01x01'):
             return (-5.08, 0.0)
+        elif sym_type in ('Connector_Automotive:Blade_Slot_Socket_1x02', 'Connector:Blade_Slot_Socket_1x02'):
+            return (-5.08, -2.54) if pnum == '1' else (-5.08, 2.54)
         elif sym_type == 'Connector_Coaxial:U.FL':
             return (-5.08, 0.0) if pnum == '1' else (5.08, 0.0)
         elif sym_type == 'Device:Crystal_4Pin':

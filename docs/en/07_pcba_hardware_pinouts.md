@@ -56,7 +56,7 @@ OpenMotorBridge hardware follows the principle of radical signal decoupling: Dat
    * **`PCBA 09` (OMM 2.4 GHz Standalone Intercom Module):** Open-source ECE 22.06 UCS intercom module for helmets and high-speed mesh cartridge operation.
    * **`PCBA 10` (OMM 446 MHz Standalone Radio Module):** Open-source ECE 22.06 UCS two-way radio module (Dual-Mode: Analog PMR446 + Digital DMR Tier I), fully compatible with Midland G-series and D-10.
 3. **Retired Assemblies (Clean Architecture v9.6):**
-   * **`PCBA 02` (Pod Base Board):** Retired without replacement. The 2-wire DC harness connects directly to two gold-plated spring pins in the pod well.
+   * **`PCBA 02` (Pod Base Board):** Retired without replacement. The 2-wire DC harness connects via a tool-free locking IP67 2-pin blade direct plug (`CON_POD_DC`) with axial NBR70 O-ring and stainless steel U-clip in the bulkhead of the monolithic pod enclosure.
    * **`PCBA 04` (Rear Pod 3):** Retired without replacement. LoRa resides on `PCBA 01`, GNSS on `PCBA 05`.
    * **`PCBA 06` (MagSafe Frame Dock Board):** Retired without replacement. Quick-disconnect luggage relies on COTS IP68 2-pin magnetic pogo connectors.
 
@@ -175,7 +175,7 @@ Mounted on the top layer (`F.Cu` at $X=175.0, Y=106.0\,\text{mm}$), the **Qualco
 
 The former pod base board (`PCBA 02`) has been **completely retired without replacement in v9.6**:
 1. **Monolithic Enclosure Body:** The pod housing (`pod_base_housing.stl`) is a 100% passive, injection-molded / MJF PA12 precision component.
-2. **Direct 2-Wire DC Spring Pin Contact:** The 2-wire DC harness from the Deutsch DTM-12 connector enters through an integrated rear elastomeric grommet and terminates directly on two heavy-duty gold-plated spring pins (Mill-Max).
+2. **Direct 2-Wire DC Blade Contact:** The 2-wire DC harness from the Deutsch DTM-12 connector enters through the housing rear wall via a tool-free locking IP67 2-pin blade direct plug (`CON_POD_DC`) with axial NBR70 O-ring and stainless steel U-retaining clip (100% solder-free) and mates positively into the factory SMT-assembled dual-beam slot socket `J_DC_IN` on `PCBA 03`.
 3. **Zero Failure Surface:** No switches, no active semiconductors, and no vulnerable sockets exposed to rear-wheel water spray.
 
 ---
@@ -204,7 +204,7 @@ The former pod base board (`PCBA 02`) has been **completely retired without repl
   * `U_UWB`: Qorvo `DW3110` Ultra-Wideband Transceiver (6.489 GHz Ch. 5, QFN-16-1EP) with external Hirose U.FL receptacle `ANT_UWB` (`Taoglas FXUWB10`) and high-precision $38.4\,\text{MHz}$ crystal `Y_UWB`. Radiates downward through the dielectric plastic sled floor for optimum wireless connection to Central Box.
   * `U3`: Everest Semi `ES8388` 24-Bit / 48 kHz Low-Noise Audio Codec (QFN-28-1EP). Deliberately located on the **bottom layer (`B.Cu`)**: Hermetically shielded by the internal copper ground plane from the steep switching transients of the top-layer MOSFETs (`Q1`–`Q4`) and actuator solenoid coils. Converts analog mic and speaker audio directly on the cartridge, streaming it jitter-free over I2S/UWB.
   * `U4`: Texas Instruments `TS5A3159DBVR` Single-Pole Double-Throw (SPDT) Analog/Digital Audio Switch ($0.5\,\Omega$ on-resistance, SOT-23-6). Enables automatic, hardware-controlled switching between analog headset audio and digital OMM USB audio.
-  * `PAD1` & `PAD2`: End-face massive $\varnothing 3.0\,\text{mm}$ gold landing pads (`TestPoint_Pad_D3.0mm_OD3.5mm`, ENIG) for the pod 2-wire DC spring contacts (`PAD1: +5V_IN`, `PAD2: GND`).
+  * `J_DC_IN`: End-face, factory SMT-assembled 2-pin automotive dual-beam blade slot socket (10.0mm pitch, 5A, IP2X finger-safe, horizontal mounting on B.Cu) for positive engagement with the blade contacts of the IP67 direct plug (`CON_POD_DC`) of the pod bay (`Pin 1: +5V_IN`, `Pin 2: GND`). Completely immune to micro-bouncing and vibration wear.
   * `F1`: Resettable 500mA PPTC fuse (Bourns `MF-MSMF050-2`, 1812 SMD) ahead of `VCC_5V_PROT`.
   * `C1`, `C2`: Ceramic decoupling capacitors ($100\,\text{nF}$ 0603 / $10\,\mu\text{F}$ 0805) on `VCC_3V3`.
   * `H1` - `H4`: 4x M2 mounting holes with plated pads (`MountingHole_2.2mm_M2_Pad`) to system ground (`GND`).

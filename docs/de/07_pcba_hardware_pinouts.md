@@ -56,7 +56,7 @@ Das Hardwaredesign von OpenMotorBridge folgt dem Grundsatz der radikalen Entflec
    * **`PCBA 09` (OMM 2.4 GHz Autonomes Intercom-Modul):** Quelloffenes, autarkes ECE 22.06 UCS-Intercom-Modul für den Helm und als High-Speed Mesh-Einsatz im Kassetten-Schlitten (`PCBA 03`).
    * **`PCBA 10` (OMM 446 MHz Autonomes Funkmodul):** Quelloffenes ECE 22.06 UCS-Funkmodul (Dual-Mode: Analog PMR446 + Digital DMR Tier I), voll kompatibel zu Midland G-Serie und D-10, mit Power-Path USV-Laden und 0.2W/0.5W Umschaltung.
 3. **Ersatzlos entfallene Baugruppen (Architektur-Bereinigung v9.6):**
-   * **`PCBA 02` (Pod-Basisplatine):** Ersatzlos gestrichen. Die Zuleitung führt direkt auf zwei vergoldete Mill-Max Hochstrom-Federkontakte in der integrierten Schottwand des monolithischen Pod-Gehäuses.
+   * **`PCBA 02` (Pod-Basisplatine):** Ersatzlos gestrichen. Die Zuleitung führt direkt auf einen werkzeuglos verriegelnden IP67 2-Pin Blade-Direktstecker (`CON_POD_DC`) mit axialem NBR70 O-Ring und Edelstahl-U-Clip in der Schottwand des monolithischen Pod-Gehäuses.
    * **`PCBA 04` (Heck-Pod 3):** Ersatzlos gestrichen. Heck-Pod 3 entfällt vollständig; LoRa sitzt auf `PCBA 01`, GNSS auf `PCBA 05`.
    * **`PCBA 06` (MagSafe Frame Dock Platine):** Ersatzlos gestrichen. Die elektrische Verbindung bei Koffer-Pods erfolgt über einen handelsüblichen industriellen 2-Pin Magnet-Pogo-Steckverbinder (IP68 COTS).
 
@@ -178,7 +178,7 @@ Der auf der Oberseite (`F.Cu` bei $X=175{,}0, Y=106{,}0$) platzierte **Qualcomm 
 
 Die frühere Pod-Basisplatine (`PCBA 02`) ist in v9.6 **vollständig und ersatzlos entfallen**:
 1. **Monolithischer Gehäusekörper:** Das Pod-Gehäuse (`pod_base_housing.stl`) ist ein 100 % passives 3D-Druck-Präzisionsteil (MJF PA12).
-2. **Direkte 2-Draht DC-Federkontaktierung:** Die 2-adrige DC-Leitung vom Deutsch DTM-12 Stecker führt über eine rückseitige Formdichtung direkt in den Schacht und endet an zwei massiven, vergoldeten Federkontakten (Mill-Max).
+2. **Direkte 2-Draht DC-Blade-Kontaktierung:** Die 2-adrige DC-Leitung vom Deutsch DTM-12 Stecker führt über einen werkzeuglos verriegelnden IP67 2-Pin Blade-Direktstecker (`CON_POD_DC`) mit axialem NBR70 O-Ring und Edelstahl-U-Clip durch die Gehäuserückwand direkt in den Schacht (100 % lötfrei) und kontaktiert formschlüssig in die werkseitig bestückte Dual-Beam Schlitzbuchse `J_DC_IN` auf `PCBA 03`.
 3. **Null Ausfallrisiko:** Keine Schalter, keine aktiven ICs und keine empfindlichen Buchsen im Spritzwasserbereich der Kofferträger.
 
 ---
@@ -207,7 +207,7 @@ Die frühere Pod-Basisplatine (`PCBA 02`) ist in v9.6 **vollständig und ersatzl
   * `U_UWB`: Qorvo `DW3110` Ultra-Wideband Transceiver (6.489 GHz Ch. 5, QFN-16-1EP) mit externer U.FL-Koaxialbuchse `ANT_UWB` (`Taoglas FXUWB10`) und hochpräzisem $38{,}4\,\text{MHz}$ Quarz `Y_UWB`. Strahlungsrichtung zeigt nach unten durch den dielektrischen Kunststoffboden der Kassette für optimale Funkverbindung zur Zentralbox.
   * `U3`: Everest Semi `ES8388` 24-Bit / 48 kHz Low-Noise Audio-Codec (QFN-28-1EP). Bewusst auf der **Unterseite (`B.Cu`)** platziert: Dadurch sind die empfindlichen analogen Audioleitungen durch die interne Kupfer-Massefläche hermetisch von den steilen Schaltflanken der Top-Layer-MOSFETs (`Q1`–`Q4`) und Aktuatorströmen entkoppelt. Wandelt das analoge Mikrofon- und Lautsprechersignal von Sena, Cardo oder Midland direkt auf der Kassette und streamt es jitterfrei digital via I2S/UWB.
   * `U4`: Texas Instruments `TS5A3159DBVR` Single-Pole Double-Throw (SPDT) Analog/Digital-Audio-Umschalter ($0{,}5\,\Omega$ Durchgangswiderstand, SOT-23-6). Ermöglicht die automatische, hardware-gesteuerte Umschaltung zwischen analogem Headset-Audio und digitalem OMM-USB-Audio.
-  * `PAD1` & `PAD2`: Stirnseitige, massive $\varnothing 3{,}0\,\text{mm}$ vergoldete Kontaktflächen (`TestPoint_Pad_D3.0mm_OD3.5mm`, ENIG) für die 2-Draht DC-Federkontakte des Pod-Schlittens (`PAD1: +5V_IN`, `PAD2: GND`).
+  * `J_DC_IN`: Stirnseitige, werkseitig SMT-bestückte 2-polige Dual-Beam Automotive Flachstecker-Schlitzbuchse (10.0mm Pitch, 5A, IP2X fingersicher, liegende Montage auf B.Cu) für die formschlüssige Aufnahme der Klingen des IP67-Direktsteckers (`CON_POD_DC`) des Pod-Schachts (`Pin 1: +5V_IN`, `Pin 2: GND`). Vollkommen immun gegen Mikrounterbrechungen bei Vibrationen.
   * `F1`: Selbstrückstellende 500mA PPTC-Sicherung (Bourns `MF-MSMF050-2`, 1812 SMD) vor `VCC_5V_PROT`.
   * `C1`, `C2`: Keramische Stützkondensatoren ($100\,\text{nF}$ 0603 / $10\,\mu\text{F}$ 0805) an `VCC_3V3`.
   * `H1` - `H4`: 4x M2-Montagebohrungen mit durchkontaktiertem Pad (`MountingHole_2.2mm_M2_Pad`) an Systemmasse (`GND`).
