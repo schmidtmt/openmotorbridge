@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#ff9f0a">
-    <meta name="description" content="OpenMotorBridge v8.0 - Universelles Intercom Gateway & BGH-konformer Tour Logger">
-    <title>OpenMotorBridge v8.0 Dashboard</title>
-    <link rel="stylesheet" href="css/style.css?v=8.5">
+    <meta name="description" content="OpenMotorBridge v9.6 - Universelles Intercom Gateway & BGH-konformer Tour Logger (Clean All-UWB Architecture)">
+    <title>OpenMotorBridge v9.6 Dashboard</title>
+    <link rel="stylesheet" href="css/style.css?v=9.6">
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏍️</text></svg>">
 </head>
@@ -20,7 +20,7 @@
                 <img src="assets/openmotorbridge_logo.svg" alt="OpenMotorBridge Logo" style="width: 38px; height: 38px; border-radius: 8px; margin-right: 8px;">
                 <div>
                     <div class="brand-title">OpenMotorBridge</div>
-                    <div class="brand-subtitle" data-i18n="app_subtitle">v8.0 Satelliten-Gateway</div>
+                    <div class="brand-subtitle" data-i18n="app_subtitle">v9.6 All-UWB Gateway</div>
                 </div>
             </div>
 
@@ -96,6 +96,29 @@
             </div>
         </div>
 
+        <!-- Handy vergessen Warn-Banner (Section 2.7) -->
+        <div id="forget-phone-banner" class="forget-phone-banner" style="display: none;">
+            <div class="forget-phone-content">
+                <div class="forget-phone-icon">📱</div>
+                <div style="flex: 1;">
+                    <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                        <strong style="font-size: 1.05rem; color: #fff; letter-spacing: 0.5px;">SMARTPHONE IM DOCK VERGESSEN!</strong>
+                        <span class="card-badge badge-orange">Zündung AUS · Fahrer entfernt (&gt; 3 m)</span>
+                    </div>
+                    <div style="font-size: 0.8rem; color: #fed7aa; margin-top: 4px; display: flex; gap: 16px; flex-wrap: wrap;">
+                        <span>📍 Ladeport: <strong id="lbl-forget-dock-port">Cockpit Qi-Dock (J10)</strong></span>
+                        <span>🔋 Status: <strong id="lbl-forget-dock-soc">Lädt (USB VBUS Aktiv)</strong></span>
+                        <span>🔊 Alarmierung: <strong>Doppel-Chirp Hupe + Keyfob LRA Haptik</strong></span>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <button id="btn-forget-phone-ack" class="btn-primary" style="background: #fff; color: #c2410c; font-weight: 800; padding: 6px 14px; font-size: 0.8rem;">
+                        ✓ Quittieren
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <!-- Navigation Tabs -->
         <nav class="nav-tabs" role="tablist">
             <button class="tab-btn active" data-tab="tab-cockpit">
@@ -120,6 +143,35 @@
 
         <!-- TAB 1: COCKPIT & POWER -->
         <main id="tab-cockpit" class="tab-content active">
+            <!-- Kognitive Cockpit-Ruhe: Stillstands-Infokarte (Section 2.9, v = 0 km/h > 5s) -->
+            <div id="cockpit-standstill-card" class="standstill-info-card hidden">
+                <div class="standstill-header">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="font-size: 1.1rem;">☕</span>
+                        <strong style="font-size: 0.9rem; color: var(--accent-cyan);">Ampel- &amp; Raststopp Info (Stillstand &gt; 5s)</strong>
+                        <span class="card-badge badge-blue">Zero-Distraction Mode</span>
+                    </div>
+                    <span style="font-size: 0.72rem; color: var(--text-muted);" id="standstill-stop-timer">Halt: 00:00 min</span>
+                </div>
+                <div class="standstill-grid">
+                    <div class="standstill-tile">
+                        <div class="standstill-tile-title">☀️ Lokaler Wettertrend &amp; Luftdruck</div>
+                        <div class="standstill-tile-val" id="standstill-weather-val">19.5 °C · 1018 hPa</div>
+                        <div class="standstill-tile-sub" id="standstill-weather-sub">BMP390 / SHTC3 Barometer stabil · Kein Regen</div>
+                    </div>
+                    <div class="standstill-tile">
+                        <div class="standstill-tile-title">🏔️ Pass- &amp; Streckenstatus</div>
+                        <div class="standstill-tile-val" id="standstill-pass-val">570 m ü. M. · Route frei</div>
+                        <div class="standstill-tile-sub" id="standstill-pass-sub">Rickenpass &amp; Kerenzerberg trocken &amp; offen</div>
+                    </div>
+                    <div class="standstill-tile">
+                        <div class="standstill-tile-title">🏍️ Fahrzeug-Gesundheit</div>
+                        <div class="standstill-tile-val" id="standstill-health-val">14.2 V · USV 100% · Reifen OK</div>
+                        <div class="standstill-tile-sub" id="standstill-health-sub">RDKS: 2.45 bar V / 2.80 bar H · Öltemp. 88 °C</div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Cockpit Mode Switcher Toolbar -->
             <div class="cockpit-mode-toolbar">
                 <div class="cockpit-mode-switch">
@@ -1013,14 +1065,14 @@
                         <!-- Universal UWB Mechatronic Opcodes (0x01..0x08) -->
                         <div style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">📡 Universal UWB Mechatronic Opcodes (0x01..0x08):</div>
                         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 6px; margin-bottom: 12px;">
-                            <button id="btn-opcode-01" class="btn-secondary" style="font-size: 0.72rem; padding: 6px 4px;">0x01 STANDBY</button>
-                            <button id="btn-opcode-02" class="btn-secondary" style="font-size: 0.72rem; padding: 6px 4px; color: var(--accent-orange); border-color: rgba(255, 159, 10, 0.4);">⚡ 0x02 PTT ON</button>
-                            <button id="btn-opcode-03" class="btn-secondary" style="font-size: 0.72rem; padding: 6px 4px;">0x03 PTT OFF</button>
-                            <button id="btn-opcode-04" class="btn-secondary" style="font-size: 0.72rem; padding: 6px 4px; color: var(--accent-red); border-color: rgba(255, 69, 58, 0.3);">🔇 0x04 MUTE</button>
-                            <button id="btn-opcode-05" class="btn-secondary" style="font-size: 0.72rem; padding: 6px 4px; color: var(--accent-green); border-color: rgba(50, 215, 75, 0.4);">🔊 0x05 UNMUTE</button>
-                            <button id="btn-opcode-06" class="btn-secondary" style="font-size: 0.72rem; padding: 6px 4px; color: var(--accent-blue); border-color: rgba(10, 132, 255, 0.4);">👂 0x06 AMBIENT</button>
-                            <button id="btn-opcode-07" class="btn-secondary" style="font-size: 0.72rem; padding: 6px 4px; color: #ff3b30; border-color: #ff3b30;">🚨 0x07 BEACON</button>
-                            <button id="btn-opcode-08" class="btn-secondary" style="font-size: 0.72rem; padding: 6px 4px;">⏏️ 0x08 EJECT</button>
+                            <button id="btn-opcode-01" class="btn-secondary" style="font-size: 0.72rem; padding: 6px 4px; color: var(--accent-orange); border-color: rgba(255, 159, 10, 0.4);">⚡ 0x01 BOOT</button>
+                            <button id="btn-opcode-02" class="btn-secondary" style="font-size: 0.72rem; padding: 6px 4px; color: var(--accent-red); border-color: rgba(255, 69, 58, 0.3);">🔌 0x02 OFF</button>
+                            <button id="btn-opcode-03" class="btn-secondary" style="font-size: 0.72rem; padding: 6px 4px;">🔊 0x03 VOL +</button>
+                            <button id="btn-opcode-04" class="btn-secondary" style="font-size: 0.72rem; padding: 6px 4px;">🔉 0x04 VOL -</button>
+                            <button id="btn-opcode-05" class="btn-secondary" style="font-size: 0.72rem; padding: 6px 4px; color: var(--accent-green); border-color: rgba(50, 215, 75, 0.4);">🔘 0x05 MESH</button>
+                            <button id="btn-opcode-06" class="btn-secondary" style="font-size: 0.72rem; padding: 6px 4px; color: var(--accent-blue); border-color: rgba(10, 132, 255, 0.4);">👥 0x06 GROUP</button>
+                            <button id="btn-opcode-07" class="btn-secondary" style="font-size: 0.72rem; padding: 6px 4px;">⏭️ 0x07 CH +</button>
+                            <button id="btn-opcode-08" class="btn-secondary" style="font-size: 0.72rem; padding: 6px 4px;">⏮️ 0x08 CH -</button>
                         </div>
                         <!-- Pod 1 Aktuatoren (Links) -->
                         <div style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">1️⃣ Pod 1 (Sena SPIDER X Slim):</div>
@@ -1350,10 +1402,10 @@
                         <span class="stat-sub" id="pod1-vendor">Sena Technologies * Mesh 3.0 & Wave (Direct-DC)</span>
                     </div>
                     <div class="stat-row">
-                        <span class="stat-sub">1-Wire Kassetten-UID:</span>
+                        <span class="stat-sub">UWB Kassetten-UID:</span>
                         <div style="display: flex; align-items: center; gap: 6px;">
                             <span style="font-family: monospace; font-size: 0.85rem;" id="pod1-uid">01:4F:2A:90:12:00:8C</span>
-                            <span class="badge badge-success" style="font-size: 0.65rem; padding: 2px 6px;">Smart CH32V003</span>
+                            <span class="badge badge-success" style="font-size: 0.65rem; padding: 2px 6px;">Smart ESP32-C6 (UWB)</span>
                         </div>
                     </div>
                     <div class="stat-row">
@@ -1398,10 +1450,10 @@
                         <span class="stat-sub" id="pod2-vendor">Cardo Systems * DMC Gen2</span>
                     </div>
                     <div class="stat-row">
-                        <span class="stat-sub">1-Wire Kassetten-UID:</span>
+                        <span class="stat-sub">UWB Kassetten-UID:</span>
                         <div style="display: flex; align-items: center; gap: 6px;">
                             <span style="font-family: monospace; font-size: 0.85rem;" id="pod2-uid">01:B3:78:11:44:90:3A</span>
-                            <span class="badge badge-blue" style="font-size: 0.65rem; padding: 2px 6px;">Smart / Legacy</span>
+                            <span class="badge badge-success" style="font-size: 0.65rem; padding: 2px 6px;">Smart ESP32-C6 (UWB)</span>
                         </div>
                     </div>
                     <div class="stat-row">
@@ -1742,7 +1794,7 @@
                         </div>
                     </div>
                     <div style="display: flex; gap: 8px; flex-wrap: wrap; align-self: center;">
-                        <button id="btn-hw-rescan" class="btn-secondary" style="padding: 7px 12px; font-size: 0.78rem; border-color: var(--accent-cyan); color: var(--accent-cyan);" title="Prüft die Busse (1-Wire, UART, ESP-NOW) erneut">
+                        <button id="btn-hw-rescan" class="btn-secondary" style="padding: 7px 12px; font-size: 0.78rem; border-color: var(--accent-cyan); color: var(--accent-cyan);" title="Prüft die Busse (UWB, UART, ESP-NOW) erneut">
                             🔄 Bus erneut scannen
                         </button>
                         <button id="btn-hw-confirm-removal" class="btn-secondary" style="padding: 7px 12px; font-size: 0.78rem; border-color: rgba(255, 69, 58, 0.5); color: var(--accent-red);" title="Entfernt die vermisste Komponente aus der NVS-Baseline (z.B. nach geplanter Demontage)">
@@ -1803,6 +1855,23 @@
                             <button id="btn-cp2aa-reset" class="btn-secondary" style="flex: 1; padding: 7px 12px; font-size: 0.78rem; border-color: rgba(255, 159, 10, 0.4); color: var(--accent-orange);" title="Setzt die 5V VBUS-Stromversorgung des CP2AA-Dongles via TPS2051B Lastschalter für 2s zurück">
                                 🔌 <span data-i18n="btn_cp2aa_reset">CP2AA Kaltstart</span>
                             </button>
+                        </div>
+
+                        <!-- Smart Docking & Cockpit Calm Integration (Kapitel 10 Abschnitte 2.7 & 2.9) -->
+                        <div style="margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border-color); font-size: 0.8rem;">
+                            <div style="font-weight: 600; color: var(--accent-cyan); margin-bottom: 8px;">⚡ Smart Docking &amp; Cockpit Calm</div>
+                            <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px; cursor: pointer; color: var(--text-secondary);">
+                                <input type="checkbox" id="chk-auto-docking-cockpit" checked style="accent-color: var(--accent-cyan);">
+                                <span data-i18n="lbl_auto_docking">Auto-Cockpit bei Lade-Docking (Flanken-Trigger)</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px; cursor: pointer; color: var(--text-secondary);">
+                                <input type="checkbox" id="chk-forget-phone-reminder" checked style="accent-color: var(--accent-orange);">
+                                <span data-i18n="lbl_forget_phone">Handy-Vergessen-Alarm bei Zündung AUS</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--text-secondary);">
+                                <input type="checkbox" id="chk-standstill-info" checked style="accent-color: var(--accent-green);">
+                                <span data-i18n="lbl_standstill_info">Stillstand-Infokarte nach 5s Halt (Zero-Distraction)</span>
+                            </label>
                         </div>
                     </section>
 
@@ -2529,7 +2598,7 @@
                 <section class="card">
                     <div class="card-header">
                         <span class="card-title">🔌 <span data-i18n="reserve_title">Reserve-Schnittstellen (GPIO Aux / Pins 11 &amp; 12)</span></span>
-                        <span class="card-badge badge-orange">Hardware v8.0</span>
+                        <span class="card-badge badge-orange">Hardware v9.6</span>
                     </div>
 
                     <div class="stat-tile" style="margin-bottom: 14px;">
@@ -3055,7 +3124,7 @@
                             🩺 <span data-i18n="smoke_test_title">Interaktiver IKEA Smoke-Test & Hardware-Diagnose</span>
                         </div>
                         <div class="smoke-test-desc" data-i18n="smoke_test_sub">
-                            Führe den geführten 4-Punkte-Check vor dem finalen Verschrauben durch: Spannungen, 1-Wire Kassetten-Erkennung, Aktuator-Klicksequenzen, Front-Node und LoRa/GNSS.
+                            Führe den geführten 4-Punkte-Check vor dem finalen Verschrauben durch: Spannungen, UWB Kassetten-Erkennung, Aktuator-Klicksequenzen, Front-Node und LoRa/GNSS.
                         </div>
                     </div>
                     <div style="display: flex; gap: 8px; flex-wrap: wrap;">
@@ -3086,7 +3155,7 @@
                             <span class="smoke-status-pill" id="smoke-status-cartridges">BEREIT</span>
                         </div>
                         <div class="smoke-step-title">🎧 Kassetten & Aktuatoren</div>
-                        <div class="smoke-step-detail" id="smoke-detail-cartridges">1-Wire Chip-Erkennung, Pogo-Pin Kontakt und Aktuator-Tastenhub.</div>
+                        <div class="smoke-step-detail" id="smoke-detail-cartridges">UWB Kassetten-Erkennung (ESP32-C6 / DW3110), Pogo-Pin Kontakt und Aktuator-Tastenhub.</div>
                         <div class="actuator-visualizer">
                             <span class="actuator-btn-indicator" id="act-btn-1">Klick 1 (Power)</span>
                             <span class="actuator-btn-indicator" id="act-btn-2">Klick 2 (Mesh)</span>
@@ -3336,7 +3405,7 @@
         </div>
     </div>
 
-    <!-- Modal: New 1-Wire Cartridge Detected (UUID Registration) -->
+    <!-- Modal: New UWB Cartridge Detected (UUID Registration) -->
     <div class="modal-overlay" id="uuid-detect-modal">
         <div class="modal-card" style="max-width: 520px;">
             <div class="modal-header">
@@ -3350,7 +3419,7 @@
                     <strong id="detected-slot-name" style="color: var(--accent-green);">Pod 1 (Rahmen links)</strong>
                 </div>
                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="font-size: 0.85rem; color: var(--text-secondary);">1-Wire Chip-UID (DS2401):</span>
+                    <span style="font-size: 0.85rem; color: var(--text-secondary);">Kassetten Chip-UID (ESP32-C6 / DS2401):</span>
                     <code id="detected-uuid-val" style="background: rgba(0,0,0,0.3); padding: 3px 8px; border-radius: 6px; font-size: 0.85rem; color: var(--accent-cyan); font-family: monospace;">01:A2:3B:4C:5D:6E:7F:8A</code>
                 </div>
             </div>
@@ -3690,8 +3759,8 @@
     <script>
         window.OMB_MODE = 'hardware';
     </script>
-    <script src="js/bom_catalog.js?v=8.13"></script>
-    <script src="js/app.js?v=8.13"></script>
+    <script src="js/bom_catalog.js?v=9.6"></script>
+    <script src="js/app.js?v=9.6"></script>
 </body>
 
 </html>

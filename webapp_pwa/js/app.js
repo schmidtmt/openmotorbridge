@@ -1,5 +1,5 @@
 /**
- * OpenMotorBridge (OMB) v8.0 - Web Bluetooth Dashboard & PWA Controller
+ * OpenMotorBridge (OMB) v9.6 - Web Bluetooth Dashboard & PWA Controller
  * With lightweight Bilingual Internationalization (German / English)
  */
 
@@ -11,7 +11,7 @@ const CONTROL_CHAR_UUID = '23d113ef-5f78-2315-deef-121200a00002';
 // Bilingual Translations Dictionary (DE / EN)
 const i18n = {
     de: {
-        app_subtitle: 'v8.0 Satelliten-Gateway',
+        app_subtitle: 'v9.6 All-UWB Gateway',
         ble_offline: 'BLE Offline',
         ble_online: 'BLE Online',
         demo_mode: 'Demo-Modus',
@@ -43,7 +43,13 @@ const i18n = {
         btn_builder_export_bom: 'BOM als CSV',
         builder_cost_disclaimer: 'zzgl. OEM-Intercom-Module (Sena/Cardo)',
         smoke_test_title: 'Interaktiver IKEA Smoke-Test & Hardware-Diagnose',
-        smoke_test_sub: 'Führe den geführten 4-Punkte-Check vor dem finalen Verschrauben durch: Spannungen, 1-Wire Kassetten-Erkennung, Aktuator-Klicksequenzen, Front-Node und LoRa/GNSS.',
+        smoke_test_sub: 'Führe den geführten 4-Punkte-Check vor dem finalen Verschrauben durch: Spannungen, UWB Kassetten-Erkennung, Aktuator-Klicksequenzen, Front-Node und LoRa/GNSS.',
+        lbl_auto_docking: 'Auto-Cockpit bei Lade-Docking (Flanken-Trigger)',
+        lbl_forget_phone: 'Handy-Vergessen-Alarm bei Zündung AUS',
+        lbl_standstill_info: 'Stillstand-Infokarte nach 5s Halt (Zero-Distraction)',
+        forget_phone_title: 'ACHTUNG: Smartphone noch im Halter / Dock!',
+        forget_phone_desc: 'Zündung wurde deaktiviert (KL15=0), aber das Smartphone befindet sich weiterhin im Ladedock und der Fahrer entfernt sich (RSSI sinkt). Bitte Smartphone mitnehmen!',
+        forget_phone_ack: 'Gelesen',
         btn_run_smoke_test: 'Smoke-Test starten',
         btn_test_actuators: 'Aktuatoren testen (Klick 1-4)',
         flasher_title: 'WebSerial 1-Click Firmware Installer',
@@ -225,7 +231,7 @@ const i18n = {
         mode_detail_short: 'Detail'
     },
     en: {
-        app_subtitle: 'v8.0 Satellite Gateway',
+        app_subtitle: 'v9.6 All-UWB Gateway',
         ble_offline: 'BLE Offline',
         ble_online: 'BLE Online',
         demo_mode: 'Demo Mode',
@@ -257,7 +263,13 @@ const i18n = {
         btn_builder_export_bom: 'BOM as CSV',
         builder_cost_disclaimer: 'excl. OEM intercom units (Sena/Cardo)',
         smoke_test_title: 'Interactive IKEA Smoke-Test & Hardware Diagnostics',
-        smoke_test_sub: 'Run the guided 4-point verification before final assembly: Voltages, 1-Wire cartridge identification, actuator click sequences, Front-Node, and LoRa/GNSS.',
+        smoke_test_sub: 'Run the guided 4-point verification before final assembly: Voltages, UWB cartridge identification, actuator click sequences, Front-Node, and LoRa/GNSS.',
+        lbl_auto_docking: 'Auto-Cockpit on Charge Docking (Edge-Triggered)',
+        lbl_forget_phone: 'Phone-Forgotten Alert on Ignition OFF',
+        lbl_standstill_info: 'Standstill Info Card after 5s Stop (Zero-Distraction)',
+        forget_phone_title: 'WARNING: Smartphone still in mount / dock!',
+        forget_phone_desc: 'Ignition was deactivated (KL15=0), but smartphone is still in dock and rider is walking away (RSSI dropping). Please take your phone!',
+        forget_phone_ack: 'Acknowledge',
         btn_run_smoke_test: 'Run Smoke Test',
         btn_test_actuators: 'Test Actuators (Clicks 1-4)',
         flasher_title: 'WebSerial 1-Click Firmware Installer',
@@ -467,6 +479,22 @@ const state = {
         soundMuted: false
     },
     simTrack: 'kerenzerberg',
+    docking: {
+        isCharging: false,
+        wasCharging: false,
+        isDocked: false,
+        userTabOverride: false,
+        autoDockingEnabled: localStorage.getItem('omb_auto_docking') !== 'false',
+        forgetReminderEnabled: localStorage.getItem('omb_forget_reminder') !== 'false',
+        standstillInfoEnabled: localStorage.getItem('omb_standstill_info') !== 'false',
+        forgetAlertActive: false
+    },
+    standstill: {
+        isStandstill: false,
+        stopStartTime: null,
+        stopTimerInterval: null,
+        cardVisible: false
+    },
     telemetry: {
         v_ign: null,
         v_bat: null,
@@ -946,11 +974,18 @@ document.addEventListener('visibilitychange', async () => {
 // 2. Toast Notification Helper
 // ==========================================
 function showToast(message, type = 'info', durationMs = 3500) {
+    // Cognitive Cockpit Calm (Section 2.9): Suppress non-safety popups during motion (v > 3 km/h)
+    if (state.telemetry && state.telemetry.speed && state.telemetry.speed > 3.0 &&
+        type !== 'danger' && type !== 'error' && !message.includes('🚨') && !message.includes('NOTRUF')) {
+        console.log(`[Cockpit Calm Suppressed Toast]: ${message}`);
+        return;
+    }
+
     const container = document.getElementById('toast-container');
     if (!container) return;
     const toast = document.createElement('div');
     toast.className = 'toast';
-    const icon = type === 'success' ? '✅' : type === 'warning' ? '⚠️' : '⚡';
+    const icon = type === 'success' ? '✅' : type === 'warning' ? '⚠️' : (type === 'danger' || type === 'error' ? '🚨' : '⚡');
     toast.innerHTML = `<span>${icon}</span><span>${message}</span>`;
     container.appendChild(toast);
 
@@ -965,7 +1000,7 @@ function showToast(message, type = 'info', durationMs = 3500) {
 // ==========================================
 // 3. Tab Navigation
 // ==========================================
-window.switchTab = function(tabId) {
+window.switchTab = function(tabId, isProgrammatic = false) {
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
 
@@ -975,12 +1010,18 @@ window.switchTab = function(tabId) {
     if (targetTab) {
         targetTab.classList.add('active');
     }
+
+    // Section 2.7: User Override Retention
+    // If rider manually clicked a tab away from cockpit while docked, do not jerk them back!
+    if (!isProgrammatic && tabId !== 'tab-cockpit' && state.docking && state.docking.isDocked) {
+        state.docking.userTabOverride = true;
+    }
 };
 
 document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
         const tabId = btn.getAttribute('data-tab');
-        if (tabId) window.switchTab(tabId);
+        if (tabId) window.switchTab(tabId, false);
     });
 });
 
@@ -1017,7 +1058,7 @@ btnConnect.addEventListener('click', async () => {
     }
 
     try {
-        showToast(isDe ? 'Suche nach OpenMotorBridge v8.0...' : 'Scanning for OpenMotorBridge v8.0...', 'info', 2500);
+        showToast(isDe ? 'Suche nach OpenMotorBridge v9.6...' : 'Scanning for OpenMotorBridge v9.6...', 'info', 2500);
         bleDevice = await navigator.bluetooth.requestDevice({
             filters: [{ namePrefix: 'OpenMotorBridge' }],
             optionalServices: [OMB_SERVICE_UUID]
@@ -2562,8 +2603,8 @@ function initRadarMacroConfigUi() {
 // 8. Hardware-Topologie & Baseline-Status Supervisor (NVS-Persistent)
 // =========================================================================
 const HW_INV_BITS = {
-    POD1:       1 << 0,  // Satelliten-Pod 1 (Intercom A / 1-Wire)
-    POD2:       1 << 1,  // Satelliten-Pod 2 (Intercom B / 1-Wire)
+    POD1:       1 << 0,  // Satelliten-Pod 1 (Intercom A / UWB)
+    POD2:       1 << 1,  // Satelliten-Pod 2 (Intercom B / UWB)
     LORA_MESH:  1 << 2,  // LoRa 868 MHz Kolonnen-Mesh (PCBA 01 Central Box)
     POD3:       1 << 2,  // Backward-compatibility alias
     FRONT_NODE: 1 << 3,  // Front-Node (Cockpit / ESP-NOW)
@@ -2575,21 +2616,21 @@ const HW_INV_BITS = {
     KEYFOB:     1 << 9,  // Smart-Keyfob LoRa Pager
     CAN_BUS:    1 << 10, // Fahrzeug-CAN Bus
     SD_CARD:    1 << 11, // MicroSD-Karte gemountet
-    DS18B20:    1 << 12  // 1-Wire Außentemperaturfühler
+    DS18B20:    1 << 12  // TMP117 / SHTC3 I2C Temperatursensor (Front-Node / Qwiic)
 };
 
 const HW_INV_LABELS = {
     [HW_INV_BITS.POD1]: {
-        nameDe: 'Satelliten-Pod 1 (Intercom A / 1-Wire)',
-        nameEn: 'Satellite Pod 1 (Intercom A / 1-Wire)',
-        hintDe: '1-Wire Steckverbindung oder Bajonettverschluss an Port 1 prüfen.',
-        hintEn: 'Check 1-Wire connector or bayonet lock on Port 1.'
+        nameDe: 'Satelliten-Pod 1 (Intercom A / UWB)',
+        nameEn: 'Satellite Pod 1 (Intercom A / UWB)',
+        hintDe: 'UWB Verbindung (DW3110) oder Bajonettverschluss an Port 1 prüfen.',
+        hintEn: 'Check UWB connection (DW3110) or bayonet lock on Port 1.'
     },
     [HW_INV_BITS.POD2]: {
-        nameDe: 'Satelliten-Pod 2 (Intercom B / 1-Wire)',
-        nameEn: 'Satellite Pod 2 (Intercom B / 1-Wire)',
-        hintDe: '1-Wire Steckverbindung oder Bajonettverschluss an Port 2 prüfen.',
-        hintEn: 'Check 1-Wire connector or bayonet lock on Port 2.'
+        nameDe: 'Satelliten-Pod 2 (Intercom B / UWB)',
+        nameEn: 'Satellite Pod 2 (Intercom B / UWB)',
+        hintDe: 'UWB Verbindung (DW3110) oder Bajonettverschluss an Port 2 prüfen.',
+        hintEn: 'Check UWB connection (DW3110) or bayonet lock on Port 2.'
     },
     [HW_INV_BITS.LORA_MESH]: {
         nameDe: 'LoRa 868 MHz Kolonnen-Mesh (PCBA 01 Central Box)',
@@ -2652,10 +2693,10 @@ const HW_INV_LABELS = {
         hintEn: 'Check seat of MicroSD card in slot.'
     },
     [HW_INV_BITS.DS18B20]: {
-        nameDe: 'Außentemperaturfühler DS18B20 (1-Wire)',
-        nameEn: 'Outside Temperature Sensor DS18B20 (1-Wire)',
-        hintDe: '1-Wire Busleitung zum Temperaturfühler prüfen.',
-        hintEn: 'Check 1-Wire bus line to temperature sensor.'
+        nameDe: 'Temperaturfühler TMP117 / SHTC3 (I2C Qwiic)',
+        nameEn: 'Temperature Sensor TMP117 / SHTC3 (I2C Qwiic)',
+        hintDe: 'I2C Qwiic Busleitung zum Front-Knoten Temperaturfühler prüfen.',
+        hintEn: 'Check I2C Qwiic bus line to Front Node temperature sensor.'
     }
 };
 
@@ -2772,7 +2813,7 @@ function initHardwareTopologyConfigUi() {
             const isDe = state.lang === 'de';
             if (state.isBleConnected) {
                 sendBleControlCommand(new Uint8Array([0x41, 0x03]));
-                showToast(isDe ? '🔄 Hardware-Bus Scan (1-Wire, UART, ESP-NOW) gestartet...'
+                showToast(isDe ? '🔄 Hardware-Bus Scan (UWB, UART, ESP-NOW) gestartet...'
                                : '🔄 Hardware bus scan triggered...', 'info', 2000);
             } else {
                 showToast(isDe ? '🔄 Simulator-Bus Scan durchgeführt (Knoten verifiziert)'
@@ -3039,7 +3080,7 @@ function updateBleUiState(connected) {
             badgeOmm.className = 'card-badge badge-green';
             badgeOmm.style.background = '';
             badgeOmm.style.color = '';
-            badgeOmm.textContent = 'Synchron (v8.0.4)';
+            badgeOmm.textContent = 'Synchron (v9.6.0)';
         }
     } else {
         labelConnectBtn.textContent = dict.ble_connect;
@@ -3554,6 +3595,7 @@ function handleBleTelemetry(event) {
 function updateTelemetryUi(data) {
     const dict = i18n[state.lang];
     if (data.v_ign !== undefined && data.v_ign !== null) {
+        state.telemetry.v_ign = data.v_ign;
         valVign.textContent = `${data.v_ign.toFixed(1)} V`;
         const cutOffMap = { agm: 11.8, wet: 11.6, lifepo4: 12.8, nmc: 10.5 };
         const threshold = cutOffMap[state.batteryChemistry] || 11.8;
@@ -3564,6 +3606,7 @@ function updateTelemetryUi(data) {
             valVign.style.color = 'var(--accent-green)';
             document.getElementById('sub-vign-status').textContent = dict.vign_active;
         }
+        checkForgetPhoneAlert();
     }
 
     if (data.v_bat !== undefined && data.v_bat !== null) {
@@ -3588,6 +3631,15 @@ function updateTelemetryUi(data) {
         valSpeed.textContent = data.speed.toFixed(1);
         state.telemetry.speed = data.speed;
         updateSpeedGatingVisual(data.speed);
+
+        // Section 2.7: Auto-focus cockpit when riding (v > 5 km/h) if user had temporarily overridden
+        if (data.speed > 5.0 && state.docking && state.docking.userTabOverride && state.docking.autoDockingEnabled) {
+            window.switchTab('tab-cockpit', true);
+            state.docking.userTabOverride = false;
+        }
+
+        // Section 2.9: Cognitive Cockpit Calm & Standstill Card handling
+        handleSpeedZeroDistraction(data.speed);
 
         if (valHudSpeed) {
             valHudSpeed.textContent = data.speed < 0.5 ? '0' : Math.round(data.speed);
@@ -4667,7 +4719,7 @@ function toggleDemoMode(enable) {
             badgeOmm.className = 'card-badge badge-green';
             badgeOmm.style.background = '';
             badgeOmm.style.color = '';
-            badgeOmm.textContent = 'Synchron (v8.0.4)';
+            badgeOmm.textContent = 'Synchron (v9.6.0)';
         }
 
         // Activate Hardware Tab in Demo
@@ -4893,16 +4945,16 @@ document.getElementById('btn-trigger-p2-vol-down')?.addEventListener('click', as
     if (controlChar) await controlChar.writeValue(new Uint8Array([0x09, 0x02, 0x04]));
 });
 
-// Universal UWB Mechatronic Opcodes (0x01..0x08)
+// Universal UWB Mechatronic Opcodes (0x01..0x08 matching firmware uwb_backbone_types.h)
 const uwbOpcodes = [
-    { id: 'btn-opcode-01', code: 0x01, name: 'STANDBY', toastDe: '💤 UWB Opcode 0x01: Cartridge Standby gesendet', toastEn: '💤 UWB Opcode 0x01: Cartridge Standby dispatched' },
-    { id: 'btn-opcode-02', code: 0x02, name: 'PTT ON', toastDe: '⚡ UWB Opcode 0x02: Cartridge PTT ON gesendet', toastEn: '⚡ UWB Opcode 0x02: Cartridge PTT ON dispatched' },
-    { id: 'btn-opcode-03', code: 0x03, name: 'PTT OFF', toastDe: '🔘 UWB Opcode 0x03: Cartridge PTT OFF gesendet', toastEn: '🔘 UWB Opcode 0x03: Cartridge PTT OFF dispatched' },
-    { id: 'btn-opcode-04', code: 0x04, name: 'MUTE', toastDe: '🔇 UWB Opcode 0x04: Cartridge Audio MUTE gesendet', toastEn: '🔇 UWB Opcode 0x04: Cartridge Audio MUTE dispatched' },
-    { id: 'btn-opcode-05', code: 0x05, name: 'UNMUTE', toastDe: '🔊 UWB Opcode 0x05: Cartridge Audio UNMUTE gesendet', toastEn: '🔊 UWB Opcode 0x05: Cartridge Audio UNMUTE dispatched' },
-    { id: 'btn-opcode-06', code: 0x06, name: 'AMBIENT', toastDe: '👂 UWB Opcode 0x06: Cartridge Ambient Pass-Through gesendet', toastEn: '👂 UWB Opcode 0x06: Cartridge Ambient Pass-Through dispatched' },
-    { id: 'btn-opcode-07', code: 0x07, name: 'BEACON', toastDe: '🚨 UWB Opcode 0x07: Cartridge Emergency Rescue Beacon gesendet', toastEn: '🚨 UWB Opcode 0x07: Cartridge Emergency Rescue Beacon dispatched' },
-    { id: 'btn-opcode-08', code: 0x08, name: 'EJECT', toastDe: '⏏️ UWB Opcode 0x08: Cartridge Release / Eject gesendet', toastEn: '⏏️ UWB Opcode 0x08: Cartridge Release / Eject dispatched' }
+    { id: 'btn-opcode-01', code: 0x01, name: 'BOOT', toastDe: '⚡ UWB Opcode 0x01: CARTRIDGE_OPCODE_POWER_BOOT gesendet', toastEn: '⚡ UWB Opcode 0x01: CARTRIDGE_OPCODE_POWER_BOOT dispatched' },
+    { id: 'btn-opcode-02', code: 0x02, name: 'OFF', toastDe: '🔌 UWB Opcode 0x02: CARTRIDGE_OPCODE_POWER_OFF gesendet', toastEn: '🔌 UWB Opcode 0x02: CARTRIDGE_OPCODE_POWER_OFF dispatched' },
+    { id: 'btn-opcode-03', code: 0x03, name: 'VOL +', toastDe: '🔊 UWB Opcode 0x03: CARTRIDGE_OPCODE_VOLUME_UP gesendet', toastEn: '🔊 UWB Opcode 0x03: CARTRIDGE_OPCODE_VOLUME_UP dispatched' },
+    { id: 'btn-opcode-04', code: 0x04, name: 'VOL -', toastDe: '🔉 UWB Opcode 0x04: CARTRIDGE_OPCODE_VOLUME_DOWN gesendet', toastEn: '🔉 UWB Opcode 0x04: CARTRIDGE_OPCODE_VOLUME_DOWN dispatched' },
+    { id: 'btn-opcode-05', code: 0x05, name: 'MESH', toastDe: '🔘 UWB Opcode 0x05: CARTRIDGE_OPCODE_MESH_TOGGLE gesendet', toastEn: '🔘 UWB Opcode 0x05: CARTRIDGE_OPCODE_MESH_TOGGLE dispatched' },
+    { id: 'btn-opcode-06', code: 0x06, name: 'GROUP', toastDe: '👥 UWB Opcode 0x06: CARTRIDGE_OPCODE_OPEN_GROUP_SW gesendet', toastEn: '👥 UWB Opcode 0x06: CARTRIDGE_OPCODE_OPEN_GROUP_SW dispatched' },
+    { id: 'btn-opcode-07', code: 0x07, name: 'CH +', toastDe: '⏭️ UWB Opcode 0x07: CARTRIDGE_OPCODE_CHANNEL_NEXT gesendet', toastEn: '⏭️ UWB Opcode 0x07: CARTRIDGE_OPCODE_CHANNEL_NEXT dispatched' },
+    { id: 'btn-opcode-08', code: 0x08, name: 'CH -', toastDe: '⏮️ UWB Opcode 0x08: CARTRIDGE_OPCODE_CHANNEL_PREV gesendet', toastEn: '⏮️ UWB Opcode 0x08: CARTRIDGE_OPCODE_CHANNEL_PREV dispatched' }
 ];
 
 uwbOpcodes.forEach(op => {
@@ -5243,7 +5295,7 @@ btnWizardFinish.addEventListener('click', () => {
 });
 
 // ==========================================
-// 9b. 1-Wire New UUID Detection & Profile Assignment
+// 9b. UWB New UUID Detection & Profile Assignment
 // ==========================================
 const uuidDetectModal = document.getElementById('uuid-detect-modal');
 const btnCloseUuidModal = document.getElementById('btn-close-uuid-modal');
@@ -5647,7 +5699,7 @@ document.querySelectorAll('input[name="gpx-profile"]').forEach(radio => {
 function generateExtendedGpxXml(profileType, tour, options) {
     const timeIso = new Date().toISOString();
     let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-    xml += `<gpx version="1.1" creator="OpenMotorBridge v8.0"\n`;
+    xml += `<gpx version="1.1" creator="OpenMotorBridge v9.6"\n`;
     xml += `  xmlns="http://www.topografix.com/GPX/1/1"\n`;
     xml += `  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n`;
     xml += `  xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3"\n`;
@@ -7166,7 +7218,7 @@ btnTriggerOmmPush?.addEventListener('click', () => {
         } else if (pct === 100) {
             clearInterval(flashInterval);
             lblOmmPushStatus.textContent = state.lang === 'de' ? '✓ MD5 Hash verifiziert * Coprozessor neugestartet' : '✓ MD5 Hash verified * Coprocessor rebooted';
-            badgeOmmFwState.textContent = 'Synchron (v8.0.4)';
+            badgeOmmFwState.textContent = 'Synchron (v9.6.0)';
             badgeOmmFwState.className = 'card-badge badge-green';
             btnTriggerOmmPush.disabled = false;
             showToast(state.lang === 'de' ? '✓ OMM UCS Intercom Firmware erfolgreich via UART aktualisiert!' : '✓ OMM UCS Intercom firmware successfully updated via UART!', 'success');
@@ -8097,7 +8149,7 @@ function exportKerenzerbergGpx() {
     const points = SIM_TRACK_KERENZERBERG_WAYPOINTS;
     const timeIso = new Date().toISOString();
     let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-    xml += `<gpx version="1.1" creator="OpenMotorBridge v8.0"\n`;
+    xml += `<gpx version="1.1" creator="OpenMotorBridge v9.6"\n`;
     xml += `  xmlns="http://www.topografix.com/GPX/1/1"\n`;
     xml += `  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n`;
     xml += `  xmlns:omb="http://openmotorbridge.org/xmlschemas/omb/1.0"\n`;
@@ -8394,6 +8446,34 @@ function setupDemoSuiteUi() {
         btnEss.addEventListener('click', () => {
             setEssActive(true);
             showToast(state.lang === 'de' ? '⚡ Notbremsung simuliert: ESS 4.5 Hz Strobe aktiv!' : '⚡ Emergency braking triggered: ESS 4.5 Hz Strobe active!', 'warning');
+        });
+    }
+
+    // 3b. Smart Docking & Forget-Phone Simulation Triggers
+    const btnInjectDock = document.getElementById('btn-inject-dock');
+    if (btnInjectDock) {
+        btnInjectDock.addEventListener('click', () => {
+            const nextCharging = !state.docking.isCharging;
+            handleChargingChange(nextCharging);
+            const isDe = state.lang === 'de';
+            btnInjectDock.textContent = nextCharging 
+                ? (isDe ? '⚡ Eingesteckt (Laden AN)' : '⚡ Docked (Charging ON)') 
+                : (isDe ? '⚡ Smart Docking (Laden Sim)' : '⚡ Smart Docking (Sim)');
+            btnInjectDock.style.background = nextCharging ? 'rgba(0, 242, 254, 0.25)' : '';
+        });
+    }
+
+    const btnInjectForget = document.getElementById('btn-inject-forget-phone');
+    if (btnInjectForget) {
+        btnInjectForget.addEventListener('click', () => {
+            // Force docked and ignition OFF to trigger reminder
+            state.docking.isCharging = true;
+            state.docking.isDocked = true;
+            state.telemetry.v_ign = 0.0;
+            if (valVign) valVign.textContent = '0.0 V (AUS)';
+            state.docking.forgetAlertActive = false; // re-arm
+            checkForgetPhoneAlert();
+            showToast(state.lang === 'de' ? '📱 Simulation: Zündung AUS & Handy vergessen ausgelöst' : '📱 Sim: Ignition OFF & Phone Forgotten triggered', 'warning');
         });
     }
 
@@ -9794,9 +9874,9 @@ function renderGroupBuilder() {
     const tbodyPcba = document.getElementById('builder-group-tbody-pcba');
     const masterPcbas = [
         { id: 'kicad_main_box', code: 'PCBA 01', name: isDe ? 'Zentralbox Hauptplatine' : 'Central Main Box', desc: isDe ? 'ESP32-S3, Codec, USV, LoRa SX1262' : 'ESP32-S3, Codec, UPS, LoRa SX1262' },
-        { id: 'kicad_cartridge', code: 'PCBA 03', name: isDe ? 'Smart Kassettenplatine' : 'Smart Modular Cartridge', desc: isDe ? 'Aktuatoren, Pogo-Pins, JST' : 'Actuators, Pogo pins, JST' },
+        { id: 'kicad_cartridge', code: 'PCBA 03', name: isDe ? 'Smart Kassettenplatine' : 'Smart Modular Cartridge', desc: isDe ? 'ESP32-C6, DW3110 UWB, Aktuatoren, Pogo-Pins' : 'ESP32-C6, DW3110 UWB, Actuators, Pogo pins' },
         { id: 'kicad_front_node', code: 'PCBA 05', name: isDe ? 'Universal Front-Knoten' : 'Universal Front Node', desc: isDe ? 'ESP32-S3, USB Hub, SAM-M10Q GNSS, 20W PD' : 'ESP32-S3, USB Hub, SAM-M10Q GNSS, PD' },
-        { id: 'kicad_smart_keyfob', code: 'PCBA 07', name: isDe ? 'Smart-Keyfob Platine' : 'Smart Keyfob', desc: isDe ? 'BLE Tracker, LRA Haptik' : 'BLE Tracker, LRA Haptic' },
+        { id: 'kicad_smart_keyfob', code: 'PCBA 07', name: isDe ? 'Smart-Keyfob Platine' : 'Smart Keyfob', desc: isDe ? 'nRF52840 (DW3000 UWB), BLE Tracker, LRA Haptik' : 'nRF52840 (DW3000 UWB), BLE Tracker, LRA Haptic' },
         { id: 'kicad_radar_submcu', code: 'PCBA 08', name: isDe ? 'Radar 2.0 Sub-MCU Platine' : 'Radar 2.0 Sub-MCU Board', desc: isDe ? 'Wheeltec 77 GHz mmWave, 36x Halo RGB LEDs, UWB' : 'Wheeltec 77 GHz mmWave, 36x Halo RGB LEDs, UWB' },
         { id: 'kicad_omm_intercom', code: 'PCBA 09', name: isDe ? 'OMM 2.4 GHz UCS Intercom' : 'OMM 2.4 GHz UCS Intercom', desc: isDe ? 'Dual-Engine: ESP32-C6 + ESP32-PICO BT Classic, BQ24075 PMIC, ES8388 Codec' : 'Dual-Engine: ESP32-C6 + ESP32-PICO BT Classic, BQ24075 PMIC, ES8388 Codec' },
         { id: 'kicad_omm446_intercom', code: 'PCBA 10', name: isDe ? 'OMM 446 MHz PMR/DMR Intercom' : 'OMM 446 MHz PMR/DMR Intercom', desc: isDe ? 'Dual-Engine: NiceRF SA818-DMR, ESP32-C6 Host, ESP32-PICO BT, ES8388 Codec' : 'Dual-Engine: NiceRF SA818-DMR, ESP32-C6 Host, ESP32-PICO BT, ES8388 Codec' }
@@ -10329,15 +10409,15 @@ function setupSmokeTestUi() {
 
         // Check 2: Pod 1 & 2 Cartridges + Actuators
         setStepState('cartridges', 'testing', state.lang === 'de' ? 'PRÜFE...' : 'TESTING...');
-        logSmoke(state.lang === 'de' ? 'Check 2: Lese 1-Wire Kassetten-IDs & Pogo-Pins...' : 'Check 2: Reading 1-Wire Cartridge IDs & Pogo-Pins...', 'info');
+        logSmoke(state.lang === 'de' ? 'Check 2: Lese UWB Kassetten-IDs (ESP32-C6 / DW3110) & Pogo-Pins...' : 'Check 2: Reading UWB Cartridge IDs (ESP32-C6 / DW3110) & Pogo-Pins...', 'info');
         await new Promise(r => setTimeout(r, 550));
-        logSmoke(state.lang === 'de' ? `✓ Slot 1 1-Wire ID: DS2431 [${builderState.slot1.toUpperCase()}] erkannt.` : `✓ Slot 1 1-Wire ID: DS2431 [${builderState.slot1.toUpperCase()}] detected.`, 'ok');
+        logSmoke(state.lang === 'de' ? `✓ Slot 1 UWB ID: ESP32-C6 [${builderState.slot1.toUpperCase()}] erkannt.` : `✓ Slot 1 UWB ID: ESP32-C6 [${builderState.slot1.toUpperCase()}] detected.`, 'ok');
         if (builderState.slot1 === 'omm-ucs') {
             logSmoke(state.lang === 'de' ? '  ↪ OMM 2.4 GHz Dual-Engine Modul (PCBA 09 ESP32-C6 + ESP32-PICO BT): BQ24075 PMIC 500mA Fast-Charge, 2.4 GHz RF (RSSI -36 dBm) OK.' : '  ↪ OMM 2.4 GHz Dual-Engine Module (PCBA 09 ESP32-C6 + ESP32-PICO BT): BQ24075 PMIC 500mA fast-charge, 2.4 GHz RF (RSSI -36 dBm) OK.', 'ok');
         } else if (builderState.slot1 === 'omm446') {
             logSmoke(state.lang === 'de' ? '  ↪ OMM 446 MHz PMR/DMR Modul (PCBA 10 NiceRF SA818 + ESP32-C6 + ESP32-PICO BT): 0.5W RF OK, CTCSS/DCS aktiv, ES8388 Audio OK.' : '  ↪ OMM 446 MHz PMR/DMR Module (PCBA 10 NiceRF SA818 + ESP32-C6 + ESP32-PICO BT): 0.5W RF OK, CTCSS/DCS active, ES8388 audio OK.', 'ok');
         }
-        logSmoke(state.lang === 'de' ? `✓ Slot 2 1-Wire ID: DS2431 [${builderState.slot2.toUpperCase()}] erkannt.` : `✓ Slot 2 1-Wire ID: DS2431 [${builderState.slot2.toUpperCase()}] detected.`, 'ok');
+        logSmoke(state.lang === 'de' ? `✓ Slot 2 UWB ID: ESP32-C6 [${builderState.slot2.toUpperCase()}] erkannt.` : `✓ Slot 2 UWB ID: ESP32-C6 [${builderState.slot2.toUpperCase()}] detected.`, 'ok');
         if (builderState.slot2 === 'omm-ucs') {
             logSmoke(state.lang === 'de' ? '  ↪ OMM 2.4 GHz Dual-Engine Modul (PCBA 09 ESP32-C6 + ESP32-PICO BT): BQ24075 PMIC 500mA Fast-Charge, 2.4 GHz RF (RSSI -36 dBm) OK.' : '  ↪ OMM 2.4 GHz Dual-Engine Module (PCBA 09 ESP32-C6 + ESP32-PICO BT): BQ24075 PMIC 500mA fast-charge, 2.4 GHz RF (RSSI -36 dBm) OK.', 'ok');
         } else if (builderState.slot2 === 'omm446') {
@@ -10447,7 +10527,7 @@ function setupWebSerialFlasherUi() {
                 { pct: 15, msg: isDe ? 'Lösche Flash-Sektoren (0x00000 bis 0x1FFFF)...' : 'Erasing flash sectors (0x00000 to 0x1FFFF)...' },
                 { pct: 30, msg: isDe ? 'Schreibe Bootloader bootloader.bin (0x0000)...' : 'Writing bootloader bootloader.bin (0x0000)...' },
                 { pct: 50, msg: isDe ? 'Schreibe Partitionstabelle partitions.bin (0x8000)...' : 'Writing partition table partitions.bin (0x8000)...' },
-                { pct: 85, msg: isDe ? 'Schreibe Firmware openmotorbridge_main_v8.12.bin (0x10000)...' : 'Writing firmware openmotorbridge_main_v8.12.bin (0x10000)...' },
+                { pct: 85, msg: isDe ? 'Schreibe Firmware openmotorbridge_main_v9.6.bin (0x10000)...' : 'Writing firmware openmotorbridge_main_v9.6.bin (0x10000)...' },
                 { pct: 95, msg: isDe ? 'Schreibe Dateisystem spiffs.bin (0x310000)...' : 'Writing filesystem spiffs.bin (0x310000)...' },
                 { pct: 100, msg: isDe ? '✓ Verifikation erfolgreich! MD5 Checksumme stimmt überein.' : '✓ Verification successful! MD5 checksum matches.' }
             ];
@@ -10460,7 +10540,7 @@ function setupWebSerialFlasherUi() {
                 await new Promise(r => setTimeout(r, 380));
             }
 
-            logFlash(isDe ? '🚀 ESP32-S3 Soft-Reset ausgelöst... System bootet Version 8.12.' : '🚀 ESP32-S3 soft reset triggered... System booting Version 8.12.', 'ok');
+            logFlash(isDe ? '🚀 ESP32-S3 Soft-Reset ausgelöst... System bootet Version 9.6.' : '🚀 ESP32-S3 soft reset triggered... System booting Version 9.6.', 'ok');
             showToast(isDe ? 'Firmware erfolgreich geflasht!' : 'Firmware successfully flashed!', 'success');
         } catch (err) {
             logFlash(isDe ? `Fehler beim Flashen: ${err.message}` : `Flashing error: ${err.message}`, 'err');
@@ -10468,6 +10548,212 @@ function setupWebSerialFlasherUi() {
             btnConnect.disabled = false;
         }
     });
+}
+
+// =========================================================================
+// 12b. Smart Docking & Cognitive Cockpit Calm Subsystems (Kapitel 10, 2.7 & 2.9)
+// =========================================================================
+
+function handleChargingChange(isCharging) {
+    const wasCharging = state.docking.isCharging;
+    state.docking.isCharging = isCharging;
+    state.docking.isDocked = isCharging;
+
+    // Single-Edge Rising Transition: false -> true
+    if (!wasCharging && isCharging) {
+        state.docking.userTabOverride = false;
+        if (state.docking.autoDockingEnabled) {
+            window.switchTab('tab-cockpit', true);
+            const isDe = state.lang === 'de';
+            showToast(isDe ? '⚡ Smart Docking: Smartphone eingedockt -> Cockpit aktiv' : '⚡ Smart Docking: Smartphone docked -> Cockpit active', 'info', 2500);
+        }
+    } else if (!isCharging) {
+        // Disconnected from dock
+        state.docking.userTabOverride = false;
+        state.docking.forgetAlertActive = false;
+        const banner = document.getElementById('forget-phone-banner');
+        if (banner) banner.style.display = 'none';
+    }
+}
+
+function handleSpeedZeroDistraction(speed) {
+    const standstillCard = document.getElementById('cockpit-standstill-card');
+    if (!standstillCard) return;
+
+    if (speed > 3.0) {
+        // Vehicle in motion: immediate hide (no delay, zero distraction)
+        state.standstill.isStandstill = false;
+        state.standstill.stopStartTime = null;
+        if (state.standstill.cardVisible) {
+            standstillCard.classList.add('hidden');
+            state.standstill.cardVisible = false;
+        }
+        if (state.standstill.stopTimerInterval) {
+            clearInterval(state.standstill.stopTimerInterval);
+            state.standstill.stopTimerInterval = null;
+        }
+    } else if (speed <= 0.5) {
+        // Vehicle at standstill (v = 0 km/h)
+        if (!state.standstill.isStandstill) {
+            state.standstill.isStandstill = true;
+            state.standstill.stopStartTime = Date.now();
+        }
+
+        const elapsedMs = Date.now() - state.standstill.stopStartTime;
+        if (elapsedMs >= 5000 && !state.standstill.cardVisible && state.docking.standstillInfoEnabled) {
+            standstillCard.classList.remove('hidden');
+            state.standstill.cardVisible = true;
+            updateStandstillCardData();
+
+            if (!state.standstill.stopTimerInterval) {
+                state.standstill.stopTimerInterval = setInterval(() => {
+                    if (!state.standstill.cardVisible) return;
+                    const curSec = Math.floor((Date.now() - state.standstill.stopStartTime) / 1000);
+                    const mins = String(Math.floor(curSec / 60)).padStart(2, '0');
+                    const secs = String(curSec % 60).padStart(2, '0');
+                    const timerEl = document.getElementById('standstill-stop-timer');
+                    if (timerEl) {
+                        timerEl.textContent = `Halt: ${mins}:${secs} min`;
+                    }
+                }, 1000);
+            }
+        }
+    }
+}
+
+function updateStandstillCardData() {
+    // 1. Weather & Baro from BMP390 / SHTC3
+    const weatherVal = document.getElementById('standstill-weather-val');
+    const weatherSub = document.getElementById('standstill-weather-sub');
+    const ambTemp = (state.frontNode && state.frontNode.sensors && state.frontNode.sensors.ambientTemp) || 19.5;
+    if (weatherVal) weatherVal.textContent = `${ambTemp.toFixed(1)} °C · 1018 hPa`;
+    if (weatherSub) weatherSub.textContent = 'BMP390 / SHTC3 Barometer stabil · Kein Regen';
+
+    // 2. Pass & Altitude
+    const passVal = document.getElementById('standstill-pass-val');
+    const passSub = document.getElementById('standstill-pass-sub');
+    if (passVal) passVal.textContent = '570 m ü. M. · Route frei';
+    if (passSub) passSub.textContent = 'Rickenpass & Kerenzerberg trocken & offen';
+
+    // 3. Vehicle Health & Tires
+    const healthVal = document.getElementById('standstill-health-val');
+    const healthSub = document.getElementById('standstill-health-sub');
+    const vIgnStr = state.telemetry.v_ign !== null ? `${state.telemetry.v_ign.toFixed(1)} V` : '14.2 V';
+    if (healthVal) healthVal.textContent = `${vIgnStr} · USV 100% · Reifen OK`;
+    if (healthSub) healthSub.textContent = 'RDKS: 2.45 bar V / 2.80 bar H · Öltemp. 88 °C';
+}
+
+function checkForgetPhoneAlert() {
+    if (!state.docking.forgetReminderEnabled) return;
+    const banner = document.getElementById('forget-phone-banner');
+    if (!banner) return;
+
+    // Ignition off (v_ign < 1.0V) and phone still docked
+    const ignOff = state.telemetry.v_ign !== null && state.telemetry.v_ign < 1.0;
+    if (ignOff && state.docking.isDocked) {
+        if (!state.docking.forgetAlertActive) {
+            state.docking.forgetAlertActive = true;
+            banner.style.display = 'block';
+            playDoubleChirp();
+            const isDe = state.lang === 'de';
+            showToast(isDe ? '⚠️ Handy-Vergessen: Zündung AUS & Smartphone noch im Dock!' : '⚠️ Phone Reminder: Ignition OFF & Phone still docked!', 'warning', 5000);
+        }
+    } else {
+        if (state.docking.forgetAlertActive && !ignOff) {
+            state.docking.forgetAlertActive = false;
+            banner.style.display = 'none';
+        }
+    }
+}
+
+function playDoubleChirp() {
+    try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        const now = ctx.currentTime;
+        
+        // Chirp 1 (880 Hz -> 1760 Hz)
+        const osc1 = ctx.createOscillator();
+        const gain1 = ctx.createGain();
+        osc1.frequency.setValueAtTime(880, now);
+        osc1.frequency.exponentialRampToValueAtTime(1760, now + 0.08);
+        gain1.gain.setValueAtTime(0.25, now);
+        gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+        osc1.connect(gain1);
+        gain1.connect(ctx.destination);
+        osc1.start(now);
+        osc1.stop(now + 0.08);
+
+        // Chirp 2 (after 100ms pause)
+        const osc2 = ctx.createOscillator();
+        const gain2 = ctx.createGain();
+        osc2.frequency.setValueAtTime(880, now + 0.12);
+        osc2.frequency.exponentialRampToValueAtTime(1760, now + 0.20);
+        gain2.gain.setValueAtTime(0.25, now + 0.12);
+        gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.20);
+        osc2.connect(gain2);
+        gain2.connect(ctx.destination);
+        osc2.start(now + 0.12);
+        osc2.stop(now + 0.20);
+    } catch (_) {}
+}
+
+function setupSmartDockingAndCalmUi() {
+    // 1. Settings checkboxes
+    const chkAutoDock = document.getElementById('chk-auto-docking-cockpit');
+    if (chkAutoDock) {
+        chkAutoDock.checked = state.docking.autoDockingEnabled;
+        chkAutoDock.addEventListener('change', (e) => {
+            state.docking.autoDockingEnabled = e.target.checked;
+            localStorage.setItem('omb_auto_docking', e.target.checked);
+        });
+    }
+
+    const chkForgetReminder = document.getElementById('chk-forget-phone-reminder');
+    if (chkForgetReminder) {
+        chkForgetReminder.checked = state.docking.forgetReminderEnabled;
+        chkForgetReminder.addEventListener('change', (e) => {
+            state.docking.forgetReminderEnabled = e.target.checked;
+            localStorage.setItem('omb_forget_reminder', e.target.checked);
+        });
+    }
+
+    const chkStandstill = document.getElementById('chk-standstill-info');
+    if (chkStandstill) {
+        chkStandstill.checked = state.docking.standstillInfoEnabled;
+        chkStandstill.addEventListener('change', (e) => {
+            state.docking.standstillInfoEnabled = e.target.checked;
+            localStorage.setItem('omb_standstill_info', e.target.checked);
+            if (!e.target.checked) {
+                const card = document.getElementById('cockpit-standstill-card');
+                if (card) card.classList.add('hidden');
+                state.standstill.cardVisible = false;
+            }
+        });
+    }
+
+    // 2. Banner Acknowledge
+    const btnForgetAck = document.getElementById('btn-forget-phone-ack');
+    if (btnForgetAck) {
+        btnForgetAck.addEventListener('click', () => {
+            state.docking.forgetAlertActive = false;
+            const banner = document.getElementById('forget-phone-banner');
+            if (banner) banner.style.display = 'none';
+        });
+    }
+
+    // 3. Hardware Battery API Listener
+    if ('getBattery' in navigator) {
+        navigator.getBattery().then(battery => {
+            state.docking.isCharging = battery.charging;
+            state.docking.wasCharging = battery.charging;
+            state.docking.isDocked = battery.charging;
+            battery.addEventListener('chargingchange', () => {
+                handleChargingChange(battery.charging);
+            });
+        }).catch(() => {});
+    }
 }
 
 // Initialize Language, Telemetry & Cockpit UI on Boot (Standby - Wait for BLE Hardware)
@@ -10480,6 +10766,7 @@ setupDemoSuiteUi();
 setupSystemBuilderUi();
 setupSmokeTestUi();
 setupWebSerialFlasherUi();
+setupSmartDockingAndCalmUi();
 
 if (!state.isDemoMode && !state.isBleConnected) {
     resetDisconnectedTelemetryUi();

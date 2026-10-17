@@ -1,9 +1,11 @@
-const CACHE_NAME = 'omb-pwa-v8.15';
+const CACHE_NAME = 'omb-pwa-v9.6';
 const ASSETS = [
     './',
     './index.html',
+    './demo.html',
     './css/style.css',
     './js/app.js',
+    './js/bom_catalog.js',
     './manifest.json',
     './assets/openmotorbridge_logo.svg',
     './assets/openmotormesh_logo.svg',

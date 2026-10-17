@@ -2699,6 +2699,128 @@ body.ride-hud-active .tab-btn {
     box-shadow: 0 0 12px rgba(255, 159, 10, 0.35);
 }
 
+/* ==========================================================================
+   Smart Docking & Phone-Left-Behind (Section 2.7)
+   ========================================================================== */
+.forget-phone-banner {
+    background: linear-gradient(135deg, rgba(234, 88, 12, 0.95), rgba(154, 52, 18, 0.95));
+    border: 2px solid #f97316;
+    border-radius: var(--radius-md);
+    box-shadow: 0 0 30px rgba(249, 115, 22, 0.6), 0 8px 24px rgba(0, 0, 0, 0.5);
+    backdrop-filter: var(--glass-blur);
+    padding: 14px 18px;
+    margin-bottom: 18px;
+    animation: forgetPhonePulse 1.2s infinite alternate ease-in-out;
+    position: relative;
+    z-index: 92;
+}
+
+.forget-phone-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.forget-phone-icon {
+    font-size: 2.2rem;
+    animation: alarmIconRing 0.5s infinite ease-in-out;
+    filter: drop-shadow(0 0 8px #f97316);
+}
+
+@keyframes forgetPhonePulse {
+    0% {
+        border-color: #f97316;
+        box-shadow: 0 0 15px rgba(249, 115, 22, 0.4);
+    }
+    100% {
+        border-color: #ef4444;
+        box-shadow: 0 0 35px rgba(239, 68, 68, 0.85), 0 0 15px rgba(249, 115, 22, 0.4);
+    }
+}
+
+.docking-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 8px;
+    background: rgba(48, 209, 88, 0.15);
+    border: 1px solid rgba(48, 209, 88, 0.4);
+    border-radius: 12px;
+    font-size: 0.72rem;
+    color: var(--accent-green);
+    font-weight: 700;
+}
+
+/* ==========================================================================
+   Kognitive Cockpit-Ruhe & Stillstands-Infokarte (Section 2.9)
+   ========================================================================== */
+.standstill-info-card {
+    background: linear-gradient(135deg, rgba(13, 17, 23, 0.92) 0%, rgba(22, 27, 34, 0.96) 100%);
+    border: 1px solid rgba(0, 242, 254, 0.35);
+    border-radius: var(--radius-md);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45), 0 0 18px rgba(0, 242, 254, 0.15);
+    backdrop-filter: var(--glass-blur);
+    padding: 14px 18px;
+    margin-bottom: 18px;
+    transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.standstill-info-card.hidden {
+    opacity: 0;
+    transform: translateY(-8px);
+    pointer-events: none;
+    display: none !important;
+}
+
+.standstill-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.standstill-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+}
+
+.standstill-tile {
+    padding: 10px 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+}
+
+.standstill-tile-title {
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.standstill-tile-val {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.standstill-tile-sub {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
 /* Print Styles */
 @media print {
     body {
