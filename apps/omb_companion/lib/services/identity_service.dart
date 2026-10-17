@@ -6,12 +6,16 @@ import 'ble_bridge_service.dart';
 class IdentityService extends ChangeNotifier {
   static const String prefBikeName = 'omb_bike_name';
   static const String prefBikeClass = 'omb_bike_class';
+  static const String prefPacingProfile = 'omb_pacing_profile';
+  static const String prefDoubtTimerSec = 'omb_doubt_timer_sec';
   static const String prefRiderName = 'omb_rider_name';
   static const String prefPillionName = 'omb_pillion_name';
   static const String prefPillionPresent = 'omb_pillion_present';
 
-  String _bikeName = 'Harley Street Glide 117';
+  String _bikeName = 'Harley Road Glide ST CVO';
   String _bikeClass = 'cruiser';
+  String _pacingProfile = 'fast_duo'; // fast_duo, dynamic_tour, group_standard, cruising_large_group, custom
+  int _doubtTimerSec = 15;
   String _riderName = 'Michael';
   String _pillionName = 'Sarah';
   bool _isPillionPresent = false;
@@ -21,16 +25,33 @@ class IdentityService extends ChangeNotifier {
 
   String get bikeName => _bikeName;
   String get bikeClass => _bikeClass;
+  String get pacingProfile => _pacingProfile;
+  int get doubtTimerSec => _doubtTimerSec;
   String get riderName => _riderName;
   String get pillionName => _pillionName;
   bool get isPillionPresent => _isPillionPresent;
 
-  String get swarmPreviewText {
-    if (_isPillionPresent) {
-      return '[$nodeIdHex] "$_riderName" & "$_pillionName" @ $_bikeName · Duo (Fahrer + Sozius aktiv)';
-    } else {
-      return '[$nodeIdHex] "$_riderName" @ $_bikeName · Solo (Nur Fahrer aktiv)';
+  String get pacingProfileLabel {
+    switch (_pacingProfile) {
+      case 'fast_duo':
+        return 'Duo Flott (15s)';
+      case 'dynamic_tour':
+        return 'Dynamische Tour (25s)';
+      case 'group_standard':
+        return 'Standard Gruppe (35s)';
+      case 'cruising_large_group':
+        return 'Gemütlich / Kolonne (50s)';
+      case 'custom':
+        return 'Custom (${_doubtTimerSec}s)';
+      default:
+        return '$_doubtTimerSec s';
     }
+  }
+
+  String get swarmPreviewText {
+    final mode = _isPillionPresent ? 'Duo' : 'Solo';
+    final crew = _isPillionPresent ? '"$_riderName" & "$_pillionName"' : '"$_riderName"';
+    return '[$nodeIdHex] $crew @ $_bikeName · $mode · Pacing: $pacingProfileLabel';
   }
 
   IdentityService() {
@@ -39,8 +60,10 @@ class IdentityService extends ChangeNotifier {
 
   Future<void> load() async {
     final prefs = await SharedPreferences.getInstance();
-    _bikeName = prefs.getString(prefBikeName) ?? 'Harley Street Glide 117';
+    _bikeName = prefs.getString(prefBikeName) ?? 'Harley Road Glide ST CVO';
     _bikeClass = prefs.getString(prefBikeClass) ?? 'cruiser';
+    _pacingProfile = prefs.getString(prefPacingProfile) ?? 'fast_duo';
+    _doubtTimerSec = prefs.getInt(prefDoubtTimerSec) ?? 15;
     _riderName = prefs.getString(prefRiderName) ?? 'Michael';
     _pillionName = prefs.getString(prefPillionName) ?? 'Sarah';
     _isPillionPresent = prefs.getBool(prefPillionPresent) ?? false;
@@ -50,6 +73,8 @@ class IdentityService extends ChangeNotifier {
   Future<void> save({
     String? bikeName,
     String? bikeClass,
+    String? pacingProfile,
+    int? doubtTimerSec,
     String? riderName,
     String? pillionName,
     bool? isPillionPresent,
@@ -64,6 +89,26 @@ class IdentityService extends ChangeNotifier {
     if (bikeClass != null) {
       _bikeClass = bikeClass;
       await prefs.setString(prefBikeClass, _bikeClass);
+    }
+    if (pacingProfile != null) {
+      _pacingProfile = pacingProfile;
+      await prefs.setString(prefPacingProfile, _pacingProfile);
+      
+      // Auto-assign doubt timer preset if not custom
+      if (_pacingProfile == 'fast_duo') {
+        _doubtTimerSec = 15;
+      } else if (_pacingProfile == 'dynamic_tour') {
+        _doubtTimerSec = 25;
+      } else if (_pacingProfile == 'group_standard') {
+        _doubtTimerSec = 35;
+      } else if (_pacingProfile == 'cruising_large_group') {
+        _doubtTimerSec = 50;
+      }
+      await prefs.setInt(prefDoubtTimerSec, _doubtTimerSec);
+    }
+    if (doubtTimerSec != null) {
+      _doubtTimerSec = doubtTimerSec;
+      await prefs.setInt(prefDoubtTimerSec, _doubtTimerSec);
     }
     if (riderName != null) {
       _riderName = riderName.trim().isEmpty ? 'Fahrer' : riderName.trim();
@@ -98,6 +143,8 @@ class IdentityService extends ChangeNotifier {
       final payload = {
         'bike_name': _bikeName,
         'bike_class': _bikeClass,
+        'pacing_profile': _pacingProfile,
+        'doubt_timer_sec': _doubtTimerSec,
         'rider_name': _riderName,
         'pillion_name': _pillionName,
         'pillion_present': _isPillionPresent,

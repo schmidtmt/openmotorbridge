@@ -244,7 +244,7 @@ class CockpitScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '${identity.bikeName} · ${identity.riderName}',
+                              '${identity.bikeName} · ${identity.riderName} (${identity.pacingProfileLabel})',
                               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                             ),
                             const SizedBox(height: 2),
@@ -549,7 +549,8 @@ class _IdentityScreenState extends State<IdentityScreen> {
   late TextEditingController _bikeNameCtrl;
   late TextEditingController _riderNameCtrl;
   late TextEditingController _pillionNameCtrl;
-  String _bikeClass = 'cruiser';
+  String _pacingProfile = 'fast_duo';
+  int _doubtTimerSec = 15;
 
   @override
   void initState() {
@@ -557,7 +558,8 @@ class _IdentityScreenState extends State<IdentityScreen> {
     _bikeNameCtrl = TextEditingController(text: widget.identity.bikeName);
     _riderNameCtrl = TextEditingController(text: widget.identity.riderName);
     _pillionNameCtrl = TextEditingController(text: widget.identity.pillionName);
-    _bikeClass = widget.identity.bikeClass;
+    _pacingProfile = widget.identity.pacingProfile;
+    _doubtTimerSec = widget.identity.doubtTimerSec;
   }
 
   @override
@@ -571,7 +573,8 @@ class _IdentityScreenState extends State<IdentityScreen> {
   void _saveAll() {
     widget.identity.save(
       bikeName: _bikeNameCtrl.text,
-      bikeClass: _bikeClass,
+      pacingProfile: _pacingProfile,
+      doubtTimerSec: _doubtTimerSec,
       riderName: _riderNameCtrl.text,
       pillionName: _pillionNameCtrl.text,
       ble: widget.ble,
@@ -716,7 +719,7 @@ class _IdentityScreenState extends State<IdentityScreen> {
                         controller: _bikeNameCtrl,
                         decoration: InputDecoration(
                           labelText: 'Fahrzeug-Name / Bike-Alias',
-                          hintText: 'z. B. Harley Street Glide 117 oder BMW R1250GS',
+                          hintText: 'z. B. Harley Road Glide ST CVO oder BMW R1250GS',
                           labelStyle: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 13),
                           filled: true,
                           fillColor: Colors.black.withValues(alpha: 0.25),
@@ -727,27 +730,65 @@ class _IdentityScreenState extends State<IdentityScreen> {
                       ),
                       const SizedBox(height: 12),
                       DropdownButtonFormField<String>(
-                        initialValue: _bikeClass,
+                        initialValue: _pacingProfile,
                         decoration: InputDecoration(
-                          labelText: 'Fahrzeugtyp / Fahrstil-Profil',
+                          labelText: 'Fahrstil & Gruppen-Dynamik (Doubt-Timer)',
                           labelStyle: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 13),
                           filled: true,
                           fillColor: Colors.black.withValues(alpha: 0.25),
                           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                          prefixIcon: const Icon(Icons.timer_outlined, size: 18),
                         ),
                         dropdownColor: const Color(0xFF131B2E),
                         items: const [
-                          DropdownMenuItem(value: 'cruiser', child: Text('Touring / Cruiser (Doubt-Timer: 30s)')),
-                          DropdownMenuItem(value: 'adventure', child: Text('Adventure / Enduro (Doubt-Timer: 25s)')),
-                          DropdownMenuItem(value: 'sport', child: Text('Sport / Naked (Doubt-Timer: 15s)')),
+                          DropdownMenuItem(value: 'fast_duo', child: Text('🏁 Duo / Flotte Truppe (Doubt-Timer: 15s)')),
+                          DropdownMenuItem(value: 'dynamic_tour', child: Text('🏍️ Dynamische Tour (Doubt-Timer: 25s)')),
+                          DropdownMenuItem(value: 'group_standard', child: Text('👥 Standard / Gemischte Gruppe (Doubt-Timer: 35s)')),
+                          DropdownMenuItem(value: 'cruising_large_group', child: Text('☕ Gemütlich / Große Kolonne (Doubt-Timer: 50s)')),
+                          DropdownMenuItem(value: 'custom', child: Text('⚙️ Benutzerdefiniert (10–90s)')),
                         ],
                         onChanged: (val) {
                           if (val != null) {
-                            setState(() => _bikeClass = val);
-                            widget.identity.save(bikeClass: val, ble: widget.ble);
+                            setState(() => _pacingProfile = val);
+                            widget.identity.save(pacingProfile: val, ble: widget.ble);
                           }
                         },
                       ),
+                      if (_pacingProfile == 'custom') ...[
+                        const SizedBox(height: 10),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: Colors.black.withValues(alpha: 0.25),
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: const Color(0xFF00F2FE).withValues(alpha: 0.2)),
+                          ),
+                          child: Row(
+                            children: [
+                              const Text('Doubt-Timer:', style: TextStyle(fontSize: 12, color: Colors.white70)),
+                              const SizedBox(width: 8),
+                              Text(
+                                '${_doubtTimerSec}s',
+                                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF00F2FE)),
+                              ),
+                              Expanded(
+                                child: Slider(
+                                  value: _doubtTimerSec.toDouble().clamp(10.0, 90.0),
+                                  min: 10,
+                                  max: 90,
+                                  divisions: 16,
+                                  activeColor: const Color(0xFF00F2FE),
+                                  onChanged: (val) {
+                                    final sec = val.round();
+                                    setState(() => _doubtTimerSec = sec);
+                                    widget.identity.save(doubtTimerSec: sec, ble: widget.ble);
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ],
                   ),
                 ),

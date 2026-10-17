@@ -62,7 +62,7 @@ const i18n = {
         identities_hub_sub: 'Hardware-gebundene Identitäten der Zentralbox (SSOT) für LoRa-Discovery, Relativ-Radar & TTS-Ansagen.',
         lbl_bike_identity: 'Motorrad / Fahrzeug (Bike-Identität)',
         lbl_bike_alias: 'Fahrzeug-Name / Bike-Alias',
-        lbl_bike_class: 'Fahrzeugtyp / Fahrstil-Profil',
+        lbl_pacing_profile: 'Fahrstil & Gruppen-Dynamik (Doubt-Timer)',
         lbl_rider_slot: 'Fahrer (Primary Rider)',
         lbl_rider_name: 'Fahrer-Rufzeichen / Mesh-Name',
         lbl_pillion_slot: 'Sozius (Pillion / 2nd Seat)',
@@ -294,7 +294,7 @@ const i18n = {
         identities_hub_sub: 'Hardware-anchored identities in Central Box (SSOT) for LoRa discovery, relative radar & TTS alerts.',
         lbl_bike_identity: 'Motorcycle / Vehicle (Bike Identity)',
         lbl_bike_alias: 'Vehicle Name / Bike Alias',
-        lbl_bike_class: 'Vehicle Class / Riding Style',
+        lbl_pacing_profile: 'Riding Style & Group Dynamics (Doubt-Timer)',
         lbl_rider_slot: 'Rider (Primary Rider)',
         lbl_rider_name: 'Rider Callsign / Mesh Name',
         lbl_pillion_slot: 'Pillion (2nd Seat)',
@@ -645,8 +645,10 @@ const state = {
     identities: {
         nodeIdHex: '0x4A',
         bikeUid: '0x014F2A9012008C',
-        bikeName: localStorage.getItem('omb_bike_name') || 'Harley Street Glide 117',
+        bikeName: localStorage.getItem('omb_bike_name') || 'Harley Road Glide ST CVO',
         bikeClass: localStorage.getItem('omb_bike_class') || 'cruiser',
+        pacingProfile: localStorage.getItem('omb_pacing_profile') || 'fast_duo',
+        doubtTimerSec: parseInt(localStorage.getItem('omb_doubt_timer_sec') || '15', 10),
         riderName: localStorage.getItem('omb_rider_name') || 'Michael',
         isRiderPresent: true,
         pillionName: localStorage.getItem('omb_pillion_name') || 'Sarah',
@@ -10802,7 +10804,10 @@ function setupSmartDockingAndCalmUi() {
 
 function setupIdentitiesUi() {
     const inputBikeAlias = document.getElementById('input-bike-alias');
-    const selectBikeClass = document.getElementById('select-bike-class');
+    const selectPacingProfile = document.getElementById('select-pacing-profile') || document.getElementById('select-bike-class');
+    const customTimerContainer = document.getElementById('custom-timer-container');
+    const sliderDoubtTimer = document.getElementById('slider-doubt-timer');
+    const lblDoubtTimerVal = document.getElementById('lbl-doubt-timer-val');
     const inputRiderName = document.getElementById('input-rider-name');
     const inputPillionName = document.getElementById('input-pillion-name');
     const chkPillionPresent = document.getElementById('chk-pillion-present');
@@ -10813,22 +10818,52 @@ function setupIdentitiesUi() {
     const lblSwarmPreviewText = document.getElementById('lbl-swarm-preview-text');
     const valPaxPhoneName = document.getElementById('val-pax-phone-name');
 
+    const PACING_PRESETS = {
+        fast_duo: { timer: 15, de: 'Duo Flott', en: 'Fast Duo' },
+        dynamic_tour: { timer: 25, de: 'Dynamische Tour', en: 'Dynamic Tour' },
+        group_standard: { timer: 35, de: 'Standard Gruppe', en: 'Standard Group' },
+        cruising_large_group: { timer: 50, de: 'Gemütlich / Kolonne', en: 'Cruising / Column' },
+        custom: { timer: state.identities.doubtTimerSec || 15, de: 'Custom', en: 'Custom' }
+    };
+
+    function getPacingLabel(profileKey, timerSec) {
+        const p = PACING_PRESETS[profileKey] || PACING_PRESETS.fast_duo;
+        const name = state.lang === 'de' ? p.de : p.en;
+        return `${name} (${timerSec}s Doubt-Timer)`;
+    }
+
     function updatePreviewAndState() {
         const bikeAlias = inputBikeAlias ? inputBikeAlias.value.trim() : state.identities.bikeName;
-        const bikeClass = selectBikeClass ? selectBikeClass.value : state.identities.bikeClass;
+        const pacingProfile = selectPacingProfile ? selectPacingProfile.value : state.identities.pacingProfile;
+        
+        let timerSec = state.identities.doubtTimerSec;
+        if (pacingProfile === 'custom') {
+            if (customTimerContainer) customTimerContainer.style.display = 'flex';
+            if (sliderDoubtTimer) timerSec = parseInt(sliderDoubtTimer.value, 10);
+        } else {
+            if (customTimerContainer) customTimerContainer.style.display = 'none';
+            if (PACING_PRESETS[pacingProfile]) {
+                timerSec = PACING_PRESETS[pacingProfile].timer;
+                if (sliderDoubtTimer) sliderDoubtTimer.value = timerSec;
+            }
+        }
+        if (lblDoubtTimerVal) lblDoubtTimerVal.textContent = `${timerSec}s`;
+
         const riderName = inputRiderName ? inputRiderName.value.trim() : state.identities.riderName;
         const pillionName = inputPillionName ? inputPillionName.value.trim() : state.identities.pillionName;
         const isPillionPresent = chkPillionPresent ? chkPillionPresent.checked : state.identities.isPillionPresent;
 
         state.identities.bikeName = bikeAlias || 'Motorrad';
-        state.identities.bikeClass = bikeClass;
+        state.identities.pacingProfile = pacingProfile;
+        state.identities.doubtTimerSec = timerSec;
         state.identities.riderName = riderName || 'Fahrer';
         state.identities.pillionName = pillionName || 'Sozius';
         state.identities.isPillionPresent = isPillionPresent;
 
-        // Persist to local storage (Client Cache)
+        // Persist to client cache
         localStorage.setItem('omb_bike_name', state.identities.bikeName);
-        localStorage.setItem('omb_bike_class', state.identities.bikeClass);
+        localStorage.setItem('omb_pacing_profile', state.identities.pacingProfile);
+        localStorage.setItem('omb_doubt_timer_sec', state.identities.doubtTimerSec.toString());
         localStorage.setItem('omb_rider_name', state.identities.riderName);
         localStorage.setItem('omb_pillion_name', state.identities.pillionName);
         localStorage.setItem('omb_pillion_present', state.identities.isPillionPresent ? 'true' : 'false');
@@ -10865,12 +10900,13 @@ function setupIdentitiesUi() {
                 : (state.lang === 'de' ? 'Nicht an Bord (Inaktiv)' : 'Not on Board (Inactive)');
         }
 
-        // Update Swarm Discovery Preview Text (Strictly announce ONLY present crew members)
+        // Update Swarm Discovery Preview Text (Strictly announce ONLY present crew members + pacing profile)
         if (lblSwarmPreviewText) {
+            const pacingStr = getPacingLabel(state.identities.pacingProfile, state.identities.doubtTimerSec);
             if (isPillionPresent) {
-                lblSwarmPreviewText.textContent = `[${state.identities.nodeIdHex}] "${state.identities.riderName}" & "${state.identities.pillionName}" @ ${state.identities.bikeName} · Duo (${state.lang === 'de' ? 'Fahrer + Sozius aktiv' : 'Rider + Pillion active'})`;
+                lblSwarmPreviewText.textContent = `[${state.identities.nodeIdHex}] "${state.identities.riderName}" & "${state.identities.pillionName}" @ ${state.identities.bikeName} · Duo · Pacing: ${pacingStr}`;
             } else {
-                lblSwarmPreviewText.textContent = `[${state.identities.nodeIdHex}] "${state.identities.riderName}" @ ${state.identities.bikeName} · Solo (${state.lang === 'de' ? 'Nur Fahrer aktiv' : 'Rider only active'})`;
+                lblSwarmPreviewText.textContent = `[${state.identities.nodeIdHex}] "${state.identities.riderName}" @ ${state.identities.bikeName} · Solo · Pacing: ${pacingStr}`;
             }
         }
     }
@@ -10879,9 +10915,13 @@ function setupIdentitiesUi() {
         inputBikeAlias.value = state.identities.bikeName;
         inputBikeAlias.addEventListener('input', updatePreviewAndState);
     }
-    if (selectBikeClass) {
-        selectBikeClass.value = state.identities.bikeClass;
-        selectBikeClass.addEventListener('change', updatePreviewAndState);
+    if (selectPacingProfile) {
+        selectPacingProfile.value = state.identities.pacingProfile;
+        selectPacingProfile.addEventListener('change', updatePreviewAndState);
+    }
+    if (sliderDoubtTimer) {
+        sliderDoubtTimer.value = state.identities.doubtTimerSec;
+        sliderDoubtTimer.addEventListener('input', updatePreviewAndState);
     }
     if (inputRiderName) {
         inputRiderName.value = state.identities.riderName;
@@ -10917,9 +10957,10 @@ function setupIdentitiesUi() {
                 badgeIdentSync.className = 'card-badge badge-green';
                 badgeIdentSync.textContent = '💾 NVS synchron';
             }
+            const pacingStr = getPacingLabel(state.identities.pacingProfile, state.identities.doubtTimerSec);
             showToast(state.lang === 'de' 
-                ? `💾 Identitäten auf Zentralbox gesichert: "${state.identities.riderName}" @ "${state.identities.bikeName}" (${state.identities.isPillionPresent ? 'Duo mit ' + state.identities.pillionName : 'Solo'})`
-                : `💾 Identities saved to Central Box: "${state.identities.riderName}" @ "${state.identities.bikeName}"`, 'success', 3000);
+                ? `💾 Identitäten auf Zentralbox gesichert: "${state.identities.riderName}" @ "${state.identities.bikeName}" (${state.identities.isPillionPresent ? 'Duo mit ' + state.identities.pillionName : 'Solo'}) · ${pacingStr}`
+                : `💾 Identities saved to Central Box: "${state.identities.riderName}" @ "${state.identities.bikeName}" · ${pacingStr}`, 'success', 3500);
         });
     }
 

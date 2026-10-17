@@ -2043,18 +2043,24 @@
                             </strong>
                             <span style="font-size: 0.74rem; color: var(--text-muted); font-family: monospace;">UID: 0x014F2A9012008C</span>
                         </div>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; align-items: center;">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; align-items: start;">
                             <div>
                                 <label style="font-size: 0.76rem; color: var(--text-secondary); display: block; margin-bottom: 4px;" data-i18n="lbl_bike_alias">Fahrzeug-Name / Bike-Alias</label>
-                                <input type="text" id="input-bike-alias" class="identity-input" placeholder="z. B. Harley Street Glide 117" value="Harley Street Glide 117" style="font-weight: 700; color: #fff;">
+                                <input type="text" id="input-bike-alias" class="identity-input" placeholder="z. B. Harley Road Glide ST CVO" value="Harley Road Glide ST CVO" style="font-weight: 700; color: #fff;">
                             </div>
                             <div>
-                                <label style="font-size: 0.76rem; color: var(--text-secondary); display: block; margin-bottom: 4px;" data-i18n="lbl_bike_class">Fahrzeugtyp / Fahrstil-Profil</label>
-                                <select id="select-bike-class" class="select-custom" style="width: 100%; color: var(--accent-cyan); font-weight: 600; padding: 8px 12px; font-size: 0.86rem;">
-                                    <option value="cruiser" selected>Touring / Cruiser (Doubt-Timer: 30s)</option>
-                                    <option value="adventure">Adventure / Enduro (Doubt-Timer: 25s)</option>
-                                    <option value="sport">Sport / Naked (Doubt-Timer: 15s)</option>
+                                <label style="font-size: 0.76rem; color: var(--text-secondary); display: block; margin-bottom: 4px;" data-i18n="lbl_pacing_profile">Fahrstil & Gruppen-Dynamik (Doubt-Timer)</label>
+                                <select id="select-pacing-profile" class="select-custom" style="width: 100%; color: var(--accent-cyan); font-weight: 600; padding: 8px 12px; font-size: 0.86rem;">
+                                    <option value="fast_duo" selected>🏁 Duo / Flotte Truppe (Doubt-Timer: 15s)</option>
+                                    <option value="dynamic_tour">🏍️ Dynamische Tour (Doubt-Timer: 25s)</option>
+                                    <option value="group_standard">👥 Standard / Gemischte Gruppe (Doubt-Timer: 35s)</option>
+                                    <option value="cruising_large_group">☕ Gemütlich / Große Kolonne (Doubt-Timer: 50s)</option>
+                                    <option value="custom">⚙️ Benutzerdefiniert (10–90s)</option>
                                 </select>
+                                <div id="custom-timer-container" style="display: none; margin-top: 8px; align-items: center; gap: 8px;">
+                                    <input type="range" id="slider-doubt-timer" min="10" max="90" step="5" value="15" style="flex: 1; accent-color: var(--accent-cyan);">
+                                    <span id="lbl-doubt-timer-val" style="font-size: 0.82rem; font-weight: bold; color: var(--accent-cyan); font-family: monospace; min-width: 38px;">15s</span>
+                                </div>
                             </div>
                         </div>
                     </div>
