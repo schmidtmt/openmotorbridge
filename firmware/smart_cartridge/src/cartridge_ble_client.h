@@ -54,6 +54,26 @@ public:
 
     const CartridgeBleConfig_t& get_config() const { return m_config; }
 
+    esp_err_t write_gatt_data(uint16_t handle, const uint8_t *data, uint16_t len);
+
+    void on_connected(uint16_t conn_handle) {
+        m_connected = true;
+        m_connecting = false;
+        m_conn_handle = conn_handle;
+    }
+    void on_disconnected() {
+        m_connected = false;
+        m_connecting = false;
+        m_conn_handle = 0;
+        m_char_handle = 0;
+    }
+    void on_scan_complete() {
+        m_connecting = false;
+    }
+    void set_char_handle(uint16_t handle) {
+        m_char_handle = handle;
+    }
+
 private:
     CartridgeBleClient();
     ~CartridgeBleClient() = default;
@@ -67,6 +87,8 @@ private:
     CartridgeBleConfig_t m_config;
     bool                 m_initialized;
     bool                 m_connected;
+    bool                 m_connecting;
     uint32_t             m_last_connect_attempt_ms;
     uint16_t             m_conn_handle;
+    uint16_t             m_char_handle;
 };

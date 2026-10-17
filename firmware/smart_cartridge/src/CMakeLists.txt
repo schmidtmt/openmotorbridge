@@ -12,6 +12,7 @@ idf_component_register(
         nvs_flash
         app_update
         mbedtls
+        bt
         uwb_backbone
     WHOLE_ARCHIVE
 )
