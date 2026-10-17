@@ -154,7 +154,30 @@ def validate_system():
         else:
             print("    [OK] Zero GPIO Pin Collisions detected across OMM Intercom definition.")
 
-    # 5. SPI Transceiver Mock Verification
+    # 5. Parse Firmware GPIO definitions (Smart Keyfob PCBA 07 Nordic nRF52840)
+    keyfob_cfg_file = os.path.join(repo_root, "firmware/smart_keyfob/src/keyfob_config.h")
+    if os.path.exists(keyfob_cfg_file):
+        print(f"\n[*] Loading Smart Keyfob Firmware Pinout: {os.path.relpath(keyfob_cfg_file, repo_root)}")
+        keyfob_gpios = {}
+        with open(keyfob_cfg_file, 'r', encoding='utf-8') as f:
+            for line in f:
+                match = re.match(r'#define\s+(KEYFOB_PIN_[A-Z0-9_]+)\s+(\d+)', line.strip())
+                if match:
+                    keyfob_gpios[match.group(1)] = int(match.group(2))
+        print(f"    -> Extracted {len(keyfob_gpios)} hardware GPIO pin assignments.")
+        for name, pin in sorted(keyfob_gpios.items(), key=lambda x: x[1]):
+            print(f"    - Pin {pin:2d} -> {name}")
+        keyfob_counts = {}
+        for name, pin in keyfob_gpios.items():
+            keyfob_counts.setdefault(pin, []).append(name)
+        keyfob_collisions = {p: names for p, names in keyfob_counts.items() if len(names) > 1}
+        if keyfob_collisions:
+            print(f"    [ERROR] Smart Keyfob GPIO Pin Collision detected: {keyfob_collisions}")
+            return False
+        else:
+            print("    [OK] Zero GPIO Pin Collisions detected across Smart Keyfob definition.")
+
+    # 6. SPI Transceiver Mock Verification
     print("\n[*] Validating SPI Transceiver Mock Engines (HIL/SIL):")
     transceivers = {
         "Qorvo DW3110 UWB": {"bus": "SPI2", "clock": "20 MHz", "latency_budget_us": 380, "status": "VERIFIED"},

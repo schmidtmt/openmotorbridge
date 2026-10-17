@@ -38,6 +38,10 @@ Das OpenMotorBridge-Gesamtsystem verteilt die Aufgaben auf drei dedizierte Mikro
 |                   | RISC-V  | PMR446 / DMR Tier I/II| 512 KB SRAM | * ES8388 16 kHz Voice Stream  |
 |                   |         | Helm / UCS Cartridge  | 4 MB Flash  | * 0.2W/0.5W ERP & CTCSS Engine|
 +-------------------+---------+-----------------------+-------------+-------------------------------+
+| `smart_keyfob`    | Nordic  | Smart-Keyfob (PCBA 07)| 64 MHz      | * BLE 5.4 Remote & Key State  |
+|                   | nRF52840| Taschen-Pager / Qi    | 256 KB RAM  | * SX1262 LoRa 4,5 km Pager RX |
+|                   | ARM-M4F | Schlüsselbund         | 1 MB Flash  | * DRV2605L Haptik & Buzzer    |
++-------------------+---------+-----------------------+-------------+-------------------------------+
 ```
 
 ---
@@ -178,6 +182,24 @@ idf.py build
 
 Das erzeugt:
 * `build/openmotorbridge_omm446_module.bin`
+
+### 3.7 Target 7: Smart Keyfob & Silent Pager (`smart_keyfob`)
+
+Für das Nordic nRF52840 Target wird das Zephyr RTOS / nRF Connect SDK verwendet:
+
+```bash
+cd ../smart_keyfob
+
+# Zephyr Build mit nRF52840 Target & DeviceTree Overlay
+west build -b nrf52840dk_nrf52840 -- -DEXTRA_DTC_OVERLAY_FILE=openmotorbridge_keyfob.overlay
+
+# Flashen via SWD Header (J_SWD) mit Segger J-Link:
+nrfjprog --program build/zephyr/zephyr.hex --chiperase --reset
+```
+
+Das erzeugt:
+* `build/zephyr/zephyr.hex`
+* `build/zephyr/zephyr.bin`
 
 ---
 
