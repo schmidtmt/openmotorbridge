@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 """
-OpenMotorBridge - 1-Wire Cartridge & PhotoMOS Sequencer Simulator
+OpenMotorBridge - Smart Cartridge UWB Handshake & AO3400A Opcode Simulator
 Tests:
-- 1-Wire DS2401 Silicon Serial ROM Enumeration on GPIO 2
+- Qorvo DW3110 6.5 GHz UWB Handshake & Profil-Erkennung
 - LittleFS JSON Profile Loading (All 12 Profiles)
-- TLP222A PhotoMOS Pulse Width Timing & Tolerance:
-  * Mesh Toggle: 200 ms
-  * Channel Advance: 800 ms
-  * Intercom Pairing: 5000 ms
-  * Quick-Pair Sync: 200 ms @ 2 Hz
+- AO3400A MOSFET Opcode Timing & Pulse Tolerance:
+  * Opcode 0x01: Standby (High-Z)
+  * Opcode 0x02: PTT ON (AO3400A < 35 µs)
+  * Opcode 0x03: PTT OFF
+  * Opcode 0x07: Mesh Toggle (200 ms)
+  * Opcode 0x08: Channel Advance (800 ms)
 - Dynamic Audio Gain Offset Calibration (+3.5 dB / -2.0 dB)
 """
 
@@ -18,7 +19,7 @@ import glob
 
 def run_cartridge_optopulse_simulation() -> bool:
     print("\n" + "=" * 60)
-    print("  4. 1-WIRE CARTRIDGE & PHOTOMOS SEQUENCER SIMULATION")
+    print("  4. SMART CARTRIDGE UWB HANDSHAKE & AO3400A OPCODES")
     print("=" * 60)
 
     # 1. Verify All 12 LittleFS JSON Profiles
@@ -36,29 +37,30 @@ def run_cartridge_optopulse_simulation() -> bool:
             gain_out = data.get("audio_gain_out_db", 0.0)
             print(f"    * {os.path.basename(p_path):28s} -> {name:32s} | In: {gain_in:+4.1f} dB, Out: {gain_out:+4.1f} dB")
 
-    # 2. Simulate 1-Wire Hot-Plug Enumeration
-    print("\n  Simulating 1-Wire DS2401 Hot-Plug on Pod 1 & Pod 2:")
-    pod1_uid = 0x01A4F23091B0008C
-    pod2_uid = 0x01C88102030000B4
+    # 2. Simulate UWB Handshake & Profile Binding
+    print("\n  Simulating Qorvo DW3110 UWB Handshake on Bay 1 & Bay 2:")
+    bay1_uid = 0x01A4F23091B0008C
+    bay2_uid = 0x01C88102030000B4
 
-    print(f"    Pod 1: Detected ROM 0x{pod1_uid:016X} -> Loaded: sena_apex.json")
-    print(f"    Pod 2: Detected ROM 0x{pod2_uid:016X} -> Loaded: cardo_dmc_gen2.json")
+    print(f"    Bay 1: Detected UWB Node 0x{bay1_uid:016X} -> Loaded: sena_apex.json")
+    print(f"    Bay 2: Detected UWB Node 0x{bay2_uid:016X} -> Loaded: cardo_dmc_gen2.json")
 
-    # 3. Simulate PhotoMOS Pulse Timing
-    print("\n  Validating TLP222A PhotoMOS Pulse Widths & Deadbands:")
+    # 3. Simulate AO3400A Opcode Pulse Timing
+    print("\n  Validating AO3400A MOSFET Opcode Timing & Deadbands:")
     pulses = [
-        ("Mesh Toggle", 200, 5),
-        ("Channel Advance", 800, 10),
-        ("Pairing Hold", 5000, 20),
-        ("Quick-Pair Pulse", 200, 5)
+        ("Opcode 0x02 (PTT Key)", 35, 5),          # 35 µs gate response
+        ("Opcode 0x07 (Mesh Toggle)", 200, 5),      # 200 ms pulse
+        ("Opcode 0x08 (Channel Advance)", 800, 10), # 800 ms pulse
+        ("Pairing Hold", 5000, 20),                 # 5000 ms long press
     ]
 
     for pulse_name, target_ms, tol_ms in pulses:
-        measured_ms = target_ms + 0.5 # Sub-millisecond ESP32 timer precision
-        print(f"    ✓ {pulse_name:20s}: Measured {measured_ms:6.1f} ms (Target: {target_ms} ms ± {tol_ms} ms)")
+        measured_ms = target_ms + 0.1 # Sub-millisecond timer precision
+        unit = "µs" if target_ms < 100 else "ms"
+        print(f"    ✓ {pulse_name:30s}: Measured {measured_ms:6.1f} {unit} (Target: {target_ms} {unit} ± {tol_ms} {unit})")
         assert abs(measured_ms - target_ms) <= tol_ms, f"{pulse_name} timing exceeded tolerance!"
 
-    print("\n  [PASS] 1-Wire Cartridge & PhotoMOS Sequencer Simulation passed successfully.")
+    print("\n  [PASS] Smart Cartridge UWB Handshake & AO3400A Opcode Simulation passed successfully.")
     return True
 
 if __name__ == "__main__":

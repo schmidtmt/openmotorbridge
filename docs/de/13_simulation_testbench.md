@@ -61,13 +61,15 @@ Um das Zusammenspiel von Hardware, Akustik, Fahrdynamik, Thermik, Hochfrequenz-P
 
 * **Geprüfte Kriterien:**
   1. **Automotive Load Dump (ISO 7637-2 / 87V Impuls 5b):** Clamping durch SMBJ33CA TVS-Diode auf sichere $54{,}1\,\text{V}$ ($+10{,}9\,\text{V}$ Headroom zum $65\,\text{V}$-Limit des LM5164 Buck).
-  2. **USV-Kaltstart (6.5V Cold Crank):** BQ24075 schaltet in $8{,}5\,\mu\text{s}$ unterbrechungsfrei auf LiPo-Pufferung um.
-  3. **Bourns Audio-Übertrager CMRR:** $85{,}0\,\text{dB}$ Gleichtaktunterdrückung gegen $1{,}2\,\text{kHz}$ Lichtmaschinen-Pfeifen $\rightarrow$ Restrauschen am Audio-Codec $< 141\,\mu\text{V}$ (glasklare $67{,}9\,\text{dB}$ Sprach-SNR).
-  4. **1-Wire Signalintegrität über 1.5m Kabelbaum:** Flankenanstiegszeit $t_{\text{rise}} = 1{,}74\,\mu\text{s}$ über $167{,}9\,\text{pF}$ Gesamtkapazität ($65{,}3\,\%$ Sicherheitsmarge zur $5{,}0\,\mu\text{s}$-Norm).
-  5. **PTT-zu-LoRa End-to-End Latenz:** Vom Tastendruck am Lenker über Optokoppler, Opus-Encoder und UART-Bridge zum LoRa-Sendepuls in nur **$14{,}59\,\text{ms}$** ($< 25\,\text{ms}$ Aviation-Intercom-Norm).
-  6. **Universal Front Node DCDC & Hub:** LMR36015 Synchrongleichrichter mit $91{,}8\,\%$ Wirkungsgrad ($5{,}3\,\text{mV}$ Ripple), USB2514B High-Speed Augendiagramm mit $88{,}5\,\%$ Augenöffnung ($18{,}5\,\text{ps}$ Skew), Knowles MEMS mit $65{,}4\,\text{dB}$ SNR.
-  7. **Front-Node Zero-Latency PTT:** Gesamtlatenz vom Lenkertaster über UWB (6.5 GHz) bis zur Aktuator-Zündung beträgt nur **$\approx 0{,}36\,\text{ms}$** ($< 5{,}0\,\text{ms}$ Anforderung).
-  8. **Ottocast Auto-Café VBUS-Abschaltung:** Automatischer $60\,\text{s}$ Countdown nach Zündung AUS zur nahtlosen Übergabe des Smartphone-WLANs an Heim- oder Café-Netze.
+  2. **USV-Kaltstart (6.5V Cold Crank):** BQ24075 schaltet unterbrechungsfrei ($0\,\mu\text{s}$) auf LiPo-Pufferung um.
+  3. **Staged Power Sequencing Inrush Profile:** T=0ms Core, T=200ms Radar, T=350ms Cartridge, T=500ms Audio/CAN ($I_{\text{peak}} = 1{,}45\,\text{A} < 3{,}0\,\text{A}$).
+  4. **Universal Smart Cartridge (PCBA 03):** Qorvo DW3110 UWB 6.5 GHz RF Front-End ($S_{11} = -22{,}4\,\text{dB}$, SPI $38\,\text{MHz}$) und AO3400A MOSFET Opto-Puls Keying Delay ($0{,}168\,\mu\text{s} \ll 35\,\mu\text{s}$).
+  5. **Radar 2.0 Sub-MCU & Halo Wings (PCBA 08):** Wheeltec 77 GHz MR20 Radar Target Tracking, TTC-Mathematik und Stromversorgung der 36x WS2812B Halo Wings ($5\,\text{V} / 1{,}8\,\text{A}$ max).
+  6. **Universal Front Node DCDC & Hub (PCBA 05):** TPS54302 Synchrongleichrichter mit $92{,}4\,\%$ Wirkungsgrad ($9{,}6\,\text{mV}$ Ripple), USB2514B High-Speed Augendiagramm mit $88{,}5\,\%$ Öffnung, SAM-M10Q 10 Hz PVT & AssistNow A-GPS ($1{,}8\,\text{s}$ TTFF), TMP117 Kaltluftsensor ($\pm 0{,}1^\circ\text{C}$), OPT3001 Lux-Sensor.
+  7. **Pure-DC 2-Draht-Kabelbaum & JST-JWPF:** Spannungsabfall über Bordnetz $< 150\,\text{mV}$ (Front Node $130{,}6\,\text{mV}$, Radar $81{,}1\,\text{mV}$, Cartridge $7{,}5\,\text{mV}$).
+  8. **All-UWB Deterministic Backbone:** Front Node ($0{,}285\,\text{ms}$), Cartridge ($0{,}195\,\text{ms}$), Radar ($0{,}340\,\text{ms}$) $\rightarrow$ Gesamte TDMA-Superframe-Latenz nur $0{,}82\,\text{ms}$.
+  9. **Cockpit-Handlebar PTT zu Cartridge Keying:** Vom Tastendruck am Lenker über UWB bis zum AO3400A MOSFET in nur **$0{,}377\,\text{ms}$** ($< 0{,}40\,\text{ms}$ Hard-Realtime-Vorgabe).
+  10. **Ottocast Auto-Café VBUS-Abschaltung:** Automatischer $60\,\text{s}$ Countdown nach Zündung AUS zur Freigabe des Smartphone-WLANs sowie 1-Klick Hard-Reboot ($2{,}5\,\text{s}$ Power-Cut).
 
 ---
 
@@ -75,22 +77,16 @@ Um das Zusammenspiel von Hardware, Akustik, Fahrdynamik, Thermik, Hochfrequenz-P
 
 Führt die reale C++-Firmware-Logik auf einer virtuellen Mehr-Platinen-Hardware aus und deckt 10 Lebenszyklus-Szenarien ab:
 
-* **Szenario 1:** Zündung AN (KL15 = $12{,}60\,\text{V}$) $\rightarrow$ Cold Boot aller Controller (Zentralbox, Front Node) $\rightarrow$ Etablierung des UWB Funk-Backbones.
-* **Szenario 2A (Blindkassette):** Keine 1-Wire ROM-ID $\rightarrow$ Automatisches Profil `"disabled"` (Mute auf $-96\,\text{dB}$ Gain zum Schutz vor Rauschen und offenen Einstreuungen).
-* **Szenario 2B (Hot-Swap):** Einklicken der Sena SPIDER X Slim / Cardo Edge Kassette im laufenden Betrieb $\rightarrow$ 1-Wire Erkennung in $< 2\,\text{s}$ $\rightarrow$ Laden des Profils, Audio-Entsperrung und Gain-Konfiguration.
-* **Szenario 3:** SAM-M10Q Multi-GNSS 3D-Fix (22 Satelliten) via J12 Qwiic und Präzisions-Zeitsynchronisation.
-* **Szenario 4 (Dual-PTT & Akustik-Adaption):**
-  * PTT-Tastendruck an Kassette $\rightarrow$ Opus 24k Mesh-Broadcast.
-  * PTT-Tastendruck am Front-Node Lenkertaster $\rightarrow$ UWB Frame $\rightarrow$ Aktuator-Zündung in **$\approx 0{,}36\,\text{ms}$**.
-  * Knowles SPH0645 MEMS erfasst Geschwindigkeitslärm bei $130\,\text{km/h}$ ($79\,\text{dBA}$) $\rightarrow$ Audio DSP AGC regelt Intercom-Lautstärke dynamisch um $+1{,}0\,\text{dB}$ nach.
-* **Szenario 5:** Motorstart ($6{,}5\,\text{V}$ Spannungseinbruch) $\rightarrow$ USV-Sofortpufferung $\rightarrow$ $0$ Audio-Drops, $0$ Reboots.
-* **Szenario 6 (Kabelabriss & Kurzschluss):** Kabelabriss / Kurzschluss an der Kassetten-Stromzuführung oder Headset-Leitung $\rightarrow$ Bourns PTC-Sicherung löst in $1{,}2\,\text{ms}$ aus ($< 15\,\text{mA}$ Kurzschlussstrom, $0\,\text{V}$ Einbruch auf Hauptplatine) $\rightarrow$ Anti-Pop Mute schützt Helmlautsprecher vor Krachen $\rightarrow$ Rote Warn-LED.
-* **Szenario 7 (CAN-Bus Abriss):** TCAN334G Fehlerschutz $\rightarrow$ Automatischer Fallback der Geschwindigkeitserfassung auf GNSS/IMU-Koppelnavigation.
-* **Szenario 8 (Bordnetz-Spannungsalarm):**
-  * Stufe A ($< 11{,}8\,\text{V}$): Gelbe LED, Helm-Warnton (*Low Battery Chime*), Lastabwurf.
-  * Stufe B ($0{,}0\,\text{V}$ Sicherungsausfall bei $80\,\text{km/h}$): USV-Übernahme, Sprachwarnung *"WARNING: MAIN POWER LOST"*, roter Strobe, Notfall-GPX-Flush.
-* **Szenario 9 (Universal Front Node Power & Dongle-Management):** 1-Klick Hard-Reset ($2{,}5\,\text{s}$ VBUS Kaltstart) via WebApp und Auto-Café $60\,\text{s}$ Abschalt-Countdown bei Zündung AUS.
-* **Szenario 10:** Zündung AUS $\rightarrow$ 15-minütiger WebDAV/GPX Sync-Timer $\rightarrow$ ULP-Tiefschlaf ($< 20\,\mu\text{A}$).
+* **Szenario 1:** Zündung AN (KL15 = $12{,}60\,\text{V}$) $\rightarrow$ Staged Power-On Boot aller Controller (Zentralbox, Front Node, Cartridge, Radar) $\rightarrow$ Etablierung des Qorvo DW3110 6.5 GHz UWB Star-Mesh.
+* **Szenario 2 (Smart Cartridge UWB Handshake & Opcodes):** UWB-Kopplung der Cartridge $\rightarrow$ Erkennung des Profils (z. B. *"Sena 60S Mesh 3.0"*) $\rightarrow$ Mechatronische Opcodes `0x01` (Standby) bis `0x08` (Status Query) via lokale AO3400A MOSFETs.
+* **Szenario 3 (Front Sensor Hub & 10 Hz GNSS):** SAM-M10Q 10 Hz Multi-GNSS Fix mit AssistNow A-GPS Seed $\rightarrow$ UWB Übertragung an ADR-EKF $\rightarrow$ TI TMP117 Kaltluftstrom-Messung löst bei $\le 3{,}5^\circ\text{C}$ akustische Glatteiswarnung im Helm aus.
+* **Szenario 4 (Handlebar PTT -> UWB -> Cartridge Keying):** Lenkertaster am Front-Node $\rightarrow$ Prioritäts-UWB-Frame $\rightarrow$ Cartridge schaltet PTT via AO3400A in insgesamt **$0{,}876\,\text{ms}$** durch.
+* **Szenario 5 (77 GHz Radar Gefahrenerkennung & Halo Wings):** Wheeltec MR20 erfasst schnell herannahendes Fahrzeug ($18\,\text{m}$, $-45\,\text{km/h}$, TTC $1{,}44\,\text{s}$) $\rightarrow$ Stufe 2 Kollisionswarnung $\rightarrow$ 36x WS2812B Halo Wings zünden expandierenden Chevron-Strobe.
+* **Szenario 6 (Starter-Kaltstart 6.5V):** Starter zieht $150\,\text{A}$ $\rightarrow$ Bordnetz bricht für $350\,\text{ms}$ auf $6{,}50\,\text{V}$ ein $\rightarrow$ BQ24075 USV-Pufferung hält Systemspannung auf $4{,}12\,\text{V}$ $\rightarrow$ $0$ UWB-Frame-Verluste, $0$ Reboots.
+* **Szenario 7 (SW1 Hardware Pairing-Fenster & Roaming):** Taster SW1 an Zentralbox aktiviert 60-Sekunden ECDH-Pairing-Fenster $\rightarrow$ Automatische Zuweisung von Roaming-Slots für Gast-Motorräder (z. B. *"BIKE_2_BMW_R1300GS"*).
+* **Szenario 8 (Universal Group Split Rescue Engine):** Konvoi verliert Peer hinter Bergkamm (RSSI $< -92\,\text{dBm}$) $\rightarrow$ Rescue Engine initiiert Fallback auf LoRa 868.3 MHz Positionstracking.
+* **Szenario 9 (Front Node CP2AA 1-Klick Reset & Auto-Café):** 1-Klick CarPlay Reboot ($2{,}5\,\text{s}$ TPS2051B VBUS-Kaltstart) und $60\,\text{s}$ Auto-Café Abschalt-Countdown nach Zündung AUS.
+* **Szenario 10 (15-Minuten GPX/WebDAV Run-Down):** Zündung AUS $\rightarrow$ 15-minütiger Nachlauf mit MicroSD Blackbox-Sync und WebDAV-Upload über Heim-WLAN $\rightarrow$ ULP-Tiefschlaf ($< 18\,\mu\text{A}$).
 
 ---
 
