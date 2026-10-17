@@ -18,6 +18,10 @@
 #include "bluetooth_audio_manager.h"
 #include "radar_processor.h"
 #include "hardware_inventory.h"
+#include "cJSON.h"
+#include "nvs_flash.h"
+#include "nvs.h"
+#include "group_split_rescue_engine.h"
 
 static const char *TAG = "BLE_SERVER";
 
@@ -157,6 +161,48 @@ static int gatt_svr_chr_access_omb(uint16_t conn_handle, uint16_t attr_handle,
                     ESP_LOGI(TAG, "GATT: Re-scan of hardware inventory requested");
                 }
             }
+        } else if (cmd[0] == 0x42) { // Vehicle & Crew Identity Hub Sync (Opcode 0x42)
+            // Packet format: [0x42, len_hi, len_lo, ...utf8 json...]
+            if (len >= 3) {
+                uint16_t json_len = ((uint16_t)cmd[1] << 8) | (uint16_t)cmd[2];
+                if (len >= 3 + json_len) {
+                    char *json_buf = (char *)malloc(json_len + 1);
+                    if (json_buf) {
+                        memcpy(json_buf, &cmd[3], json_len);
+                        json_buf[json_len] = '\0';
+                        ESP_LOGI(TAG, "GATT: Identity Sync (Opcode 0x42): %s", json_buf);
+
+                        cJSON *root = cJSON_Parse(json_buf);
+                        if (root) {
+                            cJSON *j_bike = cJSON_GetObjectItem(root, "bike_name");
+                            cJSON *j_pacing = cJSON_GetObjectItem(root, "pacing_profile");
+                            cJSON *j_timer = cJSON_GetObjectItem(root, "doubt_timer_sec");
+                            cJSON *j_rider = cJSON_GetObjectItem(root, "rider_name");
+                            cJSON *j_pillion = cJSON_GetObjectItem(root, "pillion_name");
+                            cJSON *j_present = cJSON_GetObjectItem(root, "pillion_present");
+
+                            uint16_t doubt_sec = (j_timer && cJSON_IsNumber(j_timer)) ? (uint16_t)j_timer->valueint : 15;
+                            group_split_set_doubt_timer_sec(doubt_sec);
+
+                            // Persist to NVS under "omb_ident"
+                            nvs_handle_t nvs_h;
+                            if (nvs_open("omb_ident", NVS_READWRITE, &nvs_h) == ESP_OK) {
+                                if (j_bike && cJSON_IsString(j_bike)) nvs_set_str(nvs_h, "bike_name", j_bike->valuestring);
+                                if (j_pacing && cJSON_IsString(j_pacing)) nvs_set_str(nvs_h, "pacing", j_pacing->valuestring);
+                                nvs_set_u16(nvs_h, "doubt_sec", doubt_sec);
+                                if (j_rider && cJSON_IsString(j_rider)) nvs_set_str(nvs_h, "rider_name", j_rider->valuestring);
+                                if (j_pillion && cJSON_IsString(j_pillion)) nvs_set_str(nvs_h, "pillion_name", j_pillion->valuestring);
+                                if (j_present && cJSON_IsBool(j_present)) nvs_set_u8(nvs_h, "pillion_on", cJSON_IsTrue(j_present) ? 1 : 0);
+                                nvs_commit(nvs_h);
+                                nvs_close(nvs_h);
+                                ESP_LOGI(TAG, "✓ Identity Hub & Doubt-Timer (%u s) saved to Central Box NVS (SSOT).", doubt_sec);
+                            }
+                            cJSON_Delete(root);
+                        }
+                        free(json_buf);
+                    }
+                }
+            }
         }
         return 0;
     }
@@ -239,6 +285,17 @@ esp_err_t ble_server_init(void) {
     ble_svc_gap_device_name_set("OpenMotorBridge-v8");
     ble_gatts_count_cfg(gatt_svr_svcs);
     ble_gatts_add_svcs(gatt_svr_svcs);
+
+    // Restore Identity Hub Doubt-Timer configuration from NVS
+    nvs_handle_t nvs_h;
+    if (nvs_open("omb_ident", NVS_READONLY, &nvs_h) == ESP_OK) {
+        uint16_t doubt_sec = 0;
+        if (nvs_get_u16(nvs_h, "doubt_sec", &doubt_sec) == ESP_OK && doubt_sec >= 5 && doubt_sec <= 180) {
+            group_split_set_doubt_timer_sec(doubt_sec);
+            ESP_LOGI(TAG, "Restored Doubt-Timer from omb_ident NVS: %u s", doubt_sec);
+        }
+        nvs_close(nvs_h);
+    }
 
     return ESP_OK;
 }

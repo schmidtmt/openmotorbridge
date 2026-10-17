@@ -46,6 +46,32 @@ typedef struct __attribute__((packed)) {
     uint8_t  crc8_checksum;     // CRC-8/AUTOSAR
 } OmmEmergencyAlert_t;
 
+#define OMM_TYPE_BRIDGE_ACTIVE      0x04
+#define OMM_FLAG_DO_NOT_TRANSLATE   0x80
+
+// First-Receiver-Wins (FRW) LoRa Bridging Arbitration Packet (docs/de/04_mesh_lora_navigation.md Sec 3.2)
+typedef struct __attribute__((packed)) {
+    uint8_t  packet_type;       // 0x04 = OMM_TYPE_BRIDGE_ACTIVE
+    uint8_t  source_network;    // 0x01: SENA, 0x02: CARDO, 0x03: OMM_2G4, 0x04: MIDLAND
+    uint8_t  target_network;    // Destination network being translated to
+    uint8_t  bridging_node_id;  // Short node ID of active translator
+    uint16_t sequence_id;       // Monotonic sequence number
+    uint8_t  flags;             // Bit 7: FLAG_DO_NOT_TRANSLATE
+    uint8_t  crc8_checksum;
+} OmmBridgeActivePacket_t;
+
+#define OMM_TYPE_TACTICAL_VOICE     0x05
+
+// Tactical Voice Burst Header over LoRa (Codec2 1200 bps / Opus 6 kbps, Sec 4)
+typedef struct __attribute__((packed)) {
+    uint8_t  packet_type;       // 0x05 = OMM_TYPE_TACTICAL_VOICE
+    uint8_t  node_id_short;     // Sender node ID
+    uint8_t  codec_type;        // 0x01: Codec2 (1200 bps), 0x02: Opus (6 kbps)
+    uint8_t  burst_seq;         // Monotonic burst sequence (0..255)
+    uint16_t payload_len;       // Compressed voice byte length (e.g. 450 bytes)
+    uint8_t  flags;             // Bit 0: Mic only (strict LoRa one-way rule)
+} OmmTacticalVoiceHeader_t;
+
 /**
  * @brief Initialisiert den OpenMotorMesh Stack
  */

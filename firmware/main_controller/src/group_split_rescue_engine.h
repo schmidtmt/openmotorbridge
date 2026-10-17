@@ -78,6 +78,21 @@ esp_err_t group_split_restore_from_nvs(void);
  */
 GroupStatus_t group_split_get_status(void);
 
+/**
+ * @brief Konfiguriert die Dauer des Doubt-Timers in Sekunden (z. B. 10..90 s, Default 15s)
+ */
+void group_split_set_doubt_timer_sec(uint16_t seconds);
+
+/**
+ * @brief Liefert die aktuell konfigurierte Doubt-Timer-Dauer in Sekunden
+ */
+uint16_t group_split_get_doubt_timer_sec(void);
+
+/**
+ * @brief Aktualisiert die letzte bekannte GNSS-Position der Gruppe / des Leaders aus LoRa Telemetrie
+ */
+void group_split_update_lead_position(double lat, double lon);
+
 #ifdef __cplusplus
 }
 #endif

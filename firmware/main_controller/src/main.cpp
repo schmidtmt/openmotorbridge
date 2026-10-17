@@ -237,6 +237,12 @@ void task_power_supervisor(void *pvParameters) {
         CartridgeBayState_t bay1 = uwb_cartridge_get_bay_state(UWB_NODE_CARTRIDGE_BAY1);
         CartridgeBayState_t bay2 = uwb_cartridge_get_bay_state(UWB_NODE_CARTRIDGE_BAY2);
 
+        GroupStatus_t grp_st = group_split_get_status();
+        uint8_t rescue_byte = (uint8_t)grp_st.rescue_level;
+        if (grp_st.doubt_timer_active) {
+            rescue_byte |= 0x80; // Bit 7: Doubt-Timer active flag
+        }
+
         SystemTelemetry_t telem = {
             .v_ign_volts = s_v_ign,
             .v_bat_volts = s_v_bat,
@@ -246,7 +252,7 @@ void task_power_supervisor(void *pvParameters) {
             .port2_active = bay2.active,
             .pod3_gnss_fix = UwbVehicleBackbone::instance().is_peer_online(UWB_NODE_FRONT_NODE),
             .lean_angle_deg = 0,
-            .spare = {0, 0},
+            .spare = { (uint8_t)grp_st.lifecycle_state, rescue_byte },
             .hw_baseline_mask = hw_st.baseline_mask,
             .hw_current_mask = hw_st.current_mask,
             .hw_lost_mask = hw_st.lost_mask

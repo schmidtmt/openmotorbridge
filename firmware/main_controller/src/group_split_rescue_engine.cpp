@@ -24,6 +24,7 @@ static GroupStatus_t s_status = {
 
 static uint32_t s_last_intercom_contact_ms = 0;
 static uint32_t s_doubt_start_ms = 0;
+static uint32_t s_doubt_timeout_ms = 15000; // Default 15s (konfigurierbar via IDENT_SYNC 0x42)
 static double s_last_lead_lat = 47.5000;
 static double s_last_lead_lon = 11.5000;
 static float s_group_expected_heading = 0.0f;
@@ -122,12 +123,14 @@ void group_split_update(float speed_kmh, double lat, double lon, float heading_d
                 s_status.doubt_timer_active = true;
                 s_doubt_start_ms = now;
                 s_status.lifecycle_state = GROUP_LIFECYCLE_DOUBT_SPLIT;
-                ESP_LOGW(TAG, "⚠️ Course deviation detected (Δθ = %.1f°). Starting Doubt-Timer (20s)...", heading_diff);
-            } else if (now - s_doubt_start_ms > 20000) {
+                ESP_LOGW(TAG, "⚠️ Course deviation detected (Δθ = %.1f°). Starting Doubt-Timer (%lu s)...",
+                         heading_diff, (unsigned long)(s_doubt_timeout_ms / 1000));
+            } else if (now - s_doubt_start_ms > s_doubt_timeout_ms) {
                 // Doubt-Timer abgelaufen
                 s_status.doubt_timer_active = false;
                 s_status.lifecycle_state = GROUP_LIFECYCLE_GROUP_LEFT;
-                ESP_LOGW(TAG, "Rider deliberately left group route -> Transition to GROUP_LEFT.");
+                ESP_LOGW(TAG, "Rider deliberately left group route after %lu s Doubt-Timer -> Transition to GROUP_LEFT.",
+                         (unsigned long)(s_doubt_timeout_ms / 1000));
             }
         } else {
             s_status.doubt_timer_active = false;
@@ -176,9 +179,10 @@ esp_err_t group_split_persist_to_nvs(void) {
     if (err == ESP_OK) {
         nvs_set_u8(nvs_h, "lifecycle", (uint8_t)s_status.lifecycle_state);
         nvs_set_u32(nvs_h, "members", s_status.connected_members_count);
+        nvs_set_u16(nvs_h, "doubt_sec", (uint16_t)(s_doubt_timeout_ms / 1000));
         nvs_commit(nvs_h);
         nvs_close(nvs_h);
-        ESP_LOGI(TAG, "Persisted group session state to NVS for coffee break deep-sleep.");
+        ESP_LOGI(TAG, "Persisted group session state & Doubt-Timer (%lu s) to NVS.", (unsigned long)(s_doubt_timeout_ms / 1000));
     }
     return err;
 }
@@ -194,6 +198,11 @@ esp_err_t group_split_restore_from_nvs(void) {
                 ESP_LOGI(TAG, "☕ Coffee Break Restored in < 50ms: Group Macro session fully resumed!");
             }
         }
+        uint16_t d_sec = 0;
+        if (nvs_get_u16(nvs_h, "doubt_sec", &d_sec) == ESP_OK && d_sec >= 5 && d_sec <= 180) {
+            s_doubt_timeout_ms = d_sec * 1000;
+            ESP_LOGI(TAG, "Restored Doubt-Timer from NVS: %u s", d_sec);
+        }
         nvs_close(nvs_h);
     }
     return err;
@@ -201,4 +210,22 @@ esp_err_t group_split_restore_from_nvs(void) {
 
 GroupStatus_t group_split_get_status(void) {
     return s_status;
+}
+
+void group_split_set_doubt_timer_sec(uint16_t seconds) {
+    if (seconds < 5) seconds = 5;
+    if (seconds > 180) seconds = 180;
+    s_doubt_timeout_ms = seconds * 1000;
+    ESP_LOGI(TAG, "Doubt-Timer duration configured: %u seconds (%lu ms)", seconds, (unsigned long)s_doubt_timeout_ms);
+}
+
+uint16_t group_split_get_doubt_timer_sec(void) {
+    return (uint16_t)(s_doubt_timeout_ms / 1000);
+}
+
+void group_split_update_lead_position(double lat, double lon) {
+    if (lat != 0.0 && lon != 0.0) {
+        s_last_lead_lat = lat;
+        s_last_lead_lon = lon;
+    }
 }
