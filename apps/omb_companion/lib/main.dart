@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'services/assistnow_service.dart';
 import 'services/ble_bridge_service.dart';
 import 'services/firmware_service.dart';
+import 'services/identity_service.dart';
 import 'services/proxy_service.dart';
 import 'services/update_service.dart';
 
@@ -57,6 +58,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   final BleBridgeService _bleService = BleBridgeService();
   final AssistNowService _assistNowService = AssistNowService();
   final FirmwareService _firmwareService = FirmwareService();
+  final IdentityService _identityService = IdentityService();
 
   @override
   void initState() {
@@ -72,13 +74,21 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     _proxyService.dispose();
     _bleService.dispose();
     _firmwareService.dispose();
+    _identityService.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final screens = [
-      CockpitScreen(ble: _bleService, assistNow: _assistNowService, proxy: _proxyService),
+      CockpitScreen(
+        ble: _bleService,
+        assistNow: _assistNowService,
+        proxy: _proxyService,
+        identity: _identityService,
+        onNavigateToIdentity: () => setState(() => _currentIndex = 1),
+      ),
+      IdentityScreen(identity: _identityService, ble: _bleService),
       ProxyScreen(proxy: _proxyService),
       FirmwareScreen(firmware: _firmwareService, ble: _bleService),
       UpdateScreen(updater: _updateService),
@@ -160,6 +170,11 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
             label: 'Cockpit',
           ),
           NavigationDestination(
+            icon: Icon(Icons.badge_outlined),
+            selectedIcon: Icon(Icons.badge, color: Color(0xFF00F2FE)),
+            label: 'Identität',
+          ),
+          NavigationDestination(
             icon: Icon(Icons.cell_tower),
             selectedIcon: Icon(Icons.cell_tower, color: Color(0xFF00F2FE)),
             label: 'Mobilfunk-Proxy',
@@ -187,24 +202,80 @@ class CockpitScreen extends StatelessWidget {
   final BleBridgeService ble;
   final AssistNowService assistNow;
   final ProxyService proxy;
+  final IdentityService identity;
+  final VoidCallback? onNavigateToIdentity;
 
   const CockpitScreen({
     super.key,
     required this.ble,
     required this.assistNow,
     required this.proxy,
+    required this.identity,
+    this.onNavigateToIdentity,
   });
 
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
-      listenable: Listenable.merge([ble, assistNow, proxy]),
+      listenable: Listenable.merge([ble, assistNow, proxy, identity]),
       builder: (context, _) {
         return SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // 0. Active Crew & Machine Summary Card
+              Card(
+                color: const Color(0xFF0E1422),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  side: BorderSide(
+                    color: const Color(0xFF00F2FE).withValues(alpha: 0.35),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                  child: Row(
+                    children: [
+                      const Text('🪪', style: TextStyle(fontSize: 24)),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${identity.bikeName} · ${identity.riderName}',
+                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              identity.isPillionPresent
+                                  ? 'Duo-Modus: Sozius (${identity.pillionName}) an Bord · Announce Aktiv'
+                                  : 'Solo-Fahrt: Nur Fahrer im Schwarm announced',
+                              style: TextStyle(
+                                fontSize: 11,
+                                color: identity.isPillionPresent ? const Color(0xFF00E676) : Colors.white70,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      if (onNavigateToIdentity != null)
+                        TextButton.icon(
+                          style: TextButton.styleFrom(
+                            foregroundColor: const Color(0xFF00F2FE),
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                          ),
+                          onPressed: onNavigateToIdentity,
+                          icon: const Icon(Icons.edit, size: 14),
+                          label: const Text('Profil', style: TextStyle(fontSize: 12)),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+
               // Connection Card
               Card(
                 child: Padding(
@@ -453,6 +524,445 @@ class CockpitScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 1b. Fahrzeug- & Besatzungs-Identität (SSOT & Schwarm-Profil)
+// ---------------------------------------------------------------------------
+class IdentityScreen extends StatefulWidget {
+  final IdentityService identity;
+  final BleBridgeService ble;
+
+  const IdentityScreen({
+    super.key,
+    required this.identity,
+    required this.ble,
+  });
+
+  @override
+  State<IdentityScreen> createState() => _IdentityScreenState();
+}
+
+class _IdentityScreenState extends State<IdentityScreen> {
+  late TextEditingController _bikeNameCtrl;
+  late TextEditingController _riderNameCtrl;
+  late TextEditingController _pillionNameCtrl;
+  String _bikeClass = 'cruiser';
+
+  @override
+  void initState() {
+    super.initState();
+    _bikeNameCtrl = TextEditingController(text: widget.identity.bikeName);
+    _riderNameCtrl = TextEditingController(text: widget.identity.riderName);
+    _pillionNameCtrl = TextEditingController(text: widget.identity.pillionName);
+    _bikeClass = widget.identity.bikeClass;
+  }
+
+  @override
+  void dispose() {
+    _bikeNameCtrl.dispose();
+    _riderNameCtrl.dispose();
+    _pillionNameCtrl.dispose();
+    super.dispose();
+  }
+
+  void _saveAll() {
+    widget.identity.save(
+      bikeName: _bikeNameCtrl.text,
+      bikeClass: _bikeClass,
+      riderName: _riderNameCtrl.text,
+      pillionName: _pillionNameCtrl.text,
+      ble: widget.ble,
+    );
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: const Color(0xFF131B2E),
+        content: Row(
+          children: [
+            const Icon(Icons.check_circle, color: Color(0xFF00E676)),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                widget.ble.isConnected
+                    ? 'Identität auf Zentralbox gesichert & synchron!'
+                    : 'Identität lokal gesichert (Wird bei BLE-Connect synchronisiert)',
+                style: const TextStyle(color: Colors.white, fontSize: 13),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListenableBuilder(
+      listenable: Listenable.merge([widget.identity, widget.ble]),
+      builder: (context, _) {
+        final isDuo = widget.identity.isPillionPresent;
+        final bleOnline = widget.ble.isConnected;
+
+        return SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Header Card with Node ID & Status
+              Card(
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    border: const Border(
+                      left: BorderSide(color: Color(0xFF00F2FE), width: 4),
+                    ),
+                  ),
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Row(
+                            children: [
+                              Text('🪪', style: TextStyle(fontSize: 22)),
+                              SizedBox(width: 8),
+                              Text(
+                                'Fahrzeug & Besatzung',
+                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF00F2FE).withValues(alpha: 0.15),
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: const Color(0xFF00F2FE).withValues(alpha: 0.3)),
+                            ),
+                            child: Text(
+                              'Node: ${widget.identity.nodeIdHex}',
+                              style: const TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF00F2FE),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        'Hardware-gebundene Identitäten der Zentralbox (SSOT) für LoRa-Discovery, Relativ-Radar & TTS-Ansagen.',
+                        style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 12),
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        children: [
+                          Icon(
+                            bleOnline ? Icons.cloud_done : Icons.storage,
+                            size: 14,
+                            color: bleOnline ? const Color(0xFF00E676) : Colors.orangeAccent,
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            bleOnline ? 'Zentralbox NVS synchron (Live BLE)' : 'Lokaler Cache aktiv (Zentralbox Standby)',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                              color: bleOnline ? const Color(0xFF00E676) : Colors.orangeAccent,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              // 1. Fahrzeug-Identität (Bike Entity)
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Row(
+                            children: [
+                              Icon(Icons.two_wheeler, color: Color(0xFFFF6B00)),
+                              SizedBox(width: 8),
+                              Text(
+                                'Motorrad / Fahrzeug-Identität',
+                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                              ),
+                            ],
+                          ),
+                          Text(
+                            'UID: ${widget.identity.bikeUid}',
+                            style: TextStyle(fontFamily: 'monospace', fontSize: 10, color: Colors.white.withValues(alpha: 0.5)),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 14),
+                      TextField(
+                        controller: _bikeNameCtrl,
+                        decoration: InputDecoration(
+                          labelText: 'Fahrzeug-Name / Bike-Alias',
+                          hintText: 'z. B. Harley Street Glide 117 oder BMW R1250GS',
+                          labelStyle: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 13),
+                          filled: true,
+                          fillColor: Colors.black.withValues(alpha: 0.25),
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                          prefixIcon: const Icon(Icons.edit, size: 18),
+                        ),
+                        onChanged: (val) => widget.identity.save(bikeName: val, ble: widget.ble),
+                      ),
+                      const SizedBox(height: 12),
+                      DropdownButtonFormField<String>(
+                        initialValue: _bikeClass,
+                        decoration: InputDecoration(
+                          labelText: 'Fahrzeugtyp / Fahrstil-Profil',
+                          labelStyle: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 13),
+                          filled: true,
+                          fillColor: Colors.black.withValues(alpha: 0.25),
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                        ),
+                        dropdownColor: const Color(0xFF131B2E),
+                        items: const [
+                          DropdownMenuItem(value: 'cruiser', child: Text('Touring / Cruiser (Doubt-Timer: 30s)')),
+                          DropdownMenuItem(value: 'adventure', child: Text('Adventure / Enduro (Doubt-Timer: 25s)')),
+                          DropdownMenuItem(value: 'sport', child: Text('Sport / Naked (Doubt-Timer: 15s)')),
+                        ],
+                        onChanged: (val) {
+                          if (val != null) {
+                            setState(() => _bikeClass = val);
+                            widget.identity.save(bikeClass: val, ble: widget.ble);
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              // 2. Besatzung: Fahrer & Sozius Slots
+              Row(
+                children: [
+                  // Fahrer Slot Card
+                  Expanded(
+                    child: Card(
+                      color: const Color(0xFF0A84FF).withValues(alpha: 0.08),
+                      child: Padding(
+                        padding: const EdgeInsets.all(14),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Row(
+                                  children: [
+                                    Icon(Icons.person, color: Color(0xFF00F2FE), size: 18),
+                                    SizedBox(width: 6),
+                                    Text('Fahrer', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                                  ],
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFF00E676).withValues(alpha: 0.15),
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  child: const Text('🟢 Aktiv', style: TextStyle(color: Color(0xFF00E676), fontSize: 10, fontWeight: FontWeight.bold)),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            TextField(
+                              controller: _riderNameCtrl,
+                              decoration: InputDecoration(
+                                labelText: 'Fahrer-Rufzeichen',
+                                hintText: 'z. B. Michael',
+                                labelStyle: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 12),
+                                filled: true,
+                                fillColor: Colors.black.withValues(alpha: 0.3),
+                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                                isDense: true,
+                              ),
+                              onChanged: (val) => widget.identity.save(riderName: val, ble: widget.ble),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              'Rolle: ROLE_RIDER (0x01)',
+                              style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.5)),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(width: 12),
+
+                  // Sozius Slot Card
+                  Expanded(
+                    child: Card(
+                      color: isDuo
+                          ? const Color(0xFFFF9F0A).withValues(alpha: 0.08)
+                          : Colors.white.withValues(alpha: 0.02),
+                      child: Padding(
+                        padding: const EdgeInsets.all(14),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Row(
+                                  children: [
+                                    Icon(Icons.group, color: Color(0xFFFF9F0A), size: 18),
+                                    SizedBox(width: 6),
+                                    Text('Sozius', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                                  ],
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                  decoration: BoxDecoration(
+                                    color: isDuo
+                                        ? const Color(0xFF00E676).withValues(alpha: 0.15)
+                                        : Colors.white.withValues(alpha: 0.06),
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  child: Text(
+                                    isDuo ? '🟢 An Bord' : '⚪ Solo',
+                                    style: TextStyle(
+                                      color: isDuo ? const Color(0xFF00E676) : Colors.grey,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            TextField(
+                              controller: _pillionNameCtrl,
+                              decoration: InputDecoration(
+                                labelText: 'Sozius-Rufzeichen',
+                                hintText: 'z. B. Sarah',
+                                labelStyle: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 12),
+                                filled: true,
+                                fillColor: Colors.black.withValues(alpha: 0.3),
+                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                                isDense: true,
+                              ),
+                              onChanged: (val) => widget.identity.save(pillionName: val, ble: widget.ble),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              isDuo ? 'Rolle: ROLE_PILLION (0x02)' : 'Nicht im Schwarm announced',
+                              style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.5)),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 12),
+
+              // Sozius An Bord Toggle
+              Card(
+                child: SwitchListTile(
+                  title: const Text('Sozius fährt heute mit (An Bord)', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                  subtitle: Text(
+                    isDuo
+                        ? 'Duo-Modus aktiv: Sozius wird im LoRa-Schwarm announced & Audio-Share aktiv.'
+                        : 'Solo-Modus: Gespeichertes Sozius-Profil wird strikt NICHT announced.',
+                    style: TextStyle(fontSize: 11, color: Colors.white.withValues(alpha: 0.6)),
+                  ),
+                  value: isDuo,
+                  activeThumbColor: const Color(0xFFFF9F0A),
+                  onChanged: (val) => widget.identity.save(isPillionPresent: val, ble: widget.ble),
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              // 3. LoRa-Schwarm Announce Vorschau (Was das Bike tatsächlich ins Netz funkt)
+              Card(
+                color: const Color(0xFF0E1422),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  side: BorderSide(color: const Color(0xFF00E676).withValues(alpha: 0.4), style: BorderStyle.solid),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            '📡 Aktives LoRa Kanal 1 Schwarm-Discovery-Beacon:',
+                            style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.grey, letterSpacing: 0.5),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF00E676).withValues(alpha: 0.15),
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: const Text('ETSI 18ms', style: TextStyle(color: Color(0xFF00E676), fontSize: 10, fontWeight: FontWeight.bold)),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        widget.identity.swarmPreviewText,
+                        style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF00E676),
+                          fontFamily: 'monospace',
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF00F2FE).withValues(alpha: 0.15),
+                            foregroundColor: const Color(0xFF00F2FE),
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          ),
+                          onPressed: _saveAll,
+                          icon: const Icon(Icons.save, size: 18),
+                          label: const Text('Auf Zentralbox sichern & synchronisieren'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
