@@ -168,6 +168,9 @@ All discrete components, PCB ordering files, and COTS sourcing lists are documen
    * **Slot 2 (Cardo Packtalk Edge Inlay / Swap OMM):**
      * Mount 4x solenoids into [`cartridge_insert_cardo.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_cardo.stl) and connect to `J_ACT`.
      * Lock Cardo Packtalk Edge into Air-Mount cradle and attach micro-cable whip to `J_AUDIO_PWR`.
+   * **Alternative Option: Midland PMR446 Radio Cartridge (Class 3a Analog Radio):**
+     * **Variant A (Internal Compact Inlay):** Compact walkie-talkies (e.g. Midland XT30 or bare-board modules) sit directly inside the cartridge bay. Connect 8-pin JST-SH harness to dual-jack (2.5 mm Mic / 3.5 mm Spk) and 5V DC battery eliminator dummy; PTT keying is handled via Pin 8 (`PTT_IO` via MOSFET `Q4`). The cartridge shell remains 100% solid & sealed (IP67).
+     * **Variant B (External Bulky Radio / Tethered Breakout):** For large handheld radios (Midland G7/G9 Pro, Kenwood, Baofeng, commercial VHF/UHF) that cannot fit into the pod, use the base sled with front through-hole (`has_sma_port = true`). Fit an M8 or PG7 cable gland or EPDM sealing grommet into the $\varnothing 6.5\,\text{mm}$ bore. Route the multi-conductor shielded umbilical cable from `J_AUDIO_PWR` (Mic, Spk, PTT, 5V power) through the gland to the external radio in a tank bag, pannier, or handlebar holster.
 3. **Mouth Gasket:** Slide molded silicone gasket over the cartridge collar and lightly apply silicone grease.
 
 ---

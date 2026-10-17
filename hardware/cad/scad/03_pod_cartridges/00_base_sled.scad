@@ -20,7 +20,7 @@ module cartridge_base_sled(
     wall          = 2.5,
     magnetic_lock = true,
     show_latch    = false,
-    has_sma_port  = false,
+    has_sma_port  = false, // Front Bulkhead Port: false = solid hermetic IP67 faceplate; true = Ø 6.5 mm bore for SMA or IP67 cable gland (tethered radio)
     has_front_vent= false
 ) {
     y_pcb_c = sled_w / 2.0;

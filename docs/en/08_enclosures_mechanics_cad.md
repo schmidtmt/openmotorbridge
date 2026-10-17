@@ -426,36 +426,46 @@ Accommodates the sliding contacts of the original Cardo audio kit plate. The dev
 #### 4.3.10 PMR446 Transceiver & Bare-Board Module (SA818S / RDA1846)
 Fully integrated 500 mW PMR446 analog RF module ($38 \times 20\,\text{mm}$) seated directly on the cartridge carrier PCB--optionally with internal 446 MHz helical antenna or robust SMA front socket.
 
-#### 4.3.11 Longitudinal Cross-Section Comparison (Sena vs. Cardo)
+#### 4.3.11 Universal External Radio Cartridge (Tethered Radio Breakout)
+For classic or bulky handheld two-way radios (e.g. full-size Midland G7/G9 Pro, Kenwood TH-D series, Motorola or Baofeng radios) that cannot physically fit into the compact internal volume of the standard cartridge due to their enclosure dimensions, high-capacity battery packs, or fixed antennas, the system provides a highly modular **Tethered Breakout Option**:
+
+* **Hermetic Front Cable Gland:** The standard cartridges for Sena, Cardo, OMM, and the blank dry box remain 100% solid and IP67-sealed on their front face. For the tethered variant, the front $\varnothing 6.5\,\text{mm}$ bulkhead bore of the base sled (`has_sma_port = true`) is utilized with an off-the-shelf M8 or PG7 cable gland or an EPDM strain-relief grommet.
+* **Intelligent Cartridge Electronics ([PCBA 03](file:///Users/schmidtm/openMotorBridge/data/bom_parts.json#L1647)):** Inside the sled, [PCBA 03](file:///Users/schmidtm/openMotorBridge/data/bom_parts.json#L1647) operates as usual, powered via the pod's Mill-Max heavy-duty spring contacts and communicating with the bike and helmet mesh via the synchronous 6.5 GHz UWB backbone using its bottom Taoglas FXUWB10 patch antenna.
+* **Complete Signal & PTT Interfacing (`J_AUDIO_PWR`):** A multi-conductor shielded coiled umbilical cable routes from `J_AUDIO_PWR` (8-pin JST-SH) through the sealed front gland to the external radio:
+  - **Microphone & Speaker:** Bidirectional 24-bit / 48 kHz audio through the ES8388 DSP codec with an isolated signal ground (`AGND_AUDIO_IN`) ensuring 100% hum- and ground-loop-free operation.
+  - **Hardware PTT:** Radio keying controlled via the open-drain MOSFET `Q4` (`PTT_IO` Pin 8), triggered instantly by the wireless OMB handlebar switches or helmet hotkeys.
+  - **Optional Vehicle DC Power:** Protected 5V DC supply (`VCC_5V` Pin 2 & `PGND` Pin 1) for powering a battery eliminator dummy inside the handheld radio (zero risk of dead radio batteries during long tours!).
+* **Mounting Versatility:** The external radio does not need dedicated pod brackets; it can be stowed freely in a tank bag, pannier, crash bar Molle pouch, or rider jacket pocket.
+
+#### 4.3.12 Longitudinal Cross-Section Comparison (Sena vs. Cardo)
 ![OpenMotorBridge Sena & Cardo Cartridges Longitudinal Cross Section](../images/cad/sena_cardo_cartridge_cross_section.png)
 
 *Figure 8.16: 2D longitudinal cross section (X-Z plane) through Sena 50S (top) and Cardo Packtalk Edge (bottom) cartridges docked inside the pod.*
 
-#### 4.3.12 IP67 Blank Cartridge (Dry Box Dummy)
+#### 4.3.13 IP67 Blank Cartridge (Dry Box Dummy)
 ![OpenMotorBridge IP67 Blindkassette 3D CAD Render](../images/cad/dummy_cartridge_cad.png)
 
 *Figure 8.17: Identically contoured IP67 blank cartridge providing an integrated $80 \times 46 \times 16\,\text{mm}$ emergency dry compartment.*
 
 The IP67 Blank Cartridge (`cartridge_blindkassette.scad`) reliably protects the pod slot whenever no intercom is docked:
 * **Identical Latching & Ejection Kinematics:** The blank cartridge integrates the exact same standardized 2-arm magnetic latch (`parts/05_magnetic_lock_latch.scad`), Poka-Yoke guide rails, and spring pockets for the V4A ejection springs. It engages with the same positive click and ejects contactlessly upon approaching the N52 magnetic key.
-* **Hermetic Connector Protection (EPDM Dummy Seal):** On the rear face, an integrated molded EPDM sealing block seals the 6-pin socket on PCBA 02 against water, road salt, and dirt intrusion.
+* **Hermetic Contact Protection (EPDM Dummy Seal):** On the rear face, an integrated molded EPDM sealing block seals the two gold contact pins inside the housing against water, road salt, and dirt intrusion.
 * **Emergency Dry Compartment:** The internal $80 \times 46 \times 16\,\text{mm}$ cavity functions as a sealed dry box for vehicle registration papers, cash, spare keys, or emergency O-rings.
 
 ---
 
-### 4.4 Standardized 6-Pin M8 / PUR Harness Wire Color Coding
+### 4.4 The 2-Wire Pure-DC Pod Power Feed (All-UWB Architecture)
 
-The 6-pin interface is 100% identical and symmetrically wired for both satellite pods (Pod 1 and Pod 2):
+With the transition to the **All-UWB data backbone (Qorvo DW3110)** and Bluetooth audio, all copper analog signal lines are eliminated. The wiring harness to both satellite bays (Bay 1 and Bay 2) is slimmed down to **exactly 2 conductors**:
 
-| M8 / Pogo Pin | Conductor Color (PUR Cable) | Cross Section | Signal Pods 1 & 2 (Audio & Intercom) | Shielding & Twisting |
+| Conductor | Color (Harness) | Cross Section | Signal Bays 1 & 2 (Pure-DC) | Function & Protection |
 | :---: | :--- | :---: | :--- | :--- |
-| **Pin 1** | **Red (RD)** | $0.34\,\text{mm}^2$ (AWG22) | **`VCC`** (5V switched power via MOSFET) | Single core (Power) |
-| **Pin 2** | **Black (BK)** | $0.34\,\text{mm}^2$ (AWG22) | **`GND`** (Dedicated power & signal ground) | Single core (Power Ground) |
-| **Pin 3** | **White (WH)** | $0.14\,\text{mm}^2$ (AWG26) | **`NF_P`** (Balanced Audio + via Bourns) | **Pair 1 twisted** (with Pin 4) |
-| **Pin 4** | **Blue (BU)** | $0.14\,\text{mm}^2$ (AWG26) | **`NF_N`** (Balanced Audio - via Bourns) | **Pair 1 twisted** (with Pin 3) |
-| **Pin 5** | **Yellow (YE)** | $0.14\,\text{mm}^2$ (AWG26) | **`TRIGGER_PPS`** (Single-Wire UART / Opto-Trigger) | Single core (Control) |
-| **Pin 6** | **Green (GN)** | $0.14\,\text{mm}^2$ (AWG26) | **`1-WIRE_ID`** (Native Emulation / DS2401 ID) | Single core (1-Wire Bus) |
-| **M8 Shell** | **Tinned Copper (BL)** | $> 85\,\%$ Braid | **`GND_SHIELD`** (360° Chassis Shield) | Overall shield via M8 metal body |
+| **Conductor 1** | **Red (RD)** | $0.34\,\text{mm}^2$ (AWG22) | **`VCC_5V`** (+5V switched power) | Protected via 500mA PPTC on Central Box |
+| **Conductor 2** | **Black (BK)** | $0.34\,\text{mm}^2$ (AWG22) | **`GND`** (Common power ground) | Direct return path to Central Box |
+
+* **Connector:** Compact, vibration-proof 2-pin automotive plug (JST-JWPF or AMP Superseal 1.5 2-Pin, IP67).
+* **Housing Mating:** The leads terminate directly on two heavy-duty gold-plated spring pins (Mill-Max pogo pins) in the integral transverse bulkhead ($X = 18.0\,\text{mm}$), compressing positively onto the ENIG gold pads `PAD1` (+5V) and `PAD2` (GND) on the bottom (`B.Cu`) of `PCBA 03`.
+* **Data & Audio:** 100% wireless via UWB (DW3110 / 6.489 GHz Ch. 5) and Bluetooth. Heavy M8 and USB-C bulkhead sockets on the pod are eliminated.
 
 ---
 

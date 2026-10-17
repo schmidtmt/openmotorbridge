@@ -475,12 +475,23 @@ Nutzt die formschlüssigen Schiebe-Gegenkontakte der originalen Cardo-Audiokit-B
 #### 4.3.10 PMR446 Transceiver & Bare-Board Modul (SA818S / RDA1846)
 Vollständig integriertes 500 mW PMR446-Analogfunkmodul ($38 \times 20\,\text{mm}$) direkt auf der Kassetten-Trägerplatine - wahlweise mit interner 446-MHz-Helix oder robuster SMA-Frontbuchse für große Distanzen.
 
-#### 4.3.11 Längsschnitt-Vergleich Sena & Cardo
+#### 4.3.11 Universelle Externe Funkgeräte-Kassette (Tethered Radio Breakout)
+Für klassische oder voluminöse Handfunkgeräte (z. B. ausgewachsene Midland G7/G9 Pro, Kenwood TH-D-Serie, Motorola oder Baofeng), die aufgrund ihrer Gehäuseabmessungen, großen Akkupacks oder festen Wendelantennen nicht in den kompakten Innenraum der Standard-Kassette passen, bietet das System eine hochgradig modulare **Tethered Breakout-Option**:
+
+* **Hermetische Front-Kabeldurchführung:** Die Standard-Kassetten für Sena, Cardo, OMM und Blindbox bleiben wie gewohnt stirnseitig zu 100 % geschlossen und IP67-dicht. Für die Tethered-Variante wird die stirnseitige $\varnothing 6{,}5\,\text{mm}$ Durchgangsbohrung des Basisschlittens (`has_sma_port = true`) reaktiviert und mit einer handelsüblichen M8- bzw. PG7-Kabelverschraubung oder einer EPDM-Knickschutztülle abgedichtet.
+* **Intelligente Kassettenelektronik ([PCBA 03](file:///Users/schmidtm/openMotorBridge/data/bom_parts.json#L1647)):** Im Inneren des Schlittens sitzt weiterhin [PCBA 03](file:///Users/schmidtm/openMotorBridge/data/bom_parts.json#L1647), versorgt über die pod-internen Mill-Max Federkontakte und angebunden an das synchrone UWB-Backbone (6.5 GHz) über die interne Taoglas FXUWB10 Bodenantenne.
+* **Vollständige Signal- & PTT-Adaption (`J_AUDIO_PWR`):** Ein mehradriges, geschirmtes Spiralkabel (Umbilical Cable) führt durch die Dichtverschraubung von `J_AUDIO_PWR` (8-Pin JST-SH) nach außen zur externen Funke:
+  - **Mikrofon & Lautsprecher:** Bidirektionales 24-Bit / 48 kHz Audio über den ES8388 DSP-Codec mit galvanisch getrennter Signalmasse (`AGND_AUDIO_IN`) für absolut brummfreien Betrieb.
+  - **Hardware-PTT:** Steuerung der Sendetaste über den integrierten Open-Drain MOSFET `Q4` (`PTT_IO` Pin 8) – ausgelöst durch den drahtlosen OMB-Lenkertaster am Kupplungsgriff oder Helm-Hotkeys.
+  - **Optionale Bordnetzspeisung:** Geschützte 5V DC Speisung (`VCC_5V` Pin 2 & `PGND` Pin 1) zur direkten Speisung eines Akku-Eliminators im Funkgerät (nie wieder leerer Funkgeräte-Akku während der Tour!).
+* **Maximale Montagefreiheit:** Das externe Funkgerät selbst muss nicht im Pod untergebracht werden, sondern kann flexibel im Tankrucksack, Seitenkoffer, einer Molle-Tasche am Sturzbügel oder in der Fahrerjacke getragen werden. Es sind keinerlei Sonderhalterungen am Pod erforderlich.
+
+#### 4.3.12 Längsschnitt-Vergleich Sena & Cardo
 ![OpenMotorBridge Sena & Cardo Cartridges Longitudinal Cross Section](../images/cad/sena_cardo_cartridge_cross_section.png)
 
 *Abbildung 8.16: 2D-Längsschnitt (X-Z Ebene) durch die Sena 50S (oben) und Cardo Packtalk Edge (unten) Kassetten im geschlossenen Pod.*
 
-#### 4.3.12 IP67 Blind- / Leerkassette (Dry Box Dummy)
+#### 4.3.13 IP67 Blind- / Leerkassette (Dry Box Dummy)
 ![OpenMotorBridge IP67 Blindkassette 3D CAD Render](../images/cad/dummy_cartridge_cad.png)
 
 *Abbildung 8.17: Formidentische IP67 Blindkassette mit integriertem $80 \times 46 \times 16\,\text{mm}$ Notfall-Trockenstaufach.*
