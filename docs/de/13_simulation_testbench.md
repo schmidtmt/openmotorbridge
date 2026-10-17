@@ -4,7 +4,7 @@ Um das Zusammenspiel von Hardware, Akustik, Fahrdynamik, Thermik, Hochfrequenz-P
 
 > [!NOTE]
 > **v9.6 Clean-Architecture Testbench-Update:**  
-> Durch den Entfall von `PCBA 02` (Pod-Basis) und `PCBA 04` (Lenker-Interface) zugunsten des **drahtlosen All-UWB-Backbones (6.5 GHz / DW3110)** entfallen anfällige Signal-Steckverbinder im Außenbereich vollständig. Die Testbench simuliert das modulare 5-Platinen-System (`PCBA 01`, `PCBA 03`, `PCBA 05`, `PCBA 06`, `PCBA 07`), das deterministische UWB-Timing ($< 0{,}4\,	ext{ms}$), den unterbrechungsfreien automatischen Handover zwischen Nahbereichs-Intercom (Sena Mesh / Cardo DMC / OMM 2.4 GHz) und 868-MHz-Fernbereich-LoRa sowie die NVS-Persistierung des Gruppen-States bei 30-minütigen Kaffeepausen.
+> Durch den Entfall von `PCBA 02` (Pod-Basis) und `PCBA 04` (Lenker-Interface) zugunsten des **drahtlosen All-UWB-Backbones (6.5 GHz / DW3110)** entfallen anfällige Signal-Steckverbinder im Außenbereich vollständig. Die Testbench simuliert das modulare 7-Platinen-System (`PCBA 01`, `PCBA 03`, `PCBA 05`, `PCBA 07`, `PCBA 08`, `PCBA 09`, `PCBA 10`), das deterministische UWB-Timing ($< 0{,}4\,\text{ms}$), den unterbrechungsfreien automatischen Handover zwischen Nahbereichs-Intercom (Sena Mesh / Cardo DMC / OMM 2.4 GHz) und 868-MHz-Fernbereich-LoRa sowie die NVS-Persistierung des Gruppen-States bei 30-minütigen Kaffeepausen.
 
 ---
 
@@ -84,7 +84,7 @@ Führt die reale C++-Firmware-Logik auf einer virtuellen Mehr-Platinen-Hardware 
   * PTT-Tastendruck am Front-Node Lenkertaster $\rightarrow$ UWB Frame $\rightarrow$ Aktuator-Zündung in **$\approx 0{,}36\,\text{ms}$**.
   * Knowles SPH0645 MEMS erfasst Geschwindigkeitslärm bei $130\,\text{km/h}$ ($79\,\text{dBA}$) $\rightarrow$ Audio DSP AGC regelt Intercom-Lautstärke dynamisch um $+1{,}0\,\text{dB}$ nach.
 * **Szenario 5:** Motorstart ($6{,}5\,\text{V}$ Spannungseinbruch) $\rightarrow$ USV-Sofortpufferung $\rightarrow$ $0$ Audio-Drops, $0$ Reboots.
-* **Szenario 6 (Kabelabriss & Kurzschluss):** M8-Kabel zum Helm reißt ab $\rightarrow$ Bourns PTC-Sicherung löst in $1{,}2\,\text{ms}$ aus ($< 15\,\text{mA}$ Kurzschlussstrom, $0\,\text{V}$ Einbruch auf Hauptplatine) $\rightarrow$ Anti-Pop Mute schützt Helmlautsprecher vor Krachen $\rightarrow$ Rote Warn-LED.
+* **Szenario 6 (Kabelabriss & Kurzschluss):** Kabelabriss / Kurzschluss an der Kassetten-Stromzuführung oder Headset-Leitung $\rightarrow$ Bourns PTC-Sicherung löst in $1{,}2\,\text{ms}$ aus ($< 15\,\text{mA}$ Kurzschlussstrom, $0\,\text{V}$ Einbruch auf Hauptplatine) $\rightarrow$ Anti-Pop Mute schützt Helmlautsprecher vor Krachen $\rightarrow$ Rote Warn-LED.
 * **Szenario 7 (CAN-Bus Abriss):** TCAN334G Fehlerschutz $\rightarrow$ Automatischer Fallback der Geschwindigkeitserfassung auf GNSS/IMU-Koppelnavigation.
 * **Szenario 8 (Bordnetz-Spannungsalarm):**
   * Stufe A ($< 11{,}8\,\text{V}$): Gelbe LED, Helm-Warnton (*Low Battery Chime*), Lastabwurf.
@@ -235,7 +235,7 @@ Der **Digital Twin Simulator** ([`openmotorbridge_digital_twin.py`](../../tools/
 ### Die Kernkomponenten & Test-Features:
 1. **Aktive Platinenklassen pro Motorrad:**
    * **PCBA 01 (Zentralbox):** 15-State ADR-EKF Filterung, Power Supervisor (Bordnetz $14{,}2\,\text{V}$, USV-Pufferung $4{,}14\,\text{V}$), Audio DSP Matrix, Semtech SX1262 LoRa 868 MHz Transceiver & Qorvo DW3110 UWB Backbone.
-   * **PCBA 03 (Smart Cartridges, 2x):** All-UWB 2-Layer 2-Sided SMT mit Host-MCU, Qorvo DW3110 Transceiver, 4x AO3400A N-MOSFETs (`sena_spider`, `cardo_edge`). *(PCBA 02 ist ersatzlos entfallen; Pods nutzen direkte DC-Federkontakte).*
+   * **PCBA 03 (Smart Cartridges, 2x):** All-UWB 4-Lagen High-TG150 SMT mit ESP32-C6 Host-MCU, Qorvo DW3110 Transceiver, ES8388 Audio-Codec, 4x AO3400A N-MOSFETs (`sena_spider`, `cardo_edge`). *(PCBA 02 ist ersatzlos entfallen; Pods nutzen direkte DC-Federkontakte).*
    * **PCBA 05 (Universal Front Node):** u-blox SAM-M10Q Multi-GNSS via J12 Qwiic, duale Knowles MEMS Akustikmessung (Fahrtwindrauschen skaliert mit $v^3$), Cockpit-PTT-Taste, DW3110 UWB Backbone.
 2. **Geodätischer Track (`wil_wattwil_ricken.py`):**
    * $11\,682$ Stützpunkte mit realistischer Beschleunigung, Kurvenschräglage ($\theta_{\text{lean}} = \arctan(v \cdot \dot{\psi} / g)$ bis $42^\circ$) und Höhenprofil ($570\dots 795\,\text{m}$ ü. M.).

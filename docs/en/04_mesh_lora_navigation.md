@@ -225,8 +225,8 @@ OpenMotorBridge solves the critical problem of convoy separations during alpine 
    * Transmission over LoRa 868 MHz takes only **$\approx 120\,\text{ms}$ airtime** -- legally compliant, highly resilient, penetrating $1\dots 15\,\text{km}$ through mountainous terrain.
 
 ### 5.2 OMM 2.4 GHz as an Optional Swap Cartridge (Pod 1 / Pod 2)
-* For pure OpenMotorMesh group rides or support vehicle convoys (Mode B), riders can insert the **OMM 2.4 GHz Cartridge** (PCBA 03 variant with ESP32-C3 / CH32V003 ID `0x03`) into Pod 1 or Pod 2.
-* Power and audio are supplied through the symmetric PCBA 02 base board. It is never co-located with Sena or Cardo in the same pod.
+* For pure OpenMotorMesh group rides or support vehicle convoys (Mode B), riders can insert the **OMM 2.4 GHz Cartridge** (PCBA 09 UCS Module or PCBA 03 with ESP32-C6) into Pod 1 or Pod 2.
+* Power is supplied through the 2-wire DC spring contacts into the monolithic pod, with audio streaming via UWB or direct USB-C audio. See **[Chapter 04b](04b_omm_intercom_module.md)** for full hardware and RF specifications.
 
 ### 5.3 Architectural Decision: Why Decentralized LoRa Mesh over Cellular (LTE-M / Cloud)?
 

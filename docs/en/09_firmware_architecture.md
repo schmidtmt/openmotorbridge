@@ -16,7 +16,7 @@ In v8.0, the system is strictly consolidated to two primary main nodes (Rear Pod
 +------------------------------------------------------+---------------------------------+
 | * Core 0: UWB Backbone, SX1262 LoRa 868, BLE, WebDAV  | * Core 0: UWB Backbone, SAM-M10Q|
 | * Core 1: Realtime 48 kHz Audio DSP, Ducking, AGC    |   Multi-GNSS, CAN, USB-PD, PTT  |
-| * Co-MCUs: CH32V003 on PCBA 03 (Smart Cartridges)    | * Core 1: Knowles Vector-DSP    |
+| * Co-MCUs: ESP32-C6 on PCBA 03 (Smart Cartridges)    | * Core 1: Knowles Vector-DSP    |
 +------------------------------------------------------+---------------------------------+
 ```
 
@@ -152,17 +152,28 @@ During tours across mountainous terrain or dense forests, 2.4 GHz intercom conne
 
 ---
 
-## 5. Cartridge Control: Mechatronic Smart Cartridge (PCBA 03) & Hardware IDs
+## 5. Cartridge Control: Mechatronic Smart Cartridge (PCBA 03 All-UWB) & Hardware IDs
 
-### 5.1 CH32V003 Hardware IDs & 1-Wire Emulation
-Every plug-in cartridge reports its hardware class upon insertion via single-wire UART / 1-Wire ID:
-* **`0x01`**: Sena SPIDER X Slim (Mechatronic 4-actuator control)
-* **`0x02`**: Cardo Packtalk Edge (Mechatronic 4-actuator control)
-* **`0x03`**: OMM 2.4 GHz Swap Cartridge (ESP32-C3 Digital Transceiver)
-* **`0x04`**: Midland PMR446 / Two-Way Radio (Relay keying via TLP222A)
+### 5.1 Dynamic Cartridge & Model Identification (Hardware IDs & Profile Matrix)
+To map exact mechanical button locations, pulse timings, and click sequences across manufacturers, `PCBA 03` uses a 2-stage identification process:
+1. **Resistor-coding / 1-Wire at the adapter harness:** Each inlay signals its exact device model via analog resistor coding or a 1-Wire DS2401 silicon serial number chip.
+2. **Cartridge Handshake via UWB (`UWB_PKT_CARTRIDGE_ANNOUNCE`):** On boot, the cartridge reports its 16-bit model ID and UID to the Central Box.
+
+| Model ID | Base Class | Model Name | Mechanical Inlay | Keyboard & Control Characteristics |
+| :---: | :---: | :--- | :--- | :--- |
+| **`0x0101`** | Class A | **Sena SPIDER X Slim** | 3D form-fit A | 3 buttons (Center, Plus, Minus) + Mesh button; pulse 150 ms |
+| **`0x0102`** | Class A | **Sena +Mesh Adapter** | Slide-Inlay A | 1 multi-function button; pairing & reconnect sequences |
+| **`0x0201`** | Class B | **Cardo Packtalk Edge / Pro**| Air-Mount Inlay B | 3 buttons + roller wheel (Intercom, Audio, Phone); magnetic coupling |
+| **`0x0202`** | Class B | **Cardo Packtalk Bold / Black**| Cradle Inlay B | 3 buttons + jog-dial; DMC Gen 1 protocol |
+| **`0x0301`** | Class C | **UCS Cardo Freecom UCS** | Universal UCS C | Standardized 4-button UCS geometry; universal actuator bridge |
+| **`0x0302`** | Class C | **UCS Midland Mesh UCS** | Universal UCS C | Standardized UCS geometry; Midland Mesh click layout |
+| **`0x0303`** | Class C | **OMM 2.4 GHz OEM Cartridge**| Universal UCS C | Pure digital UWB/2.4 GHz transceiver; zero mechatronic pressing |
+| **`0x0401`** | Class D | **Midland PMR446 (Alan/G9)**| Radio Inlay D | PTT keying via open-drain MOSFET `Q4` (`PTT_IO`); jack pigtail |
+
+The firmware loads the corresponding `/storage/profiles/<MODEL_ID>.json` from LittleFS. This configures exact pulse widths, debounce intervals, multi-key macros (e.g. simultaneous press for cold boot), and menu state transitions.
 
 ### 5.2 Smart Cartridge Mechatronic Mode (PCBA 03)
-The Central Box dispatches 1-byte opcodes via single-wire UART on Pin 5 (19,200 baud) to the CH32V003:
+The Central Box dispatches 1-byte opcodes wirelessly via UWB packet (`UWB_PKT_CARTRIDGE_OPCODE`) to the ESP32-C6 host MCU on PCBA 03. The MCU switches the 4x AO3400A N-MOSFETs on the board bottom (`B.Cu`), which mechatronically actuate the buttons of the inserted headset:
 
 | Opcode | Function / Gesture | Active Actuators | Pulse Duration / Sequence | Headset Response (Sena SPIDER X Slim) |
 | :---: | :--- | :--- | :--- | :--- |
@@ -191,7 +202,7 @@ The overall system orchestrates 15 specialized tasks across 2 ESP32-S3 host micr
 | **`adr_ekf_task`**    | Central Box (Core 0) | **15** | 4 KB | 50 Hz Timer         | I2C / CAN Buffer      | 15-State Kalman filter (SAM-M10Q GNSS + BMI270 IMU + CAN speed). |
 | **`ble_server_task`** | Central Box (Core 0) | **10** | 4 KB | Event-Driven        | NimBLE Stack          | Web-Bluetooth PWA dashboard (GATT services `0x180D`/`0x180A`). |
 | **`sdio_log_task`**   | Central Box (Core 0) | **8**  | 8 KB | 10 Hz Ringbuffer    | FreeRTOS RingBuffer   | 4-Bit SDIO blackbox logging with ECDSA SHA-256 signature. |
-| **`onewire_task`**    | Central Box (Core 0) | **5**  | 2 KB | 0.5 Hz cyclic       | Bit-Banging Driver    | Polls cartridge IDs on Pods 1 & 2 (CH32V003 emulation or DS2401). |
+| **`cartridge_poll_task`** | Central Box (Core 0) | **5**  | 2 KB | 0.5 Hz cyclic       | UWB / 1-Wire Driver   | Polls cartridge presence and model ID on Pods 1 & 2 via UWB. |
 | **`webdav_sync_task`**| Central Box (Core 0) | **3**  | 8 KB | Graceful Shutdown   | LwIP TLS 1.3          | Automatic GPX tour upload via home Wi-Fi upon ignition OFF. |
 | **`front_ptt_task`**  | Front Node (Core 0)  | **24** | 2 KB | GPIO Edge ISR       | UWB TX Queue          | Transmits handlebar PTT via UWB in $< 0.2\,\text{ms}$; Cam toggle; HiLight tag. |
 | **`front_gnss_task`** | Front Node (Core 0)  | **20** | 4 KB | 10 Hz I2C DMA       | J12 Qwiic / UWB TX    | u-blox SAM-M10Q UBX-NAV-PVT parsing, TMP117 Temp & OPT3001 Lux. |

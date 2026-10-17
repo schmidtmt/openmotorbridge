@@ -78,8 +78,8 @@ For riders who prefer installation directly via the Google Play Store, automated
 
 * **Mode Selector:** Standard Mode (Mesh Bridge), Single Rider Mode, Cruise Mode.
 * **Sliders:** Input sensitivity for Port 1 (Sena) and Port 2 (Cardo), Ducking depth, and Transparency volume.
-* **🦾 Smart Cartridge Mechatronic Control Panel (PCBA 03 Rev 2.0):**
-  * Live status indicator of the Cartridge MCU (CH32V003 Synced).
+* **🦾 Smart Cartridge Mechatronic Control Panel (PCBA 03 Rev 3.0 All-UWB):**
+  * Live status indicator of the Cartridge MCU (ESP32-C6 Synced).
   * `⚡ Power Boot`: Dispatches Opcode `0x01` (`Center + (+)` held for 1,000 ms) for automatic cold-booting after storage $> 3$ days.
   * `🔘 Mesh On/Off`: Opcode `0x05` (200 ms short pulse).
   * `⏭️ Channel +1 / ⏮️ Channel -1`: Autonomous cartridge macros (`0x07` / `0x08`, 2x Mesh + 1x Plus/Minus).
@@ -91,9 +91,9 @@ For riders who prefer installation directly via the Google Play Store, automated
 ![PWA Tab 3: Cartridge Identification & DLE Live Status](../images/pwa/pwa_tab3_cartridges_dle_status.png)
 
 * **Live Slot Status:** Visual display of active cartridges in Slot 1 and Slot 2 with 1-Wire UIDs (emulated by MCU or physical DS2401).
-* **Smart Cartridge Badging:** Highlights hardware architecture (RISC-V CH32V003, 4x MOSFETs, In-System Flashing active).
+* **Smart Cartridge Badging:** Highlights hardware architecture (ESP32-C6 RISC-V, 4x MOSFETs, UWB OTA Flashing active).
 * **Cartridge Onboarding Wizard:** 3-step interactive pairing guide for newly detected cartridges.
-* **Ground-Truth Sync & ISP Flashing:** Autonomous re-flashing of profile tables directly into the Cartridge MCU EEPROM via Pin 5 single-wire UART.
+* **Ground-Truth Sync & OTA Flashing:** Autonomous re-flashing of profile tables directly into the Cartridge MCU Flash via the UWB backbone or J_PROG.
 
 ### 2.4 Tab 4: Tours & WebDAV (`#tab-tours`)
 

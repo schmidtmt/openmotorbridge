@@ -3,8 +3,8 @@
 Dieses Dokument spezifiziert das fahrzeugübergreifende Weitbereichs- und Schwarm-Backbone der OpenMotorBridge v9.6 Clean Architecture: das **3-Kanal LoRa 868 MHz Funknetzwerk**, den **Zero-Touch Gruppen-Lifecycle** (selbstorganisierende Gruppenbildung ohne Tastendruck), den **schleifenfreien Link-State Audio Bridging Graph** (Precomputed Routing-Matrizen, First-Receiver-Wins Schiedsverfahren, Do-Not-Translate Flags) sowie die taktische **LoRa Voice Fallback Engine** bei Kolonnensplits.
 
 > [!NOTE]
-> * Das optionale **OpenMotorMesh 2.4 GHz HD-Audio Kassetten-Modul** (UCS-kompatibles OEM-Modul mit eigenem Mesh 3.0 / ESP-NOW) wird ausführlich im eigenständigen Dokument [04b - OMM 2.4 GHz Intercom & OEM-Kassette](file:///Users/schmidtm/openMotorBridge/docs/de/04b_omm_intercom_module.md) beschrieben.
-> * Die Sensorfusion der Koppelnavigation (**Automotive Dead Reckoning - ADR**), u-blox SAM-M10Q Multi-GNSS, IMU-Neigungsmessung und Actioncam-Zeitsynchronisation werden im Dokument [06 - Telemetrie, Sensorfusion, Blackbox & WebDAV](file:///Users/schmidtm/openMotorBridge/docs/de/06_telemetry_blackbox_webdav.md) behandelt.
+> * Das optionale **OpenMotorMesh 2.4 GHz HD-Audio Kassetten-Modul** (UCS-kompatibles OEM-Modul mit eigenem Mesh 3.0 / ESP-NOW) wird ausführlich im eigenständigen Dokument [04b - OMM 2.4 GHz Intercom & OEM-Kassette](04b_omm_intercom_module.md) beschrieben.
+> * Die Sensorfusion der Koppelnavigation (**Automotive Dead Reckoning - ADR**), u-blox SAM-M10Q Multi-GNSS, IMU-Neigungsmessung und Actioncam-Zeitsynchronisation werden im Dokument [06 - Telemetrie, Sensorfusion, Blackbox & WebDAV](06_telemetry_blackbox_webdav.md) behandelt.
 
 ---
 
@@ -293,6 +293,6 @@ struct __attribute__((packed)) OmmBikeAlarmAlert_t {
 ## 6. Schnittstellen- & Querverweise
 
 1. **OMM 2.4 GHz HD-Audio Kassetten-Modul:**  
-   Die Spezifikation der 2.4-GHz-Wechselkassette für Bucht 1 oder Bucht 2, das TDMA-Superframe-Modell sowie PWA Multicast- und Verschlüsselungskanäle sind dokumentiert in [04b - OMM 2.4 GHz Intercom & OEM-Kassette](file:///Users/schmidtm/openMotorBridge/docs/de/04b_omm_intercom_module.md).
+   Die Spezifikation der 2.4-GHz-Wechselkassette für Bucht 1 oder Bucht 2, das TDMA-Superframe-Modell sowie PWA Multicast- und Verschlüsselungskanäle sind dokumentiert in [04b - OMM 2.4 GHz Intercom & OEM-Kassette](04b_omm_intercom_module.md).
 2. **Koppelnavigation (ADR), IMU-Sensorfusion & Telemetrie-Blackbox:**  
-   Der 15-State Error-State Kalman-Filter (ES-EKF) zur Koppelung von u-blox SAM-M10Q GNSS mit Fahrzeug-Raddrehzahl, Kurvenschräglage und Actioncam-Zeitsynchronisation ist dokumentiert in [06 - Telemetrie, Sensorfusion, Blackbox & WebDAV](file:///Users/schmidtm/openMotorBridge/docs/de/06_telemetry_blackbox_webdav.md).
+   Der 15-State Error-State Kalman-Filter (ES-EKF) zur Koppelung von u-blox SAM-M10Q GNSS mit Fahrzeug-Raddrehzahl, Kurvenschräglage und Actioncam-Zeitsynchronisation ist dokumentiert in [06 - Telemetrie, Sensorfusion, Blackbox & WebDAV](06_telemetry_blackbox_webdav.md).

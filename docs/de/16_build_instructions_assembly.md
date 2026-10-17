@@ -67,13 +67,13 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
   * 1x Front-Knoten (Unterwanne mit UWB-Bodentasche und AMPS-Nut-Pockets, Deckel, TPU-Dichtkämme & USB-C Kappe)
   * 1x Fahrzeugspezifisches Montage-Kit (BMW GS Klemmen & `adventure_rack_radar_mount.stl` / Harley Kofferdeckel-Docks & Kennzeichen-Radarhalter / Support-Car `car_sun_visor_pod_clip.stl`)
   * *(Optional für Helmeinsatz / OMM):* 1-2x OMM UCS Gehäuse-Oberschalen ([`omm_ucs_top_shell.stl`](../../hardware/cad/stl/03_pod_cartridges/omm_ucs_top_shell.stl)), Unterschalen ([`omm_ucs_bottom_shell.stl`](../../hardware/cad/stl/03_pod_cartridges/omm_ucs_bottom_shell.stl)) & Silikon-Tastmatten ([`omm_ucs_silicone_keypad.stl`](../../hardware/cad/stl/03_pod_cartridges/omm_ucs_silicone_keypad.stl))
-* [ ] **Vollautomatisch bestückte Platinen (von JLCPCB / Eurocircuits - bis zu 8 PCBAs):**
+* [ ] **Vollautomatisch bestückte Platinen (von JLCPCB / Eurocircuits - das 7-PCBA Lineup):**
   * 1x PCBA 01 (Zentralbox mit LoRa SX1262, DW3110 UWB, SW1 Taster und DTM-12 Header)
   * 2x PCBA 03 (Universal Smart Cartridge Rev 3.0 All-UWB mit DW3110 UWB, MCU und 4x AO3400A MOSFETs, 2-seitig SMT)
   * 1x PCBA 05 (Front-Knoten mit DW3110 UWB)
-  * *(Optional: 1x PCBA 08 Radar 2.0 Sub-MCU mit DW3110 UWB, PCBA 06 MagSafe Dock, PCBA 07 Smart-Keyfob)*
+  * *(Optional: 1x PCBA 08 Radar 2.0 Sub-MCU mit DW3110 UWB, 1x PCBA 07 Smart-Keyfob)*
   * *(Optional für Helm / OpenMotorMesh):* 1x **PCBA 09 (OMM 2.4 GHz HD-Mesh)** und/oder 1x **PCBA 10 (OMM 446 PMR/DMR Funk)**
-  * *(Hinweis: PCBA 02 und PCBA 04 sind ersatzlos entfallen).*
+  * *(Hinweis: PCBA 02, PCBA 04 und PCBA 06 sind ersatzlos entfallen).*
 * [ ] **V4A Edelstahl-Normteile & Federn (IKEA-Prinzip - 100 % lötfrei):**
   * 8x DIN 934 / DIN 985 M3 Edelstahlmuttern (für Gehäuse-Nut-Pockets)
   * 6x DIN 934 M4 Muttern (4x AMPS-Nut-Pockets in Front-Node Wanne, 2x Radar 2.0 Heck-Mutterntaschen)

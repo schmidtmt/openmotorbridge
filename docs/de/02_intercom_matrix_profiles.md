@@ -403,9 +403,9 @@ Jedes Hardwareprofil liegt als eigenständige JSON-Datei im internen Flash-Datei
   "noise_gate_threshold_db": -44,
   "control_mode": "smart_cartridge_mechatronic",
   "smart_cartridge": {
-    "controller_type": "CH32V003_RISCV",
+    "controller_type": "ESP32C6_RISCV",
     "onewire_emulation": true,
-    "protocol": "single_wire_uart_19200",
+    "protocol": "uwb_action_frame_or_uart",
     "num_actuators": 4,
     "command_table": {
       "0x01": { "name": "POWER_BOOT", "actuators": [1, 3], "duration_ms": 1000 },

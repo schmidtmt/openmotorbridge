@@ -28,7 +28,7 @@ A complete OpenMotorBridge vehicle kit consists of the following core assemblies
 | 1x POD 1 (LEFT)  |             | 1x POD 2 (RIGHT) |             | 1x REAR RADAR    |
 | (Frame / Pannier)|             | (Frame / Pannier)|             | (Optional)       |
 | * Pod enclosure  |             | * Pod enclosure  |             | * Wheeltec MR20  |
-| * Base PCBA 02   |             | * Base PCBA 02   |             |   or Garmin      |
+| * 2-Wire DC      |             | * 2-Wire DC      |             |   or Garmin      |
 | * CARTRIDGE 1    |             | * CARTRIDGE 2    |             |   Varia RTL515   |
 |   (Sena SPIDER   |             |   (Cardo Edge    |             +------------------+
 |    X Slim)       |             |    / Swap OMM)   |
@@ -61,13 +61,13 @@ All discrete components, PCB ordering files, and COTS sourcing lists are documen
   * 1x Front Node (lower tub with UWB bottom pocket and AMPS nut pockets, upper lid, TPU cable glands & USB-C cap)
   * 1x Vehicle-specific mounting kit (BMW GS clamps & `adventure_rack_radar_mount.stl` / Harley saddlebag docks & license plate bracket / Support-Car `car_sun_visor_pod_clip.stl`)
   * *(Optional for helmet operation / OMM):* 1-2x OMM UCS upper shells ([`omm_ucs_top_shell.stl`](../../hardware/cad/stl/03_pod_cartridges/omm_ucs_top_shell.stl)), lower shells ([`omm_ucs_bottom_shell.stl`](../../hardware/cad/stl/03_pod_cartridges/omm_ucs_bottom_shell.stl)) & silicone keypads ([`omm_ucs_silicone_keypad.stl`](../../hardware/cad/stl/03_pod_cartridges/omm_ucs_silicone_keypad.stl))
-* [ ] **Fully Populated PCBAs (from JLCPCB / Eurocircuits - up to 8 PCBAs):**
+* [ ] **Fully Populated PCBAs (from JLCPCB / Eurocircuits - the 7-PCBA lineup):**
   * 1x PCBA 01 (Central Box with onboard LoRa SX1262 and DW3110 UWB)
   * 2x PCBA 03 (Universal Smart Cartridge Rev 3.0 All-UWB with DW3110 UWB, ES8388 / MCU and 4x AO3400 N-MOSFETs, 2-sided SMT)
   * 1x PCBA 05 (Front Node with DW3110 UWB)
-  * *(Optional: 1x PCBA 08 Radar 2.0 Sub-MCU, PCBA 06 MagSafe Dock, PCBA 07 Smart-Keyfob)*
+  * *(Optional: 1x PCBA 08 Radar 2.0 Sub-MCU, 1x PCBA 07 Smart-Keyfob)*
   * *(Optional for Helmet / OpenMotorMesh):* 1x **PCBA 09 (OMM 2.4 GHz HD-Mesh)** and/or 1x **PCBA 10 (OMM 446 PMR/DMR Radio)**
-  * *(Note: PCBA 02 and PCBA 04 are completely eliminated).*
+  * *(Note: PCBA 02, PCBA 04 and PCBA 06 are completely eliminated).*
 * [ ] **A4 / 316 Stainless Fasteners & Springs (IKEA Principle - 100% Solder-Free):**
   * 8x DIN 934 / DIN 985 M3 stainless nuts (for captive enclosure nut pockets)
   * 6x DIN 934 M4 nuts (4x AMPS nut pockets in Front Node tub, 2x Radar 2.0 rear housing)

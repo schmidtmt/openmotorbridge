@@ -20,7 +20,7 @@ In v8.5 / v9.0 ist das Gesamtsystem auf eine strikte **All-UWB-Stern-/Mesh-Topol
 |   Power-Sequencing, UWB Cartridge & Radar Dispatch   |   Multi-GNSS, CAN, USB-PD, PTT  |
 | * Core 1: Echtzeit 48 kHz Audio-DSP, Ducking, AGC    | * Core 1: Knowles Vector-DSP    |
 +------------------------------------------------------+---------------------------------+
-| 3. SMART CARTRIDGES (CH32V003 + DW3110, PCBA 03)     | 4. HECK-RADAR (ESP32-C5 Sub-MCU + DW3110) |
+| 3. SMART CARTRIDGES (ESP32-C6 + DW3110, PCBA 03)     | 4. HECK-RADAR (ESP32-C5 Sub-MCU + DW3110) |
 +------------------------------------------------------+---------------------------------+
 | * Bucht 1 (Links) & Bucht 2 (Rechts) All-UWB SMT     | * Wheeltec MR20 mmWave Radar    |
 | * Mechatronische 4-Aktuator-Puls-Sequenzierung       | * 20 Hz Tracking-Vektoren via   |

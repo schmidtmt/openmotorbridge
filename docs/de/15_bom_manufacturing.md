@@ -1,6 +1,6 @@
 # 15 - Stücklisten (BOM), COTS-Kaufteile & SMT-Fertigungsdaten (Das bereinigte PCBA-Lineup v9.6)
 
-Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die vollständige Bauteilliste (Bill of Materials), die Fertigungsspezifikationen aller Leiterplatten (`PCBA 01`, `03`, `05`, `07`, `08` sowie optionales Passiv-Dock `06`) bei JLCPCB / Eurocircuits (`PCBA 02` und `PCBA 04` sind durch die All-UWB-Architektur ersatzlos entfallen), alle mechanischen 3D-Druck-Komponenten (MJF PA12), die COTS-Einkaufslisten sowie eine detaillierte Kosten- und Bestellkalkulation (Solo-Aufbau vs. Sammelbestellung).
+Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die vollständige Bauteilliste (Bill of Materials), die Fertigungsspezifikationen aller aktiven Leiterplatten (`PCBA 01`, `03`, `05`, `07`, `08`, `09`, `10` - `PCBA 02`, `04` und `06` sind durch die All-UWB-Architektur ersatzlos entfallen) bei JLCPCB / Eurocircuits, alle mechanischen 3D-Druck-Komponenten (MJF PA12), die COTS-Einkaufslisten sowie eine detaillierte Kosten- und Bestellkalkulation (Solo-Aufbau vs. Sammelbestellung).
 
 > [!NOTE]
 > **v9.6 Stücklisten-Harmonisierung & Konsolidierung:**  

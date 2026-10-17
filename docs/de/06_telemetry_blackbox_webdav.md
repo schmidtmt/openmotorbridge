@@ -326,5 +326,5 @@ OpenMotorBridge steuert gekoppelte Actioncams drahtlos über den Front-Knoten (`
    * **Kurzer Klick ($< 300\,\text{ms}$):** Aufnahme Start / Stopp (weckt die Kamera per BLE aus dem Tiefschlaf; Bestätigungs-Doppelton im Helm).
    * **Doppelklick ($2\times < 250\,\text{ms}$):** Video-Highlight-Marker (HiLight-Tag im MP4/INSV-Videocontainer und GPX-Wegpunkt setzen).
    * **Automatischer Apex-Marker:** Erreicht die Schräglage in einer Kurve mehr als $45^\circ$, setzt der ESP32-S3 vollautomatisch einen Highlight-Tag in den Metadaten.
-   * *(Hinweis: Bei eingehendem Telefonat wird der Lenkertaster gemäß [03 - Audio-DSP & Telefonie](file:///Users/schmidtm/openMotorBridge/docs/de/03_audio_dsp_acoustics.md) modal für die Rufannahme isoliert).*
+   * *(Hinweis: Bei eingehendem Telefonat wird der Lenkertaster gemäß [03 - Audio-DSP & Telefonie](03_audio_dsp_acoustics.md) modal für die Rufannahme isoliert).*
 

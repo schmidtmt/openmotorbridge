@@ -76,7 +76,7 @@ Executes production C++ firmware algorithms against a virtual multi-board testbe
   * Handlebar PTT press $\rightarrow$ UWB Action Frame $\rightarrow$ Actuator firing in **$\approx 0.36\,\text{ms}$**.
   * Knowles SPH0645 MEMS captures wind noise at 130 km/h ($79\,\text{dBA}$) $\rightarrow$ Audio DSP AGC boosts volume by $+1{,}0\,\text{dB}$.
 * **Scenario 5:** Engine start ($6{,}5\,\text{V}$ cranking dip) $\rightarrow$ Instant UPS takeover $\rightarrow$ 0 audio dropouts, 0 MCU reboots.
-* **Scenario 6 (Cable Tear & Short):** M8 cable pulled out $\rightarrow$ Bourns PPTC trips in $1{,}2\,\text{ms}$ ($< 15\,\text{mA}$ fault current, zero voltage drop on main PCB) $\rightarrow$ Anti-pop mute protects speakers.
+* **Scenario 6 (Cable Disconnect & Short):** Cable disconnect / short at cartridge power interface or headset lead $\rightarrow$ Bourns PPTC trips in $1.2\,\text{ms}$ ($< 15\,\text{mA}$ fault current, zero voltage drop on main PCB) $\rightarrow$ Anti-pop mute protects speakers.
 * **Scenario 7 (CAN-Bus Interruption):** TCAN334G fault protection $\rightarrow$ Seamless fallback to GNSS/IMU dead-reckoning.
 * **Scenario 8 (Battery Voltage Alarm):**
   * Stage A ($< 11{,}8\,\text{V}$): Yellow LED, low battery chime, non-essential load shedding.
@@ -200,7 +200,7 @@ The **Digital Twin Simulator** ([`openmotorbridge_digital_twin.py`](../../tools/
  +----------------------------------------+            +----------------------------------------+
  |          MOTORCYCLE A (LEADER)         |            |          MOTORCYCLE B (CHASER)         |
  |  * PCBA 01 (ESP32-S3 Main + LoRa/UWB)  |            |  * PCBA 01 (ESP32-S3 Main + LoRa/UWB)  |
- |  * PCBA 02 (Satellite Pod Base 1 & 2)  |            |  * PCBA 02 (Satellite Pod Base 1 & 2)  |
+ |  * Pods 1 & 2 (Monocoque, 2-Wire DC)   |            |  * Pods 1 & 2 (Monocoque, 2-Wire DC)   |
  |  * PCBA 03 (Pods 1/2 Smart Cartridges) |            |  * PCBA 03 (Pods 1/2 Smart Cartridges) |
  |  * PCBA 05 (Universal Front Node)      |            |  * PCBA 05 (Universal Front Node)      |
  +-------------------+--------------------+            +-------------------+--------------------+
@@ -226,10 +226,10 @@ The **Digital Twin Simulator** ([`openmotorbridge_digital_twin.py`](../../tools/
 ```
 
 ### Core Components & Test Features:
-1. **4 PCB Classes per Motorcycle:**
+1. **Core Active Modules per Motorcycle:**
    * **PCBA 01 (Central Box):** 15-State ADR-EKF filtering, Power Supervisor (Vehicle $14.2\,\text{V}$, UPS buffer $4.14\,\text{V}$), Audio DSP Matrix, Semtech SX1262 LoRa 868 MHz transceiver & Qorvo DW3110 UWB backbone.
-   * **PCBA 02 (Pod Base, 2x):** M8 helmet interface, SP3012 TVS protection array monitoring.
-   * **PCBA 03 (Smart Cartridges, 2x):** CH32V003 RISC-V mechatronics controller, 4x AO3400 N-MOSFETs (`sena_spider`, `cardo_edge`), PTT button detection.
+   * **Pods 1 & 2 (Monocoque Pod Enclosures):** Seamless 1-piece monocoque with direct 2-wire DC spring contacts to cartridge (PCBA 02 retired).
+   * **PCBA 03 (Smart Cartridges, 2x):** ESP32-C6 RISC-V host MCU, DW3110 UWB transceiver, ES8388 audio codec, 4x AO3400A N-MOSFETs (`sena_spider`, `cardo_edge`), PTT button detection.
    * **PCBA 05 (Universal Front Node):** u-blox SAM-M10Q Multi-GNSS via J12 Qwiic, dual Knowles MEMS acoustic sensing (wind noise scaling with $v^3$), cockpit PTT button, DW3110 UWB backbone.
 2. **Geodetic Track (`wil_wattwil_ricken.py`):**
    * 11,682 support points with realistic acceleration, lean angle ($\theta_{\text{lean}} = \arctan(v \cdot \dot{\psi} / g)$ up to $42^\circ$), and elevation profile ($570\dots 795\,\text{m}$ ASL).

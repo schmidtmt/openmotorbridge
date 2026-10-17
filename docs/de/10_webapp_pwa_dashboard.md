@@ -87,8 +87,8 @@ Für Fahrer, die eine Installation über den Google Play Store, automatische Hin
 * **Betriebsmodus-Wahl:** Umschaltung zwischen Standard Mode (Mesh Bridge), Single Rider Mode und Cruise Mode.
 * **Schieberegler:** Eingangspegel Port 1 (Sena), Port 2 (Cardo), Ducking-Dämpfung und Transparenz-Lautstärke.
 * **Echtzeit-Pegelbalken:** Live-Pegelüberwachung aller 4 Audio-Eingangskanäle.
-* **🦾 Smart Cartridge Mechatronik-Bedienfeld (PCBA 03 Rev 2.0):**
-  * Live-Statusanzeige des Kassetten-Controllers (CH32V003 Synced).
+* **🦾 Smart Cartridge Mechatronik-Bedienfeld (PCBA 03 Rev 3.0 All-UWB):**
+  * Live-Statusanzeige des Kassetten-Controllers (ESP32-C6 Synced).
   * `⚡ Power Boot`: Löst über Opcode `0x01` den synchronen Tastendruck `Center + (+)` (1000 ms) aus - autom. Kaltstart nach Standzeiten $> 3$ Tage.
   * `🔘 Mesh Ein/Aus`: Opcode `0x05` (200 ms Einzelpuls).
   * `⏭️ Kanal +1 / ⏮️ Kanal -1`: Autonome Kassetten-Makros (`0x07` / `0x08`, 2x Mesh + 1x Plus/Minus).
@@ -100,9 +100,9 @@ Für Fahrer, die eine Installation über den Google Play Store, automatische Hin
 ![PWA Tab 3: Kassetten-Erkennung & DLE Live-Status](../images/pwa/pwa_tab3_cartridges_dle_status.png)
 
 * **Live-Status:** Anzeige der eingesteckten Kassetten in Slot 1 und Slot 2 mit 1-Wire UIDs (nativ emuliert oder DS2401).
-* **Smart Cartridge Kennzeichnung:** Visualisierung von Hardware-Architektur (RISC-V CH32V003, 4x MOSFETs, In-System Flashing aktiv).
+* **Smart Cartridge Kennzeichnung:** Visualisierung von Hardware-Architektur (ESP32-C6 RISC-V, 4x MOSFETs, UWB OTA Flashing aktiv).
 * **Kassetten-Onboarding-Wizard:** Interaktive 3-Schritte-Anleitung beim Einsetzen neuer Headsets.
-* **Ground-Truth Sync & ISP-Flashing:** Re-Synchronisation der Konfigurationstabellen direkt in das EEPROM des Kassetten-MCUs über Pin 5 Single-Wire UART.
+* **Ground-Truth Sync & OTA-Flashing:** Re-Synchronisation der Konfigurationstabellen direkt in den Flash-Speicher des Kassetten-MCUs über das UWB-Backbone oder J_PROG.
 
 ### 2.4 Tab 4: Touren & WebDAV (`#tab-tours`)
 

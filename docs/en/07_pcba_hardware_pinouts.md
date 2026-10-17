@@ -189,47 +189,51 @@ The former pod base board (`PCBA 02`) has been **completely retired without repl
 *Figure 7.3b: PCBA 03 Bottom 3D -- Qorvo DW3110 UWB Transceiver, Everest Semi ES8388 Stereo Codec, and J_AUDIO_PWR Header.*
 
 ### 5.1 Board Specifications & Layer Partitioning
-* **Dimensions:** $35.0 \times 25.0\,\text{mm}$ (grid $29.0 \times 19.0\,\text{mm}$ with 4x M2 mounting holes).
-* **Layer Stackup:** 2 Layers FR-4 High-TG150 ($1.2\,\text{mm}$ thickness, $35\,\mu\text{m}$ copper both sides, ENIG gold finish).
-* **Top-Layer Components (F.Cu - Mechatronics & Control):**
-  * `U2`: Espressif `ESP32-C6` RISC-V Host MCU (manages cartridge profiles, UWB communication, and actuator timings).
-  * `Q1` - `Q4`: 4x N-Channel MOSFETs (`AO3400A`, SOT-23, $30\,\text{V} / 5.7\,\text{A}$) with flyback diodes `D1`-`D4`. Positioned directly adjacent to header `J_ACT` for shortest trace runs to pushbutton actuators.
-  * `J_ACT`: 8-Pin $1.0\,\text{mm}$ JST-SH Header driving the 4 miniature solenoids.
-  * `J_AUDIO_PWR`: **8-Pin $1.0\,\text{mm}$ JST-SH Header** (identical footprint to `J_ACT`) providing complete galvanic isolation and star-ground references to the OEM headset harness.
-* **Bottom-Layer Components (B.Cu - RF, Audio Codec & Power Ingestion):**
-  * `U1`: Qorvo `DW3110` Ultra-Wideband Transceiver (6.489 GHz Ch. 5) with onboard PCB antenna radiating downward through the plastic sled floor for optimum wireless connection to Central Box.
-  * `U3`: Everest Semi `ES8388` 24-Bit / 48 kHz Low-Noise Audio Codec. Deliberately located on the **bottom layer (`B.Cu`)**: Hermetically shielded by the internal copper plane from the steep switching transients of the top-layer MOSFETs (`Q1`–`Q4`) and actuator solenoid coils. Converts analog mic and speaker audio directly on the cartridge, streaming it jitter-free over I2S/UWB.
-  * `PAD1` & `PAD2`: End-face gold landing pads (ENIG) for the pod 2-wire DC spring contacts.
-  * `F1`: Resettable 500mA PPTC fuse.
+* **Dimensions:** $35.0 \times 25.0\,\text{mm}$ (grid $29.0 \times 19.0\,\text{mm}$ with 4x M2 mounting holes H1..H4).
+* **Layer Stackup:** 4 Layers FR-4 High-TG150 (JLC04161H, $1.2\,\text{mm}$ thickness, continuous GND plane L2 and Power plane L3, ENIG gold finish).
+* **Top-Layer Components (F.Cu - Mechatronics, Host MCU & Control):**
+  * `U1`: Espressif `ESP32-C6-MINI-1U` RISC-V Host MCU (manages cartridge profiles, UWB backbone, I2S codec control, USB audio, and actuator timings).
+  * `Q1` - `Q4`: 4x N-Channel MOSFETs (`AO3400A`, SOT-23, $30\,\text{V} / 5.7\,\text{A}$) with flyback diodes `D1`-`D4` (`1N4148WS`, SOD-323). Positioned directly adjacent to header `J_ACT` for shortest trace runs to pushbutton actuators.
+  * `R1` - `R4`: $100\,\Omega$ gate series resistors (0603).
+  * `R5` - `R8`: $100\,\text{k}\Omega$ gate pulldowns (0603) for defined idle state.
+  * `R9`: $10\,\text{k}\Omega$ pull-up resistor (0603) to `VCC_3V3` for the cartridge detection signal `OMM_DETECT`.
+  * `J_ACT`: 8-Pin $1.0\,\text{mm}$ JST-SH Header (`SM08B-SRSS-TB` with SMD shield tabs `MP` to GND) driving the 4 miniature solenoids.
+  * `J_AUDIO_PWR`: 8-Pin $1.0\,\text{mm}$ JST-SH Header (identical footprint to `J_ACT`, shield tabs `MP` to GND) providing star-point Kelvin audio and power interfacing to the OEM headset or native OMM module.
+  * `J_PROG`: 4-Pin $1.27\,\text{mm}$ SMD pin header (`PinHeader_1x04_P1.27mm_Vertical_SMD_Pin1Left`) for flashing and firmware recovery (`VCC_3V3`, `USB_DP`, `GND`, `PTT_USB_N`).
+* **Bottom-Layer Components (B.Cu - RF, Audio Codec, Hardware Switching & Power Ingestion):**
+  * `U_UWB`: Qorvo `DW3110` Ultra-Wideband Transceiver (6.489 GHz Ch. 5, QFN-16-1EP) with external Hirose U.FL receptacle `ANT_UWB` (`Taoglas FXUWB10`) and high-precision $38.4\,\text{MHz}$ crystal `Y_UWB`. Radiates downward through the dielectric plastic sled floor for optimum wireless connection to Central Box.
+  * `U3`: Everest Semi `ES8388` 24-Bit / 48 kHz Low-Noise Audio Codec (QFN-28-1EP). Deliberately located on the **bottom layer (`B.Cu`)**: Hermetically shielded by the internal copper ground plane from the steep switching transients of the top-layer MOSFETs (`Q1`–`Q4`) and actuator solenoid coils. Converts analog mic and speaker audio directly on the cartridge, streaming it jitter-free over I2S/UWB.
+  * `U4`: Texas Instruments `TS5A3159DBVR` Single-Pole Double-Throw (SPDT) Analog/Digital Audio Switch ($0.5\,\Omega$ on-resistance, SOT-23-6). Enables automatic, hardware-controlled switching between analog headset audio and digital OMM USB audio.
+  * `PAD1` & `PAD2`: End-face massive $\varnothing 3.0\,\text{mm}$ gold landing pads (`TestPoint_Pad_D3.0mm_OD3.5mm`, ENIG) for the pod 2-wire DC spring contacts (`PAD1: +5V_IN`, `PAD2: GND`).
+  * `F1`: Resettable 500mA PPTC fuse (Bourns `MF-MSMF050-2`, 1812 SMD) ahead of `VCC_5V_PROT`.
+  * `C1`, `C2`: Ceramic decoupling capacitors ($100\,\text{nF}$ 0603 / $10\,\mu\text{F}$ 0805) on `VCC_3V3`.
+  * `H1` - `H4`: 4x M2 mounting holes with plated pads (`MountingHole_2.2mm_M2_Pad`) to system ground (`GND`).
 
-### 5.3 Pinout of Internal 8-Pin JST-SH Header (`J_AUDIO_PWR` / Audio & Power Harness)
+### 5.2 Pinout of Internal Audio-Power Header (`J_AUDIO_PWR` / 8-Pin JST-SH 1.0mm) & Dual-Mode Switching
 
-To physically eliminate **common-impedance ground coupling (charging ripple & Mesh TDMA transmit buzzing)**, the `J_AUDIO_PWR` header is designed as an **8-pin JST-SH connector** (identical footprint to `J_ACT`) providing complete physical separation between high-current DC power returns and pristine, zero-current audio ground references:
+To seamlessly interface **analog OEM headsets (Sena, Cardo, Midland)** with pristine Kelvin grounds and **native digital OMM modules (PCBA 09 / PCBA 10)** losslessly over the identical connector, `J_AUDIO_PWR` is engineered as a **Dual-Mode Interface** with automatic hardware switching via `U4` (`TS5A3159DBVR`) and pull-up resistor `R9` ($10\,\text{k}\Omega$ to `VCC_3V3`):
 
-| Pin | Signal Name | Direction | Function & Signal Level |
-| :---: | :--- | :---: | :--- |
-| **Pin 1** | **`PGND`** | Power Return | **High-Current Power Ground:** Carries all charging and DC-DC return current ($0.2\dots 0.6\,\text{A}$) |
-| **Pin 2** | **`VCC_HEADSET`** | Output $\rightarrow$ Intercom | $+5.0\,\text{V}$ DC continuous charging / $+3.85\,\text{V}$ battery-less regulated power rail |
-| **Pin 3** | **`AGND_SPK`** | Audio Ground Ref | **Clean Speaker Ground:** Connects to 3.5 mm TRS sleeve – **strictly zero DC current ($I = 0\,\text{mA}$)!** |
-| **Pin 4** | **`AUDIO_L_IN`** | Input $\leftarrow$ Headset | Left speaker line-out from intercom $\rightarrow$ to ES8388 ADC Ch 1 |
-| **Pin 5** | **`AUDIO_R_IN`** | Input $\leftarrow$ Headset | Right speaker line-out from intercom $\rightarrow$ to ES8388 ADC Ch 2 |
-| **Pin 6** | **`AGND_MIC`** | Audio Ground Ref | **Clean Microphone Ground:** Dedicated ground return for headset mic – **strictly zero DC current ($I = 0\,\text{mA}$)!** |
-| **Pin 7** | **`MIC_OUT`** | Output $\rightarrow$ Headset | Mic audio from ES8388 DAC $\rightarrow$ to Intercom mic input ($< 1\,\text{ms}$ latency) |
-| **Pin 8** | **`PTT_IO`** | Bidir / Open-Drain | PTT keying to ground (Midland PMR446) or DMR/mode select |
+| Pin | Signal Name | Direction | Function: Analog Intercom (Sena / Cardo / Midland) | Function: Digital OMM (PCBA 09 / PCBA 10) |
+| :---: | :--- | :---: | :--- | :--- |
+| **1** | **`PGND` / `GND`** | Power Return | **High-Current Power Ground:** Carries charging & DC-DC return ($0.2\dots 0.6\,\text{A}$) | **High-Current Power Ground:** Power return for charger & RF PA ($0.2\dots 0.6\,\text{A}$) |
+| **2** | **`VCC_5V_PROT`** | Power Out | Regulated, protected +5V supply for headset battery/charger | Regulated, protected +5V supply for OMM BQ24075 PMIC |
+| **3** | **`AGND_AUDIO_IN`**| Audio GND Ref| **Clean Headphone Ground:** 3.5 mm TRS sleeve – **strictly zero DC current ($I = 0\,\text{mA}$)!** | Unused (N/C) or coax shield reference (zero DC current!) |
+| **4** | **`AUDIO_IN_L`** | Audio In $\leftarrow$ | Left speaker line-out from headset $\rightarrow$ to ES8388 ADC | Unused (N/C) |
+| **5** | **`AUDIO_IN_R`** | Audio In $\leftarrow$ | Right speaker line-out from headset $\rightarrow$ to ES8388 ADC | Unused (N/C) |
+| **6** | **`OMM_DETECT`** | Control In $\leftarrow$ | **GND Bridge in Harness (0V):** Holds `U4` in normal closed state (NC) | **Open / N/C:** `R9` pulls HIGH ($3.3\,\text{V}$) $\rightarrow$ switches `U4` to Digital USB (NO) |
+| **7** | **`AUDIO_IO_P`** | Dual-Mode I/O | **Analog `VOICE_OUT` (via U4 NC):** Voice from ES8388 DAC $\rightarrow$ OEM Mic | **Digital `USB_DP` (via U4 NO):** Native digital USB audio data stream D+ |
+| **8** | **`PTT_USB_N`** | Dual-Mode I/O | **PTT_IO:** Push-to-Talk keying to ground (Midland PMR446 / N/C) | **Digital `USB_DN`:** Native digital USB audio data stream D- |
+| **MP** | **`GND`** | Shield | SMT connector side mounting tabs tied to solid GND plane | SMT connector side mounting tabs tied to solid GND plane |
 
 > [!IMPORTANT]
-> **Why 8 Pins Eliminate Ground Loop Noise 100%:**
-> 1. **The Shared-Ground Hazard:** When an intercom draws $300\,\text{mA}$ charging or Mesh transmit current across a shared ground pin/wire with $80\,\text{m}\Omega$ loop resistance, ground potential fluctuates by $\Delta V = 300\,\text{mA} \times 0.08\,\Omega = 24\,\text{mV}$. Since electret microphone inputs operate at $5\dots 15\,\text{mV}$, the headset's $+30\,\text{dB}$ internal mic preamp would heavily amplify this $24\,\text{mV}$ buzz into the communication link!
-> 2. **The Kelvin-Grounding Architecture:** By isolating `AGND_SPK` (Pin 3) and `AGND_MIC` (Pin 6), exactly **$0\,\text{mA}$ of power current** flows across the audio ground leads ($I_{\text{Audio}} = 0\,\text{A}$). Consequently, the Ohmic voltage drop is **$\Delta V = I \times R = 0\,\text{mV}$**. The heavy power return current flows exclusively through Pin 1 (`PGND`).
-> 3. **BOM & SMT Advantage:** Upgrading `J_AUDIO_PWR` to 8 pins standardizes it on the exact same LCSC part (`JST_SH_SM08B-SRSS-TB`) as `J_ACT`, eliminating one reel-feeder changeover during JLCPCB SMT production.
+> **Operation of Automatic Audio Switching via `U4` (`TS5A3159DBVR`):**
+> 1. **Cartridge with Analog Intercom (Sena SPIDER X Slim / Cardo Packtalk Edge / Midland):**  
+>    The adapter cable harness bridges Pin 6 (`OMM_DETECT`) internally to ground (GND Pin 1 or Pin 3). Switch `U4` remains in its normally-closed position (**NC**): Pin 7 (`AUDIO_IO_P`) connects directly to analog output `VOICE_OUT` of the ES8388 audio codec. Voice transmission proceeds zero-latency ($< 0.4\,\text{ms}$) into the headset mic input.
+> 2. **Cartridge with Native OMM Module (`PCBA 09` Mesh / `PCBA 10` 446 PMR/DMR):**  
+>    The 4-wire USB-C cable (VBUS, GND, D+, D-) leaves Pin 6 (`OMM_DETECT`) floating (**N/C**). Pull-up resistor `R9` on `PCBA 03` automatically pulls input IN of `U4` to HIGH ($3.3\,\text{V}$). SPDT switch `U4` engages in $< 35\,\text{ns}$ to normally-open (**NO**): Pin 7 is disconnected from analog audio and routed directly to native `USB_DP` of the ESP32-C6 host MCU. Together with Pin 8 (`PTT_USB_N` as `USB_DN`), a pristine digital USB 2.0 audio channel is formed directly between the intercom engine and OMB gateway. Mechatronic plungers, DAC/ADC degradation, and ground buzz loops are eliminated 100%!
 
-#### Modular Harness Variants for `J_AUDIO_PWR`:
-* **Harness Variant A (Sena SPIDER X Slim):** 2-pin DC lead to battery terminal (Pins 2/1), 3.5 mm TRS stereo jack to audio output (Pins 4/5/3), 2.5 mm jack to microphone input (Pins 7/6). Pin 8 unpopulated.
-* **Harness Variant B (Cardo Packtalk Edge Air Mount Cradle):** 3.5 mm stereo socket (speakers) to Pins 4/5/3, 2-pin miniature socket (mic) to Pins 7/6, and USB-C 5V power pigtail to Pins 2/1 for continuous charging.
-* **Harness Variant C (Universal COTS / PMR446):** Dual-pin plug (Speaker to Pins 4+5 with Pin 3 ground, Mic to Pins 7/6, PTT to Pin 8, DC to Pins 2/1).
-
-### 5.4 Pinout of Mechatronic 8-Pin Actuator Header (`J_ACT` / $1{,}0\,\text{mm}$ JST-SH)
-To control devices with different button layouts (Sena Spider X Slim vs. Cardo Packtalk Edge) flexibly, **4 discrete, independently positionable miniature actuators** are employed. Each actuator features its own 2-wire AWG30 silicone cable:
+### 5.3 Pinout of Mechatronic 8-Pin Actuator Header (`J_ACT` / $1.0\,\text{mm}$ JST-SH)
+To control devices with different button layouts (Sena SPIDER X Slim vs. Cardo Packtalk Edge) flexibly, **4 discrete, independently positionable miniature actuators** are employed:
 
 | Pin (J_ACT) | Signal Name | Driving Switch | Mapping: Sena SPIDER X Slim | Mapping: Cardo Packtalk Edge |
 | :---: | :--- | :---: | :--- | :--- |
@@ -240,11 +244,7 @@ To control devices with different button layouts (Sena Spider X Slim vs. Cardo P
 | **Pin 6** | `ACT4_OUT` | MOSFET `Q4` | **Mesh Button** (45° angled side)      | **Control Wheel Center-Press** |
 | **Pin 7 & 8** | `GND` | Power Ground | Shield and return ground | Shield and return ground |
 
-### 5.5 In-System Profile Flashing (ISP / IAP via Single-Wire) & Click Sequence Table
-* **Zero Programmers Required:** When a profile (e.g. `sena_spider_x.json` or `cardo_dmc_gen2.json`) is assigned via the WebApp, the ESP32-S3 transmits an encrypted configuration packet via Pin 5 (`TRIGGER_PPS`) containing timing tables, pulse durations, and macro steps.
-* **Persistent EEPROM Storage:** The Cartridge MCU burns the configuration table into internal EEPROM. The cartridge operates fully autonomously thereafter, executing multi-step macros locally.
-
-#### Autonomous Smart Cartridge Click Sequences & Opcode Table:
+### 5.4 Autonomous Smart Cartridge Click Sequences & Opcode Table
 | Opcode | Semantic Function | Sequence: Sena SPIDER X Slim | Sequence: Cardo Packtalk Edge |
 | :---: | :--- | :--- | :--- |
 | **`0x01`** | **Power Boot / Auto-On** | Simultaneous Plus + Center ($1000\,\text{ms}$) | Simultaneous Media + Mobile ($2000\,\text{ms}$) |
@@ -270,7 +270,7 @@ To control devices with different button layouts (Sena Spider X Slim vs. Cardo P
 >    * **LoRa 868 MHz (Semtech SX1262):** Sits directly on Central Box `PCBA 01` (powered via the UPS battery rail for 24/7 theft sentry) with a Taoglas FXP895 flex antenna in the enclosure lid.
 >    * **Multi-GNSS (u-blox SAM-M10Q):** Sits with an integrated $15 \times 15\,\text{mm}$ patch antenna inside the Front Node `PCBA 05` laminar oncoming airflow scoop (port `J12` Qwiic).
 >    * **Ambient Temperature Reliability:** TI TMP117 ($\pm 0.1\,^\circ\text{C}$ NIST-traceable precision) sits directly on Front Node `J12` in the airflow duct - thermally isolated from engine and exhaust radiant heat.
-> 3. **System BOM Impact:** Total project PCB count drops from 8 to **7 PCBAs**. The satellite base carrier `PCBA 02` is now required only 2x per vehicle (for Pod 1 and Pod 2).
+> 3. **System BOM Impact:** Total project PCB count drops to **7 active PCBAs**. The satellite base carrier `PCBA 02` is also completely retired without replacement in favor of a monolithic monocoque pod with direct 2-wire spring contacts.
 
 ---
 
@@ -799,12 +799,12 @@ Upon vehicle ignition (KL15), the system enters an optical **POST Diagnostic Mod
 1. **Left Wing (Cockpit, Bus & Left Side):**
    * **D1 / D2:** Front Node (PCBA 05) UWB link & cockpit power (KL15 / USB-PD).
    * **D3 / D4:** Motorcycle CAN-Bus (HD-LAN / K-CAN) transceiver & telemetry stream.
-   * **D5 / D6:** Pod 1 (Left Pannier / Intercom Bridge) M8 bus & cartridge MCU ready.
+   * **D5 / D6:** Pod 1 (Left Pannier / Intercom Bridge) 2-wire DC power & cartridge MCU ready.
    * **D7 / D8:** BSD Mirror Alert Left (Header `J9`) N-MOSFET & driver circuit ready.
    * **D9 / D10:** Front TPMS (Bluetooth LE Tire Pressure) packet received & pressure in spec.
    * **D11 / D12:** Actioncam BLE Shutter Link paired & camera ready.
 2. **Right Wing (Radio, Rear & Right Side):**
-   * **D19 / D20:** Pod 2 (Right Pannier / Radio & Aux) M8 bus & cartridge MCU ready.
+   * **D19 / D20:** Pod 2 (Right Pannier / Radio & Aux) 2-wire DC power & cartridge MCU ready.
    * **D21 / D22:** UWB Backbone (DW3110) 6.5 GHz link & range-measurement active.
    * **D23 / D24:** BSD Mirror Alert Right (Header `J9`) N-MOSFET & driver circuit ready.
    * **D25 / D26:** Rear TPMS (Bluetooth LE Tire Pressure) packet received & pressure in spec.
