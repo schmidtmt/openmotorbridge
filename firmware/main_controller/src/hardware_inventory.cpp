@@ -1,5 +1,6 @@
 #include "hardware_inventory.h"
 #include "cartridge_onewire.h"
+#include "uwb_cartridge_dispatcher.h"
 #include "gnss_omm_bridge.h"
 #include "esp_now_front_node_client.h"
 #include "radar_processor.h"
@@ -90,11 +91,13 @@ void hw_inventory_scan_and_evaluate(void) {
     uint16_t current = 0;
 
     // 1. Bus-Scans und Präsenz-Checks
+    CartridgeBayState_t bay1 = uwb_cartridge_get_bay_state(UWB_NODE_CARTRIDGE_BAY1);
     CartridgeInfo_t pod1 = cartridge_get_info(1);
-    if (pod1.is_connected) current |= HW_INV_POD1;
+    if (bay1.active || pod1.is_connected) current |= HW_INV_POD1;
 
+    CartridgeBayState_t bay2 = uwb_cartridge_get_bay_state(UWB_NODE_CARTRIDGE_BAY2);
     CartridgeInfo_t pod2 = cartridge_get_info(2);
-    if (pod2.is_connected) current |= HW_INV_POD2;
+    if (bay2.active || pod2.is_connected) current |= HW_INV_POD2;
 
     bool pod3_ok = gnss_bridge_is_pod3_connected();
     if (pod3_ok) current |= HW_INV_POD3;

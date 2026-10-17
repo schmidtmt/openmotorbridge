@@ -38,7 +38,7 @@ static const char *TAG = "OMB_MAIN";
 
 // GPIO Pin-Definitionen (PCBA 01 gemäss docs/de/07_pcba_hardware_pinouts.md)
 #define PIN_ADC_BAT         ADC_CHANNEL_0 // GPIO 1
-#define PIN_ONEWIRE_ID      GPIO_NUM_2
+#define PIN_UWB_IRQ         GPIO_NUM_2    // Qorvo DW3110 UWB IRQ (Active High)
 #define PIN_ADC_LINE_LVL    ADC_CHANNEL_2 // GPIO 3
 #define PIN_ADC_VIGN        ADC_CHANNEL_3 // GPIO 4 (KL15 Sense)
 #define PIN_PORT1_KEY       GPIO_NUM_5

@@ -86,18 +86,7 @@ static uint8_t onewire_read_byte(gpio_num_t pin) {
 }
 
 esp_err_t cartridge_onewire_init(void) {
-    ESP_LOGI(TAG, "Initializing Independent Dual 1-Wire Channels (Port 1: GPIO %d, Port 2: GPIO %d)...",
-             PIN_POD1_1WIRE_ID, PIN_POD2_1WIRE_ID);
-
-    gpio_config_t io_conf = {
-        .pin_bit_mask = (1ULL << PIN_POD1_1WIRE_ID) | (1ULL << PIN_POD2_1WIRE_ID),
-        .mode = GPIO_MODE_INPUT,
-        .pull_up_en = GPIO_PULLUP_ENABLE,
-        .pull_down_en = GPIO_PULLDOWN_DISABLE,
-        .intr_type = GPIO_INTR_DISABLE,
-    };
-    gpio_config(&io_conf);
-
+    ESP_LOGI(TAG, "Legacy 1-Wire disabled on PCBA 01: All-UWB Backbone active (GPIO 2=UWB_IRQ, GPIO 22=UWB_CS).");
     return ESP_OK;
 }
 
