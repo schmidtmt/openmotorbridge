@@ -2821,6 +2821,41 @@ body.ride-hud-active .tab-btn {
     margin-top: 2px;
 }
 
+/* Vehicle & Crew Identity Hub (SSOT) */
+.identity-input {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid var(--border-subtle);
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+    font-size: 0.88rem;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.identity-input:focus {
+    border-color: var(--accent-cyan);
+    box-shadow: 0 0 10px rgba(0, 242, 254, 0.25);
+    background: rgba(0, 0, 0, 0.65);
+}
+
+.slot-box {
+    transition: border-color 0.25s ease, background 0.25s ease;
+}
+
+.slot-box.active-slot {
+    border-color: rgba(48, 209, 88, 0.4) !important;
+    background: rgba(48, 209, 88, 0.04) !important;
+}
+
+.slot-box.inactive-slot {
+    border-color: var(--border-subtle) !important;
+    background: rgba(255, 255, 255, 0.02) !important;
+    opacity: 0.75;
+}
+
 /* Print Styles */
 @media print {
     body {

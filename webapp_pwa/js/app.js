@@ -58,6 +58,18 @@ const i18n = {
         device_hub_title: 'Geräte- & Verbindungs-Manager (Device Hub)',
         device_hub_sub: 'Zentrale 2-geteilte Verwaltung aller persönlichen Geräte (Teil 1) und fest verbauter Motorrad- & Systemknoten (Teil 2).',
         section_user_centric_title: 'Teil 1: Persönliche Geräte (Fahrer & Sozius)',
+        identities_hub_title: 'Fahrzeug- & Besatzungs-Identität (Schwarm-Profil)',
+        identities_hub_sub: 'Hardware-gebundene Identitäten der Zentralbox (SSOT) für LoRa-Discovery, Relativ-Radar & TTS-Ansagen.',
+        lbl_bike_identity: 'Motorrad / Fahrzeug (Bike-Identität)',
+        lbl_bike_alias: 'Fahrzeug-Name / Bike-Alias',
+        lbl_bike_class: 'Fahrzeugtyp / Fahrstil-Profil',
+        lbl_rider_slot: 'Fahrer (Primary Rider)',
+        lbl_rider_name: 'Fahrer-Rufzeichen / Mesh-Name',
+        lbl_pillion_slot: 'Sozius (Pillion / 2nd Seat)',
+        lbl_pillion_present_toggle: 'Sozius fährt heute mit (An Bord)',
+        lbl_pillion_name: 'Sozius-Rufzeichen / Mesh-Name',
+        lbl_swarm_preview_title: 'Aktives LoRa Kanal 1 Schwarm-Discovery-Beacon:',
+        btn_save_identities: 'Auf Zentralbox sichern',
         section_bike_centric_title: 'Teil 2: Motorrad & OpenMotorBridge Systemknoten',
         device_rider_phone_title: 'Fahrer-Smartphone',
         device_pax_phone_title: 'Sozius-Smartphone',
@@ -278,6 +290,18 @@ const i18n = {
         device_hub_title: 'Device & Connection Manager (Device Hub)',
         device_hub_sub: 'Central 2-part management of personal devices (Part 1) and fixed motorcycle & system nodes (Part 2).',
         section_user_centric_title: 'Part 1: Personal Devices (Rider & Passenger)',
+        identities_hub_title: 'Vehicle & Crew Identity (Swarm Profile)',
+        identities_hub_sub: 'Hardware-anchored identities in Central Box (SSOT) for LoRa discovery, relative radar & TTS alerts.',
+        lbl_bike_identity: 'Motorcycle / Vehicle (Bike Identity)',
+        lbl_bike_alias: 'Vehicle Name / Bike Alias',
+        lbl_bike_class: 'Vehicle Class / Riding Style',
+        lbl_rider_slot: 'Rider (Primary Rider)',
+        lbl_rider_name: 'Rider Callsign / Mesh Name',
+        lbl_pillion_slot: 'Pillion (2nd Seat)',
+        lbl_pillion_present_toggle: 'Pillion riding along today (On Board)',
+        lbl_pillion_name: 'Pillion Callsign / Mesh Name',
+        lbl_swarm_preview_title: 'Active LoRa Channel 1 Swarm Discovery Beacon:',
+        btn_save_identities: 'Save to Central Box',
         section_bike_centric_title: 'Part 2: Motorcycle & OpenMotorBridge System Nodes',
         device_rider_phone_title: 'Rider Smartphone',
         device_pax_phone_title: 'Passenger Smartphone',
@@ -617,6 +641,16 @@ const state = {
         currentMask: parseInt(localStorage.getItem('omb_hw_baseline') || '0x0D9D', 16),
         lostMask: 0,
         hasCriticalLoss: false
+    },
+    identities: {
+        nodeIdHex: '0x4A',
+        bikeUid: '0x014F2A9012008C',
+        bikeName: localStorage.getItem('omb_bike_name') || 'Harley Street Glide 117',
+        bikeClass: localStorage.getItem('omb_bike_class') || 'cruiser',
+        riderName: localStorage.getItem('omb_rider_name') || 'Michael',
+        isRiderPresent: true,
+        pillionName: localStorage.getItem('omb_pillion_name') || 'Sarah',
+        isPillionPresent: localStorage.getItem('omb_pillion_present') === 'true'
     },
     privacyMute: false,
     essActive: false,
@@ -6281,6 +6315,16 @@ const canvasRadar = document.getElementById('canvas-live-radar');
 let s_radarCtx = canvasRadar?.getContext('2d');
 let s_radarAngle = 0;
 
+function getOwnRadarLabel() {
+    const ident = state.identities;
+    if (!ident) return 'Bike A (Leader)';
+    const rName = ident.riderName || 'Leader';
+    if (ident.isPillionPresent && ident.pillionName) {
+        return `${rName} & ${ident.pillionName} (${ident.bikeName || 'Bike'})`;
+    }
+    return `${rName} (${ident.bikeName || 'Leader'})`;
+}
+
 function renderLiveRadarCanvas() {
     if (!canvasRadar || !s_radarCtx) return;
     const w = canvasRadar.width;
@@ -6502,7 +6546,7 @@ function renderLiveRadarCanvas() {
         s_radarCtx.fillStyle = '#ffffff';
         s_radarCtx.font = 'bold 10px sans-serif';
         s_radarCtx.textAlign = 'left';
-        s_radarCtx.fillText('Bike A (Leader)', cx + 12, cy - 4);
+        s_radarCtx.fillText(getOwnRadarLabel(), cx + 12, cy - 4);
     } else {
         // Fallback Demo Breadcrumb Trail
         const breadcrumbs = [
@@ -6556,7 +6600,7 @@ function renderLiveRadarCanvas() {
         s_radarCtx.stroke();
         s_radarCtx.fillStyle = '#ffffff';
         s_radarCtx.font = 'bold 10px sans-serif';
-        s_radarCtx.fillText('Bike A (Leader)', cx + 12, cy - 4);
+        s_radarCtx.fillText(getOwnRadarLabel(), cx + 12, cy - 4);
     }
 
     requestAnimationFrame(renderLiveRadarCanvas);
@@ -10756,6 +10800,132 @@ function setupSmartDockingAndCalmUi() {
     }
 }
 
+function setupIdentitiesUi() {
+    const inputBikeAlias = document.getElementById('input-bike-alias');
+    const selectBikeClass = document.getElementById('select-bike-class');
+    const inputRiderName = document.getElementById('input-rider-name');
+    const inputPillionName = document.getElementById('input-pillion-name');
+    const chkPillionPresent = document.getElementById('chk-pillion-present');
+    const boxPillionSlot = document.getElementById('box-pillion-slot');
+    const btnSyncIdentities = document.getElementById('btn-sync-identities');
+    const badgeIdentSync = document.getElementById('badge-ident-sync-status');
+    const badgePillionPresence = document.getElementById('badge-pillion-presence');
+    const lblSwarmPreviewText = document.getElementById('lbl-swarm-preview-text');
+    const valPaxPhoneName = document.getElementById('val-pax-phone-name');
+
+    function updatePreviewAndState() {
+        const bikeAlias = inputBikeAlias ? inputBikeAlias.value.trim() : state.identities.bikeName;
+        const bikeClass = selectBikeClass ? selectBikeClass.value : state.identities.bikeClass;
+        const riderName = inputRiderName ? inputRiderName.value.trim() : state.identities.riderName;
+        const pillionName = inputPillionName ? inputPillionName.value.trim() : state.identities.pillionName;
+        const isPillionPresent = chkPillionPresent ? chkPillionPresent.checked : state.identities.isPillionPresent;
+
+        state.identities.bikeName = bikeAlias || 'Motorrad';
+        state.identities.bikeClass = bikeClass;
+        state.identities.riderName = riderName || 'Fahrer';
+        state.identities.pillionName = pillionName || 'Sozius';
+        state.identities.isPillionPresent = isPillionPresent;
+
+        // Persist to local storage (Client Cache)
+        localStorage.setItem('omb_bike_name', state.identities.bikeName);
+        localStorage.setItem('omb_bike_class', state.identities.bikeClass);
+        localStorage.setItem('omb_rider_name', state.identities.riderName);
+        localStorage.setItem('omb_pillion_name', state.identities.pillionName);
+        localStorage.setItem('omb_pillion_present', state.identities.isPillionPresent ? 'true' : 'false');
+
+        // Update pillion slot styling & badge
+        if (boxPillionSlot) {
+            if (isPillionPresent) {
+                boxPillionSlot.classList.remove('inactive-slot');
+                boxPillionSlot.classList.add('active-slot');
+            } else {
+                boxPillionSlot.classList.remove('active-slot');
+                boxPillionSlot.classList.add('inactive-slot');
+            }
+        }
+
+        if (badgePillionPresence) {
+            if (isPillionPresent) {
+                badgePillionPresence.className = 'card-badge badge-green';
+                badgePillionPresence.style.background = '';
+                badgePillionPresence.style.color = '';
+                badgePillionPresence.textContent = state.lang === 'de' ? '🟢 An Bord (Aktiv)' : '🟢 On Board (Active)';
+            } else {
+                badgePillionPresence.className = 'card-badge';
+                badgePillionPresence.style.background = 'rgba(255,255,255,0.06)';
+                badgePillionPresence.style.color = 'var(--text-muted)';
+                badgePillionPresence.textContent = state.lang === 'de' ? '⚪ Nicht an Bord (Solo)' : '⚪ Not on Board (Solo)';
+            }
+        }
+
+        // Update Pax Phone label if present in device list
+        if (valPaxPhoneName) {
+            valPaxPhoneName.textContent = isPillionPresent 
+                ? (state.lang === 'de' ? `Smartphone von ${state.identities.pillionName} (Gekoppelt)` : `${state.identities.pillionName}'s Smartphone (Paired)`)
+                : (state.lang === 'de' ? 'Nicht an Bord (Inaktiv)' : 'Not on Board (Inactive)');
+        }
+
+        // Update Swarm Discovery Preview Text (Strictly announce ONLY present crew members)
+        if (lblSwarmPreviewText) {
+            if (isPillionPresent) {
+                lblSwarmPreviewText.textContent = `[${state.identities.nodeIdHex}] "${state.identities.riderName}" & "${state.identities.pillionName}" @ ${state.identities.bikeName} · Duo (${state.lang === 'de' ? 'Fahrer + Sozius aktiv' : 'Rider + Pillion active'})`;
+            } else {
+                lblSwarmPreviewText.textContent = `[${state.identities.nodeIdHex}] "${state.identities.riderName}" @ ${state.identities.bikeName} · Solo (${state.lang === 'de' ? 'Nur Fahrer aktiv' : 'Rider only active'})`;
+            }
+        }
+    }
+
+    if (inputBikeAlias) {
+        inputBikeAlias.value = state.identities.bikeName;
+        inputBikeAlias.addEventListener('input', updatePreviewAndState);
+    }
+    if (selectBikeClass) {
+        selectBikeClass.value = state.identities.bikeClass;
+        selectBikeClass.addEventListener('change', updatePreviewAndState);
+    }
+    if (inputRiderName) {
+        inputRiderName.value = state.identities.riderName;
+        inputRiderName.addEventListener('input', updatePreviewAndState);
+    }
+    if (inputPillionName) {
+        inputPillionName.value = state.identities.pillionName;
+        inputPillionName.addEventListener('input', updatePreviewAndState);
+    }
+    if (chkPillionPresent) {
+        chkPillionPresent.checked = state.identities.isPillionPresent;
+        chkPillionPresent.addEventListener('change', updatePreviewAndState);
+    }
+
+    // Toggle button in demo injection toolbar if present
+    const btnInjectTogglePillion = document.getElementById('btn-inject-toggle-pillion');
+    if (btnInjectTogglePillion) {
+        btnInjectTogglePillion.addEventListener('click', () => {
+            if (chkPillionPresent) {
+                chkPillionPresent.checked = !chkPillionPresent.checked;
+                updatePreviewAndState();
+                showToast(state.identities.isPillionPresent 
+                    ? `👥 Sozius (${state.identities.pillionName}) an Bord aktiviert (Duo-Modus)` 
+                    : '🏍️ Sozius abgemeldet (Solo-Modus)', 'info', 2500);
+            }
+        });
+    }
+
+    if (btnSyncIdentities) {
+        btnSyncIdentities.addEventListener('click', () => {
+            updatePreviewAndState();
+            if (badgeIdentSync) {
+                badgeIdentSync.className = 'card-badge badge-green';
+                badgeIdentSync.textContent = '💾 NVS synchron';
+            }
+            showToast(state.lang === 'de' 
+                ? `💾 Identitäten auf Zentralbox gesichert: "${state.identities.riderName}" @ "${state.identities.bikeName}" (${state.identities.isPillionPresent ? 'Duo mit ' + state.identities.pillionName : 'Solo'})`
+                : `💾 Identities saved to Central Box: "${state.identities.riderName}" @ "${state.identities.bikeName}"`, 'success', 3000);
+        });
+    }
+
+    updatePreviewAndState();
+}
+
 // Initialize Language, Telemetry & Cockpit UI on Boot (Standby - Wait for BLE Hardware)
 setLanguage(state.lang);
 resetDisconnectedTelemetryUi();
@@ -10767,6 +10937,7 @@ setupSystemBuilderUi();
 setupSmokeTestUi();
 setupWebSerialFlasherUi();
 setupSmartDockingAndCalmUi();
+setupIdentitiesUi();
 
 if (!state.isDemoMode && !state.isBleConnected) {
     resetDisconnectedTelemetryUi();

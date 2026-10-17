@@ -74,6 +74,9 @@
                     <button id="btn-inject-forget-phone" class="btn-secondary" style="padding: 6px 12px; font-size: 0.78rem; border-color: var(--accent-orange); color: var(--accent-orange);" title="Simuliert Zündung AUS mit eingestecktem Handy">
                         📱 Handy vergessen Alarm
                     </button>
+                    <button id="btn-inject-toggle-pillion" class="btn-secondary" style="padding: 6px 12px; font-size: 0.78rem; border-color: var(--accent-orange); color: var(--accent-orange);" title="Wechselt zwischen Solo- und Duo-Fahrt (Sozius an Bord)">
+                        👥 Sozius Switch (Solo/Duo)
+                    </button>
                     <button id="btn-inject-ess" class="btn-secondary" style="padding: 6px 12px; font-size: 0.78rem; border-color: rgba(255, 69, 58, 0.4); color: var(--accent-red);">
                         ⚠️ Notbremsung (ESS)
                     </button>
@@ -2012,6 +2015,109 @@
                         👤 <span data-i18n="section_user_centric_title">Teil 1: Persönliche Geräte (Fahrer & Sozius)</span>
                     </h3>
                     <span style="font-size: 0.78rem; color: var(--text-secondary);">Kontingent: 2 Helme, 2 Smartphones, 2 Action-Cams</span>
+                <!-- ================================================================= -->
+                <!-- FAHRZEUG- & BESATZUNGS-IDENTITÄT (SCHWARM-PROFIL SSOT)             -->
+                <!-- ================================================================= -->
+                <div class="card" id="card-identities-hub" style="margin-bottom: 20px; background: linear-gradient(135deg, rgba(22, 27, 34, 0.95) 0%, rgba(13, 17, 23, 0.98) 100%); border-left: 4px solid var(--accent-cyan);">
+                    <div class="card-header" style="margin-bottom: 14px;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 1.3rem;">🪪</span>
+                            <div>
+                                <span class="card-title" data-i18n="identities_hub_title" style="font-size: 1.05rem;">Fahrzeug- &amp; Besatzungs-Identität (Schwarm-Profil)</span>
+                                <div style="font-size: 0.76rem; color: var(--text-secondary); margin-top: 2px;" data-i18n="identities_hub_sub">
+                                    Hardware-gebundene Identitäten der Zentralbox (SSOT) für LoRa-Discovery, Relativ-Radar &amp; TTS-Ansagen.
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                            <span class="card-badge badge-blue" id="badge-ident-node-id">Node: 0x4A</span>
+                            <span class="card-badge badge-green" id="badge-ident-sync-status">💾 NVS synchron</span>
+                        </div>
+                    </div>
+
+                    <!-- 1. Fahrzeug-Identität (Eigenständig, fest an Zentralbox) -->
+                    <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 14px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+                            <strong style="color: var(--accent-orange); font-size: 0.88rem; display: flex; align-items: center; gap: 6px;">
+                                🏍️ <span data-i18n="lbl_bike_identity">Motorrad / Fahrzeug (Bike-Identität)</span>
+                            </strong>
+                            <span style="font-size: 0.74rem; color: var(--text-muted); font-family: monospace;">UID: 0x014F2A9012008C</span>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; align-items: center;">
+                            <div>
+                                <label style="font-size: 0.76rem; color: var(--text-secondary); display: block; margin-bottom: 4px;" data-i18n="lbl_bike_alias">Fahrzeug-Name / Bike-Alias</label>
+                                <input type="text" id="input-bike-alias" class="identity-input" placeholder="z. B. Harley Street Glide 117" value="Harley Street Glide 117" style="font-weight: 700; color: #fff;">
+                            </div>
+                            <div>
+                                <label style="font-size: 0.76rem; color: var(--text-secondary); display: block; margin-bottom: 4px;" data-i18n="lbl_bike_class">Fahrzeugtyp / Fahrstil-Profil</label>
+                                <select id="select-bike-class" class="select-custom" style="width: 100%; color: var(--accent-cyan); font-weight: 600; padding: 8px 12px; font-size: 0.86rem;">
+                                    <option value="cruiser" selected>Touring / Cruiser (Doubt-Timer: 30s)</option>
+                                    <option value="adventure">Adventure / Enduro (Doubt-Timer: 25s)</option>
+                                    <option value="sport">Sport / Naked (Doubt-Timer: 15s)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Besatzung: Fahrer & Sozius (Slots mit Präsenz-Erkennung) -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-bottom: 14px;">
+                        <!-- Fahrer Slot -->
+                        <div class="slot-box active-slot" style="border: 1px solid rgba(10, 132, 255, 0.25); border-radius: var(--radius-sm); padding: 12px 14px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                <strong style="color: var(--accent-blue); font-size: 0.86rem; display: flex; align-items: center; gap: 6px;">
+                                    👤 <span data-i18n="lbl_rider_slot">Fahrer (Primary Rider)</span>
+                                </strong>
+                                <span class="card-badge badge-green" id="badge-rider-presence" style="font-size: 0.7rem;">🟢 An Bord (Aktiv)</span>
+                            </div>
+                            <div>
+                                <label style="font-size: 0.76rem; color: var(--text-secondary); display: block; margin-bottom: 4px;" data-i18n="lbl_rider_name">Fahrer-Rufzeichen / Mesh-Name</label>
+                                <input type="text" id="input-rider-name" class="identity-input" placeholder="z. B. Michael" value="Michael" style="font-weight: 700; color: var(--accent-cyan);">
+                            </div>
+                            <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 6px; display: flex; justify-content: space-between;">
+                                <span>Rolle: <code>ROLE_RIDER (0x01)</code></span>
+                                <span id="lbl-rider-gear-status">📱 Phone + 🪖 Helm gekoppelt</span>
+                            </div>
+                        </div>
+
+                        <!-- Sozius Slot -->
+                        <div id="box-pillion-slot" class="slot-box inactive-slot" style="border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 12px 14px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                <strong style="color: var(--accent-orange); font-size: 0.86rem; display: flex; align-items: center; gap: 6px;">
+                                    👥 <span data-i18n="lbl_pillion_slot">Sozius (Pillion / 2nd Seat)</span>
+                                </strong>
+                                <span class="card-badge" id="badge-pillion-presence" style="font-size: 0.7rem; background: rgba(255,255,255,0.06); color: var(--text-muted);">⚪ Nicht an Bord (Solo)</span>
+                            </div>
+                            <div style="margin-bottom: 8px;">
+                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 600; color: #fff;">
+                                    <input type="checkbox" id="chk-pillion-present" style="accent-color: var(--accent-orange); width: 16px; height: 16px;">
+                                    <span data-i18n="lbl_pillion_present_toggle">Sozius fährt heute mit (An Bord)</span>
+                                </label>
+                            </div>
+                            <div>
+                                <label style="font-size: 0.76rem; color: var(--text-secondary); display: block; margin-bottom: 4px;" data-i18n="lbl_pillion_name">Sozius-Rufzeichen / Mesh-Name</label>
+                                <input type="text" id="input-pillion-name" class="identity-input" placeholder="z. B. Sarah" value="Sarah" style="font-weight: 700; color: var(--accent-orange);">
+                            </div>
+                            <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 6px; display: flex; justify-content: space-between;">
+                                <span>Rolle: <code>ROLE_PILLION (0x02)</code></span>
+                                <span id="lbl-pillion-announce-rule">Nur announced wenn aktiv an Bord!</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. LoRa-Schwarm Announce Vorschau (Was das Bike tatsächlich ins Netz funkt) -->
+                    <div style="background: rgba(0, 0, 0, 0.4); border: 1px dashed var(--border-accent); border-radius: var(--radius-sm); padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                        <div>
+                            <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); font-weight: 700;" data-i18n="lbl_swarm_preview_title">
+                                📡 Aktives LoRa Kanal 1 Schwarm-Discovery-Beacon:
+                            </div>
+                            <div id="lbl-swarm-preview-text" style="font-size: 0.88rem; font-weight: 700; color: var(--accent-green); margin-top: 2px;">
+                                [0x4A] "Michael" @ Harley Street Glide 117 · Solo (Nur Fahrer aktiv)
+                            </div>
+                        </div>
+                        <button id="btn-sync-identities" class="btn-primary" style="padding: 6px 14px; font-size: 0.76rem;">
+                            💾 <span data-i18n="btn_save_identities">Auf Zentralbox sichern</span>
+                        </button>
+                    </div>
                 </div>
 
                 <div class="grid-2">
