@@ -78,9 +78,30 @@ cd ~/esp/esp-idf-v5.2
 
 ---
 
-## 3. Kompilieren der 3 Targets
+## 3. Kompilieren der Targets
 
-Klonen Sie das OpenMotorBridge-Repository oder wechseln Sie in das Hauptverzeichnis:
+> [!TIP]
+> **Automatisches Build-Skript (empfohlen):**
+> Statt Toolchains und Pfade manuell zu laden, steht ein vollständiges Automatisierungs-Skript bereit:
+> ```bash
+> # Standard-Build für den Hauptcontroller:
+> ./tools/build_firmware.sh
+> # oder direkt aus dem firmware-Verzeichnis:
+> ./firmware/build.sh
+> 
+> # Spezifisches Target kompilieren:
+> ./tools/build_firmware.sh front_node
+> ./tools/build_firmware.sh smart_cartridge
+> 
+> # Alle ESP-IDF Targets nacheinander bauen:
+> ./tools/build_firmware.sh all
+> 
+> # Flashen oder sonstige idf.py-Befehle weiterreichen:
+> ./tools/build_firmware.sh main_controller flash -p /dev/cu.usbmodem1101
+> ```
+> Das Skript bindet via `tools/esp_env.sh` automatisch `CMake.app` (`/Applications/CMake.app/Contents/bin`), Ninja (`/usr/local/bin`), Python 3.14 (`/Library/Frameworks/Python.framework/...`) und ESP-IDF (`~/esp-idf/export.sh`) ein.
+
+Manuelle Einzelschritte pro Target:
 
 ```bash
 cd /path/to/openMotorBridge/firmware
