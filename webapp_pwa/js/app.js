@@ -5276,6 +5276,10 @@ function updatePodDisplay(podNum, profileKey) {
     const dleTotal = maxBonus + 20 + 10 + 10; // HW + Power + GNSS + LoRa
     const dleEl = document.getElementById('val-dle-score');
     if (dleEl) dleEl.textContent = `${dleTotal} / 100 Pkt.`;
+
+    if (typeof window.refreshOmmBayStatus === 'function') {
+        window.refreshOmmBayStatus();
+    }
 }
 
 document.getElementById('select-pod1-profile')?.addEventListener('change', (e) => {
@@ -10967,6 +10971,435 @@ function setupIdentitiesUi() {
     updatePreviewAndState();
 }
 
+// ==========================================
+// 12. OMM Intercom & Funk-Kontrollzentrale (Kapitel 4b)
+// ==========================================
+function setupOmmIntercomUi() {
+    const PMR446_FREQS = [
+        446.00625, 446.01875, 446.03125, 446.04375,
+        446.05625, 446.06875, 446.08125, 446.09375,
+        446.10625, 446.11875, 446.13125, 446.14375,
+        446.15625, 446.16875, 446.18125, 446.19375
+    ];
+
+    const CTCSS_TONES = [
+        0.0, 67.0, 71.9, 74.4, 77.0, 79.7, 82.5, 85.4, 88.5, 91.5, 94.8,
+        97.4, 100.0, 103.5, 107.2, 110.9, 114.8, 118.8, 123.0, 127.3, 131.8,
+        136.5, 141.3, 146.2, 151.4, 156.7, 162.2, 167.9, 173.8, 179.9, 186.2,
+        192.8, 203.5, 210.7, 218.1, 225.7, 233.6, 241.8, 250.3
+    ];
+
+    // Load saved settings
+    let ommCfg = {
+        activeTab: 'omm446',
+        omm446: {
+            mode: 'analog', // 'analog' or 'dmr'
+            channel: 8,
+            ctcss: 16,
+            colorCode: 1,
+            squelch: 3,
+            power: 'high'
+        },
+        omm24: {
+            meshMode: 'open',
+            channel: 1,
+            volume: 80,
+            peers: 4
+        }
+    };
+
+    try {
+        const stored = localStorage.getItem('omb_omm_settings');
+        if (stored) {
+            const parsed = JSON.parse(stored);
+            ommCfg = {
+                ...ommCfg,
+                ...parsed,
+                omm446: { ...ommCfg.omm446, ...(parsed.omm446 || {}) },
+                omm24: { ...ommCfg.omm24, ...(parsed.omm24 || {}) }
+            };
+        }
+    } catch (e) {
+        console.warn('Failed to parse omb_omm_settings:', e);
+    }
+
+    function saveOmmConfig() {
+        try {
+            localStorage.setItem('omb_omm_settings', JSON.stringify(ommCfg));
+        } catch (e) {
+            console.error('Failed to save omb_omm_settings:', e);
+        }
+    }
+
+    // Elements
+    const tabBtn446 = document.getElementById('tab-btn-omm446');
+    const tabBtn24 = document.getElementById('tab-btn-omm24');
+    const panel446 = document.getElementById('panel-omm446-view');
+    const panel24 = document.getElementById('panel-omm24-view');
+
+    const btnModeAnalog = document.getElementById('btn-omm-mode-analog');
+    const btnModeDmr = document.getElementById('btn-omm-mode-dmr');
+    const badgeModeDesc = document.getElementById('badge-omm446-mode-desc');
+    const containerSubtone = document.getElementById('container-omm-subtone');
+    const containerColorcode = document.getElementById('container-omm-colorcode');
+
+    const dispCh = document.getElementById('display-omm-channel');
+    const dispFreq = document.getElementById('display-omm-frequency');
+    const dispDesc = document.getElementById('display-omm-channel-desc');
+    const btnChPrev = document.getElementById('btn-omm-ch-prev');
+    const btnChNext = document.getElementById('btn-omm-ch-next');
+    const selectCh = document.getElementById('select-omm-channel');
+    const selectCtcss = document.getElementById('select-omm-ctcss');
+    const selectColorCode = document.getElementById('select-omm-colorcode');
+    const sliderSquelch = document.getElementById('slider-omm-squelch');
+    const lblSquelchVal = document.getElementById('lbl-omm-squelch-val');
+
+    const badgePower = document.getElementById('badge-omm-power-mode');
+    const btnPwrHigh = document.getElementById('btn-omm-pwr-high');
+    const btnPwrLow = document.getElementById('btn-omm-pwr-low');
+    const btnPtt = document.getElementById('btn-omm-ptt-push');
+    const iconPtt = document.getElementById('icon-ptt-state');
+    const textPtt = document.getElementById('text-ptt-state');
+    const lblCarrier = document.getElementById('lbl-carrier-state');
+
+    const badgeBayStatus = document.getElementById('badge-omm-bay-status');
+    const badgeRfStatus = document.getElementById('badge-omm-rf-status');
+
+    // 2.4G Elements
+    const btn24ModeOpen = document.getElementById('btn-omm24-mode-open');
+    const btn24ModePriv = document.getElementById('btn-omm24-mode-private');
+    const badge24ModeDesc = document.getElementById('badge-omm24-mode-desc');
+    const select24Ch = document.getElementById('select-omm24-channel');
+    const slider24Vol = document.getElementById('slider-omm24-volume');
+    const lbl24Vol = document.getElementById('lbl-omm24-vol-val');
+
+    // Populate Channel Dropdowns
+    if (selectCh) {
+        selectCh.innerHTML = '';
+        PMR446_FREQS.forEach((freq, idx) => {
+            const chNum = idx + 1;
+            const opt = document.createElement('option');
+            opt.value = chNum;
+            const isCh8 = (chNum === 8);
+            opt.textContent = `Kanal ${chNum < 10 ? '0' + chNum : chNum} · ${freq.toFixed(5)} MHz ${isCh8 ? '⭐ (Bergrettung / Notruf)' : ''}`;
+            selectCh.appendChild(opt);
+        });
+    }
+
+    if (selectCtcss) {
+        selectCtcss.innerHTML = '';
+        CTCSS_TONES.forEach((hz, idx) => {
+            const opt = document.createElement('option');
+            opt.value = idx;
+            opt.textContent = idx === 0 ? '00: Aus (Carrier Squelch)' : `Ton ${idx < 10 ? '0' + idx : idx} (${hz.toFixed(1)} Hz)`;
+            selectCtcss.appendChild(opt);
+        });
+    }
+
+    if (selectColorCode) {
+        selectColorCode.innerHTML = '';
+        for (let i = 1; i <= 16; i++) {
+            const opt = document.createElement('option');
+            opt.value = i;
+            opt.textContent = `Color Code ${i} (Slot 1 Broadcast)`;
+            selectColorCode.appendChild(opt);
+        }
+    }
+
+    if (select24Ch) {
+        select24Ch.innerHTML = '';
+        for (let i = 1; i <= 16; i++) {
+            const opt = document.createElement('option');
+            opt.value = i;
+            const freq = 2400 + i * 5;
+            opt.textContent = `Mesh-Kanal ${i} (${freq} MHz / Wi-Fi 6 TDMA)`;
+            select24Ch.appendChild(opt);
+        }
+    }
+
+    function renderUi() {
+        const isDe = (state.lang === 'de');
+
+        // Tab Selection
+        if (tabBtn446 && tabBtn24 && panel446 && panel24) {
+            if (ommCfg.activeTab === 'omm446') {
+                tabBtn446.className = 'btn-primary';
+                tabBtn24.className = 'btn-secondary';
+                panel446.style.display = 'block';
+                panel24.style.display = 'none';
+            } else {
+                tabBtn446.className = 'btn-secondary';
+                tabBtn24.className = 'btn-primary';
+                panel446.style.display = 'none';
+                panel24.style.display = 'block';
+            }
+        }
+
+        // OMM 446 Mode
+        if (btnModeAnalog && btnModeDmr && badgeModeDesc && containerSubtone && containerColorcode) {
+            if (ommCfg.omm446.mode === 'analog') {
+                btnModeAnalog.className = 'btn-primary';
+                btnModeDmr.className = 'btn-secondary';
+                badgeModeDesc.className = 'card-badge badge-green';
+                badgeModeDesc.textContent = isDe ? 'Analog FM · 100% Midland G7/G9 Pro kompatibel' : 'Analog FM · 100% Midland G7/G9 Pro compatible';
+                containerSubtone.style.display = 'block';
+                containerColorcode.style.display = 'none';
+            } else {
+                btnModeAnalog.className = 'btn-secondary';
+                btnModeDmr.className = 'btn-primary';
+                badgeModeDesc.className = 'card-badge badge-blue';
+                badgeModeDesc.textContent = isDe ? 'Digital DMR Tier I · TDMA 4FSK rauschfrei (Midland D-10)' : 'Digital DMR Tier I · TDMA 4FSK crystal clear (Midland D-10)';
+                containerSubtone.style.display = 'none';
+                containerColorcode.style.display = 'block';
+            }
+        }
+
+        // Channel & Frequency Display
+        const ch = ommCfg.omm446.channel;
+        const freq = PMR446_FREQS[ch - 1] || 446.09375;
+        if (dispCh) dispCh.textContent = `CH ${ch < 10 ? '0' + ch : ch}`;
+        if (dispFreq) dispFreq.textContent = `${freq.toFixed(5)} MHz`;
+        if (dispDesc) {
+            if (ch === 8) {
+                dispDesc.textContent = isDe ? '⭐ Bergrettung / Wanderkanal (Motorrad-Notruf Standard)' : '⭐ Mountain Rescue / Hike Channel (Motorcycle Emergency)';
+                dispDesc.style.color = 'var(--accent-orange)';
+            } else {
+                dispDesc.textContent = isDe ? `Standard PMR446 Kanal ${ch} (${freq.toFixed(5)} MHz)` : `Standard PMR446 Channel ${ch} (${freq.toFixed(5)} MHz)`;
+                dispDesc.style.color = 'var(--text-muted)';
+            }
+        }
+        if (selectCh) selectCh.value = ch;
+        if (selectCtcss) selectCtcss.value = ommCfg.omm446.ctcss;
+        if (selectColorCode) selectColorCode.value = ommCfg.omm446.colorCode;
+
+        // Squelch
+        if (sliderSquelch) sliderSquelch.value = ommCfg.omm446.squelch;
+        if (lblSquelchVal) {
+            const sq = ommCfg.omm446.squelch;
+            const dbm = -(120 - sq * 5);
+            lblSquelchVal.textContent = isDe ? `Stufe ${sq}/8 (${dbm} dBm)` : `Level ${sq}/8 (${dbm} dBm)`;
+        }
+
+        // Power
+        if (btnPwrHigh && btnPwrLow && badgePower) {
+            if (ommCfg.omm446.power === 'high') {
+                btnPwrHigh.className = 'btn-primary';
+                btnPwrLow.className = 'btn-secondary';
+                badgePower.className = 'card-badge badge-green';
+                badgePower.textContent = isDe ? '0.5 W HIGH (Bike-Bordnetz)' : '0.5 W HIGH (Bike Supply)';
+            } else {
+                btnPwrHigh.className = 'btn-secondary';
+                btnPwrLow.className = 'btn-primary';
+                badgePower.className = 'card-badge badge-blue';
+                badgePower.textContent = isDe ? '0.2 W LOW (Helm LiPo / SAR-Safe)' : '0.2 W LOW (Helmet LiPo / SAR-Safe)';
+            }
+        }
+
+        // 2.4G Mesh
+        if (btn24ModeOpen && btn24ModePriv && badge24ModeDesc) {
+            if (ommCfg.omm24.meshMode === 'open') {
+                btn24ModeOpen.className = 'btn-primary';
+                btn24ModePriv.className = 'btn-secondary';
+                badge24ModeDesc.className = 'card-badge badge-purple';
+                badge24ModeDesc.textContent = isDe ? 'Open Convoy (Öffentlich)' : 'Open Convoy (Public)';
+            } else {
+                btn24ModeOpen.className = 'btn-secondary';
+                btn24ModePriv.className = 'btn-primary';
+                badge24ModeDesc.className = 'card-badge badge-green';
+                badge24ModeDesc.textContent = isDe ? 'Private Group (AES-128 Hardware-Key)' : 'Private Group (AES-128 Key)';
+            }
+        }
+        if (select24Ch) select24Ch.value = ommCfg.omm24.channel;
+        if (slider24Vol) slider24Vol.value = ommCfg.omm24.volume;
+        if (lbl24Vol) lbl24Vol.textContent = `${ommCfg.omm24.volume} %`;
+
+        // Check active Pod profiles
+        const p1 = document.getElementById('select-pod1-profile')?.value;
+        const p2 = document.getElementById('select-pod2-profile')?.value;
+        const has446 = (p1 === 'omm_pmr446' || p2 === 'omm_pmr446');
+        const has24 = (p1 === 'omm_ucs' || p2 === 'omm_ucs');
+
+        if (badgeBayStatus) {
+            if (has446 && has24) {
+                badgeBayStatus.className = 'card-badge badge-green';
+                badgeBayStatus.textContent = isDe ? 'Bucht 1 & 2 gesteckt (UWB Online)' : 'Bay 1 & 2 inserted (UWB Online)';
+            } else if (has446) {
+                const bay = (p1 === 'omm_pmr446') ? '1' : '2';
+                badgeBayStatus.className = 'card-badge badge-blue';
+                badgeBayStatus.textContent = isDe ? `Bucht ${bay}: OMM 446 (UWB Online)` : `Bay ${bay}: OMM 446 (UWB Online)`;
+            } else if (has24) {
+                const bay = (p1 === 'omm_ucs') ? '1' : '2';
+                badgeBayStatus.className = 'card-badge badge-purple';
+                badgeBayStatus.textContent = isDe ? `Bucht ${bay}: OMM 2.4G (UWB Online)` : `Bay ${bay}: OMM 2.4G (UWB Online)`;
+            } else {
+                badgeBayStatus.className = 'card-badge badge-purple';
+                badgeBayStatus.textContent = isDe ? 'Vorkonfiguration (Standby)' : 'Preconfiguration (Standby)';
+            }
+        }
+    }
+
+    // Tab switcher events
+    tabBtn446?.addEventListener('click', () => { ommCfg.activeTab = 'omm446'; renderUi(); saveOmmConfig(); });
+    tabBtn24?.addEventListener('click', () => { ommCfg.activeTab = 'omm24'; renderUi(); saveOmmConfig(); });
+
+    // Mode toggles
+    btnModeAnalog?.addEventListener('click', () => {
+        ommCfg.omm446.mode = 'analog';
+        renderUi();
+        saveOmmConfig();
+        showToast(state.lang === 'de' ? '📻 Analog PMR446 aktiviert (FM Schmalband 12.5 kHz)' : '📻 Analog PMR446 activated', 'info');
+    });
+    btnModeDmr?.addEventListener('click', () => {
+        ommCfg.omm446.mode = 'dmr';
+        renderUi();
+        saveOmmConfig();
+        showToast(state.lang === 'de' ? '📟 Digital DMR Tier I aktiviert (AMBE+2 Vocoder & TDMA)' : '📟 Digital DMR Tier I activated', 'info');
+    });
+
+    // Channel Steppers & Select
+    btnChPrev?.addEventListener('click', () => {
+        ommCfg.omm446.channel = (ommCfg.omm446.channel > 1) ? ommCfg.omm446.channel - 1 : 16;
+        renderUi();
+        saveOmmConfig();
+        showToast(state.lang === 'de' ? `Kanal CH ${ommCfg.omm446.channel < 10 ? '0' + ommCfg.omm446.channel : ommCfg.omm446.channel} (${PMR446_FREQS[ommCfg.omm446.channel - 1]} MHz)` : `Channel CH ${ommCfg.omm446.channel}`, 'info', 1500);
+    });
+    btnChNext?.addEventListener('click', () => {
+        ommCfg.omm446.channel = (ommCfg.omm446.channel < 16) ? ommCfg.omm446.channel + 1 : 1;
+        renderUi();
+        saveOmmConfig();
+        showToast(state.lang === 'de' ? `Kanal CH ${ommCfg.omm446.channel < 10 ? '0' + ommCfg.omm446.channel : ommCfg.omm446.channel} (${PMR446_FREQS[ommCfg.omm446.channel - 1]} MHz)` : `Channel CH ${ommCfg.omm446.channel}`, 'info', 1500);
+    });
+    selectCh?.addEventListener('change', (e) => {
+        ommCfg.omm446.channel = parseInt(e.target.value, 10);
+        renderUi();
+        saveOmmConfig();
+    });
+
+    selectCtcss?.addEventListener('change', (e) => {
+        ommCfg.omm446.ctcss = parseInt(e.target.value, 10);
+        saveOmmConfig();
+        const hz = CTCSS_TONES[ommCfg.omm446.ctcss];
+        showToast(state.lang === 'de' ? `CTCSS Subton: ${ommCfg.omm446.ctcss === 0 ? 'Aus' : hz.toFixed(1) + ' Hz'}` : `CTCSS Subtone: ${hz.toFixed(1)} Hz`, 'info', 1500);
+    });
+
+    selectColorCode?.addEventListener('change', (e) => {
+        ommCfg.omm446.colorCode = parseInt(e.target.value, 10);
+        saveOmmConfig();
+        showToast(`DMR Color Code: ${ommCfg.omm446.colorCode}`, 'info', 1500);
+    });
+
+    sliderSquelch?.addEventListener('input', (e) => {
+        ommCfg.omm446.squelch = parseInt(e.target.value, 10);
+        renderUi();
+        saveOmmConfig();
+    });
+
+    btnPwrHigh?.addEventListener('click', () => {
+        ommCfg.omm446.power = 'high';
+        renderUi();
+        saveOmmConfig();
+        showToast(state.lang === 'de' ? '⚡ Sendeleistung: 0.5 W (Maximales Bike-Limit)' : '⚡ RF Power: 0.5 W (Bike limit)', 'success');
+    });
+
+    btnPwrLow?.addEventListener('click', () => {
+        ommCfg.omm446.power = 'low';
+        renderUi();
+        saveOmmConfig();
+        showToast(state.lang === 'de' ? '🪖 Sendeleistung: 0.2 W (SAR-Safe Helm-Modus)' : '🪖 RF Power: 0.2 W (SAR-Safe)', 'info');
+    });
+
+    // PTT Press & Hold
+    let isPttHeld = false;
+    function startPtt() {
+        if (isPttHeld) return;
+        isPttHeld = true;
+        if (btnPtt) {
+            btnPtt.style.background = 'rgba(255, 69, 58, 0.4)';
+            btnPtt.style.borderColor = '#ff453a';
+            btnPtt.style.boxShadow = '0 0 24px rgba(255, 69, 58, 0.7)';
+        }
+        if (iconPtt) iconPtt.textContent = '🔴';
+        if (textPtt) textPtt.textContent = state.lang === 'de' ? 'TX SENDEN AKTIV... (Sprechen!)' : 'TX TRANSMITTING... (Speak!)';
+        if (lblCarrier) {
+            lblCarrier.textContent = state.lang === 'de' ? '🔴 TX Senden aktiv (+27 dBm ERP)' : '🔴 TX Active (+27 dBm ERP)';
+            lblCarrier.style.color = '#ff453a';
+        }
+        if (badgeRfStatus) {
+            badgeRfStatus.className = 'card-badge badge-red';
+            badgeRfStatus.textContent = '🔴 TX Senden (PTT)';
+        }
+    }
+
+    function stopPtt() {
+        if (!isPttHeld) return;
+        isPttHeld = false;
+        if (btnPtt) {
+            btnPtt.style.background = 'rgba(255, 69, 58, 0.12)';
+            btnPtt.style.borderColor = 'rgba(255, 69, 58, 0.4)';
+            btnPtt.style.boxShadow = 'none';
+        }
+        if (iconPtt) iconPtt.textContent = '🎙️';
+        if (textPtt) textPtt.textContent = state.lang === 'de' ? 'PTT SPRECHEN (Gedrückt halten)' : 'PTT SPEAK (Hold to talk)';
+        if (lblCarrier) {
+            lblCarrier.textContent = state.lang === 'de' ? '⚪ RX Standby (Rauschfrei)' : '⚪ RX Standby (Muted)';
+            lblCarrier.style.color = 'var(--accent-green)';
+        }
+        if (badgeRfStatus) {
+            badgeRfStatus.className = 'card-badge badge-green';
+            badgeRfStatus.textContent = 'Standby (0.5 W Bike)';
+        }
+    }
+
+    if (btnPtt) {
+        btnPtt.addEventListener('mousedown', startPtt);
+        window.addEventListener('mouseup', stopPtt);
+        btnPtt.addEventListener('touchstart', (e) => { e.preventDefault(); startPtt(); }, { passive: false });
+        window.addEventListener('touchend', stopPtt);
+    }
+
+    // Spacebar PTT shortcut when not in input
+    window.addEventListener('keydown', (e) => {
+        if (e.code === 'Space' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) {
+            startPtt();
+        }
+    });
+    window.addEventListener('keyup', (e) => {
+        if (e.code === 'Space') {
+            stopPtt();
+        }
+    });
+
+    // 2.4G Handlers
+    btn24ModeOpen?.addEventListener('click', () => {
+        ommCfg.omm24.meshMode = 'open';
+        renderUi();
+        saveOmmConfig();
+        showToast(state.lang === 'de' ? '👥 Open Convoy aktiviert (öffentlich)' : '👥 Open Convoy active', 'info');
+    });
+    btn24ModePriv?.addEventListener('click', () => {
+        ommCfg.omm24.meshMode = 'private';
+        renderUi();
+        saveOmmConfig();
+        showToast(state.lang === 'de' ? '🔒 Private Group aktiviert (AES-128 verschlüsselt)' : '🔒 Private Group active (AES-128)', 'success');
+    });
+    select24Ch?.addEventListener('change', (e) => {
+        ommCfg.omm24.channel = parseInt(e.target.value, 10);
+        saveOmmConfig();
+        showToast(`Mesh-Kanal: ${ommCfg.omm24.channel}`, 'info', 1500);
+    });
+    slider24Vol?.addEventListener('input', (e) => {
+        ommCfg.omm24.volume = parseInt(e.target.value, 10);
+        renderUi();
+        saveOmmConfig();
+    });
+
+    // Initial render
+    renderUi();
+
+    // Hook into pod selection changes
+    window.refreshOmmBayStatus = renderUi;
+}
+
 // Initialize Language, Telemetry & Cockpit UI on Boot (Standby - Wait for BLE Hardware)
 setLanguage(state.lang);
 resetDisconnectedTelemetryUi();
@@ -10979,6 +11412,7 @@ setupSmokeTestUi();
 setupWebSerialFlasherUi();
 setupSmartDockingAndCalmUi();
 setupIdentitiesUi();
+setupOmmIntercomUi();
 
 if (!state.isDemoMode && !state.isBleConnected) {
     resetDisconnectedTelemetryUi();

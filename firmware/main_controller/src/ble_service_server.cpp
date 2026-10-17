@@ -44,7 +44,8 @@ static uint16_t conn_handle_pwa = BLE_HS_CONN_HANDLE_NONE;
 static int gatt_svr_chr_access_omb(uint16_t conn_handle, uint16_t attr_handle,
                                    struct ble_gatt_access_ctxt *ctxt, void *arg) {
     if (ctxt->op == BLE_GATT_ACCESS_OP_WRITE_CHR) {
-        uint8_t cmd[32] = {0};
+        static uint8_t cmd[512];
+        memset(cmd, 0, sizeof(cmd));
         uint16_t len = OS_MBUF_PKTLEN(ctxt->om);
         if (len > sizeof(cmd)) len = sizeof(cmd);
         os_mbuf_copydata(ctxt->om, 0, len, cmd);
@@ -202,6 +203,57 @@ static int gatt_svr_chr_access_omb(uint16_t conn_handle, uint16_t attr_handle,
                         free(json_buf);
                     }
                 }
+            }
+        } else if (cmd[0] == 0x43) { // OMM Intercom & Radio Config Hub Sync (Opcode 0x43)
+            // Packet format: [0x43, len_hi, len_lo, ...utf8 json...]
+            if (len >= 3) {
+                uint16_t json_len = ((uint16_t)cmd[1] << 8) | (uint16_t)cmd[2];
+                if (len >= 3 + json_len) {
+                    char *json_buf = (char *)malloc(json_len + 1);
+                    if (json_buf) {
+                        memcpy(json_buf, &cmd[3], json_len);
+                        json_buf[json_len] = '\0';
+                        ESP_LOGI(TAG, "GATT: OMM Config Sync (Opcode 0x43): %s", json_buf);
+
+                        cJSON *root = cJSON_Parse(json_buf);
+                        if (root) {
+                            cJSON *j_mode = cJSON_GetObjectItem(root, "omm446_mode");
+                            cJSON *j_ch = cJSON_GetObjectItem(root, "omm446_ch");
+                            cJSON *j_ctcss = cJSON_GetObjectItem(root, "omm446_ctcss");
+                            cJSON *j_cc = cJSON_GetObjectItem(root, "omm446_color_code");
+                            cJSON *j_sq = cJSON_GetObjectItem(root, "omm446_sq");
+                            cJSON *j_pwr = cJSON_GetObjectItem(root, "omm446_power");
+                            cJSON *j_m24_mode = cJSON_GetObjectItem(root, "omm24_mode");
+                            cJSON *j_m24_ch = cJSON_GetObjectItem(root, "omm24_ch");
+                            cJSON *j_m24_vol = cJSON_GetObjectItem(root, "omm24_vol");
+
+                            // Persist to NVS under "omb_omm"
+                            nvs_handle_t nvs_h;
+                            if (nvs_open("omb_omm", NVS_READWRITE, &nvs_h) == ESP_OK) {
+                                if (j_mode && cJSON_IsString(j_mode)) nvs_set_str(nvs_h, "omm446_mode", j_mode->valuestring);
+                                if (j_ch && cJSON_IsNumber(j_ch)) nvs_set_u8(nvs_h, "omm446_ch", (uint8_t)j_ch->valueint);
+                                if (j_ctcss && cJSON_IsNumber(j_ctcss)) nvs_set_u8(nvs_h, "omm446_ctcss", (uint8_t)j_ctcss->valueint);
+                                if (j_cc && cJSON_IsNumber(j_cc)) nvs_set_u8(nvs_h, "omm446_cc", (uint8_t)j_cc->valueint);
+                                if (j_sq && cJSON_IsNumber(j_sq)) nvs_set_u8(nvs_h, "omm446_sq", (uint8_t)j_sq->valueint);
+                                if (j_pwr && cJSON_IsString(j_pwr)) nvs_set_str(nvs_h, "omm446_pwr", j_pwr->valuestring);
+                                if (j_m24_mode && cJSON_IsString(j_m24_mode)) nvs_set_str(nvs_h, "omm24_mode", j_m24_mode->valuestring);
+                                if (j_m24_ch && cJSON_IsNumber(j_m24_ch)) nvs_set_u8(nvs_h, "omm24_ch", (uint8_t)j_m24_ch->valueint);
+                                if (j_m24_vol && cJSON_IsNumber(j_m24_vol)) nvs_set_u8(nvs_h, "omm24_vol", (uint8_t)j_m24_vol->valueint);
+                                nvs_commit(nvs_h);
+                                nvs_close(nvs_h);
+                                ESP_LOGI(TAG, "✓ OMM Intercom (PMR446 CH%d, 2.4G CH%d) settings saved to Central NVS.",
+                                         j_ch ? j_ch->valueint : 8, j_m24_ch ? j_m24_ch->valueint : 1);
+                            }
+                            cJSON_Delete(root);
+                        }
+                        free(json_buf);
+                    }
+                }
+            }
+        } else if (cmd[0] == 0x44) { // OMM PTT Transmit Trigger (Opcode 0x44)
+            if (len >= 2) {
+                bool ptt_active = (cmd[1] == 0x01);
+                ESP_LOGI(TAG, "GATT: OMM PTT Command (Opcode 0x44): %s", ptt_active ? "TRANSMIT (TX ACTIVE)" : "STANDBY (RX)");
             }
         }
         return 0;

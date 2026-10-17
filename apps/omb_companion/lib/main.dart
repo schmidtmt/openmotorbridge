@@ -3,6 +3,7 @@ import 'services/assistnow_service.dart';
 import 'services/ble_bridge_service.dart';
 import 'services/firmware_service.dart';
 import 'services/identity_service.dart';
+import 'services/omm_intercom_service.dart';
 import 'services/proxy_service.dart';
 import 'services/update_service.dart';
 
@@ -59,6 +60,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   final AssistNowService _assistNowService = AssistNowService();
   final FirmwareService _firmwareService = FirmwareService();
   final IdentityService _identityService = IdentityService();
+  final OmmIntercomService _ommService = OmmIntercomService();
 
   @override
   void initState() {
@@ -75,6 +77,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     _bleService.dispose();
     _firmwareService.dispose();
     _identityService.dispose();
+    _ommService.dispose();
     super.dispose();
   }
 
@@ -86,6 +89,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         assistNow: _assistNowService,
         proxy: _proxyService,
         identity: _identityService,
+        omm: _ommService,
         onNavigateToIdentity: () => setState(() => _currentIndex = 1),
       ),
       IdentityScreen(identity: _identityService, ble: _bleService),
@@ -203,6 +207,7 @@ class CockpitScreen extends StatelessWidget {
   final AssistNowService assistNow;
   final ProxyService proxy;
   final IdentityService identity;
+  final OmmIntercomService omm;
   final VoidCallback? onNavigateToIdentity;
 
   const CockpitScreen({
@@ -211,13 +216,14 @@ class CockpitScreen extends StatelessWidget {
     required this.assistNow,
     required this.proxy,
     required this.identity,
+    required this.omm,
     this.onNavigateToIdentity,
   });
 
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
-      listenable: Listenable.merge([ble, assistNow, proxy, identity]),
+      listenable: Listenable.merge([ble, assistNow, proxy, identity, omm]),
       builder: (context, _) {
         return SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -441,6 +447,11 @@ class CockpitScreen extends StatelessWidget {
 
               const SizedBox(height: 16),
 
+              // OMM Intercom & Radio Card (Kapitel 4b)
+              _buildOmmRadioCard(context),
+
+              const SizedBox(height: 16),
+
               // A-GPS Instant Fix Injection Card
               Card(
                 child: Padding(
@@ -521,6 +532,451 @@ class CockpitScreen extends StatelessWidget {
             ),
             Text(value, style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold, color: color)),
             Text(subtext, style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.5))),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildOmmRadioCard(BuildContext context) {
+    final isDmr = omm.omm446Mode == 'dmr';
+    final isTx = omm.isPttActive;
+
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(
+          color: isTx
+              ? Colors.redAccent
+              : const Color(0xFF00F2FE).withValues(alpha: 0.3),
+          width: isTx ? 2.0 : 1.0,
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: (isTx ? Colors.redAccent : const Color(0xFF00F2FE)).withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Icon(
+                    Icons.settings_input_antenna,
+                    color: isTx ? Colors.redAccent : const Color(0xFF00F2FE),
+                    size: 20,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'OMM Funk & Intercom Zentrale',
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                      ),
+                      Text(
+                        'PMR446 / DMR (PCBA 10) & 2.4G HD-Mesh (PCBA 09)',
+                        style: TextStyle(color: Colors.white.withValues(alpha: 0.6), fontSize: 11),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: (omm.omm446Power == 'high' ? const Color(0xFF00E676) : Colors.orangeAccent).withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: omm.omm446Power == 'high' ? const Color(0xFF00E676) : Colors.orangeAccent,
+                    ),
+                  ),
+                  child: Text(
+                    omm.omm446Power == 'high' ? '0.5W BIKE' : '0.2W HELM',
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      color: omm.omm446Power == 'high' ? const Color(0xFF00E676) : Colors.orangeAccent,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 14),
+
+            // Mode Selector: Analog PMR vs DMR Tier I
+            Row(
+              children: [
+                Expanded(
+                  child: ChoiceChip(
+                    label: const Center(child: Text('ANALOG PMR446', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold))),
+                    selected: !isDmr,
+                    selectedColor: const Color(0xFF00F2FE).withValues(alpha: 0.25),
+                    backgroundColor: Colors.white.withValues(alpha: 0.05),
+                    side: BorderSide(
+                      color: !isDmr ? const Color(0xFF00F2FE) : Colors.transparent,
+                    ),
+                    onSelected: (val) {
+                      if (val) omm.setOmm446Mode('analog', ble: ble);
+                    },
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: ChoiceChip(
+                    label: const Center(child: Text('DMR TIER I DIGITAL', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold))),
+                    selected: isDmr,
+                    selectedColor: const Color(0xFF00F2FE).withValues(alpha: 0.25),
+                    backgroundColor: Colors.white.withValues(alpha: 0.05),
+                    side: BorderSide(
+                      color: isDmr ? const Color(0xFF00F2FE) : Colors.transparent,
+                    ),
+                    onSelected: (val) {
+                      if (val) omm.setOmm446Mode('dmr', ble: ble);
+                    },
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 14),
+
+            // Digital Frequency & Channel Display (OLED Style)
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(
+                color: const Color(0xFF090D14),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: isTx
+                      ? Colors.redAccent.withValues(alpha: 0.7)
+                      : const Color(0xFF00F2FE).withValues(alpha: 0.3),
+                ),
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.arrow_back_ios, size: 18),
+                        color: const Color(0xFF00F2FE),
+                        onPressed: omm.omm446Channel > 1
+                            ? () => omm.setOmm446Channel(omm.omm446Channel - 1, ble: ble)
+                            : null,
+                      ),
+                      Column(
+                        children: [
+                          Text(
+                            'CH ${omm.omm446Channel.toString().padLeft(2, '0')}',
+                            style: TextStyle(
+                              fontFamily: 'monospace',
+                              fontSize: 26,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 2,
+                              color: isTx ? Colors.redAccent : const Color(0xFF00F2FE),
+                            ),
+                          ),
+                          Text(
+                            '${omm.currentFrequency.toStringAsFixed(5)} MHz',
+                            style: const TextStyle(
+                              fontFamily: 'monospace',
+                              fontSize: 14,
+                              color: Colors.white70,
+                            ),
+                          ),
+                        ],
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.arrow_forward_ios, size: 18),
+                        color: const Color(0xFF00F2FE),
+                        onPressed: omm.omm446Channel < 16
+                            ? () => omm.setOmm446Channel(omm.omm446Channel + 1, ble: ble)
+                            : null,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    omm.channelDescription,
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: omm.omm446Channel == 8 ? const Color(0xFF00E676) : Colors.white54,
+                      fontWeight: omm.omm446Channel == 8 ? FontWeight.bold : FontWeight.normal,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 14),
+
+            // CTCSS / Color Code & Squelch Controls
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        !isDmr ? 'CTCSS Subton (0..38)' : 'DMR Color Code (1..16)',
+                        style: const TextStyle(fontSize: 11, color: Colors.grey),
+                      ),
+                      const SizedBox(height: 4),
+                      if (!isDmr)
+                        DropdownButtonFormField<int>(
+                          initialValue: omm.omm446Ctcss,
+                          isExpanded: true,
+                          decoration: InputDecoration(
+                            isDense: true,
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                            filled: true,
+                            fillColor: const Color(0xFF0E1422),
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                          ),
+                          items: List.generate(OmmIntercomService.ctcssTones.length, (idx) {
+                            final tone = OmmIntercomService.ctcssTones[idx];
+                            final label = idx == 0 ? '00: Off (Carrier)' : '$idx (${tone.toStringAsFixed(1)} Hz)';
+                            return DropdownMenuItem<int>(
+                              value: idx,
+                              child: Text(label, style: const TextStyle(fontSize: 12)),
+                            );
+                          }),
+                          onChanged: (val) {
+                            if (val != null) omm.setOmm446Ctcss(val, ble: ble);
+                          },
+                        )
+                      else
+                        DropdownButtonFormField<int>(
+                          initialValue: omm.omm446ColorCode,
+                          isExpanded: true,
+                          decoration: InputDecoration(
+                            isDense: true,
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                            filled: true,
+                            fillColor: const Color(0xFF0E1422),
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                          ),
+                          items: List.generate(16, (idx) => idx + 1).map((cc) {
+                            return DropdownMenuItem<int>(
+                              value: cc,
+                              child: Text('CC $cc', style: const TextStyle(fontSize: 12)),
+                            );
+                          }).toList(),
+                          onChanged: (val) {
+                            if (val != null) omm.setOmm446ColorCode(val, ble: ble);
+                          },
+                        ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text('Rauschsperre (SQL)', style: TextStyle(fontSize: 11, color: Colors.grey)),
+                          Text('Stufe ${omm.omm446Squelch}', style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF00F2FE))),
+                        ],
+                      ),
+                      Slider(
+                        value: omm.omm446Squelch.toDouble(),
+                        min: 1,
+                        max: 8,
+                        divisions: 7,
+                        activeColor: const Color(0xFF00F2FE),
+                        onChanged: (val) => omm.setOmm446Squelch(val.round(), ble: ble),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 8),
+
+            // Sendeleistung Switcher (0.5W Bike vs 0.2W Helm)
+            Row(
+              children: [
+                const Text('Dual-Power:', style: TextStyle(fontSize: 11, color: Colors.grey)),
+                const SizedBox(width: 8),
+                ChoiceChip(
+                  label: const Text('0.5W Bike (12V)', style: TextStyle(fontSize: 11)),
+                  selected: omm.omm446Power == 'high',
+                  selectedColor: const Color(0xFF00E676).withValues(alpha: 0.25),
+                  onSelected: (val) {
+                    if (val) omm.setOmm446Power('high', ble: ble);
+                  },
+                ),
+                const SizedBox(width: 6),
+                ChoiceChip(
+                  label: const Text('0.2W Helm (Akku)', style: TextStyle(fontSize: 11)),
+                  selected: omm.omm446Power == 'low',
+                  selectedColor: Colors.orangeAccent.withValues(alpha: 0.25),
+                  onSelected: (val) {
+                    if (val) omm.setOmm446Power('low', ble: ble);
+                  },
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 14),
+
+            // Tactile PTT Button (Hold to Talk)
+            GestureDetector(
+              onTapDown: (_) => omm.setPtt(true, ble: ble),
+              onTapUp: (_) => omm.setPtt(false, ble: ble),
+              onTapCancel: () => omm.setPtt(false, ble: ble),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 150),
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: isTx
+                        ? [const Color(0xFFFF1744), const Color(0xFFD50000)]
+                        : [const Color(0xFF132238), const Color(0xFF0E1A2C)],
+                  ),
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(
+                    color: isTx ? Colors.redAccent : const Color(0xFF00F2FE).withValues(alpha: 0.4),
+                    width: 2,
+                  ),
+                  boxShadow: isTx
+                      ? [
+                          BoxShadow(
+                            color: Colors.redAccent.withValues(alpha: 0.6),
+                            blurRadius: 16,
+                            spreadRadius: 2,
+                          )
+                        ]
+                      : [],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      isTx ? Icons.mic : Icons.mic_none,
+                      color: isTx ? Colors.white : const Color(0xFF00F2FE),
+                      size: 26,
+                    ),
+                    const SizedBox(width: 10),
+                    Text(
+                      isTx ? 'SENDE AKTIV (TX) · PTT GEDRÜCKT' : 'HALTEN ZUM SPRECHEN (PTT)',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 13,
+                        letterSpacing: 1.1,
+                        color: isTx ? Colors.white : const Color(0xFF00F2FE),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            const Divider(height: 28),
+
+            // OMM 2.4 GHz HD-Mesh Sub-Panel (PCBA 09)
+            Row(
+              children: [
+                const Icon(Icons.hub, color: Color(0xFF00E676), size: 18),
+                const SizedBox(width: 8),
+                const Text(
+                  'OMM 2.4 GHz HD-Mesh (PCBA 09)',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                ),
+                const Spacer(),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF00E676).withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Text(
+                    '${omm.omm24PeersCount} Helme im Nahfeld',
+                    style: const TextStyle(fontSize: 10, color: Color(0xFF00E676), fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                Expanded(
+                  child: DropdownButtonFormField<String>(
+                    initialValue: omm.omm24MeshMode,
+                    decoration: InputDecoration(
+                      labelText: 'Mesh-Modus',
+                      isDense: true,
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                      filled: true,
+                      fillColor: const Color(0xFF0E1422),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                    ),
+                    items: const [
+                      DropdownMenuItem(value: 'open', child: Text('Open Convoy', style: TextStyle(fontSize: 12))),
+                      DropdownMenuItem(value: 'private', child: Text('Private AES-128', style: TextStyle(fontSize: 12))),
+                    ],
+                    onChanged: (val) {
+                      if (val != null) omm.setOmm24MeshMode(val, ble: ble);
+                    },
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: DropdownButtonFormField<int>(
+                    initialValue: omm.omm24Channel,
+                    decoration: InputDecoration(
+                      labelText: 'Mesh-Kanal',
+                      isDense: true,
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                      filled: true,
+                      fillColor: const Color(0xFF0E1422),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                    ),
+                    items: List.generate(16, (i) => i + 1).map((ch) {
+                      return DropdownMenuItem<int>(
+                        value: ch,
+                        child: Text('Kanal $ch (2.4 GHz)', style: const TextStyle(fontSize: 12)),
+                      );
+                    }).toList(),
+                    onChanged: (val) {
+                      if (val != null) omm.setOmm24Channel(val, ble: ble);
+                    },
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                const Text('Intercom Lautstärke:', style: TextStyle(fontSize: 11, color: Colors.grey)),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Slider(
+                    value: omm.omm24Volume.toDouble(),
+                    min: 0,
+                    max: 100,
+                    divisions: 20,
+                    activeColor: const Color(0xFF00E676),
+                    onChanged: (val) => omm.setOmm24Volume(val.round(), ble: ble),
+                  ),
+                ),
+                Text('${omm.omm24Volume}%', style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF00E676))),
+              ],
+            ),
           ],
         ),
       ),
