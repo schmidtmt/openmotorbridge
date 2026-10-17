@@ -97,7 +97,7 @@ static const double OMM446_CHANNEL_FREQS[OMM446_NUM_CHANNELS] = {
 };
 
 // Standard CTCSS Subtone Frequencies (Hz * 10)
-static const uint16_t OMM446_CTCSS_TONES[39] = {
+static const uint16_t OMM446_CTCSS_TONES[40] = {
     0,     // 0 = Off
     670,   693,   719,   744,   770,   797,   825,   854,   885,   915,
     948,   974,   1000,  1035,  1072,  1109,  1148,  1188,  1230,  1273,

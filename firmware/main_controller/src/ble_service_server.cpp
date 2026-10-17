@@ -10,8 +10,7 @@
 #include "services/gap/ble_svc_gap.h"
 #include "services/gatt/ble_svc_gatt.h"
 #include "audio_dsp_pipeline.h"
-#include "opto_pulse_sequencer.h"
-#include "cartridge_onewire.h"
+#include "uwb_cartridge_dispatcher.h"
 #include "omm_flasher.h"
 #include "esp_now_front_node_client.h"
 #include "gnss_omm_bridge.h"
@@ -49,22 +48,22 @@ static int gatt_svr_chr_access_omb(uint16_t conn_handle, uint16_t attr_handle,
         ESP_LOGI(TAG, "GATT Control Command received: 0x%02X 0x%02X", cmd[0], cmd[1]);
         if (cmd[0] == 0x01) { // Change Audio Mode
             audio_set_operation_mode((AudioOperationMode)cmd[1]);
-        } else if (cmd[0] == 0x02) { // Trigger Port 1 Mesh Toggle
-            opto_port1_toggle_mesh();
-        } else if (cmd[0] == 0x03) { // Trigger Port 1 Channel Next
-            opto_port1_channel_next();
-        } else if (cmd[0] == 0x04) { // Trigger Port 2 Channel Next
-            opto_port2_channel_next();
-        } else if (cmd[0] == 0x05) { // Trigger OEM Auto-Pairing (5s Opto Hold)
-            opto_port_pairing_mode(cmd[1]);
+        } else if (cmd[0] == 0x02) { // Trigger Bay 1 Mesh Toggle
+            uwb_cartridge_toggle_mesh(UWB_NODE_CARTRIDGE_BAY1);
+        } else if (cmd[0] == 0x03) { // Trigger Bay 1 Channel Next
+            uwb_cartridge_send_opcode(UWB_NODE_CARTRIDGE_BAY1, CARTRIDGE_OPCODE_CHANNEL_NEXT, 0);
+        } else if (cmd[0] == 0x04) { // Trigger Bay 2 Channel Next
+            uwb_cartridge_send_opcode(UWB_NODE_CARTRIDGE_BAY2, CARTRIDGE_OPCODE_CHANNEL_NEXT, 0);
+        } else if (cmd[0] == 0x05) { // Trigger OEM Auto-Pairing (5s Hold)
+            uwb_cartridge_send_opcode(cmd[1] == 1 ? UWB_NODE_CARTRIDGE_BAY1 : UWB_NODE_CARTRIDGE_BAY2, CARTRIDGE_OPCODE_POWER_BOOT, 5000);
         } else if (cmd[0] == 0x06) { // Trigger OMM High-Speed UART Push
-            omm_flasher_push_from_storage("/spiffs/omm_rear.bin");
-        } else if (cmd[0] == 0x07) { // Trigger Profile Merge & Hot-Reload
-            cartridge_apply_profile_merge(cmd[1], (cmd[1] == 1) ? "sena_spider_x" : "cardo_dmc_gen2", 0.0f);
-        } else if (cmd[0] == 0x08) { // Trigger Port 1 Group Mesh Toggle (3s Hold, S. 29)
-            opto_port1_toggle_group_mesh();
+            omm_flasher_push_file("/spiffs/omm_rear.bin");
+        } else if (cmd[0] == 0x07) { // Trigger Bay Power Cycle / Boot
+            uwb_cartridge_send_opcode(cmd[1] == 1 ? UWB_NODE_CARTRIDGE_BAY1 : UWB_NODE_CARTRIDGE_BAY2, CARTRIDGE_OPCODE_POWER_BOOT, 0);
+        } else if (cmd[0] == 0x08) { // Trigger Bay 1 Group Mesh Toggle (3s Hold)
+            uwb_cartridge_send_opcode(UWB_NODE_CARTRIDGE_BAY1, CARTRIDGE_OPCODE_OPEN_GROUP_SW, 3000);
         } else if (cmd[0] == 0x09) { // Smart Cartridge Opcode Dispatch (cmd[1] = port, cmd[2] = opcode)
-            smart_cartridge_send_cmd(cmd[1], cmd[2]);
+            uwb_cartridge_send_opcode(cmd[1] == 1 ? UWB_NODE_CARTRIDGE_BAY1 : UWB_NODE_CARTRIDGE_BAY2, (UwbCartridgeOpcode)cmd[2], 0);
         } else if (cmd[0] == 0x10) { // Action-Cam: REC Start/Stop Toggle
             esp_now_front_node_cam_toggle_rec();
         } else if (cmd[0] == 0x11) { // Action-Cam: HiLight Bookmark Tag
@@ -103,7 +102,7 @@ static int gatt_svr_chr_access_omb(uint16_t conn_handle, uint16_t attr_handle,
             bt_audio_start_scan(cmd[1], 10);
         } else if (cmd[0] == 0x26) { // Headset Pair
             ESP_LOGI(TAG, "GATT: Headset Pair MAC requested");
-            if (rc > 7) {
+            if (len > 7) {
                 bt_audio_pair_device(cmd[1], &cmd[2]);
             }
         } else if (cmd[0] == 0x27) { // Headset Disconnect

@@ -121,7 +121,8 @@ bool EspNowBridge::set_peer_mac(const uint8_t* mac) {
     return true;
 }
 
-void EspNowBridge::on_data_sent(const uint8_t* mac_addr, esp_now_send_status_t status) {
+void EspNowBridge::on_data_sent(const esp_now_send_info_t* tx_info, esp_now_send_status_t status) {
+    (void)tx_info;
     EspNowBridge& self = instance();
     if (status == ESP_NOW_SEND_SUCCESS) {
         self.m_tx_success_count++;

@@ -4,8 +4,6 @@ idf_component_register(
         "audio_dsp_pipeline.cpp"
         "ble_service_server.cpp"
         "ble_handlebar_client.cpp"
-        "cartridge_onewire.cpp"
-        "opto_pulse_sequencer.cpp"
         "sdio_ring_buffer.cpp"
         "webdav_uploader.cpp"
         "gnss_omm_bridge.cpp"
@@ -30,12 +28,12 @@ idf_component_register(
         nvs_flash 
         esp_event 
         esp_wifi 
-        esp_now
         esp_http_client 
         driver 
         esp_adc
         fatfs 
         json
-        nimble
+        bt
         uwb_backbone
+    WHOLE_ARCHIVE
 )

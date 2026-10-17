@@ -46,20 +46,13 @@ static UwbNodeType detect_bay_node() {
 // Send Initial Cartridge Announce Frame to Central Box
 // -----------------------------------------------------------------------------
 static void send_cartridge_announce() {
-    UwbCartridgeAnnouncePkt pkt = {};
-    pkt.hardware_class = 0x01; // Klasse A (Smart Mechatronics)
-    pkt.model_id = s_model_id;
-    pkt.status_flags = 0x01;   // Intercom mounted & ready
-    pkt.roaming_key_id = 0x00; // Local vehicle master
+    uint64_t uid = 0;
+    esp_read_mac(reinterpret_cast<uint8_t*>(&uid), ESP_MAC_WIFI_STA);
 
-    // Fetch unique factory MAC / UID
-    esp_read_mac(reinterpret_cast<uint8_t*>(&pkt.cartridge_uid), ESP_MAC_WIFI_STA);
+    ESP_LOGI(TAG, "Broadcasting Cartridge Announce: Class=0x01, Model=0x%04X, UID=0x%016llX",
+             s_model_id, (unsigned long long)uid);
 
-    ESP_LOGI(TAG, "Broadcasting Cartridge Announce: Class=0x%02X, Model=0x%04X, UID=0x%016llX",
-             pkt.hardware_class, pkt.model_id, (unsigned long long)pkt.cartridge_uid);
-
-    UwbVehicleBackbone::instance().send_packet(UWB_NODE_CENTRAL_BOX, UWB_PKT_CARTRIDGE_ANNOUNCE,
-                                               &pkt, sizeof(pkt));
+    UwbVehicleBackbone::instance().send_cartridge_announce(0x01, s_model_id, uid, 3300);
 }
 
 #include "cartridge_ble_profile.h"
@@ -113,43 +106,44 @@ static esp_err_t execute_smart_command(uint8_t opcode, uint16_t duration_ms) {
 // -----------------------------------------------------------------------------
 // Opcode Execution Callback (Dispatched from Central Box via UWB)
 // -----------------------------------------------------------------------------
-static void on_uwb_packet_received(const uint8_t* payload, size_t len, UwbNodeType source) {
-    if (!payload || len < sizeof(UwbBackboneHeader)) return;
-    const UwbBackboneHeader* hdr = reinterpret_cast<const UwbBackboneHeader*>(payload);
+static void on_cartridge_opcode_received(const UwbCartridgeOpcodePkt& op, UwbNodeType source) {
+    ESP_LOGI(TAG, "UWB Opcode RX from 0x%02X: Opcode=0x%02X, Pulse=%u ms",
+             (uint8_t)source, op.opcode, op.pulse_duration_ms);
 
-    if (hdr->packet_type == UWB_PKT_CARTRIDGE_OPCODE) {
-        if (len >= sizeof(UwbBackboneHeader) + sizeof(UwbCartridgeOpcodePkt)) {
-            const UwbCartridgeOpcodePkt* op = reinterpret_cast<const UwbCartridgeOpcodePkt*>(
-                payload + sizeof(UwbBackboneHeader));
+    esp_err_t err = execute_smart_command(op.opcode, op.pulse_duration_ms);
 
-            ESP_LOGI(TAG, "UWB Opcode RX from 0x%02X: Opcode=0x%02X, Param=%u ms",
-                     (uint8_t)source, op->opcode, op->param_duration_ms);
+    // Send Acknowledgment back to Central Box
+    uint16_t exec_us = static_cast<uint16_t>((op.pulse_duration_ms > 0 ? op.pulse_duration_ms : 150) * 1000);
+    uint8_t act_mask = CartridgeMechatronics::instance().get_active_mask();
+    uint8_t result = (err == ESP_OK) ? 0x00 : 0x01; // 0x00 = Success
 
-            esp_err_t err = execute_smart_command(op->opcode, op->param_duration_ms);
+    UwbVehicleBackbone::instance().send_cartridge_ack(UWB_NODE_CENTRAL_BOX,
+                                                      op.seq_token,
+                                                      op.opcode,
+                                                      result,
+                                                      act_mask,
+                                                      exec_us);
+}
 
-            // Send Acknowledgment back to Central Box
-            UwbCartridgeAckPkt ack = {};
-            ack.opcode = op->opcode;
-            ack.result_code = (err == ESP_OK) ? 0x00 : 0x01; // 0x00 = Success
-            ack.execution_time_ms = op->param_duration_ms > 0 ? op->param_duration_ms : 150;
-            ack.current_button_state = CartridgeMechatronics::instance().get_active_mask();
+static void on_generic_packet_received(UwbBackbonePktType type, const uint8_t* payload, size_t len, UwbNodeType source) {
+    (void)source;
+    if (type == UWB_PKT_AUDIO_STREAM_DOWN && len >= sizeof(UwbAudioStreamDownPkt)) {
+        const UwbAudioStreamDownPkt* down = reinterpret_cast<const UwbAudioStreamDownPkt*>(payload);
 
-            UwbVehicleBackbone::instance().send_packet(UWB_NODE_CENTRAL_BOX, UWB_PKT_CARTRIDGE_ACK,
-                                                       &ack, sizeof(ack));
-        }
-    } else if (hdr->packet_type == UWB_PKT_AUDIO_STREAM_DOWN) {
-        if (len >= sizeof(UwbBackboneHeader) + sizeof(UwbAudioStreamDownPkt)) {
-            const UwbAudioStreamDownPkt* down = reinterpret_cast<const UwbAudioStreamDownPkt*>(
-                payload + sizeof(UwbBackboneHeader));
+        // 1. Sub-Kanal 2: Zero-Latency Voice (< 1 ms via ES8388 DAC direct to Intercom Mic Pin)
+        int16_t voice_buf[UWB_AUDIO_DOWN_VOICE_SAMPLES];
+        memcpy(voice_buf, down->sub_voice, sizeof(voice_buf));
+        CartridgeAudioCodec::instance().write_voice_mic(voice_buf, UWB_AUDIO_DOWN_VOICE_SAMPLES);
 
-            // 1. Sub-Kanal 2: Zero-Latency Voice (< 1 ms via ES8388 DAC direct to Intercom Mic Pin)
-            CartridgeAudioCodec::instance().write_voice_mic(down->sub_voice, UWB_AUDIO_DOWN_VOICE_SAMPLES);
-
-            // 2. Sub-Kanal 0 & 1: Stereo Media to Bluetooth A2DP Source buffer (for native Mesh Music Sharing)
-            CartridgeAudioCodec::instance().push_music_samples(down->sub_music_l, down->sub_music_r, UWB_AUDIO_DOWN_MUSIC_SAMPLES);
-        }
+        // 2. Sub-Kanal 0 & 1: Stereo Media to Bluetooth A2DP Source buffer (for native Mesh Music Sharing)
+        int16_t music_l_buf[UWB_AUDIO_DOWN_MUSIC_SAMPLES];
+        int16_t music_r_buf[UWB_AUDIO_DOWN_MUSIC_SAMPLES];
+        memcpy(music_l_buf, down->sub_music_l, sizeof(music_l_buf));
+        memcpy(music_r_buf, down->sub_music_r, sizeof(music_r_buf));
+        CartridgeAudioCodec::instance().push_music_samples(music_l_buf, music_r_buf, UWB_AUDIO_DOWN_MUSIC_SAMPLES);
     }
 }
+
 
 // -----------------------------------------------------------------------------
 // Real-Time Audio Upstream Task (Intercom Headset Out -> UWB Central Box)
@@ -238,7 +232,8 @@ extern "C" void app_main(void) {
     };
 
     UwbVehicleBackbone::instance().init(s_local_bay_node, &dw_cfg);
-    UwbVehicleBackbone::instance().set_raw_rx_callback(on_uwb_packet_received);
+    UwbVehicleBackbone::instance().set_cartridge_opcode_callback(on_cartridge_opcode_received);
+    UwbVehicleBackbone::instance().set_generic_packet_callback(on_generic_packet_received);
     UwbVehicleBackbone::instance().start_task(22, 0);
 
     // 5. Send initial Announce frame to Central Box

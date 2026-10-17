@@ -7,6 +7,7 @@
 #include "driver/spi_master.h"
 #include "driver/gpio.h"
 #include "dw3110_regs.h"
+#include "uwb_backbone_types.h"
 
 #ifdef __cplusplus
 extern "C" {

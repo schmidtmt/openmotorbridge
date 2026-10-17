@@ -61,7 +61,7 @@ void gnss_bridge_update_from_telemetry(double lat, double lon, float alt, float 
         sdio_track_append_point(lat, lon, alt, speed, 0.0f, s_latest_gnss.utc_time);
 
         // Feed GNSS context to Astronomical Solar/Tunnel Dimmer
-        radar_update_gnss_context((float)lat, (float)lon, s_latest_gnss.utc_time, true);
+        radar_update_gnss_context((float)lat, (float)lon, (uint32_t)now_sec, true);
 
         // Feed GNSS altitude and speed to Autarkic Barometric Weather Trend
         baro_weather_update(1013.25f, alt, 20.0f, speed);

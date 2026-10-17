@@ -8,4 +8,5 @@ idf_component_register(
         driver
         nvs_flash
         uwb_backbone
+    WHOLE_ARCHIVE
 )

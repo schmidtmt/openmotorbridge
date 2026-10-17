@@ -1,5 +1,4 @@
 #include "hardware_inventory.h"
-#include "cartridge_onewire.h"
 #include "uwb_cartridge_dispatcher.h"
 #include "gnss_omm_bridge.h"
 #include "esp_now_front_node_client.h"
@@ -92,12 +91,10 @@ void hw_inventory_scan_and_evaluate(void) {
 
     // 1. Bus-Scans und Präsenz-Checks
     CartridgeBayState_t bay1 = uwb_cartridge_get_bay_state(UWB_NODE_CARTRIDGE_BAY1);
-    CartridgeInfo_t pod1 = cartridge_get_info(1);
-    if (bay1.active || pod1.is_connected) current |= HW_INV_POD1;
+    if (bay1.active) current |= HW_INV_POD1;
 
     CartridgeBayState_t bay2 = uwb_cartridge_get_bay_state(UWB_NODE_CARTRIDGE_BAY2);
-    CartridgeInfo_t pod2 = cartridge_get_info(2);
-    if (bay2.active || pod2.is_connected) current |= HW_INV_POD2;
+    if (bay2.active) current |= HW_INV_POD2;
 
     bool pod3_ok = gnss_bridge_is_pod3_connected();
     if (pod3_ok) current |= HW_INV_POD3;
@@ -173,7 +170,7 @@ void hw_inventory_scan_and_evaluate(void) {
     // Pair 2: CAN-Bus (D3/D4)
     eval_hw_node(HW_INV_CAN_BUS, (current & HW_INV_CAN_BUS), true, &diag_pkt.led_states[2], &diag_pkt.led_states[3]);
     // Pair 3: Pod 1 (D5/D6)
-    eval_hw_node(HW_INV_POD1, (current & HW_INV_POD1), pod1.is_connected, &diag_pkt.led_states[4], &diag_pkt.led_states[5]);
+    eval_hw_node(HW_INV_POD1, (current & HW_INV_POD1), (current & HW_INV_POD1) != 0, &diag_pkt.led_states[4], &diag_pkt.led_states[5]);
     // Pair 4: BSD Spiegel Links (D7/D8)
     eval_hw_node(HW_INV_FRONT_NODE, (current & HW_INV_FRONT_NODE), true, &diag_pkt.led_states[6], &diag_pkt.led_states[7]);
     // Pair 5: TPMS Vorne (D9/D10)
@@ -189,7 +186,7 @@ void hw_inventory_scan_and_evaluate(void) {
     eval_hw_node(HW_INV_RADAR, (current & HW_INV_RADAR), true, &diag_pkt.led_states[16], &diag_pkt.led_states[17]);
 
     // Pair 10: Pod 2 (D19/D20)
-    eval_hw_node(HW_INV_POD2, (current & HW_INV_POD2), pod2.is_connected, &diag_pkt.led_states[18], &diag_pkt.led_states[19]);
+    eval_hw_node(HW_INV_POD2, (current & HW_INV_POD2), (current & HW_INV_POD2) != 0, &diag_pkt.led_states[18], &diag_pkt.led_states[19]);
     // Pair 11: Pod 3 Backbone (D21/D22)
     eval_hw_node(HW_INV_POD3, pod3_ok, true, &diag_pkt.led_states[20], &diag_pkt.led_states[21]);
     // Pair 12: BSD Spiegel Rechts (D23/D24)

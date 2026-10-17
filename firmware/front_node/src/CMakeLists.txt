@@ -19,11 +19,11 @@ idf_component_register(
         esp_timer
         esp_wifi
         esp_netif
-        esp_now
         driver
         nvs_flash
         app_update
         mbedtls
         bt
         uwb_backbone
+    WHOLE_ARCHIVE
 )

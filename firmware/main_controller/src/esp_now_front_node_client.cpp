@@ -5,7 +5,7 @@
 #include "esp_timer.h"
 #include "nvs_flash.h"
 #include "nvs.h"
-#include "opto_pulse_sequencer.h"
+#include "uwb_vehicle_backbone.h"
 #include "audio_dsp_pipeline.h"
 #include "can_bus_manager.h"
 #include <string.h>
@@ -29,10 +29,14 @@ enum FrontNodePacketType : uint8_t {
     PKT_TYPE_CAM_SCAN_RES    = 0x07,
     PKT_TYPE_BINDING_BEACON  = 0x08,
     PKT_TYPE_BINDING_ACK     = 0x09,
+    PKT_TYPE_BSD_TRIGGER     = 0x0A,
+    PKT_TYPE_COCKPIT_STATUS  = 0x0B,
     PKT_TYPE_CMD_POWER_CYCLE = 0x10,
     PKT_TYPE_CMD_CONFIG      = 0x11,
     PKT_TYPE_CAM_CMD         = 0x12,
-    PKT_TYPE_CMD_UNBIND      = 0x13
+    PKT_TYPE_CMD_UNBIND      = 0x13,
+    PKT_TYPE_CMD_AUX_LIGHT   = 0x14,
+    PKT_TYPE_CMD_CAN_TERM    = 0x15
 };
 
 static const uint8_t s_broadcast_mac[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
@@ -153,8 +157,8 @@ static void on_esp_now_recv(const esp_now_recv_info_t* recv_info, const uint8_t*
             if (len >= 3) {
                 bool pressed = (data[2] != 0);
                 ESP_LOGI(TAG, "⚡ Zero-Latency PTT from Front Node: %s", pressed ? "DOWN" : "UP");
-                // Trigger intercom optocoupler keying on Port 1 or Port 2
-                opto_trigger_port_ptt(1, pressed);
+                // Forward PTT event to UWB Backbone (Smart Cartridges)
+                UwbVehicleBackbone::instance().send_ptt_event(UWB_BTN_INTERCOM_PTT, pressed ? UWB_PTT_EDGE_DOWN : UWB_PTT_EDGE_UP, 0, 100);
             }
             break;
 

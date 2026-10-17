@@ -13,4 +13,5 @@ idf_component_register(
         app_update
         mbedtls
         uwb_backbone
+    WHOLE_ARCHIVE
 )

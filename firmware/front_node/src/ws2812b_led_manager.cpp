@@ -1,5 +1,7 @@
 #include "ws2812b_led_manager.h"
 #include <math.h>
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 #include "esp_log.h"
 #include "esp_cpu.h"
 #include "driver/gpio.h"

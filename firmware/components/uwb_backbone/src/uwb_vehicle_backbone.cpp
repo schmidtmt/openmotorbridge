@@ -55,6 +55,7 @@ esp_err_t UwbVehicleBackbone::init(UwbNodeType local_node_type, const dw3110_con
         default_cfg.pan_id = UWB_BACKBONE_PAN_ID;
         default_cfg.short_addr = (uint16_t)m_local_node_type;
 
+#if CONFIG_IDF_TARGET_ESP32S3
         if (m_local_node_type == UWB_NODE_CENTRAL_BOX) {
             // PCBA 01 (Zentralbox)
             default_cfg.pin_sck  = GPIO_NUM_36;
@@ -72,6 +73,7 @@ esp_err_t UwbVehicleBackbone::init(UwbNodeType local_node_type, const dw3110_con
             default_cfg.pin_irq  = GPIO_NUM_39;
             default_cfg.pin_rst  = GPIO_NUM_40;
         } else {
+#endif
             // Smart Cartridge (PCBA 03) oder Radar (PCBA 08)
             default_cfg.pin_sck  = GPIO_NUM_4;
             default_cfg.pin_mosi = GPIO_NUM_5;
@@ -79,7 +81,9 @@ esp_err_t UwbVehicleBackbone::init(UwbNodeType local_node_type, const dw3110_con
             default_cfg.pin_cs   = GPIO_NUM_7;
             default_cfg.pin_irq  = GPIO_NUM_8;
             default_cfg.pin_rst  = GPIO_NUM_9;
+#if CONFIG_IDF_TARGET_ESP32S3
         }
+#endif
     }
 
     // Low-Level DW3110 Driver starten
@@ -436,7 +440,7 @@ esp_err_t UwbVehicleBackbone::send_heartbeat(uint16_t vbus_mv, int16_t temp_c_10
         .uptime_sec = (uint32_t)(esp_timer_get_time() / 1000000),
         .vbus_mv = vbus_mv,
         .temperature_c_10 = temp_c_10,
-        .ranging_dist_cm = (m_local_node_type == UWB_NODE_FRONT_NODE) ? 140 : 80,
+        .ranging_dist_cm = static_cast<uint16_t>((m_local_node_type == UWB_NODE_FRONT_NODE) ? 140 : 80),
         .rssi_dbm = -72,
         .link_quality = 98
     };

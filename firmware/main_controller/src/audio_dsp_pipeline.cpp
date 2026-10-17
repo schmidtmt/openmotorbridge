@@ -188,6 +188,8 @@ void audio_set_front_wind_noise_spl(float spl_dba) {
 // -----------------------------------------------------------------------------
 static float s_sidetone_gain_db = -12.0f;
 static float s_sidetone_linear = 0.251f; // powf(10.0f, -12/20)
+static bool s_privacy_mute_enabled = true;
+static bool s_privacy_mute_active = false;
 
 void audio_set_sidetone_gain(float gain_db) {
     s_sidetone_gain_db = gain_db;
@@ -548,7 +550,7 @@ void task_audio_dsp(void *pvParameters) {
         int16_t music_r_sub[UWB_AUDIO_DOWN_MUSIC_SAMPLES];
 
         for (int v = 0; v < UWB_AUDIO_DOWN_VOICE_SAMPLES; v++) {
-            voice_sub[v] = s_privacy_mute_active ? 0 : (int16_t)(s_sidetone_gain * rx_buffer[v * 2]);
+            voice_sub[v] = s_privacy_mute_active ? 0 : (int16_t)(s_sidetone_linear * rx_buffer[v * 2]);
         }
         for (int m = 0; m < UWB_AUDIO_DOWN_MUSIC_SAMPLES; m++) {
             music_l_sub[m] = (int16_t)(rx_buffer[m * 2] * s_ducking_factor);
@@ -561,9 +563,6 @@ void task_audio_dsp(void *pvParameters) {
                                           s_ducking_factor < 0.5f, s_vox_active, s_radar_alert_active);
     }
 }
-
-static bool s_privacy_mute_enabled = true;
-static bool s_privacy_mute_active = false;
 
 void audio_set_privacy_mute_config(bool enabled) {
     s_privacy_mute_enabled = enabled;

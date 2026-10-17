@@ -31,6 +31,8 @@ esp_err_t ble_server_init(void);
 /**
  * @brief Sendet ein Telemetrie-Update an verbundene PWA-Clients
  */
+void ble_server_notify_telemetry(const SystemTelemetry_t *telemetry);
+
 /**
  * @brief Reifendruck- und Temperaturdaten (TPMS)
  */

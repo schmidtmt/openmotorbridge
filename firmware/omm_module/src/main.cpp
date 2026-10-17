@@ -105,8 +105,8 @@ static void supervision_task(void *pvParameters) {
             OmmBleTelemetry_t telem = {
                 .battery_pct = pwr.battery_pct,
                 .is_charging = static_cast<uint8_t>(pwr.is_charging ? 1 : 0),
-                .vbus_mv = pwr.vbus_mv,
-                .vbat_mv = pwr.vbat_mv,
+                .vbus_mv = static_cast<uint16_t>(pwr.is_vbus_present ? 5000 : 0),
+                .vbat_mv = static_cast<uint16_t>(pwr.v_bat * 1000.0f),
                 .mesh_rssi_dbm = -65,
                 .connected_peers = 1
             };

@@ -19,8 +19,8 @@
 static const char *TAG = "RADAR_PROC";
 
 #define RADAR_UART_NUM          UART_NUM_2
-#define RADAR_UART_TX_PIN       GPIO_NUM_23  // RESERVE_GPIO_B
-#define RADAR_UART_RX_PIN       GPIO_NUM_22  // RESERVE_GPIO_A
+#define RADAR_UART_TX_PIN       GPIO_NUM_43  // RESERVE_GPIO_B
+#define RADAR_UART_RX_PIN       GPIO_NUM_44  // RESERVE_GPIO_A
 #define RADAR_UART_BAUDRATE     115200
 #define RADAR_RX_BUF_SIZE       1024
 

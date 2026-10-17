@@ -5,7 +5,7 @@
 #include "esp_log.h"
 #include "esp_event.h"
 #include "esp_mac.h"
-#include "lwip/ip4_addr.h"
+#include "esp_timer.h"
 #include <string.h>
 #include <stdio.h>
 
@@ -240,9 +240,9 @@ esp_err_t cockpit_wifi_fallback_init(void) {
         // Configure static IP for Front Node SoftAP (192.168.4.1)
         esp_netif_ip_info_t ip_info;
         memset(&ip_info, 0, sizeof(ip_info));
-        ip4addr_aton(COCKPIT_WIFI_AP_IP, &ip_info.ip);
-        ip4addr_aton(COCKPIT_WIFI_AP_GW, &ip_info.gw);
-        ip4addr_aton(COCKPIT_WIFI_AP_NETMASK, &ip_info.netmask);
+        esp_netif_str_to_ip4(COCKPIT_WIFI_AP_IP, &ip_info.ip);
+        esp_netif_str_to_ip4(COCKPIT_WIFI_AP_GW, &ip_info.gw);
+        esp_netif_str_to_ip4(COCKPIT_WIFI_AP_NETMASK, &ip_info.netmask);
 
         esp_netif_dhcps_stop(s_ap_netif);
         esp_netif_set_ip_info(s_ap_netif, &ip_info);

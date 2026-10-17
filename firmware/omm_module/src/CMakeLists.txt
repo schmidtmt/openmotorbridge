@@ -18,4 +18,5 @@ idf_component_register(
         esp_pm
         freertos
         log
+    WHOLE_ARCHIVE
 )

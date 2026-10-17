@@ -11,8 +11,6 @@
 #include "esp_adc/adc_cali_scheme.h"
 
 #include "audio_dsp_pipeline.h"
-#include "cartridge_onewire.h"
-#include "opto_pulse_sequencer.h"
 #include "ble_service_server.h"
 #include "ble_handlebar_client.h"
 #include "sdio_ring_buffer.h"
@@ -314,9 +312,7 @@ extern "C" void app_main(void) {
 
     // 4. Subsysteme initialisieren
     hw_inventory_init();
-    opto_sequencer_init();
     audio_dsp_init();
-    cartridge_onewire_init();
     adr_ekf_init();
     sdio_storage_init();
     webdav_uploader_init();

@@ -28,6 +28,7 @@ public:
     bool is_bus_healthy() const;
     bool is_bus_connected() const { return m_state == CAN_STATE_CONNECTED; }
     CockpitCanState get_state() const { return m_state; }
+    uint32_t get_rx_frame_count() const { return m_rx_count; }
 
 private:
     CockpitCanManager();

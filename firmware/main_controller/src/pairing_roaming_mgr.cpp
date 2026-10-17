@@ -16,7 +16,7 @@ static const char *TAG = "PAIR_ROAM";
 static PairingManagerState_t s_pairing_state = PAIRING_STATE_IDLE;
 static uint32_t s_window_end_time_ms = 0;
 static uint64_t s_active_nonce = 0;
-static uint32_t s_vehicle_vin_hash = 0x0MB96001; // Default vehicle identity hash
+static uint32_t s_vehicle_vin_hash = 0x00B96001; // Default vehicle identity hash
 
 // Autorisierte Node-UIDs im Speicher (Indexiert nach UwbNodeType 1..5)
 static uint64_t s_authorized_uids[6] = {0};

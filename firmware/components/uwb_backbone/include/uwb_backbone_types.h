@@ -14,9 +14,8 @@ extern "C" {
 // =============================================================================
 
 #define UWB_BACKBONE_MAGIC          0x55  // Framing Sync Byte ('U')
-#define UWB_BACKBONE_PAN_ID         0x0MB1 // Default PAN ID (OpenMotorBridge Network 1)
+#define UWB_BACKBONE_PAN_ID         0x1968 // Default PAN ID (OpenMotorBridge Network 1)
 #define UWB_BACKBONE_MAX_PAYLOAD    128   // Maximum payload size per UWB frame
-#define UWB_BACKBONE_MAX_FRAME_SIZE (sizeof(UwbBackboneHeader) + UWB_BACKBONE_MAX_PAYLOAD + 2) // +2 for CRC16
 
 // -----------------------------------------------------------------------------
 // Authorized Node Identifiers across the Vehicle Topology
@@ -83,6 +82,8 @@ typedef struct __attribute__((packed)) {
     uint32_t timestamp_us;    // Precision microsecond timestamp
     uint8_t  payload_len;     // Length of following payload in bytes
 } UwbBackboneHeader;
+
+#define UWB_BACKBONE_MAX_FRAME_SIZE (sizeof(UwbBackboneHeader) + UWB_BACKBONE_MAX_PAYLOAD + 2) // +2 for CRC16
 
 // -----------------------------------------------------------------------------
 // 1. Node Management & Heartbeat Payloads

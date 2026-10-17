@@ -34,7 +34,15 @@ static const char *TAG = "RADAR2_SUBMCU";
 
 static SemaphoreHandle_t s_radar_data_mutex = NULL;
 static RadarTelemetryPacket_t s_current_telemetry;
-static RadarCommandPacket_t s_current_command;
+
+typedef struct {
+    uint8_t macro_mode;
+    uint8_t dimming_pwm_pct;
+    bool bsd_left_active;
+    bool bsd_right_active;
+} RadarActiveCommand_t;
+
+static RadarActiveCommand_t s_current_command;
 static uint16_t s_radar_frame_index = 0;
 static uint32_t s_last_mr20_rx_time_ms = 0;
 
@@ -42,11 +50,12 @@ static uint32_t s_last_mr20_rx_time_ms = 0;
 static uint16_t s_enabled_macros = (RADAR_MACRO_POST_SWEEP_EN | RADAR_MACRO_ESS_STROBE_EN |
                                     RADAR_MACRO_HAZARD_BEACON_EN | RADAR_MACRO_THEFT_STROBE_EN |
                                     RADAR_MACRO_AMBIENT_GLOW_EN);
-static uint8_t s_ess_thresh_pct = 60;
-static uint32_t s_post_start_ms = 0;
-static bool s_post_running = true;
-static bool s_diag_override = false;
-static uint8_t s_diag_led_states[NUM_LEDS];
+static uint8_t s_ess_thresh_pct __attribute__((unused)) = 60;
+static uint32_t s_post_start_ms __attribute__((unused)) = 0;
+static bool s_post_running __attribute__((unused)) = true;
+static bool s_diag_override __attribute__((unused)) = false;
+static uint8_t s_diag_led_states[NUM_LEDS] __attribute__((unused));
+
 
 // Neopixel color state
 typedef struct {
@@ -87,9 +96,9 @@ static void parse_mr20_frame(const uint8_t *buf, size_t len) {
             uint8_t frame_len = buf[i + 2];
             uint8_t frame_type = buf[i + 3];
 
-            if (i + frame_len <= len && frame_type == MR20_FRAME_TARGET_LIST) {
+            if (i + frame_len <= len && frame_type == MR20_RAW_FRAME_TYPE_TARGETS) {
                 uint8_t target_count = buf[i + 4];
-                if (target_count > MR20_MAX_TARGETS) target_count = MR20_MAX_TARGETS;
+                if (target_count > 8) target_count = 8;
 
                 if (s_radar_data_mutex && xSemaphoreTake(s_radar_data_mutex, pdMS_TO_TICKS(5)) == pdTRUE) {
                     s_current_telemetry.target_count = target_count;
@@ -102,31 +111,30 @@ static void parse_mr20_frame(const uint8_t *buf, size_t len) {
                             int16_t dist_raw = (int16_t)((buf[offset + 1] << 8) | buf[offset + 2]);
                             int16_t speed_raw = (int16_t)((buf[offset + 3] << 8) | buf[offset + 4]);
                             int16_t azim_raw = (int16_t)((buf[offset + 5] << 8) | buf[offset + 6]);
-                            uint8_t snr = buf[offset + 7];
+                            uint8_t snr __attribute__((unused)) = buf[offset + 7];
 
-                            s_current_telemetry.targets[t].target_id = id;
+                            s_current_telemetry.targets[t].id = id;
                             s_current_telemetry.targets[t].distance_cm = (uint16_t)(dist_raw * 10);
-                            s_current_telemetry.targets[t].rel_speed_mps_100 = speed_raw;
-                            s_current_telemetry.targets[t].azimuth_deg_10 = azim_raw;
-                            s_current_telemetry.targets[t].snr_db = snr;
+                            s_current_telemetry.targets[t].rel_speed_cms = speed_raw;
+                            s_current_telemetry.targets[t].azimuth_cdeg = (int16_t)(azim_raw * 10);
 
                             // Calculate TTC (Time to collision) in milliseconds
                             if (speed_raw < -50 && dist_raw > 0) { // Approaching vehicle (relative speed negative)
                                 float dist_m = (float)dist_raw * 0.1f;
                                 float speed_mps = fabsf((float)speed_raw * 0.01f);
                                 float ttc_s = dist_m / speed_mps;
-                                s_current_telemetry.targets[t].ttc_ms = (uint16_t)(ttc_s * 1000.0f);
+                                s_current_telemetry.targets[t].ttc_tenths_s = (uint8_t)(ttc_s * 10.0f);
 
                                 if (ttc_s < 1.5f) {
                                     s_current_telemetry.targets[t].threat_level = RADAR_THREAT_LVL_RED;
                                 } else if (ttc_s < 3.0f) {
                                     s_current_telemetry.targets[t].threat_level = RADAR_THREAT_LVL_AMBER;
                                 } else {
-                                    s_current_telemetry.targets[t].threat_level = RADAR_THREAT_LVL_NONE;
+                                    s_current_telemetry.targets[t].threat_level = RADAR_THREAT_LVL_CLEAR;
                                 }
                             } else {
-                                s_current_telemetry.targets[t].ttc_ms = 0xFFFF; // No collision threat
-                                s_current_telemetry.targets[t].threat_level = RADAR_THREAT_LVL_NONE;
+                                s_current_telemetry.targets[t].ttc_tenths_s = 255; // No collision threat
+                                s_current_telemetry.targets[t].threat_level = RADAR_THREAT_LVL_CLEAR;
                             }
                         }
                     }
@@ -153,7 +161,7 @@ static void task_mr20_rx(void *arg) {
         uint32_t now_ms = (uint32_t)(esp_timer_get_time() / 1000ULL);
         if (now_ms - s_last_mr20_rx_time_ms > 1000) {
             if (s_radar_data_mutex && xSemaphoreTake(s_radar_data_mutex, pdMS_TO_TICKS(5)) == pdTRUE) {
-                s_current_telemetry.sensor_state = RADAR_SENSOR_STATE_ERROR;
+                s_current_telemetry.max_threat = RADAR_THREAT_LVL_CLEAR;
                 s_current_telemetry.target_count = 0;
                 xSemaphoreGive(s_radar_data_mutex);
             }
@@ -168,7 +176,7 @@ static void task_neopixel_halo(void *arg) {
     uint32_t frame_count = 0;
 
     while (true) {
-        uint8_t max_threat = RADAR_THREAT_LVL_NONE;
+        uint8_t max_threat = RADAR_THREAT_LVL_CLEAR;
         uint16_t enabled_macros = 0;
         uint8_t brightness_pct = 100;
         bool bsd_left = false;
@@ -180,8 +188,8 @@ static void task_neopixel_halo(void *arg) {
                     max_threat = s_current_telemetry.targets[t].threat_level;
                 }
                 if (s_current_telemetry.targets[t].threat_level >= RADAR_THREAT_LVL_AMBER) {
-                    if (s_current_telemetry.targets[t].azimuth_deg_10 < -100) bsd_left = true;
-                    if (s_current_telemetry.targets[t].azimuth_deg_10 > 100)  bsd_right = true;
+                    if (s_current_telemetry.targets[t].azimuth_cdeg < -300) bsd_left = true;
+                    if (s_current_telemetry.targets[t].azimuth_cdeg > 300)  bsd_right = true;
                 }
             }
             enabled_macros = s_enabled_macros;
@@ -264,11 +272,11 @@ static void task_uwb_radar_bridge(void *arg) {
             }
 
             for (uint8_t t = 0; t < uwb_pkt.target_count; t++) {
-                uwb_pkt.targets[t].target_id = s_current_telemetry.targets[t].target_id;
+                uwb_pkt.targets[t].target_id = s_current_telemetry.targets[t].id;
                 uwb_pkt.targets[t].distance_cm = s_current_telemetry.targets[t].distance_cm;
-                uwb_pkt.targets[t].speed_cm_s = s_current_telemetry.targets[t].rel_speed_mps_100;
-                uwb_pkt.targets[t].azimuth_deg_10 = s_current_telemetry.targets[t].azimuth_deg_10;
-                uwb_pkt.targets[t].ttc_ms = s_current_telemetry.targets[t].ttc_ms;
+                uwb_pkt.targets[t].speed_cm_s = s_current_telemetry.targets[t].rel_speed_cms;
+                uwb_pkt.targets[t].azimuth_deg_10 = (int16_t)(s_current_telemetry.targets[t].azimuth_cdeg / 10);
+                uwb_pkt.targets[t].ttc_ms = (uint16_t)(s_current_telemetry.targets[t].ttc_tenths_s * 100);
                 uwb_pkt.targets[t].threat_level = s_current_telemetry.targets[t].threat_level;
 
                 if (s_current_telemetry.targets[t].threat_level >= RADAR_THREAT_LVL_RED) {

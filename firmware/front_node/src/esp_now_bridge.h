@@ -42,7 +42,7 @@ public:
 private:
     EspNowBridge();
 
-    static void on_data_sent(const uint8_t* mac_addr, esp_now_send_status_t status);
+    static void on_data_sent(const esp_now_send_info_t* tx_info, esp_now_send_status_t status);
     static void on_data_recv(const esp_now_recv_info_t* recv_info, const uint8_t* data, int len);
 
     // NVS Persistence
