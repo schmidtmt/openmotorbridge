@@ -37,9 +37,23 @@ PCB_PATH = "hardware/kicad_pod_cartridge/openmotorbridge_pod_cartridge.kicad_pcb
 def u():
     return str(uuid.uuid4())
 
+def extract_components_from_pcb():
+    import pcbnew
+    board = pcbnew.LoadBoard(PCB_PATH)
+    comps = {}
+    for f in board.GetFootprints():
+        ref = f.GetReference()
+        comps[ref] = {
+            'value': f.GetValue(),
+            'fpid': str(f.GetFPID().GetUniStringLibId()),
+            'datasheet': f.GetFieldText('Datasheet'),
+            'description': f.GetFieldText('Description'),
+            'pads': {p.GetNumber(): p.GetNetname() for p in f.Pads()}
+        }
+    return comps
+
 def generate_schematic():
-    with open('/tmp/pcba03_pcb_exact.json') as f:
-        comps = json.load(f)
+    comps = extract_components_from_pcb()
 
     sch = []
     sch.append('(kicad_sch')
@@ -172,10 +186,10 @@ def generate_schematic():
 \t\t)''')
 
     # Connector_JST 8P + MP
-    sch.append('''\t\t(symbol "Connector_JST:JST_SH_SM08B_Shielded"
+    sch.append('''\t\t(symbol "Connector_JST:JST_SH_BM08B_Shielded"
 \t\t\t(property "Reference" "J" (at 0 12.7 0) (effects (font (size 1.27 1.27))))
 \t\t\t(property "Value" "Conn_01x08_Shielded" (at 0 -12.7 0) (effects (font (size 1.27 1.27))))
-\t\t\t(property "Footprint" "Connector_JST:JST_SH_SM08B-SRSS-TB_1x08-1MP_P1.00mm_Horizontal" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+\t\t\t(property "Footprint" "Connector_JST:JST_SH_BM08B-SRSS-TB_1x08-1MP_P1.00mm_Vertical" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
 \t\t\t(pin passive line (at -5.08 8.89 0) (length 2.54) (name "1" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
 \t\t\t(pin passive line (at -5.08 6.35 0) (length 2.54) (name "2" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
 \t\t\t(pin passive line (at -5.08 3.81 0) (length 2.54) (name "3" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
@@ -273,8 +287,8 @@ def generate_schematic():
         'H2': 'Mechanical:MountingHole_Pad',
         'H3': 'Mechanical:MountingHole_Pad',
         'H4': 'Mechanical:MountingHole_Pad',
-        'J_ACT': 'Connector_JST:JST_SH_SM08B_Shielded',
-        'J_AUDIO_PWR': 'Connector_JST:JST_SH_SM08B_Shielded',
+        'J_ACT': 'Connector_JST:JST_SH_BM08B_Shielded',
+        'J_AUDIO_PWR': 'Connector_JST:JST_SH_BM08B_Shielded',
         'J_PROG': 'Connector_PinHeader:PinHeader_1x04',
         'J_DC_IN': 'Connector:Blade_Slot_Socket_1x02',
         'Q1': 'Transistor_FET:AO3400A',
@@ -368,7 +382,7 @@ def generate_schematic():
             return {'1': (-5.08, -2.54), '2': (5.08, -2.54), '3': (-5.08, 2.54), '4': (0.0, -5.08), '5': (0.0, 5.08), '6': (-5.08, 0.0)}[pnum]
         elif sym_type == 'Connector_PinHeader:PinHeader_1x04':
             return {'1': (-5.08, -3.81), '2': (-5.08, -1.27), '3': (-5.08, 1.27), '4': (-5.08, 3.81)}[pnum]
-        elif sym_type == 'Connector_JST:JST_SH_SM08B_Shielded':
+        elif sym_type == 'Connector_JST:JST_SH_BM08B_Shielded':
             y_offsets = {'1': -8.89, '2': -6.35, '3': -3.81, '4': -1.27, '5': 1.27, '6': 3.81, '7': 6.35, '8': 8.89}
             if pnum in y_offsets:
                 return (-5.08, y_offsets[pnum])
@@ -393,12 +407,16 @@ def generate_schematic():
         val = c['value']
         fpid = c['fpid']
 
+        datasheet = c.get('datasheet', '')
+        description = c.get('description', '')
         sch.append(f'\t(symbol (lib_id "{sym_type}") (at {pos[0]:.2f} {pos[1]:.2f} 0) (unit 1)')
         sch.append('\t\t(in_bom yes) (on_board yes) (dnp no)')
         sch.append(f'\t\t(uuid "{u()}")')
         sch.append(f'\t\t(property "Reference" "{ref}" (at {pos[0]:.2f} {pos[1]-6.0:.2f} 0) (effects (font (size 1.27 1.27))))')
         sch.append(f'\t\t(property "Value" "{val}" (at {pos[0]:.2f} {pos[1]-3.5:.2f} 0) (effects (font (size 1.27 1.27))))')
         sch.append(f'\t\t(property "Footprint" "{fpid}" (at {pos[0]:.2f} {pos[1]:.2f} 0) (effects (font (size 1.27 1.27)) hide))')
+        sch.append(f'\t\t(property "Datasheet" "{datasheet}" (at {pos[0]:.2f} {pos[1]:.2f} 0) (effects (font (size 1.27 1.27)) hide))')
+        sch.append(f'\t\t(property "Description" "{description}" (at {pos[0]:.2f} {pos[1]:.2f} 0) (effects (font (size 1.27 1.27)) hide))')
 
         for pnum in sorted(c['pads'].keys(), key=lambda x: int(x) if x.isdigit() else 999):
             sch.append(f'\t\t(pin "{pnum}" (uuid "{u()}"))')

@@ -1648,7 +1648,7 @@ const BOM_PARTS = {
       "de": "PCBA 03: Universal Smart Cartridge",
       "en": "PCBA 03: Universal Smart Cartridge"
     },
-    "spec": "ESP32-C6, Qorvo DW3110 UWB, ES8388 Codec, TS5A3159, 4x AO3400A",
+    "spec": "ESP32-C6, Qorvo DW3110 UWB, ES8388 Codec, 2x BM08B-SRSS Top-Entry, J_DC_IN, 4x AO3400A",
     "source": "JLCPCB / SMT",
     "unit": "Stk.",
     "cost_eur": [
@@ -1656,8 +1656,8 @@ const BOM_PARTS = {
       10.5
     ],
     "desc": {
-      "de": "Universelle Kassetten-Trägerplatine mit 6.5 GHz UWB, ESP32-C6 & Kelvin-Grounding Audio",
-      "en": "Universal cartridge carrier board with 6.5 GHz UWB, ESP32-C6 & Kelvin-grounded audio"
+      "de": "Universelle Kassetten-Trägerplatine mit 6.5 GHz UWB, ESP32-C6, vertikalen Top-Entry JST-SH Headern & Kelvin-Grounding Audio",
+      "en": "Universal cartridge carrier board with 6.5 GHz UWB, ESP32-C6, vertical top-entry JST-SH headers & Kelvin-grounded audio"
     },
     "id_kicad": "kicad_cartridge",
     "pkg_qty": 5,
@@ -2354,7 +2354,7 @@ const BOM_PARTS = {
       "de": "J_ACT Aktuator-Kabelbaum",
       "en": "J_ACT Actuator Harness"
     },
-    "spec": "Vorkonfektioniertes 8-Pin JST-SH Kabel auf 4x 2-Pin Litzenpaare (AWG30 Silikon, 60 mm)",
+    "spec": "Vorkonfektioniertes 8-Pin JST-SH Kabel (Top-Entry, gerade Abgangsrichtung) auf 4x 2-Pin Litzenpaare (AWG30 Silikon, 60 mm)",
     "source": "Adafruit / SparkFun",
     "unit": "Stk.",
     "cost_eur": [
@@ -2362,8 +2362,8 @@ const BOM_PARTS = {
       1.2
     ],
     "desc": {
-      "de": "4 verdrillte Paare von PCBA 03 zu den 4 Hubmagneten (kein Crimpen nötig!)",
-      "en": "4 twisted pairs from PCBA 03 to the 4 solenoids (zero crimping!)"
+      "de": "4 verdrillte Paare von PCBA 03 J_ACT (vertikaler Top-Entry) zu den 4 Hubmagneten (keine 180°-Schleife, null Crimpen!)",
+      "en": "4 twisted pairs from PCBA 03 J_ACT (vertical top-entry) to the 4 solenoids (no 180° loop, zero crimping!)"
     },
     "pkg_qty": 10,
     "pkg_name": "10er Pack JST-Litzenkabel (Adafruit / COTS)"
@@ -2374,7 +2374,7 @@ const BOM_PARTS = {
       "de": "J_AUDIO_PWR Kabel Sena SPIDER X",
       "en": "J_AUDIO_PWR Cable Sena SPIDER X"
     },
-    "spec": "8-Pin JST-SH auf 3-fach Pigtail (Direct-DC, 2.5mm Mic, 3.5mm Spk, 8 cm)",
+    "spec": "8-Pin JST-SH (Top-Entry) auf 3-fach Pigtail (Direct-DC, 2.5mm Mic, 3.5mm Spk, 8 cm)",
     "source": "COTS Standard",
     "unit": "Stk.",
     "cost_eur": [
@@ -2382,8 +2382,8 @@ const BOM_PARTS = {
       1.2
     ],
     "desc": {
-      "de": "Direct-DC Speisung (3.85V) & Stereo-Audio mit Kelvin-Grounding (null Pogo-Pins)",
-      "en": "Direct-DC power (3.85V) & stereo audio with Kelvin grounding (zero pogo-pins)"
+      "de": "Direct-DC Speisung (3.85V) & Stereo-Audio mit Kelvin-Grounding direkt von oben gesteckt (null Pogo-Pins)",
+      "en": "Direct-DC power (3.85V) & stereo audio with Kelvin grounding plugged straight from top (zero pogo-pins)"
     },
     "pkg_qty": 10,
     "pkg_name": "10er Pack JST-Litzenkabel (Adafruit / COTS)"
@@ -2394,7 +2394,7 @@ const BOM_PARTS = {
       "de": "J_AUDIO_PWR Kabel Cardo Packtalk",
       "en": "J_AUDIO_PWR Cable Cardo Packtalk"
     },
-    "spec": "8-Pin JST-SH auf 3.5mm Spk, Micro-2Pin Mic & 90° USB-C 5V (10 cm)",
+    "spec": "8-Pin JST-SH (Top-Entry) auf 3.5mm Spk, Micro-2Pin Mic & 90° USB-C 5V (10 cm)",
     "source": "COTS Standard",
     "unit": "Stk.",
     "cost_eur": [
@@ -2402,8 +2402,8 @@ const BOM_PARTS = {
       4.2
     ],
     "desc": {
-      "de": "Koppelt Cardo Air-Mount Halterung mit 5V Lade- & Audiostrom ohne Brummstörungen",
-      "en": "Couples Cardo Air-Mount cradle with 5V charge & pristine audio without ground loop"
+      "de": "Koppelt Cardo Air-Mount Halterung via vertikalem Top-Entry mit 5V Lade- & Audiostrom ohne Brummstörungen",
+      "en": "Couples Cardo Air-Mount cradle via vertical top-entry with 5V charge & pristine audio without ground loop"
     },
     "pkg_qty": 1,
     "pkg_name": "Einzelkabel (Amazon / COTS)"
@@ -2414,7 +2414,7 @@ const BOM_PARTS = {
       "de": "J_AUDIO_PWR Kabel Midland Funk",
       "en": "J_AUDIO_PWR Cable Midland Radio"
     },
-    "spec": "8-Pin JST-SH auf Midland-Doppelklinke (2.5/3.5mm) & DC-Batteriedummy (10 cm)",
+    "spec": "8-Pin JST-SH (Top-Entry) auf Midland-Doppelklinke (2.5/3.5mm) & DC-Batteriedummy (10 cm)",
     "source": "COTS Standard",
     "unit": "Stk.",
     "cost_eur": [
@@ -2422,8 +2422,8 @@ const BOM_PARTS = {
       1.2
     ],
     "desc": {
-      "de": "Schaltet analogen PMR446 Sender via PTT-MOSFET mit isolierter Masse",
-      "en": "Keys analog PMR446 transmitter via PTT-MOSFET with isolated ground"
+      "de": "Schaltet analogen PMR446 Sender via PTT-MOSFET mit isolierter Masse direkt von oben gesteckt",
+      "en": "Keys analog PMR446 transmitter via PTT-MOSFET with isolated ground plugged directly from top"
     },
     "pkg_qty": 10,
     "pkg_name": "10er Pack JST-Litzenkabel (Adafruit / COTS)"
@@ -2434,7 +2434,7 @@ const BOM_PARTS = {
       "de": "J_AUDIO_PWR Kabel OMM (mit Booster-Abzweig)",
       "en": "J_AUDIO_PWR Cable OMM (with Booster Tap)"
     },
-    "spec": "8-Pin JST-SH auf 90° USB-C (5 cm) + 2-Pin 5V Booster-Pigtail (Pin 1 PGND, Pin 2 VCC_5V)",
+    "spec": "8-Pin JST-SH (Top-Entry) auf 90° USB-C (5 cm) + 2-Pin 5V Booster-Pigtail (Pin 1 PGND, Pin 2 VCC_5V)",
     "source": "COTS Standard",
     "unit": "Stk.",
     "cost_eur": [
@@ -2442,8 +2442,8 @@ const BOM_PARTS = {
       4.2
     ],
     "desc": {
-      "de": "Verbindung PCBA 03 zu OMM USB-C Port & Stromabzweig für optionalen Booster",
-      "en": "Connection PCBA 03 to OMM USB-C port & power branch for optional booster"
+      "de": "Verbindung PCBA 03 zu OMM USB-C Port (gerade von oben) & Stromabzweig für optionalen Booster",
+      "en": "Connection PCBA 03 to OMM USB-C port (straight from top) & power branch for optional booster"
     },
     "pkg_qty": 1,
     "pkg_name": "Einzelkabel (Amazon / COTS)"

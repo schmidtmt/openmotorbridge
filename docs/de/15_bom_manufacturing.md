@@ -53,8 +53,8 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 | **D1 - D4**| 1N4148WS | Diodes Inc. | SOD-323 (Top) | C2128 | 4x Freilaufdioden für Miniatur-Hubmagnete |
 | **F1** | MF-MSMF050-2 | Bourns | 1812 SMD | C22668 | PPTC 500mA Schutzsicherung |
 | **J_DC_IN** | 2-Pin Blade Socket | Automotive / COTS | 2-Pin SMD Horizontal (10.0mm Raster) | C2843553 | 2-Pin Dual-Beam Hochstrom-Schlitzbuchse für rüttelfesten DC-Stromeingang (5A) |
-| **J_ACT** | SM08B-SRSS-TB | JST | 8-Pin 1.0mm SMD | C160404 | Mechatronik-Header für 4 Hubmagnete (Top) |
-| **J_AUDIO_PWR**| SM08B-SRSS-TB | JST | 8-Pin 1.0mm SMD | C160404 | Audio- & Power-Header (Top, getrennte PGND / AGND Sternmassen) |
+| **J_ACT** | BM08B-SRSS-TB | JST | 8-Pin 1.0mm SMD Vert. | C160404 | Mechatronik-Header für 4 Hubmagnete (Top-Entry, vertikal) |
+| **J_AUDIO_PWR**| BM08B-SRSS-TB | JST | 8-Pin 1.0mm SMD Vert. | C160404 | Audio- & Power-Header (Top-Entry, vertikal, getrennte PGND / AGND Sternmassen) |
 | **ANT1** | U.FL-R-SMT-1 | Hirose | SMD Micro-Coax | C14894 | UWB-Antennenport (Taoglas FXUWB10 oder SMD-Patch) |
 
 ---
@@ -504,9 +504,9 @@ Für den Standalone-Einsatz der beiden Intercom-Module (**PCBA 09: OMM 2.4 GHz H
 | **Deutsch DTM-12 Hauptkabelbaum** | IP68/IP69K Deutsch DTM-12 COTS Fertigkabelbaum mit Raychem DR-25 | COTS / Deutsch | 1 Stk. | Zentraler Hauptanschluss für Bordnetz, CAN-Bus & DC-Zuleitungen zu den Pods |
 | **Front-Node 12V Anschlusskabel** | 2-Pin JST-PH Litzenkabel mit Posi-Tap Abzweigverbindern | COTS Standard | 1 Stk. | Lokale 12V-Cockpit-Versorgung (Standlicht/Navistecker) |
 | **JST-PH Pigtail Sortiments-Set** | 2-Pin, 3-Pin, 4-Pin JST-PH mit vormontierten Litzen | Amazon / COTS | 1 Set | CAN-Bus, Lenkertaster, Spiegel-LEDs, Qi-Lader & Actioncam |
-| **J_ACT Aktuator-Kabelbaum** | Vorkonfektioniertes 8-Pin JST-SH Kabel auf 4x 2-Pin Litzenpaare (AWG30 Silikon, 60 mm) | Adafruit / SparkFun | 2 Stk. | 4 verdrillte Paare von PCBA 03 zu den 4 Hubmagneten (kein Crimpen nötig!) |
-| **J_AUDIO_PWR Kabel Cardo Packtalk** | 8-Pin JST-SH auf 3.5mm Spk, Micro-2Pin Mic & 90° USB-C 5V (10 cm) | COTS Standard | 1 Stk. | Koppelt Cardo Air-Mount Halterung mit 5V Lade- & Audiostrom ohne Brummstörungen |
-| **J_AUDIO_PWR Kabel Sena SPIDER X** | 8-Pin JST-SH auf 3-fach Pigtail (Direct-DC, 2.5mm Mic, 3.5mm Spk, 8 cm) | COTS Standard | 1 Stk. | Direct-DC Speisung (3.85V) & Stereo-Audio mit Kelvin-Grounding (null Pogo-Pins) |
+| **J_ACT Aktuator-Kabelbaum** | Vorkonfektioniertes 8-Pin JST-SH Kabel (Top-Entry, gerade Abgangsrichtung) auf 4x 2-Pin Litzenpaare (AWG30 Silikon, 60 mm) | Adafruit / SparkFun | 2 Stk. | 4 verdrillte Paare von PCBA 03 J_ACT (vertikaler Top-Entry) zu den 4 Hubmagneten (keine 180°-Schleife, null Crimpen!) |
+| **J_AUDIO_PWR Kabel Cardo Packtalk** | 8-Pin JST-SH (Top-Entry) auf 3.5mm Spk, Micro-2Pin Mic & 90° USB-C 5V (10 cm) | COTS Standard | 1 Stk. | Koppelt Cardo Air-Mount Halterung via vertikalem Top-Entry mit 5V Lade- & Audiostrom ohne Brummstörungen |
+| **J_AUDIO_PWR Kabel Sena SPIDER X** | 8-Pin JST-SH (Top-Entry) auf 3-fach Pigtail (Direct-DC, 2.5mm Mic, 3.5mm Spk, 8 cm) | COTS Standard | 1 Stk. | Direct-DC Speisung (3.85V) & Stereo-Audio mit Kelvin-Grounding direkt von oben gesteckt (null Pogo-Pins) |
 | **KFZ-Sicherungshalter & 2A Sicherung** | Wasserdichter Halter + 2A Mini-Flachsicherung | Hella / MTA | 1 Stk. | Dauerplus-Absicherung an Batteriepol (Klemme 30) |
 | **OMM Helm-Audio & PTT-Kabelbaum (J_HELMET)** | 6-Pin JST-SH 1.0mm auf 3.5mm Stereo-Klinke + 2-Pin Mic + PTT (0V DC, 12-15 cm) | COTS Standard | 1 Stk. | Brummfreier Kopfhörer- & Mikrofonkabelbaum für Helm-Innenseite (reine 0V DC Signale) |
 | **Pure-DC 2-Ader Zuleitung (PUR)** | 2x 0.34 mm² (AWG22) mit JST-JWPF 2-Pin IP67 Stecker | COTS Standard | 2 Stk. | Reine DC-Stromversorgung zu Pod 1 & 2 (Audio/Daten 100% via UWB) |

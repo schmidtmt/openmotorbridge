@@ -200,8 +200,8 @@ Die frühere Pod-Basisplatine (`PCBA 02`) ist in v9.6 **vollständig und ersatzl
   * `R1` - `R4`: $100\,\Omega$ Gate-Serienwiderstände (0603).
   * `R5` - `R8`: $100\,\text{k}\Omega$ Gate-Pulldowns (0603) für definierten Ruhezustand.
   * `R9`: $10\,\text{k}\Omega$ Pull-up-Widerstand (0603) an `VCC_3V3` für das Kassetten-Erkennungssignal `OMM_DETECT`.
-  * `J_ACT`: 8-poliger $1{,}0\,\text{mm}$ JST-SH Header (`SM08B-SRSS-TB` mit SMD-Schirmlaschen `MP` an GND) zur Ansteuerung der 4 Miniatur-Hubmagnete.
-  * `J_AUDIO_PWR`: 8-poliger $1{,}0\,\text{mm}$ JST-SH Header (baugleich zu `J_ACT`, Schirmlaschen `MP` an GND) zur sternpunktförmigen Kelvin-Audio- und Power-Anbindung des jeweiligen OEM-Headsets bzw. OMM-Moduls.
+  * `J_ACT`: 8-poliger $1{,}0\,\text{mm}$ JST-SH Header (`BM08B-SRSS-TB` mit vertikalem Top-Entry-Anschluss und SMD-Schirmlaschen `MP` an GND) zur Ansteuerung der 4 Miniatur-Hubmagnete.
+  * `J_AUDIO_PWR`: 8-poliger $1{,}0\,\text{mm}$ JST-SH Header (baugleich zu `J_ACT`, `BM08B-SRSS-TB` mit vertikalem Top-Entry-Anschluss, Schirmlaschen `MP` an GND) zur sternpunktförmigen Kelvin-Audio- und Power-Anbindung des jeweiligen OEM-Headsets bzw. OMM-Moduls.
   * `J_PROG`: 4-poliger $1{,}27\,\text{mm}$ SMD-Stiftleisten-Header (`PinHeader_1x04_P1.27mm_Vertical_SMD_Pin1Left`) für Flashen und Firmware-Recovery (`VCC_3V3`, `USB_DP`, `GND`, `PTT_USB_N`).
 * **Bestückung Bottom-Layer (B.Cu - HF, Audio-Codec, Hardware-Umschaltung & Stromaufnahme):**
   * `U_UWB`: Qorvo `DW3110` Ultra-Wideband Transceiver (6.489 GHz Ch. 5, QFN-16-1EP) mit externer U.FL-Koaxialbuchse `ANT_UWB` (`Taoglas FXUWB10`) und hochpräzisem $38{,}4\,\text{MHz}$ Quarz `Y_UWB`. Strahlungsrichtung zeigt nach unten durch den dielektrischen Kunststoffboden der Kassette für optimale Funkverbindung zur Zentralbox.

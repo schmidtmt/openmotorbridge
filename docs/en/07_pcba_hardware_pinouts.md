@@ -197,8 +197,8 @@ The former pod base board (`PCBA 02`) has been **completely retired without repl
   * `R1` - `R4`: $100\,\Omega$ gate series resistors (0603).
   * `R5` - `R8`: $100\,\text{k}\Omega$ gate pulldowns (0603) for defined idle state.
   * `R9`: $10\,\text{k}\Omega$ pull-up resistor (0603) to `VCC_3V3` for the cartridge detection signal `OMM_DETECT`.
-  * `J_ACT`: 8-Pin $1.0\,\text{mm}$ JST-SH Header (`SM08B-SRSS-TB` with SMD shield tabs `MP` to GND) driving the 4 miniature solenoids.
-  * `J_AUDIO_PWR`: 8-Pin $1.0\,\text{mm}$ JST-SH Header (identical footprint to `J_ACT`, shield tabs `MP` to GND) providing star-point Kelvin audio and power interfacing to the OEM headset or native OMM module.
+  * `J_ACT`: 8-Pin $1.0\,\text{mm}$ JST-SH Header (`BM08B-SRSS-TB` with vertical top-entry connection and SMD shield tabs `MP` to GND) driving the 4 miniature solenoids.
+  * `J_AUDIO_PWR`: 8-Pin $1.0\,\text{mm}$ JST-SH Header (identical footprint to `J_ACT`, `BM08B-SRSS-TB` with vertical top-entry connection, shield tabs `MP` to GND) providing star-point Kelvin audio and power interfacing to the OEM headset or native OMM module.
   * `J_PROG`: 4-Pin $1.27\,\text{mm}$ SMD pin header (`PinHeader_1x04_P1.27mm_Vertical_SMD_Pin1Left`) for flashing and firmware recovery (`VCC_3V3`, `USB_DP`, `GND`, `PTT_USB_N`).
 * **Bottom-Layer Components (B.Cu - RF, Audio Codec, Hardware Switching & Power Ingestion):**
   * `U_UWB`: Qorvo `DW3110` Ultra-Wideband Transceiver (6.489 GHz Ch. 5, QFN-16-1EP) with external Hirose U.FL receptacle `ANT_UWB` (`Taoglas FXUWB10`) and high-precision $38.4\,\text{MHz}$ crystal `Y_UWB`. Radiates downward through the dielectric plastic sled floor for optimum wireless connection to Central Box.

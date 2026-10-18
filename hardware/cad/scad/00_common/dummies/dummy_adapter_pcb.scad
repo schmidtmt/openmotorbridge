@@ -10,8 +10,8 @@
 //                U.FL coaxial socket ANT_UWB, DW3110 UWB Transceiver (QFN-16),
 //                ES8388 Audio Codec (QFN-28), 4x MOSFETs (SOT-23), Fuse 1812.
 //              - Top (F.Cu): ESP32-S2-MINI-1U MCU Module (with RF shield),
-//                J_AUDIO_PWR 8-pin horizontal JST-SH header,
-//                J_ACT 8-pin horizontal JST-SH header,
+//                J_AUDIO_PWR 8-pin vertical JST-SH top-entry header (BM08B-SRSS-TB),
+//                J_ACT 8-pin vertical JST-SH top-entry header (BM08B-SRSS-TB),
 //                J_PROG 4-pin 1.27mm SMD pin header at bottom-left.
 //              - 4x M2 mounting holes (29.0 x 19.0 mm pitch).
 // =============================================================================
@@ -75,16 +75,44 @@ module dummy_adapter_pcb() {
             cube([15.4, 4.0, 1.0], center=false);
     }
 
-    // J_AUDIO_PWR: 8-Pin JST-SH 1.0mm Horizontal Header (at X = 3.38, Y = 12.30, facing -X)
+    // J_AUDIO_PWR: 8-Pin JST-SH 1.0mm Vertical Header (at X = 4.05, Y = 12.30, Top-Entry +Z)
     color("whitesmoke") {
-        translate([3.38 - 2.25, 12.30 - 4.5, 1.6])
-            cube([4.5, 9.0, 2.2], center=false);
+        translate([4.05 - 1.45, 12.30 - 5.0, 1.6]) {
+            difference() {
+                // Outer Shrouded Body (2.9 x 10.0 x 4.3 mm)
+                cube([2.9, 10.0, 4.3], center=false);
+                // Top-Entry Mating Slot for SHR-08V-S (from +Z)
+                translate([0.45, 0.9, 0.8])
+                    cube([2.0, 8.2, 3.6], center=false);
+            }
+        }
+    }
+    // 8 Gold Contact Pins inside J_AUDIO_PWR
+    color("gold") {
+        for (i = [0:7]) {
+            translate([5.375, 12.30 - 3.5 + i * 1.0, 1.6 + 1.2])
+                cube([0.3, 0.3, 2.0], center=true);
+        }
     }
 
-    // J_ACT: 8-Pin JST-SH 1.0mm Horizontal Header (at X = 32.00, Y = 12.75, facing +X)
+    // J_ACT: 8-Pin JST-SH 1.0mm Vertical Header (at X = 31.325, Y = 12.75, Top-Entry +Z)
     color("whitesmoke") {
-        translate([32.00 - 2.25, 12.75 - 4.5, 1.6])
-            cube([4.5, 9.0, 2.2], center=false);
+        translate([31.325 - 1.45, 12.75 - 5.0, 1.6]) {
+            difference() {
+                // Outer Shrouded Body (2.9 x 10.0 x 4.3 mm)
+                cube([2.9, 10.0, 4.3], center=false);
+                // Top-Entry Mating Slot for SHR-08V-S (from +Z)
+                translate([0.45, 0.9, 0.8])
+                    cube([2.0, 8.2, 3.6], center=false);
+            }
+        }
+    }
+    // 8 Gold Contact Pins inside J_ACT
+    color("gold") {
+        for (i = [0:7]) {
+            translate([30.00, 12.75 + 3.5 - i * 1.0, 1.6 + 1.2])
+                cube([0.3, 0.3, 2.0], center=true);
+        }
     }
 
     // J_PROG: 4-Pin 1.27mm Vertical Pin Header (at X = 8.00, Y = 22.11)
