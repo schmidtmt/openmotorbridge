@@ -75,6 +75,10 @@ STL_TARGETS: List[Tuple] = [
     ("04_front_node/01_front_node_lid.scad", "04_front_node/front_node_upper_lid.stl"),
     ("04_front_node/02_front_node_cable_glands.scad", "04_front_node/front_node_cable_glands_tpu.stl"),
     ("04_front_node/03_front_node_usbc_plug.scad", "04_front_node/front_node_usbc_cap_tpu.stl"),
+    ("04_front_node/cockpit_breakout_block.scad", "04_front_node/cockpit_breakout_block.stl"),
+    ("04_front_node/cockpit_breakout_block.scad", "04_front_node/cockpit_breakout_clamp.stl", ["-D", 'part="clamp"']),
+    ("04_front_node/vehicle_breakout_block.scad", "04_front_node/vehicle_breakout_block.stl"),
+    ("04_front_node/vehicle_breakout_block.scad", "04_front_node/vehicle_breakout_lid.stl", ["-D", 'part="lid"']),
 
     # 7b. Modular Components & Mounts (Front Node)
     ("04_front_node/parts/000_front_node_base_tub.scad", "04_front_node/components/01_front_node_base_tub.stl"),

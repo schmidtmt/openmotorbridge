@@ -34,13 +34,13 @@ module front_node_exploded_assembly() {
     translate([FRONT_NODE_WALL + 3.5 + (FRONT_NODE_CHAMBER_L - FRONT_NODE_PCB_L)/2.0, FRONT_NODE_WALL + 3.5 + (FRONT_NODE_CHAMBER_W - FRONT_NODE_PCB_W)/2.0, FRONT_NODE_WALL + FRONT_NODE_STANDOFF_H + EXPLODE_PCB_Z])
         dummy_front_node_pcb();
         
-    // 4. South USB Cable Comb (floating forwards)
-    translate([14.2, -18.0, FRONT_NODE_TUB_H - 8.0])
-        south_epdm_cable_comb();
+    // 4. South Cockpit TPU Cable Boot (floating forwards along Y)
+    translate([0, -18.0, 0])
+        front_node_south_cable_boot_installed();
         
-    // 5. North Signal/Power Cable Comb (floating rearwards)
-    translate([24.2, FRONT_NODE_OUTER_W + 18.0, FRONT_NODE_TUB_H - 7.5])
-        north_epdm_cable_comb();
+    // 5. North Vehicle TPU Cable Boot (floating rearwards along Y)
+    translate([0, 18.0, 0])
+        front_node_north_cable_boot_installed();
         
     // 6. USB-C Protective Plug (floating rightwards / East, forward right flank)
     translate([FRONT_NODE_OUTER_L + 18.0, 24.1, FRONT_NODE_WALL + FRONT_NODE_STANDOFF_H + FRONT_NODE_PCB_H + 1.8])

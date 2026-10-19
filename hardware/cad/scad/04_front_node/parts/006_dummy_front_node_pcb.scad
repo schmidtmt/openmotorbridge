@@ -34,32 +34,26 @@ module dummy_front_node_pcb() {
         }
     }
 
-    // 2. South Connectors (6x JST-PH along front rim Y = 4.0 mm, facing South)
-    // J4 (Host 4P), J5 (Phone PD 5P), J6 (CP2AA 4P), J5_MP3 (Glovebox PD 5P), J6_AUX (Cockpit 4P), J8 (Action-Cam 2P)
+    // 2. South Master Cockpit Header: J_COCKPIT (16-Pin Dual-Row 2.0mm SMT Latch Header)
+    // Sits at PCB relative X=35.00 mm, Y=5.50 mm (KiCad: X=135.0 mm, Y=114.5 mm)
+    // Carries Host, Dongle, Phone 20W PD, Action-Cam 5V, Navi 5V, and PTT
     color("ghostwhite") {
-        translate([15.25 - 5.0, 0.5, FRONT_NODE_PCB_H]) cube(size=[10.0, 4.5, 7.5], center=false); // J4 (4-Pin)
-        translate([29.00 - 6.0, 0.5, FRONT_NODE_PCB_H]) cube(size=[12.0, 4.5, 7.5], center=false); // J5 (5-Pin mit CC)
-        translate([40.50 - 5.0, 0.5, FRONT_NODE_PCB_H]) cube(size=[10.0, 4.5, 7.5], center=false); // J6 (4-Pin)
-        translate([53.75 - 6.0, 0.5, FRONT_NODE_PCB_H]) cube(size=[12.0, 4.5, 7.5], center=false); // J5_MP3 (5-Pin mit CC)
-        translate([65.25 - 5.0, 0.5, FRONT_NODE_PCB_H]) cube(size=[10.0, 4.5, 7.5], center=false); // J6_AUX (4-Pin)
-        translate([72.75 - 3.0, 0.5, FRONT_NODE_PCB_H]) cube(size=[6.0, 4.5, 7.5], center=false);  // J8 (2-Pin)
+        translate([35.0 - 9.0, 5.50 - 2.5, FRONT_NODE_PCB_H])
+            cube(size=[18.0, 5.0, 6.8], center=false); // 16-Pin Dual Row Shrouded Header
     }
 
-    // 3. North Connectors (6x JST-PH along rear rim Y = 46.5 mm, facing North)
-    // J9 (BSD 3P), J3 (PTT 4P), J1 (12V 2P), J10 (Qi 2P), J11 (Aux 2P), J2 (CAN 3P)
+    // 3. North Master Vehicle Header: J_VEHICLE (8-Pin Dual-Row 2.0mm SMT Latch Header)
+    // Sits at PCB relative X=31.00 mm, Y=44.67 mm (KiCad: X=131.0 mm, Y=75.33 mm)
+    // Carries 12V In (KL15/GND), CAN-Bus (H/L), Mirror BSD LEDs, and 12V Aux / Light
     color("ghostwhite") {
-        translate([25.50 - 4.0, FRONT_NODE_PCB_W - 5.0, FRONT_NODE_PCB_H]) cube(size=[8.0, 4.5, 7.5], center=false);  // J9 (3-Pin)
-        translate([35.25 - 5.0, FRONT_NODE_PCB_W - 5.0, FRONT_NODE_PCB_H]) cube(size=[10.0, 4.5, 7.5], center=false); // J3 (4-Pin)
-        translate([46.75 - 3.0, FRONT_NODE_PCB_W - 5.0, FRONT_NODE_PCB_H]) cube(size=[6.0, 4.5, 7.5], center=false);  // J1 (2-Pin)
-        translate([53.75 - 3.0, FRONT_NODE_PCB_W - 5.0, FRONT_NODE_PCB_H]) cube(size=[6.0, 4.5, 7.5], center=false);  // J10 (2-Pin)
-        translate([60.75 - 3.0, FRONT_NODE_PCB_W - 5.0, FRONT_NODE_PCB_H]) cube(size=[6.0, 4.5, 7.5], center=false);  // J11 (2-Pin)
-        translate([67.75 - 4.0, FRONT_NODE_PCB_W - 5.0, FRONT_NODE_PCB_H]) cube(size=[8.0, 4.5, 7.5], center=false);  // J2 (3-Pin)
+        translate([31.0 - 5.0, 44.67 - 2.5, FRONT_NODE_PCB_H])
+            cube(size=[10.0, 5.0, 6.8], center=false); // 8-Pin Dual Row Shrouded Header
     }
 
     // 4. East Rim Connectors, Sensors & User Interfaces (X = 77..79 mm)
     // J7 USB-C Service Port (facing East)
     color("silver") {
-        translate([FRONT_NODE_PCB_L - 7.5, 15.07 - 4.5, FRONT_NODE_PCB_H])
+        translate([FRONT_NODE_PCB_L - 7.5, 15.0 - 4.5, FRONT_NODE_PCB_H])
             cube(size=[8.0, 9.0, 3.2], center=false);
     }
     // J12 Qwiic I2C (1.0mm JST-SH 4-Pin, facing East)
@@ -72,62 +66,69 @@ module dummy_front_node_pcb() {
         translate([79.41 - 1.0, 31.05 - 1.0, FRONT_NODE_PCB_H])
             cube(size=[2.0, 2.0, 0.9], center=false);
     }
-    // SW1 (Boot Button) at (73.60, 31.00)
+    // SW1 (Boot Button) at (72.25, 26.50)
     color("darkslategray") {
-        translate([73.60 - 1.5, 31.00 - 1.5, FRONT_NODE_PCB_H])
+        translate([72.25 - 1.5, 26.50 - 1.5, FRONT_NODE_PCB_H])
             cube(size=[3.0, 3.0, 1.5], center=false);
     }
-    // SW2 (Reset Button) at (63.10, 12.25)
+    // SW2 (Reset Button) at (46.40, 46.25)
     color("darkslategray") {
-        translate([63.10 - 1.5, 12.25 - 1.5, FRONT_NODE_PCB_H])
+        translate([46.40 - 1.5, 46.25 - 1.5, FRONT_NODE_PCB_H])
             cube(size=[3.0, 3.0, 1.5], center=false);
     }
-    // Buffer Capacitor C_BUF (7343 D-Case Polymer 470uF) at (78.25, 38.63)
+    // Buffer Capacitor C_BUF (7343 D-Case Polymer 470uF) at (61.75, 11.87)
     color("gold") {
-        translate([78.25 - 3.65, 38.63 - 2.15, FRONT_NODE_PCB_H])
+        translate([61.75 - 3.65, 11.87 - 2.15, FRONT_NODE_PCB_H])
             cube(size=[7.3, 4.3, 3.1], center=false);
     }
 
-    // 5. ESP32-S3-WROOM-1U Module with U.FL Socket at (57.75, 31.59)
+    // 5. ESP32-S3-WROOM-1U Module with U.FL Socket at (64.10, 39.66)
     color("silver") {
-        translate([57.75 - 9.0, 31.59 - 12.75, FRONT_NODE_PCB_H])
+        translate([64.10 - 9.0, 39.66 - 12.75, FRONT_NODE_PCB_H])
             cube(size=[18.0, 25.5, 3.2], center=false);
     }
     color("gold") {
-        translate([57.75, 31.59 + 10.0, FRONT_NODE_PCB_H + 3.2])
+        translate([64.10, 39.66 + 10.0, FRONT_NODE_PCB_H + 3.2])
             cylinder(r=1.0, h=1.0, $fn=16); // U.FL connector
     }
 
-    // 6. Microchip USB2514B 4-Port Automotive USB Hub (QFN-36) at (42.00, 18.00)
+    // 6. Microchip USB2514B 4-Port Automotive USB Hub (QFN-36) at (36.50, 17.59)
     color("darkslategray") {
-        translate([42.00 - 3.0, 18.00 - 3.0, FRONT_NODE_PCB_H])
+        translate([36.50 - 3.0, 17.59 - 3.0, FRONT_NODE_PCB_H])
             cube(size=[6.0, 6.0, 0.9], center=false);
     }
-    // 24.000 MHz Crystal Y1 at (33.40, 18.15)
+    // 24.000 MHz Crystal Y1 at (26.90, 18.35)
     color("silver") {
-        translate([33.40 - 1.6, 18.15 - 1.25, FRONT_NODE_PCB_H])
+        translate([26.90 - 1.6, 18.35 - 1.25, FRONT_NODE_PCB_H])
             cube(size=[3.2, 2.5, 0.8], center=false);
     }
 
-    // 7. Dual Independent SW3526 USB-PD 20W Fast Charge Controllers (QFN-28 4x4mm)
+    // 7. SW3526 USB-PD 20W Fast Charge Controller (QFN-28 4x4mm) at (18.31, 26.05)
     color("darkslategray") {
-        translate([15.00 - 2.0, 26.50 - 2.0, FRONT_NODE_PCB_H])
-            cube(size=[4.0, 4.0, 0.85], center=false); // U5 (PD1 Lenker)
-        translate([21.50 - 2.0, 26.00 - 2.0, FRONT_NODE_PCB_H])
-            cube(size=[4.0, 4.0, 0.85], center=false); // U8 (PD3 Handschuhfach)
+        translate([18.31 - 2.0, 26.05 - 2.0, FRONT_NODE_PCB_H])
+            cube(size=[4.0, 4.0, 0.85], center=false); // U5 (PD Fast Charge)
     }
 
-    // 8. Power Inductors: L2 (PD1 5x5mm), L3 (PD3 5x5mm), L1 (Main 5V Buck 7x7mm)
+    // 8. Power Inductors: L2 (PD1 5x5mm), L1 (Main 5V Buck 7x7mm)
     color("dimgray") {
-        translate([15.00 - 2.5, 18.50 - 2.5, FRONT_NODE_PCB_H]) cube(size=[5.0, 5.0, 3.0], center=false); // L2 (PD1 Lenker)
-        translate([21.50 - 2.5, 18.50 - 2.5, FRONT_NODE_PCB_H]) cube(size=[5.0, 5.0, 3.0], center=false); // L3 (PD3 Handschuhfach)
-        translate([31.38 - 3.5, 33.75 - 3.5, FRONT_NODE_PCB_H]) cube(size=[7.0, 7.0, 3.0], center=false); // L1 (5V System Buck)
+        translate([15.00 - 2.5, 18.50 - 2.5, FRONT_NODE_PCB_H]) cube(size=[5.0, 5.0, 3.0], center=false); // L2 (PD)
+        translate([31.12 - 3.5, 32.25 - 3.5, FRONT_NODE_PCB_H]) cube(size=[7.0, 7.0, 3.0], center=false); // L1 (5V System Buck)
     }
 
-    // 9. Knowles SPH0645 Digital I2S MEMS Microphone at (72.00, 37.75)
+    // 9. Knowles SPH0645 Digital I2S MEMS Microphone at (42.75, 31.89) & (42.75, 37.00)
     color("goldenrod") {
-        translate([72.00 - 1.75, 37.75 - 1.32, FRONT_NODE_PCB_H])
+        translate([42.75 - 1.75, 31.89 - 1.32, FRONT_NODE_PCB_H])
             cube(size=[3.5, 2.65, 1.0], center=false);
+    }
+
+    // 10. Qorvo DW3000 UWB Transceiver Subsystem (U9, Y_UWB, ANT_UWB) at (45.00, 25.00)
+    color("darkslategray") {
+        translate([45.0 - 2.5, 25.0 - 2.5, FRONT_NODE_PCB_H])
+            cube(size=[5.0, 5.0, 0.9], center=false); // U9 (DW3000 QFN)
+    }
+    color("silver") {
+        translate([37.0 - 1.6, 25.0 - 1.25, FRONT_NODE_PCB_H])
+            cube(size=[3.2, 2.5, 0.8], center=false); // ANT_UWB Ceramic / U.FL
     }
 
     // 10. Automotive Power & Protection Stage (West area, internal)

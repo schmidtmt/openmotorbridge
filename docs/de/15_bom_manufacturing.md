@@ -88,19 +88,9 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 | **MIC1**| MSM261S4030H0R / SPH0645 | Sipeed / Knowles | 3.5x2.65 mm SMD | `C544577` | Digitales I2S-MEMS Akustik-Mikrofon (Standard-I2S, hohe Verfügbarkeit) |
 | **L1** | 4.7 µH Automotive Inductor | Sunlord / Wurth | SMD 5x5 mm | `C2843490` | Speicherdrossel für LMR36015 5V-Hauptregler |
 | **L2** | 10 µH Automotive Inductor | Coilcraft / Wurth | SMD 7x7 mm | `C2843525` | Speicherdrossel für SC8102 USB-PD Fast-Charge Buck (Port 1) |
-| **J1** | JST-PH 2-Pin Header | JST | 2.00mm SMD | `C289115` | 12V Bordnetz-Einspeisung (KL15 & GND) |
-| **J2** | JST-PH 3-Pin Header | JST | 2.00mm SMD | `C289116` | Cockpit CAN-Bus (CAN_H, CAN_L, GND mit Auto-Sensing Relais) |
-| **J3** | JST-PH 4-Pin Header | JST | 2.00mm SMD | `C289117` | Lenker Multi-Button Interface (PTT, Cam-Action, Media-Voice, GND) |
-| **J4** | JST-PH 4-Pin Header | JST | 2.00mm SMD | `C289117` | Upstream USB-Port zum Motorrad-Infotainment (Skyline OS / Boom! Box) |
-| **J5** | JST-PH 4-Pin Header | JST | 2.00mm SMD | `C289117` | Port 1: Lenker-Smartphone (USB-PD 20W + High-Speed Data) |
-| **J6** | JST-PH 4-Pin Header | JST | 2.00mm SMD | `C289117` | Port 2: Fairing Pigtail (geschirmt, 30 cm) zum CP2AA CarPlay/AA Dongle |
-| **J5_MP3**| JST-PH 4-Pin Header | JST | 2.00mm SMD | `C289117` | Port 3: Handschuhfach-Kabel für USB-Sticks (MP3s & Firmware-Updates) |
-| **J6_AUX**| JST-PH 4-Pin Header | JST | 2.00mm SMD | `C289117` | Port 4: Cockpit-Zubehör / Dashcam-Massenspeicher / Zūmo-Navi |
+| **J_COCKPIT** | 16-Pin Dual-Row Header | JST / Wurth | 2.00mm SMD Latch | `C289119` | Cockpit-Hauptstrang: USB Upstream, CP2AA Dongle, Phone PD 20W, PTT & 5V Aux für Cam/Navi |
+| **J_VEHICLE** | 8-Pin Dual-Row Header | JST / Wurth | 2.00mm SMD Latch | `C289120` | Fahrzeug-Hauptstrang: 12V In (KL15 & GND), CAN-Bus, Spiegel-BSD LEDs, Aux Light / 12V Navi |
 | **J7** | USB-C 16-Pin Receptacle IP67| GCT / Korean Hro | SMD Hybrid | `C2765186` | ESP32-S3 Service- & Flash-Port (Flanke) mit TPU-Dichtstopfen |
-| **J8** | JST-PH 2-Pin Header | JST | 2.00mm SMD | `C289115` | Action-Cam 5V Charge-Only Power-Port (bis 2.0A) |
-| **J9** | JST-PH 3-Pin Header | JST | 2.00mm SMD | `C289116` | Spiegel-Totwinkel-LEDs (12V_PROT, BSD_LEFT_N, BSD_RIGHT_N) |
-| **J10** | JST-PH 2-Pin Header | JST | 2.00mm SMD | `C289115` | 12V Qi-Smartphone-Power (SP Connect / QuadLock Ladekopf) |
-| **J11** | JST-PH 2-Pin Header | JST | 2.00mm SMD | `C289115` | 12V Aux Light (Adventure Zusatzscheinwerfer / Notbrems-Strobe) |
 | **J12** | JST-SH 4-Pin Header | JST | 1.00mm SMD | `C289118` | Qwiic / STEMMA QT I2C Sensorport (SAM-M10Q GNSS, TMP117, OPT3001) |
 | **ANT1**| U.FL-R-SMT-1 | Hirose / Murata | SMD HF (B.Cu) | `C2834595` | UWB 6.5 GHz U.FL Buchse zu Taoglas FXUWB10 im Boden |
 
@@ -331,23 +321,23 @@ Für Laborprüfungen (Tisch-Inbetriebnahme ohne Motorrad-Kabelbaum) sowie den mo
    * **TI TMP117:** Hochpräziser Temperatursensor ($\pm 0{,}1\,^\circ\text{C}$) für Glatteis-Frühwarnung.
 ### 11.4 Internes COTS-Kabelset & Pigtails für Front-Node & Peripherie
 
-Für alle internen Verbindungen innerhalb der Gehäuse (vom Platinen-Header zur Gehäuseflanke oder zum Nachbarmodul) kommen **ausschließlich industriell vorkonfektionierte COTS-Pigtails (Plug & Play)** zum Einsatz. Es muss kein einziger Steckkontakt von Hand gecrimpt werden:
+Für alle Verbindungen zwischen dem hermetischen IP68 Front-Node, den modularen Satelliten-Verteilern und der Peripherie kommen **ausschließlich industriell vorkonfektionierte COTS-Kabel (Plug & Play)** zum Einsatz. Es muss kein einziger Steckkontakt von Hand gecrimpt werden:
 
 | Funktion / Baugruppe | Header auf Platine | Steckertyp & Raster | Gegenstück / Gehäuseauslass | Länge | Bezugsquelle / Typ |
 | :--- | :--- | :--- | :--- | :---: | :--- |
-| **Smartphone PD 20W** | Front-Node `J5` | JST-PH 5-Pin (2.0 mm) | Wasserdichte Panel-Mount USB-C Buchse (IP67 mit Schraubkappe) am Lenker | 20 cm | COTS USB-C Panel-Mount Pigtail |
-| **Glovebox PD 20W + MP3**| Front-Node `J5_MP3` | JST-PH 5-Pin (2.0 mm) | Wasserdichte Panel-Mount USB-C Buchse (IP67) für Handschuhfach / Tankrucksack | 30 cm | COTS USB-C Panel-Mount Pigtail |
-| **CP2AA Wireless Dongle** | Front-Node `J6` | JST-PH 4-Pin (2.0 mm) | USB-A Buchse zur internen Aufnahme von Ottocast / Carlinkit Adapter | 15 cm | COTS JST-PH 4P auf USB-A Buchse |
-| **Cockpit Aux USB** | Front-Node `J6_AUX` | JST-PH 4-Pin (2.0 mm) | USB-A Buchse oder Panel-Mount für Dashcam / Display / Zūmo | 20 cm | COTS JST-PH 4P auf USB-A Buchse |
-| **OEM Upstream Host** | Front-Node `J4` | JST-PH 4-Pin (2.0 mm) | USB-A Stecker oder Litzen für Harley Skyline OS / Boom! Box GTS | 30 cm | COTS JST-PH 4P auf USB-A Stecker |
-| **Cockpit 12V Speisung** | Front-Node `J1` | JST-PH 2-Pin (2.0 mm) | Offene Litzen (0.5 mm²) mit Posi-Tap / Cartool-Stecker (KL15 Standlicht) | 50 cm | COTS JST-PH 2P Pigtail |
-| **Cockpit CAN-Bus** | Front-Node `J2` | JST-PH 3-Pin (2.0 mm) | Offene Litzen mit Posi-Tap für CAN_H / CAN_L / GND im Cockpit | 50 cm | COTS JST-PH 3P Pigtail |
-| **Lenkertaster / PTT** | Front-Node `J3` | JST-PH 4-Pin (2.0 mm) | 4-adriges Steuerkabel zur Lenkerarmatur (PTT Funk, Cam-Bookmark, Menü) | 100 cm | COTS JST-PH 4P Pigtail |
-| **Action-Cam Power 5V** | Front-Node `J8` | JST-PH 2-Pin (2.0 mm) | Rechtwinkliger USB-C Stecker für Helm- oder Verkleidungs-GoPro | 60 cm | COTS JST-PH 2P auf USB-C Stecker |
-| **Spiegel-Warn-LEDs (BSD)**| Front-Node `J9` | JST-PH 3-Pin (2.0 mm) | Y-Kabel ($2 \times 2$-Pin) zu bernsteinfarbenen LED-Pads in beiden Rückspiegeln | 120 cm | COTS JST-PH 3P Y-Pigtail |
-| **Qi Wireless Pad 12V** | Front-Node `J10` | JST-PH 2-Pin (2.0 mm) | 2-Pin Stecker für SP Connect / Quad Lock Wireless Charging Head | 25 cm | COTS JST-PH 2P Pigtail |
-| **Aux-Licht Schaltausgang**| Front-Node `J11` | JST-PH 2-Pin (2.0 mm) | 2-Pin Litzen zum Relais für Zusatzscheinwerfer / Stroboskop | 30 cm | COTS JST-PH 2P Pigtail |
-| **Qwiic / GNSS I2C Bus** | Front-Node `J12` | JST-SH 4-Pin (1.0 mm) | 4-Pin JST-SH Stecker zu u-blox SAM-M10Q & TMP117 / OPT3001 | 50-100 mm | SparkFun Qwiic / Adafruit STEMMA QT |
+| **Cockpit-Hauptstrang** | Front-Node `J_COCKPIT` | 16-Pin Dual-Row (2.0 mm Latch) | Cockpit-Satellitenverteiler (`cockpit_breakout_block`) | 50 cm | Geschirmtes 16-adriges Rundkabel (Ø 6.0 mm) mit TPU-Dichtung |
+| **Fahrzeug-Hauptstrang** | Front-Node `J_VEHICLE` | 8-Pin Dual-Row (2.0 mm Latch) | Fahrzeug-Satellitenverteiler (`vehicle_breakout_block`) | 40 cm | Geschirmtes 8-adriges Rundkabel (Ø 6.0 mm) mit TPU-Dichtung |
+| **Smartphone Ladekabel** | Cockpit-Satellit Port 1 | USB-C Stecker (COTS) | Smartphone am Lenker (mit 3D-Zugentlastungsklemme) | 20–30 cm | Handelsübliches USB-C auf USB-C Kabel (gewinkelt/geflochten) |
+| **CP2AA Wireless Dongle** | Cockpit-Satellit Port 2 | USB-C oder USB-A Buchse | Ottocast / Carlinkit Adapter im Cockpit | 15 cm | COTS USB-Kabel mit Rüttelsicherung |
+| **OEM Upstream Host** | Cockpit-Satellit Port 3 | USB-C Buchse | Motorrad-Infotainment (Harley Skyline / Boom! Box) | 30 cm | COTS USB-C auf OEM-USB Stecker |
+| **Action-Cam Stromversorgung** | Cockpit-Satellit Port 4 | USB-C Buchse (Power-Only) | Action-Cam (GoPro / Insta360) am Lenker/Scheibe | 20–40 cm | COTS USB-C Ladekabel mit Rüttelsicherung |
+| **Navi 5V Stromversorgung** | Cockpit-Satellit Port 5 | USB-C Buchse (Power-Only) | Navigationsgerät (Garmin / TomTom / Beeline) | 20–30 cm | COTS USB-C Ladekabel mit Rüttelsicherung |
+| **Lenkertaster / PTT** | Cockpit-Satellit Klemme | Schraub-/Federklemme 2-Pin | Lenkerarmatur (PTT Funk / Voice-Assistent) | 80 cm | 2-adriges Steuerkabel zur Lenkerarmatur |
+| **Bordnetz 12V In** | Fahrzeug-Satellit Port 1 | JST-JWPF 2-Pin (IP67) | Offene Litzen (0.5 mm²) mit Posi-Tap / Cartool-Stecker | 50 cm | COTS JST-JWPF 2P Pigtail (KL15 Standlicht & GND) |
+| **Fahrzeug CAN-Bus** | Fahrzeug-Satellit Port 2 | JST-JWPF 3-Pin (IP67) | Offene Litzen mit Posi-Tap für CAN_H / CAN_L / GND | 50 cm | COTS JST-JWPF 3P Pigtail |
+| **Spiegel-Warn-LEDs (BSD)**| Fahrzeug-Satellit Port 3 | JST-JWPF 3-Pin (IP67) | Y-Kabel ($2 \times 2$-Pin) zu bernsteinfarbenen Spiegel-LEDs | 120 cm | COTS JST-JWPF 3P Y-Pigtail |
+| **Aux-Licht Schaltausgang**| Fahrzeug-Satellit Port 4 | JST-JWPF 2-Pin (IP67) | 2-Pin Litzen zum Zusatzscheinwerfer / Stroboskop | 40 cm | COTS JST-JWPF 2P Pigtail |
+| **Qwiic / GNSS I2C Bus** | Front-Node `J12` | JST-SH 4-Pin (1.0 mm) | 4-Pin JST-SH Stecker zu SAM-M10Q GNSS- & TMP117 Puck | 10–20 cm | SparkFun Qwiic / Adafruit STEMMA QT COTS |
 | **MR20 Radar-Interconnect**| Radar PCBA 08 `J2` | JST-SH 4-Pin (1.0 mm) | 4-Pin JST-SH Stecker direkt in das Wheeltec MR20 Sensormodul | 40-50 mm | COTS JST-SH 4P zu JST-SH 4P |
 | **Zentralbox CarPlay Port**| Zentralbox `J3` | IDC 10-Pin (2.54 mm) | Wasserdichte Panel-Mount USB-C Buchse (IP67) an der Gehäuseflanke | 15 cm | COTS IDC-10 auf USB-C Panel-Mount |
 | **USV LiPo-Akku Anschluss**| Zentralbox `J5` | JST-PH 4-Pin / Molex | Anschlusskabel mit NTC-Sensor des 2.200 mAh LiPo Flat-Packs | 8 cm | Am LiPo-Pouch konfektioniert |
@@ -501,8 +491,10 @@ Für den Standalone-Einsatz der beiden Intercom-Module (**PCBA 09: OMM 2.4 GHz H
 | **Taoglas FXP524 V2X Flexantenne** | 5.9 GHz Flex-Patch (+3.5 dBi) mit U.FL Buchse (50 mm) | Taoglas / Mouser | 1 Stk. | Car-to-X / ITS-G5 Funk-Uplink für ESP32-C5 Sub-MCU auf PCBA 08 |
 | **Taoglas FXP895 LoRa Flexantenne** | 868 MHz Flex-Dipol (+2.0 dBi) U.FL (100 mm) | Taoglas / Mouser | 1 Stk. | Weitbereichs-Kolonnenfunk für SX1262 LoRa in der Deckeltasche der Zentralbox |
 | **Taoglas FXUWB10 UWB Flexantenne** | 6.5 GHz Ch. 5 Flex-Patch mit 20 mm U.FL Koaxialkabel | Taoglas / Mouser | 5 Stk. | Drahtloses UWB 6.5 GHz Backbone (Zentralbox, Front-Node, Kassetten, Radar) |
+| **COTS USB-C Smartphone-Kabel** | Standard USB-C auf USB-C Kabel (20-30 cm, gewinkelt/geflochten) | Amazon / COTS | 1 Stk. | Verbindung von Cockpit-Satellit zum Smartphone mit Zugentlastung |
+| **Cockpit-Kabelbaum 16-polig (geschirmt)** | 16-poliges geschirmtes Rundkabel (Ø 6.0 mm, 50 cm) mit 2.0 mm Verriegelungsstecker | COTS Standard | 1 Stk. | Verbindet PCBA 05 J_COCKPIT mit dem Cockpit-Satellitenverteiler |
 | **Deutsch DTM-12 Hauptkabelbaum** | IP68/IP69K Deutsch DTM-12 COTS Fertigkabelbaum mit Raychem DR-25 | COTS / Deutsch | 1 Stk. | Zentraler Hauptanschluss für Bordnetz, CAN-Bus & DC-Zuleitungen zu den Pods |
-| **Front-Node 12V Anschlusskabel** | 2-Pin JST-PH Litzenkabel mit Posi-Tap Abzweigverbindern | COTS Standard | 1 Stk. | Lokale 12V-Cockpit-Versorgung (Standlicht/Navistecker) |
+| **Fahrzeug-Kabelbaum 8-polig (geschirmt)** | 8-poliges geschirmtes Rundkabel (Ø 6.0 mm, 40 cm) mit 2.0 mm Verriegelungsstecker | COTS Standard | 1 Stk. | Verbindet PCBA 05 J_VEHICLE mit dem Fahrzeug-Satellitenverteiler |
 | **JST-PH Pigtail Sortiments-Set** | 2-Pin, 3-Pin, 4-Pin JST-PH mit vormontierten Litzen | Amazon / COTS | 1 Set | CAN-Bus, Lenkertaster, Spiegel-LEDs, Qi-Lader & Actioncam |
 | **J_ACT Aktuator-Kabelbaum** | Vorkonfektioniertes 8-Pin JST-SH Kabel (Top-Entry, gerade Abgangsrichtung) auf 4x 2-Pin Litzenpaare (AWG30 Silikon, 60 mm) | Adafruit / SparkFun | 2 Stk. | 4 verdrillte Paare von PCBA 03 J_ACT (vertikaler Top-Entry) zu den 4 Hubmagneten (keine 180°-Schleife, null Crimpen!) |
 | **J_AUDIO_PWR Kabel Cardo Packtalk** | 8-Pin JST-SH (Top-Entry) auf 3.5mm Spk, Micro-2Pin Mic & 90° USB-C 5V (10 cm) | COTS Standard | 1 Stk. | Koppelt Cardo Air-Mount Halterung via vertikalem Top-Entry mit 5V Lade- & Audiostrom ohne Brummstörungen |
@@ -513,8 +505,6 @@ Für den Standalone-Einsatz der beiden Intercom-Module (**PCBA 09: OMM 2.4 GHz H
 | **Qwiic Sensorkabel (100 mm)** | 4-Pin JST-SH Buchse zu Buchse (100 mm Silikonlitze) | SparkFun / Adafruit | 1 Stk. | Verbindung Port J12 am Front-Node zum SAM-M10Q GNSS-Modul |
 | **RF Micro-Koaxial-Pigtail (U.FL zu SMA IP67)** | 50 mm low-loss RG-178 / 1.13mm mit IP67 EPDM O-Ring & V4A-Mutter | COTS Standard | 2 Stk. | Wasserdichte Gehäuse-Durchführung für Antenne der OMM UCS Module |
 | **Radar 12V Zuleitung (PUR)** | 2x 0.5 mm² (AWG20) mit JST-JWPF 2-Pin IP67 Stecker | COTS Standard | 1 Stk. | 12V DC Bordnetzspeisung für Heck-Radar (Funkbrücke 100% via UWB) |
-| **USB-A Buchsen Pigtail** | JST-PH 4-Pin auf Standard USB-A Buchse (15-20 cm) | Amazon / COTS | 1 Stk. | CP2AA Wireless CarPlay Dongle & Cockpit Aux Port |
-| **USB-C Panel-Mount Pigtail (Front-Node)** | JST-PH 5-Pin auf wasserdichte Panel-Mount USB-C Buchse (IP67) | Amazon / COTS | 1 Stk. | Telefon Fast-Charge (Lenker) & Glovebox Ladeanschluss |
 | **Zentralbox USB-C Flashing Pigtail** | IDC 10-Pin auf wasserdichte Panel-Mount USB-C Buchse IP67 | COTS Standard | 1 Stk. | CarPlay / Flashing Port an der Flanke der Zentralbox |
 
 <!-- AUTOGEN_BOM_TABLE_END -->

@@ -59,11 +59,13 @@ module front_node_lower_tub() {
                     );
         }
         
-        // 6. South USB Cable Comb Cutout Pocket (Y = 0)
-        south_cable_comb_cutout(z_start = FRONT_NODE_TUB_H - 8.0, h = 8.1);
+        // 6. South Cockpit Cable Gland Bore (Y = 0 mm, X = 43.0 mm, Z = 9.5 mm)
+        // Directly aligned with J_COCKPIT (KiCad X=135.0 mm, Y=114.5 mm)
+        south_round_cable_gland_cutout();
             
-        // 7. North Vehicle/Signal/Power Cable Comb Cutout Pocket (Y = 68 mm)
-        north_cable_comb_cutout(z_start = FRONT_NODE_TUB_H - 7.5, h = 7.6);
+        // 7. North Vehicle Cable Gland Bore (Y = 68.0 mm, X = 39.0 mm, Z = 9.5 mm)
+        // Directly aligned with J_VEHICLE (KiCad X=131.0 mm, Y=75.33 mm)
+        north_round_cable_gland_cutout();
             
         // 8. USB-C Service Port Opening (East wall)
         front_node_usbc_service_cutout();

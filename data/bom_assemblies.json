@@ -52,6 +52,8 @@
         { "part_id": "part3d_front_node_cable_glands_tpu", "qty": 1 },
         { "part_id": "part3d_front_node_usbc_cap_tpu", "qty": 1 },
         { "part_id": "part3d_front_node_fairing_clamp", "qty": 1 },
+        { "part_id": "part3d_cockpit_breakout_block", "qty": 1 },
+        { "part_id": "part3d_vehicle_breakout_block", "qty": 1 },
         { "part_id": "pcba_05", "qty": 1 },
         { "part_id": "fastener_din912_m3_20", "qty": 4 },
         { "part_id": "fastener_din934_m3", "qty": 4 },
@@ -62,10 +64,10 @@
         { "part_id": "seal_silicone_cord_15", "qty": 0.3 },
         { "part_id": "cots_module_sam_m10q", "qty": 1 },
         { "part_id": "cable_qwiic_100mm", "qty": 1 },
-        { "part_id": "cable_front_node_12v", "qty": 1 },
         { "part_id": "antenna_fxuwb10_uwb", "qty": 1 },
-        { "part_id": "cable_usbc_panel_mount_front", "qty": 1 },
-        { "part_id": "cable_usba_panel_mount_front", "qty": 1 }
+        { "part_id": "cable_cockpit_harness_16p", "qty": 1 },
+        { "part_id": "cable_vehicle_harness_8p", "qty": 1 },
+        { "part_id": "cable_cots_usbc_phone", "qty": 1 }
       ]
     },
     "assembly_pod_base": {

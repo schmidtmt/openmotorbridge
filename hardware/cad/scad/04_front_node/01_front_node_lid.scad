@@ -25,22 +25,14 @@ module front_node_upper_lid() {
                 }
             }
             
-            // 2. Perimeter Sealing Tongue / Lip (protrudes downwards into tub groove)
+            // 2. Perimeter Sealing Tongue / Lip (protrudes downwards into continuous tub groove)
+            // Provides 100% continuous perimeter compression against the Ø 1.5 mm silicone O-ring cord
             front_node_sealing_tongue_lip(
                 length = FRONT_NODE_OUTER_L,
                 width  = FRONT_NODE_OUTER_W,
                 lip_w  = 1.5,
                 lip_h  = 1.4
             );
-            
-            // 3. Clamping Pressure Ribs over South & North Cable Combs
-            // South compression bar (over 70.0 mm 6-Port USB/Charge comb, X in [14.0, 84.0])
-            translate([14.0, 0, -1.5])
-                cube(size=[70.0, FRONT_NODE_WALL + 3.2, 1.5], center=false);
-                
-            // North compression bar (over 58.0 mm 6-Port Vehicle/Sensor comb, X in [24.0, 82.0])
-            translate([24.0, FRONT_NODE_OUTER_W - FRONT_NODE_WALL - 3.2, -1.5])
-                cube(size=[58.0, FRONT_NODE_WALL + 3.2, 1.5], center=false);
         }
         
         // 4. Internal cavity recess (reduces weight & creates headroom over tall parts)

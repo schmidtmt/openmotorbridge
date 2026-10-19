@@ -8,22 +8,9 @@
 include <../00_common/parameters.scad>;
 include <parts/005_cable_combs.scad>;
 
-// Pair of cable combs arranged side-by-side for 3D printing in TPU / Elastomer
-// Connected via a 1.0 mm thin breakaway sprue runner so it forms a single solid mesh for slicing.
+// Pair of circular TPU cable boots arranged side-by-side for 3D printing in Shore 85A/95A TPU
 module front_node_cable_glands_printable_pair() {
-    union() {
-        // 1. South USB Comb
-        translate([0, 0, 0])
-            south_epdm_cable_comb();
-            
-        // 2. North Signal/Power Comb
-        translate([0, 15.0, 0])
-            north_epdm_cable_comb();
-            
-        // 3. Breakaway sprue runner connecting the two parts (1.0 mm thick)
-        translate([2.0, 5.5, 0])
-            cube(size=[3.0, 15.0 - 5.5 + 0.5, 1.0], center=false);
-    }
+    front_node_cable_glands_pair();
 }
 
 front_node_cable_glands_printable_pair();

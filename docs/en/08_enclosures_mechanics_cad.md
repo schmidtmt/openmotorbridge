@@ -519,73 +519,156 @@ The Front Node enclosure was specially engineered for protected installation ins
 | 4. 3M DUAL-LOCK VELCRO CHANNELS:                                                       |
 |    * 2x recessed 20 mm channels for self-adhesive 3M Dual-Lock mushroom tape           |
 |    * Perfect for flat plastic inner fairing surfaces in Batwing or Sharknose cowls     |
-+----------------------------------------------------------------------------------------+
++-------------------------------------### 5.2 Front Node Enclosure & Interface Layout (The IP68 Monocoque 2-Harness Architecture)
+
+In v9.6, the interface architecture of PCBA 05 ($82 \times 50\,\text{mm}$, [`openmotorbridge_front_node.kicad_pcb`](../../hardware/kicad_front_node/openmotorbridge_front_node.kicad_pcb)) shifts to a hermetically sealed **IP68 monocoque lower tub with exactly two sealed round jacket cable exits**, replacing the earlier 12 individual headers that relied on fragile EPDM cable combs:
+
+> [!NOTE]
+> **Rationale for Consolidation (Elimination of 12-Port EPDM Combs & 2nd PD Controller):**
+> 1. **IP68 Hermetic Sealing vs. Flapping Lid:** The previous 70 mm wide cutouts along the 98 mm side walls severely compromised enclosure rigidity. Lacking vertical clamping pressure at the wall centers, the flexible EPDM combs degraded and leaked under temperature cycling and engine vibration. The new monocoque enclosure features continuous solid structural walls with an integrated perimeter groove for a 1.5 mm NBR/EPDM O-ring cord and 6 symmetrical clamping screws.
+> 2. **Vertical Envelope:** Mated JST-PH headers with wire bends required 17.1 mm of vertical height inside a 25.0 mm box, forcing wires into severe 90° pinches directly beneath the lid.
+> 3. **Elimination of Redundant Charging Stages:** Handlebar smartphone fast-charging (BMW GS / Road King) and glovebox media charging (Road Glide) are mutually exclusive vehicle archetypes. The second 20W buck controller `U8` (SC8102/SW3526), storage choke `L3`, and ports `J5_MP3` and `J6_AUX` are eliminated without replacement. A single 20W USB-PD controller (`U5`) powers the active charging zone.
+> 4. **Cost & Sourcing:** Rather than requiring four separate 10-packs of niche micro-connectors (80–100 € sourcing overhead), the system relies on off-the-shelf standard COTS USB-C cables.
+
 ```
-
-### 5.2 Front Node Connector & Flank Layout
-
-The physical arrangement of connectors and cable entries on the enclosure flanks aligns with the enlarged 4-layer PCBA 05 PCB design ($82 \times 50\,\text{mm}$, `openmotorbridge_front_node.kicad_pcb`) and cockpit cable routing ergonomics:
-
-![PCBA 05 Universal Front Node Top 3D](../images/pcba/pcba05_front_node_3d.png)
-
-*Figure 8.21c: PCBA 05 Universal Front Node (82 x 50 mm) photorealistic 3D render showing Knowles MEMS microphone MK1 at (172.00, 82.25 mm), Dual SW3526 20W USB-PD controllers, and all peripheral headers.*
-
-```
-                               FRONT NODE FLANK & CONNECTOR LAYOUT
+                         FRONT NODE IP68 MONOCOQUE LAYOUT (TOP VIEW)
 +-----------------------------------------------------------------------------------------------------------------------------+
-|                                                  REAR FACE / NORTH RIM (Y = 68 mm)                                          |
-|                     (6-slot EPDM Cable Comb for Vehicle Harness & Sensors: north_epdm_cable_comb)                           |
-|   U.FL Antenna     J9: Mirror BSD      J3: Handlebar PTT   J1: 12V KL15     J10: Qi Charger   J11: Aux Light     J2: CAN-Bus|
-|   (DW3110 UWB)     (3-Pin Radar LED)   (4-Pin Switch)      (2-Pin Ignition) (2-Pin 12V Sw)    (2-Pin Headlight)  (3-Pin CAN)|
-+--------------------------------------+-------------------------------------------------+------------------------------------+
-| LEFT SHORT FLANK / WEST (X = 0 mm)   |              INTERNAL CHAMBER (82 x 50 mm PCB)  | RIGHT SHORT FLANK / EAST (X = 98)  |
-|                                      |                                                 |                                    |
-| * Solid MJF PA12 Monocoque Wall      | * ESP32-S3-WROOM-1-N16R8 Dual-Core MC           | * J7: Waterproof USB-C Service     |
-|   (Zero penetrations)                | * USB2514B Automotive 4-Port USB 2.0 Hub        |   Port with TPU sealing cap        |
-| * Shields internal power stage:      | * Dual SW3526 Sync-Buck USB-PD (2x 20W)         | * J12: Qwiic / Stemma QT I2C Port  |
-|   - D4: SMCJ24CA 24V TVS Diode       | * 2x L2 & L3 shielded power inductors           | * SW1 (Boot) & SW2 (Reset) Buttons |
-|   - U3 / L1: TPS54302 5V/3A Buck     | * U3: TPS54302 5V System Buck Converter         | * LED1: WS2812B RGB Status LED     |
-|   - U6: TCAN334G CAN Transceiver     | * MK1: MSM261S4030 / SPH0645 I2S MEMS Micro     |   (Polycarbonate Light-Pipe Dome)  |
-|   - K1: CPC1017N CAN Auto-Sensing    | * K1: CPC1017N 120 Ohm Bus-Termination Relay    |                                    |
-|   - Q2: DMP3017SFG Reverse-Polarity  | * Q1: DMN63D8LDW Mirror BSD Driver Stage        | * M4/M5 Silentblock Flange Ear     |
-| * M4/M5 Silentblock Flange Ear       | * U4: TPS2051B USB Power Gate for Port 2        |   (Center Y = 34.0 mm, Z = 0..5 mm)|
-|   (Center Y = 34.0 mm, Z = 0..5 mm)  | * U7: TLV75533P 3.3V Ultra-Low-Noise LDO        |                                    |
-+--------------------------------------+-------------------------------------------------+------------------------------------+
-|                                                  FRONT FACE / SOUTH RIM (Y = 0 mm)                                          |
-|                         (6-slot EPDM Cable Comb for Cockpit & USB Cables: south_epdm_cable_comb)                            |
-|   J4: USB Host       J5: Phone 20W PD    J6: CP2AA Dongle   J5_MP3: 20W PD + MP3     J6_AUX: Dashcam    J8: Action-Cam 5V   |
-|   (Upstream Skyline) (Downstream 1, 5P)  (Downstream 2, 4P) (Downstream 3, 5P Data)  (Downstream 4, 4P) (2-Pin Switched 5V) |
-+-----------------------------------------------------------------------------------------------------------------------------+
++------------------------------------+-------------------------------------------------+--------------------------------------+
+| LEFT FLANK / WEST (X = 0 mm)       |              INTERNAL CHAMBER (82 x 50 mm PCB)  | RIGHT FLANK / EAST (X = 98 mm)       |
+|                                    |                                                 |                                      |
+| * Solid MJF PA12 Monocoque Wall    | * ESP32-S3-WROOM-1-N16R8 Dual-Core MC           | * J7: IP67 Waterproof USB-C Service  |
+|   (100% solid, zero penetrations)  | * USB2514B Automotive 4-Port USB 2.0 Hub        |   Port with tethered TPU sealing cap |
+| * Shields internal power stage:    | * Single SC8102 / SW3526 20W USB-PD Controller  | * J12: Qwiic JST-SH 4-Pin Sensor Port|
+|   - D4: SMCJ24CA 24V TVS Diode     | * L2: Shielded high-current power inductor      |   to external GNSS/climate puck      |
+|   - U3 / L1: TPS54302 5V/3A Buck   | * MK1: MSM261S4030 / SPH0645 I2S MEMS Micro     | * SW1 (Boot) & SW2 (Reset) Switches  |
+|   - U6: TCAN334G CAN Transceiver   | * K1: CPC1017N 120 Ohm Bus-Termination Relay    | * LED1: WS2812B RGB Status Display   |
+|   - K1: CPC1017N CAN Auto-Sensing  | * Q1: DMN63D8LDW Mirror BSD Driver Stage        |   (Polycarbonate Light-Pipe Dome)    |
+|   - Q2: DMP3017SFG Reverse-Polarity| * U4: TPS2051B USB Power Gate (Dongle restart)  |                                      |
+| * M4/M5 Silentblock Flange Ear     | * U7: TLV75533P 3.3V Ultra-Low-Noise LDO        | * M4/M5 Silentblock Flange Ear       |
+|   (Center Y = 34.0 mm, Z = 0..5 mm)| * J_COCKPIT: 14-Pin Dual-Row 2.0 mm SMT Header  |   (Center Y = 34.0 mm, Z = 0..5 mm)  |
+|                                    | * J_VEHICLE: 8-Pin Dual-Row 2.0 mm SMT Header   |                                      |
++------------------------------------+-------------------------------------------------+--------------------------------------+
+|       EXIT 1 (SOUTH FLANK): COCKPIT HARNESS         |          EXIT 2 (NORTH FLANK): VEHICLE HARNESS                        |
+|       Shielded round cable Ø 6.0 mm (14-conductor)   |          Shielded round cable Ø 6.0 mm (8-conductor)                 |
+|       with molded TPU strain-relief boot             |          with molded TPU strain-relief boot                          |
+|       ==> Connects to Cockpit Breakout Satellite     |          ==> Connects to Vehicle Breakout Satellite                  |
++-----------------------------------------------------+-----------------------------------------------------------------------+
 ```
 
-1. **Front Face / South Flank ($Y = 0\,\text{mm}$):**
-   - **6-Slot EPDM Cable Comb (`south_epdm_cable_comb`):** Directs USB and charging cables vibration-damped and strain-relieved through a 70 mm wide sealing chamber forwards towards the cockpit:
-     - `J4` ($X_{\text{tub}} = 23.25\,\text{mm}$): JST-GH 4-Pin Upstream USB 2.0 connection to the motorcycle head unit (Harley Skyline OS / Boom! Box GTS).
-     - `J5` ($X_{\text{tub}} = 37.00\,\text{mm}$): JST-GH 5-Pin Downstream Port 1 to handlebar-mounted smartphone with **20W USB-PD Fast Charging (5V/3A, 9V/2.22A, 12V/1.67A)** via synchronous buck controller `U5` (SW3526) and shielded high-current choke `L2`. Supports USB-PD 3.0, QC 3.0/4.0+, AFC, and FCP for uninterrupted rapid charging under navigation loads in blazing summer heat.
-     - `J6` ($X_{\text{tub}} = 48.50\,\text{mm}$): JST-GH 4-Pin Downstream Port 2 with 25-30 cm fairing pigtail to the thermally decoupled CP2AA Wireless CarPlay / Android Auto dongle (Ottocast / Carlinkit, secured via 3M Dual-Lock inside fairing void).
-     - `J5_MP3` ($X_{\text{tub}} = 61.75\,\text{mm}$): JST-GH 5-Pin Downstream Port 3 into glovebox / media bay. **Dual Role:** Full **20W USB-PD Fast Charging** via `U8` (SW3526) and choke `L3` for powerbanks, second phone, or camera batteries PLUS **High-Speed USB 2.0 Data** to the USB2514B hub for local MP3/FLAC music flash drives and official firmware updates.
-     - `J6_AUX` ($X_{\text{tub}} = 73.25\,\text{mm}$): JST-GH 4-Pin Downstream Port 4 as an auxiliary cockpit data port for dashcams, Chigee AIO-5 display, Garmin Zūmo, or TPMS receivers.
-     - `J8` ($X_{\text{tub}} = 80.75\,\text{mm}$): JST-GH 2-Pin switched 5V/1.5A power output for helmet or fairing action-cam (GoPro / Insta360).
-2. **Rear Face / North Flank ($Y = 68.0\,\text{mm}$):**
-   - **6-Slot EPDM Cable Comb (`north_epdm_cable_comb`):** Directs vehicle harness and sensor leads through a 58 mm wide sealing chamber rearwards towards the frame tunnel:
-     - `J9` ($X_{\text{tub}} = 33.50\,\text{mm}$): JST-GH 3-Pin Blind Spot Detection mirror warning LEDs (radar BSD left / right individually driven via dual-MOSFET `Q1` DMN63D8LDW).
-     - `J3` ($X_{\text{tub}} = 43.25\,\text{mm}$): JST-GH 4-Pin digital handlebar switch input (PTT intercom group call, camera bookmark, media-voice key, GND).
-     - `J1` ($X_{\text{tub}} = 54.75\,\text{mm}$): JST-GH 2-Pin 12V switched ignition power (KL15) with reverse-polarity PMOS `Q2` (DMP3017SFG) and 24V SMCJ24CA TVS diode `D4`.
-     - `J10` ($X_{\text{tub}} = 61.75\,\text{mm}$): JST-GH 2-Pin 12V switched power feed for inductive phone wireless charging heads (SP Connect / QuadLock Wireless Charging Head, zero quiescent current in standby).
-     - `J11` ($X_{\text{tub}} = 68.75\,\text{mm}$): JST-GH 2-Pin 12V switched auxiliary output for adventure auxiliary lights or emergency brake-strobe flashers.
-     - `J2` ($X_{\text{tub}} = 75.75\,\text{mm}$): JST-GH 3-Pin automotive CAN-Bus (CAN_H, CAN_L, GND) with TCAN334G transceiver `U6` and electronic $120\,\Omega$ bus-termination relay `K1` (`CPC1017N`).
-   - **U.FL UWB Antenna Outlet:** Coaxial U.FL connector on PCBA 05 leads directly to the bottom tub antenna pocket for the Taoglas FXUWB10 flex antenna, providing an ultra-low latency, deterministic wireless link to the Central Box without cables across the steering head.
-3. **Right Short Flank / East Flank ($X = 98.0\,\text{mm}$):**
-   - **Service & Diagnostics:** IP67 waterproof USB-C service receptacle (`J7`, $Y_{\text{tub}} = 24.1\,\text{mm}$) with form-fitting TPU sealing cap (`front_node_usbc_cap_tpu.stl`) for direct on-bike flashing, debugging, and log extraction.
-   - **Sensor Bus:** 4-Pin JST-SH Qwiic / Stemma QT $I^2C$ expansion port (`J12`, $Y_{\text{tub}} = 34.05\,\text{mm}$) connecting the SAM-M10Q GNSS patch module, TMP117 temperature sensor, and OPT3001 light sensor in the air scoop.
-   - **Tactile Switches:** Miniature tactile switches `SW1` (Boot) and `SW2` (Reset) for MCU maintenance.
-   - **Visual Status Display:** Polycarbonate light-pipe in enclosure lid for **WS2812B RGB Status LED** (`LED1`, $Y_{\text{tub}} = 40.05\,\text{mm}$): Green = Normal Operation, Blue = UWB Link Active, Yellow = USB Enumeration / CP2AA Dongle Boot, Red = CAN Error / Failsafe.
-   - **Flange Mount:** M4/M5 silentblock flange mounting ear at flank center ($Y_{\text{tub}} = 34.0\,\text{mm}$, $Z = 0\dots 5\,\text{mm}$).
-4. **Left Short Flank / West Flank ($X = 0\,\text{mm}$):**
-   - **Monocoque Shielding Wall:** Solid MJF PA12 wall without any penetrations. Provides maximum mechanical protection and splash resistance for the directly adjacent internal power stage (TVS diode `D4`, 12V main buck converter `U3` TPS54302 with inductor `L1`, CAN transceiver `U6`, opto-relay `K1`, PMOS reverse-polarity `Q2`).
-   - **Flange Mount:** Symmetrical M4/M5 silentblock flange mounting ear at flank center ($Y_{\text{tub}} = 34.0\,\text{mm}$, $Z = 0\dots 5\,\text{mm}$).
-5. **Bottom Face ($Z = 0\,\text{mm}$):**
-   - Sipeed / Zilltek MSM261S4030H0R (compatible drop-in for EOL Knowles SPH0645LM4H-B) $I^2S$ MEMS microphone (`MK1`, lower tub $X_{\text{tub}} = 80.0\,\text{mm}, Y_{\text{tub}} = 46.75\,\text{mm}$, KiCad board coordinates $172.00, 82.25\,\text{mm}$) with continuous acoustic duct ($\varnothing\,2.5\,\text{mm}$) and waterproof, oleophobic Gore ePTFE protective membrane ($\varnothing\,6.0 \times 0.8\,\text{mm}$) for real-time wind noise and dynamic air pressure analysis (speed-dependent volume control). The shift to $(172.00, 82.25\,\text{mm})$ guarantees full non-contact 3D clearance against the $7.3 \times 4.3 \times 3.1\,\text{mm}$ tantalum buffer capacitor `C_BUF` and switch `SW1`. The acoustic canal maintains $> 5.0\,\text{mm}$ edge clearance from AMPS nut pockets and clears the 3M Dual-Lock landing pad; Pad 5 on the PCB features a plated $\varnothing\,0.6\,\text{mm}$ acoustic drill to `B.Cu`.
+1. **The Two Hermetic Round Cable Exits ($\varnothing 6.0\,\text{mm}$):**
+   - **Exit 1 (Cockpit Harness, South Flank):** Routes a 14-conductor shielded round jacket cable from PCB header `J_COCKPIT` (14-pin dual-row 2.0 mm positive-latch header) through a flexible TPU sealing boot directly to the **Cockpit Breakout Satellite**. Carries: OEM Upstream USB Host (Harley Skyline / Boom! Box), CP2AA Wireless Dongle power and data, Smartphone USB-PD 20W fast-charging power and CC lines, and the handlebar PTT switch input.
+   - **Exit 2 (Vehicle Harness, North Flank):** Routes an 8-conductor shielded round jacket cable from PCB header `J_VEHICLE` (8-pin dual-row 2.0 mm positive-latch header) through a flexible TPU sealing boot to the **Vehicle Breakout Satellite**. Carries: 12V switched ignition power (KL15) and ground, differential CAN-Bus (CAN_H, CAN_L), Blind Spot Detection mirror warning LED outputs L/R, and 12V switched auxiliary light output.
+2. **Right Short Flank / East Flank ($X = 98.0\,\text{mm}$):**
+   - **Service & Diagnostics:** IP67 waterproof USB-C service receptacle (`J7`, $Y_{\text{tub}} = 24.1\,\text{mm}$) with tethered TPU sealing cap (`front_node_usbc_cap_tpu.stl`) for direct on-bike firmware flashing, serial debugging, and WebSerial parameter configuration without tools or enclosure disassembly.
+   - **External Sensor Bus:** 4-pin JST-SH Qwiic / STEMMA QT $I^2C$ receptacle (`J12`, $Y_{\text{tub}} = 34.05\,\text{mm}$) connecting the remote u-blox SAM-M10Q GNSS patch antenna and TI TMP117 precision ambient temperature sensor.
+   - **Tactile Switches & Indicators:** Miniature `SW1` (Boot) and `SW2` (Reset) buttons sealed beneath an elastic TPU overlay; optical polycarbonate light pipe in lid for the **WS2812B RGB Status LED** (`LED1`): Green = Normal Operation, Blue = UWB Backbone Active, Yellow = USB Enumeration / Dongle Boot, Red = CAN Error / Failsafe.
+3. **Left Short Flank / West Flank ($X = 0\,\text{mm}$):**
+   - Solid continuous monocoque wall without cutouts. Provides maximum impact, vibration, and water spray protection for the adjacent internal power components (TVS diode `D4`, 12V buck `U3`, CAN transceiver `U6`, opto-relay `K1`, PMOS reverse-polarity `Q2`).
+4. **Bottom Face ($Z = 0\,\text{mm}$):**
+   - **UWB 6.5 GHz Antenna Pocket:** Recessed pocket ($11 \times 11 \times 0.6\,\text{mm}$) in the lower tub housing the Taoglas FXUWB10 flex antenna. Connected via a 20 mm U.FL coaxial link directly to the Qorvo DW3110 transceiver on PCBA 05 `B.Cu`.
+   - **MEMS Acoustic Duct:** Acoustic canal ($\varnothing 2.5\,\text{mm}$) protected by a hydrophobic and oleophobic Gore ePTFE membrane ($\varnothing 6.0 \times 0.8\,\text{mm}$) for the Sipeed MSM261S4030 / Knowles SPH0645 $I^2S$ microphone (`MK1`) for dynamic speed-dependent volume control (Speed-Volume-Control).
+
+---
+
+### 5.3 Modular Satellite Breakout Blocks ("Lego Principle")
+
+Instead of exposing delicate wire splices or open connectors to weather and road debris, both main cable harnesses terminate into dedicated, compact satellite distribution blocks:
+
+```
+                            THE MODULAR SATELLITE PRINCIPLE
+ +-----------------------------------+             +-----------------------------------+
+ |   COCKPIT BREAKOUT SATELLITE      |             |   VEHICLE BREAKOUT SATELLITE      |
+ |   (cockpit_breakout_block.scad)   |             |   (vehicle_breakout_block.scad)   |
+ +-----------------------------------+             +-----------------------------------+
+ | * 5x Standard USB-C Receptacles:  |             | * Weatherproof Latching Headers   |
+ |   - [ PHONE 20W ] USB-PD Fast-Chg |             |   (JST-JWPF IP67 / JST-SM COTS):  |
+ |   - [ DONGLE ] CP2AA Wireless Hub |             |   - [ 12V IN ] KL15 & Power-GND   |
+ |   - [ HOST ] Skyline / Boom! Box  |             |   - [ CAN BUS ] Differential Bus  |
+ |   - [ CAM 5V ] Power-Only (DCP)   |             |   - [ MIRROR BSD ] Mirror LEDs    |
+ |   - [ NAVI 5V ] Power-Only (DCP)  |             |   - [ AUX LIGHT ] 12V Aux / Navi  |
+ | * Screw Terminal for PTT Button   |             | * 60s Field Replacement of Lights |
+ | * Mechanical Strain & Vibration   |             +-----------------------------------+
+ |   Clamp: 3D bar with 2x M3 screws |                               |
+ +-----------------------------------+                               |
+                   \                                                 /
+                    \----------- Dovetail Modular Slide ------------/
+                                  (Interlocking Tongue-in-Groove)
+                                              |
+                                              v
+                          [ COMBINED BLOCK FOR FAIRING-EQUIPPED BIKES ]
+                          (Road Glide Sharknose / Batwing Fairing)
+```
+
+1. **Cockpit Breakout Satellite (`cockpit_breakout_block.scad`):**
+   - **Ports:** Rugged, clearly labeled **standard USB-C female receptacles** (`[ PHONE 20W ]`, `[ DONGLE ]`, `[ HOST ]`, `[ CAM 5V ]`, `[ NAVI 5V ]`) plus a 2-pole screw/spring terminal for the handlebar PTT push button.
+   - **Power-Only for Cam & Navi:** Action cameras (GoPro, Insta360) and 5V USB navigators (Garmin, TomTom, Beeline) are designed as pure power-only ports (BC 1.2 DCP with shorted data pins). This eliminates camera lockups in PC mass-storage or webcam prompt mode and preserves all USB hub data bandwidth on the Front Node PCB.
+   - **Integrated Mechanical Strain & Anti-Vibration Clamp:** A custom 3D-printed clamping bar secured with two M3 hex socket screws firmly clamps the connector collars of standard inserted USB-C cables. Even severe road shocks and high-frequency engine harmonics cannot loosen or dislodge the connections.
+   - **COTS Cable Versatility:** Riders can plug in any standard off-the-shelf USB-C cable (short 20 cm, right-angled, braided nylon) without requiring expensive custom wiring assemblies.
+2. **Vehicle Breakout Satellite (`vehicle_breakout_block.scad`):**
+   - **Connectors:** Equipped with proven automotive-grade COTS positive-latch connectors (JST-JWPF IP67 waterproof or JST-SM with sealing boot) for `12V IN`, `CAN BUS`, `MIRROR BSD`, and `AUX LIGHT / 12V NAVI`.
+   - **12V Active Cradles:** For motorcycle GPS units with 12V powered cradles (e.g., Garmin Zūmo XT/XT2 motorcycle mount or BMW ConnectedRide Cradle), power is supplied directly from the switched 12V output of the Vehicle Satellite.
+   - **Field Serviceability:** If a mirror LED or auxiliary spotlight is damaged, it can be disconnected and swapped in 60 seconds without opening the hermetic main enclosure.
+3. **Modular Interlocking Flexibility ("Lego Principle"):**
+   - **Separated Deployment (BMW GS Adventure & Harley Road King Special):** The Cockpit Satellite mounts directly on the handlebar or windshield bridge; the Vehicle Satellite mounts on the frame spine or beak subframe. Consequently, **no unnecessary high-current or chassis wiring crosses the moving steering head**!
+   - **Interlocked Combined Deployment (Harley Road Glide / Sharknose & Batwing Fairing):** Both satellite housings incorporate matching dovetail slide rails. They snap securely together into a single unified distribution block installed inside the fairing cavity or media bay.
+
+---
+
+### 5.4 Vehicle-Specific Mounting & Integration Concepts
+
+The pairing of an IP68 monocoque Front Node with modular satellite blocks solves the physical packaging challenges across all three vehicle archetypes:
+
+```
++-----------------------------------------------------------------------------------------------------+
+|                              MOUNTING STRATEGIES BY VEHICLE ARCHETYPE                               |
++------------------------------------+--------------------------------+-------------------------------+
+| BMW GS / GSA ADVENTURE             | HARLEY ROAD KING SPECIAL (RKS) | HARLEY ROAD GLIDE / TOURING   |
++------------------------------------+--------------------------------+-------------------------------+
+| * Location: On front subframe      | * Location: Low at riser clamp | * Location: On inner fairing  |
+|   (Geweih) under beak behind side  |   / triple tree beneath head-  |   structure tubing (Ø 16-19mm |
+|   fairing panels (like ezCAN)      |   light & windshield           |   via front_node_tube_clamp)  |
+| * Harnessing: Exactly 1 shielded   | * "Front-to-Back Flip":        | * Satellites: Cockpit &       |
+|   cockpit cable routed along OEM   |   - Cables exit FORWARD into   |   Vehicle satellite snapped   |
+|   brake hose guide to handlebar    |     nacelle shadow             |   together via dovetail into  |
+| * Vehicle Satellite remains fixed  |   - Rider sees clean, solid    |   a unified block in fairing  |
+|   on frame / subframe              |     enclosure wall             | * Shortest runs to Display,   |
+| * Zero steering head clutter       |   - Integrated dock for SAM-   |   Ottocast & Glovebox         |
+|                                    |     M10Q GNSS puck             |                               |
+|                                    | * No CAN forward (Central Box  |                               |
+|                                    |   logs CAN at diag port)       |                               |
++------------------------------------+--------------------------------+-------------------------------+
+```
+
+1. **BMW R 1200 / 1250 / 1300 GS & Adventure (Beak & Subframe Mount):**
+   - The Front Node enclosure is mounted in the sheltered space beneath the beak and behind the side fairing panels on the front subframe (Geweih) using its 4-in-1 AMPS pattern or M4 silentblocks (identical to professional auxiliary controllers like Hex ezCAN or Denali CANsmart).
+   - From the Front Node, **exactly one** sealed cockpit jacket cable ($\varnothing 6.0\,\text{mm}$) routes vibration-protected along the factory BMW brake line and harness guide up the steering stem to the handlebars.
+   - At the handlebars, the Cockpit Satellite provides the 20W USB-PD charging port for the phone mount (SP Connect / QuadLock) and the PTT switch. The Vehicle Satellite remains stationary on the subframe, feeding auxiliary spot lights and mirror BSD LEDs directly.
+2. **Harley-Davidson Road King Special (RKS) & Naked Cruisers ("Front-to-Back Flip"):**
+   - On purist unfaired motorcycles, the Front Node mounts low on the handlebar riser base or top triple clamp in front of the handlebars.
+   - **The "Front-to-Back Flip" Principle:** The housing is installed rotated $180^\circ$:
+     - Both round jacket cables exit **forward**, disappearing into the optical shadow behind the massive headlight nacelle and fork tin covers.
+     - The wall facing the rider is a completely clean, solid, aesthetically pleasing surface without exposed plugs, sockets, or screw heads.
+     - Mounted directly on this rider-facing wall is a low-profile **micro-dock for the external u-blox SAM-M10Q GNSS puck**, connected via a short concealed Qwiic cable (`J12`). The rider sees a sleek, intentional instrument rather than brackets and wires.
+     - Because the Road King Special lacks a cockpit CAN display, no CAN bus wiring is routed forward—the Central Box under the seat handles CAN logging directly at the 6-pin HD diagnostic port.
+   - **The 3 Flexible Cockpit Operating Modes (Zero-Hardware-Change):**
+     Through the modular Cockpit Satellite ([`cockpit_breakout_block.scad`](../../hardware/cad/scad/04_front_node/cockpit_breakout_block.scad)), the rider has three fully plug-and-play operating concepts available on a naked cruiser—without exchanging a single PCB or enclosure part:
+
+     | Mode | Smartphone / `[ PHONE 20W ]` | `[ HOST ]` Port | `[ DONGLE ]` Port | `[ NAVI 5V ]` / `[ CAM 5V ]` |
+     | :--- | :--- | :--- | :--- | :--- |
+     | **Mode A: Purist / SP Connect** *(Default)* | Smartphone on handlebar (Navi & Display) | *Open / Spare* | *Open* | Action-Cam (GoPro / Insta360) |
+     | **Mode B: Classic Navigator** | Smartphone in pocket (charging) | *Open* | *Open* | Garmin Zūmo XT / TomTom Rider |
+     | **Mode C: Smart-Screen Upgrade** *(Optional)* | Smartphone in pocket (charging) | **Carpuride / Chigee Screen** | **Ottocast CP2AA Dongle** | Action-Cam (GoPro / Insta360) |
+
+     * **The Inherent Elegance of Mode C (Standalone Smart-Screen):**
+       * Instead of an OEM dashboard head unit (like on the Road Glide), an off-the-shelf 5" or 7" motorcycle touchscreen (Carpuride W502/W702, Chigee AIO-5, Ottocast Screen) connects directly to the **`[ HOST ]`** port. The screen functions as the USB host display.
+       * Via the internal automotive USB hub (`USB2514B`) on PCBA 05, this screen communicates directly with the wireless adapter on **`[ DONGLE ]`**. Budget screens that only support *wired* CarPlay/Android Auto out of the box are immediately converted into **full wireless CarPlay & wireless Android Auto systems**!
+       * **Zero-Power-Penalty:** A 5" or 7" screen draws approx. 5V @ 1.5–2.0A (7.5–10W) at peak daylight brightness. Because the screen replaces the standalone GPS navigator, the power demand of `[ NAVI 5V ]` is eliminated—the power budget is repurposed 1:1 by the smart screen. The 5V/3A buck converter (`U3`) operates completely within its thermal comfort envelope.
+       * **Helmet Audio & Voice Control:** Audio prompts and high-fidelity music streaming continue to route directly from the smartphone to the helmet headset (Cardo/Sena) via Bluetooth / OMM. The handlebar PTT switch on the Cockpit Satellite continues to trigger Siri / Google Assistant.
+       * **Vibration-Damped Clamping:** The short 20 cm USB-C link cable is firmly locked against handlebar vibrations by the 3D strain-relief clamping clamp.
+3. **Harley-Davidson Road Glide / Street Glide (Touring Sharknose & Batwing Fairing):**
+   - The Front Node is clamped directly to the round tubular steel subframe (Ø 16–19 mm) behind the fairing using the 2-piece clamp ([`front_node_fairing_tube_clamp.scad`](../../hardware/cad/scad/04_front_node/front_node_fairing_tube_clamp.scad)).
+   - Both satellite blocks click together via their dovetail tracks to form a compact unified breakout box mounted inside the fairing cavity or media bay.
+   - Provides ultra-short cable runs to the Harley Skyline OS / Boom! Box GTS head unit, Ottocast CP2AA wireless dongle, and cold air scoop sensor cluster.
 
 ---
 
@@ -670,6 +753,47 @@ For classic touring and bagger models with 2-Up comfort seats or exposed rear fe
 > **Fender Console Retirement (Deletion of `pod3_touring_fender_console`):**  
 > With the retirement of Pod 3, the rear fender on cruisers and baggers is no longer obstructed by an add-on console. The classic custom lines of the bare sheet metal fender remain 100% intact. The rear radar mounts discreetly below the license plate.
 
+#### 6.2.1 Front Node Mounting on Road King Special ("Front-to-Back Flip" & GNSS-Puck Dock)
+
+On unfaired custom and bagger models such as the **Harley-Davidson Road King Special (FLHRXS)**, no enclosed fairing cavity exists ahead of the rider. Intuitively routing cable exits rearwards toward the rider would clutter the triple clamp area and expose brackets directly in sight. OpenMotorBridge resolves this via the **"Front-to-Back Flip" mounting concept**:
+
+```
+            ROAD KING SPECIAL "FRONT-TO-BACK FLIP" MOUNTING
+                    (Top view onto upper triple tree)
+
+                 FORWARD DIRECTION / TOWARDS ROAD
+               [ HEADLIGHT NACELLE (SHADOW ZONE) ]
+                               ^
+                               |
+               Cable exits point FORWARD into nacelle:
+               * Exit 1: Cockpit harness (14-pin) -> Nacelle
+               * Exit 2: Vehicle harness (8-pin) -> Nacelle
+                 +--------------------------------+
+                 |     FRONT NODE ENCLOSURE       |
+                 |     (Rotated 180° on Z-axis)   |
+                 +--------------------------------+
+                 | [SAM-M10Q GNSS PUCK DOCK (J12)]|  <-- Rider sees only the
+                 +--------------------------------+      low-profile GPS eye!
+                               ^
+                  COMPLETELY SOLID DESIGN WALL
+                   (No plugs, no exposed screws)
+                               |
+                        RIDER'S VIEWPOINT
+                    [ HANDLEBAR / RISER BASE ]
+```
+
+1. **Mounting Location & Orientation:**
+   - The Front Node is mounted low on the **handlebar riser base or upper triple tree** immediately forward of the handlebar clamp.
+   - The enclosure is installed **rotated $180^\circ$**: Both sealed round jacket cable exits ($\varnothing 6.0\,\text{mm}$) face **forward**, disappearing into the dead optical shadow of the massive headlight nacelle and fork tin cowls.
+2. **Rider-Facing Solid Wall with GNSS-Puck Dock (`sam_m10q_rks_puck_dock.scad`):**
+   - The wall facing the rider is a completely clean, solid, aesthetically pleasing surface without exposed plugs, sockets, or screws.
+   - Form-fitted onto this surface is a low-profile **micro-dock for the external u-blox SAM-M10Q GNSS puck**, connected via a short concealed Qwiic cable (`J12`).
+   - **Result:** Instead of unsightly brackets and wire bundles, the rider sees a sleek, intentional instrument surface with an integrated GNSS receiver eye.
+3. **Satellites & Cable Routing:**
+   - **Cockpit Satellite:** Positioned discreetly beneath the left handlebar switchgear or clamped to the riser base. Provides the 20W USB-PD charging port for phone mounts (SP Connect / QuadLock) and the PTT terminal.
+   - **Vehicle Satellite:** Housed invisibly inside the headlight nacelle cavity. Taps 12V switched power (KL15 running light) and chassis ground, driving mirror BSD warning LEDs and auxiliary lights.
+   - **Zero CAN Wiring Across the Tank:** Because the Road King Special lacks a cockpit CAN display, **no CAN bus wiring is routed forward**. The Central Box under the seat handles CAN logging directly at the 6-pin HD diagnostic port.
+
 ---
 
 ### 6.3 Reference Kit 3: Adventure & Touring Enduros (BMW GS / GSA, KTM Adventure, Africa Twin)
@@ -704,7 +828,22 @@ For high-displacement dual-sport and overland adventure bikes featuring open tub
 +-----------------------------------------------------------------------------+
 ```
 
-#### 6.4.1 Cartridge Pods 1 & 2 (Lateral Modules) - The Dual Mounting Options
+#### 6.3.1 Front Node Mounting on BMW GS Subframe (Beak Subframe & Single-Cable Handlebar Run)
+
+On the BMW R 1200 / 1250 / 1300 GS and GS Adventure, the Front Node is packaged following the proven paradigm of professional auxiliary electronics modules (Hex ezCAN, Denali CANsmart):
+
+1. **Mounting on the Front Subframe (Geweih):**
+   - The Front Node mounts in the sheltered space **beneath the beak and behind the side fairing panels** directly on the round structural tubing of the front cockpit subframe.
+   - Secured via the integrated 4-in-1 base with **M4 silentblocks (Shore 50A EPDM)** to isolate high-frequency boxer vibrations, or via the 2-piece clamp ([`front_node_fairing_tube_clamp.scad`](../../hardware/cad/scad/04_front_node/front_node_fairing_tube_clamp.scad)).
+2. **Single-Cable Handlebar Run (Zero Steering Stem Clutter):**
+   - From the Front Node, **exactly one** sealed cockpit jacket cable ($\varnothing 6.0\,\text{mm}$) routes vibration-protected along the factory BMW brake line and wiring harness guide up the steering stem to the handlebars.
+   - **Zero detour wiring:** No heavy vehicle power cables, auxiliary lighting leads, or chassis lines cross the moving steering head.
+3. **Satellite Placement on the GS:**
+   - **Cockpit Satellite:** Clamped to the OEM $\varnothing 12\,\text{mm}$ navigation bar above the BMW TFT display or directly onto the handlebar. Provides labeled USB-C ports for 20W USB-PD fast-charging (for QuadLock Wireless Charging Head) and Garmin Zūmo / ConnectedRide Cradle, along with the PTT switch terminal.
+   - **Vehicle Satellite:** Remains stationary on the beak subframe. Auxiliary spotlights (Aux Light) and Blind Spot Detection mirror warning LEDs plug in directly at the subframe.
+   - **Climate & GNSS Puck:** The remote SAM-M10Q GNSS puck with integrated TMP117 temperature sensor seats inside the undisturbed laminar oncoming airflow scoop of the beak--ensuring clear zenith sky line-of-sight and true ambient temperature measurement unaffected by engine thermal radiation.
+
+#### 6.3.2 Cartridge Pods 1 & 2 (Lateral Modules) - The Dual Mounting Options
 
 Depending on luggage configurations, adventure bikes deploy two specialized mounting options:
 
@@ -945,9 +1084,55 @@ OPERATING MODES OF THE CAR SUPPORT KIT:
 
 ---
 
-#### 6.8.2 Dual-Stack Dashboard Wedge Dock for Central Box & Front Node (`car_dashboard_wedge_dock.scad`)
+#### 6.8.2 Front Node & Central Box Mounting in Cars (Glovebox Stealth vs. Dashboard Dock)
 
-For clean, integrated deployment in passenger vehicles (support cars / rally vans), a form-fitting, vibration-isolated **Dual-Stack Wedge Dock** was engineered. It consolidates both the **Front Node (`PCBA 05`) and the Central Box (`PCBA 01`)** into a compact desktop/cockpit console stationed on the dashboard or center console:
+For passenger cars, support vans, and chase vehicles, OpenMotorBridge delivers two proven mounting options--ranging from a 100% invisible stealth glovebox installation to a rapid-deployment rally cockpit dock:
+
+##### Option A: Glovebox Stealth Mount (Recommended Automotive Standard)
+
+For daily drivers, support cars, and rental/leased vehicles, an entirely invisible installation with zero add-on boxes cluttering the dashboard is ideal:
+
+```
+                  CAR GLOVEBOX STEALTH INTEGRATION
+ +-----------------------------------------------------------------------------+
+ | GLOVE COMPARTMENT / PASSENGER FOOTWELL (100% INVISIBLE):                    |
+ | * Front Node (PCBA 05): Secured via 3M Dual-Lock on glovebox rear wall      |
+ | * Direct Power Tap: 12V switched ignition (KL15) at cabin fuse box         |
+ | * Central Box (PCBA 01): Sits beside Front Node or under passenger seat    |
+ | * UWB Backbone (6.5 GHz): Fully wireless connection, zero cabin wires      |
+ +--------------------------------------+--------------------------------------+
+                                        |
+      +---------------------------------+---------------------------------+
+      | 14-Conductor Jacket Cable       | Thin 4-Pin Qwiic Cable (J12)
+      v (concealed under center console)| v (tucked behind A-pillar seal)
+ +-----------------------------------+ +-----------------------------------+
+ | CENTER CONSOLE / CUPHOLDER:       | | WINDSHIELD LOWER CORNER:          |
+ | [ COCKPIT BREAKOUT SATELLITE ]    | | [ SAM-M10Q GNSS & CLIMATE PUCK ]  |
+ | * [ PHONE 20W ] USB-PD Fast Chg   | | * Unobstructed 180° sky view      |
+ | * [ HOST ] CarPlay / Android Auto | | * Sub-meter GPS accuracy          |
+ | * [ DONGLE ] Ottocast Wireless    | | * Discreet in corner of glass     |
+ +-----------------------------------+ +-----------------------------------+
+```
+
+1. **Mounting Inside Glovebox:**
+   - The hermetic Front Node (`PCBA 05`) mounts invisibly using 3M Dual-Lock strips against the rear or side interior wall of the glove compartment, or tucked behind the lower passenger footwell trim.
+   - **Anti-Theft & OEM Aesthetics:** Zero add-on boxes or loose wiring appear on the dashboard; the car interior remains 100% factory clean.
+2. **Shortest Runs to Vehicle Power:**
+   - Nearly all modern passenger cars house the primary interior fuse panel immediately behind or beneath the glovebox.
+   - An off-the-shelf Add-A-Circuit Fuse Tap draws 12V switched ignition power (KL15) non-destructively and reversibly to the Vehicle Satellite (`J_VEHICLE`).
+3. **Discreet Cockpit Breakout Satellite in Center Console:**
+   - The sealed 14-conductor cockpit jacket cable routes out of the glovebox cavity, concealed beneath center console trim or into the armrest storage bin.
+   - There, the compact **Cockpit Breakout Satellite** presents its labeled USB-C female receptacles (`[ PHONE 20W ]`, `[ HOST ]`, `[ DONGLE ]`) with integrated 3D strain relief. Provides rapid 20W USB-PD charging and connects seamlessly to the car stereo's wired Apple CarPlay / Android Auto port using standard USB-C cables.
+4. **Remote GNSS Puck on Windshield:**
+   - The compact u-blox SAM-M10Q GNSS puck routes via a thin, ultra-flexible Qwiic cable (`J12`) tucked behind the right A-pillar weatherstrip to the lower corner of the windshield.
+   - Guarantees uncompromised satellite line-of-sight through the laminated glass while remaining completely out of sight.
+5. **Wireless Central Box Coupling via UWB:**
+   - The Central Box (`PCBA 01`) can rest directly alongside the Front Node in the glovebox or be placed under the passenger seat or in the trunk.
+   - The synchronous 6.5 GHz UWB backbone (`DW3110`) bridges the link deterministically with $< 0.4\,\text{ms}$ latency without running a single data wire through the passenger compartment.
+
+##### Option B: Dual-Stack Dashboard Wedge Dock (For Rally & Expedition Support)
+
+For rally support vehicles, desert expeditions, or rapid chase cars where the driver or co-driver requires all status LEDs, LoRa telemetry indicators, and hardware buttons permanently in direct view:
 
 ![Dashboard Wedge Dock CAD](../images/cad/car_dashboard_wedge_dock_cad.png)
 
@@ -957,12 +1142,12 @@ For clean, integrated deployment in passenger vehicles (support cars / rally van
   * **Lower Tier (Base Slide-in Bay for Front Node `PCBA 05`):**
     * Horizontal pocket ($100 \times 70 \times 26.5\,\text{mm}$ clearance) providing secure, vibration-damped retention of the Front Node enclosure.
     * **Windshield Aperture:** Faces directly toward the windshield--ensuring unobstructed sky line-of-sight for the integrated u-blox SAM-M10Q GNSS module and acoustic entry for the MSM261S4030 / SPH0645 MEMS microphone used in cabin noise compensation.
-    * **Lateral USB-PD Port Window:** Provides effortless access for connecting charging cables to both 20W USB-C ports (`J3` and `J4`).
+    * **Lateral USB-PD Port Window:** Provides effortless access for connecting charging cables to both 20W USB-C ports.
   * **Upper Tier (Tilted Deck for Central Box `PCBA 01`):**
     * Ergonomic **$15^\circ$ forward/upward tilted cradle** ($111.5 \times 75.5 \times 18\,\text{mm}$), aligning all RGB status LEDs and RF diagnostic indicators directly into driver and passenger sightlines without windshield glare.
     * Dual lateral finger notches ($40 \times 12\,\text{mm}$) enable rapid tool-free extraction of the Central Box when swapping between vehicles.
 * **Internal Concealed Harness Channel:**
-  * A continuous vertical conduit ($22 \times 36\,\text{mm}$) invisibly links the lower and upper bays: The 12V automotive Y-adapter harness ("Bench & Support-Car Harness") splits internally--Branch A routes concealed to the JST-JWPF 2-pin port `J1` of the Front Node, while Branch B routes upward to the Deutsch DTM-12 port `J1` of the Central Box.
+  * A continuous vertical conduit ($22 \times 36\,\text{mm}$) invisibly links the lower and upper bays: The 12V automotive Y-adapter harness ("Bench & Support-Car Harness") splits internally--Branch A routes concealed to the Front Node, while Branch B routes upward to the Deutsch DTM-12 port `J1` of the Central Box.
 * **Vibration-Damped Non-Marring Base:**
   * 4 circular pockets ($\varnothing 12 \times 1.5\,\text{mm}$) on the bottom accommodate 3M Bumpon silicone rubber bumpers or 3M VHB adhesive pads, keeping the dual dock firmly in place without rattling or dashboard scuffs even during aggressive driving.
 

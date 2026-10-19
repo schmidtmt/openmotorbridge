@@ -1,30 +1,61 @@
 // =============================================================================
-// OpenMotorBridge - Front Node: IP67 EPDM Cable Comb & Compression Clamp System
+// OpenMotorBridge - Front Node: IP68 Circular TPU Cable Glands & Strain Relief
 // =============================================================================
 // File: hardware/cad/scad/04_front_node/parts/005_cable_combs.scad
-// Description: IP67 elastomeric compression glands for South (6-Port USB/Charge)
-//              and North (6-Port Vehicle/Power/Sensor) cable exits, plus East USB-C.
+// Description: IP68 hermetic circular cable gland ports for South (Cockpit 16P)
+//              and North (Vehicle 8P) Ø 6.0 mm jacket cables, plus East USB-C.
 // =============================================================================
 
 include <../../00_common/parameters.scad>;
 
-// 1. South USB/Charge Cable Pocket Cutout (in Tub rim, Y = 0)
-// Accommodates 6x USB/Power cables: J4 (Host, X=23.25), J5 (Phone PD1, X=37.00),
-//                                   J6 (CP2AA, X=48.50), J5_MP3 (Glovebox PD3, X=61.75),
-//                                   J6_AUX (Cockpit, X=73.25), J8 (Action-Cam, X=80.75)
-module south_cable_comb_cutout(z_start = FRONT_NODE_TUB_H - 8.0, h = 8.1) {
-    // Cutout spans Tub X in [14.0, 84.0] mm (70.0 mm width, centered between corner bosses)
-    translate([14.0, -1.0, z_start])
-        cube(size=[70.0, FRONT_NODE_WALL + 5.0, h], center=false);
+// 1. South Cockpit Cable Gland Cutout (in Tub South Wall, Y = 0 mm, X = 43.0 mm)
+// Aligned directly with PCBA 05 J_COCKPIT (KiCad: X=135.0 mm, Y=114.5 mm)
+module south_round_cable_gland_cutout(
+    x_center = 43.0,
+    z_center = FRONT_NODE_WALL + FRONT_NODE_STANDOFF_H + 4.0, // Z = 9.5 mm
+    bore_r   = 4.0, // Ø 8.0 mm bore for TPU boot
+    collar_r = 5.2, // Ø 10.4 mm internal retention counterbore
+    collar_d = 1.2
+) {
+    // A. Main pass-through cylindrical bore through South wall
+    translate([x_center, -1.0, z_center])
+        rotate([-90, 0, 0])
+            cylinder(r=bore_r, h=FRONT_NODE_WALL + 2.0, center=false, $fn=36);
+            
+    // B. Internal counterbore on inner tub face for anti-pullout collar
+    translate([x_center, FRONT_NODE_WALL - collar_d, z_center])
+        rotate([-90, 0, 0])
+            cylinder(r=collar_r, h=collar_d + 1.0, center=false, $fn=36);
 }
 
-// 2. North Vehicle/Signal/Power Cable Pocket Cutout (in Tub rear rim, Y = 68.0 mm)
-// Accommodates 6x harnesses: J9 (BSD, X=33.50), J3 (PTT, X=43.25), J1 (12V, X=54.75),
-//                            J10 (Qi, X=61.75), J11 (Aux, X=68.75), J2 (CAN, X=75.75)
-module north_cable_comb_cutout(z_start = FRONT_NODE_TUB_H - 7.5, h = 7.6) {
-    // Cutout spans Tub X in [24.0, 82.0] mm (58.0 mm width)
-    translate([24.0, FRONT_NODE_OUTER_W - FRONT_NODE_WALL - 1.0, z_start])
-        cube(size=[58.0, FRONT_NODE_WALL + 5.0, h], center=false);
+// Backwards-compatible alias for tub subtraction
+module south_cable_comb_cutout(z_start = 0, h = 0) {
+    south_round_cable_gland_cutout();
+}
+
+// 2. North Vehicle Cable Gland Cutout (in Tub North Wall, Y = 68.0 mm, X = 39.0 mm)
+// Aligned directly with PCBA 05 J_VEHICLE (KiCad: X=131.0 mm, Y=75.3 mm)
+module north_round_cable_gland_cutout(
+    x_center = 39.0,
+    z_center = FRONT_NODE_WALL + FRONT_NODE_STANDOFF_H + 4.0, // Z = 9.5 mm
+    bore_r   = 4.0, // Ø 8.0 mm bore for TPU boot
+    collar_r = 5.2, // Ø 10.4 mm internal retention counterbore
+    collar_d = 1.2
+) {
+    // A. Main pass-through cylindrical bore through North wall
+    translate([x_center, FRONT_NODE_OUTER_W - FRONT_NODE_WALL - 1.0, z_center])
+        rotate([-90, 0, 0])
+            cylinder(r=bore_r, h=FRONT_NODE_WALL + 2.0, center=false, $fn=36);
+            
+    // B. Internal counterbore on inner tub face for anti-pullout collar
+    translate([x_center, FRONT_NODE_OUTER_W - FRONT_NODE_WALL - 0.1, z_center])
+        rotate([-90, 0, 0])
+            cylinder(r=collar_r, h=collar_d + 0.1, center=false, $fn=36);
+}
+
+// Backwards-compatible alias for tub subtraction
+module north_cable_comb_cutout(z_start = 0, h = 0) {
+    north_round_cable_gland_cutout();
 }
 
 // 3. USB-C Service Port Cutout (East wall, X = 98.0 mm, Y = 24.1 mm, forward right flank)
@@ -43,44 +74,84 @@ module front_node_usbc_service_cutout(
         cube(size=[1.4, w + 3.0, h + 3.0], center=false);
 }
 
-// 4. South 6-Slot EPDM Elastomer Comb (Insert Model)
-module south_epdm_cable_comb() {
-    color([0.15, 0.15, 0.15, 0.95]) // Black soft rubber
+// 4. Circular TPU Cable Gland Boot (Individual Component)
+module front_node_tpu_cable_boot(
+    cable_r   = 3.05, // Ø 6.1 mm tight fit on Ø 6.0 mm jacket cable
+    bore_r    = 3.95, // Ø 7.9 mm snug fit in Ø 8.0 mm wall hole
+    flange_r  = 5.0,  // Ø 10.0 mm retaining collar
+    flange_w  = 1.4,  // Collar thickness
+    groove_w  = 2.5,  // Wall snap groove (matching FRONT_NODE_WALL = 2.5 mm)
+    boot_len  = 13.0  // Conical strain-relief extension length
+) {
+    color([0.15, 0.15, 0.15, 0.95]) // Black flexible TPU (Shore 85A/95A)
     difference() {
-        cube(size=[69.6, FRONT_NODE_WALL + 3.2, 7.8], center=false);
-        
-        // 6x Cable Channels (Ø 4.2 mm) for J4, J5, J6, J5_MP3, J6_AUX, J8
-        // Positions relative to comb origin (starts at X_Tub = 14.0 mm):
-        cable_x = [23.25 - 14.0, 37.00 - 14.0, 48.50 - 14.0, 61.75 - 14.0, 73.25 - 14.0, 80.75 - 14.0];
-        for (cx = cable_x) {
-            translate([cx, -0.5, 4.0])
-                rotate([-90, 0, 0])
-                    cylinder(r=2.1, h=FRONT_NODE_WALL + 5.0, center=false, $fn=24);
-                    
-            // Slit for easy cable insertion without cutting connectors
-            translate([cx - 0.4, -0.5, 4.0])
-                cube(size=[0.8, FRONT_NODE_WALL + 5.0, 4.5], center=false);
+        union() {
+            // A. Inner anti-pullout retaining flange
+            cylinder(r=flange_r, h=flange_w, center=false, $fn=36);
+            
+            // B. Cylindrical wall pass-through section
+            translate([0, 0, flange_w])
+                cylinder(r=bore_r, h=groove_w, center=false, $fn=36);
+                
+            // C. Outer sealing ring / shoulder (locks against outer wall face)
+            translate([0, 0, flange_w + groove_w])
+                cylinder(r=flange_r, h=1.5, center=false, $fn=36);
+                
+            // D. Conical anti-kink strain-relief flex boot
+            translate([0, 0, flange_w + groove_w + 1.5])
+                cylinder(r1=flange_r, r2=cable_r + 1.0, h=boot_len, center=false, $fn=36);
+                
+            // E. Concentric anti-kink flex ribs along the boot cone
+            for (z = [3.0, 6.5, 10.0]) {
+                translate([0, 0, flange_w + groove_w + 1.5 + z])
+                    cylinder(r1=cable_r + 1.6, r2=cable_r + 1.1, h=1.0, center=false, $fn=36);
+            }
         }
+        
+        // Continuous central through-bore for the jacket cable
+        translate([0, 0, -1.0])
+            cylinder(r=cable_r, h=flange_w + groove_w + 1.5 + boot_len + 2.0, center=false, $fn=36);
     }
 }
 
-// 5. North 6-Slot EPDM Elastomer Comb (Insert Model)
-module north_epdm_cable_comb() {
-    color([0.15, 0.15, 0.15, 0.95]) // Black soft rubber
-    difference() {
-        cube(size=[57.6, FRONT_NODE_WALL + 3.2, 7.3], center=false);
-        
-        // 6x Cable Channels (Ø 3.2 mm) for J9, J3, J1, J10, J11, J2
-        // Positions relative to comb origin (starts at X_Tub = 24.0 mm):
-        cable_x = [33.50 - 24.0, 43.25 - 24.0, 54.75 - 24.0, 61.75 - 24.0, 68.75 - 24.0, 75.75 - 24.0];
-        for (cx = cable_x) {
-            translate([cx, -0.5, 3.8])
-                rotate([-90, 0, 0])
-                    cylinder(r=1.6, h=FRONT_NODE_WALL + 5.0, center=false, $fn=24);
-                    
-            // Slit for easy cable insertion
-            translate([cx - 0.4, -0.5, 3.8])
-                cube(size=[0.8, FRONT_NODE_WALL + 5.0, 4.0], center=false);
-        }
+// 5. Printable Pair of TPU Cable Glands (Front Node)
+module front_node_cable_glands_pair() {
+    union() {
+        // Cockpit Boot (South)
+        translate([0, -8.0, 0])
+            front_node_tpu_cable_boot();
+            
+        // Vehicle Boot (North)
+        translate([0, 8.0, 0])
+            front_node_tpu_cable_boot();
+            
+        // Breakaway 0.8 mm runner joining both boots for reliable build-plate adhesion
+        translate([-1.5, -8.0, 0])
+            cube(size=[3.0, 16.0, 0.8], center=false);
     }
 }
+
+// 6. Installed Boot Helpers for Assemblies
+module front_node_south_cable_boot_installed() {
+    translate([43.0, FRONT_NODE_WALL, FRONT_NODE_WALL + FRONT_NODE_STANDOFF_H + 4.0])
+        rotate([90, 0, 0])
+            front_node_tpu_cable_boot();
+}
+
+module front_node_north_cable_boot_installed() {
+    translate([39.0, FRONT_NODE_OUTER_W - FRONT_NODE_WALL, FRONT_NODE_WALL + FRONT_NODE_STANDOFF_H + 4.0])
+        rotate([-90, 0, 0])
+            front_node_tpu_cable_boot();
+}
+
+// Backwards-compatible aliases for legacy assembly files
+module south_epdm_cable_comb() {
+    front_node_south_cable_boot_installed();
+}
+
+module north_epdm_cable_comb() {
+    front_node_north_cable_boot_installed();
+}
+
+// Standalone render
+front_node_cable_glands_pair();

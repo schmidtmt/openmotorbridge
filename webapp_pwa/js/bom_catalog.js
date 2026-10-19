@@ -876,19 +876,19 @@ const BOM_PARTS = {
   "part3d_front_node_cable_glands_tpu": {
     "type": "part_3d",
     "name": {
-      "de": "Front-Node Dichtkämme (TPU)",
-      "en": "Front Node Sealing Combs (TPU)"
+      "de": "Front-Node TPU-Knickschutztüllen (Paar)",
+      "en": "Front Node TPU Cable Gland Boots (Pair)"
     },
-    "spec": "TPU Shore 95A (Elastische Schlitzdichtung)",
+    "spec": "TPU Shore 95A (Formschlüssige Knickschutztüllen für Ø 6.0 mm Rundkabel)",
     "source": "3D-Druck (TPU 95A)",
     "unit": "Paar",
     "cost_eur": [
-      0.4,
-      0.9
+      0.5,
+      1.0
     ],
     "desc": {
-      "de": "Elastische Dichtkämme für wasserdichte Kabeleinführung ins Cockpit",
-      "en": "Elastomeric sealing combs for watertight cockpit cable routing"
+      "de": "Hermetische Dichtmanschetten für die 2 Rundkabel-Auslässe ins Cockpit & Fahrzeug",
+      "en": "Hermetic sealing boots for the 2 round cable exits to cockpit & vehicle"
     },
     "file": "front_node_cable_glands_tpu.stl",
     "group": "Front-Node",
@@ -935,6 +935,50 @@ const BOM_PARTS = {
       "en": "Universal Fairing Tube Clamp for GPS bars & cockpit stays"
     },
     "file": "front_node_fairing_tube_clamp.stl",
+    "group": "Front-Node",
+    "pkg_qty": 1,
+    "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
+  },
+  "part3d_cockpit_breakout_block": {
+    "type": "part_3d",
+    "name": {
+      "de": "Cockpit-Satellitenverteiler Gehäuse",
+      "en": "Cockpit Breakout Satellite Housing"
+    },
+    "spec": "MJF PA12 / ASA (3x USB-C Ports, PTT-Klemme & Zugentlastungs-Bügel)",
+    "source": "3D-Druck (MJF PA12 / ASA)",
+    "unit": "Stk.",
+    "cost_eur": [
+      2.0,
+      4.0
+    ],
+    "desc": {
+      "de": "Cockpit-Verteilerleiste für USB-PD 20W, Dongle, Host und PTT-Taster",
+      "en": "Cockpit distribution bar for USB-PD 20W, dongle, host, and PTT button"
+    },
+    "file": "cockpit_breakout_block.stl",
+    "group": "Front-Node",
+    "pkg_qty": 1,
+    "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
+  },
+  "part3d_vehicle_breakout_block": {
+    "type": "part_3d",
+    "name": {
+      "de": "Fahrzeug-Satellitenverteiler Gehäuse",
+      "en": "Vehicle Breakout Satellite Housing"
+    },
+    "spec": "MJF PA12 / ASA (COTS Raststecker-Aufnahmen & Schwalbenschwanz)",
+    "source": "3D-Druck (MJF PA12 / ASA)",
+    "unit": "Stk.",
+    "cost_eur": [
+      1.8,
+      3.5
+    ],
+    "desc": {
+      "de": "Wetterfeste Verteilerbox für 12V In, CAN-Bus, Spiegel-LEDs und Aux-Licht",
+      "en": "Weatherproof breakout box for 12V in, CAN bus, mirror LEDs, and aux light"
+    },
+    "file": "vehicle_breakout_block.stl",
     "group": "Front-Node",
     "pkg_qty": 1,
     "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
@@ -2488,45 +2532,65 @@ const BOM_PARTS = {
     "pkg_qty": 10,
     "pkg_name": "10er Kabelsortiment"
   },
-  "cable_usbc_panel_mount_front": {
+  "cable_cockpit_harness_16p": {
     "type": "cable",
     "name": {
-      "de": "USB-C Panel-Mount Pigtail (Front-Node)",
-      "en": "USB-C Panel-Mount Pigtail (Front Node)"
+      "de": "Cockpit-Kabelbaum 16-polig (geschirmt)",
+      "en": "Cockpit Harness 16-Conductor (Shielded)"
     },
-    "spec": "JST-PH 5-Pin auf wasserdichte Panel-Mount USB-C Buchse (IP67)",
-    "source": "Amazon / COTS",
+    "spec": "16-poliges geschirmtes Rundkabel (Ø 6.0 mm, 50 cm) mit 2.0 mm Verriegelungsstecker",
+    "source": "COTS Standard",
     "unit": "Stk.",
     "cost_eur": [
-      2.4,
-      4.2
+      3.5,
+      6.0
     ],
     "desc": {
-      "de": "Telefon Fast-Charge (Lenker) & Glovebox Ladeanschluss",
-      "en": "Phone fast-charge (handlebar) & glovebox charging port"
+      "de": "Verbindet PCBA 05 J_COCKPIT mit dem Cockpit-Satellitenverteiler",
+      "en": "Connects PCBA 05 J_COCKPIT to Cockpit Breakout Satellite"
     },
     "pkg_qty": 1,
-    "pkg_name": "Einzelkabel (Amazon / COTS)"
+    "pkg_name": "Konfektionierter Kabelbaum"
   },
-  "cable_usba_panel_mount_front": {
+  "cable_vehicle_harness_8p": {
     "type": "cable",
     "name": {
-      "de": "USB-A Buchsen Pigtail",
-      "en": "USB-A Socket Pigtail"
+      "de": "Fahrzeug-Kabelbaum 8-polig (geschirmt)",
+      "en": "Vehicle Harness 8-Conductor (Shielded)"
     },
-    "spec": "JST-PH 4-Pin auf Standard USB-A Buchse (15-20 cm)",
+    "spec": "8-poliges geschirmtes Rundkabel (Ø 6.0 mm, 40 cm) mit 2.0 mm Verriegelungsstecker",
+    "source": "COTS Standard",
+    "unit": "Stk.",
+    "cost_eur": [
+      2.8,
+      4.8
+    ],
+    "desc": {
+      "de": "Verbindet PCBA 05 J_VEHICLE mit dem Fahrzeug-Satellitenverteiler",
+      "en": "Connects PCBA 05 J_VEHICLE to Vehicle Breakout Satellite"
+    },
+    "pkg_qty": 1,
+    "pkg_name": "Konfektionierter Kabelbaum"
+  },
+  "cable_cots_usbc_phone": {
+    "type": "cable",
+    "name": {
+      "de": "COTS USB-C Smartphone-Kabel",
+      "en": "COTS USB-C Smartphone Cable"
+    },
+    "spec": "Standard USB-C auf USB-C Kabel (20-30 cm, gewinkelt/geflochten)",
     "source": "Amazon / COTS",
     "unit": "Stk.",
     "cost_eur": [
-      2.4,
-      4.2
+      2.5,
+      5.0
     ],
     "desc": {
-      "de": "CP2AA Wireless CarPlay Dongle & Cockpit Aux Port",
-      "en": "CP2AA wireless CarPlay dongle & cockpit aux port"
+      "de": "Verbindung von Cockpit-Satellit zum Smartphone mit Zugentlastung",
+      "en": "Connection from Cockpit Satellite to smartphone with strain relief"
     },
     "pkg_qty": 1,
-    "pkg_name": "Einzelkabel (Amazon / COTS)"
+    "pkg_name": "Handelsübliches COTS USB-C Kabel"
   },
   "cable_usbc_panel_mount_mainbox": {
     "type": "cable",
@@ -2702,6 +2766,14 @@ const BOM_ASSEMBLIES = {
         "qty": 1
       },
       {
+        "part_id": "part3d_cockpit_breakout_block",
+        "qty": 1
+      },
+      {
+        "part_id": "part3d_vehicle_breakout_block",
+        "qty": 1
+      },
+      {
         "part_id": "pcba_05",
         "qty": 1
       },
@@ -2742,19 +2814,19 @@ const BOM_ASSEMBLIES = {
         "qty": 1
       },
       {
-        "part_id": "cable_front_node_12v",
-        "qty": 1
-      },
-      {
         "part_id": "antenna_fxuwb10_uwb",
         "qty": 1
       },
       {
-        "part_id": "cable_usbc_panel_mount_front",
+        "part_id": "cable_cockpit_harness_16p",
         "qty": 1
       },
       {
-        "part_id": "cable_usba_panel_mount_front",
+        "part_id": "cable_vehicle_harness_8p",
+        "qty": 1
+      },
+      {
+        "part_id": "cable_cots_usbc_phone",
         "qty": 1
       }
     ]
