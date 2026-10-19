@@ -676,13 +676,21 @@ Anstatt empfindliche Einzelstecker im Spritzwasserbereich des Motorrads zu verte
    - **Power-Only für Cam & Navi:** Action-Cams (GoPro, Insta360) und USB-Navis (Garmin, TomTom, Beeline) sind als reine Stromversorgungs-Ports (BC 1.2 DCP mit intern gebrückten Datenleitungen) ausgelegt. Dadurch wird zuverlässig verhindert, dass angeschlossene Kameras oder Navis in den blockierenden PC-Massenspeicher- oder Webcam-Modus wechseln. Auf der Front-Node-Platine werden somit keinerlei USB-Hub-Datenkanäle verschwendet.
    - **Integrierte mechanische Zug- und Rüttelsicherung:** Eine formschlüssige 3D-gedruckte Klemmleiste, die mit zwei M3-Inbusschrauben fixiert wird, spannt die Steckerhälse aller eingesteckten USB-C-Kabel unlösbar fest. Selbst stärkste Motor- und Fahrbahnvibrationen führen zu keinem Wackelkontakt oder Lösen der Stecker.
    - **COTS-Kabel-Freiheit:** Der Fahrer kann handelsübliche Standard-USB-C-Kabel beliebig konfigurieren (20 cm kurz, gewinkelt, geflochten) – kein teures Sonderzubehör erforderlich.
+
+   ![Cockpit Breakout Satellite CAD](../images/cad/cockpit_breakout_block_cad.png)
+
 2. **Fahrzeug-Satellit (`vehicle_breakout_block.scad`):**
    - **Anschlüsse:** Ausgestattet mit industriellen, codierten COTS-Raststeckern (JST-JWPF IP67 wasserdicht oder JST-SM mit Schutztülle) für `12V IN`, `CAN BUS`, `MIRROR BSD` und `AUX LIGHT / 12V NAVI`.
    - **12V-Aktivhalterungen:** Für Motorrad-Navis mit 12V-Aktivhalterung (z. B. Garmin Zūmo XT/XT2 Motorradhalterung oder BMW ConnectedRide Cradle) erfolgt die Stromversorgung direkt über den geschalteten 12V-Ausgang des Fahrzeug-Satelliten.
    - **Wartungsfreundlichkeit:** Bei Beschädigung eines Spiegels mit Radar-LED oder eines Zusatzscheinwerfers wird die Komponente in 60 Sekunden werkzeuglos abgesteckt und getauscht, ohne das Hauptgehäuse öffnen zu müssen.
+
+   ![Vehicle Breakout Satellite CAD](../images/cad/vehicle_breakout_block_cad.png)
+
 3. **Modulare Kombinierbarkeit ("Lego-Prinzip"):**
    - **Getrennt montiert (BMW GS Adventure & Harley Road King Special):** Der Cockpit-Satellit sitzt direkt am Lenker bzw. Scheibenhalter; der Fahrzeug-Satellit sitzt fest am Rahmen oder Schnabel. Dadurch wird **kein einziges unnötiges Kabel über das bewegliche Lenkkopflager** geführt!
    - **Zusammengeclipst (Harley Road Glide / Sharknose & Batwing Fairing):** Beide Satellitenblöcke besitzen an den Gehäuseflanken formschlüssige Schwalbenschwanz-Führungen (Dovetail). Sie lassen sich mit einem Klick zu einer kompakten, gemeinsamen Verteilereinheit zusammenstecken und im Handschuhfach oder hinter dem Innenverkleidungsträger montieren.
+
+   ![Front Node Satellites Dovetail Combo CAD](../images/cad/front_node_satellites_dovetail_combo_cad.png)
 
 ---
 

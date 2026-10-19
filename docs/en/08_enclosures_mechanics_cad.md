@@ -604,13 +604,21 @@ Instead of exposing delicate wire splices or open connectors to weather and road
    - **Power-Only for Cam & Navi:** Action cameras (GoPro, Insta360) and 5V USB navigators (Garmin, TomTom, Beeline) are designed as pure power-only ports (BC 1.2 DCP with shorted data pins). This eliminates camera lockups in PC mass-storage or webcam prompt mode and preserves all USB hub data bandwidth on the Front Node PCB.
    - **Integrated Mechanical Strain & Anti-Vibration Clamp:** A custom 3D-printed clamping bar secured with two M3 hex socket screws firmly clamps the connector collars of standard inserted USB-C cables. Even severe road shocks and high-frequency engine harmonics cannot loosen or dislodge the connections.
    - **COTS Cable Versatility:** Riders can plug in any standard off-the-shelf USB-C cable (short 20 cm, right-angled, braided nylon) without requiring expensive custom wiring assemblies.
+
+   ![Cockpit Breakout Satellite CAD](../images/cad/cockpit_breakout_block_cad.png)
+
 2. **Vehicle Breakout Satellite (`vehicle_breakout_block.scad`):**
    - **Connectors:** Equipped with proven automotive-grade COTS positive-latch connectors (JST-JWPF IP67 waterproof or JST-SM with sealing boot) for `12V IN`, `CAN BUS`, `MIRROR BSD`, and `AUX LIGHT / 12V NAVI`.
    - **12V Active Cradles:** For motorcycle GPS units with 12V powered cradles (e.g., Garmin Zūmo XT/XT2 motorcycle mount or BMW ConnectedRide Cradle), power is supplied directly from the switched 12V output of the Vehicle Satellite.
    - **Field Serviceability:** If a mirror LED or auxiliary spotlight is damaged, it can be disconnected and swapped in 60 seconds without opening the hermetic main enclosure.
+
+   ![Vehicle Breakout Satellite CAD](../images/cad/vehicle_breakout_block_cad.png)
+
 3. **Modular Interlocking Flexibility ("Lego Principle"):**
    - **Separated Deployment (BMW GS Adventure & Harley Road King Special):** The Cockpit Satellite mounts directly on the handlebar or windshield bridge; the Vehicle Satellite mounts on the frame spine or beak subframe. Consequently, **no unnecessary high-current or chassis wiring crosses the moving steering head**!
    - **Interlocked Combined Deployment (Harley Road Glide / Sharknose & Batwing Fairing):** Both satellite housings incorporate matching dovetail slide rails. They snap securely together into a single unified distribution block installed inside the fairing cavity or media bay.
+
+   ![Front Node Satellites Dovetail Combo CAD](../images/cad/front_node_satellites_dovetail_combo_cad.png)
 
 ---
 

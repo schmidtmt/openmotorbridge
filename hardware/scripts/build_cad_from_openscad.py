@@ -255,6 +255,27 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
         "Tomorrow"
     ),
     (
+        "04_front_node/breakout_satellites_assembly.scad",
+        os.path.join(CAD_IMG_DIR, "cockpit_breakout_block_cad.png"),
+        "43,14,9,55,0,320,170",
+        "Tomorrow",
+        ["-D", 'mode="cockpit"']
+    ),
+    (
+        "04_front_node/breakout_satellites_assembly.scad",
+        os.path.join(CAD_IMG_DIR, "vehicle_breakout_block_cad.png"),
+        "38,14,9,55,0,320,150",
+        "Tomorrow",
+        ["-D", 'mode="vehicle"']
+    ),
+    (
+        "04_front_node/breakout_satellites_assembly.scad",
+        os.path.join(CAD_IMG_DIR, "front_node_satellites_dovetail_combo_cad.png"),
+        "43,28,9,55,0,320,220",
+        "Tomorrow",
+        ["-D", 'mode="combo"']
+    ),
+    (
         "02_pod_base/parts/006_fender_curved_saddle.scad",
         os.path.join(CAD_IMG_DIR, "fender_curved_saddle_cad.png"),
         "0,0,8,55,0,310,280",
