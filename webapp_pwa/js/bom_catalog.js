@@ -945,7 +945,7 @@ const BOM_PARTS = {
       "de": "Cockpit-Satellitenverteiler Gehäuse",
       "en": "Cockpit Breakout Satellite Housing"
     },
-    "spec": "MJF PA12 / ASA (3x USB-C Ports, PTT-Klemme & Zugentlastungs-Bügel)",
+    "spec": "MJF PA12 / ASA (5x USB-C Ports, JST-GH PTT Buchse & Zugentlastungs-Bügel)",
     "source": "3D-Druck (MJF PA12 / ASA)",
     "unit": "Stk.",
     "cost_eur": [
@@ -953,8 +953,8 @@ const BOM_PARTS = {
       4.0
     ],
     "desc": {
-      "de": "Cockpit-Verteilerleiste für USB-PD 20W, Dongle, Host und PTT-Taster",
-      "en": "Cockpit distribution bar for USB-PD 20W, dongle, host, and PTT button"
+      "de": "Cockpit-Verteilerleiste für PCBA 05B (Phone 20W, Dongle, Host, Cam, Navi & PTT-Taster)",
+      "en": "Cockpit distribution bar for PCBA 05B (Phone 20W, dongle, host, cam, navi & PTT button)"
     },
     "file": "cockpit_breakout_block.stl",
     "group": "Front-Node",
@@ -1734,7 +1734,7 @@ const BOM_PARTS = {
       "de": "PCBA 05B: Cockpit Breakout Satellit",
       "en": "PCBA 05B: Cockpit Breakout Satellite"
     },
-    "spec": "76x22 mm 2-Layer PCB mit 5x USB-C SMD Buchsen, 16-Pin 2.0 mm Latch Header & 2-Pin PTT Klemme",
+    "spec": "76x20 mm 2-Layer PCB mit 5x USB-C SMD Buchsen, 16-Pin 2.0 mm Header & 2-Pin JST-GH PTT SMD Buchse",
     "source": "JLCPCB / SMT",
     "unit": "Stk.",
     "cost_eur": [
@@ -2971,8 +2971,12 @@ const BOM_ASSEMBLIES = {
         "qty": 4
       },
       {
+        "part_id": "fastener_din912_m3_16",
+        "qty": 2
+      },
+      {
         "part_id": "fastener_din934_m3",
-        "qty": 4
+        "qty": 6
       },
       {
         "part_id": "fastener_din934_m4",
@@ -2980,7 +2984,7 @@ const BOM_ASSEMBLIES = {
       },
       {
         "part_id": "fastener_din912_m25_6",
-        "qty": 4
+        "qty": 6
       },
       {
         "part_id": "fastener_din912_m5_25",

@@ -95,6 +95,23 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 
 ---
 
+## 5.1 PCBA 05B: Cockpit Breakout Satellit (`openmotorbridge_cockpit_breakout`, 2-Layer FR4 TG150, 76 x 20 mm)
+
+| Designator | Bauteil / MPN | Hersteller | Gehäuse | LCSC / JLCPCB Part # | Funktion |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **`J1`** | USB-C 16-Pin Receptacle | Korean Hro TYPE-C-31-M-12 / GCT | SMD Horizontal | `C165948` / `C2765186` | Port 1: Smartphone 20W USB-PD Fast-Charge (VBUS_PD, DN1_DM, DN1_DP, DN1_CC, PGND) |
+| **`J2`** | USB-C 16-Pin Receptacle | Korean Hro TYPE-C-31-M-12 / GCT | SMD Horizontal | `C165948` / `C2765186` | Port 2: CP2AA Wireless Dongle (VCC_5V_OTTOCAST, DN2_DM, DN2_DP, GND) |
+| **`J3`** | USB-C 16-Pin Receptacle | Korean Hro TYPE-C-31-M-12 / GCT | SMD Horizontal | `C165948` / `C2765186` | Port 3: OEM Infotainment Upstream Host (USB_UP_VBUS, UP_DM, UP_DP, GND) |
+| **`J4`** | USB-C 16-Pin Receptacle | Korean Hro TYPE-C-31-M-12 / GCT | SMD Horizontal | `C165948` / `C2765186` | Port 4: Action-Cam 5V Power-Only (BC 1.2 DCP mit D+/D- gebrückt, VCC_5V_AUX, GND) |
+| **`J5`** | USB-C 16-Pin Receptacle | Korean Hro TYPE-C-31-M-12 / GCT | SMD Horizontal | `C165948` / `C2765186` | Port 5: Navi 5V Power-Only (BC 1.2 DCP mit D+/D- gebrückt, VCC_5V_AUX, GND) |
+| **`J6`** | JST-GH 2-Pin Horiz. Header | JST `SM02B-GHS-TB` | SMD 1.25 mm Raste | `C2897368` | Lenkertaster PTT Gruppenfunk (Pin 1: PTT_IN1_N, Pin 2: GND, horizontal nach Norden, 0 mm Überstand) |
+| **`J_IN`**| 16-Pin Dual-Row Header | JST / Wurth `B16B-PHDSS` | 2.00 mm SMD Latch | `C289119` | Zuleitung vom Front-Knoten PCBA 05 (J_COCKPIT) via geschirmtes 16-Ader-Kabel |
+| **`R1-R6`**| 5.1k $\Omega$ 1% 1/10W Resistor | UniOhm / Yageo | SMD 0603 | `C23186` | CC1/CC2 Pull-Down Widerstände für USB Type-C Port-Erkennung (J1, J2, J3) |
+| **`C1-C5`**| 100 nF 50V X7R Capacitor | Murata / Samsung | SMD 0603 | `C14663` | HF-Entkopplung pro VBUS-Zweig direkt an den Buchsen |
+| **`C6-C10`**| 10 µF 25V X5R/X7R Capacitor| Murata / Samsung | SMD 0603/0805 | `C15850` | VBUS Stützkondensatoren zur Spannungsstabilisierung bei Lastspitzen |
+
+---
+
 ## 6. PCBA 06: MagSafe Rahmendock-Adapter (`openmotorbridge_magsafe_dock`, 2-Layer FR4, 28 x 11.5 mm) [Optional / Legacy]
 
 > [!NOTE]
@@ -198,22 +215,12 @@ Alle Fertigungsdaten liegen im Repository unter `hardware/production_packages/` 
 | **PCBA 01: Zentralbox** | `01_main_box_pcba_gerbers_jlcpcb.zip` | `01_main_box_pcba_bom_jlcpcb.csv` | `01_main_box_pcba_cpl_jlcpcb.csv` | **4 Lagen** | ENIG (Gold), 1.6 mm, TG150, SMT beidseitig (DW3110 auf B.Cu) |
 | **PCBA 03: Universal-Kassette**| `03_pod_cartridge_pcba_gerbers_jlcpcb.zip` | `03_pod_cartridge_pcba_bom_jlcpcb.csv` | `03_pod_cartridge_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG (Gold), 1.2 mm, SMT beidseitig (2x pro Fahrzeug bestellen) |
 | **PCBA 05: Front-Knoten** | `05_front_node_pcba_gerbers_jlcpcb.zip` | `05_front_node_pcba_bom_jlcpcb.csv` | `05_front_node_pcba_cpl_jlcpcb.csv` | **4 Lagen** | ENIG (Gold), 1.6 mm, TG150, SMT beidseitig (DW3110 auf B.Cu) |
+| **PCBA 05B: Cockpit Breakout** | `05b_cockpit_breakout_pcba_gerbers_jlcpcb.zip` | `05b_cockpit_breakout_pcba_bom_jlcpcb.csv` | `05b_cockpit_breakout_pcba_cpl_jlcpcb.csv` | **2 Lagen** | HASL / ENIG, 1.6 mm, TG150, SMT Top (5x USB-C, 1x Header 16P, 1x JST-GH 2P SMD) |
 | **PCBA 06: MagSafe Dock** | `06_magsafe_dock_pcba_gerbers_jlcpcb.zip` | `06_magsafe_dock_pcba_bom_jlcpcb.csv` | `06_magsafe_dock_pcba_cpl_jlcpcb.csv` | **2 Lagen** | *Optional / Legacy* (bei All-UWB durch COTS 2-Pin Magnetkupplung ersetzt) |
 | **PCBA 07: Smart-Keyfob** | `07_smart_keyfob_pcba_gerbers_jlcpcb.zip` | `07_smart_keyfob_pcba_bom_jlcpcb.csv` | `07_smart_keyfob_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG (Gold), 1.0 mm, SMT beidseitig |
 | **PCBA 08: Radar 2.0 Sub-MCU** | `08_radar_submcu_pcba_gerbers_jlcpcb.zip` | `08_radar_submcu_pcba_bom_jlcpcb.csv` | `08_radar_submcu_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG (Gold), 1.2 mm, TG150, SMT Top (2x U.FL, 90° Stiftleiste) |
 | **PCBA 09: OMM UCS Modul** | `09_omm_ucs_pcba_gerbers_jlcpcb.zip` | `09_omm_ucs_pcba_bom_jlcpcb.csv` | `09_omm_ucs_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG (Gold), 1.0 mm, TG150, SMT beidseitig (ECE 22.06 & Pod) |
 | **PCBA 10: OMM 446 UCS** | `10_omm446_ucs_pcba_gerbers_jlcpcb.zip` | `10_omm446_ucs_pcba_bom_jlcpcb.csv` | `10_omm446_ucs_pcba_cpl_jlcpcb.csv` | **4 Lagen** | ENIG (Gold), 1.0 mm, TG150, SMT beidseitig (ECE 22.06 & Pod) |
-
-Alle Fertigungsdaten liegen im Repository unter `hardware/production_packages/` als fertige ZIP- und CSV-Pakete vor:
-
-| Baugruppe / PCBA | Gerber-ZIP Datei | BOM CSV Datei | CPL (Pick & Place) CSV | Lagen | Fertigungs-Hinweis |
-| :--- | :--- | :--- | :--- | :---: | :--- |
-| **PCBA 01: Zentralbox** | `01_main_box_pcba_gerbers_jlcpcb.zip` | `01_main_box_pcba_bom_jlcpcb.csv` | `01_main_box_pcba_cpl_jlcpcb.csv` | **4 Lagen** | ENIG (Gold), 1.6 mm, TG150, SMT beidseitig (DW3110 auf B.Cu) |
-| **PCBA 03: Universal-Kassette**| `03_pod_cartridge_pcba_gerbers_jlcpcb.zip` | `03_pod_cartridge_pcba_bom_jlcpcb.csv` | `03_pod_cartridge_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG (Gold), 1.2 mm, SMT beidseitig (2x pro Fahrzeug bestellen) |
-| **PCBA 05: Front-Knoten** | `05_front_node_pcba_gerbers_jlcpcb.zip` | `05_front_node_pcba_bom_jlcpcb.csv` | `05_front_node_pcba_cpl_jlcpcb.csv` | **4 Lagen** | ENIG (Gold), 1.6 mm, TG150, SMT beidseitig (DW3110 auf B.Cu) |
-| **PCBA 06: MagSafe Dock** | `06_magsafe_dock_pcba_gerbers_jlcpcb.zip` | `06_magsafe_dock_pcba_bom_jlcpcb.csv` | `06_magsafe_dock_pcba_cpl_jlcpcb.csv` | **2 Lagen** | *Optional / Legacy* (bei All-UWB durch COTS 2-Pin Magnetkupplung ersetzt) |
-| **PCBA 07: Smart-Keyfob** | `07_smart_keyfob_pcba_gerbers_jlcpcb.zip` | `07_smart_keyfob_pcba_bom_jlcpcb.csv` | `07_smart_keyfob_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG (Gold), 1.0 mm, SMT beidseitig |
-| **PCBA 08: Radar 2.0 Sub-MCU** | `08_radar_submcu_pcba_gerbers_jlcpcb.zip` | `08_radar_submcu_pcba_bom_jlcpcb.csv` | `08_radar_submcu_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG (Gold), 1.2 mm, TG150, SMT Top |
 
 ---
 
@@ -460,10 +467,11 @@ Für den Standalone-Einsatz der beiden Intercom-Module (**PCBA 09: OMM 2.4 GHz H
 | **M2 Kassetten-Platinenschraube** | DIN 7985 / DIN 912 V4A M2 x 6 mm | Normteil / Amazon | 8 Stk. | Befestigung von PCBA 03 im Kassetten-Schlitten (4x pro Kassette; Schottwandschrauben entfallen) |
 | **M2 Schwenkachse Wippe** | DIN 7 V4A Zylinderstift M2 x 8 mm | Normteil / Misumi | 2 Stk. | Präzisions-Drehachse für magnetische Kassetten-Rastwippe im Schlitten |
 | **M2 UCS Modul-Schraube** | DIN 912 V4A M2 x 8 mm | Normteil / Amazon | 8 Stk. | Verschraubung OMM UCS Gehäuseschalen (4x pro Modul, greift in M2 Muttern) |
-| **M2.5 Platinenschraube** | DIN 912 V4A M2.5 x 6 mm | Normteil / Amazon | 8 Stk. | Befestigung der Hauptplatinen (4x Zentralbox PCBA 01, 4x Front-Node PCBA 05) |
-| **M3 Edelstahlmutter (Captive)** | DIN 934 / DIN 985 M3 V4A | Normteil / Amazon | 8 Stk. | Unverlierbar in Nut-Pockets eingelegt (Zentralbox, Front-Node, Rahmendock – kein Lötkolben nötig!) |
+| **M2.5 Platinenschraube** | DIN 912 V4A M2.5 x 6 mm | Normteil / Amazon | 10 Stk. | Befestigung der Hauptplatinen (4x Zentralbox PCBA 01, 4x Front-Node PCBA 05) |
+| **M3 Edelstahlmutter (Captive)** | DIN 934 / DIN 985 M3 V4A | Normteil / Amazon | 10 Stk. | Unverlierbar in Nut-Pockets eingelegt (Zentralbox, Front-Node, Rahmendock – kein Lötkolben nötig!) |
 | **M3 Front-Schraube (Front-Node)** | DIN 912 V4A M3 x 20 mm | Normteil / Amazon | 4 Stk. | Front-Node Gehäusedeckel-Verschraubung in Nut-Pockets |
 | **M3 Gehäuseschraube (Main Box)** | DIN 912 V4A M3 x 40 mm | Normteil / Amazon | 4 Stk. | Zentralbox-Gehäuseverschraubung (greift von oben in Nut-Pockets der Bodenwanne) |
+| **M3 Klemmschraube (Dock / Schelle)** | DIN 912 V4A M3 x 16 mm | Normteil / Amazon | 2 Stk. | Rahmenklemmschelle cots_magnetic_frame_dock / Transition-Dock |
 | **M4 Edelstahlmutter (AMPS & Radar)** | DIN 934 M4 V4A | Normteil / Amazon | 6 Stk. | 4x Front-Node Wanne (AMPS-Taschen), 2x Radar 2.0 Gehäuserückwand |
 | **M4 Schraube (Radar-Cradle)** | DIN 912 V4A M4 x 12 mm | Normteil / Amazon | 2 Stk. | Verschraubung Adapterplatte radar_swivel_tilt_cradle an Radar 2.0 Gehäuse |
 | **M4 Silentblöcke / Gummipuffer** | Typ A M4 Außen/Innen Ø 15 x 10 mm | Ganter / Normteil | 4 Stk. | Schwingungsentkoppelte 4-Punkt Zentralbox-Montage am Motorradrahmen (dämpft 10-100 Hz) |

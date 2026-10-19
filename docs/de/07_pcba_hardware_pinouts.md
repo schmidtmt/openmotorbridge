@@ -27,6 +27,10 @@ Das Hardwaredesign von OpenMotorBridge folgt dem Grundsatz der radikalen Entflec
 |       | (Cockpit, GNSS, Sensoren, UWB)| (4x M2.5)     | (ENIG)  | SAM-M10Q, USB2514B,  |
 |       |                               |               |         | SC8102 PD20W, TPS2051|
 +-------+-------------------------------+---------------+---------+----------------------+
+| **PCBA 05B**| **Cockpit Breakout Satellit** | 76 x 20 mm    | 2 Lagen | 5x USB-C SMD, 16P    |
+|       | (Cockpit USB & PTT Verteiler) | (2x M2.5)     | (ENIG)  | 2.0mm Header, JST-GH |
+|       |                               | 100% SMT      |         | 2P PTT SMD, TVS ESD  |
++-------+-------------------------------+---------------+---------+----------------------+
 | **PCBA 07**| **2-in-1 LoRa Smart-Keyfob**  | 38 x 19 mm    | 2 Lagen | Nordic nRF52840 SoC, |
 |       | (Silent Pager, N52 Key & Qi)  | (Tasche M2)   | (ENIG)  | SX1262 LoRa, DRV2605L|
 |       |                               |               |         | BQ51003 Qi, JST-ACH  |
@@ -350,15 +354,17 @@ Fasst alle Stromversorgungs-, Bus-, Sensor- und Signalleitungen in einem zweiten
 
 Die abgehenden Mantelleitungen von `J_COCKPIT` und `J_VEHICLE` münden in zwei kompakte, spezialisierte Satelliten-Verteiler:
 
-1. **Cockpit-Verteiler (USB-C Leiste mit mechanischer Zug-Sicherung):**
-   * Bietet 5 standardisierte, klar laserbeschriftete **USB-C Buchsen**:
-     - `[ PHONE 20W ]`: Fast-Charge PD 20W + USB 2.0 Daten für Smartphone (oder Handschuhfach mit optionalem Mini-Hub).
-     - `[ DONGLE ]`: 5V geschaltet (1.5A mit TPS2051B Kaltstart-Reset) + USB 2.0 Daten für Ottocast/Carlinkit CP2AA.
-     - `[ HOST ]`: 5V VBUS In + USB 2.0 Daten zum OEM-Motorrad-Infotainment (Harley Boom! Box GTS / Skyline OS) oder zum Standalone Smart-Screen (Carpuride W502/W702, Chigee AIO-5).
-     - `[ CAM 5V ]`: **Power-Only** USB-C (5V bis 2A, BC 1.2 DCP mit D+/D- gebrückt). Verhindert, dass Action-Cams (GoPro, Insta360) in den PC-Massenspeicher- oder Webcam-Modus wechseln.
-     - `[ NAVI 5V ]`: **Power-Only** USB-C (5V bis 2A, BC 1.2 DCP) für USB-betriebene Navis (Garmin, TomTom, Beeline). *(Hinweis: Für 12V-Aktivhalterungen wie Garmin Zūmo XT2 oder BMW Cradle erfolgt die Speisung direkt über `+12V_AUX` am Fahrzeug-Satelliten).*
-   * **PTT-Klemme:** 2-polige Schraub-/Federklemme für den Intercom-Gruppenfunk-Lenkertaster (`PTT_IN1_N` gegen `GND`).
-   * **Integrierte Klemme:** Eine 3D-gedruckte Klemmleiste mit 2 Schrauben fixiert die Steckerhälse handelsüblicher COTS-USB-C-Kabel vibrationsfest und dient als vollwertige Zugentlastung.
+1. **Cockpit-Verteiler (PCBA 05B Satellitenplatine im Blockgehäuse):**
+   * Realisiert als ultrakompakte 2-Lagen-Leiterplatte (`PCBA 05B: openmotorbridge_cockpit_breakout`, $76{,}0 \times 20{,}0\,\text{mm}$, 100 % SMD, 0 mm Unterseiten-Überstand) im MJF PA12-Gehäuse ([`cockpit_breakout_block.scad`](../../hardware/cad/scad/04_front_node/cockpit_breakout_block.scad)).
+   * Bietet 5 standardisierte, klar laserbeschriftete **USB-C Buchsen** (16-Pin SMD):
+     - `[ PHONE 20W ]` (`J1`): Fast-Charge PD 20W + USB 2.0 Daten für Smartphone (Speisung via SC8102 / SW3526 Regler `U5` auf PCBA 05).
+     - `[ DONGLE ]` (`J2`): 5V geschaltet (1.5A mit TPS2051B Kaltstart-Reset) + USB 2.0 Daten für Ottocast/Carlinkit CP2AA.
+     - `[ HOST ]` (`J3`): 5V VBUS In + USB 2.0 Daten zum OEM-Motorrad-Infotainment (Harley Boom! Box GTS / Skyline OS) oder zum Standalone Smart-Screen (Carpuride W502/W702, Chigee AIO-5).
+     - `[ CAM 5V ]` (`J4`): **Power-Only** USB-C (5V bis 2A, BC 1.2 DCP mit D+/D- gebrückt). Verhindert, dass Action-Cams (GoPro, Insta360) in den PC-Massenspeicher- oder Webcam-Modus wechseln.
+     - `[ NAVI 5V ]` (`J5`): **Power-Only** USB-C (5V bis 2A, BC 1.2 DCP) für USB-betriebene Navis (Garmin, TomTom, Beeline). *(Hinweis: Für 12V-Aktivhalterungen wie Garmin Zūmo XT2 oder BMW Cradle erfolgt die Speisung direkt über `+12V_AUX` am Fahrzeug-Satelliten).*
+   * **PTT-Steckverbinder (`J6`):** Vibrationsfeste, formschlüssig verriegelnde 2-polige **JST-GH SMD Buchse** (`SM02B-GHS-TB`, 1.25 mm Raster, horizontal parallel zu den USB-C Ports nach Norden gerichtet) für den Intercom-Gruppenfunk-Lenkertaster (`PTT_IN1_N` gegen `GND`). Keine durchsteckenden THT-Pins auf der Unterseite.
+   * **Haupt-Zuleitung (`J_IN`):** 16-poliger 2.0 mm SMD Verriegelungs-Header (`B16B-PHDSS`), verbunden über das geschirmte Rundkabel `cable_cockpit_harness_16p` mit `J_COCKPIT` auf PCBA 05.
+   * **Integrierte Zugentlastung:** Eine 3D-gedruckte Klemmleiste mit 2 Schrauben fixiert die Steckerhälse handelsüblicher COTS-USB-C-Kabel vibrationsfest und dient als vollwertige Zugentlastung.
    * Der Endkunde kann jedes beliebige Standard-USB-C-Kabel (20 cm, gewinkelt, Textilmantel etc.) werkzeuglos einstecken.
 2. **Fahrzeug-Verteiler (Spritzwassergeschützte 5-Port Steckerbox):**
    * Beinhaltet kompakte, codierte COTS-Klick-Steckverbinder (JST-JWPF IP67 / JST-SM / Qwiic) für:
@@ -371,6 +377,35 @@ Die abgehenden Mantelleitungen von `J_COCKPIT` und `J_VEHICLE` münden in zwei k
 3. **Fahrzeugspezifische Flexibilität:**
    * **Adventure GS & Road King Special:** Die beiden Satelliten werden **getrennt montiert** (Cockpit-Leiste am Lenker/Windschild, Fahrzeug-Box am Rahmen/Schnabel). Dadurch wird **kein einziges unnötiges Kabel über den beweglichen Lenkkopf** geführt.
    * **Touring Fairing (Road Glide):** Beide Satelliten lassen sich über seitliche Schwalbenschwanz-Führungen mit einem Klick zu **einer einzigen Kombi-Box** vereinen und im Handschuhfach / Verkleidungsträger montieren.
+
+---
+
+### 7.2.5 PCBA 05B: Cockpit Breakout Satellit (`openmotorbridge_cockpit_breakout`)
+
+![PCBA 05B Cockpit Breakout Satellit 3D](../images/pcba/pcba05b_cockpit_breakout_3d.png)
+*Abbildung 7.5c: KiCad 3D-Render des Cockpit-Breakout-Satelliten (PCBA 05B, 76 x 20 mm) mit 5x USB-C SMD Buchsen, 16-Pin 2.0 mm SMD Zuleitungs-Header und horizontal verriegelnder JST-GH 2P SMD PTT-Buchse.*
+
+![PCBA 05B Cockpit Breakout Satellit Top](../images/pcba/pcba05b_cockpit_breakout_top.png)
+*Abbildung 7.5d: KiCad Top-Ansicht von PCBA 05B mit symmetrischer Bauteilaufteilung (0603 Passives links und rechts des 16-Pin Headers, sauberes autorouting-optimiertes Layout).*
+
+![PCBA 05B Cockpit Breakout Satellit Bottom 3D](../images/pcba/pcba05b_cockpit_breakout_bottom_3d.png)
+*Abbildung 7.5e: KiCad Bottom-Ansicht von PCBA 05B: 100 % SMD mit 0 mm Unterseiten-Überstand für formschlüssige Planlage im Gehäuseboden.*
+
+#### Technische Platinen-Kenndaten & Port-Mapping:
+* **Abmessungen:** $76{,}0 \times 20{,}0\,\text{mm}$, 2 Lagen FR4 High-TG150 ($1{,}6\,\text{mm}$, ENIG-Goldfinish oder LeadFree HASL).
+* **Bauform:** 100 % SMD (Surface Mount Device). 0 mm Durchsteck-Pins auf der Platinenunterseite (`B.Cu`), wodurch die Platine plan auf dem Boden des Gehäuses aufliegt.
+* **Befestigung:** 2x M2.5 Schraubenbohrungen (Ø 2.7 mm) mit 4.5 mm Freihaltezone.
+* **Filterung & ESD:** 5.1k CC-Widerstände für Phone PD / Dongle / Host Erkennung, 100 nF & 10 µF Stützkondensatoren pro VBUS-Zweig, D+/D- Brücken für BC 1.2 DCP Lademodus an Cam & Navi.
+
+| Port / Ref | Steckverbindertyp | Belegung / Signal | Funktion & Peripherie |
+| :--- | :--- | :--- | :--- |
+| **`J1`** | USB-C 16-Pin SMD | `VBUS_PD, DN1_DM, DN1_DP, DN1_CC, PGND` | **Phone 20W Fast-Charge:** SC8102 USB-PD 3.0 / QC4+ Ladeport & Daten |
+| **`J2`** | USB-C 16-Pin SMD | `VCC_5V_OTTOCAST, DN2_DM, DN2_DP, GND` | **Dongle:** Ottocast/Carlinkit CP2AA (geschaltet via TPS2051B) |
+| **`J3`** | USB-C 16-Pin SMD | `USB_UP_VBUS, UP_DM, UP_DP, GND` | **Host:** OEM Headunit (Harley Boom! Box GTS / Skyline OS, Carpuride) |
+| **`J4`** | USB-C 16-Pin SMD | `VCC_5V_AUX, D+/D- short, GND` | **Cam 5V:** Power-Only Ladeport (BC 1.2 DCP, verhindert PC-Modus) |
+| **`J5`** | USB-C 16-Pin SMD | `VCC_5V_AUX, D+/D- short, GND` | **Navi 5V:** Power-Only Ladeport (BC 1.2 DCP für Garmin, TomTom) |
+| **`J6`** | JST-GH 2-Pin SMD Horiz. | `Pin 1: PTT_IN1_N, Pin 2: GND` | **PTT:** Lenkertaster für Gruppenfunk & Voice-Assistant (verriegelt) |
+| **`J_IN`**| 16-Pin 2.0 mm Dual-Row SMD| Pins 1–16 von `J_COCKPIT` | **Kabelbaum-Eingang:** Direkte 1:1 Verbindung zum Front-Knoten PCBA 05 |
 
 ### 7.3 Vollständige ESP32-S3 Controller Pinbelegung (PCBA 05 `U1`)
 

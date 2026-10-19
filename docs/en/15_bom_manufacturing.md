@@ -90,6 +90,23 @@ This document serves as the master reference (Single Source of Truth) for the co
 
 ---
 
+## 5.1 PCBA 05B: Cockpit Breakout Satellite (`openmotorbridge_cockpit_breakout`, 2-Layer FR4 TG150, 76 x 20 mm)
+
+| Designator | Component / MPN | Manufacturer | Package | LCSC / JLCPCB Part # | Function |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **`J1`** | USB-C 16-Pin Receptacle | Korean Hro TYPE-C-31-M-12 / GCT | SMD Horizontal | `C165948` / `C2765186` | Port 1: Smartphone 20W USB-PD Fast-Charge (VBUS_PD, DN1_DM, DN1_DP, DN1_CC, PGND) |
+| **`J2`** | USB-C 16-Pin Receptacle | Korean Hro TYPE-C-31-M-12 / GCT | SMD Horizontal | `C165948` / `C2765186` | Port 2: CP2AA Wireless Dongle (VCC_5V_OTTOCAST, DN2_DM, DN2_DP, GND) |
+| **`J3`** | USB-C 16-Pin Receptacle | Korean Hro TYPE-C-31-M-12 / GCT | SMD Horizontal | `C165948` / `C2765186` | Port 3: OEM Infotainment Upstream Host (USB_UP_VBUS, UP_DM, UP_DP, GND) |
+| **`J4`** | USB-C 16-Pin Receptacle | Korean Hro TYPE-C-31-M-12 / GCT | SMD Horizontal | `C165948` / `C2765186` | Port 4: Action-Cam 5V Power-Only (BC 1.2 DCP with shorted D+/D-, VCC_5V_AUX, GND) |
+| **`J5`** | USB-C 16-Pin Receptacle | Korean Hro TYPE-C-31-M-12 / GCT | SMD Horizontal | `C165948` / `C2765186` | Port 5: Navi 5V Power-Only (BC 1.2 DCP with shorted D+/D-, VCC_5V_AUX, GND) |
+| **`J6`** | JST-GH 2-Pin Horiz. Header | JST `SM02B-GHS-TB` | SMD 1.25 mm Latch | `C2897368` | Handlebar PTT button for intercom & voice assistant (Pin 1: PTT_IN1_N, Pin 2: GND, 0 mm protrusion) |
+| **`J_IN`**| 16-Pin Dual-Row Header | JST / Wurth `B16B-PHDSS` | 2.00 mm SMD Latch | `C289119` | Harness input from Front Node PCBA 05 (J_COCKPIT) via 16-pin shielded cable |
+| **`R1-R6`**| 5.1k $\Omega$ 1% 1/10W Resistor | UniOhm / Yageo | SMD 0603 | `C23186` | CC1/CC2 pull-down resistors for USB Type-C port role detection (J1, J2, J3) |
+| **`C1-C5`**| 100 nF 50V X7R Capacitor | Murata / Samsung | SMD 0603 | `C14663` | High-frequency decoupling capacitor on each VBUS branch directly at receptacles |
+| **`C6-C10`**| 10 µF 25V X5R/X7R Capacitor| Murata / Samsung | SMD 0603/0805 | `C15850` | VBUS bulk capacitors for instantaneous load-step transient stabilization |
+
+---
+
 ## 6. PCBA 06: MagSafe Framework Dock Adapter (`openmotorbridge_magsafe_dock`, 2-Layer FR4, 28 x 11.5 mm)
 
 | Ref | Component / Type | Package | Specification & Function | LCSC Part |
@@ -191,6 +208,7 @@ All manufacturing packages reside in the repository under `hardware/production_p
 | **PCBA 01: Central Box** | `01_main_box_pcba_gerbers_jlcpcb.zip` | `01_main_box_pcba_bom_jlcpcb.csv` | `01_main_box_pcba_cpl_jlcpcb.csv` | **4 Layers** | ENIG (Gold), 1.6 mm, TG150, 2-sided SMT (DW3110 on B.Cu) |
 | **PCBA 03: Cartridge Carrier**| `03_pod_cartridge_pcba_gerbers_jlcpcb.zip` | `03_pod_cartridge_pcba_bom_jlcpcb.csv` | `03_pod_cartridge_pcba_cpl_jlcpcb.csv` | **2 Layers** | ENIG (Gold), 1.2 mm, 2-sided SMT (Order 2x per vehicle) |
 | **PCBA 05: Front Node** | `05_front_node_pcba_gerbers_jlcpcb.zip` | `05_front_node_pcba_bom_jlcpcb.csv` | `05_front_node_pcba_cpl_jlcpcb.csv` | **4 Layers** | ENIG (Gold), 1.6 mm, TG150, 2-sided SMT (DW3110 on B.Cu) |
+| **PCBA 05B: Cockpit Breakout** | `05b_cockpit_breakout_pcba_gerbers_jlcpcb.zip` | `05b_cockpit_breakout_pcba_bom_jlcpcb.csv` | `05b_cockpit_breakout_pcba_cpl_jlcpcb.csv` | **2 Layers** | HASL / ENIG, 1.6 mm, TG150, SMT Top (5x USB-C, 1x Header 16P, 1x JST-GH 2P SMD) |
 | **PCBA 06: MagSafe Dock** | `06_magsafe_dock_pcba_gerbers_jlcpcb.zip` | `06_magsafe_dock_pcba_bom_jlcpcb.csv` | `06_magsafe_dock_pcba_cpl_jlcpcb.csv` | **2 Layers** | *Optional / Legacy* (replaced by COTS 2-Pin magnetic connector) |
 | **PCBA 07: Smart-Keyfob** | `07_smart_keyfob_pcba_gerbers_jlcpcb.zip` | `07_smart_keyfob_pcba_bom_jlcpcb.csv` | `07_smart_keyfob_pcba_cpl_jlcpcb.csv` | **2 Layers** | ENIG (Gold), 1.0 mm, 2-sided SMT |
 | **PCBA 08: Radar 2.0 Sub-MCU** | `08_radar_submcu_pcba_gerbers_jlcpcb.zip` | `08_radar_submcu_pcba_bom_jlcpcb.csv` | `08_radar_submcu_pcba_cpl_jlcpcb.csv` | **2 Layers** | ENIG (Gold), 1.2 mm, TG150, SMT Top (2x U.FL, 90° pin header) |
@@ -393,10 +411,11 @@ For standalone helmet operation of both intercom modules (**PCBA 09: OMM 2.4 GHz
 | **M2 Cartridge PCB Screw** | DIN 7985 / DIN 912 V4A M2 x 6 mm | Normteil / Amazon | 8 pcs | Securing PCBA 03 in cartridge sled (4x per cartridge; bulkhead screws eliminated) |
 | **M2 Rocker Pivot Pin** | DIN 7 V4A Zylinderstift M2 x 8 mm | Normteil / Misumi | 2 pcs | Precision pivot axle for magnetic cartridge locking rocker inside sled |
 | **M2 UCS Module Screw** | DIN 912 V4A M2 x 8 mm | Normteil / Amazon | 8 pcs | Fastening OMM UCS housing shells (4x per module, threads into M2 captive nuts) |
-| **M2.5 PCB Mounting Screw** | DIN 912 V4A M2.5 x 6 mm | Normteil / Amazon | 8 pcs | Fastening main controller boards (4x Central Box PCBA 01, 4x Front Node PCBA 05) |
-| **M3 Stainless Nut (Captive)** | DIN 934 / DIN 985 M3 V4A | Normteil / Amazon | 8 pcs | Captive in nut pockets (Central Box, Front Node, frame dock – zero heat-set inserts!) |
+| **M2.5 PCB Mounting Screw** | DIN 912 V4A M2.5 x 6 mm | Normteil / Amazon | 10 pcs | Fastening main controller boards (4x Central Box PCBA 01, 4x Front Node PCBA 05) |
+| **M3 Stainless Nut (Captive)** | DIN 934 / DIN 985 M3 V4A | Normteil / Amazon | 10 pcs | Captive in nut pockets (Central Box, Front Node, frame dock – zero heat-set inserts!) |
 | **M3 Front Screw (Front Node)** | DIN 912 V4A M3 x 20 mm | Normteil / Amazon | 4 pcs | Front Node enclosure lid fastener into captive nut pockets |
 | **M3 Enclosure Screw (Main Box)** | DIN 912 V4A M3 x 40 mm | Normteil / Amazon | 4 pcs | Central box enclosure fastener (threads from top into bottom tub nut pockets) |
+| **M3 Clamp Screw (Dock / Clamp)** | DIN 912 V4A M3 x 16 mm | Normteil / Amazon | 2 pcs | Frame clamp cots_magnetic_frame_dock / transition dock clamp |
 | **M4 Stainless Nut (AMPS & Radar)** | DIN 934 M4 V4A | Normteil / Amazon | 6 pcs | 4x Front Node tub (AMPS pockets), 2x Radar 2.0 rear housing |
 | **M4 Screw (Radar Cradle)** | DIN 912 V4A M4 x 12 mm | Normteil / Amazon | 2 pcs | Securing adapter bracket radar_swivel_tilt_cradle to Radar 2.0 housing |
 | **M4 Anti-Vibration Silentblocks** | Typ A M4 Außen/Innen Ø 15 x 10 mm | Ganter / Normteil | 4 pcs | Vibration-decoupled 4-point mounting of Central Box on bike frame (damps 10-100 Hz) |

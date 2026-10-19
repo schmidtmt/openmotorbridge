@@ -262,8 +262,8 @@ Die beiden autarken Module (**PCBA 09: OMM 2.4 GHz HD-Mesh** und **PCBA 10: OMM 
    * Silikon-Rundschnur (Ø 1,5 mm Shore 40A, $30\,\text{cm}$) in die Deckelnut einlegen.
    * Gehäusedeckel aufsetzen und mit 4x M3 $\times 20\,\text{mm}$ Edelstahlschrauben gleichmäßig über Kreuz festziehen.
 7. **Satelliten-Verteilerblöcke komplettieren:**
-   * **Cockpit-Satellit:** Das 16-polige Kabel endet im Cockpit-Block auf den 5 USB-C Buchsen (`[ PHONE 20W ]`, `[ DONGLE ]`, `[ HOST ]`, `[ CAM 5V ]`, `[ NAVI 5V ]`) und der 2-poligen PTT-Schraubklemme. Die M3-Zugentlastungsschiene sichert die Steckerhälse eingesteckter COTS-Kabel vibrationsfest.
-   * **Fahrzeug-Satellit:** Das 12-polige Kabel splittet sich im Fahrzeug-Block direkt in die 5 wasserdichten **JST-JWPF (IP67)** Einrast-Buchsen (`[ 12V IN ]`, `[ CAN BUS ]`, `[ MIRROR BSD ]`, `[ AUX LIGHT ]`, `[ GNSS / CLIMATE PUCK ]`). Schnappdeckel aufrasten.
+   * **Cockpit-Satellit:** Das 16-polige Kabel wird über den 16-poligen 2.0 mm Verriegelungsstecker auf `J_IN` der Satellitenplatine `PCBA 05B` ([`cockpit_breakout_block.scad`](../../hardware/cad/scad/04_front_node/cockpit_breakout_block.scad)) aufgesteckt. Die Platine stellt 5x USB-C Buchsen (`[ PHONE 20W ]`, `[ DONGLE ]`, `[ HOST ]`, `[ CAM 5V ]`, `[ NAVI 5V ]`) und die formschlüssig verriegelnde 2-polige **JST-GH SMD Buchse (`J6`)** für den Lenker-PTT-Taster bereit (100 % SMD mit 0 mm Unterseiten-Überstand, plan aufliegend). Die M3-Zugentlastungsschiene sichert die Steckerhälse eingesteckter COTS-Kabel vibrationsfest.
+   * **Fahrzeug-Satellit:** Das 12-polige Kabel splittet sich im Fahrzeug-Block direkt in die 5 wasserdichten **JST-JWPF (IP67)** Einrast-Buchsen (`[ 12V IN ]`, `[ CAN BUS ]`, `[ MIRROR BSD ]`, `[ AUX LIGHT ]`, `[ GNSS / CLIMATE PUCK ]`). Zur fahrzeugseitigen Plug-and-Play Anbindung werden die modellspezifischen Adapterkabel (z. B. BMW Cartool, BMW CAN Y-Splitter, Harley Fairing Aux) einfach werkzeuglos auf die JWPF-Buchsen angesteckt. Schnappdeckel aufrasten.
 
 ---
 

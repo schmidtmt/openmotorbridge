@@ -242,8 +242,8 @@ Both standalone modules (**PCBA 09: OMM 2.4 GHz HD-Mesh** and **PCBA 10: OMM 446
    * Place silicone cord (Ø 1.5 mm Shore 40A, $30\,\text{cm}$) into lid groove.
    * Seat lid and tighten 4x M3 $\times 20\,\text{mm}$ stainless steel bolts crosswise.
 7. **Assemble Breakout Satellites:**
-   * **Cockpit Satellite:** The 16-wire cable terminates on 5 USB-C sockets (`[ PHONE 20W ]`, `[ DONGLE ]`, `[ HOST ]`, `[ CAM 5V ]`, `[ NAVI 5V ]`) and 2-pin PTT screw terminal. The M3 strain-relief clamp bar secures COTS USB-C plug necks against vibration.
-   * **Vehicle Satellite:** The 12-wire cable breaks out directly into 5 watertight **JST-JWPF (IP67)** latching sockets (`[ 12V IN ]`, `[ CAN BUS ]`, `[ MIRROR BSD ]`, `[ AUX LIGHT ]`, `[ GNSS / CLIMATE PUCK ]`). Snap lid closed.
+   * **Cockpit Satellite:** The 16-wire cable plugs via 16-pin 2.0 mm latching connector onto `J_IN` of `PCBA 05B` ([`cockpit_breakout_block.scad`](../../hardware/cad/scad/04_front_node/cockpit_breakout_block.scad)). The board provides 5x USB-C receptacles (`[ PHONE 20W ]`, `[ DONGLE ]`, `[ HOST ]`, `[ CAM 5V ]`, `[ NAVI 5V ]`) and the positive-locking 2-pin **JST-GH SMD Header (`J6`)** for handlebar PTT (100% SMD with 0 mm underside protrusion, laying completely flush). The M3 strain-relief clamp bar secures COTS USB-C plug necks against vibration.
+   * **Vehicle Satellite:** The 12-wire cable breaks out directly into 5 watertight **JST-JWPF (IP67)** latching sockets (`[ 12V IN ]`, `[ CAN BUS ]`, `[ MIRROR BSD ]`, `[ AUX LIGHT ]`, `[ GNSS / CLIMATE PUCK ]`). For bike connection, vehicle-specific adapter cables (e.g. BMW Cartool, BMW CAN Y-Splitter, Harley Fairing Aux) plug directly into the JWPF sockets without cutting wires. Snap lid closed.
 
 ---
 
