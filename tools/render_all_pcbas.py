@@ -5,6 +5,7 @@ using kicad-cli and sync them to docs/images/pcba/ and hardware/kicad_*/.
 """
 
 import os
+import sys
 import subprocess
 import shutil
 
@@ -144,7 +145,11 @@ def main():
     print("🎨 RENDERING ALL OPENMOTORBRIDGE PCBAs & SYNCING TO DOCS")
     print("=" * 70)
 
+    target_ids = [arg.lower() for arg in sys.argv[1:] if not arg.startswith("-")]
+
     for board in BOARDS:
+        if target_ids and board["id"].lower() not in target_ids and board["name"].lower() not in target_ids:
+            continue
         pcb = board["pcb"]
         if not os.path.exists(pcb):
             print(f"⚠️  Skipping {board['name']}: PCB file not found at {pcb}")
