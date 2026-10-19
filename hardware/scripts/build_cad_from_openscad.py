@@ -32,6 +32,7 @@ STL_TARGETS: List[Tuple] = [
     ("01_main_box/00_lower_deck.scad", "01_main_box/main_box_lower_case.stl"),
     ("01_main_box/01_upper_deck.scad", "01_main_box/main_box_mid_tray.stl"),
     ("01_main_box/02_colsure.scad", "01_main_box/main_box_lid.stl"),
+    ("01_main_box/parts/013_battery_antenna_bridge.scad", "01_main_box/main_box_battery_bridge.stl"),
     
     # 2. Satellite Pod Base
     ("02_pod_base/pod_base_housing.scad", "02_pod_base/pod_base_housing.stl"),
@@ -154,13 +155,13 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
     (
         "01_main_box/99_overall_box.scad",
         os.path.join(CAD_IMG_DIR, "main_box_full_assembly_exploded_3d.png"),
-        "55,37,65,55,0,310,360",
+        "55,37,76,55,0,310,480",
         "Tomorrow"
     ),
     (
         "01_main_box/98_closed_box.scad",
         os.path.join(CAD_IMG_DIR, "main_box_enclosure_cad.png"),
-        "55,37,18,55,0,310,250",
+        "55,37,18,55,0,310,240",
         "Tomorrow"
     ),
     (

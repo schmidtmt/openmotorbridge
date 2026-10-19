@@ -325,22 +325,16 @@ def render_main_box_cross_section(output_png):
     ax1.add_patch(patches.Rectangle((-55, -19), 3.0, 38.0, facecolor='#1e293b', edgecolor='#334155', linewidth=0.8))
     ax1.add_patch(patches.Rectangle((52, -19), 3.0, 38.0, facecolor='#1e293b', edgecolor='#334155', linewidth=0.8))
 
-    # 4x Solid Copper Thermal Studs (Ø 8 mm at X = -31, -16, +8, +22, Z = -19 to -12.5)
-    for cx in [-31, -16, 8, 22]:
-        ax1.add_patch(patches.Rectangle((cx - 4.0, -19.0), 8.0, 6.5, facecolor='#d97706', edgecolor='#f59e0b', linewidth=1.0))
-        ax1.text(cx, -15.8, "Cu", color='#080c14', fontsize=7.5, fontweight='bold', ha='center')
-    ax1.text(-4.0, -21.5, "4x KUPFER-THERMAL-PINS (Ø 8.0 mm // λ = 390 W/m·K)", color='#f59e0b', fontsize=8, fontweight='bold', ha='center')
-
-    # Silicone Gap Pad (65 x 2.0 mm from X = -35 to +30, Z = -12.5 to -10.5)
-    ax1.add_patch(patches.Rectangle((-35, -12.5), 65, 2.0, facecolor='#38bdf8', edgecolor='#0284c7', linewidth=0.8))
-    ax1.text(-3.0, -11.6, "SILIKON GAP-PAD (2.0 mm // λ = 3.0 W/m·K)", color='#080c14', fontsize=7.5, fontweight='bold', ha='center')
+    # Thermal Spreader Planar PCB Ground Plane & Thermal Vias (Copper stud free)
+    ax1.add_patch(patches.Rectangle((-42.5, -15.5), 85, 3.0, facecolor='#064e3b', edgecolor='#047857', linewidth=0.8, linestyle=':'))
+    ax1.text(0.0, -14.2, "PLANARER 4-LAYER KUPFER-WÄRMESPREADER & THERMAL-VIAS", color='#10b981', fontsize=7.5, fontweight='bold', ha='center')
 
     # 4-Layer Main PCB (85 x 1.6 mm from X = -42.5 to +42.5, Z = -10.5 to -8.9)
     ax1.add_patch(patches.Rectangle((-42.5, -10.5), 85, 1.6, facecolor='#065f46', edgecolor='#10b981', linewidth=1.2))
     ax1.text(-38.0, -9.7, "MAIN PCB (1.6mm)", color='#10b981', fontsize=7.5, fontweight='bold')
 
     # Components on PCB:
-    # ESP32-S3 (X = -39 to -21, Z = -8.9 to -5.7)
+    # ESP32-S3-WROOM-1U (X = -39 to -21, Z = -8.9 to -5.7)
     ax1.add_patch(patches.Rectangle((-39, -8.9), 18, 3.2, facecolor='#cbd5e1', edgecolor='#94a3b8', linewidth=0.8))
     ax1.text(-30, -7.3, "ESP32-S3", color='#080c14', fontsize=7.5, fontweight='bold', ha='center')
     # LM5164 Power Stage (X = -19 to -1, Z = -8.9 to -4.4)
@@ -350,22 +344,28 @@ def render_main_box_cross_section(output_png):
     ax1.add_patch(patches.Rectangle((2, -8.9), 26, 5.0, facecolor='#1e293b', edgecolor='#fbbf24', linewidth=0.8))
     ax1.text(15, -6.4, "BOURNS AUDIOTRANSFORMATOREN", color='#fbbf24', fontsize=7, fontweight='bold', ha='center')
 
-    # Mid-Baffle Floor Partition (Z = -2.0 to +0.5 mm)
+    # Mid Partition Floor (Z = -2.0 to +0.5 mm) with 9x Convection Slots
     ax1.add_patch(patches.Rectangle((-52, -2.0), 104, 2.5, facecolor='#334155', edgecolor='#64748b', linewidth=1.0))
     ax1.text(-44.0, -0.8, "ZWISCHENBODEN (2.5mm)", color='#94a3b8', fontsize=7.5, fontweight='bold')
 
-    # Battery Cradle & 1S LiPo Battery (X = -26 to +24, Z = 1.5 to 8.0 mm)
-    ax1.add_patch(patches.Rectangle((-28, 0.5), 54, 1.0, facecolor='#1e293b', edgecolor='#64748b', linewidth=0.6))
-    ax1.add_patch(patches.Rectangle((-26, 1.5), 50, 6.5, facecolor='#3b82f6', edgecolor='#1d4ed8', linewidth=1.0))
-    ax1.text(-1.0, 4.75, "1S LiPo PUFFERAKKU (1200 mAh // 52x36x6.5 mm)", color='#ffffff', fontsize=8, fontweight='bold', ha='center')
-    # EPDM Retention Strap across Battery
-    ax1.add_patch(patches.Rectangle((-4, 8.0), 6.0, 1.2, facecolor='#ef4444', edgecolor='#be123c', linewidth=0.8))
-    ax1.text(-1.0, 10.5, "EPDM-SPANNLASCHE", color='#ef4444', fontsize=7.5, fontweight='bold', ha='center')
+    # Battery Cradle & 1S LiPo Battery (X = -34 to +34, Z = 1.0 to 6.0 mm, 2200 mAh // 68x39x5.0 mm)
+    ax1.add_patch(patches.Rectangle((-35, 0.5), 70, 0.8, facecolor='#1e293b', edgecolor='#64748b', linewidth=0.6))
+    ax1.add_patch(patches.Rectangle((-34, 1.0), 68, 5.0, facecolor='#3b82f6', edgecolor='#1d4ed8', linewidth=1.0))
+    ax1.text(0.0, 3.5, "1S LiPo PUFFERAKKU (2.200 mAh // 68x39x5.0 mm)", color='#ffffff', fontsize=8, fontweight='bold', ha='center')
 
-    # Enclosure Lid (Z = +13 to +19 mm) with Gore Vent (X = -4 to +4)
+    # Modular Battery & Dual-Antenna Bridge (Z = 6.0 to 10.0 mm)
+    ax1.add_patch(patches.Rectangle((-36, 6.0), 72, 2.4, facecolor='#475569', edgecolor='#94a3b8', linewidth=1.0))
+    # Antenna nests (Taoglas FXP895 & FXP73)
+    ax1.add_patch(patches.Rectangle((-33, 8.4), 42, 0.8, facecolor='#f59e0b', edgecolor='#b45309', linewidth=0.6))
+    ax1.add_patch(patches.Rectangle((12, 8.4), 22, 0.8, facecolor='#38bdf8', edgecolor='#0284c7', linewidth=0.6))
+    # Protective Cover Shroud
+    ax1.add_patch(patches.Rectangle((-36, 9.2), 72, 0.8, facecolor='#0284c7', alpha=0.5, edgecolor='#38bdf8', linewidth=0.8))
+    ax1.text(0.0, 11.2, "MODULARE AKKUBRÜCKE MIT ANTENNENNESTERN (LoRa 868 & 2.4G) & SCHUTZBLENDE", color='#38bdf8', fontsize=7.5, fontweight='bold', ha='center')
+
+    # 100% Cable-Free Solid Enclosure Lid (Z = +13 to +19 mm) with Gore Vent (X = -4 to +4)
     ax1.add_patch(patches.Rectangle((-55, 13), 110, 6.0, facecolor='#0f172a', edgecolor='#38bdf8', linewidth=1.0))
     ax1.add_patch(patches.Rectangle((-4, 17.5), 8.0, 2.5, facecolor='#ffffff', edgecolor='#64748b', linewidth=0.8))
-    ax1.text(0, 21.5, "GORE ePTFE VENTIL (Ø 7.0 mm)", color='#ffffff', fontsize=8, fontweight='bold', ha='center')
+    ax1.text(0, 21.5, "GORE ePTFE VENTIL (Ø 7.0 mm) // 100% KABELFREIER DECKEL", color='#ffffff', fontsize=8, fontweight='bold', ha='center')
 
     ax1.set_xlim([-65, 65])
     ax1.set_ylim([-25, 25])
@@ -375,49 +375,57 @@ def render_main_box_cross_section(output_png):
     ax1.grid(True, color='#1e293b', linestyle=':', alpha=0.6)
 
     # =========================================================================
-    # SUBPLOT 2: QUERSCHNITT (Y-Z EBENE) DURCH J1 & HD26 KABELFÜHRUNG
+    # SUBPLOT 2: QUERSCHNITT (Y-Z EBENE) DURCH KABELFÜHRUNG ZUM DTM-12 FLANSCH
     # =========================================================================
     ax2.set_facecolor('#0b1120')
-    ax2.set_title("2. ZENTRALBOX QUERSCHNITT (Y-Z EBENE) // KABELFÜHRUNG DURCH ZWISCHENBODEN-SCHLITZ ZUM HD26-FLANSCH", 
+    ax2.set_title("2. ZENTRALBOX QUERSCHNITT (Y-Z EBENE) // KABELFÜHRUNG DURCH OFFENE 70x10mm BUCHT ZUM DTM-12 FLANSCH", 
                   color='#10b981', fontsize=12, fontweight='bold', pad=10)
 
     # Outer Housing in Y-Z (74 x 38 mm from Y = -37 to +37, Z = -19 to +19)
     ax2.add_patch(patches.Rectangle((-37, -19), 74, 38, fill=False, edgecolor='#059669', linewidth=1.5, linestyle='--'))
     ax2.add_patch(patches.Rectangle((-37, -19), 74, 3.0, facecolor='#1e293b', edgecolor='#334155', linewidth=0.8))
     ax2.add_patch(patches.Rectangle((-37, 13), 74, 6.0, facecolor='#0f172a', edgecolor='#38bdf8', linewidth=1.0))
-    ax2.add_patch(patches.Rectangle((-37, -19), 3.0, 38.0, facecolor='#1e293b', edgecolor='#334155', linewidth=0.8)) # Front wall
-    ax2.add_patch(patches.Rectangle((34, -19), 3.0, 38.0, facecolor='#1e293b', edgecolor='#334155', linewidth=0.8))  # Rear wall
+    ax2.add_patch(patches.Rectangle((-37, -19), 3.0, 38.0, facecolor='#1e293b', edgecolor='#334155', linewidth=0.8)) # Front wall (Y = -37)
+    ax2.add_patch(patches.Rectangle((34, -19), 3.0, 38.0, facecolor='#1e293b', edgecolor='#334155', linewidth=0.8))  # Rear wall (Y = +37)
+
+    # Rear Wall 0.4mm Knockout Membrane for SMA Port (Y = 34 to 37, Z = 0 to 12)
+    ax2.add_patch(patches.Rectangle((34.0, 0.0), 2.1, 12.0, facecolor='#0f172a', edgecolor='#38bdf8', linewidth=0.8))
+    ax2.add_patch(patches.Rectangle((36.1, 0.0), 0.4, 12.0, facecolor='#f59e0b', edgecolor='#d97706', linewidth=1.0)) # 0.4mm membrane
+    ax2.text(39.0, 6.0, "0.4mm KNOCKOUT\nMEMBRAN (SMA)", color='#f59e0b', fontsize=7.5, fontweight='bold', ha='left', va='center')
 
     # Main PCB in Y-Z (55 x 1.6 mm from Y = -27.5 to +27.5, Z = -10.5 to -8.9)
     ax2.add_patch(patches.Rectangle((-27.5, -10.5), 55, 1.6, facecolor='#065f46', edgecolor='#10b981', linewidth=1.2))
     ax2.text(-25.0, -12.5, "MAIN PCB (55mm Breite)", color='#10b981', fontsize=7.5, fontweight='bold')
 
-    # J1: 26-Pin IDC Box Header 2x13 at Front Rail (Y = -24 to -18, Z = -8.9 to -3.5)
-    ax2.add_patch(patches.Rectangle((-24.0, -8.9), 6.0, 5.4, facecolor='#0f172a', edgecolor='#fbbf24', linewidth=1.0))
-    ax2.text(-21.0, -6.2, "J1: IDC26", color='#fbbf24', fontsize=7.5, fontweight='bold', ha='center')
+    # J1: Deutsch DTM-12 Header on PCB (Y = -24 to -18, Z = -8.9 to -2.0)
+    ax2.add_patch(patches.Rectangle((-24.0, -8.9), 6.0, 6.9, facecolor='#0f172a', edgecolor='#fbbf24', linewidth=1.0))
+    ax2.text(-21.0, -5.5, "J1: DTM-12\nHEADER", color='#fbbf24', fontsize=7, fontweight='bold', ha='center')
 
-    # Mid-Baffle Floor Partition at Z = -2.0 to +0.5 mm
-    ax2.add_patch(patches.Rectangle((-34, -2.0), 68, 2.5, facecolor='#334155', edgecolor='#64748b', linewidth=1.0))
-    # 38 x 6.0 mm Pass-Through Slot in Mid-Baffle (Y = -25 to -19, Z = -2.0 to +0.5)
-    ax2.add_patch(patches.Rectangle((-25.0, -2.2), 6.0, 2.9, facecolor='#0284c7', alpha=0.35, edgecolor='#38bdf8', linewidth=1.2))
-    ax2.text(-22.0, 2.0, "38x6mm SCHLITZ\n(R=1.5mm)", color='#38bdf8', fontsize=7.5, fontweight='bold', ha='center')
+    # Mid Partition Floor (Z = -2.0 to +0.5 mm)
+    # Starts at Y = -24.0 (Leaving 10 mm OPEN CABLING BAY from Y = -34.0 to -24.0)
+    ax2.add_patch(patches.Rectangle((-24.0, -2.0), 58.0, 2.5, facecolor='#334155', edgecolor='#64748b', linewidth=1.0))
+    # Open Cable Bay highlighted
+    ax2.add_patch(patches.Rectangle((-34.0, -2.2), 10.0, 2.9, facecolor='#10b981', alpha=0.35, edgecolor='#10b981', linewidth=1.5))
+    ax2.text(-29.0, -5.5, "70x10mm\nOFFENE\nKABELBUCHT", color='#10b981', fontsize=7.5, fontweight='bold', ha='center')
 
-    # 26-Conductor Flexible Ribbon Cable (Pink line) routing from J1 through the slot into HD26 Flange
-    ax2.plot([-21.0, -21.0, -37.0], [-3.5, 6.0, 6.0], color='#f43f5e', linewidth=3.0)
-    ax2.text(-29.0, 8.5, "26-POL FLACHBANDKABEL (AWG28)", color='#f43f5e', fontsize=8, fontweight='bold', ha='center')
+    # 6-Cable Flexible Service Loop routing from J1 & PCB through open bay to DTM-12 Flange
+    ax2.plot([-21.0, -21.0, -30.0, -30.0, -37.0], [-2.0, 4.0, 4.0, 6.0, 6.0], color='#f43f5e', linewidth=3.0)
+    ax2.text(-25.0, 7.5, "6-LEITER SERVICE-LOOP (DTM-12 / USB / DC / KOAX)", color='#f43f5e', fontsize=7.5, fontweight='bold', ha='center')
 
-    # HD26 SEAL-D Flange on Front Wall (Y = -37, Z = 0 to 12)
-    ax2.add_patch(patches.Rectangle((-41.0, 0.0), 4.0, 12.0, facecolor='#0284c7', edgecolor='#38bdf8', linewidth=1.2))
-    ax2.add_patch(patches.Rectangle((-42.5, 1.5), 1.5, 9.0, facecolor='#f43f5e', edgecolor='#be123c', linewidth=0.8)) # EPDM Gasket
-    ax2.text(-44.0, 6.0, "HD26 FLANSCH\n(SEAL-D IP67)", color='#38bdf8', fontsize=7.5, fontweight='bold', ha='right', va='center')
+    # Deutsch DTM-12 Flange on Front Wall (Y = -37, Z = 0 to 12)
+    ax2.add_patch(patches.Rectangle((-42.0, 0.0), 5.0, 12.0, facecolor='#0284c7', edgecolor='#38bdf8', linewidth=1.2))
+    ax2.add_patch(patches.Rectangle((-43.5, 1.5), 1.5, 9.0, facecolor='#f43f5e', edgecolor='#be123c', linewidth=0.8)) # Gasket
+    ax2.text(-45.0, 6.0, "DEUTSCH DTM-12\nAUTOMOTIVE FLANSCH", color='#38bdf8', fontsize=7.5, fontweight='bold', ha='right', va='center')
 
-    # Upper Compartment: LiPo Battery in Cradle (Y = 0 to +30, Z = 1.5 to 8.0 mm)
-    ax2.add_patch(patches.Rectangle((-2.0, 0.5), 34.0, 1.0, facecolor='#1e293b', edgecolor='#64748b', linewidth=0.6))
-    ax2.add_patch(patches.Rectangle((0.0, 1.5), 30.0, 6.5, facecolor='#3b82f6', edgecolor='#1d4ed8', linewidth=1.0))
-    ax2.text(15.0, 4.75, "1S LiPo PUFFERAKKU", color='#ffffff', fontsize=8, fontweight='bold', ha='center')
-    # EPDM Strap
-    ax2.add_patch(patches.Rectangle((12.0, 8.0), 6.0, 1.2, facecolor='#ef4444', edgecolor='#be123c', linewidth=0.8))
-    ax2.text(15.0, 10.5, "EPDM-LASCHE", color='#ef4444', fontsize=7.5, fontweight='bold', ha='center')
+    # Upper Compartment: LiPo Battery in Cradle (Y = -14 to +25, Z = 1.0 to 6.0 mm)
+    ax2.add_patch(patches.Rectangle((-15.0, 0.5), 40.0, 0.8, facecolor='#1e293b', edgecolor='#64748b', linewidth=0.6))
+    ax2.add_patch(patches.Rectangle((-14.0, 1.0), 39.0, 5.0, facecolor='#3b82f6', edgecolor='#1d4ed8', linewidth=1.0))
+    ax2.text(5.5, 3.5, "1S LiPo PUFFERAKKU", color='#ffffff', fontsize=8, fontweight='bold', ha='center')
+
+    # Hinged Battery Bridge with C-Clip Strain Relief
+    ax2.add_patch(patches.Rectangle((-16.0, 6.0), 42.0, 2.4, facecolor='#475569', edgecolor='#94a3b8', linewidth=1.0))
+    ax2.add_patch(patches.Rectangle((-16.0, 8.4), 42.0, 0.8, facecolor='#0284c7', alpha=0.5, edgecolor='#38bdf8', linewidth=0.8))
+    ax2.text(5.5, 10.5, "AKKUBRÜCKE (SCHWENKBAR)", color='#38bdf8', fontsize=7.5, fontweight='bold', ha='center')
 
     ax2.set_xlim([-50, 50])
     ax2.set_ylim([-25, 25])
@@ -432,10 +440,12 @@ def render_main_box_cross_section(output_png):
     print(f"✓ Main Box Cross-Section Render generated: {output_png}")
 
 if __name__ == '__main__':
-    out_exp = os.path.join(output_dir, "main_box_full_assembly_exploded_3d.png")
-    out_mat = os.path.join(output_dir, "main_box_assembly_mated_3d.png")
-    out_crs = os.path.join(output_dir, "main_box_assembly_cross_section.png")
+    doc_img_dir = "docs/images/cad"
+    os.makedirs(doc_img_dir, exist_ok=True)
 
-    render_main_box_exploded_3d(out_exp)
-    render_main_box_mated_3d(out_mat)
-    render_main_box_cross_section(out_crs)
+    out_crs_cad = os.path.join(output_dir, "main_box_assembly_cross_section.png")
+    out_crs_doc = os.path.join(doc_img_dir, "main_box_assembly_cross_section.png")
+
+    render_main_box_cross_section(out_crs_cad)
+    render_main_box_cross_section(out_crs_doc)
+

@@ -15,7 +15,10 @@ use <01_upper_deck.scad>;
 use <02_colsure.scad>;
 use <parts/013_battery_antenna_bridge.scad>;
 
-module main_box_xray_inspection_assembly() {
+// Optional: Set to true if an external SMA bulkhead connector is mounted
+has_sma_bulkhead = false;
+
+module main_box_xray_inspection_assembly(has_sma_bulkhead=has_sma_bulkhead) {
     // 1. Lower Case (Translucent Slate Grey, 30% alpha)
     color([0.2, 0.35, 0.55, 0.30])
         translate([0, 0, 0])
@@ -69,11 +72,13 @@ module main_box_xray_inspection_assembly() {
         translate([80.0, -3.0, z_intf])
             cube([28.0, 6.0, 14.0], center=true);
 
-    // 7. Rear SMA Antenna Bulkhead Port (Gold-plated, at X = 85.0 mm, Y = MAIN_BOX_OUTER_W)
-    color("gold", 0.9)
-        translate([85.0, MAIN_BOX_OUTER_W + 3.5, z_intf])
-            rotate([-90, 0, 0])
-                cylinder(r=3.2, h=7.0, center=true, $fn=24);
+    // 7. Optional Rear SMA Antenna Bulkhead Port (Gold-plated, default: sealed knockout membrane)
+    if (has_sma_bulkhead) {
+        color("gold", 0.9)
+            translate([85.0, MAIN_BOX_OUTER_W + 3.5, z_intf])
+                rotate([-90, 0, 0])
+                    cylinder(r=3.2, h=7.0, center=true, $fn=24);
+    }
 }
 
 // Render inspection assembly

@@ -26,7 +26,7 @@ Das Basisgehäuse der Zentralbox ist als modulares, 3-teiliges IP67/IP69K-Sandwi
 
 ![OpenMotorBridge Zentralbox 3D Anschnitt CAD](../images/cad/main_box_cutaway_3d.png)
 
-*Abbildung 8.1: Photorealistischer 3D-CAD-Schräganschnitt der zentralen Steuerbox. Sichtbar sind die 3 Schichten im geschlossenen Verbund: Unterwanne mit 4-Layer-Platine (ENIG) auf M2.5 Dämpfern, Zwischenboden mit 11 Konvektionsschlitzen, oberes Akku-Fach mit 1S LiPo-USV-Batterie und EPDM-Spannband, Deutsch DTM-12 Flansch, Taster SW1, USB-C Servicekappe sowie Deckel mit Gore-Membran.*
+*Abbildung 8.1: Photorealistischer 3D-CAD-Schräganschnitt der zentralen Steuerbox. Sichtbar sind die 3 Schichten im geschlossenen Verbund: Unterwanne mit 4-Layer-Platine (ENIG) auf M2.5 Dämpfern, Zwischenboden mit offener 70x10mm Kabelbucht und Konvektionsschlitzen, oberes Akku-Fach mit 1S LiPo-USV-Batterie (2.200 mAh) unter der schwenkbaren Akkubrücke mit Antennenkapselung und Zugentlastung, Deutsch DTM-12 Flansch, Taster SW1, USB-C Servicekappe sowie 100% kabelfreier Deckel mit Gore-Membran.*
 
 ![OpenMotorBridge Zentralbox 3-Teiliges Sandwich-Gehäuse IP67](../images/cad/main_box_enclosure_cad.png)
 
@@ -77,7 +77,7 @@ Das Basisgehäuse der Zentralbox ist als modulares, 3-teiliges IP67/IP69K-Sandwi
 
 ![OpenMotorBridge Zentralbox Mated 3D X-Ray CAD Fitting](../images/cad/main_box_assembly_mated_3d.png)
 
-*Abbildung 8.4: Transparente 3D-Röntgenansicht der vollständig geschlossenen Zentralbox. Erkennbar sind die spielfreien Bauteilfreiräume, die geschützte Akku-Lagerung auf dem Zwischenboden, die durchgängige Konvektion über die 11 Zwischenbodenschlitze und der scheuerfreie Kabelverlauf zum Deutsch DTM-12 Flansch.*
+*Abbildung 8.4: Transparente 3D-Röntgenansicht der vollständig geschlossenen Zentralbox. Erkennbar sind die spielfreien Bauteilfreiräume, die geschützte Akku-Lagerung unter der schwenkbaren Akkubrücke, die durchgängige Konvektion über die 9 Zwischenbodenschlitze, der scheuerfreie Kabelverlauf durch die offene 70x10mm Kabelbucht zum Deutsch DTM-12 Flansch und die rückseitige 0,4mm Knockout-Membran für den SMA-Port.*
 
 ### 1.4 Maßstabsgetreuer Längs- & Querschnitt (X-Z Thermik & Y-Z Kabelführung)
 

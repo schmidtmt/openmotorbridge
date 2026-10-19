@@ -21,7 +21,7 @@ The Central Box enclosure is engineered in **PA12 (HP Multi Jet Fusion)** for ha
 
 ![OpenMotorBridge Central Box 3D Cutaway CAD](../images/cad/main_box_cutaway_3d.png)
 
-*Figure 8.1: Photorealistic 3D CAD diagonal cutaway render of the Central Control Box. The 3-tier sandwich is exposed: bottom tub with 4-layer PCB (ENIG) on M2.5 standoffs, intermediate tray with 11 convection cooling slots, upper LiPo UPS battery cradle with EPDM strap, Deutsch DTM-12 automotive flange, SW1 button, USB-C service port, and lid with Gore ePTFE vent.*
+*Figure 8.1: Photorealistic 3D CAD diagonal cutaway render of the Central Control Box. The 3-tier sandwich is exposed: bottom tub with 4-layer PCB (ENIG) on M2.5 standoffs, intermediate tray with open front 70x10mm cabling bay and convection cooling slots, upper LiPo UPS battery cradle with 2,200 mAh cell clamped under the hinged battery & dual-antenna bridge with cable strain reliefs, Deutsch DTM-12 automotive flange, SW1 button, USB-C service port, and 100% cable-free solid lid with Gore ePTFE vent.*
 
 ### 1.1 3D CAD Model & 3-Piece Sandwich Architecture
 
