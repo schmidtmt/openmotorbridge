@@ -1728,6 +1728,27 @@ const BOM_PARTS = {
     "pkg_qty": 5,
     "pkg_name": "JLCPCB 5er SMT-Nutzen (MOQ 5)"
   },
+  "pcba_05b": {
+    "type": "pcba",
+    "name": {
+      "de": "PCBA 05B: Cockpit Breakout Satellit",
+      "en": "PCBA 05B: Cockpit Breakout Satellite"
+    },
+    "spec": "76x22 mm 2-Layer PCB mit 5x USB-C SMD Buchsen, 16-Pin 2.0 mm Latch Header & 2-Pin PTT Klemme",
+    "source": "JLCPCB / SMT",
+    "unit": "Stk.",
+    "cost_eur": [
+      2.5,
+      4.5
+    ],
+    "desc": {
+      "de": "Passive USB-C & PTT Verteilerplatine für Cockpit Breakout Satellite (Phone 20W, Dongle, Host, Cam, Navi)",
+      "en": "Passive USB-C & PTT breakout board for Cockpit Breakout Satellite (Phone 20W, Dongle, Host, Cam, Navi)"
+    },
+    "id_kicad": "kicad_cockpit_breakout",
+    "pkg_qty": 5,
+    "pkg_name": "JLCPCB 5er SMT-Nutzen (MOQ 5)"
+  },
   "pcba_07": {
     "type": "pcba",
     "name": {
@@ -2652,6 +2673,26 @@ const BOM_PARTS = {
     "pkg_qty": 5,
     "pkg_name": "5er Steckverbinder-Set (JST / MTA)"
   },
+  "cots_jwpf_socket_set_vehicle_satellite": {
+    "type": "cots",
+    "name": {
+      "de": "Fahrzeug-Satellit 5-Port JST-JWPF Buchsenset (IP67)",
+      "en": "Vehicle Satellite 5-Port JST-JWPF Socket Set (IP67)"
+    },
+    "spec": "2x 02R-JWPF-VSLE-S (2-Pol), 2x 03R-JWPF-VSLE-S (3-Pol), 1x 04R-JWPF-VSLE-S (4-Pol) samt 14x SWPR-001T-P025 Crimp-Kontakten",
+    "source": "JST / COTS",
+    "unit": "Set",
+    "cost_eur": [
+      3.5,
+      5.5
+    ],
+    "desc": {
+      "de": "5x wasserdichte Einrastbuchsen im Fahrzeug-Satelliten für 12V IN, CAN, Mirror BSD, Aux Light & GNSS/Klima-Puck",
+      "en": "5x watertight latching sockets in vehicle satellite for 12V IN, CAN, Mirror BSD, Aux Light & GNSS/climate puck"
+    },
+    "pkg_qty": 1,
+    "pkg_name": "5-Port Buchsenset"
+  },
   "cable_adapter_jwpf_bmw_cartool": {
     "type": "cable",
     "name": {
@@ -2915,6 +2956,14 @@ const BOM_ASSEMBLIES = {
       },
       {
         "part_id": "pcba_05",
+        "qty": 1
+      },
+      {
+        "part_id": "pcba_05b",
+        "qty": 1
+      },
+      {
+        "part_id": "cots_jwpf_socket_set_vehicle_satellite",
         "qty": 1
       },
       {
