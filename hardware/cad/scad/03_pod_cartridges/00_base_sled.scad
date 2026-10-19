@@ -237,6 +237,11 @@ module cartridge_base_sled(
         translate([45.0, sled_w - wall - 1.5, 11.5])
             cube(size=[20.0, wall + 3.0, sled_h + 8.0], center=false);
 
+        // 14b. Cardo Packtalk Edge 90° USB-C Connector & Air-Mount Latch Relief Pocket (Right Wall at X = 50 .. 82 mm, Z = wall .. 16 mm)
+        // Provides unobstructed 8.0 mm lateral clearance down to sled floor for right-angle low-profile USB-C charge boot
+        translate([50.0, sled_w - wall - 1.5, wall])
+            cube(size=[32.0, wall + 3.0, 13.5], center=false);
+
         // 15. Taoglas FXUWB10 UWB 6.5 GHz Flex Antenna Pocket in Sled Floor (12 x 12 x 0.8 mm)
         // Positioned directly below ANT_UWB of PCBA 03 (X = 12.5, Y = y_pcb_c - 3.0)
         translate([12.5 - 6.0, y_pcb_c - 3.0 - 6.0, wall - 0.8])
