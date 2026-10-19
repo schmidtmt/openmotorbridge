@@ -2651,6 +2651,146 @@ const BOM_PARTS = {
     },
     "pkg_qty": 5,
     "pkg_name": "5er Steckverbinder-Set (JST / MTA)"
+  },
+  "cable_adapter_jwpf_bmw_cartool": {
+    "type": "cable",
+    "name": {
+      "de": "BMW Cartool Adapterkabel (JST-JWPF 2-Pin)",
+      "en": "BMW Cartool Adapter Cable (JST-JWPF 2-Pin)"
+    },
+    "spec": "JST-JWPF 02R-JWPF-VSLE-S auf BMW 3-Pin Cartool-Stecker (BMW 83300413585), 20 cm",
+    "source": "BMW / COTS / Amazon",
+    "unit": "Stk.",
+    "cost_eur": [
+      4.5,
+      9.0
+    ],
+    "desc": {
+      "de": "Plug-and-play Zündungsplus (KL15) Speisung für R1200/R1250/R1300 GS/GSA & F-Serie ohne Kabelbaum-Eingriff",
+      "en": "Plug-and-play switched ignition (KL15) feed for R1200/R1250/R1300 GS/GSA & F-Series without tapping OEM harness"
+    },
+    "pkg_qty": 1,
+    "pkg_name": "Konfektioniertes Adapterkabel"
+  },
+  "cable_adapter_jwpf_bmw_can_splitter": {
+    "type": "cable",
+    "name": {
+      "de": "BMW CAN-Bus Y-Splitter Adapterkabel (JST-JWPF 3-Pin)",
+      "en": "BMW CAN Bus Y-Splitter Adapter Cable (JST-JWPF 3-Pin)"
+    },
+    "spec": "JST-JWPF 03R-JWPF-VSLE-S auf BMW Navigationsvorbereitung / TFT Y-Abzweig, 25 cm",
+    "source": "COTS Standard",
+    "unit": "Stk.",
+    "cost_eur": [
+      6.0,
+      12.0
+    ],
+    "desc": {
+      "de": "Zerstörungsfreier Abgriff des BMW K2x/K5x/K6x Fahrzeug-CAN-Busses an der Vorbereitung Navigationssystem",
+      "en": "Non-destructive tap of BMW K2x/K5x/K6x vehicle CAN bus at navigation preparation cradle"
+    },
+    "pkg_qty": 1,
+    "pkg_name": "Y-Splitter Adapterkabel"
+  },
+  "cable_adapter_jwpf_hd_fairing_aux": {
+    "type": "cable",
+    "name": {
+      "de": "Harley Fairing Aux Adapterkabel (JST-JWPF 2-Pin)",
+      "en": "Harley Fairing Aux Adapter Cable (JST-JWPF 2-Pin)"
+    },
+    "spec": "JST-JWPF 02R-JWPF-VSLE-S auf Molex MX150 / Deutsch DT 2-Pin Verkleidungs-Zubehörbuchse, 25 cm",
+    "source": "Harley / COTS",
+    "unit": "Stk.",
+    "cost_eur": [
+      5.0,
+      10.0
+    ],
+    "desc": {
+      "de": "Zündungsplus-Speisung (KL15) am OEM-Zubehörstecker unter Sharknose/Batwing Verkleidung von Touring & CVO ST",
+      "en": "Switched ignition (KL15) power feed from OEM fairing accessory plug on Touring & CVO ST"
+    },
+    "pkg_qty": 1,
+    "pkg_name": "Konfektioniertes Adapterkabel"
+  },
+  "cable_adapter_jwpf_hd_can_splitter": {
+    "type": "cable",
+    "name": {
+      "de": "Harley CAN-Bus Y-Splitter Adapterkabel (JST-JWPF 3-Pin)",
+      "en": "Harley CAN Bus Y-Splitter Adapter Cable (JST-JWPF 3-Pin)"
+    },
+    "spec": "JST-JWPF 03R-JWPF-VSLE-S auf Molex MX150 4-Pin CAN Y-Abzweig am Tacho / Diagnosestecker, 25 cm",
+    "source": "COTS Standard",
+    "unit": "Stk.",
+    "cost_eur": [
+      6.5,
+      12.5
+    ],
+    "desc": {
+      "de": "Zerstörungsfreier Abgriff des HD-LAN / CAN-Busses hinter der Verkleidung oder am Lenkkopf",
+      "en": "Non-destructive tap of HD-LAN / CAN bus behind fairing or steering neck"
+    },
+    "pkg_qty": 1,
+    "pkg_name": "Y-Splitter Adapterkabel"
+  },
+  "cable_adapter_jwpf_deutsch_dt2_aux": {
+    "type": "cable",
+    "name": {
+      "de": "Zusatzscheinwerfer Adapterkabel (JST-JWPF auf Deutsch DT-2S)",
+      "en": "Aux Light Adapter Cable (JST-JWPF to Deutsch DT-2S)"
+    },
+    "spec": "JST-JWPF 02R-JWPF-VSLE-S auf Deutsch DT-2S 2-Pin Buchse mit Verriegelungskeil (IP68), 30 cm",
+    "source": "Deutsch / TE Connectivity",
+    "unit": "Stk.",
+    "cost_eur": [
+      3.8,
+      7.5
+    ],
+    "desc": {
+      "de": "Direktanschluss für Denali D3/D7, Baja Designs, Wunderlich Zusatzscheinwerfer oder 12V Aktivcradle via TPS1H100",
+      "en": "Direct plug-in for Denali D3/D7, Baja Designs, Wunderlich auxiliary lights or 12V active cradle via TPS1H100"
+    },
+    "pkg_qty": 1,
+    "pkg_name": "Wasserdichtes Adapterkabel"
+  },
+  "cable_adapter_jwpf_qwiic_sh": {
+    "type": "cable",
+    "name": {
+      "de": "Sensor-Puck Adapterkabel (JST-JWPF auf Qwiic JST-SH)",
+      "en": "Sensor Puck Adapter Cable (JST-JWPF to Qwiic JST-SH)"
+    },
+    "spec": "JST-JWPF 04R-JWPF-VSLE-S auf 4-Pin JST-SH 1.0 mm (Qwiic/STEMMA QT), 25 cm",
+    "source": "SparkFun / Adafruit / COTS",
+    "unit": "Stk.",
+    "cost_eur": [
+      2.5,
+      4.5
+    ],
+    "desc": {
+      "de": "Wasserdichte I2C-Verbindung vom Fahrzeug-Satelliten zum SAM-M10Q GNSS & TMP117 Klimapuck im Schnabel",
+      "en": "Watertight I2C connection from vehicle satellite to SAM-M10Q GNSS & TMP117 climate puck in beak"
+    },
+    "pkg_qty": 1,
+    "pkg_name": "Adapterkabel"
+  },
+  "cable_adapter_jwpf_universal_pigtail": {
+    "type": "cable",
+    "name": {
+      "de": "Universal Pigtail Adapterset (JST-JWPF auf offene Enden)",
+      "en": "Universal Pigtail Adapter Set (JST-JWPF to Open Wire Posi-Tap)"
+    },
+    "spec": "JST-JWPF 2-Pin & 3-Pin mit verzinnten Aderenden (AWG20) und 4x Posi-Tap Zerstörungsfrei-Klemmen",
+    "source": "Posi-Products / COTS",
+    "unit": "Set",
+    "cost_eur": [
+      4.0,
+      8.0
+    ],
+    "desc": {
+      "de": "Für Motorräder ohne vorkonfektionierte Stecker: Zerstörungsfreier Abgriff via Posi-Tap Klemmen",
+      "en": "For bikes without pre-assembled plugs: Non-destructive wire tap via Posi-Tap connectors"
+    },
+    "pkg_qty": 1,
+    "pkg_name": "Pigtail & Posi-Tap Set"
   }
 };
 
@@ -3517,13 +3657,25 @@ const BOM_ASSEMBLIES = {
       "en": "Mount Kit: BMW GS Family"
     },
     "desc": {
-      "de": "Sitzbank-Bügelfalte Transition-Docks (Ø 28 mm, Vario-kompatibel)",
-      "en": "Seat crease transition docks (Ø 28 mm, Vario-case compatible)"
+      "de": "Sitzbank-Bügelfalte Transition-Docks (Ø 28 mm, Vario-kompatibel), BMW Cartool 12V Zündungsplus-Adapter & CAN-Bus Y-Splitter",
+      "en": "Seat crease transition docks (Ø 28 mm, Vario-case compatible), BMW Cartool 12V ignition adapter & CAN bus Y-splitter"
     },
     "parts": [
       {
         "part_id": "part3d_gs_transition_dock",
         "qty": 2
+      },
+      {
+        "part_id": "cable_adapter_jwpf_bmw_cartool",
+        "qty": 1
+      },
+      {
+        "part_id": "cable_adapter_jwpf_bmw_can_splitter",
+        "qty": 1
+      },
+      {
+        "part_id": "cable_adapter_jwpf_qwiic_sh",
+        "qty": 1
       }
     ]
   },
@@ -3561,8 +3713,8 @@ const BOM_ASSEMBLIES = {
       "en": "Mount Kit: BMW GSA Adventure"
     },
     "desc": {
-      "de": "Ø 18 mm Edelstahl-Rohrträger-Klemmschellen (4 Paar) mit M5 Schrauben",
-      "en": "Ø 18 mm stainless pannier rack clamps (4 pairs) with M5 bolts"
+      "de": "Ø 18 mm Edelstahl-Rohrträger-Klemmschellen (4 Paar) mit M5 Schrauben, BMW Cartool 12V-Adapter, CAN Y-Splitter & Deutsch DT-2 Zusatzscheinwerfer-Kabel",
+      "en": "Ø 18 mm stainless pannier rack clamps (4 pairs) with M5 bolts, BMW Cartool 12V adapter, CAN Y-splitter & Deutsch DT-2 aux light cable"
     },
     "parts": [
       {
@@ -3580,6 +3732,22 @@ const BOM_ASSEMBLIES = {
       {
         "part_id": "fastener_din934_m5",
         "qty": 4
+      },
+      {
+        "part_id": "cable_adapter_jwpf_bmw_cartool",
+        "qty": 1
+      },
+      {
+        "part_id": "cable_adapter_jwpf_bmw_can_splitter",
+        "qty": 1
+      },
+      {
+        "part_id": "cable_adapter_jwpf_deutsch_dt2_aux",
+        "qty": 1
+      },
+      {
+        "part_id": "cable_adapter_jwpf_qwiic_sh",
+        "qty": 1
       }
     ]
   },
@@ -3591,8 +3759,8 @@ const BOM_ASSEMBLIES = {
       "en": "Mount Kit: Harley-Davidson Touring & CVO ST"
     },
     "desc": {
-      "de": "Kofferdeckel-Docks, Rahmenrohr-Magnetdocks (Ø 26 mm), 2-Pin Magnet-Pogo Trennstelle & Koffer-Tüllenset",
-      "en": "Saddlebag lid docks, frame tube magnetic docks (Ø 26 mm), 2-pin breakaway coupler & grommet kit"
+      "de": "Kofferdeckel-Docks, Rahmenrohr-Magnetdocks (Ø 26 mm), 2-Pin Magnet-Pogo Trennstelle, Fairing-Aux 12V Adapter & HD-CAN Y-Splitter",
+      "en": "Saddlebag lid docks, frame tube magnetic docks (Ø 26 mm), 2-pin breakaway coupler, fairing aux 12V adapter & HD-CAN Y-splitter"
     },
     "parts": [
       {
@@ -3622,6 +3790,22 @@ const BOM_ASSEMBLIES = {
       {
         "part_id": "fastener_din934_m3",
         "qty": 4
+      },
+      {
+        "part_id": "cable_adapter_jwpf_hd_fairing_aux",
+        "qty": 1
+      },
+      {
+        "part_id": "cable_adapter_jwpf_hd_can_splitter",
+        "qty": 1
+      },
+      {
+        "part_id": "cable_adapter_jwpf_deutsch_dt2_aux",
+        "qty": 1
+      },
+      {
+        "part_id": "cable_adapter_jwpf_qwiic_sh",
+        "qty": 1
       }
     ]
   },
@@ -3735,8 +3919,8 @@ const BOM_ASSEMBLIES = {
       "en": "General Accessories & Mounting Material"
     },
     "desc": {
-      "de": "N52 Magnetschlüssel, 3M Dual-Lock Klettband & JST-PH Pigtail Sortiments-Set",
-      "en": "N52 magnetic key, 3M Dual-Lock fastener & JST-PH pigtail assortment set"
+      "de": "N52 Magnetschlüssel, 3M Dual-Lock Klettband, JST-PH Sortiments-Set & JST-JWPF Universal-Pigtails",
+      "en": "N52 magnetic key, 3M Dual-Lock fastener, JST-PH pigtail assortment & JST-JWPF universal pigtails"
     },
     "parts": [
       {
@@ -3749,6 +3933,10 @@ const BOM_ASSEMBLIES = {
       },
       {
         "part_id": "cable_jst_ph_assortment",
+        "qty": 1
+      },
+      {
+        "part_id": "cable_adapter_jwpf_universal_pigtail",
         "qty": 1
       }
     ]

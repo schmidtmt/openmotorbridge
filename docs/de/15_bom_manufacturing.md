@@ -504,6 +504,7 @@ Für den Standalone-Einsatz der beiden Intercom-Module (**PCBA 09: OMM 2.4 GHz H
 | **Qwiic Sensorkabel (100 mm)** | 4-Pin JST-SH Buchse zu Buchse (100 mm Silikonlitze) | SparkFun / Adafruit | 1 Stk. | Verbindung vom 5-Port Fahrzeug-Satelliten zum SAM-M10Q GNSS-Modul |
 | **RF Micro-Koaxial-Pigtail (U.FL zu SMA IP67)** | 50 mm low-loss RG-178 / 1.13mm mit IP67 EPDM O-Ring & V4A-Mutter | COTS Standard | 2 Stk. | Wasserdichte Gehäuse-Durchführung für Antenne der OMM UCS Module |
 | **Radar 12V Zuleitung (PUR)** | 2x 0.5 mm² (AWG20) mit JST-JWPF 2-Pin IP67 Stecker | COTS Standard | 1 Stk. | 12V DC Bordnetzspeisung für Heck-Radar (Funkbrücke 100% via UWB) |
+| **Universal Pigtail Adapterset (JST-JWPF auf offene Enden)** | JST-JWPF 2-Pin & 3-Pin mit verzinnten Aderenden (AWG20) und 4x Posi-Tap Zerstörungsfrei-Klemmen | Posi-Products / COTS | 1 Set | Für Motorräder ohne vorkonfektionierte Stecker: Zerstörungsfreier Abgriff via Posi-Tap Klemmen |
 | **Zentralbox USB-C Flashing Pigtail** | IDC 10-Pin auf wasserdichte Panel-Mount USB-C Buchse IP67 | COTS Standard | 1 Stk. | CarPlay / Flashing Port an der Flanke der Zentralbox |
 
 <!-- AUTOGEN_BOM_TABLE_END -->

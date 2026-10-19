@@ -437,6 +437,7 @@ For standalone helmet operation of both intercom modules (**PCBA 09: OMM 2.4 GHz
 | **Qwiic Sensor Cable (100 mm)** | 4-Pin JST-SH Buchse zu Buchse (100 mm Silikonlitze) | SparkFun / Adafruit | 1 pcs | Link from 5-port Vehicle Satellite to SAM-M10Q GNSS module |
 | **RF Micro-Coax Pigtail (U.FL to SMA IP67)** | 50 mm low-loss RG-178 / 1.13mm mit IP67 EPDM O-Ring & V4A-Mutter | COTS Standard | 2 pcs | Watertight enclosure bulkhead feed-through for OMM UCS antenna |
 | **Radar 12V Power Cable (PUR)** | 2x 0.5 mm² (AWG20) mit JST-JWPF 2-Pin IP67 Stecker | COTS Standard | 1 pcs | 12V DC power feed for rear radar (data link 100% wireless via UWB) |
+| **Universal Pigtail Adapter Set (JST-JWPF to Open Wire Posi-Tap)** | JST-JWPF 2-Pin & 3-Pin mit verzinnten Aderenden (AWG20) und 4x Posi-Tap Zerstörungsfrei-Klemmen | Posi-Products / COTS | 1 Set | For bikes without pre-assembled plugs: Non-destructive wire tap via Posi-Tap connectors |
 | **Central Box USB-C Flashing Pigtail** | IDC 10-Pin auf wasserdichte Panel-Mount USB-C Buchse IP67 | COTS Standard | 1 pcs | CarPlay / firmware flashing port on Central Box flank |
 
 <!-- AUTOGEN_BOM_TABLE_END -->

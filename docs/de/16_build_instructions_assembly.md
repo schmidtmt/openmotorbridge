@@ -253,13 +253,17 @@ Die beiden autarken Module (**PCBA 09: OMM 2.4 GHz HD-Mesh** und **PCBA 10: OMM 
    * Fertig bestückte PCBA 05 auf die Dämpferdome setzen.
    * UWB-Kabel an die U.FL-Buchse auf `B.Cu` aufklicken.
    * Platine mit 4x M2.5 Schrauben fixieren.
-4. **Cockpit-Sensoren anschließen (J12 Qwiic):**
-   * u-blox SAM-M10Q Multi-GNSS Modul (mit integrierter $15 \times 15\,\text{mm}$ Patchantenne) per Qwiic-Kabel an `J12` anstecken.
-   * TI TMP117 Temperatursensor und TI OPT3001 Lichtsensor per Daisy-Chain am Qwiic-Bus im Kaltluft-Staudruckbereich platzieren.
-5. **Akustik-Membran:** Hydrophobe Gore ePTFE-Membran über die Schalleintrittsöffnung des Sipeed/Knowles MEMS Mikrofons (`MIC1`) kleben.
-6. **Kabel einlegen & Gehäuse vorbereiten:**
-   * 12V KL15 & GND an `J1`, CAN-Bus an `J2`, PTT-Taster an `J3`, CP2AA Dongle an `J6`, Smartphone Fast-Charge an `J5`.
-   * TPU-Dichtkämme einsetzen, Silikon-Rundschnur (Ø 1,5 mm, $30\,\text{cm}$) in Deckelnut einlegen und Deckel vorerst lose auflegen.
+4. **Akustik-Membran:** Hydrophobe Gore ePTFE-Membran über die frontale Schalleintrittsöffnung des Sipeed/Knowles MEMS Mikrofons (`MK1`) kleben.
+5. **Kabelbäume anschließen (2-Strang Clean-Architecture):**
+   * **Cockpit-Kabelbaum (`cable_cockpit_harness_16p`):** 16-poligen 2.0 mm Verriegelungsstecker auf `J_COCKPIT` aufrasten. Das geschirmte Rundkabel ($\varnothing 6{,}0\,\text{mm}$) durch die südliche TPU-Knickschutztülle nach außen zum **Cockpit-Satellitenverteiler** ([`cockpit_breakout_block.scad`](../../hardware/cad/scad/04_front_node/cockpit_breakout_block.scad)) führen.
+   * **Fahrzeug-Kabelbaum (`cable_vehicle_harness_12p`):** 12-poligen 2.0 mm Verriegelungsstecker auf `J_VEHICLE` aufrasten. Das geschirmte Rundkabel ($\varnothing 6{,}5\,\text{mm}$) durch die nördliche TPU-Knickschutztülle nach außen zum **Fahrzeug-Satellitenverteiler** ([`vehicle_breakout_block.scad`](../../hardware/cad/scad/04_front_node/vehicle_breakout_block.scad)) führen.
+6. **Gehäuse versiegeln:**
+   * TPU-Dichtkämme in die Führungsnuten der Unterwanne einsetzen.
+   * Silikon-Rundschnur (Ø 1,5 mm Shore 40A, $30\,\text{cm}$) in die Deckelnut einlegen.
+   * Gehäusedeckel aufsetzen und mit 4x M3 $\times 20\,\text{mm}$ Edelstahlschrauben gleichmäßig über Kreuz festziehen.
+7. **Satelliten-Verteilerblöcke komplettieren:**
+   * **Cockpit-Satellit:** Das 16-polige Kabel endet im Cockpit-Block auf den 5 USB-C Buchsen (`[ PHONE 20W ]`, `[ DONGLE ]`, `[ HOST ]`, `[ CAM 5V ]`, `[ NAVI 5V ]`) und der 2-poligen PTT-Schraubklemme. Die M3-Zugentlastungsschiene sichert die Steckerhälse eingesteckter COTS-Kabel vibrationsfest.
+   * **Fahrzeug-Satellit:** Das 12-polige Kabel splittet sich im Fahrzeug-Block direkt in die 5 wasserdichten **JST-JWPF (IP67)** Einrast-Buchsen (`[ 12V IN ]`, `[ CAN BUS ]`, `[ MIRROR BSD ]`, `[ AUX LIGHT ]`, `[ GNSS / CLIMATE PUCK ]`). Schnappdeckel aufrasten.
 
 ---
 
@@ -361,11 +365,26 @@ Erst wenn alle 4 Checks grün leuchten, die Gehäusedeckel mit den M3-Schrauben 
   * **Option A: Montage am Kennzeichenträger:** Den Kennzeichenträger ([`radar_license_plate_bracket.stl`](../../hardware/cad/stl/02_pod_base/radar_license_plate_bracket.stl)) unter die unteren M6-Kennzeichenschrauben klemmen. Die Hirth-Zunge der Adapterplatte in die Gabelaufnahme einschieben, Nickwinkel waagerecht zur Fahrbahn justieren und mit einer DIN 912 M5 $\times$ 25 mm Klemmschraube in die versenkte M5-Mutter formschlüssig festziehen.
   * **Option B: Montage am Heckkotflügel (Bobber / Custom-Bike):** Den Stealth Center Under-Fender Mount ([`radar_center_underfender_mount.stl`](../../hardware/cad/stl/02_pod_base/radar_center_underfender_mount.stl)) mittig unter die Kotflügelkante kleben (3M VHB 5952) oder mit 2x M4/M5 Senkkopfschrauben verschrauben. Die Neigungswiege in die Clevis-Gabel einschieben und per M5-Schraube arretieren. Der integrierte $42\,\text{mm}$ Schmutzfänger-Spoiler hält Reifengischt zuverlässig vom Drehgelenk und der M8-Kabelverschraubung ab.
   * **Spritzwasser-Verkabelung (Abtropfbogen):** Das 2-adrige FLRY-B Kabel von Peitsche 3 im rückseitigen Kanal der Trägerwirbelsäule führen und in einer nach unten hängenden Abtropfschlaufe (Drip-Loop) von unten durch die M8 IP68-Kabelverschraubung führen. Der monolithische Roost-Deflector am Gehäuseboden schirmt die Verschraubung vollständig gegen aufgewirbelte Reifengischt ab.
-* **Front-Knoten (Stealth-Montage unterm Fairing):** Direkt unter der Verkleidung (Sharknose FLTRX, Batwing FLHX oder CVO ST) an den runden Metallstangen des Verkleidungsgeweihs (Ø 16–19 mm Fairing Support Brackets) mit der 2-teiligen Verkleidungs-Rohrschelle ([`front_node_fairing_tube_clamp.stl`](../../hardware/cad/stl/04_front_node/front_node_fairing_tube_clamp.stl)) oder per EPDM-Kabelbinder-Kreuztunnel vibrationsentkoppelt verschrauben (0° oder 90° drehbar). Hält Lenker und Riser 100% frei; sitzt unmittelbar neben der Headunit, dem OEM-USB-Kabelbaum und dem Ottocast CarPlay/AA Dongle. 12V geschaltetes Zündungsplus von Standlicht/Zubehörstecker; CAN-Bus lokal an `J2` (oder drahtlos an Zentralbox).
+* **Front-Knoten & Satelliten-Verteiler (Stealth-Montage unterm Fairing):**
+  * **Front-Node Montage:** Direkt unter der Verkleidung (Sharknose FLTRX, Batwing FLHX oder CVO ST) an den runden Metallstangen des Verkleidungsgeweihs (Ø 16–19 mm Fairing Support Brackets) mit der 2-teiligen Verkleidungs-Rohrschelle ([`front_node_fairing_tube_clamp.stl`](../../hardware/cad/stl/04_front_node/front_node_fairing_tube_clamp.stl)) oder per EPDM-Kabelbinder-Kreuztunnel vibrationsentkoppelt verschrauben (0° oder 90° drehbar). Hält Lenker und Riser 100% frei; sitzt unmittelbar neben der Headunit, dem OEM-USB-Kabelbaum und dem Ottocast CarPlay/AA Dongle.
+  * **Satelliten-Dovetail-Verbund:** Cockpit- und Fahrzeug-Satellit können per Schwalbenschwanzführung zu einer Kombi-Box zusammengesteckt und im Handschuhfach oder hinter der Verkleidungswand fixiert werden.
+  * **Plug-and-Play Fahrzeug-Anbindung (Zero Wire-Cut):**
+    * `[ 12V IN ]`: Mit dem **Harley Fairing-Aux Adapterkabel** (`cable_adapter_jwpf_hd_fairing_aux`) direkt an den 2-poligen OEM-Zubehörstecker unter der Verkleidung anstecken (Klemme 15 Zündungsplus, schaltet automatisch mit Zündung).
+    * `[ CAN BUS ]`: Mit dem **Harley CAN Y-Splitter-Adapterkabel** (`cable_adapter_jwpf_hd_can_splitter`) am Diagnosestecker / Tacho-Y zerstörungsfrei einschleifen.
+    * `[ AUX LIGHT ]`: Über das **Deutsch DT-2 Adapterkabel** (`cable_adapter_jwpf_deutsch_dt2_aux`) an Zusatzleuchten oder Navi anschließen.
+    * `[ GNSS / CLIMATE PUCK ]`: Über das **Qwiic JST-SH Adapterkabel** (`cable_adapter_jwpf_qwiic_sh`) zum SAM-M10Q GNSS- & Klimasensor im Luftkanal führen.
 
 ### 5.2 Montage Adventure-Plattform (BMW GS / GSA Familie)
 * **Zentralbox:** Im Rahmendreieck unter der Fahrersitzbank auf 4x M4 Silentblöcken montieren.
-* **Cockpit & Front-Knoten:** An der Ø 12 mm GPS-Querstrebe über dem TFT befestigt; 12V über originalen BMW Cartool-Stecker.
+* **Cockpit, Front-Knoten & Satelliten (Plug & Play am Schnabel / Lenker):**
+  * **Front-Node Montage:** An der Ø 12 mm GPS-Querstrebe über dem TFT-Display oder an der Verkleidungsstrebe mit der 2-teiligen Klemmschelle fixieren.
+  * **Cockpit-Satellit:** Wird separat direkt am Lenker / Riser platziert (mittels Kabelbinder-Tunnel), sodass Smartphones und Zubehör ohne Kabelsalat am Lenkkopf geladen werden.
+  * **Fahrzeug-Satellit:** Wird fahrzeugfest am Steuerkopf / Schnabel befestigt.
+  * **Plug-and-Play Fahrzeug-Anbindung (Zero Wire-Cut):**
+    * `[ 12V IN ]`: Mit dem vorkonfektionierten **BMW Cartool-Adapterkabel** (`cable_adapter_jwpf_bmw_cartool`) direkt in den originalen 3-Pin Cartool-Zubehörstecker (BMW Teilenr. 83300413585) über dem Ölkühler / Lenkkopf einstecken. Liefert sauberes Zündungsplus (KL15) mit automatischer ZFE/BCO-Abschaltung nach 60 Sekunden (kein Entladen der Starterbatterie, keine CAN-Bus Fehlereinträge).
+    * `[ CAN BUS ]`: Mit dem **BMW CAN Y-Splitter-Adapterkabel** (`cable_adapter_jwpf_bmw_can_splitter`) an der Vorbereitung Navigationssystem / TFT zerstörungsfrei einschleifen.
+    * `[ AUX LIGHT ]` (GSA): Mit dem **Deutsch DT-2 Adapterkabel** (`cable_adapter_jwpf_deutsch_dt2_aux`) direkt an Zusatzscheinwerfer (z.B. Denali D3/D7 oder Wunderlich) ankoppeln (geschaltet über PCBA 05 High-Side Switch TPS1H100).
+    * `[ GNSS / CLIMATE PUCK ]`: Mit dem **Qwiic JST-SH Adapterkabel** (`cable_adapter_jwpf_qwiic_sh`) zum SAM-M10Q GNSS- & Klimasensor im Verkleidungsschnabel führen.
 * **Pod 1 & Pod 2 (Strikt fahrzeugfest montiert - KEINE Pods im Alukoffer!):**
   * *Option A (Vario-Koffer / GS Standard):* Transition-Docks ([`adventure_transition_dock_base.stl`](../../hardware/cad/stl/02_pod_base/adventure_transition_dock_base.stl)) in der Sitzbank-Bügelfalte (Ø 28 mm Rahmenrohr) verbunden mit der Sattelbrücke ([`adventure_underseat_cross_rail.stl`](../../hardware/cad/stl/02_pod_base/adventure_underseat_cross_rail.stl)).
   * *Option B (Edelstahl-Rohrkofferträger / GSA):* Heavy-Duty GSA Cage Docks ([`adventure_gsa_cage_dock_body.stl`](../../hardware/cad/stl/02_pod_base/adventure_gsa_cage_dock_body.stl)) im 45 mm Totraum des Trägers zwischen Trägerrohr und Radkasten.

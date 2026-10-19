@@ -233,13 +233,17 @@ Both standalone modules (**PCBA 09: OMM 2.4 GHz HD-Mesh** and **PCBA 10: OMM 446
    * Place PCBA 05 onto damping bosses.
    * Snap UWB coax lead onto U.FL receptacle on `B.Cu`.
    * Secure board with 4x M2.5 screws.
-4. **Connect Cockpit Sensors (J12 Qwiic):**
-   * Connect u-blox SAM-M10Q Multi-GNSS module (with integrated $15 \times 15\,\text{mm}$ patch antenna) via Qwiic cable to `J12`.
-   * Daisy-chain TI TMP117 temperature sensor and TI OPT3001 light sensor along the Qwiic bus inside the cool ram-air intake zone.
-5. **Acoustic Membrane:** Stick hydrophobic Gore ePTFE membrane over the acoustic port of the digital MEMS microphone (`MIC1`).
-6. **Connect Wiring & Enclosure Closure:**
-   * Plug 12V KL15 & GND to `J1`, CAN-bus to `J2`, handlebar PTT to `J3`, CP2AA dongle to `J6`, fast-charging to `J5`.
-   * Insert TPU sealing combs, place silicone cord in lid groove, and seat lid loosely.
+4. **Acoustic Membrane:** Stick hydrophobic Gore ePTFE membrane over the frontal acoustic port of the digital MEMS microphone (`MK1`).
+5. **Connect Harnesses (2-Strand Clean-Architecture):**
+   * **Cockpit Harness (`cable_cockpit_harness_16p`):** Snap 16-pin 2.0 mm latching connector onto `J_COCKPIT`. Route shielded round harness ($\varnothing 6.0\,\text{mm}$) through South TPU gland to **Cockpit Breakout Satellite** ([`cockpit_breakout_block.scad`](../../hardware/cad/scad/04_front_node/cockpit_breakout_block.scad)).
+   * **Vehicle Harness (`cable_vehicle_harness_12p`):** Snap 12-pin 2.0 mm latching connector onto `J_VEHICLE`. Route shielded round harness ($\varnothing 6.5\,\text{mm}$) through North TPU gland to **Vehicle Breakout Satellite** ([`vehicle_breakout_block.scad`](../../hardware/cad/scad/04_front_node/vehicle_breakout_block.scad)).
+6. **Seal Enclosure:**
+   * Insert TPU sealing combs into lower tub guide slots.
+   * Place silicone cord (Ø 1.5 mm Shore 40A, $30\,\text{cm}$) into lid groove.
+   * Seat lid and tighten 4x M3 $\times 20\,\text{mm}$ stainless steel bolts crosswise.
+7. **Assemble Breakout Satellites:**
+   * **Cockpit Satellite:** The 16-wire cable terminates on 5 USB-C sockets (`[ PHONE 20W ]`, `[ DONGLE ]`, `[ HOST ]`, `[ CAM 5V ]`, `[ NAVI 5V ]`) and 2-pin PTT screw terminal. The M3 strain-relief clamp bar secures COTS USB-C plug necks against vibration.
+   * **Vehicle Satellite:** The 12-wire cable breaks out directly into 5 watertight **JST-JWPF (IP67)** latching sockets (`[ 12V IN ]`, `[ CAN BUS ]`, `[ MIRROR BSD ]`, `[ AUX LIGHT ]`, `[ GNSS / CLIMATE PUCK ]`). Snap lid closed.
 
 ---
 
@@ -300,11 +304,26 @@ Once all 4 checks indicate green, tighten enclosure lids with M3 screws diagonal
   * **Option A: License Plate Bracket:** Clamp the license plate bracket ([`radar_license_plate_bracket.stl`](../../hardware/cad/stl/02_pod_base/radar_license_plate_bracket.stl)) under the lower M6 license plate screws. Slide the cradle Hirth tongue into the clevis fork, align the radar beam horizontally ($\pm 2^\circ$), and clamp securely with a DIN 912 M5 $\times$ 25 mm bolt and DIN 934 M5 nut.
   * **Option B: Under-Fender Mount (Bobbers / Custom Bikes):** Bond or bolt the Stealth Center Under-Fender Mount ([`radar_center_underfender_mount.stl`](../../hardware/cad/stl/02_pod_base/radar_center_underfender_mount.stl)) centrally under the rear fender trailing edge using 3M VHB 5952 tape or 2x M4/M5 countersunk screws. Slide the cradle into the clevis and lock with an M5 bolt. The integrated 42 mm roost deflector shield protects the joint and bottom M8 gland from rear tire spray.
   * **Water Spray Protection (Drip Loop):** Route the 2-wire FLRY-B cable from Whip 5 down the spine conduit and guide it in an upward drip loop through the bottom M8 IP68 cable gland. The monolithic roost deflector on the housing bottom protects the gland from rear tire road spray.
-* **Front Node:** Secure inside fairing (Batwing / Sharknose) or nacelle; 12V from auxiliary plug; CAN connected locally at J2 (or under seat at Central Box).
+* **Front Node & Breakout Satellites (Fairing Stealth Installation):**
+  * **Front Node Mounting:** Mount directly under fairing (Sharknose FLTRX, Batwing FLHX or CVO ST) on fairing support brackets (Ø 16–19 mm tube) using the 2-piece clamp ([`front_node_fairing_tube_clamp.stl`](../../hardware/cad/stl/04_front_node/front_node_fairing_tube_clamp.stl)).
+  * **Dovetail Combo Block:** Cockpit and vehicle satellites can slide-interlock via lateral dovetail rails into a single compact combo block inside glovebox or fairing wall.
+  * **Plug-and-Play Vehicle Interfacing (Zero Wire-Cut):**
+    * `[ 12V IN ]`: Connect directly to 2-pin OEM fairing accessory plug via **Harley Fairing-Aux Adapter Cable** (`cable_adapter_jwpf_hd_fairing_aux`).
+    * `[ CAN BUS ]`: Intercept HD-LAN / CAN bus non-destructively at diagnostic port or speedo Y via **Harley CAN Y-Splitter Cable** (`cable_adapter_jwpf_hd_can_splitter`).
+    * `[ AUX LIGHT ]`: Connect auxiliary lights or GPS cradle via **Deutsch DT-2 Adapter Cable** (`cable_adapter_jwpf_deutsch_dt2_aux`).
+    * `[ GNSS / CLIMATE PUCK ]`: Route to SAM-M10Q GNSS & TMP117 puck in air intake via **Qwiic JST-SH Adapter Cable** (`cable_adapter_jwpf_qwiic_sh`).
 
 ### 5.2 Adventure Platform (BMW GS / GSA Family)
 * **Central Box:** Mount inside frame triangle under rider seat on 4x M4 vibration isolators.
-* **Cockpit & Front Node:** Mount to Ø 12 mm GPS bar above TFT display; 12V via factory BMW Cartool plug.
+* **Cockpit, Front Node & Satellites (Plug & Play at Beak / Handlebars):**
+  * **Front Node Mounting:** Fasten to Ø 12 mm GPS rail above TFT display or fairing stays using 2-piece clamp.
+  * **Cockpit Satellite:** Positioned separately on handlebars/riser (via zip-tie channels) for cable-free phone charging without steering neck entanglement.
+  * **Vehicle Satellite:** Fastened frame-side at steering head / beak.
+  * **Plug-and-Play Vehicle Interfacing (Zero Wire-Cut):**
+    * `[ 12V IN ]`: Plug directly into factory 3-pin BMW Cartool accessory socket (BMW P/N 83300413585) over oil cooler/steering head using pre-assembled **BMW Cartool Adapter Cable** (`cable_adapter_jwpf_bmw_cartool`). Provides clean switched ignition (KL15) with automatic ZFE/BCO 60-second shutdown.
+    * `[ CAN BUS ]`: Intercept BMW CAN bus non-destructively at navigation prep cradle via **BMW CAN Y-Splitter Cable** (`cable_adapter_jwpf_bmw_can_splitter`).
+    * `[ AUX LIGHT ]` (GSA): Connect directly to auxiliary LED lamps (Denali D3/D7 or Wunderlich) via **Deutsch DT-2 Adapter Cable** (`cable_adapter_jwpf_deutsch_dt2_aux`).
+    * `[ GNSS / CLIMATE PUCK ]`: Route to SAM-M10Q GNSS & TMP117 puck inside beak via **Qwiic JST-SH Adapter Cable** (`cable_adapter_jwpf_qwiic_sh`).
 * **Pod 1 & Pod 2:**
   * *Option A (Vario Panniers / GS Standard):* Transition docks ([`adventure_transition_dock_base.stl`](../../hardware/cad/stl/02_pod_base/adventure_transition_dock_base.stl)) in seat frame crease (Ø 28 mm tube) with 4x strap hook clearance pockets, coupled with underseat cross-rail ([`adventure_underseat_cross_rail.stl`](../../hardware/cad/stl/02_pod_base/adventure_underseat_cross_rail.stl)) for concealed 2-wire DC harness routing.
   * *Option B (Stainless Pannier Racks / GSA):* Heavy-duty GSA cage docks ([`adventure_gsa_cage_dock_body.stl`](../../hardware/cad/stl/02_pod_base/adventure_gsa_cage_dock_body.stl)) in 45 mm frame dead space with 4x strap hook clearance pockets and zip-tie anchor bridge in tube clamp shadow for 2-wire DC cable.

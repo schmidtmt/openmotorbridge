@@ -447,11 +447,14 @@
         "en": "Mount Kit: BMW GS Family"
       },
       "desc": {
-        "de": "Sitzbank-Bügelfalte Transition-Docks (Ø 28 mm, Vario-kompatibel)",
-        "en": "Seat crease transition docks (Ø 28 mm, Vario-case compatible)"
+        "de": "Sitzbank-Bügelfalte Transition-Docks (Ø 28 mm, Vario-kompatibel), BMW Cartool 12V Zündungsplus-Adapter & CAN-Bus Y-Splitter",
+        "en": "Seat crease transition docks (Ø 28 mm, Vario-case compatible), BMW Cartool 12V ignition adapter & CAN bus Y-splitter"
       },
       "parts": [
-        { "part_id": "part3d_gs_transition_dock", "qty": 2 }
+        { "part_id": "part3d_gs_transition_dock", "qty": 2 },
+        { "part_id": "cable_adapter_jwpf_bmw_cartool", "qty": 1 },
+        { "part_id": "cable_adapter_jwpf_bmw_can_splitter", "qty": 1 },
+        { "part_id": "cable_adapter_jwpf_qwiic_sh", "qty": 1 }
       ]
     },
     "assembly_bike_bmw_gs_radar": {
@@ -479,14 +482,18 @@
         "en": "Mount Kit: BMW GSA Adventure"
       },
       "desc": {
-        "de": "Ø 18 mm Edelstahl-Rohrträger-Klemmschellen (4 Paar) mit M5 Schrauben",
-        "en": "Ø 18 mm stainless pannier rack clamps (4 pairs) with M5 bolts"
+        "de": "Ø 18 mm Edelstahl-Rohrträger-Klemmschellen (4 Paar) mit M5 Schrauben, BMW Cartool 12V-Adapter, CAN Y-Splitter & Deutsch DT-2 Zusatzscheinwerfer-Kabel",
+        "en": "Ø 18 mm stainless pannier rack clamps (4 pairs) with M5 bolts, BMW Cartool 12V adapter, CAN Y-splitter & Deutsch DT-2 aux light cable"
       },
       "parts": [
         { "part_id": "part3d_gsa_pannier_clamp_base", "qty": 4 },
         { "part_id": "part3d_gsa_pannier_clamp_cap", "qty": 4 },
         { "part_id": "fastener_din912_m5_25", "qty": 4 },
-        { "part_id": "fastener_din934_m5", "qty": 4 }
+        { "part_id": "fastener_din934_m5", "qty": 4 },
+        { "part_id": "cable_adapter_jwpf_bmw_cartool", "qty": 1 },
+        { "part_id": "cable_adapter_jwpf_bmw_can_splitter", "qty": 1 },
+        { "part_id": "cable_adapter_jwpf_deutsch_dt2_aux", "qty": 1 },
+        { "part_id": "cable_adapter_jwpf_qwiic_sh", "qty": 1 }
       ]
     },
     "assembly_bike_hd_touring": {
@@ -497,8 +504,8 @@
         "en": "Mount Kit: Harley-Davidson Touring & CVO ST"
       },
       "desc": {
-        "de": "Kofferdeckel-Docks, Rahmenrohr-Magnetdocks (Ø 26 mm), 2-Pin Magnet-Pogo Trennstelle & Koffer-Tüllenset",
-        "en": "Saddlebag lid docks, frame tube magnetic docks (Ø 26 mm), 2-pin breakaway coupler & grommet kit"
+        "de": "Kofferdeckel-Docks, Rahmenrohr-Magnetdocks (Ø 26 mm), 2-Pin Magnet-Pogo Trennstelle, Fairing-Aux 12V Adapter & HD-CAN Y-Splitter",
+        "en": "Saddlebag lid docks, frame tube magnetic docks (Ø 26 mm), 2-pin breakaway coupler, fairing aux 12V adapter & HD-CAN Y-splitter"
       },
       "parts": [
         { "part_id": "part3d_hd_saddlebag_lid_dock", "qty": 2 },
@@ -507,7 +514,11 @@
         { "part_id": "part3d_hd_grommet_split", "qty": 2 },
         { "part_id": "cots_pogo_magnetic_2pin", "qty": 2 },
         { "part_id": "fastener_din912_m3_16", "qty": 4 },
-        { "part_id": "fastener_din934_m3", "qty": 4 }
+        { "part_id": "fastener_din934_m3", "qty": 4 },
+        { "part_id": "cable_adapter_jwpf_hd_fairing_aux", "qty": 1 },
+        { "part_id": "cable_adapter_jwpf_hd_can_splitter", "qty": 1 },
+        { "part_id": "cable_adapter_jwpf_deutsch_dt2_aux", "qty": 1 },
+        { "part_id": "cable_adapter_jwpf_qwiic_sh", "qty": 1 }
       ]
     },
     "assembly_bike_hd_radar": {
@@ -596,13 +607,14 @@
         "en": "General Accessories & Mounting Material"
       },
       "desc": {
-        "de": "N52 Magnetschlüssel, 3M Dual-Lock Klettband & JST-PH Pigtail Sortiments-Set",
-        "en": "N52 magnetic key, 3M Dual-Lock fastener & JST-PH pigtail assortment set"
+        "de": "N52 Magnetschlüssel, 3M Dual-Lock Klettband, JST-PH Sortiments-Set & JST-JWPF Universal-Pigtails",
+        "en": "N52 magnetic key, 3M Dual-Lock fastener, JST-PH pigtail assortment & JST-JWPF universal pigtails"
       },
       "parts": [
         { "part_id": "tool_n52_key", "qty": 1 },
         { "part_id": "fastener_tape_3m_duallock_sj3550", "qty": 0.5 },
-        { "part_id": "cable_jst_ph_assortment", "qty": 1 }
+        { "part_id": "cable_jst_ph_assortment", "qty": 1 },
+        { "part_id": "cable_adapter_jwpf_universal_pigtail", "qty": 1 }
       ]
     }
   }
