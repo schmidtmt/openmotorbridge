@@ -286,7 +286,7 @@ Auf der Platine sitzen genau **zwei robuste Haupt-Steckverbinder** (2,0 mm Raste
      ┌─────────────────────────────────────────────────────────────┐
      │                                                             │
      │   [ J_COCKPIT ]                             [ J_VEHICLE ]   │
-     │   (14-Pin Dual-Row 2.0 mm)                  (8-Pin 2.0 mm)  │
+     │   (16-Pin Dual-Row 2.0 mm)                  (12-Pin 2.0 mm) │
      │                                                             │
      │   • USB Upstream Host (Boom! Box)           • 12V In & GND  │
      │   • CP2AA Wireless Dongle                   • CAN-Bus       │
