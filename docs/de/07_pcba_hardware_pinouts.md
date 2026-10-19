@@ -318,9 +318,9 @@ Fasst alle Cockpit-, Multimedia- und Lenker-Signale in einem einzigen, geschirmt
 | **15**| `VCC_5V_AUX` | +5V geschützt (bis 2.0A)| Power-Only Speisung für Action-Cam & 5V-Navi via TPS54302 3A-Buck & PPTC |
 | **16**| `GND` | Power-Masse | Masse-Rückleitung für Action-Cam & 5V-Navi |
 
-#### 7.2.2 Belegung Fahrzeug- & Bordnetz-Header (`J_VEHICLE` / 8-Pin 2.0 mm)
+#### 7.2.2 Belegung Fahrzeug- & Bordnetz-Header (`J_VEHICLE` / 12-Pin Dual-Row 2.0 mm)
 
-Fasst alle Stromversorgungs-, Bus- und Signalleitungen in einem zweiten, abgedichteten Mantelkabel ($\varnothing 6{,}0\,\text{mm}$) zusammen, das zur **Fahrzeug-Verteilerbox** führt:
+Fasst alle Stromversorgungs-, Bus-, Sensor- und Signalleitungen in einem zweiten, abgedichteten Mantelkabel ($\varnothing 6{,}0\,\text{mm}$) zusammen, das zur **Fahrzeug-Verteilerbox** führt:
 
 | Pin | Signalname | Signalpegel / Richtung | Funktion & angeschlossene Bordnetz-Peripherie |
 | :---: | :--- | :--- | :--- |
@@ -332,13 +332,16 @@ Fasst alle Stromversorgungs-, Bus- und Signalleitungen in einem zweiten, abgedic
 | **6** | `BSD_LEFT_N` | Kathode Links (Low-Side) | Geschaltete Masse für linke Spiegel-Totwinkel-Warnleuchte (Dual-MOSFET `Q1`) |
 | **7** | `BSD_RIGHT_N`| Kathode Rechts (Low-Side)| Geschaltete Masse für rechte Spiegel-Totwinkel-Warnleuchte (Dual-MOSFET `Q1`) |
 | **8** | `+12V_AUX` | +12V geschaltet (2.0A) | Zusatzscheinwerfer / Strobe oder 12V-Navi-Aktivhalterung (Garmin Zūmo XT2 / BMW Cradle) via TI TPS1H100 `Q2` |
+| **9** | `+3V3_SENS` | +3.3V geschützt Out | Speisung für externen GNSS- & Klima-Sensor-Puck (u-blox SAM-M10Q, TMP117, OPT3001) |
+| **10**| `GND` | Sensor-Masse | Masse-Rückleitung für I2C-Sensorbus |
+| **11**| `I2C_SDA` | I2C Data (3.3V) | Bidirektionale I2C-Datenleitung mit 4.7k Pull-Up für Sensor-Puck am Verkleidungsschnabel |
+| **12**| `I2C_SCL` | I2C Clock (3.3V) | I2C-Taktleitung (100 / 400 kHz) |
 
 #### 7.2.3 Lokale Ports & Service-Schnittstellen
 
 | Header | Typ | Signalname | Funktion & Besonderheiten |
 | :--- | :--- | :--- | :--- |
 | **`J7`** | **USB-C SMD (16-Pin)** | `USB 2.0 + VBUS` | Wasserdichter Service-Port: Bündig in rechter Gehäuseflanke mit TPU-Stopfen (Flashen & WebSerial) |
-| **`J12`** | **JST-SH 4-Pin (1.0 mm)** | `GND, 3V3, SDA, SCL` | Qwiic / STEMMA QT Sensor-Bus: Steckverbindung zum externen u-blox SAM-M10Q GNSS-Puck & TMP117 |
 | **`ANT_UWB`**| **U.FL Hirose (SMD)** | `UWB_RF_CH5, GND` | 6.5 GHz UWB HF-Verbindung (50 Ohm) zur Taoglas FXUWB10 Flex-Antenne im Gehäuseboden |
 
 ---
@@ -357,9 +360,14 @@ Die abgehenden Mantelleitungen von `J_COCKPIT` und `J_VEHICLE` münden in zwei k
    * **PTT-Klemme:** 2-polige Schraub-/Federklemme für den Intercom-Gruppenfunk-Lenkertaster (`PTT_IN1_N` gegen `GND`).
    * **Integrierte Klemme:** Eine 3D-gedruckte Klemmleiste mit 2 Schrauben fixiert die Steckerhälse handelsüblicher COTS-USB-C-Kabel vibrationsfest und dient als vollwertige Zugentlastung.
    * Der Endkunde kann jedes beliebige Standard-USB-C-Kabel (20 cm, gewinkelt, Textilmantel etc.) werkzeuglos einstecken.
-2. **Fahrzeug-Verteiler (Spritzwassergeschützte Steckerbox):**
-   * Beinhaltet kompakte, codierte COTS-Klick-Steckverbinder (JST-JWPF / JST-SM) für `12V IN`, `CAN-BUS`, `SPIEGEL BSD` und `AUX LICHT / 12V NAVI`.
-   * **Wartungsvorteil:** Bei Beschädigung eines Spiegels oder Scheinwerfers wird die Komponente in 60 Sekunden werkzeuglos abgesteckt und getauscht.
+2. **Fahrzeug-Verteiler (Spritzwassergeschützte 5-Port Steckerbox):**
+   * Beinhaltet kompakte, codierte COTS-Klick-Steckverbinder (JST-JWPF IP67 / JST-SM / Qwiic) für:
+     - `[ 12V IN ]`: KL15 Zündungsplus & Power-GND (2-Pin)
+     - `[ CAN BUS ]`: CAN_H, CAN_L, GND (3-Pin)
+     - `[ MIRROR BSD ]`: Totwinkel-Radar-Spiegel-LEDs (3-Pin)
+     - `[ AUX LIGHT ]`: Zusatzscheinwerfer / 12V-Navi-Cradle (2-Pin)
+     - `[ GNSS / CLIMATE PUCK ]`: 4-Pin I2C-Steckverbindung (3V3, GND, SDA, SCL) für SAM-M10Q & TMP117 Sensor-Puck im Schnabel
+   * **Wartungsvorteil:** Bei Beschädigung eines Spiegels, Scheinwerfers oder Sensors wird die Komponente in 60 Sekunden werkzeuglos abgesteckt und getauscht.
 3. **Fahrzeugspezifische Flexibilität:**
    * **Adventure GS & Road King Special:** Die beiden Satelliten werden **getrennt montiert** (Cockpit-Leiste am Lenker/Windschild, Fahrzeug-Box am Rahmen/Schnabel). Dadurch wird **kein einziges unnötiges Kabel über den beweglichen Lenkkopf** geführt.
    * **Touring Fairing (Road Glide):** Beide Satelliten lassen sich über seitliche Schwalbenschwanz-Führungen mit einem Klick zu **einer einzigen Kombi-Box** vereinen und im Handschuhfach / Verkleidungsträger montieren.
@@ -381,8 +389,8 @@ Die abgehenden Mantelleitungen von `J_COCKPIT` und `J_VEHICLE` münden in zwei k
 | **Pad 13** | `USB_SERV_DM` | USB D- | Nativer USB-JTAG / CDC Service-Port (`J7`) |
 | **Pad 14** | `USB_SERV_DP` | USB D+ | Nativer USB-JTAG / CDC Service-Port (`J7`) |
 | **Pad 15** | `CAN_TERM_EN` | Digital Out | Steuersignal für CPC1017N Solid-State Relais (120 Ohm CAN-Busabschluss) |
-| **Pad 17** | `I2C_SDA` | Open-Drain | I2C Datenleitung für Qwiic-Port `J12` (SAM-M10Q GNSS, TMP117, OPT3001) |
-| **Pad 18** | `I2C_SCL` | Open-Drain | I2C Taktleitung für Qwiic-Port `J12` |
+| **Pad 17** | `I2C_SDA` | Open-Drain | I2C Datenleitung für `J_VEHICLE` (Pins 11/12) zum externen Sensor-Puck (SAM-M10Q, TMP117, OPT3001) |
+| **Pad 18** | `I2C_SCL` | Open-Drain | I2C Taktleitung für `J_VEHICLE` (Pins 11/12) |
 | **Pad 19** | `WS2812B_DIN` | Digital Out | Datenleitung für SMD WS2812B-2020 RGB Status-LED (`D4`) |
 | **Pad 20** | `BSD_LED_LEFT` | Digital Out | Gate-Ansteuerung für Totwinkel-Spiegel-LED Links (`J9`, MOSFET `Q1`) |
 | **Pad 21** | `BSD_LED_RIGHT`| Digital Out | Gate-Ansteuerung für Totwinkel-Spiegel-LED Rechts (`J9`, MOSFET `Q1`) |

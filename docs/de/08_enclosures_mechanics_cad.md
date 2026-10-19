@@ -5,7 +5,7 @@
 Dieses Dokument spezifiziert die mechanische Konstruktion, das Thermomanagement, das IP67/IP69K-Gehäusedesign, die Kinematik des Auto-Eject-Schnellwechselsystems sowie alle CAD- und STL-Modelle aller Gehäuse-Baugruppen der OpenMotorBridge v9.6:
 1. **Zentrale Steuerbox (Typ A):** 3-teiliges Sandwich-Gehäuse mit Zwischenboden, integrierter Akku-Wanne, stirnseitiger Schnittstellenleiste (Deutsch DTM-12 Flansch, Taster SW1, USB-C, RGB-LED), integrierter Deckeltasche ($85{,}0 \times 18{,}0 \times 1{,}2\,\text{mm}$) für LoRa-868-Flexantenne (Taoglas FXP895), Unterwannen-Bodenkammer ($12{,}0 \times 12{,}0 \times 0{,}8\,\text{mm}$) für UWB-Flexantenne (Taoglas FXUWB10), optionalem rückseitigen SMA-Antennendurchgang und planarem 4-Layer Kupfer-Wärmespreader.
 2. **Modulares Satelliten-Pod- & Wechselsystem (Typ B):** Baugleiches 5-seitiges Monocoque-Schachtgehäuse für beide Satelliten-Pods (Pod 1 & 2 Audio/Intercom, 2x symmetrisch) mit modularen Wechselkassetten (Sena SPIDER X Slim, Cardo Packtalk Edge, OMM 2.4 GHz Swap Cartridge, Midland, Dry Box), glatter geschlossener IP67-Außenhaut (ohne störende Antennen-Radomlöcher), $120^\circ$-V-Nut Rohrbett, wasserdichtem IP67 Gleichstrom-Direktstecker mit vibrationsfester Dual-Beam Schlitzbuchsen-Kontaktierung, Poka-Yoke Nut-und-Feder-Führung, federbelastetem Auto-Eject und unsichtbarem Neodym-Magnet-Diebstahlschutz.
-3. **Universal Front-Knoten (Typ C):** Ultrakompakter Cockpit- & Sensor-Hub ($98{,}0 \times 68{,}0 \times 25{,}0\,\text{mm}$) für die vergrößerte $82 \times 50\,\text{mm}$ 4-Lagen PCBA 05 mit **4-in-1 Universal-Befestigungssystem** (AMPS, Rohrbügel-Prisma, Silentblöcke, 3M Dual-Lock), integrierter Bodenkammer für UWB-Backbone (FXUWB10), J12 Qwiic Sensor-Hub (u-blox SAM-M10Q GNSS-Patch, TI TMP117 Präzisionsthermometer, TI OPT3001 Lichtsensor) im Fahrtwindeinlass, getrennten EPDM-Kabelkämmen für USB (Süd) und Fahrzeugleitungen (Nord), Dual-SW3526 20W USB-PD und Knowles MEMS Akustikkanal.
+3. **Universal Front-Knoten (Typ C):** Ultrakompakter Cockpit- & Sensor-Hub ($98{,}0 \times 68{,}0 \times 25{,}0\,\text{mm}$) für die vergrößerte $82 \times 50\,\text{mm}$ 4-Lagen PCBA 05 mit **4-in-1 Universal-Befestigungssystem** (AMPS, Rohrbügel-Prisma, Silentblöcke, 3M Dual-Lock), integrierter Bodenkammer für UWB-Backbone (FXUWB10), GNSS- & Klima-Sensoranbindung (u-blox SAM-M10Q GNSS-Patch, TI TMP117 Präzisionsthermometer, TI OPT3001 Lichtsensor) über den 5-Port Fahrzeug-Satelliten, getrennten EPDM-Kabelkämmen für USB (Süd) und Fahrzeugleitungen (Nord), Dual-SW3526 20W USB-PD und Knowles MEMS Akustikkanal.
 4. **2-in-1 LoRa Smart-Keyfob & Pager (Typ D):** Ultrakompakter Taschenbegleiter ($58{,}0 \times 34{,}0 \times 13{,}0\,\text{mm}$) aus PA12-MJF mit umlaufendem TPU-Kantenschutz, integriertem N52-Neodym-Auswerferschlüssel, $0{,}5\,\text{mm}$ Mu-Metall-Flussschirmung, MagSafe/Qi-Induktionsladeaufnahme, LRA-Haptikmotor und drahtlosem SX1262 LoRa/BLE Alarm-Pager.
 5. **Fahrzeugspezifische Referenz-Montagekits (Zero-Drill):** Vollständig konstruierte, zerstörungsfreie Bolt-On Montagekits für CVO Road Glide ST (Kit 1), Road King Special (Kit 2), Classic Bagger & Cruiser (Kit 3) sowie Adventure & Touring Enduros (BMW GS, KTM Adventure, Africa Twin - Kit 4 mit minimalem Unterbrücken-Radarträger).
 
@@ -528,7 +528,7 @@ Das Gehäuse des Front-Knotens wurde speziell für die geschützte Montage in Mo
 - **Material:** HP Multi Jet Fusion (MJF) PA12, schwarz kugelgestrahlt und chemisch geglättet.
 - **Schutzart:** IP67 (tauch- und strahlwasserdicht) mit integrierter Gore-Tex Druckausgleichsmembran (ePTFE Vent) gegen Kondenswasserbildung.
 - **HF-Backbone-Integration (UWB):** Im Gehäuseboden der Unterwanne ist eine vertiefte Antennentasche ($11 \times 11 \times 0{,}6\,\text{mm}$) für die Taoglas FXUWB10 Flexantenne integriert. Das ultrakurze 20 mm U.FL-Kabel führt direkt auf den Qorvo DW3110 Transceiver auf PCBA 05 `B.Cu`. Dies eliminiert 2.4 GHz Störungen im Cockpit vollständig und bietet deterministische Übertragung ($< 0{,}4\,\text{ms}$) zur Zentralbox.
-- **Laminarer Cockpit Sensor-Hub (J12 Qwiic):** Im strömungsgünstigen Kaltlufteinlass des Gehäuses sitzt der Qwiic-Sensor-Hub mit integriertem u-blox SAM-M10Q Multi-GNSS Patch-Modul ($15 \times 15\,\text{mm}$ Groundplane), TI TMP117 Labor-Temperatursensor ($\pm 0{,}1\,^\circ\text{C}$ Glatteis-Wächter) und TI OPT3001 Umgebungslichtsensor.
+- **Laminarer GNSS- & Klima-Sensor-Puck:** Die Sensorik (u-blox SAM-M10Q Multi-GNSS Patch-Modul mit $15 \times 15\,\text{mm}$ Groundplane, TI TMP117 Labor-Temperatursensor $\pm 0{,}1\,^\circ\text{C}$ Glatteis-Wächter und TI OPT3001 Umgebungslichtsensor) ist als abgesetzter Sensor-Puck im strömungsgünstigen Kaltlufteinlass / Schnabel platziert und wird über den 5. Port des Fahrzeug-Satelliten (`[ GNSS / CLIMATE PUCK ]`) an den 12-poligen `J_VEHICLE`-Kabelstrang angebunden. Dies hält das Front-Node-Gehäuse vollkommen hermetisch geschlossen.
 
 ![Universal Front Node Closed CAD](../images/cad/front_node_closed_cad.png)
 
@@ -610,29 +610,29 @@ Die Schnittstellenarchitektur von PCBA 05 ($82 \times 50\,\text{mm}$, [`openmoto
 |                                    |                                                 |                                      |
 | * Vollwandiges MJF PA12 Monocoque  | * ESP32-S3-WROOM-1-N16R8 Dual-Core MC           | * J7: IP67 USB-C Service-Buchse mit  |
 |   (100 % geschlossen, 0 Schlitze)  | * USB2514B Automotive 4-Port USB 2.0 Hub        |   formschlüssigem TPU-Schutzstopfen  |
-| * Schirmt interne Leistungsschaltung| * Single SC8102 / SW3526 20W USB-PD Controller  | * J12: Qwiic JST-SH 4-Pin Sensor-Port|
-|   - D4: SMCJ24CA 24V TVS-Diode     | * L2: Geschirmte Hochstrom-Speicherdrossel      |   zum externen GNSS/Klima-Puck       |
-|   - U3 / L1: TPS54302 5V/3A Buck   | * MK1: MSM261S4030 / SPH0645 I2S MEMS-Mikrofon  | * SW1 (Boot) & SW2 (Reset) Taster    |
-|   - U6: TCAN334G CAN-Transceiver   | * K1: CPC1017N 120 Ohm Bus-Terminierungs-Relais | * LED1: WS2812B RGB Statusanzeige    |
-|   - K1: CPC1017N CAN Auto-Sensing  | * Q1: DMN63D8LDW Spiegel-BSD Treiber-Stufe      |   (Polycarbonat-Lichtleiter-Dom)     |
+| * Schirmt interne Leistungsschaltung| * Single SC8102 / SW3526 20W USB-PD Controller  |   (100 % hermetisch verschließbar)   |
+|   - D4: SMCJ24CA 24V TVS-Diode     | * L2: Geschirmte Hochstrom-Speicherdrossel      | * SW1 (Boot) & SW2 (Reset) Taster    |
+|   - U3 / L1: TPS54302 5V/3A Buck   | * MK1: MSM261S4030 / SPH0645 I2S MEMS-Mikrofon  | * LED1: WS2812B RGB Statusanzeige    |
+|   - U6: TCAN334G CAN-Transceiver   | * K1: CPC1017N 120 Ohm Bus-Terminierungs-Relais |   (Polycarbonat-Lichtleiter-Dom)     |
+|   - K1: CPC1017N CAN Auto-Sensing  | * Q1: DMN63D8LDW Spiegel-BSD Treiber-Stufe      |                                      |
 |   - Q2: DMP3017SFG Verpolschutz    | * U4: TPS2051B USB-Power-Gate (Dongle-Kaltstart)|                                      |
 | * M4/M5 Silentblock-Flanschohr     | * U7: TLV75533P 3.3V Ultra-Low-Noise LDO        | * M4/M5 Silentblock-Flanschohr       |
-|   (Mitte Y = 34.0 mm, Z = 0..5 mm) | * J_COCKPIT: 14-Pin Dual-Row 2.0 mm SMT-Header  |   (Mitte Y = 34.0 mm, Z = 0..5 mm)   |
-|                                    | * J_VEHICLE: 8-Pin Dual-Row 2.0 mm SMT-Header   |                                      |
+|   (Mitte Y = 34.0 mm, Z = 0..5 mm) | * J_COCKPIT: 16-Pin Dual-Row 2.0 mm SMT-Header  |   (Mitte Y = 34.0 mm, Z = 0..5 mm)   |
+|                                    | * J_VEHICLE: 12-Pin Dual-Row 2.0 mm SMT-Header  |                                      |
 +------------------------------------+-------------------------------------------------+--------------------------------------+
 |       AUSLASS 1 (SÜDFLANKE): COCKPIT-STRANG         |          AUSLASS 2 (NORDFLANKE): FAHRZEUG-STRANG                      |
-|       Geschirmtes Rundkabel Ø 6.0 mm (14-adrig)      |          Geschirmtes Rundkabel Ø 6.0 mm (8-adrig)                     |
-|       mit TPU-Dichtmanschette / Knickschutztülle     |          mit TPU-Dichtmanschette / Knickschutztülle                   |
-|       ==> Führt zum Cockpit-Satelliten-Verteiler     |          ==> Führt zum Fahrzeug-Satelliten-Verteiler                  |
+|       Geschirmtes Rundkabel Ø 6.0 mm (16-adrig)     |          Geschirmtes Rundkabel Ø 6.5 mm (12-adrig)                    |
+|       mit TPU-Dichtmanschette / Knickschutztülle    |          mit TPU-Dichtmanschette / Knickschutztülle                  |
+|       ==> Führt zum Cockpit-Satelliten-Verteiler    |          ==> Führt zum Fahrzeug-Satelliten-Verteiler (5 Ports)        |
 +-----------------------------------------------------+-----------------------------------------------------------------------+
 ```
 
-1. **Die zwei hermetischen Rundkabel-Auslässe ($\varnothing 6{,}0\,\text{mm}$):**
-   - **Auslass 1 (Cockpit-Kabelstrang, Südflanke):** Führt ein 14-adriges geschirmtes Rundkabel vom Platinen-Header `J_COCKPIT` (14-Pin Dual-Row 2.0 mm Verriegelungsstecker) durch eine TPU-Knickschutztülle direkt zum **Cockpit-Satelliten-Verteilerblock**. Beinhaltet: USB Upstream Host (Harley Skyline / Boom! Box), CP2AA Wireless Dongle Strom & Daten, Smartphone USB-PD 20W Fast-Charge Lade- und CC-Leitungen sowie PTT-Lenkertastersignal.
-   - **Auslass 2 (Fahrzeug-Kabelstrang, Nordflanke):** Führt ein 8-adriges geschirmtes Rundkabel vom Platinen-Header `J_VEHICLE` (8-Pin Dual-Row 2.0 mm Verriegelungsstecker) durch eine TPU-Dichtmanschette zum **Fahrzeug-Satelliten-Verteilerblock**. Beinhaltet: 12V Zündungsplus (KL15) & Power-GND, CAN-Bus differenziell (CAN_H, CAN_L), Totwinkel-Spiegel-LEDs L/R (BSD) und 12V geschalteten Zusatzscheinwerfer-Ausgang.
+1. **Die zwei hermetischen Rundkabel-Auslässe ($\varnothing 6{,}0\,\text{mm}$ / $\varnothing 6{,}5\,\text{mm}$):**
+   - **Auslass 1 (Cockpit-Kabelstrang, Südflanke):** Führt ein 16-adriges geschirmtes Rundkabel vom Platinen-Header `J_COCKPIT` (16-Pin Dual-Row 2.0 mm Verriegelungsstecker) durch eine TPU-Knickschutztülle direkt zum **Cockpit-Satelliten-Verteilerblock**. Beinhaltet: USB Upstream Host (Harley Skyline / Boom! Box), CP2AA Wireless Dongle Strom & Daten, Smartphone USB-PD 20W Fast-Charge Lade- und CC-Leitungen, Action-Cam / Navi 5V-Speisung sowie PTT-Lenkertastersignal.
+   - **Auslass 2 (Fahrzeug-Kabelstrang, Nordflanke):** Führt ein 12-adriges geschirmtes Rundkabel vom Platinen-Header `J_VEHICLE` (12-Pin Dual-Row 2.0 mm Verriegelungsstecker) durch eine TPU-Dichtmanschette zum **Fahrzeug-Satelliten-Verteilerblock**. Beinhaltet: 12V Zündungsplus (KL15) & Power-GND, CAN-Bus differenziell (CAN_H, CAN_L), Totwinkel-Spiegel-LEDs L/R (BSD), 12V geschalteten Zusatzscheinwerfer-Ausgang sowie die 4-polige I2C-Sensorleitung (+3.3V, GND, SDA, SCL) zum abgesetzten Sensor-Puck.
 2. **Rechte Schmalseite / Ostflanke ($X = 98{,}0\,\text{mm}$):**
    - **Service & Diagnose:** IP67 wasserdichte USB-C Service-Buchse (`J7`, $Y_{\text{tub}} = 24{,}1\,\text{mm}$) mit unverlierbarem TPU-Schutzstopfen (`front_node_usbc_cap_tpu.stl`) zum direkten Flashen, Debuggen und WebSerial-Konfiguration ohne Werkzeug und ohne Gehäuseöffnung.
-   - **Externer Sensor-Bus:** 4-Pin JST-SH Qwiic / Stemma QT $I^2C$-Port (`J12`, $Y_{\text{tub}} = 34{,}05\,\text{mm}$) für die abgesetzte u-blox SAM-M10Q GNSS-Antenne und den TI TMP117 Kaltluft-Sensor.
+   - **100 % Hermetisch:** Da der Sensorbus direkt über das Nordkabel `J_VEHICLE` zum Fahrzeug-Satelliten geführt wird, entfällt der separate Kabeldurchbruch `J12` an der Ostwand vollständig – die rechte Flanke bleibt dauerhaft absolut dicht.
    - **Taster & Status:** Miniaturtaster `SW1` (Boot) und `SW2` (Reset) unter elastischer TPU-Dichtmembran; Polycarbonat-Lichtleiter im Deckel für die **WS2812B RGB-Status-LED** (`LED1`): Grün = OK, Blau = UWB Backbone aktiv, Gelb = USB-Enumeration / CP2AA Dongle Boot, Rot = CAN-Fehler / Failsafe.
 3. **Linke Schmalseite / Westflanke ($X = 0\,\text{mm}$):**
    - Vollwandige Monocoque-Schutzwand ohne jede Gehäusedurchbrechung. Maximaler Stoß-, Vibrations- und Spritzwasserschutz für die direkt dahinterliegende Leistungselektronik (TVS-Diode `D4`, 12V Buck `U3`, CAN-Transceiver `U6`, Optorelais `K1`, PMOS-Verpolschutz `Q2`).
@@ -652,15 +652,15 @@ Anstatt empfindliche Einzelstecker im Spritzwasserbereich des Motorrads zu verte
  |   COCKPIT-SATELLITENBLOCK         |             |   FAHRZEUG-SATELLITENBLOCK        |
  |   (cockpit_breakout_block.scad)   |             |   (vehicle_breakout_block.scad)   |
  +-----------------------------------+             +-----------------------------------+
- | * 5x Standard USB-C Buchsen:      |             | * Wasserdichte Raststeckverbinder |
+ | * 5x Standard USB-C Buchsen:      |             | * 5x Wasserdichte Raststeckverbinder|
  |   - [ PHONE 20W ] USB-PD Fast-Chg |             |   (JST-JWPF IP67 / JST-SM COTS):  |
  |   - [ DONGLE ] CP2AA Wireless Hub |             |   - [ 12V IN ] KL15 & Power-GND   |
  |   - [ HOST ] Skyline / Boom! Box  |             |   - [ CAN BUS ] Differenziell     |
  |   - [ CAM 5V ] Power-Only (DCP)   |             |   - [ MIRROR BSD ] Spiegel-LEDs   |
  |   - [ NAVI 5V ] Power-Only (DCP)  |             |   - [ AUX LIGHT ] 12V Aux / Navi  |
- | * Schraubklemme für PTT-Taster    |             | * 60s Schnelltausch im Defektfall |
- | * Mechanische Zug- & Rüttelsicher-|             +-----------------------------------+
- |   ung: 3D-Klemmspange mit 2x M3   |                               |
+ | * Schraubklemme für PTT-Taster    |             |   - [ GNSS / CLIMATE PUCK ] 4P I2C|
+ | * Mechanische Zug- & Rüttelsicher-|             | * 60s Schnelltausch im Defektfall |
+ |   ung: 3D-Klemmspange mit 2x M3   |             +-----------------------------------+
  +-----------------------------------+                               |
                    \                                                 /
                     \----------- Schwalbenschwanz-Kupplung ---------/
@@ -680,9 +680,14 @@ Anstatt empfindliche Einzelstecker im Spritzwasserbereich des Motorrads zu verte
    ![Cockpit Breakout Satellite CAD](../images/cad/cockpit_breakout_block_cad.png)
 
 2. **Fahrzeug-Satellit (`vehicle_breakout_block.scad`):**
-   - **Anschlüsse:** Ausgestattet mit industriellen, codierten COTS-Raststeckern (JST-JWPF IP67 wasserdicht oder JST-SM mit Schutztülle) für `12V IN`, `CAN BUS`, `MIRROR BSD` und `AUX LIGHT / 12V NAVI`.
+   - **5 abgedichtete COTS-Ports:** Ausgestattet mit industriellen, codierten COTS-Raststeckern (JST-JWPF IP67 wasserdicht oder JST-SM mit Schutztülle) für:
+     - `[ 12V IN ]`: KL15 Zündungsplus & Power-GND (2-Pin)
+     - `[ CAN BUS ]`: CAN_H, CAN_L, Masse (3-Pin)
+     - `[ MIRROR BSD ]`: Totwinkel-Spiegel-LEDs links & rechts (3-Pin)
+     - `[ AUX LIGHT ]`: Geschalteter 12V Zusatzscheinwerfer oder Aktivhalterung (2-Pin)
+     - `[ GNSS / CLIMATE PUCK ]`: 4-poliger I2C-Sensorport (+3.3V, GND, SDA, SCL) für den externen u-blox SAM-M10Q / TMP117 / OPT3001 Sensor-Puck im Verkleidungsschnabel
    - **12V-Aktivhalterungen:** Für Motorrad-Navis mit 12V-Aktivhalterung (z. B. Garmin Zūmo XT/XT2 Motorradhalterung oder BMW ConnectedRide Cradle) erfolgt die Stromversorgung direkt über den geschalteten 12V-Ausgang des Fahrzeug-Satelliten.
-   - **Wartungsfreundlichkeit:** Bei Beschädigung eines Spiegels mit Radar-LED oder eines Zusatzscheinwerfers wird die Komponente in 60 Sekunden werkzeuglos abgesteckt und getauscht, ohne das Hauptgehäuse öffnen zu müssen.
+   - **Wartungsfreundlichkeit:** Bei Beschädigung eines Spiegels mit Radar-LED, eines Zusatzscheinwerfers oder eines Sensors wird die Komponente in 60 Sekunden werkzeuglos abgesteckt und getauscht, ohne das Hauptgehäuse öffnen zu müssen.
 
    ![Vehicle Breakout Satellite CAD](../images/cad/vehicle_breakout_block_cad.png)
 
@@ -728,7 +733,7 @@ Die Kombination aus IP68 Monocoque-Front-Knoten und modularen Satelliten löst d
    - **Das "Front-to-Back Flip" Montageprinzip:** Das Gehäuse wird um $180^\circ$ gedreht montiert:
      - Die beiden Rundkabel-Auslässe treten **nach vorne** aus und verschwinden unsichtbar im toten optischen Schatten der massiven Scheinwerfer-Nacelle bzw. der Gabelabdeckung.
      - Die dem Fahrer zugewandte Gehäusewand ist eine vollkommen geschlossene, homogene Sichtfläche ohne sichtbare Stecker, Buchsen oder Schraubenköpfe.
-     - Auf dieser Fahrerseite ist eine formschlüssige **Mikro-Halterung für den externen u-blox SAM-M10Q GNSS-Puck** integriert, der über ein kurzes, verdecktes Qwiic-Kabel (`J12`) angebunden ist. Der Fahrer sieht eine elegante, technisch hochwertige Einheit anstelle von Kabelwirrwarr.
+     - Auf dieser Fahrerseite ist eine formschlüssige **Mikro-Halterung für den externen u-blox SAM-M10Q GNSS-Puck** integriert, der über ein kurzes, verdecktes Sensorkabel am Port `[ GNSS / CLIMATE PUCK ]` des Fahrzeug-Satelliten angebunden ist. Der Fahrer sieht eine elegante, technisch hochwertige Einheit anstelle von Kabelwirrwarr.
      - Da die Road King Special kein Cockpit-CAN-Display besitzt, wird kein CAN-Bus nach vorne geführt – die Zentralbox unter der Sitzbank übernimmt das CAN-Logging direkt am 6-poligen HD-Diagnosestecker.
    - **Die 3 flexiblen Cockpit-Betriebsmodi (Zero-Hardware-Change):**
      Durch den modularen Cockpit-Satelliten ([`cockpit_breakout_block.scad`](../../hardware/cad/scad/04_front_node/cockpit_breakout_block.scad)) stehen dem Fahrer an einem Naked Bike / RKS drei vollwertige, steckbare Betriebskonzepte zur Verfügung – ohne dass auch nur eine einzige Platine oder Gehäusekomponente getauscht werden muss:
@@ -768,7 +773,7 @@ Aufgrund der werkseitigen Showa Inverted-Remote-Reservoir-Stoßdämpfer mit dick
 +-----------------------------------------------------------------------------+
 | 1. COCKPIT (Vorne, unsichtbar hinter Außenhaut):                            |
 |    * Front-Node (PCBA 05) + Ottocast am Alu-Geweihträger montiert           |
-|    * SAM-M10Q GNSS + TMP117 + OPT3001 via J12 Qwiic im Kaltlufteinlass     |
+|    * SAM-M10Q GNSS + TMP117 + OPT3001 via Fahrzeug-Satellit im Kaltlufteinl.|
 |    * UWB-Backbone (DW3110 / 6.489 GHz Ch. 5) zur Zentralbox -> 0 Kabel      |
 |      über den Lenkkopf, deterministische Latenz < 0,4 ms                    |
 +-----------------------------------------------------------------------------+
@@ -792,7 +797,7 @@ Aufgrund der werkseitigen Showa Inverted-Remote-Reservoir-Stoßdämpfer mit dick
 
 #### A. Heck-Integration: 100 % OEM-Bündigkeit & Freigängigkeit
 * **Original Forged-Carbon-Hutze bleibt unberührt:** In v8.0 entfällt der Heck-Pod 3 und das interne Skeleton Dock ersatzlos. Die originale Forged-Carbon-Hutze der CVO ST schließt mit ihrer umlaufenden Dichtlippe vollkommen plan auf dem Heckkotflügel ab und wird mit der werksseitigen Rändelschraube wackelfrei gehalten. Da kein Kabel darunter gequetscht werden muss, bleibt der Lack zu 100 % geschützt.
-* **Außentemperatur- & GNSS-Sensorik:** Liegt thermisch vollkommen entkoppelt von Auspuff- und Motorwärme im laminaren Fahrtwindkanal des Front-Knotens (`PCBA 05`, Port `J12` Qwiic) mit dem NIST-Präzisionssensor TI TMP117 ($\pm 0{,}1\,^\circ\text{C}$) und dem u-blox SAM-M10Q Multi-GNSS.
+* **Außentemperatur- & GNSS-Sensorik:** Liegt thermisch vollkommen entkoppelt von Auspuff- und Motorwärme im laminaren Fahrtwindkanal des Front-Knotens (angebunden über den Fahrzeug-Satelliten) mit dem NIST-Präzisionssensor TI TMP117 ($\pm 0{,}1\,^\circ\text{C}$) und dem u-blox SAM-M10Q Multi-GNSS.
 * **Radar-Montage:** Erfolgt mittig unter dem Kennzeichen über den vibrationsfesten Kennzeichenträger ([`radar_license_plate_bracket.scad`](../../hardware/cad/scad/02_pod_base/radar_license_plate_bracket.scad)), gespeist über Peitsche 3 (Pins 10-11: 12V geschaltet, GND). Vollständige Freigängigkeit zu den Showa Inverted-Remote-Reservoirs garantiert.
 
 #### B. Kofferdeckel-Integration: Pod 1 (Links) & Pod 2 (Rechts)
@@ -812,7 +817,7 @@ Für klassische Touring- und Bagger-Modelle mit 2-Up-Komfortsitzbank oder freiem
 | 1. COCKPIT (Nacelle / Batwing / Sharknose):                                 |
 |    * Front-Node (PCBA 05) im Hohlraum der Headlight-Nacelle oder Verkleidung |
 |    * Speist Garmin Navi / Smartphone-Halterung & Action-Cam am Lenker       |
-|    * SAM-M10Q GNSS + TMP117 Thermometer an J12 Qwiic im Fahrtwind           |
+|    * SAM-M10Q GNSS + TMP117 Thermometer an Fahrzeug-Satellit im Fahrtwind   |
 |    * UWB-Backbone (DW3110) zur Zentralbox -> 0 Kabel am Tank nach hinten    |
 +-----------------------------------------------------------------------------+
 | 2. MITTE (Unter Sitzbank):                                                  |
@@ -860,13 +865,13 @@ Bei unverkleideten Custom- und Bagger-Bikes wie der **Harley-Davidson Road King 
                                ^
                                |
                Kabelauslässe treten NACH VORNE aus:
-               * Auslass 1: Cockpit-Strang (14-polig) -> Nacelle
-               * Auslass 2: Fahrzeug-Strang (8-polig) -> Nacelle
+               * Auslass 1: Cockpit-Strang (16-polig) -> Nacelle
+               * Auslass 2: Fahrzeug-Strang (12-polig) -> Nacelle
                  +--------------------------------+
                  |    FRONT-NODE GEHÄUSEWANNE     |
                  |  (180° um die Z-Achse gedreht) |
                  +--------------------------------+
-                 | [SAM-M10Q GNSS-PUCK DOCK (J12)]|  <-- Fahrer sieht nur das
+                 | [SAM-M10Q GNSS-PUCK DOCK]      |  <-- Fahrer sieht nur das
                  +--------------------------------+      flache GNSS-Auge!
                                ^
                   VÖLLIG GESCHLOSSENE DESIGNWAND
@@ -881,7 +886,7 @@ Bei unverkleideten Custom- und Bagger-Bikes wie der **Harley-Davidson Road King 
    - Das Gehäuse wird um **$180^\circ$ gedreht** verbaut: Die beiden abgedichteten Rundkabel-Auslässe ($\varnothing 6{,}0\,\text{mm}$) treten **nach vorne** in den toten optischen Schatten der massiven Scheinwerfer-Nacelle aus.
 2. **Die fahrerseitige Sichtblende mit GNSS-Puck-Dock (`sam_m10q_rks_puck_dock.scad`):**
    - Die dem Fahrer zugewandte Gehäusewand ist eine vollkommen geschlossene, plane Designfläche ohne sichtbare Stecker, Buchsen oder Schraubenköpfe.
-   - In diese Wand ist eine formschöne **Mikro-Halterung für den externen u-blox SAM-M10Q GNSS-Puck** integriert. Der Puck wird über ein ultrakurzes, verdeckt verlegtes Qwiic-Kabel (`J12`) angebunden.
+   - In diese Wand ist eine formschöne **Mikro-Halterung für den externen u-blox SAM-M10Q GNSS-Puck** integriert. Der Puck wird über ein ultrakurzes, verdeckt verlegtes Kabel direkt am 5. Port des Fahrzeug-Satelliten (`[ GNSS / CLIMATE PUCK ]`) angebunden.
    - **Ergebnis:** Anstelle von Haltebügeln oder Kabelsalat blickt der Fahrer auf eine minimalistische, hochwertige Instrumentenfläche mit integriertem GNSS-Auge.
 3. **Satelliten & Leitungsverlauf:**
    - **Cockpit-Satellit:** Sitzt dezent unter der linken Schalterarmatur oder seitlich am Riser. Bietet die USB-PD 20W Buchse für die Smartphone-Halterung (SP Connect / QuadLock) und die PTT-Klemme.
@@ -900,7 +905,7 @@ Für großvolumige Reiseenduros und Offroad-Tourer mit offenem Gitterrohr-Heckra
 | 1. COCKPIT (Windschild / Navigationsstrebe / Schnabel):                     |
 |    * Front-Node (PCBA 05) via AMPS-Bohrbild (30 x 38 mm) an Navigationsstrebe|
 |      oder vibrationsentkoppelt mit M4 Silentblöcken im Schnabel             |
-|    * SAM-M10Q GNSS + TMP117 Glatteis-Wächter an J12 Qwiic im Kaltlufteinlass |
+|    * SAM-M10Q GNSS + TMP117 Glatteis-Wächter an Fahrzeug-Satellit im Kaltlufteinlass |
 |    * UWB-Backbone (DW3110) zur Zentralbox unter der Sitzbank                |
 +-----------------------------------------------------------------------------+
 | 2. MITTE (Unter Fahrersitz / Batteriefach):                                 |
@@ -1308,7 +1313,7 @@ Für private Alltags-Pkw, Begleitfahrzeuge und Leasingwagen ist eine cleane, von
  +--------------------------------------+--------------------------------------+
                                         |
       +---------------------------------+---------------------------------+
-      | 14-poliges Mantelkabel          | Dünnes 4-Pin Qwiic-Kabel (J12)
+      | 16-poliges Mantelkabel          | 12-poliges Mantelkabel (5 Ports)
       v (unter Mittelkonsole verdeckt)  v (hinter A-Säulen-Dichtung verdeckt)
  +-----------------------------------+ +-----------------------------------+
  | MITTELKONSOLE / BECHERHALTER:     | | WINDSCHUTZSCHEIBE UNTEN RECHTS:   |
@@ -1326,10 +1331,10 @@ Für private Alltags-Pkw, Begleitfahrzeuge und Leasingwagen ist eine cleane, von
    - Nahezu alle modernen Pkw besitzen den primären Innenraum-Sicherungskasten direkt hinter oder unter dem Handschuhfach.
    - Über einen Standard-Flachsicherungs-Stromabgreifer (Add-A-Circuit Fuse Tap) wird 12V Zündungsplus (KL15) völlig zerstörungsfrei und rückrüstbar an den Fahrzeug-Satelliten (`J_VEHICLE`) gespeist.
 3. **Dezenter Cockpit-Satellit in der Mittelkonsole:**
-   - Das abgedichtete 14-polige Cockpit-Mantelkabel führt aus dem Handschuhfach verdeckt unter die Mittelkonsole oder in das Ablagefach unter der Armlehne.
+   - Das abgedichtete 16-polige Cockpit-Mantelkabel führt aus dem Handschuhfach verdeckt unter die Mittelkonsole oder in das Ablagefach unter der Armlehne.
    - Dort stellt der kompakte **Cockpit-Satellitenblock** seine beschrifteten Standard-USB-C Buchsen (`[ PHONE 20W ]`, `[ HOST ]`, `[ DONGLE ]`) mit 3D-Zugentlastung bereit. Smartphone-Schnellladen (20W PD) und native Apple CarPlay / Android Auto Einbindung ins Werksradio sind per Standard-Kabel sofort einsatzbereit.
 4. **Abgesetzter GNSS-Puck an der Windschutzscheibe:**
-   - Der kleine u-blox SAM-M10Q GNSS-Puck wird über ein dünnes, hochflexibles Qwiic-Kabel (`J12`) hinter der Türdichtung der rechten A-Säule an die untere Ecke der Frontscheibe geführt.
+   - Der kleine u-blox SAM-M10Q GNSS-Puck wird über den 5. Port des Fahrzeug-Satelliten (`[ GNSS / CLIMATE PUCK ]`) hinter der Türdichtung der rechten A-Säule an die untere Ecke der Frontscheibe geführt.
    - Garantiert ungedämpften Satellitenempfang durch das Verbundglas bei absoluter Unsichtbarkeit.
 5. **Drahtlose Zentralbox-Kopplung via UWB:**
    - Die Zentralbox (`PCBA 01`) kann entweder direkt neben dem Front-Node im Handschuhfach liegen oder unter den Beifahrersitz bzw. in den Kofferraum wandern.
@@ -1408,7 +1413,7 @@ Das Zusammenspiel aller Komponenten des Referenz-Kits 5 garantiert einen werkzeu
  |                                                Media-USB / Head Unit]  |
  |                                                                        |
  | Drahtlose Schnittstellen & Telemetrie:                                 |
- |   [Front-Node GNSS Port J12]             ---> [SAM-M10Q GPS Dashboard] |
+ |   [Fahrzeug-Satellit GNSS-Port]          ---> [SAM-M10Q GPS Dashboard] |
  |   [OBD2 BLE-Dongle unter Lenkrad]        ---> Front-Node Bluetooth LE  |
  |   [Offline PWA (iPad / Android Tablet)]  ---> LoRa / WebBLE Telemetrie |
  +------------------------------------------------------------------------+

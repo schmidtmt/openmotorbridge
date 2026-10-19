@@ -4,7 +4,7 @@ C1,100nF,Capacitor_SMD:C_0603_1608Metric,,1
 C2,10uF,Capacitor_SMD:C_0805_2012Metric,,1
 "D1, D2, D3, D4",1N4148WS,Diode_SMD:D_SOD-323,,4
 F1,MF-MSMF050-2,Fuse:Fuse_1812_4532Metric,,1
-J_ACT,ACTUATORS_8P,Connector_JST:JST_SH_BM08B-SRSS-TB_1x08-1MP_P1.00mm_Vertical,,1
+J_ACT,ACTUATORS_8P,Connector_JST:JST_SH_BM08B-SRSS-TB_1x08-1MP_P1.00mm_Vertical,C160404,1
 J_AUDIO_PWR,AUDIO_PWR_8P,Connector_JST:JST_SH_BM08B-SRSS-TB_1x08-1MP_P1.00mm_Vertical,C160404,1
 J_DC_IN,CON_POD_DC_IN,Connector:Blade_Slot_Socket_1x02_P10.0mm_Horizontal_SMD,,1
 J_PROG,SWD_PROG_4P,Connector_PinHeader_1.27mm:PinHeader_1x04_P1.27mm_Vertical_SMD_Pin1Left,,1

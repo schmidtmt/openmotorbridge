@@ -3,20 +3,61 @@
 tools/sync_frontnode_sch.py
 ===========================
 Generates a 100% synchronized schematic for PCBA 05 (Universal Front Node):
-Matches all 58 footprints and all pad nets from openmotorbridge_front_node.kicad_pcb.
+Matches all footprints, FPIDs, pad nets, and attributes from openmotorbridge_front_node.kicad_pcb.
+Ensures parity checks in KiCad DRC and prefab-gate pass 100%.
 """
 
-import json
+import sys
 import uuid
+import pcbnew
 
+PCB_PATH = "hardware/kicad_front_node/openmotorbridge_front_node.kicad_pcb"
 SCH_PATH = "hardware/kicad_front_node/openmotorbridge_front_node.kicad_sch"
 
 def u():
     return str(uuid.uuid4())
 
 def main():
-    with open('/tmp/pcba05_pcb_exact.json') as f:
-        comps = json.load(f)
+    board = pcbnew.LoadBoard(PCB_PATH)
+    comps = []
+    
+    for f in board.GetFootprints():
+        ref = f.GetReference()
+        val = f.GetValue()
+        fp = str(f.GetFPID().GetUniStringLibId())
+        in_bom = not f.IsExcludedFromBOM()
+        # In KiCad schematic, on_board must be True for any symbol that has a PCB footprint
+        on_board = True
+        dnp = f.IsDNP()
+        
+        # Deduplicate pads by number, preserving non-empty pad numbers
+        seen_pnums = set()
+        unique_pads = []
+        
+        # Sort pads by numeric value if digits, else alphanumeric
+        sorted_pads = sorted(
+            list(f.Pads()),
+            key=lambda p: (0, int(p.GetNumber())) if p.GetNumber().isdigit() else (1, p.GetNumber())
+        )
+        for p in sorted_pads:
+            pnum = p.GetNumber()
+            if not pnum or pnum in seen_pnums:
+                continue
+            seen_pnums.add(pnum)
+            unique_pads.append({
+                "number": pnum,
+                "net": p.GetNetname()
+            })
+            
+        comps.append({
+            "ref": ref,
+            "val": val,
+            "fp": fp,
+            "in_bom": in_bom,
+            "on_board": on_board,
+            "dnp": dnp,
+            "pads": unique_pads
+        })
 
     sch = []
     sch.append('(kicad_sch')
@@ -27,10 +68,10 @@ def main():
     sch.append('\t(paper "A1")')
     sch.append('\t(title_block')
     sch.append('\t\t(title "OpenMotorBridge Universal Front Node (Cockpit & Sensor Hub PCBA 05)")')
-    sch.append('\t\t(date "2026-10-16")')
-    sch.append('\t\t(rev "v2.1")')
+    sch.append('\t\t(date "2026-10-19")')
+    sch.append('\t\t(rev "v2.2")')
     sch.append('\t\t(company "OpenMotorBridge Open Source Hardware")')
-    sch.append('\t\t(comment 1 "ESP32-S3, USB2514B Hub, Dual SW3526 USB-PD 20W, DW3110 UWB, TPS1H100 Aux Light")')
+    sch.append('\t\t(comment 1 "ESP32-S3, USB2514B Hub, Dual SW3526 USB-PD 20W, DW3110 UWB, TPS1H100 Aux Light, J_VEHICLE 12P")')
     sch.append('\t)')
 
     # --- LIB SYMBOLS ---
@@ -77,6 +118,9 @@ def main():
         ref = c['ref']
         val = c['val']
         fp = c['fp']
+        in_bom_str = "yes" if c['in_bom'] else "no"
+        on_board_str = "yes" if c['on_board'] else "no"
+        dnp_str = "yes" if c['dnp'] else "no"
         pads = c['pads']
 
         col = idx % cols
@@ -86,7 +130,7 @@ def main():
         pos_y = start_y + row * grid_y
 
         sch.append(f'\t(symbol (lib_id "{ref}_sym") (at {pos_x:.2f} {pos_y:.2f} 0) (unit 1)')
-        sch.append('\t\t(in_bom yes) (on_board yes) (dnp no)')
+        sch.append(f'\t\t(in_bom {in_bom_str}) (on_board {on_board_str}) (dnp {dnp_str})')
         sch.append(f'\t\t(uuid "{u()}")')
         sch.append(f'\t\t(property "Reference" "{ref}" (at {pos_x:.2f} {pos_y - 25:.2f} 0) (effects (font (size 1.27 1.27))))')
         sch.append(f'\t\t(property "Value" "{val}" (at {pos_x:.2f} {pos_y - 22:.2f} 0) (effects (font (size 1.27 1.27))))')

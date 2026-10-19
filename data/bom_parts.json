@@ -1908,8 +1908,8 @@
         32.0
       ],
       "desc": {
-        "de": "Cockpit-Satellitenortung an Port J12 mit freier Sicht zum Zenit",
-        "en": "Cockpit satellite navigation on port J12 with clear zenith view"
+        "de": "Satellitenortung am 5-Port Fahrzeug-Satelliten mit freier Sicht zum Zenit",
+        "en": "Satellite navigation on 5-port Vehicle Satellite with clear zenith view"
       },
       "pkg_qty": 1,
       "pkg_name": "COTS GNSS-Modul (SparkFun / u-blox)"
@@ -2368,8 +2368,8 @@
         1.0
       ],
       "desc": {
-        "de": "Verbindung Port J12 am Front-Node zum SAM-M10Q GNSS-Modul",
-        "en": "Link from Front Node port J12 to SAM-M10Q GNSS module"
+        "de": "Verbindung vom 5-Port Fahrzeug-Satelliten zum SAM-M10Q GNSS-Modul",
+        "en": "Link from 5-port Vehicle Satellite to SAM-M10Q GNSS module"
       },
       "pkg_qty": 10,
       "pkg_name": "10er Kabelsortiment"
@@ -2388,8 +2388,8 @@
         1.0
       ],
       "desc": {
-        "de": "Verbindung Gabelfuß-Sensor TMP117 zu Port J12 am Front-Node",
-        "en": "Link from fork foot sensor TMP117 to Port J12 on Front Node"
+        "de": "Verbindung Gabelfuß-Sensor TMP117 zum 5-Port Fahrzeug-Satelliten",
+        "en": "Link from fork foot sensor TMP117 to 5-port Vehicle Satellite"
       },
       "pkg_qty": 10,
       "pkg_name": "10er Kabelsortiment"
@@ -2554,22 +2554,22 @@
       "pkg_qty": 1,
       "pkg_name": "Konfektionierter Kabelbaum"
     },
-    "cable_vehicle_harness_8p": {
+    "cable_vehicle_harness_12p": {
       "type": "cable",
       "name": {
-        "de": "Fahrzeug-Kabelbaum 8-polig (geschirmt)",
-        "en": "Vehicle Harness 8-Conductor (Shielded)"
+        "de": "Fahrzeug-Kabelbaum 12-polig (geschirmt)",
+        "en": "Vehicle Harness 12-Conductor (Shielded)"
       },
-      "spec": "8-poliges geschirmtes Rundkabel (Ø 6.0 mm, 40 cm) mit 2.0 mm Verriegelungsstecker",
+      "spec": "12-poliges geschirmtes Rundkabel (Ø 6.5 mm, 40 cm) mit 2.0 mm Verriegelungsstecker",
       "source": "COTS Standard",
       "unit": "Stk.",
       "cost_eur": [
-        2.8,
-        4.8
+        3.2,
+        5.2
       ],
       "desc": {
-        "de": "Verbindet PCBA 05 J_VEHICLE mit dem Fahrzeug-Satellitenverteiler",
-        "en": "Connects PCBA 05 J_VEHICLE to Vehicle Breakout Satellite"
+        "de": "Verbindet PCBA 05 J_VEHICLE mit dem 5-Port Fahrzeug-Satellitenverteiler",
+        "en": "Connects PCBA 05 J_VEHICLE to 5-Port Vehicle Breakout Satellite"
       },
       "pkg_qty": 1,
       "pkg_name": "Konfektionierter Kabelbaum"

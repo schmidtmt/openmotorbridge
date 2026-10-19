@@ -31,7 +31,7 @@ module breakout_satellites_assembly() {
                 cockpit_breakout_clamp();
         }
         // Vehicle unit
-        translate([5.0, 30.0, 0]) {
+        translate([0, 30.0, 0]) {
             vehicle_breakout_body();
             translate([0, 0, 18.0 + 8.0])
                 vehicle_breakout_lid();
@@ -44,7 +44,7 @@ module breakout_satellites_assembly() {
             cockpit_breakout_clamp();
             
         // Vehicle Satellite (Rear / North, slid onto Dovetail rail at Y = 28.0 mm)
-        translate([5.0, 28.0, 0]) {
+        translate([0, 28.0, 0]) {
             vehicle_breakout_body();
             vehicle_breakout_lid();
         }

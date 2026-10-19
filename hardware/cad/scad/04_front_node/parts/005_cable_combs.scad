@@ -8,10 +8,10 @@
 
 include <../../00_common/parameters.scad>;
 
-// 1. South Cockpit Cable Gland Cutout (in Tub South Wall, Y = 0 mm, X = 43.0 mm)
-// Aligned directly with PCBA 05 J_COCKPIT (KiCad: X=135.0 mm, Y=114.5 mm)
+// 1. South Cockpit Cable Gland Cutout (in Tub South Wall, Y = 0 mm, X = 35.5 mm)
+// Aligned directly with PCBA 05 J_COCKPIT (KiCad: X=127.50 mm, Y=114.50 mm)
 module south_round_cable_gland_cutout(
-    x_center = 43.0,
+    x_center = 35.5,
     z_center = FRONT_NODE_WALL + FRONT_NODE_STANDOFF_H + 4.0, // Z = 9.5 mm
     bore_r   = 4.0, // Ø 8.0 mm bore for TPU boot
     collar_r = 5.2, // Ø 10.4 mm internal retention counterbore
@@ -33,10 +33,10 @@ module south_cable_comb_cutout(z_start = 0, h = 0) {
     south_round_cable_gland_cutout();
 }
 
-// 2. North Vehicle Cable Gland Cutout (in Tub North Wall, Y = 68.0 mm, X = 39.0 mm)
-// Aligned directly with PCBA 05 J_VEHICLE (KiCad: X=131.0 mm, Y=75.3 mm)
+// 2. North Vehicle Cable Gland Cutout (in Tub North Wall, Y = 68.0 mm, X = 35.5 mm)
+// Aligned directly with PCBA 05 J_VEHICLE (KiCad: X=127.50 mm, Y=75.42 mm)
 module north_round_cable_gland_cutout(
-    x_center = 39.0,
+    x_center = 35.5,
     z_center = FRONT_NODE_WALL + FRONT_NODE_STANDOFF_H + 4.0, // Z = 9.5 mm
     bore_r   = 4.0, // Ø 8.0 mm bore for TPU boot
     collar_r = 5.2, // Ø 10.4 mm internal retention counterbore
@@ -133,13 +133,13 @@ module front_node_cable_glands_pair() {
 
 // 6. Installed Boot Helpers for Assemblies
 module front_node_south_cable_boot_installed() {
-    translate([43.0, FRONT_NODE_WALL, FRONT_NODE_WALL + FRONT_NODE_STANDOFF_H + 4.0])
+    translate([35.5, FRONT_NODE_WALL, FRONT_NODE_WALL + FRONT_NODE_STANDOFF_H + 4.0])
         rotate([90, 0, 0])
             front_node_tpu_cable_boot();
 }
 
 module front_node_north_cable_boot_installed() {
-    translate([39.0, FRONT_NODE_OUTER_W - FRONT_NODE_WALL, FRONT_NODE_WALL + FRONT_NODE_STANDOFF_H + 4.0])
+    translate([35.5, FRONT_NODE_OUTER_W - FRONT_NODE_WALL, FRONT_NODE_WALL + FRONT_NODE_STANDOFF_H + 4.0])
         rotate([-90, 0, 0])
             front_node_tpu_cable_boot();
 }

@@ -59,12 +59,12 @@ module front_node_lower_tub() {
                     );
         }
         
-        // 6. South Cockpit Cable Gland Bore (Y = 0 mm, X = 43.0 mm, Z = 9.5 mm)
-        // Directly aligned with J_COCKPIT (KiCad X=135.0 mm, Y=114.5 mm)
+        // 6. South Cockpit Cable Gland Bore (Y = 0 mm, X = 35.5 mm, Z = 9.5 mm)
+        // Directly aligned with J_COCKPIT (KiCad X=127.50 mm, Y=114.50 mm)
         south_round_cable_gland_cutout();
             
-        // 7. North Vehicle Cable Gland Bore (Y = 68.0 mm, X = 39.0 mm, Z = 9.5 mm)
-        // Directly aligned with J_VEHICLE (KiCad X=131.0 mm, Y=75.33 mm)
+        // 7. North Vehicle Cable Gland Bore (Y = 68.0 mm, X = 35.5 mm, Z = 9.5 mm)
+        // Directly aligned with J_VEHICLE (KiCad X=127.50 mm, Y=75.42 mm)
         north_round_cable_gland_cutout();
             
         // 8. USB-C Service Port Opening (East wall)

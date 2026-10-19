@@ -339,9 +339,9 @@ Combines all cockpit, multimedia, and handlebar signals into a single shielded j
 | **15**| `VCC_5V_AUX` | +5V protected (up to 2.0A)| Power-Only supply for Action Cam & 5V Navi via TPS54302 3A buck & PPTC |
 | **16**| `GND` | Power Ground | Ground return for Action Cam & 5V Navi |
 
-#### 7.2.2 Vehicle & Chassis Header (`J_VEHICLE` / 8-Pin 2.0 mm)
+#### 7.2.2 Vehicle & Chassis Header (`J_VEHICLE` / 12-Pin Dual-Row 2.0 mm)
 
-Combines all vehicle power, CAN bus, and auxiliary switching lines into a second sealed jacket cable ($\varnothing 6.0\,\text{mm}$) routed to the **Vehicle Satellite Breakout Block**:
+Combines all vehicle power, CAN bus, sensor, and auxiliary switching lines into a second sealed jacket cable ($\varnothing 6.0\,\text{mm}$) routed to the **Vehicle Satellite Breakout Block**:
 
 | Pin | Signal Name | Level / Direction | Function & Connected Vehicle Peripherals |
 | :---: | :--- | :--- | :--- |
@@ -353,13 +353,16 @@ Combines all vehicle power, CAN bus, and auxiliary switching lines into a second
 | **6** | `BSD_LEFT_N` | Cathode Left (Low-Side) | Switched ground for left blind-spot mirror warning LED (Dual-MOSFET `Q1`) |
 | **7** | `BSD_RIGHT_N`| Cathode Right (Low-Side)| Switched ground for right blind-spot mirror warning LED (Dual-MOSFET `Q1`) |
 | **8** | `+12V_AUX` | +12V switched (2.0A) | Auxiliary driving light / strobe or 12V active Navi cradle (Garmin Zūmo XT2 / BMW Cradle) via TI TPS1H100 `Q2` |
+| **9** | `+3V3_SENS` | +3.3V protected Out | Supply for external GNSS & climate sensor puck (u-blox SAM-M10Q, TMP117, OPT3001) |
+| **10**| `GND` | Sensor Ground | Ground return for I2C sensor bus |
+| **11**| `I2C_SDA` | I2C Data (3.3V) | Bidirectional I2C data line with 4.7k pull-up for sensor puck on fairing beak |
+| **12**| `I2C_SCL` | I2C Clock (3.3V) | I2C clock line (100 / 400 kHz) |
 
 #### 7.2.3 Local Interfaces & Service Ports
 
 | Header | Typ | Signal Name | Function & Features |
 | :--- | :--- | :--- | :--- |
 | **`J7`** | **USB-C SMD (16-Pin)** | `USB 2.0 + VBUS` | Watertight Service Port: Flush on right housing flank with TPU plug (Flashing & WebSerial) |
-| **`J12`** | **JST-SH 4-Pin (1.0 mm)** | `GND, 3V3, SDA, SCL` | Qwiic / STEMMA QT Sensor Bus: Connects to external u-blox SAM-M10Q GNSS puck & TMP117 |
 | **`ANT_UWB`**| **U.FL Hirose (SMD)** | `UWB_RF_CH5, GND` | 6.5 GHz UWB RF interface (50 Ohm) to Taoglas FXUWB10 flex antenna in tub floor |
 
 ---
@@ -378,9 +381,14 @@ The outgoing jacket cables from `J_COCKPIT` and `J_VEHICLE` terminate in two spe
    * **PTT Terminal:** 2-pin screw/spring terminal for the handlebar PTT intercom button (`PTT_IN1_N` to `GND`).
    * **Integrated Cable Clamp:** A 3D-printed clamping bar secured by two M3 screws clamps over the rubber boots of commercial COTS USB-C plugs, providing absolute vibration immunity and rugged strain relief.
    * Users can plug in any standard COTS USB-C cable (20 cm, angled, braided, etc.) without tools.
-2. **Vehicle Breakout Block (Weatherproof Latching Terminal Box):**
-   * Houses compact, keyed COTS click-latch connectors (JST-JWPF / JST-SM) for `12V IN`, `CAN-BUS`, `MIRROR BSD`, and `AUX LIGHT / 12V NAVI`.
-   * **Service Advantage:** If a mirror or auxiliary light is damaged, the component is unplugged and replaced in 60 seconds without tools or soldering.
+2. **Vehicle Breakout Block (Weatherproof 5-Port Latching Terminal Box):**
+   * Houses compact, keyed COTS click-latch connectors (JST-JWPF IP67 / JST-SM / Qwiic) for:
+     - `[ 12V IN ]`: KL15 switched ignition power & power ground (2-pin)
+     - `[ CAN BUS ]`: CAN_H, CAN_L, GND (3-pin)
+     - `[ MIRROR BSD ]`: Blind-spot radar mirror LEDs (3-pin)
+     - `[ AUX LIGHT ]`: Auxiliary driving light / 12V active Navi cradle (2-pin)
+     - `[ GNSS / CLIMATE PUCK ]`: 4-pin I2C connector (3V3, GND, SDA, SCL) for SAM-M10Q & TMP117 sensor puck in fairing beak
+   * **Service Advantage:** If a mirror, light, or sensor is damaged, the component is unplugged and replaced in 60 seconds without tools or soldering.
 3. **Bike-Specific Modular Flexibility:**
    * **Adventure GS & Road King Special:** The two satellite blocks are **mounted separately** (Cockpit block at the handlebar/windshield, Vehicle block at the frame/beak). **Zero unnecessary high-current cables run across the steering head**.
    * **Touring Fairing (Road Glide):** Both satellite blocks slide together via lateral dovetail guides with a single click into a **unified combination block** secured inside the glovebox / fairing bracket.
@@ -402,8 +410,8 @@ The outgoing jacket cables from `J_COCKPIT` and `J_VEHICLE` terminate in two spe
 | **Pad 13** | `USB_SERV_DM` | USB D- | Native USB-JTAG / CDC Service Port (`J7`) |
 | **Pad 14** | `USB_SERV_DP` | USB D+ | Native USB-JTAG / CDC Service Port (`J7`) |
 | **Pad 15** | `CAN_TERM_EN` | Digital Out | Control line for CPC1017N Solid-State Relay (120 Ohm CAN Termination) |
-| **Pad 17** | `I2C_SDA` | Open-Drain | I2C Data Line for Qwiic Port `J12` (SAM-M10Q GNSS, TMP117, OPT3001) |
-| **Pad 18** | `I2C_SCL` | Open-Drain | I2C Clock Line for Qwiic Port `J12` |
+| **Pad 17** | `I2C_SDA` | Open-Drain | I2C Data Line for `J_VEHICLE` (Pins 11/12) to external sensor puck (SAM-M10Q, TMP117, OPT3001) |
+| **Pad 18** | `I2C_SCL` | Open-Drain | I2C Clock Line for `J_VEHICLE` (Pins 11/12) |
 | **Pad 19** | `WS2812B_DIN` | Digital Out | Data line for onboard WS2812B-2020 RGB Status LED (`D4`) |
 | **Pad 20** | `BSD_LED_LEFT` | Digital Out | Gate drive for left blind-spot mirror LED MOSFET (`J9`, MOSFET `Q1`) |
 | **Pad 21** | `BSD_LED_RIGHT`| Digital Out | Gate drive for right blind-spot mirror LED MOSFET (`J9`, MOSFET `Q1`) |

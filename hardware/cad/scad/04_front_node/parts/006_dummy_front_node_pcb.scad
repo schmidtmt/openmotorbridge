@@ -35,19 +35,19 @@ module dummy_front_node_pcb() {
     }
 
     // 2. South Master Cockpit Header: J_COCKPIT (16-Pin Dual-Row 2.0mm SMT Latch Header)
-    // Sits at PCB relative X=35.00 mm, Y=5.50 mm (KiCad: X=135.0 mm, Y=114.5 mm)
+    // Sits at PCB relative X=27.50 mm, Y=5.50 mm (KiCad: X=127.50 mm, Y=114.50 mm)
     // Carries Host, Dongle, Phone 20W PD, Action-Cam 5V, Navi 5V, and PTT
     color("ghostwhite") {
-        translate([35.0 - 9.0, 5.50 - 2.5, FRONT_NODE_PCB_H])
+        translate([27.50 - 9.0, 5.50 - 2.5, FRONT_NODE_PCB_H])
             cube(size=[18.0, 5.0, 6.8], center=false); // 16-Pin Dual Row Shrouded Header
     }
 
-    // 3. North Master Vehicle Header: J_VEHICLE (8-Pin Dual-Row 2.0mm SMT Latch Header)
-    // Sits at PCB relative X=31.00 mm, Y=44.67 mm (KiCad: X=131.0 mm, Y=75.33 mm)
-    // Carries 12V In (KL15/GND), CAN-Bus (H/L), Mirror BSD LEDs, and 12V Aux / Light
+    // 3. North Master Vehicle Header: J_VEHICLE (12-Pin Dual-Row 2.0mm SMT Latch Header)
+    // Sits at PCB relative X=27.50 mm, Y=44.58 mm (KiCad: X=127.50 mm, Y=75.42 mm)
+    // Carries 12V In, CAN-Bus, Mirror BSD, Aux Light, and I2C Sensor Bus (3V3, GND, SDA, SCL)
     color("ghostwhite") {
-        translate([31.0 - 5.0, 44.67 - 2.5, FRONT_NODE_PCB_H])
-            cube(size=[10.0, 5.0, 6.8], center=false); // 8-Pin Dual Row Shrouded Header
+        translate([27.50 - 7.0, 44.58 - 2.5, FRONT_NODE_PCB_H])
+            cube(size=[14.0, 5.0, 6.8], center=false); // 12-Pin Dual Row Shrouded Header
     }
 
     // 4. East Rim Connectors, Sensors & User Interfaces (X = 77..79 mm)
@@ -55,11 +55,6 @@ module dummy_front_node_pcb() {
     color("silver") {
         translate([FRONT_NODE_PCB_L - 7.5, 15.0 - 4.5, FRONT_NODE_PCB_H])
             cube(size=[8.0, 9.0, 3.2], center=false);
-    }
-    // J12 Qwiic I2C (1.0mm JST-SH 4-Pin, facing East)
-    color("ghostwhite") {
-        translate([FRONT_NODE_PCB_L - 5.5, 25.05 - 2.5, FRONT_NODE_PCB_H])
-            cube(size=[5.0, 5.0, 3.0], center=false);
     }
     // Status RGB LED (WS2812B-2020) at (79.41, 31.05)
     color("white") {

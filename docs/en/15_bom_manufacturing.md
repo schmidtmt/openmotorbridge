@@ -59,7 +59,7 @@ This document serves as the master reference (Single Source of Truth) for the co
 > [!NOTE]
 > **Architecture Streamlining v8.0:** Circuit board `PCBA 04` and the 3rd satellite enclosure (Rear Pod 3) have been **completely eliminated without replacement**:
 > 1. **LoRa 868 MHz (SX1262):** Sits directly on the Central Box (`PCBA 01`), backed up 24/7 by the UPS battery for continuous anti-theft sentry.
-> 2. **Multi-GNSS (SAM-M10Q):** Sits in the cool ram-air intake zone on Front Node (`PCBA 05`), interfaced via Qwiic I2C (`J12`).
+> 2. **Multi-GNSS (SAM-M10Q):** Sits in the cool ram-air intake zone, interfaced via the 5-port Vehicle Satellite (I2C via `J_VEHICLE`).
 > 3. **Vehicle Wireless Backbone:** Transmitted via Ultra-Wideband (Qorvo DW3110 / 6.5 GHz Ch. 5, $< 0.4\,\text{ms}$ latency) between Front Node and Central Box.
 > 4. **Rear Radar:** Connects directly to the Central Box via Whip 5 of the Deutsch DTM-12 automotive harness.
 
@@ -84,9 +84,8 @@ This document serves as the master reference (Single Source of Truth) for the co
 | **L1** | 4.7 µH Automotive Inductor | Sunlord / Wurth | SMD 5x5 mm | `C2843490` | Storage Inductor for LMR36015 5V Main Regulator |
 | **L2** | 10 µH Automotive Inductor | Coilcraft / Wurth | SMD 7x7 mm | `C2843525` | Storage Inductor for SC8102 USB-PD Fast-Charge Buck (Port 1) |
 | **J_COCKPIT** | 16-Pin Dual-Row Header | JST / Wurth | 2.00mm SMD Latch | `C289119` | Cockpit Main Harness: USB Upstream, CP2AA Dongle, Phone PD 20W, PTT & 5V Aux for Cam/Navi |
-| **J_VEHICLE** | 8-Pin Dual-Row Header | JST / Wurth | 2.00mm SMD Latch | `C289120` | Vehicle Main Harness: 12V In (KL15 & GND), CAN-Bus, Mirror BSD LEDs, Aux Light / 12V Navi |
+| **J_VEHICLE** | 12-Pin Dual-Row Header | JST / Wurth | 2.00mm SMD Latch | `C289122` | Vehicle Main Harness: 12V In (KL15 & GND), CAN-Bus, Mirror BSD LEDs, Aux Light / 12V Navi, I2C Sensor Bus (3V3, GND, SDA, SCL) |
 | **J7** | USB-C 16-Pin Receptacle IP67| GCT / Korean Hro | SMD Hybrid | `C2765186` | ESP32-S3 Service & Flash Port (Flank) with TPU Sealing Plug |
-| **J12** | JST-SH 4-Pin Header | JST | 1.00mm SMD | `C289118` | Qwiic / STEMMA QT I2C Sensor Port (SAM-M10Q GNSS, TMP117, OPT3001) |
 | **ANT1**| U.FL-R-SMT-1 | Hirose / Murata | SMD RF (B.Cu) | `C2834595` | UWB 6.5 GHz U.FL socket to Taoglas FXUWB10 in tub floor |
 
 ---
@@ -282,8 +281,8 @@ For bench testing without a bike harness, or mobile operation in chase vans, the
 ### 11.3 RF Antennas & Sensors (COTS)
 1. **UWB 6.5 GHz Flex Antennas (2 pcs):** **Taoglas FXUWB10** ($11 \times 11 \times 0.6\,\text{mm}$) with 20 mm U.FL coaxial lead for Central Box and Front Node lower tub floor recesses.
 2. **LoRa 868 MHz Flex Antenna (1 pc):** **Taoglas FXP895** ($110 \times 20 \times 0.8\,\text{mm}$) with 50 $\Omega$ U.FL feed for Central Box lid pocket.
-3. **Multi-GNSS Module (1 pc):** **u-blox SAM-M10Q** with integrated $15 \times 15\,\text{mm}$ ceramic patch antenna, Qwiic I2C (`J12`) on Front Node inside ram-air duct.
-4. **Environmental Sensors (Front Node J12 Daisy-Chain):**
+3. **Multi-GNSS Module (1 pc):** **u-blox SAM-M10Q** with integrated $15 \times 15\,\text{mm}$ ceramic patch antenna, connected to port 5 of the Vehicle Satellite (`[ GNSS / CLIMATE PUCK ]`).
+4. **Environmental Sensors (Vehicle Satellite I2C Daisy-Chain):**
    * **TI TMP117:** High-precision temperature sensor ($\pm 0.1\,^\circ\text{C}$) for black ice early warning.
    * **TI OPT3001:** Ambient light sensor for display and driving light control.
 
@@ -294,7 +293,7 @@ For all interconnections between the hermetic IP68 Front Node, the modular satel
 | Function / Assembly | Header on PCB | Connector Type & Pitch | Mating End / Enclosure Outlet | Length | Sourcing / Model |
 | :--- | :--- | :--- | :--- | :---: | :--- |
 | **Cockpit Main Harness** | Front Node `J_COCKPIT` | 16-Pin Dual-Row (2.0 mm Latch) | Cockpit Satellite (`cockpit_breakout_block`) | 50 cm | Shielded 16-conductor round cable (Ø 6.0 mm) with TPU seal |
-| **Vehicle Main Harness** | Front Node `J_VEHICLE` | 8-Pin Dual-Row (2.0 mm Latch) | Vehicle Satellite (`vehicle_breakout_block`) | 40 cm | Shielded 8-conductor round cable (Ø 6.0 mm) with TPU seal |
+| **Vehicle Main Harness** | Front Node `J_VEHICLE` | 12-Pin Dual-Row (2.0 mm Latch) | Vehicle Satellite (`vehicle_breakout_block`) | 40 cm | Shielded 12-conductor round cable (Ø 6.5 mm) with TPU seal |
 | **Smartphone Charge Cable** | Cockpit Satellite Port 1 | Standard USB-C Plug | Smartphone on handlebar (with 3D strain-relief clamp) | 20–30 cm | Standard COTS USB-C to USB-C cable (angled/braided) |
 | **CP2AA Wireless Dongle** | Cockpit Satellite Port 2 | USB-C or USB-A Socket | Ottocast / Carlinkit dongle in fairing | 15 cm | COTS USB cable with anti-vibration clamp |
 | **OEM Upstream Host** | Cockpit Satellite Port 3 | USB-C Socket | Head unit (Harley Skyline / Boom! Box) | 30 cm | COTS USB-C to OEM USB male plug |
@@ -305,7 +304,7 @@ For all interconnections between the hermetic IP68 Front Node, the modular satel
 | **Vehicle CAN-Bus** | Vehicle Satellite Port 2 | JST-JWPF 3-Pin (IP67) | Flying leads with Posi-Tap for CAN_H / CAN_L / GND | 50 cm | COTS JST-JWPF 3P pigtail |
 | **Mirror BSD Warning LEDs**| Vehicle Satellite Port 3 | JST-JWPF 3-Pin (IP67) | Y-cable ($2 \times 2$-Pin) to amber mirror LED indicators | 120 cm | COTS JST-JWPF 3P Y-pigtail |
 | **Auxiliary Light Output** | Vehicle Satellite Port 4 | JST-JWPF 2-Pin (IP67) | 2-pin flying leads to driving lights / strobe relay | 40 cm | COTS JST-JWPF 2P pigtail |
-| **Qwiic / GNSS I2C Bus** | Front Node `J12` | JST-SH 4-Pin (1.0 mm) | 4-Pin JST-SH connector to SAM-M10Q & TMP117 puck | 10–20 cm | SparkFun Qwiic / Adafruit STEMMA QT COTS |
+| **Qwiic / GNSS I2C Bus** | Vehicle Satellite Port 5 | JST-SH 4-Pin (1.0 mm) | 4-Pin JST-SH connector to SAM-M10Q & TMP117 puck | 10–20 cm | SparkFun Qwiic / Adafruit STEMMA QT COTS |
 | **MR20 Radar Interconnect**| Radar PCBA 08 `J2` | JST-SH 4-Pin (1.0 mm) | 4-Pin JST-SH connector directly to Wheeltec MR20 module | 40-50 mm | COTS JST-SH 4P to JST-SH 4P |
 | **Central Box CarPlay Port**| Central Box `J3` | IDC 10-Pin (2.54 mm) | Waterproof panel-mount USB-C receptacle (IP67) | 15 cm | COTS IDC-10 to USB-C panel-mount |
 | **UPS LiPo Battery Plug** | Central Box `J5` | JST-PH 4-Pin / Molex | Integrated harness with NTC of 2,200 mAh LiPo pack | 8 cm | Pre-crimped on LiPo battery pouch |
@@ -419,7 +418,7 @@ For standalone helmet operation of both intercom modules (**PCBA 09: OMM 2.4 GHz
 | **Buffer Battery (LiPo UPS 2,200 mAh)** | 1S 3.7V 2.200 mAh Flat-Pack (Typ 504068) Molex Micro-Fit | EEMB / Enerpower | 1 pcs | Seamless UPS reserve in Central Box during engine cranking & ignition off |
 | **Qi Inductive Receiver Coil Ø 24 mm** | Ø 24 x 0.3 mm Flachspule mit Ferritfolie (0.3 mm) & JST-ACH 2-Pin | Sunlord / Web | 1 pcs | Ultra-thin Qi receiver coil for Smart Keyfob (100% solderless plug connection) |
 | **Wheeltec MR20 77-GHz mmWave Radar** | 77-GHz FMCW Automotive Radar (150 m Reichweite) | Wheeltec / DE-Distributor | 1 pcs | Automotive mmWave radar for blind spot detection & forward/rear collision alert |
-| **u-blox SAM-M10Q Multi-GNSS Module** | 15x15 mm Keramik-Patchantenne, Qwiic I2C | SparkFun / u-blox | 1 pcs | Cockpit satellite navigation on port J12 with clear zenith view |
+| **u-blox SAM-M10Q Multi-GNSS Module** | 15x15 mm Keramik-Patchantenne, Qwiic I2C | SparkFun / u-blox | 1 pcs | Satellite navigation on 5-port Vehicle Satellite with clear zenith view |
 | **OMM 2.4 GHz Stubby Antenna** | 2.4 GHz Rubber-Duck (38 mm, SMA-Male, +2.5 dBi omni) | COTS Standard | 1 pcs | Compact helmet stubby antenna for PCBA 09 (zero buffeting or wind noise) |
 | **Taoglas FXP524 V2X Flex Antenna** | 5.9 GHz Flex-Patch (+3.5 dBi) mit U.FL Buchse (50 mm) | Taoglas / Mouser | 1 pcs | Car-to-X / ITS-G5 RF uplink for ESP32-C5 sub-MCU on PCBA 08 |
 | **Taoglas FXP895 LoRa Flex Antenna** | 868 MHz Flex-Dipol (+2.0 dBi) U.FL (100 mm) | Taoglas / Mouser | 1 pcs | Long-range convoy mesh for SX1262 LoRa in Central Box lid cavity |
@@ -427,7 +426,7 @@ For standalone helmet operation of both intercom modules (**PCBA 09: OMM 2.4 GHz
 | **COTS USB-C Smartphone Cable** | Standard USB-C auf USB-C Kabel (20-30 cm, gewinkelt/geflochten) | Amazon / COTS | 1 pcs | Connection from Cockpit Satellite to smartphone with strain relief |
 | **Cockpit Harness 16-Conductor (Shielded)** | 16-poliges geschirmtes Rundkabel (Ø 6.0 mm, 50 cm) mit 2.0 mm Verriegelungsstecker | COTS Standard | 1 pcs | Connects PCBA 05 J_COCKPIT to Cockpit Breakout Satellite |
 | **Deutsch DTM-12 Main Harness** | IP68/IP69K Deutsch DTM-12 COTS Fertigkabelbaum mit Raychem DR-25 | COTS / Deutsch | 1 pcs | Central main harness for bike power, CAN bus & DC leads to pods |
-| **Vehicle Harness 8-Conductor (Shielded)** | 8-poliges geschirmtes Rundkabel (Ø 6.0 mm, 40 cm) mit 2.0 mm Verriegelungsstecker | COTS Standard | 1 pcs | Connects PCBA 05 J_VEHICLE to Vehicle Breakout Satellite |
+| **Vehicle Harness 12-Conductor (Shielded)** | 12-poliges geschirmtes Rundkabel (Ø 6.5 mm, 40 cm) mit 2.0 mm Verriegelungsstecker | COTS Standard | 1 pcs | Connects PCBA 05 J_VEHICLE to 5-Port Vehicle Breakout Satellite |
 | **JST-PH Pigtail Assortment Set** | 2-Pin, 3-Pin, 4-Pin JST-PH mit vormontierten Litzen | Amazon / COTS | 1 Set | CAN bus, handlebar buttons, mirror LEDs, Qi charger & action cam |
 | **J_ACT Actuator Harness** | Vorkonfektioniertes 8-Pin JST-SH Kabel (Top-Entry, gerade Abgangsrichtung) auf 4x 2-Pin Litzenpaare (AWG30 Silikon, 60 mm) | Adafruit / SparkFun | 2 pcs | 4 twisted pairs from PCBA 03 J_ACT (vertical top-entry) to the 4 solenoids (no 180° loop, zero crimping!) |
 | **J_AUDIO_PWR Cable Cardo Packtalk** | 8-Pin JST-SH (Top-Entry) auf 3.5mm Spk, Micro-2Pin Mic & 90° USB-C 5V (10 cm) | COTS Standard | 1 pcs | Couples Cardo Air-Mount cradle via vertical top-entry with 5V charge & pristine audio without ground loop |
@@ -435,7 +434,7 @@ For standalone helmet operation of both intercom modules (**PCBA 09: OMM 2.4 GHz
 | **Automotive Fuse Holder & 2A Fuse** | Wasserdichter Halter + 2A Mini-Flachsicherung | Hella / MTA | 1 pcs | Direct battery terminal protection (KL30) |
 | **OMM Helmet Audio & PTT Harness (J_HELMET)** | 6-Pin JST-SH 1.0mm auf 3.5mm Stereo-Klinke + 2-Pin Mic + PTT (0V DC, 12-15 cm) | COTS Standard | 1 pcs | Hum-free headset & mic harness for helmet interior (pure 0V DC signals) |
 | **Pure-DC 2-Wire Cable (PUR)** | 2x 0.34 mm² (AWG22) mit JST-JWPF 2-Pin IP67 Stecker | COTS Standard | 2 pcs | Pure DC power feed to Pod 1 & 2 (audio/data 100% via UWB) |
-| **Qwiic Sensor Cable (100 mm)** | 4-Pin JST-SH Buchse zu Buchse (100 mm Silikonlitze) | SparkFun / Adafruit | 1 pcs | Link from Front Node port J12 to SAM-M10Q GNSS module |
+| **Qwiic Sensor Cable (100 mm)** | 4-Pin JST-SH Buchse zu Buchse (100 mm Silikonlitze) | SparkFun / Adafruit | 1 pcs | Link from 5-port Vehicle Satellite to SAM-M10Q GNSS module |
 | **RF Micro-Coax Pigtail (U.FL to SMA IP67)** | 50 mm low-loss RG-178 / 1.13mm mit IP67 EPDM O-Ring & V4A-Mutter | COTS Standard | 2 pcs | Watertight enclosure bulkhead feed-through for OMM UCS antenna |
 | **Radar 12V Power Cable (PUR)** | 2x 0.5 mm² (AWG20) mit JST-JWPF 2-Pin IP67 Stecker | COTS Standard | 1 pcs | 12V DC power feed for rear radar (data link 100% wireless via UWB) |
 | **Central Box USB-C Flashing Pigtail** | IDC 10-Pin auf wasserdichte Panel-Mount USB-C Buchse IP67 | COTS Standard | 1 pcs | CarPlay / firmware flashing port on Central Box flank |
@@ -540,7 +539,7 @@ The following areas must **never** be coated:
 1. **Connectors & Sockets:**
    * USB-C receptacles (`J7` Front Node, service ports)
    * M8 / M5 connector pins (`J2` Pod Base, Binder M5 Radar)
-   * JST-SH / JST-PH pin headers (`J1..J12` Front Node, `J1..J2` Cartridges)
+   * JST-SH / JST-PH pin headers (`J_COCKPIT`, `J_VEHICLE`, `J7` Front Node, `J1..J2` Cartridges)
    * MicroSD card slot (`J2` Central Box)
 2. **Acoustic Sensors & Venting:**
    * **MEMS Microphone (`MIC1` MSM261S4030H0R on PCBA 05):** Acoustic inlet port ($\varnothing 0.5\,\text{mm}$) must be sealed with a Kapton dot!
