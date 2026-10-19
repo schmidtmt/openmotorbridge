@@ -48,16 +48,29 @@ module main_box_front_cutout_tool(wall_th=5.0) {
     }
 }
 
-// Module for Optional Rear SMA Antenna Bulkhead Port (for external LoRa 868 MHz antenna)
-module main_box_rear_antenna_cutout_tool(length=110.0, width=74.0, wall_th=5.0) {
+// Module for Optional Rear SMA Antenna Knockout Port (0.4 mm Knockout Membrane)
+// Default state: 100% solid, sealed, airtight & leak-proof (IP68 / IP69K).
+// Optional: Membrane can be punched out with a screwdriver for external SMA bulkhead.
+module main_box_rear_antenna_cutout_tool(length=110.0, width=74.0, wall_th=2.5, membrane_th=0.4) {
     z_mid = 7.5;
     // Positioned at rear wall (Y = width) near SX1262 LoRa module (X = 85.0 mm)
-    translate([85.0, width + 1.0, z_mid]) {
+    // Outer face is at Y = width. Inner face is at Y = width - wall_th.
+
+    // 1. External O-Ring Sealing Pocket (from outside face Y = width inward, depth = 1.2 mm)
+    translate([85.0, width + 0.1, z_mid]) {
         rotate([90, 0, 0]) {
-            // Ø 6.5 mm through-bore for SMA bulkhead thread
-            cylinder(r=SMA_BORE_R, h=wall_th + 2.0, center=false, $fn=32);
-            // Ø 9.5 mm x 1.2 mm O-ring sealing counterbore on outer face
-            cylinder(r=SMA_ORECESS_R, h=SMA_ORECESS_DEPTH + 1.0, center=false, $fn=32);
+            cylinder(r=SMA_ORECESS_R, h=SMA_ORECESS_DEPTH + 0.1, center=false, $fn=32);
+        }
+    }
+
+    // 2. Internal Pilot Bore (from inside face Y = width - wall_th outward toward membrane)
+    // Leaves exact 0.4 mm solid membrane between internal bore and outer O-ring pocket
+    inner_bore_depth = wall_th - SMA_ORECESS_DEPTH - membrane_th;
+    if (inner_bore_depth > 0) {
+        translate([85.0, width - wall_th - 0.1, z_mid]) {
+            rotate([-90, 0, 0]) {
+                cylinder(r=SMA_BORE_R, h=inner_bore_depth + 0.1, center=false, $fn=32);
+            }
         }
     }
 }

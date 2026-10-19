@@ -13,6 +13,7 @@ use <../00_common/dummies/dummy_lipo_battery.scad>;
 use <00_lower_deck.scad>;
 use <01_upper_deck.scad>;
 use <02_colsure.scad>;
+use <parts/013_battery_antenna_bridge.scad>;
 
 module main_box_xray_inspection_assembly() {
     // 1. Lower Case (Translucent Slate Grey, 30% alpha)
@@ -33,7 +34,11 @@ module main_box_xray_inspection_assembly() {
     translate([MAIN_BOX_WALL + 18.5, MAIN_BOX_WALL + 14.5, MAIN_BOX_LOWER_H + 2.0])
         dummy_lipo_battery();
 
-    // 5. Top Enclosure Lid (Translucent Graphite Grey, 28% alpha)
+    // 4b. Modular Battery Retainer & Dual Antenna Bridge (with protective cover & strain relief)
+    translate([MAIN_BOX_WALL, MAIN_BOX_WALL, MAIN_BOX_LOWER_H + 2.0 + 4.5])
+        main_box_battery_antenna_bridge();
+
+    // 5. Top Enclosure Lid (Translucent Graphite Grey, 28% alpha, 100% Cable-Free)
     color([0.3, 0.45, 0.65, 0.28])
         translate([0, 0, MAIN_BOX_LOWER_H + MAIN_BOX_MID_H])
             main_box_lid();

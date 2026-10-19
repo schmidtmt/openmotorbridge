@@ -118,11 +118,17 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
    * Fertig bestückte PCBA 01 auf die Dämpferdome setzen.
    * U.FL-Stecker des UWB-Kabels senkrecht auf die Buchse `ANT2` auf der Platinenunterseite (`B.Cu`) aufklicken.
    * Platine mit 4x M2.5 $\times 6\,\text{mm}$ Schrauben handfest fixieren.
-4. **LoRa-Antenne im Deckel installieren:**
-   * Die flexible LoRa-Antenne (Taoglas FXP895, $110 \times 20 \times 0{,}8\,\text{mm}$) in die Deckeltasche des Gehäusedeckels ([`main_box_lid.stl`](../../hardware/cad/stl/01_main_box/main_box_lid.stl)) einkleben.
-   * U.FL-Koaxialkabel an die Buchse `ANT1` auf der Oberseite der PCBA 01 anstecken.
-5. **Zwischenboden & 2.200 mAh LiPo-Akku:** Den Zwischenboden ([`main_box_mid_tray.stl`](../../hardware/cad/stl/01_main_box/main_box_mid_tray.stl)) aufsetzen. Den **2.200 mAh Flat-LiPo-Akku** in die Wanne einlegen, das Molex Micro-Fit Kabel an `J_BAT` anstecken und mit EPDM-Band sichern.
-6. **Dichtung & Deckel:** Silikon-Rundschnur (Ø 1,5 mm, $40\,\text{cm}$) dünn mit Silikonfett einreiben und in die Deckelnut einlegen. Gore-Membran auf den Belüftungssitz kleben. Den Deckel vorerst nur lose aufsetzen.
+4. **Kabelstränge vorverlegen & Zwischenboden aufsetzen:**
+   * Sämtliche Kabel (12-Pin DTM-12 Flachband, 10-Pin USB-C Flachband, Strom, LiPo-Akkukabel, 868 MHz LoRa Koax von `ANT1` und 2.4 GHz WLAN/BLE Koax vom ESP32 U.FL) an `PCBA 01` anstecken.
+   * Den Zwischenboden ([`main_box_mid_tray.stl`](../../hardware/cad/stl/01_main_box/main_box_mid_tray.stl)) aufsetzen. Alle 6 Leitungen gleiten durch die $70 \times 10\,\text{mm}$ offene Kabelbucht an der Stirnseite absolut quetsch- und knickfrei in das obere Fach.
+5. **2.200 mAh LiPo-Akku & schwenkbare Akkubrücke montieren:**
+   * Den **2.200 mAh Flat-LiPo-Akku** in die Wanne einlegen und das Molex Micro-Fit Kabel anstecken.
+   * Die beiden Antennen (Taoglas FXP895 LoRa und Taoglas FXP73 2.4 GHz) in die Aussparungen der Akkubrücke ([`main_box_battery_bridge.stl`](../../hardware/cad/stl/01_main_box/main_box_battery_bridge.stl)) einkleben und die Schutzabdeckung aufclipsen (100 % berührungs- und kratzgeschützt).
+   * Beide Koax-Kabel sowie das Akku-Kabel in die integrierten C-Clips an der Scharnierseite der Brücke einklicken (vollständige mechanische Zugsicherung).
+   * Die Akkubrücke mit ihren beiden Einhängenocken links einstecken, umlegen und mit dem RC-Schnapphaken rechts mit einem satten Klick verriegeln. Der Akku sitzt nun spielfrei und vibrationsfest bis $20\,\text{g}$.
+6. **100 % kabelfreier Deckel & Dichtung:**
+   * Silikon-Rundschnur (Ø 1,5 mm, $40\,\text{cm}$) dünn mit Silikonfett einreiben und in die Deckelnut einlegen. Gore-Membran auf den Belüftungssitz kleben.
+   * Den Gehäusedeckel ([`main_box_lid.stl`](../../hardware/cad/stl/01_main_box/main_box_lid.stl)) aufsetzen und mit 4x M3 $\times 40\,\text{mm}$ V4A-Schrauben über Kreuz anziehen. Da am Deckel keinerlei Kabel hängen, ist die Montage und jeder spätere Service absolut stressfrei und abrisssicher!
 
 ---
 

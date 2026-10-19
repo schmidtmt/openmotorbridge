@@ -19,6 +19,7 @@
       "parts": [
         { "part_id": "part3d_main_box_lower_case", "qty": 1 },
         { "part_id": "part3d_main_box_mid_tray", "qty": 1 },
+        { "part_id": "part3d_main_box_battery_bridge", "qty": 1 },
         { "part_id": "part3d_main_box_lid", "qty": 1 },
         { "part_id": "pcba_01", "qty": 1 },
         { "part_id": "fastener_din912_m3_40", "qty": 4 },
@@ -29,6 +30,7 @@
         { "part_id": "seal_vent_gore_eptfe", "qty": 1 },
         { "part_id": "cots_battery_usv_lipo", "qty": 1 },
         { "part_id": "antenna_fxp895_lora", "qty": 1 },
+        { "part_id": "antenna_taoglas_fxp73_24g", "qty": 1 },
         { "part_id": "antenna_fxuwb10_uwb", "qty": 1 },
         { "part_id": "cable_dtm12_main_harness", "qty": 1 },
         { "part_id": "cable_fuse_holder_kfz", "qty": 1 },

@@ -589,6 +589,28 @@
       "pkg_qty": 1,
       "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
     },
+    "part3d_main_box_battery_bridge": {
+      "type": "part_3d",
+      "name": {
+        "de": "Main Box Akkubrücke & Antennenträger",
+        "en": "Main Box Battery Bridge & Antenna Carrier"
+      },
+      "spec": "PA12-SLS / MJF, schwenkbare RC-Schnappbrücke, C-Clip Zugsicherung & Schutzblende",
+      "source": "3D-Druck (PA12-SLS)",
+      "unit": "Stk.",
+      "cost_eur": [
+        1.2,
+        2.5
+      ],
+      "desc": {
+        "de": "Schwenkbare Akkubrücke für vibrationsfesten Halt des 2.200 mAh LiPo sowie geschützte Aufnahme der Taoglas FXP895 LoRa & FXP73 2.4 GHz Antennen",
+        "en": "Hinged battery bridge for vibration-proof retention of 2200 mAh LiPo and protected housing of Taoglas FXP895 LoRa & FXP73 2.4 GHz antennas"
+      },
+      "file": "main_box_battery_bridge.stl",
+      "group": "Main Box",
+      "pkg_qty": 1,
+      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
+    },
     "part3d_main_box_lid": {
       "type": "part_3d",
       "name": {

@@ -22,9 +22,10 @@ This document specifies the protection circuitry against vehicle electrical tran
   * Fully compliant with **ETSI EN 302 065-1, EN 302 065-3**, and **EU Decision 2019/785** ($-41.3\,\text{dBm/MHz}$, continuous legal transmission without duty-cycle capping).
   * Operates across 6.240-6.739 GHz (center frequency 6.489 GHz) with 499.2 MHz bandwidth, far above 2.4 GHz (Wi-Fi, Bluetooth, Mesh) and 5.8 GHz.
   * **Antenna Integration:** Taoglas FXUWB10 flex antenna mounted inside an $11 \times 11 \times 0.6\,\text{mm}$ recess in the enclosure bottom tub floor of both Central Box and Front Node. Connected via 20 mm U.FL micro-coax. The PCB top layer maintains an unbroken solid ground plane (zero keepout cuts), and the enclosure lid can be serviced without cable strain.
-* **LoRa 868 MHz (Semtech SX1262) on Central Box (`PCBA 01`):**
-  * Integrated directly on the Central Box PCB and buffered 24/7 via the UPS battery rail for uninterrupted theft sentry and group telemetry.
-  * Taoglas FXP895 flex antenna ($110 \times 20 \times 0.8\,\text{mm}$) accommodated in a protected lid pocket of the Central Box with $50\,\Omega$ U.FL feed.
+* **LoRa 868 MHz (Semtech SX1262) & Wi-Fi/BLE (ESP32-S3) on Central Box (`PCBA 01`):**
+  * SX1262 LoRa transceiver buffered 24/7 via the UPS battery rail for uninterrupted theft sentry and group telemetry.
+  * **Hinged Battery & Dual-Antenna Bridge:** Taoglas FXP895 LoRa-868 flex antenna ($86 \times 16 \times 1.0\,\text{mm}$) and Taoglas FXP73 2.4 GHz flex antenna ($47 \times 7.5 \times 0.8\,\text{mm}$) housed in form-fitting recessed pockets under a $0.8\,\text{mm}$ snap-on PA12 protective cover plate with C-clip strain-relief clamps. The enclosure lid remains 100% passive and cable-free.
+  * **Rear SMA Port Knockout Membrane:** Molded with a $0.4\,\text{mm}$ PA12 knockout membrane, keeping the enclosure 100% sealed (IP68/IP69K) by default while allowing quick punch-out for an external SMA antenna on carbon fiber or rally bikes.
 * **Multi-GNSS & Sensor Coexistence on Front Node (`PCBA 05`):**
   * u-blox SAM-M10Q with integrated $15 \times 15\,\text{mm}$ ceramic patch antenna, interfaced via Qwiic I2C (`J12`) in the cold ram-air intake zone.
   * Coexistence with TI TMP117 ($\pm 0.1\,^\circ\text{C}$ temperature) and OPT3001 ambient light sensor without RF desensing of the GNSS LNA.

@@ -55,7 +55,7 @@ A complete OpenMotorBridge vehicle kit consists of the following core assemblies
 All discrete components, PCB ordering files, and COTS sourcing lists are documented in **[Chapter 15: Bill of Materials & Manufacturing](15_bom_manufacturing.md)**. Ensure the following items are ready before assembly begins:
 
 * [ ] **3D Printed Parts (MJF PA12 Black or FDM ASA/PET-CF):**
-  * 1x Main Box (lower tub with UWB bottom pocket $11 \times 11 \times 0.6\,\text{mm}$, mid tray with LiPo cradle, lid with LoRa FXP895 pocket $110 \times 20 \times 0.8\,\text{mm}$)
+  * 1x Main Box (lower tub with UWB bottom pocket $11 \times 11 \times 0.6\,\text{mm}$, mid tray with $70 \times 10\,\text{mm}$ open front cable bay, hinged battery & antenna bridge [`main_box_battery_bridge.stl`](../../hardware/cad/stl/01_main_box/main_box_battery_bridge.stl), and 100% cable-free solid lid [`main_box_lid.stl`](../../hardware/cad/stl/01_main_box/main_box_lid.stl))
   * 2x Pod base enclosures (seamless 1-piece monocoques with integral monolithic bulkhead, mounting pocket for IP67 direct blade plug & spring guide posts; 0 assembly screws, 0 loose parts)
   * 2x Cartridge base sleds (with UWB antenna floor pocket & DIN 934 M2 captive nut standoffs), inlays (Sena SPIDER X Slim, Cardo Packtalk Edge, Swap OMM, or blank cartridge) & 2x magnetic latches
   * 1x Front Node (lower tub with UWB bottom pocket and AMPS nut pockets, upper lid, TPU cable glands & USB-C cap)
@@ -86,6 +86,7 @@ All discrete components, PCB ordering files, and COTS sourcing lists are documen
   * **1-2x 1S LiPo Pouch Battery 600 mAh** ($38 \times 24 \times 4.5\,\text{mm}$) with JST 2-Pin connector (OMM UCS modules)
   * **Taoglas FXUWB10 UWB Flex Antennas** with 20 mm U.FL leads (Central Box, Front Node, Cartridges)
   * **1x Taoglas FXP895 LoRa 868 MHz Flex Antenna** with 50 $\Omega$ U.FL lead
+  * **1x Taoglas FXP73 2.4 GHz Wi-Fi/BLE Flex Antenna** with 50 $\Omega$ U.FL lead
   * **1x u-blox SAM-M10Q Multi-GNSS Module** with integrated patch antenna (Qwiic I2C)
   * **1x TI TMP117 & 1x TI OPT3001 Sensors** (Qwiic I2C)
   * **1-2x RF Micro-Coaxial Pigtails U.FL to SMA-Bulkhead** (RG-178 / 1.13mm, 50 mm) with IP67 EPDM O-ring and M6 stainless nut
@@ -112,11 +113,19 @@ All discrete components, PCB ordering files, and COTS sourcing lists are documen
    * Place fully assembled PCBA 01 onto the vibration-damping bosses.
    * Snap the U.FL connector onto receptacle `ANT2` located on the bottom copper layer (`B.Cu`).
    * Fasten the board with 4x M2.5 $\times 6\,\text{mm}$ screws finger-tight.
-4. **Install Lid LoRa Antenna:**
-   * Adhere the flexible LoRa antenna (Taoglas FXP895, $110 \times 20 \times 0.8\,\text{mm}$) into the lid pocket of [`main_box_lid.stl`](../../hardware/cad/stl/01_main_box/main_box_lid.stl).
-   * Connect the U.FL lead to header `ANT1` on the top surface of PCBA 01.
-5. **Mid Tray & 2,200 mAh LiPo Battery:** Seat the mid tray ([`main_box_mid_tray.stl`](../../hardware/cad/stl/01_main_box/main_box_mid_tray.stl)). Place the **2,200 mAh flat LiPo battery** into the tray, connect the Micro-Fit plug to `J_BAT`, and secure the cell with EPDM foam tape.
-6. **Seal & Temporary Cover:** Lightly lubricate the silicone O-ring cord (Ø 1.5 mm, $40\,\text{cm}$) and seat it into the lid groove. Stick the Gore vent membrane onto the vent boss. Place the lid loosely on top.
+4. **Mid Tray & Open Front Cable Bay:**
+   * Lower the mid tray ([`main_box_mid_tray.stl`](../../hardware/cad/stl/01_main_box/main_box_mid_tray.stl)) into place.
+   * Route all 6 internal cable leads (12-pin DTM-12 harness, USB-C service lead, DC power harness, Molex Micro-Fit battery lead, LoRa U.FL coax, 2.4 GHz Wi-Fi/BLE U.FL coax) freely and smoothly through the wide $70 \times 10\,\text{mm}$ open front bay without pinching.
+5. **Hinged Battery & Antenna Bridge Installation:**
+   * Adhere the Taoglas FXP895 (LoRa 868 MHz) and Taoglas FXP73 (2.4 GHz) flex antennas into their designated pockets on the upper side of the bridge ([`main_box_battery_bridge.stl`](../../hardware/cad/stl/01_main_box/main_box_battery_bridge.stl)).
+   * Snap the $0.8\,\text{mm}$ PA12 protective cover plate into place over both antennas for complete scratch and handling protection.
+   * Press the antenna coaxial leads into the integrated $\varnothing 1.25\,\text{mm}$ C-clip strain reliefs on the hinge end.
+   * Hook the L-tabs on the left side of the bridge into the hinge sockets of the mid tray cradle.
+   * Insert the 2,200 mAh LiPo battery into the cradle beneath the 1.0 mm EPDM compression pad, plug the Micro-Fit lead into `J_BAT`, and swing the bridge down until the right cantilever snap latch clicks securely into the frame pocket.
+6. **Seal & 100% Cable-Free Solid Lid:**
+   * Seat the silicone O-ring cord (Ø 1.5 mm, $40\,\text{cm}$) into the perimeter sealing groove of the mid tray.
+   * Affix the Gore ePTFE pressure equalization vent membrane to the lid boss.
+   * Place the 100% passive, cable-free solid lid ([`main_box_lid.stl`](../../hardware/cad/stl/01_main_box/main_box_lid.stl)) on top and fasten with 4x M3 $\times 40\,\text{mm}$ screws. Because there are no antennas or cables attached to the lid, the box can be opened during maintenance in seconds without touching or straining any fragile RF connectors!
 
 ---
 

@@ -34,14 +34,9 @@ module main_box_lid_plate(length=110.0, width=74.0, plate_h=4.0, lip_h=1.5, lip_
         translate([length/2.0, width/2.0, -lip_h - 0.5])
             cylinder(r=1.5, h=plate_h + lip_h + 2.5, center=false, $fn=24);
 
-        // 5. Internal LoRa 868 MHz Flex Antenna Pocket (Taoglas FXP895: 85.0 x 18.0 x 0.8 mm)
-        // Recessed on underside of lid (facing downward into enclosure), 100% leak-proof
-        translate([length/2.0, width/2.0, -lip_h - 0.1]) {
-            cube([85.0, 18.0, 1.2], center=true);
-            // U.FL Micro-Coaxial Cable Relief Channel leading toward front wire pass-through
-            translate([20.0, -12.0, 0])
-                cube([4.0, 14.0, 1.2], center=true);
-        }
+        // 5. 100% Solid Underside (Cable-Free Lid): Antennas are housed on the modular
+        // battery bridge (013_battery_antenna_bridge.scad), making the lid 100% passive,
+        // completely free of tethered cables, and exceptionally stiff and leak-proof.
 
         // 6. 4x M3 Corner Countersunk Screw Holes
         corner_offset = MAIN_BOX_CORNER_POST / 2.0;

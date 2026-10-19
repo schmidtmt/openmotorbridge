@@ -3,7 +3,7 @@
 *(Hinweis: Sämtliche CAD- und 3D-Baugruppenansichten werden im Zuge der finalen Render-Phase aktualisiert).*
 
 Dieses Dokument spezifiziert die mechanische Konstruktion, das Thermomanagement, das IP67/IP69K-Gehäusedesign, die Kinematik des Auto-Eject-Schnellwechselsystems sowie alle CAD- und STL-Modelle aller Gehäuse-Baugruppen der OpenMotorBridge v9.6:
-1. **Zentrale Steuerbox (Typ A):** 3-teiliges Sandwich-Gehäuse mit Zwischenboden, integrierter Akku-Wanne, stirnseitiger Schnittstellenleiste (Deutsch DTM-12 Flansch, Taster SW1, USB-C, RGB-LED), integrierter Deckeltasche ($85{,}0 \times 18{,}0 \times 1{,}2\,\text{mm}$) für LoRa-868-Flexantenne (Taoglas FXP895), Unterwannen-Bodenkammer ($12{,}0 \times 12{,}0 \times 0{,}8\,\text{mm}$) für UWB-Flexantenne (Taoglas FXUWB10), optionalem rückseitigen SMA-Antennendurchgang und planarem 4-Layer Kupfer-Wärmespreader.
+1. **Zentrale Steuerbox (Typ A):** 3-teiliges Sandwich-Gehäuse mit Zwischenboden ($70{,}0 \times 10{,}0\,\text{mm}$ offene Kabelbucht), integrierter Akku-Wanne mit schwenkbarer Akkubrücke (Doppel-Antennennest für Taoglas FXP895 LoRa-868 und Taoglas FXP73 2.4-GHz mit $0{,}8\,\text{mm}$ Schutzblende und C-Clip Zugsicherung), 100 % kabelfreiem Gehäusedeckel, Unterwannen-Bodenkammer ($12{,}0 \times 12{,}0 \times 0{,}8\,\text{mm}$) für UWB-Flexantenne (Taoglas FXUWB10), rückseitigem SMA-Antennendurchgang mit wasserdichter $0{,}4\,\text{mm}$ Knockout-Membran (ab Werk IP68/IP69K geschlossen) und planarem 4-Layer Kupfer-Wärmespreader.
 2. **Modulares Satelliten-Pod- & Wechselsystem (Typ B):** Baugleiches 5-seitiges Monocoque-Schachtgehäuse für beide Satelliten-Pods (Pod 1 & 2 Audio/Intercom, 2x symmetrisch) mit modularen Wechselkassetten (Sena SPIDER X Slim, Cardo Packtalk Edge, OMM 2.4 GHz Swap Cartridge, Midland, Dry Box), glatter geschlossener IP67-Außenhaut (ohne störende Antennen-Radomlöcher), $120^\circ$-V-Nut Rohrbett, wasserdichtem IP67 Gleichstrom-Direktstecker mit vibrationsfester Dual-Beam Schlitzbuchsen-Kontaktierung, Poka-Yoke Nut-und-Feder-Führung, federbelastetem Auto-Eject und unsichtbarem Neodym-Magnet-Diebstahlschutz.
 3. **Universal Front-Knoten (Typ C):** Ultrakompakter Cockpit- & Sensor-Hub ($98{,}0 \times 68{,}0 \times 25{,}0\,\text{mm}$) für die vergrößerte $82 \times 50\,\text{mm}$ 4-Lagen PCBA 05 mit **4-in-1 Universal-Befestigungssystem** (AMPS, Rohrbügel-Prisma, Silentblöcke, 3M Dual-Lock), integrierter Bodenkammer für UWB-Backbone (FXUWB10), GNSS- & Klima-Sensoranbindung (u-blox SAM-M10Q GNSS-Patch, TI TMP117 Präzisionsthermometer, TI OPT3001 Lichtsensor) über den 5-Port Fahrzeug-Satelliten, getrennten EPDM-Kabelkämmen für USB (Süd) und Fahrzeugleitungen (Nord), Dual-SW3526 20W USB-PD und Knowles MEMS Akustikkanal.
 4. **2-in-1 LoRa Smart-Keyfob & Pager (Typ D):** Ultrakompakter Taschenbegleiter ($58{,}0 \times 34{,}0 \times 13{,}0\,\text{mm}$) aus PA12-MJF mit umlaufendem TPU-Kantenschutz, integriertem N52-Neodym-Auswerferschlüssel, $0{,}5\,\text{mm}$ Mu-Metall-Flussschirmung, MagSafe/Qi-Induktionsladeaufnahme, LRA-Haptikmotor und drahtlosem SX1262 LoRa/BLE Alarm-Pager.
@@ -37,9 +37,9 @@ Das Basisgehäuse der Zentralbox ist als modulares, 3-teiliges IP67/IP69K-Sandwi
 | 1. GEHÄUSEDECKEL (6,0 mm Höhe / 3,0 mm Wandstärke)         |  |
 |    * Gore ePTFE Druckausgleichsmembran (Ø 7,0 mm)          |  | 38,0 mm
 |    * Umlaufende Nut mit Shore 40A Silikon-Profildichtung   |  | Gesamt-
-|    * Integrierte Deckeltasche (85 x 18 x 1,2 mm) für       |  | höhe
-|      Taoglas FXP895 LoRa 868 MHz Flexantenne & U.FL-Nut   |  |
-|    * 100% geschlossener Deckel (>1,8 mm Wandung zum Äußern)|  |
+|    * 100% kabelfreier Deckel (keine Antennen im Deckel;    |  | höhe
+|      absolut stressfreies Abnehmen bei Wartung & Service)  |  |
+|    * Durchgängig massiver PA12-Deckel (>2,5 mm Wandung)    |  |
 +------------------------------------------------------------+  |
 | 2. OBERWANNE MIT ZWISCHENBODEN (15,0 mm Höhe)              |  |
 |    * Vordere Stirnwand (Alle Anschlüsse & Anzeige):        |  |
@@ -47,14 +47,14 @@ Das Basisgehäuse der Zentralbox ist als modulares, 3-teiliges IP67/IP69K-Sandwi
 |      - Taster SW1 (Silikon-Dichtkappe, Pairing & Reset)    |  |
 |      - Wasserdichter USB-C Service-Port (Alu-Schraubkappe) |  |
 |      - Diffuser PMMA-Lichtleiter (Ø 3,2 mm) für WS2812B RGB|  |
-|    * Hintere Stirnwand:                                    |  |
-|      - Optionaler SMA-Antennenport (Ø 6,5 mm, Ø 9,5 mm Nut)|  |
-|    * Oberes Fach (auf dem Zwischenboden):                  |  |
-|      - 1S LiPo-Pufferakku (68x39x5.0mm, 2.200 mAh)         |  |
-|      - EPDM-Gummispannband zur vibrationsfesten Fixierung  |  |
+|    * Schwenkbare Akkubrücke (RC-Scharnier & Schnapphaken): |  |
+|      - Hält 1S LiPo (2.200 mAh) mit 1.0mm EPDM vibrationsfest|  |
+|      - Integrierte Nester für Taoglas FXP895 (LoRa 868 MHz)|  |
+|        und Taoglas FXP73 (2.4 GHz) mit Schutzabdeckung     |  |
+|      - Integrierte C-Clip Zugsicherung für Koax- & DC-Kabel|  |
 |    * Zwischenboden (Optimierte Zirkulationsebene):         |  |
-|      - 25,0 x 4,0 mm Kabeldurchbruchsschlitz               |  |
-|      - 11x Konvektions- & Druckausgleichsschlitze          |  |
+|      - 70,0 x 10,0 mm offene Kabelbucht an der Stirnseite  |  |
+|      - 9x Konvektions- & Druckausgleichsschlitze           |  |
 +------------------------------------------------------------+  |
 | 3. UNTERWANNE (17,0 mm Höhe - Geschlossene Monocoque-Wanne)|  |
 |    * 4-Layer Hauptplatine (85 x 55 mm) auf M2.5 Standdomen |  |
@@ -121,13 +121,14 @@ Die Gesamtabwärme der Zentralbox liegt im normalen Fahrbetrieb bei lediglich **
 ### 2.2 Oberwanne: 1S LiPo-Akkuaufnahme & Zwischenboden-Durchführungen
 * **Integrierte LiPo-Akkutasche:** Auf der Oberseite des Zwischenbodens sitzt eine formschlüssige Aussparung ($68{,}0 \times 39{,}0 \times 5{,}0\,\text{mm}$) für eine ultra-flache **2.200 mAh 1S LiPo-Pufferzelle** (Typ 504068 oder 503870). Durch die gezielte Vergrößerung der horizontalen Grundfläche statt der Bauhöhe bleibt die gesamte Gehäusehöhe der Zentralbox strikt bei **$38{,}0\,\text{mm}$**, sodass unter der Motorradsitzbank kein einziger Millimeter Freigang verloren geht.
 * **100 % freier Querschnitt aller 11 Konvektionsschlitze:** Das Akkubett ist zentral bei $X = 17{,}0\dots 88{,}0\,\text{mm}$ und $Y = 13{,}0\dots 55{,}0\,\text{mm}$ platziert. Dadurch halten alle 11 Lüftungsschlitze (5 an der Rückwand, 4 an den Flanken, 2 an der Front) mindestens $2{,}5\dots 4{,}5\,\text{mm}$ Randabstand ein. Die Kaminwirkung und Innenluft-Zirkulation für die Abwärme von LM5164-Q1 und BQ24075 im Unterdeck bleibt uneingeschränkt erhalten.
-* **Vibrationssicherung:** Eine $1{,}0\,\text{mm}$ dämpfende EPDM-Schaumstoffmatte an der Unterseite und ein quer verlaufendes EPDM-Gummispannband ($40 \times 12\,\text{mm}$) über seitliche Einhängenocken halten die Zelle auch bei $20\,\text{g}$ Stößen absolut spielfrei.
+* **Vibrationssicherung via schwenkbare Akkubrücke ([`main_box_battery_bridge.stl`](../../hardware/cad/stl/01_main_box/main_box_battery_bridge.stl)):** Ein formschlüssig einrastender, monolithischer PA12-Niederhalter mit Steckscharnier links ($X=17\,\text{mm}$) und elastischem RC-Schnappverschluss rechts ($X=88\,\text{mm}$) drückt die Zelle über einen $1{,}0\,\text{mm}$ EPDM-Moosgummistreifen vibrationsfest (geprüft bis $20\,\text{g}$) ein – komplett schrauben- und werkzeuglos öffenbar.
+* **Integrierte Antennenkapselung & Zugsicherung:** Die Oberseite der Brücke beherbergt geschützte Nester für die Taoglas FXP895 (LoRa 868 MHz) und Taoglas FXP73 (2.4 GHz) unter einer $0{,}8\,\text{mm}$ PA12-Clip-Schutzblende. Formschlüssige C-Clips ($\varnothing 1{,}2\,\text{mm}$) am Scharnierende absorbieren alle Zugkräfte der Koaxial- und DC-Leitungen.
 * **Molex Micro-Fit 3.0 Akkuanschluss (`J_BAT`):**
   * Pin 1: `VBAT+` ($+3{,}7\,\text{V}$ LiPo Pluspol über BQ24075)
   * Pin 2: `GND` (LiPo Masse mit integriertem Murata 10k NTC Temperaturfühler für JEITA-Ladeüberwachung)
-* **Kabeldurchbruch & Zwischenboden-Führung:**
-  * Großzügiger Front-Kabeldurchbruch ($25{,}0 \times 4{,}0\,\text{mm}$ bei $Y = 4\dots 8\,\text{mm}$) mit beidseitig verrundeten Kanten ($R = 1{,}5\,\text{mm}$) liegt $5{,}0\,\text{mm}$ vor der Akkutasche.
-  * Führt die Akku-Silikonleitungen knickfrei nach unten auf den `J_BAT`-Header sowie die Leitungen von der Hauptplatine zum DTM-12-Flansch und Taster SW1 in der Stirnwand.
+* **Offene Stirnseiten-Kabelbucht ($70{,}0 \times 10{,}0\,\text{mm}$):**
+  * Großzügige, zur Front ($Y=0\,\text{mm}$) hin vollkommen offene Ausklinkung ($X = 18\dots 88\,\text{mm}$) im Zwischenboden.
+  * Lässt sämtliche 6 Leitungen (12-Pin DTM-12 Flachband, 10-Pin USB-C Flachband, 12V Strom, LiPo-Akkukabel, 868 MHz LoRa Koax und 2.4 GHz Koax) beim Aufsetzen der Oberwanne völlig frei und ohne Fädel- oder Quetschgefahr hineingleiten.
 
 ---
 
@@ -153,16 +154,20 @@ Die Gesamtabwärme der Zentralbox liegt im normalen Fahrbetrieb bei lediglich **
 
 OpenMotorBridge nutzt ein duales, vollständig gehäuseintegriertes Antennenkonzept ohne störende äußere Antennenstummel bei maximaler Reichweite:
 1. **LoRa 868 MHz Primärantenne (Taoglas FXP895):**
-   * Formschlüssig in die Unterseite des Gehäusedeckels (`020_lid_plate.scad`) eingelassene Antennentasche ($85{,}0 \times 18{,}0 \times 1{,}2\,\text{mm}$) mit integrierter $2{,}5\,\text{mm}$ Kabelführungsnut für das U.FL-Koaxialkabel zu `ANT1`.
-   * Die Antenne strahlt horizontal polarisiert nach oben durch den $1{,}8\,\text{mm}$ dünnen, HF-neutralen PA12-Deckel ($\varepsilon_r \approx 2{,}3\dots 2{,}7$, $\tan\delta \approx 0{,}015$). Dies garantiert eine maximale Rundum-Reichweite von bis zu $15\,\text{km}$ im OMM-Mesh.
-2. **LoRa 868 MHz Sekundäroption (SMA-Bulkhead für Carbon-Bikes & Rallye):**
-   * In der hinteren Stirnwand der Oberwanne ist ein Durchbruch ($\varnothing\,6{,}5\,\text{mm}$) mit einer $\varnothing\,9{,}5 \times 1{,}2\,\text{mm}$ O-Ring-Senkung für eine IP67-SMA-Einbaubuchse vorgesehen.
-   * Ermöglicht das Anschließen externer Whip-Antennen, falls die Zentralbox in voll geschirmten Carbon-Heckbürzeln montiert wird.
-3. **UWB 6.5 GHz Kanal 5 Flexantenne (Taoglas FXUWB10):**
+   * Formschlüssig in die Oberseite der schwenkbaren Akkubrücke (`013_battery_antenna_bridge.scad`) eingelassenes Antennennest ($86{,}0 \times 16{,}0 \times 1{,}0\,\text{mm}$) unter einer $0{,}8\,\text{mm}$ PA12-Clip-Schutzblende.
+   * Die Antenne strahlt horizontal polarisiert nach oben durch den $2{,}5\,\text{mm}$ dünnen, HF-neutralen PA12-Deckel ($\varepsilon_r \approx 2{,}3\dots 2{,}7$, $\tan\delta \approx 0{,}015$). Dies garantiert eine maximale Rundum-Reichweite von bis zu $15\,\text{km}$ im OMM-Mesh.
+   * Der Gehäusedeckel (`020_lid_plate.scad`) bleibt hierbei zu 100 % passiv und kabelfrei – bei Wartungsarbeiten kann er gefahrlos abgenommen werden, ohne U.FL-Koaxialleitungen zu belasten oder abzureißen.
+2. **Wi-Fi 4 / BLE 5.0 Antenne für ESP32-S3 (Taoglas FXP73):**
+   * Ebenfalls formschlüssig auf der Akkubrücke gelagert ($47{,}0 \times 7{,}5 \times 0{,}8\,\text{mm}$). Sie versorgt den ESP32-S3-WROOM-1U (`U2`) verlustfrei mit 2.4-GHz-HF für das Web-Interface und OTA-Firmware-Updates.
+3. **LoRa 868 MHz Sekundäroption (SMA-Bulkhead mit 0,4 mm Knockout-Membran für Carbon-Bikes & Rallye):**
+   * In der hinteren Stirnwand der Oberwanne (`012_front_cutouts.scad`) befindet sich an $X = 85{,}0\,\text{mm}$ ein vorbereiteter SMA-Antennenanschluss ($\varnothing\,6{,}5\,\text{mm}$ Durchbruch mit $\varnothing\,9{,}5 \times 1{,}2\,\text{mm}$ O-Ring-Senkung).
+   * **Ab Werk 100 % hermetisch dicht (IP68/IP69K):** Eine integrierte $0{,}4\,\text{mm}$ dünne PA12-Knockout-Membran versiegelt das Gehäuse standardmäßig vollständig.
+   * **Werkzeugloses Durchstoßen bei Bedarf:** Wird für Carbon-Heckverkleidungen oder Rallye-Einsätze eine externe Whip-Antenne benötigt, lässt sich die $0{,}4\,\text{mm}$ Membran mit einem kleinen Dorn/Schraubendreher sauber herausdrücken und eine IP67 SMA-Einbaubuchse mit O-Ring montieren.
+4. **UWB 6.5 GHz Kanal 5 Flexantenne (Taoglas FXUWB10):**
    * Im Boden der Unterwanne (`00_lower_deck.scad`) exakt bei $X=66{,}5\,\text{mm}, Y=37{,}4\,\text{mm}$ eingelassene Tasche ($12{,}0 \times 12{,}0 \times 0{,}8\,\text{mm}$) mit $2{,}0\,\text{mm}$ Koaxialkabel-Führungsnut.
    * Liegt unmittelbar senkrecht unter dem DW3110 / `ANT2` U.FL-Connector der Platinen-Unterseite (`B.Cu`), wodurch die HF-Kabellänge auf ultrakurze $25\,\text{mm}$ minimiert wird (Einfügedämpfung $< 0{,}15\,\text{dB}$).
    * Der Wannenboden bleibt nach unten mit $>2{,}2\,\text{mm}$ PA12-Wandung 100% hermetisch geschlossen und spritzwasserdicht.
-4. **Bluetooth 5.4 / LE Audio (Qualcomm QCC3084):**
+5. **Bluetooth 5.4 / LE Audio (Qualcomm QCC3084):**
    * Nutzt die onboard 2.4-GHz-Keramik-Chipantenne mit optimiertem Keepout-Bereich auf `PCBA 01`. Die Abstrahlung erfolgt verlustfrei durch die PA12-Wandungen und den Zwischenboden zu den Helm-Headsets und Smartphone-Docks.
 
 ---

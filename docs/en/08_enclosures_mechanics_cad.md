@@ -1,7 +1,7 @@
 # 08 - Mechanical Enclosures, CAD Models & Sealing System (All Units)
 
 This document specifies the mechanical engineering, thermal dissipation, IP67/IP69K sealing concepts, kinematics of the quick-change auto-eject system, and all CAD and STL assets of OpenMotorBridge v8.0:
-1. **Central Control Box (Type A):** 3-piece sandwich enclosure with intermediate tray, battery cradle, front interface panel (Deutsch DTM-12 flange, SW1 button, USB-C, RGB-LED), integrated lid pocket ($85.0 \times 18.0 \times 1.2\,\text{mm}$) for Taoglas FXP895 LoRa 868 MHz flex antenna, bottom tub pocket ($12.0 \times 12.0 \times 0.8\,\text{mm}$) for Taoglas FXUWB10 UWB flex antenna, optional rear SMA bulkhead port, and planar 4-layer copper heat spreader.
+1. **Central Control Box (Type A):** 3-piece sandwich enclosure with intermediate tray ($70.0 \times 10.0\,\text{mm}$ open front cable bay), hinged battery bridge with dual-antenna pockets (Taoglas FXP895 LoRa-868 and Taoglas FXP73 2.4-GHz under a $0.8\,\text{mm}$ protective snap shroud and C-clip strain-relief clamps), 100% cable-free lid plate, bottom tub pocket ($12.0 \times 12.0 \times 0.8\,\text{mm}$) for Taoglas FXUWB10 UWB flex antenna, rear SMA antenna bulkhead with waterproof $0.4\,\text{mm}$ knockout membrane (IP68/IP69K sealed by default), and planar 4-layer copper heat spreader.
 2. **Modular Satellite Pod & Cartridge System (Type B):** Mechanically identical 5-sided monocoque enclosure for both satellite pods (Pods 1 & 2 Audio/Intercom, 2x symmetric) with modular swap cartridges (Sena SPIDER X Slim, Cardo Packtalk Edge, OMM 2.4 GHz Swap Cartridge, Midland, Dry Box), smooth closed IP67 outer shell (zero antenna radome penetrations), $120^\circ$ V-groove pipe saddle, waterproof 2-wire DC connection via tool-free locking IP67 blade plug (`CON_POD_DC`), vibration-proof SMT dual-beam slot socket mating (`J_DC_IN`), Poka-Yoke tongue-and-groove guidance, spring-loaded auto-eject, and invisible neodymium magnetic anti-theft locking.
 3. **Universal Front Node (Type C):** Ultra-compact Cockpit & Sensor Hub ($98.0 \times 68.0 \times 25.0\,\text{mm}$) tailored for the enlarged $82 \times 50\,\text{mm}$ 4-layer PCBA 05, featuring a **4-in-1 universal mounting system** (AMPS, pipe saddle, silentblocks, 3M Dual-Lock), integrated bottom tub pocket for UWB backbone (FXUWB10), GNSS & climate sensor interfacing (u-blox SAM-M10Q GNSS patch, TI TMP117 precision thermometer, TI OPT3001 light sensor) via the 5-port Vehicle Satellite, dedicated EPDM cable combs for USB (South) and vehicle wiring (North), Dual SW3526 20W USB-PD, and Knowles MEMS acoustic channel.
 4. **2-in-1 LoRa Smart-Keyfob & Pager (Type D):** Ultra-compact pocket companion ($58.0 \times 34.0 \times 13.0\,\text{mm}$) molded in PA12-MJF with perimeter TPU shock bumper, integrated N52 neodymium ejection key, $0.5\,\text{mm}$ Mu-metal magnetic flux shield, MagSafe/Qi inductive charging receiver, LRA haptic motor, and wireless SX1262 LoRa/BLE alert pager.
@@ -34,18 +34,23 @@ The Central Box enclosure is engineered in **PA12 (HP Multi Jet Fusion)** for ha
 | 1. ENCLOSURE LID (6.0 mm Height / 3.0 mm Wall Thickness)   |  |
 |    * Gore ePTFE pressure equalization vent (Ø 7.0 mm)      |  | 38.0 mm
 |    * Perimeter groove with Shore 40A silicone cord gasket  |  | Total
-|    * Integrated lid pocket (85 x 18 x 1.2 mm) for          |  | Height
-|      Taoglas FXP895 LoRa 868 MHz flex antenna & U.FL slot  |  |
-|    * 100% closed, solid lid (>1.8 mm wall to exterior)     |  |
+|    * 100% cable-free, solid lid (zero antennas in lid;     |  | Height
+|      stress-free opening during field maintenance)         |  |
+|    * Homogeneous PA12 structure (>2.5 mm wall to exterior) |  |
 +------------------------------------------------------------+  |
 | 2. UPPER CASE WITH INTERMEDIATE TRAY (15.0 mm Height)      |  |
 |    * Front Panel: Deutsch DTM-12 flange (12-pin harness),  |  |
 |      SW1 button (silicone boot), USB-C service port,       |  |
 |      diffuse PMMA light pipe (Ø 3.2 mm) for WS2812B RGB    |  |
-|    * Rear Panel: Optional SMA antenna port (Ø 6.5 mm bore, |  |
-|      Ø 9.5 mm O-ring counterbore)                          |  |
-|    * Upper Chamber: 1S LiPo battery (68x39x5.0mm, 2,200mAh)|  |
-|    * Intermediate Tray: 11x convection vents & cable slot  |  |
+|    * Rear Panel: SMA antenna port with 0.4 mm knockout     |  |
+|      membrane (IP68/IP69K sealed by default; punch-out)    |  |
+|    * Hinged Battery & Antenna Bridge (013_...bridge.scad): |  |
+|      - Holds 1S LiPo (68x39x5.0 mm, 2,200 mAh) via EPDM   |  |
+|      - Integrated pockets for Taoglas FXP895 (LoRa 868)    |  |
+|        & Taoglas FXP73 (2.4 GHz) under 0.8 mm snap cover   |  |
+|      - Integrated C-clip strain relief for coax/power leads|  |
+|    * Intermediate Floor: Open front cable bay (70x10 mm)   |  |
+|      & 9x convection / pressure equalization slots         |  |
 +------------------------------------------------------------+  |
 | 3. LOWER CASE (17.0 mm Height - Monocoque Tub)             |  |
 |    * 4-Layer Main PCB (85 x 55 mm) on M2.5 standoffs       |  |
@@ -125,16 +130,20 @@ Total heat dissipation during standard riding is only **$\approx 1{,}5\,\text{W}
 
 OpenMotorBridge implements a dual, fully integrated internal antenna concept eliminating protruding external antennas while maintaining maximum range:
 1. **LoRa 868 MHz Primary Antenna (Taoglas FXP895):**
-   * Form-fitting pocket ($85.0 \times 18.0 \times 1.2\,\text{mm}$) molded into the underside of the lid plate (`020_lid_plate.scad`) with integrated $2.5\,\text{mm}$ U.FL coaxial cable routing groove to `ANT1`.
-   * Radiates horizontally polarized RF upwards through the $1.8\,\text{mm}$ thin, RF-neutral PA12 lid ($\varepsilon_r \approx 2.3\dots 2.7$, $\tan\delta \approx 0.015$), providing up to $15\,\text{km}$ LoRa mesh range.
-2. **LoRa 868 MHz Secondary Option (Rear SMA Bulkhead):**
-   * Borehole ($\varnothing\,6.5\,\text{mm}$) with $\varnothing\,9.5 \times 1.2\,\text{mm}$ O-ring counterbore on the upper tray rear wall accommodating an IP67 SMA bulkhead connector.
-   * Enables optional external whip antenna connection for rally raid applications or fully shielded carbon fiber tail cowls.
-3. **UWB 6.5 GHz Channel 5 Flex Antenna (Taoglas FXUWB10):**
+   * Form-fitting nest ($86.0 \times 16.0 \times 1.0\,\text{mm}$) molded into the top side of the hinged battery bridge (`013_battery_antenna_bridge.scad`) protected by a $0.8\,\text{mm}$ snap-on PA12 protective cover plate.
+   * Radiates horizontally polarized RF upwards through the $2.5\,\text{mm}$ RF-neutral PA12 lid ($\varepsilon_r \approx 2.3\dots 2.7$, $\tan\delta \approx 0.015$), providing up to $15\,\text{km}$ LoRa mesh range.
+   * Leaves the enclosure lid (`020_lid_plate.scad`) 100% passive and cable-free, allowing rapid field opening without risk of tearing fragile U.FL coax leads.
+2. **Wi-Fi 4 / BLE 5.0 Antenna for ESP32-S3 (Taoglas FXP73):**
+   * Securely encapsulated in a parallel nest on the battery bridge ($47.0 \times 7.5 \times 0.8\,\text{mm}$), feeding the ESP32-S3-WROOM-1U (`U2`) with 2.4 GHz RF for the web dashboard and OTA updates.
+3. **LoRa 868 MHz Secondary Option (Rear SMA Bulkhead with 0.4 mm Knockout Membrane):**
+   * Positioned on the upper tray rear wall (`012_front_cutouts.scad`) at $X = 85.0\,\text{mm}$ ($\varnothing\,6.5\,\text{mm}$ through-bore with $\varnothing\,9.5 \times 1.2\,\text{mm}$ O-ring counterbore).
+   * **Factory IP68/IP69K Sealed:** Molded with a solid $0.4\,\text{mm}$ PA12 knockout membrane, keeping the enclosure 100% airtight and waterproof by default.
+   * **Tool-Free Punch-Out:** For carbon fiber cowls or rally raid whip antennas, the $0.4\,\text{mm}$ membrane can be cleanly punched out with a small driver to install an IP67 SMA bulkhead socket with O-ring.
+4. **UWB 6.5 GHz Channel 5 Flex Antenna (Taoglas FXUWB10):**
    * Pocket ($12.0 \times 12.0 \times 0.8\,\text{mm}$) in the lower tub floor (`00_lower_deck.scad`) at $X=66.5\,\text{mm}, Y=37.4\,\text{mm}$ with $2.0\,\text{mm}$ coaxial cable groove.
    * Positioned directly beneath the DW3110 / `ANT2` U.FL connector on `B.Cu`, keeping coaxial line length under $25\,\text{mm}$ (insertion loss $< 0.15\,\text{dB}$).
    * Preserves $>2.2\,\text{mm}$ solid, homogeneous PA12 floor thickness underneath for hermetic IP67/IP69K sealing.
-4. **Bluetooth 5.4 / LE Audio (Qualcomm QCC3084):**
+5. **Bluetooth 5.4 / LE Audio (Qualcomm QCC3084):**
    * Utilizes the onboard ceramic chip antenna with optimized copper keepout on `PCBA 01`, radiating cleanly through the RF-transparent PA12 mid-tray and lid.
 
 ---

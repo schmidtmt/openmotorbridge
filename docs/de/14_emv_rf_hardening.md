@@ -55,10 +55,10 @@ Zur Gewährleistung maximaler Link-Budgets und reproduzierbarer EMV-Konformität
 
 | Baugruppe | Funktechnik | Frequenz | Antennentyp | Genaue Position & Montage |
 | :--- | :--- | :--- | :--- | :--- |
-| **Zentralbox (`PCBA 01`)** | Semtech SX1262 LoRa | 868 MHz | Taoglas FXP895 Flex | Eingeklebt in Gehäusedeckel (`ANT1`), U.FL |
+| **Zentralbox (`PCBA 01`)** | Semtech SX1262 LoRa | 868 MHz | Taoglas FXP895 Flex | Gekapselt auf Akkubrücke (`ANT1`), U.FL (Deckel 100% kabelfrei) |
 | **Zentralbox (`PCBA 01`)** | Qorvo DW3110 UWB | 6.5 GHz (Ch. 5) | Taoglas FXUWB10 Flex | Eigene Antennentasche im Gehäuseboden (`ANT2`), U.FL |
 | **Zentralbox (`PCBA 01`)** | Qualcomm QCC3084 BT | 2.4 GHz | Keramik-Chipantenne | Onboard auf Moduloberseite (`F.Cu`), 0 mm Koax |
-| **Zentralbox (`PCBA 01`)** | ESP32-S3 BLE/WiFi | 2.4 GHz | PCB-Trace-Antenne | Onboard WROOM-1 Modul |
+| **Zentralbox (`PCBA 01`)** | ESP32-S3 BLE/WiFi | 2.4 GHz | Taoglas FXP73 Flex | Gekapselt auf Akkubrücke (`U2` U.FL Koax am WROOM-1U) |
 | **Front-Knoten (`PCBA 05`)** | u-blox SAM-M10Q GNSS | 1.575 / 1.602 GHz | Keramik-Patchantenne | Onboard Moduloberseite mit freier Sicht zum Himmel |
 | **Front-Knoten (`PCBA 05`)** | Qorvo DW3110 UWB | 6.5 GHz (Ch. 5) | Taoglas FXUWB10 Flex | Gehäusebodentasche der Front-Node Wanne, U.FL |
 | **Front-Knoten (`PCBA 05`)** | ESP32-S3 BLE/WiFi | 2.4 / 5 GHz | COTS Stummel / Sharknose | U.FL Buchse am WROOM-1U Modul |

@@ -16,15 +16,25 @@ module main_box_mid_partition_floor(floor_l=105.0, floor_w=69.0, floor_t=2.0) {
             translate([17.0, 13.0, floor_t]) {
                 difference() {
                     cube(size=[71.0, 42.0, 4.0], center=false);
+                    // Inner cavity for battery
                     translate([1.5, 1.5, -0.1])
                         cube(size=[68.0, 39.0, 4.2], center=false);
+                    // Left Side: 2x Hinge Pivot Sockets (for 013_battery_antenna_bridge tabs)
+                    translate([-0.5, 9.0, 0.5])
+                        cube(size=[2.5, 5.0, 3.6], center=false);
+                    translate([-0.5, 27.0, 0.5])
+                        cube(size=[2.5, 5.0, 3.6], center=false);
+                    // Right Side: Snap Catch Recess (for 013 cantilever latch barb)
+                    translate([71.0 - 1.5, 10.0, 0.2])
+                        cube(size=[2.0, 12.0, 2.4], center=false);
                 }
             }
         }
 
-        // 3. Front Wire Routing Slot (for Battery wires & internal flex connections: 25 x 4 mm)
-        translate([40.0, 4.0, -0.5])
-            cube(size=[25.0, 4.0, floor_t + 1.0], center=false);
+        // 3. Wide Open Front Cable Bay (70 x 10 mm open toward front Y=0)
+        // Seamlessly clears all 6 cables (12-Pin, 10-Pin, Battery, Power, LoRa, 2.4G)
+        translate([18.0, -0.5, -0.5])
+            cube(size=[69.0, 10.5, floor_t + 1.0], center=false);
 
         // 4. Enhanced Convective Ventilation & Air Circulation Slots (10x slots):
         // Rear Row (5x slots along y = 58.0 mm)
@@ -40,12 +50,9 @@ module main_box_mid_partition_floor(floor_l=105.0, floor_w=69.0, floor_t=2.0) {
         // Right Side Flank (2x slots along x = 92.0 mm)
         translate([92.0, 20.0, -0.5]) cube(size=[2.5, 14.0, floor_t + 1.0], center=false);
         translate([92.0, 38.0, -0.5]) cube(size=[2.5, 14.0, floor_t + 1.0], center=false);
-
-        // Front Row Flanks (2x slots along y = 8.0 mm)
-        translate([15.0, 8.0, -0.5]) cube(size=[14.0, 2.5, floor_t + 1.0], center=false);
-        translate([76.0, 8.0, -0.5]) cube(size=[14.0, 2.5, floor_t + 1.0], center=false);
     }
 }
 
 // Standalone preview
 main_box_mid_partition_floor();
+
