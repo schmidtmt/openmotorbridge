@@ -1526,6 +1526,17 @@ Der **Under-Perch Tasterhalter** ([`under_perch_switch_bracket.scad`](../../hard
   * **2-Finger-Hebelüberdeckung:** Zeige- und Mittelfinger bleiben unterbrechungsfrei auf dem Kupplungshebel. Der Taster sitzt exakt 15 mm unterhalb des Blinkerschalters in der natürlichen Daumenabsenkzone.
   * **Universelle Befestigung:** Verschraubung entweder über die originale M4-Gehäuse-Torxschraube der Harley-Armatur oder über den M8/M10-Spiegelschaftadapter ([`under_perch_mirror_plate.stl`](../../hardware/cad/stl/05_accessories/under_perch_mirror_plate.stl)).
 
+* **Elektrische Anbindung & Multi-Aktions-Architektur:**
+  * **1 physischer Taster, 2 Adern:** Der Taster verwendet ein extrem schlankes, flexibles 2-adriges PUR-Kabel ($\varnothing 2{,}5\,\text{mm}$), das formschlüssig durch die rückwärtige Zugentlastungs-Kabeltülle geführt und mit einem Mini-Kabelbinder gesichert wird.
+  * **Direkter Steckanschluss an Port `J6` (Cockpit-Satellit):** Am Lenker/Verkleidungsbereich endet das Kabel in einem 2-poligen JST-GH Verriegelungsstecker, der direkt auf Port `J6` des Cockpit-Satelliten (`PCBA 05B`) gesteckt wird (Pin 1: `GND`, Pin 2: `PTT_IN1_N`).
+  * **Signalweiterleitung via 16-Pin Cockpit-Harness (`J_COCKPIT`):** Das Signal läuft über Pin 14 des geschirmten 16-Ader-Kabels direkt in die Front-Node Wanne und liegt an GPIO 15 der ESP32-S3 MCU an (Hardware-Pull-Up, TVS-Diode, Hardware-Filterung).
+  * **Firmware-Gestensteuerung (Multi-Aktion statt Multi-Button):** Trotz nur einer Taste stehen dem Fahrer über intelligente Klick-Muster alle wesentlichen Cockpit-Funktionen ohne Blickabwendung zur Verfügung:
+    * **Gedrückt halten:** Latenzfreie PTT-Intercom Funkübertragung (< 1.8 ms Reaktionszeit via LoRa / Mesh / OMM446).
+    * **2x Klick (Doppelklick):** Actioncam-Highlight / Video-Bookmark Marker.
+    * **3x Klick (Dreifachklick):** Sprachassistent (Siri / Google Assistant via CarPlay / Android Auto).
+    * **Langer Druck (> 3 s):** Emergency SOS-Broadcast an Konvoi / automatischer Notruf.
+  * **Pkw-Integration (Reference Kit 5 - Chase Van):** Im Begleitfahrzeug entfällt der Lenkerhalter. Der Cockpit-Satellit (`PCBA 05B`) ruht in der Mittelkonsole/Armlehnenfach. Ein optionaler diskreter Mikrotaster kann direkt an Port `J6` (z.B. am Wählhebel oder Mittelkonsolendeckel) eingesteckt werden; alternativ erfolgt die PTT-Sprachsteuerung drahtlos über das Fahrer-Headset oder CarPlay.
+
 ### 8.2 Spiegel-Totwinkel-LED Gehäuse (`bsd_mirror_indicator_pod.scad`)
 
 Das **Spiegel-Totwinkel-LED Gehäuse** ([`bsd_mirror_indicator_pod.scad`](../../hardware/cad/scad/05_accessories/bsd_mirror_indicator_pod.scad)) integriert die Radarwarnung (Port `J9` am Front-Node) aerodynamisch und blendfrei in das Cockpit:

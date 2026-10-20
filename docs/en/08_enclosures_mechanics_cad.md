@@ -1259,6 +1259,17 @@ The **Under-Perch Switch Bracket** ([`under_perch_switch_bracket.scad`](../../ha
   * **Continuous 2-Finger Lever Covering:** Index and middle fingers remain uninterruptedly covering the clutch lever. The button is positioned exactly 15 mm below the left turn signal switch in the thumb's natural downward sweep.
   * **Universal Mounting:** Anchored either via the factory lower M4 Torx bolt of the Harley switch housing or through the M8/M10 mirror stem adapter plate ([`under_perch_mirror_plate.stl`](../../hardware/cad/stl/05_accessories/under_perch_mirror_plate.stl)).
 
+* **Electrical Interconnect & Multi-Action Architecture:**
+  * **Single Physical Button, 2 Conductors:** Uses an ultra-slim, flexible 2-conductor PUR jacket cable ($\varnothing 2.5\,\text{mm}$), routed neatly through the rear strain-relief snout and secured with a miniature zip tie.
+  * **Direct Plug-In to Cockpit Satellite Port `J6`:** In the handlebar or fairing area, the cable terminates in a 2-pin positive-latching JST-GH connector plugged directly into Port `J6` of Cockpit Satellite `PCBA 05B` (Pin 1: `GND`, Pin 2: `PTT_IN1_N`).
+  * **Signal Forwarding via 16-Pin Cockpit Harness (`J_COCKPIT`):** Routes via Pin 14 of the shielded 16-pin cable directly into the Front Node enclosure and ties to GPIO 15 of the ESP32-S3 sub-MCU (hardware pull-up, TVS protection, debouncing).
+  * **Firmware Gesture Decoding (Multi-Action vs. Multi-Button):** Despite using only a single physical button, intelligent click-pattern recognition provides instant access to critical cockpit functions without eyes leaving the road:
+    * **Hold (> 150 ms):** Zero-latency PTT intercom transmission (< 1.8 ms reaction time over LoRa / Mesh / OMM446).
+    * **Double-Click:** Action-cam video highlight bookmark / event tag.
+    * **Triple-Click:** Voice Assistant (Siri / Google Assistant via CarPlay / Android Auto).
+    * **Long Press (> 3 s):** Emergency SOS convoy alert broadcast.
+  * **Automotive Integration (Reference Kit 5 - Chase Van):** In chase cars and vans, the handlebar perch bracket is omitted. Cockpit Satellite `PCBA 05B` resides inside the center console or armrest bin. An optional miniature push-button can be plugged into Port `J6` (mounted on the shift lever or console), or PTT can operate wirelessly via the driver's headset or Apple CarPlay / Android Auto.
+
 ### 8.2 Blind Spot Detection (BSD) Mirror Indicator Pod (`bsd_mirror_indicator_pod.scad`)
 
 The **BSD Mirror Indicator Pod** ([`bsd_mirror_indicator_pod.scad`](../../hardware/cad/scad/05_accessories/bsd_mirror_indicator_pod.scad)) aerodynamically integrates rear radar alerts (Port `J9` on Front Node PCBA 05) into the rider's peripheral cockpit vision:

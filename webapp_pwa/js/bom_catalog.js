@@ -1250,10 +1250,10 @@ const BOM_PARTS = {
   "part3d_under_perch_switch": {
     "type": "part_3d",
     "name": {
-      "de": "Under-Perch 3-Tasten-Konsole",
-      "en": "Under-Perch 3-Button Console"
+      "de": "Under-Perch Smart-PTT Tasterhalter",
+      "en": "Under-Perch Smart-PTT Switch Bracket"
     },
-    "spec": "PA12-SLS (Kupplungsarmatur-Montage)",
+    "spec": "PA12-CF / SLS (Kupplungsarmatur M4 Torx)",
     "source": "3D-Druck (PA12-SLS)",
     "unit": "Stk.",
     "cost_eur": [
@@ -1261,10 +1261,32 @@ const BOM_PARTS = {
       1.8
     ],
     "desc": {
-      "de": "Ergonomische 3-Tasten-Konsole unter der Kupplungsarmatur",
-      "en": "Ergonomic 3-button console under clutch bracket"
+      "de": "Ergonomischer Tasterhalter für M7/M8 IP67 Taster unter der linken Kupplungsarmatur (Zero-Footprint am Lenkerrohr)",
+      "en": "Ergonomic bracket for M7/M8 IP67 tactile switch under left clutch perch (zero-footprint on handlebar tube)"
     },
     "file": "under_perch_switch_bracket.stl",
+    "group": "Lenkertaster",
+    "pkg_qty": 1,
+    "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
+  },
+  "part3d_under_perch_mirror_plate": {
+    "type": "part_3d",
+    "name": {
+      "de": "Under-Perch Spiegelschaft-Adapterplatte (M8/M10)",
+      "en": "Under-Perch Mirror Stem Adapter Plate (M8/M10)"
+    },
+    "spec": "PA12-CF / V4A 2.5 mm (M8/M10 Spiegelschaft)",
+    "source": "3D-Druck (PA12-SLS) / Laserzuschnitt",
+    "unit": "Stk.",
+    "cost_eur": [
+      0.5,
+      1.2
+    ],
+    "desc": {
+      "de": "Adapterplatte zur Befestigung des Under-Perch Tasterhalters unter der Spiegel-Kontermutter",
+      "en": "Adapter plate to mount under-perch switch bracket under mirror stem locknut"
+    },
+    "file": "under_perch_mirror_plate.stl",
     "group": "Lenkertaster",
     "pkg_qty": 1,
     "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
@@ -2091,6 +2113,26 @@ const BOM_PARTS = {
     "desc": {
       "de": "Plug-and-Play Audio-Peripherie für OMM UCS Headset am Helm",
       "en": "Plug-and-play audio peripherals for OMM UCS headset inside helmet"
+    },
+    "pkg_qty": 1,
+    "pkg_name": "COTS Einzelteil"
+  },
+  "cots_under_perch_tactile_switch": {
+    "type": "cots_electronic",
+    "name": {
+      "de": "IP67 Smart-PTT Mikrotaster mit PUR-Kabel",
+      "en": "IP67 Smart-PTT Tactile Switch with PUR Cable"
+    },
+    "spec": "M7x0.75 Gewinde, IP67 wasserdicht, 50 cm 2-adriges geschirmtes PUR-Kabel mit 2-Pin JST-GH Stecker",
+    "source": "COTS / Web",
+    "unit": "Stk.",
+    "cost_eur": [
+      2.2,
+      4.5
+    ],
+    "desc": {
+      "de": "Wasserdichter Mikrotaster für Under-Perch Halterung, direkter Anschluss an Port J6 des Cockpit-Satelliten (Multi-Aktions Smart-PTT: Halten = Funk, 2x = Cam-Bookmark, 3x = Siri)",
+      "en": "Waterproof micro-switch for under-perch bracket, plugs directly into Cockpit Satellite Port J6 (multi-action smart PTT: hold = intercom, 2x = cam bookmark, 3x = Siri)"
     },
     "pkg_qty": 1,
     "pkg_name": "COTS Einzelteil"
@@ -3722,16 +3764,24 @@ const BOM_ASSEMBLIES = {
     "id": "assembly_handlebar_controls",
     "category": "addon",
     "name": {
-      "de": "Under-Perch Lenkerkonsole",
-      "en": "Under-Perch Handlebar Console"
+      "de": "Under-Perch Smart-PTT Lenkertaster",
+      "en": "Under-Perch Smart-PTT Handlebar Switch"
     },
     "desc": {
-      "de": "Ergonomische 3-Tasten-Konsole unter der Kupplungsarmatur",
-      "en": "Ergonomic 3-button console under clutch bracket"
+      "de": "Ergonomischer IP67 Mikrotaster unter der Kupplungsarmatur mit Multi-Aktions Gesten",
+      "en": "Ergonomic IP67 micro-switch under clutch perch with multi-action gestures"
     },
     "parts": [
       {
         "part_id": "part3d_under_perch_switch",
+        "qty": 1
+      },
+      {
+        "part_id": "cots_under_perch_tactile_switch",
+        "qty": 1
+      },
+      {
+        "part_id": "part3d_under_perch_mirror_plate",
         "qty": 1
       }
     ]

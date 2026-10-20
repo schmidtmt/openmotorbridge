@@ -10,27 +10,28 @@ include <../../00_common/parameters.scad>;
 
 // 1. South Cockpit Cable Gland Cutout (in Tub South Wall, Y = 0 mm, X = 35.5 mm)
 // Aligned directly with PCBA 05 J_COCKPIT (KiCad: X=127.50 mm, Y=114.50 mm)
-// Open-top U-slot: allows pre-crimped 16P latching connectors (18x8 mm) to drop in freely from above!
+// Open-top full through U-slot: penetrates the entire 6.0 mm wall (FRONT_NODE_WALL + 3.5) into the chamber!
 module south_round_cable_gland_cutout(
     x_center = 35.5,
     z_center = FRONT_NODE_WALL + FRONT_NODE_STANDOFF_H + 4.0, // Z = 9.5 mm
     bore_r   = 4.5, // U-slot width = 9.0 mm
     collar_r = 6.0, // Retention collar width = 12.0 mm
     collar_d = 1.2,
-    z_top    = FRONT_NODE_TUB_H + 1.0
+    z_top    = FRONT_NODE_TUB_H + 1.0,
+    wall_th  = FRONT_NODE_WALL + 3.5 // 6.0 mm actual wall thickness to inner chamber
 ) {
-    // A. Main pass-through U-slot through South wall (open to top rim)
+    // A. Main pass-through U-slot through South wall (open to top rim, all the way into chamber)
     translate([x_center, -1.0, z_center])
         rotate([-90, 0, 0])
-            cylinder(r=bore_r, h=FRONT_NODE_WALL + 2.0, center=false, $fn=36);
+            cylinder(r=bore_r, h=wall_th + 2.0, center=false, $fn=36);
     translate([x_center - bore_r, -1.0, z_center])
-        cube([2 * bore_r, FRONT_NODE_WALL + 2.0, z_top - z_center], center=false);
+        cube([2 * bore_r, wall_th + 2.0, z_top - z_center], center=false);
             
-    // B. Internal counterbore on inner tub face for anti-pullout collar (open to top rim)
-    translate([x_center, FRONT_NODE_WALL - collar_d, z_center])
+    // B. Internal counterbore on inner chamber face for anti-pullout collar (at Y = 6.0 mm)
+    translate([x_center, wall_th - collar_d, z_center])
         rotate([-90, 0, 0])
             cylinder(r=collar_r, h=collar_d + 1.0, center=false, $fn=36);
-    translate([x_center - collar_r, FRONT_NODE_WALL - collar_d, z_center])
+    translate([x_center - collar_r, wall_th - collar_d, z_center])
         cube([2 * collar_r, collar_d + 1.0, z_top - z_center], center=false);
 }
 
@@ -41,27 +42,28 @@ module south_cable_comb_cutout(z_start = 0, h = 0) {
 
 // 2. North Vehicle Cable Gland Cutout (in Tub North Wall, Y = 68.0 mm, X = 35.5 mm)
 // Aligned directly with PCBA 05 J_VEHICLE (KiCad: X=127.50 mm, Y=75.42 mm)
-// Open-top U-slot: allows pre-crimped 12P latching connectors (14x8 mm) to drop in freely from above!
+// Open-top full through U-slot: penetrates the entire 6.0 mm North wall into the chamber!
 module north_round_cable_gland_cutout(
     x_center = 35.5,
     z_center = FRONT_NODE_WALL + FRONT_NODE_STANDOFF_H + 4.0, // Z = 9.5 mm
     bore_r   = 4.5, // U-slot width = 9.0 mm
     collar_r = 6.0, // Retention collar width = 12.0 mm
     collar_d = 1.2,
-    z_top    = FRONT_NODE_TUB_H + 1.0
+    z_top    = FRONT_NODE_TUB_H + 1.0,
+    wall_th  = FRONT_NODE_WALL + 3.5 // 6.0 mm actual wall thickness
 ) {
-    // A. Main pass-through U-slot through North wall (open to top rim)
-    translate([x_center, FRONT_NODE_OUTER_W - FRONT_NODE_WALL - 1.0, z_center])
+    // A. Main pass-through U-slot through North wall (open to top rim, into chamber at Y=62.0)
+    translate([x_center, FRONT_NODE_OUTER_W - wall_th - 1.0, z_center])
         rotate([-90, 0, 0])
-            cylinder(r=bore_r, h=FRONT_NODE_WALL + 2.0, center=false, $fn=36);
-    translate([x_center - bore_r, FRONT_NODE_OUTER_W - FRONT_NODE_WALL - 1.0, z_center])
-        cube([2 * bore_r, FRONT_NODE_WALL + 2.0, z_top - z_center], center=false);
+            cylinder(r=bore_r, h=wall_th + 2.0, center=false, $fn=36);
+    translate([x_center - bore_r, FRONT_NODE_OUTER_W - wall_th - 1.0, z_center])
+        cube([2 * bore_r, wall_th + 2.0, z_top - z_center], center=false);
             
-    // B. Internal counterbore on inner tub face for anti-pullout collar (open to top rim)
-    translate([x_center, FRONT_NODE_OUTER_W - FRONT_NODE_WALL - 0.1, z_center])
+    // B. Internal counterbore on inner chamber face for anti-pullout collar (at Y = 62.0 mm)
+    translate([x_center, FRONT_NODE_OUTER_W - wall_th - 0.1, z_center])
         rotate([-90, 0, 0])
             cylinder(r=collar_r, h=collar_d + 0.1, center=false, $fn=36);
-    translate([x_center - collar_r, FRONT_NODE_OUTER_W - FRONT_NODE_WALL - 0.1, z_center])
+    translate([x_center - collar_r, FRONT_NODE_OUTER_W - wall_th - 0.1, z_center])
         cube([2 * collar_r, collar_d + 0.1, z_top - z_center], center=false);
 }
 
@@ -92,7 +94,7 @@ module front_node_tpu_cable_boot(
     bore_r    = 4.45, // Snug fit in 9.0 mm U-slot
     collar_r  = 5.95, // Retention collar width 11.9 mm (snug fit in 12.0 mm step)
     collar_d  = 1.2,  // Retention collar thickness
-    wall_th   = FRONT_NODE_WALL, // 2.5 mm
+    wall_th   = FRONT_NODE_WALL + 3.5, // 6.0 mm actual wall thickness to inner chamber
     z_center  = FRONT_NODE_WALL + FRONT_NODE_STANDOFF_H + 4.0, // Z = 9.5 mm
     z_top     = FRONT_NODE_TUB_H, // 17.5 mm
     boot_len  = 13.0, // Conical strain-relief extension length

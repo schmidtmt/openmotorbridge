@@ -393,15 +393,17 @@
       "id": "assembly_handlebar_controls",
       "category": "addon",
       "name": {
-        "de": "Under-Perch Lenkerkonsole",
-        "en": "Under-Perch Handlebar Console"
+        "de": "Under-Perch Smart-PTT Lenkertaster",
+        "en": "Under-Perch Smart-PTT Handlebar Switch"
       },
       "desc": {
-        "de": "Ergonomische 3-Tasten-Konsole unter der Kupplungsarmatur",
-        "en": "Ergonomic 3-button console under clutch bracket"
+        "de": "Ergonomischer IP67 Mikrotaster unter der Kupplungsarmatur mit Multi-Aktions Gesten",
+        "en": "Ergonomic IP67 micro-switch under clutch perch with multi-action gestures"
       },
       "parts": [
-        { "part_id": "part3d_under_perch_switch", "qty": 1 }
+        { "part_id": "part3d_under_perch_switch", "qty": 1 },
+        { "part_id": "cots_under_perch_tactile_switch", "qty": 1 },
+        { "part_id": "part3d_under_perch_mirror_plate", "qty": 1 }
       ]
     },
     "assembly_keyfob": {
