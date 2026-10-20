@@ -1375,13 +1375,14 @@ Daher ist im **Referenz-Kit 5 (Car Support Kit)** die **externe Magnetfuß-Dacha
 
 #### 6.8.4 Telemetrie: Autarke Bluetooth-OBD2-Kopplung vs. Festverdrahtung
 
-Für die Fahrzeugdaten (Geschwindigkeit, Drehzahl, Tankstand, Kühlmitteltemperatur nach ISO 15765-4) unterstützt das System zwei Modi:
-1. **Drahtloser BLE-Dongle (Mietwagen / Plug & Play):**
-   - Die Zentralbox fungiert als BLE-Master und koppelt sich autark mit einem im Fahrerfußraum eingesteckten *vGate iCar Pro BLE 4.0* oder *OBDLink CX*. Null Kabel im Fahrerfußraum bei den Pedalen.
-2. **Kabelgebundenes OBD2 (Festeinbau Support-Van):**
-   - Vom 12-Pin Fahrzeug-Satelliten unterm Fahrersitz führt ein flaches Kabel mit $90^\circ$-OBD2-Winkelstecker direkt in die Buchse. Latenzfreie Erfassung der CAN-Telemetrie.
+Für die Fahrzeugdaten (Geschwindigkeit, Drehzahl, Tankstand, Kühlmitteltemperatur nach ISO 15765-4) unterstützt das System zwei praxiserprobte Wege:
+1. **Kabelgebundenes 90°-Flachbandkabel zum Fahrzeug-Satelliten (Günstig, robust & pedalfrei):**
+   - Ein ultraflaches, $80\,\text{cm}$ langes $90^\circ$-Winkelkabel ([`cable_obd2_flat_jwpf_3p`](../../data/bom_parts.json)) baut an der OBD2-Buchse nur ca. $10\,\text{mm}$ auf und führt die Leitungen (Pin 6 CAN_H, Pin 14 CAN_L, Pin 4/5 GND) direkt hinter die Schweller-/Teppichverkleidung zum Fahrzeug-Satelliten ([`vehicle_breakout_block`](#)) an der Fahrersitzbasis.
+   - **Vorteil:** Kein teurer Zusatz-Dongle nötig, absolut null Funkstrecke, und keine Kollisionsgefahr mit der Kupplung beim Schalten.
+2. **Drahtloser BLE-Dongle (Plug & Play / Mietwagen):**
+   - Für Fahrzeuge, bei denen die OBD2-Buchse frei liegt (z. B. Handschuhfach, Mittelkonsole) oder kein Kabel gelegt werden soll. Die Zentralbox fungiert als BLE-Master und koppelt sich autark mit einem *vGate iCar Pro BLE 4.0* oder *OBDLink CX*. (Tipp bei beengtem Pedalraum: Falls ein vorhandener langer BT-Dongle stört, kann ein ultraflaches 10-cm-Flachband-Verlängerungskabel genutzt werden, um den Dongle hinter die Fußraumverkleidung zu legen).
 3. **Live-Broadcasting im OMM-Mesh:**
-   - Die Fahrzeug-Telemetrie wird automatisch in die 25-Byte OMM-Radar-Pings eingespeist. Alle Motorradfahrer sehen Tankstand und Position des Begleitfahrzeugs live auf ihren Displays.
+   - Die erfasste Pkw-Telemetrie wird automatisch in die 25-Byte OMM-Radar-Pings eingespeist. Alle Motorradfahrer sehen Tankstand und Position des Begleitwagens live auf ihren Displays.
 
 ---
 

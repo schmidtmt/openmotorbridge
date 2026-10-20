@@ -1184,10 +1184,11 @@ Therefore, **Reference Kit 5 (Car Support Kit)** includes the **external magneti
 #### 6.8.4 Telemetry: Autonomous Bluetooth OBD2 Coupling vs. Hardwired CAN
 
 For vehicle telemetry (speed, RPM, fuel level, coolant temperature per ISO 15765-4), the system supports dual operation:
-1. **Wireless BLE Dongle (Rental Cars / Rapid Swap):**
-   - The Central Box acts as the autonomous BLE Master, pairing automatically with an off-the-shelf *vGate iCar Pro BLE 4.0* or *OBDLink CX* in the diagnostic socket. Zero wiring in the pedal box.
-2. **Hardwired OBD2 (Dedicated Support Vans):**
-   - A flat cable with a $90^\circ$ OBD2 plug runs from the 12-pin Vehicle Satellite under the driver seat straight into the port for zero-latency CAN bus logging.
+1. **Hardwired 90° Flat Cable to Vehicle Satellite (Affordable, Robust & Pedal-Safe):**
+   - An ultra-flat, $80\,\text{cm}$ right-angle cable ([`cable_obd2_flat_jwpf_3p`](../../data/bom_parts.json)) protrudes merely $10\,\text{mm}$ from the OBD2 port, routing CAN lines (Pin 6 CAN_H, Pin 14 CAN_L, Pin 4/5 GND) safely behind rocker trim and floor carpet into the Vehicle Satellite ([`vehicle_breakout_block`](#)) at the driver seat base.
+   - **Advantage:** No expensive dongle required, zero wireless dropouts, and zero foot/clutch interference while driving.
+2. **Wireless BLE Dongle (Rapid Swap / Rental Cars):**
+   - Suitable when the diagnostic port is in an unencumbered position (e.g. glove compartment or center console) or no wiring is desired. The Central Box acts as the autonomous BLE Master, pairing automatically with an off-the-shelf *vGate iCar Pro BLE 4.0* or *OBDLink CX*. (Pro-tip: If a bulky 7.5 cm BT dongle conflicts with the clutch pedal, a flat 10 cm ribbon extension allows tucking the dongle behind knee bolster trim).
 3. **Live Fleet Mesh Broadcasting:**
    - Vehicle telemetry is automatically multiplexed into the 25-byte OMM radar packets, keeping the motorcycle convoy informed of the chase vehicle's location and fuel status in real time.
    * Runs down behind the soft rubber weatherstripping of the passenger A-pillar into the glovebox space and center console.

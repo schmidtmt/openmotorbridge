@@ -344,7 +344,8 @@ Für alle Verbindungen zwischen dem hermetischen IP68 Front-Node, den modularen 
 | **Navi 5V Stromversorgung** | Cockpit-Satellit Port 5 | USB-C Buchse (Power-Only) | Navigationsgerät (Garmin / TomTom / Beeline) | 20–30 cm | COTS USB-C Ladekabel mit Rüttelsicherung |
 | **Lenkertaster / PTT** | Cockpit-Satellit Klemme | Schraub-/Federklemme 2-Pin | Lenkerarmatur (PTT Funk / Voice-Assistent) | 80 cm | 2-adriges Steuerkabel zur Lenkerarmatur |
 | **Bordnetz 12V In** | Fahrzeug-Satellit Port 1 | JST-JWPF 2-Pin (IP67) | Offene Litzen (0.5 mm²) mit Posi-Tap / Cartool-Stecker | 50 cm | COTS JST-JWPF 2P Pigtail (KL15 Standlicht & GND) |
-| **Fahrzeug CAN-Bus** | Fahrzeug-Satellit Port 2 | JST-JWPF 3-Pin (IP67) | Offene Litzen mit Posi-Tap für CAN_H / CAN_L / GND | 50 cm | COTS JST-JWPF 3P Pigtail |
+| **Fahrzeug CAN-Bus (Motorrad)** | Fahrzeug-Satellit Port 2 | JST-JWPF 3-Pin (IP67) | Offene Litzen mit Posi-Tap für CAN_H / CAN_L / GND | 50 cm | COTS JST-JWPF 3P Pigtail |
+| **OBD2 Pkw-Direktkabel (Opt.)** | Fahrzeug-Satellit Port 2 | JST-JWPF 3-Pin (IP67) | Flacher 90° OBD2-Stecker im Fahrerfußraum | 80 cm | Ultraflaches Flachbandkabel (baut nur 10 mm auf, null Pedalkonflikt) |
 | **Spiegel-Warn-LEDs (BSD)**| Fahrzeug-Satellit Port 3 | JST-JWPF 3-Pin (IP67) | Y-Kabel ($2 \times 2$-Pin) zu bernsteinfarbenen Spiegel-LEDs | 120 cm | COTS JST-JWPF 3P Y-Pigtail |
 | **Aux-Licht Schaltausgang**| Fahrzeug-Satellit Port 4 | JST-JWPF 2-Pin (IP67) | 2-Pin Litzen zum Zusatzscheinwerfer / Stroboskop | 40 cm | COTS JST-JWPF 2P Pigtail |
 | **Qwiic / GNSS I2C Bus** | Fahrzeug-Satellit Port 5 | JST-SH 4-Pin (1.0 mm) | 4-Pin JST-SH Stecker zu SAM-M10Q GNSS- & TMP117 Puck | 10–20 cm | SparkFun Qwiic / Adafruit STEMMA QT COTS |

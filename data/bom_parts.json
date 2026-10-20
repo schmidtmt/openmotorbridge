@@ -2417,6 +2417,26 @@
       "pkg_qty": 1,
       "pkg_name": "COTS SMA Bulkhead Pigtail"
     },
+    "cable_obd2_flat_jwpf_3p": {
+      "type": "cable",
+      "name": {
+        "de": "OBD2 90° Flachband-Direktkabel (Pkw-Kit)",
+        "en": "OBD2 90° Flat Direct Cable (Car Kit)"
+      },
+      "spec": "Ultraflacher 90° OBD2-Stecker auf JST-JWPF 3-Pin (0.8 m hochflexibles Flachband)",
+      "source": "COTS Standard",
+      "unit": "Stk.",
+      "cost_eur": [
+        4.5,
+        7.8
+      ],
+      "desc": {
+        "de": "Direkte, pedalfreie CAN-Bus Anbindung von der OBD2-Buchse zum Fahrzeug-Satelliten an der Schwellerleiste (Pin 6 CAN_H, Pin 14 CAN_L, Pin 4/5 GND)",
+        "en": "Direct pedal-safe CAN bus link from OBD2 port to Vehicle Satellite at door sill (Pin 6 CAN_H, Pin 14 CAN_L, Pin 4/5 GND)"
+      },
+      "pkg_qty": 1,
+      "pkg_name": "COTS OBD2 Flat Cable"
+    },
     "cable_support_car_visor_dc": {
       "type": "cable",
       "name": {

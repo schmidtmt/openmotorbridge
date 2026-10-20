@@ -323,7 +323,8 @@ For all interconnections between the hermetic IP68 Front Node, the modular satel
 | **Navi 5V Power Supply** | Cockpit Satellite Port 5 | USB-C Socket (Power-Only) | GPS Navigator (Garmin / TomTom / Beeline) | 20–30 cm | COTS USB-C charging cable with strain clamp |
 | **Handlebar PTT Switch** | Cockpit Satellite Terminal | Screw / Spring Terminal 2-Pin | Handlebar controls (PTT intercom / voice assistant) | 80 cm | 2-conductor control wire to handlebar switch |
 | **Vehicle 12V DC In** | Vehicle Satellite Port 1 | JST-JWPF 2-Pin (IP67) | Flying leads (0.5 mm²) with Posi-Tap / Cartool plug | 50 cm | COTS JST-JWPF 2P pigtail (KL15 ignition & GND) |
-| **Vehicle CAN-Bus** | Vehicle Satellite Port 2 | JST-JWPF 3-Pin (IP67) | Flying leads with Posi-Tap for CAN_H / CAN_L / GND | 50 cm | COTS JST-JWPF 3P pigtail |
+| **Vehicle CAN-Bus (Motorcycle)** | Vehicle Satellite Port 2 | JST-JWPF 3-Pin (IP67) | Flying leads with Posi-Tap for CAN_H / CAN_L / GND | 50 cm | COTS JST-JWPF 3P pigtail |
+| **OBD2 Car Direct Cable (Opt.)** | Vehicle Satellite Port 2 | JST-JWPF 3-Pin (IP67) | Flat 90° OBD2 male connector in driver footwell | 80 cm | Ultra-flat ribbon cable (10 mm profile, zero pedal conflict) |
 | **Mirror BSD Warning LEDs**| Vehicle Satellite Port 3 | JST-JWPF 3-Pin (IP67) | Y-cable ($2 \times 2$-Pin) to amber mirror LED indicators | 120 cm | COTS JST-JWPF 3P Y-pigtail |
 | **Auxiliary Light Output** | Vehicle Satellite Port 4 | JST-JWPF 2-Pin (IP67) | 2-pin flying leads to driving lights / strobe relay | 40 cm | COTS JST-JWPF 2P pigtail |
 | **Qwiic / GNSS I2C Bus** | Vehicle Satellite Port 5 | JST-SH 4-Pin (1.0 mm) | 4-Pin JST-SH connector to SAM-M10Q & TMP117 puck | 10–20 cm | SparkFun Qwiic / Adafruit STEMMA QT COTS |
