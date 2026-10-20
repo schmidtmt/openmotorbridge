@@ -1064,10 +1064,12 @@ The radar is strictly centered on the vehicle longitudinal symmetry axis and att
 
 For professional deployment in support vehicles (sweep vans on guided motorcycle tours, breakdown service vehicles, organizer vans on Alpine passes) and automotive convoys (e.g., sports car rallies), **Reference Kit 5** constitutes an autonomous fleet management setup. It enables real-time monitoring of all participating motorcycles via the 868 MHz LoRa mesh without requiring cellular reception or cloud services.
 
-Mechanically and ergonomically, the Car Support Kit relies on three screw-free, non-destructive CAD components:
-1. The **Universal Sun Visor Clip for Pods 1 & 2 (2x)** ([`car_sun_visor_pod_clip.scad`](../../hardware/cad/scad/05_accessories/car_sun_visor_pod_clip.scad) / [`car_sun_visor_pod_clip.stl`](../../hardware/cad/stl/05_accessories/car_sun_visor_pod_clip.stl))
-2. The **Dashboard Wedge Dock for Central Control Box** ([`car_dashboard_wedge_dock.scad`](../../hardware/cad/scad/05_accessories/car_dashboard_wedge_dock.scad) / [`car_dashboard_wedge_dock.stl`](../../hardware/cad/stl/05_accessories/car_dashboard_wedge_dock.stl))
-3. The **Compact Dashboard GNSS Dock** for the u-blox SAM-M10Q Multi-GNSS patch module near the base of the windshield.
+Mechanically and ergonomically, the Car Support Kit relies on well-engineered, non-destructive components:
+1. The **Universal Sun Visor Clip for Pods 1 & 2 (2x)** ([`car_sun_visor_pod_clip.scad`](../../hardware/cad/scad/05_accessories/car_sun_visor_pod_clip.scad) / [`car_sun_visor_pod_clip.stl`](../../hardware/cad/stl/05_accessories/car_sun_visor_pod_clip.stl)) providing unobstructed forward RF radiation through the front windshield glass.
+2. The compact **Cockpit Breakout Satellite (`PCBA 05B`)** in the center console / armrest storage bin with a $75\,\text{cm}$ drag-chain jacket cable routing to the Front Node under the driver seat.
+3. The **Under-Seat Mounting Architecture** with the Front Node under the driver seat and the Central Box under the passenger seat, delivering thermal protection and cross-free cable routing.
+4. The **External 868 MHz Magnetic Mount Roof Antenna** with $2.5\,\text{m}$ RG-174 coaxial cable for omnidirectional $360^\circ$ line-of-sight range ($15\dots 25\,\text{km}$) to the motorcycle group.
+5. The remote **SAM-M10Q Multi-GNSS Puck** mounted near the base of the windshield / A-pillar.
 
 ---
 
@@ -1107,127 +1109,87 @@ OPERATING MODES OF THE CAR SUPPORT KIT:
 
 ---
 
-#### 6.8.2 Front Node & Central Box Mounting in Cars (Glovebox Stealth vs. Dashboard Dock)
+#### 6.8.2 Front Node & Central Box Mounting in Cars (Under-Seat Topology & Satellite Convergence)
 
-For passenger cars, support vans, and chase vehicles, OpenMotorBridge delivers two proven mounting options--ranging from a 100% invisible stealth glovebox installation to a rapid-deployment rally cockpit dock:
+For passenger cars, support vans, and chase vehicles, OpenMotorBridge v9.6 standardizes on the **ergonomically and physically optimized Under-Seat Topology**. The legacy dual-stack dashboard wedge dock (`car_dashboard_wedge_dock.scad`) has been completely retired following RF and thermal validation:
 
-##### Option A: Glovebox Stealth Mount (Recommended Automotive Standard)
-
-For daily drivers, support cars, and rental/leased vehicles, an entirely invisible installation with zero add-on boxes cluttering the dashboard is ideal:
+> [!NOTE]
+> **Why the Legacy Dashboard Dual-Dock Was Retired:**
+> 1. **Thermal Hotspot ($85\dots 95\,^\circ\text{C}$):** Dashboard surfaces behind the windshield reach extreme temperatures in direct sunlight. Confining the Central Box's LiPo UPS battery and the Front Node's 20W USB-PD switching regulators inside a plastic enclosure caused thermal throttling and safety shutdowns.
+> 2. **Faraday Cage & Athermic Windshields:** Modern vehicles employ metallic heat-reflective coatings (silver sputtering or heating grids) that attenuate 868 MHz and 2.4 GHz signals by $15\dots 25\,\text{dB}$, trapping RF inside the cabin.
+> 3. **UWB Near-Field Coupling:** The UWB backbone (`DW3110`) is engineered to span 1.5 m wirelessly. Stacking both boxes 25 mm apart caused severe near-field detuning and multipath reflections.
+> 4. **Front Node Consolidation:** With all user ports moved to the Cockpit Breakout Satellite (`PCBA 05B`) and GNSS to `J_VEHICLE`, mounting the Front Node on the dash would clutter the interior with two thick umbilical cables.
 
 ```
-                  CAR GLOVEBOX STEALTH INTEGRATION
- +-----------------------------------------------------------------------------+
- | GLOVE COMPARTMENT / PASSENGER FOOTWELL (100% INVISIBLE):                    |
- | * Front Node (PCBA 05): Secured via 3M Dual-Lock on glovebox rear wall      |
- | * Direct Power Tap: 12V switched ignition (KL15) at cabin fuse box         |
- | * Central Box (PCBA 01): Sits beside Front Node or under passenger seat    |
- | * UWB Backbone (6.5 GHz): Fully wireless connection, zero cabin wires      |
- +--------------------------------------+--------------------------------------+
-                                        |
-      +---------------------------------+---------------------------------+
-      | 16-Conductor Jacket Cable       | 12-Conductor Jacket Cable (5-Port)
-      v (concealed under center console)| v (tucked behind A-pillar seal)
- +-----------------------------------+ +-----------------------------------+
- | CENTER CONSOLE / CUPHOLDER:       | | WINDSHIELD LOWER CORNER:          |
- | [ COCKPIT BREAKOUT SATELLITE ]    | | [ SAM-M10Q GNSS & CLIMATE PUCK ]  |
- | * [ PHONE 20W ] USB-PD Fast Chg   | | * Unobstructed 180° sky view      |
- | * [ HOST ] CarPlay / Android Auto | | * Sub-meter GPS accuracy          |
- | * [ DONGLE ] Ottocast Wireless    | | * Discreet in corner of glass     |
- +-----------------------------------+ +-----------------------------------+
+                  CAR UNDER-SEAT & SATELLITE TOPOLOGY (v9.6)
++-----------------------------------------------------------------------------------------+
+| WINDSHIELD BASE / A-PILLAR:                    SUN VISORS:                              |
+| [ SAM-M10Q GPS Puck at Windshield Base ]       [ Pod 1 & Pod 2 on Visor Clips ]         |
+| (Clear line-of-sight through toll aperture)    (2.4 GHz radiates unobstructed forward)  |
++-----------------------------------------------------------------------------------------+
+       ^                                                        ^
+       | Thin I2C Sensor Cable                                  | UWB 6.5 GHz (1.2 m Air Path)
++----------------------------------+             +----------------------------------------+
+| UNDER DRIVER SEAT:               |             | UNDER PASSENGER SEAT:                  |
+| [ FRONT NODE (PCBA 05) ]         |             | [ CENTRAL BOX (PCBA 01) ]              |
+| * Cool, shaded, 100% concealed   | <=========> | * Coolest spot in cabin (protects UPS) |
+| * South flank (Cockpit) to center|  UWB Link   | * 12V DC via rear console 12V socket   |
+| * North flank (Vehicle) to sill  | (0.7m Air)  | * SMA Knockout: Magnetic Roof Antenna  |
++----------------------------------+             |   (2.5 m RG-174 out through hatch)     |
+       |                                         +----------------------------------------+
+       v 75 cm 16-Pin Drag-Chain Cable
++-----------------------------------------------------------------------------------------+
+| CENTER CONSOLE / ARMREST STORAGE (The Single Visible Touchpoint):                       |
+| [ COCKPIT BREAKOUT SATELLITE (PCBA 05B) ]                                               |
+| * [ HOST ]: 10 cm USB cable to factory radio (pure data, zero power starvation!)        |
+| * [ DONGLE ]: Ottocast / Carlinkit supplied with clean 5V / 3A from 12V vehicle bus     |
+| * [ PHONE 20W ]: USB-PD Fast-Charge for smartphone (charges even during GPS nav)        |
+| * [ BTN_PTT ]: JST-GH socket for push-to-talk button on gear lever or handbrake         |
++-----------------------------------------------------------------------------------------+
 ```
 
-1. **Mounting Inside Glovebox:**
-   - The hermetic Front Node (`PCBA 05`) mounts invisibly using 3M Dual-Lock strips against the rear or side interior wall of the glove compartment, or tucked behind the lower passenger footwell trim.
-   - **Anti-Theft & OEM Aesthetics:** Zero add-on boxes or loose wiring appear on the dashboard; the car interior remains 100% factory clean.
-2. **Shortest Runs to Vehicle Power:**
-   - Nearly all modern passenger cars house the primary interior fuse panel immediately behind or beneath the glovebox.
-   - An off-the-shelf Add-A-Circuit Fuse Tap draws 12V switched ignition power (KL15) non-destructively and reversibly to the Vehicle Satellite (`J_VEHICLE`).
-3. **Discreet Cockpit Breakout Satellite in Center Console:**
-   - The sealed 14-conductor cockpit jacket cable routes out of the glovebox cavity, concealed beneath center console trim or into the armrest storage bin.
-   - There, the compact **Cockpit Breakout Satellite** presents its labeled USB-C female receptacles (`[ PHONE 20W ]`, `[ HOST ]`, `[ DONGLE ]`) with integrated 3D strain relief. Provides rapid 20W USB-PD charging and connects seamlessly to the car stereo's wired Apple CarPlay / Android Auto port using standard USB-C cables.
-4. **Remote GNSS Puck on Windshield:**
-   - The compact u-blox SAM-M10Q GNSS puck routes via port 5 of the Vehicle Satellite (`[ GNSS / CLIMATE PUCK ]`) tucked behind the right A-pillar weatherstrip to the lower corner of the windshield.
-   - Guarantees uncompromised satellite line-of-sight through the laminated glass while remaining completely out of sight.
-5. **Wireless Central Box Coupling via UWB:**
-   - The Central Box (`PCBA 01`) can rest directly alongside the Front Node in the glovebox or be placed under the passenger seat or in the trunk.
-   - The synchronous 6.5 GHz UWB backbone (`DW3110`) bridges the link deterministically with $< 0.4\,\text{ms}$ latency without running a single data wire through the passenger compartment.
+1. **Front Node Under Driver Seat (Cross-Free North/South Flanks):**
+   - The hermetic Front Node (`PCBA 05`) mounts securely with 3M Dual-Lock on the carpet under the driver seat.
+   - **South Flank (Facing Inward Toward Center Console):** The ultra-flexible **$75\,\text{cm}$ 16-pin drag-chain jacket cable** (`J_COCKPIT`) routes with an elastic relief loop directly into the center console or armrest bin. The $75\,\text{cm}$ length ensures the seat can travel freely through its full forward/backward adjustment stroke ($20\dots 25\,\text{cm}$) without any mechanical tension on the connectors.
+   - **North Flank (Facing Outward Toward Door Sill):** The 12-pin vehicle cable (`J_VEHICLE`) routes directly left under the door sill trim into the driver footwell (connecting to the fuse panel for KL15 switched power, the OBD2 port, and up the A-pillar to the GNSS puck).
+   - **Result:** 100% cross-free cable paths without kinks, tangles, or chafe hazards.
 
-##### Option B: Dual-Stack Dashboard Wedge Dock (For Rally & Expedition Support)
+2. **Cockpit Breakout Satellite (`PCBA 05B`) in Center Console – Solving Factory USB Starvation:**
+   - **The Factory USB Dilemma:** Automotive media ports typically deliver only $500\,\text{mA}$ ($2.5\,\text{W}$). Wireless CarPlay adapters (Ottocast U2-Air, Carlinkit) draw up to $1.6\,\text{A}$ ($8\,\text{W}$) during boot and video streaming, causing perpetual reboot loops. Smartphones discharge even while plugged in when running GPS navigation.
+   - **The OMB Solution:** The port `[ HOST ]` on the breakout block connects purely to the radio's data lines. The ports `[ DONGLE ]` and `[ PHONE 20W ]` draw power **directly from the internal 12V DCDC converter (`SC8102`) on the Front Node**, delivering a genuine $20\,\text{W}$ USB-PD and robust $5\,\text{V} / 3\,\text{A}$. The wireless adapter boots reliably and never crashes.
+   - **PTT Ergonomics:** The driver rests their forearm naturally on the center armrest. A micro-button attached to the gear lever or handbrake plugs directly into the gold-plated JST-GH PTT socket `J6`.
 
-For rally support vehicles, desert expeditions, or rapid chase cars where the driver or co-driver requires all status LEDs, LoRa telemetry indicators, and hardware buttons permanently in direct view:
-
-![Dashboard Wedge Dock CAD](../images/cad/car_dashboard_wedge_dock_cad.png)
-
-*Figure 8.33c: 3D CAD view of the Dual-Stack Dashboard Wedge Dock for Central Control Box and Front Node (`car_dashboard_wedge_dock_cad.png`). Depicted are the lower horizontal slide-in bay for the Front Node with unobstructed GNSS view to the windshield and lateral USB-PD window, the upper 15° tilted deck for the Central Control Box, dual lateral finger extraction notches, internal harness routing channel for the 12V Y-adapter harness, and underside recesses for anti-slip silicone feet.*
-
-* **Two-Tier Architecture (Tier 1 & Tier 2):**
-  * **Lower Tier (Base Slide-in Bay for Front Node `PCBA 05`):**
-    * Horizontal pocket ($100 \times 70 \times 26.5\,\text{mm}$ clearance) providing secure, vibration-damped retention of the Front Node enclosure.
-    * **Windshield Aperture:** Faces directly toward the windshield--ensuring unobstructed sky line-of-sight for the integrated u-blox SAM-M10Q GNSS module and acoustic entry for the MSM261S4030 / SPH0645 MEMS microphone used in cabin noise compensation.
-    * **Lateral USB-PD Port Window:** Provides effortless access for connecting charging cables to both 20W USB-C ports.
-  * **Upper Tier (Tilted Deck for Central Box `PCBA 01`):**
-    * Ergonomic **$15^\circ$ forward/upward tilted cradle** ($111.5 \times 75.5 \times 18\,\text{mm}$), aligning all RGB status LEDs and RF diagnostic indicators directly into driver and passenger sightlines without windshield glare.
-    * Dual lateral finger notches ($40 \times 12\,\text{mm}$) enable rapid tool-free extraction of the Central Box when swapping between vehicles.
-* **Internal Concealed Harness Channel:**
-  * A continuous vertical conduit ($22 \times 36\,\text{mm}$) invisibly links the lower and upper bays: The 12V automotive Y-adapter harness ("Bench & Support-Car Harness") splits internally--Branch A routes concealed to the Front Node, while Branch B routes upward to the Deutsch DTM-12 port `J1` of the Central Box.
-* **Vibration-Damped Non-Marring Base:**
-  * 4 circular pockets ($\varnothing 12 \times 1.5\,\text{mm}$) on the bottom accommodate 3M Bumpon silicone rubber bumpers or 3M VHB adhesive pads, keeping the dual dock firmly in place without rattling or dashboard scuffs even during aggressive driving.
+3. **Central Box (`PCBA 01`) Under Passenger Seat:**
+   - **Optimal Thermal Decoupling:** The passenger seat floor represents the coolest cabin zone--shielded from solar radiation and cooled by under-seat AC vents. The 2,200 mAh LiPo UPS buffer battery is preserved from heat-induced degradation.
+   - **12V Power via Rear Console Socket:** Nearly all modern vehicles feature a 12V auxiliary socket on the rear face of the center console. A short $0.5\,\text{m}$ DTM-12 cable connects the Central Box directly to this outlet.
+   - **Wireless UWB Backbone:** The 6.5 GHz UWB link bridges the $70\,\text{cm}$ gap to the driver seat and $1.2\,\text{m}$ to the visor pods with zero cabin wires and $< 0.4\,\text{ms}$ latency.
 
 ---
 
-#### 6.8.3 Wireless Automotive Telemetry: Autonomous Bluetooth OBD2 Coupling via Central Box
+#### 6.8.3 RF Architecture in Car Kit: External Magnetic Roof Antenna as Default
 
-Routing a long, fixed CAN cable from the center console across the driver footwell to the vehicle diagnostic socket creates safety hazards around the pedals and complicates vehicle swaps. OpenMotorBridge resolves this via **wireless Bluetooth OBD2 telemetry**:
+Inside a car cabin, the steel chassis (Faraday cage) attenuates RF transmissions by $20\dots 30\,\text{dB}$. An internal LoRa antenna under the seat achieves an effective range of only $500\dots 1,000\,\text{m}$--on guided motorcycle tours or rallies, the chase vehicle drops communication behind the first ridge.
 
-1. **Direct Coupling to Central Box (ESP32-S3):**
-   * Pairing operates **independently of the tablet browser** (browser-based WebBLE drops whenever the tablet locks or apps switch to the background). Instead, the Central Box's hardware Bluetooth 5.0 controller acts as the autonomous BLE Master (SPP Client).
-   * The Central Box automatically connects at ignition ON to standard COTS OBD2 BLE adapters (e.g. *vGate iCar Pro BLE 4.0*, *OBDLink CX*, or standard *ELM327 BLE*) plugged unobtrusively into the vehicle OBD2 socket under the steering column.
-2. **Autonomous PID Polling & LoRa Mesh Broadcast:**
-   * The Central Box cyclically queries standard ISO 15765-4 PIDs:
-     * `010D`: Vehicle Speed (km/h)
-     * `010C`: Engine RPM
-     * `012F`: Fuel Tank Level (%)
-     * `0105`: Engine Coolant Temperature (°C)
-   * Telemetry broadcasts autonomously into the 868 MHz LoRa mesh (OMM). The entire motorcycle group monitors the chase vehicle's fuel level, speed, and status in real time--even if no tablet or smartphone is turned on inside the van.
+Therefore, **Reference Kit 5 (Car Support Kit)** includes the **external magnetic roof antenna as standard equipment (Default)**:
+1. **Rear SMA Port on Central Box:** The $0.4\,\text{mm}$ knockout membrane on the rear of the Central Box is punched out and fitted with an IP67 SMA bulkhead connector linked to `ANT1` on `PCBA 01`.
+2. **Compact 868 MHz Magnetic Mount on Vehicle Roof:**
+   - A rubberized mini-magnetic base ($\varnothing 30\,\text{mm}$) with an $8\,\text{cm}$ flexible stainless steel whip adheres scratch-free to the roof.
+   - The entire vehicle roof serves as a large metallic ground plane ($+3\,\text{dBi}$ gain, $360^\circ$ omnidirectional radiation).
+   - Delivers **$15\dots 25\,\text{km}$ true LoRa range** to the motorcycle group--even across alpine passes!
+3. **Weatherproof Cable Pass-Through:**
+   - The $2.5\,\text{m}$ long, $2.8\,\text{mm}$ thin RG-174 coaxial cable routes concealed under interior carpet and through the rubber weatherstrip of the rear tailgate or door. The seal compresses around the cable without leaks or wind noise.
 
 ---
 
-#### 6.8.4 Complete System Topology & Tool-Free 5-Minute Vehicle Integration
+#### 6.8.4 Telemetry: Autonomous Bluetooth OBD2 Coupling vs. Hardwired CAN
 
-The synchronized design of Reference Kit 5 enables quick, tool-free installation and removal in any rental car, support van, or chase vehicle:
-
-```text
-         OPENMOTORBRIDGE REFERENCE KIT 5 (CAR & SUPPORT-VAN TOPOLOGY)
- +------------------------------------------------------------------------+
- | Windshield Upper Zone:                                                 |
- | [Driver Sun Visor]    --> [car_sun_visor_pod_clip] --> [Pod 1]         |
- | (Sena SPIDER X Slim or OMM 2.4 GHz)                                    |
- |                                                                        |
- | [Passenger Sun Visor] --> [car_sun_visor_pod_clip] --> [Pod 2]         |
- | (Cardo Packtalk Edge or Midland PMR446)                                |
- +-----------------------------------+------------------------------------+
-                                     | Ultra-Thin Flat USB-C Cable
-                                     v (Concealed in Headliner & A-Pillar)
- +------------------------------------------------------------------------+
- | Dashboard / Center Console:                                            |
- | [car_dashboard_wedge_dock (15°)] --> [Central Box (SX1262 LoRa 868)]   |
- | [SAM-M10Q GNSS Dashboard Dock]   --> [Front Node / GNSS-USB]           |
- |       ^           ^                       |        ^                   |
- |       | 12V PD    | M8 / USB-C            |        | Bluetooth LE      |
- | [Cigarette        v                       |        v                   |
- |  Lighter]    [Pods 1 & 2 Power Feed]      |   [OBD2 BLE Dongle]        |
- |                                           |   (ELM327 / vGate under    |
- |                                           |    steering wheel)         |
- |                                           +-> USB-C / BLE Offline PWA  |
- |                                           |   (iPad / Android Tablet)  |
- |                                           v                            |
- |                                      [CarPlay / Android Auto Audio]    |
- +------------------------------------------------------------------------+
-```
-
-1. **Concealed Flat-Ribbon Cable Routing (Zero-Damage):**
-   * The thin 3 m flat USB-C cable tucks into the soft **headliner seam** above the windshield with fingertip pressure.
+For vehicle telemetry (speed, RPM, fuel level, coolant temperature per ISO 15765-4), the system supports dual operation:
+1. **Wireless BLE Dongle (Rental Cars / Rapid Swap):**
+   - The Central Box acts as the autonomous BLE Master, pairing automatically with an off-the-shelf *vGate iCar Pro BLE 4.0* or *OBDLink CX* in the diagnostic socket. Zero wiring in the pedal box.
+2. **Hardwired OBD2 (Dedicated Support Vans):**
+   - A flat cable with a $90^\circ$ OBD2 plug runs from the 12-pin Vehicle Satellite under the driver seat straight into the port for zero-latency CAN bus logging.
+3. **Live Fleet Mesh Broadcasting:**
+   - Vehicle telemetry is automatically multiplexed into the 25-byte OMM radar packets, keeping the motorcycle convoy informed of the chase vehicle's location and fuel status in real time.
    * Runs down behind the soft rubber weatherstripping of the passenger A-pillar into the glovebox space and center console.
    * **Result:** Zero exposed wiring, zero drill holes, 100% reversible in under 3 minutes (perfect for rental or leased vans).
 2. **Autonomous Power Supply:**

@@ -60,12 +60,11 @@ Classic motorcycle communication systems are historically fragmented:
 | * Wireless Actioncam Induction Dock (Port J8: 5V Qi charging coil with auto-shutter stop) |
 | * Integrated Cockpit CAN-Bus Transceiver (TCAN334G with 120 Ohm) for Fairing TFT Displays |
 | * Only Single Vehicle Wire Needed: Rugged 2-Core 12V Power Cable (KL15 / GND)            |
-+-------------------------------------------------------------------------------------------+
 | 8. SUPPORT VEHICLE TOPOLOGY (Car / Support-Van / Rally Sweep Vehicle / RV):               |
-| * Central Box with Dashboard Wedge Dock (car_dashboard_wedge_dock.stl) & 12V Cig Lighter  |
-| * 2 Satellite Pods on 2 Sun Visors (Driver: Pod 1, Passenger: Pod 2) via Visor Clips      |
-| * SAM-M10Q Multi-GNSS on Dashboard Dock; LoRa SX1262 inside Central Box (Zero Ext. Ant.) |
-| * Live LoRa-Mesh Fleet Tracking of All Group Bikes on Tablet / Smartphone (PWA Offline)   |
+| * 2 Pods on 2 Sun Visors: Driver Pod 1, Passenger Pod 2 (Sena/Cardo or OMM/Midland)        |
+| * Front Node under driver seat (Cockpit breakout to console, vehicle satellite to sill)     |
+| * Central Box under passenger seat; External 868 MHz Magnetic Roof Mount Antenna as Default  |
+| * 75 cm drag-chain harness to Cockpit Breakout (20W USB-PD charging bypass for Ottocast/Phone)|
 +-------------------------------------------------------------------------------------------+
 ```
 
@@ -118,7 +117,7 @@ OpenMotorBridge v8.0 defines the platform across **standardized functional nodes
 > * **Reference Kit 2 (Harley-Davidson Road King Special / FLHRXS):** Pods 1 & 2 in the saddlebag lids (MagSafe side pass-through), Front Node hidden inside the 7" headlight nacelle, Central Box under the seat, rear radar via Peitsche 5 at license plate carrier. *(Rear fender stays 100% OEM clean - fender console omitted without replacement!)*
 > * **Reference Kit 3 (Classic Bagger & Cruiser - Street Glide / Electra Glide):** Pods 1 & 2 in the saddlebag lids, Front Node in batwing fairing, Central Box under the seat, optional radar below the license plate via Peitsche 5.
 > * **Reference Kit 4 (Adventure & Touring Enduros - BMW GS, KTM Adventure, Africa Twin):** Pods 1 & 2 on crash bars or pannier frame via 120° V-grooves and EPDM tension straps, Front Node on nav crossbar or inside beak, Central Box under the seat, standalone minimal radar mount (`adventure_rack_radar_mount.stl`) under the luggage bridge via Peitsche 5.
-> * **Reference Kit 5 (Car / Support-Van / Rally Sweep Vehicle / RV):** 2 Pods on 2 sun visors (Driver: Pod 1, Passenger: Pod 2) via tool-free visor clips ([`car_sun_visor_pod_clip.stl`](../../hardware/cad/stl/05_accessories/car_sun_visor_pod_clip.stl)) radiating through glass windshield; Central Box in dashboard wedge dock ([`car_dashboard_wedge_dock.stl`](../../hardware/cad/stl/05_accessories/car_dashboard_wedge_dock.stl)) with SAM-M10Q GNSS and 12V cigarette lighter PD adapter; autonomous Bluetooth OBD2 telemetry (ELM327 / vGate); zero external antennas sticking out; PWA dashboard on iPad/tablet for live tracking of all group bikes without cellular connectivity.
+> * **Reference Kit 5 (Car / Support-Van / Rally Sweep Vehicle / RV):** 2 Pods on 2 sun visors (Driver: Pod 1, Passenger: Pod 2) via tool-free visor clips ([`car_sun_visor_pod_clip.stl`](../../hardware/cad/stl/05_accessories/car_sun_visor_pod_clip.stl)) radiating unobstructed through glass windshield. Ergonomic Under-Seat Topology: Front Node (`PCBA 05`) under driver seat, Cockpit Breakout Satellite (`PCBA 05B`) in center console / armrest bin via $75\,\text{cm}$ drag-chain cable (solves weak OEM USB issues with 20W USB-PD charging bypass for Ottocast/smartphones), Vehicle Satellite at door sill into driver footwell. Central Box (`PCBA 01`) under passenger seat (cool cabin zone protects LiPo UPS, wireless UWB link across seats). External 868 MHz mini magnetic roof mount antenna ($\varnothing 30\,\text{mm}$) as standard default (routes via tailgate rubber seal, vehicle roof ground plane delivers $15\dots 25\,\text{km}$ LoRa range to motorcycle group). PWA dashboard on tablet for live fleet tracking without cellular connectivity.
 >
 > Riders and support crews are encouraged to replicate these kits, adapt them for other vehicle models, or design custom brackets based on our open CAD/STEP dimensional envelopes!
 
@@ -440,16 +439,21 @@ The Front Node (PCBA 05) serves on **all motorcycle types** as the universal coc
     * **Versatile Convoy Modes:**
       - **Mode A (Chase vehicle for mixed motorcycle group):** Pod 1 with Sena SPIDER X Slim (Mesh 3.0/2.0), Pod 2 with Cardo Packtalk Edge (DMC Gen 2). Enables simultaneous full-duplex communication into both major motorcycle mesh ecosystems!
       - **Mode B (Pure Car/Camper Convoy):** Pod 1 with OMM 2.4 GHz Cartridge (OpenMotorMesh), Pod 2 with Midland PMR446 Cartridge for universal public radio.
-  * **Central Box Docking & Dashboard GNSS:**
-    * The Central Box rests on the dashboard in the vibration-damped wedge dock ([`car_dashboard_wedge_dock.stl`](../../hardware/cad/stl/05_accessories/car_dashboard_wedge_dock.stl)).
-    * The u-blox SAM-M10Q Multi-GNSS module sits with clear sky zenith view directly beneath the windshield on the dashboard.
-    * The LoRa 868 MHz transceiver (Semtech SX1262) operates via the integrated Taoglas FXP895 flex antenna in the Central Box lid -- zero external antennas required.
-    * Power is supplied tool-free via the 12V/24V cigarette lighter adapter (30W USB-PD).
-  * **Concealed A-Pillar Cabling:**
-    * Ultra-flat USB-C ribbon cables route invisibly behind the rubber weatherstrip of the A-pillars directly to the two sun visors.
-  * **Wireless Automotive Telemetry via Bluetooth OBD2 (ELM327 / vGate):**
-    * The Central Box couples autonomously via Bluetooth 5.0 (BLE) to a compact OBD2 dongle plugged under the steering column.
-    * Vehicle telemetry (speed, RPM, fuel tank level %, engine coolant temp) broadcasts into the 868 MHz LoRa mesh -- zero footwell wiring and zero dependency on a smartphone/tablet app.
+  * **Ergonomic Under-Seat Topology (Zero-Clutter & Thermal Protection):**
+    * **Front Node (`PCBA 05`) under driver seat:** Stress-free cable routing with split opposing flanks: South flank (`J_COCKPIT`) routes via a $75\,\text{cm}$ flexible drag-chain cable inward into the center console to the Cockpit Breakout Satellite (`PCBA 05B`), fully compensating for $20\dots 25\,\text{cm}$ seat travel. North flank (`J_VEHICLE`) routes outward along door sill/rocker trim to driver footwell.
+    * **Cockpit Breakout Satellite (`PCBA 05B`) in center console / armrest:** Provides a clean 20W USB-PD / 5V 3A charging bypass from the Front Node's 12V regulator to the phone or wireless CarPlay dongle (Ottocast / Carlinkit), completely eliminating bootloop crashes caused by weak OEM car USB ports ($< 500\,\text{mA}$). Upstream `[ HOST ]` port connects purely for data to the car head unit. PTT button on gear lever/handbrake plugs into `J6`.
+    * **Central Box (`PCBA 01`) under passenger seat:** Located in the coolest cabin zone ($< 35^\circ\text{C}$ vs $85\dots 95^\circ\text{C}$ dashboard solar bake), protecting the internal LiPo UPS battery from heat degradation. Ultra-low latency UWB wireless link ($< 0.4\,\text{ms}$) connects across the seat row to the Front Node.
+    * **SAM-M10Q GNSS Puck:** Positioned unobtrusively at windshield corner connected via the Vehicle Satellite.
+  * **External 868 MHz Magnetic Roof Antenna as Default (15–25 km LoRa Range):**
+    * In an automotive steel cabin, the Faraday body attenuates RF signals by $20\dots 30\,\text{dB}$.
+    * Reference Kit 5 therefore standardizes on a miniature $\varnothing 30\,\text{mm}$ magnetic roof mount antenna with $2.5\,\text{m}$ thin RG-174 coaxial cable routed through the elastic tailgate weatherstrip seal.
+    * The metallic vehicle roof acts as a $360^\circ$ ground plane ($+3\,\text{dBi}$ gain), ensuring $15\dots 25\,\text{km}$ real-world LoRa range to the motorcycle group across valleys and mountain passes.
+  * **Concealed Wiring & Power Supply:**
+    * 12V Y-adapter harness supplies Front Node and Central Box from 12V cigarette socket or ignition KL15 fuse tap.
+    * Ultra-flat USB-C ribbon cables route invisibly behind A-pillar weatherstrips directly to the two sun visors.
+  * **Automotive Telemetry:**
+    * Autonomous wireless coupling via Bluetooth 5.0 (BLE) to an OBD2 dongle (vGate / OBDLink) or hardwired 16-pin OBD2 right-angle cable from the 12-pin Vehicle Satellite.
+    * Vehicle telemetry (speed, RPM, fuel level %, coolant temperature) broadcasts autonomously into the 868 MHz LoRa mesh -- zero smartphone dependency.
 * **Real-Time Fleet Telemetry without Cellular Service (PWA Fleet Dashboard):**
   * An iPad or Android tablet mounted in the car runs the OpenMotorBridge PWA dashboard in offline vector map mode.
   * Over the 868 MHz LoRa mesh, the support crew receives second-by-second telemetry updates (GPS coordinate fixes, road speeds, crash/SOS alerts, tire pressures, ambient road temperature) from all group motorcycles over a radius of up to $15\,\text{km}$ -- autonomous, robust, and completely independent of cellular network coverage.

@@ -342,14 +342,34 @@ Once all 4 checks indicate green, tighten enclosure lids with M3 screws diagonal
   * Insert the pre-assembled Radar 2.0 housing with `radar_swivel_tilt_cradle.stl` into the clevis fork, level horizontally, and clamp firmly with a DIN 912 M5 $\times$ 25 mm bolt.
   * The monolithic $45^\circ$ forward deflector wedge shields the pivot joint and M8 wiring from stones thrown up by knobby offroad tires.
 
-### 5.3 Support Car / Chase Van Installation (Car-Kit)
+### 5.3 Support Car / Chase Van Installation (Car-Kit / Reference Kit 5)
+
 * **Pod 1 & Pod 2:** Attached to driver and passenger sun visors using quick-release clips ([`car_sun_visor_pod_clip.stl`](../../hardware/cad/stl/05_accessories/car_sun_visor_pod_clip.stl)).
   * Mode A (Chase vehicle for bike group): Pod 1 = Sena SPIDER X Slim, Pod 2 = Cardo Packtalk Edge.
-  * Mode B (Pure car convoy): Pod 1 = OMM 2.4 GHz Swap Cartridge, Pod 2 = Midland PMR446 radio cartridge.
-* **Central Box:** Sits in 15° dashboard wedge dock on center console.
-* **SAM-M10Q GNSS:** Positioned on dashboard behind windshield.
-* **Audio Integration:** USB-C audio link to vehicle headunit for group intercom through vehicle speakers.
-* **Telemetry:** Wireless BLE OBD2 dongle plugged into driver footwell.
+  * Mode B (Pure car convoy / offroad): Pod 1 = OMM 2.4 GHz Swap Cartridge, Pod 2 = Midland PMR446 radio cartridge.
+  * Route 2-conductor 5V DC flat cables invisibly behind headliner seam and A-pillar weatherstrip to the center console.
+* **Ergonomic Under-Seat Topology (Zero-Clutter & Thermal Protection):**
+  * **Front Node (`PCBA 05`) under driver seat:**
+    * Secure flat to seat base frame using velcro hook-and-loop strips or cable ties.
+    * **Cross-Free Flank Orientation:**
+      * **South flank (`J_COCKPIT`):** Faces inward toward the center console. Secure the $75\,\text{cm}$ shielded drag-chain cable with a strain-relief clamp to the moving seat chassis, allowing the entire $20\dots 25\,\text{cm}$ longitudinal seat stroke to travel freely without tension.
+      * **North flank (`J_VEHICLE`):** Faces outward toward the door sill / rocker trim into the driver footwell to the Vehicle Satellite (`vehicle_breakout_block.stl`).
+  * **Cockpit Satellite (`PCBA 05B`) in center console / armrest bin:**
+    * Positioned inside the center armrest storage compartment or forward tunnel tray.
+    * **Solving OEM Car USB Power Starvation (20W Ottocast Bypass):** Weak automotive OEM USB ports ($< 500\,\text{mA}$) routinely cause wireless CarPlay adapters (Ottocast / Carlinkit) to crash into bootloops during RF transmit bursts. The Cockpit Satellite feeds the dongle or smartphone via port `[ FAST CHARGE / DONGLE ]` directly from the Front Node's 12V buck regulator (`SC8102`) with a robust 20W USB-PD / 5V 3A rail. The upstream `[ HOST ]` port connects purely for data to the car head unit.
+    * **PTT Switch:** External momentary pushbutton mounted on gear lever or handbrake connects to terminal `J6` on the Cockpit Satellite.
+  * **Central Box (`PCBA 01`) under passenger seat:**
+    * Located in the coolest footwell zone ($< 35^\circ\text{C}$ vs $85\dots 95^\circ\text{C}$ solar dashboard baking), protecting the LiPo UPS from thermal wear.
+    * Wireless UWB backbone ($< 0.4\,\text{ms}$) connects across the center console directly to the Front Node.
+* **Standard External Antenna: 868 MHz Miniature Magnetic Roof Mount:**
+  * Pierce the $0.4\,\text{mm}$ rear knockout membrane on the Central Box and mount an IP67 SMA bulkhead pigtail to `ANT1` on `PCBA 01`.
+  * Place the rubberized $\varnothing 30\,\text{mm}$ mini magnetic base on the vehicle roof (car roof acts as a $+3\,\text{dBi}$ RF ground plane).
+  * Route the $2.5\,\text{m}$ thin RG-174 coaxial cable under floor carpet to the rear and exit through the elastic tailgate rubber weatherstrip (seals 100% wind- and watertight).
+  * **Range Benefit:** Guarantees $15\dots 25\,\text{km}$ real-world LoRa range to the motorcycle group over mountain ridges (completely overcoming the $20\dots 30\,\text{dB}$ Faraday attenuation of the vehicle body).
+* **Power Supply & Telemetry:**
+  * Parallel 12V power via pre-molded 12V Y-adapter harness to 12V cigarette lighter socket or ignition KL15 fuse tap.
+  * Vehicle telemetry (speed, fuel level, coolant temp) via wireless BLE OBD2 dongle (vGate / OBDLink) or hardwired OBD2 right-angle cable into the Vehicle Satellite.
+
 
 ---
 

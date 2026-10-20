@@ -267,9 +267,11 @@ All enclosure parts are strictly engineered according to the **IKEA Principle**:
 * **Optional Bobber & Custom Bike Parts:**
   * `radar_center_underfender_mount.stl` (1 pc): Stealth Center Under-Fender Mount with 46 mm drop and integrated 42 mm tire roost deflector shield.
   * `radar_swivel_tilt_cradle.stl` (1 pc): Heavy-duty swivel tilt cradle with 2x M4 screws.
-* **Kit 4: Support Car / Van Convoy Kit (Car-Kit):**
+* **Kit 4: Support Car / Van Convoy Kit (Car-Kit / Reference Kit 5):**
   * `car_sun_visor_pod_clip.stl` (2 pcs): Quick-release spring clips for secure, vibration-free mounting of Pod 1 and Pod 2 to the sun visors in chase car or van (driver and passenger side).
-  * `car_dashboard_wedge_dock.stl` (1 pc): Dual-stack dashboard dock for Front Node (bottom, clear sky GNSS view) and Central Box (top, 15° tilted).
+  * `cockpit_breakout_block.stl` (1 pc) & `vehicle_breakout_block.stl` (1 pc): Form-fitting satellite breakout blocks for center console / armrest (cockpit) and door sill / rocker trim (vehicle).
+  * `car_dashboard_wedge_dock.stl` (Optional / Legacy): Optional dashboard shelf dock if temporary non-under-seat placement is preferred. (Standard deployment is concealed under-seat installation).
+
 
 ---
 
@@ -303,6 +305,7 @@ For bench testing without a bike harness, or mobile operation in chase vans, the
 4. **Environmental Sensors (Vehicle Satellite I2C Daisy-Chain):**
    * **TI TMP117:** High-precision temperature sensor ($\pm 0.1\,^\circ\text{C}$) for black ice early warning.
    * **TI OPT3001:** Ambient light sensor for display and driving light control.
+5. **868 MHz Miniature Magnetic Roof Mount Antenna (1 pc, Default in Car Kit):** Compact $\varnothing 30\,\text{mm}$ magnetic base with 8 cm stainless whip (+3.0 dBi) and $2.5\,\text{m}$ RG-174 coaxial cable (SMA male) for scratch-free roof mounting (overcoming 20-30 dB chassis attenuation). Complemented by a $100\,\text{mm}$ IP67 SMA female to U.FL bulkhead pigtail with O-ring for Central Box rear knockout.
 
 ### 11.4 Internal COTS Cable Set & Pigtails for Front Node & Periphery
 
@@ -310,7 +313,8 @@ For all interconnections between the hermetic IP68 Front Node, the modular satel
 
 | Function / Assembly | Header on PCB | Connector Type & Pitch | Mating End / Enclosure Outlet | Length | Sourcing / Model |
 | :--- | :--- | :--- | :--- | :---: | :--- |
-| **Cockpit Main Harness** | Front Node `J_COCKPIT` | 16-Pin Dual-Row (2.0 mm Latch) | Cockpit Satellite (`cockpit_breakout_block`) | 50 cm | Shielded 16-conductor round cable (Ø 6.0 mm) with TPU seal |
+| **Cockpit Main Harness (Motorcycle)** | Front Node `J_COCKPIT` | 16-Pin Dual-Row (2.0 mm Latch) | Cockpit Satellite (`cockpit_breakout_block`) | 50 cm | Shielded 16-conductor round cable (Ø 6.0 mm) with TPU seal |
+| **Cockpit Harness (Car-Kit)** | Front Node `J_COCKPIT` | 16-Pin Dual-Row (2.0 mm Latch) | Cockpit Satellite in center console / armrest | 75 cm | High-flexibility 16-conductor drag-chain cable (compensates for 25 cm seat travel) |
 | **Vehicle Main Harness** | Front Node `J_VEHICLE` | 12-Pin Dual-Row (2.0 mm Latch) | Vehicle Satellite (`vehicle_breakout_block`) | 40 cm | Shielded 12-conductor round cable (Ø 6.5 mm) with TPU seal |
 | **Smartphone Charge Cable** | Cockpit Satellite Port 1 | Standard USB-C Plug | Smartphone on handlebar (with 3D strain-relief clamp) | 20–30 cm | Standard COTS USB-C to USB-C cable (angled/braided) |
 | **CP2AA Wireless Dongle** | Cockpit Satellite Port 2 | USB-C or USB-A Socket | Ottocast / Carlinkit dongle in fairing | 15 cm | COTS USB cable with anti-vibration clamp |
@@ -440,6 +444,7 @@ For standalone helmet operation of both intercom modules (**PCBA 09: OMM 2.4 GHz
 | **u-blox SAM-M10Q Multi-GNSS Module** | 15x15 mm Keramik-Patchantenne, Qwiic I2C | SparkFun / u-blox | 1 pcs | Satellite navigation on 5-port Vehicle Satellite with clear zenith view |
 | **OMM 2.4 GHz Stubby Antenna** | 2.4 GHz Rubber-Duck (38 mm, SMA-Male, +2.5 dBi omni) | COTS Standard | 1 pcs | Compact helmet stubby antenna for PCBA 09 (zero buffeting or wind noise) |
 | **Taoglas FXP524 V2X Flex Antenna** | 5.9 GHz Flex-Patch (+3.5 dBi) mit U.FL Buchse (50 mm) | Taoglas / Mouser | 1 pcs | Car-to-X / ITS-G5 RF uplink for ESP32-C5 sub-MCU on PCBA 08 |
+| **Taoglas FXP73 2.4 GHz FPC Flex Antenna** | 2.4 GHz FPC Klebeantenne (+2.5 dBi) mit U.FL (50 mm) | Taoglas / Mouser | 1 pcs | Internal antenna along cartridge sled cavity for sealed pod operation |
 | **Taoglas FXP895 LoRa Flex Antenna** | 868 MHz Flex-Dipol (+2.0 dBi) U.FL (100 mm) | Taoglas / Mouser | 1 pcs | Long-range convoy mesh for SX1262 LoRa in Central Box lid cavity |
 | **Taoglas FXUWB10 UWB Flex Antenna** | 6.5 GHz Ch. 5 Flex-Patch mit 20 mm U.FL Koaxialkabel | Taoglas / Mouser | 5 pcs | Wireless UWB 6.5 GHz backbone (Central Box, Front Node, Cartridges, Radar) |
 | **COTS USB-C Smartphone Cable** | Standard USB-C auf USB-C Kabel (20-30 cm, gewinkelt/geflochten) | Amazon / COTS | 1 pcs | Connection from Cockpit Satellite to smartphone with strain relief |

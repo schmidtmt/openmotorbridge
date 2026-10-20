@@ -401,20 +401,34 @@ Erst wenn alle 4 Checks grün leuchten, die Gehäusedeckel mit den M3-Schrauben 
   * Das vormontierte Radar 2.0 Gehäuse mit `radar_swivel_tilt_cradle.stl` in die Clevis-Gabel einschieben, Neigungswinkel ausrichten und mit M5 $\times$ 25 mm Klemmschraube formschlüssig in die Hirth-Verzahnung spannen.
   * Der integrierte $45^\circ$-Abweiserkeil schützt das Gelenk und das M8-Kabel wirksam gegen Schotterschlag von grobstolligen Enduro-Hinterreifen.
 
-### 5.3 Begleitfahrzeug- & Autokolonnen-Installation (Support-Car / Van)
+### 5.3 Begleitfahrzeug- & Autokolonnen-Installation (Support-Car / Van / Referenz-Kit 5)
+
 * **Pod 1 & Pod 2:** Werden mit je einem Schnellwechsel-Clip ([`car_sun_visor_pod_clip.stl`](../../hardware/cad/stl/05_accessories/car_sun_visor_pod_clip.stl)) an Fahrer- und Beifahrer-Sonnenblende geklemmt.
   * Modus A (Begleitfahrzeug für Bike-Gruppe): Pod 1 = Sena SPIDER X Slim, Pod 2 = Cardo Packtalk Edge.
+  * Modus B (Reine Auto-Kolonne / Offroad): Pod 1 = OMM 2.4 GHz, Pod 2 = Midland PMR446.
   * 2-poliges 5V DC-Stromkabel verdeckt in der Dachhimmel- und A-Säulen-Gummidichtung zur Mittelkonsole verlegen.
-* **Zentralbox & Front-Knoten (Doppelgehäuse / Stack-Dock):**
-  * Für den sauberen Einsatz im Pkw/Van werden Front-Knoten (unten) und Zentralbox (oben) in einem formschlüssigen **Doppelgehäuse (`car_dashboard_wedge_dock.scad`)** gestackt auf der Mittelkonsole oder dem Armaturenbrett platziert.
-  * **Energie- & Stromversorgungskonzept (über das 12V Y-Adapterkabel, siehe Kap. 4.0):**
-    * **Option A (Zigarettenanzünder / 12V Bordsteckdose):** 12V Speisung über das vorkonfektionierte 12V-Y-Adapterkabel ("Bench & Support-Car Harness"):
-      * **Abzweig A (JST-JWPF 2-Pin):** Speist Port `J1` des Front-Knotens. Dessen interne Buck-Wandler versorgen die Sonnenblenden-Pods mit 5V VBUS sowie Smartphones via Dual 20W USB-PD / Qi.
-      * **Abzweig B (Deutsch DTM-12):** Speist Port `J1` der Zentralbox (Pins 1+2 KL30/KL15, Pin 3 GND). Der interne LM5164-Q1 versorgt Zentralbox und USV mit vollem Ladestrom.
-    * **Option B (Fahrerfußraum Zündungsplus):** Feste 2-Draht-Verkabelung an Klemme 15 (KL15 Zündungsplus + Karosserie-GND) im Sicherungskasten/Fußraum auf den Eingang des Y-Adapterkabels (strikt kein Dauerplus KL30 ohne Ruhestrom-Abschaltung).
-* **SAM-M10Q GNSS:** Auf dem Armaturenbrett hinter der Windschutzscheibe (über Qwiic-Kabel an Front-Node Port `J12`).
-* **Audio- & Infotainment-Integration:** Direkte USB-C Datenverbindung von der Zentralbox zur USB-Media-Buchse des Fahrzeugs. Startet kabelgebundenes Apple CarPlay / Android Auto, spiegelt die PWA-Navigation auf das Fahrzeug-Display und gibt Funkdurchsagen über das Pkw-Soundsystem aus.
-* **Telemetrie:** Drahtloser BLE-OBD2 Dongle im Fahrerfußraum (oder direkter 16-Pin OBD-Port).
+* **Ergonomische Unter-Sitz-Topologie (Zero-Clutter & Hitzeschutz):**
+  * **Front-Node (`PCBA 05`) unterm Fahrersitz:**
+    * Flach mit Klettband oder Kabelbindern am Sitzuntergestell fixieren.
+    * **Kreuzungsfreie Flanken-Orientierung:**
+      * **Südflanke (`J_COCKPIT`):** Weist nach innen zur Mittelkonsole. Das $75\,\text{cm}$ geschirmte Schleppkettenkabel wird mit Zugentlastungsschelle am beweglichen Sitzrahmen befestigt, sodass die $20\dots 25\,\text{cm}$ Sitzlängsverstellung vollständig ohne Zugspannung abgefahren werden kann.
+      * **Nordflanke (`J_VEHICLE`):** Weist nach außen zur Einstiegsleiste/Türholm in den Fahrerfußraum zum Fahrzeug-Satelliten (`vehicle_breakout_block.stl`).
+  * **Cockpit-Satellit (`PCBA 05B`) in der Mittelkonsole / Armlehne:**
+    * Im Ablagefach der Mittelarmlehne oder im Mitteltunnel platziert.
+    * **Lösung des OEM-USB-Stromproblems (20W Ottocast-Bypass):** Schwache Pkw-Headunit-USB-Ports (oft nur $\sim 500\,\text{mA}$) lassen Wireless CarPlay-Dongles (Ottocast / Carlinkit) bei Spitzenlast abstürzen. Am Cockpit-Satelliten wird der Dongle / das Telefon über Port `[ FAST CHARGE / DONGLE ]` direkt vom 12V-Schaltregler (`SC8102`) des Front-Nodes mit sauberen 20W USB-PD / 5V 3A versorgt. Die reine Datenleitung `[ HOST ]` führt zum USB-Media-Port des Fahrzeug-Infotainments.
+    * **PTT-Taster:** Externer Taster am Schalthebel oder Handbremsgriff wird an Klemme `J6` des Cockpit-Satelliten angeschlossen.
+  * **Zentralbox (`PCBA 01`) unterm Beifahrersitz:**
+    * Im thermisch kühlen Fußraum unter dem Beifahrersitz platziert ($< 35^\circ\text{C}$ statt $85\dots 95^\circ\text{C}$ Hitzestau auf dem Armaturenbrett), schützt den LiPo-USV-Akku vor Hitzealterung.
+    * Die UWB-Verbindung ($< 0{,}4\,\text{ms}$) koppelt drahtlos quer durch den Mitteltunnel direkt mit dem Front-Node.
+* **Standard-Außenantenne: 868-MHz-Miniatur-Magnetfuß auf dem Dach:**
+  * Rückseitige $0{,}4\,\text{mm}$ Knockout-Membran der Zentralbox durchstoßen und IP67 SMA-Einbaupigtail zu `ANT1` auf `PCBA 01` montieren.
+  * Gummierter $\varnothing 30\,\text{mm}$ Mini-Magnetfuß kratzfrei auf das Fahrzeugdach setzen (Dach fungiert als $+3\,\text{dBi}$ Groundplane).
+  * Das $2{,}5\,\text{m}$ dünne RG-174 Koaxialkabel unterm Teppich nach hinten führen und durch die elastische Gummidichtung der Heckklappe nach außen legen (schließt absolut wind- und wasserdicht).
+  * **Reichweitenvorteil:** Garantiert $15\dots 25\,\text{km}$ echte LoRa-Reichweite zur Motorradgruppe über Berge hinweg (überwindet die $20\dots 30\,\text{dB}$ Faradaysche Dämpfung der Blechkarosserie).
+* **Stromversorgung & Telemetrie:**
+  * Parallele 12V Speisung über das vorkonfektionierte 12V Y-Adapterkabel an 12V Zigarettenanzünder oder Zündungsplus (KL15) im Fahrerfußraum.
+  * Pkw-Telemetrie (Geschwindigkeit, Tankstand, Kühlmitteltemperatur) wahlweise über drahtlosen BLE-OBD2 Dongle (vGate / OBDLink) oder kabelgebundenen OBD2-Winkelstecker am Fahrzeug-Satelliten.
+
 
 ---
 

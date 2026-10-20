@@ -56,9 +56,9 @@ Klassische Motorrad-Kommunikationssysteme sind historisch stark fragmentiert:
 +-------------------------------------------------------------------------------------------+
 | 8. BEGLEITFAHRZEUG- & KOLONNEN-TOPOLOGIE (Pkw / Support-Van / Rallye / Wohnmobil):        |
 | * 2 Pods an 2 Sonnenblenden: Fahrer Pod 1, Beifahrer Pod 2 (Sena/Cardo oder OMM/Midland)  |
-| * Front-Node mit SAM-M10Q flach auf dem Armaturenbrett (100 % freie GNSS-Sicht)           |
-| * Zentralbox mit 12V-Lader & UWB-Link * Null externe Antennen (keine Bruch-/Knickgefahr)  |
-+-------------------------------------------------------------------------------------------+
+| * Front-Node unterm Fahrersitz (Cockpit-Satellit zur Konsole, GNSS-Satellit zum Scheibenrand) |
+| * Zentralbox unterm Beifahrersitz; Externe 868-MHz-Magnetfuß-Dachantenne als Default      |
+| * 75 cm Schleppketten-Kabel zum Cockpit-Breakout (20W USB-PD Lade-Bypass für Ottocast/Tel) |
 +-------------------------------------------------------------------------------------------+
 ```
 
@@ -118,11 +118,14 @@ OpenMotorBridge v8.0 definiert die Plattform über **standardisierte Funktionskn
 > * **Referenz-Kit 3 (Classic Bagger & Cruiser - Street Glide / Electra Glide):** Pod 1 & 2 in den Kofferdeckeln, Front-Node in der Batwing-Verkleidung, Zentralbox unter dem Sitz, optionales Radar unter dem Kennzeichen an Peitsche 3.
 > * **Referenz-Kit 4 (Adventure & Touring Enduros - BMW GS, KTM Adventure, Africa Twin):** Pod 1 & 2 werden **strikt fahrzeugfest am Motorrad** montiert: Entweder am Rohr-Kofferträger über das geschützte Heavy-Duty GSA Cage Dock ([`adventure_gsa_cage_dock.scad`](../../hardware/cad/scad/02_pod_base/adventure_gsa_cage_dock.scad)) im $45\,\text{mm}$ Totraum zwischen Kofferinnenwand und Rahmen, oder in der Sitzbank-Bügelfalte über das aerodynamische Transition Dock ([`adventure_transition_dock.scad`](../../hardware/cad/scad/02_pod_base/adventure_transition_dock.scad)). *(Strikte HF-Regel: Eine Montage im Inneren von Aluminium-Koffern ist physikalisch verboten, da Aluminium als Faradayscher Käfig 2,4-GHz- und UWB-Signale vollständig blockiert!).* Front-Node an der Navigationsstrebe hinter dem Windschild (freie GNSS-Sicht). Am Heckträger sitzt lediglich der schlanke, rein **optionale Radarträger** ([`adventure_rack_radar_mount.stl`](../../hardware/cad/stl/02_pod_base/adventure_rack_radar_mount.stl)) an Peitsche 3 - wer kein Radar fährt, montiert am Heck **überhaupt nichts**!
 > * **Referenz-Kit 5 (Pkw / Support-Van / Rallye-Begleitfahrzeug / Wohnmobil):** 
->   * **2 Pods an 2 Sonnenblenden:** Fahrer-Sonnenblende = Pod 1, Beifahrer-Sonnenblende = Pod 2.
+>   * **2 Pods an 2 Sonnenblenden:** Fahrer-Sonnenblende = Pod 1, Beifahrer-Sonnenblende = Pod 2 via werkzeugloser Klemmen ([`car_sun_visor_pod_clip.stl`](../../hardware/cad/stl/05_accessories/car_sun_visor_pod_clip.stl)) mit freier Abstrahlung durch die Windschutzscheibe.
 >     - *Modus A (Begleitfahrzeug Motorrad-Tour):* Pod 1 Sena SPIDER X Slim, Pod 2 Cardo Packtalk Edge oder Midland PMR446.
 >     - *Modus B (Reine Auto-Kolonne / Offroad / Camper):* Pod 1 OMM 2.4 GHz Wechselkassette (HD-Audio-Mesh zwischen OMB-Fahrzeugen), Pod 2 Midland PMR446 Wechselkassette (Jedermann-Funk zu LKW, Streckenposten).
 >     - *Modus C (Hybrid-Lead & OMM-Anchor):* Pod 1 OMM 2.4 GHz Wechselkassette (verbindet alle OMB-Bikes), Pod 2 Sena oder Cardo für Gastfahrer.
->   * **Armaturenbrett:** Front-Node mit u-blox SAM-M10Q flach an der Frontscheibe (100 % freie Sicht zum Himmel); Zentralbox auf vibrationsgedämpfter Keilaufnahme ([`car_dashboard_wedge_dock.stl`](../../hardware/cad/stl/05_accessories/car_dashboard_wedge_dock.stl)) mit 12V Zigarettenanzünder-PD-Speisung; drahtlose UWB-Verbindung zur Front; **null externe Antennen** (keine Knick-/Bruchgefahr beim Sonnenblenden-Kappen).
+>   * **Ergonomische Unter-Sitz-Topologie (Zero-Clutter):** Front-Node (`PCBA 05`) unterm Fahrersitz, Cockpit-Satellit (`PCBA 05B`) in der Mittelkonsole/Armlehne via $75\,\text{cm}$ Schleppkettenkabel (löst schwache OEM-USB-Probleme durch 20W USB-PD Lade-Bypass für Ottocast/Smartphones), Fahrzeug-Satellit am Türholm in den Fahrerfußraum.
+>   * **Zentralbox unterm Beifahrersitz:** Im thermisch kühlen Fußraum (schützt LiPo-USV); drahtloses UWB-Backbone quer durch die Sitzreihe.
+>   * **Externe 868-MHz-Magnetfuß-Dachantenne (Default):** Kompakter $\varnothing 30\,\text{mm}$ Mini-Magnetfuß auf dem Dach mit $2{,}5\,\text{m}$ RG-174 Koaxialkabel durch die Heckklappendichtung; Karosseriedach als HF-Groundplane liefert $15\dots 25\,\text{km}$ LoRa-Reichweite zur Motorradgruppe.
+
 
 ### 2.1 Whitepaper-Entwurfsentscheidung: Dezentrale Satelliten-Topologie vs. Monolithische Single-Box
 
@@ -402,19 +405,23 @@ Der Front-Knoten (PCBA 05) dient auf **allen Motorrädern** als universeller Coc
       - **Modus B (Reiner Pkw-/Camper-Konvoi & Rallye-Orga):** Pod 1 mit OMM 2.4 GHz Kassette (OpenMotorMesh), Pod 2 mit Midland PMR446 Kassette für universellen Jedermannfunk.
       - **Modus C (Hybrid-Lead & OMM-Anchor):** Pod 1 mit OMM 2.4 GHz Kassette (verbindet alle OMB-Bikes im Konvoi), Pod 2 wahlweise Sena oder Cardo für Gastfahrer.
     * **Audio-Integration im Pkw (Headset-frei & Freisprech-Komfort):**
-      - **Option 1 (Pkw-Freisprecheinrichtung via Qualcomm QCC3084):** Die Zentralbox auf dem Dashboard koppelt sich per Bluetooth (HFP 1.8 / A2DP) vollautomatisch als Mobiltelefon mit der Pkw-Freisprechanlage. Die Fahrzeuginsassen hören den Gruppenfunk glasklar über die Autolautsprecher und sprechen freihändig über das Pkw-Dachmikrofon!
-      - **Option 2 (Apple CarPlay / Android Auto Audio-In/Out):** Bei USB-C Verbindung spiegelt die Zentralbox das PWA-Dashboard auf den großen Auto-Bildschirm und leitet Sprache latenzfrei über die USB-Audioschnittstelle.
-      - **Option 3 (Autarkes OMM-Handgerät / Tischmikrofon):** Ein autarkes OMM 2.4 GHz Modul mit Schwanenhals-Mikrofon oder PTT-Taste liegt griffbereit auf der Mittelkonsole für den Beifahrer / Tourguide.
-  * **Zentralbox-Docking & Dashboard-GNSS:**
-    * Die Zentralbox ruht auf dem Armaturenbrett in der vibrationsdämpfenden Keilaufnahme ([`car_dashboard_wedge_dock.stl`](../../hardware/cad/stl/05_accessories/car_dashboard_wedge_dock.stl)).
-    * Das u-blox SAM-M10Q Multi-GNSS-Modul sitzt mit optimaler Zenith-Sicht direkt unter der Windschutzscheibe auf dem Dashboard.
-    * Der LoRa 868 MHz Transceiver (Semtech SX1262) arbeitet mit der integrierten Taoglas FXP895 Flexantenne im Gehäusedeckel der Zentralbox - keine Außenantennen nötig.
-    * Die Stromversorgung erfolgt werkzeuglos über den 12V/24V-Zigarettenanzünder-Adapter (30W USB-PD).
-  * **Verdeckte A-Säulen-Verkabelung:**
-    * Ultraflache USB-C Flachbandkabel verlaufen unsichtbar hinter der Gummidichtung der A-Säulen direkt zu den beiden Sonnenblenden.
-  * **Drahtlose Pkw-Telemetrie via Bluetooth-OBD2 (ELM327 / vGate):**
-    * Die Zentralbox koppelt sich autark via Bluetooth 5.0 (BLE) mit einem kompakten OBD2-Dongle im Fahrerfußraum.
-    * Pkw-Daten (Geschwindigkeit, Drehzahl, Tankfüllstand, Motortemperatur) werden autark ins 868-MHz-LoRa-Mesh übertragen - ohne Kabel im Fußraum und ohne Abhängigkeit von einer App auf dem Smartphone/Tablet.
+      - **Option 1 (Pkw-Freisprecheinrichtung via Qualcomm QCC3084):** Die Zentralbox unterm Sitz koppelt sich per Bluetooth (HFP 1.8 / A2DP) vollautomatisch als Mobiltelefon mit der Pkw-Freisprechanlage. Die Fahrzeuginsassen hören den Gruppenfunk glasklar über die Autolautsprecher und sprechen freihändig über das Pkw-Dachmikrofon!
+      - **Option 2 (Apple CarPlay / Android Auto Audio-In/Out & 20W Ottocast-Bypass):** Über den Cockpit-Satelliten (`PCBA 05B`) in der Mittelkonsole wird der Wireless-CarPlay-Adapter (Ottocast / Carlinkit) oder das Smartphone mit sauberen 20W USB-PD / 5V 3A vom 12V-Schaltregler des Front-Nodes versorgt (behebt die berüchtigten Bootloops durch schwache OEM-USB-Buchsen). Die reine USB-Datenleitung (`[ HOST ]`) spiegelt das PWA-Dashboard auf den großen Auto-Bildschirm.
+      - **Option 3 (Autarkes OMM-Handgerät / Tischmikrofon):** Ein autarkes OMM 2.4 GHz Modul mit Schwanenhals-Mikrofon oder PTT-Taste liegt griffbereit auf der Mittelkonsole für den Beifahrer / Tourguide (angeschlossen an Port `J6` des Cockpit-Satelliten).
+  * **Ergonomische Unter-Sitz-Topologie (Zero-Clutter & Thermoschutz):**
+    * **Front-Node (`PCBA 05`) unterm Fahrersitz:** Entspanntes Kabelrouting dank getrennter Stirnseiten: Südflanke (`J_COCKPIT`) führt über ein $75\,\text{cm}$ hochflexibles Schleppkettenkabel nach innen in die Mittelkonsole zum Cockpit-Satelliten (`PCBA 05B`), gleicht $20\dots 25\,\text{cm}$ Sitzlängsverstellung voll aus. Nordflanke (`J_VEHICLE`) führt nach außen zur Einstiegsleiste/Türholm in den Fahrerfußraum.
+    * **Zentralbox (`PCBA 01`) unterm Beifahrersitz:** Im kühlsten Bereich des Fahrzeugs ($< 35^\circ\text{C}$ statt $85\dots 95^\circ\text{C}$ Hitzestau auf dem Armaturenbrett), schützt den internen LiPo-USV-Akku vor vorzeitiger Alterung. Drahtlose UWB-Verbindung ($< 0{,}4\,\text{ms}$) quer durch die Sitzreihe zum Front-Node.
+    * **SAM-M10Q GNSS-Puck:** Unauffällig an der Windschutzscheibenecke über den Fahrzeug-Satelliten angebunden.
+  * **Externe 868-MHz-Magnetfuß-Dachantenne als Default (15–25 km LoRa-Reichweite):**
+    * Im geschlossenen Stahlblech-Pkw dämpft die Karosserie Funkwellen im Innenraum um $20\dots 30\,\text{dB}$ (Faradayscher Käfig).
+    * Referenz-Kit 5 beinhaltet daher standardmäßig einen kompakten $\varnothing 30\,\text{mm}$ Mini-Magnetfuß auf dem Dach mit $2{,}5\,\text{m}$ dünnem RG-174 Koaxialkabel, das verdeckt durch die elastische Gummidichtung der Heckklappe geführt wird.
+    * Das Metalldach dient als $360^\circ$ Groundplane ($+3\,\text{dBi}$ Gewinn) und garantiert $15\dots 25\,\text{km}$ echte LoRa-Reichweite zur Motorradgruppe über Täler und Pässe hinweg.
+  * **Verdeckte Kabelverlegung & Stromversorgung:**
+    * Stromversorgung von Front-Node und Zentralbox erfolgt über das 12V Y-Adapterkabel an 12V-Zigarettenanzünder oder Zündungsplus (KL15).
+    * Flache USB-C Kabel zu den Sonnenblenden-Pods verlaufen unsichtbar hinter den Gummidichtungen der A-Säulen.
+  * **Drahtlose oder kabelgebundene Pkw-Telemetrie:**
+    * Wahlweise drahtlos via Bluetooth 5.0 (BLE) mit einem kompakten OBD2-Dongle (vGate / OBDLink) im Fahrerfußraum oder kabelgebunden über den 12-Pin Fahrzeug-Satelliten.
+    * Pkw-Daten (Geschwindigkeit, Drehzahl, Tankfüllstand, Motortemperatur) werden autark ins 868-MHz-LoRa-Mesh übertragen - ohne Smartphone-Abhängigkeit.
 * **Live-Gruppenüberwachung ohne Mobilfunknetz (PWA Fleet Dashboard):**
   * Auf einem im Pkw montierten iPad oder Android-Tablet läuft das PWA-Dashboard im Offline-Kartenmodus.
   * Über das 868 MHz LoRa-Mesh empfängt das Begleitfahrzeug im Sekundentakt Telemetriedaten (Position, Geschwindigkeit, SOS-/Sturzalarm, Reifendruck, Außentemperatur) aller Motorräder im Umkreis von bis zu $15\,\text{km}$ - autark, robust und vollkommen unabhängig von Mobilfunkmasten.

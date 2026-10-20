@@ -545,17 +545,19 @@
       "id": "assembly_bike_car_support",
       "category": "bike_kit",
       "name": {
-        "de": "Montagekit: Support-Fahrzeug / PKW / Van",
-        "en": "Mount Kit: Support Vehicle / Car / Van"
+        "de": "Montagekit: Support-Fahrzeug / PKW / Van (Referenz-Kit 5)",
+        "en": "Mount Kit: Support Vehicle / Car / Van (Reference Kit 5)"
       },
       "desc": {
-        "de": "Armaturenbrett-Doppelaufnahme für Front-Node & Zentralbox mit 12V Y-Kabel & CarPlay-Kabel",
-        "en": "Dashboard dual-stack dock for Front Node & Central Box with 12V Y-cable & CarPlay cable"
+        "de": "Unter-Sitz-Kabelbaum & Cockpit-Verteiler für Front-Node & Zentralbox mit 75 cm Schleppkettenkabel, 12V Y-Kabel, CarPlay-Kabel & 868 MHz Magnetfuß-Dachantenne",
+        "en": "Under-seat harness & cockpit breakout for Front Node & Central Box with 75 cm drag-chain cable, 12V Y-cable, CarPlay cable & 868 MHz magnetic roof antenna"
       },
       "parts": [
-        { "part_id": "part3d_car_dashboard_dock", "qty": 1 },
+        { "part_id": "cable_cockpit_breakout_75cm_car", "qty": 1 },
         { "part_id": "cable_support_car_12v_y", "qty": 1 },
-        { "part_id": "cable_usbc_carplay_data", "qty": 1 }
+        { "part_id": "cable_usbc_carplay_data", "qty": 1 },
+        { "part_id": "antenna_lora_car_roof_magnetic", "qty": 1 },
+        { "part_id": "cable_sma_pigtail_central_box", "qty": 1 }
       ]
     },
     "assembly_bike_car_support_pods": {

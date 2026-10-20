@@ -278,9 +278,10 @@ Alle Gehäuseteile sind konsequent für das **IKEA-Prinzip** konstruiert: **Kein
 * **Optionale Bobber & Custom-Kit Teile:**
   * `radar_center_underfender_mount.stl` (1 Stk.): Stealth Center Under-Fender Mount mit $46\,\text{mm}$ Tiefgang und integriertem $42\,\text{mm}$ Spritzwasser-Schmutzfänger-Spoiler.
   * `radar_swivel_tilt_cradle.stl` (1 Stk.): Schwerlast-Neigegelenk mit 2x M4-Verschraubung.
-* **Kit 4: Support-Car / Begleitfahrzeug Kolonnen-Kit (Car-Kit):**
-  * `car_sun_visor_pod3_clip.stl` (2 Stk.): Schnellwechsel-Spannclips zur vibrationsfreien Befestigung von Pod 1 und Pod 2 an den beiden Sonnenblenden im Pkw/Van (Fahrer- und Beifahrerseite).
-  * `car_dashboard_wedge_dock.stl` (1 Stk.): Zweistufige Armaturenbrett-Doppelaufnahme (Dual-Stack Dock) zur formschlüssigen, vibrationsgedämpften Aufnahme von Front-Knoten (unten, freie GNSS-Sicht) und Zentralbox (oben, 15° geneigt).
+* **Kit 4: Support-Car / Begleitfahrzeug Kolonnen-Kit (Car-Kit / Referenz-Kit 5):**
+  * `car_sun_visor_pod_clip.stl` (2 Stk.): Schnellwechsel-Spannclips zur vibrationsfreien Befestigung von Pod 1 und Pod 2 an den beiden Sonnenblenden im Pkw/Van (Fahrer- und Beifahrerseite).
+  * `cockpit_breakout_block.stl` (1 Stk.) & `vehicle_breakout_block.stl` (1 Stk.): Formschlüssige Satelliten-Gehäuse für Mittelkonsole / Armlehne (Cockpit) und Schweller / Einstiegsleiste (Fahrzeug).
+  * `car_dashboard_wedge_dock.stl` (Optional / Legacy): Optionale Armaturenbrett-Ablageaufnahme, falls temporär kein Unter-Sitz-Einbau gewünscht wird. (Standard ist die verdeckte Unter-Sitz-Montage).
 
 ---
 
@@ -325,13 +326,16 @@ Für Laborprüfungen (Tisch-Inbetriebnahme ohne Motorrad-Kabelbaum) sowie den mo
 3. **Multi-GNSS Modul (1 Stk.):** **u-blox SAM-M10Q** mit integrierter $15 \times 15\,\text{mm}$ Keramik-Patchantenne, angebunden am 5. Port des Fahrzeug-Satelliten (`[ GNSS / CLIMATE PUCK ]`).
 4. **Umgebungssensoren (Fahrzeug-Satellit I2C Daisy-Chain):**
    * **TI TMP117:** Hochpräziser Temperatursensor ($\pm 0{,}1\,^\circ\text{C}$) für Glatteis-Frühwarnung.
+5. **868-MHz-Miniatur-Magnetfuß-Dachantenne (1 Stk., Default im Car-Kit):** Kompakter $\varnothing 30\,\text{mm}$ Magnetfuß mit 8 cm Edelstahlstrahler (+3.0 dBi) und $2{,}5\,\text{m}$ RG-174 Koaxialkabel (SMA-Stecker) für kratzfreie Montage auf dem Fahrzeugdach (überwindet die 20-30 dB Karosseriedämpfung). Ergänzt durch ein $100\,\text{mm}$ IP67 SMA-auf-U.FL Einbau-Pigtail mit O-Ring für den rückseitigen Knockout der Zentralbox.
+
 ### 11.4 Internes COTS-Kabelset & Pigtails für Front-Node & Peripherie
 
 Für alle Verbindungen zwischen dem hermetischen IP68 Front-Node, den modularen Satelliten-Verteilern und der Peripherie kommen **ausschließlich industriell vorkonfektionierte COTS-Kabel (Plug & Play)** zum Einsatz. Es muss kein einziger Steckkontakt von Hand gecrimpt werden:
 
 | Funktion / Baugruppe | Header auf Platine | Steckertyp & Raster | Gegenstück / Gehäuseauslass | Länge | Bezugsquelle / Typ |
 | :--- | :--- | :--- | :--- | :---: | :--- |
-| **Cockpit-Hauptstrang** | Front-Node `J_COCKPIT` | 16-Pin Dual-Row (2.0 mm Latch) | Cockpit-Satellitenverteiler (`cockpit_breakout_block`) | 50 cm | Geschirmtes 16-adriges Rundkabel (Ø 6.0 mm) mit TPU-Dichtung |
+| **Cockpit-Hauptstrang (Motorrad)** | Front-Node `J_COCKPIT` | 16-Pin Dual-Row (2.0 mm Latch) | Cockpit-Satellitenverteiler (`cockpit_breakout_block`) | 50 cm | Geschirmtes 16-adriges Rundkabel (Ø 6.0 mm) mit TPU-Dichtung |
+| **Cockpit-Strang (Pkw-Kit)** | Front-Node `J_COCKPIT` | 16-Pin Dual-Row (2.0 mm Latch) | Cockpit-Satellit in Mittelkonsole / Armlehne | 75 cm | Hochflexibles 16-adriges Schleppkettenkabel (gleicht 25 cm Sitzverstellung aus) |
 | **Fahrzeug-Hauptstrang** | Front-Node `J_VEHICLE` | 12-Pin Dual-Row (2.0 mm Latch) | Fahrzeug-Satellitenverteiler (`vehicle_breakout_block`) | 40 cm | Geschirmtes 12-adriges Rundkabel (Ø 6.5 mm) mit TPU-Dichtung |
 | **Smartphone Ladekabel** | Cockpit-Satellit Port 1 | USB-C Stecker (COTS) | Smartphone am Lenker (mit 3D-Zugentlastungsklemme) | 20–30 cm | Handelsübliches USB-C auf USB-C Kabel (gewinkelt/geflochten) |
 | **CP2AA Wireless Dongle** | Cockpit-Satellit Port 2 | USB-C oder USB-A Buchse | Ottocast / Carlinkit Adapter im Cockpit | 15 cm | COTS USB-Kabel mit Rüttelsicherung |
@@ -496,6 +500,7 @@ Für den Standalone-Einsatz der beiden Intercom-Module (**PCBA 09: OMM 2.4 GHz H
 | **u-blox SAM-M10Q Multi-GNSS Modul** | 15x15 mm Keramik-Patchantenne, Qwiic I2C | SparkFun / u-blox | 1 Stk. | Satellitenortung am 5-Port Fahrzeug-Satelliten mit freier Sicht zum Zenit |
 | **OMM 2.4 GHz Stummelantenne** | 2.4 GHz Rubber-Duck (38 mm, SMA-Male, +2.5 dBi omni) | COTS Standard | 1 Stk. | Kompakte Helmmontage-Antenne für PCBA 09 (völlig flatter- & pfeiffrei) |
 | **Taoglas FXP524 V2X Flexantenne** | 5.9 GHz Flex-Patch (+3.5 dBi) mit U.FL Buchse (50 mm) | Taoglas / Mouser | 1 Stk. | Car-to-X / ITS-G5 Funk-Uplink für ESP32-C5 Sub-MCU auf PCBA 08 |
+| **Taoglas FXP73 2.4 GHz FPC Flexantenne** | 2.4 GHz FPC Klebeantenne (+2.5 dBi) mit U.FL (50 mm) | Taoglas / Mouser | 1 Stk. | Interne Antenne im Längsschacht des Kassetten-Schlittens für Pod-Betrieb |
 | **Taoglas FXP895 LoRa Flexantenne** | 868 MHz Flex-Dipol (+2.0 dBi) U.FL (100 mm) | Taoglas / Mouser | 1 Stk. | Weitbereichs-Kolonnenfunk für SX1262 LoRa in der Deckeltasche der Zentralbox |
 | **Taoglas FXUWB10 UWB Flexantenne** | 6.5 GHz Ch. 5 Flex-Patch mit 20 mm U.FL Koaxialkabel | Taoglas / Mouser | 5 Stk. | Drahtloses UWB 6.5 GHz Backbone (Zentralbox, Front-Node, Kassetten, Radar) |
 | **COTS USB-C Smartphone-Kabel** | Standard USB-C auf USB-C Kabel (20-30 cm, gewinkelt/geflochten) | Amazon / COTS | 1 Stk. | Verbindung von Cockpit-Satellit zum Smartphone mit Zugentlastung |

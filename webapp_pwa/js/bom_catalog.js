@@ -587,6 +587,28 @@ const BOM_PARTS = {
     "pkg_qty": 1,
     "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
   },
+  "part3d_main_box_battery_bridge": {
+    "type": "part_3d",
+    "name": {
+      "de": "Main Box Akkubrücke & Antennenträger",
+      "en": "Main Box Battery Bridge & Antenna Carrier"
+    },
+    "spec": "PA12-SLS / MJF, schwenkbare RC-Schnappbrücke, C-Clip Zugsicherung & Schutzblende",
+    "source": "3D-Druck (PA12-SLS)",
+    "unit": "Stk.",
+    "cost_eur": [
+      1.2,
+      2.5
+    ],
+    "desc": {
+      "de": "Schwenkbare Akkubrücke für vibrationsfesten Halt des 2.200 mAh LiPo sowie geschützte Aufnahme der Taoglas FXP895 LoRa & FXP73 2.4 GHz Antennen",
+      "en": "Hinged battery bridge for vibration-proof retention of 2200 mAh LiPo and protected housing of Taoglas FXP895 LoRa & FXP73 2.4 GHz antennas"
+    },
+    "file": "main_box_battery_bridge.stl",
+    "group": "Main Box",
+    "pkg_qty": 1,
+    "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
+  },
   "part3d_main_box_lid": {
     "type": "part_3d",
     "name": {
@@ -1602,10 +1624,10 @@ const BOM_PARTS = {
   "part3d_car_dashboard_dock": {
     "type": "part_3d",
     "name": {
-      "de": "PKW Armaturenbrett Doppelaufnahme",
-      "en": "Support-Car Dashboard Dock"
+      "de": "PKW Armaturenbrett Doppelaufnahme (Optional)",
+      "en": "Support-Car Dashboard Dock (Optional)"
     },
-    "spec": "PA12-SLS (Doppelkeil-Aufnahme)",
+    "spec": "PA12-SLS (Optionale Keil-Aufnahme)",
     "source": "3D-Druck (PA12-SLS)",
     "unit": "Stk.",
     "cost_eur": [
@@ -1613,8 +1635,8 @@ const BOM_PARTS = {
       4.8
     ],
     "desc": {
-      "de": "Armaturenbrett-Doppelaufnahme für Front-Knoten & Zentralbox im Van/PKW",
-      "en": "Dashboard dual-stack dock for Front Node & Central Box in support van"
+      "de": "Optionale Armaturenbrett-Ablageaufnahme für Front-Knoten & Zentralbox (Standard: Unter-Sitz-Montage)",
+      "en": "Optional dashboard shelf dock for Front Node & Central Box (Standard: Under-seat mounting)"
     },
     "file": "car_dashboard_wedge_dock.stl",
     "group": "PKW-Kit",
@@ -2113,6 +2135,26 @@ const BOM_PARTS = {
     "pkg_qty": 1,
     "pkg_name": "Taoglas COTS Antenne (Mouser)"
   },
+  "antenna_lora_car_roof_magnetic": {
+    "type": "antenna",
+    "name": {
+      "de": "868 MHz Magnetfuß-Dachantenne (Pkw-Kit)",
+      "en": "868 MHz Magnetic Roof Mount Antenna (Car Kit)"
+    },
+    "spec": "868 MHz Miniatur-Magnetfuß (Ø 30 mm, 8 cm Strahler, +3.0 dBi) mit 2.5 m RG-174 & SMA-Male",
+    "source": "COTS Standard",
+    "unit": "Stk.",
+    "cost_eur": [
+      6.5,
+      12.0
+    ],
+    "desc": {
+      "de": "Standard-Außenantenne für Referenz-Kit 5 (Pkw/Support-Van): Verhindert Faradaysche Dämpfung der Karosserie und bietet 15-25 km LoRa-Reichweite zur Motorradgruppe",
+      "en": "Standard external antenna for Reference Kit 5 (Car/Support-Van): Prevents Faraday chassis attenuation and provides 15-25 km LoRa range to the motorcycle group"
+    },
+    "pkg_qty": 1,
+    "pkg_name": "COTS 868 MHz Magnetfußantenne"
+  },
   "antenna_fxuwb10_uwb": {
     "type": "antenna",
     "name": {
@@ -2332,6 +2374,46 @@ const BOM_PARTS = {
     },
     "pkg_qty": 1,
     "pkg_name": "COTS Kabelbaum (Deutsch / MTA)"
+  },
+  "cable_cockpit_breakout_75cm_car": {
+    "type": "cable",
+    "name": {
+      "de": "Cockpit-Schleppkettenkabel 75 cm (Pkw-Kit)",
+      "en": "Cockpit Drag-Chain Cable 75 cm (Car Kit)"
+    },
+    "spec": "16-poliges geschirmtes Schleppkettenkabel (AWG26/28, hochflexibel) mit Dual-Row 2.0 mm Buchsen",
+    "source": "COTS Industrieware",
+    "unit": "Stk.",
+    "cost_eur": [
+      4.5,
+      8.5
+    ],
+    "desc": {
+      "de": "Verbindet Front-Node unterm Fahrersitz mit Cockpit-Satellit in Mittelkonsole; gleicht 25 cm Sitzlängsverstellung und Sitzbreite vollkommen aus",
+      "en": "Connects Front Node under driver seat to Cockpit Satellite in center console; compensates for 25 cm seat slide travel and seat width"
+    },
+    "pkg_qty": 1,
+    "pkg_name": "COTS 16-Pin Drag-Chain Harness"
+  },
+  "cable_sma_pigtail_central_box": {
+    "type": "cable",
+    "name": {
+      "de": "IP67 SMA-Buchse auf IPEX/U.FL Pigtail",
+      "en": "IP67 SMA Female to IPEX/U.FL Pigtail"
+    },
+    "spec": "RG-178 / 1.13 mm Pigtail (100 mm) mit O-Ring-Dichtung für Rückwand-Knockout",
+    "source": "COTS Standard",
+    "unit": "Stk.",
+    "cost_eur": [
+      1.2,
+      2.5
+    ],
+    "desc": {
+      "de": "Wasserdichte SMA-Gehäusedurchführung an der Rückseite der Zentralbox für externe 868 MHz Antenne",
+      "en": "Waterproof SMA bulkhead pass-through at rear of Central Box for external 868 MHz antenna"
+    },
+    "pkg_qty": 1,
+    "pkg_name": "COTS SMA Bulkhead Pigtail"
   },
   "cable_support_car_visor_dc": {
     "type": "cable",
@@ -2857,6 +2939,10 @@ const BOM_ASSEMBLIES = {
         "qty": 1
       },
       {
+        "part_id": "part3d_main_box_battery_bridge",
+        "qty": 1
+      },
+      {
         "part_id": "part3d_main_box_lid",
         "qty": 1
       },
@@ -2894,6 +2980,10 @@ const BOM_ASSEMBLIES = {
       },
       {
         "part_id": "antenna_fxp895_lora",
+        "qty": 1
+      },
+      {
+        "part_id": "antenna_taoglas_fxp73_24g",
         "qty": 1
       },
       {
@@ -3884,16 +3974,16 @@ const BOM_ASSEMBLIES = {
     "id": "assembly_bike_car_support",
     "category": "bike_kit",
     "name": {
-      "de": "Montagekit: Support-Fahrzeug / PKW / Van",
-      "en": "Mount Kit: Support Vehicle / Car / Van"
+      "de": "Montagekit: Support-Fahrzeug / PKW / Van (Referenz-Kit 5)",
+      "en": "Mount Kit: Support Vehicle / Car / Van (Reference Kit 5)"
     },
     "desc": {
-      "de": "Armaturenbrett-Doppelaufnahme für Front-Node & Zentralbox mit 12V Y-Kabel & CarPlay-Kabel",
-      "en": "Dashboard dual-stack dock for Front Node & Central Box with 12V Y-cable & CarPlay cable"
+      "de": "Unter-Sitz-Kabelbaum & Cockpit-Verteiler für Front-Node & Zentralbox mit 75 cm Schleppkettenkabel, 12V Y-Kabel, CarPlay-Kabel & 868 MHz Magnetfuß-Dachantenne",
+      "en": "Under-seat harness & cockpit breakout for Front Node & Central Box with 75 cm drag-chain cable, 12V Y-cable, CarPlay cable & 868 MHz magnetic roof antenna"
     },
     "parts": [
       {
-        "part_id": "part3d_car_dashboard_dock",
+        "part_id": "cable_cockpit_breakout_75cm_car",
         "qty": 1
       },
       {
@@ -3902,6 +3992,14 @@ const BOM_ASSEMBLIES = {
       },
       {
         "part_id": "cable_usbc_carplay_data",
+        "qty": 1
+      },
+      {
+        "part_id": "antenna_lora_car_roof_magnetic",
+        "qty": 1
+      },
+      {
+        "part_id": "cable_sma_pigtail_central_box",
         "qty": 1
       }
     ]
