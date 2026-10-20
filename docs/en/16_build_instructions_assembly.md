@@ -243,13 +243,12 @@ Both standalone modules (**PCBA 09: OMM 2.4 GHz HD-Mesh** and **PCBA 10: OMM 446
    * Snap UWB coax lead onto U.FL receptacle on `B.Cu`.
    * Secure board with 4x M2.5 screws.
 4. **Acoustic Membrane:** Stick hydrophobic Gore ePTFE membrane over the frontal acoustic port of the digital MEMS microphone (`MK1`).
-5. **Connect Harnesses (2-Strand Clean-Architecture):**
-   * **Cockpit Harness (`cable_cockpit_harness_16p`):** Snap 16-pin 2.0 mm latching connector onto `J_COCKPIT`. Route shielded round harness ($\varnothing 6.0\,\text{mm}$) through South TPU gland to **Cockpit Breakout Satellite** ([`cockpit_breakout_block.scad`](../../hardware/cad/scad/04_front_node/cockpit_breakout_block.scad)).
-   * **Vehicle Harness (`cable_vehicle_harness_12p`):** Snap 12-pin 2.0 mm latching connector onto `J_VEHICLE`. Route shielded round harness ($\varnothing 6.5\,\text{mm}$) through North TPU gland to **Vehicle Breakout Satellite** ([`vehicle_breakout_block.scad`](../../hardware/cad/scad/04_front_node/vehicle_breakout_block.scad)).
-6. **Seal Enclosure:**
-   * Insert TPU sealing combs into lower tub guide slots.
-   * Place silicone cord (Ø 1.5 mm Shore 40A, $30\,\text{cm}$) into lid groove.
-   * Seat lid and tighten 4x M3 $\times 20\,\text{mm}$ stainless steel bolts crosswise.
+5. **Connect Harnesses (U-Slot Drop-In & Split-Gland Assembly):**
+   * **Cockpit Harness (`cable_cockpit_harness_16p`):** Drop pre-assembled 16-pin 2.0 mm latching connector from above through the open South U-slot onto `J_COCKPIT`. Snap the split TPU strain-relief boot (`front_node_tpu_cable_boot`) around the shielded cable ($\varnothing 6.0\,\text{mm}$) and slide it from above into the stepped U-guide groove (sits flush with the tub rim at $Z = 17.5\,\text{mm}$).
+   * **Vehicle Harness (`cable_vehicle_harness_12p`):** Drop 12-pin 2.0 mm latching connector from above onto `J_VEHICLE` (or direct 12V DC lead in passenger cars). Snap split TPU boot around cable ($\varnothing 6.5\,\text{mm}$) and slide from above into North U-guide groove.
+6. **Seal Enclosure (Continuous 3-Way Sealing):**
+   * Place continuous silicone O-ring cord (Ø 1.5 mm Shore 40A, $30\,\text{cm}$) into perimeter tub/lid groove. The cord runs as an unbroken continuous ring across the integrated sealing groove on top of both TPU inserts!
+   * Mount upper lid and tighten 4x M3 $\times 20\,\text{mm}$ stainless steel bolts crosswise. Clamping pressure compresses both the O-ring cord and the split TPU gland into an IP67 hermetic seal.
 7. **Assemble Breakout Satellites:**
    * **Cockpit Satellite:** The 16-wire cable plugs via 16-pin 2.0 mm latching connector onto `J_IN` of `PCBA 05B` ([`cockpit_breakout_block.scad`](../../hardware/cad/scad/04_front_node/cockpit_breakout_block.scad)). The board provides 5x USB-C receptacles (`[ PHONE 20W ]`, `[ DONGLE ]`, `[ HOST ]`, `[ CAM 5V ]`, `[ NAVI 5V ]`) and the positive-locking 2-pin **JST-GH SMD Header (`J6`)** for handlebar PTT (100% SMD with 0 mm underside protrusion, laying completely flush). The M3 strain-relief clamp bar secures COTS USB-C plug necks against vibration.
    * **Vehicle Satellite:** The 12-wire cable breaks out directly into 5 watertight **JST-JWPF (IP67)** latching sockets (`[ 12V IN ]`, `[ CAN BUS ]`, `[ MIRROR BSD ]`, `[ AUX LIGHT ]`, `[ GNSS / CLIMATE PUCK ]`). For bike connection, vehicle-specific adapter cables (e.g. BMW Cartool, BMW CAN Y-Splitter, Harley Fairing Aux) plug directly into the JWPF sockets without cutting wires. Snap lid closed.
