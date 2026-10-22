@@ -1,109 +1,116 @@
 # 09 - Firmware Architecture, FreeRTOS Tasks & Rollback-OTA
 
-This document specifies the system-wide firmware architecture of OpenMotorBridge v8.0: the multi-core allocation of the ESP32-S3 host MCU on the Central Box (`PCBA 01`), the ESP32-S3 Front Node (`PCBA 05`), the deterministic **UWB Backbone (Qorvo DW3110 / 6.489 GHz Ch. 5, latency < 0.4 ms)**, the **Group Split Fallback Engine**, the LittleFS profile engine, and the **Dual-Bank Rollback-OTA architecture** guaranteeing zero bricking during power interruptions.
+*Note: All CAD, electronic, and block diagrams reflect the standardized v10.0 node architecture (PCBA 01 through 10).*
+
+This document specifies the system-wide firmware architecture of OpenMotorBridge v10.0 (Native USB-PD & Edge-AI Generation): the multi-core allocation of the **ESP32-S31 AI RISC-V** host MCU on the Central Box (`PCBA 01`) featuring a 128-bit SIMD AI vector accelerator, the ESP32-S3 Front Node (`PCBA 05`), the deterministic **4-Wire Automotive USB-PD & USB 2.0 Backbone (`VBUS`, `GND`, `D+`, `D-`, latency < 0.2 ms)** to all satellite nodes, the **Dual-Power Input Engine** (12V DTM-12 & USB-PD Sink 5V–20V via LM5050 ideal-diode OR-ing), the **5-Gesture Trigger Engine** for symmetrical under-perch mirror pods (`PCBA 05B`), the LittleFS profile engine, and the **Dual-Bank Rollback-OTA architecture** guaranteeing zero bricking during power interruptions.
 
 ---
 
 ## 1. Multi-Core & Multi-MCU System Architecture
 
-In v8.0, the system is strictly consolidated to two primary main nodes (Rear Pod 3 and PCBA 04 have been retired without replacement):
+In v10.0, the overall system is standardized onto a ruggedized, shielded **4-wire Automotive USB-PD & USB 2.0 bus**. All data, audio, and control links between Central Box and external nodes operate over wire with deterministic latency ($< 0.2\,	ext{ms}$) and massive power delivery (up to 60 W per branch):
 
 ```
 +----------------------------------------------------------------------------------------+
-|                         THE FIRMWARE CONTROLLERS IN CONCERT                            |
+|                        FIRMWARE CONTROLLERS IN CONCERT (v10.0)                         |
 +------------------------------------------------------+---------------------------------+
-| 1. CENTRAL BOX (ESP32-S3 Dual-Core, PCBA 01)          | 2. FRONT NODE (ESP32-S3, PCBA 05)|
+| 1. CENTRAL BOX (ESP32-S31 AI RISC-V, PCBA 01)         | 2. FRONT NODE (ESP32-S3, PCBA 05)|
 +------------------------------------------------------+---------------------------------+
-| * Core 0: UWB Backbone, SX1262 LoRa 868, BLE, WebDAV  | * Core 0: UWB Backbone, SAM-M10Q|
-| * Core 1: Realtime 48 kHz Audio DSP, Ducking, AGC    |   Multi-GNSS, CAN, USB-PD, PTT  |
-| * Co-MCUs: ESP32-C6 on PCBA 03 (Smart Cartridges)    | * Core 1: Knowles Vector-DSP    |
+| * Core 0: 4-Wire USB-PD Host Engine, SX1262 LoRa     | * Core 0: USB Backbone Client,  |
+|   868 MHz, Dual-Power OR-ing, BLE, Pod Dispatcher    |   SAM-M10Q GNSS, CAN, USB-PD    |
+| * Core 1: 48 kHz SIMD AI Audio-DSP, Raised-Cosine    | * Core 1: Knowles Wind-DSP,     |
+|   Ducking, AGC, Qualcomm QCC3084 BT 5.4 Hub          |   5-Gesture Mirror-Pod Engine   |
++------------------------------------------------------+---------------------------------+
+| 3. SATELLITE PODS (ESP32-C6, PCBA 03 in Pod 1 & 2)   | 4. REAR RADAR (ESP32-C5 Sub-MCU, PCBA 08)|
++------------------------------------------------------+---------------------------------+
+| * USB 2.0 Device & USB-PD Sink Controller (up to 30W)| * Wheeltec MR20 77-GHz mmWave   |
+| * ES8388 Audio Codec / USB Audio Class Streamer      | * 20 Hz Tracking Vectors via    |
+| * OptoMOS PTT Keying & Direct Headset Interface      |   CAN / High-Speed Serial       |
 +------------------------------------------------------+---------------------------------+
 ```
 
-### 1.1 Central Box ESP32-S3 Core Allocation (240 MHz)
+### 1.1 Central Box ESP32-S31 AI Host Controller Core Allocation (320 MHz RISC-V)
 
-#### CORE 0 (Communication, Telemetry & System):
-- **UWB Backbone Driver (`uwb_vehicle_backbone.cpp`):** Deterministic SPI communication with the Qorvo DW3110 transceiver on `B.Cu`. Receives handlebar PTT events ($< 0.4\,\text{ms}$), Knowles MEMS dB(A) acoustic noise readings, and 10 Hz Multi-GNSS packets from the Front Node.
+#### CORE 0 (Communication, Telemetry, 4-Wire USB Backbone & Power Management):
+- **Automotive USB Backbone Host Engine (`usb_vehicle_backbone.cpp`):** Manages the USB 2.0 High-Speed connection across the onboard USB2514B hub to Front Node and saddlebag pods. Receives handlebar PTT and gesture events ($< 0.15\,	ext{ms}$), Knowles MEMS acoustic noise readings, 10 Hz Multi-GNSS packets, and pod telemetry.
+- **Dual-Power Input Manager (`dual_power_mgr.cpp`):** Overviews the TI LM5050-Q1 ideal-diode OR-ing between 12V vehicle power (Deutsch DTM-12) and USB-PD Sink (5V–20V USB-C). Enables seamless switching and zero-disassembly flashing, benchtop calibration, and testing without a 12V laboratory power supply.
+- **Staggered Power Sequencing (`power_sequencer.cpp`):** Controls the automotive eFuses `TI TPS25982` on PCBA 01 to eliminate inrush current spikes:
+  - $T = 0\,	ext{ms}$: Central Box (PCBA 01) and Front Node (PCBA 05) boot synchronously upon ignition ON (KL15).
+  - $T = 200\,	ext{ms}$: Pod 1 (VBUS via eFuse with soft-start ramp).
+  - $T = 350\,	ext{ms}$: Pod 2 (VBUS via eFuse with soft-start ramp).
+  - $T = 500\,	ext{ms}$: Rear Radar (+12V switched on Whip 3).
 - **LoRa 868 MHz Mesh Engine (`lora_mesh_engine.cpp`):** Direct SPI link to the onboard Semtech SX1262 transceiver on PCBA 01 (24/7 UPS-buffered for theft sentry and group telemetry).
 - **BLE GATT Server (`ble_service_server.cpp`):** Web-Bluetooth connection for the PWA dashboard (`0x180D`, `0x180A`, `0xFFE0`).
-- **UWB Smart Cartridge Dispatcher (`uwb_cartridge_dispatcher.cpp`):** Manages wireless interaction with Smart Cartridges (PCBA 03) in Bays 1 & 2 via UWB (`UWB_PKT_CARTRIDGE_OPCODE`) with $< 0.4\,\text{ms}$ latency.
-- **UWB Radar Telemetry Parser & Dispatcher (`uwb_radar_parser.cpp`):** Receives 20 Hz pre-processed target vectors (pre-computed TTC, threat level CLEAR/AMBER/RED, distance, relative speed) from the Radar Sub-MCU (PCBA 08) via UWB (`UWB_PKT_RADAR_TARGETS`), cross-references vehicle dynamics (IMU/CAN), and orchestrates vehicle-wide safety actions: triggers Prio-1 audio ducking (-18 dB) on Core 1, dispatches mirror LED strobe via UWB to the Front Node (PCBA 05), and streams telemetry to the BLE/CarPlay dashboard.
 - **Group Split Fallback Engine (`group_split_rescue_engine.cpp`):** Automatic state machine bridging radio shadows between Sena Mesh, Cardo DMC, OMM 2.4 GHz, and LoRa 868 MHz emergency beacon.
 - **WebDAV TLS 1.3 Client:** Asynchronous upload of GPX tour recordings to Nextcloud/Synology on home Wi-Fi upon ignition OFF.
 - **SDIO Logging Task:** 4-bit high-speed SD card logger with rolling BGH privacy auto-purge.
-- **ADR-EKF Filter:** 15-State sensor fusion fusing 10 Hz Multi-GNSS telemetry (from Front Node via UWB) and onboard Bosch BMI270 6-axis IMU for uninterrupted navigation through tunnels.
+- **ADR-EKF Filter:** 15-State sensor fusion fusing 10 Hz Multi-GNSS telemetry (from Front Node via USB) and onboard Bosch BMI270 6-axis IMU for uninterrupted navigation through tunnels.
 
-#### CORE 1 (Realtime Audio DSP Engine @ Highest Priority):
-- **I2S Audio DMA Receiver & Transmitter:** Ultra-low-latency streaming via ES8388 Audio Codec ($f_s = 48\,\text{kHz}, 24\,\text{bit}$, double-buffer of 128 samples = $2.67\,\text{ms}$).
+#### CORE 1 (Realtime Edge-AI Audio DSP & Qualcomm QCC3084 Hub @ Highest Priority):
+- **128-bit SIMD AI Vector Accelerator:** Real-time filtering of wind noise, acoustic transients, and engine rumble, plus acoustic scene classification directly on silicon.
+- **Qualcomm QCC3084 Dual-Helmet Audio Hub (`bluetooth_audio_manager.cpp`):** Controls the dedicated QCC3084 BT 5.4 Audio SoC (`U9` on PCBA 01) via UART (GAIA/AT) for hardware-accelerated Dual-A2DP (aptX HD / Adaptive) to rider and pillion helmets, LE Audio Auracast, and synchronous HFP 1.8 Wideband voice channel.
+- **I2S Audio DMA Receiver & Transmitter:** Ultra-low-latency streaming via ES8388 Audio Codec and Qualcomm QCC3084 ($f_s = 48\,	ext{kHz}, 24\,	ext{bit}$, double-buffer of 128 samples = $2.67\,	ext{ms}$).
 - **Raised-Cosine Ducking Engine:** Click-free, continuously differentiable audio attenuation during intercom announcements or radar alerts.
 - **Dynamic AGC Volume Scaling:** Smooth automatic scaling of helmet output volume based on Front Node aerodynamic wind noise.
-- **Lookahead Brickwall Limiter:** Prevents digital clipping exceeding $0\,\text{dBFS}$.
+- **Lookahead Brickwall Limiter:** Prevents digital clipping exceeding $0\,	ext{dBFS}$.
 
 ---
 
-## 2. Deterministic UWB Vehicle Backbone (`uwb_vehicle_backbone.cpp`)
+## 2. Deterministic 4-Wire Automotive Bus (`usb_vehicle_backbone.cpp`)
 
-The wireless backbone between Front Node and Central Box employs IEEE 802.15.4z Ultra-Wideband (Qorvo DW3110, Channel 5 @ 6.489 GHz, 499.2 MHz bandwidth, BPRF mode):
-- **Regulatory Compliance:** ETSI EN 302 065-1, EN 302 065-3, and EU Decision 2019/785 ($-41.3\,\text{dBm/MHz}$, continuous legal transmission without duty-cycle capping).
-- **Zero-Interference:** Operates far above 2.4 GHz (Wi-Fi, Bluetooth, Sena Mesh, Cardo DMC) and 5.8 GHz.
-- **Deterministic Latency:** Flight and processing time $< 0.4\,\text{ms}$.
+All data, control, and audio links in the vehicle network employ the shielded 4-wire Automotive USB-PD & USB 2.0 bus (`VBUS`, `GND`, `D+`, `D-`):
+- **Zero RF Congestion & Zero De-Sensing:** The physical wired bus completely eliminates UWB or RF backbone cross-talk in the cockpit or saddlebag flanks.
+- **Deterministic Latency:** Bus transfer times $< 0.2\,	ext{ms}$ over native USB 2.0 interrupt and bulk endpoints.
+- **Automotive USB-PD:** Up to 60 W charging power per branch with dynamic power balancing.
 
 ```cpp
-enum UwbBackbonePktType : uint8_t {
-    UWB_PKT_HEARTBEAT       = 0x01,  // Status, Uptime, VBUS Voltage, Ranging Distance
-    UWB_PKT_PTT_EVENT       = 0x02,  // Handlebar PTT pressed/released (< 0.4 ms)
-    UWB_PKT_AUDIO_RMS       = 0x03,  // Knowles MEMS wind noise dB(A) level (50 Hz)
-    UWB_PKT_GNSS_PVT        = 0x04,  // u-blox SAM-M10Q 10 Hz PVT telemetry block
-    UWB_PKT_ENV_SENSORS     = 0x05,  // TI TMP117 (Temp) & TI OPT3001 (Lux)
-    UWB_PKT_CAN_TELEMETRY   = 0x06,  // Cockpit CAN telemetry data (when J2 active)
-    UWB_PKT_OTTOCAST_STATUS = 0x07,  // Status, Current, Auto-Café Timer
-    UWB_PKT_CMD_POWER_CYCLE = 0x10,  // Central Box -> Front Node: 2.5s Hard Reboot
-    UWB_PKT_CMD_CONFIG      = 0x11   // Central Box -> Front Node: Ignition Sync
+enum UsbBackbonePktType : uint8_t {
+    // --- Node Management & System Heartbeat ---
+    USB_DESC_NODE_ANNOUNCE     = 0x01,  // Boot Handshake: Node Type (Front, Pod 1/2, Radar), UID, FW Version
+    USB_PKT_NODE_HEARTBEAT     = 0x02,  // 1 Hz Heartbeat: Uptime, VBUS Voltage, Current Draw, Bus Status
+    USB_PKT_GESTURE_EVENT      = 0x03,  // 5-Gesture Handlebar Trigger (< 0.15 ms Latency): Short, Double, Triple, Long, Hold
+
+    // --- Consolidated Telemetry (10 Hz Frame) & Peripherals ---
+    USB_PKT_FRONT_TELEMETRY    = 0x04,  // Consolidated 10 Hz Frame: GNSS PVT + Wind-RMS + TMP117 + Lux + CAN
+    USB_PKT_WIRELESS_CP_AA_STAT= 0x05,  // COTS CarPlay / Android Auto Bridge Status, Current Draw, Auto-Café Timer
+
+    // --- Control Commands & System Synchronization ---
+    USB_CMD_POWER_CYCLE        = 0x10,  // Central Box -> Front Node / Pods: Cold Boot & Power Gating
+    USB_CMD_CONFIG             = 0x11,  // Central Box -> Satellites: Ignition Sync & Sleep State
+    USB_CMD_PAIRING_REQUEST    = 0x12,  // Pairing routine upon SW1 button press (60s window)
+
+    // --- Pod Control & Interface Protocol (Pods 1 & 2) ---
+    USB_DESC_POD_ANNOUNCE      = 0x20,  // Handshake: Hardware Class, Model ID, UID, Status, USB-PD Profile
+    USB_CMD_POD_CONTROL        = 0x21,  // Central Box -> Pod: PTT Trigger, BLE Command, Audio Routing
+    USB_PKT_POD_ACK            = 0x22,  // Pod -> Central Box: Execution Acknowledgment & Status
+
+    // --- Digital USB Audio Class Backbone (Bidirectional, 48 kHz / 24-Bit PCM) ---
+    USB_PKT_AUDIO_STREAM_DOWN  = 0x24,  // Central Box -> Pods: Master Mix to Headsets (Mic + Navigation + TTS)
+    USB_PKT_AUDIO_STREAM_UP    = 0x25,  // Pods -> Central Box: Intercom Spk-Out / Helmet Audio to Central Box
+    USB_PKT_AUDIO_MEDIA_UP     = 0x26,  // Front Node -> Central Box: Music / Navigation Prompts
+
+    // --- Radar 2.0 (PCBA 08 via CAN/UART): Pre-filtering & LED Macro Control ---
+    USB_PKT_RADAR_TARGETS      = 0x30,  // 20 Hz Pre-filtered Target List (TTC, Distance, Azimuth) + URGENT Flag
+    USB_PKT_RADAR_LED_CMD      = 0x31,  // Central Box -> Radar: Macro Command (Idle, Warning, Prio-1 Strobe)
+
+    // --- Zero-Disassembly WebUSB DFU Flashing ---
+    USB_PKT_FW_UPDATE_PUSH     = 0x50,  // Host -> Nodes: Block-wise Firmware Update via USB 2.0
+    USB_PKT_FW_UPDATE_DONE     = 0x51   // Nodes -> Host: Flash Acknowledgment / Reboot Ready
 };
 ```
 
 ### 2.1 Handlebar PTT Latency Budget
-1. **Handlebar Switch Closure:** $12\,\mu\text{s}$ hardware debouncing.
-2. **Front Node ESP32-S3 GPIO Interrupt:** $25\,\mu\text{s}$ ISR execution time.
-3. **UWB SPI TX & RF Transmission (6.5 GHz):** $180\,\mu\text{s}$ (6.8 Mbps data rate).
-4. **Central Box DW3110 SPI RX & Core 0 ISR:** $45\,\mu\text{s}$ frame decode & opcode dispatch.
-5. **Cartridge Controller & N-MOSFETs (`AO3400`):** $< 100\,\mu\text{s}$ switching time of mechatronic actuators.
-* **Total Glass-to-Glass Latency:** **$\approx 0.36\,\text{ms}$** (more than 25 times faster than the human perceptual threshold of $10\,\text{ms}$).
+1. **Handlebar Switch Closure:** $12\,\mu	ext{s}$ hardware Schmitt-trigger debouncing at Front Node.
+2. **Front Node ESP32-S3 GPIO Interrupt:** $15\,\mu	ext{s}$ ISR execution time & gesture detector.
+3. **USB 2.0 Interrupt Transfer (Front -> Central Box):** $60\,\mu	ext{s}$ transit time across shielded 4-wire bus.
+4. **Central Box ESP32-S31 Core 0 Dispatcher:** $20\,\mu	ext{s}$ event parsing & PTT routing.
+5. **Pod Interface OptoMOS / Digital Audio:** $< 10\,\mu	ext{s}$ switching time of OptoMOS relay `CPC1017N` or digital USB audio stream.
+* **Total Glass-to-Glass Latency:** **$pprox 0.12\,	ext{ms}$** (over 80 times faster than the human perceptual threshold of $10\,	ext{ms}$).
 
-### 2.2 UWB Cryptographic Binding & Distance Gating
-- **PAN-ID & Session Key:** A 128-bit AES-GCM session key stored in encrypted NVS flash prevents cross-talk between adjacent motorcycles.
-- **Two-Way Ranging Gating:** The Central Box continuously verifies the physical distance to the Front Node. If distance falls outside the motorcycle envelope ($0.5\,\text{m}\dots 2.5\,\text{m}$), frames are rejected (protection against spoofing and relay attacks).
-
-### 2.3 CAN Dual-Ingress Architecture & Auto-Sensing / Deactivation
-
-```
-+-----------------------------------------------------------------------------+
-|                    CAN DUAL-INGRESS & AUTO-SENSING MATRIX                   |
-+-----------------------------------+-----------------------------------------+
-| Scenario 1: Touring Fairing       | Scenario 2: Naked / Road King / Adv     |
-| (Street Glide / Road Glide)       | (Road King Special, BMW R1250/R1300 GS) |
-+-----------------------------------+-----------------------------------------+
-| * CAN connector at FRONT NODE     | * No CAN present in headlight nacelle   |
-|   Port J2 (3-Pin JST-GH)          | * CAN connector at CENTRAL BOX          |
-| * Front Node detects bus frames   |   DTM-12 header pins 4/5 at BCM / OBD2  |
-| * 120R relay CPC1017N CLOSES      | * Front Node J2 remains UNCONNECTED     |
-| * Telemetry streamed via UWB      | * Front Node deactivates J2 after 2.5s: |
-|   (UWB_PKT_CAN_TELEMETRY) to      |   - 120R relay remains OPEN             |
-|   Central Box                     |   - TCAN334G enters Silent High-Z mode  |
-| * Central Box switches to         |   - TWAI controller halted (twai_stop)  |
-|   `CAN_SOURCE_REMOTE_FRONT_NODE`  | * Central Box utilizes local DTM-12 CAN |
-|                                   |   as `CAN_SOURCE_LOCAL_CENTRAL_BOX`     |
-+-----------------------------------+-----------------------------------------+
-```
-
-1. **Front Node Auto-Sensing & Deactivation (`cockpit_can_manager.cpp`):**
-   - Boots in safe **Listen-Only Mode** (`TWAI_MODE_LISTEN_ONLY`) with the termination relay open (`PIN_CAN_TERM_EN = 0`).
-   - Senses bus activity within a $2.5\,\text{s}$ boot-time window.
-   - **Bus Detected:** State transitions to `CAN_STATE_CONNECTED`, the Solid-State OptoMOS relay `CPC1017N` closes the local $120\,\Omega$ termination resistor, the transceiver switches to normal mode (`PIN_CAN_SILENT = 0`), and streams received frames over UWB to the Central Box.
-   - **No Bus Detected (e.g., Road King / BMW GS):** State transitions to `CAN_STATE_DEACTIVATED`. The relay remains open, `PIN_CAN_SILENT` is pulled HIGH (standby/high-Z), and the TWAI controller is halted (`twai_stop()`). This guarantees 0 bus-off errors, 0 spurious interrupts, and negligible quiescent current.
-2. **Central Box Source Arbitration (`can_bus_manager.cpp`):**
-   - When local CAN frames are received on DTM-12 pins 4/5, `CAN_SOURCE_LOCAL_CENTRAL_BOX` is active.
-   - If the local DTM-12 CAN port remains unconnected, the manager seamlessly switches to `CAN_SOURCE_REMOTE_FRONT_NODE`.
+### 2.2 Dual-Power Input Management & Benchtop Testing
+- **TI LM5050-Q1 Ideal-Diode OR-ing:** Decouples the 12V vehicle power (Deutsch DTM-12) and the USB-PD Sink input (5V–20V via the native USB-C port) with zero forward voltage drop compared to conventional Schottky diodes.
+- **Seamless Switching:** If the motorcycle is started with a USB-C charger connected, the 12V rail takes over the load without interruption.
+- **Zero-Disassembly Benchtop Flashing:** On the workbench, the entire system can be operated, flashed, and calibrated with any standard USB-C PD phone or laptop charger—eliminating the need for a heavy 12V lab bench supply!
 
 ---
 
@@ -114,16 +121,16 @@ The system exposes standardized Bluetooth SIG services as well as vendor-specifi
 | Service UUID | Characteristic UUID | Properties | Function & Data Payload |
 | :--- | :--- | :--- | :--- |
 | **`0x180D`** (Audio RMS & Env)       | **`0x2A37`** | Notify | Knowles MEMS wind noise level (50 Hz, dB(A)) & TMP117 temperature. |
-| **`0x180A`** (Device Information)    | **`0x2A24`** | Read   | Hardware revision (`OMB-V8-2026.1`), Serial, Firmware build. |
-| **`0xFFE0`** (Proprietary Control)   | **`0xFFE1`** | Write  | Control commands: `0x01` Profile switch, `0x02` Reset, `0x09` Smart Cartridge Opcode. |
+| **`0x180A`** (Device Information)    | **`0x2A24`** | Read   | Hardware revision (`OMB-v10.0`), Serial, Firmware build. |
+| **`0xFFE0`** (Proprietary Control)   | **`0xFFE1`** | Write  | Control commands: `0x01` Profile switch, `0x02` Reset, `0x09` Pod Control Opcode. |
 | **`0xFFE0`** (Proprietary Telemetry) | **`0xFFE2`** | Notify | 10 Hz Telemetry stream: Lean-Angle (Roll/Pitch), Speed, TTC, Radar warning. |
-| **`0xFFE0`** (1-Wire & Cartridge ID) | **`0xFFE3`** | Notify/Read | Cartridge status Ports 1 & 2: 64-bit UID, hardware class, DLE score. |
+| **`0xFFE0`** (Pod Status)            | **`0xFFE3`** | Notify/Read | Pod status 1 & 2: 64-bit UID, hardware class, USB-PD profile, status. |
 
 ---
 
 ## 4. Universal Group Split Fallback Engine (`group_split_rescue_engine.cpp`)
 
-During tours across mountainous terrain or dense forests, 2.4 GHz intercom connections (Sena Mesh / Cardo DMC) drop beyond approximately $800\dots 1200\,\text{m}$ once line-of-sight is obstructed. The integrated **Group Split Fallback Engine** in v8.0 prevents groups from fragmenting:
+During tours across mountainous terrain or dense forests, 2.4 GHz intercom connections (Sena Mesh / Cardo DMC) drop beyond approximately $800\dots 1200\,	ext{m}$ once line-of-sight is obstructed. The integrated **Group Split Fallback Engine** in v10.0 prevents groups from fragmenting:
 
 ```
                GROUP SPLIT FALLBACK ENGINE STATE MACHINE
@@ -134,7 +141,7 @@ During tours across mountainous terrain or dense forests, 2.4 GHz intercom conne
 +-----------------------------------------------------------------------------+
 |                                     v (Connection loss > 15 s)              |
 | 2. RESCUE LEVEL 1: OMM 2.4 GHz CHANNEL-HOPPING MESH                         |
-|    * If OMM cartridge installed: Boosts TX power to +20 dBm                 |
+|    * If OMM module installed: Boosts TX power to +20 dBm                    |
 |    * Searches for relay nodes among adjacent group members                  |
 +-----------------------------------------------------------------------------+
 |                                     v (Connection loss > 45 s)              |
@@ -145,88 +152,76 @@ During tours across mountainous terrain or dense forests, 2.4 GHz intercom conne
 +-----------------------------------------------------------------------------+
 |                                     v (Connection loss > 120 s)             |
 | 4. RESCUE LEVEL 3: PMR446 ANALOG VOICE FALLBACK (OPTIONAL)                  |
-|    * Triggers automated voice broadcast ping on Midland radio cartridge     |
+|    * Triggers automated voice broadcast ping on Midland radio pod           |
 |    * Broadcasts synthesized TTS location announcement over PMR446 channel   |
 +-----------------------------------------------------------------------------+
 ```
 
 ---
 
-## 5. Cartridge Control: Mechatronic Smart Cartridge (PCBA 03 All-UWB) & Hardware IDs
+## 5. Pod Control (PCBA 03) & Symmetrical 5-Gesture Mirror-Pod Engine
 
-### 5.1 Dynamic Cartridge & Model Identification (Hardware IDs & Profile Matrix)
-To map exact mechanical button locations, pulse timings, and click sequences across manufacturers, `PCBA 03` uses a 2-stage identification process:
-1. **Resistor-coding / 1-Wire at the adapter harness:** Each inlay signals its exact device model via analog resistor coding or a 1-Wire DS2401 silicon serial number chip.
-2. **Cartridge Handshake via UWB (`UWB_PKT_CARTRIDGE_ANNOUNCE`):** On boot, the cartridge reports its 16-bit model ID and UID to the Central Box.
+### 5.1 Dynamic Pod & Model Identification (Hardware Descriptors & Profile Matrix)
+To flexibly interface modern OEM communicators without brittle mechatronic solenoids, `PCBA 03` uses a pure digital and electrical identification scheme:
+1. **USB 2.0 Descriptor Handshake:** On boot, the carrier board reports its 16-bit model ID, hardware class, and 64-bit UID natively over USB 2.0 to the Central Box.
+2. **Harness Auto-Sense:** Automatically identifies whether a Sena SPIDER X Slim (micro-cable whip at `J_AUDIO_PWR`), Cardo Packtalk Edge (Air-Mount & USB-C port), OMM UCS 2.4 GHz module (USB Audio Class), analog radio (Midland PMR446), or hermetic dry-box is installed.
 
-| Model ID | Base Class | Model Name | Mechanical Inlay | Keyboard & Control Characteristics |
+| Model ID | Base Class | Model Name | Physical Interface | Control & Audio Characteristics |
 | :---: | :---: | :--- | :--- | :--- |
-| **`0x0101`** | Class A | **Sena SPIDER X Slim** | 3D form-fit A | 3 buttons (Center, Plus, Minus) + Mesh button; pulse 150 ms |
-| **`0x0102`** | Class A | **Sena +Mesh Adapter** | Slide-Inlay A | 1 multi-function button; pairing & reconnect sequences |
-| **`0x0201`** | Class B | **Cardo Packtalk Edge / Pro**| Air-Mount Inlay B | 3 buttons + roller wheel (Intercom, Audio, Phone); magnetic coupling |
-| **`0x0202`** | Class B | **Cardo Packtalk Bold / Black**| Cradle Inlay B | 3 buttons + jog-dial; DMC Gen 1 protocol |
-| **`0x0301`** | Class C | **UCS Cardo Freecom UCS** | Universal UCS C | Standardized 4-button UCS geometry; universal actuator bridge |
-| **`0x0302`** | Class C | **UCS Midland Mesh UCS** | Universal UCS C | Standardized UCS geometry; Midland Mesh click layout |
-| **`0x0303`** | Class C | **OMM 2.4 GHz OEM Cartridge**| Universal UCS C | Pure digital UWB/2.4 GHz transceiver; zero mechatronic pressing |
-| **`0x0401`** | Class D | **Midland PMR446 (Alan/G9)**| Radio Inlay D | PTT keying via open-drain MOSFET `Q4` (`PTT_IO`); jack pigtail |
+| **`0x0101`** | Class A | **Sena SPIDER X Slim** | Micro-cable whip at `J_AUDIO_PWR` | 3.85V Direct-DC, ES8388 Line-In/Out, BLE GATT |
+| **`0x0102`** | Class A | **Sena +Mesh Adapter** | Internal USB-C charging port | Pure Bluetooth/Audio gateway; USB-PD charging |
+| **`0x0201`** | Class B | **Cardo Packtalk Edge / Pro**| Air-Mount & USB-C charging port | DMC Gen2, USB-PD charging ("Charge while Riding") |
+| **`0x0301`** | Class C | **OMM UCS 2.4 GHz Module** | Native USB 2.0 Port | Full-digital USB Audio Class 2.0, IPv6-Mesh |
+| **`0x0401`** | Class D | **Midland PMR446 (G9 Pro)** | 2-Pin dual jack pigtail | OptoMOS PTT keying (`CPC1017N`), galvanically isolated |
+| **`0x0000`** | Class 0 | **Dry-Box / Luggage Bay** | Zero audio peripherals | Pure 30W/60W USB-PD charge port for phone/powerbank |
 
-The firmware loads the corresponding `/storage/profiles/<MODEL_ID>.json` from LittleFS. This configures exact pulse widths, debounce intervals, multi-key macros (e.g. simultaneous press for cold boot), and menu state transitions.
-
-### 5.2 Smart Cartridge Mechatronic Mode (PCBA 03)
-The Central Box dispatches 1-byte opcodes wirelessly via UWB packet (`UWB_PKT_CARTRIDGE_OPCODE`) to the ESP32-C6 host MCU on PCBA 03. The MCU switches the 4x AO3400A N-MOSFETs on the board bottom (`B.Cu`), which mechatronically actuate the buttons of the inserted headset:
-
-| Opcode | Function / Gesture | Active Actuators | Pulse Duration / Sequence | Headset Response (Sena SPIDER X Slim) |
-| :---: | :--- | :--- | :--- | :--- |
-| **`0x01`** | **Power Boot (Cold Start)**| **ACT_CENTER + PLUS** | $1000\,\text{ms}$ synchronous | Automatically boots headset on ignition ON |
-| **`0x02`** | **Power Off** | **ACT_CENTER + PLUS** | $200\,\text{ms}$ synchronous | Clean graceful shutdown prior to power cut |
-| **`0x03`** | **Volume Up (+)** | **ACT_PLUS** (solo) | $100\,\text{ms}$ single pulse | Volume +1 step |
-| **`0x04`** | **Volume Down (-)** | **ACT_MINUS** (solo) | $100\,\text{ms}$ single pulse | Volume -1 step |
-| **`0x05`** | **Mesh Intercom On/Off**| **ACT_MESH** (solo) | $200\,\text{ms}$ single pulse | Mesh toggle voice prompt ("Mesh On/Off") |
-| **`0x06`** | **Open ↔ Group Mesh** | **ACT_MESH** (solo) | $3000\,\text{ms}$ hold pulse | Toggles between Open Mesh and private Group Mesh |
-| **`0x07`** | **Channel +1 (Macro)** | **ACT_MESH (2x) + PLUS (1x)** | 2x $150\,\text{ms}$, pause $200\,\text{ms}$, 1x $150\,\text{ms}$ | Enters channel menu and advances channel autonomously |
-| **`0x08`** | **Channel -1 (Macro)** | **ACT_MESH (2x) + MINUS (1x)**| 2x $150\,\text{ms}$, pause $200\,\text{ms}$, 1x $150\,\text{ms}$ | Enters channel menu and decrements channel autonomously |
+### 5.2 Symmetrical Dual Under-Perch Mirror Pods & 5-Gesture Engine (`PCBA 05B`)
+The two identical mirror pods (`PCBA 05B`) mounted under the mirror perches provide tactile thumb control and bilateral Blind Spot Detection (BSD):
+* **5 Gesture Triggers:** Each switch autonomously detects `SHORT_CLICK`, `DOUBLE_CLICK`, `TRIPLE_CLICK`, `LONG_PRESS`, and `HOLD_GATE`.
+* **100% Free Button Mapping:** Via the PWA dashboard, each gesture is freely assignable to any action in the OMB Action Catalog (e.g. Push-to-Talk, Voice Assistant Siri/Google, Waze 1-Click Hazard Pin, Action-Cam Tags for Insta360/GoPro/DJI, Radar Mute, Garage Door via BLE).
 
 ---
 
 ## 6. FreeRTOS Task Architecture & Scheduling Matrix (Central Box & Front Node)
 
-The overall system orchestrates 15 specialized tasks across 2 ESP32-S3 host microcontrollers:
+The overall system orchestrates specialized tasks across the two host microcontrollers:
 
 | Task Name | MCU / Core | Priority | Stack | Trigger / Rate | IPC / Interface | Responsibility & Function |
 | :--- | :--- | :---: | :---: | :---: | :--- | :--- |
-| **`audio_dsp_task`** | Central Box (Core 1) | **24** | 8 KB | 48 kHz DMA ISR | FreeRTOS StreamBuffer | Zero-latency I2S audio mix, Raised-Cosine ducking & AGC. |
-| **`uwb_backbone_task`**| Central Box (Core 0) | **22** | 4 KB | DW3110 IRQ / Event | Direct-to-Task Notify | Processes Front Node PTT events ($< 0.4\,\text{ms}$), GNSS & wind noise. |
+| **`audio_dsp_task`** | Central Box (Core 1) | **24** | 8 KB | 48 kHz DMA ISR | FreeRTOS StreamBuffer | Zero-latency I2S audio mix, SIMD AI noise filter, ducking & AGC. |
+| **`usb_backbone_task`**| Central Box (Core 0) | **22** | 6 KB | USB Host IRQ / Event | FreeRTOS StreamBuffer | 4-Wire Automotive USB 2.0 host engine for Front Node & Pods (< 0.2 ms). |
+| **`qcc3084_hub_task`**| Central Box (Core 1) | **21** | 4 KB | UART DMA ISR / Queue | FreeRTOS Queue / UART1| QCC3084 Supervisor: aptX HD Dual-A2DP, Auracast & HFP Call Handling. |
 | **`lora_mesh_task`**  | Central Box (Core 0) | **20** | 4 KB | SX1262 IRQ / Timer  | FreeRTOS Queue        | 868 MHz LoRa mesh protocol, theft sentry & Group Split Rescue. |
-| **`smart_act_task`**  | Central Box (Core 0) | **18** | 2 KB | Event-Queue         | FreeRTOS Queue        | Dispatches 1-byte opcodes via single-wire UART / TLP222A relays. |
-| **`radar_proc_task`** | Central Box (Core 0) | **16** | 4 KB | 20 Hz UART2 ISR     | FreeRTOS Queue / UART | Wheeltec MR20 / Garmin Varia parsing, TTC calculation & Prio-1 ducking. |
+| **`gesture_engine_task`**| Front Node (Core 0)| **24** | 2 KB | GPIO Edge ISR       | USB TX Queue          | Processes mirror pod switches Left/Right, generates 5 gestures (< 0.15 ms). |
+| **`radar_task`**      | Central Box (Core 0) | **16** | 4 KB | CAN / UART DMA ISR  | FreeRTOS Queue        | 20 Hz Radar target vectors from Wheeltec MR20; TTC computation & Prio-1 ducking. |
 | **`adr_ekf_task`**    | Central Box (Core 0) | **15** | 4 KB | 50 Hz Timer         | I2C / CAN Buffer      | 15-State Kalman filter (SAM-M10Q GNSS + BMI270 IMU + CAN speed). |
-| **`ble_server_task`** | Central Box (Core 0) | **10** | 4 KB | Event-Driven        | NimBLE Stack          | Web-Bluetooth PWA dashboard (GATT services `0x180D`/`0x180A`). |
+| **`power_mgmt_task`** | Central Box (Core 0) | **14** | 2 KB | Boot-Event / Timer  | GPIO / I2C Power      | Automotive eFuses, Dual-Power LM5050 monitoring, staggered power start. |
+| **`ble_server_task`** | Central Box (Core 0) | **10** | 4 KB | Event-Driven        | NimBLE Stack          | Web-Bluetooth PWA dashboard (GATT services `0x180D`/`0x180A`/`0xFFE0`). |
 | **`sdio_log_task`**   | Central Box (Core 0) | **8**  | 8 KB | 10 Hz Ringbuffer    | FreeRTOS RingBuffer   | 4-Bit SDIO blackbox logging with ECDSA SHA-256 signature. |
-| **`cartridge_poll_task`** | Central Box (Core 0) | **5**  | 2 KB | 0.5 Hz cyclic       | UWB / 1-Wire Driver   | Polls cartridge presence and model ID on Pods 1 & 2 via UWB. |
 | **`webdav_sync_task`**| Central Box (Core 0) | **3**  | 8 KB | Graceful Shutdown   | LwIP TLS 1.3          | Automatic GPX tour upload via home Wi-Fi upon ignition OFF. |
-| **`front_ptt_task`**  | Front Node (Core 0)  | **24** | 2 KB | GPIO Edge ISR       | UWB TX Queue          | Transmits handlebar PTT via UWB in $< 0.2\,\text{ms}$; Cam toggle; HiLight tag. |
-| **`front_gnss_task`** | Front Node (Core 0)  | **20** | 4 KB | 10 Hz I2C DMA       | J12 Qwiic / UWB TX    | u-blox SAM-M10Q UBX-NAV-PVT parsing, TMP117 Temp & OPT3001 Lux. |
-| **`front_mems_task`** | Front Node (Core 1)  | **18** | 4 KB | 48 kHz DMA          | Vector-DSP Filter     | Knowles SPH0645 digital microphone A-weighting & RMS tracking via Xtensa DSP. |
+| **`front_gnss_task`** | Front Node (Core 0)  | **20** | 4 KB | 10 Hz I2C DMA       | J12 Qwiic / USB TX    | u-blox SAM-M10Q UBX-NAV-PVT parsing, TMP117 Temp & OPT3001 Lux. |
+| **`front_mems_task`** | Front Node (Core 1)  | **18** | 4 KB | 48 kHz DMA          | Vector-DSP Filter     | Knowles I2S digital microphone A-weighting & RMS tracking via Xtensa DSP. |
 | **`front_can_task`**  | Front Node (Core 0)  | **16** | 4 KB | TWAI Interrupt      | CAN Message Queue     | Reads cockpit CAN (if J2 connected), CPC1017N auto-termination. |
 | **`front_pwr_task`**  | Front Node (Core 0)  | **10** | 2 KB | 10 Hz Timer         | GPIO Load Switch      | SW3526 USB-PD monitoring, TPS2051B cold restart (2.5s), auto-off. |
 
 ---
 
-## 7. LittleFS Cartridge Profile Engine & JSON Storage Schema
+## 7. LittleFS Pod Profile Engine & JSON Storage Schema
 
-Upon cartridge insertion, the cartridge manager loads the configuration from `/storage/profiles/<UID>.json`:
+Upon pod connection and USB descriptor announcement (`USB_DESC_POD_ANNOUNCE`), the pod manager loads the configuration from `/storage/profiles/<UID>.json`:
 
 ```json
 {
-  "profile_schema": 2,
+  "profile_schema": 3,
   "uid": "01:A4:7B:3F:00:00:00:1E",
-  "device_name": "Sena SPIDER X Slim Inlay",
+  "device_name": "Sena SPIDER X Slim Direct Cradle",
   "hardware_class": "0x01",
   "power": {
     "vcc_enabled": true,
-    "vcc_voltage_mv": 5000,
-    "max_current_ma": 350,
-    "soft_start_ms": 120
+    "usb_pd_profile": "9V_3A",
+    "direct_dc_mv": 3850,
+    "max_current_ma": 600,
+    "soft_start_ms": 50
   },
   "audio": {
     "input_gain_db": 6.0,
@@ -235,11 +230,10 @@ Upon cartridge insertion, the cartridge manager loads the configuration from `/s
     "auto_agc_enabled": true,
     "clip_limit_dbfs": -0.5
   },
-  "opto_trigger": {
+  "direct_interface": {
     "enabled": true,
-    "mode": "sena_spider_mesh",
-    "pulse_click_ms": 150,
-    "pulse_channel_ms": 1000
+    "opto_key_mode": "sena_spider_mesh",
+    "ble_gatt_control": true
   },
   "mesh_routing": {
     "dle_bonus_points": 60,
@@ -248,69 +242,22 @@ Upon cartridge insertion, the cartridge manager loads the configuration from `/s
 }
 ```
 
-* **Zero-Trust Fallback (`disabled.json`):** On unrecognized UIDs, electrical shorts, or empty bays, the 5V MOSFET remains off (`vcc_enabled: false`), codec gain drops to `-96 dB`, and DLE score is clamped to `0`.
+* **Zero-Trust Fallback (`disabled.json`):** On unknown UID, short-circuit, or empty bay, the VBUS MOSFET remains disabled (`vcc_enabled: false`), the audio codec is muted to `-96 dB`, and DLE score falls to `0`.
 
 ---
 
 ## 8. Modular Hardware Topology & Graceful Degradation
 
-OpenMotorBridge is designed from the ground up as a **resilient, fault-tolerant modular architecture**. No subsystem blocks Central Box boot or crashes if optional modules are omitted or unplugged:
+OpenMotorBridge is designed as a **decoupled, fault-tolerant modular building block**. No subsystem can prevent the Central Box from operating:
 
-| Configuration | Installed Hardware | System Behavior & Graceful Degradation |
+| Configuration | Installed Components | System Behavior & Graceful Degradation |
 | :--- | :--- | :--- |
-| **Tier 1: Minimal Core** | Central Box only<br>*(No Front Node)* | * **Audio Bridge & Intercoms fully operational:** Pod 1 & 2 mix with zero latency.<br>* **LoRa 868 MHz Mesh active:** Direct UPS-buffered 24/7 theft sentry & tracking.<br>* **CAN-Bus active:** Speed, RPM & BCM telemetry via DTM-12 pins 4/5 under seat.<br>* **IMU active:** Bosch BMI270 provides lean angle, pitch & vibration sensing.<br>* **ADR-EKF:** Operates in pure Dead Reckoning mode supported by IMU & wheel speed.<br>* **UWB driver:** Waits passively in scan mode; AGC operates at nominal gain. |
-| **Tier 2: Full System with Front Node** | Central Box + Front Node | * All Tier 1 features + deterministic UWB backbone (< 0.4 ms).<br>* u-blox SAM-M10Q Multi-GNSS with 10 Hz PVT fix & precision time synchronization.<br>* TI TMP117 black ice warning ($\pm 0.1\,^\circ\text{C}$) & TI OPT3001 ambient light sensor.<br>* 4-Port USB Hub & Dual 20W USB-PD fast charger in cockpit.<br>* Ottocast Watchdog & automatic ignition power-gating.<br>* Handlebar PTT (< 0.4 ms) and dynamic acoustic wind AGC via MSM261S4030 / SPH0645 I2S MEMS. |
-| **Tier 3: Rear Radar Option** | Central Box + Front Node + Radar | * All Tier 2 features + Wheeltec MR20 77 GHz or Garmin Varia on Whip 5.<br>* Audible warning pings in helmet, visual alert wings & mirror LEDs (Port `J9`).<br>* Automatic action cam bookmarks upon critical radar TTC hazard (< 2.5s). |
+| **Tier 1: Minimal Core** | Central Box only<br>*(No Front Node)* | * **Audio Bridge & Intercoms fully operational:** Pod 1 & 2 mix with zero latency via 4-wire bus.<br>* **LoRa 868 MHz Mesh active:** Direct UPS-buffered 24/7 theft sentry & tracking.<br>* **CAN-Bus active:** Speed, RPM & BCM telemetry via DTM-12 pins 4/5 under seat.<br>* **IMU active:** Bosch BMI270 provides lean angle, pitch & vibration sensing.<br>* **ADR-EKF:** Operates in pure Dead Reckoning mode supported by IMU & wheel speed.<br>* **USB Host:** Passively monitors ports for hotplug events. |
+| **Tier 2: Full System with Front Node** | Central Box + Front Node | * All Tier 1 features + deterministic 4-wire USB backbone (< 0.2 ms).<br>* u-blox SAM-M10Q Multi-GNSS with 10 Hz PVT fix & precision time synchronization.<br>* TI TMP117 black ice warning ($\pm 0.1\,^\circ	ext{C}$) & TI OPT3001 ambient light sensor.<br>* 4-Port USB Hub & Dual 20W USB-PD fast charger in cockpit.<br>* Ottocast Watchdog & automatic ignition power-gating.<br>* Symmetrical Under-Perch Mirror Pods (< 0.15 ms) with 5-gesture engine and Knowles dynamic acoustic wind AGC. |
+| **Tier 3: Rear Radar Option** | Central Box + Front Node + Radar | * All Tier 2 features + Wheeltec MR20 77 GHz (PCBA 08).<br>* 4-wire power & high-speed data from DTM-12 Whip 3.<br>* Acoustic alert pings in helmet, optical alert wings & mirror BSD LEDs.<br>* Automatic action-cam bookmarks upon critical radar TTC (< 2.5 s). |
 
-### 8.1 Zero-Crash Resiliency Mechanisms
-1. **Asynchronous Non-Blocking Interfaces:** Communications via UWB, LoRa (SPI), and Radar (UART2) use FreeRTOS timeouts (`pdMS_TO_TICKS(50)`). There are **zero blocking `while(1)` polling loops** awaiting serial bytes.
-2. **Dynamic DLE Capabilities (`omm_get_capabilities_vector`):** Central Box advertises only those hardware flags to the mesh that physically acknowledge presence (`gnss_is_connected()`, `is_linked`, `can_bus_is_connected()`).
-3. **Sensor-Fusion Autarky (`adr_ekf_filter.cpp`):** If GNSS is absent (e.g. tunnel or Front Node offline), the EKF immediately falls back to **Dead Reckoning** supported by IMU and CAN wheel speed.
-4. **Fault-Tolerant Audio Mixer (`audio_dsp_pipeline.cpp`):** If the Front Node I2S MEMS microphone is absent, the brickwall limiter and AGC level run at a fixed nominal baseline (Unity Gain `1.0f`).
-
----
-
-## 9. Build & Flashing Guide (Developer Guide)
-
-For complete toolchain setup (ESP-IDF v5.2 / v5.3 LTS), compiling all 6 firmware targets (`main_controller`, `front_node`, `smart_cartridge`, `radar_submcu`, `omm_module`, `omm446_module`), and flashing via USB-C, refer to the authoritative guide:
-
-> [!TIP]
-> The complete step-by-step developer documentation with troubleshooting instructions is in:  
-> [`firmware/README.md`](../../firmware/README.md)
-
-### 9.1 Build Commands Quick Reference
-
-```bash
-# Load environment
-. $HOME/esp/esp-idf-v5.2/export.sh
-
-# 1. Main Controller (Central Box PCBA 01)
-cd firmware/main_controller
-idf.py set-target esp32s3
-idf.py build flash monitor
-
-# 2. Front Node (PCBA 05)
-cd ../front_node
-idf.py set-target esp32s3
-idf.py build flash monitor
-
-# 3. Smart Cartridge Carrier (PCBA 03)
-cd ../smart_cartridge
-idf.py set-target esp32c6
-idf.py build flash monitor
-
-# 4. Rear Radar Sub-MCU (PCBA 08)
-cd ../radar_submcu
-idf.py set-target esp32c6
-idf.py build flash monitor
-
-# 5. OMM 2.4 GHz UCS Radio Module (PCBA 09)
-cd ../omm_module
-idf.py set-target esp32c6
-idf.py build flash monitor
-
-# 6. OMM 446 MHz PMR/DMR Radio Module (PCBA 10)
-cd ../omm446_module
-idf.py set-target esp32c6
-idf.py build flash monitor
-```
+### 8.1 Protection Mechanisms Against Missing Data (Zero-Crash Policy)
+1. **Asynchronous Non-Blocking Interfaces:** Communications via USB, LoRa (SPI), and Radar use FreeRTOS timeouts (`pdMS_TO_TICKS(50)`). There are **zero blocking `while(1)` polling loops**.
+2. **Dynamic DLE Capabilities (`omm_get_capabilities_vector`):** The Central Box advertises only those hardware flags in mesh packets that physically respond.
+3. **Sensor-Fusion Autonomy (`adr_ekf_filter.cpp`):** If GNSS is lost, the EKF transitions immediately to **Dead Reckoning** supported by IMU and wheel speed.
+4. **Fault-Tolerant Audio Mixer (`audio_dsp_pipeline.cpp`):** If the Front Node Knowles MEMS is missing, AGC defaults to nominal unity gain (`1.0f`).
