@@ -1,6 +1,6 @@
-# 02 - Intercom Matrix, PTT Control & Dynamic Cartridge Profiles
+# 02 - Intercom Matrix, PTT Control & Dynamic Pod Profiles
 
-This document specifies the universal **Intercom Routing Matrix**, the ultra-low-latency **Handlebar PTT Control** (< 0.5 ms), and the class-based **Hardware Profile System** of OpenMotorBridge v8.5 / v9.0 Clean Architecture based on All-UWB Cartridge Identification (`UWB_PKT_CARTRIDGE_ANNOUNCE`), staggered power sequencing, and the LittleFS profile engine.
+This document specifies the universal **Intercom Routing Matrix**, the ultra-low-latency **Handlebar PTT Control** (< 0.5 ms), and the class-based **Hardware Profile System** of OpenMotorBridge v8.5 / v9.0 Clean Architecture based on v10.0 4-Wire Bus Pod Identification (`USB_DESC_POD_ANNOUNCE`), staggered power sequencing, and the LittleFS profile engine.
 
 ---
 
@@ -9,13 +9,13 @@ This document specifies the universal **Intercom Routing Matrix**, the ultra-low
 OpenMotorBridge operates as an active audio crossbar and bridge gateway between two physical intercom units (Bay 1 and Bay 2), external audio sources (Navigation / Boom! Box), and the rider and passenger Bluetooth helmets:
 
 ```
-                                INTERCOM ROUTING MATRIX (ALL-UWB)
+                                INTERCOM ROUTING MATRIX (v10.0 4-WIRE BUS)
 +----------------------------------------------------------------------------------------+
 |                                                                                        |
 |   SATELLITE BAY 1 (Gateway A * Sena)          SATELLITE BAY 2 (Gateway B * Cardo/OMM)  |
 |   +--------------------------+                +--------------------------+             |
 |   | * Sena SPIDER X / 50S/60S|                | * Cardo Edge / Pro / OMM |             |
-|   | * UWB Transceiver DW3110 |                | * UWB Transceiver DW3110 |             |
+|   | * PCBA 03 Gateway-Board |                | * PCBA 03 Gateway-Board |             |
 |   | * 4x Mechatronic MOSFETs |                | * 4x Mechatronic MOSFETs |             |
 |   +------------+-------------+                +------------+-------------+             |
 |                |                                           |                           |
@@ -23,11 +23,11 @@ OpenMotorBridge operates as an active audio crossbar and bridge gateway between 
 |                | Staggered: T=200ms                        | Staggered: T=350ms        |
 |                |                                           |                           |
 |                +-------------+-----------------------------+                           |
-|                              | Wireless UWB Audio & Control Streams                    |
-|                              | (Qorvo DW3110 / 6.489 GHz Ch. 5 / Latency < 0.4 ms)     |
+|                              | High-Speed USB 2.0 Audio Class & Control                    |
+|                              | (Automotive USB 2.0 Hub / 6.489 GHz Ch. 5 / Latency < 0.4 ms)     |
 |                              v                                                         |
 |       +------------------------------------------------------------+                   |
-|       |     ESP32-S3 CORE 1 DSP & ES8388 24-BIT / 48 kHz AUDIO     |                   |
+|       |     ESP32-S31 CORE 1 DSP & ES8388 24-BIT / 48 kHz AUDIO     |                   |
 |       |  * Raised-Cosine Ducking (Prio: Radar > Nav > Intercom)    |                   |
 |       |  * Symmetrical Intercom Cross-Mix (Bay 1 <-> Bay 2)        |                   |
 |       |  * Knowles MEMS Wind Noise Adaptive Gain Control (AGC)     |                   |
@@ -83,7 +83,7 @@ OpenMotorBridge operates as an active audio crossbar and bridge gateway between 
 Unlike compromised software-emulated A2DP stacks, OpenMotorBridge offloads helmet Bluetooth to a **dedicated Qualcomm QCC3084 Bluetooth 5.4 Audio SoC (`U9` on PCBA 01)** in dedicated hardware:
 
 1. **Complete RF & CPU Decoupling:**
-   * The ESP32-S3 internal radio shares a single 2.4-GHz RF path between Wi-Fi (PWA Webserver, WebDAV uploads) and BLE (telemetry dashboard). Computing and streaming dual Hi-Res A2DP streams on the host MCU would lead to buffer under-runs, crackling, and latency spikes $> 150\,\text{ms}$.
+   * The ESP32-S31 internal radio shares a single 2.4-GHz RF path between Wi-Fi (PWA Webserver, WebDAV uploads) and BLE (telemetry dashboard). Computing and streaming dual Hi-Res A2DP streams on the host MCU would lead to buffer under-runs, crackling, and latency spikes $> 150\,\text{ms}$.
    * The Qualcomm QCC3084 operates autonomously on an independent dual-core 32-bit processor ($80\,\text{MHz}$) with a $240\,\text{MHz}$ Kalimba hardware audio DSP.
 2. **True Dual-A2DP & aptX HD / Adaptive:**
    * **Rider Helmet (Stream 1):** Dynamic switching between **aptX HD** ($24\,\text{Bit} / 48\,\text{kHz}$, Studio-HiFi for media) and **aptX Adaptive Low-Latency Mode** ($< 20\,\text{ms}$ latency for lip-sync intercom clarity).
@@ -91,7 +91,7 @@ Unlike compromised software-emulated A2DP stacks, OpenMotorBridge offloads helme
 3. **LE Audio Auracast Broadcast:**
    * Enables sharing the entire vehicle mix (intercom, GPS, music) with unlimited Auracast-enabled companion devices without pairing limits.
 4. **HFP 1.8 Wideband Speech & Rider Microphone Uplink:**
-   * Decodes HFP 1.8 Wideband Speech ($16\,\text{kHz}$ mSBC / aptX Voice) and feeds the rider's voice into the host ESP32-S3 DSP pipeline over the synchronous `I2S_DIN` line.
+   * Decodes HFP 1.8 Wideband Speech ($16\,\text{kHz}$ mSBC / aptX Voice) and feeds the rider's voice into the host ESP32-S31 DSP pipeline over the synchronous `I2S_DIN` line.
 5. **Onboard Ceramic Chip Antenna (Zero Coaxial Cable Overhead):**
    * The QCC3084 module integrates an omnidirectional $2.4\,\text{GHz}$ high-performance ceramic antenna directly on its $13 \times 18\,\text{mm}$ substrate, radiating cleanly through the enclosure toward rider and pillion.
 
@@ -120,18 +120,18 @@ Unlike compromised software-emulated A2DP stacks, OpenMotorBridge offloads helme
 
 #### Massive Battery Savings: Standard Bluetooth on Helmet:
 * Operating an active Mesh transceiver on the helmet (Sena Mesh or Cardo DMC) draws **$80\dots 130\,\text{mA}$**, depleting the 1,000 mAh helmet battery within **7 to 9 hours** (often before the tour ends!).
-* When the helmet connects **strictly via low-power Bluetooth (HFP/A2DP)** to the OMB Central Box (while Mesh traffic is handled by the 12V bike-fed cartridge), current draw drops to **$15\dots 22\,\text{mA}$**.
+* When the helmet connects **strictly via low-power Bluetooth (HFP/A2DP)** to the OMB Central Box (while Mesh traffic is handled by the 12V bike-fed pod), current draw drops to **$15\dots 22\,\text{mA}$**.
 * **Result:** Helmet battery runtime increases to **18 to 24+ hours** -- easily lasting an entire weekend tour without intermediate charging!
 
 #### Mechatronic Advantage: Dedicated Pushbuttons vs. Jog Dials:
-* For linear solenoids and micro-plungers, **flat, clearly defined discrete pushbuttons** (as on the Sena Spider X Slim, Spider RT1, 50R, or Cardo Packtalk Edge) are mechanically ideal with crisp tactile snap domes.
+* For linear direct digital controls and micro-plungers, **flat, clearly defined discrete pushbuttons** (as on the Sena Spider X Slim, Spider RT1, 50R, or Cardo Packtalk Edge) are mechanically ideal with crisp tactile snap domes.
 * Large rotary dials (jog dials as on the Sena 50S, 60S, or Spider ST1) feature angular play, soft stops, and require rotational torque -- making them poison for mechatronic actuation reliability.
 
 ---
 
-## 2. Zero-Latency PTT Control & Mechatronic UWB Trigger (< 0.5 ms)
+## 2. Zero-Latency PTT Control & Digital USB Trigger (< 0.2 ms)
 
-Classic handlebar Bluetooth remotes suffer from high latency ($80 \dots 250\,\text{ms}$) and connection dropouts. OpenMotorBridge resolves this with an ultra-low-latency **All-UWB PTT Signal Chain**:
+Classic handlebar Bluetooth remotes suffer from high latency ($80 \dots 250\,\text{ms}$) and connection dropouts. OpenMotorBridge resolves this with an ultra-low-latency **v10.0 4-Wire Bus PTT Signal Chain**:
 
 ```
                HANDLEBAR PTT SIGNAL CHAIN (GLASS-TO-GLASS < 0.54 ms)
@@ -139,39 +139,39 @@ Classic handlebar Bluetooth remotes suffer from high latency ($80 \dots 250\,\te
 | 1. HANDLEBAR SWITCH (Wired to Front Node PCBA 05):                                     |
 |    * Mechanical gold-contact pushbutton on handlebar (IP67, 100% battery-free)         |
 |    * Hardware Schmitt-trigger debouncing (12 µs latency)                               |
-|    * GPIO level interrupt on ESP32-S3 host controller                                  |
+|    * GPIO level interrupt on ESP32-S31 host controller                                  |
 +----------------------------------------------------------------------------------------+
 |                                        v                                               |
 | 2. ULTRA-LOW-LATENCY WIRELESS BRIDGE 1: FRONT NODE -> CENTRAL BOX                      |
-|    * IEEE 802.15.4z UWB Frame UWB_PKT_PTT_EVENT (6.8 Mbps PHY, < 180 µs flight time)   |
+|    * High-Speed USB 2.0 Interrupt Transfer (< 60 µs Bus Transit Time)   |
 |    * 100% compliant with ETSI EN 302 065-1/3 & EU Decision 2019/785 (Zero duty cycle)  |
 |    * Zero collision with 2.4 GHz Bluetooth, Wi-Fi, or Sena/Cardo Mesh (PDR: 99.99%)    |
 +----------------------------------------------------------------------------------------+
 |                                        v                                               |
-| 3. CENTRAL BOX DISPATCHER & WIRELESS BRIDGE 2: CENTRAL BOX -> CARTRIDGE                |
-|    * ESP32-S3 Core 0 ISR decodes PTT event (< 35 µs) & generates opcode (< 10 µs)      |
-|    * Dispatches UWB_PKT_CARTRIDGE_OPCODE wirelessly to Bay 1 or Bay 2 (< 180 µs)       |
+| 3. CENTRAL BOX DISPATCHER & USB ROUTING: CENTRAL BOX -> POD 1 / POD 2                |
+|    * ESP32-S31 Core 0 ISR decodes PTT event (< 35 µs) & generates opcode (< 10 µs)      |
+|    * Dispatches USB_CMD_POD_CONTROL wirelessly to Bay 1 or Bay 2 (< 180 µs)       |
 +----------------------------------------------------------------------------------------+
 |                                        v                                               |
-| 4. CARTRIDGE ACTUATOR TRIGGER (PCBA 03 Rev 3.0 All-UWB):                               |
+| 4. INTERFACE TRIGGER (PCBA 03 in Satellite Pod):                               |
 |    * Host MCU on PCBA 03 switches AO3400A N-MOSFET (< 1 µs)                            |
-|    * Solenoid depresses PTT/Mesh rubber pushbutton on headset (< 100 µs)               |
+|    * Direct OptoMOS PTT keying (< 10 µs) or digital USB Audio Class               |
 |    * Total glass-to-glass latency from switch press to physical button actuation: ~0.54|
 +----------------------------------------------------------------------------------------+
 ```
 
-### 2.1 Mechatronic Smart Cartridge & 4-Channel MOSFET Drivers (PCBA 03 Rev 3.0)
+### 2.1 Mechatronic Smart Pod & 4-Channel MOSFET Drivers (PCBA 03 Rev 3.0)
 
 * **Physically Infinite Galvanic Isolation:** Mechatronic plungers actuate original rubber buttons from the outside without electrical connection to motorcycle power. Optocouplers on the mainboard are completely eliminated!
-* **Ultra-Low Loss N-Channel MOSFETs (`AO3400A`):** Four power MOSFETs ($R_{\text{ON}} < 28\,\text{m}\Omega$) on `B.Cu` drive miniature solenoids bounce-free with $< 1\,\mu\text{s}$ response time.
+* **Ultra-Low Loss N-Channel MOSFETs (`AO3400A`):** Four power MOSFETs ($R_{\text{ON}} < 28\,\text{m}\Omega$) on `B.Cu` drive miniature direct digital controls bounce-free with $< 1\,\mu\text{s}$ response time.
 * **100% Preservation of Factory Warranty & IPX Rating:** Headsets remain brand-new and sealed. Factory seals and rubber gaskets are untouched.
 * **Form-Fit Retention Resisting $20\,\text{g}$ Vibration:** The 3D-printed PA12-MJF cradle nests the intercom with damping EPDM liners with zero play, ensuring plungers consistently strike buttons on-center with calibrated $1.0\dots 1.2\,\text{mm}$ travel.
 
-### 2.2 Independent 4-Channel Actuator Matrix via UWB Opcodes
+### 2.2 Symmetrical Dual Under-Perch 5-Gesture Engine
 
 ```
 +----------------------------------------------------------------------------------------+
-|        SENA SPIDER X SLIM - SMART CARTRIDGE ACTUATOR MATRIX (PCBA 03 Rev 3.0)          |
+|        SYMMETRICAL UNDER-PERCH MIRROR POD GESTURE MATRIX (PCBA 05B)          |
 +----------------------+-----------------------+-----------------+-----------------------+
 | Function / Opcode    | Active Actuators      | Pulse / Timing  | Sena Reaction         |
 +----------------------+-----------------------+-----------------+-----------------------+
@@ -202,7 +202,7 @@ Classic handlebar Bluetooth remotes suffer from high latency ($80 \dots 250\,\te
 
 ## 3. Class-Based Hardware Profile Matrix & Device Hierarchy
 
-All supported intercom and two-way radio cartridges are categorized into clearly segregated hardware classes:
+All supported intercom and two-way radio pods are categorized into clearly segregated hardware classes:
 
 ```
 +-----------------------------------------------------------------------------------------+
@@ -234,7 +234,7 @@ All supported intercom and two-way radio cartridges are categorized into clearly
 +----------+-------------------------------------+-----------------------+----------------+
 | **K4**   | OMM 2.4 GHz Universal (PCBA 09 UCS) | OMM TDMA / IPv6 Mesh  | **+55 Points** |
 +----------+-------------------------------------+-----------------------+----------------+
-| **K0**   | Disabled / Empty Cartridge Slot     | None (eFuse OFF)      | **0 Points**   |
+| **K0**   | Disabled / Empty Pod Slot     | None (eFuse OFF)      | **0 Points**   |
 +----------+-------------------------------------+-----------------------+----------------+
 ```
 
@@ -344,7 +344,7 @@ All supported intercom and two-way radio cartridges are categorized into clearly
 
 #### Specific OEM Model Upcycling Reference:
 
-| OEM Model | Helmet Compatibility | Sena Architecture | Mesh Support | Antenna Connection | OMB Cartridge Integration Notes |
+| OEM Model | Helmet Compatibility | Sena Architecture | Mesh Support | Antenna Connection | OMB Pod Integration Notes |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **Schuberth SC2** | Schuberth C5, E2, S3 | Sena 50 / Spider | **Mesh 3.0** (official FW) & Mesh 2.0 | Micro-coax pigtail | Monolithic main unit ($75 \times 40 \times 12\,\text{mm}$); BLE handlebar remote included from factory! |
 | **Shoei SRL-Mesh** | Shoei Neotec 2, GT-Air 2, J-Cruise 2 | Sena 50S/50R | **Mesh 3.0** & Mesh 2.0 | U.FL / Coax plug | 3-part harness; neck main unit and button strip fit flat side-by-side in base sled. |
@@ -356,17 +356,17 @@ All supported intercom and two-way radio cartridges are categorized into clearly
 #### Mechanical Installation in Universal Base Sled (`00_base_sled.scad`):
 * The internal cavity of the base sled ($124 \times 53 \times 28\,\text{mm}$ with $130 \times 58 \times 28\,\text{mm}$ outer dimensions) provides generous room for all aforementioned OEM mainboards (rarely exceeding $75 \times 40 \times 12\,\text{mm}$).
 * The remaining $35\,\text{mm}$ of longitudinal space houses the step-down buck converter, NTC resistor, audio isolation transformers, and silicone strain reliefs.
-* The unit is sealed using the solid **Dummy Plug Cover ([`03_insert_blindkassette.scad`](../../hardware/cad/scad/03_pod_cartridges/parts/03_insert_blindkassette.scad))** with 4x M2 countersunk screws—100% waterproof and clean (or an optional 3D printed cover with button apertures).
+* The unit is sealed using the solid **Dry-Box Cover ([`03_insert_blindkassette.scad`](../../hardware/cad/scad/03_pod_cartridges/parts/03_insert_blindkassette.scad))** with 4x M2 countersunk screws—100% waterproof and clean (or an optional 3D printed cover with button apertures).
 
 ---
 
 ### 3.3 JSON Profile Schema Specification
-Each hardware profile is stored as an independent JSON file in the ESP32-S3 internal LittleFS flash filesystem (`/data/profiles/*.json`), defining audio gain levels, ducking curves, mechatronic pulse mappings, and BLE remote control parameters:
+Each hardware profile is stored as an independent JSON file in the ESP32-S31 internal LittleFS flash filesystem (`/data/profiles/*.json`), defining audio gain levels, ducking curves, mechatronic pulse mappings, and BLE remote control parameters:
 
 ```json
 {
   "id": "sena_spider_x",
-  "name": "Sena Spider X Slim (Smart Cartridge 4-Actuator)",
+  "name": "Sena Spider X Slim (Smart Pod 4-Actuator)",
   "vendor": "Sena Technologies",
   "hardware_tier": 1,
   "vcc_enabled": true,
@@ -376,11 +376,11 @@ Each hardware profile is stored as an independent JSON file in the ESP32-S3 inte
   "input_gain_db": 1.5,
   "output_gain_db": 0.0,
   "noise_gate_threshold_db": -44,
-  "control_mode": "smart_cartridge_mechatronic",
-  "smart_cartridge": {
+  "control_mode": "smart_pod_mechatronic",
+  "smart_pod": {
     "controller_type": "ESP32C6_RISCV",
     "onewire_emulation": true,
-    "protocol": "uwb_action_frame_or_uart",
+    "protocol": "usb_cdc_or_uart",
     "num_actuators": 4,
     "command_table": {
       "0x01": { "name": "POWER_BOOT", "actuators": [1, 3], "duration_ms": 1000 },
@@ -436,20 +436,20 @@ Each hardware profile is stored as an independent JSON file in the ESP32-S3 inte
 4. **`hid_consumer_control` (`0x0C`):**  
    Standard Bluetooth Human Interface Device Consumer Control for legacy headsets and Midland BTR1 (Volume, Play/Pause).
 5. **`none`:**  
-   No BLE interface available (pure analog radios like Midland G9 Pro PMR446, `omm_pmr446.json`, or disabled cartridges). All commands are dispatched directly via hardware PTT lines or mechatronic actuators.
+   No BLE interface available (pure analog radios like Midland G9 Pro PMR446, `omm_pmr446.json`, or disabled pods). All commands are dispatched directly via hardware PTT lines or direct digital & OptoMOS interfaces.
 
 > [!NOTE]
 > **Architectural Rule:** In the `ble_control` object, `power_boot` is by principle **always `false`**, because unpowered intercom devices in cold-off state cannot receive Bluetooth packets. Powering on is handled exclusively via the initial physical mechatronic plunger pulse (`0x01`). Once booted, runtime operation is 100% wear-free digital BLE. If the BLE link drops or desynchronizes, `fallback_to_mechatronics_on_disconnect` immediately engages.
 
 ---
 
-## 4. All-UWB Cartridge Recognition, Staggered Power Sequencing & Plug-and-Play
+## 4. v10.0 4-Wire Bus Pod Recognition, Staggered Power Sequencing & Plug-and-Play
 
-Every cartridge carrier board (`PCBA 03 Rev 3.0 All-UWB`) incorporates an onboard Qorvo DW3110 UWB transceiver, broadcasting its unique 64-bit chip UID and hardware class wirelessly over UWB. Physical 1-Wire data lines and discrete DS2401 chips are retired:
+Every pod carrier board (`PCBA 03`) connects via the shielded 4-wire Automotive Bus, broadcasting its unique 64-bit chip UID and hardware descriptor natively over High-Speed USB 2.0 (CDC-ACM / HID):
 
 ```
 +-------------------------------------------------------------+
-|        ALL-UWB PLUG-AND-PLAY & POWER-SEQUENCING FLOW        |
+|        4-WIRE USB-PD PLUG-AND-PLAY & SEQUENCING FLOW        |
 +-------------------------------------------------------------+
 | 1. STAGGERED POWER-UP (Sequencer via DTM-12):               |
 |    * T=0ms: Central Box & Front Node boot on KL15 ignition  |
@@ -458,8 +458,8 @@ Every cartridge carrier board (`PCBA 03 Rev 3.0 All-UWB`) incorporates an onboar
 |    * Avoids battery voltage drops during starter cranking   |
 +-------------------------------------------------------------+
 |                                v                            |
-| 2. WIRELESS DISCOVERY VIA UWB (Airgap < 0.4 ms):            |
-|    * Cartridge boots; transmits UWB_PKT_CARTRIDGE_ANNOUNCE  |
+| 2. HIGH-SPEED USB 2.0 ENUMERATION & DESCRIPTOR HANDSHAKE:            |
+|    * Pod boots; transmits USB_DESC_POD_ANNOUNCE  |
 |    * Payload: 64-bit UID, hardware class, battery status    |
 |    * Central Box loads /data/profiles/<profile_id>.json     |
 +-------------------------------------------------------------+
@@ -472,18 +472,18 @@ To maximize component lifespan and eliminate mechanical wear, OpenMotorBridge en
 1. **Digital BLE GATT Primary Path (Zero-Wear):**
    * Once the intercom device is powered on and connected via Bluetooth Low Energy, all **runtime commands** (Mesh activation, group toggles, volume +/-, channel selection, mic mute) are dispatched **strictly digitally via BLE GATT**.
    * Latency: **$< 5\,\text{ms}$** (compared to $100\dots 300\,\text{ms}$ mechanical actuator travel).
-   * For `PCBA 09` (OMM 2.4 GHz), the native service `0x00MB` manages all parameters directly. For Sena and Cardo, the cartridge BLE client commands the corresponding vendor GATT characteristics.
+   * For `PCBA 09` (OMM 2.4 GHz), the native service `0x00MB` manages all parameters directly. For Sena and Cardo, the pod BLE client commands the corresponding vendor GATT characteristics.
 
 2. **Physical Mechatronics (Plungers / MOSFETs) for Cold-Boot & Fallback Only:**
    * **Power ON (Cold-Boot):** Essential because when an intercom is powered off, its Bluetooth radio is completely unpowered. Only a physical mechatronic press (e.g., Center + Plus for $1.0\,\text{s}$ on Sena Spider X Slim) can boot the unit.
    * **Power OFF (Shutdown):** Reliable mechatronic power-down upon vehicle ignition cut (KL15).
-   * **Failsafe Fallback:** If the BLE link drops or a vendor changes their proprietary BLE handshake via firmware update, the cartridge firmware immediately falls back to the physical 4x AO3400A MOSFET actuator gates.
+   * **Failsafe Fallback:** If the BLE link drops or a vendor changes their proprietary BLE handshake via firmware update, the pod firmware immediately falls back to the physical 4x AO3400A MOSFET actuator gates.
 
 ---
 
-## 5. Cartridge Interface Pinout (`J_AUDIO_PWR` / 8-Pin JST-SH 1.0mm)
+## 5. Pod Interface Pinout (`J_AUDIO_PWR` / 8-Pin JST-SH 1.0mm)
 
-### 5.1 Detailed Pinout of Cartridge Header (`J_AUDIO_PWR`) with Kelvin Grounding
+### 5.1 Detailed Pinout of Pod Header (`J_AUDIO_PWR`) with Kelvin Grounding
 
 To physically eliminate **common-impedance ground coupling (charging ripple & Mesh TDMA transmit buzzing)**, the `J_AUDIO_PWR` header on `PCBA 03` is designed as an **8-pin JST-SH connector** with complete Kelvin ground isolation:
 
@@ -506,7 +506,7 @@ To physically eliminate **common-impedance ground coupling (charging ripple & Me
 
 ## 6. Safety Fallback: `disabled.json` & Zero-Trust Quarantine
 
-When a cartridge bay is empty, contains a blank dummy cartridge, or is shut down via the WebApp, the system loads `disabled.json`:
+When a pod bay is empty, contains a blank dummy pod, or is shut down via the WebApp, the system loads `disabled.json`:
 * `vcc_enabled`: `false` (eFuse isolated, zero parasitic power draw).
 * `input_gain_db` & `output_gain_db`: `-96.0 dB` (hermetic digital mute).
 * `control_mode`: `"disabled"` (all actuator MOSFETs de-energized).
