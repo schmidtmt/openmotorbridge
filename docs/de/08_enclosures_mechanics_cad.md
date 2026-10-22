@@ -768,46 +768,59 @@ Während die 5 Hardware-Gehäuse (Typ A bis E) zu **100 % universell und einheit
 
 ---
 
-### 6.1 Referenz-Kit 1: Harley-Davidson CVO Road Glide ST (2024+) & New Touring Platform
+### 6.1 Referenz-Kit 1: Harley-Davidson CVO Road Glide ST (2024+) & New Touring Platform (v10.0)
 
 Für High-Performance Bagger mit werkseitiger Einzelsitzbank und Forged-Carbon-Hutze (FLTRXSTSE):
-Aufgrund der werkseitigen Showa Inverted-Remote-Reservoir-Stoßdämpfer mit dicken Hydraulikleitungen und des neuen 2024er Heckabschlusses scheiden externe Strut-Konsolen mechanisch aus. Das ST-Referenzkit integriert die 5 Knoten daher zu 100 % unsichtbar und zerstörungsfrei:
+Aufgrund der werkseitigen Showa Inverted-Remote-Reservoir-Stoßdämpfer mit dicken Hydraulikleitungen und des 2024er Heckabschlusses integriert das v10.0 Referenzkit alle Knoten zu 100 % zerstörungsfrei und ohne Verkleidungs- oder Tankdemontage:
 
 ```
-          CVO ROAD GLIDE ST (2024+) GESAMTSYSTEM-INTEGRATION
+          CVO ROAD GLIDE ST (2024+) GESAMTSYSTEM-INTEGRATION (v10.0)
 +-----------------------------------------------------------------------------+
-| 1. COCKPIT (Vorne, unsichtbar hinter Außenhaut):                            |
-|    * Front-Node (PCBA 05) + Ottocast am Alu-Geweihträger montiert           |
-|    * SAM-M10Q GNSS + TMP117 + OPT3001 via Fahrzeug-Satellit im Kaltlufteinl.|
-|    * UWB-Backbone (DW3110 / 6.489 GHz Ch. 5) zur Zentralbox -> 0 Kabel      |
-|      über den Lenkkopf, deterministische Latenz < 0,4 ms                    |
+| 1. COCKPIT (Lenker-Riser & Spiegelfuß):                                     |
+|    * Front-Node (PCBA 05) am Riser / Gabelbrücke (Zero Outer Fairing Removal|
+|      - kein Abhebeln von Rockford Fosgate Lautsprechergittern nötig!)       |
+|    * Symmetrische Dual Under-Perch Spiegel-Pods unter beiden Spiegelfüßen:  |
+|      - Links:  Taktiler PTT-Taster & linke gerichtete BSD-Warn-LED (Amber)  |
+|      - Rechts: Taktiler Action-Cam-Tag Taster & rechte BSD-Warn-LED (Amber) |
+|    * Handschuhfach-Hub: 2-Port USB-Hub im rechten Fach, von UNTEN durch die |
+|      OEM-Gummitülle erschlossen (Türdichtung bleibt 100% hermetisch dicht!) |
+|    * SAM-M10Q GNSS + TMP117 + Knowles MEMS im laminaren Fahrtwind           |
 +-----------------------------------------------------------------------------+
-| 2. MITTE (Unter Sitzbank):                                                  |
-|    * Zentralbox mittig im Batteriefach (SX1262 LoRa 868 MHz & DW3110 UWB)   |
-|    * USV-Pufferung via 1S LiPo für 24/7 Diebstahl-Sentry                    |
+| 2. VERKABELUNG (Backbone Wire Caddy - Zero Tank Lifting):                   |
+|    * 4-Draht Automotive Bus (USB-PD & USB 2.0) verlegt per Nylon-Einzug     |
+|      in 5 Minuten durch den offenen Rahmentunnel unter der Tankkonsole      |
+|    * Zero Tank-Demontage, Zero Tank-Anheben!                                |
 +-----------------------------------------------------------------------------+
-| 3. HECK (Unter Forged Carbon Hutze & Kennzeichen):                          |
+| 3. MITTE (Unter Sitzbank):                                                  |
+|    * Zentralbox mittig auf Batteriebrücke (ESP32-S31 AI-Host, QCC3084 Audio,|
+|      SX1262 LoRa 868 MHz & Multi-Port Automotive USB-PD Engine bis 60 W)   |
+|    * USV-Pufferung via 1S LiPo (2.200 mAh) für 24/7 Diebstahl-Sentry        |
++-----------------------------------------------------------------------------+
+| 4. HECK (Unter Forged Carbon Hutze & Kennzeichen):                          |
 |    * Forged-Carbon-Hutze schließt plan mit OEM-Rändelschraube ab (100% frei |
 |      von Elektronik/Kabeln - keine Quetschungen an der Rändelschraube!)     |
 |    * Radar mittig unter dem Kennzeichen (radar_license_plate_bracket.scad)  |
-|      gespeist über Peitsche 3 des Deutsch DTM-12 Kabelbaums (2-Draht 12V DC) |
+|      gespeist über 4-Draht Bus, mit Abtropfschlaufe (Drip-Loop) & Deflector |
 +-----------------------------------------------------------------------------+
-| 4. KOFFER (Gruppenfunk-Brücke Sena & Cardo):                                |
-|    * Pod 1 (Sena SPIDER X Slim) im linken Kofferdeckel                      |
-|    * Pod 2 (Cardo Packtalk Edge) im rechten Kofferdeckel                    |
-|    * Montage an originalen Scharnier-/Fangbandschrauben (Zero-Drill)        |
-|    * Kabelführung am Fangband, MagSafe-Abreißkupplung außen am Spalt        |
+| 5. KOFFER (Gruppenfunk-Brücke Sena & Cardo mit Ladefunktion):               |
+|    * Pod 1 (Sena) im linken Koffer, Pod 2 (Cardo) im rechten Koffer         |
+|    * Slide-in Deckel mit integrierter Dichtung & FOB-Magnetverriegelung     |
+|    * Innenliegender Zwischendeckel (Dry-Flap) gegen Spritzwasser bei Regen   |
+|    * Integrierte Koffer-USB-Ladedose (5V/12V PD bis 30W) zum Laden im Koffer|
+|    * 4-Pin IP67 Magnet-Abreißkupplung am Rahmen ("MagSafe-Prinzip")         |
 +-----------------------------------------------------------------------------+
 ```
 
 #### A. Heck-Integration: 100 % OEM-Bündigkeit & Freigängigkeit
-* **Original Forged-Carbon-Hutze bleibt unberührt:** In v8.0 entfällt der Heck-Pod 3 und das interne Skeleton Dock ersatzlos. Die originale Forged-Carbon-Hutze der CVO ST schließt mit ihrer umlaufenden Dichtlippe vollkommen plan auf dem Heckkotflügel ab und wird mit der werksseitigen Rändelschraube wackelfrei gehalten. Da kein Kabel darunter gequetscht werden muss, bleibt der Lack zu 100 % geschützt.
-* **Außentemperatur- & GNSS-Sensorik:** Liegt thermisch vollkommen entkoppelt von Auspuff- und Motorwärme im laminaren Fahrtwindkanal des Front-Knotens (angebunden über den Fahrzeug-Satelliten) mit dem NIST-Präzisionssensor TI TMP117 ($\pm 0{,}1\,^\circ\text{C}$) und dem u-blox SAM-M10Q Multi-GNSS.
-* **Radar-Montage:** Erfolgt mittig unter dem Kennzeichen über den vibrationsfesten Kennzeichenträger ([`radar_license_plate_bracket.scad`](../../hardware/cad/scad/02_pod_base/radar_license_plate_bracket.scad)), gespeist über Peitsche 3 (Pins 10-11: 12V geschaltet, GND). Vollständige Freigängigkeit zu den Showa Inverted-Remote-Reservoirs garantiert.
+* **Original Forged-Carbon-Hutze bleibt unberührt:** In v10.0 entfällt der Heck-Pod 3 und das interne Skeleton Dock ersatzlos. Die originale Forged-Carbon-Hutze der CVO ST schließt mit ihrer umlaufenden Dichtlippe vollkommen plan auf dem Heckkotflügel ab und wird mit der werksseitigen Rändelschraube wackelfrei gehalten. Da kein Kabel darunter gequetscht werden muss, bleibt der Lack zu 100 % geschützt.
+* **Außentemperatur- & GNSS-Sensorik:** Liegt thermisch vollkommen entkoppelt von Auspuff- und Motorwärme im laminaren Fahrtwindkanal am Riser-Frontknoten mit dem NIST-Präzisionssensor TI TMP117 ($\pm 0{,}1\,^\circ\text{C}$) und dem u-blox SAM-M10Q Multi-GNSS mit freier Zenit-Sicht.
+* **Radar-Montage:** Erfolgt mittig unter dem Kennzeichen über den vibrationsfesten Kennzeichenträger ([`radar_license_plate_bracket.scad`](../../hardware/cad/scad/02_pod_base/radar_license_plate_bracket.scad)), gespeist über Strang 3 mit Abtropfschlaufe. Vollständige Freigängigkeit zu den Showa Inverted-Remote-Reservoirs garantiert.
 
-#### B. Kofferdeckel-Integration: Pod 1 (Links) & Pod 2 (Rechts)
-* **Top-Lid Montage:** Beide Pods sitzen im vorderen Drittel der Kofferdeckel, verschraubt an den originalen Torx-Punkten der Scharnier- bzw. Fangbandhalterung (siehe [Abschnitt 6.5](#65-universal-kofferdeckel-dock-saddlebag_lid_dockscad)).
-* **Gepäck- und Getränke-Sicherheit:** Liegen ca. $30\,\text{cm}$ über dem Kofferboden. Schwere Kaltgetränke, Werkzeug oder feuchte Kleidung am Boden liegen vollständig unterhalb der Funk-Fresnel-Zone.
+#### B. Koffer-Integration: Pod 1 (Links) & Pod 2 (Rechts) mit Koffer-USB-Ladedose
+* **Slide-in Deckel & FOB-Magnetverriegelung:** Beide Pods sitzen an der Innenwand der Hartschalenkoffer. Der Slide-in Deckel schließt formschlüssig und wird bei Annäherung des OMB Smart-Keyfobs magnetisch entriegelt.
+* **Zwischendeckel (Dry-Flap):** Eine nach innen federnde Spritzschutzklappe hält Elektronik und Intercoms auch bei geöffnetem Kofferdeckel im Starkregen absolut trocken.
+* **Koffer-USB-Ladedose:** Jeder Pod stellt im Kofferinneren eine vollwertige USB-C Buchse (5V/12V PD bis 30W) bereit, um Actioncams, Smartphones oder Helmpolster-Trockner während der Fahrt zu laden.
+* **4-Pin Magnet-Abreißkupplung:** Beim Abnehmen der Koffer löst sich die Kupplung an der Koffer-Vorderwand völlig widerstandsfrei ohne Kabelabriss.
 * **Maximale HF-Isolation ($> 40\,\text{dB}$):** Sena (links) und Cardo (rechts) sind über $60\,\text{cm}$ voneinander getrennt, mit Heckfender und Rahmen als HF-Schild.
 
 ---
@@ -900,52 +913,62 @@ Bei unverkleideten Custom- und Bagger-Bikes wie der **Harley-Davidson Road King 
 
 ---
 
-### 6.3 Referenz-Kit 3: Adventure & Touring Enduros (BMW GS / GSA, KTM Adventure, Africa Twin)
+### 6.3 Referenz-Kit 3: Adventure & Touring Enduros (BMW GS / GSA, KTM Adventure, Africa Twin) (v10.0)
 
 Für großvolumige Reiseenduros und Offroad-Tourer mit offenem Gitterrohr-Heckrahmen, Rohrgepäckbrücke und optionalem Aluminium-3-Koffersystem (z. B. Touratech Zega Pro/Evo, BMW Adventure oder Wunderlich):
 
 ```
-            ADVENTURE BIKE (BMW GS / KTM / AFRICA TWIN) INTEGRATION
+            ADVENTURE BIKE (BMW GS / KTM / AFRICA TWIN) INTEGRATION (v10.0)
 +-----------------------------------------------------------------------------+
-| 1. COCKPIT (Windschild / Navigationsstrebe / Schnabel):                     |
-|    * Front-Node (PCBA 05) via AMPS-Bohrbild (30 x 38 mm) an Navigationsstrebe|
-|      oder vibrationsentkoppelt mit M4 Silentblöcken im Schnabel             |
-|    * SAM-M10Q GNSS + TMP117 Glatteis-Wächter an Fahrzeug-Satellit im Kaltlufteinlass |
-|    * UWB-Backbone (DW3110) zur Zentralbox unter der Sitzbank                |
+| 1. COCKPIT (Windschild / Navigationsstrebe / Spiegelfuß):                   |
+|    * Front-Node (PCBA 05) via 2-teiliger Klemmschelle an Ø 12 mm GPS-Strebe|
+|      über TFT-Display oder am Schnabel-Subframe                             |
+|    * All-in-One Under-Perch Spiegel-Pod am linken Spiegelfuß: Taktiler      |
+|      PTT-Taster & gerichtete bernsteinfarbene BSD-Radar-Warn-LED            |
+|    * SAM-M10Q GNSS + TMP117 Glatteis-Wächter im laminaren Fahrtwind        |
 +-----------------------------------------------------------------------------+
-| 2. MITTE (Unter Fahrersitz / Batteriefach):                                 |
-|    * Zentralbox spritzwassergeschützt im Batteriefach / Werkzeugraum        |
-|    * SX1262 LoRa 868 MHz für 24/7 Diebstahl-Sentry & Notfall-Ortung        |
+| 2. VERKABELUNG (Das GS-Telelever-Dilemma vs. Harley-Kanal):                 |
+|    * 4-Draht Automotive Bus (USB-PD & USB 2.0) von Zentralbox zum Cockpit   |
+|    * Erfordert 20 min sorgfältige Verlegung: Tankseitenblende anheben,      |
+|      Parallellauf zum BMW-Hauptkabelbaum, Telelever-Bogen am Steuerkopf     |
+|      mit 50 mm Bewegungsschlaufe (verhindert Abscheren beim Einfedern!)     |
 +-----------------------------------------------------------------------------+
-| 3. VORDERER HECKRAHMEN / SEITENBEREICH (Kassetten-Pods 1 & 2):             |
+| 3. MITTE (Unter Fahrersitz / Werkzeugfach):                                 |
+|    * Zentralbox spritzwassergeschützt auf 4x M4 Silentblöcken               |
+|    * ESP32-S31 AI-Host, QCC3084 Audio, SX1262 LoRa 868 MHz & USB-PD Engine  |
+|    * 12V Speisung direkt vom 3-Pin BMW Cartool-Stecker über dem Steuerkopf  |
++-----------------------------------------------------------------------------+
+| 4. VORDERER HECKRAHMEN / SEITENBEREICH (Koffer-Pods 1 & 2):                 |
 |    * Variante A (GSA & Heavy Duty): An der Innenseite der Rundrohr-         |
-|      Kofferträger (Ø 18 mm) im geschützten Rahmendreieck ("Überrollkäfig")  |
-|    * Variante B (Standard-GS ohne Koffer): Im "Transition Dock" unter der   |
+|      Kofferträger (Ø 18 mm) im geschützten GSA Cage Dock (45 mm Totraum)    |
+|    * Variante B (Standard-GS ohne Koffer): Im Transition Dock unter der     |
 |      Sitzbank in der optischen "Bügelfalte" am Fahrer-/Sozius-Übergang       |
-|    * Raumdiversität > 45 cm; 100 % frei von Koffer-Abschattung              |
+|    * Slide-in Deckel mit FOB-Magnetriegel, Dry-Flap & interner USB-Ladedose |
+|    * Strikt fahrzeugfest montiert (niemals im Inneren von Alukoffern!)      |
 +-----------------------------------------------------------------------------+
-| 4. HECK (Minimaler Radarträger unter Gepäckbrücke):                         |
+| 5. HECK (Minimaler Radarträger unter Gepäckbrücke):                         |
 |    * Minimaler "Adventure Rack Radar Mount" unter der Gepäckbrücke          |
-|    * Schwenkbare GoPro/Hirth-Aufnahme für Wheeltec MR20 oder Garmin Varia   |
-|    * Gespeist über Peitsche 3 des Deutsch DTM-12 Kabelbaums (2-Draht 12V DC) |
-|    * Topcase bleibt in 5 Sekunden per Original-Schnellverschluss abnehmbar  |
+|    * Schwenkbare Hirth-Aufnahme für Wheeltec MR20 77 GHz mit 45°-Spoiler    |
+|    * Gespeist über 4-Draht Bus; Topcases bleiben uneingeschränkt abnehmbar  |
 +-----------------------------------------------------------------------------+
 ```
 
-#### 6.3.1 Front-Node Montage am BMW GS Verkleidungsgeweih (Schnabel-Subframe & 1-Kabel-Lenkerführung)
+#### 6.3.1 Front-Node Montage am BMW GS Verkleidungsgeweih & Telelever-Kabelführung
 
 Auf der BMW R 1200 / 1250 / 1300 GS und GS Adventure wird der Front-Node nach dem Vorbild professioneller Zusatzsteuergeräte (Hex ezCAN, Denali CANsmart) vibrations- und witterungsgeschützt montiert:
 
-1. **Montageort am Verkleidungsgeweih:**
-   - Der Front-Node wird im geschützten Hohlraum **unter dem Schnabel hinter den seitlichen Verkleidungsteilen** direkt an den runden Trägerrohren des vorderen Cockpitrahmens (Geweih) befestigt.
-   - Die Montage erfolgt über die integrierte 4-in-1 Bodenaufnahme mit **M4 Silentblöcken (Shore 50A EPDM)** zur Schwingungsentkopplung von Einzylinder- / Boxer-Vibrationen oder über die 2-teilige Rohrschelle ([`front_node_fairing_tube_clamp.scad`](../../hardware/cad/scad/04_front_node/front_node_fairing_tube_clamp.scad)).
-2. **Die 1-Kabel-Lenkerführung (Zero Lenkkopf-Kabelsalat):**
-   - Vom Front-Node führt **exakt ein einziges** geschirmtes Cockpit-Mantelkabel ($\varnothing 6{,}0\,\text{mm}$) entlang der werkseitigen BMW Bremsleitungs- und Kabelbaumführung am Lenkkopf vibrationsgeschützt nach oben zum Lenker.
-   - Es werden **keine** Hochstrom-Zusatzleitungen, Scheinwerferkabel oder Bordnetzkabel über das bewegliche Lenkkopflager geführt.
-3. **Satelliten-Positionierung auf der GS:**
-   - **Cockpit-Satellit:** Wird an der serienmäßigen $\varnothing 12\,\text{mm}$ Navigationsstrebe über dem BMW TFT-Display oder am Lenker montiert. Stellt die beschrifteten USB-C Ports für Smartphone-Schnellladen (20W PD für QuadLock Wireless Charging Head) und Garmin Zūmo / ConnectedRide Cradle sowie die Klemme für den PTT-Taster bereit.
-   - **Fahrzeug-Satellit:** Bleibt fest am Verkleidungsgeweih unter dem Schnabel. Adventure-Zusatzscheinwerfer (Aux Light) und Totwinkel-Spiegel-LEDs (BSD) werden dort direkt eingesteckt.
-   - **Klima- & GNSS-Puck:** Der abgesetzte SAM-M10Q GNSS-Puck mit integriertem TMP117 Temperatursensor sitzt strömungsgünstig im vorderen Kaltlufteinlass des Schnabels – ungestörte Zenitsicht für Satelliten und absolut verfälschungsfreie Glatteiswarnung ohne Motorstauwärme.
+1. **Montageort an der Navigationsstrebe:**
+   - Der Front-Node wird über die 2-teilige Rohrschelle direkt an der serienmäßigen $\varnothing 12\,\text{mm}$ Navigationsstrebe über dem 6.5" TFT-Display befestigt.
+   - Liefert ungestörte Zenitsicht für das u-blox SAM-M10Q GNSS, Kaltluft-Sensorik (TMP117) und versorgt Smartphone-Halterungen (QuadLock Wireless Head) oder Garmin Zūmo Cradles.
+2. **Die GS/GSA-Kabelführung im Praxis-Vergleich zur Harley:**
+   - Während das 4-Draht-Kabel bei der Harley Touring in 5 Minuten per Einzugsfeder durch den offenen Rahmentunnel geschoben werden kann, erfordert die BMW GS/GSA durch ihren 20L/30L-Tank und die **Telelever-Vorderradführung** eine sorgfältigere Verlegung:
+   - Die obere Tankseitenblende (Torx T25) wird gelöst und leicht angehoben. Das geschirmte 4-adrige Kabel wird parallel zum originalen BMW-Kabelbaum an den Rahmenrohren nach vorne geführt.
+   - **Crucial Telelever Loop:** Am Lenkkopf muss das Kabel **exakt dem Radius der werksseitigen Bremsleitungen** folgen. Vor dem Festziehen der Kabelbinder wird die Lenkung von Anschlag zu Anschlag gedreht und die Federung komprimiert: Das Kabel darf weder auf Zug geraten noch zwischen Gabelbrücke und Telelever-Längslenker eingeklemmt werden!
+3. **Symmetrische Dual Under-Perch Spiegel-Pods (Links & Rechts):**
+   - Jeweils formschlüssig unter die linke und rechte Spiegelschraube der BMW-Armatur geklemmt.
+   - **Links:** Der linke Daumen bedient den PTT-Taster blind; die bernsteinfarbene Warn-LED strahlt direkt in den linken Rückspiegel (Überholverkehr links).
+   - **Rechts:** Der rechte Daumen markiert Action-Cam Highlights / Bookmarks; die bernsteinfarbene Warn-LED strahlt in den rechten Rückspiegel (Verkehr rechts beim Wiedereinscheren).
+   - Echte 360° bilaterale Totwinkel-Überwachung ohne Blickabwendung.
 
 #### 6.3.2 Kassetten-Pods 1 & 2 (Seitenmodule) - Die zwei Montage-Varianten
 
@@ -1301,60 +1324,51 @@ EINSATZMODI DES CAR-SUPPORT-KITS:
 
 ---
 
-#### 6.8.2 Front-Node & Zentralbox Montage im Pkw (Unter-Sitz-Topologie & Satelliten-Konvergenz)
+#### 6.8.2 Front-Node & Zentralbox Montage im Pkw (Die v10.0 All-in-One Core Unit)
 
-Für den professionellen Einsatz im Pkw-Innenraum (Begleitfahrzeug, Support-Van, Alltags-Pkw) setzt OpenMotorBridge v9.6 auf die **ergonomisch und physikalisch optimierte Unter-Sitz-Topologie**. Das frühere Armaturenbrett-Doppeldeckel-Dock (`car_dashboard_wedge_dock.scad`) wurde nach HF- und thermischen Messungen vollständig verworfen:
+In v10.0 entfällt der frühere Zwang, Zentralbox und Front-Node im Auto zwingend getrennt auf Fahrer- und Beifahrersitz zu verteilen:  
+Da Ultra-Wideband (UWB) komplett durch den drahtgebundenen 4-Draht Automotive USB-PD Bus ersetzt wurde, gibt es **keine HF-Nahfeld-Übersteuerung (De-Sensing)** mehr. Zentralbox (`PCBA 01`) und Front-Node (`PCBA 05`) werden im Begleitfahrzeug ab sofort als **kompakte, gemeinsame „All-in-One Car Support Core Unit“** zusammen montiert!
 
 > [!NOTE]
-> **Warum das alte Armaturenbrett-Doppeldeckel-Dock entfällt:**
-> 1. **Die Hitzefalle ($85\dots 95\,^\circ\text{C}$):** Auf dem Armaturenbrett entstehen im Sommer hinter der Windschutzscheibe extreme Oberflächentemperaturen. Den LiPo-USV-Akku (Zentralbox) und die 20W USB-PD Schaltregler (Front-Node) in ein geschlossenes Plastikgehäuse in die pralle Sonne zu stellen, führte zu thermischem Throttling und Sicherheitsabschaltungen.
-> 2. **Faradayscher Käfig & metallbedampfte Scheiben (Athermic Glass):** Nahezu alle modernen Pkw besitzen wärmedämmende Frontscheiben mit Silberbedampfung oder Heizdrähten ($15\dots 25\,\text{dB}$ Dämpfung). Die 868-MHz-LoRa-Funkenergie bleibt im Auto gefangen.
-> 3. **UWB-Absurdität:** Das UWB-Backbone (`DW3110`) überbrückt am Motorrad 1,5 m drahtlos. Beide Boxen 25 mm übereinander zu stacken, erzeugte Nahfeldkopplung und Antennenverstimmung.
-> 4. **Front-Node Monocoque:** Durch die Auslagerung aller Buchsen auf den Cockpit-Satelliten (`PCBA 05B`) und des GNSS-Pucks auf `J_VEHICLE` würden zwei dicke Mantelkabel über das Armaturenbrett laufen.
+> **Warum das Armaturenbrett tabu bleibt, aber beide Boxen zusammenrücken:**
+> 1. **Die thermische Schonung ($< 35\,^\circ\text{C}$):** Auf dem Armaturenbrett herrschen im Sommer hinter der Windschutzscheibe $85\dots 95\,^\circ\text{C}$. Die gemeinsame Core Unit wird daher im thermisch kühlen Fußraum unter dem Beifahrersitz oder im Mitteltunnel platziert.
+> 2. **Gemeinsame 12V-Einspeisung:** Es wird nur noch eine einzige 12V-Zuleitung (Zigarettenanzünder oder Bordnetz-Zündungsplus) benötigt. Kein Y-Kabel-Wirrwarr quer durch den Fahrzeuginnenraum!
+> 3. **Direkt-Bus:** Die 4-Draht-Verbindung zwischen Zentralbox und Front-Node schrumpft auf ein ultrakurzes $10\,\text{cm}$ internes Patchkabel.
 
 ```
-                  PKW UNTER-SITZ- & SATELLITEN-TOPOLOGIE (v9.6)
+            v10.0 PKW ALL-IN-ONE CORE-UNIT & SATELLITEN-TOPOLOGIE
 +-----------------------------------------------------------------------------------------+
 | WINDSCHUTZSCHEIBE / A-SÄULE OBEN:              SONNENBLENDEN:                           |
-| [ SAM-M10Q GPS-Puck an Scheibenbasis ]         [ Pod 1 & Pod 2 an Visor-Clips ]         |
-| (Freie Sicht durch Mautbox-Scheibenfenster)    (2.4 GHz strahlt unbedämpft nach vorn)   |
+| [ SAM-M10Q GPS-Puck an Scheibenbasis ]         [ Pod 1 (Fahrer) & Pod 2 (Beifahrer) ]   |
+| (Freie Sicht im Mautbox-Scheibenfenster)       (2.4 GHz strahlt unbedämpft nach vorn)   |
 +-----------------------------------------------------------------------------------------+
        ^                                                        ^
-       | Dünnes I2C-Sensorkabel                                 | UWB 6.5 GHz (1,2 m Luftlinie)
-+----------------------------------+             +----------------------------------------+
-| UNTERM FAHRERSITZ:               |             | UNTERM BEIFAHRERSITZ:                  |
-| [ FRONT-NODE (PCBA 05) ]         |             | [ ZENTRALBOX (PCBA 01) ]               |
-| * Kühl, schattig, 100 % verdeckt | <=========> | * Kühlster Ort im Pkw (Schonung USV)   |
-| * Südflanke (Cockpit) zur Mitte  |  UWB Link   | * 12V DC via Fond-Zigarettenanzünder   |
-| * Nordflanke (Vehicle) zum Rand  | (0,7m Luft) | * SMA-Knockout: Magnetfuß-Dachantenne  |
-+----------------------------------+             |   (2,5 m RG-174 nach hinten aufs Dach) |
-       |                                         +----------------------------------------+
-       v 75 cm 16-Pin Schleppketten-Kabel
+       | Dünnes I2C-Sensorkabel                                 | 2x 4-Draht USB-PD Zuleitungen
++---------------------------------------------------------------+-------------------------+
+| UNTERM BEIFAHRERSITZ ODER IM MITTELTUNNEL:                                              |
+| [ GEMEINSAME CAR SUPPORT CORE UNIT (PCBA 01 + PCBA 05) ]                                |
+| * Zentralbox (ESP32-S31 AI-Host, QCC3084 Audio, SX1262 LoRa Notfunk, LiPo-USV)          |
+| * Front-Node (Automotive USB-Hub, 20W PD Ottocast-Bypass, Cockpit-Audio-Routing)       |
+| * Interner 10 cm 4-Draht Bus (USB-PD / USB 2.0); gemeinsame 12V-Bordnetzeinspeisung     |
+| * SMA-Ausgang: 2,5 m RG-174 Koaxialkabel nach hinten zur 868-MHz-Magnetfuß-Dachantenne  |
++-----------------------------------------------------------------------------------------+
+       |
+       v 75 cm geschirmtes Kabel
 +-----------------------------------------------------------------------------------------+
 | MITTELKONSOLE / MITTELARMLEHNE (Der einzige sichtbare Bedienpunkt):                     |
-| [ COCKPIT-SATELLITENBLOCK (PCBA 05B) ]                                                  |
-| * [ HOST ]: 10 cm USB-Kabel zum Werks-Radio (nur Daten, kein Strommangel!)              |
-| * [ DONGLE ]: Ottocast / Carlinkit mit stabilen 5V / 3A aus 12V-Bordnetz versorgt       |
-| * [ PHONE 20W ]: USB-PD Schnellladekabel für Smartphone (lädt trotz Navigation)         |
-| * [ BTN_PTT ]: JST-GH Buchse für Taster an Schalthebel oder Handbremse                  |
+| [ COCKPIT-BEDIENBLOCK & AAWIRELESS / CARPLAY CLEAN POWER-INJECTION ]                    |
+| * [ HOST ]: USB-Kabel zum Werks-Radio (Reine Datenverbindung D+/D-, VBUS blockiert)     |
+| * [ DONGLE 5V/3A ]: AAWireless / Ottocast / Carlinkit sauber versorgt (keine Reboots!)  |
+| * [ PHONE 20W ]: USB-PD Schnellladekabel für Smartphone                                 |
+| * [ BTN_PTT ]: Taster an Schalthebel oder Handbremse                                    |
 +-----------------------------------------------------------------------------------------+
 ```
 
-1. **Front-Node unterm Fahrersitz (Kreuzungsfreie Nord/Süd-Ausrichtung):**
-   - Der hermetische Front-Node (`PCBA 05`) wird mit 3M Dual-Lock Klettstreifen vibrationsfest auf dem Fahrzeugteppich unter dem Fahrersitz montiert.
-   - **Südflanke (nach innen zur Fahrzeugmitte gerichtet):** Das hochflexible **$75\,\text{cm}$ lange 16-Pin Schleppketten-Mantelkabel** (`J_COCKPIT`) läuft mit einer elastischen Bewegungsschlaufe direkt in die Mittelkonsole bzw. in das Fach unter der Mittelarmlehne. Die großzügige Länge von $75\,\text{cm}$ stellt sicher, dass der Fahrersitz über seinen gesamten Verstellbereich ($20\dots 25\,\text{cm}$ Hub) vor- und zurückgeschoben werden kann, ohne dass Zug auf den Steckverbindern entsteht.
-   - **Nordflanke (nach außen zur Schwellerverkleidung gerichtet):** Das 12-Pin Fahrzeugkabel (`J_VEHICLE`) läuft direkt nach links zur Einstiegsleiste, taucht verdeckt unter die Kunststoffabdeckung und führt nach vorn in den Fahrerfußraum (zum Sicherungskasten für KL15 Zündungsplus, zur OBD2-Buchse und an der A-Säule hoch zum GPS-Puck).
-   - **Ergebnis:** Völlig kreuzungsfreie Leitungsführung ohne Knicke oder Scheuerstellen.
-
-2. **Cockpit-Satellit (`PCBA 05B`) in der Mittelkonsole – Lösung des Werks-USB-Stromproblems:**
-   - **Das Problem von Werks-USB-Buchsen:** Autoseitige USB-Ports liefern oft nur magere $500\,\text{mA}$ ($2{,}5\,\text{W}$). Moderne Wireless-CarPlay-Dongles (Ottocast U2-Air, Carlinkit) ziehen beim Booten und Video-Streaming bis zu $1{,}6\,\text{A}$ ($8\,\text{W}$) und stürzen an Werks-Ports in Dauer-Bootloops ab. Smartphones entladen sich trotz Kabel während der GPS-Navigation.
-   - **Die OMB-Lösung:** Am Cockpit-Satellitenblock dient der Port `[ HOST ]` ausschließlich dem Datenaustausch mit dem Radio. Die Ports `[ DONGLE ]` und `[ PHONE 20W ]` werden **vollständig aus dem internen 12V-Schaltregler (`SC8102`) des Front-Nodes** mit echten $20\,\text{W}$ USB-PD bzw. stabilen $5\,\text{V} / 3\,\text{A}$ versorgt. Der Ottocast-Dongle bootet blitzschnell und stürzt nie wieder ab.
-   - **PTT-Ergonomie:** Der Fahrer legt den Unterarm entspannt auf die Mittelarmlehne. Ein kleiner Taster am Schalthebel oder an der Handbremse wird direkt an die vergoldete JST-GH PTT-Buchse `J6` angesteckt.
-
-3. **Zentralbox (`PCBA 01`) unterm Beifahrersitz:**
-   - **Optimaler Hitzeschutz:** Unterm Beifahrersitz herrscht der kühlste Bereich der Fahrgastzelle – kein Sonnenlicht, ständige Kühlung durch die Fußraum-Klimadüsen. Der 2.200-mAh LiPo-USV-Akku wird thermisch geschont.
-   - **Stromversorgung via 12V-Fond-Steckdose:** An der Rückseite der Mittelkonsole besitzen fast alle Fahrzeuge eine 12V-Zigarettenanzünderdose für Fond-Passagiere. Ein kurzes $0{,}5\,\text{m}$ langes DTM-12-Kabel verbindet die Zentralbox direkt mit dieser Dose.
-   - **Drahtloser UWB-Link:** Das 6.5 GHz UWB-Backbone überbrückt die $70\,\text{cm}$ Distanz zwischen den Sitzen und $1{,}2\,\text{m}$ zu den Sonnenblenden völlig drahtlos ($< 0{,}4\,\text{ms}$ Latenz).
+1. **Vorteile der zusammengefassten Core Unit:**
+   * **10-Minuten-Rüstzeit:** Das Gesamtsystem lässt sich in jedem Begleitwagen, Mietfahrzeug oder Rallye-Van in 10 Minuten ohne Werkzeug installieren.
+   * **Sternförmige Leitungsführung:** Alle Leitungen gehen von einem einzigen Punkt aus (nach oben zur Scheibe/Dach, zur Mittelkonsole und zu den Sonnenblenden).
+   * **Optimaler Hitzeschutz:** Unterm Beifahrersitz herrscht der kühlste Bereich der Fahrgastzelle – kein Sonnenlicht, ständige Kühlung durch die Fußraum-Klimadüsen. Der 2.200-mAh LiPo-USV-Akku wird thermisch geschont.
+   * **Stabile Stromversorgung & AAWireless / CarPlay Power-Bypass:** Der interne 12V-Schaltregler liefert saubere $5\,\text{V}\,/\,3\,\text{A}$ ($15\,\text{W}$) an den AAWireless- / Ottocast-Adapter. Zum OEM-Media-Port des Autos führt nur ein reines USB-Datenkabel (`D+`, `D-`, `GND` bei getrenntem `VBUS`). Dadurch entfallen die gefürchteten Abstürze und Bootloops durch überlastete Werks-USB-Buchsen ($500\,\text{mA}$) vollständig!
 
 ---
 
@@ -1513,29 +1527,74 @@ Bei der Kombination von ultrastarken Permanentmagneten ($B_r \approx 1{,}48\,\te
 
 ## 8. Cockpit-Zubehör & Ergonomie-Bedienelemente (`05_accessories/`)
 
-### 8.1 Under-Perch Tasterhalter (`under_perch_switch_bracket.scad`)
+### 8.1 Symmetrische Dual Under-Perch Spiegel-Pods (`under_perch_mirror_pod.scad`)
 
-Der **Under-Perch Tasterhalter** ([`under_perch_switch_bracket.scad`](../../hardware/cad/scad/05_accessories/under_perch_switch_bracket.scad)) löst das fundamentale Bauraum- und Ergonomie-Dilemma am linken Lenkergriff von Cruisern und Touring-Maschinen:
+Die **symmetrischen Dual Under-Perch Spiegel-Pods** ([`under_perch_mirror_pod.scad`](../../hardware/cad/scad/05_accessories/under_perch_mirror_pod.scad)) integrieren Taster und Radar-Warnanzeige in eine elegante, formschlüssige Baugruppe unter beiden Spiegelschrauben:
 
 ![Under-Perch Tactile Switch Bracket 3D CAD](../images/cad/under_perch_switch_bracket_cad.png)
 
-*Abbildung 8.36: 3D-CAD-Ansicht des Under-Perch Tasterhalters (`under_perch_switch_bracket_cad.png`). Dargestellt sind der M4-Befestigungsflansch mit Antirotations-Führung zur Harley-Schalterarmatur, der bionische Absenksteg, das um 28° zum Fahrerdaumen geneigte Schalterrohr mit Schutzblende, der rote IP67-Mikrotaster sowie die rückwärtige PUR-Kabeldurchführung.*
+*Abbildung 8.36: 3D-CAD-Ansicht des Under-Perch Spiegel-Pods (`under_perch_mirror_pod_cad.png`). Dargestellt sind der M8/M10-Spiegelflansch mit Verdrehschutz zur Armatur, der ergonomische Daumen-Tasterdom (IP67-Mikrotaster) sowie der nach oben zum Spiegelglas ausgerichtete Diffusortrichter für die bernsteinfarbene Totwinkel-Warn-LED (BSD).*
 
-* **Mechanische Vorteile:**
-  * **0 mm Lenkerrohr-Bedarf:** Verbraucht keinen Millimeter auf dem geraden Lenkerrohr. Die obere Klemmschelle der Armatur bleibt zu **100 % frei für die Steuereinheit eines Klappenauspuffs** (Dr. Jekill & Mr. Hyde / KessTech).
-  * **2-Finger-Hebelüberdeckung:** Zeige- und Mittelfinger bleiben unterbrechungsfrei auf dem Kupplungshebel. Der Taster sitzt exakt 15 mm unterhalb des Blinkerschalters in der natürlichen Daumenabsenkzone.
-  * **Universelle Befestigung:** Verschraubung entweder über die originale M4-Gehäuse-Torxschraube der Harley-Armatur oder über den M8/M10-Spiegelschaftadapter ([`under_perch_mirror_plate.stl`](../../hardware/cad/stl/05_accessories/under_perch_mirror_plate.stl)).
+* **Symmetrische Ergonomie & Funktionsaufteilung (Links & Rechts):**
+  * **Linker Under-Perch Pod (Kommunikation & Audio):**
+    * **Taktiler Daumen-PTT-Taster:** Latenzfreie Push-to-Talk-Funkübertragung für Sena, Cardo, Midland oder OMM Mesh; Dreifachklick aktiviert Siri / Google Assistant.
+    * **Linke Totwinkel-Warn-LED (BSD Amber):** Strahlt blendfrei im $38^\circ$-Winkel direkt in das linke Spiegelglas, sobald das Heck-Radar ein sich von hinten links näherndes Fahrzeug erfasst.
+  * **Rechter Under-Perch Pod (Action-Cam & Media-Bookmarks):**
+    * **Taktiler Daumen-Taster für Action-Cam:** Kurzdruck setzt sofort einen Highlight-Marker / Bookmark im laufenden Video (BLE-Kopplung mit Insta360 X3/X4, GoPro Hero 11/12/13 oder DJI Osmo Action 4/5); langer Druck startet oder stoppt die Aufnahme (bzw. 3s Halten für Notfall-SOS).
+    * **Rechte Totwinkel-Warn-LED (BSD Amber):** Strahlt blendfrei in das rechte Spiegelglas, wenn sich ein Fahrzeug im toten Winkel rechts befindet (lebensrettend beim Wiedereinscheren nach Überholvorgängen).
+  * **Bilateraler Sicherheitsgewinn:** Der Fahrer erhält eine intuitive, seitengetrennte Totwinkelwarnung direkt im Blickfeld des Spiegels, den er instinktiv ansteuert.
 
-* **Elektrische Anbindung & Multi-Aktions-Architektur:**
-  * **1 physischer Taster, 2 Adern:** Der Taster verwendet ein extrem schlankes, flexibles 2-adriges PUR-Kabel ($\varnothing 2{,}5\,\text{mm}$), das formschlüssig durch die rückwärtige Zugentlastungs-Kabeltülle geführt und mit einem Mini-Kabelbinder gesichert wird.
-  * **Direkter Steckanschluss an Port `J6` (Cockpit-Satellit):** Am Lenker/Verkleidungsbereich endet das Kabel in einem 2-poligen JST-GH Verriegelungsstecker, der direkt auf Port `J6` des Cockpit-Satelliten (`PCBA 05B`) gesteckt wird (Pin 1: `GND`, Pin 2: `PTT_IN1_N`).
-  * **Signalweiterleitung via 16-Pin Cockpit-Harness (`J_COCKPIT`):** Das Signal läuft über Pin 14 des geschirmten 16-Ader-Kabels direkt in die Front-Node Wanne und liegt an GPIO 15 der ESP32-S3 MCU an (Hardware-Pull-Up, TVS-Diode, Hardware-Filterung).
-  * **Firmware-Gestensteuerung (Multi-Aktion statt Multi-Button):** Trotz nur einer Taste stehen dem Fahrer über intelligente Klick-Muster alle wesentlichen Cockpit-Funktionen ohne Blickabwendung zur Verfügung:
-    * **Gedrückt halten:** Latenzfreie PTT-Intercom Funkübertragung (< 1.8 ms Reaktionszeit via LoRa / Mesh / OMM446).
-    * **2x Klick (Doppelklick):** Actioncam-Highlight / Video-Bookmark Marker.
-    * **3x Klick (Dreifachklick):** Sprachassistent (Siri / Google Assistant via CarPlay / Android Auto).
-    * **Langer Druck (> 3 s):** Emergency SOS-Broadcast an Konvoi / automatischer Notruf.
-  * **Pkw-Integration (Reference Kit 5 - Chase Van):** Im Begleitfahrzeug entfällt der Lenkerhalter. Der Cockpit-Satellit (`PCBA 05B`) ruht in der Mittelkonsole/Armlehnenfach. Ein optionaler diskreter Mikrotaster kann direkt an Port `J6` (z.B. am Wählhebel oder Mittelkonsolendeckel) eingesteckt werden; alternativ erfolgt die PTT-Sprachsteuerung drahtlos über das Fahrer-Headset oder CarPlay.
+* **Mechanische & Elektronische Vorteile:**
+  * **0 mm Lenkerrohr-Bedarf:** Verbraucht keinen Millimeter auf dem geraden Lenkerrohr. Die oberen Armaturenklemmen bleiben zu **100 % frei für Zusatzschalter (z. B. Klappenauspuff)**.
+  * **Baugleiche Platine (`PCBA 05B`):** Beide Pods nutzen exakt dieselbe Miniatur-Leiterplatte (`PCBA 05B` All-in-One Under-Perch Board). Die Zuordnung Links/Rechts erfolgt über den Kabelstrang (`J_POD_L` bzw. `J_POD_R` am Front-Node).
+  * **Universelle Befestigung:** Klemmung direkt unter dem Spiegelgewinde (M8 / M10 / M12 oder Harley-Torx-Schraube).
+  * **Pkw-Integration (Reference Kit 5 - Chase Van):** Im Begleitfahrzeug entfällt die Lenkermontage. Ein optionaler Taster ruht in der Mittelkonsole/Schalthebel, während die Sprachsteuerung primär drahtlos über CarPlay oder Headset erfolgt.
+
+#### 8.1.1 Software-Defined Multi-Action Tasterarchitektur & Aktionskatalog
+
+Die Funktionen der beiden physischen Daumentaster sind **zu 100 % softwaredefiniert** und keineswegs starr an eine Funktion gekoppelt. Die werkseitige Aufteilung (Links = PTT/Intercom, Rechts = Action-Cam) stellt lediglich das optimierte **Werks-Default-Profil** dar.
+
+Über das lokale **OMB PWA-Dashboard** kann jeder Taster (Links und Rechts völlig unabhängig) frei programmiert und mit multiplen Gesten belegt werden.
+
+* **Hardware-Ebene (Zero-Hardcoding):**
+  * Auf `PCBA 05B` arbeitet ein hochzuverlässiger, IP67-versiegelter taktiler Mikrotaster (`SW1`) mit spürbarem Druckpunkt ($300\,\text{g}$ Betätigungskraft, optimal taktiles Feedback auch mit dicken Leder-Winterhandschuhen).
+  * Der Taster schaltet als aktives Low-Signal gegen Masse, geschützt durch ein 100 nF RC-Entprellglied und eine bidirektionale TVS-Diode gegen elektrostatische Entladungen (ESD).
+  * Das Signal wird über den 4-poligen JST-GH Kabelbaum direkt an interruptfähige GPIOs des Front-Node MCU (`PCBA 05`) geleitet.
+
+* **Firmware Gesten-Erkennungs-Engine (Front-Node & ESP32-S3):**
+  Die Firmware tastet die Signale flankengesteuert mit einer zustandsbasierten Gesten-Engine ab:
+  1. `SHORT_CLICK` (Kurzdruck $< 300\,\text{ms}$, Pause $> 250\,\text{ms}$): Schneller Impuls für Marker, Toggles oder Fotoauslösung.
+  2. `DOUBLE_CLICK` (Zweifachklick innerhalb von $400\,\text{ms}$): Für sekundäre Funktionen oder Weiterschalten.
+  3. `TRIPLE_CLICK` (Dreifachklick innerhalb von $500\,\text{ms}$): Gezielter Aufruf von Systemdiensten (z. B. Sprachassistent).
+  4. `LONG_PRESS` (Langer Druck $> 800\,\text{ms}$ bis zum Loslassen): Bestätigungskritische Aktionen wie Aufnahmestart oder Moduswechsel.
+  5. `HOLD_GATE` (Kontinuierlich aktiv solange gedrückt): Klassischer Gate-Zustand für Halbduplex-Sprechfunk (PTT aktiv bei Tastendruck, sofort stumm beim Loslassen).
+
+* **Der OMB-Aktionskatalog (Frei zuweisbar via PWA):**
+
+| Kategorie | Aktions-ID | Beschreibung | Typische Belegung |
+| :--- | :--- | :--- | :--- |
+| **Intercom & Voice** | `INTERCOM_PTT_GATE` | Push-to-Talk aktiv solange gedrückt (Sena / Cardo / OMM / PMR446) | Links: `HOLD_GATE` |
+| | `INTERCOM_TOGGLE` | Einmal drücken = Funkkanal offen, nochmal drücken = geschlossen | Alternativ |
+| | `VOICE_ASSISTANT` | Triggert Siri / Google Assistant via Bluetooth HFP am QCC3084 | Links: `TRIPLE_CLICK` |
+| | `MIC_MUTE_TOGGLE` | Helmmikrofon sofort stummschalten (Mute-Funktion) | Frei wählbar |
+| | `MESH_CHANNEL_NEXT` | Schaltet die Mesh-Gruppenkanäle durch (Open Mesh 1 bis 9) | Links: `DOUBLE_CLICK` |
+| **Action-Cam & Media** | `CAM_HIGHLIGHT_TAG` | Sendet BLE-Bookmark an Insta360, GoPro oder DJI (setzt Highlight-Tag im Video) | Rechts: `SHORT_CLICK` |
+| | `CAM_RECORD_TOGGLE` | Startet oder stoppt die Videoaufnahme der Action-Cam via BLE | Rechts: `LONG_PRESS` |
+| | `CAM_PHOTO_SNAP` | Schießt sofort ein Standbild / Foto in maximaler Sensorauflösung | Alternativ |
+| | `MEDIA_PLAY_PAUSE` | Musikwiedergabe pausieren / fortsetzen | Frei wählbar |
+| | `MEDIA_TRACK_NEXT` | Nächster Musiktitel im CarPlay / Android Auto Stream | Frei wählbar |
+| **Navigation & Community**| `HAZARD_PIN_DROP` | **1-Klick Gefahrenstellen-Meldung:** Setzt sofort GPS-Marker und meldet via Companion-App Gefahren (Schlagloch, Ölspur, Blitzer, Panne) an Waze, Apple Maps oder OpenTrafficMap | Frei wählbar |
+| | `NAV_ZOOM_IN` / `OUT` | Stufenweises Zoomen der Cockpit-Kartenansicht | Frei wählbar |
+| | `NAV_MUTE_PROMPTS` | Stummschaltung von Navigationsansagen für 10 Minuten | Frei wählbar |
+| **Sicherheit & Radar** | `RADAR_MUTE_30S` | Schaltet akustische Radar-Warntöne für 30s im dichten Stop-and-Go-Verkehr stumm | Frei wählbar |
+| | `EMERGENCY_SOS_BROADCAST`| Sendet 868 MHz LoRa Notfall-Beacon mit GPS-Koordinaten an alle Gruppenmitglieder | Rechts: 3s `LONG_PRESS` |
+| **Smart Vehicle / Home** | `GARAGE_DOOR_TRIGGER` | Sendet Webhook/BLE-Signal an Home Assistant oder Shelly zur Garagentoröffnung | Frei wählbar |
+| | `AUX_LIGHTS_TOGGLE` | Schaltet Zusatzscheinwerfer über den geschalteten Front-Node Ausgang | Frei wählbar |
+| | `HEATED_GRIPS_CYCLE` | Schaltet Heizgriff-Stufen durch (0% $\rightarrow$ 33% $\rightarrow$ 66% $\rightarrow$ 100%) | Frei wählbar |
+
+* **Auslieferungs-Profil (Factory Default Profile):**
+  * **Linker Taster:** `HOLD_GATE` $\rightarrow$ `INTERCOM_PTT_GATE`; `TRIPLE_CLICK` $\rightarrow$ `VOICE_ASSISTANT`; `DOUBLE_CLICK` $\rightarrow$ `MESH_CHANNEL_NEXT`.
+  * **Rechter Taster:** `SHORT_CLICK` $\rightarrow$ `CAM_HIGHLIGHT_TAG`; `LONG_PRESS` $\rightarrow$ `CAM_RECORD_TOGGLE`; 3s Halten $\rightarrow$ `EMERGENCY_SOS_BROADCAST`.
 
 ### 8.2 Spiegel-Totwinkel-LED Gehäuse (`bsd_mirror_indicator_pod.scad`)
 

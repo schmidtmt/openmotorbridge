@@ -37,6 +37,32 @@ $$L = \frac{V_{\text{OUT}} \cdot (V_{\text{IN,max}} - V_{\text{OUT}})}{V_{\text{
 * **Standby Deep Sleep (KL15 Ext-Interrupt):** **$92\,\mu\text{A}$** (System wakes in $< 5\,\text{ms}$ upon ignition ON).
 * **ULP Winter Hibernate (> 72 h Inactive):** **$14{,}8\,\mu\text{A}$** (Measured with INA226; preserves starter battery from deep discharge even after 12 months).
 
+### 1.3 Dual-Power Input Architecture (12V Vehicle Net vs. USB-PD Sink for Bench & Lab)
+
+A frequent friction point in embedded automotive development and firmware diagnostics is the requirement for a dedicated 12V bench power supply and custom wiring pigtails. OpenMotorBridge v10.0 solves this via a native **Dual-Input Power-Path Architecture**:
+
+```
+                  DUAL-INPUT POWER-ORING ARCHITECTURE (CENTRAL BOX)
++----------------------------+
+| 12V VEHICLE NET (DTM-12)   |---+
+| KL30 (Batt) / KL15 (Ign.)  |   |   +-----------------------+
++----------------------------+   +-->| TI LM5050 / P-FET     |
+                                     | Ideal-Diode OR-ing 1  |---+
++----------------------------+   +-->| (Priority: 12V Bike)  |   |   +-------------------+
+| USB-C PD SINK PORT         |---|   +-----------------------+   +-->| SYSTEM POWER BUS  |
+| 5V, 9V, 12V, 15V, 20V      |   |   +-----------------------+   |   | * LM5164-Q1 Buck  |
+| (CH224K PD Controller)     |   +-->| TI LM5050 / P-FET     |---+   | * BQ24075 UPS Chg.|
++----------------------------+       | Ideal-Diode OR-ing 2  |       | * 4-Wire Bus VBUS |
+                                     | (100% Reverse Block)  |       +-------------------+
+                                     +-----------------------+
+```
+
+* **Priority & Protection Logic:**
+  * **On-Bike Operation:** When 12V vehicle power is supplied via the Deutsch DTM-12 connector, the motorcycle electrical system powers the ECU and charges the UPS buffer cell.
+  * **Workbench & Desk Diagnostics:** For firmware flashing (USB-DFU), PWA dashboard testing, RF calibration, and sensor validation, the Central Box can be powered directly from any standard USB-C smartphone or laptop charger (or USB power bank).
+  * **Zero Back-Feed Isolation:** The ideal-diode controller (TI LM5050-1 or dual P-FETs with $< 15\,\text{m}\Omega$) strictly prevents 12V vehicle power from back-feeding into the USB-C port / PC host, and prevents USB voltage from leaking into the motorcycle harness.
+  * **Peripheral Satellite Powering on Desk:** The USB-PD Sink negotiates up to 60W ($15\dots 60\,\text{W}$ depending on charger), supplying ample power to run connected Front Nodes and saddlebag pods simultaneously on the workbench!
+
 ---
 
 ## 2. Dynamic Power-Path Management & Integrated UPS

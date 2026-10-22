@@ -37,6 +37,32 @@ $$L = \frac{V_{\text{OUT}} \cdot (V_{\text{IN,max}} - V_{\text{OUT}})}{V_{\text{
 * **Standby Deep Sleep (KL15 Ext-Interrupt):** **$92\,\mu\text{A}$** (System wacht in $< 5\,\text{ms}$ bei Zündung AN auf).
 * **ULP-Winter-Hibernate (> 72 h Stillstand):** **$14{,}8\,\mu\text{A}$** (Gemessen mit INA226; schützt Starterbatterie selbst nach 12 Monaten Standzeit vor Tiefentladung).
 
+### 1.3 Dual-Power Input Architektur (12V Bordnetz vs. USB-PD Sink für Werkbank & Labor)
+
+Ein häufiges Hindernis bei der Inbetriebnahme, Firmware-Entwicklung und Diagnose von Fahrzeugelektronik ist die Notwendigkeit eines 12V-Labornetzgeräts mit maßgefertigtem Prüfkabelbaum. OpenMotorBridge v10.0 integriert daher eine **Dual-Input Power-Path Architektur**:
+
+```
+                  DUAL-INPUT POWER-ORING ARCHITEKTUR (ZENTRALBOX)
++----------------------------+
+| 12V BORDNETZ (DTM-12)      |---+
+| KL30 (Dauer) / KL15 (Zünd.)|   |   +-----------------------+
++----------------------------+   +-->| TI LM5050 / P-FET     |
+                                     | Ideal-Diode OR-ing 1  |---+
++----------------------------+   +-->| (Priorität: 12V Kfz)  |   |   +-------------------+
+| USB-C PD SINK PORT         |---|   +-----------------------+   +-->| SYSTEM-POWER BUS  |
+| 5V, 9V, 12V, 15V, 20V      |   |   +-----------------------+   |   | * LM5164-Q1 Buck  |
+| (CH224K PD-Controller)    |   +-->| TI LM5050 / P-FET     |---+   | * BQ24075 USV-Lad.|
++----------------------------+       | Ideal-Diode OR-ing 2  |       | * 4-Draht Bus VBUS|
+                                     | (Rückstromsperre 100%)|       +-------------------+
+                                     +-----------------------+
+```
+
+* **Prioritäts- & Schutzlogik:**
+  * **Fahrzeugbetrieb (On-Bike):** Liegt 12V-Bordnetzspannung über den Deutsch DTM-12 Stecker an, versorgt das Bordnetz das Gesamtsystem und lädt den USV-Akku.
+  * **Werkbank- & Diagnosebetrieb (Bench/Desk):** Für Firmware-Updates (USB-DFU), PWA-Tests, Funk-Messungen und Kalibrierung wird die Zentralbox einfach über ein handelsübliches USB-C Smartphone- oder Laptop-Netzteil (oder Powerbank) versorgt.
+  * **Vollständige galvanische Entkopplung (Zero Back-Feed):** Der Ideal-Dioden-Controller (TI LM5050-1 oder duale P-FETs mit $< 15\,\text{m}\Omega$) garantiert, dass 12V niemals in den USB-C Port / Host-PC rückspeisen können, und umgekehrt keine USB-Spannung in den Fahrzeugkabelbaum dringt.
+  * **Satelliten-Speisung am Schreibtisch:** Der USB-PD Sink liefert genügend Leistung ($15\dots 60\,\text{W}$ je nach Netzteil), um auch angeschlossene Front-Nodes und Koffer-Pods am Labortisch vollständig mitzubetreiben!
+
 ---
 
 ## 2. Dynamisches Power-Path Management & Integrierte USV
