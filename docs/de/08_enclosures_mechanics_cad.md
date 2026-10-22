@@ -4,8 +4,8 @@
 
 Dieses Dokument spezifiziert die mechanische Konstruktion, das Thermomanagement, das IP67/IP69K-Gehäusedesign, die Kinematik des Auto-Eject-Schnellwechselsystems sowie alle CAD- und STL-Modelle aller Gehäuse-Baugruppen der OpenMotorBridge v9.6:
 1. **Zentrale Steuerbox (Typ A):** 3-teiliges Sandwich-Gehäuse mit Zwischenboden ($70{,}0 \times 10{,}0\,\text{mm}$ offene Kabelbucht), integrierter Akku-Wanne mit schwenkbarer Akkubrücke (Doppel-Antennennest für Taoglas FXP895 LoRa-868 und Taoglas FXP73 2.4-GHz mit $0{,}8\,\text{mm}$ Schutzblende und C-Clip Zugsicherung), 100 % kabelfreiem Gehäusedeckel, Unterwannen-Bodenkammer ($12{,}0 \times 12{,}0 \times 0{,}8\,\text{mm}$) für UWB-Flexantenne (Taoglas FXUWB10), rückseitigem SMA-Antennendurchgang mit wasserdichter $0{,}4\,\text{mm}$ Knockout-Membran (ab Werk IP68/IP69K geschlossen) und planarem 4-Layer Kupfer-Wärmespreader.
-2. **Modulares Satelliten-Pod- & Wechselsystem (Typ B):** Baugleiches 5-seitiges Monocoque-Schachtgehäuse für beide Satelliten-Pods (Pod 1 & 2 Audio/Intercom, 2x symmetrisch) mit modularen Wechselkassetten (Sena SPIDER X Slim, Cardo Packtalk Edge, OMM 2.4 GHz Swap Cartridge, Midland, Dry Box), glatter geschlossener IP67-Außenhaut (ohne störende Antennen-Radomlöcher), $120^\circ$-V-Nut Rohrbett, wasserdichtem IP67 Gleichstrom-Direktstecker mit vibrationsfester Dual-Beam Schlitzbuchsen-Kontaktierung, Poka-Yoke Nut-und-Feder-Führung, federbelastetem Auto-Eject und unsichtbarem Neodym-Magnet-Diebstahlschutz.
-3. **Universal Front-Knoten (Typ C):** Ultrakompakter Cockpit- & Sensor-Hub ($98{,}0 \times 68{,}0 \times 25{,}0\,\text{mm}$) für die vergrößerte $82 \times 50\,\text{mm}$ 4-Lagen PCBA 05 mit **4-in-1 Universal-Befestigungssystem** (AMPS, Rohrbügel-Prisma, Silentblöcke, 3M Dual-Lock), integrierter Bodenkammer für UWB-Backbone (FXUWB10), GNSS- & Klima-Sensoranbindung (u-blox SAM-M10Q GNSS-Patch, TI TMP117 Präzisionsthermometer, TI OPT3001 Lichtsensor) über den 5-Port Fahrzeug-Satelliten, getrennten EPDM-Kabelkämmen für USB (Süd) und Fahrzeugleitungen (Nord), Dual-SW3526 20W USB-PD und Knowles MEMS Akustikkanal.
+2. **Universeller Koffer-Satelliten-Pod (Typ B):** Baugleiches Monocoque-Gehäuse für beide Satelliten-Pods (Pod 1 & 2 Audio/Intercom, 2x symmetrisch) mit werkzeuglosem Slide-in Deckel, verdeckter FOB-Magnetverriegelung (Öffnen über Smart-Keyfob), innenliegendem Zwischendeckel (Dry-Flap), integrierter Koffer-USB-Ladebuchse (5V/12V PD bis zu 30W/60W), direkter EPDM-Nestaufnahme für OEM-Intercoms (Sena SPIDER X Slim, Cardo Packtalk Edge, OMM 2.4 GHz UCS, Midland PMR446) oder 100 % wasserdichter Dry-Box sowie 4-Draht-Automotive-Bus mit 4-Pin IP67 Magnet-Abrissschnittstelle.
+3. **Universal Front-Knoten (Typ C):** Ultrakompakter Cockpit- & Sensor-Hub ($98{,}0 \times 68{,}0 \times 25{,}0\,\text{mm}$) für die $82 \times 50\,\text{mm}$ 4-Lagen PCBA 05 mit 4-in-1 Universal-Befestigungssystem (AMPS, Riser-Klemme, Silentblöcke, 3M Dual-Lock), Direktanbindung an die symmetrischen Dual Under-Perch Spiegel-Pods, 4-adrigem Automotive-Backbone (ohne Tankdemontage!), integriertem u-blox SAM-M10Q GNSS, TI TMP117 / OPT3001 Sensoren im Anströmbereich und Knowles MEMS Windgeräusch-Mikrofon.
 4. **2-in-1 LoRa Smart-Keyfob & Pager (Typ D):** Ultrakompakter Taschenbegleiter ($58{,}0 \times 34{,}0 \times 13{,}0\,\text{mm}$) aus PA12-MJF mit umlaufendem TPU-Kantenschutz, integriertem N52-Neodym-Auswerferschlüssel, $0{,}5\,\text{mm}$ Mu-Metall-Flussschirmung, MagSafe/Qi-Induktionsladeaufnahme, LRA-Haptikmotor und drahtlosem SX1262 LoRa/BLE Alarm-Pager.
 5. **Fahrzeugspezifische Referenz-Montagekits (Zero-Drill):** Vollständig konstruierte, zerstörungsfreie Bolt-On Montagekits für CVO Road Glide ST (Kit 1), Road King Special (Kit 2), Classic Bagger & Cruiser (Kit 3) sowie Adventure & Touring Enduros (BMW GS, KTM Adventure, Africa Twin - Kit 4 mit minimalem Unterbrücken-Radarträger).
 
@@ -146,7 +146,7 @@ Die Gesamtabwärme der Zentralbox liegt im normalen Fahrbetrieb bei lediglich **
 ```
 
 1. **Deutsch DTM-12 Flansch (Haupt-Kabelbaum):** Automotive-Flansch (Deutsch DTM13-12PA) mit integrierter Silikondichtung und 2x M3-Verschraubung ($28{,}0\,\text{mm}$ Lochabstand). Verbindet intern über `J1` (2x06 Box-Header, 2,54 mm Raster) die 12 zentralen Fahrzeugadern für die Peitschen 1 bis 4: Peitsche 1 (Pod 1: +12V geschaltet, GND), Peitsche 2 (Pod 2: +12V geschaltet, GND), Peitsche 3 (Heck-Radar: +12V geschaltet, GND; Telemetrie 100% drahtlos via UWB) und Peitsche 4 (Bordnetz & CAN: KL30, KL15, GND, CAN-H, CAN-L, CHASSIS_EARTH).
-2. **Taster SW1 (`SW_PAIR_RESET`):** Wasserdichter IP67-Minitaster mit Silikon-Dichtkappe und M7-Gewindehülse. Dient dem drahtlosen UWB-Pairing neuer Wechselkassetten (3s Betätigung) sowie dem vollständigen Werksreset & NVS Key Purge (10s Betätigung).
+2. **Taster SW1 (`SW_PAIR_RESET`):** Wasserdichter IP67-Minitaster mit Silikon-Dichtkappe und M7-Gewindehülse. Dient dem Bluetooth/Audio-Pairing (3s Betätigung) sowie dem vollständigen Werksreset & NVS Key Purge (10s Betätigung).
 3. **USB-C Service-Port:** Wasserdichte Rundflansch-Buchse mit unverlierbarer blau eloxierter Aluminium-Schraubkappe und EPDM-O-Ring für Firmware-Updates, ESP-IDF Telemetrie und Notfall-Diagnose.
 4. **RGB-Status-LED Sichtfenster:** Diffuser PMMA-Linsenkörper ($\varnothing\,3{,}2\,\text{mm}$) mit umlaufendem O-Ring, der das Licht der onboard WS2812B RGB-LED direkt auf die Frontblende spiegelt (Zustandsanzeige: Grün = Betrieb/Mesh OK, Blau = BT Audio Stream, Orange = Warnung/Radar aktiv, Rot = Sabotage/Alarm).
 
@@ -172,356 +172,152 @@ OpenMotorBridge nutzt ein duales, vollständig gehäuseintegriertes Antennenkonz
 
 ---
 
-## 4. Gehäusesystem Typ B: Universeller Satelliten-Pod & Modulare Wechselkassetten
+## 4. Gehäusesystem Typ B: Universeller Satelliten-Pod (Slide-in Deckel & Integrierte Dry-Box)
 
-OpenMotorBridge trennt das mechanische Gehäuse der Satelliten in zwei untrennbar aufeinander abgestimmte Systemkomponenten:
-1. **Typ B (Pod-Basisschacht):** Ein zu 100 % baugleiches 5-seitiges Monocoque-Gehäuse ($150{,}0 \times 70{,}0 \times 38{,}0\,\text{mm}$), das dauerhaft am Motorrad verbleibt (an Rahmenrohren, im Kofferdeckel oder am Heckbürzel).
-2. **Typ C (Modulare Wechselkassette):** Ein universeller 2-teiliger Basisschlitten ($130{,}0 \times 58{,}0 \times 28{,}0\,\text{mm}$ mit $124{,}0 \times 53{,}0 \times 28{,}0\,\text{mm}$ lichter Einbaukammer für den seriellen Aufbau von PCBA 03 und OEM-Intercom/Booster), der systemspezifische OEM-Funkgeräte (Sena 50S/60S, Cardo Packtalk Edge, Midland, PMR446) oder eine wasserdichte Dry Box aufnimmt und werkzeuglos eingeschoben wird.
+In OpenMotorBridge v10.0 entfällt das frühere System modularer Wechselkassetten (mit doppeltem Gehäusetunnel, Poka-Yoke-Führungsschienen, V4A-Auswerferfedern und elektromechanischen Tauchanker-Stößeln) vollständig.
 
-![OpenMotorBridge Satelliten-Pod & Kassetten 3D Anschnitt CAD](../images/cad/pod_cartridge_cutaway_3d.png)
+Stattdessen setzen die beiden Satelliten-Pods (Pod 1 im linken Seitenkoffer, Pod 2 im rechten Seitenkoffer) auf ein **ultrakompaktes, direktes Monocoque-Gehäuse mit werkzeuglosem Slide-in Deckel, verdeckter FOB-Magnetverriegelung, schützendem Zwischendeckel (Dry-Flap) und integrierter Koffer-USB-Ladebuchse**:
 
-*Abbildung 8.6: Photorealistischer 3D-CAD-Schräganschnitt des Satelliten-Pods mit eingeschobener Wechselkassette. Gut zu erkennen sind die 120°-V-Nut mit EPDM-Spannringen um das Motorrad-Rahmenrohr, die monolithisch im 1-Teil-Monocoque integrierte Schottwand mit den beiden V4A-Auswerferfedern, die asymmetrischen Poka-Yoke Gleitschienen mit 8 mm Höhenversatz, die formschlüssige Klingen-Kontaktierung des IP67-Direktsteckers in die Dual-Beam Schlitzbuchse J_DC_IN von PCBA 03 und die formbündige Dichtung an der Frontblende.*
-
-#### Verdeckte Innenverschraubung & Sabotageschutz des Pod-Gehäuses
-Da die frühere äußere M8-Verschraubung durch das All-UWB-Backbone und die direkte 2-Draht DC-Zuleitung entfallen ist, erfolgt die mechanische Befestigung des Pod-Basisschachts am Motorradrahmen, Sturzbügel oder Kofferhalter über **verdeckte M4/M5-Edelstahlschrauben**:
-* **Zugangssperre durch Kassettenverriegelung:** Die Montagebohrungen im Gehäuseboden sind **ausschließlich aus dem inneren Kassetten-Schachtraum zugänglich**, wenn die Wechselkassette herausgezogen wurde.
-* Solange die Wechselkassette eingeschoben und durch die interne N52-Magnetwippe formschlüssig verriegelt ist, sind die Befestigungsschrauben mechanisch vollständig verdeckt und gegen Werkzeugeangriffe von außen geschützt.
-* Das Entriegeln der Kassette erfordert das Vorhalten des codierten 2-in-1 Smart-Keyfobs (`PCBA 07`). Ein unbefugtes Abschrauben des Pod-Gehäuses im abgestellten Zustand ist somit physisch blockiert.
-* **Aktive Sabotage-Erkennung:** Jeder Versuch, das Gehäuse mit einem Hebelwerkzeug gewaltsam aufzubiegen oder abzureißen, wird von der hochempfindlichen 6-Achs-IMU der Zentralbox registriert und löst in $< 50\,\text{ms}$ einen Prioritäts-Diebstahlalarm (`0xFE`) über LoRa Kanal 3 direkt auf den Taschen-Pager des Fahrers aus.
+1. **Typ B (Universelles Monocoque-Pod-Gehäuse):** Ein zu 100 % symmetrisches Monocoque-Gehäuse ($140{,}0 \times 65{,}0 \times 32{,}0\,\text{mm}$ mit $128{,}0 \times 58{,}0 \times 26{,}0\,\text{mm}$ lichter Innenkammer), das dauerhaft im Seitenkoffer, am Heckrahmen oder an Sturzbügeln montiert wird.
+2. **Slide-in Deckel mit Automatik-Verschluss:** Ein formschlüssig in einer umlaufenden Dichtnut geführter Schiebedeckel, der beim Einschieben am Endanschlag selbsttätig mit einem satten Klick einrastet und die umlaufende Silikondichtung komprimiert (IP67).
+3. **Unsichtbare FOB-Magnetentriegelung:** Die Verriegelung erfolgt über eine innenliegende magnetische Rastklinke. Zum Öffnen nähert der Fahrer den Smart-Keyfob (`PCBA 07` mit N52-Neodym-Magnet) an die markierte Gehäusezone an. Das Magnetfeld zieht die Sperrklinke berührungslos zurück und der Deckel gleitet federunterstützt um $10\,\text{mm}$ heraus – 100 % werkzeuglos, ohne sichtbare Schlösser, vandalismus- und diebstahlsicher.
+4. **Zweizonen-Aufbau mit Zwischendeckel (Dry-Flap):**
+   * **Untere Zone:** Beherbergt die Trägerplatine `PCBA 03` mit nativer USB-PD Speisung und dem 4-Draht Automotive-Backbone.
+   * **Integrierte Koffer-USB-Ladebuchse (5V/12V PD bis zu 30W/60W):** Direkt auf `PCBA 03` sitzt ein nach oben/innen geführter USB-C Ladeport. Damit erhält der Fahrer eine vollwertige Schnellladestation im Seitenkoffer (für Smartphone, Powerbank, Helm oder Kamera).
+   * **Zwischendeckel-Spritzschutzblende (Dry-Flap):** Ein aufklappbarer oder einschiebbarer Silikon-/EPDM-Zwischendeckel schirmt die Platine und Kabelanschlüsse vollständig gegen Schmutz und Nässe ab.
+   * **Obere Zone (Direktaufnahme für OEM-Intercoms oder Dry-Box):** Nimmt direkt das jeweilige Kommunikationsmodul auf (Sena SPIDER X Slim, Cardo Packtalk Edge, OMM 2.4 GHz UCS oder Midland PMR446). Wird kein Intercom genutzt, fungiert das gesamte Fach als hermetische **Mini-Dry-Box** für Fahrzeugpapiere, Bargeld und Notfallschlüssel.
 
 ---
 
-### 4.1 Gesamtsystem-Kinematik: Poka-Yoke, Auto-Eject & Unsichtbarer Magnet-Diebstahlschutz
+### 4.1 Kinematik des Slide-in Deckels & Magnetische FOB-Verriegelung
 
-Das Zusammenspiel von Pod-Schacht (Typ B) und Wechselkassette (Typ C) wird durch ein vollkommen gekapseltes, werkzeugloses und diebstahlgeschütztes Führungs- und Verriegelungssystem bestimmt:
-
-#### 4.1.1 Asymmetrisches Poka-Yoke Nut-und-Feder Führungskonzept
-
-![OpenMotorBridge Pod Poka-Yoke Cross Section](../images/cad/pod_poka_yoke_cross_section_cad.png)
-
-*Abbildung 8.7: 3D-CAD-Querschnitt (Y-Z Ebene) durch das Satelliten-Pod-Gehäuse und den Kassetten-Grundschlitten. Sichtbar ist der $8{,}0\,\text{mm}$ Höhenversatz der Führungsnuten (Links: $Z=10{,}0\,\text{mm}$, Rechts: $Z=18{,}0\,\text{mm}$). Ein $180^\circ$-Falscheinbau ist mechanisch ausgeschlossen.*
-
-* **Führungsgeometrie:** Die Führungsnuten an den Innenwänden des Pods und die Gegenfedern am Kassetten-Schlitten sind um $8{,}0\,\text{mm}$ vertikal versetzt. Ein versehentliches Einschieben auf dem Kopf ($180^\circ$-Verdrehung) ist physisch blockiert, bevor elektrische Kontakte berührt werden können.
-* **Vorzentrierungs-Fase:** $30^\circ$-Einlaufschrägen verengen das seitliche Führungsspiel auf den ersten $80\,\text{mm}$ auf präzise $\pm 0{,}2\,\text{mm}$.
-
-#### 4.1.2 Serienmäßiger Unsichtbarer Magnet-Diebstahlschutz (2-Arm-Wippe)
-
-Um Wechselkassetten auf allen Motorrädern (von frei zugänglichen Reiseenduro-Sturzbügeln über Naked-Bikes bis zu Cruisern) wirksam gegen unbefugtes Herausziehen und Gelegenheitsdiebstahl zu sichern, verfügen **alle Pods und Kassetten serienmäßig** über einen unsichtbaren, magnetisch entsperrbaren Verriegelungsmechanismus (`parts/05_magnetic_lock_latch.scad`):
+Das Öffnen und Verschließen des Satelliten-Pods erfolgt absolut intuitiv, schmutzunempfindlich und diebstahlgeschützt:
 
 ```
-        MAGNETISCHER DIEBSTAHL-SCHUTZ: 2-ARM-WIPPE (KINEMATIK-SCHNITT)
+          SLIDE-IN DECKEL & FOB-MAGNETVERRIEGELUNG (SCHNITTANSICHT)
 =================================================================================
 
-                 POD-GEHÄUSEWAND (PA12-MJF, NICHT-MAGNETISCH)
- -------------------------+-----------------------+------------------------------
-  [EXTERNER NEODYM-KEY]   |                       | [GEHÄUSE-FÜHRUNGSNUT]
-   (Zielkreis bei X=71)   |                       |  (Rastkerbe bei X=95 mm)
-            v             |                       |            ^
-      +-----------+       |                       |            | 90° Sperrflanke:
-      | NEODYM-   |       |                       |            | blockiert Auszug!
-      | MAGNET N52|       |                       |            |
-      +-----+-----+       |                       |            |
- =========================+=======================+============+=================
-  KASSETTE  |             |                       |            |
-            v Zieht nach  |   M2 SCHWENKACHSE     |            v
-      +-----------+ außen!|    (DREHPUNKT)        |   +-----------------+
-      |STAHLANKER +-------+---------o-------------+---+ SÄGEZAHN-KRALLE |
-      |(Ø 6.2 mm) |   Hinterarm     |     Vorderarm   | (30° Ein / 90°)|
-      +-----+-----+   (X = 53 mm)   |    (X = 77 mm)  +-----------------+
-            ^                       |                          ^
-     [V4A-FEDER] # Drückt           |                          | Schwenkt nach
-     (Normalst.)   nach innen       |                          | innen frei!
+                POD-GEHÄUSEWAND (PA12-MJF, NICHT-MAGNETISCH)
+ ------------------------+------------------------------------+------------------
+  [SMART-KEYFOB PCBA 07] |                                    | [VERRIEGELUNGS-
+   (N52 Neodym-Magnet)   |                                    |  KERBE IM DECKEL]
+            v            |                                    |         ^
+      +-----------+      |                                    |         | 90° Sperr-
+      | N52 MAGNET|      |                                    |         | flanke:
+      |   (Key)   |      |                                    |         | blockiert
+      +-----+-----+      |                                    |         | Deckel!
+ ========================+====================================+=========+=======
+  SLIDE-IN DECKEL        |                                              |
+                         |     M2 DREHACHSE                             v
+      +-----------+      |      (DREHPUNKT)                   +-----------------+
+      |STAHLANKER +------+-----------o------------------------+ SPERRKLINKE     |
+      |(Ø 6.0 mm) |      Hinterarm   |            Vorderarm   | (30° Ein / 90°)|
+      +-----+-----+      (X = 45 mm) |           (X = 75 mm)  +-----------------+
+            ^                        |                                  ^
+     [V4A-BLATTFEDER]                |                                  | Zieht nach
+      drückt Klinke nach oben!       |                                  | unten frei!
 ```
 
-![OpenMotorBridge Magnetischer Diebstahlschutz 3D CAD Kinematik](../images/cad/magnetic_anti_theft_lock_cad.png)
+1. **Selbstverriegelndes Einschieben (Push-to-Close):**
+   * Der Slide-in Deckel gleitet in seitlichen Führungsnuten über die Dichtlippe.
+   * Am Endanschlag gleitet die $30^\circ$-Einlaufschräge der Sperrklinke über die Gegenkante und schnappt durch die Federkraft der V4A-Blattfeder mit einem satten mechanischen Klick in die $90^\circ$-Rastkerbe des Deckels ein.
+   * Die umlaufende Silikon-Profildichtung wird dabei gleichmäßig komprimiert. Der Deckel schließt spaltfrei und bündig mit der Gehäusekontur ab (IP67). Ein gewaltsames Aufhebeln mit Schraubendrehern ist ohne sichtbare Zerstörung unmöglich.
 
-*Abbildung 8.8: Kinematische 3D-Schnittansicht des magnetischen Kassetten-Diebstahlschutzes (`98_magnetic_anti_theft_inspection.scad`). Erkennbar sind das transparente Pod-Gehäuse, der Schlitten mit 1. Klasse Wipphebel (grün), die 90°-Sägezahnkralle im Gehäuserasteingriff ($X = 95\,\text{mm}$), der $\varnothing\,6{,}2 \times 8\,\text{mm}$ Stahlanker mit V4A Rückstellfeder ($X = 53\,\text{mm}$), die M2 Edelstahl-Drehachse ($X = 65\,\text{mm}$) sowie die stirnseitigen V4A Auswerffedern.*
+2. **Kontaktloses Entriegeln mit dem Smart-Keyfob (FOB Magnetic Release):**
+   * Auf der Pod-Oberseite bzw. Frontseite ist ein dezenter taktiler Zielkreis ($\varnothing\,16\,\text{mm}$) eingeprägt.
+   * Nähert der Fahrer den Smart-Keyfob (`PCBA 07` mit integriertem N52-Permanentmagneten) oder seinen Fahrzeug-Zündschlüssel an den Zielkreis an, zieht das starke Magnetfeld den ferromagnetischen Stahlanker der Sperrklinke an.
+   * Die Klinke taucht nach unten weg und gibt die $90^\circ$-Rastkerbe frei.
+   * Eine integrierte EPDM-Ausstoßfeder drückt den Deckel automatisch um **$10\dots 15\,\text{mm}$ heraus**, sodass er bequem mit einer Hand gegriffen und herausgezogen werden kann.
+   * **100 % Ausfallsicherheit:** Funktioniert rein permanentmagnetisch – benötigt 0 mA Ruhestrom und öffnet selbst bei komplett entleerter Motorradbatterie zuverlässig.
 
-1. **Glatte, diebstahlsichere Kassettenfront:**
-   * Äußere Squeeze-Tasten entfallen vollständig. Die Frontblende der Kassette schließt absolut glatt und spaltbündig mit dem Pod-Gehäuse ab. Ein manuelles Aushebeln per Hand oder mit Werkzeug ist ohne Zerstörung des Gehäuses unmöglich.
-2. **Kinetische 2-Arm-Wippe (`parts/05_magnetic_lock_latch.scad`):**
-   * Arbeitet als Hebel 1. Ordnung um eine rostfreie M2-Schwenkachse bei $X = 65\,\text{mm}$ auf dem Kassetten-Schlitten.
-   * **Vorderer Arm ($X = 77\,\text{mm}$):** Trägt die $90^\circ$-Sägezahn-Rastkralle mit $30^\circ$-Einlaufschräge. Sie gleitet beim Einschieben federnd über die Schiene und rastet am Endanschlag formschlüssig in die Gehäusetasche bei $X = 95\,\text{mm}$ ein ($18\,\text{mm}$ Schottwand-Offset $+ 77\,\text{mm}$).
-   * **Hinterer Arm ($X = 53\,\text{mm}$):** Trägt den eingepressten ferromagnetischen Stahlanker ($\varnothing\,6{,}2 \times 8\,\text{mm}$). Eine V4A-Druckfeder stützt sich gegen die innere Schlittenwand ab und hält die Sperrkralle im Ruhezustand permanent unter Verriegelung.
-3. **Kontaktlose Neodym-Entriegelung & Taktiler Zielkreis:**
-   * Auf der linken Gehäuseaußenwand von `pod_base_housing.scad` ist bei $X = 71\,\text{mm}$ ($18\,\text{mm} + 53\,\text{mm}$) ein taktiler Zielkreis ($\varnothing\,18\,\text{mm} \times 0{,}6\,\text{mm}$) eingelassen.
-   * Nähert der Fahrer den [Smart-Keyfob](../../hardware/cad/scad/05_accessories/smart_keyfob_pager.scad) (oder einen N52-Magnetschlüssel) an diesen Zielkreis an, zieht das Magnetfeld den innenliegenden Stahlanker nach außen. Die Wippe schwenkt um die M2-Achse, zieht die Sperrkralle nach innen in den Schlitten und gibt die Rastung frei.
-4. **Automatischer Federauswurf (Auto-Eject):**
-   * Im selben Moment stoßen die beiden in der Schottwand sitzenden V4A-Druckfedern die Kassette definiert um **$15\dots 20\,\text{mm}$ nach vorne aus**, sodass sie bequem gegriffen und entnommen werden kann.
-5. **Hermetischer Offroad- & Allwetterschutz:**
-   * Keine offenen Gehäuseschlitze, Schieber oder Tastenöffnungen nach außen. Vollkommen resistent gegen Schlamm, Staub, Regen und winterlichen Frost.
-
-| Parameter | Berechneter Wert | Funktion & Sicherheitsnachweis |
-| :--- | :---: | :--- |
-| **Federrate (2x V4A Auswerffedern)** | **$2{,}4\,\text{N/mm}$** | Parallelschaltung zweier Edelstahl-Druckfedern (DIN EN 13906-1) |
-| **Vorspannfederweg** | **$6{,}0\,\text{mm}$** | Kompression von $L_0 = 15\,\text{mm}$ auf $L_{\text{mated}} = 9\,\text{mm}$ |
-| **Axiale Haltekraft (Preload)** | **$7{,}2\,\text{N}$** | Hält Dichtsitz permanent unter Druck gegen $20\,\text{g}$ Vibration |
-| **Dichtungs-Gegenkraft** | **$4{,}5\,\text{N}$** | $30\,\%$ Kompression der umlaufenden $1{,}5\,\text{mm}$ Silikon-Dichtschnur |
-| **Auszugskraft (Verriegelung)** | **$> 120\,\text{N}$** | $90^\circ$-Formschluss sperrt Auszug zuverlässig gegen unbefugtes Ziehen |
-| **Entriegelungsmagnetfeld** | **$B_r \ge 1{,}2\,\text{T}$ (N52)** | Kontaktlose Schwenkauslenkung der 2-Arm-Wippe am Zielkreis $X = 71\,\text{mm}$ |
-| **Automatischer Auswurfhub** | **$15\dots 20\,\text{mm}$** | Trennt den Kontakt mit großem Sicherheits-Überhub |
-
-#### 4.1.3 Die 4 kinematischen Bewegungsphasen des Kassetteneinschubs
-1. **Phase 1 - Vorzentrierung ($x = 0\dots 80\,\text{mm}$):** Die asymmetrischen Poka-Yoke Führungsrippen greifen in die Gehäusenuten ein. Das seitliche Spiel wird auf $\pm 0{,}2\,\text{mm}$ begrenzt.
-2. **Phase 2 - Feder-Kompression ($x = 80\dots 90\,\text{mm}$):** Die Stirnseite des Schlittens trifft auf die beiden V4A-Auswerferfedern in der Schottwand und baut die $7{,}2\,\text{N}$ Vorspannkraft auf.
-3. **Phase 3 - Kontakt-Eingriff & Schnapp-Rastung ($x = 90\dots 95\,\text{mm}$):** Die beiden vergoldeten Messerklingen des IP67-Direktsteckers gleiten formschlüssig in die Dual-Beam Schlitzbuchse `J_DC_IN` auf `PCBA 03` (selbstreinigender Wischkontakt, 0 % Kontaktprellen bei Vibrationen). Die $30^\circ$-Einlaufschräge der Sägezahnkralle drückt die Wippe federnd nach innen, bis sie bei $X = 95\,\text{mm}$ in die Gehäusekerbe schnappt.
-4. **Phase 4 - Formbündige Verriegelung ($x = 95\dots 98\,\text{mm}$):** Die $90^\circ$-Sperrkante verriegelt formschlüssig. Die umlaufende Silikon-Dichtung wird um $30\,\%$ komprimiert (IP67 Dichtsitz).
+3. **Verdeckte Innenverschraubung & Sabotageschutz:**
+   * Die M4/M5-Edelstahlschrauben zur Befestigung des Pod-Gehäuses im Koffer oder am Rahmenrohr liegen im Inneren des Gehäuses unterhalb der Elektronikbucht.
+   * Bei geschlossenem und verriegeltem Deckel sind die Schrauben für Werkzeuge physisch unzugänglich.
+   * Jeder Versuch, den Pod gewaltsam abzureißen, wird über die 6-Achs-IMU der Zentralbox erkannt und alarmiert den Fahrer in $< 50\,\text{ms}$ über LoRa (868 MHz) auf dem Taschen-Pager.
 
 ---
 
-### 4.2 Gehäuse Typ B: Der universelle Satelliten-Pod (Pod 1 und 2)
-Beide Satelliten-Pods (Pod 1 und Pod 2) nutzen dasselbe 5-seitige Monocoque-Schachtgehäuse im standardisierten Envelope ($150{,}0 \times 70{,}0 \times 38{,}0\,\text{mm}$ mit $132{,}0 \times 63{,}0 \times 31{,}0\,\text{mm}$ Kammer):
+### 4.2 Innenarchitektur: Zweizonen-Aufbau, Zwischendeckel & Koffer-USB
 
-#### 4.2.1 Rohrbett-Prisma ($120^\circ$) & EPDM-Spannbefestigung
-* **An der Unterseite:** $120^\circ$-V-Nut ($R = 15\,\text{mm}$) schmiegt sich formschlüssig an alle Rohre von $\varnothing 18\dots 35\,\text{mm}$ an ($1"$ Sturzbügel, $7/8"$ Heckrahmen).
-* **4x Einhängenasen:** Blitzschnelle Montage mit 2 UV-beständigen EPDM-Gummiringen bei gleichzeitiger Schwingungsdämpfung.
-
-#### 4.2.2 100% Monolithisches 1-Teil-Schachtgehäuse & 2-Draht-DC-Kontaktierung
-
-In der v9.6 Clean Architecture ist die frühere Pod-Bodenplatine (`PCBA 02`) **vollständig entfallen**:
-* **Entfall der geschraubten Schottwand:**
-  * Da keine Platine mehr im Pod-Gehäuse montiert werden muss, entfällt die früher separat einzuschraubende Schottwand samt 4x M2-Eckschraubdomen und 2x M2-Platinenschrauben ersatzlos.
-  * Das gesamte Gehäuse (`pod_base_housing.scad`) wird als **nahtloses, 100% monolithisches 1-Teil-Monocoque** gedruckt.
-  * Die Quer-Trennwand bei $X = 18{,}0\,\text{mm}$ mit der formschlüssigen Aufnahme für den IP67-Direktstecker (`CON_POD_DC`, $10{,}0\,\text{mm}$ Klingenraster) und den zwei integrierten V4A-Auswerferfeder-Domen ist materialhomogen mit dem Tunnel verschmolzen.
-  * **0 Montageschrauben, 0 lose Teile, 100% Verzugsfreiheit und maximale Dichtigkeit.**
-* **Vibrationsfester IP67-Direktstecker & Dual-Beam Wischkontakte:**
-  * Die 2-adrige DC-Zuleitung (12V/5V geschaltet und GND) endet am vorkonfektionierten 2-Pin Automotive Blade-Direktstecker (`CON_POD_DC`).
-  * Der Stecker wird von außen mit einem axialen NBR70 O-Ring in die Gehäuserückwand gesteckt und mit einem Edelstahl-U-Clip werkzeuglos formschlüssig verriegelt (100 % lötfrei, IP67).
-  * Beim Einschieben der Kassette gleiten die beiden vergoldeten $2{,}8 \times 0{,}8\,\text{mm}$ Klingen in die werkseitig SMT-bestückte Dual-Beam Schlitzbuchse `J_DC_IN` auf `PCBA 03`. 
-  * Gegenüberliegende Federarme klemmen die Klingen beidseitig ein: Absolut immun gegen axiale Motorvibrationen und Fahrbahnstöße (kein Prellen, kein Fretting).
-* **Integrierte UWB-Antennenaufnahme in der Kassette:**
-  * Im Boden des Kassetten-Grundschlittens (`00_base_sled.scad`) ist direkt unterhalb des U.FL-Ports von `PCBA 03` eine formschlüssige Tasche ($12{,}0 \times 12{,}0 \times 0{,}8\,\text{mm}$) mit Koaxialkabel-Führung für die **Taoglas FXUWB10 UWB 6.5 GHz Flexantenne** eingelassen.
-  * Die Antenne strahlt verlustfrei durch den Schlittenboden und das dielektrisch neutrale PA12-Pod-Gehäuse ins Freie ab.
-* **Koffer-Trennstelle (COTS Magnet-Pogo-Dock):** Bei abnehmbaren Seitenkoffern wird die Verbindung an der Gepäckträger-Schnittstelle über einen handelsüblichen industriellen **2-Pin Magnet-Pogo-Steckverbinder (IP68 COTS)** realisiert. Fällt der Koffer ab oder wird abgenommen, trennt sich die Magnetkupplung zerstörungsfrei. Die eFuse auf `PCBA 01` schützt die Leitung bei Kurzschluss in $< 1\,\mu\text{s}$.
-* **Vorteile der rein passiven Pod-Basis:**
-  1. **Null Kontaktprellen auf Datenleitungen:** Sämtliche Audio- und Steuerströme laufen über das drahtlose All-UWB-Backbone.
-  2. **Extreme Vibrationsfestigkeit:** Keine empfindlichen SMD-Bauteile oder Buchsen im Spritzwasserbereich der Räder.
-  3. **100 % Wartungsfreiheit:** Das Gehäuse besitzt keine beweglichen Elektronikteile.
-
----
-
-### 4.3 Gehäuse Typ C: Modulare Wechselkassetten
-
-![OpenMotorBridge Modular Cartridge Variants CAD Trio](../images/cad/cartridge_variants_trio.png)
-
-*Abbildung 8.11: Die modularen Wechselkassetten-Varianten im Überblick: OMM 2.4 GHz UCS Cartridge, Sena SPIDER X Slim Quick-Snap Cradle, Cardo Magnetic Air Mount und wasserdichte IP67 Blindkassette.*
-
-#### 4.3.1 Benutzerzentrierte Serielle Docking-Architektur (Hintereinander-Layout & 0 Lötaufwand)
-Um Bauraum und Bauhöhe optimal auszunutzen und vertikale Sandwich-Doppelstöckigkeit zu vermeiden, ist der Kassetten-Schlitten (`00_base_sled.scad`, $130{,}0 \times 58{,}0 \times 28{,}0\,\text{mm}$) in einer **strengen seriellen Längsanordnung (hintereinander auf Schlittenbodenebene $Z=2{,}5\,\text{mm}$)** aufgebaut:
-* **Vordere Sektion ($X = 1{,}5\dots 36{,}5\,\text{mm}$):** Trägerplatine `PCBA 03` Rev 3.0 ($35{,}0 \times 25{,}0\,\text{mm}$) mit MCU (ESP32-S2), ES8388 Audio-Codec, 4-Kanal Aktuatortreiber (`J_ACT`) und Audio/Power-Header (`J_AUDIO_PWR`).
-* **Hintere Sektion ($X = 40{,}0\dots 126{,}0\,\text{mm}$):** Aufnahme für das jeweilige Intercom-Modul bzw. dessen originale OEM-Halterung, direkt verschraubt auf dem Schlittenboden.
-* **Einsatz der originalen OEM-Halterungen (Null Spezialfertigung, 100 % Zuverlässigkeit):**
-  * **Cardo Packtalk Edge:** Nutzt die originale **Cardo OEM Air-Mount Halterung** mit werksseitigen Neodym-Magneten, Gold-Federkontakten und Auslösehebel. Die werksseitige Cardo-Kabelpeitsche ($3{,}5\,\text{mm}$ Audio + 2-Pin Mic) führt direkt nach vorn in `J_AUDIO_PWR` auf `PCBA 03`. Selbstbau-Pogo-Pins oder Einkleben von Magneten entfallen vollständig.
-  * **Sena SPIDER X Slim:** Nutzt das originale **Sena OEM Quick-Snap Cradle**. Die 3-adrige Original-Kabelpeitsche führt direkt nach vorn in `J_AUDIO_PWR`.
-  * **OpenMotorMesh (OMM 2.4 GHz UCS):** UCS-Modul ($54 \times 34 \times 11\,\text{mm}$) in der Mitte und dedizierter 5V COTS RF-Booster-Kühlkörper ($25 \times 15 \times 6\,\text{mm}$) im Heckbereich. Vollständig digitale USB-Audioübertragung (UAC) via 90° USB-C Flachbandkabel zu `PCBA 03`.
-* **Kabelübergabe & Zugentlastung:** Auf Bodenebene fluchten die Kabelauslässe der OEM-Cradles direkt mit den Steckverbindern auf `PCBA 03`. Kein vertikaler Durchbruch durch einen Zwischenboden nötig.
-
-#### 4.3.2 UCS-Standard (Universal Communication Solution) & OMM 2.4 GHz OEM-Kassette
-
-OpenMotorBridge setzt für moderne, herstellerunabhängige Wechselmodule auf die **Universal Communication Solution (UCS)**, welche von führenden Helm- und Intercom-Herstellern (u. a. Cardo, Midland, Shoei, HJC) forciert wird:
-
-1. **UCS-Standard als universeller Formfaktor ($68{,}0 \times 36{,}0 \times 9{,}5\,\text{mm}$):**
-   * Durch die Vereinheitlichung der Außenkontur bei UCS-Geräten können unterschiedliche Mesh-Module in denselben standardisierten Halteschlitten eingesetzt werden.
-   * Das **OpenMotorMesh 2.4 GHz Modul** wird nativ im UCS-Formfaktor gefertigt und fungiert als vollwertiger, offener OEM-Transceiver (CAD-Modelle: [`omm_ucs_top_shell.scad`](../../hardware/cad/scad/03_pod_cartridges/parts/omm_ucs_module.scad), [`omm_ucs_bottom_shell.scad`](../../hardware/cad/scad/03_pod_cartridges/parts/omm_ucs_module.scad) und [`omm_ucs_silicone_keypad.scad`](../../hardware/cad/scad/03_pod_cartridges/parts/omm_ucs_module.scad)).
-
-![OMM UCS Intercom Modul CAD](../images/cad/omm_ucs_module_cad.png)
-
-*Abbildung 8.11b: 3D-CAD-Ansicht des universellen OMM UCS-Moduls (`omm_ucs_module.scad`) mit monolithischer Shore 50A Silikon-Tastmatte, frontaler wasserdichter USB-C Schnittstelle, rückseitigem RF-Koaxialauslass und ECE 22.06 Schnapprastnasen.*
-
-| PCBA 09 (OMM 2.4 GHz HD-Mesh) | PCBA 10 (OMM 446 MHz PMR/DMR) |
-| :---: | :---: |
-| ![PCBA 09 Top 3D](../images/pcba/pcba09_omm_intercom_3d.png) | ![PCBA 10 Top 3D](../images/pcba/pcba10_omm446_intercom_3d.png) |
-| *PCBA 09: Dual-Engine ESP32-C6 + PICO-V3-02* | *PCBA 10: Dual-Engine NiceRF SA818-DMR + PICO-V3-02* |
-
-   * **Befestigungskonzept (Captive Nuts Standard):** Die Oberschale besitzt 4 formschlüssige **DIN 934 M2 Sechskantmutter-Taschen**. Die Verschraubung erfolgt von der Unterschale aus mit 4x DIN 912 M2 x 8 mm V4A Edelstahlschrauben. Gewindeschneiden in Kunststoff ist ausgeschlossen – das Modul kann beliebig oft zur Inspektion oder zum Akkutausch geöffnet werden.
-   * **Dichtungskonzept:** 100 % wasserdicht nach IP67 durch eine geschäumte Shore 40A Silikonschnurdichtung in der Gehäusedichtnut und eine einteilige, unterbrechungsfreie Silikon-Tastmatte ohne Öffnungen.
-   * **Exakte Ausrichtung aller Gehäuseöffnungen & Schnittstellen (100%ige Deckungsgleichheit mit PCBA 09 & PCBA 10):**
-     - **Stirnseitige USB-C Buchse (`J1`):** Formschlüssiger Tunneldurchbruch an der Frontkante ($X = 0\,\text{mm}$, zentriert bei $Y = 18{,}00\,\text{mm}$, lichte Weite $9{,}5 \times 4{,}2\,\text{mm}$) mit TPU-Dichtstopfen für Helm- und Standalone-Laden/WebUSB.
-     - **4x Taster-Aperturen (`SW1`–`SW4`):** Konzentrische $\varnothing\,5{,}0\,\text{mm}$ Plungerdurchbrüche in der Oberschale bei $X = 17{,}0, 29{,}0, 41{,}0, 53{,}0\,\text{mm}$ (Raster $12{,}0\,\text{mm}$) und $Y = 25{,}00\,\text{mm}$ – exakt zentriert über den taktilen Kurzhubtastern Alps SKRK auf den Platinen.
-     - **RGB-Status-LED Lichtleiter (`D1`):** $\varnothing\,2{,}6\,\text{mm}$ Lichtleiter-Dom bei $X = 35{,}00\,\text{mm}$ (exakt mittig zwischen Taste 2 und 3) und $Y = 29{,}22\,\text{mm}$ – sitzt direkt über der WS2812B-2020 LED.
-     - **Rückseitiger HF-Koaxialauslass & SMA-Durchführung:** Bei `PCBA 09` geht das 50 mm Micro-Koaxial-Pigtail direkt vom U.FL-Port des ESP32-C6-MINI-1U aus, bei `PCBA 10` von der U.FL-Buchse `J_RF` (`B.Cu`). An der Schmalseite $+X$ ($X = 68{,}0\,\text{mm}$, $Y = 18{,}0\,\text{mm}$) sitzt in einer formschlüssigen D-Cut Aussparung ($5{,}0 \times 4{,}0\,\text{mm}$) eine wasserdichte IP67 SMA-Einbaubuchse mit EPDM/Silikon-O-Ring ($\varnothing 6{,}0 \times 1{,}0\,\text{mm}$) und V4A-Sechskant-Kontermutter. Im Helmeinsatz wird direkt eine ultrakompakte Stummelantenne verschraubt ($38\,\text{mm}$ Rubber-Duck für PCBA 09 bzw. $48\,\text{mm}$ Helical für PCBA 10 – völlig flatter- und pfeiffrei); im Pod-Betrieb bleibt die Kassette zu 100 % geschlossen und dicht (`has_sma_port = false`), während die Antenne intern verlustfrei durch das $1{,}8\,\text{mm}$ PA12-Gehäuse abstrahlt. Im seriellen Kassetten-Inlay ist hierfür im Heckbereich eine passgenaue $25 \times 15\,\text{mm}$ Einbautasche für einen optionalen 5V COTS Bi-Directional RF Booster integriert, der via Y-Kabel direkt mit 5V von PCBA 03 versorgt wird. Die OMM-Audioübertragung erfolgt zu 100 % volldigital über USB Audio (UAC) direkt zur Zentralbox – analoge Audioleitungen und Wandlungsverluste entfallen vollständig.
-     - **Interner Helm-Audio & PTT-Auslass (`J_HELMET`):** Auf der Schachtseite der Gehäuseunterschale führt ein verdeckter Durchbruch ($9{,}0 \times 9{,}0\,\text{mm}$) bei $X = 55{,}0\dots 64{,}0\,\text{mm}$ (im hinteren Abteil gegenüber vom USB-C-Port, hinter dem zentralen Akkufach) direkt in den Helminnenraum zum 180° nach innen ausgerichteten 6-Pin JST-SH Header (`HP_OUT_L`, `HP_OUT_R`, `AGND_SPK`, `MIC_IN+`, `AGND_MIC`, `BTN_PTT` – ohne 5V DC). Außen am Helm ist kein einziges Kabel sichtbar, und der stirnseitige USB-C Port bleibt frei für Ladekabel (Powerbank/Frontnode) und WebUSB.
-     - **4x M2 Gehäuseverschraubung (`H1`–`H4`):** Bohrungskoordinaten bei $X = 8{,}0, 60{,}0\,\text{mm}$ und $Y = 7{,}0, 29{,}0\,\text{mm}$ – fluchtet 1:1 mit den M2-Befestigungsbohrungen der Platinen.
-2. **Akku- & Energie-Autonomie (Pass-Through Charging):**
-   * Das OMM 2.4 GHz Modul verfügt über eine integrierte, werkzeuglos wechselbare 600-mAh-LiPo-Flachzelle ($> 12\,\text{h}$ autarke Laufzeit).
-   * **Laden während des Betriebs:** Das Modul unterstützt unterbrechungsfreies Laden im Fahrbetrieb. Im OMB-Pod erfolgt die Speisung über die 2-Draht DC-Bodenkontakte von `PCBA 03` via kurzem 90° USB-C Kabel (rein digitales USB-Audio, keine analogen Signalwege); im Standalone-Betrieb am Helm über den stirnseitigen USB-C-Anschluss.
-3. **Universelle Schnittstellen-Peitsche:**
-   * Analog zu modernen Intercom-Standards führt das Modul alle Signale über eine robuste 3-fach Kabelpeitsche heraus:
-     * Mikrofon-Anschluss (2-polig JST-JWPF wasserdicht)
-     * Stereo-Kopfhörer-Buchse (3.5 mm Klinke für 40 mm JBL/Sena Treiber)
-     * USB-C Port für Laden und WebUSB Service
-4. **Multi-Plattform-Einsatz & ECE 22.06 Helm-Arretierung:**
-   * Mit einem Handgriff kann das OMM-Modul aus dem Kassetten-Schlitten entnommen und dank integrierter Schnapp-Rastnasen werkzeuglos in jeden beliebigen UCS-kompatiblen Motorradhelm geklickt werden.
-   * Details zur Schaltung und Platinenspezifikation siehe [04b_omm_intercom_module.md (Kapitel 2 & 3)](04b_omm_intercom_module.md#2-omm-24-ghz-hardware--platinen-design-pcba-spezifikation).
-
-#### 4.3.3 Das 4-Klassen-Kassettenportfolio der Universal Smart Cartridge
-
-Um mechanische Passgenauigkeit bei maximaler Flexibilität zu gewährleisten, existieren 4 präzise gefertigte Varianten für den universalen 130 mm Grundschlitten:
-
-1. **Variante 1: Sena SPIDER X Slim (serielle OEM-Cradle-Integration):**
-   * Verwendet die originale Sena OEM Quick-Snap Halterung, direkt auf dem Schlittenboden verschraubt.
-   * Direkter Anschluss der originalen 3-fach Kabelpeitsche auf den Header `J_AUDIO_PWR` von `PCBA 03`. Vollkommen frei von fehleranfälligen Pogo-Pins.
-   * Ultraflache Bauhöhe: Nur $22{,}0\,\text{mm}$ Gesamthöhe (enorme vertikale Reserve im Pod).
-2. **Variante 2: Cardo Packtalk Edge / Pro (serielle OEM-AirMount-Integration):**
-   * Verwendet die originale Cardo OEM Air-Mount Halterung mit werkseitigen Neodym-Magneten und Gold-Pogo-Pins.
-   * Direkte Verbindung der Cardo-Kabelpeitsche ($3{,}5\,\text{mm}$ Audio + 2-Pin Mic) nach vorn auf `J_AUDIO_PWR`.
-   * Mechatronischer Kaltstart: 2 Hubmagnete mit abgewinkelten Rechteck-Füßen (orange TPU-Dämpfer) über den beiden Power-Tasten.
-3. **Variante 3: OMM 2.4 GHz UCS Transceiver (Autonome Mesh-Engine):**
-   * Seriell angeordnetes UCS-Modul ($54 \times 34 \times 11\,\text{mm}$) mit 5V COTS RF-Booster im Heckbereich.
-   * 100 % digitale USB-Audioübertragung (UAC) und Telemetrie direkt zu `PCBA 03`.
-4. **Variante 4: Leerkassette / Staufach-Kassette (Organizer am Kassettenboden):**
-   * Vollständiger Innenraum als Staufach für Notschlüssel, Papiere oder Ersatzsicherungen mit passgenauem Einlegeboden direkt auf dem Schlittenboden (`am Boden` verschraubt mit 4x M2-Senkkopfschrauben). Beim Einschieben in den Pod-Schacht wird die Kassette durch das umlaufende Pod-Gehäuse und die frontale Dichtlippe zu 100 % IP67-dicht umschlossen.
-
----
-
-#### 4.3.4 Mechatronische Smart Cartridge: Formschlüssige Arretierung & 4-Kanal Aktuator-Führung (Sena SPIDER X Slim & Cardo Packtalk Edge)
-Für moderne Intercom-Kassetten wie das Sena SPIDER X Slim und das Cardo Packtalk Edge löst die Kassettenmechanik die doppelte Kernherausforderung: **Absolute Schwingungsfestigkeit des OEM-Adapters** und **präzise, dauerhafte Ausrichtung von 4 diskreten, unabhängig platzierten Aktuatoren auf die Tastenfelder**.
-
-##### Universelle Aktuatoren-Architektur (`cartridge_universal_actuator_rails.scad`):
-Um auch Headsets mit asymmetrischen, mittigen oder beidseitig gegenüberliegenden Tasten ohne Neukonstruktion mechanisch vollautomatisiert steuern zu können, wurde das universelle Schienen- und Rastersystem konstruiert:
-1. **Top-Face 2D-Langloch-Rasterplatte ($3\,\text{mm}$ Raster):**
-   * Die Deckelplatte besitzt eine 2D-Matrix aus verschiebbaren Langlöchern. Zylindrische Miniatur-Hubmagnete ($\varnothing 6{,}0\,\text{mm}$) können stufenlos exakt über der Taste positioniert und mit einer M2-Kontermutter fixiert werden.
-2. **Unabhängige seitliche Ausleger-Arme (Lateral Brackets links & rechts):**
-   * Bei Headsets mit Tasten auf beiden Seitenwänden (oder mittigen Wippen) greifen zwei separate, voneinander mechanisch entkoppelte Auslegerarme ein. Ein Arm bedient die linke Flanke, der andere die rechte Flanke.
+Das Innere des Satelliten-Pods ist modular in zwei vertikal getrennte Ebenen gegliedert:
 
 ```
-     MECHATRONISCHE SMART CARTRIDGE - UNIVERSELLE RASTER- & AUSLEGER-FÜHRUNG
-+----------------------------------------------------------------------------------+
-| KASSETTEN-OBERDECKEL (cartridge_universal_actuator_rails.scad):                  |
-|                                                                                  |
-|   TOP-RASTER (2D-Langlochplatte):                 SEITLICHE AUSLEGER-ARME:       |
-|   [ Aktuator 1 ]   [ Aktuator 2 ]   [ Aktuator 3 ]    [ Linker Arm ] [ Rechter Arm]|
-|   (Verschiebbar     (Verschiebbar    (Verschiebbar    (Flanke links   (Flanke rechts|
-|    in X- & Y-       in X- & Y-        in X- & Y-       unabhängig)     unabhängig)  |
-|    3mm-Raster)      3mm-Raster)       3mm-Raster)                                   |
-|         |                |                |                 |               |       |
-|   +-----+-----+    +-----+-----+    +-----+-----+     +-----+-----+   +-----+-----+ |
-|   |Feder 0,15N|    |Feder 0,15N|    |Feder 0,15N|     |Feder 0,15N|   |Feder 0,15N| |
-|   +-----+-----+    +-----+-----+    +-----+-----+     +-----+-----+   +-----+-----+ |
-|         v                v                v                 v               v       |
-|   +-----------+    +-----------+    +-----------+     +-----------+   +-----------+ |
-|   |Vertikal-  |    |Vertikal-  |    |Vertikal-  |     |Seiten-    |   |Seiten-    | |
-|   |Führung H8 |    |Führung H8 |    |Führung H8 |     |Führung H8 |   |Führung H8 | |
-|   +-----+-----+    +-----+-----+    +-----+-----+             +-----+-----+      |
-|         | (TPU)          | (TPU)          | (TPU)                   | (TPU)      |
-|         v (0,4mm)        v (0,4mm)        v (0,4mm)                 v (0,4mm)    |
-+---------+----------------+----------------+-------------------------+------------+
-| OEM INTERCOM GEHÄUSE (Im vibrationsdämpfenden EPDM-Konturbett):                  |
-|         v                v                v                         v            |
-|   [ Taste 1 ]      [ Taste 2 ]      [ Taste 3 ]               [ Taste 4 / Wheel ]|
-|                                                                                  |
-| +------------------------------------------------------------------------------+ |
-| | 3-Punkt EPDM-Dämpfungseinlagen (60° Shore A, 1,5 mm) gegen 20g Vibration     | |
-| +------------------------------------------------------------------------------+ |
-| KASSETTEN-UNTERTEIL MIT MONOCOQUE-VERRIEGELUNG (PA12-MJF Negativkontur)          |
-+----------------------------------------------------------------------------------+
+            POD-INNENAUFBAU: ZWEIZONEN-ARCHITEKTUR & DRY-FLAP
++-----------------------------------------------------------------------------+
+| SLIDE-IN DECKEL (Formschlüssig geführt, Silikondichtung IP67, FOB-Rastung)  |
++-----------------------------------------------------------------------------+
+| OBERE ZONE: GERÄTEKAMMER / DRY-BOX                                          |
+| * OEM-Intercom (Sena SPIDER X Slim, Cardo Packtalk Edge, OMM UCS, Midland)  |
+| * ODER: 100% wasserdichte Mini-Dry-Box für Papiere, Geld, Schlüssel         |
++ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - +
+| ZWISCHENDECKEL / DRY-FLAP (Aufklappbare EPDM/Silikon-Schutzblende)         |
++ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - +
+| UNTERE ZONE: ELEKTRONIK & VERSORGUNG                                        |
+| * PCBA 03 Trägerplatine (MCU, ES8388 Audio-Codec, 4-Ader-Automotive-Bus)    |
+| * Integrierte USB-PD Ladebuchse (5V/12V bis 30W/60W Schnellladen im Koffer) |
+| * Geteilte TPU-Kabeldurchführung zur 4-Pin Magnet-Abrissschnittstelle       |
++-----------------------------------------------------------------------------+
 ```
 
-* **1. Diskrete, flexible Aktuator-Architektur:**
-  * Anstelle eines starren 4er-Kammblocks setzt OpenMotorBridge auf **4 miniaturisierte Einzel-Aktuatoren** (Hubmagnete mit Federrückstellung und dämpfender TPU-Druckspitze), die jeweils über ein flexibles 2-poliges AWG30-Silikonkabel an den 8-Pin Header `J_ACT` von PCBA 03 angeschlossen werden.
-  * Dadurch kann das Inlay des Kassettenoberteils für jedes Intercom-Modell maßgeschneidert werden:
-    * **Sena SPIDER X Slim:** 3 Aktuatoren axial von oben auf die Tastenreihe (Plus, Center, Minus) sowie 1 Aktuator in einem $45^\circ$-Winkelturm auf der Seitenflanke zur Betätigung der exponierten Mesh-Intercom-Taste.
-    * **Cardo Packtalk Edge:** Auf `PCBA 03` bleiben hardwareseitig alle 4 unabhängigen Aktuatorkanäle (`ACT1`–`ACT4` via AO3400A N-Kanal MOSFETs auf dem 8-Pin Header `J_ACT`) für maximale Flexibilität vollständig bestückt. Für das Cardo Packtalk Edge werden **2 mechatronische Aktuatoren** mit speziell angepassten, rechteckigen Schrägfüßen montiert, die exakt auf die schrägen, schmalen Tastenflanken greifen, um das Gerät per Tastensequenz ein- und auszuschalten (Kaltstart / Power). Sämtliche weiteren Einstellungen und Betriebsmodi (wie Kanal- und Open-Mesh-Gruppenwechsel) werden vollautomatisch und direkt via BLE über die OpenMotorBridge-Firmware gesteuert, da man im geschlossenen Pod weder akustische Menüansagen hört noch optisches LED-Feedback erhält. Ein mechanisches Betätigen des Control Wheels entfällt ebenfalls, da Lautstärke und Gain volldigital über den DSP in der Zentralbox geregelt werden.
-  * **Mechanische Befestigung via Niederhalteplatte:** Die Aktuatoren werden von innen in die monolithischen Führungsdome geschoben und durch eine gemeinsame, mit 4x M2-Senkkopfschrauben verschraubte PA12-CF-Halteplatte mit $1{,}0\,\text{mm}$ EPDM-Dämpfungsunterlage vibrationsfest und spielfrei auf ihren Bund gepresst.
-  * **Anti-Pinch-Kabelführung:** Entlang der Schlitteninnenwand sind vertiefte $1{,}8 \times 2{,}0\,\text{mm}$ Führungskanäle mit angeformten Halteclips integriert. Die hochflexiblen AWG30-Silikonlitzen des 8-Pin Y-Kabelbaums werden darin vollkommen knickfrei und quetschgeschützt von `J_ACT` zu den 4 Aktuatoren geführt.
+1. **Untere Elektronik-Zone (`PCBA 03`):**
+   * Die Platine [PCBA 03](07_pcba_hardware_pinouts.md#5-pcba-03-universal-smart-cartridge-openmotorbridge_universal_cartridge) ist auf 4x M2.5 Schwingungsdämpfern direkt am Gehäuseboden verschraubt.
+   * Sie enthält den Audio-Codec (ES8388), die MCU zur Peripherieüberwachung sowie die Signalfilterung.
+   * **Integrierte Koffer-USB-Ladebuchse:** Ein vertikal bzw. $45^\circ$ nach oben abgewinkelter USB-C Port auf `PCBA 03` stellt bis zu **30W/60W USB-PD Ladeleistung** direkt im Seitenkoffer bereit. Fahrer können während der Tour Smartphones, Helme, Action-Cams oder Powerbanks wettergeschützt im Koffer aufladen.
+   * **Kabeldurchführung im U-Slot-Design:** Die 4-adrige Zuleitung wird über eine geschlitzte TPU-Knickschutztülle (analog zum Front-Node) staub- und druckwasserdicht (IP68) in das Pod-Gehäuse eingeführt.
 
-* **2. Formschlüssiges Negativbett & Vibrationssicherung gegen $20\,\text{g}$ Shock:**
-  * **Präzisions-Passung:** Die Aufnahmeschale bildet das OEM-Gehäuse des SPIDER X Slim ($74{,}5 \times 31{,}0 \times 16{,}0\,\text{mm}$) mit einer Passungstoleranz von $0{,}2\,\text{mm}$ im SLS/MJF-Verfahren ab.
-  * **3-Punkt EPDM-Schwingungsentkopplung:** Drei profilierte EPDM-Dämpfungspolster ($60^\circ$ Shore A, Dicke $1{,}5\,\text{mm}$) am Boden und an den Stirnflanken absorbieren hochfrequente Motorvibrationen ($50\dots 500\,\text{Hz}$) sowie Stoßbelastungen bis $20\,\text{g}$ (nach ISO 16750-3).
-  * **Formschlüssige Schnellspann-Klammer (Quick-Clamp):** Ein schwenkbarer Niederhaltebügel mit unverlierbarer M3-Rändelschraube presst den OEM-Adapter mit definierter Haltekraft ($15\dots 20\,\text{N}$) spielfrei und unbeweglich in das Nest. Ein Verrutschen oder Klappern während der Fahrt ist physikalisch ausgeschlossen.
+2. **Zwischendeckel-Spritzschutzblende (Dry-Flap):**
+   * Über der `PCBA 03` sitzt eine schwenkbare oder einschiebbare Zwischenblende aus hochflexiblem Shore 50A Silikon/EPDM.
+   * Sie dichtet die Platine, Lötanschlüsse und Stecker hermetisch gegen die obere Kammer ab.
+   * Beim Öffnen des Slide-in Deckels im Regen oder bei nassen Gepäckstücken kann kein Tropfwasser auf die empfindliche Leiterplatte gelangen.
 
-* **3. Präzisions-Führungsbrücke & Zuverlässiges Treffen der Gegenstelle:**
-  * **Monolithische Führungsbuchsen:** Im Kassetten-Deckel sind vier hochpräzise Führungszylinder ($\varnothing\,3{,}2\,\text{mm}$, Passung H8) direkt eingesintert.
-  * **Fluchtende Achsausrichtung:** Jeder Zylinder fluchtet exakt zentrisch über der entsprechenden OEM-Gummitaste (`ACT_PLUS`, `ACT_MINUS`, `ACT_CENTER`, `ACT_MESH`) mit einer Achsabweichung von $< \pm 0{,}15\,\text{mm}$.
-  * **TPU-/Silikon-Druckkappen (Shore 70A):** Die Stößelspitzen tragen elastische Kappen mit leicht balliger Stirnfläche. Sie verhindern Abrutschen auf der gewölbten Gummitaste, gleichen Bauteiltoleranzen aus und schützen die Original-Tastenbeschichtung vor Reibverschleiß.
-  * **Integrierte Rückstellfedern (Edelstahl 1.4310):** Jede Stößelachse wird durch eine Spiralfeder ($c \approx 0{,}15\,\text{N/mm}$) in Ruhelage gehalten. Ein definierter Freihub von $0{,}4\,\text{mm}$ ("Luftspalt") stellt sicher, dass selbst extreme Fahrbahnstöße niemals zu einem ungewollten Berühren oder Drücken der Taste führen.
-  * **Mechanischer Endanschlag ($1{,}1 \pm 0{,}1\,\text{mm}$):** Die Betätigungstiefe ist mechanisch begrenzt. Der interne Mikrotaster schaltet sicher durch, eine Überlastung oder Quetschung der internen SMD-Taster auf der Headset-Platine wird zuverlässig verhindert.
-
-* **4. Knickfreie Zugentlastung der Kabelpeitsche:**
-  * Im Kassettenboden führen drei separate Führungskanäle die werkseitige Kabelpeitsche des SPIDER X Slim (DC-Power ⑧, Mikrofon ⑨, Lautsprecher ⑩) über großzügig gerundete Radien ($R \ge 5\,\text{mm}$) direkt zu den Buchsen `J2` und `J_ACT` auf PCBA 03 Rev 2.0.
-
-![OpenMotorBridge Mechatronische Smart Cartridge Sena SPIDER X Slim 3D CAD Fitting](../images/cad/smart_cartridge_spider_x_cad.png)
-
-*Abbildung 8.14b: CAD-Visualisierung der mechatronischen Smart Cartridge Rev 2.0 für Sena SPIDER X Slim: Formschlüssiges PA12-MJF Konturbett, 3-Punkt EPDM-Schwingungsdämpfung gegen 20g Vibration, Niederhaltebügel und monolithische Führungsbrücke mit 4 unabhängigen Tauchanker-Aktuatoren auf PCBA 03.*
-
-#### 4.3.5 Sena +Mesh & Universal Slide-Inlay (Klasse A mit externem Antennenanschluss)
-Für das Sena +Mesh (oder andere OEM-Adapter mit Antennen- und Ladeanschluss) bietet die Kassetten-Frontblende (`00_base_sled.scad` & `01_insert_sena.scad`):
-* **100 % zerstörungsfreie Nutzung des ungeöffneten OEM-Geräts:** Das Sena +Mesh wird im Originalgehäuse belassen.
-* **Formschlüssiges Schlitten-Inlay:** Bildet exakt die OEM-Rahmenbefestigungsplatte mit 2x Quer-Schiebestegen (Hakenabstand $30\,\text{mm}$) und federnder Rastzunge ab.
-* **Optional zuschaltbare SMA-Flansch-Bohrung (`has_sma_port = true`, $\varnothing\,6{,}5\,\text{mm}$):** Mit zylindrischer O-Ring-Dichtsenkung ($\varnothing\,9{,}5 \times 1{,}2\,\text{mm}$) an der Deckelstirnseite für eine IP67 SMA-Flansch-Doppelbuchse (Female-to-Female). Im Standard-Grundschlitten (`has_sma_port = false`) ist die Frontstirnseite zu 100 % geschlossen und monolithisch abgedichtet (IP67).
-* **Interner Koax-Kabelkanal:** Ausgesparter Durchbruch im Schlittenboden für die biege- und knickfreie Führung des internen $8\,\text{cm}$ RG-178 Pigtails (mit 90°-SMA-Winkelstecker zum Sena +Mesh).
-* **EPDM-Spannband-Aufnahme:** Einhängehaken für ein elastisches EPDM-Gummiband ($35 \times 10\,\text{mm}$), das den Adapter vibrationsfest im Negativbett sichert.
-* **Elektrische Speisung:** Flaches 90° Micro-USB / USB-C Pigtail von Pin 1 (`GND`) und Pin 2 (`5V_VBUS`) des JST-SH Headers `J2`.
-
-#### 4.3.6 Universelles OEM-Upcycling im Grundschlitten (Schuberth SC2, Shoei SRL-Mesh/SRL3, HJC Smart 50B)
-Ausgemusterte OEM-Intercoms ausgetauschter Helme (Schuberth C5 mit SC2, Shoei Neotec 2/3 mit SRL2/SRL-Mesh/SRL3, HJC RPHA mit Smart HJC 50B) eignen sich ideal für den kostengünstigen Festeinbau in Bucht 1 als autarke Sena Mesh 3.0 / 2.0 Gateways:
-* **Haupteinheit-Abmessungen & Bauraum:** 
-  * Das **Schuberth SC2** misst lediglich $75 \times 40 \times 12\,\text{mm}$ als monolithischer Block.
-  * Beim **Shoei SRL-Mesh / SRL3** wird das flache Nacken-Elektronikmodul ($65 \times 35 \times 10\,\text{mm}$) zusammen mit der kompakten 3-Tasten-Flanke flach im Schlittenbett platziert.
-  * Das **Smart HJC 50B** Einschubmodul ($68 \times 38 \times 11\,\text{mm}$) passt ebenfalls unmittelbar in das Nest.
-  * Alle Systeme fügen sich mühelos in den lichten Innenraum des universellen Basisschlittens (`00_base_sled.scad`, $124 \times 53 \times 28\,\text{mm}$) ein.
-* **$30\dots 35\,\text{mm}$ Funktions-Freiraum:** Der verbleibende Längsbauraum vor den Modulen nimmt den Miniatur-Step-Down-Wandler (MP2315, 5V Bordnetz $\rightarrow 3{,}75\,\text{V}$ Festspannung anstelle des ausgelöteten Akkus), den $10\,\text{k}\Omega$-NTC-Dummy-Widerstand sowie die Audio-Übertrager und Zugentlastungen auf.
-* **Bedienelemente & Ansteuerung:**
-  * *Schuberth SC2:* Steuerung erfolgt 100 % drahtlos über die werkseitige Schuberth Bluetooth Low Energy (BLE) Lenkerfernbedienung (Zero-Wear, keine Kabel zum Lenker).
-  * *Shoei SRL & HJC 50B:* Unterstützen entweder die drahtlose **Sena RC3 / RC4 Lenkerfernbedienung** (BLE) oder werden bei geöffneter Kassette über 4 mechatronische Tauchanker auf der Tastenleiste getaktet.
-* **Externe Koax-Antennenanbindung:** Die internen Micro-Koaxialkabel (U.FL / IPEX oder koaxiale Helmpigtails) werden über ein kurzes flexibles RG-178 Pigtail direkt an die frontale SMA-Flanschbuchse des Basisschlittens (`has_sma_port = true`) geführt. Daran wird die externe Hochgewinn-Fahrzeugantenne am Heckträger angeschlossen (freies Abstrahlen ohne Helm-Dämpfung).
-* **Wetterfeste Kassettenabdeckung:** Nach dem Einlegen wird die Kassette mit dem flachen Blinddeckel ([`03_insert_blindkassette.scad`](../../hardware/cad/scad/03_pod_cartridges/parts/03_insert_blindkassette.scad)) und 4x M2-Senkkopfschrauben staub- und strahlwasserdicht verschlossen.
-
-#### 4.3.7 Cardo Packtalk Edge / Pro Magnetic Air Mount
-![OpenMotorBridge Cardo Packtalk Edge Cartridge Assembly 3D CAD Fitting](../images/cad/cardo_cartridge_assembly_cad.png)
-
-*Abbildung 8.15: CAD-Visualisierung der Cardo Packtalk Edge Wechselkassette mit N52-Neodym-Magnetsitz und 5 gefederten Kontaktpads.*
-
-#### 4.3.8 Cardo Packtalk Bold / Black Edition
-Nutzt die formschlüssigen Schiebe-Gegenkontakte der originalen Cardo-Audiokit-Basisplatte. Das Gerät wird von oben in die mechanische Führung geschoben und federnd arretiert.
-
-#### 4.3.9 Midland BT Mini / BTR1 Advanced & XT30 Slide
-* **Midland Intercom Edition (BTR1 / Rush / BT Mini):** Kontur-Aufnahme für Midland Bluetooth- und Wave-Mesh-Intercoms ($70\dots 85\,\text{mm}$ Baubreite).
-* **Midland XT Bare-Board Edition:** Nimmt die entkernte Platine eines kompakten Handfunkgeräts (XT10/XT30/G5, $\approx 68 \times 42 \times 10\,\text{mm}$) direkt auf.
-
-#### 4.3.10 PMR446 Transceiver & Bare-Board Modul (SA818S / RDA1846)
-Vollständig integriertes 500 mW PMR446-Analogfunkmodul ($38 \times 20\,\text{mm}$) direkt auf der Kassetten-Trägerplatine - wahlweise mit interner 446-MHz-Helix oder robuster SMA-Frontbuchse für große Distanzen.
-
-#### 4.3.11 Universelle Externe Funkgeräte-Kassette (Tethered Radio Breakout)
-Für klassische oder voluminöse Handfunkgeräte (z. B. ausgewachsene Midland G7/G9 Pro, Kenwood TH-D-Serie, Motorola oder Baofeng), die aufgrund ihrer Gehäuseabmessungen, großen Akkupacks oder festen Wendelantennen nicht in den kompakten Innenraum der Standard-Kassette passen, bietet das System eine hochgradig modulare **Tethered Breakout-Option**:
-
-* **Hermetische Front-Kabeldurchführung:** Die Standard-Kassetten für Sena, Cardo, OMM und Blindbox bleiben wie gewohnt stirnseitig zu 100 % geschlossen und IP67-dicht. Für die Tethered-Variante wird die stirnseitige $\varnothing 6{,}5\,\text{mm}$ Durchgangsbohrung des Basisschlittens (`has_sma_port = true`) reaktiviert und mit einer handelsüblichen M8- bzw. PG7-Kabelverschraubung oder einer EPDM-Knickschutztülle abgedichtet.
-* **Intelligente Kassettenelektronik ([PCBA 03](07_pcba_hardware_pinouts.md#5-pcba-03-universal-smart-cartridge-openmotorbridge_universal_cartridge)):** Im Inneren des Schlittens sitzt weiterhin [PCBA 03](07_pcba_hardware_pinouts.md#5-pcba-03-universal-smart-cartridge-openmotorbridge_universal_cartridge), versorgt über den pod-internen IP67-Direktstecker in die Buchse `J_DC_IN` und angebunden an das synchrone UWB-Backbone (6.5 GHz) über die interne Taoglas FXUWB10 Bodenantenne.
-* **Vollständige Signal- & PTT-Adaption (`J_AUDIO_PWR`):** Ein mehradriges, geschirmtes Spiralkabel (Umbilical Cable) führt durch die Dichtverschraubung von `J_AUDIO_PWR` (8-Pin JST-SH) nach außen zur externen Funke:
-  - **Mikrofon & Lautsprecher:** Bidirektionales 24-Bit / 48 kHz Audio über den ES8388 DSP-Codec mit galvanisch getrennter Signalmasse (`AGND_AUDIO_IN`) für absolut brummfreien Betrieb.
-  - **Hardware-PTT:** Steuerung der Sendetaste über den integrierten Open-Drain MOSFET `Q4` (`PTT_IO` Pin 8) – ausgelöst durch den drahtlosen OMB-Lenkertaster am Kupplungsgriff oder Helm-Hotkeys.
-  - **Optionale Bordnetzspeisung:** Geschützte 5V DC Speisung (`VCC_5V` Pin 2 & `PGND` Pin 1) zur direkten Speisung eines Akku-Eliminators im Funkgerät (nie wieder leerer Funkgeräte-Akku während der Tour!).
-* **Maximale Montagefreiheit:** Das externe Funkgerät selbst muss nicht im Pod untergebracht werden, sondern kann flexibel im Tankrucksack, Seitenkoffer, einer Molle-Tasche am Sturzbügel oder in der Fahrerjacke getragen werden. Es sind keinerlei Sonderhalterungen am Pod erforderlich.
-
-#### 4.3.12 Längsschnitt-Vergleich Sena & Cardo
-![OpenMotorBridge Sena & Cardo Cartridges Longitudinal Cross Section](../images/cad/sena_cardo_cartridge_cross_section.png)
-
-*Abbildung 8.16: 2D-Längsschnitt (X-Z Ebene) durch die Sena 50S (oben) und Cardo Packtalk Edge (unten) Kassetten im geschlossenen Pod.*
-
-#### 4.3.13 IP67 Blind- / Leerkassette (Dry Box Dummy)
-![OpenMotorBridge IP67 Blindkassette 3D CAD Render](../images/cad/dummy_cartridge_cad.png)
-
-*Abbildung 8.17: Formidentische IP67 Blindkassette mit integriertem $80 \times 46 \times 16\,\text{mm}$ Notfall-Trockenstaufach.*
-
-Die IP67 Blindkassette (`cartridge_blindkassette.scad`) schützt den Pod-Schacht zuverlässig, wenn kein Intercom montiert ist:
-* **Identischer Verriegelungs- & Auswurfmechanismus:** Auch die Blindkassette verfügt über die standardisierte 2-Arm-Magnetwippe (`parts/05_magnetic_lock_latch.scad`), Poka-Yoke-Führungsschienen und Federtaschen für die V4A-Auswerferfedern. Sie verriegelt mit demselben satten Klick und wird kontaktlos über den N52-Magnetschlüssel ausgeworfen.
-* **Hermetischer Kontaktschutz (EPDM-Dichtblock):** An der Rückseite dichtet ein integrierter EPDM-Formblock die beiden Klingen des IP67-Direktsteckers im Gehäuseschacht absolut wasser- und staubdicht ab.
-* **Notfall-Trockenstaufach:** Der $80 \times 46 \times 16\,\text{mm}$ große Innenraum dient als wasserdichte Mini-Dry-Box für Fahrzeugschein, Bargeld, Notfallschlüssel oder Ersatz-O-Ringe.
+3. **Obere Gerätekammer & Hermetische Dry-Box:**
+   * **Mit Intercom:** Dient als passgenaues Nest für das jeweilige Kommunikationsmodul. Das Modul ruht auf vibrationsdämpfenden EPDM-Schaumpolstern und wird über eine kurze, vorkonfektionierte OEM-Kabelpeitsche direkt an `PCBA 03` angesteckt.
+   * **Ohne Intercom (Dry-Box-Modus):** Bleibt die Kammer leer, bietet der $120 \times 55 \times 18\,\text{mm}$ große Raum ein vollwertiges, trockenes und diebstahlgeschütztes Staufach für Fahrzeugdokumente, Kreditkarten, Notfall-Bargeld oder Mauttransponder.
 
 ---
 
-### 4.4 Die 2-Draht Pure-DC Pod-Zuleitung (All-UWB Architektur)
+### 4.3 Direkte Intercom-Integration (Entfall der elektromechanischen Kassetten)
 
-Durch die Umstellung auf das **All-UWB Datenbackbone (Qorvo DW3110)** und Bluetooth-Audio entfallen sämtliche Kupfer-Signaladern. Die Zuleitung zu den beiden Satellitenbuchten (Bucht 1 und Bucht 2) speckt von 6 Adern auf **exakt 2 Adern** ab:
+Durch die Umstellung entfallen sämtliche anfälligen elektromechanischen Tauchanker-Stößel und klobigen Kassetten-Einschübe. Die Steuerung der Geräte erfolgt zeitgemäß digital über die zentrale Audio-Engine oder ergonomische Taster:
 
-| Leitungsader | Farbe (Kabelpeitsche) | Querschnitt | Signal Bucht 1 & 2 (Pure-DC) | Funktion & Schutz |
-| :---: | :--- | :---: | :--- | :--- |
-| **Ader 1** | **Rot (RD)** | $0{,}34\,\text{mm}^2$ (AWG22) | **`VCC_5V`** (+5V geschaltete Speisung) | Geschützt via PPTC 500mA auf Zentralbox |
-| **Ader 2** | **Schwarz (BK)** | $0{,}34\,\text{mm}^2$ (AWG22) | **`GND`** (Gemeinsame Power-Masse) | Direkte Rückleitung zur Zentralbox |
+1. **Sena SPIDER X Slim (Referenz-Setup):**
+   * Das extrem flache OEM-Gerät wird formschlüssig in ein EPDM-Formsitzbett in die obere Kammer gelegt.
+   * Die werksseitige 3-adrige Sena-Kabelpeitsche (DC-Power, Audio-Out, Mic-In) wird direkt auf den vorkonfektionierten JST-Stecker von `PCBA 03` gesteckt.
+   * Die Bedienung (Mesh Ein/Aus, Kanalwechsel, Lautstärke) erfolgt **100 % digital** über die Bluetooth 5.4 LE Audio-Schnittstelle des Qualcomm QCC3084 auf der Zentralbox oder die programmierbaren Under-Perch Lenkertaster – **null Verschleißteile, null Stößel-Justage!**
 
-* **Steckverbinder:** Vorkonfektionierter IP67 2-Pin Automotive Blade-Direktstecker (`CON_POD_DC`) mit NBR70 O-Ring und Edelstahl-U-Clip.
-* **Gehäusekontakt:** Die Adern enden direkt an den zwei massiven, vergoldeten Messerklingen des Steckers in der integrierten Quer-Schottwand ($X = 18{,}0\,\text{mm}$), die beim Einschieben formschlüssig in die werkseitig bestückte Dual-Beam Schlitzbuchse `J_DC_IN` auf der Kassettenplatine (`PCBA 03`) gleiten (100 % lötfrei, absolut prell- und vibrationsfest).
-* **Daten & Audio:** Zu 100 % drahtlos über UWB (DW3110 / 6.489 GHz Ch. 5) und Bluetooth. M8- und USB-C-Buchsen am Pod entfallen ersatzlos.
+2. **Cardo Packtalk Edge / Pro:**
+   * Die originale **Cardo Air-Mount Magnethalterung** wird mit 2x M3-Schrauben direkt im Gehäusebett fixiert.
+   * Das Cardo-Gerät klickt mit seiner OEM-Magnethalterung ein. Die originale Cardo-Audiopeitsche führt direkt unter den Zwischendeckel an `PCBA 03`.
+
+3. **OpenMotorMesh (OMM 2.4 GHz UCS):**
+   * Das ultrakompakte UCS-Modul ($68 \times 36 \times 9{,}5\,\text{mm}$) wird formschlüssig eingeclipst.
+   * Die Audio- und Datenübertragung erfolgt verlustfrei und volldigital über ein kurzes 90° USB-C Flachbandkabel direkt an `PCBA 03` (USB Audio Class 2.0).
+
+4. **PMR446 Handfunkgeräte & Midland Intercoms:**
+   * Kompakte PMR446-Funkgeräte oder Midland-Module (BTR1 / BT Mini) werden über vorkonfektionierte Spiralkabel-Adapterpeitschen an `PCBA 03` angebunden.
+   * Die Hardware-PTT wird über den integrierten Open-Drain MOSFET auf `PCBA 03` gesteuert – getriggert durch den linken Lenker-Daumentaster.
+
+---
+
+### 4.4 Das 4-Draht Automotive-Backbone (Power & USB 2.0)
+
+Die Zuleitung von der Zentralbox zu beiden Seitenkoffer-Pods erfolgt über einen robusten, geschirmten **4-adrigen Automotive-Kabelbaum** ($4 \times 0{,}34\,\text{mm}^2$, FLRY-B):
+
+| Ader | Kennzeichnung | Signal | Funktion & Schutz |
+| :---: | :--- | :---: | :--- |
+| **1** | **Rot (RD)** | **`VCC_BUS`** | Geschaltete DC-Speisung (12V Bordnetz, bis zu 60W USB-PD von Zentralbox) |
+| **2** | **Weiß (WH)** | **`USB_D-`** | USB 2.0 High-Speed Datenleitung (invertiert), geschützt durch TVS-Diode |
+| **3** | **Grün (GN)** | **`USB_D+`** | USB 2.0 High-Speed Datenleitung (nicht-invertiert), geschützt durch TVS-Diode |
+| **4** | **Schwarz (BK)** | **`GND`** | Gemeinsame Power- und Signalmasse |
+
+* **Koffer-Trennstelle (4-Pin Magnet-Abrissschnittstelle):**
+  * An der Koffer-Trennkante sitzt eine formbündige, wasserdichte **4-Pin Magnet-Abrissschnittstelle (IP67)**.
+  * Beim Abnehmen des Koffers trennt sich die Magnetverbindung völlig zerstörungsfrei und ohne Werkzeug.
+  * Eine integrierte eFuse auf der Zentralbox (`PCBA 01`) schaltet die Speisung bei Kurzschluss (z. B. durch Schmutz oder Metallkontakt an der Trennstelle) in $< 1\,\mu\text{s}$ ab und reaktiviert sich nach Beseitigung der Störung automatisch.
+* **Vorteile der 4-Draht-Architektur gegenüber UWB:**
+  * **100 % Verbindungsstabilität:** Keine HF-Dämpfung durch nasses Gepäck, nasse Regenkombis oder Koffer-Aluminiumschalen.
+  * **Echte USB-Ladeleistung im Koffer:** Bis zu 30W/60W Schnellladeleistung direkt im Gepäck.
+  * **Zero-Disassembly Firmware-Updates:** Jedes Intercom und die Pod-MCU können direkt über WebUSB vom Smartphone oder Laptop aus geflasht werden.
 
 ---
 
@@ -532,8 +328,8 @@ Das Gehäuse des Front-Knotens wurde speziell für die geschützte Montage in Mo
 - **Außenabmessungen:** Kompakte **$98{,}0 \times 68{,}0 \times 25{,}0\,\text{mm}$** (L x B x H, passend für die $82 \times 50\,\text{mm}$ 4-Lagen PCBA 05).
 - **Material:** HP Multi Jet Fusion (MJF) PA12, schwarz kugelgestrahlt und chemisch geglättet.
 - **Schutzart:** IP67 (tauch- und strahlwasserdicht) mit integrierter Gore-Tex Druckausgleichsmembran (ePTFE Vent) gegen Kondenswasserbildung.
-- **HF-Backbone-Integration (UWB):** Im Gehäuseboden der Unterwanne ist eine vertiefte Antennentasche ($11 \times 11 \times 0{,}6\,\text{mm}$) für die Taoglas FXUWB10 Flexantenne integriert. Das ultrakurze 20 mm U.FL-Kabel führt direkt auf den Qorvo DW3110 Transceiver auf PCBA 05 `B.Cu`. Dies eliminiert 2.4 GHz Störungen im Cockpit vollständig und bietet deterministische Übertragung ($< 0{,}4\,\text{ms}$) zur Zentralbox.
-- **Laminarer GNSS- & Klima-Sensor-Puck:** Die Sensorik (u-blox SAM-M10Q Multi-GNSS Patch-Modul mit $15 \times 15\,\text{mm}$ Groundplane, TI TMP117 Labor-Temperatursensor $\pm 0{,}1\,^\circ\text{C}$ Glatteis-Wächter und TI OPT3001 Umgebungslichtsensor) ist als abgesetzter Sensor-Puck im strömungsgünstigen Kaltlufteinlass / Schnabel platziert und wird über den 5. Port des Fahrzeug-Satelliten (`[ GNSS / CLIMATE PUCK ]`) an den 12-poligen `J_VEHICLE`-Kabelstrang angebunden. Dies hält das Front-Node-Gehäuse vollkommen hermetisch geschlossen.
+- **Automotive-Backbone-Integration:** Die Anbindung zur Zentralbox erfolgt über das geschirmte 4-adrige Automotive-Kabel (12V Bordnetz, GND, USB 2.0 D+/D-), das ohne Tankdemontage durch den Harley-Kabelkanal bzw. BMW-Rahmenstrang geführt wird (**ZERO Tank-Demontage!**).
+- **Laminarer GNSS- & Klima-Sensor-Puck:** Die Sensorik (u-blox SAM-M10Q Multi-GNSS Patch-Modul mit $15 \times 15\,\text{mm}$ Groundplane, TI TMP117 Labor-Temperatursensor $\pm 0{,}1\,^\circ\text{C}$ Glatteis-Wächter und TI OPT3001 Umgebungslichtsensor) ist direkt im Anströmbereich des Riser/Schnabels platziert.
 
 ![Universal Front Node Closed CAD](../images/cad/front_node_closed_cad.png)
 
@@ -1073,9 +869,9 @@ Das universelle Kofferdeckel-Dock ([`saddlebag_lid_dock.scad`](../../hardware/ca
 > * *Kofferdeckel-Docks (`saddlebag_lid_dock.scad`) sind ausschließlich für funkdurchlässige ABS-/Kunststoffkoffer (z. B. Harley-Davidson Touring, BMW Vario-Kunststoffschalen) vorgesehen.*
 3. **Halbschalen-Architektur ($H = 26\,\text{mm}$):**
    * Die $3\,\text{mm}$ dicke PA12-Wanne ($151{,}0 \times 71{,}0\,\text{mm}$ Innenmaß, $154{,}0\,\text{mm}$ Wannen-Außenlänge, Gesamtlänge inkl. Flansch und Snout $174\,\text{mm}$) umschließt das Pod-Gehäuse ($150 \times 70 \times 38\,\text{mm}$) formschlüssig bis auf halbe Höhe. Sie nutzt die großzügigen Platzverhältnisse in Harley-Davidson Touring Kofferdeckeln ($> 450\,\text{mm}$ lichte Länge) optimal aus.
-   * Die modulare Wechselkassette bleibt von hinten voll zugänglich und kann mit Daumen und Zeigefinger in Sekunden entriegelt und gewechselt werden, ohne das Dock zu demontieren.
+   * Der Slide-in Deckel bleibt von hinten voll zugänglich und kann mit dem Smart-Keyfob in Sekunden entriegelt und geöffnet werden, ohne das Dock zu demontieren.
 4. **Schutz vor Tropfwasser (Overhead Drip Lip):**
-   * Über dem Kassetteneingang kragt eine integrierte **Tropfkante ($16 \times 2\,\text{mm}$ mit $30^\circ$-Dachschräge)** aus. Sie leitet Kondenswasser oder herablaufende Regentropfen beim Öffnen des Kofferdeckels zuverlässig seitlich an der Kassetten-Dichtfuge vorbei.
+   * Über dem Gehäuseeingang kragt eine integrierte **Tropfkante ($16 \times 2\,\text{mm}$ mit $30^\circ$-Dachschräge)** aus. Sie leitet Kondenswasser oder herablaufende Regentropfen beim Öffnen des Kofferdeckels zuverlässig seitlich an der Gehäuse-Dichtfuge vorbei.
 5. **Vibrationsfeste EPDM-Sicherung:**
    * Zwei seitliche Durchbrüche ($25 \times 3\,\text{mm}$) nehmen ein elastisches Spannband auf, das den Pod bei harten Fahrbahnschlägen spielfrei in der Wanne arretiert.
 6. **4x Spanngurt-Freisparungstaschen ($X = 26{,}0\,\text{mm}$ und $X = 126{,}0\,\text{mm}$):**
