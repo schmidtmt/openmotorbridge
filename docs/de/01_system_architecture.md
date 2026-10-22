@@ -153,8 +153,8 @@ In der frühen Konzeptphase wurde intensiv evaluiert, ob das gesamte System in e
 
 | Bewertungskriterium | Option A: Monolithische Single-Box | Option B: Reine Lenker/Cockpit-Box | **Option C: OMB Dezentrale Satelliten (Gewählt)** |
 | :--- | :--- | :--- | :--- |
-| **HF-Selbststörung (Desensing)**| **Kritisch:** 2.4 GHz BLE, Wi-Fi, 868 MHz LoRa, GNSS L1/L5 & 72V Buck-Regler auf engstem Raum | **Kritisch:** Starkes Übersprechen auf Cockpit-TFT und Radio-Antenne | **Optimal (> 45 dB Isolation):** GNSS im Cockpit, Intercoms an den Heckflanken (Pod 1 & 2), UWB-Backbone auf 6.5 GHz |
-| **Kabelbaum-Durchmesser** | **Massiv:** 26+ Einzelleitungen müssen quer durch das gesamte Motorrad gezogen werden | **Schlecht:** 18 Leitungen über den schwenkenden Lenkkopf (Kabelbruch-Risiko) | **Ultra-Schlank:** Deutsch DTM-12 Kabelbaum mit reinen 2-Draht-DC-Power-Peitschen; Daten 100% drahtlos via UWB |
+| **HF-Selbststörung (Desensing)**| **Kritisch:** 2.4 GHz BLE, Wi-Fi, 868 MHz LoRa, GNSS L1/L5 & 72V Buck-Regler auf engstem Raum | **Kritisch:** Starkes Übersprechen auf Cockpit-TFT und Radio-Antenne | **Optimal (> 45 dB Isolation):** GNSS im Cockpit, Intercoms an den Heckflanken (Pod 1 & 2), geschirmter 4-Draht Bus |
+| **Kabelbaum-Durchmesser** | **Massiv:** 26+ Einzelleitungen müssen quer durch das gesamte Motorrad gezogen werden | **Schlecht:** 18 Leitungen über den schwenkenden Lenkkopf (Kabelbruch-Risiko) | **Ultra-Schlank:** Deutsch DTM-12 mit 4-Draht USB-PD/Daten-Peitschen; ZERO Tank-Lifting im Rahmentunnel |
 | **Thermische Verlustleistung** | **Hot-Spot (> 18 W):** 72V DC/DC + Audio-Endstufen + Akkuladung unter der Sitzbank | **Thermischer Hitzetod (> 85 °C):** Stauwärme direkt hinter der Scheinwerfermaske | **Perfekt verteilt:** Max. 3-4 W pro Gehäuse; passive Wärmeabfuhr ohne Hotspots |
 | **GNSS-Zenitsicht & Radar** | **Verschattet:** Sitzbank und Fahrer-Körper blockieren Satelliten & Heck-Sichtfeld | **Schlecht:** Heck-Radar vom Lenker aus physikalisch unmöglich | **Ideal:** SAM-M10Q hat freie Sicht durch Windschild; Radar hat freie Sicht nach hinten an Peitsche 3 |
 | **Fahrtwind-Abtastung (AGC)** | **Physikalisch unmöglich:** Unter der Sitzbank herrscht kein dynamischer Staudruck | **Möglich:** Windmessung direkt am Lenker | **Exzellent:** Knowles I2S MEMS direkt an der Frontscheibe im Front-Node |
@@ -162,11 +162,11 @@ In der frühen Konzeptphase wurde intensiv evaluiert, ob das gesamte System in e
 1. **Die Physik der HF-Koexistenz (Vermeidung von Receiver Desensitization):**
    * GNSS-Signale treffen die Erde mit extrem schwachen Pegeln von ca. **$-130\,\text{dBm}$ bis $-160\,\text{dBm}$**.
    * Die Auslagerung von Multi-GNSS in das Cockpit (Front-Node) platziert den Empfänger direkt unter die dielektrische Kunststoff-Scheibe mit ungetrübtem $180^\circ$-Blickwinkel zum Himmel.
-   * Durch die Verbannung von OMM 2.4 GHz aus dem Cockpit und den Einsatz der **UWB-Funkbrücke (6.5 GHz)** herrscht im Cockpit vollkommene Ruhe im 2.4-GHz-Spektrum. Das GNSS leidet unter null Anhebung des Grundrauschens (*Noise Floor Lift*).
+   * Durch die Verbannung von OMM 2.4 GHz aus dem Cockpit und den Einsatz des geschirmten **4-Draht Automotive-Busses** herrscht im Cockpit vollkommene Ruhe im 2.4-GHz-Spektrum. Das GNSS leidet unter null Anhebung des Grundrauschens (*Noise Floor Lift*).
    * Die räumliche Trennung zwischen Front-Cockpit und den Heck-Pods (Pod 1 links, Pod 2 rechts) garantiert physikalisch über **$46\,\text{dB}$ Freiraumdämpfung** zwischen den 2.4-GHz-Mesh-Stufen und der Cockpit-Elektronik.
 2. **Kabelbaum-Zuverlässigkeit über den Lenkkopf:**
    * Jedes Kabel, das über den beweglichen Lenkkopf geführt wird, unterliegt während der Fahrzeuglebensdauer Millionen von Biegewechseln.
-   * Durch die Auslagerung der Cockpit-, Display- und PTT-Funktionen in den **Front-Node (PCBA 05)**, der über die hochzuverlässige, drahtlose **UWB-Funkbrücke (Qorvo DW3110, $< 0{,}4\,\text{ms}$ Latenz)** mit der Zentralbox kommuniziert, entfallen sämtliche empfindlichen Datenleitungen über die Lenkachse.
+   * Durch die Auslagerung der Cockpit-, Display- und PTT-Funktionen in den **Front-Node (PCBA 05)**, der über das hochzuverlässige **4-Draht Automotive Backbone-Kabel** (durch den Harley-Rahmentunnel ohne Tank-Demontage) mit der Zentralbox verbunden ist, entfallen empfindliche HF-Funkstrecken und bruchgefährdete Einzelleitungen über die Lenkachse.
 3. **Ergebnis:** Höchste Signalintegrität, null Hotspots, maximale Langlebigkeit und unübertroffene Montageflexibilität auf jedem Motorradtyp.
 
 ### 2.2 Universelle Gehäuse-Grundformen & Rohrbett-Option (Universal-V-Nut)
@@ -180,8 +180,8 @@ Für Naked Bikes, Enduros und klassische Rahmenrohre verfügen die Universal-Pod
 * Die Helme von Fahrer und Sozius bleiben zu $100\,\%$ leicht, aerodynamisch original und frei von Kabeln. Die Audio-Ein- und Ausgabe erfolgt vollkommen drahtlos über die integrierte Bluetooth-Schnittstelle der Zentralbox.
 
 ### 2.4 Universelle OEM-Adapter-Kompatibilität (Off-the-Shelf)
-Die erweiterten Pod-Kassetten ($130 \times 58 \times 28\,\text{mm}$ Basisschlitten mit $124 \times 53 \times 28\,\text{mm}$ Innenraum im $150 \times 70 \times 38\,\text{mm}$ Pod) nehmen alle handelsüblichen OEM-Geräte im ungeöffneten Originalzustand auf:
-* **Klasse S (Smart Modular Cartridge mit Mechatronik * OMB-Referenz):** z. B. Sena SPIDER X Slim (Primärempfehlung), Sena 60S, Cardo Edge - 100 % ungeöffnetes Originalgerät im PA12-MJF Konturbett mit 3-Punkt EPDM-Dämpfung gegen $20\,\text{g}$ Vibration, 4 unabhängige mechatronische Aktuatoren auf PCBA 03 Rev 3.0 (Espressif ESP32-C6-MINI-1U RISC-V Host-MCU, All-UWB Backbone & USB-Audio), direkte $3{,}85\,\text{V}$ DC-Speisung ab Werk, null Pogo-Pins, null Löten, 100 % Erhalt von Werksgarantie & IPX-Schutz.
+Die universellen Monocoque-Pods ($150 \times 70 \times 38\,\text{mm}$ mit werkzeuglosem Slide-in Deckel, Trockenklappe und $124 \times 53 \times 28\,\text{mm}$ Innenraum) nehmen alle handelsüblichen OEM-Geräte im ungeöffneten Originalzustand direkt in der oberen Bucht auf:
+* **Klasse S (Direkte Pod-Aufnahme * OMB-Referenz):** z. B. Sena SPIDER X Slim (Primärempfehlung), Cardo Packtalk Edge (Air-Mount), OMM UCS 2.4 GHz - 100 % ungeöffnetes Originalgerät im PA12-MJF Konturbett mit 3-Punkt EPDM-Dämpfung gegen $20\,\text{g}$ Vibration, direkt an PCBA 03 angebunden (USB-PD Ladeversorgung bis 30W, USB Audio Class, direkte elektrische PTT-Tastung oder BLE-Steuerung), null Pogo-Pins, null Löten, 100 % Erhalt von Werksgarantie & IP67-Schutz. Fehleranfällige Wechselkassettenschlitten und Hubmagnete sind vollständig eliminiert.
 * **Klasse A (Drahtlos-Bridges & USB-Speisung):** z. B. Sena +Mesh (B2M-01), Sena MeshPort Blue/Red - versorgt über flaches 90° Micro-USB/USB-C Kabel, drahtlose Audioübertragung zum Helm, externe SMA-Bulkhead-Doppelbuchse mit Schutzkappe an der Frontblende.
 * **Klasse B (Pogo-Pin Federkontakt-Cradles):** z. B. Sena 50S/60S/30K/20S EVO - vollwertiges analoges Audio (ES8388 Codec auf PCBA 03) und PTT-Tastung via AO3400A MOSFETs.
 * **Klasse C (Magnetischer Air-Mount):** z. B. Cardo Packtalk Edge / Pro (Hinweis: Packtalk Neo unterstützt kein Laden während der Fahrt und ist ausgeschlossen) - werkzeugloses magnetisches Andocken über 2x N52 Neodym-Magnete.
@@ -196,32 +196,32 @@ Die erweiterten Pod-Kassetten ($130 \times 58 \times 28\,\text{mm}$ Basisschlitt
 Werden Sena- und Cardo-Mesh-Geräte gleichzeitig betrieben, muss eine gegenseitige Blockade der 2,4-GHz-Empfänger zuverlässig verhindert werden:
 
 1. **Räumliche Distanzierung ($d \ge 45\,\text{cm}$ durch Fahrzeug-Flankentrennung):**
-   * **Keine Pod-Montage am Helm:** Die wetterfesten Pods ($150 \times 70 \times 38\,\text{mm}$ mit $130 \times 58 \times 28\,\text{mm}$ Kassetten) verbleiben grundsätzlich fest am Fahrzeug (z. B. linker und rechter Kofferdeckel, Rahmenrohre oder Sturzbügel). Die Helme von Fahrer und Sozius bleiben zu 100 % kabel- und pod-frei.
+   * **Keine Pod-Montage am Helm:** Die wetterfesten Monocoque-Pods ($150 \times 70 \times 38\,\text{mm}$) verbleiben grundsätzlich fest am Fahrzeug (z. B. linker und rechter Kofferdeckel, Rahmenrohre oder Sturzbügel). Die Helme von Fahrer und Sozius bleiben zu 100 % kabel- und pod-frei.
    * **Physische & metallische Barriere:** Pod 1 (linke Fahrzeugflanke / linker Koffer) und Pod 2 (rechte Fahrzeugflanke / rechter Koffer) nutzen den massiven Motorradrahmen, den Kraftstofftank, den Motorblock und die Heckstruktur als natürliche metallische HF-Abschirmung.
 2. **Schirmdämpfung:**
    * Die Freiraumdämpfung über $> 50\,\text{cm}$ in Kombination mit der massiven metallischen Abschirmung durch die Fahrzeugstruktur erzielt eine **HF-Entkopplung von $> 35\,\text{dB}$**.
    * Damit sinkt der Einkopplungspegel des Nachbarsenders unter $-15\,\text{dBm}$, wodurch die Eingangs-LNAs beider Headsets im linearen Bereich arbeiten und kein *De-Sensing* auftritt.
-3. **Klare Frequenzzonen & UWB-Fahrzeug-Backbone:**
-   * Durch die Verbannung von OMM 2.4 GHz aus dem Cockpit und den Entfall von Pod 3 ist das Motorrad in absolut saubere Funkzonen gegliedert:
+3. **Klare Frequenzzonen & Entlastung des 2.4-GHz-Spektrums:**
+   * Durch die Verbannung von OMM 2.4 GHz aus dem Cockpit und den Entfall von Funk-Backbones zugunsten des geschirmten 4-Draht Busses ist das Motorrad in absolut saubere Funkzonen gegliedert:
      * **Heckflanken (2.4 GHz):** Pod 1 (Sena) und Pod 2 (Cardo) sind durch Rahmen und Tank gegeneinander $> 35\,\text{dB}$ und zum Cockpit $> 46\,\text{dB}$ isoliert.
-     * **Zentralbox (868 MHz LoRa & 6.5 GHz UWB):** Sitzt geschützt unter der Sitzbank an der USV-Schiene für 24/7 Diebstahlschutz und PTT-Backbone.
-     * **Cockpit (1.575 GHz GNSS & 6.5 GHz UWB):** Völlig frei von störendem 2.4-GHz-Dauerfeuer.
+     * **Zentralbox (868 MHz LoRa):** Sitzt geschützt unter der Sitzbank an der USV-Schiene für 24/7 Diebstahlschutz und PTT-Backbone via 4-Draht Bus.
+     * **Cockpit (1.575 GHz GNSS & 5 GHz Wi-Fi für CP2AA):** Völlig frei von störendem 2.4-GHz-Dauerfeuer.
 
 ---
 
 ## 4. Physische Schnittstellen & Signalmatrix
 
-### 4.1 Zentralbox Deutsch DTM-12 Hauptkabelbaum (Reiner Pure-DC & CAN Strang)
+### 4.1 Zentralbox Deutsch DTM-12 Hauptkabelbaum (Standardisierter 4-Draht & CAN Strang)
 Die Verbindung aller Basis-Komponenten erfolgt über den zentralen, wasserdichten **Deutsch DTM-12 Industriestecker (IP67/IP69K)** an der Zentralbox:
 
 | Zweig / Kabel | Anschlusstyp | Zielkomponente | Übertragene Signale / Querschnitt |
 | :--- | :--- | :--- | :--- |
-| **Peitsche 1 (250 mm)** | JST-JWPF / Superseal 2-Pin | **Satelliten-Pod 1** (Sena SPIDER X Slim / OMM 2.4 GHz) | `POD1_VCC` (+12V geschaltet, AWG22 0.34²), `POD1_GND` (Masse, AWG22 0.34²) |
-| **Peitsche 2 (250 mm)** | JST-JWPF / Superseal 2-Pin | **Satelliten-Pod 2** (Cardo Edge / OMM 2.4 GHz / Midland) | `POD2_VCC` (+12V geschaltet, AWG22 0.34²), `POD2_GND` (Masse, AWG22 0.34²) |
-| **Peitsche 3 (250 mm)** | JST-JWPF / Superseal 2-Pin | **Heck-Radar** (Radar 2.0 Sub-MCU PCBA 08) | `RADAR_PWR_12V` (+12V geschaltet, AWG22 0.34²), `RADAR_GND` (Masse, AWG22 0.34²) |
+| **Peitsche 1 (250 mm)** | 4-Pin Magnet-Abreißkupplung IP67 | **Satelliten-Pod 1** (Sena SPIDER X / OMM / Cardo) | `POD1_VBUS` (+12V/PD, AWG22), `POD1_GND` (AWG22), `USB_D+` / `USB_D-` (AWG28 verdrillt) |
+| **Peitsche 2 (250 mm)** | 4-Pin Magnet-Abreißkupplung IP67 | **Satelliten-Pod 2** (Cardo / OMM / Sena / Midland) | `POD2_VBUS` (+12V/PD, AWG22), `POD2_GND` (AWG22), `USB_D+` / `USB_D-` (AWG28 verdrillt) |
+| **Peitsche 3 (250 mm)** | Binder Serie 707 M5 4-Pin IP67 | **Heck-Radar** (Wheeltec MR20 / PCBA 08) | `RADAR_12V` (+12V geschaltet, AWG22), `RADAR_GND` (AWG22), `CAN_H`/`TX`, `CAN_L`/`RX` |
 | **Peitsche 4 (250 mm)** | AMP Superseal 1.5 6-Pin | **Bordnetz & CAN** (Motorrad oder Pkw) | `KL30_IN` (12V Dauer, AWG20 0.5²), `KL15_IGN` (12V Zündung, AWG22 0.34²), `VEHICLE_GND` (AWG20 0.5²), `CHASSIS_EARTH` (AWG20 0.5²), `CAN_H` / `CAN_L` (AWG24 0.22²) |
 
-*(Hinweis: Durch die All-UWB Funkarchitektur entfällt jegliche Signal- und Audioverdrahtung. Es werden nur noch 2-adrige Gleichstrompeitschen geführt!)*
+*(Hinweis: Der Front-Node wird über das separate geschirmte 4-Draht Automotive Backbone-Kabel direkt aus der Zentralbox versorgt und durch den Rahmentunnel ohne Tank-Demontage zum Lenker-Riser geführt).*
 
 ### 4.2 Universal Front-Node (PCBA 05) Cockpit-Schnittstellen
 Der Front-Node wird im Cockpit autark über eine 2-polige 12V-Leitung an Zündungsplus (KL15) versorgt und bündelt sämtliche Front-Komponenten:
@@ -244,7 +244,7 @@ Der Front-Node wird im Cockpit autark über eine 2-polige 12V-Leitung an Zündun
 
 #### 5.1.2 Universal Cockpit & Front Hub (PCBA 05): USB-Subsystem, Live-Traffic & PTT
 Der Front-Knoten (PCBA 05) dient auf **allen Motorrädern** als universeller Cockpit-Knoten und eliminiert empfindliche Signalkabel über den mechanisch beanspruchten Lenkkopf:
-* **Drahtlose Funkbrücke zur Zentralbox:** Ein autonomer Controller-Knoten (ESP32-S3-WROOM-1U mit Vektor-DSP) hinter der Verkleidung kommuniziert über **UWB (Qorvo DW3110 / 6,5 GHz Ch. 5, $< 0{,}4\,\text{ms}$ Latenz)** und **BLE 5.0 (2M-PHY)** mit der Zentralbox.
+* **Nativer 4-Draht USB-Backbone zur Zentralbox:** Der Front-Node kommuniziert über den geschirmten **4-Draht Automotive USB 2.0 Bus (`VBUS`, `GND`, `D+`, `D-`)** mit $< 0{,}2\,\text{ms}$ Latenz mit der Zentralbox. Zero Funk-Jitter, unempfindlich gegen EMV-Einstrahlung von Zündkerzen oder LED-Scheinwerfern.
 * **Drahtgebundener Lenker-PTT (Optokoppler an `J3` / GPIO 0, $< 1{,}8\,\text{ms}$ Latenz):** Nur $30\dots 50\,\text{cm}$ kurzes, geschütztes Kabel am Lenker - kein bruchgefährdetes Signalkabel über den schwenkenden Lenkkopf nach hinten zur Zentralbox!
 * **Digitales I2S-MEMS Ambient-Mikrofon (Sipeed / Zilltek MSM261S4030H0R / Knowles SPH0645):** Berechnet Umgebungs- und Fahrtwindgeräusche (dB-A/RMS) direkt an der Front für automatische Helmlautstärke-Nachführung (AGC) via Xtensa Vektor-DSP. Standard-I2S mit hoher Bauteilverfügbarkeit.
 * **Automotive USB 2.0 Subsystem (Microchip USB2514B & TI TPS2051B):**
@@ -271,7 +271,7 @@ Der Front-Knoten (PCBA 05) dient auf **allen Motorrädern** als universeller Coc
 * **Display-Warnmeldungen:** Statusmeldungen können direkt im Motorrad-TFT-Display generiert werden.
 
 ### 5.3 Heck-Radar 2.0 & Totwinkel-Assistent (Wheeltec MR20 77 GHz mmWave & Garmin Varia) an dediziertem Heck-Träger
-* **Heck-Montage & Justage (Ohne Pod 3):** Das Heck-Radar wird vollkommen autark und ohne zusätzliches Gehäuse direkt über einen dedizierten, minimalen Halter (z. B. [`adventure_rack_radar_mount.stl`](../../hardware/cad/stl/02_pod_base/adventure_rack_radar_mount.stl) unter der Gepäckbrücke oder modellspezifische Adapter) montiert. Die Anbindung erfolgt über Peitsche 3 des Deutsch DTM-12 Kabelbaums (Pins 10-11: 12V geschaltet, GND); die 20 Hz Radar-Zieltelemetrie wird 100% drahtlos via UWB (DW3110) an die Zentralbox übertragen. Eine bionische Hirth-Verzahnung ermöglicht eine verzugsfreie 100% waagerechte Ausrichtung.
+* **Heck-Montage & Justage (Ohne Pod 3):** Das Heck-Radar wird vollkommen autark und ohne zusätzliches Gehäuse direkt über einen dedizierten, minimalen Halter (z. B. [`adventure_rack_radar_mount.stl`](../../hardware/cad/stl/02_pod_base/adventure_rack_radar_mount.stl) unter der Gepäckbrücke oder modellspezifische Adapter) montiert. Die Anbindung erfolgt über Peitsche 3 des Deutsch DTM-12 Kabelbaums (Pins 10-11: 12V geschaltet, GND); die 20 Hz Radar-Zieltelemetrie wird über die 4-Draht High-Speed Datenleitung (CAN/UART) an Peitsche 3 an die Zentralbox übertragen. Eine bionische Hirth-Verzahnung ermöglicht eine verzugsfreie 100% waagerechte Ausrichtung.
 * **Dual-Radar-Architektur (Zwei austauschbare Radar-Engines):**
   * **Radar 2.0 (Wheeltec MR20 77 GHz mmWave - Standard):**
     - Integriert in IP67-Flügel-Gehäuse ([`radar_mr20_housing.scad`](../../hardware/cad/scad/05_accessories/radar_mr20_housing.scad)) mit PCBA 08 (ESP32-C5 Dual-Band Sub-MCU).
@@ -324,7 +324,7 @@ Der Front-Knoten (PCBA 05) dient auf **allen Motorrädern** als universeller Coc
      * Schlägt die Werksalarmanlage an (`bcm_alarm_triggered == 1`), erkennt OMB dies sofort.
   2. **Autonome Überwachung (für Bikes ohne Werksalarm oder bei Koffer-Diebstahl):**
      * Die interne 6-Achsen IMU erkennt Lageänderungen (Aufrichten vom Seitenständer, Erschütterung).
-     * Die Reed-Kontakte an den Koffer-Schlitten erkennen das unbefugte Entriegeln von Kassetten.
+     * Die Reed-Kontakte an den Pod-Slide-in-Deckeln erkennen das unbefugte Öffnen der Koffer-Pods.
   3. **Fernmelde-Alarm via LoRa 868 MHz (Packet Type `0xFE`):**
      * OMB sendet blitzschnell ein LoRa-Notfallpaket mit $1\dots 5\,\text{km}$ Reichweite (durchdringt Hotelbetonwände) an den LoRa-Taschenempfänger des Fahrers oder die anderen Gruppen-Bikes:
        > *"🚨 DIEBSTAHLWARNUNG: Dein Motorrad wird bewegt! (Distanz: 180 m)"*
@@ -357,12 +357,12 @@ Der Front-Knoten (PCBA 05) dient auf **allen Motorrädern** als universeller Coc
 
 ### 5.8 2-in-1 LoRa Smart-Keyfob (Alarm-Pager, N52 Magnetschlüssel & MagSafe Qi Dock)
 * **All-in-One Schlüsselanhänger:**
-  * Kombiniert den $20 \times 10 \times 5\,\text{mm}$ N52-Neodym-Magnetschlüssel für den mechanischen Kassettenverschluss mit einem stummen LoRa 868 MHz Silent Alarm Pager in einem kompakten PA12-MJF Gehäuse ($58 \times 34 \times 13\,\text{mm}$).
+  * Kombiniert den $20 \times 10 \times 5\,\text{mm}$ N52-Neodym-Magnetschlüssel für die berührungslose Entriegelung des Pod-Slide-in-Deckels mit einem stummen LoRa 868 MHz Silent Alarm Pager in einem kompakten PA12-MJF Gehäuse ($58 \times 34 \times 13\,\text{mm}$).
   * Ein integriertes $0{,}5\,\text{mm}$ Weicheisen-Abschirmblech schützt interne Elektronik und Akku vor Magnetfeldsättigung.
 * **Kryptografische Absicherung & Selektivität:**
   * Verschlüsselt mit AES-128 GCM und 32-Bit Monotonic Nonce (Anti-Replay). Nur der autorisierte Pager des Besitzers schlägt an; unbefugtes Abhören oder Auslösen von Fehlalarmen ist ausgeschlossen.
 * **Zero-False-Alarm & Anti-Theft:**
-  * Bei anwesendem BLE-Token des Fahrers ($< 1{,}5\,\text{m}$) wird die Kassettenentnahme als legitim erkannt. Unbefugtes Aufhebeln ohne Keyfob löst sofort einen lautlosen Pager-Notruf mit bis zu 4,5 km Reichweite aus.
+  * Bei anwesendem BLE-Token des Fahrers ($< 1{,}5\,\text{m}$) wird das Öffnen des Pod-Deckels als legitim erkannt. Unbefugtes Aufhebeln ohne Keyfob löst sofort einen lautlosen Pager-Notruf mit bis zu 4,5 km Reichweite aus.
 * **Cockpit-Docking & Induktivladung:**
   * Auf dem Motorrad rastet der Keyfob magnetisch am Cockpit-Dock ein und wird über die integrierte Qi-Ladespule während der Fahrt 100 % kabellos nachgeladen.
 
@@ -392,7 +392,7 @@ Der Front-Knoten (PCBA 05) dient auf **allen Motorrädern** als universeller Coc
 * **Flankengetriggerter Wechsel & "Handy vergessen"-Alarm:**
   * Der automatische Wechsel in die Cockpit-Ansicht erfolgt **strikt einmalig auf der steigenden Flanke** des Ladebeginns. Manuelle Navigationen zu anderen Tabs werden respektiert (User Override Protection).
 * **Systemweite Hochfrequenz-Architektur (Die 5 Funkbänder der OpenMotorBridge):**
-  1. **UWB (6.489 GHz Ch. 5 / Qorvo DW3110):** Universeller, deterministischer Daten- und Audio-Backbone zwischen allen Knoten (Zentralbox, Front-Node, Pod 1, Pod 2, Heck-Radar). Null De-Sensing auf 2.4 GHz, Latenz $< 0{,}4\,\text{ms}$, AES-128-CCM verschlüsselt. Im Nahbereich (30-80 m) zusätzlich hochpräzises Inter-Bike Ranging für Platoon-Spacing und Konvoiführung.
+  1. **Automotive 4-Draht USB-PD & USB 2.0 Backbone (Kabelgebunden):** Hochrobuster physischer Bus (`VBUS`, `GND`, `D+`, `D-`) zwischen Zentralbox, Front-Node und den Koffer-Pods. Ersetzt das frühere UWB-Funkbackbone vollständig: bis zu 60W USB-PD Ladeleistung, latenzfreie USB 2.0 Audio- und Steuerdaten, 100 % immun gegen Funkschatten durch Regenkombis, nasses Gepäck oder Alukoffer.
   2. **Heck 5.9 GHz V2X & 77 GHz mmWave:** Externe 5.9 GHz V2X-Patchantenne (C-V2X / DSRC) am Heck plus Wheeltec MR20 mmWave Radar für 360°-Umfeldüberwachung und Notfall-Kollisionsstrobe.
   3. **Front 5 GHz Wi-Fi:** Dedizierter High-Speed Funklink am Front-Knoten für drahtloses Apple CarPlay und Android Auto (Headless CP2AA Bridge).
   4. **2.4 GHz Audio & Konnektivität:**
@@ -420,8 +420,8 @@ Der Front-Knoten (PCBA 05) dient auf **allen Motorrädern** als universeller Coc
     * **Physikalischer Vorteil:** Die Antennen strahlen ungehindert durch die Glas-Windschutzscheibe nach vorn und zur Seite ab - **100 % frei von metallischer Karosserie-Abschattung**, absolut verdeckt und ohne abstehende externe Antennen.
     * **Flexible Konvoi-Modi:**
       - **Modus A (Begleitfahrzeug für gemischte Motorradgruppe):** Pod 1 mit Sena SPIDER X Slim (Mesh 3.0/2.0), Pod 2 mit Cardo Packtalk Edge (DMC Gen 2). Ermöglicht gleichzeitige Vollduplex-Verbindung in beide großen Motorrad-Mesh-Welten!
-      - **Modus B (Reiner Pkw-/Camper-Konvoi & Rallye-Orga):** Pod 1 mit OMM 2.4 GHz Kassette (OpenMotorMesh), Pod 2 mit Midland PMR446 Kassette für universellen Jedermannfunk.
-      - **Modus C (Hybrid-Lead & OMM-Anchor):** Pod 1 mit OMM 2.4 GHz Kassette (verbindet alle OMB-Bikes im Konvoi), Pod 2 wahlweise Sena oder Cardo für Gastfahrer.
+      - **Modus B (Reiner Pkw-/Camper-Konvoi & Rallye-Orga):** Pod 1 mit OMM 2.4 GHz Modul (OpenMotorMesh), Pod 2 mit Midland PMR446 Funkgerät für universellen Jedermannfunk.
+      - **Modus C (Hybrid-Lead & OMM-Anchor):** Pod 1 mit OMM 2.4 GHz Modul (verbindet alle OMB-Bikes im Konvoi), Pod 2 wahlweise Sena oder Cardo für Gastfahrer.
     * **Audio-Integration im Pkw (Headset-frei & Freisprech-Komfort):**
       - **Option 1 (Pkw-Freisprecheinrichtung via Qualcomm QCC3084):** Die Zentralbox unterm Sitz koppelt sich per Bluetooth (HFP 1.8 / A2DP) vollautomatisch als Mobiltelefon mit der Pkw-Freisprechanlage. Die Fahrzeuginsassen hören den Gruppenfunk glasklar über die Autolautsprecher und sprechen freihändig über das Pkw-Dachmikrofon!
       - **Option 2 (AAWireless / CarPlay Clean Power-Injection & OEM-Media-Passthrough):** Die werkseitigen USB-Media-Buchsen moderner und älterer Pkw liefern oft streng nach alter USB 2.0-Norm nur $500\,\text{mA}$ ($2{,}5\,\text{W}$) oder instabile Spannung. Beim Starten von Wireless Android Auto / Apple CarPlay (AAWireless, Ottocast, Carlinkit) erzeugt das 5-GHz-WLAN-Modem Stromspitzen von $1{,}2\dots 1{,}8\,\text{A}$, was am OEM-Port zu endlosen Bootloops, Hitze und Verbindungsabbrüchen führt. **Die OMB-Lösung:** Der AAWireless-Adapter wird direkt an den Front-Node / Core-Unit USB-Port von OpenMotorBridge angeschlossen und aus dem bordeigenen 12V-Schaltregler mit felsenfesten $5\,\text{V}\,/\,3\,\text{A}$ ($15\,\text{W}$) versorgt. Zum OEM-Media-USB-Port des Autos führt lediglich ein reines High-Speed Datenkabel (`D+`, `D-`, `GND` bei galvanisch getrenntem / blockiertem `VBUS`). Der Auto-Bildschirm empfängt saubere USB-Daten, liefert aber keinen Milliampere Strom – 100 % Stabilität, null Abstürze!
@@ -463,7 +463,7 @@ Auf Android-Geräten bietet die Companion-App (`bar.f0o.omb`) im Hintergrund mä
      - **SPaT (Signal Phase and Timing):** Umschaltzeiten und Grünphasen vernetzter Lichtsignalanlagen (Ampeln).
      - **DENM:** Akute Gefahrenmeldungen (Geisterfahrer, Glatteis, Stauende hinter unübersichtlicher Kurve).
      - **CAM:** Positionen und Geschwindigkeiten benachbarter Fahrzeuge.
-   * OpenMotorBridge überträgt diese Daten über UWB und BLE an die Companion-App, die sie über das Mobilfunknetz (4G/5G) in das **OpenTrafficMap-Projekt** einspeist und lokale Gefahren-Tiles (GeoJSON) lädt.
+   * OpenMotorBridge überträgt diese Daten über den 4-Draht Bus und BLE an die Companion-App, die sie über das Mobilfunknetz (4G/5G) in das **OpenTrafficMap-Projekt** einspeist und lokale Gefahren-Tiles (GeoJSON) lädt.
 3. **Waze "Auto-Klick" & Schwarm-Automatisierung:**
    * Um die Community-Warnungen von Waze während der Fahrt ohne gefährliche Touchscreen-Bedienung zu nutzen:
    * Erkennt OMB über V2X ein relevantes Ereignis (Ampel rot, Baustelle, Unfall) oder über die 6-Achs-IMU eine Gefahrensituation (Vollbremsung $> 0{,}6\,\text{g}$, Notbremsstrobe, Sturz):
@@ -479,7 +479,7 @@ Auf Android-Geräten bietet die Companion-App (`bar.f0o.omb`) im Hintergrund mä
 
 ### 6.3 Die 100 % Offline-First Garantie (Safety First)
 Sollte die Mobilfunkverbindung auf Pässen oder in Tälern abreißen:
-* Sämtliche fahr- und sicherheitskritischen Funktionen – das 77-GHz-Radar ($< 15\,\text{ms}$), der UWB-Backbone ($< 0{,}4\,\text{ms}$), die Intercom-Mesh-Matrix (Sena/Cardo/OMM), die IMU-Sturzerkennung und das Notbremsblinken – arbeiten zu **100 % offline und autark** auf der Motorrad-Hardware.
+* Sämtliche fahr- und sicherheitskritischen Funktionen – das 77-GHz-Radar ($< 15\,\text{ms}$), der 4-Draht USB-Backbone ($< 0{,}2\,\text{ms}$), die Intercom-Mesh-Matrix (Sena/Cardo/OMM), die IMU-Sturzerkennung und das Notbremsblinken – arbeiten zu **100 % offline und autark** auf der Motorrad-Hardware.
 * Im tiefsten Funkloch auf abgelegenen Pässen funktioniert OpenMotorBridge mit identischer Präzision und Schutzwirkung wie im Stadtzentrum.
 
 ---
@@ -498,8 +498,8 @@ Zur Vermeidung von Redundanzen und zur Gewährleistung klarer Zuständigkeiten i
 | **Telemetrie & Blackbox** | **[Kapitel 06](06_telemetry_blackbox_webdav.md)** | MicroSD-FAT32 Ringpuffer, 15-State EKF Schräglage, WebDAV / Nextcloud Sync |
 | **PCBA Hardware & Pinouts (SSOT)**| **[Kapitel 07](07_pcba_hardware_pinouts.md)** | **Alle Platinen (PCBA 01 bis 10)**, vollständige Pinbelegungen, Bauteilwerte |
 | **Gehäuse, Mechanik & CAD (SSOT)**| **[Kapitel 08](08_enclosures_mechanics_cad.md)** | **Alle CAD-Modelle**, OpenSCAD Parameter, ECE-Normen, unverlierbare Muttern |
-| **Firmware-Architektur** | **[Kapitel 09](09_firmware_architecture.md)** | FreeRTOS Task-Matrix, UWB Ranging-Protokoll, Ringpuffer & State-Machines |
-| **WebApp PWA Dashboard** | **[Kapitel 10](10_webapp_pwa_dashboard.md)** | Ride HUD, WebBLE Protokoll, Kassetten-Konfiguration, Offline-OSM-Vektorkarten |
+| **Firmware-Architektur** | **[Kapitel 09](09_firmware_architecture.md)** | FreeRTOS Task-Matrix, 4-Draht USB-PD & USB 2.0 Protokoll, 5-Gesten-Engine |
+| **WebApp PWA Dashboard** | **[Kapitel 10](10_webapp_pwa_dashboard.md)** | Ride HUD, WebBLE Protokoll, Pod- & Profil-Konfiguration, Offline-OSM-Vektorkarten |
 | **CarPlay / Android Auto Bridge** | **[Kapitel 11](11_carplay_android_auto_bridge_architecture.md)**| Virtual WHIM, CP2AA Bridge, Multi-Path Wi-Fi/Cellular, Headless Dongle |
 | **CAN-Bus Fahrzeugprofile** | **[Kapitel 12](12_can_bus_vehicle_profiles.md)** | BMW, KTM, Ducati, Harley CAN-Matrizen, LIN/K-Line Interfaces |
 | **Simulation & Testbench (HIL/SIL)**| **[Kapitel 13](13_simulation_testbench.md)** | Python Netlist Validator, FreeRTOS Timing-Verifikation, Signalintegrität |
