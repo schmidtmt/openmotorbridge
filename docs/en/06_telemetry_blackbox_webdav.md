@@ -18,7 +18,7 @@ This document specifies the storage and telemetry subsystem of OpenMotorBridge v
 The telemetry subsystem fuses data from the multi-constellation GNSS receiver (**u-blox SAM-M10Q** with integrated $15 \times 15\,\text{mm}$ patch antenna on the Front Node via `J12` Qwiic), the 6-axis IMU (**Bosch BMI270**) on the Central Box, and optional motorcycle wheel speed inputs (via CAN-bus or ABS sensor pulse line) in a **15-State Error-State Extended Kalman Filter (ES-EKF)**:
 
 ```
-[ u-blox SAM-M10Q GNSS (10 Hz) ] --(I2C 400k / UWB)--+
+[ u-blox SAM-M10Q GNSS (10 Hz) ] --(I2C / 4-Wire USB)--+
 [ CAN-Bus Wheel Speed / Velocity ] ---(10-20 Hz)-----+-> [ 15-State Extended Kalman Filter ] --> [ MicroSD: tour.gpx ]
 [ Bosch BMI270 Gyro / Accel (I2C) ] --(50-100 Hz)----+        (Dead Reckoning Engine)            (With Lean Angle & G-Force)
 ```
@@ -85,7 +85,7 @@ To strictly avoid running cables through the steering stem to the wireless Front
 | * Installation: Ram-air intake duct inside fairing / headlight scoop         |
 | * Thermal Isolation: Eliminates false readings from engine heat trapped     |
 |   around cylinder heads or radiator exhaust                                  |
-| * Wireless Steering Head: Telemetry streams over UWB (< 0.4 ms)              |
+| * 4-Wire Automotive Bus via Frame Caddy (Zero Tank Lifting): USB (< 0.2 ms) |
 +-----------------------------------------------------------------------------+
 ```
 

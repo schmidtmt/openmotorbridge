@@ -16,7 +16,7 @@ Dieses Dokument spezifiziert das Telemetrie-, Navigations- und Speichersystem de
 Das Telemetrie-Subsystem führt Daten des Multi-GNSS-Empfängers (**u-blox SAM-M10Q** mit integrierter $15 \times 15\,\text{mm}$ Patch-Antenne am Front-Knoten via `J12` Qwiic), der 6-Achsen-IMU (**Bosch BMI270**) auf der Zentralbox und optionaler Raddrehzahlen (über fahrzeugseitigen CAN-Bus oder ABS-Sensorpulse) in einem **15-State Error-State Extended Kalman Filter (ES-EKF)** zusammen:
 
 ```
-[ u-blox SAM-M10Q GNSS (10 Hz) ] --(I2C 400k / UWB)--+
+[ u-blox SAM-M10Q GNSS (10 Hz) ] --(I2C / 4-Draht USB)--+
 [ CAN-Bus Raddrehzahl / Speed ] ----(10-20 Hz)-------+-> [ 15-State Extended Kalman Filter ] --> [ MicroSD: tour.gpx ]
 [ Bosch BMI270 Gyro / Accel (I2C) ] -(50-100 Hz)-----+        (Dead Reckoning Engine)            (Mit Schräglage & G-Force)
 ```
@@ -93,7 +93,7 @@ Um Leitungen durch den Lenkkopf zum kabellosen Frontnode strikt zu vermeiden und
 | * Präzisionssensorik (TI TMP117 ±0.1°C & OPT3001 Lichtsensor an J12 Qwiic)  |
 | * Montage: Im Fahrtwind-Kaltluftkanal der Verkleidung / Cockpitmaske         |
 | * Thermische Entkopplung: 100 % frei von Zylinder-, Kühler- & Motorabwärme   |
-| * Kabelfrei über den Lenkkopf: Telemetrie-Streaming über UWB (< 0.4 ms)      |
+| * 4-Draht Automotive-Bus durch Kabelkanal (Zero Tank-Heben!): USB (< 0.2 ms)|
 +-----------------------------------------------------------------------------+
 ```
 
