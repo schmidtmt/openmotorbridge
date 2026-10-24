@@ -1,10 +1,10 @@
-# 04b - OpenMotorMesh (OMM) Intercom-Module & Autonome OEM-Kassetten: 2.4 GHz HD-Mesh & 446 MHz PMR/DMR Tier I
+# 04b - OpenMotorMesh (OMM) Intercom-Module & Universelle Pod-Inlays: 2.4 GHz HD-Mesh & 446 MHz PMR/DMR Tier I
 
 Dieses Dokument ist die verbindliche Architekturspezifikation für die **zwei nativen, quelloffenen OpenMotorMesh (OMM) Intercom-Module**:
 1. **OMM 2.4 GHz HD-Mesh Intercom (`PCBA 09`):** High-Definition Ad-hoc-Mesh über 2.4 GHz Wi-Fi 6 / 802.15.4 TDMA mit 6LoWPAN/IPv6-Multicast und Opus-Audio für bis zu 32 Fahrer.
 2. **OMM 446 MHz Analog & Digital PMR446 / DMR Tier I Funkmodul (`PCBA 10`):** Universelles Jedermannfunk-Modul auf Basis des NiceRF SA818-DMR Transceivers für 100%ige Interoperabilität mit analogen Handfunkgeräten (z. B. Midland G7/G9 Pro) und digitalen DMR-Geräten (z. B. Midland D-10).
 
-Beide Baugruppen nutzen den standardisierten **ECE 22.06 UCS-Formfaktor** ($68{,}0 \times 36{,}0 \times 9{,}5\,\text{mm}$) und können sowohl als **autarke Helm-Headsets** als auch formschlüssig als **Wechselkassetten in Bucht 1 oder Bucht 2 (`PCBA 03`)** am Motorrad betrieben werden.
+Beide Baugruppen nutzen den standardisierten **ECE 22.06 UCS-Formfaktor** ($68{,}0 \times 36{,}0 \times 9{,}5\,\text{mm}$) und können sowohl als **autarke Helm-Headsets** als auch formschlüssig als **Plug-in Inlays in Pod 1 oder Pod 2 (`PCBA 03`)** am Motorrad betrieben werden.
 
 ---
 
@@ -18,17 +18,17 @@ Um Missverständnissen zwischen der Träger-Mechatronik und den Intercom-Modulen
 +---------------------------------------------------------------------------------------------------+
 |                        ARCHITEKTUR-TRENNUNG: TRÄGERPLATINE VS. OMM-MODULE                         |
 +----------------------------------------------------+----------------------------------------------+
-| 1. KASSETTEN-TRÄGERPLATINE (PCBA 03 im Pod)        | 2. OMM INTERCOM-MODULE (PCBA 09 / PCBA 10)   |
+| 1. POD-INTERFACEPLATINE (PCBA 03 im Koffer-Pod)    | 2. OMM INTERCOM-MODULE (PCBA 09 / PCBA 10)   |
 +----------------------------------------------------+----------------------------------------------+
-| * Verbleibt dauerhaft im Pod-Schlitten am Bike     | * Entnehmbare, standardisierte UCS-Module    |
-| * Qorvo DW3110 UWB Transceiver (6.5 GHz Ch. 5)     | * Standardisierte Abmessungen: 68 x 36 mm    |
-| * Deterministischer Backbone zur Zentralbox        | * ECE 22.06 Helmnorm-konforme Rasten         |
-|   (Latenz < 0.4 ms, jitterfrei)                    | * Integrierter 600-mAh-LiPo-Akku (USV)       |
+| * Verbleibt dauerhaft am Boden des Koffer-Pods     | * Entnehmbare, standardisierte UCS-Module    |
+| * 4-Ader Automotive-USB-Bus (12V/PD, USB 2.0)      | * Standardisierte Abmessungen: 68 x 36 mm    |
+| * Nativer USB Audio Class 2.0 Link zur Zentralbox  | * ECE 22.06 Helmnorm-konforme Rasten         |
+|   (Latenz < 0.2 ms, jitterfrei)                    | * Integrierter 600-mAh-LiPo-Akku (USV)       |
 | * Everest Semi ES8388 24-Bit / 48 kHz Audio-Codec  | * 4x taktile IP67-Taster an Gehäuseoberseite |
-| * 4x AO3400A MOSFETs + Mechatronik-Stößel (J_ACT)  | * Wasserdichte stirnseitige USB-C Buchse     |
-| * 12V -> 3.8V/5V DC-DC Bordnetz-Speisung           | * Modul A: OMM 2.4 GHz Mesh (PCBA 09)        |
+| * Null Mechatronik-Verschleiß (keine Hubmagnete!)  | * Wasserdichte stirnseitige USB-C Buchse     |
+| * Interner 30W/60W USB-PD Schnellladeport          | * Modul A: OMM 2.4 GHz Mesh (PCBA 09)        |
 | * 8-Pin Kelvin Audio & Power Interface (J_AUDIO)   | * Modul B: OMM 446 PMR/DMR Radio (PCBA 10)   |
-| * Null 2.4-GHz/446-MHz-Funk auf Trägerplatine!     | * Null UWB am Modul (Backbone rein im Pod)   |
+| * Null 2.4-GHz/446-MHz-Funk auf Trägerplatine!     | * Nativ digitales USB Audio Class Streaming  |
 +----------------------------------------------------+----------------------------------------------+
 ```
 
@@ -358,11 +358,11 @@ Das SA818-DMR Modul verfügt über einen dedizierten Umschaltpin `HL` (`SA818_PW
 | Betriebsmodus | Steuersignal `SA818_PWR_HL` | ERP-Sendeleistung | Reichweite (Freifeld) | Anwendungsbereich / Zulassung |
 | :--- | :--- | :--- | :--- | :--- |
 | **Helm-Modus (Standalone)** | **`LOW` (0 V)** | **$0{,}2\,\text{W}$ ($200\,\text{mW}$)** | **$1{,}5\dots 2{,}5\,\text{km}$** | **SAR-Safe:** Minimale HF-Absorption am Kopf; schont den 600-mAh-LiPo-Akku (Laufzeit 8–10 h). |
-| **Bike-Modus (Kassette im Pod)** | **`HIGH` ($3{,}3\,\text{V}$)** | **$0{,}5\,\text{W}$ ($500\,\text{mW}$)** | **$3{,}0\dots 6{,}0\,\text{km}$** | **Maximales PMR446-Gesetzeslimit:** Speisung über 5V-Bordnetz; maximale Reichweite bei Überlandfahrten. |
+| **Bike-Modus (Pod im Koffer)** | **`HIGH` ($3{,}3\,\text{V}$)** | **$0{,}5\,\text{W}$ ($500\,\text{mW}$)** | **$3{,}0\dots 6{,}0\,\text{km}$** | **Maximales PMR446-Gesetzeslimit:** Speisung über 5V-Bordnetz; maximale Reichweite bei Überlandfahrten. |
 
-* **Autonome Modus-Erkennung:** Wird das Modul in den Kassetten-Schlitten (`PCBA 03`) gesteckt, erkennt der ESP32-C6 die 5V-Bordnetzspeisung an Pin 2 (`VCC_5V_PROT`) und treibt Pin 6 (`OMM_DETECT`) aktiv auf HIGH ($3{,}3\,\text{V}$). Dies schaltet den SPDT-Umschalter `U4` (`TS5A3159DBVR`) auf `PCBA 03` in $< 35\,\text{ns}$ auf den verlustfreien digitalen USB-Audiopfad (`USB_DP` / `USB_DN`) und veranlasst das OMM-Modul zugleich, die Sendeleistung via `SA818_PWR_HL` automatisch von 0,2 W auf 0,5 W hochzuregeln. Außerhalb des Pods fällt das Modul sicherheitshalber in den 0,2-W-Helm-Modus zurück.
+* **Autonome Modus-Erkennung:** Wird das Modul in den Koffer-Pod (`PCBA 03`) eingesetzt, erkennt der ESP32-C6 die 5V-Bordnetzspeisung an Pin 2 (`VCC_5V_PROT`) und treibt Pin 6 (`OMM_DETECT`) aktiv auf HIGH ($3{,}3\,\text{V}$). Dies schaltet den SPDT-Umschalter `U4` (`TS5A3159DBVR`) auf `PCBA 03` in $< 35\,\text{ns}$ auf den verlustfreien digitalen USB-Audiopfad (`USB_DP` / `USB_DN`) und veranlasst das OMM-Modul zugleich, die Sendeleistung via `SA818_PWR_HL` automatisch von 0,2 W auf 0,5 W hochzuregeln. Außerhalb des Pods fällt das Modul sicherheitshalber in den 0,2-W-Helm-Modus zurück.
 
-### 6.2 Antennen-Architektur: Helm-Stummelantenne vs. geschlossene Pod-Kassette & Festeinbau-Booster
+### 6.2 Antennen-Architektur: Helm-Stummelantenne vs. geschlossener Koffer-Pod & Festeinbau-Booster
 
 Sowohl das **OpenMotorMesh 2.4 GHz Modul (PCBA 09)** als auch das **OMM 446 MHz PMR/DMR Modul (PCBA 10)** nutzen eine durchdachte, zweistufige Antennen- und Leistungsarchitektur:
 
@@ -372,8 +372,8 @@ Sowohl das **OpenMotorMesh 2.4 GHz Modul (PCBA 09)** als auch das **OMM 446 MHz 
    * **Alternative (Unsichtbares FPC-Inlay):** Wer am Helm überhaupt keine sichtbare Antenne wünscht, kann ein kurzes Micro-Koaxkabel (1.13 mm) unter das Helmfutter zu einer flexiblen FPC-Streifenantenne führen, die unsichtbar zwischen Außenschale und EPS-Dämpfungskern verklebt ist.
    * **Bluetooth/BLE Nahfeld:** Der zweite Funkchip (`ESP32-PICO-V3-02`) behält seine Onboard-Keramik-Chipantenne (`ANT1`), da er nur die Nahfeld-Kopplung ($1\dots 3\,\text{m}$) zum Smartphone im Tankrucksack oder Display bedient.
 
-2. **Kassetten-Betrieb im Motorrad-Pod (Geschlossene IP67-Kassette & Festeinbau-Booster):**
-   * **Clean Architecture ohne Außenlöcher (`has_sma_port = false`):** Die Auflösung des früheren Pod 3 erfolgte gezielt, um alle Kassetten (Sena, Cardo, OMM, Blindkassette) mit einem 100 % einheitlichen, glatten Monocoque-Schachtgehäuse ohne störende Radome oder Außenantennen-Durchbrüche zu versehen. Bei den Adventure-Bikes (GS/GSA) entfallen dadurch Hängerisiken an Ästen und Packgurten im Gelände; bei Touring-Bikes (Harley) bleibt der Kofferdeckel absolut lochfrei und dicht.
+2. **Pod-Betrieb im Motorrad-Koffer (Geschlossener IP67-Pod & Festeinbau-Booster):**
+   * **Clean Architecture ohne Außenlöcher (`has_sma_port = false`):** Die Monocoque-Pods mit Slide-in Deckel nehmen alle Inlays (Sena, Cardo, OMM, Dry Box) mit einem 100 % einheitlichen, glatten Gehäuse ohne störende Radome oder Außenantennen-Durchbrüche auf. Bei den Adventure-Bikes (GS/GSA) entfallen dadurch Hängerisiken an Ästen und Packgurten im Gelände; bei Touring-Bikes (Harley) bleibt der Kofferdeckel absolut lochfrei und dicht.
    * **Interne Antennenabstrahlung durch PA12:** Die Antenne liegt geschützt im Längsschacht des Schlittens (2.4 GHz FPC-Flexantenne wie Taoglas FXP73 bzw. 446-MHz-Helix) und strahlt verlustfrei ($< 0{,}3\,\text{dB}$ Dämpfung) durch den $1{,}8\,\text{mm}$ dielektrischen PA12-Deckel und den Kofferdeckel ab.
    * **Intelligente Software-Leistungsumschaltung (Automatischer Dual-Power Modus):**
      - **Im Helm (Standalone):** Das Modul läuft auf 600-mAh-LiPo-Akku. Die Sendeleistung wird SAR-safe und energiesparend geregelt (PCBA 09: $+10\dots +12\,\text{dBm}$, PCBA 10: 0.2 W ERP via `SA818_PWR_HL` = LOW), Laufzeit $12\dots 14\,\text{h}$.
@@ -478,7 +478,7 @@ Sendet das SA818-DMR Modul mit $0{,}5\,\text{W}$ ERP im 446-MHz-Band, zieht die 
 
 ## 9. Cockpit-Integration: CarPlay, Android Auto & PWA Funk-Dashboard
 
-Im Kassetten-Betrieb am Motorrad entfällt die Notwendigkeit, das Modul manuell zu bedienen. Alle Parameter werden vom ESP32-S3 der Zentralbox über den UWB-Backbone digital gesteuert und im Dashboard visualisiert:
+Im Pod-Betrieb am Motorrad entfällt die Notwendigkeit, das Modul manuell zu bedienen. Alle Parameter werden vom ESP32-S31 AI Core der Zentralbox über den 4-Draht USB-Bus digital gesteuert und im Dashboard visualisiert:
 
 ```
 +-----------------------------------------------------------------------------------------+
@@ -542,18 +542,18 @@ flowchart LR
     end
 
     subgraph Central["Zentralbox (PCBA 01) DSP Routing Matrix"]
-        P10 <-->|UWB Backbone Ch. 5 (< 0.4 ms)| DSP["ESP32-S3 Audio DSP\n* Raised-Cosine Filter\n* Ducking (-12 dB)\n* Voice Activity Detection (VAD)"]
+        P10 <-->|4-Draht USB-Bus UAC2 (< 0.2 ms)| DSP["ESP32-S31 AI RISC-V DSP\n* Raised-Cosine Filter\n* Ducking (-12 dB)\n* Voice Activity Detection (VAD)"]
     end
 
     subgraph SenaNet["Motorrad-Gruppe (Sena Mesh 3.0)"]
-        DSP <-->|UWB Backbone Ch. 5| SLED["Sena SPIDER X Slim\n(PCBA 03 in Bucht 1)"]
+        DSP <-->|4-Draht USB-Bus UAC2| SLED["Sena SPIDER X Slim\n(PCBA 03 in Pod 1)"]
         SLED <-->|2.4 GHz Sena Mesh| BIKES["Gruppe (15 Fahrer auf Sena 50S / 60S / Spider)"]
     end
 ```
 
 1. Ein Wanderer, Streckenposten oder Fahrschüler spricht über ein analoges **Midland G9 Pro** oder ein digitales **Midland D-10** auf PMR Kanal 8.
-2. Das OMM 446 Modul in Bucht 2 demoduliert das Signal in $< 4\,\text{ms}$ und streamt das Audiosignal digital über den Qorvo DW3110 UWB-Backbone zur Zentralbox (`PCBA 01`).
-3. Der Audio-DSP auf der Zentralbox pegelt das Signal ein, wendet einen $300\dots 3400\,\text{Hz}$ Bandpassfilter an und injiziert es mit $< 1\,\text{ms}$ Latenz in die Trägerkassette von Bucht 1 (Sena SPIDER X Slim).
+2. Das OMM 446 Modul in Pod 2 demoduliert das Signal in $< 4\,\text{ms}$ und streamt das Audiosignal digital über den 4-Draht Automotive-USB-Bus (UAC2) zur Zentralbox (`PCBA 01`).
+3. Der Audio-DSP auf der Zentralbox pegelt das Signal ein, wendet einen $300\dots 3400\,\text{Hz}$ Bandpassfilter an und injiziert es mit $< 1\,\text{ms}$ Latenz in das Pod-Interface von Pod 1 (Sena SPIDER X Slim).
 4. **Ergebnis:** Die gesamte Motorradgruppe hört den Funkspruch glasklar im Sena Mesh 3.0 auf ihren Helmen – **ohne dass ein einziger Fahrer ein PMR-Funkgerät am Helm montieren muss!**
 
 ---

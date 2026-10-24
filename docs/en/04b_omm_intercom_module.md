@@ -18,17 +18,17 @@ To prevent architectural confusion between motorcycle carrier mechatronics and i
 +---------------------------------------------------------------------------------------------------+
 |                     ARCHITECTURAL DECOUPLING: CARRIER BOARD VS. OMM MODULES                       |
 +----------------------------------------------------+----------------------------------------------+
-| 1. CARTRIDGE CARRIER BOARD (PCBA 03 in Pod)        | 2. OMM INTERCOM MODULES (PCBA 09 / PCBA 10)  |
+| 1. POD INTERFACE BOARD (PCBA 03 in Saddlebag Pod)  | 2. OMM INTERCOM MODULES (PCBA 09 / PCBA 10)  |
 +----------------------------------------------------+----------------------------------------------+
-| * Remains permanently inside the pod sled on bike  | * Detachable, standardized UCS modules       |
-| * Qorvo DW3110 UWB Transceiver (6.5 GHz Ch. 5)     | * Standardized dimensions: 68 x 36 mm        |
-| * Deterministic backbone link to Central Box       | * ECE 22.06 helmet compliant retention claws |
-|   (latency < 0.4 ms, jitter-free)                  | * Integrated 600 mAh LiPo battery (UPS)      |
+| * Remains permanently on pod enclosure floor       | * Detachable, standardized UCS modules       |
+| * 4-Wire Automotive USB Bus (12V/PD, USB 2.0)      | * Standardized dimensions: 68 x 36 mm        |
+| * Native USB Audio Class 2.0 link to Central Box   | * ECE 22.06 helmet compliant retention claws |
+|   (latency < 0.2 ms, jitter-free)                  | * Integrated 600 mAh LiPo battery (UPS)      |
 | * Everest Semi ES8388 24-Bit / 48 kHz Audio Codec  | * 4x tactile IP67 pushbuttons on top face    |
-| * 4x AO3400A MOSFETs + mechatronic plungers (J_ACT)| * Waterproof front USB-C interface port      |
-| * 12V -> 3.8V/5V DC-DC vehicle power supply        | * Module A: OMM 2.4 GHz Mesh (PCBA 09)       |
+| * Zero mechatronic wear (no solenoids!)            | * Waterproof front USB-C interface port      |
+| * Internal 30W/60W USB-PD fast-charge port         | * Module A: OMM 2.4 GHz Mesh (PCBA 09)       |
 | * 8-Pin Kelvin Audio & Power Interface (J_AUDIO)   | * Module B: OMM 446 PMR/DMR Radio (PCBA 10)  |
-| * Zero 2.4-GHz/446-MHz RF on carrier board!        | * Zero UWB on module (Backbone in pod sled)  |
+| * Zero 2.4-GHz/446-MHz RF on carrier board!        | * Native digital USB Audio Class streaming   |
 +----------------------------------------------------+----------------------------------------------+
 ```
 
@@ -483,17 +483,17 @@ flowchart LR
     end
 
     subgraph Central["Central Box (PCBA 01) DSP Routing Matrix"]
-        P10 <-->|UWB Backbone Ch. 5 (< 0.4 ms)| DSP["ESP32-S3 Audio DSP\n* Raised-Cosine Filter\n* Ducking (-12 dB)\n* Voice Activity Detection (VAD)"]
+        P10 <-->|4-Wire USB Bus UAC2 (< 0.2 ms)| DSP["ESP32-S31 AI RISC-V DSP\n* Raised-Cosine Filter\n* Ducking (-12 dB)\n* Voice Activity Detection (VAD)"]
     end
 
     subgraph SenaNet["Motorcycle Riding Group (Sena Mesh 3.0)"]
-        DSP <-->|UWB Backbone Ch. 5| SLED["Sena SPIDER X Slim\n(PCBA 03 in Bay 1)"]
+        DSP <-->|4-Wire USB Bus UAC2| SLED["Sena SPIDER X Slim\n(PCBA 03 in Pod 1)"]
         SLED <-->|2.4 GHz Sena Mesh| BIKES["Group (15 Riders on Sena 50S / 60S / Spider)"]
     end
 ```
 
 * An analog **Midland G9 Pro** or digital **Midland D-10** user transmits on Channel 8.
-* `PCBA 10` demodulates the signal in $< 4\,\text{ms}$ and streams digital audio across the Qorvo DW3110 UWB backbone to the Central Box (`PCBA 01`).
+* `PCBA 10` demodulates the signal in $< 4\,\text{ms}$ and streams digital audio across the 4-wire automotive USB bus (UAC2) to the Central Box (`PCBA 01`).
 * The central DSP applies bandpass filtering and injects the voice into the Sena SPIDER X Slim cartridge with $< 1\,\text{ms}$ latency.
 * **The Entire Group Hears the Transmission in Sena Mesh 3.0** without any rider needing to mount a handheld radio!
 
