@@ -1,6 +1,6 @@
 # 14 - EMV-Härtung, Schirmung & ESD-Schutz
 
-Dieses Dokument spezifiziert die Schutzschaltungen gegen Kfz-Bordnetz-Transienten (ISO 7637-2), die HF-Entkopplung im 2.4-GHz-, 868-MHz- und 6.5-GHz-UWB-Band, die Schutzlackierung nach IPC-CC-830B sowie die mechanische Vibrations- und Schockdämpfung nach ISO 16750-3 für die OpenMotorBridge v8.0 Clean Architecture.
+Dieses Dokument spezifiziert die Schutzschaltungen gegen Kfz-Bordnetz-Transienten (ISO 7637-2), die EMV-Härtung des geschirmten 4-Ader Automotive-USB-Busses, die HF-Entkopplung im 2.4-GHz-, 868-MHz-, 5.9-GHz- und 77-GHz-Band, die Schutzlackierung nach IPC-CC-830B sowie die mechanische Vibrations- und Schockdämpfung nach ISO 16750-3 für die OpenMotorBridge v10.0 Standardized Node Architecture.
 
 ---
 
@@ -14,14 +14,14 @@ Dieses Dokument spezifiziert die Schutzschaltungen gegen Kfz-Bordnetz-Transiente
 
 ---
 
-## 2. HF-Entkopplung, UWB-Backbone & Raumdiversität
+## 2. HF-Entkopplung, 4-Ader Automotive-Bus & EMV-Härtung
 
-* **2,4-GHz-Koexistenz (Sena vs. Cardo):** Durch die räumliche Trennung von Pod 1 (Rahmen links / Koffer links) und Pod 2 (Rahmen rechts / Koffer rechts) über das metallische Fahrzeugchassis wird eine minimale Freiraumdämpfung von $> 35\,\text{dB}$ sichergestellt. Dies verhindert De-Sensing und HF-Intermodulation effektiv.
-* **Deterministischer UWB Fahrzeug-Backbone (Qorvo DW3110 / 6.489 GHz Ch. 5):**
-  * Drahtlose Verbindung zwischen Front-Knoten (`PCBA 05`) und Zentralbox (`PCBA 01`).
-  * Vollständig konform mit **ETSI EN 302 065-1, EN 302 065-3** und **EU-Beschluss 2019/785** ($-41{,}3\,\text{dBm/MHz}$, kontinuierlicher legaler Sendebetrieb ohne Duty-Cycle-Beschränkung).
-  * Arbeitet im Frequenzbereich 6.240-6.739 GHz (Mittenfrequenz 6.489 GHz) mit 499.2 MHz Bandbreite weitab von 2.4 GHz (WLAN, Bluetooth, Mesh) und 5.8 GHz.
-  * **Antennenintegration:** Taoglas FXUWB10 Flex-Antenne montiert in einer $11 \times 11 \times 0{,}6\,\text{mm}$ Aussparung im Gehäuseboden (Unterwanne) von Zentralbox und Front-Knoten. Verbindung über 20 mm U.FL Mikro-Koax. Die PCB-Oberseite behält eine geschlossene Massefläche (Zero-Keepout), und der Gehäusedeckel kann ohne Kabelzug geöffnet werden.
+* **2,4-GHz-Koexistenz (Sena vs. Cardo vs. OMM):** Durch die räumliche Trennung von Pod 1 (Koffer links) und Pod 2 (Koffer rechts) über das metallische Fahrzeugchassis wird eine minimale Freiraumdämpfung von $> 35\,\text{dB}$ sichergestellt. Dies verhindert De-Sensing und HF-Intermodulation effektiv.
+* **Geschirmter 4-Ader Automotive-Bus (Ersatz von UWB):**
+  * In v10.0 ist das experimentelle 6.5-GHz-UWB-System (DW3110) vollständig entfallen. Die Verbindung zwischen Zentralbox (`PCBA 01`), Koffer-Pods (`PCBA 03`) und Front-Knoten (`PCBA 05`) erfolgt über einen hochrobusten, geschirmten **4-Ader Automotive-Bus** (`VCC_BUS` 12V/PD, `GND`, `USB_D-`, `USB_D+`).
+  * **Gleichtakt-Entstörung (Common-Mode Chokes):** Auf allen differentiellen USB-Datenleitungen ($90\,\Omega$ Differenzimpedanz) sitzen Murata DLW21SN900HQ2L Gleichtaktdrosseln ($90\,\Omega$ @ $100\,\text{MHz}$), die Störeinstrahlungen von Zündfunken, Lichtmaschine und Schaltreglern wirksam unterdrücken.
+  * **TVS ESD-Schutznetzwerk:** Jede Schnittstelle ist mit STMicroelectronics USBLC6-2SC6 / Littelfuse SP3012 Arrays geschützt (parasitäre Kapazität $< 0{,}5\,\text{pF}$, $\pm 15\,\text{kV}$ Luft- / $\pm 8\,\text{kV}$ Kontaktentladung nach IEC 61000-4-2 Level 4).
+  * **Sternmassen-Trennung & Dual-Power Schutz:** Strikte galvanische Trennung von Power-Ground (`PGND`) und Analog-Audio-Masse (`AGND`). Auf `PCBA 01` verhindert der TI LM5050 Ideal-Dioden-Controller Rückspeisungen zwischen dem 12V-Bordnetz und dem USB-PD Sink.
 * **LoRa 868 MHz (Semtech SX1262) auf der Zentralbox (`PCBA 01`):**
   * Direkt auf der Zentralbox integriert und 24/7 über die USV-Batterieschiene gepuffert für unterbrechungsfreie Diebstahl-Sentry und Gruppen-Telemetrie.
   * Taoglas FXP895 Flex-Antenne ($110 \times 20 \times 0{,}8\,\text{mm}$) in einer geschützten Tasche im Deckel der Zentralbox mit 50 $\Omega$ U.FL Speisung.
@@ -44,9 +44,8 @@ Um Interferenzen zwischen den nunmehr 8 simultan aktiven Funksystemen der OpenMo
 | **868 MHz LoRa (SX1262)** | 863.0 - 870.0 MHz | +14 dBm (25 mW) | Zentralbox / Taoglas FXP895 Flex | Harmonischen-Tiefpass ($f_{\text{cut}} = 1{,}0\,\text{GHz}$); 24/7 USV-Dauerbetrieb |
 | **1.575 GHz GNSS (SAM-M10Q)** | 1559 - 1610 MHz | Nur Empfang (-167 dBm) | Front-Knoten (`PCBA 05`) / 15x15 Keramik-Patch | SAW-Vorfilter im LNA; räumlich maximal entfernt von 868M/2.4G |
 | **2.4 GHz ISM (Sena/Cardo/OMM/BLE)** | 2402 - 2480 MHz | +10 bis +20 dBm | Pod 1 (Links), Pod 2 (Rechts), Cockpit | $> 35\,\text{dB}$ Freiraumdämpfung über Fahrzeugrahmen; AFH & TDMA |
-| **5 GHz Wi-Fi (CarPlay / AA)** | 5180 - 5825 MHz | +14 dBm (25 mW) | Cockpit / Front-Knoten (Integrierter Dongle) | Begrenzt auf Cockpit-Nahfeld; $> 600\,\text{MHz}$ Abstand zu UWB Ch. 5 |
+| **5 GHz Wi-Fi (CarPlay / AA)** | 5180 - 5825 MHz | +14 dBm (25 mW) | Cockpit / Front-Knoten (Integrierter Dongle) | Begrenzt auf Cockpit-Nahfeld; koexistiert störungsfrei mit 2.4 GHz und 5.9 GHz V2X |
 | **5.9 GHz C-V2X / DSRC (ETSI)** | 5855 - 5925 MHz | +23 dBm (200 mW) | Fahrzeug-Heck (`PCBA 08`) / Taoglas FXP524 | Striktes Bandpassfilter; 2.4 GHz am Heck deaktiviert |
-| **6.5 GHz UWB (DW3110 Ch. 5)** | 6240 - 6739 MHz | -41.3 dBm/MHz (< 1 mW) | Zentralbox, Front-Node, Pods, Radar | Ultra-Breitband (499.2 MHz BW); Null Interferenz mit Schmalband |
 | **77 GHz mmWave Radar (MR20)** | 76.0 - 81.0 GHz | +30 dBm EIRP | Kennzeichen- / Heck-Bracket (`PCBA 08`) | Vollkommen entkoppelt; Millimeterwellen-Spektrum ohne HF-Kopplung |
 
 ### 2.2 Verbindliche Gesamtsystem-Antennenmatrix & Exakte Positionen
@@ -56,16 +55,12 @@ Zur Gewährleistung maximaler Link-Budgets und reproduzierbarer EMV-Konformität
 | Baugruppe | Funktechnik | Frequenz | Antennentyp | Genaue Position & Montage |
 | :--- | :--- | :--- | :--- | :--- |
 | **Zentralbox (`PCBA 01`)** | Semtech SX1262 LoRa | 868 MHz | Taoglas FXP895 Flex | Gekapselt auf Akkubrücke (`ANT1`), U.FL (Deckel 100% kabelfrei) |
-| **Zentralbox (`PCBA 01`)** | Qorvo DW3110 UWB | 6.5 GHz (Ch. 5) | Taoglas FXUWB10 Flex | Eigene Antennentasche im Gehäuseboden (`ANT2`), U.FL |
 | **Zentralbox (`PCBA 01`)** | Qualcomm QCC3084 BT | 2.4 GHz | Keramik-Chipantenne | Onboard auf Moduloberseite (`F.Cu`), 0 mm Koax |
 | **Zentralbox (`PCBA 01`)** | ESP32-S3 BLE/WiFi | 2.4 GHz | Taoglas FXP73 Flex | Gekapselt auf Akkubrücke (`U2` U.FL Koax am WROOM-1U) |
 | **Front-Knoten (`PCBA 05`)** | u-blox SAM-M10Q GNSS | 1.575 / 1.602 GHz | Keramik-Patchantenne | Onboard Moduloberseite mit freier Sicht zum Himmel |
-| **Front-Knoten (`PCBA 05`)** | Qorvo DW3110 UWB | 6.5 GHz (Ch. 5) | Taoglas FXUWB10 Flex | Gehäusebodentasche der Front-Node Wanne, U.FL |
 | **Front-Knoten (`PCBA 05`)** | ESP32-S3 BLE/WiFi | 2.4 / 5 GHz | COTS Stummel / Sharknose | U.FL Buchse am WROOM-1U Modul |
-| **Smart Cartridge (`PCBA 03`)**| Qorvo DW3110 UWB | 6.5 GHz (Ch. 5) | Integrierte PCB-Antenne | Unterseite (`B.Cu`), strahlt nach unten durch Pod-Boden |
 | **OMM 2.4G UCS (`PCBA 09`)** | ESP32-C6 TDMA Mesh | 2.4 GHz ISM | Taoglas FXP73 Flex-Dipol | Abgesetzte Helmschalen-Antenne, U.FL Buchse (+3 dBi) |
 | **OMM 446 UCS (`PCBA 10`)** | NiceRF SA818-DMR | 446 MHz PMR | Abgestimmte Wendel-Helix | Vergossen im Deckellabyrinth ($32\,\text{mm}$), opt. U.FL Bike-Pigtail |
-| **Heck-Radar (`PCBA 08`)** | Qorvo DW3110 UWB | 6.5 GHz (Ch. 5) | Taoglas FXUWB10 Flex | Gehäusetasche im Flügelfuß, U.FL Buchse `J4` |
 | **Heck-Radar (`PCBA 08`)** | ESP32-C5 V2X / ITS-G5 | 5.9 GHz (C-V2X) | Taoglas FXP524 Flex | U.FL Buchse `U.FL_5G9_V2X` (2.4G am Heck strikt deaktiviert) |
 | **Heck-Radar (`PCBA 08`)** | Wheeltec MR20 Radar | 77 GHz mmWave | On-Chip Patch-Array (AoP)| Radom-Linse im Zentrum von PCBA 08 (keine HF-Koaxleitung) |
 

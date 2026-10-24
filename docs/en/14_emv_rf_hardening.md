@@ -1,6 +1,6 @@
 # 14 - EMC Hardening, RF Shielding & Environmental Protection
 
-This document specifies the protection circuitry against vehicle electrical transients (ISO 7637-2), RF decoupling across the 2.4 GHz, 868 MHz, and 6.5 GHz UWB bands, conformal coating per IPC-CC-830B, and mechanical vibration isolation according to ISO 16750-3 for the OpenMotorBridge v8.0 Clean Architecture.
+This document specifies the protection circuitry against vehicle electrical transients (ISO 7637-2), EMC hardening of the shielded 4-wire automotive USB bus, RF decoupling across the 2.4 GHz, 868 MHz, 5.9 GHz, and 77 GHz bands, conformal coating per IPC-CC-830B, and mechanical vibration isolation according to ISO 16750-3 for the OpenMotorBridge v10.0 Standardized Node Architecture.
 
 ---
 
@@ -14,14 +14,14 @@ This document specifies the protection circuitry against vehicle electrical tran
 
 ---
 
-## 2. RF Decoupling, UWB Backbone & Spatial Diversity
+## 2. RF Decoupling, 4-Wire Automotive Bus & EMC Hardening
 
-* **2.4 GHz Coexistence (Sena vs. Cardo):** Physical separation of Pod 1 (left frame rail / left pannier) and Pod 2 (right frame rail / right pannier) across the metallic chassis provides $> 35\,\text{dB}$ free-space path loss, preventing de-sensing and intermodulation.
-* **Deterministic UWB Vehicle Backbone (Qorvo DW3110 / 6.489 GHz Ch. 5):**
-  * Wireless backbone linking Front Node (`PCBA 05`) and Central Box (`PCBA 01`).
-  * Fully compliant with **ETSI EN 302 065-1, EN 302 065-3**, and **EU Decision 2019/785** ($-41.3\,\text{dBm/MHz}$, continuous legal transmission without duty-cycle capping).
-  * Operates across 6.240-6.739 GHz (center frequency 6.489 GHz) with 499.2 MHz bandwidth, far above 2.4 GHz (Wi-Fi, Bluetooth, Mesh) and 5.8 GHz.
-  * **Antenna Integration:** Taoglas FXUWB10 flex antenna mounted inside an $11 \times 11 \times 0.6\,\text{mm}$ recess in the enclosure bottom tub floor of both Central Box and Front Node. Connected via 20 mm U.FL micro-coax. The PCB top layer maintains an unbroken solid ground plane (zero keepout cuts), and the enclosure lid can be serviced without cable strain.
+* **2.4 GHz Coexistence (Sena vs. Cardo vs. OMM):** Physical separation of Pod 1 (left pannier) and Pod 2 (right pannier) across the metallic chassis provides $> 35\,\text{dB}$ free-space path loss, preventing de-sensing and intermodulation.
+* **Shielded 4-Wire Automotive Bus (Replacement of UWB):**
+  * In v10.0, the experimental 6.5 GHz UWB subsystem (DW3110) has been eliminated. Communication between Central Box (`PCBA 01`), saddlebag pods (`PCBA 03`), and Front Node (`PCBA 05`) runs over a rugged, shielded **4-wire automotive bus** (`VCC_BUS` 12V/PD, `GND`, `USB_D-`, `USB_D+`).
+  * **Common-Mode Chokes:** Differential USB data lines ($90\,\Omega$ differential impedance) are filtered by Murata DLW21SN900HQ2L common-mode chokes ($90\,\Omega$ @ $100\,\text{MHz}$), rejecting high-frequency noise from alternators and switched-mode converters.
+  * **TVS ESD Protection:** Every port is protected by STMicroelectronics USBLC6-2SC6 / Littelfuse SP3012 arrays (parasitic capacitance $< 0.5\,\text{pF}$, $\pm 15\,\text{kV}$ air / $\pm 8\,\text{kV}$ contact ESD per IEC 61000-4-2 Level 4).
+  * **Star Grounding & Dual-Power Protection:** Power ground (`PGND`) is strictly isolated from sensitive audio ground (`AGND`). On `PCBA 01`, a TI LM5050 ideal-diode controller blocks reverse currents between 12V vehicle power and the benchtop USB-PD sink.
 * **LoRa 868 MHz (Semtech SX1262) & Wi-Fi/BLE (ESP32-S3) on Central Box (`PCBA 01`):**
   * SX1262 LoRa transceiver buffered 24/7 via the UPS battery rail for uninterrupted theft sentry and group telemetry.
   * **Hinged Battery & Dual-Antenna Bridge:** Taoglas FXP895 LoRa-868 flex antenna ($86 \times 16 \times 1.0\,\text{mm}$) and Taoglas FXP73 2.4 GHz flex antenna ($47 \times 7.5 \times 0.8\,\text{mm}$) housed in form-fitting recessed pockets under a $0.8\,\text{mm}$ snap-on PA12 protective cover plate with C-clip strain-relief clamps. The enclosure lid remains 100% passive and cable-free.
@@ -60,5 +60,4 @@ The following components and contact surfaces must **not** be coated:
 * **PCB Isolation:** 4x NBR O-rings (ID 3.0 mm, cross-section 1.0 mm) between enclosure bosses and PCB underside dampen high-frequency engine harmonics.
 * **Screw Locking:** All M2.5 board screws torqued to $0.35\,\text{Nm}$ and secured with medium-strength threadlocker (*Loctite 243* blue).
 * **Component Underfill:**
-  * **Bourns LM-NP-1001 Transformer:** Corners anchored with elastomeric silicone adhesive (*Dow Corning 732* / *Dowsil 3145*) to prevent solder fatigue.
   * **UPS Battery Cushioning:** LiPo cell anchored in the upper enclosure tray above the partition plate using $1.0\,\text{mm}$ damping foam (*3M VHB 4910* / EPDM) and an elastic EPDM retention strap (Shore 50A).
