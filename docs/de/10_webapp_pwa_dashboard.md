@@ -30,7 +30,7 @@ Für Fahrer, die eine Installation über den Google Play Store, automatische Hin
      * **Kein Wi-Fi-Konflikt bei Wireless CarPlay / Android Auto:** Da ein Smartphone hardwarebedingt immer nur mit einem einzigen WLAN gleichzeitig verbunden sein kann, belegt Wireless CarPlay/AA das 5-GHz-WLAN des Telefons exklusiv. Durch die strikte Nutzung von WebBLE für OMB entsteht keinerlei Funk- oder Verbindungskonflikt – Bluetooth und Wi-Fi arbeiten auf getrennten Funkstacks vollkommen ungestört parallel.
      * **Internet-Uplink via Android SOCKS5/Stream-Relay (`bar.f0o.omb`):** Da das 5-GHz-WLAN des Smartphones durch Wireless CarPlay/AA belegt ist, nutzt OpenMotorBridge für die Anbindung an Mobilfunkdaten (4G/5G) den physischen BLE- bzw. USB-Kanal. Die native Android-App (`bar.f0o.omb`) stellt ein unprivilegiertes Layer-5 SOCKS5/Stream-Relay bereit, gebunden an die Mobilfunk-Schnittstelle (`TRANSPORT_CELLULAR`). Dies ermöglicht den Cloud-Sync mit dem OpenTrafficMap-Backend (V2X-Ampelphasen SPaT, Gefahrenmeldungen DENM) und die automatisierte Gefahrenmeldung in Waze ("Auto-Klick" via AccessibilityService/Intents) – vollkommen legal und ohne Konflikt mit einem parallel laufenden Tailscale-VPN.
      * **Direkter Cloud- & WebDAV-Sync:** GPX-Touren und Telemetrie-Logs werden von der PWA über die eigene Mobilfunkverbindung des Smartphones (4G/5G) direkt an Nextcloud/WebDAV übertragen – ohne jedes Routing über den ESP32.
-     * **100 % Offline-First:** Sämtliche sicherheitskritischen Motorrad-Funktionen (77-GHz-Radar, UWB-Backbone, Intercom-Mesh Sena/Cardo/OMM, Sturzerkennung, Notbremsblinken) laufen autark auf der Motorrad-Hardware. Das System funktioniert ohne jegliche Funktionseinbußen auch im tiefsten Funkloch der Alpen völlig ohne Internet!
+     * **100 % Offline-First:** Sämtliche sicherheitskritischen Motorrad-Funktionen (77-GHz-Radar, 4-Ader Automotive-Bus, Intercom-Mesh Sena/Cardo/OMM, Sturzerkennung, Notbremsblinken) laufen autark auf der Motorrad-Hardware. Das System funktioniert ohne jegliche Funktionseinbußen auch im tiefsten Funkloch der Alpen völlig ohne Internet!
 
 ---
 
@@ -57,10 +57,10 @@ Für Fahrer, die eine Installation über den Google Play Store, automatische Hin
   * Lenker-PTT Status (< 0.4 ms Latenzanzeige, Test-Button).
   * 4. Metrik-Kachel: Action-Cam BLE Bridge (REC-Toggle, HiLight Marker, Tankpausen-Filter, Pairing-Modal).
   * Live Fahrtwind-Lärmpegel VU-Meter (Knowles MEMS dB(A) & AGC-Boost).
-  * **Status-Badge:** Live 6.5 GHz UWB Funklink (`UWB LINK (6.5 GHz / Ch. 5)` / `OFFLINE`).
+  * **Status-Badge:** Live 4-Ader Automotive-Bus (`4-WIRE BUS (12V/PD & 480 Mbps)` / `OFFLINE`).
   * **4 Subsystem-Kacheln:**
     1. **📱 Wireless CarPlay / Android Auto Bridge (COTS Universal):** Live-Spannung & Strom (`5.00 V · 380 mA`), Betriebsstatus (`AKTIV`, `REBOOT`, `STANDBY`). Herstellerunabhängige Unterstützung für COTS-Adapter (CarlinKit, AAWireless etc.).
-    2. **⚡ Lenker-PTT (Zero-Latency):** Bereitschaftsstatus und Latenzanzeige (`< 0.4 ms Latenz`) mit leuchtender Pulse-Animation bei Tastendruck (1x = Funk, 2x = Cam Toggle, Lang = HiLight Tag).
+    2. **⚡ Symmetrische Spiegel-Pods (PCBA 05B):** Bereitschaftsstatus beider Taster (`< 0.2 ms Latenz`) mit 5-Gesten-Visualisierung (Short, Double, Triple, Long Press, Hold Gate) für PTT, Voice Assistant, Hazard Pin Drop und Cam-Marker.
     3. **🎙️ Cockpit-Lärm (Knowles MEMS):** Live-Schallpegel in $\text{dB(A)}$ und berechnete Lautstärkenachführung (`+0.0 dB` bis `+6.0 dB Boost`).
     4. **🎥 Action-Cam BLE Bridge (GoPro / Insta360 / DJI):** Kamera-Typ (`GoPro Hero 12` / `Insta360 X4`), Akkustand (%), verbleibende SD-Zeit, pulsierender roter REC-Status.
   * **Fahrtwind-Lärm VU-Meter:** Farbkodierter Balken ($35\,\text{dB(A)}$ Standgas bis $115\,\text{dB(A)}$ Höchstgeschwindigkeit).
@@ -87,22 +87,21 @@ Für Fahrer, die eine Installation über den Google Play Store, automatische Hin
 * **Betriebsmodus-Wahl:** Umschaltung zwischen Standard Mode (Mesh Bridge), Single Rider Mode und Cruise Mode.
 * **Schieberegler:** Eingangspegel Port 1 (Sena), Port 2 (Cardo), Ducking-Dämpfung und Transparenz-Lautstärke.
 * **Echtzeit-Pegelbalken:** Live-Pegelüberwachung aller 4 Audio-Eingangskanäle.
-* **🦾 Smart Cartridge Mechatronik-Bedienfeld (PCBA 03 Rev 3.0 All-UWB):**
-  * Live-Statusanzeige des Kassetten-Controllers (ESP32-C6 Synced).
-  * `⚡ Power Boot`: Löst über Opcode `0x01` den synchronen Tastendruck `Center + (+)` (1000 ms) aus - autom. Kaltstart nach Standzeiten $> 3$ Tage.
-  * `🔘 Mesh Ein/Aus`: Opcode `0x05` (200 ms Einzelpuls).
-  * `⏭️ Kanal +1 / ⏮️ Kanal -1`: Autonome Kassetten-Makros (`0x07` / `0x08`, 2x Mesh + 1x Plus/Minus).
-  * `🔊 Lauter / 🔉 Leiser`: Einzeltasten-Impulse (`0x03` / `0x04`, 100 ms) über unabhängige Aktuatoren `ACT_PLUS` bzw. `ACT_MINUS`.
-  * `👥 Group Mesh`: 3000 ms Haltepuls (`0x06`) für nahtloses Umschalten zwischen öffentlichem Open Mesh und privatem Gruppen-Mesh.
+* **🎛️ Satelliten-Pod Digital-Interface (PCBA 03 Rev 4.0 Standardized Node):**
+  * Live-Statusanzeige des Pod-Controllers (ESP32-C6 Synced via 4-Draht USB-Bus).
+  * `⚡ USB-PD Fast-Charge`: Anzeige von Ladespannung, Ladestrom (bis 30W/60W) und Temperatur der internen Koffer-Ladedose.
+  * `🎧 Headset-Profil`: Umschaltung zwischen Sena SPIDER X Slim, Cardo Packtalk Pro, OMM UCS 2.4 GHz, Midland PMR446 und regendichter Dry Box.
+  * `🔊 Lautstärke / Gain`: Digitale I2S/USB-Codec Pegelsteuerung ohne mechanische Verschleißteile.
+  * `👥 Group Mesh / PTT`: Digitale Steuerung von Mesh-Kanälen und galvanisch getrenntem PTT-Keying via OptoMOS K1.
 
-### 2.3 Tab 3: Kassetten & DLE (`#tab-cartridges`)
+### 2.3 Tab 3: Koffer-Pods & Lade-Management (`#tab-pods`)
 
-![PWA Tab 3: Kassetten-Erkennung & DLE Live-Status](../images/pwa/pwa_tab3_cartridges_dle_status.png)
+![PWA Tab 3: Koffer-Pods & Lade-Management](../images/pwa/pwa_tab3_cartridges_dle_status.png)
 
-* **Live-Status:** Anzeige der eingesteckten Kassetten in Slot 1 und Slot 2 mit 1-Wire UIDs (nativ emuliert oder DS2401).
-* **Smart Cartridge Kennzeichnung:** Visualisierung von Hardware-Architektur (ESP32-C6 RISC-V, 4x MOSFETs, UWB OTA Flashing aktiv).
-* **Kassetten-Onboarding-Wizard:** Interaktive 3-Schritte-Anleitung beim Einsetzen neuer Headsets.
-* **Ground-Truth Sync & OTA-Flashing:** Re-Synchronisation der Konfigurationstabellen direkt in den Flash-Speicher des Kassetten-MCUs über das UWB-Backbone oder J_PROG.
+* **Live-Status:** Anzeige der aktiven Pods in Bucht 1 (Links) und Bucht 2 (Rechts) mit Profilerkennung, Slide-in Deckel-Status und Dry-Flap Überwachung.
+* **Pod-Hardware Kennzeichnung:** Visualisierung von ESP32-C6 Host-MCU, USB Audio Class 2.0 Streaming, USB-PD Ladeleistung (W) und WebUSB DFU-Status.
+* **Pod-Onboarding-Wizard:** Interaktive Anleitung zum Einlegen neuer OEM-Geräte (Sena, Cardo, OMM) oder Umschalten auf die regendichte Dry Box.
+* **Ground-Truth Sync & WebUSB Flashing:** Firmware-Aktualisierung und Profil-Synchronisation direkt über den 4-Draht USB-Bus ohne Gehäuseöffnung.
 
 ### 2.4 Tab 4: Touren & WebDAV (`#tab-tours`)
 
@@ -122,15 +121,15 @@ Der Geräte-Manager ist in zwei klar voneinander getrennte Bereiche strukturiert
 * **Fahrer- & Sozius-Smartphones:** WebBLE Verbindungsstatus, Signalstärke (RSSI), 1-Klick Kaltstart des CarPlay/AA CP2AA-Dongles (TPS2051B VBUS Power-Cycle), Audio-Share Toggle für Sozius.
 * **Dual-Headset Hub (Fahrer & Sozius):** Bluetooth Audio Manager für Schuberth/Sena, Cardo DMC und Bluetooth-Headsets (LC3/aptX Codec, Akkustand, Suchlauf).
 * **Dual Action-Cam Hub:** Verwaltung von GoPro (Hero 11/12/13), Insta360 (X3/X4/Ace) und DJI Action-Cams mit Auto-REC, Tankpausen-Filter und PTT-HiLight Marker.
-* **2-in-1 LoRa Smart-Keyfob (Alarm-Pager & Kassetten-Key):**
+* **2-in-1 LoRa Smart-Keyfob (Alarm-Pager & Pod-Key):**
   * AES-128 GCM Verschlüsselungs-Status & Monotonic Sequence Nonce.
-  * BLE Nahfeld-Präsenzerkennung (Zero-False-Alarm bei legitimer Kassettenentnahme).
+  * BLE Nahfeld-Präsenzerkennung (Zero-False-Alarm bei legitimem Öffnen des Pod-Slide-in Deckels).
   * `[Test-Alarm (LRA)]`: Sendet einen haptischen Test-Alarm an den Pager.
   * `[Pager neu koppeln]`: Neuer kryptografischer Schlüssel-Handshake via Dock/BLE.
   * `[Buddy-Alarm]`: Checkbox zum automatischen Weiterleiten von Diebstahlalarmen ins Gruppen-Mesh.
 
 #### Teil 2: Motorrad & OpenMotorBridge Systemknoten
-* **Universal Front-Node (Cockpit-Hub * PCBA 05):** UWB Backbone (6.5 GHz), Wi-Fi SoftAP Fallback Toggle, Proximity-Rescue Beacon.
+* **Universal Front-Node (Cockpit-Hub * PCBA 05):** 4-Ader Automotive-Bus (Zero Tank-Heben!), Wi-Fi SoftAP Fallback Toggle, Proximity-Rescue Beacon und 5-Gesten-Konfigurationsmatrix für symmetrische Spiegel-Pods (PCBA 05B).
 * **Heck-Radar & Spiegel-Totwinkel-LEDs (BSD):** Master-Schalter für Radar-Power und Spiegel-Totwinkel-LEDs (Header `J9` via MOSFET `Q1`) mit 2-Sekunden-Testblitz.
 * **Sicherheits-Lichtmanagement:**
   * **ESS Notbremsblinken:** Master-Toggle für 4,5 Hz Stroboskop-Warnblinken (Garmin Varia UART2 & `RESERVE_GPIO_B`), konfigurierbare Verzögerungsschwelle ($-0{,}45\,\text{g}$, $-0{,}60\,\text{g}$, $-0{,}75\,\text{g}$) und Button `[Bremsblitz-Test]`.

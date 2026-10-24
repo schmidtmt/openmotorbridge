@@ -49,7 +49,7 @@ For riders who prefer installation directly via the Google Play Store, automated
 
 * **Vehicle Dynamics & Lean Angle:** Real-time animated motorcycle attitude indicator (15-state EKF with Bosch BMI270).
 * **Universal Front Node Dashboard Card:**
-  * **Link Status:** Live 6.5 GHz UWB wireless status badge (`UWB LINK (6.5 GHz / Ch. 5)` / `OFFLINE`).
+  * **Link Status:** Live 4-wire automotive bus badge (`4-WIRE BUS (12V/PD & 480 Mbps)` / `OFFLINE`).
   * **Subsystem Tiles:**
     1. **📱 Wireless CarPlay / AA (Ottocast):** Live voltage & current (`5.00 V · 380 mA`), operating status (`ACTIVE`, `REBOOT`, `STANDBY`).
     2. **⚡ Handlebar PTT (Zero-Latency):** Status indicator (`< 0.4 ms Latency`) with glowing pulse animation when keying (1x = radio, 2x = cam toggle, long = HiLight tag).
@@ -78,22 +78,21 @@ For riders who prefer installation directly via the Google Play Store, automated
 
 * **Mode Selector:** Standard Mode (Mesh Bridge), Single Rider Mode, Cruise Mode.
 * **Sliders:** Input sensitivity for Port 1 (Sena) and Port 2 (Cardo), Ducking depth, and Transparency volume.
-* **🦾 Smart Cartridge Mechatronic Control Panel (PCBA 03 Rev 3.0 All-UWB):**
-  * Live status indicator of the Cartridge MCU (ESP32-C6 Synced).
-  * `⚡ Power Boot`: Dispatches Opcode `0x01` (`Center + (+)` held for 1,000 ms) for automatic cold-booting after storage $> 3$ days.
-  * `🔘 Mesh On/Off`: Opcode `0x05` (200 ms short pulse).
-  * `⏭️ Channel +1 / ⏮️ Channel -1`: Autonomous cartridge macros (`0x07` / `0x08`, 2x Mesh + 1x Plus/Minus).
-  * `🔊 Vol Up / 🔉 Vol Down`: Single-button pulses (`0x03` / `0x04`, 100 ms) via dedicated actuators `ACT_PLUS` / `ACT_MINUS`.
-  * `👥 Group Mesh`: 3,000 ms hold pulse (`0x06`) toggling between Open Mesh and private Group Mesh.
+* **🎛️ Saddlebag Pod Digital Interface (PCBA 03 Rev 4.0 Standardized Node):**
+  * Live status display of Pod Controller (ESP32-C6 Synced via 4-wire USB bus).
+  * `⚡ USB-PD Fast-Charge`: Real-time monitoring of charging voltage, current (up to 30W/60W), and internal dry-flap temperature.
+  * `🎧 Headset Profile`: Software selection between Sena SPIDER X Slim, Cardo Packtalk Pro, OMM UCS 2.4 GHz, Midland PMR446, and watertight Dry Box.
+  * `🔊 Volume / Gain`: Digital I2S/USB codec audio level control with zero mechanical wear.
+  * `👥 Group Mesh / PTT`: Digital mesh channel routing and isolated PTT keying via OptoMOS K1.
 
-### 2.3 Tab 3: Cartridges & DLE (`#tab-cartridges`)
+### 2.3 Tab 3: Saddlebag Pods & Charging (`#tab-pods`)
 
-![PWA Tab 3: Cartridge Identification & DLE Live Status](../images/pwa/pwa_tab3_cartridges_dle_status.png)
+![PWA Tab 3: Saddlebag Pods & Charging](../images/pwa/pwa_tab3_cartridges_dle_status.png)
 
-* **Live Slot Status:** Visual display of active cartridges in Slot 1 and Slot 2 with 1-Wire UIDs (emulated by MCU or physical DS2401).
-* **Smart Cartridge Badging:** Highlights hardware architecture (ESP32-C6 RISC-V, 4x MOSFETs, UWB OTA Flashing active).
-* **Cartridge Onboarding Wizard:** 3-step interactive pairing guide for newly detected cartridges.
-* **Ground-Truth Sync & OTA Flashing:** Autonomous re-flashing of profile tables directly into the Cartridge MCU Flash via the UWB backbone or J_PROG.
+* **Live Status:** Displays active pods in Bay 1 (Left) and Bay 2 (Right) with profile detection, slide-in lid status, and dry-flap monitoring.
+* **Pod Hardware Badging:** Highlights ESP32-C6 host MCU, USB Audio Class 2.0 streaming, USB-PD charging power (W), and WebUSB DFU status.
+* **Pod Onboarding Wizard:** Interactive guide for inserting OEM devices (Sena, Cardo, OMM) or switching to the watertight Dry Box.
+* **Ground-Truth Sync & WebUSB Flashing:** Firmware update and profile sync directly across the 4-wire USB bus without opening enclosures.
 
 ### 2.4 Tab 4: Tours & WebDAV (`#tab-tours`)
 
@@ -113,7 +112,7 @@ The Device Manager is organized into two distinct sections:
 * **Rider & Pillion Smartphones:** WebBLE connection status, signal strength (RSSI), 1-click cold restart of the CarPlay/AA dongle (TPS2051B VBUS power-cycle), and pillion audio sharing toggle.
 * **Dual-Headset Hub (Rider & Pillion):** Bluetooth audio manager for Schuberth/Sena, Cardo DMC, and generic BT headsets (LC3/aptX codecs, battery level, discovery scan).
 * **Dual Action Cam Hub:** Management for GoPro (Hero 11/12/13), Insta360 (X3/X4/Ace), and DJI cameras with auto-REC, fuel-stop pause filter, and PTT-triggered HiLight tagging.
-* **2-in-1 LoRa Smart-Keyfob (Alarm Pager & Cartridge Key):**
+* **2-in-1 LoRa Smart-Keyfob (Alarm Pager & Pod Key):**
   * AES-128 GCM encryption verification & monotonic sequence counter.
   * BLE near-field presence detection (zero false alarms during legitimate cartridge swaps).
   * `[Test Alarm (LRA)]`: Dispatches an emergency haptic vibration pattern to the pager.
@@ -121,7 +120,7 @@ The Device Manager is organized into two distinct sections:
   * `[Buddy Alarm]`: Forwards theft alerts automatically over the decentralized LoRa group mesh.
 
 #### Part 2: Motorcycle & OpenMotorBridge System Nodes
-* **Universal Front Node (Cockpit Hub * PCBA 05):** UWB backbone (6.5 GHz), Wi-Fi SoftAP fallback toggle, and proximity-rescue beacon.
+* **Universal Front Node (Cockpit Hub * PCBA 05):** 4-wire automotive bus (Zero tank lifting!), Wi-Fi SoftAP fallback toggle, proximity-rescue beacon, and 5-gesture mapping matrix for symmetrical mirror pods (PCBA 05B).
 * **Rear Radar & Mirror Blind-Spot LEDs (BSD):** Master power switch and mirror indicator controls (Header `J9` via MOSFET `Q1`) with a 2-second diagnostic flash.
 * **Safety Lighting Management:**
   * **ESS Emergency Brake Strobing:** Master toggle for 4.5 Hz hazard flashing (Garmin Varia UART2 & `RESERVE_GPIO_B`), configurable deceleration threshold ($-0.45\,\text{g}$, $-0.60\,\text{g}$, $-0.75\,\text{g}$), and `[Brake Strobe Test]` button.
