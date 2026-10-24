@@ -2,8 +2,8 @@
 
 *(Hinweis: Sämtliche CAD- und 3D-Baugruppenansichten werden im Zuge der finalen Render-Phase aktualisiert).*
 
-Dieses Dokument spezifiziert die mechanische Konstruktion, das Thermomanagement, das IP67/IP69K-Gehäusedesign, die Kinematik des Auto-Eject-Schnellwechselsystems sowie alle CAD- und STL-Modelle aller Gehäuse-Baugruppen der OpenMotorBridge v9.6:
-1. **Zentrale Steuerbox (Typ A):** 3-teiliges Sandwich-Gehäuse mit Zwischenboden ($70{,}0 \times 10{,}0\,\text{mm}$ offene Kabelbucht), integrierter Akku-Wanne mit schwenkbarer Akkubrücke (Doppel-Antennennest für Taoglas FXP895 LoRa-868 und Taoglas FXP73 2.4-GHz mit $0{,}8\,\text{mm}$ Schutzblende und C-Clip Zugsicherung), 100 % kabelfreiem Gehäusedeckel, Unterwannen-Bodenkammer ($12{,}0 \times 12{,}0 \times 0{,}8\,\text{mm}$) für UWB-Flexantenne (Taoglas FXUWB10), rückseitigem SMA-Antennendurchgang mit wasserdichter $0{,}4\,\text{mm}$ Knockout-Membran (ab Werk IP68/IP69K geschlossen) und planarem 4-Layer Kupfer-Wärmespreader.
+Dieses Dokument spezifiziert die mechanische Konstruktion, das Thermomanagement, das IP67/IP69K-Gehäusedesign, die Kinematik des Auto-Eject-Schnellwechselsystems sowie alle CAD- und STL-Modelle aller Gehäuse-Baugruppen der OpenMotorBridge v10.0 Standardized Node Architecture:
+1. **Zentrale Steuerbox (Typ A):** 3-teiliges Sandwich-Gehäuse mit Zwischenboden ($70{,}0 \times 10{,}0\,\text{mm}$ offene Kabelbucht), integrierter Akku-Wanne mit schwenkbarer Akkubrücke (Doppel-Antennennest für Taoglas FXP895 LoRa-868 und Taoglas FXP73 2.4-GHz mit $0{,}8\,\text{mm}$ Schutzblende und C-Clip Zugsicherung), 100 % kabelfreiem Gehäusedeckel, Unterwannen-Bodenkammer ($12{,}0 \times 12{,}0 \times 0{,}8\,\text{mm}$) als geschlossene Reserve-Kavität (historische UWB-Aufnahme), rückseitigem SMA-Antennendurchgang mit wasserdichter $0{,}4\,\text{mm}$ Knockout-Membran (ab Werk IP68/IP69K geschlossen) und planarem 4-Layer Kupfer-Wärmespreader.
 2. **Universeller Koffer-Satelliten-Pod (Typ B):** Baugleiches Monocoque-Gehäuse für beide Satelliten-Pods (Pod 1 & 2 Audio/Intercom, 2x symmetrisch) mit werkzeuglosem Slide-in Deckel, verdeckter FOB-Magnetverriegelung (Öffnen über Smart-Keyfob), innenliegendem Zwischendeckel (Dry-Flap), integrierter Koffer-USB-Ladebuchse (5V/12V PD bis zu 30W/60W), direkter EPDM-Nestaufnahme für OEM-Intercoms (Sena SPIDER X Slim, Cardo Packtalk Edge, OMM 2.4 GHz UCS, Midland PMR446) oder 100 % wasserdichter Dry-Box sowie 4-Draht-Automotive-Bus mit 4-Pin IP67 Magnet-Abrissschnittstelle.
 3. **Universal Front-Knoten (Typ C):** Ultrakompakter Cockpit- & Sensor-Hub ($98{,}0 \times 68{,}0 \times 25{,}0\,\text{mm}$) für die $82 \times 50\,\text{mm}$ 4-Lagen PCBA 05 mit 4-in-1 Universal-Befestigungssystem (AMPS, Riser-Klemme, Silentblöcke, 3M Dual-Lock), Direktanbindung an die symmetrischen Dual Under-Perch Spiegel-Pods, 4-adrigem Automotive-Backbone (ohne Tankdemontage!), integriertem u-blox SAM-M10Q GNSS, TI TMP117 / OPT3001 Sensoren im Anströmbereich und Knowles MEMS Windgeräusch-Mikrofon.
 4. **2-in-1 LoRa Smart-Keyfob & Pager (Typ D):** Ultrakompakter Taschenbegleiter ($58{,}0 \times 34{,}0 \times 13{,}0\,\text{mm}$) aus PA12-MJF mit umlaufendem TPU-Kantenschutz, integriertem N52-Neodym-Auswerferschlüssel, $0{,}5\,\text{mm}$ Mu-Metall-Flussschirmung, MagSafe/Qi-Induktionsladeaufnahme, LRA-Haptikmotor und drahtlosem SX1262 LoRa/BLE Alarm-Pager.
@@ -59,8 +59,8 @@ Das Basisgehäuse der Zentralbox ist als modulares, 3-teiliges IP67/IP69K-Sandwi
 | 3. UNTERWANNE (17,0 mm Höhe - Geschlossene Monocoque-Wanne)|  |
 |    * 4-Layer Hauptplatine (85 x 55 mm) auf M2.5 Standdomen |  |
 |      (77 x 47 mm Lochabstand, DIN 934 M2.5 Mutterntaschen) |  |
-|    * Integrierte Antennentasche (12 x 12 x 0,8 mm) im Boden|  |
-|      mit U.FL-Kabelführung für Taoglas FXUWB10 UWB Ch. 5   |  |
+|    * Integrierte Kavität (12 x 12 x 0,8 mm) im Boden       |  |
+|      als Bauraumreserve / historische UWB-Aufnahme         |  |
 |    * Formschlüssige DIN 934 M3 Sechskant-Nut-Pockets       |  |
 |    * 4x M4 Silentblock-Befestigungsohren (vibrationsfest)  |  |
 |    * 100% geschlossener PA12-Wannenboden (>2,2 mm Wandung) |  |
@@ -163,9 +163,8 @@ OpenMotorBridge nutzt ein duales, vollständig gehäuseintegriertes Antennenkonz
    * In der hinteren Stirnwand der Oberwanne (`012_front_cutouts.scad`) befindet sich an $X = 85{,}0\,\text{mm}$ ein vorbereiteter SMA-Antennenanschluss ($\varnothing\,6{,}5\,\text{mm}$ Durchbruch mit $\varnothing\,9{,}5 \times 1{,}2\,\text{mm}$ O-Ring-Senkung).
    * **Ab Werk 100 % hermetisch dicht (IP68/IP69K):** Eine integrierte $0{,}4\,\text{mm}$ dünne PA12-Knockout-Membran versiegelt das Gehäuse standardmäßig vollständig.
    * **Werkzeugloses Durchstoßen bei Bedarf:** Wird für Carbon-Heckverkleidungen oder Rallye-Einsätze eine externe Whip-Antenne benötigt, lässt sich die $0{,}4\,\text{mm}$ Membran mit einem kleinen Dorn/Schraubendreher sauber herausdrücken und eine IP67 SMA-Einbaubuchse mit O-Ring montieren.
-4. **UWB 6.5 GHz Kanal 5 Flexantenne (Taoglas FXUWB10):**
-   * Im Boden der Unterwanne (`00_lower_deck.scad`) exakt bei $X=66{,}5\,\text{mm}, Y=37{,}4\,\text{mm}$ eingelassene Tasche ($12{,}0 \times 12{,}0 \times 0{,}8\,\text{mm}$) mit $2{,}0\,\text{mm}$ Koaxialkabel-Führungsnut.
-   * Liegt unmittelbar senkrecht unter dem DW3110 / `ANT2` U.FL-Connector der Platinen-Unterseite (`B.Cu`), wodurch die HF-Kabellänge auf ultrakurze $25\,\text{mm}$ minimiert wird (Einfügedämpfung $< 0{,}15\,\text{dB}$).
+4. **Historische UWB-Antennentasche (v10.0 Reserve-Bauraum):**
+   * Die im Boden der Unterwanne (`00_lower_deck.scad`) eingelassene Tasche ($12{,}0 \times 12{,}0 \times 0{,}8\,\text{mm}$) diente in früheren Prototypen der Aufnahme der Taoglas FXUWB10 UWB-Antenne für den entfallenen DW3110-Transceiver. In v10.0 bleibt dieser Gehäusebereich als mechanische Reserve frei bzw. wird durch den massiven PA12-Boden planar geschlossen. Sämtliche fahrzeuginterne Daten- und Audioverbindungen laufen über den geschirmten 4-Ader Automotive-Bus.
    * Der Wannenboden bleibt nach unten mit $>2{,}2\,\text{mm}$ PA12-Wandung 100% hermetisch geschlossen und spritzwasserdicht.
 5. **Bluetooth 5.4 / LE Audio (Qualcomm QCC3084):**
    * Nutzt die onboard 2.4-GHz-Keramik-Chipantenne mit optimiertem Keepout-Bereich auf `PCBA 01`. Die Abstrahlung erfolgt verlustfrei durch die PA12-Wandungen und den Zwischenboden zu den Helm-Headsets und Smartphone-Docks.
@@ -434,11 +433,11 @@ Die Schnittstellenarchitektur von PCBA 05 ($82 \times 50\,\text{mm}$, [`openmoto
 2. **Rechte Schmalseite / Ostflanke ($X = 98{,}0\,\text{mm}$):**
    - **Service & Diagnose:** IP67 wasserdichte USB-C Service-Buchse (`J7`, $Y_{\text{tub}} = 24{,}1\,\text{mm}$) mit unverlierbarem TPU-Schutzstopfen (`front_node_usbc_cap_tpu.stl`) zum direkten Flashen, Debuggen und WebSerial-Konfiguration ohne Werkzeug und ohne Gehäuseöffnung.
    - **100 % Hermetisch:** Da der Sensorbus direkt über das Nordkabel `J_VEHICLE` zum Fahrzeug-Satelliten geführt wird, entfällt der separate Kabeldurchbruch `J12` an der Ostwand vollständig – die rechte Flanke bleibt dauerhaft absolut dicht.
-   - **Taster & Status:** Miniaturtaster `SW1` (Boot) und `SW2` (Reset) unter elastischer TPU-Dichtmembran; Polycarbonat-Lichtleiter im Deckel für die **WS2812B RGB-Status-LED** (`LED1`): Grün = OK, Blau = UWB Backbone aktiv, Gelb = USB-Enumeration / CP2AA Dongle Boot, Rot = CAN-Fehler / Failsafe.
+   - **Taster & Status:** Miniaturtaster `SW1` (Boot) und `SW2` (Reset) unter elastischer TPU-Dichtmembran; Polycarbonat-Lichtleiter im Deckel für die **WS2812B RGB-Status-LED** (`LED1`): Grün = OK, Blau = 4-Draht Automotive-USB Backbone aktiv, Gelb = USB-Enumeration / CP2AA Dongle Boot, Rot = CAN-Fehler / Failsafe.
 3. **Linke Schmalseite / Westflanke ($X = 0\,\text{mm}$):**
    - Vollwandige Monocoque-Schutzwand ohne jede Gehäusedurchbrechung. Maximaler Stoß-, Vibrations- und Spritzwasserschutz für die direkt dahinterliegende Leistungselektronik (TVS-Diode `D4`, 12V Buck `U3`, CAN-Transceiver `U6`, Optorelais `K1`, PMOS-Verpolschutz `Q2`).
 4. **Gehäuseunterseite ($Z = 0\,\text{mm}$):**
-   - **UWB 6.5 GHz Antennentasche:** Formschlüssige Vertiefung ($11 \times 11 \times 0{,}6\,\text{mm}$) für die Taoglas FXUWB10 Flex-Antenne. Über ein 20 mm kurzes U.FL-Koaxialkabel direkt an den Qorvo DW3110 Transceiver auf PCBA 05 `B.Cu` angebunden.
+   - **Historische UWB-Antennentasche:** Formschlüssige Vertiefung ($11 \times 11 \times 0{,}6\,\text{mm}$) diente in früheren Prototypen der Aufnahme der Taoglas FXUWB10 Flex-Antenne. In v10.0 durch das geschirmte 4-Draht Automotive-Bus-Backbone abgelöst.
    - **MEMS-Akustikkanal:** Schallkanal ($\varnothing 2{,}5\,\text{mm}$) mit wasserdichter, ölabweisender Gore ePTFE-Schutzmembran ($\varnothing 6{,}0 \times 0{,}8\,\text{mm}$) für das Sipeed MSM261S4030 / Knowles SPH0645 $I^2S$ Mikrofon (`MK1`) zur dynamischen Geschwindigkeits-Lautstärkeanpassung (Speed-Volume-Control).
 
 ---
@@ -632,10 +631,10 @@ Für klassische Touring- und Bagger-Modelle mit 2-Up-Komfortsitzbank oder freiem
 |    * Front-Node (PCBA 05) im Hohlraum der Headlight-Nacelle oder Verkleidung |
 |    * Speist Garmin Navi / Smartphone-Halterung & Action-Cam am Lenker       |
 |    * SAM-M10Q GNSS + TMP117 Thermometer an Fahrzeug-Satellit im Fahrtwind   |
-|    * UWB-Backbone (DW3110) zur Zentralbox -> 0 Kabel am Tank nach hinten    |
+|    * 4-Ader-Bus zur Zentralbox (im Rahmen-Kabelkanal -> 0 Tankdemontage)    |
 +-----------------------------------------------------------------------------+
 | 2. MITTE (Unter Sitzbank):                                                  |
-|    * Zentralbox mittig im Batteriefach (SX1262 LoRa & DW3110 UWB)           |
+|    * Zentralbox mittig im Batteriefach (SX1262 LoRa, QCC3084 BT & USB-Hub)  |
 +-----------------------------------------------------------------------------+
 | 3. HECK (Kotflügel & Kennzeichen):                                          |
 |    * Heckkotflügel bleibt 100% frei und sauber (Fender Console entfällt)    |
@@ -831,7 +830,7 @@ Da der Heck-Pod 3 und dessen große Balkonwanne vollständig entfallen sind, ben
    * Zwei beidseitige 36-Zahn Hirth-Rosetten ($10^\circ$-Raster) garantieren absoluten Formschluss – ein vibrationsbedingtes Absacken oder Nachgeben über Wellblechpisten und Schlaglöcher ist physikalisch ausgeschlossen.
    * Das Radar 2.0 Gehäuse wird über 2x M4 V4A-Schrauben direkt von vorne in die internen DIN 934 M4 Muttern des Gehäuses geklemmt.
 6. **Geschützte Kabelverbindung im Rohrschatten:**
-   * Das M8-Sensorkabel tritt durch einen verdeckten $\varnothing 6{,}0\,\text{mm}$ Führungskanal unmittelbar hinter dem Trägerrohr aus und wird im Rohrschatten entlang des Heckrahmens zur Zentralbox geführt. Direkt gespeist über Peitsche 3 des Deutsch DTM-12 Kabelbaums (2-Draht 12V DC; Telemetrie 100 % drahtlos via UWB).
+   * Das M8-Sensorkabel tritt durch einen verdeckten $\varnothing 6{,}0\,\text{mm}$ Führungskanal unmittelbar hinter dem Trägerrohr aus und wird im Rohrschatten entlang des Heckrahmens zur Zentralbox geführt. Direkt gespeist über den Deutsch DTM-12 Kabelbaum (Radar-Telemetrie über isolierten High-Speed Bus/UART).
 
 ---
 
@@ -925,7 +924,7 @@ Die Platzierung der Intercom-Pods im Kofferdeckel ($\approx 70\dots 75\,\text{cm
 
 #### 6.5.4 Das COTS 2-Pin Magnet-Rahmendock (`cots_magnetic_frame_dock.scad`) & Befestigungskonzepte
 
-Mit der Umstellung auf die **reine 2-Draht DC All-UWB-Architektur** und dem Entfall der proprietären Platine `PCBA 06` wird die Koffer-Trennstelle über einen handelsüblichen industriellen **2-Pin Magnet-Pogo-Steckverbinder (IP68 COTS, z. B. HytePro M411)** realisiert.
+Mit der Umstellung auf die **reine 4-Ader Automotive-Bus-Architektur** (`VCC_BUS`, `GND`, `USB_D-`, `USB_D+`) und dem Entfall der proprietären Platine `PCBA 06` wird die Koffer-Trennstelle über einen industriellen COTS Magnet-Pogo-Steckverbinder (IP68 COTS) oder eine robuste Rundsteckverbindung realisiert.
 
 > [!IMPORTANT]
 > **Warum das alte Rahmendock (`009_magsafe_frame_dock.scad`) NICHT für COTS-Stecker passt:**

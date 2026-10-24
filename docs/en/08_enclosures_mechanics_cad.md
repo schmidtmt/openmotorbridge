@@ -1,7 +1,7 @@
 # 08 - Mechanical Enclosures, CAD Models & Sealing System (All Units)
 
-This document specifies the mechanical engineering, thermal dissipation, IP67/IP69K sealing concepts, kinematics of the quick-change auto-eject system, and all CAD and STL assets of OpenMotorBridge v8.0:
-1. **Central Control Box (Type A):** 3-piece sandwich enclosure with intermediate tray ($70.0 \times 10.0\,\text{mm}$ open front cable bay), hinged battery bridge with dual-antenna pockets (Taoglas FXP895 LoRa-868 and Taoglas FXP73 2.4-GHz under a $0.8\,\text{mm}$ protective snap shroud and C-clip strain-relief clamps), 100% cable-free lid plate, bottom tub pocket ($12.0 \times 12.0 \times 0.8\,\text{mm}$) for Taoglas FXUWB10 UWB flex antenna, rear SMA antenna bulkhead with waterproof $0.4\,\text{mm}$ knockout membrane (IP68/IP69K sealed by default), and planar 4-layer copper heat spreader.
+This document specifies the mechanical engineering, thermal dissipation, IP67/IP69K sealing concepts, kinematics of the quick-change auto-eject system, and all CAD and STL assets of OpenMotorBridge v10.0 Standardized Node Architecture:
+1. **Central Control Box (Type A):** 3-piece sandwich enclosure with intermediate tray ($70.0 \times 10.0\,\text{mm}$ open front cable bay), hinged battery bridge with dual-antenna pockets (Taoglas FXP895 LoRa-868 and Taoglas FXP73 2.4-GHz under a $0.8\,\text{mm}$ protective snap shroud and C-clip strain-relief clamps), 100% cable-free lid plate, bottom tub pocket ($12.0 \times 12.0 \times 0.8\,\text{mm}$) as sealed reserve cavity (historical UWB housing), rear SMA antenna bulkhead with waterproof $0.4\,\text{mm}$ knockout membrane (IP68/IP69K sealed by default), and planar 4-layer copper heat spreader.
 2. **Universal Saddlebag Satellite Pod System (Type B):** Mechanically identical monocoque enclosure for both satellite pods (Pods 1 & 2 Audio/Intercom, 2x symmetric) featuring a tool-free slide-in lid, concealed FOB magnetic latch (unlocked via Smart Keyfob), internal intermediate splash shield (dry-flap), integrated in-bag USB charging port (5V/12V PD up to 30W/60W), direct EPDM contoured cradle for OEM communicators (Sena SPIDER X Slim, Cardo Packtalk Edge, OMM 2.4 GHz UCS, Midland PMR446) or 100% watertight dry box, and 4-wire automotive backbone with 4-pin IP67 magnetic breakaway dock.
 3. **Universal Front Node (Type C):** Ultra-compact Cockpit & Sensor Hub ($98.0 \times 68.0 \times 25.0\,\text{mm}$) tailored for the $82 \times 50\,\text{mm}$ 4-layer PCBA 05 with a 4-in-1 universal mounting system (AMPS, riser clamp, silentblocks, 3M Dual-Lock), direct interfacing to symmetrical dual under-perch mirror pods, 4-wire automotive backbone (ZERO fuel tank removal!), integrated u-blox SAM-M10Q GNSS, TI TMP117 / OPT3001 airflow sensors, and Knowles MEMS wind noise microphone.
 4. **2-in-1 LoRa Smart-Keyfob & Pager (Type D):** Ultra-compact pocket companion ($58.0 \times 34.0 \times 13.0\,\text{mm}$) molded in PA12-MJF with perimeter TPU shock bumper, integrated N52 neodymium ejection key, $0.5\,\text{mm}$ Mu-metal magnetic flux shield, MagSafe/Qi inductive charging receiver, LRA haptic motor, and wireless SX1262 LoRa/BLE alert pager.
@@ -55,8 +55,8 @@ The Central Box enclosure is engineered in **PA12 (HP Multi Jet Fusion)** for ha
 | 3. LOWER CASE (17.0 mm Height - Monocoque Tub)             |  |
 |    * 4-Layer Main PCB (85 x 55 mm) on M2.5 standoffs       |  |
 |      (77 x 47 mm hole pitch, Ø 2.1 mm PA12 pilot holes)    |  |
-|    * Integrated antenna pocket (12 x 12 x 0.8 mm) in floor |  |
-|      with U.FL cable groove for Taoglas FXUWB10 UWB Ch. 5  |  |
+|    * Integrated cavity (12 x 12 x 0.8 mm) in floor         |  |
+|      as reserve space / historical UWB housing             |  |
 |    * Captive DIN 934 M3 hex nut pockets                    |  |
 |    * 4x M4 silentblock mounting ears                       |  |
 |    * 100% solid PA12 floor without through-holes (>2.2 mm) |  |
@@ -139,9 +139,8 @@ OpenMotorBridge implements a dual, fully integrated internal antenna concept eli
    * Positioned on the upper tray rear wall (`012_front_cutouts.scad`) at $X = 85.0\,\text{mm}$ ($\varnothing\,6.5\,\text{mm}$ through-bore with $\varnothing\,9.5 \times 1.2\,\text{mm}$ O-ring counterbore).
    * **Factory IP68/IP69K Sealed:** Molded with a solid $0.4\,\text{mm}$ PA12 knockout membrane, keeping the enclosure 100% airtight and waterproof by default.
    * **Tool-Free Punch-Out:** For carbon fiber cowls or rally raid whip antennas, the $0.4\,\text{mm}$ membrane can be cleanly punched out with a small driver to install an IP67 SMA bulkhead socket with O-ring.
-4. **UWB 6.5 GHz Channel 5 Flex Antenna (Taoglas FXUWB10):**
-   * Pocket ($12.0 \times 12.0 \times 0.8\,\text{mm}$) in the lower tub floor (`00_lower_deck.scad`) at $X=66.5\,\text{mm}, Y=37.4\,\text{mm}$ with $2.0\,\text{mm}$ coaxial cable groove.
-   * Positioned directly beneath the DW3110 / `ANT2` U.FL connector on `B.Cu`, keeping coaxial line length under $25\,\text{mm}$ (insertion loss $< 0.15\,\text{dB}$).
+4. **Historical UWB Antenna Pocket (v10.0 Reserved Space / Legacy Compatibility):**
+   * Recessed pocket ($12.0 \times 12.0 \times 0.8\,\text{mm}$) in the lower tub floor (`00_lower_deck.scad`) housed the Taoglas FXUWB10 UWB antenna for the superseded DW3110 transceiver in earlier prototypes. In v10.0, this area remains as mechanical reserve or is planar-sealed, with all vehicle interconnects running over the shielded 4-wire automotive bus.
    * Preserves $>2.2\,\text{mm}$ solid, homogeneous PA12 floor thickness underneath for hermetic IP67/IP69K sealing.
 5. **Bluetooth 5.4 / LE Audio (Qualcomm QCC3084):**
    * Utilizes the onboard ceramic chip antenna with optimized copper keepout on `PCBA 01`, radiating cleanly through the RF-transparent PA12 mid-tray and lid.
@@ -388,11 +387,11 @@ In v9.6, the interface architecture of PCBA 05 ($82 \times 50\,\text{mm}$, [`ope
 2. **Right Short Flank / East Flank ($X = 98.0\\,\\text{mm}$):**
    - **Service & Diagnostics:** IP67 waterproof USB-C service receptacle (`J7`, $Y_{\\text{tub}} = 24.1\\,\\text{mm}$) with tethered TPU sealing cap (`front_node_usbc_cap_tpu.stl`) for direct on-bike firmware flashing, serial debugging, and WebSerial parameter configuration without tools or enclosure disassembly.
    - **100% Hermetically Sealed:** Because the sensor bus routes directly through the North vehicle harness `J_VEHICLE` to the 5-port Vehicle Satellite, the separate `J12` East-wall cable cutout is eliminated entirely—leaving the East flank permanently and reliably sealed.
-   - **Tactile Switches & Indicators:** Miniature `SW1` (Boot) and `SW2` (Reset) buttons sealed beneath an elastic TPU overlay; optical polycarbonate light pipe in lid for the **WS2812B RGB Status LED** (`LED1`): Green = Normal Operation, Blue = UWB Backbone Active, Yellow = USB Enumeration / Dongle Boot, Red = CAN Error / Failsafe.
+   - **Tactile Switches & Indicators:** Miniature `SW1` (Boot) and `SW2` (Reset) buttons sealed beneath an elastic TPU overlay; optical polycarbonate light pipe in lid for the **WS2812B RGB Status LED** (`LED1`): Green = Normal Operation, Blue = 4-Wire Automotive USB Backbone Active, Yellow = USB Enumeration / Dongle Boot, Red = CAN Error / Failsafe.
 3. **Left Short Flank / West Flank ($X = 0\,\text{mm}$):**
    - Solid continuous monocoque wall without cutouts. Provides maximum impact, vibration, and water spray protection for the adjacent internal power components (TVS diode `D4`, 12V buck `U3`, CAN transceiver `U6`, opto-relay `K1`, PMOS reverse-polarity `Q2`).
 4. **Bottom Face ($Z = 0\,\text{mm}$):**
-   - **UWB 6.5 GHz Antenna Pocket:** Recessed pocket ($11 \times 11 \times 0.6\,\text{mm}$) in the lower tub housing the Taoglas FXUWB10 flex antenna. Connected via a 20 mm U.FL coaxial link directly to the Qorvo DW3110 transceiver on PCBA 05 `B.Cu`.
+   - **Historical UWB Antenna Pocket:** Recessed pocket ($11 \times 11 \times 0.6\,\text{mm}$) in the lower tub floor accommodated the Taoglas FXUWB10 flex antenna in earlier prototypes. In v10.0, superseded by the shielded 4-wire automotive bus backbone.
    - **MEMS Acoustic Duct:** Acoustic canal ($\varnothing 2.5\,\text{mm}$) protected by a hydrophobic and oleophobic Gore ePTFE membrane ($\varnothing 6.0 \times 0.8\,\text{mm}$) for the Sipeed MSM261S4030 / Knowles SPH0645 $I^2S$ microphone (`MK1`) for dynamic speed-dependent volume control (Speed-Volume-Control).
 
 ---
@@ -589,10 +588,10 @@ For classic touring and bagger models with 2-Up comfort seats or exposed rear fe
 |    * Front Node (PCBA 05) inside headlight nacelle or fairing cavity        |
 |    * Powers Garmin navigator / smartphone dock & action cam on handlebars   |
 |    * SAM-M10Q GNSS + TMP117 thermometer on Vehicle Satellite in air scoop   |
-|    * UWB Backbone (DW3110) to Central Box -> 0 cables along tank rearward   |
+|    * 4-Wire Bus to Central Box (inside frame wire caddy -> 0 tank lifting)   |
 +-----------------------------------------------------------------------------+
 | 2. CENTER (Under Rider Seat):                                               |
-|    * Central Box centered in battery well (SX1262 LoRa & DW3110 UWB)        |
+|    * Central Box centered in battery well (SX1262 LoRa, QCC3084 BT & USB Hub)|
 +-----------------------------------------------------------------------------+
 | 3. REAR (Fender & License Plate):                                           |
 |    * Rear fender remains 100% clean and unobstructed (Console deleted)      |
@@ -767,7 +766,7 @@ Because rear Pod 3 and its large balcony tray have been completely eliminated, a
    * Dual 36-tooth radial Hirth rosettes ($10^\circ$ steps) provide 100% positive anti-vibration locking over washboard gravel tracks.
    * The Radar 2.0 housing is clamped with 2x M4 screws directly into its internal DIN 934 M4 captive nuts.
 6. **Concealed Cable Routing in Tube Shadow:**
-   * The M8 sensor cable routes upward through an integrated $\varnothing 6.0\,\text{mm}$ conduit directly behind the rack tube, hidden in the tube shadow along the subframe to the central controller box. Direct 12V DC power from Deutsch DTM-12 harness whip 5; UWB telemetry is 100% wireless.
+   * The M8 sensor cable routes upward through an integrated $\varnothing 6.0\,\text{mm}$ conduit directly behind the rack tube, hidden in the tube shadow along the subframe to the central controller box. Direct power from Deutsch DTM-12 harness; radar cluster telemetry via isolated high-speed bus/UART.
 
 ---
 

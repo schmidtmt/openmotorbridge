@@ -186,7 +186,7 @@ In OpenMotorBridge v10.0, the legacy cartridge bay system is completely supersed
 ## 5. PCBA 03: Satellite Pod Interface Board (`openmotorbridge_pod_interface`)
 
 ![PCBA 03 Satellite Pod Board Top 3D](../images/pcba/pcba03_pod_cartridge_3d.png)
-*Figure 7.3a: KiCad 3D view of the Satellite Pod Interface Board Top (PCBA 03, 35 x 25 mm) with ESP32-C6 Host MCU, USB-PD Charging Controller, ES8388 Audio Codec, and J_AUDIO_PWR Header.*
+*Figure 7.3a: KiCad 3D view of the Satellite Pod Interface Board Top (PCBA 03, 35 x 25 mm) with ESP32-C6 Host MCU, USB-PD Charging Controller, ES8388 Audio Codec, and J_AUDIO_PWR Header.*ƒ
 
 ### 5.1 Board Specifications & Architecture
 * **Dimensions:** $35.0 	imes 25.0\,	ext{mm}$ (4x M2 mounting holes with vibration dampers directly at the pod floor).
@@ -205,10 +205,14 @@ In OpenMotorBridge v10.0, the legacy cartridge bay system is completely supersed
 | **1** | **`PGND` / `GND`** | Power Return | **High-Current Power Ground:** Carries charging & DC-DC return ($0.2\dots 0.6\,	ext{A}$) | **High-Current Power Ground:** Power return for charger & RF PA ($0.2\dots 0.6\,	ext{A}$) |
 | **2** | **`VCC_5V_PROT`** | Power Out | Regulated, protected +5V supply for headset battery/charger | Regulated, protected +5V supply for OMM BQ24075 PMIC |
 | **3** | **`AGND_AUDIO_IN`**| Audio GND Ref| **Clean Headphone Ground:** 3.5 mm TRS sleeve – **strictly zero DC current ($I = 0\,	ext{mA}$)!** | Unused (N/C) or coax shield reference (zero DC current!) |
-| **4** | **`AUDIO_IN_L`** | Audio In $\leftarrow$ | Left speaker line-out from headset $ightarrow$ to ES8388 ADC | Unused (N/C) |
-| **5** | **`AUDIO_IN_R`** | Audio In $\leftarrow$ | Right speaker line-out from headset $ightarrow$ to ES8388 ADC | Unused (N/C) |
-| **6** | **`OMM_DETECT`** | Control In $\leftarrow$ | **GND Bridge in Harness (0V):** Holds `U4` in normal closed state (NC) | **Open / N/C:** `R9` pulls HIGH ($3.3\,	ext{V}$) $ightarrow$ switches `U4` to Digital USB (NO) |
-| **7** | **`AUDIO_IO_P`** | Dual-Mode I/O | **Analog `VOICE_OUT` (via U4 NC):** Voice from ES8388 DAC $ightarrow$ OEM Mic | **Digital `USB_DP` (via U4 NO):** Native digital USB audio data stream D+ |
+| **4** | **`AUDIO_IN_L`** | Audio In $\leftarrow$ | Left speaker line-out from headset $
+ightarrow$ to ES8388 ADC | Unused (N/C) |
+| **5** | **`AUDIO_IN_R`** | Audio In $\leftarrow$ | Right speaker line-out from headset $
+ightarrow$ to ES8388 ADC | Unused (N/C) |
+| **6** | **`OMM_DETECT`** | Control In $\leftarrow$ | **GND Bridge in Harness (0V):** Holds `U4` in normal closed state (NC) | **Open / N/C:** `R9` pulls HIGH ($3.3\,	ext{V}$) $
+ightarrow$ switches `U4` to Digital USB (NO) |
+| **7** | **`AUDIO_IO_P`** | Dual-Mode I/O | **Analog `VOICE_OUT` (via U4 NC):** Voice from ES8388 DAC $
+ightarrow$ OEM Mic | **Digital `USB_DP` (via U4 NO):** Native digital USB audio data stream D+ |
 | **8** | **`PTT_USB_N`** | Dual-Mode I/O | **PTT_IO:** Push-to-Talk keying to ground (Midland PMR446 / N/C) | **Digital `USB_DN`:** Native digital USB audio data stream D- |
 | **MP** | **`GND`** | Shield | SMT connector side mounting tabs tied to solid GND plane | SMT connector side mounting tabs tied to solid GND plane |
 
@@ -266,8 +270,14 @@ The rear transceiver board `PCBA 04` and its enclosure are completely eliminated
 
 #### 7.2.3 100% Software-Defined Button Mapping via PWA Dashboard
 Both buttons are hardware-identical and freely assignable via the PWA dashboard across 5 gesture triggers (`SHORT_CLICK`, `DOUBLE_CLICK`, `TRIPLE_CLICK`, `LONG_PRESS`, `HOLD_GATE`):
-* **Left Factory Default:** `HOLD_GATE` $ightarrow$ PTT Intercom; `TRIPLE_CLICK` $ightarrow$ Siri/Google Assistant; `DOUBLE_CLICK` $ightarrow$ Mesh Channel Cycle.
-* **Right Factory Default:** `SHORT_CLICK` $ightarrow$ Action-Cam Highlight Tag (Insta360/GoPro BLE); `LONG_PRESS` $ightarrow$ Video Record Start/Stop; 3s Hold $ightarrow$ 868 MHz LoRa Emergency SOS.
+* **Left Factory Default:** `HOLD_GATE` $
+ightarrow$ PTT Intercom; `TRIPLE_CLICK` $
+ightarrow$ Siri/Google Assistant; `DOUBLE_CLICK` $
+ightarrow$ Mesh Channel Cycle.
+* **Right Factory Default:** `SHORT_CLICK` $
+ightarrow$ Action-Cam Highlight Tag (Insta360/GoPro BLE); `LONG_PRESS` $
+ightarrow$ Video Record Start/Stop; 3s Hold $
+ightarrow$ 868 MHz LoRa Emergency SOS.
 * **Bindable Action Catalog:** 1-Click Hazard Pin Drop (Waze/OpenTrafficMap), Radar Acoustic Mute 30s, Garage Door Trigger (Shelly/Home Assistant), Auxiliary Lights, Heated Grips.
 
 ---
@@ -544,7 +554,7 @@ Upon vehicle ignition (KL15), the system enters an optical **POST Diagnostic Mod
    D1 .. D12 (12 LEDs = 6 Pairs)                                             D19 .. D30 (12 LEDs = 6 Pairs)
  +---------------------------+   +-------------------------------------+   +---------------------------+
  | D1/D2:   Front Node       |   |                                     |   | D19/D20: Pod 2 Radio      |
- | D3/D4:   CAN-Bus          |   |         WHEELTEC MR20               |   | D21/D22: UWB Backbone     |
+ | D3/D4:   CAN-Bus          |   |         WHEELTEC MR20               |   | D21/D22: 4-Wire USB Bus   |
  | D5/D6:   Pod 1 Intercom   |   |       77-GHz mmWave Radar           |   | D23/D24: BSD Mirror R     |
  | D7/D8:   BSD Mirror L     |   |                                     |   | D25/D26: Rear TPMS        |
  | D9/D10:  Front TPMS       |   |                                     |   | D27/D28: Dallas DS18B20   |
@@ -558,7 +568,7 @@ Upon vehicle ignition (KL15), the system enters an optical **POST Diagnostic Mod
 
 #### The 2-LED Principle per Function:
 * **LED A (Left / Top): Hardware & Bus Presence:**
-  - **Green:** Subsystem acknowledges on bus (1-Wire ROM-ID, I2C ACK, UART ping, UWB/BLE link OK).
+  - **Green:** Subsystem acknowledges on bus (1-Wire ROM-ID, I2C ACK, UART ping, USB/BLE link OK).
   - **Amber:** Handshake / bootloader active.
   - **Blinking Red:** Hardware missing / short circuit / bus timeout.
   - **Dark:** Component declared as "uninstalled / optional" in bike profile.
@@ -569,15 +579,15 @@ Upon vehicle ignition (KL15), the system enters an optical **POST Diagnostic Mod
 
 #### Mapping of the 18 Motorcycle Subsystems:
 1. **Left Wing (Cockpit, Bus & Left Side):**
-   * **D1 / D2:** Front Node (PCBA 05) UWB link & cockpit power (KL15 / USB-PD).
+   * **D1 / D2:** Front Node (PCBA 05) 4-wire automotive USB-PD link & cockpit power (KL15).
    * **D3 / D4:** Motorcycle CAN-Bus (HD-LAN / K-CAN) transceiver & telemetry stream.
-   * **D5 / D6:** Pod 1 (Left Pannier / Intercom Bridge) 2-wire DC power & cartridge MCU ready.
+   * **D5 / D6:** Pod 1 (Left Saddlebag Pod PCBA 03) 4-wire automotive USB bus & charging state ready.
    * **D7 / D8:** BSD Mirror Alert Left (Header `J9`) N-MOSFET & driver circuit ready.
    * **D9 / D10:** Front TPMS (Bluetooth LE Tire Pressure) packet received & pressure in spec.
    * **D11 / D12:** Actioncam BLE Shutter Link paired & camera ready.
 2. **Right Wing (Radio, Rear & Right Side):**
-   * **D19 / D20:** Pod 2 (Right Pannier / Radio & Aux) 2-wire DC power & cartridge MCU ready.
-   * **D21 / D22:** UWB Backbone (DW3110) 6.5 GHz link & range-measurement active.
+   * **D19 / D20:** Pod 2 (Right Saddlebag Pod PCBA 03) 4-wire automotive USB bus & charging state ready.
+   * **D21 / D22:** Automotive USB 2.0 Backbone link & WebUSB enumeration active.
    * **D23 / D24:** BSD Mirror Alert Right (Header `J9`) N-MOSFET & driver circuit ready.
    * **D25 / D26:** Rear TPMS (Bluetooth LE Tire Pressure) packet received & pressure in spec.
    * **D27 / D28:** Dallas DS18B20 Road Temperature Sensor (`J6`) 1-Wire responsive & plausible.

@@ -1,6 +1,6 @@
 # 05 - Power Management, UPS & Vehicle Electrical Protection
 
-This document specifies the dynamic power and protection management of OpenMotorBridge v8.0: the primary switching regulators (Central Box LM5164-Q1 & Front Node LMR36015), the uninterruptible power supply (UPS with BQ24075 and **2,200 mAh Flat LiPo**), automotive transient and reverse-polarity protection (ISO 7637-2), intelligent **dongle power management (1-click cold reboot & Auto-Café mode)**, **Apple Find My & Google Find My Device dual-beaconing**, and the multi-stage winter hibernation cascade (< 16.5 µA).
+This document specifies the dynamic power and protection management of OpenMotorBridge v10.0 Standardized Node Architecture: the primary switching regulators (Central Box LM5164-Q1 & Front Node LMR36015), the uninterruptible power supply (UPS with BQ24075 and **2,200 mAh Flat LiPo**), the **Dual-Power Input Architecture (12V Net / USB-PD)**, automotive transient and reverse-polarity protection (ISO 7637-2), intelligent **dongle power management (1-click cold reboot & Auto-Café mode)**, **Apple Find My & Google Find My Device dual-beaconing**, and the multi-stage winter hibernation cascade (< 16.5 µA).
 
 ---
 
@@ -93,6 +93,14 @@ When parked or if thieves sever the 12V motorcycle battery, the Central Box swit
 - **Transient & Spike Clamping:** Littelfuse `SMBJ33CA` bidirectional TVS diode ($33\,\text{V}$ standoff, $53{,}3\,\text{V}$ max clamping). Provides the 65V-rated LM5164 regulator with $> 11{,}7\,\text{V}$ safe headroom during ISO 16750-2 Pulse 5b load dumps ($87\,\text{V}$).
 - **Reverse Polarity Protection:** Diodes Inc. `DMP6023L` P-channel MOSFET with ultra-low on-resistance ($R_{\text{DS(on)}} < 25\,\text{m}\Omega$).
 - **LC-PI Filtering:** Dual-stage LC-PI filter ($10\,\mu\text{H}$ shielded automotive inductor + 2x $10\,\mu\text{F}$ X7R 100V ceramic capacitors) at KL30 and KL15 inputs.
+
+### 3.1 DTM-12 & 4-Wire Bus Power Distribution with TI TPS25921 eFuse Protection
+All vehicle-side electrical net and peripheral node connections from Central Box (`PCBA 01`) route through the rugged, vibration-proof **Deutsch DTM-12 industrial connector** and the shielded 4-wire automotive buses. Every power branch is hardware-protected:
+* **Individual eFuse Protection (Texas Instruments TPS25921):**
+  * Each external power branch (Left Saddlebag Pod `PCBA 03`, Right Saddlebag Pod `PCBA 03`, Front Node `PCBA 05`, Auxiliary Radar drop) is individually hardware-protected on `PCBA 01` by a dedicated **TI TPS25921 eFuse** (electronic circuit breaker).
+  * Adjustable current limit with ultra-fast overcurrent trip in $< 1\,\mu\text{s}$ during short circuits (e.g. from harness chafing or moisture ingress).
+  * Automatic thermal shutdown ($150\,^\circ\text{C}$ junction clamp) and controlled soft-start ramp to eliminate inrush current spikes.
+  * Fault status reporting (`FLT`) to the ESP32-S31 for proactive diagnostic alerts in the PWA dashboard.
 
 ---
 

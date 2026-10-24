@@ -1,6 +1,6 @@
 # 04 - Mesh Network, LoRa & GNSS Navigation
 
-This document specifies the communication and positioning architecture of OpenMotorBridge v8.0: the OpenMotorMesh (OMM) protocol with **Dynamic Leader Election (DLE)**, large group convoy partitioning, the **868 MHz LoRa Long-Range fallback**, and the **10 Hz Multi-GNSS engine (u-blox NEO-M9N)** with dead-reckoning and video telemetry synchronization.
+This document specifies the communication and positioning architecture of OpenMotorBridge v10.0 Standardized Node Architecture: the OpenMotorMesh (OMM) protocol with **Dynamic Leader Election (DLE)**, large group convoy partitioning, the **868 MHz LoRa Long-Range fallback**, and the **10 Hz Multi-GNSS engine (u-blox SAM-M10Q)** with dead-reckoning and video telemetry synchronization.
 
 ---
 
@@ -24,7 +24,7 @@ To balance wide audio bandwidth with long-range offroad resilience, OpenMotorBri
 
 ### 1.1 Universal, Clean RF & Spectrum Architecture
 The system cleanly separates all frequency bands to completely prevent receiver desensitization (De-Sensing):
-* **6.489 GHz (UWB Channel 5):** Vehicle backbone link between Front Node (PCBA 05) and Central Box (PCBA 01) via Qorvo DW3110 ($< 0.4\,\text{ms}$ latency, zero duty-cycle restriction under ETSI EN 302 065-3). Taoglas FXUWB10 flex antennas mounted in dedicated floor pockets ($11 \times 11 \times 0.6\,\text{mm}$) ensure uninterrupted PCB ground planes and tether-free lid opening.
+* **Shielded 4-Wire Automotive Bus (Physical Backbone):** Replaced legacy 6.5 GHz UWB in v10.0. Interconnects Front Node (PCBA 05), Central Box (PCBA 01), and saddlebag pods (PCBA 03) via shielded automotive 4-wire cable (`VCC_BUS` 12V/PD, `GND`, `USB_D-`, `USB_D+`) routed through the Harley frame wire caddy with zero tank lifting, offering $< 0.2\,\text{ms}$ latency and native USB 2.0 WebUSB flashing.
 * **868 MHz LoRa (Central Box PCBA 01):** Integrated directly on the Central Box mainboard and powered by the UPS battery rail for 24/7 theft sentry and emergency group-split fallback. Uses an internal Taoglas FXP895 flex antenna in the enclosure lid.
 * **Multi-GNSS & Cockpit Sensors (Front Node PCBA 05):** u-blox SAM-M10Q (with integrated $15 \times 15\,\text{mm}$ patch antenna), TI TMP117 ($\pm 0.1^\circ\text{C}$ precision temp), and TI OPT3001 ambient light sensor mounted in the cold air scoop via Qwiic port `J12`.
 * **2.4 GHz:** Exclusively reserved for helmet audio links (Pod 1 Sena SPIDER X Slim, Pod 2 Cardo Packtalk Edge) and smartphone BLE. OMM 2.4 GHz operates as an optional swap cartridge in Pod 1 or Pod 2 (never co-located in the same enclosure with Sena/Cardo).
@@ -224,15 +224,15 @@ OpenMotorBridge solves the critical problem of convoy separations during alpine 
    * OpenMotorBridge compresses a **3-second voice message** using the ultra-low-bitrate **Codec2 (1200 bps)** speech codec into just **450 bytes**.
    * Transmission over LoRa 868 MHz takes only **$\approx 120\,\text{ms}$ airtime** -- legally compliant, highly resilient, penetrating $1\dots 15\,\text{km}$ through mountainous terrain.
 
-### 5.2 OMM 2.4 GHz as an Optional Swap Cartridge (Pod 1 / Pod 2)
-* For pure OpenMotorMesh group rides or support vehicle convoys (Mode B), riders can insert the **OMM 2.4 GHz Cartridge** (PCBA 09 UCS Module or PCBA 03 with ESP32-C6) into Pod 1 or Pod 2.
-* Power is supplied through the 2-wire DC spring contacts into the monolithic pod, with audio streaming via UWB or direct USB-C audio. See **[Chapter 04b](04b_omm_intercom_module.md)** for full hardware and RF specifications.
+### 5.2 OMM 2.4 GHz as an Optional Pod Inlay / Module (Pod 1 / Pod 2)
+* For pure OpenMotorMesh group rides or support vehicle convoys (Mode B), riders can insert the **OMM 2.4 GHz Module** (PCBA 09 UCS Module or PCBA 03 with ESP32-C6) into Pod 1 or Pod 2.
+* Power and digital audio are supplied directly through the shielded 4-wire automotive USB-PD bus into the monolithic pod via native USB Audio Class (UAC2). See **[Chapter 04b](04b_omm_intercom_module.md)** for full hardware and RF specifications.
 
 ### 5.3 Architectural Decision: Why Decentralized LoRa Mesh over Cellular (LTE-M / Cloud)?
 
 Conventional telematics systems rely on cellular modems (LTE-M / NB-IoT) connected to centralized cloud backends. For motorcycle group touring, this paradigm was intentionally rejected:
 
-| Criterion | Centralized Cloud Architecture (LTE-M / NB-IoT) | OpenMotorBridge Decentralized (UWB + 868 MHz LoRa) |
+| Criterion | Centralized Cloud Architecture (LTE-M / NB-IoT) | OpenMotorBridge Decentralized (4-Wire Bus + 868 MHz LoRa) |
 | :--- | :--- | :--- |
 | **Mountain Pass Coverage** | **Frequently 0%** (Dead zones across Alpine passes, gorges, remote trails) | **100% Autonomous** (Direct vehicle-to-vehicle peer-to-peer radio) |
 | **Recurring Cost** | Monthly SIM subscriptions, cloud server fees | **Permanently $0 / 0 €** (License-free ISM band, zero operating expenses) |
@@ -247,7 +247,7 @@ Conventional telematics systems rely on cellular modems (LTE-M / NB-IoT) connect
 The GNSS subsystem in the Front Node (**u-blox SAM-M10Q** on `J12` in the cold air scoop) is coupled to the 6-axis IMU (**Bosch BMI270**) and motorcycle wheel speed sensors via a **15-State Error-State Kalman Filter (ES-EKF)**:
 
 ```
-[ u-blox SAM-M10Q GNSS (10 Hz) ] --(I2C / UWB)------+
+[ u-blox SAM-M10Q GNSS (10 Hz) ] --(I2C / 4-Wire Bus)-+
 [ CAN-Bus Wheel Speed / Velocity ] ---(10-20 Hz)-----+-> [ 15-State Extended Kalman Filter ] --> [ MicroSD: tour.gpx ]
 [ Bosch BMI270 Gyro / Accel (I2C) ] --(50-100 Hz)----+        (Dead Reckoning Engine)            (With Lean Angle & G-Force)
 ```

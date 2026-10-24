@@ -1,6 +1,6 @@
 # 05 - Energie-Management, USV & Kfz-Bordnetzschutz
 
-Dieses Dokument spezifiziert das dynamische Energie- und Schutzmanagement der OpenMotorBridge v8.0: die primären Schaltregler (Zentralbox LM5164-Q1 & Front-Knoten LMR36015), die unterbrechungsfreie Stromversorgung (USV mit BQ24075 und **2.200 mAh Flat-LiPo**), den automobilen Transienten- und Verpolschutz (ISO 7637-2), das intelligente **Dongle-Powermanagement (1-Klick Kaltstart & Auto-Café Mode)**, das **Apple Find My & Google Find My Device Dual-Beaconing** sowie die mehrstufige Winterschlaf-Kaskade (< 16,5 µA).
+Dieses Dokument spezifiziert das dynamische Energie- und Schutzmanagement der OpenMotorBridge v10.0 Standardized Node Architecture: die primären Schaltregler (Zentralbox LM5164-Q1 & Front-Knoten LMR36015), die unterbrechungsfreie Stromversorgung (USV mit BQ24075 und **2.200 mAh Flat-LiPo**), die **Dual-Power Input Architektur (12V Bordnetz / USB-PD)**, den automobilen Transienten- und Verpolschutz (ISO 7637-2), das intelligente **Dongle-Powermanagement (1-Klick Kaltstart & Auto-Café Mode)**, das **Apple Find My & Google Find My Device Dual-Beaconing** sowie die mehrstufige Winterschlaf-Kaskade (< 16,5 µA).
 
 ---
 
@@ -94,13 +94,13 @@ Wird das Motorrad abgestellt oder trennen Diebe die 12V-Starterbatterie ab, scha
 - **Verpolschutz:** Diodes Inc. DMP6023L P-Kanal MOSFET mit extrem niedrigem Durchlasswiderstand ($R_{\text{DS(on)}} < 25\,\text{m}\Omega$).
 - **Filterung:** Zweistufiger LC-PI-Filter ($10\,\mu\text{H}$ Shielded Automotive Inductor + 2x $10\,\mu\text{F}$ X7R 100V Keramikkondensatoren) am KL30/KL15-Eingang.
 
-### 3.1 DTM-12 2-Draht-DC-Leistungsverteilung & TI TPS25921 eFuse-Schutz
-Sämtliche peripheren Abgänge der Zentralbox (`PCBA 01`) werden über den robusten, vibrationsfesten **Deutsch DTM-12 Industrie-Steckverbinder** geführt. Da Daten- und Audioströme zu 100 % über das drahtlose All-UWB-Backbone übertragen werden, führt der Kabelbaum **ausschließlich reine 12V-Gleichspannung (2-Draht DC)**:
+### 3.1 DTM-12 & 4-Ader-Bus Leistungsverteilung mit TI TPS25921 eFuse-Schutz
+Sämtliche fahrzeugseitigen Bordnetz- und Peripherie-Anbindungen der Zentralbox (`PCBA 01`) werden über den robusten, vibrationsfesten **Deutsch DTM-12 Industrie-Steckverbinder** sowie die geschirmten 4-Ader Automotive-Busse geführt. Jeder Abgang ist hardware-gesichert:
 * **Individuelle eFuse-Absicherung (Texas Instruments TPS25921):**
-  * Jeder der 4 externen DC-Zweige (Bucht 1 Links, Bucht 2 Rechts, Front-Knoten, Radar 2.0 Warnflügel) ist auf `PCBA 01` durch eine eigene **TI TPS25921 eFuse** (elektronische Sicherung) hardware-geschützt.
+  * Jeder externe Versorgungszweig (Koffer-Pod Links `PCBA 03`, Koffer-Pod Rechts `PCBA 03`, Front-Knoten `PCBA 05`, Radar-Zusatzabgang) ist auf `PCBA 01` durch eine eigene **TI TPS25921 eFuse** (elektronische Sicherung) hardware-geschützt.
   * Einstellbare Strombegrenzung mit Überstromabschaltung in $< 1\,\mu\text{s}$ bei Kurzschluss (z. B. durch Scheuerstellen am Rahmen oder Wassereintritt in offenen Steckern).
   * Automatischer Thermoschutz ($150\,^\circ\text{C}$ Junction Shutdown) und kontrollierter Sanftanlauf (Soft-Start zur Vermeidung kapazitiver Einschaltstromspitzen).
-  * Status-Rückmeldung jedes Zweigs (`FLT`) an den ESP32-S3 für proaktive Fehlermeldungen in der WebApp.
+  * Status-Rückmeldung jedes Zweigs (`FLT`) an den ESP32-S31 für proaktive Fehlermeldungen in der WebApp.
 
 ---
 
