@@ -265,11 +265,12 @@ Alle Gehäuseteile sind konsequent für das **IKEA-Prinzip** konstruiert: **Kein
   * `radar_swivel_tilt_cradle.stl` (1 Stk.): Schwerlast-Neigegelenk mit 2x M4-Verschraubung.
 * **Kit 3: Harley-Davidson Touring & Classic Bagger (Street Glide, Road Glide, Road King):**
   * `saddlebag_lid_dock.stl` (2 Stk.): Kofferdeckel-Docks mit Scharnier-Torx-Flansch, 4x Spanngurt-Freisparungen & 2-Draht DC-Zugentlastungsschnauze.
-  * `010_saddlebag_hole_grommet_split.stl` (2 Stk.): Geteilte EPDM/TPU-Durchführung für Ø 3,6 mm 2-Draht DC-Kabel in Ø 12 mm Wandbohrung (oberhalb Schwingenlager).
+  * `010_saddlebag_hole_grommet_split.stl` (2 Stk.): Geteilte EPDM/TPU-Durchführung für Ø 3,6 mm 2-Draht DC-Kabel in OEM Ø 19,0 mm Kofferwandbohrung (100 % Zero-Drill, oberhalb Schwingenlager) inkl. U-geschlitzter Tunnel-Distanzscheibe.
   * `radar_license_plate_bracket.stl` (1 Stk.): Entkoppelter Kennzeichen-Radarhalter für Peitsche 3.
   * `radar_swivel_tilt_cradle.stl` (1 Stk.): Radar 2.0 Schwerlast-Neigegelenk (Actioncam/GoPro-Hirth-Cradle) mit 2x M4-Verschraubung und 36-Zahn Hirth-Verzahnung.
   * `radar_mr20_housing.stl` & `radar_mr20_radome.stl` (1 Stk.): Radar 2.0 PA12 Flügel-Gehäuse mit Spritzwasser-Schutzspoiler und PC-Radom.
   * `cots_magnetic_frame_dock_body.stl` (1 Stk.) & `cots_magnetic_frame_clamp.stl` (1 Stk.): COTS 2-Pin Magnet-Rahmendock für werkzeuglose Kofferabnahme am Ø 26 mm Rahmenrohr (optional; bei reinem Inline-Breakaway-Kabelstrang entfällt das Gehäuse). Sowie `road_glide_inductive_cam_dock.stl` (1 Stk.): Induktives Cam-Docking für Sharknose-Verkleidungen. (Legacy-Referenz: `009_magsafe_frame_dock.stl`).
+  * `cockpit_speaker_corner_pod.stl` (2 Stk.): Symmetrische Cockpit-Display-Pods für die unteren inneren Ecken der Rockford Fosgate Lautsprechergitter (Bagger / CVO ST).
 * **Optionale Bobber & Custom-Kit Teile:**
   * `radar_center_underfender_mount.stl` (1 Stk.): Stealth Center Under-Fender Mount mit $46\,\text{mm}$ Tiefgang und integriertem $42\,\text{mm}$ Spritzwasser-Schmutzfänger-Spoiler.
   * `radar_swivel_tilt_cradle.stl` (1 Stk.): Schwerlast-Neigegelenk mit 2x M4-Verschraubung.
@@ -399,9 +400,10 @@ Anstelle der früheren proprietären Platine `PCBA 06` wird die werkzeuglose Kof
 2. **Mechanische Befestigung Fahrzeugseite (Rahmen):**
    * **Option A (Elastischer Inline-Breakaway-Kabelstrang - Standard für Reiseenduros):** Die Magnetkupplung sitzt fliegend im Leitungsverlauf, geschützt durch Harzverguss und doppelwandigen Klebeschrumpfschlauch. Ein elastischer EPDM-Clip oder Kabelbinder am Rahmenrohr / Soziusfußrastenausleger haltert die Buchse vibrationsfrei. Kein starres Rahmendock erforderlich!
    * **Option B (Stationäres COTS-Rahmendock für Tourer/Harley):** Die COTS-Buchse wird formschlüssig in das 3D-Druck Gehäuse [`cots_magnetic_frame_dock.scad`](../../hardware/cad/scad/02_pod_base/parts/cots_magnetic_frame_dock.scad) eingelegt. Es besitzt einen formschlüssigen Haltekragen gegen axiales Herausziehen, integrierte Zugentlastung und wird mit der Klemmschelle (`cots_magnetic_frame_clamp.stl`) am Ø 25.4–28.6 mm Rahmenrohr mit 4x M3 Schrauben in unverlierbaren DIN 934 Nut-Pockets fest verschraubt (keine Platine, 100 % lötkolbenfrei). *(Hinweis: Das alte `009_magsafe_frame_dock.scad` war für die entfallene PCBA 06 ausgelegt und passt mechanisch nicht für COTS-Steckverbinder).*
-3. **Mechanische Befestigung Kofferseite (Pannier):**
-   * **Montageort:** Die Koffer-Durchführung sitzt **seitlich-innen an der Koffer-Vorderwand (oberhalb des Schwingenlagers)** im absoluten Wind- und Spritzwasserschatten des Rahmens.
-   * **Bohrung & Dichtung:** Ein einzelnes $\varnothing 12\,\text{mm}$ Loch in der Koffer-Vorderwand nimmt die geteilte EPDM/TPU-Dichtung ([`010_saddlebag_hole_grommet_split.scad`](../../hardware/cad/scad/02_pod_base/parts/010_saddlebag_hole_grommet_split.scad)) auf. Der **Kofferboden bleibt zu 100 % intakt, lochfrei und wasserdicht**.
+3. **Mechanische Befestigung Kofferseite (100 % Zero-Drill):**
+   * **Montageort:** Die Koffer-Durchführung nutzt die werksseitige **vordere OEM-Kofferverschraubung (oberhalb des Schwingenlagers)** im absoluten Wind- und Spritzwasserschatten des Rahmens.
+   * **100 % Zero-Drill (OEM $\varnothing 19{,}0\,\text{mm}$ Bohrung):** Die originale Vollgummitülle wird entnommen. Durch die freie $\varnothing 19\,\text{mm}$ Bohrung der ABS-Kofferwanne gleitet das vorkonfektionierte OMB-Kabel samt Stecker (USB-C / JST-GH) völlig werkzeuglos ohne Auspinnen oder Löten.
+   * **Geteilte Dichtung & U-Tunnel-Distanzscheibe:** Die geteilte EPDM/TPU-Dichtung ([`010_saddlebag_hole_grommet_split.scad`](../../hardware/cad/scad/02_pod_base/parts/010_saddlebag_hole_grommet_split.scad)) wird zweischalig um Kabel und M8-Stahlhülse gelegt. Eine C-förmig geschlitzte 4 mm PA12-CF/Alu Distanzscheibe unter der OEM-$\varnothing 25\,\text{mm}$-Stahlscheibe leitet 100 % der Schraubenklemmkraft druckfrei um das Kabel herum direkt auf die Hülse. Der OEM-Spannhebel behält 360° Drehfreiheit. Der **Koffer bleibt zu 100 % unversehrt, lochfrei und absolut wasserdicht (IP67)**.
    * **Integrierte Stufe-1 Zugentlastung:** Ein an der Dichtung angeformter Klemmturm fixiert das Kabel per Mini-Kabelbinder formschlüssig. Reißt die Magnetkupplung ab, werden die $10\dots 15\,\text{N}$ Zugkraft vollständig in die Kofferwand eingeleitet – kein Zug auf die Kofferinnenverkabelung!
 
 ### 11.8 OMM UCS Helm-Zubehör: Audio-Kabelbaum, HF-Koaxialpigtail & Stummelantennen

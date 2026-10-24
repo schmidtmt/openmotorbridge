@@ -281,6 +281,18 @@ All discrete components, PCB ordering files, and COTS sourcing lists are documen
    * Route the two slim 3-wire leads along the handlebar wiring down to the Front Node and plug into `J_POD_L` and `J_POD_R`.
    * **Result:** Symmetrical cockpit aesthetics, left thumb operates PTT, right thumb bookmarks action-cam highlights, bilateral amber radar alerts reflected directly on both mirrors!
 
+#### Step 5.1.3b: Symmetrical Cockpit Displays (Dual Speaker Corner-Pods)
+1. **Ergonomic Principle (Bagger & Touring):**
+   * The rider's smartphone charges safely and weather-protected in the right glove box (Media Compartment) via USB-PD.
+   * For critical glanceable telemetry, two compact miniature displays are symmetrically positioned in the rider's primary line of sight.
+2. **Mounting on Rockford Fosgate Stage II Speakers:**
+   * Both display pods ([`cockpit_speaker_corner_pod.scad`](../../hardware/cad/scad/04_front_node/cockpit_speaker_corner_pod.scad)) clip form-fittingly onto the **lower inner corners** of the speaker grilles flanking the 12.3" Skyline OS display.
+   * **Brand Preservation & Clean Aesthetics:** The upper Rockford Fosgate emblems and the Harley-Davidson Bar & Shield badge remain 100% visible and untouched. The handlebar riser plate with its machined "CVO ST" badge remains completely unobstructed.
+3. **Invisible Cable Routing (Zero Fairing Disassembly):**
+   * The cable drops directly into the natural shadow seam at the bottom inner edge of the speaker surround and routes concealed downward into the steering head / triple tree area to the Front Node (`PCBA 05`).
+   * **0 cm visible cable, 0 screws removed from the outer fairing!**
+4. **Functionality:** Driven locally by the ESP32-S3 on `PCBA 05` via SPI/QSPI (left: rear radar proximity bar & blind spot warnings; right: turn-by-turn navigation arrows, TPMS pressures, intercom channel/talking state, and smartphone charge status).
+
 #### Step 5.1.4: Glove Box 2-Port USB Hub (CVO ST Infotainment Bypass)
 1. Open the right glove box on the CVO Road Glide ST.
 2. Locate the OEM rubber grommet on the underside of the compartment floor.
@@ -290,16 +302,21 @@ All discrete components, PCB ordering files, and COTS sourcing lists are documen
    * **Port 2:** Available for phone charging or USB flash drives.
 5. The glove box door seals airtight with zero cable interference!
 
-#### Step 5.1.5: Saddlebag Pods & 4-Pin Magnetic Breakaway Coupling
-1. **Magnetic Coupling at Frame Spar:** Secure the HytePro 4-pin magnetic breakaway socket to the rear subframe tube under the seat overhang.
-2. **Saddlebag Wall Feedthrough:**
-   * Drill a single $\varnothing 12\,\text{mm}$ hole in the upper front inner wall of the saddlebag (in the aerodynamic and spray shadow; **the bag bottom remains 100% unpierced**).
-   * Insert the split EPDM seal grommet and pass the mating magnetic harness through.
+#### Step 5.1.5: Saddlebag Pods & 100% Zero-Drill Feedthrough (OEM Ø 19 mm)
+1. **Magnetic Breakaway Coupling at Frame Spar:**
+   * Secure the 2-pin/4-pin HytePro magnetic pogo socket (`cots_pogo_magnetic_2pin`, IP68) with clamp to the rear subframe tube under the seat overhang.
+2. **100% Zero-Drill Saddlebag Feedthrough (OEM Ø 19.0 mm Bore):**
+   * **Zero Drilling in Saddlebags:** Neither the bag floor nor the side walls are drilled (strictly taboo on CVO ST).
+   * Unscrew the forward OEM saddlebag lever knob and washer, and push out the factory rubber isolator grommet into the bag. The bare ABS pass-through hole measures **$\varnothing 19.0\,\text{mm}$**.
+   * **Tool-Free Pre-Assembled Connector Passage:** The factory-terminated OMB cable harness complete with plug (USB-C / JST-GH, outer dimensions max. $\approx 12 \times 7\,\text{mm}$) slides effortlessly through the bare $\varnothing 19\,\text{mm}$ bore into the bag (zero de-pinning, zero cutting, zero soldering!).
+   * **Install Split TPU Grommet:** Place the two-piece EPDM/TPU grommet ([`010_saddlebag_hole_grommet_split.scad`](../../hardware/cad/scad/02_pod_base/parts/010_saddlebag_hole_grommet_split.scad), Half A & B) around the cable and OEM M8 steel sleeve, and press-fit into the $\varnothing 19\,\text{mm}$ bore (IP67).
+   * **Slide On U-Slotted Tunnel-Spacer Ring:** Slide the C-slotted 4 mm PA12-CF/Alu spacer ring laterally over the cable beneath the OEM $\varnothing 25\,\text{mm}$ steel washer.
+   * **Torque OEM Lever Knob:** Thread in the OEM lever knob. The $\varnothing 25\,\text{mm}$ OEM washer seats flush against the spacer ring; 100% of the axial clamping force transfers into the steel sleeve. The cable exits completely uncompressed through the 4 mm tunnel along the inner wall. The lever knob retains full 360° rotation above the cable exit!
 3. **Install Pod in Bag:**
-   * Fasten the pod body to the inner wall with M4 hardware or structural 3M VHB 5952 tape.
+   * Fasten the pod body inside the bag (preferably on the lid via [`saddlebag_lid_dock.scad`](../../hardware/cad/scad/02_pod_base/saddlebag_lid_dock.scad) onto the hinge bolts).
    * Connect the 4-wire harness to `PCBA 03`.
    * Insert intercom module and slide the lid in until it locks magnetically.
-4. **Day-to-Day Operation:** When detaching saddlebags for hotel stops or cleaning, the magnetic connector releases instantly with zero snagging or damage ("MagSafe principle"). When remounting, it snaps back into alignment automatically. In-bag USB charging is immediately active!
+4. **Day-to-Day Operation (100% Breakaway):** When removing saddlebags (e.g. for hotel stops, tire changes, washing), **simply loosen both OEM lever knobs** and lift off the bag. The external magnetic coupler on the frame disconnects cleanly at $10\dots 15\,\text{N}$ axial tension ("MagSafe principle"). No internal connectors are touched! When remounting, the coupling snaps back together self-centering.
 
 #### Step 5.1.6: 77 GHz Rear Radar at License Plate Bracket
 1. Bolt the MR20 radar enclosure to the lower license plate bracket.

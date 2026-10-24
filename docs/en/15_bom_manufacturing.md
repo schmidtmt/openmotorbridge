@@ -259,10 +259,11 @@ All enclosure parts are strictly engineered according to the **IKEA Principle**:
   * `radar_swivel_tilt_cradle.stl` (1 pc): Heavy-duty swivel tilt cradle with 2x M4 screws.
 * **Kit 3: Harley-Davidson Touring & Classic Bagger (Street Glide, Road Glide, Road King):**
   * `saddlebag_lid_dock.stl` (2 pcs): Hard saddlebag lid mounting docks for Pod 1 & 2 with hinge Torx flange, 4x strap hook clearance pockets & 2-wire DC strain relief snout.
-  * `010_saddlebag_hole_grommet_split.stl` (2 pcs): Split EPDM/TPU grommet for Ø 3.6 mm 2-wire DC cable in Ø 12 mm forward wall bore (above swingarm pivot).
+  * `010_saddlebag_hole_grommet_split.stl` (2 pcs): Split EPDM/TPU grommet for Ø 3.6 mm 2-wire DC cable in OEM Ø 19.0 mm forward wall bore (100% Zero-Drill, above swingarm pivot) incl. U-slotted tunnel-spacer ring.
   * `radar_license_plate_bracket.stl` (1 pc): Vibration-isolated license plate radar bracket for Whip 5.
   * `radar_swivel_tilt_cradle.stl` (1 pc): Radar 2.0 heavy-duty center-of-gravity swivel tilt cradle with 2x M4 bolts and 36-tooth radial Hirth rosette.
   * `radar_mr20_housing.stl` & `radar_mr20_radome.stl` (1 pc): Radar 2.0 PA12 wing housing with tire roost deflector and PC radome.
+  * `cockpit_speaker_corner_pod.stl` (2 pcs): Symmetrical Cockpit Display Pods for lower inner corners of Rockford Fosgate speaker grilles (Bagger / CVO ST).
   * `magsafe_cockpit_mount_harley.stl` (1 pc), `magsafe_frame_dock.stl` (1 pc) & `magsafe_clamp_wings.stl` (1 pc): MagSafe frame dock components.
 * **Optional Bobber & Custom Bike Parts:**
   * `radar_center_underfender_mount.stl` (1 pc): Stealth Center Under-Fender Mount with 46 mm drop and integrated 42 mm tire roost deflector shield.
@@ -359,8 +360,7 @@ In OpenMotorBridge v10.0, mechatronic solenoids and plunger brackets are **compl
 Instead of the former proprietary `PCBA 06` board, the tool-free pannier breakaway connection is engineered as a **pure 2-wire DC system (5V / GND)** with an industrial **2-Pin Magnetic Pogo Breakaway Coupler (IP68 COTS)**:
 * Industrial 2-Pin magnetic pogo connector (HytePro M411, IP68 rated, gold-plated contacts, N52 neodymium magnets).
 * Rated up to $2.5\,\text{A}$ continuous DC current at $12\,\text{V}/5\,\text{V}$; contact resistance $< 30\,\text{m}\Omega$.
-* **Breakaway Safety:** Separates non-destructively at $10\dots 15\,\text{N}$ axial pull force when the pannier is removed without manual uncoupling.
-* **Sealing:** Single $\varnothing 12\,\text{mm}$ bore in the forward pannier wall accepts split EPDM/TPU grommet ([`010_saddlebag_hole_grommet_split.scad`](../../hardware/cad/scad/02_pod_base/parts/010_saddlebag_hole_grommet_split.scad)). The pannier floor remains 100% intact and watertight.
+* **100% Zero-Drill Sealing:** Utilizes the OEM $\varnothing 19.0\,\text{mm}$ forward saddlebag mounting bore (the factory full-rubber isolator is pushed out). The pre-assembled OMB harness complete with connector (USB-C / JST-GH) slides effortlessly through the bare $\varnothing 19\,\text{mm}$ bore without de-pinning or soldering. The split EPDM/TPU grommet ([`010_saddlebag_hole_grommet_split.scad`](../../hardware/cad/scad/02_pod_base/parts/010_saddlebag_hole_grommet_split.scad)) seals both cable and M8 sleeve. A C-slotted 4 mm PA12-CF/Alu spacer ring under the OEM washer transfers clamping force without pinching the cable, maintaining 360° lever rotation. The saddlebag floor and walls remain 100% unpierced and watertight (IP67).
 
 ### 11.8 OMM UCS Helmet Accessories: Audio Harness, RF Coaxial Pigtails & Stubby Antennas
 

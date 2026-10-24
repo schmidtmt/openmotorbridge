@@ -554,6 +554,17 @@ Die Kombination aus IP68 Monocoque-Front-Knoten und modularen Satelliten löst d
    - Der Front-Knoten wird mit der 2-teiligen Rohrschelle ([`front_node_fairing_tube_clamp.scad`](../../hardware/cad/scad/04_front_node/front_node_fairing_tube_clamp.scad)) direkt an die runden Stahlrohre (Ø 16–19 mm) des inneren Verkleidungsgeweihs geklemmt.
    - Beide Satellitenblöcke werden über die Schwalbenschwanzführung zu einem gemeinsamen Kombi-Block zusammengesteckt und im Verkleidungshohlraum oder der Media-Bay platziert.
    - Kürzeste Wege zu Harley Skyline OS / Boom! Box GTS, Ottocast CP2AA Wireless Dongle und Kaltluft-Sensorik.
+4. **Bagger & Touring Cockpit-Glance-Displays: Symmetrische Dual Speaker Corner-Pods ([`cockpit_speaker_corner_pod.scad`](../../hardware/cad/scad/04_front_node/cockpit_speaker_corner_pod.scad)):**
+   - **Fahrpraxis & Ergonomie:** Bei modernen Touring-Baggern lädt das Fahrer-Smartphone wetter- und vibrationsgeschützt im rechten Handschuhfach (Media-Compartment) via USB-PD (schützt optische Bildstabilisatoren vor Vibrationen und Akkus vor Überhitzung in der Sonne). Für sicherheitskritische Blicke (Glanceable Telemetry) benötigt der Fahrer jedoch eine reflexionsarme, permanente Anzeige im primären Sichtfeld.
+   - **Ausschluss ungeeigneter Montagepositionen:**
+     - *Riser-Abdeckung:* Auf der Lenker-Riser-Platte der CVO ST befindet sich die exklusive, gefräste "CVO ST / Screamin' Eagle 121 High Output" Modellplakette – diese darf aus Werterhaltungs- und Ästhetikgründen keinesfalls überdeckt werden.
+     - *Windschild-Unterkante:* Eine Montage über dem Display erfordert sichtbare Kabelquerungen über das riesige 12.3" Skyline OS Display.
+     - *Handschuhfach-Deckel:* Liegen viel zu tief außerhalb des primären Sichtfelds (im Knie-/Tankbereich).
+   - **Die Sieger-Position: Untere innere Ecken der Rockford Fosgate Stage II Lautsprechergitter:**
+     - Zwei formschlüssige Display-Pods ([`cockpit_speaker_corner_pod.scad`](../../hardware/cad/scad/04_front_node/cockpit_speaker_corner_pod.scad)) clipsen direkt an die unteren inneren Kanten der beiden Lautsprechergitter, die das 12.3" Skyline OS Display symmetrisch flankieren.
+     - **Vollständiger Markenerhalt:** Die oberen Rockford Fosgate Schriftzüge und das Harley-Davidson Bar & Shield Emblem bleiben zu 100 % sichtbar und unberührt.
+     - **Unsichtbare Kabelführung (Zero Fairing Disassembly):** Die Zuleitung taucht an der inneren Unterkante direkt in die natürliche Schattenfuge des Lautsprecher-Gehäuses ein und läuft verdeckt nach unten in den Lenkkopf-/Gabelbrückenbereich zum Front-Node (`PCBA 05`). **0 cm sichtbares Kabel, 0 Schrauben an der Verkleidung lösen!**
+     - **Elektronik- & Display-Architektur:** Zwei sonnenlichttaugliche Displays (z. B. 1.28" Round oder 1.69" IPS) werden lokal vom ESP32-S3 des Front-Nodes (`PCBA 05`) per High-Speed SPI/QSPI angesteuert (links: 24/77 GHz Heckradar-Abstandsbalken & Totwinkel; rechts: Turn-by-Turn Pfeile, TPMS-Reifendrücke, Intercom-Sprechstatus und Smartphone-Ladezustand). Telemetriedaten fließen über den 4-Draht Automotive-Bus.
 
 ---
 
@@ -571,14 +582,12 @@ Aufgrund der werkseitigen Showa Inverted-Remote-Reservoir-Stoßdämpfer mit dick
 ```
           CVO ROAD GLIDE ST (2024+) GESAMTSYSTEM-INTEGRATION (v10.0)
 +-----------------------------------------------------------------------------+
-| 1. COCKPIT (Lenker-Riser & Spiegelfuß):                                     |
-|    * Front-Node (PCBA 05) am Riser / Gabelbrücke (Zero Outer Fairing Removal|
-|      - kein Abhebeln von Rockford Fosgate Lautsprechergittern nötig!)       |
-|    * Symmetrische Dual Under-Perch Spiegel-Pods unter beiden Spiegelfüßen:  |
-|      - Links:  Taktiler PTT-Taster & linke gerichtete BSD-Warn-LED (Amber)  |
-|      - Rechts: Taktiler Action-Cam-Tag Taster & rechte BSD-Warn-LED (Amber) |
-|    * Handschuhfach-Hub: 2-Port USB-Hub im rechten Fach, von UNTEN durch die |
-|      OEM-Gummitülle erschlossen (Türdichtung bleibt 100% hermetisch dicht!) |
+| 1. COCKPIT (Lenker-Riser, Spiegelfuß & Lautsprecher-Ecken):                 |
+|    * Front-Node (PCBA 05) am Riser / Gabelbrücke (Zero Fairing Removal)     |
+|    * Symmetrische Dual Under-Perch Spiegel-Pods (PTT & BSD-Warn-LEDs)        |
+|    * Dual Speaker Corner-Pods: 2x Cockpit-Displays an Rockford-Gittern      |
+|      (Radar-Balken, Turn-by-Turn, TPMS, Akku - 0 cm sichtbares Kabel)       |
+|    * Handschuhfach-Hub: 2-Port USB-Hub im Fach von UNTEN durch OEM-Tülle    |
 |    * SAM-M10Q GNSS + TMP117 + Knowles MEMS im laminaren Fahrtwind           |
 +-----------------------------------------------------------------------------+
 | 2. VERKABELUNG (Backbone Wire Caddy - Zero Tank Lifting):                   |
@@ -597,12 +606,13 @@ Aufgrund der werkseitigen Showa Inverted-Remote-Reservoir-Stoßdämpfer mit dick
 |    * Radar mittig unter dem Kennzeichen (radar_license_plate_bracket.scad)  |
 |      gespeist über 4-Draht Bus, mit Abtropfschlaufe (Drip-Loop) & Deflector |
 +-----------------------------------------------------------------------------+
-| 5. KOFFER (Gruppenfunk-Brücke Sena & Cardo mit Ladefunktion):               |
+| 5. KOFFER (100% Zero-Drill OEM Ø 19 mm Egress & Magnet-Abreißkupplung):     |
 |    * Pod 1 (Sena) im linken Koffer, Pod 2 (Cardo) im rechten Koffer         |
-|    * Slide-in Deckel mit integrierter Dichtung & FOB-Magnetverriegelung     |
-|    * Innenliegender Zwischendeckel (Dry-Flap) gegen Spritzwasser bei Regen   |
+|    * Vorkonfektionierter Stecker gleitet durch nackte OEM Ø 19 mm Bohrung   |
+|    * Geteilte TPU-Dichtung (010_saddlebag_hole_grommet_split.scad)          |
+|    * U-geschlitzte C-Tunnel-Distanzscheibe (360° Hebel-Drehung, 0 Quetschung|
+|    * 2-Pin/4-Pin IP68 Magnet-Abreißkupplung am Rahmen (werkzeugloses Lösen) |
 |    * Integrierte Koffer-USB-Ladedose (5V/12V PD bis 30W) zum Laden im Koffer|
-|    * 4-Pin IP67 Magnet-Abreißkupplung am Rahmen ("MagSafe-Prinzip")         |
 +-----------------------------------------------------------------------------+
 ```
 
@@ -611,11 +621,14 @@ Aufgrund der werkseitigen Showa Inverted-Remote-Reservoir-Stoßdämpfer mit dick
 * **Außentemperatur- & GNSS-Sensorik:** Liegt thermisch vollkommen entkoppelt von Auspuff- und Motorwärme im laminaren Fahrtwindkanal am Riser-Frontknoten mit dem NIST-Präzisionssensor TI TMP117 ($\pm 0{,}1\,^\circ\text{C}$) und dem u-blox SAM-M10Q Multi-GNSS mit freier Zenit-Sicht.
 * **Radar-Montage:** Erfolgt mittig unter dem Kennzeichen über den vibrationsfesten Kennzeichenträger ([`radar_license_plate_bracket.scad`](../../hardware/cad/scad/02_pod_base/radar_license_plate_bracket.scad)), gespeist über Strang 3 mit Abtropfschlaufe. Vollständige Freigängigkeit zu den Showa Inverted-Remote-Reservoirs garantiert.
 
-#### B. Koffer-Integration: Pod 1 (Links) & Pod 2 (Rechts) mit Koffer-USB-Ladedose
-* **Slide-in Deckel & FOB-Magnetverriegelung:** Beide Pods sitzen an der Innenwand der Hartschalenkoffer. Der Slide-in Deckel schließt formschlüssig und wird bei Annäherung des OMB Smart-Keyfobs magnetisch entriegelt.
+#### B. Koffer-Integration: 100 % Zero-Drill Durchführung (OEM Ø 19 mm) & Magnet-Abreißkupplung
+* **100 % Zero-Drill Durchgang:** Weder Kofferboden noch Kofferwände werden angebohrt. Nach Entnahme der werkseitigen OEM-Vollgummitülle bietet die vordere Kofferbohrung einen freien Durchgang von **$\varnothing 19{,}0\,\text{mm}$**.
+* **Werkzeuglose Stecker-Durchführung:** Der fertig vorkonfektionierte Stecker des Kabelbaums (USB-C / JST-GH) gleitet berührungsfrei durch das freie $\varnothing 19\,\text{mm}$ Loch. Kein Auspinnen, kein Drahtabschneiden, kein Löten!
+* **Geteilte TPU-Dichtung & U-Tunnel-Distanzscheibe:** Die zweischalige EPDM/TPU-Dichtung ([`010_saddlebag_hole_grommet_split.scad`](../../hardware/cad/scad/02_pod_base/parts/010_saddlebag_hole_grommet_split.scad)) schließt das Loch wasserdicht (IP67) um Kabel und M8-Stahlhülse ab. Unter der OEM-$\varnothing 25\,\text{mm}$-Unterlegscheibe sitzt die seitlich geschlitzte 4 mm PA12-CF/Alu Distanzscheibe (C-Clip): Sie leitet 100 % der Anzugskraft metallisch auf die Hülse, während das Kabel druckfrei durch den Tunnel austritt und der OEM-Spannhebel 360° frei rotieren kann.
+* **Werkzeuglose Kofferdemontage (Magnet-Abreißfunktion):** Am Rahmen sitzt die HytePro Magnetkupplung (`cots_pogo_magnetic_2pin`, IP68). Beim Lösen der OEM-Hebel trennt sich die Verbindung bei $10\dots 15\,\text{N}$ selbsttätig. Im Kofferinneren wird kein Stecker angefasst!
+* **Slide-in Deckel & FOB-Magnetverriegelung:** Beide Pods sitzen vorzugsweise im Kofferdeckel. Der Deckel schließt formschlüssig und wird bei Annäherung des OMB Smart-Keyfobs magnetisch entriegelt.
 * **Zwischendeckel (Dry-Flap):** Eine nach innen federnde Spritzschutzklappe hält Elektronik und Intercoms auch bei geöffnetem Kofferdeckel im Starkregen absolut trocken.
 * **Koffer-USB-Ladedose:** Jeder Pod stellt im Kofferinneren eine vollwertige USB-C Buchse (5V/12V PD bis 30W) bereit, um Actioncams, Smartphones oder Helmpolster-Trockner während der Fahrt zu laden.
-* **4-Pin Magnet-Abreißkupplung:** Beim Abnehmen der Koffer löst sich die Kupplung an der Koffer-Vorderwand völlig widerstandsfrei ohne Kabelabriss.
 * **Maximale HF-Isolation ($> 40\,\text{dB}$):** Sena (links) und Cardo (rechts) sind über $60\,\text{cm}$ voneinander getrennt, mit Heckfender und Rahmen als HF-Schild.
 
 ---
@@ -884,7 +897,7 @@ Die Verkabelung der Kofferdeckel-Pods löst das fundamentale Praxiskriterium des
 
 ![OpenMotorBridge Koffer-Verkabelung & MagSafe-Abreiß-Schnittstelle](../images/cad/saddlebag_magsafe_wiring_cad.png)
 
-*Abbildung 8.30b: CAD-Systemarchitektur der Koffer-Verkabelung mit selbstzentrierender MagSafe-Abreißkupplung (IP67). Dargestellt sind die zündungsgesteuerte 5V-Versorgung über die Zentralbox (KL15/BQ24075-USV), das rahmenfeste MagSafe-Dock (`009_magsafe_frame_dock.scad`) mit PCBA 06 TVS-Schutz, die zerstörungsfreie magnetische Abreißtrennung (~10-15 N) bei Kofferabnahme durch Werkstattmechaniker, die seitliche Durchführung an der Koffer-Vorderwand (oberhalb des Schwingenlagers) mit geteilter TPU-Dichtung (`010_saddlebag_hole_grommet_split.scad`) und Stufe-1-Klemmturm (Kofferboden bleibt zu 100 % intakt und lochfrei), die lastfreie Flachkabelführung parallel zum Deckel-Fangband sowie die Stufe-2-Zugentlastung am Kofferdeckel-Dock mit 0 Newton Zugkraft am USB-C Port B.*
+*Abbildung 8.30b: CAD-Systemarchitektur der Koffer-Verkabelung mit selbstzentrierender MagSafe-Abreißkupplung (IP67). Dargestellt sind die zündungsgesteuerte 5V-Versorgung über die Zentralbox (KL15/BQ24075-USV), das rahmenfeste MagSafe-Dock (`009_magsafe_frame_dock.scad`) mit PCBA 06 TVS-Schutz, die zerstörungsfreie magnetische Abreißtrennung (~10-15 N) bei Kofferabnahme durch Werkstattmechaniker, die 100 % bohrfreie Durchführung an der Koffer-Vorderwand (oberhalb des Schwingenlagers) über die OEM Ø 19,0 mm Bohrung mit geteilter TPU-Dichtung (`010_saddlebag_hole_grommet_split.scad`) und U-geschlitzter Tunnel-Distanzscheibe (Kofferboden und Kofferwände bleiben 100 % intakt und ungebohrt), die lastfreie Flachkabelführung parallel zum Deckel-Fangband sowie die Stufe-2-Zugentlastung am Kofferdeckel-Dock mit 0 Newton Zugkraft am USB-C Port B.*
 
 1. **Intelligente Stromversorgung & USV-Pufferung über die Zentralbox (Klemme 15 / BQ24075):**
    * Die Koffer-Pods werden **nicht direkt unreguliert** aus dem Bordnetz gespeist, sondern zentral und konditioniert von der **Zentralbox** unter der Sitzbank versorgt.
@@ -901,12 +914,16 @@ Die Verkabelung der Kofferdeckel-Pods löst das fundamentale Praxiskriterium des
 4. **Direktanschluss an die Schacht-Federkontakte des Pods:**
    * Das schlanke Koffer-Kabel läuft parallel zum textilen Deckel-Fangband in den Kofferdeckel und führt über eine formschlüssige Bodendichtung direkt zu den beiden massiven vergoldeten Federkontakten im Schachtboden des Pods.
    * Im Kofferinneren befinden sich **keinerlei zusätzliche Adapterplatinen, Zwischenstecker oder Lötstellen**.
-5. **2-Stufen-Zugentlastung & Seitliche Durchführung oberhalb des Schwingenlagers ([`010_saddlebag_hole_grommet_split.scad`](../../hardware/cad/scad/02_pod_base/parts/010_saddlebag_hole_grommet_split.scad)):**
-   * **Montageort (Feedback-Entscheidung):** Der Kabelausgang liegt **nicht im Kofferboden**, sondern **seitlich-innen an der Koffer-Vorderwand (oberhalb des Schwingenlagers, zum Fahrzeugrahmen hin gewandt)**.
-   * **Vorteile:**
-     - **100 % Spritzwasser- & Dreckschutz:** Am Kofferboden sammelt sich Regenwasser und Straßengischt vom Hinterrad. Die seitliche Vorderwand liegt im absoluten Wind- und Gischt-Schatten des Rahmens.
-     - **Kein Scheuern bei Bodenkontakt:** Beim Abstellen des Koffers im Hotel oder in der Werkstatt berührt die Durchführung niemals den Boden.
-   * **Stufe 1 (Koffer-Vorderwand & Geteilte Dichtung `010_saddlebag_hole_grommet_split.scad`):** Die geteilte EPDM/TPU-Dichtung (`010_saddlebag_hole_grommet_split.scad`) dichtet die $\varnothing 12\,\text{mm}$ Wandbohrung mit umlaufenden Doppellippen zuverlässig ab. Sie ist auf ein $\varnothing 3{,}6\,\text{mm}$ 2-Draht Automotive-Kabel optimiert (Dichtbereich $\varnothing 2{,}5\dots 4{,}2\,\text{mm}$ FLRY-B / PUR). Durch den gezielten Achsversatz des Kabelkanals auf $Y = 6{,}0\,\text{mm}$ bleibt ein massiver elastischer Dichtsteg von $> 1{,}1\,\text{mm}$ zur M8-Stahlhülsen-Verschraubung erhalten. Ein angeformter Klemmturm fixiert das Kabel per Mini-Kabelbinder formschlüssig. Externe Magnet-Abreißkräfte ($10\dots 15\,\text{N}$) werden vollständig in die Kofferwand eingeleitet. Der **Kofferboden bleibt zu 100 % lochfrei und wasserdicht**. Über den OpenSCAD-Selektor `part` können die Hälften einzeln (`"part_a"`, `"part_b"`) oder als fertige Druckplatte (`"print_plate"`) exportiert werden.
+5. **100 % Zero-Drill Durchführung & 2-Stufen-Zugentlastung ([`010_saddlebag_hole_grommet_split.scad`](../../hardware/cad/scad/02_pod_base/parts/010_saddlebag_hole_grommet_split.scad)):**
+   * **Montageort (100 % Bohrungsfrei):** Der Kabelausgang nutzt die originale vordere Befestigungsbohrung an der Koffer-Vorderwand (oberhalb des Schwingenlagers, zum Fahrzeugrahmen gewandt). Weder Kofferboden noch Kofferwände werden gebohrt (Werterhalt & Rissvermeidung!).
+   * **Vorteile gegenüber Kofferboden:**
+     - **100 % Spritzwasser- & Dreckschutz:** Am Kofferboden sammelt sich Regenwasser und Straßengischt vom Hinterrad. Die vordere OEM-Verschraubung liegt im absoluten Wind- und Gischt-Schatten des Rahmens.
+     - **Kein Scheuern oder Quetschen bei Bodenkontakt:** Auf den unteren Gummi-Auflagern lastet das gesamte dynamische Koffergewicht. Die obere Befestigung trägt kein Fahrbahngewicht.
+   * **Stufe 1 (OEM Ø 19,0 mm Bohrung, Geteilte TPU-Dichtung & U-Tunnel-Distanzscheibe):**
+     - *Stecker-Durchgang:* Nach Entnahme der werkseitigen OEM-Vollgummitülle bietet die Kofferbohrung **$\varnothing 19{,}0\,\text{mm}$ lichten Durchgang**. Das vorkonfektionierte Kabel samt Stecker (USB-C / JST-GH) gleitet berührungsfrei durch die freie Bohrung (kein Auspinnen, kein Drahtabschneiden, kein Löten).
+     - *Geteilte TPU-Dichtung:* Die zweischalige EPDM/TPU-Dichtung ([`010_saddlebag_hole_grommet_split.scad`](../../hardware/cad/scad/02_pod_base/parts/010_saddlebag_hole_grommet_split.scad)) dichtet die $\varnothing 19\,\text{mm}$ Wandbohrung mit umlaufenden Doppellippen zuverlässig ab (IP67). Durch den Achsversatz des Kabelkanals ($Y = 6{,}0\,\text{mm}$) bleibt ein massiver Dichtsteg zur M8-Stahlhülsen-Verschraubung ($Y = -2{,}0\,\text{mm}$) erhalten.
+     - *U-Tunnel-Distanzscheibe:* Unter der $\varnothing 25\,\text{mm}$ OEM-Stahlunterlegscheibe wird eine C-förmig geschlitzte 4 mm PA12-CF/Alu Distanzscheibe seitlich über das Kabel geschoben. Sie leitet den axialen Spanndruck des OEM-Bolzens zu 100 % metallisch auf die Hülse ab, während das Kabel quetschfrei im 4 mm Tunnel verläuft und der OEM-Spannhebel 360° frei rotieren kann.
+     - *Integrierter Klemmturm:* Sichert das Kabel formschlüssig gegen Axialzug ($10\dots 15\,\text{N}$ Magnet-Abreißkraft).
    * **Stufe 2 (Kofferdeckel & 2-Draht DC-Schnauze):** Im Schnauz des Kofferdeckel-Docks ([`saddlebag_lid_dock.scad`](../../hardware/cad/scad/02_pod_base/saddlebag_lid_dock.scad)) sind dedizierte $\varnothing 4{,}4\,\text{mm}$ Klemmkanäle und Kabelbinder-Rillen integriert, die das 2-adrige DC-Kabel vibrationsfest und zugentlastet fixieren.
    * **Ergebnis:** Die interne Verkabelung und die Pod-Kontakte unterliegen **0 Newton dynamischer oder statischer Zugkraft**.
 

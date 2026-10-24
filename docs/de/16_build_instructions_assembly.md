@@ -282,6 +282,18 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
    * Die dünnen 3-Draht-Kabel entlang der Armaturenkabelbäume zum Front-Knoten führen und an `J_POD_L` bzw. `J_POD_R` einstecken.
    * **Ergebnis:** Symmetrische Optik am Lenker, linker Daumen bedient PTT, rechter Daumen markiert Action-Cam Highlights, beidseitige bernsteinfarbene Totwinkelwarnung direkt in beiden Rückspiegeln!
 
+#### Schritt 5.1.3b: Symmetrische Cockpit-Displays (Dual Speaker Corner-Pods)
+1. **Ergonomisches Grundprinzip (Bagger & Touring):**
+   * Das Fahrer-Smartphone lädt wetter- und vibrationsgeschützt im rechten Handschuhfach (Media-Compartment) via USB-PD.
+   * Für fahrrelevante Blicke (Glanceable Telemetry) werden zwei kompakte Miniatur-Displays symmetrisch im primären Sichtfeld des Fahrers platziert.
+2. **Montageort an den Rockford Fosgate Stage II Lautsprechern:**
+   * Die beiden Display-Pods ([`cockpit_speaker_corner_pod.scad`](../../hardware/cad/scad/04_front_node/cockpit_speaker_corner_pod.scad)) clipsen formschlüssig an die **unteren inneren Ecken** der Lautsprechergitter beidseits des 12.3" Skyline OS Displays.
+   * **Markenschutz & Ästhetik:** Die oberen Rockford Fosgate Schriftzüge und das Harley-Davidson Bar & Shield Emblem bleiben zu 100 % sichtbar und unberührt. Die Riser-Abdeckung mit der gefrästen "CVO ST"-Plakette bleibt frei.
+3. **Unsichtbare Kabelführung (Zero Fairing Disassembly):**
+   * Das Kabel taucht an der unteren Kante direkt in die natürliche Schattenfuge der Lautsprechereinfassung ein und verläuft verdeckt nach unten in den Lenkkopf-/Gabelbrückenbereich zum Front-Node (`PCBA 05`).
+   * **0 cm sichtbares Kabel, 0 Schrauben an der Außenverkleidung lösen!**
+4. **Funktion:** Der ESP32-S3 auf `PCBA 05` treibt die Displays per SPI/QSPI (links: Heckradar-Abstandsbalken & Totwinkel; rechts: Turn-by-Turn Pfeile, TPMS-Drücke, Intercom-Sprechstatus und Smartphone-Akkustand).
+
 #### Schritt 5.1.4: Handschuhfach 2-Port USB-Hub (CVO ST Infotainment-Bypass)
 1. Das rechte Handschuhfach der CVO Road Glide ST öffnen.
 2. An der Unterseite des Handschuhfachs befindet sich die originale Harley-Gummitülle für Zubehörverkabelung.
@@ -291,16 +303,21 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
    * **Port 2:** Steht frei zum Laden des Fahrer-Smartphones oder für USB-Musiksticks zur Verfügung.
 5. Die Handschuhfachtür schließt hermetisch dicht – kein Kabel wird über die weiche Dichtlippe gequetscht!
 
-#### Schritt 5.1.5: Koffer-Pods & 4-Pin Magnet-Abreißkupplung
-1. **Magnet-Kupplung am Rahmendreieck:** Die 4-Pin HytePro Magnet-Kupplung mit Klemmschelle am hinteren Rahmenrohr unter dem Sitzbanküberhang befestigen.
-2. **Kofferwand-Durchführung:**
-   * Ein einzelnes $\varnothing 12\,\text{mm}$ Loch an der oberen Innenwand des Koffers bohren (im Wind- und Spritzwasserschatten; der **Kofferboden bleibt zu 100 % ungebohrt**).
-   * EPDM-Geteilte Dichtetülle einsetzen und das Gegenstück der Magnetkupplung hindurchführen.
+#### Schritt 5.1.5: Koffer-Pods & 100 % Zero-Drill Kofferwand-Durchführung (OEM Ø 19 mm)
+1. **Magnet-Abreißkupplung am Rahmenrohr:**
+   * Die 2-Pin/4-Pin HytePro Magnet-Pogo Buchse (`cots_pogo_magnetic_2pin`, IP68) mit Klemmschelle am hinteren Rahmenrohr unter dem Sitzbanküberhang befestigen.
+2. **100 % Zero-Drill Kofferwand-Durchführung (OEM Ø 19,0 mm Bohrung):**
+   * **Kein Bohren im Koffer:** Weder Kofferboden noch Kofferwände werden angebohrt (absolutes Tabu bei CVO ST).
+   * Die vordere OEM-Kofferverschraubung (silberner Spannhebel & Unterlegscheibe) lösen und die werkseitige OEM-Vollgummitülle nach innen herausdrücken. Die freiliegende ABS-Bohrung der Kofferwanne besitzt einen Durchmesser von **$\varnothing 19{,}0\,\text{mm}$**.
+   * **Stecker-Durchführung ohne Werkzeug:** Das fertig konfektionierte OMB-Kabel samt Stecker (USB-C / JST-GH, Außenmaß max. $\approx 12 \times 7\,\text{mm}$) wird berührungsfrei durch das freie $\varnothing 19\,\text{mm}$ Loch in den Koffer geschoben (kein Auspinnen, kein Zerschneiden, kein Löten!).
+   * **Geteilte TPU-Dichtung einsetzen:** Die zweischalige EPDM/TPU-Dichtung ([`010_saddlebag_hole_grommet_split.scad`](../../hardware/cad/scad/02_pod_base/parts/010_saddlebag_hole_grommet_split.scad), Halbschale A & B) von beiden Seiten um das Kabel und die OEM-M8-Stahlhülse legen und formschlüssig in die $\varnothing 19\,\text{mm}$ Bohrung einpressen (IP67).
+   * **U-förmige Tunnel-Distanzscheibe aufschieben:** Die C-förmig geschlitzte 4 mm PA12-CF/Alu Distanzscheibe seitlich über das Kabel unter die OEM-$\varnothing 25\,\text{mm}$-Stahlscheibe schieben.
+   * **OEM-Spannhebel festziehen:** Der OEM-Spannhebel wird eingedreht. Die $\varnothing 25\,\text{mm}$ OEM-Stahlscheibe liegt plan auf der Distanzscheibe auf; der Anzugsdruck wird zu 100 % metallisch auf die Stahlhülse übertragen. Das Kabel läuft völlig druck- und klemmfrei durch den 4 mm hohen Tunnel an der Innenwand nach oben. Der Hebel dreht beim Festspannen 360° frei über dem Kabelausgang!
 3. **Koffer-Pod montieren:**
-   * Pod-Gehäuse im Kofferinneren an der Stirnwand verschrauben oder mit 3M VHB 5952 strukturell verkleben.
-   * 4-Draht-Kabel an `PCBA 03` anschließen.
+   * Pod-Gehäuse im Kofferinneren (vorzugsweise im Kofferdeckel via [`saddlebag_lid_dock.scad`](../../hardware/cad/scad/02_pod_base/saddlebag_lid_dock.scad) an den Scharnierschrauben) montieren.
+   * 4-Draht-Kabel an `PCBA 03` anstecken.
    * Intercom-Modul einsetzen und Slide-in Deckel einschieben, bis er magnetisch verriegelt.
-4. **Bedienung im Alltag:** Beim Abnehmen der Koffer (z. B. im Hotel) zieht sich die Magnetkupplung völlig kraft- und beschädigungsfrei ab ("MagSafe-Prinzip"). Beim Einhängen des Koffers schnappt sie von selbst zentriert ein. Im Kofferinneren steht nun ein voll funktionsfähiger USB-Ladeport bereit!
+4. **Bedienung im Alltag (100 % Breakaway):** Beim Abnehmen der Koffer (z. B. für Hotel, Reifenwechsel, Wäsche) werden **nur die beiden OEM-Spannhebel gelöst** und der Koffer angehoben. Die externe Magnetkupplung am Rahmen trennt sich bei $10\dots 15\,\text{N}$ völlig selbsttätig und zerstörungsfrei ("MagSafe-Prinzip"). Im Kofferinneren wird kein Stecker berührt! Beim Wiederaufsetzen zieht sich die Kupplung magnetisch zentriert zusammen.
 
 #### Schritt 5.1.6: 77 GHz Heck-Radar am Kennzeichenträger
 1. Das MR20 Radar-Gehäuse an den Kennzeichenträger montieren.

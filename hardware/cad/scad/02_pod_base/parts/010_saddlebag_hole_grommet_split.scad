@@ -117,12 +117,44 @@ module saddlebag_grommet_part_a() {
 }
 
 // Module for Part B (Rear Half with Steel Sleeve Pocket)
+// Module for Part B (Rear Half with Steel Sleeve Pocket)
 module saddlebag_grommet_part_b() {
     difference() {
         saddlebag_hole_grommet_full();
         // Cut away front half (Y > 0.0 mm)
         translate([-COLLAR_DIA, 0.0, -TOTAL_H])
             cube([2*COLLAR_DIA, COLLAR_DIA + 0.05, 2*TOTAL_H + 2*TOWER_H]);
+    }
+}
+
+// =============================================================================
+// Module for U-Slotted Tunnel-Spacer Ring (C-Clip / Washer Underlay)
+// Fits under OEM Ø 25.0 mm steel washer inside saddlebag tub.
+// Transmits 100% of M8 bolt clamping torque into the steel sleeve without
+// crushing the cable, and allows the OEM silver lever knob to rotate 360° freely.
+// =============================================================================
+SPACER_OD       = 25.0; // Outer diameter matching OEM steel washer (mm)
+SPACER_H        = 4.0;  // Spacer thickness (mm)
+SPACER_SLOT_W   = SLEEVE_DIA + 0.6; // Lateral slot width for M8 steel sleeve (10.8 mm)
+TUNNEL_W        = CABLE_DIA + 0.8;  // Tunnel width for cable exit (4.4 mm)
+TUNNEL_H        = 2.8;  // Tunnel height at underside (mm)
+
+module saddlebag_u_tunnel_spacer() {
+    difference() {
+        // Main cylinder
+        cylinder(r=SPACER_OD/2, h=SPACER_H, center=false, $fn=60);
+        
+        // 1. Central M8 sleeve through-bore (Ø 10.8 mm)
+        translate([0, 0, -0.5])
+            cylinder(r=SPACER_SLOT_W/2, h=SPACER_H + 1.0, $fn=60);
+            
+        // 2. Lateral assembly slot (U-opening to the side along X+)
+        translate([0, -SPACER_SLOT_W/2, -0.5])
+            cube([SPACER_OD/2 + 2.0, SPACER_SLOT_W, SPACER_H + 1.0]);
+            
+        // 3. Radial cable tunnel channel on the underside (along Y- / downward)
+        translate([-TUNNEL_W/2, -SPACER_OD/2 - 1.0, -0.1])
+            cube([TUNNEL_W, SPACER_OD/2 + 2.0, TUNNEL_H + 0.1]);
     }
 }
 
@@ -135,13 +167,24 @@ module print_plate_saddlebag_grommet() {
         saddlebag_grommet_part_b();
 }
 
+// Complete set for zero-drill installation (Part A, Part B in TPU, plus U-Spacer in PA12-CF)
+module print_plate_complete_set() {
+    print_plate_saddlebag_grommet();
+    translate([0, 22.0, 0])
+        saddlebag_u_tunnel_spacer();
+}
+
 // Parametric part selector
-part = "full"; // ["full", "part_a", "part_b", "print_plate"]
+part = "full"; // ["full", "part_a", "part_b", "print_plate", "u_spacer", "complete_set"]
 
 if (part == "part_a") {
     saddlebag_grommet_part_a();
 } else if (part == "part_b") {
     saddlebag_grommet_part_b();
+} else if (part == "u_spacer") {
+    saddlebag_u_tunnel_spacer();
+} else if (part == "complete_set") {
+    print_plate_complete_set();
 } else if (part == "print_plate") {
     print_plate_saddlebag_grommet();
 } else {

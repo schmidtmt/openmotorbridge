@@ -509,8 +509,17 @@ The pairing of an IP68 monocoque Front Node with modular satellite blocks solves
    - The Front Node is clamped directly to the round tubular steel subframe (Ø 16–19 mm) behind the fairing using the 2-piece clamp ([`front_node_fairing_tube_clamp.scad`](../../hardware/cad/scad/04_front_node/front_node_fairing_tube_clamp.scad)).
    - Both satellite blocks click together via their dovetail tracks to form a compact unified breakout box mounted inside the fairing cavity or media bay.
    - Provides ultra-short cable runs to the Harley Skyline OS / Boom! Box GTS head unit, Ottocast CP2AA wireless dongle, and cold air scoop sensor cluster.
-
----
+4. **Bagger & Touring Cockpit-Glance Displays: Symmetrical Dual Speaker Corner-Pods ([`cockpit_speaker_corner_pod.scad`](../../hardware/cad/scad/04_front_node/cockpit_speaker_corner_pod.scad)):**
+   - **Riding Ergonomics:** On modern touring baggers, the rider's smartphone charges safely and weather-protected in the right glove box (Media Compartment) via USB-PD (protecting optical camera stabilizers from engine vibrations and battery packs from direct solar heat). However, high-priority glanceable telemetry requires a dedicated, reflection-free display in the primary line of sight.
+   - **Exclusion of Suboptimal Mounting Locations:**
+     - *Handlebar Riser Plate:* The CVO ST features an exclusive, laser-etched/CNC-machined "CVO ST / Screamin' Eagle 121 High Output" emblem that must remain 100% visible and unmarred.
+     - *Windshield Lip / Base:* Mounting above the cluster forces unsightly cables across the massive 12.3" Skyline OS display.
+     - *Glove Box Lids:* Sits far too low in the rider's downward line of sight (near knees/fuel tank).
+   - **The Winning Location: Lower Inner Corners of Rockford Fosgate Stage II Speaker Grilles:**
+     - Two form-fitting display pods ([`cockpit_speaker_corner_pod.scad`](../../hardware/cad/scad/04_front_node/cockpit_speaker_corner_pod.scad)) clip securely onto the lower inner corners of the speaker grilles flanking the 12.3" Skyline OS display.
+     - **Preservation of Factory Brand Heritage:** The upper Rockford Fosgate branding and Harley-Davidson Bar & Shield emblems remain 100% visible and untouched.
+     - **Concealed Cable Routing (Zero Fairing Disassembly):** Leads drop directly into the natural shadow seam at the inner speaker pod rim, routing invisibly into the steering head / triple tree cavity to the Front Node (`PCBA 05`). **0 cm visible cable, 0 outer fairing screws removed!**
+     - **Electronics & Display Architecture:** Two sunlight-readable miniature displays (e.g. 1.28" Round or 1.69" IPS) are driven locally by the Front Node's ESP32-S3 (`PCBA 05`) via high-speed SPI/QSPI (left: 24/77 GHz rear radar proximity bar & blind spot warnings; right: turn-by-turn navigation arrows, TPMS pressures, intercom speaking state, and smartphone battery level). Telemetry streams over the 4-wire automotive bus.
 
 ---
 
@@ -528,14 +537,12 @@ Due to factory Showa inverted remote-reservoir shock absorbers with heavy hydrau
 ```
           CVO ROAD GLIDE ST (2024+) COMPLETE SYSTEM INTEGRATION (v10.0)
 +-----------------------------------------------------------------------------+
-| 1. COCKPIT (Handlebar Riser & Mirror Perch):                                |
-|    * Front Node (PCBA 05) at Riser / Triple Tree (Zero Outer Fairing Removal|
-|      - never prying Rockford Fosgate speaker grilles or painted vent clips!)|
-|    * Symmetrical Dual Under-Perch Mirror Pods under both mirror stems:       |
-|      - Left:  Tactile PTT button & left directed amber BSD alert LED        |
-|      - Right: Tactile Cam-Tag button & right directed amber BSD alert LED   |
-|    * Glove Box Hub: 2-Port USB Hub in right compartment, accessed from      |
-|      BELOW through factory grommet (door weatherseal remains 100% intact!)  |
+| 1. COCKPIT (Handlebar Riser, Mirror Perch & Speaker Corners):               |
+|    * Front Node (PCBA 05) at Riser / Triple Tree (Zero Fairing Removal)     |
+|    * Symmetrical Dual Under-Perch Mirror Pods (PTT & BSD Warning LEDs)      |
+|    * Dual Speaker Corner-Pods: 2x Cockpit Displays on Rockford Grilles      |
+|      (Radar Bar, Turn-by-Turn, TPMS, Battery - 0 cm visible cable!)         |
+|    * Glove Box Hub: 2-Port USB Hub in right compartment from BELOW via OEM  |
 |    * SAM-M10Q GNSS + TMP117 + Knowles MEMS in cooling oncoming airflow      |
 +-----------------------------------------------------------------------------+
 | 2. WIRING (Backbone Wire Caddy - Zero Tank Lifting):                        |
@@ -554,12 +561,13 @@ Due to factory Showa inverted remote-reservoir shock absorbers with heavy hydrau
 |    * Radar centered below license plate (radar_license_plate_bracket.scad)  |
 |      fed via 4-wire bus, with downward drip-loop and roost deflector        |
 +-----------------------------------------------------------------------------+
-| 5. SADDLEBAGS (Intercom Bridge Sena & Cardo with In-Bag Charging):          |
+| 5. SADDLEBAGS (100% Zero-Drill OEM Ø 19 mm Egress & Magnetic Breakaway):     |
 |    * Pod 1 (Sena) in left saddlebag, Pod 2 (Cardo) in right saddlebag       |
-|    * Slide-in lid with perimeter seal & captive FOB magnetic latch          |
-|    * Intermediate dry-flap splash guard protects against rain when open     |
+|    * Pre-assembled plug slides through bare OEM Ø 19.0 mm wall bore         |
+|    * Split TPU Grommet (010_saddlebag_hole_grommet_split.scad)              |
+|    * C-slotted tunnel-spacer ring (360° lever rotation, 0 cable pinch)      |
+|    * 2-Pin/4-Pin IP68 magnetic breakaway coupling on frame (hands-free)     |
 |    * Integrated in-bag USB-C charging port (5V/12V PD up to 30W)            |
-|    * 4-Pin IP67 magnetic breakaway coupling on frame ("MagSafe principle")  |
 +-----------------------------------------------------------------------------+
 ```
 
@@ -568,11 +576,14 @@ Due to factory Showa inverted remote-reservoir shock absorbers with heavy hydrau
 * **Ambient Air & GNSS Sensing:** Thermally decoupled from engine and exhaust heat, positioned inside the undisturbed laminar oncoming airflow at the riser Front Node featuring the NIST-grade TI TMP117 precision sensor ($\pm 0.1\,^\circ\text{C}$) and the u-blox SAM-M10Q Multi-GNSS with unobstructed zenith sky view.
 * **Radar Mounting:** Centered below the license plate via the vibration-proof bracket ([`radar_license_plate_bracket.scad`](../../hardware/cad/scad/02_pod_base/radar_license_plate_bracket.scad)), powered via branch 3 with a downward drip loop. Uncompromised clearance to Showa inverted remote reservoirs guaranteed.
 
-#### B. Saddlebag Integration: Pod 1 (Left) & Pod 2 (Right) with In-Bag Charging
-* **Slide-in Lid & FOB Magnetic Latch:** Both pods mount to the interior walls of the hard saddlebags. The slide-in lid provides a positive mechanical seal and releases instantly upon proximity of the OMB Smart Keyfob.
+#### B. Saddlebag Integration: 100% Zero-Drill Egress (OEM Ø 19 mm) & Magnetic Breakaway
+* **100% Zero-Drill Feedthrough:** Neither the saddlebag floor nor the side walls are drilled. Removing the factory OEM rubber isolator exposes a bare ABS through-hole of **$\varnothing 19.0\,\text{mm}$**.
+* **Tool-Free Pre-Assembled Plug Passage:** The pre-terminated harness plug (USB-C / JST-GH) glides through the bare $\varnothing 19\,\text{mm}$ hole with zero de-pinning, zero cutting, and zero soldering.
+* **Split TPU Grommet & C-Slotted Tunnel Spacer Ring:** The two-piece EPDM/TPU grommet ([`010_saddlebag_hole_grommet_split.scad`](../../hardware/cad/scad/02_pod_base/parts/010_saddlebag_hole_grommet_split.scad)) seals water-tight (IP67) around cable and M8 steel sleeve. Beneath the OEM $\varnothing 25\,\text{mm}$ washer, a C-slotted 4 mm PA12-CF/Alu spacer ring transfers 100% of the bolt's axial clamping force directly into the sleeve while the cable exits uncompressed through the tunnel and the OEM lever knob retains full 360° rotation.
+* **Hands-Free Saddlebag Removal (Magnetic Breakaway):** Detaching the bags simply requires loosening the two OEM lever knobs and lifting the bag. The external HytePro magnetic pogo coupling (`cots_pogo_magnetic_2pin`, IP68) separates cleanly at $10\dots 15\,\text{N}$ axial pull. No internal connectors are touched!
+* **Slide-in Lid & FOB Magnetic Latch:** Both pods mount preferably to the saddlebag lids. The slide-in lid provides a positive mechanical seal and releases instantly upon proximity of the OMB Smart Keyfob.
 * **Intermediate Dry-Flap Guard:** An internal spring-loaded flap protects internal electronics and intercom cradles even if the saddlebag lid is opened during torrential downpours.
 * **Integrated In-Bag USB Charging Port:** Each pod provides a ruggedized USB-C charging port (5V/12V PD up to 30W) inside the bag, allowing action cams, smartphones, or helmet dryers to charge on the move.
-* **4-Pin Magnetic Breakaway Coupling:** Detaching the saddlebags for hotel stops separates the connector cleanly with zero tension or wire damage.
 * **Maximum RF Isolation ($> 40\,\text{dB}$):** Sena (left) and Cardo (right) are separated by over $60\,\text{cm}$, using rear fender and chassis as an RF shield.
 
 ---
@@ -809,7 +820,7 @@ Wiring the saddlebag lid pods resolves the quintessential operational requiremen
 
 ![OpenMotorBridge Saddlebag Cable Routing & MagSafe Breakaway Interface](../images/cad/saddlebag_magsafe_wiring_cad.png)
 
-*Figure 8.30b: CAD system architecture of the saddlebag cable routing with self-centering MagSafe breakaway interface (IP67). Depicted are the switched 5V power supply from the Central Box (KL15/BQ24075 UPS), the stationary frame dock (`009_magsafe_frame_dock.scad`) with PCBA 06 TVS protection, the non-destructive magnetic breakaway separation (~10-15 N) during bag detachment, the side-wall pass-through on the forward bag wall (above the swingarm pivot) with split TPU grommet (`010_saddlebag_hole_grommet_split.scad`) and Stage 1 clamp tower (leaving the saddlebag floor 100% intact and puddle-proof), the zero-load ribbon cable routing along the check strap, and the Stage 2 strain relief at the lid dock ensuring 0 Newton dynamic load on USB-C Port B.*
+*Figure 8.30b: CAD system architecture of the saddlebag cable routing with self-centering MagSafe breakaway interface (IP67). Depicted are the switched 5V power supply from the Central Box (KL15/BQ24075 UPS), the stationary frame dock (`009_magsafe_frame_dock.scad`) with PCBA 06 TVS protection, the non-destructive magnetic breakaway separation (~10-15 N) during bag detachment, the 100% zero-drill feedthrough on the forward bag wall (above the swingarm pivot) via OEM Ø 19.0 mm bore with split TPU grommet (`010_saddlebag_hole_grommet_split.scad`) and U-slotted tunnel-spacer ring (leaving saddlebag floor and walls 100% intact and unpierced), the zero-load ribbon cable routing along the check strap, and the Stage 2 strain relief at the lid dock ensuring 0 Newton dynamic load on USB-C Port B.*
 
 1. **Intelligent Power Delivery & UPS Buffering via Central Box (Ignition KL15 / BQ24075):**
    * Saddlebag pods are not fed unregulated 12V bike power directly, but conditioned 5.0V from the Central Box beneath the seat.
@@ -824,9 +835,16 @@ Wiring the saddlebag lid pods resolves the quintessential operational requiremen
    * **Zone 2 (Inside Saddlebag):** Flexible 4-wire ribbon harness running in the dry interior, taking zero luggage space.
 4. **Direct Connection to Pod Headers:**
    * The internal saddlebag cable routes along the textile check strap straight into the pod base, connecting directly to `PCBA 03`--zero redundant adapter boards or intermediate solder joints inside the bag.
-5. **Two-Stage Strain Relief & Split Side-Wall Grommet ([`010_saddlebag_hole_grommet_split.scad`](../../hardware/cad/scad/02_pod_base/parts/010_saddlebag_hole_grommet_split.scad)):**
-   * **Mounting Location:** Placed **on the forward bag wall (above the swingarm pivot)** in the aerodynamic and splash-water shadow of the frame. The **saddlebag floor remains 100% intact, hole-free, and watertight**.
-   * **Stage 1 (Side Wall Split Grommet `010_saddlebag_hole_grommet_split.scad`):** The split EPDM/TPU grommet seals the $\varnothing 12\,\text{mm}$ wall bore with circumferential dual sealing lips. Sized for $\varnothing 3.6\,\text{mm}$ 2-wire automotive cable (sealing range $\varnothing 2.5\dots 4.2\,\text{mm}$ FLRY-B / PUR), with cable conduit offset to $Y = 6.0\,\text{mm}$ preserving $> 1.1\,\text{mm}$ solid elastomeric bridge to the M8 steel sleeve bore. A molded clamp tower anchors the cable via mini zip-tie, transferring 100% of magnetic breakaway forces ($10\dots 15\,\text{N}$) into the luggage wall. OpenSCAD parameter `part` supports `"part_a"`, `"part_b"`, or `"print_plate"`.
+5. **100% Zero-Drill Feedthrough & Two-Stage Strain Relief ([`010_saddlebag_hole_grommet_split.scad`](../../hardware/cad/scad/02_pod_base/parts/010_saddlebag_hole_grommet_split.scad)):**
+   * **Mounting Location (100% Drill-Free):** Cable routing utilizes the factory forward mounting bore on the saddlebag front wall (above the swingarm pivot, facing the frame). Neither the saddlebag floor nor the side walls are drilled (preserving resale value and avoiding stress cracks).
+   * **Advantages over Floor Exit:**
+     - **100% Spray & Dirt Protection:** Road spray and water puddle at the pannier floor. The forward mounting bore sits in the deep aerodynamic and splash-water shadow of the frame.
+     - **Zero Abrasion on Ground Contact:** The bottom rubber cushions carry the entire dynamic luggage weight. The upper mounting stud carries zero vertical road impact weight.
+   * **Stage 1 (OEM Ø 19.0 mm Bore, Split TPU Grommet & U-Tunnel Spacer Ring):**
+     - *Pre-Assembled Connector Passage:* Removing the factory OEM solid rubber grommet exposes a bare through-hole of **$\varnothing 19.0\,\text{mm}$**. The pre-terminated OMB harness with connector plug (USB-C / JST-GH) glides through the bare opening with zero cutting, zero de-pinning, and zero soldering.
+     - *Split TPU Grommet:* The two-piece EPDM/TPU grommet ([`010_saddlebag_hole_grommet_split.scad`](../../hardware/cad/scad/02_pod_base/parts/010_saddlebag_hole_grommet_split.scad)) seals the $\varnothing 19\,\text{mm}$ wall bore with circumferential dual sealing lips (IP67). The offset cable conduit ($Y = 6.0\,\text{mm}$) preserves a solid elastomeric sealing bridge to the M8 steel sleeve bore ($Y = -2.0\,\text{mm}$).
+     - *U-Tunnel Spacer Ring:* A C-slotted 4 mm PA12-CF/Alu spacer ring slides laterally over the cable beneath the OEM $\varnothing 25\,\text{mm}$ steel washer. It transfers 100% of the bolt's axial clamping force directly into the sleeve, allowing the cable to exit uncompressed through the 4 mm tunnel and the OEM lever knob to rotate 360° freely.
+     - *Integrated Clamp Tower:* Anchors the cable securely against axial pull forces ($10\dots 15\,\text{N}$ magnetic breakaway tension).
    * **Stage 2 (Lid Dock 2-Wire DC Snout):** Dedicated $\varnothing 4.4\,\text{mm}$ clamping channels and zip-tie ribs in the snout of [`saddlebag_lid_dock.scad`](../../hardware/cad/scad/02_pod_base/saddlebag_lid_dock.scad) capture the cable vibration-free.
    * **Result:** Internal wiring and pod contacts experience strictly **0 Newton dynamic or static strain**.
 
