@@ -1,6 +1,6 @@
 # 17 - Automotive-Standards & Normen-Referenzen
 
-Dieses Dokument listet alle internationalen Industrie-, Automotive-, Funk- und Protokoll-Standards auf, nach denen die **OpenMotorBridge v8.0** ausgelegt, verifiziert und dokumentiert ist.
+Dieses Dokument listet alle internationalen Industrie-, Automotive-, Funk- und Protokoll-Standards auf, nach denen die **OpenMotorBridge v10.0 Standardized Node Architecture** ausgelegt, verifiziert und dokumentiert ist.
 
 ---
 
@@ -8,6 +8,8 @@ Dieses Dokument listet alle internationalen Industrie-, Automotive-, Funk- und P
 
 * **ISO 7637-2:2011:** *Road vehicles -- Electrical disturbances from conduction and coupling -- Part 2: Electrical transient conduction along supply lines only* (Pulse 1, 2a, 3a/b und Load-Dump Absicherung bis 100 V).
 * **ISO 16750-2:2012:** *Road vehicles -- Environmental conditions and testing for electrical and electronic equipment -- Part 2: Electrical loads* (Überspannungs-, Kaltstart- und Verpolungsprüfungen).
+* **ISO 21498-2:2021:** *Road vehicles -- Electrical specifications and tests for component testing in electrical propulsion systems and sub-systems* (Dual-Power OR-ing und Spannungsstabilität).
+* **USB-IF USB Power Delivery 3.1 & Type-C:** *Universal Serial Bus Power Delivery Specification Revision 3.1* (bis zu 60W Schnellladen, Extended Power Range & Sink/Source Profilverhandlung).
 * **ISO 16750-3:2012:** *Road vehicles -- Environmental conditions and testing for electrical and electronic equipment -- Part 3: Mechanical loads* (Breitband-Rüttel- und Schwingungsprüfung für Einspurfahrzeuge / Motorräder bis 20 g).
 * **ECE R10 Rev. 6:** *Uniform provisions concerning the approval of vehicles with regard to electromagnetic compatibility* (Typgenehmigungs-Konformität für Kfz-Zusatzgeräte im Listen-Only-Modus).
 * **DIN EN 60529 (VDE 0470-1):2014-09:** *Schutzarten durch Gehäuse (IP-Code)* (IP67: Staubdicht und Schutz gegen zeitweiliges Untertauchen; IP69K: Schutz gegen Wasser bei Hochdruck-/Dampfstrahlreinigung).
@@ -21,9 +23,7 @@ Dieses Dokument listet alle internationalen Industrie-, Automotive-, Funk- und P
 ## 2. Funk-, Wellenausbreitungs- & Telekommunikations-Normen
 
 * **RED 2014/53/EU:** *Radio Equipment Directive* (Europäische Funkanlagen-Richtlinie für CE-Kennzeichnung).
-* **IEEE 802.15.4z-2020:** *Enhanced Ultra-Wideband (UWB) Physical Layers (PHYs) and Associated Ranging Techniques* (BPRF Modus, Channel 5 @ 6.489 GHz, 499.2 MHz Bandbreite).
-* **ETSI EN 302 065-1 v2.1.1 & EN 302 065-3 v2.1.1:** *Short Range Devices (SRD) using Ultra Wide Band technology (UWB); Part 1: Generic UWB applications; Part 3: UWB devices for automotive and road transport vehicles* ($-41{,}3\,\text{dBm/MHz}$ spektrale EIRP-Leistungsdichte, legaler Dauerbetrieb ohne Duty-Cycle-Beschränkung).
-* **EU-Beschluss 2019/785:** *Durchführungsbeschluss der Europäischen Kommission zur Harmonisierung der Frequenznutzung durch Ultrabreitbandgeräte in der Union*.
+*(Hinweis zu UWB: Die Normen IEEE 802.15.4z-2020, ETSI EN 302 065-1/-3 und EU-Beschluss 2019/785 dienten als Referenz für frühere Prototypen und wurden in v10.0 durch den störungsimmunen, geschirmten 4-Ader Automotive-USB-Bus vollständig abgelöst).*
 * **ETSI EN 300 328 v2.2.2:** *Wideband transmission systems; Data transmission equipment operating in the 2,4 GHz ISM band* (Sendeleistungen bis 100 mW EIRP, FHSS/DSSS Frequenzspreizung).
 * **ETSI EN 300 220-2 v3.2.1:** *Short Range Devices (SRD) operating in the frequency range 25 MHz to 1 000 MHz* (LoRa 868 MHz Sub-GHz Band, Duty-Cycle Grenzwerte 1 % / 10 %).
 * **ETSI EN 301 489-1 / -3 / -17 / -33:** *ElectroMagnetic Compatibility (EMC) standard for radio equipment and services* (Gemeinsame EMV-Anforderungen für UWB, Kurzstreckenfunk und Breitbandsysteme).
@@ -35,7 +35,9 @@ Dieses Dokument listet alle internationalen Industrie-, Automotive-, Funk- und P
 
 ## 3. Protokoll-, Bus- & Schnittstellen-Spezifikationen
 
-* **Qorvo Inc.:** *DW3000 / DW3110 Ultra-Wideband Transceiver User Manual & Software API Guide* (SPI 20 MHz, Double-Buffer RX, Two-Way Ranging).
+*(Qorvo DW3110 User Manual: Historische Referenz, in v10.0 durch native USB 2.0 Schnittstelle ersetzt).*
+* **USB Audio Class 2.0 (UAC2):** *Universal Serial Bus Device Class Definition for Audio Devices Release 2.0* (Echtzeit-Digitalaudiostreaming mit $< 0{,}2\,\text{ms}$ Latenz zwischen Pods und Zentralbox).
+* **USB CDC-ACM:** *Universal Serial Bus Communication Device Class Abstract Control Model* (Virtuelle serielle Telemetrie- und Steuerverbindung über den 4-Draht-Bus).
 * **Bluetooth SIG:**
   * *Battery Service Specification v1.0* (GATT UUID `0x180F`, Battery Level Characteristic `0x2A19`).
   * *Adopted Bluetooth Core Specification v5.0 / v5.2* (LE 2M PHY & Long Range Coded PHY).

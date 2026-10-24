@@ -1,6 +1,6 @@
 # 17 - Automotive Standards & Technical References
 
-This document lists all international automotive, industry, radio frequency, and protocol standards under which **OpenMotorBridge v8.0** is engineered, verified, and documented.
+This document lists all international automotive, industry, radio frequency, and protocol standards under which **OpenMotorBridge v10.0 Standardized Node Architecture** is engineered, verified, and documented.
 
 ---
 
@@ -8,6 +8,8 @@ This document lists all international automotive, industry, radio frequency, and
 
 * **ISO 7637-2:2011:** *Road vehicles -- Electrical disturbances from conduction and coupling -- Part 2: Electrical transient conduction along supply lines only* (Pulses 1, 2a, 3a/b and load-dump protection up to 100 V).
 * **ISO 16750-2:2012:** *Road vehicles -- Environmental conditions and testing for electrical and electronic equipment -- Part 2: Electrical loads* (Overvoltage, cold crank, reverse polarity testing).
+* **ISO 21498-2:2021:** *Road vehicles -- Electrical specifications and tests for component testing in electrical propulsion systems and sub-systems* (Dual-power OR-ing and voltage stability).
+* **USB-IF USB Power Delivery 3.1 & Type-C:** *Universal Serial Bus Power Delivery Specification Revision 3.1* (up to 60W fast charging, Extended Power Range & Sink/Source profile negotiation).
 * **ISO 16750-3:2012:** *Road vehicles -- Environmental conditions and testing for electrical and electronic equipment -- Part 3: Mechanical loads* (Broadband random vibration and mechanical shock testing up to 20 g).
 * **ECE R10 Rev. 6:** *Uniform provisions concerning the approval of vehicles with regard to electromagnetic compatibility* (Type-approval conformity for aftermarket automotive electronics in listen-only mode).
 * **DIN EN 60529 (VDE 0470-1):2014-09:** *Degrees of protection provided by enclosures (IP Code)* (IP67: Dust-tight and temporary submersion to 1 m; IP69K: High-pressure/steam-jet washdown).
@@ -21,9 +23,7 @@ This document lists all international automotive, industry, radio frequency, and
 ## 2. Radio, Wave Propagation & Telecommunications Standards
 
 * **RED 2014/53/EU:** *Radio Equipment Directive* (European regulatory framework for CE radio equipment).
-* **IEEE 802.15.4z-2020:** *Enhanced Ultra-Wideband (UWB) Physical Layers (PHYs) and Associated Ranging Techniques* (BPRF mode, Channel 5 @ 6.489 GHz, 499.2 MHz bandwidth).
-* **ETSI EN 302 065-1 v2.1.1 & EN 302 065-3 v2.1.1:** *Short Range Devices (SRD) using Ultra Wide Band technology (UWB); Part 1: Generic UWB applications; Part 3: UWB devices for automotive and road transport vehicles* ($-41.3\,\text{dBm/MHz}$ e.i.r.p. spectral power density, continuous legal transmission without duty cycle capping).
-* **EU Decision 2019/785:** *European Commission Implementing Decision on the harmonisation of radio spectrum for ultra-wideband equipment in the Union*.
+*(Note on UWB: IEEE 802.15.4z-2020, ETSI EN 302 065-1/-3, and EU Decision 2019/785 served as reference for earlier prototypes and are completely superseded in v10.0 by the interference-immune, shielded 4-wire automotive USB bus).*
 * **ETSI EN 300 328 v2.2.2:** *Wideband transmission systems; Data transmission equipment operating in the 2.4 GHz ISM band* (EIRP limits to 100 mW, FHSS/DSSS spread spectrum).
 * **ETSI EN 300 220-2 v3.2.1:** *Short Range Devices (SRD) operating in the frequency range 25 MHz to 1 000 MHz* (LoRa 868 MHz Sub-GHz band duty cycle limits: 1% / 10%).
 * **ETSI EN 301 489-1 / -3 / -17 / -33:** *ElectroMagnetic Compatibility (EMC) standard for radio equipment and services* (Harmonized EMC standards for UWB, short-range devices and wideband systems).
@@ -35,7 +35,9 @@ This document lists all international automotive, industry, radio frequency, and
 
 ## 3. Protocol, Bus & Interface Specifications
 
-* **Qorvo Inc.:** *DW3000 / DW3110 Ultra-Wideband Transceiver User Manual & Software API Guide* (SPI 20 MHz, double-buffer RX, two-way ranging).
+*(Qorvo DW3110 User Manual: Historical reference, superseded in v10.0 by native USB 2.0 interface).*
+* **USB Audio Class 2.0 (UAC2):** *Universal Serial Bus Device Class Definition for Audio Devices Release 2.0* (Real-time digital audio streaming with < 0.2 ms latency between pods and Central Box).
+* **USB CDC-ACM:** *Universal Serial Bus Communication Device Class Abstract Control Model* (Virtual serial telemetry and control bridge over 4-wire bus).
 * **Bluetooth SIG:** *Battery Service Specification v1.0* (GATT UUID `0x180F`) and *Adopted Bluetooth Core Specification v5.0 / v5.2*.
 * **u-blox AG:** *u-blox SAM-M10Q / M10 SPG 5.10 Interface Description* (Doc UBX-21035062, UBX/NMEA 10 Hz PVT & Qwiic I2C).
 * **Semtech Corporation:** *SX1261/2 Long Range Low Power Sub-GHz Transceiver Datasheet* (DS.SX1261-2.W.APP).
